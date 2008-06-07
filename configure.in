@@ -617,7 +617,7 @@ AC_ARG_ENABLE(gda,
    esac],[want_gda=true])
 if test x${want_gda} = xtrue
 then
-  PKG_CHECK_MODULES(LIBGDA, libgda-3.0 >= 2.99.2, [GDA_DIR=gda])
+  PKG_CHECK_MODULES(LIBGDA, libgda-4.0 >= 3.99.2, [GDA_DIR=gda])
 fi
 AC_SUBST(GDA_DIR)
 AC_SUBST(LIBGDA_CFLAGS)
@@ -1478,6 +1478,8 @@ AC_CONFIG_FILES(po/Makefile.in
           src/app-utils/Makefile
           src/app-utils/test/Makefile
           src/backend/Makefile
+		  src/backend/dbi/Makefile
+		  src/backend/dbi/test/Makefile
           src/backend/file/Makefile
           src/backend/file/test/Makefile
           src/backend/file/test/test-files/Makefile
@@ -1486,6 +1488,8 @@ AC_CONFIG_FILES(po/Makefile.in
 		  src/backend/gda/test/Makefile
           src/backend/postgres/Makefile
           src/backend/postgres/test/Makefile
+		  src/backend/sql/Makefile
+		  src/backend/sql/test/Makefile
           src/bin/Makefile
           src/bin/overrides/Makefile
           src/bin/test/Makefile
@@ -1566,7 +1570,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/test-core/Makefile
           src/business/Makefile
           src/business/business-core/Makefile
-          src/business/business-core/gda/Makefile
+          src/business/business-core/sql/Makefile
           src/business/business-core/test/Makefile
           src/business/business-core/file/Makefile
           src/business/business-utils/Makefile

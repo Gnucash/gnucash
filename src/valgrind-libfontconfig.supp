@@ -36,19 +36,21 @@
 #     if Free: name of free-ing fn)
 
 {
-	FcFontRenderPrepare Leak
+	libfontconfig realloc Leak
 	Memcheck:Leak
 	fun:realloc
-	obj:/usr/lib/libfontconfig.so.1.1.0
-	obj:/usr/lib/libfontconfig.so.1.1.0
-	obj:/usr/lib/libfontconfig.so.1.1.0
-	fun:FcFontRenderPrepare
+	obj:/usr/lib/libfontconfig.so.1.3.0
 }
 {
-	libfontconfig malloc Leak
+	libfontconfig malloc Leak #1
 	Memcheck:Leak
 	fun:malloc
-	obj:/usr/lib/libfontconfig.so.1.1.0
+	obj:/usr/lib/libfontconfig.so.1.3.0
+}
+{
+	libfontconfig malloc Leak #2
+	fun:malloc
+	fun:FcStrCopy
 }
 
 

@@ -2,7 +2,7 @@
  * gncmod-backend-gda.c
  * module definition/initialization for the gda backend module
  *
- *  @author Copyright (c) 2006-2008 Phil Longstaff <plongstaff@rogers.com>
+ * Copyright (c) 2001 Linux Developers Group, Inc.
  *********************************************************************/
 
 #include <stdio.h>

@@ -1,6 +1,6 @@
 /*********************************************************************
- * gncmod-backend-gda.c
- * module definition/initialization for the gda backend module
+ * gncmod-backend-dbi.c
+ * module definition/initialization for the dbi backend module
  *
  *  @author Copyright (c) 2006-2008 Phil Longstaff <plongstaff@rogers.com>
  *********************************************************************/
@@ -25,13 +25,13 @@ static GNCModule engine;
 gchar *
 gnc_module_path(void)
 {
-  return g_strdup("gnucash/backend/gda");
+  return g_strdup("gnucash/backend/dbi");
 }
 
 gchar *
 gnc_module_description(void)
 {
-  return g_strdup("The GDA/SQL backend for GnuCash");
+  return g_strdup("The DBI/SQL backend for GnuCash");
 }
 
 int

@@ -37,6 +37,12 @@
 #     if Free: name of free-ing fn)
 
 {
+	libld-2.7(Value4)
+	Memcheck:Value4
+	obj:/lib/ld-2.7.so
+	obj:/lib/ld-2.7.so
+}
+{
    libglib-1.2.so.0(Value4)
    Memcheck:Value4
    fun:g_hash_table_lookup
@@ -69,14 +75,14 @@
    fun:link_connection_writev
    fun:giop_send_buffer_write
 }
-{
-   pthread_mutex_lock PThread
-   core:PThread
-   fun:pthread_mutex_lock
-   fun:_IO_flockfile
-   fun:pango_read_line
-   fun:pango_find_map
-}
+#{
+#   pthread_mutex_lock PThread
+#   core:PThread
+#   fun:pthread_mutex_lock
+#   fun:_IO_flockfile
+#   fun:pango_read_line
+#   fun:pango_find_map
+#}
 {
    writev(vector) X11 Param
    Memcheck:Param

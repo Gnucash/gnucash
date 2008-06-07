@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-backend-gda.h: load and save data to SQL via libgda          *
+ * gnc-backend-dbi.h: load and save data to SQL via libdbi          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,30 +18,27 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file gnc-backend-gda.h
- *  @brief load and save data to SQL via libgda
+/** @file gnc-backend-dbi.h
+ *  @brief load and save data to SQL via libdbi
  *  @author Copyright (c) 2006-2008 Phil Longstaff <plongstaff@rogers.com>
  *
  * This file implements the top-level QofBackend API for saving/
- * restoring data to/from an SQL database via libgda
+ * restoring data to/from an SQL database via libdbi
  */
 
-#ifndef GNC_BACKEND_GDA_H_
-#define GNC_BACKEND_GDA_H_
+#ifndef GNC_BACKEND_DBI_H_
+#define GNC_BACKEND_DBI_H_
 
 #include <gmodule.h>
 
 G_MODULE_EXPORT void
 qof_backend_module_init(void);
 
-struct GncGdaBackend_struct
+struct GncDbiBackend_struct
 {
   GncSqlBackend sql_be;
 
-  GdaConnection* pConnection;
-  GdaSqlParser* parser;
-  GdaDataHandler* timespecDH;
-  GdaDataHandler* dateDH;
+  dbi_conn conn;
 
   QofBook *primary_book;	/* The primary, main open book */
   gboolean	loading;		/* We are performing an initial load */
@@ -51,8 +48,8 @@ struct GncGdaBackend_struct
 
   gint obj_total;			// Total # of objects (for percentage calculation)
   gint operations_done;		// Number of operations (save/load) done
-  GHashTable* versions;		// Version number for each table
+//  GHashTable* versions;		// Version number for each table
 };
-typedef struct GncGdaBackend_struct GncGdaBackend;
+typedef struct GncDbiBackend_struct GncDbiBackend;
 
-#endif /* GNC_BACKEND_GDA_H_ */
+#endif /* GNC_BACKEND_DBI_H_ */

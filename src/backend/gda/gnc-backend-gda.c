@@ -20,7 +20,7 @@
 \********************************************************************/
 /** @file gnc-backend-gda.c
  *  @brief load and save data to SQL 
- *  @author Copyright (c) 2006 Phil Longstaff <plongstaff@rogers.com>
+ *  @author Copyright (c) 2006-2008 Phil Longstaff <plongstaff@rogers.com>
  *
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db using libgda
@@ -34,6 +34,11 @@
 #include <glib/gstdio.h>
 
 #include <libgda/libgda.h>
+#include <libgda/gda-easy.h>
+#include <sql-parser/gda-sql-parser.h>
+
+#include "gnc-backend-util-sql.h"
+#include "gnc-backend-sql.h"
 
 #include "qof.h"
 #include "qofquery-p.h"
@@ -44,65 +49,31 @@
 #include "SX-book.h"
 #include "Recurrence.h"
 
-#include "gnc-backend-util-gda.h"
 #include "gnc-gconf-utils.h"
-
-#include "gnc-account-gda.h"
-#include "gnc-book-gda.h"
-#include "gnc-budget-gda.h"
-#include "gnc-commodity-gda.h"
-#include "gnc-lots-gda.h"
-#include "gnc-price-gda.h"
-#include "gnc-pricedb.h"
-#include "gnc-recurrence-gda.h"
-#include "gnc-schedxaction-gda.h"
-#include "gnc-slots-gda.h"
-#include "gnc-transaction-gda.h"
 
 #include "gnc-backend-gda.h"
 
-static const gchar* convert_search_obj( QofIdType objType );
-static void gnc_gda_init_object_handlers( void );
-static void add_table_column( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const gchar* arg, const gchar* dbms_type,
-            gint size, gint flags );
-static void update_save_progress( GncGdaBackend* be );
-
 #define TRANSACTION_NAME "trans"
-
-typedef struct {
-    QofIdType searchObj;
-    gpointer pCompiledQuery;
-} gnc_gda_query_info;
-
-/* callback structure */
-typedef struct {
-    gboolean ok;
-    GncGdaBackend* be;
-    QofInstance* inst;
-    QofQuery* pQuery;
-    gpointer pCompiledQuery;
-    gnc_gda_query_info* pQueryInfo;
-} gda_backend;
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define SQLITE_PROVIDER_NAME "SQLite"
 #define URI_PREFIX "gda://"
+static GncSqlConnection* create_gda_connection( GdaConnection* conn );
 
 /* ================================================================= */
 
 static void
 create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
 {
-    GncGdaDataType_t* pData = data_p;
+    GncSqlDataType_t* pData = data_p;
     GncGdaBackend* be = be_p;
 
     g_return_if_fail( type != NULL && data_p != NULL && be_p != NULL );
-    g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
+    g_return_if_fail( pData->version == GNC_SQL_BACKEND_VERSION );
 
     if( pData->create_tables != NULL ) {
-        (pData->create_tables)( be );
+        (pData->create_tables)( &be->sql_be );
     }
 }
 
@@ -115,10 +86,12 @@ static gboolean parse_uri( const gchar* book_id,
 {
 	gchar* uri_id;
 	gchar* book_info;
-	gchar* provider;
-	GList* provider_list;
+	const gchar* provider;
+	GdaDataModel* providers;
+	gint numProviders;
 	gboolean provider_found;
 	gchar* dsn;
+	gint i;
 
 	*pProvider = NULL;
 	*pDsn = NULL;
@@ -161,15 +134,17 @@ static gboolean parse_uri( const gchar* book_id,
 
 	// Get a list of all of the providers.  If the requested provider is on the list, use it.
 	// Note that we need a case insensitive comparison here
-	provider_list = gda_config_get_provider_list();
+	providers = gda_config_list_providers();
+	numProviders = gda_data_model_get_n_rows( providers );
 
 	provider_found = FALSE;
-	for( ; provider_list != NULL; provider_list = provider_list->next ) {
-		GdaProviderInfo* provider_info = (GdaProviderInfo*)provider_list->data;
+	for( i = 0; i < numProviders; i++ ) {
+		const GValue* providerValue = gda_data_model_get_value_at( providers, 0, i );
+		const gchar* s = g_value_get_string( providerValue );
 
-		if( provider_info != NULL && g_ascii_strcasecmp( provider_info->id, provider ) == 0 ) {
+		if( g_ascii_strcasecmp( s, provider ) == 0 ) {
 			provider_found = TRUE;
-			provider = provider_info->id;
+			provider = s;
 			break;
 		}
 	}
@@ -234,7 +209,6 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
 
     ENTER (" ");
 
-    be->pClient = gda_client_new();
 	be->pConnection = NULL;
 
 	// FIXME: better username/password handling
@@ -250,38 +224,30 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
 	}
 
 	if( provider == NULL ) {
-	    be->pConnection = gda_client_open_connection( be->pClient,
-													dsn,
-													username, password,
-													0,
-													&error );
+		be->pConnection = gda_connection_open_from_dsn( dsn, "", 0, &error );
 	} else {
-		be->pConnection = gda_client_open_connection_from_string( be->pClient,
-									provider, 
-									dsn,
-									username, password,
-									0,
-									&error );
+		be->pConnection = gda_connection_open_from_string(
+											provider,
+											dsn,
+											"",
+											0,
+											&error );
 
 		if( be->pConnection == NULL ) {
-			GdaServerOperation* op = gda_client_prepare_create_database(
-													be->pClient,
+			GdaServerOperation* op = gda_prepare_create_database(
+													provider,
 													dsn,
-													provider );
+													&error );
 			if( op != NULL ) {
 				gboolean isOK;
-				isOK = gda_client_perform_create_database(
-													be->pClient,
-													op,
-													&error );
+				isOK = gda_perform_create_database( op, &error );
 				if( isOK ) {
-					be->pConnection = gda_client_open_connection_from_string(
-													be->pClient,
-													provider, 
-													dsn,
-													username, password,
-													0,
-													&error );
+					be->pConnection = gda_connection_open_from_string(
+											provider,
+											dsn,
+											"",
+											0,
+											&error );
 				}
 			}
 		}
@@ -303,13 +269,11 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
 	be->supports_transactions = gda_connection_supports_feature( be->pConnection, GDA_CONNECTION_FEATURE_TRANSACTIONS );
 
     // Set up the dictionary
-    be->pDict = gda_dict_new();
-    gda_dict_set_connection( be->pDict, be->pConnection );
-    gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );
-	gda_dict_extend_with_functions( be->pDict );
-    if( error != NULL ) {
-        PERR( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
-    }
+	gda_connection_update_meta_store( be->pConnection, NULL, &error );
+
+	be->parser = gda_sql_parser_new();
+
+	be->sql_be.conn = create_gda_connection( be->pConnection );
 
     LEAVE (" ");
 }
@@ -317,7 +281,7 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
 /* ================================================================= */
 
 static void
-gnc_gda_session_end(QofBackend *be_start)
+gnc_gda_session_end( QofBackend *be_start )
 {
     GncGdaBackend *be = (GncGdaBackend*)be_start;
 
@@ -325,25 +289,24 @@ gnc_gda_session_end(QofBackend *be_start)
 
     ENTER (" ");
 
-    if( be->pDict != NULL ) {
-        g_object_unref( G_OBJECT(be->pDict) );
-        be->pDict = NULL;
+	if( be->parser != NULL ) {
+		g_object_unref( be->parser );
+		be->parser = NULL;
+	}
+    if( be->pConnection != NULL ) {
+		if( gda_connection_is_opened( be->pConnection ) ) {
+        	gda_connection_close( be->pConnection );
+		}
+		g_object_unref( be->pConnection );
+    	be->pConnection = NULL;
     }
-    if( be->pConnection != NULL && gda_connection_is_opened( be->pConnection ) ) {
-        gda_connection_close( be->pConnection );
-    }
-    be->pConnection = NULL;
-    if( be->pClient != NULL ) {
-        g_object_unref( G_OBJECT(be->pClient ) );
-        be->pClient = NULL;
-    }
-	_finalize_version_info( be );
+	gnc_sql_finalize_version_info( &be->sql_be );
 
     LEAVE (" ");
 }
 
 static void
-gnc_gda_destroy_backend(QofBackend *be)
+gnc_gda_destroy_backend( QofBackend *be )
 {
 	g_return_if_fail( be != NULL );
 
@@ -352,39 +315,16 @@ gnc_gda_destroy_backend(QofBackend *be)
 
 /* ================================================================= */
 
-static const gchar* fixed_load_order[] =
-{ GNC_ID_BOOK, GNC_ID_COMMODITY, GNC_ID_ACCOUNT, NULL };
-
 static void
-initial_load_cb( const gchar* type, gpointer data_p, gpointer be_p )
+gnc_gda_load( QofBackend* qbe, QofBook *book )
 {
-    GncGdaDataType_t* pData = data_p;
-    GncGdaBackend* be = be_p;
-	int i;
-
-    g_return_if_fail( type != NULL && data_p != NULL && be_p != NULL );
-    g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
-
-	// Don't need to load anything if it has already been loaded with the fixed order
-	for( i = 0; fixed_load_order[i] != NULL; i++ ) {
-    	if( g_ascii_strcasecmp( type, fixed_load_order[i] ) == 0 ) return;
-	}
-
-    if( pData->initial_load != NULL ) {
-        (pData->initial_load)( be );
-    }
-}
-
-static void
-gnc_gda_load(QofBackend* be_start, QofBook *book)
-{
-    GncGdaBackend *be = (GncGdaBackend*)be_start;
-    GncGdaDataType_t* pData;
+    GncGdaBackend *be = (GncGdaBackend*)qbe;
+    GncSqlDataType_t* pData;
 	int i;
 	Account* root;
 	GError* error = NULL;
 
-	g_return_if_fail( be_start != NULL );
+	g_return_if_fail( qbe != NULL );
 	g_return_if_fail( book != NULL );
 
     ENTER( "be=%p, book=%p", be, book );
@@ -393,199 +333,17 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
     be->primary_book = book;
 
 	// Set up table version information
-	_init_version_info( be );
+	gnc_sql_init_version_info( &be->sql_be );
 
     // Call all object backends to create any required tables
-    qof_object_foreach_backend( GNC_GDA_BACKEND, create_tables_cb, be );
+    qof_object_foreach_backend( GNC_SQL_BACKEND, create_tables_cb, be );
 
-    // Update the dictionary because new tables may exist
-    gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );
-    if( error != NULL ) {
-        PERR( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
-    }
-
-    /* Load any initial stuff */
-    be->loading = TRUE;
-    
-    /* Some of this needs to happen in a certain order */
-	for( i = 0; fixed_load_order[i] != NULL; i++ ) {
-    	pData = qof_object_lookup_backend( fixed_load_order[i], GNC_GDA_BACKEND );
-    	if( pData->initial_load != NULL ) {
-        	(pData->initial_load)( be );
-		}
-    }
-
-	root = gnc_book_get_root_account( book );
-	gnc_account_foreach_descendant( root, (AccountCb)xaccAccountBeginEdit, NULL );
-
-    qof_object_foreach_backend( GNC_GDA_BACKEND, initial_load_cb, be );
-
-	gnc_account_foreach_descendant( root, (AccountCb)xaccAccountCommitEdit, NULL );
-
-    be->loading = FALSE;
-
-	// Mark the book as clean
-	qof_book_mark_saved( book );
+	gnc_sql_load( &be->sql_be, book );
 
     LEAVE( "" );
 }
 
 /* ================================================================= */
-
-static gint
-compare_namespaces(gconstpointer a, gconstpointer b)
-{
-    const gchar *sa = (const gchar *) a;
-    const gchar *sb = (const gchar *) b;
-
-    return( safe_strcmp( sa, sb ) );
-}
-
-static gint
-compare_commodity_ids(gconstpointer a, gconstpointer b)
-{
-    const gnc_commodity *ca = (const gnc_commodity *) a;
-    const gnc_commodity *cb = (const gnc_commodity *) b;
-  
-    return( safe_strcmp( gnc_commodity_get_mnemonic( ca ),
-                     	 gnc_commodity_get_mnemonic( cb ) ) );
-}
-
-static void
-write_commodities( GncGdaBackend* be, QofBook* book )
-{
-    gnc_commodity_table* tbl;
-    GList* namespaces;
-    GList* lp;
-
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( book != NULL );
-
-    tbl = gnc_book_get_commodity_table( book );
-    namespaces = gnc_commodity_table_get_namespaces( tbl );
-    if( namespaces != NULL ) {
-        namespaces = g_list_sort( namespaces, compare_namespaces );
-    }
-    for( lp = namespaces; lp != NULL; lp = lp->next ) {
-        GList* comms;
-        GList* lp2;
-        
-        comms = gnc_commodity_table_get_commodities( tbl, lp->data );
-        comms = g_list_sort( comms, compare_commodity_ids );
-
-        for( lp2 = comms; lp2 != NULL; lp2 = lp2->next ) {
-	    	gnc_gda_save_commodity( be, GNC_COMMODITY(lp2->data) );
-        }
-    }
-}
-
-static void
-write_account_tree( GncGdaBackend* be, Account* root )
-{
-    GList* descendants;
-    GList* node;
-
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( root != NULL );
-
-    descendants = gnc_account_get_descendants( root );
-    for( node = descendants; node != NULL; node = g_list_next(node) ) {
-        gnc_gda_save_account( QOF_INSTANCE(GNC_ACCOUNT(node->data)), be );
-		update_save_progress( be );
-    }
-    g_list_free( descendants );
-}
-
-static void
-write_accounts( GncGdaBackend* be )
-{
-	g_return_if_fail( be != NULL );
-
-    write_account_tree( be, gnc_book_get_root_account( be->primary_book ) );
-}
-
-static int
-write_tx( Transaction* tx, gpointer data )
-{
-    GncGdaBackend* be = (GncGdaBackend*)data;
-
-	g_return_val_if_fail( tx != NULL, 0 );
-	g_return_val_if_fail( data != NULL, 0 );
-
-    gnc_gda_save_transaction( QOF_INSTANCE(tx), be );
-	update_save_progress( be );
-
-    return 0;
-}
-
-static void
-write_transactions( GncGdaBackend* be )
-{
-	g_return_if_fail( be != NULL );
-	
-    xaccAccountTreeForEachTransaction( gnc_book_get_root_account( be->primary_book ),
-                                       write_tx,
-                                       (gpointer)be );
-}
-
-static void
-write_template_transactions( GncGdaBackend* be )
-{
-    Account* ra;
-
-	g_return_if_fail( be != NULL );
-
-    ra = gnc_book_get_template_root( be->primary_book );
-    if( gnc_account_n_descendants( ra ) > 0 ) {
-        write_account_tree( be, ra );
-        xaccAccountTreeForEachTransaction( ra, write_tx, (gpointer)be );
-    }
-}
-
-static void
-write_schedXactions( GncGdaBackend* be )
-{
-    GList* schedXactions;
-    SchedXaction* tmpSX;
-
-	g_return_if_fail( be != NULL );
-
-    schedXactions = gnc_book_get_schedxactions( be->primary_book )->sx_list;
-
-    for( ; schedXactions != NULL; schedXactions = schedXactions->next ) {
-        tmpSX = schedXactions->data;
-		gnc_gda_save_schedxaction( QOF_INSTANCE( tmpSX ), be );
-    }
-}
-
-static void
-write_cb( const gchar* type, gpointer data_p, gpointer be_p )
-{
-    GncGdaDataType_t* pData = data_p;
-    GncGdaBackend* be = (GncGdaBackend*)be_p;
-
-    g_return_if_fail( type != NULL && data_p != NULL && be_p != NULL );
-    g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
-
-    if( pData->write != NULL ) {
-        (pData->write)( be );
-    }
-}
-
-static void
-update_save_progress( GncGdaBackend* be )
-{
-	if( be->be.percentage != NULL ) {
-		gint percent_done;
-
-		be->operations_done++;
-		percent_done = be->operations_done * 100 / be->obj_total;
-		if( percent_done > 100 ) {
-			percent_done = 100;
-		}
-		(be->be.percentage)( NULL, percent_done );
-	}
-}
 
 static gboolean
 gnc_gda_save_may_clobber_data( QofBackend* qbe )
@@ -594,12 +352,17 @@ gnc_gda_save_may_clobber_data( QofBackend* qbe )
     GdaDataModel* tables;
     GError* error = NULL;
 	gint numTables;
+	GdaMetaStore* mstore;
 
 	/* Data may be clobbered iff the number of tables != 0 */
+	mstore = gda_connection_get_meta_store( be->pConnection );
+	tables = gda_connection_get_meta_store_data( be->pConnection, GDA_CONNECTION_META_TABLES, &error, 0 );
+#if 0
     tables = gda_connection_get_schema( be->pConnection,
                                         GDA_CONNECTION_SCHEMA_TABLES,
                                         NULL,
                                         &error );
+#endif
     if( error != NULL ) {
         PERR( "SQL error: %s\n", error->message );
     }
@@ -617,6 +380,7 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
     gint row;
     gint numTables;
 	gboolean status;
+	GdaMetaStore* mstore;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( book != NULL );
@@ -624,10 +388,8 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
     ENTER( "book=%p, primary=%p", book, be->primary_book );
 
     /* Destroy the current contents of the database */
-    tables = gda_connection_get_schema( be->pConnection,
-                                        GDA_CONNECTION_SCHEMA_TABLES,
-                                        NULL,
-                                        &error );
+	mstore = gda_connection_get_meta_store( be->pConnection );
+	tables = gda_connection_get_meta_store_data( be->pConnection, GDA_CONNECTION_META_TABLES, &error, 0 );
     if( error != NULL ) {
         PERR( "SQL error: %s\n", error->message );
     }
@@ -635,520 +397,35 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
     for( row = 0; row < numTables; row++ ) {
         const GValue* row_value;
         const gchar* table_name;
+		GdaServerOperation* op;
 
         row_value = gda_data_model_get_value_at( tables, 0, row );
         table_name = g_value_get_string( row_value );
         error = NULL;
-        if( !gda_drop_table( be->pConnection, table_name, &error ) ) {
-            PERR( "Unable to drop table %s\n", table_name );
+		op = gda_prepare_drop_table( be->pConnection, table_name, &error );
+		if( error != NULL ) {
+			PERR( "Unable to create op: %s\n", error->message );
+		}
+		if( op != NULL ) {
+			error = NULL;
+			gda_perform_drop_table( op, &error );
             if( error != NULL ) {
                 PERR( "SQL error: %s\n", error->message );
             }
         }
     }
 
-	_reset_version_info( be );
-
-    // Update the dictionary because new tables may exist
-    gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );
-    if( error != NULL ) {
-        PERR( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
-    }
+	gnc_sql_reset_version_info( &be->sql_be );
 
     /* Create new tables */
 	be->is_pristine_db = TRUE;
-    qof_object_foreach_backend( GNC_GDA_BACKEND, create_tables_cb, be );
-
-    // Update the dictionary because new tables may exist
-    gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );
-    if( error != NULL ) {
-        PERR( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
-    }
+    qof_object_foreach_backend( GNC_SQL_BACKEND, create_tables_cb, be );
 
     /* Save all contents */
 	be->primary_book = book;
-	be->obj_total = 0;
-    be->obj_total += 1 + gnc_account_n_descendants( gnc_book_get_root_account( book ) );
-	be->obj_total += gnc_book_count_transactions( book );
-	be->operations_done = 0;
-
-	error = NULL;
-	if( be->supports_transactions ) {
-		status = gda_connection_begin_transaction( be->pConnection, TRANSACTION_NAME,
-										GDA_TRANSACTION_ISOLATION_UNKNOWN, &error );
-		if( !status ) {
-			if( error != NULL ) {
-				PWARN( "Unable to begin transaction: %s\n", error->message );
-			} else {
-				PWARN( "Unable to begin transaction\n" );
-			}
-		}
-	}
-
-	// FIXME: should write the set of commodities that are used 
-    //write_commodities( be, book );
-	gnc_gda_save_book( QOF_INSTANCE(book), be );
-    write_accounts( be );
-    write_transactions( be );
-    write_template_transactions( be );
-    write_schedXactions( be );
-    qof_object_foreach_backend( GNC_GDA_BACKEND, write_cb, be );
-	if( be->supports_transactions ) {
-		status = gda_connection_commit_transaction( be->pConnection, TRANSACTION_NAME, &error );
-		if( !status ) {
-			if( error != NULL ) {
-				PWARN( "Unable to commit transaction: %s\n", error->message );
-			} else {
-				PWARN( "Unable to commit transaction\n" );
-			}
-		}
-	}
-	be->is_pristine_db = FALSE;
-
-	// Mark the book as clean
-	qof_book_mark_saved( book );
+	gnc_sql_sync_all( &be->sql_be, book );
 
     LEAVE( "book=%p", book );
-}
-
-/* ================================================================= */
-/* Routines to deal with the creation of multiple books. */
-
-
-static void
-gnc_gda_begin_edit (QofBackend *be, QofInstance *inst)
-{
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( inst != NULL );
-}
-
-static void
-gnc_gda_rollback_edit (QofBackend *be, QofInstance *inst)
-{
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( inst != NULL );
-}
-
-static void
-commit_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
-{
-    GncGdaDataType_t* pData = data_p;
-    gda_backend* be_data = be_data_p;
-
-    g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
-    g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
-
-    /* If this has already been handled, or is not the correct handler, return */
-    if( strcmp( pData->type_name, be_data->inst->e_type ) != 0 ) return;
-    if( be_data->ok ) return;
-
-    if( pData->commit != NULL ) {
-        (pData->commit)( be_data->inst, be_data->be );
-        be_data->ok = TRUE;
-    }
-}
-
-/* Commit_edit handler - find the correct backend handler for this object
- * type and call its commit handler
- */
-static void
-gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
-{
-    GncGdaBackend *be = (GncGdaBackend*)be_start;
-    gda_backend be_data;
-	GError* error;
-	gboolean status;
-
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( inst != NULL );
-
-    /* During initial load where objects are being created, don't commit
-    anything */
-    if( be->loading ) {
-	    return;
-	}
-
-	// The engine has a PriceDB object but it isn't in the database
-	if( strcmp( inst->e_type, "PriceDB" ) == 0 ) {
-    	qof_instance_mark_clean(inst);
-    	qof_book_mark_saved( be->primary_book );
-		return;
-	}
-
-    ENTER( " " );
-
-    DEBUG( "gda_commit_edit(): %s dirty = %d, do_free=%d\n",
-             (inst->e_type ? inst->e_type : "(null)"),
-             qof_instance_get_dirty_flag(inst), qof_instance_get_destroying(inst) );
-
-    if( !qof_instance_get_dirty_flag(inst) && !qof_instance_get_destroying(inst) && GNC_IS_TRANS(inst) ) {
-        gnc_gda_transaction_commit_splits( be, GNC_TRANS(inst) );
-    }
-
-    if( !qof_instance_get_dirty_flag(inst) && !qof_instance_get_destroying(inst) ) return;
-
-	error = NULL;
-	if( be->supports_transactions ) {
-		status = gda_connection_begin_transaction( be->pConnection, TRANSACTION_NAME,
-										GDA_TRANSACTION_ISOLATION_UNKNOWN, &error );
-		if( !status ) {
-			if( error != NULL ) {
-				PWARN( "Unable to begin transaction: %s\n", error->message );
-			} else {
-				PWARN( "Unable to begin transaction\n" );
-			}
-		}
-	}
-
-    be_data.ok = FALSE;
-    be_data.be = be;
-    be_data.inst = inst;
-    qof_object_foreach_backend( GNC_GDA_BACKEND, commit_cb, &be_data );
-
-    if( !be_data.ok ) {
-        PERR( "gnc_gda_commit_edit(): Unknown object type '%s'\n", inst->e_type );
-		if( be->supports_transactions ) {
-			status = gda_connection_rollback_transaction( be->pConnection, TRANSACTION_NAME, &error );
-			if( !status ) {
-				if( error != NULL ) {
-					PWARN( "Unable to roll back transaction: %s\n", error->message );
-				} else {
-					PWARN( "Unable to roll back transaction\n" );
-				}
-			}
-		}
-
-		// Don't let unknown items still mark the book as being dirty
-    	qof_instance_mark_clean(inst);
-    	qof_book_mark_saved( be->primary_book );
-        return;
-    }
-	if( be->supports_transactions ) {
-		status = gda_connection_commit_transaction( be->pConnection, TRANSACTION_NAME, &error );
-		if( !status ) {
-			if( error != NULL ) {
-				PWARN( "Unable to commit transaction: %s\n", error->message );
-			} else {
-				PWARN( "Unable to commit transaction\n" );
-			}
-		}
-	}
-
-    qof_instance_mark_clean(inst);
-    qof_book_mark_saved( be->primary_book );
-
-	LEAVE( "" );
-}
-/* ---------------------------------------------------------------------- */
-
-/* Query processing */
-
-static const gchar*
-convert_search_obj( QofIdType objType )
-{
-    return (gchar*)objType;
-}
-
-static void
-handle_and_term( QofQueryTerm* pTerm, gchar* sql )
-{
-    GSList* pParamPath;
-    QofQueryPredData* pPredData;
-    gboolean isInverted;
-    GSList* name;
-    gchar val[GUID_ENCODING_LENGTH+1];
-
-	g_return_if_fail( pTerm != NULL );
-	g_return_if_fail( sql != NULL );
-
-    pParamPath = qof_query_term_get_param_path( pTerm );
-    pPredData = qof_query_term_get_pred_data( pTerm );
-    isInverted = qof_query_term_is_inverted( pTerm );
-
-    strcat( sql, "(" );
-    if( isInverted ) {
-        strcat( sql, "!" );
-    }
-
-    for( name = pParamPath; name != NULL; name = name->next ) {
-        if( name != pParamPath ) strcat( sql, "." );
-        strcat( sql, name->data );
-    }
-
-    if( pPredData->how == QOF_COMPARE_LT ) {
-        strcat( sql, "<" );
-    } else if( pPredData->how == QOF_COMPARE_LTE ) {
-        strcat( sql, "<=" );
-    } else if( pPredData->how == QOF_COMPARE_EQUAL ) {
-        strcat( sql, "=" );
-    } else if( pPredData->how == QOF_COMPARE_GT ) {
-        strcat( sql, ">" );
-    } else if( pPredData->how == QOF_COMPARE_GTE ) {
-        strcat( sql, ">=" );
-    } else if( pPredData->how == QOF_COMPARE_NEQ ) {
-        strcat( sql, "~=" );
-    } else {
-        strcat( sql, "??" );
-    }
-
-    if( strcmp( pPredData->type_name, "string" ) == 0 ) {
-        query_string_t pData = (query_string_t)pPredData;
-        strcat( sql, "'" );
-        strcat( sql, pData->matchstring );
-        strcat( sql, "'" );
-    } else if( strcmp( pPredData->type_name, "date" ) == 0 ) {
-        query_date_t pData = (query_date_t)pPredData;
-
-        (void)gnc_timespec_to_iso8601_buff( pData->date, val );
-        strcat( sql, "'" );
-        strncat( sql, val, 4+1+2+1+2 );
-        strcat( sql, "'" );
-    } else if( strcmp( pPredData->type_name, "numeric" ) == 0 ) {
-        query_numeric_t pData = (query_numeric_t)pPredData;
-    
-        strcat( sql, "numeric" );
-    } else if( strcmp( pPredData->type_name, "guid" ) == 0 ) {
-        query_guid_t pData = (query_guid_t)pPredData;
-        (void)guid_to_string_buff( pData->guids->data, val );
-        strcat( sql, "'" );
-        strcat( sql, val );
-        strcat( sql, "'" );
-    } else if( strcmp( pPredData->type_name, "gint32" ) == 0 ) {
-        query_int32_t pData = (query_int32_t)pPredData;
-
-        sprintf( val, "%d", pData->val );
-        strcat( sql, val );
-    } else if( strcmp( pPredData->type_name, "gint64" ) == 0 ) {
-        query_int64_t pData = (query_int64_t)pPredData;
-    
-        sprintf( val, "%" G_GINT64_FORMAT, pData->val );
-        strcat( sql, val );
-    } else if( strcmp( pPredData->type_name, "double" ) == 0 ) {
-        query_double_t pData = (query_double_t)pPredData;
-
-        sprintf( val, "%f", pData->val );
-        strcat( sql, val );
-    } else if( strcmp( pPredData->type_name, "boolean" ) == 0 ) {
-        query_boolean_t pData = (query_boolean_t)pPredData;
-
-        sprintf( val, "%d", pData->val );
-        strcat( sql, val );
-    } else {
-        g_assert( FALSE );
-    }
-
-    strcat( sql, ")" );
-}
-
-static void
-compile_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
-{
-    GncGdaDataType_t* pData = data_p;
-    gda_backend* be_data = be_data_p;
-
-    g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
-    g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
-
-	// Is this the right item?
-    if( strcmp( type, be_data->pQueryInfo->searchObj ) != 0 ) return;
-    if( be_data->ok ) return;
-
-    if( pData->compile_query != NULL ) {
-        be_data->pQueryInfo->pCompiledQuery = (pData->compile_query)(
-                                                            be_data->be,
-                                                            be_data->pQuery );
-        be_data->ok = TRUE;
-    }
-}
-
-static gpointer
-gnc_gda_compile_query(QofBackend* pBEnd, QofQuery* pQuery)
-{
-    GncGdaBackend *be = (GncGdaBackend*)pBEnd;
-    GList* pBookList;
-    QofIdType searchObj;
-    gchar sql[1000];
-    gda_backend be_data;
-    gnc_gda_query_info* pQueryInfo;
-
-	g_return_val_if_fail( pBEnd != NULL, NULL );
-	g_return_val_if_fail( pQuery != NULL, NULL );
-
-	ENTER( " " );
-
-    searchObj = qof_query_get_search_for( pQuery );
-
-    pQueryInfo = g_malloc( sizeof( gnc_gda_query_info ) );
-
-    // Try various objects first
-    be_data.ok = FALSE;
-    be_data.be = be;
-    be_data.pQuery = pQuery;
-    pQueryInfo->searchObj = searchObj;
-    be_data.pQueryInfo = pQueryInfo;
-
-    qof_object_foreach_backend( GNC_GDA_BACKEND, compile_query_cb, &be_data );
-    if( be_data.ok ) {
-		LEAVE( "" );
-        return be_data.pQueryInfo;
-    }
-
-    pBookList = qof_query_get_books( pQuery );
-
-    /* Convert search object type to table name */
-    sprintf( sql, "SELECT * from %s", convert_search_obj( searchObj ) );
-    if( !qof_query_has_terms( pQuery ) ) {
-        strcat( sql, ";" );
-    } else {
-        GList* pOrTerms = qof_query_get_terms( pQuery );
-        GList* orTerm;
-
-        strcat( sql, " WHERE " );
-
-        for( orTerm = pOrTerms; orTerm != NULL; orTerm = orTerm->next ) {
-            GList* pAndTerms = (GList*)orTerm->data;
-            GList* andTerm;
-
-            if( orTerm != pOrTerms ) strcat( sql, " OR " );
-            strcat( sql, "(" );
-            for( andTerm = pAndTerms; andTerm != NULL; andTerm = andTerm->next ) {
-                if( andTerm != pAndTerms ) strcat( sql, " AND " );
-                handle_and_term( (QofQueryTerm*)andTerm->data, sql );
-            }
-            strcat( sql, ")" );
-        }
-    }
-
-    DEBUG( "Compiled: %s\n", sql );
-    pQueryInfo->pCompiledQuery =  g_strdup( sql );
-
-	LEAVE( "" );
-
-    return pQueryInfo;
-}
-
-static void
-free_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
-{
-    GncGdaDataType_t* pData = data_p;
-    gda_backend* be_data = be_data_p;
-
-    g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
-    g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
-    if( be_data->ok ) return;
-    if( strcmp( type, be_data->pQueryInfo->searchObj ) != 0 ) return;
-
-    if( pData->free_query != NULL ) {
-        (pData->free_query)( be_data->be, be_data->pCompiledQuery );
-        be_data->ok = TRUE;
-    }
-}
-
-static void
-gnc_gda_free_query(QofBackend* pBEnd, gpointer pQuery)
-{
-    GncGdaBackend *be = (GncGdaBackend*)pBEnd;
-    gnc_gda_query_info* pQueryInfo = (gnc_gda_query_info*)pQuery;
-    gda_backend be_data;
-
-	g_return_if_fail( pBEnd != NULL );
-	g_return_if_fail( pQuery != NULL );
-
-	ENTER( " " );
-
-    // Try various objects first
-    be_data.ok = FALSE;
-    be_data.be = be;
-    be_data.pCompiledQuery = pQuery;
-    be_data.pQueryInfo = pQueryInfo;
-
-    qof_object_foreach_backend( GNC_GDA_BACKEND, free_query_cb, &be_data );
-    if( be_data.ok ) {
-		LEAVE( "" );
-        return;
-    }
-
-    DEBUG( "gda_free_query(): %s\n", (gchar*)pQueryInfo->pCompiledQuery );
-    g_free( pQueryInfo->pCompiledQuery );
-    g_free( pQueryInfo );
-
-	LEAVE( "" );
-}
-
-static void
-run_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
-{
-    GncGdaDataType_t* pData = data_p;
-    gda_backend* be_data = be_data_p;
-
-    g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
-    g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
-    if( be_data->ok ) return;
-
-	// Is this the right item?
-    if( strcmp( type, be_data->pQueryInfo->searchObj ) != 0 ) return;
-
-    if( pData->run_query != NULL ) {
-        (pData->run_query)( be_data->be, be_data->pCompiledQuery );
-        be_data->ok = TRUE;
-    }
-}
-
-static void
-gnc_gda_run_query(QofBackend* pBEnd, gpointer pQuery)
-{
-    GncGdaBackend *be = (GncGdaBackend*)pBEnd;
-    gnc_gda_query_info* pQueryInfo = (gnc_gda_query_info*)pQuery;
-    gda_backend be_data;
-
-	g_return_if_fail( pBEnd != NULL );
-	g_return_if_fail( pQuery != NULL );
-    g_return_if_fail( !be->in_query );
-
-	ENTER( " " );
-
-    be->loading = TRUE;
-    be->in_query = TRUE;
-
-    qof_event_suspend();
-
-    // Try various objects first
-    be_data.ok = FALSE;
-    be_data.be = be;
-    be_data.pCompiledQuery = pQueryInfo->pCompiledQuery;
-    be_data.pQueryInfo = pQueryInfo;
-
-    qof_object_foreach_backend( GNC_GDA_BACKEND, run_query_cb, &be_data );
-    be->loading = FALSE;
-    be->in_query = FALSE;
-    qof_event_resume();
-//    if( be_data.ok ) {
-//		LEAVE( "" );
-//       	return;
-//    }
-
-	// Mark the book as clean
-	qof_instance_mark_clean( QOF_INSTANCE(be->primary_book) );
-
-//    DEBUG( "gda_run_query(): %s\n", (gchar*)pQueryInfo->pCompiledQuery );
-
-	LEAVE( "" );
-}
-
-/* ================================================================= */
-static void
-gnc_gda_init_object_handlers( void )
-{
-    gnc_gda_init_book_handler();
-    gnc_gda_init_commodity_handler();
-    gnc_gda_init_account_handler();
-    gnc_gda_init_budget_handler();
-    gnc_gda_init_price_handler();
-    gnc_gda_init_transaction_handler();
-    gnc_gda_init_slots_handler();
-	gnc_gda_init_recurrence_handler();
-    gnc_gda_init_schedxaction_handler();
-    gnc_gda_init_lot_handler();
 }
 
 /* ================================================================= */
@@ -1172,9 +449,9 @@ gnc_gda_backend_new(void)
     be->save_may_clobber_data = gnc_gda_save_may_clobber_data;
 
     /* The gda backend treats accounting periods transactionally. */
-    be->begin = gnc_gda_begin_edit;
-    be->commit = gnc_gda_commit_edit;
-    be->rollback = gnc_gda_rollback_edit;
+    be->begin = gnc_sql_begin_edit;
+    be->commit = gnc_sql_commit_edit;
+    be->rollback = gnc_sql_rollback_edit;
 
     /* The gda backend uses queries to load data ... */
 #if 0
@@ -1198,9 +475,8 @@ gnc_gda_backend_new(void)
     gnc_be->primary_book = NULL;
 
     if( !initialized ) {
-        gda_init( "gnucash", "2.0", 0, NULL );
-        gnc_gda_init_object_handlers();
-		gnc_gda_register_standard_col_type_handlers();
+        gda_init();
+		gnc_sql_init( &gnc_be->sql_be );
         initialized = TRUE;
     }
 
@@ -1288,6 +564,557 @@ qof_backend_module_init(void)
     prov->provider_free = gnc_gda_provider_free;
     prov->check_data_type = gnc_gda_check_sqlite_file;
     qof_backend_register_provider (prov);
+}
+
+/* --------------------------------------------------------- */
+typedef struct
+{
+	GncSqlRow base;
+
+	GdaDataModel* model;
+	int row_num;
+} GncGdaSqlRow;
+
+static void
+row_dispose( GncSqlRow* row )
+{
+	GncGdaSqlRow* gda_row = (GncGdaSqlRow*)row;
+
+	g_object_unref( gda_row->model );
+	gda_row->model = NULL;
+	g_free( gda_row );
+}
+
+static const GValue*
+row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
+{
+	GncGdaSqlRow* gda_row = (GncGdaSqlRow*)row;
+
+	return gda_data_model_get_value_at_col_name( gda_row->model, col_name, gda_row->row_num );
+}
+
+static GncSqlRow*
+create_gda_row( GdaDataModel* model, int rowNum )
+{
+	GncGdaSqlRow* row;
+
+	row = g_new0( GncGdaSqlRow, 1 );
+	row->base.getValueAtColName = row_get_value_at_col_name;
+	row->base.dispose = row_dispose;
+	row->model = model;
+	g_object_ref( model );
+	row->row_num = rowNum;
+
+	return (GncSqlRow*)row;
+}
+/* --------------------------------------------------------- */
+typedef struct
+{
+	GncSqlResult base;
+
+	GdaDataModel* model;
+	gint next_row;
+	gint num_rows;
+} GncGdaSqlResult;
+
+static void
+result_dispose( GncSqlResult* result )
+{
+	GncGdaSqlResult* gda_result = (GncGdaSqlResult*)result;
+
+	g_object_unref( gda_result->model );
+	gda_result->model = NULL;
+	g_free( result );
+}
+
+static gint
+result_get_num_rows( GncSqlResult* result )
+{
+	GncGdaSqlResult* gda_result = (GncGdaSqlResult*)result;
+
+	return gda_result->num_rows;
+}
+
+static GncSqlRow*
+result_get_first_row( GncSqlResult* result )
+{
+	GncGdaSqlResult* gda_result = (GncGdaSqlResult*)result;
+
+	if( gda_result->num_rows > 0 ) {
+		gda_result->next_row = 1;
+		return create_gda_row( gda_result->model, 0 );
+	} else {
+		return NULL;
+	}
+}
+
+static GncSqlRow*
+result_get_next_row( GncSqlResult* result )
+{
+	GncGdaSqlResult* gda_result = (GncGdaSqlResult*)result;
+
+	if( gda_result->next_row < gda_result->num_rows ) {
+		return create_gda_row( gda_result->model, gda_result->next_row++ );
+	} else {
+		return NULL;
+	}
+}
+
+static GncSqlResult*
+create_gda_result( GdaDataModel* model )
+{
+	GncGdaSqlResult* result;
+
+	result = g_new0( GncGdaSqlResult, 1 );
+	result->base.dispose = result_dispose;
+	result->base.getNumRows = result_get_num_rows;
+	result->base.getFirstRow = result_get_first_row;
+	result->base.getNextRow = result_get_next_row;
+	result->model = model;
+	result->num_rows = gda_data_model_get_n_rows( model );
+	result->next_row = 0;
+
+	return (GncSqlResult*)result;
+}
+/* --------------------------------------------------------- */
+typedef struct
+{
+	GncSqlStatement base;
+
+	GString* sql;
+} GncGdaSqlStatement;
+
+static void
+stmt_dispose( GncSqlStatement* stmt )
+{
+	GncGdaSqlStatement* gda_stmt = (GncGdaSqlStatement*)stmt;
+
+	if( gda_stmt->sql != NULL ) {
+		g_string_free( gda_stmt->sql, TRUE );
+	}
+	g_free( stmt );
+}
+
+static gchar*
+stmt_to_sql( GncSqlStatement* stmt )
+{
+	GncGdaSqlStatement* gda_stmt = (GncGdaSqlStatement*)stmt;
+
+	return gda_stmt->sql->str;
+}
+
+static void
+stmt_add_where_cond( GncSqlStatement* stmt, QofIdTypeConst type_name,
+					gpointer obj, const col_cvt_t* table_row, GValue* value )
+{
+	GncGdaSqlStatement* gda_stmt = (GncGdaSqlStatement*)stmt;
+	gchar* buf;
+
+	buf = g_strdup_printf( " WHERE %s = %s", table_row->col_name,
+						gnc_sql_get_sql_value( value ) );
+	g_string_append( gda_stmt->sql, buf );
+	g_free( buf );
+}
+
+static GncSqlStatement*
+create_gda_statement( const gchar* sql )
+{
+	GncGdaSqlStatement* stmt;
+
+	stmt = g_new0( GncGdaSqlStatement, 1 );
+	stmt->base.dispose = stmt_dispose;
+	stmt->base.toSql = stmt_to_sql;
+	stmt->base.addWhereCond = stmt_add_where_cond;
+	stmt->sql = g_string_new( sql );
+
+	return (GncSqlStatement*)stmt;
+}
+/* --------------------------------------------------------- */
+typedef struct
+{
+	GncSqlConnection base;
+
+	GdaConnection* conn;
+	GdaSqlParser* parser;
+	GdaServerProvider* server;
+} GncGdaSqlConnection;
+
+static void
+conn_dispose( GncSqlConnection* conn )
+{
+	GncGdaSqlConnection* gda_conn = (GncGdaSqlConnection*)conn;
+
+	gda_connection_close( gda_conn->conn );
+	g_object_unref( gda_conn->conn );
+	g_free( conn );
+}
+
+static GncSqlResult*
+conn_execute_select_statement( GncSqlConnection* conn, GncSqlStatement* stmt )
+{
+	GncGdaSqlConnection* gda_conn = (GncGdaSqlConnection*)conn;
+	GncGdaSqlStatement* gda_stmt = (GncGdaSqlStatement*)stmt;
+	GdaDataModel* model;
+	GdaStatement* real_stmt;
+	GError* error = NULL;
+														
+	real_stmt = gda_sql_parser_parse_string( gda_conn->parser, gda_stmt->sql->str, NULL, &error );
+	if( error != NULL ) {
+		PERR( "Error parsing SQL %s\n%s\n", gda_stmt->sql->str, error->message );
+		return NULL;
+	}
+	model = gda_connection_statement_execute_select( gda_conn->conn,
+												real_stmt, NULL, &error );
+	if( error != NULL ) {
+		PERR( "Error executing SQL %s\n%s\n", gda_stmt->sql->str, error->message );
+		return NULL;
+	}
+	return create_gda_result( model );
+}
+
+static gint
+conn_execute_nonselect_statement( GncSqlConnection* conn, GncSqlStatement* stmt )
+{
+	GncGdaSqlConnection* gda_conn = (GncGdaSqlConnection*)conn;
+	GncGdaSqlStatement* gda_stmt = (GncGdaSqlStatement*)stmt;
+	GdaStatement* real_stmt;
+	gint result;
+	GError* error = NULL;
+
+	real_stmt = gda_sql_parser_parse_string( gda_conn->parser, gda_stmt->sql->str, NULL, &error );
+	if( error != NULL ) {
+		PERR( "Error parsing SQL %s\n%s\n", gda_stmt->sql->str, error->message );
+		return 0;
+	}
+	result = gda_connection_statement_execute_non_select( gda_conn->conn,
+												real_stmt, NULL, NULL, &error );
+	if( error != NULL ) {
+		PERR( "Error executing SQL %s\n%s\n", gda_stmt->sql->str, error->message );
+		return 0;
+	}
+	return result;
+}
+
+static GncSqlStatement*
+conn_create_statement_from_sql( GncSqlConnection* conn, const gchar* sql )
+{
+	GncGdaSqlConnection* gda_conn = (GncGdaSqlConnection*)conn;
+
+	return create_gda_statement( sql );
+}
+
+static GValue*
+create_gvalue_from_string( gchar* s )
+{
+	GValue* s_gval;
+
+	s_gval = g_new0( GValue, 1 );
+	g_value_init( s_gval, G_TYPE_STRING );
+	g_value_take_string( s_gval, s );
+
+	return s_gval;
+}
+
+static gboolean
+conn_does_table_exist( GncSqlConnection* conn, const gchar* table_name )
+{
+	GncGdaSqlConnection* gda_conn = (GncGdaSqlConnection*)conn;
+	GError* error = NULL;
+	GValue* table_name_value;
+	GdaDataModel* model;
+	gint nTables;
+	GdaMetaStore* mstore;
+
+	g_return_val_if_fail( conn != NULL, FALSE );
+	g_return_val_if_fail( table_name != NULL, FALSE );
+
+#if 0
+	/* If the db is pristine because it's being saved, the table does not
+	 * exist.
+	 */
+	if( conn->is_pristine_db ) {
+		return FALSE;
+	}
+#endif
+
+	table_name_value = create_gvalue_from_string( g_strdup( table_name ) );
+	mstore = gda_connection_get_meta_store( gda_conn->conn );
+	model = gda_connection_get_meta_store_data( gda_conn->conn, GDA_CONNECTION_META_TABLES, &error, 1, "name", table_name_value );
+	g_free( table_name_value );
+	nTables = gda_data_model_get_n_rows( model );
+	g_object_unref( model );
+
+	if( nTables == 1 ) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+static void
+conn_begin_transaction( GncSqlConnection* conn )
+{
+	GncGdaSqlConnection* gda_conn = (GncGdaSqlConnection*)conn;
+}
+
+static void
+conn_rollback_transaction( GncSqlConnection* conn )
+{
+	GncGdaSqlConnection* gda_conn = (GncGdaSqlConnection*)conn;
+}
+
+static void
+conn_commit_transaction( GncSqlConnection* conn )
+{
+	GncGdaSqlConnection* gda_conn = (GncGdaSqlConnection*)conn;
+}
+
+static const gchar*
+conn_get_column_type_name( GncSqlConnection* conn, GType type, gint size )
+{
+	GncGdaSqlConnection* gda_conn = (GncGdaSqlConnection*)conn;
+
+	return gda_server_provider_get_default_dbms_type(
+									gda_conn->server, gda_conn->conn, type );
+}
+
+static void
+add_table_column( GdaServerOperation* op, const GncSqlColumnInfo* info,
+					guint col_num )
+{
+    gchar* buf;
+	GError* error = NULL;
+	gboolean ok;
+
+	g_return_if_fail( op != NULL );
+	g_return_if_fail( info != NULL );
+
+	ok = gda_server_operation_set_value_at( op, info->name, &error,
+									"/FIELDS_A/@COLUMN_NAME/%d", col_num );
+	if( error != NULL ) {
+		PWARN( "Error setting NAME for %s: %s\n", info->name, error->message );
+	}
+	if( !ok ) return;
+	ok = gda_server_operation_set_value_at( op, info->type_name, &error,
+									"/FIELDS_A/@COLUMN_TYPE/%d", col_num );
+	if( error != NULL ) {
+		PWARN( "Error setting TYPE for %s: %s\n", info->name, error->message );
+	}
+	if( !ok ) return;
+    if( info->size != 0 ) {
+        buf = g_strdup_printf( "%d", info->size );
+		ok = gda_server_operation_set_value_at( op, buf, &error,
+									"/FIELDS_A/@COLUMN_SIZE/%d", col_num );
+		if( error != NULL ) {
+			PWARN( "Error setting SIZE for %s: %s\n", info->name, error->message );
+		}
+        g_free( buf );
+		if( !ok ) return;
+    }
+	ok = gda_server_operation_set_value_at( op,
+									(info->is_primary_key) ? "TRUE" : "FALSE",
+									&error,
+									"/FIELDS_A/@COLUMN_PKEY/%d", col_num );
+	if( error != NULL ) {
+		PWARN( "Error setting PKEY for %s: %s\n", info->name, error->message );
+	}
+	if( !ok ) return;
+	ok = gda_server_operation_set_value_at( op,
+									(info->null_allowed) ? "FALSE" : "TRUE",
+									&error,
+									"/FIELDS_A/@COLUMN_NNUL/%d", col_num );
+	if( error != NULL ) {
+		PWARN( "Error setting NNUL for %s: %s\n", info->name, error->message );
+	}
+	if( !ok ) return;
+#if 0
+	ok = gda_server_operation_set_value_at( op,
+									(flags & COL_AUTOINC) ? "TRUE" : "FALSE",
+									&error,
+									"/FIELDS_A/@COLUMN_AUTOINC/%d", col_num );
+	if( error != NULL ) {
+		PWARN( "Error setting AUTOINC for %s: %s\n", arg, error->message );
+	}
+	if( !ok ) return;
+	ok = gda_server_operation_set_value_at( op,
+									(flags & COL_UNIQUE) ? "TRUE" : "FALSE",
+									&error,
+									"/FIELDS_A/@COLUMN_UNIQUE/%d", col_num );
+	if( error != NULL ) {
+		PWARN( "Error setting UNIQUE for %s: %s\n", arg, error->message );
+	}
+#endif
+}
+
+static void
+conn_create_table( GncSqlConnection* conn, const gchar* table_name,
+				const GList* col_info_list )
+{
+	GncGdaSqlConnection* gda_conn = (GncGdaSqlConnection*)conn;
+    GdaServerOperation *op;
+	GdaConnection* cnn;
+	GError* error = NULL;
+	const GList* list_node;
+	guint col_num;
+
+	g_return_if_fail( conn != NULL );
+	g_return_if_fail( table_name != NULL );
+	g_return_if_fail( col_info_list != NULL );
+    
+	cnn = gda_conn->conn;
+    
+    op = gda_server_provider_create_operation( gda_conn->server, cnn, 
+                           GDA_SERVER_OPERATION_CREATE_TABLE, NULL, &error );
+    if( op != NULL && GDA_IS_SERVER_OPERATION(op) ) {
+        gint col;
+		gboolean ok;
+		GdaServerOperationNode* node;
+		gint i;
+		GdaDataModel* model;
+		GError* error = NULL;
+		gint numRows;
+
+		ok = gda_server_operation_set_value_at( op, table_name, &error,
+								"/TABLE_DEF_P/TABLE_NAME" );
+		if( error != NULL ) {
+			PWARN( "Setting TABLE_NAME %s\n%s\n", table_name, error->message );
+		}
+		if( !ok ) return;
+
+		/* Remove any pre-created colums */
+		node = gda_server_operation_get_node_info( op, "/FIELDS_A" );
+		model = node->model;
+		if( model != NULL ) {
+			numRows = gda_data_model_get_n_rows( model );
+			for( i = 0; i < numRows; i++ ) {
+				gda_data_model_remove_row( model, i, &error );
+				if( error != NULL ) {
+					PWARN( "Removing server op row: %s\n", error->message );
+				}
+			}
+		}
+        
+        for( list_node = col_info_list, col_num = 0; list_node != NULL;
+				list_node = list_node->next, col_num++ ) {
+			GncSqlColumnInfo* info = (GncSqlColumnInfo*)(list_node->data);
+
+			add_table_column( op, info, col_num );
+        }
+        
+        if( !gda_server_provider_perform_operation( gda_conn->server, cnn, op, &error ) ) {
+			PWARN( "gda_server_provider_perform_operation(): %s\n%s\n",
+					table_name, error->message );
+            g_object_unref( op );
+            return;
+        }
+
+        g_object_unref( op );
+    }
+}
+
+static void
+conn_create_index( GncSqlConnection* conn, const gchar* index_name,
+					const gchar* table_name, const col_cvt_t* col_table )
+{
+    GdaServerOperation *op;
+    GdaServerProvider *server;
+	GdaConnection* cnn;
+	GncGdaSqlConnection* gda_conn = (GncGdaSqlConnection*)conn;
+	GError* error = NULL;
+    
+    g_return_if_fail( conn != NULL );
+	g_return_if_fail( index_name != NULL );
+	g_return_if_fail( table_name != NULL );
+	g_return_if_fail( col_table != NULL );
+    
+	cnn = gda_conn->conn;
+	g_return_if_fail( cnn != NULL );
+    g_return_if_fail( GDA_IS_CONNECTION(cnn) );
+    g_return_if_fail( gda_connection_is_opened(cnn) );
+
+    server = gda_conn->server;
+	g_return_if_fail( server != NULL );
+    
+    op = gda_server_provider_create_operation( server, cnn, 
+                           GDA_SERVER_OPERATION_CREATE_INDEX, NULL, &error );
+    if( error != NULL ) {
+		PERR( "gda_server_provider_create_operation(): %s\n", error->message );
+	}
+    if( op != NULL && GDA_IS_SERVER_OPERATION(op) ) {
+        gint col;
+		gboolean ok;
+        
+		ok = gda_server_operation_set_value_at( op, index_name, &error,
+								"/INDEX_DEF_P/INDEX_NAME" );
+    	if( error != NULL ) {
+			PERR( "set INDEX_NAME: %s\n", error->message );
+		}
+		if( !ok ) return;
+		ok = gda_server_operation_set_value_at( op, "", &error,
+								"/INDEX_DEF_P/INDEX_TYPE" );
+    	if( error != NULL ) {
+			PERR( "set INDEX_TYPE: %s\n", error->message );
+		}
+		if( !ok ) return;
+		ok = gda_server_operation_set_value_at( op, "TRUE", &error,
+								"/INDEX_DEF_P/INDEX_IFNOTEXISTS" );
+    	if( error != NULL ) {
+			PERR( "set INDEX_IFNOTEXISTS: %s\n", error->message );
+		}
+		if( !ok ) return;
+		ok = gda_server_operation_set_value_at( op, table_name, &error,
+								"/INDEX_DEF_P/INDEX_ON_TABLE" );
+    	if( error != NULL ) {
+			PERR( "set INDEX_ON_TABLE: %s\n", error->message );
+		}
+		if( !ok ) return;
+
+        for( col = 0; col_table[col].col_name != NULL; col++ ) {
+			guint item;
+
+			if( col != 0 ) {
+				item = gda_server_operation_add_item_to_sequence( op, "/INDEX_FIELDS_S" );
+				g_assert( item == col );
+			}
+			ok = gda_server_operation_set_value_at( op, col_table->col_name, &error,
+													"/INDEX_FIELDS_S/%d/INDEX_FIELD", col );
+			if( error != NULL ) {
+				PERR( "set INDEX_FIELD %s: %s\n", col_table->col_name, error->message );
+			}
+			if( !ok ) break;
+        }
+        
+        if( !gda_server_provider_perform_operation( server, cnn, op, &error ) ) {
+            g_object_unref( op );
+            return;
+        }
+
+        g_object_unref( op );
+    }
+}
+
+static GncSqlConnection*
+create_gda_connection( GdaConnection* conn )
+{
+	GncGdaSqlConnection* gda_conn;
+
+	gda_conn = g_new0( GncGdaSqlConnection, 1 );
+	gda_conn->base.dispose = conn_dispose;
+	gda_conn->base.executeSelectStatement = conn_execute_select_statement;
+	gda_conn->base.executeNonSelectStatement = conn_execute_nonselect_statement;
+	gda_conn->base.createStatementFromSql = conn_create_statement_from_sql;
+	gda_conn->base.doesTableExist = conn_does_table_exist;
+	gda_conn->base.beginTransaction = conn_begin_transaction;
+	gda_conn->base.rollbackTransaction = conn_rollback_transaction;
+	gda_conn->base.commitTransaction = conn_commit_transaction;
+	gda_conn->base.getColumnTypeName = conn_get_column_type_name;
+	gda_conn->base.createTable = conn_create_table;
+	gda_conn->base.createIndex = conn_create_index;
+	gda_conn->conn = conn;
+	gda_conn->parser = gda_sql_parser_new();
+	gda_conn->server = gda_connection_get_provider_obj( conn );
+
+	return (GncSqlConnection*)gda_conn;
 }
 
 /* ========================== END OF FILE ===================== */

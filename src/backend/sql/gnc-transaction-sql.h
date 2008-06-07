@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-backend-gda.h: load and save data to SQL via libgda          *
+ * gnc-transaction-sql.h: load and save data to SQL                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,41 +18,34 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file gnc-backend-gda.h
- *  @brief load and save data to SQL via libgda
+/** @file gnc-transaction-sql.h
+ *  @brief load and save data to SQL
  *  @author Copyright (c) 2006-2008 Phil Longstaff <plongstaff@rogers.com>
  *
  * This file implements the top-level QofBackend API for saving/
- * restoring data to/from an SQL database via libgda
+ * restoring data to/from an SQL database
  */
 
-#ifndef GNC_BACKEND_GDA_H_
-#define GNC_BACKEND_GDA_H_
+#ifndef GNC_TRANSACTION_SQL_H_
+#define GNC_TRANSACTION_SQL_H_
 
+#include "qof.h"
 #include <gmodule.h>
 
-G_MODULE_EXPORT void
-qof_backend_module_init(void);
+void gnc_sql_init_transaction_handler( void );
+void gnc_sql_transaction_commit_splits( GncSqlBackend* be, Transaction* pTx );
+void gnc_sql_save_transaction( QofInstance* inst, GncSqlBackend* be );
+void gnc_sql_get_account_balances( GncSqlBackend* be, Account* pAccount, 
+								    gnc_numeric* start_balance,
+								    gnc_numeric* cleared_balance,
+									gnc_numeric* reconciled_balance );
 
-struct GncGdaBackend_struct
-{
-  GncSqlBackend sql_be;
+typedef struct {
+	Account* acct;
+	gnc_numeric start_balance;
+	gnc_numeric cleared_balance;
+	gnc_numeric reconciled_balance;
+} acct_balances_t;
+GList* gnc_sql_get_account_balances_for_list( GncSqlBackend* be, GList* list );
 
-  GdaConnection* pConnection;
-  GdaSqlParser* parser;
-  GdaDataHandler* timespecDH;
-  GdaDataHandler* dateDH;
-
-  QofBook *primary_book;	/* The primary, main open book */
-  gboolean	loading;		/* We are performing an initial load */
-  gboolean  in_query;
-  gboolean  supports_transactions;
-  gboolean  is_pristine_db;	// Are we saving to a new pristine db?
-
-  gint obj_total;			// Total # of objects (for percentage calculation)
-  gint operations_done;		// Number of operations (save/load) done
-  GHashTable* versions;		// Version number for each table
-};
-typedef struct GncGdaBackend_struct GncGdaBackend;
-
-#endif /* GNC_BACKEND_GDA_H_ */
+#endif /* GNC_TRANSACTION_SQL_H_ */

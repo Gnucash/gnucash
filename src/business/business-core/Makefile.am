@@ -1,4 +1,4 @@
-SUBDIRS = . gda test file
+SUBDIRS = . sql test file
 
 pkglib_LTLIBRARIES = libgncmod-business-core.la
 

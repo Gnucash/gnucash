@@ -76,10 +76,9 @@ gnc_engine_init(int argc, char ** argv)
     const gchar* lib;
     gboolean required;
   } libs[] = {
-    { "gncmod-backend-gda", TRUE },
-    { GNC_LIB_NAME, TRUE },
-    /* shouldn't the PG gnc-module do this instead of US doing it? */
-//    { "gncmod-backend-postgres", FALSE },
+    { "gncmod-backend-dbi", TRUE },
+//    { "gncmod-backend-gda", TRUE },
+    { "gncmod-backend-xml", TRUE },
     { NULL, FALSE } }, *lib;
   gnc_engine_init_hook_t hook;
   GList * cur;
