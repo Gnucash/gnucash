@@ -218,6 +218,21 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         if (result == GNC_RESPONSE_NOW) {
             /* Finally, execute the job */
             successful = AB_Banking_ExecuteJobs(api, job_list, NULL, 0) == 0;
+
+            if (!successful
+                && (AB_Job_GetStatus(job) == AB_Job_StatusPending
+                    || AB_Job_GetStatus(job) == AB_Job_StatusError)
+                && !gnc_verify_dialog(
+                    parent, FALSE, "%s",
+                    _("The job was sent to the bank successfully, but the "
+                      "bank is refusing to execute the job. Please check "
+                      "the log window for the exact error message of the "
+                      "bank. The line with the error message contains a "
+                      "code number that is greater than 9000.\n"
+                      "\n"
+                      "Do you want to enter the job again?"))) {
+                aborted = TRUE;
+            }
         }
         /* Simply ignore any other case */
 
