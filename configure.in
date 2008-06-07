@@ -1162,6 +1162,11 @@ then
     ], [gtkhtml=0])
     AM_CONDITIONAL(GTKHTML_USES_GTKPRINT,test "x$gtkhtml" = "x1")
 
+    # GOffice >= 0.5 requires GtkHTML >= 3.14
+    if test x$goffice_with_cairo = x1 -a x$gtkhtml = x0 ; then
+      AC_MSG_ERROR([Goffice uses Cairo/GtkPrint but didn't find GtkHTML with GtkPrint support])
+    fi
+
     # fallback to older gtkhtml versions and gnomeprint
     if test x$gtkhtml = x0
     then
