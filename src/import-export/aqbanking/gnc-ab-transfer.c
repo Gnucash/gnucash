@@ -134,6 +134,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
     td = gnc_ab_trans_dialog_new(parent, ab_acc,
                                  xaccAccountGetCommoditySCU(gnc_acc),
                                  trans_type, templates);
+    templates = NULL;
 
     /* Repeat until AqBanking action was successful or user pressed cancel */
     do {
@@ -152,6 +153,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
             save_templates(parent, gnc_acc, templates,
                            (result == GNC_RESPONSE_NOW));
         g_list_free(templates);
+        templates = NULL;
 
         /* Get a job and enqueue it */
         ab_trans = gnc_ab_trans_dialog_get_ab_trans(td);
@@ -258,8 +260,6 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
 cleanup:
     if (td)
         gnc_ab_trans_dialog_free(td);
-    if (templates)
-        gnc_ab_trans_templ_list_free(templates);
     if (gui)
         gnc_GWEN_Gui_release(gui);
     if (online)
