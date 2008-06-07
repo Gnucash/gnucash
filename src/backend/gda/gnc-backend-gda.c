@@ -796,7 +796,7 @@ conn_execute_nonselect_statement( GncSqlConnection* conn, GncSqlStatement* stmt 
 }
 
 static GncSqlStatement*
-conn_create_statement_from_sql( GncSqlConnection* conn, const gchar* sql )
+conn_create_statement_from_sql( GncSqlConnection* conn, gchar* sql )
 {
 	GncGdaSqlConnection* gda_conn = (GncGdaSqlConnection*)conn;
 

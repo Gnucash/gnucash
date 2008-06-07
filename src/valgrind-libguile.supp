@@ -50,9 +50,9 @@
    libguile.so(Leak)
    Memcheck:Leak
    fun:malloc
-   obj:/usr/lib/libguile.so.12.3.0
-   obj:/usr/lib/libguile.so.12.3.0
-   obj:/usr/lib/libguile.so.12.3.0
+   obj:*libguile.so*
+   obj:*libguile.so*
+   obj:*libguile.so*
 }
 {
    scm_make_port_type Leak
@@ -60,13 +60,13 @@
    fun:realloc
    fun:scm_make_port_type
    fun:scm_init_vports
-   obj:/usr/lib/libguile.so.12.3.0
+   obj:*libguile.so*
 }
 {
    scm_gc_for_newcell Leak
    Memcheck:Leak
-   fun:realloc
-   obj:/usr/lib/libguile.so.12.3.0
+   fun:malloc
+   obj:*libguile.so*
    fun:scm_gc_for_newcell
    fun:scm_acons
 }

@@ -41,7 +41,7 @@
 	Memcheck:Leak
 	fun:memalign
 	fun:posix_memalign
-	obj:/opt/gnome/lib/libglib-2.0.so.0.1200.4
+	obj:/usr/lib/libglib-2.0.so.0.1600.3
 	fun:g_slice_alloc
 	fun:g_array_sized_new
 	fun:g_array_new

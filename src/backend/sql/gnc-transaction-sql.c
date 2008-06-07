@@ -281,7 +281,7 @@ load_splits_for_tx_list( GncSqlBackend* be, GList* list )
 
 		gnc_sql_result_dispose( result );
     }
-	g_string_free( sql, TRUE );
+	g_string_free( sql, FALSE );
 }
 
 static void
@@ -357,6 +357,7 @@ load_tx_by_guid( GncSqlBackend* be, GUID* tx_guid )
 	sql = g_strdup_printf( "SELECT * FROM %s WHERE guid = %s", TRANSACTION_TABLE, guid_buf );
 	stmt = gnc_sql_create_statement_from_sql( be, sql );
 	query_transactions( be, stmt );
+	gnc_sql_statement_dispose( stmt );
 }
 
 /* ================================================================= */
@@ -370,8 +371,8 @@ load_all_tx( GncSqlBackend* be )
 
 	sql = g_strdup_printf( "SELECT * FROM %s", TRANSACTION_TABLE );
 	stmt = gnc_sql_create_statement_from_sql( be, sql );
-	g_free( sql );
 	query_transactions( be, stmt );
+	gnc_sql_statement_dispose( stmt );
 }
 
 /* ================================================================= */
@@ -639,15 +640,16 @@ static void
 run_split_query( GncSqlBackend* be, gpointer pQuery )
 {
     GncSqlStatement* stmt;
-    const gchar* sql;
+    gchar* sql;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( pQuery != NULL );
 
-    sql = (const gchar*)pQuery;
+    sql = (gchar*)pQuery;
 
 	stmt = gnc_sql_create_statement_from_sql( be, sql );
     query_transactions( be, stmt );
+	gnc_sql_statement_dispose( stmt );
 }
 
 static void

@@ -68,7 +68,7 @@ struct GncSqlConnection
 	void (*dispose)( GncSqlConnection* );
 	GncSqlResult* (*executeSelectStatement)( GncSqlConnection*, GncSqlStatement* );
 	gint (*executeNonSelectStatement)( GncSqlConnection*, GncSqlStatement* );
-	GncSqlStatement* (*createStatementFromSql)( GncSqlConnection*, const gchar* );
+	GncSqlStatement* (*createStatementFromSql)( GncSqlConnection*, gchar* );
 	gboolean (*doesTableExist)( GncSqlConnection*, const gchar* );
 	void (*beginTransaction)( GncSqlConnection* );
 	void (*rollbackTransaction)( GncSqlConnection* );
@@ -256,10 +256,10 @@ GncSqlStatement* gnc_sql_build_delete_statement( GncSqlBackend* pBackend,
 gint gnc_sql_execute_statement( GncSqlBackend* pBackend, GncSqlStatement* statement );
 GncSqlResult* gnc_sql_execute_select_statement( GncSqlBackend* pBackend, GncSqlStatement* statement );
 GncSqlResult* gnc_sql_execute_sql_statement( GncSqlBackend* pBackend, GncSqlStatement* sqlStmt );
-GncSqlResult* gnc_sql_execute_select_sql( const GncSqlBackend* pBackend, const gchar* sql );
-gint gnc_sql_execute_nonselect_sql( const GncSqlBackend* pBackend, const gchar* sql );
-GncSqlStatement* gnc_sql_create_statement_from_sql( const GncSqlBackend* pBackend, const gchar* sql );
-int gnc_sql_execute_select_get_count( const GncSqlBackend* pBackend, const gchar* sql );
+GncSqlResult* gnc_sql_execute_select_sql( const GncSqlBackend* pBackend, gchar* sql );
+gint gnc_sql_execute_nonselect_sql( const GncSqlBackend* pBackend, gchar* sql );
+GncSqlStatement* gnc_sql_create_statement_from_sql( const GncSqlBackend* pBackend, gchar* sql );
+int gnc_sql_execute_select_get_count( const GncSqlBackend* pBackend, gchar* sql );
 int gnc_sql_execute_statement_get_count( GncSqlBackend* pBackend, GncSqlStatement* statement );
 void gnc_sql_load_object( const GncSqlBackend* be, GncSqlRow* row,
 						QofIdTypeConst obj_name, gpointer pObject,

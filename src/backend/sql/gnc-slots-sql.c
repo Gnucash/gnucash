@@ -427,8 +427,6 @@ gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst )
 
 	buf = g_strdup_printf( "SELECT * FROM %s WHERE obj_guid='%s'", TABLE_NAME, guid_buf );
 	stmt = gnc_sql_create_statement_from_sql( be, buf );
-	g_free( buf );
-
 	result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
@@ -526,7 +524,7 @@ gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list )
         }
 		gnc_sql_result_dispose( result );
     }
-	g_string_free( sql, TRUE );
+	g_string_free( sql, FALSE );
 }
 
 /* ================================================================= */

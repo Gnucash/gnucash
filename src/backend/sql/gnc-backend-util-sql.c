@@ -71,18 +71,6 @@ get_integer_value( const GValue* value )
 	return 0;
 }
 
-static GValue*
-create_gvalue_from_string( gchar* s )
-{
-	GValue* s_gval;
-
-	s_gval = g_new0( GValue, 1 );
-	g_value_init( s_gval, G_TYPE_STRING );
-	g_value_take_string( s_gval, s );
-
-	return s_gval;
-}
-
 /* ----------------------------------------------------------------- */
 static gpointer
 get_autoinc_id( gpointer pObject, const QofParam* param )
@@ -185,7 +173,6 @@ static void
 add_string_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
 								GList** pList )
 {
-    const gchar* dbms_type;
 	GncSqlColumnInfo* info;
 
 	g_return_if_fail( be != NULL );
@@ -275,7 +262,6 @@ static void
 add_int_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
 								GList** pList )
 {
-    const gchar* dbms_type;
 	GncSqlColumnInfo* info;
 
 	g_return_if_fail( be != NULL );
@@ -355,7 +341,6 @@ static void
 add_boolean_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
 								GList** pList )
 {
-    const gchar* dbms_type;
 	GncSqlColumnInfo* info;
 
 	g_return_if_fail( be != NULL );
@@ -429,7 +414,6 @@ static void
 add_int64_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
 								GList** pList )
 {
-    const gchar* dbms_type;
 	GncSqlColumnInfo* info;
 
 	g_return_if_fail( be != NULL );
@@ -504,7 +488,6 @@ static void
 add_double_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
 								GList** pList )
 {
-    const gchar* dbms_type;
 	GncSqlColumnInfo* info;
 
 	g_return_if_fail( be != NULL );
@@ -587,7 +570,6 @@ static void
 add_guid_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
 								GList** pList )
 {
-    const gchar* dbms_type;
 	GncSqlColumnInfo* info;
 
 	g_return_if_fail( be != NULL );
@@ -739,7 +721,6 @@ static void
 add_timespec_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
 								GList** pList )
 {
-    const gchar* dbms_type;
 	GncSqlColumnInfo* info;
 
 	g_return_if_fail( be != NULL );
@@ -843,7 +824,6 @@ static void
 add_date_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
 								GList** pList )
 {
-    const gchar* dbms_type;
 	GncSqlColumnInfo* info;
 
 	g_return_if_fail( be != NULL );
@@ -943,7 +923,6 @@ static void
 add_numeric_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
 								GList** pList )
 {
-    const gchar* dbms_type;
 	GncSqlColumnInfo* info;
     gchar* buf;
 	const col_cvt_t* subtable_row;
@@ -1199,7 +1178,7 @@ gnc_sql_execute_sql_statement( GncSqlBackend* be, GncSqlStatement* sqlStmt )
 }
 
 GncSqlStatement*
-gnc_sql_create_statement_from_sql( const GncSqlBackend* be, const gchar* sql )
+gnc_sql_create_statement_from_sql( const GncSqlBackend* be, gchar* sql )
 {
     GError* error = NULL;
 	GncSqlStatement* stmt;
@@ -1216,7 +1195,7 @@ gnc_sql_create_statement_from_sql( const GncSqlBackend* be, const gchar* sql )
 }
 
 GncSqlResult*
-gnc_sql_execute_select_sql( const GncSqlBackend* be, const gchar* sql )
+gnc_sql_execute_select_sql( const GncSqlBackend* be, gchar* sql )
 {
 	GncSqlStatement* stmt;
     GError* error = NULL;
@@ -1238,7 +1217,7 @@ gnc_sql_execute_select_sql( const GncSqlBackend* be, const gchar* sql )
 }
 
 gint
-gnc_sql_execute_nonselect_sql( const GncSqlBackend* be, const gchar* sql )
+gnc_sql_execute_nonselect_sql( const GncSqlBackend* be, gchar* sql )
 {
 	GncSqlStatement* stmt;
     GError* error = NULL;
@@ -1260,7 +1239,7 @@ gnc_sql_execute_nonselect_sql( const GncSqlBackend* be, const gchar* sql )
 }
 
 int
-gnc_sql_execute_select_get_count( const GncSqlBackend* be, const gchar* sql )
+gnc_sql_execute_select_get_count( const GncSqlBackend* be, gchar* sql )
 {
     int count = 0;
     GncSqlResult* result;
@@ -1392,8 +1371,6 @@ gnc_sql_do_db_operation( GncSqlBackend* be,
     }
 }
 
-#define INITIAL_SQL_BUF_LEN 500
-
 static GSList*
 create_gslist_from_values( GncSqlBackend* be,
                             QofIdTypeConst obj_name, gpointer pObject,
@@ -1427,9 +1404,11 @@ gnc_sql_get_sql_value( const GValue* value )
 			g_free( string );
 			return str;
 		} else {
+			PWARN( "not transformable, gtype = %d\n", G_VALUE_TYPE(value) );
 			return "$$$";
 		}
 	} else {
+		PWARN( "value is NULL or not G_IS_VALUE()\n" );
 		return "";
 	}
 }
@@ -1554,58 +1533,6 @@ gnc_sql_build_delete_statement( GncSqlBackend* be,
 }
 
 /* ================================================================= */
-#if 0
-void
-gnc_gda_add_table_column( GdaServerOperation* op, const gchar* arg, const gchar* dbms_type,
-            gint size, gint flags, guint col_num )
-{
-    gchar* buf;
-	GError* error = NULL;
-	gboolean ok;
-
-	g_return_if_fail( op != NULL );
-	g_return_if_fail( arg != NULL );
-	g_return_if_fail( dbms_type != NULL );
-
-	ok = gda_server_operation_set_value_at( op, arg, &error, "/FIELDS_A/@COLUMN_NAME/%d", col_num );
-	if( !ok ) return;
-	ok = gda_server_operation_set_value_at( op, dbms_type, &error, "/FIELDS_A/@COLUMN_TYPE/%d", col_num );
-	if( !ok ) return;
-    if( size != 0 ) {
-        buf = g_strdup_printf( "%d", size );
-		ok = gda_server_operation_set_value_at( op, buf, &error, "/FIELDS_A/@COLUMN_SIZE/%d", col_num );
-        g_free( buf );
-		if( !ok ) return;
-    }
-	ok = gda_server_operation_set_value_at( op,
-										(flags & COL_PKEY) ? "TRUE" : "FALSE",
-										&error, "/FIELDS_A/@COLUMN_PKEY/%d", col_num );
-	if( error != NULL ) {
-		PWARN( "Error setting PKEY for %s: %s\n", arg, error->message );
-	}
-	if( !ok ) return;
-	ok = gda_server_operation_set_value_at( op,
-										(flags & COL_NNUL) ? "TRUE" : "FALSE",
-										&error, "/FIELDS_A/@COLUMN_NNUL/%d", col_num );
-	if( error != NULL ) {
-		PWARN( "Error setting NNUL for %s: %s\n", arg, error->message );
-	}
-	if( !ok ) return;
-	ok = gda_server_operation_set_value_at( op,
-										(flags & COL_AUTOINC) ? "TRUE" : "FALSE",
-										&error, "/FIELDS_A/@COLUMN_AUTOINC/%d", col_num );
-	if( error != NULL ) {
-		PWARN( "Error setting AUTOINC for %s: %s\n", arg, error->message );
-	}
-	if( !ok ) return;
-	ok = gda_server_operation_set_value_at( op,
-										(flags & COL_UNIQUE) ? "TRUE" : "FALSE",
-										&error, "/FIELDS_A/@COLUMN_UNIQUE/%d", col_num );
-	if( error != NULL ) {
-		PWARN( "Error setting UNIQUE for %s: %s\n", arg, error->message );
-	}
-}
-#endif
 
 static gboolean
 create_table( const GncSqlBackend* be, const gchar* table_name,
@@ -1705,7 +1632,6 @@ gnc_sql_init_version_info( GncSqlBackend* be )
 
 		sql = g_strdup_printf( "SELECT * FROM %s", VERSION_TABLE_NAME );
 		result = gnc_sql_execute_select_sql( be, sql );
-		g_free( sql );
 		if( result != NULL ) {
 			const GValue* name;
 			const GValue* version;

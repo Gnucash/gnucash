@@ -356,13 +356,21 @@ typedef struct
 	GncSqlRow base;
 
 	dbi_result result;
+	GList* gvalue_list;
 } GncDbiSqlRow;
 
 static void
 row_dispose( GncSqlRow* row )
 {
 	GncDbiSqlRow* dbi_row = (GncDbiSqlRow*)row;
+	GList* node;
 
+	if( dbi_row->gvalue_list != NULL ) {
+		for( node = dbi_row->gvalue_list; node != NULL; node = node->next ) {
+			g_free( node->data );
+		}
+		g_list_free( dbi_row->gvalue_list );
+	}
 	g_free( dbi_row );
 }
 
@@ -394,6 +402,7 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
 			return NULL;
 	}
 	
+	dbi_row->gvalue_list = g_list_prepend( dbi_row->gvalue_list, value );
 	return value;
 }
 
@@ -417,6 +426,7 @@ typedef struct
 	dbi_result result;
 	gint num_rows;
 	gint cur_row;
+	GncSqlRow* row;
 } GncDbiSqlResult;
 
 static void
@@ -424,7 +434,12 @@ result_dispose( GncSqlResult* result )
 {
 	GncDbiSqlResult* dbi_result = (GncDbiSqlResult*)result;
 
-	dbi_result_free( dbi_result->result );
+	if( dbi_result->row != NULL ) {
+		gnc_sql_row_dispose( dbi_result->row );
+	}
+	if( dbi_result->result != NULL ) {
+		dbi_result_free( dbi_result->result );
+	}
 	g_free( result );
 }
 
@@ -441,10 +456,15 @@ result_get_first_row( GncSqlResult* result )
 {
 	GncDbiSqlResult* dbi_result = (GncDbiSqlResult*)result;
 
+	if( dbi_result->row != NULL ) {
+		gnc_sql_row_dispose( dbi_result->row );
+		dbi_result->row = NULL;
+	}
 	if( dbi_result->num_rows > 0 ) {
 		dbi_result_first_row( dbi_result->result );
 		dbi_result->cur_row = 1;
-		return create_dbi_row( dbi_result->result );
+		dbi_result->row = create_dbi_row( dbi_result->result );
+		return dbi_result->row;
 	} else {
 		return NULL;
 	}
@@ -455,10 +475,15 @@ result_get_next_row( GncSqlResult* result )
 {
 	GncDbiSqlResult* dbi_result = (GncDbiSqlResult*)result;
 
+	if( dbi_result->row != NULL ) {
+		gnc_sql_row_dispose( dbi_result->row );
+		dbi_result->row = NULL;
+	}
 	if( dbi_result->cur_row < dbi_result->num_rows ) {
 		dbi_result_next_row( dbi_result->result );
 		dbi_result->cur_row++;
-		return create_dbi_row( dbi_result->result );
+		dbi_result->row = create_dbi_row( dbi_result->result );
+		return dbi_result->row;
 	} else {
 		return NULL;
 	}
@@ -521,7 +546,7 @@ stmt_add_where_cond( GncSqlStatement* stmt, QofIdTypeConst type_name,
 }
 
 static GncSqlStatement*
-create_dbi_statement( const gchar* sql )
+create_dbi_statement( gchar* sql )
 {
 	GncDbiSqlStatement* stmt;
 
@@ -530,6 +555,7 @@ create_dbi_statement( const gchar* sql )
 	stmt->base.toSql = stmt_to_sql;
 	stmt->base.addWhereCond = stmt_add_where_cond;
 	stmt->sql = g_string_new( sql );
+	g_free( sql );
 
 	return (GncSqlStatement*)stmt;
 }
@@ -580,7 +606,7 @@ conn_execute_nonselect_statement( GncSqlConnection* conn, GncSqlStatement* stmt 
 }
 
 static GncSqlStatement*
-conn_create_statement_from_sql( GncSqlConnection* conn, const gchar* sql )
+conn_create_statement_from_sql( GncSqlConnection* conn, gchar* sql )
 {
 	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 
@@ -613,6 +639,7 @@ conn_does_table_exist( GncSqlConnection* conn, const gchar* table_name )
 	dbname = dbi_conn_get_option( dbi_conn->conn, "dbname" );
 	tables = dbi_conn_get_table_list( dbi_conn->conn, dbname, table_name );
 	nTables = dbi_result_get_numrows( tables );
+	dbi_result_free( tables );
 
 	if( nTables == 1 ) {
 		return TRUE;

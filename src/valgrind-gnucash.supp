@@ -37,10 +37,67 @@
 #     if Free: name of free-ing fn)
 
 {
-	libld-2.7(Value4)
-	Memcheck:Value4
+	libld-2.7(Addr4)
+	Memcheck:Addr4
 	obj:/lib/ld-2.7.so
 	obj:/lib/ld-2.7.so
+}
+{
+	libld-2.7(Addr4 #2)
+	Memcheck:Addr4
+	obj:/lib/ld-2.7.so
+	obj:/lib/ld-2.7.so
+	obj:/lib/tls/i686/cmov/libc-2.7.so
+	obj:/lib/ld-2.7.so
+	obj:/lib/tls/i686/cmov/libc-2.7.so
+}
+{
+	libld-2.7(Addr4 #3)
+	Memcheck:Addr4
+	obj:/lib/ld-2.7.so
+	obj:/lib/tls/i686/cmov/libc-2.7.so
+	fun:_dl_sym
+}
+{
+	libld-2.7(Addr4 #4)
+	Memcheck:Addr4
+	obj:/lib/ld-2.7.so
+	obj:/lib/tls/i686/cmov/libdl-2.7.so
+	obj:/lib/ld-2.7.so
+	obj:/lib/tls/i686/cmov/libdl-2.7.so
+}
+{
+	libld-2.7(Cond)
+	Memcheck:Cond
+	obj:/lib/ld-2.7.so
+	obj:/lib/tls/i686/cmov/libc-2.7.so
+	fun:_dl_sym
+}
+{
+	libld-2.7(Cond #2)
+	Memcheck:Cond
+	obj:/lib/ld-2.7.so
+	obj:/lib/ld-2.7.so
+	obj:/lib/tls/i686/cmov/libc-2.7.so
+	obj:/lib/ld-2.7.so
+	obj:/lib/tls/i686/cmov/libc-2.7.so
+}
+{
+	libld-2.7(Cond #3)
+	Memcheck:Cond
+	obj:/lib/ld-2.7.so
+	obj:/lib/ld-2.7.so
+	obj:/lib/tls/i686/cmov/libdl-2.7.so
+	obj:/lib/ld-2.7.so
+	obj:/lib/tls/i686/cmov/libdl-2.7.so
+}
+{
+	libld-2.7(Cond #4)
+	Memcheck:Cond
+	obj:/lib/ld-2.7.so
+	obj:/lib/tls/i686/cmov/libdl-2.7.so
+	obj:/lib/ld-2.7.so
+	obj:/lib/tls/i686/cmov/libdl-2.7.so
 }
 {
    libglib-1.2.so.0(Value4)
