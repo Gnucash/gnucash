@@ -83,20 +83,11 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
     AB_BANKING *api;
     gboolean online = FALSE;
     AB_ACCOUNT *ab_acc;
-    GncGWENGui *gui = NULL;
     GncABTransDialog *dialog = NULL;
     GList *templates = NULL;
     GncABTransDialog *td = NULL;
     gboolean successful;
     gboolean aborted = FALSE;
-    const AB_TRANSACTION *ab_trans;
-    AB_JOB *job = NULL;
-    AB_JOB_LIST2 *job_list = NULL;
-    XferDialog *xfer_dialog = NULL;
-    gnc_numeric amount;
-    gchar *description;
-    gchar *memo;
-    Transaction *gnc_trans = NULL;
 
     g_return_if_fail(parent && gnc_acc);
 
@@ -119,13 +110,6 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         goto cleanup;
     }
 
-    /* Get a GUI object */
-    gui = gnc_GWEN_Gui_get(parent);
-    if (!gui) {
-        g_warning("gnc_ab_maketrans: Couldn't initialize Gwenhywfar GUI");
-        goto cleanup;
-    }
-
     /* Get list of template transactions */
     templates = gnc_ab_trans_templ_list_new_from_kvp_list(
         gnc_ab_get_book_template_list(gnc_account_get_book(gnc_acc)));
@@ -138,14 +122,33 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
 
     /* Repeat until AqBanking action was successful or user pressed cancel */
     do {
+        GncGWENGui *gui = NULL;
         gint result;
         gboolean changed;
+        const AB_TRANSACTION *ab_trans;
+        AB_JOB *job = NULL;
+        AB_JOB_LIST2 *job_list = NULL;
+        XferDialog *xfer_dialog = NULL;
+        gnc_numeric amount;
+        gchar *description;
+        gchar *memo;
+        Transaction *gnc_trans = NULL;
+
+        /* Get a GUI object */
+        gui = gnc_GWEN_Gui_get(parent);
+        if (!gui) {
+            g_warning("gnc_ab_maketrans: Couldn't initialize Gwenhywfar GUI");
+            aborted = TRUE;
+            goto repeat;
+        }
 
         /* Let the user enter the values */
         result = gnc_ab_trans_dialog_run_until_ok(td);
 
-        if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
-            goto cleanup;
+        if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER) {
+            aborted = TRUE;
+            goto repeat;
+        }
 
         /* Save the templates */
         templates = gnc_ab_trans_dialog_get_templ(td, &changed);
@@ -222,18 +225,23 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
             successful = AB_Banking_ExecuteJobs(api, job_list, NULL, 0) == 0;
 
             if (!successful
-                && (AB_Job_GetStatus(job) == AB_Job_StatusPending
-                    || AB_Job_GetStatus(job) == AB_Job_StatusError)
-                && !gnc_verify_dialog(
-                    parent, FALSE, "%s",
-                    _("The job was sent to the bank successfully, but the "
-                      "bank is refusing to execute the job. Please check "
-                      "the log window for the exact error message of the "
-                      "bank. The line with the error message contains a "
-                      "code number that is greater than 9000.\n"
-                      "\n"
-                      "Do you want to enter the job again?"))) {
-                aborted = TRUE;
+                || AB_Job_GetStatus(job) != AB_Job_StatusFinished) {
+                successful = FALSE;
+                if (!gnc_verify_dialog(
+                        parent, FALSE, "%s",
+                        _("An error occurred while executing the job.  Please check "
+                          "the log window for the exact error message.\n"
+                          "\n"
+                          "Do you want to enter the job again?"))) {
+                        /* _("The job was sent to the bank successfully, but the " */
+                        /*   "bank is refusing to execute the job. Please check " */
+                        /*   "the log window for the exact error message of the " */
+                        /*   "bank. The line with the error message contains a " */
+                        /*   "code number that is greater than 9000.\n" */
+                        /*   "\n" */
+                        /*   "Do you want to enter the job again?"))) { */
+                    aborted = TRUE;
+                }
             }
         }
         /* Simply ignore any other case */
@@ -254,14 +262,16 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
             AB_Job_free(job);
             job = NULL;
         }
+        if (gui) {
+            gnc_GWEN_Gui_release(gui);
+            gui = NULL;
+        }
 
     } while (!successful && !aborted);
 
 cleanup:
     if (td)
         gnc_ab_trans_dialog_free(td);
-    if (gui)
-        gnc_GWEN_Gui_release(gui);
     if (online)
         AB_Banking_OnlineFini(api);
     gnc_AB_BANKING_fini(api);
