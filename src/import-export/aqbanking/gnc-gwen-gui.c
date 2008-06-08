@@ -133,7 +133,8 @@ static gint loghook_cb(GWEN_GUI *gwen_gui, const gchar *log_domain,
 static gint checkcert_cb(GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
                          GWEN_IO_LAYER *io, guint32 guiid);
 
-gboolean ggg_delete_event_cb(GtkWidget *widget, GdkEvent *event, gpointer user_data);
+gboolean ggg_delete_event_cb(GtkWidget *widget, GdkEvent *event,
+                             gpointer user_data);
 void ggg_abort_clicked_cb(GtkButton *button, gpointer user_data);
 void ggg_close_clicked_cb(GtkButton *button, gpointer user_data);
 
@@ -827,7 +828,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
             gchar *msg = g_strdup_printf(
                 _("The PIN needs to be at least %d characters \n"
                   "long. Do you want to try again?"), min_len);
-            retval = gnc_verify_dialog(gui->parent, TRUE, msg);
+            retval = gnc_verify_dialog(gui->parent, TRUE, "%s", msg);
             g_free(msg);
             if (!retval)
                 break;
@@ -1199,7 +1200,7 @@ loghook_cb(GWEN_GUI *gwen_gui, const gchar *log_domain,
            GWEN_LOGGER_LEVEL priority, const gchar *text)
 {
     if (G_LIKELY(priority < n_log_levels))
-        g_log(log_domain, log_levels[priority], text);
+        g_log(log_domain, log_levels[priority], "%s", text);
 
     return 1;
 }
@@ -1255,7 +1256,7 @@ ggg_delete_event_cb(GtkWidget *widget, GdkEvent *event, gpointer user_data){
         const char *still_running_msg =
             _("The Online Banking job is still running; are you "
               "sure you want to cancel?");
-        if (!gnc_verify_dialog(gui->dialog, FALSE, still_running_msg))
+        if (!gnc_verify_dialog(gui->dialog, FALSE, "%s", still_running_msg))
             return FALSE;
 
         set_aborted(gui);
