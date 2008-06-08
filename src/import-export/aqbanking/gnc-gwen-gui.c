@@ -88,6 +88,7 @@ typedef enum _GuiState GuiState;
 static void register_callbacks(GncGWENGui *gui);
 static void unregister_callbacks(GncGWENGui *gui);
 static void setup_dialog(GncGWENGui *gui);
+static void enable_password_cache(GncGWENGui *gui, gboolean enabled);
 static void reset_dialog(GncGWENGui *gui);
 static void set_runing(GncGWENGui *gui);
 static void set_finished(GncGWENGui *gui);
@@ -387,8 +388,28 @@ setup_dialog(GncGWENGui *gui)
 }
 
 static void
+enable_password_cache(GncGWENGui *gui, gboolean enabled)
+{
+    g_return_if_fail(gui);
+
+    if (enabled && !gui->passwords) {
+        /* Remember passwords in memory, mapping tokens to passwords */
+        gui->passwords = g_hash_table_new_full(
+            g_str_hash, g_str_equal, (GDestroyNotify) g_free,
+            (GDestroyNotify) erase_password);
+    } else if (!enabled && gui->passwords) {
+        /* Erase and free remembered passwords from memory */
+        g_hash_table_destroy(gui->passwords);
+        gui->passwords = NULL;
+    }
+    gui->cache_passwords = enabled;
+}
+
+static void
 reset_dialog(GncGWENGui *gui)
 {
+    gboolean cache_passwords;
+
     g_return_if_fail(gui);
 
     ENTER("gui=%p", gui);
@@ -420,18 +441,9 @@ reset_dialog(GncGWENGui *gui)
     gui->state = INIT;
     gui->min_loglevel = GWEN_LoggerLevel_Verbous;
 
-    gui->cache_passwords = gnc_gconf_get_bool(GCONF_SECTION_AQBANKING,
-                                              KEY_REMEMBER_PIN, NULL);
-    if (gui->cache_passwords && !gui->passwords) {
-        /* Remember passwords in memory, mapping tokens to passwords */
-        gui->passwords = g_hash_table_new_full(
-            g_str_hash, g_str_equal, (GDestroyNotify) g_free,
-            (GDestroyNotify) erase_password);
-    } else if (!gui->cache_passwords && gui->passwords) {
-        /* Erase and free remembered passwords from memory */
-        g_hash_table_destroy(gui->passwords);
-        gui->passwords = NULL;
-    }
+    cache_passwords = gnc_gconf_get_bool(GCONF_SECTION_AQBANKING,
+                                         KEY_REMEMBER_PIN, NULL);
+    enable_password_cache(gui, cache_passwords);
 
     if (!gui->accepted_certs)
         gui->accepted_certs = g_hash_table_new_full(
@@ -766,6 +778,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
     GtkWidget *input_entry;
     GtkWidget *confirm_entry;
     GtkWidget *confirm_label;
+    GtkWidget *remember_pin_checkbutton;
     const gchar *internal_input, *internal_confirmed;
     gboolean confirm = (flags & GWEN_GUI_INPUT_FLAGS_CONFIRM) != 0;
     gboolean hidden = (flags & GWEN_GUI_INPUT_FLAGS_SHOW) == 0;
@@ -785,6 +798,9 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
     input_entry = glade_xml_get_widget(xml, "input_entry");
     confirm_entry = glade_xml_get_widget(xml, "confirm_entry");
     confirm_label = glade_xml_get_widget(xml, "confirm_label");
+    remember_pin_checkbutton = glade_xml_get_widget(xml, "remember_pin");
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(remember_pin_checkbutton),
+                                 gui->cache_passwords);
 
     if (gui->parent)
         gtk_window_set_transient_for(GTK_WINDOW(dialog),
@@ -819,8 +835,17 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
 
     /* Ask the user until he enters a valid input or cancels */
     while (TRUE) {
+        gboolean remember_pin;
+
         if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
             break;
+
+        /* Enable or disable the password cache */
+        remember_pin = gtk_toggle_button_get_active(
+            GTK_TOGGLE_BUTTON(remember_pin_checkbutton));
+        enable_password_cache(gui, remember_pin);
+        gnc_gconf_set_bool(GCONF_SECTION_AQBANKING, KEY_REMEMBER_PIN,
+                           remember_pin, NULL);
 
         internal_input = gtk_entry_get_text(GTK_ENTRY(input_entry));
         if (strlen(internal_input) < min_len) {
