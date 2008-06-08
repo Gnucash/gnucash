@@ -580,7 +580,7 @@ get_templ_helper(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
 GList *
 gnc_ab_trans_dialog_get_templ(const GncABTransDialog *td, gboolean *changed)
 {
-    GList *list;
+    GList *list = NULL;
 
     g_return_val_if_fail(td, NULL);
 
@@ -693,7 +693,7 @@ templ_list_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
     old_amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(td->amount_edit));
 
     /* Get new values */
-    new_name = gnc_ab_trans_templ_get_name(templ);
+    new_name = gnc_ab_trans_templ_get_recp_name(templ);
     new_account = gnc_ab_trans_templ_get_recp_account(templ);
     new_bankcode = gnc_ab_trans_templ_get_recp_bankcode(templ);
     new_purpose = gnc_ab_trans_templ_get_purpose(templ);
