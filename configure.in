@@ -623,6 +623,28 @@ AC_SUBST(GDA_DIR)
 AC_SUBST(LIBGDA_CFLAGS)
 AC_SUBST(LIBGDA_LIBS)
 
+### ----------------------
+### LIBDBI
+AC_ARG_ENABLE(dbi,
+  [  --disable-dbi                build without the libdbi backend],
+  [case "${enableval}" in
+     yes) want_dbi=true ;;
+     no)  want_dbi=false ;;
+     *) want_dbi=true ;;
+   esac],[want_dbi=true])
+if test x${want_dbi} = xtrue
+then
+  AC_CHECK_HEADERS(dbi/dbi.h)
+  if test "x$ac_cv_header_dbi_dbi_h" != xno; then
+    LIBDBI_LIBS=-ldbi
+    DBI_DIR=dbi
+  else
+    AC_MSG_ERROR( Unable to find dbi/dbi.h )
+  fi
+fi
+AC_SUBST(LIBDBI_LIBS)
+AC_SUBST(DBI_DIR)
+
 ### --------------------------------------------------------------------------
 ### Variables
 ### Set up all the initial variable values...
@@ -670,94 +692,6 @@ AC_ARG_ENABLE( ref-counts-dumps,
   [  --enable-ref-counts-dumps    compile with ref count dumps],
        AC_DEFINE(DEBUG_REFERENCE_COUNTING,1,Enable reference count dumps),
        AC_DEFINE(DEBUG_REFERENCE_COUNTING,0,Enable reference count dumps) )
-
-
-### --------------------------------------------------------------------------
-### SQL
-# Check to see if the user wants to have Postgres support
-#
-# hack alert ... we should use 'pg_config --includedir' and
-# 'pg_config --libdir' to find paths; unfortunately pg_config itself
-# is hard to find :-(
-
-AC_ARG_ENABLE( sql,
-  [  --enable-sql                 compile with sql support],
-  [
-    PG_CONFIG=`which pg_config`
-
-    if test "x$PG_CONFIG" = "x" ; then
-        PG_CONFIG="/usr/lib/postgresql/bin/pg_config"
-    fi
-
-    if test "x$enableval" != "xno" ; then
-
-      PGSQL_CFLAGS=`${PG_CONFIG} --includedir`
-      if test "x$PGSQL_CFLAGS" != x; then
-	PGSQL_CFLAGS="-I${PGSQL_CFLAGS}"
-      fi
-
-      AS_SCRUB_INCLUDE(PGSQL_CFLAGS)
-# XXX Fixme: CPPFLAGS are saved but CFLAGS are altered later on and not restored.
-      saved_CPPFLAGS="${CPPFLAGS}"
-      saved_CFLAGS="${CFLAGS}"
-      CPPFLAGS="${CPPFLAGS} ${PGSQL_CFLAGS}"
-      AC_CHECK_HEADERS(pgsql/libpq-fe.h postgresql/libpq-fe.h libpq-fe.h)
-      if test "x$ac_cv_header_pgsql_libpq_fe_h$ac_cv_header_postgresql_libpq_fe_h$ac_cv_header_libpq_fe_h" = xnonono; then
-         AC_MSG_ERROR([Cannot find PostgreSQL headers; won't build sql backend]) 
-      else 
-        master_dirs="/usr/include /usr/local/include"
-        if test "x$ac_cv_header_pgsql_libpq_fe_h" != xno; then
-          for dir in $master_dirs; do
-              if test -f "$dir/pgsql/libpq-fe.h"; then
-                  CFLAGS="${CFLAGS} -I$dir/pgsql"
-                  break
-	      fi
-          done
-        elif test "x$ac_cv_header_postgresql_libpq_fe_h" != xno; then
-          for dir in $master_dirs; do
-              if test -f "$dir/postgresql/libpq-fe.h"; then
-                  CFLAGS="${CFLAGS} -I$dir/postgresql"
-                  break
-              fi
-          done
-	fi
-
-	AS_SCRUB_INCLUDE(CFLAGS)
-        
-        PGSQL_LIBS=`${PG_CONFIG} --libdir`
-        if test "x$PGSQL_LIBS" != x; then
-	  PGSQL_LIBS="-L${PGSQL_LIBS}"
-        fi
-
-        saved_LIBS="$LIBS"
- 	LIBS="${PGSQL_LIBS} -lpq $LIBS"
-        AC_MSG_CHECKING(for libpq)
-        AC_TRY_LINK(
-          [
-	    #include <libpq-fe.h>
-	  ],
-          [
-             PQconnectdb("asdf");
-          ],
-          [
-            AC_MSG_RESULT(yes)
-            SQL_DIR=postgres
-          ],
-          [
-            AC_MSG_ERROR([Cannot find PostgreSQL libraries; will not build sql backend]) 
-          ]
-        )
-        LIBS="$saved_LIBS"
-      fi
-      CPPFLAGS="$saved_CPPFLAGS"
-      CFLAGS="$saved_CFLAGS"
-    fi
-  ]
-)
-
-AC_SUBST(PGSQL_CFLAGS)
-AC_SUBST(PGSQL_LIBS)
-AC_SUBST(SQL_DIR)
 
 
 ### --------------------------------------------------------------------------
@@ -1595,11 +1529,11 @@ output_qof_prefix=`eval eval eval echo $QOF_PREFIX`
 output_qof_lib_dir=`eval eval eval echo $QOF_LIB_DIR`
 output_qof_xml_dir=`eval eval eval echo $QOF_XML_DIR`
 
+if test x${DBI_DIR} != x; then
+components="$components dbi"
+fi
 if test x${GDA_DIR} != x; then
 components="$components gda"
-fi
-if test x${SQL_DIR} != x; then
-components="$components sql"
 fi
 if test x${OFX_DIR} != x; then
 components="$components ofx"

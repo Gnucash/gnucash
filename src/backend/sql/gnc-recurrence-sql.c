@@ -238,7 +238,6 @@ load_recurrence( GncSqlBackend* be, GncSqlRow* row, Recurrence* r )
 	recurrence_info.pRecurrence = r;
 
     gnc_sql_load_object( be, row, TABLE_NAME, &recurrence_info, col_table );
-	g_free( row );
 }
 
 static GncSqlResult*
@@ -248,7 +247,6 @@ gnc_sql_set_recurrences_from_db( GncSqlBackend* be, const GUID* guid )
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
     gchar* field_name;
     GncSqlStatement* stmt;
-    GValue value;
 	GError* error = NULL;
 	GncSqlResult* result;
 
@@ -256,14 +254,8 @@ gnc_sql_set_recurrences_from_db( GncSqlBackend* be, const GUID* guid )
 	g_return_val_if_fail( guid != NULL, NULL );
 
     guid_to_string_buff( guid, guid_buf );
-    memset( &value, 0, sizeof( value ) );
-    g_value_init( &value, G_TYPE_STRING );
-    g_value_set_string( &value, guid_buf );
-
 	buf = g_strdup_printf( "SELECT * FROM %s WHERE obj_guid='%s'", TABLE_NAME, guid_buf );
 	stmt = gnc_sql_connection_create_statement_from_sql( be->conn, buf );
-	g_free( buf );
-
     result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
 	return result;

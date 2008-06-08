@@ -810,12 +810,13 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
 			month = atoi( buf );
 			day = atoi( &s[6] );
 
-			date = g_date_new_dmy( day, month, year );
-			(*setter)( pObject, date );
-			g_date_free( date );
-
+			if( year != 0 || month != 0 || day != 0 ) {
+				date = g_date_new_dmy( day, month, year );
+				(*setter)( pObject, date );
+				g_date_free( date );
+			}
 		} else {
-			PWARN( "Unknown timespec type: %s", G_VALUE_TYPE_NAME( val ) );
+			PWARN( "Unknown date type: %s", G_VALUE_TYPE_NAME( val ) );
         }
     }
 }
@@ -1624,7 +1625,7 @@ gnc_sql_init_version_info( GncSqlBackend* be )
 {
 	g_return_if_fail( be != NULL );
 
-	be->versions = g_hash_table_new( g_str_hash, g_str_equal );
+	be->versions = g_hash_table_new_full( g_str_hash, g_str_equal, g_free, NULL );
 
 	if( gnc_sql_connection_does_table_exist( be->conn, VERSION_TABLE_NAME ) ) {
 		GncSqlResult* result;
@@ -1642,7 +1643,7 @@ gnc_sql_init_version_info( GncSqlBackend* be )
     			name = gnc_sql_row_get_value_at_col_name( row, TABLE_COL_NAME );
 				version = gnc_sql_row_get_value_at_col_name( row, VERSION_COL_NAME );
 				g_hash_table_insert( be->versions,
-									(gpointer)g_value_get_string( name ),
+									g_strdup( g_value_get_string( name ) ),
 									GINT_TO_POINTER(g_value_get_int( version )) );
 				row = gnc_sql_result_get_next_row( result );
 			}
@@ -1678,7 +1679,7 @@ gnc_sql_reset_version_info( GncSqlBackend* be )
 		PERR( "Error creating versions table: %s\n", error->message );
 	}
 	if( be->versions == NULL ) {
-		be->versions = g_hash_table_new( g_str_hash, g_str_equal );
+		be->versions = g_hash_table_new_full( g_str_hash, g_str_equal, g_free, NULL );
 	} else {
 		g_hash_table_remove_all( be->versions );
 	}
@@ -1729,7 +1730,7 @@ register_table_version( const GncSqlBackend* be, const gchar* table_name, gint v
 		g_free( sql );
 	}
 
-	g_hash_table_insert( be->versions, (gpointer)table_name, GINT_TO_POINTER(version) );
+	g_hash_table_insert( be->versions, g_strdup( table_name ), GINT_TO_POINTER(version) );
 }
 
 /**

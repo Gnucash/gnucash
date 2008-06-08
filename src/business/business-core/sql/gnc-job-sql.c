@@ -58,8 +58,10 @@ static col_cvt_t col_table[] =
 	{ "id",        CT_STRING,   MAX_ID_LEN,        COL_NNUL,          NULL, JOB_ID },
 	{ "name",      CT_STRING,   MAX_NAME_LEN,      COL_NNUL,          NULL, JOB_NAME },
 	{ "reference", CT_STRING,   MAX_REFERENCE_LEN, COL_NNUL,          NULL, JOB_REFERENCE },
-	{ "active",    CT_BOOLEAN,  0,                 COL_NNUL,          NULL, JOB_ACTIVE },
-	{ "owner",     CT_OWNERREF, 0,                 COL_NNUL,          NULL, JOB_OWNER },
+	{ "active",    CT_BOOLEAN,  0,                 COL_NNUL,          NULL, NULL,
+		(QofAccessFunc)gncJobGetActive, (QofSetterFunc)gncJobSetActive },
+	{ "owner",     CT_OWNERREF, 0,                 COL_NNUL,          NULL, NULL,
+		(QofAccessFunc)gncJobGetOwner, (QofSetterFunc)gncJobSetOwner },
 	{ NULL }
 };
 

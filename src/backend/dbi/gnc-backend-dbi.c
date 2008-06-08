@@ -367,7 +367,11 @@ row_dispose( GncSqlRow* row )
 
 	if( dbi_row->gvalue_list != NULL ) {
 		for( node = dbi_row->gvalue_list; node != NULL; node = node->next ) {
-			g_free( node->data );
+			GValue* value = (GValue*)node->data;
+			if( G_VALUE_HOLDS_STRING(value) ) {
+				g_free( (gpointer)g_value_get_string( value ) );
+			}
+			g_free( value );
 		}
 		g_list_free( dbi_row->gvalue_list );
 	}
@@ -394,7 +398,7 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
 			break;
 		case DBI_TYPE_STRING:
 			g_value_init( value, G_TYPE_STRING );
-			g_value_set_string( value, dbi_result_get_string( dbi_row->result, col_name ) );
+			g_value_take_string( value, dbi_result_get_string_copy( dbi_row->result, col_name ) );
 			break;
 		default:
 			PERR( "Unknown DBI_TYPE: %d\n", type );

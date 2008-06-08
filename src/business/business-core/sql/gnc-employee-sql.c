@@ -68,7 +68,7 @@ static col_cvt_t col_table[] =
 	{ "active",     CT_BOOLEAN,       0,                COL_NNUL,          NULL, QOF_PARAM_ACTIVE },
 	{ "currency",   CT_COMMODITYREF,  0,                COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)gncEmployeeGetCurrency, (QofSetterFunc)gncEmployeeSetCurrency },
-	{ "ccard_guid", CT_ACCOUNTREF,    0,                COL_NNUL,          NULL, EMPLOYEE_CC },
+	{ "ccard_guid", CT_ACCOUNTREF,    0,                0,                 NULL, EMPLOYEE_CC },
 	{ "workday",    CT_NUMERIC,       0,                COL_NNUL,          NULL, EMPLOYEE_WORKDAY },
 	{ "rate",       CT_NUMERIC,       0,                COL_NNUL,          NULL, EMPLOYEE_RATE },
 	{ "addr",       CT_ADDRESS,       0,                0,                 NULL, EMPLOYEE_ADDR },

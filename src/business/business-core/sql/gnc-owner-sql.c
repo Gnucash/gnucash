@@ -74,7 +74,6 @@ load_owner( const GncSqlBackend* be, GncSqlRow* row,
     val = gnc_sql_row_get_value_at_col_name( row, buf );
     g_free( buf );
 
-    val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
     if( val != NULL ) {
         string_to_guid( g_value_get_string( val ), &guid );
     }
