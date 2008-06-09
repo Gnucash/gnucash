@@ -380,14 +380,38 @@ static void
 gnc_plugin_ab_cmd_issue_inttransaction (GtkAction *action,
                                         GncMainWindowActionData *data)
 {
-    /* FIXME */
+    Account *account;
+
+    ENTER("action %p, main window data %p", action, data);
+    account = main_window_to_account(data->window);
+    if (account == NULL) {
+        g_message("No AqBanking account selected");
+        LEAVE("no account");
+        return;
+    }
+
+    gnc_ab_maketrans(GTK_WIDGET(data->window), account, SINGLE_INTERNAL_TRANSFER);
+
+    LEAVE(" ");
 }
 
 static void
 gnc_plugin_ab_cmd_issue_direct_debit (GtkAction *action,
                                       GncMainWindowActionData *data)
 {
-    /* FIXME */
+    Account *account;
+
+    ENTER("action %p, main window data %p", action, data);
+    account = main_window_to_account(data->window);
+    if (account == NULL) {
+        g_message("No AqBanking account selected");
+        LEAVE("no account");
+        return;
+    }
+
+    gnc_ab_maketrans(GTK_WIDGET(data->window), account, SINGLE_DEBITNOTE);
+
+    LEAVE(" ");
 }
 
 /************************************************************
