@@ -186,13 +186,18 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         case SINGLE_DEBITNOTE:
             gnc_xfer_dialog_set_title(
                 xfer_dialog, _("Online Banking Direct Debit Note"));
+            gnc_xfer_dialog_lock_to_account_tree(xfer_dialog);
+            break;
         case SINGLE_INTERNAL_TRANSFER:
             gnc_xfer_dialog_set_title(
                 xfer_dialog, _("Online Banking Bank-Internal Transfer"));
+            gnc_xfer_dialog_lock_from_account_tree(xfer_dialog);
+            break;
         case SINGLE_TRANSFER:
         default:
             gnc_xfer_dialog_set_title(
                 xfer_dialog, _("Online Banking Transaction"));
+            gnc_xfer_dialog_lock_from_account_tree(xfer_dialog);
         }
 
         amount = double_to_gnc_numeric(

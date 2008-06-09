@@ -112,10 +112,6 @@ struct _GncABTransDialog {
     /* The aqbanking transaction that got created here */
     AB_TRANSACTION *ab_trans;
 
-    /* The gnucash transaction dialog where the user specifies the
-     * gnucash transaction. */
-    XferDialog *gnc_trans_dialog;
-
     /* The gnucash transaction that got created here */
     Transaction *gnc_trans;
 
@@ -545,9 +541,6 @@ void
 gnc_ab_trans_dialog_free(GncABTransDialog *td)
 {
     if (!td) return;
-    /* Unregister handler for transaction creation callback */
-    if (td->gnc_trans_dialog)
-        gnc_xfer_dialog_set_txn_cb(td->gnc_trans_dialog, NULL, NULL);
     if (td->ab_trans)
         AB_Transaction_free(td->ab_trans);
     if (td->dialog)
