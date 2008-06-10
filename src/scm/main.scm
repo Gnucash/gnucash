@@ -130,8 +130,18 @@
 (define (gnc:backtrace-if-exception proc . args)
   (define (dumper key . args)
     (let ((stack (make-stack #t dumper)))
+      ;; Send debugging output to the console.
       (display-backtrace stack (current-error-port))
       (apply display-error stack (current-error-port) args)
+
+      ;; Send debugging output to the log.
+      (if (defined? 'gnc:warn)
+          (let ((string-port (open-output-string)))
+            (display-backtrace stack string-port)
+            (apply display-error stack string-port args)
+            (gnc:warn (get-output-string string-port))
+            (close-output-port string-port)))
+
       (throw 'ignore)))
   
   (catch 
