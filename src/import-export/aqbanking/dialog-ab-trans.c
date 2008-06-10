@@ -58,6 +58,8 @@ static gboolean clear_templ_helper(GtkTreeModel *model, GtkTreePath *path,
                                    GtkTreeIter *iter, gpointer user_data);
 static gboolean get_templ_helper(GtkTreeModel *model, GtkTreePath *path,
                                  GtkTreeIter *iter, gpointer data);
+static AB_JOB *get_available_empty_job(AB_ACCOUNT *ab_acc,
+                                       GncABTransType trans_type);
 
 void dat_bankcode_changed_cb(GtkEditable *editable, gpointer user_data);
 void templ_list_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
@@ -403,11 +405,10 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     gchar *purpose;
     gchar *othername;
 
-    job = AB_JobSingleTransfer_new(td->ab_acc);
-    if (!job || AB_Job_CheckAvailability(job, 0)) {
-        if (job) AB_Job_free(job);
-        g_warning("gnc_ab_getbalance: JobGetBalance not available for this "
-                  "account");
+    /* Check whether the account supports this job */
+    job = get_available_empty_job(td->ab_acc, td->trans_type);
+    if (!job) {
+        g_warning("gnc_ab_trans_dialog_run_until_ok: Oops, job not available");
         return GTK_RESPONSE_CANCEL;
     }
 
@@ -603,19 +604,10 @@ gnc_ab_trans_dialog_get_ab_trans(const GncABTransDialog *td)
     return td->ab_trans;
 }
 
-AB_JOB *
-gnc_ab_trans_dialog_get_job(const GncABTransDialog *td)
-{
-    g_return_val_if_fail(td, NULL);
-    return gnc_ab_get_trans_job(td->ab_acc, td->ab_trans, td->trans_type);
-}
-
-AB_JOB *gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
-                             GncABTransType trans_type)
+static AB_JOB *
+get_available_empty_job(AB_ACCOUNT *ab_acc, GncABTransType trans_type)
 {
     AB_JOB *job;
-
-    g_return_val_if_fail(ab_acc && ab_trans, NULL);
 
     switch (trans_type) {
     case SINGLE_DEBITNOTE:
@@ -629,21 +621,42 @@ AB_JOB *gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
         job = AB_JobSingleTransfer_new(ab_acc);
     };
 
-    if (!job || AB_Job_CheckAvailability(job, 0))
+    if (!job || AB_Job_CheckAvailability(job, 0)) {
+        if (job) AB_Job_free(job);
         return NULL;
+    }
+    return job;
+}
 
-    switch (trans_type) {
-    case SINGLE_DEBITNOTE:
-        AB_JobSingleDebitNote_SetTransaction(job, ab_trans);
-        break;
-    case SINGLE_INTERNAL_TRANSFER:
-        AB_JobInternalTransfer_SetTransaction(job, ab_trans);
-        break;
-    case SINGLE_TRANSFER:
-    default:
-        AB_JobSingleTransfer_SetTransaction(job, ab_trans);
-    };
+AB_JOB *
+gnc_ab_trans_dialog_get_job(const GncABTransDialog *td)
+{
+    g_return_val_if_fail(td, NULL);
+    return gnc_ab_get_trans_job(td->ab_acc, td->ab_trans, td->trans_type);
+}
 
+AB_JOB *
+gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
+                     GncABTransType trans_type)
+{
+    AB_JOB *job;
+
+    g_return_val_if_fail(ab_acc && ab_trans, NULL);
+
+    job = get_available_empty_job(ab_acc, trans_type);
+    if (job) {
+        switch (trans_type) {
+        case SINGLE_DEBITNOTE:
+            AB_JobSingleDebitNote_SetTransaction(job, ab_trans);
+            break;
+        case SINGLE_INTERNAL_TRANSFER:
+            AB_JobInternalTransfer_SetTransaction(job, ab_trans);
+            break;
+        case SINGLE_TRANSFER:
+        default:
+            AB_JobSingleTransfer_SetTransaction(job, ab_trans);
+        };
+    }
     return job;
 }
 
