@@ -48,6 +48,7 @@
           (first-xtn #f)
           (ignore-accounts #f)
           (return-val #t)
+          (line-num 0)
           (line #f)
           (tag #f)
           (value #f)
@@ -79,6 +80,7 @@
           ;; loop over lines
           (let line-loop ()
             (set! line (read-delimited delimiters))
+            (set! line-num (+ 1 line-num))
             (if (and (not (eof-object? line))
                      (not (string=? line "")))
                 (begin
@@ -105,7 +107,8 @@
                                " "
                                (_ "Some characters have been discarded."))))
                               (gnc:warn "qif-file:read-file:"
-                                        " stripping invalid characters."
+                                        " stripping invalid characters"
+                                        " at line " line-num
                                         "\nAfter: [" value "]"))
                             (begin
                               (set! return-val
@@ -114,7 +117,8 @@
                                " "
                                (_ "Some characters have been converted according to your locale."))))
                               (gnc:warn "qif-file:read-file:"
-                                        " converting characters by locale."
+                                        " converting characters by locale"
+                                        " at line " line-num
                                         "\nBefore: [" value "]"
                                         "\nAfter:  [" converted-value "]")
                               (set! value converted-value)))))
@@ -175,8 +179,8 @@
                                              (symbol->string qstate-type))
                                (begin
                                  (gnc:warn "qif-file:read-file:"
-                                           " ignoring '" qstate-type
-                                           "' option.")
+                                           " ignoring '" qstate-type "' option"
+                                           " at line " line-num)
                                  (set! qstate-type old-qstate))))))
 
 
@@ -349,7 +353,8 @@
 
                            (else
                             (gnc:warn "qif-file:read-file:"
-                                      " ignoring class '" tag "' line."
+                                      " ignoring class '" tag "'"
+                                      " at line " line-num
                                       "\nLine content: [" line "]"))))
 
 
@@ -452,7 +457,8 @@
 
                            (else
                             (gnc:warn "qif-file:read-file:"
-                                      " ignoring security '" tag "' line."
+                                      " ignoring security '" tag "'"
+                                      " at line " line-num
                                       "\nLine content: [" line "]"))))
 
 
@@ -462,18 +468,18 @@
                                    (not (string=? (string-trim line) "")))
                               (begin
                                 (gnc:warn "qif-file:read-file:"
-                                          " file does not appear to be a QIF."
+                                          " file does not appear to be a QIF"
+                                          " at line " line-num
                                           "\nLine content: [" line "]")
                                 (set! return-val
                                       (list #f "File does not appear to be a QIF file."))
                                 (set! heinous-error #t))))))
 
                   ;; Update the progress bar for each line read.
-                  (if (not (null? progress-dialog))
-                      (begin
-                        (gnc-progress-dialog-set-value
-                         progress-dialog (/ bytes-read file-size))
-                        (gnc-progress-dialog-update progress-dialog)))
+                  (if (and (not (null? progress-dialog))
+                           (zero? (remainder line-num 32)))
+                      (gnc-progress-dialog-set-value progress-dialog
+                                                     (/ bytes-read file-size)))
 
                   ;; This is if we read a normal (non-null, non-eof) line...
                   (if (not heinous-error)
@@ -496,7 +502,9 @@
 
     ;; Get rid of the progress dialog (if any).
     (if (not (null? progress-dialog))
-        (gnc-progress-dialog-destroy progress-dialog))
+        (begin
+          (gnc-progress-dialog-set-value progress-dialog 1)
+          (gnc-progress-dialog-destroy progress-dialog)))
 
     retval))
 
