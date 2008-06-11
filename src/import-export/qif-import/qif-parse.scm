@@ -312,7 +312,7 @@
                           (match:substring match 2)
                           (match:substring match 3)))
         (numeric-date-parts '())
-        (retval #f))
+        (retval '()))
 
     ;;(define (print-list l)
     ;;  (for-each (lambda (x) (display x) (display " ")) l))
@@ -388,7 +388,7 @@
 ;;  of possibilities.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (qif-parse:check-date-format date-string possible-formats)
-  (let ((retval #f))
+  (let ((retval '()))
     (if (or (not (string? date-string))
             (not (> (string-length date-string) 0)))
         (set! retval possible-formats))
@@ -553,7 +553,7 @@
 (define (qif-parse:parse-number/format value-string format)
   (case format
     ((decimal)
-     (let* ((filtered-string (string-remove-chars value-string ",$'"))
+     (let* ((filtered-string (gnc:string-delete-chars value-string ",$'"))
             (read-val (with-input-from-string filtered-string
                                               (lambda () (read)))))
        (if (number? read-val)
@@ -564,8 +564,8 @@
                     GNC-RND-ROUND))
            (gnc-numeric-zero))))
     ((comma)
-     (let* ((filtered-string (string-replace-char
-                               (string-remove-chars value-string ".$'")
+     (let* ((filtered-string (gnc:string-replace-char
+                               (gnc:string-delete-chars value-string ".$'")
                                #\, #\.))
             (read-val (with-input-from-string filtered-string
                                               (lambda () (read)))))

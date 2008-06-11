@@ -57,6 +57,14 @@
 (define (default-unspec-acct)
   (_ "Unspecified"))
 
+;; The following investment actions implicitly specify
+;; the two accounts involved in the transaction.
+(define qif-import:actions-implicit
+  (list 'buy 'cglong 'cgmid 'cgshort 'div 'intinc 'margint 'reinvdiv
+        'reinvint 'reinvlg 'reinvmd 'reinvsg 'reinvsh 'reminder
+        'rtrncap 'sell 'shrsin 'shrsout 'stksplit))
+
+
 (define (qif-import:gnc-account-exists map-entry acct-list)
   (let ((retval #f))
     (for-each
@@ -149,17 +157,23 @@
                                                    GNC-CCARD-TYPE
                                                    GNC-CASH-TYPE
                                                    GNC-ASSET-TYPE
-                                                   GNC-LIABILITY-TYPE)))
+                                                   GNC-LIABILITY-TYPE
+                                                   GNC-RECEIVABLE-TYPE
+                                                   GNC-PAYABLE-TYPE)))
 
                     ((divx cgshortx cgmidx cglongx intincx margintx rtrncapx)
                      (set! qif-account
-                           (qif-split:category
-                            (car (qif-xtn:splits xtn))))
+                           (and (qif-split:category-is-account?
+                                  (car (qif-xtn:splits xtn)))
+                                (qif-split:category
+                                  (car (qif-xtn:splits xtn)))))
                      (set! qif-account-types (list GNC-BANK-TYPE
                                                    GNC-CCARD-TYPE
                                                    GNC-CASH-TYPE
                                                    GNC-ASSET-TYPE
-                                                   GNC-LIABILITY-TYPE)))
+                                                   GNC-LIABILITY-TYPE
+                                                   GNC-RECEIVABLE-TYPE
+                                                   GNC-PAYABLE-TYPE)))
                     ((miscincx miscexpx)
                      (set! qif-account
                            (qif-split:miscx-category
@@ -168,7 +182,9 @@
                                                    GNC-CCARD-TYPE
                                                    GNC-CASH-TYPE
                                                    GNC-ASSET-TYPE
-                                                   GNC-LIABILITY-TYPE))))
+                                                   GNC-LIABILITY-TYPE
+                                                   GNC-RECEIVABLE-TYPE
+                                                   GNC-PAYABLE-TYPE))))
 
                   ;; now reference the near-end account
                   (if qif-account
@@ -203,16 +219,22 @@
                                                    GNC-CCARD-TYPE
                                                    GNC-CASH-TYPE
                                                    GNC-ASSET-TYPE
-                                                   GNC-LIABILITY-TYPE)))
+                                                   GNC-LIABILITY-TYPE
+                                                   GNC-RECEIVABLE-TYPE
+                                                   GNC-PAYABLE-TYPE)))
                     ((buyx sellx xin xout)
                      (set! qif-account
-                           (qif-split:category
-                            (car (qif-xtn:splits xtn))))
+                           (and (qif-split:category-is-account?
+                                  (car (qif-xtn:splits xtn)))
+                                (qif-split:category
+                                  (car (qif-xtn:splits xtn)))))
                      (set! qif-account-types (list GNC-BANK-TYPE
                                                    GNC-CCARD-TYPE
                                                    GNC-CASH-TYPE
                                                    GNC-ASSET-TYPE
-                                                   GNC-LIABILITY-TYPE)))
+                                                   GNC-LIABILITY-TYPE
+                                                   GNC-RECEIVABLE-TYPE
+                                                   GNC-PAYABLE-TYPE)))
 
                     ((stksplit)
                      (set! qif-account
@@ -220,7 +242,9 @@
                      (set! qif-account-types (list GNC-STOCK-TYPE
                                                    GNC-MUTUAL-TYPE
                                                    GNC-ASSET-TYPE
-                                                   GNC-LIABILITY-TYPE)))
+                                                   GNC-LIABILITY-TYPE
+                                                   GNC-RECEIVABLE-TYPE
+                                                   GNC-PAYABLE-TYPE)))
                     ((cgshort cgshortx reinvsg reinvsh)
                      (set! qif-account
                            (default-cgshort-acct from-acct stock-acct))
@@ -301,12 +325,13 @@
                   (if (not entry)
                       (set! entry (qif-import:guess-acct
                                    from-acct
-                                   (list
-                                    GNC-BANK-TYPE
-                                    GNC-CCARD-TYPE
-                                    GNC-CASH-TYPE
-                                    GNC-ASSET-TYPE
-                                    GNC-LIABILITY-TYPE)
+                                   (list GNC-BANK-TYPE
+                                         GNC-CCARD-TYPE
+                                         GNC-CASH-TYPE
+                                         GNC-ASSET-TYPE
+                                         GNC-LIABILITY-TYPE
+                                         GNC-RECEIVABLE-TYPE
+                                         GNC-PAYABLE-TYPE)
                                    gnc-acct-info)))
                   (qif-map-entry:set-display?! entry #t)
                   (hash-set! acct-hash from-acct entry)
@@ -325,12 +350,13 @@
                                  (set! entry
                                        (qif-import:guess-acct
                                         xtn-acct
-                                        (list
-                                         GNC-BANK-TYPE
-                                         GNC-CCARD-TYPE
-                                         GNC-CASH-TYPE
-                                         GNC-ASSET-TYPE
-                                         GNC-LIABILITY-TYPE)
+                                        (list GNC-BANK-TYPE
+                                              GNC-CCARD-TYPE
+                                              GNC-CASH-TYPE
+                                              GNC-ASSET-TYPE
+                                              GNC-LIABILITY-TYPE
+                                              GNC-RECEIVABLE-TYPE
+                                              GNC-PAYABLE-TYPE)
                                         gnc-acct-info)))
                              (qif-map-entry:set-display?! entry #t)
                              (hash-set! acct-hash xtn-acct entry)))))
@@ -401,28 +427,62 @@
      (lambda (qif-file)
        (for-each
         (lambda (xtn)
-          ;; iterate over the splits
-          (for-each
-           (lambda (split)
-             (let ((xtn-is-acct (qif-split:category-is-account? split))
-                   (xtn-cat #f)
-                   (entry #f))
-               (if (not xtn-is-acct)
-                   (begin
-                     (set! xtn-cat (qif-split:category split))
-                     (set! entry (hash-ref cat-hash xtn-cat))
-                     (if (not entry)
-                         (set! entry
-                               (qif-import:guess-acct
-                                xtn-cat
-                                (if (gnc-numeric-positive-p
-                                     (qif-split:amount split))
-                                    (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE)
-                                    (list GNC-EXPENSE-TYPE GNC-INCOME-TYPE))
-                                gnc-acct-info)))
-                     (qif-map-entry:set-display?! entry #t)
-                     (hash-set! cat-hash xtn-cat entry)))))
-           (qif-xtn:splits xtn)))
+          (let ((action (qif-xtn:action xtn)))
+            ;; Many types of investment transactions implicitly use the
+            ;; brokerage account or a known offshoot. There is no need
+            ;; to consider a category mapping for these.
+            (if (not (and action
+                          (memv action qif-import:actions-implicit)))
+                ;; iterate over the splits
+                (for-each
+                 (lambda (split)
+                   (let ((xtn-is-acct (qif-split:category-is-account? split))
+                         (xtn-cat #f)
+                         (entry #f))
+                     (if (not xtn-is-acct)
+                         (begin
+                           (set! xtn-cat (qif-split:category split))
+                           (set! entry (hash-ref cat-hash xtn-cat))
+                           ;; NOTE: It would be more robust and efficient if the
+                           ;; three "make display" routines below were combined:
+                           ;;   make-account-display
+                           ;;   make-category-display
+                           ;;   make-memo-display
+                           ;;
+                           ;; This would also require adjusting several callback
+                           ;; functions that reference these procedures from C.
+                           ;;
+                           ;; Until then, the maintainer of this code must make
+                           ;; sure that the logic used in the "if" below matches
+                           ;; the criteria for making memo/payee mappings (seen
+                           ;; in make-memo-display).
+
+                           ;; Add an entry if there isn't one already and either
+                           ;;  (a) the category is non-blank, or
+                           ;;  (b) no memo/payee mapping can be applied
+                           (if (and (not entry)
+                                    (or (not (and (string? xtn-cat)
+                                                  (string=? xtn-cat "")))
+                                        (and (or (not (qif-split:memo split))
+                                                 (equal? (qif-split:memo split) ""))
+                                             (or (> (length (qif-xtn:splits xtn)) 1)
+                                                 (not (qif-xtn:payee xtn))
+                                                 (equal? (qif-xtn:payee xtn) "")))))
+                               (set! entry
+                                     (qif-import:guess-acct
+                                      xtn-cat
+                                      (if (gnc-numeric-positive-p
+                                           (qif-split:amount split))
+                                          (list GNC-INCOME-TYPE
+                                                GNC-EXPENSE-TYPE)
+                                          (list GNC-EXPENSE-TYPE
+                                                GNC-INCOME-TYPE))
+                                      gnc-acct-info)))
+                           (if entry
+                               (begin
+                                 (qif-map-entry:set-display?! entry #t)
+                                 (hash-set! cat-hash xtn-cat entry)))))))
+                 (qif-xtn:splits xtn)))))
         (qif-file:xtns qif-file)))
      qif-files)
 
@@ -464,47 +524,55 @@
        (for-each
         (lambda (xtn)
           (let ((payee (qif-xtn:payee xtn))
+                (action (qif-xtn:action xtn))
                 (splits (qif-xtn:splits xtn)))
-            (for-each
-             (lambda (split)
-               (let ((cat (qif-split:category split))
-                     (memo (qif-split:memo split))
-                     (key-string #f))
-                 ;; for each split: if there's a category, do nothing.
-                 ;; if there's a payee, use that as the
-                 ;; key otherwise, use the split memo.
-                 (cond ((and cat
-                             (or (not (string? cat))
-                                 (not (string=? cat ""))))
-                        (set! key-string #f))
-                       ((and payee (= (length splits) 1))
-                        (set! key-string payee))
-                       (memo
-                        (set! key-string memo)))
+            ;; Many types of investment transactions implicitly use the
+            ;; brokerage account or a known offshoot. There is no need
+            ;; to consider a memo/payee mapping for these.
+            (if (not (and action
+                          (memv action qif-import:actions-implicit)))
+                (for-each
+                 (lambda (split)
+                   (let ((cat (qif-split:category split))
+                         (memo (qif-split:memo split))
+                         (key-string #f))
+                     ;; for each split: if there's a category, do nothing.
+                     ;; if there's a payee, use that as the
+                     ;; key otherwise, use the split memo.
+                     (cond ((and cat
+                                 (or (not (string? cat))
+                                     (not (string=? cat ""))))
+                            (set! key-string #f))
+                           ((and payee (= (length splits) 1))
+                            (set! key-string payee))
+                           (memo
+                            (set! key-string memo)))
 
-                 (if key-string
-                     (let ((entry (hash-ref memo-hash key-string)))
-                       (if (not entry)
-                           (begin
-                             (set! entry (make-qif-map-entry))
-                             (qif-map-entry:set-qif-name! entry key-string)
-                             (qif-map-entry:set-gnc-name!
-                              entry (default-unspec-acct))
-                             (qif-map-entry:set-allowed-types!
-                              entry
-                              (if (gnc-numeric-positive-p
-                                   (qif-split:amount split))
-                                  (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE
-                                        GNC-BANK-TYPE GNC-CCARD-TYPE
-                                        GNC-LIABILITY-TYPE GNC-ASSET-TYPE
-                                        GNC-STOCK-TYPE GNC-MUTUAL-TYPE)
-                                  (list GNC-EXPENSE-TYPE GNC-INCOME-TYPE
-                                        GNC-BANK-TYPE GNC-CCARD-TYPE
-                                        GNC-LIABILITY-TYPE GNC-ASSET-TYPE
-                                        GNC-STOCK-TYPE GNC-MUTUAL-TYPE)))))
-                       (qif-map-entry:set-display?! entry #t)
-                       (hash-set! memo-hash key-string entry)))))
-             splits)))
+                     (if key-string
+                         (let ((entry (hash-ref memo-hash key-string)))
+                           (if (not entry)
+                               (begin
+                                 (set! entry (make-qif-map-entry))
+                                 (qif-map-entry:set-qif-name! entry key-string)
+                                 (qif-map-entry:set-gnc-name!
+                                  entry (default-unspec-acct))
+                                 (qif-map-entry:set-allowed-types!
+                                  entry
+                                  (if (gnc-numeric-positive-p
+                                       (qif-split:amount split))
+                                      (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE
+                                            GNC-BANK-TYPE GNC-CCARD-TYPE
+                                            GNC-LIABILITY-TYPE GNC-ASSET-TYPE
+                                            GNC-RECEIVABLE-TYPE GNC-PAYABLE-TYPE
+                                            GNC-STOCK-TYPE GNC-MUTUAL-TYPE)
+                                      (list GNC-EXPENSE-TYPE GNC-INCOME-TYPE
+                                            GNC-BANK-TYPE GNC-CCARD-TYPE
+                                            GNC-LIABILITY-TYPE GNC-ASSET-TYPE
+                                            GNC-RECEIVABLE-TYPE GNC-PAYABLE-TYPE
+                                            GNC-STOCK-TYPE GNC-MUTUAL-TYPE)))))
+                           (qif-map-entry:set-display?! entry #t)
+                           (hash-set! memo-hash key-string entry)))))
+                 splits))))
         (qif-file:xtns file)))
      qif-files)
 
@@ -569,11 +637,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:get-account-name fullname)
-  (let ((lastsep (string-rindex fullname
-                                (string-ref (gnc-get-account-separator-string)
-                                            0))))
-    (if lastsep
-        (substring fullname (+ lastsep 1))
+  (let* ((sep (gnc-get-account-separator-string))
+         (last-sep (gnc:string-rcontains fullname sep)))
+    (if last-sep
+        (substring fullname (+ last-sep (string-length sep)))
         fullname)))
 
 
@@ -667,7 +734,7 @@
     (hash-fold
      (lambda (qif-name map-entry p)
        (let ((security-name (qif-import:get-account-name qif-name)))
-         ;; Is this account going to be imported, is it security-denominated, 
+         ;; Is this account going to be imported, is it security-denominated,
          ;; and is the security not already in the security hash table?
          (if (and
               security-name
@@ -771,7 +838,8 @@
 
   (let ((accts '())
         (acct-tree '())
-        (separator (string-ref (gnc-get-account-separator-string) 0)))
+        (sep (gnc-get-account-separator-string)))
+
     ;; get the new accounts from the account map
     (for-each
      (lambda (acctmap)
@@ -781,8 +849,8 @@
               (if (qif-map-entry:display? v)
                   (set! accts
                         (cons
-                         (cons (string-split (qif-map-entry:gnc-name v)
-                                             separator)
+                         (cons (gnc:substring-split (qif-map-entry:gnc-name v)
+                                                    sep)
                                (qif-map-entry:new-acct? v))
                          accts)))
               #f)
@@ -794,9 +862,7 @@
      (lambda (acct)
        (set! accts
              (cons
-              (cons (string-split
-                     (gnc-account-get-full-name acct)
-                     separator)
+              (cons (gnc:substring-split (gnc-account-get-full-name acct) sep)
                     #f)
               accts)))
      (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))

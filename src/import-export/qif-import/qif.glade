@@ -504,7 +504,7 @@ Please enter a name for the account. If the file was exported from another accou
 	  <property name="title" translatable="yes">QIF files you have loaded</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="prepare" handler="gnc_ui_qif_import_loaded_files_prepare_cb" after="yes"/>
-	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="next" handler="gnc_ui_qif_import_loaded_files_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
 	  <child internal-child="vbox">
@@ -664,8 +664,7 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match QIF accounts with GnuCash accounts</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
-	  <signal name="prepare" handler="gnc_ui_qif_import_account_prepare_cb"/>
-	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="next" handler="gnc_ui_qif_import_account_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
 	  <child internal-child="vbox">
@@ -673,7 +672,7 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
 	      <property name="border_width">25</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">5</property>
+	      <property name="spacing">0</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label7609">
@@ -869,7 +868,6 @@ If you change your mind later, you can reorganize the account structure safely w
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match QIF categories with GnuCash accounts</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
-	  <signal name="prepare" handler="gnc_ui_qif_import_category_prepare_cb"/>
 	  <signal name="next" handler="gnc_ui_qif_import_category_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
@@ -878,7 +876,7 @@ If you change your mind later, you can reorganize the account structure safely w
 	      <property name="border_width">25</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">5</property>
+	      <property name="spacing">0</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label7611">
@@ -1026,7 +1024,7 @@ If you change your mind later, you can reorganize the account structure safely w
 	  <property name="title" translatable="yes">Payees and memos</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
-	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_memo_doc_back_cb"/>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox39">
@@ -1072,8 +1070,7 @@ In the following page, you will see the text that appears in the Payee and Memo 
 	  <property name="title" translatable="yes">Match payees/memos to GnuCash accounts</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
-	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
-	  <signal name="prepare" handler="gnc_ui_qif_import_memo_prepare_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_memo_back_cb"/>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox40">

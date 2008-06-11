@@ -4275,15 +4275,15 @@ gnc_account_merge_children (Account *parent)
       Account *acc_b = node_b->data;
 
       priv_b = GET_PRIVATE(acc_b);
-      if (0 != safe_strcmp(priv_a->accountName, priv_b->accountName))
+      if (0 != null_strcmp(priv_a->accountName, priv_b->accountName))
 	continue;
-      if (0 != safe_strcmp(priv_a->accountCode, priv_b->accountCode))
+      if (0 != null_strcmp(priv_a->accountCode, priv_b->accountCode))
 	continue;
-      if (0 != safe_strcmp(priv_a->description, priv_b->description))
+      if (0 != null_strcmp(priv_a->description, priv_b->description))
 	continue;
       if (!gnc_commodity_equiv(priv_a->commodity, priv_b->commodity))
 	continue;
-      if (0 != safe_strcmp(xaccAccountGetNotes(acc_a),
+      if (0 != null_strcmp(xaccAccountGetNotes(acc_a),
 			   xaccAccountGetNotes(acc_b)))
 	continue;
       if (priv_a->type != priv_b->type)

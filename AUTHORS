@@ -91,6 +91,9 @@ Chris Shoemaker <c.shoemaker@cox.net> implemented budgeting support
 Andreas Köhler <andi5.py@gmx.net> is hunting down lots of bugs,
    especially for GUI code and other gtk related issues.
 
+Charles Day <cedayiv@gmail.com> hacks excessively on the QIF importer
+   and aims to see significantly expanded support for investments.
+
 Other Contributors:
 ----------------
 (In alphabetical order)

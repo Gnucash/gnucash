@@ -178,6 +178,7 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
 		    mnemonic ? mnemonic : "");
    gtk_label_set_text ((GtkLabel *)(win->select_user_prompt),
 		      user_prompt_text);
+   g_free(user_prompt_text);
 
   /* Run the dialog, handling the terminal conditions. */
   done = FALSE;

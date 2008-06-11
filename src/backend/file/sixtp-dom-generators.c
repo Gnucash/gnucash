@@ -21,10 +21,9 @@
  *                                                                  *
  ********************************************************************/
 
-#include "config.h"
-
 #define __EXTENSIONS__
 
+#include "config.h"
 #include <glib.h>
 
 #include "gnc-xml-helper.h"

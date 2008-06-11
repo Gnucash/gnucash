@@ -1387,6 +1387,8 @@ int num_weeks_per_col(GncDenseCal *dcal)
         }
         num_weeks_toRet = MAX(num_weeks_toRet, (endWeek - startWeek)+1);
     }
+	g_date_free(start);
+	g_date_free(end);
     return num_weeks_toRet;
 }
 
