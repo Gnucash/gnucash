@@ -1963,6 +1963,7 @@ gboolean
 gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBook *book)
 {
   QofCollection *col;
+  gnc_commodity* c;
 
   ENTER ("table=%p", table);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_AMEX, book);
@@ -1970,6 +1971,9 @@ gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBook *book)
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NASDAQ, book);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_EUREX, book);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_MUTUAL, book);
+  gnc_commodity_table_add_namespace(table, "template", book);
+  c = gnc_commodity_new(book, "template", "template", "template", "template", 1);
+  gnc_commodity_table_insert(table, c);
 
   #include "iso-4217-currencies.c"
 

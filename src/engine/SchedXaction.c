@@ -92,9 +92,8 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
    xaccAccountSetName( sx->template_acct, guid_to_string( guid ));
    xaccAccountSetCommodity
      (sx->template_acct,
-      gnc_commodity_new( book,
-                         "template", "template",
-                         "template", "template", 1 ) );
+	  gnc_commodity_table_lookup( gnc_commodity_table_get_table(book),
+	  					"template", "template") );
    xaccAccountSetType( sx->template_acct, ACCT_TYPE_BANK );
    xaccAccountCommitEdit( sx->template_acct );
    ra = gnc_book_get_template_root( book );

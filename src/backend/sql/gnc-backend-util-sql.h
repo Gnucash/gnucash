@@ -76,6 +76,7 @@ struct GncSqlConnection
 	const gchar* (*getColumnTypeName)( GncSqlConnection*, GType, gint size );
 	void (*createTable)( GncSqlConnection*, const gchar*, const GList* );
 	void (*createIndex)( GncSqlConnection*, const gchar*, const gchar*, const col_cvt_t* );
+	gchar* (*quoteString)( const GncSqlConnection*, gchar* );
 };
 #define gnc_sql_connection_dispose(CONN) (CONN)->dispose(CONN)
 #define gnc_sql_connection_execute_select_statement(CONN,STMT) \
@@ -98,6 +99,8 @@ struct GncSqlConnection
 		(CONN)->createTable(CONN,NAME,COLLIST)
 #define gnc_sql_connection_create_index(CONN,INDEXNAME,TABLENAME,COLTABLE) \
 		(CONN)->createIndex(CONN,INDEXNAME,TABLENAME,COLTABLE)
+#define gnc_sql_connection_quote_string(CONN,STR) \
+		(CONN)->quoteString(CONN,STR)
 
 struct GncSqlRow
 {
@@ -288,7 +291,7 @@ void gnc_sql_add_objectref_guid_col_info_to_list( const GncSqlBackend* be,
 guint gnc_sql_append_guid_list_to_sql( GString* str, GList* list, guint maxCount );
 void gnc_sql_add_subtable_colnames_to_list( const col_cvt_t* table_row, const col_cvt_t* subtable,
 								GList** pList );
-gchar* gnc_sql_get_sql_value( const GValue* value );
+gchar* gnc_sql_get_sql_value( const GncSqlConnection* conn, const GValue* value );
 
 void _retrieve_guid_( gpointer pObject, gpointer pValue );
 void gnc_sql_init_version_info( GncSqlBackend* be );

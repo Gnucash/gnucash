@@ -48,6 +48,44 @@
 	fun:g_static_private_set
 	fun:g_get_filename_charsets
 }
-
+{
+	g_get_tmp_dir leak
+	Memcheck:Leak
+	fun:malloc
+	obj:/lib/tls/i686/cmov/libc-2.7.so
+	fun:__nss_database_lookup
+	obj:*
+	obj:*
+	fun:getpwnam_r
+	obj:*libglib-2.0*
+	fun:g_get_tmp_dir
+}
+{
+	g_option_context_parse leak
+	Memcheck:Leak
+	fun:calloc
+	fun:g_malloc0
+	obj:*libgobject*
+	obj:*libgobject*
+	fun:g_type_init_with_debug_flags
+	fun:g_type_init
+	fun:gdk_pre_parse_libgtk_only
+	obj:*libgtk-x11-2.0*
+	fun:g_option_context_parse
+}
+{
+    g_child_watch_add lean
+	Memcheck:Leak
+	fun:calloc (vg_replace_malloc.c:397)
+	obj:*
+	fun:_dl_allocate_tls
+	fun:pthread_create*
+	obj:*libgthread-2.0*
+	fun:g_thread_create_full
+	obj:*libglib-2.0*
+	fun:g_child_watch_source_new
+	fun:g_child_watch_add_full
+	fun:g_child_watch_add
+}
 
 # ##----------------------------------------------------------------------##

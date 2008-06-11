@@ -166,41 +166,13 @@ gnc_file_dialog (const char * title,
   response = gtk_dialog_run(GTK_DIALOG(file_box));
 
   if (response == GTK_RESPONSE_ACCEPT) {
-  	gboolean need_free = FALSE;
-
     /* look for constructs like postgres://foo */
     internal_name = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (file_box));
     if (strstr (internal_name, "file://") == internal_name) {
-	  gchar* cur_folder;
-	  char* colon;
-	  char* slash;
-
       /* nope, a local file name */
       internal_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (file_box));
-	  cur_folder = gtk_file_chooser_get_current_folder( GTK_FILE_CHOOSER( file_box ) );
-	  if( g_str_has_prefix( internal_name, cur_folder ) ) {
-	    internal_name += strlen( cur_folder )+1;
-
-		/* If there's a ':' before a '/', assume it was from an access method
-		 * and rearrange the name.
-		 */
-		colon = strstr( internal_name, ":" );
-		slash = strstr( internal_name, "/" );
-		if( colon != NULL && (slash == NULL || slash > colon) ) {
-		    const gchar* access_method = internal_name;
-			gchar* rest = colon+1;
-			*colon = '\0';
-
-			internal_name = g_strconcat( access_method, ":",
-										 cur_folder, "/", rest, NULL );
-			need_free = TRUE;
-		}
-	  }
     }
     file_name = g_strdup(internal_name);
-	if( need_free ) {
-		g_free( (gchar*)internal_name );
-	}
   }
   gtk_widget_destroy(GTK_WIDGET(file_box));
   LEAVE("%s", file_name ? file_name : "(null)");

@@ -209,12 +209,10 @@ add_gvalue_string_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     	getter = gnc_sql_get_getter( obj_name, table_row );
     	s = (gchar*)(*getter)( pObject, NULL );
 	}
+	g_value_init( value, G_TYPE_STRING );
     if( s ) {
-		buf = g_strdup_printf( "'%s'", s );
-        g_value_init( value, G_TYPE_STRING );
-        g_value_take_string( value, buf );
+        g_value_set_string( value, s );
     } else {
-        g_value_init( value, G_TYPE_STRING );
 		g_value_set_string( value, "NULL" );
 	}
 
@@ -603,11 +601,9 @@ add_gvalue_guid_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     	guid = (*getter)( pObject, NULL );
 	}
     if( guid != NULL ) {
-		gchar* buf;
         (void)guid_to_string_buff( guid, guid_buf );
-		buf = g_strdup_printf( "'%s'", guid_buf );
         g_value_init( value, G_TYPE_STRING );
-        g_value_take_string( value, buf );
+        g_value_set_string( value, guid_buf );
     } else {
         g_value_init( value, G_TYPE_STRING );
 		g_value_set_string( value, "NULL" );
@@ -632,7 +628,6 @@ gnc_sql_add_gvalue_objectref_guid_to_slist( const GncSqlBackend* be, QofIdTypeCo
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	QofInstance* inst;
 	GValue* value;
-	gchar* buf;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( obj_name != NULL );
@@ -651,9 +646,8 @@ gnc_sql_add_gvalue_objectref_guid_to_slist( const GncSqlBackend* be, QofIdTypeCo
 	}
     if( guid != NULL ) {
         (void)guid_to_string_buff( guid, guid_buf );
-		buf = g_strdup_printf( "'%s'", guid_buf );
         g_value_init( value, G_TYPE_STRING );
-        g_value_take_string( value, buf );
+        g_value_set_string( value, guid_buf );
     } else {
         g_value_init( value, G_TYPE_STRING );
 		g_value_set_string( value, "NULL" );
@@ -674,7 +668,7 @@ gnc_sql_add_objectref_guid_col_info_to_list( const GncSqlBackend* be,
 typedef Timespec (*TimespecAccessFunc)( const gpointer );
 typedef void (*TimespecSetterFunc)( const gpointer, Timespec );
 
-#define TIMESPEC_STR_FORMAT "'%04d%02d%02d%02d%02d%02d'"
+#define TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 #define TIMESPEC_COL_SIZE (4+2+2+2+2+2)
 
 static void
@@ -855,7 +849,7 @@ add_gvalue_date_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     value = g_new0( GValue, 1 );
     getter = gnc_sql_get_getter( obj_name, table_row );
     date = (GDate*)(*getter)( pObject, NULL );
-	buf = g_strdup_printf( "'%04d%02d%02d'",
+	buf = g_strdup_printf( "%04d%02d%02d",
 					g_date_get_year( date ), g_date_get_month( date ), g_date_get_day( date ) );
     g_value_init( value, G_TYPE_STRING );
     g_value_take_string( value, buf );
@@ -1365,6 +1359,7 @@ gnc_sql_do_db_operation( GncSqlBackend* be,
     }
     if( sqlStmt != NULL ) {
         gnc_sql_execute_statement( be, sqlStmt );
+		gnc_sql_statement_dispose( sqlStmt );
 
         return TRUE;
     } else {
@@ -1392,16 +1387,24 @@ create_gslist_from_values( GncSqlBackend* be,
 }
 
 gchar*
-gnc_sql_get_sql_value( const GValue* value )
+gnc_sql_get_sql_value( const GncSqlConnection* conn, const GValue* value )
 {
 	if( value != NULL && G_IS_VALUE( value ) ) {
-		if( g_value_type_transformable( G_VALUE_TYPE(value), G_TYPE_STRING ) ) {
+		if( G_VALUE_HOLDS_STRING(value) ) {
+			gchar *before_str;
+			gchar* after_str;
+			before_str = g_value_dup_string( value );
+			after_str = gnc_sql_connection_quote_string( conn, before_str );
+			g_free( before_str );
+			return after_str;
+		} else if( g_value_type_transformable( G_VALUE_TYPE(value), G_TYPE_STRING ) ) {
 			GValue *string;
 			gchar *str;
 			
 			string = g_value_init( g_new0( GValue, 1 ), G_TYPE_STRING );
 			g_value_transform( value, string );
 			str = g_value_dup_string( string );
+			g_value_unset( string );
 			g_free( string );
 			return str;
 		} else {
@@ -1424,6 +1427,7 @@ gnc_sql_build_insert_statement( GncSqlBackend* be,
 	GString* sql;
 	GSList* values;
 	GSList* node;
+	gchar* sqlbuf;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( table_name != NULL, NULL );
@@ -1431,14 +1435,16 @@ gnc_sql_build_insert_statement( GncSqlBackend* be,
 	g_return_val_if_fail( pObject != NULL, NULL );
 	g_return_val_if_fail( table != NULL, NULL );
 
-	sql = g_string_new( g_strdup_printf( "INSERT INTO %s VALUES(", table_name ) );
+	sqlbuf = g_strdup_printf( "INSERT INTO %s VALUES(", table_name );
+	sql = g_string_new( sqlbuf );
+	g_free( sqlbuf );
 	values = create_gslist_from_values( be, obj_name, pObject, table );
 	for( node = values; node != NULL; node = node->next ) {
 		GValue* value = (GValue*)node->data;
 		if( node != values ) {
 			g_string_append( sql, "," );
 		}
-		g_string_append( sql, gnc_sql_get_sql_value( value ) );
+		g_string_append( sql, gnc_sql_get_sql_value( be->conn, value ) );
 	}
 	g_string_append( sql, ")" );
 
@@ -1460,6 +1466,7 @@ gnc_sql_build_update_statement( GncSqlBackend* be,
 	GList* colname;
 	gboolean firstCol;
 	const col_cvt_t* table_row = table;
+	gchar* sqlbuf;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( table_name != NULL, NULL );
@@ -1478,7 +1485,9 @@ gnc_sql_build_update_statement( GncSqlBackend* be,
 	values = create_gslist_from_values( be, obj_name, pObject, table );
 
 	// Create the SQL statement
-	sql = g_string_new( g_strdup_printf( "UPDATE %s SET ", table_name ) );
+	sqlbuf = g_strdup_printf( "UPDATE %s SET ", table_name );
+	sql = g_string_new( sqlbuf );
+	g_free( sqlbuf );
 
 	firstCol = TRUE;
 	for( colname = colnames->next, value = values->next;
@@ -1489,7 +1498,7 @@ gnc_sql_build_update_statement( GncSqlBackend* be,
 		}
 		g_string_append( sql, (gchar*)colname->data );
 		g_string_append( sql, "=" );
-		g_string_append( sql, gnc_sql_get_sql_value( (GValue*)(value->data) ) );
+		g_string_append( sql, gnc_sql_get_sql_value( be->conn, (GValue*)(value->data) ) );
 		firstCol = FALSE;
 	}
 	g_list_free( colnames );
@@ -1514,6 +1523,7 @@ gnc_sql_build_delete_statement( GncSqlBackend* be,
 	GString* sql;
     col_type_handler_t* pHandler;
 	GSList* list = NULL;
+	gchar* sqlbuf;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( table_name != NULL, NULL );
@@ -1521,8 +1531,9 @@ gnc_sql_build_delete_statement( GncSqlBackend* be,
 	g_return_val_if_fail( pObject != NULL, NULL );
 	g_return_val_if_fail( table != NULL, NULL );
 
-	sql = g_string_new( g_strdup_printf( "DELETE FROM %s ", table_name ) );
-
+	sqlbuf = g_strdup_printf( "DELETE FROM %s ", table_name );
+	sql = g_string_new( sqlbuf );
+	g_free( sqlbuf );
 	stmt = gnc_sql_connection_create_statement_from_sql( be->conn, sql->str );
 
     /* WHERE */
@@ -1727,7 +1738,6 @@ register_table_version( const GncSqlBackend* be, const gchar* table_name, gint v
 								TABLE_COL_NAME, table_name );
 		}
 		(void)gnc_sql_execute_nonselect_sql( be, sql );
-		g_free( sql );
 	}
 
 	g_hash_table_insert( be->versions, g_strdup( table_name ), GINT_TO_POINTER(version) );

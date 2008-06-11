@@ -70,5 +70,22 @@
    fun:scm_gc_for_newcell
    fun:scm_acons
 }
+{
+	scm_dynamic_link leak
+	Memcheck:Leak
+	fun:malloc
+	obj:*libguile-ltdl*
+	obj:*libguile-ltdl*
+	obj:*libguile-ltdl*
+	fun:scm_lt_dlopenext
+	fun:scm_dynamic_link
+}
+{
+	scm_deval leak
+	Memcheck:Leak
+	fun:malloc
+	fun:_wrap_*
+	fun:scm_deval
+}
 
 # ##----------------------------------------------------------------------##

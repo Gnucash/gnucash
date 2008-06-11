@@ -677,11 +677,13 @@ create_gda_result( GdaDataModel* model )
 	return (GncSqlResult*)result;
 }
 /* --------------------------------------------------------- */
+typedef struct GncGdaSqlConnection_s GncGdaSqlConnection;
 typedef struct
 {
 	GncSqlStatement base;
 
 	GString* sql;
+	GncGdaSqlConnection* conn;
 } GncGdaSqlStatement;
 
 static void
@@ -711,13 +713,13 @@ stmt_add_where_cond( GncSqlStatement* stmt, QofIdTypeConst type_name,
 	gchar* buf;
 
 	buf = g_strdup_printf( " WHERE %s = %s", table_row->col_name,
-						gnc_sql_get_sql_value( value ) );
+						gnc_sql_get_sql_value( (GncSqlConnection*)(gda_stmt->conn), value ) );
 	g_string_append( gda_stmt->sql, buf );
 	g_free( buf );
 }
 
 static GncSqlStatement*
-create_gda_statement( const gchar* sql )
+create_gda_statement( GncGdaSqlConnection* conn, const gchar* sql )
 {
 	GncGdaSqlStatement* stmt;
 
@@ -726,18 +728,19 @@ create_gda_statement( const gchar* sql )
 	stmt->base.toSql = stmt_to_sql;
 	stmt->base.addWhereCond = stmt_add_where_cond;
 	stmt->sql = g_string_new( sql );
+	stmt->conn = conn;
 
 	return (GncSqlStatement*)stmt;
 }
 /* --------------------------------------------------------- */
-typedef struct
+struct GncGdaSqlConnection_s
 {
 	GncSqlConnection base;
 
 	GdaConnection* conn;
 	GdaSqlParser* parser;
 	GdaServerProvider* server;
-} GncGdaSqlConnection;
+};
 
 static void
 conn_dispose( GncSqlConnection* conn )
@@ -800,7 +803,7 @@ conn_create_statement_from_sql( GncSqlConnection* conn, gchar* sql )
 {
 	GncGdaSqlConnection* gda_conn = (GncGdaSqlConnection*)conn;
 
-	return create_gda_statement( sql );
+	return create_gda_statement( gda_conn, sql );
 }
 
 static GValue*

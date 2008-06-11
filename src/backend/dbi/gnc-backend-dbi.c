@@ -231,7 +231,7 @@ gnc_dbi_sync_all( QofBackend* fbe, QofBook *book )
 		const gchar* table_name;
 		dbi_result result;
 
-		table_name = dbi_result_get_string_idx( tables, 0 );
+		table_name = dbi_result_get_string_idx( tables, 1 );
 		result = dbi_conn_queryf( be->conn, "DROP TABLE %s", table_name );
 	}
 
@@ -283,7 +283,17 @@ gnc_dbi_backend_new(void)
     gnc_be->primary_book = NULL;
 
     if( !initialized ) {
-        int num_drivers = dbi_initialize( "/usr/lib/dbd" );
+#define DEFAULT_DBD_DIR "/usr/lib/dbd"
+		const gchar* driver_dir;
+        int num_drivers;
+
+		driver_dir = g_getenv( "GNC_DBD_DIR" );
+		if( driver_dir == NULL ) {
+			PWARN( "GNC_DBD_DIR not set: using %s\n", DEFAULT_DBD_DIR );
+			driver_dir = DEFAULT_DBD_DIR;
+		}
+
+        num_drivers = dbi_initialize( driver_dir );
 		gnc_sql_init( &gnc_be->sql_be );
         initialized = TRUE;
     }
@@ -515,6 +525,7 @@ typedef struct
 	GncSqlStatement base;
 
 	GString* sql;
+	GncSqlConnection* conn;
 } GncDbiSqlStatement;
 
 static void
@@ -544,13 +555,13 @@ stmt_add_where_cond( GncSqlStatement* stmt, QofIdTypeConst type_name,
 	gchar* buf;
 
 	buf = g_strdup_printf( " WHERE %s = %s", table_row->col_name,
-						gnc_sql_get_sql_value( value ) );
+						gnc_sql_get_sql_value( dbi_stmt->conn, value ) );
 	g_string_append( dbi_stmt->sql, buf );
 	g_free( buf );
 }
 
 static GncSqlStatement*
-create_dbi_statement( gchar* sql )
+create_dbi_statement( GncSqlConnection* conn, gchar* sql )
 {
 	GncDbiSqlStatement* stmt;
 
@@ -560,6 +571,7 @@ create_dbi_statement( gchar* sql )
 	stmt->base.addWhereCond = stmt_add_where_cond;
 	stmt->sql = g_string_new( sql );
 	g_free( sql );
+	stmt->conn = conn;
 
 	return (GncSqlStatement*)stmt;
 }
@@ -600,13 +612,16 @@ conn_execute_nonselect_statement( GncSqlConnection* conn, GncSqlStatement* stmt 
 	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 	GncDbiSqlStatement* dbi_stmt = (GncDbiSqlStatement*)stmt;
 	dbi_result result;
+	gint num_rows;
 
 	result = dbi_conn_query( dbi_conn->conn, dbi_stmt->sql->str );
 	if( result == NULL ) {
 		PERR( "Error executing SQL %s\n", dbi_stmt->sql->str );
 		return 0;
 	}
-	return dbi_result_get_numrows_affected( result );
+	num_rows = dbi_result_get_numrows_affected( result );
+	dbi_result_free( result );
+	return num_rows;
 }
 
 static GncSqlStatement*
@@ -614,7 +629,7 @@ conn_create_statement_from_sql( GncSqlConnection* conn, gchar* sql )
 {
 	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 
-	return create_dbi_statement( sql );
+	return create_dbi_statement( conn, sql );
 }
 
 static GValue*
@@ -722,6 +737,7 @@ conn_create_table( GncSqlConnection* conn, const gchar* table_name,
 	GString* ddl;
 	const GList* list_node;
 	guint col_num;
+	dbi_result result;
 
 	g_return_if_fail( conn != NULL );
 	g_return_if_fail( table_name != NULL );
@@ -740,7 +756,8 @@ conn_create_table( GncSqlConnection* conn, const gchar* table_name,
     }
 	g_string_append( ddl, ")" );
         
-	dbi_conn_query( dbi_conn->conn, ddl->str );
+	result = dbi_conn_query( dbi_conn->conn, ddl->str );
+	dbi_result_free( result );
 	g_string_free( ddl, TRUE );
 }
 
@@ -827,6 +844,22 @@ conn_create_index( GncSqlConnection* conn, const gchar* index_name,
 #endif
 }
 
+static gchar*
+conn_quote_string( const GncSqlConnection* conn, gchar* unquoted_str )
+{
+	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+	gchar* quoted_str;
+	gint size;
+
+	size = dbi_conn_quote_string_copy( dbi_conn->conn, unquoted_str,
+									&quoted_str );
+	if( size != 0 ) {
+		return quoted_str;
+	} else {
+		return NULL;
+	}
+}
+
 static GncSqlConnection*
 create_dbi_connection( dbi_conn conn )
 {
@@ -844,6 +877,7 @@ create_dbi_connection( dbi_conn conn )
 	dbi_conn->base.getColumnTypeName = conn_get_column_type_name;
 	dbi_conn->base.createTable = conn_create_table;
 	dbi_conn->base.createIndex = conn_create_index;
+	dbi_conn->base.quoteString = conn_quote_string;
 	dbi_conn->conn = conn;
 
 	return (GncSqlConnection*)dbi_conn;
