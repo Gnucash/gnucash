@@ -12,6 +12,7 @@ libgncmod_aqbanking_la_SOURCES = \
   gnc-ab-trans-templ.c \
   gnc-ab-transfer.c \
   gnc-ab-utils.c \
+  gnc-file-aqb-import.c \
   gnc-gwen-gui.c \
   gnc-plugin-aqbanking.c \
   gncmod-aqbanking.c
@@ -26,6 +27,7 @@ noinst_HEADERS = \
   gnc-ab-trans-templ.h \
   gnc-ab-transfer.h \
   gnc-ab-utils.h \
+  gnc-file-aqb-import.h \
   gnc-gwen-gui.h \
   gnc-plugin-aqbanking.h
 

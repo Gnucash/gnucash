@@ -41,6 +41,9 @@
 G_BEGIN_DECLS
 
 #define GCONF_SECTION_AQBANKING "dialogs/import/hbci"
+#define KEY_FORMAT_SWIFT940 "format_swift_mt940"
+#define KEY_FORMAT_SWIFT942 "format_swift_mt942"
+#define KEY_FORMAT_DTAUS "format_dtaus"
 
 /**
  * Initialize the gwenhywfar library by calling GWEN_Init() and setting up
@@ -141,6 +144,16 @@ gchar *gnc_ab_description_to_gnc(const AB_TRANSACTION *ab_trans);
  * @return A newly allocated string, may be ""
  */
 gchar *gnc_ab_memo_to_gnc(const AB_TRANSACTION *ab_trans);
+
+/**
+ * Create an unbalanced and dirty GnuCash transaction with a split to @a gnc_acc
+ * from the information available in the AqBanking transaction @a ab_trans.
+ *
+ * @param ab_trans AqBanking transaction
+ * @param gnc_acc Account of to use for the split
+ * @return A dirty GnuCash transaction or NULL otherwise
+ */
+Transaction *gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc);
 
 /**
  * Lookup the most recent ACCOUNT_STATUS available in an ACCOUNTINFO as

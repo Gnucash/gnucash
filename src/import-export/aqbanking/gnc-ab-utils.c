@@ -33,10 +33,12 @@
 #include <gwenhywfar/gwenhywfar.h>
 #include <aqbanking/banking.h>
 
+#include "Transaction.h"
 #include "gnc-ab-kvp.h"
 #include "gnc-ab-utils.h"
 #include "gnc-glib-utils.h"
 #include "gnc-gwen-gui.h"
+#include "import-utilities.h"
 #include "qof.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -306,6 +308,89 @@ gnc_ab_memo_to_gnc(const AB_TRANSACTION *ab_trans)
     g_free(ab_other_bankcode);
 
     return retval;
+}
+
+Transaction *
+gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
+{
+    QofBook *book;
+    Transaction *gnc_trans;
+    const gchar *fitid;
+    const GWEN_TIME *valuta_date;
+    time_t current_time;
+    const char *custref;
+    gchar *description;
+    Split *split;
+    const AB_VALUE *ab_value;
+    gnc_numeric gnc_amount;
+    gchar *memo;
+
+    g_return_val_if_fail(ab_trans && gnc_acc, NULL);
+
+    /* Create new GnuCash transaction for the given AqBanking one */
+    book = gnc_account_get_book(gnc_acc);
+    gnc_trans = xaccMallocTransaction(book);
+    xaccTransBeginEdit(gnc_trans);
+
+    /* Set OFX unique transaction ID */
+    fitid = AB_Transaction_GetFiId(ab_trans);
+    if (fitid && *fitid)
+        gnc_import_set_trans_online_id(gnc_trans, fitid);
+
+    /* Date / Time */
+    valuta_date = AB_Transaction_GetValutaDate(ab_trans);
+    if (!valuta_date) {
+        const GWEN_TIME *normal_date = AB_Transaction_GetDate(ab_trans);
+        if (normal_date)
+            valuta_date = normal_date;
+    }
+    if (valuta_date)
+        xaccTransSetDateSecs(gnc_trans, GWEN_Time_toTime_t(valuta_date));
+    else
+        g_warning("transaction_cb: Oops, date 'valuta_date' was NULL");
+
+    current_time = time(NULL);
+    xaccTransSetDateEnteredSecs(gnc_trans, mktime(localtime(&current_time)));
+
+    /* Currency.  We take simply the default currency of the gnucash account */
+    xaccTransSetCurrency(gnc_trans, xaccAccountGetCommodity(gnc_acc));
+
+    /* Number.  We use the "customer reference", if there is one. */
+    custref = AB_Transaction_GetCustomerReference(ab_trans);
+    if (custref && *custref
+        && g_ascii_strncasecmp(custref, "NONREF", 6) != 0)
+        xaccTransSetNum(gnc_trans, custref);
+
+    /* Description */
+    description = gnc_ab_description_to_gnc(ab_trans);
+    xaccTransSetDescription(gnc_trans, description);
+    g_free(description);
+
+    /* Notes. */
+    /* xaccTransSetNotes(gnc_trans, g_notes); */
+    /* But Nobody ever uses the Notes field? */
+
+    /* Add one split */
+    split = xaccMallocSplit(book);
+    xaccSplitSetParent(split, gnc_trans);
+    xaccSplitSetAccount(split, gnc_acc);
+
+    /* Amount into the split */
+    ab_value = AB_Transaction_GetValue(ab_trans);
+    gnc_amount = double_to_gnc_numeric(
+        ab_value ? AB_Value_GetValueAsDouble(ab_value) : 0.0,
+        xaccAccountGetCommoditySCU(gnc_acc),
+        GNC_RND_ROUND);
+    if (!ab_value)
+        g_warning("transaction_cb: Oops, value was NULL.  Using 0");
+    xaccSplitSetBaseValue(split, gnc_amount, xaccAccountGetCommodity(gnc_acc));
+
+    /* Memo in the Split. */
+    memo = gnc_ab_memo_to_gnc(ab_trans);
+    xaccSplitSetMemo(split, memo);
+    g_free(memo);
+
+    return gnc_trans;
 }
 
 AB_ACCOUNT_STATUS *

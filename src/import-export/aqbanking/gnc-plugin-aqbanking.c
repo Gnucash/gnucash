@@ -38,6 +38,9 @@
 #include "gnc-ab-getbalance.h"
 #include "gnc-ab-gettrans.h"
 #include "gnc-ab-transfer.h"
+#include "gnc-ab-utils.h"
+#include "gnc-file-aqb-import.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-plugin-aqbanking.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-plugin-page-account-tree.h"
@@ -62,10 +65,14 @@ static Account *main_window_to_account(GncMainWindow *window);
 /* Command callbacks */
 static void gnc_plugin_ab_cmd_setup(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_get_balance(GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_ab_cmd_get_transactions (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_ab_cmd_issue_transaction (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_ab_cmd_issue_inttransaction (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_ab_cmd_issue_direct_debit (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_ab_cmd_get_transactions(GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_ab_cmd_issue_transaction(GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_ab_cmd_issue_inttransaction(GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_ab_cmd_issue_direct_debit(GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_ab_cmd_mt940_import(GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_ab_cmd_mt942_import(GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_ab_cmd_dtaus_import(GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_ab_cmd_dtaus_importsend(GtkAction *action, GncMainWindowActionData *data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-aqbanking-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-aqbanking-ui.xml"
@@ -94,16 +101,16 @@ static GtkActionEntry gnc_plugin_actions [] = {
       N_("Issue a new direct debit note online through Online Banking"),
       G_CALLBACK(gnc_plugin_ab_cmd_issue_direct_debit) },
 
-/*   /\* File -> Import menu item *\/ */
-/*     { "Mt940ImportAction", GTK_STOCK_CONVERT, N_("Import _MT940"), NULL, */
-/*       N_("Import a MT940 file into GnuCash"), */
-/*       G_CALLBACK(gnc_plugin_ab_cmd_mt940_import) }, */
-/*     { "Mt942ImportAction", GTK_STOCK_CONVERT, N_("Import MT94_2"), NULL, */
-/*       N_("Import a MT942 file into GnuCash"), */
-/*       G_CALLBACK(gnc_plugin_ab_cmd_mt942_import) }, */
-/*     { "DtausImportAction", GTK_STOCK_CONVERT, N_("Import _DTAUS"), NULL, */
-/*       N_("Import a DTAUS file into GnuCash"), */
-/*       G_CALLBACK(gnc_plugin_ab_cmd_dtaus_import) }, */
+  /* File -> Import menu item */
+    { "Mt940ImportAction", GTK_STOCK_CONVERT, N_("Import _MT940"), NULL,
+      N_("Import a MT940 file into GnuCash"),
+      G_CALLBACK(gnc_plugin_ab_cmd_mt940_import) },
+    { "Mt942ImportAction", GTK_STOCK_CONVERT, N_("Import MT94_2"), NULL,
+      N_("Import a MT942 file into GnuCash"),
+      G_CALLBACK(gnc_plugin_ab_cmd_mt942_import) },
+    { "DtausImportAction", GTK_STOCK_CONVERT, N_("Import _DTAUS"), NULL,
+      N_("Import a DTAUS file into GnuCash"),
+      G_CALLBACK(gnc_plugin_ab_cmd_dtaus_import) },
 /* #ifdef CSV_IMPORT_FUNCTIONAL */
 /*     { "CsvImportAction", GTK_STOCK_CONVERT, N_("Import _CSV"), NULL, */
 /*       N_("Import a CSV file into GnuCash"), */
@@ -112,9 +119,9 @@ static GtkActionEntry gnc_plugin_actions [] = {
 /*       N_("Import a CSV file into GnuCash and send the transfers online through Online Banking"), */
 /*       G_CALLBACK(gnc_plugin_ab_cmd_csv_importsend) }, */
 /* #endif */
-/*     { "DtausImportSendAction", GTK_STOCK_CONVERT, N_("Import DTAUS and _send..."), NULL, */
-/*       N_("Import a DTAUS file into GnuCash and send the transfers online through Online Banking"), */
-/*       G_CALLBACK(gnc_plugin_ab_cmd_dtaus_importsend) }, */
+    { "DtausImportSendAction", GTK_STOCK_CONVERT, N_("Import DTAUS and _send..."), NULL,
+      N_("Import a DTAUS file into GnuCash and send the transfers online through Online Banking"),
+      G_CALLBACK(gnc_plugin_ab_cmd_dtaus_importsend) },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
@@ -412,6 +419,43 @@ gnc_plugin_ab_cmd_issue_direct_debit (GtkAction *action,
     gnc_ab_maketrans(GTK_WIDGET(data->window), account, SINGLE_DEBITNOTE);
 
     LEAVE(" ");
+}
+
+static void
+gnc_plugin_ab_cmd_mt940_import(GtkAction *action, GncMainWindowActionData *data)
+{
+    gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
+                                         KEY_FORMAT_SWIFT940, NULL);
+    gnc_file_aqbanking_import("swift", format ? format : "swift-mt940", FALSE);
+    g_free (format);
+}
+
+static void
+gnc_plugin_ab_cmd_mt942_import(GtkAction *action, GncMainWindowActionData *data)
+{
+    gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
+                                         KEY_FORMAT_SWIFT942, NULL);
+    gnc_file_aqbanking_import("swift", format ? format : "swift-mt942", FALSE);
+    g_free (format);
+}
+
+static void
+gnc_plugin_ab_cmd_dtaus_import(GtkAction *action, GncMainWindowActionData *data)
+{
+    gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
+                                         KEY_FORMAT_DTAUS, NULL);
+    gnc_file_aqbanking_import("dtaus", format ? format : "default", FALSE);
+    g_free (format);
+}
+
+static void
+gnc_plugin_ab_cmd_dtaus_importsend(GtkAction *action,
+                                   GncMainWindowActionData *data)
+{
+    gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
+                                         KEY_FORMAT_DTAUS, NULL);
+    gnc_file_aqbanking_import("dtaus", format ? format : "default", TRUE);
+    g_free (format);
 }
 
 /************************************************************
