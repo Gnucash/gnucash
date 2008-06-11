@@ -781,6 +781,13 @@ tt_act_handler( xmlNodePtr node, gpointer data )
                    pre-7/11/2001-CIT-change SX template Account was parsed [but
                    incorrectly]. */
                 if ( xaccAccountGetCommodity( acc ) == NULL ) {
+#if 1
+						gnc_commodity_table* table;
+
+						table = gnc_commodity_table_get_table( txd->book );
+						com = gnc_commodity_table_lookup( table,
+												"template", "template" );
+#else
                         /* FIXME: This should first look in the table of the
                            book, maybe? The right thing happens [WRT file
                            load/save] if we just _new all the time, but it
@@ -792,6 +799,7 @@ tt_act_handler( xmlNodePtr node, gpointer data )
                                                  "template", "template",
                                                  "template", "template",
                                                  1 );
+#endif
                         xaccAccountSetCommodity( acc, com );
                 }
 
