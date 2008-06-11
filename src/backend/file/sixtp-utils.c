@@ -21,9 +21,9 @@
  *                                                                  *
  ********************************************************************/
 
-#include "config.h"
-
 #define __EXTENSIONS__
+
+#include "config.h"
 
 #include <ctype.h>
 #include <glib.h>
