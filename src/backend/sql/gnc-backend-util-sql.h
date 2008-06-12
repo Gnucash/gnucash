@@ -42,6 +42,9 @@ typedef struct GncSqlResult GncSqlResult;
 typedef struct GncSqlConnection GncSqlConnection;
 typedef struct GncSqlRow GncSqlRow;
 
+/**
+ *@struct GncSqlStatement
+ */
 struct GncSqlStatement
 {
 	void (*dispose)( GncSqlStatement* );
@@ -55,6 +58,9 @@ struct GncSqlStatement
 #define gnc_sql_statement_add_where_cond(STMT,TYPENAME,OBJ,COLDESC,VALUE) \
 		(STMT)->addWhereCond(STMT, TYPENAME, OBJ, COLDESC, VALUE)
 
+/**
+ * @struct GncSqlColumnInfo
+ */
 typedef struct {
 	const gchar* name;
 	const gchar* type_name;
@@ -63,6 +69,9 @@ typedef struct {
 	gboolean null_allowed;
 } GncSqlColumnInfo;
 
+/**
+ * @struct GncSqlConnection
+ */
 struct GncSqlConnection
 {
 	void (*dispose)( GncSqlConnection* );

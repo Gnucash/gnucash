@@ -425,16 +425,16 @@ gnc_sql_sync_all( GncSqlBackend* be, QofBook *book )
 /* Routines to deal with the creation of multiple books. */
 
 void
-gnc_sql_begin_edit( QofBackend *qbe, QofInstance *inst )
+gnc_sql_begin_edit( GncSqlBackend *be, QofInstance *inst )
 {
-	g_return_if_fail( qbe != NULL );
+	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 }
 
 void
-gnc_sql_rollback_edit( QofBackend *qbe, QofInstance *inst )
+gnc_sql_rollback_edit( GncSqlBackend *be, QofInstance *inst )
 {
-	g_return_if_fail( qbe != NULL );
+	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 }
 
@@ -461,9 +461,8 @@ commit_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
  * type and call its commit handler
  */
 void
-gnc_sql_commit_edit( QofBackend *qbe, QofInstance *inst )
+gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
 {
-	GncSqlBackend* be = (GncSqlBackend*)qbe;
     sql_backend be_data;
 	GError* error;
 	gboolean status;

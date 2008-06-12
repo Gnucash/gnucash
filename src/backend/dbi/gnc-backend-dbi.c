@@ -209,9 +209,9 @@ gnc_dbi_save_may_clobber_data( QofBackend* qbe )
 }
 
 static void
-gnc_dbi_sync_all( QofBackend* fbe, QofBook *book )
+gnc_dbi_sync_all( QofBackend* qbe, QofBook *book )
 {
-    GncDbiBackend* be = (GncDbiBackend*)fbe;
+    GncDbiBackend* be = (GncDbiBackend*)qbe;
     dbi_result tables;
     GError* error = NULL;
     gint row;
@@ -244,6 +244,40 @@ gnc_dbi_sync_all( QofBackend* fbe, QofBook *book )
 }
 
 /* ================================================================= */
+static void
+gnc_dbi_begin_edit( QofBackend *qbe, QofInstance *inst )
+{
+    GncDbiBackend* be = (GncDbiBackend*)qbe;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+
+	gnc_sql_begin_edit( &be->sql_be, inst );
+}
+
+static void
+gnc_dbi_rollback_edit( QofBackend *qbe, QofInstance *inst )
+{
+    GncDbiBackend* be = (GncDbiBackend*)qbe;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+
+	gnc_sql_rollback_edit( &be->sql_be, inst );
+}
+
+static void
+gnc_dbi_commit_edit( QofBackend *qbe, QofInstance *inst )
+{
+    GncDbiBackend* be = (GncDbiBackend*)qbe;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+
+	gnc_sql_commit_edit( &be->sql_be, inst );
+}
+
+/* ================================================================= */
 
 static QofBackend*
 gnc_dbi_backend_new(void)
@@ -264,9 +298,9 @@ gnc_dbi_backend_new(void)
     be->save_may_clobber_data = gnc_dbi_save_may_clobber_data;
 
     /* The gda backend treats accounting periods transactionally. */
-    be->begin = gnc_sql_begin_edit;
-    be->commit = gnc_sql_commit_edit;
-    be->rollback = gnc_sql_rollback_edit;
+    be->begin = gnc_dbi_begin_edit;
+    be->commit = gnc_dbi_commit_edit;
+    be->rollback = gnc_dbi_rollback_edit;
 
     be->counter = NULL;
 

@@ -429,6 +429,40 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
 }
 
 /* ================================================================= */
+static void
+gnc_gda_begin_edit( QofBackend *qbe, QofInstance *inst )
+{
+    GncGdaBackend* be = (GncGdaBackend*)qbe;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+
+	gnc_sql_begin_edit( &be->sql_be, inst );
+}
+
+static void
+gnc_gda_rollback_edit( QofBackend *qbe, QofInstance *inst )
+{
+    GncGdaBackend* be = (GncGdaBackend*)qbe;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+
+	gnc_sql_rollback_edit( &be->sql_be, inst );
+}
+
+static void
+gnc_gda_commit_edit( QofBackend *qbe, QofInstance *inst )
+{
+    GncGdaBackend* be = (GncGdaBackend*)qbe;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+
+	gnc_sql_commit_edit( &be->sql_be, inst );
+}
+
+/* ================================================================= */
 
 static QofBackend*
 gnc_gda_backend_new(void)
@@ -449,9 +483,9 @@ gnc_gda_backend_new(void)
     be->save_may_clobber_data = gnc_gda_save_may_clobber_data;
 
     /* The gda backend treats accounting periods transactionally. */
-    be->begin = gnc_sql_begin_edit;
-    be->commit = gnc_sql_commit_edit;
-    be->rollback = gnc_sql_rollback_edit;
+    be->begin = gnc_gda_begin_edit;
+    be->commit = gnc_gda_commit_edit;
+    be->rollback = gnc_gda_rollback_edit;
 
     /* The gda backend uses queries to load data ... */
 #if 0
