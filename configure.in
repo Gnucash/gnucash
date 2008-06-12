@@ -609,12 +609,13 @@ AC_DEFINE(QOF_DISABLE_DEPRECATED,1, [Don't use deprecated qof functions])
 ### -----------------------
 ### LIBGDA
 AC_ARG_ENABLE(gda, 
-  [  --disable-gda                build without the libgda backend],
+  [AS_HELP_STRING([--enable-gda],[build with the libgda backend])],
   [case "${enableval}" in
      yes) want_gda=true ;;
      no)  want_gda=false ;;
-     *) want_gda=true ;;
-   esac],[want_gda=true])
+     *) want_gda=false ;;
+   esac],
+   [want_gda=false])
 if test x${want_gda} = xtrue
 then
   PKG_CHECK_MODULES(LIBGDA, libgda-4.0 >= 3.99.2, [GDA_DIR=gda])
@@ -626,12 +627,13 @@ AC_SUBST(LIBGDA_LIBS)
 ### ----------------------
 ### LIBDBI
 AC_ARG_ENABLE(dbi,
-  [  --disable-dbi                build without the libdbi backend],
+  [AS_HELP_STRING([--disable-dbi],[build without the libdbi backend])],
   [case "${enableval}" in
      yes) want_dbi=true ;;
      no)  want_dbi=false ;;
      *) want_dbi=true ;;
-   esac],[want_dbi=true])
+   esac],
+   [want_dbi=true])
 if test x${want_dbi} = xtrue
 then
   AC_CHECK_HEADERS(dbi/dbi.h)
