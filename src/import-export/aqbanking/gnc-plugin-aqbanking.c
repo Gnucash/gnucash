@@ -101,7 +101,7 @@ static GtkActionEntry gnc_plugin_actions [] = {
       N_("Issue a new direct debit note online through Online Banking"),
       G_CALLBACK(gnc_plugin_ab_cmd_issue_direct_debit) },
 
-  /* File -> Import menu item */
+    /* File -> Import menu item */
     { "Mt940ImportAction", GTK_STOCK_CONVERT, N_("Import _MT940"), NULL,
       N_("Import a MT940 file into GnuCash"),
       G_CALLBACK(gnc_plugin_ab_cmd_mt940_import) },
@@ -189,9 +189,9 @@ gnc_plugin_aqbanking_remove_from_window(GncPlugin *plugin, GncMainWindow *window
                                         GQuark type)
 {
     g_signal_handlers_disconnect_by_func(
-        window, G_CALLBACK (gnc_plugin_ab_main_window_page_changed), plugin);
+        window, G_CALLBACK(gnc_plugin_ab_main_window_page_changed), plugin);
     g_signal_handlers_disconnect_by_func(
-        window, G_CALLBACK (gnc_plugin_ab_main_window_page_added), plugin);
+        window, G_CALLBACK(gnc_plugin_ab_main_window_page_added), plugin);
 }
 
 /************************************************************
@@ -346,8 +346,8 @@ gnc_plugin_ab_cmd_get_balance(GtkAction *action, GncMainWindowActionData *data)
 }
 
 static void
-gnc_plugin_ab_cmd_get_transactions (GtkAction *action,
-                                    GncMainWindowActionData *data)
+gnc_plugin_ab_cmd_get_transactions(GtkAction *action,
+                                   GncMainWindowActionData *data)
 {
     Account *account;
 
@@ -365,8 +365,8 @@ gnc_plugin_ab_cmd_get_transactions (GtkAction *action,
 }
 
 static void
-gnc_plugin_ab_cmd_issue_transaction (GtkAction *action,
-                                     GncMainWindowActionData *data)
+gnc_plugin_ab_cmd_issue_transaction(GtkAction *action,
+                                    GncMainWindowActionData *data)
 {
     Account *account;
 
@@ -384,8 +384,8 @@ gnc_plugin_ab_cmd_issue_transaction (GtkAction *action,
 }
 
 static void
-gnc_plugin_ab_cmd_issue_inttransaction (GtkAction *action,
-                                        GncMainWindowActionData *data)
+gnc_plugin_ab_cmd_issue_inttransaction(GtkAction *action,
+                                       GncMainWindowActionData *data)
 {
     Account *account;
 
@@ -397,14 +397,15 @@ gnc_plugin_ab_cmd_issue_inttransaction (GtkAction *action,
         return;
     }
 
-    gnc_ab_maketrans(GTK_WIDGET(data->window), account, SINGLE_INTERNAL_TRANSFER);
+    gnc_ab_maketrans(GTK_WIDGET(data->window), account,
+                     SINGLE_INTERNAL_TRANSFER);
 
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_ab_cmd_issue_direct_debit (GtkAction *action,
-                                      GncMainWindowActionData *data)
+gnc_plugin_ab_cmd_issue_direct_debit(GtkAction *action,
+                                     GncMainWindowActionData *data)
 {
     Account *account;
 
@@ -427,7 +428,7 @@ gnc_plugin_ab_cmd_mt940_import(GtkAction *action, GncMainWindowActionData *data)
     gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
                                          KEY_FORMAT_SWIFT940, NULL);
     gnc_file_aqbanking_import("swift", format ? format : "swift-mt940", FALSE);
-    g_free (format);
+    g_free(format);
 }
 
 static void
@@ -436,7 +437,7 @@ gnc_plugin_ab_cmd_mt942_import(GtkAction *action, GncMainWindowActionData *data)
     gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
                                          KEY_FORMAT_SWIFT942, NULL);
     gnc_file_aqbanking_import("swift", format ? format : "swift-mt942", FALSE);
-    g_free (format);
+    g_free(format);
 }
 
 static void
@@ -445,7 +446,7 @@ gnc_plugin_ab_cmd_dtaus_import(GtkAction *action, GncMainWindowActionData *data)
     gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
                                          KEY_FORMAT_DTAUS, NULL);
     gnc_file_aqbanking_import("dtaus", format ? format : "default", FALSE);
-    g_free (format);
+    g_free(format);
 }
 
 static void
@@ -455,7 +456,7 @@ gnc_plugin_ab_cmd_dtaus_importsend(GtkAction *action,
     gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
                                          KEY_FORMAT_DTAUS, NULL);
     gnc_file_aqbanking_import("dtaus", format ? format : "default", TRUE);
-    g_free (format);
+    g_free(format);
 }
 
 /************************************************************
