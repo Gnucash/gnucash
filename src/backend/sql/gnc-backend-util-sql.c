@@ -1408,7 +1408,7 @@ gnc_sql_get_sql_value( const GncSqlConnection* conn, const GValue* value )
 			g_free( string );
 			return str;
 		} else {
-			PWARN( "not transformable, gtype = %d\n", G_VALUE_TYPE(value) );
+			PWARN( "not transformable, gtype = '%s'\n", g_type_name( G_VALUE_TYPE(value) ) );
 			return "$$$";
 		}
 	} else {
