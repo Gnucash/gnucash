@@ -1287,6 +1287,7 @@ qof_session_save (QofSession *session,
 					{
 						PWARN("%s", msg);
 						g_free(msg);
+						msg = NULL;
 					}
 				}
 				/* Tell the books about the backend that they'll be using. */
@@ -1347,6 +1348,7 @@ qof_session_save (QofSession *session,
 	}
 	LEAVE("error -- No backend!");
  leave:
+ 	if(msg != NULL) g_free(msg);
 	g_atomic_int_inc(&session->lock);
 	return;
 }
