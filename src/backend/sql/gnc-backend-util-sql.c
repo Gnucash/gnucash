@@ -1322,6 +1322,7 @@ gnc_sql_object_is_it_in_db( GncSqlBackend* be, const gchar* table_name,
 	gnc_sql_statement_add_where_cond( sqlStmt, obj_name, pObject, &table[0], (GValue*)(list->data) );
 
     count = gnc_sql_execute_statement_get_count( be, sqlStmt );
+	gnc_sql_statement_dispose( sqlStmt );
     if( count == 0 ) {
         return FALSE;
     } else {
@@ -1441,11 +1442,17 @@ gnc_sql_build_insert_statement( GncSqlBackend* be,
 	values = create_gslist_from_values( be, obj_name, pObject, table );
 	for( node = values; node != NULL; node = node->next ) {
 		GValue* value = (GValue*)node->data;
+		gchar* value_str;
 		if( node != values ) {
 			g_string_append( sql, "," );
 		}
-		g_string_append( sql, gnc_sql_get_sql_value( be->conn, value ) );
+		value_str = gnc_sql_get_sql_value( be->conn, value );
+		g_string_append( sql, value_str );
+		g_free( value_str );
+		g_value_reset( value );
+		g_free( value );
 	}
+	g_slist_free( values );
 	g_string_append( sql, ")" );
 
 	stmt = gnc_sql_connection_create_statement_from_sql( be->conn, sql->str );
@@ -1493,12 +1500,15 @@ gnc_sql_build_update_statement( GncSqlBackend* be,
 	for( colname = colnames->next, value = values->next;
 					colname != NULL && value != NULL;
 					colname = colname->next, value = value->next ) {
+		gchar* value_str;
 		if( !firstCol ) {
 			g_string_append( sql, "," );
 		}
 		g_string_append( sql, (gchar*)colname->data );
 		g_string_append( sql, "=" );
-		g_string_append( sql, gnc_sql_get_sql_value( be->conn, (GValue*)(value->data) ) );
+		value_str = gnc_sql_get_sql_value( be->conn, (GValue*)(value->data) );
+		g_string_append( sql, value_str );
+		g_free( value_str );
 		firstCol = FALSE;
 	}
 	g_list_free( colnames );
