@@ -233,7 +233,9 @@ gnc_dbi_sync_all( QofBackend* qbe, QofBook *book )
 
 		table_name = dbi_result_get_string_idx( tables, 1 );
 		result = dbi_conn_queryf( be->conn, "DROP TABLE %s", table_name );
+		dbi_result_free( result );
 	}
+	dbi_result_free( tables );
 
     /* Save all contents */
 	be->is_pristine_db = TRUE;
@@ -587,9 +589,12 @@ stmt_add_where_cond( GncSqlStatement* stmt, QofIdTypeConst type_name,
 {
 	GncDbiSqlStatement* dbi_stmt = (GncDbiSqlStatement*)stmt;
 	gchar* buf;
+	gchar* value_str;
 
+	value_str = gnc_sql_get_sql_value( dbi_stmt->conn, value );
 	buf = g_strdup_printf( " WHERE %s = %s", table_row->col_name,
-						gnc_sql_get_sql_value( dbi_stmt->conn, value ) );
+						value_str );
+	g_free( value_str );
 	g_string_append( dbi_stmt->sql, buf );
 	g_free( buf );
 }
