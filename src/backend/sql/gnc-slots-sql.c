@@ -531,7 +531,6 @@ gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list )
 static void
 create_slots_tables( GncSqlBackend* be )
 {
-	GError* error = NULL;
 	gboolean ok;
 	gint version;
 
@@ -539,15 +538,12 @@ create_slots_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
 	if( version == 0 ) {
-    	gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table, &error );
-		if( error != NULL ) {
-			g_critical( "Unable to create SLOTS table: %s\n", error->message );
-		}
+    	gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
 #if 0
 		// FIXME: Create index
 		ok = gnc_sql_create_index( be, "slots_guid_index", TABLE_NAME, obj_guid_col_table, &error );
 		if( !ok ) {
-			g_critical( "Unable to create index: %s\n", error->message );
+			PERR( "Unable to create index: %s\n", error->message );
 		}
 #endif
 	}

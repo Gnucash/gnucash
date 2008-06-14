@@ -225,6 +225,8 @@ struct GncSqlResult
 		(RESULT)->dispose(RESULT)
 
 /**
+ * @struct GncSqlDataType_t
+ *
  * Struct used to pass in a new data type for GDA storage.  This contains
  * the set of callbacks to read and write GDA for new data objects..  New
  * types should register an instance of this object with the engine.
@@ -245,12 +247,12 @@ typedef struct
   const gchar *	type_name;	/* The XML tag for this type */
 
   void		(*commit)( QofInstance* inst, GncSqlBackend* be );
-  void		(*initial_load)( GncSqlBackend* pBackend );
-  void		(*create_tables)( GncSqlBackend* pBackend );
-  gpointer	(*compile_query)( GncSqlBackend* pBackend, QofQuery* pQuery );
-  void		(*run_query)( GncSqlBackend* pBackend, gpointer pQuery );
-  void		(*free_query)( GncSqlBackend* pBackend, gpointer pQuery );
-  void		(*write)( GncSqlBackend* pBackend );
+  void		(*initial_load)( GncSqlBackend* be );
+  void		(*create_tables)( GncSqlBackend* be );
+  gpointer	(*compile_query)( GncSqlBackend* be, QofQuery* pQuery );
+  void		(*run_query)( GncSqlBackend* be, gpointer pQuery );
+  void		(*free_query)( GncSqlBackend* be, gpointer pQuery );
+  void		(*write)( GncSqlBackend* be );
 } GncSqlDataType_t;
 
 // Type for conversion of db row to object.
@@ -308,77 +310,246 @@ typedef struct {
 	GNC_SQL_ADD_GVALUE_TO_SLIST_FN	add_gvalue_to_slist_fn;
 } col_type_handler_t;
 
+/**
+ * Creates a GncSqlColumnInfo structure for a column.
+ *
+ * @param table_row DB table column
+ * @param type Type name
+ * @param size Field size (if string)
+ * @return Column info
+ */
 GncSqlColumnInfo* gnc_sql_create_column_info( const col_cvt_t* table_row, const gchar* type, gint size );
+
+/**
+ * Returns the QOF access function for a column.
+ *
+ * @param obj_name QOF object type name
+ * @param table_row DB table column
+ * @return Access function
+ */
 QofAccessFunc gnc_sql_get_getter( QofIdTypeConst obj_name, const col_cvt_t* table_row );
 
+/**
+ * Adds a column name to a list.  If the column type spans multiple columns,
+ * all of the column names for the pieces are added.
+ *
+ * @param table_row DB table column
+ * @pList List
+ */
 void gnc_sql_add_colname_to_list( const col_cvt_t* table_row, GList** pList );
 
-gboolean gnc_sql_do_db_operation( GncSqlBackend* pBackend,
+/**
+ * Performs an operation on the database.
+ *
+ * @param be SQL backend struct
+ * @param op Operation type
+ * @param table_name SQL table name
+ * @param obj_name QOF object type name
+ * @param pObject Gnucash object
+ * @param table DB table description
+ * @return TRUE if successful, FALSE if not
+ */
+gboolean gnc_sql_do_db_operation( GncSqlBackend* be,
 									E_DB_OPERATION op,
 									const gchar* table_name,
 									QofIdTypeConst obj_name,
 									gpointer pObject,
 									const col_cvt_t* table );
-GncSqlStatement* gnc_sql_build_insert_statement( GncSqlBackend* pBackend,
-									const gchar* table_name,
-									QofIdTypeConst obj_name,
-									gpointer pObject,
-									const col_cvt_t* table );
-GncSqlStatement* gnc_sql_build_update_statement( GncSqlBackend* pBackend,
-									const gchar* table_name,
-									QofIdTypeConst obj_name,
-									gpointer pObject,
-									const col_cvt_t* table );
-GncSqlStatement* gnc_sql_build_delete_statement( GncSqlBackend* pBackend,
-									const gchar* table_name,
-									QofIdTypeConst obj_name,
-									gpointer pObject,
-									const col_cvt_t* table );
-gint gnc_sql_execute_statement( GncSqlBackend* pBackend, GncSqlStatement* statement );
-GncSqlResult* gnc_sql_execute_select_statement( GncSqlBackend* pBackend, GncSqlStatement* statement );
-GncSqlResult* gnc_sql_execute_select_sql( const GncSqlBackend* pBackend, gchar* sql );
-gint gnc_sql_execute_nonselect_sql( const GncSqlBackend* pBackend, gchar* sql );
-GncSqlStatement* gnc_sql_create_statement_from_sql( const GncSqlBackend* pBackend, gchar* sql );
-int gnc_sql_execute_select_get_count( const GncSqlBackend* pBackend, gchar* sql );
-int gnc_sql_execute_statement_get_count( GncSqlBackend* pBackend, GncSqlStatement* statement );
+
+/**
+ * Execute an SQL SELECT statement.
+ *
+ * @param be SQL backend struct
+ * @param statement Statement
+ * @return Results
+ */
+GncSqlResult* gnc_sql_execute_select_statement( GncSqlBackend* be, GncSqlStatement* statement );
+
+/**
+ * Executes an SQL SELECT statement from an SQL char string.
+ *
+ * @param be SQL backend struct
+ * @param sql SQL SELECT string
+ * @return Results
+ */
+GncSqlResult* gnc_sql_execute_select_sql( const GncSqlBackend* be, gchar* sql );
+
+/**
+ * Creates a statement from an SQL char string.
+ *
+ * @param be SQL backend struct
+ * @param sql SQL char string
+ * @return Statement
+ */
+GncSqlStatement* gnc_sql_create_statement_from_sql( const GncSqlBackend* be, gchar* sql );
+
+/**
+ * Loads a Gnucash object from the database.
+ *
+ * @param be SQL backend struct
+ * @param row DB result row
+ * @param obj_name QOF object type name
+ * @param pObject Object to be loaded
+ * @param table DB table description
+ */
 void gnc_sql_load_object( const GncSqlBackend* be, GncSqlRow* row,
 						QofIdTypeConst obj_name, gpointer pObject,
 						const col_cvt_t* table );
+
+/**
+ * Checks whether an object is in the database or not.
+ *
+ * @param be SQL backend struct
+ * @param table_name DB table name
+ * @param obj_name QOF object type name
+ * @param pObject Object to be checked
+ * @param table DB table description
+ * @return TRUE if the object is in the database, FALSE otherwise
+ */
 gboolean gnc_sql_object_is_it_in_db( GncSqlBackend* be,
 									const gchar* table_name,
 									QofIdTypeConst obj_name, const gpointer pObject,
 									const col_cvt_t* table );
+
+/**
+ * Returns the version number for a DB table.
+ *
+ * @param be SQL backend struct
+ * @param table_name Table name
+ * @return Version number, or 0 if the table does not exist
+ */
 gint gnc_sql_get_table_version( const GncSqlBackend* be, const gchar* table_name );
+
+/**
+ * Creates a table in the database
+ *
+ * @param be SQL backend struct
+ * @param table_name Table name
+ * @param table_version Table version
+ * @param col_table DB table description
+ * @return TRUE if successful, FALSE if unsuccessful
+ */
 gboolean gnc_sql_create_table( const GncSqlBackend* be, const gchar* table_name,
-								gint table_version, const col_cvt_t* col_table,
-						GError** error );
+								gint table_version, const col_cvt_t* col_table );
+
+/**
+ * Creates an index in the database
+ *
+ * @param be SQL backend struct
+ * @param index_name Index name
+ * @param table_name Table name
+ * @param col_table Columns that the index should index
+ */
 void gnc_sql_create_index( const GncSqlBackend* be, const gchar* index_name,
 						const gchar* table_name, const col_cvt_t* col_table );
-const GUID* gnc_sql_load_guid( const GncSqlBackend* be, GncSqlRow* row );
-const GUID* gnc_sql_load_tx_guid( const GncSqlBackend* be, GncSqlRow* row );
-GncSqlStatement* gnc_sql_create_select_statement( const GncSqlBackend* be, const gchar* table_name,
-										const col_cvt_t* col_table );
-void gnc_sql_register_col_type_handler( const gchar* colType, const col_type_handler_t* handler );
-void gnc_sql_register_standard_col_type_handlers( void );
 
-void gnc_sql_add_gvalue_objectref_guid_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
-                const gpointer pObject, const col_cvt_t* table_row, GSList** pList );
+/**
+ * Loads the object guid from a database row.  The table must have a column
+ * named "guid" with type CT_GUID.
+ *
+ * @param be SQL backend struct
+ * @param row Database row
+ * @return GUID
+ */
+const GUID* gnc_sql_load_guid( const GncSqlBackend* be, GncSqlRow* row );
+
+/**
+ * Loads the transaction guid from a database row.  The table must have a column
+ * named "tx_guid" with type CT_GUID.
+ *
+ * @param be SQL backend struct
+ * @param row Database row
+ * @return GUID
+ */
+const GUID* gnc_sql_load_tx_guid( const GncSqlBackend* be, GncSqlRow* row );
+
+/**
+ * Creates a basic SELECT statement for a table.
+ *
+ * @param be SQL backend struct
+ * @param table_name Table name
+ * @return Statement
+ */
+GncSqlStatement* gnc_sql_create_select_statement( const GncSqlBackend* be,
+										const gchar* table_name );
+
+/**
+ * Registers a column handler for a new column type.
+ *
+ * @param colType Column type
+ * @param handler Column handler
+ */
+void gnc_sql_register_col_type_handler( const gchar* colType, const col_type_handler_t* handler );
+
+/**
+ * Adds a GValue for an object reference GUID to the end of a GSList.
+ *
+ * @param be SQL backend struct
+ * @param obj_name QOF object type name
+ * @param pObject Object
+ * @param table_row DB table column description
+ * @param pList List
+ */
+void gnc_sql_add_gvalue_objectref_guid_to_slist( const GncSqlBackend* be,
+							QofIdTypeConst obj_name, const gpointer pObject,
+							const col_cvt_t* table_row, GSList** pList );
+
+/**
+ * Adds a column info structure for an object reference GUID to the end of a
+ * GList.
+ *
+ * @param be SQL backend struct
+ * @param table_row DB table column description
+ * @param pList List
+ */
 void gnc_sql_add_objectref_guid_col_info_to_list( const GncSqlBackend* be,
 	            const col_cvt_t* table_row, GList** pList );
+
+/**
+ * Appends the ascii strings for a list of GUIDs to the end of an SQL string.
+ *
+ * @param str SQL string
+ * @param list List of GUIDs
+ * @param maxCount Max # of GUIDs to append
+ * @return Number of GUIDs appended
+ */
 guint gnc_sql_append_guid_list_to_sql( GString* str, GList* list, guint maxCount );
-void gnc_sql_add_subtable_colnames_to_list( const col_cvt_t* table_row, const col_cvt_t* subtable,
+
+/**
+ * Appends column names for a subtable to the end of a GList.
+ *
+ * @param table_row Main DB column description
+ * @param subtable Sub-column description table
+ * @param pList List
+ */
+void gnc_sql_add_subtable_colnames_to_list( const col_cvt_t* table_row,
+								const col_cvt_t* subtable,
 								GList** pList );
+
+/**
+ * Returns a string corresponding to the SQL representation of a GValue.  The
+ * caller must free the string.
+ *
+ * @param conn SQL connection
+ * @param value Value to be converted
+ * @return String
+ */
 gchar* gnc_sql_get_sql_value( const GncSqlConnection* conn, const GValue* value );
 
-void _retrieve_guid_( gpointer pObject, gpointer pValue );
+/**
+ * Initializes DB table version information.
+ *
+ * @param be SQL backend struct
+ */
 void gnc_sql_init_version_info( GncSqlBackend* be );
-void gnc_sql_reset_version_info( GncSqlBackend* be );
+
+/**
+ * Finalizes DB table version information.
+ *
+ * @param be SQL backend struct
+ */
 void gnc_sql_finalize_version_info( GncSqlBackend* be );
 
-G_MODULE_EXPORT const gchar *
-g_module_check_init( GModule *module );
-
-G_MODULE_EXPORT void
-qof_backend_module_init(void);
+void _retrieve_guid_( gpointer pObject, gpointer pValue );
 
 #endif /* GNC_BACKEND_SQL_H_ */

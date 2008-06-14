@@ -136,7 +136,7 @@ load_all_commodities( GncSqlBackend* be )
     gnc_commodity_table* pTable;
 
     pTable = gnc_commodity_table_get_table( be->primary_book );
-    stmt = gnc_sql_create_select_statement( be, COMMODITIES_TABLE, col_table );
+    stmt = gnc_sql_create_select_statement( be, COMMODITIES_TABLE );
     result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
@@ -177,12 +177,7 @@ create_commodities_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, COMMODITIES_TABLE );
     if( version == 0 ) {
-    	GError* error = NULL;
-
-        gnc_sql_create_table( be, COMMODITIES_TABLE, TABLE_VERSION, col_table, &error );
-        if( error != NULL ) {
-            PERR( "Error creating table: %s\n", error->message );
-        }
+        gnc_sql_create_table( be, COMMODITIES_TABLE, TABLE_VERSION, col_table );
     }
 }
 

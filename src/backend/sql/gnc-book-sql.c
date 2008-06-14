@@ -157,7 +157,7 @@ load_all_books( GncSqlBackend* be )
 
 	g_return_if_fail( be != NULL );
 
-    stmt = gnc_sql_create_select_statement( be, BOOK_TABLE, col_table );
+    stmt = gnc_sql_create_select_statement( be, BOOK_TABLE );
     result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
 	if( result != NULL ) {
@@ -185,12 +185,7 @@ create_book_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, BOOK_TABLE );
     if( version == 0 ) {
-    	GError* error = NULL;
-
-        gnc_sql_create_table( be, BOOK_TABLE, TABLE_VERSION, col_table, &error );
-        if( error != NULL ) {
-            PERR( "Error creating table: %s\n", error->message );
-        }
+        gnc_sql_create_table( be, BOOK_TABLE, TABLE_VERSION, col_table );
     }
 }
 

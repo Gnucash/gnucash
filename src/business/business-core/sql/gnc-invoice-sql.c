@@ -113,7 +113,7 @@ load_all_invoices( GncSqlBackend* be )
 
     pBook = be->primary_book;
 
-    stmt = gnc_sql_create_select_statement( be, TABLE_NAME, col_table );
+    stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
     result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
@@ -138,12 +138,7 @@ create_invoice_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
     if( version == 0 ) {
-    	GError* error = NULL;
-
-        gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table, &error );
-        if( error != NULL ) {
-            PERR( "Error creating table: %s\n", error->message );
-        }
+        gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
     }
 }
 

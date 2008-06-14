@@ -62,6 +62,20 @@
 static const gchar* convert_search_obj( QofIdType objType );
 static void gnc_sql_init_object_handlers( void );
 static void update_save_progress( GncSqlBackend* be );
+static void register_standard_col_type_handlers( void );
+static void reset_version_info( GncSqlBackend* be );
+static GncSqlStatement* build_insert_statement( GncSqlBackend* be,
+                        			const gchar* table_name,
+                        			QofIdTypeConst obj_name, gpointer pObject,
+                        			const col_cvt_t* table );
+static GncSqlStatement* build_update_statement( GncSqlBackend* be,
+                        			const gchar* table_name,
+                        			QofIdTypeConst obj_name, gpointer pObject,
+                        			const col_cvt_t* table );
+static GncSqlStatement* build_delete_statement( GncSqlBackend* be,
+                        			const gchar* table_name,
+                        			QofIdTypeConst obj_name, gpointer pObject,
+                        			const col_cvt_t* table );
 
 #define TRANSACTION_NAME "trans"
 
@@ -90,7 +104,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 void
 gnc_sql_init( GncSqlBackend* be )
 {
-	gnc_sql_register_standard_col_type_handlers();
+	register_standard_col_type_handlers();
 	gnc_sql_init_object_handlers();
 }
 
@@ -150,12 +164,6 @@ gnc_sql_load( GncSqlBackend* be, QofBook *book )
 
     g_assert( be->primary_book == NULL );
     be->primary_book = book;
-
-	// Set up table version information
-//	gnc_sql_init_version_info( be );
-
-    // Call all object backends to create any required tables
-//    qof_object_foreach_backend( GNC_SQL_BACKEND, create_tables_cb, be );
 
     /* Load any initial stuff */
     be->loading = TRUE;
@@ -387,7 +395,7 @@ gnc_sql_sync_all( GncSqlBackend* be, QofBook *book )
     }
 #endif
 
-	gnc_sql_reset_version_info( be );
+	reset_version_info( be );
 
     /* Create new tables */
 	be->is_pristine_db = TRUE;
@@ -832,11 +840,6 @@ gnc_sql_init_object_handlers( void )
 }
 
 /* ================================================================= */
-
-G_MODULE_EXPORT void
-qof_backend_module_init(void)
-{
-}
 
 static void register_table_version( const GncSqlBackend* be, const gchar* table_name, gint version );
 static gint get_table_version( const GncSqlBackend* be, const gchar* table_name );
@@ -1807,8 +1810,8 @@ get_handler( const col_cvt_t* table_row )
     return pHandler;
 }
 
-void
-gnc_sql_register_standard_col_type_handlers( void )
+static void
+register_standard_col_type_handlers( void )
 {
 	gnc_sql_register_col_type_handler( CT_STRING, &string_handler );
     gnc_sql_register_col_type_handler( CT_BOOLEAN, &boolean_handler );
@@ -1904,10 +1907,12 @@ gnc_sql_load_object( const GncSqlBackend* be, GncSqlRow* row,
 
 /* ================================================================= */
 GncSqlStatement*
-gnc_sql_create_select_statement( const GncSqlBackend* be, const gchar* table_name,
-							const col_cvt_t* table_row )
+gnc_sql_create_select_statement( const GncSqlBackend* be, const gchar* table_name )
 {
 	gchar* sql;
+
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( table_name != NULL, NULL );
 
 	sql = g_strdup_printf( "SELECT * FROM %s", table_name );
 	return gnc_sql_create_statement_from_sql( be, sql );
@@ -1920,28 +1925,15 @@ create_single_col_select_statement( const GncSqlBackend* be,
 {
 	gchar* sql;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( table_name != NULL, NULL );
+	g_return_val_if_fail( table_row != NULL, NULL );
+
 	sql = g_strdup_printf( "SELECT %s FROM %s", table_row->col_name, table_name );
 	return gnc_sql_create_statement_from_sql( be, sql );
 }
 
 /* ================================================================= */
-gint
-gnc_sql_execute_statement( GncSqlBackend* be, GncSqlStatement* stmt )
-{
-    GError* error = NULL;
-    gint numRows;
-
-	g_return_val_if_fail( be != NULL, -1 );
-	g_return_val_if_fail( stmt != NULL, -1 );
-
-	numRows = gnc_sql_connection_execute_nonselect_statement( be->conn, stmt );
-    if( error != NULL ) {
-        PERR( "SQL error: %s\n%s\n", gnc_sql_statement_to_sql( stmt ), error->message );
-		qof_backend_set_error( &be->be, ERR_BACKEND_SERVER_ERR );
-    }
-
-    return numRows;
-}
 
 GncSqlResult*
 gnc_sql_execute_select_statement( GncSqlBackend* be, GncSqlStatement* stmt )
@@ -2000,11 +1992,10 @@ gnc_sql_execute_select_sql( const GncSqlBackend* be, gchar* sql )
 	return result;
 }
 
-gint
-gnc_sql_execute_nonselect_sql( const GncSqlBackend* be, gchar* sql )
+static gint
+execute_nonselect_sql( const GncSqlBackend* be, gchar* sql )
 {
 	GncSqlStatement* stmt;
-    GError* error = NULL;
 	gint result;
 
 	g_return_val_if_fail( be != NULL, 0 );
@@ -2016,32 +2007,11 @@ gnc_sql_execute_nonselect_sql( const GncSqlBackend* be, gchar* sql )
     }
 	result = gnc_sql_connection_execute_nonselect_statement( be->conn, stmt );
 	gnc_sql_statement_dispose( stmt );
-    if( error != NULL ) {
-        PERR( "SQL error: %s\n%s\n", sql, error->message );
-    }
 	return result;
 }
 
-int
-gnc_sql_execute_select_get_count( const GncSqlBackend* be, gchar* sql )
-{
-    int count = 0;
-    GncSqlResult* result;
-
-	g_return_val_if_fail( be != NULL, 0 );
-	g_return_val_if_fail( sql != NULL, 0 );
-
-    result = gnc_sql_execute_select_sql( be, sql );
-    if( result != NULL ) {
-        count = gnc_sql_result_get_num_rows( result );
-		gnc_sql_result_dispose( result );
-    }
-
-    return count;
-}
-
-int
-gnc_sql_execute_statement_get_count( GncSqlBackend* be, GncSqlStatement* stmt )
+static int
+execute_statement_get_count( GncSqlBackend* be, GncSqlStatement* stmt )
 {
     GncSqlResult* result;
 	int count = 0;
@@ -2110,7 +2080,7 @@ gnc_sql_object_is_it_in_db( GncSqlBackend* be, const gchar* table_name,
 	pHandler->add_gvalue_to_slist_fn( be, obj_name, pObject, table, &list );
 	gnc_sql_statement_add_where_cond( sqlStmt, obj_name, pObject, &table[0], (GValue*)(list->data) );
 
-    count = gnc_sql_execute_statement_get_count( be, sqlStmt );
+    count = execute_statement_get_count( be, sqlStmt );
 	gnc_sql_statement_dispose( sqlStmt );
     if( count == 0 ) {
         return FALSE;
@@ -2126,7 +2096,7 @@ gnc_sql_do_db_operation( GncSqlBackend* be,
                         QofIdTypeConst obj_name, gpointer pObject,
                         const col_cvt_t* table )
 {
-    GncSqlStatement* sqlStmt;
+    GncSqlStatement* stmt;
 
 	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( table_name != NULL, FALSE );
@@ -2136,20 +2106,20 @@ gnc_sql_do_db_operation( GncSqlBackend* be,
 
     if( op == OP_DB_ADD_OR_UPDATE ) {
         if( gnc_sql_object_is_it_in_db( be, table_name, obj_name, pObject, table ) ) {
-            sqlStmt = gnc_sql_build_update_statement( be, table_name, obj_name, pObject, table );
+            stmt = build_update_statement( be, table_name, obj_name, pObject, table );
         } else {
-            sqlStmt = gnc_sql_build_insert_statement( be, table_name, obj_name, pObject, table );
+            stmt = build_insert_statement( be, table_name, obj_name, pObject, table );
         }
     } else if( op == OP_DB_DELETE ) {
-        sqlStmt = gnc_sql_build_delete_statement( be, table_name, obj_name, pObject, table );
+        stmt = build_delete_statement( be, table_name, obj_name, pObject, table );
     } else if( op == OP_DB_ADD ) {
-        sqlStmt = gnc_sql_build_insert_statement( be, table_name, obj_name, pObject, table );
+        stmt = build_insert_statement( be, table_name, obj_name, pObject, table );
     } else {
         g_assert( FALSE );
     }
-    if( sqlStmt != NULL ) {
-        gnc_sql_execute_statement( be, sqlStmt );
-		gnc_sql_statement_dispose( sqlStmt );
+    if( stmt != NULL ) {
+		gnc_sql_connection_execute_nonselect_statement( be->conn, stmt );
+		gnc_sql_statement_dispose( stmt );
 
         return TRUE;
     } else {
@@ -2207,11 +2177,11 @@ gnc_sql_get_sql_value( const GncSqlConnection* conn, const GValue* value )
 	}
 }
 
-GncSqlStatement*
-gnc_sql_build_insert_statement( GncSqlBackend* be,
-                            const gchar* table_name,
-                            QofIdTypeConst obj_name, gpointer pObject,
-                            const col_cvt_t* table )
+static GncSqlStatement*
+build_insert_statement( GncSqlBackend* be,
+                        const gchar* table_name,
+                        QofIdTypeConst obj_name, gpointer pObject,
+                        const col_cvt_t* table )
 {
 	GncSqlStatement* stmt;
 	GString* sql;
@@ -2248,11 +2218,11 @@ gnc_sql_build_insert_statement( GncSqlBackend* be,
 	return stmt;
 }
 
-GncSqlStatement*
-gnc_sql_build_update_statement( GncSqlBackend* be,
-                            const gchar* table_name,
-                            QofIdTypeConst obj_name, gpointer pObject,
-                            const col_cvt_t* table )
+static GncSqlStatement*
+build_update_statement( GncSqlBackend* be,
+                        const gchar* table_name,
+                        QofIdTypeConst obj_name, gpointer pObject,
+                        const col_cvt_t* table )
 {
 	GncSqlStatement* stmt;
 	GString* sql;
@@ -2312,11 +2282,11 @@ gnc_sql_build_update_statement( GncSqlBackend* be,
 	return stmt;
 }
 
-GncSqlStatement*
-gnc_sql_build_delete_statement( GncSqlBackend* be,
-                            const gchar* table_name,
-                            QofIdTypeConst obj_name, gpointer pObject,
-                            const col_cvt_t* table )
+static GncSqlStatement*
+build_delete_statement( GncSqlBackend* be,
+                        const gchar* table_name,
+                        QofIdTypeConst obj_name, gpointer pObject,
+                        const col_cvt_t* table )
 {
 	GncSqlStatement* stmt;
 	GString* sql;
@@ -2347,14 +2317,13 @@ gnc_sql_build_delete_statement( GncSqlBackend* be,
 
 static gboolean
 create_table( const GncSqlBackend* be, const gchar* table_name,
-				const col_cvt_t* col_table, GError** pError )
+				const col_cvt_t* col_table )
 {
 	GList* col_info_list = NULL;
     
 	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( table_name != NULL, FALSE );
 	g_return_val_if_fail( col_table != NULL, FALSE );
-	g_return_val_if_fail( pError != NULL, FALSE );
     
     for( ; col_table->col_name != NULL; col_table++ ) {
         col_type_handler_t* pHandler;
@@ -2368,11 +2337,11 @@ create_table( const GncSqlBackend* be, const gchar* table_name,
 
 gboolean
 gnc_sql_create_table( const GncSqlBackend* be, const gchar* table_name,
-					gint table_version, const col_cvt_t* col_table, GError** error )
+					gint table_version, const col_cvt_t* col_table )
 {
 	gboolean ok;
 
-	ok = create_table( be, table_name, col_table, error );
+	ok = create_table( be, table_name, col_table );
 	if( ok ) {
 		register_table_version( be, table_name, table_version );
 	}
@@ -2461,12 +2430,8 @@ gnc_sql_init_version_info( GncSqlBackend* be )
 		}
 	} else {
 		gboolean ok;
-		GError* error = NULL;
 
-		ok = create_table( be, VERSION_TABLE_NAME, version_table, &error );
-		if( error != NULL ) {
-			PERR( "Error creating versions table: %s\n", error->message );
-		}
+		ok = create_table( be, VERSION_TABLE_NAME, version_table );
 	}
 }
 
@@ -2476,18 +2441,14 @@ gnc_sql_init_version_info( GncSqlBackend* be )
  *
  * @param be Backend struct
  */
-void
-gnc_sql_reset_version_info( GncSqlBackend* be )
+static void
+reset_version_info( GncSqlBackend* be )
 {
 	gboolean ok;
-	GError* error = NULL;
 
 	g_return_if_fail( be != NULL );
 
-	ok = create_table( be, VERSION_TABLE_NAME, version_table, &error );
-	if( error != NULL ) {
-		PERR( "Error creating versions table: %s\n", error->message );
-	}
+	ok = create_table( be, VERSION_TABLE_NAME, version_table );
 	if( be->versions == NULL ) {
 		be->versions = g_hash_table_new_full( g_str_hash, g_str_equal, g_free, NULL );
 	} else {
@@ -2536,7 +2497,7 @@ register_table_version( const GncSqlBackend* be, const gchar* table_name, gint v
 								VERSION_COL_NAME, version,
 								TABLE_COL_NAME, table_name );
 		}
-		(void)gnc_sql_execute_nonselect_sql( be, sql );
+		execute_nonselect_sql( be, sql );
 	}
 
 	g_hash_table_insert( be->versions, g_strdup( table_name ), GINT_TO_POINTER(version) );

@@ -320,12 +320,7 @@ create_recurrence_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
     if( version == 0 ) {
-    	GError* error = NULL;
-
-        gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table, &error );
-        if( error != NULL ) {
-            PERR( "Error creating table: %s\n", error->message );
-        }
+        gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
     }
 }
 

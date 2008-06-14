@@ -385,22 +385,12 @@ create_transaction_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, TRANSACTION_TABLE );
     if( version == 0 ) {
-    	GError* error = NULL;
-
-        gnc_sql_create_table( be, TRANSACTION_TABLE, TX_TABLE_VERSION, tx_col_table, &error );
-        if( error != NULL ) {
-            PERR( "Error creating table: %s\n", error->message );
-        }
+        gnc_sql_create_table( be, TRANSACTION_TABLE, TX_TABLE_VERSION, tx_col_table );
     }
 
 	version = gnc_sql_get_table_version( be, SPLIT_TABLE );
     if( version == 0 ) {
-    	GError* error = NULL;
-
-        gnc_sql_create_table( be, SPLIT_TABLE, SPLIT_TABLE_VERSION, split_col_table, &error );
-        if( error != NULL ) {
-            PERR( "Error creating table: %s\n", error->message );
-        }
+        gnc_sql_create_table( be, SPLIT_TABLE, SPLIT_TABLE_VERSION, split_col_table );
     }
 }
 /* ================================================================= */
