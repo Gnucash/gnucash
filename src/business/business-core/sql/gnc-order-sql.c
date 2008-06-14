@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gnc-backend-util-sql.h"
+#include "gnc-backend-sql.h"
 #include "gnc-slots-sql.h"
 
 #include "gncOrderP.h"
@@ -98,7 +98,7 @@ load_all_orders( GncSqlBackend* be )
     pBook = be->primary_book;
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME, col_table );
-    result = gnc_sql_execute_sql_statement( be, stmt );
+    result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
         GncSqlRow* row;

@@ -34,7 +34,7 @@
 #include "gnc-engine.h"
 #include "Recurrence.h"
 
-#include "gnc-backend-util-sql.h"
+#include "gnc-backend-sql.h"
 
 #include "gnc-recurrence-sql.h"
 

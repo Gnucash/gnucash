@@ -32,7 +32,7 @@
 
 #include "qof.h"
 
-#include "gnc-backend-util-sql.h"
+#include "gnc-backend-sql.h"
 #include "gnc-commodity.h"
 
 #include "gnc-commodity-sql.h"
@@ -137,7 +137,7 @@ load_all_commodities( GncSqlBackend* be )
 
     pTable = gnc_commodity_table_get_table( be->primary_book );
     stmt = gnc_sql_create_select_statement( be, COMMODITIES_TABLE, col_table );
-    result = gnc_sql_execute_sql_statement( be, stmt );
+    result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
         int r;

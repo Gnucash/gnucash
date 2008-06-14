@@ -35,7 +35,6 @@
 
 #include <dbi/dbi.h>
 
-#include "gnc-backend-util-sql.h"
 #include "gnc-backend-sql.h"
 
 #include "qof.h"

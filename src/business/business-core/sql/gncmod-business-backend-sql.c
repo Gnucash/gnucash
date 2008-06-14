@@ -36,7 +36,7 @@
 #include "gnc-module-api.h"
 #include "gnc-engine.h"
 
-#include "gnc-backend-util-sql.h"
+#include "gnc-backend-sql.h"
 
 #include "gnc-address-sql.h"
 #include "gnc-bill-term-sql.h"

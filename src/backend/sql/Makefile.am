@@ -1,7 +1,6 @@
 SUBDIRS = . test
 
 # Now a shared library AND a GModule
-lib_LTLIBRARIES = libgnc-backend-utils-sql.la
 pkglib_LTLIBRARIES = libgncmod-backend-sql.la
 
 
@@ -18,8 +17,8 @@ AM_CFLAGS = \
   ${GCONF_CFLAGS} \
   ${WARN_CFLAGS}
 
-libgnc_backend_utils_sql_la_SOURCES = \
-  gnc-backend-util-sql.c \
+libgncmod_backend_sql_la_SOURCES = \
+  gnc-backend-sql.c \
   gnc-account-sql.c \
   gnc-book-sql.c \
   gnc-budget-sql.c \
@@ -31,13 +30,9 @@ libgnc_backend_utils_sql_la_SOURCES = \
   gnc-slots-sql.c \
   gnc-transaction-sql.c
 
-libgncmod_backend_sql_la_SOURCES = \
-  gnc-backend-sql.c
-
 noinst_HEADERS = \
   gnc-account-sql.h \
   gnc-backend-sql.h \
-  gnc-backend-util-sql.h \
   gnc-book-sql.h \
   gnc-budget-sql.h \
   gnc-commodity-sql.h \
@@ -48,16 +43,10 @@ noinst_HEADERS = \
   gnc-slots-sql.h \
   gnc-transaction-sql.h
 
-libgnc_backend_utils_sql_la_LIBADD = \
-   ${GLIB_LIBS} ${GCONF_LIBS} \
-   ${top_builddir}/src/engine/libgncmod-engine.la \
-   ${QOF_LIBS}
-
 libgncmod_backend_sql_la_LDFLAGS = -module -avoid-version
 libgncmod_backend_sql_la_LIBADD = \
    ${GLIB_LIBS} ${GCONF_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
-   libgnc-backend-utils-sql.la \
    ${QOF_LIBS}
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.sql\"

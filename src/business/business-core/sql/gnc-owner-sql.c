@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gnc-backend-util-sql.h"
+#include "gnc-backend-sql.h"
 
 #include "gnc-owner-sql.h"
 #include "gncCustomerP.h"

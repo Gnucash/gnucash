@@ -38,7 +38,7 @@
 #include "Transaction.h"
 #include "engine-helpers.h"
 
-#include "gnc-backend-util-sql.h"
+#include "gnc-backend-sql.h"
 #include "gnc-transaction-sql.h"
 #include "gnc-commodity.h"
 #include "gnc-commodity-sql.h"

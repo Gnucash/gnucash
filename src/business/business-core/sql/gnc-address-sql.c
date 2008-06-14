@@ -35,9 +35,9 @@
 #include <string.h>
 
 #include "gnc-engine.h"
-#include "gnc-address-sql.h"
 
-#include "gnc-backend-util-sql.h"
+#include "gnc-backend-sql.h"
+#include "gnc-address-sql.h"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 

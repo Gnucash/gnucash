@@ -32,7 +32,7 @@
 
 #include "qof.h"
 
-#include "gnc-backend-util-sql.h"
+#include "gnc-backend-sql.h"
 
 #include "Recurrence.h"
 
@@ -98,7 +98,7 @@ load_all_budgets( GncSqlBackend* be )
 	g_return_if_fail( be != NULL );
 
     stmt = gnc_sql_create_select_statement( be, BUDGET_TABLE, col_table );
-    result = gnc_sql_execute_sql_statement( be, stmt );
+    result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
 	if( result != NULL ) {
 		GncSqlRow* row = gnc_sql_result_get_first_row( result );

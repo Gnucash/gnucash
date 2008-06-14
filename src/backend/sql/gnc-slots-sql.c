@@ -33,7 +33,7 @@
 #include "qof.h"
 #include "gnc-engine.h"
 
-#include "gnc-backend-util-sql.h"
+#include "gnc-backend-sql.h"
 
 #include "gnc-slots-sql.h"
 

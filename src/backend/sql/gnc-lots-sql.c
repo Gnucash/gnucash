@@ -33,7 +33,7 @@
 #include "qof.h"
 #include "gnc-lot.h"
 
-#include "gnc-backend-util-sql.h"
+#include "gnc-backend-sql.h"
 #include "gnc-slots-sql.h"
 
 #include "gnc-lots-sql.h"
@@ -123,7 +123,7 @@ load_all_lots( GncSqlBackend* be )
 	g_return_if_fail( be != NULL );
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME, col_table );
-    result = gnc_sql_execute_sql_statement( be, stmt );
+    result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
         int r;

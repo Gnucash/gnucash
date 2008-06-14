@@ -33,7 +33,7 @@
 #include "qof.h"
 #include "gnc-pricedb.h"
 
-#include "gnc-backend-util-sql.h"
+#include "gnc-backend-sql.h"
 
 #include "gnc-commodity-sql.h"
 #include "gnc-price-sql.h"
@@ -92,7 +92,7 @@ load_all_prices( GncSqlBackend* be )
     pBook = be->primary_book;
     pPriceDB = gnc_book_get_pricedb( pBook );
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME, col_table );
-    result = gnc_sql_execute_sql_statement( be, stmt );
+    result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
         int r;
