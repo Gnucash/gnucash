@@ -27,7 +27,7 @@ noinst_HEADERS = \
 libgncmod_backend_gda_la_LDFLAGS = -module -avoid-version
 libgncmod_backend_gda_la_LIBADD = \
    ${GLIB_LIBS} ${GCONF_LIBS} \
-   ${top_builddir}/src/engine/libgncmod-engine.la \
+   ${top_builddir}/src/engine/libgnc-engine.la \
    ${top_builddir}/src/backend/sql/libgncmod-backend-sql.la \
    ${LIBGDA_LIBS} \
    ${QOF_LIBS}

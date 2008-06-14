@@ -44,7 +44,7 @@ libgncmod_business_backend_sql_la_LDFLAGS = -module -avoid-version
 
 libgncmod_business_backend_sql_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
-  ${top_builddir}/src/backend/sql/libgncmod-backend-sql.la \
+  ${top_builddir}/src/backend/sql/libgnc-backend-sql.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${QOF_LIBS} \

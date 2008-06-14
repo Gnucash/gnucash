@@ -26,7 +26,7 @@ noinst_HEADERS = \
 libgncmod_backend_dbi_la_LDFLAGS = -module -avoid-version
 libgncmod_backend_dbi_la_LIBADD = \
    ${GLIB_LIBS} ${GCONF_LIBS} \
-   ${top_builddir}/src/backend/sql/libgncmod-backend-sql.la \
+   ${top_builddir}/src/backend/sql/libgnc-backend-sql.la \
    ${top_builddir}/src/engine/libgncmod-engine.la \
    ${LIBDBI_LIBS} \
    ${QOF_LIBS}
