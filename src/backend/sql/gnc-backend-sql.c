@@ -924,8 +924,8 @@ gnc_sql_add_subtable_colnames_to_list( const col_cvt_t* table_row, const col_cvt
 	}
 }
 
-GncSqlColumnInfo*
-gnc_sql_create_column_info( const col_cvt_t* table_row, const gchar* type,
+static GncSqlColumnInfo*
+create_column_info( const col_cvt_t* table_row, const gchar* type,
 							gint size )
 {
 	GncSqlColumnInfo* info;
@@ -977,7 +977,7 @@ add_string_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = gnc_sql_create_column_info( table_row,
+	info = create_column_info( table_row,
 					gnc_sql_connection_get_column_type_name( be->conn,
 											G_TYPE_STRING, table_row->size ),
 				    table_row->size );
@@ -1064,7 +1064,7 @@ add_int_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = gnc_sql_create_column_info( table_row,
+	info = create_column_info( table_row,
 					gnc_sql_connection_get_column_type_name( be->conn,
 											G_TYPE_INT, table_row->size ),
 				    0 );
@@ -1143,7 +1143,7 @@ add_boolean_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_ro
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = gnc_sql_create_column_info( table_row,
+	info = create_column_info( table_row,
 					gnc_sql_connection_get_column_type_name( be->conn,
 											G_TYPE_INT, table_row->size ),
 				    0 );
@@ -1216,7 +1216,7 @@ add_int64_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = gnc_sql_create_column_info( table_row,
+	info = create_column_info( table_row,
 					gnc_sql_connection_get_column_type_name( be->conn,
 											G_TYPE_INT64, table_row->size ),
 				    0 );
@@ -1290,7 +1290,7 @@ add_double_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = gnc_sql_create_column_info( table_row,
+	info = create_column_info( table_row,
 					gnc_sql_connection_get_column_type_name( be->conn,
 											G_TYPE_DOUBLE, table_row->size ),
 				    0 );
@@ -1372,7 +1372,7 @@ add_guid_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = gnc_sql_create_column_info( table_row, "CHAR", GUID_ENCODING_LENGTH );
+	info = create_column_info( table_row, "CHAR", GUID_ENCODING_LENGTH );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1496,9 +1496,9 @@ load_timespec( const GncSqlBackend* be, GncSqlRow* row,
 									s[0], s[1], s[2], s[3],
 									s[4], s[5],
 									s[6], s[7],
-									s[9], s[10],
-									s[11], s[12],
-									s[13], s[14] );
+									s[8], s[9],
+									s[10], s[11],
+									s[12], s[13] );
 		    ts = gnc_iso8601_to_timespec_gmt( buf );
 			(*ts_setter)( pObject, ts );
 			g_free( buf );
@@ -1519,8 +1519,7 @@ add_timespec_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_r
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = gnc_sql_create_column_info( table_row,
-					"CHAR", TIMESPEC_COL_SIZE );
+	info = create_column_info( table_row, "CHAR", TIMESPEC_COL_SIZE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1623,8 +1622,7 @@ add_date_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = gnc_sql_create_column_info( table_row,
-					"CHAR", DATE_COL_SIZE );
+	info = create_column_info( table_row, "CHAR", DATE_COL_SIZE );
 
 	*pList = g_list_append( *pList, info );
 }

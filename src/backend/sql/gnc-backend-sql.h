@@ -57,6 +57,12 @@
 #include <gmodule.h>
 
 typedef struct GncSqlConnection GncSqlConnection;
+
+/**
+ * @struct GncSqlBackend
+ *
+ * Main SQL backend structure.
+ */
 struct GncSqlBackend_struct
 {
   QofBackend be;
@@ -131,6 +137,9 @@ typedef struct GncSqlRow GncSqlRow;
 
 /**
  *@struct GncSqlStatement
+ *
+ * Struct which represents an SQL statement.  SQL backends must provide a
+ * structure which implements all of the functions.
  */
 struct GncSqlStatement
 {
@@ -146,18 +155,10 @@ struct GncSqlStatement
 		(STMT)->addWhereCond(STMT, TYPENAME, OBJ, COLDESC, VALUE)
 
 /**
- * @struct GncSqlColumnInfo
- */
-typedef struct {
-	const gchar* name;
-	const gchar* type_name;
-	gint size;
-	gboolean is_primary_key;
-	gboolean null_allowed;
-} GncSqlColumnInfo;
-
-/**
  * @struct GncSqlConnection
+ *
+ * Struct which represents the connection to an SQL database.  SQL backends
+ * must provide a structure which implements all of the functions.
  */
 struct GncSqlConnection
 {
@@ -198,6 +199,12 @@ struct GncSqlConnection
 #define gnc_sql_connection_quote_string(CONN,STR) \
 		(CONN)->quoteString(CONN,STR)
 
+/**
+ * @struct GncSqlRow
+ *
+ * Struct used to represent a row in the result of an SQL SELECT statement.
+ * SQL backends must provide a structure which implements all of the functions.
+ */
 struct GncSqlRow
 {
 	const GValue* (*getValueAtColName)( GncSqlRow*, const gchar* );
@@ -208,9 +215,15 @@ struct GncSqlRow
 #define gnc_sql_row_dispose(ROW) \
 		(ROW)->dispose(ROW)
 
+/**
+ * @struct GncSqlResult
+ *
+ * Struct used to represent the result of an SQL SELECT statement.  SQL
+ * backends must provide a structure which implements all of the functions.
+ */
 struct GncSqlResult
 {
-	int (*getNumRows)( GncSqlResult* );
+	gint (*getNumRows)( GncSqlResult* );
     GncSqlRow* (*getFirstRow)( GncSqlResult* );
 	GncSqlRow* (*getNextRow)( GncSqlResult* );
 	void (*dispose)( GncSqlResult* );
@@ -254,6 +267,17 @@ typedef struct
   void		(*free_query)( GncSqlBackend* be, gpointer pQuery );
   void		(*write)( GncSqlBackend* be );
 } GncSqlDataType_t;
+
+/**
+ * @struct GncSqlColumnInfo
+ */
+typedef struct {
+	const gchar* name;
+	const gchar* type_name;
+	gint size;
+	gboolean is_primary_key;
+	gboolean null_allowed;
+} GncSqlColumnInfo;
 
 // Type for conversion of db row to object.
 #define CT_STRING "ct_string"
@@ -309,16 +333,6 @@ typedef struct {
     GNC_SQL_ADD_COLNAME_TO_LIST_FN  add_colname_to_list_fn;
 	GNC_SQL_ADD_GVALUE_TO_SLIST_FN	add_gvalue_to_slist_fn;
 } col_type_handler_t;
-
-/**
- * Creates a GncSqlColumnInfo structure for a column.
- *
- * @param table_row DB table column
- * @param type Type name
- * @param size Field size (if string)
- * @return Column info
- */
-GncSqlColumnInfo* gnc_sql_create_column_info( const col_cvt_t* table_row, const gchar* type, gint size );
 
 /**
  * Returns the QOF access function for a column.
