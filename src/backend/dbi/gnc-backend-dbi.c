@@ -61,7 +61,7 @@ static GncSqlConnection* create_dbi_connection( dbi_conn conn );
 static void
 create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
 {
-    GncSqlDataType_t* pData = data_p;
+    GncSqlObjectBackend* pData = data_p;
     GncDbiBackend* be = be_p;
 
     g_return_if_fail( type != NULL && data_p != NULL && be_p != NULL );
@@ -165,7 +165,7 @@ static void
 gnc_dbi_load( QofBackend* qbe, QofBook *book )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
-    GncSqlDataType_t* pData;
+    GncSqlObjectBackend* pData;
 	int i;
 	Account* root;
 
@@ -329,6 +329,11 @@ gnc_dbi_backend_new(void)
 		}
 
         num_drivers = dbi_initialize( driver_dir );
+		if( num_drivers == 0 ) {
+			PWARN( "No DBD drivers found\n" );
+		} else {
+			PINFO( "%d DBD drivers found\n", num_drivers );
+		}
 		gnc_sql_init( &gnc_be->sql_be );
         initialized = TRUE;
     }
@@ -584,7 +589,7 @@ stmt_to_sql( GncSqlStatement* stmt )
 
 static void
 stmt_add_where_cond( GncSqlStatement* stmt, QofIdTypeConst type_name,
-					gpointer obj, const col_cvt_t* table_row, GValue* value )
+					gpointer obj, const GncSqlColumnTableEntry* table_row, GValue* value )
 {
 	GncDbiSqlStatement* dbi_stmt = (GncDbiSqlStatement*)stmt;
 	gchar* buf;
@@ -801,7 +806,7 @@ conn_create_table( GncSqlConnection* conn, const gchar* table_name,
 
 static void
 conn_create_index( GncSqlConnection* conn, const gchar* index_name,
-					const gchar* table_name, const col_cvt_t* col_table )
+					const gchar* table_name, const GncSqlColumnTableEntry* col_table )
 {
 #if 0
     GdaServerOperation *op;
