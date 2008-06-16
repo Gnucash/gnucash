@@ -59,7 +59,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_DISCTYPE_LEN 2048
 #define MAX_DISCHOW_LEN 2048
 
-static col_cvt_t col_table[] =
+static GncSqlColumnTableEntry col_table[] =
 {
 	{ "guid",          CT_GUID,        0,                   COL_NNUL|COL_PKEY, "guid" },
 	{ "date",          CT_TIMESPEC,    0,                   COL_NNUL,          NULL, ENTRY_DATE },
@@ -212,7 +212,7 @@ write_entries( GncSqlBackend* be )
 void
 gnc_entry_sql_initialize( void )
 {
-    static GncSqlDataType_t be_data =
+    static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_ENTRY,

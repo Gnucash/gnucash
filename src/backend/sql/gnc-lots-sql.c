@@ -47,7 +47,7 @@ static gpointer get_lot_account( gpointer pObject, const QofParam* param );
 static void set_lot_account( gpointer pObject, gpointer pValue );
 static void set_lot_is_closed( gpointer pObject, gboolean value );
 
-static const col_cvt_t col_table[] =
+static const GncSqlColumnTableEntry col_table[] =
 {
     { "guid",         CT_GUID,    0, COL_NNUL|COL_PKEY, "guid" },
     { "account_guid", CT_GUID,    0, COL_NNUL,          NULL, NULL, get_lot_account,   set_lot_account },
@@ -185,7 +185,7 @@ commit_lot( QofInstance* inst, GncSqlBackend* be )
 static void
 load_lot_guid( const GncSqlBackend* be, GncSqlRow* row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table_row )
+            const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     GUID guid;
@@ -223,7 +223,7 @@ static col_type_handler_t lot_guid_handler
 void
 gnc_sql_init_lot_handler( void )
 {
-    static GncSqlDataType_t be_data =
+    static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_LOT,

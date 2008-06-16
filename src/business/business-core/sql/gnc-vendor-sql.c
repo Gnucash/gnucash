@@ -61,7 +61,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define TABLE_NAME "vendors"
 #define TABLE_VERSION 1
 
-static col_cvt_t col_table[] =
+static GncSqlColumnTableEntry col_table[] =
 {
 	{ "guid",         CT_GUID,          0,               COL_NNUL|COL_PKEY, "guid" },
 	{ "name",         CT_STRING,        MAX_NAME_LEN,    COL_NNUL,          NULL, VENDOR_NAME },
@@ -211,7 +211,7 @@ write_vendors( GncSqlBackend* be )
 void
 gnc_vendor_sql_initialize( void )
 {
-    static GncSqlDataType_t be_data =
+    static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_VENDOR,

@@ -73,7 +73,7 @@ static void set_numeric_val( gpointer pObject, gnc_numeric value );
 #define SLOT_MAX_PATHNAME_LEN 4096
 #define SLOT_MAX_STRINGVAL_LEN 4096
 
-static const col_cvt_t col_table[] =
+static const GncSqlColumnTableEntry col_table[] =
 {
     { "obj_guid",     CT_GUID,     0,                     COL_NNUL, NULL, NULL,
 			get_obj_guid,     set_obj_guid },
@@ -98,7 +98,7 @@ static const col_cvt_t col_table[] =
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
-static const col_cvt_t obj_guid_col_table[] =
+static const GncSqlColumnTableEntry obj_guid_col_table[] =
 {
     { "obj_guid", CT_GUID, 0, 0, NULL, NULL, get_obj_guid, _retrieve_guid_ },
     { NULL }
@@ -553,7 +553,7 @@ create_slots_tables( GncSqlBackend* be )
 void
 gnc_sql_init_slots_handler( void )
 {
-    static GncSqlDataType_t be_data =
+    static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_ACCOUNT,

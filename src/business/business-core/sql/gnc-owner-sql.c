@@ -50,7 +50,7 @@ typedef GncOwner* (*OwnerGetterFunc)( const gpointer );
 static void
 load_owner( const GncSqlBackend* be, GncSqlRow* row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table_row )
+            const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     gchar* buf;
@@ -136,12 +136,11 @@ load_owner( const GncSqlBackend* be, GncSqlRow* row,
 }
 
 static void
-add_owner_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
+add_owner_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,
 								GList** pList )
 {
 	GncSqlColumnInfo* info;
     gchar* buf;
-	const col_cvt_t* subtable_row;
 	const gchar* type;
 
 	g_return_if_fail( be != NULL );
@@ -168,7 +167,7 @@ add_owner_col_info_to_list( const GncSqlBackend* be, const col_cvt_t* table_row,
 }
 
 static void
-add_colname_to_list( const col_cvt_t* table_row, GList** pList )
+add_colname_to_list( const GncSqlColumnTableEntry* table_row, GList** pList )
 {
     gchar* buf;
 
@@ -180,7 +179,7 @@ add_colname_to_list( const col_cvt_t* table_row, GList** pList )
 
 static void
 add_gvalue_owner_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
-                	const gpointer pObject, const col_cvt_t* table_row, GSList** pList )
+                	const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
 {
     GValue* subfield_value;
     GncOwner* owner;

@@ -56,7 +56,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_ID_LEN 2048
 #define MAX_NOTES_LEN 2048
 
-static col_cvt_t col_table[] =
+static GncSqlColumnTableEntry col_table[] =
 {
 	{ "guid",         CT_GUID,          0,             COL_NNUL|COL_PKEY, "guid" },
 	{ "name",         CT_STRING,        MAX_NAME_LEN,  COL_NNUL,          NULL, CUSTOMER_NAME },
@@ -206,7 +206,7 @@ write_customers( GncSqlBackend* be )
 void
 gnc_customer_sql_initialize( void )
 {
-    static GncSqlDataType_t be_data =
+    static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_CUSTOMER,

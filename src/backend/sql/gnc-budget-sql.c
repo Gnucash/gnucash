@@ -50,7 +50,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define BUDGET_MAX_NAME_LEN 2048
 #define BUDGET_MAX_DESCRIPTION_LEN 2048
 
-static const col_cvt_t col_table[] =
+static const GncSqlColumnTableEntry col_table[] =
 {
     { "guid",        CT_GUID,   0,                          COL_NNUL|COL_PKEY, "guid" },
     { "name",        CT_STRING, BUDGET_MAX_NAME_LEN,        COL_NNUL,          NULL, "name" },
@@ -174,7 +174,7 @@ write_budgets( GncSqlBackend* be )
 void
 gnc_sql_init_budget_handler( void )
 {
-    static GncSqlDataType_t be_data =
+    static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_BUDGET,

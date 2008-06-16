@@ -60,7 +60,7 @@ static void set_recurrence_period_type( gpointer pObject, gpointer pValue );
 static gpointer get_recurrence_period_start( gpointer pObject, const QofParam* );
 static void set_recurrence_period_start( gpointer pObject, gpointer pValue );
 
-static const col_cvt_t col_table[] =
+static const GncSqlColumnTableEntry col_table[] =
 {
     { "obj_guid",                CT_GUID,   0,                                     COL_NNUL, NULL, NULL,
             get_obj_guid, set_obj_guid },
@@ -75,7 +75,7 @@ static const col_cvt_t col_table[] =
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
-static const col_cvt_t guid_col_table[] =
+static const GncSqlColumnTableEntry guid_col_table[] =
 {
     { "obj_guid", CT_GUID, 0, 0, NULL, NULL, get_obj_guid, set_obj_guid },
     { NULL }
@@ -328,7 +328,7 @@ create_recurrence_tables( GncSqlBackend* be )
 void
 gnc_sql_init_recurrence_handler( void )
 {
-    static GncSqlDataType_t be_data =
+    static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_ACCOUNT,

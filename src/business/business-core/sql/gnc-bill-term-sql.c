@@ -55,7 +55,7 @@ static void set_invisible( gpointer data, gboolean value );
 #define TABLE_NAME "billterms"
 #define TABLE_VERSION 1
 
-static col_cvt_t col_table[] =
+static GncSqlColumnTableEntry col_table[] =
 {
 	{ "guid",         CT_GUID,        0,                   COL_NNUL|COL_PKEY, "guid" },
 	{ "name",         CT_STRING,      MAX_NAME_LEN,        COL_NNUL,          NULL, GNC_BILLTERM_NAME },
@@ -186,7 +186,7 @@ gnc_sql_save_billterm( QofInstance* inst, GncSqlBackend* be )
 static void
 load_billterm_guid( const GncSqlBackend* be, GncSqlRow* row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table_row )
+            const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     GUID guid;
@@ -224,7 +224,7 @@ static col_type_handler_t billterm_guid_handler
 void
 gnc_billterm_sql_initialize( void )
 {
-    static GncSqlDataType_t be_data =
+    static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_BILLTERM,

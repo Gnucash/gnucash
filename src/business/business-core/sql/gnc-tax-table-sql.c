@@ -63,7 +63,7 @@ static void set_parent( gpointer pObject, gpointer pValue );
 #define TT_TABLE_NAME "taxtables"
 #define TT_TABLE_VERSION 1
 
-static col_cvt_t tt_col_table[] =
+static GncSqlColumnTableEntry tt_col_table[] =
 {
 	{ "guid",      CT_GUID,        0,            COL_NNUL|COL_PKEY, "guid" },
 	{ "name",      CT_STRING,      MAX_NAME_LEN, COL_NNUL,          NULL, GNC_TT_NAME },
@@ -80,7 +80,7 @@ static col_cvt_t tt_col_table[] =
 #define TTENTRIES_TABLE_NAME "taxtable_entries"
 #define TTENTRIES_TABLE_VERSION 1
 
-static col_cvt_t ttentries_col_table[] =
+static GncSqlColumnTableEntry ttentries_col_table[] =
 {
 	{ "taxtable", CT_TAXTABLEREF, 0, COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncTaxTableEntryGetTable, set_obj_guid },
@@ -95,7 +95,7 @@ static col_cvt_t ttentries_col_table[] =
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
-static col_cvt_t guid_col_table[] =
+static GncSqlColumnTableEntry guid_col_table[] =
 {
     { "taxtable", CT_GUID, 0, 0, NULL, NULL, get_obj_guid, set_obj_guid },
     { NULL }
@@ -342,7 +342,7 @@ write_taxtables( GncSqlBackend* be )
 static void
 load_taxtable_guid( const GncSqlBackend* be, GncSqlRow* row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table_row )
+            const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     GUID guid;
@@ -380,7 +380,7 @@ static col_type_handler_t taxtable_guid_handler
 void
 gnc_taxtable_sql_initialize( void )
 {
-    static GncSqlDataType_t be_data =
+    static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_TAXTABLE,

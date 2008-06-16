@@ -61,7 +61,7 @@ typedef struct {
 #define TX_MAX_NUM_LEN 2048
 #define TX_MAX_DESCRIPTION_LEN 2048
 
-static const col_cvt_t tx_col_table[] =
+static const GncSqlColumnTableEntry tx_col_table[] =
 {
     { "guid",          CT_GUID,           0,                      COL_NNUL|COL_PKEY, "guid" },
     { "currency_guid", CT_COMMODITYREF,   0,                      COL_NNUL,          NULL, NULL,
@@ -84,7 +84,7 @@ static void set_split_reconcile_date( gpointer pObject, Timespec ts );
 #define SPLIT_MAX_MEMO_LEN 2048
 #define SPLIT_MAX_ACTION_LEN 2048
 
-static const col_cvt_t split_col_table[] =
+static const GncSqlColumnTableEntry split_col_table[] =
 {
     { "guid",            CT_GUID,         0,                    COL_NNUL|COL_PKEY, "guid" },
     { "tx_guid",         CT_TXREF,        0,                    COL_NNUL,          NULL, SPLIT_TRANS },
@@ -100,7 +100,7 @@ static const col_cvt_t split_col_table[] =
     { NULL }
 };
 
-static const col_cvt_t guid_col_table[] =
+static const GncSqlColumnTableEntry guid_col_table[] =
 {
     { "tx_guid", CT_GUID, 0, 0, "guid" },
     { NULL }
@@ -158,7 +158,7 @@ retrieve_numeric_value( gpointer pObject, gnc_numeric value )
 
 
 // Table to retrieve just the quantity
-static col_cvt_t quantity_table[] =
+static GncSqlColumnTableEntry quantity_table[] =
 {
     { "quantity", CT_NUMERIC, 0, COL_NNUL, NULL, NULL, NULL, (QofSetterFunc)retrieve_numeric_value },
     { NULL }
@@ -655,7 +655,7 @@ free_split_query( GncSqlBackend* be, gpointer pQuery )
 static void
 load_tx_guid( const GncSqlBackend* be, GncSqlRow* row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table_row )
+            const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     GUID guid;
@@ -693,7 +693,7 @@ static col_type_handler_t tx_guid_handler
 void
 gnc_sql_init_transaction_handler( void )
 {
-    static GncSqlDataType_t be_data_tx =
+    static GncSqlObjectBackend be_data_tx =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_TRANS,
@@ -701,7 +701,7 @@ gnc_sql_init_transaction_handler( void )
         load_all_tx,                 /* initial_load */
         create_transaction_tables    /* create tables */
     };
-    static GncSqlDataType_t be_data_split =
+    static GncSqlObjectBackend be_data_split =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_SPLIT,

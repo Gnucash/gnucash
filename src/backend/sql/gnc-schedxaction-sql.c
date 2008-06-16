@@ -58,7 +58,7 @@ static gint get_instance_count( gpointer pObject );
 static gpointer get_template_act_guid( gpointer pObject, const QofParam* param );
 static void set_template_act_guid( gpointer pObject, gpointer pValue );
 
-static const col_cvt_t col_table[] =
+static const GncSqlColumnTableEntry col_table[] =
 {
     { "guid",              CT_GUID,    0,               COL_NNUL|COL_PKEY, "guid" },
     { "name",              CT_STRING,  SX_MAX_NAME_LEN, 0,                 NULL, GNC_SX_NAME },
@@ -294,7 +294,7 @@ gnc_sql_save_schedxaction( QofInstance* inst, GncSqlBackend* be )
 void
 gnc_sql_init_schedxaction_handler( void )
 {
-    static GncSqlDataType_t be_data =
+    static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_SCHEDXACTION,

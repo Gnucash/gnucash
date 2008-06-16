@@ -53,7 +53,7 @@ static void set_quote_source_name( gpointer pObject, gpointer pValue );
 #define COMMODITY_MAX_QUOTESOURCE_LEN 2048
 #define COMMODITY_MAX_QUOTE_TZ_LEN 2048
 
-static const col_cvt_t col_table[] = {
+static const GncSqlColumnTableEntry col_table[] = {
     { "guid",         CT_GUID,   0,                             COL_NNUL|COL_PKEY, "guid" },
     { "namespace",    CT_STRING, COMMODITY_MAX_NAMESPACE_LEN,   COL_NNUL,          NULL, NULL,
             (QofAccessFunc)gnc_commodity_get_namespace,
@@ -238,7 +238,7 @@ gnc_sql_save_commodity( GncSqlBackend* be, gnc_commodity* pCommodity )
 static void
 load_commodity_guid( const GncSqlBackend* be, GncSqlRow* row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table_row )
+            const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     GUID guid;
@@ -276,7 +276,7 @@ static col_type_handler_t commodity_guid_handler
 void
 gnc_sql_init_commodity_handler( void )
 {
-    static GncSqlDataType_t be_data =
+    static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_COMMODITY,

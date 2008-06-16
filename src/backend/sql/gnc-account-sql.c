@@ -56,7 +56,7 @@ static void set_parent_guid( gpointer pObject, gpointer pValue );
 #define ACCOUNT_MAX_CODE_LEN 2048
 #define ACCOUNT_MAX_DESCRIPTION_LEN 2048
 
-static const col_cvt_t col_table[] =
+static const GncSqlColumnTableEntry col_table[] =
 {
     { "guid",           CT_GUID,         0,                           COL_NNUL|COL_PKEY, "guid" },
     { "name",           CT_STRING,       ACCOUNT_MAX_NAME_LEN,        COL_NNUL,          "name" },
@@ -67,7 +67,7 @@ static const col_cvt_t col_table[] =
     { "description",    CT_STRING,       ACCOUNT_MAX_DESCRIPTION_LEN, 0,                 "description" },
     { NULL }
 };
-static col_cvt_t parent_col_table[] =
+static GncSqlColumnTableEntry parent_col_table[] =
 {
     { "parent_guid", CT_GUID, 0, 0, NULL, NULL, NULL, set_parent_guid },
     { NULL }
@@ -301,7 +301,7 @@ gnc_sql_save_account( QofInstance* inst, GncSqlBackend* be )
 static void
 load_account_guid( const GncSqlBackend* be, GncSqlRow* row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table_row )
+            const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     GUID guid;
@@ -339,7 +339,7 @@ static col_type_handler_t account_guid_handler
 void
 gnc_sql_init_account_handler( void )
 {
-    static GncSqlDataType_t be_data =
+    static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_ACCOUNT,

@@ -56,7 +56,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define TABLE_NAME "employees"
 #define TABLE_VERSION 1
 
-static col_cvt_t col_table[] =
+static GncSqlColumnTableEntry col_table[] =
 {
 	{ "guid",       CT_GUID,          0,                COL_NNUL|COL_PKEY, "guid" },
 	{ "username",   CT_STRING,        MAX_USERNAME_LEN, COL_NNUL,          NULL, EMPLOYEE_USERNAME },
@@ -205,7 +205,7 @@ write_employees( GncSqlBackend* be )
 void
 gnc_employee_sql_initialize( void )
 {
-    static GncSqlDataType_t be_data =
+    static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_EMPLOYEE,
