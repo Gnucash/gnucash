@@ -161,6 +161,7 @@ add_owner_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntr
 	info->name = buf;
 	info->type_name = gnc_sql_connection_get_column_type_name( be->conn,
 										G_TYPE_STRING, GUID_ENCODING_LENGTH );
+	info->size = GUID_ENCODING_LENGTH;
 	info->is_primary_key = (table_row->flags & COL_PKEY) ? TRUE : FALSE;
 	info->null_allowed = (table_row->flags & COL_NNUL) ? FALSE : TRUE;
 	*pList = g_list_append( *pList, info );
@@ -234,7 +235,7 @@ add_gvalue_owner_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 			guid = qof_instance_get_guid( inst );
     		if( guid != NULL ) {
         		(void)guid_to_string_buff( guid, guid_buf );
-        		g_value_take_string( subfield_value, g_strdup_printf( "'%s'", guid_buf ) );
+        		g_value_take_string( subfield_value, g_strdup_printf( "%s", guid_buf ) );
     		} else {
 				g_value_set_string( subfield_value, "NULL" );
 			}

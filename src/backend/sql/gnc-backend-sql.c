@@ -1087,15 +1087,15 @@ add_gvalue_int_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	g_return_if_fail( pList != NULL );
 
 	value = g_new0( GValue, 1 );
+    g_value_init( value, G_TYPE_INT );
 
 	if( table_row->gobj_param_name != NULL ) {
-		g_object_get( pObject, table_row->gobj_param_name, &int_value, NULL );
+		g_object_get_property( pObject, table_row->gobj_param_name, value );
 	} else {
     	i_getter = (IntAccessFunc)gnc_sql_get_getter( obj_name, table_row );
     	int_value = (*i_getter)( pObject );
+    	g_value_set_int( value, int_value );
 	}
-    g_value_init( value, G_TYPE_INT );
-    g_value_set_int( value, int_value );
 
 	(*pList) = g_slist_append( (*pList), value );
 }
@@ -1767,8 +1767,12 @@ add_gvalue_numeric_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
 
-    getter = (NumericGetterFunc)gnc_sql_get_getter( obj_name, table_row );
-    n = (*getter)( pObject );
+//	if( table_row->gobj_param_name != NULL ) {
+//		g_object_get( pObject, table_row->gobj_param_name, &s, NULL );
+//	} else {
+    	getter = (NumericGetterFunc)gnc_sql_get_getter( obj_name, table_row );
+    	n = (*getter)( pObject );
+//	}
 
     num_value = g_new0( GValue, 1 );
     g_value_init( num_value, G_TYPE_INT64 );
