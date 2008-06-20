@@ -3070,7 +3070,7 @@
   <gnc:account version="2.0.0">
     <act:name>01. Forderungen aus Lieferungen und Leistungen</act:name>
     <act:id type="new">3db9920658f7630cee64902f9698ebb3</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3097,7 +3097,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen aus Lieferungen und Leistungen ohne Kontokorrent</act:name>
     <act:id type="new">76c54d31f188167d8a031d96045283fd</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3120,7 +3120,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen aus L+L allgem. Steuersatz oder eines Kleinunternehmers</act:name>
     <act:id type="new">6cefdcc3737a94cc580149e2d2cd97b9</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3143,7 +3143,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen aus L+L ermäßigt. Steuersatz</act:name>
     <act:id type="new">d060a1de8e5ca6ea1b954c42e8396755</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3169,7 +3169,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderg. aus steuerfreien oder nicht steuerbaren steuerbaren L+L</act:name>
     <act:id type="new">ab6ca9e6320b202c3fc84c367edfc366</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3191,7 +3191,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen aus L+L gemäß § 24 UStG</act:name>
     <act:id type="new">7dc3830ac363a526ef101cf09a77b6ee</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3214,7 +3214,7 @@
   <gnc:account version="2.0.0">
     <act:name>Gegenkonto 1215 - 1218 bei Aufteilung der Forderungen nach Steuersätzen (EÜR)</act:name>
     <act:id type="new">ad25157eba24299560894cb650a9a5b9</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3236,7 +3236,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen nach § 11 Abs. 1 Satz 2 EStG für § 4/3</act:name>
     <act:id type="new">fd124dab720d156a374f1386a565d9d0</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3258,7 +3258,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderg.a. Lieferungen/Leistungen &lt; 1 J</act:name>
     <act:id type="new">ef26d6e1057d2042cb9eea64e48187a0</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3280,7 +3280,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderg.a. Lieferungen/Leistungen &gt; 1 J</act:name>
     <act:id type="new">7b2c1a17aabc3268fca1f751840c6a9d</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3390,7 +3390,7 @@
   <gnc:account version="2.0.0">
     <act:name>Zweifelhafte Forderungen</act:name>
     <act:id type="new">9c12aa23ce66851b83316b04a40c28e3</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3412,7 +3412,7 @@
   <gnc:account version="2.0.0">
     <act:name>Zweifelhafte Forderungen (bis 1 Jahr)</act:name>
     <act:id type="new">5e4e256cf81cdb6b18e5e2d587b94be8</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3434,7 +3434,7 @@
   <gnc:account version="2.0.0">
     <act:name>Zweifelhafte Forderungen (&gt; 1 Jahr)</act:name>
     <act:id type="new">aa3689c5e36ccc625d009b52be7710c9</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3456,7 +3456,7 @@
   <gnc:account version="2.0.0">
     <act:name>Einzelwertberichtigung Forderung (&lt; 1J)</act:name>
     <act:id type="new">91c0860c2c4d593316b6e1a20a94b502</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3478,7 +3478,7 @@
   <gnc:account version="2.0.0">
     <act:name>Einzelwertberichtigung Forderung (&gt; 1J)</act:name>
     <act:id type="new">a0f98fc2e44d10a5ecfd8da3c83a846c</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3500,7 +3500,7 @@
   <gnc:account version="2.0.0">
     <act:name>Pauschalwertberichtigung Forderg. &lt; 1J</act:name>
     <act:id type="new">c28569653345dc9953b419b6f1c47f06</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3522,7 +3522,7 @@
   <gnc:account version="2.0.0">
     <act:name>Pauschalwertberichtigung Forderg. &gt; 1J</act:name>
     <act:id type="new">2b029b521129173c6889beae2724f248</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3544,7 +3544,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen aus L+L gg. Gesellschafter</act:name>
     <act:id type="new">8f9b84b36d18f3c215e399fbaccd0a1b</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3566,7 +3566,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderg. aus L+L gg.Gesellschafter &lt; 1 J</act:name>
     <act:id type="new">9ed2e513a63541a65eefa53f48e62307</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3588,7 +3588,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderg. aus L+L gg.Gesellschafter &gt; 1 J</act:name>
     <act:id type="new">3a221b4090c2323acaca1f024acd3905</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3610,7 +3610,7 @@
   <gnc:account version="2.0.0">
     <act:name>Gegenkonto zu sonstigen Vermögensgegenständen bei Buchungen über Debitorenkonto</act:name>
     <act:id type="new">fe80110fa10de8c4f447a1a1c53e1157</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3632,7 +3632,7 @@
   <gnc:account version="2.0.0">
     <act:name>Gegenkonto 1221-1229, 1250-1257, 1270-1279, 1290-1297 bei Aufteilung Debitorenkonto</act:name>
     <act:id type="new">450ebcecfd06848c840c7cc8b0c85cd9</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3654,7 +3654,7 @@
   <gnc:account version="2.0.0">
     <act:name>02. Forderungen gegen verbundene Unternehmen</act:name>
     <act:id type="new">2206ddc60ecf97df41c9a90d71fdd94d</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3680,7 +3680,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen gg. verbundene UN &lt; 1 J</act:name>
     <act:id type="new">747b5cd3365a7858a97b20068a6206a0</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3702,7 +3702,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen gg. verbundene UN &gt; 1 J</act:name>
     <act:id type="new">fcb9c6bb6cbed4c2c533bfd9dd5ec900</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3812,7 +3812,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen aus L+L gg. verbundene UN</act:name>
     <act:id type="new">7fa441383b425d01688d980afa0e2159</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3834,7 +3834,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen aus L+L gg. verbund. UN &lt; 1J</act:name>
     <act:id type="new">a4efa9234842fcb2f6189d91fa9ef54e</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3856,7 +3856,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen aus L+L gg. verbund. UN &gt; 1J</act:name>
     <act:id type="new">e845e5c2387c8e4a555b4b5148fefebc</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3878,7 +3878,7 @@
   <gnc:account version="2.0.0">
     <act:name>WB Forderungen gg. verbundene UN &lt; 1 J</act:name>
     <act:id type="new">64f813bff556c59e4a450b1917b8502e</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3900,7 +3900,7 @@
   <gnc:account version="2.0.0">
     <act:name>WB Forderungen gg. verbundene UN &gt; 1J</act:name>
     <act:id type="new">0167cc972e237540235d314740348107</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3922,7 +3922,7 @@
   <gnc:account version="2.0.0">
     <act:name>03. Forderungen gegen Unternehmen, mit denen ein Beteiligungsverhältnis besteht</act:name>
     <act:id type="new">8025095dc946bd68be8762fc42e31fc6</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3948,7 +3948,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderg. gg. UN mit Beteiligg.verh. &lt; 1 J.</act:name>
     <act:id type="new">35488b898db7a562b086bb500b12c682</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -3970,7 +3970,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderg. gg. UN mit Beteiligg.verh. &gt; 1 J</act:name>
     <act:id type="new">89760a5f09f7259f905f7e788e6c0d0f</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4080,7 +4080,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderg. L+L gg.UN m. Beteiligungsverh.</act:name>
     <act:id type="new">d2b31319d77dff392a7d723099c32c4e</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4102,7 +4102,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderg. L+L gg.UN m.Beteiligg.verh. &lt; 1 J</act:name>
     <act:id type="new">7317fdc156e222b74887182651c71966</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4124,7 +4124,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderg. L+L gg.UN m.Beteiligg.verh. &gt; 1 J</act:name>
     <act:id type="new">5beb4af25c67d01128ce0e448a680da4</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4146,7 +4146,7 @@
   <gnc:account version="2.0.0">
     <act:name>WB Forderg.gg.UN m.Beteiligg.verh. b.1J</act:name>
     <act:id type="new">33568526db0bd952b65ebdb063542528</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4168,7 +4168,7 @@
   <gnc:account version="2.0.0">
     <act:name>WB Forderg.gg.UN m.Beteiligg.verh. g.1J</act:name>
     <act:id type="new">5ad37b32f5d6a461fb25e18c0745ce59</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4328,7 +4328,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen gegen Vorstandsmitglieder und Geschäftsführer</act:name>
     <act:id type="new">f389699a21fa73f290aab9183d2f5c65</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4350,7 +4350,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen gg. Geschäftsf.(b.1J)</act:name>
     <act:id type="new">fd6ed5e511300dd4649b82d908c45c1c</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4372,7 +4372,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen gg. Geschäftsf.(g.1J)</act:name>
     <act:id type="new">cf8fec4e205c4679dedc5b017ad10308</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4394,7 +4394,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen gegen Aufsichtsrats- und Beirats-Mitglieder</act:name>
     <act:id type="new">8fa4caf4bfbf52ca8f41c6d3856d7ab3</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4416,7 +4416,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen gg. Aufsichtsratsm. (b.1 J)</act:name>
     <act:id type="new">6046d3a0953c4bcafeffa562972afb3f</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4438,7 +4438,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen gg. Aufsichtsratsm. (g.1 J)</act:name>
     <act:id type="new">230923a406e6ed245809b01e01236260</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4460,7 +4460,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen gegen Gesellschafter</act:name>
     <act:id type="new">f68f9fd560ad2d91a8c7e8b74423d676</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4482,7 +4482,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen gg. Gesellschafter (b.1J)</act:name>
     <act:id type="new">d48f1bbe9d77a812520b79aa5e1475bf</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4504,7 +4504,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen gg. Gesellschafter (g.1J)</act:name>
     <act:id type="new">86ce422efda3992e920607271933520c</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4526,7 +4526,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen gegen Personal aus Lohn- und Gehaltsabrechnung</act:name>
     <act:id type="new">4517b3561a7ff696c0662a257ed40cdd</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4548,7 +4548,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen gegen Personal (bis 1Jahr)</act:name>
     <act:id type="new">5e6b56d8bc5622c3ce68115d8c3cef02</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -4570,7 +4570,7 @@
   <gnc:account version="2.0.0">
     <act:name>Forderungen gegen Personal (g. 1Jahr)</act:name>
     <act:id type="new">a27c13b57de63e57699efbe6b26e6bce</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
