@@ -62,6 +62,7 @@ static const GncSqlColumnTableEntry col_table[] =
     { "name",           CT_STRING,       ACCOUNT_MAX_NAME_LEN,        COL_NNUL,          "name" },
     { "account_type",   CT_STRING,       ACCOUNT_MAX_TYPE_LEN,        COL_NNUL,          NULL, ACCOUNT_TYPE_ },
     { "commodity_guid", CT_COMMODITYREF, 0,                           COL_NNUL,          "commodity" },
+	{ "commodity_scu",  CT_INT,          0,                           COL_NNUL,          "commodity-scu" },
     { "parent_guid",    CT_GUID,         0,                           0,                 NULL, NULL, get_parent, set_parent },
     { "code",           CT_STRING,       ACCOUNT_MAX_CODE_LEN,        0,                 "code" },
     { "description",    CT_STRING,       ACCOUNT_MAX_DESCRIPTION_LEN, 0,                 "description" },
