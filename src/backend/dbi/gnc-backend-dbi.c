@@ -332,7 +332,15 @@ gnc_dbi_backend_new(void)
 		if( num_drivers == 0 ) {
 			PWARN( "No DBD drivers found\n" );
 		} else {
+			dbi_driver driver = NULL;
 			PINFO( "%d DBD drivers found\n", num_drivers );
+
+			do {
+				driver = dbi_driver_list( driver );
+				if( driver != NULL ) {
+					PINFO( "Driver: %s\n", dbi_driver_get_name( driver ) );
+				}
+			} while( driver != NULL );
 		}
 		gnc_sql_init( &gnc_be->sql_be );
         initialized = TRUE;
