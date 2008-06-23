@@ -87,55 +87,55 @@
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">0</property>
 
-	      <child>
-		<widget class="GtkLabel" id="label1">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">_Select or add a GnuCash account:</property>
-		  <property name="use_underline">Yes</property>
-		  <property name="use_markup">False</property>
-		  <property name="justify">GTK_JUSTIFY_LEFT</property>
-		  <property name="wrap">False</property>
-		  <property name="selectable">False</property>
-		  <property name="xalign">0</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">5</property>
-		  <property name="ypad">0</property>
-                  <property name="mnemonic_widget">account_tree</property>
-		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		  <property name="width_chars">-1</property>
-		  <property name="single_line_mode">False</property>
-		  <property name="angle">0</property>
-		</widget>
-		<packing>
-		  <property name="padding">5</property>
-		  <property name="expand">False</property>
-		  <property name="fill">False</property>
-		</packing>
-	      </child>
+	  <child>
+	    <widget class="GtkLabel" id="label1">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Select or add a GnuCash account:</property>
+	      <property name="use_underline">Yes</property>
+	      <property name="use_markup">False</property>
+	      <property name="justify">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap">False</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">5</property>
+	      <property name="ypad">0</property>
+              <property name="mnemonic_widget">account_tree</property>
+	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	      <property name="width_chars">-1</property>
+	      <property name="single_line_mode">False</property>
+	      <property name="angle">0</property>
+	    </widget>
+	    <packing>
+	      <property name="padding">5</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkScrolledWindow" id="scrolledwindow24">
+	      <property name="visible">True</property>
+	      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+	      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+	      <property name="shadow_type">GTK_SHADOW_IN</property>
+	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	      <child>
-		<widget class="GtkScrolledWindow" id="scrolledwindow24">
-		  <property name="visible">True</property>
-		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-		  <property name="shadow_type">GTK_SHADOW_IN</property>
-		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
-
-		  <child>
-		    <widget class="GtkTreeView" id="account_tree">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="headers_visible">True</property>
-		      <property name="rules_hint">True</property>
-		      <property name="reorderable">False</property>
-		      <property name="enable_search">True</property>
-		      <property name="fixed_height_mode">False</property>
-		      <property name="hover_selection">False</property>
-		      <property name="hover_expand">False</property>
-		    </widget>
-		  </child>
-		</widget>
+	        <widget class="GtkTreeView" id="account_tree">
+	          <property name="visible">True</property>
+	          <property name="can_focus">True</property>
+	          <property name="headers_visible">True</property>
+	          <property name="rules_hint">True</property>
+	          <property name="reorderable">False</property>
+	          <property name="enable_search">True</property>
+	          <property name="fixed_height_mode">False</property>
+	          <property name="hover_selection">False</property>
+	          <property name="hover_expand">False</property>
+	        </widget>
 	      </child>
+	    </widget>
+	  </child>
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
@@ -193,7 +193,7 @@ Click &quot;Forward&quot; to start loading your QIF data, or &quot;Cancel&quot; 
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox8">
-	      <property name="border_width">25</property>
+	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -282,6 +282,186 @@ You will have the opportunity to load as many files as you wish, so don't  worry
       </child>
 
       <child>
+	<widget class="GnomeDruidPageStandard" id="load_progress_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Load QIF files</property>
+	  <signal name="prepare" handler="gnc_ui_qif_import_load_progress_prepare_cb" after="yes"/>
+	  <signal name="show" handler="gnc_ui_qif_import_load_progress_show_cb" after="yes"/>
+	  <signal name="next" handler="gnc_ui_qif_import_load_progress_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_load_progress_back_cb"/>
+
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox7609">
+	      <property name="border_width">12</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">12</property>
+
+	      <child>
+		<widget class="GtkLabel" id="load_progress_primary">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="no">&lt;span weight=&quot;bold&quot; size=&quot;larger&quot;&gt;Primary text&lt;/span&gt;</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">True</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">True</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		  <property name="width_chars">-1</property>
+		  <property name="single_line_mode">False</property>
+		  <property name="angle">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="load_progress_secondary">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="no">Secondary text.</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">True</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		  <property name="width_chars">-1</property>
+		  <property name="single_line_mode">False</property>
+		  <property name="angle">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkVBox" id="load_progress_vbox1">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
+
+		  <child>
+		    <widget class="GtkProgressBar" id="load_progress_bar">
+	              <property name="visible">True</property>
+	              <property name="orientation">GTK_PROGRESS_LEFT_TO_RIGHT</property>
+	              <property name="fraction">0</property>
+	              <property name="pulse_step">0.10000000149</property>
+	              <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		    </widget>
+		    <packing>
+	              <property name="padding">0</property>
+	              <property name="expand">False</property>
+	              <property name="fill">False</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkLabel" id="load_progress_sub">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="no">Sub-operation text</property>
+		      <property name="label" translatable="no">&lt;span style=&quot;italic&quot;&gt;Sub-operation text&lt;/span&gt;</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">True</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">True</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		      <property name="width_chars">-1</property>
+		      <property name="single_line_mode">False</property>
+		      <property name="angle">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkHButtonBox" id="load_progress_hbuttonbox1">
+		      <property name="visible">True</property>
+		      <property name="layout_style">GTK_BUTTONBOX_END</property>
+  
+		      <child>
+	                <widget class="GtkButton" id="load_progress_pause">
+	                  <property name="visible">True</property>
+	                  <property name="sensitive">True</property>
+	                  <property name="can_default">True</property>
+	                  <property name="can_focus">True</property>
+	                  <property name="label">gtk-media-pause</property>
+	                  <property name="use_stock">True</property>
+	                  <property name="relief">GTK_RELIEF_NORMAL</property>
+	                  <property name="focus_on_click">True</property>
+	                  <signal name="clicked" handler="gnc_ui_qif_import_load_progress_pause_cb"/>
+	                </widget>
+	              </child>
+		    </widget>
+		    <packing>
+	              <property name="padding">0</property>
+	              <property name="expand">False</property>
+	              <property name="fill">False</property>
+		    </packing>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">6</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+	        <widget class="GtkScrolledWindow" id="scrolledwindow25">
+	          <property name="visible">True</property>
+	          <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+	          <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+	          <property name="shadow_type">GTK_SHADOW_IN</property>
+	          <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+	          <child>
+		    <widget class="GtkTextView" id="load_progress_log">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="editable">False</property>
+		      <property name="overwrite">False</property>
+		      <property name="accepts_tab">False</property>
+		      <property name="justification">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap_mode">GTK_WRAP_WORD</property>
+		      <property name="cursor_visible">False</property>
+		      <property name="pixels_above_lines">0</property>
+		      <property name="pixels_below_lines">0</property>
+		      <property name="pixels_inside_wrap">0</property>
+		      <property name="left_margin">0</property>
+		      <property name="right_margin">0</property>
+		      <property name="indent">0</property>
+		      <property name="text" translatable="no">Log for errors and warnings</property>
+		    </widget>
+	          </child>
+	        </widget>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+      </child>
+
+      <child>
 	<widget class="GnomeDruidPageStandard" id="date_format_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Set a date format for this QIF file</property>
@@ -291,7 +471,7 @@ You will have the opportunity to load as many files as you wish, so don't  worry
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox22">
-	      <property name="border_width">25</property>
+	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -378,7 +558,7 @@ Please select a date format for the file.  QIF files created by European softwar
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox9">
-	      <property name="border_width">25</property>
+	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -509,7 +689,7 @@ Please enter a name for the account. If the file was exported from another accou
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox1">
-	      <property name="border_width">25</property>
+	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">4</property>
@@ -622,7 +802,7 @@ Click &quot;Forward&quot; to finish loading files and move to the next step of t
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox13">
-	      <property name="border_width">25</property>
+	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -669,7 +849,7 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox3">
-	      <property name="border_width">25</property>
+	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -825,7 +1005,7 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox18">
-	      <property name="border_width">25</property>
+	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -873,7 +1053,7 @@ If you change your mind later, you can reorganize the account structure safely w
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox4">
-	      <property name="border_width">25</property>
+	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -1028,7 +1208,7 @@ If you change your mind later, you can reorganize the account structure safely w
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox39">
-	      <property name="border_width">25</property>
+	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -1074,7 +1254,7 @@ In the following page, you will see the text that appears in the Payee and Memo 
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox40">
-	      <property name="border_width">25</property>
+	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -1229,7 +1409,7 @@ In the following page, you will see the text that appears in the Payee and Memo 
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox16">
-	      <property name="border_width">25</property>
+	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -1316,7 +1496,7 @@ In the following page, you will see the text that appears in the Payee and Memo 
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox17">
-	      <property name="border_width">25</property>
+	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -1375,8 +1555,6 @@ Check to see if there is an existing Type that is appropriate; if not, you can e
 		  <property name="label" translatable="yes">If you are importing a QIF file downloaded from a bank or other financial institution, some of the information in the QIF file may duplicate information already in your GnuCash accounts.  GnuCash will try to detect duplicates of existing transactions.  
 
 On the next page, you will be asked to confirm that an existing transaction matches an imported transaction.  Imported transactions are shown on the left side of the page, and possible matches for the selected left-hand transaction are shown to the right.  There may be several old transactions that could match an imported transaction; you will be able to select the correct one by double-clicking in the &quot;Dup?&quot; column of the correct transaction.
-
-You can control the rules used by GnuCash to find duplicate transactions in the &quot;QIF Import&quot; section of the GnuCash Preferences dialog.
 
 Click &quot;Forward&quot; to find duplicate transactions. </property>
 		  <property name="use_underline">False</property>
@@ -1490,7 +1668,7 @@ An error occurred while importing transactions into GnuCash. Your accounts are u
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox35">
-	      <property name="border_width">5</property>
+	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -1506,7 +1684,7 @@ An error occurred while importing transactions into GnuCash. Your accounts are u
 		      <property name="visible">True</property>
 		      <property name="label_xalign">0</property>
 		      <property name="label_yalign">0.5</property>
-		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+		      <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 		      <child>
 			<widget class="GtkScrolledWindow" id="scrolledwindow22">
@@ -1536,7 +1714,7 @@ An error occurred while importing transactions into GnuCash. Your accounts are u
 			<widget class="GtkLabel" id="label847716">
 			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Imported transactions with duplicates</property>
-			  <property name="use_underline">False</property>
+			  <property name="use_underline">True</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
 			  <property name="wrap">False</property>
@@ -1567,7 +1745,7 @@ An error occurred while importing transactions into GnuCash. Your accounts are u
 		      <property name="visible">True</property>
 		      <property name="label_xalign">0</property>
 		      <property name="label_yalign">0.5</property>
-		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+		      <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 		      <child>
 			<widget class="GtkScrolledWindow" id="scrolledwindow23">
@@ -1597,7 +1775,7 @@ An error occurred while importing transactions into GnuCash. Your accounts are u
 			<widget class="GtkLabel" id="label847717">
 			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Possible duplicates for selected new transaction</property>
-			  <property name="use_underline">False</property>
+			  <property name="use_underline">True</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
 			  <property name="wrap">False</property>

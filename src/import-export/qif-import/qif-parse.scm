@@ -138,7 +138,7 @@
 ;;  conventions.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-parse:parse-acct-type read-value)
+(define (qif-parse:parse-acct-type read-value errorproc errortype)
   (let ((mangled-string
          (string-downcase! (string-remove-trailing-space
                             (string-remove-leading-space read-value)))))
@@ -162,9 +162,9 @@
      ((string=? mangled-string "mutual")
       (list GNC-BANK-TYPE))
      (#t
-      (gnc:warn "qif-parse:parse-acct-type: unrecognized account type ["
-                read-value
-                "]... substituting Bank.")
+      (errorproc errortype
+                 (sprintf #f (_ "Unrecognized account type '%s'. Defaulting to Bank.")
+                          read-value))
       (list GNC-BANK-TYPE)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -185,7 +185,7 @@
     (string->symbol bang-field)))
 
 
-(define (qif-parse:parse-action-field read-value)
+(define (qif-parse:parse-action-field read-value errorproc errortype)
   (if read-value
       (let ((action-symbol (string-to-canonical-symbol read-value)))
         (case action-symbol
@@ -269,12 +269,8 @@
 ;          ((vest)
 ;           'vest)
           (else
-           (gnc-warning-dialog '()
-            (string-append
-             (sprintf #f (_ "The file contains an unknown Action '%s'.")
-                      read-value)
-             "\n"
-             (_ "Some transactions may be discarded.")))
+           (errorproc errortype
+                      (sprintf #f (_ "Unrecognized action '%s'.") read-value))
            #f)))
       #f))
 
@@ -284,7 +280,7 @@
 ;;  budget related stuff I don't understand.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-parse:parse-cleared-field read-value)
+(define (qif-parse:parse-cleared-field read-value errorproc errortype)
   (if (and (string? read-value)
            (> (string-length read-value) 0))
       (let ((secondchar (string-ref read-value 0)))
@@ -296,7 +292,7 @@
               ((or (eq? secondchar #\?)
                    (eq? secondchar #\!))
                'budgeted)
-              (#t
+              (else
                #f)))
       #f))
 
