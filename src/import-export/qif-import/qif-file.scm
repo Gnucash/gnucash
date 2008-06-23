@@ -991,9 +991,7 @@
                              (errorproc errortype
                                         (gnc:list-display-to-string (list
                               (_ "Parse ambiguity between formats") " "
-                              formats "\n" "Value " unparsed " could be "
-                              (printer parsed) " or "
-                              (printer this-parsed)
+                              formats "\n"
                               (sprintf #f (_ "Value '%s' could be %s or %s.")
                                        parsed
                                        (printer parsed)
