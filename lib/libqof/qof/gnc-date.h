@@ -68,7 +68,6 @@
 #define GNC_DATE_H
 
 #include <time.h>
-#include <glib/gi18n.h>
 
 /** The default date format for use with strftime. */
 extern const char *gnc_default_strftime_date_format;

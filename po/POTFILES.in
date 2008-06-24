@@ -454,5 +454,6 @@ src/report/stylesheets/gnc-plugin-stylesheets.c
 src/report/utility-reports/gncmod-utility-reports.c
 src/tax/us/gncmod-tax-us.c
 lib/libqof/backend/file/qsf-backend.c
+lib/libqof/qof/gnc-date.c
 intl-scm/guile-strings.c
 doc/tip_of_the_day.list.in

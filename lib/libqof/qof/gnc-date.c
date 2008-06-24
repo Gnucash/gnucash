@@ -41,6 +41,7 @@
 #include <time.h>
 
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "gnc-date-p.h"
 #include "qof.h"
