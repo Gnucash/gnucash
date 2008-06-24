@@ -68,6 +68,15 @@
 #  define GNC_T_FMT "%r" 
 #endif
 
+/* The default date format for use with strftime. */
+const char *gnc_default_strftime_date_format =
+#ifdef G_OS_WIN32
+ N_("%B %#d, %Y")
+#else
+ N_("%B %e, %Y")
+#endif
+ ;
+
 /* This is now user configured through the gnome options system() */
 static QofDateFormat dateFormat = QOF_DATE_FORMAT_LOCALE;
 static QofDateFormat prevQofDateFormat = QOF_DATE_FORMAT_LOCALE;

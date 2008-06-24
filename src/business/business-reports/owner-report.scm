@@ -418,7 +418,7 @@
    (gnc:make-string-option
     gnc:pagename-general (N_ "Today Date Format")
     "p" (N_ "The format for the date->string conversion for today's date.")
-    "%B %e, %Y"))
+    (gnc-default-strftime-date-format)))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 

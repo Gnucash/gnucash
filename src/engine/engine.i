@@ -106,6 +106,7 @@ void qof_book_kvp_changed (QofBook *book);
 // TODO: Unroll/remove
 const char *qof_session_get_url (QofSession *session);
 
+extern const char *gnc_default_strftime_date_format;
 const char *gnc_print_date (Timespec ts);
 
 GUID guid_new_return(void);
@@ -131,6 +132,7 @@ SplitList * qof_query_run (QofQuery *q);
 %ignore qof_query_run;
 %include <qofquery.h>
 %include <qofquerycore.h>
+%include <gnc-date.h>
 
 gnc_numeric gnc_numeric_create(gint64 num, gint64 denom);
 gnc_numeric gnc_numeric_zero(void);
