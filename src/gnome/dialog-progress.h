@@ -70,7 +70,7 @@ typedef gboolean (*GNCProgressCancelFunc) (gpointer user_data);
  *  @param use_ok_button If @c TRUE, an OK button is shown and must be
  *  clicked when progress is completed.
  *
- *  @return A GNCProgressDialog that identifies the dialog and
+ *  @return A ::GNCProgressDialog that identifies the dialog and
  *  is needed when making subsequent API calls. */
 GNCProgressDialog * gnc_progress_dialog_new(GtkWidget *parent,
                                             gboolean use_ok_button);
@@ -85,14 +85,14 @@ GNCProgressDialog * gnc_progress_dialog_new(GtkWidget *parent,
  *
  *  @param bar a @c GtkProgressBar widget for filling or pulsing
  *
- *  @param sub a @c GtkLabel widget to use for suboperation text
+ *  @param suboperation a @c GtkLabel widget to use for suboperation text
  *
- *  @param sub a @c GtkTextView widget for logging progress textually
+ *  @param log a @c GtkTextView widget for logging progress textually
  *
  *  Any of the parameters may be passed as @c NULL if management of
  *  that visual element is not desired.
  *
- *  @return A GNCProgressDialog that identifies the dialog and
+ *  @return A ::GNCProgressDialog that identifies the dialog and
  *  is needed when making subsequent API calls. */
 GNCProgressDialog * gnc_progress_dialog_custom(GtkLabel       *primary,
                                                GtkLabel       *secondary,
@@ -103,7 +103,7 @@ GNCProgressDialog * gnc_progress_dialog_custom(GtkLabel       *primary,
 /** Set the title of a pop-up progress dialog. This function has no effect
  *  on dialogs registered using gnc_progress_dialog_custom().
  *
- *  @param progress a GNCProgressDialog
+ *  @param progress a ::GNCProgressDialog
  *
  *  @param title the window title to display */
 void gnc_progress_dialog_set_title(GNCProgressDialog *progress,
@@ -113,7 +113,7 @@ void gnc_progress_dialog_set_title(GNCProgressDialog *progress,
  *  be displayed using the HIG-recommended style. If @a str is @c NULL
  *  or blank, the label is hidden (this is the default state).
  *
- *  @param progress a GNCProgressDialog
+ *  @param progress a ::GNCProgressDialog
  *
  *  @param str the text to be displayed */
 void gnc_progress_dialog_set_primary(GNCProgressDialog *progress,
@@ -122,7 +122,7 @@ void gnc_progress_dialog_set_primary(GNCProgressDialog *progress,
 /** Set the primary text of the progress dialog. If @a str is @c NULL
  *  or blank, the label is hidden (this is the default state).
  *
- *  @param progress a GNCProgressDialog
+ *  @param progress a ::GNCProgressDialog
  *
  *  @param str the text to be displayed
  *
@@ -135,7 +135,7 @@ void gnc_progress_dialog_set_heading(GNCProgressDialog *progress,
  *  be displayed using the HIG-recommended style. If @a str is @c NULL
  *  or blank, the label is hidden (this is the default state).
  *
- *  @param progress a GNCProgressDialog
+ *  @param progress a ::GNCProgressDialog
  *
  *  @param str the text to be displayed */
 void gnc_progress_dialog_set_secondary(GNCProgressDialog *progress,
@@ -145,7 +145,7 @@ void gnc_progress_dialog_set_secondary(GNCProgressDialog *progress,
  *  be displayed using the HIG-recommended style. If @a str is @c NULL
  *  or blank, the label is hidden (this is the default state).
  *
- *  @param progress a GNCProgressDialog
+ *  @param progress a ::GNCProgressDialog
  *
  *  @param str the text to be displayed */
 void gnc_progress_dialog_set_sub(GNCProgressDialog *progress,
@@ -155,12 +155,12 @@ void gnc_progress_dialog_set_sub(GNCProgressDialog *progress,
  *  created via gnc_progress_dialog_new(), the log is not shown by default.
  *  Calling this function will make it appear.
  *
- *  @param progress a GNCProgressDialog */
+ *  @param progress a ::GNCProgressDialog */
 void gnc_progress_dialog_reset_log(GNCProgressDialog *progress);
 
 /** Append @a str to the progress log.
  *
- *  @param progress a GNCProgressDialog
+ *  @param progress a ::GNCProgressDialog
  *
  *  @param str the text to be appended */
 void gnc_progress_dialog_append_log(GNCProgressDialog *progress,
@@ -170,21 +170,21 @@ void gnc_progress_dialog_append_log(GNCProgressDialog *progress,
  *  suboperation text, the window title, or the primary text. The first
  *  that is both known and currently shown will be the one used.
  *
- *  @param progress a GNCProgressDialog */
+ *  @param progress a ::GNCProgressDialog */
 void gnc_progress_dialog_pause(GNCProgressDialog *progress);
 
 /** Remove any indication that progress has paused by removing any existing
  *  "(paused)" suffix from the suboperation text, the window title, and the
  *  primary text.
  *
- *  @param progress a GNCProgressDialog */
+ *  @param progress a ::GNCProgressDialog */
 void gnc_progress_dialog_resume(GNCProgressDialog *progress);
 
 /** Show a Cancel button and set the C function which will be called when it
  *  is pressed by the user. The cancel function must return a boolean value.
  *  If the value is @c TRUE, the window is hidden.
  *
- *  @param progress a GNCProgressDialog
+ *  @param progress a ::GNCProgressDialog
  *
  *  @param cancel_func the callback function
  *
@@ -199,7 +199,7 @@ void gnc_progress_dialog_set_cancel_func(GNCProgressDialog *progress,
  *  must return @c #t if the dialog should be hidden. If there is no C or Guile
  *  cancel callback (the default state), the Cancel button is hidden.
  *
- *  @param progress a GNCProgressDialog
+ *  @param progress a ::GNCProgressDialog
  *
  *  @param cancel_scm_func the Guile callback procedure */
 void gnc_progress_dialog_set_cancel_scm_func(GNCProgressDialog *progress,
@@ -208,7 +208,7 @@ void gnc_progress_dialog_set_cancel_scm_func(GNCProgressDialog *progress,
 /** Set the fraction of the progress bar to fill, where 0 is empty and
  *  1 is full. If @a value is over 1, the bar will pulse instead of fill.
  *
- *  @param progress a GNCProgressDialog
+ *  @param progress a ::GNCProgressDialog
  *
  *  @param value the fraction of the bar to fill */
 void gnc_progress_dialog_set_value(GNCProgressDialog *progress, gdouble value);
@@ -228,7 +228,7 @@ void gnc_progress_dialog_set_value(GNCProgressDialog *progress, gdouble value);
  *  stack of virtual bars, each subordinate to the last. This allows a task
  *  to be split into any number of levels of sub-tasks.
  *
- *  @param progress a GNCProgressDialog
+ *  @param progress a ::GNCProgressDialog
  *
  *  @param weight the requested fraction of the current bar that the new bar
  *  will represent (The fraction actually assigned will be the lesser of the
@@ -241,7 +241,7 @@ guint gnc_progress_dialog_push(GNCProgressDialog *progress, gdouble weight);
 /** Moves up one level in the stack of virtual bars. See
  *  gnc_progress_dialog_push() for an explanation of virtual bars.
  *
- *  @param progress a GNCProgressDialog
+ *  @param progress a ::GNCProgressDialog
  *
  *  @return the number of times that gnc_progress_dialog_pop() would have to
  *  be called again to return to the top level. */
@@ -249,35 +249,35 @@ guint gnc_progress_dialog_pop(GNCProgressDialog *progress);
 
 /** Fills the current progress bar, then calls gnc_progress_dialog_pop().
  *
- *  @param progress a GNCProgressDialog
+ *  @param progress a ::GNCProgressDialog
  *
  *  @return the value returned by gnc_progress_dialog_pop() */
 guint gnc_progress_dialog_pop_full(GNCProgressDialog *progress);
 
 /** Pop up to the top level and clear the progress bar.
  *
- *  @param progress a GNCProgressDialog */
+ *  @param progress a ::GNCProgressDialog */
 void gnc_progress_dialog_reset_value(GNCProgressDialog *progress);
 
 /** Update the GUI of the progress dialog, and call any pending cancel
  *  callbacks. This function will be called automatically by the other
  *  functions, including gnc_progress_dialog_set_value.
  *
- *  @param progress a GNCProgressDialog */
+ *  @param progress a ::GNCProgressDialog */
 void gnc_progress_dialog_update(GNCProgressDialog *progress);
 
 /** Set the progress meter to fully complete, change the heading, if
  *  any, to "Complete", enable the 'OK' button, and make the dialog
  *  non-modal.
  *
- *  @param progress a GNCProgressDialog */
+ *  @param progress a ::GNCProgressDialog */
 void gnc_progress_dialog_finish(GNCProgressDialog *progress);
 
 /** Destroy the dialog. If gnc_progress_dialog_finish has been called,
  *  the dialog will not be destroyed until the user dismisses the window.
  *  This function must be called in order to reclaim the dialog's memory.
  *
- *  @param progress a GNCProgressDialog */
+ *  @param progress a ::GNCProgressDialog */
 void gnc_progress_dialog_destroy(GNCProgressDialog *progress);
 
 #endif
