@@ -128,7 +128,7 @@ create_order_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 static void
-save_order( QofInstance* inst, GncSqlBackend* be )
+save_order( GncSqlBackend* be, QofInstance* inst )
 {
     const GUID* guid;
 
@@ -178,7 +178,7 @@ write_single_order( QofInstance *term_p, gpointer be_p )
 	g_return_if_fail( be_p != NULL );
 
 	if( order_should_be_saved( GNC_ORDER(term_p) ) ) {
-    	save_order( term_p, be );
+    	save_order( be, term_p );
 	}
 }
 

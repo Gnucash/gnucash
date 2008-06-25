@@ -130,6 +130,9 @@ void xaccSplitSetParent (Split *split, Transaction *trans);
  * belongs to, or NULL if it doesn't belong to any. */
 GNCLot *      xaccSplitGetLot (const Split *split);
 
+/** Assigns the split to a specific Lot */
+void xaccSplitSetLot(Split* split, GNCLot* lot);
+
 
 /** Returns the KvpFrame slots of this split for direct editing. 
  *

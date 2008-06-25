@@ -165,7 +165,7 @@ load_all_books( GncSqlBackend* be )
 
 		// If there are no rows, try committing the book
 		if( row == NULL ) {
-   	    	gnc_sql_save_book( QOF_INSTANCE(be->primary_book), be );
+   	    	gnc_sql_save_book( be, QOF_INSTANCE(be->primary_book) );
 		} else {
 			// Otherwise, load the 1st book.
         	load_single_book( be, row );
@@ -191,7 +191,7 @@ create_book_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 void
-gnc_sql_save_book( QofInstance* inst, GncSqlBackend* be )
+gnc_sql_save_book( GncSqlBackend* be, QofInstance* inst)
 {
     const GUID* guid;
 	gint op;

@@ -144,7 +144,7 @@ create_invoice_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 static void
-save_invoice( QofInstance* inst, GncSqlBackend* be )
+save_invoice( GncSqlBackend* be, QofInstance* inst )
 {
     const GUID* guid;
 	GncInvoice* invoice = GNC_INVOICE(inst);
@@ -198,7 +198,7 @@ write_single_invoice( QofInstance *term_p, gpointer be_p )
 	g_return_if_fail( be_p != NULL );
 
 	if( invoice_should_be_saved( GNC_INVOICE(term_p) ) ) {
-    	save_invoice( term_p, be );
+    	save_invoice( be, term_p );
 	}
 }
 

@@ -127,7 +127,7 @@ create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
 /* ================================================================= */
 
 static const gchar* fixed_load_order[] =
-{ GNC_ID_BOOK, GNC_ID_COMMODITY, GNC_ID_ACCOUNT, NULL };
+{ GNC_ID_BOOK, GNC_ID_COMMODITY, GNC_ID_ACCOUNT, GNC_ID_LOT, NULL };
 
 static void
 initial_load_cb( const gchar* type, gpointer data_p, gpointer be_p )
@@ -251,7 +251,7 @@ write_account_tree( GncSqlBackend* be, Account* root )
 
     descendants = gnc_account_get_descendants( root );
     for( node = descendants; node != NULL; node = g_list_next(node) ) {
-        gnc_sql_save_account( QOF_INSTANCE(GNC_ACCOUNT(node->data)), be );
+        gnc_sql_save_account( be, QOF_INSTANCE(GNC_ACCOUNT(node->data)) );
 		update_save_progress( be );
     }
     g_list_free( descendants );
@@ -273,7 +273,7 @@ write_tx( Transaction* tx, gpointer data )
 	g_return_val_if_fail( tx != NULL, 0 );
 	g_return_val_if_fail( data != NULL, 0 );
 
-    gnc_sql_save_transaction( QOF_INSTANCE(tx), be );
+    gnc_sql_save_transaction( be, QOF_INSTANCE(tx) );
 	update_save_progress( be );
 
     return 0;
@@ -315,7 +315,7 @@ write_schedXactions( GncSqlBackend* be )
 
     for( ; schedXactions != NULL; schedXactions = schedXactions->next ) {
         tmpSX = schedXactions->data;
-		gnc_sql_save_schedxaction( QOF_INSTANCE( tmpSX ), be );
+		gnc_sql_save_schedxaction( be, QOF_INSTANCE( tmpSX ) );
     }
 }
 
@@ -413,7 +413,7 @@ gnc_sql_sync_all( GncSqlBackend* be, QofBook *book )
 
 	// FIXME: should write the set of commodities that are used 
     //write_commodities( be, book );
-	gnc_sql_save_book( QOF_INSTANCE(book), be );
+	gnc_sql_save_book( be, QOF_INSTANCE(book) );
     write_accounts( be );
     write_transactions( be );
     write_template_transactions( be );
@@ -460,7 +460,7 @@ commit_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
     if( be_data->ok ) return;
 
     if( pData->commit != NULL ) {
-        (pData->commit)( be_data->inst, be_data->be );
+        (pData->commit)( be_data->be, be_data->inst );
         be_data->ok = TRUE;
     }
 }
@@ -501,7 +501,10 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
         gnc_sql_transaction_commit_splits( be, GNC_TRANS(inst) );
     }
 
-    if( !qof_instance_get_dirty_flag(inst) && !qof_instance_get_destroying(inst) ) return;
+    if( !qof_instance_get_dirty_flag(inst) && !qof_instance_get_destroying(inst) ) {
+		LEAVE( "!dirty OR !destroying" );
+		return;
+	}
 
 	error = NULL;
 	gnc_sql_connection_begin_transaction( be->conn );
@@ -518,6 +521,7 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
 		// Don't let unknown items still mark the book as being dirty
     	qof_instance_mark_clean(inst);
     	qof_book_mark_saved( be->primary_book );
+		LEAVE( "Rolled back" );
         return;
     }
 	gnc_sql_connection_commit_transaction( be->conn );

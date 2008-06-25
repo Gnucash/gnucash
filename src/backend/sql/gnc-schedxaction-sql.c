@@ -261,7 +261,7 @@ create_sx_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 void
-gnc_sql_save_schedxaction( QofInstance* inst, GncSqlBackend* be )
+gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst )
 {
     SchedXaction* pSx = GNC_SX(inst);
     const GUID* guid;
@@ -298,9 +298,9 @@ gnc_sql_init_schedxaction_handler( void )
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_SCHEDXACTION,
-        gnc_sql_save_schedxaction,                /* commit */
+        gnc_sql_save_schedxaction,    /* commit */
         load_all_sxes,                /* initial_load */
-        create_sx_tables        /* create_tables */
+        create_sx_tables              /* create_tables */
     };
 
     qof_object_register_backend( GNC_ID_SCHEDXACTION, GNC_SQL_BACKEND, &be_data );

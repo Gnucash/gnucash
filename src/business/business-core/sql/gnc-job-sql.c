@@ -127,7 +127,7 @@ create_job_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 static void
-save_job( QofInstance* inst, GncSqlBackend* be )
+save_job( GncSqlBackend* be, QofInstance* inst )
 {
     const GUID* guid;
 
@@ -177,7 +177,7 @@ write_single_job( QofInstance *term_p, gpointer be_p )
 	g_return_if_fail( be_p != NULL );
 
 	if( job_should_be_saved( GNC_JOB(term_p) ) ) {
-    	save_job( term_p, be );
+    	save_job( be, term_p );
 	}
 }
 

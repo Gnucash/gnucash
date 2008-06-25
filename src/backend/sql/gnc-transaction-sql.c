@@ -36,6 +36,7 @@
 
 #include "Account.h"
 #include "Transaction.h"
+#include "gnc-lot.h"
 #include "engine-helpers.h"
 
 #include "gnc-backend-sql.h"
@@ -80,6 +81,7 @@ static const GncSqlColumnTableEntry tx_col_table[] =
 static gpointer get_split_reconcile_state( gpointer pObject, const QofParam* param );
 static void set_split_reconcile_state( gpointer pObject, gpointer pValue );
 static void set_split_reconcile_date( gpointer pObject, Timespec ts );
+static void set_split_lot( gpointer pObject, gpointer pLot );
 
 #define SPLIT_MAX_MEMO_LEN 2048
 #define SPLIT_MAX_ACTION_LEN 2048
@@ -97,6 +99,8 @@ static const GncSqlColumnTableEntry split_col_table[] =
 			(QofAccessFunc)xaccSplitRetDateReconciledTS, (QofSetterFunc)set_split_reconcile_date },
     { "value",           CT_NUMERIC,      0,                    COL_NNUL,          NULL, SPLIT_VALUE },
     { "quantity",        CT_NUMERIC,      0,                    COL_NNUL,          NULL, SPLIT_AMOUNT },
+	{ "lot_guid",        CT_LOTREF,       0,                    0,                 NULL, NULL,
+			(QofAccessFunc)xaccSplitGetLot, set_split_lot },
     { NULL }
 };
 
@@ -156,6 +160,23 @@ retrieve_numeric_value( gpointer pObject, gnc_numeric value )
     *pResult = value;
 }
 
+static void
+set_split_lot( gpointer pObject, gpointer pLot )
+{
+	GNCLot* lot;
+	Split* split;
+
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( GNC_IS_SPLIT(pObject) );
+
+	if( pLot == NULL ) return;
+
+	g_return_if_fail( GNC_IS_LOT(pLot) );
+
+	split = GNC_SPLIT(pObject);
+	lot = GNC_LOT(pLot);
+	gnc_lot_add_split( lot, split );
+}
 
 // Table to retrieve just the quantity
 static GncSqlColumnTableEntry quantity_table[] =
@@ -424,7 +445,7 @@ delete_splits( GncSqlBackend* be, Transaction* pTx )
 }
 
 static void
-commit_split( QofInstance* inst, GncSqlBackend* be )
+commit_split( GncSqlBackend* be, QofInstance* inst )
 {
 	gint op;
 
@@ -454,7 +475,7 @@ save_split_cb( gpointer data, gpointer user_data )
 	g_return_if_fail( GNC_IS_SPLIT(data) );
 	g_return_if_fail( user_data != NULL );
 
-    commit_split( QOF_INSTANCE(pSplit), split_info->be );
+    commit_split( split_info->be, QOF_INSTANCE(pSplit) );
 }
 
 static void
@@ -472,7 +493,7 @@ save_splits( GncSqlBackend* be, const GUID* tx_guid, SplitList* pSplitList )
 }
 
 void
-gnc_sql_save_transaction( QofInstance* inst, GncSqlBackend* be )
+gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst )
 {
     Transaction* pTx = GNC_TRANS(inst);
     const GUID* guid;

@@ -141,7 +141,7 @@ create_vendor_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 static void
-save_vendor( QofInstance* inst, GncSqlBackend* be )
+save_vendor( GncSqlBackend* be, QofInstance* inst )
 {
     GncVendor* v = GNC_VENDOR(inst);
     const GUID* guid;
@@ -195,7 +195,7 @@ write_single_vendor( QofInstance *term_p, gpointer be_p )
 	g_return_if_fail( be_p != NULL );
 
 	if( vendor_should_be_saved( GNC_VENDOR(term_p) ) ) {
-    	save_vendor( term_p, be );
+    	save_vendor( be, term_p );
 	}
 }
 

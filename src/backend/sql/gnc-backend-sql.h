@@ -252,7 +252,7 @@ typedef struct
   int		version;		/**< Backend version number */
   const gchar *	type_name;	/**< Engine object type name */
   /** Commit an instance of this object to the database */
-  void		(*commit)( QofInstance* inst, GncSqlBackend* be );
+  void		(*commit)( GncSqlBackend* be, QofInstance* inst );
   /** Load all objects of this type from the database */
   void		(*initial_load)( GncSqlBackend* be );
   /** Create database tables for this object */

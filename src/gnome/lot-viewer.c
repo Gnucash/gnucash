@@ -221,6 +221,8 @@ lv_save_current_row (GNCLotViewer *lv)
 
    if (lot)
    {
+	  gnc_lot_begin_edit(lot);
+
       /* Get the title, save_the_title */
       str = gtk_entry_get_text (lv->title_entry);
       gnc_lot_set_title (lot, str);
@@ -229,6 +231,8 @@ lv_save_current_row (GNCLotViewer *lv)
       notes = xxxgtk_textview_get_text (lv->lot_notes);
       gnc_lot_set_notes (lot, notes);
       g_free(notes);
+
+	  gnc_lot_commit_edit(lot);
    }
 }
 

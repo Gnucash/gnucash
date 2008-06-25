@@ -183,7 +183,7 @@ create_commodities_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 static void
-commit_commodity( QofInstance* inst, GncSqlBackend* be )
+commit_commodity( GncSqlBackend* be, QofInstance* inst )
 {
     const GUID* guid;
 	gint op;
@@ -229,7 +229,7 @@ gnc_sql_save_commodity( GncSqlBackend* be, gnc_commodity* pCommodity )
 	g_return_if_fail( pCommodity != NULL );
 
     if( !is_commodity_in_db( be, pCommodity ) ) {
-        commit_commodity( QOF_INSTANCE(pCommodity), be );
+        commit_commodity( be, QOF_INSTANCE(pCommodity) );
     }
 }
 
@@ -281,7 +281,7 @@ gnc_sql_init_commodity_handler( void )
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_COMMODITY,
         commit_commodity,            /* commit */
-        load_all_commodities,            /* initial_load */
+        load_all_commodities,        /* initial_load */
         create_commodities_tables    /* create_tables */
     };
 

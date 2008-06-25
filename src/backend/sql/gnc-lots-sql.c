@@ -159,7 +159,7 @@ create_lots_tables( GncSqlBackend* be )
 /* ================================================================= */
 
 static void
-commit_lot( QofInstance* inst, GncSqlBackend* be )
+commit_lot( GncSqlBackend* be, QofInstance* inst )
 {
 	gint op;
 
@@ -177,8 +177,12 @@ commit_lot( QofInstance* inst, GncSqlBackend* be )
     (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_LOT, inst, col_table );
 
     // Now, commit any slots
-    gnc_sql_slots_save( be, qof_instance_get_guid( inst ),
-                        qof_instance_get_slots( inst ) );
+	if( !qof_instance_get_destroying( inst ) ) {
+    	gnc_sql_slots_save( be, qof_instance_get_guid( inst ),
+                        	qof_instance_get_slots( inst ) );
+	} else {
+    	gnc_sql_slots_delete( be, qof_instance_get_guid( inst ) );
+	}
 }
 
 /* ----------------------------------------------------------------- */
@@ -228,8 +232,8 @@ gnc_sql_init_lot_handler( void )
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_LOT,
         commit_lot,            /* commit */
-        load_all_lots,            /* initial_load */
-        create_lots_tables    /* create tables */
+        load_all_lots,         /* initial_load */
+        create_lots_tables     /* create tables */
     };
 
     qof_object_register_backend( GNC_ID_LOT, GNC_SQL_BACKEND, &be_data );

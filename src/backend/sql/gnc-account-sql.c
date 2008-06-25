@@ -261,7 +261,7 @@ create_account_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 void
-gnc_sql_save_account( QofInstance* inst, GncSqlBackend* be )
+gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
 {
     Account* pAcc = GNC_ACCOUNT(inst);
     const GUID* guid;

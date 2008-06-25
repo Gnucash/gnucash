@@ -34,7 +34,7 @@
 
 void gnc_sql_init_transaction_handler( void );
 void gnc_sql_transaction_commit_splits( GncSqlBackend* be, Transaction* pTx );
-void gnc_sql_save_transaction( QofInstance* inst, GncSqlBackend* be );
+void gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst );
 void gnc_sql_get_account_balances( GncSqlBackend* be, Account* pAccount, 
 								    gnc_numeric* start_balance,
 								    gnc_numeric* cleared_balance,

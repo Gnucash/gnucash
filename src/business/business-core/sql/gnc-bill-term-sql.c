@@ -159,7 +159,7 @@ create_billterm_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 void
-gnc_sql_save_billterm( QofInstance* inst, GncSqlBackend* be )
+gnc_sql_save_billterm( GncSqlBackend* be, QofInstance* inst )
 {
     const GUID* guid;
 

@@ -136,7 +136,7 @@ create_employee_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 static void
-save_employee( QofInstance* inst, GncSqlBackend* be )
+save_employee( GncSqlBackend* be, QofInstance* inst )
 {
     GncEmployee* emp = GNC_EMPLOYEE(inst);
     const GUID* guid;
@@ -189,7 +189,7 @@ write_single_employee( QofInstance *term_p, gpointer be_p )
 	g_return_if_fail( be_p != NULL );
 
 	if( employee_should_be_saved( GNC_EMPLOYEE(term_p) ) ) {
-    	save_employee( term_p, be );
+    	save_employee( be, term_p );
 	}
 }
 

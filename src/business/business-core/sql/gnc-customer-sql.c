@@ -140,7 +140,7 @@ create_customer_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 static void
-save_customer( QofInstance* inst, GncSqlBackend* be )
+save_customer( GncSqlBackend* be, QofInstance* inst )
 {
     const GUID* guid;
 
@@ -190,7 +190,7 @@ write_single_customer( QofInstance *term_p, gpointer be_p )
 	g_return_if_fail( be_p != NULL );
 
 	if( customer_should_be_saved( GNC_CUSTOMER(term_p) ) ) {
-    	save_customer( term_p, be );
+    	save_customer( be, term_p );
 	}
 }
 

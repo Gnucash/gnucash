@@ -303,7 +303,7 @@ save_tt_entries( GncSqlBackend* be, const GUID* guid, GList* entries )
 }
 
 static void
-save_taxtable( QofInstance* inst, GncSqlBackend* be )
+save_taxtable( GncSqlBackend* be, QofInstance* inst )
 {
     GncTaxTable* tt = GNC_TAXTABLE(inst);
     const GUID* guid;
@@ -331,11 +331,17 @@ save_taxtable( QofInstance* inst, GncSqlBackend* be )
 
 /* ================================================================= */
 static void
+save_next_taxtable( QofInstance* inst, gpointer p2 )
+{
+	save_taxtable( (GncSqlBackend*)p2, inst );
+}
+
+static void
 write_taxtables( GncSqlBackend* be )
 {
 	g_return_if_fail( be != NULL );
 
-    qof_object_foreach( GNC_ID_TAXTABLE, be->primary_book, (QofInstanceForeachCB)save_taxtable, (gpointer)be );
+    qof_object_foreach( GNC_ID_TAXTABLE, be->primary_book, save_next_taxtable, be );
 }
 
 /* ================================================================= */

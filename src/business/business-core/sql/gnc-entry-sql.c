@@ -159,7 +159,7 @@ create_entry_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 static void
-save_entry( QofInstance* inst, GncSqlBackend* be )
+save_entry( GncSqlBackend* be, QofInstance* inst )
 {
     const GUID* guid;
 
@@ -196,7 +196,7 @@ write_single_entry( QofInstance *term_p, gpointer be_p )
   	/* Only save if attached */
   	if( gncEntryGetOrder( entry ) != NULL || gncEntryGetInvoice( entry ) != NULL ||
 			gncEntryGetBill( entry ) != NULL ) {
-    	save_entry( term_p, be );
+    	save_entry( be, term_p );
 	}
 }
 
