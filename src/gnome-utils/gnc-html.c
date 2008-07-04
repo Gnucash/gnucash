@@ -898,7 +898,7 @@ gnc_html_show_url(gnc_html * html, URLType type,
     if (!ok)
     {
       if (result.error_message)
-        gnc_error_dialog( html->window, result.error_message);
+        gnc_error_dialog( html->window, "%s", result.error_message);
       else
 	/* %s is a URL (some location somewhere). */
         gnc_error_dialog( html->window, _("There was an error accessing %s."), location);

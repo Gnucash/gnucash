@@ -388,7 +388,7 @@ qsf_file_select_ok(GtkWidget *w, GtkFileSelection *fs )
     PERR("%s", message);
     qof_session_destroy(qsf_session);
     qof_event_resume();
-    gnc_error_dialog(gnc_ui_get_toplevel(), message);
+    gnc_error_dialog(gnc_ui_get_toplevel(), "%s", message);
     LEAVE (" ");
     return;
   }
@@ -480,7 +480,7 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
   {
     if (summary.num_auto_create_no_notify_instances == 0)
     {
-      gnc_info_dialog(GTK_WIDGET(&window->gtk_window), nothing_to_do_msg);
+      gnc_info_dialog(GTK_WIDGET(&window->gtk_window), "%s", nothing_to_do_msg);
     }
     else
     {

@@ -230,7 +230,7 @@ pedit_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
   if (response == GTK_RESPONSE_OK) {
     error_str = gui_to_price (pedit_dialog);
     if (error_str) {
-      gnc_warning_dialog (pedit_dialog->dialog, error_str);
+      gnc_warning_dialog (pedit_dialog->dialog, "%s", error_str);
       return;
     }
 

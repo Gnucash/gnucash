@@ -277,7 +277,7 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
       check_entry_nonempty (cw->dialog, cw->addr3_entry, NULL) &&
       check_entry_nonempty (cw->dialog, cw->addr4_entry, NULL)) {
     const char *msg = _("You must enter a billing address.");
-    gnc_error_dialog (cw->dialog, msg);
+    gnc_error_dialog (cw->dialog, "%s", msg);
     return;
   }
 

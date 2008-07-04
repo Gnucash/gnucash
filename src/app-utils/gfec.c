@@ -169,7 +169,7 @@ static int error_in_scm_eval = FALSE;
 static void
 error_handler(const char *msg)
 {
-    g_warning(msg);
+    g_warning("%s", msg);
     error_in_scm_eval = TRUE;
 }
 

@@ -217,7 +217,7 @@ sxed_confirmed_cancel(GncSxEditorDialog *sxed)
         const char *sx_changed_msg =
             _( "This SX has changed; are you "
                "sure you want to cancel?" );
-        if (!gnc_verify_dialog(sxed->dialog, FALSE, sx_changed_msg)) {
+        if (!gnc_verify_dialog(sxed->dialog, FALSE, "%s", sx_changed_msg)) {
             return FALSE;
         }
     }
@@ -635,7 +635,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                                          _( "Couldn't parse credit formula for "
                                             "split \"%s\"." ),
                                          xaccSplitGetMemo( s ) );
-                        gnc_error_dialog( GTK_WIDGET(sxed->dialog),
+                        gnc_error_dialog( GTK_WIDGET(sxed->dialog), "%s",
                                           errStr->str );
                         g_string_free( errStr, TRUE );
 
@@ -661,7 +661,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                                          _( "Couldn't parse debit formula for "
                                             "split \"%s\"." ),
                                          xaccSplitGetMemo( s ) );
-                        gnc_error_dialog( GTK_WIDGET(sxed->dialog),
+                        gnc_error_dialog( GTK_WIDGET(sxed->dialog), "%s",
                                           (gchar*)errStr->str );
                         g_string_free( errStr, TRUE );
 
@@ -712,7 +712,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         if ( strlen(name) == 0 ) {
             const char *sx_has_no_name_msg =
                 _( "Please name the Scheduled Transaction." );
-            gnc_error_dialog( sxed->dialog, sx_has_no_name_msg );
+            gnc_error_dialog( sxed->dialog, "%s", sx_has_no_name_msg );
             g_free( name );
             return FALSE;
                         
@@ -790,7 +790,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
              && !gtk_toggle_button_get_active(sxed->optEndNone) ) {
             const char *sx_end_spec_msg =
                 _( "Please provide a valid end selection." );
-            gnc_error_dialog( sxed->dialog, sx_end_spec_msg );
+            gnc_error_dialog( sxed->dialog, "%s", sx_end_spec_msg );
             return FALSE;
         }
 
@@ -806,7 +806,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
             if ( occur == 0 ) {
                 const char *sx_occur_count_zero_msg =
                     _( "There must be some number of occurrences." );
-                gnc_error_dialog( sxed->dialog,
+                gnc_error_dialog( sxed->dialog, "%s",
                                   sx_occur_count_zero_msg );
                 return FALSE;
             }
@@ -847,7 +847,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                 _("You have attempted to create a Scheduled "
                   "Transaction which will never run. Do you "
                   "really want to do this?");
-            if (!gnc_verify_dialog(sxed->dialog, FALSE, invalid_sx_check_msg))
+            if (!gnc_verify_dialog(sxed->dialog, FALSE,
+                                   "%s", invalid_sx_check_msg))
                 return FALSE;
         }
     }
@@ -1493,7 +1494,7 @@ gnc_sxed_reg_check_close(GncSxEditorDialog *sxed)
         return;
     }
 
-    if (gnc_verify_dialog(sxed->dialog, TRUE, message)) {
+    if (gnc_verify_dialog(sxed->dialog, TRUE, "%s", message)) {
         Transaction *trans;
         trans = gnc_split_register_get_current_trans( reg );
         if ( !gnc_split_register_save( reg, TRUE ) )

@@ -1252,7 +1252,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
       const char *message = _("You must specify an account to transfer from, "
 			      "or to, or both, for this transaction. "
 			      "Otherwise, it will not be recorded.");
-      gnc_error_dialog(xferData->dialog, message);
+      gnc_error_dialog(xferData->dialog, "%s", message);
       LEAVE("bad account");
       return;
     }
@@ -1261,7 +1261,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     {
       const char *message = _("You can't transfer from and to the same "
 			      "account!");
-      gnc_error_dialog(xferData->dialog, message);
+      gnc_error_dialog(xferData->dialog, "%s", message);
       LEAVE("same account");
       return;
     }
@@ -1288,7 +1288,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
       const char *message = _("You can't transfer from a non-currency account.  "
 			      "Try reversing the \"from\" and \"to\" accounts "
 			      "and making the \"amount\" negative.");
-      gnc_error_dialog(xferData->dialog, message);
+      gnc_error_dialog(xferData->dialog, "%s", message);
       LEAVE("non-currency");
       return;
     }
@@ -1311,7 +1311,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
   if (gnc_numeric_zero_p (amount))
   {
     const char *message = _("You must enter an amount to transfer.");
-    gnc_error_dialog(xferData->dialog, message);
+    gnc_error_dialog(xferData->dialog, "%s", message);
     LEAVE("invalid from amount");
     return;
   }

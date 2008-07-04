@@ -48,7 +48,7 @@ static const gchar *emacs_trailer =
 void
 write_emacs_trailer(FILE *out)
 {
-    fprintf(out, emacs_trailer);
+    fprintf(out, "%s", emacs_trailer);
 }
 
 static void

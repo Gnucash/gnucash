@@ -509,7 +509,7 @@ void gnc_file_log_replay (void)
 
   /* Use g_strdup_printf so we don't get accidental tab -> space conversion */
   if (!expected_header)
-    expected_header = g_strdup_printf(expected_header_orig);
+    expected_header = g_strdup(expected_header_orig);
 
   qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_DEBUG);
   ENTER(" ");

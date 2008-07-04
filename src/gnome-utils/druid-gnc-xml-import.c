@@ -738,7 +738,7 @@ gxi_parse_file (GncXmlImportData *data)
     data->subst = NULL;
   }
   if (message) {
-    gnc_error_dialog (data->dialog, message);
+    gnc_error_dialog (data->dialog, "%s", message);
   }
   if (!success)
     gxi_session_destroy (data);
@@ -1033,7 +1033,7 @@ gxi_load_file (GncXmlImportData *data)
                           (GCompareFunc) file_filename_cmp)) {
     const gchar *message = _(
       "That GnuCash XML file is already loaded. Please select another file.");
-    gnc_error_dialog (data->dialog, message);
+    gnc_error_dialog (data->dialog, "%s", message);
     g_free (filename);
     return;
   }
@@ -1335,7 +1335,7 @@ gxi_add_encoding (GncXmlImportData *data, gpointer encoding_ptr)
 
   if (g_list_find (data->encodings, encoding_ptr)) {
     message = _("This encoding has been added to the list already.");
-    gnc_error_dialog (data->encodings_dialog, message);
+    gnc_error_dialog (data->encodings_dialog, "%s", message);
     return;
   }
 
@@ -1345,7 +1345,7 @@ gxi_add_encoding (GncXmlImportData *data, gpointer encoding_ptr)
     g_iconv_close (iconv);
     g_free (enc_string);
     message = _("This is an invalid encoding.");
-    gnc_error_dialog (data->encodings_dialog, message);
+    gnc_error_dialog (data->encodings_dialog, "%s", message);
     return;
   }
   g_iconv_close (iconv);
@@ -1480,7 +1480,7 @@ gxi_loaded_files_next_cb (GnomeDruidPage *page, GtkWidget *widget,
   if (!g_list_first (data->files)) {
     const gchar *message = _(
       "No files to merge. Please add ones by clicking on 'Load another file'.");
-    gnc_error_dialog (data->dialog, message);
+    gnc_error_dialog (data->dialog, "%s", message);
     return TRUE;
   }
 
