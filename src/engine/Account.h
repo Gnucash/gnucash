@@ -878,7 +878,7 @@ gboolean xaccAccountHasAncestor(const Account *acc, const Account *ancestor);
 
 /** @} */
 
-/** @name Getting Accounts and Subaccounts by Name
+/** @name Lookup Accounts and Subaccounts by name or code
  @{
 */
 /** The gnc_account_lookup_by_name() subroutine fetches the account by
@@ -898,6 +898,12 @@ Account *gnc_account_lookup_by_name (const Account *parent, const char *name);
  */
 Account *gnc_account_lookup_by_full_name (const Account *any_account,
 					  const gchar *name);
+
+/** The gnc_account_lookup_full_name() subroutine works like
+ *  gnc_account_lookup_by_name, but uses the account code.
+ */
+Account *gnc_account_lookup_by_code (const Account *parent,
+                                     const char *code);
 
 /** @} */
 
