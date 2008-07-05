@@ -484,7 +484,8 @@
              (rest-new (cdr newcol))
              (rest-existing (cdr existing-data))
              (rest-result (append-to-element rest-new rest-existing 
-                                             (- length-to-append 1))))
+                                             (- length-to-append 1)
+                                             width-to-make)))
           (cons (cons (widen-and-append 
                        current-existing 
                        current-new 
