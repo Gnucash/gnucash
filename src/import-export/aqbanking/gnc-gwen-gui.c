@@ -782,6 +782,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
     const gchar *internal_input, *internal_confirmed;
     gboolean confirm = (flags & GWEN_GUI_INPUT_FLAGS_CONFIRM) != 0;
     gboolean hidden = (flags & GWEN_GUI_INPUT_FLAGS_SHOW) == 0;
+    gboolean is_tan = (flags & GWEN_GUI_INPUT_FLAGS_TAN) != 0;
     gint retval;
 
     g_return_if_fail(input);
@@ -799,8 +800,12 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
     confirm_entry = glade_xml_get_widget(xml, "confirm_entry");
     confirm_label = glade_xml_get_widget(xml, "confirm_label");
     remember_pin_checkbutton = glade_xml_get_widget(xml, "remember_pin");
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(remember_pin_checkbutton),
-                                 gui->cache_passwords);
+    if (is_tan) {
+        gtk_widget_hide(remember_pin_checkbutton);
+    } else {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(remember_pin_checkbutton),
+                                     gui->cache_passwords);
+    }
 
     if (gui->parent)
         gtk_window_set_transient_for(GTK_WINDOW(dialog),
@@ -840,12 +845,14 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
         if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
             break;
 
-        /* Enable or disable the password cache */
-        remember_pin = gtk_toggle_button_get_active(
-            GTK_TOGGLE_BUTTON(remember_pin_checkbutton));
-        enable_password_cache(gui, remember_pin);
-        gnc_gconf_set_bool(GCONF_SECTION_AQBANKING, KEY_REMEMBER_PIN,
-                           remember_pin, NULL);
+        if (!is_tan) {
+            /* Enable or disable the password cache */
+            remember_pin = gtk_toggle_button_get_active(
+                GTK_TOGGLE_BUTTON(remember_pin_checkbutton));
+            enable_password_cache(gui, remember_pin);
+            gnc_gconf_set_bool(GCONF_SECTION_AQBANKING, KEY_REMEMBER_PIN,
+                               remember_pin, NULL);
+        }
 
         internal_input = gtk_entry_get_text(GTK_ENTRY(input_entry));
         if (strlen(internal_input) < min_len) {
@@ -1152,13 +1159,14 @@ getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
 {
     GncGWENGui *gui = GETDATA_GUI(gwen_gui);
     gchar *password = NULL;
+    gboolean is_tan = (flags & GWEN_GUI_INPUT_FLAGS_TAN) != 0;
 
     g_return_val_if_fail(gui, -1);
 
     ENTER("gui=%p, flags=%d, token=%s", gui, flags, token ? token : "(null");
 
-    /* Check remembered passwords */
-    if (gui->cache_passwords && gui->passwords && token) {
+    /* Check remembered passwords, excluding TANs */
+    if (!is_tan && gui->cache_passwords && gui->passwords && token) {
         if (flags & GWEN_GUI_INPUT_FLAGS_RETRY) {
             /* If remembered, remove password from memory */
             g_hash_table_remove(gui->passwords, token);
@@ -1184,7 +1192,7 @@ getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
         strncpy(buffer, password, max_len);
         buffer[max_len-1] = '\0';
 
-        if (token) {
+        if (!is_tan && token) {
             if (gui->cache_passwords && gui->passwords) {
                 /* Remember password */
                 DEBUG("Remember password, token=%s", token);
