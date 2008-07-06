@@ -72,8 +72,8 @@ struct _ImportData {
     AB_ACCOUNT *ab_acc;
 };
 
-static const AB_TRANSACTION *transaction_cb(const AB_TRANSACTION *element,
-                                            gpointer user_data)
+static const AB_TRANSACTION *
+transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
 {
     ImportData *data = user_data;
     Transaction *gnc_trans;
