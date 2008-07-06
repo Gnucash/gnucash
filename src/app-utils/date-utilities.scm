@@ -20,6 +20,8 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+(use-modules (gnucash core-utils))
+
 (define gnc:reldate-list '())
 
 (define (gnc:timepair->secs tp)
@@ -79,7 +81,7 @@
   (gnc:date-get-year-day (gnc:timepair->date tp)))
 
 (define (gnc:date-get-year-string datevec)
-  (strftime "%Y" datevec))
+  (gnc-locale-to-utf8 (strftime "%Y" datevec)))
 
 (define (gnc:date-get-quarter-string datevec)
   (sprintf #f "Q%d" (gnc:date-get-quarter datevec)))
@@ -91,10 +93,10 @@
    (gnc:date-get-year-string datevec)))
 
 (define (gnc:date-get-month-string datevec)
-  (strftime "%B" datevec))
+  (gnc-locale-to-utf8 (strftime "%B" datevec)))
 
 (define (gnc:date-get-month-year-string datevec)
-  (strftime "%B %Y" datevec))
+  (gnc-locale-to-utf8 (strftime "%B %Y" datevec)))
 
 (define (gnc:date-get-week-year-string datevec)
   (let ((begin-string (gnc-print-date
