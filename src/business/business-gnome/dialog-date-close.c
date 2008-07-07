@@ -73,6 +73,12 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
       return;
     }
 
+    if (xaccAccountGetPlaceholder (acc)) {
+      gnc_error_dialog (ddc->dialog,
+			_("Placeholder account selected.  Please try again."));
+      return;
+    }
+
     ddc->acct = acc;
   }
 
