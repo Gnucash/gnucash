@@ -1329,6 +1329,28 @@ else
 fi
 AC_SUBST(LC_MESSAGES_ENUM)
 
+###--------------------------------------------------------
+### Make Python bindings optional
+###--------------------------------------------------------
+enable_python=false
+
+AC_ARG_ENABLE(python-bindings,
+  [  --enable-python-bindings     enable python bindings],
+  [case "${enableval}" in
+        yes) enable_python=true ;;
+        no) enable_python=false ;;
+        *) enable_python=true ;;
+        esac]
+  )
+if test x${enable_python} = "xtrue"
+then
+  PYTHON_DIR=python-bindings
+  AM_PATH_PYTHON(2.4)
+  AC_PYTHON_DEVEL(>= '2.4')
+  SWIG_PYTHON
+fi
+AC_SUBST(PYTHON_DIR)
+
 ###-------------------------------------------------------------------------
 ### Additional compiler warnings (or not) if we're running GCC
 ###-------------------------------------------------------------------------
@@ -1520,6 +1542,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/import-export/hbci/schemas/Makefile
           src/import-export/hbci/test/Makefile
           src/optional/Makefile
+          src/optional/python-bindings/Makefile
           src/optional/xsl/Makefile
           src/pixmaps/Makefile
           src/quotes/Makefile
@@ -1584,6 +1607,9 @@ components="$components ofx"
 fi
 if test x${HBCI_DIR} != x; then
 components="$components hbci"
+fi
+if test x${PYTHON_DIR} != x; then
+components="$components python-bindings"
 fi
 
 AC_MSG_RESULT([
