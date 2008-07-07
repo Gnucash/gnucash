@@ -1543,6 +1543,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/import-export/hbci/test/Makefile
           src/optional/Makefile
           src/optional/python-bindings/Makefile
+          src/optional/python-bindings/tests/Makefile
           src/optional/xsl/Makefile
           src/pixmaps/Makefile
           src/quotes/Makefile

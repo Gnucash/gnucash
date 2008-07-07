@@ -23,6 +23,14 @@ SCM scm_init_sw_engine_module (void);
 
 %import "base-typemaps.i"
 
+%include "engine-common.i"
+
+%inline %{
+static const GUID * gncPriceGetGUID(GNCPrice *x)
+{ return qof_instance_get_guid(QOF_INSTANCE(x)); }
+static const GUID * gncBudgetGetGUID(GncBudget *x)
+{ return qof_instance_get_guid(QOF_INSTANCE(x)); }
+%}
 
 GLIST_HELPER_INOUT(SplitList, SWIGTYPE_p_Split);
 GLIST_HELPER_INOUT(TransList, SWIGTYPE_p_Transaction);
@@ -31,27 +39,6 @@ GLIST_HELPER_INOUT(AccountList, SWIGTYPE_p_Account);
 GLIST_HELPER_INOUT(PriceList, SWIGTYPE_p_GNCPrice);
 // TODO: free PriceList?
 GLIST_HELPER_INOUT(CommodityList, SWIGTYPE_p_gnc_commodity);
-
-
-%inline %{
-static const GUID * gncSplitGetGUID(Split *x)
-{ return qof_instance_get_guid(QOF_INSTANCE(x)); }
-static const GUID * gncTransGetGUID(Transaction *x)
-{ return qof_instance_get_guid(QOF_INSTANCE(x)); }
-static const GUID * gncAccountGetGUID(Account *x)
-{ return qof_instance_get_guid(QOF_INSTANCE(x)); }
-static const GUID * gncPriceGetGUID(GNCPrice *x)
-{ return qof_instance_get_guid(QOF_INSTANCE(x)); }
-static const GUID * gncBudgetGetGUID(GncBudget *x)
-{ return qof_instance_get_guid(QOF_INSTANCE(x)); }
-%}
-
-%typemap(newfree) AccountList * "g_list_free($1);"
-%typemap(newfree) SplitList * "g_list_free($1);"
-%typemap(newfree) TransList * "g_list_free($1);"
-%typemap(newfree) PriceList * "g_list_free($1);"
-%typemap(newfree) LotList * "g_list_free($1);"
-%typemap(newfree) CommodityList * "g_list_free($1);"
 
 %typemap(newfree) gchar * "g_free($1);"
 
@@ -83,18 +70,7 @@ functions. */
   static QofIdType QOF_ID_BOOK_SCM (void) { return QOF_ID_BOOK; }
 }
 
-%include <Split.h>
 %include <engine-helpers.h>
-AccountList * gnc_account_get_children (const Account *account);
-AccountList * gnc_account_get_children_sorted (const Account *account);
-AccountList * gnc_account_get_descendants (const Account *account);
-AccountList * gnc_account_get_descendants_sorted (const Account *account);
-%ignore gnc_account_get_children;
-%ignore gnc_account_get_children_sorted;
-%ignore gnc_account_get_descendants;
-%ignore gnc_account_get_descendants_sorted;
-%include <Account.h>
-%include <Transaction.h>
 %include <gnc-pricedb.h>
 
 QofSession * qof_session_new (void);
@@ -193,7 +169,6 @@ void gnc_quote_source_set_fq_installed (GList *sources_list);
 %ignore gnc_quote_source_set_fq_installed;
 %include <gnc-commodity.h>
 
-%include <gnc-lot.h>
 %include <gnc-session-scm.h>
 void gnc_hook_add_scm_dangler (const gchar *name, SCM proc);
 void gnc_hook_run (const gchar *name, gpointer data);

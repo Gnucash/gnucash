@@ -32,18 +32,27 @@
 #include "qofsession.h"
 #include "qofbook.h"
 #include "qofbackend.h"
-#include "gnc-commodity.h"
-#include "gnc-lot.h"
-#include "gnc-numeric.h"
+#include "qofid.h"
+#include "guid.h"
 #include "Transaction.h"
 #include "Split.h"
 #include "Account.h"
+#include "gnc-commodity.h"
+#include "gnc-lot.h"
+#include "gnc-numeric.h"
+#include "gncCustomer.h"
+#include "gncEmployee.h"
+#include "gncVendor.h"
+#include "gncAddress.h"
+#include "gncBillTerm.h"
 #include <guile/gh.h>
 %}
 
 %include <timespec.i>
 
-%include <glib.i>
+%include <base-typemaps.i>
+
+%include <engine-common.i>
 
 %include <qofbackend.h>
 
@@ -54,9 +63,15 @@
 
 %include <qofbook.h>
 
-%include <Transaction.h>
+%include <qofid.h>
+
+/* SWIG doesn't like this macro, so redefine it to simply mean const */
+#define G_CONST_RETURN const
+%include <guid.h>
+
+/* %include <Transaction.h>
 %include <Split.h>
-%include <Account.h>
+%include <Account.h> */
 
 //Ignored because it is unimplemented
 %ignore gnc_numeric_convert_with_error;
@@ -64,7 +79,14 @@
 
 %include <gnc-commodity.h>
 
-%include <gnc-lot.h>
+/* %include <gnc-lot.h> */
+
+//business-core includes
+%include <gncCustomer.h>
+%include <gncEmployee.h>
+%include <gncVendor.h>
+%include <gncAddress.h>
+%include <gncBillTerm.h>
 
 %init %{
 

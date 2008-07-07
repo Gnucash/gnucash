@@ -90,3 +90,26 @@
         return NULL;        
     }
 }
+
+%typemap(out) GList *, CommodityList *, SplitList *, AccountList *, LotList * {
+    guint i;
+    gpointer data;
+    PyObject *list = PyList_New(0);
+    for (i = 0; i < g_list_length($1); i++)
+    {
+        data = g_list_nth_data($1, i);        
+        if (GNC_IS_ACCOUNT(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_Account, 0)); 
+        else if (GNC_IS_SPLIT(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_Split, 0)); 
+        else if (GNC_IS_TRANSACTION(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_Transaction, 0)); 
+        else if (GNC_IS_COMMODITY(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_gnc_commodity, 0)); 
+        else if (GNC_IS_LOT(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_GNCLot, 0)); 
+        else
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_gpointer, 0)); 
+    }
+    $result = list;
+}

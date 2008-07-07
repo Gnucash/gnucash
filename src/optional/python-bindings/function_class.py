@@ -165,3 +165,12 @@ def extract_attributes_with_prefix(obj, prefix):
         if attr_name.startswith(prefix):
             after_prefix = attr_name[ len(prefix): ]
             yield attr_name, attr_value, after_prefix
+
+def methods_return_instance(cls, function_dict):
+    """Iterates through a dictionary of function name strings and instance names
+    and sets the function to return the associated instance 
+    """
+    for func_name, instance_name in function_dict.iteritems():
+        setattr(cls, func_name, 
+            method_function_returns_instance( getattr(cls, func_name), instance_name))
+
