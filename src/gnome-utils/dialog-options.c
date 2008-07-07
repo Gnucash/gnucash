@@ -974,13 +974,15 @@ gnc_option_create_list_widget(GNCOption *option, char *name, GtkTooltips *toolti
   num_values = gnc_option_num_permissible_values(option);
   for (i = 0; i < num_values; i++)
   {
-    gchar *string;
+    gchar *raw_string, *string;
 
-    string = gnc_option_permissible_value_name(option, i);
+    raw_string = gnc_option_permissible_value_name(option, i);
+    string = (raw_string && *raw_string) ? _(raw_string) : "";
     gtk_list_store_append(store, &iter);
     gtk_list_store_set(store, &iter,
 		       0, string ? string : "",
 		       -1);
+    g_free(raw_string);
   }
 
   gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(view), FALSE, FALSE, 0);
