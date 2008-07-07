@@ -1211,7 +1211,8 @@ qof_session_save (QofSession *session,
 	QofBook *book, *abook;
 	int err;
 	gint num;
-	char *msg, *book_id;
+	char *msg = NULL;
+	char *book_id;
 
 	if (!session) return;
 	if (!g_atomic_int_dec_and_test(&session->lock))
