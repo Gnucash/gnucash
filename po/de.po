@@ -6600,11 +6600,11 @@ msgstr "_Benutzername:"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:57
 msgid "New Accounts _Page"
-msgstr "Neue Konto-_Hierarchie"
+msgstr "Neue _Ansicht"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:58
 msgid "Open a new Account Tree page"
-msgstr "Neue Konto-Hierarchie Ansicht öffnen"
+msgstr "Neue Ansicht des Kontenbaums öffnen"
 
 #. File menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:98
@@ -6799,7 +6799,7 @@ msgstr "Ein neues Konto eröffnen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:153
 msgid "New Account _Hierarchy..."
-msgstr "Neue Konten_hierarchie..."
+msgstr "Konten_hierarchie _hinzufügen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:154
 msgid "Extend the current book by merging with new account type categories"
