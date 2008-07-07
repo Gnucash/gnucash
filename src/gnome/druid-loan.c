@@ -1043,7 +1043,7 @@ ld_cancel_check( GnomeDruid *gd, LoanDruidData *ldd )
 {
         const char *cancelMsg = _( "Are you sure you want to cancel "
                                    "the Mortgage/Loan Setup Druid?" );
-        if ( gnc_verify_dialog( ldd->dialog, FALSE, cancelMsg ) ) {
+        if ( gnc_verify_dialog( ldd->dialog, FALSE, "%s", cancelMsg ) ) {
                 gnc_close_gui_component_by_data( DIALOG_LOAN_DRUID_CM_CLASS,
                                                  ldd );
         }

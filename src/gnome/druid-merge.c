@@ -170,7 +170,7 @@ on_import_next (GnomeDruidPage  *gnomedruidpage,
 		message = g_strdup_printf(_("Error: Please resolve all %d "
 			"conflicts before trying to commit the data."), count);
 		top = gtk_widget_get_toplevel (GTK_WIDGET (gnomedruidpage));
-		gnc_error_dialog(top, message);
+		gnc_error_dialog(top, "%s", message);
 		g_free(message);
 		return TRUE;
 	}
@@ -224,7 +224,7 @@ on_merge_finish (GnomeDruidPage  *gnomedruidpage,
 	if(result != 0) {
 		message = g_strdup_printf(_("Error: the Commit operation failed, error code %d."), result);
 		top = gtk_widget_get_toplevel (GTK_WIDGET (gnomedruidpage));
-		gnc_error_dialog(top, message);
+		gnc_error_dialog(top, "%s", message);
 	}
 	g_return_if_fail(result == 0);
 	delete_merge_window ();

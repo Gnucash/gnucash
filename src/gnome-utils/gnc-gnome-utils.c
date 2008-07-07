@@ -279,7 +279,7 @@ gnc_gnome_help (const char *file_name, const char *anchor)
     const gchar *message =
       _("GnuCash could not find the files for the help documentation.  "
 	"This is likely because the 'gnucash-docs' package is not installed.");
-    gnc_error_dialog(NULL, message);
+    gnc_error_dialog(NULL, "%s", message);
   }
   PERR ("%s", error->message);
   g_error_free(error);

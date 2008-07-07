@@ -513,7 +513,7 @@ gnc_invoice_window_deleteCB (GtkWidget *widget, gpointer data)
     else
       msg = g_strdup (message);
 
-    result = gnc_verify_dialog (iw_get_window(iw), FALSE, msg);
+    result = gnc_verify_dialog (iw_get_window(iw), FALSE, "%s", msg);
     g_free (msg);
 
     if (!result)

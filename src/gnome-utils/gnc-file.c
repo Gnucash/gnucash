@@ -230,7 +230,7 @@ show_session_error (QofBackendError io_error,
       fmt = _("This file/URL appears to be from a newer version "
               "of GnuCash. You must upgrade your version of GnuCash "
               "to work with this data.");
-      gnc_error_dialog (parent, fmt);
+      gnc_error_dialog (parent, "%s", fmt);
       break;
 
     case ERR_BACKEND_NO_SUCH_DB:
@@ -395,7 +395,7 @@ show_session_error (QofBackendError io_error,
     case ERR_FILEIO_FILE_BAD_READ:
       fmt = _("There was an error reading the file. "
               "Do you want to continue?");
-      if (gnc_verify_dialog (parent, TRUE, fmt)) { uh_oh = FALSE; }
+      if (gnc_verify_dialog (parent, TRUE, "%s", fmt)) { uh_oh = FALSE; }
       break;
 
     case ERR_FILEIO_PARSE_ERROR:
@@ -420,7 +420,7 @@ show_session_error (QofBackendError io_error,
     case ERR_FILEIO_FILE_TOO_OLD:
       fmt = _("This file is from an older version of GnuCash. "
               "Do you want to continue?");
-      if (gnc_verify_dialog (parent, TRUE, fmt)) { uh_oh = FALSE; }
+      if (gnc_verify_dialog (parent, TRUE, "%s", fmt)) { uh_oh = FALSE; }
       break;
 
     case ERR_FILEIO_UNKNOWN_FILE_TYPE:
@@ -449,7 +449,7 @@ show_session_error (QofBackendError io_error,
       fmt = _("This database is from an older version of GnuCash. "
               "Do you want to want to upgrade the database "
               "to the current version?");
-      if (gnc_verify_dialog (parent, TRUE, fmt)) { uh_oh = FALSE; }
+      if (gnc_verify_dialog (parent, TRUE, "%s", fmt)) { uh_oh = FALSE; }
       break;
 
     case ERR_SQL_DB_BUSY:
@@ -458,7 +458,7 @@ show_session_error (QofBackendError io_error,
               "If there are currently no other users, consult the  "
               "documentation to learn how to clear out dangling login "
               "sessions.");
-      gnc_error_dialog (parent, fmt);
+      gnc_error_dialog (parent, "%s", fmt);
       break;
 
     default:

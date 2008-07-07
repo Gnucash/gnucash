@@ -1043,7 +1043,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
 
   /* If this is an un-expanded, multi-split transaction, then warn the user */
   if (force_dialog && !expanded && !xfer_acc) {
-    gnc_error_dialog (gnc_split_register_get_parent (reg), message);
+    gnc_error_dialog (gnc_split_register_get_parent (reg), "%s", message);
     return TRUE;
   }
 
@@ -1092,7 +1092,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   if (!expanded && osplit &&
       gnc_split_register_split_needs_amount (reg, split) &&
       gnc_split_register_split_needs_amount (reg, osplit)) {
-    gnc_error_dialog (gnc_split_register_get_parent (reg), message);
+    gnc_error_dialog (gnc_split_register_get_parent (reg), "%s", message);
     return TRUE;
   }
 

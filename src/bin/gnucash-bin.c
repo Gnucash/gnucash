@@ -141,7 +141,7 @@ static void
 update_message(const gchar *msg)
 {
     gnc_update_splash_screen(msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
-    g_message(msg);
+    g_message("%s", msg);
 }
 
 static void

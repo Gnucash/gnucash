@@ -153,7 +153,7 @@ gnc_search_dialog_select_cb (GtkButton *button, GNCSearchWindow *sw)
 
   if (sw->selected_item == NULL && sw->allow_clear == FALSE) {
     char *msg = _("You must select an item from the list");
-    gnc_error_dialog (sw->dialog, msg);
+    gnc_error_dialog (sw->dialog, "%s", msg);
     return;
   }
 

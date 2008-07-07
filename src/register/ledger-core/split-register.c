@@ -723,7 +723,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
     if (split != NULL)
       result = gnc_verify_dialog (gnc_split_register_get_parent (reg),
-				  FALSE, message);
+				  FALSE, "%s", message);
     else
       result = TRUE;
 
@@ -759,7 +759,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
     if (split != blank_split)
       result = gnc_verify_dialog(gnc_split_register_get_parent(reg),
-				 FALSE, message);
+				 FALSE, "%s", message);
     else
       result = TRUE;
 

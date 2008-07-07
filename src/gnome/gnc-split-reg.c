@@ -1109,7 +1109,7 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
 				    | GTK_DIALOG_DESTROY_WITH_PARENT,
 				    GTK_MESSAGE_QUESTION,
 				    GTK_BUTTONS_NONE,
-				    buf);
+				    "%s", buf);
     g_free(buf);
     recn = xaccSplitGetReconcile (split);
     if (recn == YREC || recn == FREC)

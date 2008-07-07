@@ -110,7 +110,7 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
     name = gtk_entry_get_text (GTK_ENTRY (ntt->name_entry));
     if (name == NULL || *name == '\0') {
       message = _("You must provide a name for this Tax Table.");
-      gnc_error_dialog (ntt->dialog, message);
+      gnc_error_dialog (ntt->dialog, "%s", message);
       return FALSE;
     }
     if (gncTaxTableLookupByName (ttw->book, name)) {
@@ -127,14 +127,14 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
   amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (ntt->amount_entry));
   if (gnc_numeric_negative_p (amount)) {
     message = _("Negative amounts are not allowed.");
-    gnc_error_dialog (ntt->dialog, message);
+    gnc_error_dialog (ntt->dialog, "%s", message);
     return FALSE;
   }
   if (ntt->type == GNC_AMT_TYPE_PERCENT &&
       gnc_numeric_compare (amount,
 			   gnc_numeric_create (100, 1)) > 0) {
     message = _("Percentage amount must be between 0 and 100.");
-    gnc_error_dialog (ntt->dialog, message);
+    gnc_error_dialog (ntt->dialog, "%s", message);
     return FALSE;
   }							   
 
@@ -142,7 +142,7 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
   acc = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(ntt->acct_tree));
   if (acc == NULL) {
     message = _("You must choose a Tax Account.");
-    gnc_error_dialog (ntt->dialog, message);
+    gnc_error_dialog (ntt->dialog, "%s", message);
     return FALSE;
   }
 
@@ -579,7 +579,7 @@ tax_table_delete_entry_cb (GtkButton *button, TaxTableWindow *ttw)
   if (g_list_length (gncTaxTableGetEntries (ttw->current_table)) <= 1) {
     char *message = _("You cannot remove the last entry from the tax table. "
 		      "Try deleting the tax table if you want to do that.");
-    gnc_error_dialog (ttw->dialog, message);
+    gnc_error_dialog (ttw->dialog, "%s", message);
     return;
   }
 

@@ -1345,7 +1345,7 @@ gnc_get_export_filename (SCM choice)
         {
                 const char *message = _("You cannot save to that file.");
 
-                gnc_error_dialog (NULL, message);
+                gnc_error_dialog (NULL, "%s", message);
                 g_free(filepath);
                 return NULL;
         }

@@ -505,7 +505,7 @@ druid_gconf_finish_page_finish (GnomeDruidPage *druidpage,
       case HOW_INSTALL:
 	if (!druid_gconf_install_keys(&error)) {
 	  keep_going = FALSE;
-	  gnc_error_dialog(NULL, error->message);
+	  gnc_error_dialog(NULL, "%s", error->message);
 	  g_error_free(error);
 	}
 	break;
@@ -513,7 +513,7 @@ druid_gconf_finish_page_finish (GnomeDruidPage *druidpage,
       default:
 	if (!druid_gconf_update_path(&error)) {
 	  keep_going = FALSE;
-	  gnc_error_dialog(NULL, error->message);
+	  gnc_error_dialog(NULL, "%s", error->message);
 	  g_error_free(error);
 	}
 	break;
@@ -587,7 +587,7 @@ gnc_gnome_install_gconf_schemas (void)
   /* Kill the backend daemon. When it restarts it will find our changes */
   if (!g_spawn_command_line_sync("gconftool-2 --shutdown", NULL, NULL,
 				 NULL, &error)) {
-    gnc_warning_dialog(NULL, error->message);
+    gnc_warning_dialog(NULL, "%s", error->message);
     g_error_free(error);
   }
 }
