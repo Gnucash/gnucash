@@ -312,9 +312,9 @@
          documentation-string)
 
   (define (budget->guid budget)
-    (if (string? budget)
-        budget
-        (gncBudgetGetGUID budget)))
+    (cond ((eq? budget #f) #f)
+          ((string? budget) budget)
+          (t (gncBudgetGetGUID budget))))
 
   (define (guid->budget budget)
     (if (string? budget)
