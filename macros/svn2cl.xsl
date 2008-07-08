@@ -102,6 +102,9 @@
  </xsl:variable>
  <xsl:variable name="branches">
   <branch>
+   <prefix>gnucash/branches/aqbanking3</prefix>
+  </branch>
+  <branch>
    <prefix>gnucash/branches/csv-import</prefix>
   </branch>
   <branch>

@@ -340,6 +340,7 @@ load_gnucash_modules()
         { "gnucash/import-export/ofx", 0, TRUE },
         { "gnucash/import-export/csv", 0, TRUE },
         { "gnucash/import-export/log-replay", 0, TRUE },
+        { "gnucash/import-export/aqbanking", 0, TRUE },
         { "gnucash/import-export/hbci", 0, TRUE },
         { "gnucash/report/report-system", 0, FALSE },
         { "gnucash/report/stylesheets", 0, FALSE },
