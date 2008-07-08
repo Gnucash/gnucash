@@ -46,7 +46,7 @@
 static int
 files_return(int ret, const char* msg)
 {
-    printf(msg);
+    printf("%s", msg);
     return ret;
 }
 
