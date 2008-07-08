@@ -150,7 +150,7 @@ Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Todd T. Fries <todd@flare.fries.net> OpenBSD fix
 John Goerzen <jgoerzen@complete.org> file i/o fix for 64-bit architectures
-Jeff Green <jmgreen7@gmail.com> Python bindings
+Jeff Green <jeff@parit.ca> Python bindings, with grant funding from Assiniboine Credit Union (http://assiniboine.mb.ca/)
 Hans de Graaff <hans@degraaff.org> XML patches
 Daniel Hagerty <hag@linnaean.org> patch to balance sheet report
 Mitsuo Hamada <mhamada@redhat.com> messages Japanese translations
@@ -167,7 +167,7 @@ Péter Hosszú <hosszu@web.de> Hungarian translation
 Edward J. Huff <ejhuff@huff20may77.us> Date handling in reports, quarterly option
 Tomokazu Iwashita <iwashita@center.nitech.ac.jp> Japanese translation of xea
 David Jafferian <david.jafferian@east.sun.com> Delete account query code.
-Mark Jenkins <mark@parit.ca> Python bindings
+Mark Jenkins <mark@parit.ca> Python bindings, with grant funding from Assiniboine Credit Union (http://assiniboine.mb.ca/)
 Miquel Jordana Vilamitjana <jjvmjv@mundomail.net> Spanish translation of manual
 Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Alexey Kakunin <small@arcadia.spb.ru> quickfill patch for Cyrillic
