@@ -416,22 +416,6 @@
        (+ (* 2 tree-depth)
 	  (if (equal? tabbing 'canonically-tabbed) 1 0))))
 
-    ;; Get the value of all transactions (in transaction currency)
-    ;; in the given account before the given date
-    (define (get-account-value-at-date account to-date)
-      (let ((value (gnc:make-commodity-collector)))
-        (for-each
-         (lambda (split)
-           (let* ((parent (xaccSplitGetParent split))
-                  (currency (xaccTransGetCurrency parent)))
-             (if (gnc:timepair-le (gnc-transaction-get-date-posted parent) to-date)
-                 (value 'add currency (xaccSplitGetValue split)))))
-         (xaccAccountGetSplitList account)
-         )
-        value
-        )
-      )
-    
     ;;(gnc:warn "account names" liability-account-names)
     (gnc:html-document-set-title! 
      doc (string-append company-name " " report-title " "
@@ -451,7 +435,6 @@
 	
         ;; Get all the balances for each of the account types.
         (let* ((asset-balance #f)
-               (asset-basis #f)
                (neg-liability-balance #f) ;; credit balances are < 0
                (liability-balance #f)
                (neg-equity-balance #f)
@@ -478,7 +461,7 @@
 		   account date-tp #f)))
                (get-total-value-fn
                 (lambda (account)
-                  (get-account-value-at-date account date-tp)))
+                  (gnc:account-get-comm-value-at-date account date-tp #f)))
 	       )
 	  
 	  ;; If you ask me, any outstanding(TM) retained earnings and
@@ -490,9 +473,6 @@
 	  (set! asset-balance 
                 (gnc:accounts-get-comm-total-assets 
                  asset-accounts get-total-balance-fn))
-          (set! asset-basis
-                (gnc:accounts-get-comm-total-assets
-                 asset-accounts get-total-value-fn))
 	  (gnc:report-percent-done 6)
 	  ;; sum liabilities
 	  (set! neg-liability-balance
@@ -533,8 +513,18 @@
           ;; commodity trading accounts they will automatically accumulate the gains.
           (set! unrealized-gain-collector (gnc:make-commodity-collector))
           (if compute-unrealized-gains?
-              (begin (unrealized-gain-collector 'merge asset-balance #f)
-                     (unrealized-gain-collector 'minusmerge asset-basis #f)))
+              (let ((asset-basis 
+                     (gnc:accounts-get-comm-total-assets asset-accounts
+                                                         get-total-value-fn))
+                    (neg-liability-basis 
+                     (gnc:accounts-get-comm-total-assets liability-accounts
+                                                         get-total-value-fn)))
+                ;; Calculate unrealized gains from assets.
+                (unrealized-gain-collector 'merge asset-balance #f)
+                (unrealized-gain-collector 'minusmerge asset-basis #f)
+                ;; Combine with unrealized gains from liabilities
+                (unrealized-gain-collector 'merge neg-liability-balance #f)
+                (unrealized-gain-collector 'minusmerge neg-liability-basis #f)))
 
           ;; calculate equity and liability+equity totals
 	  (set! total-equity-balance (gnc:make-commodity-collector))
