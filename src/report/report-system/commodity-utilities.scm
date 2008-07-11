@@ -775,23 +775,24 @@
 (define (gnc:make-exchange-function exchange-alist)
   (let ((exchangelist exchange-alist))
     (lambda (foreign domestic)
-      (begin
-	(gnc:debug "foreign: " foreign)
-	(gnc:debug "domestic: " domestic)
-	(if foreign
-	    (or (gnc:exchange-by-euro foreign domestic #f)
-		(gnc:exchange-if-same foreign domestic)
-		(gnc:make-gnc-monetary 
-		 domestic
-		 (let ((pair (assoc (gnc:gnc-monetary-commodity foreign) 
-				    exchangelist)))
-		   (if (not pair)
-		       (gnc-numeric-zero)
-		       (gnc-numeric-mul (gnc:gnc-monetary-amount foreign)
-					(cadr pair)
-					(gnc-commodity-get-fraction domestic)
-					GNC-RND-ROUND)))))
-	  #f)))))
+      (gnc:debug "foreign: " foreign)
+      (gnc:debug "domestic: " domestic)
+      (if foreign
+          (or (gnc:exchange-by-euro foreign domestic #f)
+              (gnc:exchange-if-same foreign domestic)
+              (gnc:make-gnc-monetary
+               domestic
+               (let ((pair (assoc (gnc:gnc-monetary-commodity foreign)
+                                  exchangelist))
+                     (foreign-amount (gnc:gnc-monetary-amount foreign)))
+                 (if (or (not pair)
+                         (gnc-numeric-zero-p foreign-amount))
+                     (gnc-numeric-zero)
+                     (gnc-numeric-mul foreign-amount
+                                      (cadr pair)
+                                      (gnc-commodity-get-fraction domestic)
+                                      GNC-RND-ROUND)))))
+          #f))))
 
 ;; Helper for the gnc:exchange-by-pricalist* below. Exchange the
 ;; <gnc:monetary> 'foreign' into the <gnc:commodity*> 'domestic' by
