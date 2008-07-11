@@ -23,15 +23,6 @@ SCM scm_init_sw_engine_module (void);
 
 %import "base-typemaps.i"
 
-%include "engine-common.i"
-
-%inline %{
-static const GUID * gncPriceGetGUID(GNCPrice *x)
-{ return qof_instance_get_guid(QOF_INSTANCE(x)); }
-static const GUID * gncBudgetGetGUID(GncBudget *x)
-{ return qof_instance_get_guid(QOF_INSTANCE(x)); }
-%}
-
 GLIST_HELPER_INOUT(SplitList, SWIGTYPE_p_Split);
 GLIST_HELPER_INOUT(TransList, SWIGTYPE_p_Transaction);
 GLIST_HELPER_INOUT(LotList, SWIGTYPE_p_GNCLot);
@@ -41,6 +32,15 @@ GLIST_HELPER_INOUT(PriceList, SWIGTYPE_p_GNCPrice);
 GLIST_HELPER_INOUT(CommodityList, SWIGTYPE_p_gnc_commodity);
 
 %typemap(newfree) gchar * "g_free($1);"
+
+%include "engine-common.i"
+
+%inline %{
+static const GUID * gncPriceGetGUID(GNCPrice *x)
+{ return qof_instance_get_guid(QOF_INSTANCE(x)); }
+static const GUID * gncBudgetGetGUID(GncBudget *x)
+{ return qof_instance_get_guid(QOF_INSTANCE(x)); }
+%}
 
 /* NB: The object ownership annotations should already cover all the
 functions currently used in guile, but not all the functions that are
