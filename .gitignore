@@ -3,6 +3,8 @@
 *.la
 *.lo
 *.orig
+*.pyc
+*.pyo
 *.schemas
 COPYING
 ChangeLog
@@ -49,6 +51,7 @@ po/POTFILES
 po/POTFILES.in
 po/gnucash.pot
 po/stamp-it
+py-compile
 src/app-utils/gnucash
 src/bin/gnucash
 src/bin/gnucash-bin
