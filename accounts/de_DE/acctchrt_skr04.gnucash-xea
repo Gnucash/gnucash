@@ -22841,7 +22841,7 @@
     <act:parent type="new">d8494e8b7d4b2f51d181e5a3cb3b7b4a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Aufwendugnen aus der Zuschreibung von steuerlich niedriger bewerteten Rückstellungen</act:name>
+    <act:name>Aufwendungen aus der Zuschreibung von steuerlich niedriger bewerteten Rückstellungen</act:name>
     <act:id type="new">4fd7ecf98b836a356fd25b36ac0c30af</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
