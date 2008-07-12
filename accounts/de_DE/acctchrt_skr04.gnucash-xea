@@ -4948,6 +4948,7 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>1401</act:code>
+    <act:description>UstVa Zl. 55, Kz. 66</act:description>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -4956,6 +4957,19 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>tax-related</slot:key>
+	<slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+	<slot:key>tax-US</slot:key>
+	<slot:value type="frame">
+	  <slot>
+	    <slot:key>code</slot:key>
+	    <slot:value type="string">K66</slot:value>
+	  </slot>
+	</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">d4ac4ec9e7c83bcbb6ac389be1821f0c</act:parent>
@@ -4969,7 +4983,44 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:description>UstVa Zl. 55, Kz. 66</act:description>
     <act:code>1405</act:code>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+        <slot:key>notes</slot:key>
+        <slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K66</slot:value>
+          </slot>
+        </slot:value>
+      </slot>
+    </act:slots>
+    <act:parent type="new">d4ac4ec9e7c83bcbb6ac389be1821f0c</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+    <act:name>Abziehbare Vorsteuer 19%</act:name>
+    <act:id type="new">f5e12dd9ee63444b35271eb0cc29ca27</act:id>
+    <act:type>ASSET</act:type>
+    <act:commodity>
+      <cmdty:space>ISO4217</cmdty:space>
+      <cmdty:id>EUR</cmdty:id>
+    </act:commodity>
+    <act:commodity-scu>100</act:commodity-scu>
+    <act:description>UstVa Zl. 55, Kz. 66</act:description>
+    <act:code>1406</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -4978,6 +5029,19 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K66</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">d4ac4ec9e7c83bcbb6ac389be1821f0c</act:parent>
@@ -5028,6 +5092,7 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>1403</act:code>
+    <act:description>UstVa Zl. 56, Kz. 61</act:description>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -5036,6 +5101,55 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K61</slot:value>
+          </slot>
+        </slot:value>
+      </slot>
+    </act:slots>
+    <act:parent type="new">922006b4e0d3a0e5deb659ab7da9b42a</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+    <act:name>Abziehbare Vorsteuer aus innergemeinschaftlichem Erwerb 19%</act:name>
+    <act:id type="new">fb1eb58315969d65581a6e4f313f43c4</act:id>
+    <act:type>ASSET</act:type>
+    <act:commodity>
+      <cmdty:space>ISO4217</cmdty:space>
+      <cmdty:id>EUR</cmdty:id>
+    </act:commodity>
+    <act:commodity-scu>100</act:commodity-scu>
+    <act:code>1404</act:code>
+    <act:description>UstVa Zl. 56, Kz. 61</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+        <slot:key>notes</slot:key>
+        <slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K61</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">922006b4e0d3a0e5deb659ab7da9b42a</act:parent>
