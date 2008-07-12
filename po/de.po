@@ -5518,7 +5518,7 @@ msgstr "Buchungsteile entfernen"
 #: ../src/gnome/gnc-plugin-page-register.c:275
 #: ../src/gnome-utils/gnc-icons.c:22
 msgid "S_plit Transaction"
-msgstr "Mehrteilige Buchung"
+msgstr "_Mehrteilige Buchung"
 
 #: ../src/gnome/glade/register.glade.h:40
 msgid "S_tatement Date"
