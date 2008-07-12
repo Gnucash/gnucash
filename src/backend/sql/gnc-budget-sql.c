@@ -141,14 +141,16 @@ save_budget( GncSqlBackend* be, QofInstance* inst )
     GncBudget* pBudget = GNC_BUDGET(inst);
     const GUID* guid;
 	gint op;
+	gboolean is_infant;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_BUDGET(inst) );
 
+	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
 		op = OP_DB_DELETE;
-	} else if( be->is_pristine_db ) {
+	} else if( be->is_pristine_db || is_infant ) {
 		op = OP_DB_ADD;
 	} else {
 		op = OP_DB_ADD_OR_UPDATE;
@@ -159,7 +161,7 @@ save_budget( GncSqlBackend* be, QofInstance* inst )
     guid = qof_instance_get_guid( inst );
     if( !qof_instance_get_destroying(inst) ) {
 		gnc_sql_recurrence_save( be, guid, gnc_budget_get_recurrence( pBudget ) );
-        gnc_sql_slots_save( be, guid, qof_instance_get_slots( inst ) );
+        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
     } else {
         gnc_sql_recurrence_delete( be, guid );
         gnc_sql_slots_delete( be, guid );

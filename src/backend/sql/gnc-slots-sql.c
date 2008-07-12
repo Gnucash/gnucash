@@ -348,7 +348,7 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
 }
 
 void
-gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid, KvpFrame* pFrame )
+gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid, gboolean is_infant, KvpFrame* pFrame )
 {
     slot_info_t slot_info;
 
@@ -357,7 +357,7 @@ gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid, KvpFrame* pFrame )
 	g_return_if_fail( pFrame != NULL );
 
     // If this is not saving into a new db, clear out the old saved slots first
-	if( !be->is_pristine_db ) {
+	if( !be->is_pristine_db && !is_infant ) {
     	gnc_sql_slots_delete( be, guid );
 	}
 

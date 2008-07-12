@@ -143,21 +143,27 @@ static void
 save_customer( GncSqlBackend* be, QofInstance* inst )
 {
     const GUID* guid;
+	gint op;
+	gboolean is_infant;
 
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_CUSTOMER(inst) );
 	g_return_if_fail( be != NULL );
 
-    (void)gnc_sql_do_db_operation( be,
-                        (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
-                        TABLE_NAME,
-                        GNC_ID_CUSTOMER, inst,
-                        col_table );
+	is_infant = qof_instance_get_infant( inst );
+	if( qof_instance_get_destroying( inst ) ) {
+		op = OP_DB_DELETE;
+	} else if( be->is_pristine_db || is_infant ) {
+		op = OP_DB_ADD;
+	} else {
+		op = OP_DB_ADD_OR_UPDATE;
+	}
+    (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_CUSTOMER, inst, col_table );
 
     // Now, commit or delete any slots
     guid = qof_instance_get_guid( inst );
     if( !qof_instance_get_destroying(inst) ) {
-        gnc_sql_slots_save( be, guid, qof_instance_get_slots( inst ) );
+        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
     } else {
         gnc_sql_slots_delete( be, guid );
     }

@@ -266,25 +266,27 @@ gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst )
     SchedXaction* pSx = GNC_SX(inst);
     const GUID* guid;
 	gint op;
+	gboolean is_infant;
 
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_SX(inst) );
 	g_return_if_fail( be != NULL );
 
+	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
 		op = OP_DB_DELETE;
-	} else if( be->is_pristine_db ) {
+	} else if( be->is_pristine_db || is_infant ) {
 		op = OP_DB_ADD;
 	} else {
 		op = OP_DB_ADD_OR_UPDATE;
 	}
-    (void)gnc_sql_do_db_operation( be, op, SCHEDXACTION_TABLE, /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx, col_table );
+    (void)gnc_sql_do_db_operation( be, op, SCHEDXACTION_TABLE, GNC_SX_ID, pSx, col_table );
     guid = qof_instance_get_guid( inst );
 	gnc_sql_recurrence_save_list( be, guid, gnc_sx_get_schedule( pSx ) );
 
     // Now, commit any slots
     if( !qof_instance_get_destroying(inst) ) {
-        gnc_sql_slots_save( be, guid, qof_instance_get_slots( inst ) );
+        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
     } else {
         gnc_sql_slots_delete( be, guid );
     }

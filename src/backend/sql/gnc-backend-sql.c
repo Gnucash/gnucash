@@ -476,6 +476,7 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
 	gboolean status;
 	gboolean is_dirty;
 	gboolean is_destroying;
+	gboolean is_infant;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
@@ -498,16 +499,11 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
 
 	is_dirty = qof_instance_get_dirty_flag( inst );
 	is_destroying = qof_instance_get_destroying( inst );
+	is_infant = qof_instance_get_infant( inst );
 
-    DEBUG( "%s dirty = %d, do_free = %d\n",
+    DEBUG( "%s dirty = %d, do_free = %d, infant = %d\n",
              (inst->e_type ? inst->e_type : "(null)"),
-             is_dirty, is_destroying );
-
-#if 0
-    if( !is_dirty && !is_destroying && GNC_IS_TRANS(inst) ) {
-        gnc_sql_transaction_commit_splits( be, GNC_TRANS(inst) );
-    }
-#endif
+             is_dirty, is_destroying, is_infant );
 
     if( !is_dirty && !is_destroying ) {
 		LEAVE( "!dirty OR !destroying" );

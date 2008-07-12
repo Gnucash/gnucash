@@ -32,9 +32,41 @@
 #include "qof.h"
 #include <gmodule.h>
 
-void gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid, KvpFrame* pFrame );
+/**
+* gnc_sql_slots_save - Saves slots for an object to the db.
+*
+* @param be SQL backend
+* @param guid Object guid
+* @param is_infant Is this an infant object?
+* @param pFrame Top-level KVP frame
+*/
+void gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid,
+					gboolean is_infant, KvpFrame* pFrame );
+
+/**
+* gnc_sql_slots_delete - Deletes slots for an object from the db.
+*
+* @param be SQL backend
+* @param guid Object guid
+*/
 void gnc_sql_slots_delete( GncSqlBackend* be, const GUID* guid );
+
+/**
+* gnc_sql_slots_load - Loads slots for an object from the db.
+*
+* @param be SQL backend
+* @param guid Object guid
+*/
 void gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst );
+
+/**
+* gnc_sql_slots_load_for_list - Loads slots for a list of objects from the db.
+* Loading slots for a list of objects can be faster than loading for one object
+* at a time because fewer SQL queries are used.
+*
+* @param be SQL backend
+* @param list List of objects
+*/
 void gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list );
 
 void gnc_sql_init_slots_handler( void );

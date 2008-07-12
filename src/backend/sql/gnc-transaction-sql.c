@@ -462,13 +462,15 @@ static void
 commit_split( GncSqlBackend* be, QofInstance* inst )
 {
 	gint op;
+	gboolean is_infant;
 
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( be != NULL );
 
+	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
 		op = OP_DB_DELETE;
-	} else if( be->is_pristine_db ) {
+	} else if( be->is_pristine_db || is_infant ) {
 		op = OP_DB_ADD;
 	} else {
 		op = OP_DB_ADD_OR_UPDATE;
@@ -476,6 +478,7 @@ commit_split( GncSqlBackend* be, QofInstance* inst )
     (void)gnc_sql_do_db_operation( be, op, SPLIT_TABLE, GNC_ID_SPLIT, inst, split_col_table );
     gnc_sql_slots_save( be,
                         qof_instance_get_guid( inst ),
+						is_infant,
                         qof_instance_get_slots( inst ) );
 }
 
@@ -512,6 +515,7 @@ gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst )
     Transaction* pTx = GNC_TRANS(inst);
     const GUID* guid;
 	gint op;
+	gboolean is_infant;
 
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_TRANS(inst) );
@@ -520,9 +524,10 @@ gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst )
     // Ensure the commodity is in the db
     gnc_sql_save_commodity( be, xaccTransGetCurrency( pTx ) );
 
+	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
 		op = OP_DB_DELETE;
-	} else if( be->is_pristine_db ) {
+	} else if( be->is_pristine_db || is_infant ) {
 		op = OP_DB_ADD;
 	} else {
 		op = OP_DB_ADD_OR_UPDATE;
@@ -538,22 +543,8 @@ gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst )
 	}
 
     if( !qof_instance_get_destroying(inst) ) {
-        SplitList* splits;
-
         // Now, commit any slots and splits
-        gnc_sql_slots_save( be, guid, qof_instance_get_slots( inst ) );
-#if 0
-        splits = xaccTransGetSplitList( pTx );
-        save_splits( be, guid, splits );
-
-        /* Mark the splits as clean */
-        splits = xaccTransGetSplitList( pTx );
-        for( ; splits != NULL; splits = splits->next ) {
-            QofInstance* inst = QOF_INSTANCE(splits->data);
-
-            qof_instance_mark_clean(inst);
-        }
-#endif
+        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
     } else {
         gnc_sql_slots_delete( be, guid );
     }

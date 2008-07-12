@@ -268,14 +268,18 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
 {
     Account* pAcc = GNC_ACCOUNT(inst);
     const GUID* guid;
+	gboolean is_infant;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_ACCOUNT(inst) );
 
-    // If there is no commodity yet, this might be because a new account name has been entered directly
-    // into the register and an account window will be opened.  The account info is not complete yet,
-    // but the name has been set, triggering this commit
+	is_infant = qof_instance_get_infant( inst );
+
+    // If there is no commodity yet, this might be because a new account name
+	// has been entered directly into the register and an account window will
+	// be opened.  The account info is not complete yet, but the name has been
+	// set, triggering this commit
     if( xaccAccountGetCommodity( pAcc ) != NULL ) {
 		gint op;
 
@@ -284,7 +288,7 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
 
 		if( qof_instance_get_destroying( inst ) ) {
 			op = OP_DB_DELETE;
-		} else if( be->is_pristine_db ) {
+		} else if( be->is_pristine_db || is_infant ) {
 			op = OP_DB_ADD;
 		} else {
 			op = OP_DB_ADD_OR_UPDATE;
@@ -295,7 +299,7 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
         // Now, commit or delete any slots
         guid = qof_instance_get_guid( inst );
         if( !qof_instance_get_destroying(inst) ) {
-            gnc_sql_slots_save( be, guid, qof_instance_get_slots( inst ) );
+            gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
         } else {
             gnc_sql_slots_delete( be, guid );
         }

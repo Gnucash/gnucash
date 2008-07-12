@@ -289,7 +289,7 @@ save_tt_entries( GncSqlBackend* be, const GUID* guid, GList* entries )
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( guid != NULL );
 
-    /* First, delete the old slots for this object */
+    /* First, delete the old entries for this object */
     delete_all_tt_entries( be, guid );
 
 	for( entry = entries; entry != NULL; entry = entry->next ) {
@@ -305,23 +305,31 @@ save_tt_entries( GncSqlBackend* be, const GUID* guid, GList* entries )
 static void
 save_taxtable( GncSqlBackend* be, QofInstance* inst )
 {
-    GncTaxTable* tt = GNC_TAXTABLE(inst);
+    GncTaxTable* tt;
     const GUID* guid;
+	gint op;
+	gboolean is_infant;
 
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_TAXTABLE(inst) );
 	g_return_if_fail( be != NULL );
 
-    (void)gnc_sql_do_db_operation( be,
-                        (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
-                        TT_TABLE_NAME,
-                        GNC_ID_TAXTABLE, tt,
-                        tt_col_table );
+    tt = GNC_TAXTABLE(inst);
+
+	is_infant = qof_instance_get_infant( inst );
+	if( qof_instance_get_destroying( inst ) ) {
+		op = OP_DB_DELETE;
+	} else if( be->is_pristine_db || is_infant ) {
+		op = OP_DB_ADD;
+	} else {
+		op = OP_DB_ADD_OR_UPDATE;
+	}
+    (void)gnc_sql_do_db_operation( be, op, TT_TABLE_NAME, GNC_ID_TAXTABLE, tt, tt_col_table );
 
     // Now, commit or delete any slots and tax table entries
     guid = qof_instance_get_guid( inst );
     if( !qof_instance_get_destroying(inst) ) {
-        gnc_sql_slots_save( be, guid, qof_instance_get_slots( inst ) );
+        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
 		save_tt_entries( be, guid, gncTaxTableGetEntries( tt ) );
     } else {
         gnc_sql_slots_delete( be, guid );
