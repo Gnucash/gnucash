@@ -13020,6 +13020,42 @@
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
+    <act:name>Erlöse aus im Inland steuerpflichtigen EG Lieferungen 19% USt</act:name>
+    <act:id type="new">7fb425afaf83ab27a04c4665b18f3598</act:id>
+    <act:type>INCOME</act:type>
+    <act:commodity>
+      <cmdty:space>ISO4217</cmdty:space>
+      <cmdty:id>EUR</cmdty:id>
+    </act:commodity>
+    <act:commodity-scu>100</act:commodity-scu>
+    <act:code>4315</act:code>
+    <act:description>UstVa Zl. 35, Kz. 89</act:description>
+    <act:slots>
+      <slot>
+	<slot:key>placeholder</slot:key>
+	<slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+	<slot:key>notes</slot:key>
+	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>tax-related</slot:key>
+	<slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+	<slot:key>tax-US</slot:key>
+	<slot:value type="frame">
+	  <slot>
+	    <slot:key>code</slot:key>
+	    <slot:value type="string">K89</slot:value>
+	  </slot>
+	</slot:value>
+      </slot>
+    </act:slots>
+    <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
     <act:name>Erlöse aus im anderen EG-Land steuerpflichtigen Lieferungen</act:name>
     <act:id type="new">baa97706a92a388670d4b65554feb84a</act:id>
     <act:type>INCOME</act:type>
@@ -13183,6 +13219,46 @@
 	  <slot>
 	    <slot:key>code</slot:key>
 	    <slot:value type="string">K51</slot:value>
+	  </slot>
+	</slot:value>
+      </slot>
+    </act:slots>
+    <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+    <act:name>Umsatzerlöse 19% USt</act:name>
+    <act:id type="new">ecf894d93ba331ecafc6e4084b83ebe1</act:id>
+    <act:type>INCOME</act:type>
+    <act:commodity>
+      <cmdty:space>ISO4217</cmdty:space>
+      <cmdty:id>EUR</cmdty:id>
+    </act:commodity>
+    <act:commodity-scu>100</act:commodity-scu>
+    <act:code>4400</act:code>
+    <act:description>UstVa Zl. 27, Kz. 81</act:description>
+    <act:slots>
+      <slot>
+	<slot:key>placeholder</slot:key>
+	<slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+	<slot:key>notes</slot:key>
+	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>hbci</slot:key>
+	<slot:value type="frame"/>
+      </slot>
+      <slot>
+	<slot:key>tax-related</slot:key>
+	<slot:value type="integer">1</slot:value>
+      </slot>
+      <slot>
+	<slot:key>tax-US</slot:key>
+	<slot:value type="frame">
+	  <slot>
+	    <slot:key>code</slot:key>
+	    <slot:value type="string">K81</slot:value>
 	  </slot>
 	</slot:value>
       </slot>
