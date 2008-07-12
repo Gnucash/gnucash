@@ -8975,27 +8975,6 @@
     <act:parent type="new">984e3a4bbeb1a32db7dd6df9437e6ee1</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>C. Verbindlichkeiten</act:name>
-    <act:id type="new">cbdc8c08e95339f0eb311c9f280ff6ad</act:id>
-    <act:type>LIABILITY</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">67e3afb8f6e39be571749da7aa113b2e</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten</act:name>
     <act:id type="new">8755bf4081c942798c5ac5f34c5b1aac</act:id>
     <act:type>PAYABLE</act:type>
@@ -9004,7 +8983,6 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>3000</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -9019,7 +8997,7 @@
 	<slot:value type="frame"/>
       </slot>
     </act:slots>
-    <act:parent type="new">cbdc8c08e95339f0eb311c9f280ff6ad</act:parent>
+    <act:parent type="new">67e3afb8f6e39be571749da7aa113b2e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
     <act:name>01. Anleihen</act:name>
