@@ -4974,7 +4974,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>4130</act:code>
+    <act:code>1400</act:code>
     <act:description>UstVa Zl. 55, Kz. 66</act:description>
     <act:slots>
       <slot>
