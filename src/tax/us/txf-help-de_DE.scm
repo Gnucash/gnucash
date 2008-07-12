@@ -34,7 +34,7 @@
 
     (K89 . "Steuerpflichtige innergemeinschaftliche Erwerbe zum Steuersatz von 19 v.H. (Bemessungsgrundlage)")
     (K91 . "Steuerfreie innergemeinschaftliche Erwerbe: Erwerbe nach § 4b UStG (Bemessungsgrundlage)")
-    (K93 . "Steuerpflichtige innergemeinschaftliche Erwerbe zum Steuersatz von 7 v.h. (Bemessungsgrundlage)")
+    (K93 . "Steuerpflichtige innergemeinschaftliche Erwerbe zum Steuersatz von 7 v.H. (Bemessungsgrundlage)")
 
     (K66 . "Vorsteuerbeträge aus Rechnungen von anderen Unternehmern (§ 15 Abs. 1 Satz 1 Nr. 1 UStG), aus Leistungen im Sinne des § 13a Abs. 1 Nr. 6 UStG (§ 15 Abs. 1 Satz 1 Nr. 5 UStG) und aus innergemeinschaftlichen Dreiecksgeschäften (§ 25b Abs. 5 UStG)")
     ))
