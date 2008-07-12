@@ -5,6 +5,7 @@
 # Christian Stimming <stimming@tuhh.de>, 2001-2003, 2004, 2005, 2006, 2007.
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
+# Rolf Leggewie 2008
 #
 msgid ""
 msgstr ""
@@ -17994,7 +17995,7 @@ msgstr "Bilanz"
 #: ../intl-scm/guile-strings.c:1504 ../intl-scm/guile-strings.c:1898
 #: ../intl-scm/guile-strings.c:2184
 msgid "Unrealized Gains"
-msgstr "Noch nicht erzielter Gewinn/Verlust"
+msgstr "Nicht realisierter Gewinn/Verlust"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1506
@@ -18575,7 +18576,7 @@ msgstr "Eine Zeile für die Summe Eigenkapital anzeigen"
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:1880
 msgid "Compute unrealized gains and losses"
-msgstr "Noch nicht erzielter Gewinn und Verlust mit einberechnen"
+msgstr "Nicht realisierten Gewinn/Verlust mit einbeziehen"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:1882
@@ -18583,7 +18584,7 @@ msgid ""
 "Include unrealized gains and losses in the computation.  Will produce "
 "incorrect results if the current file uses commodity trading accounts"
 msgstr ""
-"Noch nicht erzielter Gewinn und Verlust mit einberechnen. Diese Funktion "
+"Nicht realisierten Gewinn und Verlust mit einbeziehen. Diese Funktion "
 "erreicht nur dann korrekte Ergebnisse, wenn im aktuellen Buch keine (alten "
 "oder zukünftigen) Währungskonten verwendet werden."
 
@@ -18600,13 +18601,13 @@ msgstr "Gesamt Passiva"
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:1896
 msgid "Retained Losses"
-msgstr "Zurückbehaltene Verluste"
+msgstr "Verlustvortrag"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:1900 ../intl-scm/guile-strings.c:2186
 msgid "Unrealized Losses"
-msgstr "Noch nicht erzielter Verlust"
+msgstr "Nicht realisierter Verlust"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:1902
@@ -18833,7 +18834,7 @@ msgstr "Realisierter Gewinn"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2100
 msgid "Unrealized Gain"
-msgstr "Noch nicht erzielter Gewinn"
+msgstr "Nicht realisierter Gewinn"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2102
