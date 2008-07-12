@@ -184,7 +184,7 @@ set_template_act_guid( gpointer pObject, gpointer pValue )
 
 /* ================================================================= */
 static SchedXaction*
-load_single_sx( GncSqlBackend* be, GncSqlRow* row, GList** pList )
+load_single_sx( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
     GUID sx_guid;
@@ -199,12 +199,11 @@ load_single_sx( GncSqlBackend* be, GncSqlRow* row, GList** pList )
 
     pSx = xaccSchedXactionMalloc( be->primary_book );
 
+	gnc_sx_begin_edit( pSx );
     gnc_sql_load_object( be, row, GNC_SX_ID, pSx, col_table );
 	gnc_sql_recurrence_load_list( be, guid, &schedule );
 	gnc_sx_set_schedule( pSx, schedule );
-	*pList = g_list_append( *pList, pSx );
-
-    qof_instance_mark_clean( QOF_INSTANCE(pSx) );
+	gnc_sx_commit_edit( pSx );
 
     return pSx;
 }
@@ -231,9 +230,10 @@ load_all_sxes( GncSqlBackend* be )
         while( row != NULL ) {
             SchedXaction* sx;
 			
-			sx = load_single_sx( be, row, &list );
+			sx = load_single_sx( be, row );
 			if( sx != NULL ) {
-		    	gnc_sxes_add_sx(sxes, sx);
+		    	gnc_sxes_add_sx( sxes, sx );
+				list = g_list_append( list, sx );
 			}
 			row = gnc_sql_result_get_next_row( result );
         }

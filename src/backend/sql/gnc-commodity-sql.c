@@ -120,10 +120,9 @@ load_single_commodity( GncSqlBackend* be, GncSqlRow* row )
     gnc_commodity* pCommodity;
 
     pCommodity = gnc_commodity_new( pBook, NULL, NULL, NULL, NULL, 100 );
-
+	gnc_commodity_begin_edit( pCommodity );
     gnc_sql_load_object( be, row, GNC_ID_COMMODITY, pCommodity, col_table );
-
-    qof_instance_mark_clean( QOF_INSTANCE(pCommodity) );
+	gnc_commodity_commit_edit( pCommodity );
 
     return pCommodity;
 }

@@ -198,15 +198,15 @@ get_gnc_numeric_from_row( GncSqlBackend* be, GncSqlRow* row )
     return val;
 }
 
-static void
-load_single_split( GncSqlBackend* be, GncSqlRow* row, GList** pList )
+static Split*
+load_single_split( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
     GUID split_guid;
 	Split* pSplit;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( row != NULL );
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
     split_guid = *guid;
@@ -219,10 +219,11 @@ load_single_split( GncSqlBackend* be, GncSqlRow* row, GList** pList )
     /* If the split is dirty, don't overwrite it */
     if( !qof_instance_is_dirty( QOF_INSTANCE(pSplit) ) ) {
     	gnc_sql_load_object( be, row, GNC_ID_SPLIT, pSplit, split_col_table );
-		*pList = g_list_append( *pList, pSplit );
 	}
 
     g_assert( pSplit == xaccSplitLookup( &split_guid, be->primary_book ) );
+
+	return pSplit;
 }
 
 static void
@@ -256,7 +257,12 @@ load_all_splits_for_tx( GncSqlBackend* be, const GUID* tx_guid )
 
 		row = gnc_sql_result_get_first_row( result );
         while( row != NULL ) {
-            load_single_split( be, row, &list );
+			Split* s;
+
+            s = load_single_split( be, row );
+			if( s != NULL ) {
+				list = g_list_append( list, s );
+			}
 			row = gnc_sql_result_get_next_row( result );
         }
 		gnc_sql_result_dispose( result );
@@ -292,7 +298,11 @@ load_splits_for_tx_list( GncSqlBackend* be, GList* list )
 
 		row = gnc_sql_result_get_first_row( result );
         while( row != NULL ) {
-            load_single_split( be, row, &list );
+			Split* s;
+            s = load_single_split( be, row );
+			if( s != NULL ) {
+				list = g_list_append( list, s );
+			}
 			row = gnc_sql_result_get_next_row( result );
         }
 
@@ -305,15 +315,15 @@ load_splits_for_tx_list( GncSqlBackend* be, GList* list )
 	g_string_free( sql, FALSE );
 }
 
-static void
-load_single_tx( GncSqlBackend* be, GncSqlRow* row, GList** pList )
+static Transaction*
+load_single_tx( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
     GUID tx_guid;
 	Transaction* pTx;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( row != NULL );
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
     tx_guid = *guid;
@@ -324,9 +334,10 @@ load_single_tx( GncSqlBackend* be, GncSqlRow* row, GList** pList )
     }
     xaccTransBeginEdit( pTx );
     gnc_sql_load_object( be, row, GNC_ID_TRANS, pTx, tx_col_table );
-	*pList = g_list_append( *pList, pTx );
 
     g_assert( pTx == xaccTransLookup( &tx_guid, be->primary_book ) );
+
+	return pTx;
 }
 
 static void
@@ -342,10 +353,14 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
 		GList* tx_list = NULL;
 		GList* node;
 		GncSqlRow* row;
+		Transaction* tx;
 
 		row = gnc_sql_result_get_first_row( result );
         while( row != NULL ) {
-            load_single_tx( be, row, &tx_list );
+            tx = load_single_tx( be, row );
+			if( tx != NULL ) {
+				tx_list = g_list_append( tx_list, tx );
+			}
 			row = gnc_sql_result_get_next_row( result );
         }
 		gnc_sql_result_dispose( result );
@@ -358,7 +373,6 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
 		// Commit all of the transactions
 		for( node = tx_list; node != NULL; node = node->next ) {
 			Transaction* pTx = GNC_TRANSACTION(node->data);
-    		qof_instance_mark_clean( QOF_INSTANCE(pTx) );
     		xaccTransCommitEdit( pTx );
 		}
     }
@@ -528,6 +542,7 @@ gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst )
 
         // Now, commit any slots and splits
         gnc_sql_slots_save( be, guid, qof_instance_get_slots( inst ) );
+#if 0
         splits = xaccTransGetSplitList( pTx );
         save_splits( be, guid, splits );
 
@@ -538,6 +553,7 @@ gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst )
 
             qof_instance_mark_clean(inst);
         }
+#endif
     } else {
         gnc_sql_slots_delete( be, guid );
     }

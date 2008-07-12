@@ -98,20 +98,21 @@ set_lot_is_closed( gpointer pObject, gboolean closed )
     lot->is_closed = closed;
 }
 
-static void
-load_single_lot( GncSqlBackend* be, GncSqlRow* row, GList** pList )
+static GNCLot*
+load_single_lot( GncSqlBackend* be, GncSqlRow* row )
 {
 	GNCLot* lot;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( row != NULL );
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( row != NULL, NULL );
 
     lot = gnc_lot_new( be->primary_book );
 
+	gnc_lot_begin_edit( lot );
     gnc_sql_load_object( be, row, GNC_ID_LOT, lot, col_table );
-	*pList = g_list_append( *pList, lot );
+	gnc_lot_commit_edit( lot );
 
-    qof_instance_mark_clean( QOF_INSTANCE(lot) );
+	return lot;
 }
 
 static void
@@ -129,9 +130,13 @@ load_all_lots( GncSqlBackend* be )
         int r;
 		GList* list = NULL;
         GncSqlRow* row = gnc_sql_result_get_first_row( result );
+		GNCLot* lot;
 
         while( row != NULL ) {
-            load_single_lot( be, row, &list );
+            lot = load_single_lot( be, row );
+			if( lot != NULL ) {
+				list = g_list_append( list, lot );
+			}
 			row = gnc_sql_result_get_next_row( result );
         }
 		gnc_sql_result_dispose( result );

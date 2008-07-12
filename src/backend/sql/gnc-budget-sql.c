@@ -60,16 +60,16 @@ static const GncSqlColumnTableEntry col_table[] =
 };
 
 /* ================================================================= */
-static void
-load_single_budget( GncSqlBackend* be, GncSqlRow* row, GList** pList )
+static GncBudget*
+load_single_budget( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
     GUID budget_guid;
 	GncBudget* pBudget;
 	Recurrence* r;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( row != NULL );
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
     budget_guid = *guid;
@@ -79,12 +79,13 @@ load_single_budget( GncSqlBackend* be, GncSqlRow* row, GList** pList )
         pBudget = gnc_budget_new( be->primary_book );
     }
 
+	gnc_budget_begin_edit( pBudget );
     gnc_sql_load_object( be, row, GNC_ID_BUDGET, pBudget, col_table );
 	r = g_new0( Recurrence, 1 );
 	gnc_sql_recurrence_load( be, gnc_budget_get_guid( pBudget ), r );
-	*pList = g_list_append( *pList, pBudget );
+	gnc_budget_commit_edit( pBudget );
 
-    qof_instance_mark_clean( QOF_INSTANCE(pBudget) );
+	return pBudget;
 }
 
 static void
@@ -102,9 +103,13 @@ load_all_budgets( GncSqlBackend* be )
 	gnc_sql_statement_dispose( stmt );
 	if( result != NULL ) {
 		GncSqlRow* row = gnc_sql_result_get_first_row( result );
+		GncBudget* b;
 
         while( row != NULL ) {
-            load_single_budget( be, row, &list );
+            b = load_single_budget( be, row );
+			if( b != NULL ) {
+				list = g_list_append( list, b );
+			}
 			row = gnc_sql_result_get_next_row( result );
         }
 		gnc_sql_result_dispose( result );

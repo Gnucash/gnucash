@@ -136,17 +136,17 @@ set_parent_guid( gpointer pObject, gpointer pValue )
 	s->guid = *guid;
 }
 
-static void
-load_single_account( GncSqlBackend* be, GncSqlRow* row, GList** pList,
-				GList** l_accounts_needing_parents )
+static Account*
+load_single_account( GncSqlBackend* be, GncSqlRow* row,
+					GList** l_accounts_needing_parents )
 {
     const GUID* guid;
     GUID acc_guid;
 	Account* pAccount;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( row != NULL );
-	g_return_if_fail( l_accounts_needing_parents != NULL );
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( row != NULL, NULL );
+	g_return_val_if_fail( l_accounts_needing_parents != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
     acc_guid = *guid;
@@ -157,10 +157,7 @@ load_single_account( GncSqlBackend* be, GncSqlRow* row, GList** pList,
     }
 	xaccAccountBeginEdit( pAccount );
     gnc_sql_load_object( be, row, GNC_ID_ACCOUNT, pAccount, col_table );
-	*pList = g_list_append( *pList, pAccount );
-
 	xaccAccountCommitEdit( pAccount );
-    qof_instance_mark_clean( QOF_INSTANCE(pAccount) );
 
 	/* If we don't have a parent, it might be because the parent account hasn't
 	   been loaded yet.  Remember the account and its parent guid for later. */
@@ -170,6 +167,8 @@ load_single_account( GncSqlBackend* be, GncSqlRow* row, GList** pList,
 		gnc_sql_load_object( be, row, GNC_ID_ACCOUNT, s, parent_col_table );
 		*l_accounts_needing_parents = g_list_prepend( *l_accounts_needing_parents, s );
 	}
+
+	return pAccount;
 }
 
 static void
@@ -195,9 +194,13 @@ load_all_accounts( GncSqlBackend* be )
 	gnc_sql_statement_dispose( stmt );
 	if( result != NULL ) {
 	    GncSqlRow* row = gnc_sql_result_get_first_row( result );
+		Account* acc;
 
     	while( row != NULL ) {
-        	load_single_account( be, row, &list, &l_accounts_needing_parents );
+        	acc = load_single_account( be, row, &l_accounts_needing_parents );
+			if( acc != NULL ) {
+				list = g_list_append( list, acc );
+			}
 			row = gnc_sql_result_get_next_row( result );
     	}
 		gnc_sql_result_dispose( result );

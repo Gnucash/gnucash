@@ -654,6 +654,7 @@ conn_execute_select_statement( GncSqlConnection* conn, GncSqlStatement* stmt )
 		PERR( "Error executing SQL %s\n", dbi_stmt->sql->str );
 		return NULL;
 	}
+	DEBUG( "SQL: %s\n", dbi_stmt->sql->str );
 	return create_dbi_result( result );
 }
 
@@ -670,6 +671,7 @@ conn_execute_nonselect_statement( GncSqlConnection* conn, GncSqlStatement* stmt 
 		PERR( "Error executing SQL %s\n", dbi_stmt->sql->str );
 		return 0;
 	}
+	DEBUG( "SQL: %s\n", dbi_stmt->sql->str );
 	num_rows = dbi_result_get_numrows_affected( result );
 	dbi_result_free( result );
 	return num_rows;

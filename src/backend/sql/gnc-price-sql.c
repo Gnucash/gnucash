@@ -62,7 +62,7 @@ static const GncSqlColumnTableEntry col_table[] =
 /* ================================================================= */
 
 static GNCPrice*
-load_single_price( GncSqlBackend* be, GncSqlRow* row, GList** pList )
+load_single_price( GncSqlBackend* be, GncSqlRow* row )
 {
 	GNCPrice* pPrice;
 
@@ -71,10 +71,9 @@ load_single_price( GncSqlBackend* be, GncSqlRow* row, GList** pList )
 
     pPrice = gnc_price_create( be->primary_book );
 
+	gnc_price_begin_edit( pPrice );
     gnc_sql_load_object( be, row, GNC_ID_PRICE, pPrice, col_table );
-	*pList = g_list_append( *pList, pPrice );
-
-    qof_instance_mark_clean( QOF_INSTANCE(pPrice) );
+	gnc_price_commit_edit( pPrice );
 
     return pPrice;
 }
@@ -101,9 +100,10 @@ load_all_prices( GncSqlBackend* be )
 		GncSqlRow* row = gnc_sql_result_get_first_row( result );
 
         while( row != NULL ) {
-            pPrice = load_single_price( be, row, &list );
+            pPrice = load_single_price( be, row );
 
             if( pPrice != NULL ) {
+				list = g_list_append( list, pPrice );
                 gnc_pricedb_add_price( pPriceDB, pPrice );
             }
 			row = gnc_sql_result_get_next_row( result );

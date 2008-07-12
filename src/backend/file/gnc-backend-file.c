@@ -860,6 +860,11 @@ file_rollback_edit (QofBackend *be, QofInstance *inst)
 static void
 file_commit_edit (QofBackend *be, QofInstance *inst)
 {
+    if (qof_instance_get_dirty(inst) && qof_get_alt_dirty_mode() && 
+        !(qof_instance_get_infant(inst) && qof_instance_get_destroying(inst))) {
+      qof_collection_mark_dirty(qof_instance_get_collection(inst));
+      qof_book_mark_dirty(qof_instance_get_book(inst));
+    }
 #if BORKEN_FOR_NOW
     FileBackend *fbe = (FileBackend *) be;
     QofBook *book = gp;

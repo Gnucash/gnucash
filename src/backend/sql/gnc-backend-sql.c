@@ -474,34 +474,42 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
     sql_backend be_data;
 	GError* error;
 	gboolean status;
+	gboolean is_dirty;
+	gboolean is_destroying;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 
     /* During initial load where objects are being created, don't commit
-    anything */
+    anything, but do mark the object as clean. */
     if( be->loading ) {
+		qof_instance_mark_clean( inst );
 	    return;
 	}
 
 	// The engine has a PriceDB object but it isn't in the database
 	if( strcmp( inst->e_type, "PriceDB" ) == 0 ) {
-    	qof_instance_mark_clean(inst);
+    	qof_instance_mark_clean( inst );
     	qof_book_mark_saved( be->primary_book );
 		return;
 	}
 
     ENTER( " " );
 
-    DEBUG( "%s dirty = %d, do_free=%d\n",
-             (inst->e_type ? inst->e_type : "(null)"),
-             qof_instance_get_dirty_flag(inst), qof_instance_get_destroying(inst) );
+	is_dirty = qof_instance_get_dirty_flag( inst );
+	is_destroying = qof_instance_get_destroying( inst );
 
-    if( !qof_instance_get_dirty_flag(inst) && !qof_instance_get_destroying(inst) && GNC_IS_TRANS(inst) ) {
+    DEBUG( "%s dirty = %d, do_free = %d\n",
+             (inst->e_type ? inst->e_type : "(null)"),
+             is_dirty, is_destroying );
+
+#if 0
+    if( !is_dirty && !is_destroying && GNC_IS_TRANS(inst) ) {
         gnc_sql_transaction_commit_splits( be, GNC_TRANS(inst) );
     }
+#endif
 
-    if( !qof_instance_get_dirty_flag(inst) && !qof_instance_get_destroying(inst) ) {
+    if( !is_dirty && !is_destroying ) {
 		LEAVE( "!dirty OR !destroying" );
 		return;
 	}

@@ -1203,6 +1203,9 @@ gnc_main_window_event_handler (QofInstance *entity,  QofEventId event_type,
  *  window title and the title of the "Window" menu item associated
  *  with the window.
  *
+ *  As a side-effect, the save action is set sensitive iff the book
+ *  is dirty.
+ *
  *  @param window The window whose title should be generated.
  *
  *  @return The title for the window.  It is the callers
