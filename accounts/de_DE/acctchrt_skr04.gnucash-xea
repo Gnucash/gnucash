@@ -2830,69 +2830,6 @@
     <act:parent type="new">f8a1595720a430d2d890c735ec280801</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Marmor</act:name>
-    <act:id type="new">87234e6891fac01304264bc8512448a0</act:id>
-    <act:type>ASSET</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">e1960c5433e5eb58cbd136d8c3d2fa0a</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Stein</act:name>
-    <act:id type="new">a99b2f31be2be1a074bc1c8b54825c7e</act:id>
-    <act:type>ASSET</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">e1960c5433e5eb58cbd136d8c3d2fa0a</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Eisen</act:name>
-    <act:id type="new">b94ac228e74d955127e50a16d82f7b21</act:id>
-    <act:type>ASSET</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">e1960c5433e5eb58cbd136d8c3d2fa0a</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
     <act:name>04. Geleistete Anzahlungen auf Vorräte</act:name>
     <act:id type="new">4b94caba6927babf0af628999af0e00d</act:id>
     <act:type>ASSET</act:type>
