@@ -4974,6 +4974,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:code>4130</act:code>
     <act:description>UstVa Zl. 55, Kz. 66</act:description>
     <act:slots>
       <slot>
@@ -12783,7 +12784,7 @@
     <act:parent type="new">3d14d5d5d3001e01974df06bf3752d3a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Steuerfreie EG-Lieferungen, §4,1b UStG</act:name>
+    <act:name>Steuerfreie EG-Lieferungen (§4,1b UStG) an Abnehmer mit UStID</act:name>
     <act:id type="new">498dcac4132faa3052bfb2af19a7b6fa</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -12819,7 +12820,7 @@
     <act:parent type="new">3d14d5d5d3001e01974df06bf3752d3a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Innergemeinschaftl. Dreiecksgeschäft</act:name>
+    <act:name>Innergemeinschaftl. Dreiecksgeschäft, Lieferung des ersten Abnehmers (§25b Abs. 2 UStG)</act:name>
     <act:id type="new">17fb01aec55ddc4c737783ea99564e66</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
