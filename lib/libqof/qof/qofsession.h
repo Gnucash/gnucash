@@ -436,5 +436,10 @@ gboolean qof_session_export (QofSession *tmp_session,
                              QofSession *real_session,
                              QofPercentageFunc percentage_func);
 
+/** Return a list of strings for the registered access methods. The owner is
+ *  responsible for freeing the list but not the strings.
+ */
+GList* qof_backend_get_registered_access_method_list(void);
+
 #endif /* QOF_SESSION_H */
 /** @} */

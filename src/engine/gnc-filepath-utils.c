@@ -285,6 +285,9 @@ xaccResolveFilePath (const char * filefrag)
 char * 
 xaccResolveURL (const char * pathfrag)
 {
+  GList* list;
+  GList* node;
+
   /* seriously invalid */
   if (!pathfrag) return NULL;
 
@@ -296,13 +299,28 @@ xaccResolveURL (const char * pathfrag)
    */
 
   if (!g_ascii_strncasecmp (pathfrag, "http://", 7)      ||
-      !g_ascii_strncasecmp (pathfrag, "https://", 8)     ||
-      !g_ascii_strncasecmp (pathfrag, "gda://", 6)		 ||
-      !g_ascii_strncasecmp (pathfrag, "postgres://", 11))
+      !g_ascii_strncasecmp (pathfrag, "https://", 8))
   {
     return g_strdup(pathfrag);
   }
 
+  /* Check the URL against the list of registered access methods */
+  list = qof_backend_get_registered_access_method_list();
+  for( node = list; node != NULL; node = node->next ) {
+  	const gchar* access_method = node->data;
+	if( strcmp( access_method, "file" ) != 0 &&
+			strcmp( access_method, "xml" ) != 0 ) {
+		gchar s[30];
+		sprintf( s, "%s://", access_method );
+		if( !g_ascii_strncasecmp( pathfrag, s, strlen(s) ) ) {
+			g_list_free(list);
+    		return g_strdup(pathfrag);
+		}
+	}
+  }
+  g_list_free(list);
+
+  /* "file:" and "xml:" are handled specially */
   if (!g_ascii_strncasecmp (pathfrag, "file:", 5)) {
     return (xaccResolveFilePath (pathfrag));
   }

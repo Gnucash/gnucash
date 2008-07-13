@@ -63,6 +63,20 @@ qof_backend_register_provider (QofBackendProvider *prov)
 	provider_list = g_slist_append (provider_list, prov);
 }
 
+GList*
+qof_backend_get_registered_access_method_list(void)
+{
+	GList* list = NULL;
+	GSList* node;
+
+	for( node = provider_list; node != NULL; node = node->next ) {
+		QofBackendProvider *prov = node->data;
+		list = g_list_append( list, (gchar*)prov->access_method );
+	}
+
+	return list;
+}
+
 /* ====================================================================== */
 
 /* hook routines */
