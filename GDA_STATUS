@@ -23,6 +23,6 @@ any changes.
 This can result in trying to save invalid objects:
 	- Price editor (new price has no commodity or currency)
 	- New invoice
-* Use the "infant" flag to avoid checking whether a new object is already in
-the db.
 * Need transactions to group updates to multiple objects
+* Possibly mark commodities that are in the db so that they don't need to be
+queried every time.

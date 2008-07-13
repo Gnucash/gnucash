@@ -82,14 +82,14 @@ static GncSqlColumnTableEntry col_table[] =
 	{ NULL }
 };
 
-static void
+static GncInvoice*
 load_single_invoice( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
 	GncInvoice* pInvoice;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( row != NULL );
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
     pInvoice = gncInvoiceLookup( be->primary_book, guid );
@@ -97,9 +97,9 @@ load_single_invoice( GncSqlBackend* be, GncSqlRow* row )
         pInvoice = gncInvoiceCreate( be->primary_book );
     }
     gnc_sql_load_object( be, row, GNC_ID_INVOICE, pInvoice, col_table );
-    gnc_sql_slots_load( be, QOF_INSTANCE(pInvoice) );
-
     qof_instance_mark_clean( QOF_INSTANCE(pInvoice) );
+
+	return pInvoice;
 }
 
 static void
@@ -118,13 +118,21 @@ load_all_invoices( GncSqlBackend* be )
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
         GncSqlRow* row;
+		GList* list = NULL;
 
 		row = gnc_sql_result_get_first_row( result );
         while( row != NULL ) {
-            load_single_invoice( be, row );
+			GncInvoice* pInvoice = load_single_invoice( be, row );
+			if( pInvoice != NULL ) {
+				list = g_list_append( list, pInvoice );
+			}
 			row = gnc_sql_result_get_next_row( result );
 		}
 		gnc_sql_result_dispose( result );
+
+		if( list != NULL ) {
+			gnc_sql_slots_load_for_list( be, list );
+		}
     }
 }
 
@@ -155,18 +163,21 @@ save_invoice( GncSqlBackend* be, QofInstance* inst )
 	g_return_if_fail( GNC_IS_INVOICE(inst) );
 	g_return_if_fail( be != NULL );
 
-    // Ensure the commodity is in the db
 	invoice = GNC_INVOICE(inst);
-    gnc_sql_save_commodity( be, gncInvoiceGetCurrency( invoice ) );
 
 	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
 		op = OP_DB_DELETE;
 	} else if( be->is_pristine_db || is_infant ) {
-		op = OP_DB_ADD;
+		op = OP_DB_INSERT;
 	} else {
-		op = OP_DB_ADD_OR_UPDATE;
+		op = OP_DB_UPDATE;
 	}
+	if( op != OP_DB_DELETE ) {
+    	// Ensure the commodity is in the db
+    	gnc_sql_save_commodity( be, gncInvoiceGetCurrency( invoice ) );
+	}
+
     (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_INVOICE, inst, col_table );
 
     // Now, commit or delete any slots

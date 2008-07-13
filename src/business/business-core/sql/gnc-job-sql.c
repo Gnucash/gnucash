@@ -65,14 +65,14 @@ static GncSqlColumnTableEntry col_table[] =
 	{ NULL }
 };
 
-static void
+static GncJob*
 load_single_job( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
 	GncJob* pJob;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( row != NULL );
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
     pJob = gncJobLookup( be->primary_book, guid );
@@ -80,9 +80,9 @@ load_single_job( GncSqlBackend* be, GncSqlRow* row )
         pJob = gncJobCreate( be->primary_book );
     }
     gnc_sql_load_object( be, row, GNC_ID_JOB, pJob, col_table );
-    gnc_sql_slots_load( be, QOF_INSTANCE(pJob) );
-
     qof_instance_mark_clean( QOF_INSTANCE(pJob) );
+
+	return pJob;
 }
 
 static void
@@ -101,13 +101,21 @@ load_all_jobs( GncSqlBackend* be )
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
         GncSqlRow* row;
+		GList* list = NULL;
 
 		row = gnc_sql_result_get_first_row( result );
         while( row != NULL ) {
-            load_single_job( be, row );
+            GncJob* pJob = load_single_job( be, row );
+			if( pJob != NULL ) {
+				list = g_list_append( list, pJob );
+			}
 			row = gnc_sql_result_get_next_row( result );
 		}
 		gnc_sql_result_dispose( result );
+
+		if( list != NULL ) {
+			gnc_sql_slots_load_for_list( be, list );
+		}
     }
 }
 
@@ -129,31 +137,11 @@ create_job_tables( GncSqlBackend* be )
 static void
 save_job( GncSqlBackend* be, QofInstance* inst )
 {
-    const GUID* guid;
-	gint op;
-	gboolean is_infant;
-
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_JOB(inst) );
 	g_return_if_fail( be != NULL );
 
-	is_infant = qof_instance_get_infant( inst );
-	if( qof_instance_get_destroying( inst ) ) {
-		op = OP_DB_DELETE;
-	} else if( be->is_pristine_db || is_infant ) {
-		op = OP_DB_ADD;
-	} else {
-		op = OP_DB_ADD_OR_UPDATE;
-	}
-    (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_JOB, inst, col_table );
-
-    // Now, commit or delete any slots
-    guid = qof_instance_get_guid( inst );
-    if( !qof_instance_get_destroying(inst) ) {
-        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-    } else {
-        gnc_sql_slots_delete( be, guid );
-    }
+    gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_JOB, col_table );
 }
 
 /* ================================================================= */

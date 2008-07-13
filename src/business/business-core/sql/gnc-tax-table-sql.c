@@ -295,7 +295,7 @@ save_tt_entries( GncSqlBackend* be, const GUID* guid, GList* entries )
 	for( entry = entries; entry != NULL; entry = entry->next ) {
 		GncTaxTableEntry* e = (GncTaxTableEntry*)entry->data;
     	(void)gnc_sql_do_db_operation( be,
-                        OP_DB_ADD_OR_UPDATE,
+                        OP_DB_INSERT,
                         TTENTRIES_TABLE_NAME,
                         GNC_ID_TAXTABLE, e,
                         ttentries_col_table );
@@ -320,9 +320,9 @@ save_taxtable( GncSqlBackend* be, QofInstance* inst )
 	if( qof_instance_get_destroying( inst ) ) {
 		op = OP_DB_DELETE;
 	} else if( be->is_pristine_db || is_infant ) {
-		op = OP_DB_ADD;
+		op = OP_DB_INSERT;
 	} else {
-		op = OP_DB_ADD_OR_UPDATE;
+		op = OP_DB_UPDATE;
 	}
     (void)gnc_sql_do_db_operation( be, op, TT_TABLE_NAME, GNC_ID_TAXTABLE, tt, tt_col_table );
 

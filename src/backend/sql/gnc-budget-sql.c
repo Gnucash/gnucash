@@ -151,9 +151,9 @@ save_budget( GncSqlBackend* be, QofInstance* inst )
 	if( qof_instance_get_destroying( inst ) ) {
 		op = OP_DB_DELETE;
 	} else if( be->is_pristine_db || is_infant ) {
-		op = OP_DB_ADD;
+		op = OP_DB_INSERT;
 	} else {
-		op = OP_DB_ADD_OR_UPDATE;
+		op = OP_DB_UPDATE;
 	}
     (void)gnc_sql_do_db_operation( be, op, BUDGET_TABLE, GNC_ID_BUDGET, pBudget, col_table );
 

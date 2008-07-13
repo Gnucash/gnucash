@@ -73,14 +73,14 @@ static GncSqlColumnTableEntry col_table[] =
     { NULL }
 };
 
-static void
+static GncEmployee*
 load_single_employee( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
 	GncEmployee* pEmployee;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( row != NULL );
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
     pEmployee = gncEmployeeLookup( be->primary_book, guid );
@@ -88,9 +88,9 @@ load_single_employee( GncSqlBackend* be, GncSqlRow* row )
         pEmployee = gncEmployeeCreate( be->primary_book );
     }
     gnc_sql_load_object( be, row, GNC_ID_EMPLOYEE, pEmployee, col_table );
-    gnc_sql_slots_load( be, QOF_INSTANCE(pEmployee) );
-
     qof_instance_mark_clean( QOF_INSTANCE(pEmployee) );
+
+	return pEmployee;
 }
 
 static void
@@ -111,12 +111,21 @@ load_all_employees( GncSqlBackend* be )
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
         GncSqlRow* row;
+		GList* list = NULL;
 
 		row = gnc_sql_result_get_first_row( result );
         while( row != NULL ) {
-            load_single_employee( be, row );
+            GncEmployee* pEmployee = load_single_employee( be, row );
+			if( pEmployee != NULL ) {
+				list = g_list_append( list, pEmployee );
+			}
+			row = gnc_sql_result_get_next_row( result );
 		}
 		gnc_sql_result_dispose( result );
+
+		if( list != NULL ) {
+			gnc_sql_slots_load_for_list( be, list );
+		}
     }
 }
 
@@ -147,18 +156,21 @@ save_employee( GncSqlBackend* be, QofInstance* inst )
 	g_return_if_fail( GNC_IS_EMPLOYEE(inst) );
 	g_return_if_fail( be != NULL );
 
-    // Ensure the commodity is in the db
     emp = GNC_EMPLOYEE(inst);
-    gnc_sql_save_commodity( be, gncEmployeeGetCurrency( emp ) );
 
 	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
 		op = OP_DB_DELETE;
 	} else if( be->is_pristine_db || is_infant ) {
-		op = OP_DB_ADD;
+		op = OP_DB_INSERT;
 	} else {
-		op = OP_DB_ADD_OR_UPDATE;
+		op = OP_DB_UPDATE;
 	}
+	if( op != OP_DB_DELETE ) {
+    	// Ensure the commodity is in the db
+    	gnc_sql_save_commodity( be, gncEmployeeGetCurrency( emp ) );
+	}
+
     (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_EMPLOYEE, emp, col_table );
 
     // Now, commit or delete any slots

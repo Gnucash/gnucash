@@ -319,8 +319,8 @@ struct GncSqlColumnTableEntry {
 };
 
 typedef enum {
-	OP_DB_ADD,
-	OP_DB_ADD_OR_UPDATE,
+	OP_DB_INSERT,
+	OP_DB_UPDATE,
 	OP_DB_DELETE
 } E_DB_OPERATION;
 
@@ -572,6 +572,20 @@ void gnc_sql_init_version_info( GncSqlBackend* be );
  * @param be SQL backend struct
  */
 void gnc_sql_finalize_version_info( GncSqlBackend* be );
+
+/**
+ *
+ * Commits a "standard" item to the database.  In most cases, a commit of one object vs
+ * another differs only in the table name and column table.
+ *
+ * @param be SQL backend
+ * @param inst Instance
+ * @param tableName SQL table name
+ * @param obj_name QOF object type name
+ * @param col_table Column table
+ */
+void gnc_sql_commit_standard_item( GncSqlBackend* be, QofInstance* inst, const gchar* tableName,
+                        	QofIdTypeConst obj_name, const GncSqlColumnTableEntry* col_table );
 
 void _retrieve_guid_( gpointer pObject, gpointer pValue );
 

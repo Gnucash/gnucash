@@ -79,14 +79,14 @@ static GncSqlColumnTableEntry col_table[] =
 	{ NULL }
 };
 
-static void
+static GncVendor*
 load_single_vendor( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
 	GncVendor* pVendor;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( row != NULL );
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
     pVendor = gncVendorLookup( be->primary_book, guid );
@@ -94,9 +94,9 @@ load_single_vendor( GncSqlBackend* be, GncSqlRow* row )
         pVendor = gncVendorCreate( be->primary_book );
     }
     gnc_sql_load_object( be, row, GNC_ID_VENDOR, pVendor, col_table );
-    gnc_sql_slots_load( be, QOF_INSTANCE(pVendor) );
-
     qof_instance_mark_clean( QOF_INSTANCE(pVendor) );
+
+	return pVendor;
 }
 
 static void
@@ -115,13 +115,21 @@ load_all_vendors( GncSqlBackend* be )
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
         GncSqlRow* row;
+		GList* list = NULL;
 
 		row = gnc_sql_result_get_first_row( result );
         while( row != NULL ) {
-            load_single_vendor( be, row );
+            GncVendor* pVendor = load_single_vendor( be, row );
+			if( pVendor != NULL ) {
+				list = g_list_append( list, pVendor );
+			}
 			row = gnc_sql_result_get_next_row( result );
 		}
 		gnc_sql_result_dispose( result );
+
+		if( list != NULL ) {
+			gnc_sql_slots_load_for_list( be, list );
+		}
     }
 }
 
@@ -152,17 +160,19 @@ save_vendor( GncSqlBackend* be, QofInstance* inst )
 	g_return_if_fail( GNC_IS_VENDOR(inst) );
 	g_return_if_fail( be != NULL );
 
-    // Ensure the commodity is in the db
     v = GNC_VENDOR(inst);
-    gnc_sql_save_commodity( be, gncVendorGetCurrency( v ) );
 
 	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
 		op = OP_DB_DELETE;
 	} else if( be->is_pristine_db || is_infant ) {
-		op = OP_DB_ADD;
+		op = OP_DB_INSERT;
 	} else {
-		op = OP_DB_ADD_OR_UPDATE;
+		op = OP_DB_UPDATE;
+	}
+	if( op != OP_DB_DELETE ) {
+    	// Ensure the commodity is in the db
+    	gnc_sql_save_commodity( be, gncVendorGetCurrency( v ) );
 	}
     (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_VENDOR, v, col_table );
 

@@ -166,31 +166,11 @@ create_lots_tables( GncSqlBackend* be )
 static void
 commit_lot( GncSqlBackend* be, QofInstance* inst )
 {
-	gint op;
-	gboolean is_infant;
-
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_LOT(inst) );
 
-	is_infant = qof_instance_get_infant( inst );
-	if( qof_instance_get_destroying( inst ) ) {
-		op = OP_DB_DELETE;
-	} else if( be->is_pristine_db || is_infant ) {
-		op = OP_DB_ADD;
-	} else {
-		op = OP_DB_ADD_OR_UPDATE;
-	}
-    (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_LOT, inst, col_table );
-
-    // Now, commit any slots
-	if( !qof_instance_get_destroying( inst ) ) {
-    	gnc_sql_slots_save( be, qof_instance_get_guid( inst ),
-							is_infant,
-                        	qof_instance_get_slots( inst ) );
-	} else {
-    	gnc_sql_slots_delete( be, qof_instance_get_guid( inst ) );
-	}
+    gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_LOT, col_table );
 }
 
 /* ----------------------------------------------------------------- */

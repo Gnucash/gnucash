@@ -143,18 +143,21 @@ save_price( GncSqlBackend* be, QofInstance* inst )
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_PRICE(inst) );
 
-    /* Ensure commodity and currency are in the db */
-	gnc_sql_save_commodity( be, gnc_price_get_commodity( pPrice ) );
-    gnc_sql_save_commodity( be, gnc_price_get_currency( pPrice ) );
-
 	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
 		op = OP_DB_DELETE;
 	} else if( be->is_pristine_db || is_infant ) {
-		op = OP_DB_ADD;
+		op = OP_DB_INSERT;
 	} else {
-		op = OP_DB_ADD_OR_UPDATE;
+		op = OP_DB_UPDATE;
 	}
+
+	if( op != OP_DB_DELETE ) {
+    	/* Ensure commodity and currency are in the db */
+		gnc_sql_save_commodity( be, gnc_price_get_commodity( pPrice ) );
+    	gnc_sql_save_commodity( be, gnc_price_get_currency( pPrice ) );
+	}
+
     (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_PRICE, pPrice, col_table );
 }
 

@@ -2126,16 +2126,12 @@ gnc_sql_do_db_operation( GncSqlBackend* be,
 	g_return_val_if_fail( pObject != NULL, FALSE );
 	g_return_val_if_fail( table != NULL, FALSE );
 
-    if( op == OP_DB_ADD_OR_UPDATE ) {
-        if( gnc_sql_object_is_it_in_db( be, table_name, obj_name, pObject, table ) ) {
-            stmt = build_update_statement( be, table_name, obj_name, pObject, table );
-        } else {
-            stmt = build_insert_statement( be, table_name, obj_name, pObject, table );
-        }
+	if( op == OP_DB_INSERT ) {
+        stmt = build_insert_statement( be, table_name, obj_name, pObject, table );
+    } else if( op == OP_DB_UPDATE ) {
+        stmt = build_update_statement( be, table_name, obj_name, pObject, table );
     } else if( op == OP_DB_DELETE ) {
         stmt = build_delete_statement( be, table_name, obj_name, pObject, table );
-    } else if( op == OP_DB_ADD ) {
-        stmt = build_insert_statement( be, table_name, obj_name, pObject, table );
     } else {
         g_assert( FALSE );
     }
@@ -2333,6 +2329,34 @@ build_delete_statement( GncSqlBackend* be,
 	gnc_sql_statement_add_where_cond( stmt, obj_name, pObject, &table[0], (GValue*)(list->data) );
 
 	return stmt;
+}
+
+/* ================================================================= */
+void
+gnc_sql_commit_standard_item( GncSqlBackend* be, QofInstance* inst, const gchar* tableName,
+                        	QofIdTypeConst obj_name, const GncSqlColumnTableEntry* col_table )
+{
+	const GUID* guid;
+	gboolean is_infant;
+	gint op;
+
+	is_infant = qof_instance_get_infant( inst );
+	if( qof_instance_get_destroying( inst ) ) {
+		op = OP_DB_DELETE;
+	} else if( be->is_pristine_db || is_infant ) {
+		op = OP_DB_INSERT;
+	} else {
+		op = OP_DB_UPDATE;
+	}
+    (void)gnc_sql_do_db_operation( be, op, tableName, obj_name, inst, col_table );
+
+    // Now, commit any slots
+    guid = qof_instance_get_guid( inst );
+    if( !qof_instance_get_destroying(inst) ) {
+        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+    } else {
+        gnc_sql_slots_delete( be, guid );
+    }
 }
 
 /* ================================================================= */

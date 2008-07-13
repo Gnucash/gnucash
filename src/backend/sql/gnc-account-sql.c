@@ -283,15 +283,17 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
     if( xaccAccountGetCommodity( pAcc ) != NULL ) {
 		gint op;
 
-        // Ensure the commodity is in the db
-        gnc_sql_save_commodity( be, xaccAccountGetCommodity( pAcc ) );
-
 		if( qof_instance_get_destroying( inst ) ) {
 			op = OP_DB_DELETE;
 		} else if( be->is_pristine_db || is_infant ) {
-			op = OP_DB_ADD;
+			op = OP_DB_INSERT;
 		} else {
-			op = OP_DB_ADD_OR_UPDATE;
+			op = OP_DB_UPDATE;
+		}
+
+        // If not deleting the account, ensure the commodity is in the db
+		if( op != OP_DB_DELETE ) {
+        	gnc_sql_save_commodity( be, xaccAccountGetCommodity( pAcc ) );
 		}
 
         (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_ACCOUNT, pAcc, col_table );

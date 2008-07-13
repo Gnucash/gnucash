@@ -263,22 +263,24 @@ create_sx_tables( GncSqlBackend* be )
 void
 gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst )
 {
-    SchedXaction* pSx = GNC_SX(inst);
+    SchedXaction* pSx;
     const GUID* guid;
 	gint op;
 	gboolean is_infant;
 
+	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_SX(inst) );
-	g_return_if_fail( be != NULL );
+
+    pSx = GNC_SX(inst);
 
 	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
 		op = OP_DB_DELETE;
 	} else if( be->is_pristine_db || is_infant ) {
-		op = OP_DB_ADD;
+		op = OP_DB_INSERT;
 	} else {
-		op = OP_DB_ADD_OR_UPDATE;
+		op = OP_DB_UPDATE;
 	}
     (void)gnc_sql_do_db_operation( be, op, SCHEDXACTION_TABLE, GNC_SX_ID, pSx, col_table );
     guid = qof_instance_get_guid( inst );

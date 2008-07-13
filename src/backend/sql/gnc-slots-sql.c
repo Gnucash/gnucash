@@ -340,7 +340,7 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
         KvpFrame* pKvpFrame = kvp_value_get_frame( value );
         kvp_frame_for_each_slot( pKvpFrame, save_slot, pSlot_info );
     } else {
-        (void)gnc_sql_do_db_operation( pSlot_info->be, OP_DB_ADD, TABLE_NAME,
+        (void)gnc_sql_do_db_operation( pSlot_info->be, OP_DB_INSERT, TABLE_NAME,
                                         TABLE_NAME, pSlot_info, col_table );
     }
 

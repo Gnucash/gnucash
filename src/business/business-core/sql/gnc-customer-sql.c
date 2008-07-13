@@ -78,14 +78,14 @@ static GncSqlColumnTableEntry col_table[] =
 	{ NULL }
 };
 
-static void
+static GncCustomer*
 load_single_customer( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
 	GncCustomer* pCustomer;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( row != NULL );
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
     pCustomer = gncCustomerLookup( be->primary_book, guid );
@@ -93,9 +93,9 @@ load_single_customer( GncSqlBackend* be, GncSqlRow* row )
         pCustomer = gncCustomerCreate( be->primary_book );
     }
     gnc_sql_load_object( be, row, GNC_ID_CUSTOMER, pCustomer, col_table );
-    gnc_sql_slots_load( be, QOF_INSTANCE(pCustomer) );
-
     qof_instance_mark_clean( QOF_INSTANCE(pCustomer) );
+
+	return pCustomer;
 }
 
 static void
@@ -113,14 +113,22 @@ load_all_customers( GncSqlBackend* be )
     result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
+		GList* list = NULL;
 		GncSqlRow* row;
 
 		row = gnc_sql_result_get_first_row( result );
         while( row != NULL ) {
-            load_single_customer( be, row );
+            GncCustomer* pCustomer = load_single_customer( be, row );
+			if( pCustomer != NULL ) {
+				list = g_list_append( list, pCustomer );
+			}
 			row = gnc_sql_result_get_next_row( result );
 		}
 		gnc_sql_result_dispose( result );
+
+		if( list != NULL ) {
+			gnc_sql_slots_load_for_list( be, list );
+		}
     }
 }
 
@@ -142,31 +150,11 @@ create_customer_tables( GncSqlBackend* be )
 static void
 save_customer( GncSqlBackend* be, QofInstance* inst )
 {
-    const GUID* guid;
-	gint op;
-	gboolean is_infant;
-
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_CUSTOMER(inst) );
 	g_return_if_fail( be != NULL );
 
-	is_infant = qof_instance_get_infant( inst );
-	if( qof_instance_get_destroying( inst ) ) {
-		op = OP_DB_DELETE;
-	} else if( be->is_pristine_db || is_infant ) {
-		op = OP_DB_ADD;
-	} else {
-		op = OP_DB_ADD_OR_UPDATE;
-	}
-    (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_CUSTOMER, inst, col_table );
-
-    // Now, commit or delete any slots
-    guid = qof_instance_get_guid( inst );
-    if( !qof_instance_get_destroying(inst) ) {
-        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-    } else {
-        gnc_sql_slots_delete( be, guid );
-    }
+    gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_CUSTOMER, col_table );
 }
 
 /* ================================================================= */

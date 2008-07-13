@@ -83,7 +83,105 @@ error_fn( dbi_conn conn, void* user_data )
 }
 
 static void
-gnc_dbi_session_begin( QofBackend *qbe, QofSession *session, 
+gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session, 
+	                   const gchar *book_id,
+                       gboolean ignore_lock,
+				       gboolean create_if_nonexistent )
+{
+    GncDbiBackend *be = (GncDbiBackend*)qbe;
+	gint result;
+	gchar* dirname;
+	gchar* basename;
+
+	g_return_if_fail( qbe != NULL );
+	g_return_if_fail( session != NULL );
+	g_return_if_fail( book_id != NULL );
+
+    ENTER (" ");
+
+	dirname = g_path_get_dirname( book_id );
+	basename = g_path_get_basename( book_id );
+
+	be->conn = dbi_conn_new( "sqlite3" );
+	if( be->conn == NULL ) {
+		PERR( "Unable to create sqlite3 dbi connection\n" );
+        qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
+		LEAVE( " " );
+		return;
+	}
+	dbi_conn_error_handler( be->conn, error_fn, be );
+	dbi_conn_set_option( be->conn, "host", "localhost" );
+	dbi_conn_set_option( be->conn, "dbname", basename );
+	dbi_conn_set_option( be->conn, "sqlite3_dbdir", dirname );
+	result = dbi_conn_connect( be->conn );
+	g_free( basename );
+	g_free( dirname );
+	if( result < 0 ) {
+		PERR( "Unable to connect to %s: %d\n", book_id, result );
+        qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
+        LEAVE( " " );
+        return;
+	}
+
+	be->sql_be.conn = create_dbi_connection( be->conn );
+
+    LEAVE (" ");
+}
+
+static void
+gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session, 
+	                   const gchar *book_id,
+                       gboolean ignore_lock,
+				       gboolean create_if_nonexistent )
+{
+    GncDbiBackend *be = (GncDbiBackend*)qbe;
+    GError* error = NULL;
+    gchar* dsn;
+    gchar* username;
+    gchar* password;
+	gchar* provider;
+	gboolean uriOK;
+	gint result;
+	gchar* dirname;
+	gchar* basename;
+
+	g_return_if_fail( qbe != NULL );
+	g_return_if_fail( session != NULL );
+	g_return_if_fail( book_id != NULL );
+
+    ENTER (" ");
+
+	dirname = g_path_get_dirname( book_id );
+	basename = g_path_get_basename( book_id );
+
+	be->conn = dbi_conn_new( "sqlite3" );
+	if( be->conn == NULL ) {
+		PERR( "Unable to create sqlite3 dbi connection\n" );
+        qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
+		LEAVE( " " );
+		return;
+	}
+	dbi_conn_error_handler( be->conn, error_fn, be );
+	dbi_conn_set_option( be->conn, "host", "localhost" );
+	dbi_conn_set_option( be->conn, "dbname", basename );
+	dbi_conn_set_option( be->conn, "sqlite3_dbdir", dirname );
+	result = dbi_conn_connect( be->conn );
+	g_free( basename );
+	g_free( dirname );
+	if( result < 0 ) {
+		PERR( "Unable to connect to %s: %d\n", book_id, result );
+        qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
+        LEAVE( " " );
+        return;
+	}
+
+	be->sql_be.conn = create_dbi_connection( be->conn );
+
+    LEAVE (" ");
+}
+
+static void
+gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session, 
 	                   const gchar *book_id,
                        gboolean ignore_lock,
 				       gboolean create_if_nonexistent )
@@ -280,18 +378,14 @@ gnc_dbi_commit_edit( QofBackend *qbe, QofInstance *inst )
 
 /* ================================================================= */
 
-static QofBackend*
-gnc_dbi_backend_new(void)
+static void
+init_sql_backend( GncDbiBackend* dbi_be )
 {
-    GncDbiBackend *gnc_be;
-    QofBackend *be;
     static gboolean initialized = FALSE;
+	QofBackend* be;
 
-    gnc_be = g_new0(GncDbiBackend, 1);
-    be = (QofBackend*) gnc_be;
-    qof_backend_init(be);
+    be = (QofBackend*)dbi_be;
 
-    be->session_begin = gnc_dbi_session_begin;
     be->session_end = gnc_dbi_session_end;
     be->destroy_backend = gnc_dbi_destroy_backend;
 
@@ -314,8 +408,6 @@ gnc_dbi_backend_new(void)
     be->get_config = NULL;
 
     be->export = NULL;
-
-    gnc_be->primary_book = NULL;
 
     if( !initialized ) {
 #define DEFAULT_DBD_DIR "/usr/lib/dbd"
@@ -342,9 +434,55 @@ gnc_dbi_backend_new(void)
 				}
 			} while( driver != NULL );
 		}
-		gnc_sql_init( &gnc_be->sql_be );
+		gnc_sql_init( &dbi_be->sql_be );
         initialized = TRUE;
     }
+}
+
+static QofBackend*
+gnc_dbi_backend_sqlite3_new( void )
+{
+    GncDbiBackend *dbi_be;
+    QofBackend *be;
+
+    dbi_be = g_new0( GncDbiBackend, 1 );
+    be = (QofBackend*)dbi_be;
+    qof_backend_init( be );
+
+    be->session_begin = gnc_dbi_sqlite3_session_begin;
+	init_sql_backend( dbi_be );
+
+    return be;
+}
+
+static QofBackend*
+gnc_dbi_backend_mysql_new( void )
+{
+    GncDbiBackend *dbi_be;
+    QofBackend *be;
+
+    dbi_be = g_new0( GncDbiBackend, 1 );
+    be = (QofBackend*)dbi_be;
+    qof_backend_init( be );
+
+    be->session_begin = gnc_dbi_mysql_session_begin;
+	init_sql_backend( dbi_be );
+
+    return be;
+}
+
+static QofBackend*
+gnc_dbi_backend_postgres_new( void )
+{
+    GncDbiBackend *dbi_be;
+    QofBackend *be;
+
+    dbi_be = g_new0( GncDbiBackend, 1 );
+    be = (QofBackend*)dbi_be;
+    qof_backend_init( be );
+
+    be->session_begin = gnc_dbi_postgres_session_begin;
+	init_sql_backend( dbi_be );
 
     return be;
 }
@@ -364,7 +502,7 @@ gnc_dbi_provider_free( QofBackendProvider *prov )
  *
  */
 static gboolean
-gnc_dbi_check_sqlite_file( const gchar *path )
+gnc_dbi_check_sqlite3_file( const gchar *path )
 {
 	FILE* f;
 	gchar buf[50];
@@ -399,13 +537,29 @@ qof_backend_module_init(void)
     QofBackendProvider *prov;
 
     prov = g_new0 (QofBackendProvider, 1);
-    prov->provider_name = "GnuCash Libdbi Backend";
+    prov->provider_name = "GnuCash Libdbi (SQLITE3) Backend";
     prov->access_method = "file";
     prov->partial_book_supported = FALSE;
-    prov->backend_new = gnc_dbi_backend_new;
+    prov->backend_new = gnc_dbi_backend_sqlite3_new;
     prov->provider_free = gnc_dbi_provider_free;
-    prov->check_data_type = gnc_dbi_check_sqlite_file;
-    qof_backend_register_provider (prov);
+    prov->check_data_type = gnc_dbi_check_sqlite3_file;
+    qof_backend_register_provider( prov );
+
+    prov = g_new0 (QofBackendProvider, 1);
+    prov->provider_name = "GnuCash Libdbi (MYSQL) Backend";
+    prov->access_method = "mysql";
+    prov->partial_book_supported = FALSE;
+    prov->backend_new = gnc_dbi_backend_mysql_new;
+    prov->provider_free = gnc_dbi_provider_free;
+    qof_backend_register_provider( prov );
+
+    prov = g_new0 (QofBackendProvider, 1);
+    prov->provider_name = "GnuCash Libdbi (POSTGRESQL) Backend";
+    prov->access_method = "postgres";
+    prov->partial_book_supported = FALSE;
+    prov->backend_new = gnc_dbi_backend_postgres_new;
+    prov->provider_free = gnc_dbi_provider_free;
+    qof_backend_register_provider( prov );
 }
 
 /* --------------------------------------------------------- */

@@ -187,7 +187,7 @@ gnc_sql_recurrence_save( GncSqlBackend* be, const GUID* guid, const Recurrence* 
     recurrence_info.be = be;
     recurrence_info.guid = guid;
 	recurrence_info.pRecurrence = (Recurrence*)r;
-    (void)gnc_sql_do_db_operation( be, OP_DB_ADD, TABLE_NAME,
+    (void)gnc_sql_do_db_operation( be, OP_DB_INSERT, TABLE_NAME,
                                 TABLE_NAME, &recurrence_info, col_table );
 }
 
@@ -206,7 +206,7 @@ gnc_sql_recurrence_save_list( GncSqlBackend* be, const GUID* guid, GList* schedu
     recurrence_info.guid = guid;
 	for( l = schedule; l != NULL; l = g_list_next( l ) ) {
 		recurrence_info.pRecurrence = (Recurrence*)l->data;
-    	(void)gnc_sql_do_db_operation( be, OP_DB_ADD, TABLE_NAME,
+    	(void)gnc_sql_do_db_operation( be, OP_DB_INSERT, TABLE_NAME,
                                 TABLE_NAME, &recurrence_info, col_table );
 	}
 }

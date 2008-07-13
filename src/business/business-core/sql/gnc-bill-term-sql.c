@@ -88,14 +88,14 @@ set_invisible( gpointer data, gboolean value )
 	}
 }
 
-static void
+static GncBillTerm*
 load_single_billterm( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
 	GncBillTerm* pBillTerm;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( row != NULL );
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
     pBillTerm = gncBillTermLookup( be->primary_book, guid );
@@ -103,9 +103,9 @@ load_single_billterm( GncSqlBackend* be, GncSqlRow* row )
         pBillTerm = gncBillTermCreate( be->primary_book );
     }
     gnc_sql_load_object( be, row, GNC_ID_BILLTERM, pBillTerm, col_table );
-    gnc_sql_slots_load( be, QOF_INSTANCE( pBillTerm ) );
-
     qof_instance_mark_clean( QOF_INSTANCE(pBillTerm) );
+
+	return pBillTerm;
 }
 
 static void
@@ -124,13 +124,21 @@ load_all_billterms( GncSqlBackend* be )
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
 		GncSqlRow* row;
+		GList* list = NULL;
 
 		row = gnc_sql_result_get_first_row( result );
         while( row != NULL ) {
-            load_single_billterm( be, row );
+            GncBillTerm* pBillTerm = load_single_billterm( be, row );
+			if( pBillTerm != NULL ) {
+				list = g_list_append( list, pBillTerm );
+			}
 			row = gnc_sql_result_get_next_row( result );
 		}
 		gnc_sql_result_dispose( result );
+
+		if( list != NULL ) {
+			gnc_sql_slots_load_for_list( be, list );
+		}
     }
 }
 
@@ -161,31 +169,11 @@ create_billterm_tables( GncSqlBackend* be )
 void
 gnc_sql_save_billterm( GncSqlBackend* be, QofInstance* inst )
 {
-    const GUID* guid;
-	gboolean is_infant;
-	gint op;
-
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( !GNC_IS_BILLTERM(inst) );
 	g_return_if_fail( be != NULL );
 
-	is_infant = qof_instance_get_infant( inst );
-    if( qof_instance_get_destroying(inst) ) {
-		op = OP_DB_DELETE;
-	} else if( be->is_pristine_db || is_infant ) {
-		op = OP_DB_ADD;
-	} else {
-		op = OP_DB_ADD_OR_UPDATE;
-	}
-    (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_BILLTERM, inst, col_table );
-
-    // Now, commit or delete any slots
-    guid = qof_instance_get_guid( inst );
-    if( !qof_instance_get_destroying(inst) ) {
-        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-    } else {
-        gnc_sql_slots_delete( be, guid );
-    }
+    gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_BILLTERM, col_table );
 }
 
 /* ================================================================= */

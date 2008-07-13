@@ -471,9 +471,9 @@ commit_split( GncSqlBackend* be, QofInstance* inst )
 	if( qof_instance_get_destroying( inst ) ) {
 		op = OP_DB_DELETE;
 	} else if( be->is_pristine_db || is_infant ) {
-		op = OP_DB_ADD;
+		op = OP_DB_INSERT;
 	} else {
-		op = OP_DB_ADD_OR_UPDATE;
+		op = OP_DB_UPDATE;
 	}
     (void)gnc_sql_do_db_operation( be, op, SPLIT_TABLE, GNC_ID_SPLIT, inst, split_col_table );
     gnc_sql_slots_save( be,
@@ -521,16 +521,18 @@ gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst )
 	g_return_if_fail( GNC_IS_TRANS(inst) );
 	g_return_if_fail( be != NULL );
 
-    // Ensure the commodity is in the db
-    gnc_sql_save_commodity( be, xaccTransGetCurrency( pTx ) );
-
 	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
 		op = OP_DB_DELETE;
 	} else if( be->is_pristine_db || is_infant ) {
-		op = OP_DB_ADD;
+		op = OP_DB_INSERT;
 	} else {
-		op = OP_DB_ADD_OR_UPDATE;
+		op = OP_DB_UPDATE;
+	}
+
+	if( op != OP_DB_DELETE ) {
+    	// Ensure the commodity is in the db
+    	gnc_sql_save_commodity( be, xaccTransGetCurrency( pTx ) );
 	}
 
     (void)gnc_sql_do_db_operation( be, op, TRANSACTION_TABLE, GNC_ID_TRANS, pTx, tx_col_table );
