@@ -1498,7 +1498,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
   const char *placeholder = _("The account %s does not allow transactions.");
   const char *missing = _("The account %s does not exist. "
 			  "Would you like to create it?");
-  char *fullname;
+  char *account_name;
   ComboCell *cell = (ComboCell *) bcell;
   Account *account;
 
@@ -1506,7 +1506,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     return NULL;
 
   /* Find the account */
-  account = gnc_account_lookup_by_full_name (gnc_get_current_root_account (), name);
+  account = gnc_account_lookup_for_register (gnc_get_current_root_account (), name);
   if (!account)
 	  account = gnc_account_lookup_by_code (gnc_get_current_root_account (), name);
 
@@ -1525,10 +1525,10 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
 
   /* Now have the account. Update the cell with the name as created. */
   *refresh = TRUE;
-  fullname = xaccAccountGetFullName (account);
-  gnc_combo_cell_set_value (cell, fullname);
+  account_name = gnc_get_account_name_for_register (account);
+  gnc_combo_cell_set_value (cell, account_name);
   gnc_basic_cell_set_changed (&cell->cell, TRUE);
-  g_free (fullname);
+  g_free (account_name);
 
   /* See if the account (either old or new) is a placeholder. */
   if (xaccAccountGetPlaceholder (account)) {
