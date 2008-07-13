@@ -8975,7 +8975,7 @@
     <act:parent type="new">984e3a4bbeb1a32db7dd6df9437e6ee1</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Verbindlichkeiten</act:name>
+    <act:name>C. Verbindlichkeiten</act:name>
     <act:id type="new">8755bf4081c942798c5ac5f34c5b1aac</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
