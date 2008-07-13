@@ -157,7 +157,6 @@ gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session,
 				       gboolean create_if_nonexistent )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
-    GError* error = NULL;
 	gchar* dsn;
 	gchar* host;
 	gchar* dbname;
@@ -216,15 +215,12 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 				       gboolean create_if_nonexistent )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
-    GError* error = NULL;
-    gchar* dsn;
+	gint result;
+	gchar* dsn;
+	gchar* host;
+	gchar* dbname;
     gchar* username;
     gchar* password;
-	gchar* provider;
-	gboolean uriOK;
-	gint result;
-	gchar* dirname;
-	gchar* basename;
 
 	g_return_if_fail( qbe != NULL );
 	g_return_if_fail( session != NULL );
@@ -232,23 +228,32 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 
     ENTER (" ");
 
-	dirname = g_path_get_dirname( book_id );
-	basename = g_path_get_basename( book_id );
+	/* Split the book-id (format host:dbname:username:password) */
+	dsn = g_strdup( book_id );
+	for( host = dsn; *host != '/'; host++ ) {}
+	host += 2;
+	for( dbname = host; *dbname != ':'; dbname++ ) {}
+	*dbname++ = '\0';
+	for( username = dbname; *username != ':'; username++ ) {}
+	*username++ = '\0';
+	for( password = username; *password != ':'; password++ ) {}
+	*password++ = '\0';
 
-	be->conn = dbi_conn_new( "sqlite3" );
+	be->conn = dbi_conn_new( "pgsql" );
 	if( be->conn == NULL ) {
-		PERR( "Unable to create sqlite3 dbi connection\n" );
+		PERR( "Unable to create pgsql dbi connection\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
 		LEAVE( " " );
 		return;
 	}
 	dbi_conn_error_handler( be->conn, error_fn, be );
-	dbi_conn_set_option( be->conn, "host", "localhost" );
-	dbi_conn_set_option( be->conn, "dbname", basename );
-	dbi_conn_set_option( be->conn, "sqlite3_dbdir", dirname );
+	dbi_conn_set_option( be->conn, "host", host );
+	dbi_conn_set_option_numeric( be->conn, "port", 0 );
+	dbi_conn_set_option( be->conn, "dbname", dbname );
+	dbi_conn_set_option( be->conn, "username", username );
+	dbi_conn_set_option( be->conn, "password", password );
 	result = dbi_conn_connect( be->conn );
-	g_free( basename );
-	g_free( dirname );
+	g_free( dsn );
 	if( result < 0 ) {
 		PERR( "Unable to connect to %s: %d\n", book_id, result );
         qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
@@ -951,6 +956,22 @@ conn_get_column_type_name( GncSqlConnection* conn, GType type, gint size )
 				break;
 			case G_TYPE_DOUBLE:
 				return "double";
+				break;
+			case G_TYPE_STRING:
+				return "varchar";
+				break;
+			default:
+				PERR( "Unknown GType: %d\n", type );
+				return "";
+		}
+	} else if( dbi_conn->provider == GNC_DBI_PROVIDER_PGSQL ) {
+		switch( type ) {
+			case G_TYPE_INT:
+			case G_TYPE_INT64:
+				return "integer";
+				break;
+			case G_TYPE_DOUBLE:
+				return "double precision";
 				break;
 			case G_TYPE_STRING:
 				return "varchar";

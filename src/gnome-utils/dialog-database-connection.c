@@ -72,7 +72,7 @@ geturl( struct DatabaseConnectionWindow* dcw )
 	if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(dcw->rb_mysql) ) ) {
 		type = "mysql";
 	} else {
-		type = "postgresql";
+		type = "postgres";
 	}
 	url = g_strdup_printf( "%s://%s:%s:%s:%s",
 							type, host, database, username, password );

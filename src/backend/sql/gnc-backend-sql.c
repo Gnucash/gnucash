@@ -1306,8 +1306,8 @@ add_gvalue_double_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
         g_value_init( value, G_TYPE_DOUBLE );
         g_value_set_double( value, d_value );
     } else {
-        g_value_init( value, G_TYPE_STRING );
-		g_value_set_string( value, "NULL" );
+        g_value_init( value, G_TYPE_DOUBLE );
+		g_value_set_double( value, 0 );
 	}
 
 	(*pList) = g_slist_append( (*pList), value );
