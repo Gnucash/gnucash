@@ -509,18 +509,18 @@ save_splits( GncSqlBackend* be, const GUID* tx_guid, SplitList* pSplitList )
     g_list_foreach( pSplitList, save_split_cb, &split_info );
 }
 
-void
-gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst )
+static void
+save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
 {
-    Transaction* pTx = GNC_TRANS(inst);
     const GUID* guid;
 	gint op;
 	gboolean is_infant;
+	QofInstance* inst;
 
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_TRANS(inst) );
 	g_return_if_fail( be != NULL );
+	g_return_if_fail( pTx != NULL );
 
+	inst = QOF_INSTANCE(pTx);
 	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
 		op = OP_DB_DELETE;
@@ -537,37 +537,37 @@ gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst )
 
     (void)gnc_sql_do_db_operation( be, op, TRANSACTION_TABLE, GNC_ID_TRANS, pTx, tx_col_table );
 
+    // Commit slots and splits
     guid = qof_instance_get_guid( inst );
-
-    // Delete any old slots and splits for this transaction
-	if( !be->is_pristine_db ) {
-    	delete_splits( be, pTx );
-	}
-
     if( !qof_instance_get_destroying(inst) ) {
-        // Now, commit any slots and splits
         gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+		if( do_save_splits ) {
+			save_splits( be, guid, xaccTransGetSplitList( pTx ) );
+		}
     } else {
         gnc_sql_slots_delete( be, guid );
+    	delete_splits( be, pTx );
     }
 }
 
 void
-gnc_sql_transaction_commit_splits( GncSqlBackend* be, Transaction* pTx )
+gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst )
 {
-    SplitList* splits;
-    Split* s;
-    QofBackend* qbe = (QofBackend*)be;
-    
 	g_return_if_fail( be != NULL );
-	g_return_if_fail( pTx != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_TRANS(inst) );
 
-    splits = xaccTransGetSplitList( pTx );
-    for( ; splits != NULL; splits = splits->next ) {
-        s = GNC_SPLIT(splits->data);
+	save_transaction( be, GNC_TRANS(inst), TRUE );
+}
 
-        qbe->commit( qbe, QOF_INSTANCE(s) );
-    }
+static void
+commit_transaction( GncSqlBackend* be, QofInstance* inst )
+{
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_TRANS(inst) );
+
+	save_transaction( be, GNC_TRANS(inst), FALSE );
 }
 
 /* ================================================================= */
@@ -727,7 +727,7 @@ gnc_sql_init_transaction_handler( void )
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_TRANS,
-        gnc_sql_save_transaction,    /* commit */
+        commit_transaction,          /* commit */
         load_all_tx,                 /* initial_load */
         create_transaction_tables    /* create tables */
     };

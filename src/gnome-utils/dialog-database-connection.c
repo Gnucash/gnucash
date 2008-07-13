@@ -30,8 +30,6 @@
 #include <glib/gi18n.h>
 #include <glade/glade.h>
 
-#include <libgda/libgda.h>
-
 #include "gnc-ui.h"
 #include "dialog-utils.h"
 #include "dialog-database-connection.h"
@@ -48,25 +46,36 @@ struct DatabaseConnectionWindow
 {
   /* Parts of the dialog */
   GtkWidget* dialog;
-  GtkWidget* rb_predefined;
-  GtkWidget* rb_general;
-  GtkWidget* cb_predefined;
-  GtkWidget* tf_general;
+  GtkWidget* rb_mysql;
+  GtkWidget* rb_postgresql;
+  GtkWidget* tf_host;
+  GtkWidget* tf_database;
+  GtkWidget* tf_username;
+  GtkWidget* tf_password;
 };
 
 static gchar*
 geturl( struct DatabaseConnectionWindow* dcw )
 {
 	gchar* url;
+	const gchar* host;
+	const gchar* database;
+	const gchar* username;
+	const gchar* password;
+	const gchar* type;
 
-	if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(dcw->rb_predefined) ) ) {
-		/* Selection from predefined list */
-		url = g_strdup_printf( "gda://@%s", gtk_combo_box_get_active_text( GTK_COMBO_BOX(dcw->cb_predefined) ) );
+	host = gtk_entry_get_text( GTK_ENTRY(dcw->tf_host) );
+	database = gtk_entry_get_text( GTK_ENTRY(dcw->tf_database) );
+	username = gtk_entry_get_text( GTK_ENTRY(dcw->tf_username) );
+	password = gtk_entry_get_text( GTK_ENTRY(dcw->tf_password) );
 
+	if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(dcw->rb_mysql) ) ) {
+		type = "mysql";
 	} else {
-		/* Selection using entered info */
-		url = g_strdup_printf( "gdk://%s", gtk_entry_get_text( GTK_ENTRY(dcw->tf_general) ) );
+		type = "postgresql";
 	}
+	url = g_strdup_printf( "%s://%s:%s:%s:%s",
+							type, host, database, username, password );
 
 	return url;
 }
@@ -113,9 +122,6 @@ void gnc_ui_database_connection( void )
     GladeXML* xml;
     GtkWidget* box;
 	GList* ds_node;
-	GdaDataModel* dsns;
-	gint numDsns;
-	gint i;
 
     dcw = g_new0(struct DatabaseConnectionWindow, 1);
     g_return_if_fail(dcw);
@@ -124,26 +130,14 @@ void gnc_ui_database_connection( void )
     xml = gnc_glade_xml_new( "dialog-database-connection.glade", "Database Connection" );
     dcw->dialog = glade_xml_get_widget( xml, "Database Connection" );
 
-    /* Predefined */
-    dcw->rb_predefined = glade_xml_get_widget( xml, "rb_predefined" );
-	box = glade_xml_get_widget( xml, "predefined_connection_box" );
-	dcw->cb_predefined = gtk_combo_box_new_text();
-	numDsns = gda_config_get_nb_dsn();
-	dsns = gda_config_list_dsn();
-	for( i = 0; i < numDsns; i++ ) {
-		GdaDataSourceInfo* ds_info = gda_config_get_dsn_at_index( i );
-		gtk_combo_box_append_text( GTK_COMBO_BOX(dcw->cb_predefined), g_strdup(ds_info->name) );
-	}
-	if( numDsns != 0 ) {
-		gtk_combo_box_set_active( GTK_COMBO_BOX(dcw->cb_predefined), 0 );
-	} else {
-		gtk_widget_set_sensitive( dcw->rb_predefined, FALSE );
-	}
-	gtk_box_pack_start( GTK_BOX(box), dcw->cb_predefined, TRUE, TRUE, 0 );
-
-    /* General */
-    dcw->rb_general = glade_xml_get_widget( xml, "rb_general" );
-    dcw->tf_general = glade_xml_get_widget( xml, "tf_general_db_info" );
+    dcw->rb_mysql = glade_xml_get_widget( xml, "rb_mysql" );
+    dcw->rb_postgresql = glade_xml_get_widget( xml, "rb_postgresql" );
+    dcw->tf_host = glade_xml_get_widget( xml, "tf_host" );
+	gtk_entry_set_text( GTK_ENTRY(dcw->tf_host), "localhost" );
+    dcw->tf_database = glade_xml_get_widget( xml, "tf_database" );
+	gtk_entry_set_text( GTK_ENTRY(dcw->tf_database), "gnucash" );
+    dcw->tf_username = glade_xml_get_widget( xml, "tf_username" );
+    dcw->tf_password = glade_xml_get_widget( xml, "tf_password" );
 
     /* Autoconnect signals */
     glade_xml_signal_autoconnect_full( xml, gnc_glade_autoconnect_full_func,

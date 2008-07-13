@@ -154,6 +154,7 @@ add_owner_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntr
 											G_TYPE_INT, table_row->size );
 	info->is_primary_key = (table_row->flags & COL_PKEY) ? TRUE : FALSE;
 	info->null_allowed = (table_row->flags & COL_NNUL) ? FALSE : TRUE;
+	info->size = table_row->size;
 	*pList = g_list_append( *pList, info );
 
    	buf = g_strdup_printf( "%s_guid", table_row->col_name );

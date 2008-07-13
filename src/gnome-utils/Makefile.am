@@ -30,6 +30,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-account.c \
   dialog-book-close.c \
   dialog-commodity.c \
+  dialog-database-connection.c \
   dialog-options.c \
   dialog-preferences.c \
   dialog-query-list.c \
@@ -104,6 +105,7 @@ gncinclude_HEADERS = \
   dialog-account.h \
   dialog-book-close.h \
   dialog-commodity.h \
+  dialog-database-connection.h \
   dialog-preferences.h \
   dialog-options.h \
   dialog-query-list.h \
@@ -194,8 +196,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${QOF_LIBS} \
   ${GOFFICE_LIBS} \
   ${REGEX_LIBS} \
-  ${LIBXML2_LIBS} \
-  ${LIBGDA_LIBS}
+  ${LIBXML2_LIBS}
 
 if BUILDING_FROM_SVN
 swig-gnome-utils.c: gnome-utils.i gnc-html.h \

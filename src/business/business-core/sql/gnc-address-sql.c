@@ -122,8 +122,9 @@ add_address_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEn
 		info = g_new0( GncSqlColumnInfo, 1 );
 		info->name = buf;
 		info->type_name = gnc_sql_connection_get_column_type_name( be->conn,
-											G_TYPE_STRING, table_row->size );
+											G_TYPE_STRING, subtable_row->size );
 		info->is_primary_key = (table_row->flags & COL_PKEY) ? TRUE : FALSE;
+		info->size = subtable_row->size;
 		info->null_allowed = (table_row->flags & COL_NNUL) ? FALSE : TRUE;
 		*pList = g_list_append( *pList, info );
 	}

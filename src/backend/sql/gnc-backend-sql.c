@@ -361,40 +361,6 @@ gnc_sql_sync_all( GncSqlBackend* be, QofBook *book )
 
     ENTER( "book=%p, primary=%p", book, be->primary_book );
 
-#if 0
-    /* Destroy the current contents of the database */
-	mstore = gda_connection_get_meta_store( be->pConnection );
-	tables = gda_connection_get_meta_store_data( be->pConnection, GDA_CONNECTION_META_TABLES, &error, 0 );
-//    tables = gda_connection_get_schema( be->pConnection,
-                                        //GDA_CONNECTION_SCHEMA_TABLES,
-                                        //NULL,
-                                        //&error );
-    if( error != NULL ) {
-        PERR( "SQL error: %s\n", error->message );
-    }
-    numTables = gda_data_model_get_n_rows( tables );
-    for( row = 0; row < numTables; row++ ) {
-        const GValue* row_value;
-        const gchar* table_name;
-		GdaServerOperation* op;
-
-        row_value = gda_data_model_get_value_at( tables, 0, row );
-        table_name = g_value_get_string( row_value );
-        error = NULL;
-		op = gda_prepare_drop_table( be->pConnection, table_name, &error );
-		if( error != NULL ) {
-			PERR( "Unable to create op: %s\n", error->message );
-		}
-		if( op != NULL ) {
-			error = NULL;
-			gda_perform_drop_table( op, &error );
-            if( error != NULL ) {
-                PERR( "SQL error: %s\n", error->message );
-            }
-        }
-    }
-#endif
-
 	reset_version_info( be );
 
     /* Create new tables */

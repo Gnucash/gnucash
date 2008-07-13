@@ -34,22 +34,4 @@
 G_MODULE_EXPORT void
 qof_backend_module_init(void);
 
-struct GncDbiBackend_struct
-{
-  GncSqlBackend sql_be;
-
-  dbi_conn conn;
-
-  QofBook *primary_book;	/* The primary, main open book */
-  gboolean	loading;		/* We are performing an initial load */
-  gboolean  in_query;
-  gboolean  supports_transactions;
-  gboolean  is_pristine_db;	// Are we saving to a new pristine db?
-
-  gint obj_total;			// Total # of objects (for percentage calculation)
-  gint operations_done;		// Number of operations (save/load) done
-//  GHashTable* versions;		// Version number for each table
-};
-typedef struct GncDbiBackend_struct GncDbiBackend;
-
 #endif /* GNC_BACKEND_DBI_H_ */

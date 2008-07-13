@@ -103,11 +103,9 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "FileOpenAction", GTK_STOCK_OPEN, N_("_Open..."), NULL,
     N_("Open an existing GnuCash file"),
     G_CALLBACK (gnc_main_window_cmd_file_open) },
-#if 0
   { "FileDatabaseConnectionAction", NULL, N_("_Database Connection"), NULL,
     N_("Connect to a database"),
     G_CALLBACK (gnc_main_window_cmd_file_db_connection) },
-#endif
   { "FileSaveAction", GTK_STOCK_SAVE, N_("_Save"), "<control>s",
     N_("Save the current file"),
     G_CALLBACK (gnc_main_window_cmd_file_save) },
@@ -347,7 +345,7 @@ gnc_main_window_cmd_file_db_connection (GtkAction *action, GncMainWindowActionDa
   if (!gnc_main_window_all_finish_pending())
     return;
 
-//  gnc_ui_database_connection();
+  gnc_ui_database_connection();
 }
 
 static void
