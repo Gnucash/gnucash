@@ -945,7 +945,7 @@ conn_get_column_type_name( GncSqlConnection* conn, GType type, gint size )
 				return "string";
 				break;
 			default:
-				PERR( "Unknown GType: %d\n", type );
+				PERR( "Unknown GType: %s\n", g_type_name( type ) );
 				return "";
 		}
 	} else if( dbi_conn->provider == GNC_DBI_PROVIDER_MYSQL ) {
@@ -961,7 +961,7 @@ conn_get_column_type_name( GncSqlConnection* conn, GType type, gint size )
 				return "varchar";
 				break;
 			default:
-				PERR( "Unknown GType: %d\n", type );
+				PERR( "Unknown GType: %s\n", g_type_name( type ) );
 				return "";
 		}
 	} else if( dbi_conn->provider == GNC_DBI_PROVIDER_PGSQL ) {
@@ -977,7 +977,7 @@ conn_get_column_type_name( GncSqlConnection* conn, GType type, gint size )
 				return "varchar";
 				break;
 			default:
-				PERR( "Unknown GType: %d\n", type );
+				PERR( "Unknown GType: %s\n", g_type_name( type ) );
 				return "";
 		}
 	} else {
