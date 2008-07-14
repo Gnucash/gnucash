@@ -1518,7 +1518,7 @@ add_gvalue_timespec_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     Timespec ts;
 	gchar* datebuf;
 	time_t time;
-	struct tm tm;
+	struct tm* tm;
 	gint year;
 	GValue* value;
 
@@ -1533,13 +1533,13 @@ add_gvalue_timespec_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     ts = (*ts_getter)( pObject );
 
 	time = timespecToTime_t( ts );
-	(void)gmtime_r( &time, &tm );	
+	tm = gmtime( &time );	
 
-	if( tm.tm_year < 60 ) year = tm.tm_year + 2000;
-	else year = tm.tm_year + 1900;
+	if( tm->tm_year < 60 ) year = tm->tm_year + 2000;
+	else year = tm->tm_year + 1900;
 
 	datebuf = g_strdup_printf( TIMESPEC_STR_FORMAT,
-					year, tm.tm_mon+1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec );
+					year, tm->tm_mon+1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec );
     g_value_init( value, G_TYPE_STRING );
 	g_value_take_string( value, datebuf );
 
