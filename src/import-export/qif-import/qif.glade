@@ -1716,7 +1716,7 @@ Check to see if there is an existing Type that is appropriate; if not, you can e
       <child>
 	<widget class="GnomeDruidPageStandard" id="match_doc_page">
 	  <property name="visible">True</property>
-	  <property name="title" translatable="yes">Match duplicate transactions</property>
+	  <property name="title" translatable="yes">Match existing transactions</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
@@ -1731,11 +1731,11 @@ Check to see if there is an existing Type that is appropriate; if not, you can e
 	      <child>
 		<widget class="GtkLabel" id="label847694">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">If you are importing a QIF file downloaded from a bank or other financial institution, some of the information in the QIF file may duplicate information already in your GnuCash accounts.  GnuCash will try to detect duplicates of existing transactions.  
+		  <property name="label" translatable="yes">If you are importing a QIF file from a bank or other financial institution, some of the transactions may already exist in your GnuCash accounts. To avoid duplication, GnuCash has tried to identify matches and needs your help to review them.
 
-On the next page, you will be asked to confirm that an existing transaction matches an imported transaction.  Imported transactions are shown on the left side of the page, and possible matches for the selected left-hand transaction are shown to the right.  There may be several old transactions that could match an imported transaction; you will be able to select the correct one by double-clicking in the &quot;Dup?&quot; column of the correct transaction.
+On the next page you will be shown a list of imported transactions. As you select each one, a list of possible matches will be shown below it. If you find a correct match, click on it. Your selection will be confirmed by a check mark in the &quot;Match?&quot; column.
 
-Click &quot;Forward&quot; to find duplicate transactions. </property>
+Click &quot;Forward&quot; to review the possible matches.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1777,7 +1777,7 @@ Click &quot;Forward&quot; to find duplicate transactions. </property>
 	      <property name="spacing">0</property>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox94">
+		<widget class="GtkVBox" id="vbox94">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">2</property>
@@ -1816,7 +1816,7 @@ Click &quot;Forward&quot; to find duplicate transactions. </property>
 		      <child>
 			<widget class="GtkLabel" id="label847716">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Imported transactions with duplicates</property>
+			  <property name="label" translatable="yes">_Imported transactions needing review:</property>
 			  <property name="use_underline">True</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1826,6 +1826,7 @@ Click &quot;Forward&quot; to find duplicate transactions. </property>
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
+                          <property name="mnemonic_widget">new_transaction_view</property>
 			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			  <property name="width_chars">-1</property>
 			  <property name="single_line_mode">False</property>
@@ -1877,7 +1878,7 @@ Click &quot;Forward&quot; to find duplicate transactions. </property>
 		      <child>
 			<widget class="GtkLabel" id="label847717">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Possible duplicates for selected new transaction</property>
+			  <property name="label" translatable="yes">_Possible matches for the selected transaction:</property>
 			  <property name="use_underline">True</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1887,6 +1888,7 @@ Click &quot;Forward&quot; to find duplicate transactions. </property>
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
+                          <property name="mnemonic_widget">old_transaction_view</property>
 			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			  <property name="width_chars">-1</property>
 			  <property name="single_line_mode">False</property>

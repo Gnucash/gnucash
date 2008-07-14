@@ -3516,7 +3516,7 @@ gnc_ui_qif_import_druid_make(void)
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_toggle_new();
-  column = gtk_tree_view_column_new_with_attributes(_("Dup?"),
+  column = gtk_tree_view_column_new_with_attributes(_("Match?"),
                                                     renderer,
                                                     "active",
                                                     QIF_TRANS_COL_CHECKED,
