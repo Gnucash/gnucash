@@ -980,6 +980,10 @@ showbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
                         dialog);
     gui->showbox_last = dialog;
 
+    /* Give it a change to be showed */
+    if (!keep_alive(gui))
+        showbox_id = 0;
+
     LEAVE("id=%" G_GUINT32_FORMAT, showbox_id);
     return showbox_id;
 }
