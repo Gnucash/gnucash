@@ -4133,7 +4133,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1298 </act:code>
+    <act:code>1298</act:code>
     <act:description>Forderungen, nicht eingeforderte ausstehende Einlagen s. Konto 2910</act:description>
     <act:slots>
       <slot>
