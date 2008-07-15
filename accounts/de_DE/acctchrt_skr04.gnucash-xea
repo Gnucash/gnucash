@@ -11784,7 +11784,7 @@
     <act:parent type="new">8755bf4081c942798c5ac5f34c5b1aac</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Mehrwertsteuer 7%</act:name>
+    <act:name>Umsatzsteuer 7%</act:name>
     <act:id type="new">c76f946f844d0afc674013ca97731f3a</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -11856,7 +11856,7 @@
     <act:parent type="new">e726cf1027d9589c65f0681a73fbc8c8</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Mehrwertsteuer 16%</act:name>
+    <act:name>Umsatzsteuer 16%</act:name>
     <act:id type="new">ea57995749ee6b3af394f62ff181e502</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
