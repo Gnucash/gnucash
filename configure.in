@@ -181,9 +181,9 @@ ${srcdir}/util/gnc-svnversion ${srcdir} >/dev/null 2>&1
 if test $? = 0 ; then
   BUILDING_FROM_SVN=yes
 
-  # We need at least version 1.3.28 of SWIG because
-  # that's when SWIG added %delobject
-  AC_PROG_SWIG(1.3.28)
+  # We need at least version 1.3.31 of SWIG because
+  # that's when SWIG doesn't barf on the "inline" keyword in C headers anymore
+  AC_PROG_SWIG(1.3.31)
 else
   BUILDING_FROM_SVN=no
   # Make sure we've got swig-runtime.h and gnc-svninfo.h
