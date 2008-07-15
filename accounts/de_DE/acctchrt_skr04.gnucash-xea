@@ -6182,29 +6182,7 @@
     <act:parent type="new">3be1aa86d6868b006741b9af6777cf5f</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Schecks</act:name>
-    <act:id type="new">e0712c0ad9d6bfbc9b18a65832d73fcb</act:id>
-    <act:type>ASSET</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1550</act:code>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">9743059255b8318a7eb5ba07b2dd3e0e</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Kassenbestand</act:name>
+    <act:name>Kasse</act:name>
     <act:id type="new">9245a7abb3a1df7c26c1b189cceb84b1</act:id>
     <act:type>CASH</act:type>
     <act:commodity>
@@ -6232,28 +6210,6 @@
       </slot>
     </act:slots>
     <act:parent type="new">9743059255b8318a7eb5ba07b2dd3e0e</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Kasse</act:name>
-    <act:id type="new">a73604541838ee1eff060ae018db8bb3</act:id>
-    <act:type>CASH</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1600</act:code>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">9245a7abb3a1df7c26c1b189cceb84b1</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
     <act:name>Postbank</act:name>
@@ -11127,28 +11083,6 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>3567</act:code>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">934e168b36770e076b9d2eeaad400912</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Gegenkonto Aufteilung der Darlehen</act:name>
-    <act:id type="new">d542fba3d1dd39fcdf4d5c721a6b43cd</act:id>
-    <act:type>PAYABLE</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>3599</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -18642,28 +18576,6 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>6140</act:code>
-    <act:slots>
-      <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">false</slot:value>
-      </slot>
-      <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string"></slot:value>
-      </slot>
-    </act:slots>
-    <act:parent type="new">2906a27180c72875652cef912c773d4e</act:parent>
-  </gnc:account>
-  <gnc:account version="2.0.0">
-    <act:name>Pauschale Steuer für Versicherungen</act:name>
-    <act:id type="new">da3a1376f6f6240594701514868a0465</act:id>
-    <act:type>EXPENSE</act:type>
-    <act:commodity>
-      <cmdty:space>ISO4217</cmdty:space>
-      <cmdty:id>EUR</cmdty:id>
-    </act:commodity>
-    <act:commodity-scu>100</act:commodity-scu>
-    <act:code>6147</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
