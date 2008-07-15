@@ -187,7 +187,7 @@ struct _GncGWENGui {
     GWEN_GUI_CHECKCERT_FN builtin_checkcert;
 
     /* Dialogs */
-    guint showbox_id;
+    guint32 showbox_id;
     GHashTable *showbox_hash;
     GtkWidget *showbox_last;
 
@@ -959,6 +959,7 @@ showbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
 {
     GncGWENGui *gui = GETDATA_GUI(gwen_gui);
     GtkWidget *dialog;
+    guint32 showbox_id;
 
     g_return_val_if_fail(gui, -1);
 
@@ -974,13 +975,13 @@ showbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_hide), NULL);
     gtk_widget_show_all(dialog);
 
-    g_hash_table_insert(gui->showbox_hash, GUINT_TO_POINTER(gui->showbox_id),
+    showbox_id = gui->showbox_id++;
+    g_hash_table_insert(gui->showbox_hash, GUINT_TO_POINTER(showbox_id),
                         dialog);
-    gui->showbox_id++;
     gui->showbox_last = dialog;
 
-    LEAVE(" ");
-    return 0;
+    LEAVE("id=%" G_GUINT32_FORMAT, showbox_id);
+    return showbox_id;
 }
 
 static void
