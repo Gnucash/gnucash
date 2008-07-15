@@ -20400,7 +20400,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>6458 </act:code>
+    <act:code>6458</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -20912,7 +20912,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>6660 </act:code>
+    <act:code>6660</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -21114,7 +21114,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>6689 </act:code>
+    <act:code>6689</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
