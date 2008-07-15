@@ -4889,7 +4889,6 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1400</act:code>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
