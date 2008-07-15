@@ -13017,7 +13017,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>4315</act:code>
+    <act:code>4330</act:code>
     <act:description>UstVa Zl. 35, Kz. 97</act:description>
     <act:slots>
       <slot>
@@ -13219,7 +13219,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>4400</act:code>
+    <act:code>4340</act:code>
     <act:description>UstVa Zl. 27, Kz. 51</act:description>
     <act:slots>
       <slot>
