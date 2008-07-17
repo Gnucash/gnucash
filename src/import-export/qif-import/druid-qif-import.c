@@ -73,6 +73,7 @@ enum account_cols {
   ACCOUNT_COL_QIF_NAME,
   ACCOUNT_COL_GNC_NAME,
   ACCOUNT_COL_NEW,
+  ACCOUNT_COL_ELLIPSIZE,
   NUM_ACCOUNT_COLS
 };
 
@@ -242,10 +243,11 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
 
     gtk_list_store_append(store, &iter);
     gtk_list_store_set(store, &iter,
-                       ACCOUNT_COL_INDEX,    row++,
-                       ACCOUNT_COL_QIF_NAME, qif_name,
-                       ACCOUNT_COL_GNC_NAME, gnc_name,
-                       ACCOUNT_COL_NEW,      checked,
+                       ACCOUNT_COL_INDEX,     row++,
+                       ACCOUNT_COL_QIF_NAME,  qif_name,
+                       ACCOUNT_COL_GNC_NAME,  gnc_name,
+                       ACCOUNT_COL_NEW,       checked,
+                       ACCOUNT_COL_ELLIPSIZE, PANGO_ELLIPSIZE_START,
                        -1);
     accts_left = SCM_CDR(accts_left);
   }
@@ -1446,7 +1448,8 @@ create_account_picker_view(GtkWidget *widget,
   GtkTreeViewColumn *column;
 
   store = gtk_list_store_new(NUM_ACCOUNT_COLS, G_TYPE_INT, G_TYPE_STRING,
-                             G_TYPE_STRING, G_TYPE_BOOLEAN);
+                             G_TYPE_STRING, G_TYPE_BOOLEAN,
+                             PANGO_TYPE_ELLIPSIZE_MODE);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
   g_object_unref(store);
 
@@ -1455,7 +1458,10 @@ create_account_picker_view(GtkWidget *widget,
                                                     renderer,
                                                     "text",
                                                     ACCOUNT_COL_QIF_NAME,
+                                                    "ellipsize",
+                                                    ACCOUNT_COL_ELLIPSIZE,
                                                     NULL);
+  g_object_set(column, "expand", TRUE, NULL);
   gtk_tree_view_column_set_resizable(column, TRUE);
   gtk_tree_view_append_column(view, column);
 
@@ -1464,6 +1470,8 @@ create_account_picker_view(GtkWidget *widget,
                                                     renderer,
                                                     "text",
                                                     ACCOUNT_COL_GNC_NAME,
+                                                    "ellipsize",
+                                                    ACCOUNT_COL_ELLIPSIZE,
                                                     NULL);
   g_object_set(column, "expand", TRUE, NULL);
   gtk_tree_view_column_set_resizable(column, TRUE);
