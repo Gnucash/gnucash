@@ -10,12 +10,14 @@
   (string-append brokerage (gnc-get-account-separator-string) security))
 
 (define (default-dividend-acct brokerage security)
-  (string-append (_ "Dividends") (gnc-get-account-separator-string)
+  (string-append (_ "Income") (gnc-get-account-separator-string)
+                 (_ "Dividends") (gnc-get-account-separator-string)
                  brokerage (gnc-get-account-separator-string)
                  security))
 
 (define (default-interest-acct brokerage security)
-  (string-append (_ "Interest") (gnc-get-account-separator-string)
+  (string-append (_ "Income") (gnc-get-account-separator-string)
+                 (_ "Interest") (gnc-get-account-separator-string)
                  brokerage
                  (if (string=? security "")
                   ""
@@ -23,35 +25,45 @@
                                   security))))
 
 (define (default-capital-return-acct brokerage security)
-  (string-append (_ "Cap Return") (gnc-get-account-separator-string)
+  (string-append (_ "Income") (gnc-get-account-separator-string)
+                 (_ "Cap Return") (gnc-get-account-separator-string)
                  brokerage (gnc-get-account-separator-string)
                  security))
 
 (define (default-cglong-acct brokerage security)
-  (string-append (_ "Cap. gain (long)") (gnc-get-account-separator-string)
+  (string-append (_ "Income") (gnc-get-account-separator-string)
+                 (_ "Cap. gain (long)") (gnc-get-account-separator-string)
                  brokerage (gnc-get-account-separator-string)
                  security))
 
 (define (default-cgmid-acct brokerage security)
-  (string-append (_ "Cap. gain (mid)") (gnc-get-account-separator-string)
+  (string-append (_ "Income") (gnc-get-account-separator-string)
+                 (_ "Cap. gain (mid)") (gnc-get-account-separator-string)
                  brokerage (gnc-get-account-separator-string)
                  security))
 
 (define (default-cgshort-acct brokerage security)
-  (string-append (_ "Cap. gain (short)") (gnc-get-account-separator-string)
+  (string-append (_ "Income") (gnc-get-account-separator-string)
+                 (_ "Cap. gain (short)") (gnc-get-account-separator-string)
                  brokerage (gnc-get-account-separator-string)
                  security))
 
-(define (default-equity-holding security) (_ "Retained Earnings"))
+(define (default-equity-holding security)
+  (string-append (_ "Equity") (gnc-get-account-separator-string)
+                 (_ "Retained Earnings")))
 
-(define (default-equity-account) (_ "Retained Earnings"))
+(define (default-equity-account)
+  (string-append (_ "Equity") (gnc-get-account-separator-string)
+                 (_ "Retained Earnings")))
 
 (define (default-commission-acct brokerage)
-  (string-append (_ "Commissions") (gnc-get-account-separator-string)
+  (string-append (_ "Expenses") (gnc-get-account-separator-string)
+                 (_ "Commissions") (gnc-get-account-separator-string)
                  brokerage))
 
 (define (default-margin-interest-acct brokerage)
-  (string-append (_ "Margin Interest") (gnc-get-account-separator-string)
+  (string-append (_ "Expenses") (gnc-get-account-separator-string)
+                 (_ "Margin Interest") (gnc-get-account-separator-string)
                  brokerage))
 
 (define (default-unspec-acct)
@@ -889,5 +901,3 @@
                (set-cdr! match #f))
            (set! i (+ 1 i)))
          matches))))
-
-
