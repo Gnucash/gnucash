@@ -1503,11 +1503,11 @@ In the following page, you will see the text that appears in the Payee and Memo 
 	      <child>
 		<widget class="GtkLabel" id="label833">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">In the next pages, you will be asked to provide information about stocks, mutual funds, and other tradable commodities that appear in the QIF file(s) you are importing. GnuCash requires more information about tradable commodities than the QIF format can represent. 
+		  <property name="label" translatable="yes">In the following pages you will be asked to provide information about stocks, mutual funds, and other investments that appear in the QIF file(s) you are importing. GnuCash needs some additional details about these investments that the QIF format does not provide. 
 
-Each stock, mutual fund, or other commodity must have a type, which is the exchange or listing that it is found on (NASDAQ, NYSE, US Mutual Funds, etc), a full name, and an abbreviation.
+Each stock, mutual fund, or other investment must have a name and an abbreviation, such as a stock symbol. Because some unrelated investments have the same abbreviation, you also need to indicate what type of abbreviation you have entered. For example, you could select the exchange that assigned the symbol (NASDAQ, NYSE, etc.), or select an investment type.
 
-Check to see if there is an existing Type that is appropriate; if not, you can enter a new Type name by hand in the box. Make sure that the abbreviation you enter matches the ticker symbol used for the commodity on the exchange or listing for its type.</property>
+If you don't see your exchange listed, or none of the available choices are appropriate, you can enter a new one.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>

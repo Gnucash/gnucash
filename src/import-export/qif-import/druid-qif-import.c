@@ -169,9 +169,9 @@ struct _qifimportwindow {
 
 struct _qifdruidpage {
   GtkWidget     *page;
-  GtkWidget     *new_type_combo;
-  GtkWidget     *new_name_entry;
-  GtkWidget     *new_mnemonic_entry;
+  GtkWidget     *namespace_combo;
+  GtkWidget     *name_entry;
+  GtkWidget     *mnemonic_entry;
   gnc_commodity *commodity;
   SCM            hash_key;
 };
@@ -2035,16 +2035,16 @@ gnc_ui_qif_import_comm_prepare_cb(GnomeDruidPage * page,
   gchar           *ns;
 
   /* Get any entered namespace. */
-  ns = gtk_combo_box_get_active_text(GTK_COMBO_BOX(qpage->new_type_combo));
+  ns = gtk_combo_box_get_active_text(GTK_COMBO_BOX(qpage->namespace_combo));
 
   /* Update the namespaces available to select. */
   if (!ns || !ns[0])
     gnc_ui_update_namespace_picker(
-      qpage->new_type_combo,
+      qpage->namespace_combo,
       gnc_commodity_get_namespace(qpage->commodity),
       DIAG_COMM_ALL);
   else
-    gnc_ui_update_namespace_picker(qpage->new_type_combo, ns, DIAG_COMM_ALL);
+    gnc_ui_update_namespace_picker(qpage->namespace_combo, ns, DIAG_COMM_ALL);
 
   g_free(ns);
 }
@@ -2062,29 +2062,34 @@ gnc_ui_qif_import_comm_next_cb(GnomeDruidPage * page,
   gnc_commodity_table     *table;
   gnc_commodity_namespace *newns;
 
-  gchar       *namespace = gnc_ui_namespace_picker_ns(qpage->new_type_combo);
-  const gchar *name      = gtk_entry_get_text(GTK_ENTRY(qpage->new_name_entry));
-  const gchar *mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->new_mnemonic_entry));
+  gchar       *namespace = gnc_ui_namespace_picker_ns(qpage->namespace_combo);
+  const gchar *name      = gtk_entry_get_text(GTK_ENTRY(qpage->name_entry));
+  const gchar *mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->mnemonic_entry));
 
-  if (!namespace || (namespace[0] == 0)) {
+  if (!name || (name[0] == 0)) {
     gnc_warning_dialog(wind->window,
-                       _("You must enter a Type for the commodity."));
-    if (namespace)
-      g_free(namespace);
-    return TRUE;
-  }
-  else if (!name || (name[0] == 0)) {
-    gnc_warning_dialog(wind->window,
-                       _("You must enter a name for the commodity."));
+     _("Enter a name or short description, such as \"Red Hat Stock\"."));
     g_free(namespace);
     return TRUE;
   }
   else if (!mnemonic || (mnemonic[0] == 0)) {
-    gnc_warning_dialog
-      (wind->window, _("You must enter an abbreviation for the commodity."));
+    gnc_warning_dialog(wind->window,
+     _("Enter the ticker symbol or other well known abbreviation, such as"
+       " \"RHT\". If there isn't one, or you don't know it, create your own."));
     g_free(namespace);
     return TRUE;
   }
+  else if (!namespace || (namespace[0] == 0)) {
+    gnc_warning_dialog(wind->window,
+     _("Select the exchange on which the symbol is traded, or select the"
+       " type of investment (such as FUND for mutual funds.) If you don't"
+       " see your exchange or an appropriate investment type, you can"
+       " enter a new one."));
+    if (namespace)
+      g_free(namespace);
+    return TRUE;
+  }
+
   /* FIXME: Should check whether a commodity with this namespace and
    *        mnemonic already exists. If so, ask the user whether to use
    *        the existing one, or go back and change what they've entered.
@@ -2130,13 +2135,27 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm)
 {
 
   QIFDruidPage *retval = g_new0(QIFDruidPage, 1);
-  GtkWidget    *top_vbox;
-  GtkWidget    *info_label;
-  GtkWidget    *next_label;
-  GtkWidget    *temp;
+  GtkWidget    *table;
+  GtkWidget    *label;
   gchar        *title = NULL;
   const char   *str;
   GnomeDruidPageStandard *page;
+  char         *name_tooltip =
+   _("Enter a name or short description, such as \"Red Hat Stock\".");
+  char         *mnemonic_tooltip =
+   _("Enter the ticker symbol or other well known abbreviation, such as"
+     " \"RHT\". If there isn't one, or you don't know it, create your own.");
+  char         *namespace_tooltip =
+   _("Select the exchange on which the symbol is traded, or select the"
+     " type of investment (such as FUND for mutual funds.) If you don't"
+     " see your exchange or an appropriate investment type, you can"
+     " enter a new one.");
+#if GTK_CHECK_VERSION(2, 12, 0)
+  /* Use the GtkTooltip API */
+#elif GTK_CHECK_VERSION(2, 6, 0)
+  /* Use the deprecated GtkTooltips API */
+  GtkTooltips  *tooltips = gtk_tooltips_new();
+#endif
 
   /* Make the page widget. */
   retval->page = gnome_druid_page_standard_new_with_vals("", NULL, NULL);
@@ -2156,81 +2175,81 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm)
   g_free(title);
 
   /* Set the page colors. */
-  gnome_druid_page_standard_set_background(page, & std_bg_color);
-  gnome_druid_page_standard_set_logo_background(page, & std_logo_bg_color);
-  gnome_druid_page_standard_set_title_foreground(page, & std_title_color);
+  gnome_druid_page_standard_set_background(page, &std_bg_color);
+  gnome_druid_page_standard_set_logo_background(page, &std_logo_bg_color);
+  gnome_druid_page_standard_set_title_foreground(page, &std_title_color);
 
   /*
    * Add all the widgets to the page.
    */
-  top_vbox = gtk_vbox_new(FALSE, 3);
-  gtk_box_pack_start(GTK_BOX(page->vbox), top_vbox, FALSE, FALSE, 0);
+  table = gtk_table_new(3, 2, FALSE);
+  gtk_table_set_row_spacings(GTK_TABLE(table), 6);
+  gtk_table_set_col_spacings(GTK_TABLE(table), 12);
 
-  info_label = gtk_label_new(_("Pick the commodity's exchange or listing "
-                               "(NASDAQ, NYSE, etc)."));
-  gtk_label_set_justify(GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
-  gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
-
-  temp = gtk_hbox_new(FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 0);
-
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
-
-  retval->new_type_combo = gtk_combo_box_entry_new_text();
-  gnc_cbe_add_completion(GTK_COMBO_BOX_ENTRY(retval->new_type_combo));
-  gtk_box_pack_start(GTK_BOX(temp), retval->new_type_combo, TRUE, TRUE, 0);
-
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
-
-  info_label = gtk_label_new(_("Enter the full name of the commodity, "
-                               "such as \"Red Hat Stock\""));
-
-  gtk_label_set_justify(GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
-  gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
-
-  temp = gtk_hbox_new(FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 0);
-
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
-
-  retval->new_name_entry = gtk_entry_new();
-  gtk_box_pack_start(GTK_BOX(temp), retval->new_name_entry,
-                     TRUE, TRUE, 0);
-  gtk_entry_set_text(GTK_ENTRY(retval->new_name_entry),
+  /* Name entry */
+  retval->name_entry = gtk_entry_new();
+  gtk_entry_set_text(GTK_ENTRY(retval->name_entry),
                      gnc_commodity_get_fullname(comm));
-
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
-
-  info_label = gtk_label_new(_("Enter the ticker symbol (such as \"RHAT\") or "
-                               "other unique abbreviation for the name."));
-
-  gtk_label_set_justify(GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
-  gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
-
-  temp = gtk_hbox_new(FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 0);
-
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
-
-  retval->new_mnemonic_entry = gtk_entry_new();
-  gtk_box_pack_start(GTK_BOX(temp), retval->new_mnemonic_entry,
-                     TRUE, TRUE, 0);
-  gtk_entry_set_text(GTK_ENTRY(retval->new_mnemonic_entry),
+  label = gtk_label_new_with_mnemonic(_("_Name or description:"));
+  gtk_label_set_mnemonic_widget(GTK_LABEL(label), retval->name_entry);
+  gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+#if GTK_CHECK_VERSION(2, 12, 0)
+  gtk_widget_set_tooltip_text(label, name_tooltip);
+  gtk_widget_set_tooltip_text(retval->name_entry, name_tooltip);
+#elif GTK_CHECK_VERSION(2, 6, 0)
+  gtk_tooltips_set_tip(tooltips, label,
+                       name_tooltip, NULL);
+  gtk_tooltips_set_tip(tooltips, retval->name_entry,
+                       name_tooltip, NULL);
+#endif
+  gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
+                   GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+  gtk_table_attach_defaults(GTK_TABLE(table), retval->name_entry,
+                            1, 2, 0, 1);
+  /* Mnemonic entry */
+  retval->mnemonic_entry = gtk_entry_new();
+  gtk_entry_set_text(GTK_ENTRY(retval->mnemonic_entry),
                      gnc_commodity_get_mnemonic(comm));
+  label = gtk_label_new_with_mnemonic(
+    _("_Ticker symbol or other abbreviation:"));
+  gtk_label_set_mnemonic_widget(GTK_LABEL(label), retval->mnemonic_entry);
+  gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+#if GTK_CHECK_VERSION(2, 12, 0)
+  gtk_widget_set_tooltip_text(label, mnemonic_tooltip);
+  gtk_widget_set_tooltip_text(retval->mnemonic_entry, mnemonic_tooltip);
+#elif GTK_CHECK_VERSION(2, 6, 0)
+  gtk_tooltips_set_tip(tooltips, label,
+                       mnemonic_tooltip, NULL);
+  gtk_tooltips_set_tip(tooltips, retval->mnemonic_entry,
+                       mnemonic_tooltip, NULL);
+#endif
+  gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
+                   GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+  gtk_table_attach_defaults(GTK_TABLE(table), retval->mnemonic_entry,
+                            1, 2, 1, 2);
 
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
+  /* Namespace entry */
+  retval->namespace_combo = gtk_combo_box_entry_new_text();
+  gnc_cbe_add_completion(GTK_COMBO_BOX_ENTRY(retval->namespace_combo));
+  label = gtk_label_new_with_mnemonic(
+    _("_Exchange or abbreviation type:"));
+  gtk_label_set_mnemonic_widget(GTK_LABEL(label), retval->namespace_combo);
+  gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+#if GTK_CHECK_VERSION(2, 12, 0)
+  gtk_widget_set_tooltip_text(label, namespace_tooltip);
+  gtk_widget_set_tooltip_text(retval->namespace_combo, namespace_tooltip);
+#elif GTK_CHECK_VERSION(2, 6, 0)
+  gtk_tooltips_set_tip(tooltips, label,
+                       namespace_tooltip, NULL);
+  gtk_tooltips_set_tip(tooltips, retval->namespace_combo,
+                       namespace_tooltip, NULL);
+#endif
+  gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
+                   GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+  gtk_table_attach_defaults(GTK_TABLE(table), retval->namespace_combo,
+                            1, 2, 2, 3);
 
-  next_label = gtk_label_new(_("Click \"Forward\" to accept the information "
-                               "and move on."));
-  gtk_label_set_justify(GTK_LABEL(next_label), GTK_JUSTIFY_LEFT);
-  gtk_box_pack_end(GTK_BOX(top_vbox), next_label, TRUE, TRUE, 0);
-
+  gtk_box_pack_start(GTK_BOX(page->vbox), table, FALSE, FALSE, 0);
 
   return retval;
 }
@@ -2359,9 +2378,9 @@ gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
     page      = g_object_get_data(G_OBJECT(gtkpage), "page_struct");
 
     /* Get any changes from the commodity page. */
-    mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->new_mnemonic_entry));
-    namespace = gnc_ui_namespace_picker_ns(page->new_type_combo);
-    fullname  = gtk_entry_get_text(GTK_ENTRY(page->new_name_entry));
+    mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->mnemonic_entry));
+    namespace = gnc_ui_namespace_picker_ns(page->namespace_combo);
+    fullname  = gtk_entry_get_text(GTK_ENTRY(page->name_entry));
 
     /* Update the commodity with the new values. */
     gnc_commodity_set_namespace(page->commodity, namespace);
