@@ -1,7 +1,21 @@
 SUBDIRS = .
 
+test_column_types_SOURCES = \
+  ${top_srcdir}/src/backend/sql/gnc-backend-sql.c \
+  ${top_srcdir}/src/backend/sql/gnc-account-sql.c \
+  ${top_srcdir}/src/backend/sql/gnc-book-sql.c \
+  ${top_srcdir}/src/backend/sql/gnc-budget-sql.c \
+  ${top_srcdir}/src/backend/sql/gnc-commodity-sql.c \
+  ${top_srcdir}/src/backend/sql/gnc-lots-sql.c \
+  ${top_srcdir}/src/backend/sql/gnc-price-sql.c \
+  ${top_srcdir}/src/backend/sql/gnc-recurrence-sql.c \
+  ${top_srcdir}/src/backend/sql/gnc-schedxaction-sql.c \
+  ${top_srcdir}/src/backend/sql/gnc-slots-sql.c \
+  ${top_srcdir}/src/backend/sql/gnc-transaction-sql.c \
+  test-column-types.c
+
 TESTS = \
-  test-load-backend
+  test-column-types
 
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/engine \
@@ -10,7 +24,7 @@ GNC_TEST_DEPS := \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/src/backend/gda
+  --library-dir    ${top_builddir}/src/backend/sql
 
 TESTS_ENVIRONMENT := \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
@@ -18,7 +32,7 @@ TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \
-  test-load-backend
+  test-column-types
 
 #noinst_HEADERS = test-file-stuff.h
 
@@ -38,11 +52,10 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
-  -I${top_srcdir}/src/backend/gda \
-  -I${top_srcdir}/src/backend/qsf \
+  -I${top_srcdir}/src/backend/sql \
   ${GLIB_CFLAGS} \
   ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GCONF_CFLAGS}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.gda\"
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.sql\"

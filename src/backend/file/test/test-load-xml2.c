@@ -40,7 +40,7 @@
 #include "cashobjects.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
-#include "gnc-backend-xml.h"
+#include "gnc-backend-file.h"
 #include "io-gncxml-v2.h"
 
 #include "test-stuff.h"

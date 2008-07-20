@@ -1,11 +1,10 @@
 /***************************************************************************
- *            test-load-backend.c
+ *            test-column-types.c
  *
- *  Replaces the guile version to test the GModule file backend loading.
+ *  Tests the basic SQL column types
  *
- *  Sun Oct  9 18:58:47 2005
- *  Copyright  2005  Neil Williams
- *  linux@codehelp.co.uk
+ *  Copyright  2008 Phil Longstaff
+ *  plongstaff@rogers.com
  ****************************************************************************/
 
 /*
@@ -30,16 +29,18 @@
 #include "cashobjects.h"
 #include "test-stuff.h"
 
-#define GNC_LIB_NAME "gncmod-backend-gda"
+#include "gnc-backend-sql.h"
 
-int main (int argc, char ** argv)
+int main( int argc, char ** argv )
 {
     qof_init();
     cashobjects_register();
-    do_test(
+	gnc_sql_init( NULL );
+/*    do_test(
         qof_load_backend_library ("../.libs/", GNC_LIB_NAME),
         " loading gnc-backend-gda GModule failed");
+*/
     print_test_results();
     qof_close();
-    exit(get_rv());
+    exit( get_rv() );
 }
