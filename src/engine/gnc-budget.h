@@ -67,7 +67,7 @@
 #include <glib.h>
 
 /** The budget data.*/
-typedef struct gnc_budget_private GncBudget;
+typedef struct budget_s GncBudget;
 typedef struct _GncBudgetClass GncBudgetClass;
 
 #include "qof.h"
