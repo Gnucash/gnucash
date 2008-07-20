@@ -133,6 +133,8 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         gchar *description;
         gchar *memo;
         Transaction *gnc_trans = NULL;
+        AB_IMEXPORTER_CONTEXT *context = NULL;
+        GncABImExContextImport *ieci = NULL;
 
         /* Get a GUI object */
         gui = gnc_GWEN_Gui_get(parent);
@@ -226,8 +228,11 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         }
 
         if (result == GNC_RESPONSE_NOW) {
+            /* Create a context to store possible results */
+            context = AB_ImExporterContext_new();
+
             /* Finally, execute the job */
-            successful = AB_Banking_ExecuteJobs(api, job_list, NULL, 0) == 0;
+            successful = AB_Banking_ExecuteJobs(api, job_list, context, 0) == 0;
 
             if (!successful
                 || AB_Job_GetStatus(job) != AB_Job_StatusFinished) {
@@ -248,6 +253,9 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
                     aborted = TRUE;
                 }
             }
+
+            /* Import the results, awaiting nothing */
+            ieci = gnc_ab_import_context(context, 0, FALSE, NULL, parent);
         }
         /* Simply ignore any other case */
 
@@ -259,6 +267,10 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
             xaccTransCommitEdit(gnc_trans);
             gnc_trans = NULL;
         }
+        if (ieci)
+            g_free(ieci);
+        if (context)
+            AB_ImExporterContext_free(context);
         if (job_list) {
             AB_Job_List2_free(job_list);
             job_list = NULL;

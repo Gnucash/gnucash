@@ -47,7 +47,6 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 typedef struct _TransListData TransListData;
 
 static gboolean gettrans_dates(GtkWidget *parent, Account *gnc_acc, GWEN_TIME **from_date, GWEN_TIME **to_date);
-static const AB_TRANSACTION *transaction_cb(const AB_TRANSACTION *ab_trans, gpointer user_data);
 
 struct _TransListData {
     Account *gnc_acc;
@@ -98,28 +97,6 @@ gettrans_dates(GtkWidget *parent, Account *gnc_acc,
     return TRUE;
 }
 
-/**
- * Callback function for AB_ImExporterAccountInfo_TransactionsForEach().  The
- * conversion from AqBanking to GnuCash transaction is done here, once for each
- * AB_TRANSACTION.
- */
-static const AB_TRANSACTION *
-transaction_cb(const AB_TRANSACTION *ab_trans, gpointer user_data)
-{
-    TransListData *data = user_data;
-    Transaction *gnc_trans;
-
-    g_return_val_if_fail(ab_trans && data, NULL);
-
-    /* Create a GnuCash transaction from ab_trans */
-    gnc_trans = gnc_ab_trans_to_gnc(ab_trans, data->gnc_acc);
-
-    /* Instead of xaccTransCommitEdit(gnc_trans)  */
-    gnc_gen_trans_list_add_trans(data->importer_generic, gnc_trans);
-
-    return NULL;
-}
-
 void
 gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
 {
@@ -132,7 +109,7 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     AB_JOB_LIST2 *job_list = NULL;
     GncGWENGui *gui = NULL;
     AB_IMEXPORTER_CONTEXT *context = NULL;
-    AB_IMEXPORTER_ACCOUNTINFO *acc_info = NULL;
+    GncABImExContextImport *ieci = NULL;
 
     g_return_if_fail(parent && gnc_acc);
 
@@ -191,25 +168,10 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
         goto cleanup;
     }
 
-    /* Lookup account in context */
-    acc_info = AB_ImExporterContext_FindAccountInfo(
-        context, gnc_ab_get_account_bankcode(gnc_acc),
-        gnc_ab_get_account_accountid(gnc_acc));
-    if (!acc_info) {
-        g_warning("gnc_ab_gettrans: No accountinfo result for this account");
-        goto cleanup;
-    }
-
-    if (AB_ImExporterAccountInfo_GetFirstTransaction(acc_info)) {
-        /* Import transactions */
-
-        TransListData data;
-        data.importer_generic = gnc_gen_trans_list_new(parent, NULL, TRUE, 14);
-        data.gnc_acc = gnc_acc;
-
-        AB_ImExporterAccountInfo_TransactionsForEach(acc_info, transaction_cb,
-                                                     &data);
-    } else {
+    /* Import the results */
+    ieci = gnc_ab_import_context(context, AWAIT_TRANSACTIONS, FALSE, NULL,
+                                 parent);
+    if (!(gnc_ab_ieci_get_found(ieci) & FOUND_TRANSACTIONS)) {
         /* No transaction found */
         GtkWidget *dialog = gtk_message_dialog_new(
             GTK_WINDOW(parent),
@@ -227,6 +189,8 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     gnc_ab_set_account_trans_retrieval(gnc_acc, until_timespec);
 
 cleanup:
+    if (ieci)
+        g_free(ieci);
     if (context)
         AB_ImExporterContext_free(context);
     if (gui)

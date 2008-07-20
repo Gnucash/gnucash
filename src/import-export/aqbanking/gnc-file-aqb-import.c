@@ -53,143 +53,6 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
-typedef struct _ImportData ImportData;
-
-static const AB_TRANSACTION *transaction_cb(
-    const AB_TRANSACTION *element, gpointer user_data);
-static AB_IMEXPORTER_ACCOUNTINFO *accountinfo_cb(
-    AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data);
-static AB_JOB_LIST2 *import_context(
-    AB_BANKING *api, AB_IMEXPORTER_CONTEXT *context,
-    GNCImportMainMatcher *importer_generic_gui, gboolean execute_transactions);
-
-struct _ImportData {
-    AB_BANKING *api;
-    GNCImportMainMatcher *importer_generic;
-    gboolean execute_transactions;
-    AB_JOB_LIST2 *job_list;
-    Account *gnc_acc;
-    AB_ACCOUNT *ab_acc;
-};
-
-static const AB_TRANSACTION *
-transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
-{
-    ImportData *data = user_data;
-    Transaction *gnc_trans;
-    AB_JOB *job;
-
-    g_return_val_if_fail(element && data, NULL);
-
-    /* Create a GnuCash transaction from ab_trans */
-    gnc_trans = gnc_ab_trans_to_gnc(element, data->gnc_acc);
-
-    /* Instead of xaccTransCommitEdit(gnc_trans)  */
-    gnc_gen_trans_list_add_trans(data->importer_generic, gnc_trans);
-
-    if (data->ab_acc) {
-        AB_TRANSACTION *ab_trans = AB_Transaction_dup(element);
-
-        /* NEW: The imported transaction has been imported into gnucash.
-         * Now also add it as a job to aqbanking */
-        AB_Transaction_SetLocalBankCode(
-            ab_trans, AB_Account_GetBankCode(data->ab_acc));
-        AB_Transaction_SetLocalAccountNumber(
-            ab_trans, AB_Account_GetAccountNumber(data->ab_acc));
-        AB_Transaction_SetLocalCountry(ab_trans, "DE");
-
-        job = gnc_ab_get_trans_job(data->ab_acc, ab_trans, SINGLE_DEBITNOTE);
-
-        /* Check whether we really got a job */
-        if (!job) {
-            /* Oops, no job, probably not supported by bank */
-            if (gnc_verify_dialog(
-                    NULL, FALSE, "%s",
-                    _("The backend found an error during the preparation "
-                      "of the job. It is not possible to execute this job. \n"
-                      "\n"
-                      "Most probable the bank does not support your chosen "
-                      "job or your Online Banking account does not have the permission "
-                      "to execute this job. More error messages might be "
-                      "visible on your console log.\n"
-                      "\n"
-                      "Do you want to enter the job again?"))) {
-                gnc_error_dialog(NULL, "Sorry, not implemented yet.");
-            }
-            /* else */
-        }
-        AB_Job_List2_PushBack(data->job_list, job);
-
-        AB_Transaction_free(ab_trans);
-    }
-
-    return NULL;
-}
-
-static AB_IMEXPORTER_ACCOUNTINFO *
-accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
-{
-    Account *gnc_acc;
-    ImportData *data = user_data;
-    const gchar *bank_code =
-        AB_ImExporterAccountInfo_GetBankCode(element);
-    const gchar *account_number =
-        AB_ImExporterAccountInfo_GetAccountNumber(element);
-    const gchar *account_name =
-        AB_ImExporterAccountInfo_GetAccountName(element);
-    gchar *online_id;
-
-    g_return_val_if_fail(element && data, NULL);
-
-    online_id = g_strconcat(bank_code, account_number, (gchar*)NULL);
-    gnc_acc = gnc_import_select_account(NULL, online_id, 1, account_name, NULL,
-                                        ACCT_TYPE_NONE, NULL, NULL);
-    g_free(online_id);
-
-    if (gnc_acc) {
-        /* Store chosen gnucash account in callback data */
-        data->gnc_acc = gnc_acc;
-
-        if (data->execute_transactions) {
-            /* Retrieve the aqbanking account that belongs to this gnucash
-             * account */
-            data->ab_acc = gnc_ab_get_ab_account(data->api, gnc_acc);
-            if (!data->ab_acc) {
-                gnc_error_dialog(NULL, "%s",
-                                 _("No Online Banking account found for this "
-                                   "gnucash account. These transactions will "
-                                   "not be executed by Online Banking."));
-            }
-        } else {
-            data->ab_acc = NULL;
-        }
-
-        /* Iterate through all transactions.  */
-        AB_ImExporterAccountInfo_TransactionsForEach(element, transaction_cb,
-                                                     data);
-    }
-    return NULL;
-}
-
-static AB_JOB_LIST2 *
-import_context(AB_BANKING *api, AB_IMEXPORTER_CONTEXT *context,
-               GNCImportMainMatcher *importer_generic_gui,
-               gboolean execute_transactions)
-{
-    ImportData data;
-
-    g_return_val_if_fail(api && context && importer_generic_gui, NULL);
-    data.api = api;
-    data.importer_generic = importer_generic_gui;
-    data.execute_transactions = execute_transactions;
-    data.job_list = NULL;
-
-    /* Iterate through all accounts */
-    AB_ImExporterContext_AccountInfoForEach(context, accountinfo_cb, &data);
-
-    return data.job_list;
-}
-
 void
 gnc_file_aqbanking_import(const gchar *aqbanking_importername,
                           const gchar *aqbanking_profilename,
@@ -206,7 +69,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     GWEN_DB_NODE *db_profile;
     AB_IMEXPORTER_CONTEXT *context = NULL;
     GWEN_IO_LAYER *io, *buffio;
-    GNCImportMainMatcher *importer_generic_gui = NULL;
+    GncABImExContextImport *ieci = NULL;
     AB_JOB_LIST2 *job_list = NULL;
 
     /* Select a file */
@@ -308,15 +171,17 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     /* Close the file */
     GWEN_Io_Layer_free(buffio);
 
-    /* Create importer GUI */
-    importer_generic_gui = gnc_gen_trans_list_new(NULL, NULL, TRUE, 14);
+    /* Import the results */
+    ieci = gnc_ab_import_context(context, AWAIT_TRANSACTIONS,
+                                 execute_transactions,
+                                 execute_transactions ? api : NULL,
+                                 NULL);
 
-    /* Import the transactions from the context into gnucash */
-    job_list = import_context(api, context, importer_generic_gui,
-                              execute_transactions);
+    /* Extract the list of jobs */
+    job_list = gnc_ab_ieci_get_job_list(ieci);
 
     if (execute_transactions) {
-        if (gnc_gen_trans_list_run(importer_generic_gui)) {
+        if (gnc_ab_ieci_run_matcher(ieci)) {
             /* FIXME */
             /* gnc_hbci_multijob_execute(NULL, api, job_list, gui); */
         }
@@ -324,9 +189,9 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
 
 cleanup:
     if (job_list)
-        AB_Job_List2_free(job_list);
-    if (importer_generic_gui)
-        gnc_gen_trans_list_delete(importer_generic_gui);
+        AB_Job_List2_FreeAll(job_list);
+    if (ieci)
+        g_free(ieci);
     if (context)
         AB_ImExporterContext_free(context);
     if (db_profiles)

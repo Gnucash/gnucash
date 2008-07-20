@@ -38,7 +38,6 @@
 #include "gnc-ab-utils.h"
 #include "gnc-gwen-gui.h"
 #include "gnc-ui.h"
-#include "RecnWindow.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -53,15 +52,7 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
     AB_JOB_LIST2 *job_list = NULL;
     GncGWENGui *gui = NULL;
     AB_IMEXPORTER_CONTEXT *context = NULL;
-    AB_IMEXPORTER_ACCOUNTINFO *acc_info = NULL;
-    AB_ACCOUNT_STATUS *status = NULL;
-    const AB_BALANCE *booked_bal, *noted_bal;
-    const AB_VALUE *booked_val = NULL, *noted_val = NULL;
-    gdouble booked_value, noted_value;
-    gnc_numeric value;
-    time_t booked_tt = 0;
-    GtkWidget *dialog;
-    gboolean show_recn_window = FALSE;
+    GncABImExContextImport *ieci = NULL;
 
     g_return_if_fail(parent && gnc_acc);
 
@@ -110,133 +101,12 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
         goto cleanup;
     }
 
-    /* Lookup account in context */
-    acc_info = AB_ImExporterContext_FindAccountInfo(
-        context, gnc_ab_get_account_bankcode(gnc_acc),
-        gnc_ab_get_account_accountid(gnc_acc));
-    if (!acc_info) {
-        g_warning("gnc_ab_getbalance: No accountinfo result for this account");
-        goto cleanup;
-    }
-
-    /* Lookup newest data */
-    status = gnc_ab_get_best_accountstatus(acc_info);
-    if (!status) {
-        g_warning("gnc_ab_getbalance: No accountstatus result for this account");
-        goto cleanup;
-    }
-
-    /* Lookup booked balance and time */
-    booked_bal = AB_AccountStatus_GetBookedBalance(status);
-    if (booked_bal) {
-        const GWEN_TIME *ti = AB_Balance_GetTime(booked_bal);
-        if (ti) {
-            booked_tt =  GWEN_Time_toTime_t(ti);
-        } else {
-            /* No time found? Use today because the HBCI query asked for today's
-             * balance. */
-            booked_tt = gnc_timet_get_day_start(time(NULL));
-        }
-        booked_val = AB_Balance_GetValue(booked_bal);
-        if (booked_val) {
-            booked_value = AB_Value_GetValueAsDouble(booked_val);
-        } else {
-            g_warning("gnc_ab_getbalance: booked_val == NULL.  Assuming 0");
-            booked_value = 0.0;
-        }
-    } else {
-        g_warning("gnc_ab_getbalance: booked_bal == NULL.  Assuming 0");
-        booked_tt = 0;
-        booked_value = 0.0;
-    }
-
-    /* Lookup noted balance */
-    noted_bal = AB_AccountStatus_GetNotedBalance(status);
-    if (noted_bal) {
-        noted_val = AB_Balance_GetValue(noted_bal);
-        if (noted_val)
-            noted_value = AB_Value_GetValueAsDouble(noted_val);
-        else {
-            g_warning("gnc_ab_getbalance: noted_val == NULL.  Assuming 0");
-            noted_value = 0.0;
-        }
-    } else {
-        g_warning("gnc_ab_getbalance: noted_bal == NULL.  Assuming 0");
-        noted_value = 0.0;
-    }
-
-    value = double_to_gnc_numeric(booked_value,
-                                  xaccAccountGetCommoditySCU(gnc_acc),
-                                  GNC_RND_ROUND);
-    if (noted_value == 0.0 && booked_value == 0.0) {
-        dialog = gtk_message_dialog_new(
-            GTK_WINDOW(parent),
-            GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-            GTK_MESSAGE_INFO,
-            GTK_BUTTONS_OK,
-            "%s",
-            /* Translators: Strings from this file are needed only in
-             * countries that have one of aqbanking's Online Banking
-             * techniques available. This is 'OFX DirectConnect'
-             * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
-             * (Switzerland). If none of these techniques are available
-             * in your country, you may safely ignore strings from the
-             * import-export/hbci subdirectory. */
-            _("The downloaded Online Banking Balance was zero.\n\n"
-              "Either this is the correct balance, or your bank does not "
-              "support Balance download in this Online Banking version. "
-              "In the latter case you should choose a different "
-              "Online Banking version number in the Online Banking "
-              "(AqBanking or HBCI) Setup. After that, try again to "
-              "download the Online Banking Balance."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
-
-    } else {
-        gnc_numeric reconc_balance = xaccAccountGetReconciledBalance(gnc_acc);
-
-        gchar *booked_str = gnc_AB_VALUE_to_readable_string(booked_val);
-        gchar *message1 = g_strdup_printf(
-            _("Result of Online Banking job: \n"
-              "Account booked balance is %s"),
-            booked_str);
-        gchar *message2 =
-            (noted_value == 0.0) ?
-            g_strdup("") :
-            g_strdup_printf(_("For your information: This account also "
-                              "has a noted balance of %s\n"),
-                            gnc_AB_VALUE_to_readable_string(noted_val));
-
-        if (gnc_numeric_equal(value, reconc_balance)) {
-            const gchar *message3 =
-                _("The booked balance is identical to the current "
-                  "reconciled balance of the account.");
-            dialog = gtk_message_dialog_new(
-                GTK_WINDOW(parent),
-                GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                GTK_MESSAGE_INFO,
-                GTK_BUTTONS_OK,
-                "%s\n%s\n%s",
-                message1, message2, message3);
-            gtk_dialog_run(GTK_DIALOG(dialog));
-            gtk_widget_destroy(GTK_WIDGET(dialog));
-
-        } else {
-            const char *message3 = _("Reconcile account now?");
-
-            show_recn_window = gnc_verify_dialog(parent,TRUE, "%s\n%s\n%s",
-                                                 message1, message2, message3);
-        }
-        g_free(booked_str);
-        g_free(message1);
-        g_free(message2);
-    }
-
-    /* Show reconciliation window */
-    if (show_recn_window)
-        recnWindowWithBalance(parent, gnc_acc, value, booked_tt);
+    /* Import the results */
+    ieci = gnc_ab_import_context(context, AWAIT_BALANCES, FALSE, NULL, parent);
 
 cleanup:
+    if (ieci)
+        g_free(ieci);
     if (context)
         AB_ImExporterContext_free(context);
     if (gui)
