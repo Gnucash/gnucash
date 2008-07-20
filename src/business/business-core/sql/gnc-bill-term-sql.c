@@ -170,7 +170,7 @@ void
 gnc_sql_save_billterm( GncSqlBackend* be, QofInstance* inst )
 {
 	g_return_if_fail( inst != NULL );
-	g_return_if_fail( !GNC_IS_BILLTERM(inst) );
+	g_return_if_fail( GNC_IS_BILLTERM(inst) );
 	g_return_if_fail( be != NULL );
 
     gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_BILLTERM, col_table );

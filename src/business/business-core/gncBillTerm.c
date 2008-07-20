@@ -367,7 +367,9 @@ void gncBillTermSetParent (GncBillTerm *term, GncBillTerm *parent)
   if (parent)
     gncBillTermAddChild(parent, term);
   term->refcount = 0;
-  gncBillTermMakeInvisible (term);
+  if( parent != NULL ) {
+    gncBillTermMakeInvisible (term);
+  }
   gncBillTermCommitEdit (term);
 }
 
