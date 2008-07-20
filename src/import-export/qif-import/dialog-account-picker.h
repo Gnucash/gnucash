@@ -28,7 +28,7 @@
 
 #include "druid-qif-import.h"
 
-SCM qif_account_picker_dialog(QIFImportWindow * wind, SCM initial_sel);
+gboolean qif_account_picker_dialog(QIFImportWindow * wind, SCM initial_sel);
 
 typedef struct _accountpickerdialog QIFAccountPickerDialog;
 
