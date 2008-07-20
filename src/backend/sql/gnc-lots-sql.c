@@ -173,7 +173,22 @@ commit_lot( GncSqlBackend* be, QofInstance* inst )
     gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_LOT, col_table );
 }
 
-/* ----------------------------------------------------------------- */
+static void
+do_save_lot( QofInstance* inst, gpointer data )
+{
+	commit_lot( (GncSqlBackend*)data, inst );
+}
+
+static void
+write_lots( GncSqlBackend* be )
+{
+	g_return_if_fail( be != NULL );
+
+    qof_collection_foreach( qof_book_get_collection( be->primary_book, GNC_ID_LOT ),
+                            (QofInstanceForeachCB)do_save_lot, be );
+}
+
+/* ================================================================= */
 static void
 load_lot_guid( const GncSqlBackend* be, GncSqlRow* row,
             QofSetterFunc setter, gpointer pObject,
@@ -221,7 +236,9 @@ gnc_sql_init_lot_handler( void )
         GNC_ID_LOT,
         commit_lot,            /* commit */
         load_all_lots,         /* initial_load */
-        create_lots_tables     /* create tables */
+        create_lots_tables,    /* create tables */
+		NULL, NULL, NULL,
+		write_lots             /* save all */
     };
 
     qof_object_register_backend( GNC_ID_LOT, GNC_SQL_BACKEND, &be_data );
