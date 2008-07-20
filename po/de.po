@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-21 22:11+0200\n"
-"PO-Revision-Date: 2008-04-21 22:15+0200\n"
+"POT-Creation-Date: 2008-07-20 22:09+0200\n"
+"PO-Revision-Date: 2008-07-20 22:25+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -682,6 +682,10 @@ msgstr "Kunde suchen"
 #: ../src/business/business-gnome/dialog-date-close.c:72
 msgid "No Account selected.  Please try again."
 msgstr "Kein Konto ausgewählt. Bitte erneut versuchen."
+
+#: ../src/business/business-gnome/dialog-date-close.c:78
+msgid "Placeholder account selected.  Please try again."
+msgstr "Das ausgewählte Konto ist als »Platzhalter« markiert und darf deshalb keine Buchungen enthalten. Bitte wählen Sie ein anderes Konto."
 
 #: ../src/business/business-gnome/dialog-employee.c:216
 msgid "You must enter a username."
@@ -16259,8 +16263,18 @@ msgid "The source of price information"
 msgstr "Quelle der Preisinformationen"
 
 #. src/report/report-system/options-utilities.scm
+#: ../intl-scm/guile-strings.c:770
+msgid "Average Cost"
+msgstr "Durchschnittlicher Preis"
+
+#. src/report/report-system/options-utilities.scm
+#: ../intl-scm/guile-strings.c:772
+msgid "The volume-weighted average cost of purchases"
+msgstr ""
+
+#. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/price-scatter.scm
-#: ../intl-scm/guile-strings.c:770 ../intl-scm/guile-strings.c:1196
+#: ../intl-scm/guile-strings.c:774 ../intl-scm/guile-strings.c:1200
 msgid "Weighted Average"
 msgstr "Gewichteter Durchschnitt"
 
