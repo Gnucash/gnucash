@@ -121,6 +121,7 @@ struct _qifimportwindow {
   SCM       security_hash;
   SCM       security_prefs;
   SCM       new_securities;
+  GList   * new_namespaces;
   SCM       ticker_map;
 
   SCM       imported_account_tree;
@@ -199,6 +200,10 @@ gnc_ui_qif_import_commodity_destroy(QIFImportWindow * wind)
      *          Any other cleanup?
      */
   }
+
+  /* Free the list of pages. */
+  g_list_free(wind->commodity_pages);
+  wind->commodity_pages = NULL;
 }
 
 
@@ -532,7 +537,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 {
   QIFImportWindow * wind = user_data;
 
-  const char * path_to_load;
+  const gchar * path_to_load;
   const gchar * default_acctname = NULL;
 
   SCM make_qif_file   = scm_c_eval_string("make-qif-file");
@@ -542,7 +547,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   SCM unload_qif_file = scm_c_eval_string("qif-dialog:unload-qif-file");
   SCM check_from_acct = scm_c_eval_string("qif-file:check-from-acct");
   SCM default_acct    = scm_c_eval_string("qif-file:path-to-accountname");
-  SCM qif_file_parse_results  = scm_c_eval_string("qif-file:parse-fields-results");
+  SCM parse_results   = scm_c_eval_string("qif-file:parse-fields-results");
   SCM date_formats;
   SCM scm_filename;
   SCM scm_qiffile;
@@ -660,7 +665,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 	while (n_items-- > 0)
 	  gtk_combo_box_remove_text(GTK_COMBO_BOX(wind->date_format_combo), 0);
 
-	if ((date_formats = scm_call_2(qif_file_parse_results,
+	if ((date_formats = scm_call_2(parse_results,
 				       SCM_CDR(parse_return),
 				       scm_str2symbol("date"))) != SCM_BOOL_F) {
 	  while(SCM_LISTP(date_formats) && !SCM_NULLP(date_formats)) {
@@ -947,7 +952,7 @@ gnc_ui_qif_import_default_acct_next_cb(GnomeDruidPage * page,
                                        gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
-  const char   * acct_name = gtk_entry_get_text(GTK_ENTRY(wind->acct_entry));
+  const gchar * acct_name = gtk_entry_get_text(GTK_ENTRY(wind->acct_entry));
   SCM    fix_default = scm_c_eval_string("qif-import:fix-from-acct");
   SCM    scm_name;
 
@@ -1353,9 +1358,9 @@ gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
   GList          *pageptr;
   GnomeDruidPage *gtkpage;
   QIFDruidPage   *page;
-  const char     *mnemonic = NULL;
+  const gchar    *mnemonic = NULL;
   gchar          *namespace = NULL;
-  const char     *fullname = NULL;
+  const gchar    *fullname = NULL;
   gnc_commodity  *tab_commodity;
 
   for (pageptr = wind->commodity_pages; pageptr; pageptr=pageptr->next)
@@ -1502,7 +1507,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
   SCM   window;
 
   /* Get the default currency. */
-  const char * currname =
+  gchar *currname =
     gtk_combo_box_get_active_text(GTK_COMBO_BOX(wind->currency_picker));
 
   /* Let the user know we're busy. */
@@ -1525,6 +1530,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
                                scm_makfrom0str(currname),
                                window),
                      SCM_EOL);
+  g_free(currname);
   gnc_unset_busy_cursor(NULL);
 
   if (retval == SCM_BOOL_F)
@@ -1744,17 +1750,46 @@ gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
 }
 
 
-static gboolean
-gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
-                                gpointer arg1,
-                                gpointer user_data)
+static void
+gnc_ui_qif_import_comm_prepare_cb(GnomeDruidPage * page,
+                                  gpointer arg1,
+                                  gpointer user_data)
 {
-  QIFImportWindow * wind = user_data;
-  QIFDruidPage    * qpage = g_object_get_data(G_OBJECT(page), "page_struct");
+  QIFImportWindow *wind = user_data;
+  QIFDruidPage    *qpage = g_object_get_data(G_OBJECT(page), "page_struct");
+  gchar           *ns;
+
+  /* Get any entered namespace. */
+  ns = gtk_combo_box_get_active_text(GTK_COMBO_BOX(qpage->new_type_combo));
+
+  /* Update the namespaces available to select. */
+  if (!ns || !ns[0])
+    gnc_ui_update_namespace_picker(
+      qpage->new_type_combo, 
+      gnc_commodity_get_namespace(qpage->commodity),
+      DIAG_COMM_ALL);
+  else
+    gnc_ui_update_namespace_picker(qpage->new_type_combo, ns, DIAG_COMM_ALL);
+
+  g_free(ns);
+}
+
   
-  gchar *namespace       = gnc_ui_namespace_picker_ns(qpage->new_type_combo);
-  const char * name      = gtk_entry_get_text(GTK_ENTRY(qpage->new_name_entry));
-  const char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->new_mnemonic_entry));
+static gboolean
+gnc_ui_qif_import_comm_next_cb(GnomeDruidPage * page,
+                               gpointer arg1,
+                               gpointer user_data)
+{
+  QIFImportWindow *wind = user_data;
+  QIFDruidPage    *qpage = g_object_get_data(G_OBJECT(page), "page_struct");
+
+  QofBook                 *book;
+  gnc_commodity_table     *table;
+  gnc_commodity_namespace *newns;
+  
+  gchar       *namespace = gnc_ui_namespace_picker_ns(qpage->new_type_combo);
+  const gchar *name      = gtk_entry_get_text(GTK_ENTRY(qpage->new_name_entry));
+  const gchar *mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->new_mnemonic_entry));
 
   if(!namespace || (namespace[0] == 0)) {
     gnc_warning_dialog(wind->window,
@@ -1766,11 +1801,13 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
   else if(!name || (name[0] == 0)) {
     gnc_warning_dialog(wind->window,
 		       _("You must enter a name for the commodity."));
+    g_free(namespace);
     return TRUE;
   }
   else if(!mnemonic || (mnemonic[0] == 0)) {
     gnc_warning_dialog
       (wind->window, _("You must enter an abbreviation for the commodity."));
+    g_free(namespace);
     return TRUE;
   }
   /* FIXME: Should check whether a commodity with this namespace and
@@ -1778,9 +1815,10 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
    *        the existing one, or go back and change what they've entered.
    */
 
+  book = gnc_get_current_book();
+  table = gnc_commodity_table_get_table(book);
   if (gnc_commodity_namespace_is_iso (namespace) &&
-      !gnc_commodity_table_lookup (gnc_get_current_commodities (),
-                                   namespace, mnemonic))
+      !gnc_commodity_table_lookup (table, namespace, mnemonic))
   {
     gnc_warning_dialog(wind->window,
 		       _("You must enter an existing national "
@@ -1789,7 +1827,24 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
     g_free(namespace);
     return TRUE;
   }
-  g_free(namespace);
+
+  /* Is the namespace a new one? */
+  if (!gnc_commodity_table_has_namespace(table, namespace))
+  {
+    /* Register it so that it will appear as an option on other pages. */
+    newns = gnc_commodity_table_add_namespace(table, namespace, book);
+
+    /* Remember it so it can be removed if the import gets canceled. */
+    if (newns)
+      wind->new_namespaces = g_list_prepend(wind->new_namespaces, namespace);
+    else
+    {
+      g_warning("QIF import: Couldn't create namespace %s\n", namespace);
+      g_free(namespace);
+    }
+  }
+  else
+    g_free(namespace);
 
   if(page == (g_list_last(wind->commodity_pages))->data)
   {
@@ -1859,12 +1914,16 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
         /* Add a druid page for the commodity. */
         new_page = make_qif_druid_page(SCM_CAR(securities), commodity);
 
+        g_signal_connect(new_page->page, "prepare",
+                         G_CALLBACK(gnc_ui_qif_import_comm_prepare_cb),
+                         wind);
+
         g_signal_connect(new_page->page, "back",
                          G_CALLBACK(gnc_ui_qif_import_generic_back_cb),
                          wind);
 
         g_signal_connect(new_page->page, "next",
-                         G_CALLBACK(gnc_ui_qif_import_comm_check_cb),
+                         G_CALLBACK(gnc_ui_qif_import_comm_next_cb),
                          wind);
 
         wind->commodity_pages = g_list_append(wind->commodity_pages, 
@@ -1939,15 +1998,11 @@ make_qif_druid_page(SCM security_hash_key, gnc_commodity *comm)
   gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
 
   retval->new_type_combo = gtk_combo_box_entry_new_text();
-  gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(retval->new_type_combo));
+  gnc_cbe_add_completion(GTK_COMBO_BOX_ENTRY(retval->new_type_combo));
   gtk_box_pack_start(GTK_BOX(temp), retval->new_type_combo, TRUE, TRUE, 0);
 
   info_label = gtk_label_new("");
   gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
-
-  gnc_ui_update_namespace_picker(retval->new_type_combo, 
-                                 gnc_commodity_get_namespace(comm),
-                                 DIAG_COMM_ALL);
 
   info_label = gtk_label_new(_("Enter the full name of the commodity, "
                                "such as \"Red Hat Stock\""));
@@ -2192,10 +2247,11 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
 static void
 gnc_ui_qif_import_cancel_cb(GnomeDruid * druid, gpointer user_data)
 {
-  QIFImportWindow *wind = user_data;
-  GList           *pageptr;
-  GnomeDruidPage  *gtkpage;
-  QIFDruidPage    *page;
+  QIFImportWindow     *wind = user_data;
+  GList               *pageptr;
+  GnomeDruidPage      *gtkpage;
+  QIFDruidPage        *page;
+  gnc_commodity_table *table;
 
   /* Remove any converted data. */
   gnc_ui_qif_import_convert_undo(wind);
@@ -2206,6 +2262,18 @@ gnc_ui_qif_import_cancel_cb(GnomeDruid * druid, gpointer user_data)
     gtkpage   = GNOME_DRUID_PAGE(pageptr->data);
     page      = g_object_get_data(G_OBJECT(gtkpage), "page_struct");
     gnc_commodity_destroy(page->commodity);
+  }
+
+  /* Remove any namespaces created by the user. */
+  table = gnc_get_current_commodities();
+  while (wind->new_namespaces)
+  {
+    gnc_commodity_table_delete_namespace(table, (gchar *) wind->new_namespaces->data);
+
+    /* Free the data and the list element. */
+    g_free(wind->new_namespaces->data);
+    wind->new_namespaces = g_list_delete_link(wind->new_namespaces,
+                                              wind->new_namespaces);
   }
 
   /* Destroy the druid. */
@@ -2387,6 +2455,7 @@ gnc_ui_qif_import_druid_make(void)
   retval->memo_map_info     =  SCM_BOOL_F;
   retval->security_hash     =  SCM_BOOL_F;
   retval->new_securities    =  SCM_BOOL_F;
+  retval->new_namespaces    =  NULL;
   retval->ticker_map        =  SCM_BOOL_F;
   retval->imported_account_tree   = SCM_BOOL_F;
   retval->match_transactions = SCM_BOOL_F;
