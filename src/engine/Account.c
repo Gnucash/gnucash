@@ -398,6 +398,9 @@ gnc_account_set_property (GObject         *object,
 	case PROP_COMMODITY_SCU:
 	    xaccAccountSetCommoditySCU(account, g_value_get_int(value));
 	    break;
+	case PROP_NON_STD_SCU:
+		xaccAccountSetNonStdSCU(account, g_value_get_boolean(value));
+		break;
 	case PROP_SORT_DIRTY:
 	    gnc_account_set_sort_dirty(account);
 	    break;
