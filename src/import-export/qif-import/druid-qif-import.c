@@ -152,21 +152,6 @@ struct _qifdruidpage {
 };
 
 typedef struct _qifdruidpage QIFDruidPage;
-static QIFDruidPage * make_qif_druid_page(SCM security_hash_key,
-                                          gnc_commodity * comm);
-
-static void update_file_page(QIFImportWindow * win);
-static void update_account_page(QIFImportWindow * win);
-static void update_category_page(QIFImportWindow * win);
-static void update_memo_page(QIFImportWindow * win);
-
-static void update_account_picker_page(QIFImportWindow * wind,
-                                       SCM make_display, GtkWidget *view,
-                                       SCM map_info, SCM * display_info);
-
-static void gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
-                                                   gpointer arg1,
-                                                   gpointer user_data);
 
 static GdkColor std_bg_color = { 0, 39835, 49087, 40092 };
 static GdkColor std_logo_bg_color = { 0, 65535, 65535, 65535 };
@@ -180,6 +165,124 @@ static GnomeDruidPage *
 get_named_page(QIFImportWindow * w, const char * name)
 {
   return GNOME_DRUID_PAGE(gnc_glade_lookup_widget(w->window, name));
+}
+
+
+/****************************************************************
+ * update_account_picker_page
+ *
+ * Generic function to update an account_picker page.  This
+ * generalizes the code shared whenever any QIF -> GNC mapper is
+ * updating it's LIST STORE.  It asks the Scheme side to guess some account
+ * translations and then shows the account name and suggested
+ * translation in the Accounts page view (acount picker list).
+ ****************************************************************/
+
+static void
+update_account_picker_page(QIFImportWindow * wind, SCM make_display,
+                           GtkWidget *view, SCM map_info, SCM * display_info)
+{
+
+  SCM  get_qif_name = scm_c_eval_string("qif-map-entry:qif-name");
+  SCM  get_gnc_name = scm_c_eval_string("qif-map-entry:gnc-name");
+  SCM  get_new      = scm_c_eval_string("qif-map-entry:new-acct?");
+  SCM  accts_left;
+  const gchar *qif_name, *gnc_name;
+  gboolean checked;
+  gint row = 0;
+  gint prev_row;
+  GtkListStore *store;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  GtkTreeSelection *selection;
+
+  store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(view)));
+
+  /* now get the list of strings to display in the gtk_list_store widget */
+  accts_left = scm_call_3(make_display,
+                          wind->imported_files,
+                          map_info,
+                          wind->gnc_acct_info);
+
+  scm_gc_unprotect_object(*display_info);
+  *display_info = accts_left;
+  scm_gc_protect_object(*display_info);
+
+  /* clear the list */
+  gtk_list_store_clear(store);
+
+  while(!SCM_NULLP(accts_left)) {
+    qif_name = SCM_STRING_CHARS(scm_call_1(get_qif_name, SCM_CAR(accts_left)));
+    gnc_name = SCM_STRING_CHARS(scm_call_1(get_gnc_name, SCM_CAR(accts_left)));
+    checked  = (scm_call_1(get_new, SCM_CAR(accts_left)) == SCM_BOOL_T);
+
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set(store, &iter,
+                       ACCOUNT_COL_INDEX,    row++,
+                       ACCOUNT_COL_QIF_NAME, qif_name,
+                       ACCOUNT_COL_GNC_NAME, gnc_name,
+                       ACCOUNT_COL_NEW,      checked,
+                       -1);
+    accts_left = SCM_CDR(accts_left);
+  }
+
+  /* move to the old selected row */
+  prev_row = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(store), PREV_ROW));
+  if (prev_row != -1) {
+    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+    path = gtk_tree_path_new_from_indices(prev_row, -1);
+    gtk_tree_selection_select_path(selection, path);
+    gtk_tree_path_free(path);
+  }
+}
+
+
+/****************************************************************
+ * update_account_page
+ *
+ * update the QIF account -> GNC Account picker
+ ****************************************************************/
+
+static void
+update_account_page(QIFImportWindow * wind)
+{
+
+  SCM  make_account_display = scm_c_eval_string("qif-dialog:make-account-display");
+
+  update_account_picker_page(wind, make_account_display, wind->acct_view,
+                             wind->acct_map_info, &(wind->acct_display_info));
+}
+
+
+/****************************************************************
+ * update_category_page
+ *
+ * update the QIF category -> GNC Account picker
+ ****************************************************************/
+
+static void
+update_category_page(QIFImportWindow * wind)
+{
+  SCM  make_category_display = scm_c_eval_string("qif-dialog:make-category-display");
+
+  update_account_picker_page(wind, make_category_display, wind->cat_view,
+                             wind->cat_map_info, &(wind->cat_display_info));
+}
+
+
+/****************************************************************
+ * update_memo_page
+ *
+ * update the QIF memo -> GNC Account picker
+ ****************************************************************/
+
+static void
+update_memo_page(QIFImportWindow * wind)
+{
+  SCM  make_memo_display = scm_c_eval_string("qif-dialog:make-memo-display");
+
+  update_account_picker_page(wind, make_memo_display, wind->memo_view,
+                             wind->memo_map_info, &(wind->memo_display_info));
 }
 
 
@@ -395,7 +498,7 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
           prev = g_list_last(wind->commodity_pages);
         }
         else {
-           prev = g_list_last(wind->pre_comm_pages);
+          prev = g_list_last(wind->pre_comm_pages);
         }
         break;
       default:
@@ -429,15 +532,14 @@ gnc_ui_qif_import_generic_next_cb(GnomeDruidPage * page, gpointer arg1,
   QIFImportWindow * wind = user_data;
   GtkWidget * next_page = get_next_druid_page(wind, page);
 
-  if(next_page) {
+  if(next_page)
+  {
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
                          GNOME_DRUID_PAGE(next_page));
-
     return TRUE;
   }
-  else {
-    return FALSE;
-  }
+
+  return FALSE;
 }
 
 
@@ -454,14 +556,14 @@ gnc_ui_qif_import_generic_back_cb(GnomeDruidPage * page, gpointer arg1,
   QIFImportWindow * wind = user_data;
   GtkWidget * back_page = get_prev_druid_page(wind, page);
 
-  if(back_page) {
+  if(back_page)
+  {
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
                          GNOME_DRUID_PAGE(back_page));
     return TRUE;
   }
-  else {
-    return FALSE;
-  }
+
+  return FALSE;
 }
 
 
@@ -790,6 +892,63 @@ gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page,
 }
 
 
+/********************************************************************
+ * update_file_page
+ *
+ * Update the list of loaded files.
+ ********************************************************************/
+
+static void
+update_file_page(QIFImportWindow * wind)
+{
+
+  SCM       loaded_file_list = wind->imported_files;
+  SCM       scm_qiffile = SCM_BOOL_F;
+  SCM       qif_file_path;
+  int       row = 0;
+  char      * row_text;
+  GtkTreeView *view;
+  GtkListStore *store;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  GtkTreeRowReference *reference = NULL;
+
+  /* clear the list */
+  view = GTK_TREE_VIEW(wind->selected_file_view);
+  store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
+  gtk_list_store_clear(store);
+  qif_file_path = scm_c_eval_string("qif-file:path");
+
+  while(!SCM_NULLP(loaded_file_list)) {
+    scm_qiffile = SCM_CAR(loaded_file_list);
+    row_text    = SCM_STRING_CHARS(scm_call_1(qif_file_path, scm_qiffile));
+
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set(store, &iter,
+                       FILENAME_COL_INDEX, row++,
+                       FILENAME_COL_NAME, row_text,
+                       -1);
+    if(scm_qiffile == wind->selected_file) {
+      path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
+      reference = gtk_tree_row_reference_new(GTK_TREE_MODEL(store), path);
+      gtk_tree_path_free(path);
+    }
+
+    loaded_file_list = SCM_CDR(loaded_file_list);
+  }
+
+  if (reference) {
+    GtkTreeSelection* selection = gtk_tree_view_get_selection(view);
+    path = gtk_tree_row_reference_get_path(reference);
+    if (path) {
+      gtk_tree_selection_select_path(selection, path);
+      gtk_tree_path_free(path);
+    }
+    gtk_tree_row_reference_free(reference);
+  }
+}
+
+
 /****************************************************************
  * gnc_ui_qif_import_select_loaded_file_cb
  * callback when a file is clicked in the "loaded files" page
@@ -900,58 +1059,26 @@ gnc_ui_qif_import_unload_file_cb(GtkButton * button,
 
 
 /********************************************************************
- * update_file_page
- * update the list of loaded files
+ * gnc_ui_qif_import_loaded_files_next_cb
+ *
+ * Get the matching pages ready for viewing.
  ********************************************************************/
 
-static void
-update_file_page(QIFImportWindow * wind)
+static gboolean
+gnc_ui_qif_import_loaded_files_next_cb(GnomeDruidPage * page,
+                                       gpointer arg1,
+                                       gpointer user_data)
 {
+  QIFImportWindow * wind = user_data;
 
-  SCM       loaded_file_list = wind->imported_files;
-  SCM       scm_qiffile = SCM_BOOL_F;
-  SCM       qif_file_path;
-  int       row = 0;
-  char      * row_text;
-  GtkTreeView *view;
-  GtkListStore *store;
-  GtkTreeIter iter;
-  GtkTreePath *path;
-  GtkTreeRowReference *reference = NULL;
+  /* Prepare the matching pages. */
+  gnc_set_busy_cursor(NULL, TRUE);
+  update_account_page(wind);
+  update_category_page(wind);
+  update_memo_page(wind);
+  gnc_unset_busy_cursor(NULL);
 
-  /* clear the list */
-  view = GTK_TREE_VIEW(wind->selected_file_view);
-  store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
-  gtk_list_store_clear(store);
-  qif_file_path = scm_c_eval_string("qif-file:path");
-
-  while(!SCM_NULLP(loaded_file_list)) {
-    scm_qiffile = SCM_CAR(loaded_file_list);
-    row_text    = SCM_STRING_CHARS(scm_call_1(qif_file_path, scm_qiffile));
-
-    gtk_list_store_append(store, &iter);
-    gtk_list_store_set(store, &iter,
-                       FILENAME_COL_INDEX, row++,
-                       FILENAME_COL_NAME, row_text,
-                       -1);
-    if(scm_qiffile == wind->selected_file) {
-      path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
-      reference = gtk_tree_row_reference_new(GTK_TREE_MODEL(store), path);
-      gtk_tree_path_free(path);
-    }
-
-    loaded_file_list = SCM_CDR(loaded_file_list);
-  }
-
-  if (reference) {
-    GtkTreeSelection* selection = gtk_tree_view_get_selection(view);
-    path = gtk_tree_row_reference_get_path(reference);
-    if (path) {
-      gtk_tree_selection_select_path(selection, path);
-      gtk_tree_path_free(path);
-    }
-    gtk_tree_row_reference_free(reference);
-  }
+  return gnc_ui_qif_import_generic_next_cb(page, arg1, user_data);
 }
 
 
@@ -1014,123 +1141,6 @@ gnc_ui_qif_import_default_acct_back_cb(GnomeDruidPage * page,
   gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
                                     TRUE, TRUE, TRUE, TRUE);
   return TRUE;
-}
-
-
-/****************************************************************
- * update_account_picker_page
- * Generic function to update an account_picker page.  This
- * generalizes the code shared whenever any QIF -> GNC mapper is
- * updating it's LIST STORE.  It asks the Scheme side to guess some account
- * translations and then shows the account name and suggested
- * translation in the Accounts page view (acount picker list).
- ****************************************************************/
-
-static void
-update_account_picker_page(QIFImportWindow * wind, SCM make_display,
-                           GtkWidget *view, SCM map_info, SCM * display_info)
-{
-
-  SCM  get_qif_name = scm_c_eval_string("qif-map-entry:qif-name");
-  SCM  get_gnc_name = scm_c_eval_string("qif-map-entry:gnc-name");
-  SCM  get_new      = scm_c_eval_string("qif-map-entry:new-acct?");
-  SCM  accts_left;
-  const gchar *qif_name, *gnc_name;
-  gboolean checked;
-  gint row = 0;
-  gint prev_row;
-  GtkListStore *store;
-  GtkTreeIter iter;
-  GtkTreePath *path;
-  GtkTreeSelection *selection;
-
-  store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(view)));
-
-  /* now get the list of strings to display in the gtk_list_store widget */
-  accts_left = scm_call_3(make_display,
-                          wind->imported_files,
-                          map_info,
-                          wind->gnc_acct_info);
-
-  scm_gc_unprotect_object(*display_info);
-  *display_info = accts_left;
-  scm_gc_protect_object(*display_info);
-
-  /* clear the list */
-  gtk_list_store_clear(store);
-
-  while(!SCM_NULLP(accts_left)) {
-    qif_name = SCM_STRING_CHARS(scm_call_1(get_qif_name, SCM_CAR(accts_left)));
-    gnc_name = SCM_STRING_CHARS(scm_call_1(get_gnc_name, SCM_CAR(accts_left)));
-    checked  = (scm_call_1(get_new, SCM_CAR(accts_left)) == SCM_BOOL_T);
-
-    gtk_list_store_append(store, &iter);
-    gtk_list_store_set(store, &iter,
-                       ACCOUNT_COL_INDEX,    row++,
-                       ACCOUNT_COL_QIF_NAME, qif_name,
-                       ACCOUNT_COL_GNC_NAME, gnc_name,
-                       ACCOUNT_COL_NEW,      checked,
-                       -1);
-    accts_left = SCM_CDR(accts_left);
-  }
-
-  /* move to the old selected row */
-  prev_row = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(store), PREV_ROW));
-  if (prev_row != -1) {
-    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
-    path = gtk_tree_path_new_from_indices(prev_row, -1);
-    gtk_tree_selection_select_path(selection, path);
-    gtk_tree_path_free(path);
-  }
-}
-
-
-/****************************************************************
- * update_account_page
- *
- * update the QIF account -> GNC Account picker
- ****************************************************************/
-
-static void
-update_account_page(QIFImportWindow * wind)
-{
-
-  SCM  make_account_display = scm_c_eval_string("qif-dialog:make-account-display");
-
-  update_account_picker_page(wind, make_account_display, wind->acct_view,
-                             wind->acct_map_info, &(wind->acct_display_info));
-}
-
-
-/****************************************************************
- * update_category_page
- *
- * update the QIF category -> GNC Account picker
- ****************************************************************/
-
-static void
-update_category_page(QIFImportWindow * wind)
-{
-  SCM  make_category_display = scm_c_eval_string("qif-dialog:make-category-display");
-
-  update_account_picker_page(wind, make_category_display, wind->cat_view,
-                             wind->cat_map_info, &(wind->cat_display_info));
-}
-
-
-/****************************************************************
- * update_memo_page
- *
- * update the QIF memo -> GNC Account picker
- ****************************************************************/
-
-static void
-update_memo_page(QIFImportWindow * wind)
-{
-  SCM  make_memo_display = scm_c_eval_string("qif-dialog:make-memo-display");
-
-  update_account_picker_page(wind, make_memo_display, wind->memo_view,
-                             wind->memo_map_info, &(wind->memo_display_info));
 }
 
 
@@ -1401,7 +1411,7 @@ gnc_ui_qif_import_category_select_cb(GtkTreeSelection *selection,
  *  gnc_ui_qif_import_memo_activate_cb
  *
  * This handler is invoked when a row is double-clicked in the "Match
- * QIF memo/payee to GnuCash accounts" page.
+ * QIF payee/memo to GnuCash accounts" page.
  ********************************************************************/
 
 static void
@@ -1457,23 +1467,6 @@ gnc_ui_qif_import_memo_select_cb(GtkTreeSelection *selection,
 }
 
 
-/********************************************************************
- * gnc_ui_qif_import_account_prepare_cb
- ********************************************************************/
-
-static void
-gnc_ui_qif_import_account_prepare_cb(GnomeDruidPage * page,
-                                     gpointer arg1,
-                                     gpointer user_data)
-{
-  QIFImportWindow * wind = user_data;
-
-  gnc_set_busy_cursor(NULL, TRUE);
-  update_account_page(wind);
-  gnc_unset_busy_cursor(NULL);
-}
-
-
 /****************************************************************
  * gnc_ui_qif_import_account_rematch_cb
  *
@@ -1497,20 +1490,40 @@ gnc_ui_qif_import_account_rematch_cb(GtkButton *button, gpointer user_data)
 }
 
 
-/********************************************************************
- * gnc_ui_qif_import_category_prepare_cb
- ********************************************************************/
+/****************************************************************
+ * gnc_ui_qif_import_account_next_cb
+ *
+ * Find the next page to show, depending on whether there are
+ * category or payee/memo mappings to be dealt with.
+ ****************************************************************/
 
-static void
-gnc_ui_qif_import_category_prepare_cb(GnomeDruidPage * page,
-                                      gpointer arg1,
-                                      gpointer user_data)
+static gboolean
+gnc_ui_qif_import_account_next_cb(GnomeDruidPage * page,
+                                  gpointer arg1,
+                                  gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
 
-  gnc_set_busy_cursor(NULL, TRUE);
-  update_category_page(wind);
-  gnc_unset_busy_cursor(NULL);
+  /* If there are category mappings then proceed as usual. */
+  if (SCM_LISTP(wind->cat_display_info) && !SCM_NULLP(wind->cat_display_info))
+    return gnc_ui_qif_import_generic_next_cb(page, arg1, user_data);
+
+  /* If there are memo mappings then skip to that step. */
+  if (SCM_LISTP(wind->memo_display_info) && !SCM_NULLP(wind->memo_display_info))
+  {
+    if (wind->show_doc_pages)
+      gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                           get_named_page(wind, "memo_doc_page"));
+    else
+      gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                           get_named_page(wind, "memo_match_page"));
+    return TRUE;
+  }
+
+  /* Skip ahead to the currency page. */
+  gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                       get_named_page(wind, "currency_page"));
+  return TRUE;
 }
 
 
@@ -1539,54 +1552,27 @@ gnc_ui_qif_import_category_rematch_cb(GtkButton *button, gpointer user_data)
 
 /****************************************************************
  * gnc_ui_qif_import_category_next_cb
- * Check to see if there are any payees and memos to show. If not
- * jump to currency page.
+ *
+ * Check to see if there are any memo or payee mappings to show.
+ * If not, skip that step.
  ****************************************************************/
+
 static gboolean
 gnc_ui_qif_import_category_next_cb(GnomeDruidPage * page,
                                    gpointer arg1,
                                    gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
-  SCM  make_memo_display = scm_c_eval_string("qif-dialog:make-memo-display");
-  SCM  accts_left;
 
-  gnc_set_busy_cursor(NULL, TRUE);
-  /*
-   * Hack. Call make-memo-display to see if there are any memos to display.
-   * This will get called again when we actually do make the memo display.
-   */
-  accts_left = scm_call_3(make_memo_display,
-                          wind->imported_files,
-                          wind->memo_map_info,
-                          wind->gnc_acct_info);
-
-  gnc_unset_busy_cursor(NULL);
-
-  if (SCM_NULLP(accts_left)) {
+  /* If there aren't any payee/memo mappings then skip that step. */
+  if (!SCM_LISTP(wind->memo_display_info) || SCM_NULLP(wind->memo_display_info))
+  {
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
                          get_named_page(wind, "currency_page"));
     return TRUE;
-  } else {
-      return gnc_ui_qif_import_generic_next_cb(page, arg1, user_data);
   }
-}
 
-
-/********************************************************************
- * gnc_ui_qif_import_memo_prepare_cb
- ********************************************************************/
-
-static void
-gnc_ui_qif_import_memo_prepare_cb(GnomeDruidPage * page,
-                                        gpointer arg1,
-                                        gpointer user_data)
-{
-  QIFImportWindow * wind = user_data;
-
-  gnc_set_busy_cursor(NULL, TRUE);
-  update_memo_page(wind);
-  gnc_unset_busy_cursor(NULL);
+  return gnc_ui_qif_import_generic_next_cb(page, arg1, user_data);
 }
 
 
@@ -1610,6 +1596,58 @@ gnc_ui_qif_import_memo_rematch_cb(GtkButton *button, gpointer user_data)
                wind->memo_display_info,
                wind->memo_map_info,
                update_memo_page);
+}
+
+
+/****************************************************************
+ * gnc_ui_qif_import_memo_doc_back_cb
+ *
+ * Figure out which page went before payee/memo documentation.
+ ****************************************************************/
+
+static gboolean
+gnc_ui_qif_import_memo_doc_back_cb(GnomeDruidPage * page, gpointer arg1,
+                                   gpointer user_data)
+{
+  QIFImportWindow * wind = user_data;
+
+  /* If there are no categories to show, go to account matching. */
+  if (!SCM_LISTP(wind->cat_display_info) || SCM_NULLP(wind->cat_display_info))
+  {
+
+    gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                         get_named_page(wind, "account_match_page"));
+    return TRUE;
+  }
+
+  return gnc_ui_qif_import_generic_back_cb(page, arg1, user_data);
+}
+
+
+/****************************************************************
+ * gnc_ui_qif_import_memo_back_cb
+ *
+ * Figure out which page went before payee/memo mapping.
+ ****************************************************************/
+
+static gboolean
+gnc_ui_qif_import_memo_back_cb(GnomeDruidPage * page, gpointer arg1,
+                               gpointer user_data)
+{
+  QIFImportWindow * wind = user_data;
+
+  /* If documentation is off and there are no categories to show,
+   * skip directly to account matching. */
+  if (!wind->show_doc_pages &&
+      (!SCM_LISTP(wind->cat_display_info) || SCM_NULLP(wind->cat_display_info)))
+  {
+
+    gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                         get_named_page(wind, "account_match_page"));
+    return TRUE;
+  }
+
+  return gnc_ui_qif_import_generic_back_cb(page, arg1, user_data);
 }
 
 
@@ -1918,102 +1956,39 @@ gnc_ui_qif_import_new_securities(QIFImportWindow * wind)
 }
 
 
-/********************************************************************
- * gnc_ui_qif_import_memo_next_cb
- ********************************************************************/
-
-static gboolean
-gnc_ui_qif_import_memo_next_cb(GnomeDruidPage * page,
-                               gpointer arg1,
-                               gpointer user_data)
-{
-  QIFImportWindow * wind = user_data;
-  SCM any_new = scm_c_eval_string("qif-import:any-new-accts?");
-
-  /* if any accounts are new, ask about the currency; else,
-     just skip that page */
-  if ((scm_call_1(any_new, wind->acct_map_info) == SCM_BOOL_T) ||
-      (scm_call_1(any_new, wind->cat_map_info) == SCM_BOOL_T))
-    /* go to currency page */
-    return gnc_ui_qif_import_generic_next_cb(page, arg1, wind);
-  else
-  {
-    /* If we need to look at securities do that; otherwise import
-       xtns and go to the duplicates page */
-    if (gnc_ui_qif_import_new_securities(wind))
-    {
-      if (wind->show_doc_pages)
-        gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                             get_named_page(wind, "commodity_doc_page"));
-      else
-      {
-        gnc_ui_qif_import_commodity_prepare_cb(page, arg1, wind);
-        gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                             GNOME_DRUID_PAGE(wind->commodity_pages->data));
-      }
-    }
-    else
-      /* It's time to import the accounts. */
-      gnc_ui_qif_import_convert(wind);
-
-    return TRUE;
-  }
-}
-
 /****************************************************************
  * gnc_ui_qif_import_currency_back_cb
- * Check to see if there are any payees and memos to show. If not
- * jump to category match page.
+ *
+ * Set the next page depending on whether there are payee/memo
+ * or category mappings to show.
  ****************************************************************/
-static gboolean
-gnc_ui_qif_import_currency_back_cb(GnomeDruidPage * page, gpointer arg1,
-                                  gpointer user_data)
-{
-  QIFImportWindow * wind = user_data;
-
-  if (!wind->memo_display_info ||
-      (wind->memo_display_info == SCM_BOOL_F) ||
-       SCM_NULLP(wind->memo_display_info))
-  {
-    gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                         get_named_page(wind, "category_match_page"));
-    return TRUE;
-  } else {
-      return gnc_ui_qif_import_generic_back_cb(page, arg1, user_data);
-  }
-}
-
-/********************************************************************
- * gnc_ui_qif_import_currency_next_cb
- ********************************************************************/
 
 static gboolean
-gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
+gnc_ui_qif_import_currency_back_cb(GnomeDruidPage * page,
                                    gpointer arg1,
                                    gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
 
-  gnc_set_busy_cursor(NULL, TRUE);
-
-  if (gnc_ui_qif_import_new_securities(wind))
+  /* If there are payee/memo mappings to display, go there. */
+  if (SCM_LISTP(wind->memo_display_info) && !SCM_NULLP(wind->memo_display_info))
   {
-    /* There are new commodities, so show a commodity page next. */
-    if (wind->show_doc_pages)
-      gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           get_named_page(wind, "commodity_doc_page"));
-    else
-    {
-      gnc_ui_qif_import_commodity_prepare_cb(page, arg1, user_data);
-      gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           GNOME_DRUID_PAGE(wind->commodity_pages->data));
-    }
+    gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                         get_named_page(wind, "memo_match_page"));
+    return TRUE;
   }
-  else
-    /* It's time to import the accounts. */
-    gnc_ui_qif_import_convert(wind);
 
-  gnc_unset_busy_cursor(NULL);
+  /* If there are category mappings to display, go there. */
+  if (SCM_LISTP(wind->cat_display_info) && !SCM_NULLP(wind->cat_display_info))
+  {
+    gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                         get_named_page(wind, "category_match_page"));
+    return TRUE;
+  }
+
+  /* Go to account matching. */
+  gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                       get_named_page(wind, "account_match_page"));
   return TRUE;
 }
 
@@ -2125,96 +2100,8 @@ gnc_ui_qif_import_comm_next_cb(GnomeDruidPage * page,
 }
 
 
-/********************************************************************
- * gnc_ui_qif_import_commodity_prepare_cb
- * build a mapping of QIF security name to gnc_commodity
- ********************************************************************/
-
-static void
-gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
-                                       gpointer arg1,
-                                       gpointer user_data)
-{
-  QIFImportWindow * wind = user_data;
-
-  SCM   hash_ref  = scm_c_eval_string("hash-ref");
-  SCM   securities;
-  SCM   comm_ptr_token;
-
-  GList          * current;
-  gnc_commodity  * commodity;
-  GnomeDruidPage * back_page = get_named_page(wind, "commodity_doc_page");
-  QIFDruidPage   * new_page;
-
-  /* This shouldn't happen, but do the right thing if it does. */
-  if (wind->new_securities == SCM_BOOL_F || SCM_NULLP(wind->new_securities))
-  {
-    g_warning("QIF import: BUG DETECTED! Reached commodity doc page with nothing to do!");
-    gnc_ui_qif_import_convert(wind);
-  }
-  else
-  {
-    /*
-     * Make druid pages for each new QIF security.
-     */
-    gnc_set_busy_cursor(NULL, TRUE);
-    securities = wind->new_securities;
-    current = wind->commodity_pages;
-    while (!SCM_NULLP(securities) && (securities != SCM_BOOL_F))
-    {
-      if (current)
-      {
-        /* The page has already been made. */
-        back_page = GNOME_DRUID_PAGE(current->data);
-        current = current->next;
-      }
-      else
-      {
-        /* Get the GnuCash commodity corresponding to the new QIF security. */
-        comm_ptr_token = scm_call_2(hash_ref,
-                                    wind->security_hash,
-                                    SCM_CAR(securities));
-        #define FUNC_NAME "make_qif_druid_page"
-        commodity = SWIG_MustGetPtr(comm_ptr_token,
-                                    SWIG_TypeQuery("_p_gnc_commodity"), 1, 0);
-        #undef FUNC_NAME
-
-        /* Add a druid page for the commodity. */
-        new_page = make_qif_druid_page(SCM_CAR(securities), commodity);
-
-        g_signal_connect(new_page->page, "prepare",
-                         G_CALLBACK(gnc_ui_qif_import_comm_prepare_cb),
-                         wind);
-
-        g_signal_connect(new_page->page, "back",
-                         G_CALLBACK(gnc_ui_qif_import_generic_back_cb),
-                         wind);
-
-        g_signal_connect(new_page->page, "next",
-                         G_CALLBACK(gnc_ui_qif_import_comm_next_cb),
-                         wind);
-
-        wind->commodity_pages = g_list_append(wind->commodity_pages,
-                                              new_page->page);
-
-        gnome_druid_insert_page(GNOME_DRUID(wind->druid),
-                                back_page,
-                                GNOME_DRUID_PAGE(new_page->page));
-        back_page = GNOME_DRUID_PAGE(new_page->page);
-        gtk_widget_show_all(new_page->page);
-      }
-
-      securities = SCM_CDR(securities);
-    }
-
-    gnc_unset_busy_cursor(NULL);
-  }
-
-  gnc_druid_set_colors(GNOME_DRUID(wind->druid));
-}
-
 static QIFDruidPage *
-make_qif_druid_page(SCM security_hash_key, gnc_commodity *comm)
+new_security_page(SCM security_hash_key, gnc_commodity *comm)
 {
 
   QIFDruidPage *retval = g_new0(QIFDruidPage, 1);
@@ -2321,6 +2208,145 @@ make_qif_druid_page(SCM security_hash_key, gnc_commodity *comm)
 
 
   return retval;
+}
+
+
+/********************************************************************
+ * prepare_security_pages
+ *
+ * Prepare the druid page for each security.
+ ********************************************************************/
+
+static void
+prepare_security_pages(QIFImportWindow * wind)
+{
+  SCM   hash_ref  = scm_c_eval_string("hash-ref");
+  SCM   securities;
+  SCM   comm_ptr_token;
+
+  GList          * current;
+  gnc_commodity  * commodity;
+  GnomeDruidPage * back_page = get_named_page(wind, "commodity_doc_page");
+  QIFDruidPage   * new_page;
+
+  /*
+   * Make druid pages for each new QIF security.
+   */
+  gnc_set_busy_cursor(NULL, TRUE);
+  securities = wind->new_securities;
+  current = wind->commodity_pages;
+  while (!SCM_NULLP(securities) && (securities != SCM_BOOL_F))
+  {
+    if (current)
+    {
+      /* The page has already been made. */
+      back_page = GNOME_DRUID_PAGE(current->data);
+      current = current->next;
+    }
+    else
+    {
+      /* Get the GnuCash commodity corresponding to the new QIF security. */
+      comm_ptr_token = scm_call_2(hash_ref,
+                                  wind->security_hash,
+                                  SCM_CAR(securities));
+      #define FUNC_NAME "new_security_page"
+      commodity = SWIG_MustGetPtr(comm_ptr_token,
+                                  SWIG_TypeQuery("_p_gnc_commodity"), 1, 0);
+      #undef FUNC_NAME
+
+      /* Build a new security page. */
+      new_page = new_security_page(SCM_CAR(securities), commodity);
+
+      /* Connect the signals. */
+      g_signal_connect(new_page->page, "prepare",
+                       G_CALLBACK(gnc_ui_qif_import_comm_prepare_cb),
+                       wind);
+
+      g_signal_connect(new_page->page, "back",
+                       G_CALLBACK(gnc_ui_qif_import_generic_back_cb),
+                       wind);
+
+      g_signal_connect(new_page->page, "next",
+                       G_CALLBACK(gnc_ui_qif_import_comm_next_cb),
+                       wind);
+
+      /* Add it to the list of security pages. */
+      wind->commodity_pages = g_list_append(wind->commodity_pages,
+                                            new_page->page);
+
+      /* Add the new page to the druid. */
+      gnome_druid_insert_page(GNOME_DRUID(wind->druid),
+                              back_page,
+                              GNOME_DRUID_PAGE(new_page->page));
+
+      back_page = GNOME_DRUID_PAGE(new_page->page);
+      gtk_widget_show_all(new_page->page);
+    }
+
+    securities = SCM_CDR(securities);
+  }
+  gnc_unset_busy_cursor(NULL);
+
+  gnc_druid_set_colors(GNOME_DRUID(wind->druid));
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_currency_next_cb
+ ********************************************************************/
+
+static gboolean
+gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
+                                   gpointer arg1,
+                                   gpointer user_data)
+{
+  QIFImportWindow * wind = user_data;
+
+  gnc_set_busy_cursor(NULL, TRUE);
+
+  if (gnc_ui_qif_import_new_securities(wind))
+  {
+    /* There are new commodities, so show a commodity page next. */
+    if (wind->show_doc_pages)
+      gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                           get_named_page(wind, "commodity_doc_page"));
+    else
+    {
+      prepare_security_pages(wind);
+      gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                           GNOME_DRUID_PAGE(wind->commodity_pages->data));
+    }
+  }
+  else
+    /* It's time to import the accounts. */
+    gnc_ui_qif_import_convert(wind);
+
+  gnc_unset_busy_cursor(NULL);
+  return TRUE;
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_commodity_prepare_cb
+ *
+ * build a mapping of QIF security name to gnc_commodity
+ ********************************************************************/
+
+static void
+gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
+                                       gpointer arg1,
+                                       gpointer user_data)
+{
+  QIFImportWindow * wind = user_data;
+
+  /* This shouldn't happen, but do the right thing if it does. */
+  if (wind->new_securities == SCM_BOOL_F || SCM_NULLP(wind->new_securities))
+  {
+    g_warning("QIF import: BUG DETECTED! Reached commodity doc page with nothing to do!");
+    gnc_ui_qif_import_convert(wind);
+  }
+  else
+    prepare_security_pages(wind);
 }
 
 
@@ -2668,6 +2694,10 @@ gnc_ui_qif_import_druid_make(void)
      G_CALLBACK(gnc_ui_qif_import_unload_file_cb), retval);
 
   glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_loaded_files_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_loaded_files_next_cb), retval);
+
+  glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_default_acct_next_cb",
      G_CALLBACK(gnc_ui_qif_import_default_acct_next_cb), retval);
 
@@ -2676,16 +2706,12 @@ gnc_ui_qif_import_druid_make(void)
      G_CALLBACK(gnc_ui_qif_import_default_acct_back_cb), retval);
 
   glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_account_prepare_cb",
-     G_CALLBACK(gnc_ui_qif_import_account_prepare_cb), retval);
-
-  glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_account_rematch_cb",
      G_CALLBACK(gnc_ui_qif_import_account_rematch_cb), retval);
 
   glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_category_prepare_cb",
-     G_CALLBACK(gnc_ui_qif_import_category_prepare_cb), retval);
+    (xml, "gnc_ui_qif_import_account_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_account_next_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_category_rematch_cb",
@@ -2696,16 +2722,16 @@ gnc_ui_qif_import_druid_make(void)
      G_CALLBACK(gnc_ui_qif_import_category_next_cb), retval);
 
   glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_memo_prepare_cb",
-     G_CALLBACK(gnc_ui_qif_import_memo_prepare_cb), retval);
+    (xml, "gnc_ui_qif_import_memo_doc_back_cb",
+     G_CALLBACK(gnc_ui_qif_import_memo_doc_back_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_memo_rematch_cb",
      G_CALLBACK(gnc_ui_qif_import_memo_rematch_cb), retval);
 
   glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_memo_next_cb",
-     G_CALLBACK(gnc_ui_qif_import_memo_next_cb), retval);
+    (xml, "gnc_ui_qif_import_memo_back_cb",
+     G_CALLBACK(gnc_ui_qif_import_memo_back_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_currency_back_cb",
