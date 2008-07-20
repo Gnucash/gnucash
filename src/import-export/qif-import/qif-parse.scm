@@ -553,7 +553,7 @@
 (define (qif-parse:parse-number/format value-string format)
   (case format
     ((decimal)
-     (let* ((filtered-string (string-remove-chars value-string ",$'"))
+     (let* ((filtered-string (gnc:string-delete-chars value-string ",$'"))
             (read-val (with-input-from-string filtered-string
                                               (lambda () (read)))))
        (if (number? read-val)
@@ -564,8 +564,8 @@
                     GNC-RND-ROUND))
            (gnc-numeric-zero))))
     ((comma)
-     (let* ((filtered-string (string-replace-char
-                               (string-remove-chars value-string ".$'")
+     (let* ((filtered-string (gnc:string-replace-char
+                               (gnc:string-delete-chars value-string ".$'")
                                #\, #\.))
             (read-val (with-input-from-string filtered-string
                                               (lambda () (read)))))

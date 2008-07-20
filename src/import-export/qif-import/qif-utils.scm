@@ -5,7 +5,7 @@
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (srfi srfi-13))
+(use-modules (ice-9 regex))
 
 
 (define (simple-filter pred list)
@@ -49,31 +49,9 @@
     (regexp-substitute/global #f rexpstr str 'pre 'post)))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  string-remove-chars
-;;
-;;  Removes all characters in string "chars" from string "str".
-;;  Example: (string-remove-chars "abcd" "cb") returns "ad".
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define (string-remove-chars str chars)
-  (string-delete str (lambda (c) (string-index chars c))))
-
-
 (define (string-char-count str char)
   (length (simple-filter (lambda (elt) (eq? elt char))
                          (string->list str))))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  string-replace-char
-;;
-;;  Replaces all occurrences of char "old" with char "new".
-;;  Example: (string-replace-char "foo" #\o #\c) returns "fcc".
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define (string-replace-char str old new)
-  (string-map (lambda (c) (if (char=? c old) new c)) str))
 
 
 (define (string-replace-char! str old new)
@@ -89,4 +67,3 @@
    (string-downcase
     (string-remove-leading-space
      (string-remove-trailing-space str)))))
-
