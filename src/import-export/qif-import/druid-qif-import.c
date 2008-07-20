@@ -91,9 +91,22 @@ struct _qifimportwindow {
   GtkWidget * acct_entry;
   GtkWidget * date_format_combo;
   GtkWidget * selected_file_view;
+
+  /* Widgets on the account matching page. */
   GtkWidget * acct_view;
+  GtkWidget * acct_view_count;
+  GtkWidget * acct_view_btn;
+
+  /* Widgets on the category matching page. */
   GtkWidget * cat_view;
+  GtkWidget * cat_view_count;
+  GtkWidget * cat_view_btn;
+
+  /* Widgets on the memo matching page. */
   GtkWidget * memo_view;
+  GtkWidget * memo_view_count;
+  GtkWidget * memo_view_btn;
+
   GtkWidget * currency_picker;
   GtkWidget * new_transaction_view;
   GtkWidget * old_transaction_view;
@@ -143,8 +156,8 @@ static QIFDruidPage * make_qif_druid_page(SCM security_hash_key,
                                           gnc_commodity * comm);
 
 static void update_file_page(QIFImportWindow * win);
-static void update_accounts_page(QIFImportWindow * win);
-static void update_categories_page(QIFImportWindow * win);
+static void update_account_page(QIFImportWindow * win);
+static void update_category_page(QIFImportWindow * win);
 static void update_memo_page(QIFImportWindow * win);
 
 static void update_account_picker_page(QIFImportWindow * wind,
@@ -1073,12 +1086,13 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
 
 
 /****************************************************************
- * update_accounts_page
+ * update_account_page
+ *
  * update the QIF account -> GNC Account picker
  ****************************************************************/
 
 static void
-update_accounts_page(QIFImportWindow * wind)
+update_account_page(QIFImportWindow * wind)
 {
 
   SCM  make_account_display = scm_c_eval_string("qif-dialog:make-account-display");
@@ -1087,20 +1101,22 @@ update_accounts_page(QIFImportWindow * wind)
                              wind->acct_map_info, &(wind->acct_display_info));
 }
 
+
 /****************************************************************
- * update_categories_page
+ * update_category_page
  *
  * update the QIF category -> GNC Account picker
  ****************************************************************/
 
 static void
-update_categories_page(QIFImportWindow * wind)
+update_category_page(QIFImportWindow * wind)
 {
   SCM  make_category_display = scm_c_eval_string("qif-dialog:make-category-display");
 
   update_account_picker_page(wind, make_category_display, wind->cat_view,
                              wind->cat_map_info, &(wind->cat_display_info));
 }
+
 
 /****************************************************************
  * update_memo_page
@@ -1124,10 +1140,12 @@ update_memo_page(QIFImportWindow * wind)
 static void
 create_account_picker_view(GtkWidget *widget,
                            const gchar *col_name,
-                           GCallback callback,
+                           GCallback activate_cb,
+                           GCallback select_cb,
                            gpointer user_data)
 {
   GtkTreeView *view = GTK_TREE_VIEW(widget);
+  GtkTreeSelection *selection = gtk_tree_view_get_selection(view);
   GtkListStore *store;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
@@ -1165,16 +1183,18 @@ create_account_picker_view(GtkWidget *widget,
   gtk_tree_view_append_column(view, column);
 
   g_object_set_data(G_OBJECT(store), PREV_ROW, GINT_TO_POINTER(-1));
-  g_signal_connect(view, "row-activated", G_CALLBACK(callback), user_data);
+
+  /* Connect the signal handlers. */
+  g_signal_connect(view, "row-activated", G_CALLBACK(activate_cb), user_data);
+  g_signal_connect(selection, "changed", G_CALLBACK(select_cb), user_data);
 
   /* Allow multiple rows to be selected. */
-  gtk_tree_selection_set_mode(gtk_tree_view_get_selection(view),
-                              GTK_SELECTION_MULTIPLE);
+  gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
 }
 
 
 /********************************************************************
- * select_line
+ * rematch_line
  *
  * This is a helper function for tree controls used by some druid
  * pages for mapping QIF values to GnuCash accounts. It processes
@@ -1185,8 +1205,8 @@ create_account_picker_view(GtkWidget *widget,
  ********************************************************************/
 
 static void
-select_line(QIFImportWindow *wind, GtkTreeSelection *selection,
-            SCM display_info, SCM map_info,
+rematch_line(QIFImportWindow *wind, GtkTreeSelection *selection,
+             SCM display_info, SCM map_info,
             void (*update_page)(QIFImportWindow *))
 {
   SCM           get_qif_name = scm_c_eval_string("qif-map-entry:qif-name");
@@ -1257,16 +1277,77 @@ select_line(QIFImportWindow *wind, GtkTreeSelection *selection,
   update_page(wind);
 }
 
+
 /********************************************************************
- * gnc_ui_qif_import_account_line_select_cb
- * when an account is clicked for editing in the "map QIF accts to GNC"
- * page.
+ * gnc_ui_qif_import_account_activate_cb
+ *
+ * This handler is invoked when a row is double-clicked in the "Match
+ * QIF accounts to GnuCash accounts" page.
  ********************************************************************/
 
 static void
-gnc_ui_qif_import_account_line_select_cb(GtkTreeView *view, GtkTreePath *path,
-                                         GtkTreeViewColumn *column,
-                                         gpointer user_data)
+gnc_ui_qif_import_account_activate_cb(GtkTreeView *view, GtkTreePath *path,
+                                      GtkTreeViewColumn *column,
+                                      gpointer user_data)
+{
+  QIFImportWindow  *wind = user_data;
+
+  g_return_if_fail(wind);
+
+  rematch_line(wind, gtk_tree_view_get_selection(view),
+               wind->acct_display_info, wind->acct_map_info,
+               update_account_page);
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_account_select_cb
+ *
+ * This handler is invoked when the selection of account matchings
+ * has changed.  It updates the selection count and enables/disables
+ * the "Change" button.
+ ********************************************************************/
+
+static void
+gnc_ui_qif_import_account_select_cb(GtkTreeSelection *selection,
+                                    gpointer user_data)
+{
+  QIFImportWindow  *wind = user_data;
+  gint              count = gtk_tree_selection_count_selected_rows(selection);
+  gchar            *count_str;
+
+  g_return_if_fail(wind);
+
+  /* Update the "items selected" count. */
+  if (wind->acct_view_count)
+  {
+    count_str = g_strdup_printf("%d", count);
+    gtk_label_set_text(GTK_LABEL(wind->acct_view_count), count_str);
+    g_free(count_str);
+  }
+
+  /* Enable/disable the Change button. */
+  if (wind->acct_view_btn)
+  {
+    if (count)
+      gtk_widget_set_sensitive(wind->acct_view_btn, TRUE);
+    else
+      gtk_widget_set_sensitive(wind->acct_view_btn, FALSE);
+  }
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_category_activate_cb
+ *
+ * This handler is invoked when a row is double-clicked in the "Match
+ * QIF categories to GnuCash accounts" page.
+ ********************************************************************/
+
+static void
+gnc_ui_qif_import_category_activate_cb(GtkTreeView *view, GtkTreePath *path,
+                                       GtkTreeViewColumn *column,
+                                       gpointer user_data)
 {
   QIFImportWindow *wind = user_data;
   GtkTreeSelection *selection;
@@ -1274,20 +1355,59 @@ gnc_ui_qif_import_account_line_select_cb(GtkTreeView *view, GtkTreePath *path,
   g_return_if_fail(view && wind);
   selection = gtk_tree_view_get_selection(view);
 
-  select_line(wind, selection, wind->acct_display_info, wind->acct_map_info,
-              update_accounts_page);
+  rematch_line(wind, selection, wind->cat_display_info, wind->cat_map_info,
+               update_category_page);
 }
 
+
 /********************************************************************
- * gnc_ui_qif_import_category_line_select_cb
- * when a cat is clicked for editing in the "map QIF cats to GNC"
- * page.
+ * gnc_ui_qif_import_category_select_cb
+ *
+ * This handler is invoked when the selection of category matchings
+ * has changed.  It updates the selection count and enables/disables
+ * the "Change" button.
  ********************************************************************/
 
 static void
-gnc_ui_qif_import_category_line_select_cb(GtkTreeView *view, GtkTreePath *path,
-                                         GtkTreeViewColumn *column,
-                                         gpointer user_data)
+gnc_ui_qif_import_category_select_cb(GtkTreeSelection *selection,
+                                     gpointer user_data)
+{
+  QIFImportWindow  *wind = user_data;
+  gint              count = gtk_tree_selection_count_selected_rows(selection);
+  gchar            *count_str;
+
+  g_return_if_fail(wind);
+
+  /* Update the "items selected" count. */
+  if (wind->cat_view_count)
+  {
+    count_str = g_strdup_printf("%d", count);
+    gtk_label_set_text(GTK_LABEL(wind->cat_view_count), count_str);
+    g_free(count_str);
+  }
+
+  /* Enable/disable the Change button. */
+  if (wind->cat_view_btn)
+  {
+    if (count)
+      gtk_widget_set_sensitive(wind->cat_view_btn, TRUE);
+    else
+      gtk_widget_set_sensitive(wind->cat_view_btn, FALSE);
+  }
+}
+
+
+/********************************************************************
+ *  gnc_ui_qif_import_memo_activate_cb
+ *
+ * This handler is invoked when a row is double-clicked in the "Match
+ * QIF memo/payee to GnuCash accounts" page.
+ ********************************************************************/
+
+static void
+gnc_ui_qif_import_memo_activate_cb(GtkTreeView *view, GtkTreePath *path,
+                                   GtkTreeViewColumn *column,
+                                   gpointer user_data)
 {
   QIFImportWindow *wind = user_data;
   GtkTreeSelection *selection;
@@ -1295,74 +1415,137 @@ gnc_ui_qif_import_category_line_select_cb(GtkTreeView *view, GtkTreePath *path,
   g_return_if_fail(view && wind);
   selection = gtk_tree_view_get_selection(view);
 
-  select_line(wind, selection, wind->cat_display_info, wind->cat_map_info,
-              update_categories_page);
+  rematch_line(wind, selection, wind->memo_display_info, wind->memo_map_info,
+               update_memo_page);
 }
 
+
 /********************************************************************
- *  gnc_ui_qif_import_memo_line_select_cb
- *  when a memo is clicked for editing in the "map QIF memos to GNC"
- *  page.
+ * gnc_ui_qif_import_memo_select_cb
+ *
+ * This handler is invoked when the selection of memo matchings
+ * has changed.  It updates the selection count and enables/disables
+ * the "Change" button.
  ********************************************************************/
 
 static void
-gnc_ui_qif_import_memo_line_select_cb(GtkTreeView *view, GtkTreePath *path,
-                                         GtkTreeViewColumn *column,
-                                         gpointer user_data)
+gnc_ui_qif_import_memo_select_cb(GtkTreeSelection *selection,
+                                 gpointer user_data)
 {
-  QIFImportWindow *wind = user_data;
-  GtkTreeSelection *selection;
+  QIFImportWindow  *wind = user_data;
+  gint              count = gtk_tree_selection_count_selected_rows(selection);
+  gchar            *count_str;
 
-  g_return_if_fail(view && wind);
-  selection = gtk_tree_view_get_selection(view);
+  g_return_if_fail(wind);
 
-  select_line(wind, selection, wind->memo_display_info, wind->memo_map_info,
-              update_memo_page);
+  /* Update the "items selected" count. */
+  if (wind->memo_view_count)
+  {
+    count_str = g_strdup_printf("%d", count);
+    gtk_label_set_text(GTK_LABEL(wind->memo_view_count), count_str);
+    g_free(count_str);
+  }
+
+  /* Enable/disable the Change button. */
+  if (wind->memo_view_btn)
+  {
+    if (count)
+      gtk_widget_set_sensitive(wind->memo_view_btn, TRUE);
+    else
+      gtk_widget_set_sensitive(wind->memo_view_btn, FALSE);
+  }
 }
 
 
 /********************************************************************
- * gnc_ui_qif_import_accounts_prepare_cb
+ * gnc_ui_qif_import_account_prepare_cb
  ********************************************************************/
 
 static void
-gnc_ui_qif_import_accounts_prepare_cb(GnomeDruidPage * page,
+gnc_ui_qif_import_account_prepare_cb(GnomeDruidPage * page,
+                                     gpointer arg1,
+                                     gpointer user_data)
+{
+  QIFImportWindow * wind = user_data;
+
+  gnc_set_busy_cursor(NULL, TRUE);
+  update_account_page(wind);
+  gnc_unset_busy_cursor(NULL);
+}
+
+
+/****************************************************************
+ * gnc_ui_qif_import_account_rematch_cb
+ *
+ * This handler is invoked when the user clicks the "Change
+ * GnuCash account" button on the account mapping page. This
+ * button is an alternative to double-clicking a row.
+ ****************************************************************/
+
+static void
+gnc_ui_qif_import_account_rematch_cb(GtkButton *button, gpointer user_data)
+{
+  QIFImportWindow  *wind = user_data;
+
+  g_return_if_fail(wind);
+
+  rematch_line(wind,
+               gtk_tree_view_get_selection(GTK_TREE_VIEW(wind->acct_view)),
+               wind->acct_display_info,
+               wind->acct_map_info,
+               update_account_page);
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_category_prepare_cb
+ ********************************************************************/
+
+static void
+gnc_ui_qif_import_category_prepare_cb(GnomeDruidPage * page,
                                       gpointer arg1,
                                       gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
 
   gnc_set_busy_cursor(NULL, TRUE);
-  update_accounts_page(wind);
+  update_category_page(wind);
   gnc_unset_busy_cursor(NULL);
 }
 
-
-/********************************************************************
- * gnc_ui_qif_import_categories_prepare_cb
- ********************************************************************/
-
-static void
-gnc_ui_qif_import_categories_prepare_cb(GnomeDruidPage * page,
-                                        gpointer arg1,
-                                        gpointer user_data)
-{
-  QIFImportWindow * wind = user_data;
-
-  gnc_set_busy_cursor(NULL, TRUE);
-  update_categories_page(wind);
-  gnc_unset_busy_cursor(NULL);
-}
 
 /****************************************************************
- * gnc_ui_qif_import_categories_next_cb
+ * gnc_ui_qif_import_category_rematch_cb
+ *
+ * This handler is invoked when the user clicks the "Change
+ * GnuCash account" button on the category mapping page. This
+ * button is an alternative to double-clicking a row.
+ ****************************************************************/
+
+static void
+gnc_ui_qif_import_category_rematch_cb(GtkButton *button, gpointer user_data)
+{
+  QIFImportWindow  *wind = user_data;
+
+  g_return_if_fail(wind);
+
+  rematch_line(wind,
+               gtk_tree_view_get_selection(GTK_TREE_VIEW(wind->cat_view)),
+               wind->cat_display_info,
+               wind->cat_map_info,
+               update_category_page);
+}
+
+
+/****************************************************************
+ * gnc_ui_qif_import_category_next_cb
  * Check to see if there are any payees and memos to show. If not
  * jump to currency page.
  ****************************************************************/
 static gboolean
-gnc_ui_qif_import_categories_next_cb(GnomeDruidPage * page,
-                                     gpointer arg1,
-                                     gpointer user_data)
+gnc_ui_qif_import_category_next_cb(GnomeDruidPage * page,
+                                   gpointer arg1,
+                                   gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
   SCM  make_memo_display = scm_c_eval_string("qif-dialog:make-memo-display");
@@ -1389,6 +1572,7 @@ gnc_ui_qif_import_categories_next_cb(GnomeDruidPage * page,
   }
 }
 
+
 /********************************************************************
  * gnc_ui_qif_import_memo_prepare_cb
  ********************************************************************/
@@ -1403,6 +1587,29 @@ gnc_ui_qif_import_memo_prepare_cb(GnomeDruidPage * page,
   gnc_set_busy_cursor(NULL, TRUE);
   update_memo_page(wind);
   gnc_unset_busy_cursor(NULL);
+}
+
+
+/****************************************************************
+ * gnc_ui_qif_import_memo_rematch_cb
+ *
+ * This handler is invoked when the user clicks the "Change
+ * GnuCash account" button on the memo mapping page. This
+ * button is an alternative to double-clicking a row.
+ ****************************************************************/
+
+static void
+gnc_ui_qif_import_memo_rematch_cb(GtkButton *button, gpointer user_data)
+{
+  QIFImportWindow  *wind = user_data;
+
+  g_return_if_fail(wind);
+
+  rematch_line(wind,
+               gtk_tree_view_get_selection(GTK_TREE_VIEW(wind->memo_view)),
+               wind->memo_display_info,
+               wind->memo_map_info,
+               update_memo_page);
 }
 
 
@@ -2469,20 +2676,32 @@ gnc_ui_qif_import_druid_make(void)
      G_CALLBACK(gnc_ui_qif_import_default_acct_back_cb), retval);
 
   glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_accounts_prepare_cb",
-     G_CALLBACK(gnc_ui_qif_import_accounts_prepare_cb), retval);
+    (xml, "gnc_ui_qif_import_account_prepare_cb",
+     G_CALLBACK(gnc_ui_qif_import_account_prepare_cb), retval);
 
   glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_categories_prepare_cb",
-     G_CALLBACK(gnc_ui_qif_import_categories_prepare_cb), retval);
+    (xml, "gnc_ui_qif_import_account_rematch_cb",
+     G_CALLBACK(gnc_ui_qif_import_account_rematch_cb), retval);
 
   glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_categories_next_cb",
-     G_CALLBACK(gnc_ui_qif_import_categories_next_cb), retval);
+    (xml, "gnc_ui_qif_import_category_prepare_cb",
+     G_CALLBACK(gnc_ui_qif_import_category_prepare_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_category_rematch_cb",
+     G_CALLBACK(gnc_ui_qif_import_category_rematch_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_category_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_category_next_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_memo_prepare_cb",
      G_CALLBACK(gnc_ui_qif_import_memo_prepare_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_memo_rematch_cb",
+     G_CALLBACK(gnc_ui_qif_import_memo_rematch_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_memo_next_cb",
@@ -2523,15 +2742,21 @@ gnc_ui_qif_import_druid_make(void)
   retval->match_transactions = SCM_BOOL_F;
   retval->selected_transaction = 0;
 
-  retval->druid          = glade_xml_get_widget(xml, "qif_import_druid");
-  retval->filename_entry = glade_xml_get_widget(xml, "qif_filename_entry");
-  retval->acct_entry     = glade_xml_get_widget(xml, "qif_account_entry");
+  retval->druid           = glade_xml_get_widget(xml, "qif_import_druid");
+  retval->filename_entry  = glade_xml_get_widget(xml, "qif_filename_entry");
+  retval->acct_entry      = glade_xml_get_widget(xml, "qif_account_entry");
   retval->date_format_combo = glade_xml_get_widget(xml, "date_format_combobox");
   retval->selected_file_view = glade_xml_get_widget(xml, "selected_file_view");
   retval->currency_picker = glade_xml_get_widget(xml, "currency_comboboxentry");
-  retval->acct_view      = glade_xml_get_widget(xml, "account_page_view");
-  retval->cat_view       = glade_xml_get_widget(xml, "category_page_view");
-  retval->memo_view      = glade_xml_get_widget(xml, "memo_page_view");
+  retval->acct_view       = glade_xml_get_widget(xml, "account_page_view");
+  retval->acct_view_count = glade_xml_get_widget(xml, "account_page_count");
+  retval->acct_view_btn   = glade_xml_get_widget(xml, "account_page_change");
+  retval->cat_view        = glade_xml_get_widget(xml, "category_page_view");
+  retval->cat_view_count  = glade_xml_get_widget(xml, "category_page_count");
+  retval->cat_view_btn    = glade_xml_get_widget(xml, "category_page_change");
+  retval->memo_view       = glade_xml_get_widget(xml, "memo_page_view");
+  retval->memo_view_count = glade_xml_get_widget(xml, "memo_page_count");
+  retval->memo_view_btn   = glade_xml_get_widget(xml, "memo_page_change");
   retval->new_transaction_view =
     glade_xml_get_widget(xml, "new_transaction_view");
   retval->old_transaction_view =
@@ -2591,14 +2816,22 @@ gnc_ui_qif_import_druid_make(void)
                    G_CALLBACK(gnc_ui_qif_import_select_loaded_file_cb),
                    retval);
 
+  /* Set up the QIF account to GnuCash account matcher. */
   create_account_picker_view(retval->acct_view, _("QIF account name"),
-                             G_CALLBACK(gnc_ui_qif_import_account_line_select_cb),
+                             G_CALLBACK(gnc_ui_qif_import_account_activate_cb),
+                             G_CALLBACK(gnc_ui_qif_import_account_select_cb),
                              retval);
+
+  /* Set up the QIF category to GnuCash account matcher. */
   create_account_picker_view(retval->cat_view,  _("QIF category name"),
-                             G_CALLBACK(gnc_ui_qif_import_category_line_select_cb),
+                             G_CALLBACK(gnc_ui_qif_import_category_activate_cb),
+                             G_CALLBACK(gnc_ui_qif_import_category_select_cb),
                              retval);
+
+  /* Set up the QIF payee/memo to GnuCash account matcher. */
   create_account_picker_view(retval->memo_view, _("QIF payee/memo"),
-                             G_CALLBACK(gnc_ui_qif_import_memo_line_select_cb),
+                             G_CALLBACK(gnc_ui_qif_import_memo_activate_cb),
+                             G_CALLBACK(gnc_ui_qif_import_memo_select_cb),
                              retval);
 
   /* Set up the new transaction view */
