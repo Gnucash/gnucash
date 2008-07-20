@@ -312,7 +312,7 @@
                           (match:substring match 2)
                           (match:substring match 3)))
         (numeric-date-parts '())
-        (retval #f))
+        (retval '()))
 
     ;;(define (print-list l)
     ;;  (for-each (lambda (x) (display x) (display " ")) l))
@@ -388,7 +388,7 @@
 ;;  of possibilities.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (qif-parse:check-date-format date-string possible-formats)
-  (let ((retval #f))
+  (let ((retval '()))
     (if (or (not (string? date-string))
             (not (> (string-length date-string) 0)))
         (set! retval possible-formats))
