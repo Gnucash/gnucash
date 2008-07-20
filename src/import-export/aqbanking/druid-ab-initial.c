@@ -88,6 +88,7 @@ struct _ABInitialInfo {
     GtkWidget *druid;
 
     /* account match page */
+    gboolean match_page_prepared;
     GtkTreeView *account_view;
     GtkListStore *account_store;
 
@@ -309,12 +310,17 @@ dai_match_page_prepare_cb(GnomeDruidPage *druid_page, GtkWidget *widget,
     Account *root;
     AccCbData data;
 
-
     g_return_if_fail(info && info->api);
 
     /* No way back */
     gnome_druid_set_buttons_sensitive(GNOME_DRUID(info->druid),
                                       FALSE, TRUE, TRUE, TRUE);
+
+    /* Do not run this twice */
+    if (info->match_page_prepared)
+        return;
+    else
+        info->match_page_prepared = TRUE;
 
     /* Load aqbanking accounts */
     AB_Banking_OnlineInit(info->api);
@@ -738,6 +744,7 @@ gnc_ab_initial_druid(void)
     info->deferred_info = NULL;
     info->gnc_hash = NULL;
 
+    info->match_page_prepared = FALSE;
     info->account_view =
         GTK_TREE_VIEW(glade_xml_get_widget(xml, "account_page_view"));
     info->account_store = gtk_list_store_new(NUM_ACCOUNT_LIST_COLS,
