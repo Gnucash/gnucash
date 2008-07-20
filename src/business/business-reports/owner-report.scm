@@ -185,21 +185,44 @@
     table))
 		 
 ;;
+;; Make a row list based on the visible columns
+;;
+(define (make-row column-vector date due-date num type-str memo monetary)
+  (let ((row-contents '()))
+    (if (date-col column-vector)
+	(addto! row-contents (gnc-print-date date)))
+    (if (date-due-col column-vector)
+	(addto! row-contents 
+		(if (and due-date
+			 (not (equal? due-date (cons 0 0))))
+		    (gnc-print-date due-date)
+		    "")))
+    (if (num-col column-vector)
+	(addto! row-contents num))
+    (if (type-col column-vector)
+	(addto! row-contents type-str))
+    (if (memo-col column-vector)
+	(addto! row-contents memo))
+    (if (value-col column-vector)
+	(addto! row-contents
+		(gnc:make-html-table-cell/markup "number-cell" monetary)))
+    row-contents))
+
+;;
 ;; Adds the 'Balance' row to the table if it has not been printed and
 ;; total is not zero
 ;;
 ;; Returns printed? 
 ;;
-(define (add-balance-row table txn odd-row? printed? start-date total)
+(define (add-balance-row table column-vector txn odd-row? printed? start-date total)
   (if (not printed?)
       (begin
 	(set! printed? #t)
 	(if (not (gnc-numeric-zero-p total))
-	    (let ((row (list (gnc-print-date start-date) "" "" "Balance" ""
-			(gnc:make-html-table-cell/markup "number-cell" 
-				(gnc:make-gnc-monetary (xaccTransGetCurrency txn) total))))
+	    (let ((row (make-row column-vector start-date #f "" (_ "Balance") ""
+				 (gnc:make-gnc-monetary (xaccTransGetCurrency txn) total)))
 		  (row-style (if odd-row? "normal-row" "alternate-row")))
-	      (gnc:html-table-append-row/markup! table row-style row)
+	      (gnc:html-table-append-row/markup! table row-style (reverse row))
 	      (set! odd-row? (not odd-row?))
 	      (set! row-style (if odd-row? "normal-row" "alternate-row")))
 	    )))
@@ -233,29 +256,6 @@
 	   (else (_ "Unknown"))))
 	 )
 
-    (define (make-row date due-date num type-str memo value)
-      (let ((row-contents '()))
-	(if (date-col column-vector)
-	    (addto! row-contents (gnc-print-date date)))
-	(if (date-due-col column-vector)
-	    (addto! row-contents 
-		    (if (and due-date
-			     (not (equal? due-date (cons 0 0))))
-			(gnc-print-date due-date)
-			"")))
-	(if (num-col column-vector)
-	    (addto! row-contents num))
-	(if (type-col column-vector)
-	    (addto! row-contents type-str))
-	(if (memo-col column-vector)
-	    (addto! row-contents memo))
-	(if (value-col column-vector)
-	    (addto! row-contents
-		    (gnc:make-html-table-cell/markup "number-cell"
-						     (gnc:make-gnc-monetary
-						      currency value))))
-	row-contents))
-
     (if reverse?
 	(set! value (gnc-numeric-neg value)))
 
@@ -263,14 +263,15 @@
 	(begin
 	  
 	  ; Adds 'balance' row if needed
-	  (set! printed? (add-balance-row table txn odd-row? printed? start-date total))
+	  (set! printed? (add-balance-row table column-vector txn odd-row? printed? start-date total))
 	  
 	  ; Now print out the invoice row
 	  (if (not (null? invoice))
 	      (set! due-date (gncInvoiceGetDateDue invoice)))
 
-	  (let ((row (make-row date due-date (xaccTransGetNum txn)
-			       type-str (xaccSplitGetMemo split) value))
+	  (let ((row (make-row column-vector date due-date (xaccTransGetNum txn)
+			       type-str (xaccSplitGetMemo split)
+			       (gnc:make-gnc-monetary currency value)))
 		(row-style (if odd-row? "normal-row" "alternate-row")))
 
 	    (gnc:html-table-append-row/markup! table row-style
@@ -320,7 +321,7 @@
 	  ;Balance row may not have been added if all transactions were before
 	  ;start-date (and no other rows would be added either) so add it now
       (if (not (null? txns))
-	  (add-balance-row table (car txns) odd-row? printed? start-date total)
+	  (add-balance-row table used-columns (car txns) odd-row? printed? start-date total)
 		))
 
     (gnc:html-table-append-row/markup! 
