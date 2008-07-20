@@ -552,10 +552,12 @@
        (cond 
         ((memv t (list GNC-BANK-TYPE GNC-CASH-TYPE GNC-CCARD-TYPE 
                        GNC-STOCK-TYPE GNC-MUTUAL-TYPE
-                       GNC-ASSET-TYPE GNC-LIABILITY-TYPE))
+                       GNC-ASSET-TYPE GNC-LIABILITY-TYPE
+                       GNC-RECEIVABLE-TYPE GNC-PAYABLE-TYPE))
          (add-types GNC-BANK-TYPE GNC-CASH-TYPE GNC-CCARD-TYPE 
                     GNC-STOCK-TYPE GNC-MUTUAL-TYPE
-                    GNC-ASSET-TYPE GNC-LIABILITY-TYPE))
+                    GNC-ASSET-TYPE GNC-LIABILITY-TYPE
+                    GNC-RECEIVABLE-TYPE GNC-PAYABLE-TYPE))
         ((memv t (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE))
          (add-types GNC-INCOME-TYPE GNC-EXPENSE-TYPE))
         (#t
