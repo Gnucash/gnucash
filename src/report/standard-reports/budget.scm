@@ -68,7 +68,7 @@
     ;; optname-from-date optname-to-date "a")
 
     (gnc:options-add-price-source!
-     options gnc:pagename-general optname-price-source "c" 'weighted-average)
+     options gnc:pagename-general optname-price-source "c" 'average-cost)
 
     ;;(gnc:register-option
     ;; options

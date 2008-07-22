@@ -183,7 +183,7 @@
     
     (gnc:options-add-price-source! 
      options pagename-commodities
-     optname-price-source "b" 'weighted-average)
+     optname-price-source "b" 'average-cost)
     
     (add-option 
      (gnc:make-simple-boolean-option
