@@ -256,9 +256,9 @@
 
 ;; gnc:make-report instantiates a report from a report-template.
 ;; The actual report is stored away in a hash-table -- only the id is returned.
-(define (gnc:make-report template-name . rest)
+(define (gnc:make-report template-id . rest)
   (let ((r ((record-constructor <report>) 
-            template-name ;; type
+            template-id ;; type
             #f            ;; id
             #f            ;; options
             #t            ;; dirty
@@ -266,7 +266,7 @@
             #f            ;; editor-widget
             #f            ;; ctext
             ))
-        (template (hash-ref *gnc:_report-templates_* template-name))
+        (template (hash-ref *gnc:_report-templates_* template-id))
         )
     (let ((options 
            (if (not (null? rest))
@@ -306,8 +306,8 @@
         #f))
   )
 
-(define (gnc:make-report-options template-name)
-  (let ((template (hash-ref *gnc:_report-templates_* template-name)))
+(define (gnc:make-report-options template-id)
+  (let ((template (hash-ref *gnc:_report-templates_* template-id)))
     (if template
         (gnc:report-template-new-options template)
         #f)))
