@@ -119,3 +119,24 @@
 
 (define-public (gnc:string-delete-chars s chars)
   (string-delete s (lambda (c) (string-index chars c))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  gnc:list-display
+;;
+;;  Run the display procedure on each element in a list.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define-public (gnc:list-display lst)
+  (for-each (lambda (elt) (display elt)) lst))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  gnc:list-display-to-string
+;;
+;;  Return a string containing the output that would be generated
+;;  by running the display procedure on each element in a list.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define-public (gnc:list-display-to-string lst)
+  (with-output-to-string (lambda () (gnc:list-display lst))))
+

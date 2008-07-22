@@ -7,6 +7,8 @@
 
 (use-modules (ice-9 regex))
 
+(define qif-import:paused #f)
+(define qif-import:canceled #f)
 
 (define (simple-filter pred list)
   (let ((retval '()))
@@ -67,3 +69,32 @@
    (string-downcase
     (string-remove-leading-space
      (string-remove-trailing-space str)))))
+
+
+(define (qif-import:log progress-dialog proc str)
+  (if progress-dialog
+      (gnc-progress-dialog-append-log progress-dialog (string-append str "\n"))
+      (gnc:warn proc ": " str)))
+
+(define (qif-import:reset-cancel-pause)
+  (set! qif-import:paused #f)
+  (set! qif-import:canceled #f))
+
+(define (qif-import:cancel)
+  (set! qif-import:canceled #t))
+
+(define (qif-import:toggle-pause progress-dialog)
+  (if qif-import:paused
+      (begin
+        (set! qif-import:paused #f)
+        (if progress-dialog
+            (gnc-progress-dialog-resume progress-dialog)))
+      (begin
+        (set! qif-import:paused #t)
+        (if progress-dialog
+            (gnc-progress-dialog-pause progress-dialog)))))
+
+(define (qif-import:check-pause progress-dialog)
+  (while (and qif-import:paused (not qif-import:canceled))
+    (gnc-progress-dialog-update progress-dialog)))
+

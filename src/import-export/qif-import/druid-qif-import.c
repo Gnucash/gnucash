@@ -38,6 +38,7 @@
 #include "Transaction.h"
 #include "dialog-account-picker.h"
 #include "dialog-commodity.h"
+#include "dialog-progress.h"
 #include "dialog-utils.h"
 #include "druid-qif-import.h"
 #include "druid-utils.h"
@@ -87,9 +88,22 @@ enum qif_trans_cols {
 struct _qifimportwindow {
   GtkWidget * window;
   GtkWidget * druid;
+
+  /* Widgets on the file selection page. */
   GtkWidget * filename_entry;
+
+  /* File loading progress page. */
+  GtkWidget * load_pause;
+  GtkWidget * load_log;
+  GNCProgressDialog *load_progress;
+
+  /* Widgets on the default account page. */
   GtkWidget * acct_entry;
+
+  /* Widgets on the date format page. */
   GtkWidget * date_format_combo;
+
+  /* Widgets on the files loaded page. */
   GtkWidget * selected_file_view;
 
   /* Widgets on the account matching page. */
@@ -107,7 +121,10 @@ struct _qifimportwindow {
   GtkWidget * memo_view_count;
   GtkWidget * memo_view_btn;
 
+  /* Widgets on the currency page. */
   GtkWidget * currency_picker;
+
+  /* Widgets on the duplicates page. */
   GtkWidget * new_transaction_view;
   GtkWidget * old_transaction_view;
 
@@ -117,6 +134,8 @@ struct _qifimportwindow {
   GList     * doc_pages;
 
   gboolean  show_doc_pages;
+  gboolean  ask_date_format;
+  gboolean  busy;
 
   SCM       imported_files;
   SCM       selected_file;
@@ -157,7 +176,7 @@ static GdkColor std_bg_color = { 0, 39835, 49087, 40092 };
 static GdkColor std_logo_bg_color = { 0, 65535, 65535, 65535 };
 static GdkColor std_title_color =  { 0, 65535, 65535, 65535 };
 
-#define NUM_PRE_PAGES 13
+#define NUM_PRE_PAGES 14
 #define NUM_POST_PAGES 3
 #define NUM_DOC_PAGES  6
 
@@ -309,12 +328,6 @@ gnc_ui_qif_import_commodity_destroy(QIFImportWindow * wind)
 
     /* Free the memory allocated for the page's struct. */
     g_free(page);
-
-    /*
-     * FIXME -- Do we need to call gtk_widget_destroy() for anything?
-     *          Or will they all get destroyed when the druid gets destroyed?
-     *          Any other cleanup?
-     */
   }
 
   /* Free the list of pages. */
@@ -329,35 +342,38 @@ gnc_ui_qif_import_commodity_destroy(QIFImportWindow * wind)
 \********************************************************************/
 
 void
-gnc_ui_qif_import_druid_destroy(QIFImportWindow * window)
+gnc_ui_qif_import_druid_destroy(QIFImportWindow * wind)
 {
-  if (!window)
+  if (!wind)
     return;
 
+  /* Destroy the progress dialog helpers. */
+  gnc_progress_dialog_destroy(wind->load_progress);
+
   /* Destroy any commodity pages. */
-  gnc_ui_qif_import_commodity_destroy(window);
+  gnc_ui_qif_import_commodity_destroy(wind);
 
-  gnc_unregister_gui_component_by_data(DRUID_QIF_IMPORT_CM_CLASS, window);
+  gnc_unregister_gui_component_by_data(DRUID_QIF_IMPORT_CM_CLASS, wind);
 
-  gtk_widget_destroy(window->window);
+  gtk_widget_destroy(wind->window);
 
-  scm_gc_unprotect_object(window->imported_files);
-  scm_gc_unprotect_object(window->selected_file);
-  scm_gc_unprotect_object(window->gnc_acct_info);
-  scm_gc_unprotect_object(window->cat_display_info);
-  scm_gc_unprotect_object(window->cat_map_info);
-  scm_gc_unprotect_object(window->memo_display_info);
-  scm_gc_unprotect_object(window->memo_map_info);
-  scm_gc_unprotect_object(window->acct_display_info);
-  scm_gc_unprotect_object(window->acct_map_info);
-  scm_gc_unprotect_object(window->security_hash);
-  scm_gc_unprotect_object(window->security_prefs);
-  scm_gc_unprotect_object(window->new_securities);
-  scm_gc_unprotect_object(window->ticker_map);
-  scm_gc_unprotect_object(window->imported_account_tree);
-  scm_gc_unprotect_object(window->match_transactions);
+  scm_gc_unprotect_object(wind->imported_files);
+  scm_gc_unprotect_object(wind->selected_file);
+  scm_gc_unprotect_object(wind->gnc_acct_info);
+  scm_gc_unprotect_object(wind->cat_display_info);
+  scm_gc_unprotect_object(wind->cat_map_info);
+  scm_gc_unprotect_object(wind->memo_display_info);
+  scm_gc_unprotect_object(wind->memo_map_info);
+  scm_gc_unprotect_object(wind->acct_display_info);
+  scm_gc_unprotect_object(wind->acct_map_info);
+  scm_gc_unprotect_object(wind->security_hash);
+  scm_gc_unprotect_object(wind->security_prefs);
+  scm_gc_unprotect_object(wind->new_securities);
+  scm_gc_unprotect_object(wind->ticker_map);
+  scm_gc_unprotect_object(wind->imported_account_tree);
+  scm_gc_unprotect_object(wind->match_transactions);
 
-  g_free(window);
+  g_free(wind);
 }
 
 
@@ -653,207 +669,430 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
                                     gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
-
   const gchar * path_to_load;
-  const gchar * default_acctname = NULL;
+
+  /* Get the file name. */
+  path_to_load = gtk_entry_get_text(GTK_ENTRY(wind->filename_entry));
+
+  /* Validate the chosen filename. */
+  if (strlen(path_to_load) == 0)
+    gnc_error_dialog(wind->window, _("Please select a file to load."));
+  else if (g_access(path_to_load, R_OK) < 0)
+    gnc_error_dialog(wind->window,
+                     _("File not found or read permission denied. "
+                       "Please select another file."));
+  else
+  {
+    SCM qif_file_loaded = scm_c_eval_string("qif-dialog:qif-file-loaded?");
+
+    /* See if the file is already loaded. */
+    if (scm_call_2(qif_file_loaded,
+                   scm_makfrom0str(path_to_load),
+                   wind->imported_files) == SCM_BOOL_T)
+      gnc_error_dialog(wind->window,
+                       _("That QIF file is already loaded. "
+                         "Please select another file."));
+    else
+    {
+      /* Passed all checks; proceed to the next page. */
+      return gnc_ui_qif_import_generic_next_cb(page, arg1, wind);
+    }
+  }
+
+  /* Stay on this page. */
+  return TRUE;
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_load_progress_prepare_cb
+ *
+ * Prepare the progress page for display.
+ ********************************************************************/
+
+static void
+gnc_ui_qif_import_load_progress_prepare_cb(GnomeDruidPage * page,
+                                           gpointer arg1,
+                                           gpointer user_data)
+{
+  QIFImportWindow   *wind = user_data;
+
+  /* Reset the progress display. */
+  gnc_progress_dialog_set_primary(wind->load_progress, "");
+  gnc_progress_dialog_set_secondary(wind->load_progress,
+    _("GnuCash will now load your QIF file. If there are no errors or warnings, you will automatically proceed to the next step. Otherwise, the details will be shown below for your review."));
+  gnc_progress_dialog_set_sub(wind->load_progress, " ");
+  gnc_progress_dialog_reset_value(wind->load_progress);
+  gnc_progress_dialog_reset_log(wind->load_progress);
+
+  /* Disable the "Forward" button for now.
+   *
+   * NOTE: Due to bug 91001 in GnomeDruid, gnome_druid_set_buttons_sensitive()
+   *       will not work in prepare callbacks unless they are run AFTER the
+   *       standard one. Make sure the Glade line has the callback set up with
+   *       after=yes. For example:
+   *         <signal name="prepare" handler="my_prepare_cb" after="yes"/>   */
+  gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
+                                    TRUE, FALSE, TRUE, TRUE);
+
+  /* Generate a show signal once the page is displayed. This
+   * will kick off our (potentially) long-running operations. */
+  gtk_widget_hide(GTK_WIDGET(page));
+  gtk_widget_show(GTK_WIDGET(page));
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_load_progress_show_cb
+ *
+ * Start the long-running operation.
+ ********************************************************************/
+
+static void
+gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
+                                        gpointer user_data)
+{
+  QIFImportWindow   *wind = user_data;
+  const gchar * path_to_load;
 
   SCM make_qif_file   = scm_c_eval_string("make-qif-file");
   SCM qif_file_load   = scm_c_eval_string("qif-file:read-file");
   SCM qif_file_parse  = scm_c_eval_string("qif-file:parse-fields");
-  SCM qif_file_loaded = scm_c_eval_string("qif-dialog:qif-file-loaded?");
   SCM unload_qif_file = scm_c_eval_string("qif-dialog:unload-qif-file");
-  SCM check_from_acct = scm_c_eval_string("qif-file:check-from-acct");
-  SCM default_acct    = scm_c_eval_string("qif-file:path-to-accountname");
   SCM parse_results   = scm_c_eval_string("qif-file:parse-fields-results");
-  SCM date_formats;
-  SCM scm_filename;
   SCM scm_qiffile;
   SCM imported_files = SCM_EOL;
   SCM load_return, parse_return;
-  SCM window;
-  int ask_date_format = FALSE;
+  SCM progress;
 
-  /* get the file name */
+  /* Raise the busy flag so the druid can't be canceled unexpectedly. */
+  wind->busy = TRUE;
+  gtk_widget_set_sensitive(wind->load_pause, TRUE);
+
+  /* Get the file name. */
   path_to_load = gtk_entry_get_text(GTK_ENTRY(wind->filename_entry));
-  window = SWIG_NewPointerObj(wind->window, SWIG_TypeQuery("_p_GtkWidget"), 0);
 
-  /* check a few error conditions before we get started */
-  if(strlen(path_to_load) == 0) {
-    /* stay here if no file specified */
-    gnc_error_dialog(wind->window, _("Please select a file to load."));
-    return TRUE;
+  /* Create the <qif-file> object. */
+  scm_qiffile          = scm_call_0(make_qif_file);
+  scm_gc_unprotect_object(wind->selected_file);
+  wind->selected_file  = scm_qiffile;
+  scm_gc_protect_object(wind->selected_file);
+  imported_files       = scm_cons(scm_qiffile, wind->imported_files);
+
+  /* Create SCM for the progress helper. */
+  progress = SWIG_NewPointerObj(wind->load_progress,
+                                SWIG_TypeQuery("_p__GNCProgressDialog"),
+                                0);
+
+  /* Clear any previous pause or cancel state. */
+  scm_c_eval_string("(qif-import:reset-cancel-pause)");
+
+
+  /*
+   * Load the file.
+   *
+   * The loader returns:
+   *  success:   ()
+   *  failure:   (#f error-message)
+   *  warning:   (#t error-message)
+   *  cancel:    #t
+   *  exception: #f
+   */
+
+  /* This step will fill 70% of the bar. */
+  gnc_progress_dialog_push(wind->load_progress, 0.7);
+  load_return = scm_call_4(qif_file_load,
+                           SCM_CAR(imported_files),
+                           scm_makfrom0str(path_to_load),
+                           wind->ticker_map,
+                           progress);
+  gnc_progress_dialog_pop(wind->load_progress);
+  if (load_return == SCM_BOOL_T)
+  {
+    /* Canceled by the user. */
+    wind->busy = FALSE;
+    gtk_widget_set_sensitive(wind->load_pause, FALSE);
+    return;
   }
-  else if (g_access(path_to_load, R_OK) < 0) {
-    /* stay here if bad file */
+  else if (load_return == SCM_BOOL_F || !SCM_LISTP(load_return))
+  {
+    gnc_progress_dialog_append_log(wind->load_progress,
+                     _( "A bug was detected while reading the QIF file."));
+    gnc_progress_dialog_set_sub(wind->load_progress, _("Failed"));
+    gnc_progress_dialog_reset_value(wind->load_progress);
     gnc_error_dialog(wind->window,
-                     _("File not found or read permission denied. "
-                       "Please select another file."));
-    return TRUE;
+                     _( "A bug was detected while reading the QIF file."));
+    /* FIXME: How should we request that the user report this problem? */
+
+    wind->busy = FALSE;
+    gtk_widget_set_sensitive(wind->load_pause, FALSE);
+    return;
   }
-  else {
-    /* convert filename to scm */
-    scm_filename   = scm_makfrom0str(path_to_load);
-    imported_files = wind->imported_files;
+  else if (!SCM_NULLP(load_return))
+  {
+    const gchar *str = SCM_STRING_CHARS(SCM_CADR(load_return));
 
-    if(scm_call_2(qif_file_loaded, scm_filename, wind->imported_files)
-       == SCM_BOOL_T) {
-      gnc_error_dialog(wind->window,
-                                _("That QIF file is already loaded. "
-                                  "Please select another file."));
-      return TRUE;
-    }
-
-    /* turn on the busy cursor */
-    gnc_set_busy_cursor(NULL, TRUE);
-
-    /* create the <qif-file> object */
-    scm_qiffile          = scm_call_0(make_qif_file);
-    imported_files       = scm_cons(scm_qiffile, imported_files);
-
-    scm_gc_unprotect_object(wind->selected_file);
-    wind->selected_file  = scm_qiffile;
-    scm_gc_protect_object(wind->selected_file);
-
-    /* load the file */
-    load_return = scm_call_4(qif_file_load, SCM_CAR(imported_files),
-                             scm_filename, wind->ticker_map, window);
-
-    /* turn back the cursor */
-    gnc_unset_busy_cursor(NULL);
-
-    /* a list returned is (#f error-message) for an error,
-     * (#t error-message) for a warning, or just #f for an
-     * exception. */
-    if(SCM_LISTP(load_return) &&
-       (SCM_CAR(load_return) == SCM_BOOL_T)) {
-      const gchar *warn_str = SCM_STRING_CHARS(SCM_CADR(load_return));
-      gnc_warning_dialog(GTK_WIDGET(wind->window),
-                         _("QIF file load warning: %s"),
-                         warn_str ? warn_str : "(null)");
-    }
-
-    /* check success of the file load */
-    if(load_return == SCM_BOOL_F) {
-      gnc_error_dialog(wind->window,
-                       _( "An error occurred while loading the QIF file."));
-      return TRUE;
-    }
-    else if ((load_return != SCM_BOOL_T) &&
-             (!SCM_LISTP(load_return) ||
-              (SCM_CAR(load_return) != SCM_BOOL_T))) {
-      const gchar *warn_str = SCM_STRING_CHARS(SCM_CADR(load_return));
-      gnc_error_dialog(wind->window,
-                       _("QIF file load failed: %s"),
-                       warn_str ? warn_str : "(null)");
-
-      imported_files =
-        scm_call_2(unload_qif_file, scm_qiffile, imported_files);
-
+    if (SCM_CAR(load_return) == SCM_BOOL_F)
+    {
+      imported_files = scm_call_2(unload_qif_file, scm_qiffile, imported_files);
       scm_gc_unprotect_object(wind->imported_files);
       wind->imported_files = imported_files;
       scm_gc_protect_object(wind->imported_files);
 
-      return TRUE;
-    }
-    else {
-      /* turn on the busy cursor */
-      gnc_set_busy_cursor(NULL, TRUE);
+      gnc_progress_dialog_set_sub(wind->load_progress, _("Failed"));
+      gnc_progress_dialog_reset_value(wind->load_progress);
 
-      /* call the field parser */
-      parse_return = scm_call_1(qif_file_parse, SCM_CAR(imported_files));
-
-      /* parser returns:
-       *   success: #t
-       *   failure: (#f . ((type . errror) ...))
-       *   warning: (#t . ((type . error) ...))
-       *
-       * warning means that (potentially) the date format is
-       * ambiguous.  So search the results for the "date" type and if
-       * it's found, set up the format selector page.
-       */
-      if(SCM_LISTP(parse_return) &&
-         (SCM_CAR(parse_return) == SCM_BOOL_T)) {
-        gint n_items;
-
-        /* clear the combo box */
-        gtk_combo_box_set_active(GTK_COMBO_BOX(wind->date_format_combo), -1);
-        n_items = gtk_tree_model_iter_n_children(
-          gtk_combo_box_get_model(GTK_COMBO_BOX(wind->date_format_combo)), NULL);
-        while (n_items-- > 0)
-          gtk_combo_box_remove_text(GTK_COMBO_BOX(wind->date_format_combo), 0);
-
-        if ((date_formats = scm_call_2(parse_results,
-                                       SCM_CDR(parse_return),
-                                       scm_str2symbol("date"))) != SCM_BOOL_F) {
-          while(SCM_LISTP(date_formats) && !SCM_NULLP(date_formats)) {
-            gtk_combo_box_append_text(GTK_COMBO_BOX(wind->date_format_combo),
-                                      SCM_SYMBOL_CHARS(SCM_CAR(date_formats)));
-            date_formats = SCM_CDR(date_formats);
-          }
-        gtk_combo_box_set_active(GTK_COMBO_BOX(wind->date_format_combo), 0);
-
-          ask_date_format = TRUE;
-
-        } else {
-          /* FIXME: we've got a "warning" but it's not the date! */
-          ;
-        }
-      }
-
-      /* turn back the cursor */
-      gnc_unset_busy_cursor(NULL);
-
-      /* Can this ever happen??? */
-      if(parse_return == SCM_BOOL_F) {
-        gnc_error_dialog(wind->window,
-                         _("An error occurred while parsing the QIF file."));
-        imported_files =
-          scm_call_2(unload_qif_file, scm_qiffile, imported_files);
-        return TRUE;
-      }
-      else if((parse_return != SCM_BOOL_T) &&
-         (!SCM_LISTP(parse_return) ||
-          (SCM_CAR(parse_return) != SCM_BOOL_T))) {
-        const gchar *warn_str = SCM_STRING_CHARS(SCM_CDADR(parse_return));
-        gnc_error_dialog(wind->window,
-                         _("QIF file parse failed: %s"),
-                         warn_str ? warn_str : "(null)");
-
-        imported_files =
-          scm_call_2(unload_qif_file, scm_qiffile, imported_files);
-
-        return TRUE;
-      }
-    }
-
-    scm_gc_unprotect_object(wind->imported_files);
-    wind->imported_files = imported_files;
-    scm_gc_protect_object(wind->imported_files);
-
-    if(ask_date_format) {
-      /* we need to get a date format, so go to the next page */
-      return gnc_ui_qif_import_generic_next_cb(page, arg1, wind);
-    }
-    else if(scm_call_1(check_from_acct, SCM_CAR(imported_files)) != SCM_BOOL_T) {
-      /* skip to the "ask account name" page */
-      default_acctname =
-        SCM_STRING_CHARS(scm_call_1(default_acct, SCM_CAR(imported_files)));
-      gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
-
-      gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           get_named_page(wind, "account_name_page"));
-      return TRUE;
-    }
-    else {
-      /* skip ahead to the "loaded files" page */
-      gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           get_named_page(wind, "loaded_files_page"));
-      return TRUE;
+      wind->busy = FALSE;
+      gtk_widget_set_sensitive(wind->load_pause, FALSE);
+      return;
     }
   }
 
+
+  /*
+   * Parse the fields.
+   *
+   * The parser returns:
+   *   success:   ()
+   *   failure:   (#f . ((type . error) ...))
+   *   warning:   (#t . ((type . error) ...))
+   *   cancel:    #t
+   *   exception: #f
+   */
+
+  /* This step will fill the remainder of the bar. */
+  gnc_progress_dialog_push(wind->load_progress, 1);
+  parse_return = scm_call_2(qif_file_parse, SCM_CAR(imported_files), progress);
+  gnc_progress_dialog_pop(wind->load_progress);
+  wind->ask_date_format = FALSE;
+  if (parse_return == SCM_BOOL_T)
+  {
+    /* Canceled by the user. */
+    imported_files = scm_call_2(unload_qif_file, scm_qiffile, imported_files);
+    wind->busy = FALSE;
+    gtk_widget_set_sensitive(wind->load_pause, FALSE);
+    return;
+  }
+  else if (parse_return == SCM_BOOL_F || !SCM_LISTP(parse_return))
+  {
+    imported_files = scm_call_2(unload_qif_file, scm_qiffile, imported_files);
+    gnc_progress_dialog_append_log(wind->load_progress,
+                     _( "A bug was detected while parsing the QIF file."));
+    gnc_progress_dialog_set_sub(wind->load_progress, _("Failed"));
+    gnc_progress_dialog_reset_value(wind->load_progress);
+    gnc_error_dialog(wind->window,
+                     _( "A bug was detected while parsing the QIF file."));
+    /* FIXME: How should we request that the user report this problem? */
+
+    wind->busy = FALSE;
+    gtk_widget_set_sensitive(wind->load_pause, FALSE);
+    return;
+  }
+  else if (!SCM_NULLP(parse_return))
+  {
+    /* Are there only warnings? */
+    if (SCM_CAR(parse_return) == SCM_BOOL_T)
+    {
+      SCM date_formats;
+
+      /* A warning means that (potentially) the date format is
+       * ambiguous.  So search the results for the "date" type and if
+       * it's found, set up the format selector page. */
+      if ((date_formats = scm_call_2(parse_results,
+                                     SCM_CDR(parse_return),
+                                     scm_str2symbol("date"))) != SCM_BOOL_F)
+      {
+        gint n_items;
+
+        /* Clear the date format combo box. */
+        gtk_combo_box_set_active(GTK_COMBO_BOX(wind->date_format_combo), -1);
+        n_items = gtk_tree_model_iter_n_children(
+          gtk_combo_box_get_model(GTK_COMBO_BOX(wind->date_format_combo)),
+                                  NULL);
+        while (n_items-- > 0)
+          gtk_combo_box_remove_text(GTK_COMBO_BOX(wind->date_format_combo), 0);
+
+        /* Add the formats for the user to select from. */
+        while(SCM_LISTP(date_formats) && !SCM_NULLP(date_formats))
+        {
+          gtk_combo_box_append_text(GTK_COMBO_BOX(wind->date_format_combo),
+                                    SCM_SYMBOL_CHARS(SCM_CAR(date_formats)));
+          date_formats = SCM_CDR(date_formats);
+        }
+        gtk_combo_box_set_active(GTK_COMBO_BOX(wind->date_format_combo), 0);
+
+        wind->ask_date_format = TRUE;
+      }
+    }
+    else
+    {
+      /* Parsing failed. */
+      imported_files = scm_call_2(unload_qif_file, scm_qiffile, imported_files);
+      gnc_progress_dialog_set_sub(wind->load_progress, _("Failed"));
+      gnc_progress_dialog_reset_value(wind->load_progress);
+
+      wind->busy = FALSE;
+      gtk_widget_set_sensitive(wind->load_pause, FALSE);
+      return;
+    }
+  }
+
+  /* The file was loaded successfully. */
+  gnc_progress_dialog_set_sub(wind->load_progress, _("Loading completed"));
+  gnc_progress_dialog_set_value(wind->load_progress, 1);
+
+  scm_gc_unprotect_object(wind->imported_files);
+  wind->imported_files = imported_files;
+  scm_gc_protect_object(wind->imported_files);
+
+  /* Enable all buttons. */
+  gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
+                                    TRUE, TRUE, TRUE, TRUE);
+
+  /* If the log is empty, move on to the next page automatically. */
+  if (gtk_text_buffer_get_char_count(gtk_text_view_get_buffer(GTK_TEXT_VIEW(wind->load_log))) == 0)
+    gnome_druid_page_next(GNOME_DRUID_PAGE(widget));
+
+  wind->busy = FALSE;
+  gtk_widget_set_sensitive(wind->load_pause, FALSE);
+  return;
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_load_progress_pause_cb
+ *
+ * Invoked when the "Pause" button is clicked.
+ ********************************************************************/
+
+static void
+gnc_ui_qif_import_load_progress_pause_cb(GtkButton * button,
+                                         gpointer user_data)
+{
+  QIFImportWindow *wind = user_data;
+  SCM toggle_pause      = scm_c_eval_string("qif-import:toggle-pause");
+  SCM progress;
+
+  if (!wind->busy)
+    return;
+
+  /* Create SCM for the progress helper. */
+  progress = SWIG_NewPointerObj(wind->load_progress,
+                                SWIG_TypeQuery("_p__GNCProgressDialog"),
+                                0);
+
+  /* Pause (or resume) the currently running operation. */
+  scm_call_1(toggle_pause, progress);
+
+  /* Swap the button label between pause and resume. */
+  if (strcmp(gtk_button_get_label(button), _("_Resume")))
+  {
+    gtk_button_set_use_stock(button, FALSE);
+    gtk_button_set_use_underline(button, TRUE);
+    gtk_button_set_label(button, _("_Resume"));
+  }
+  else
+  {
+    gtk_button_set_use_stock(button, TRUE);
+    gtk_button_set_use_underline(button, FALSE);
+    gtk_button_set_label(button, "gtk-media-pause");
+  }
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_load_progress_next_cb
+ *
+ * Determine the next page after loading a file successfully.
+ ********************************************************************/
+
+static gboolean
+gnc_ui_qif_import_load_progress_next_cb(GnomeDruidPage * page,
+                                        gpointer arg1,
+                                        gpointer user_data)
+{
+  QIFImportWindow *wind = user_data;
+  SCM check_from_acct   = scm_c_eval_string("qif-file:check-from-acct");
+
+  if (wind->ask_date_format)
+  {
+    /* We need to get a date format, so go to the next page. */
+    return gnc_ui_qif_import_generic_next_cb(page, arg1, user_data);
+  }
+  else if (scm_call_1(check_from_acct, wind->selected_file) != SCM_BOOL_T)
+  {
+    SCM default_acct = scm_c_eval_string("qif-file:path-to-accountname");
+    const gchar * default_acctname;
+
+    /* Go to the "ask account name" page. */
+    default_acctname = SCM_STRING_CHARS(scm_call_1(default_acct,
+                                                   wind->selected_file));
+    gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
+
+    gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                         get_named_page(wind, "account_name_page"));
+    return TRUE;
+  }
+
+  /* Skip ahead to the "loaded files" page. */
+  gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                       get_named_page(wind, "loaded_files_page"));
+
+  return TRUE;
+}
+
+
+/****************************************************************
+ * load_progress_back_timeout_cb
+ *
+ * This timer callback function waits until the busy flag
+ * has been cleared before going back to the previous page.
+ ****************************************************************/
+
+static gboolean
+load_progress_back_timeout_cb(gpointer data)
+{
+  QIFImportWindow *wind = data;
+
+  if (wind->busy)
+    /* Wait for timer to go off again. */
+    return TRUE;
+
+  /* The busy flag was lowered. Go back to the previous page. */
+  gnome_druid_page_back(get_named_page(wind, "load_progress_page"));
+
+  /* Cancel the timer. */
   return FALSE;
 }
+
+
+/********************************************************************
+ * gnc_ui_qif_import_load_progress_back_cb
+ *
+ * Return to the previous page, waiting if necessary.
+ ********************************************************************/
+
+static gboolean
+gnc_ui_qif_import_load_progress_back_cb(GnomeDruidPage * page,
+                                        gpointer arg1,
+                                        gpointer user_data)
+{
+  QIFImportWindow *wind = user_data;
+
+  if (wind->busy)
+  {
+    /* Cancel any long-running Scheme operation. */
+    scm_c_eval_string("(qif-import:cancel)");
+
+    /* Wait for the busy flag to be lowered. */
+    g_timeout_add(200, load_progress_back_timeout_cb, user_data);
+
+    return TRUE;
+  }
+
+  return gnc_ui_qif_import_generic_back_cb(page, arg1, user_data);
+}
+
 
 static gboolean
 gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page,
@@ -867,23 +1106,35 @@ gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page,
   SCM  format_sym;
   gchar *text;
 
+  /* Get the selected date format. */
   text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(wind->date_format_combo));
+  if (!text)
+  {
+    g_critical("QIF import: BUG DETECTED in gnc_ui_qif_import_date_format_next_cb. Format is NULL.");
+    return TRUE;
+  }
   format_sym = scm_str2symbol(text);
   g_free(text);
+
+  /* Reparse the dates using the selected format. */
   scm_call_2(reparse_dates, wind->selected_file, format_sym);
 
-  if(scm_call_1(check_from_acct, wind->selected_file) != SCM_BOOL_T) {
-    SCM default_acct    = scm_c_eval_string("qif-file:path-to-accountname");
+  /* Determine the next page to display. */
+  if (scm_call_1(check_from_acct, wind->selected_file) != SCM_BOOL_T)
+  {
+    /* There is an account name missing. Ask the user to provide one. */
+    SCM default_acct = scm_c_eval_string("qif-file:path-to-accountname");
     const gchar * default_acctname;
 
     default_acctname = SCM_STRING_CHARS(scm_call_1(default_acct,
-                                                    wind->selected_file));
+                                                   wind->selected_file));
     gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
 
     return FALSE;
   }
-  else {
-    /* skip ahead to the "loaded files" page */
+  else
+  {
+    /* Skip ahead to the "loaded files" page. */
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
                          get_named_page(wind, "loaded_files_page"));
 
@@ -2533,15 +2784,14 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
 
 
 /****************************************************************
- * gnc_ui_qif_import_cancel_cb
+ * do_cancel
  *
- * Invoked when the "Cancel" button is clicked.
+ * Clears out any imported data and shuts down the importer.
  ****************************************************************/
 
 static void
-gnc_ui_qif_import_cancel_cb(GnomeDruid * druid, gpointer user_data)
+do_cancel(QIFImportWindow * wind)
 {
-  QIFImportWindow     *wind = user_data;
   GList               *pageptr;
   GnomeDruidPage      *gtkpage;
   QIFDruidPage        *page;
@@ -2572,6 +2822,54 @@ gnc_ui_qif_import_cancel_cb(GnomeDruid * druid, gpointer user_data)
 
   /* Destroy the druid. */
   gnc_ui_qif_import_druid_destroy(wind);
+}
+
+
+/****************************************************************
+ * cancel_timeout_cb
+ *
+ * This timer callback function waits until the busy flag
+ * has been cleared before acting to cancel the import.
+ ****************************************************************/
+
+static gboolean
+cancel_timeout_cb(gpointer data)
+{
+  QIFImportWindow *wind = data;
+
+  if (wind->busy)
+    /* Wait for timer to go off again. */
+    return TRUE;
+
+  /* The busy flag was lowered. Perform the cancel. */
+  do_cancel(wind);
+
+  /* Cancel the timer. */
+  return FALSE;
+}
+
+
+/****************************************************************
+ * gnc_ui_qif_import_cancel_cb
+ *
+ * Invoked when the "Cancel" button is clicked.
+ ****************************************************************/
+
+static void
+gnc_ui_qif_import_cancel_cb(GnomeDruid * druid, gpointer user_data)
+{
+  QIFImportWindow     *wind = user_data;
+
+  if (wind->busy)
+  {
+    /* Cancel any long-running Scheme operation. */
+    scm_c_eval_string("(qif-import:cancel)");
+
+    /* Wait for the busy flag to be lowered. */
+    g_timeout_add(200, cancel_timeout_cb, user_data);
+  }
+  else
+    do_cancel(wind);
 }
 
 
@@ -2634,7 +2932,8 @@ gnc_ui_qif_import_druid_make(void)
 
 
   char * pre_page_names[NUM_PRE_PAGES] = {
-    "start_page", "load_file_page", "date_format_page", "account_name_page",
+    "start_page", "load_file_page", "load_progress_page",
+    "date_format_page", "account_name_page",
     "loaded_files_page", "account_doc_page", "account_match_page",
     "category_doc_page", "category_match_page", "memo_doc_page",
     "memo_match_page", "currency_page", "commodity_doc_page"
@@ -2676,6 +2975,26 @@ gnc_ui_qif_import_druid_make(void)
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_load_file_next_cb",
      G_CALLBACK(gnc_ui_qif_import_load_file_next_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_load_progress_prepare_cb",
+     G_CALLBACK(gnc_ui_qif_import_load_progress_prepare_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_load_progress_show_cb",
+     G_CALLBACK(gnc_ui_qif_import_load_progress_show_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_load_progress_pause_cb",
+     G_CALLBACK(gnc_ui_qif_import_load_progress_pause_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_load_progress_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_load_progress_next_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_load_progress_back_cb",
+     G_CALLBACK(gnc_ui_qif_import_load_progress_back_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_date_format_next_cb",
@@ -2764,12 +3083,21 @@ gnc_ui_qif_import_druid_make(void)
   retval->new_securities    =  SCM_BOOL_F;
   retval->new_namespaces    =  NULL;
   retval->ticker_map        =  SCM_BOOL_F;
-  retval->imported_account_tree   = SCM_BOOL_F;
-  retval->match_transactions = SCM_BOOL_F;
-  retval->selected_transaction = 0;
+  retval->imported_account_tree = SCM_BOOL_F;
+  retval->match_transactions    = SCM_BOOL_F;
+  retval->selected_transaction  = 0;
+  retval->busy              = FALSE;
 
   retval->druid           = glade_xml_get_widget(xml, "qif_import_druid");
   retval->filename_entry  = glade_xml_get_widget(xml, "qif_filename_entry");
+  retval->load_pause      = glade_xml_get_widget(xml, "load_progress_pause");
+  retval->load_log        = glade_xml_get_widget(xml, "load_progress_log");
+  retval->load_progress = gnc_progress_dialog_custom(
+    GTK_LABEL(glade_xml_get_widget(xml, "load_progress_primary")),
+    GTK_LABEL(glade_xml_get_widget(xml, "load_progress_secondary")),
+    GTK_PROGRESS_BAR(glade_xml_get_widget(xml, "load_progress_bar")),
+    GTK_LABEL(glade_xml_get_widget(xml, "load_progress_sub")),
+    GTK_TEXT_VIEW(retval->load_log));
   retval->acct_entry      = glade_xml_get_widget(xml, "qif_account_entry");
   retval->date_format_combo = glade_xml_get_widget(xml, "date_format_combobox");
   retval->selected_file_view = glade_xml_get_widget(xml, "selected_file_view");

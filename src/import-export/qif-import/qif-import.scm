@@ -44,6 +44,9 @@
 (export qif-import:load-map-prefs)
 (export qif-import:qif-to-gnc)
 (export qif-import:qif-to-gnc-undo)
+(export qif-import:reset-cancel-pause)
+(export qif-import:cancel)
+(export qif-import:toggle-pause)
 
 (export qif-map-entry:gnc-name)
 (export qif-map-entry:set-gnc-name!)

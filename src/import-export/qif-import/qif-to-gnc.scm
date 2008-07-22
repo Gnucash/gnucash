@@ -327,9 +327,14 @@
            (if (> work-to-do 100)
                (begin
                  (set! progress-dialog (gnc-progress-dialog-new window #f))
-                 (gnc-progress-dialog-set-title progress-dialog (_ "Progress"))
-                 (gnc-progress-dialog-set-heading progress-dialog
-                                             (_ "Importing transactions..."))))
+                 (gnc-progress-dialog-set-title progress-dialog
+                                                (_ "Importing QIF data"))
+                 (gnc-progress-dialog-set-primary progress-dialog
+                                                  (_ "Importing QIF data"))
+                 (gnc-progress-dialog-set-secondary progress-dialog
+                   (_ "GnuCash is converting your QIF data."))
+                 (gnc-progress-dialog-set-sub progress-dialog
+                                              (_ "Importing transactions"))))
 
 
            ;; now run through the markable transactions marking any
@@ -337,12 +342,13 @@
            (if (> (length markable-xtns) 1)
                (let xloop ((xtn (car markable-xtns))
                            (rest (cdr markable-xtns)))
+                 ;; Update the progress.
                  (set! work-done (+ 1 work-done))
-                 (if (not (null? progress-dialog))
-                     (begin
-                       (gnc-progress-dialog-set-value
-                        progress-dialog (/ work-done work-to-do))
-                       (gnc-progress-dialog-update progress-dialog)))
+                 (if (and (not (null? progress-dialog))
+                          (zero? (remainder work-done 32)))
+                     (gnc-progress-dialog-set-value progress-dialog
+                                                    (/ work-done work-to-do)))
+
                  (if (not (qif-xtn:mark xtn))
                      (qif-import:mark-matching-xtns xtn rest))
                  (if (not (null? (cdr rest)))
@@ -354,31 +360,35 @@
             (lambda (qif-file)
               (for-each
                (lambda (xtn)
+                 ;; Update the progress.
                  (set! work-done (+ 1 work-done))
-                 (if (not (null? progress-dialog))
-                     (begin
-                       (gnc-progress-dialog-set-value
-                        progress-dialog (/ work-done work-to-do))
-                       (gnc-progress-dialog-update progress-dialog)))
+                 (if (and (not (null? progress-dialog))
+                          (zero? (remainder work-done 32)))
+                     (gnc-progress-dialog-set-value progress-dialog
+                                                    (/ work-done work-to-do)))
+
                  (if (not (qif-xtn:mark xtn))
-                     (begin
-                       ;; create and fill in the GNC transaction
-                       (let ((gnc-xtn (xaccMallocTransaction
-                                       (gnc-get-current-book))))
-                         (xaccTransBeginEdit gnc-xtn)
+                     ;; create and fill in the GNC transaction
+                     (let ((gnc-xtn (xaccMallocTransaction
+                                     (gnc-get-current-book))))
+                       (xaccTransBeginEdit gnc-xtn)
 
-                         ;; FIXME. This is probably wrong
-                         (xaccTransSetCurrency gnc-xtn (gnc-default-currency))
+                       ;; FIXME. This is probably wrong
+                       (xaccTransSetCurrency gnc-xtn (gnc-default-currency))
 
-                         ;; build the transaction
-                         (qif-import:qif-xtn-to-gnc-xtn
-                          xtn qif-file gnc-xtn gnc-acct-hash
-                          qif-acct-map qif-cat-map qif-memo-map)
+                       ;; build the transaction
+                       (qif-import:qif-xtn-to-gnc-xtn
+                        xtn qif-file gnc-xtn gnc-acct-hash
+                        qif-acct-map qif-cat-map qif-memo-map)
 
-                         ;; rebalance and commit everything
-                         (xaccTransCommitEdit gnc-xtn)))))
+                       ;; rebalance and commit everything
+                       (xaccTransCommitEdit gnc-xtn))))
                (qif-file:xtns qif-file)))
             sorted-qif-files-list)
+
+           ;; Finished.
+           (if (not (null? progress-dialog))
+               (gnc-progress-dialog-set-value progress-dialog 1))
 
            new-root))))
 
@@ -482,7 +492,6 @@
                                        (gnc-get-current-book)))
                        (far-acct-info #f)
                        (far-acct-name #f)
-                       (far-acct-type #f)
                        (far-acct #f)
                        (split-amt (qif-split:amount qif-split))
                        ;; For split transactions, get this split's memo.
@@ -572,7 +581,6 @@
                (commission-acct #f)
                (commission-amt (qif-xtn:commission qif-xtn))
                (commission-split #f)
-               (defer-share-price #f)
                (gnc-far-split (xaccMallocSplit (gnc-get-current-book))))
 
           (if (not num-shares) (set! num-shares (gnc-numeric-zero)))
@@ -796,11 +804,9 @@
          (date (qif-xtn:date xtn))
          (amount (n- (qif-split:amount split)))
          (group-amount #f)
-         (memo (qif-split:memo split))
          (security-name (qif-xtn:security-name xtn))
          (action (qif-xtn:action xtn))
          (bank-xtn? (not security-name))
-         (cleared? #f)
          (different-acct-splits '())
          (same-acct-splits '())
          (how #f)
@@ -895,8 +901,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:xtn-has-matches? xtn acct-name date amount group-amt)
-  (let ((matching-splits '())
-        (same-acct-splits '())
+  (let ((same-acct-splits '())
         (this-group-amt (gnc-numeric-zero))
         (how #f)
         (date-matches
@@ -959,9 +964,7 @@
           ;; we can still have a many-to-one match.
           (if (and (not how)
                    (gnc-numeric-equal this-group-amt amount))
-              (begin
-                (set! how
-                      (cons 'many-to-one same-acct-splits))))))
+              (set! how (cons 'many-to-one same-acct-splits)))))
 
     ;; we're all done.  'how' either is #f or a
     ;; cons of the way-it-matched and a list of the matching

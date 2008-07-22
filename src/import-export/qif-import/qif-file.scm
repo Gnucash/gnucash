@@ -29,13 +29,18 @@
 ;;  Suck in all the lines. Don't do any string interpretation,
 ;;  just store the fields "raw".
 ;;
+;;  The return value will be:
+;;    success:   ()
+;;    failure:   (#f error-message)
+;;    warning:   (#t error-message)
+;;    cancel:    #t
+;;    exception: #f
+;;
 ;; FIXME: This function really should be able to return multiple
 ;;        errors and warnings rather than a single one.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-file:read-file self path ticker-map window)
-  (let ((progress-dialog '())
-        (retval #f))
+(define (qif-file:read-file self path ticker-map progress-dialog)
 
   ;; This procedure does all the work. We'll define it, then call it safely.
   (define (private-read)
@@ -47,17 +52,34 @@
           (default-split #f)
           (first-xtn #f)
           (ignore-accounts #f)
-          (return-val #t)
+          (private-retval '())
           (line-num 0)
           (line #f)
           (tag #f)
           (value #f)
-          (heinous-error #f)
-          (missing-date-warned #f)
+          (abort-read #f)
           (delimiters (string #\cr #\nl))
           (file-stats #f)
           (file-size 0)
           (bytes-read 0))
+
+      ;; This procedure simplifies handling of warnings.
+      (define (mywarn . args)
+        (let ((str (gnc:list-display-to-string
+                     (append (list (_ "Line") " " line-num ": ") args))))
+          (set! private-retval (list #t str))
+          (qif-import:log progress-dialog "qif-file:read-file" str)))
+
+
+      ;; This procedure simplifies handling of failures
+      (define (myfail . args)
+        (let ((str (gnc:list-display-to-string
+                         (append (list (_ "Line") " " line-num ": ") args))))
+          (set! private-retval (list #f str))
+          (qif-import:log progress-dialog "qif-file:read-file"
+                          (string-append str "\n" (_ "Read aborted.")))
+          (set! abort-read #t)))
+
 
       (qif-file:set-path! self path)
       (if (not (access? path R_OK))
@@ -68,12 +90,9 @@
       (set! file-size (stat:size file-stats))
 
 
-      (if (> file-size 10000)
-          (begin
-            (set! progress-dialog (gnc-progress-dialog-new window #f))
-            (gnc-progress-dialog-set-title progress-dialog (_ "Progress"))
-            (gnc-progress-dialog-set-heading progress-dialog
-                                             (_ "Loading QIF file..."))))
+      (if progress-dialog
+          (gnc-progress-dialog-set-sub progress-dialog
+                                       (string-append (_ "Reading") " " path)))
 
       (with-input-from-file path
         (lambda ()
@@ -101,26 +120,13 @@
                                 (not (gnc-utf8? converted-value)))
                             (begin
                               (set! value (gnc-utf8-strip-invalid-strdup value))
-                              (set! return-val
-                                    (list #t (string-append
-                               (_ "This file is not encoded in UTF-8 or ASCII.")
-                               " "
-                               (_ "Some characters have been discarded."))))
-                              (gnc:warn "qif-file:read-file:"
-                                        " stripping invalid characters"
-                                        " at line " line-num
-                                        "\nAfter: [" value "]"))
+                              (mywarn
+                               (_ "Some characters have been discarded.")
+                               " " (_"Converted to: ") value))
                             (begin
-                              (set! return-val
-                                    (list #t (string-append
-                               (_ "This file is not encoded in UTF-8 or ASCII.")
-                               " "
-                               (_ "Some characters have been converted according to your locale."))))
-                              (gnc:warn "qif-file:read-file:"
-                                        " converting characters by locale"
-                                        " at line " line-num
-                                        "\nBefore: [" value "]"
-                                        "\nAfter:  [" converted-value "]")
+                              (mywarn
+                               (_ "Some characters have been converted according to your locale.")
+                               " " (_"Converted to: ") converted-value)
                               (set! value converted-value)))))
 
                   (if (eq? tag #\!)
@@ -178,9 +184,8 @@
                            (if (string-match "^option:"
                                              (symbol->string qstate-type))
                                (begin
-                                 (gnc:warn "qif-file:read-file:"
-                                           " ignoring '" qstate-type "' option"
-                                           " at line " line-num)
+                                 (mywarn (_ "Ignoring unknown option") " '"
+                                         qstate-type "'")
                                  (set! qstate-type old-qstate))))))
 
 
@@ -312,15 +317,9 @@
 
                             (if (qif-xtn:date current-xtn)
                                 (qif-file:add-xtn! self current-xtn)
-                                ;; The date is missing! Warn the user if they
-                                ;; haven't been warned already.
-                                (if (not missing-date-warned)
-                                    (begin
-                                      (set! missing-date-warned #t)
-                                      (gnc-warning-dialog '() (string-append
-                               (_ "One or more transactions is missing a date.")
-                               "\n"
-                               (_ "Some transactions may be discarded."))))))
+                                ;; The date is missing! Warn the user.
+                                (mywarn (_ "Date required.") " "
+                                        (_ "Discarding this transaction.")))
 
                             ;;(write current-xtn) (newline)
                             (set! current-xtn (make-qif-xtn))
@@ -352,10 +351,7 @@
                             (set! current-xtn (make-qif-class)))
 
                            (else
-                            (gnc:warn "qif-file:read-file:"
-                                      " ignoring class '" tag "'"
-                                      " at line " line-num
-                                      "\nLine content: [" line "]"))))
+                            (mywarn (_ "Ignoring class line") ": " line))))
 
 
                         ;;;;;;;;;;;;;;;;;;
@@ -423,9 +419,7 @@
                             (set! current-xtn (make-qif-cat)))
 
                            (else
-                            (gnc:warn "qif-file:read-file:"
-                                      " ignoring category '" tag "' line."
-                                      "\nLine content: [" line "]"))))
+                            (mywarn (_ "Ignoring category line") ": " line))))
 
 
                         ;;;;;;;;;;;;;;;;;;;
@@ -456,37 +450,35 @@
                             (set! current-xtn (make-qif-stock-symbol)))
 
                            (else
-                            (gnc:warn "qif-file:read-file:"
-                                      " ignoring security '" tag "'"
-                                      " at line " line-num
-                                      "\nLine content: [" line "]"))))
+                            (mywarn (_ "Ignoring security line") ": " line))))
 
 
                         ;; trying to sneak one by, eh?
                         (else
                           (if (and (not qstate-type)
                                    (not (string=? (string-trim line) "")))
-                              (begin
-                                (gnc:warn "qif-file:read-file:"
-                                          " file does not appear to be a QIF"
-                                          " at line " line-num
-                                          "\nLine content: [" line "]")
-                                (set! return-val
-                                      (list #f "File does not appear to be a QIF file."))
-                                (set! heinous-error #t))))))
+                              (myfail
+                                (_ "File does not appear to be in QIF format")
+                                ": " line)))))
 
-                  ;; Update the progress bar for each line read.
-                  (if (and (not (null? progress-dialog))
+                  ;; Report the progress.
+                  (if (and progress-dialog
                            (zero? (remainder line-num 32)))
-                      (gnc-progress-dialog-set-value progress-dialog
-                                                     (/ bytes-read file-size)))
+                      (begin
+                        (gnc-progress-dialog-set-value progress-dialog
+                                                       (/ bytes-read file-size))
+                        (qif-import:check-pause progress-dialog)
+                        (if qif-import:canceled
+                            (begin
+                              (set! private-retval #t)
+                              (set! abort-read #t)))))
 
                   ;; This is if we read a normal (non-null, non-eof) line...
-                  (if (not heinous-error)
+                  (if (not abort-read)
                       (line-loop)))
 
                 ;; ...and this is if we read a null or eof line.
-                (if (and (not heinous-error)
+                (if (and (not abort-read)
                          (not (eof-object? line)))
                     (line-loop))))))
 
@@ -494,19 +486,21 @@
       ;; they appeared in the file.  This is important in a few cases.
       (qif-file:set-xtns! self (reverse (qif-file:xtns self)))
 
-      return-val))
+      private-retval))
 
 
-    ;; Safely read the file.
-    (set! retval (gnc:backtrace-if-exception private-read))
+  (gnc:backtrace-if-exception
+    (lambda ()
+      (let ((retval #f))
+        ;; Safely read the file.
+        (set! retval (gnc:backtrace-if-exception private-read))
 
-    ;; Get rid of the progress dialog (if any).
-    (if (not (null? progress-dialog))
-        (begin
-          (gnc-progress-dialog-set-value progress-dialog 1)
-          (gnc-progress-dialog-destroy progress-dialog)))
+        ;; Fill the progress dialog.
+        (if (and progress-dialog
+                 (list? retval))
+          (gnc-progress-dialog-set-value progress-dialog 1))
 
-    retval))
+        retval))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -574,27 +568,8 @@
    qif-parse:parse-date/format
    (qif-file:xtns self)
    qif-parse:print-date
-   'error-on-ambiguity
-   (lambda (t e) e) 'date))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  qif-file:parse-fields-results
-;;
-;;  Take the results from qif-file:parse fields and find the
-;;  results for a particular type of parse.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define (qif-file:parse-fields-results results type)
-  (define (test-results results)
-    (if (null? results) #f
-        (let* ((this-res (car results))
-               (this-type (car this-res)))
-          (if (eq? this-type type)
-              (cdr this-res)
-              (test-results (cdr results))))))
-
-  (if results (test-results results) #f))
+   'error-on-ambiguity (lambda (t e) e) 'date
+   (lambda (fraction) #t)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -602,107 +577,229 @@
 ;;
 ;;  Take a previously-read qif file and convert fields from
 ;;  strings to the appropriate type.
+;;
+;;  The return value will be:
+;;    success:   ()
+;;    failure:   (#f . ((type . error) ...))
+;;    warning:   (#t . ((type . error) ...))
+;;    cancel:    #t
+;;    exception: #f
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-file:parse-fields self)
-;  (false-if-exception
-   (let* ((error #f)
-          (all-ok #f)
-          (set-error
-           (lambda (t e)
-             (if (not error)
-                 (set! error (list (cons t e)))
-                 (set! error (cons (cons t e) error)))))
-          (errlist-to-string
-           (lambda (lst)
-             (with-output-to-string
-               (lambda ()
-                 (for-each
-                  (lambda (elt)
-                    (display elt))
-                  lst))))))
+(define (qif-file:parse-fields self progress-dialog)
+
+  ;; This procedure does all the work. We'll define it, then call it safely.
+  (define (private-parse)
+   (let ((error #f)
+         (update-count 0)
+         (all-ok #f))
+
+     ;; This procedure sets a suboperation name.
+     (define (set-sub str)
+       (if progress-dialog
+           (gnc-progress-dialog-set-sub progress-dialog str))
+       #t)
+
+
+     ;; This procedure sets a suboperation weight.
+     (define (start-sub weight)
+       (if progress-dialog
+           (gnc-progress-dialog-push progress-dialog weight))
+       #t)
+
+
+     ;; This procedure finishes a suboperation.
+     (define (finish-sub)
+       (if progress-dialog
+           (gnc-progress-dialog-pop-full progress-dialog))
+       #t)
+
+
+     ;; This procedure handles progress reporting, pause, and cancel.
+     (define (update-progress fraction)
+       (set! update-count (+ 1 update-count))
+       (if (and progress-dialog
+                (zero? (remainder update-count 32)))
+           (begin
+             (gnc-progress-dialog-set-value progress-dialog fraction)
+             (qif-import:check-pause progress-dialog)
+             (if qif-import:canceled
+                 (throw 'cancel)))))
+
+
+     ;; This procedure is the generic error handler for parsing.
+     (define (add-error t e)
+       ;; Log the error message.
+       (if (string? e)
+           (qif-import:log progress-dialog
+                           "qif-file:parse-fields"
+                           (string-append (case t
+                                            ((date) (_ "Transaction date"))
+                                            ((split-amounts) (_ "Transaction amount"))
+                                            ((share-price) (_ "Share price"))
+                                            ((num-shares) (_ "Share quantity"))
+                                            ((action) (_ "Investment action"))
+                                            ((cleared) (_ "Reconciliation status"))
+                                            ((commission) (_ "Commission"))
+                                            ((acct-type) (_ "Account type"))
+                                            ((tax-class) (_ "Tax class"))
+                                            ((budget-amt) (_ "Category budget amount"))
+                                            ((budget) (_ "Account budget amount"))
+                                            ((limit) (_ "Credit limit"))
+                                            (else (symbol->string t)))
+                                          ": " e)))
+       ;; Save the error condition.
+       (if (not error)
+           (set! error (list (cons t e)))
+           (set! error (cons (cons t e) error))))
+
+
      (and
-      ;; fields of categories.
+      ;;
+      ;; Fields of categories.
+      ;;
+      (set-sub (_ "Parsing categories"))
+      ;; The category tasks will be 5% of the overall parsing effort.
+      (start-sub 0.05)
+
+      ;; Tax classes; assume this is 50% of the category parsing effort.
+      (start-sub 0.5)
       (check-and-parse-field
        qif-cat:tax-class qif-cat:set-tax-class! gnc-numeric-equal
        qif-parse:check-number-format '(decimal comma)
        qif-parse:parse-number/format (qif-file:cats self)
        qif-parse:print-number
-       'guess-on-ambiguity
-       set-error 'tax-class)
+       'guess-on-ambiguity add-error 'tax-class
+       update-progress)
+      (finish-sub)
 
+      ;; Budget amounts; this is the last task for category parsing.
+      (start-sub 1)
       (check-and-parse-field
        qif-cat:budget-amt qif-cat:set-budget-amt! gnc-numeric-equal
        qif-parse:check-number-format '(decimal comma)
        qif-parse:parse-number/format (qif-file:cats self)
        qif-parse:print-number
-       'guess-on-ambiguity
-       set-error 'budget-amt)
+       'guess-on-ambiguity add-error 'budget-amt
+       update-progress)
+      (finish-sub)
 
-      ;; fields of accounts
+      (finish-sub)
+
+
+      ;;
+      ;; Fields of accounts
+      ;;
+      (set-sub (_ "Parsing accounts"))
+      ;; The account tasks will be 5% of the overall parsing effort.
+      (start-sub 0.05)
+
+      ;; Account limits; assume this is 20% of the account parsing effort.
+      (start-sub 0.2)
       (check-and-parse-field
        qif-acct:limit qif-acct:set-limit! gnc-numeric-equal
        qif-parse:check-number-format '(decimal comma)
        qif-parse:parse-number/format (qif-file:accounts self)
        qif-parse:print-number
-       'guess-on-ambiguity
-       set-error 'limit)
+       'guess-on-ambiguity add-error 'limit
+       update-progress)
+      (finish-sub)
 
+      ;; Budget amounts; assume this is 20% of the account parsing effort.
+      (start-sub 0.2)
       (check-and-parse-field
        qif-acct:budget qif-acct:set-budget! gnc-numeric-equal
        qif-parse:check-number-format '(decimal comma)
        qif-parse:parse-number/format (qif-file:accounts self)
        qif-parse:print-number
-       'guess-on-ambiguity
-       set-error 'budget)
+       'guess-on-ambiguity add-error 'budget
+       update-progress)
+      (finish-sub)
 
+      ;; Account types; this is the last task for account parsing.
+      (start-sub 1)
       (parse-field
        qif-acct:type qif-acct:set-type!
        qif-parse:parse-acct-type (qif-file:accounts self)
-       set-error)
+       add-error 'acct-type
+       update-progress)
+      (finish-sub)
 
+      (finish-sub)
+
+
+      ;;
       ;; fields of transactions
+      ;;
+      (set-sub (_ "Parsing transactions"))
+      ;; Transaction parsing takes up the rest of the overall parsing effort.
+      (start-sub 1)
+
+      ;; Dates; assume this is 15% of the transaction effort.
+      (start-sub 0.15)
       (check-and-parse-field
        qif-xtn:date qif-xtn:set-date! equal?
        qif-parse:check-date-format '(m-d-y d-m-y y-m-d y-d-m)
        qif-parse:parse-date/format
        (qif-file:xtns self)
        qif-parse:print-date
-       'error-on-ambiguity
-       set-error 'date)
+       'error-on-ambiguity add-error 'date
+       update-progress)
+      (finish-sub)
 
+      ;; Clear flags; assume this is 5% of the transaction effort.
+      (start-sub 0.05)
       (parse-field
        qif-xtn:cleared qif-xtn:set-cleared!
-       qif-parse:parse-cleared-field (qif-file:xtns self) set-error)
+       qif-parse:parse-cleared-field (qif-file:xtns self)
+       add-error 'cleared
+       update-progress)
+      (finish-sub)
 
+      ;; Investment actions; assume this is 10% of the transaction effort.
+      (start-sub 0.1)
       (parse-field
        qif-xtn:action qif-xtn:set-action!
-       qif-parse:parse-action-field (qif-file:xtns self) set-error)
+       qif-parse:parse-action-field (qif-file:xtns self)
+       add-error 'action
+       update-progress)
+      (finish-sub)
 
+      ;; Share prices; assume this is 10% of the transaction effort.
+      (start-sub 0.1)
       (check-and-parse-field
        qif-xtn:share-price qif-xtn:set-share-price! gnc-numeric-equal
        qif-parse:check-number-format '(decimal comma)
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
-       'guess-on-ambiguity
-       set-error 'share-price)
+       'guess-on-ambiguity add-error 'share-price
+       update-progress)
+      (finish-sub)
 
+      ;; Share quantities; assume this is 10% of the transaction effort.
+      (start-sub 0.1)
       (check-and-parse-field
        qif-xtn:num-shares qif-xtn:set-num-shares! gnc-numeric-equal
        qif-parse:check-number-format '(decimal comma)
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
-       'guess-on-ambiguity
-       set-error 'num-shares)
+       'guess-on-ambiguity add-error 'num-shares
+       update-progress)
+      (finish-sub)
 
+      ;; Commissions; assume this is 10% of the transaction effort.
+      (start-sub 0.1)
       (check-and-parse-field
        qif-xtn:commission qif-xtn:set-commission! gnc-numeric-equal
        qif-parse:check-number-format '(decimal comma)
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
-       'guess-on-ambiguity
-       set-error 'commission)
+       'guess-on-ambiguity add-error 'commission
+       update-progress)
+      (finish-sub)
 
+      ;; Splits; this is the rest of the transaction effort.
+      (start-sub 1)
       ;; this one's a little tricky... it checks and sets all the
       ;; split amounts for the transaction together.
       (check-and-parse-field
@@ -710,17 +807,28 @@
        qif-parse:check-number-formats '(decimal comma)
        qif-parse:parse-numbers/format (qif-file:xtns self)
        qif-parse:print-numbers
-       'guess-on-ambiguity
-       set-error 'split-amounts)
+       'guess-on-ambiguity add-error 'split-amounts
+       update-progress)
+      (finish-sub)
+
+      (finish-sub)
+
 
       (begin
         (set! all-ok #t)
         #t))
 
-     (cond (error
+     ;; Determine what to return.
+     (cond (qif-import:canceled
+            #t)
+           (error
             (cons all-ok error))
-           (#t #t))))
-;)
+           (else '()))))
+
+
+  ;; Safely read the file and return the result.
+  (gnc:backtrace-if-exception
+    (lambda () (catch 'cancel private-parse (lambda (key . args) #t)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -731,13 +839,18 @@
 ;;  of objects.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (parse-field getter setter parser objects errormsg)
-  (for-each
-   (lambda (obj)
-     (let ((unparsed (getter obj)))
+(define (parse-field getter setter parser objects errorproc errortype reporter)
+  (let ((work-to-do (length objects))
+        (work-done 0)
+        (unparsed #f))
+    (for-each
+     (lambda (obj)
+       (set! unparsed (getter obj))
        (if (and unparsed (string? unparsed))
-           (setter obj (parser unparsed)))))
-   objects)
+           (setter obj (parser unparsed errorproc errortype)))
+       (set! work-done (+ 1 work-done))
+       (reporter (/ work-done work-to-do)))
+     objects))
   #t)
 
 
@@ -753,11 +866,16 @@
 
 (define (check-and-parse-field getter setter equiv-thunk checker
                                formats parser objects printer
-                               on-error errormsg errortype)
-  ;; first find the right format for the field
-  (let ((do-parsing #f)
-        (retval #t)
-        (format #f))
+                               on-error errorproc errortype
+                               reporter)
+  (let* ((do-parsing #f)
+         (retval #t)
+         (format #f)
+         (len (length objects))
+         (work-to-do (* len 2))
+         (work-done 0))
+
+    ;; first find the right format for the field
     ;; loop over objects.  If the formats list ever gets down
     ;; to 1 element, we can stop right there.
     (if (not (null? objects))
@@ -767,7 +885,9 @@
             (if val
                 (begin
                   (set! do-parsing #t)
-                  (set! formats (checker val formats)))))
+                  (set! formats (checker val formats))))
+            (set! work-done (+ 1 work-done))
+            (reporter (/ work-done work-to-do)))
           (if (and (not (null? formats))
                    ;; (not (null? (cdr formats)))
                    (not (null? rest)))
@@ -786,24 +906,30 @@
     (cond
      ((or (not formats)
           (null? formats))
-      (errormsg errortype "Data for number or date does not match a known format.")
+      ;; Data was not in any of the supplied formats.
+      (errorproc errortype (_ "Unrecognized or inconsistent format."))
       (set! retval #f)
       (set! do-parsing #f))
+
      ((and (not (null? (cdr formats))) do-parsing)
-      ;; there are multiple formats that fit.  If they all produce the
+      ;; There are multiple formats that fit.  If they all produce the
       ;; same interpretation for every data point in the set, then
       ;; just ignore the format ambiguity.  Otherwise, it's really an
       ;; error.  ATM since there's no way to correct the error let's
       ;; just leave it be.
       (if (or (eq? on-error 'guess-on-ambiguity)
               (all-formats-equivalent? getter parser equiv-thunk formats
-                                       objects printer errormsg errortype))
+                                       objects printer errorproc errortype))
           (set! format (car formats))
           (begin
-            (errormsg errortype formats)
+            (errorproc errortype formats)
             (set! do-parsing #f)
+            ;; NOTE: It seems like this ought to be (set! retval #f) instead,
+            ;;       but that would stop all parsing dead in its tracks. Not
+            ;;       sure that this can happen to anything other than dates,
+            ;;       and those will get reparsed anyway.
             (set! retval #t))))
-     (#t
+     (else
       (set! format (car formats))))
 
     ;; do-parsing is false if there were no objects with non-#f values
@@ -812,19 +938,25 @@
     ;; all of them once, but at least not twice.
     (if do-parsing
         (for-each
-         (lambda (current)
-           (let ((val (getter current))
-                 (parsed #f))
-             (if val
-                 (begin
-                   (set! parsed (parser val format))
-                   (if parsed
-                       (setter current parsed)
-                       (begin
-                         (set! retval #f)
-                         (errormsg errortype
-                          "Data format inconsistent in QIF file.")))))))
+          (lambda (current)
+            (let ((val (getter current))
+                  (parsed #f))
+              (if val
+                  (begin
+                    (set! parsed (parser val format))
+                    (if parsed
+                        (setter current parsed)
+                        (begin
+                          (set! retval #f)
+                          (errorproc errortype
+                           (_ "Parsing failed.")))))))
+            (set! work-done (+ 1 work-done))
+            (reporter (/ work-done work-to-do)))
          objects))
+
+    (if retval
+        (reporter 1))
+
     retval))
 
 
@@ -839,35 +971,51 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (all-formats-equivalent? getter parser equiv-thunk formats objects
-                                 printer errormsg errortype)
+                                 printer errorproc errortype)
   (let ((all-ok #t))
     (let obj-loop ((objlist objects))
       (let* ((unparsed (getter (car objlist)))
              (parsed #f))
         (if (string? unparsed)
             (begin
+              ;; Parse using the first format in the list.
               (set! parsed (parser unparsed (car formats)))
+              ;; For each remaining format, see if the result is the same.
               (for-each
                (lambda (fmt)
                  (let ((this-parsed (parser unparsed fmt)))
                    (if (not (equiv-thunk parsed this-parsed))
                        (begin
                          (set! all-ok #f)
-                         (errormsg errortype
-                          (with-output-to-string
-                            (lambda ()
-                              (for-each
-                               (lambda (elt)
-                                 (display elt))
-                               (list
-                                "Parse ambiguity : between formats "
-                                formats "\nValue " unparsed " could be "
-                                (printer parsed) " or "
-                                (printer this-parsed)
-                                "\nand no evidence exists to distinguish."
-                                "\nUsing " (printer parsed) ". "
-                                "\nSee help for more info.")))))))))
+                         (if (not (eq? errortype 'date))
+                             (errorproc errortype
+                                        (gnc:list-display-to-string (list
+                              (_ "Parse ambiguity between formats") " "
+                              formats "\n"
+                              (sprintf #f (_ "Value '%s' could be %s or %s.")
+                                       parsed
+                                       (printer parsed)
+                                       (printer this-parsed))))))))))
                (cdr formats))))
         (if (and all-ok (not (null? (cdr objlist))))
             (obj-loop (cdr objlist)))))
     all-ok))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  qif-file:parse-fields-results
+;;
+;;  Take the results from qif-file:parse fields and find the
+;;  first result for a particular type of parse.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (qif-file:parse-fields-results results type)
+  (define (test-results results)
+    (if (null? results) #f
+        (let* ((this-res (car results))
+               (this-type (car this-res)))
+          (if (eq? this-type type)
+              (cdr this-res)
+              (test-results (cdr results))))))
+
+  (if results (test-results results) #f))

@@ -25,18 +25,18 @@
       <property name="border_width">5</property>
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">6</property>
+      <property name="spacing">12</property>
 
       <child>
-	<widget class="GtkLabel" id="heading_label">
+	<widget class="GtkLabel" id="primary_label">
 	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">Heading</property>
+	  <property name="label" translatable="no">&lt;span weight=&quot;bold&quot; size=&quot;larger&quot;&gt;Primary text&lt;/span&gt;</property>
 	  <property name="use_underline">False</property>
-	  <property name="use_markup">False</property>
-	  <property name="justify">GTK_JUSTIFY_CENTER</property>
-	  <property name="wrap">False</property>
+	  <property name="use_markup">True</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">True</property>
 	  <property name="selectable">False</property>
-	  <property name="xalign">0.5</property>
+	  <property name="xalign">0</property>
 	  <property name="yalign">0.5</property>
 	  <property name="xpad">0</property>
 	  <property name="ypad">0</property>
@@ -53,18 +53,112 @@
       </child>
 
       <child>
-	<widget class="GtkProgressBar" id="progress_bar">
+	<widget class="GtkLabel" id="secondary_label">
 	  <property name="visible">True</property>
-	  <property name="orientation">GTK_PROGRESS_LEFT_TO_RIGHT</property>
-	  <property name="fraction">0</property>
-	  <property name="pulse_step">0.10000000149</property>
+	  <property name="label" translatable="no">Secondary text.</property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">True</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
 	  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	  <property name="width_chars">-1</property>
+	  <property name="single_line_mode">False</property>
+	  <property name="angle">0</property>
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
 	  <property name="expand">False</property>
 	  <property name="fill">False</property>
 	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkVBox" id="progress_vbox1">
+	  <property name="visible">True</property>
+	  <property name="homogeneous">False</property>
+	  <property name="spacing">0</property>
+
+	  <child>
+	    <widget class="GtkProgressBar" id="progress_bar">
+	      <property name="visible">True</property>
+	      <property name="orientation">GTK_PROGRESS_LEFT_TO_RIGHT</property>
+	      <property name="fraction">0</property>
+	      <property name="pulse_step">0.10000000149</property>
+	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkLabel" id="sub_label">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="no">Sub-operation text</property>
+	      <property name="label" translatable="no">&lt;span style=&quot;italic&quot;&gt;Sub-operation text&lt;/span&gt;</property>
+	      <property name="use_underline">False</property>
+	      <property name="use_markup">True</property>
+	      <property name="justify">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap">True</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
+	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	      <property name="width_chars">-1</property>
+	      <property name="single_line_mode">False</property>
+	      <property name="angle">0</property>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">6</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
+	</packing>
+      </child>
+
+      <child>
+        <widget class="GtkScrolledWindow" id="progress_log_window">
+          <property name="visible">True</property>
+          <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+          <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+          <property name="shadow_type">GTK_SHADOW_IN</property>
+          <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+          <child>
+	    <widget class="GtkTextView" id="progress_log">
+	      <property name="visible">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="editable">False</property>
+	      <property name="overwrite">False</property>
+	      <property name="accepts_tab">False</property>
+	      <property name="justification">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap_mode">GTK_WRAP_WORD</property>
+	      <property name="cursor_visible">False</property>
+	      <property name="pixels_above_lines">0</property>
+	      <property name="pixels_below_lines">0</property>
+	      <property name="pixels_inside_wrap">0</property>
+	      <property name="left_margin">0</property>
+	      <property name="right_margin">0</property>
+	      <property name="indent">0</property>
+	      <property name="text" translatable="no">1234567890123456789012345678901234567890</property>
+	    </widget>
+          </child>
+        </widget>
       </child>
 
       <child>
