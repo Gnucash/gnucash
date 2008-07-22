@@ -474,11 +474,12 @@ ab_account_longname(const AB_ACCOUNT *ab_acc)
 {
     gchar *bankname;
     gchar *result;
-    const char *bankcode;
+    const char *ab_bankname, *bankcode;
 
     g_return_val_if_fail(ab_acc, NULL);
 
-    bankname = gnc_utf8_strip_invalid_strdup(AB_Account_GetBankName(ab_acc));
+    ab_bankname = AB_Account_GetBankName(ab_acc);
+    bankname = ab_bankname ? gnc_utf8_strip_invalid_strdup(ab_bankname) : NULL;
     bankcode = AB_Account_GetBankCode(ab_acc);
 
     /* Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code. */
