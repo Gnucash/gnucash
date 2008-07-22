@@ -36,29 +36,49 @@ gncpixmap_DATA = \
   stock_split_title.png \
   stock_split_watermark.png
 
-gncnormalicondir = ${datadir}/icons/hicolor/48x48/apps
-gncnormalicon_DATA = 48x48/gnucash-icon.png
+gnclargeicondir = ${datadir}/icons/hicolor/48x48/apps
+gnclargeicon_DATA = 48x48/gnucash-icon.png
+
+gncmediumicondir = ${datadir}/icons/hicolor/32x32/apps
+gncmediumicon_DATA = 32x32/gnucash-icon.png
+
+gncsmalltwfouricondir = ${datadir}/icons/hicolor/24x24/apps
+gncsmalltwfouricon_DATA = 24x24/gnucash-icon.png
+
+gncsmalltwtwoicondir = ${datadir}/icons/hicolor/22x22/apps
+gncsmalltwtwoicon_DATA = 22x22/gnucash-icon.png
+
+gncextrasmallicondir = ${datadir}/icons/hicolor/16x16/apps
+gncextrasmallicon_DATA = 16x16/gnucash-icon.png
+
+gncscalableicondir = ${datadir}/icons/hicolor/scalable/apps
+gncscalableicon_DATA = scalable/gnucash-icon.svg
+
+if BUILDING_FROM_SVN
 48x48/gnucash-icon.png: gnucash-icon-48x48.png
 	-mkdir -p 48x48
 	cp ${srcdir}/gnucash-icon-48x48.png 48x48/gnucash-icon.png
 
-gncmediumicondir = ${datadir}/icons/hicolor/32x32/apps
-gncmediumicon_DATA = 32x32/gnucash-icon.png
-32x32/gnucash-icon.png: gnucash-icon-32x32.png
+32x32/gnucash-icon.png: ${top_srcdir}/art/tango/32x32/gnucash.png
 	-mkdir -p 32x32
-	cp ${srcdir}/gnucash-icon-32x32.png 32x32/gnucash-icon.png
+	cp ${top_srcdir}/art/tango/32x32/gnucash.png 32x32/gnucash-icon.png
 
-gncsmallicondir = ${datadir}/icons/hicolor/16x16/apps
-gncsmallicon_DATA = 16x16/gnucash-icon.png
-16x16/gnucash-icon.png: gnucash-icon-16x16.png
+24x24/gnucash-icon.png: ${top_srcdir}/art/tango/22x22/gnucash-24x24.png
+	-mkdir -p 24x24
+	cp ${top_srcdir}/art/tango/22x22/gnucash-24x24.png 24x24/gnucash-icon.png
+
+22x22/gnucash-icon.png: ${top_srcdir}/art/tango/22x22/gnucash-22x22.png
+	-mkdir -p 22x22
+	cp ${top_srcdir}/art/tango/22x22/gnucash-22x22.png 22x22/gnucash-icon.png
+
+16x16/gnucash-icon.png: ${top_srcdir}/art/tango/16x16/gnucash.png
 	-mkdir -p 16x16
-	cp ${srcdir}/gnucash-icon-16x16.png 16x16/gnucash-icon.png
+	cp ${top_srcdir}/art/tango/16x16/gnucash.png 16x16/gnucash-icon.png
 
-gncscalableicondir = ${datadir}/icons/hicolor/scalable/apps
-gncscalableicon_DATA = scalable/gnucash-icon.svg
-scalable/gnucash-icon.svg: ${top_srcdir}/art/icon.svgz
+scalable/gnucash-icon.svg: ${top_srcdir}/art/tango/scalable/gnucash.svg
 	-mkdir -p scalable
-	gzip -cd ${top_srcdir}/art/icon.svgz > scalable/gnucash-icon.svg
+	cp ${top_srcdir}/art/tango/scalable/gnucash.svg scalable/gnucash-icon.svg
+endif
 
 # As suggested by <http://live.gnome.org/GnomeGoals/AppIcon>
 if !OS_WIN32
@@ -77,7 +97,15 @@ endif
 
 EXTRA_DIST = \
   ${gncpixmap_DATA} \
-  ${gncnormalicon_DATA} ${gncmediumicon_DATA} ${gncsmallicon_DATA} ${gncscalableicon_DATA}
+  ${gnclargeicon_DATA} \
+  ${gncmediumicon_DATA} \
+  ${gncsmalltwfouricon_DATA} \
+  ${gncsmalltwtwoicon_DATA} \
+  ${gncextrasmallicon_DATA} \
+  ${gncscalableicon_DATA}
 
+# Only clean up if we're building from SVN
+if BUILDING_FROM_SVN
 clean-local:
-	-rm -rf 48x48 32x32 16x16 scalable
+	-rm -rf 48x48 32x32 24x24 22x22 16x16 scalable
+endif

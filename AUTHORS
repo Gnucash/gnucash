@@ -91,6 +91,9 @@ Chris Shoemaker <c.shoemaker@cox.net> implemented budgeting support
 Andreas Köhler <andi5.py@gmx.net> is hunting down lots of bugs,
    especially for GUI code and other gtk related issues.
 
+Charles Day <cedayiv@gmail.com> hacks excessively on the QIF importer
+   and aims to see significantly expanded support for investments.
+
 Other Contributors:
 ----------------
 (In alphabetical order)
@@ -110,6 +113,7 @@ Terry Boldt <tboldt@attglobal.net> financial calculator and expression parser
 Richard Braakman <dark@xs4all.nl> xml version configure patch
 Simon Britnell <simon.britnell@peace.com> patch to RPM spec
 Christopher B. Browne <cbbrowne@hex.net> for perl, lots of scheme and documentation updates
+Nathan Buchanan <nbinont@yahoo.ca> packaging Windows binaries for release
 Johan Buret <johanburet@free.fr> french translation
 Thomas Bushnell <tb@becket.net> fix for file backups
 Eskil Bylund <eskil.bylund@gmail.com> account type deprecation
@@ -151,11 +155,13 @@ Daniel Hagerty <hag@linnaean.org> patch to balance sheet report
 Mitsuo Hamada <mhamada@redhat.com> messages Japanese translations
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
 Eric Hanchrow <offby1@blarg.net> updated currency documentation
+Daniel Harding <dharding@gmail.com> Windows build tweaks; various code fixes
 Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work
 John Hasler <john@dhh.gt.org> engine patch
 Jon Kåre Hellan <hellan@acm.org> misc core dump fixes
 Hendrik-Jan Heins <hjh@passys.nl> Dutch translation
 Claus Hindsgaul <claus_h@image.dk> messages Danish translation
+Ori Hoch <ori@uumpa.com> Hebrew translation
 Péter Hosszú <hosszu@web.de> Hungarian translation
 Edward J. Huff <ejhuff@huff20may77.us> Date handling in reports, quarterly option
 Tomokazu Iwashita <iwashita@center.nitech.ac.jp> Japanese translation of xea
@@ -186,6 +192,7 @@ Vitaly Lipatov <lav@altlinux.ru> complete Russian translation, build tweaks, cod
 Volodymyr M. Lisivka <lvm@mystery.lviv.net> Ukrainian translation
 Phil Longstaff <plongstaff@newearth.org> fixes for pricedb
 Duarte Loreto <happyguy_pt@hotmail.com> message and documentation Portuguese translations
+Raffael Luthiger <modir@huanga.com> Swiss German translation
 Lionel Elie Mamane <lionel@mamane.lu> Patches for gcc2.95 macro compatibility
 Kjartan Maraas <kmaraas@gnome.org> Norwegian translations
 Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work, x86_64 support
@@ -231,6 +238,7 @@ Dirk Schoenberger <schoenberger@signsoft.com> Qt/KDE work
 Jan Schrage <jan.schrage@urz.uni-heidelberg.de> documentation patches
 Christopher Seawood <cls@seawood.org> for XbaeMatrix core dump
 Alessandro Seveso <aleseveso@tiscalinet.it> messages Italian translations
+Clytie Siddall <clytie@riverland.net.au> Vietnamese translation
 Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
 Keld Simonsen <keld@dkuug.dk> messages Danish translation
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
@@ -247,6 +255,7 @@ Nigel Titley <nigel@titley.com> British English translation
 James A. Treacy <treacy@debian.org> doc patch
 Arnold Troeger <troeger@samart.co.th> Mandrake packager
 Diane Trout <detrout@earthlink.net> scheme QIF import patch
+Nicolae Turcan <nicturcan@gmail.com> Romanian translation
 Richard -Gilligan- Uschold <uschold@cs.ucf.edu> tax report & txf export
 Matthew Vanecek <mevanecek@yahoo.com> lots of postgres backend work
 Didier Vidal <didier-devel@9online.fr> various G2 fixes.

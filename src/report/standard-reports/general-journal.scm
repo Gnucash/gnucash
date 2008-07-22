@@ -36,18 +36,19 @@
 
 (define reportname (N_ "General Journal"))
 (define regrptname (N_ "Register"))
+(define regrptguid "22104e02654c4adba844ee75a3f8d173")
 
 ;; report constructor
 
 (define (gnc:make-general-journal-report)
-  (let* ((regrpt (gnc:make-report regrptname)))
+  (let* ((regrpt (gnc:make-report regrptguid)))
     regrpt))
 
 ;; options generator
 
 (define (general-journal-options-generator)
   
-  (let* ((options (gnc:report-template-new-options/name regrptname))
+  (let* ((options (gnc:report-template-new-options/report-guid regrptguid regrptname))
 	 (query (qof-query-create-for-splits))
 	 )
     
@@ -123,11 +124,12 @@
 
 (define (general-journal-renderer report-obj)
   ;; just delegate rendering to the Register Report renderer...
-  ((gnc:report-template-renderer/name regrptname) report-obj))
+  ((gnc:report-template-renderer/report-guid regrptguid regrptname) report-obj))
 
 (gnc:define-report 
  'version 1
  'name reportname
+ 'report-guid "25455562bd234dd0b048ecc5a8af9e43"
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator general-journal-options-generator
  'renderer general-journal-renderer

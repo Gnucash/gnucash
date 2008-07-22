@@ -38,12 +38,12 @@
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label" translatable="yes">gnc-new-account</property>
+	      <property name="label" translatable="no">gnc-new-account</property>
 	      <property name="use_underline">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	      <property name="response_id">1</property>
-	      <signal name="clicked" handler="gnc_ui_qif_account_picker_new_cb" last_modification_time="Sat, 25 Oct 2003 19:44:39 GMT"/>
+	      <signal name="clicked" handler="gnc_ui_qif_account_picker_new_cb"/>
 	    </widget>
 	  </child>
 
@@ -87,12 +87,31 @@
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">0</property>
 
-	  <child>
-	    <widget class="GtkFrame" id="frame1">
-	      <property name="visible">True</property>
-	      <property name="label_xalign">0</property>
-	      <property name="label_yalign">0.5</property>
-	      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+	      <child>
+		<widget class="GtkLabel" id="label1">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">_Select or add a GnuCash account:</property>
+		  <property name="use_underline">Yes</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">5</property>
+		  <property name="ypad">0</property>
+                  <property name="mnemonic_widget">account_tree</property>
+		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		  <property name="width_chars">-1</property>
+		  <property name="single_line_mode">False</property>
+		  <property name="angle">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">5</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
 
 	      <child>
 		<widget class="GtkScrolledWindow" id="scrolledwindow24">
@@ -117,36 +136,6 @@
 		  </child>
 		</widget>
 	      </child>
-
-	      <child>
-		<widget class="GtkLabel" id="label1">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Select or add a GnuCash account</property>
-		  <property name="use_underline">False</property>
-		  <property name="use_markup">False</property>
-		  <property name="justify">GTK_JUSTIFY_LEFT</property>
-		  <property name="wrap">False</property>
-		  <property name="selectable">False</property>
-		  <property name="xalign">0.5</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
-		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		  <property name="width_chars">-1</property>
-		  <property name="single_line_mode">False</property>
-		  <property name="angle">0</property>
-		</widget>
-		<packing>
-		  <property name="type">label_item</property>
-		</packing>
-	      </child>
-	    </widget>
-	    <packing>
-	      <property name="padding">0</property>
-	      <property name="expand">True</property>
-	      <property name="fill">True</property>
-	    </packing>
-	  </child>
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
@@ -268,7 +257,7 @@ You will have the opportunity to load as many files as you wish, so don't  worry
 		    <widget class="GtkButton" id="button71">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Select...</property>
+		      <property name="label" translatable="yes">_Select...</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -515,7 +504,7 @@ Please enter a name for the account. If the file was exported from another accou
 	  <property name="title" translatable="yes">QIF files you have loaded</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="prepare" handler="gnc_ui_qif_import_loaded_files_prepare_cb" after="yes"/>
-	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="next" handler="gnc_ui_qif_import_loaded_files_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
 	  <child internal-child="vbox">
@@ -592,7 +581,7 @@ Click &quot;Forward&quot; to finish loading files and move to the next step of t
 		    <widget class="GtkButton" id="unload_file_button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Unload selected file</property>
+		      <property name="label" translatable="yes">_Unload selected file</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -604,7 +593,7 @@ Click &quot;Forward&quot; to finish loading files and move to the next step of t
 		    <widget class="GtkButton" id="button69">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Load another file</property>
+		      <property name="label" translatable="yes">_Load another file</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -675,8 +664,7 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match QIF accounts with GnuCash accounts</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
-	  <signal name="prepare" handler="gnc_ui_qif_import_accounts_prepare_cb"/>
-	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="next" handler="gnc_ui_qif_import_account_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
 	  <child internal-child="vbox">
@@ -685,6 +673,32 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
+
+	      <child>
+		<widget class="GtkLabel" id="label7609">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">_Select the matchings you want to change:</property>
+		  <property name="use_underline">Yes</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">5</property>
+		  <property name="ypad">0</property>
+                  <property name="mnemonic_widget">account_page_view</property>
+		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		  <property name="width_chars">-1</property>
+		  <property name="single_line_mode">False</property>
+		  <property name="angle">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">5</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
 
 	      <child>
 		<widget class="GtkScrolledWindow" id="scrolledwindow11">
@@ -717,25 +731,81 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
 	      </child>
 
 	      <child>
-		<widget class="GtkLabel" id="label828">
+		<widget class="GtkHBox" id="hbox7609">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Click &quot;Forward&quot; to check matchings for QIF categories. </property>
-		  <property name="use_underline">False</property>
-		  <property name="use_markup">False</property>
-		  <property name="justify">GTK_JUSTIFY_CENTER</property>
-		  <property name="wrap">True</property>
-		  <property name="selectable">False</property>
-		  <property name="xalign">0.5</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
-		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		  <property name="width_chars">-1</property>
-		  <property name="single_line_mode">False</property>
-		  <property name="angle">0</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
+
+	          <child>
+		    <widget class="GtkLabel" id="label7610">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Matchings selected:</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">True</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		      <property name="width_chars">-1</property>
+		      <property name="single_line_mode">False</property>
+		      <property name="angle">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+	          </child>
+
+	          <child>
+		    <widget class="GtkLabel" id="account_page_count">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="no">0</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">True</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		      <property name="width_chars">-1</property>
+		      <property name="single_line_mode">False</property>
+		      <property name="angle">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">3</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
+	          </child>
+
+		  <child>
+		    <widget class="GtkButton" id="account_page_change">
+		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Change GnuCash _Account...</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <signal name="clicked" handler="gnc_ui_qif_import_account_rematch_cb"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
 		</widget>
 		<packing>
-		  <property name="padding">3</property>
+		  <property name="padding">0</property>
 		  <property name="expand">False</property>
 		  <property name="fill">False</property>
 		</packing>
@@ -798,8 +868,7 @@ If you change your mind later, you can reorganize the account structure safely w
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match QIF categories with GnuCash accounts</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
-	  <signal name="prepare" handler="gnc_ui_qif_import_categories_prepare_cb"/>
-	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="next" handler="gnc_ui_qif_import_category_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
 	  <child internal-child="vbox">
@@ -808,6 +877,32 @@ If you change your mind later, you can reorganize the account structure safely w
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
+
+	      <child>
+		<widget class="GtkLabel" id="label7611">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">_Select the matchings you want to change:</property>
+		  <property name="use_underline">Yes</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">5</property>
+		  <property name="ypad">0</property>
+                  <property name="mnemonic_widget">category_page_view</property>
+		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		  <property name="width_chars">-1</property>
+		  <property name="single_line_mode">False</property>
+		  <property name="angle">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">5</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
 
 	      <child>
 		<widget class="GtkScrolledWindow" id="scrolledwindow12">
@@ -839,25 +934,81 @@ If you change your mind later, you can reorganize the account structure safely w
 	      </child>
 
 	      <child>
-		<widget class="GtkLabel" id="label829">
+		<widget class="GtkHBox" id="hbox7612">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Click &quot;Forward&quot; to enter information about the currency used in your QIF files.</property>
-		  <property name="use_underline">False</property>
-		  <property name="use_markup">False</property>
-		  <property name="justify">GTK_JUSTIFY_CENTER</property>
-		  <property name="wrap">False</property>
-		  <property name="selectable">False</property>
-		  <property name="xalign">0.5</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
-		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		  <property name="width_chars">-1</property>
-		  <property name="single_line_mode">False</property>
-		  <property name="angle">0</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
+
+	          <child>
+		    <widget class="GtkLabel" id="label7613">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Matchings selected:</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">True</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		      <property name="width_chars">-1</property>
+		      <property name="single_line_mode">False</property>
+		      <property name="angle">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+	          </child>
+
+	          <child>
+		    <widget class="GtkLabel" id="category_page_count">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="no">0</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">True</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		      <property name="width_chars">-1</property>
+		      <property name="single_line_mode">False</property>
+		      <property name="angle">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">3</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
+	          </child>
+
+		  <child>
+		    <widget class="GtkButton" id="category_page_change">
+		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Change GnuCash _Account...</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <signal name="clicked" handler="gnc_ui_qif_import_category_rematch_cb"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
 		</widget>
 		<packing>
-		  <property name="padding">3</property>
+		  <property name="padding">0</property>
 		  <property name="expand">False</property>
 		  <property name="fill">False</property>
 		</packing>
@@ -873,7 +1024,7 @@ If you change your mind later, you can reorganize the account structure safely w
 	  <property name="title" translatable="yes">Payees and memos</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
-	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_memo_doc_back_cb"/>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox39">
@@ -918,9 +1069,8 @@ In the following page, you will see the text that appears in the Payee and Memo 
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match payees/memos to GnuCash accounts</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
-	  <signal name="next" handler="gnc_ui_qif_import_memo_next_cb"/>
-	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
-	  <signal name="prepare" handler="gnc_ui_qif_import_memo_prepare_cb"/>
+	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_memo_back_cb"/>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox40">
@@ -928,6 +1078,32 @@ In the following page, you will see the text that appears in the Payee and Memo 
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
+
+	      <child>
+		<widget class="GtkLabel" id="label7614">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">_Select the matchings you want to change:</property>
+		  <property name="use_underline">Yes</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">5</property>
+		  <property name="ypad">0</property>
+                  <property name="mnemonic_widget">memo_page_view</property>
+		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		  <property name="width_chars">-1</property>
+		  <property name="single_line_mode">False</property>
+		  <property name="angle">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">5</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
 
 	      <child>
 		<widget class="GtkScrolledWindow" id="scrolledwindow12">
@@ -957,6 +1133,87 @@ In the following page, you will see the text that appears in the Payee and Memo 
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
+
+	      <child>
+		<widget class="GtkHBox" id="hbox7615">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
+
+	          <child>
+		    <widget class="GtkLabel" id="label7616">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Matchings selected:</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">True</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		      <property name="width_chars">-1</property>
+		      <property name="single_line_mode">False</property>
+		      <property name="angle">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+	          </child>
+
+	          <child>
+		    <widget class="GtkLabel" id="memo_page_count">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="no">0</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">True</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		      <property name="width_chars">-1</property>
+		      <property name="single_line_mode">False</property>
+		      <property name="angle">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">3</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
+	          </child>
+
+		  <child>
+		    <widget class="GtkButton" id="memo_page_change">
+		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Change GnuCash _Account...</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <signal name="clicked" handler="gnc_ui_qif_import_memo_rematch_cb"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
 	    </widget>
 	  </child>
 	</widget>
@@ -965,10 +1222,10 @@ In the following page, you will see the text that appears in the Payee and Memo 
       <child>
 	<widget class="GnomeDruidPageStandard" id="currency_page">
 	  <property name="visible">True</property>
-	  <property name="title" translatable="yes">Enter the currency used for new accounts</property>
+	  <property name="title" translatable="yes">Enter the QIF file currency</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_currency_next_cb"/>
-	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_currency_back_cb"/>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox16">
@@ -980,50 +1237,8 @@ In the following page, you will see the text that appears in the Payee and Memo 
 	      <child>
 		<widget class="GtkLabel" id="label831">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">The QIF importer cannot currently handle multi-currency QIF files. All the accounts in the QIF file(s) you are importing must be denominated in the same currency. This limitation should be removed soon.
-
-Select the currency to use for transactions imported from your QIF files:
+		  <property name="label" translatable="yes">The QIF importer cannot currently handle multi-currency QIF files. All the accounts you are importing must be denominated in the same currency.
 </property>
-		  <property name="use_underline">False</property>
-		  <property name="use_markup">False</property>
-		  <property name="justify">GTK_JUSTIFY_LEFT</property>
-		  <property name="wrap">True</property>
-		  <property name="selectable">False</property>
-		  <property name="xalign">0.5</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
-		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		  <property name="width_chars">-1</property>
-		  <property name="single_line_mode">False</property>
-		  <property name="angle">0</property>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">False</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkComboBoxEntry" id="currency_comboboxentry">
-		  <property name="visible">True</property>
-		  <property name="items">Dummy currency entry</property>
-		  <property name="add_tearoffs">False</property>
-		  <property name="has_frame">True</property>
-		  <property name="focus_on_click">True</property>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">False</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkLabel" id="label832">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Click &quot;Forward&quot; to enter information about stocks and mutual funds in the imported data.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -1042,7 +1257,47 @@ Select the currency to use for transactions imported from your QIF files:
 		  <property name="padding">0</property>
 		  <property name="expand">False</property>
 		  <property name="fill">False</property>
-		  <property name="pack_type">GTK_PACK_END</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label832">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">_Select the currency to use for all imported transactions:</property>
+		  <property name="use_underline">True</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">4</property>
+		  <property name="ypad">0</property>
+                  <property name="mnemonic_widget">currency_comboboxentry</property>
+		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		  <property name="width_chars">-1</property>
+		  <property name="single_line_mode">False</property>
+		  <property name="angle">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">True</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkComboBoxEntry" id="currency_comboboxentry">
+		  <property name="visible">True</property>
+		  <property name="items">Dummy currency entry</property>
+		  <property name="add_tearoffs">False</property>
+		  <property name="has_frame">True</property>
+		  <property name="focus_on_click">True</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
 		</packing>
 	      </child>
 	    </widget>
@@ -1143,6 +1398,82 @@ Click &quot;Forward&quot; to find duplicate transactions. </property>
 		  <property name="expand">False</property>
 		  <property name="fill">False</property>
 		</packing>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+      </child>
+
+      <child>
+	<widget class="GnomeDruidPageStandard" id="failed_page">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Cancel import</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
+	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
+
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="failed_vbox">
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">12</property>
+
+      	      <child>
+	        <widget class="GtkHBox" id="failed_hbox">
+	          <property name="border_width">6</property>
+	          <property name="visible">True</property>
+	          <property name="homogeneous">False</property>
+	          <property name="spacing">12</property>
+
+	          <child>
+	            <widget class="GtkImage" id="failed_image">
+	              <property name="visible">True</property>
+	              <property name="stock">gtk-dialog-warning</property>
+	              <property name="icon_size">6</property>
+	              <property name="xalign">0.5</property>
+	              <property name="yalign">0</property>
+	              <property name="xpad">0</property>
+	              <property name="ypad">0</property>
+	            </widget>
+	            <packing>
+	              <property name="padding">0</property>
+	              <property name="expand">False</property>
+	              <property name="fill">False</property>
+	            </packing>
+	          </child>
+
+	          <child>
+		    <widget class="GtkLabel" id="label_failed">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">&lt;span weight=&quot;bold&quot; size=&quot;larger&quot;&gt;The QIF import has failed&lt;/span&gt;
+
+An error occurred while importing transactions into GnuCash. Your accounts are unchanged.</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">True</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">True</property>
+		      <property name="selectable">True</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		      <property name="width_chars">-1</property>
+		      <property name="single_line_mode">False</property>
+		      <property name="angle">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+	          </child>
+	        </widget>
+	        <packing>
+	          <property name="padding">0</property>
+	          <property name="expand">False</property>
+	          <property name="fill">False</property>
+	        </packing>
 	      </child>
 	    </widget>
 	  </child>

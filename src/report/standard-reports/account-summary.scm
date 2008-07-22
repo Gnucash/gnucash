@@ -504,6 +504,7 @@
 (gnc:define-report 
  'version 1
  'name reportname
+ 'report-guid "3298541c236b494998b236dfad6ad752"
  'options-generator accsum-options-generator
  'renderer accsum-renderer)
 

@@ -1289,6 +1289,7 @@ gz_thread_func(gz_thread_params_t *params)
     success = 1;
 
 cleanup_gz_thread_func:
+    close(params->fd);
     g_free(params->filename);
     g_free(params->perms);
     g_free(params);

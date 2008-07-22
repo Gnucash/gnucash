@@ -273,8 +273,11 @@ listen_for_account_events  (QofInstance *entity,  QofEventId event_type,
 	path = gtk_tree_row_reference_get_path(tmp->data);
 	gtk_tree_row_reference_free(tmp->data);
 	if (!gtk_tree_model_get_iter(GTK_TREE_MODEL(qfb->list_store),
-				    &iter, path))
+				     &iter, path)) {
+	  gtk_tree_path_free(path);
 	  continue;
+	}
+	gtk_tree_path_free(path);
 	gtk_tree_model_get(GTK_TREE_MODEL(qfb->list_store), &iter,
 			   ACCOUNT_POINTER, &account,
 			   -1);
@@ -310,8 +313,7 @@ listen_for_account_events  (QofInstance *entity,  QofEventId event_type,
       DEBUG("remove %s", name);
 
       /* Remove from qf */
-      gnc_quickfill_purge(qfb->qf);
-      gnc_account_foreach_descendant(qfb->root, load_shared_qf_cb, qfb);
+      gnc_quickfill_remove(qfb->qf, name, QUICKFILL_ALPHA);
 
       /* Does the account exist in the model? */
       data.accounts = g_list_append(NULL, account);
@@ -326,6 +328,7 @@ listen_for_account_events  (QofInstance *entity,  QofEventId event_type,
 				    &iter, path)) {
 	  gtk_list_store_remove(qfb->list_store, &iter);
 	}
+	gtk_tree_path_free(path);
       }
       break;
 

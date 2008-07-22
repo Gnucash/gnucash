@@ -149,7 +149,7 @@ gboolean gnc_quote_source_fq_installed (void);
  *  @param sources_list A list of strings containing the source names
  *  as they are known to F::Q.
  */
-void gnc_quote_source_set_fq_installed (GList *sources_list);
+void gnc_quote_source_set_fq_installed (const GList *sources_list);
 
 /** Return the number of entries for a given type of quote source.
  *
@@ -202,7 +202,7 @@ gnc_quote_source *gnc_quote_source_lookup_by_ti(QuoteSourceType type, gint index
  *
  *  @return TRUE if the user's computer supports this quote source.
  */
-gboolean gnc_quote_source_get_supported (gnc_quote_source *source);
+gboolean gnc_quote_source_get_supported (const gnc_quote_source *source);
 
 /** Given a gnc_quote_source data structure, return the type of this
  *  particular quote source. (SINGLE, MULTI, UNKNOWN)
@@ -211,7 +211,7 @@ gboolean gnc_quote_source_get_supported (gnc_quote_source *source);
  *
  *  @return The type of this quote source.
  */
-QuoteSourceType gnc_quote_source_get_type (gnc_quote_source *source);
+QuoteSourceType gnc_quote_source_get_type (const gnc_quote_source *source);
 
 /** Given a gnc_quote_source data structure, return the index of this
  *  particular quote source within its type.
@@ -220,7 +220,7 @@ QuoteSourceType gnc_quote_source_get_type (gnc_quote_source *source);
  *
  *  @return The index of this quote source in its type.
  */
-gint gnc_quote_source_get_index (gnc_quote_source *source);
+gint gnc_quote_source_get_index (const gnc_quote_source *source);
 
 /** Given a gnc_quote_source data structure, return the user friendly
  *  name of this quote source.  E.G. "Yahoo Australia" or "Australia
@@ -230,7 +230,7 @@ gint gnc_quote_source_get_index (gnc_quote_source *source);
  *
  *  @return The user friendly name.
  */
-const char *gnc_quote_source_get_user_name (gnc_quote_source *source);
+const char *gnc_quote_source_get_user_name (const gnc_quote_source *source);
 
 /** Given a gnc_quote_source data structure, return the internal name
  *  of this quote source.  This is the name used by both gnucash and
@@ -240,7 +240,7 @@ const char *gnc_quote_source_get_user_name (gnc_quote_source *source);
  *
  *  @return The internal name.
  */
-const char *gnc_quote_source_get_internal_name (gnc_quote_source *source);
+const char *gnc_quote_source_get_internal_name (const gnc_quote_source *source);
 
 /** Given a gnc_quote_source data structure, return the internal name
  *  of this quote source.  This is the name used by both gnucash and
@@ -254,7 +254,7 @@ const char *gnc_quote_source_get_internal_name (gnc_quote_source *source);
  *
  *  @return The internal name.
  */
-const char *gnc_quote_source_get_old_internal_name (gnc_quote_source *source);
+const char *gnc_quote_source_get_old_internal_name (const gnc_quote_source *source);
 /** @} */
 
 
@@ -309,10 +309,10 @@ gnc_commodity * gnc_commodity_new(QofBook *book,
 void  gnc_commodity_destroy(gnc_commodity * cm);
 
 /** Copy src into dest */
-void  gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src);
+void  gnc_commodity_copy(gnc_commodity * dest, const gnc_commodity *src);
 
 /** allocate and copy */
-gnc_commodity * gnc_commodity_clone(gnc_commodity *src, QofBook *dest_book);
+gnc_commodity * gnc_commodity_clone(const gnc_commodity *src, QofBook *dest_book);
 /** @} */
 
 
@@ -768,7 +768,7 @@ gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBoo
  *
  *  @return A pointer to the name of the namespace.  This string is
  *  owned by the engine and should not be freed by the caller. */
-const char * gnc_commodity_namespace_get_name (gnc_commodity_namespace *ns) ;
+const char * gnc_commodity_namespace_get_name (const gnc_commodity_namespace *ns) ;
 
 
 /** Return a list of all commodity data structures in the specified namespace.
@@ -785,7 +785,7 @@ GList * gnc_commodity_namespace_get_commodity_list(const gnc_commodity_namespace
  *
  *  @return The number of namespaces.  Zero if an invalid argument was
  *  supplied or there was an error. */
-guint gnc_commodity_table_get_number_of_namespaces(gnc_commodity_table* tbl);
+guint gnc_commodity_table_get_number_of_namespaces(const gnc_commodity_table* tbl);
 
 /** Test to see if the indicated namespace exits in the commodity table.
  *
@@ -862,7 +862,7 @@ void      gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
  *
  *  @return The number of commodities in the table. 0 if there are no
  *  commodities, or the routine was passed a bad argument. */
-guint gnc_commodity_table_get_size(gnc_commodity_table* tbl);
+guint gnc_commodity_table_get_size(const gnc_commodity_table* tbl);
 
 /** Return a list of all commodities in the commodity table that are
  *  in the given namespace.
@@ -943,7 +943,7 @@ void          gnc_commodity_table_destroy(gnc_commodity_table * table);
  *   the indicated book.  This routine is primarily useful for setting
  *   up clones of things across multiple books.
  */
-gnc_commodity * gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book);
+gnc_commodity * gnc_commodity_obtain_twin (const gnc_commodity *from, QofBook *book);
 
 /** You should probably not be using gnc_commodity_table_register()
  * It is an internal routine for registering the gncObject for the

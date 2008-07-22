@@ -857,6 +857,7 @@
 (gnc:define-report
  'version 1
  'name reportname
+ 'report-guid "758b125c05e54531a7dec5f1ef0ef9c8"
  'menu-name (N_ "Tax Report & XML Export")
  ;;'menu-path (list gnc:menuname-taxes)
  'menu-tip (N_ "Taxable Income / Deductible Expenses / Export to .XML file")

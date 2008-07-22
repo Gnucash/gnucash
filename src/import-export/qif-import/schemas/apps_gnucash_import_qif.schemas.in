@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/qif/show_doc</key>
+      <applyto>/apps/gnucash/dialogs/import/qif/show_doc</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Show documentation</short>
+        <long>
+          Show some documentation-only pages in QIF Import druid.
+	</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>

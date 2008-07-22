@@ -45,7 +45,7 @@ function prepare() {
     level1=$(basename ${_REPOS_UDIR})
     level2=$(basename $(dirname ${_REPOS_UDIR}))"/"$level1
     for mydir in $level0 $level1 $level2; do
-        if [ -f $mydir/make-gnucash-patch.in ]; then
+        if [ -f $mydir/make-gnucash-potfiles.in ]; then
             die "Do not save install.sh in the repository or one its parent directories"
         fi
     done
@@ -932,8 +932,6 @@ function inst_aqbanking() {
 function svn_up() {
     mkdir -p $_REPOS_UDIR
     qpushd $REPOS_DIR
-    # latest revision that should compile, use HEAD or vwxyz
-    SVN_REV="HEAD"
     if [ -x .svn ]; then
         setup "svn update in ${REPOS_DIR}"
         svn up -r ${SVN_REV}
@@ -953,10 +951,8 @@ function inst_gnucash() {
     mkdir -p $_BUILD_UDIR
     add_to_env $_INSTALL_UDIR/bin PATH
 
-    # When aqbanking is enabled, uncomment this:
     AQBANKING_OPTIONS="--enable-hbci --with-aqbanking-dir=${_AQBANKING_UDIR}"
     AQBANKING_UPATH="${_OPENSSL_UDIR}/bin:${_GWENHYWFAR_UDIR}/bin:${_AQBANKING_UDIR}/bin"
-    AQBANKING_PATH="${OPENSSL_DIR}\\bin;${GWENHYWFAR_DIR}\\bin;${AQBANKING_DIR}\\bin"
     LIBOFX_OPTIONS="--enable-ofx --with-ofx-prefix=${_LIBOFX_UDIR}"
 
     qpushd $REPOS_DIR
@@ -1000,15 +996,21 @@ function inst_gnucash() {
                 gnucash
         qpopd
 
-        make install
+        make_install
     qpopd
+}
+
+function make_install() {
+    AQBANKING_PATH="${OPENSSL_DIR}\\bin;${GWENHYWFAR_DIR}\\bin;${AQBANKING_DIR}\\bin"
+
+    make install
 
     qpushd $_INSTALL_UDIR/lib
         # Move modules that are compiled without -module to lib/gnucash and
         # correct the 'dlname' in the libtool archives. We do not use these
         # files to dlopen the modules, so actually this is unneeded.
         # Also, in all installed .la files, remove the dependency_libs line
-        mv bin/*.dll gnucash || true
+        mv bin/*.dll gnucash 2>/dev/null || true
         for A in gnucash/*.la; do
             sed '/dependency_libs/d;s#../bin/##' $A > tmp ; mv tmp $A
         done
@@ -1018,7 +1020,7 @@ function inst_gnucash() {
 
         # gettext 0.17 installs translations to \share\locale, but not all
         # gnome packages have been recompiled against it
-        cp -a locale ../share && rm -rf locale
+        [ -d locale ] && cp -a locale ../share && rm -rf locale
     qpopd
 
     qpushd $_INSTALL_UDIR/etc/gconf/schemas
@@ -1032,7 +1034,8 @@ function inst_gnucash() {
 
     # Create a startup script that works without the msys shell
     qpushd $_INSTALL_UDIR/bin
-        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;%PATH%" > gnucash.bat
+        echo "setlocal" > gnucash.bat
+        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;%PATH%" >> gnucash.bat
         echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
         echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
         echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
@@ -1046,7 +1049,7 @@ function make_chm() {
     _CHM_LANG=$2
     echo "Processing $_CHM_TYPE ($_CHM_LANG) ..."
     qpushd $_CHM_TYPE/$_CHM_LANG
-        xsltproc ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
+        xsltproc $XSLTPROCFLAGS ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
         count=0
         echo >> htmlhelp.hhp
         echo "[ALIAS]" >> htmlhelp.hhp
@@ -1080,14 +1083,14 @@ function inst_docs() {
     fi
     mkdir -p $_DOCS_UDIR/repos
     qpushd $DOCS_DIR/repos
-        # latest revision that should compile, use HEAD or vwxyz
-        SVN_REV="HEAD"
-        if [ -x .svn ]; then
-            setup "SVN update of docs"
-            svn up -r ${SVN_REV}
-        else
-            setup "SVN checkout of docs"
-            svn co -r ${SVN_REV} $DOCS_URL .
+        if [ "$UPDATE_DOCS" = "yes" ]; then
+            if [ -x .svn ]; then
+                setup "SVN update of docs"
+                svn up -r ${DOCS_REV}
+            else
+                setup "SVN checkout of docs"
+                svn co -r ${DOCS_REV} $DOCS_URL .
+            fi
         fi
         setup docs
         _DOCS_INST_UDIR=`unix_path $INSTALL_DIR`/share/gnucash/help
@@ -1137,11 +1140,9 @@ function finish() {
     fi
 }
 
-prepare
 for step in "${steps[@]}" ; do
     eval $step
 done
-finish
 qpopd
 
 

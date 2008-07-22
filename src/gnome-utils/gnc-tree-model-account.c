@@ -549,6 +549,9 @@ gnc_tree_model_account_compute_period_balance(GncTreeModelAccount *model,
   time_t t1, t2;
   gnc_numeric b3;  
 
+  if( negative )
+  	*negative = FALSE;
+
   priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
   if (acct == priv->root)
     return g_strdup("");

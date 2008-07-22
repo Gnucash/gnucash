@@ -46,6 +46,7 @@
 #include "gnc-plugin-page-report.h"
 
 #include "dialog-account.h"
+#include "dialog-find-transactions.h"
 #include "dialog-print-check.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
@@ -118,6 +119,7 @@ static void gnc_plugin_page_register_cmd_cut (GtkAction *action, GncPluginPageRe
 static void gnc_plugin_page_register_cmd_copy (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_paste (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_edit_account (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_find_transactions (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_cut_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_copy_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_paste_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
@@ -184,6 +186,9 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<control>e",
 	  N_("Edit the selected account"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_edit_account) },
+	{ "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<control>f",
+	  N_("Find transactions with a search"),
+	  G_CALLBACK (gnc_plugin_page_register_cmd_find_transactions) },
 
 	/* Transaction menu */
 
@@ -1023,6 +1028,9 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
     return NULL;
   }
   g_free(reg_type);
+
+  /* Recreate page in given window */
+  gnc_plugin_page_set_use_new_window(page, FALSE);
 
   /* Install it now so we can them manipulate the created widget */
   gnc_main_window_open_page(GNC_MAIN_WINDOW(window), page);
@@ -1955,6 +1963,21 @@ gnc_plugin_page_register_cmd_edit_account (GtkAction *action,
   account = gnc_plugin_page_register_get_account (page);
   if (account)
     gnc_ui_edit_account_window (account);
+  LEAVE(" ");
+}
+
+
+static void
+gnc_plugin_page_register_cmd_find_transactions (GtkAction *action,
+						GncPluginPageRegister *page)
+{
+  GncPluginPageRegisterPrivate *priv;
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+  ENTER("(action %p, page %p)", action, page);
+  priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+  gnc_ui_find_transactions_dialog_create(priv->ledger);
   LEAVE(" ");
 }
 

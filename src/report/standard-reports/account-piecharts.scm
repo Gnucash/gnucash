@@ -156,7 +156,7 @@ balance at a given time"))
 ;; account settings, you have to give the reportname, the
 ;; account-types to work on and whether this report works on
 ;; intervals as arguments.
-(define (piechart-renderer report-obj reportname
+(define (piechart-renderer report-obj reportname report-guid
                            account-types do-intervals?)
   
   ;; This is a helper function for looking up option values.
@@ -335,7 +335,7 @@ balance at a given time"))
                   (set! combined
                         (append start
                                 (list (list sum (_ "Other")))))
-                  (let ((options (gnc:make-report-options reportname))
+                  (let ((options (gnc:make-report-options report-guid))
                         (id #f))
                     ;; now copy all the options
                     (gnc:options-copy-values (gnc:report-options report-obj)
@@ -345,7 +345,7 @@ balance at a given time"))
                      (gnc:lookup-option options gnc:pagename-accounts 
                                         optname-accounts)
                      (map cadr finish))
-                    (set! id (gnc:make-report reportname options))
+                    (set! id (gnc:make-report report-guid options))
                     ;; set the URL.
                     (set! other-anchor (gnc:report-anchor-text id)))))
             
@@ -367,7 +367,7 @@ balance at a given time"))
                                ;; immediate subaccounts of this account
                                ;; (and including this account).
                                (gnc:make-report-anchor
-                                reportname
+                                report-guid
                                 report-obj
                                 (list
                                  (list gnc:pagename-accounts optname-accounts
@@ -463,6 +463,7 @@ balance at a given time"))
      (gnc:define-report
       'version 1
       'name (car l)
+      'report-guid (car (reverse l))
       'menu-path (if (caddr l)
 		     (list gnc:menuname-income-expense)
 		     (list gnc:menuname-asset-liability)) 
@@ -474,20 +475,21 @@ balance at a given time"))
       'renderer (lambda (report-obj)
 		  (piechart-renderer report-obj 
 				     (car l) 
+				     (car (reverse l))
 				     (cadr l)
 				     (caddr l))))))
  (list 
   ;; reportname, account-types, do-intervals?, 
   ;; menu-reportname, menu-tip
-  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t))
-  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f))
+  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t) "e1bd09b8a1dd49dd85760db9d82b045c")
+  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f) "9bf1892805cb4336be6320fe48ce5446")
   (list reportname-assets
         (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
               ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
               ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
               ACCT-TYPE-CURRENCY)
-        #f menuname-assets menutip-assets (lambda (x) #f))
+        #f menuname-assets menutip-assets (lambda (x) #f) "5c7fd8a1fe9a4cd38884ff54214aa88a")
   (list reportname-liabilities 
         (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
               ACCT-TYPE-CREDITLINE)
-        #f menuname-liabilities menutip-liabilities (lambda (x) #t))))
+        #f menuname-liabilities menutip-liabilities (lambda (x) #t) "3fe6dce77da24c66bdc8f8efdea7f9ac")))

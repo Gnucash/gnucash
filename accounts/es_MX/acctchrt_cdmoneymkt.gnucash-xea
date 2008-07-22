@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Pagarés y mercado monetario
+    </gnc-act:title>
+    <gnc-act:short-description>
+     Cuentas para pagarés, e inversiones de mercado monetario
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Debería seleccionar este juego de cuentas si maneja pagarés o
+      cuentas de mercado monetario (pagarés, intereses de pagarés,
+      mercado monetario, intereses de mercado monetario).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Activo</act:name>
+  <act:id type="new">7b1a39efc6234d1db148baa722c9471e</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Activo</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Activo circulante</act:name>
+  <act:id type="new">1880e89ec9fe82622b8648df481dd2b7</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Activo circulante</act:description>
+  <act:parent type="new">7b1a39efc6234d1db148baa722c9471e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pagaré de banco</act:name>
+  <act:id type="new">c1620f9c3082e33d8fd559e17f90a122</act:id>
+  <act:type>BANK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Pagaré de banco</act:description>
+  <act:parent type="new">1880e89ec9fe82622b8648df481dd2b7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Mercado de dinero</act:name>
+  <act:id type="new">3a01e5b0132ba26803b49732a3242654</act:id>
+  <act:type>BANK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Mercado de dinero</act:description>
+  <act:parent type="new">1880e89ec9fe82622b8648df481dd2b7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ingresos</act:name>
+  <act:id type="new">4b3e36f325569b80efc7d3331bdf851b</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Ingresos</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ingresos por intereses</act:name>
+  <act:id type="new">fd131cae797d1fb83c2e2bf57254eca5</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Ingresos por intereses</act:description>
+  <act:parent type="new">4b3e36f325569b80efc7d3331bdf851b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Interés de pagarés</act:name>
+  <act:id type="new">28d311f0f38da5e35628e76ad8bcc853</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Interés de pagarés</act:description>
+  <act:parent type="new">fd131cae797d1fb83c2e2bf57254eca5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Interés de mercado de dinero</act:name>
+  <act:id type="new">dc537946f39e84ccef7ce38f016249af</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Interés de mercado de dinero</act:description>
+  <act:parent type="new">fd131cae797d1fb83c2e2bf57254eca5</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -1,0 +1,23 @@
+[Top]
+Guid = 378e5740-a2d3-4678-be20-37d14d97b458
+Title = Liberty(tm) Personal Checks US-Letter
+Rotation = -90.0
+Translation = 4;492
+Show_Grid = false
+Show_Boxes = false
+
+[Check Items]
+Type_1 = PAYEE
+Coords_1 = 118.0;74.0
+
+Type_2 = AMOUNT_WORDS
+Coords_2 = 90.0;96.0
+
+Type_3 = AMOUNT_NUMBER
+Coords_3 = 415.0;74.0
+
+Type_4 = DATE
+Coords_4 = 323.0;43.0
+
+Type_5 = NOTES
+Coords_5 = 90.0;155.0

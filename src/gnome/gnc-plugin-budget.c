@@ -203,6 +203,13 @@ gnc_plugin_budget_cmd_open_budget (GtkAction *action,
  *                     Other Functions                      *
  ************************************************************/
 
+static void
+row_activated_cb(GtkTreeView *tv, GtkTreePath *path, GtkTreeViewColumn *column,
+                 gpointer data)
+{
+    gtk_dialog_response(GTK_DIALOG(data), GTK_RESPONSE_OK);
+}
+
 GncBudget *
 gnc_budget_gui_select_budget(QofBook *book)
 {
@@ -223,6 +230,7 @@ gnc_budget_gui_select_budget(QofBook *book)
     tv = GTK_TREE_VIEW(gtk_tree_view_new());
     sel = gtk_tree_view_get_selection(tv);
     gtk_tree_selection_set_mode(sel, GTK_SELECTION_BROWSE);
+    g_signal_connect(tv, "row-activated", G_CALLBACK(row_activated_cb), dlg);
     tm = gnc_tree_model_budget_new(book);
     gnc_tree_view_budget_set_model(tv, tm);
     g_object_unref(tm);

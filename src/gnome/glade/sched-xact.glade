@@ -5992,7 +5992,7 @@ Custom</property>
 	</widget>
 	<packing>
 	  <property name="shrink">True</property>
-	  <property name="resize">False</property>
+	  <property name="resize">True</property>
 	</packing>
       </child>
 
@@ -6085,7 +6085,7 @@ Custom</property>
 	</widget>
 	<packing>
 	  <property name="shrink">True</property>
-	  <property name="resize">True</property>
+	  <property name="resize">False</property>
 	</packing>
       </child>
     </widget>

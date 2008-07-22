@@ -4250,15 +4250,15 @@ gnc_account_merge_children (Account *parent)
       Account *acc_b = node_b->data;
 
       priv_b = GET_PRIVATE(acc_b);
-      if (0 != safe_strcmp(priv_a->accountName, priv_b->accountName))
+      if (0 != null_strcmp(priv_a->accountName, priv_b->accountName))
 	continue;
-      if (0 != safe_strcmp(priv_a->accountCode, priv_b->accountCode))
+      if (0 != null_strcmp(priv_a->accountCode, priv_b->accountCode))
 	continue;
-      if (0 != safe_strcmp(priv_a->description, priv_b->description))
+      if (0 != null_strcmp(priv_a->description, priv_b->description))
 	continue;
       if (!gnc_commodity_equiv(priv_a->commodity, priv_b->commodity))
 	continue;
-      if (0 != safe_strcmp(xaccAccountGetNotes(acc_a),
+      if (0 != null_strcmp(xaccAccountGetNotes(acc_a),
 			   xaccAccountGetNotes(acc_b)))
 	continue;
       if (priv_a->type != priv_b->type)
@@ -4378,6 +4378,7 @@ xaccAccountStagedTransactionTraversal (const Account *acc,
 {
   AccountPrivate *priv;
   GList *split_p;
+  GList *next;
   Transaction *trans;
   Split *s;
   int retval;
@@ -4385,7 +4386,13 @@ xaccAccountStagedTransactionTraversal (const Account *acc,
   if (!acc) return 0;
 
   priv = GET_PRIVATE(acc);
-  for(split_p = priv->splits; split_p; split_p = g_list_next(split_p)) {
+  for(split_p = priv->splits; split_p; split_p = next) {
+    /* Get the next element in the split list now, just in case some
+     * naughty thunk destroys the one we're using. This reduces, but
+     * does not eliminate, the possibility of undefined results if
+     * a thunk removes splits from this account. */
+    next = g_list_next(split_p);
+
     s = split_p->data;
     trans = s->parent;   
     if (trans && (trans->marker < stage)) {

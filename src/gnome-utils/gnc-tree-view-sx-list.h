@@ -61,6 +61,8 @@ GtkTreeView* gnc_tree_view_sx_list_new(GncSxInstanceModel *sx_instances);
 
 SchedXaction* gnc_tree_view_sx_list_get_sx_from_path(GncTreeViewSxList *view, GtkTreePath *path);
 
+/** @} */
+
 G_END_DECLS
 
 #endif /* __GNC_TREE_VIEW_SX_LIST_H */

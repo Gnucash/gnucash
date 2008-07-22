@@ -9,6 +9,7 @@ function set_default() {
 }
 
 function block_step() { blocked_steps=("${blocked_steps[@]}" "$@"); }
+function reset_steps() { steps=(); blocked_steps=(); }
 function add_step() {
     while [ "$1" ]; do
         _is_blocked=

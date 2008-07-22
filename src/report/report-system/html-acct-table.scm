@@ -756,7 +756,7 @@
 	
 	(for-each
 	 (lambda (acct)
-	   (let* ((subaccts (gnc-account-get-children acct))
+	   (let* ((subaccts (gnc-account-get-children-sorted acct))
 		  ;; assign output parameters
 		  (account acct)
 		  (account-name (xaccAccountGetName acct))

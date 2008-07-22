@@ -1,5 +1,8 @@
 # Work around the intltool-0.35.5 / automake-1.10 failures
-# due to "missing" files.   Make sure these files NEVER have
-# translatable strings.
+# due to "missing" files.  These files may be distributed.
 lib/glib28/gfileutils-2.8.c
 src/gnome/gnucash.desktop.in.in
+src/gnome/gnucash.desktop.in
+# The features in import-export/qif are still unused.
+src/import-export/qif/qif-defaults.c
+src/import-export/qif/qif-parse.c

@@ -395,7 +395,7 @@ gnc_quote_source_lookup_by_internal(const char * name)
  * Accessor functions - get functions only. There are no set functions.
  ********************************************************************/
 QuoteSourceType
-gnc_quote_source_get_type (gnc_quote_source *source)
+gnc_quote_source_get_type (const gnc_quote_source *source)
 {
   ENTER("%p", source);
   if (!source) {
@@ -408,7 +408,7 @@ gnc_quote_source_get_type (gnc_quote_source *source)
 }
 
 gint
-gnc_quote_source_get_index (gnc_quote_source *source)
+gnc_quote_source_get_index (const gnc_quote_source *source)
 {
   ENTER("%p", source);
   if (!source) {
@@ -421,7 +421,7 @@ gnc_quote_source_get_index (gnc_quote_source *source)
 }
 
 gboolean
-gnc_quote_source_get_supported (gnc_quote_source *source)
+gnc_quote_source_get_supported (const gnc_quote_source *source)
 {
   ENTER("%p", source);
   if (!source) {
@@ -434,7 +434,7 @@ gnc_quote_source_get_supported (gnc_quote_source *source)
 }
 
 const char *
-gnc_quote_source_get_user_name (gnc_quote_source *source)
+gnc_quote_source_get_user_name (const gnc_quote_source *source)
 {
   ENTER("%p", source);
   if (!source) {
@@ -446,7 +446,7 @@ gnc_quote_source_get_user_name (gnc_quote_source *source)
 }
 
 const char *
-gnc_quote_source_get_old_internal_name (gnc_quote_source *source)
+gnc_quote_source_get_old_internal_name (const gnc_quote_source *source)
 {
   ENTER("%p", source);
   if (!source) {
@@ -458,7 +458,7 @@ gnc_quote_source_get_old_internal_name (gnc_quote_source *source)
 }
 
 const char *
-gnc_quote_source_get_internal_name (gnc_quote_source *source)
+gnc_quote_source_get_internal_name (const gnc_quote_source *source)
 {
   ENTER("%p", source);
   if (!source) {
@@ -476,11 +476,11 @@ gnc_quote_source_get_internal_name (gnc_quote_source *source)
  * installed.
  ********************************************************************/
 void
-gnc_quote_source_set_fq_installed (GList *sources_list)
+gnc_quote_source_set_fq_installed (const GList *sources_list)
 {
   gnc_quote_source *source;
   char *source_name;
-  GList *node;
+  const GList *node;
 
   ENTER(" ");
   fq_is_installed = TRUE;
@@ -797,10 +797,12 @@ gnc_commodity_new(QofBook *book, const char * fullname,
   qof_instance_init_data (&retval->inst, GNC_ID_COMMODITY, book);
   gnc_commodity_begin_edit(retval);
 
-  gnc_commodity_set_namespace(retval, namespace);
-  if (gnc_commodity_namespace_is_iso(namespace)) {
-    gnc_commodity_set_quote_source(retval,
+  if( namespace != NULL ) {
+  	gnc_commodity_set_namespace(retval, namespace);
+  	if (gnc_commodity_namespace_is_iso(namespace)) {
+    	gnc_commodity_set_quote_source(retval,
 					gnc_quote_source_lookup_by_internal("currency") );
+	}
   }
   gnc_commodity_set_fullname(retval, fullname);
   gnc_commodity_set_mnemonic(retval, mnemonic);
@@ -877,7 +879,7 @@ gnc_commodity_destroy(gnc_commodity * cm)
 }
 
 void
-gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src)
+gnc_commodity_copy(gnc_commodity * dest, const gnc_commodity *src)
 {
   CommodityPrivate* src_priv = GET_PRIVATE(src);
   CommodityPrivate* dest_priv = GET_PRIVATE(dest);
@@ -894,7 +896,7 @@ gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src)
 }
 
 gnc_commodity *
-gnc_commodity_clone(gnc_commodity *src, QofBook *dest_book)
+gnc_commodity_clone(const gnc_commodity *src, QofBook *dest_book)
 {
   CommodityPrivate* src_priv;
   CommodityPrivate* dest_priv;
@@ -1491,7 +1493,7 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
  *                   Namespace functions                    *
  ************************************************************/
 const char *
-gnc_commodity_namespace_get_name (gnc_commodity_namespace *ns)
+gnc_commodity_namespace_get_name (const gnc_commodity_namespace *ns)
 {
   if (ns == NULL)
     return NULL;
@@ -1548,7 +1550,7 @@ gnc_commodity_table_get_table(QofBook *book)
 }
 
 gnc_commodity *
-gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book)
+gnc_commodity_obtain_twin (const gnc_commodity *from, QofBook *book)
 {
   gnc_commodity *twin;
   const char * ucom;
@@ -1574,7 +1576,7 @@ gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book)
  ********************************************************************/
 
 guint
-gnc_commodity_table_get_number_of_namespaces(gnc_commodity_table* tbl)
+gnc_commodity_table_get_number_of_namespaces(const gnc_commodity_table* tbl)
 {
     g_return_val_if_fail(tbl, 0);
     g_return_val_if_fail(tbl->ns_table, 0);
@@ -1599,7 +1601,7 @@ count_coms(gpointer key, gpointer value, gpointer user_data)
 }
 
 guint
-gnc_commodity_table_get_size(gnc_commodity_table* tbl)
+gnc_commodity_table_get_size(const gnc_commodity_table* tbl)
 {
     guint count = 0;
     g_return_val_if_fail(tbl, 0);

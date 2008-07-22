@@ -264,7 +264,7 @@ gboolean qof_book_equal (const QofBook *book_1, const QofBook *book_2);
 /** This will 'get and increment' the named counter for this book.
  * The return value is -1 on error or the incremented counter.
  */
-gint64 qof_book_get_counter (QofBook *book, const char *counter_name);
+gint64 qof_book_get_counter (const QofBook *book, const char *counter_name);
 
 /** deprecated */
 #define qof_book_get_guid(X) qof_entity_get_guid (QOF_INSTANCE(X))

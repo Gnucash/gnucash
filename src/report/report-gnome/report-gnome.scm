@@ -26,7 +26,7 @@
 ;; returns a function that takes a list: (options, report),
 ;; and returns a widget
 (define (gnc:report-options-editor report) 
-  (if (equal? (gnc:report-type report) "Multicolumn View")
+  (if (equal? (gnc:report-type report) "d8ba4a2e89e8479ca9f6eccdeb164588")
       gnc-column-view-edit-options
       gnc-report-window-default-params-editor))
 
@@ -77,12 +77,13 @@
                  menu-path
                  (lambda (window)
                    (let ((report (gnc:make-report
-                                  (gnc:report-template-name template))))
+                                  (gnc:report-template-report-guid template))))
                      (gnc-main-window-open-report report window)))))
           (gnc-add-scm-extension item))))
 
-  (define (add-template name template)
-    (let ((menu-name (gnc:report-template-menu-name template)))
+  (define (add-template report-guid template)
+    (let ((name (gnc:report-template-name template))
+	  (menu-name (gnc:report-template-menu-name template)))
       (if menu-name (set! name menu-name))
       (set! *template-items* (cons (cons name template) *template-items*))))
 

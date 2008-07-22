@@ -279,7 +279,7 @@ int gnc_date_my_last_mday (int month, int year)
 param  tm: the time value in question
 return the last day of the month, integer.
 */
-int date_get_last_mday(struct tm *tm)
+int date_get_last_mday(const struct tm *tm)
 {
   return gnc_date_my_last_mday (tm->tm_mon+1, tm->tm_year+1900);
 }
@@ -291,7 +291,7 @@ int date_get_last_mday(struct tm *tm)
 param  tm: the time value in question
 return TRUE if tm_mday matches the last day of the month, else FALSE.
 */
-gboolean date_is_last_mday(struct tm *tm)
+gboolean date_is_last_mday(const struct tm *tm)
 {
   return(tm->tm_mday == date_get_last_mday(tm));
 }
@@ -472,7 +472,7 @@ qof_print_date_buff (char * buff, size_t len, time_t t)
 }
 
 size_t
-qof_print_gdate( char *buf, size_t len, GDate *gd )
+qof_print_gdate( char *buf, size_t len, const GDate *gd )
 {
   return qof_print_date_dmy_buff( buf, len,
              g_date_get_day(gd),
@@ -1164,14 +1164,15 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
   localtime_r(&tmp, &parsed);
 
   secs = gnc_timezone (&parsed);
-  tz_hour = secs / 3600;
-  tz_min = (secs % 3600) / 60;
 
   /* We also have to print the sign by hand, to work around a bug
    * in the glibc 2.1.3 printf (where %+02d fails to zero-pad).
    */
   cyn = '-';
-  if (0>tz_hour) { cyn = '+'; tz_hour = -tz_hour; }
+  if (0>secs) { cyn = '+'; secs = -secs; }
+
+  tz_hour = secs / 3600;
+  tz_min = (secs % 3600) / 60;
 
   len = sprintf (buff, "%4d-%02d-%02d %02d:%02d:%02d.%06ld %c%02d%02d",
                  parsed.tm_year + 1900,
@@ -1292,7 +1293,7 @@ gnc_dmy2timespec_end (int day, int month, int year)
 \********************************************************************/
 
 long int
-gnc_timezone (struct tm *tm)
+gnc_timezone (const struct tm *tm)
 {
   g_return_val_if_fail (tm != NULL, 0);
 
@@ -1394,10 +1395,10 @@ gnc_dow_abbrev(gchar *buf, int buf_len, int dow)
 {
     struct tm my_tm;
     int i;
-    
+
     memset(buf, 0, buf_len);
     memset(&my_tm, 0, sizeof(struct tm));
     my_tm.tm_wday = dow;
-    i = qof_strftime(buf, buf_len - 1, "%a", &my_tm);
+    i = qof_strftime(buf, buf_len, "%a", &my_tm);
     buf[i] = 0;
 }

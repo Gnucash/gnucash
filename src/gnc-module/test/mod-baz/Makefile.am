@@ -19,7 +19,7 @@ noinst_HEADERS = \
   swig-baz.c
 
 libgncmodbaz_la_SOURCES = gnc-mod-baz.c
-libgncmodbaz_la_LDFLAGS = -rpath ${PWD}
+libgncmodbaz_la_LDFLAGS = -rpath ${PWD} -avoid-version
 libgncmodbaz_la_LIBADD = \
   libbaz.la \
   ../../libgnc-module.la \

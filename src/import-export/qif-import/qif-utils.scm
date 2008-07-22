@@ -5,6 +5,9 @@
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (ice-9 regex))
+
+
 (define (simple-filter pred list)
   (let ((retval '()))
     (map (lambda (elt)
@@ -45,9 +48,11 @@
              (make-string 1 char)))))
     (regexp-substitute/global #f rexpstr str 'pre 'post)))
 
+
 (define (string-char-count str char)
   (length (simple-filter (lambda (elt) (eq? elt char))
                          (string->list str))))
+
 
 (define (string-replace-char! str old new)
   (let ((rexpstr 
@@ -62,4 +67,3 @@
    (string-downcase
     (string-remove-leading-space
      (string-remove-trailing-space str)))))
-

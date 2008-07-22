@@ -503,7 +503,8 @@ gnc_main_window_restore_page (GncMainWindow *window,
     if (page) {
       /* Does the page still need to be installed into the window? */
       if (page->window == NULL) {
-      	gnc_main_window_open_page(window, page);
+	gnc_plugin_page_set_use_new_window(page, FALSE);
+	gnc_main_window_open_page(window, page);
       }
 
       /* Restore the page name */
@@ -3238,8 +3239,7 @@ gnc_main_window_cmd_actions_rename_page (GtkAction *action, GncMainWindow *windo
 {
   GncMainWindowPrivate *priv;
   GncPluginPage *page;
-  GtkWidget *tab_hbox, *widget, *label = NULL, *entry = NULL;
-  GList *children, *tmp;
+  GtkWidget *label, *entry;
 
   ENTER(" ");
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
@@ -3248,22 +3248,9 @@ gnc_main_window_cmd_actions_rename_page (GtkAction *action, GncMainWindow *windo
     LEAVE("No current page");
     return;
   }
-  
-  tab_hbox = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
-                                       page->notebook_page);
-  children = gtk_container_get_children(GTK_CONTAINER(tab_hbox));
-  for (tmp = children; tmp; tmp = g_list_next(tmp)) {
-    widget = tmp->data;
-    if (GTK_IS_LABEL(widget)) {
-      label = widget;
-    } else if (GTK_IS_ENTRY(widget)) {
-      entry = widget;
-    }
-  }
-  g_list_free(children);
 
-  if (!label || !entry) {
-    LEAVE("Missing label or entry.");
+  if (!main_window_find_tab_items(window, page, &label, &entry)) {
+    LEAVE("can't find required widgets");
     return;
   }
 
@@ -3472,7 +3459,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 {
 	const gchar *fixed_message = _("The GnuCash personal finance manager. "
 				       "The GNU way to manage your money!");
-	const gchar *copyright = "© 1997-2007 Contributors";
+	const gchar *copyright = "© 1997-2008 Contributors";
 	gchar **authors, **documenters, *license, *message;
 	GdkPixbuf *logo;
 

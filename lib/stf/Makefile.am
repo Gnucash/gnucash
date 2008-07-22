@@ -6,7 +6,7 @@ REALHDRS = stf-parse.h
 libgnc_stf_la_SOURCES = ${REALSRCS}
 noinst_HEADERS = ${REALHDRS}
 
-libgnc_stf_la_LDFLAGS = $(pkg-config --libs libgoffice-0.3)
+libgnc_stf_la_LIBADD = $(GOFFICE_LIBS)
 
 AM_CFLAGS = $(GOFFICE_CFLAGS)
 

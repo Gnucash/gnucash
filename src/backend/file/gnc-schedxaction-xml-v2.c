@@ -414,12 +414,15 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
     struct sx_pdata *pdata = sx_pdata;
     SchedXaction *sx = pdata->sx;
     GList *schedule;
+	gchar* debug_str;
 
     g_return_val_if_fail( node, FALSE );
 
     schedule = dom_tree_freqSpec_to_recurrences(node, pdata->book);
     gnc_sx_set_schedule(sx, schedule);
-    g_debug("parsed from freqspec [%s]", recurrenceListToString(schedule));
+    debug_str = recurrenceListToString(schedule);
+    g_debug("parsed from freqspec [%s]", debug_str);
+	g_free(debug_str);
 
     _fixup_recurrence_start_dates(xaccSchedXactionGetStartDate(sx), schedule);
     pdata->saw_freqspec = TRUE;
@@ -431,9 +434,12 @@ static gboolean
 sx_schedule_recurrence_handler(xmlNodePtr node, gpointer parsing_data)
 {
     GList **schedule = (GList**)parsing_data;
+	gchar* sched_str;
     Recurrence *r = dom_tree_to_recurrence(node);
     g_return_val_if_fail(r, FALSE);
-    g_debug("parsed recurrence [%s]", recurrenceToString(r));
+    sched_str = recurrenceToString(r);
+    g_debug("parsed recurrence [%s]", sched_str);
+	g_free(sched_str);
     *schedule = g_list_append(*schedule, r);
     return TRUE;
 }
@@ -448,13 +454,16 @@ sx_recurrence_handler(xmlNodePtr node, gpointer _pdata)
 {
     struct sx_pdata *parsing_data = _pdata;
     GList *schedule = NULL;
+	gchar* debug_str;
      
     g_return_val_if_fail(node, FALSE);
 
     if (!dom_tree_generic_parse(node, sx_recurrence_list_handlers, &schedule))
         return FALSE;
     // g_return_val_if_fail(schedule, FALSE);
-    g_debug("setting freshly-parsed schedule: [%s]", recurrenceListToString(schedule));
+    debug_str = recurrenceListToString(schedule);
+    g_debug("setting freshly-parsed schedule: [%s]", debug_str);
+	g_free(debug_str);
     gnc_sx_set_schedule(parsing_data->sx, schedule);
     parsing_data->saw_recurrence = TRUE;
     return TRUE;

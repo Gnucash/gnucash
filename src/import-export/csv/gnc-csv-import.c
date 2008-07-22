@@ -253,6 +253,7 @@ static void ok_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
   for(i = 0; i < ncols; i++)
   {
     int type; /* The column type contained in this column. */
+    gboolean found;
     gchar* contents; /* The column type string in this column. */
     /* Get the type string first. (store is arranged so that every two
      * columns is a pair of the model used for the combobox and the
@@ -264,7 +265,9 @@ static void ok_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
     for(type = 0; type < GNC_CSV_NUM_COL_TYPES; type++)
     {
       /* ... we find one that matches with what's in the column. */
-      if(!strcmp(contents, _(gnc_csv_column_type_strs[type])))
+      found = !strcmp(contents, _(gnc_csv_column_type_strs[type]));
+      g_free(contents);
+      if(found)
       {
         /* Set the column_types array appropriately and quit. */
         column_types->data[i] = type;
@@ -369,6 +372,7 @@ static void column_type_edited(GtkCellRenderer* renderer, gchar* path,
         gtk_list_store_set(GTK_LIST_STORE(store), &iter, 2*i+1,
                            _(gnc_csv_column_type_strs[GNC_CSV_NONE]), -1);
       }
+      g_free(contents);
     }
     else /* If this is the column that was edited ... */
     {

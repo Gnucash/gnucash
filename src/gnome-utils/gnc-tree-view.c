@@ -2168,5 +2168,5 @@ gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col,
     return;
 }
 
-
+/** @} */
 /** @} */

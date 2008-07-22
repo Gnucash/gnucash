@@ -1167,16 +1167,18 @@ primary_exp (parser_env_ptr pe)
     case FN_TOKEN:
       funcArgCount = 0;
 
-      do {
-        assignment_op(pe);
-        if ( pe->error_code )
-          return;
-        funcArgCount++;
-        if (!pe->Token || pe->Token == ')') {
-          break;
-        }
-        next_token(pe);
-      } while (pe->Token != ARG_TOKEN);
+      if (pe->Token && pe->Token != ')') {
+        do {
+          assignment_op(pe);
+          if ( pe->error_code )
+            return;
+          funcArgCount++;
+          if (!pe->Token || pe->Token == ')') {
+            break;
+          }
+          next_token(pe);
+        } while (pe->Token != ARG_TOKEN);
+      }
 
       if ( pe->Token != ')' ) {
         add_token( pe, EOS );

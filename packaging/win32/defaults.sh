@@ -58,6 +58,8 @@ if [ "$BUILD_FROM_TARBALL" = "yes" ]; then
 else
     # change this to "no" if you are using install.sh from the same repository checkout
     set_default UPDATE_SOURCES yes
+    # latest revision that should compile, use HEAD or vwxyz
+    set_default SVN_REV "HEAD"
     set_default GNUCASH_DIR $GLOBAL_DIR\\gnucash
     set_default REPOS_URL "http://svn.gnucash.org/repo/gnucash/trunk"
     set_default REPOS_DIR $GNUCASH_DIR\\repos
@@ -150,19 +152,19 @@ set_default LIBXSLT_DIR $GLOBAL_DIR\\libxslt
 
 set_default LIBXML2_URL "$GNOME_WIN32_DEPS_URL/libxml2-2.6.27.zip"
 set_default LIBXML2_DEV_URL "$GNOME_WIN32_DEPS_URL/libxml2-dev-2.6.27.zip"
-set_default GETTEXT_RUNTIME_URL "$GNOME_WIN32_DEPS_URL/gettext-runtime-0.17.zip"
-set_default GETTEXT_RUNTIME_DEV_URL "$GNOME_WIN32_DEPS_URL/gettext-runtime-dev-0.17.zip"
+set_default GETTEXT_RUNTIME_URL "$GNOME_WIN32_DEPS_URL/gettext-runtime-0.17-1.zip"
+set_default GETTEXT_RUNTIME_DEV_URL "$GNOME_WIN32_DEPS_URL/gettext-runtime-dev-0.17-1.zip"
 set_default GETTEXT_TOOLS_URL "$GNOME_WIN32_DEPS_URL/gettext-tools-0.17.zip"
 set_default LIBICONV_URL "$GNOME_WIN32_DEPS_URL/libiconv-1.9.1.bin.woe32.zip"
-set_default GLIB_URL "$GNOME_WIN32_URL/glib/2.14/glib-2.14.4.zip"
-set_default GLIB_DEV_URL "$GNOME_WIN32_URL/glib/2.14/glib-dev-2.14.4.zip"
+set_default GLIB_URL "$GNOME_WIN32_URL/glib/2.14/glib-2.14.6-2.zip"
+set_default GLIB_DEV_URL "$GNOME_WIN32_URL/glib/2.14/glib-dev-2.14.6-2.zip"
 set_default LIBJPEG_URL "$GNOME_WIN32_DEPS_URL/libjpeg-6b-4.zip"
 set_default LIBPNG_URL "$GTK_MIRROR/gtk/v2.10/win32/dependencies/libpng-1.2.8-bin.zip"
 set_default LIBTIFF_URL "$GNOME_WIN32_DEPS_URL/libtiff-3.7.1.zip"
 set_default ZLIB_URL "$GTK_MIRROR/gtk/v2.10/win32/dependencies/zlib123-dll.zip"
 set_default PKG_CONFIG_URL "$GNOME_WIN32_DEPS_URL/pkg-config-0.20.zip"
-set_default CAIRO_URL "$GNOME_WIN32_DEPS_URL/cairo-1.4.10.zip"
-set_default CAIRO_DEV_URL "$GNOME_WIN32_DEPS_URL/cairo-dev-1.4.10.zip"
+set_default CAIRO_URL "$GNOME_WIN32_DEPS_URL/cairo-1.4.14.zip"
+set_default CAIRO_DEV_URL "$GNOME_WIN32_DEPS_URL/cairo-dev-1.4.14.zip"
 set_default EXPAT_URL "$GNOME_WIN32_DEPS_URL/expat-2.0.0.zip"
 set_default FONTCONFIG_URL "$GNOME_WIN32_DEPS_URL/fontconfig-2.4.2-tml-20071015.zip"
 set_default FONTCONFIG_DEV_URL "$GNOME_WIN32_DEPS_URL/fontconfig-dev-2.4.2-tml-20071015.zip"
@@ -170,15 +172,15 @@ set_default FREETYPE_URL "$GNOME_WIN32_DEPS_URL/freetype-2.3.5.zip"
 set_default FREETYPE_DEV_URL "$GNOME_WIN32_DEPS_URL/freetype-dev-2.3.5.zip"
 set_default ATK_URL "$GNOME_WIN32_URL/atk/1.20/atk-1.20.0.zip"
 set_default ATK_DEV_URL "$GNOME_WIN32_URL/atk/1.20/atk-dev-1.20.0.zip"
-set_default PANGO_URL "$GNOME_WIN32_URL/pango/1.18/pango-1.18.3.zip"
-set_default PANGO_DEV_URL "$GNOME_WIN32_URL/pango/1.18/pango-dev-1.18.3.zip"
+set_default PANGO_URL "$GNOME_WIN32_URL/pango/1.18/pango-1.18.4.zip"
+set_default PANGO_DEV_URL "$GNOME_WIN32_URL/pango/1.18/pango-dev-1.18.4.zip"
 set_default LIBART_LGPL_URL "$GNOME_WIN32_URL/libart_lgpl/2.3/libart_lgpl-2.3.19.zip"
 set_default LIBART_LGPL_DEV_URL "$GNOME_WIN32_URL/libart_lgpl/2.3/libart_lgpl-dev-2.3.19.zip"
-set_default GTK_URL "$GNOME_WIN32_URL/gtk+/2.12/gtk+-2.12.3.zip"
-set_default GTK_DEV_URL "$GNOME_WIN32_URL/gtk+/2.12/gtk+-dev-2.12.3.zip"
+set_default GTK_URL "$GNOME_WIN32_URL/gtk+/2.12/gtk+-2.12.8.zip"
+set_default GTK_DEV_URL "$GNOME_WIN32_URL/gtk+/2.12/gtk+-dev-2.12.8.zip"
 set_default INTLTOOL_URL "$GNOME_WIN32_URL/intltool/0.35/intltool-0.35.5.zip"
-set_default ORBIT2_URL "$GNOME_WIN32_URL/ORBit2/2.14/ORBit2-2.14.10.zip"
-set_default ORBIT2_DEV_URL "$GNOME_WIN32_URL/ORBit2/2.14/ORBit2-dev-2.14.10.zip"
+set_default ORBIT2_URL "$GNOME_WIN32_URL/ORBit2/2.14/ORBit2-2.14.12.zip"
+set_default ORBIT2_DEV_URL "$GNOME_WIN32_URL/ORBit2/2.14/ORBit2-dev-2.14.12.zip"
 set_default GAIL_URL "$GNOME_WIN32_URL/gail/1.20/gail-1.20.1.zip"
 set_default GAIL_DEV_URL "$GNOME_WIN32_URL/gail/1.20/gail-dev-1.20.1.zip"
 set_default POPT_URL "$GNOME_WIN32_DEPS_URL/popt-1.10.2-tml-20050828.zip"
@@ -187,8 +189,11 @@ set_default GCONF_URL "$GNOME_WIN32_URL/GConf/2.18/GConf-2.18.0.1.zip"
 set_default GCONF_DEV_URL "$GNOME_WIN32_URL/GConf/2.18/GConf-dev-2.18.0.1.zip"
 set_default LIBBONOBO_URL "$GNOME_WIN32_URL/libbonobo/2.20/libbonobo-2.20.1.zip"
 set_default LIBBONOBO_DEV_URL "$GNOME_WIN32_URL/libbonobo/2.20/libbonobo-dev-2.20.1.zip"
-set_default GNOME_VFS_URL "$GNOME_WIN32_URL/gnome-vfs/2.18/gnome-vfs-2.18.0.1.zip"
-set_default GNOME_VFS_DEV_URL "$GNOME_WIN32_URL/gnome-vfs/2.18/gnome-vfs-dev-2.18.0.1.zip"
+# work-around #504261, GetVolumePathNamesForVolumeNameW missing on Win2k
+set_default GNOME_VFS_URL "$GNOME_WIN32_URL/gnome-vfs/2.14/gnome-vfs-2.14.2-no-openssl.zip" 
+set_default GNOME_VFS_DEV_URL "$GNOME_WIN32_URL/gnome-vfs/2.14/gnome-vfs-dev-2.14.2-no-openssl.zip" 
+#set_default GNOME_VFS_URL "$GNOME_WIN32_URL/gnome-vfs/2.18/gnome-vfs-2.18.0.1.zip"
+#set_default GNOME_VFS_DEV_URL "$GNOME_WIN32_URL/gnome-vfs/2.18/gnome-vfs-dev-2.18.0.1.zip"
 set_default LIBGNOME_URL "$GNOME_WIN32_URL/libgnome/2.20/libgnome-2.20.1.zip"
 set_default LIBGNOME_DEV_URL "$GNOME_WIN32_URL/libgnome/2.20/libgnome-dev-2.20.1.zip"
 set_default LIBGNOMECANVAS_URL "$GNOME_WIN32_URL/libgnomecanvas/2.20/libgnomecanvas-2.20.1.zip"
@@ -248,7 +253,7 @@ set_default LIBOFX_PATCH `pwd`/libofx-0.8.3-patch.diff
 set_default GWENHYWFAR_URL "$SF_MIRROR/gwenhywfar/gwenhywfar-2.6.2.tar.gz"
 set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
 
-set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.16.tar.gz"
+set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.17.tar.gz"
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
 set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.3.3.tar.gz"
@@ -258,12 +263,16 @@ set_default AQBANKING_WITH_QT yes
 # install it and set QTDIR in custom.sh, like "QTDIR=/c/Qt/4.2.3".
 
 set_default DOCBOOK_XSL_URL "$SF_MIRROR/docbook/docbook-xsl-1.72.0.zip"
+set_default UPDATE_DOCS yes
+set_default DOCS_REV "HEAD"
 set_default DOCS_URL "http://svn.gnucash.org/repo/gnucash-docs/trunk"
 set_default DOCS_DIR $GLOBAL_DIR\\gnucash-docs
+set_default XSLTPROCFLAGS ""
 ##
 
 # There is no reason to ever need to comment these out!
 # * commented out glade, as it is not needed to run gnucash
+add_step prepare
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_wget
  add_step inst_dtk
@@ -306,6 +315,7 @@ if [ "$UPDATE_SOURCES" = "yes" ]; then
 fi
 add_step inst_gnucash
 add_step inst_docs
+add_step finish
 
 # run commands registered with late_eval
 eval_now

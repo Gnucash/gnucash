@@ -104,7 +104,7 @@ gnc_numeric xaccSplitGetCapGains(Split *);
  *    TRUE if this is a trading account, else it returns
  *    FALSE.
  */
-gboolean xaccAccountHasTrades (Account *);
+gboolean xaccAccountHasTrades (const Account *);
 
 /** The xaccAccountFindEarliestOpenLot() method is a handy
  *   utility routine for finding the earliest open lot in
@@ -133,7 +133,7 @@ GNCLot * xaccAccountFindLatestOpenLot (Account *acc,
  *   currency name.  IOf there is no default account for this
  *   currency, NULL will be returned.
  */
-Account * xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * currency);
+Account * xaccAccountGetDefaultGainAccount (const Account *acc, const gnc_commodity * currency);
 
 /** The xaccAccountSetDefaultGainAccount() routine can be used 
  *   to set the account to which realized gains/losses will be 
@@ -141,7 +141,7 @@ Account * xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * curren
  *   value of the "/lot-mgmt/gains-act/XXX" key, where XXX is the 
  *   unique currency name of the currency of gains account.
  */
-void xaccAccountSetDefaultGainAccount (Account *acc, Account *gains_acct);
+void xaccAccountSetDefaultGainAccount (Account *acc, const Account *gains_acct);
 
 /** The xaccSplitGetCapGainsSplit() routine returns the split
  *  that records the cap gains for this split.  It returns NULL

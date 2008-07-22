@@ -1137,6 +1137,7 @@
 (gnc:define-report 
  'version 1
  'name reportname
+ 'report-guid "216cd0cf6931453ebcce85415aba7082"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator trial-balance-options-generator
  'renderer (lambda (report-obj)

@@ -496,13 +496,15 @@ gnc_plugin_page_invoice_recreate_page (GtkWidget *window,
 				       const gchar *group_name)
 {
 	GncPluginPage *page;
-	
+
+	g_return_val_if_fail(GNC_IS_MAIN_WINDOW(window), NULL);
 	g_return_val_if_fail(key_file, NULL);
 	g_return_val_if_fail(group_name, NULL);
 	ENTER("key_file %p, group_name %s", key_file, group_name);
 
 	/* Create the new page. */
-    page = gnc_invoice_recreate_page(key_file, group_name);
+	page = gnc_invoice_recreate_page(GNC_MAIN_WINDOW(window),
+					 key_file, group_name);
 
 	LEAVE(" ");
 	return page;

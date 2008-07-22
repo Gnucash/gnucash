@@ -80,7 +80,8 @@ gchar *gnc_invoice_get_help (InvoiceWindow *iw);
 gchar *gnc_invoice_get_title (InvoiceWindow *iw);
 
 #ifdef __GNC_PLUGIN_PAGE_H
-GncPluginPage *gnc_invoice_recreate_page (GKeyFile *key_file, const gchar *group_name);
+#include "gnc-main-window.h"
+GncPluginPage *gnc_invoice_recreate_page (GncMainWindow *window, GKeyFile *key_file, const gchar *group_name);
 void gnc_invoice_save_page (InvoiceWindow *iw, GKeyFile *key_file, const gchar *group_name);
 #endif
 

@@ -34,6 +34,7 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-component-manager.h"
+#include "gnc-session.h"
 #include "qof.h"
 #include "gnc-ui.h"
 
@@ -846,6 +847,7 @@ gnc_tax_info_dialog (GtkWidget * parent)
   component_id = gnc_register_gui_component (DIALOG_TAX_INFO_CM_CLASS,
                                              refresh_handler, close_handler,
                                              ti_dialog);
+  gnc_gui_component_set_session (component_id, gnc_get_current_session ());
 
   gnc_gui_component_watch_entity_type (component_id,
                                        GNC_ID_ACCOUNT,

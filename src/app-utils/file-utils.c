@@ -291,6 +291,7 @@ gnc_find_state_file (const gchar *url,
       g_free(file_guid);
       break;
     }
+	g_free(file_guid);
 
     /* Handle the case where gnucash was updated first, and is trying
      * to find new key names in an old state files. */

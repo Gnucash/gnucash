@@ -180,7 +180,7 @@ static void free_query_term (QofQueryTerm *qt)
   g_free (qt);
 }
 
-static QofQueryTerm * copy_query_term (QofQueryTerm *qt)
+static QofQueryTerm * copy_query_term (const QofQueryTerm *qt)
 {
   QofQueryTerm *new_qt;
   if (!qt) return NULL;
@@ -193,10 +193,10 @@ static QofQueryTerm * copy_query_term (QofQueryTerm *qt)
   return new_qt;
 }
 
-static GList * copy_and_terms (GList *and_terms)
+static GList * copy_and_terms (const GList *and_terms)
 {
   GList *and = NULL;
-  GList *cur_and;
+  const GList *cur_and;
 
   for(cur_and = and_terms; cur_and; cur_and = cur_and->next)
   {
@@ -207,10 +207,10 @@ static GList * copy_and_terms (GList *and_terms)
 }
 
 static GList * 
-copy_or_terms(GList * or_terms) 
+copy_or_terms(const GList * or_terms) 
 {
   GList * or = NULL;
-  GList * cur_or;
+  const GList * cur_or;
 
   for(cur_or = or_terms; cur_or; cur_or = cur_or->next)
   {
@@ -270,8 +270,8 @@ static void free_members (QofQuery *q)
   q->results = NULL;
 }
 
-static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
-                     gconstpointer a, gconstpointer b)
+static int cmp_func (const QofQuerySort *sort, QofSortFunc default_sort,
+                     const gconstpointer a, const gconstpointer b)
 {
   QofParam *param = NULL;
   GSList *node;
@@ -319,10 +319,10 @@ static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
   return sort->obj_cmp (conva, convb);
 }
 
-static int sort_func (gconstpointer a, gconstpointer b, gpointer q)
+static int sort_func (const gconstpointer a, const gconstpointer b, const gpointer q)
 {
   int retval;
-  QofQuery *sortQuery = q;
+  const QofQuery *sortQuery = q;
 
   g_return_val_if_fail (sortQuery, 0);
 
@@ -355,11 +355,11 @@ static int sort_func (gconstpointer a, gconstpointer b, gpointer q)
  */
 
 static int 
-check_object (QofQuery *q, gpointer object)
+check_object (const QofQuery *q, gpointer object)
 {
-  GList     * and_ptr;
-  GList     * or_ptr;
-  QofQueryTerm * qt;
+  const GList     * and_ptr;
+  const GList     * or_ptr;
+  const QofQueryTerm * qt;
   int       and_terms_ok=1;
   
   for(or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next) 
@@ -370,7 +370,7 @@ check_object (QofQuery *q, gpointer object)
       qt = (QofQueryTerm *)(and_ptr->data);
       if (qt->param_fcns && qt->pred_fcn) 
       {
-        GSList *node;
+        const GSList *node;
         QofParam *param = NULL;
         gpointer conv_obj = object;
 
@@ -556,7 +556,7 @@ static void check_item_cb (gpointer object, gpointer user_data)
   return;
 }
 
-static int param_list_cmp (GSList *l1, GSList *l2)
+static int param_list_cmp (const GSList *l1, const GSList *l2)
 {
   while (1) {
     int ret;
@@ -1022,14 +1022,9 @@ QofQuery * qof_query_invert (QofQuery *q)
       qt = copy_query_term(cur->data);
       qt->invert = !(qt->invert);
       new_oterm = g_list_append(NULL, qt);
-
-      /* g_list_append() can take forever, so let's do this for speed
-       * in "large" queries.
-       */
-      retval->terms = g_list_reverse(retval->terms);
       retval->terms = g_list_prepend(retval->terms, new_oterm);
-      retval->terms = g_list_reverse(retval->terms);
     }
+    retval->terms = g_list_reverse(retval->terms);
     break;
 
     /* If there are multiple OR-terms, we just recurse by 
@@ -1311,39 +1306,39 @@ void qof_query_shutdown (void)
   qof_query_core_shutdown ();
 }
 
-int qof_query_get_max_results (QofQuery *q)
+int qof_query_get_max_results (const QofQuery *q)
 {
   if (!q) return 0;
   return q->max_results;
 }
 
-QofIdType qof_query_get_search_for (QofQuery *q)
+QofIdType qof_query_get_search_for (const QofQuery *q)
 {
   if (!q) return NULL;
   return q->search_for;
 }
 
-GList * qof_query_get_terms (QofQuery *q)
+GList * qof_query_get_terms (const QofQuery *q)
 {
   if (!q) return NULL;
   return q->terms;
 }
 
-GSList * qof_query_term_get_param_path (QofQueryTerm *qt)
+GSList * qof_query_term_get_param_path (const QofQueryTerm *qt)
 {
   if (!qt)
     return NULL;
   return qt->param_list;
 }
 
-QofQueryPredData *qof_query_term_get_pred_data (QofQueryTerm *qt)
+QofQueryPredData *qof_query_term_get_pred_data (const QofQueryTerm *qt)
 {
   if (!qt)
     return NULL;
   return qt->pdata;
 }
 
-gboolean qof_query_term_is_inverted (QofQueryTerm *qt)
+gboolean qof_query_term_is_inverted (const QofQueryTerm *qt)
 {
   if (!qt)
     return FALSE;
@@ -1363,21 +1358,21 @@ void qof_query_get_sorts (QofQuery *q, QofQuerySort **primary,
     *tertiary = &(q->tertiary_sort);
 }
 
-GSList * qof_query_sort_get_param_path (QofQuerySort *qs)
+GSList * qof_query_sort_get_param_path (const QofQuerySort *qs)
 {
   if (!qs)
     return NULL;
   return qs->param_list;
 }
 
-gint qof_query_sort_get_sort_options (QofQuerySort *qs)
+gint qof_query_sort_get_sort_options (const QofQuerySort *qs)
 {
   if (!qs)
     return 0;
   return qs->options;
 }
 
-gboolean qof_query_sort_get_increasing (QofQuerySort *qs)
+gboolean qof_query_sort_get_increasing (const QofQuerySort *qs)
 {
   if (!qs)
     return FALSE;
@@ -1385,7 +1380,7 @@ gboolean qof_query_sort_get_increasing (QofQuerySort *qs)
 }
 
 static gboolean 
-qof_query_term_equal (QofQueryTerm *qt1, QofQueryTerm *qt2)
+qof_query_term_equal (const QofQueryTerm *qt1, const QofQueryTerm *qt2)
 {
   if (qt1 == qt2) return TRUE;
   if (!qt1 || !qt2) return FALSE;
@@ -1396,7 +1391,7 @@ qof_query_term_equal (QofQueryTerm *qt1, QofQueryTerm *qt2)
 }
 
 static gboolean 
-qof_query_sort_equal (QofQuerySort* qs1, QofQuerySort* qs2)
+qof_query_sort_equal (const QofQuerySort* qs1, const QofQuerySort* qs2)
 {
   if (qs1 == qs2) return TRUE;
   if (!qs1 || !qs2) return FALSE;
@@ -1409,7 +1404,7 @@ qof_query_sort_equal (QofQuerySort* qs1, QofQuerySort* qs2)
   return (param_list_cmp (qs1->param_list, qs2->param_list) == 0);
 }
 
-gboolean qof_query_equal (QofQuery *q1, QofQuery *q2)
+gboolean qof_query_equal (const QofQuery *q1, const QofQuery *q2)
 {
   GList *or1, *or2;
 

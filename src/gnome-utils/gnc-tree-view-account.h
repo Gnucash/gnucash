@@ -477,6 +477,7 @@ void gnc_tree_view_account_expand_to_account (GncTreeViewAccount *view, Account 
 /** @} */
 
 /** @} */
+/** @} */
 
 G_END_DECLS
 

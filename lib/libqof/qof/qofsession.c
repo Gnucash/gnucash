@@ -165,7 +165,7 @@ get_default_error_message(QofBackendError err)
 }
 
 const char *
-qof_session_get_error_message(QofSession *session)
+qof_session_get_error_message(const QofSession *session)
 {
     if(!session) return "";
     if(!session->error_message)
@@ -234,7 +234,7 @@ qof_session_set_current_session (QofSession *session)
 }
 
 QofBook *
-qof_session_get_book (QofSession *session)
+qof_session_get_book (const QofSession *session)
 {
    GList *node;
    if (!session) return NULL;
@@ -282,14 +282,14 @@ qof_session_add_book (QofSession *session, QofBook *addbook)
 }
 
 QofBackend * 
-qof_session_get_backend (QofSession *session)
+qof_session_get_backend (const QofSession *session)
 {
    if (!session) return NULL;
    return session->backend;
 }
 
 const char *
-qof_session_get_file_path (QofSession *session)
+qof_session_get_file_path (const QofSession *session)
 {
    if (!session) return NULL;
    if (!session->backend) return NULL;
@@ -297,7 +297,7 @@ qof_session_get_file_path (QofSession *session)
 }
 
 const char *
-qof_session_get_url (QofSession *session)
+qof_session_get_url (const QofSession *session)
 {
    if (!session) return NULL;
    return session->book_id;
@@ -865,7 +865,7 @@ struct backend_providers backend_list[] = {
 };
 
 static void
-qof_session_load_backend(QofSession * session, char * access_method)
+qof_session_load_backend(QofSession * session, const char * access_method)
 {
 	GSList *p;
 	GList *node;
@@ -1176,7 +1176,7 @@ qof_session_load (QofSession *session,
 /* ====================================================================== */
 
 gboolean
-qof_session_save_may_clobber_data (QofSession *session)
+qof_session_save_may_clobber_data (const QofSession *session)
 {
   if (!session) return FALSE;
   if (!session->backend) return FALSE;
@@ -1287,6 +1287,7 @@ qof_session_save (QofSession *session,
 					{
 						PWARN("%s", msg);
 						g_free(msg);
+						msg = NULL;
 					}
 				}
 				/* Tell the books about the backend that they'll be using. */
@@ -1347,6 +1348,7 @@ qof_session_save (QofSession *session,
 	}
 	LEAVE("error -- No backend!");
  leave:
+ 	if(msg != NULL) g_free(msg);
 	g_atomic_int_inc(&session->lock);
 	return;
 }
@@ -1447,7 +1449,7 @@ qof_session_swap_data (QofSession *session_1, QofSession *session_2)
 /* ====================================================================== */
 
 gboolean
-qof_session_events_pending (QofSession *session)
+qof_session_events_pending (const QofSession *session)
 {
   if (!session) return FALSE;
   if (!session->backend) return FALSE;

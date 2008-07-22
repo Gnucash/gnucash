@@ -127,8 +127,10 @@ build_action_map()
   g_assert(qif_action_map);
 
   QIF_ADD_ACT("buy", QIF_A_BUY);
+  QIF_ADD_ACT("cvrshrt", QIF_A_BUY);
   QIF_ADD_ACT("kauf", QIF_A_BUY);
   QIF_ADD_ACT("buyx", QIF_A_BUYX);
+  QIF_ADD_ACT("cvrshrtx", QIF_A_BUYX);
   QIF_ADD_ACT("kaufx", QIF_A_BUYX);
   QIF_ADD_ACT("cglong", QIF_A_CGLONG);
   QIF_ADD_ACT("kapgew", QIF_A_CGLONG); /* Kapitalgewinnsteuer */
@@ -172,8 +174,10 @@ build_action_map()
   QIF_ADD_ACT("rtrncap", QIF_A_RTRNCAP);
   QIF_ADD_ACT("rtrncapx", QIF_A_RTRNCAPX);
   QIF_ADD_ACT("sell", QIF_A_SELL);
+  QIF_ADD_ACT("shtsell", QIF_A_SELL);
   QIF_ADD_ACT("verkauf", QIF_A_SELL); /* verkaufen */
   QIF_ADD_ACT("sellx", QIF_A_SELLX);
+  QIF_ADD_ACT("shtsellx", QIF_A_SELLX);
   QIF_ADD_ACT("verkaufx", QIF_A_SELLX); /* verkaufen */
   QIF_ADD_ACT("shrsin", QIF_A_SHRSIN);
   QIF_ADD_ACT("aktzu", QIF_A_SHRSIN);

@@ -15,7 +15,7 @@ noinst_HEADERS = \
   gnc-csv-model.h \
   gnc-csv-gnumeric-popup.h
 
-libgncmod_csv_la_LDFLAGS = -avoid-version $(pkg-config --libs libgoffice-0.3)
+libgncmod_csv_la_LDFLAGS = -avoid-version
 
 libgncmod_csv_la_LIBADD = \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \

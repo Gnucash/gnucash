@@ -1464,7 +1464,9 @@
   ((options 'for-each-general) section-thunk option-thunk))
 
 (define (gnc:lookup-option options section name)
-  ((options 'lookup) section name))
+  (if options
+      ((options 'lookup) section name)
+      #f))
 
 (define (gnc:generate-restore-forms options options-string)
   ((options 'generate-restore-forms) options-string))

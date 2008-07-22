@@ -851,19 +851,22 @@
 
     document))
 
+(define easy-invoice-guid "67112f318bef4fc496bdc27d106bbda4")
+
 (gnc:define-report
  'version 1
  'name (N_ "Easy Invoice")
+ 'report-guid easy-invoice-guid
  'menu-path (list gnc:menuname-business-reports)
  'options-generator options-generator
  'renderer reg-renderer
  'in-menu? #t)
 
 (define (gnc:easy-invoice-report-create-internal invoice)
-  (let* ((options (gnc:make-report-options (N_ "Easy Invoice")))
+  (let* ((options (gnc:make-report-options easy-invoice-guid))
          (invoice-op (gnc:lookup-option options invoice-page invoice-name)))
 
     (gnc:option-set-value invoice-op invoice)
-    (gnc:make-report (N_ "Easy Invoice") options)))
+    (gnc:make-report easy-invoice-guid options)))
 
 (export gnc:easy-invoice-report-create-internal)

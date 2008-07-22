@@ -129,6 +129,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	  gnc_utf8_strip_invalid(data.name);
 	if (data.memo_valid)
 	  gnc_utf8_strip_invalid(data.memo);
+	if (data.check_number_valid)
+	  gnc_utf8_strip_invalid(data.check_number);
+	if (data.reference_number_valid)
+	  gnc_utf8_strip_invalid(data.reference_number);
 
 	/********** Create the transaction and setup transaction data ************/
 	book = gnc_account_get_book(account);
@@ -258,7 +262,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	    break;
 	  }
 	  tmp=notes;
-	  notes=g_strdup_printf("%s%s%s",tmp,"|Ivestment Trans type:", dest_string);
+	  notes=g_strdup_printf("%s%s%s",tmp,"|Investment Trans type:", dest_string);
 	  g_free(tmp);
 	}
 	if(data.memo_valid==true&&data.name_valid==true){/* Copy only if memo wasn't put in Description */

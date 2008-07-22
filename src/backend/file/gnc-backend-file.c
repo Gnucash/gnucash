@@ -320,6 +320,7 @@ file_session_end(QofBackend *be_start)
 static void
 file_destroy_backend(QofBackend *be)
 {
+    qof_backend_destroy(be);
     g_free(be);
 }
 
