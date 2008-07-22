@@ -57,6 +57,29 @@ QofBook * gnc_get_current_book (void);
 Account * gnc_get_current_root_account (void);
 gnc_commodity_table * gnc_get_current_commodities (void);
 
+/**
+ * Get either the full name of the account or the simple name, depending on the
+ * configuration parameter general/register/show_leaf_account_names.
+ *
+ * @param account The account to retrieve the name for.
+ * @return A newly allocated string.
+*/
+gchar *gnc_get_account_name_for_register(const Account *account);
+
+/**
+ * Retrieve the account matching the given name starting from the descandants of
+ * base_account.
+ * @a name is either considered to be the name of the leaf in the account tree
+ * or to be the full account path, depending on the configuration parameter
+ * general/register/show_leaf_account_names.
+ *
+ * @param base_account The account to start the search at.
+ * @param name The name to search for.
+ * @return A pointer to the account, or NULL if the account was not found.
+*/
+Account *gnc_account_lookup_for_register(const Account *base_account, const
+					 gchar *name);
+
 /*
  * This is a wrapper routine around an xaccGetBalanceInCurrency
  * function that handles additional needs of the gui.

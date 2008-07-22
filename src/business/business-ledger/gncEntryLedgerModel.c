@@ -155,7 +155,7 @@ static const char * get_iacct_entry (VirtualLocation virt_loc,
   entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
 
   g_free (name);
-  name = xaccAccountGetFullName (gncEntryGetInvAccount (entry));
+  name = gnc_get_account_name_for_register (gncEntryGetInvAccount (entry));
   return name;
 }
 
@@ -172,7 +172,7 @@ static const char * get_bacct_entry (VirtualLocation virt_loc,
   entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
 
   g_free (name);
-  name = xaccAccountGetFullName (gncEntryGetBillAccount (entry));
+  name = gnc_get_account_name_for_register (gncEntryGetBillAccount (entry));
   return name;
 }
 
