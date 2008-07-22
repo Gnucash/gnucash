@@ -186,6 +186,8 @@ gnc_utf8_strip_invalid (gchar *str)
   gchar *end;
   gint len;
 
+  g_return_if_fail(str);
+
   if (gnc_utf8_validate(str, -1, (const gchar **)&end))
     return;
 
