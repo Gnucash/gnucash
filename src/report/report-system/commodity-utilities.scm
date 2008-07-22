@@ -978,7 +978,7 @@
     (else 
      (begin
        (gnc:warn "gnc:case-exchange-time-fn: bad price-source value: " 
-                    source-option " using pricedb-nearest.")
+                    source-option ". Using pricedb-nearest.")
        ;; FIX-ME another hack to prevent report crashing when an
        ;; unimplemented source-option comes through
        gnc:exchange-by-pricedb-nearest
