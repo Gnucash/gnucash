@@ -26,22 +26,24 @@
   (vector-ref columns-used 1))
 (define (description-col columns-used)
   (vector-ref columns-used 2))
-(define (account-col columns-used)
+(define (memo-col columns-used)
   (vector-ref columns-used 3))
-(define (shares-col columns-used)
+(define (account-col columns-used)
   (vector-ref columns-used 4))
-(define (price-col columns-used)
+(define (shares-col columns-used)
   (vector-ref columns-used 5))
-(define (amount-single-col columns-used)
+(define (price-col columns-used)
   (vector-ref columns-used 6))
-(define (debit-col columns-used)
+(define (amount-single-col columns-used)
   (vector-ref columns-used 7))
-(define (credit-col columns-used)
+(define (debit-col columns-used)
   (vector-ref columns-used 8))
-(define (balance-col columns-used)
+(define (credit-col columns-used)
   (vector-ref columns-used 9))
+(define (balance-col columns-used)
+  (vector-ref columns-used 10))
 
-(define columns-used-size 10)
+(define columns-used-size 11)
 
 (define (num-columns-required columns-used)  
   (do ((i 0 (+ i 1)) 
@@ -67,18 +69,29 @@
          (set-col (make-set-col col-vector)))
     (set-col (opt-val "Display" "Date") 0)
     (set-col (opt-val "Display" "Num") 1)
-    (set-col (opt-val "Display" "Description") 2)
-    (set-col (opt-val "Display" "Account") 3)
-    (set-col (opt-val "Display" "Shares") 4)
-    (set-col (opt-val "Display" "Price") 5)
+    (set-col 
+        (if (opt-val "__reg" "journal")
+        (or (opt-val "Display" "Memo") (opt-val "Display" "Description") (opt-val "__reg" "double") )
+        (opt-val "Display" "Description") 
+        )
+        2)
+    (set-col 
+        (if (opt-val "__reg" "journal")
+        #f
+        (opt-val "Display" "Memo") 
+        )
+        3)
+    (set-col (opt-val "Display" "Account") 4)
+    (set-col (opt-val "Display" "Shares") 5)
+    (set-col (opt-val "Display" "Price") 6)
     (let ((invoice? #f)
           (amount-setting (opt-val "Display" "Amount")))
       (if (or invoice? (eq? amount-setting 'single))
-          (set-col #t 6)
+          (set-col #t 7)
           (begin
-            (set-col #t 7)
-            (set-col #t 8))))
-    (set-col (opt-val "Display" "Running Balance") 9)
+            (set-col #t 8)
+            (set-col #t 9))))
+    (set-col (opt-val "Display" "Running Balance") 10)
 
     col-vector))
 
@@ -93,6 +106,8 @@
         (addto! heading-list (_ "Num")))
     (if (description-col column-vector)
         (addto! heading-list (_ "Description")))
+    (if (memo-col column-vector)
+        (addto! heading-list (_ "Memo")))
     (if (account-col column-vector)
         (addto! heading-list (if multi-rows?
                                  (_ "Account")
@@ -119,7 +134,7 @@
         balance)))
 
 (define (add-split-row table split column-vector row-style
-                       transaction-info? split-info? double?)
+                       transaction-info? split-info? double? memo? description?)
   (let* ((row-contents '())
          (parent (xaccSplitGetParent split))
          (account (xaccSplitGetAccount split))
@@ -145,10 +160,19 @@
     (if (description-col column-vector)
         (addto! row-contents
                 (if transaction-info?
-                    (xaccTransGetDescription parent)
+                    (if description?
+                        (xaccTransGetDescription parent)
+                        " " )
                     (if split-info?
-                        (xaccSplitGetMemo split)
+                        (if memo?
+                            (xaccSplitGetMemo split)
+                            " ")
                         " "))))
+    (if (memo-col column-vector)
+        (addto! row-contents
+                (if transaction-info?
+                    (xaccSplitGetMemo split)
+                    " ")))
     (if (account-col column-vector)
         (addto! row-contents
                 (if split-info?
@@ -277,6 +301,11 @@
 
   (gnc:register-reg-option
    (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Memo")
+    "e" (N_ "Display the memo?") #t))
+
+  (gnc:register-reg-option
+   (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Account")
     "g" (N_ "Display the account?") #t))
 
@@ -374,7 +403,7 @@
       (let ((current (xaccTransGetSplit parent i)))
         (if (not (null? current))
             (begin
-              (add-split-row table current used-columns row-style #f #t #f)
+              (add-split-row table current used-columns row-style #f #t #f (opt-val "Display" "Memo") (opt-val "Display" "Description"))
               (other-rows-driver split parent table
                                  used-columns (+ i 1))))))
 
@@ -417,7 +446,9 @@
                                            current-row-style
                                            #t
                                            (not multi-rows?)
-                                           double?)))
+                                           double?
+                                           (opt-val "Display" "Memo")
+                                           (opt-val "Display" "Description"))))
 
           (if multi-rows?
               (add-other-split-rows 
