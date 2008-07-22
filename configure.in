@@ -1115,6 +1115,7 @@ then
     # checks for goffice
     goffice=0
     goffice_with_cairo=0
+    have_goffice_0_5=0
     PKG_CHECK_MODULES(GOFFICE, libgoffice-0.6 >= 0.6.0, [goffice=1], [
       PKG_CHECK_MODULES(GOFFICE, libgoffice-0.5 >= 0.5.1, [goffice=1], [goffice=0])
     ])
@@ -1122,6 +1123,7 @@ then
     then
       AC_DEFINE(HAVE_GOFFICE_0_5,1,[System has goffice 0.5.1 or better])
       AC_DEFINE(GOFFICE_WITH_CAIRO,1,[GOffice has been built with cairo support])
+      have_goffice_0_5=1
       goffice_with_cairo=1
     else
       PKG_CHECK_MODULES(GOFFICE, libgoffice-0.4 >= 0.4.0, [goffice=1], [
@@ -1162,6 +1164,11 @@ then
       fi
     ], [gtkhtml=0])
     AM_CONDITIONAL(GTKHTML_USES_GTKPRINT,test "x$gtkhtml" = "x1")
+
+    # GOffice >= 0.5 requires GtkHTML >= 3.14
+    if test x$have_goffice_0_5 = x1 -a x$gtkhtml = x0 ; then
+      AC_MSG_ERROR([Goffice uses Cairo/GtkPrint but didn't find GtkHTML with GtkPrint support])
+    fi
 
     # fallback to older gtkhtml versions and gnomeprint
     if test x$gtkhtml = x0
