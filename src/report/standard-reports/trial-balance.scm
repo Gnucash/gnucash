@@ -220,7 +220,7 @@
     
     (gnc:options-add-price-source! 
      options pagename-commodities
-     optname-price-source "b" 'weighted-average)
+     optname-price-source "b" 'average-cost)
     
     (add-option 
      (gnc:make-simple-boolean-option
@@ -531,8 +531,8 @@
 		 )
 	       all-accounts)
           (set! unrealized-gain-collector (gnc:make-commodity-collector))
-          (let* ((weighted-fn
-                  (gnc:case-exchange-fn 'weighted-average
+          (let* ((cost-fn
+                  (gnc:case-exchange-fn 'average-cost
                                         report-commodity end-date-tp))
 		 
                  (value
@@ -545,7 +545,7 @@
                   (gnc:gnc-monetary-amount
                    (gnc:sum-collector-commodity book-balance
                                                 report-commodity
-                                                weighted-fn)))
+                                                cost-fn)))
 		 
                  (unrealized-gain (gnc-numeric-sub-fixed value cost)))
 	    
@@ -821,28 +821,23 @@
 	  ;; we omit unrealized gains from the balance report, if
 	  ;; zero, since they are not present on normal trial balances
 	  (and (not (gnc-commodity-collector-allzero?
-		     unrealized-gain-collector))
+		     neg-unrealized-gain-collector))
 	       (let* ((ug-row (+ header-rows
-				 (gnc:html-acct-table-num-rows
-				  acct-table)))
+				 (gnc:html-acct-table-num-rows acct-table)))
+                      (credit? (gnc:double-col
+                                'credit-q neg-unrealized-gain-collector
+                                report-commodity exchange-fn show-fcur?))
+                      (entry (gnc:double-col
+                              'entry neg-unrealized-gain-collector
+                              report-commodity exchange-fn show-fcur?))
 		      )
-		 (add-line
-		  build-table (_ "Unrealized Gains")
-		  neg-unrealized-gain-collector)
-		 ;; make table line wide enough
-		 (gnc:html-table-set-cell!
-		  build-table
-		  ug-row
-		  (+ account-cols 1)
-		  #f)
+                 (add-line build-table
+                           (if credit?
+                               (_ "Unrealized Gains")
+                               (_ "Unrealized Losses"))
+                           neg-unrealized-gain-collector)
 		 (if (equal? report-variant 'work-sheet)
-		     (let* ((credit? (gnc:double-col
-				      'credit-q neg-unrealized-gain-collector
-				      report-commodity exchange-fn show-fcur?))
-			    (entry (gnc:double-col
-				    'entry neg-unrealized-gain-collector
-				    report-commodity exchange-fn show-fcur?))
-			    )
+		     (begin
 		       ;; make table line wide enough
 		       (gnc:html-table-set-cell!
 			build-table
