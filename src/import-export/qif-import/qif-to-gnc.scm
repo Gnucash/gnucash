@@ -201,202 +201,213 @@
 ;; This is the top-level of the back end conversion from QIF
 ;; to GnuCash. All the account mappings and so on should be
 ;; done before this is called.
+;;
+;; This procedure returns:
+;;   success: the root of the imported tree
+;;   failure: a symbol indicating the reason
+;;   cancel:  #t
+;;   bug:     #f
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:qif-to-gnc qif-files-list
                                qif-acct-map qif-cat-map
                                qif-memo-map stock-map
-                               default-currency-name window)
-  (let ((progress-dialog '())
-        (retval #f))
-    (set! retval
-      (gnc:backtrace-if-exception
-       (lambda ()
-         (let* ((old-root (gnc-get-current-root-account))
-                (new-root (xaccMallocAccount (gnc-get-current-book)))
-                (gnc-acct-hash (make-hash-table 20))
-                (sep (gnc-get-account-separator-string))
-                (default-currency
-                  (gnc-commodity-table-find-full
-                   (gnc-commodity-table-get-table (gnc-get-current-book))
-                   GNC_COMMODITY_NS_CURRENCY default-currency-name))
-                (sorted-accounts-list '())
-                (markable-xtns '())
-                (sorted-qif-files-list
-                 (sort qif-files-list
-                       (lambda (a b)
-                         (> (length (qif-file:xtns a))
-                            (length (qif-file:xtns b))))))
-                (work-to-do 0)
-                (work-done 0))
+                               default-currency-name progress-dialog)
 
-           ;; first, build a local account tree that mirrors the gnucash
-           ;; accounts in the mapping data.  we need to iterate over the
-           ;; cat-map and the acct-map to build the list
-           (hash-fold
-            (lambda (k v p)
-              (if (qif-map-entry:display? v)
-                  (set! sorted-accounts-list
-                        (cons v sorted-accounts-list)))
-              #t)
-            #t qif-acct-map)
+  ;; This procedure does all the work. We'll define it, then call it safely.
+  (define (private-convert)
+    (let* ((old-root (gnc-get-current-root-account))
+           (new-root (xaccMallocAccount (gnc-get-current-book)))
+           (gnc-acct-hash (make-hash-table 20))
+           (sep (gnc-get-account-separator-string))
+           (default-currency
+             (gnc-commodity-table-find-full
+              (gnc-commodity-table-get-table (gnc-get-current-book))
+              GNC_COMMODITY_NS_CURRENCY default-currency-name))
+           (sorted-accounts-list '())
+           (markable-xtns '())
+           (sorted-qif-files-list (sort qif-files-list
+                                        (lambda (a b)
+                                          (> (length (qif-file:xtns a))
+                                             (length (qif-file:xtns b))))))
+           (work-to-do 0)
+           (work-done 0))
 
-           (hash-fold
-            (lambda (k v p)
-              (if (qif-map-entry:display? v)
-                  (set! sorted-accounts-list
-                        (cons v sorted-accounts-list)))
-              #t)
-            #t qif-cat-map)
-
-           (hash-fold
-            (lambda (k v p)
-              (if (qif-map-entry:display? v)
-                  (set! sorted-accounts-list
-                        (cons v sorted-accounts-list)))
-              #t)
-            #t qif-memo-map)
-
-           ;; sort the account info on the depth of the account path.  if a
-           ;; short part is explicitly mentioned, make sure it gets created
-           ;; before the deeper path, which will create the parent accounts
-           ;; without the information about their type.
-           (set! sorted-accounts-list
-                 (sort sorted-accounts-list
-                       (lambda (a b)
-                         (< (gnc:substring-count (qif-map-entry:gnc-name a)
-                                                 sep)
-                            (gnc:substring-count (qif-map-entry:gnc-name b)
-                                                 sep)))))
-
-           ;; make all the accounts
-           (for-each
-            (lambda (acctinfo)
-              (let* ((security
-                      (and stock-map
-                           (hash-ref stock-map
-                                     (qif-import:get-account-name
-                                      (qif-map-entry:qif-name acctinfo)))))
-                     (ok-types (qif-map-entry:allowed-types acctinfo))
-                     (equity? (memv GNC-EQUITY-TYPE ok-types))
-                     (stock? (or (memv GNC-STOCK-TYPE ok-types)
-                                 (memv GNC-MUTUAL-TYPE ok-types))))
-
-                ;; Debug
-                ;; (for-each
-                ;;  (lambda (expr)
-                ;;    (display expr))
-                ;;  (list "Account: " acctinfo "\nsecurity = " security
-                ;;     "\nequity? = " equity?
-                ;;     "\n"))
-
-                (cond ((and equity? security)  ;; a "retained holdings" acct
-                       (qif-import:find-or-make-acct acctinfo #f
-                                                     security #t
-                                                     default-currency
-                                                     gnc-acct-hash
-                                                     old-root new-root))
-                      ((and security (or stock?
-                                         (gnc-commodity-is-currency security)))
-                       (qif-import:find-or-make-acct
-                        acctinfo #f security #t default-currency
-                        gnc-acct-hash old-root new-root))
-                      (#t
-                       (qif-import:find-or-make-acct
-                        acctinfo #f default-currency #t default-currency
-                        gnc-acct-hash old-root new-root)))))
-            sorted-accounts-list)
-
-           ;; before trying to mark transactions, prune down the list of
-           ;; ones to match.
-           (for-each
-            (lambda (qif-file)
-              (for-each
-               (lambda (xtn)
-                 (set! work-to-do (+ 1 work-to-do))
-                 (let splitloop ((splits (qif-xtn:splits xtn)))
-                   (if (qif-split:category-is-account? (car splits))
-                       (begin
-                         (set! markable-xtns (cons xtn markable-xtns))
-                         (set! work-to-do (+ 1 work-to-do)))
-                       (if (not (null? (cdr splits)))
-                           (splitloop (cdr splits))))))
-               (qif-file:xtns qif-file)))
-            qif-files-list)
-
-           (if (> work-to-do 100)
-               (begin
-                 (set! progress-dialog (gnc-progress-dialog-new window #f))
-                 (gnc-progress-dialog-set-title progress-dialog
-                                                (_ "Importing QIF data"))
-                 (gnc-progress-dialog-set-primary progress-dialog
-                                                  (_ "Importing QIF data"))
-                 (gnc-progress-dialog-set-secondary progress-dialog
-                   (_ "GnuCash is converting your QIF data."))
-                 (gnc-progress-dialog-set-sub progress-dialog
-                                              (_ "Importing transactions"))))
+      ;; This procedure handles progress reporting, pause, and cancel.
+      (define (update-progress)
+        (set! work-done (+ 1 work-done))
+        (if (and progress-dialog
+                 (zero? (remainder work-done 8)))
+            (begin
+              (gnc-progress-dialog-set-value progress-dialog
+                                             (/ work-done work-to-do))
+              (qif-import:check-pause progress-dialog)
+              (if qif-import:canceled
+                  (throw 'cancel)))))
 
 
-           ;; now run through the markable transactions marking any
-           ;; duplicates.  marked transactions/splits won't get imported.
-           (if (> (length markable-xtns) 1)
-               (let xloop ((xtn (car markable-xtns))
-                           (rest (cdr markable-xtns)))
-                 ;; Update the progress.
-                 (set! work-done (+ 1 work-done))
-                 (if (and (not (null? progress-dialog))
-                          (zero? (remainder work-done 32)))
-                     (gnc-progress-dialog-set-value progress-dialog
-                                                    (/ work-done work-to-do)))
+      (if progress-dialog
+          (gnc-progress-dialog-set-sub progress-dialog
+                                      (_ "Preparing to convert your QIF data")))
 
-                 (if (not (qif-xtn:mark xtn))
-                     (qif-import:mark-matching-xtns xtn rest))
-                 (if (not (null? (cdr rest)))
-                     (xloop (car rest) (cdr rest)))))
+      ;; Build a list of all accounts to create for the import tree.
+      ;; We need to iterate over the account, category, and payee/memo
+      ;; mappings to build the list.
+      (hash-fold
+       (lambda (k v p)
+         (if (qif-map-entry:display? v)
+             (set! sorted-accounts-list
+                   (cons v sorted-accounts-list)))
+         #t)
+       #t qif-acct-map)
 
-           ;; iterate over files. Going in the sort order by number of
-           ;; transactions should give us a small speed advantage.
-           (for-each
-            (lambda (qif-file)
-              (for-each
-               (lambda (xtn)
-                 ;; Update the progress.
-                 (set! work-done (+ 1 work-done))
-                 (if (and (not (null? progress-dialog))
-                          (zero? (remainder work-done 32)))
-                     (gnc-progress-dialog-set-value progress-dialog
-                                                    (/ work-done work-to-do)))
+      (hash-fold
+       (lambda (k v p)
+         (if (qif-map-entry:display? v)
+             (set! sorted-accounts-list
+                   (cons v sorted-accounts-list)))
+         #t)
+       #t qif-cat-map)
 
-                 (if (not (qif-xtn:mark xtn))
-                     ;; create and fill in the GNC transaction
-                     (let ((gnc-xtn (xaccMallocTransaction
-                                     (gnc-get-current-book))))
-                       (xaccTransBeginEdit gnc-xtn)
+      (hash-fold
+       (lambda (k v p)
+         (if (qif-map-entry:display? v)
+             (set! sorted-accounts-list
+                   (cons v sorted-accounts-list)))
+         #t)
+       #t qif-memo-map)
+      (set! work-to-do (length sorted-accounts-list))
 
-                       ;; FIXME. This is probably wrong
-                       (xaccTransSetCurrency gnc-xtn (gnc-default-currency))
+      ;; Before trying to mark transactions, prune down the list to
+      ;; those that are transfers between QIF accounts.
+      (for-each
+       (lambda (qif-file)
+         (for-each
+          (lambda (xtn)
+            (set! work-to-do (+ 1 work-to-do))
+            (let splitloop ((splits (qif-xtn:splits xtn)))
+              (if (qif-split:category-is-account? (car splits))
+                  (begin
+                    (set! markable-xtns (cons xtn markable-xtns))
+                    (set! work-to-do (+ 1 work-to-do)))
+                  (if (not (null? (cdr splits)))
+                      (splitloop (cdr splits))))))
+          (qif-file:xtns qif-file)))
+       qif-files-list)
 
-                       ;; build the transaction
-                       (qif-import:qif-xtn-to-gnc-xtn
-                        xtn qif-file gnc-xtn gnc-acct-hash
-                        qif-acct-map qif-cat-map qif-memo-map)
 
-                       ;; rebalance and commit everything
-                       (xaccTransCommitEdit gnc-xtn))))
-               (qif-file:xtns qif-file)))
-            sorted-qif-files-list)
+      ;; Build a local account tree to hold converted transactions.
+      (if progress-dialog
+          (gnc-progress-dialog-set-sub progress-dialog
+                                       (_ "Creating accounts")))
 
-           ;; Finished.
-           (if (not (null? progress-dialog))
-               (gnc-progress-dialog-set-value progress-dialog 1))
+      ;; Sort the account list on the depth of the account path.  If a
+      ;; short part is explicitly mentioned, make sure it gets created
+      ;; before the deeper path that would create the parent accounts
+      ;; without enough information about their type.
+      (set! sorted-accounts-list
+            (sort sorted-accounts-list
+                  (lambda (a b)
+                    (< (gnc:substring-count (qif-map-entry:gnc-name a)
+                                            sep)
+                       (gnc:substring-count (qif-map-entry:gnc-name b)
+                                            sep)))))
 
-           new-root))))
+      ;; Make all the accounts.
+      (for-each
+       (lambda (acctinfo)
+         (let* ((security
+                 (and stock-map
+                      (hash-ref stock-map
+                                (qif-import:get-account-name
+                                 (qif-map-entry:qif-name acctinfo)))))
+                (ok-types (qif-map-entry:allowed-types acctinfo))
+                (equity? (memv GNC-EQUITY-TYPE ok-types))
+                (stock? (or (memv GNC-STOCK-TYPE ok-types)
+                            (memv GNC-MUTUAL-TYPE ok-types))))
 
-    ;; Get rid of the progress dialog (if any).
-    (if (not (null? progress-dialog))
-        (gnc-progress-dialog-destroy progress-dialog))
+           (update-progress)
+           (cond ((and equity? security)  ;; a "retained holdings" acct
+                  (qif-import:find-or-make-acct acctinfo #f
+                                                security #t
+                                                default-currency
+                                                gnc-acct-hash
+                                                old-root new-root))
+                 ((and security (or stock?
+                                    (gnc-commodity-is-currency security)))
+                  (qif-import:find-or-make-acct
+                   acctinfo #f security #t default-currency
+                   gnc-acct-hash old-root new-root))
+                 (#t
+                  (qif-import:find-or-make-acct
+                   acctinfo #f default-currency #t default-currency
+                   gnc-acct-hash old-root new-root)))))
+       sorted-accounts-list)
 
-    retval))
+      ;; Run through the markable transactions marking any
+      ;; duplicates.  marked transactions/splits won't get imported.
+      (if progress-dialog
+          (gnc-progress-dialog-set-sub progress-dialog
+                                    (_ "Matching transfers between accounts")))
+      (if (> (length markable-xtns) 1)
+          (let xloop ((xtn (car markable-xtns))
+                      (rest (cdr markable-xtns)))
+            ;; Update the progress.
+            (update-progress)
+
+            (if (not (qif-xtn:mark xtn))
+                (qif-import:mark-matching-xtns xtn rest))
+            (if (not (null? (cdr rest)))
+                (xloop (car rest) (cdr rest)))))
+
+      ;; Iterate over files. Going in the sort order by number of
+      ;; transactions should give us a small speed advantage.
+      (for-each
+       (lambda (qif-file)
+         (if progress-dialog
+             (gnc-progress-dialog-set-sub progress-dialog
+                                          (string-append (_ "Converting") " "
+                                                     (qif-file:path qif-file))))
+         (for-each
+          (lambda (xtn)
+            ;; Update the progress.
+            (update-progress)
+
+            (if (not (qif-xtn:mark xtn))
+                ;; Convert into a GnuCash transaction.
+                (let ((gnc-xtn (xaccMallocTransaction
+                                (gnc-get-current-book))))
+                  (xaccTransBeginEdit gnc-xtn)
+
+                  ;; FIXME. This is probably wrong
+                  (xaccTransSetCurrency gnc-xtn (gnc-default-currency))
+
+                  ;; Build the transaction.
+                  (qif-import:qif-xtn-to-gnc-xtn xtn qif-file gnc-xtn
+                                                 gnc-acct-hash
+                                                 qif-acct-map
+                                                 qif-cat-map
+                                                 qif-memo-map
+                                                 progress-dialog)
+
+                  ;; rebalance and commit everything
+                  (xaccTransCommitEdit gnc-xtn))))
+          (qif-file:xtns qif-file)))
+       sorted-qif-files-list)
+
+      ;; Finished.
+      (if progress-dialog
+          (gnc-progress-dialog-set-value progress-dialog 1))
+
+      new-root))
+
+  ;; Safely convert the files and return the result.
+  (gnc:backtrace-if-exception
+    (lambda ()
+      (catch 'cancel
+             (lambda ()
+               (catch 'bad-date private-convert (lambda (key . args) key)))
+             (lambda (key . args) #t)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -407,7 +418,8 @@
 
 (define (qif-import:qif-xtn-to-gnc-xtn qif-xtn qif-file gnc-xtn
                                        gnc-acct-hash
-                                       qif-acct-map qif-cat-map qif-memo-map)
+                                       qif-acct-map qif-cat-map qif-memo-map
+                                       progress-dialog)
   (let ((splits (qif-xtn:splits qif-xtn))
         (gnc-near-split (xaccMallocSplit (gnc-get-current-book)))
         (near-split-total (gnc-numeric-zero))
@@ -434,12 +446,18 @@
     ;; Set the transaction date.
     (cond
       ((not qif-date)
+        (qif-import:log progress-dialog
+                        "qif-import:qif-xtn-to-gnc-xtn"
+                        (_ "Missing transaction date."))
         (throw 'bad-date
                "qif-import:qif-xtn-to-gnc-xtn"
                "Missing transaction date."
                #f
                #f))
       ((< (list-ref qif-date 2) 1970)
+        (qif-import:log progress-dialog
+                        "qif-import:qif-xtn-to-gnc-xtn"
+                        (_ "Dates earlier than 1970 are not supported."))
         (throw 'bad-date
                "qif-import:qif-xtn-to-gnc-xtn"
                "Invalid transaction year (~A)."

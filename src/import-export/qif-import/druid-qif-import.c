@@ -124,6 +124,11 @@ struct _qifimportwindow {
   /* Widgets on the currency page. */
   GtkWidget * currency_picker;
 
+  /* Conversion progress page. */
+  GtkWidget * convert_pause;
+  GtkWidget * convert_log;
+  GNCProgressDialog *convert_progress;
+
   /* Widgets on the duplicates page. */
   GtkWidget * new_transaction_view;
   GtkWidget * old_transaction_view;
@@ -177,7 +182,7 @@ static GdkColor std_logo_bg_color = { 0, 65535, 65535, 65535 };
 static GdkColor std_title_color =  { 0, 65535, 65535, 65535 };
 
 #define NUM_PRE_PAGES 14
-#define NUM_POST_PAGES 3
+#define NUM_POST_PAGES 4
 #define NUM_DOC_PAGES  6
 
 static GnomeDruidPage *
@@ -707,7 +712,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 /********************************************************************
  * gnc_ui_qif_import_load_progress_prepare_cb
  *
- * Prepare the progress page for display.
+ * Prepare the file loading progress page for display.
  ********************************************************************/
 
 static void
@@ -738,6 +743,7 @@ gnc_ui_qif_import_load_progress_prepare_cb(GnomeDruidPage * page,
   /* Generate a show signal once the page is displayed. This
    * will kick off our (potentially) long-running operations. */
   gtk_widget_hide(GTK_WIDGET(page));
+  gtk_widget_set_sensitive(GTK_WIDGET(page), TRUE);
   gtk_widget_show(GTK_WIDGET(page));
 }
 
@@ -810,12 +816,24 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
   if (load_return == SCM_BOOL_T)
   {
     /* Canceled by the user. */
-    wind->busy = FALSE;
+
+    /* Disable the pause button. */
     gtk_widget_set_sensitive(wind->load_pause, FALSE);
+
+    /* Inform the user. */
+    gnc_progress_dialog_set_sub(wind->load_progress, _("Canceled"));
+
+    wind->busy = FALSE;
     return;
   }
   else if (load_return == SCM_BOOL_F || !SCM_LISTP(load_return))
   {
+    /* A bug was detected. */
+
+    /* Disable the pause button. */
+    gtk_widget_set_sensitive(wind->load_pause, FALSE);
+
+    /* Inform the user. */
     gnc_progress_dialog_append_log(wind->load_progress,
                      _( "A bug was detected while reading the QIF file."));
     gnc_progress_dialog_set_sub(wind->load_progress, _("Failed"));
@@ -825,7 +843,6 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
     /* FIXME: How should we request that the user report this problem? */
 
     wind->busy = FALSE;
-    gtk_widget_set_sensitive(wind->load_pause, FALSE);
     return;
   }
   else if (!SCM_NULLP(load_return))
@@ -842,8 +859,8 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
       gnc_progress_dialog_set_sub(wind->load_progress, _("Failed"));
       gnc_progress_dialog_reset_value(wind->load_progress);
 
-      wind->busy = FALSE;
       gtk_widget_set_sensitive(wind->load_pause, FALSE);
+      wind->busy = FALSE;
       return;
     }
   }
@@ -868,14 +885,32 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
   if (parse_return == SCM_BOOL_T)
   {
     /* Canceled by the user. */
-    imported_files = scm_call_2(unload_qif_file, scm_qiffile, imported_files);
-    wind->busy = FALSE;
+
+    /* Disable the pause button. */
     gtk_widget_set_sensitive(wind->load_pause, FALSE);
+
+    /* Unload the file. */
+    gnc_progress_dialog_set_sub(wind->load_progress, _("Cleaning up"));
+    imported_files = scm_call_2(unload_qif_file, scm_qiffile, imported_files);
+
+    /* Inform the user. */
+    gnc_progress_dialog_set_sub(wind->load_progress, _("Canceled"));
+
+    wind->busy = FALSE;
     return;
   }
   else if (parse_return == SCM_BOOL_F || !SCM_LISTP(parse_return))
   {
+    /* A bug was detected. */
+
+    /* Disable the pause button. */
+    gtk_widget_set_sensitive(wind->load_pause, FALSE);
+
+    /* Unload the file. */
+    gnc_progress_dialog_set_sub(wind->load_progress, _("Cleaning up"));
     imported_files = scm_call_2(unload_qif_file, scm_qiffile, imported_files);
+
+    /* Inform the user. */
     gnc_progress_dialog_append_log(wind->load_progress,
                      _( "A bug was detected while parsing the QIF file."));
     gnc_progress_dialog_set_sub(wind->load_progress, _("Failed"));
@@ -885,7 +920,6 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
     /* FIXME: How should we request that the user report this problem? */
 
     wind->busy = FALSE;
-    gtk_widget_set_sensitive(wind->load_pause, FALSE);
     return;
   }
   else if (!SCM_NULLP(parse_return))
@@ -931,8 +965,8 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
       gnc_progress_dialog_set_sub(wind->load_progress, _("Failed"));
       gnc_progress_dialog_reset_value(wind->load_progress);
 
-      wind->busy = FALSE;
       gtk_widget_set_sensitive(wind->load_pause, FALSE);
+      wind->busy = FALSE;
       return;
     }
   }
@@ -953,8 +987,8 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
   if (gtk_text_buffer_get_char_count(gtk_text_view_get_buffer(GTK_TEXT_VIEW(wind->load_log))) == 0)
     gnome_druid_page_next(GNOME_DRUID_PAGE(widget));
 
-  wind->busy = FALSE;
   gtk_widget_set_sensitive(wind->load_pause, FALSE);
+  wind->busy = FALSE;
   return;
 }
 
@@ -1903,268 +1937,6 @@ gnc_ui_qif_import_memo_back_cb(GnomeDruidPage * page, gpointer arg1,
 
 
 /****************************************************************
- * gnc_ui_qif_import_commodity_update
- *
- * This function updates the commodities based on the values for
- * mnemonic, namespace, and name approved by the user.
- ****************************************************************/
-
-static void
-gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
-{
-  GList          *pageptr;
-  GnomeDruidPage *gtkpage;
-  QIFDruidPage   *page;
-  const gchar    *mnemonic = NULL;
-  gchar          *namespace = NULL;
-  const gchar    *fullname = NULL;
-  gnc_commodity  *tab_commodity;
-
-  for (pageptr = wind->commodity_pages; pageptr; pageptr=pageptr->next)
-  {
-    gtkpage   = GNOME_DRUID_PAGE(pageptr->data);
-    page      = g_object_get_data(G_OBJECT(gtkpage), "page_struct");
-
-    /* Get any changes from the commodity page. */
-    mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->new_mnemonic_entry));
-    namespace = gnc_ui_namespace_picker_ns(page->new_type_combo);
-    fullname  = gtk_entry_get_text(GTK_ENTRY(page->new_name_entry));
-
-    /* Update the commodity with the new values. */
-    gnc_commodity_set_namespace(page->commodity, namespace);
-    gnc_commodity_set_fullname(page->commodity, fullname);
-    gnc_commodity_set_mnemonic(page->commodity, mnemonic);
-
-    /* Add the commodity to the commodity table (if it isn't a duplicate). */
-    tab_commodity = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-                                               namespace, mnemonic);
-    if (!tab_commodity || tab_commodity == page->commodity)
-      tab_commodity = gnc_commodity_table_insert(gnc_get_current_commodities(),
-                                                 page->commodity);
-
-    /* Update the security hash table. */
-    scm_hash_set_x(wind->security_hash,
-                   page->hash_key,
-                   SWIG_NewPointerObj(tab_commodity,
-                                      SWIG_TypeQuery("_p_gnc_commodity"), 0));
-
-    g_free(namespace);
-  }
-}
-
-
-/****************************************************************
- * gnc_ui_qif_import_prepare_duplicates
- *
- * This function prepares the duplicates checking page.
- ****************************************************************/
-
-static void
-gnc_ui_qif_import_prepare_duplicates(QIFImportWindow * wind)
-{
-  GtkTreeView      *view;
-  GtkListStore     *store;
-  SCM               duplicates;
-  SCM               current_xtn;
-  Transaction      *gnc_xtn;
-  Split            *gnc_split;
-  GtkTreeIter       iter;
-  GtkTreeSelection *selection;
-  GtkTreePath      *path;
-  const gchar      *amount_str;
-  int               rownum = 0;
-
-  view = GTK_TREE_VIEW(wind->new_transaction_view);
-  store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
-  gtk_list_store_clear(store);
-
-  /* Loop through the list of new, potentially duplicate transactions. */
-  duplicates = wind->match_transactions;
-  while (!SCM_NULLP(duplicates))
-  {
-    current_xtn = SCM_CAAR(duplicates);
-    #define FUNC_NAME "xaccTransCountSplits"
-    gnc_xtn     = SWIG_MustGetPtr(current_xtn,
-                                  SWIG_TypeQuery("_p_Transaction"), 1, 0);
-    #undef FUNC_NAME
-    if (xaccTransCountSplits(gnc_xtn) > 2)
-      amount_str = _("(split)");
-    else
-    {
-      gnc_split = xaccTransGetSplit(gnc_xtn, 0);
-      amount_str =
-        xaccPrintAmount(gnc_numeric_abs(xaccSplitGetValue(gnc_split)),
-                        gnc_account_print_info
-                        (xaccSplitGetAccount(gnc_split), TRUE));
-    }
-
-    gtk_list_store_append(store, &iter);
-    gtk_list_store_set
-      (store, &iter,
-       QIF_TRANS_COL_INDEX, rownum++,
-       QIF_TRANS_COL_DATE,
-       gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn)),
-       QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
-       QIF_TRANS_COL_AMOUNT, amount_str,
-       -1);
-
-    duplicates = SCM_CDR(duplicates);
-  }
-
-  selection = gtk_tree_view_get_selection(view);
-  path = gtk_tree_path_new_from_indices(0, -1);
-  gtk_tree_selection_select_path(selection, path);
-  gtk_tree_path_free(path);
-}
-
-
-/****************************************************************
- * gnc_ui_qif_import_convert_undo
- *
- * This function launches the Scheme procedure that un-imports
- * any imported accounts and transactions.
- ****************************************************************/
-
-static void
-gnc_ui_qif_import_convert_undo(QIFImportWindow * wind)
-{
-  SCM undo = scm_c_eval_string("qif-import:qif-to-gnc-undo");
-
-  /* Undo the conversion. */
-  scm_call_1(undo, wind->imported_account_tree);
-
-  /* There's no imported account tree any more. */
-  scm_gc_unprotect_object(wind->imported_account_tree);
-  wind->imported_account_tree = SCM_BOOL_F;
-  scm_gc_protect_object(wind->imported_account_tree);
-
-
-  /* Get rid of the list of matched transactions. */
-  scm_gc_unprotect_object(wind->match_transactions);
-  wind->match_transactions = SCM_BOOL_F;
-  scm_gc_protect_object(wind->match_transactions);
-}
-
-
-/****************************************************************
- * gnc_ui_qif_import_convert
- *
- * This function launches the Scheme procedures that actually do
- * the work of (a) converting the QIF data into GnuCash accounts
- * transactions, and (b) checking for possible duplication. Then
- * the next druid page is prepared and displayed.
- ****************************************************************/
-
-static gboolean
-gnc_ui_qif_import_convert(QIFImportWindow * wind)
-{
-  SCM   qif_to_gnc      = scm_c_eval_string("qif-import:qif-to-gnc");
-  SCM   find_duplicates = scm_c_eval_string("gnc:account-tree-find-duplicates");
-  SCM   retval;
-  SCM   window;
-
-  /* Get the default currency. */
-  gchar *currname =
-    gtk_combo_box_get_active_text(GTK_COMBO_BOX(wind->currency_picker));
-
-  /* Let the user know we're busy. */
-  gnc_suspend_gui_refresh();
-  gnc_set_busy_cursor(NULL, TRUE);
-
-  /* Update the commodities. */
-  gnc_ui_qif_import_commodity_update(wind);
-
-  /* Call a Scheme function to do the work.  The return value is the
-   * root account of an account tree containing all the new accounts
-   * and transactions */
-  window = SWIG_NewPointerObj(wind->window, SWIG_TypeQuery("_p_GtkWidget"), 0);
-  retval = scm_apply(qif_to_gnc,
-                     SCM_LIST7(wind->imported_files,
-                               wind->acct_map_info,
-                               wind->cat_map_info,
-                               wind->memo_map_info,
-                               wind->security_hash,
-                               scm_makfrom0str(currname),
-                               window),
-                     SCM_EOL);
-  g_free(currname);
-  gnc_unset_busy_cursor(NULL);
-
-  if (retval == SCM_BOOL_F)
-  {
-    /* An error occurred during conversion. */
-
-    /* Remove any converted data. */
-    gnc_ui_qif_import_convert_undo(wind);
-
-    /* We don't know what data structures may have become corrupted,
-     * so we shouldn't allow further action. Display the failure
-     * page next, and only allow the user to cancel. */
-    gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                         get_named_page(wind, "failed_page"));
-    gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
-                                      FALSE, FALSE, TRUE, TRUE);
-  }
-  else
-  {
-    /* Save the imported account tree. */
-    scm_gc_unprotect_object(wind->imported_account_tree);
-    wind->imported_account_tree = retval;
-    scm_gc_protect_object(wind->imported_account_tree);
-
-    /* Detect duplicate transactions. */
-    gnc_set_busy_cursor(NULL, TRUE);
-    retval = scm_call_3(find_duplicates,
-                        scm_c_eval_string("(gnc-get-current-root-account)"),
-                        wind->imported_account_tree, window);
-    gnc_unset_busy_cursor(NULL);
-
-    /* Save the results. */
-    scm_gc_unprotect_object(wind->match_transactions);
-    wind->match_transactions = retval;
-    scm_gc_protect_object(wind->match_transactions);
-
-    /* Were any potential duplicates found? */
-    if (retval == SCM_BOOL_F)
-    {
-      /* An error occurred during duplicate checking. */
-
-      /* Remove any converted data. */
-      gnc_ui_qif_import_convert_undo(wind);
-
-      /* Display the failure page. */
-      gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           get_named_page(wind, "failed_page"));
-      gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
-                                        FALSE, FALSE, TRUE, TRUE);
-    }
-    else if (SCM_NULLP(retval))
-    {
-      /* No potential duplicates, so skip to the last page. */
-      gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           get_named_page(wind, "end_page"));
-    }
-    else
-    {
-      /* Prepare the duplicates page. */
-      gnc_ui_qif_import_prepare_duplicates(wind);
-
-      /* Display the next page. */
-      if (wind->show_doc_pages)
-        gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                             get_named_page(wind, "match_doc_page"));
-      else
-        gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                             get_named_page(wind, "match_duplicates_page"));
-    }
-  }
-
-  gnc_resume_gui_refresh();
-  return TRUE;
-}
-
-
-/****************************************************************
  * gnc_ui_qif_import_new_securities
  *
  * This function creates or updates the list of QIF securities
@@ -2340,14 +2112,7 @@ gnc_ui_qif_import_comm_next_cb(GnomeDruidPage * page,
   else
     g_free(namespace);
 
-  if(page == (g_list_last(wind->commodity_pages))->data)
-  {
-    /* it's time to import the accounts. */
-    gnc_ui_qif_import_convert(wind);
-    return TRUE;
-  }
-  else
-    return FALSE;
+  return FALSE;
 }
 
 
@@ -2553,51 +2318,514 @@ gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
 {
   QIFImportWindow * wind = user_data;
 
-  gnc_set_busy_cursor(NULL, TRUE);
-
+  /* If there are new securities, prepare the security pages. */
   if (gnc_ui_qif_import_new_securities(wind))
+    prepare_security_pages(wind);
+
+  return gnc_ui_qif_import_generic_next_cb(page, arg1, wind);
+}
+
+
+/****************************************************************
+ * gnc_ui_qif_import_commodity_update
+ *
+ * This function updates the commodities based on the values for
+ * mnemonic, namespace, and name approved by the user.
+ ****************************************************************/
+
+static void
+gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
+{
+  GList          *pageptr;
+  GnomeDruidPage *gtkpage;
+  QIFDruidPage   *page;
+  const gchar    *mnemonic = NULL;
+  gchar          *namespace = NULL;
+  const gchar    *fullname = NULL;
+  gnc_commodity  *tab_commodity;
+
+  for (pageptr = wind->commodity_pages; pageptr; pageptr=pageptr->next)
   {
-    /* There are new commodities, so show a commodity page next. */
-    if (wind->show_doc_pages)
-      gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           get_named_page(wind, "commodity_doc_page"));
+    gtkpage   = GNOME_DRUID_PAGE(pageptr->data);
+    page      = g_object_get_data(G_OBJECT(gtkpage), "page_struct");
+
+    /* Get any changes from the commodity page. */
+    mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->new_mnemonic_entry));
+    namespace = gnc_ui_namespace_picker_ns(page->new_type_combo);
+    fullname  = gtk_entry_get_text(GTK_ENTRY(page->new_name_entry));
+
+    /* Update the commodity with the new values. */
+    gnc_commodity_set_namespace(page->commodity, namespace);
+    gnc_commodity_set_fullname(page->commodity, fullname);
+    gnc_commodity_set_mnemonic(page->commodity, mnemonic);
+
+    /* Add the commodity to the commodity table (if it isn't a duplicate). */
+    tab_commodity = gnc_commodity_table_lookup(gnc_get_current_commodities(),
+                                               namespace, mnemonic);
+    if (!tab_commodity || tab_commodity == page->commodity)
+      tab_commodity = gnc_commodity_table_insert(gnc_get_current_commodities(),
+                                                 page->commodity);
+
+    /* Update the security hash table. */
+    scm_hash_set_x(wind->security_hash,
+                   page->hash_key,
+                   SWIG_NewPointerObj(tab_commodity,
+                                      SWIG_TypeQuery("_p_gnc_commodity"), 0));
+
+    g_free(namespace);
+  }
+}
+
+
+/****************************************************************
+ * gnc_ui_qif_import_prepare_duplicates
+ *
+ * This function prepares the duplicates checking page.
+ ****************************************************************/
+
+static void
+gnc_ui_qif_import_prepare_duplicates(QIFImportWindow * wind)
+{
+  GtkTreeView      *view;
+  GtkListStore     *store;
+  SCM               duplicates;
+  SCM               current_xtn;
+  Transaction      *gnc_xtn;
+  Split            *gnc_split;
+  GtkTreeIter       iter;
+  GtkTreeSelection *selection;
+  GtkTreePath      *path;
+  const gchar      *amount_str;
+  int               rownum = 0;
+
+  view = GTK_TREE_VIEW(wind->new_transaction_view);
+  store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
+  gtk_list_store_clear(store);
+
+  if (!SCM_LISTP(wind->match_transactions))
+    return;
+
+  /* Loop through the list of new, potentially duplicate transactions. */
+  duplicates = wind->match_transactions;
+  while (!SCM_NULLP(duplicates))
+  {
+    current_xtn = SCM_CAAR(duplicates);
+    #define FUNC_NAME "xaccTransCountSplits"
+    gnc_xtn     = SWIG_MustGetPtr(current_xtn,
+                                  SWIG_TypeQuery("_p_Transaction"), 1, 0);
+    #undef FUNC_NAME
+    if (xaccTransCountSplits(gnc_xtn) > 2)
+      amount_str = _("(split)");
     else
     {
-      prepare_security_pages(wind);
-      gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           GNOME_DRUID_PAGE(wind->commodity_pages->data));
+      gnc_split = xaccTransGetSplit(gnc_xtn, 0);
+      amount_str =
+        xaccPrintAmount(gnc_numeric_abs(xaccSplitGetValue(gnc_split)),
+                        gnc_account_print_info
+                        (xaccSplitGetAccount(gnc_split), TRUE));
     }
+
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set
+      (store, &iter,
+       QIF_TRANS_COL_INDEX, rownum++,
+       QIF_TRANS_COL_DATE,
+       gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn)),
+       QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
+       QIF_TRANS_COL_AMOUNT, amount_str,
+       -1);
+
+    duplicates = SCM_CDR(duplicates);
   }
-  else
-    /* It's time to import the accounts. */
-    gnc_ui_qif_import_convert(wind);
+
+  selection = gtk_tree_view_get_selection(view);
+  path = gtk_tree_path_new_from_indices(0, -1);
+  gtk_tree_selection_select_path(selection, path);
+  gtk_tree_path_free(path);
+}
+
+
+/****************************************************************
+ * gnc_ui_qif_import_convert_undo
+ *
+ * This function launches the Scheme procedure that un-imports
+ * any imported accounts and transactions.
+ ****************************************************************/
+
+static void
+gnc_ui_qif_import_convert_undo(QIFImportWindow * wind)
+{
+  SCM undo = scm_c_eval_string("qif-import:qif-to-gnc-undo");
+
+  gnc_set_busy_cursor(NULL, TRUE);
+
+  /* Undo the conversion. */
+  scm_call_1(undo, wind->imported_account_tree);
+
+  /* There's no imported account tree any more. */
+  scm_gc_unprotect_object(wind->imported_account_tree);
+  wind->imported_account_tree = SCM_BOOL_F;
+  scm_gc_protect_object(wind->imported_account_tree);
+
+
+  /* Get rid of the list of matched transactions. */
+  scm_gc_unprotect_object(wind->match_transactions);
+  wind->match_transactions = SCM_BOOL_F;
+  scm_gc_protect_object(wind->match_transactions);
 
   gnc_unset_busy_cursor(NULL);
-  return TRUE;
 }
 
 
 /********************************************************************
- * gnc_ui_qif_import_commodity_prepare_cb
+ * gnc_ui_qif_import_convert_progress_prepare_cb
  *
- * build a mapping of QIF security name to gnc_commodity
+ * Prepare the data conversion progress page for display.
  ********************************************************************/
 
 static void
-gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
-                                       gpointer arg1,
-                                       gpointer user_data)
+gnc_ui_qif_import_convert_progress_prepare_cb(GnomeDruidPage * page,
+                                              gpointer arg1,
+                                              gpointer user_data)
 {
-  QIFImportWindow * wind = user_data;
+  QIFImportWindow   *wind = user_data;
 
-  /* This shouldn't happen, but do the right thing if it does. */
-  if (wind->new_securities == SCM_BOOL_F || SCM_NULLP(wind->new_securities))
+  /* Reset the progress display. */
+  gnc_progress_dialog_set_primary(wind->convert_progress, "");
+  gnc_progress_dialog_set_secondary(wind->convert_progress,
+    _("GnuCash is now importing your QIF data. If there are no errors or warnings, you will automatically proceed to the next step. Otherwise, the details will be shown below for your review."));
+  gnc_progress_dialog_set_sub(wind->convert_progress, " ");
+  gnc_progress_dialog_reset_value(wind->convert_progress);
+  gnc_progress_dialog_reset_log(wind->convert_progress);
+
+  /* Disable the "Forward" button for now.
+   *
+   * NOTE: Due to bug 91001 in GnomeDruid, gnome_druid_set_buttons_sensitive()
+   *       will not work in prepare callbacks unless they are run AFTER the
+   *       standard one. Make sure the Glade line has the callback set up with
+   *       after=yes. For example:
+   *         <signal name="prepare" handler="my_prepare_cb" after="yes"/>   */
+  gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
+                                    TRUE, FALSE, TRUE, TRUE);
+
+  /* Generate a show signal once the page is displayed. This
+   * will kick off our (potentially) long-running operations. */
+  gtk_widget_hide(GTK_WIDGET(page));
+  gtk_widget_set_sensitive(GTK_WIDGET(page), TRUE);
+  gtk_widget_show(GTK_WIDGET(page));
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_convert_progress_show_cb
+ *
+ * Perform the conversion.
+ ********************************************************************/
+
+static void
+gnc_ui_qif_import_convert_progress_show_cb(GtkWidget *widget,
+                                           gpointer user_data)
+{
+  QIFImportWindow   *wind = user_data;
+  SCM qif_to_gnc      = scm_c_eval_string("qif-import:qif-to-gnc");
+  SCM find_duplicates = scm_c_eval_string("gnc:account-tree-find-duplicates");
+  SCM retval;
+
+  /* SCM for the progress dialog. */
+  SCM progress = SWIG_NewPointerObj(wind->convert_progress,
+                                    SWIG_TypeQuery("_p__GNCProgressDialog"),
+                                    0);
+
+  /* The default currency. */
+  gchar *currname =
+    gtk_combo_box_get_active_text(GTK_COMBO_BOX(wind->currency_picker));
+
+  /* Raise the busy flag so the druid can't be canceled unexpectedly. */
+  wind->busy = TRUE;
+  gtk_widget_set_sensitive(wind->convert_pause, TRUE);
+
+  /* Clear any previous pause or cancel state. */
+  scm_c_eval_string("(qif-import:reset-cancel-pause)");
+
+  /* Update the commodities. */
+  gnc_ui_qif_import_commodity_update(wind);
+
+
+  /*
+   * Convert the QIF data into GnuCash data.
+   *
+   * A Scheme function does all the work.  The return value is the
+   * root account of an account tree containing all the new accounts
+   * and transactions. Upon failure, #f is returned. If the user
+   * cancels, #t is returned.
+   */
+
+  /* This step will fill 70% of the bar. */
+  gnc_progress_dialog_push(wind->convert_progress, 0.7);
+  retval = scm_apply(qif_to_gnc,
+                     SCM_LIST7(wind->imported_files,
+                               wind->acct_map_info,
+                               wind->cat_map_info,
+                               wind->memo_map_info,
+                               wind->security_hash,
+                               scm_makfrom0str(currname),
+                               progress),
+                     SCM_EOL);
+  gnc_progress_dialog_pop(wind->convert_progress);
+  g_free(currname);
+
+  if (retval == SCM_BOOL_T)
   {
-    g_warning("QIF import: BUG DETECTED! Reached commodity doc page with nothing to do!");
-    gnc_ui_qif_import_convert(wind);
+    /* Canceled by the user. */
+
+    /* Disable the pause button. */
+    gtk_widget_set_sensitive(wind->convert_pause, FALSE);
+
+    /* Remove any converted data. */
+    gnc_progress_dialog_set_sub(wind->convert_progress, _("Cleaning up"));
+    gnc_ui_qif_import_convert_undo(wind);
+
+    /* Inform the user. */
+    gnc_progress_dialog_set_sub(wind->convert_progress, _("Canceled"));
+    gnc_progress_dialog_reset_value(wind->convert_progress);
+
+    wind->busy = FALSE;
+    return;
+  }
+  else if (retval == SCM_BOOL_F)
+  {
+    /* An bug was encountered during conversion. */
+
+    /* Disable the pause button. */
+    gtk_widget_set_sensitive(wind->convert_pause, FALSE);
+
+    /* Remove any converted data. */
+    gnc_progress_dialog_set_sub(wind->convert_progress, _("Cleaning up"));
+    gnc_ui_qif_import_convert_undo(wind);
+
+    /* Inform the user. */
+    gnc_progress_dialog_append_log(wind->convert_progress,
+                     _( "A bug was detected while converting the QIF data."));
+    gnc_progress_dialog_set_sub(wind->convert_progress, _("Failed"));
+    gnc_progress_dialog_reset_value(wind->convert_progress);
+    gnc_error_dialog(wind->window,
+                     _( "A bug was detected while converting the QIF data."));
+    /* FIXME: How should we request that the user report this problem? */
+
+    wind->busy = FALSE;
+    return;
+  }
+  else if (SCM_SYMBOLP(retval))
+  {
+    /* An error was encountered during conversion. */
+
+    /* Disable the pause button. */
+    gtk_widget_set_sensitive(wind->convert_pause, FALSE);
+
+    /* Remove any converted data. */
+    gnc_progress_dialog_set_sub(wind->convert_progress, _("Cleaning up"));
+    gnc_ui_qif_import_convert_undo(wind);
+
+    /* Inform the user. */
+    gnc_progress_dialog_set_sub(wind->convert_progress, _("Failed"));
+    gnc_progress_dialog_reset_value(wind->convert_progress);
+
+    wind->busy = FALSE;
+    return;
+  }
+
+
+  /* Save the imported account tree. */
+  scm_gc_unprotect_object(wind->imported_account_tree);
+  wind->imported_account_tree = retval;
+  scm_gc_protect_object(wind->imported_account_tree);
+
+
+  /*
+   * Detect potentially duplicated transactions.
+   */
+
+  /* This step will fill the remainder of the bar. */
+  gnc_progress_dialog_push(wind->convert_progress, 1);
+  retval = scm_call_3(find_duplicates,
+                      scm_c_eval_string("(gnc-get-current-root-account)"),
+                      wind->imported_account_tree, progress);
+  gnc_progress_dialog_pop(wind->convert_progress);
+
+  /* Save the results. */
+  scm_gc_unprotect_object(wind->match_transactions);
+  wind->match_transactions = retval;
+  scm_gc_protect_object(wind->match_transactions);
+
+  if (retval == SCM_BOOL_T)
+  {
+    /* Canceled by the user. */
+    gtk_widget_set_sensitive(wind->convert_pause, FALSE);
+    gnc_progress_dialog_set_sub(wind->convert_progress, _("Canceling"));
+    wind->busy = FALSE;
+    return;
+  }
+  else if (retval == SCM_BOOL_F)
+  {
+    /* An error occurred during duplicate checking. */
+
+    /* Remove any converted data. */
+    gnc_progress_dialog_set_sub(wind->convert_progress, _("Cleaning up"));
+    gnc_ui_qif_import_convert_undo(wind);
+
+    /* Inform the user. */
+    gnc_progress_dialog_append_log(wind->convert_progress,
+                     _( "A bug was detected while detecting duplicates."));
+    gnc_progress_dialog_set_sub(wind->convert_progress, _("Failed"));
+    gnc_progress_dialog_reset_value(wind->convert_progress);
+    gnc_error_dialog(wind->window,
+                     _( "A bug was detected while detecting duplicates."));
+    /* FIXME: How should we request that the user report this problem? */
+
+    gtk_widget_set_sensitive(wind->convert_pause, FALSE);
+    wind->busy = FALSE;
+    return;
+  }
+
+
+  /* The conversion completed successfully. */
+  gnc_progress_dialog_set_sub(wind->convert_progress,
+                              _("Conversion completed"));
+  gnc_progress_dialog_set_value(wind->convert_progress, 1);
+
+  /* Enable all buttons. */
+  gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
+                                    TRUE, TRUE, TRUE, TRUE);
+
+  /* If the log is empty, move on to the next page automatically. */
+  if (gtk_text_buffer_get_char_count(gtk_text_view_get_buffer(GTK_TEXT_VIEW(wind->convert_log))) == 0)
+    gnome_druid_page_next(GNOME_DRUID_PAGE(widget));
+
+  gtk_widget_set_sensitive(wind->convert_pause, FALSE);
+  wind->busy = FALSE;
+  return;
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_convert_progress_pause_cb
+ *
+ * Invoked when the "Pause" button is clicked.
+ ********************************************************************/
+
+static void
+gnc_ui_qif_import_convert_progress_pause_cb(GtkButton * button,
+                                            gpointer user_data)
+{
+  QIFImportWindow *wind = user_data;
+  SCM toggle_pause      = scm_c_eval_string("qif-import:toggle-pause");
+  SCM progress;
+
+  if (!wind->busy)
+    return;
+
+  /* Create SCM for the progress helper. */
+  progress = SWIG_NewPointerObj(wind->convert_progress,
+                                SWIG_TypeQuery("_p__GNCProgressDialog"),
+                                0);
+
+  /* Pause (or resume) the currently running operation. */
+  scm_call_1(toggle_pause, progress);
+
+  /* Swap the button label between pause and resume. */
+  if (strcmp(gtk_button_get_label(button), _("_Resume")))
+  {
+    gtk_button_set_use_stock(button, FALSE);
+    gtk_button_set_use_underline(button, TRUE);
+    gtk_button_set_label(button, _("_Resume"));
   }
   else
-    prepare_security_pages(wind);
+  {
+    gtk_button_set_use_stock(button, TRUE);
+    gtk_button_set_use_underline(button, FALSE);
+    gtk_button_set_label(button, "gtk-media-pause");
+  }
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_convert_progress_next_cb
+ *
+ * Determine the next page after converting successfully.
+ ********************************************************************/
+
+static gboolean
+gnc_ui_qif_import_convert_progress_next_cb(GnomeDruidPage * page,
+                                           gpointer arg1,
+                                           gpointer user_data)
+{
+  QIFImportWindow *wind = user_data;
+
+  if (SCM_NULLP(wind->match_transactions))
+  {
+    /* No potential duplicates, so skip to the last page. */
+    gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                         get_named_page(wind, "end_page"));
+    return TRUE;
+  }
+
+  /* Prepare the duplicates page. */
+  gnc_ui_qif_import_prepare_duplicates(wind);
+
+  /* Display the next page. */
+  return gnc_ui_qif_import_generic_next_cb(page, arg1, wind);
+}
+
+
+/****************************************************************
+ * convert_progress_back_timeout_cb
+ *
+ * This timer callback function waits until the busy flag
+ * has been cleared before going back to the previous page.
+ ****************************************************************/
+
+static gboolean
+convert_progress_back_timeout_cb(gpointer data)
+{
+  QIFImportWindow *wind = data;
+
+  if (wind->busy)
+    /* Wait for timer to go off again. */
+    return TRUE;
+
+  /* The busy flag was lowered. Go back to the previous page. */
+  gnome_druid_page_back(get_named_page(wind, "convert_progress_page"));
+
+  /* Cancel the timer. */
+  return FALSE;
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_convert_progress_back_cb
+ *
+ * Return to the previous page, waiting if necessary.
+ ********************************************************************/
+
+static gboolean
+gnc_ui_qif_import_convert_progress_back_cb(GnomeDruidPage * page,
+                                           gpointer arg1,
+                                           gpointer user_data)
+{
+  QIFImportWindow *wind = user_data;
+
+  if (wind->busy)
+  {
+    /* Cancel any long-running Scheme operation. */
+    scm_c_eval_string("(qif-import:cancel)");
+
+    /* Wait for the busy flag to be lowered. */
+    g_timeout_add(200, convert_progress_back_timeout_cb, user_data);
+
+    return TRUE;
+  }
+
+  return gnc_ui_qif_import_generic_back_cb(page, arg1, user_data);
 }
 
 
@@ -2797,6 +3025,8 @@ do_cancel(QIFImportWindow * wind)
   QIFDruidPage        *page;
   gnc_commodity_table *table;
 
+  gnc_set_busy_cursor(NULL, TRUE);
+
   /* Remove any converted data. */
   gnc_ui_qif_import_convert_undo(wind);
 
@@ -2819,6 +3049,8 @@ do_cancel(QIFImportWindow * wind)
     wind->new_namespaces = g_list_delete_link(wind->new_namespaces,
                                               wind->new_namespaces);
   }
+
+  gnc_unset_busy_cursor(NULL);
 
   /* Destroy the druid. */
   gnc_ui_qif_import_druid_destroy(wind);
@@ -2940,7 +3172,8 @@ gnc_ui_qif_import_druid_make(void)
   };
 
   char * post_page_names[NUM_POST_PAGES] = {
-    "match_doc_page", "match_duplicates_page", "end_page"
+    "convert_progress_page", "match_doc_page", "match_duplicates_page",
+    "end_page"
   };
 
   char * doc_page_names[NUM_DOC_PAGES] = {
@@ -3061,8 +3294,24 @@ gnc_ui_qif_import_druid_make(void)
      G_CALLBACK(gnc_ui_qif_import_currency_next_cb), retval);
 
   glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_commodity_prepare_cb",
-     G_CALLBACK(gnc_ui_qif_import_commodity_prepare_cb), retval);
+    (xml, "gnc_ui_qif_import_convert_progress_prepare_cb",
+     G_CALLBACK(gnc_ui_qif_import_convert_progress_prepare_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_convert_progress_show_cb",
+     G_CALLBACK(gnc_ui_qif_import_convert_progress_show_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_convert_progress_pause_cb",
+     G_CALLBACK(gnc_ui_qif_import_convert_progress_pause_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_convert_progress_next_cb",
+     G_CALLBACK(gnc_ui_qif_import_convert_progress_next_cb), retval);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_convert_progress_back_cb",
+     G_CALLBACK(gnc_ui_qif_import_convert_progress_back_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_finish_cb",
@@ -3111,6 +3360,14 @@ gnc_ui_qif_import_druid_make(void)
   retval->memo_view       = glade_xml_get_widget(xml, "memo_page_view");
   retval->memo_view_count = glade_xml_get_widget(xml, "memo_page_count");
   retval->memo_view_btn   = glade_xml_get_widget(xml, "memo_page_change");
+  retval->convert_pause   = glade_xml_get_widget(xml, "convert_progress_pause");
+  retval->convert_log     = glade_xml_get_widget(xml, "convert_progress_log");
+  retval->convert_progress = gnc_progress_dialog_custom(
+    GTK_LABEL(glade_xml_get_widget(xml, "convert_progress_primary")),
+    GTK_LABEL(glade_xml_get_widget(xml, "convert_progress_secondary")),
+    GTK_PROGRESS_BAR(glade_xml_get_widget(xml, "convert_progress_bar")),
+    GTK_LABEL(glade_xml_get_widget(xml, "convert_progress_sub")),
+    GTK_TEXT_VIEW(retval->convert_log));
   retval->new_transaction_view =
     glade_xml_get_widget(xml, "new_transaction_view");
   retval->old_transaction_view =
