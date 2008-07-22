@@ -122,8 +122,10 @@ gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
 GtkWidget * 
 gnc_report_window_default_params_editor(SCM options, SCM report)
 {
-  SCM get_editor = scm_c_eval_string("gnc:report-editor-widget");
-  SCM get_title  = scm_c_eval_string("gnc:report-type");
+  SCM get_editor        = scm_c_eval_string("gnc:report-editor-widget");
+  SCM get_report_type   = scm_c_eval_string("gnc:report-type");
+  SCM get_template      = scm_c_eval_string("gnc:find-report-template");
+  SCM get_template_name = scm_c_eval_string("gnc:report-template-name");
   SCM ptr;
   
   const gchar *title = NULL;
@@ -144,10 +146,17 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
     prm->cur_report  = report;
     prm->db          = gnc_option_db_new(prm->scm_options);
 
-    ptr = scm_call_1(get_title, report);
-    if (SCM_STRINGP(ptr)) {
-      title = SCM_STRING_CHARS(ptr);
+    /* Get the title of the report's template. */
+    ptr = scm_call_1(get_report_type, report);
+    if (ptr != SCM_BOOL_F) {
+      ptr = scm_call_1(get_template, ptr);
+      if (ptr != SCM_BOOL_F) {
+        ptr = scm_call_1(get_template_name, ptr);
+        if (SCM_STRINGP(ptr))
+          title = SCM_STRING_CHARS(ptr);
+      }
     }
+
     /* Don't forget to translate the window title */
     prm->win  = gnc_options_dialog_new((gchar*) (title && *title ? _(title) : ""));
     
