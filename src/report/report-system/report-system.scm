@@ -577,6 +577,8 @@
 (export gnc-commodity-collector-commodity-count)
 (export gnc:account-get-balance-at-date)
 (export gnc:account-get-comm-balance-at-date)
+(export gnc:account-get-comm-value-interval)
+(export gnc:account-get-comm-value-at-date)
 (export gnc:accounts-get-balance-helper)
 (export gnc:accounts-get-comm-total-profit)
 (export gnc:accounts-get-comm-total-income)
