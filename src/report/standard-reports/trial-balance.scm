@@ -421,9 +421,7 @@
 	       (acct-table #f)
 	       (debit-tot (gnc:make-commodity-collector))
 	       (credit-tot (gnc:make-commodity-collector))
-               (unrealized-gain-collector #f)
-               (neg-unrealized-gain-collector #f)
-	       (book-balance #f) ;; assets - liabilities - equity, norm 0
+               (neg-unrealized-gain-collector (gnc:make-commodity-collector))
 	       (table-env #f)    ;; parameters for :make-
 	       (account-cols #f)
 	       (indented-depth #f)
@@ -502,15 +500,7 @@
 	       )
 	      cell)
 	    )
-	  
-	  ;; set default cell alignment
-	  (gnc:html-table-set-style!
-	   build-table "td"
-	   'attribute '("align" "right")
-	   'attribute '("valign" "top")
-	   )
-	  
-	  (gnc:report-percent-done 4)
+
 	  ;; sum any unrealized gains
 	  ;; 
 	  ;; Hm... unrealized gains....  This is when you purchase
@@ -521,40 +511,63 @@
 	  ;; I *think* a decrease in the value of a liability or
 	  ;; equity constitutes an unrealized loss.  I'm unsure about
 	  ;; that though....
-	  ;; 
-	  (set! book-balance (gnc:make-commodity-collector))
-	  (map (lambda (acct)
-		 (book-balance
-		  'merge
-		  (gnc:account-get-comm-balance-at-date acct end-date-tp #f)
-		  #f)
-		 )
-	       all-accounts)
-          (set! unrealized-gain-collector (gnc:make-commodity-collector))
-          (let* ((cost-fn
-                  (gnc:case-exchange-fn 'average-cost
-                                        report-commodity end-date-tp))
-		 
-                 (value
-                  (gnc:gnc-monetary-amount
-                   (gnc:sum-collector-commodity book-balance
-                                                report-commodity
-                                                exchange-fn)))
-		 
-                 (cost
-                  (gnc:gnc-monetary-amount
-                   (gnc:sum-collector-commodity book-balance
-                                                report-commodity
-                                                cost-fn)))
-		 
-                 (unrealized-gain (gnc-numeric-sub-fixed value cost)))
-	    
-            (unrealized-gain-collector 'add report-commodity unrealized-gain)
-	    )
-	  (set! neg-unrealized-gain-collector (gnc:make-commodity-collector))
-	  (neg-unrealized-gain-collector 'minusmerge
-					 unrealized-gain-collector
-					 #f)
+          ;;
+          ;; This procedure returns a commodity collector.
+          (define (collect-unrealized-gains)
+            (if (equal? price-source 'average-cost)
+                ;; No need to calculate if doing valuation at cost.
+                (gnc:make-commodity-collector)
+                (let ((book-balance (gnc:make-commodity-collector))
+                      (unrealized-gain-collector (gnc:make-commodity-collector))
+                      (cost-fn (gnc:case-exchange-fn 'average-cost
+                                                     report-commodity
+                                                     end-date-tp))
+                      (value #f)
+                      (cost #f))
+
+                  ;; Calculate book balance.
+                  ;; assets - liabilities - equity; normally 0
+                  (map
+                   (lambda (acct)
+                     (book-balance 'merge
+                                   (gnc:account-get-comm-balance-at-date
+                                    acct end-date-tp #f)
+                     #f))
+                   all-accounts)
+
+                 ;; Get the value of all holdings.
+                 (set! value (gnc:gnc-monetary-amount
+                              (gnc:sum-collector-commodity book-balance
+                                                           report-commodity
+                                                           exchange-fn)))
+
+                 ;; Get the cost of all holdings.
+                 (set! cost (gnc:gnc-monetary-amount
+                             (gnc:sum-collector-commodity book-balance
+                                                          report-commodity
+                                                          cost-fn)))
+
+                 ;; Get the unrealized gain or loss (value minus cost).
+                 (unrealized-gain-collector 'add
+                                            report-commodity
+                                            (gnc-numeric-sub-fixed value cost))
+                 unrealized-gain-collector)))
+
+
+	  ;; set default cell alignment
+	  (gnc:html-table-set-style!
+	   build-table "td"
+	   'attribute '("align" "right")
+	   'attribute '("valign" "top")
+	   )
+	  
+	  (gnc:report-percent-done 4)
+
+          ;; Get any unrealized gains/losses.
+          (neg-unrealized-gain-collector 'minusmerge
+                                         (collect-unrealized-gains)
+                                         #f)
+
 	  (set! table-env
 		(list
 		 (list 'start-date #f)
