@@ -106,6 +106,9 @@
    <before>16560</before>
   </branch>
   <branch>
+   <prefix>gnucash/branches/aqbanking3</prefix>
+  </branch>
+  <branch>
    <prefix>gnucash/branches/reshuffle-modules</prefix>
   </branch>
   <branch>
