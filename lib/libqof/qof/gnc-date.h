@@ -69,6 +69,9 @@
 
 #include <time.h>
 
+/** The default date format for use with strftime. */
+extern const char *gnc_default_strftime_date_format;
+
 /** The maximum length of a string created by the date printers */
 #define MAX_DATE_LENGTH 31
 
@@ -380,7 +383,7 @@ size_t qof_print_date_dmy_buff (gchar * buff, size_t buflen, int day, int month,
 size_t qof_print_date_buff (char * buff, size_t buflen, time_t secs);
 
 /** Convenience; calls through to qof_print_date_dmy_buff(). **/
-size_t qof_print_gdate( char *buf, size_t bufflen, GDate *gd );
+size_t qof_print_gdate(char *buf, size_t bufflen, GDate *gd);
 
 /** Convenience; calls through to qof_print_date_dmy_buff(). 
  *  Return: string, which should be freed when no longer needed.

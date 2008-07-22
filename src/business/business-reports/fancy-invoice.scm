@@ -375,7 +375,7 @@
 ;   (gnc:make-string-option
 ;    (N_ "Display") (N_ "Today Date Format")
 ;    "v" (N_ "The format for the date->string conversion for today's date.")
-;    "%B %e, %Y"))
+;    (gnc-default-strftime-date-format)))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 
@@ -647,7 +647,9 @@
     ;; oli-custom - modified to display a custom format
     ;; for the invoice date/due date fields
     ;; I could have taken the format from the report options, but... ;)
-    (string-expand (strftime "%B %e, %Y" (localtime (car date))) #\space "&nbsp;")
+    (string-expand (strftime (gnc-default-strftime-date-format)
+                             (localtime (car date)))
+                   #\space "&nbsp;")
     ;;(string-expand (gnc-print-date date) #\space "&nbsp;")
     )))
 

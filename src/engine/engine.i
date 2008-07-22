@@ -106,6 +106,7 @@ void qof_book_kvp_changed (QofBook *book);
 // TODO: Unroll/remove
 const char *qof_session_get_url (QofSession *session);
 
+extern const char *gnc_default_strftime_date_format;
 const char *gnc_print_date (Timespec ts);
 
 GUID guid_new_return(void);
