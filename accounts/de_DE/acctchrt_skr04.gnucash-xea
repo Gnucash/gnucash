@@ -38,7 +38,7 @@
     Standardkontenrahmen SKR04, Stand 2005
   </gnc-act:short-description>
   <gnc-act:long-description>
-    BETA-Version eines Kontenrahmes SKR04 für 2005.  Mehr Informationen unter http://linuxwiki.de/GnuCash/skr04
+    BETA-Version eines Kontenrahmes SKR04 für 2005.  Mehr Informationen unter http://wiki.gnucash.org/wiki/De/SKR04
   </gnc-act:long-description>
   <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
   <gnc:account version="2.0.0">
