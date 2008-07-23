@@ -66,6 +66,10 @@
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
       </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   </gnc:account>
@@ -2221,6 +2225,10 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>hbci</slot:key>
@@ -14419,6 +14427,10 @@
 	<slot:value type="string"></slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>hbci</slot:key>
 	<slot:value type="frame"/>
       </slot>
@@ -14552,6 +14564,10 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>hbci</slot:key>
@@ -15711,6 +15727,10 @@
 	<slot:value type="string">false</slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
       </slot>
@@ -15846,6 +15866,10 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>hbci</slot:key>
@@ -16032,6 +16056,10 @@
 	<slot:value type="string"></slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>hbci</slot:key>
 	<slot:value type="frame"/>
       </slot>
@@ -16194,6 +16222,10 @@
 	<slot:value type="string"></slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>hbci</slot:key>
 	<slot:value type="frame"/>
       </slot>
@@ -16349,6 +16381,10 @@
       <slot>
 	<slot:key>placeholder</slot:key>
 	<slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>notes</slot:key>
@@ -16623,6 +16659,10 @@
 	<slot:value type="string"></slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>hbci</slot:key>
 	<slot:value type="frame"/>
       </slot>
@@ -16717,6 +16757,10 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>hbci</slot:key>
@@ -19276,6 +19320,10 @@
 	<slot:value type="string"></slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>hbci</slot:key>
 	<slot:value type="frame"/>
       </slot>
@@ -19366,6 +19414,10 @@
       <slot>
 	<slot:key>placeholder</slot:key>
 	<slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>notes</slot:key>
@@ -23019,6 +23071,10 @@
 	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
       </slot>
@@ -23550,6 +23606,10 @@
 	<slot:value type="string">false</slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
       </slot>
@@ -23734,6 +23794,10 @@
 	<slot:value type="string">false</slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
       </slot>
@@ -23801,6 +23865,10 @@
       <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>hbci</slot:key>
@@ -24183,6 +24251,10 @@
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
 	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
@@ -24678,6 +24750,10 @@
 	<slot:value type="string"></slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>hbci</slot:key>
 	<slot:value type="frame"/>
       </slot>
@@ -24795,6 +24871,10 @@
 	<slot:value type="string">false</slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
       </slot>
@@ -24817,6 +24897,10 @@
 	<slot:value type="string">false</slot:value>
       </slot>
       <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
 	<slot:key>notes</slot:key>
 	<slot:value type="string"></slot:value>
       </slot>
@@ -24837,6 +24921,10 @@
       <slot>
 	<slot:key>placeholder</slot:key>
 	<slot:value type="string">false</slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
+	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
 	<slot:key>notes</slot:key>
@@ -25390,6 +25478,10 @@
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
+	<slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
+	<slot:key>hidden</slot:key>
 	<slot:value type="string">true</slot:value>
       </slot>
       <slot>
