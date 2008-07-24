@@ -428,13 +428,16 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
 static Account *
 gnc_ab_accinfo_to_gnc_acc(AB_IMEXPORTER_ACCOUNTINFO *acc_info)
 {
+    const gchar *bankcode, *accountnumber;
     gchar *online_id;
     Account *gnc_acc;
 
     g_return_val_if_fail(acc_info, NULL);
 
-    online_id = g_strconcat(AB_ImExporterAccountInfo_GetBankCode(acc_info),
-                            AB_ImExporterAccountInfo_GetAccountNumber(acc_info),
+    bankcode = AB_ImExporterAccountInfo_GetBankCode(acc_info);
+    accountnumber = AB_ImExporterAccountInfo_GetAccountNumber(acc_info);
+    online_id = g_strconcat(bankcode ? bankcode : "",
+                            accountnumber ? accountnumber : "",
                             (gchar*)NULL);
     gnc_acc = gnc_import_select_account(
         NULL, online_id, 1, AB_ImExporterAccountInfo_GetAccountName(acc_info),
