@@ -658,6 +658,7 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (amount),
                                     gnc_default_price_print_info ());
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (amount), 1000000);
     gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
     info->price_edit = amount;
     label = glade_xml_get_widget (xml, "price_label");
