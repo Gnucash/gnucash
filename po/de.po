@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-20 22:09+0200\n"
-"PO-Revision-Date: 2008-07-20 22:25+0200\n"
+"POT-Creation-Date: 2008-07-25 22:00+0200\n"
+"PO-Revision-Date: 2008-07-25 23:41+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -685,7 +685,9 @@ msgstr "Kein Konto ausgewählt. Bitte erneut versuchen."
 
 #: ../src/business/business-gnome/dialog-date-close.c:78
 msgid "Placeholder account selected.  Please try again."
-msgstr "Das ausgewählte Konto ist als »Platzhalter« markiert und darf deshalb keine Buchungen enthalten. Bitte wählen Sie ein anderes Konto."
+msgstr ""
+"Das ausgewählte Konto ist als »Platzhalter« markiert und darf deshalb keine "
+"Buchungen enthalten. Bitte wählen Sie ein anderes Konto."
 
 #: ../src/business/business-gnome/dialog-employee.c:216
 msgid "You must enter a username."
@@ -3552,7 +3554,11 @@ msgstr "user"
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
-#: ../src/gnome/dialog-progress.c:331 ../src/gnome/dialog-progress.c:334
+#: ../src/gnome/dialog-progress.c:478 ../src/gnome/dialog-progress.c:527
+msgid "(paused)"
+msgstr "(angehalten)"
+
+#: ../src/gnome/dialog-progress.c:762 ../src/gnome/dialog-progress.c:765
 msgid "Complete"
 msgstr "Komplett"
 
@@ -5356,10 +5362,6 @@ msgid "y"
 msgstr "y"
 
 #: ../src/gnome/glade/progress.glade.h:1
-msgid "Heading"
-msgstr "Überschrift"
-
-#: ../src/gnome/glade/progress.glade.h:2
 msgid "Working..."
 msgstr "In Arbeit..."
 
@@ -8264,6 +8266,10 @@ msgid "Number of automatic decimal places"
 msgstr "Anzahl automatische Dezimalstellen"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:39
+msgid "Only display leaf account names."
+msgstr "Nur letzten Kontennamen anzeigen"
+
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:40
 msgid "Position of the notebook tabs"
 msgstr "Position der Reiter der Karteikarten"
 
@@ -8297,7 +8303,15 @@ msgstr ""
 msgid "Show horizontal borders in a register"
 msgstr "Horizontale Begrenzungen im Kontofenster anzeigen"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:46
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:47
+msgid ""
+"Show only the names of the leaf accounts in the register and in the account "
+"selection popup. The default behaviour is to display the full name, "
+"including the path in the account tree. Activating this option implies that "
+"you use unique leaf names."
+msgstr "Wenn aktiviert, wird nur der letzte Bestandteil des Kontonamens im Kontofenster und in der Kontoauswahl angezeigt. Andernfalls wird der lange Kontonamen mit allen Hauptkonten angezeigt. Diese Option kann nur sinnvoll aktiviert werden, wenn die letzten Kontennamen nicht mehrfach auftreten."
+
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:48
 msgid "Show splash screen"
 msgstr "Begrüßungsbild anzeigen"
 
@@ -10643,6 +10657,14 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:86
 msgid ""
+"If checked, only the names of the leaf accounts are displayed in the "
+"register and in the account selection popup. The default behaviour is to "
+"display the full name, including the path in the account tree. Cecking this "
+"option implies that you use unique leaf names."
+msgstr "Wenn aktiviert, wird nur der letzte Bestandteil des Kontonamens im Kontofenster und in der Kontoauswahl angezeigt. Andernfalls wird der lange Kontonamen mit allen Hauptkonten angezeigt. Diese Option kann nur sinnvoll aktiviert werden, wenn die letzten Kontennamen nicht mehrfach auftreten."
+
+#: ../src/gnome-utils/glade/preferences.glade.h:87
+msgid ""
 "If checked, pressing the 'Enter' key will move to the blank transaction at "
 "the bottom of the register.  If clear, pressing the 'Enter' key will move "
 "down one row."
@@ -12420,7 +12442,15 @@ msgstr "Abgeglichener Saldo:"
 msgid "Difference:"
 msgstr "Differenz:"
 
-#: ../src/gnome/window-reconcile.c:1883
+#: ../src/gnome/window-reconcile.c:1822
+msgid ""
+"You have made changes to this reconcile window. Are you sure you want to "
+"cancel?"
+msgstr ""
+"Sie haben Veränderungen vorgenommen. Sind Sie sicher, dass Sie abbrechen "
+"wollen?"
+
+#: ../src/gnome/window-reconcile.c:1934
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr ""
 "Das Konto ist nicht ausgeglichen. Sind Sie sicher, dass Sie das Abgleichen "
@@ -12431,16 +12461,8 @@ msgid "Do you want to postpone this reconciliation and finish it later?"
 msgstr ""
 "Möchten Sie dieses Abgleichen jetzt unterbrechen und später fertigstellen?"
 
-#: ../src/gnome/window-reconcile.c:1974
-msgid ""
-"You have made changes to this reconcile window. Are you sure you want to "
-"cancel?"
-msgstr ""
-"Sie haben Veränderungen vorgenommen. Sind Sie sicher, dass Sie abbrechen "
-"wollen?"
-
 #. Toplevel
-#: ../src/gnome/window-reconcile.c:1991
+#: ../src/gnome/window-reconcile.c:2027
 msgid "_Reconcile"
 msgstr "Ab_gleichen"
 
@@ -12503,6 +12525,937 @@ msgstr "Ausgewählten Buchungssatz löschen"
 #: ../src/gnome/window-reconcile.c:2043
 msgid "Open the GnuCash help window"
 msgstr "Das GnuCash-Hilfe-Fenster öffnen"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:1
+#: ../src/import-export/hbci/glade/hbci.glade.h:1
+msgid "(filled in automatically)"
+msgstr "(wird automatisch ausgefüllt)"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:2
+msgid "<b>From</b>"
+msgstr "<b>Von</b>"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:3
+msgid "<b>Log Messages</b>"
+msgstr "<b>Protokoll</b>"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:4
+#: ../src/import-export/hbci/glade/hbciprefs.glade.h:1
+msgid "<b>Online Banking</b>"
+msgstr "<b>Onlinebanking</b>"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:5
+#: ../src/import-export/hbci/glade/hbci.glade.h:4
+msgid "<b>Progress</b>"
+msgstr "<b>Verlauf</b>"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:5
+msgid "<b>To</b>"
+msgstr "<b>Bis</b>"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:6
+msgid "Add current"
+msgstr "Aktuelle hinzufügen"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:7
+msgid "Add the current online transaction as a new transaction template"
+msgstr "Aktuelle Online-Buchung als neue Überweisungsvorlage hinzufügen"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:9
+msgid "Bank Code"
+msgstr "Bankleitzahl"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:11
+#: ../src/import-export/hbci/glade/hbci.glade.h:11
+msgid ""
+"Click on the line of an Online Banking account name if you want to match it "
+"to a GnuCash account. Click \"Forward\" when all desired accounts are "
+"matching."
+msgstr ""
+"Klicken Sie auf die Zeile eines Online-Banking-Kontos, um diesem HBCI-Konto "
+"ein GnuCash-Konto zuzuordnen. Klicken Sie »Vor«, wenn alle gewünschten "
+"Konten zugeordnet sind."
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:12
+msgid "Close when finished"
+msgstr "Fenster nach Verbindungsende schließen"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:13
+#: ../src/import-export/hbci/glade/hbcipass.glade.h:1
+msgid "Confirm Password:"
+msgstr "Passwort bestätigen:"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:14
+#: ../src/import-export/hbci/glade/hbci.glade.h:13
+msgid "Current Action"
+msgstr "Momentane Aktion"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:15
+#: ../src/import-export/hbci/glade/hbci.glade.h:14
+msgid "Current Job"
+msgstr "Momentaner Auftrag"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:15
+msgid "Date range of transactions to retrieve:"
+msgstr "Datumsbereich der abzurufenden Buchungen:"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:16
+msgid "Delete the currently selected transaction template"
+msgstr "Ausgewählte Überweisungsvorlage löschen"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:17
+msgid "E_nter date:"
+msgstr "D_atum eingeben:"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:18
+msgid "Ente_r date:"
+msgstr "Datum _eingeben:"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:20
+#: ../src/import-export/hbci/glade/hbcipass.glade.h:2
+msgid "Enter Password"
+msgstr "Passwort eingeben:"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:21
+#: ../src/import-export/hbci/glade/hbci.glade.h:19
+msgid "Enter an Online Transaction"
+msgstr "Online-Überweisung eingeben"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:20
+msgid "Enter name for new template:"
+msgstr "Bitte geben Sie einen Namen für die neue Überweisungsvorlage ein:"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:23
+#: ../src/import-export/hbci/glade/hbcipass.glade.h:5
+msgid "Enter your password"
+msgstr "Geben Sie Ihr Passwort ein"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:24
+#: ../src/import-export/hbci/glade/hbci.glade.h:21
+msgid "Execute Now"
+msgstr "Jetzt ausführen"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:22
+msgid "Execute later (unimpl.)"
+msgstr "Später ausführen (unfertig)"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:23
+msgid "Execute this online transaction now"
+msgstr "Diesen Auftrag jetzt online abschicken"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:24
+msgid "Get Transactions Online"
+msgstr "Online Kontoumsätze abfragen"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:25
+msgid "Initial Online Banking Setup"
+msgstr "Grundlegende Online-Banking Einrichtung"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:26
+msgid "Match Online Banking accounts with GnuCash accounts"
+msgstr "Online-Banking Konten mit GnuCash Konten zuordnen"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:27
+msgid "Move the selected transaction template one row down"
+msgstr "Gewählte Überweisungsvorlage eine Zeile nach unten umsortieren"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:28
+msgid "Move the selected transaction template one row up"
+msgstr "Gewählte Überweisungsvorlage eine Zeile nach oben umsortieren"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:29
+msgid "Name for new template"
+msgstr "Namen für neue Überweisungsvorlage"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:30
+msgid "Online Banking Connection Window"
+msgstr "Onlinebanking Verbindungsfenster"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:31
+msgid "Online Banking Setup Finished"
+msgstr "Online-Banking Einrichtung beendet"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:35
+#: ../src/import-export/hbci/glade/hbci.glade.h:33
+msgid "Online Transaction"
+msgstr "Online-Auftrag Einzelüberweisung"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:34
+msgid "Originator Account Number"
+msgstr "Konto-Nr. des Auftraggebers"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:35
+msgid "Originator Name"
+msgstr "Auftraggeber: Name, Vorname"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:38
+#: ../src/import-export/hbci/glade/hbcipass.glade.h:6
+msgid "Password:"
+msgstr "Passwort:"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:39
+#: ../src/import-export/hbci/glade/hbci.glade.h:36
+msgid "Payment Purpose (only for recipient)"
+msgstr "Verwendungszweck - z.B. Kunden-Referenznummer - (nur für Empfänger)"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:37
+msgid "Payment Purpose continued"
+msgstr "noch Verwendungszweck (ggf. noch Anschrift des Auftraggebers)"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:41
+#: ../src/import-export/hbci/glade/hbci.glade.h:38
+msgid "Progress"
+msgstr "Verlauf"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:39
+msgid "Recipient Account Number"
+msgstr "Konto-Nr. des Empfängers"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:40
+msgid "Recipient Bank Code"
+msgstr "Bankleitzahl"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:41
+msgid "Recipient Name"
+msgstr "Empfänger: Name, Vorname / Firma"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:45
+#: ../src/import-export/hbci/glade/hbciprefs.glade.h:4
+msgid "Remember _PIN"
+msgstr "_PIN merken"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:46
+#: ../src/import-export/hbci/glade/hbci.glade.h:42
+msgid "Sort"
+msgstr "Sortieren"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:43
+msgid "Sort the list of transaction templates alphabetically"
+msgstr "Die Liste der Überweisungsvorlagen alphabetisch sortieren"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:48
+#: ../src/import-export/hbci/glade/hbci.glade.h:45
+msgid "Start Online Banking Wizard"
+msgstr "Onlinebanking Einrichtungs-Assistenten starten"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:46
+msgid ""
+"The Setup of your Online Banking connection is handled by the external "
+"program \"AqBanking Setup Wizard\". Please press the button below to start "
+"this program."
+msgstr ""
+"Die Einrichtung Ihrer Onlinebanking-Verbindung (HBCI) wird von dem externen "
+"Programm »AqBanking Einrichtungs-Assistent« durchgeführt. Bitte klicken Sie "
+"den Knopf, um dieses Programm zu starten."
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:47
+msgid ""
+"The setup for matching Online Banking accounts to GnuCash accounts is now "
+"finished.  You can now invoke Online Banking actions on those accounts.\n"
+"\n"
+"If you want to add another bank, user, or account, you can start this druid "
+"again anytime.\n"
+"\n"
+"Press \"Apply\" now."
+msgstr ""
+"Die Einrichtung des Onlinebanking-Zugangs und die Zuordnung zu den passenden "
+"GnuCash Konten ist fertig gestellt. Sie können nun Onlinebanking-Aktionen in "
+"diesen Konten aufrufen (Menü Aktionen: Online Aktionen).\n"
+"\n"
+"Wenn Sie eine neue Bank, einen neuen Benutzer oder ein neues Konto "
+"hinzufügen möchten, können Sie diesen Assistenten (Druiden) jederzeit wieder "
+"aufrufen.\n"
+"\n"
+"Klicken Sie jetzt »Anwenden«."
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:52
+msgid ""
+"This druid helps you setting up your Online Banking connection with your "
+"bank.\n"
+"\n"
+"You first need to apply for Online Banking access at your bank. If your "
+"bank  decides to grant you electronic access, they will send you a letter "
+"containing \n"
+"\n"
+"* The bank code of your bank\n"
+"* The user ID that identifies you to your bank\n"
+"* The Internet address of your bank's Online Banking server\n"
+"* For HBCI Online Banking, information about the cryptographic public key of "
+"your bank (\"Ini-Letter\").\n"
+"\n"
+"This information will be needed in the following. Press \"Forward\" now.\n"
+"\n"
+"NOTE: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online "
+"Banking server. You should not rely on time-critical transfers through "
+"Online Banking, because sometimes the bank does not give you correct "
+"feedback when a transfer is rejected.\n"
+"\n"
+"Press \"Cancel\" if you do not wish to setup any Online Banking connection "
+"now."
+msgstr ""
+"Dieser Assistent hilft Ihnen, die Online-Verbindung (HBCI) mit Ihrer Bank "
+"einzurichten.\n"
+"\n"
+"Zunächst müssen Sie bei Ihrer Bank die Freischaltung des HBCI-Zugangs "
+"beantragt haben. Ihre Bank müsste Ihnen dann einen Brief zugesandt haben, "
+"der u.a. folgende Angaben enthält:\n"
+"\n"
+"* Die Bankleitzahl Ihrer Bank\n"
+"* Die Benutzerkennung, die Sie gegenüber Ihrer Bank identifiziert\n"
+"* Die Internetadresse des Bank-Servers \n"
+"* Informationen über die öffentlichen kryptographischen Schlüssel Ihrer Bank "
+"(»Ini-Brief«)\n"
+"\n"
+"Diese Informationen werden im folgenden benötigt. Klicken Sie jetzt »Vor«.\n"
+"\n"
+"ACHTUNG: Die Programmierer geben keine Garantie auf korrekte Funktion. "
+"Insbesondere kann bei manchen Bank-Servern eine schlechte HBCI-"
+"Implementierung dazu führen, dass Sie keine Fehlermeldung bei "
+"zurückgewiesenen Aufträgen erhalten. Sie sollten sich daher bei "
+"zeitkritischen Aufträgen nicht auf HBCI allein verlassen.\n"
+"\n"
+"Klicken Sie »Abbrechen«, wenn Sie jetzt keine HBCI Verbindung einrichten "
+"möchten."
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:66
+msgid "Use Transaction Template"
+msgstr "Überweisungsvorlage:"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:70
+#: ../src/import-export/hbci/glade/hbci.glade.h:68
+msgid "_Earliest possible date"
+msgstr "_Frühestes mögliches Datum"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:69
+msgid "_Last retrieval date"
+msgstr "_Letztes Abrufdatum"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:70
+msgid "_Now"
+msgstr "_Jetzt"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:71
+msgid "_Start AqBanking Wizard"
+msgstr "AqBanking Einrichtungs-Assistenten _starten"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:74
+#: ../src/import-export/hbci/glade/hbciprefs.glade.h:6
+msgid "_Verbose debug messages"
+msgstr "Ausführliche _Fehlermeldungen"
+
+#: ../src/import-export/aqbanking/aqbanking.glade.h:75
+#: ../src/import-export/hbci/glade/hbci.glade.h:72
+msgid "at Bank"
+msgstr "der Bank"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:73
+msgid "something"
+msgstr "irgendwas"
+
+#. Conversion was erroneous, so don't use the string
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:232
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:778
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:781
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:785
+#: ../src/import-export/hbci/dialog-hbcitrans.c:408
+#: ../src/import-export/hbci/dialog-hbcitrans.c:895
+#: ../src/import-export/hbci/dialog-hbcitrans.c:899
+#: ../src/import-export/hbci/dialog-hbcitrans.c:909
+msgid "(unknown)"
+msgstr "(unbekannt)"
+
+#. Translators: Strings from this file are
+#. * needed only in countries that have one of
+#. * aqbanking's Online Banking techniques
+#. * available. This is 'OFX DirectConnect'
+#. * (U.S. and others), 'HBCI' (in Germany),
+#. * or 'YellowNet' (Switzerland). If none of
+#. * these techniques are available in your
+#. * country, you may safely ignore strings
+#. * from the import-export/hbci
+#. * subdirectory.
+#. Translators: Strings from this file are needed only in
+#. * countries that have one of aqbanking's Online Banking
+#. * techniques available. This is 'OFX DirectConnect'
+#. * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
+#. * (Switzerland). If none of these techniques are available
+#. * in your country, you may safely ignore strings from the
+#. * import-export/hbci subdirectory.
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:303
+#: ../src/import-export/hbci/dialog-hbcitrans.c:368
+msgid "Enter an Online Direct Debit Note"
+msgstr "Online-Lastschrift eingeben"
+
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:306
+#: ../src/import-export/hbci/dialog-hbcitrans.c:371
+msgid "Debited Account Owner"
+msgstr "Zahlungspflichtiger"
+
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:308
+#: ../src/import-export/hbci/dialog-hbcitrans.c:373
+msgid "Debited Account Number"
+msgstr "Konto-Nr. des Zahlungspflichtigen"
+
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:310
+#: ../src/import-export/hbci/dialog-hbcitrans.c:375
+msgid "Debited Account Bank Code"
+msgstr "BLZ des Zahlungspflichtigen"
+
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:313
+#: ../src/import-export/hbci/dialog-hbcitrans.c:378
+msgid "Credited Account Owner"
+msgstr "Auftraggeber"
+
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:315
+#: ../src/import-export/hbci/dialog-hbcitrans.c:380
+msgid "Credited Account Number"
+msgstr "Konto-Nr. des Auftraggebers"
+
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:317
+#: ../src/import-export/hbci/dialog-hbcitrans.c:382
+msgid "Credited Account Bank Code"
+msgstr "BLZ des Auftraggebers"
+
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:370
+#: ../src/import-export/hbci/dialog-hbcitrans.c:714
+#, c-format
+msgid ""
+"The internal check of the destination account number '%s' at the specified "
+"bank with bank code '%s' failed. This means the account number might contain "
+"an error. Should the online transfer job be sent with this account number "
+"anyway?"
+msgstr ""
+"Die interne Überprüfung der angegebenen Kontonummer »%s« bei der Bank mit "
+"der Bankleitzahl »%s« ergab, dass die Kontonummer wahrscheinlich einen "
+"Fehler enthält. Wollen Sie den Auftrag trotzdem mit dieser Kontonummer "
+"abschicken?"
+
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:455
+#: ../src/import-export/hbci/dialog-hbcitrans.c:534
+msgid ""
+"The amount is zero or the amount field could not be interpreted correctly. "
+"You might have mixed up decimal point and comma, compared to your locale "
+"settings. This does not result in a valid online transfer job. \n"
+"\n"
+"Do you want to enter the job again?"
+msgstr ""
+"Der Betrag ist Null oder der eingegebene Betrag konnte nicht korrekt "
+"interpretiert werden. Eventuell haben Sie Komma und Dezimalpunkt "
+"verwechselt. In der länderspezifischen Einstellung Deutschland (locale de, "
+"LANG=de_DE) müssen Sie ein Komma eingeben, andernfalls einen Punkt.\n"
+"\n"
+"Dies ergibt keinen zulässigen Zahlungsauftrag. Wollen Sie den Auftrag erneut "
+"eingeben?"
+
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:478
+#: ../src/import-export/hbci/dialog-hbcitrans.c:556
+msgid ""
+"You did not enter any transaction purpose. A purpose is required for an "
+"online transfer.\n"
+"\n"
+"Do you want to enter the job again?"
+msgstr ""
+"Sie haben keinen Verwendungszweck eingegeben. Für einen Überweisungsauftrag "
+"ist die Eingabe eines Verwendungszweck erforderlich.\n"
+"\n"
+"Wollen Sie den Auftrag erneut eingeben?"
+
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:499
+#: ../src/import-export/hbci/dialog-hbcitrans.c:577
+msgid ""
+"You did not enter a recipient name.  A recipient name is required for an "
+"online transfer.\n"
+"\n"
+"Do you want to enter the job again?"
+msgstr ""
+"Sie haben keinen Empfängernamen eingegeben. Für einen Überweisungsauftrag "
+"ist die Eingabe eines Empfängernamens erforderlich.\n"
+"\n"
+"Wollen Sie den Auftrag erneut eingeben?"
+
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:723
+#, c-format
+msgid ""
+"Do you really want to overwrite your changes with the contents of the "
+"template \"%s\"?"
+msgstr "Wollen Sie wirklich Ihre Änderungen verwerfen und durch den Inhalt der Vorlage »%s« überschreiben?"
+
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:867
+msgid ""
+"A template with the given name already exists.  Please enter another name."
+msgstr "Eine Vorlage mit diesem Namen existiert bereits.  Bitte geben Sie einen anderen Namen ein."
+
+#: ../src/import-export/aqbanking/dialog-ab-trans.c:992
+#, c-format
+msgid "Do you really want to delete the template with the name \"%s\"?"
+msgstr "Sind Sie sicher, dass Sie die ausgewählte Vorlage mit dem Namen »%s« löschen wollen?"
+
+#: ../src/import-export/aqbanking/druid-ab-initial.c:290
+#: ../src/import-export/hbci/druid-hbci-initial.c:689
+#, c-format
+msgid ""
+"The external program \"AqBanking Setup Wizard\" has not been found. \n"
+"\n"
+"The %s package should include the program \"qt3-wizard\".  Please check your "
+"installation to ensure this program is present.  On some distributions this "
+"may require installing additional packages."
+msgstr ""
+"Das externe Programm »AqBanking Einrichtungs-Assistent« konnte nicht "
+"gefunden werden. \n"
+"\n"
+"Dieses soll normalerweise vom %s-Paket installiert werden, so dass dann ein "
+"Programm namens »qt3-wizard« installiert ist. Bitte kontrollieren Sie Ihre "
+"Installation der Bibliothek AqBanking."
+
+#: ../src/import-export/aqbanking/druid-ab-initial.c:438
+#: ../src/import-export/hbci/druid-hbci-initial.c:661
+msgid ""
+"The external program \"AqBanking Setup Wizard\" failed to run successfully "
+"because the additional software \"Qt\" was not found.  Please install the "
+"\"Qt/Windows Open Source Edition\" from Trolltech by downloading it from www."
+"trolltech.com\n"
+"\n"
+"If you have installed Qt already, you will have to adapt the PATH variable "
+"of your system appropriately.  Contact the GnuCash developers if you need "
+"further assistance on how to install Qt correctly.\n"
+"\n"
+"Online Banking cannot be setup without Qt.  Press \"Close\" now, then "
+"\"Cancel\" to cancel the Online Banking setup."
+msgstr ""
+"Das externe Programm »AqBanking Einrichtungsassistent« konnte nicht "
+"gestartet werden, da die benötigte Programmbibliothek »Qt« nicht gefunden "
+"wurde.  Bitte installieren Sie »Qt/Windows Open Source Edition« der Firma "
+"Trolltech, indem Sie dies herunterladen von www.trolltech.com.\n"
+"\n"
+"Wenn Sie Qt bereits installiert haben, müssen Sie die Variable PATH in Ihrem "
+"System noch anpassen.  Fragen Sie bei den GnuCash-Entwicklern nach, wenn Sie "
+"weitere Hilfe dabei benötigen.\n"
+"\n"
+"Online-Banking kann ohne Qt nicht eingerichtet werden.  Drücken Sie jetzt "
+"»Schließen« und dann »Abbrechen«, um die Einrichtung des Online-Banking "
+"wieder abzubrechen."
+
+#: ../src/import-export/aqbanking/druid-ab-initial.c:457
+#: ../src/import-export/hbci/druid-hbci-initial.c:678
+msgid ""
+"The external program \"AqBanking Setup Wizard\" failed to run successfully.  "
+"Online Banking can only be setup if this wizard has run successfully.  "
+"Please try running the \"AqBanking Setup Wizard\" again."
+msgstr ""
+"Das externe Programm »AqBanking Einrichtungs-Assistent« konnte nicht "
+"erfolgreich ausgeführt werden, was bedeutet, dass die Einrichtung nicht "
+"erfolgreich abgeschlossen worden ist. Die weitere Einrichtung von "
+"Onlinebanking/HBCI in GnuCash kann nur fortgesetzt werden, wenn der "
+"»AqBanking Assistent« erfolgreich aufgerufen worden ist. Bitte versuchen Sie "
+"erneut, den »AqBanking Einrichtungs-Assistent« korrekt auszuführen."
+
+#: ../src/import-export/aqbanking/druid-ab-initial.c:487
+#: ../src/import-export/hbci/druid-hbci-initial.c:143
+#, c-format
+msgid "%s at %s (code %s)"
+msgstr "%s bei %s (BLZ %s)"
+
+#: ../src/import-export/aqbanking/druid-ab-initial.c:492
+#: ../src/import-export/hbci/druid-hbci-initial.c:148
+#, c-format
+msgid "%s at bank code %s"
+msgstr "%s bei %s"
+
+#: ../src/import-export/aqbanking/druid-ab-initial.c:760
+#: ../src/import-export/hbci/druid-hbci-initial.c:755
+msgid "Online Banking Account Name"
+msgstr "Online-Banking Kontoname"
+
+#: ../src/import-export/aqbanking/druid-ab-initial.c:765
+#: ../src/import-export/hbci/druid-hbci-initial.c:762
+msgid "GnuCash Account Name"
+msgstr "GnuCash Kontoname"
+
+#: ../src/import-export/aqbanking/druid-ab-initial.c:771
+#: ../src/import-export/generic-import.glade.h:35
+#: ../src/import-export/hbci/druid-hbci-initial.c:770
+#: ../src/import-export/qif-import/dialog-account-picker.c:349
+#: ../src/import-export/qif-import/druid-qif-import.c:1482
+msgid "New?"
+msgstr "Neu?"
+
+#: ../src/import-export/aqbanking/gnc-ab-gettrans.c:182
+#: ../src/import-export/hbci/gnc-hbci-gettrans.c:208
+msgid ""
+"The Online Banking import returned no transactions for the selected time "
+"period."
+msgstr "Es liegen keine Buchungen für die gewählte Zeitspanne vor."
+
+#: ../src/import-export/aqbanking/gnc-ab-transfer.c:61
+#: ../src/import-export/hbci/gnc-hbci-transfer.c:219
+msgid ""
+"You have changed the list of online transfer templates, but you cancelled "
+"the transfer dialog. Do you nevertheless want to store the changes?"
+msgstr ""
+"Sie haben die Liste der Überweisungsvorlagen geändert, aber Sie haben den "
+"Überweisungsdialog abgebrochen. Möchten Sie die Liste der "
+"Überweisungsvorlagen trotzdem speichern?"
+
+#: ../src/import-export/aqbanking/gnc-ab-transfer.c:169
+#: ../src/import-export/aqbanking/gnc-ab-utils.c:487
+#: ../src/import-export/hbci/gnc-hbci-transfer.c:136
+#: ../src/import-export/hbci/gnc-hbci-utils.c:711
+msgid ""
+"The backend found an error during the preparation of the job. It is not "
+"possible to execute this job. \n"
+"\n"
+"Most probable the bank does not support your chosen job or your Online "
+"Banking account does not have the permission to execute this job. More error "
+"messages might be visible on your console log.\n"
+"\n"
+"Do you want to enter the job again?"
+msgstr ""
+"Das AqBanking-Modul hat einen Fehler während der Vorbereitung des Auftrags "
+"gefunden. Es ist nicht möglich, den Auftrag auszuführen.\n"
+"\n"
+"Wahrscheinlich wird dieser Geschäftsvorfall von Ihrer Bank leider nicht "
+"unterstützt oder ist für Ihren HBCI-Zugang nicht freigeschaltet. Weitere "
+"Fehlermeldungen könnten auf dem Console-Log sichtbar sein.\n"
+"\n"
+"Wollen Sie den Auftrag erneut eingeben?"
+
+#: ../src/import-export/aqbanking/gnc-ab-transfer.c:190
+#: ../src/import-export/hbci/gnc-hbci-transfer.c:250
+msgid "Online Banking Direct Debit Note"
+msgstr "Online-Auftrag Einzellastschrift"
+
+#: ../src/import-export/hbci/gnc-hbci-transfer.c:252
+msgid "Online Banking Bank-Internal Transfer"
+msgstr "Online-Auftrag Einzelumbuchung"
+
+#: ../src/import-export/hbci/gnc-hbci-transfer.c:255
+msgid "Online Banking Transaction"
+msgstr "Online-Auftrag Einzelüberweisung"
+
+#: ../src/import-export/aqbanking/gnc-ab-transfer.c:242
+msgid ""
+"An error occurred while executing the job.  Please check the log window for "
+"the exact error message.\n"
+"\n"
+"Do you want to enter the job again?"
+msgstr ""
+"Ein Fehler ist bei der Ausführung des Auftrags aufgetreten.  Bitte prüfen Sie die Ausgaben im Verlaufsfenster für eine exakte Fehlermeldung.\n"
+"\n"
+"Wollen Sie den Auftrag erneut abschicken?"
+
+#. src/import-export/qif-io-core/qif-invst-xtn-import.scm
+#. src/import-export/qif-import/qif-dialog-utils.scm
+#: ../src/import-export/aqbanking/gnc-ab-utils.c:295
+#: ../src/import-export/hbci/gnc-hbci-utils.c:811
+#: ../intl-scm/guile-strings.c:3202 ../intl-scm/guile-strings.c:3244
+msgid "Unspecified"
+msgstr "Nicht spezifiziert"
+
+#: ../src/import-export/aqbanking/gnc-ab-utils.c:528
+msgid ""
+"The bank has sent transaction information in its response.\n"
+"Do you want to import it?"
+msgstr ""
+"Der Bank-Server hat Kontoumsätze (Buchungen) in der Antwort mitgeschickt. \n"
+"Wollen Sie diese jetzt importieren?"
+
+#: ../src/import-export/aqbanking/gnc-ab-utils.c:550
+#: ../src/import-export/hbci/gnc-hbci-utils.c:663
+msgid ""
+"No Online Banking account found for this gnucash account. These transactions "
+"will not be executed by Online Banking."
+msgstr ""
+"Kein Online-Banking Konto gefunden, welches zu diesem GnuCash-Konto "
+"zugeordnet ist. Die Buchungen werden nicht als Online-Banking Aufträge "
+"abgeschickt."
+
+#: ../src/import-export/aqbanking/gnc-ab-utils.c:598
+msgid ""
+"The bank has sent balance information in its response.\n"
+"Do you want to import it?"
+msgstr ""
+"Der Bank-Server hat Kontosalden in seiner Antwort mitgeschickt. \n"
+"Wollen Sie diese jetzt importieren?"
+
+#. Translators: Strings from this file are needed only in
+#. * countries that have one of aqbanking's Online Banking
+#. * techniques available. This is 'OFX DirectConnect'
+#. * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
+#. * (Switzerland). If none of these techniques are available
+#. * in your country, you may safely ignore strings from the
+#. * import-export/hbci subdirectory.
+#: ../src/import-export/aqbanking/gnc-ab-utils.c:681
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:271
+msgid ""
+"The downloaded Online Banking Balance was zero.\n"
+"\n"
+"Either this is the correct balance, or your bank does not support Balance "
+"download in this Online Banking version. In the latter case you should "
+"choose a different Online Banking version number in the Online Banking "
+"(AqBanking or HBCI) Setup. After that, try again to download the Online "
+"Banking Balance."
+msgstr ""
+"Der abgefragte Saldo war Null. \n"
+"\n"
+"Entweder war dies der korrekte Saldo, oder Ihre Bank bietet anscheinend "
+"keine Saldenabfrage in der gewählten HBCI-Version an. Im letzteren Fall "
+"können Sie im Onlinebanking-Einrichtungs-Assistent eine höhere HBCI-Version "
+"auswählen. Versuchen Sie anschließend erneut, den Saldo abzufragen."
+
+#: ../src/import-export/aqbanking/gnc-ab-utils.c:696
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:289
+#, c-format
+msgid ""
+"Result of Online Banking job: \n"
+"Account booked balance is %s"
+msgstr ""
+"Ergebnis der Saldenabfrage:\n"
+"Gebuchter Saldo des Kontos ist %s"
+
+#: ../src/import-export/aqbanking/gnc-ab-utils.c:702
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:296
+#, c-format
+msgid "For your information: This account also has a noted balance of %s\n"
+msgstr ""
+"Zu Ihrer Information: Dieses Konto hat außerdem folgenden Saldo an zur "
+"Ausführung vorgemerkten Aufträgen: %s\n"
+
+#: ../src/import-export/aqbanking/gnc-ab-utils.c:708
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:301
+msgid ""
+"The booked balance is identical to the current reconciled balance of the "
+"account."
+msgstr ""
+"Dieser gebuchte Saldo stimmt mit dem aktuellen abgeglichenen Saldo Ihres "
+"Kontos überein."
+
+#: ../src/import-export/aqbanking/gnc-ab-utils.c:721
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:315
+msgid "Reconcile account now?"
+msgstr "Konto jetzt abgleichen?"
+
+#: ../src/import-export/aqbanking/gnc-file-aqb-import.c:77
+#: ../src/import-export/hbci/gnc-file-aqb-import.c:76
+msgid "Select a file to import"
+msgstr "Wählen Sie eine Datei, die importiert werden soll"
+
+#: ../src/import-export/aqbanking/gnc-file-aqb-import.c:122
+msgid "Import module for DTAUS import not found."
+msgstr "Importer-Modul für DTAUS nicht gefunden."
+
+#: ../src/import-export/aqbanking/gnc-gwen-gui.c:861
+#, c-format
+msgid ""
+"The PIN needs to be at least %d characters \n"
+"long. Do you want to try again?"
+msgstr ""
+"Die PIN muss mindestens %d Zeichen lang \n"
+"sein.  Erneut versuchen?"
+
+#: ../src/import-export/aqbanking/gnc-gwen-gui.c:1295
+msgid ""
+"The Online Banking job is still running; are you sure you want to cancel?"
+msgstr "Der Online-Banking-Auftrag wird noch bearbeitet.  Sind Sie sicher, dass Sie abbrechen wollen?"
+
+#. Menus
+#: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:82
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:89
+msgid "_Online Actions"
+msgstr "_Online Aktionen"
+
+#. Menu Items
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:92
+msgid "_Online Banking Setup..."
+msgstr "_Onlinebanking Einrichtung..."
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:93
+msgid ""
+"Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using "
+"AqBanking)"
+msgstr "Einrichtung des Online Banking Zugangs: HBCI oder OFX DirectConnect"
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:95
+msgid "Get _Balance"
+msgstr "_Saldenabfrage"
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:96
+msgid "Get the account balance online through Online Banking"
+msgstr "Kontosaldo online abfragen via HBCI/Onlinebanking"
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:98
+msgid "Get _Transactions..."
+msgstr "Abfrage Konto_umsätze..."
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:99
+msgid "Get the transactions online through Online Banking"
+msgstr "Kontoumsätze online abfragen via HBCI/Onlinebanking"
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:101
+msgid "_Issue Transaction..."
+msgstr "_Einzelüberweisung..."
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:102
+msgid "Issue a new transaction online through Online Banking"
+msgstr "Neue Einzelüberweisung mit HBCI online absenden"
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:104
+msgid "I_nternal Transaction..."
+msgstr "Interne _Umbuchung..."
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:105
+msgid "Issue a new bank-internal transaction online through Online Banking"
+msgstr ""
+"Neue bankinterne Einzelumbuchung mit HBCI/Onlinebanking online absenden"
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:107
+msgid "_Direct Debit..."
+msgstr "Einzel_lastschrift..."
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:108
+msgid "Issue a new direct debit note online through Online Banking"
+msgstr "Neue Einzellastschrift online mit HBCI/Onlinebanking absenden"
+
+#. File -> Import menu item
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:112
+msgid "Import _MT940"
+msgstr "_MT940 importieren"
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:113
+msgid "Import a MT940 file into GnuCash"
+msgstr "Buchungen aus einer MT940 Datei importieren"
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:115
+msgid "Import MT94_2"
+msgstr "MT94_2 importieren"
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:116
+msgid "Import a MT942 file into GnuCash"
+msgstr "Buchungen aus einer MT942 Datei importieren"
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:118
+msgid "Import _DTAUS"
+msgstr "_DTAUS importieren"
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:119
+msgid "Import a DTAUS file into GnuCash"
+msgstr "Buchungen aus einer DTAUS Datei importieren"
+
+#. #ifdef CSV_IMPORT_FUNCTIONAL
+#. { "CsvImportAction", GTK_STOCK_CONVERT, N_("Import _CSV"), NULL,
+#. N_("Import a CSV file into GnuCash"),
+#. G_CALLBACK(gnc_plugin_ab_cmd_csv_import) },
+#. { "CsvImportSendAction", GTK_STOCK_CONVERT, N_("Import CSV and s_end..."), NULL,
+#. N_("Import a CSV file into GnuCash and send the transfers online through Online Banking"),
+#. G_CALLBACK(gnc_plugin_ab_cmd_csv_importsend) },
+#. #endif
+#: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:122
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:129
+msgid "Import DTAUS and _send..."
+msgstr "DTAUS importieren und _senden..."
+
+#: ../src/import-export/hbci/gnc-plugin-hbci.c:130
+msgid ""
+"Import a DTAUS file into GnuCash and send the transfers online through "
+"Online Banking"
+msgstr ""
+"Buchungen aus einer DTAUS Datei importieren und als Online-Banking Aufträge "
+"an die Bank schicken"
+
+#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
+#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
+msgid "CSV import data format"
+msgstr "CSV-Import Dateiformat"
+
+#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:2
+msgid "Close dialog when finished"
+msgstr "Fenster nach Verbindungsende schließen"
+
+#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:3
+msgid "DTAUS import data format"
+msgstr "DTAUS-Import Dateiformat"
+
+#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:4
+msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
+msgstr "Ausführliche Fehlermeldungen für HBCI Online Banking aktivieren."
+
+#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:5
+msgid ""
+"If active, the PIN for HBCI/AqBanking actions will be remembered in memory "
+"during a session. Otherwise it will have to be entered again each time "
+"during a session when it is needed."
+msgstr ""
+"Wenn aktiviert, wird die PIN (Persönliche Identifikationsnummer) für HBCI/"
+"AqBanking während einer Programmbenutzung im Speicher zwischengespeichert. "
+"Wenn nicht aktiviert, muss die PIN bei jeder einzelnen Aktion von HBCI/"
+"AqBanking eingegeben werden und wird nicht im Speicher gehalten."
+
+#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:6
+msgid ""
+"If active, the window will be closed automatically when you finish the HBCI/"
+"AqBanking import process. Otherwise it will stay open."
+msgstr ""
+"Wenn aktiviert, wird das Fenster automatisch geschlossen, wenn der HBCI/"
+"AqBanking-Import beendet ist. Andernfalls bleibt das Fenster geöffnet."
+
+#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:7
+msgid "Remember the PIN in memory"
+msgstr "HBCI PIN im Speicher merken"
+
+#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:8
+msgid "SWIFT MT940 import data format"
+msgstr "SWIFT MT940-Import Dateiformat"
+
+#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:9
+msgid "SWIFT MT942 import data format"
+msgstr "SWIFT MT942-Import Dateiformat"
+
+#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:12
+msgid ""
+"This setting specifies the data format when importing CSV files. The "
+"AqBanking library offers various import formats (called \"profiles\") of "
+"which you can choose one here."
+msgstr ""
+"Diese Einstellung gibt die Datenformate beim Importieren von CSV-Dateien an. "
+"Die Bibliothek AqBanking bietet verschiedene Datenformate an, die dort als "
+"»Profiles« (Profile) bezeichnet werden. Geben Sie hier den Namen des "
+"AqBanking-Profils an."
+
+#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:13
+msgid ""
+"This setting specifies the data format when importing DTAUS files. The "
+"AqBanking library offers various import formats (called \"profiles\") of "
+"which you can choose one here."
+msgstr ""
+"Diese Einstellung gibt die Datenformate beim Importieren von DTAUS-Dateien "
+"an. Die Bibliothek AqBanking bietet verschiedene Datenformate an, die dort "
+"als »Profiles« (Profile) bezeichnet werden. Geben Sie hier den Namen des "
+"AqBanking-Profils an."
+
+#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:14
+msgid ""
+"This setting specifies the data format when importing SWIFT MT940 files. The "
+"AqBanking library offers various import formats (called \"profiles\") of "
+"which you can choose one here."
+msgstr ""
+"Diese Einstellung gibt die Datenformate beim Importieren von SWIFT MT940-"
+"Dateien an. Die Bibliothek AqBanking bietet verschiedene Datenformate an, "
+"die dort als »Profiles« (Profile) bezeichnet werden. Geben Sie hier den "
+"Namen des AqBanking-Profils an."
+
+#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:15
+msgid ""
+"This setting specifies the data format when importing SWIFT MT942 files. The "
+"AqBanking library offers various import formats (called \"profiles\") of "
+"which you can choose one here."
+msgstr ""
+"Diese Einstellung gibt die Datenformate beim Importieren von SWIFT MT942-"
+"Dateien an. Die Bibliothek AqBanking bietet verschiedene Datenformate an, "
+"die dort als »Profiles« (Profile) bezeichnet werden. Geben Sie hier den "
+"Namen des AqBanking-Profils an."
+
+#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:16
+msgid "Verbose HBCI debug messages"
+msgstr "Ausführliche HBCI-Fehlermeldungen"
 
 #: ../src/import-export/generic-import.glade.h:1
 msgid "\"A\""
@@ -12651,13 +13604,6 @@ msgstr ""
 msgid "Match _display threshold"
 msgstr "Entscheidungsschwelle für Anzeige in Zuordnung"
 
-#: ../src/import-export/generic-import.glade.h:35
-#: ../src/import-export/hbci/druid-hbci-initial.c:770
-#: ../src/import-export/qif-import/dialog-account-picker.c:296
-#: ../src/import-export/qif-import/druid-qif-import.c:1147
-msgid "New?"
-msgstr "Neu?"
-
 #: ../src/import-export/generic-import.glade.h:36
 msgid "Online account ID here..."
 msgstr "Online Kontonummer hier..."
@@ -12739,15 +13685,6 @@ msgstr ""
 msgid "Yellow"
 msgstr "Gelb"
 
-#: ../src/import-export/generic-import.glade.h:55
-msgid "do not translate"
-msgstr "do not translate"
-
-#: ../src/import-export/generic-import.glade.h:56
-#: ../src/import-export/qif-import/qif.glade.h:91
-msgid "gnc-new-account"
-msgstr "gnc-new-account"
-
 #. Numeric formats
 #: ../src/import-export/gnc-import-format-gnome.c:106
 msgid "Period-as-decimal (1,000.00)"
@@ -12774,102 +13711,6 @@ msgstr "Jahr-Monat-Tag"
 msgid "y-d-m"
 msgstr "Jahr-Tag-Monat"
 
-#. Translators: Strings from this file are needed only in
-#. * countries that have one of aqbanking's Online Banking
-#. * techniques available. This is 'OFX DirectConnect'
-#. * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
-#. * (Switzerland). If none of these techniques are available
-#. * in your country, you may safely ignore strings from the
-#. * import-export/hbci subdirectory.
-#: ../src/import-export/hbci/dialog-hbcitrans.c:368
-msgid "Enter an Online Direct Debit Note"
-msgstr "Online-Lastschrift eingeben"
-
-#: ../src/import-export/hbci/dialog-hbcitrans.c:371
-msgid "Debited Account Owner"
-msgstr "Zahlungspflichtiger"
-
-#: ../src/import-export/hbci/dialog-hbcitrans.c:373
-msgid "Debited Account Number"
-msgstr "Konto-Nr. des Zahlungspflichtigen"
-
-#: ../src/import-export/hbci/dialog-hbcitrans.c:375
-msgid "Debited Account Bank Code"
-msgstr "BLZ des Zahlungspflichtigen"
-
-#: ../src/import-export/hbci/dialog-hbcitrans.c:378
-msgid "Credited Account Owner"
-msgstr "Auftraggeber"
-
-#: ../src/import-export/hbci/dialog-hbcitrans.c:380
-msgid "Credited Account Number"
-msgstr "Konto-Nr. des Auftraggebers"
-
-#: ../src/import-export/hbci/dialog-hbcitrans.c:382
-msgid "Credited Account Bank Code"
-msgstr "BLZ des Auftraggebers"
-
-#. Conversion was erroneous, so don't use the string
-#: ../src/import-export/hbci/dialog-hbcitrans.c:408
-#: ../src/import-export/hbci/dialog-hbcitrans.c:895
-#: ../src/import-export/hbci/dialog-hbcitrans.c:899
-#: ../src/import-export/hbci/dialog-hbcitrans.c:909
-msgid "(unknown)"
-msgstr "(unbekannt)"
-
-#: ../src/import-export/hbci/dialog-hbcitrans.c:534
-msgid ""
-"The amount is zero or the amount field could not be interpreted correctly. "
-"You might have mixed up decimal point and comma, compared to your locale "
-"settings. This does not result in a valid online transfer job. \n"
-"\n"
-"Do you want to enter the job again?"
-msgstr ""
-"Der Betrag ist Null oder der eingegebene Betrag konnte nicht korrekt "
-"interpretiert werden. Eventuell haben Sie Komma und Dezimalpunkt "
-"verwechselt. In der länderspezifischen Einstellung Deutschland (locale de, "
-"LANG=de_DE) müssen Sie ein Komma eingeben, andernfalls einen Punkt.\n"
-"\n"
-"Dies ergibt keinen zulässigen Zahlungsauftrag. Wollen Sie den Auftrag erneut "
-"eingeben?"
-
-#: ../src/import-export/hbci/dialog-hbcitrans.c:556
-msgid ""
-"You did not enter any transaction purpose. A purpose is required for an "
-"online transfer.\n"
-"\n"
-"Do you want to enter the job again?"
-msgstr ""
-"Sie haben keinen Verwendungszweck eingegeben. Für einen Überweisungsauftrag "
-"ist die Eingabe eines Verwendungszweck erforderlich.\n"
-"\n"
-"Wollen Sie den Auftrag erneut eingeben?"
-
-#: ../src/import-export/hbci/dialog-hbcitrans.c:577
-msgid ""
-"You did not enter a recipient name.  A recipient name is required for an "
-"online transfer.\n"
-"\n"
-"Do you want to enter the job again?"
-msgstr ""
-"Sie haben keinen Empfängernamen eingegeben. Für einen Überweisungsauftrag "
-"ist die Eingabe eines Empfängernamens erforderlich.\n"
-"\n"
-"Wollen Sie den Auftrag erneut eingeben?"
-
-#: ../src/import-export/hbci/dialog-hbcitrans.c:714
-#, c-format
-msgid ""
-"The internal check of the destination account number '%s' at the specified "
-"bank with bank code '%s' failed. This means the account number might contain "
-"an error. Should the online transfer job be sent with this account number "
-"anyway?"
-msgstr ""
-"Die interne Überprüfung der angegebenen Kontonummer »%s« bei der Bank mit "
-"der Bankleitzahl »%s« ergab, dass die Kontonummer wahrscheinlich einen "
-"Fehler enthält. Wollen Sie den Auftrag trotzdem mit dieser Kontonummer "
-"abschicken?"
-
 #: ../src/import-export/hbci/dialog-hbcitrans.c:806
 msgid ""
 "The job was sent to the bank successfully, but the bank is refusing to "
@@ -12890,16 +13731,6 @@ msgstr ""
 msgid "The two passwords didn't match. Please try again."
 msgstr "Die beiden PINs haben nicht übereingestimmt. Bitte erneut eingeben."
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:143
-#, c-format
-msgid "%s at %s (code %s)"
-msgstr "%s bei %s (BLZ %s)"
-
-#: ../src/import-export/hbci/druid-hbci-initial.c:148
-#, c-format
-msgid "%s at bank code %s"
-msgstr "%s bei %s"
-
 #: ../src/import-export/hbci/druid-hbci-initial.c:506
 msgid "Choose AqBanking Backend"
 msgstr "AqBanking-Modul wählen"
@@ -12911,70 +13742,6 @@ msgstr "Wählen Sie das Modul von AqBanking, das Sie einrichten möchten."
 #: ../src/import-export/hbci/druid-hbci-initial.c:508
 msgid "Co_nfigure"
 msgstr "_Einrichten"
-
-#: ../src/import-export/hbci/druid-hbci-initial.c:661
-msgid ""
-"The external program \"AqBanking Setup Wizard\" failed to run successfully "
-"because the additional software \"Qt\" was not found.  Please install the "
-"\"Qt/Windows Open Source Edition\" from Trolltech by downloading it from www."
-"trolltech.com\n"
-"\n"
-"If you have installed Qt already, you will have to adapt the PATH variable "
-"of your system appropriately.  Contact the GnuCash developers if you need "
-"further assistance on how to install Qt correctly.\n"
-"\n"
-"Online Banking cannot be setup without Qt.  Press \"Close\" now, then "
-"\"Cancel\" to cancel the Online Banking setup."
-msgstr ""
-"Das externe Programm »AqBanking Einrichtungsassistent« konnte nicht "
-"gestartet werden, da die benötigte Programmbibliothek »Qt« nicht gefunden "
-"wurde.  Bitte installieren Sie »Qt/Windows Open Source Edition« der Firma "
-"Trolltech, indem Sie dies herunterladen von www.trolltech.com.\n"
-"\n"
-"Wenn Sie Qt bereits installiert haben, müssen Sie die Variable PATH in Ihrem "
-"System noch anpassen.  Fragen Sie bei den GnuCash-Entwicklern nach, wenn Sie "
-"weitere Hilfe dabei benötigen.\n"
-"\n"
-"Online-Banking kann ohne Qt nicht eingerichtet werden.  Drücken Sie jetzt "
-"»Schließen« und dann »Abbrechen«, um die Einrichtung des Online-Banking "
-"wieder abzubrechen."
-
-#: ../src/import-export/hbci/druid-hbci-initial.c:678
-msgid ""
-"The external program \"AqBanking Setup Wizard\" failed to run successfully.  "
-"Online Banking can only be setup if this wizard has run successfully.  "
-"Please try running the \"AqBanking Setup Wizard\" again."
-msgstr ""
-"Das externe Programm »AqBanking Einrichtungs-Assistent« konnte nicht "
-"erfolgreich ausgeführt werden, was bedeutet, dass die Einrichtung nicht "
-"erfolgreich abgeschlossen worden ist. Die weitere Einrichtung von "
-"Onlinebanking/HBCI in GnuCash kann nur fortgesetzt werden, wenn der "
-"»AqBanking Assistent« erfolgreich aufgerufen worden ist. Bitte versuchen Sie "
-"erneut, den »AqBanking Einrichtungs-Assistent« korrekt auszuführen."
-
-#: ../src/import-export/hbci/druid-hbci-initial.c:689
-#, c-format
-msgid ""
-"The external program \"AqBanking Setup Wizard\" has not been found. \n"
-"\n"
-"The %s package should include the program \"qt3-wizard\".  Please check your "
-"installation to ensure this program is present.  On some distributions this "
-"may require installing additional packages."
-msgstr ""
-"Das externe Programm »AqBanking Einrichtungs-Assistent« konnte nicht "
-"gefunden werden. \n"
-"\n"
-"Dieses soll normalerweise vom %s-Paket installiert werden, so dass dann ein "
-"Programm namens »qt3-wizard« installiert ist. Bitte kontrollieren Sie Ihre "
-"Installation der Bibliothek AqBanking."
-
-#: ../src/import-export/hbci/druid-hbci-initial.c:755
-msgid "Online Banking Account Name"
-msgstr "Online-Banking Kontoname"
-
-#: ../src/import-export/hbci/druid-hbci-initial.c:762
-msgid "GnuCash Account Name"
-msgstr "GnuCash Kontoname"
 
 #: ../src/import-export/hbci/druid-hbci-utils.c:152
 #, c-format
@@ -12990,312 +13757,22 @@ msgstr ""
 "Das Verzeichnis für Datei »%s« existiert nicht. Bitte wählen Sie einen "
 "anderen Ort für diese Datei."
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:1
-msgid "(filled in automatically)"
-msgstr "(wird automatisch ausgefüllt)"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:2
-msgid "<b>From</b>"
-msgstr "<b>Von</b>"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:3
-msgid "<b>Log Messages</b>"
-msgstr "<b>Protokoll</b>"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:4
-msgid "<b>Progress</b>"
-msgstr "<b>Verlauf</b>"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:5
-msgid "<b>To</b>"
-msgstr "<b>Bis</b>"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:6
-msgid "Add current"
-msgstr "Aktuelle hinzufügen"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:7
-msgid "Add the current online transaction as a new transaction template"
-msgstr "Aktuelle Online-Buchung als neue Überweisungsvorlage hinzufügen"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:9
-msgid "Bank Code"
-msgstr "Bankleitzahl"
-
 #: ../src/import-export/hbci/glade/hbci.glade.h:10
 msgid "Choose an Online Banking Version to use with the selected bank:"
 msgstr ""
 "Wählen Sie eine Online-Banking- oder HBCI-Version, die benutzt werden soll:"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:11
-msgid ""
-"Click on the line of an Online Banking account name if you want to match it "
-"to a GnuCash account. Click \"Forward\" when all desired accounts are "
-"matching."
-msgstr ""
-"Klicken Sie auf die Zeile eines Online-Banking-Kontos, um diesem HBCI-Konto "
-"ein GnuCash-Konto zuzuordnen. Klicken Sie »Vor«, wenn alle gewünschten "
-"Konten zugeordnet sind."
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:12
-msgid "Close when finished"
-msgstr "Fenster nach Verbindungsende schließen"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:13
-msgid "Current Action"
-msgstr "Momentane Aktion"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:14
-msgid "Current Job"
-msgstr "Momentaner Auftrag"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:15
-msgid "Date range of transactions to retrieve:"
-msgstr "Datumsbereich der abzurufenden Buchungen:"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:16
-msgid "Delete the currently selected transaction template"
-msgstr "Ausgewählte Überweisungsvorlage löschen"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:17
-msgid "E_nter date:"
-msgstr "D_atum eingeben:"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:18
-msgid "Ente_r date:"
-msgstr "Datum _eingeben:"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:19
-msgid "Enter an Online Transaction"
-msgstr "Online-Überweisung eingeben"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:20
-msgid "Enter name for new template:"
-msgstr "Bitte geben Sie einen Namen für die neue Überweisungsvorlage ein:"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:21
-msgid "Execute Now"
-msgstr "Jetzt ausführen"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:22
-msgid "Execute later (unimpl.)"
-msgstr "Später ausführen (unfertig)"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:23
-msgid "Execute this online transaction now"
-msgstr "Diesen Auftrag jetzt online abschicken"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:24
-msgid "Get Transactions Online"
-msgstr "Online Kontoumsätze abfragen"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:25
-msgid "Initial Online Banking Setup"
-msgstr "Grundlegende Online-Banking Einrichtung"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:26
-msgid "Match Online Banking accounts with GnuCash accounts"
-msgstr "Online-Banking Konten mit GnuCash Konten zuordnen"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:27
-msgid "Move the selected transaction template one row down"
-msgstr "Gewählte Überweisungsvorlage eine Zeile nach unten umsortieren"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:28
-msgid "Move the selected transaction template one row up"
-msgstr "Gewählte Überweisungsvorlage eine Zeile nach oben umsortieren"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:29
-msgid "Name for new template"
-msgstr "Namen für neue Überweisungsvorlage"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:30
-msgid "Online Banking Connection Window"
-msgstr "Onlinebanking Verbindungsfenster"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:31
-msgid "Online Banking Setup Finished"
-msgstr "Online-Banking Einrichtung beendet"
-
 #: ../src/import-export/hbci/glade/hbci.glade.h:32
 msgid "Online Banking Version"
 msgstr "Online-Banking Version"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:33
-msgid "Online Transaction"
-msgstr "Online-Auftrag Einzelüberweisung"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:34
-msgid "Originator Account Number"
-msgstr "Konto-Nr. des Auftraggebers"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:35
-msgid "Originator Name"
-msgstr "Auftraggeber: Name, Vorname"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:36
-msgid "Payment Purpose (only for recipient)"
-msgstr "Verwendungszweck - z.B. Kunden-Referenznummer - (nur für Empfänger)"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:37
-msgid "Payment Purpose continued"
-msgstr "noch Verwendungszweck (ggf. noch Anschrift des Auftraggebers)"
-
-#. src/import-export/qif-import/qif-file.scm
-#. src/import-export/qif-import/qif-to-gnc.scm
-#. src/import-export/qif-import/qif-merge-groups.scm
-#: ../src/import-export/hbci/glade/hbci.glade.h:38
-#: ../intl-scm/guile-strings.c:3180 ../intl-scm/guile-strings.c:3198
-#: ../intl-scm/guile-strings.c:3206
-msgid "Progress"
-msgstr "Verlauf"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:39
-msgid "Recipient Account Number"
-msgstr "Konto-Nr. des Empfängers"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:40
-msgid "Recipient Bank Code"
-msgstr "Bankleitzahl"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:41
-msgid "Recipient Name"
-msgstr "Empfänger: Name, Vorname / Firma"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:42
-msgid "Sort"
-msgstr "Sortieren"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:43
-msgid "Sort the list of transaction templates alphabetically"
-msgstr "Die Liste der Überweisungsvorlagen alphabetisch sortieren"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:44
 msgid "Start AqBanking Setup Wizard"
 msgstr "AqBanking Einrichtungs-Assistent starten"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:45
-msgid "Start Online Banking Wizard"
-msgstr "Onlinebanking Einrichtungs-Assistenten starten"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:46
-msgid ""
-"The Setup of your Online Banking connection is handled by the external "
-"program \"AqBanking Setup Wizard\". Please press the button below to start "
-"this program."
-msgstr ""
-"Die Einrichtung Ihrer Onlinebanking-Verbindung (HBCI) wird von dem externen "
-"Programm »AqBanking Einrichtungs-Assistent« durchgeführt. Bitte klicken Sie "
-"den Knopf, um dieses Programm zu starten."
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:47
-msgid ""
-"The setup for matching Online Banking accounts to GnuCash accounts is now "
-"finished.  You can now invoke Online Banking actions on those accounts.\n"
-"\n"
-"If you want to add another bank, user, or account, you can start this druid "
-"again anytime.\n"
-"\n"
-"Press \"Apply\" now."
-msgstr ""
-"Die Einrichtung des Onlinebanking-Zugangs und die Zuordnung zu den passenden "
-"GnuCash Konten ist fertig gestellt. Sie können nun Onlinebanking-Aktionen in "
-"diesen Konten aufrufen (Menü Aktionen: Online Aktionen).\n"
-"\n"
-"Wenn Sie eine neue Bank, einen neuen Benutzer oder ein neues Konto "
-"hinzufügen möchten, können Sie diesen Assistenten (Druiden) jederzeit wieder "
-"aufrufen.\n"
-"\n"
-"Klicken Sie jetzt »Anwenden«."
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:52
-msgid ""
-"This druid helps you setting up your Online Banking connection with your "
-"bank.\n"
-"\n"
-"You first need to apply for Online Banking access at your bank. If your "
-"bank  decides to grant you electronic access, they will send you a letter "
-"containing \n"
-"\n"
-"* The bank code of your bank\n"
-"* The user ID that identifies you to your bank\n"
-"* The Internet address of your bank's Online Banking server\n"
-"* For HBCI Online Banking, information about the cryptographic public key of "
-"your bank (\"Ini-Letter\").\n"
-"\n"
-"This information will be needed in the following. Press \"Forward\" now.\n"
-"\n"
-"NOTE: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online "
-"Banking server. You should not rely on time-critical transfers through "
-"Online Banking, because sometimes the bank does not give you correct "
-"feedback when a transfer is rejected.\n"
-"\n"
-"Press \"Cancel\" if you do not wish to setup any Online Banking connection "
-"now."
-msgstr ""
-"Dieser Assistent hilft Ihnen, die Online-Verbindung (HBCI) mit Ihrer Bank "
-"einzurichten.\n"
-"\n"
-"Zunächst müssen Sie bei Ihrer Bank die Freischaltung des HBCI-Zugangs "
-"beantragt haben. Ihre Bank müsste Ihnen dann einen Brief zugesandt haben, "
-"der u.a. folgende Angaben enthält:\n"
-"\n"
-"* Die Bankleitzahl Ihrer Bank\n"
-"* Die Benutzerkennung, die Sie gegenüber Ihrer Bank identifiziert\n"
-"* Die Internetadresse des Bank-Servers \n"
-"* Informationen über die öffentlichen kryptographischen Schlüssel Ihrer Bank "
-"(»Ini-Brief«)\n"
-"\n"
-"Diese Informationen werden im folgenden benötigt. Klicken Sie jetzt »Vor«.\n"
-"\n"
-"ACHTUNG: Die Programmierer geben keine Garantie auf korrekte Funktion. "
-"Insbesondere kann bei manchen Bank-Servern eine schlechte HBCI-"
-"Implementierung dazu führen, dass Sie keine Fehlermeldung bei "
-"zurückgewiesenen Aufträgen erhalten. Sie sollten sich daher bei "
-"zeitkritischen Aufträgen nicht auf HBCI allein verlassen.\n"
-"\n"
-"Klicken Sie »Abbrechen«, wenn Sie jetzt keine HBCI Verbindung einrichten "
-"möchten."
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:66
-msgid "Use Transaction Template"
-msgstr "Überweisungsvorlage:"
-
 #: ../src/import-export/hbci/glade/hbci.glade.h:67
 msgid "Version"
 msgstr "Version"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:68
-msgid "_Earliest possible date"
-msgstr "_Frühestes mögliches Datum"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:69
-msgid "_Last retrieval date"
-msgstr "_Letztes Abrufdatum"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:70
-msgid "_Now"
-msgstr "_Jetzt"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:71
-msgid "_Start AqBanking Wizard"
-msgstr "AqBanking Einrichtungs-Assistenten _starten"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:72
-msgid "at Bank"
-msgstr "der Bank"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:73
-msgid "something"
-msgstr "irgendwas"
-
-#: ../src/import-export/hbci/glade/hbcipass.glade.h:1
-msgid "Confirm Password:"
-msgstr "Passwort bestätigen:"
-
-#: ../src/import-export/hbci/glade/hbcipass.glade.h:2
-msgid "Enter Password"
-msgstr "Passwort eingeben:"
 
 #: ../src/import-export/hbci/glade/hbcipass.glade.h:3
 msgid "Enter and confirm your new password"
@@ -13305,138 +13782,14 @@ msgstr "Geben Sie Ihr neues Passwort zweimal ein"
 msgid "Enter new Password"
 msgstr "Neues Passwort eingeben"
 
-#: ../src/import-export/hbci/glade/hbcipass.glade.h:5
-msgid "Enter your password"
-msgstr "Geben Sie Ihr Passwort ein"
-
-#: ../src/import-export/hbci/glade/hbcipass.glade.h:6
-msgid "Password:"
-msgstr "Passwort:"
-
-#: ../src/import-export/hbci/glade/hbciprefs.glade.h:1
-msgid "<b>Online Banking</b>"
-msgstr "<b>Onlinebanking</b>"
-
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:2
 msgid "Activate verbose debug messages for Online Banking."
 msgstr "Ausführliche Fehlermeldungen für Onlinebanking aktivieren."
-
-#: ../src/import-export/hbci/glade/hbciprefs.glade.h:4
-msgid "Remember _PIN"
-msgstr "_PIN merken"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:5
 msgid "Remember the Online Banking PIN in memory during a session."
 msgstr ""
 "Die PIN für Onlinebanking während einer GnuCash-Sitzung im Speicher merken."
-
-#: ../src/import-export/hbci/glade/hbciprefs.glade.h:6
-msgid "_Verbose debug messages"
-msgstr "Ausführliche _Fehlermeldungen"
-
-#: ../src/import-export/hbci/gnc-file-aqb-import.c:76
-msgid "Select a file to import"
-msgstr "Wählen Sie eine Datei, die importiert werden soll"
-
-#. Translators: Strings from this file are needed only in
-#. * countries that have one of aqbanking's Online Banking
-#. * techniques available. This is 'OFX DirectConnect'
-#. * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
-#. * (Switzerland). If none of these techniques are available
-#. * in your country, you may safely ignore strings from the
-#. * import-export/hbci subdirectory.
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:271
-msgid ""
-"The downloaded Online Banking Balance was zero.\n"
-"\n"
-"Either this is the correct balance, or your bank does not support Balance "
-"download in this Online Banking version. In the latter case you should "
-"choose a different Online Banking version number in the Online Banking "
-"(AqBanking or HBCI) Setup. After that, try again to download the Online "
-"Banking Balance."
-msgstr ""
-"Der abgefragte Saldo war Null. \n"
-"\n"
-"Entweder war dies der korrekte Saldo, oder Ihre Bank bietet anscheinend "
-"keine Saldenabfrage in der gewählten HBCI-Version an. Im letzteren Fall "
-"können Sie im Onlinebanking-Einrichtungs-Assistent eine höhere HBCI-Version "
-"auswählen. Versuchen Sie anschließend erneut, den Saldo abzufragen."
-
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:289
-#, c-format
-msgid ""
-"Result of Online Banking job: \n"
-"Account booked balance is %s"
-msgstr ""
-"Ergebnis der Saldenabfrage:\n"
-"Gebuchter Saldo des Kontos ist %s"
-
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:296
-#, c-format
-msgid "For your information: This account also has a noted balance of %s\n"
-msgstr ""
-"Zu Ihrer Information: Dieses Konto hat außerdem folgenden Saldo an zur "
-"Ausführung vorgemerkten Aufträgen: %s\n"
-
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:301
-msgid ""
-"The booked balance is identical to the current reconciled balance of the "
-"account."
-msgstr ""
-"Dieser gebuchte Saldo stimmt mit dem aktuellen abgeglichenen Saldo Ihres "
-"Kontos überein."
-
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:315
-msgid "Reconcile account now?"
-msgstr "Konto jetzt abgleichen?"
-
-#: ../src/import-export/hbci/gnc-hbci-gettrans.c:208
-msgid ""
-"The Online Banking import returned no transactions for the selected time "
-"period."
-msgstr "Es liegen keine Buchungen für die gewählte Zeitspanne vor."
-
-#: ../src/import-export/hbci/gnc-hbci-transfer.c:136
-#: ../src/import-export/hbci/gnc-hbci-utils.c:711
-msgid ""
-"The backend found an error during the preparation of the job. It is not "
-"possible to execute this job. \n"
-"\n"
-"Most probable the bank does not support your chosen job or your Online "
-"Banking account does not have the permission to execute this job. More error "
-"messages might be visible on your console log.\n"
-"\n"
-"Do you want to enter the job again?"
-msgstr ""
-"Das AqBanking-Modul hat einen Fehler während der Vorbereitung des Auftrags "
-"gefunden. Es ist nicht möglich, den Auftrag auszuführen.\n"
-"\n"
-"Wahrscheinlich wird dieser Geschäftsvorfall von Ihrer Bank leider nicht "
-"unterstützt oder ist für Ihren HBCI-Zugang nicht freigeschaltet. Weitere "
-"Fehlermeldungen könnten auf dem Console-Log sichtbar sein.\n"
-"\n"
-"Wollen Sie den Auftrag erneut eingeben?"
-
-#: ../src/import-export/hbci/gnc-hbci-transfer.c:219
-msgid ""
-"You have changed the list of online transfer templates, but you cancelled "
-"the transfer dialog. Do you nevertheless want to store the changes?"
-msgstr ""
-"Sie haben die Liste der Überweisungsvorlagen geändert, aber Sie haben den "
-"Überweisungsdialog abgebrochen. Möchten Sie die Liste der "
-"Überweisungsvorlagen trotzdem speichern?"
-
-#: ../src/import-export/hbci/gnc-hbci-transfer.c:250
-msgid "Online Banking Direct Debit Note"
-msgstr "Online-Auftrag Einzellastschrift"
-
-#: ../src/import-export/hbci/gnc-hbci-transfer.c:252
-msgid "Online Banking Bank-Internal Transfer"
-msgstr "Online-Auftrag Einzelumbuchung"
-
-#: ../src/import-export/hbci/gnc-hbci-transfer.c:255
-msgid "Online Banking Transaction"
-msgstr "Online-Auftrag Einzelüberweisung"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:357
 msgid ""
@@ -13527,104 +13880,6 @@ msgstr ""
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
 
-#: ../src/import-export/hbci/gnc-hbci-utils.c:663
-msgid ""
-"No Online Banking account found for this gnucash account. These transactions "
-"will not be executed by Online Banking."
-msgstr ""
-"Kein Online-Banking Konto gefunden, welches zu diesem GnuCash-Konto "
-"zugeordnet ist. Die Buchungen werden nicht als Online-Banking Aufträge "
-"abgeschickt."
-
-#. src/import-export/qif-io-core/qif-invst-xtn-import.scm
-#. src/import-export/qif-import/qif-dialog-utils.scm
-#: ../src/import-export/hbci/gnc-hbci-utils.c:811
-#: ../intl-scm/guile-strings.c:3156 ../intl-scm/guile-strings.c:3178
-msgid "Unspecified"
-msgstr "Nicht spezifiziert"
-
-#. Menus
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:89
-msgid "_Online Actions"
-msgstr "_Online Aktionen"
-
-#. Menu Items
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:92
-msgid "_Online Banking Setup..."
-msgstr "_Onlinebanking Einrichtung..."
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:93
-msgid ""
-"Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using "
-"AqBanking)"
-msgstr "Einrichtung des Online Banking Zugangs: HBCI oder OFX DirectConnect"
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:95
-msgid "Get _Balance"
-msgstr "_Saldenabfrage"
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:96
-msgid "Get the account balance online through Online Banking"
-msgstr "Kontosaldo online abfragen via HBCI/Onlinebanking"
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:98
-msgid "Get _Transactions..."
-msgstr "Abfrage Konto_umsätze..."
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:99
-msgid "Get the transactions online through Online Banking"
-msgstr "Kontoumsätze online abfragen via HBCI/Onlinebanking"
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:101
-msgid "_Issue Transaction..."
-msgstr "_Einzelüberweisung..."
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:102
-msgid "Issue a new transaction online through Online Banking"
-msgstr "Neue Einzelüberweisung mit HBCI online absenden"
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:104
-msgid "I_nternal Transaction..."
-msgstr "Interne _Umbuchung..."
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:105
-msgid "Issue a new bank-internal transaction online through Online Banking"
-msgstr ""
-"Neue bankinterne Einzelumbuchung mit HBCI/Onlinebanking online absenden"
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:107
-msgid "_Direct Debit..."
-msgstr "Einzel_lastschrift..."
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:108
-msgid "Issue a new direct debit note online through Online Banking"
-msgstr "Neue Einzellastschrift online mit HBCI/Onlinebanking absenden"
-
-#. File -> Import menu item
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:112
-msgid "Import _MT940"
-msgstr "_MT940 importieren"
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:113
-msgid "Import a MT940 file into GnuCash"
-msgstr "Buchungen aus einer MT940 Datei importieren"
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:115
-msgid "Import MT94_2"
-msgstr "MT94_2 importieren"
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:116
-msgid "Import a MT942 file into GnuCash"
-msgstr "Buchungen aus einer MT942 Datei importieren"
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:118
-msgid "Import _DTAUS"
-msgstr "_DTAUS importieren"
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:119
-msgid "Import a DTAUS file into GnuCash"
-msgstr "Buchungen aus einer DTAUS Datei importieren"
-
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:122
 msgid "Import _CSV"
 msgstr "_CSV importieren"
@@ -13644,18 +13899,6 @@ msgid ""
 msgstr ""
 "Buchungen aus einer CSV Datei importieren und als Online-Banking Aufträge an "
 "die Bank schicken"
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:129
-msgid "Import DTAUS and _send..."
-msgstr "DTAUS importieren und _senden..."
-
-#: ../src/import-export/hbci/gnc-plugin-hbci.c:130
-msgid ""
-"Import a DTAUS file into GnuCash and send the transfers online through "
-"Online Banking"
-msgstr ""
-"Buchungen aus einer DTAUS Datei importieren und als Online-Banking Aufträge "
-"an die Bank schicken"
 
 #: ../src/import-export/hbci/hbci-interaction.c:401
 #, c-format
@@ -13686,101 +13929,6 @@ msgid ""
 msgstr ""
 "Sie haben %ld Zeichen eingegeben, aber die TAN darf nicht länger als %d "
 "Zeichen sein.  Erneut versuchen?"
-
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
-msgid "CSV import data format"
-msgstr "CSV-Import Dateiformat"
-
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:2
-msgid "Close dialog when finished"
-msgstr "Fenster nach Verbindungsende schließen"
-
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:3
-msgid "DTAUS import data format"
-msgstr "DTAUS-Import Dateiformat"
-
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:4
-msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
-msgstr "Ausführliche Fehlermeldungen für HBCI Online Banking aktivieren."
-
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:5
-msgid ""
-"If active, the PIN for HBCI/AqBanking actions will be remembered in memory "
-"during a session. Otherwise it will have to be entered again each time "
-"during a session when it is needed."
-msgstr ""
-"Wenn aktiviert, wird die PIN (Persönliche Identifikationsnummer) für HBCI/"
-"AqBanking während einer Programmbenutzung im Speicher zwischengespeichert. "
-"Wenn nicht aktiviert, muss die PIN bei jeder einzelnen Aktion von HBCI/"
-"AqBanking eingegeben werden und wird nicht im Speicher gehalten."
-
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:6
-msgid ""
-"If active, the window will be closed automatically when you finish the HBCI/"
-"AqBanking import process. Otherwise it will stay open."
-msgstr ""
-"Wenn aktiviert, wird das Fenster automatisch geschlossen, wenn der HBCI/"
-"AqBanking-Import beendet ist. Andernfalls bleibt das Fenster geöffnet."
-
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:7
-msgid "Remember the PIN in memory"
-msgstr "HBCI PIN im Speicher merken"
-
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:8
-msgid "SWIFT MT940 import data format"
-msgstr "SWIFT MT940-Import Dateiformat"
-
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:9
-msgid "SWIFT MT942 import data format"
-msgstr "SWIFT MT942-Import Dateiformat"
-
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:12
-msgid ""
-"This setting specifies the data format when importing CSV files. The "
-"AqBanking library offers various import formats (called \"profiles\") of "
-"which you can choose one here."
-msgstr ""
-"Diese Einstellung gibt die Datenformate beim Importieren von CSV-Dateien an. "
-"Die Bibliothek AqBanking bietet verschiedene Datenformate an, die dort als "
-"»Profiles« (Profile) bezeichnet werden. Geben Sie hier den Namen des "
-"AqBanking-Profils an."
-
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:13
-msgid ""
-"This setting specifies the data format when importing DTAUS files. The "
-"AqBanking library offers various import formats (called \"profiles\") of "
-"which you can choose one here."
-msgstr ""
-"Diese Einstellung gibt die Datenformate beim Importieren von DTAUS-Dateien "
-"an. Die Bibliothek AqBanking bietet verschiedene Datenformate an, die dort "
-"als »Profiles« (Profile) bezeichnet werden. Geben Sie hier den Namen des "
-"AqBanking-Profils an."
-
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:14
-msgid ""
-"This setting specifies the data format when importing SWIFT MT940 files. The "
-"AqBanking library offers various import formats (called \"profiles\") of "
-"which you can choose one here."
-msgstr ""
-"Diese Einstellung gibt die Datenformate beim Importieren von SWIFT MT940-"
-"Dateien an. Die Bibliothek AqBanking bietet verschiedene Datenformate an, "
-"die dort als »Profiles« (Profile) bezeichnet werden. Geben Sie hier den "
-"Namen des AqBanking-Profils an."
-
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:15
-msgid ""
-"This setting specifies the data format when importing SWIFT MT942 files. The "
-"AqBanking library offers various import formats (called \"profiles\") of "
-"which you can choose one here."
-msgstr ""
-"Diese Einstellung gibt die Datenformate beim Importieren von SWIFT MT942-"
-"Dateien an. Die Bibliothek AqBanking bietet verschiedene Datenformate an, "
-"die dort als »Profiles« (Profile) bezeichnet werden. Geben Sie hier den "
-"Namen des AqBanking-Profils an."
-
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:16
-msgid "Verbose HBCI debug messages"
-msgstr "Ausführliche HBCI-Fehlermeldungen"
 
 #: ../src/import-export/import-account-matcher.c:82
 msgid "Account ID"
@@ -14058,30 +14206,68 @@ msgstr ""
 msgid "That QIF file is already loaded. Please select another file."
 msgstr "Diese QIF Datei ist bereits geladen. Bitte wählen Sie eine andere."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:609
-#, c-format
-msgid "QIF file load warning: %s"
-msgstr "Warnung beim Laden der QIF Datei: %s"
+#: ../src/import-export/qif-import/druid-qif-import.c:730
+msgid ""
+"GnuCash will now load your QIF file. If there are no errors or warnings, you "
+"will automatically proceed to the next step. Otherwise, the details will be "
+"shown below for your review."
+msgstr ""
 
-#: ../src/import-export/qif-import/druid-qif-import.c:616
-msgid "An error occurred while loading the QIF file."
+#. Inform the user.
+#: ../src/import-export/qif-import/druid-qif-import.c:826
+#: ../src/import-export/qif-import/druid-qif-import.c:899
+#: ../src/import-export/qif-import/druid-qif-import.c:2617
+msgid "Canceled"
+msgstr "Abgebrochen"
+
+#: ../src/import-export/qif-import/druid-qif-import.c:840
+#: ../src/import-export/qif-import/druid-qif-import.c:844
+msgid "A bug was detected while reading the QIF file."
 msgstr "Beim Laden der QIF Datei ist ein Fehler aufgetreten."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:624
-#, c-format
-msgid "QIF file load failed: %s"
-msgstr "Fehler beim Laden der QIF-Datei:%s"
+#. Inform the user.
+#: ../src/import-export/qif-import/druid-qif-import.c:841
+#: ../src/import-export/qif-import/druid-qif-import.c:861
+#: ../src/import-export/qif-import/druid-qif-import.c:918
+#: ../src/import-export/qif-import/druid-qif-import.c:967
+#: ../src/import-export/qif-import/druid-qif-import.c:2637
+#: ../src/import-export/qif-import/druid-qif-import.c:2658
+#: ../src/import-export/qif-import/druid-qif-import.c:2707
+msgid "Failed"
+msgstr "Fehlgeschlagen"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:687
-msgid "An error occurred while parsing the QIF file."
+#. Unload the file.
+#. Remove any converted data.
+#. An error occurred during duplicate checking.
+#. Remove any converted data.
+#: ../src/import-export/qif-import/druid-qif-import.c:895
+#: ../src/import-export/qif-import/druid-qif-import.c:912
+#: ../src/import-export/qif-import/druid-qif-import.c:2613
+#: ../src/import-export/qif-import/druid-qif-import.c:2631
+#: ../src/import-export/qif-import/druid-qif-import.c:2654
+#: ../src/import-export/qif-import/druid-qif-import.c:2701
+msgid "Cleaning up"
+msgstr "Aufräumen"
+
+#: ../src/import-export/qif-import/druid-qif-import.c:917
+#: ../src/import-export/qif-import/druid-qif-import.c:921
+msgid "A bug was detected while parsing the QIF file."
 msgstr "Beim Verarbeiten der QIF Datei ist ein Fehler aufgetreten."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:697
-#, c-format
-msgid "QIF file parse failed: %s"
-msgstr "QIF-Datei Analyse fehlerhaft: %s"
+#. The file was loaded successfully.
+#: ../src/import-export/qif-import/druid-qif-import.c:977
+msgid "Loading completed"
+msgstr "Vollständig geladen"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:956
+#. Swap the button label between pause and resume.
+#: ../src/import-export/qif-import/druid-qif-import.c:1024
+#: ../src/import-export/qif-import/druid-qif-import.c:1028
+#: ../src/import-export/qif-import/druid-qif-import.c:2764
+#: ../src/import-export/qif-import/druid-qif-import.c:2768
+msgid "_Resume"
+msgstr "_Fortsetzen"
+
+#: ../src/import-export/qif-import/druid-qif-import.c:1390
 msgid "You must enter an account name."
 msgstr "Sie müssen einen Kontonamen eingeben."
 
@@ -14089,24 +14275,28 @@ msgstr "Sie müssen einen Kontonamen eingeben."
 msgid "GnuCash account name"
 msgstr "GnuCash Kontobezeichnung"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1429
-#: ../src/import-export/qif-import/druid-qif-import.c:2037
-msgid "(split)"
-msgstr "(Buchung)"
+#: ../src/import-export/qif-import/druid-qif-import.c:2071
+#: ../src/import-export/qif-import/druid-qif-import.c:2144
+#, fuzzy
+msgid "Enter a name or short description, such as \"Red Hat Stock\"."
+msgstr "Geben Sie den vollen Namen des Wertpapiers an, z.B. »Deutsche Telekom«"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1761
-msgid "You must enter a Type for the commodity."
-msgstr "Sie müssen einen Typ für die Devise/Wertpapier angeben."
+#: ../src/import-export/qif-import/druid-qif-import.c:2077
+#: ../src/import-export/qif-import/druid-qif-import.c:2146
+msgid ""
+"Enter the ticker symbol or other well known abbreviation, such as \"RHT\". "
+"If there isn't one, or you don't know it, create your own."
+msgstr ""
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1768
-msgid "You must enter a name for the commodity."
-msgstr "Sie müssen einen Namen für die Devise/Wertpapier angeben."
+#: ../src/import-export/qif-import/druid-qif-import.c:2084
+#: ../src/import-export/qif-import/druid-qif-import.c:2149
+msgid ""
+"Select the exchange on which the symbol is traded, or select the type of "
+"investment (such as FUND for mutual funds.) If you don't see your exchange "
+"or an appropriate investment type, you can enter a new one."
+msgstr ""
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1773
-msgid "You must enter an abbreviation for the commodity."
-msgstr "Sie müssen eine Abkürzung für die Devise/Wertpapier angeben."
-
-#: ../src/import-export/qif-import/druid-qif-import.c:1786
+#: ../src/import-export/qif-import/druid-qif-import.c:2104
 msgid "You must enter an existing national currency or enter a different type."
 msgstr ""
 "Sie müssen entweder eine existierende Währung angeben oder einen anderen Typ "
@@ -14117,42 +14307,67 @@ msgstr ""
 msgid "Enter information about \"%s\""
 msgstr "Informationen über »%s«"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1930
-msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-msgstr "Wählen Sie den Handelsplatz für das Wertpapier (NASDAQ, NYSE, etc)."
+#: ../src/import-export/qif-import/druid-qif-import.c:2193
+#, fuzzy
+msgid "_Name or description:"
+msgstr "_Beschreibung:"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1952
-msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
-msgstr "Geben Sie den vollen Namen des Wertpapiers an, z.B. »Deutsche Telekom«"
+#: ../src/import-export/qif-import/druid-qif-import.c:2214
+msgid "_Ticker symbol or other abbreviation:"
+msgstr ""
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1973
+#: ../src/import-export/qif-import/druid-qif-import.c:2235
+msgid "_Exchange or abbreviation type:"
+msgstr ""
+
+#: ../src/import-export/qif-import/druid-qif-import.c:2446
+#: ../src/import-export/qif-import/druid-qif-import.c:2893
+msgid "(split)"
+msgstr "(Buchung)"
+
+#: ../src/import-export/qif-import/druid-qif-import.c:2524
 msgid ""
-"Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for "
-"the name."
+"GnuCash is now importing your QIF data. If there are no errors or warnings, "
+"you will automatically proceed to the next step. Otherwise, the details will "
+"be shown below for your review."
 msgstr ""
-"Geben Sie das Tickersymbol (z.B. »DTE«) des Wertpapiers oder eine andere "
-"eindeutige Abkürzung an."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1994
-msgid "Click \"Forward\" to accept the information and move on."
+#: ../src/import-export/qif-import/druid-qif-import.c:2636
+#: ../src/import-export/qif-import/druid-qif-import.c:2640
+msgid "A bug was detected while converting the QIF data."
 msgstr ""
-"Wenn Sie fertig gelesen haben, klicken Sie bitte »Vor«, um fortzufahren."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:2461
+#: ../src/import-export/qif-import/druid-qif-import.c:2692
+msgid "Canceling"
+msgstr "Abbrechen"
+
+#: ../src/import-export/qif-import/druid-qif-import.c:2706
+#: ../src/import-export/qif-import/druid-qif-import.c:2710
+msgid "A bug was detected while detecting duplicates."
+msgstr ""
+
+#: ../src/import-export/qif-import/druid-qif-import.c:2721
+msgid "Conversion completed"
+msgstr "Vollständig konvertiert"
+
+#. Set up the QIF account to GnuCash account matcher.
+#: ../src/import-export/qif-import/druid-qif-import.c:3545
 msgid "QIF account name"
 msgstr "QIF-Kontobezeichnung"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:2464
+#. Set up the QIF category to GnuCash account matcher.
+#: ../src/import-export/qif-import/druid-qif-import.c:3551
 msgid "QIF category name"
 msgstr "QIF Kategorie"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:2467
+#. Set up the QIF payee/memo to GnuCash account matcher.
+#: ../src/import-export/qif-import/druid-qif-import.c:3557
 msgid "QIF payee/memo"
 msgstr "QIF Empfänger/Text"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:2530
-msgid "Dup?"
-msgstr "Duplikat?"
+#: ../src/import-export/qif-import/druid-qif-import.c:3633
+msgid "Match?"
+msgstr ""
 
 #: ../src/import-export/qif-import/gnc-plugin-qif-import.c:48
 msgid "Import _QIF..."
@@ -14167,29 +14382,18 @@ msgid "<b>QIF Import</b>"
 msgstr "<b>QIF Import</b>"
 
 #: ../src/import-export/qif-import/qif.glade.h:2
-msgid ""
-"<span weight=\"bold\" size=\"larger\">The QIF import has failed</span>\n"
-"\n"
-"An error occurred while importing transactions into GnuCash. Your accounts "
-"are unchanged."
-msgstr ""
-"<span weight=\"bold\" size=\"larger\">Der QIF-Import ist fehlgeschlagen</span>\n"
-"\n"
-"Während des Import ist ein Fehler aufgetreten. Ihre Konten sind unverändert."
-
-#: ../src/import-export/qif-import/qif.glade.h:5
 msgid "Account name:"
 msgstr "Kontobezeichnung:"
 
-#: ../src/import-export/qif-import/qif.glade.h:6
+#: ../src/import-export/qif-import/qif.glade.h:3
 msgid "Accounts and stock holdings"
 msgstr "Konten und Aktienanteile"
 
-#: ../src/import-export/qif-import/qif.glade.h:7
-msgid "Cancel import"
-msgstr "Import abbrechen"
+#: ../src/import-export/qif-import/qif.glade.h:4
+msgid "Change GnuCash _Account..."
+msgstr "GnuCash-_Konto ändern..."
 
-#: ../src/import-export/qif-import/qif.glade.h:8
+#: ../src/import-export/qif-import/qif.glade.h:5
 msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
@@ -14213,29 +14417,7 @@ msgstr ""
 "\n"
 "Klicken Sie auf »Abbrechen«, um den QIF-Import-Prozess abzubrechen."
 
-#: ../src/import-export/qif-import/qif.glade.h:14
-msgid "Click \"Forward\" to check matchings for QIF categories. "
-msgstr ""
-"Klicken Sie bitte auf »Vor«, um passende Zuordnungen für QIF\n"
-"Kategorien zu prüfen."
-
-#: ../src/import-export/qif-import/qif.glade.h:15
-msgid ""
-"Click \"Forward\" to enter information about stocks and mutual funds in the "
-"imported data."
-msgstr ""
-"Klicken Sie nun auf »Vor«, um Informationen über die Aktien und Aktienfonds "
-"einzugeben, die aus den importierten Daten stammen."
-
-#: ../src/import-export/qif-import/qif.glade.h:16
-msgid ""
-"Click \"Forward\" to enter information about the currency used in your QIF "
-"files."
-msgstr ""
-"Bitte klicken Sie »Vor«, um Informationen über Währungen in Ihren\n"
-"QIF-Dateien einzugeben."
-
-#: ../src/import-export/qif-import/qif.glade.h:17
+#: ../src/import-export/qif-import/qif.glade.h:11
 msgid ""
 "Click \"Load another file\" if you have more data to import at this time. Do "
 "this if you have saved your accounts to separate QIF files.\n"
@@ -14301,86 +14483,52 @@ msgstr ""
 "\n"
 "Sie können jederzeit auch später in GnuCash Änderungen vornehmen."
 
-#: ../src/import-export/qif-import/qif.glade.h:31
+#: ../src/import-export/qif-import/qif.glade.h:25
 msgid ""
-"If you are importing a QIF file downloaded from a bank or other financial "
-"institution, some of the information in the QIF file may duplicate "
-"information already in your GnuCash accounts.  GnuCash will try to detect "
-"duplicates of existing transactions.  \n"
+"If you are importing a QIF file from a bank or other financial institution, "
+"some of the transactions may already exist in your GnuCash accounts. To "
+"avoid duplication, GnuCash has tried to identify matches and needs your help "
+"to review them.\n"
 "\n"
-"On the next page, you will be asked to confirm that an existing transaction "
-"matches an imported transaction.  Imported transactions are shown on the "
-"left side of the page, and possible matches for the selected left-hand "
-"transaction are shown to the right.  There may be several old transactions "
-"that could match an imported transaction; you will be able to select the "
-"correct one by double-clicking in the \"Dup?\" column of the correct "
-"transaction.\n"
+"On the next page you will be shown a list of imported transactions. As you "
+"select each one, a list of possible matches will be shown below it. If you "
+"find a correct match, click on it. Your selection will be confirmed by a "
+"check mark in the \"Match?\" column.\n"
 "\n"
-"You can control the rules used by GnuCash to find duplicate transactions in "
-"the \"QIF Import\" section of the GnuCash Preferences dialog.\n"
-"\n"
-"Click \"Forward\" to find duplicate transactions. "
+"Click \"Forward\" to review the possible matches."
 msgstr ""
-"Wenn Sie eine QIF-Datei importieren, kann ein Teil der Informationen aus der "
-"QIF-Datei schon in Ihren GnuCash Konten enthalten sein. GnuCash wird "
-"versuchen, doppelt vorhandene Buchungen zu finden.\n"
-"\n"
-"Auf der nächsten Seite können Sie bestätigen, wenn eine bestehende Buchung "
-"einer importierten Buchung entspricht. Importierte Buchungen werden auf der "
-"linken Seite angezeigt. Mögliche Entsprechungen für die auf der linken Seite "
-"ausgewählte Buchung werden auf der rechten Seite angezeigt. Es ist möglich, "
-"dass mehrere existierende Buchungen einer importierten Buchung entsprechen. "
-"Sie können die richtige Buchung durch Doppelklicken in die »Duplikat?«-"
-"Spalte der richtigen Buchung auswählen.\n"
-"\n"
-"Sie können die Regeln, die GnuCash nutzt, um doppelte Buchungen zu finden, "
-"im »QIF Import«-Abschnitt der GnuCash-Einstellungen beeinflussen.\n"
-"\n"
-"Klicken Sie nun auf »Vor«, um doppelte Buchungen zu finden."
 
-#: ../src/import-export/qif-import/qif.glade.h:38
+#: ../src/import-export/qif-import/qif.glade.h:30
 msgid "Import QIF files"
 msgstr "QIF-Datei importieren"
 
-#: ../src/import-export/qif-import/qif.glade.h:39
-msgid "Imported transactions with duplicates"
-msgstr "Importierte Buchungen mit Duplikaten"
-
-#: ../src/import-export/qif-import/qif.glade.h:40
+#: ../src/import-export/qif-import/qif.glade.h:31
 msgid ""
-"In the next pages, you will be asked to provide information about stocks, "
-"mutual funds, and other tradable commodities that appear in the QIF file(s) "
-"you are importing. GnuCash requires more information about tradable "
-"commodities than the QIF format can represent. \n"
+"In the following pages you will be asked to provide information about "
+"stocks, mutual funds, and other investments that appear in the QIF file(s) "
+"you are importing. GnuCash needs some additional details about these "
+"investments that the QIF format does not provide. \n"
 "\n"
-"Each stock, mutual fund, or other commodity must have a type, which is the "
-"exchange or listing that it is found on (NASDAQ, NYSE, US Mutual Funds, "
-"etc), a full name, and an abbreviation.\n"
+"Each stock, mutual fund, or other investment must have a name and an "
+"abbreviation, such as a stock symbol. Because some unrelated investments "
+"have the same abbreviation, you also need to indicate what type of "
+"abbreviation you have entered. For example, you could select the exchange "
+"that assigned the symbol (NASDAQ, NYSE, etc.), or select an investment "
+"type.\n"
 "\n"
-"Check to see if there is an existing Type that is appropriate; if not, you "
-"can enter a new Type name by hand in the box. Make sure that the "
-"abbreviation you enter matches the ticker symbol used for the commodity on "
-"the exchange or listing for its type."
+"If you don't see your exchange listed, or none of the available choices are "
+"appropriate, you can enter a new one."
 msgstr ""
-"Auf den nächsten Seiten werden Sie nach Informationen über Ihre Aktien, "
-"Aktienfonds und anderen handelbaren Währungen gefragt, die in den QIF-"
-"Dateien auftauchen, die Sie importieren möchten. GnuCash benötigt mehr "
-"Informationen über handelbare Waren, als das QIF-Format normalerweise "
-"enthält.\n"
-"\n"
-"Jede Aktie, Fonds oder Währung muss einen Typ, einen vollen Namen und ein "
-"Kürzel haben. Der Typ ist der Handelsplatz (NASDAQ, NYSE etc.).\n"
-"\n"
-"Prüfen Sie bitte, ob ein bereits existierender Typ passt. Andernfalls geben "
-"Sie einen neuen Typ in das Eingabefeld ein. Bitte benutzen Sie dabei das "
-"exakte Tickersymbol für die Aktie, das bei der offiziellen Börsennotierung "
-"benutzt wird."
 
-#: ../src/import-export/qif-import/qif.glade.h:45
+#: ../src/import-export/qif-import/qif.glade.h:36
 msgid "Income and Expense categories"
 msgstr "Erträge und Aufwendungen"
 
-#: ../src/import-export/qif-import/qif.glade.h:46
+#: ../src/import-export/qif-import/qif.glade.h:37
+msgid "Load QIF files"
+msgstr "QIF Dateien laden"
+
+#: ../src/import-export/qif-import/qif.glade.h:38
 msgid "Match QIF accounts with GnuCash accounts"
 msgstr "Füge QIF-Konten in GnuCash Konten ein"
 
@@ -14388,15 +14536,21 @@ msgstr "Füge QIF-Konten in GnuCash Konten ein"
 msgid "Match QIF categories with GnuCash accounts"
 msgstr "Vereine QIF-Kategorien mit GnuCash Konten"
 
-#: ../src/import-export/qif-import/qif.glade.h:48
-msgid "Match duplicate transactions"
-msgstr "Doppelte Buchungssätze suchen"
+#: ../src/import-export/qif-import/qif.glade.h:40
+#, fuzzy
+msgid "Match existing transactions"
+msgstr "Wählen Sie die zugeordnete, schon existierende Buchung"
 
-#: ../src/import-export/qif-import/qif.glade.h:49
+#: ../src/import-export/qif-import/qif.glade.h:41
 msgid "Match payees/memos to GnuCash accounts"
 msgstr "Finde passende GnuCash Konten für QIF-Zahlungsempfänger/Buchungstext"
 
-#: ../src/import-export/qif-import/qif.glade.h:50
+#: ../src/import-export/qif-import/qif.glade.h:42
+#, fuzzy
+msgid "Matchings selected:"
+msgstr "Keine Konten ausgewählt"
+
+#: ../src/import-export/qif-import/qif.glade.h:43
 msgid ""
 "On the next page, the accounts in your QIF files and any stocks or mutual "
 "funds you own will be matched with GnuCash accounts. If a GnuCash account "
@@ -14448,11 +14602,7 @@ msgstr ""
 "Sie können soviele Dateien laden, wie Sie möchten. Es ist kein Problem, "
 "falls sich Ihre Daten in mehreren Dateien befinden.\n"
 
-#: ../src/import-export/qif-import/qif.glade.h:59
-msgid "Possible duplicates for selected new transaction"
-msgstr "Mögliche Duplikate für ausgewählte neue Buchungen"
-
-#: ../src/import-export/qif-import/qif.glade.h:61
+#: ../src/import-export/qif-import/qif.glade.h:53
 msgid "QIF Import"
 msgstr "QIF-Import"
 
@@ -14516,13 +14666,11 @@ msgstr ""
 "anderen Finanzprogramm exportiert wurde, sollten Sie den gleichen Kontonamen "
 "wie dort verwenden.\n"
 
-#: ../src/import-export/qif-import/qif.glade.h:81
+#: ../src/import-export/qif-import/qif.glade.h:72
+#, fuzzy
 msgid ""
 "The QIF importer cannot currently handle multi-currency QIF files. All the "
-"accounts in the QIF file(s) you are importing must be denominated in the "
-"same currency. This limitation should be removed soon.\n"
-"\n"
-"Select the currency to use for transactions imported from your QIF files:\n"
+"accounts you are importing must be denominated in the same currency.\n"
 msgstr ""
 "Der QIF-Importer kann bisher noch keine QIF-Dateien mit verschiedenen "
 "Währungen verarbeiten. Daher müssen alle Konten in der QIF-Datei die gleiche "
@@ -14540,7 +14688,29 @@ msgstr "Handelbare Währungen/Aktien"
 msgid "Update your GnuCash accounts"
 msgstr "Aktualisieren Ihrer GnuCash Konten"
 
-#: ../src/import-export/qif-import/qif.glade.h:88
+#: ../src/import-export/qif-import/qif.glade.h:76
+#, fuzzy
+msgid "_Imported transactions needing review:"
+msgstr "Erster Teil der importierten Buchung"
+
+#: ../src/import-export/qif-import/qif.glade.h:78
+msgid "_Possible matches for the selected transaction:"
+msgstr "Mögliche Duplikate für ausgewählte neue Buchungen"
+
+#: ../src/import-export/qif-import/qif.glade.h:79
+msgid "_Select or add a GnuCash account:"
+msgstr "Auswählen oder Hinzufügen eines GnuCash Kontos"
+
+#: ../src/import-export/qif-import/qif.glade.h:80
+msgid "_Select the currency to use for all imported transactions:"
+msgstr ""
+
+#: ../src/import-export/qif-import/qif.glade.h:81
+#, fuzzy
+msgid "_Select the matchings you want to change:"
+msgstr "Konten wählen, die verglichen werden sollen"
+
+#: ../src/import-export/qif-import/qif.glade.h:82
 msgid "_Select..."
 msgstr "_Auswählen..."
 
@@ -17467,7 +17637,24 @@ msgid "Show a Net Worth bar?"
 msgstr "Reinvermögen anzeigen?"
 
 #. src/report/standard-reports/net-barchart.scm
-#: ../intl-scm/guile-strings.c:1292
+#. src/report/standard-reports/category-barchart.scm
+#. src/report/standard-reports/average-balance.scm
+#: ../intl-scm/guile-strings.c:1286 ../intl-scm/guile-strings.c:1290
+#: ../intl-scm/guile-strings.c:1778 ../intl-scm/guile-strings.c:1782
+#: ../intl-scm/guile-strings.c:2822 ../intl-scm/guile-strings.c:2872
+msgid "Show table"
+msgstr "Tabelle anzeigen"
+
+#. src/report/standard-reports/net-barchart.scm
+#. src/report/standard-reports/category-barchart.scm
+#. src/report/standard-reports/average-balance.scm
+#: ../intl-scm/guile-strings.c:1288 ../intl-scm/guile-strings.c:1780
+#: ../intl-scm/guile-strings.c:2824
+msgid "Display a table of the selected data."
+msgstr "Daten als Tabelle anzeigen."
+
+#. src/report/standard-reports/net-barchart.scm
+#: ../intl-scm/guile-strings.c:1302 ../intl-scm/guile-strings.c:1324
 msgid "Net Profit"
 msgstr "Reingewinn"
 
@@ -18012,7 +18199,15 @@ msgid "Unrealized Gains"
 msgstr "Nicht realisierter Gewinn/Verlust"
 
 #. src/report/standard-reports/trial-balance.scm
-#: ../intl-scm/guile-strings.c:1506
+#. src/report/standard-reports/balance-sheet.scm
+#. src/report/standard-reports/equity-statement.scm
+#: ../intl-scm/guile-strings.c:1530 ../intl-scm/guile-strings.c:1938
+#: ../intl-scm/guile-strings.c:2224
+msgid "Unrealized Losses"
+msgstr "Nicht realisierter Verlust"
+
+#. src/report/standard-reports/trial-balance.scm
+#: ../intl-scm/guile-strings.c:1532
 msgid "Net Income"
 msgstr "Netto Erträge"
 
@@ -18455,8 +18650,15 @@ msgstr "Salden %s bis %s"
 msgid "and"
 msgstr "und"
 
+#. src/report/standard-reports/category-barchart.scm
+#. src/report/standard-reports/transaction.scm
+#: ../intl-scm/guile-strings.c:1796 ../intl-scm/guile-strings.c:2260
+#: ../intl-scm/guile-strings.c:2636
+msgid "Grand Total"
+msgstr "Gesamtbetrag"
+
 #. src/report/standard-reports/portfolio.scm
-#: ../intl-scm/guile-strings.c:1760
+#: ../intl-scm/guile-strings.c:1798
 msgid "Investment Portfolio"
 msgstr "Portfolio"
 
@@ -18618,13 +18820,7 @@ msgid "Retained Losses"
 msgstr "Verlustvortrag"
 
 #. src/report/standard-reports/balance-sheet.scm
-#. src/report/standard-reports/equity-statement.scm
-#: ../intl-scm/guile-strings.c:1900 ../intl-scm/guile-strings.c:2186
-msgid "Unrealized Losses"
-msgstr "Nicht realisierter Verlust"
-
-#. src/report/standard-reports/balance-sheet.scm
-#: ../intl-scm/guile-strings.c:1902
+#: ../intl-scm/guile-strings.c:1940
 msgid "Total Equity"
 msgstr "Gesamt Eigenkapital"
 
@@ -18938,12 +19134,7 @@ msgid "Total For "
 msgstr "Gesamtsumme für "
 
 #. src/report/standard-reports/transaction.scm
-#: ../intl-scm/guile-strings.c:2222 ../intl-scm/guile-strings.c:2598
-msgid "Grand Total"
-msgstr "Gesamtbetrag"
-
-#. src/report/standard-reports/transaction.scm
-#: ../intl-scm/guile-strings.c:2312
+#: ../intl-scm/guile-strings.c:2350
 msgid "Transfer from/to"
 msgstr "Umbuchen von/nach"
 
@@ -19464,17 +19655,7 @@ msgid "Do transaction report on this account"
 msgstr "Den Buchungsbericht zu diesem Konto erstellen"
 
 #. src/report/standard-reports/average-balance.scm
-#: ../intl-scm/guile-strings.c:2776 ../intl-scm/guile-strings.c:2826
-msgid "Show table"
-msgstr "Tabelle anzeigen"
-
-#. src/report/standard-reports/average-balance.scm
-#: ../intl-scm/guile-strings.c:2778
-msgid "Display a table of the selected data."
-msgstr "Daten als Tabelle anzeigen."
-
-#. src/report/standard-reports/average-balance.scm
-#: ../intl-scm/guile-strings.c:2780 ../intl-scm/guile-strings.c:2824
+#: ../intl-scm/guile-strings.c:2826 ../intl-scm/guile-strings.c:2870
 msgid "Show plot"
 msgstr "Diagramm anzeigen"
 
@@ -19948,55 +20129,234 @@ msgid "Margin Interest"
 msgstr "Zinsmarge"
 
 #. src/import-export/qif-import/qif-file.scm
-#: ../intl-scm/guile-strings.c:3182
-msgid "Loading QIF file..."
-msgstr "QIF Datei lesen..."
+#: ../intl-scm/guile-strings.c:3246 ../intl-scm/guile-strings.c:3248
+msgid "Line"
+msgstr "Zeile"
 
 #. src/import-export/qif-import/qif-file.scm
-#: ../intl-scm/guile-strings.c:3184 ../intl-scm/guile-strings.c:3188
-msgid "This file is not encoded in UTF-8 or ASCII."
-msgstr "Diese Datei hat eine andere Zeichenkodierung als UTF-8 oder ASCII."
+#: ../intl-scm/guile-strings.c:3250
+msgid "Read aborted."
+msgstr "Lesen abgebrochen."
 
 #. src/import-export/qif-import/qif-file.scm
-#: ../intl-scm/guile-strings.c:3186
+#: ../intl-scm/guile-strings.c:3252
+msgid "Reading"
+msgstr "Lese"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3254
 msgid "Some characters have been discarded."
 msgstr "Einige Zeichen sind verworfen worden."
 
 #. src/import-export/qif-import/qif-file.scm
-#: ../intl-scm/guile-strings.c:3190
+#: ../intl-scm/guile-strings.c:3256 ../intl-scm/guile-strings.c:3260
+msgid "Converted to: "
+msgstr "Konvertiert zu:"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3258
 msgid "Some characters have been converted according to your locale."
-msgstr "Einige Zeichen wurden gemäß Ihren Systemeinstellungen (locale) konvertiert."
+msgstr ""
+"Einige Zeichen wurden gemäß Ihren Systemeinstellungen (locale) konvertiert."
 
 #. src/import-export/qif-import/qif-file.scm
-#: ../intl-scm/guile-strings.c:3192
-msgid "One or more transactions is missing a date."
-msgstr "Bei einer oder mehreren Buchungen wurde kein Datum gefunden."
+#: ../intl-scm/guile-strings.c:3262
+msgid "Ignoring unknown option"
+msgstr "Unbekannte Option wird ignoriert"
 
 #. src/import-export/qif-import/qif-file.scm
-#. src/import-export/qif-import/qif-parse.scm
-#: ../intl-scm/guile-strings.c:3194 ../intl-scm/guile-strings.c:3204
-msgid "Some transactions may be discarded."
-msgstr "Einige Buchungen sind eventuell verworfen worden."
+#: ../intl-scm/guile-strings.c:3264
+msgid "Date required."
+msgstr "Datum erforderlich."
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3266
+msgid "Discarding this transaction."
+msgstr "Diese Buchung ignorieren."
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3268
+msgid "Ignoring class line"
+msgstr ""
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3270
+#, fuzzy
+msgid "Ignoring category line"
+msgstr "QIF Kategorie"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3272
+msgid "Ignoring security line"
+msgstr ""
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3274
+msgid "File does not appear to be in QIF format"
+msgstr ""
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3276
+msgid "Transaction date"
+msgstr "Buchungsdatum"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3278
+msgid "Transaction amount"
+msgstr "Buchungsbetrag"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3280
+#, fuzzy
+msgid "Share price"
+msgstr "Wertpapier-/Anteilspreis"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3282
+#, fuzzy
+msgid "Share quantity"
+msgstr "Anzahl"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3284
+#, fuzzy
+msgid "Investment action"
+msgstr "Portfolio"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3286
+#, fuzzy
+msgid "Reconciliation status"
+msgstr "Abgleichen (mit automatisch gewählter Zuordnung)"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3288
+#, fuzzy
+msgid "Commission"
+msgstr "Kommissionen"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3290
+msgid "Account type"
+msgstr "Kontoart"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3292
+#, fuzzy
+msgid "Tax class"
+msgstr "Steuertabellen"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3294
+#, fuzzy
+msgid "Category budget amount"
+msgstr "Sortieren nach Summe"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3296
+#, fuzzy
+msgid "Account budget amount"
+msgstr "Kontenlöschung"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3298
+msgid "Credit limit"
+msgstr "Kreditrahmen"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3300
+#, fuzzy
+msgid "Parsing categories"
+msgstr "Datei wird verarbeitet..."
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3302
+#, fuzzy
+msgid "Parsing accounts"
+msgstr "Existierendes Konto"
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3304
+#, fuzzy
+msgid "Parsing transactions"
+msgstr "Buchungen erstellen..."
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3306
+msgid "Unrecognized or inconsistent format."
+msgstr ""
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3308
+#, fuzzy
+msgid "Parsing failed."
+msgstr "Datei wird verarbeitet..."
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3310
+msgid "Parse ambiguity between formats"
+msgstr ""
+
+#. src/import-export/qif-import/qif-file.scm
+#: ../intl-scm/guile-strings.c:3312
+#, c-format
+msgid "Value '%s' could be %s or %s."
+msgstr ""
 
 #. src/import-export/qif-import/qif-to-gnc.scm
-#: ../intl-scm/guile-strings.c:3196
+#: ../intl-scm/guile-strings.c:3314
 msgid "QIF import: Name conflict with another account."
 msgstr "QIF-Import: Namenskonflikt mit bestehendem Konto."
 
 #. src/import-export/qif-import/qif-to-gnc.scm
-#: ../intl-scm/guile-strings.c:3200
-msgid "Importing transactions..."
-msgstr "Buchungen importieren..."
+#: ../intl-scm/guile-strings.c:3316
+msgid "Preparing to convert your QIF data"
+msgstr ""
+
+#. src/import-export/qif-import/qif-to-gnc.scm
+#: ../intl-scm/guile-strings.c:3318
+msgid "Creating accounts"
+msgstr "Konten erstellen"
+
+#. src/import-export/qif-import/qif-to-gnc.scm
+#: ../intl-scm/guile-strings.c:3320
+#, fuzzy
+msgid "Matching transfers between accounts"
+msgstr "entspricht keinem Konto"
+
+#. src/import-export/qif-import/qif-to-gnc.scm
+#: ../intl-scm/guile-strings.c:3322
+msgid "Converting"
+msgstr "Konvertieren"
+
+#. src/import-export/qif-import/qif-to-gnc.scm
+#: ../intl-scm/guile-strings.c:3324
+#, fuzzy
+msgid "Missing transaction date."
+msgstr "Anzeigen des Buchungsdatum?"
+
+#. src/import-export/qif-import/qif-to-gnc.scm
+#: ../intl-scm/guile-strings.c:3326
+#, fuzzy
+msgid "Dates earlier than 1970 are not supported."
+msgstr "Ein Datum in der Zukunft wird nicht unterstützt"
 
 #. src/import-export/qif-import/qif-parse.scm
-#: ../intl-scm/guile-strings.c:3202
+#: ../intl-scm/guile-strings.c:3328
 #, c-format
-msgid "The file contains an unknown Action '%s'."
-msgstr "Diese Datei enthält eine unbekannte Aktion '%s'."
+msgid "Unrecognized account type '%s'. Defaulting to Bank."
+msgstr ""
+
+#. src/import-export/qif-import/qif-parse.scm
+#: ../intl-scm/guile-strings.c:3330
+#, fuzzy, c-format
+msgid "Unrecognized action '%s'."
+msgstr "Nicht realisierter Gewinn/Verlust"
 
 #. src/import-export/qif-import/qif-merge-groups.scm
-#: ../intl-scm/guile-strings.c:3208
-msgid "Finding duplicate transactions..."
+#: ../intl-scm/guile-strings.c:3332
+#, fuzzy
+msgid "Finding duplicate transactions"
 msgstr "Duplizierte Buchungen finden..."
 
 #. src/business/business-utils/business-prefs.scm
