@@ -167,7 +167,6 @@ add_gvalue_address_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     gchar* s;
     QofAccessFunc getter;
 	const GncSqlColumnTableEntry* subtable_row;
-	gchar* buf;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( obj_name != NULL );
@@ -180,8 +179,6 @@ add_gvalue_address_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     if( G_VALUE_TYPE(&value) != 0 ) {
         addr = g_value_get_object( &value );
 		for( subtable_row = col_table; subtable_row->col_name != NULL; subtable_row++ ) {
-    		buf = g_strdup_printf( "%s_%s", table_row->col_name, subtable_row->col_name );
-			
 			subfield_value = g_new0( GValue, 1 );
 			if( subtable_row->gobj_param_name != NULL ) {
 				g_object_get( addr, subtable_row->gobj_param_name, &s, NULL );
@@ -189,16 +186,13 @@ add_gvalue_address_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     			getter = gnc_sql_get_getter( GNC_ID_ADDRESS, subtable_row );
     			s = (gchar*)(*getter)( addr, NULL );
 			}
+        	g_value_init( subfield_value, G_TYPE_STRING );
     		if( s ) {
-        		g_value_init( subfield_value, G_TYPE_STRING );
-        		g_value_take_string( subfield_value,
-									g_strdup_printf( "'%s'", s ) );
+        		g_value_set_string( subfield_value, s );
 			} else {
-				g_value_init( subfield_value, G_TYPE_STRING );
 				g_value_set_string( subfield_value, "NULL" );
 			}
 			(*pList) = g_slist_append( (*pList), subfield_value );
-			g_free( buf );
 		}
     }
 }
