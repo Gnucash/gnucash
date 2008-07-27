@@ -70,8 +70,8 @@ static GncSqlColumnTableEntry tt_col_table[] =
 	{ "refcount",  CT_INT64,       0,            COL_NNUL,          NULL, GNC_TT_REFCOUNT },
 	{ "invisible", CT_BOOLEAN,     0,            COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)gncTaxTableGetInvisible, (QofSetterFunc)set_invisible },
-	{ "child",     CT_TAXTABLEREF, 0,			 0,                 NULL, NULL,
-			get_child, (QofSetterFunc)gncTaxTableSetChild },
+/*	{ "child",     CT_TAXTABLEREF, 0,			 0,                 NULL, NULL,
+			get_child, (QofSetterFunc)gncTaxTableSetChild }, */
 	{ "parent",    CT_TAXTABLEREF, 0,			 0,                 NULL, NULL,
 			(QofAccessFunc)gncTaxTableGetParent, set_parent },
 	{ NULL }
@@ -153,6 +153,7 @@ set_parent( gpointer data, gpointer value )
 	if( value != NULL ) {
 		parent = GNC_TAXTABLE(value);
 		gncTaxTableSetParent( tt, parent );
+		gncTaxTableSetChild( parent, tt );
 	}
 }
 
