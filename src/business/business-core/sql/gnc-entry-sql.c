@@ -83,7 +83,7 @@ static GncSqlColumnTableEntry col_table[] =
 			(QofAccessFunc)gncEntryGetInvTaxTable, (QofSetterFunc)gncEntrySetInvTaxTable },
 	{ "b_acct",        CT_ACCOUNTREF,  0,                   0,        			NULL, ENTRY_BACCT },
 	{ "b_price",       CT_NUMERIC,     0,                   0,        			NULL, ENTRY_BPRICE },
-	{ "bill",          CT_BILLTERMREF,  0,                   0,        			NULL, NULL,
+	{ "bill",          CT_INVOICEREF,  0,                   0,        			NULL, NULL,
 			(QofAccessFunc)gncEntryGetBill, (QofSetterFunc)gncEntrySetBill },
 	{ "b_taxable",     CT_BOOLEAN,     0,                   0,        			NULL, ENTRY_BILL_TAXABLE },
 	{ "b_taxincluded", CT_BOOLEAN,     0,                   0,        			NULL, ENTRY_BILL_TAX_INC },
