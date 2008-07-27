@@ -1,6 +1,62 @@
 Version history:
 ------- -------
 
+ 2.2.6 - 27 July 2008
+ 	 Welcome to the GnuCash 2.2.6 Release.
+	 Fixed Bugs:
+	 o #129099: Register: Optionally show leaf names instead of full names
+	 o #144669: Register: Shortcut to filter accounts by account number
+	 o #313660: QIF Import: Can't stop progress on long importing process
+	 o #336192: QIF Import: Allow new namespaces when defining new securities
+	 o #353880: Reports: Options dialog violates HIG, add borders.
+	 o #309359: QIF Import: "unknown Action '..'" shown many times
+	 o #452354: Average Balance Report: Translate account type option names
+	 o #454305: Trial Balance Report: Wrong after negative Stock Split
+	 o #460721: Balance Sheet: Should have a "value at cost" option
+	 o #463320: Trial Balance Report: Does not add up correctly
+	 o #470656: Preferences, Win32: Crash when setting accounting period
+	 o #475980: QIF Import: Forward and Back don't follow same path
+	 o #489502: Register: Account autocompletion ignores new
+	            separator until restart
+	 o #501490: Balance Sheet: Incorrect in presence of stock sale
+	 o #502646: Win32: Crash entering dates before 1/1/1970 in dialogs
+	 o #506499: Win32: Crash after online banking transfer
+	 o #512991: Invoices: Do not allow posting to placeholder accounts
+	 o #514210: QIF Import: Allow multiple selections for account mapping
+	 o #515163: QIF Import: Eliminate pointless mappings
+	 o #521403: Reports: One more option in "Price Source" in Stock
+	            Value Reports
+	 o #526883: Transaction Report: Question marks instead of month
+	            in cyrillic locale
+	 o #528835: Crash when creating SKR04 accounts with German locale
+	 o #530924: Customer Report: Honor the used column list
+	 o #531662: Budget report: Crash on #f in budget->guid
+	 o #532405: Win32: Guile crashes on strftime formats containing %e
+	 o #535407: QIF Import: Crash on invalid or unsupported date format
+	 o #538800: Balance Sheet: Gives wrong results
+	 o #539654: Reports: html-table-append-column! in html-table.scm crashes
+	 o #539829: Build Process: qofsession.c compile warning
+	 o #540207: Reports: Show a table of data beneath barcharts
+	 o #542472: Reports: Period does not default to Accounting Period
+	 o #542967: Reports: Options dialog title shows GUID
+	 Other Changes:
+	 o New Hebrew translation
+	 o Add support for aqbanking3
+	 o Correct quickfill directions in transfer dialogs
+	 o Add QIF importer support for importing to A/R and A/P account types
+	 o QIF importer loading speedup and visual feedback, further improvements
+	 o Avoid crashing if a report's option generating procedure
+	   causes a Scheme exception
+	 o Make the new option Average Cost the default for several
+	   reports
+	 o Make weighted average price source computations ignore zero
+	   amount splits
+	 o Support calculation of unrealized gains/losses on liabilities
+	   in balance sheet
+	 o Allow creating new accounts from the general ledger
+	 o Fix some compiler warnings, minor build system improvements
+	 o Update translations: Catalan, German, Russian, Traditional Chinese
+
  2.2.5 - 27 April 2008
  	 Welcome to the GnuCash 2.2.5 Release.
 	 Fixed Bugs:
