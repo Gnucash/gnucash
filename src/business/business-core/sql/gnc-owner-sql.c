@@ -58,7 +58,7 @@ load_owner( const GncSqlBackend* be, GncSqlRow* row,
     GUID guid;
 	QofBook* book;
 	GncOwner owner;
-	GUID* pGuid;
+	GUID* pGuid = NULL;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( row != NULL );
@@ -74,18 +74,22 @@ load_owner( const GncSqlBackend* be, GncSqlRow* row,
     val = gnc_sql_row_get_value_at_col_name( row, buf );
     g_free( buf );
 
-    if( val != NULL ) {
+    if( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL ) {
         string_to_guid( g_value_get_string( val ), &guid );
-    }
-	pGuid = &guid;
+		pGuid = &guid;
+	}
 
     switch( type ) {
   	case GNC_OWNER_CUSTOMER:
   		{
-    		GncCustomer *cust = gncCustomerLookup( book, pGuid );
-    		if( cust == NULL ) {
-      			cust = gncCustomerCreate( book );
-      			gncCustomerSetGUID( cust, &guid );
+    		GncCustomer *cust = NULL;
+
+			if( pGuid != NULL ) {
+    			cust = gncCustomerLookup( book, pGuid );
+    			if( cust == NULL ) {
+      				cust = gncCustomerCreate( book );
+      				gncCustomerSetGUID( cust, &guid );
+				}
     		}
     		gncOwnerInitCustomer( &owner, cust );
     		break; 
@@ -93,10 +97,14 @@ load_owner( const GncSqlBackend* be, GncSqlRow* row,
 
   	case GNC_OWNER_JOB:
   		{
-    		GncJob *job = gncJobLookup( book, pGuid );
-    		if( job == NULL ) {
-      			job = gncJobCreate( book );
-      			gncJobSetGUID( job, &guid );
+    		GncJob *job = NULL;
+
+			if( pGuid != NULL ) {
+				job = gncJobLookup( book, pGuid );
+    			if( job == NULL ) {
+      				job = gncJobCreate( book );
+      				gncJobSetGUID( job, &guid );
+				}
     		}
     		gncOwnerInitJob( &owner, job );
     		break; 
@@ -104,10 +112,14 @@ load_owner( const GncSqlBackend* be, GncSqlRow* row,
 
   	case GNC_OWNER_VENDOR:
   		{
-    		GncVendor *vendor = gncVendorLookup( book, pGuid );
-    		if( vendor == NULL ) {
-      			vendor = gncVendorCreate( book );
-    		  	gncVendorSetGUID( vendor, &guid );
+    		GncVendor *vendor = NULL;
+
+			if( pGuid != NULL ) {
+    			vendor = gncVendorLookup( book, pGuid );
+    			if( vendor == NULL ) {
+      				vendor = gncVendorCreate( book );
+    		  		gncVendorSetGUID( vendor, &guid );
+				}
     		}
     		gncOwnerInitVendor( &owner, vendor );
     		break; 
@@ -115,10 +127,14 @@ load_owner( const GncSqlBackend* be, GncSqlRow* row,
 
   	case GNC_OWNER_EMPLOYEE:
   		{
-    		GncEmployee *employee = gncEmployeeLookup( book, pGuid );
-    		if( employee == NULL ) {
-      			employee = gncEmployeeCreate( book );
-      			gncEmployeeSetGUID( employee, &guid );
+    		GncEmployee *employee = NULL;
+
+			if( pGuid != NULL ) {
+    			employee = gncEmployeeLookup( book, pGuid );
+    			if( employee == NULL ) {
+      				employee = gncEmployeeCreate( book );
+      				gncEmployeeSetGUID( employee, &guid );
+				}
     		}
     		gncOwnerInitEmployee( &owner, employee );
     		break; 
@@ -237,11 +253,7 @@ add_gvalue_owner_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     		if( guid != NULL ) {
         		(void)guid_to_string_buff( guid, guid_buf );
         		g_value_take_string( subfield_value, g_strdup_printf( "%s", guid_buf ) );
-    		} else {
-				g_value_set_string( subfield_value, "NULL" );
 			}
-    	} else {
-			g_value_set_string( subfield_value, "NULL" );
 		}
 		(*pList) = g_slist_append( (*pList), subfield_value );
 		g_free( buf );

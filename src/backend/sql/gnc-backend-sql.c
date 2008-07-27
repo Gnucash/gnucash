@@ -984,8 +984,6 @@ add_gvalue_string_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	g_value_init( value, G_TYPE_STRING );
     if( s ) {
         g_value_set_string( value, s );
-    } else {
-		g_value_set_string( value, "NULL" );
 	}
 
 	(*pList) = g_slist_append( (*pList), value );
@@ -2135,15 +2133,19 @@ gnc_sql_get_sql_value( const GncSqlConnection* conn, const GValue* value )
 {
 	if( value != NULL && G_IS_VALUE( value ) ) {
 		if( G_VALUE_HOLDS_STRING(value) ) {
-			gchar *before_str;
-			gchar* after_str;
-			before_str = g_value_dup_string( value );
-			after_str = gnc_sql_connection_quote_string( conn, before_str );
-			g_free( before_str );
-			return after_str;
+			if( g_value_get_string( value ) != NULL ) {
+				gchar* before_str;
+				gchar* after_str;
+				before_str = g_value_dup_string( value );
+				after_str = gnc_sql_connection_quote_string( conn, before_str );
+				g_free( before_str );
+				return after_str;
+			} else {
+				return g_strdup( "NULL" );
+			}
 		} else if( g_value_type_transformable( G_VALUE_TYPE(value), G_TYPE_STRING ) ) {
-			GValue *string;
-			gchar *str;
+			GValue* string;
+			gchar* str;
 			
 			string = g_value_init( g_new0( GValue, 1 ), G_TYPE_STRING );
 			g_value_transform( value, string );
