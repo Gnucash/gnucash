@@ -339,13 +339,17 @@ src/gnome-utils/window-main-summarybar.c
 src/gnome/window-reconcile.c
 src/import-export/aqbanking/aqbanking.glade
 src/import-export/aqbanking/dialog-ab-trans.c
+src/import-export/aqbanking/dialog-daterange.c
 src/import-export/aqbanking/druid-ab-initial.c
 src/import-export/aqbanking/gnc-ab-getbalance.c
 src/import-export/aqbanking/gnc-ab-gettrans.c
+src/import-export/aqbanking/gnc-ab-kvp.c
 src/import-export/aqbanking/gnc-ab-transfer.c
+src/import-export/aqbanking/gnc-ab-trans-templ.c
 src/import-export/aqbanking/gnc-ab-utils.c
 src/import-export/aqbanking/gnc-file-aqb-import.c
 src/import-export/aqbanking/gnc-gwen-gui.c
+src/import-export/aqbanking/gncmod-aqbanking.c
 src/import-export/aqbanking/gnc-plugin-aqbanking.c
 src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in
 src/import-export/generic-import.glade
