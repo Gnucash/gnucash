@@ -1383,7 +1383,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   /* at this point, buf contains the whole part of the number */
 
   /* If it's not decimal, print the fraction as an expression */
-  if (!is_decimal_fraction (val.denom, NULL))
+  if (!gnc_numeric_to_decimal(&val, NULL))
   {
     if (!gnc_numeric_zero_p (val))
     {
