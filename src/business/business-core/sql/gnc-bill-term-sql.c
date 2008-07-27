@@ -144,11 +144,17 @@ load_all_billterms( GncSqlBackend* be )
 
 /* ================================================================= */
 static void
+do_save_billterm( QofInstance* inst, gpointer p2 )
+{
+	gnc_sql_save_billterm( (GncSqlBackend*)p2, inst );
+}
+
+static void
 write_billterms( GncSqlBackend* be )
 {
 	g_return_if_fail( be != NULL );
 
-    qof_object_foreach( GNC_ID_BILLTERM, be->primary_book, (QofInstanceForeachCB)gnc_sql_save_billterm, (gpointer)be );
+    qof_object_foreach( GNC_ID_BILLTERM, be->primary_book, do_save_billterm, (gpointer)be );
 }
 
 /* ================================================================= */
