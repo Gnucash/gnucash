@@ -939,10 +939,10 @@ conn_get_column_type_name( GncSqlConnection* conn, GType type, gint size )
 				return "integer";
 				break;
 			case G_TYPE_DOUBLE:
-				return "double";
+				return "real";
 				break;
 			case G_TYPE_STRING:
-				return "string";
+				return "text";
 				break;
 			default:
 				PERR( "Unknown GType: %s\n", g_type_name( type ) );
