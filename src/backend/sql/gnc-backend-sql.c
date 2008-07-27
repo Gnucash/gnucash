@@ -1382,13 +1382,10 @@ add_gvalue_guid_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     	getter = gnc_sql_get_getter( obj_name, table_row );
     	guid = (*getter)( pObject, NULL );
 	}
+    g_value_init( value, G_TYPE_STRING );
     if( guid != NULL ) {
         (void)guid_to_string_buff( guid, guid_buf );
-        g_value_init( value, G_TYPE_STRING );
         g_value_set_string( value, guid_buf );
-    } else {
-        g_value_init( value, G_TYPE_STRING );
-		g_value_set_string( value, "NULL" );
 	}
 
 	(*pList) = g_slist_append( (*pList), value );
@@ -1426,13 +1423,10 @@ gnc_sql_add_gvalue_objectref_guid_to_slist( const GncSqlBackend* be, QofIdTypeCo
 	if( inst != NULL ) {
 		guid = qof_instance_get_guid( inst );
 	}
+    g_value_init( value, G_TYPE_STRING );
     if( guid != NULL ) {
         (void)guid_to_string_buff( guid, guid_buf );
-        g_value_init( value, G_TYPE_STRING );
         g_value_set_string( value, guid_buf );
-    } else {
-        g_value_init( value, G_TYPE_STRING );
-		g_value_set_string( value, "NULL" );
 	}
 
 	(*pList) = g_slist_append( (*pList), value );
