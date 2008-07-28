@@ -240,9 +240,9 @@ gnc_budget_free(QofInstance *inst)
     GncBudget *budget;
 	BudgetPrivate* priv;
 
-    if (budget == NULL)
+    if (inst == NULL)
         return;
-    g_return_if_fail(GNC_IS_BUDGET(budget));
+    g_return_if_fail(GNC_IS_BUDGET(inst));
 
 	budget = GNC_BUDGET(inst);
 	priv = GET_PRIVATE(budget);
