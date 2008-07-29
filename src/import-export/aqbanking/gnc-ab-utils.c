@@ -242,7 +242,7 @@ gnc_ab_get_remote_name(const AB_TRANSACTION *ab_trans)
 
     g_return_val_if_fail(ab_trans, NULL);
 
-    ab_remote_name = AB_Transaction_GetPurpose(ab_trans);
+    ab_remote_name = AB_Transaction_GetRemoteName(ab_trans);
     if (ab_remote_name)
         GWEN_StringList_ForEach(ab_remote_name, join_ab_strings_cb,
                                 &gnc_other_name);
