@@ -20,7 +20,8 @@ AM_CFLAGS = \
   ${GTKHTML_CFLAGS} \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} \
-  ${GOFFICE_CFLAGS}
+  ${GOFFICE_CFLAGS} \
+  ${LIBGDA_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \
@@ -29,6 +30,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-account.c \
   dialog-book-close.c \
   dialog-commodity.c \
+  dialog-database-connection.c \
   dialog-options.c \
   dialog-preferences.c \
   dialog-query-list.c \
@@ -103,6 +105,7 @@ gncinclude_HEADERS = \
   dialog-account.h \
   dialog-book-close.h \
   dialog-commodity.h \
+  dialog-database-connection.h \
   dialog-preferences.h \
   dialog-options.h \
   dialog-query-list.h \
@@ -178,7 +181,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/backend/file/libgnc-backend-file-utils.la \
+  ${top_builddir}/src/backend/file/libgnc-backend-xml-utils.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \

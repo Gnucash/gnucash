@@ -1,4 +1,31 @@
 {
+	qtcurve Cond
+	Memcheck:Cond
+	obj:/usr/lib/kde3/plugins/styles/qtcurve.so
+	fun:drawArrow
+	obj:/usr/lib/gtk-2.0/*/engines/libqtengine.so
+	fun:gtk_paint_arrow
+}
+{
+	qtcurve Cond #2
+	Memcheck:Cond
+	obj:/usr/lib/libkdefx.so*
+	obj:/usr/lib/kde3/plugins/styles/qtcurve.so
+	fun:drawArrow
+	obj:/usr/lib/gtk-2.0/*/engines/libqtengine.so
+	fun:gtk_paint_arrow
+}
+{
+	qtcurve Cond #3
+	Memcheck:Cond
+	obj:/usr/lib/libqt-mt.so*
+	obj:/usr/lib/libkdefx.so*
+	obj:/usr/lib/kde3/plugins/styles/qtcurve.so
+	fun:drawArrow
+	obj:/usr/lib/gtk-2.0/*/engines/libqtengine.so
+	fun:gtk_paint_arrow
+}
+{
    <insert some suppression name here>
    Memcheck:Leak
    fun:malloc

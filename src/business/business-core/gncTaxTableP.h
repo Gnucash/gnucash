@@ -38,7 +38,7 @@ void gncTaxTableSetChild (GncTaxTable *table, GncTaxTable *child);
 void gncTaxTableSetRefcount (GncTaxTable *table, gint64 refcount);
 void gncTaxTableMakeInvisible (GncTaxTable *table);
 
-gboolean gncTaxTableGetInvisible (GncTaxTable *table);
+gboolean gncTaxTableGetInvisible (const GncTaxTable *table);
 
 /** The gncCloneTaxTable() routine makes a copy of the indicated
  *  tax table, placing it in the indicated book.  It copies
@@ -61,7 +61,9 @@ GncTaxTable * gncCloneTaxTable (GncTaxTable *from, QofBook *book);
  * it from the other Get routines, which work in fundamentally
  * different ways.
  */
-GncTaxTable * gncTaxTableObtainTwin (GncTaxTable *from, QofBook *book);
+GncTaxTable * gncTaxTableObtainTwin (const GncTaxTable *from, QofBook *book);
+
+GncTaxTable* gncTaxTableEntryGetTable( const GncTaxTableEntry* entry );
 
 #define gncTaxTableSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
 

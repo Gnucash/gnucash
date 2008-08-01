@@ -92,7 +92,7 @@ void gnc_lot_commit_edit (GNCLot *lot);
  *    that *all* splits in a lot must also be in the same account.
  *    Note that this routine adds the split unconditionally, with
  *    no regard for the accounting policy.  To enforce a particular
- *    accounting polciy, use the xaccSplitAssignToLot() routine 
+ *    accounting policy, use the xaccSplitAssignToLot() routine 
  *    instead.
  */
 void gnc_lot_add_split (GNCLot *, Split *);

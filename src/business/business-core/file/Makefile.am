@@ -1,6 +1,6 @@
 SUBDIRS = .
 
-pkglib_LTLIBRARIES = libgncmod-business-backend-file.la
+pkglib_LTLIBRARIES = libgncmod-business-backend-xml.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -13,8 +13,8 @@ AM_CFLAGS = \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
-libgncmod_business_backend_file_la_SOURCES = \
-  gncmod-business-backend-file.c \
+libgncmod_business_backend_xml_la_SOURCES = \
+  gncmod-business-backend-xml.c \
   gnc-address-xml-v2.c \
   gnc-bill-term-xml-v2.c \
   gnc-customer-xml-v2.c \
@@ -41,11 +41,11 @@ noinst_HEADERS = \
   gnc-vendor-xml-v2.h \
   xml-helpers.h
 
-libgncmod_business_backend_file_la_LDFLAGS = -module -avoid-version
+libgncmod_business_backend_xml_la_LDFLAGS = -module -avoid-version
 
-libgncmod_business_backend_file_la_LIBADD = \
+libgncmod_business_backend_xml_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
-  ${top_builddir}/src/backend/file/libgnc-backend-file-utils.la \
+  ${top_builddir}/src/backend/file/libgnc-backend-xml-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${LIBXML2_LIBS} \

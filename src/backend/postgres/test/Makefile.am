@@ -7,7 +7,7 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_srcdir}/src/engine \
-  --gnc-module-dir ${top_builddir}/src/backend/file \
+  --gnc-module-dir ${top_builddir}/src/backend/xml \
   --gnc-module-dir ${top_builddir}/src/backend/postgres
 
 TESTS_ENVIRONMENT := \

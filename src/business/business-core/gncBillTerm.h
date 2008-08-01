@@ -124,30 +124,30 @@ void gncBillTermSetCutoff (GncBillTerm *term, gint cutoff);
 GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name);
 GList * gncBillTermGetTerms (QofBook *book);
 
-const char *gncBillTermGetName (GncBillTerm *term);
-const char *gncBillTermGetDescription (GncBillTerm *term);
-GncBillTermType gncBillTermGetType (GncBillTerm *term);
-gint gncBillTermGetDueDays (GncBillTerm *term);
-gint gncBillTermGetDiscountDays (GncBillTerm *term);
-gnc_numeric gncBillTermGetDiscount (GncBillTerm *term);
-gint gncBillTermGetCutoff (GncBillTerm *term);
+const char *gncBillTermGetName (const GncBillTerm *term);
+const char *gncBillTermGetDescription (const GncBillTerm *term);
+GncBillTermType gncBillTermGetType (const GncBillTerm *term);
+gint gncBillTermGetDueDays (const GncBillTerm *term);
+gint gncBillTermGetDiscountDays (const GncBillTerm *term);
+gnc_numeric gncBillTermGetDiscount (const GncBillTerm *term);
+gint gncBillTermGetCutoff (const GncBillTerm *term);
 
-gboolean gncBillTermIsDirty (GncBillTerm *term);
+gboolean gncBillTermIsDirty (const GncBillTerm *term);
 
-GncBillTerm *gncBillTermGetParent (GncBillTerm *term);
+GncBillTerm *gncBillTermGetParent (const GncBillTerm *term);
 GncBillTerm *gncBillTermReturnChild (GncBillTerm *term, gboolean make_new);
 #define gncBillTermGetChild(t) gncBillTermReturnChild((t),FALSE)
-gint64 gncBillTermGetRefcount (GncBillTerm *term);
+gint64 gncBillTermGetRefcount (const GncBillTerm *term);
 /** @} */
 
-int gncBillTermCompare (GncBillTerm *a, GncBillTerm *b);
+int gncBillTermCompare (const GncBillTerm *a, const GncBillTerm *b);
 
 /********************************************************/
 /* functions to compute dates from Bill Terms           */
 
 /* Compute the due date and discount dates from the post date */
-Timespec gncBillTermComputeDueDate (GncBillTerm *term, Timespec post_date);
-Timespec gncBillTermComputeDiscountDate (GncBillTerm *term, Timespec post_date);
+Timespec gncBillTermComputeDueDate (const GncBillTerm *term, Timespec post_date);
+Timespec gncBillTermComputeDiscountDate (const GncBillTerm *term, Timespec post_date);
 
 /* deprecated */
 #define gncBillTermGetGUID(x) qof_instance_get_guid (QOF_INSTANCE(x))

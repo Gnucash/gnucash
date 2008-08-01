@@ -118,26 +118,26 @@ void gncCustomerRemoveJob (GncCustomer *customer, GncJob *job);
 #define gncCustomerLookup(book,guid)    \
        QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_CUSTOMER, GncCustomer)
 
-const char * gncCustomerGetID (GncCustomer *customer);
-const char * gncCustomerGetName (GncCustomer *customer);
-GncAddress * gncCustomerGetAddr (GncCustomer *customer);
-GncAddress * gncCustomerGetShipAddr (GncCustomer *customer);
-const char * gncCustomerGetNotes (GncCustomer *customer);
-GncBillTerm * gncCustomerGetTerms (GncCustomer *customer);
-GncTaxIncluded gncCustomerGetTaxIncluded (GncCustomer *customer);
-gboolean gncCustomerGetActive (GncCustomer *customer);
-gnc_numeric gncCustomerGetDiscount (GncCustomer *customer);
-gnc_numeric gncCustomerGetCredit (GncCustomer *customer);
-gnc_commodity * gncCustomerGetCurrency (GncCustomer *customer);
+const char * gncCustomerGetID (const GncCustomer *customer);
+const char * gncCustomerGetName (const GncCustomer *customer);
+GncAddress * gncCustomerGetAddr (const GncCustomer *customer);
+GncAddress * gncCustomerGetShipAddr (const GncCustomer *customer);
+const char * gncCustomerGetNotes (const GncCustomer *customer);
+GncBillTerm * gncCustomerGetTerms (const GncCustomer *customer);
+GncTaxIncluded gncCustomerGetTaxIncluded (const GncCustomer *customer);
+gboolean gncCustomerGetActive (const GncCustomer *customer);
+gnc_numeric gncCustomerGetDiscount (const GncCustomer *customer);
+gnc_numeric gncCustomerGetCredit (const GncCustomer *customer);
+gnc_commodity * gncCustomerGetCurrency (const GncCustomer *customer);
 
-gboolean gncCustomerGetTaxTableOverride (GncCustomer *customer);
-GncTaxTable* gncCustomerGetTaxTable (GncCustomer *customer);
+gboolean gncCustomerGetTaxTableOverride (const GncCustomer *customer);
+GncTaxTable* gncCustomerGetTaxTable (const GncCustomer *customer);
 
-GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
+GList * gncCustomerGetJoblist (const GncCustomer *customer, gboolean show_all);
 /** @} */
 
 gboolean gncCustomerIsDirty (GncCustomer *customer);
-int gncCustomerCompare (GncCustomer *a, GncCustomer *b);
+int gncCustomerCompare (const GncCustomer *a, const GncCustomer *b);
 
 #define CUSTOMER_ID			"id"
 #define CUSTOMER_NAME		"name"

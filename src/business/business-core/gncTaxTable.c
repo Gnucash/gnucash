@@ -66,7 +66,7 @@ struct _book_info
   GList *         tables;          /* visible tables */
 };
 
-static GncTaxTableEntry * CloneTaxEntry (GncTaxTableEntry*, QofBook *);
+static GncTaxTableEntry * CloneTaxEntry (const GncTaxTableEntry*, QofBook *);
 
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
@@ -194,7 +194,7 @@ gncTaxTableAddChild (GncTaxTable *table, GncTaxTable *child)
 }
 
 static inline void
-gncTaxTableRemoveChild (GncTaxTable *table, GncTaxTable *child)
+gncTaxTableRemoveChild (GncTaxTable *table, const GncTaxTable *child)
 {
   g_return_if_fail(table);
   g_return_if_fail(child);
@@ -291,7 +291,7 @@ gncCloneTaxTable (GncTaxTable *from, QofBook *book)
 }
 
 GncTaxTable *
-gncTaxTableObtainTwin (GncTaxTable *from, QofBook *book)
+gncTaxTableObtainTwin (const GncTaxTable *from, QofBook *book)
 {
   GncTaxTable *table;
   if (!from) return NULL;
@@ -370,7 +370,7 @@ void gncTaxTableEntryDestroy (GncTaxTableEntry *entry)
  *  we set it above, when cloning the table).
  */
 static GncTaxTableEntry * 
-CloneTaxEntry (GncTaxTableEntry*from, QofBook *book)
+CloneTaxEntry (const GncTaxTableEntry*from, QofBook *book)
 {
   QofInstance *acc;
   GncTaxTableEntry *entry;
@@ -575,13 +575,13 @@ GList * gncTaxTableGetTables (QofBook *book)
   return bi->tables;
 }
 
-const char *gncTaxTableGetName (GncTaxTable *table)
+const char *gncTaxTableGetName (const GncTaxTable *table)
 {
   if (!table) return NULL;
   return table->name;
 }
 
-static GncTaxTableEntry *gncTaxTableEntryCopy (GncTaxTableEntry *entry)
+static GncTaxTableEntry *gncTaxTableEntryCopy (const GncTaxTableEntry *entry)
 {
   GncTaxTableEntry *e;
   if (!entry) return NULL;
@@ -594,7 +594,7 @@ static GncTaxTableEntry *gncTaxTableEntryCopy (GncTaxTableEntry *entry)
   return e;
 }
 
-static GncTaxTable *gncTaxTableCopy (GncTaxTable *table)
+static GncTaxTable *gncTaxTableCopy (const GncTaxTable *table)
 {
   GncTaxTable *t;
   GList *list;
@@ -626,56 +626,62 @@ GncTaxTable *gncTaxTableReturnChild (GncTaxTable *table, gboolean make_new)
   return child;
 }
 
-GncTaxTable *gncTaxTableGetParent (GncTaxTable *table)
+GncTaxTable *gncTaxTableGetParent (const GncTaxTable *table)
 {
   if (!table) return NULL;
   return table->parent;
 }
 
-GList *gncTaxTableGetEntries (GncTaxTable *table)
+GList *gncTaxTableGetEntries (const GncTaxTable *table)
 {
   if (!table) return NULL;
   return table->entries;
 }
 
-gint64 gncTaxTableGetRefcount (GncTaxTable *table)
+gint64 gncTaxTableGetRefcount (const GncTaxTable *table)
 {
   if (!table) return 0;
   return table->refcount;
 }
 
-Timespec gncTaxTableLastModified (GncTaxTable *table)
+Timespec gncTaxTableLastModified (const GncTaxTable *table)
 {
   Timespec ts = { 0 , 0 };
   if (!table) return ts;
   return table->modtime;
 }
 
-gboolean gncTaxTableGetInvisible (GncTaxTable *table)
+gboolean gncTaxTableGetInvisible (const GncTaxTable *table)
 {
   if (!table) return FALSE;
   return table->invisible;
 }
 
-Account * gncTaxTableEntryGetAccount (GncTaxTableEntry *entry)
+Account * gncTaxTableEntryGetAccount (const GncTaxTableEntry *entry)
 {
   if (!entry) return NULL;
   return entry->account;
 }
 
-GncAmountType gncTaxTableEntryGetType (GncTaxTableEntry *entry)
+GncAmountType gncTaxTableEntryGetType (const GncTaxTableEntry *entry)
 {
   if (!entry) return 0;
   return entry->type;
 }
 
-gnc_numeric gncTaxTableEntryGetAmount (GncTaxTableEntry *entry)
+gnc_numeric gncTaxTableEntryGetAmount (const GncTaxTableEntry *entry)
 {
   if (!entry) return gnc_numeric_zero();
   return entry->amount;
 }
 
-int gncTaxTableEntryCompare (GncTaxTableEntry *a, GncTaxTableEntry *b)
+GncTaxTable* gncTaxTableEntryGetTable( const GncTaxTableEntry* entry )
+{
+  if (!entry) return NULL;
+  return entry->table;
+}
+
+int gncTaxTableEntryCompare (const GncTaxTableEntry *a, const GncTaxTableEntry *b)
 {
   char *name_a, *name_b;
   int retval;
@@ -696,7 +702,7 @@ int gncTaxTableEntryCompare (GncTaxTableEntry *a, GncTaxTableEntry *b)
   return gnc_numeric_compare (a->amount, b->amount);
 }
 
-int gncTaxTableCompare (GncTaxTable *a, GncTaxTable *b)
+int gncTaxTableCompare (const GncTaxTable *a, const GncTaxTable *b)
 {
   if (!a && !b) return 0;
   if (!a) return -1;

@@ -658,39 +658,39 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest)
 /* ================================================================ */
 /* Get Functions */
 
-Timespec gncEntryGetDate (GncEntry *entry)
+Timespec gncEntryGetDate (const GncEntry *entry)
 {
   Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
   if (!entry) return ts;
   return entry->date;
 }
 
-Timespec gncEntryGetDateEntered (GncEntry *entry)
+Timespec gncEntryGetDateEntered (const GncEntry *entry)
 {
   Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
   if (!entry) return ts;
   return entry->date_entered;
 }
 
-const char * gncEntryGetDescription (GncEntry *entry)
+const char * gncEntryGetDescription (const GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->desc;
 }
 
-const char * gncEntryGetAction (GncEntry *entry)
+const char * gncEntryGetAction (const GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->action;
 }
 
-const char * gncEntryGetNotes (GncEntry *entry)
+const char * gncEntryGetNotes (const GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->notes;
 }
 
-gnc_numeric gncEntryGetQuantity (GncEntry *entry)
+gnc_numeric gncEntryGetQuantity (const GncEntry *entry)
 {
   if (!entry) return gnc_numeric_zero();
   return entry->quantity;
@@ -698,37 +698,37 @@ gnc_numeric gncEntryGetQuantity (GncEntry *entry)
 
 /* Customer Invoice */
 
-Account * gncEntryGetInvAccount (GncEntry *entry)
+Account * gncEntryGetInvAccount (const GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->i_account;
 }
 
-gnc_numeric gncEntryGetInvPrice (GncEntry *entry)
+gnc_numeric gncEntryGetInvPrice (const GncEntry *entry)
 {
   if (!entry) return gnc_numeric_zero();
   return entry->i_price;
 }
 
-gnc_numeric gncEntryGetInvDiscount (GncEntry *entry)
+gnc_numeric gncEntryGetInvDiscount (const GncEntry *entry)
 {
   if (!entry) return gnc_numeric_zero();
   return entry->i_discount;
 }
 
-GncAmountType gncEntryGetInvDiscountType (GncEntry *entry)
+GncAmountType gncEntryGetInvDiscountType (const GncEntry *entry)
 {
   if (!entry) return 0;
   return entry->i_disc_type;
 }
 
-GncDiscountHow gncEntryGetInvDiscountHow (GncEntry *entry)
+GncDiscountHow gncEntryGetInvDiscountHow (const GncEntry *entry)
 {
   if (!entry) return 0;
   return entry->i_disc_how;
 }
 
-char* qofEntryGetInvDiscType (GncEntry *entry)
+char* qofEntryGetInvDiscType (const GncEntry *entry)
 {
 	char *type_string;
 
@@ -737,7 +737,7 @@ char* qofEntryGetInvDiscType (GncEntry *entry)
 	return type_string;
 }
 
-char* qofEntryGetInvDiscHow (GncEntry *entry)
+char* qofEntryGetInvDiscHow (const GncEntry *entry)
 {
 	char *type_string;
 
@@ -746,19 +746,19 @@ char* qofEntryGetInvDiscHow (GncEntry *entry)
 	return type_string;
 }
 
-gboolean gncEntryGetInvTaxable (GncEntry *entry)
+gboolean gncEntryGetInvTaxable (const GncEntry *entry)
 {
   if (!entry) return FALSE;
   return entry->i_taxable;
 }
 
-gboolean gncEntryGetInvTaxIncluded (GncEntry *entry)
+gboolean gncEntryGetInvTaxIncluded (const GncEntry *entry)
 {
   if (!entry) return FALSE;
   return entry->i_taxincluded;
 }
 
-GncTaxTable * gncEntryGetInvTaxTable (GncEntry *entry)
+GncTaxTable * gncEntryGetInvTaxTable (const GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->i_tax_table;
@@ -766,37 +766,37 @@ GncTaxTable * gncEntryGetInvTaxTable (GncEntry *entry)
 
 /* vendor bills */
 
-Account * gncEntryGetBillAccount (GncEntry *entry)
+Account * gncEntryGetBillAccount (const GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->b_account;
 }
 
-gnc_numeric gncEntryGetBillPrice (GncEntry *entry)
+gnc_numeric gncEntryGetBillPrice (const GncEntry *entry)
 {
   if (!entry) return gnc_numeric_zero();
   return entry->b_price;
 }
 
-gboolean gncEntryGetBillTaxable (GncEntry *entry)
+gboolean gncEntryGetBillTaxable (const GncEntry *entry)
 {
   if (!entry) return FALSE;
   return entry->b_taxable;
 }
 
-gboolean gncEntryGetBillTaxIncluded (GncEntry *entry)
+gboolean gncEntryGetBillTaxIncluded (const GncEntry *entry)
 {
   if (!entry) return FALSE;
   return entry->b_taxincluded;
 }
 
-GncTaxTable * gncEntryGetBillTaxTable (GncEntry *entry)
+GncTaxTable * gncEntryGetBillTaxTable (const GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->b_tax_table;
 }
 
-gboolean gncEntryGetBillable (GncEntry *entry)
+gboolean gncEntryGetBillable (const GncEntry *entry)
 {
   if (!entry) return FALSE;
   return entry->billable;
@@ -808,25 +808,25 @@ GncOwner * gncEntryGetBillTo (GncEntry *entry)
   return &entry->billto;
 }
 
-GncEntryPaymentType gncEntryGetBillPayment (GncEntry* entry)
+GncEntryPaymentType gncEntryGetBillPayment (const GncEntry* entry)
 {
   if (!entry) return 0;
   return entry->b_payment;
 }
 
-GncInvoice * gncEntryGetInvoice (GncEntry *entry)
+GncInvoice * gncEntryGetInvoice (const GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->invoice;
 }
 
-GncInvoice * gncEntryGetBill (GncEntry *entry)
+GncInvoice * gncEntryGetBill (const GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->bill;
 }
 
-GncOrder * gncEntryGetOrder (GncEntry *entry)
+GncOrder * gncEntryGetOrder (const GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->order;
@@ -867,7 +867,7 @@ GncOrder * gncEntryGetOrder (GncEntry *entry)
  * to let a consumer know how much they saved.
  */
 void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
-			   GncTaxTable *tax_table, gboolean tax_included,
+			   const GncTaxTable *tax_table, gboolean tax_included,
 			   gnc_numeric discount, GncAmountType discount_type,
 			   GncDiscountHow discount_how, int SCU,
 			   gnc_numeric *value, gnc_numeric *discount_value,
@@ -1044,7 +1044,7 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 }
 
 static int
-get_entry_commodity_denom (GncEntry *entry)
+get_entry_commodity_denom (const GncEntry *entry)
 {
   gnc_commodity *c;
   if (!entry)
@@ -1178,7 +1178,7 @@ gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_inv)
 }
 
 /* XXXX this exsitnace of this routine is just wrong */
-gboolean gncEntryIsOpen (GncEntry *entry)
+gboolean gncEntryIsOpen (const GncEntry *entry)
 {
   if (!entry) return FALSE;
   return (qof_instance_get_editlevel(entry) > 0);
@@ -1211,7 +1211,7 @@ void gncEntryCommitEdit (GncEntry *entry)
 			 gncEntryOnDone, entry_free);
 }
 
-int gncEntryCompare (GncEntry *a, GncEntry *b)
+int gncEntryCompare (const GncEntry *a, const GncEntry *b)
 {
   int compare;
 

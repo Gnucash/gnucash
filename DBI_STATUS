@@ -1,0 +1,25 @@
+Status of the DBI backend.
+
+Code for all standard and business objects has been written.  The following
+bugs/issues are known.
+
+* Initial save performance is better than it used to be, but is still slow.
+For example, saving my file with ~8000 transactions and ~21000 splits takes
+13 minutes to an sqlite db.
+* Foreign key definitions should be used for referential integrity.
+* (Maybe) Keep an 'old values' table for each main table.  When a record is
+updated, copy the old record to the 'old values' table first to keep track of
+any changes.
+* Use prepared statements
+* Use cursor-based data models when reading from the db for better performance
+* Write automated tests
+* Write doxygen comment headers
+* Don't need a log file
+* Certain dialogs create an object when opened and update it as they go along.
+This can result in trying to save invalid objects:
+	- Price editor (new price has no commodity or currency)
+	- New invoice
+* Need transactions to group updates to multiple objects
+* Possibly mark commodities that are in the db so that they don't need to be
+queried every time.
+* The sqlite db file is *much* larger than the gzipped XML file.

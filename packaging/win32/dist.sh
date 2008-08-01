@@ -34,6 +34,7 @@ function prepare() {
     _LIBOFX_UDIR=`unix_path $LIBOFX_DIR`
     _GWENHYWFAR_UDIR=`unix_path $GWENHYWFAR_DIR`
     _AQBANKING_UDIR=`unix_path $AQBANKING_DIR`
+    _LIBGDA_UDIR=`unix_path $LIBGDA_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
     _REPOS_UDIR=`unix_path $REPOS_DIR`
     _BUILD_UDIR=`unix_path $BUILD_DIR`
@@ -171,6 +172,14 @@ function dist_aqbanking() {
     cp -a ${_AQBANKING_UDIR}/share/locale ${DIST_UDIR}/lib
 }
 
+function dist_libgda() {
+    setup Libgda
+    cp -a ${_LIBGDA_UDIR}/bin/* ${DIST_UDIR}/bin
+    cp -a ${_LIBGDA_UDIR}/lib/libgda-3.0 ${DIST_UDIR}/lib
+    cp -a ${_LIBGDA_UDIR}/share/libgda-3.0 ${DIST_UDIR}/share
+    cp -a ${_LIBGDA_UDIR}/share/locale ${DIST_UDIR}/lib
+}
+
 function dist_gnucash() {
     setup GnuCash
     mkdir -p $DIST_UDIR/bin
@@ -245,6 +254,7 @@ dist_goffice
 dist_libofx
 dist_gwenhywfar
 dist_aqbanking
+dist_libgda
 dist_gnucash
 finish
 qpopd

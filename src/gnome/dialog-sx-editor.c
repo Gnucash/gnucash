@@ -862,6 +862,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 static void
 gnc_sxed_save_sx( GncSxEditorDialog *sxed )
 {
+	gnc_sx_begin_edit( sxed->sx );
+
     /* name */
     {
         char *name;
@@ -963,6 +965,8 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
         /* now that we have it, set the start date */
         xaccSchedXactionSetStartDate( sxed->sx, &gdate );
     }
+
+	gnc_sx_commit_edit( sxed->sx );
 }
 
 static void

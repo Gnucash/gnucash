@@ -149,21 +149,21 @@ GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name);
 
 GList * gncTaxTableGetTables (QofBook *book);
 
-const char *gncTaxTableGetName (GncTaxTable *table);
-GncTaxTable *gncTaxTableGetParent (GncTaxTable *table);
+const char *gncTaxTableGetName (const GncTaxTable *table);
+GncTaxTable *gncTaxTableGetParent (const GncTaxTable *table);
 GncTaxTable *gncTaxTableReturnChild (GncTaxTable *table, gboolean make_new);
 #define gncTaxTableGetChild(t) gncTaxTableReturnChild((t),FALSE)
-GList *gncTaxTableGetEntries (GncTaxTable *table);
-gint64 gncTaxTableGetRefcount (GncTaxTable *table);
-Timespec gncTaxTableLastModified (GncTaxTable *table);
+GList *gncTaxTableGetEntries (const GncTaxTable *table);
+gint64 gncTaxTableGetRefcount (const GncTaxTable *table);
+Timespec gncTaxTableLastModified (const GncTaxTable *table);
 
-Account * gncTaxTableEntryGetAccount (GncTaxTableEntry *entry);
-GncAmountType gncTaxTableEntryGetType (GncTaxTableEntry *entry);
-gnc_numeric gncTaxTableEntryGetAmount (GncTaxTableEntry *entry);
+Account * gncTaxTableEntryGetAccount (const GncTaxTableEntry *entry);
+GncAmountType gncTaxTableEntryGetType (const GncTaxTableEntry *entry);
+gnc_numeric gncTaxTableEntryGetAmount (const GncTaxTableEntry *entry);
 /** @} */
 
-int gncTaxTableCompare (GncTaxTable *a, GncTaxTable *b);
-int gncTaxTableEntryCompare (GncTaxTableEntry *a, GncTaxTableEntry *b);
+int gncTaxTableCompare (const GncTaxTable *a, const GncTaxTable *b);
+int gncTaxTableEntryCompare (const GncTaxTableEntry *a, const GncTaxTableEntry *b);
 
 /************************************************/
 
