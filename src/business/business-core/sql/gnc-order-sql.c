@@ -217,7 +217,7 @@ load_order_guid( const GncSqlBackend* be, GncSqlRow* row,
     }
 }
 
-static col_type_handler_t order_guid_handler
+static GncSqlColumnTypeHandler order_guid_handler
 	= { load_order_guid,
 		gnc_sql_add_objectref_guid_col_info_to_list,
 		gnc_sql_add_colname_to_list,

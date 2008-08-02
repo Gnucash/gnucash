@@ -269,7 +269,7 @@ add_gvalue_owner_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	}
 }
 
-static col_type_handler_t owner_handler
+static GncSqlColumnTypeHandler owner_handler
 	= { load_owner,
 		add_owner_col_info_to_list,
 		add_colname_to_list,

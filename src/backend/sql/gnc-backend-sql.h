@@ -237,7 +237,7 @@ struct GncSqlResult
  * @struct GncSqlObjectBackend
  *
  * Struct used to handle a specific engine object type for an SQL backend.
- * This * handler should be registered with qof_object_register_backend().
+ * This handler should be registered with qof_object_register_backend().
  *
  * commit()			- commit an object to the db
  * initial_load()	- load stuff when new db opened
@@ -271,6 +271,9 @@ typedef struct
 
 /**
  * @struct GncSqlColumnInfo
+ *
+ * The GncSqlColumnInfo structure contains information required to create
+ * a column in a table.
  */
 typedef struct {
 	const gchar* name;		/**< Column name */
@@ -299,7 +302,17 @@ typedef struct {
  * @struct GncSqlColumnTableEntry
  *
  * The GncSqlColumnTableEntry struct contains all of the information
- * required to copy information between an object and the database.
+ * required to copy information between an object and the database for a
+ * specific object property.
+ *
+ * If an entry contains a gobj_param_name value, this string is used as the
+ * property name for a call to g_object_get() or g_object_set().  If the
+ * gobj_param_name value is NULL but qof_param_name is not NULL, this value
+ * is used as the parameter name for a call to
+ * qof_class_get_parameter_getter().  If both of these values are NULL, getter
+ * and setter are the addresses of routines to return or set the parameter
+ * value, respectively.
+ *
  * The database description for an object consists of an array of
  * GncSqlColumnTableEntry objects, with a final member having col_name == NULL.
  */
@@ -307,10 +320,10 @@ struct GncSqlColumnTableEntry {
 	const gchar* col_name;	/**< Column name */
 	const gchar* col_type;	/**< Column type */
 	gint size;				/**< Column size in bytes, for string columns */
-#define COL_PKEY	0x01
-#define COL_NNUL	0x02
-#define COL_UNIQUE	0x04
-#define COL_AUTOINC	0x08
+#define COL_PKEY	0x01	/**< The column is a primary key */
+#define COL_NNUL	0x02	/**< The column may not contain a NULL value */
+#define COL_UNIQUE	0x04	/**< The column must contain unique values */
+#define COL_AUTOINC	0x08	/**< The column is an auto-incrementing int */
 	gint flags;				/**< Column flags */
 	const gchar* gobj_param_name; /**< If non-null, g_object param name */
 	const gchar* qof_param_name;  /**< If non-null, qof parameter name */
@@ -336,12 +349,36 @@ typedef void (*GNC_SQL_ADD_GVALUE_TO_SLIST_FN)( const GncSqlBackend* be,
                 QofIdTypeConst obj_name, const gpointer pObject,
                 const GncSqlColumnTableEntry* table_row, GSList** pList );
 
+/**
+ * @struct GncSqlColumnTypeHandler
+ *
+ * The GncSqlColumnTypeHandler struct contains pointers to routines to handle
+ * different options for a specific column type.
+ *
+ * A column type maps a property value to one or more columns in the database.
+ */
 typedef struct {
+	/**
+	 * Routine to load a value into an object from the database row.
+	 */
     GNC_SQL_LOAD_FN                 load_fn;
+
+	/**
+	 * Routine to add a GncSqlColumnInfo structure for the column type to a
+	 * GList.
+	 */
     GNC_SQL_ADD_COL_INFO_TO_LIST_FN add_col_info_to_list_fn;
+
+	/**
+	 * Routine to add a column name string for the column type to a GList.
+	 */
     GNC_SQL_ADD_COLNAME_TO_LIST_FN  add_colname_to_list_fn;
+
+	/**
+	 * Routine to add a GValue for the property to a GSList.
+	 */
 	GNC_SQL_ADD_GVALUE_TO_SLIST_FN	add_gvalue_to_slist_fn;
-} col_type_handler_t;
+} GncSqlColumnTypeHandler;
 
 /**
  * Returns the QOF access function for a column.
@@ -502,7 +539,7 @@ GncSqlStatement* gnc_sql_create_select_statement( const GncSqlBackend* be,
  * @param colType Column type
  * @param handler Column handler
  */
-void gnc_sql_register_col_type_handler( const gchar* colType, const col_type_handler_t* handler );
+void gnc_sql_register_col_type_handler( const gchar* colType, const GncSqlColumnTypeHandler* handler );
 
 /**
  * Adds a GValue for an object reference GUID to the end of a GSList.

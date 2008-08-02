@@ -236,7 +236,7 @@ load_commodity_guid( const GncSqlBackend* be, GncSqlRow* row,
     }
 }
 
-static col_type_handler_t commodity_guid_handler
+static GncSqlColumnTypeHandler commodity_guid_handler
 	= { load_commodity_guid,
 		gnc_sql_add_objectref_guid_col_info_to_list,
 		gnc_sql_add_colname_to_list,

@@ -989,7 +989,7 @@ add_gvalue_string_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	(*pList) = g_slist_append( (*pList), value );
 }
 
-static col_type_handler_t string_handler
+static GncSqlColumnTypeHandler string_handler
     = { load_string,
 		add_string_col_info_to_list,
 		gnc_sql_add_colname_to_list,
@@ -1072,7 +1072,7 @@ add_gvalue_int_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	(*pList) = g_slist_append( (*pList), value );
 }
 
-static col_type_handler_t int_handler
+static GncSqlColumnTypeHandler int_handler
 	= { load_int,
 		add_int_col_info_to_list,
 		gnc_sql_add_colname_to_list,
@@ -1155,7 +1155,7 @@ add_gvalue_boolean_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	(*pList) = g_slist_append( (*pList), value );
 }
 
-static col_type_handler_t boolean_handler
+static GncSqlColumnTypeHandler boolean_handler
 	= { load_boolean,
 		add_boolean_col_info_to_list,
 		gnc_sql_add_colname_to_list,
@@ -1231,7 +1231,7 @@ add_gvalue_int64_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	(*pList) = g_slist_append( (*pList), value );
 }
 
-static col_type_handler_t int64_handler
+static GncSqlColumnTypeHandler int64_handler
 	= { load_int64,
 		add_int64_col_info_to_list,
 		gnc_sql_add_colname_to_list,
@@ -1311,7 +1311,7 @@ add_gvalue_double_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	(*pList) = g_slist_append( (*pList), value );
 }
 
-static col_type_handler_t double_handler
+static GncSqlColumnTypeHandler double_handler
 	= { load_double,
 		add_double_col_info_to_list,
 		gnc_sql_add_colname_to_list,
@@ -1391,7 +1391,7 @@ add_gvalue_guid_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	(*pList) = g_slist_append( (*pList), value );
 }
 
-static col_type_handler_t guid_handler
+static GncSqlColumnTypeHandler guid_handler
 	= { load_guid,
 		add_guid_col_info_to_list,
 		gnc_sql_add_colname_to_list,
@@ -1538,7 +1538,7 @@ add_gvalue_timespec_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	(*pList) = g_slist_append( (*pList), value );
 }
 
-static col_type_handler_t timespec_handler
+static GncSqlColumnTypeHandler timespec_handler
 	= { load_timespec,
 		add_timespec_col_info_to_list,
 		gnc_sql_add_colname_to_list,
@@ -1631,7 +1631,7 @@ add_gvalue_date_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	(*pList) = g_slist_append( (*pList), value );
 }
 
-static col_type_handler_t date_handler
+static GncSqlColumnTypeHandler date_handler
 	= { load_date,
 		add_date_col_info_to_list,
 		gnc_sql_add_colname_to_list,
@@ -1751,7 +1751,7 @@ add_gvalue_numeric_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	(*pList) = g_slist_append( (*pList), denom_value );
 }
 
-static col_type_handler_t numeric_handler
+static GncSqlColumnTypeHandler numeric_handler
 	= { load_numeric,
 		add_numeric_col_info_to_list,
 		add_numeric_colname_to_list,
@@ -1761,7 +1761,7 @@ static col_type_handler_t numeric_handler
 static GHashTable* g_columnTypeHash = NULL;
 
 void
-gnc_sql_register_col_type_handler( const gchar* colType, const col_type_handler_t* handler )
+gnc_sql_register_col_type_handler( const gchar* colType, const GncSqlColumnTypeHandler* handler )
 {
 	g_return_if_fail( colType != NULL );
 	g_return_if_fail( handler != NULL );
@@ -1774,10 +1774,10 @@ gnc_sql_register_col_type_handler( const gchar* colType, const col_type_handler_
 	DEBUG( "Col type %s registered\n", colType );
 }
 
-static col_type_handler_t*
+static GncSqlColumnTypeHandler*
 get_handler( const GncSqlColumnTableEntry* table_row )
 {
-    col_type_handler_t* pHandler;
+    GncSqlColumnTypeHandler* pHandler;
 
 	g_return_val_if_fail( table_row != NULL, NULL );
 	g_return_val_if_fail( table_row->col_type != NULL, NULL );
@@ -1864,7 +1864,7 @@ gnc_sql_load_object( const GncSqlBackend* be, GncSqlRow* row,
 {
     int col;
     QofSetterFunc setter;
-    col_type_handler_t* pHandler;
+    GncSqlColumnTypeHandler* pHandler;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( row != NULL );
@@ -2043,7 +2043,7 @@ gnc_sql_object_is_it_in_db( GncSqlBackend* be, const gchar* table_name,
 {
     GncSqlStatement* sqlStmt;
     int count;
-    col_type_handler_t* pHandler;
+    GncSqlColumnTypeHandler* pHandler;
 	GSList* list = NULL;
 
 	g_return_val_if_fail( be != NULL, FALSE );
@@ -2109,7 +2109,7 @@ create_gslist_from_values( GncSqlBackend* be,
                             const GncSqlColumnTableEntry* table )
 {
 	GSList* list = NULL;
-	col_type_handler_t* pHandler;
+	GncSqlColumnTypeHandler* pHandler;
 	const GncSqlColumnTableEntry* table_row;
 
     for( table_row = table; table_row->col_name != NULL; table_row++ ) {
@@ -2222,7 +2222,7 @@ build_update_statement( GncSqlBackend* be,
 
     // Get all col names and all values
 	for( ; table_row->col_name != NULL; table_row++ ) {
-    	col_type_handler_t* pHandler;
+    	GncSqlColumnTypeHandler* pHandler;
 
 		// Add col names to the list
 		pHandler = get_handler( table_row );
@@ -2270,7 +2270,7 @@ build_delete_statement( GncSqlBackend* be,
 {
 	GncSqlStatement* stmt;
 	GString* sql;
-    col_type_handler_t* pHandler;
+    GncSqlColumnTypeHandler* pHandler;
 	GSList* list = NULL;
 	gchar* sqlbuf;
 
@@ -2334,7 +2334,7 @@ create_table( const GncSqlBackend* be, const gchar* table_name,
 	g_return_val_if_fail( col_table != NULL, FALSE );
     
     for( ; col_table->col_name != NULL; col_table++ ) {
-        col_type_handler_t* pHandler;
+        GncSqlColumnTypeHandler* pHandler;
 
         pHandler = get_handler( col_table );
         pHandler->add_col_info_to_list_fn( be, col_table, &col_info_list );

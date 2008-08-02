@@ -386,7 +386,7 @@ load_taxtable_guid( const GncSqlBackend* be, GncSqlRow* row,
     }
 }
 
-static col_type_handler_t taxtable_guid_handler
+static GncSqlColumnTypeHandler taxtable_guid_handler
 	= { load_taxtable_guid,
 		gnc_sql_add_objectref_guid_col_info_to_list,
 		gnc_sql_add_colname_to_list,

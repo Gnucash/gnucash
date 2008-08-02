@@ -714,7 +714,7 @@ load_tx_guid( const GncSqlBackend* be, GncSqlRow* row,
     }
 }
 
-static col_type_handler_t tx_guid_handler
+static GncSqlColumnTypeHandler tx_guid_handler
 	= { load_tx_guid,
 		gnc_sql_add_objectref_guid_col_info_to_list,
 		gnc_sql_add_colname_to_list,

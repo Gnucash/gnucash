@@ -197,7 +197,7 @@ add_gvalue_address_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     }
 }
 
-static col_type_handler_t address_handler
+static GncSqlColumnTypeHandler address_handler
 	= { load_address,
 		add_address_col_info_to_list,
 		add_address_colname_to_list,

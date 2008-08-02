@@ -221,7 +221,7 @@ load_lot_guid( const GncSqlBackend* be, GncSqlRow* row,
     }
 }
 
-static col_type_handler_t lot_guid_handler
+static GncSqlColumnTypeHandler lot_guid_handler
 	= { load_lot_guid,
 		gnc_sql_add_objectref_guid_col_info_to_list,
 		gnc_sql_add_colname_to_list,
