@@ -38,17 +38,17 @@ static int count = 0;
 static void
 test_string_fcn (QofBook *book, const char *message,
 		 void (*set) (GncCustomer *, const char *str),
-		 const char * (*get)(GncCustomer *));
+		 const char * (*get)(const GncCustomer *));
 
 static void
 test_numeric_fcn (QofBook *book, const char *message,
 		  void (*set) (GncCustomer *, gnc_numeric),
-		  gnc_numeric (*get)(GncCustomer *));
+		  gnc_numeric (*get)(const GncCustomer *));
 
 static void
 test_bool_fcn (QofBook *book, const char *message,
 		  void (*set) (GncCustomer *, gboolean),
-		  gboolean (*get) (GncCustomer *));
+		  gboolean (*get) (const GncCustomer *));
 
 static void
 test_customer (void)
@@ -149,7 +149,7 @@ test_customer (void)
 static void
 test_string_fcn (QofBook *book, const char *message,
 		 void (*set) (GncCustomer *, const char *str),
-		 const char * (*get)(GncCustomer *))
+		 const char * (*get)(const GncCustomer *))
 {
   GncCustomer *customer = gncCustomerCreate (book);
   char const *str = get_random_string ();
@@ -168,7 +168,7 @@ test_string_fcn (QofBook *book, const char *message,
 static void
 test_numeric_fcn (QofBook *book, const char *message,
 		  void (*set) (GncCustomer *, gnc_numeric),
-		  gnc_numeric (*get)(GncCustomer *))
+		  gnc_numeric (*get)(const GncCustomer *))
 {
   GncCustomer *customer = gncCustomerCreate (book);
   gnc_numeric num = gnc_numeric_create (17, 1);
@@ -187,7 +187,7 @@ test_numeric_fcn (QofBook *book, const char *message,
 static void
 test_bool_fcn (QofBook *book, const char *message,
 	       void (*set) (GncCustomer *, gboolean),
-	       gboolean (*get) (GncCustomer *))
+	       gboolean (*get) (const GncCustomer *))
 {
   GncCustomer *customer = gncCustomerCreate (book);
   gboolean num = get_random_boolean ();

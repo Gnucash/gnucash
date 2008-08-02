@@ -38,25 +38,25 @@ static int count = 0;
 static void
 test_string_fcn (QofBook *book, const char *message,
 		 void (*set) (GncJob *, const char *str),
-		 const char * (*get)(GncJob *));
+		 const char * (*get)(const GncJob *));
 
 #if 0
 static void
 test_numeric_fcn (QofBook *book, const char *message,
 		  void (*set) (GncJob *, gnc_numeric),
-		  gnc_numeric (*get)(GncJob *));
+		  gnc_numeric (*get)(const GncJob *));
 #endif
 
 static void
 test_bool_fcn (QofBook *book, const char *message,
 		  void (*set) (GncJob *, gboolean),
-		  gboolean (*get) (GncJob *));
+		  gboolean (*get) (const GncJob *));
 
 #if 0
 static void
 test_gint_fcn (QofBook *book, const char *message,
 	       void (*set) (GncJob *, gint),
-	       gint (*get) (GncJob *));
+	       gint (*get) (const GncJob *));
 #endif
 
 static void
@@ -157,7 +157,7 @@ test_job (void)
 static void
 test_string_fcn (QofBook *book, const char *message,
 		 void (*set) (GncJob *, const char *str),
-		 const char * (*get)(GncJob *))
+		 const char * (*get)(const GncJob *))
 {
   GncJob *job = gncJobCreate (book);
   char const *str = get_random_string ();
@@ -176,7 +176,7 @@ test_string_fcn (QofBook *book, const char *message,
 static void
 test_numeric_fcn (QofBook *book, const char *message,
 		  void (*set) (GncJob *, gnc_numeric),
-		  gnc_numeric (*get)(GncJob *))
+		  gnc_numeric (*get)(const GncJob *))
 {
   GncJob *job = gncJobCreate (book);
   gnc_numeric num = gnc_numeric_create (17, 1);
@@ -195,7 +195,7 @@ test_numeric_fcn (QofBook *book, const char *message,
 static void
 test_bool_fcn (QofBook *book, const char *message,
 	       void (*set) (GncJob *, gboolean),
-	       gboolean (*get) (GncJob *))
+	       gboolean (*get) (const GncJob *))
 {
   GncJob *job = gncJobCreate (book);
   gboolean num = get_random_boolean ();
@@ -216,7 +216,7 @@ test_bool_fcn (QofBook *book, const char *message,
 static void
 test_gint_fcn (QofBook *book, const char *message,
 	       void (*set) (GncJob *, gint),
-	       gint (*get) (GncJob *))
+	       gint (*get) (const GncJob *))
 {
   GncJob *job = gncJobCreate (book);
   gint num = 17;

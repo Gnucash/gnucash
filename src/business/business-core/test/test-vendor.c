@@ -37,25 +37,25 @@ static int count = 0;
 static void
 test_string_fcn (QofBook *book, const char *message,
 		 void (*set) (GncVendor *, const char *str),
-		 const char * (*get)(GncVendor *));
+		 const char * (*get)(const GncVendor *));
 
 #if 0
 static void
 test_numeric_fcn (QofBook *book, const char *message,
 		  void (*set) (GncVendor *, gnc_numeric),
-		  gnc_numeric (*get)(GncVendor *));
+		  gnc_numeric (*get)(const GncVendor *));
 #endif
 
 static void
 test_bool_fcn (QofBook *book, const char *message,
 		  void (*set) (GncVendor *, gboolean),
-		  gboolean (*get) (GncVendor *));
+		  gboolean (*get) (const GncVendor *));
 
 #if 0
 static void
 test_gint_fcn (QofBook *book, const char *message,
 	       void (*set) (GncVendor *, gint),
-	       gint (*get) (GncVendor *));
+	       gint (*get) (const GncVendor *));
 #endif
 
 static void
@@ -138,7 +138,7 @@ test_vendor (void)
 static void
 test_string_fcn (QofBook *book, const char *message,
 		 void (*set) (GncVendor *, const char *str),
-		 const char * (*get)(GncVendor *))
+		 const char * (*get)(const GncVendor *))
 {
   GncVendor *vendor = gncVendorCreate (book);
   char const *str = get_random_string ();
@@ -157,7 +157,7 @@ test_string_fcn (QofBook *book, const char *message,
 static void
 test_numeric_fcn (QofBook *book, const char *message,
 		  void (*set) (GncVendor *, gnc_numeric),
-		  gnc_numeric (*get)(GncVendor *))
+		  gnc_numeric (*get)(const GncVendor *))
 {
   GncVendor *vendor = gncVendorCreate (book);
   gnc_numeric num = gnc_numeric_create (17, 1);
@@ -176,7 +176,7 @@ test_numeric_fcn (QofBook *book, const char *message,
 static void
 test_bool_fcn (QofBook *book, const char *message,
 	       void (*set) (GncVendor *, gboolean),
-	       gboolean (*get) (GncVendor *))
+	       gboolean (*get) (const GncVendor *))
 {
   GncVendor *vendor = gncVendorCreate (book);
   gboolean num = get_random_boolean ();
@@ -197,7 +197,7 @@ test_bool_fcn (QofBook *book, const char *message,
 static void
 test_gint_fcn (QofBook *book, const char *message,
 	       void (*set) (GncVendor *, gint),
-	       gint (*get) (GncVendor *))
+	       gint (*get) (const GncVendor *))
 {
   GncVendor *vendor = gncVendorCreate (book);
   gint num = 17;
