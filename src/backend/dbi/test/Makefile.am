@@ -1,8 +1,7 @@
 SUBDIRS = .
 
 TESTS = \
-  test-load-backend \
-  test-dbi-account
+  test-load-backend
 
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/engine \
@@ -19,8 +18,7 @@ TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \
-  test-load-backend \
-  test-dbi-account
+  test-load-backend
 
 #noinst_HEADERS = test-file-stuff.h
 
