@@ -831,47 +831,38 @@ gnc_xfer_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
 static void
 gnc_xfer_update_to_amount (XferDialog *xferData)
 {
-  gnc_numeric amount, price, to_amount;
+  GNCAmountEdit *amount_edit, *price_edit, *to_amount_edit;
+  gnc_numeric price, to_amount;
   Account *account;
 
-  account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_TO);
+  g_return_if_fail(xferData);
+
+  /* Get the amount editing controls of the dialog. */
+  amount_edit     = GNC_AMOUNT_EDIT(xferData->amount_edit);
+  price_edit      = GNC_AMOUNT_EDIT(xferData->price_edit);
+  to_amount_edit  = GNC_AMOUNT_EDIT(xferData->to_amount_edit);
+
+  account = gnc_transfer_dialog_get_selected_account(xferData, XFER_DIALOG_TO);
   if (account == NULL)
-    account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_FROM);
+    account = gnc_transfer_dialog_get_selected_account(xferData,
+                                                       XFER_DIALOG_FROM);
 
-  if (account == NULL)
-  {
-    GtkEntry *entry;
-
-    gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit),
-                               gnc_numeric_zero ());
-    entry = GTK_ENTRY(gnc_amount_edit_gtk_entry
-                      (GNC_AMOUNT_EDIT(xferData->to_amount_edit)));
-    gtk_entry_set_text(entry, "");
-  }
-
-  gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->price_edit));
-
-  amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
-  price = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
-
-  if (gnc_numeric_zero_p (price))
-    to_amount = gnc_numeric_zero ();
+  /* Determine the amount to transfer. */
+  if (account == NULL ||
+      !gnc_amount_edit_evaluate(price_edit) ||
+      gnc_numeric_zero_p(price = gnc_amount_edit_get_amount(price_edit)))
+    to_amount = gnc_numeric_zero();
   else
-    to_amount = gnc_numeric_mul (amount, price,
-                                 xaccAccountGetCommoditySCU (account),
-                                 GNC_RND_ROUND);
+    to_amount = gnc_numeric_mul(gnc_amount_edit_get_amount(amount_edit),
+                                price,
+                                xaccAccountGetCommoditySCU(account),
+                                GNC_RND_ROUND);
 
-  gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit),
-                             to_amount);
-
-  if (gnc_numeric_zero_p (to_amount))
-  {
-    GtkEntry *entry;
-
-    entry = GTK_ENTRY(gnc_amount_edit_gtk_entry
-                      (GNC_AMOUNT_EDIT(xferData->to_amount_edit)));
-    gtk_entry_set_text(entry, "");
-  }
+  /* Update the dialog. */
+  gnc_amount_edit_set_amount(to_amount_edit, to_amount);
+  if (gnc_numeric_zero_p(to_amount))
+    gtk_entry_set_text(GTK_ENTRY(gnc_amount_edit_gtk_entry(to_amount_edit)),
+                       "");
 
   gnc_xfer_dialog_update_conv_info(xferData);
 }
