@@ -2126,6 +2126,8 @@ gchar*
 gnc_sql_get_sql_value( const GncSqlConnection* conn, const GValue* value )
 {
 	if( value != NULL && G_IS_VALUE( value ) ) {
+		GType type = G_VALUE_TYPE(value);
+
 		if( G_VALUE_HOLDS_STRING(value) ) {
 			if( g_value_get_string( value ) != NULL ) {
 				gchar* before_str;
@@ -2137,7 +2139,16 @@ gnc_sql_get_sql_value( const GncSqlConnection* conn, const GValue* value )
 			} else {
 				return g_strdup( "NULL" );
 			}
-		} else if( g_value_type_transformable( G_VALUE_TYPE(value), G_TYPE_STRING ) ) {
+		} else if( type == G_TYPE_INT64 ) {
+			return g_strdup_printf( "%lld", g_value_get_int64( value ) );
+
+		} else if( type == G_TYPE_INT ) {
+			return g_strdup_printf( "%d", g_value_get_int( value ) );
+
+		} else if( type == G_TYPE_DOUBLE ) {
+			return g_strdup_printf( "%g", g_value_get_double( value ) );
+
+		} else if( g_value_type_transformable( type, G_TYPE_STRING ) ) {
 			GValue* string;
 			gchar* str;
 			
@@ -2146,9 +2157,10 @@ gnc_sql_get_sql_value( const GncSqlConnection* conn, const GValue* value )
 			str = g_value_dup_string( string );
 			g_value_unset( string );
 			g_free( string );
+			PWARN( "using g_value_transform(), gtype = '%s'\n", g_type_name( type ) );
 			return str;
 		} else {
-			PWARN( "not transformable, gtype = '%s'\n", g_type_name( G_VALUE_TYPE(value) ) );
+			PWARN( "not transformable, gtype = '%s'\n", g_type_name( type ) );
 			return "$$$";
 		}
 	} else {
