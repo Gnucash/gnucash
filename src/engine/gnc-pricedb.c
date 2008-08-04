@@ -1578,7 +1578,10 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
       Timespec abs_current = timespec_abs(&diff_current);
       Timespec abs_next = timespec_abs(&diff_next);
 
-      if (timespec_cmp(&abs_current, &abs_next) <= 0) {
+      /* Choose the price that is closest to the given time. In case of
+       * a tie, prefer the older price since it actually existed at the
+       * time. (This also fixes bug #541970.) */
+      if (timespec_cmp(&abs_current, &abs_next) < 0) {
         result = current_price;
       } else {
         result = next_price;
