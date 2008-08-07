@@ -1260,6 +1260,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   char temp_buf[128];
   gnc_numeric whole, rounding;
   int min_dp, max_dp;
+  gboolean value_is_decimal;
 
   g_return_val_if_fail (info != NULL, 0);
 
@@ -1272,6 +1273,9 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 
   /* print the absolute value */
   val = gnc_numeric_abs (val);
+
+  /* Try to print as decimal. */
+  value_is_decimal = gnc_numeric_to_decimal(&val, NULL);
 
   /* Force at least auto_decimal_places zeros */
   if (auto_decimal_enabled) {
@@ -1288,7 +1292,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     max_dp = 99;
 
   /* rounding? -- can only ROUND if force_fit is also true */
-  if (info->round && info->force_fit) {
+  if (value_is_decimal && info->round && info->force_fit) {
     rounding.num = 5; /* Limit the denom to 10^13 ~= 2^44, leaving max at ~524288 */
     rounding.denom = pow(10, max_dp + 1);
     val = gnc_numeric_add(val, rounding, GNC_DENOM_AUTO, GNC_DENOM_LCD);
@@ -1382,22 +1386,24 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 
   /* at this point, buf contains the whole part of the number */
 
-  /* If it's not decimal, print the fraction as an expression */
-  if (!gnc_numeric_to_decimal(&val, NULL))
+  /* If it's not decimal, print the fraction as an expression. */
+  if (!value_is_decimal)
   {
-    if (!gnc_numeric_zero_p (val))
-    {
-      val = gnc_numeric_reduce (val);
+    val = gnc_numeric_reduce (val);
 
-      if (val.denom > 0)
-          sprintf (temp_buf, " + %" G_GINT64_FORMAT " / %" G_GINT64_FORMAT,
-                   val.num, val.denom);
-      else
-          sprintf (temp_buf, " + %" G_GINT64_FORMAT " * %" G_GINT64_FORMAT,
-                   val.num, -val.denom);
+    if (val.denom > 0)
+        sprintf (temp_buf, "%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
+                 val.num, val.denom);
+    else
+        sprintf (temp_buf, "%" G_GINT64_FORMAT " * %" G_GINT64_FORMAT,
+                 val.num, -val.denom);
 
-      strcat (buf, temp_buf);
-    }
+    if (whole.num == 0)
+      *buf = '\0';
+    else
+      strcat(buf, " + ");
+
+    strcat (buf, temp_buf);
   }
   else
   {
