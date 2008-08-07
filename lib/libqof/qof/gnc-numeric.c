@@ -1042,10 +1042,14 @@ gnc_numeric_to_decimal(gnc_numeric *a, guint8 *max_decimal_places)
     return FALSE;
 
   converted_val = *a;
-  fraction = converted_val.denom;
-  if (fraction <= 0)
+  if (converted_val.denom <= 0)
     return FALSE;
 
+  /* Zero is easily converted. */
+  if (converted_val.num == 0)
+    converted_val.denom = 1;
+
+  fraction = converted_val.denom;
   while (fraction != 1)
   {
     switch (fraction % 10)
