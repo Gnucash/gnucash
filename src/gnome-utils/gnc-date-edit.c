@@ -307,7 +307,8 @@ static void
 fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
 {
 	GtkWidget *menu;
-	struct tm *mtm;
+	struct tm *tm_returned;
+	struct tm mtm;
 	time_t current_time;
 	int i, j;
 
@@ -318,21 +319,25 @@ fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (gde->time_popup), menu);
 
 	time (&current_time);
-	mtm = localtime (&current_time);
+	tm_returned = localtime (&current_time);
+	g_return_if_fail(tm_returned != NULL);
+        /* The return value points to statically allocated, shared memory.
+         * Copy the contents so we don't risk unexpected changes. */
+        mtm = *tm_returned;
 	
 	for (i = gde->lower_hour; i <= gde->upper_hour; i++){
 		GtkWidget *item, *submenu;
 		hour_info_t *hit;
 		char buffer [40];
 
-		mtm->tm_hour = i;
-		mtm->tm_min  = 0;
+		mtm.tm_hour = i;
+		mtm.tm_min  = 0;
 		hit = g_new (hour_info_t, 1);
 
 		if (gde->flags & GNC_DATE_EDIT_24_HR)
-			qof_strftime (buffer, sizeof (buffer), "%H:00", mtm);
+			qof_strftime (buffer, sizeof (buffer), "%H:00", &mtm);
 		else
-			qof_strftime (buffer, sizeof (buffer), "%I:00 %p ", mtm);
+			qof_strftime (buffer, sizeof (buffer), "%I:00 %p ", &mtm);
 		hit->hour = g_strdup (buffer);
 		hit->gde  = gde;
 
@@ -351,14 +356,14 @@ fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
 		for (j = 0; j < 60; j += 15){
 			GtkWidget *mins;
 
-			mtm->tm_min = j;
+			mtm.tm_min = j;
 			hit = g_new (hour_info_t, 1);
 			if (gde->flags & GNC_DATE_EDIT_24_HR)
 				qof_strftime (buffer, sizeof (buffer),
-					      "%H:%M", mtm);
+					      "%H:%M", &mtm);
 			else
 				qof_strftime (buffer, sizeof (buffer),
-					      "%I:%M %p", mtm);
+					      "%I:%M %p", &mtm);
 			hit->hour = g_strdup (buffer);
 			hit->gde  = gde;
 
@@ -529,7 +534,8 @@ gnc_date_edit_set_time_tm (GNCDateEdit *gde, struct tm *mytm)
 void
 gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
 {
-	struct tm *mytm;
+	struct tm *tm_returned;
+	struct tm tm_to_set;
 
 	g_return_if_fail (gde != NULL);
         g_return_if_fail (GNC_IS_DATE_EDIT (gde));
@@ -545,8 +551,14 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
         else
           gde->initial_time = the_time;
 
-	mytm = localtime (&the_time);
-	gnc_date_edit_set_time_tm(gde, mytm);
+        /* Convert time_t to tm. */
+	tm_returned = localtime (&the_time);
+	g_return_if_fail(tm_returned != NULL);
+        /* The return value points to statically allocated, shared memory.
+         * Copy the contents so we don't risk unexpected changes. */
+        tm_to_set = *tm_returned;
+
+	gnc_date_edit_set_time_tm(gde, &tm_to_set);
 }
 
 void
