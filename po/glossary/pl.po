@@ -1,23 +1,23 @@
 # Polish translation of GnuCash.
 # Copyright (C) 2005 Free Software Foundation, Inc.
 # A. Tokarski <szczur@malinablue.punkt.pl>, 2005.
-# 
-# 
+# Updated to 2.2.x by nowak2000@poczta.onet.pl
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 1.8.x\n"
+"Project-Id-Version: GnuCash 2.2.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-14 21:55+0100\n"
+"POT-Creation-Date: 2008-08-08 18:48+0200\n"
 "PO-Revision-Date: 2005-10-15 00:38+0200\n"
-"Last-Translator: szczur <szczur@malinablue.punkt.pl>\n"
+"Last-Translator: Tomasz Ł. Nowak <nowak2000@poczta.onet.pl>\n"
 "Language-Team: Polish <translators@gnomepl.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. "English Definition"
-msgid "Term"
-msgstr "Termin"
+#. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
+msgid "Term (Dear translator: This file will never be visible to the user!)"
+msgstr ""
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -29,7 +29,7 @@ msgstr "kod konta"
 
 #. "the tree view of all accounts"
 msgid "account hierarchy"
-msgstr "drzewko kont"
+msgstr "plan kont"
 
 #. "-"
 msgid "account name"
@@ -37,19 +37,19 @@ msgstr "nazwa konta"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts"
 msgid "account type: Asset"
-msgstr ""
+msgstr "typ konta: Aktywa"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr "typ konta: sprawdzam"
+msgstr ""
 
 #. "-"
 msgid "account type: currency"
-msgstr "typ konta: bieżący"
+msgstr "typ konta: gotówka"
 
 #. "see: Equity"
 msgid "account type: Equity"
-msgstr "typ konta: Akcje"
+msgstr ""
 
 #. "-"
 msgid "account type: Expense"
@@ -60,8 +60,9 @@ msgid "account type: Income"
 msgstr "typ konta: Przychody"
 
 #. "A debt, a financial obligation"
+#, fuzzy
 msgid "account type: Liability"
-msgstr ""
+msgstr "typ konta: Aktywa"
 
 #. "-"
 msgid "account type: money-market"
@@ -85,7 +86,7 @@ msgstr ""
 
 #. "-"
 msgid "account: subaccount"
-msgstr "konto: podkonto"
+msgstr "konto: subkonto"
 
 #. "-"
 msgid "account: top level account"
@@ -97,11 +98,11 @@ msgstr "Akcja (rejestrowanie)"
 
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr ""
+msgstr "akcja: bankomat"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
-msgstr "akcja: automatycznyZastaw"
+msgstr "akcja: autoWpł"
 
 #. "-"
 msgid "action: buy"
@@ -109,7 +110,7 @@ msgstr "akcja: kup"
 
 #. "-"
 msgid "action: deposit"
-msgstr "akcja: zastaw"
+msgstr "akcja: wpłać"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
@@ -125,7 +126,7 @@ msgstr "akcja: odsetki"
 
 #. "-"
 msgid "action: fee"
-msgstr ""
+msgstr "akcja: opłata"
 
 #. "transaction comes from interest"
 msgid "action: int"
@@ -133,15 +134,15 @@ msgstr ""
 
 #. "-"
 msgid "action: loan"
-msgstr ""
+msgstr "akcja: pożyczka"
 
 #. "see: payment 1."
 msgid "action: payment"
-msgstr ""
+msgstr "akcja: płatność"
 
 #. "-"
 msgid "action: POS"
-msgstr ""
+msgstr "akcja: punkt sprzedaży"
 
 #. "-"
 msgid "action: rebate"
@@ -149,7 +150,7 @@ msgstr "akcja: rabat"
 
 #. "-"
 msgid "action: sell"
-msgstr "akcja: sprzedarz"
+msgstr "akcja: sprzedaż"
 
 #. "-"
 msgid "action: Teller"
@@ -165,7 +166,7 @@ msgstr ""
 
 #. "-"
 msgid "action: withdraw"
-msgstr ""
+msgstr "akcja: wycofanie"
 
 #. "A sum of money"
 msgid "amount"
@@ -177,11 +178,11 @@ msgstr "średnia"
 
 #. "The amount of money that is in one's account"
 msgid "balance (noun)"
-msgstr ""
+msgstr "saldo"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
-msgstr ""
+msgstr "bilans"
 
 #. "To arrange for income and spending to be equal"
 msgid "balance, to"
@@ -191,7 +192,7 @@ msgstr ""
 msgid "bank"
 msgstr "bank"
 
-#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received, whereas an 'invoice' is one that we sent out."
+#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
 msgstr "rachunek"
 
@@ -209,11 +210,11 @@ msgstr ""
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
-msgstr ""
+msgstr "Budżet"
 
 #. "-"
 msgid "business (adjective)"
-msgstr ""
+msgstr "biznesowy"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
 msgid "business (noun)"
@@ -229,11 +230,11 @@ msgstr ""
 
 #. "Money in coins or notes"
 msgid "cash"
-msgstr "pieniądze"
+msgstr "gotówka"
 
 #. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
 msgid "check"
-msgstr ""
+msgstr "czek"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
 msgid "check and repair, to"
@@ -241,7 +242,7 @@ msgstr "sprawdź i napraw"
 
 #. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
 msgid "close, to"
-msgstr ""
+msgstr "zakmnij"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
@@ -305,7 +306,7 @@ msgstr "domyślnie"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
-msgstr ""
+msgstr "wpłata"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
@@ -321,10 +322,14 @@ msgstr ""
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
-msgstr ""
+msgstr "pracownik"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
+msgstr ""
+
+#. "Report that ... FIXME: Add description."
+msgid "equity statement"
 msgstr ""
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
@@ -333,7 +338,7 @@ msgstr ""
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
-msgstr ""
+msgstr "kurs wymiany"
 
 #. "in the account creation dialog??"
 msgid "field"
@@ -357,7 +362,7 @@ msgstr ""
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
-msgstr ""
+msgstr "zysk"
 
 #. "Name of an automaticly created account to get imbalanced transactions back in balance"
 msgid "imbalance"
@@ -367,21 +372,25 @@ msgstr ""
 msgid "import"
 msgstr "import"
 
+#. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
+msgid "income statement"
+msgstr ""
+
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
 msgstr ""
 
-#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out, whereas a 'bill' is one that we received."
+#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
-msgstr ""
+msgstr "faktura"
 
-#. "In small business accounting: A piece of work or task undertaken on order at a stated rate?????"
+#. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
 msgstr "praca"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
-msgstr ""
+msgstr "księga"
 
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
@@ -389,7 +398,7 @@ msgstr ""
 
 #. "A sum of money that is lent (by a bank)"
 msgid "loan"
-msgstr "zastaw"
+msgstr "pożyczka"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -410,7 +419,7 @@ msgstr "przeładuj"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
-msgstr ""
+msgstr "znak"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
@@ -426,23 +435,23 @@ msgstr ""
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
-msgstr ""
+msgstr "waluta narodowa"
 
 #. "(of money) remaining when nothing more is to be taken away"
 msgid "net"
-msgstr ""
+msgstr "netto"
 
 #. "net total of all assets"
 msgid "net assets"
-msgstr ""
+msgstr "aktywa netto"
 
 #. "The total income minus the total expenses of a given time period."
 msgid "net profit"
-msgstr ""
+msgstr "zysk netto"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
-msgstr ""
+msgstr "wartość netto"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
@@ -464,17 +473,17 @@ msgstr ""
 msgid "options"
 msgstr "opcje"
 
-#. "In small business accounting: unused term at the moment (maybe: a particular piece of work, maybe created through an order from a customer???)"
+#. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
 msgstr ""
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
-msgstr ""
+msgstr "osierocone"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
-msgstr ""
+msgstr "hasło"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
@@ -490,7 +499,7 @@ msgstr "płatnik"
 
 #. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
 msgid "payment"
-msgstr ""
+msgstr "płatność"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
@@ -510,21 +519,21 @@ msgstr ""
 
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
-msgstr ""
+msgstr "typ ceny: sprzedaż"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
 msgid "price type: bid"
-msgstr ""
+msgstr "typ ceny: skup"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
-msgstr ""
+msgstr "cena: notowania"
 
 #. "Money gained in business, esp. the difference between the amount earned and the amount spent"
 msgid "profit"
-msgstr ""
+msgstr "zysk"
 
-#. "(rather: profit and loss account!?) A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
+#. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
 msgstr "Zyski i Straty"
 
@@ -580,6 +589,10 @@ msgstr "przeładuj"
 msgid "Retained Earnings"
 msgstr ""
 
+#. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
+msgid "reverse transaction, to (Action in the register)"
+msgstr ""
+
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
 msgstr "zapisz (do pliku)"
@@ -594,7 +607,7 @@ msgstr ""
 
 #. "A document or certificate showing who owns shares"
 msgid "security"
-msgstr "bezpieczeństwo"
+msgstr "papiery wartościowe"
 
 #. "-"
 msgid "Share Balance (register)"
@@ -602,7 +615,7 @@ msgstr ""
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
-msgstr ""
+msgstr "udziały"
 
 #. "(of a price) A place wfrom which sth comes or is obtained"
 msgid "source"
@@ -614,7 +627,7 @@ msgstr "podział"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
-msgstr ""
+msgstr "arkusz stylów"
 
 #. "The total of a set of figures that are part of a larger group of figures"
 msgid "subtotal"
@@ -638,7 +651,7 @@ msgstr ""
 
 #. "The full number or amount: total of some balances, of any account's running balance etc."
 msgid "total"
-msgstr ""
+msgstr "razem"
 
 #. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
 msgid "transaction"
@@ -672,6 +685,11 @@ msgstr ""
 msgid "transfer, to (register toolbar)"
 msgstr ""
 
+#. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
+#, fuzzy
+msgid "trial balance (report)"
+msgstr "saldo"
+
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
 msgstr "typ"
@@ -690,8 +708,16 @@ msgstr ""
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
-msgstr "sprzedawca"
+msgstr "dostawca"
+
+#. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
+#, fuzzy
+msgid "voucher"
+msgstr "źródło"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr ""
+
+#~ msgid "Term"
+#~ msgstr "Termin"
