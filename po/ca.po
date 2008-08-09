@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.1.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-12-27 13:47+0100\n"
-"PO-Revision-Date: 2008-06-08 14:24+0200\n"
+"PO-Revision-Date: 2008-08-03 17:40+0200\n"
 "Last-Translator: David Planella Molas <david.planella@gmail.com>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "MIME-Version: 1.0\n"
@@ -609,7 +609,7 @@ msgid ""
 "This transaction needs to be assigned to a Vendor.  Please choose the Vendor "
 "below."
 msgstr ""
-"Aquesta assentament s'ha d'assignar a un proveïdor.  Escolliu un proveïdor "
+"Aquest assentament s'ha d'assignar a un proveïdor.  Escolliu un proveïdor "
 "dels de sota."
 
 #: ../src/business/business-gnome/dialog-customer.c:268
@@ -1337,7 +1337,7 @@ msgstr "Confirma aquesta condició de pagament"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:7
 msgid "Create a new Billing Term"
-msgstr "Crea una nova condició de pagament"
+msgstr "Crea una condició de pagament nova"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:8
 msgid "Cutoff Day: "
@@ -4362,7 +4362,7 @@ msgstr "_Fracció mínima:"
 
 #: ../src/gnome/glade/account.glade.h:59
 msgid "Smallest fraction of this commodity that can be referenced."
-msgstr ""
+msgstr "Fracció mínima d'aquesta divisa/valor a la qual es pot fer referència."
 
 #: ../src/gnome/glade/account.glade.h:60
 msgid "Ta_x related"
@@ -4971,15 +4971,15 @@ msgstr "Visualitzador de paquets"
 
 #: ../src/gnome/glade/lots.glade.h:16
 msgid "Scrub _Account"
-msgstr ""
+msgstr "Comprova el _compte"
 
 #: ../src/gnome/glade/lots.glade.h:17
 msgid "Scrub the highlighted lot"
-msgstr ""
+msgstr "Comprova el paquet seleccionat"
 
 #: ../src/gnome/glade/lots.glade.h:19
 msgid "_Scrub"
-msgstr ""
+msgstr "_Comprova"
 
 #: ../src/gnome/glade/merge.glade.h:1
 msgid "1. Update your existing book with the import data"
@@ -6479,20 +6479,20 @@ msgid ""
 "split or merger. For stock mergers (negative splits) use a negative value "
 "for the share distribution. You can also enter a description of the "
 "transaction, or accept the default one."
-msgstr ""
+msgstr "Introduïu la data i el nombre d'accions que hàgiu guanyat o perdut en la fusió o divisió d'accions. En els casos de fusió d'accions (desglossaments negatius), utilitzeu un valor negatiu per a la distribució de les accions. També podeu introduir una descripció de la transacció, o bé acceptar la predeterminada."
 
 #: ../src/gnome/glade/stocks.glade.h:7
 msgid ""
 "If you are finished creating the stock split or merger, press `Apply'. You "
 "may also press `Back' to review your choices, or `Cancel' to quit without "
 "making any changes."
-msgstr ""
+msgstr "Un cop hàgiu finalitzat la creació de la fusió o divisió d'accions, premeu «Aplica». També podeu triar «Endarrere» per a tornar a revisar els canvis, o bé «Cancel·la» per a sortir sense fer cap canvi."
 
 #: ../src/gnome/glade/stocks.glade.h:8
 msgid ""
 "If you received a cash disbursement as a result of the stock split, enter "
 "the details of that payment here. Otherwise, just click `Forward'."
-msgstr ""
+msgstr "Si heu rebut un reemborsament efectiu com a resultat de la divisió d'accions, introduïu-ne els detalls aquí. En cas contrari, premeu «Endavant»."
 
 #: ../src/gnome/glade/stocks.glade.h:9
 msgid ""
@@ -7195,7 +7195,7 @@ msgstr "_Tots els assentaments"
 
 #: ../src/gnome/gnc-plugin-page-register.c:256
 msgid "_This transaction"
-msgstr "A_questa assentament"
+msgstr "A_quest assentament"
 
 #. Reports menu
 #: ../src/gnome/gnc-plugin-page-register.c:261
@@ -7248,7 +7248,7 @@ msgid ""
 "This register has pending changes to a transaction.  Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
 "operation?"
-msgstr ""
+msgstr "Aquest registre té canvis pendents per a un assentametn. Voleu desar els canvis a aquest assentament, descartar-lo, o bé cancel·lar la operació?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1101
 msgid "_Discard Transaction"
@@ -7405,7 +7405,7 @@ msgstr "Voleu suprimir els desglossaments d'aquest assentament?"
 msgid ""
 "This transaction contains reconciled splits. Modifying it is not a good idea "
 "because that will cause your reconciled balance to be off."
-msgstr ""
+msgstr "Aquest assentament conté desglossaments conciliats. No és recomanable que el modifiqueu, atès que si ho feu, el balanç conciliat estarà desquadrat."
 
 #: ../src/gnome/gnc-split-reg.c:993
 msgid "_Remove Splits"
@@ -7420,7 +7420,7 @@ msgstr "Voleu suprimir el desglossament «%s» de l'assentament «%s»?"
 msgid ""
 "You would be deleting a reconciled split! This is not a good idea as it will "
 "cause your reconciled balance to be off."
-msgstr ""
+msgstr "Amb aquesta acció suprimiríeu un desglossament conciliat! Això no és recomanable, atès que si ho feu, el balanç conciliat estaria desquadrat."
 
 #: ../src/gnome/gnc-split-reg.c:1072
 msgid "You cannot delete this split."
@@ -7432,7 +7432,7 @@ msgid ""
 "delete it from this register window.  You may delete the entire transaction "
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and delete the split from that register."
-msgstr ""
+msgstr "Aquest és el desglossament que vincula aquesta transacció amb el registre, per la qual cosa no podeu suprimir-lo d'aquesta finestra de registre. El que podeu fer és suprimir l'assentament complet d'aquesta finestrs, o bé navegar cap a un registre que en mostri l'entrada complementària i suprimir el desglossament d'aquell registre."
 
 #: ../src/gnome/gnc-split-reg.c:1100
 msgid "(no memo)"
@@ -7454,7 +7454,7 @@ msgstr "Voleu suprimir l'assentament actual?"
 msgid ""
 "You would be deleting a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
-msgstr ""
+msgstr "Amb aquesta acció suprimiríeu un assentament amb desglossaments conciliats! Això no és recomanable, atès que si ho feu, el balanç conciliat estaria desquadrat."
 
 #: ../src/gnome/gnc-split-reg.c:1793
 msgid "Present:"
@@ -7504,7 +7504,7 @@ msgid ""
 "transactions in this register, please open the sub-account options and turn "
 "off the placeholder checkbox. You may also open an individual account "
 "instead of a set of accounts."
-msgstr ""
+msgstr "Un dels subcomptes que heu seleccionat no es pot editar. Si voleu editar els assentaments d'aquest registre, hauríeu d'obrie el diàleg d'opcions del subcompte i desactivar la casella de «contenidor». De manera alternativa, també podeu obrir un compte individual en lloc d'un conjunt de comptes."
 
 #: ../src/gnome/gnucash.desktop.in.h:1
 msgid "GnuCash Finance Management"
@@ -7669,7 +7669,7 @@ msgstr ""
 msgid ""
 "This setting indicates how the key column is sorted. Possible values for "
 "this setting are 'ascending' and 'descending'."
-msgstr ""
+msgstr "Aquest paràmetre indica com s'ordenarà la clau de columna. Els valors permesos són «ascending» (ascendent) i «descending» (descendent)."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:14
 msgid ""
@@ -7684,7 +7684,7 @@ msgid ""
 "This setting indicates which column in the tree is used for sorting. "
 "Possible values for this setting are the name of any column in this dialog "
 "(see the column_order key) or the keyword 'none'."
-msgstr ""
+msgstr "Aquest paràmetre indica quina columna de l'arbre s'utilitzarà per a l'ordenació. Els valors permesos són el nom de qualsevol columna d'aquest diàleg (vegeu la clau column_order) o bé la paraula clau «none» (cap)."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:16
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:17
@@ -7712,7 +7712,7 @@ msgstr "Mostra la columna del tipus"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:5
 msgid "Show the commodity column"
-msgstr ""
+msgstr "Mostra la columna de divisa/valor"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:6
 msgid "Show the currency column"
@@ -7736,7 +7736,7 @@ msgstr "Aquest paràmetre habilita la columna del tipus."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:12
 msgid "This setting enables the commodity column."
-msgstr ""
+msgstr "Aquest paràmetre habilita la columna de divisa/valor."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:13
 msgid "This setting enables the currency column."
@@ -7758,7 +7758,7 @@ msgstr "Format de data a utilitzar"
 msgid ""
 "Each time the date is printed, print the date format immediately below in 8 "
 "point type using the characters Y, M, and D."
-msgstr ""
+msgstr "En imprimir la data, imprimeix-ne el seu format a sota, amb un tipus de lletra de 8 punts i utilitzant els caràcters Y, M i D."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:4
 msgid ""
@@ -7766,7 +7766,7 @@ msgid ""
 "used as an argument to strftime to produce the date to be printed. It may be "
 "any valid strftime string; for more information about this format, read the "
 "manual page of strftime by \"man 3 strftime\"."
-msgstr ""
+msgstr "Si s'ha definit la clau «date_format» per a indicar la utilització d'un format de data personalitzat, s'utilitzarà aquest valor com a argument per a la funció strftime amb la finalitat d'obtenir la data a imprimir. El valor pot ser qualsevol cadena vàlida per a la funció strftime, per a les quals trobareu més informació a la seva pàgina de manual: «man 3 strftime»."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:5
 msgid "Index of predefined check format to use"
@@ -7777,15 +7777,15 @@ msgid ""
 "On preprinted checks containing multiple checks per page, this setting "
 "specifies which check position to print. The possible values are 0, 1 and 2, "
 "corresponding to the top, middle and bottom checks on the page."
-msgstr ""
+msgstr "En els xecs preimprimits que contenen diversos xecs per pàgina, aquest paràmetre especifica quina posició de xec s'ha d'imprimir. Els valors permesos són 0, 1 i 2, els quals indiquen els xecs superior, central i inferior de la pàgina, respectivament."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:7
 msgid "Position of check amount in numbers"
-msgstr "Posició de la quantitat del xec en números"
+msgstr "Posició de l'import del xec en números"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:8
 msgid "Position of check amount in words"
-msgstr "Posició de la quantitat del xec en lletres"
+msgstr "Posició de l'import del xec en lletres"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:9
 msgid "Position of check on page"
@@ -7831,63 +7831,63 @@ msgid ""
 "This value contains the X,Y coordinates for the start of the date line on "
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
-msgstr ""
+msgstr "Aquest valor conté les coordenades X, Y de l'inici de la línia de la data en el xec. L'inici de les coordenades es correspon a la cantonada inferior dreta de la posició de xec especificada."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:19
 msgid ""
 "This value contains the X,Y coordinates for the start of the memo line on "
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
-msgstr ""
+msgstr "Aquest valor conté les coordenades X, Y de l'inici de la línia de l'anotació en el xec. L'inici de les coordenades es correspon a la cantonada inferior dreta de la posició de xec especificada."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:20
 msgid ""
 "This value contains the X,Y coordinates for the start of the numerical "
 "amount line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
-msgstr ""
+msgstr "Aquest valor conté les coordenades X, Y de l'inici de la línia de l'import numèric en el xec. L'inici de les coordenades es correspon a la cantonada inferior dreta de la posició de xec especificada."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:21
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee line on "
 "the check."
-msgstr ""
+msgstr "Aquest valor conté les coordenades X, Y de l'inici de la línia del pagador xec."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:22
 msgid ""
 "This value contains the X,Y coordinates for the start of the written amount "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
-msgstr ""
+msgstr "Aquest valor conté les coordenades X, Y de l'inici de la línia de l'import en lletra en el xec. L'inici de les coordenades es correspon a la cantonada inferior dreta de la posició de xec especificada."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:23
 msgid ""
 "This value contains the Y coordinate for the bottom edge of the check. This "
 "coordinate is from the bottom edge of the sheet of paper."
-msgstr ""
+msgstr "Aquest valor conté la coordenada Y de la cantonada inferior del xec. L'inici d'questa coordenada es correspon amb la cantonada inferior del full de paper."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:24
 msgid ""
 "This value specifies the predefined check format to use. The number is the 0-"
 "based index into the list of known check formats."
-msgstr ""
+msgstr "Aquest valor especifica el format de xec predefinit a utilitzar. El número és l'índex amb base 0 de la llista de formats de xec reconeguts."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:25
 msgid "Which check position to print"
-msgstr ""
+msgstr "La posició de xec a imprimir"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:1
 msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
 "a credit card payment. Otherwise do not prompt the user for this."
-msgstr ""
+msgstr "Si és actiu, se li demanarà a l'usuari que entri un pagament de targeta de crèdit un cop hagi conciliat un compte de targeta de crèdit. En cas contrari, no se li demanarà res."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:2
 msgid ""
 "If active, all transactions marked as cleared in the register will appear "
 "already selected in the reconcile dialog. Otherwise no transactions will be "
 "initially selected."
-msgstr ""
+msgstr "Si és actiu, tots els assentaments marcats com a liquidats en el registre apareixeran seleccionats en el diàleg de conciliació. En cas contrari, no es preseleccionarà cap assentament."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:3
 msgid "Pre-select cleared transactions"
@@ -7940,15 +7940,15 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:5
 msgid "Set the \"auto create\" flag by default"
-msgstr ""
+msgstr "Estableix el senyalador «auto create» de manera predeterminada"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:6
 msgid "Set the \"notify\" flag by default"
-msgstr ""
+msgstr "Estableix el senyalador «notify» de manera predeterminada"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:7
 msgid "Show \"since last run\" dialog when a file is opened."
-msgstr ""
+msgstr "Mostra el diàleg «since last run» en obrir un fitxer."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:8
 msgid ""
@@ -7962,7 +7962,7 @@ msgstr ""
 msgid ""
 "Enables the \"Tip Of The Day\" when GnuCash starts up. If active, the dialog "
 "will be shown. Otherwise it will not be shown."
-msgstr ""
+msgstr "Habilita el «Consell del dia» en iniciar-se el GnuCash. Si és actiu, es mostrarà el diàleg. En cas contrari, no es mostrarà."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:2
 msgid "Show \"Tip Of The Day\" at GnuCash start"
@@ -8157,7 +8157,7 @@ msgstr ""
 msgid ""
 "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
 msgstr ""
-"Si s'habilita, s'emmprarà un format horari de 24 hores. En cas contrari "
+"Si s'habilita, s'emprarà un format horari de 24 hores. En cas contrari "
 "s'utilitzarà un format horari de 12 hores."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:37
@@ -8614,7 +8614,7 @@ msgid ""
 "This setting contains the width of the named column in the most recently "
 "closed register window. Changing these values will change the sizes of the "
 "columns in the next opened register"
-msgstr ""
+msgstr "Aquest paràmetre conté l'amplada de la columna anomenada a la darrera finestra de registre que s'hagi tancat. En canviar aquests valors, es canviaran les mides de les columnes del propre registre que s'obri."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_register.schemas.in.h:2
 msgid "Width of a column in the dialog"
@@ -9249,7 +9249,7 @@ msgid ""
 "When you click Apply, GnuCash will install the gconf data into your local ~/."
 "gconf file and restart the gconf backend.  The %s script must be found in "
 "your search path for this to work correctly."
-msgstr ""
+msgstr "Un cop cliqueu a «Aplica», el GnuCash instal·larà les dades del gconf en el vostre fitxer ~/.gconf local i reiniciarà el rerefons del gconf. De manera que això funcioni, heu de tenir l'script %s ubicat en el camí de cerca d'executables."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:416
 msgid ""
@@ -9258,7 +9258,7 @@ msgid ""
 "with the command 'gconftool-2 --shutdown' before restarting GnuCash.  If you "
 "have not already done so, you can click the Back button and copy the "
 "necessary text from the dialog."
-msgstr ""
+msgstr "Heu triat resoldre el problema vós mateix/a. Un cop cliqueu a «Aplica», sortireu del GnuCash. Llavors hauríeu de corregir el problema i reiniciar el rerefons del gconf amb l'ordre «gconftool-2 --shutdown» abans de tornar a iniciar el GnuCash. En cas que no ho hàgiu fet, podeu prémer el botó «Endarrere» i copiar el text necessari del diàleg."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:422
 #, c-format
@@ -9266,14 +9266,14 @@ msgid ""
 "You have chosen to correct the problem by yourself.  When you click Apply, "
 "GnuCash will exit.  Please run the %s script which will install the "
 "configuration data and restart the gconf backend."
-msgstr ""
+msgstr "Heu triat resoldre el problema vós mateix/a. Un cop cliqueu a «Aplica» sortireu del GnuCash. Llavors hauríeu d'executar l'script %s per a instal·lar les dades de configuració i tornar a iniciar el rerefons del gconf."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:426
 msgid ""
 "You have already corrected the problem and restarted the gconf backend with "
 "the command 'gconftool-2 --shutdown'.  When you click Apply, GnuCash will "
 "continue loading."
-msgstr ""
+msgstr "Ja heu corregit el problema i tornat a iniciar el rerefons del gconf amb l'ordre «gconftool-2 --shutdown». Un cop cliqueu a «Aplica», el GnuCash continuarà amb el procés de càrrega habitual."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:189
 msgid ""
@@ -9296,6 +9296,11 @@ msgid ""
 "Press 'Forward' now to select the correct character encoding for your data "
 "file."
 msgstr ""
+"El fitxer que esteu intentant carregar és d'una versió antiga del GnuCash, la qual no especifica la codificació de caràcters utilitzada. Això vol dir que pot ser que el text del vostre fitxer de dades es llegeixi de manera incorrecta, cosa que no es pot solucionar de manera automàtica. De totes maneres, el format de fitxer del GnuCash 2.0.0 ja especifica la codificació de manera detallada, per la qual cosa no haureu de tornar a repetir aquest pas.\n"
+"\n"
+"El GnuCash ara intentarà detectar la codificació de caràcters correcta del vostre fitxer de dades. A la pàgina següent se us mostraran els textos obtinguts com a resultat d'aquesta estimació, els quals haureu de comprovar si són correctes. Un cop vegeu que els textos son llegibles, premeu «Endavant». En cas contrari, si els textos o certs caràcters no es mostren correctament, haureu de provar de seleccionar una altra codificació i comprovar-ne de nou els resultats. És possible que hàgiu d'editar la llista de codificacions de caràcters clicant el botó respectiu.\n"
+"\n"
+"Premeu «Endavant» ara per a seleccionar la codificació de caràctes correcta per al vostre fitxer de dades."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:209
 msgid "Ambiguous character encoding"
@@ -9309,6 +9314,9 @@ msgid ""
 "\n"
 "You can also go back and verify your selections by clicking on 'Back'."
 msgstr ""
+"El fitxer s'ha carregat de manera satisfactòria. Si premeu «Aplica» es desarà i es tornarà a carregar a l'aplicació principal. D'aquesta manera tindreu un fitxer de treball com a còpia de seguretat en el mateix directori.\n"
+"\n"
+"També podeu tornar enrere i verificar el que heu seleccionat si cliqueu a «Endarrere»."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:234
 msgid "Unicode"
@@ -9625,6 +9633,9 @@ msgid ""
 "operate properly but it may require some extra time to setup.  Do you wish "
 "to setup the configuration data?"
 msgstr ""
+"<b>No es poden trobar els valors predeterminats</b>\n"
+"\n"
+"No s'han trobat les dades de configuaració utilitzades per a especificar els valors predeterminats del GnuCash a les ubicacions per defecte del sistema. El GnuCash funcionarà tot i no tenir-les, però trigarà una estona més a configurar-se. Voleu preparar les dades de configuració ara?"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:4
 msgid "Choose method"
@@ -9664,14 +9675,14 @@ msgid ""
 "methods that can be used to make this data visible to GnuCash.  The first is "
 "to modify a system search path to include the data location.  The second is "
 "to copy the data into your home directory."
-msgstr ""
+msgstr "Les dades de configuració es troben en una ubicació no estàndard. Hi ha dos mètodes que es poden utilitzar per a fer visibles aquestes dades per al GnuCash. El primer es basa en modificar el camí de cerca d'executables del sistema, de manera que inclogui la ubicació de les dades. El segon és simplement copiar les dades al vostre directori d'usuari."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:13
 msgid ""
 "The configuration data used by GnuCash to specify its default values cannot "
 "be found in the default system locations.  Without this data GnuCash will "
 "still operate properly, but it may require some extra time to set up."
-msgstr ""
+msgstr "No es troben les dades de configuració predeterminades del GnuCash en les ubicacions per defecte del sistema. El GnuCash funcionarà de totes maneres, però pot ser que trigui una estona més a configurar-se."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:14
 msgid "The data has _already been installed in another window"
@@ -9687,14 +9698,14 @@ msgid ""
 "the .gconf directory within your home directory.  The disadvantage to this "
 "method is that future updates to GnuCash will not update your local settings "
 "to add in new keys."
-msgstr ""
+msgstr "Aquest mètode instal·larà els paràmetres per defecte i descripcions del GnuCash en el directori .gconf dins el vostre directori d'usuari. L'inconvenient d'aquest és que les actualitzacions futures del GnuCash no actualitzaran els vostres paràmetres locals per a afegir-hi noves claus."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:17
 msgid ""
 "This method will modify the file .gconf.path in your home directory.  It "
 "will add the GnuCash install directory to this path so that GnuCash can find "
 "its default settings and their descriptions."
-msgstr ""
+msgstr "Aquest mètode modificarà el fitxer .gconf.path del vostre directori d'usuari. Hi afegirà el directori d'instal·lació del GnuCash de manera que aquest pugui trobar els seus paràmetres predeterminats i les seves descripcions."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:18
 msgid "Update GnuCash configuration data"
@@ -9713,19 +9724,21 @@ msgid ""
 "You have chosen to install the configuration data used by GnuCash into the "
 "~/.gconf directory.  GnuCash can do this for you, or tell you how to do it "
 "yourself."
-msgstr ""
+msgstr "Heu triat instal·lar les dades de configuració del GnuCash en el directori ~/.gconf. El GnuCash pot fer-ho per vós, o bé podeu indicar-li que ho fareu vós mateix."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:22
 msgid ""
 "You have chosen to update the system search path.  GnuCash can do this for "
 "you, or it can tell you how to do it yourself."
-msgstr ""
+msgstr "Heu triat actualitzar el camí de cerca del sistema. El GnuCash pot fer-ho per vós, o bé podeu indicar-li que ho fareu vós mateix."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:23
 msgid ""
 "You will then need to restart the gconf backend with the\n"
 "command 'gconftool-2 --shutdown'."
 msgstr ""
+"Llavors haureu de tornar a iniciar el rerefons del gconf\n"
+"amb l'ordre «gconftool-2 --shutdown»."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:25
 msgid "_GnuCash installs the data"
@@ -9779,6 +9792,9 @@ msgid ""
 "Click \"Forward\" to finish loading files and move to the next step of the "
 "GnuCash Datafile import process."
 msgstr ""
+"Cliqueu a «Carrega un altre fitxer» si teniu més dades a importar. Feu això si heu desat els vostres comptes en fitxers separats del GnuCash.\n"
+"\n"
+"Cliqueu a «Endavant» per a finalitzar la importació de fitxers i continuar amb el pas següent del procés d'importació del fitxer de dades del GnuCash."
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:8
 msgid "Convert the file"
@@ -10261,7 +10277,7 @@ msgstr "No inverteixis el signe de cap compte."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:75
 msgid "Double _mode colors alternate with transactions"
-msgstr "Els colord del _mode doble s'alternen per assentaments"
+msgstr "Els colors del _mode doble s'alternen per assentaments"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:76
 msgid "Draw _vertical lines between columns"
@@ -10287,7 +10303,7 @@ msgstr "Quantes xifres de coma decimal s'ompliran de manera automàtica."
 msgid ""
 "If active, GnuCash shows a confirmation question each time the auto-save "
 "feature is started. Otherwise no extra explanation is shown."
-msgstr ""
+msgstr "Si és actiu, el GnuCash mostrarà una pregunta de confirmació cada cop que s'iniciï el desament automàtic. En cas contrari, no es mostrarà cap aclariment addicional."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:83
 msgid ""
@@ -10795,6 +10811,11 @@ msgid ""
 "\n"
 "Should your file be saved automatically?"
 msgstr ""
+"El vostre fitxer de dades s'ha de desar al disc dur per a emmagatzemar els vostres canvis. El GnuCash permet desar-lo de manera automàtica cada %d minuts, tal com si haguéssiu premut el boto «Desa» cada vegada.\n"
+"\n"
+"Podeu canviar l'interval de temps o bé desactivar aquesta funció des del menú Edita -> Preferències -> General -> Interval de temps del desament automàtic.\n"
+"\n"
+"Voleu que el vostre fitxer de dades es desi de manera automàtica?"
 
 #: ../src/gnome-utils/gnc-autosave.c:107
 msgid "_Yes, this time"
@@ -11291,13 +11312,13 @@ msgstr "No s'ha pogut carregar l'URL especificat."
 msgid ""
 "Secure HTTP access is disabled. You can enable it in the Network section of "
 "the Preferences dialog."
-msgstr ""
+msgstr "L'accés segur per HTTP està inhabilitat. Podeu habilitar-lo a la secció de Xarxa del diàleg de Preferències."
 
 #: ../src/gnome-utils/gnc-html.c:518 ../src/gnome-utils/gnc-html.c:974
 msgid ""
 "Network HTTP access is disabled. You can enable it in the Network section of "
 "the Preferences dialog."
-msgstr ""
+msgstr "L'accés HTTP està inhabilitat. Podeu habilitar-lo a la secció de Xarxa del diàleg de Preferències."
 
 #. %s is a URL (some location somewhere).
 #: ../src/gnome-utils/gnc-html.c:904
@@ -11717,7 +11738,7 @@ msgstr "Nom del compte"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:516
 msgid "Commodity"
-msgstr ""
+msgstr "Divisa/valor"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/general-ledger.scm
@@ -11732,15 +11753,15 @@ msgstr "Codi de compte"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:533
 msgid "Last Num"
-msgstr ""
+msgstr "Darrer núm"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:538
 msgid "Present"
-msgstr ""
+msgstr "Actual"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:545
 msgid "Present (Report)"
-msgstr ""
+msgstr "Actual (informe)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:558
 msgid "Balance (Report)"
@@ -12193,7 +12214,7 @@ msgstr "Trieu un format"
 
 #: ../src/import-export/generic-import.glade.h:14
 msgid "Commercial ATM _fees threshold"
-msgstr "Llindar per a la _comissió dels caixers automatics"
+msgstr "Llindar per a la _comissió dels caixers automàtics"
 
 #: ../src/import-export/generic-import.glade.h:18
 msgid "Enable edit match action"
@@ -12205,14 +12226,14 @@ msgstr "Habilita l'acció d'omissió de la transacció"
 
 #: ../src/import-export/generic-import.glade.h:20
 msgid "Enable the EDIT action in the transaction matcher.  NOT YET SUPPORTED"
-msgstr ""
+msgstr "Habilita l'acció EDITA en el gestor de concordances de transaccions. ENCARA NO FUNCIONA"
 
 #: ../src/import-export/generic-import.glade.h:21
 msgid ""
 "Enable the SKIP action in the transaction matcher.  If enabled, a "
 "transaction whose best match's score is in the yellow zone (above the Auto-"
 "ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by default."
-msgstr ""
+msgstr "Habilita l'acció OMET en el gestor de concordances de transaccions. Si s'habilita, una transacció la puntuació de concordança de la qual es trobi a la zona groga (per sobre del llindar d'ADDICIÓ automàtica, però per sota del llindar de LIQUIDACIÓ automàtica) s'ometrà per defecte."
 
 #: ../src/import-export/generic-import.glade.h:22
 msgid ""
@@ -12455,6 +12476,9 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
+"No heu introduït cap finalitat per a la transacció, la qual s'ha d'especificar per a transferències en línia.\n"
+"\n"
+"Voleu tornar a introduir la tasca?"
 
 #: ../src/import-export/hbci/dialog-hbcitrans.c:592
 msgid ""
@@ -12807,6 +12831,20 @@ msgid ""
 "Press \"Cancel\" if you do not wish to setup any Online Banking connection "
 "now."
 msgstr ""
+"Aquest auxiliar us ajudarà a configurar la connexió de banca electrònica amb el vostre banc.\n"
+"\n"
+"Primer de tot haureu de sol·licitar aquest servei al vostre banc. Un cop l'hàgiu obtingut, el banc us enviarà una carta amb les següents dades:\n"
+"\n"
+"* El codi bancari de la institució bancària\n"
+"* L'identificador d'usuari que us vincula amb la institució\n"
+"* L'adreça d'internet del servidor de banca electrònica de la institució\n"
+"* Si utilitzeu l'accés HBCI, també rebreu informació sobre la clau de xifratge pública de la institució («Ini-Letter»)\n"
+"\n"
+"En els passos següents se us demanarà que introduïu aquesta informació. Premeu «Endavant».\n"
+"\n"
+"AVÍS: NO S'OFEREIX CAP MENA DE GARANTIA. Alguns bancs funcionen amb servidors que implementen la banca electrònica de manera incompleta. No hauríeu d'utilitzar la banca electrònica per a transferències en les quals el temps és crític, atès que a vegades el banc no proporciona un avís correcte en rebutjar una transacció.\n"
+"\n"
+"Premeu «Cancel·la» en cas que no vulgueu configurar cap connexió de banca electrònica en aquest moment."
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:66
 msgid "Use Transaction Template"
@@ -12957,7 +12995,7 @@ msgstr ""
 msgid ""
 "You have changed the list of online transfer templates, but you cancelled "
 "the transfer dialog. Do you nevertheless want to store the changes?"
-msgstr ""
+msgstr "Heu canviat la llista de plantilles de transferències en línia, però heu cancel·lat el diàleg de transferència. Voleu emmagatzemar els canvis de totes maneres?"
 
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:250
 msgid "Online Banking Direct Debit Note"
@@ -12985,6 +13023,9 @@ msgid ""
 "ATTENTION: You have zero further wrong retries left!\n"
 "Do you want to try again?"
 msgstr ""
+"Heu introduït un PIN no vàlid.\n"
+"ATENCIÓ: aquest és l'últim intent que us queda!\n"
+"Voleu tornar-ho a provar?"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:370
 msgid ""
@@ -13313,7 +13354,7 @@ msgid ""
 "Please select a commodity to match the following exchange specific code. "
 "Please note that the exchange code of the commodity you select will be "
 "overwritten."
-msgstr ""
+msgstr "Seleccioneu una divisa/valor que concordi amb el codi de mercat de valors següent. Tingueu en compte que se sobreescriureà el codi de la divisa/valor que seleccioneu."
 
 #: ../src/import-export/import-format-dialog.c:59
 msgid "Period: 123,456.78"
@@ -13407,7 +13448,7 @@ msgstr "(no)"
 #: ../src/import-export/qif-import/qif.glade.h:9
 msgid "Click \"Back\" to cancel the loading of this file and choose another."
 msgstr ""
-"Cliqueu «Enrere» per a cancel·lar el carregament d'aquest fitxer i trieu-ne "
+"Cliqueu «Enrere» per a cancel·lar el carregament d'aquest fitxer i triar-ne "
 "un altre."
 
 #: ../src/import-export/import-provider-format.glade.h:3
@@ -13602,15 +13643,15 @@ msgstr "(desglossament)"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1522
 msgid "You must enter a Type for the commodity."
-msgstr ""
+msgstr "Heu d'introduir un tipus per al valor."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1529
 msgid "You must enter a name for the commodity."
-msgstr ""
+msgstr "Heu d'introduir un nom per al valor."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1534
 msgid "You must enter an abbreviation for the commodity."
-msgstr ""
+msgstr "Heu d'introduir una abreviació per al valor."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1543
 msgid "You must enter an existing national currency or enter a different type."
@@ -13625,7 +13666,7 @@ msgstr "Introduïu informació sobre «%s»"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1693
 msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-msgstr ""
+msgstr "Trieu el mercat del valor (NASDAQ, NYSE, etc)."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1717
 msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
@@ -14060,7 +14101,7 @@ msgstr "Utilitza concordança bayesiana"
 msgid ""
 "This transaction is already being edited in another register. Please finish "
 "editing it there first."
-msgstr ""
+msgstr "Aquest assentament està essent editat en un altre registre. Hauríeu de finalitzar-ne l'edició allí primer."
 
 #: ../src/register/ledger-core/split-register.c:408
 msgid "Save transaction before duplicating?"
@@ -14070,13 +14111,13 @@ msgstr "Voleu desar l'assentament abans de duplicar-lo?"
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before duplicating the transaction, or cancel the duplication?"
-msgstr ""
+msgstr "L'assentament actual ha canviat. Voleu emmagatzemar els canvis abans de duplicar-lo, o bé cancel·lar-ne la duplicació?"
 
 #: ../src/register/ledger-core/split-register.c:717
 msgid ""
 "You are about to overwrite an existing split. Are you sure you want to do "
 "that?"
-msgstr ""
+msgstr "Esteu a punt de sobreescriure un desglossament existent. Esteu segur que voleu fer-ho?"
 
 #: ../src/register/ledger-core/split-register.c:746
 msgid ""
@@ -14465,6 +14506,9 @@ msgid ""
 "\n"
 "'%s'"
 msgstr ""
+"No es pot modificar o suprimir aquesta transacció, atès que està marcada com a només-lectura pel motiu següent:\n"
+"\n"
+"«%s»"
 
 #: ../src/register/ledger-core/split-register-model.c:1670
 msgid "Change reconciled split?"
@@ -14544,7 +14588,7 @@ msgid ""
 "Add the current report to the `Custom' menu for later use. The report will "
 "be saved in the file ~/.gnucash/saved-reports-2.0. It will be accessible as "
 "menu entry in the report menu at the next startup of GnuCash."
-msgstr ""
+msgstr "Afegeix l'informe actual al menú «Personalitzat» per a poder-lo utilitzar més endavant. L'informe es desarà en el fitxer ~/.gnucash/saved-reports-2.0 i s'hi podrà accedir a través del menú d'informes la propera vegada que s'iniciï el GnuCash."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:974
 msgid "Export _Report"
@@ -15101,7 +15145,7 @@ msgstr "Nom de la persona que prepara l'informe"
 #: ../intl-scm/guile-strings.c:246 ../intl-scm/guile-strings.c:370
 #: ../intl-scm/guile-strings.c:458 ../intl-scm/guile-strings.c:582
 msgid "Prepared for"
-msgstr "Preparar per a"
+msgstr "Preparat per a"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -15595,17 +15639,17 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:758 ../intl-scm/guile-strings.c:1590
 #: ../intl-scm/guile-strings.c:1812 ../intl-scm/guile-strings.c:1920
 msgid "Report on these accounts, if display depth allows."
-msgstr ""
+msgstr "Mostra un informe d'aquests comptes, si la profunditat de visualització ho permet."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:760
 msgid "Include sub-account balances in printed balance?"
-msgstr ""
+msgstr "Voleu incloure els saldos dels subcomptes en el saldo de l'informe?"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:762
 msgid "Group the accounts in main categories?"
-msgstr ""
+msgstr "Voleu agrupar els comptes en les categories principals?"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:764
@@ -15616,7 +15660,7 @@ msgstr ""
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:766
 msgid "Display the account's foreign currency amount?"
-msgstr ""
+msgstr "Voleu mostrar l'import del compte en moneda estrangera?"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/price-scatter.scm
@@ -15886,7 +15930,7 @@ msgid ""
 "A custom report with this name already exists. Either rename the report to "
 "store it with a different name, or edit your saved-reports file and delete "
 "the section with the following name: "
-msgstr ""
+msgstr "Ja existeix un informe personalitzat amb aquest nom. Deseu-lo amb un altre nom, o bé editeu el fitxer d'informes desats i suprimiu-ne la secció amb el nom següent: "
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:874
@@ -15923,13 +15967,13 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:890 ../intl-scm/guile-strings.c:1480
 #: ../intl-scm/guile-strings.c:1672 ../intl-scm/guile-strings.c:2166
 msgid "Closing Entries"
-msgstr ""
+msgstr "Entrades de tancament"
 
 #. src/report/report-system/html-acct-table.scm
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:892 ../intl-scm/guile-strings.c:1478
 msgid "Adjusting Entries"
-msgstr ""
+msgstr "Entrades d'ajustament"
 
 #. src/report/report-system/report-utilities.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -16654,7 +16698,7 @@ msgstr "Alçada del diagrama"
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1192
 msgid "Calculate the price of this commodity."
-msgstr ""
+msgstr "Calcula el preu d'aquest valor."
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1200
@@ -16674,7 +16718,7 @@ msgstr "Base de dades de les cotitzacions"
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1206
 msgid "The recorded prices"
-msgstr "LEs cotitzacions enregistrades"
+msgstr "Les cotitzacions enregistrades"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1208
@@ -16702,12 +16746,12 @@ msgstr "%s a %s"
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1216
 msgid "Double-Weeks"
-msgstr ""
+msgstr "Setmanes dobles"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1222
 msgid "All Prices equal"
-msgstr ""
+msgstr "Tots els preus són iguals"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1224
@@ -16750,7 +16794,7 @@ msgstr ""
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1238
 msgid "Identical commodities"
-msgstr ""
+msgstr "Els valors són idèntics"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1240
@@ -16776,7 +16820,7 @@ msgstr "Diagrama d'ingressos i despeses"
 #: ../intl-scm/guile-strings.c:1272 ../intl-scm/guile-strings.c:1742
 #: ../intl-scm/guile-strings.c:2858 ../intl-scm/guile-strings.c:2928
 msgid "Report on these accounts, if chosen account level allows."
-msgstr ""
+msgstr "Mostra un informe d'aquests comptes, si la profunditat de visualització de comptes ho permet."
 
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:1274
@@ -16871,7 +16915,7 @@ msgstr "Totals"
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:1336
 msgid "Cash Flow"
-msgstr "Flux de Caixa"
+msgstr "Flux de caixa"
 
 #. src/report/standard-reports/cash-flow.scm
 #. src/report/standard-reports/budget.scm
@@ -17069,7 +17113,7 @@ msgstr "Nombre màxim de nivells que es mostraran a l'arbre de comptes"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1404
 msgid "Merchandising"
-msgstr ""
+msgstr "Merxandatge"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1406
@@ -17736,7 +17780,7 @@ msgstr "Criteri d'ordenació"
 #: ../intl-scm/guile-strings.c:1744 ../intl-scm/guile-strings.c:2860
 #: ../intl-scm/guile-strings.c:2930
 msgid "Show accounts to this depth and not further"
-msgstr ""
+msgstr "Mostra els comptes fins a aquesta profunditat i prou"
 
 #. src/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -19732,12 +19776,12 @@ msgstr "Factura&nbsp;#&nbsp;%d"
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3426
 msgid "Invoice&nbsp;Date"
-msgstr "Factura&nbsp;data"
+msgstr "Data&nbsp;de&nbsp;la&nbsp;factura"
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3428
 msgid "Due&nbsp;Date"
-msgstr ""
+msgstr "Data&nbsp;de&nbsp;venciment"
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3430
@@ -20090,7 +20134,7 @@ msgid ""
 "upgrading from earlier versions of GnuCash, the section \"What's new in "
 "GnuCash 2.0\" is particularly interesting. You can access the manual under "
 "the Help menu."
-msgstr ""
+msgstr "El manual en línia del GnuCash conté molta informació útil. Si heu actualitzat la vostra versió del GnuCash, trobareu la secció «Què té de nou el GnuCash 2.0» força interessant. Podeu accedir al manual a través del menú d'ajuda."
 
 #: ../doc/tip_of_the_day.list.in:6
 msgid ""
@@ -20098,7 +20142,7 @@ msgid ""
 "other programs that export QIF files or OFX files.  In the File menu, click "
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
-msgstr ""
+msgstr "Podeu importar de manera fàcil les vostres dades financeres del Quicken, Microsoft Money, o bé altres programes que exportin fitxers QIF o OFX. Al menú Fitxer, cliqueu en el submenú Importa i llavors a l'entrada QIF o OFX, segons sigui el cas. Finalment, simplement haureu de seguir les instruccions de l'auxiliar d'importació."
 
 #: ../doc/tip_of_the_day.list.in:11
 msgid ""
@@ -20106,7 +20150,7 @@ msgid ""
 "GnuCash uses accounts instead of categories to track income and expenses.  "
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
-msgstr ""
+msgstr "Si ja heu utilitzat altres programes de finances com ara el Quicken, tingueu en compte que el GnuCash utilitza comptes en lloc de categories per a fer el seguiment dels ingressos i despeses. Si voleu obtenir més informació sobre els comptes d'ingressos i despeses, consulteu el manual en línia del GnuCash."
 
 #: ../doc/tip_of_the_day.list.in:16
 msgid ""
@@ -20114,19 +20158,14 @@ msgid ""
 "This will bring up a dialog box where you can enter account details.  For "
 "more information on choosing an account type or setting up a chart of "
 "accounts, please see the GnuCash online manual."
-msgstr ""
-"Creeu nous comptes tot clicant el botó «Nou» a la barra d'einesde la finestra "
-"principal.  En fer-ho es mostrarà un quadre de diàlegon podreu introduir els "
-"detalls del compte.  Per a més informaciósobre els diferents tipus de "
-"comptes o com crear-ne un conjuntestructurat, consulteu el manual en línia "
-"de GnuCash."
+msgstr "Podeu crear comptes nous en clicar al botó «Nou» a la barra d'eines de la finestra principal.  En fer-ho es mostrarà un quadre de diàleg on podreu introduir els detalls del compte. Per a més informació sobre els diferents tipus de comptes o com crear-ne un conjunt estructurat, consulteu el manual en línia del GnuCash."
 
 #: ../doc/tip_of_the_day.list.in:22
 msgid ""
 "Click the right mouse button in the main window to bring up the account menu "
 "options. Within each register, clicking the right mouse button brings up the "
 "transaction menu options."
-msgstr ""
+msgstr "Feu clic amb el botó dret del ratolí a la finestra principal per a mostrar el menú d'opcions del compte. Dins de cada registre, es mostrarà el menú d'opcions de l'assentament en fer-hi clic amb el botó dret."
 
 #: ../doc/tip_of_the_day.list.in:26
 msgid ""
@@ -20134,7 +20173,7 @@ msgid ""
 "deductions, click the Split button in the tool bar. Alternatively, in the "
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
-msgstr ""
+msgstr "Si voleu introduir un assentament amb desglossaments múltiples, com ara una nòmina de salari amb deduccions diverses, feu clic al botó «Desglossa» de la barra d'eines. De manera alternativa, podeu triar la visualització de llibre major autodesglossat o bé la de diari d'assentaments al menú «Visualitza»."
 
 #: ../doc/tip_of_the_day.list.in:31
 msgid ""
@@ -20142,7 +20181,7 @@ msgid ""
 "add, subtract, multiply and divide .  Simply type the first value, then "
 "select '+', '-','*', or '/'.  Type the second value and press Enter to "
 "record the calculated amount."
-msgstr ""
+msgstr "En introduir quantitats en un registre, podeu utilitzar la calculadora del GnuCash per a afegir, substreure, multiplicar o dividir. Simplement heu d'introduir el primer valor, seleccionar «+», «-», «*» o «/», introduir el segon valor i prémer la tecla de retorn per a registrar la quantitat calculada."
 
 #: ../doc/tip_of_the_day.list.in:36
 msgid ""
@@ -20150,11 +20189,7 @@ msgid ""
 "first letter(s) of a common transaction description, GnuCash will "
 "automatically complete the remainder of the transaction as it was last "
 "entered."
-msgstr ""
-"«Emplenar ràpid» facilita la introducció d'assentaments. Quanescriviu la "
-"primera lletra o lletres de la descripció d'un assentament habitual, "
-"elGnuCash completarà automàticament la resta de l'assentament tal i com fou "
-"introduït la darrera vegada."
+msgstr "La compleció automàtica facilita la introducció d'assentaments. En escriure la primera lletra o lletres de la descripció d'un assentament habitual, el GnuCash completarà automàticament la resta de l'assentament tal i com fou introduït la darrera vegada."
 
 #: ../doc/tip_of_the_day.list.in:41
 msgid ""
@@ -20163,50 +20198,34 @@ msgid ""
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash.)"
-msgstr ""
-"Escriviu les primeres lletres d'un nom de compte existent a la columna "
-"«Transferència» del registre, i el GnuCash completarà el nom a partir de la "
-"llista de comptes existents. En quant als subcomptes, escriviu les primeres "
-"lletres del compte pare, seguides de «:» i les primeres lletres del subcompte "
-"(p.ex. A:E per Actius:Efectiu.)"
+msgstr "Escriviu les primeres lletres d'un nom de compte existent a la columna «Transferència» del registre, i el GnuCash completarà el nom a partir de la llista de comptes existents. En quant als subcomptes, escriviu les primeres lletres del compte pare, seguides de «:» i les primeres lletres del subcompte (p.ex. A:E per Actius:Efectiu.)"
 
 #: ../doc/tip_of_the_day.list.in:47
 msgid ""
 "Want to see all your subaccount transactions in one register? From the main "
 "menu, highlight the parent account and select Accounts -> Open Subaccounts "
 "from the menu."
-msgstr ""
-"Voleu veure totes les transaccions dels vostres subcomptes en un únic "
-"registre? Seleccioneu el compte pare a la finestra de comptes i escolliu "
-"l'opció Comptes -> Obre subcomptes del menú principal."
+msgstr "Voleu veure tots els assentaments dels vostres subcomptes en un únic registre? Seleccioneu el compte pare a la finestra de comptes i escolliu l'opció Comptes -> Obre subcomptes del menú principal."
 
 #: ../doc/tip_of_the_day.list.in:51
 msgid ""
 "When entering dates, you can type '+' or '-' to increment or decrement the "
 "selected date. You can use '+' and '-' to increment and decrement check "
 "numbers as well."
-msgstr ""
-"En introduir dades teclejar «+» o «-» per a incrementar o fer disminuir la "
-"data seleccionada. De la mateixa manera, també podeu fer servir «+» i «-» per "
-"a incrementar i fer disminuir els números de xec."
+msgstr "En introduir dades, podeu prémer les tecles «+» o «-» per a incrementar o disminuir la data seleccionada. De la mateixa manera, també podeu fer-les servir per a incrementar i disminuir els números de xec."
 
 #: ../doc/tip_of_the_day.list.in:55
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Alt+Page "
 "Up/Down."
-msgstr ""
-"Per a deplaçar-vos entre múltiples pestanyes a la finestra principal, premeu "
-"la combinació de tecles Ctrl-Alt-AvPg/RePg"
+msgstr "Per a desplaçar-vos entre múltiples pestanyes a la finestra principal, premeu la combinació de tecles Ctrl-Alt-AvPg/RePg"
 
 #: ../doc/tip_of_the_day.list.in:58
 msgid ""
 "In the reconcile window, you can press the spacebar to mark transactions as "
 "reconciled.  You can also press Tab and Shift-Tab to move between deposits "
 "and withdrawals."
-msgstr ""
-"A la finestra de conciliació podeu prémer la barra espaiadora per a "
-"marcarles transaccions com a conciliades.  També podeu prémer Tab i Majús-"
-"Tab per adesplaçar-vos entre imposicions i reintegraments."
+msgstr "A la finestra de conciliació podeu prémer la barra d'espai per a marcar les transaccions com a conciliades.  També podeu prémer les tecles Tab i Majús-Tab per a desplaçar-vos entre imposicions i reintegraments."
 
 #: ../doc/tip_of_the_day.list.in:62
 msgid ""
@@ -20214,37 +20233,34 @@ msgid ""
 "Transfer button in the register toolbar, select the accounts, and the "
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
-msgstr ""
+msgstr "Si voleu transferir fons entre comptes de monedes diferents, feu clic al botó de Transferència de la barra d'eines, seleccioneu els comptes i utilitzeu les opcions de Transferència monetària per a introduir el tipus de canvi o bé l'import en l'altra moneda."
 
 #: ../doc/tip_of_the_day.list.in:67
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom -> \"Custom Multicolumn Report\" report."
-msgstr ""
+msgstr "Podeu agrupar diversos informes en una única finestra, de manera que es mostri tota la informació financera que vulgueu en una mateixa visualització. Per a fer-ho utilitzeu l'entrada Informes -> Personalitzat i mostres -> Informe multicolumna personalitzat."
 
 #: ../doc/tip_of_the_day.list.in:72
 msgid ""
 "Style Sheets affect how reports are displayed.  Choose a style sheet for "
 "your report as a report option, and use the Edit -> Style Sheets menu to "
 "customize style sheets."
-msgstr ""
-"Els fulls d'estil afecten  la visualització dels informes.  Trieuun full "
-"d'estil per al vostre informe, i feu servirel menú Edita -> Fulls d'estil "
-"per personalitzar els fulls d'estil."
+msgstr "Els fulls d'estil afecten  la visualització dels informes. Trieu-ne un per al vostre informe, i feu servir el menú Edita -> Fulls d'estil per a personalitzar els fulls d'estil."
 
 #: ../doc/tip_of_the_day.list.in:76
 msgid ""
 "To raise the accounts menu in the transfer field of a register page, press "
 "the Menu key or the Ctrl-Down key combination."
-msgstr ""
+msgstr "Per a mostrar el menú de comptes en el camp de transferència d'una pàgina de registre, premeu la tecla de Menú o bé la combinació Ctrl-Fletxa avall."
 
 #: ../doc/tip_of_the_day.list.in:79
 msgid ""
 "The GnuCash developers are easy to contact.  As well as several mailing "
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
-msgstr ""
+msgstr "És molt fàcil contactar els desenvolupadors del GnuCash. Podeu utilitzar diverses llistes de correu o bé parlar amb ells en viu al xat de l'IRC, al canal #gnucash æ irc.gnome.org."
 
 #: ../doc/tip_of_the_day.list.in:83
 msgid ""
@@ -20253,7 +20269,7 @@ msgid ""
 "even more bizarre and inexplicable. There is another theory that this has "
 "already happened. Douglas Adams, \"The Restaurant at the End of the Universe"
 "\""
-msgstr ""
+msgstr "Hi ha una teoria que postula que si mai algú descobreix la finalitat de l'Univers i el perquè de la seva existència, aquest desapareixerà de manera instantània i serà substituït per quelcom encara més estrany i inexplicable. Hi ha una altra teoria que diu que això ja ha succeït. Douglas Adams, «El restaurant a la fi de l'univers»"
 
 #~ msgid "last day"
 #~ msgstr "darrer dia"
