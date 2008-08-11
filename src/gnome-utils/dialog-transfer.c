@@ -834,6 +834,7 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
   GNCAmountEdit *amount_edit, *price_edit, *to_amount_edit;
   gnc_numeric price, to_amount;
   Account *account;
+  int scu = 0;
 
   g_return_if_fail(xferData);
 
@@ -842,21 +843,23 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
   price_edit      = GNC_AMOUNT_EDIT(xferData->price_edit);
   to_amount_edit  = GNC_AMOUNT_EDIT(xferData->to_amount_edit);
 
+  /* Determine the SCU (smallest commodity unit) of the "to" amount. */
   account = gnc_transfer_dialog_get_selected_account(xferData, XFER_DIALOG_TO);
   if (account == NULL)
     account = gnc_transfer_dialog_get_selected_account(xferData,
                                                        XFER_DIALOG_FROM);
+  if (account != NULL)
+    scu = xaccAccountGetCommoditySCU(account);
+  else if (xferData->to_commodity != NULL)
+    scu = gnc_commodity_get_fraction(xferData->to_commodity);
 
   /* Determine the amount to transfer. */
-  if (account == NULL ||
-      !gnc_amount_edit_evaluate(price_edit) ||
+  if (!gnc_amount_edit_evaluate(price_edit) ||
       gnc_numeric_zero_p(price = gnc_amount_edit_get_amount(price_edit)))
     to_amount = gnc_numeric_zero();
   else
     to_amount = gnc_numeric_mul(gnc_amount_edit_get_amount(amount_edit),
-                                price,
-                                xaccAccountGetCommoditySCU(account),
-                                GNC_RND_ROUND);
+                                price, scu, GNC_RND_ROUND);
 
   /* Update the dialog. */
   gnc_amount_edit_set_amount(to_amount_edit, to_amount);
