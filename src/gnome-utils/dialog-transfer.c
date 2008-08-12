@@ -1084,7 +1084,10 @@ gnc_xfer_dialog_is_exchange_dialog (XferDialog *xferData,
 {
   GNCAmountEdit *gae;
 
-  if (!xferData) return;
+  g_return_if_fail(xferData);
+  ENTER("xferData=%p, exch_rate=%p (%s)", xferData, exch_rate,
+        exch_rate == NULL ? "NULL" : xaccPrintAmount(*exch_rate,
+                                       gnc_default_print_info(FALSE)));
 
   gtk_widget_set_sensitive (xferData->amount_edit, FALSE);
   gtk_widget_set_sensitive (xferData->date_entry, FALSE);
@@ -1097,6 +1100,8 @@ gnc_xfer_dialog_is_exchange_dialog (XferDialog *xferData,
   gtk_widget_grab_focus (gnc_amount_edit_gtk_entry (gae));
 
   xferData->exch_rate = exch_rate;
+
+  LEAVE(" ");
 }
 
 /********************************************************************\
@@ -1683,7 +1688,6 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     edit = gnc_amount_edit_new();
     gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(edit),
                                    gnc_default_print_info (FALSE));
-    gnc_amount_edit_set_fraction(GNC_AMOUNT_EDIT(edit), PRECISION);
     hbox = glade_xml_get_widget (xml, "price_hbox");
     gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
     xferData->price_edit = edit;
