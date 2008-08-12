@@ -90,8 +90,8 @@
       <type>bool</type>
       <default>TRUE</default>
       <locale name="C">
-        <short>Show the CUSIP Code (Exchange Specific Data) column</short>
-        <long>Show the CUSIP Code (Exchange Specific Data) column</long>
+        <short>Show the ISIN/CUSIP Code (Exchange Specific Data) column</short>
+        <long>Show the ISIN/CUSIP Code (Exchange Specific Data) column</long>
       </locale>
     </schema>
     <schema>
