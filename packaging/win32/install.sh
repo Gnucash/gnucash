@@ -23,6 +23,8 @@ register_env_var GUILE_LDFLAGS " "
 register_env_var HH_CPPFLAGS " "
 register_env_var HH_LDFLAGS " "
 register_env_var INTLTOOL_PERL " "
+register_env_var LIBDBI_CPPFLAGS " "
+register_env_var LIBDBI_LDFLAGS " "
 register_env_var KTOBLZCHECK_CPPFLAGS " "
 register_env_var KTOBLZCHECK_LDFLAGS " "
 register_env_var PATH ":"
@@ -929,6 +931,69 @@ function inst_aqbanking() {
     fi
 }
 
+function inst_libdbi() {
+    setup LibDBI
+    _SQLITE3_UDIR=`unix_path ${SQLITE3_DIR}`
+    _LIBDBI_UDIR=`unix_path ${LIBDBI_DIR}`
+    _LIBDBI_DRIVERS_UDIR=`unix_path ${LIBDBI_DRIVERS_DIR}`
+    add_to_env -I$_LIBDBI_UDIR/include LIBDBI_CPPFLAGS
+    add_to_env -L$_LIBDBI_UDIR/lib LIBDBI_LDFLAGS
+    if test -f ${_SQLITE3_UDIR}/bin/libsqlite3-0.dll
+    then
+        echo "SQLite3 already installed.  skipping."
+    else
+        wget_unpacked $SQLITE3_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/sqlite-*
+        qpushd $TMP_UDIR/sqlite-*
+	    ./configure \
+	        --prefix=${_SQLITE3_UDIR}
+	    make
+	    make install
+	qpopd
+        test -f ${_SQLITE3_UDIR}/bin/libsqlite3-0.dll || die "SQLite3 not installed correctly"
+    fi
+    if test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll
+    then
+        echo "libdbi already installed.  skipping."
+    else
+        wget_unpacked $LIBDBI_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/libdbi-0*
+        qpushd $TMP_UDIR/libdbi-0*
+            [ -n "$LIBDBI_PATCH" -a -f "$LIBDBI_PATCH" ] && \
+                patch -p0 < $LIBDBI_PATCH
+	    ./configure \
+	        --disable-docs \
+	    	--prefix=${_LIBDBI_UDIR}
+	    make
+	    make install
+        qpopd
+        test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll || die "libdbi not installed correctly"
+    fi
+    if test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdsqlite3.dll
+    then
+        echo "libdbi drivers already installed.  skipping."
+    else
+        wget_unpacked $LIBDBI_DRIVERS_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/libdbi-drivers-*
+        qpushd $TMP_UDIR/libdbi-drivers*
+            [ -n "$LIBDBI_DRIVERS_PATCH" -a -f "$LIBDBI_DRIVERS_PATCH" ] && \
+                patch -p0 < $LIBDBI_DRIVERS_PATCH
+            [ -n "$LIBDBI_DRIVERS_PATCH2" -a -f "$LIBDBI_DRIVERS_PATCH2" ] && \
+                patch -p0 < $LIBDBI_DRIVERS_PATCH2
+	    ./configure \
+	        --disable-docs \
+		--with-dbi-incdir=${_LIBDBI_UDIR}/include \
+		--with-dbi-libdir=${_LIBDBI_UDIR}/lib \
+		--with-sqlite3 \
+		--with-sqlite3-dir=${_SQLITE3_UDIR} \
+	    	--prefix=${_LIBDBI_DRIVERS_UDIR}
+	    make
+	    make install
+        qpopd
+        test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdsqlite3.dll || die "libdbi drivers not installed correctly"
+    fi
+}
+
 function inst_libgda() {
     setup LibGDA
     _LIBGDA_UDIR=`unix_path ${LIBGDA_DIR}`
@@ -1002,12 +1067,13 @@ function inst_gnucash() {
             --prefix=$_INSTALL_WFSDIR \
             --enable-debug \
             --enable-schemas-install=no \
+	    --enable-dbi \
             ${LIBOFX_OPTIONS} \
             ${AQBANKING_OPTIONS} \
             --enable-binreloc \
             --enable-locale-specific-tax \
-            CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} -D_WIN32" \
-            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS}" \
+            CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} ${LIBDBI_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} -D_WIN32" \
+            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS} ${LIBDBI_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS}" \
             PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
 
         # Windows DLLs don't need relinking
@@ -1062,11 +1128,12 @@ function make_install() {
     # Create a startup script that works without the msys shell
     qpushd $_INSTALL_UDIR/bin
         echo "setlocal" > gnucash.bat
-        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBGDA_DIR}\\bin;%PATH%" > gnucash.bat
+        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBDBI_DIR}\\bin;${SQLITE3_DIR}\\bin;%PATH%" > gnucash.bat
         echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
         echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
         echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
         echo "set LTDL_LIBRARY_PATH=${INSTALL_DIR}\\lib" >> gnucash.bat
+	echo "set GNC_DBD_DIR=${LIBDBI_DRIVERS_DIR}\\lib\\dbd" >> gnucash.bat
         echo "start gnucash-bin %*" >> gnucash.bat
     qpopd
 }

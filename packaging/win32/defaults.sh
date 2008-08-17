@@ -267,6 +267,16 @@ set_default LIBGDA_DIR $GLOBAL_DIR\\libgda
 set_default LIBGDA_PATCH `pwd`/libgda-3.1.2-patch.diff
 set_default LIBGDA_PATCH2 `pwd`/libgda-3.1.2-patch2.diff
 
+set_default SQLITE3_URL "http://sqlite.org/sqlite-amalgamation-3.6.1.tar.gz"
+set_default SQLITE3_DIR $GLOBAL_DIR\\sqlite3
+set_default LIBDBI_URL "http://downloads.sourceforge.net/libdbi/libdbi-0.8.3.tar.gz"
+set_default LIBDBI_DIR $GLOBAL_DIR\\libdbi
+set_default LIBDBI_PATCH `pwd`/libdbi-0.8.3.patch
+set_default LIBDBI_DRIVERS_URL "http://downloads.sourceforge.net/libdbi-drivers/libdbi-drivers-0.8.3-1.tar.gz"
+set_default LIBDBI_DRIVERS_DIR $GLOBAL_DIR\\libdbi-drivers
+set_default LIBDBI_DRIVERS_PATCH `pwd`/libdbi-drivers-dbd_sqlite3.c.patch
+set_default LIBDBI_DRIVERS_PATCH2 `pwd`/libdbi-drivers-Makefile.in.patch
+
 set_default DOCBOOK_XSL_URL "$SF_MIRROR/docbook/docbook-xsl-1.72.0.zip"
 set_default UPDATE_DOCS yes
 set_default DOCS_REV "HEAD"
@@ -310,7 +320,7 @@ add_step inst_libofx
 add_step inst_gwenhywfar
 add_step inst_ktoblzcheck
 add_step inst_aqbanking
-add_step inst_libgda
+add_step inst_libdbi
 ##
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_inno

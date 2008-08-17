@@ -1,0 +1,24 @@
+Index: dbd_sqlite3.c
+===================================================================
+RCS file: /cvsroot/libdbi-drivers/libdbi-drivers/drivers/sqlite3/dbd_sqlite3.c,v
+retrieving revision 1.31
+diff -u -r1.31 dbd_sqlite3.c
+--- drivers/sqlite3/dbd_sqlite3.c	13 Aug 2008 22:56:03 -0000	1.31
++++ drivers/sqlite3/dbd_sqlite3.c	16 Aug 2008 20:23:23 -0000
+@@ -1369,11 +1369,11 @@
+   return db;
+ }
+ 
+-int dbd_geterror(dbi_conn_t *conn, int *errno, char **errstr) {
+-  /* put error number into errno, error string into errstr
+-   * return 0 if error, 1 if errno filled, 2 if errstr filled, 3 if both errno and errstr filled */
++int dbd_geterror(dbi_conn_t *conn, int *err_no, char **errstr) {
++  /* put error number into err_no, error string into errstr
++   * return 0 if error, 1 if err_no filled, 2 if errstr filled, 3 if both err_no and errstr filled */
+ 
+-  *errno = sqlite3_errcode((sqlite3 *)conn->connection);
++  *err_no = sqlite3_errcode((sqlite3 *)conn->connection);
+   *errstr = strdup((char*)sqlite3_errmsg((sqlite3 *)conn->connection));
+   return 3;
+ }
+
