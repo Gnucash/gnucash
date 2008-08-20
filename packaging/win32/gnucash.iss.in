@@ -193,6 +193,7 @@ begin
   FileString := FileString + 'set GUILE_LOAD_PATH=' + pkgdatadir + '\guile-modules;' + pkgdatadir + '\scm;' + appdir + '\share\guile\1.6;%GUILE_LOAD_PATH%'#13#10 ;
   FileString := FileString + 'set LTDL_LIBRARY_PATH=' + libdir + ''#13#10 ;
   FileString := FileString + 'set QOF_LIB_DIR=' + pkglibdir + ''#13#10 ;
+  FileString := FileString + 'set GNC_DBD_DIR=' + libdir + '\dbd'#13#10 ;
   FileString := FileString + 'start gnucash-bin %*'#13#10 ;
 
   { Save the final file }

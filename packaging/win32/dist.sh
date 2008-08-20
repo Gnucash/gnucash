@@ -34,6 +34,9 @@ function prepare() {
     _LIBOFX_UDIR=`unix_path $LIBOFX_DIR`
     _GWENHYWFAR_UDIR=`unix_path $GWENHYWFAR_DIR`
     _AQBANKING_UDIR=`unix_path $AQBANKING_DIR`
+    _SQLITE3_UDIR=`unix_path ${SQLITE3_DIR}`
+    _LIBDBI_UDIR=`unix_path ${LIBDBI_DIR}`
+    _LIBDBI_DRIVERS_UDIR=`unix_path ${LIBDBI_DRIVERS_DIR}`
     _LIBGDA_UDIR=`unix_path $LIBGDA_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
     _REPOS_UDIR=`unix_path $REPOS_DIR`
@@ -172,6 +175,16 @@ function dist_aqbanking() {
     cp -a ${_AQBANKING_UDIR}/share/locale ${DIST_UDIR}/lib
 }
 
+function dist_libdbi() {
+    setup LibDBI
+    cp -a ${_SQLITE3_UDIR}/bin/* ${DIST_UDIR}/bin
+    cp -a ${_SQLITE3_UDIR}/lib/* ${DIST_UDIR}/lib
+    cp -a ${_LIBDBI_UDIR}/bin/* ${DIST_UDIR}/bin
+    cp -a ${_LIBDBI_UDIR}/lib/* ${DIST_UDIR}/lib
+    mkdir ${DIST_UDIR}/lib/dbd
+    cp -a ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/* ${DIST_UDIR}/lib/dbd
+}
+
 function dist_libgda() {
     setup Libgda
     cp -a ${_LIBGDA_UDIR}/bin/* ${DIST_UDIR}/bin
@@ -254,7 +267,7 @@ dist_goffice
 dist_libofx
 dist_gwenhywfar
 dist_aqbanking
-dist_libgda
+dist_libdbi
 dist_gnucash
 finish
 qpopd

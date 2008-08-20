@@ -78,6 +78,10 @@ function eval_all() {
     eval_path $LIBOFX_DIR
     eval_path $GWENHYWFAR_DIR
     eval_path $AQBANKING_DIR
+    eval_path $LIBGDA_DIR
+    eval_path $SQLITE3_DIR
+    eval_path $LIBDBI_DIR
+    eval_path $LIBDBI_DRIVERS_DIR
     eval_path $BUILD_DIR
     eval_path $INSTALL_DIR
     eval_path $GNUCASH_DIR\\dist
