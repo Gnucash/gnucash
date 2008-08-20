@@ -906,6 +906,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   /* Create a new lot for this invoice, if we need to do so */
   if (!lot)
     lot = gnc_lot_new (book);
+  gnc_lot_begin_edit (lot);
 
   type = gncInvoiceGetType (invoice);
 
@@ -1126,6 +1127,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
     t2 = xaccMallocTransaction (book);
     lot2 = gnc_lot_new (book);
+	gnc_lot_begin_edit (lot2);
     gncOwnerAttachToLot (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice)),
 			 lot2);
     
@@ -1162,10 +1164,12 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccSplitSetBaseValue (split, total, invoice->currency);
     gnc_lot_add_split (lot2, split);
 
+	gnc_lot_commit_edit (lot2);
     xaccTransCommitEdit (t2);
     xaccAccountCommitEdit (acc);
   }
 
+  gnc_lot_commit_edit (lot);
   gncInvoiceCommitEdit (invoice);
 
   return txn;
