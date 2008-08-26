@@ -1086,7 +1086,7 @@ function inst_gnucash() {
         qpushd src/bin
             rm gnucash
             make PATH_SEPARATOR=";" \
-                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin:${_LIBDBI_UDIR}/bin;${_SQLITE3_UDIR}/bin" \
+                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin:${_LIBDBI_UDIR}/bin:${_SQLITE3_UDIR}/bin" \
                 gnucash
         qpopd
 
