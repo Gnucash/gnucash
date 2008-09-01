@@ -23,7 +23,6 @@ src/app-utils/gnc-sx-instance-model.c
 src/app-utils/gnc-ui-util.c
 src/app-utils/guile-util.c
 src/app-utils/option-util.c
-src/app-utils/swig-app-utils.c
 src/backend/file/gnc-account-xml-v2.c
 src/backend/file/gnc-backend-file.c
 src/backend/file/gnc-book-xml-v2.c
@@ -47,25 +46,17 @@ src/backend/file/sixtp-stack.c
 src/backend/file/sixtp-to-dom-parser.c
 src/backend/file/sixtp-utils.c
 src/backend/postgres/account.c
-src/backend/postgres/base-autogen.c
 src/backend/postgres/book.c
 src/backend/postgres/builder.c
-src/backend/postgres/check-autogen.c
 src/backend/postgres/checkpoint.c
 src/backend/postgres/demo.c
 src/backend/postgres/escape.c
 src/backend/postgres/events.c
-src/backend/postgres/functions.c
 src/backend/postgres/gncquery.c
-src/backend/postgres/kvp-autogen.c
 src/backend/postgres/kvp-sql.c
 src/backend/postgres/PostgresBackend.c
 src/backend/postgres/price.c
 src/backend/postgres/putil.c
-src/backend/postgres/table-audit.c
-src/backend/postgres/table-create.c
-src/backend/postgres/table-drop.c
-src/backend/postgres/table-version.c
 src/backend/postgres/txn.c
 src/backend/postgres/txnmass.c
 src/backend/postgres/upgrade.c
@@ -96,7 +87,6 @@ src/business/business-core/gncOrder.c
 src/business/business-core/gncOwner.c
 src/business/business-core/gncTaxTable.c
 src/business/business-core/gncVendor.c
-src/business/business-core/swig-business-core.c
 src/business/business-gnome/business-gnome-utils.c
 src/business/business-gnome/business-options-gnome.c
 src/business/business-gnome/business-urls.c
@@ -136,7 +126,6 @@ src/business/business-utils/business-options.c
 src/business/business-utils/gncmod-business-utils.c
 src/business/dialog-tax-table/dialog-tax-table.c
 src/business/dialog-tax-table/gncmod-dialog-tax-table.c
-src/business/dialog-tax-table/swig-dialog-tax-table.c
 src/business/dialog-tax-table/tax-tables.glade
 src/calculation/amort_opt.c
 src/calculation/amort_prt.c
@@ -153,7 +142,6 @@ src/core-utils/gnc-glib-utils.c
 src/core-utils/gnc-gobject-utils.c
 src/core-utils/gnc-gtk-utils.c
 src/core-utils/gnc-main.c
-src/core-utils/swig-core-utils.c
 src/doc/doxygen_main_page.c
 src/engine/Account.c
 src/engine/binreloc.c
@@ -173,7 +161,6 @@ src/engine/gnc-path.c
 src/engine/gnc-pricedb.c
 src/engine/gnc-session.c
 src/engine/gnc-session-scm.c
-src/engine/iso-4217-currencies.c
 src/engine/kvp-scm.c
 src/engine/Period.c
 src/engine/policy.c
@@ -184,13 +171,11 @@ src/engine/Scrub2.c
 src/engine/Scrub3.c
 src/engine/Scrub.c
 src/engine/Split.c
-src/engine/swig-engine.c
 src/engine/SX-book.c
 src/engine/SX-ttinfo.c
 src/engine/Transaction.c
 src/engine/TransLog.c
 src/gnc-module/gnc-module.c
-src/gnc-module/swig-gnc-module.c
 src/gnome/dialog-chart-export.c
 src/gnome/dialog-commodities.c
 src/gnome/dialog-fincalc.c
@@ -264,7 +249,6 @@ src/gnome-search/search-int64.c
 src/gnome-search/search-numeric.c
 src/gnome-search/search-reconciled.c
 src/gnome-search/search-string.c
-src/gnome/swig-gnome.c
 src/gnome/top-level.c
 src/gnome-utils/account-quickfill.c
 src/gnome-utils/cursors.c
@@ -351,7 +335,6 @@ src/gnome-utils/print-session.c
 src/gnome-utils/QuickFill.c
 src/gnome-utils/schemas/apps_gnucash_history.schemas.in
 src/gnome-utils/search-param.c
-src/gnome-utils/swig-gnome-utils.c
 src/gnome-utils/window-main-summarybar.c
 src/gnome/window-reconcile.c
 src/import-export/aqbanking/aqbanking.glade
@@ -471,11 +454,9 @@ src/report/report-gnome/dialog-style-sheet.c
 src/report/report-gnome/gncmod-report-gnome.c
 src/report/report-gnome/gnc-plugin-page-report.c
 src/report/report-gnome/report.glade
-src/report/report-gnome/swig-report-gnome.c
 src/report/report-gnome/window-report.c
 src/report/report-system/gncmod-report-system.c
 src/report/report-system/gnc-report.c
-src/report/report-system/swig-report-system.c
 src/report/standard-reports/gncmod-standard-reports.c
 src/report/stylesheets/gncmod-stylesheets.c
 src/report/stylesheets/gnc-plugin-stylesheets.c
