@@ -19,13 +19,13 @@
 
 (define decimal-radix-regexp
   (make-regexp
-   "^ *[$£]?[+-]?[$£]?[0-9]+$|^ *[$£]?[+-]?[$£]?[0-9]?[0-9]?[0-9]?([,'][0-9][0-9][0-9])*(\\.[0-9]*)? *$|^ *[$£]?[+-]?[$£]?[0-9]+\\.[0-9]* *$"))
+   "^ *[$£]?[+-]?[$£]?[0-9]+[+-]?$|^ *[$£]?[+-]?[$£]?[0-9]?[0-9]?[0-9]?([,'][0-9][0-9][0-9])*(\\.[0-9]*)?[+-]? *$|^ *[$£]?[+-]?[$£]?[0-9]+\\.[0-9]*[+-]? *$"))
 
 (define comma-radix-regexp
   (make-regexp
-   "^ *[$£]?[+-]?[$£]?[0-9]+$|^ *[$£]?[+-]?[$£]?[0-9]?[0-9]?[0-9]?([\\.'][0-9][0-9][0-9])*(,[0-9]*)? *$|^ *[$£]?[+-]?[$£]?[0-9]+,[0-9]* *$"))
+   "^ *[$£]?[+-]?[$£]?[0-9]+[+-]?$|^ *[$£]?[+-]?[$£]?[0-9]?[0-9]?[0-9]?([\\.'][0-9][0-9][0-9])*(,[0-9]*)?[+-]? *$|^ *[$£]?[+-]?[$£]?[0-9]+,[0-9]*[+-]? *$"))
 
-(define integer-regexp (make-regexp "^[$£]?[+-]?[$£]?[0-9]+ *$"))
+(define integer-regexp (make-regexp "^[$£]?[+-]?[$£]?[0-9]+[+-]? *$"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-split:parse-category
@@ -547,39 +547,43 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-parse:parse-number/format value-string format)
-  (case format
-    ((decimal)
-     (let* ((filtered-string (gnc:string-delete-chars value-string ",$£'"))
-            (read-val (with-input-from-string filtered-string
-                                              (lambda () (read)))))
-       (if (number? read-val)
-           (double-to-gnc-numeric
-            (+ 0.0 read-val) GNC-DENOM-AUTO
-            (logior (GNC-DENOM-SIGFIGS
-                     (string-length (string-remove-char filtered-string #\.)))
-                    GNC-RND-ROUND))
-           (gnc-numeric-zero))))
-    ((comma)
-     (let* ((filtered-string (gnc:string-replace-char
-                               (gnc:string-delete-chars value-string ".$£'")
-                               #\, #\.))
-            (read-val (with-input-from-string filtered-string
-                                              (lambda () (read)))))
-       (if (number? read-val)
-           (double-to-gnc-numeric
-            (+ 0.0 read-val) GNC-DENOM-AUTO
-            (logior (GNC-DENOM-SIGFIGS
-                     (string-length (string-remove-char filtered-string #\.)))
-                    GNC-RND-ROUND))
-           (gnc-numeric-zero))))
-    ((integer)
-     (let ((read-val (with-input-from-string
-                       (gnc:string-delete-chars value-string "$£'")
-                       (lambda () (read)))))
-       (if (number? read-val)
-           (double-to-gnc-numeric
-            (+ 0.0 read-val) 1 GNC-RND-ROUND)
-           (gnc-numeric-zero))))))
+  (let ((minus-index (string-index value-string #\-))
+        (filtered-string (gnc:string-delete-chars value-string "$£'+-")))
+    (case format
+      ((decimal)
+       (let* ((read-string (string-remove-char filtered-string #\,))
+              (read-val (with-input-from-string read-string
+                                                (lambda () (read)))))
+         (if (number? read-val)
+             (double-to-gnc-numeric
+              (if minus-index (- 0.0 read-val) (+ 0.0 read-val))
+              GNC-DENOM-AUTO
+              (logior (GNC-DENOM-SIGFIGS
+                       (string-length (string-remove-char read-string #\.)))
+                      GNC-RND-ROUND))
+             (gnc-numeric-zero))))
+      ((comma)
+       (let* ((read-string (gnc:string-replace-char
+                              (string-remove-char filtered-string #\.)
+                              #\, #\.))
+              (read-val (with-input-from-string read-string
+                                                (lambda () (read)))))
+         (if (number? read-val)
+             (double-to-gnc-numeric
+              (if minus-index (- 0.0 read-val) (+ 0.0 read-val))
+              GNC-DENOM-AUTO
+              (logior (GNC-DENOM-SIGFIGS
+                       (string-length (string-remove-char read-string #\.)))
+                      GNC-RND-ROUND))
+             (gnc-numeric-zero))))
+      ((integer)
+       (let ((read-val (with-input-from-string filtered-string
+                                               (lambda () (read)))))
+         (if (number? read-val)
+             (double-to-gnc-numeric
+              (if minus-index (- 0.0 read-val) (+ 0.0 read-val))
+              1 GNC-RND-ROUND)
+             (gnc-numeric-zero)))))))
 
 (define (qif-parse:check-number-formats amt-strings formats)
   (let ((retval formats))
