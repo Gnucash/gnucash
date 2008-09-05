@@ -44,6 +44,7 @@
 #include <time.h>
 
 #include "gnc-date.h"
+#include "gnc-engine.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
 #include "glib-compat.h"
@@ -54,6 +55,7 @@ enum {
 	LAST_SIGNAL
 };
 
+static QofLogModule log_module = GNC_MOD_GUI;
 static guint date_edit_signals [LAST_SIGNAL] = { 0 };
 
 
@@ -135,11 +137,20 @@ gnc_strtok_r (char *s, const char *delim, char **save_ptr)
 }
 
 static void
-hide_popup (GNCDateEdit *gde)
+gnc_date_edit_popdown(GNCDateEdit *gde)
 {
-	gtk_widget_hide (gde->cal_popup);
-	gtk_grab_remove (gde->cal_popup);
-	gdk_pointer_ungrab (GDK_CURRENT_TIME);
+  g_return_if_fail (GNC_IS_DATE_EDIT (gde));
+
+  ENTER("gde %p", gde);
+
+  gtk_grab_remove (gde->cal_popup);
+  gtk_widget_hide (gde->cal_popup);
+  gdk_pointer_ungrab (GDK_CURRENT_TIME);
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gde->date_button),
+                                FALSE);
+
+  LEAVE(" ");
 }
 
 static void
@@ -158,7 +169,7 @@ day_selected (GtkCalendar *calendar, GNCDateEdit *gde)
 static void
 day_selected_double_click (GtkCalendar *calendar, GNCDateEdit *gde)
 {
-	hide_popup (gde);
+	gnc_date_edit_popdown (gde);
 }
 
 static gint
@@ -167,7 +178,7 @@ delete_popup (GtkWidget *widget, gpointer data)
 	GNCDateEdit *gde;
 
 	gde = data;
-	hide_popup (gde);
+	gnc_date_edit_popdown (gde);
 
 	return TRUE;
 }
@@ -183,39 +194,8 @@ key_press_popup (GtkWidget *widget, GdkEventKey *event, gpointer data)
 	  return date_accel_key_press(gde->date_entry, event, data);
 
 	gde = data;
-	g_signal_stop_emission_by_name (G_OBJECT (widget), "key_press_event");
-	hide_popup (gde);
-
-	return TRUE;
-}
-
-/* This function is yanked from gtkcombo.c */
-static gint
-button_press_popup (GtkWidget *widget, GdkEventButton *event, gpointer data)
-{
-	GNCDateEdit *gde;
-	GtkWidget *child;
-
-	gde = data;
-
-	child = gtk_get_event_widget ((GdkEvent *) event);
-
-	/* We don't ask for button press events on the grab widget, so
-	 *  if an event is reported directly to the grab widget, it must
-	 *  be on a window outside the application (and thus we remove
-	 *  the popup window). Otherwise, we check if the widget is a child
-	 *  of the grab widget, and only remove the popup window if it
-	 *  is not.
-	 */
-	if (child != widget) {
-		while (child) {
-			if (child == widget)
-				return FALSE;
-			child = child->parent;
-		}
-	}
-
-	hide_popup (gde);
+	g_signal_stop_emission_by_name (G_OBJECT (widget), "key-press-event");
+	gnc_date_edit_popdown (gde);
 
 	return TRUE;
 }
@@ -248,40 +228,183 @@ position_popup (GNCDateEdit *gde)
 	gtk_window_move (GTK_WINDOW (gde->cal_popup), x, y);
 }
 
-static void
-select_clicked (GtkWidget *widget, GNCDateEdit *gde)
+/* Pulled from gtkcombobox.c */
+static gboolean
+popup_grab_on_window (GdkWindow *window,
+                      guint32    activate_time,
+                      gboolean   grab_keyboard)
 {
-	struct tm mtm;
+  if ((gdk_pointer_grab (window, TRUE,
+                         GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+                         GDK_POINTER_MOTION_MASK,
+                         NULL, NULL, activate_time) == 0))
+  {
+    if (!grab_keyboard ||
+        gdk_keyboard_grab (window, TRUE,
+                           activate_time) == 0)
+      return TRUE;
+    else
+    {
+      gdk_display_pointer_ungrab (gdk_drawable_get_display (window),
+                                  activate_time);
+      return FALSE;
+    }
+  }
 
-        /* This code is pretty much just copied from gtk_date_edit_get_date */
-        qof_scan_date (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
-                  &mtm.tm_mday, &mtm.tm_mon, &mtm.tm_year);
+  return FALSE;
+}
 
-        mtm.tm_mon--;
+static void
+gnc_date_edit_popup (GNCDateEdit *gde)
+{
+  GtkWidget *toplevel;
+  struct tm mtm;
 
-	/* Hope the user does not actually mean years early in the A.D. days...
-	 * This date widget will obviously not work for a history program :-)
-	 */
-	if (mtm.tm_year >= 1900)
-		mtm.tm_year -= 1900;
+  g_return_if_fail (GNC_IS_DATE_EDIT (gde));
 
-	gnc_tm_set_day_start(&mtm);
-        if (mktime (&mtm) == (time_t) -1)
-        {
-		gnc_tm_get_today_start (&mtm);
-                gnc_date_edit_set_time (gde, mktime (&mtm));
-        }
+  ENTER("gde %p", gde);
 
-        gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), 1);
-	gtk_calendar_select_month (GTK_CALENDAR (gde->calendar), mtm.tm_mon,
-                                   1900 + mtm.tm_year);
-        gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), mtm.tm_mday);
+  /* This code is pretty much just copied from gtk_date_edit_get_date */
+  qof_scan_date (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
+                 &mtm.tm_mday, &mtm.tm_mon, &mtm.tm_year);
 
-        position_popup (gde);
+  mtm.tm_mon--;
 
-	gtk_widget_show (gde->cal_popup);
-	gtk_widget_grab_focus (gde->cal_popup);
-	gtk_grab_add (gde->cal_popup);
+  /* Hope the user does not actually mean years early in the A.D. days...
+   * This date widget will obviously not work for a history program :-)
+   */
+  if (mtm.tm_year >= 1900)
+    mtm.tm_year -= 1900;
+
+  gnc_tm_set_day_start(&mtm);
+  if (mktime (&mtm) == (time_t) -1)
+  {
+    gnc_tm_get_today_start (&mtm);
+    gnc_date_edit_set_time (gde, mktime (&mtm));
+  }
+
+  /* Set the calendar.  */
+  gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), 1);
+  gtk_calendar_select_month (GTK_CALENDAR (gde->calendar), mtm.tm_mon,
+                             1900 + mtm.tm_year);
+  gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), mtm.tm_mday);
+
+  /* Make sure we'll get notified of clicks outside the popup
+   * window so we can properly pop down if that happens. */
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (gde));
+  if (GTK_IS_WINDOW (toplevel))
+  {
+    gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),
+                                 GTK_WINDOW (gde->cal_popup));
+    gtk_window_set_transient_for (GTK_WINDOW (gde->cal_popup),
+                                  GTK_WINDOW (toplevel));
+  }
+
+  position_popup (gde);
+
+  gtk_widget_show (gde->cal_popup);
+
+  gtk_widget_grab_focus (gde->cal_popup);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gde->date_button),
+                                TRUE);
+
+  if (!GTK_WIDGET_HAS_FOCUS (gde->calendar))
+    gtk_widget_grab_focus (gde->calendar);
+
+  if (!popup_grab_on_window ((GTK_WIDGET(gde->cal_popup))->window,
+                             GDK_CURRENT_TIME, TRUE))
+  {
+    gtk_widget_hide (gde->cal_popup);
+    return;
+  }
+
+  gtk_grab_add (gde->cal_popup);
+
+  LEAVE(" ");
+}
+
+/* This function is a customized gtk_combo_box_list_button_pressed(). */
+static gboolean
+gnc_date_edit_button_pressed (GtkWidget      *widget,
+                              GdkEventButton *event,
+                              gpointer        data)
+{
+  GNCDateEdit *gde     = GNC_DATE_EDIT(data);
+  GtkWidget   *ewidget = gtk_get_event_widget ((GdkEvent *)event);
+
+  /* While popped up, ignore presses outside the popup window. */
+  if (ewidget == gde->cal_popup)
+    return TRUE;
+
+  /* If the press isn't to make the popup appear, just propagate it. */
+  if (ewidget != gde->date_button ||
+      gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gde->date_button)))
+    return FALSE;
+
+  if (!GTK_WIDGET_HAS_FOCUS (gde->date_button))
+    gtk_widget_grab_focus (gde->date_button);
+
+  gde->popup_in_progress = TRUE;
+
+  gnc_date_edit_popup (gde);
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gde->date_button), TRUE);
+
+  return TRUE;
+}
+
+static gboolean
+gnc_date_edit_button_released (GtkWidget      *widget,
+                               GdkEventButton *event,
+                               gpointer        data)
+{
+  GNCDateEdit *gde     = GNC_DATE_EDIT(data);
+  GtkWidget   *ewidget = gtk_get_event_widget ((GdkEvent *)event);
+
+  gboolean popup_in_progress = FALSE;
+
+  if (gde->popup_in_progress)
+  {
+    popup_in_progress = TRUE;
+    gde->popup_in_progress = FALSE;
+  }
+
+  /* Propagate releases on the calendar. */
+  if (ewidget == gde->calendar)
+    return FALSE;
+
+  if (ewidget == gde->date_button)
+  {
+    /* Pop down if we're up and it isn't due to the preceding press. */
+    if (!popup_in_progress &&
+        gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gde->date_button)))
+    {
+      gnc_date_edit_popdown (gde);
+      return TRUE;
+    }
+
+    return FALSE;
+  }
+
+  /* Pop down on a release anywhere else. */
+  gnc_date_edit_popdown (gde);
+  return TRUE;
+}
+
+static void
+gnc_date_edit_button_toggled (GtkWidget *widget, GNCDateEdit *gde)
+{
+  ENTER("widget %p, gde %p", widget, gde);
+
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+  {
+    if (!gde->popup_in_progress)
+      gnc_date_edit_popup (gde);
+  }
+  else
+    gnc_date_edit_popdown (gde);
+
+  LEAVE(" ");
 }
 
 typedef struct {
@@ -420,6 +543,7 @@ static void
 gnc_date_edit_init (GNCDateEdit *gde)
 {
 	gde->disposed = FALSE;
+	gde->popup_in_progress = FALSE;
 	gde->lower_hour = 7;
 	gde->upper_hour = 19;
 	gde->flags = GNC_DATE_EDIT_SHOW_TIME;
@@ -629,7 +753,7 @@ key_press_entry (GtkWidget *widget, GdkEventKey *event, gpointer data)
 	if (!date_accel_key_press(widget, event, data))
 		return FALSE;
 
-	g_signal_stop_emission_by_name (widget, "key_press_event");
+	g_signal_stop_emission_by_name (widget, "key-press-event");
 	return TRUE;
 }
 
@@ -659,18 +783,22 @@ create_children (GNCDateEdit *gde)
 	GtkWidget *hbox;
 	GtkWidget *arrow;
 
+        /* Create the text entry area. */
 	gde->date_entry  = gtk_entry_new ();
 	gtk_entry_set_width_chars (GTK_ENTRY (gde->date_entry), 11);
 	gtk_box_pack_start (GTK_BOX (gde), gde->date_entry, TRUE, TRUE, 0);
 	gtk_widget_show (GTK_WIDGET(gde->date_entry));
-	g_signal_connect (G_OBJECT (gde->date_entry), "key_press_event",
+	g_signal_connect (G_OBJECT (gde->date_entry), "key-press-event",
 			  G_CALLBACK (key_press_entry), gde);
-	g_signal_connect (G_OBJECT (gde->date_entry), "focus_out_event",
+	g_signal_connect (G_OBJECT (gde->date_entry), "focus-out-event",
 			  G_CALLBACK (date_focus_out_event), gde);
 
-	gde->date_button = gtk_button_new ();
-	g_signal_connect (G_OBJECT (gde->date_button), "clicked",
-			  G_CALLBACK  (select_clicked), gde);
+        /* Create the popup button. */
+	gde->date_button = gtk_toggle_button_new ();
+	g_signal_connect (gde->date_button, "button-press-event",
+			  G_CALLBACK(gnc_date_edit_button_pressed), gde);
+	g_signal_connect (G_OBJECT (gde->date_button), "toggled",
+			  G_CALLBACK (gnc_date_edit_button_toggled), gde);
 	gtk_box_pack_start (GTK_BOX (gde), gde->date_button, FALSE, FALSE, 0);
 
 	hbox = gtk_hbox_new (FALSE, 3);
@@ -678,19 +806,20 @@ create_children (GNCDateEdit *gde)
 	gtk_widget_show (GTK_WIDGET(hbox));
 
 	/* Calendar label, only shown if the date editor has a time field */
-
 	gde->cal_label = gtk_label_new (_("Calendar"));
 	gtk_misc_set_alignment (GTK_MISC (gde->cal_label), 0.0, 0.5);
 	gtk_box_pack_start (GTK_BOX (hbox), gde->cal_label, TRUE, TRUE, 0);
 	if (gde->flags & GNC_DATE_EDIT_SHOW_TIME)
 		gtk_widget_show (GTK_WIDGET(gde->cal_label));
 
-	arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_OUT);
+        /* Graphic for the popup button. */
+	arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
 	gtk_box_pack_start (GTK_BOX (hbox), arrow, TRUE, FALSE, 0);
 	gtk_widget_show (GTK_WIDGET(arrow));
 
 	gtk_widget_show (GTK_WIDGET(gde->date_button));
 
+        /* Time entry controls. */
 	gde->time_entry = gtk_entry_new ();
 	gtk_entry_set_max_length (GTK_ENTRY(gde->time_entry), 12);
 	gtk_widget_set_size_request (GTK_WIDGET(gde->time_entry), 88, -1);
@@ -712,22 +841,29 @@ create_children (GNCDateEdit *gde)
 	}
 
 	gde->cal_popup = gtk_window_new (GTK_WINDOW_POPUP);
+        gtk_widget_set_name (gde->cal_popup, "gnc-date-edit-popup-window");
+
+        gtk_window_set_type_hint (GTK_WINDOW (gde->cal_popup),
+                                  GDK_WINDOW_TYPE_HINT_COMBO);
+
 	gtk_widget_set_events (GTK_WIDGET(gde->cal_popup),
 			       gtk_widget_get_events (GTK_WIDGET(gde->cal_popup)) |
                                GDK_KEY_PRESS_MASK);
-	g_signal_connect (gde->cal_popup, "delete_event",
-			  G_CALLBACK(delete_popup),
-			  gde);
-	g_signal_connect (gde->cal_popup, "key_press_event",
-			  G_CALLBACK(key_press_popup),
-			  gde);
-	g_signal_connect (gde->cal_popup, "button_press_event",
-			  G_CALLBACK(button_press_popup),
-			  gde);
+
+	g_signal_connect (gde->cal_popup, "delete-event",
+			  G_CALLBACK(delete_popup), gde);
+	g_signal_connect (gde->cal_popup, "key-press-event",
+			  G_CALLBACK(key_press_popup), gde);
+	g_signal_connect (gde->cal_popup, "button-press-event",
+			  G_CALLBACK(gnc_date_edit_button_pressed), gde);
+	g_signal_connect (gde->cal_popup, "button-release-event",
+			  G_CALLBACK(gnc_date_edit_button_released), gde);
 	gtk_window_set_resizable (GTK_WINDOW (gde->cal_popup), FALSE);
+        gtk_window_set_screen (GTK_WINDOW (gde->cal_popup),
+                               gtk_widget_get_screen (GTK_WIDGET (gde)));
 
 	frame = gtk_frame_new (NULL);
-	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
+	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
 	gtk_container_add (GTK_CONTAINER (gde->cal_popup), frame);
 	gtk_widget_show (GTK_WIDGET(frame));
 
