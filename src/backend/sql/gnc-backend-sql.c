@@ -2140,7 +2140,7 @@ gnc_sql_get_sql_value( const GncSqlConnection* conn, const GValue* value )
 				return g_strdup( "NULL" );
 			}
 		} else if( type == G_TYPE_INT64 ) {
-			return g_strdup_printf( "%lld", g_value_get_int64( value ) );
+			return g_strdup_printf( "%" G_GINT64_FORMAT, g_value_get_int64( value ) );
 
 		} else if( type == G_TYPE_INT ) {
 			return g_strdup_printf( "%d", g_value_get_int( value ) );
