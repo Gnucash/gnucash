@@ -539,7 +539,7 @@ _gnc_dense_cal_set_month(GncDenseCal *dcal, GDateMonth mon, gboolean redraw)
 void
 gnc_dense_cal_set_year(GncDenseCal *dcal, guint year)
 {
-    return _gnc_dense_cal_set_year(dcal, year, TRUE);
+    _gnc_dense_cal_set_year(dcal, year, TRUE);
 }
 
 static void
