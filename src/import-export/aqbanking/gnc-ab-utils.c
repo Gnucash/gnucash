@@ -593,7 +593,24 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     else
         data->awaiting |= FOUND_BALANCES;
 
+    /* Lookup the most recent ACCOUNT_STATUS available */
+    item = AB_ImExporterAccountInfo_GetFirstAccountStatus(element);
+    while (item) {
+        const GWEN_TIME *item_time = AB_AccountStatus_GetTime(item);
+        if (!best || GWEN_Time_Diff(best_time, item_time) < 0.0) {
+            best = item;
+            best_time = item_time;
+        }
+        item = AB_ImExporterAccountInfo_GetNextAccountStatus(element);
+    }
+
+    booked_bal = AB_AccountStatus_GetBookedBalance(best);
     if (!(data->awaiting & AWAIT_BALANCES)) {
+        /* Ignore zero balances if we don't await a balance */
+        if (!booked_bal || AB_Value_IsZero(AB_Balance_GetValue(booked_bal)))
+            return NULL;
+
+        /* Ask the user whether to import unawaited non-zero balance */
         if (gnc_verify_dialog(data->parent, TRUE, "%s",
                               _("The bank has sent balance information "
                                 "in its response."
@@ -611,19 +628,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     if (!gnc_acc) return NULL;
     data->gnc_acc = gnc_acc;
 
-    /* Lookup the most recent ACCOUNT_STATUS available */
-    item = AB_ImExporterAccountInfo_GetFirstAccountStatus(element);
-    while (item) {
-        const GWEN_TIME *item_time = AB_AccountStatus_GetTime(item);
-        if (!best || GWEN_Time_Diff(best_time, item_time) < 0.0) {
-            best = item;
-            best_time = item_time;
-        }
-        item = AB_ImExporterAccountInfo_GetNextAccountStatus(element);
-    }
-
     /* Lookup booked balance and time */
-    booked_bal = AB_AccountStatus_GetBookedBalance(best);
     if (booked_bal) {
         const GWEN_TIME *ti = AB_Balance_GetTime(booked_bal);
         if (ti) {
