@@ -17,11 +17,8 @@ perl -e "$ver=1000*sprintf(\"%%.3f\", $]); exit(int($ver)-5000);"
 set _perlminor=%errorlevel%
 if %_perlmajor% equ 5 (
   if %_perlminor% equ 10 (
-    echo.
-    echo Found ActivePerl 5.10.  This version does not yet support Finance-Quote.
-    echo Please install ActivePerl 5.8 (http://www.activestate.com/store/activeperl^)
-    echo instead and add the bin directory to your Path environment variable.
-    goto error
+    set _perlversion=5.10
+    goto ccp
   )
   if %_perlminor% equ 8 (
     set _perlversion=5.8
@@ -41,7 +38,11 @@ goto error
 
 echo * Install DateManip
 echo.
-perl -x -S ppm install DateManip
+if %_perlversion% == 5.10 (
+  perl -x -S ppm install Date-Manip
+) else (
+  perl -x -S ppm install DateManip
+)
 if %errorlevel% neq 0 goto error
 
 echo.
@@ -49,7 +50,9 @@ echo * Install Crypt-SSLeay
 echo.
 set OLDPATH=%PATH%
 set PATH=%CD%;%PATH%
-if %_perlversion% == 5.8 (
+if %_perlversion% == 5.10 (
+  perl -x -S ppm install Crypt-SSLeay
+) else if %_perlversion% == 5.8 (
   echo anything | perl -x -S ppm install http://theoryx5.uwinnipeg.ca/ppms/Crypt-SSLeay.ppd
 ) else (
   perl -x -S ppm install http://theoryx5.uwinnipeg.ca/ppmpackages/Crypt-SSLeay.ppd
