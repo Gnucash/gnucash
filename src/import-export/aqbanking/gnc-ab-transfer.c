@@ -134,6 +134,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         gchar *memo;
         Transaction *gnc_trans = NULL;
         AB_IMEXPORTER_CONTEXT *context = NULL;
+        AB_JOB_STATUS job_status;
         GncABImExContextImport *ieci = NULL;
 
         /* Get a GUI object */
@@ -232,10 +233,16 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
             context = AB_ImExporterContext_new();
 
             /* Finally, execute the job */
-            successful = AB_Banking_ExecuteJobs(api, job_list, context, 0) == 0;
+            AB_Banking_ExecuteJobs(api, job_list, context, 0);
 
-            if (!successful
-                || AB_Job_GetStatus(job) != AB_Job_StatusFinished) {
+            /* Ignore the return value of AB_Banking_ExecuteJobs(), as the job's
+             * status always describes better whether the job was actually
+             * transferred to and accepted by the bank.  See also
+             * http://lists.gnucash.org/pipermail/gnucash-de/2008-September/006389.html
+             */
+            job_status = AB_Job_GetStatus(job);
+            if (job_status != AB_Job_StatusFinished
+                && job_status != AB_Job_StatusPending) {
                 successful = FALSE;
                 if (!gnc_verify_dialog(
                         parent, FALSE, "%s",
@@ -243,19 +250,16 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
                           "the log window for the exact error message.\n"
                           "\n"
                           "Do you want to enter the job again?"))) {
-                        /* _("The job was sent to the bank successfully, but the " */
-                        /*   "bank is refusing to execute the job. Please check " */
-                        /*   "the log window for the exact error message of the " */
-                        /*   "bank. The line with the error message contains a " */
-                        /*   "code number that is greater than 9000.\n" */
-                        /*   "\n" */
-                        /*   "Do you want to enter the job again?"))) { */
                     aborted = TRUE;
                 }
+            } else {
+                successful = TRUE;
             }
 
-            /* Import the results, awaiting nothing */
-            ieci = gnc_ab_import_context(context, 0, FALSE, NULL, parent);
+            if (successful) {
+                /* Import the results, awaiting nothing */
+                ieci = gnc_ab_import_context(context, 0, FALSE, NULL, parent);
+            }
         }
         /* Simply ignore any other case */
 
