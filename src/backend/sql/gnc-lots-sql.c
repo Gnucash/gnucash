@@ -41,7 +41,7 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "lots"
-#define TABLE_VERSION 1
+#define TABLE_VERSION 2
 
 static gpointer get_lot_account( gpointer pObject, const QofParam* param );
 static void set_lot_account( gpointer pObject, gpointer pValue );
@@ -157,7 +157,31 @@ create_lots_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
     if( version == 0 ) {
+		/* The table doesn't exist, so create it */
         gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
+	} else if( version == 1 ) {
+		/* Version 1 -> 2 removes the 'NOT NULL' constraint on the account_guid
+		field. 
+
+		Create a temporary table, copy the data from the old table, delete the
+		old table, then rename the new one. */
+		gchar* sql;
+#define TEMP_TABLE_NAME "lots_new"
+		GncSqlStatement* stmt;
+
+        gnc_sql_create_temp_table( be, TEMP_TABLE_NAME, col_table );
+		sql = g_strdup_printf( "INSERT INTO %s SELECT * FROM %s",
+								TEMP_TABLE_NAME, TABLE_NAME );
+		(void)gnc_sql_execute_nonselect_sql( be, sql );
+
+		sql = g_strdup_printf( "DROP TABLE %s", TABLE_NAME );
+		(void)gnc_sql_execute_nonselect_sql( be, sql );
+
+		sql = g_strdup_printf( "ALTER TABLE %s RENAME TO %s",
+								TEMP_TABLE_NAME, TABLE_NAME );
+		(void)gnc_sql_execute_nonselect_sql( be, sql );
+
+		gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
     }
 }
 

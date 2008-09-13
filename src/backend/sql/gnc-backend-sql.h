@@ -435,6 +435,15 @@ GncSqlResult* gnc_sql_execute_select_statement( GncSqlBackend* be, GncSqlStateme
 GncSqlResult* gnc_sql_execute_select_sql( const GncSqlBackend* be, gchar* sql );
 
 /**
+ * Executes an SQL non-SELECT statement from an SQL char string.
+ *
+ * @param be SQL backend struct
+ * @param sql SQL non-SELECT string
+ * @returns Number of rows affected
+ */
+gint gnc_sql_execute_nonselect_sql( const GncSqlBackend* be, gchar* sql );
+
+/**
  * Creates a statement from an SQL char string.
  *
  * @param be SQL backend struct
@@ -481,6 +490,18 @@ gboolean gnc_sql_object_is_it_in_db( GncSqlBackend* be,
 gint gnc_sql_get_table_version( const GncSqlBackend* be, const gchar* table_name );
 
 /**
+ * Sets the version number for a DB table.
+ *
+ * @param be SQL backend struct
+ * @param table_name Table name
+ * @param table_version Table version
+ * @return TRUE if successful, FALSE if unsuccessful
+ */
+gboolean gnc_sql_set_table_version( const GncSqlBackend* be,
+									const gchar* table_name,
+									gint table_version );
+
+/**
  * Creates a table in the database
  *
  * @param be SQL backend struct
@@ -489,8 +510,23 @@ gint gnc_sql_get_table_version( const GncSqlBackend* be, const gchar* table_name
  * @param col_table DB table description
  * @return TRUE if successful, FALSE if unsuccessful
  */
-gboolean gnc_sql_create_table( const GncSqlBackend* be, const gchar* table_name,
-								gint table_version, const GncSqlColumnTableEntry* col_table );
+gboolean gnc_sql_create_table( const GncSqlBackend* be,
+								const gchar* table_name,
+								gint table_version,
+								const GncSqlColumnTableEntry* col_table );
+
+/**
+ * Creates a temporary table in the database.  A temporary table does not
+ * have a version number added to the versions table.
+ *
+ * @param be SQL backend struct
+ * @param table_name Table name
+ * @param col_table DB table description
+ * @return TRUE if successful, FALSE if unsuccessful
+ */
+gboolean gnc_sql_create_temp_table( const GncSqlBackend* be,
+									const gchar* table_name,
+									const GncSqlColumnTableEntry* col_table );
 
 /**
  * Creates an index in the database

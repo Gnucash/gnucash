@@ -815,10 +815,6 @@ gnc_sql_init_object_handlers( void )
 
 /* ================================================================= */
 
-static void register_table_version( const GncSqlBackend* be, const gchar* table_name, gint version );
-static gint get_table_version( const GncSqlBackend* be, const gchar* table_name );
-
-/* ================================================================= */
 static gint64
 get_integer_value( const GValue* value )
 {
@@ -1972,8 +1968,8 @@ gnc_sql_execute_select_sql( const GncSqlBackend* be, gchar* sql )
 	return result;
 }
 
-static gint
-execute_nonselect_sql( const GncSqlBackend* be, gchar* sql )
+gint
+gnc_sql_execute_nonselect_sql( const GncSqlBackend* be, gchar* sql )
 {
 	GncSqlStatement* stmt;
 	gint result;
@@ -2363,9 +2359,16 @@ gnc_sql_create_table( const GncSqlBackend* be, const gchar* table_name,
 
 	ok = create_table( be, table_name, col_table );
 	if( ok ) {
-		register_table_version( be, table_name, table_version );
+		(void)gnc_sql_set_table_version( be, table_name, table_version );
 	}
 	return ok;
+}
+
+gboolean
+gnc_sql_create_temp_table( const GncSqlBackend* be, const gchar* table_name,
+							const GncSqlColumnTableEntry* col_table )
+{
+	return create_table( be, table_name, col_table );
 }
 
 void
@@ -2397,8 +2400,8 @@ gnc_sql_get_table_version( const GncSqlBackend* be, const gchar* table_name )
 		return 0;
 	}
 
-	return get_table_version( be, table_name );
-	}
+	return GPOINTER_TO_INT(g_hash_table_lookup( be->versions, table_name ));
+}
 
 /* ================================================================= */
 #define VERSION_TABLE_NAME "versions"
@@ -2496,18 +2499,19 @@ gnc_sql_finalize_version_info( GncSqlBackend* be )
  * @param be Backend struct
  * @param table_name Table name
  * @param version Version number
+ * @return TRUE if successful, FALSE if unsuccessful
  */
-static void
-register_table_version( const GncSqlBackend* be, const gchar* table_name, gint version )
+gboolean
+gnc_sql_set_table_version( const GncSqlBackend* be, const gchar* table_name, gint version )
 {
 	gchar* sql;
 	gint cur_version;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( table_name != NULL );
-	g_return_if_fail( version > 0 );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( table_name != NULL, FALSE );
+	g_return_val_if_fail( version > 0, FALSE );
 
-	cur_version = get_table_version( be, table_name );
+	cur_version = gnc_sql_get_table_version( be, table_name );
 	if( cur_version != version ) {
 		if( cur_version == 0 ) {
 			sql = g_strdup_printf( "INSERT INTO %s VALUES('%s',%d)", VERSION_TABLE_NAME,
@@ -2517,25 +2521,12 @@ register_table_version( const GncSqlBackend* be, const gchar* table_name, gint v
 								VERSION_COL_NAME, version,
 								TABLE_COL_NAME, table_name );
 		}
-		execute_nonselect_sql( be, sql );
+		(void)gnc_sql_execute_nonselect_sql( be, sql );
 	}
 
 	g_hash_table_insert( be->versions, g_strdup( table_name ), GINT_TO_POINTER(version) );
+
+	return TRUE;
 }
 
-/**
- * Returns the registered version number for a table.
- *
- * @param be Backend struct
- * @param table_name Table name
- * @return Version number
- */
-static gint
-get_table_version( const GncSqlBackend* be, const gchar* table_name )
-{
-	g_return_val_if_fail( be != NULL, 0 );
-	g_return_val_if_fail( table_name != NULL, 0 );
-
-	return GPOINTER_TO_INT(g_hash_table_lookup( be->versions, table_name ));
-}
 /* ========================== END OF FILE ===================== */
