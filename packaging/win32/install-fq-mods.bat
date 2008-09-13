@@ -38,12 +38,11 @@ goto error
 
 echo * Install DateManip
 echo.
-if %_perlversion% == 5.10 (
-  perl -x -S ppm install Date-Manip
-) else (
+perl -x -S ppm install Date-Manip
+if %errorlevel% neq 0 (
   perl -x -S ppm install DateManip
+  if %errorlevel% neq 0 goto error
 )
-if %errorlevel% neq 0 goto error
 
 echo.
 echo * Install Crypt-SSLeay
