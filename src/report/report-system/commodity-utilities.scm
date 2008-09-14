@@ -184,10 +184,14 @@
 			report-currency (gnc-numeric-zero)))
 		 (gnc-numeric-zero))
 	       (begin
-		 (set! total-foreign (gnc-numeric-add-fixed
-				      total-foreign (third foreignlist)))
-		 (set! total-domestic (gnc-numeric-add-fixed
-				       total-domestic (second foreignlist)))
+		 (set! total-foreign (gnc-numeric-add total-foreign
+                                                      (third foreignlist)
+                                                      GNC-DENOM-AUTO
+                                                      GNC-DENOM-LCD))
+		 (set! total-domestic (gnc-numeric-add total-domestic
+                                                       (second foreignlist)
+                                                       GNC-DENOM-AUTO
+                                                       GNC-DENOM-LCD))
 		 (gnc-numeric-div
 		  total-domestic
 		  total-foreign
