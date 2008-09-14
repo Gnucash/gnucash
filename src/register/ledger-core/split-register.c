@@ -1356,6 +1356,10 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
 
    DEBUG ("save split is %p \n", split);
 
+   /* Act on any changes to the current cell before the save. */
+   gnc_split_register_check_cell (reg,
+                                  gnc_table_get_current_cell_name (reg->table));
+
    if (!gnc_split_register_auto_calc (reg, split))
      return FALSE;
 
@@ -2371,6 +2375,8 @@ gnc_split_register_cleanup (SplitRegister *reg)
    Transaction *trans;
    Split *blank_split;
 
+   ENTER("reg=%p", reg);
+
    blank_split = xaccSplitLookup (&info->blank_split_guid,
                                   gnc_get_current_book ());
 
@@ -2419,13 +2425,16 @@ gnc_split_register_cleanup (SplitRegister *reg)
    gnc_split_register_destroy_info (reg);
 
    gnc_resume_gui_refresh ();
+
+   LEAVE(" ");
 }
 
 void
 gnc_split_register_destroy (SplitRegister *reg)
 {
-  if (!reg)
-    return;
+  g_return_if_fail(reg);
+
+  ENTER("reg=%p", reg);
 
   gnc_gconf_general_remove_cb(KEY_ACCOUNTING_LABELS,
 			      split_register_gconf_changed,
@@ -2440,6 +2449,7 @@ gnc_split_register_destroy (SplitRegister *reg)
 
   /* free the memory itself */
   g_free (reg);
+  LEAVE(" ");
 }
 
 void 
