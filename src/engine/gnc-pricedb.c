@@ -1883,8 +1883,8 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
           (!gnc_numeric_zero_p(currency_price_value)));
 
   balance = gnc_numeric_mul (balance, currency_price_value,
-                             gnc_commodity_get_fraction (new_currency),
-                             GNC_HOW_RND_ROUND);
+                             GNC_DENOM_AUTO,
+                             GNC_HOW_DENOM_EXACT | GNC_HOW_RND_NEVER);
   balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
                              gnc_commodity_get_fraction (new_currency),
                              GNC_HOW_RND_ROUND);
