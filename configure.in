@@ -1125,8 +1125,10 @@ then
     goffice=0
     goffice_with_cairo=0
     have_goffice_0_5=0
-    PKG_CHECK_MODULES(GOFFICE, libgoffice-0.6 >= 0.6.0, [goffice=1], [
-      PKG_CHECK_MODULES(GOFFICE, libgoffice-0.5 >= 0.5.1, [goffice=1], [goffice=0])
+    PKG_CHECK_MODULES(GOFFICE, libgoffice-0.8 >= 0.7.0, [goffice=1], [
+      PKG_CHECK_MODULES(GOFFICE, libgoffice-0.6 >= 0.6.0, [goffice=1], [
+        PKG_CHECK_MODULES(GOFFICE, libgoffice-0.5 >= 0.5.1, [goffice=1], [goffice=0])
+      ])
     ])
     if test x$goffice = x1
     then
