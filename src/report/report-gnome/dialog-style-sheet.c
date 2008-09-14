@@ -117,8 +117,8 @@ gnc_style_sheet_options_close_cb(GNCOptionWin * propertybox,
     gtk_tree_path_free(path);
   }
   gtk_tree_row_reference_free (ssi->row_ref);
-  gnc_option_db_destroy(ssi->odb);
   gnc_options_dialog_destroy(ssi->odialog);
+  gnc_option_db_destroy(ssi->odb);
   scm_gc_unprotect_object(ssi->stylesheet);
   g_free(ssi);
 }
