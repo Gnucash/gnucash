@@ -86,7 +86,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
     GncABTransDialog *dialog = NULL;
     GList *templates = NULL;
     GncABTransDialog *td = NULL;
-    gboolean successful;
+    gboolean successful = FALSE;
     gboolean aborted = FALSE;
 
     g_return_if_fail(parent && gnc_acc);
