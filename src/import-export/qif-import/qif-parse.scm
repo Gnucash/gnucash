@@ -19,13 +19,13 @@
 
 (define decimal-radix-regexp
   (make-regexp
-   "^ *[$£]?[+-]?[$£]?[0-9]+[+-]?$|^ *[$£]?[+-]?[$£]?[0-9]?[0-9]?[0-9]?([,'][0-9][0-9][0-9])*(\\.[0-9]*)?[+-]? *$|^ *[$£]?[+-]?[$£]?[0-9]+\\.[0-9]*[+-]? *$"))
+   "^ *[$\xa3]?[+-]?[$\xa3]?[0-9]+[+-]?$|^ *[$\xa3]?[+-]?[$\xa3]?[0-9]?[0-9]?[0-9]?([,'][0-9][0-9][0-9])*(\\.[0-9]*)?[+-]? *$|^ *[$\xa3]?[+-]?[$\xa3]?[0-9]+\\.[0-9]*[+-]? *$"))
 
 (define comma-radix-regexp
   (make-regexp
-   "^ *[$£]?[+-]?[$£]?[0-9]+[+-]?$|^ *[$£]?[+-]?[$£]?[0-9]?[0-9]?[0-9]?([\\.'][0-9][0-9][0-9])*(,[0-9]*)?[+-]? *$|^ *[$£]?[+-]?[$£]?[0-9]+,[0-9]*[+-]? *$"))
+   "^ *[$\xa3]?[+-]?[$\xa3]?[0-9]+[+-]?$|^ *[$\xa3]?[+-]?[$\xa3]?[0-9]?[0-9]?[0-9]?([\\.'][0-9][0-9][0-9])*(,[0-9]*)?[+-]? *$|^ *[$\xa3]?[+-]?[$\xa3]?[0-9]+,[0-9]*[+-]? *$"))
 
-(define integer-regexp (make-regexp "^[$£]?[+-]?[$£]?[0-9]+[+-]? *$"))
+(define integer-regexp (make-regexp "^[$\xa3]?[+-]?[$\xa3]?[0-9]+[+-]? *$"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-split:parse-category
@@ -548,7 +548,7 @@
 
 (define (qif-parse:parse-number/format value-string format)
   (let ((minus-index (string-index value-string #\-))
-        (filtered-string (gnc:string-delete-chars value-string "$£'+-")))
+        (filtered-string (gnc:string-delete-chars value-string "$\xa3'+-")))
     (case format
       ((decimal)
        (let* ((read-string (string-remove-char filtered-string #\,))
