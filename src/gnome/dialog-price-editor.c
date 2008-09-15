@@ -162,6 +162,7 @@ gui_to_price (PriceEditDialog *pedit_dialog)
 {
   gnc_commodity *commodity;
   gnc_commodity *currency;
+  const char *source;
   const char *type;
   gnc_numeric value;
   Timespec date;
@@ -182,6 +183,8 @@ gui_to_price (PriceEditDialog *pedit_dialog)
   date.tv_sec = gnc_date_edit_get_date (GNC_DATE_EDIT (pedit_dialog->date_edit));
   date.tv_nsec = 0;
 
+  source = gtk_entry_get_text (GTK_ENTRY (pedit_dialog->source_entry));
+
   type = type_index_to_string
     (gtk_combo_box_get_active (GTK_COMBO_BOX (pedit_dialog->type_combobox)));
 
@@ -195,6 +198,7 @@ gui_to_price (PriceEditDialog *pedit_dialog)
   gnc_price_set_commodity (pedit_dialog->price, commodity);
   gnc_price_set_currency (pedit_dialog->price, currency);
   gnc_price_set_time (pedit_dialog->price, date);
+  gnc_price_set_source (pedit_dialog->price, source);
   gnc_price_set_typestr (pedit_dialog->price, type);
   gnc_price_set_value (pedit_dialog->price, value);
   gnc_price_commit_edit (pedit_dialog->price);
