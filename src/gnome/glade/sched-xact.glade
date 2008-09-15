@@ -2259,7 +2259,7 @@ Last Sunday</property>
 </widget>
 
 <widget class="GtkDialog" id="sx_from_real_trans">
-  <property name="visible">True</property>
+  <property name="visible">False</property>
   <property name="title" translatable="yes">Make Scheduled Transaction</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>

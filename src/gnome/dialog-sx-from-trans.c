@@ -781,5 +781,5 @@ gnc_sx_create_from_trans( Transaction *trans )
           }
   }
 
-  gtk_widget_show_all(GTK_WIDGET(sxfti->dialog));
+  gtk_widget_show(GTK_WIDGET(sxfti->dialog));
 }
