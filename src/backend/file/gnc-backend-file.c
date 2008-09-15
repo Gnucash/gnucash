@@ -146,9 +146,15 @@ gnc_file_be_get_file_lock (FileBackend *be)
         /* If hard links aren't supported, just allow the lock. */
         if (errno == EPERM
 # ifdef EOPNOTSUPP
-	    || errno == EOPNOTSUPP
+            || errno == EOPNOTSUPP
 # endif
-	    )
+# ifdef ENOTSUP
+            || errno == ENOTSUP
+# endif
+# ifdef ENOSYS
+            || errno == ENOSYS
+# endif
+            )
         {
             be->linkfile = NULL;
             return TRUE;
@@ -395,6 +401,7 @@ copy_file(const char *orig, const char *bkup)
 static gboolean
 gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
 {
+    gboolean copy_success = FALSE;
     int err_ret = 
 #ifdef HAVE_LINK
       link (orig, bkup)
@@ -407,15 +414,21 @@ gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
 #ifdef HAVE_LINK
         if(errno == EPERM
 # ifdef EOPNOTSUPP
-	   || errno == EOPNOTSUPP
+           || errno == EOPNOTSUPP
 # endif
-	   )
+# ifdef ENOTSUP
+           || errno == ENOTSUP
+# endif
+# ifdef ENOSYS
+           || errno == ENOSYS
+# endif
+            )
 #endif
         {
-            err_ret = copy_file(orig, bkup);
+            copy_success = copy_file(orig, bkup);
         }
 
-        if(!err_ret)
+        if(!copy_success)
         {
             qof_backend_set_error((QofBackend*)be, ERR_FILEIO_BACKUP_ERROR);
             PWARN ("unable to make file backup from %s to %s: %s", 
