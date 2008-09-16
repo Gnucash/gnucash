@@ -453,7 +453,7 @@ gnc_split_register_layout_add_cursors (SplitRegister *reg,
 
     case PAYABLE_REGISTER:
     case RECEIVABLE_REGISTER:
-      num_cols = 10;
+      num_cols = 9;
       break;
 
     case INCOME_LEDGER:
@@ -464,7 +464,7 @@ gnc_split_register_layout_add_cursors (SplitRegister *reg,
 
     case STOCK_REGISTER:
     case CURRENCY_REGISTER:
-      num_cols = 11;
+      num_cols = 10;
       break;
 
     case PORTFOLIO_LEDGER:
