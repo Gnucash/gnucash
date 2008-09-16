@@ -58,7 +58,7 @@ static const char * _numeric_error_strings[] =
 inline GNCNumericErrorCode
 gnc_numeric_check(gnc_numeric in) 
 {
-  if(in.denom != 0) 
+  if(G_LIKELY(in.denom != 0))
   {
     return GNC_ERROR_OK;
   }
