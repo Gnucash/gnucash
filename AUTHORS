@@ -120,7 +120,7 @@ Eskil Bylund <eskil.bylund@gmail.com> account type deprecation
 Paul Campbell <kemitix@users.sourceforge.net> reconcile children patch
 Conrad Canterford <conrad@mail.watersprite.com.au> register bug fix
 Bill Carlson <wwc@wwcnet.nu> performance improvements
-David Mar?n Carre?o <davefx@aspl.f2s.com> Spanish translation of account setup.
+David Marín Carreño <davefx@aspl.f2s.com> Spanish translation of account setup.
 Tomas Cernaj <tcernaj@gmx.de> GType consistency changes, register fixes
 Carol Champagne <carol@io.com> documentation & a patient GUI usability critic
 Nikos Charonitakis <charosn@her.forthnet.gr> Greek translation
@@ -228,7 +228,7 @@ Gordon Oliver <gordo@pincoya.com> multiple currency status line patch
 Scott Oonk <s.oonk@comcast.net>, <scott.oonk@gmail.com> register changes for utf-8 and pango.
 Alan Orndorff <dwarf@solarisresources.com> Solaris packager
 Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
-Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
+Laurent Pélecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
 Sulyok Peter <sp@elte.hu> Hungarian account templates
 Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
 Zdenko Podobný <zdpo@mailbox.sk> Slovak translations
