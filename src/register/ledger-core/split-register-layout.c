@@ -544,7 +544,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
   gnc_register_add_cell (layout,
                          RATE_CELL,
                          PRICE_CELL_TYPE_NAME,
-                         "",
+                         NULL,
                          CELL_ALIGN_RIGHT,
                          FALSE,
                          FALSE);
