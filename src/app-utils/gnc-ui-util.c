@@ -1260,7 +1260,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   char temp_buf[128];
   gnc_numeric whole, rounding;
   int min_dp, max_dp;
-  gboolean value_is_decimal;
+  gboolean value_is_negative, value_is_decimal;
 
   g_return_val_if_fail (info != NULL, 0);
 
@@ -1271,7 +1271,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     return 0;
   }
 
-  /* print the absolute value */
+  /* Print the absolute value, but remember negativity */
+  value_is_negative = gnc_numeric_negative_p (val);
   val = gnc_numeric_abs (val);
 
   /* Try to print as decimal. */
@@ -1400,6 +1401,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 
     if (whole.num == 0)
       *buf = '\0';
+    else if (value_is_negative)
+      strcat(buf, " - ");
     else
       strcat(buf, " + ");
 
