@@ -384,14 +384,13 @@ gnc_xfer_dialog_from_tree_selection_changed_cb (GtkTreeSelection *selection,
 
   xferData->from_commodity = commodity;
 
-  gnc_xfer_dialog_curr_acct_activate(xferData);
-
   print_info = gnc_account_print_info (account, FALSE);
-
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (xferData->amount_edit),
                                   print_info);
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (xferData->amount_edit),
                                 xaccAccountGetCommoditySCU (account));
+
+  gnc_xfer_dialog_curr_acct_activate(xferData);
 
   /* Reload the xferDialog quickfill if it is based on the from account */
   if (xferData->quickfill == XFER_DIALOG_FROM)
@@ -417,14 +416,13 @@ gnc_xfer_dialog_to_tree_selection_changed_cb (GtkTreeSelection *selection, gpoin
 
   xferData->to_commodity = commodity;
 
-  gnc_xfer_dialog_curr_acct_activate(xferData);
-
   print_info = gnc_account_print_info (account, FALSE);
-
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (xferData->to_amount_edit),
                                   print_info);
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (xferData->to_amount_edit),
                                 xaccAccountGetCommoditySCU (account));
+
+  gnc_xfer_dialog_curr_acct_activate(xferData);
 
   /* Reload the xferDialog quickfill if it is based on the to account */
   if (xferData->quickfill == XFER_DIALOG_TO)
@@ -954,11 +952,13 @@ gnc_xfer_dialog_select_from_currency(XferDialog *xferData, gnc_commodity *cur)
   if (!xferData) return;
   if (!cur) return;
 
-  gtk_label_set_text(GTK_LABEL(xferData->from_currency_label), 
-		     gnc_commodity_get_printname(cur));
+  gtk_label_set_text(GTK_LABEL(xferData->from_currency_label),
+                     gnc_commodity_get_printname(cur));
 
-  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (xferData->amount_edit),
-                                gnc_commodity_get_fraction (cur));
+  gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(xferData->amount_edit),
+                                 gnc_commodity_print_info(cur, FALSE));
+  gnc_amount_edit_set_fraction(GNC_AMOUNT_EDIT(xferData->amount_edit),
+                               gnc_commodity_get_fraction (cur));
 
   xferData->from_commodity = cur;
   gnc_xfer_dialog_curr_acct_activate(xferData);
@@ -968,10 +968,12 @@ void
 gnc_xfer_dialog_select_to_currency(XferDialog *xferData, gnc_commodity *cur)
 {
   gtk_label_set_text(GTK_LABEL(xferData->to_currency_label),
-		     gnc_commodity_get_printname(cur));
+                     gnc_commodity_get_printname(cur));
 
-  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (xferData->to_amount_edit),
-				gnc_commodity_get_fraction (cur));
+  gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(xferData->to_amount_edit),
+                                 gnc_commodity_print_info(cur, FALSE));
+  gnc_amount_edit_set_fraction(GNC_AMOUNT_EDIT(xferData->to_amount_edit),
+                               gnc_commodity_get_fraction(cur));
 
   xferData->to_commodity = cur;
   gnc_xfer_dialog_curr_acct_activate(xferData);
