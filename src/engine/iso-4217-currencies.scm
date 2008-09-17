@@ -97,7 +97,7 @@
 ( "Hungarian Forint" "forint" "forint" "ISO4217" "HUF" "348" 1 1)
 ( "Iceland Krona" "krona" "aur" "ISO4217" "ISK" "352" 100 100 )
 ( "Indian Rupee" "rupee" "paise" "ISO4217" "INR" "356" 100 100 )
-( "Indonesian Rupiah" "rupiah" "sen" "ISO4217" "IDR" "360" 100 1 )
+( "Indonesian Rupiah" "rupiah" "sen" "ISO4217" "IDR" "360" 100 100 )
 ( "Iranian Rial" "rial" "rial" "ISO4217" "IRR" "364" 1 1)
 ( "Iraqi Dinar" "dinar" "fil"  "ISO4217" "IQD" "368" 1000 1000)
 ( "Irish Punt" "punt" "pingin" "ISO4217" "IEP" "372" 100 100 ) ;; through 1998
