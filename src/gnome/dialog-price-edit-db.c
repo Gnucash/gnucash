@@ -355,7 +355,27 @@ static void
 row_activated_cb (GtkTreeView *view, GtkTreePath *path,
 		  GtkTreeViewColumn *column, gpointer data)
 {
-  gnc_prices_dialog_edit_clicked (GTK_WIDGET (view), data);
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+
+  g_return_if_fail(view);
+
+  model = gtk_tree_view_get_model(view);
+  if (gtk_tree_model_get_iter(model, &iter, path))
+  {
+    if (gtk_tree_model_iter_has_child(model, &iter))
+    {
+      /* There are children, so it's not a price.
+       * Just expand or collapse the row. */
+      if (gtk_tree_view_row_expanded(view, path))
+        gtk_tree_view_collapse_row(view, path);
+      else
+        gtk_tree_view_expand_row(view, path, FALSE);
+    }
+    else
+      /* It's a price, so click the Edit button. */
+      gnc_prices_dialog_edit_clicked(GTK_WIDGET(view), data);
+  }
 }
 
 static void
