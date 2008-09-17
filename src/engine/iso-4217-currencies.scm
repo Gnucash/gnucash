@@ -198,7 +198,8 @@
 ( "Uruguayan Peso" "peso" "centesimo" "ISO4217" "UYU" "858" 100 100 )
 ( "Uzbekistani Sum" "som" "tiyin" "ISO4217" "UZS" "860" 100 100 )
 ( "Vanuatu Vatu" "vatu" "centime" "ISO4217" "VUV" "548" 1 1 )
-( "Venezuelan Bolivar" "bolivar" "centimo" "ISO4217" "VEB" "862" 100 100 )
+( "Venezuelan Bolivar (old)" "bolivar" "centimo" "ISO4217" "VEB" "862" 100 100 ) ;; 1000 replaced by 1 VEF in 2008
+( "Venezuelan Bolivar Fuerte" "bolivar" "centimo" "ISO4217" "VEF" "937" 100 100 ) ;; since 2008-01-01
 ( "Vietnamese Dong" "dong" "hao" "ISO4217" "VND" "704" 100 100 )
 ( "Yemeni Riyal" "riyal" "fils" "ISO4217" "YER" "886" 100 100 )
 ( "Yugoslav Dinar" "dinar" "para"  "ISO4217" "YUM"  "890" 100 100)
