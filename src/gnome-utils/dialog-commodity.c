@@ -172,9 +172,13 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
 		    initial,
 		    fullname ? _("\nCommodity: ") : "",
 		    fullname ? fullname : "",
-		    cusip    ? _("\nExchange code (CUSIP or similar): ") : "",
+		    /* Translators: Replace here and later CUSIP by the name of your local
+		       National Securities Identifying Number
+		       like gb:SEDOL, de:WKN, ch:Valorennummer, fr:SICOVAM ...
+		       See http://en.wikipedia.org/wiki/ISIN for hints. */
+		    cusip    ? _("\nExchange code (ISIN, CUSIP or similar): ") : "",
 		    cusip    ? cusip : "",
-		    mnemonic ? _("\nMnemonic(Ticker symbol or similar): ") : "",
+		    mnemonic ? _("\nMnemonic (Ticker symbol or similar): ") : "",
 		    mnemonic ? mnemonic : "");
    gtk_label_set_text ((GtkLabel *)(win->select_user_prompt),
 		      user_prompt_text);
