@@ -2997,9 +2997,10 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
                             gpointer arg1,
                             gpointer user_data)
 {
-  SCM   save_map_prefs = scm_c_eval_string("qif-import:save-map-prefs");
-  SCM   cat_and_merge = scm_c_eval_string("gnc:account-tree-catenate-and-merge");
-  SCM   prune_xtns = scm_c_eval_string("gnc:prune-matching-transactions");
+  SCM save_map_prefs = scm_c_eval_string("qif-import:save-map-prefs");
+  SCM cat_and_merge = scm_c_eval_string("gnc:account-tree-catenate-and-merge");
+  SCM prune_xtns = scm_c_eval_string("gnc:prune-matching-transactions");
+  SCM scm_result;
 
   QIFImportWindow * wind = user_data;
   GncPluginPage *page;
@@ -3020,11 +3021,14 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
   gnc_resume_gui_refresh();
 
   /* Save the user's mapping preferences. */
-  scm_apply(save_map_prefs,
-            SCM_LIST5(wind->acct_map_info, wind->cat_map_info,
-                      wind->memo_map_info, wind->security_hash,
-                      wind->security_prefs),
-            SCM_EOL);
+  scm_result = scm_apply(save_map_prefs,
+                         SCM_LIST5(wind->acct_map_info, wind->cat_map_info,
+                                   wind->memo_map_info, wind->security_hash,
+                                   wind->security_prefs),
+                         SCM_EOL);
+  if (scm_result == SCM_BOOL_F)
+    gnc_warning_dialog(wind->window,
+            _("GnuCash was unable to save your mapping preferences."));
 
   /* Open an account tab in the main window if one doesn't exist already. */
   gnc_main_window_foreach_page(gnc_ui_qif_import_check_acct_tree,
