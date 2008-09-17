@@ -2402,6 +2402,8 @@ gnc_split_register_cleanup (SplitRegister *reg)
    /* be sure to take care of any open transactions */
    if (pending_trans != NULL)
    {
+      g_critical("BUG DETECTED: pending_trans=%p, blank_split=%p, trans=%p",
+                 pending_trans, blank_split, trans);
       g_assert_not_reached();
       info->pending_trans_guid = *guid_null ();
       /* CAS: It's not clear to me that we'd really want to commit
