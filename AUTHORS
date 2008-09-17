@@ -91,8 +91,8 @@ Chris Shoemaker <c.shoemaker@cox.net> implemented budgeting support
 Andreas Köhler <andi5.py@gmx.net> is hunting down lots of bugs,
    especially for GUI code and other gtk related issues.
 
-Charles Day <cedayiv@gmail.com> hacks excessively on the QIF importer
-   and aims to see significantly expanded support for investments.
+Charles Day <cedayiv@gmail.com> overhauled the QIF importer and now
+   focuses mainly on investment- and currency-related issues.
 
 Other Contributors:
 ----------------
@@ -138,6 +138,7 @@ Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
 Bob Drzyzgula <bob@mostly.com> for budgeting design notes
 Frank H. Ellenberger <f.ellenberger@online.de> small things, usually germany related
 Volker Englisch <Volker@englisch.us> QA and testing
+Frank H. Ellenberger <f.ellenberger@online.de> Fix for IDR currency
 Christoph Ernst <C.Ernst72@googlemail.com> Small bugfixes and minor enhancements
 Jonathan Ernst <jonathan@ernstfamily.ch> Translations
 Stephen Evanchik <evanchsa@clarkson.edu> Logging improvements; gtk2 conversions
