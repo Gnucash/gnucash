@@ -138,5 +138,5 @@ gnc_dense_cal_model_get_instance_count(GncDenseCalModel *model, guint tag)
 void
 gnc_dense_cal_model_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date)
 {
-    return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_instance)(model, tag, instance_index, date);
+    (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_instance)(model, tag, instance_index, date);
 }

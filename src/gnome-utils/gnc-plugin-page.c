@@ -177,7 +177,7 @@ gnc_plugin_page_destroy_widget (GncPluginPage *plugin_page)
 	g_return_if_fail (klass != NULL);
 	g_return_if_fail (klass->destroy_widget != NULL);
 
-	return klass->destroy_widget (plugin_page);
+	klass->destroy_widget (plugin_page);
 }
 
 

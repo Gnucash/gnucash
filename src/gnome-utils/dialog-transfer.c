@@ -257,7 +257,10 @@ gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
 
   if (!gnc_is_euro_currency (from_currency) ||
       !gnc_is_euro_currency (to_currency))
-    return gnc_xfer_dialog_update_price (xferData);
+  {
+    gnc_xfer_dialog_update_price (xferData);
+    return;
+  }
 
   from_rate = gnc_euro_currency_get_rate (from_currency);
   to_rate = gnc_euro_currency_get_rate (to_currency);
