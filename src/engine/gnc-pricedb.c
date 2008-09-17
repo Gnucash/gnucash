@@ -985,7 +985,7 @@ check_one_price_date (GNCPrice *price, gpointer user_data)
 	user_data);
   if (!data->delete_user) {
     source = gnc_price_get_source (price);
-    if (strcmp(source, "Finance::Quote") != 0) {
+    if (safe_strcmp(source, "Finance::Quote") != 0) {
       LEAVE("Not an automatic quote");
       return TRUE;
     }
