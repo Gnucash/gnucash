@@ -46,6 +46,7 @@
 
 #define DIALOG_PRICE_EDIT_CM_CLASS "dialog-price-edit"
 #define GCONF_SECTION "dialogs/price_editor"
+#define DIALOG_PRICE_EDIT_SOURCE "user:price-editor"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_GUI; */
@@ -135,7 +136,7 @@ price_to_gui (PriceEditDialog *pedit_dialog)
     currency = gnc_default_currency ();
     date.tv_sec = time (NULL);
     date.tv_nsec = 0;
-    source = "user:price-editor";
+    source = DIALOG_PRICE_EDIT_SOURCE;
     type = "";
     value = gnc_numeric_zero ();
   }
@@ -448,6 +449,7 @@ gnc_price_edit_dialog (GtkWidget * parent,
     } else {
       price = gnc_price_create (pedit_dialog->book);
     }
+    gnc_price_set_source (price, DIALOG_PRICE_EDIT_SOURCE);
 
     pedit_dialog->new = TRUE;
     /* New price will only have one ref, this dialog. */
