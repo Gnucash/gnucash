@@ -1253,7 +1253,9 @@ gnc_integral_print_info (void)
 
 /* Utility function for printing non-negative amounts */
 static int
-PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
+PrintAmountInternal(char *buf, gnc_numeric val,
+                    const GNCPrintAmountInfo *info,
+                    gboolean print_absolute)
 {
   struct lconv *lc = gnc_localeconv();
   int num_whole_digits;
@@ -1401,7 +1403,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 
     if (whole.num == 0)
       *buf = '\0';
-    else if (value_is_negative)
+    else if (value_is_negative && !print_absolute)
       strcat(buf, " - ");
     else
       strcat(buf, " + ");
@@ -1483,6 +1485,7 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 
    gboolean print_sign = TRUE;
    gboolean is_shares = FALSE;
+   gboolean print_absolute = FALSE;
 
    if (!bufp)
      return 0;
@@ -1570,10 +1573,13 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 
    /* Now see if we print parentheses */
    if (print_sign && (sign_posn == 0))
+   {
      bufp = g_stpcpy(bufp, "(");
+     print_absolute = TRUE;
+   }
 
    /* Now print the value */
-   bufp += PrintAmountInternal(bufp, val, &info);
+   bufp += PrintAmountInternal(bufp, val, &info, print_absolute);
 
    /* Now see if we print parentheses */
    if (print_sign && (sign_posn == 0))
