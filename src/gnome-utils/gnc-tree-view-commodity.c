@@ -366,13 +366,6 @@ gnc_tree_view_commodity_new (QofBook *book,
   va_list var_args;
 
   ENTER(" ");
-  /* Create our view */
-  va_start (var_args, first_property_name);
-  view = (GncTreeView *)g_object_new_valist (GNC_TYPE_TREE_VIEW_COMMODITY,
-					     first_property_name, var_args);
-  va_end (var_args);
-  g_object_set(view, "name", "commodity_tree", NULL);
-
   /* Create/get a pointer to the existing model for this set of books. */
   ct = gnc_book_get_commodity_table (book);
   model = gnc_tree_model_commodity_new (book, ct);
@@ -382,6 +375,10 @@ gnc_tree_view_commodity_new (QofBook *book,
   g_object_unref(G_OBJECT(model));
   s_model = gtk_tree_model_sort_new_with_model (f_model);
   g_object_unref(G_OBJECT(f_model));
+
+  /* Create our view */
+  view = g_object_new (GNC_TYPE_TREE_VIEW_COMMODITY,
+                       "name", "commodity_tree", NULL);
   gnc_tree_view_set_model (view, s_model);
   g_object_unref(G_OBJECT(s_model));
 
@@ -454,9 +451,23 @@ gnc_tree_view_commodity_new (QofBook *book,
       GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ,
       GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
       sort_by_commodity_string);
-  
   g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+
   gnc_tree_view_configure_columns(view);
+
+  /* Set properties */
+  va_start (var_args, first_property_name);
+  g_object_set_valist (G_OBJECT(view), first_property_name, var_args);
+  va_end (var_args);
+
+  /* Sort on the name column by default. This allows for a consistent
+   * sort if commodities are briefly removed and re-added. */
+  if (!gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(s_model),
+                                            NULL, NULL)) {
+    gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(s_model),
+                                         GNC_TREE_MODEL_COMMODITY_COL_FULLNAME,
+                                         GTK_SORT_ASCENDING);
+  }
 
   gtk_widget_show(GTK_WIDGET(view));
   LEAVE(" %p", view);
