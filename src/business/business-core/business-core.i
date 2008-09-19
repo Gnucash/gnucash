@@ -23,7 +23,7 @@
  * emits a warning that the guid null pointer test is always true.
  */
 #if (__GNUC__ >= 4 && __GNUC_MINOR__ >= 2)
-#    pragma GCC diagnostic ignored "-Waddress"
+#    pragma GCC diagnostic warning "-Waddress"
 #endif
 
 SCM scm_init_sw_business_core_module (void);
