@@ -37,6 +37,10 @@
 (use-modules (gnucash report standard-reports))
 (use-modules (gnucash report business-reports))
 
+;; Option names
+(define optname-from-date (N_ "From"))
+(define optname-to-date (N_ "To"))
+
 ;; let's define a name for the report-guid's, much prettier
 (define employee-report-guid "08ae9c2e884b4f9787144f47eacd7f44")
 (define vendor-report-guid "d7d1e53505ee4b1b82efad9eacedaea0")
@@ -382,7 +386,12 @@
 
   (gnc:options-add-date-interval!
    gnc:*report-options* gnc:pagename-general
-   (N_ "From") (N_ "To") "a")
+   optname-from-date optname-to-date "a")
+  ;; Use a default report date of 'today'
+  (gnc:option-set-value (gnc:lookup-option gnc:*report-options*
+                                           gnc:pagename-general
+                                           optname-to-date)
+                        (cons 'relative 'today))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -561,10 +570,10 @@
 	 (owner (opt-val owner-page owner-string))
 	 (start-date (gnc:timepair-start-day-time 
 		       (gnc:date-option-absolute-time
-			(opt-val gnc:pagename-general (N_ "From")))))
+			(opt-val gnc:pagename-general optname-from-date))))
 	 (end-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
-			(opt-val gnc:pagename-general (N_ "To")))))
+			(opt-val gnc:pagename-general optname-to-date))))
 	 (book (gnc-get-current-book)) ;XXX Grab this from elsewhere
 	 (type (opt-val "__reg" "owner-type"))
 	 (type-str ""))
