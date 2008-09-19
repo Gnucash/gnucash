@@ -77,7 +77,7 @@
  * emits a warning that the guid null pointer test is always true.
  */
 #if (__GNUC__ >= 4 && __GNUC_MINOR__ >= 2)
-#    pragma GCC diagnostic ignored "-Waddress"
+#    pragma GCC diagnostic warning "-Waddress"
 #endif
 
 #define DIALOG_NEW_INVOICE_CM_CLASS "dialog-new-invoice"
