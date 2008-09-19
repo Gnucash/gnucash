@@ -321,12 +321,12 @@ gnc_amount_edit_set_amount (GNCAmountEdit *gae, gnc_numeric amount)
   g_return_if_fail(GNC_IS_AMOUNT_EDIT(gae));
   g_return_if_fail(!gnc_numeric_check (amount));
 
+  /* Update the display. */
+  amount_string = xaccPrintAmount (amount, gae->print_info);
+  gtk_entry_set_text (GTK_ENTRY(gae), amount_string);
+
   gae->amount = amount;
   gae->need_to_parse = FALSE;
-
-  amount_string = xaccPrintAmount (amount, gae->print_info);
-
-  gtk_entry_set_text (GTK_ENTRY(gae), amount_string);
 }
 
 /**
