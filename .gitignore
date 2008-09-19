@@ -117,3 +117,4 @@ swig-*.c
 *~
 po/.intltool-merge-cache
 src/bin/gnucash-bin.o
+gnucash-*.*.*/
