@@ -185,6 +185,7 @@ gnc_totd_initialize (void)
   /* Convert any escaped characters while counting the strings */
   for (tip_count = 0; tip_list[tip_count] != NULL; tip_count++) {
 
+    g_strstrip(tip_list[tip_count]);
     new = g_strcompress(g_strdelimit(tip_list[tip_count], "\n", ' '));
     g_free(tip_list[tip_count]);
     tip_list[tip_count] = new;
