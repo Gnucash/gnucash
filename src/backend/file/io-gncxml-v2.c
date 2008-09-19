@@ -47,6 +47,14 @@
 #include "gnc-xml.h"
 #include "io-utils.h"
 
+/* Do not treat -Wstrict-aliasing warnings as errors because of problems of the
+ * G_LOCK* macros as declared by glib.  See
+ * http://bugzilla.gnome.org/show_bug.cgi?id=316221 for additional information.
+ */
+#if (__GNUC__ >= 4 && __GNUC_MINOR__ >= 2)
+#    pragma GCC diagnostic warning "-Wstrict-aliasing"
+#endif
+
 static QofLogModule log_module = GNC_MOD_IO;
 
 /* map pointers, e.g. of type FILE*, to GThreads */

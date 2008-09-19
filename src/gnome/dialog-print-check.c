@@ -95,6 +95,14 @@
 #define KF_KEY_TEXT        "Text"
 #define KF_KEY_FILENAME    "Filename"
 
+/* Do not treat -Wstrict-aliasing warnings as errors because of problems of the
+ * G_LOCK* macros as declared by glib.  See
+ * http://bugzilla.gnome.org/show_bug.cgi?id=316221 for additional information.
+ */
+#if (__GNUC__ >= 4 && __GNUC_MINOR__ >= 2)
+#    pragma GCC diagnostic warning "-Wstrict-aliasing"
+#endif
+
 /**< This enum specifies the columns used in the check format combobox. */
 typedef enum format_combo_col_t {
     COL_NAME = 0,               /**< This column holds a copy of the check
