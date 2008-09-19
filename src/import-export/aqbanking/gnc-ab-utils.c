@@ -572,7 +572,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     GncABImExContextImport *data = user_data;
     Account *gnc_acc;
     AB_ACCOUNT_STATUS *item, *best = NULL;
-    const GWEN_TIME *best_time;
+    const GWEN_TIME *best_time = NULL;
     const AB_BALANCE *booked_bal, *noted_bal;
     const AB_VALUE *booked_val = NULL, *noted_val = NULL;
     gdouble booked_value, noted_value;
