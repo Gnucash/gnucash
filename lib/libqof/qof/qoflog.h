@@ -165,7 +165,7 @@ gboolean qof_log_check(QofLogModule log_module, QofLogLevel log_level);
 /** Set the default level for QOF-related log paths. **/
 void qof_log_set_default(QofLogLevel log_level);
 
-#define PRETTY_FUNC_NAME qof_log_prettify(__FUNCTION__)
+#define PRETTY_FUNC_NAME qof_log_prettify(G_STRFUNC)
 
 /** Log a fatal error */
 #define FATAL(format, args...) do { \
@@ -254,21 +254,21 @@ void qof_report_clock_total (gint clockno,
 #define START_CLOCK(clockno,format, args...) do {        \
   if (qof_log_check (log_module, QOF_LOG_INFO))          \
     qof_start_clock (clockno, log_module, QOF_LOG_INFO,  \
-             __FUNCTION__, format , ## args);               \
+             G_STRFUNC, format , ## args);               \
 } while (0)
 
 /** report elapsed time since last report on a particular timer */
 #define REPORT_CLOCK(clockno,format, args...) do {       \
   if (qof_log_check (log_module, QOF_LOG_INFO))          \
     qof_report_clock (clockno, log_module, QOF_LOG_INFO, \
-             __FUNCTION__, format , ## args);               \
+             G_STRFUNC, format , ## args);               \
 } while (0)
 
 /** report total elapsed time since timer started */
 #define REPORT_CLOCK_TOTAL(clockno,format, args...) do {       \
   if (qof_log_check (log_module, QOF_LOG_INFO))                \
     qof_report_clock_total (clockno, log_module, QOF_LOG_INFO, \
-             __FUNCTION__, format , ## args);               \
+             G_STRFUNC, format , ## args);               \
 } while (0)
 
 

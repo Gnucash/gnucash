@@ -587,7 +587,7 @@ gnc_invoice_window_printCB (GtkWidget *widget, gpointer data)
 
   arg = scm_apply (func, args, SCM_EOL);
   g_return_if_fail (SCM_EXACTP (arg));
-  report_id = scm_num2int (arg, SCM_ARG1, __FUNCTION__);
+  report_id = scm_num2int (arg, SCM_ARG1, G_STRFUNC);
 
   /* scm_gc_unprotect_object(func); */
   if (report_id >= 0)
@@ -789,7 +789,7 @@ void gnc_business_call_owner_report (GncOwner *owner, Account *acc)
   /* Apply the function to the args */
   arg = scm_apply (func, args, SCM_EOL);
   g_return_if_fail (SCM_EXACTP (arg));
-  id = scm_num2int (arg, SCM_ARG1, __FUNCTION__);
+  id = scm_num2int (arg, SCM_ARG1, G_STRFUNC);
 
   if (id >= 0)
     reportWindow (id);

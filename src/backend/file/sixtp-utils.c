@@ -183,7 +183,7 @@ string_to_double(const char *str, double *result)
       return(FALSE);
     }
   
-    *result = scm_num2dbl(conversion_result, __FUNCTION__);
+    *result = scm_num2dbl(conversion_result, G_STRFUNC);
   } 
   
 #else /* don't USE_GUILE_FOR_DOUBLE_CONVERSION */

@@ -77,7 +77,7 @@ gint gnc_report_add(SCM report)
 
     value = scm_call_1(get_id, report);
     if (SCM_NUMBERP(value)) {
-      id = scm_num2int(value, SCM_ARG1, __FUNCTION__);
+      id = scm_num2int(value, SCM_ARG1, G_STRFUNC);
       if (!g_hash_table_lookup(reports, &id)) {
 	key = g_new(gint, 1);
 	*key = id;

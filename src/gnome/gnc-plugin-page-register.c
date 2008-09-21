@@ -1872,7 +1872,7 @@ report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
   arg = scm_apply (func, args, SCM_EOL);
   g_return_val_if_fail (SCM_EXACTP (arg), -1);
 
-  return scm_num2int (arg, SCM_ARG1, __FUNCTION__);
+  return scm_num2int (arg, SCM_ARG1, G_STRFUNC);
 }
 
 /************************************************************/
