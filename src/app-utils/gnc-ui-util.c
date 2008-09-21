@@ -1483,6 +1483,7 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 
    gboolean print_sign = TRUE;
    gboolean is_shares = FALSE;
+   gboolean print_absolute = FALSE;
 
    if (!bufp)
      return 0;
@@ -1570,10 +1571,15 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 
    /* Now see if we print parentheses */
    if (print_sign && (sign_posn == 0))
+   {
      bufp = g_stpcpy(bufp, "(");
+     print_absolute = TRUE;
+   }
 
    /* Now print the value */
-   bufp += PrintAmountInternal(bufp, val, &info);
+   bufp += PrintAmountInternal(bufp,
+                               print_absolute? gnc_numeric_abs(val) : val,
+                               &info);
 
    /* Now see if we print parentheses */
    if (print_sign && (sign_posn == 0))
