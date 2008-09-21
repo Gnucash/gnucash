@@ -1,7 +1,7 @@
 Version history:
 ------- -------
 
- 2.2.7 - 22 September 2008
+ 2.2.7 - 21 September 2008
  	 Welcome to the GnuCash 2.2.7 Release.
 	 Fixed Bugs:
 	 o #139651: Register: Split transaction with multiple currencies fails
