@@ -76,6 +76,8 @@ typedef struct {
 	int       flags;
 
 	int       disposed;
+
+        gboolean  popup_in_progress;
 } GNCDateEdit;
 
 typedef struct {
