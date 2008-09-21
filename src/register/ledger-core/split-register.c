@@ -2372,7 +2372,7 @@ gnc_split_register_cleanup (SplitRegister *reg)
 {
    SRInfo *info = gnc_split_register_get_info (reg);
    Transaction *pending_trans;
-   Transaction *trans;
+   Transaction *trans = NULL;
    Split *blank_split;
 
    ENTER("reg=%p", reg);
