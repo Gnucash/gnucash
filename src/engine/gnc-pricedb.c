@@ -193,6 +193,7 @@ static void
 gnc_price_set_dirty (GNCPrice *p)
 {
   qof_instance_set_dirty(&p->inst);
+  qof_event_gen(&p->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 void
