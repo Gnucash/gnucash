@@ -1,6 +1,57 @@
 Version history:
 ------- -------
 
+ 2.2.7 - 22 September 2008
+ 	 Welcome to the GnuCash 2.2.7 Release.
+	 Fixed Bugs:
+	 o #139651: Register: Split transaction with multiple currencies fails
+	 o #309863: Balance Sheet: Rounding errors with prices from pricedb
+	 o #341362: Price Editor: Price is displayed as fraction instead
+	            of decimal
+	 o #376298: Price Editor: Window Contents Corrupted After
+	            Manually Adding a Price
+	 o #378734: Drop down calendar only works once
+	 o #430121: Incorrect Sign Symbol for Fractional Commodity/Security Sale
+	 o #454340: Security Editor: duplicate rows after editing a security
+	 o #454827: Reports: Incorrect share value of stocks in foreign currency
+	 o #464771: Investment Portfolio: Report crashes without price data
+	 o #483393: Reports: Allow mixed denominators in numeric collectors
+	 o #506873: Win32: Cannot install online price retrieval with
+	            ActivePerl 5.10
+	 o #520570: Drop-down calendar for "reconcile information" non-responsive
+	 o #522095: Updating stock prices does not update totals shown in windows
+	 o #526313: GnuCash does not support the new currency in Venezuela
+	 o #529816: Supplement "CUSIP" by "ISIN", to give people outside
+	            USA a hint
+	 o #539640: Price Editor: Security disappears from price list
+	 o #539962: Void function cannot return value with sun cc
+	 o #540148: GnuCash cannot be built with libgoffice-0.8
+	 o #541970: Balance Sheet: "Nearest in time" exchange rate not correct
+	 o #543061: Fractional not working in IDR (rupiah) currency
+	 o #543780: Transfer Dialog: CRIT messages in gnucash.trace from
+	            exchange rate dialog
+	 o #545316: Drop-down calendar is not clickable when posting invoice
+	 o #545722: Can't change date in dialog boxes
+	 o #546064: gnucash.desktop file does not comply with
+	            desktop-file-validate
+	 o #548601: AqBanking Import: Obscuring zero balance windows
+	            after getting transactions
+	 o #548891: QIF Import: GnuCash crashes when
+	            .gnucash/qif-accounts-map is readonly
+	 o #549115: Popup calendar unresponsive in modal dialogs
+	 o #549595: Silently removes main files while trying to save without lock
+	 o #549738: Reports: Default date on aging and customer reports
+	            is too far in the future
+	 o #551038: Reports: Alt-O shortcut in report options dialog crashes app
+	 o #552306: Fails to save file when using a network filesystem on Mac
+	 Other Changes:
+	 o Complete Romanian translation
+	 o Usability improvements in the price and the security editor
+	 o Lower number of false positives when checking aqbanking
+	   results for failures
+	 o Correct import of remote names, zero balances from aqbanking3
+	 o Update translations: Catalan, Dutch, German, Italian, Polish
+
  2.2.6 - 27 July 2008
  	 Welcome to the GnuCash 2.2.6 Release.
 	 Fixed Bugs:
