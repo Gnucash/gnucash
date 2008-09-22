@@ -315,6 +315,7 @@ gnc_date_edit_popup (GNCDateEdit *gde)
                              GDK_CURRENT_TIME, TRUE))
   {
     gtk_widget_hide (gde->cal_popup);
+    LEAVE("Failed to grab window");
     return;
   }
 
@@ -332,14 +333,22 @@ gnc_date_edit_button_pressed (GtkWidget      *widget,
   GNCDateEdit *gde     = GNC_DATE_EDIT(data);
   GtkWidget   *ewidget = gtk_get_event_widget ((GdkEvent *)event);
 
+  ENTER("widget=%p, ewidget=%p, event=%p, gde=%p", widget, ewidget, event, gde);
+
   /* While popped up, ignore presses outside the popup window. */
   if (ewidget == gde->cal_popup)
+  {
+    LEAVE("Press on calendar. Ignoring.");
     return TRUE;
+  }
 
   /* If the press isn't to make the popup appear, just propagate it. */
   if (ewidget != gde->date_button ||
       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gde->date_button)))
+  {
+    LEAVE("Press, not on popup button, or while popup is raised.");
     return FALSE;
+  }
 
   if (!GTK_WIDGET_HAS_FOCUS (gde->date_button))
     gtk_widget_grab_focus (gde->date_button);
@@ -350,6 +359,7 @@ gnc_date_edit_button_pressed (GtkWidget      *widget,
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gde->date_button), TRUE);
 
+  LEAVE("Popup in progress.");
   return TRUE;
 }
 
@@ -360,8 +370,9 @@ gnc_date_edit_button_released (GtkWidget      *widget,
 {
   GNCDateEdit *gde     = GNC_DATE_EDIT(data);
   GtkWidget   *ewidget = gtk_get_event_widget ((GdkEvent *)event);
-
   gboolean popup_in_progress = FALSE;
+
+  ENTER("widget=%p, ewidget=%p, event=%p, gde=%p", widget, ewidget, event, gde);
 
   if (gde->popup_in_progress)
   {
@@ -371,7 +382,10 @@ gnc_date_edit_button_released (GtkWidget      *widget,
 
   /* Propagate releases on the calendar. */
   if (ewidget == gde->calendar)
+  {
+    LEAVE("Button release on calendar.");
     return FALSE;
+  }
 
   if (ewidget == gde->date_button)
   {
@@ -380,14 +394,17 @@ gnc_date_edit_button_released (GtkWidget      *widget,
         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gde->date_button)))
     {
       gnc_date_edit_popdown (gde);
+      LEAVE("Release on button, not in progress. Popped down.");
       return TRUE;
     }
 
+    LEAVE("Button release on button. Allowing.");
     return FALSE;
   }
 
   /* Pop down on a release anywhere else. */
   gnc_date_edit_popdown (gde);
+  LEAVE("Release not on button or calendar. Popping down.");
   return TRUE;
 }
 
@@ -874,10 +891,12 @@ create_children (GNCDateEdit *gde)
                   | GTK_CALENDAR_SHOW_HEADING
                   | ((gde->flags & GNC_DATE_EDIT_WEEK_STARTS_ON_MONDAY)
                      ? GTK_CALENDAR_WEEK_START_MONDAY : 0)));
-	g_signal_connect (G_OBJECT (gde->calendar), "day_selected",
+	g_signal_connect (gde->calendar, "button-release-event",
+			  G_CALLBACK(gnc_date_edit_button_released), gde);
+	g_signal_connect (G_OBJECT (gde->calendar), "day-selected",
 			  G_CALLBACK  (day_selected), gde);
 	g_signal_connect (G_OBJECT (gde->calendar),
-                            "day_selected_double_click",
+                            "day-selected-double-click",
 			  G_CALLBACK  (day_selected_double_click), gde);
 	gtk_container_add (GTK_CONTAINER (frame), gde->calendar);
         gtk_widget_show (GTK_WIDGET(gde->calendar));
