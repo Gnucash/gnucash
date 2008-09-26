@@ -1,7 +1,7 @@
 Version history:
 ------- -------
 
- 2.2.7 - 21 September 2008
+ 2.2.7 - 26 September 2008
  	 Welcome to the GnuCash 2.2.7 Release.
 	 Fixed Bugs:
 	 o #139651: Register: Split transaction with multiple currencies fails
@@ -16,6 +16,7 @@ Version history:
 	 o #454827: Reports: Incorrect share value of stocks in foreign currency
 	 o #464771: Investment Portfolio: Report crashes without price data
 	 o #483393: Reports: Allow mixed denominators in numeric collectors
+	 o #504935: Add currencies XDR and XXX
 	 o #506873: Win32: Cannot install online price retrieval with
 	            ActivePerl 5.10
 	 o #520570: Drop-down calendar for "reconcile information" non-responsive
@@ -45,6 +46,7 @@ Version history:
 	 o #551038: Reports: Alt-O shortcut in report options dialog crashes app
 	 o #552306: Fails to save file when using a network filesystem on Mac
 	 Other Changes:
+	 o New Finnish translation
 	 o Complete Romanian translation
 	 o Usability improvements in the price and the security editor
 	 o Lower number of false positives when checking aqbanking
