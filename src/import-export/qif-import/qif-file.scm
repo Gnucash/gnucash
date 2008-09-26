@@ -287,8 +287,7 @@
                                 (qif-split:set-memo! current-split value)))
 
                            ;; $ : split amount (if there are splits)
-                           ;; Also allowing pound symbol just in case (#141003)
-                           ((#\$ #\243)
+                           ((#\$)
                             (if (and current-split
                                      (not-bad-numeric-string? value))
                                 (qif-split:set-amount! current-split value)))

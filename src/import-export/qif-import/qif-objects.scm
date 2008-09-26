@@ -177,7 +177,7 @@
 ;;  [Y] name of security 
 ;;  [O] commission (parsed)
 ;;  [L] category   : string 
-;;  [S]/[E]/[$]/[pound ("\xa3" or #\243)] splits : a list of <qif-split>
+;;  [S]/[E]/[$] splits : a list of <qif-split>
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <qif-xtn>
