@@ -73,7 +73,7 @@ AC_DEFINE_UNQUOTED(GNUCASH_MICRO_VERSION, $GNUCASH_MICRO_VERSION,
 	[GnuCash Micro version number])
 
 dnl Set of available languages.
-ALL_LINGUAS="ca cs da de de_CH el en_GB es_NI es eu fr he hu it ja nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk vi zh_CN zh_TW"
+ALL_LINGUAS="ca cs da de de_CH el en_GB es_NI es eu fi fr he hu it ja nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk vi zh_CN zh_TW"
 
 GETTEXT_PACKAGE=gnucash
 AC_SUBST(GETTEXT_PACKAGE)
