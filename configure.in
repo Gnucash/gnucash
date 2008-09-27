@@ -1427,6 +1427,7 @@ AC_CONFIG_FILES(po/Makefile.in
           accounts/en_GB/Makefile
           accounts/es_ES/Makefile
           accounts/es_MX/Makefile
+          accounts/fi_FI/Makefile
           accounts/fr_CA/Makefile
           accounts/fr_CH/Makefile
           accounts/fr_FR/Makefile
