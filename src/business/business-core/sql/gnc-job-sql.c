@@ -134,14 +134,14 @@ create_job_tables( GncSqlBackend* be )
 }
 
 /* ================================================================= */
-static void
+static gboolean
 save_job( GncSqlBackend* be, QofInstance* inst )
 {
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_JOB(inst) );
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_JOB(inst), FALSE );
+	g_return_val_if_fail( be != NULL, FALSE );
 
-    gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_JOB, col_table );
+    return gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_JOB, col_table );
 }
 
 /* ================================================================= */
@@ -161,26 +161,37 @@ job_should_be_saved( GncJob *job )
     return TRUE;
 }
 
+typedef struct {
+	GncSqlBackend* be;
+	gboolean is_ok;
+} write_objects_t;
+
 static void
-write_single_job( QofInstance *term_p, gpointer be_p )
+write_single_job( QofInstance *term_p, gpointer data_p )
 {
-    GncSqlBackend* be = (GncSqlBackend*)be_p;
+	write_objects_t* s = (write_objects_t*)data_p;
 
 	g_return_if_fail( term_p != NULL );
 	g_return_if_fail( GNC_IS_JOB(term_p) );
-	g_return_if_fail( be_p != NULL );
+	g_return_if_fail( data_p != NULL );
 
-	if( job_should_be_saved( GNC_JOB(term_p) ) ) {
-    	save_job( be, term_p );
+	if( s->is_ok && job_should_be_saved( GNC_JOB(term_p) ) ) {
+    	s->is_ok = save_job( s->be, term_p );
 	}
 }
 
-static void
+static gboolean
 write_jobs( GncSqlBackend* be )
 {
-	g_return_if_fail( be != NULL );
+	write_objects_t data;
 
-    qof_object_foreach( GNC_ID_JOB, be->primary_book, write_single_job, (gpointer)be );
+	g_return_val_if_fail( be != NULL, FALSE );
+
+	data.be = be;
+	data.is_ok = TRUE;
+    qof_object_foreach( GNC_ID_JOB, be->primary_book, write_single_job, &data );
+
+	return data.is_ok;
 }
 
 /* ================================================================= */

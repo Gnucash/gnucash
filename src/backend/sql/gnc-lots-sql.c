@@ -187,29 +187,43 @@ create_lots_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 
-static void
+static gboolean
 commit_lot( GncSqlBackend* be, QofInstance* inst )
 {
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_LOT(inst) );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_LOT(inst), FALSE );
 
-    gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_LOT, col_table );
+    return gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_LOT, col_table );
 }
+
+typedef struct {
+	GncSqlBackend* be;
+	gboolean is_ok;
+} write_objects_t;
 
 static void
 do_save_lot( QofInstance* inst, gpointer data )
 {
-	commit_lot( (GncSqlBackend*)data, inst );
+	write_objects_t* s = (write_objects_t*)data;
+
+	if( s->is_ok ) {
+		s->is_ok = commit_lot( s->be, inst );
+	}
 }
 
-static void
+static gboolean
 write_lots( GncSqlBackend* be )
 {
-	g_return_if_fail( be != NULL );
+	write_objects_t data;
 
+	g_return_val_if_fail( be != NULL, FALSE );
+
+	data.be = be;
+	data.is_ok = TRUE;
     qof_collection_foreach( qof_book_get_collection( be->primary_book, GNC_ID_LOT ),
-                            (QofInstanceForeachCB)do_save_lot, be );
+                            (QofInstanceForeachCB)do_save_lot, &data );
+	return data.is_ok;
 }
 
 /* ================================================================= */

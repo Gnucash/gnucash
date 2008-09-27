@@ -859,7 +859,7 @@ conn_execute_nonselect_statement( GncSqlConnection* conn, GncSqlStatement* stmt 
 	result = dbi_conn_query( dbi_conn->conn, dbi_stmt->sql->str );
 	if( result == NULL ) {
 		PERR( "Error executing SQL %s\n", dbi_stmt->sql->str );
-		return 0;
+		return -1;
 	}
 	DEBUG( "SQL: %s\n", dbi_stmt->sql->str );
 	num_rows = dbi_result_get_numrows_affected( result );
@@ -910,22 +910,28 @@ conn_does_table_exist( GncSqlConnection* conn, const gchar* table_name )
 	}
 }
 
-static void
+static gboolean
 conn_begin_transaction( GncSqlConnection* conn )
 {
 	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+
+	return TRUE;
 }
 
-static void
+static gboolean
 conn_rollback_transaction( GncSqlConnection* conn )
 {
 	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+
+	return TRUE;
 }
 
-static void
+static gboolean
 conn_commit_transaction( GncSqlConnection* conn )
 {
 	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+
+	return TRUE;
 }
 
 static const gchar*
@@ -1009,7 +1015,7 @@ add_table_column( GString* ddl, const GncSqlColumnInfo* info )
 	}
 }
 
-static void
+static gboolean
 conn_create_table( GncSqlConnection* conn, const gchar* table_name,
 				const GList* col_info_list )
 {
@@ -1019,9 +1025,9 @@ conn_create_table( GncSqlConnection* conn, const gchar* table_name,
 	guint col_num;
 	dbi_result result;
 
-	g_return_if_fail( conn != NULL );
-	g_return_if_fail( table_name != NULL );
-	g_return_if_fail( col_info_list != NULL );
+	g_return_val_if_fail( conn != NULL, FALSE );
+	g_return_val_if_fail( table_name != NULL, FALSE );
+	g_return_val_if_fail( col_info_list != NULL, FALSE );
     
 	ddl = g_string_new( "" );
 	g_string_printf( ddl, "CREATE TABLE %s (", table_name );
@@ -1040,9 +1046,11 @@ conn_create_table( GncSqlConnection* conn, const gchar* table_name,
 	result = dbi_conn_query( dbi_conn->conn, ddl->str );
 	dbi_result_free( result );
 	g_string_free( ddl, TRUE );
+
+	return TRUE;
 }
 
-static void
+static gboolean
 conn_create_index( GncSqlConnection* conn, const gchar* index_name,
 					const gchar* table_name, const GncSqlColumnTableEntry* col_table )
 {
@@ -1053,10 +1061,10 @@ conn_create_index( GncSqlConnection* conn, const gchar* index_name,
 	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 	GError* error = NULL;
     
-    g_return_if_fail( conn != NULL );
-	g_return_if_fail( index_name != NULL );
-	g_return_if_fail( table_name != NULL );
-	g_return_if_fail( col_table != NULL );
+    g_return_val_if_fail( conn != NULL, FALSE );
+	g_return_val_if_fail( index_name != NULL, FALSE );
+	g_return_val_if_fail( table_name != NULL, FALSE );
+	g_return_val_if_fail( col_table != NULL, FALSE );
     
 	cnn = gda_conn->conn;
 	g_return_if_fail( cnn != NULL );
@@ -1123,6 +1131,8 @@ conn_create_index( GncSqlConnection* conn, const gchar* index_name,
         g_object_unref( op );
     }
 #endif
+
+	return TRUE;
 }
 
 static gchar*

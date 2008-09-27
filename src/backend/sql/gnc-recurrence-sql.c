@@ -173,21 +173,21 @@ set_recurrence_period_start( gpointer pObject, gpointer pValue )
 
 /* ================================================================= */
 
-void
+gboolean
 gnc_sql_recurrence_save( GncSqlBackend* be, const GUID* guid, const Recurrence* r )
 {
     recurrence_info_t recurrence_info;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( guid != NULL );
-	g_return_if_fail( r != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( guid != NULL, FALSE );
+	g_return_val_if_fail( r != NULL, FALSE );
 
 	gnc_sql_recurrence_delete( be, guid );
 
     recurrence_info.be = be;
     recurrence_info.guid = guid;
 	recurrence_info.pRecurrence = (Recurrence*)r;
-    (void)gnc_sql_do_db_operation( be, OP_DB_INSERT, TABLE_NAME,
+    return gnc_sql_do_db_operation( be, OP_DB_INSERT, TABLE_NAME,
                                 TABLE_NAME, &recurrence_info, col_table );
 }
 
@@ -211,17 +211,17 @@ gnc_sql_recurrence_save_list( GncSqlBackend* be, const GUID* guid, GList* schedu
 	}
 }
 
-void
+gboolean
 gnc_sql_recurrence_delete( GncSqlBackend* be, const GUID* guid )
 {
     recurrence_info_t recurrence_info;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( guid != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( guid != NULL, FALSE );
 
     recurrence_info.be = be;
     recurrence_info.guid = guid;
-    (void)gnc_sql_do_db_operation( be, OP_DB_DELETE, TABLE_NAME,
+    return gnc_sql_do_db_operation( be, OP_DB_DELETE, TABLE_NAME,
                                 TABLE_NAME, &recurrence_info, guid_col_table );
 }
 

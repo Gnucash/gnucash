@@ -159,16 +159,16 @@ struct GncSqlStatement
 struct GncSqlConnection
 {
 	void (*dispose)( GncSqlConnection* );
-	GncSqlResult* (*executeSelectStatement)( GncSqlConnection*, GncSqlStatement* );
-	gint (*executeNonSelectStatement)( GncSqlConnection*, GncSqlStatement* );
+	GncSqlResult* (*executeSelectStatement)( GncSqlConnection*, GncSqlStatement* ); /**< Returns NULL if error */
+	gint (*executeNonSelectStatement)( GncSqlConnection*, GncSqlStatement* ); /**< Returns -1 if error */
 	GncSqlStatement* (*createStatementFromSql)( GncSqlConnection*, gchar* );
 	gboolean (*doesTableExist)( GncSqlConnection*, const gchar* );
-	void (*beginTransaction)( GncSqlConnection* );
-	void (*rollbackTransaction)( GncSqlConnection* );
-	void (*commitTransaction)( GncSqlConnection* );
+	gboolean (*beginTransaction)( GncSqlConnection* ); /**< Returns TRUE if successful, FALSE if error */
+	gboolean (*rollbackTransaction)( GncSqlConnection* ); /**< Returns TRUE if successful, FALSE if error */
+	gboolean (*commitTransaction)( GncSqlConnection* ); /**< Returns TRUE if successful, FALSE if error */
 	const gchar* (*getColumnTypeName)( GncSqlConnection*, GType, gint size );
-	void (*createTable)( GncSqlConnection*, const gchar*, const GList* );
-	void (*createIndex)( GncSqlConnection*, const gchar*, const gchar*, const GncSqlColumnTableEntry* );
+	gboolean (*createTable)( GncSqlConnection*, const gchar*, const GList* ); /**< Returns TRUE if successful, FALSE if error */
+	gboolean (*createIndex)( GncSqlConnection*, const gchar*, const gchar*, const GncSqlColumnTableEntry* ); /**< Returns TRUE if successful, FALSE if error */
 	gchar* (*quoteString)( const GncSqlConnection*, gchar* );
 };
 #define gnc_sql_connection_dispose(CONN) (CONN)->dispose(CONN)
@@ -251,8 +251,10 @@ typedef struct
 {
   int		version;		/**< Backend version number */
   const gchar *	type_name;	/**< Engine object type name */
-  /** Commit an instance of this object to the database */
-  void		(*commit)( GncSqlBackend* be, QofInstance* inst );
+  /** Commit an instance of this object to the database
+   * @return TRUE if successful, FALSE if error
+   */
+  gboolean	(*commit)( GncSqlBackend* be, QofInstance* inst );
   /** Load all objects of this type from the database */
   void		(*initial_load)( GncSqlBackend* be );
   /** Create database tables for this object */
@@ -263,8 +265,10 @@ typedef struct
   void		(*run_query)( GncSqlBackend* be, gpointer pQuery );
   /** Free a query on these objects */
   void		(*free_query)( GncSqlBackend* be, gpointer pQuery );
-  /** Write all objects of this type to the database */
-  void		(*write)( GncSqlBackend* be );
+  /** Write all objects of this type to the database
+   * @return TRUE if successful, FALSE if error
+   */
+  gboolean	(*write)( GncSqlBackend* be );
 } GncSqlObjectBackend;
 #define GNC_SQL_BACKEND             "gnc:sql:1"
 #define GNC_SQL_BACKEND_VERSION	1
@@ -417,31 +421,35 @@ gboolean gnc_sql_do_db_operation( GncSqlBackend* be,
 									const GncSqlColumnTableEntry* table );
 
 /**
- * Execute an SQL SELECT statement.
+ * Executes an SQL SELECT statement and returns the result rows.  If an error
+ * occurs, an entry is added to the log, an error status is returned to qof and
+ * NULL is returned.
  *
  * @param be SQL backend struct
  * @param statement Statement
- * @return Results
+ * @return Results, or NULL if an error has occured
  */
 GncSqlResult* gnc_sql_execute_select_statement( GncSqlBackend* be, GncSqlStatement* statement );
 
 /**
- * Executes an SQL SELECT statement from an SQL char string.
+ * Executes an SQL SELECT statement from an SQL char string and returns the
+ * result rows.  If an error occurs, an entry is added to the log, an error
+ * status is returned to qof and NULL is returned.
  *
  * @param be SQL backend struct
  * @param sql SQL SELECT string
- * @return Results
+ * @return Results, or NULL if an error has occured
  */
-GncSqlResult* gnc_sql_execute_select_sql( const GncSqlBackend* be, gchar* sql );
+GncSqlResult* gnc_sql_execute_select_sql( GncSqlBackend* be, gchar* sql );
 
 /**
  * Executes an SQL non-SELECT statement from an SQL char string.
  *
  * @param be SQL backend struct
  * @param sql SQL non-SELECT string
- * @returns Number of rows affected
+ * @returns Number of rows affected, or -1 if an error has occured
  */
-gint gnc_sql_execute_nonselect_sql( const GncSqlBackend* be, gchar* sql );
+gint gnc_sql_execute_nonselect_sql( GncSqlBackend* be, gchar* sql );
 
 /**
  * Creates a statement from an SQL char string.
@@ -450,7 +458,7 @@ gint gnc_sql_execute_nonselect_sql( const GncSqlBackend* be, gchar* sql );
  * @param sql SQL char string
  * @return Statement
  */
-GncSqlStatement* gnc_sql_create_statement_from_sql( const GncSqlBackend* be, gchar* sql );
+GncSqlStatement* gnc_sql_create_statement_from_sql( GncSqlBackend* be, gchar* sql );
 
 /**
  * Loads a Gnucash object from the database.
@@ -497,7 +505,7 @@ gint gnc_sql_get_table_version( const GncSqlBackend* be, const gchar* table_name
  * @param table_version Table version
  * @return TRUE if successful, FALSE if unsuccessful
  */
-gboolean gnc_sql_set_table_version( const GncSqlBackend* be,
+gboolean gnc_sql_set_table_version( GncSqlBackend* be,
 									const gchar* table_name,
 									gint table_version );
 
@@ -510,7 +518,7 @@ gboolean gnc_sql_set_table_version( const GncSqlBackend* be,
  * @param col_table DB table description
  * @return TRUE if successful, FALSE if unsuccessful
  */
-gboolean gnc_sql_create_table( const GncSqlBackend* be,
+gboolean gnc_sql_create_table( GncSqlBackend* be,
 								const gchar* table_name,
 								gint table_version,
 								const GncSqlColumnTableEntry* col_table );
@@ -535,8 +543,9 @@ gboolean gnc_sql_create_temp_table( const GncSqlBackend* be,
  * @param index_name Index name
  * @param table_name Table name
  * @param col_table Columns that the index should index
+ * @return TRUE if successful, FALSE if unsuccessful
  */
-void gnc_sql_create_index( const GncSqlBackend* be, const gchar* index_name,
+gboolean gnc_sql_create_index( const GncSqlBackend* be, const gchar* index_name,
 						const gchar* table_name, const GncSqlColumnTableEntry* col_table );
 
 /**
@@ -566,7 +575,7 @@ const GUID* gnc_sql_load_tx_guid( const GncSqlBackend* be, GncSqlRow* row );
  * @param table_name Table name
  * @return Statement
  */
-GncSqlStatement* gnc_sql_create_select_statement( const GncSqlBackend* be,
+GncSqlStatement* gnc_sql_create_select_statement( GncSqlBackend* be,
 										const gchar* table_name );
 
 /**
@@ -656,8 +665,9 @@ void gnc_sql_finalize_version_info( GncSqlBackend* be );
  * @param tableName SQL table name
  * @param obj_name QOF object type name
  * @param col_table Column table
+ * @return TRUE if successful, FALSE if not
  */
-void gnc_sql_commit_standard_item( GncSqlBackend* be, QofInstance* inst, const gchar* tableName,
+gboolean gnc_sql_commit_standard_item( GncSqlBackend* be, QofInstance* inst, const gchar* tableName,
                         	QofIdTypeConst obj_name, const GncSqlColumnTableEntry* col_table );
 
 void _retrieve_guid_( gpointer pObject, gpointer pValue );

@@ -45,6 +45,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 typedef struct {
     GncSqlBackend* be;
     const GUID* guid;
+	gboolean is_ok;
     KvpFrame* pKvpFrame;
     KvpValueType value_type;
     KvpValue* pKvpValue;
@@ -324,10 +325,16 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
 {
     slot_info_t* pSlot_info = (slot_info_t*)data;
     gint curlen;
+	gboolean is_ok = FALSE;
 
 	g_return_if_fail( key != NULL );
 	g_return_if_fail( value != NULL );
 	g_return_if_fail( data != NULL );
+
+	// Ignore if we've already run into a failure
+	if( !pSlot_info->is_ok ) {
+		return;
+	}
 
     curlen = pSlot_info->path->len;
     pSlot_info->pKvpValue = value;
@@ -340,21 +347,23 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
         KvpFrame* pKvpFrame = kvp_value_get_frame( value );
         kvp_frame_for_each_slot( pKvpFrame, save_slot, pSlot_info );
     } else {
-        (void)gnc_sql_do_db_operation( pSlot_info->be, OP_DB_INSERT, TABLE_NAME,
-                                        TABLE_NAME, pSlot_info, col_table );
+        pSlot_info->is_ok = gnc_sql_do_db_operation( pSlot_info->be,
+												OP_DB_INSERT, TABLE_NAME,
+												TABLE_NAME, pSlot_info,
+												col_table );
     }
 
     g_string_truncate( pSlot_info->path, curlen );
 }
 
-void
+gboolean
 gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid, gboolean is_infant, KvpFrame* pFrame )
 {
     slot_info_t slot_info;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( guid != NULL );
-	g_return_if_fail( pFrame != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( guid != NULL, FALSE );
+	g_return_val_if_fail( pFrame != NULL, FALSE );
 
     // If this is not saving into a new db, clear out the old saved slots first
 	if( !be->is_pristine_db && !is_infant ) {
@@ -364,22 +373,28 @@ gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid, gboolean is_infant, Kvp
     slot_info.be = be;
     slot_info.guid = guid;
     slot_info.path = g_string_new( "" );
+	slot_info.is_ok = TRUE;
     kvp_frame_for_each_slot( pFrame, save_slot, &slot_info );
     g_string_free( slot_info.path, TRUE );
+
+	return slot_info.is_ok;
 }
 
-void
+gboolean
 gnc_sql_slots_delete( GncSqlBackend* be, const GUID* guid )
 {
     slot_info_t slot_info;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( guid != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( guid != NULL, FALSE );
 
     slot_info.be = be;
     slot_info.guid = guid;
-    (void)gnc_sql_do_db_operation( be, OP_DB_DELETE, TABLE_NAME,
+	slot_info.is_ok = TRUE;
+    slot_info.is_ok = gnc_sql_do_db_operation( be, OP_DB_DELETE, TABLE_NAME,
                                 TABLE_NAME, &slot_info, obj_guid_col_table );
+
+	return slot_info.is_ok;
 }
 
 static void

@@ -33,6 +33,6 @@
 #include <gmodule.h>
 
 void gnc_sql_init_commodity_handler( void );
-void gnc_sql_save_commodity( GncSqlBackend* be, gnc_commodity* pCommodity );
+gboolean gnc_sql_save_commodity( GncSqlBackend* be, gnc_commodity* pCommodity );
 
 #endif /* GNC_COMMODITY_SQL_H_ */

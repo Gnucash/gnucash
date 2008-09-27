@@ -135,14 +135,14 @@ create_order_tables( GncSqlBackend* be )
 }
 
 /* ================================================================= */
-static void
+static gboolean
 save_order( GncSqlBackend* be, QofInstance* inst )
 {
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_ORDER(inst) );
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_ORDER(inst), FALSE );
+	g_return_val_if_fail( be != NULL, FALSE );
 
-    gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_ORDER, col_table );
+    return gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_ORDER, col_table );
 }
 
 /* ================================================================= */
@@ -162,26 +162,37 @@ order_should_be_saved( GncOrder *order )
     return TRUE;
 }
 
+typedef struct {
+	GncSqlBackend* be;
+	gboolean is_ok;
+} write_objects_t;
+
 static void
-write_single_order( QofInstance *term_p, gpointer be_p )
+write_single_order( QofInstance *term_p, gpointer data_p )
 {
-    GncSqlBackend* be = (GncSqlBackend*)be_p;
+	write_objects_t* s = (write_objects_t*)data_p;
 
 	g_return_if_fail( term_p != NULL );
 	g_return_if_fail( GNC_IS_ORDER(term_p) );
-	g_return_if_fail( be_p != NULL );
+	g_return_if_fail( data_p != NULL );
 
-	if( order_should_be_saved( GNC_ORDER(term_p) ) ) {
-    	save_order( be, term_p );
+	if( s->is_ok && order_should_be_saved( GNC_ORDER(term_p) ) ) {
+    	s->is_ok = save_order( s->be, term_p );
 	}
 }
 
-static void
+static gboolean
 write_orders( GncSqlBackend* be )
 {
-	g_return_if_fail( be != NULL );
+	write_objects_t data;
 
-    qof_object_foreach( GNC_ID_ORDER, be->primary_book, write_single_order, (gpointer)be );
+	g_return_val_if_fail( be != NULL, FALSE );
+
+	data.be = be;
+	data.is_ok = TRUE;
+    qof_object_foreach( GNC_ID_ORDER, be->primary_book, write_single_order, &data );
+
+	return data.is_ok;
 }
 
 /* ================================================================= */

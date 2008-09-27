@@ -135,17 +135,18 @@ create_budget_tables( GncSqlBackend* be )
 }
 
 /* ================================================================= */
-static void
+static gboolean
 save_budget( GncSqlBackend* be, QofInstance* inst )
 {
     GncBudget* pBudget = GNC_BUDGET(inst);
     const GUID* guid;
 	gint op;
 	gboolean is_infant;
+	gboolean is_ok;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_BUDGET(inst) );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_BUDGET(inst), FALSE );
 
 	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
@@ -155,32 +156,55 @@ save_budget( GncSqlBackend* be, QofInstance* inst )
 	} else {
 		op = OP_DB_UPDATE;
 	}
-    (void)gnc_sql_do_db_operation( be, op, BUDGET_TABLE, GNC_ID_BUDGET, pBudget, col_table );
+    is_ok = gnc_sql_do_db_operation( be, op, BUDGET_TABLE, GNC_ID_BUDGET, pBudget, col_table );
 
     // Now, commit any slots and recurrence
-    guid = qof_instance_get_guid( inst );
-    if( !qof_instance_get_destroying(inst) ) {
-		gnc_sql_recurrence_save( be, guid, gnc_budget_get_recurrence( pBudget ) );
-        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-    } else {
-        gnc_sql_recurrence_delete( be, guid );
-        gnc_sql_slots_delete( be, guid );
-    }
+	if( is_ok ) {
+    	guid = qof_instance_get_guid( inst );
+    	if( !qof_instance_get_destroying(inst) ) {
+			is_ok = gnc_sql_recurrence_save( be, guid, gnc_budget_get_recurrence( pBudget ) );
+			if( is_ok ) {
+        		is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+			}
+    	} else {
+        	is_ok = gnc_sql_recurrence_delete( be, guid );
+			if( is_ok ) {
+        		gnc_sql_slots_delete( be, guid );
+			}
+    	}
+	}
+
+	return is_ok;
 }
+
+typedef struct {
+	GncSqlBackend* be;
+	gboolean is_ok;
+} write_objects_t;
 
 static void
 do_save_budget( QofInstance* inst, gpointer data )
 {
-	save_budget( (GncSqlBackend*)data, inst );
+	write_objects_t* s = (write_objects_t*)data;
+
+	if( s->is_ok ) {
+		s->is_ok = save_budget( s->be, inst );
+	}
 }
 
-static void
+static gboolean
 write_budgets( GncSqlBackend* be )
 {
-	g_return_if_fail( be != NULL );
+	write_objects_t data;
 
+	g_return_val_if_fail( be != NULL, FALSE );
+
+	data.be = be;
+	data.is_ok = TRUE;
     qof_collection_foreach( qof_book_get_collection( be->primary_book, GNC_ID_BUDGET ),
-                            (QofInstanceForeachCB)do_save_budget, be );
+                            (QofInstanceForeachCB)do_save_budget, &data );
+
+	return data.is_ok;
 }
 
 /* ================================================================= */

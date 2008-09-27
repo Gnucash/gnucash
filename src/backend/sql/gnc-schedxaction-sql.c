@@ -260,17 +260,18 @@ create_sx_tables( GncSqlBackend* be )
 }
 
 /* ================================================================= */
-void
+gboolean
 gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst )
 {
     SchedXaction* pSx;
     const GUID* guid;
 	gint op;
 	gboolean is_infant;
+	gboolean is_ok;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_SX(inst) );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_SX(inst), FALSE );
 
     pSx = GNC_SX(inst);
 
@@ -282,16 +283,20 @@ gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst )
 	} else {
 		op = OP_DB_UPDATE;
 	}
-    (void)gnc_sql_do_db_operation( be, op, SCHEDXACTION_TABLE, GNC_SX_ID, pSx, col_table );
+    is_ok = gnc_sql_do_db_operation( be, op, SCHEDXACTION_TABLE, GNC_SX_ID, pSx, col_table );
     guid = qof_instance_get_guid( inst );
 	gnc_sql_recurrence_save_list( be, guid, gnc_sx_get_schedule( pSx ) );
 
-    // Now, commit any slots
-    if( !qof_instance_get_destroying(inst) ) {
-        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-    } else {
-        gnc_sql_slots_delete( be, guid );
-    }
+	if( is_ok ) {
+    	// Now, commit any slots
+    	if( !qof_instance_get_destroying(inst) ) {
+        	is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+    	} else {
+        	is_ok = gnc_sql_slots_delete( be, guid );
+    	}
+	}
+
+	return is_ok;
 }
 
 /* ================================================================= */

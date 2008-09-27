@@ -143,18 +143,32 @@ load_all_billterms( GncSqlBackend* be )
 }
 
 /* ================================================================= */
+typedef struct {
+	GncSqlBackend* be;
+	gboolean is_ok;
+} write_billterms_t;
+
 static void
 do_save_billterm( QofInstance* inst, gpointer p2 )
 {
-	gnc_sql_save_billterm( (GncSqlBackend*)p2, inst );
+	write_billterms_t* data = (write_billterms_t*)p2;
+
+	if( data->is_ok ) {
+		data->is_ok = gnc_sql_save_billterm( data->be, inst );
+	}
 }
 
-static void
+static gboolean
 write_billterms( GncSqlBackend* be )
 {
-	g_return_if_fail( be != NULL );
+	write_billterms_t data;
 
-    qof_object_foreach( GNC_ID_BILLTERM, be->primary_book, do_save_billterm, (gpointer)be );
+	g_return_val_if_fail( be != NULL, FALSE );
+
+	data.be = be;
+	data.is_ok = TRUE;
+    qof_object_foreach( GNC_ID_BILLTERM, be->primary_book, do_save_billterm, &data );
+	return data.is_ok;
 }
 
 /* ================================================================= */
@@ -172,14 +186,14 @@ create_billterm_tables( GncSqlBackend* be )
 }
 
 /* ================================================================= */
-void
+gboolean
 gnc_sql_save_billterm( GncSqlBackend* be, QofInstance* inst )
 {
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_BILLTERM(inst) );
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_BILLTERM(inst), FALSE );
+	g_return_val_if_fail( be != NULL, FALSE );
 
-    gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_BILLTERM, col_table );
+    return gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_BILLTERM, col_table );
 }
 
 /* ================================================================= */

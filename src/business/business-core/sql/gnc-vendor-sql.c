@@ -148,17 +148,18 @@ create_vendor_tables( GncSqlBackend* be )
 }
 
 /* ================================================================= */
-static void
+static gboolean
 save_vendor( GncSqlBackend* be, QofInstance* inst )
 {
     GncVendor* v;
     const GUID* guid;
 	gint op;
 	gboolean is_infant;
+	gboolean is_ok = TRUE;
 
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_VENDOR(inst) );
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_VENDOR(inst), FALSE );
+	g_return_val_if_fail( be != NULL, FALSE );
 
     v = GNC_VENDOR(inst);
 
@@ -172,17 +173,23 @@ save_vendor( GncSqlBackend* be, QofInstance* inst )
 	}
 	if( op != OP_DB_DELETE ) {
     	// Ensure the commodity is in the db
-    	gnc_sql_save_commodity( be, gncVendorGetCurrency( v ) );
+    	is_ok = gnc_sql_save_commodity( be, gncVendorGetCurrency( v ) );
 	}
-    (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_VENDOR, v, col_table );
+	if( is_ok ) {
+    	is_ok = gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_VENDOR, v, col_table );
+	}
 
-    // Now, commit or delete any slots
-    guid = qof_instance_get_guid( inst );
-    if( !qof_instance_get_destroying(inst) ) {
-        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-    } else {
-        gnc_sql_slots_delete( be, guid );
-    }
+	if( is_ok ) {
+    	// Now, commit or delete any slots
+    	guid = qof_instance_get_guid( inst );
+    	if( !qof_instance_get_destroying(inst) ) {
+        	is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+    	} else {
+        	is_ok = gnc_sql_slots_delete( be, guid );
+    	}
+	}
+
+	return is_ok;
 }
 
 /* ================================================================= */
@@ -202,26 +209,37 @@ vendor_should_be_saved( GncVendor *vendor )
     return TRUE;
 }
 
+typedef struct {
+	GncSqlBackend* be;
+	gboolean is_ok;
+} write_objects_t;
+
 static void
-write_single_vendor( QofInstance *term_p, gpointer be_p )
+write_single_vendor( QofInstance *term_p, gpointer data_p )
 {
-    GncSqlBackend* be = (GncSqlBackend*)be_p;
+	write_objects_t* s = (write_objects_t*)data_p;
 
 	g_return_if_fail( term_p != NULL );
 	g_return_if_fail( GNC_IS_VENDOR(term_p) );
-	g_return_if_fail( be_p != NULL );
+	g_return_if_fail( data_p != NULL );
 
-	if( vendor_should_be_saved( GNC_VENDOR(term_p) ) ) {
-    	save_vendor( be, term_p );
+	if( s->is_ok && vendor_should_be_saved( GNC_VENDOR(term_p) ) ) {
+    	s->is_ok = save_vendor( s->be, term_p );
 	}
 }
 
-static void
+static gboolean
 write_vendors( GncSqlBackend* be )
 {
-	g_return_if_fail( be != NULL );
+	write_objects_t data;
 
-    qof_object_foreach( GNC_ID_VENDOR, be->primary_book, write_single_vendor, (gpointer)be );
+	g_return_val_if_fail( be != NULL, FALSE );
+
+	data.be = be;
+	data.is_ok = TRUE;
+    qof_object_foreach( GNC_ID_VENDOR, be->primary_book, write_single_vendor, &data );
+
+	return data.is_ok;
 }
 
 /* ================================================================= */

@@ -63,7 +63,7 @@ static const gchar* convert_search_obj( QofIdType objType );
 static void gnc_sql_init_object_handlers( void );
 static void update_save_progress( GncSqlBackend* be );
 static void register_standard_col_type_handlers( void );
-static void reset_version_info( GncSqlBackend* be );
+static gboolean reset_version_info( GncSqlBackend* be );
 static GncSqlStatement* build_insert_statement( GncSqlBackend* be,
                         			const gchar* table_name,
                         			QofIdTypeConst obj_name, gpointer pObject,
@@ -86,7 +86,8 @@ typedef struct {
 
 /* callback structure */
 typedef struct {
-    gboolean ok;
+    gboolean is_known;
+	gboolean is_ok;
     GncSqlBackend* be;
     QofInstance* inst;
     QofQuery* pQuery;
@@ -240,83 +241,110 @@ write_commodities( GncSqlBackend* be, QofBook* book )
     }
 }
 
-static void
+static gboolean
 write_account_tree( GncSqlBackend* be, Account* root )
 {
     GList* descendants;
     GList* node;
+	gboolean is_ok = TRUE;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( root != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( root != NULL, FALSE );
 
     descendants = gnc_account_get_descendants( root );
-    for( node = descendants; node != NULL; node = g_list_next(node) ) {
-        gnc_sql_save_account( be, QOF_INSTANCE(GNC_ACCOUNT(node->data)) );
+    for( node = descendants; node != NULL && is_ok; node = g_list_next(node) ) {
+        is_ok = gnc_sql_save_account( be, QOF_INSTANCE(GNC_ACCOUNT(node->data)) );
 		update_save_progress( be );
     }
     g_list_free( descendants );
+
+	return is_ok;
 }
 
-static void
+static gboolean
 write_accounts( GncSqlBackend* be )
 {
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
 
-    write_account_tree( be, gnc_book_get_root_account( be->primary_book ) );
+    return write_account_tree( be, gnc_book_get_root_account( be->primary_book ) );
 }
+
+typedef struct {
+	GncSqlBackend* be;
+	gboolean is_ok;
+} write_objects_t;
 
 static int
 write_tx( Transaction* tx, gpointer data )
 {
-    GncSqlBackend* be = (GncSqlBackend*)data;
+	write_objects_t* s = (write_objects_t*)data;
 
 	g_return_val_if_fail( tx != NULL, 0 );
 	g_return_val_if_fail( data != NULL, 0 );
 
-    gnc_sql_save_transaction( be, QOF_INSTANCE(tx) );
-	update_save_progress( be );
+    s->is_ok = gnc_sql_save_transaction( s->be, QOF_INSTANCE(tx) );
+	update_save_progress( s->be );
 
-    return 0;
+	if( s->is_ok ) {
+    	return 0;
+	} else {
+		return 1;
+	}
 }
 
-static void
+static gboolean
 write_transactions( GncSqlBackend* be )
 {
-	g_return_if_fail( be != NULL );
-	
+	write_objects_t data;
+
+	g_return_val_if_fail( be != NULL, FALSE );
+
+	data.be = be;
+	data.is_ok = TRUE;
     xaccAccountTreeForEachTransaction( gnc_book_get_root_account( be->primary_book ),
                                        write_tx,
-                                       (gpointer)be );
+                                       &data );
+	return data.is_ok;
 }
 
-static void
+static gboolean
 write_template_transactions( GncSqlBackend* be )
 {
     Account* ra;
+	write_objects_t data;
 
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
 
+	data.is_ok = TRUE;
     ra = gnc_book_get_template_root( be->primary_book );
     if( gnc_account_n_descendants( ra ) > 0 ) {
-        write_account_tree( be, ra );
-        xaccAccountTreeForEachTransaction( ra, write_tx, (gpointer)be );
+        data.is_ok = write_account_tree( be, ra );
+		if( data.is_ok ) {
+			data.be = be;
+        	xaccAccountTreeForEachTransaction( ra, write_tx, &data );
+		}
     }
+
+	return data.is_ok;
 }
 
-static void
+static gboolean
 write_schedXactions( GncSqlBackend* be )
 {
     GList* schedXactions;
     SchedXaction* tmpSX;
+	gboolean is_ok = TRUE;
 
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
 
     schedXactions = gnc_book_get_schedxactions( be->primary_book )->sx_list;
 
-    for( ; schedXactions != NULL; schedXactions = schedXactions->next ) {
+    for( ; schedXactions != NULL && is_ok; schedXactions = schedXactions->next ) {
         tmpSX = schedXactions->data;
-		gnc_sql_save_schedxaction( be, QOF_INSTANCE( tmpSX ) );
+		is_ok = gnc_sql_save_schedxaction( be, QOF_INSTANCE( tmpSX ) );
     }
+
+	return is_ok;
 }
 
 static void
@@ -354,7 +382,7 @@ gnc_sql_sync_all( GncSqlBackend* be, QofBook *book )
     GError* error = NULL;
     gint row;
     gint numTables;
-	gboolean status;
+	gboolean is_ok;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( book != NULL );
@@ -379,12 +407,22 @@ gnc_sql_sync_all( GncSqlBackend* be, QofBook *book )
 
 	// FIXME: should write the set of commodities that are used 
     //write_commodities( be, book );
-	gnc_sql_save_book( be, QOF_INSTANCE(book) );
-    write_accounts( be );
-    write_transactions( be );
-    write_template_transactions( be );
-    write_schedXactions( be );
-    qof_object_foreach_backend( GNC_SQL_BACKEND, write_cb, be );
+	is_ok = gnc_sql_save_book( be, QOF_INSTANCE(book) );
+	if( is_ok ) {
+    	is_ok = write_accounts( be );
+	}
+	if( is_ok ) {
+    	is_ok = write_transactions( be );
+	}
+	if( is_ok ) {
+    	is_ok = write_template_transactions( be );
+	}
+	if( is_ok ) {
+    	is_ok = write_schedXactions( be );
+	}
+	if( is_ok ) {
+    	qof_object_foreach_backend( GNC_SQL_BACKEND, write_cb, be );
+	}
 
 	gnc_sql_connection_commit_transaction( be->conn );
 	be->is_pristine_db = FALSE;
@@ -423,11 +461,11 @@ commit_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 
     /* If this has already been handled, or is not the correct handler, return */
     if( strcmp( pData->type_name, be_data->inst->e_type ) != 0 ) return;
-    if( be_data->ok ) return;
+    if( be_data->is_known ) return;
 
     if( pData->commit != NULL ) {
-        (pData->commit)( be_data->be, be_data->inst );
-        be_data->ok = TRUE;
+        be_data->is_ok = (pData->commit)( be_data->be, be_data->inst );
+        be_data->is_known = TRUE;
     }
 }
 
@@ -439,7 +477,6 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
 {
     sql_backend be_data;
 	GError* error;
-	gboolean status;
 	gboolean is_dirty;
 	gboolean is_destroying;
 	gboolean is_infant;
@@ -479,21 +516,30 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
 	error = NULL;
 	gnc_sql_connection_begin_transaction( be->conn );
 
-    be_data.ok = FALSE;
+    be_data.is_known = FALSE;
     be_data.be = be;
     be_data.inst = inst;
     qof_object_foreach_backend( GNC_SQL_BACKEND, commit_cb, &be_data );
 
-    if( !be_data.ok ) {
+    if( !be_data.is_known ) {
         PERR( "gnc_sql_commit_edit(): Unknown object type '%s'\n", inst->e_type );
 		gnc_sql_connection_rollback_transaction( be->conn );
 
 		// Don't let unknown items still mark the book as being dirty
     	qof_instance_mark_clean(inst);
     	qof_book_mark_saved( be->primary_book );
-		LEAVE( "Rolled back" );
+		LEAVE( "Rolled back - unknown object type" );
         return;
     }
+	if( !be_data.is_ok ) {
+		// Error - roll it back
+		gnc_sql_connection_rollback_transaction( be->conn );
+
+		// This *should* leave things marked dirty
+		LEAVE( "Rolled back - database error" );
+        return;
+	}
+
 	gnc_sql_connection_commit_transaction( be->conn );
 
     qof_instance_mark_clean(inst);
@@ -613,13 +659,13 @@ compile_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 
 	// Is this the right item?
     if( strcmp( type, be_data->pQueryInfo->searchObj ) != 0 ) return;
-    if( be_data->ok ) return;
+    if( be_data->is_ok ) return;
 
     if( pData->compile_query != NULL ) {
         be_data->pQueryInfo->pCompiledQuery = (pData->compile_query)(
                                                             be_data->be,
                                                             be_data->pQuery );
-        be_data->ok = TRUE;
+        be_data->is_ok = TRUE;
     }
 }
 
@@ -643,14 +689,14 @@ gnc_sql_compile_query( QofBackend* pBEnd, QofQuery* pQuery )
     pQueryInfo = g_malloc( sizeof( gnc_sql_query_info ) );
 
     // Try various objects first
-    be_data.ok = FALSE;
+    be_data.is_ok = FALSE;
     be_data.be = be;
     be_data.pQuery = pQuery;
     pQueryInfo->searchObj = searchObj;
     be_data.pQueryInfo = pQueryInfo;
 
     qof_object_foreach_backend( GNC_SQL_BACKEND, compile_query_cb, &be_data );
-    if( be_data.ok ) {
+    if( be_data.is_ok ) {
 		LEAVE( "" );
         return be_data.pQueryInfo;
     }
@@ -697,12 +743,12 @@ free_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 
     g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
     g_return_if_fail( pData->version == GNC_SQL_BACKEND_VERSION );
-    if( be_data->ok ) return;
+    if( be_data->is_ok ) return;
     if( strcmp( type, be_data->pQueryInfo->searchObj ) != 0 ) return;
 
     if( pData->free_query != NULL ) {
         (pData->free_query)( be_data->be, be_data->pCompiledQuery );
-        be_data->ok = TRUE;
+        be_data->is_ok = TRUE;
     }
 }
 
@@ -719,13 +765,13 @@ gnc_sql_free_query( QofBackend* pBEnd, gpointer pQuery )
 	ENTER( " " );
 
     // Try various objects first
-    be_data.ok = FALSE;
+    be_data.is_ok = FALSE;
     be_data.be = be;
     be_data.pCompiledQuery = pQuery;
     be_data.pQueryInfo = pQueryInfo;
 
     qof_object_foreach_backend( GNC_SQL_BACKEND, free_query_cb, &be_data );
-    if( be_data.ok ) {
+    if( be_data.is_ok ) {
 		LEAVE( "" );
         return;
     }
@@ -745,14 +791,14 @@ run_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 
     g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
     g_return_if_fail( pData->version == GNC_SQL_BACKEND_VERSION );
-    if( be_data->ok ) return;
+    if( be_data->is_ok ) return;
 
 	// Is this the right item?
     if( strcmp( type, be_data->pQueryInfo->searchObj ) != 0 ) return;
 
     if( pData->run_query != NULL ) {
         (pData->run_query)( be_data->be, be_data->pCompiledQuery );
-        be_data->ok = TRUE;
+        be_data->is_ok = TRUE;
     }
 }
 
@@ -775,7 +821,7 @@ gnc_sql_run_query( QofBackend* pBEnd, gpointer pQuery )
     qof_event_suspend();
 
     // Try various objects first
-    be_data.ok = FALSE;
+    be_data.is_ok = FALSE;
     be_data.be = be;
     be_data.pCompiledQuery = pQueryInfo->pCompiledQuery;
     be_data.pQueryInfo = pQueryInfo;
@@ -784,7 +830,7 @@ gnc_sql_run_query( QofBackend* pBEnd, gpointer pQuery )
     be->loading = FALSE;
     be->in_query = FALSE;
     qof_event_resume();
-//    if( be_data.ok ) {
+//    if( be_data.is_ok ) {
 //		LEAVE( "" );
 //       	return;
 //    }
@@ -1883,7 +1929,7 @@ gnc_sql_load_object( const GncSqlBackend* be, GncSqlRow* row,
 
 /* ================================================================= */
 GncSqlStatement*
-gnc_sql_create_select_statement( const GncSqlBackend* be, const gchar* table_name )
+gnc_sql_create_select_statement( GncSqlBackend* be, const gchar* table_name )
 {
 	gchar* sql;
 
@@ -1895,7 +1941,7 @@ gnc_sql_create_select_statement( const GncSqlBackend* be, const gchar* table_nam
 }
 
 static GncSqlStatement*
-create_single_col_select_statement( const GncSqlBackend* be,
+create_single_col_select_statement( GncSqlBackend* be,
 							const gchar* table_name,
 							const GncSqlColumnTableEntry* table_row )
 {
@@ -1914,15 +1960,14 @@ create_single_col_select_statement( const GncSqlBackend* be,
 GncSqlResult*
 gnc_sql_execute_select_statement( GncSqlBackend* be, GncSqlStatement* stmt )
 {
-    GError* error = NULL;
     GncSqlResult* result;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( stmt != NULL, NULL );
 
     result = gnc_sql_connection_execute_select_statement( be->conn, stmt );
-    if( error != NULL ) {
-        PERR( "SQL error: %s\n%s\n", gnc_sql_statement_to_sql( stmt ), error->message );
+    if( result == NULL ) {
+        PERR( "SQL error: %s\n", gnc_sql_statement_to_sql( stmt ) );
 		qof_backend_set_error( &be->be, ERR_BACKEND_SERVER_ERR );
     }
 
@@ -1930,9 +1975,8 @@ gnc_sql_execute_select_statement( GncSqlBackend* be, GncSqlStatement* stmt )
 }
 
 GncSqlStatement*
-gnc_sql_create_statement_from_sql( const GncSqlBackend* be, gchar* sql )
+gnc_sql_create_statement_from_sql( GncSqlBackend* be, gchar* sql )
 {
-    GError* error = NULL;
 	GncSqlStatement* stmt;
 
 	g_return_val_if_fail( be != NULL, NULL );
@@ -1940,17 +1984,17 @@ gnc_sql_create_statement_from_sql( const GncSqlBackend* be, gchar* sql )
 
 	stmt = gnc_sql_connection_create_statement_from_sql( be->conn, sql );
     if( stmt == NULL ) {
-        PERR( "SQL error: %s\n%s\n", sql, error->message );
+        PERR( "SQL error: %s\n", sql );
+		qof_backend_set_error( &be->be, ERR_BACKEND_SERVER_ERR );
     }
 
 	return stmt;
 }
 
 GncSqlResult*
-gnc_sql_execute_select_sql( const GncSqlBackend* be, gchar* sql )
+gnc_sql_execute_select_sql( GncSqlBackend* be, gchar* sql )
 {
 	GncSqlStatement* stmt;
-    GError* error = NULL;
 	GncSqlResult* result = NULL;
 
 	g_return_val_if_fail( be != NULL, NULL );
@@ -1961,15 +2005,16 @@ gnc_sql_execute_select_sql( const GncSqlBackend* be, gchar* sql )
 		return NULL;
     }
 	result = gnc_sql_connection_execute_select_statement( be->conn, stmt );
-    if( error != NULL ) {
-        PERR( "SQL error: %s\n%s\n", sql, error->message );
+    if( result == NULL ) {
+        PERR( "SQL error: %s\n", sql );
+		qof_backend_set_error( &be->be, ERR_BACKEND_SERVER_ERR );
     }
 
 	return result;
 }
 
 gint
-gnc_sql_execute_nonselect_sql( const GncSqlBackend* be, gchar* sql )
+gnc_sql_execute_nonselect_sql( GncSqlBackend* be, gchar* sql )
 {
 	GncSqlStatement* stmt;
 	gint result;
@@ -1979,7 +2024,7 @@ gnc_sql_execute_nonselect_sql( const GncSqlBackend* be, gchar* sql )
 
 	stmt = gnc_sql_create_statement_from_sql( be, sql );
     if( stmt == NULL ) {
-		return 0;
+		return -1;
     }
 	result = gnc_sql_connection_execute_nonselect_statement( be->conn, stmt );
 	gnc_sql_statement_dispose( stmt );
@@ -2073,6 +2118,7 @@ gnc_sql_do_db_operation( GncSqlBackend* be,
                         const GncSqlColumnTableEntry* table )
 {
     GncSqlStatement* stmt;
+	gboolean ok = FALSE;
 
 	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( table_name != NULL, FALSE );
@@ -2090,13 +2136,19 @@ gnc_sql_do_db_operation( GncSqlBackend* be,
         g_assert( FALSE );
     }
     if( stmt != NULL ) {
-		gnc_sql_connection_execute_nonselect_statement( be->conn, stmt );
-		gnc_sql_statement_dispose( stmt );
+		gint result;
 
-        return TRUE;
-    } else {
-        return FALSE;
+		result = gnc_sql_connection_execute_nonselect_statement( be->conn, stmt );
+		if( result == -1 ) {
+        	PERR( "SQL error: %s\n", gnc_sql_statement_to_sql( stmt ) );
+			qof_backend_set_error( &be->be, ERR_BACKEND_SERVER_ERR );
+		} else {
+			ok = TRUE;
+		}
+		gnc_sql_statement_dispose( stmt );
     }
+
+	return ok;
 }
 
 static GSList*
@@ -2302,13 +2354,14 @@ build_delete_statement( GncSqlBackend* be,
 }
 
 /* ================================================================= */
-void
+gboolean
 gnc_sql_commit_standard_item( GncSqlBackend* be, QofInstance* inst, const gchar* tableName,
                         	QofIdTypeConst obj_name, const GncSqlColumnTableEntry* col_table )
 {
 	const GUID* guid;
 	gboolean is_infant;
 	gint op;
+	gboolean is_ok;
 
 	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
@@ -2318,24 +2371,29 @@ gnc_sql_commit_standard_item( GncSqlBackend* be, QofInstance* inst, const gchar*
 	} else {
 		op = OP_DB_UPDATE;
 	}
-    (void)gnc_sql_do_db_operation( be, op, tableName, obj_name, inst, col_table );
+    is_ok = gnc_sql_do_db_operation( be, op, tableName, obj_name, inst, col_table );
 
-    // Now, commit any slots
-    guid = qof_instance_get_guid( inst );
-    if( !qof_instance_get_destroying(inst) ) {
-        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-    } else {
-        gnc_sql_slots_delete( be, guid );
-    }
+	if( is_ok ) {
+    	// Now, commit any slots
+    	guid = qof_instance_get_guid( inst );
+    	if( !qof_instance_get_destroying(inst) ) {
+        	is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+    	} else {
+        	is_ok = gnc_sql_slots_delete( be, guid );
+    	}
+	}
+
+	return is_ok;
 }
 
 /* ================================================================= */
 
 static gboolean
-create_table( const GncSqlBackend* be, const gchar* table_name,
+do_create_table( const GncSqlBackend* be, const gchar* table_name,
 				const GncSqlColumnTableEntry* col_table )
 {
 	GList* col_info_list = NULL;
+	gboolean ok = FALSE;
     
 	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( table_name != NULL, FALSE );
@@ -2347,19 +2405,19 @@ create_table( const GncSqlBackend* be, const gchar* table_name,
         pHandler = get_handler( col_table );
         pHandler->add_col_info_to_list_fn( be, col_table, &col_info_list );
     }
-	gnc_sql_connection_create_table( be->conn, table_name, col_info_list );
-	return TRUE;
+	ok = gnc_sql_connection_create_table( be->conn, table_name, col_info_list );
+	return ok;
 }
 
 gboolean
-gnc_sql_create_table( const GncSqlBackend* be, const gchar* table_name,
+gnc_sql_create_table( GncSqlBackend* be, const gchar* table_name,
 					gint table_version, const GncSqlColumnTableEntry* col_table )
 {
 	gboolean ok;
 
-	ok = create_table( be, table_name, col_table );
+	ok = do_create_table( be, table_name, col_table );
 	if( ok ) {
-		(void)gnc_sql_set_table_version( be, table_name, table_version );
+		ok = gnc_sql_set_table_version( be, table_name, table_version );
 	}
 	return ok;
 }
@@ -2368,21 +2426,24 @@ gboolean
 gnc_sql_create_temp_table( const GncSqlBackend* be, const gchar* table_name,
 							const GncSqlColumnTableEntry* col_table )
 {
-	return create_table( be, table_name, col_table );
+	return do_create_table( be, table_name, col_table );
 }
 
-void
+gboolean
 gnc_sql_create_index( const GncSqlBackend* be, const gchar* index_name,
 					const gchar* table_name,
                     const GncSqlColumnTableEntry* col_table )
 {
-    g_return_if_fail( be != NULL );
-	g_return_if_fail( index_name != NULL );
-	g_return_if_fail( table_name != NULL );
-	g_return_if_fail( col_table != NULL );
+	gboolean ok;
+
+    g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( index_name != NULL, FALSE );
+	g_return_val_if_fail( table_name != NULL, FALSE );
+	g_return_val_if_fail( col_table != NULL, FALSE );
     
-	gnc_sql_connection_create_index( be->conn, index_name, table_name,
+	ok = gnc_sql_connection_create_index( be->conn, index_name, table_name,
 								col_table );
+	return ok;
 }
 
 gint
@@ -2454,7 +2515,7 @@ gnc_sql_init_version_info( GncSqlBackend* be )
 	} else {
 		gboolean ok;
 
-		ok = create_table( be, VERSION_TABLE_NAME, version_table );
+		ok = do_create_table( be, VERSION_TABLE_NAME, version_table );
 	}
 }
 
@@ -2463,20 +2524,23 @@ gnc_sql_init_version_info( GncSqlBackend* be )
  * It also recreates the version table in the db.
  *
  * @param be Backend struct
+ * @return TRUE if successful, FALSE if error
  */
-static void
+static gboolean
 reset_version_info( GncSqlBackend* be )
 {
 	gboolean ok;
 
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
 
-	ok = create_table( be, VERSION_TABLE_NAME, version_table );
+	ok = do_create_table( be, VERSION_TABLE_NAME, version_table );
 	if( be->versions == NULL ) {
 		be->versions = g_hash_table_new_full( g_str_hash, g_str_equal, g_free, NULL );
 	} else {
 		g_hash_table_remove_all( be->versions );
 	}
+
+	return ok;
 }
 
 /**
@@ -2502,10 +2566,11 @@ gnc_sql_finalize_version_info( GncSqlBackend* be )
  * @return TRUE if successful, FALSE if unsuccessful
  */
 gboolean
-gnc_sql_set_table_version( const GncSqlBackend* be, const gchar* table_name, gint version )
+gnc_sql_set_table_version( GncSqlBackend* be, const gchar* table_name, gint version )
 {
 	gchar* sql;
 	gint cur_version;
+	gint status;
 
 	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( table_name != NULL, FALSE );
@@ -2521,7 +2586,11 @@ gnc_sql_set_table_version( const GncSqlBackend* be, const gchar* table_name, gin
 								VERSION_COL_NAME, version,
 								TABLE_COL_NAME, table_name );
 		}
-		(void)gnc_sql_execute_nonselect_sql( be, sql );
+		status = gnc_sql_execute_nonselect_sql( be, sql );
+		if( status == -1 ) {
+        	PERR( "SQL error: %s\n", sql );
+			qof_backend_set_error( &be->be, ERR_BACKEND_SERVER_ERR );
+		}
 	}
 
 	g_hash_table_insert( be->versions, g_strdup( table_name ), GINT_TO_POINTER(version) );

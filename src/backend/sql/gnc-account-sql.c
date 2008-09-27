@@ -263,16 +263,17 @@ create_account_tables( GncSqlBackend* be )
 }
 
 /* ================================================================= */
-void
+gboolean
 gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
 {
     Account* pAcc = GNC_ACCOUNT(inst);
     const GUID* guid;
 	gboolean is_infant;
+	gboolean is_ok = FALSE;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_ACCOUNT(inst) );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_ACCOUNT(inst), FALSE );
 
 	is_infant = qof_instance_get_infant( inst );
 
@@ -293,19 +294,25 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
 
         // If not deleting the account, ensure the commodity is in the db
 		if( op != OP_DB_DELETE ) {
-        	gnc_sql_save_commodity( be, xaccAccountGetCommodity( pAcc ) );
+        	is_ok = gnc_sql_save_commodity( be, xaccAccountGetCommodity( pAcc ) );
 		}
 
-        (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_ACCOUNT, pAcc, col_table );
+		if( is_ok ) {
+        	is_ok = gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_ACCOUNT, pAcc, col_table );
+		}
 
-        // Now, commit or delete any slots
-        guid = qof_instance_get_guid( inst );
-        if( !qof_instance_get_destroying(inst) ) {
-            gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-        } else {
-            gnc_sql_slots_delete( be, guid );
-        }
+		if( is_ok ) {
+        	// Now, commit or delete any slots
+        	guid = qof_instance_get_guid( inst );
+        	if( !qof_instance_get_destroying(inst) ) {
+            	is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+	        } else {
+            	is_ok = gnc_sql_slots_delete( be, guid );
+			}
+		}
     }
+
+	return is_ok;
 }
 
 /* ================================================================= */
@@ -354,8 +361,8 @@ gnc_sql_init_account_handler( void )
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_ACCOUNT,
-        gnc_sql_save_account,				/* commit */
-        load_all_accounts,				/* initial_load */
+        gnc_sql_save_account,		/* commit */
+        load_all_accounts,			/* initial_load */
         create_account_tables		/* create_tables */
     };
 

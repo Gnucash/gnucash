@@ -33,6 +33,6 @@
 #include <gmodule.h>
 
 void gnc_sql_init_schedxaction_handler( void );
-void gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst );
+gboolean gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst );
 
 #endif /* GNC_SCHEDXACTION_SQL_H_ */

@@ -132,16 +132,17 @@ create_prices_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 
-static void
+static gboolean
 save_price( GncSqlBackend* be, QofInstance* inst )
 {
     GNCPrice* pPrice = GNC_PRICE(inst);
 	gint op;
 	gboolean is_infant;
+	gboolean is_ok;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_PRICE(inst) );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_PRICE(inst), FALSE );
 
 	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
@@ -155,35 +156,49 @@ save_price( GncSqlBackend* be, QofInstance* inst )
 	if( op != OP_DB_DELETE ) {
     	/* Ensure commodity and currency are in the db */
 		gnc_sql_save_commodity( be, gnc_price_get_commodity( pPrice ) );
-    	gnc_sql_save_commodity( be, gnc_price_get_currency( pPrice ) );
+    	is_ok = gnc_sql_save_commodity( be, gnc_price_get_currency( pPrice ) );
 	}
 
-    (void)gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_PRICE, pPrice, col_table );
+	if( is_ok ) {
+    	is_ok = gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_PRICE, pPrice, col_table );
+	}
+
+	return is_ok;
 }
+
+typedef struct {
+	GncSqlBackend* be;
+	gboolean is_ok;
+} write_objects_t;
 
 static gboolean
 write_price( GNCPrice* p, gpointer data )
 {
-    GncSqlBackend* be = (GncSqlBackend*)data;
+    write_objects_t* s = (write_objects_t*)data;
 
 	g_return_val_if_fail( p != NULL, FALSE );
 	g_return_val_if_fail( data != NULL, FALSE );
 
-    save_price( be, QOF_INSTANCE(p) );
+	if( s->is_ok ) {
+    	s->is_ok = save_price( s->be, QOF_INSTANCE(p) );
+	}
 
-    return TRUE;
+    return s->is_ok;
 }
 
-static void
+static gboolean
 write_prices( GncSqlBackend* be )
 {
     GNCPriceDB* priceDB;
+	write_objects_t data;
 
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
 
     priceDB = gnc_book_get_pricedb( be->primary_book );
 
-    gnc_pricedb_foreach_price( priceDB, write_price, be, TRUE );
+	data.be = be;
+	data.is_ok = TRUE;
+    return gnc_pricedb_foreach_price( priceDB, write_price, &data, TRUE );
 }
 
 /* ================================================================= */

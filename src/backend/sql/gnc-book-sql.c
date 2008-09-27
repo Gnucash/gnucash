@@ -190,18 +190,18 @@ create_book_tables( GncSqlBackend* be )
 }
 
 /* ================================================================= */
-void
+gboolean
 gnc_sql_save_book( GncSqlBackend* be, QofInstance* inst)
 {
     const GUID* guid;
 	gint op;
 	gboolean is_infant;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( QOF_IS_BOOK(inst) );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( QOF_IS_BOOK(inst), FALSE );
 
-	gnc_sql_commit_standard_item( be, inst, BOOK_TABLE, GNC_ID_BOOK, col_table );
+	return gnc_sql_commit_standard_item( be, inst, BOOK_TABLE, GNC_ID_BOOK, col_table );
 }
 
 /* ================================================================= */

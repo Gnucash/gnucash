@@ -169,16 +169,16 @@ create_commodities_tables( GncSqlBackend* be )
 }
 
 /* ================================================================= */
-static void
+static gboolean
 commit_commodity( GncSqlBackend* be, QofInstance* inst )
 {
     const GUID* guid;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_COMMODITY(inst) );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_COMMODITY(inst), FALSE );
 
-    gnc_sql_commit_standard_item( be, inst, COMMODITIES_TABLE, GNC_ID_COMMODITY, col_table );
+    return gnc_sql_commit_standard_item( be, inst, COMMODITIES_TABLE, GNC_ID_COMMODITY, col_table );
 }
 
 static gboolean
@@ -191,15 +191,19 @@ is_commodity_in_db( GncSqlBackend* be, gnc_commodity* pCommodity )
                                 pCommodity, col_table );
 }
 
-void
+gboolean
 gnc_sql_save_commodity( GncSqlBackend* be, gnc_commodity* pCommodity )
 {
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( pCommodity != NULL );
+	gboolean is_ok = TRUE;
+
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( pCommodity != NULL, FALSE );
 
     if( !is_commodity_in_db( be, pCommodity ) ) {
-        commit_commodity( be, QOF_INSTANCE(pCommodity) );
+        is_ok = commit_commodity( be, QOF_INSTANCE(pCommodity) );
     }
+
+	return is_ok;
 }
 
 /* ----------------------------------------------------------------- */

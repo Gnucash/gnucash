@@ -57,6 +57,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 typedef struct {
     GncSqlBackend* be;
     const GUID* guid;
+	gboolean is_ok;
 } split_info_t;
 
 #define TX_MAX_NUM_LEN 2048
@@ -439,33 +440,41 @@ delete_split_slots_cb( gpointer data, gpointer user_data )
 	g_return_if_fail( GNC_IS_SPLIT(data) );
 	g_return_if_fail( user_data != NULL );
 
-    gnc_sql_slots_delete( split_info->be,
-                    qof_instance_get_guid( QOF_INSTANCE(pSplit) ) );
+	if( split_info->is_ok ) {
+    	split_info->is_ok = gnc_sql_slots_delete( split_info->be,
+                    			qof_instance_get_guid( QOF_INSTANCE(pSplit) ) );
+	}
 }
 
-static void
+static gboolean
 delete_splits( GncSqlBackend* be, Transaction* pTx )
 {
     split_info_t split_info;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( pTx != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( pTx != NULL, FALSE );
 
-    (void)gnc_sql_do_db_operation( be, OP_DB_DELETE, SPLIT_TABLE,
-                                SPLIT_TABLE, pTx, guid_col_table );
+    if( !gnc_sql_do_db_operation( be, OP_DB_DELETE, SPLIT_TABLE,
+                                SPLIT_TABLE, pTx, guid_col_table ) ) {
+		return FALSE;
+	}
     split_info.be = be;
+	split_info.is_ok = TRUE;
 
     g_list_foreach( xaccTransGetSplitList( pTx ), delete_split_slots_cb, &split_info );
+
+	return split_info.is_ok;
 }
 
-static void
+static gboolean
 commit_split( GncSqlBackend* be, QofInstance* inst )
 {
 	gint op;
 	gboolean is_infant;
+	gboolean is_ok;
 
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( be != NULL );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( be != NULL, FALSE );
 
 	is_infant = qof_instance_get_infant( inst );
 	if( qof_instance_get_destroying( inst ) ) {
@@ -475,11 +484,15 @@ commit_split( GncSqlBackend* be, QofInstance* inst )
 	} else {
 		op = OP_DB_UPDATE;
 	}
-    (void)gnc_sql_do_db_operation( be, op, SPLIT_TABLE, GNC_ID_SPLIT, inst, split_col_table );
-    gnc_sql_slots_save( be,
+    is_ok = gnc_sql_do_db_operation( be, op, SPLIT_TABLE, GNC_ID_SPLIT, inst, split_col_table );
+	if( is_ok ) {
+		is_ok = gnc_sql_slots_save( be,
                         qof_instance_get_guid( inst ),
 						is_infant,
                         qof_instance_get_slots( inst ) );
+	}
+
+	return is_ok;
 }
 
 static void
@@ -492,33 +505,39 @@ save_split_cb( gpointer data, gpointer user_data )
 	g_return_if_fail( GNC_IS_SPLIT(data) );
 	g_return_if_fail( user_data != NULL );
 
-    commit_split( split_info->be, QOF_INSTANCE(pSplit) );
+	if( split_info->is_ok ) {
+    	split_info->is_ok = commit_split( split_info->be, QOF_INSTANCE(pSplit) );
+	}
 }
 
-static void
+static gboolean
 save_splits( GncSqlBackend* be, const GUID* tx_guid, SplitList* pSplitList )
 {
     split_info_t split_info;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( tx_guid != NULL );
-	g_return_if_fail( pSplitList != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( tx_guid != NULL, FALSE );
+	g_return_val_if_fail( pSplitList != NULL, FALSE );
 
     split_info.be = be;
     split_info.guid = tx_guid;
+	split_info.is_ok = TRUE;
     g_list_foreach( pSplitList, save_split_cb, &split_info );
+
+	return split_info.is_ok;
 }
 
-static void
+static gboolean
 save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
 {
     const GUID* guid;
 	gint op;
 	gboolean is_infant;
 	QofInstance* inst;
+	gboolean is_ok = TRUE;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( pTx != NULL );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( pTx != NULL, FALSE );
 
 	inst = QOF_INSTANCE(pTx);
 	is_infant = qof_instance_get_infant( inst );
@@ -532,42 +551,50 @@ save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
 
 	if( op != OP_DB_DELETE ) {
     	// Ensure the commodity is in the db
-    	gnc_sql_save_commodity( be, xaccTransGetCurrency( pTx ) );
+    	is_ok = gnc_sql_save_commodity( be, xaccTransGetCurrency( pTx ) );
 	}
 
-    (void)gnc_sql_do_db_operation( be, op, TRANSACTION_TABLE, GNC_ID_TRANS, pTx, tx_col_table );
+	if( is_ok ) {
+    	is_ok = gnc_sql_do_db_operation( be, op, TRANSACTION_TABLE, GNC_ID_TRANS, pTx, tx_col_table );
+	}
 
-    // Commit slots and splits
-    guid = qof_instance_get_guid( inst );
-    if( !qof_instance_get_destroying(inst) ) {
-        gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-		if( do_save_splits ) {
-			save_splits( be, guid, xaccTransGetSplitList( pTx ) );
-		}
-    } else {
-        gnc_sql_slots_delete( be, guid );
-    	delete_splits( be, pTx );
-    }
+	if( is_ok ) {
+    	// Commit slots and splits
+    	guid = qof_instance_get_guid( inst );
+    	if( !qof_instance_get_destroying(inst) ) {
+        	is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+			if( is_ok && do_save_splits ) {
+				is_ok = save_splits( be, guid, xaccTransGetSplitList( pTx ) );
+			}
+    	} else {
+        	is_ok = gnc_sql_slots_delete( be, guid );
+			if( is_ok ) {
+    			is_ok = delete_splits( be, pTx );
+			}
+    	}
+	}
+
+	return is_ok;
 }
 
-void
+gboolean
 gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst )
 {
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_TRANS(inst) );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_TRANS(inst), FALSE );
 
-	save_transaction( be, GNC_TRANS(inst), TRUE );
+	return save_transaction( be, GNC_TRANS(inst), TRUE );
 }
 
-static void
+static gboolean
 commit_transaction( GncSqlBackend* be, QofInstance* inst )
 {
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( inst != NULL );
-	g_return_if_fail( GNC_IS_TRANS(inst) );
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( inst != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_TRANS(inst), FALSE );
 
-	save_transaction( be, GNC_TRANS(inst), FALSE );
+	return save_transaction( be, GNC_TRANS(inst), FALSE );
 }
 
 /* ================================================================= */
