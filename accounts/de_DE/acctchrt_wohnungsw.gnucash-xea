@@ -32,7 +32,7 @@
   xmlns:entry="http://www.gnucash.org/XML/entry"
   xmlns:vendor="http://www.gnucash.org/XML/vendor">
   <gnc-act:title>
-    Kontenrahmen SKR04
+    Kontenrahmen für Wohnungswirtschaft
   </gnc-act:title>
   <gnc-act:short-description>
     Kontenrahmen für Wohnungswirtschaft
@@ -41,6 +41,12 @@
     BETA-Version eines allgemeinen Kontenrahmes für Wohnungswirtschaft, bearbeitet von Christoph Franzen. Fehlermeldungen an ChristophFranzen@gmx.net .
   </gnc-act:long-description>
   <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
+  <gnc:account version="2.0.0">
+    <act:name>Root Account</act:name>
+    <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+    <act:type>ROOT</act:type>
+    <act:commodity-scu>0</act:commodity-scu>
+  </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>0 Anlagevermögen</act:name>
   <act:id type="guid">5dfd1f9eb05cbb673ebfe7cb3a9fdda9</act:id>
