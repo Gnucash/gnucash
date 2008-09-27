@@ -103,6 +103,7 @@ Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD & other patches
 Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
 Jon Arney <jarney1@cox.net> Windows porting patches, misc fixes
 A. Alper Atici <alper_atici@yahoo.com> Turkish translation
+J. Alex Aycinena <alex.aycinena@gmail.com> Heavily improved Tax Report & TXF export
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Roman Bertle <bertle@smoerz.org> Austrian German account templates
 Jan-Pascal van Best <j.p.vanbest@tbm.tudelft.nl> MT940 importer
