@@ -53,15 +53,6 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 
-/* Do not treat -Wstrict-aliasing warnings as errors because of problems of the
- * G_LOCK* macros as declared by glib.  See
- * http://bugzilla.gnome.org/show_bug.cgi?id=316221 for additional information.
- */
-#if (__GNUC__ >= 4 && __GNUC_MINOR__ >= 2)
-#    pragma GCC diagnostic warning "-Wstrict-aliasing"
-#endif
-
-
 struct gnc_html_struct {
   GtkWidget   * window;            /* window this html goes into */
   GtkWidget   * container;         /* parent of the gtkhtml widget */
@@ -114,11 +105,6 @@ static char error_404_format[] =
 static char error_404_title[] = N_("Not found");
 static char error_404_body[] = 
 N_("The specified URL could not be loaded.");
-
-#ifdef GTKHTML_USES_GTKPRINT
-static GtkPrintSettings *print_settings = NULL;
-G_LOCK_DEFINE_STATIC(print_settings);
-#endif
 
 
 static char * 
@@ -1248,11 +1234,7 @@ gnc_html_print(gnc_html *html)
 
     print = gtk_print_operation_new();
 
-    G_LOCK(print_settings);
-    if (print_settings)
-        gtk_print_operation_set_print_settings(print, print_settings);
-    G_UNLOCK(print_settings);
-
+    gnc_print_operation_restore_print_settings(print);
     gtk_print_operation_set_use_full_page(print, FALSE);
     gtk_print_operation_set_unit(print, GTK_UNIT_POINTS);
     gtk_print_operation_set_n_pages(print, 1);
@@ -1261,13 +1243,8 @@ gnc_html_print(gnc_html *html)
     res = gtk_print_operation_run(print, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
                                   GTK_WINDOW(html->window), NULL);
 
-    if (res == GTK_PRINT_OPERATION_RESULT_APPLY) {
-        G_LOCK(print_settings);
-        if (print_settings)
-            g_object_unref(print_settings);
-        print_settings = g_object_ref(gtk_print_operation_get_print_settings(print));
-        G_UNLOCK(print_settings);
-    }
+    if (res == GTK_PRINT_OPERATION_RESULT_APPLY)
+        gnc_print_operation_save_print_settings(print);
 
     g_object_unref(print);
 }

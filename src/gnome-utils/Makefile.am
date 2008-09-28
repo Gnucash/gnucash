@@ -52,6 +52,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-dense-cal.c \
   gnc-dense-cal-model.c \
   gnc-dense-cal-store.c \
+  gnc-dialog.c \
   gnc-druid-gnome.c \
   gnc-druid-provider-edge-gnome.c \
   gnc-druid-provider-file-gnome.c \
@@ -94,7 +95,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gncmod-gnome-utils.c \
   misc-gnome-utils.c \
   search-param.c \
-  gnc-dialog.c \
+  print-session.c \
   swig-gnome-utils.c \
   window-main-summarybar.c
 
@@ -217,12 +218,9 @@ EXTRA_DIST = \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 
-if GTKHTML_USES_GTKPRINT
-  EXTRA_DIST += print-session.c
-else
+if !GTKHTML_USES_GTKPRINT
   AM_CFLAGS += ${GNOME_PRINT_CFLAGS}
   libgncmod_gnome_utils_la_LIBADD += ${GNOME_PRINT_LIBS}
-  libgncmod_gnome_utils_la_SOURCES += print-session.c
 endif
 
 ## We borrow guile's convention and use @-...-@ as the substitution

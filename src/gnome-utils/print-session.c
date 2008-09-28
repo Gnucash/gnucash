@@ -22,14 +22,63 @@
 
 #include "config.h"
 
-#include <gnome.h>
-#include <glib/gi18n.h>
-#include <libgnomeprint/gnome-font.h>
-#include <libgnomeprintui/gnome-print-job-preview.h>
+#ifdef HAVE_GTK_2_10
+#    include <gtk/gtkprintoperation.h>
+#endif
+
+#ifndef GTKHTML_USES_GTKPRINT
+#    include <gnome.h>
+#    include <glib/gi18n.h>
+#    include <libgnomeprint/gnome-font.h>
+#    include <libgnomeprintui/gnome-print-job-preview.h>
+#endif
 
 #include "print-session.h"
 
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "gnc.printing"
 
+#ifdef HAVE_GTK_2_10
+/* Do not treat -Wstrict-aliasing warnings as errors because of problems of the
+ * G_LOCK* macros as declared by glib.  See
+ * http://bugzilla.gnome.org/show_bug.cgi?id=316221 for additional information.
+ */
+#    if (__GNUC__ >= 4 && __GNUC_MINOR__ >= 2)
+#        pragma GCC diagnostic warning "-Wstrict-aliasing"
+#    endif
+
+static GtkPrintSettings *print_settings = NULL;
+G_LOCK_DEFINE_STATIC(print_settings);
+#endif
+
+
+#ifdef HAVE_GTK_2_10
+void
+gnc_print_operation_save_print_settings(GtkPrintOperation *op)
+{
+  g_return_if_fail(op);
+
+  G_LOCK(print_settings);
+  if (print_settings)
+    g_object_unref(print_settings);
+  print_settings = g_object_ref(gtk_print_operation_get_print_settings(op));
+  G_UNLOCK(print_settings);
+}
+
+void
+gnc_print_operation_restore_print_settings(GtkPrintOperation *op)
+{
+  g_return_if_fail(op);
+
+  G_LOCK(print_settings);
+  if (print_settings)
+    gtk_print_operation_set_print_settings(op, print_settings);
+  G_UNLOCK(print_settings);
+}
+#endif  /* HAVE_GTK_2_10 */
+
+
+#ifndef GTKHTML_USES_GTKPRINT
 PrintSession * 
 gnc_print_session_create(gboolean hand_built_pages)
 {
@@ -105,3 +154,4 @@ gnc_print_session_done(PrintSession * ps)
       break;
   }
 }
+#endif  /* !GTKHTML_USES_GTKPRINT */
