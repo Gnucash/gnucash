@@ -49,11 +49,19 @@ void gnc_print_operation_save_print_settings(GtkPrintOperation *op);
 /**
  * If print settings have been saved by
  * gnc_print_operation_save_print_settings(), then set them on the given
- * GtkPrintOperation @a op.
+ * GtkPrintOperation @a op.  Set the default page setup as well.
  *
  * @param op non-NULL print operation
  */
-void gnc_print_operation_restore_print_settings(GtkPrintOperation *op);
+void gnc_print_operation_init(GtkPrintOperation *op);
+
+/**
+ * Run a page setup dialog and save the resulting GtkPageSetup in a static
+ * variable.
+ *
+ * @param parent Transient parent, or NULL
+ */
+void gnc_ui_page_setup(GtkWindow *parent);
 
 #endif  /* HAVE_GTK_2_10 */
 

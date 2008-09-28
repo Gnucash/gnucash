@@ -18,6 +18,7 @@
       <placeholder name="FileSavePlaceholder"/>
       <separator name="FileSep2"/>
       <menuitem name="FilePrint" action="FilePrintAction"/>
+      <menuitem name="FilePageSetup" action="FilePageSetupAction"/>
       <placeholder name="FilePrintPlaceholder"/>
       <menu name="FileExport" action="FileExportAction">
         <placeholder name="FileExportPlaceholder"/>

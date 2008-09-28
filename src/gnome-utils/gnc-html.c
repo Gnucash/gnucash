@@ -1234,7 +1234,7 @@ gnc_html_print(gnc_html *html)
 
     print = gtk_print_operation_new();
 
-    gnc_print_operation_restore_print_settings(print);
+    gnc_print_operation_init(print);
     gtk_print_operation_set_use_full_page(print, FALSE);
     gtk_print_operation_set_unit(print, GTK_UNIT_POINTS);
     gtk_print_operation_set_n_pages(print, 1);
