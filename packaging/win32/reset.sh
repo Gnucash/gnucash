@@ -76,6 +76,8 @@ function eval_all() {
     eval_path $HH_DIR
     eval_path $OPENSP_DIR
     eval_path $LIBOFX_DIR
+    eval_path $GMP_DIR
+    eval_path $GNUTLS_DIR
     eval_path $GWENHYWFAR_DIR
     eval_path $AQBANKING_DIR
     eval_path $LIBGDA_DIR

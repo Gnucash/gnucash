@@ -1,0 +1,12 @@
+diff -Nur aqbanking-3.7.1-old/src/frontends/qbanking/bin/helpbrowser/Makefile.am aqbanking-3.7.1/src/frontends/qbanking/bin/helpbrowser/Makefile.am
+--- aqbanking-3.7.1-old/src/frontends/qbanking/bin/helpbrowser/Makefile.am	Thu Jul 31 18:13:32 2008
++++ aqbanking-3.7.1/src/frontends/qbanking/bin/helpbrowser/Makefile.am	Sun Sep 28 18:54:56 2008
+@@ -65,7 +65,7 @@
+ 
+ # This section is for a qt4 environment
+ qt4-port:
+-	for A in $(libqbhelp_la_SOURCES) $(noinst_HEADERS); do \
++	for A in $(libqbhelp_la_SOURCES) $(noinst_HEADERS) qb_help.cpp qbhelpbrowser.cpp; do \
+ 	 $(YES) | $(QT3TO4) $$A; \
+ 	done
+ #	rm $(BUILT_SOURCES)

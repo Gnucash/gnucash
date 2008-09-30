@@ -32,6 +32,8 @@ function prepare() {
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     _OPENSP_UDIR=`unix_path $OPENSP_DIR`
     _LIBOFX_UDIR=`unix_path $LIBOFX_DIR`
+    _GMP_UDIR=`unix_path $GMP_DIR`
+    _GNUTLS_UDIR=`unix_path $GNUTLS_DIR`
     _GWENHYWFAR_UDIR=`unix_path $GWENHYWFAR_DIR`
     _AQBANKING_UDIR=`unix_path $AQBANKING_DIR`
     _SQLITE3_UDIR=`unix_path ${SQLITE3_DIR}`
@@ -151,11 +153,24 @@ function dist_libofx() {
     cp -a ${_LIBOFX_UDIR}/share/libofx ${DIST_UDIR}/share
 }
 
+function dist_gnutls() {
+    setup gnutls
+    cp -a ${_GNUTLS_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+    cp -a ${_GNUTLS_UDIR}/bin/*.exe ${DIST_UDIR}/bin
+}
+
+function dist_gmp() {
+    setup gmp
+    cp -a ${_GMP_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+}
+
 function dist_gwenhywfar() {
     setup gwenhywfar
     cp -a ${_GWENHYWFAR_UDIR}/bin/*.dll ${DIST_UDIR}/bin
     mkdir -p ${DIST_UDIR}/etc
-    cp -a ${_GWENHYWFAR_UDIR}/etc/* ${DIST_UDIR}/etc
+    if [ "$AQBANKING3" != "yes" ]; then
+        cp -a ${_GWENHYWFAR_UDIR}/etc/* ${DIST_UDIR}/etc
+    fi
     cp -a ${_GWENHYWFAR_UDIR}/lib/gwenhywfar ${DIST_UDIR}/lib
 }
 
@@ -171,7 +186,9 @@ function dist_aqbanking() {
     cp -a ${_AQBANKING_UDIR}/bin/*.dll ${DIST_UDIR}/bin
     cp -a ${_AQBANKING_UDIR}/lib/aqbanking ${DIST_UDIR}/lib
     cp -a ${_AQBANKING_UDIR}/share/aqbanking ${DIST_UDIR}/share
-    cp -a ${_AQBANKING_UDIR}/share/aqhbci ${DIST_UDIR}/share
+    if [ "$AQBANKING3" != "yes" ]; then
+        cp -a ${_AQBANKING_UDIR}/share/aqhbci ${DIST_UDIR}/share
+    fi
     cp -a ${_AQBANKING_UDIR}/share/locale ${DIST_UDIR}/lib
 }
 
@@ -229,8 +246,13 @@ function finish() {
     cp $_BUILD_UDIR/packaging/win32/.libs/redirect.exe $DIST_UDIR/libexec/gconfd-2.exe
 
     if [ "$AQBANKING_WITH_QT" = "yes" ]; then
-        mv ${DIST_UDIR}/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe $DIST_UDIR/bin
-        cp $_BUILD_UDIR/packaging/win32/.libs/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe
+        if [ "$AQBANKING3" != "yes" ]; then
+            mv ${DIST_UDIR}/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe $DIST_UDIR/bin
+            cp $_BUILD_UDIR/packaging/win32/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe
+        else
+            mv ${DIST_UDIR}/lib/aqbanking/plugins/20/wizards/qt3-wizard.exe $DIST_UDIR/bin
+            cp $_BUILD_UDIR/packaging/win32/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/20/wizards/qt3-wizard.exe
+        fi
     fi
 
     # Strip redirections in distributed libtool .la files
@@ -259,12 +281,17 @@ prepare
 dist_regex
 dist_autotools
 dist_guile
-dist_openssl
 dist_gnome
 dist_pcre
 dist_libgsf
 dist_goffice
 dist_libofx
+if [ "$AQBANKING3" != "yes" ]; then
+ dist_openssl
+else
+ dist_gnutls
+ dist_gmp
+fi
 dist_gwenhywfar
 dist_aqbanking
 dist_libdbi

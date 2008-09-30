@@ -134,12 +134,19 @@ set_default AUTOMAKE_URL "http://ftp.gnu.org/gnu/automake/automake-1.9.6.tar.bz2
 set_default LIBTOOL_URL "http://ftp.gnu.org/gnu/libtool/libtool-1.5.22.tar.gz"
 set_default AUTOTOOLS_DIR $GLOBAL_DIR\\autotools
 
+set_default GMP_URL "ftp://ftp.gnu.org/gnu/gmp/gmp-4.2.3.tar.bz2"
+set_default GMP_ABI 32
+set_default GMP_DIR $GLOBAL_DIR\\gmp
+
 set_default GUILE_URL "http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
 set_default SLIB_URL "http://swiss.csail.mit.edu/ftpdir/scm/OLD/slib3a3.zip"
 set_default GUILE_DIR $GLOBAL_DIR\\guile
 
 set_default OPENSSL_URL "http://www.openssl.org/source/openssl-0.9.8e.tar.gz"
 set_default OPENSSL_DIR $GLOBAL_DIR\\openssl
+
+set_default GNUTLS_URL "http://josefsson.org/gnutls4win/gnutls-2.4.1.zip"
+set_default GNUTLS_DIR $GLOBAL_DIR\\gnutls
 
 set_default MINGW_UTILS_URL "$SF_MIRROR/mingw/mingw-utils-0.3.tar.gz"
 set_default MINGW_UTILS_DIR $TOOLS_DIR
@@ -250,13 +257,24 @@ set_default LIBOFX_DIR $GLOBAL_DIR\\libofx
 set_default LIBOFX_PATCH `pwd`/libofx-0.8.3-patch.diff
 
 ## online banking: gwenhywfar+aqbanking
-set_default GWENHYWFAR_URL "$SF_MIRROR/gwenhywfar/gwenhywfar-2.6.2.tar.gz"
+set_default AQBANKING3 yes
+
+if [ "$AQBANKING3" != "yes" ]; then
+    set_default GWENHYWFAR_URL "$SF_MIRROR/gwenhywfar/gwenhywfar-2.6.2.tar.gz"
+else
+    set_default GWENHYWFAR_URL "http://www.aquamaniac.de/sites/download/download.php?package=01&release=13&file=01&dummy=gwenhywfar-3.4.1.tar.gz"
+fi
 set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
 
 set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.17.tar.gz"
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
-set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.3.3.tar.gz"
+if [ "$AQBANKING3" != "yes" ]; then
+    set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.3.3.tar.gz"
+else
+    set_default AQBANKING_URL "http://www.aquamaniac.de/sites/download/download.php?package=03&release=16&file=01&dummy=aqbanking-3.7.2.tar.gz"
+    set_default AQBANKING_PATCH `pwd`/aqbanking-3.7.2.patch
+fi
 set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking
 set_default AQBANKING_WITH_QT yes
 # If set to yes, download Qt from http://www.trolltech.com/developer/downloads/qt/windows,
@@ -300,11 +318,18 @@ if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_active_perl
 fi
 add_step inst_autotools
+if [ "$AQBANKING3" = "yes" ]; then
+ add_step inst_gmp
+fi
 add_step inst_guile
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_svn
  add_step inst_mingwutils
- add_step inst_openssl
+ if [ "$AQBANKING3" != "yes" ]; then
+  add_step inst_openssl
+ else
+  add_step inst_gnutls
+ fi
 fi
 add_step inst_exetype
 add_step inst_libxslt

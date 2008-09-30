@@ -15,8 +15,12 @@ qpushd "$(dirname $(unix_path "$0"))"
 register_env_var ACLOCAL_FLAGS " "
 register_env_var AUTOTOOLS_CPPFLAGS " "
 register_env_var AUTOTOOLS_LDFLAGS " "
+register_env_var GMP_CPPFLAGS " "
+register_env_var GMP_LDFLAGS " "
 register_env_var GNOME_CPPFLAGS " "
 register_env_var GNOME_LDFLAGS " "
+register_env_var GNUTLS_CPPFLAGS " "
+register_env_var GNUTLS_LDFLAGS " "
 register_env_var GUILE_LOAD_PATH ";"
 register_env_var GUILE_CPPFLAGS " "
 register_env_var GUILE_LDFLAGS " "
@@ -259,6 +263,31 @@ function inst_autotools() {
             make install
         qpopd
         quiet ${LIBTOOLIZE} --help || die "libtool/libtoolize not installed correctly"
+    fi
+}
+
+function inst_gmp() {
+    setup Gmp
+    _GMP_UDIR=`unix_path ${GMP_DIR}`
+    add_to_env -I$_GMP_UDIR/include GMP_CPPFLAGS
+    add_to_env -L$_GMP_UDIR/lib GMP_LDFLAGS
+    add_to_env ${_GMP_UDIR}/bin PATH
+    if quiet ${LD} $GMP_LDFLAGS -lgmp -o $TMP_UDIR/ofile
+    then
+        echo "Gmp already installed. skipping."
+    else
+        wget_unpacked $GMP_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/gmp-*
+        qpushd $TMP_UDIR/gmp-*
+            ./configure ${HOST_XCOMPILE} \
+                ABI=$GMP_ABI \
+                --prefix=${_GMP_UDIR} \
+                --disable-static --enable-shared 
+            make
+#            [ "$CROSS_COMPILE" != "yes" ] && make check
+            make install
+        qpopd
+        quiet ${LD} $GMP_LDFLAGS -lgmp -o $TMP_UDIR/ofile || die "Gmp not installed correctly"
     fi
 }
 
@@ -801,6 +830,24 @@ function inst_libofx() {
     fi
 }
 
+function inst_gnutls() {
+    setup GNUTLS
+    _GNUTLS_UDIR=`unix_path ${GNUTLS_DIR}`
+    add_to_env ${_GNUTLS_UDIR}/bin PATH
+    add_to_env ${_GNUTLS_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    add_to_env "-I${_GNUTLS_UDIR}/include" GNUTLS_CPPFLAGS
+    add_to_env "-L${_GNUTLS_UDIR}/lib" GNUTLS_LDFLAGS
+    add_to_env "-I $_GNUTLS_UDIR/share/aclocal" ACLOCAL_FLAGS
+    if quiet which gnutls-cli
+    then
+        echo "GNUTLS already installed. skipping."
+    else
+        wget_unpacked $GNUTLS_URL $DOWNLOAD_DIR $GNUTLS_DIR
+        rm -f $_GNUTLS_UDIR/lib/*.la
+        quiet which gnutls-cli || die "GNUTLS not installed correctly"
+    fi
+}
+
 function inst_gwenhywfar() {
     setup Gwenhywfar
     _GWENHYWFAR_UDIR=`unix_path ${GWENHYWFAR_DIR}`
@@ -815,16 +862,28 @@ function inst_gwenhywfar() {
         assert_one_dir $TMP_UDIR/gwenhywfar-*
         qpushd $TMP_UDIR/gwenhywfar-*
             # circumvent binreloc bug, http://trac.autopackage.org/ticket/28
-            ./configure ${HOST_XCOMPILE} \
-                --with-openssl-includes=$_OPENSSL_UDIR/include \
-                --disable-binreloc \
-                ssl_libraries="-L${_OPENSSL_UDIR}/lib" \
-                ssl_lib="-leay32 -lssl32" \
-                --prefix=$_GWENHYWFAR_UDIR \
-                CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS}" \
-                LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -lintl"
+            if [ "$AQBANKING3" != "yes" ]; then
+                ./configure ${HOST_XCOMPILE} \
+                    --with-openssl-includes=$_OPENSSL_UDIR/include \
+                    --disable-binreloc \
+                    ssl_libraries="-L${_OPENSSL_UDIR}/lib" \
+                    ssl_lib="-leay32 -lssl32" \
+                    --prefix=$_GWENHYWFAR_UDIR \
+                    CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS}" \
+                    LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -lintl"
+            else
+                ./configure ${HOST_XCOMPILE} \
+                    --with-openssl-includes=$_OPENSSL_UDIR/include \
+                    --with-openssl-libs=$_OPENSSL_UDIR/lib \
+                    --with-libgnutls-prefix=$_GNUTLS_UDIR \
+                    --with-libgcrypt-prefix=$_GNUTLS_UDIR \
+                    --disable-binreloc \
+                    --prefix=$_GWENHYWFAR_UDIR \
+                    CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS}" \
+                    LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS} -lintl"
+            fi
             make
-            [ "$CROSS_COMPILE" != "yes" ] && make check
+#            [ "$CROSS_COMPILE" != "yes" ] && make check
             make install
         qpopd
         ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
@@ -850,7 +909,7 @@ function inst_ktoblzcheck() {
                 --disable-binreloc \
                 --disable-python
             make
-            [ "$CROSS_COMPILE" != "yes" ] && make check
+#            [ "$CROSS_COMPILE" != "yes" ] && make check
             make install
         qpopd
         ${PKG_CONFIG} --exists ktoblzcheck || die "Ktoblzcheck not installed correctly"
@@ -898,16 +957,20 @@ function inst_aqbanking() {
         wget_unpacked $AQBANKING_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/aqbanking-*
         qpushd $TMP_UDIR/aqbanking-*
-            _AQ_CPPFLAGS="-I${_LIBOFX_UDIR}/include ${KTOBLZCHECK_CPPFLAGS} ${GNOME_CPPFLAGS}"
-            _AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib ${KTOBLZCHECK_LDFLAGS} ${GNOME_LDFLAGS}"
+            _AQ_CPPFLAGS="-I${_LIBOFX_UDIR}/include ${KTOBLZCHECK_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS}"
+            _AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib ${KTOBLZCHECK_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS}"
+            if [ -n "$AQBANKING_PATCH" -a -f "$AQBANKING_PATCH" ]; then
+                patch -p1 < $AQBANKING_PATCH
+                make -f Makefile.cvs
+            fi
             if test x$AQBANKING_WITH_QT = xyes; then
                 inst_qt4
                 ./configure \
                     --with-gwen-dir=${_GWENHYWFAR_UDIR} \
                     --with-frontends="cbanking qbanking" \
-                    --with-backends="aqdtaus aqhbci aqofxconnect" \
-                    CPPFLAGS="${_AQ_CPPFLAGS}" \
-                    LDFLAGS="${_AQ_LDFLAGS}" \
+                    --with-backends="aqhbci aqofxconnect" \
+                    CPPFLAGS="${_AQ_CPPFLAGS} ${GMP_CPPFLAGS}" \
+                    LDFLAGS="${_AQ_LDFLAGS} ${GMP_LDFLAGS}" \
                     qt3_libs="-L${_QTDIR}/lib -L${_QTDIR}/bin -lQtCore4 -lQtGui4 -lQt3Support4" \
                     qt3_includes="-I${_QTDIR}/include -I${_QTDIR}/include/Qt -I${_QTDIR}/include/QtCore -I${_QTDIR}/include/QtGui -I${_QTDIR}/include/Qt3Support" \
                     --prefix=${_AQBANKING_UDIR}
@@ -918,16 +981,20 @@ function inst_aqbanking() {
                     --with-gwen-dir=${_GWENHYWFAR_UDIR} \
                     --with-frontends="cbanking" \
                     --with-backends="aqdtaus aqhbci aqofxconnect" \
-                    CPPFLAGS="${_AQ_CPPFLAGS}" \
-                    LDFLAGS="${_AQ_LDFLAGS}" \
+                    CPPFLAGS="${_AQ_CPPFLAGS} ${GMP_CPPFLAGS}" \
+                    LDFLAGS="${_AQ_LDFLAGS} ${GMP_LDFLAGS}" \
                     --prefix=${_AQBANKING_UDIR}
             fi
             make
             make install
         qpopd
         qpushd ${_AQBANKING_UDIR}/bin
-            exetype aqbanking-tool.exe console
-            exetype aqhbci-tool.exe console
+            if [ "$AQBANKING3" != "yes" ]; then
+                exetype aqbanking-tool.exe console
+                exetype aqhbci-tool.exe console
+            else
+                exetype aqhbci-tool3.exe console
+            fi
         qpopd
         ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
     fi
