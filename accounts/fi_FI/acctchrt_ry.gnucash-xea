@@ -35,6 +35,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:code>7000</act:code>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 
@@ -54,11 +55,12 @@
           <slot:value type="string">true</slot:value>
         </slot>
       </act:slots>
+      <act:code>7500</act:code>
       <act:parent type="new">8d33ceef608df2a5dfd1ad5fe57c24f5</act:parent>
     </gnc:account>
 
         <gnc:account version="2.0.0">
-          <act:name>Pankkitili</act:name>
+          <act:name>Käyttötili</act:name>
           <act:id type="new">a07a8effafd0afec842bb566ff33ee2b</act:id>
           <act:type>BANK</act:type>
           <act:commodity>
@@ -67,6 +69,7 @@
           </act:commodity>
           <act:commodity-scu>100</act:commodity-scu>
           <act:description>Checking Account</act:description>
+          <act:code>7510</act:code>
           <act:parent type="new">bebb679353339a1b8da3a33253ec36f8</act:parent>
         </gnc:account>
 
@@ -87,8 +90,45 @@
           <slot:value type="string">true</slot:value>
         </slot>
       </act:slots>
+      <act:code>7100</act:code>
       <act:parent type="new">8d33ceef608df2a5dfd1ad5fe57c24f5</act:parent>
     </gnc:account>
+        <gnc:account version="2.0.0">
+          <act:name>Aineelliset hyödykkeet</act:name>
+          <act:id type="new">6113da895d80f342ec9c7ff2e89e0bb3</act:id>
+          <act:type>ASSET</act:type>
+          <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+          </act:commodity>
+          <act:commodity-scu>100</act:commodity-scu>
+          <act:code>7200</act:code>
+          <act:parent type="new">3bbb9f9bcdc84be10f0996f7d8e95034</act:parent>
+        </gnc:account>
+            <gnc:account version="2.0.0">
+              <act:name>Maa- ja vesialueet</act:name>
+              <act:id type="new">7842a7733246062d3c3047bc638afe7b</act:id>
+              <act:type>ASSET</act:type>
+              <act:commodity>
+                <cmdty:space>ISO4217</cmdty:space>
+                <cmdty:id>EUR</cmdty:id>
+              </act:commodity>
+              <act:commodity-scu>100</act:commodity-scu>
+              <act:code>7210</act:code>
+              <act:parent type="new">6113da895d80f342ec9c7ff2e89e0bb3</act:parent>
+            </gnc:account>
+            <gnc:account version="2.0.0">
+              <act:name>Kalusto</act:name>
+              <act:id type="new">a2d26379c2763511d99a2d4d3adc5670</act:id>
+              <act:type>ASSET</act:type>
+              <act:commodity>
+                <cmdty:space>ISO4217</cmdty:space>
+                <cmdty:id>EUR</cmdty:id>
+              </act:commodity>
+              <act:commodity-scu>100</act:commodity-scu>
+              <act:code>7220</act:code>
+              <act:parent type="new">6113da895d80f342ec9c7ff2e89e0bb3</act:parent>
+            </gnc:account>
 
 
 
@@ -101,6 +141,7 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8000</act:code>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 
@@ -113,7 +154,8 @@
         <cmdty:id>EUR</cmdty:id>
       </act:commodity>
       <act:commodity-scu>100</act:commodity-scu>
-      <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+      <act:code>8100</act:code>
+      <act:parent type="new">9e012cae8d4891f58b4879a99a515474</act:parent>
     </gnc:account>
 
 
@@ -141,6 +183,7 @@
         <cmdty:id>EUR</cmdty:id>
       </act:commodity>
       <act:commodity-scu>100</act:commodity-scu>
+      <act:code>3100</act:code>
       <act:parent type="new">9e001a7d6e2dee96fac05789ec40bc45</act:parent>
     </gnc:account>
     <gnc:account version="2.0.0">
@@ -152,6 +195,7 @@
         <cmdty:id>EUR</cmdty:id>
       </act:commodity>
       <act:commodity-scu>100</act:commodity-scu>
+      <act:code>3200</act:code>
       <act:parent type="new">9e001a7d6e2dee96fac05789ec40bc45</act:parent>
     </gnc:account>
 
@@ -176,6 +220,7 @@
         <cmdty:id>EUR</cmdty:id>
       </act:commodity>
       <act:commodity-scu>100</act:commodity-scu>
+      <act:code>4100</act:code>
       <act:parent type="new">d1322ce495e6dc04d77babbc8b5e4f83</act:parent>
     </gnc:account>
     <gnc:account version="2.0.0">
@@ -187,6 +232,7 @@
         <cmdty:id>EUR</cmdty:id>
       </act:commodity>
       <act:commodity-scu>100</act:commodity-scu>
+      <act:code>4200</act:code>
       <act:parent type="new">d1322ce495e6dc04d77babbc8b5e4f83</act:parent>
     </gnc:account>
 
@@ -231,8 +277,21 @@
         <cmdty:id>EUR</cmdty:id>
       </act:commodity>
       <act:commodity-scu>100</act:commodity-scu>
+      <act:code>2100</act:code>
       <act:parent type="new">fa349003c5f3ba57de9e74910404f498</act:parent>
     </gnc:account>
+        <gnc:account version="2.0.0">
+          <act:name>Jäsenmaksut</act:name>
+          <act:id type="new">2e1f5fa4f1bd636cece25b7fb5cebe2a</act:id>
+          <act:type>INCOME</act:type>
+          <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+          </act:commodity>
+          <act:commodity-scu>100</act:commodity-scu>
+          <act:code>2110</act:code>
+          <act:parent type="new">2156f4ca43b92ab4a6d81c657bde5281</act:parent>
+        </gnc:account>
     <gnc:account version="2.0.0">
       <act:name>Kulut</act:name>
       <act:id type="new">078cd81ae3f7e7f38fe9eca1db1d9c21</act:id>
@@ -242,6 +301,7 @@
         <cmdty:id>EUR</cmdty:id>
       </act:commodity>
       <act:commodity-scu>100</act:commodity-scu>
+      <act:code>2500</act:code>
       <act:parent type="new">fa349003c5f3ba57de9e74910404f498</act:parent>
     </gnc:account>
 
@@ -281,7 +341,7 @@
           <slot:value type="string">true</slot:value>
         </slot>
       </act:slots>
-      <act:code>1200</act:code>
+      <act:code>1500</act:code>
       <act:parent type="new">2a0f1f3b6c429114174102e861ac9dbe</act:parent>
     </gnc:account>
 
@@ -294,7 +354,7 @@
             <cmdty:id>EUR</cmdty:id>
           </act:commodity>
           <act:commodity-scu>100</act:commodity-scu>
-          <act:code>1210</act:code>
+          <act:code>1600</act:code>
           <act:parent type="new">000e50355d7e50c0e09edfbe2ead7912</act:parent>
         </gnc:account>
         <gnc:account version="2.0.0">
@@ -305,7 +365,7 @@
             <cmdty:space>ISO4217</cmdty:space>
             <cmdty:id>EUR</cmdty:id>
           </act:commodity>
-          <act:code>1230</act:code>
+          <act:code>1700</act:code>
           <act:commodity-scu>100</act:commodity-scu>
           <act:parent type="new">000e50355d7e50c0e09edfbe2ead7912</act:parent>
         </gnc:account>
@@ -318,7 +378,7 @@
             <cmdty:id>EUR</cmdty:id>
           </act:commodity>
           <act:commodity-scu>100</act:commodity-scu>
-          <act:code>1250</act:code>
+          <act:code>1800</act:code>
           <act:parent type="new">000e50355d7e50c0e09edfbe2ead7912</act:parent>
         </gnc:account>
 
@@ -353,6 +413,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:code>9000</act:code>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
     <gnc:account version="2.0.0">
@@ -365,6 +426,7 @@
       </act:commodity>
       <act:commodity-scu>100</act:commodity-scu>
       <act:description>Opening Balances</act:description>
+      <act:code>9100</act:code>
       <act:parent type="new">7081f24a5685d4dfcb8f143f0b7ee31d</act:parent>
     </gnc:account>
 
