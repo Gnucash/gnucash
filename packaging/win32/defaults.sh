@@ -327,13 +327,14 @@ if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_mingwutils
  if [ "$AQBANKING3" != "yes" ]; then
   add_step inst_openssl
- else
-  add_step inst_gnutls
  fi
 fi
 add_step inst_exetype
 add_step inst_libxslt
 add_step inst_gnome
+if [ "$AQBANKING3" = "yes" ]; then
+ add_step inst_gnutls
+fi
 add_step inst_swig
 add_step inst_pcre
 add_step inst_libgsf

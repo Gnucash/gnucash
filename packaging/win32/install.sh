@@ -838,13 +838,13 @@ function inst_gnutls() {
     add_to_env "-I${_GNUTLS_UDIR}/include" GNUTLS_CPPFLAGS
     add_to_env "-L${_GNUTLS_UDIR}/lib" GNUTLS_LDFLAGS
     add_to_env "-I $_GNUTLS_UDIR/share/aclocal" ACLOCAL_FLAGS
-    if quiet which gnutls-cli
+    if quiet ${PKG_CONFIG} --exists gnutls
     then
         echo "GNUTLS already installed. skipping."
     else
         wget_unpacked $GNUTLS_URL $DOWNLOAD_DIR $GNUTLS_DIR
         rm -f $_GNUTLS_UDIR/lib/*.la
-        quiet which gnutls-cli || die "GNUTLS not installed correctly"
+        quiet ${PKG_CONFIG} --exists gnutls || die "GNUTLS not installed correctly"
     fi
 }
 
@@ -963,10 +963,16 @@ function inst_aqbanking() {
                 patch -p1 < $AQBANKING_PATCH
                 make -f Makefile.cvs
             fi
+            if test x$CROSS_COMPILE = xyes; then
+                XMLMERGE="xmlmerge"
+            else
+                XMLMERGE="${GWENHYWFAR_UDIR}/bin/xmlmerge"
+            fi
             if test x$AQBANKING_WITH_QT = xyes; then
                 inst_qt4
-                ./configure \
+                ./configure ${HOST_XCOMPILE} \
                     --with-gwen-dir=${_GWENHYWFAR_UDIR} \
+                    --with-xmlmerge=${XMLMERGE} \
                     --with-frontends="cbanking qbanking" \
                     --with-backends="aqhbci aqofxconnect" \
                     CPPFLAGS="${_AQ_CPPFLAGS} ${GMP_CPPFLAGS}" \
@@ -977,8 +983,9 @@ function inst_aqbanking() {
                 make qt4-port
                 make clean
             else
-                ./configure \
+                ./configure ${HOST_XCOMPILE} \
                     --with-gwen-dir=${_GWENHYWFAR_UDIR} \
+                    --with-xmlmerge=${XMLMERGE} \
                     --with-frontends="cbanking" \
                     --with-backends="aqdtaus aqhbci aqofxconnect" \
                     CPPFLAGS="${_AQ_CPPFLAGS} ${GMP_CPPFLAGS}" \

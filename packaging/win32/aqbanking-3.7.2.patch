@@ -1,6 +1,17 @@
+diff -Nur aqbanking-3.7.1-old/configure.ac aqbanking-3.7.1/configure.ac
+--- aqbanking-3.7.1-old/configure.ac	2008-08-16 13:36:42.000000000 +0200
++++ aqbanking-3.7.1/configure.ac	2008-10-05 13:37:48.295980988 +0200
+@@ -511,7 +511,6 @@
+ #
+ # Checks for library functions.
+ #
+-AC_FUNC_MALLOC
+ AC_FUNC_STRFTIME
+ AC_CHECK_FUNCS([memmove memset strcasecmp strdup strerror snprintf])
+ AC_CHECK_FUNCS([setlocale])
 diff -Nur aqbanking-3.7.1-old/src/frontends/qbanking/bin/helpbrowser/Makefile.am aqbanking-3.7.1/src/frontends/qbanking/bin/helpbrowser/Makefile.am
---- aqbanking-3.7.1-old/src/frontends/qbanking/bin/helpbrowser/Makefile.am	Thu Jul 31 18:13:32 2008
-+++ aqbanking-3.7.1/src/frontends/qbanking/bin/helpbrowser/Makefile.am	Sun Sep 28 18:54:56 2008
+--- aqbanking-3.7.1-old/src/frontends/qbanking/bin/helpbrowser/Makefile.am	2008-07-31 20:13:31.000000000 +0200
++++ aqbanking-3.7.1/src/frontends/qbanking/bin/helpbrowser/Makefile.am	2008-10-05 13:37:38.257983188 +0200
 @@ -65,7 +65,7 @@
  
  # This section is for a qt4 environment
