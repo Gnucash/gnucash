@@ -1,10 +1,17 @@
-Index: dbd.h
-===================================================================
-RCS file: /cvsroot/libdbi/libdbi/include/dbi/dbd.h,v
-retrieving revision 1.29
-diff -u -r1.29 dbd.h
---- include/dbi/dbd.h	15 Aug 2005 19:18:18 -0000	1.29
-+++ include/dbi/dbd.h	16 Aug 2008 20:20:33 -0000
+diff -Nur libdbi-0.8.3-old/configure.in libdbi-0.8.3/configure.in
+--- libdbi-0.8.3-old/configure.in	2008-02-06 17:03:27.000000000 +0100
++++ libdbi-0.8.3/configure.in	2008-10-05 15:56:55.677983028 +0200
+@@ -26,6 +26,7 @@
+ AC_PROG_CPP
+ AC_PROG_LD
+ AC_PROG_INSTALL
++AC_LIBTOOL_WIN32_DLL
+ AC_PROG_LIBTOOL
+ AC_SUBST(LIBTOOL)
+ dnl ====================================
+diff -Nur libdbi-0.8.3-old/include/dbi/dbd.h libdbi-0.8.3/include/dbi/dbd.h
+--- libdbi-0.8.3-old/include/dbi/dbd.h	2005-08-15 21:18:18.000000000 +0200
++++ libdbi-0.8.3/include/dbi/dbd.h	2008-10-05 15:57:24.889982668 +0200
 @@ -52,7 +52,7 @@
  size_t dbd_quote_binary(dbi_conn_t *conn, const unsigned char *orig, size_t from_length, unsigned char **ptr_dest);
  size_t dbd_conn_quote_string(dbi_conn_t *conn, const char *orig, char *dest);
@@ -23,4 +30,3 @@ diff -u -r1.29 dbd.h
  dbi_result_t *_dbd_result_create_from_stringarray(dbi_conn_t *conn, unsigned long long numrows_matched, const char **stringarray);
  void _dbd_register_driver_cap(dbi_driver_t *driver, const char *capname, int value);
  void _dbd_register_conn_cap(dbi_conn_t *conn, const char *capname, int value);
-

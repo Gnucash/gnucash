@@ -1035,8 +1035,10 @@ function inst_libdbi() {
         wget_unpacked $LIBDBI_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/libdbi-0*
         qpushd $TMP_UDIR/libdbi-0*
-            [ -n "$LIBDBI_PATCH" -a -f "$LIBDBI_PATCH" ] && \
-                patch -p0 < $LIBDBI_PATCH
+            if [ -n "$LIBDBI_PATCH" -a -f "$LIBDBI_PATCH" ]; then
+                patch -p1 < $LIBDBI_PATCH
+                ./autogen.sh
+            fi
             ./configure ${HOST_XCOMPILE} \
                 --disable-docs \
                 --prefix=${_LIBDBI_UDIR}
