@@ -1021,11 +1021,11 @@ function inst_libdbi() {
         wget_unpacked $SQLITE3_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/sqlite-*
         qpushd $TMP_UDIR/sqlite-*
-	    ./configure \
-	        --prefix=${_SQLITE3_UDIR}
-	    make
-	    make install
-	qpopd
+            ./configure \
+                --prefix=${_SQLITE3_UDIR}
+            make
+            make install
+        qpopd
         test -f ${_SQLITE3_UDIR}/bin/libsqlite3-0.dll || die "SQLite3 not installed correctly"
     fi
     if test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll
@@ -1037,11 +1037,11 @@ function inst_libdbi() {
         qpushd $TMP_UDIR/libdbi-0*
             [ -n "$LIBDBI_PATCH" -a -f "$LIBDBI_PATCH" ] && \
                 patch -p0 < $LIBDBI_PATCH
-	    ./configure \
-	        --disable-docs \
-	    	--prefix=${_LIBDBI_UDIR}
-	    make
-	    make install
+            ./configure \
+                --disable-docs \
+                --prefix=${_LIBDBI_UDIR}
+            make
+            make install
         qpopd
         test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll || die "libdbi not installed correctly"
     fi
@@ -1056,15 +1056,15 @@ function inst_libdbi() {
                 patch -p0 < $LIBDBI_DRIVERS_PATCH
             [ -n "$LIBDBI_DRIVERS_PATCH2" -a -f "$LIBDBI_DRIVERS_PATCH2" ] && \
                 patch -p0 < $LIBDBI_DRIVERS_PATCH2
-	    ./configure \
-	        --disable-docs \
-		--with-dbi-incdir=${_LIBDBI_UDIR}/include \
-		--with-dbi-libdir=${_LIBDBI_UDIR}/lib \
-		--with-sqlite3 \
-		--with-sqlite3-dir=${_SQLITE3_UDIR} \
-	    	--prefix=${_LIBDBI_DRIVERS_UDIR}
-	    make
-	    make install
+            ./configure \
+                --disable-docs \
+                --with-dbi-incdir=${_LIBDBI_UDIR}/include \
+                --with-dbi-libdir=${_LIBDBI_UDIR}/lib \
+                --with-sqlite3 \
+                --with-sqlite3-dir=${_SQLITE3_UDIR} \
+                --prefix=${_LIBDBI_DRIVERS_UDIR}
+            make
+            make install
         qpopd
         test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdsqlite3.dll || die "libdbi drivers not installed correctly"
     fi
@@ -1143,8 +1143,8 @@ function inst_gnucash() {
             --prefix=$_INSTALL_WFSDIR \
             --enable-debug \
             --enable-schemas-install=no \
-	    --enable-dbi \
-	    --with-dbi-dbd-dir=${_LIBDBI_DRIVERS_UDIR}/lib/dbd \
+            --enable-dbi \
+            --with-dbi-dbd-dir=${_LIBDBI_DRIVERS_UDIR}/lib/dbd \
             ${LIBOFX_OPTIONS} \
             ${AQBANKING_OPTIONS} \
             --enable-binreloc \
@@ -1210,7 +1210,7 @@ function make_install() {
         echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
         echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
         echo "set LTDL_LIBRARY_PATH=${INSTALL_DIR}\\lib" >> gnucash.bat
-	echo "set GNC_DBD_DIR=${LIBDBI_DRIVERS_DIR}\\lib\\dbd" >> gnucash.bat
+        echo "set GNC_DBD_DIR=${LIBDBI_DRIVERS_DIR}\\lib\\dbd" >> gnucash.bat
         echo "start gnucash-bin %*" >> gnucash.bat
     qpopd
 }
