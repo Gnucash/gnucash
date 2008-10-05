@@ -6,7 +6,7 @@ diff -Nur aqbanking-3.7.1-old/configure.ac aqbanking-3.7.1/configure.ac
  
  AC_LIBTOOL_WIN32_DLL
 -AC_LIBTOOL_RC
-+LT_PROG_RC
++AC_CHECK_TOOL([RC], [windres], [no])
  AC_PROG_LIBTOOL
  AC_CHECK_PROG(USE_DOT,dot,YES,NO)
  AC_CHECK_PROG(SED,sed,sed)
