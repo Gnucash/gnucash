@@ -227,7 +227,6 @@ function inst_autotools() {
     add_to_env $_AUTOTOOLS_UDIR/bin PATH
     add_to_env -I$_AUTOTOOLS_UDIR/include AUTOTOOLS_CPPFLAGS
     add_to_env -L$_AUTOTOOLS_UDIR/lib AUTOTOOLS_LDFLAGS
-    add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet autoconf --help && quiet automake --help
     then
         echo "autoconf/automake already installed.  skipping."
@@ -250,7 +249,7 @@ function inst_autotools() {
         qpopd
         quiet autoconf --help && quiet automake --help || die "autoconf/automake not installed correctly"
     fi
-    if quiet ${LIBTOOLIZE} --help 
+    if quiet libtoolize --help
     then
         echo "libtool/libtoolize already installed.  skipping."
     else
@@ -262,8 +261,9 @@ function inst_autotools() {
             make
             make install
         qpopd
-        quiet ${LIBTOOLIZE} --help || die "libtool/libtoolize not installed correctly"
+        quiet libtoolize --help || die "libtool/libtoolize not installed correctly"
     fi
+    [ ! -d $_AUTOTOOLS_UDIR/share/aclocal ] || add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
 
 function inst_gmp() {
@@ -364,9 +364,8 @@ function inst_guile() {
         ln -sf /usr/bin/guile-config mingw32-guile-config
         ln -sf /usr/bin/guile mingw32-build-guile
         qpopd
-    else
-        add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
     fi
+    [ ! -d $_GUILE_UDIR/share/aclocal ] || add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
 
 function inst_svn() {
@@ -492,7 +491,6 @@ function inst_gnome() {
     else
         add_to_env pkg-config PKG_CONFIG
     fi
-    add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet gconftool-2 --version &&
         ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
 #        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgtkhtml-3.14 &&  # not gnomeprint
@@ -603,6 +601,7 @@ EOF
         #    for A in *-0.dll; do ln -sf $A `echo $A|sed 's/\(.*\)-0.dll/\1.dll/'`; done
         #qpopd
     fi
+    [ ! -d $_GNOME_UDIR/share/aclocal ] || add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
 
 function inst_swig() {
@@ -683,7 +682,7 @@ function inst_goffice() {
         qpushd $TMP_UDIR/goffice-*
             [ -n "$GOFFICE_PATCH" -a -f "$GOFFICE_PATCH" ] && \
                 patch -p1 < $GOFFICE_PATCH
-            ${LIBTOOLIZE} --force
+            libtoolize --force
             aclocal ${ACLOCAL_FLAGS} -I .
             automake
             autoconf
@@ -786,6 +785,7 @@ function inst_opensp() {
         qpushd $TMP_UDIR/OpenSP-*
             [ -n "$OPENSP_PATCH" -a -f "$OPENSP_PATCH" ] && \
                 patch -p0 < $OPENSP_PATCH
+            libtoolize --force
             aclocal ${ACLOCAL_FLAGS} -I m4
             automake
             autoconf
@@ -837,7 +837,6 @@ function inst_gnutls() {
     add_to_env ${_GNUTLS_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
     add_to_env "-I${_GNUTLS_UDIR}/include" GNUTLS_CPPFLAGS
     add_to_env "-L${_GNUTLS_UDIR}/lib" GNUTLS_LDFLAGS
-    add_to_env "-I $_GNUTLS_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet ${PKG_CONFIG} --exists gnutls
     then
         echo "GNUTLS already installed. skipping."
@@ -846,6 +845,7 @@ function inst_gnutls() {
         rm -f $_GNUTLS_UDIR/lib/*.la
         quiet ${PKG_CONFIG} --exists gnutls || die "GNUTLS not installed correctly"
     fi
+    [ ! -d $_GNUTLS_UDIR/share/aclocal ] || add_to_env "-I $_GNUTLS_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
 
 function inst_gwenhywfar() {
@@ -853,7 +853,6 @@ function inst_gwenhywfar() {
     _GWENHYWFAR_UDIR=`unix_path ${GWENHYWFAR_DIR}`
     add_to_env ${_GWENHYWFAR_UDIR}/bin PATH
     add_to_env ${_GWENHYWFAR_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    add_to_env "-I $_GWENHYWFAR_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet ${PKG_CONFIG} --exists gwenhywfar
     then
         echo "Gwenhywfar already installed. skipping."
@@ -888,6 +887,7 @@ function inst_gwenhywfar() {
         qpopd
         ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
     fi
+    [ ! -d $_GWENHYWFAR_UDIR/share/aclocal ] || add_to_env "-I $_GWENHYWFAR_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
 
 function inst_ktoblzcheck() {
@@ -949,7 +949,6 @@ function inst_aqbanking() {
     _AQBANKING_UDIR=`unix_path ${AQBANKING_DIR}`
     add_to_env ${_AQBANKING_UDIR}/bin PATH
     add_to_env ${_AQBANKING_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    add_to_env "-I $_AQBANKING_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet ${PKG_CONFIG} --exists aqbanking
     then
         echo "AqBanking already installed. skipping."
@@ -1005,6 +1004,7 @@ function inst_aqbanking() {
         qpopd
         ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
     fi
+    [ ! -d $_AQBANKING_UDIR/share/aclocal ] || add_to_env "-I $_AQBANKING_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
 
 function inst_libdbi() {
@@ -1021,7 +1021,7 @@ function inst_libdbi() {
         wget_unpacked $SQLITE3_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/sqlite-*
         qpushd $TMP_UDIR/sqlite-*
-            ./configure \
+            ./configure ${HOST_XCOMPILE} \
                 --prefix=${_SQLITE3_UDIR}
             make
             make install
@@ -1037,7 +1037,7 @@ function inst_libdbi() {
         qpushd $TMP_UDIR/libdbi-0*
             [ -n "$LIBDBI_PATCH" -a -f "$LIBDBI_PATCH" ] && \
                 patch -p0 < $LIBDBI_PATCH
-            ./configure \
+            ./configure ${HOST_XCOMPILE} \
                 --disable-docs \
                 --prefix=${_LIBDBI_UDIR}
             make
@@ -1056,7 +1056,7 @@ function inst_libdbi() {
                 patch -p0 < $LIBDBI_DRIVERS_PATCH
             [ -n "$LIBDBI_DRIVERS_PATCH2" -a -f "$LIBDBI_DRIVERS_PATCH2" ] && \
                 patch -p0 < $LIBDBI_DRIVERS_PATCH2
-            ./configure \
+            ./configure ${HOST_XCOMPILE} \
                 --disable-docs \
                 --with-dbi-incdir=${_LIBDBI_UDIR}/include \
                 --with-dbi-libdir=${_LIBDBI_UDIR}/lib \
@@ -1086,7 +1086,7 @@ function inst_libgda() {
             patch libgda/gda-data-model-dir.c $LIBGDA_PATCH
             #patch to use g_setenv instead of setenv (bug #510739)
             patch tools/gda-sql.c $LIBGDA_PATCH2
-            ./configure  \
+            ./configure ${HOST_XCOMPILE} \
                 --prefix=${_LIBGDA_UDIR} \
                 CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS}" \
                 LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -lintl"

@@ -79,11 +79,8 @@ set_default RANLIB ranlib
 # For cross-compiling, change this to "yes"
 set_default CROSS_COMPILE "no"
 
-if [ "$CROSS_COMPILE" != yes ]; then
-    set_default LIBTOOLIZE libtoolize
-else
+if [ "$CROSS_COMPILE" = yes ]; then
     # Insert your cross-compiler mingw32 bin-directories here
-    set_default LIBTOOLIZE $GLOBAL_DIR/autotools/bin/libtoolize
     set_default HOST_XCOMPILE "--host=mingw32"
 fi
 ####
