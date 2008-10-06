@@ -70,7 +70,7 @@ msgstr "account type: валютный рынок"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr "account type: Взаимный фонд"
+msgstr "account type: Паевой Инвестиционный Фонд (ПИФ)"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
