@@ -847,8 +847,10 @@ gnc_split_register_delete_current_split (SplitRegister *reg)
       g_assert(xaccTransIsOpen(trans));
   } else {
       g_assert(!pending_trans);
-      if (gnc_split_register_begin_edit_or_warn(info, trans))
-          return;
+      if (gnc_split_register_begin_edit_or_warn(info, trans)) {
+        gnc_resume_gui_refresh ();
+        return;
+      }
   }
   xaccSplitDestroy (split);
 
@@ -1018,8 +1020,10 @@ gnc_split_register_empty_current_trans_except_split (SplitRegister *reg,
 
   trans = xaccSplitGetParent(split);
   if (!pending) {
-      if (gnc_split_register_begin_edit_or_warn(info, trans))
-          return;
+      if (gnc_split_register_begin_edit_or_warn(info, trans)) {
+        gnc_resume_gui_refresh ();
+        return;
+      }
   } else if (pending == trans) {
       g_assert(xaccTransIsOpen(trans));
   } else g_assert_not_reached();
@@ -1333,6 +1337,8 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
      if (!xaccTransIsOpen(trans))
          return FALSE;
 
+     gnc_suspend_gui_refresh ();
+
      if (trans == blank_trans) {
          blank_edited = info->blank_split_edited;
          info->last_date_entered = xaccTransGetDate (trans);
@@ -1350,6 +1356,8 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
          PINFO("commiting trans (%p)", trans);
          xaccTransCommitEdit(trans);
      }
+
+     gnc_resume_gui_refresh ();
 
      return TRUE;
    }
@@ -1382,8 +1390,11 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
        if (xaccTransIsOpen (pending_trans)) {
            g_warning("Impossible? commiting pending %p", pending_trans);
            xaccTransCommitEdit (pending_trans);
-       } else if (pending_trans) 
+       } else if (pending_trans) {
+           g_critical("BUG DETECTED! pending transaction (%p) not open",
+                      pending_trans);
            g_assert_not_reached();
+       }
 
        if (trans == blank_trans) {
            /* Don't begin editing the blank trans, because it's
