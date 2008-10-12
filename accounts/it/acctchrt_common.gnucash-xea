@@ -597,14 +597,14 @@
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Cure mediche</act:name>
+  <act:name>Assistenza sanitaria</act:name>
   <act:id type="new">0785932c5de43e814659420762c9b577</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Cure mediche</act:description>
+  <act:description>Assistenza sanitaria</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -619,14 +619,14 @@
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Pensione</act:name>
+  <act:name>Previdenza sociale</act:name>
   <act:id type="new">c252f10f3d57dd05c500856164b1729e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Pensione</act:description>
+  <act:description>Previdenza sociale</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
