@@ -147,18 +147,35 @@ gnc_split_get_amount_denom (Split *split)
 gboolean
 gnc_split_register_begin_edit_or_warn(SRInfo *info, Transaction *trans)
 {
+  ENTER("info=%p, trans=%p", info, trans);
+
       if (!xaccTransIsOpen(trans)) {
           xaccTransBeginEdit(trans);
           /* This is now the pending transaction */
           info->pending_trans_guid = *xaccTransGetGUID(trans);
+          LEAVE("opened and marked pending");
           return FALSE;
       } else {
+        Split       *blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                                    gnc_get_current_book ());
+        Transaction *blank_trans = xaccSplitGetParent (blank_split);
+
+        if (trans == blank_trans) {
+          /* This is a brand-new transaction. It is already
+           * open, so just mark it as pending. */
+          info->pending_trans_guid = *xaccTransGetGUID(trans);
+          LEAVE("already open, now pending.");
+          return FALSE;
+        } else {
           GtkWidget *parent = NULL;
           if (info->get_parent)
               parent = info->get_parent(info->user_data);
           gnc_error_dialog(parent, "%s", _("This transaction is already being edited in another register. Please finish editing it there first."));
+          LEAVE("already editing");
           return TRUE;
+        }
       }
+  LEAVE(" ");
 }
 
 void
