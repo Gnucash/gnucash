@@ -1,5 +1,5 @@
 # GnuCash PO file, for Simplified Chinese.
-# Copyright (C) YEAR Free Software Foundation, Inc.
+# Copyright (C) 2008 Free Software Foundation, Inc.
 # Yang Yi <yang_yi_cn@yahoo.com>, 2002
 # Charles Wang <charlesw1234@163.com>, 2008
 #
@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: GnuCash\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-01-28 23:25+0000\n"
-"PO-Revision-Date: 2008-01-27 21:02+0000\n"
+"PO-Revision-Date: 2008-10-17 10:20+0800\n"
 "Last-Translator: Charles Wang <charles@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -18792,21 +18792,18 @@ msgstr ""
 
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:2684
-#, fuzzy
 msgid "Total Debits"
 msgstr "借方总计"
 
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:2686
-#, fuzzy
 msgid "Total Credits"
 msgstr "贷方总计"
 
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:2688
-#, fuzzy
 msgid "Net Change"
-msgstr "修改了"
+msgstr "结余"
 
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:2690
