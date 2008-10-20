@@ -661,7 +661,7 @@ msgstr "定制"
 
 #: ../src/business/business-gnome/dialog-date-close.c:72
 msgid "No Account selected.  Please try again."
-msgstr "没有选择帐号。请重试。"
+msgstr "没有选择账号。请重试。"
 
 #: ../src/business/business-gnome/dialog-employee.c:216
 msgid "You must enter a username."
@@ -2653,7 +2653,7 @@ msgstr ""
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:170
 #, fuzzy
 msgid "an Account"
-msgstr "帐号"
+msgstr "账号"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:374
 #, fuzzy, c-format
@@ -3077,7 +3077,7 @@ msgstr ""
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:9
 msgid "_Account:"
-msgstr "帐号(_A)："
+msgstr "账号(_A)："
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:10
 msgid "_Name: "
@@ -3405,7 +3405,7 @@ msgstr "帐户"
 #: ../intl-scm/guile-strings.c:2642 ../intl-scm/guile-strings.c:2708
 #: ../intl-scm/guile-strings.c:3426
 msgid "Account"
-msgstr "帐号"
+msgstr "账号"
 
 #: ../src/gnome/dialog-find-transactions.c:106
 #: ../src/import-export/import-match-picker.c:337
@@ -3808,7 +3808,7 @@ msgstr "“%s”的帐户"
 #: ../src/gnome/druid-hierarchy.c:505
 #, fuzzy
 msgid "Accounts in Category"
-msgstr "帐号类型"
+msgstr "账号类型"
 
 #: ../src/gnome/druid-hierarchy.c:711
 msgid "zero"
@@ -4054,7 +4054,7 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:1
 msgid "<b>Acco_unt Type</b>"
-msgstr "<b>帐号类型(_U)</b>"
+msgstr "<b>账号类型(_U)</b>"
 
 #: ../src/gnome/glade/account.glade.h:2
 #, fuzzy
@@ -4094,11 +4094,11 @@ msgstr "<b>新帐户货币</b>"
 
 #: ../src/gnome/glade/account.glade.h:10
 msgid "<b>Sub-account Transactions</b>"
-msgstr "<b>子帐号交易</b>"
+msgstr "<b>子账号交易</b>"
 
 #: ../src/gnome/glade/account.glade.h:11
 msgid "<b>Sub-accounts</b>"
-msgstr "<b>子帐号</b>"
+msgstr "<b>子账号</b>"
 
 #: ../src/gnome/glade/account.glade.h:12
 #: ../src/gnome/glade/sched-xact.glade.h:50
@@ -4107,12 +4107,12 @@ msgstr "<b>交易</b>"
 
 #: ../src/gnome/glade/account.glade.h:13
 msgid "<b>_Parent Account</b>"
-msgstr "<b>父帐号(_P)</b>"
+msgstr "<b>父账号(_P)</b>"
 
 #. src/report/standard-reports/account-summary.scm
 #: ../src/gnome/glade/account.glade.h:14 ../intl-scm/guile-strings.c:1920
 msgid "Account Type"
-msgstr "帐号类型"
+msgstr "账号类型"
 
 #: ../src/gnome/glade/account.glade.h:15
 msgid "Account _name:"
@@ -4317,12 +4317,12 @@ msgstr "设定新帐户"
 #: ../src/gnome/glade/account.glade.h:56
 #, fuzzy
 msgid "Show _hidden accounts"
-msgstr "帐号代码"
+msgstr "账号代码"
 
 #: ../src/gnome/glade/account.glade.h:57
 #, fuzzy
 msgid "Show _zero total accounts"
-msgstr "帐号代码"
+msgstr "账号代码"
 
 #: ../src/gnome/glade/account.glade.h:58
 msgid "Smallest _fraction:"
@@ -4400,7 +4400,7 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:77
 msgid "_Account code:"
-msgstr "帐号代码(_A)："
+msgstr "账号代码(_A)："
 
 #: ../src/gnome/glade/account.glade.h:78
 msgid "_Balance:"
@@ -4442,7 +4442,7 @@ msgstr "全选(_S)"
 
 #: ../src/gnome/glade/account.glade.h:86
 msgid "_Select transfer account"
-msgstr "选择转账帐号(_S)"
+msgstr "选择转账账号(_S)"
 
 #: ../src/gnome/glade/account.glade.h:87
 msgid "_Use equity 'Opening Balances' account"
@@ -4696,7 +4696,7 @@ msgstr "复利："
 #: ../src/gnome/glade/fincalc.glade.h:3
 #, fuzzy
 msgid "<b>Payment Options</b>"
-msgstr "帐号"
+msgstr "账号"
 
 #: ../src/gnome/glade/fincalc.glade.h:4
 #, fuzzy
@@ -4705,7 +4705,7 @@ msgstr "描述"
 
 #: ../src/gnome/glade/fincalc.glade.h:5
 msgid "Account Information"
-msgstr "帐号信息"
+msgstr "账号信息"
 
 #: ../src/gnome/glade/fincalc.glade.h:6
 msgid "Annual"
@@ -4767,7 +4767,7 @@ msgstr "每天（365）"
 #: ../src/gnome/glade/fincalc.glade.h:27
 #, fuzzy
 msgid "Discrete"
-msgstr "帐号"
+msgstr "账号"
 
 #: ../src/gnome/glade/fincalc.glade.h:28
 msgid "End"
@@ -4921,7 +4921,7 @@ msgstr ""
 #: ../src/gnome/glade/lots.glade.h:16
 #, fuzzy
 msgid "Scrub _Account"
-msgstr "帐号(_A)"
+msgstr "账号(_A)"
 
 #: ../src/gnome/glade/lots.glade.h:17
 msgid "Scrub the highlighted lot"
@@ -5154,7 +5154,7 @@ msgstr "账户名称："
 #: ../src/gnome/glade/print.glade.h:2
 #, fuzzy
 msgid "Amount (_words):"
-msgstr "帐号代码"
+msgstr "账号代码"
 
 #: ../src/gnome/glade/print.glade.h:3
 msgid "Check _format:"
@@ -5754,7 +5754,7 @@ msgstr "编号"
 #: ../src/gnome/glade/sched-xact.glade.h:46
 #, fuzzy
 msgid "<b>Occurrences</b>"
-msgstr "帐号类型"
+msgstr "账号类型"
 
 #: ../src/gnome/glade/sched-xact.glade.h:47
 #, fuzzy
@@ -5778,7 +5778,7 @@ msgstr "对帐信息"
 #: ../src/gnome/glade/sched-xact.glade.h:52
 #, fuzzy
 msgid "Account Deletion"
-msgstr "帐号信息"
+msgstr "账号信息"
 
 #: ../src/gnome/glade/sched-xact.glade.h:53
 msgid "Advanced..."
@@ -5977,7 +5977,7 @@ msgstr "丢失的帐户"
 #: ../src/gnome/glade/sched-xact.glade.h:108
 #, fuzzy
 msgid "Loan Information"
-msgstr "帐号信息"
+msgstr "账号信息"
 
 #: ../src/gnome/glade/sched-xact.glade.h:109
 #, fuzzy
@@ -6356,11 +6356,11 @@ msgstr "周。"
 
 #: ../src/gnome/glade/stocks.glade.h:1
 msgid "<b>A_sset Account</b>"
-msgstr "<b>资产帐号(_S)</b>"
+msgstr "<b>资产账号(_S)</b>"
 
 #: ../src/gnome/glade/stocks.glade.h:2
 msgid "<b>_Income Account</b>"
-msgstr "<b>收入帐号(_I)</b>"
+msgstr "<b>收入账号(_I)</b>"
 
 #: ../src/gnome/glade/stocks.glade.h:3
 msgid "Cash In Lieu"
@@ -6412,7 +6412,7 @@ msgstr ""
 
 #: ../src/gnome/glade/stocks.glade.h:12
 msgid "Stock Account"
-msgstr "股票帐号"
+msgstr "股票账号"
 
 #: ../src/gnome/glade/stocks.glade.h:13
 msgid "Stock Split"
@@ -6456,7 +6456,7 @@ msgstr "<没有信息>"
 
 #: ../src/gnome/glade/tax.glade.h:4
 msgid "<b>_Accounts</b>"
-msgstr "<b>帐号(_A)</b>"
+msgstr "<b>账号(_A)</b>"
 
 #: ../src/gnome/glade/tax.glade.h:5
 msgid "<b>_TXF Categories</b>"
@@ -6489,7 +6489,7 @@ msgstr "收入(_I)"
 #: ../src/gnome/glade/tax.glade.h:12
 #, fuzzy
 msgid "_Parent Account"
-msgstr "帐号"
+msgstr "账号"
 
 #: ../src/gnome/glade/tax.glade.h:13
 msgid "_Select Subaccounts"
@@ -6826,7 +6826,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:191
 msgid "Check & Repair A_ccount"
-msgstr "检查和修复帐号(_C)"
+msgstr "检查和修复账号(_C)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:192
 #: ../src/gnome/window-reconcile.c:2028
@@ -7405,7 +7405,7 @@ msgstr "现价："
 
 #: ../src/gnome/gnc-split-reg.c:1874
 msgid "This account register is read-only."
-msgstr "这个帐号登记表是只读的。"
+msgstr "这个账号登记表是只读的。"
 
 #: ../src/gnome/gnc-split-reg.c:1908
 msgid ""
@@ -7413,7 +7413,7 @@ msgid ""
 "register, please open the account options and turn off the placeholder "
 "checkbox."
 msgstr ""
-"无法编辑这一帐号。如果您需要编辑这一登记表中的交易，请打开帐号选项并关闭占位"
+"无法编辑这一账号。如果您需要编辑这一登记表中的交易，请打开账号选项并关闭占位"
 "符选项。"
 
 #: ../src/gnome/gnc-split-reg.c:1915
@@ -7931,7 +7931,7 @@ msgstr "日期格式选择"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:15
 msgid "Default currency for new accounts"
-msgstr "新帐号的默认货币"
+msgstr "新账号的默认货币"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:16
 msgid "Default currency for new reports"
@@ -8847,7 +8847,7 @@ msgstr ""
 #: ../src/gnome-utils/dialog-account.c:636
 #, fuzzy
 msgid "_Show children accounts"
-msgstr "帐号代码"
+msgstr "账号代码"
 
 #: ../src/gnome-utils/dialog-account.c:708
 msgid "The account must be given a name."
@@ -8855,7 +8855,7 @@ msgstr "帐户必须要给个名字。"
 
 #: ../src/gnome-utils/dialog-account.c:730
 msgid "There is already an account with that name."
-msgstr "已经有一个帐号用了这个名字。"
+msgstr "已经有一个账号用了这个名字。"
 
 #: ../src/gnome-utils/dialog-account.c:738
 msgid "You must choose a valid parent account."
@@ -9088,7 +9088,7 @@ msgid ""
 "transaction. Otherwise, it will not be recorded."
 msgstr ""
 "你必须为这个交易指明一个用来汇入，\n"
-"或汇出，或者双向的帐号。\n"
+"或汇出，或者双向的账号。\n"
 "否则，它不会被记录。"
 
 #: ../src/gnome-utils/dialog-transfer.c:1253
@@ -11326,7 +11326,7 @@ msgstr "为本页面视图选择排序标准"
 
 #: ../src/gnome-utils/gnc-main-window.c:269
 msgid "Select the account types that should be displayed."
-msgstr "选择应该显示的帐号类型。"
+msgstr "选择应该显示的账号类型。"
 
 #: ../src/gnome-utils/gnc-main-window.c:270
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:965
@@ -11640,7 +11640,7 @@ msgstr "新建顶级帐户"
 #: ../intl-scm/guile-strings.c:2480 ../intl-scm/guile-strings.c:2996
 #: ../intl-scm/guile-strings.c:3084
 msgid "Account Name"
-msgstr "帐号名"
+msgstr "账号名"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:516
 msgid "Commodity"
@@ -11655,7 +11655,7 @@ msgstr "商品"
 #: ../intl-scm/guile-strings.c:1916 ../intl-scm/guile-strings.c:2242
 #: ../intl-scm/guile-strings.c:2360 ../intl-scm/guile-strings.c:2488
 msgid "Account Code"
-msgstr "帐号代码"
+msgstr "账号代码"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:533
 #, fuzzy
@@ -12017,7 +12017,7 @@ msgstr "对帐(_R)"
 
 #: ../src/gnome/window-reconcile.c:1996
 msgid "_Account"
-msgstr "帐号(_A)"
+msgstr "账号(_A)"
 
 #. Reconcile menu
 #: ../src/gnome/window-reconcile.c:2002
@@ -12517,7 +12517,7 @@ msgstr "删除帐户(_D)"
 #: ../src/import-export/hbci/dialog-hbcitrans.c:382
 #, fuzzy
 msgid "Debited Account Bank Code"
-msgstr "帐号代码"
+msgstr "账号代码"
 
 #: ../src/import-export/hbci/dialog-hbcitrans.c:385
 #, fuzzy
@@ -12646,11 +12646,11 @@ msgstr ""
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:755
 msgid "Online Banking Account Name"
-msgstr "在线银行帐号名"
+msgstr "在线银行账号名"
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:762
 msgid "GnuCash Account Name"
-msgstr "GnuCash 帐号名"
+msgstr "GnuCash 账号名"
 
 #: ../src/import-export/hbci/druid-hbci-utils.c:152
 #, c-format
@@ -12835,7 +12835,7 @@ msgstr ""
 #: ../src/import-export/hbci/glade/hbci.glade.h:39
 #, fuzzy
 msgid "Recipient Account Number"
-msgstr "帐号名"
+msgstr "账号名"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:40
 msgid "Recipient Bank Code"
@@ -13166,7 +13166,7 @@ msgstr "获取余额(_B)"
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:103
 #, fuzzy
 msgid "Get the account balance online through Online Banking"
-msgstr "显示帐号里的所有交易"
+msgstr "显示账号里的所有交易"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:105
 msgid "Get _Transactions..."
@@ -13175,7 +13175,7 @@ msgstr "获取交易(_T)..."
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:106
 #, fuzzy
 msgid "Get the transactions online through Online Banking"
-msgstr "显示帐号里的所有交易"
+msgstr "显示账号里的所有交易"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:108
 #, fuzzy
@@ -13369,7 +13369,7 @@ msgstr "帐户 ID"
 
 #: ../src/import-export/import-account-matcher.c:212
 msgid "(Full account ID: "
-msgstr "(完整的帐号 ID："
+msgstr "(完整的账号 ID："
 
 #: ../src/import-export/import-account-matcher.c:239
 #, c-format
@@ -13705,7 +13705,7 @@ msgstr ""
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2150
 msgid "QIF account name"
-msgstr "QIF 帐号名"
+msgstr "QIF 账号名"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2153
 msgid "QIF category name"
@@ -15758,7 +15758,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:778
 #, fuzzy
 msgid "Alphabetical by account name"
-msgstr "帐号名"
+msgstr "账号名"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:782
@@ -15776,7 +15776,7 @@ msgstr "你必须选择一个有效的父帐户。"
 #: ../intl-scm/guile-strings.c:786 ../intl-scm/guile-strings.c:1912
 #, fuzzy
 msgid "Account Balance"
-msgstr "帐号名"
+msgstr "账号名"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:788
@@ -16026,13 +16026,13 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:884
 #, fuzzy
 msgid "Accounts Receivable"
-msgstr "帐号名"
+msgstr "账号名"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:886
 #, fuzzy
 msgid "Accounts Payable"
-msgstr "帐号名"
+msgstr "账号名"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:888
@@ -16054,7 +16054,7 @@ msgstr ""
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:896
 msgid "Account name"
-msgstr "帐号名"
+msgstr "账号名"
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:900
@@ -16909,7 +16909,7 @@ msgstr "显示汇率"
 #: ../intl-scm/guile-strings.c:1314 ../intl-scm/guile-strings.c:2714
 #, fuzzy
 msgid "Show Full Account Names"
-msgstr "帐号名"
+msgstr "账号名"
 
 #. src/report/standard-reports/cash-flow.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -17058,7 +17058,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2094
 #, fuzzy
 msgid "Accounts to include"
-msgstr "帐号代码"
+msgstr "账号代码"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/transaction.scm
@@ -17455,7 +17455,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2434
 #, fuzzy
 msgid "Show Full Account Name?"
-msgstr "帐号名"
+msgstr "账号名"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -17463,7 +17463,7 @@ msgstr "帐号名"
 #: ../intl-scm/guile-strings.c:2438
 #, fuzzy
 msgid "Show Account Code?"
-msgstr "帐号代码"
+msgstr "账号代码"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -17758,7 +17758,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1692 ../intl-scm/guile-strings.c:2830
 #: ../intl-scm/guile-strings.c:2902
 msgid "Show long account names"
-msgstr "显示长帐号名"
+msgstr "显示长账号名"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:1694
@@ -18024,7 +18024,7 @@ msgstr "包括子帐户"
 #: ../intl-scm/guile-strings.c:1918
 #, fuzzy
 msgid "Show an account's account code"
-msgstr "帐号代码"
+msgstr "账号代码"
 
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:1922
@@ -18035,7 +18035,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1924
 #, fuzzy
 msgid "Account Description"
-msgstr "帐号信息"
+msgstr "账号信息"
 
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:1926
@@ -18047,13 +18047,13 @@ msgstr "(没有描述)"
 #: ../intl-scm/guile-strings.c:1928
 #, fuzzy
 msgid "Account Notes"
-msgstr "帐号名"
+msgstr "账号名"
 
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:1930
 #, fuzzy
 msgid "Show an account's notes"
-msgstr "帐号代码"
+msgstr "账号代码"
 
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:1946
@@ -18099,7 +18099,7 @@ msgstr "代码"
 #: ../intl-scm/guile-strings.c:1964
 #, fuzzy
 msgid "Account title"
-msgstr "帐号名"
+msgstr "账号名"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1970
@@ -19473,7 +19473,7 @@ msgstr "新建帐户"
 #: ../intl-scm/guile-strings.c:3218
 #, fuzzy
 msgid "The payable account you wish to examine"
-msgstr "已经有一个帐号用了这个名字。"
+msgstr "已经有一个账号用了这个名字。"
 
 #. src/business/business-reports/payables.scm
 #: ../intl-scm/guile-strings.c:3220
@@ -20201,7 +20201,7 @@ msgstr "删除帐户(_D)"
 #: ../intl-scm/guile-strings.c:3952
 #, fuzzy
 msgid "The receivables account you wish to examine"
-msgstr "已经有一个帐号用了这个名字。"
+msgstr "已经有一个账号用了这个名字。"
 
 #. src/business/business-reports/receivables.scm
 #: ../intl-scm/guile-strings.c:3954
@@ -20363,7 +20363,7 @@ msgstr ""
 #~ msgstr "GnuCash 财务管理"
 
 #~ msgid "Manage your finances, accounts, and investments"
-#~ msgstr "管理您的财务、帐号和投资"
+#~ msgstr "管理您的财务、账号和投资"
 
 #, fuzzy
 #~ msgid "Daily (x%u)"
@@ -20427,7 +20427,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "account"
-#~ msgstr "帐号"
+#~ msgstr "账号"
 
 #~ msgid " Stylesheet"
 #~ msgstr " 样式表"
@@ -20670,7 +20670,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "HBCI account name"
-#~ msgstr "帐号名"
+#~ msgstr "账号名"
 
 #, fuzzy
 #~ msgid "Online HBCI Transaction"
