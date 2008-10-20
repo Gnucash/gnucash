@@ -11,17 +11,16 @@ or directly to the gnucash-devel mailing list.
 
 Sections:
 1) Mailing lists, IRC and web sites
-2) Get the source from CVS
+2) Get the source
 3) Contact the maintainer of your language
-4) Compile & Install
-5) Running GnuCash
-6) The glossary file
-7) Initial processing of the translation file
-8) Translating the .po file
-9) Testing and submitting your translations
-10) Problems
-11) How to translate the GnuCash guide and/or help files
-12) How to translate the files containing the new account hierarchies
+4) Building, Installing and running GnuCash
+5) The glossary file
+6) Initial processing of the translation file
+7) Translating the .po file
+8) Testing and submitting your translations
+9) Problems
+10) How to translate the GnuCash guide and/or help files
+11) How to translate the files containing the new account hierarchies
 
 ==============================================================================
 1) Mailing lists, IRC and web sites
@@ -29,13 +28,13 @@ Sections:
 Translators will probably find 3 gnucash mailing lists of interest.  General
 use questions and answers are found on the gnucash-users mailing list, 
 specific development questions go to the gnucash-devel list and your finished
-translation file are sent to the gnucash-patches list.
+translation file are sent to the gnucash-devel list.
 
 To subscribe or view archives of these lists, go the the gnucash web site, 
 and follow the links to the mailing lists:
-http://www.gnucash.org/en/lists.phtml
+https://lists.gnucash.org/mailman/listinfo
 
-Another excellent place to get help is on IRC, as many of the developers hang
+Another excellent place to get help is on IRC, as many of the developers hang 
 out there and are eager to help.  Go to the #gnucash channel at 
 "irc.gnome.org".  If you don't know what that mean, fire up an IRC client 
 (for example, xchat), connect to irc.gnome.org and then type "/join 
@@ -48,33 +47,17 @@ The GNU Translation Project is another way to submit translations:
 http://www.iro.umontreal.ca/contrib/po/HTML/
 
 ==============================================================================
-2) Get the source from CVS/SVN
+2) Get the source
 
-  ****FIXME: This section is now outdated since the source is now in SVN
-  instead of CVS. Please check the website.*****
+The first thing to do is to download the latest STABLE branch of gnucash.
+This could be easily done by visiting
+http://www.gnucash.org/pub/gnucash/sources/stable/
+and grab the latest stable source package.
 
-#######################################################################
-The first thing to do is to download the latest STABLE branch of gnucash
-from CVS and get it to compile.  Do not use the HEAD branch, since the text
-in the HEAD branch changes so much, it would be a waste of time to translate 
-it.  Do not worry, when the HEAD branch becomes stable, the existing 
-translations in the STABLE branch will be merged.  Your work will not be lost.
-
-Login (password is "guest") to the CVS server (this only needs to be done once 
-as your login name and password are saved in your homedir):
-cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot login
-
-Checkout the current stable branch.
-cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout \
-        -rgnucash-2-0-branch gnucash
-
-Checkout the documentation (optional, but recommended)
-cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout \
-	gnucash-docs
-
-After this initial CVS checkout, you can update your CVS files using:
-cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot update gnucash
-########################################################################
+Please do not use the HEAD branch from SVN, since the text in the HEAD branch 
+changes so much, it would be a waste of time to translate it.  Do not worry, 
+when the HEAD branch becomes stable, the existing translations in the STABLE 
+branch will be merged.  Your work will not be lost.
 
 ==============================================================================
 3) Contact the maintainer of your language
@@ -114,74 +97,41 @@ the maintainer and you should change the "Last-translator" to your name and
 email address.
 
 ==============================================================================
-4) Compile & Install
+4) Building, Installing and running GnuCash
 
 Before starting to work on your translations, it is suggested that you 
-compile the gnucash source code.  This way you can get your system set up 
+buiild the gnucash source code.  This way you can get your system set up 
 correctly with all the development packages you need.  It is a good idea
 to actually run gnucash with your new translations because it is quite 
 helpful to see the phrases in the context of the running program.
 
-Enter the gnucash directory. Run the autogen.sh script.  Then run the
-./configure script, as described in README.svn. There are many options
-available when compiling gnucash.  For now, we will just enable
-debugging and change the default prefix because these two changes will
-be handly later for tracking down problems and installing multiple
-versions.
-
-cd gnucash
-./autogen.sh
-./configure  --enable-debug --prefix=/opt/gnucash-2.0
-
-If autogen complains about missing development packages, find them on your
-favorite OS distribution, install it, and try to re-run the autogen command.
-Eventually, you should be able to get autogen to run without any error 
-messages.
-
-Note: there are some warnings that spew forth during autogen.  Do not worry
-about them, apparently they are normal.
-
-Next, compile gnucash:
-
-make
-
-To install (assuming "make" completed without any problems) you must be 
-root.  
-
-su - 
-make install
-
-To compile the documentation, enter the gnucash-doc directory and go 
-through the same process:
-
-./autogen.sh
-./configure --prefix=/opt/gnucash-2.0
-make
-su -
-make install
-
-==============================================================================
-5) Running GnuCash
+For how to build and install, please refer to ../README
 
 After installation, insure that it works by running (as a normal user,
 no need to be root here):
 
-/opt/gnucash-2.0/bin/gnucash
+$ /usr/local/bin/gnucash
 
 It is a good idea to use absolute paths like this to insure you run 
 the proper gnucash executable.  To run your OS pre-installed version of
 gnucash, usually you can type:
 
-/usr/bin/gnucash
+$ /usr/bin/gnucash
+
+Unless on some special systems, e.g. FreeBSD, where the OS installed
+version sits in /usr/local/bin/, in which case you need OS-specific knowledge.
 
 In either case, you can easily switch between the various languages the 
-gnucash has available by placing the LANG env var before the call to the
-executable:
+gnucash has available by setting the LANG env var before the call to the
+executable. In sh-like shell environment this could be done by:
 
-LANG=pt_BR /opt/gnucash-2.0/bin/gnucash
+$ LANG=pt_BR /usr/local/bin/gnucash
+
+(other shell like tcsh may behave differently, please to refer to related
+manuals)
 
 ==============================================================================
-6) The glossary file
+5) The glossary file
 
 Inside the po/glossary/ directory should be a "glossary" file for your 
 language.  This file contains a bunch of commonly used terms found in gnucash.
@@ -205,7 +155,7 @@ If your .po glossary file does exist, use the msgmerge program to update it:
 Now, open your language's glossary file and translate it completely.
 
 ==============================================================================
-7) Initial processing of the translation file
+6) Initial processing of the translation file
 
 Before you begin actualy translation work, you should update the gnucash.pot 
 file and use this to update your .po file.  This process will insure that 
@@ -237,11 +187,17 @@ Make sure that the header of your .po file contains this line:
 ...and that you change the "Last-translator" string to your name.
 
 ==============================================================================
-8) Translating the .po file
+7) Translating the .po files
 
 Finally.  You are ready to do some translating!
 
-Here is an example of translating some text into German:
+There are many transaltion editors, KBabel, for example, works well for 
+GnuCash.  Some Editors are noted here:
+http://translationproject.org/html/software.html
+
+If you are familiar with a text editor, e.g. vim or emacs, you can also 
+manually edit the .po files.  Here is an example of translating some text 
+into German:
 
 Before:
 #: messages-i18n.c:11
@@ -263,7 +219,9 @@ msgstr ""
 You should read through every translation in the .po file at least once.  
 If you translate a string that has the phrase "#, fuzzy" in the comments
 above it, remove the word fuzzy.   A fuzzy translation means that the 
-computer guessed what the translation should be.
+computer guessed what the translation should be. If you use a translation
+editor, the "fuzzy" translation are marked in different ways in different 
+translation editor, please refer to their documents for how to work with them.
 
 After you finish translating, you should not have any "#, fuzzy" strings left.
 
@@ -302,7 +260,7 @@ tranlatable string are referring to C formatting codes.  So, '%s' means text,
 '%d' means an integer, etc...
 
 ==============================================================================
-9) Testing and submitting your translations
+8) Testing and submitting your translations
 
 You must check that your new translations are programatically correct (ie: 
 that there are no unclosed quotes, etc).  To do this, use the msgfmt program
@@ -318,33 +276,25 @@ may need to be root to do this):
 
 make install
 
-Now you can run gnucash with your ned translations:
+Now you can run gnucash with your new translations:
 
-LANG=XXXX /opt/gnucash-2.0/bin/gnucash
+$ LANG=XXXX /usr/local/bin/gnucash
 
 When you are happy with the new translation file, email a gzipped version
-of it to the gnucash-patches mailing list.
+of it to the gnucash-devel mailing list.
 
 gzip XXXX.po
 (email this file using your favorite mail client)
 
+Note that on this list we would kindly ask to send patches as attachments, not 
+within email text.
+
+If you know how to make a patch, a patch is also welcome. Patches are more 
+helpful if there are more than one people working on one translation file.
+
 ==============================================================================
-10) Problems
+9) Problems
 
-When you see this error message during autogen.sh run:
-
-configure.in:1219: error: `intl/Makefile' is already registered with
-AC_CONFIG_FILES.
-autoconf/status.m4:844: AC_CONFIG_FILES is expanded from...
-configure.in:1219: the top level
-autom4te: /usr/bin/m4 failed with exit status: 1
-autoheader: /usr/bin/autom4te failed with exit status: 1
-**Error**: autoheader failed.
-
-Reload the configure.in script:
-svn revert configure.in
-
----------------------------------
 If you see any "Gtk-CRITICAL" messages while running gnucash, it is probably
 because you translated a string differently than how it exists in some other
 gnome library. You must discover which string you translated differently, and
@@ -352,10 +302,10 @@ change the translation to exactly match that of the gnome libraries.
 
 To do this, you need to run gnucash under gdb:
 
-LANG=XXXX /opt/gnucash-2.0/bin/gnucash-env gdb /usr/bin/guile
+LANG=XXXX /usr/local/bin/gnucash-env gdb /usr/bin/guile
 
 Then, from within gdb, issue:
-run -e main -s /opt/gnucash-2.0/libexec/gnucash/overrides/gnucash --g-fatal-warnings
+run -e main -s /usr/local/libexec/gnucash/overrides/gnucash --g-fatal-warnings
 
 Eventually, gnucash should crash (because of the --g-fatal-warnings 
 directive), when it does, issue from within gdb:
@@ -389,10 +339,10 @@ Remember that the translations must contain the proper underscores.
 
 ------------
 To follow gnucash as it access files, 
-strace /opt/gnucash-2.0/bin/gnucash
+strace /usr/local/bin/gnucash
 
 ==============================================================================
-11) How to translate the GnuCash guide and/or help files
+10) How to translate the GnuCash guide and/or help files
 
 This section describes the actions needed to translate the manual.
 
@@ -415,7 +365,7 @@ To translate the help files, repeat steps 2-5 but replace the "guide"
 directory with "help".
 
 ==============================================================================
-12) How to translate the files containing the new account hierarchies
+11) How to translate the files containing the new account hierarchies
 
 This section describes the actions needed to translate the files
 containing the new account hierarchies.
