@@ -686,9 +686,8 @@ msgid "ID #"
 msgstr ""
 
 #: ../src/business/business-gnome/dialog-customer.c:832
-#, fuzzy
 msgid "Find Customer"
-msgstr "定制"
+msgstr "查找客户"
 
 #: ../src/business/business-gnome/dialog-date-close.c:72
 msgid "No Account selected.  Please try again."
@@ -705,7 +704,7 @@ msgstr "您必须输入一个用户名。"
 
 #: ../src/business/business-gnome/dialog-employee.c:221
 msgid "You must enter the employee's name."
-msgstr "您必须输入职员的姓名。"
+msgstr "您必须输入员工的姓名。"
 
 #: ../src/business/business-gnome/dialog-employee.c:229
 msgid "You must enter an address."
@@ -713,16 +712,16 @@ msgstr "您必须输入一个地址。"
 
 #: ../src/business/business-gnome/dialog-employee.c:308
 msgid "Edit Employee"
-msgstr "编辑职员"
+msgstr "编辑员工"
 
 #: ../src/business/business-gnome/dialog-employee.c:310
 #: ../src/business/business-gnome/glade/employee.glade.h:18
 msgid "New Employee"
-msgstr "新建职员"
+msgstr "新建员工"
 
 #: ../src/business/business-gnome/dialog-employee.c:682
 msgid "View/Edit Employee"
-msgstr "查看/编辑职员"
+msgstr "查看/编辑员工"
 
 #: ../src/business/business-gnome/dialog-employee.c:683
 msgid "Expense Vouchers"
@@ -760,7 +759,7 @@ msgstr "名称"
 
 #: ../src/business/business-gnome/dialog-employee.c:727
 msgid "Find Employee"
-msgstr "查找职员"
+msgstr "查找员工"
 
 #. Translators: In this context,
 #. * 'Billing information' maps to the
@@ -1282,17 +1281,16 @@ msgstr "您必须输入一个有效的表达式"
 
 #: ../src/business/business-gnome/dialog-vendor.c:294
 msgid "Edit Vendor"
-msgstr ""
+msgstr "编辑厂商"
 
 #: ../src/business/business-gnome/dialog-vendor.c:296
 #: ../src/business/business-gnome/glade/vendor.glade.h:9
-#, fuzzy
 msgid "New Vendor"
-msgstr "新值"
+msgstr "登记新的厂商"
 
 #: ../src/business/business-gnome/dialog-vendor.c:646
 msgid "View/Edit Vendor"
-msgstr ""
+msgstr "查看和修改厂商"
 
 #: ../src/business/business-gnome/dialog-vendor.c:647
 msgid "Vendor's Jobs"
@@ -1583,7 +1581,7 @@ msgstr "选择所有者对话框"
 #: ../intl-scm/guile-strings.c:3920
 #: ../intl-scm/guile-strings.c:3948
 msgid "Description"
-msgstr "描述"
+msgstr "摘要"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:1
 #: ../src/business/business-gnome/glade/employee.glade.h:3
@@ -1782,11 +1780,11 @@ msgstr "默认"
 #: ../src/business/business-gnome/search-owner.c:238
 #: ../intl-scm/guile-strings.c:3630
 msgid "Employee"
-msgstr "职员"
+msgstr "员工"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:12
 msgid "Employee Number: "
-msgstr "职员编号："
+msgstr "员工编号："
 
 #: ../src/business/business-gnome/glade/employee.glade.h:15
 msgid "Interface"
@@ -2069,7 +2067,7 @@ msgstr ""
 #: ../src/business/business-gnome/gncmod-business-gnome.c:135
 #: ../intl-scm/guile-strings.c:3318
 msgid "Business"
-msgstr "商务"
+msgstr "业务"
 
 #. Toplevel
 #. Extensions Menu
@@ -2078,7 +2076,7 @@ msgstr "商务"
 #: ../src/business/business-gnome/gnc-plugin-business.c:241
 #: ../intl-scm/guile-strings.c:3550
 msgid "_Business"
-msgstr "商务(_B)"
+msgstr "业务(_B)"
 
 #. Customer submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:151
@@ -2196,23 +2194,23 @@ msgstr "打开查找帐单对话框"
 #. Employee submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:199
 msgid "_Employee"
-msgstr "职员(_E)"
+msgstr "员工(_E)"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:200
 msgid "_New Employee..."
-msgstr "新建职员(_N)..."
+msgstr "新建员工(_N)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:201
 msgid "Open the New Employee dialog"
-msgstr "打开新建职员对话框"
+msgstr "打开新建员工对话框"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:203
 msgid "_Find Employee..."
-msgstr "查找职员(_F)..."
+msgstr "查找员工(_F)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:204
 msgid "Open the Find Employee dialog"
-msgstr "打开查找职员对话框"
+msgstr "打开查找员工对话框"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:206
 msgid "New _Expense Voucher..."
@@ -2288,11 +2286,11 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:236
 msgid "QSF _Employee..."
-msgstr "QSF 职员(_E)..."
+msgstr "QSF 员工(_E)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:237
 msgid "Export one or more employees to QSF"
-msgstr "将一名或多名职员导出到 QSF"
+msgstr "将一名或多名员工导出到 QSF"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:242
 #: ../src/business/business-gnome/gnc-plugin-business.c:243
@@ -2343,7 +2341,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:823
 msgid "Export Employees to XML"
-msgstr "将职员导出到 XML"
+msgstr "将员工导出到 XML"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:96
 #: ../src/gnome/glade/register.glade.h:51
@@ -2367,7 +2365,7 @@ msgstr "新建帐户(_A)..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:103
 msgid "Create a new account"
-msgstr "创建一个新账户"
+msgstr "创建一个新科目"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:105
 msgid "Print Invoice"
@@ -2523,7 +2521,7 @@ msgstr "价格(_P)"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:165
 #: ../src/gnome/glade/register.glade.h:18
 msgid "Descri_ption"
-msgstr "描述(_P)"
+msgstr "摘要(_P)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:194
 #: ../src/gnome/glade/register.glade.h:25
@@ -3502,9 +3500,8 @@ msgid "The number of payments cannot be negative."
 msgstr "付款数字不能是负数"
 
 #: ../src/gnome/dialog-find-transactions.c:99
-#, fuzzy
 msgid "All Accounts"
-msgstr "帐户"
+msgstr "全部科目"
 
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/cash-flow.scm
@@ -4217,7 +4214,7 @@ msgstr "<b>分类</b>"
 
 #: ../src/gnome/glade/account.glade.h:4
 msgid "<b>Category Description</b>"
-msgstr "<b>分类描述</b>"
+msgstr "<b>分类摘要</b>"
 
 #: ../src/gnome/glade/account.glade.h:5
 #, fuzzy
@@ -4226,7 +4223,7 @@ msgstr "丢失的帐户"
 
 #: ../src/gnome/glade/account.glade.h:6
 msgid "<b>Description</b>"
-msgstr "<b>描述</b>"
+msgstr "<b>摘要</b>"
 
 #: ../src/gnome/glade/account.glade.h:7
 #, fuzzy
@@ -4583,7 +4580,7 @@ msgstr " 默认(_D)"
 
 #: ../src/gnome/glade/account.glade.h:81
 msgid "_Description:"
-msgstr "描述(_D)："
+msgstr "摘要(_D)："
 
 #: ../src/gnome/glade/account.glade.h:82
 msgid "_Move to:"
@@ -4631,7 +4628,7 @@ msgstr "为帐户输入一个名字"
 #: ../src/gnome/glade/acctperiod.glade.h:4
 #, fuzzy
 msgid "Enter notes that describe this book."
-msgstr "按描述排序"
+msgstr "按摘要排序"
 
 #: ../src/gnome/glade/acctperiod.glade.h:5
 msgid "Finish Closing Books"
@@ -5677,7 +5674,7 @@ msgstr ""
 
 #: ../src/gnome/glade/register.glade.h:54
 msgid "Sort by Description"
-msgstr "按描述排序"
+msgstr "按摘要排序"
 
 #: ../src/gnome/glade/register.glade.h:55
 msgid "Sort by Memo"
@@ -6831,13 +6828,12 @@ msgid "Use the financial calculator"
 msgstr "使用财务计算器"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:163
-#, fuzzy
 msgid "_Close Book"
-msgstr "关闭"
+msgstr "结转(_C)"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:164
 msgid "Close the Book at the end of the Period"
-msgstr ""
+msgstr "在一个会计周期结束时结转"
 
 #. Help menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:169
@@ -7063,7 +7059,7 @@ msgstr "新建"
 #: ../intl-scm/guile-strings.c:2854
 #: ../intl-scm/guile-strings.c:2928
 msgid "Accounts"
-msgstr "帐户"
+msgstr "科目"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:906
 #, fuzzy
@@ -7544,7 +7540,7 @@ msgstr "(没有备忘录)"
 
 #: ../src/gnome/gnc-split-reg.c:1103
 msgid "(no description)"
-msgstr "(没有描述)"
+msgstr "(没有摘要)"
 
 #: ../src/gnome/gnc-split-reg.c:1126
 msgid "_Delete Split"
@@ -9699,14 +9695,12 @@ msgid "Description:"
 msgstr "说明："
 
 #: ../src/gnome-utils/glade/dialog-book-close.glade.h:4
-#, fuzzy
 msgid "Expense Total:"
-msgstr "支出报告"
+msgstr "支出总计："
 
 #: ../src/gnome-utils/glade/dialog-book-close.glade.h:5
-#, fuzzy
 msgid "Income Total:"
-msgstr "款项总计："
+msgstr "收入总计："
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:1
 msgid "No warnings to reset."
@@ -11889,7 +11883,7 @@ msgstr "新建顶级帐户"
 #: ../intl-scm/guile-strings.c:3026
 #: ../intl-scm/guile-strings.c:3114
 msgid "Account Name"
-msgstr "账号名"
+msgstr "会计科目"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:518
 msgid "Commodity"
