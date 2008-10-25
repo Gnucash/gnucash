@@ -1154,6 +1154,11 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   /* Make sure we NEED this for this type of register */
   if (!gnc_split_reg_has_rate_cell (reg->type))
   {
+    if (force_dialog)
+    {
+      message = _("This register does not support editing exchange rates.");
+      gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
+    }
     LEAVE("No rate cell.");
     return FALSE;
   }
@@ -1162,6 +1167,11 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
       reg->table->layout, RATE_CELL);
   if (!rate_cell)
   {
+    if (force_dialog)
+    {
+      message = _("This register does not support editing exchange rates.");
+      gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
+    }
     LEAVE("Null rate cell.");
     return FALSE;
   }
@@ -1181,6 +1191,12 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   /* If we're expanded AND a transaction cursor, there is nothing to do */
   if (expanded && cursor_class == CURSOR_CLASS_TRANS)
   {
+    if (force_dialog)
+    {
+      message = _("You need to select a split in order to modify its exchange "
+                  "rate.");
+      gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
+    }
     LEAVE("Expanded with transaction cursor. Nothing to do.");
     return FALSE;
   }
@@ -1189,11 +1205,10 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   xfer_acc = gnc_split_register_get_account_always(
       reg, expanded ? XFRM_CELL : MXFRM_CELL);
 
-  message =
-    _("You need to expand the transaction in order to modify its exchange rates.");
-
   /* If this is an un-expanded, multi-split transaction, then warn the user */
   if (force_dialog && !expanded && !xfer_acc) {
+    message = _("You need to expand the transaction in order to modify its "
+                "exchange rates.");
     gnc_error_dialog (gnc_split_register_get_parent (reg), "%s", message);
     LEAVE("%s", message);
     return TRUE;
@@ -1202,6 +1217,11 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   /* No account -- don't run the dialog */
   if (!xfer_acc)
   {
+    if (force_dialog)
+    {
+      message = _("The entered account could not be found.");
+      gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
+    }
     LEAVE("No xfer account.");
     return FALSE;
   }
@@ -1233,17 +1253,21 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     /* Only proceed with two-split, basic, non-expanded registers */
     if (expanded || osplit == NULL)
     {
+      message = _("The two currencies involved equal each other.");
+      gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
       LEAVE("Register is expanded, or osplit == NULL. Not forcing dialog.");
       return FALSE;
     }
 
     /* If we're forcing, then compare the current account
-     * commodity to the transaction commodity.
+     * commodity to the transaction currency.
      */
     xfer_acc = reg_acc;
     xfer_com = reg_com;
     if (gnc_commodity_equal (txn_cur, xfer_com))
     {
+      message = _("The two currencies involved equal each other.");
+      gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
       LEAVE("Register commodity == txn commodity. Not forcing dialog.");
       return FALSE;
     }
@@ -1256,7 +1280,12 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   if (!expanded && osplit &&
       gnc_split_register_split_needs_amount (reg, split) &&
       gnc_split_register_split_needs_amount (reg, osplit)) {
-    gnc_error_dialog (gnc_split_register_get_parent (reg), "%s", message);
+    if (force_dialog)
+    {
+      message = _("You need to expand the transaction in order to modify its "
+                  "exchange rates.");
+      gnc_error_dialog (gnc_split_register_get_parent (reg), "%s", message);
+    }
     LEAVE("%s", message);
     return TRUE;
   }
@@ -1284,6 +1313,11 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
    */
   if (gnc_numeric_zero_p (amount))
   {
+    if (force_dialog)
+    {
+      message = _("The split's amount is zero, so no exchange rate is needed.");
+      gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
+    }
     LEAVE("Amount is zero. No exchange rate needed.");
     return FALSE;
   }
