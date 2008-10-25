@@ -101,7 +101,7 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
 }
 
 static void
-fill_in_acct_info (DialogDateClose *ddc)
+fill_in_acct_info (DialogDateClose *ddc, gboolean set_default_acct)
 {
   GNCAccountSel *gas = GNC_ACCOUNT_SEL (ddc->acct_combo);
 
@@ -109,7 +109,7 @@ fill_in_acct_info (DialogDateClose *ddc)
   gnc_account_sel_set_acct_filters( gas, ddc->acct_types );
   gnc_account_sel_set_new_account_ability( gas, TRUE );
   gnc_account_sel_set_new_account_modal( gas, TRUE );
-  gnc_account_sel_set_account( gas, ddc->acct );
+  gnc_account_sel_set_account( gas, ddc->acct, set_default_acct );
 }
 
 static void
@@ -227,6 +227,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 				const char *acct_label_message,
 				const char *question_check_message,
 				gboolean ok_is_default,
+                                gboolean set_default_acct,
 				GList * acct_types, GNCBook *book,
 				GncBillTerm *terms,
 				/* Returned Data... */
@@ -311,7 +312,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
     gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *ddue);
 
   /* Setup the account widget */
-  fill_in_acct_info (ddc);
+  fill_in_acct_info (ddc, set_default_acct);
 
   /* Setup signals */
   glade_xml_signal_autoconnect_full( xml,
@@ -371,7 +372,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
   acct_box = glade_xml_get_widget (xml, "acct_hbox");
   ddc->acct_combo = gnc_account_sel_new();
   if (*acct)
-    gnc_account_sel_set_account (GNC_ACCOUNT_SEL(ddc->acct_combo), *acct);
+    gnc_account_sel_set_account (GNC_ACCOUNT_SEL(ddc->acct_combo), *acct, FALSE);
   gtk_box_pack_start (GTK_BOX(acct_box), ddc->acct_combo, TRUE, TRUE, 0);
 
   date_box = glade_xml_get_widget (xml, "date_box");
@@ -393,7 +394,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
   gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *date);
 
   /* Setup the account widget */
-  fill_in_acct_info (ddc);
+  fill_in_acct_info (ddc, FALSE);
 
   /* Setup signals */
   glade_xml_signal_autoconnect_full( xml,

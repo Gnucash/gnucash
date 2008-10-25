@@ -70,9 +70,9 @@ GtkWidget* gnc_account_sel_new (void);
 /**
  * Sets the GAS to the given account.  If the account doesn't exist in the
  * list, then it doesn't change the state of the GAS.  If the account is
- * NULL, then the first list selection is made.
+ * NULL, then the first list selection is made if set_default_acct is TRUE.
  **/
-void       gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct );
+void       gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct, gboolean set_default_acct );
 /**
  * Returns the currently-selected Account.  If, for some reason the selection
  * is in a bad state, NULL will be returned.

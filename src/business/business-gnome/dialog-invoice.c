@@ -664,7 +664,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   accumulate = gnc_gconf_get_bool(GCONF_SECTION_INVOICE, "accumulate_splits", NULL);
 
   if (!gnc_dialog_dates_acct_question_parented (iw_get_window(iw), message, ddue_label,
-				       post_label, acct_label, question_label, TRUE,
+				       post_label, acct_label, question_label, TRUE, TRUE,
 				       acct_types, iw->book, iw->terms,
 				       &ddue, &postdate, &memo, &acc, &accumulate))
     return;
