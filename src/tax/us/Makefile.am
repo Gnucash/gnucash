@@ -11,7 +11,7 @@ libgncmod_tax_us_la_LIBADD = \
  ${GUILE_LIBS} \
  ${GLIB_LIBS}
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   ${GLIB_CFLAGS} ${GUILE_INCS}

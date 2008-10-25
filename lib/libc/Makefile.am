@@ -18,7 +18,7 @@ LTLIBOBJS = $(shell echo "$(LIBOBJS)" | sed '@LIBOBJS_SEDSCRIPT@' | \
 libc_missing_la_LIBADD = $(LTLIBOBJS)
 
 if OS_WIN32
-  AM_CFLAGS = -DOS_WIN32
+  AM_CPPFLAGS = -DOS_WIN32
 endif
 
 # Not currently used.  If added to AC_REPLACE_FUNCS then this line

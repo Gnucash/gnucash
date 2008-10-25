@@ -16,11 +16,11 @@ libgncmod_test_engine_la_LIBADD = \
 
 noinst_HEADERS=test-engine-stuff.h test-engine-strings.h
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
-  ${GLIB_CFLAGS} \
   ${QOF_CFLAGS} \
+  ${GLIB_CFLAGS} \
   ${GUILE_INCS}

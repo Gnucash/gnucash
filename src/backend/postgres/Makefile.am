@@ -2,14 +2,14 @@ SUBDIRS = . test
 
 lib_LTLIBRARIES = libgnc-backend-postgres.la 
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I.. -I../.. \
   -I../../engine \
   -I${srcdir}/../.. \
   -I${top_srcdir}/src/backend \
   -I${top_srcdir}/src/engine \
-  ${PGSQL_CFLAGS} \
   ${QOF_CFLAGS} \
+  ${PGSQL_CFLAGS} \
   ${GLIB_CFLAGS}
 
 libgnc_backend_postgres_la_LDFLAGS = -module -avoid-version

@@ -20,16 +20,16 @@ libgncmod_stylesheets_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/report/report-gnome \
+  ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS}
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/

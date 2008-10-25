@@ -4,15 +4,15 @@ SUBDIRS = . test
 lib_LTLIBRARIES = libgnc-backend-xml-utils.la
 pkglib_LTLIBRARIES = libgncmod-backend-xml.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I.. -I../.. \
   -DLOCALE_DIR=\""$(datadir)/locale"\" \
   -I${top_srcdir}/src/backend \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/core-utils\
   -I${top_srcdir}/lib/libc\
-  ${LIBXML2_CFLAGS} \
   ${QOF_CFLAGS} \
+  ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS}
 

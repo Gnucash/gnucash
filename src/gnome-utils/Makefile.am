@@ -4,7 +4,7 @@ pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 
 # Note that src/gnome-utils CANNOT depend on src/gnome!
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
@@ -219,7 +219,7 @@ EXTRA_DIST = \
   ${gncscm_DATA}
 
 if !GTKHTML_USES_GTKPRINT
-  AM_CFLAGS += ${GNOME_PRINT_CFLAGS}
+  AM_CPPFLAGS += ${GNOME_PRINT_CFLAGS}
   libgncmod_gnome_utils_la_LIBADD += ${GNOME_PRINT_LIBS}
 endif
 

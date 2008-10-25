@@ -100,7 +100,7 @@ EXTRA_DIST = \
   gnucash.desktop.in \
   gnome.i
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/src/core-utils \
@@ -116,13 +116,13 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/lib/libc \
+  ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GNOME_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \
-  $(GLIB_CFLAGS) \
-  ${QOF_CFLAGS}
+  $(GLIB_CFLAGS)
 
 # We build this in an earlier directory.
 

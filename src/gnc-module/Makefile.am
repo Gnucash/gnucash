@@ -1,10 +1,11 @@
 SUBDIRS = . test
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
    -I${top_srcdir}/lib/libc \
    -I${top_srcdir}/src \
    -I${top_srcdir}/src/core-utils \
-   ${GLIB_CFLAGS} ${GUILE_INCS}
+   ${GLIB_CFLAGS} \
+   ${GUILE_INCS}
 
 lib_LTLIBRARIES = libgnc-module.la
 

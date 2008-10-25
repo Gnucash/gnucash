@@ -40,7 +40,7 @@ libgncmod_ledger_core_la_LIBADD = \
   ${QOF_LIBS} \
   ${GLIB_LIBS}
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
@@ -49,10 +49,10 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
+  ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
 

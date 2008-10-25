@@ -2,7 +2,7 @@ SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-report-gnome.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/src/core-utils \
@@ -12,11 +12,11 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/report/report-system \
+  ${QOF_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${GTKHTML_CFLAGS} \
   ${GNOME_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
 libgncmod_report_gnome_la_SOURCES = \

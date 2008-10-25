@@ -1,6 +1,6 @@
 pkglib_LTLIBRARIES = libgncmod-dialog-tax-table.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
@@ -8,12 +8,12 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/business/business-core \
+  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GUILE_INCS}
 
 libgncmod_dialog_tax_table_la_SOURCES = \

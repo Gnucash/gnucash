@@ -19,7 +19,7 @@ if OS_WIN32
   bin_PROGRAMS = redirect
   redirect_SOURCES = redirect.c
   redirect_LDADD = $(GLIB_LIBS)
-  AM_CFLAGS = $(GLIB_CFLAGS)
+  AM_CPPFLAGS = $(GLIB_CFLAGS)
   pkgdata_DATA = Greek-4-5.1.11.isl
 else
   EXTRA_DIST += redirect.c

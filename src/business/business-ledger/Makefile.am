@@ -32,7 +32,7 @@ libgnc_business_ledger_la_LIBADD = \
   ${QOF_LIBS} \
   ${GLIB_LIBS}
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src/business/business-core \
   -I${top_srcdir}/src/business/business-utils \
   -I${top_srcdir}/src/business/dialog-tax-table \
@@ -43,9 +43,9 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/register/register-core \
+  ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLIB_CFLAGS}
 

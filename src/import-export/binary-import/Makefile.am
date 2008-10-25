@@ -2,17 +2,17 @@ SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-binary-import.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnome \
+  ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS}
 
 #FIXME remove the following deps

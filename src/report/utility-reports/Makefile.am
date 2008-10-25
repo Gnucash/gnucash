@@ -11,7 +11,7 @@ libgncmod_utility_reports_la_LIBADD = \
 
 libgncmod_utility_reports_la_LDFLAGS = -module -avoid-version
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   ${GUILE_INCS} ${GLIB_CFLAGS}

@@ -2,7 +2,7 @@ SUBDIRS = . glade schemas ui
 
 pkglib_LTLIBRARIES = libgncmod-business-gnome.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/src/core-utils \
@@ -16,16 +16,16 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/business/business-core \
   -I${top_srcdir}/src/business/business-ledger \
   -I${top_srcdir}/src/business/dialog-tax-table \
+  -I${top_srcdir}/src/register/register-core \
+  -I${top_srcdir}/src/register/register-gnome \
+  -I${top_srcdir}/src/register/ledger-core \
+  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${GUILE_INCS} \
-  ${QOF_CFLAGS} \
-  -I${top_srcdir}/src/register/register-core \
-  -I${top_srcdir}/src/register/register-gnome \
-  -I${top_srcdir}/src/register/ledger-core
+  ${GUILE_INCS}
 
 libgncmod_business_gnome_la_SOURCES = \
   business-options-gnome.c \

@@ -50,7 +50,7 @@ noinst_HEADERS = \
   quickfillcell-gnome.h \
   table-gnome.h
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
@@ -59,11 +59,11 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/register/register-core \
+  ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GTK_XIM_FLAGS} \
-  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS}
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.register.gnome\"

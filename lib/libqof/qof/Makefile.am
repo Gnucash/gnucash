@@ -6,9 +6,9 @@ libgnc_qof_la_LIBADD= \
   $(REGEX_LIBS) \
   $(top_builddir)/lib/libc/libc-missing.la
 
-AM_CFLAGS = \
-  $(GLIB_CFLAGS) \
-  -I$(top_srcdir)/lib/libc
+AM_CPPFLAGS = \
+  -I$(top_srcdir)/lib/libc \
+  $(GLIB_CFLAGS)
 
 libgnc_qof_la_SOURCES =  \
    gnc-date.c        \

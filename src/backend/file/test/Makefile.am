@@ -228,7 +228,7 @@ LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
         ${QOF_LIBS} \
         ${top_builddir}/lib/libc/libc-missing.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
@@ -238,9 +238,9 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine/test-core \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/backend/qsf \
+  ${QOF_CFLAGS} \
   ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GCONF_CFLAGS}
 

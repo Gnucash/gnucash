@@ -2,13 +2,13 @@ SUBDIRS = .
 
 pkglib_LTLIBRARIES = libgncqof-backend-qsf.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I.. -I../.. \
+  -I$(top_srcdir)/lib/libc \
   -DLOCALE_DIR=\""$(datadir)/locale"\" \
   ${QOF_CFLAGS} \
   ${LIBXML2_CFLAGS} \
-  ${GLIB_CFLAGS} \
-  -I$(top_srcdir)/lib/libc
+  ${GLIB_CFLAGS}
 
 libgncqof_backend_qsf_la_SOURCES = \
   qsf-backend.c \

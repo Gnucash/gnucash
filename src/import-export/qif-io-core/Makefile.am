@@ -2,7 +2,7 @@ SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-qifiocore.la
 
-AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GUILE_INCS} ${GLIB_CFLAGS}
+AM_CPPFLAGS = -I${top_srcdir}/src/gnc-module ${GUILE_INCS} ${GLIB_CFLAGS}
 
 libgncmod_qifiocore_la_SOURCES = gncmod-qifiocore.c
 

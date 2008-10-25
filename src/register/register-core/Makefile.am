@@ -51,16 +51,16 @@ gncinclude_HEADERS = \
   table-layout.h \
   table-model.h
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnome-utils \
+  ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
 CLEANFILES = $(BUILT_SOURCES)

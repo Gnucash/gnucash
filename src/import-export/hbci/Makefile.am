@@ -58,7 +58,7 @@ libgncmod_hbci_la_LIBADD = \
   ${GLIB_LIBS} \
   ${AQBANKING_LIBS}
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
@@ -71,11 +71,11 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/register/ledger-core \
+  ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${AQBANKING_CFLAGS}
 

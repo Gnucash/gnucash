@@ -1,13 +1,13 @@
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir} \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
-  ${GUILE_INCS} \
   ${QOF_CFLAGS} \
+  ${GUILE_INCS} \
   ${GLIB_CFLAGS}
 
 LDADD = \

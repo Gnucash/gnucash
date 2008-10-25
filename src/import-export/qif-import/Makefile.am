@@ -51,7 +51,7 @@ gncscm_DATA = \
 gladedir = ${GNC_GLADE_DIR}
 glade_DATA = qif.glade
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/src/core-utils \
@@ -61,12 +61,12 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
+  ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GTKHTML_CFLAGS}
 
 uidir = $(GNC_UI_DIR)

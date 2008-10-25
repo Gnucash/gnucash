@@ -25,7 +25,7 @@ swig-report-system.c: report-system.i ${top_srcdir}/src/base-typemaps.i
 	-I${top_srcdir}/src -o $@ $<
 endif
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \

@@ -26,15 +26,15 @@ libgncmod_qif_la_LIBADD = \
   ${REGEX_LIBS} \
   ${GLIB_LIBS}
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/import-export \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${GUILE_INCS} \
-  ${QOF_CFLAGS}
+  ${GUILE_INCS}
 
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.import.qif\"

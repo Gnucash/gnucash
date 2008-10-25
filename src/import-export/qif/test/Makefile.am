@@ -1,4 +1,4 @@
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
@@ -6,9 +6,9 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/import-export \
   -I${top_srcdir}/src/import-export/qif \
-  ${GUILE_INCS} \
   ${QOF_CFLAGS} \
-  ${GLIB_CFLAGS} 
+  ${GUILE_INCS} \
+  ${GLIB_CFLAGS}
 
 LDADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \

@@ -58,7 +58,7 @@ glade_DATA = \
   generic-import.glade \
   import-provider-format.glade
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
@@ -66,13 +66,13 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
+  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
-  ${QOF_CFLAGS} \
-  ${GLIB_CFLAGS} 
+  ${GLIB_CFLAGS}
 
 EXTRA_DIST = \
   $(glade_DATA) \

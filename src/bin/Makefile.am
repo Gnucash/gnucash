@@ -1,9 +1,7 @@
 # Order is important here.
 SUBDIRS = . overrides test
 
-AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
-  ${GUILE_INCS} \
-  ${QOF_CFLAGS} \
+AM_CPPFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   -DPKGSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
   -DPKGDATADIR=\"${GNC_SHAREDIR}\" \
   -DGNC_HELPDIR=\"${GNC_HELPDIR}\" \
@@ -15,7 +13,9 @@ AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnome \
   -I${top_builddir}/src/gnome-utils \
-  -I${top_srcdir}/src/gnc-module
+  -I${top_srcdir}/src/gnc-module \
+  ${QOF_CFLAGS} \
+  ${GUILE_INCS}
 
 bin_PROGRAMS = gnucash-bin
 gnucash_bin_SOURCES = gnucash-bin.c

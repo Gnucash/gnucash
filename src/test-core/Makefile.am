@@ -8,7 +8,7 @@ libgncmod_test_la_LIBADD = \
 
 noinst_HEADERS=test-stuff.h
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   ${GLIB_CFLAGS} \

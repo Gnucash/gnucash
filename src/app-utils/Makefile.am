@@ -2,7 +2,7 @@ SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-app-utils.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I$(top_srcdir)/lib/libc \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
@@ -10,9 +10,9 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
+  ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GCONF_CFLAGS} \
   ${GTK_CFLAGS}
 

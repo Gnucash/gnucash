@@ -28,10 +28,10 @@ EXTRA_DIST = \
   numeric_ops.c \
   numeric_ops.h
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
-  ${GUILE_INCS} \
   ${QOF_CFLAGS} \
+  ${GUILE_INCS} \
   ${GLIB_CFLAGS}

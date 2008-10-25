@@ -1,6 +1,6 @@
 pkglib_LTLIBRARIES = libgncmod-gnome-search.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
@@ -8,13 +8,13 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/business/business-core \
+  ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
-  ${GLIB_CFLAGS} \
-  ${QOF_CFLAGS}
+  ${GLIB_CFLAGS}
 
 libgncmod_gnome_search_la_SOURCES = \
   gncmod-gnome-search.c \

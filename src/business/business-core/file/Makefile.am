@@ -2,15 +2,15 @@ SUBDIRS = .
 
 pkglib_LTLIBRARIES = libgncmod-business-backend-xml.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/backend \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/business/business-core \
-  ${LIBXML2_CFLAGS} \
   ${QOF_CFLAGS} \
+  ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS}
 
 libgncmod_business_backend_xml_la_SOURCES = \

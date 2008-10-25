@@ -24,7 +24,7 @@ libgncmod_ofx_la_LIBADD = \
   ${GLIB_LIBS} \
   ${LIBOFX_LIBS}
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
@@ -33,11 +33,11 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
+  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
-  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${LIBOFX_CFLAGS} 
 

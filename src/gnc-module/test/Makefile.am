@@ -2,7 +2,7 @@ SUBDIRS = mod-foo mod-bar mod-baz misc-mods
 
 LDADD = ../libgnc-module.la ${GLIB_LIBS} ${GUILE_LIBS}
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   ${GUILE_INCS} \

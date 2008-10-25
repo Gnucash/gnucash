@@ -2,14 +2,14 @@ SUBDIRS = . sql test file
 
 pkglib_LTLIBRARIES = libgncmod-business-core.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
-  ${GUILE_INCS} \
   ${QOF_CFLAGS} \
-  ${GLIB_CFLAGS} 
+  ${GUILE_INCS} \
+  ${GLIB_CFLAGS}
 
 libgncmod_business_core_la_SOURCES = \
   swig-business-core.c \

@@ -55,7 +55,7 @@ check_PROGRAMS = \
 EXTRA_DIST = \
   test-load-module
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
@@ -63,7 +63,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/core-utils \
+  ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GCONF_CFLAGS}

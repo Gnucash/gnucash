@@ -61,7 +61,7 @@ test_escape_SOURCES = \
   ${top_srcdir}/src/backend/postgres/putil.c \
   test-escape.c
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   ${QOF_CFLAGS} \
   -I${top_srcdir}/src/test-core \

@@ -3,7 +3,7 @@
 
 bin_PROGRAMS = hello hello2 fastcgi-hello hello3 gnc-server
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
 	-I../../engine -I${srcdir}/../../engine \
 	-I../../backend/xml -I${srcdir}/../../backend/xml \
 	${GLIB_CFLAGS}
