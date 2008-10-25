@@ -549,7 +549,7 @@ gnc_employee_new_window (GNCBook *bookp,
     gtk_widget_set_sensitive (ew->ccard_acct_sel, FALSE);
   } else {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ew->ccard_acct_check), TRUE);
-    gnc_account_sel_set_account (GNC_ACCOUNT_SEL (ew->ccard_acct_sel), ccard_acct);
+    gnc_account_sel_set_account (GNC_ACCOUNT_SEL (ew->ccard_acct_sel), ccard_acct, FALSE);
   }
 
   /* XXX: Set the ACL */

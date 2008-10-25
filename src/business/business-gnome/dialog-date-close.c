@@ -101,7 +101,7 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
 }
 
 static void
-fill_in_acct_info (DialogDateClose *ddc)
+fill_in_acct_info (DialogDateClose *ddc, gboolean set_default_acct)
 {
   GNCAccountSel *gas = GNC_ACCOUNT_SEL (ddc->acct_combo);
 
@@ -111,7 +111,7 @@ fill_in_acct_info (DialogDateClose *ddc)
   gnc_account_sel_set_new_account_modal( gas, TRUE );
 
   /* XXX: Some way to remember the last selection? */
-  gnc_account_sel_set_account( gas, NULL );
+  gnc_account_sel_set_account( gas, NULL, set_default_acct );
 }
 
 static void
@@ -229,6 +229,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 				const char *acct_label_message,
 				const char *question_check_message,
 				gboolean ok_is_default,
+				gboolean set_default_acct,
 				GList * acct_types, GNCBook *book,
 				GncBillTerm *terms,
 				/* Returned Data... */
@@ -312,7 +313,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
     gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *ddue);
 
   /* Setup the account widget */
-  fill_in_acct_info (ddc);
+  fill_in_acct_info (ddc, set_default_acct);
 
   /* Setup signals */
   glade_xml_signal_autoconnect_full( xml,
@@ -391,7 +392,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
   gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *date);
 
   /* Setup the account widget */
-  fill_in_acct_info (ddc);
+  fill_in_acct_info (ddc, FALSE);
 
   /* Setup signals */
   glade_xml_signal_autoconnect_full( xml,

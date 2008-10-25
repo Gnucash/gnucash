@@ -282,11 +282,19 @@ gnc_account_sel_find_account (GtkTreeModel *model,
   return TRUE;
 }
 void
-gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct )
+gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct, gboolean set_default_acct )
 {
 	gas_find_data data;
 
-	gtk_combo_box_set_active( GTK_COMBO_BOX(gas->combo), -1 );
+	if (set_default_acct)
+	{
+		gtk_combo_box_set_active( GTK_COMBO_BOX(gas->combo), 0 );
+	}
+        else
+	{
+		gtk_combo_box_set_active( GTK_COMBO_BOX(gas->combo), -1 );
+	}
+
         if ( acct == NULL )
                 return;
 

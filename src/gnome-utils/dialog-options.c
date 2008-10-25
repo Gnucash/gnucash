@@ -2384,7 +2384,7 @@ gnc_option_set_ui_value_account_sel (GNCOption *option, gboolean use_default,
     acc = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_Account"), 4, 0);
   }
 	
-  gnc_account_sel_set_account (GNC_ACCOUNT_SEL(widget), acc);
+  gnc_account_sel_set_account (GNC_ACCOUNT_SEL(widget), acc, FALSE);
 
   return FALSE;
 }
