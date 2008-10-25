@@ -68,7 +68,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     GWEN_DB_NODE *db_profiles = NULL;
     GWEN_DB_NODE *db_profile;
     AB_IMEXPORTER_CONTEXT *context = NULL;
-    GWEN_IO_LAYER *io, *buffio;
+    GWEN_IO_LAYER *io;
     GncABImExContextImport *ieci = NULL;
     AB_JOB_LIST2 *job_list = NULL;
 
@@ -156,20 +156,19 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     /* Wrap file in buffered gwen io */
     io = GWEN_Io_LayerFile_new(dtaus_fd, -1);
     dtaus_fd = -1;
-    buffio = GWEN_Io_LayerBuffered_new(io);
-    if (GWEN_Io_Manager_RegisterLayer(buffio)) {
-        g_warning("gnc_file_aqbanking_import: Failed to wrap file");
-        goto cleanup;
+    if (GWEN_Io_Manager_RegisterLayer(io)) {
+	g_warning("gnc_file_aqbanking_import: Failed to wrap file");
+	goto cleanup;
     }
 
     /* Run the import */
-    if (AB_ImExporter_Import(importer, context, buffio, db_profile, 0)) {
+    if (AB_ImExporter_Import(importer, context, io, db_profile, 0)) {
         g_warning("gnc_file_aqbanking_import: Error on import");
         goto cleanup;
     }
 
     /* Close the file */
-    GWEN_Io_Layer_free(buffio);
+    GWEN_Io_Layer_free(io);
 
     /* Import the results */
     ieci = gnc_ab_import_context(context, AWAIT_TRANSACTIONS,
