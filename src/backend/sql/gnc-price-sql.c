@@ -138,7 +138,7 @@ save_price( GncSqlBackend* be, QofInstance* inst )
     GNCPrice* pPrice = GNC_PRICE(inst);
 	gint op;
 	gboolean is_infant;
-	gboolean is_ok;
+	gboolean is_ok = TRUE;
 
 	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( inst != NULL, FALSE );
