@@ -694,10 +694,10 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
 
   /* go one day before what's in the box so we can get the correct start
    * date. */
+  startDate = date;
   g_date_subtract_days(&date, 1);
   g_date_clear(&nextDate, 1);
   recurrenceListNextInstance(schedule, &date, &nextDate);
-  startDate = date;
 
   {
       GtkWidget *w;
