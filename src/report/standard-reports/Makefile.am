@@ -26,6 +26,7 @@ gncscmmod_DATA = \
    balance-sheet.scm \
    cash-flow.scm \
    budget.scm \
+   budget-barchart.scm \
    budget-flow.scm \
    category-barchart.scm \
    daily-reports.scm \
