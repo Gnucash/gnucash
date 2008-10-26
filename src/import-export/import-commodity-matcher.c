@@ -121,10 +121,20 @@ gnc_commodity * gnc_import_select_commodity(char * cusip,
 						default_mnemonic);
       
     }
+  /* There seems to be a problem here - if the matched commodity does not
+     have a cusip defined (gnc_commodity_get_cusip returns NULL) then
+     it does not get overwritten - which is not consistent with the
+     message - so Im adding it to do this.  Looks like this is all
+     that was needed to fix the cash value used as stock units problem
+     for pre-defined commodities which didnt have the cusip defined! */
   if (retval != NULL&&
       gnc_commodity_get_cusip(retval)!=NULL &&
       cusip != NULL &&
       (strncmp(gnc_commodity_get_cusip(retval),cusip,strlen(cusip))!=0))
+    {
+      gnc_commodity_set_cusip(retval, cusip);
+    }
+  else if (gnc_commodity_get_cusip(retval)==NULL && cusip != NULL)
     {
       gnc_commodity_set_cusip(retval, cusip);
     }
