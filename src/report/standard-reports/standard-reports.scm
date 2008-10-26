@@ -75,6 +75,7 @@
 (use-modules (gnucash report general-ledger))
 (use-modules (gnucash report cash-flow))
 (use-modules (gnucash report budget))
+(use-modules (gnucash report budget-flow))
 (use-modules (gnucash report category-barchart))
 (use-modules (gnucash report daily-reports))
 (use-modules (gnucash report net-barchart))
