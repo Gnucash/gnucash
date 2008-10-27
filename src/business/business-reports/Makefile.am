@@ -7,7 +7,8 @@ gncscmmod_DATA = \
    payables.scm \
    receivables.scm \
    invoice.scm \
-   owner-report.scm
+   owner-report.scm \
+   job-report.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
 SCM_FILE_LINKS = ${gncscmmod_DATA}
