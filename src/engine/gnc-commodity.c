@@ -519,6 +519,7 @@ gnc_commodity_begin_edit (gnc_commodity *cm)
 static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR ("Failed to commit: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void noop (QofInstance *inst) {}

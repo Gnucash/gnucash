@@ -208,6 +208,7 @@ typedef GList                  AccountGUIDList;
 /** GList of GUIDs of a GNCBook */
 typedef GList                  BookGUIDList;
 
+typedef void (*EngineCommitErrorCallback)( gpointer data, QofBackendError errcode );
 
 typedef  gint (*SplitCallback)(Split *s, gpointer data);
 typedef  gint (*TransactionCallback)(Transaction *t, void *data);
@@ -243,6 +244,12 @@ void gnc_log_default(void);
 /** Pass a function pointer to gnc_engine_add_init_hook and 
  * it will be called during the evaluation of gnc_engine_init */
 void gnc_engine_add_init_hook(gnc_engine_init_hook_t hook);
+
+/** Set a callback function to be called in case an engine commit
+ * fails */
+void gnc_engine_add_commit_error_callback( EngineCommitErrorCallback cb, gpointer data );
+
+void gnc_engine_signal_commit_error( QofBackendError errcode );
 
 #endif
 /** @} */

@@ -940,6 +940,7 @@ static void trans_on_error(Transaction *trans, QofBackendError errcode)
     }
 
     xaccTransRollbackEdit(trans);
+    gnc_engine_signal_commit_error( errcode );
 }
 
 static void trans_cleanup_commit(Transaction *trans)

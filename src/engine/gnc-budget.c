@@ -232,6 +232,7 @@ gnc_budget_class_init(GncBudgetClass* klass)
 static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR ("Failed to commit: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void

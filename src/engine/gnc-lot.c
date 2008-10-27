@@ -143,6 +143,7 @@ gnc_lot_begin_edit (GNCLot *lot)
 static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR ("Failed to commit: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void lot_free(QofInstance* inst)

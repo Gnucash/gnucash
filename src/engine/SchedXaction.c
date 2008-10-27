@@ -219,6 +219,7 @@ gnc_sx_begin_edit (SchedXaction *sx)
 static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
      g_critical("Failed to commit: %d", errcode);
+     gnc_engine_signal_commit_error( errcode );
 }
 
 static void commit_done(QofInstance *inst)

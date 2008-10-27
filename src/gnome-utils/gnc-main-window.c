@@ -122,6 +122,7 @@ static void gnc_main_window_page_reordered (GtkNotebook *notebook, GtkWidget *ch
 #endif
 static void gnc_main_window_plugin_added (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 static void gnc_main_window_plugin_removed (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
+static void gnc_main_window_engine_commit_error_callback( gpointer data, QofBackendError errcode );
 
 /* Command callbacks */
 #ifdef HAVE_GTK_2_10
@@ -2039,12 +2040,32 @@ gnc_main_window_new (void)
     active_windows = g_list_append (active_windows, window);
     gnc_main_window_update_title(window);
     gnc_main_window_update_all_menu_items();
+
+    gnc_engine_add_commit_error_callback( gnc_main_window_engine_commit_error_callback, window );
+
     return window;
 }
 
 /************************************************************
  *                     Utility Functions                    *
  ************************************************************/
+
+static void
+gnc_main_window_engine_commit_error_callback( gpointer data,
+					QofBackendError errcode )
+{
+      GncMainWindow* window = GNC_MAIN_WINDOW(data);
+      GtkWidget* dialog;
+
+      dialog = gtk_message_dialog_new( GTK_WINDOW(window),
+                                       GTK_DIALOG_DESTROY_WITH_PARENT,
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_CLOSE,
+                                       "Unable to save to database" );
+      gtk_dialog_run(GTK_DIALOG (dialog));
+      gtk_widget_destroy(dialog);
+
+}
 
 /** Connect a GncPluginPage to the window.  This function will insert
  *  the page in to the window's notebook and its list of active pages.

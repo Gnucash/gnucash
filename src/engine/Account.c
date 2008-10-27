@@ -1063,6 +1063,7 @@ static void on_done(QofInstance *inst)
 static void on_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR("commit error: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void acc_free (QofInstance *inst)

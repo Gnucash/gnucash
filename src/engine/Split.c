@@ -498,6 +498,12 @@ xaccSplitSetAccount (Split *s, Account *acc)
         xaccTransCommitEdit(trans);
 }
 
+static void commit_err (QofInstance *inst, QofBackendError errcode)
+{
+  PERR("commit error: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
+}
+
 /* An engine-private helper for completing xaccTransCommitEdit(). */
 void
 xaccSplitCommitEdit(Split *s)
@@ -551,7 +557,7 @@ xaccSplitCommitEdit(Split *s)
        original and new transactions, for the _next_ begin/commit cycle. */
     s->orig_acc = s->acc;
     s->orig_parent = s->parent;
-    qof_commit_edit_part2(QOF_INSTANCE(s), NULL, NULL, 
+    qof_commit_edit_part2(QOF_INSTANCE(s), commit_err, NULL, 
                           (void (*) (QofInstance *)) xaccFreeSplit);
 
     if (acc) {
