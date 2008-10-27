@@ -32,13 +32,13 @@ typedef struct _job_window JobWindow;
 #include "dialog-search.h"
 
 /* Create or Edit a job */
-GncJob * gnc_ui_job_new_return_handle (GncOwner *owner, GNCBook *book);
+GncJob * gnc_ui_job_new_return_handle (GncOwner *owner, QofBook *book);
 JobWindow * gnc_ui_job_edit (GncJob *job);
-JobWindow * gnc_ui_job_new (GncOwner *owner, GNCBook *book);
+JobWindow * gnc_ui_job_new (GncOwner *owner, QofBook *book);
 
 /* Search for Jobs */
 GNCSearchWindow * gnc_job_search (GncJob *start, GncOwner *owner,
-				  GNCBook *book);
+				  QofBook *book);
 
 /*
  * These callbacks are for use with the gnc_general_search widget

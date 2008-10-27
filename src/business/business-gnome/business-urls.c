@@ -42,6 +42,7 @@
 #include "dialog-employee.h"
 #include "dialog-vendor.h"
 #include "dialog-invoice.h"
+#include "dialog-job.h"
 
 /* Disable -Waddress.  GCC 4.2 warns (and fails to compile with -Werror) when
  * passing the address of a guid on the stack to QOF_BOOK_LOOKUP_ENTITY via
