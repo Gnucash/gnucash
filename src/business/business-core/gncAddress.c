@@ -281,6 +281,7 @@ void gncAddressBeginEdit (GncAddress *addr)
 static void gncAddressOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("Address QofBackend Failure: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
   
 static void gncAddressOnDone (QofInstance *addr) { }

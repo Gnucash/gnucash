@@ -374,6 +374,7 @@ void gncEmployeeBeginEdit (GncEmployee *employee)
 static void gncEmployeeOnError (QofInstance *employee, QofBackendError errcode)
 {
   PERR("Employee QofBackend Failure: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void gncEmployeeOnDone (QofInstance *inst)

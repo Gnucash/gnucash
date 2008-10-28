@@ -1488,6 +1488,7 @@ void gncInvoiceBeginEdit (GncInvoice *invoice)
 static void gncInvoiceOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("Invoice QofBackend Failure: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void gncInvoiceOnDone (QofInstance *invoice) { }

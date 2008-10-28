@@ -393,6 +393,7 @@ void gncCustomerBeginEdit (GncCustomer *cust)
 static void gncCustomerOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("Customer QofBackend Failure: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void gncCustomerOnDone (QofInstance *inst)

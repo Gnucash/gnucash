@@ -287,6 +287,7 @@ void gncJobBeginEdit (GncJob *job)
 static void gncJobOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("Job QofBackend Failure: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void job_free (QofInstance *inst)

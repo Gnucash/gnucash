@@ -361,6 +361,7 @@ void gncOrderBeginEdit (GncOrder *order)
 static void gncOrderOnError (QofInstance *order, QofBackendError errcode)
 {
   PERR("Order QofBackend Failure: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void gncOrderOnDone (QofInstance *order) {}

@@ -533,6 +533,7 @@ void gncTaxTableBeginEdit (GncTaxTable *table)
 static void gncTaxTableOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("TaxTable QofBackend Failure: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void gncTaxTableOnDone (QofInstance *inst) {}

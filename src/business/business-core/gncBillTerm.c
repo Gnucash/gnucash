@@ -429,6 +429,7 @@ void gncBillTermBeginEdit (GncBillTerm *term)
 static void gncBillTermOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("BillTerm QofBackend Failure: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void bill_free (QofInstance *inst)

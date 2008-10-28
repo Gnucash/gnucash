@@ -451,6 +451,7 @@ void gncVendorBeginEdit (GncVendor *vendor)
 static void gncVendorOnError (QofInstance *vendor, QofBackendError errcode)
 {
   PERR("Vendor QofBackend Failure: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void gncVendorOnDone (QofInstance *inst)

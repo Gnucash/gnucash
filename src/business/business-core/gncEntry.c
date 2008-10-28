@@ -1194,6 +1194,7 @@ void gncEntryBeginEdit (GncEntry *entry)
 static void gncEntryOnError (QofInstance *entry, QofBackendError errcode)
 {
   PERR("Entry QofBackend Failure: %d", errcode);
+  gnc_engine_signal_commit_error( errcode );
 }
 
 static void gncEntryOnDone (QofInstance *inst) {}
