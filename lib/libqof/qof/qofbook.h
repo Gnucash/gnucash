@@ -131,7 +131,7 @@ GType qof_book_get_type(void);
 /** Lookup an entity by guid, returning pointer to the entity */
 #define QOF_BOOK_LOOKUP_ENTITY(book,guid,e_type,c_type) ({  \
   QofInstance *val = NULL;                                    \
-  if (guid && book) {                                       \
+  if ((guid != NULL) && (book != NULL)) {		      \
     QofCollection *col;                                     \
     col = qof_book_get_collection (book, e_type);           \
     val = qof_collection_lookup_entity (col, guid);         \
