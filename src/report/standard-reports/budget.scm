@@ -49,18 +49,41 @@
 (define optname-price-source (N_ "Price Source"))
 (define optname-show-rates (N_ "Show Exchange Rates"))
 (define optname-show-full-names (N_ "Show Full Account Names"))
+(define optname-select-columns (N_ "Select Columns"))
 
 (define optname-budget (N_ "Budget"))
 
 ;; options generator
 (define (budget-report-options-generator)
-  (let ((options (gnc:new-options)))
+  (let* ((options (gnc:new-options)) 
+    (add-option 
+     (lambda (new-option)
+       (gnc:register-option options new-option))))
 
     (gnc:register-option
      options
      (gnc:make-budget-option
       gnc:pagename-general optname-budget
       "a" (N_ "Budget")))
+
+    (add-option
+     (gnc:make-multichoice-option
+      gnc:pagename-general optname-select-columns
+      "f" (N_ "Select the columns of the budget report") 
+      'opt-all
+      (list (vector 'opt-all
+                    (N_ "All")
+                    (N_ "Display all colums"))
+            (vector 'opt-budget 
+                    (N_ "Budget")
+                    (N_ "Display only the budget values"))
+            (vector 'opt-actual
+                    (N_ "Actual")
+                    (N_ "Display only the actual values"))
+            (vector 'opt-diff
+                    (N_ "Difference")
+                    (N_ "Display only the difference"))
+            )))
 
     ;; date interval
     ;;(gnc:options-add-date-interval!
@@ -102,52 +125,83 @@
 
 (define (gnc:html-table-add-budget-values!
          html-table acct-table budget params)
-
+  (let* ((get-val (lambda (alist key)
+                    (let ((lst (assoc-ref alist key)))
+                      (if lst (car lst) lst))))
+         (select-columns (get-val params 'selected-columns))
+         (show-actual? (or (eq? select-columns 'opt-all) (eq? select-columns 'opt-actual)))
+         (show-budget? (or (eq? select-columns 'opt-all) (eq? select-columns 'opt-budget)))
+         (show-diff? (or (eq? select-columns 'opt-all) (eq? select-columns 'opt-diff)))
+         )
+  
   (define (gnc:html-table-add-budget-line!
            html-table rownum colnum
            budget acct exchange-fn)
     (let* ((num-periods (gnc-budget-get-num-periods budget))
            (period 0)
+           (current-col (+ colnum 1))
            )
       (while (< period num-periods)
-             (let* ((bgt-col (+ (* period 2) colnum 1))
-                    (act-col (+ 1 bgt-col))
-
+             (let* (
                     (comm (xaccAccountGetCommodity acct))
+                    
+                    ;; budgeted amount
                     (bgt-unset? (not (gnc-budget-is-account-period-value-set 
                                       budget acct period)))
-                    (numeric-val (gnc-budget-get-account-period-value
+                    (bgt-numeric-val (gnc-budget-get-account-period-value
                                   budget acct period))
-
                     (bgt-val (if bgt-unset? "."
-                                 (gnc:make-gnc-monetary comm numeric-val)))
-                    (numeric-val (gnc-budget-get-account-period-actual-value
+                                 (gnc:make-gnc-monetary comm bgt-numeric-val)))
+
+                    ;; actual amount
+                    (act-numeric-val (gnc-budget-get-account-period-actual-value
                                   budget acct period))
-                    (act-val (gnc:make-gnc-monetary comm numeric-val))
+                    (act-val (gnc:make-gnc-monetary comm act-numeric-val))
+
+                    ;; difference (budget to actual)
+                    (dif-numeric-val (gnc-numeric-sub bgt-numeric-val
+                                 act-numeric-val GNC-DENOM-AUTO
+                                 (bitwise-ior GNC-DENOM-LCD GNC-RND-NEVER)))
+                    (dif-val (if bgt-unset? "."
+                                 (gnc:make-gnc-monetary comm dif-numeric-val)))
+
                     (reverse-balance? (gnc-reverse-balance acct))
                     )
 
                (cond (reverse-balance? (set! act-val
                                        (gnc:monetary-neg act-val))))
 
-
-               (gnc:html-table-set-cell!
-                html-table
-                rownum bgt-col bgt-val)
-
-               (gnc:html-table-set-cell!
-                html-table
-                rownum act-col act-val)
-
-               (set! period (+ period 1))
+               (if show-budget?
+                 (begin
+                   (gnc:html-table-set-cell!
+                    html-table rownum current-col bgt-val)
+                   (set! current-col (+ current-col 1))
+                 )
                )
+               (if show-actual?
+                 (begin
+                   (gnc:html-table-set-cell!
+                    html-table rownum current-col act-val)
+                   (set! current-col (+ current-col 1))
+                 )
+               )
+               (if show-diff?
+                 (begin
+                   (gnc:html-table-set-cell!
+                    html-table rownum current-col dif-val)
+                   (set! current-col (+ current-col 1))
+                 )
+               )
+               (set! period (+ period 1))
              )
+        )
       )
     )
   (define (gnc:html-table-add-budget-headers!
            html-table colnum budget)
     (let* ((num-periods (gnc-budget-get-num-periods budget))
            (period 0)
+           (current-col (+ colnum 1))
            )
 
       ;; prepend 2 empty rows
@@ -156,21 +210,33 @@
 
       ;; make the column headers
       (while (< period num-periods)
-             (let* ((bgt-col (+ (* period 2) colnum 1))
-                    (act-col (+ 1 bgt-col))
-                    (date (gnc-budget-get-period-start-date budget period))
-                    )
+             (let* ((date (gnc-budget-get-period-start-date budget period)))
                (gnc:html-table-set-cell!
-                html-table 0 bgt-col (gnc-print-date date))
-
-               (gnc:html-table-set-cell!
-                html-table
-                1 bgt-col (_ "Bgt")) ;; Translators: Abbreviation for "Budget"
-
-               (gnc:html-table-set-cell!
-                html-table
-                1 act-col (_ "Act")) ;; Translators: Abbreviation for "Actual"
-
+                html-table 0 current-col (gnc-print-date date))
+               (if show-budget?
+                 (begin
+                   (gnc:html-table-set-cell!
+                    html-table 1
+                    current-col (_ "Bgt")) ;; Translators: Abbreviation for "Budget"
+                   (set! current-col (+ current-col 1))
+                 )
+               )
+               (if show-actual?
+                 (begin 
+                   (gnc:html-table-set-cell!
+                    html-table 1
+                    current-col (_ "Act")) ;; Translators: Abbreviation for "Actual"
+                   (set! current-col (+ current-col 1))
+                 )
+               )
+               (if show-diff?
+                 (begin 
+                   (gnc:html-table-set-cell!
+                    html-table 1
+                    current-col (_ "Diff")) ;; Translators: Abbrevation for "Difference"
+                   (set! current-col (+ current-col 1))
+                 )
+               )
                (set! period (+ period 1))
                )
              )
@@ -178,12 +244,9 @@
     )
 
   (let* ((num-rows (gnc:html-acct-table-num-rows acct-table))
-	 (rownum 0)
+         (rownum 0)
          (numcolumns (gnc:html-table-num-columns html-table))
 	 ;;(html-table (or html-table (gnc:make-html-table)))
-	 (get-val (lambda (alist key)
-		    (let ((lst (assoc-ref alist key)))
-		      (if lst (car lst) lst))))
          ;; WARNING: we implicitly depend here on the details of
          ;; gnc:html-table-add-account-balances.  Specifically, we
          ;; assume that it makes twice as many columns as it uses for
@@ -212,6 +275,7 @@
     ;; column headers
     (gnc:html-table-add-budget-headers! html-table colnum budget)
 
+    )
     )
   ) ;; end of define
 
@@ -243,6 +307,8 @@
          ;;                             optname-report-currency))
          (show-full-names? (get-option gnc:pagename-general
                                        optname-show-full-names))
+         (select-columns (get-option gnc:pagename-general
+                                       optname-select-columns))
          (doc (gnc:make-html-document))
          ;;(table (gnc:make-html-table))
          ;;(txt (gnc:make-html-text))
@@ -316,6 +382,10 @@
                (acct-table #f)
                (html-table (gnc:make-html-table))
                (params '())
+               (paramsBudget (list
+                        (list 'selected-columns select-columns)
+                        )
+                       )
                (report-name (get-option gnc:pagename-general
                                         gnc:optname-reportname))
                )
@@ -338,7 +408,7 @@
 
           ;; ... then the budget values
           (gnc:html-table-add-budget-values!
-           html-table acct-table budget params)
+           html-table acct-table budget paramsBudget)
 
           ;; hmmm... I expected that add-budget-values would have to
           ;; clear out any unused columns to the right, out to the
