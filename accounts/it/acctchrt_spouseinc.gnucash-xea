@@ -15,7 +15,7 @@
      Conti per tener traccia separatamente delle entrate del coniuge
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Selezionare questo insieme di conti se il coniuge lavora (stipendio ed imposte del coniuge).
+    Selezionare questo insieme di conti se il coniuge lavora (stipendio e imposte del coniuge).
   </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
