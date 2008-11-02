@@ -144,6 +144,7 @@
       (while (< period num-periods)
              (let* (
                     (comm (xaccAccountGetCommodity acct))
+                    (reverse-balance? (gnc-reverse-balance acct))
                     
                     ;; budgeted amount
                     (bgt-unset? (not (gnc-budget-is-account-period-value-set 
@@ -154,8 +155,11 @@
                                  (gnc:make-gnc-monetary comm bgt-numeric-val)))
 
                     ;; actual amount
-                    (act-numeric-val (gnc-budget-get-account-period-actual-value
+                    (act-numeric-abs (gnc-budget-get-account-period-actual-value 
                                   budget acct period))
+                    (act-numeric-val (if reverse-balance?
+                         (gnc-numeric-neg act-numeric-abs)
+                         act-numeric-abs))
                     (act-val (gnc:make-gnc-monetary comm act-numeric-val))
 
                     ;; difference (budget to actual)
@@ -164,12 +168,7 @@
                                  (bitwise-ior GNC-DENOM-LCD GNC-RND-NEVER)))
                     (dif-val (if bgt-unset? "."
                                  (gnc:make-gnc-monetary comm dif-numeric-val)))
-
-                    (reverse-balance? (gnc-reverse-balance acct))
                     )
-
-               (cond (reverse-balance? (set! act-val
-                                       (gnc:monetary-neg act-val))))
 
                (if show-budget?
                  (begin
