@@ -165,7 +165,7 @@
                     ;; difference (budget to actual)
                     (dif-numeric-val (gnc-numeric-sub bgt-numeric-val
                                  act-numeric-val GNC-DENOM-AUTO
-                                 (bitwise-ior GNC-DENOM-LCD GNC-RND-NEVER)))
+                                 (+ GNC-DENOM-LCD GNC-RND-NEVER)))
                     (dif-val (if bgt-unset? "."
                                  (gnc:make-gnc-monetary comm dif-numeric-val)))
                     )
