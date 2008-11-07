@@ -322,6 +322,7 @@
 (gnc:define-report
  'version 1
  'name reportname
+ 'report-guid "e6e34fa3b6e748debde3cb3bc76d3e53"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator budget-report-options-generator
  'renderer budget-renderer)

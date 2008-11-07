@@ -686,6 +686,7 @@
 (gnc:define-report
  'version 1
  'name (N_ "Job Report")
+ 'report-guid "5518ac227e474f47a34439f2d4d049de"
  'menu-path (list gnc:menuname-business-reports)
  'options-generator job-options-generator
  'renderer reg-renderer

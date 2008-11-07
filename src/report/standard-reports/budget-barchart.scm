@@ -207,6 +207,7 @@
 (gnc:define-report
  'version 1
  'name (N_ "Budget Barchart")
+ 'report-guid "415cd38d39054d9e9c4040455290c2b1"
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator (lambda () (options-generator))
  'renderer (lambda (report-obj) (net-renderer report-obj)))
