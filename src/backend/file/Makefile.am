@@ -59,14 +59,14 @@ noinst_HEADERS = \
   sixtp-utils.h
 
 libgnc_backend_xml_utils_la_LIBADD = \
-   ${GLIB_LIBS} ${GCONF_LIBS} ${LIBXML2_LIBS} \
+   ${GLIB_LIBS} ${GCONF_LIBS} ${LIBXML2_LIBS} ${ZLIB_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
    ${top_builddir}/src/core-utils/libgnc-core-utils.la \
    ${QOF_LIBS}
 
 libgncmod_backend_xml_la_LDFLAGS = -module -avoid-version
 libgncmod_backend_xml_la_LIBADD = \
-   ${GLIB_LIBS} ${GCONF_LIBS} ${LIBXML2_LIBS} \
+   ${GLIB_LIBS} ${GCONF_LIBS} ${LIBXML2_LIBS} ${ZLIB_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
    ${top_builddir}/src/core-utils/libgnc-core-utils.la \
    libgnc-backend-xml-utils.la \
