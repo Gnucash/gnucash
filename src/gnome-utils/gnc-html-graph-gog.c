@@ -71,6 +71,7 @@
 
 static int handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
+static int handle_linechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 
 #ifdef GTKHTML_USES_GTKPRINT
@@ -103,6 +104,7 @@ gnc_html_graph_gog_init(void)
   gnc_html_register_object_handler( "gnc-guppi-pie", handle_piechart );
   gnc_html_register_object_handler( "gnc-guppi-bar", handle_barchart );
   gnc_html_register_object_handler( "gnc-guppi-scatter", handle_scatter );
+  gnc_html_register_object_handler( "gnc-guppi-line", handle_linechart );
 }
 
 static double * 
@@ -518,6 +520,166 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
   g_debug("barchart rendered.");
   return TRUE;
 }
+
+
+/**
+ * data_rows:int
+ * data_cols:int
+ * data:doubles[], data_rows*data_cols
+ * x_axis_label:string
+ * y_axis_label:string
+ * row_labels:string[]
+ * col_labels:string[]
+ * col_colors:string[]
+ * rotate_row_labels:boolean
+ * stacked:boolean
+ * markers:boolean
+ * major_grid:boolean
+ * minor_grid:boolean
+ **/
+static gboolean
+handle_linechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
+{
+  GogObject *graph, *chart;
+  GogPlot *plot;
+  GogSeries *series;
+  GogStyle *style;
+  GOData *label_data, *slice_data;
+  int data_rows, data_cols;
+  double *data = NULL;
+  char **col_labels = NULL, **row_labels = NULL, **col_colors = NULL;
+  gboolean rotate_row_labels = FALSE;
+  gboolean stacked = FALSE;
+  gboolean markers = FALSE;
+  gboolean major_grid = FALSE;
+  gboolean minor_grid = FALSE;
+  char *line_type = "normal";
+
+  gtkhtml_pre_3_10_1_bug_workaround (eb);
+
+  // parse data from the text-ized params
+  // series => lines [gnc:cols]
+  // series-elements => segments [gnc:rows]
+  {
+    char *data_rows_str, *data_cols_str, *data_str, *col_labels_str, *row_labels_str;
+    char *col_colors_str, *rotate_row_labels_str = NULL, *stacked_str = NULL, *markers_str = NULL;
+    char *major_grid_str = NULL, *minor_grid_str = NULL;
+
+    data_rows_str         = g_hash_table_lookup (eb->params, "data_rows");
+    data_cols_str         = g_hash_table_lookup (eb->params, "data_cols");
+    data_str              = g_hash_table_lookup (eb->params, "data" );
+    row_labels_str        = g_hash_table_lookup (eb->params, "row_labels");
+    col_labels_str        = g_hash_table_lookup (eb->params, "col_labels");
+    col_colors_str        = g_hash_table_lookup (eb->params, "col_colors");
+    rotate_row_labels_str = g_hash_table_lookup (eb->params, "rotate_row_labels");
+    stacked_str           = g_hash_table_lookup (eb->params, "stacked");
+    markers_str           = g_hash_table_lookup (eb->params, "markers");
+    major_grid_str        = g_hash_table_lookup (eb->params, "major_grid");
+    minor_grid_str        = g_hash_table_lookup (eb->params, "minor_grid");
+
+    rotate_row_labels     = (gboolean) atoi (rotate_row_labels_str);
+    stacked               = (gboolean) atoi (stacked_str);
+    markers               = (gboolean) atoi (markers_str);
+    major_grid            = (gboolean) atoi (major_grid_str);
+    minor_grid            = (gboolean) atoi (minor_grid_str);
+
+#if 0 // too strong at the moment.
+    g_return_val_if_fail (data_rows_str != NULL
+                          && data_cols_str != NULL
+                          && data_str != NULL
+                          && col_labels_str != NULL
+                          && row_labels_str != NULL
+                          && col_colors_str != NULL, FALSE );
+#endif // 0
+
+    data_rows = atoi (data_rows_str);
+    data_cols = atoi (data_cols_str);
+    data = read_doubles (data_str, data_rows*data_cols);
+    row_labels = read_strings (row_labels_str, data_rows);
+    col_labels = read_strings (col_labels_str, data_cols);
+    col_colors = read_strings (col_colors_str, data_cols);
+  }
+
+  if (!create_basic_plot_elements("GogLinePlot", &graph, &chart, &plot)) {
+    return FALSE;
+  }
+  gog_object_add_by_name(chart, "Legend", NULL);
+
+  if ( stacked ) {
+    // when stacked, we want the lines on _top_ of eachother.
+    line_type = "stacked";
+  }
+
+  g_object_set (G_OBJECT (plot),
+                //"vary_style_by_element",	TRUE,
+                "type",                         line_type,
+                "default-style-has-markers",	markers,
+                NULL);
+  label_data = go_data_vector_str_new ((char const * const *)row_labels, data_rows, NULL);
+  {
+    // foreach row:
+    //   series = row
+    GdkColor color;
+    int i;
+    for (i = 0; i < data_cols; i++) {
+      GError *err = NULL;
+
+      series = gog_plot_new_series (plot);
+      gog_object_set_name (GOG_OBJECT (series), col_labels[i], &err);
+      if (err != NULL)
+      {
+           g_warning("error setting name [%s] on series [%d]: [%s]",
+                     col_labels[i], i, err->message);
+      }
+
+      g_object_ref (label_data);
+      gog_series_set_dim (series, 0, label_data, NULL);
+      go_data_emit_changed (GO_DATA (label_data));
+
+      slice_data = go_data_vector_val_new (data + (i*data_rows), data_rows, NULL);
+      gog_series_set_dim (series, 1, slice_data, NULL);
+      go_data_emit_changed (GO_DATA (slice_data));
+
+      style = gog_styled_object_get_style (GOG_STYLED_OBJECT (series));
+      style->fill.type = GOG_FILL_STYLE_PATTERN;
+      if (gdk_color_parse (col_colors[i], &color)) {
+           style->fill.auto_back = FALSE;
+           go_pattern_set_solid (&style->fill.pattern, GDK_TO_UINT (color));
+      } else {
+           g_warning("cannot parse color [%s]", col_colors[i]);
+      }
+    }
+  }
+
+  if (rotate_row_labels) {
+    GogObject *object = gog_object_get_child_by_role (
+      chart, gog_object_find_role_by_name (chart, "X-Axis"));
+    style = gog_styled_object_get_style (GOG_STYLED_OBJECT (object));
+    gog_style_set_text_angle (style, 90.0);
+  }
+
+  if (major_grid || minor_grid) {
+    GogObject *object;
+    gog_object_add_by_name(chart,"Grid", NULL);
+    object = gog_object_get_child_by_role (chart, gog_object_find_role_by_name (chart, "Y-Axis"));
+    if (major_grid)
+      gog_object_add_by_name (GOG_OBJECT (object),"MajorGrid", NULL);
+    if (minor_grid)
+      gog_object_add_by_name (GOG_OBJECT (object),"MinorGrid", NULL);
+  }
+
+  set_chart_titles_from_hash (chart, eb);
+  set_chart_axis_labels_from_hash (chart, eb);
+
+  // we need to do this twice for the linechart... :p
+  gog_object_update (GOG_OBJECT (graph));
+
+  add_pixbuf_graph_widget (eb, graph);
+
+  g_debug("linechart rendered.");
+  return TRUE;
+}
+
 
 static gboolean
 handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
