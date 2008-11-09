@@ -103,9 +103,11 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "FileOpenAction", GTK_STOCK_OPEN, N_("_Open..."), NULL,
     N_("Open an existing GnuCash file"),
     G_CALLBACK (gnc_main_window_cmd_file_open) },
+#ifdef HAVE_DBI_DBI_H
   { "FileDatabaseConnectionAction", NULL, N_("_Database Connection"), NULL,
     N_("Connect to a database"),
     G_CALLBACK (gnc_main_window_cmd_file_db_connection) },
+#endif
   { "FileSaveAction", GTK_STOCK_SAVE, N_("_Save"), "<control>s",
     N_("Save the current file"),
     G_CALLBACK (gnc_main_window_cmd_file_save) },
