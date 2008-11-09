@@ -2802,7 +2802,7 @@ gnc_option_get_ui_value_budget(GNCOption *option, GtkWidget *widget)
     if (!bgt)
         return SCM_BOOL_F;
 
-    return SWIG_NewPointerObj(bgt, SWIG_TypeQuery("_p_gnc_budget_private"), 0);
+    return SWIG_NewPointerObj(bgt, SWIG_TypeQuery("_p_budget_s"), 0);
 }
 
 static SCM
