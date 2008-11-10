@@ -20884,7 +20884,7 @@
     <act:parent type="new">c4f157aa055b2df995b3ecb00a255372</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Reisekosten AN Übernachtungsaufwand</act:name>
+    <act:name>Reisekosten Arbeitnehmer Übernachtungsaufwand</act:name>
     <act:id type="new">9f5ea185c477f76fab9d3613d57cd2ed</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -20906,7 +20906,7 @@
     <act:parent type="new">03ce1f9501fb243d08288bb02a9f431e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Reisekosten Arbeitnehmer, Fahrtkosten</act:name>
+    <act:name>Reisekosten Arbeitnehmer Fahrtkosten</act:name>
     <act:id type="new">ef38fa59dc24f353ca58eed4fd4598b7</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -20998,7 +20998,7 @@
     <act:parent type="new">c4f157aa055b2df995b3ecb00a255372</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Reisekosten Unternehmer, Fahrtkosten</act:name>
+    <act:name>Reisekosten Unternehmer Fahrtkosten</act:name>
     <act:id type="new">21b362e4c1d8e75f13c8eac7c257e731</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
