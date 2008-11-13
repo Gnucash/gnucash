@@ -1,4 +1,4 @@
-# translation of ru.po to russian
+# translation of ru_new.po to russian
 # Translation of gnucash messages to Russian.
 # Copyright (C) 2000, 2001, 2002, 2003, 2004, 2008 Free Software Foundation, Inc.
 #
@@ -8,17 +8,17 @@
 # Sergey Belyashov <Sergey.Belyashov@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: ru\n"
+"Project-Id-Version: ru_new\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-06 10:31+0400\n"
-"PO-Revision-Date: 2008-10-06 23:55+0400\n"
+"POT-Creation-Date: 2008-11-12 20:14+0300\n"
+"PO-Revision-Date: 2008-11-12 20:32+0300\n"
 "Last-Translator: Sergey Belyashov <Sergey.Belyashov@gmail.com>\n"
 "Language-Team: russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:633
 msgid "Illegal variable in expression."
@@ -3191,7 +3191,7 @@ msgstr "Ценные бумаги"
 
 #: ../src/engine/Account.c:3673
 msgid "Mutual Fund"
-msgstr "ПИФ"
+msgstr "Взаимный фонд"
 
 #: ../src/engine/Account.c:3674
 #: ../src/gnome-utils/dialog-commodity.c:760
@@ -4528,51 +4528,57 @@ msgstr ""
 "1/1000000"
 
 #: ../src/gnome/glade/account.glade.h:77
+msgid ""
+"Use Edit->Tax Options to set the tax-related flag and assign a tax code to "
+"this account."
+msgstr "Используйте Правка->Параметры налогов для установки флага налогооблажения и ассоциации налогового кода этого счета."
+
+#: ../src/gnome/glade/account.glade.h:78
 msgid "_Account code:"
 msgstr "_Код счета:"
 
-#: ../src/gnome/glade/account.glade.h:78
+#: ../src/gnome/glade/account.glade.h:79
 msgid "_Balance:"
 msgstr "_Баланс:"
 
-#: ../src/gnome/glade/account.glade.h:79 ../src/gnome/glade/price.glade.h:21
+#: ../src/gnome/glade/account.glade.h:80 ../src/gnome/glade/price.glade.h:21
 #: ../src/gnome/glade/print.glade.h:27 ../src/gnome/glade/register.glade.h:81
 #: ../src/gnome/glade/stocks.glade.h:17
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:5
 msgid "_Date:"
 msgstr "_Дата:"
 
-#: ../src/gnome/glade/account.glade.h:80
+#: ../src/gnome/glade/account.glade.h:81
 msgid "_Default"
 msgstr "По _умолчанию"
 
-#: ../src/gnome/glade/account.glade.h:81
+#: ../src/gnome/glade/account.glade.h:82
 msgid "_Description:"
 msgstr "_Описание:"
 
-#: ../src/gnome/glade/account.glade.h:82
+#: ../src/gnome/glade/account.glade.h:83
 msgid "_Move to:"
 msgstr "_Переместить в:"
 
-#: ../src/gnome/glade/account.glade.h:83
+#: ../src/gnome/glade/account.glade.h:84
 msgid "_Renumber"
 msgstr "Пере_нумеровать"
 
-#: ../src/gnome/glade/account.glade.h:84
+#: ../src/gnome/glade/account.glade.h:85
 #: ../src/gnome-utils/dialog-commodity.c:274
 msgid "_Security/currency:"
 msgstr "_Валюта/ценная бумага:"
 
-#: ../src/gnome/glade/account.glade.h:85
+#: ../src/gnome/glade/account.glade.h:86
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:6
 msgid "_Select All"
 msgstr "В_ыбрать все"
 
-#: ../src/gnome/glade/account.glade.h:86
+#: ../src/gnome/glade/account.glade.h:87
 msgid "_Select transfer account"
 msgstr "_Выбрать счет для передачи"
 
-#: ../src/gnome/glade/account.glade.h:87
+#: ../src/gnome/glade/account.glade.h:88
 msgid "_Use equity 'Opening Balances' account"
 msgstr "Использоват_ь начальное сальдо счета собственных средств"
 
@@ -6799,7 +6805,7 @@ msgstr "Редактор цен"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:155
 msgid "View and edit the prices for stocks and mutual funds"
-msgstr "Просмотреть и изменить цены ценных бумаг и ПИФов"
+msgstr "Просмотреть и изменить цены ценных бумаг и взаимных фондов"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:157
 msgid "_Security Editor"
@@ -6807,7 +6813,7 @@ msgstr "Редактор ценных бумаг"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:158
 msgid "View and edit the commodities for stocks and mutual funds"
-msgstr "Просмотреть и изменить предметы ценных бумаг и ПИФов"
+msgstr "Просмотреть и изменить предметы ценных бумаг и взаимных фондов"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:160
 msgid "_Financial Calculator"
@@ -8373,7 +8379,11 @@ msgid ""
 "selection popup. The default behaviour is to display the full name, "
 "including the path in the account tree. Activating this option implies that "
 "you use unique leaf names."
-msgstr "Показывать названия только нижних подсчетов в журнале и в диалоге выбора счетов. По умолчанию, показывается полный путь, включая путь по дереву счетов. Включение этого параметра подразумевает, что используются уникальные названия подсчетов."
+msgstr ""
+"Показывать названия только нижних подсчетов в журнале и в диалоге выбора "
+"счетов. По умолчанию, показывается полный путь, включая путь по дереву "
+"счетов. Включение этого параметра подразумевает, что используются уникальные "
+"названия подсчетов."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:48
 msgid "Show splash screen"
@@ -10683,7 +10693,11 @@ msgid ""
 "register and in the account selection popup. The default behaviour is to "
 "display the full name, including the path in the account tree. Cecking this "
 "option implies that you use unique leaf names."
-msgstr "Если отмечено, то только названия нижних подсчетов будут отображаться в журнале и в диалоге выбора счетов. По умолчанию, показывается полный путь, включая путь по дереву счетов. Включение этого параметра подразумевает, что используются уникальные названия подсчетов."
+msgstr ""
+"Если отмечено, то только названия нижних подсчетов будут отображаться в "
+"журнале и в диалоге выбора счетов. По умолчанию, показывается полный путь, "
+"включая путь по дереву счетов. Включение этого параметра подразумевает, что "
+"используются уникальные названия подсчетов."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:87
 msgid ""
@@ -11140,7 +11154,7 @@ msgid "Transfer Funds"
 msgstr "Передача фондов"
 
 #. create the button.
-#: ../src/gnome-utils/gnc-account-sel.c:390
+#: ../src/gnome-utils/gnc-account-sel.c:398
 msgid "New..."
 msgstr "Новый..."
 
@@ -12612,6 +12626,9 @@ msgid ""
 "to a GnuCash account. Click \"Forward\" when all desired accounts are "
 "matching."
 msgstr ""
+"Кликните на строку со счетов интернет-банкинга, если желаете сопоставить "
+"его со счетов GnuCash. Кликните \"Далее\", когда все желаемые счета будут "
+"сопоставлены."
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:12
 #: ../src/import-export/hbci/glade/hbci.glade.h:12
@@ -12874,12 +12891,12 @@ msgstr "_Сейчас"
 #: ../src/import-export/aqbanking/aqbanking.glade.h:73
 #: ../src/import-export/hbci/glade/hbci.glade.h:71
 msgid "_Start AqBanking Wizard"
-msgstr ""
+msgstr "_Запуск мастера AqBanking"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:74
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:6
 msgid "_Verbose debug messages"
-msgstr ""
+msgstr "_Расширенные отладочные сообщения"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:75
 #: ../src/import-export/hbci/glade/hbci.glade.h:72
@@ -13005,9 +13022,9 @@ msgid "A template with the given name already exists.  Please enter another name
 msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:992
-#, fuzzy, c-format
+#, c-format
 msgid "Do you really want to delete the template with the name \"%s\"?"
-msgstr "Вы действительно хотите удалить эту запланированную проводку?"
+msgstr "Вы действительно хотите удалить шаблон с именем \"%s\"?"
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:290
 #: ../src/import-export/hbci/druid-hbci-initial.c:689
@@ -14134,7 +14151,10 @@ msgid ""
 "GnuCash will now load your QIF file. If there are no errors or warnings, you "
 "will automatically proceed to the next step. Otherwise, the details will be "
 "shown below for your review."
-msgstr "GnuCash сейчас загрузит ваш файл QIF. Если не будет ошибок или предупреждений, то вы перейдете к следующему шагу. Иначе, будут показаны подробности для рассмотрения."
+msgstr ""
+"GnuCash сейчас загрузит ваш файл QIF. Если не будет ошибок или "
+"предупреждений, то вы перейдете к следующему шагу. Иначе, будут показаны "
+"подробности для рассмотрения."
 
 #. Inform the user.
 #: ../src/import-export/qif-import/druid-qif-import.c:826
@@ -14218,7 +14238,10 @@ msgid ""
 "Select the exchange on which the symbol is traded, or select the type of "
 "investment (such as FUND for mutual funds.) If you don't see your exchange "
 "or an appropriate investment type, you can enter a new one."
-msgstr "Выберите биржу, на которой торгуется символ, или выберите тип инвестиции (например, FUND для ПИФа). Если в списке нет вашей биржи или подходящего типа инвестиций, то введите свою."
+msgstr ""
+"Выберите биржу, на которой торгуется символ, или выберите тип инвестиции "
+"(например, FUND для взаимного фонда). Если в списке нет вашей биржи "
+"или подходящего типа инвестиций, то введите свою."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2104
 msgid "You must enter an existing national currency or enter a different type."
@@ -14253,8 +14276,8 @@ msgid ""
 "be shown below for your review."
 msgstr ""
 "GnuCash импортирует ваши данные QIF. Если не произойдет ошибок или "
-"предупреждений, вы автоматически перейдете на следующий шаг. "
-"Иначе, будут показаны подробности для ознакомления."
+"предупреждений, вы автоматически перейдете на следующий шаг. Иначе, будут "
+"показаны подробности для ознакомления."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2636
 #: ../src/import-export/qif-import/druid-qif-import.c:2640
@@ -14422,10 +14445,16 @@ msgid ""
 "\n"
 "Click \"Forward\" to review the possible matches."
 msgstr ""
-"Если производится импорт файла QIF из банка или другой финансовой организации, "
-"некоторые проводки могут уже присутствовать на ваших счетах GnuCash. Для предотвращения повторов GnuCash попытается определить совпадения, поэтому ему может понадобиться ваша помощь для проверки результатов.\n"
+"Если производится импорт файла QIF из банка или другой финансовой "
+"организации, некоторые проводки могут уже присутствовать на ваших счетах "
+"GnuCash. Для предотвращения повторов GnuCash попытается определить "
+"совпадения, поэтому ему может понадобиться ваша помощь для проверки "
+"результатов.\n"
 "\n"
-"На следующей странице будет показан список импортированных проводок. При выборе каждой из них ниже будет показываться список подходящих совпадений. Если вы увидите подходящую, то кликните на ней. Ваш выбор будет подтвержден изменением состояния в столбце \"Подходит?\".\n"
+"На следующей странице будет показан список импортированных проводок. При "
+"выборе каждой из них ниже будет показываться список подходящих совпадений. "
+"Если вы увидите подходящую, то кликните на ней. Ваш выбор будет подтвержден "
+"изменением состояния в столбце \"Подходит?\".\n"
 "\n"
 "Кликните \"Далее\" для просмотра возможных совпадений."
 
@@ -14450,11 +14479,18 @@ msgid ""
 "If you don't see your exchange listed, or none of the available choices are "
 "appropriate, you can enter a new one."
 msgstr ""
-"На следующих страницах у вас будет спрошена информация о вкладах, ПИФах и других вложениях, которые могут присутствовать в импортируемых файлах QIF. GnuCash требуется некоторые дополнительные подробности об этих вложениях, которые не предоставляет формат QIF.\n"
+"На следующих страницах у вас будет спрошена информация о вкладах, взаимных фондах и других вложениях, которые могут присутствовать "
+"в импортируемых файлах QIF. GnuCash требуется некоторые дополнительные "
+"подробности об этих вложениях, которые не предоставляет формат QIF.\n"
 "\n"
-"Каждый вклад, ПИФ или другая инвестиция должна иметь название и аббревиатуру, такую как биржевой символ. Так как некоторые несвязанные инвестиции могут иметь одинаковые аббревиатуры, вам необходимо как-то выделить, что за тип вклада вы вводите. Например, вы можете выбрать биржу, которая назначает символ (NASDAQ, NYSE и пр.), или тип инвестиции.\n"
+"Каждый вклад, ПИФ или другая инвестиция должна иметь название и "
+"аббревиатуру, такую как биржевой символ. Так как некоторые несвязанные "
+"инвестиции могут иметь одинаковые аббревиатуры, вам необходимо как-то "
+"выделить, что за тип вклада вы вводите. Например, вы можете выбрать биржу, "
+"которая назначает символ (NASDAQ, NYSE и пр.), или тип инвестиции.\n"
 "\n"
-"Если вы не можете найти в списке биржу или не подходит ни один из вариантов, то можно ввести свой собственный."
+"Если вы не можете найти в списке биржу или не подходит ни один из вариантов, "
+"то можно ввести свой собственный."
 
 #: ../src/import-export/qif-import/qif.glade.h:36
 msgid "Income and Expense categories"
@@ -14713,7 +14749,8 @@ msgstr ""
 "отображения в виде отдельной проводки. Например, вы сняли $100, а с вас "
 "списали $101,50. Если вы вручную введете эти $100, то итог не совпадет. Вы "
 "должны установить на какой-нибудь максимум подобного сбора в вашем регионе "
-"(в единицах вашей локальной валюты), таким образомпроводка будет распознана, как подходящая."
+"(в единицах вашей локальной валюты), таким образомпроводка будет распознана, "
+"как подходящая."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:13
 msgid ""
@@ -19708,7 +19745,7 @@ msgstr "Пакеты акций"
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:2524
 msgid "Mutual Funds"
-msgstr "ПИФы"
+msgstr "Взаимные фонды"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:2526
