@@ -1161,18 +1161,6 @@ gnc_split_amount_print_info (Split *split, gboolean use_symbol)
   return gnc_account_print_info (xaccSplitGetAccount (split), use_symbol);
 }
 
-GNCPrintAmountInfo
-gnc_split_value_print_info (Split *split, gboolean use_symbol)
-{
-  Transaction *trans;
-
-  if (!split) return gnc_default_print_info (use_symbol);
-
-  trans = xaccSplitGetParent (split);
-
-  return gnc_commodity_print_info (xaccTransGetCurrency (trans), use_symbol);
-}
-
 static GNCPrintAmountInfo
 gnc_default_print_info_helper (int decplaces)
 {
