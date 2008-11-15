@@ -101,7 +101,7 @@
 ( "Iranian Rial" "rial" "rial" "ISO4217" "IRR" "364" 1 1)
 ( "Iraqi Dinar" "dinar" "fil"  "ISO4217" "IQD" "368" 1000 1000)
 ( "Irish Punt" "punt" "pingin" "ISO4217" "IEP" "372" 100 100 ) ;; through 1998
-( "Israeli New Shekel" "new shekel" "new agorot"  "ISO4217" "NIS" "376" 100 100)
+( "Israeli New Shekel" "new shekel" "agorot"  "ISO4217" "ILS" "376" 100 100)
 ( "Italian Lira" "lira" "lira" "ISO4217" "ITL" "380" 1 1 ) ;; through 1998
 ( "Jamaican Dollar" "dollar" "cent" "ISO4217" "JMD" "388" 100 100 )
 ( "Japanese Yen" "yen" "sen"  "ISO4217" "JPY" "392" 100 1 )

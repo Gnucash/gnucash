@@ -97,7 +97,10 @@ struct gnc_new_iso_code
   {"RUR", "RUB"}, /* Russian Ruble: RUR through 1997-12, RUB from 1998-01 onwards; see bug #393185 */
   {"PLZ", "PLN"}, /* Polish Zloty */
   {"UAG", "UAH"}, /* Ukraine Hryvnia */
-  {"ILS", "NIS"}, /* New Israeli Shekel */
+  {"NIS", "ILS"}, /* New Israeli Shekel: The informal abbreviation may be "NIS", but
+		     its iso-4217 is clearly ILS and only this! Incorrectly changed
+		     due to bug#152755 (Nov 2004) and changed back again by bug#492417
+		     (Oct 2008). */
   {"MXP", "MXN"}, /* Mexican (Nuevo) Peso */
   {"TRL", "TRY"}, /* New Turkish Lira: changed 2005 */
 
