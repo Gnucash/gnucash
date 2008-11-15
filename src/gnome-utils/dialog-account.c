@@ -1456,6 +1456,13 @@ gnc_ui_new_account_window_internal (QofBook *book,
 
   if (default_commodity != NULL) {
     commodity = default_commodity;
+    if ((aw->type = ACCT_TYPE_STOCK) || (aw->type = ACCT_TYPE_MUTUAL)) 
+       {
+        gtk_entry_set_text(GTK_ENTRY(aw->name_entry), 
+                            (gpointer) gnc_commodity_get_mnemonic(commodity));
+        gtk_entry_set_text(GTK_ENTRY(aw->description_entry), 
+                            (gpointer) gnc_commodity_get_fullname(commodity));
+        }
   } else if ((aw->type != ACCT_TYPE_STOCK) && (aw->type != ACCT_TYPE_MUTUAL)) {
     commodity = parent_commodity;
   } else {
