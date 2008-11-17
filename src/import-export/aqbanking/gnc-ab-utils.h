@@ -43,7 +43,7 @@ G_BEGIN_DECLS
 
 #if (AQBANKING_VERSION_MAJOR > 3) || \
   ((AQBANKING_VERSION_MAJOR == 3) && \
-    (AQBANKING_VERSION_MINOR >= 9))
+    (AQBANKING_VERSION_MINOR >= 99))
 /** Defined if libaqbanking4 as opposed to libaqbanking3 is being used */
 # define AQBANKING_VERSION_4_PLUS
 #endif
