@@ -44,6 +44,10 @@
 #include "gnc-ui.h"
 #include "Transaction.h"
 #include "Account.h"
+#include <libguile.h>
+#include "swig-runtime.h"
+#include "guile-mappings.h"
+#include "engine-helpers.h"
 
 
 #define DIALOG_TRANSFER_CM_CLASS "dialog-transfer"
@@ -108,6 +112,8 @@ struct _xferDialog
 
   GtkWidget * price_radio;
   GtkWidget * amount_radio;
+
+  GtkWidget * fetch_button;
 
   GtkTooltips *tips;
 
@@ -1240,6 +1246,13 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
   Split *to_split;
 
   ENTER(" ");
+
+  if (response == GTK_RESPONSE_APPLY)
+  {
+    LEAVE("fetching exchange rate");
+    return;
+  }
+
   if (response != GTK_RESPONSE_OK) {
     gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
     LEAVE("cancel, etc.");
@@ -1537,6 +1550,56 @@ gnc_xfer_dialog_close_cb(GtkDialog *dialog, gpointer data)
 
 
 static void
+gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
+{
+  gnc_numeric rate;
+  GNCPrice *prc;
+  gnc_commodity *from = xferData->from_commodity;
+  gnc_commodity *to = xferData->to_commodity;
+  SCM quotes_func;
+  SCM book_scm;
+  SCM scm_window;
+
+  g_return_if_fail (xferData);
+
+  ENTER(" ");
+
+  quotes_func = scm_c_eval_string ("gnc:book-add-quotes");
+
+  if (!SCM_PROCEDUREP (quotes_func)) {
+    LEAVE("quote retrieval failed");
+    return;
+  }
+
+  book_scm = gnc_book_to_scm (xferData->book);
+  if (SCM_NFALSEP (scm_not (book_scm))) {
+    LEAVE("no book");
+    return;
+  }
+
+  scm_window =  SWIG_NewPointerObj(xferData->dialog,
+                                   SWIG_TypeQuery("_p_GtkWidget"), 0);
+
+  if (SCM_NFALSEP (scm_not (book_scm))) {
+    LEAVE("no scm window");
+    return;
+  }
+
+  gnc_set_busy_cursor (NULL, TRUE);
+  scm_call_2 (quotes_func, scm_window, book_scm);
+  gnc_unset_busy_cursor (NULL);
+
+  /*the results should be in the price db now */
+
+  prc = gnc_pricedb_lookup_latest(xferData->pricedb, from, to);
+  rate = gnc_price_get_value (prc);
+  gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), rate); 
+
+  LEAVE("quote retrieved");
+
+}
+
+static void
 gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 {
   GtkWidget *dialog;
@@ -1572,6 +1635,10 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
   xferData->quickfill = XFER_DIALOG_FROM;
 
   xferData->transferinfo_label = glade_xml_get_widget (xml, "transferinfo-label");
+
+  xferData->fetch_button = glade_xml_get_widget (xml, "fetch");
+  glade_xml_signal_connect_data (xml, "gnc_xfer_dialog_fetch",
+				 G_CALLBACK (gnc_xfer_dialog_fetch), xferData);
 
   /* amount & date widgets */
   {
@@ -1956,7 +2023,7 @@ gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
     DEBUG("gtk_dialog_run returned %d", response);
     gnc_xfer_dialog_response_cb (dialog, response, xferData);
 
-    if (response != GTK_RESPONSE_OK) {
+    if ((response != GTK_RESPONSE_OK) && (response != GTK_RESPONSE_APPLY)) {
       LEAVE("not ok");
       return FALSE;
     }
