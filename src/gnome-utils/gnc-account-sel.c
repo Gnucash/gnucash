@@ -231,14 +231,6 @@ gas_populate_list( GNCAccountSel *gas )
         }
 }
 
-/* Wrapper to offer the correct function declaration for
-   g_list_find_custom(), which needs void pointers instead of
-   gnc_commodity ones */
-static int gnc_commodity_compare_void(const void *a, const void *b)
-{
-  return gnc_commodity_compare(a, b);
-}
-
 static
 void
 gas_filter_accounts( gpointer data, gpointer user_data )

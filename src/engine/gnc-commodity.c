@@ -1507,6 +1507,11 @@ int gnc_commodity_compare(const gnc_commodity * a, const gnc_commodity * b)
     }
 }
 
+int gnc_commodity_compare_void(const void * a, const void * b)
+{
+  return gnc_commodity_compare(a, b);
+}
+
 /************************************************************
  *                   Namespace functions                    *
  ************************************************************/

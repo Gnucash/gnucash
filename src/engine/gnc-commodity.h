@@ -651,6 +651,12 @@ gboolean gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b);
  *   than "true or false"
  */
 int gnc_commodity_compare(const gnc_commodity * a, const gnc_commodity * b);
+
+/** A wrapper around gnc_commodity_compare() which offers the function
+ * declaration that is needed for g_list_find_custom(), which needs
+ * void pointers instead of gnc_commodity ones.
+ */
+int gnc_commodity_compare_void(const void * a, const void * b);
 /** @} */
 
 

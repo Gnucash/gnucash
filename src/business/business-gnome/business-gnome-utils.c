@@ -343,7 +343,7 @@ gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
     {
         if ( g_list_find_custom( acct_commodities,
                                  GINT_TO_POINTER(xaccAccountGetCommodity(account)),
-                                 gnc_commodity_compare) == NULL ) {
+                                 gnc_commodity_compare_void) == NULL ) {
             continue;
         }
     }
