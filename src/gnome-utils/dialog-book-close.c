@@ -333,7 +333,7 @@ void gnc_ui_close_book (QofBook* book)
   box = glade_xml_get_widget(xml, "income_acct_box");
   cbw->income_acct_widget = gnc_account_sel_new();
   gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(cbw->income_acct_widget),
-				   equity_list);
+				   equity_list, NULL);
   gnc_account_sel_set_new_account_ability(GNC_ACCOUNT_SEL(cbw->income_acct_widget), TRUE);
   gtk_box_pack_start(GTK_BOX(box), cbw->income_acct_widget, TRUE, TRUE, 0);
 
@@ -341,7 +341,7 @@ void gnc_ui_close_book (QofBook* book)
   box = glade_xml_get_widget(xml, "expense_acct_box");
   cbw->expense_acct_widget = gnc_account_sel_new();
   gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(cbw->expense_acct_widget),
-				   equity_list);
+				   equity_list, NULL);
   gnc_account_sel_set_new_account_ability(GNC_ACCOUNT_SEL(cbw->expense_acct_widget), TRUE);
   gtk_box_pack_start(GTK_BOX(box), cbw->expense_acct_widget, TRUE, TRUE, 0);
 

@@ -52,9 +52,9 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 				const char *acct_label_message,
 				const char *question_check_message,
 				gboolean ok_is_default,
-				gboolean set_default_acct,
-				GList * acct_types, GNCBook *book,
-				GncBillTerm *terms,
+                                gboolean set_default_acct,
+				GList * acct_types, GList * acct_commodities, 
+                                GNCBook *book, GncBillTerm *terms,
 				/* Returned Data... */
 				Timespec *ddue, Timespec *post,
 				char **memo, Account **acct, gboolean *answer);

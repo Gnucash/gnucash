@@ -602,6 +602,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   char *message, *memo, *ddue_label, *post_label, *acct_label, *question_label;
   Account *acc = NULL;
   GList * acct_types = NULL;
+  GList * acct_commodities = NULL;
   Timespec ddue, postdate;
   gboolean accumulate;
   QofInstance *owner_inst;
@@ -650,6 +651,9 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   /* Determine the type of account to post to */
   acct_types = gnc_business_account_types (&(iw->owner));
 
+  /* Determine which commodity we're working with */
+  acct_commodities = gnc_business_commodities(&(iw->owner));
+  
   /* Get the due date and posted account */
   timespecFromTime_t (&postdate, time(NULL));
   ddue = postdate;
@@ -665,7 +669,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
 
   if (!gnc_dialog_dates_acct_question_parented (iw_get_window(iw), message, ddue_label,
 				       post_label, acct_label, question_label, TRUE, TRUE,
-				       acct_types, iw->book, iw->terms,
+				       acct_types, acct_commodities, iw->book, iw->terms,
 				       &ddue, &postdate, &memo, &acc, &accumulate))
     return;
 

@@ -889,6 +889,7 @@ gnc_commodity_copy(gnc_commodity * dest, const gnc_commodity *src)
   CommodityPrivate* dest_priv = GET_PRIVATE(dest);
 
   gnc_commodity_set_fullname (dest, src_priv->fullname);
+  gnc_commodity_set_mnemonic (dest, gnc_commodity_get_mnemonic(src));
   dest_priv->namespace = src_priv->namespace;
   gnc_commodity_set_fraction (dest, src_priv->fraction);
   gnc_commodity_set_cusip (dest, src_priv->cusip);
@@ -1494,6 +1495,17 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
   return TRUE;
 }
 
+int gnc_commodity_compare(const gnc_commodity * a, const gnc_commodity * b)
+{
+    if (gnc_commodity_equal(a,b))
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
 
 /************************************************************
  *                   Namespace functions                    *

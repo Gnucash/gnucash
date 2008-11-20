@@ -503,7 +503,7 @@ gnc_ui_sx_loan_druid_create(void)
                                         gas, gas_data[i].newAcctAbility );
                                 if ( gas_data[i].allowableAccounts != NULL ) {
                                         gnc_account_sel_set_acct_filters(
-                                                gas, gas_data[i].allowableAccounts );
+                                                gas, gas_data[i].allowableAccounts, NULL );
                                 }
                                 gtk_container_add( GTK_CONTAINER(a),
                                                    GTK_WIDGET(gas) );

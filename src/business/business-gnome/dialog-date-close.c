@@ -47,6 +47,7 @@ typedef struct _dialog_date_close_window {
   GncBillTerm *terms;
   Timespec *ts, *ts2;
   GList * acct_types;
+  GList * acct_commodities;
   GNCBook *book;
   Account *acct;
   char **memo;
@@ -106,7 +107,7 @@ fill_in_acct_info (DialogDateClose *ddc, gboolean set_default_acct)
   GNCAccountSel *gas = GNC_ACCOUNT_SEL (ddc->acct_combo);
 
   /* How do I set the book? */
-  gnc_account_sel_set_acct_filters( gas, ddc->acct_types );
+  gnc_account_sel_set_acct_filters( gas, ddc->acct_types, ddc->acct_commodities );
   gnc_account_sel_set_new_account_ability( gas, TRUE );
   gnc_account_sel_set_new_account_modal( gas, TRUE );
   gnc_account_sel_set_account( gas, ddc->acct, set_default_acct );
@@ -228,8 +229,8 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 				const char *question_check_message,
 				gboolean ok_is_default,
                                 gboolean set_default_acct,
-				GList * acct_types, GNCBook *book,
-				GncBillTerm *terms,
+				GList * acct_types, GList * acct_commodities, 
+                                GNCBook *book, GncBillTerm *terms,
 				/* Returned Data... */
 				Timespec *ddue, Timespec *post,
 				char **memo, Account **acct, gboolean *answer)
@@ -253,6 +254,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
   ddc->ts2 = post;
   ddc->book = book;
   ddc->acct_types = acct_types;
+  ddc->acct_commodities = acct_commodities;
   ddc->acct = *acct;
   ddc->memo = memo;
   ddc->terms = terms;

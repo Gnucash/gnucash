@@ -31,10 +31,12 @@
 #include "dialog-account.h"
 #include "GNCId.h"
 #include "gnc-account-sel.h"
+#include "gnc-commodity.h"
 #include "gnc-exp-parser.h"
 #include "gnc-gtk-utils.h"
 #include "gnc-ui-util.h"
 #include "qof.h"
+#include "gnc-session.h"
 
 #define ACCT_DATA_TAG "gnc-account-sel_acct"
 
@@ -249,6 +251,17 @@ gas_filter_accounts( gpointer data, gpointer user_data )
                         return;
                 }
         }
+
+        if ( atnd->gas->acctCommodityFilters ) {
+                if ( g_list_find_custom( atnd->gas->acctCommodityFilters,
+                                  GINT_TO_POINTER(xaccAccountGetCommodity( a )),
+                                  gnc_commodity_compare) 
+                     == NULL ) {
+                        return;
+                }
+        }
+
+        
         *atnd->outList = g_list_append( *atnd->outList, a );
 }
 
@@ -324,19 +337,54 @@ gnc_account_sel_get_account( GNCAccountSel *gas )
 
 
 void
-gnc_account_sel_set_acct_filters( GNCAccountSel *gas, GList *filters )
+gnc_account_sel_set_acct_filters( GNCAccountSel *gas, GList *typeFilters, GList *commodityFilters )
 {
+        GList *src=NULL;
+        GList *dest=NULL;
+        gnc_commodity* commClone=NULL;
+
         if ( gas->acctTypeFilters != NULL ) {
                 g_list_free( gas->acctTypeFilters );
                 gas->acctTypeFilters = NULL;
         }
-        /* If it's null, then no filters exist. */
-        if ( ! filters ) {
+
+        if ( gas->acctCommodityFilters != NULL) {
+                g_list_free( gas->acctCommodityFilters );
+                gas->acctCommodityFilters = NULL;
+        }
+
+        /* If both filters are null, then no filters exist. */
+        if (( ! typeFilters ) && ( ! commodityFilters)) {
                 return;
         }
+
         /* This works because the GNCAccountTypes in the list are
          * ints-casted-as-pointers. */
-        gas->acctTypeFilters = g_list_copy( filters );
+        if (typeFilters)
+        {
+            gas->acctTypeFilters = g_list_copy( typeFilters );
+        }
+
+        if (commodityFilters)
+        {
+            src = commodityFilters;
+
+            while (src->data != NULL)
+            {
+                //gnc_commodity_clone would have been nice but it expects me to 
+                //insert the clone into a book, which I don't want to do.
+                commClone = gnc_commodity_new(qof_session_get_book(gnc_get_current_session()), "","","","",1);
+                gnc_commodity_copy(commClone, src->data);
+                dest = g_list_prepend(dest, commClone);
+                if (src->next == NULL)
+                {
+                    break;
+                }
+                src = src->next;
+            }
+            gas->acctCommodityFilters = dest;
+        }
+
         gas_populate_list( gas );
 }
 

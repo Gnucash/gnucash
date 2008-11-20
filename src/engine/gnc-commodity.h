@@ -642,6 +642,15 @@ gboolean gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b);
  *  fullname, exchange private code and fraction.
  */
 gboolean gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b);
+
+/** This routine returns 0 if the two commodities are equal, 1 otherwise.
+ *  Commodities are equal if they have the same namespace, mnemonic,
+ *  fullname, exchange private code and fraction.
+ *  This function is useful for list-traversal comparison purposes where
+ *  The semantics are 0, <0, or >0 (equal, greater than, less than) rather
+ *   than "true or false"
+ */
+int gnc_commodity_compare(const gnc_commodity * a, const gnc_commodity * b);
 /** @} */
 
 

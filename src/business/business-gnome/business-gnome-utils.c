@@ -366,6 +366,14 @@ gnc_business_account_types (GncOwner *owner)
   }
 }
 
+GList *
+gnc_business_commodities (GncOwner *owner)
+{
+  g_return_val_if_fail (owner, NULL);
+
+  return (g_list_prepend (NULL, gncOwnerGetCurrency(owner)));
+}
+
 /*********************************************************************/
 /* Option Menu creation                                              */
 
