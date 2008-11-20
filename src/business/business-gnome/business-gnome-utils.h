@@ -67,7 +67,8 @@ GList * gnc_business_commodities (GncOwner *owner);
 
 /* Fill in a combo box with the appropriate list of accounts */
 void gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
-				    GList *acct_types);
+				    GList *acct_types, 
+				    GList *acct_commodities);
 
 
 /* Create an optionmenu of available billing terms and attach it to

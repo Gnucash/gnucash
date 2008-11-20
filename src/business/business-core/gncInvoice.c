@@ -1282,7 +1282,7 @@ gnc_lot_sort_func (GNCLot *a, GNCLot *b)
 Transaction *
 gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
 		      Account *posted_acc, Account *xfer_acc,
-		      gnc_numeric amount, Timespec date,
+		      gnc_numeric amount, gnc_numeric exch, Timespec date,
 		      const char *memo, const char *num)
 {
   QofBook *book;
@@ -1296,6 +1296,7 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
   gnc_commodity *commodity;
   gnc_numeric split_amt;
   gboolean reverse, inv_passed = TRUE;
+  gnc_numeric payment_value=amount;
 
   /* Verify our arguments */
   if (!owner || !posted_acc || !xfer_acc) return NULL;
@@ -1318,6 +1319,7 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
   xaccTransSetDatePostedTS (txn, &date);
   xaccTransSetTxnType (txn, TXN_TYPE_PAYMENT);
 
+
   /* The split for the transfer account */
   split = xaccMallocSplit (book);
   xaccSplitSetMemo (split, memo);
@@ -1326,8 +1328,20 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
   xaccAccountInsertSplit (xfer_acc, split);
   xaccAccountCommitEdit (xfer_acc);
   xaccTransAppendSplit (txn, split);
-  xaccSplitSetBaseValue (split, reverse ? amount :
-			 gnc_numeric_neg (amount), commodity);
+
+  if (gnc_commodity_equal(xaccAccountGetCommodity(xfer_acc), commodity))
+  {
+      xaccSplitSetBaseValue (split, reverse ? amount :
+	    		     gnc_numeric_neg (amount), commodity);
+  }
+  else
+  {
+      /* Need to value the payment in terms of the owner commodity */
+      xaccSplitSetAmount(split, reverse ? amount : gnc_numeric_neg (amount));
+      payment_value = gnc_numeric_mul(amount, exch, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
+      xaccSplitSetValue(split, reverse ? payment_value : gnc_numeric_neg(payment_value));
+  }
+
 
   /* Now, find all "open" lots in the posting account for this
    * company and apply the payment on a FIFO basis.  Create
@@ -1397,20 +1411,20 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
     }
 
     /*
-     * If the amount <= the balance; we're done -- apply the amount.
-     * Otherwise, apply the balance, subtract that from the amount,
+     * If the payment_value <= the balance; we're done -- apply the payment_value.
+     * Otherwise, apply the balance, subtract that from the payment_value,
      * and move on to the next one.
      */
-    if (gnc_numeric_compare (amount, balance) <= 0) {
-      /* amount <= balance */
-      split_amt = amount;
+    if (gnc_numeric_compare (payment_value, balance) <= 0) {
+      /* payment_value <= balance */
+      split_amt = payment_value;
     } else {
-      /* amount > balance */
+      /* payment_value > balance */
       split_amt = balance;
     }
 
-    /* reduce the amount by split_amt */
-    amount = gnc_numeric_sub (amount, split_amt, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+    /* reduce the payment_value by split_amt */
+    payment_value = gnc_numeric_sub (payment_value, split_amt, GNC_DENOM_AUTO, GNC_DENOM_LCD);
 
     /* Create the split for this lot in the post account */
     split = xaccMallocSplit (book);
@@ -1427,14 +1441,14 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
     if (this_invoice)
       qof_event_gen (&this_invoice->inst, QOF_EVENT_MODIFY, NULL);
 
-    if (gnc_numeric_zero_p (amount))
+    if (gnc_numeric_zero_p (payment_value))
       break;
   }
 
   g_list_free (fifo);
 
   /* If there is still money left here, then create a pre-payment lot */
-  if (gnc_numeric_positive_p (amount)) {
+  if (gnc_numeric_positive_p (payment_value)) {
     if (prepay_lot == NULL) {
       prepay_lot = gnc_lot_new (book);
       gncOwnerAttachToLot (owner, prepay_lot);
@@ -1445,8 +1459,8 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
     xaccSplitSetAction (split, _("Pre-Payment"));
     xaccAccountInsertSplit (posted_acc, split);
     xaccTransAppendSplit (txn, split);
-    xaccSplitSetBaseValue (split, reverse ? gnc_numeric_neg (amount) :
-			   amount, commodity);
+    xaccSplitSetBaseValue (split, reverse ? gnc_numeric_neg (payment_value) :
+			   payment_value, commodity);
     gnc_lot_add_split (prepay_lot, split);
   }
 

@@ -160,7 +160,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables);
 Transaction *
 gncOwnerApplyPayment (GncOwner *owner, GncInvoice *invoice,
 		      Account *posted_acc, Account *xfer_acc,
-		      gnc_numeric amount, Timespec date,
+		      gnc_numeric amount, gnc_numeric exch, Timespec date,
 		      const char *memo, const char *num);
 
 
