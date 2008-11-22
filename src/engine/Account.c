@@ -2872,7 +2872,7 @@ gnc_account_set_start_cleared_balance (Account *acc,
   g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
   priv = GET_PRIVATE(acc);
-  priv->starting_balance = start_baln;
+  priv->starting_cleared_balance = start_baln;
   priv->balance_dirty = TRUE;
 }
 
@@ -2893,7 +2893,7 @@ gnc_account_set_start_reconciled_balance (Account *acc,
   g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
   priv = GET_PRIVATE(acc);
-  priv->starting_balance = start_baln;
+  priv->starting_reconciled_balance = start_baln;
   priv->balance_dirty = TRUE;
 }
 
