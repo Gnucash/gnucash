@@ -441,6 +441,10 @@ init_sql_backend( GncDbiBackend* dbi_be )
     be->load_config = NULL;
     be->get_config = NULL;
 
+	be->compile_query = gnc_sql_compile_query;
+	be->run_query = gnc_sql_run_query;
+	be->free_query = gnc_sql_free_query;
+
     be->export = NULL;
 
     if( !initialized ) {

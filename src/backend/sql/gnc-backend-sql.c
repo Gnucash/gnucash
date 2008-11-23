@@ -669,7 +669,7 @@ compile_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
     }
 }
 
-static gpointer
+gpointer
 gnc_sql_compile_query( QofBackend* pBEnd, QofQuery* pQuery )
 {
     GncSqlBackend *be = (GncSqlBackend*)pBEnd;
@@ -752,7 +752,7 @@ free_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
     }
 }
 
-static void
+void
 gnc_sql_free_query( QofBackend* pBEnd, gpointer pQuery )
 {
     GncSqlBackend *be = (GncSqlBackend*)pBEnd;
@@ -802,7 +802,7 @@ run_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
     }
 }
 
-static void
+void
 gnc_sql_run_query( QofBackend* pBEnd, gpointer pQuery )
 {
     GncSqlBackend *be = (GncSqlBackend*)pBEnd;

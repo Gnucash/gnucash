@@ -672,4 +672,8 @@ gboolean gnc_sql_commit_standard_item( GncSqlBackend* be, QofInstance* inst, con
 
 void _retrieve_guid_( gpointer pObject, gpointer pValue );
 
+gpointer gnc_sql_compile_query( QofBackend* pBEnd, QofQuery* pQuery );
+void gnc_sql_free_query( QofBackend* pBEnd, gpointer pQuery );
+void gnc_sql_run_query( QofBackend* pBEnd, gpointer pQuery );
+
 #endif /* GNC_BACKEND_SQL_H_ */

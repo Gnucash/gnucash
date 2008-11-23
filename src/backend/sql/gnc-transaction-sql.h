@@ -35,17 +35,18 @@
 void gnc_sql_init_transaction_handler( void );
 void gnc_sql_transaction_commit_splits( GncSqlBackend* be, Transaction* pTx );
 gboolean gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst );
-void gnc_sql_get_account_balances( GncSqlBackend* be, Account* pAccount, 
-								    gnc_numeric* start_balance,
-								    gnc_numeric* cleared_balance,
-									gnc_numeric* reconciled_balance );
 
 typedef struct {
 	Account* acct;
-	gnc_numeric start_balance;
+	gnc_numeric balance;
 	gnc_numeric cleared_balance;
 	gnc_numeric reconciled_balance;
 } acct_balances_t;
-GList* gnc_sql_get_account_balances_for_list( GncSqlBackend* be, GList* list );
+
+/**
+ * Returns a list of acct_balances_t structures, one for each account which
+ * has splits.
+ */
+GSList* gnc_sql_get_account_balances_slist( GncSqlBackend* be );
 
 #endif /* GNC_TRANSACTION_SQL_H_ */

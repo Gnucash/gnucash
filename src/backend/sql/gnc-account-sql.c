@@ -183,6 +183,8 @@ load_all_accounts( GncSqlBackend* be )
     Account* parent;
 	GList* l_accounts_needing_parents = NULL;
 	GList* list = NULL;
+	GSList* bal_slist;
+	GSList* bal;
 
 	g_return_if_fail( be != NULL );
 
@@ -245,6 +247,20 @@ load_all_accounts( GncSqlBackend* be )
             	gnc_account_append_child( root, s->pAccount ); 
 			}
 		}
+
+		/* Load starting balances */
+		bal_slist = gnc_sql_get_account_balances_slist( be );
+		for( bal = bal_slist; bal != NULL; bal = bal->next ) {
+			acct_balances_t* balances = (acct_balances_t*)bal->data;
+
+			g_object_set( balances->acct,
+                			"start-balance", &balances->balance,
+                			"start-cleared-balance", &balances->cleared_balance,
+                			"start-reconciled-balance", &balances->reconciled_balance,
+                			NULL);
+
+		}
+		g_slist_free( bal_slist );
 	}
 }
 
