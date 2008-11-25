@@ -1,0 +1,1366 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Alle rekeningen
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Volledig overzicht van alle rekeningen.
+    </gnc-act:short-description>
+<gnc:account version="2.0.0">
+  <act:name>Hoofdrekening</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Activa</act:name>
+  <act:id type="new">c942789c77cfdd65bc6e4c12900f0805</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Activa</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Huidige Activa</act:name>
+  <act:id type="new">f23dcf070835b376a95a7a06dbb62e59</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Huidige Activa</act:description>
+  <act:parent type="new">c942789c77cfdd65bc6e4c12900f0805</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Deposito</act:name>
+  <act:id type="new">e2f05a66ad8fb10a4f4d2d1ecdc6a13d</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Deposito</act:description>
+  <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Lopende Rekening</act:name>
+  <act:id type="new">a58419050d3b82f7f156658a98929df2</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Lopende Rekening</act:description>
+  <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Geldmarkt</act:name>
+  <act:id type="new">fc68a65077344e22b08d805ddcbf4dc8</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Geldmarkt</act:description>
+  <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Spaarrekening</act:name>
+  <act:id type="new">bd6088ea984f27470c8ef4b8fc0826c1</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Spaarrekening</act:description>
+  <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kas</act:name>
+  <act:id type="new">d8232291d80c3d558e51d1e08cc3e85d</act:id>
+  <act:type>CASH</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Kas</act:description>
+  <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Vaste Activa</act:name>
+  <act:id type="new">c188686b29b9104da292aed8c2ca8541</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Vaste Activa</act:description>
+  <act:parent type="new">c942789c77cfdd65bc6e4c12900f0805</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Vaste Activa</act:name>
+  <act:id type="new">1d81c657af6cce36422ce3d7eb782bfc</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Vaste Activa</act:description>
+  <act:parent type="new">c188686b29b9104da292aed8c2ca8541</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Overige Activa</act:name>
+  <act:id type="new">b7ac61cf72bc19c6b3917db1063908c6</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Overige Activa</act:description>
+  <act:parent type="new">c188686b29b9104da292aed8c2ca8541</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Wagenpark</act:name>
+  <act:id type="new">71b413a7042e74974115333fd3d6f496</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Wagenpark</act:description>
+  <act:parent type="new">c188686b29b9104da292aed8c2ca8541</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Investeringen</act:name>
+  <act:id type="new">0efa7e60042a8d5e4f07a2e6f76bb66d</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Investeringen</act:description>
+  <act:parent type="new">c942789c77cfdd65bc6e4c12900f0805</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Beleggingsrekening</act:name>
+  <act:id type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Beleggingsrekening</act:description>
+  <act:parent type="new">0efa7e60042a8d5e4f07a2e6f76bb66d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Obligaties</act:name>
+  <act:id type="new">7e0a0149682cc309278987426b5f9b82</act:id>
+  <act:type>STOCK</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Obligaties</act:description>
+  <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aandelen</act:name>
+  <act:id type="new">4599087f4755245fbc052ec425c0094b</act:id>
+  <act:type>STOCK</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Aandelen</act:description>
+  <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Marktindex</act:name>
+  <act:id type="new">00710d6bd400e580c7e4f3d0795ef2ab</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Marktindex</act:description>
+  <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Fondsen</act:name>
+  <act:id type="new">d8e24554e11c296b79b33953cba093de</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Fondsen</act:description>
+  <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pensioen</act:name>
+  <act:id type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Pensioen</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">IRA, 401(k), or other retirement</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">0efa7e60042a8d5e4f07a2e6f76bb66d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Obligaties</act:name>
+  <act:id type="new">4c272ebf68c058a45dde6be718ad9321</act:id>
+  <act:type>STOCK</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Obligaties</act:description>
+  <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aandelen</act:name>
+  <act:id type="new">8aa76ecd4acf6b32280711f198787e4f</act:id>
+  <act:type>STOCK</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Aandelen</act:description>
+  <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Marktindex</act:name>
+  <act:id type="new">00c1dd188a5a3ffe26baf4afbe358adc</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Marktindex</act:description>
+  <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Fondsen</act:name>
+  <act:id type="new">f3e62c6cf53adb5637b765b45b8df6c3</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Fondsen</act:description>
+  <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pensioen Echtgenoot/Partner</act:name>
+  <act:id type="new">eacb6de7f8896665d150d7dcb0a0b521</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Pensioen Echtgenoot/Partner</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">IRA, 401(k), or other retirement</slot:value>
+    </slot>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">0efa7e60042a8d5e4f07a2e6f76bb66d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Obligaties</act:name>
+  <act:id type="new">aefb6c2cb4fe8ef354f4aaa2d8a6aac6</act:id>
+  <act:type>STOCK</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Obligaties</act:description>
+  <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aandelen</act:name>
+  <act:id type="new">bebd94871a7e14592cae393381e6f733</act:id>
+  <act:type>STOCK</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Aandelen</act:description>
+  <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Marktindex</act:name>
+  <act:id type="new">255ac00eae374e6893a934f5094d4d90</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Marktindex</act:description>
+  <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Fondsen</act:name>
+  <act:id type="new">217ffae020de3df2671b4c247035d9df</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Fondsen</act:description>
+  <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Buitenlandse Geldmarkt</act:name>
+  <act:id type="new">66641bfe13094125067d5cb9e0bbddf0</act:id>
+  <act:type>CURRENCY</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DEM</cmdty:id>
+  </act:commodity
+  <act:description>Buitenlandse Geldmarkt</act:description>
+  <act:parent type="new">0efa7e60042a8d5e4f07a2e6f76bb66d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Passiva</act:name>
+  <act:id type="new">eeb68231aa8330bb6e3a747ffd94c07f</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Passiva</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Creditkaart</act:name>
+  <act:id type="new">ae4c4552746eed9927cee195e7965dd8</act:id>
+  <act:type>CREDIT</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Creditkaart</act:description>
+  <act:parent type="new">eeb68231aa8330bb6e3a747ffd94c07f</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kredietlijn</act:name>
+  <act:id type="new">4c95c4842d41f421c3e715f60eca8cce</act:id>
+  <act:type>CREDIT</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Kredietlijn</act:description>
+  <act:parent type="new">eeb68231aa8330bb6e3a747ffd94c07f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Leningen</act:name>
+  <act:id type="new">c24e85723783d9ec27d9042c61b1673e</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Leningen</act:description>
+  <act:parent type="new">eeb68231aa8330bb6e3a747ffd94c07f</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Studiefinanciering</act:name>
+  <act:id type="new">44b1db96fbb3582be7df3cb69b280d98</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Studiefinanciering</act:description>
+  <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Hypotheek</act:name>
+  <act:id type="new">f8d2f4753875905bf13f40495f51d382</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Hypotheek</act:description>
+  <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Overige Leningen</act:name>
+  <act:id type="new">f1f25c96e2e452924c1707d1368e235b</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Overige Leningen</act:description>
+  <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Wagenparklening</act:name>
+  <act:id type="new">8e5190568ac6f8d96b0162e80d649dea</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Wagenparklening</act:description>
+  <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Inkomen</act:name>
+  <act:id type="new">dcf25b179583108b12c1c36f044f2bf7</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Inkomen</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bonus</act:name>
+  <act:id type="new">db19175a8749bb90e5d4a535db7aa509</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Bonus</act:description>
+  <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Dividenduitkering</act:name>
+  <act:id type="new">f230ee8a41e285ff4b9a02c7a7d1255c</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Dividenduitkering</act:description>
+  <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ontvangen Giften</act:name>
+  <act:id type="new">9bb39b906c8797a8a9302087c80a75a3</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Ontvangen Giften</act:description>
+  <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Rente</act:name>
+  <act:id type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Rente</act:description>
+  <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Obligatierente</act:name>
+  <act:id type="new">26528cbd37abdfa623eb237a78eaeb28</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Obligatierente</act:description>
+  <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Deposito Rente</act:name>
+  <act:id type="new">87d975472429aa388923d5674db26e10</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Deposito Rente</act:description>
+  <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Rente Lopende Rekening</act:name>
+  <act:id type="new">8e12304ec75b0562e8e7e5f1d3ef3f87</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Rente Lopende Rekening</act:description>
+  <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Geldmarktrente</act:name>
+  <act:id type="new">170912c87f795e4715d22dff03ee68b7</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Geldmarktrente</act:description>
+  <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Overige Rente</act:name>
+  <act:id type="new">e52426c9cd9b0366a900e617b430d743</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Overige Rente</act:description>
+  <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Spaarrente</act:name>
+  <act:id type="new">236e074cb18481c1c29018ddde5611f2</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Spaarrente</act:description>
+  <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Overig Inkomsten</act:name>
+  <act:id type="new">ba7f00e1972eead75456d0cb492cc7f0</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Overig Inkomsten</act:description>
+  <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Salaris</act:name>
+  <act:id type="new">512c7af596fe774137b66e3533c8f055</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Salaris</act:description>
+  <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Salaris (Echtgenoot/Partner)</act:name>
+  <act:id type="new">ba57742bca4aa6d9d5978e191601a3eb</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Salaris (Echtgenoot/Partner)</act:description>
+  <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Onkosten</act:name>
+  <act:id type="new">d971e6172c344b6ce569f1af76b5dce1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Onkosten</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Correcties</act:name>
+  <act:id type="new">ab7be937a05748c1be3d9ef1785f4519</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Correcties</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Afschrijving Wagenpark</act:name>
+  <act:id type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Afschrijving Wagenpark</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Toeslagen</act:name>
+  <act:id type="new">f812e775ecd98d235dffb3ebd83c4b3b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Toeslagen</act:description>
+  <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Brandstof</act:name>
+  <act:id type="new">a4d661a2ba6410a74e4c70128bb275ba</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Brandstof</act:description>
+  <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Parkeren</act:name>
+  <act:id type="new">a4538c6a7aa7f6020b98e733b7d5dc40</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Parkeren</act:description>
+  <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Reparaties/Onderhoud</act:name>
+  <act:id type="new">f70be35deecc0a3984cbd7ce2e4c77c5</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Reparaties/Onderhoud</act:description>
+  <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bankkosten</act:name>
+  <act:id type="new">feab2e317232f98a5ebc859a8b4ee906</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Bankkosten</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Boeken</act:name>
+  <act:id type="new">f93635e6a5f1ef83d9d54dc8edea3de7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Boeken</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Centrale Antenne Inrichting</act:name>
+  <act:id type="new">509b8795a9e5e0cbd634e5247b4188a9</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Centrale Antenne Inrichting</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Giften</act:name>
+  <act:id type="new">5c0c0e895a39b6a0d953d28f701fc8e6</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Giften</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kinderopvang</act:name>
+  <act:id type="new">f9b8ecd89294fba3e3a6af75722568b3</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Kinderopvang</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kleding</act:name>
+  <act:id type="new">245f0820b7733c540cbef67a891e270c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Kleding</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Commissies</act:name>
+  <act:id type="new">0bd7305ca93854747f81a62b39725947</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Commissies</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Computer</act:name>
+  <act:id type="new">58bef76d9de74e726019590a8b666fd8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Computer</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Dineren</act:name>
+  <act:id type="new">36a0ecee5cdf0147988e75b440b4fc22</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Dineren</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Opleidingen</act:name>
+  <act:id type="new">bd907e7b878af870e05595df89a7ed70</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Opleidingen</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Amusement</act:name>
+  <act:id type="new">f8194ec13425c8d3adb62a87e48dbe42</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Amusement</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Muziek/Film</act:name>
+  <act:id type="new">d96f97bf73335793d3746e8d049d9403</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Muziek/Film</act:description>
+  <act:parent type="new">f8194ec13425c8d3adb62a87e48dbe42</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Recreatie</act:name>
+  <act:id type="new">b4b6cfe725a71b5aa8878679e4487ecb</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Recreatie</act:description>
+  <act:parent type="new">f8194ec13425c8d3adb62a87e48dbe42</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Reizen</act:name>
+  <act:id type="new">a6713e6f8776c9450256e144d95dc111</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Reizen</act:description>
+  <act:parent type="new">f8194ec13425c8d3adb62a87e48dbe42</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Geschenken</act:name>
+  <act:id type="new">acebcd1a292f0686f390aaaa9264a850</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Geschenken</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Boodschappen</act:name>
+  <act:id type="new">c1c9fdbb40055c8942653c92b6d09676</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Boodschappen</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Hobby's</act:name>
+  <act:id type="new">58b0de20ba38fad88958e31cf59e3f68</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Hobby's</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Onderhoud Vaste Activa</act:name>
+  <act:id type="new">0e10decd3e859abaaa133be5ba907c08</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Onderhoud Vaste Activa</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Verzekeringen</act:name>
+  <act:id type="new">165046096e7e0979a0470bfe28de4cf3</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Verzekeringen</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Autoverzekering</act:name>
+  <act:id type="new">ecfb7eba411756d5562027255f948362</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Autoverzekering</act:description>
+  <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gezondheidsverzekering</act:name>
+  <act:id type="new">4879a1e9f1046516fc9c96ab9e7d135b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Gezondheidsverzekering</act:description>
+  <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Inboedelverzekering</act:name>
+  <act:id type="new">af0037a765c4c400161a19900e791969</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Inboedelverzekering</act:description>
+  <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Levensverzekering</act:name>
+  <act:id type="new">f849aa8e2df7241dd4bb30e9ff79b982</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Levensverzekering</act:description>
+  <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Inboedelverzekering</act:name>
+  <act:id type="new">3e2212f779cf5feb6ecdf210a1f27c50</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Inboedelverzekering</act:description>
+  <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Rente</act:name>
+  <act:id type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Rente</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Rente Studiefinanciering</act:name>
+  <act:id type="new">3b54390a95a8fb5ad0830765f0db7bbf</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Rente Studiefinanciering</act:description>
+  <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Hypotheekrente</act:name>
+  <act:id type="new">5314f613166cf952aa83086ceb31858b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Hypotheekrente</act:description>
+  <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Overige Rente</act:name>
+  <act:id type="new">a026778e8671ff552fc1db361c827bd3</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Overige Rente</act:description>
+  <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Autoleaserente</act:name>
+  <act:id type="new">c410f2c057c1b219b4ea9ebf90f34492</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Autoleaserente</act:description>
+  <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+	<act:name>Was/Stomerij</act:name>
+  <act:id type="new">db0be14af195878c6ee87346344c7aac</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Was/Stomerij</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Zorgverzekeringskosten</act:name>
+  <act:id type="new">cf091aca54380ecbf2d4bc3d88f37a00</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Zorgverzekeringskosten</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Diversen</act:name>
+  <act:id type="new">31f399cfc9289ce07105dbf0ebfd725b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Diversen</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Online-diensten</act:name>
+  <act:id type="new">7dd178de8586033654a06b98bee7eb7b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Online-diensten</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Telefoon</act:name>
+  <act:id type="new">a2657d9df178ff47fb608128838c3562</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Telefoon</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Openbaar Vervoer</act:name>
+  <act:id type="new">e8fd2b3d711c9b8eff7b119cedf5bf04</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Openbaar Vervoer</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Huur</act:name>
+  <act:id type="new">d52369b08c150d14c894c32ebf758e97</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Huur</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Abonnementen</act:name>
+  <act:id type="new">ea59a2f59d6049cc7cb4d0becef15a13</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Abonnementen</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Voorraad</act:name>
+  <act:id type="new">690ddda611710f6e4afefcfb9b83d5f5</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Voorraad</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Belastingen</act:name>
+  <act:id type="new">c0ad45e7b335ee715b26ee11457da5cc</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Belastingen</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Federaal</act:name>
+  <act:id type="new">fb15d987b277d68e960989397b82c903</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Federaal</act:description>
+  <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Zorgverzekeringen</act:name>
+  <act:id type="new">0517c53d7390b4a6fd3d4590fb9e5a37</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Zorgverzekeringen</act:description>
+  <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Overige Belastingen</act:name>
+  <act:id type="new">e0cfe3e8b1d1578bdfa87b6ab93a65d8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Overige Belastingen</act:description>
+  <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Onroerendgoedbelasting</act:name>
+  <act:id type="new">c51f0cacdcacf37a9f089fc5712e06e5</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Onroerendgoedbelasting</act:description>
+  <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sociale Zekerheid</act:name>
+  <act:id type="new">6143875cd54c1d42b0eb5d8165424320</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Sociale Zekerheid</act:description>
+  <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Provincie</act:name>
+  <act:id type="new">4d77f8743da33d910b119ab71d1d3de0</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Provincie</act:description>
+  <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Belasting (Echtgenoot/Partner)</act:name>
+  <act:id type="new">63427014f39c577ee7aaeac3603d3d1f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Belasting (Echtgenoot/Partner)</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Federaal</act:name>
+  <act:id type="new">bed90f2f5a34174b1411af26d5a3be66</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Federaal</act:description>
+  <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Zorgverzekeringen</act:name>
+  <act:id type="new">d875462cb5d15112c2e803b03b8d1ab7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Zorgverzekeringen</act:description>
+  <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Overige Belastingen</act:name>
+  <act:id type="new">1d9c9ea015bd54e5950c408c43d26814</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Overige Belastingen</act:description>
+  <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sociale Zekerheid</act:name>
+  <act:id type="new">92c0ce430b98ed01dbdff9c6f6ecbb74</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Sociale Zekerheid</act:description>
+  <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Provincie</act:name>
+  <act:id type="new">6d729d9b8356d9ee9af50b6dae4bcce9</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Provincie</act:description>
+  <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Nutsbedrijven</act:name>
+  <act:id type="new">7eecc2df800a0b8854343703d9cfae00</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Nutsbedrijven</act:description>
+  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Elektriciteit</act:name>
+  <act:id type="new">141513d42098eb6692cf9473a8af1dc8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Elektriciteit</act:description>
+  <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gemeentereiniging</act:name>
+  <act:id type="new">32e63639b9c11290ea1992ef495886d5</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Gemeentereiniging</act:description>
+  <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Stookkosten</act:name>
+  <act:id type="new">82576b22dca07135a0d0dc6b8c75bcae</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Stookkosten</act:description>
+  <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Water</act:name>
+  <act:id type="new">5fe26045f26b9054b5edf944d7e66f94</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Water</act:description>
+  <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Eigen Vermogen</act:name>
+  <act:id type="new">68d4074f91295062c0b773b4ae8de6bd</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Eigen Vermogen</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Openingsbalans</act:name>
+  <act:id type="new">934f33a49a656d1813398f0e73bc3cd7</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity
+  <act:description>Openingsbalans</act:description>
+  <act:parent type="new">68d4074f91295062c0b773b4ae8de6bd</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->
