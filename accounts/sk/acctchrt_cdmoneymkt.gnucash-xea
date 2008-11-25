@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <gnc-account-example>
     <gnc-act:title>
-	Depozitný certifikát a peňažný trh
+      Depozitné certifikáty a peňažný trh
     </gnc-act:title>
     <gnc-act:short-description>
-	Účty pre depozitné certifikáty a investície na peňažnom trhu
+     Účty pre depozitné certifikáty a investície na peňažnom trhu
     </gnc-act:short-description>
     <gnc-act:long-description>
-	Zvoľte si túto sadu účtov, ak vlastníte depozitné certifikáty alebo investujete na peňažnom trhu.
+    Zvoľte si túto sadu účtov, ak máte depozitné certifikáty, alebo investujete na peňažnom trhu.
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -19,88 +19,106 @@
   <act:name>Aktíva</act:name>
   <act:id type="new">7b1a39efc6234d1db148baa722c9471e</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Aktíva</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Bežné aktíva</act:name>
+  <act:name>Obežný majetok</act:name>
   <act:id type="new">1880e89ec9fe82622b8648df481dd2b7</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Bežné aktíva</act:description>
+  </act:commodity>
+  <act:description>Obežný majetok</act:description>
   <act:parent type="new">7b1a39efc6234d1db148baa722c9471e</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-    <act:name>Depozitný certifikát</act:name>
+  <act:name>Bankové depozitné certifikáty</act:name>
   <act:id type="new">c1620f9c3082e33d8fd559e17f90a122</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Depozitný certifikát</act:description>
+  </act:commodity>
+  <act:description>Bankové depozitné certifikáty</act:description>
   <act:parent type="new">1880e89ec9fe82622b8648df481dd2b7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Peňažný trh</act:name>
   <act:id type="new">3a01e5b0132ba26803b49732a3242654</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Peňažný trh</act:description>
   <act:parent type="new">1880e89ec9fe82622b8648df481dd2b7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Príjem</act:name>
+  <act:name>Príjmy</act:name>
   <act:id type="new">4b3e36f325569b80efc7d3331bdf851b</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Príjem</act:description>
+  </act:commodity>
+  <act:description>Príjmy</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Úrokový príjem</act:name>
+  <act:name>Úrokové príjmy</act:name>
   <act:id type="new">fd131cae797d1fb83c2e2bf57254eca5</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Úrokový príjem</act:description>
+  </act:commodity>
+  <act:description>Úrokové príjmy</act:description>
   <act:parent type="new">4b3e36f325569b80efc7d3331bdf851b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Úrok depozitného certifikátu</act:name>
+  <act:name>Úroky z depozitných certifikátov</act:name>
   <act:id type="new">28d311f0f38da5e35628e76ad8bcc853</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Úrok depozitného certifikátu</act:description>
+  </act:commodity>
+  <act:description>Úroky z depozitných certifikátov</act:description>
   <act:parent type="new">fd131cae797d1fb83c2e2bf57254eca5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Úrok peňažného trhu</act:name>
+  <act:name>Úroky z peňažného trhu</act:name>
   <act:id type="new">dc537946f39e84ccef7ce38f016249af</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Úrok peňažného trhu</act:description>
+  </act:commodity>
+  <act:description>Úroky z peňažného trhu</act:description>
   <act:parent type="new">fd131cae797d1fb83c2e2bf57254eca5</act:parent>
 </gnc:account>
 </gnc-account-example>

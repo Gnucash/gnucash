@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <gnc-account-example>
     <gnc-act:title>
-      Úver na auto 
+      Úver na auto
     </gnc-act:title>
     <gnc-act:short-description>
-      Účty pre úver na auto
+      Účty pre úver na auto a prislúchajúce úroky
     </gnc-act:short-description>
     <gnc-act:long-description>
-	Zvoľte si túto sadu účtov, ak ste si zobrali pôžičku na auto.
+    Zvoľte túto sadu účtov, ak máte úver na auto (úver na auto, úroky z úveru na auto).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -16,69 +16,87 @@
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Pasíva</act:name>
+  <act:name>Záväzky</act:name>
   <act:id type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Pasíva</act:description>
+  </act:commodity>
+  <act:description>Záväzky</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Dlhy</act:name>
+  <act:name>Úvery</act:name>
   <act:id type="new">023e2343114b3d695feaeb96904e0da6</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Dlhy</act:description>
+  </act:commodity>
+  <act:description>Úvery</act:description>
   <act:parent type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Úver na dopravný prostriedok</act:name>
+  <act:name>Úver na auto</act:name>
   <act:id type="new">3e5f44fd7bfaa9cae737a4113a749e36</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Úver na dopravný prostriedok</act:description>
+  </act:commodity>
+  <act:description>Úver na auto</act:description>
   <act:parent type="new">023e2343114b3d695feaeb96904e0da6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Výdaje</act:name>
+  <act:name>Výdavky</act:name>
   <act:id type="new">acacdcb998e45fb741766622e8542f0b</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Výdaje</act:description>
+  </act:commodity>
+  <act:description>Výdavky</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Úrok</act:name>
+  <act:name>Úroky</act:name>
   <act:id type="new">9e8495e80ebfb762089be917dff7ab72</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Úrok</act:description>
+  </act:commodity>
+  <act:description>Úroky</act:description>
   <act:parent type="new">acacdcb998e45fb741766622e8542f0b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Úrok z úveru na dopravný prostriedok</act:name>
+  <act:name>Úroky z úveru na auto</act:name>
   <act:id type="new">e9bd8477e27361238d2f53c4fe7594ab</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Úrok z úveru na dopravný prostriedok</act:description>
+  </act:commodity>
+  <act:description>Úroky z úveru na auto</act:description>
   <act:parent type="new">9e8495e80ebfb762089be917dff7ab72</act:parent>
 </gnc:account>
 </gnc-account-example>

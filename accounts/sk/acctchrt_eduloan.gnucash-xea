@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <gnc-account-example>
     <gnc-act:title>
-      Študijná pôžička 
+      Študentská pôžička 
     </gnc-act:title>
     <gnc-act:short-description>
-      Účty pre študijnú pôžičku
+      Účty pre študentskú pôžičku a zodpovedajúce úroky
     </gnc-act:short-description>
     <gnc-act:long-description>
-	Zvoľte si túto sadu účtov, ak ste si zobrali pôžičku na štúdium.
+    Zvoľte si túto sadu účtov, ak máte študentskú pôžičku (študentská pôžička, úroky zo študentskej pôžičky).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -16,69 +16,87 @@
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Pasíva</act:name>
+  <act:name>Záväzky</act:name>
   <act:id type="new">4e7e8e39487ad4aba0b62c2232c577c5</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Pasíva</act:description>
+  </act:commodity>
+  <act:description>Záväzky</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Dlhy</act:name>
+  <act:name>Úvery</act:name>
   <act:id type="new">c3219e37044b0531d66a7b64433b026d</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Dlhy</act:description>
+  </act:commodity>
+  <act:description>Úvery</act:description>
   <act:parent type="new">4e7e8e39487ad4aba0b62c2232c577c5</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-    <act:name>Študijná pôžička</act:name>
+  <act:name>Študentská pôžička</act:name>
   <act:id type="new">ddeba367199bd025e00420a19d6f9ae4</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Študijná pôžička</act:description>
+  </act:commodity>
+  <act:description>Študentská pôžička</act:description>
   <act:parent type="new">c3219e37044b0531d66a7b64433b026d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Výdaje</act:name>
+  <act:name>Výdavky</act:name>
   <act:id type="new">fdbf47b39f70e8818f325eee7931039a</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Výdaje</act:description>
+  </act:commodity>
+  <act:description>Výdavky</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Úrok</act:name>
+  <act:name>Úroky</act:name>
   <act:id type="new">1cfcd30ea97b954ffb550ab87d561033</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Úrok</act:description>
+  </act:commodity>
+  <act:description>Úroky</act:description>
   <act:parent type="new">fdbf47b39f70e8818f325eee7931039a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Úrok zo študijnej pôžičky</act:name>
+  <act:name>Úroky zo študentskej pôžičky</act:name>
   <act:id type="new">04e3d970dc60d3920f40b93fce8924a2</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Úrok zo študijnej pôžičky</act:description>
+  </act:commodity>
+  <act:description>Úroky zo študentskej pôžičky</act:description>
   <act:parent type="new">1cfcd30ea97b954ffb550ab87d561033</act:parent>
 </gnc:account>
 </gnc-account-example>

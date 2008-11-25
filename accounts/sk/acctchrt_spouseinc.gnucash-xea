@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <gnc-account-example>
     <gnc-act:title>
-	Manželov/Manželkin príjem
+      Partnerove príjmy
     </gnc-act:title>
     <gnc-act:short-description>
-	Účty na osobitné zaznamenávanie príjmu životného partnera
+     Účty pre oddelené sledovanie partnerovych príjmov
     </gnc-act:short-description>
     <gnc-act:long-description>
-	Túto sadu účtov si zvoľte, ak váš životný partner pracuje.
+    Zvoľte si túto sadu účtov, ak máte pracujúceho partnera (mzda (partnerova), dane (partnerove)).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -16,79 +16,91 @@
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Príjem</act:name>
+  <act:name>Príjmy</act:name>
   <act:id type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Príjem</act:description>
+  </act:commodity>
+  <act:description>Príjmy</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Mzda (Partnerova)</act:name>
+  <act:name>Mzda (partnerova)</act:name>
   <act:id type="new">7c4495ff132d100b0aa339ce683200dd</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Partnerova mzda</act:description>
+  </act:commodity>
+  <act:description>Mzda (partnerova)</act:description>
   <act:parent type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Výdaje</act:name>
+  <act:name>Výdavky</act:name>
   <act:id type="new">1884bbd7394883ebafec8b9e2eb091a4</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Výdaje</act:description>
+  </act:commodity>
+  <act:description>Výdavky</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-    <act:name>Dane a poplatky (Partnerove)</act:name>
+  <act:name>Dane a odvody (partnerove)</act:name>
   <act:id type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Partnerove dane a poplatky</act:description>
+  </act:commodity>
+  <act:description>Dane a odvody (partnerove)</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Celoštátne dane</act:name>
   <act:id type="new">78df9cf06ee197272a695a4c3044f749</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Celoštátne dane</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Zdravotná starostlivosť</act:name>
+  <act:name>Zdravotné poistenie</act:name>
   <act:id type="new">eba0c095658c7c3a4f4294db9c7392f3</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Zdravotná starostlivosť</act:description>
+  </act:commodity>
+  <act:description>Zdravotné poistenie</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ostatné dane</act:name>
   <act:id type="new">dea0cf67026749c9a5aa97be4e5cd052</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Ostatné dane</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
@@ -96,10 +108,10 @@
   <act:name>Sociálne poistenie</act:name>
   <act:id type="new">9bd3abb2ed8c4c0d00f8e8ec36d2744d</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Sociálne poistenie</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
@@ -107,10 +119,10 @@
   <act:name>Miestne dane</act:name>
   <act:id type="new">aa14dbcd622024495a8a972b0f37d13a</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Miestne dane</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>

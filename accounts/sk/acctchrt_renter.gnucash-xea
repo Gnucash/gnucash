@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <gnc-account-example>
     <gnc-act:title>
-	Výdavky na nájomné
+      Výdavky na nájomné
     </gnc-act:title>
     <gnc-act:short-description>
       Výdavky spojené s nájmom domu
     </gnc-act:short-description>
     <gnc-act:long-description>
-	Túto sadu účtov si zvoľte, ak si prenajímate dom alebo byt (nájomné, poistenie)
+    Zvoľte si túto sadu účtov, ak máte prenajatý dom alebo byt (nájomné, poistenie nájomného).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -16,24 +16,30 @@
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Výdaje</act:name>
+  <act:name>Výdavky</act:name>
   <act:id type="new">9a2b4520f113372f4e576f5b6dc129c6</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Výdaje</act:description>
+  </act:commodity>
+  <act:description>Výdavky</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Poistenie</act:name>
   <act:id type="new">b79b231807a98cd562c46cf0454e9f25</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Poistenie</act:description>
   <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
 </gnc:account>
@@ -41,10 +47,10 @@
   <act:name>Poistenie nájomného</act:name>
   <act:id type="new">a4c93c964b8322d534e35b7054cbda4d</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Poistenie nájomného</act:description>
   <act:parent type="new">b79b231807a98cd562c46cf0454e9f25</act:parent>
 </gnc:account>
@@ -52,10 +58,10 @@
   <act:name>Nájomné</act:name>
   <act:id type="new">c1638a9a48d4d0e1b17d99219a18f34b</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Nájomné</act:description>
   <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
 </gnc:account>

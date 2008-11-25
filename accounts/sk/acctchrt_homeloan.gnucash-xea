@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <gnc-account-example>
     <gnc-act:title>
-      Hypotekárny úver
+      Hypoterkárny úver
     </gnc-act:title>
     <gnc-act:short-description>
-     Účty pre hypotekárny úver a s tým súvisiaci úrok 
+     Účty pre hypotekárny úver a zodpovedajúce úroky
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Zvoľte si túto sadu účtov, ak ste si zobrali úver na dom (hypoteku).
+    Zvoľte si túto sadu účtov, ak máte hypotekárny úver na dom (hypotekárny úver, úroky z hypotekárneho úveru).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -16,69 +16,88 @@
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Pasíva</act:name>
+  <act:name>Záväzky</act:name>
   <act:id type="new">6664763bd1ea41462cba5ef856d9c00c</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Pasíva</act:description>
+  </act:commodity>
+  <act:description>Záväzky</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Dlhy</act:name>
+  <act:name>Úvery</act:name>
   <act:id type="new">2e6e2d91551cff7b1fd8d6eb34c12117</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Dlhy</act:description>
+  </act:commodity>
+  <act:description>Úvery</act:description>
   <act:parent type="new">6664763bd1ea41462cba5ef856d9c00c</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Hypotekárny úver</act:name>
   <act:id type="new">4df1b393c218d9047dd22d33d2737e83</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Hypotekárny úver</act:description>
   <act:parent type="new">2e6e2d91551cff7b1fd8d6eb34c12117</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Výdaje</act:name>
+  <act:name>Výdavky</act:name>
   <act:id type="new">2f076f5ae073173a11d33420cd39fa4d</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Výdaje</act:description>
+  </act:commodity>
+  <act:description>Výdavky</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Úrok</act:name>
+  <act:name>Úroky</act:name>
   <act:id type="new">3dc58d8a51b5deaa22e0c65d81e90346</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Úrok</act:description>
+  </act:commodity>
+  <act:description>Úroky</act:description>
   <act:parent type="new">2f076f5ae073173a11d33420cd39fa4d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Hypotekárny úrok</act:name>
+  <act:name>Úroky z hypotekárneho úveru</act:name>
   <act:id type="new">c1e23fa813d3c8c4a8ea1228a7615b79</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Hypotekárny úrok</act:description>
+  </act:commodity>
+  <act:description>Úroky z hypotekárneho úveru</act:description>
   <act:parent type="new">3dc58d8a51b5deaa22e0c65d81e90346</act:parent>
 </gnc:account>
 </gnc-account-example>

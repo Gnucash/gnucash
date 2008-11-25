@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <gnc-account-example>
     <gnc-act:title>
-	Výdavky na staroslivosť o dieťa
+      Výdavky na starostlivosť o dieťa
     </gnc-act:title>
     <gnc-act:short-description>
-  	Účet na zaznamenávanie výdavkov na starostlivosť o dieťa
+      Účet na sledovanie výdavkov na starostlivosť o dieťa
     </gnc-act:short-description>
     <gnc-act:long-description>
-	Zvoľte si túto sadu účtov, ak máte výdavky na starostlivosť o dieťa.
+    Zvoľte si túto sadu účtov, ak máte výdavky na starostlivosť o dieťa.
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -16,24 +16,30 @@
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Výdaje</act:name>
+  <act:name>Výdavky</act:name>
   <act:id type="new">ee8238ee2c2ce590160761df09b99b72</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Výdaje</act:description>
+  </act:commodity>
+  <act:description>Výdavky</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Staroslivosť o dieťa</act:name>
+  <act:name>Starostlivosť o dieťa</act:name>
   <act:id type="new">8999739a6bfc46088a3ea5ec45e5f8a4</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Starostlivosť o dieťa</act:description>
   <act:parent type="new">ee8238ee2c2ce590160761df09b99b72</act:parent>
 </gnc:account>

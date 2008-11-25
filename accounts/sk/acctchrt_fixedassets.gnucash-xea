@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <gnc-account-example>
     <gnc-act:title>
-	Fixné aktíva
+      Neobežný majetok
     </gnc-act:title>
     <gnc-act:short-description>
-	Účty pre zaznamenávanie rozsiahlych fixných aktív
+      Účty pre sledovanie veľkého neobežného majetku
     </gnc-act:short-description>
     <gnc-act:long-description>
-	Zvoľte si túto sadu účtov, ak vlastníte veľké fixné aktíva (dom, dopravné prostriedky, ostatné aktíva).
+    Zvoľte si túto sadu účtov, ak máte veľký neobežný majetok (dom, auto, chatu, ostatný majetok).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -19,55 +19,67 @@
   <act:name>Aktíva</act:name>
   <act:id type="new">64b6276c060185131cecbd1ac6218440</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Aktíva</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Fixné aktíva</act:name>
+  <act:name>Neobežný majetok</act:name>
   <act:id type="new">9b171f77000bf68dd1ebbaf58336656d</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Fixné aktíva</act:description>
+  </act:commodity>
+  <act:description>Neobežný majetok</act:description>
   <act:parent type="new">64b6276c060185131cecbd1ac6218440</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dom</act:name>
   <act:id type="new">9205ad6b6482903e5a696602d491c8f5</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Dom</act:description>
   <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ostatné aktíva</act:name>
+  <act:name>Ostatný majetok</act:name>
   <act:id type="new">ad3b239297277c9ef3840c0433cecb18</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Ostatné aktíva</act:description>
+  </act:commodity>
+  <act:description>Ostatný majetok</act:description>
   <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-    <act:name>Dopravný prostriedok</act:name>
+  <act:name>Auto</act:name>
   <act:id type="new">5913089ffc36df6f0a5d96a5d7a444c0</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:description>Dopravný prostriedok</act:description>
+  </act:commodity>
+  <act:description>Auto</act:description>
   <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
 </gnc-account-example>
