@@ -1216,6 +1216,15 @@ gnc_html_export(gnc_html * html, const char *filepath)
   return TRUE;
 }
 
+static GtkHTML *
+gnc_html_get_top_html (GtkHTML *html)
+{
+  while (html->iframe_parent)
+    html = GTK_HTML (html->iframe_parent);
+
+  return html;
+}
+
 #ifdef GTKHTML_USES_GTKPRINT
 static void
 draw_page_cb(GtkPrintOperation *operation, GtkPrintContext *context,
@@ -1254,6 +1263,8 @@ void
 gnc_html_print(gnc_html * html)
 {
   PrintSession *ps;
+  GtkWidget *top_level;
+  PangoFontDescription *fontdesc;
 
   ps = gnc_print_session_create(FALSE);
   if (ps == NULL) {
@@ -1261,7 +1272,21 @@ gnc_html_print(gnc_html * html)
     return;
   }
 
+  top_level = GTK_WIDGET (gnc_html_get_top_html (GTK_HTML(html->html)));
+
+  if (ps->pango_font_string != NULL) {
+    fontdesc = pango_font_description_from_string(ps->pango_font_string);
+    gtk_widget_modify_font(top_level, fontdesc);
+    pango_font_description_free(fontdesc);
+  }
+
+  gtk_html_print_set_master(GTK_HTML(html->html), ps->job);
   gtk_html_print(GTK_HTML(html->html), ps->context);
+
+  if (ps->pango_font_string != NULL) {
+    gtk_widget_modify_font(top_level, NULL);
+  }
+
   gnc_print_session_done(ps);
 }
 #endif /* GTKHTML_USES_GTKPRINT */

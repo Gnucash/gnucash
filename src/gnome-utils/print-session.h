@@ -80,6 +80,7 @@ typedef struct {
   GnomePrintJob      * job;
   GnomePrintContext  * context;		/* Convenience only. Owned by the job */
   GnomeFont          * default_font;
+  guchar             * pango_font_string;
 } PrintSession;
 
 
