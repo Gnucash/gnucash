@@ -47,7 +47,6 @@ const gchar *recurrence_version_string = "1.0.0";
 #define recurrence_mult          "recurrence:mult"
 #define recurrence_period_type   "recurrence:period_type"
 #define recurrence_start         "recurrence:start"
-#define recurrence_weekend_adj   "recurrence:weekend_adj"
 
 //TODO: I think three of these functions rightly belong in Recurrence.c.
 
@@ -84,25 +83,10 @@ recurrence_mult_handler(xmlNodePtr node, gpointer r)
     return dom_tree_to_guint16(node, &((Recurrence *)r)->mult);
 }
 
-static gboolean
-recurrence_weekend_adj_handler(xmlNodePtr node, gpointer d)
-{
-    WeekendAdjust wadj;
-    char *nodeTxt;
-
-    nodeTxt = dom_tree_to_text(node);
-    g_return_val_if_fail(nodeTxt, FALSE);
-    wadj= recurrenceWeekendAdjustFromString(nodeTxt);
-    ((Recurrence *) d)->wadj = wadj;
-    g_free(nodeTxt);
-    return (wadj != -1);
-}
-
 static struct dom_tree_handler recurrence_dom_handlers[] = {
     { recurrence_mult, recurrence_mult_handler, 1, 0 },
     { recurrence_period_type, recurrence_period_type_handler, 1, 0 },
     { recurrence_start, recurrence_start_date_handler, 1, 0 },
-    { recurrence_weekend_adj, recurrence_weekend_adj_handler, 1, 0 },
     { NULL, NULL, 0, 0 }
 };
 
@@ -129,7 +113,6 @@ recurrence_to_dom_tree(const gchar *tag, const Recurrence *r)
     xmlNodePtr n;
     PeriodType pt;
     GDate d;
-    WeekendAdjust wadj;
 
     n = xmlNewNode(NULL, tag);
     xmlSetProp(n, "version", recurrence_version_string );
@@ -140,8 +123,5 @@ recurrence_to_dom_tree(const gchar *tag, const Recurrence *r)
                                     recurrencePeriodTypeToString(pt)));
     d = recurrenceGetDate(r);
     xmlAddChild(n, gdate_to_dom_tree(recurrence_start, &d));
-    wadj = recurrenceGetWeekendAdjust(r);
-    xmlAddChild(n, text_to_dom_tree(recurrence_weekend_adj,
-                                    recurrenceWeekendAdjustToString(wadj)));
     return n;
 }
