@@ -368,17 +368,17 @@ static const char * _gncJobPrintable (gpointer item)
 
 static QofObject gncJobDesc = 
 {
-  interface_version:  QOF_OBJECT_VERSION,
-  e_type:             _GNC_MOD_NAME,
-  type_label:         "Job",
-  create:             (gpointer)gncJobCreate,
-  book_begin:         NULL,
-  book_end:           NULL,
-  is_dirty:           qof_collection_is_dirty,
-  mark_clean:         qof_collection_mark_clean,
-  foreach:            qof_collection_foreach,
-  printable:          _gncJobPrintable,
-  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = _GNC_MOD_NAME,
+  .type_label        = "Job",
+  .create            = (gpointer)gncJobCreate,
+  .book_begin        = NULL,
+  .book_end          = NULL,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = qof_collection_foreach,
+  .printable         = _gncJobPrintable,
+  .version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncJobRegister (void)

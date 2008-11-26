@@ -1912,17 +1912,17 @@ xaccTransFindSplitByAccount(const Transaction *trans, const Account *acc)
 
 /* Hook into the QofObject registry */
 static QofObject trans_object_def = {
-  interface_version:   QOF_OBJECT_VERSION,
-  e_type:              GNC_ID_TRANS,
-  type_label:          "Transaction",
-  create:              (gpointer)xaccMallocTransaction,
-  book_begin:          NULL,
-  book_end:            NULL,
-  is_dirty:            qof_collection_is_dirty,
-  mark_clean:          qof_collection_mark_clean,
-  foreach:             qof_collection_foreach,
-  printable:           (const char* (*)(gpointer)) xaccTransGetDescription,
-  version_cmp:         (int (*)(gpointer,gpointer)) qof_instance_version_cmp,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = GNC_ID_TRANS,
+  .type_label        = "Transaction",
+  .create            = (gpointer)xaccMallocTransaction,
+  .book_begin        = NULL,
+  .book_end          = NULL,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = qof_collection_foreach,
+  .printable         = (const char* (*)(gpointer)) xaccTransGetDescription,
+  .version_cmp       = (int (*)(gpointer,gpointer)) qof_instance_version_cmp,
 };
 
 static gboolean

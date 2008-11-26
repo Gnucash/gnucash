@@ -851,17 +851,17 @@ gnc_sx_get_defer_instances( SchedXaction *sx )
 
 static QofObject SXDesc = 
 {
-	interface_version : QOF_OBJECT_VERSION,
-	e_type            : GNC_SX_ID,
-	type_label        : "Scheduled Transaction",
-	create            : (gpointer)xaccSchedXactionMalloc,
-	book_begin        : NULL,
-	book_end          : NULL,
-	is_dirty          : qof_collection_is_dirty,
-	mark_clean        : qof_collection_mark_clean,
-	foreach           : qof_collection_foreach,
-	printable         : NULL,
-	version_cmp       : (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+	.interface_version = QOF_OBJECT_VERSION,
+	.e_type            = GNC_SX_ID,
+	.type_label        = "Scheduled Transaction",
+	.create            = (gpointer)xaccSchedXactionMalloc,
+	.book_begin        = NULL,
+	.book_end          = NULL,
+	.is_dirty          = qof_collection_is_dirty,
+	.mark_clean        = qof_collection_mark_clean,
+	.foreach           = qof_collection_foreach,
+	.printable         = NULL,
+	.version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean

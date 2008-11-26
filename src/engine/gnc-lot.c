@@ -438,17 +438,17 @@ gnc_lot_get_latest_split (GNCLot *lot)
 
 static QofObject gncLotDesc =
 {
-    interface_version:  QOF_OBJECT_VERSION,
-    e_type:             GNC_ID_LOT,
-    type_label:         "Lot",
-    create:             (gpointer)gnc_lot_new,
-    book_begin:         NULL,
-    book_end:           NULL,
-    is_dirty:           qof_collection_is_dirty,
-    mark_clean:         qof_collection_mark_clean,
-    foreach:            qof_collection_foreach,
-    printable:          NULL,
-    version_cmp:        (int (*)(gpointer,gpointer))qof_instance_version_cmp,
+    .interface_version = QOF_OBJECT_VERSION,
+    .e_type            = GNC_ID_LOT,
+    .type_label        = "Lot",
+    .create            = (gpointer)gnc_lot_new,
+    .book_begin        = NULL,
+    .book_end          = NULL,
+    .is_dirty          = qof_collection_is_dirty,
+    .mark_clean        = qof_collection_mark_clean,
+    .foreach           = qof_collection_foreach,
+    .printable         = NULL,
+    .version_cmp       = (int (*)(gpointer,gpointer))qof_instance_version_cmp,
 };
 
 

@@ -373,17 +373,17 @@ int gncAddressCompare (const GncAddress *a, const GncAddress *b)
 
 static QofObject GncAddressDesc =
 {
-	interface_version:  QOF_OBJECT_VERSION,
-	e_type:             GNC_ID_ADDRESS,
-	type_label:         "Address",
-	create:             (gpointer)qofAddressCreate,
-	book_begin:         NULL,
-	book_end:           NULL,
-	is_dirty:           qof_collection_is_dirty,
-	mark_clean:         qof_collection_mark_clean,
-	foreach:            qof_collection_foreach,
-	printable:          NULL,
-	version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+	.interface_version = QOF_OBJECT_VERSION,
+	.e_type            = GNC_ID_ADDRESS,
+	.type_label        = "Address",
+	.create            = (gpointer)qofAddressCreate,
+	.book_begin        = NULL,
+	.book_end          = NULL,
+	.is_dirty          = qof_collection_is_dirty,
+	.mark_clean        = qof_collection_mark_clean,
+	.foreach           = qof_collection_foreach,
+	.printable         = NULL,
+	.version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncAddressRegister (void)

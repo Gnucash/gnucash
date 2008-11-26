@@ -1240,17 +1240,17 @@ int gncEntryCompare (const GncEntry *a, const GncEntry *b)
 
 static QofObject gncEntryDesc = 
 {
-  interface_version:  QOF_OBJECT_VERSION,
-  e_type:             _GNC_MOD_NAME,
-  type_label:         "Order/Invoice/Bill Entry",
-  create:             (gpointer)gncEntryCreate,
-  book_begin:         NULL,
-  book_end:           NULL,
-  is_dirty:           qof_collection_is_dirty,
-  mark_clean:         qof_collection_mark_clean,
-  foreach:            qof_collection_foreach,
-  printable:          NULL,
-  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = _GNC_MOD_NAME,
+  .type_label        = "Order/Invoice/Bill Entry",
+  .create            = (gpointer)gncEntryCreate,
+  .book_begin        = NULL,
+  .book_end          = NULL,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = qof_collection_foreach,
+  .printable         = NULL,
+  .version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncEntryRegister (void)

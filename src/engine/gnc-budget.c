@@ -596,17 +596,17 @@ gnc_budget_get_default (QofBook *book)
 /* Define the QofObject. */
 static QofObject budget_object_def =
 {
-    interface_version: QOF_OBJECT_VERSION,
-    e_type:            GNC_ID_BUDGET,
-    type_label:        "Budget",
-    create:            (gpointer)gnc_budget_new,
-    book_begin:        NULL,
-    book_end:          NULL,
-    is_dirty:          qof_collection_is_dirty,
-    mark_clean:        qof_collection_mark_clean,
-    foreach:           qof_collection_foreach,
-    printable:         (const char* (*)(gpointer)) gnc_budget_get_name,
-    version_cmp:       (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+    .interface_version = QOF_OBJECT_VERSION,
+    .e_type            = GNC_ID_BUDGET,
+    .type_label        = "Budget",
+    .create            = (gpointer)gnc_budget_new,
+    .book_begin        = NULL,
+    .book_end          = NULL,
+    .is_dirty          = qof_collection_is_dirty,
+    .mark_clean        = qof_collection_mark_clean,
+    .foreach           = qof_collection_foreach,
+    .printable         = (const char* (*)(gpointer)) gnc_budget_get_name,
+    .version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 

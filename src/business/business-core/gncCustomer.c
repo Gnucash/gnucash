@@ -578,17 +578,17 @@ static const char * _gncCustomerPrintable (gpointer item)
 
 static QofObject gncCustomerDesc =
 {
-  interface_version:  QOF_OBJECT_VERSION,
-  e_type:             _GNC_MOD_NAME,
-  type_label:         "Customer",
-  create:             (gpointer)gncCustomerCreate,
-  book_begin:         NULL,
-  book_end:           NULL,
-  is_dirty:           qof_collection_is_dirty,
-  mark_clean:         qof_collection_mark_clean,
-  foreach:            qof_collection_foreach,
-  printable:          (const char* (*)(gpointer))gncCustomerGetName,
-  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = _GNC_MOD_NAME,
+  .type_label        = "Customer",
+  .create            = (gpointer)gncCustomerCreate,
+  .book_begin        = NULL,
+  .book_end          = NULL,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = qof_collection_foreach,
+  .printable         = (const char* (*)(gpointer))gncCustomerGetName,
+  .version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncCustomerRegister (void)

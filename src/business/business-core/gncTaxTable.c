@@ -802,17 +802,17 @@ static void _gncTaxTableDestroy (QofBook *book)
 
 static QofObject gncTaxTableDesc = 
 {
-  interface_version:  QOF_OBJECT_VERSION,
-  e_type:             _GNC_MOD_NAME,
-  type_label:         "Tax Table",
-  create:             (gpointer)gncTaxTableCreate,
-  book_begin:         _gncTaxTableCreate,
-  book_end:           _gncTaxTableDestroy,
-  is_dirty:           qof_collection_is_dirty,
-  mark_clean:         qof_collection_mark_clean,
-  foreach:            qof_collection_foreach,
-  printable:          NULL,
-  version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = _GNC_MOD_NAME,
+  .type_label        = "Tax Table",
+  .create            = (gpointer)gncTaxTableCreate,
+  .book_begin        = _gncTaxTableCreate,
+  .book_end          = _gncTaxTableDestroy,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = qof_collection_foreach,
+  .printable         = NULL,
+  .version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncTaxTableRegister (void)

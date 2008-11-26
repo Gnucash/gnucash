@@ -1758,17 +1758,17 @@ xaccSplitUnvoid(Split *split)
 /* Hook into the QofObject registry */
 
 static QofObject split_object_def = {
-  interface_version: QOF_OBJECT_VERSION,
-  e_type:            GNC_ID_SPLIT,
-  type_label:        "Split",
-  create:            (gpointer)xaccMallocSplit,
-  book_begin:        NULL,
-  book_end:          NULL,
-  is_dirty:          qof_collection_is_dirty,
-  mark_clean:        qof_collection_mark_clean,
-  foreach:           qof_collection_foreach,
-  printable:         (const char* (*)(gpointer)) xaccSplitGetMemo,
-  version_cmp:       (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+  .interface_version = QOF_OBJECT_VERSION,
+  .e_type            = GNC_ID_SPLIT,
+  .type_label        = "Split",
+  .create            = (gpointer)xaccMallocSplit,
+  .book_begin        = NULL,
+  .book_end          = NULL,
+  .is_dirty          = qof_collection_is_dirty,
+  .mark_clean        = qof_collection_mark_clean,
+  .foreach           = qof_collection_foreach,
+  .printable         = (const char* (*)(gpointer)) xaccSplitGetMemo,
+  .version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 static gpointer 
