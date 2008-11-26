@@ -105,7 +105,7 @@ CLEANFILES = $(BUILT_SOURCES)
 # run "make check" (to build the test program) and then run test-qofmath
 check_PROGRAMS = test-qofmath
 test_qofmath_SOURCES=gnc-numeric.c
-test_qofmath_CPPFLAGS=$(libgnc_qof_la_CPPFLAGS) -DTEST_128_BIT_MULT
+test_qofmath_CPPFLAGS=$(AM_CPPFLAGS) -DTEST_128_BIT_MULT
 test_qofmath_LDFLAGS=$(libgnc_qof_la_LDFLAGS)
 test_qofmath_LDADD=$(libgnc_qof_la_LIBADD)
 
