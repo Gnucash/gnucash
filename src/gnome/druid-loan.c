@@ -804,7 +804,7 @@ gnc_loan_druid_data_init( LoanDruidData *ldd )
         ldd->ld.repayment_schedule = NULL;
         {
                 Recurrence *r = g_new0(Recurrence, 1);
-                recurrenceSet(r, 1, PERIOD_MONTH, ldd->ld.startDate);
+                recurrenceSet(r, 1, PERIOD_MONTH, ldd->ld.startDate, WEEKEND_ADJ_NONE);
                 ldd->ld.repayment_schedule = g_list_append(ldd->ld.repayment_schedule, r);
         }
 
@@ -1662,7 +1662,7 @@ ld_pay_freq_toggle( GtkToggleButton *tb, gpointer ud )
 
                 if ( rod->schedule == NULL ) {
                         Recurrence *r = g_new0(Recurrence, 1);
-                        recurrenceSet(r, 1, PERIOD_MONTH, ldd->ld.startDate);
+                        recurrenceSet(r, 1, PERIOD_MONTH, ldd->ld.startDate, WEEKEND_ADJ_NONE);
                         rod->schedule = g_list_append(rod->schedule, r);
                 }
                 if ( rod->startDate == NULL ) {

@@ -101,6 +101,7 @@ typedef struct
         gint64                offset;       /* all [except once] */
         gint64                day;          /* monthly or month-relative */
         gint64                occurrence;   /* month-relative */
+        gint64                weekend_adj;  /* monthly/yearly */
         GList                *list;         /* composite */
         UIFreqType            uift;
 } fsParseData;
@@ -118,6 +119,7 @@ fspd_init( fsParseData *fspd )
                 = fspd->day
                 = fspd->occurrence
                 = 0;
+        fspd->weekend_adj = WEEKEND_ADJ_NONE;
         g_date_clear( &fspd->once_day, 1 );
 }
 
@@ -243,6 +245,20 @@ fs_occurrence_handler( xmlNodePtr node, gpointer data )
 
 static
 gboolean
+fs_weekend_adj_handler( xmlNodePtr node, gpointer data )
+{
+        fsParseData *fspd = data;
+        gboolean        ret;
+        gint64          foo;
+        ret = dom_tree_to_integer( node, &foo );
+        if ( !ret )
+                return ret;
+        fspd->weekend_adj = foo;
+        return TRUE;
+}
+
+static
+gboolean
 fs_subelement_handler( xmlNodePtr node, gpointer data )
 {
         fsParseData *fspd = data;
@@ -262,7 +278,7 @@ fs_subelement_handler( xmlNodePtr node, gpointer data )
                 {
                     // complementry hack around 'once' freqspects not being valid. :/
                     recurrence_date = recurrenceGetDate(r);
-                    recurrenceSet(r, recurrenceGetMultiplier(r), PERIOD_MONTH, &recurrence_date);
+                    recurrenceSet(r, recurrenceGetMultiplier(r), PERIOD_MONTH, &recurrence_date, recurrenceGetWeekendAdjust(r));
                 }
                 fspd->recurrence_list = g_list_append(fspd->recurrence_list, r);
             }
@@ -271,13 +287,14 @@ fs_subelement_handler( xmlNodePtr node, gpointer data )
 }
 
 struct dom_tree_handler fs_union_dom_handlers[] = {
-        { "fs:date",       fs_date_handler,       0, 0 },
-        { "fs:interval",   fs_interval_handler,   0, 0 },
-        { "fs:offset",     fs_offset_handler,     0, 0 },
-        { "fs:day",        fs_day_handler,        0, 0 },
-        { "fs:weekday",    fs_weekday_handler,    0, 0 },
-        { "fs:occurrence", fs_occurrence_handler, 0, 0 },
-        { "gnc:freqspec",  fs_subelement_handler, 0, 0 },
+        { "fs:date",        fs_date_handler,        0, 0 },
+        { "fs:interval",    fs_interval_handler,    0, 0 },
+        { "fs:offset",      fs_offset_handler,      0, 0 },
+        { "fs:day",         fs_day_handler,         0, 0 },
+        { "fs:weekday",     fs_weekday_handler,     0, 0 },
+        { "fs:occurrence",  fs_occurrence_handler,  0, 0 },
+        { "fs:weekend_adj", fs_weekend_adj_handler, 0, 0 },
+        { "gnc:freqspec",   fs_subelement_handler,  0, 0 },
         { NULL, NULL, 0, 0 },
 };
 
@@ -304,7 +321,7 @@ fs_once_handler( xmlNodePtr node, gpointer data )
                                              fspd );
         if ( !successful )
                 return FALSE;
-        recurrenceSet(fspd->recurrence, 0, PERIOD_ONCE, &fspd->once_day);
+        recurrenceSet(fspd->recurrence, 0, PERIOD_ONCE, &fspd->once_day, WEEKEND_ADJ_NONE);
         
         return TRUE;
 }
@@ -321,7 +338,7 @@ fs_daily_handler(xmlNodePtr node, gpointer data)
 
         g_date_clear(&offset_date, 1);
         g_date_set_julian(&offset_date, fspd->offset == 0 ? 7 : fspd->offset);
-        recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_DAY, &offset_date);
+        recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_DAY, &offset_date, WEEKEND_ADJ_NONE);
 
         return TRUE;
 }
@@ -341,7 +358,7 @@ fs_weekly_handler( xmlNodePtr node, gpointer data )
 
         g_date_clear(&offset_date, 1);
         g_date_set_julian(&offset_date, fspd->offset == 0 ? 7 : fspd->offset);
-        recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_WEEK, &offset_date);
+        recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_WEEK, &offset_date, WEEKEND_ADJ_NONE);
 
         return TRUE;
 }
@@ -367,11 +384,11 @@ fs_monthly_handler( xmlNodePtr node, gpointer data)
         if (fspd->uift == UIFREQ_ONCE)
         {
             // hack...
-            recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_ONCE, &offset_date);
+            recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_ONCE, &offset_date, WEEKEND_ADJ_NONE);
         }
         else
         {
-            recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_MONTH, &offset_date);
+            recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_MONTH, &offset_date, fspd->weekend_adj);
         }
         
         return successful;

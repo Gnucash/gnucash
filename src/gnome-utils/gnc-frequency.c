@@ -157,11 +157,14 @@ gnc_frequency_init(GncFrequency *gf)
         char *name;
         void (*fn)();
     } comboBoxes[] = {
-        { "freq_combobox",      freq_combo_changed },
-        { "semimonthly_first",  semimonthly_sel_changed },
-        { "semimonthly_second", semimonthly_sel_changed },
-        { "monthly_day",        monthly_sel_changed },
-        { NULL,                 NULL }
+        { "freq_combobox",               freq_combo_changed },
+        { "semimonthly_first",          semimonthly_sel_changed },
+        { "semimonthly_first_weekend",  semimonthly_sel_changed },
+        { "semimonthly_second",         semimonthly_sel_changed },
+        { "semimonthly_second_weekend", semimonthly_sel_changed },
+        { "monthly_day",                monthly_sel_changed },
+        { "monthly_weekend",            monthly_sel_changed },
+        { NULL,                         NULL }
     };
 
     static const struct spinvalTuple {
@@ -409,8 +412,12 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, GDate *start_date)
 
              dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_first");
              gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), _get_monthly_combobox_index(first));
+             dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_first_weekend");
+             gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), recurrenceGetWeekendAdjust(first));
              dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_second");
              gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), _get_monthly_combobox_index(second));
+             dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_second_weekend");
+             gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), recurrenceGetWeekendAdjust(second));
 
              gtk_notebook_set_current_page(gf->nb, PAGE_SEMI_MONTHLY);
              gtk_combo_box_set_active(gf->freqComboBox, PAGE_SEMI_MONTHLY);
@@ -461,7 +468,7 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, GDate *start_date)
          case PERIOD_YEAR:
          case PERIOD_LAST_WEEKDAY: {
              guint multiplier;
-             GtkWidget *multipler_spin, *day_of_month;
+             GtkWidget *multipler_spin, *day_of_month, *weekend_mode;
              
              multipler_spin = glade_xml_get_widget(gf->gxml, "monthly_spin");
              multiplier = recurrenceGetMultiplier(r);
@@ -471,6 +478,8 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, GDate *start_date)
 
              day_of_month = glade_xml_get_widget(gf->gxml, "monthly_day");
              gtk_combo_box_set_active(GTK_COMBO_BOX(day_of_month), _get_monthly_combobox_index(r));
+             weekend_mode = glade_xml_get_widget(gf->gxml, "monthly_weekend");
+             gtk_combo_box_set_active(GTK_COMBO_BOX(weekend_mode), recurrenceGetWeekendAdjust(r));
 
              gtk_notebook_set_current_page(gf->nb, PAGE_MONTHLY);
              gtk_combo_box_set_active(gf->freqComboBox, PAGE_MONTHLY);
@@ -498,12 +507,14 @@ _get_multiplier_from_widget(GncFrequency *gf, char *widget_name)
 }
 
 static Recurrence*
-_get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier, char *combo_name)
+_get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier, char *combo_name, char *combo_weekend_name)
 {
     int last_day_of_month_option_index = 31;
     Recurrence *r;
     GtkWidget *day_of_month_combo = glade_xml_get_widget(gf->gxml, combo_name);
     int day_of_month_index = gtk_combo_box_get_active(GTK_COMBO_BOX(day_of_month_combo));
+    GtkWidget *weekend_adjust_combo = glade_xml_get_widget(gf->gxml, combo_weekend_name);
+    int weekend_adjust = gtk_combo_box_get_active(GTK_COMBO_BOX(weekend_adjust_combo));
         
     r = g_new0(Recurrence, 1);
     if (day_of_month_index > LAST_DAY_OF_MONTH_OPTION_INDEX)
@@ -514,12 +525,12 @@ _get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier
         g_date_set_day(day_of_week_date, 1);
         while (g_date_get_weekday(day_of_week_date) != selected_day_of_week)
             g_date_add_days(day_of_week_date, 1);
-        recurrenceSet(r, multiplier, PERIOD_LAST_WEEKDAY, day_of_week_date);
+        recurrenceSet(r, multiplier, PERIOD_LAST_WEEKDAY, day_of_week_date, weekend_adjust);
     }
     else if (day_of_month_index == LAST_DAY_OF_MONTH_OPTION_INDEX)
     {
         GDate *day_of_month = g_date_new_julian(g_date_get_julian(start_date));
-        recurrenceSet(r, multiplier, PERIOD_END_OF_MONTH, day_of_month);
+        recurrenceSet(r, multiplier, PERIOD_END_OF_MONTH, day_of_month, weekend_adjust);
     }
     else
     {
@@ -529,7 +540,7 @@ _get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier
                              g_date_get_days_in_month(g_date_get_month(day_of_month),
                                                       g_date_get_year(day_of_month)));
         g_date_set_day(day_of_month, allowable_date);
-        recurrenceSet(r, multiplier, PERIOD_MONTH, day_of_month);
+        recurrenceSet(r, multiplier, PERIOD_MONTH, day_of_month, weekend_adjust);
     }
     return r;
 }
@@ -556,13 +567,13 @@ gnc_frequency_save_to_recurrence(GncFrequency *gf, GList **recurrences, GDate *o
     } break;
     case PAGE_ONCE: {
         Recurrence *r = g_new0(Recurrence, 1);
-        recurrenceSet(r, 1, PERIOD_ONCE, &start_date);
+        recurrenceSet(r, 1, PERIOD_ONCE, &start_date, WEEKEND_ADJ_NONE);
         *recurrences = g_list_append(*recurrences, r);
     } break;
     case PAGE_DAILY: {
         gint multiplier = _get_multiplier_from_widget(gf, "daily_spin");
         Recurrence *r = g_new0(Recurrence, 1);
-        recurrenceSet(r, multiplier, PERIOD_DAY, &start_date);
+        recurrenceSet(r, multiplier, PERIOD_DAY, &start_date, WEEKEND_ADJ_NONE);
         *recurrences = g_list_append(*recurrences, r);
     } break;
     case PAGE_WEEKLY: {
@@ -584,19 +595,19 @@ gnc_frequency_save_to_recurrence(GncFrequency *gf, GList **recurrences, GDate *o
                 g_date_add_days(day_of_week_aligned_date, 1);
 
             r = g_new0(Recurrence, 1);
-            recurrenceSet(r, multiplier, PERIOD_WEEK, day_of_week_aligned_date);
+            recurrenceSet(r, multiplier, PERIOD_WEEK, day_of_week_aligned_date, WEEKEND_ADJ_NONE);
             
             *recurrences = g_list_append(*recurrences, r);
         }
     } break;
     case PAGE_SEMI_MONTHLY: {
         int multiplier = _get_multiplier_from_widget(gf, "semimonthly_spin");
-        *recurrences = g_list_append(*recurrences, _get_day_of_month_recurrence(gf, &start_date, multiplier, "semimonthly_first"));
-        *recurrences = g_list_append(*recurrences, _get_day_of_month_recurrence(gf, &start_date, multiplier, "semimonthly_second"));
+        *recurrences = g_list_append(*recurrences, _get_day_of_month_recurrence(gf, &start_date, multiplier, "semimonthly_first", "semimonthly_first_weekend"));
+        *recurrences = g_list_append(*recurrences, _get_day_of_month_recurrence(gf, &start_date, multiplier, "semimonthly_second", "semimonthly_second_weekend"));
     } break;
     case PAGE_MONTHLY: {
         int multiplier = _get_multiplier_from_widget(gf, "monthly_spin");
-        Recurrence *r = _get_day_of_month_recurrence(gf, &start_date, multiplier, "monthly_day");
+        Recurrence *r = _get_day_of_month_recurrence(gf, &start_date, multiplier, "monthly_day", "monthly_weekend");
         *recurrences = g_list_append(*recurrences, r);
     } break;
     default:

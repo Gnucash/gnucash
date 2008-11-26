@@ -802,6 +802,7 @@ gnc_sx_sxsincelast_book_opened(void)
         gnc_ui_sx_since_last_run_dialog(inst_model, auto_created_txns);
         auto_created_txns = NULL;
     }
+#if 0
     else
     {
         if (summary.num_auto_create_no_notify_instances != 0)
@@ -817,6 +818,7 @@ gnc_sx_sxsincelast_book_opened(void)
                  summary.num_auto_create_no_notify_instances);
         }
     }
+#endif
     g_list_free(auto_created_txns);
     g_object_unref(G_OBJECT(inst_model));
 }

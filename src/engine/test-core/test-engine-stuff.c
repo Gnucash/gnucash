@@ -2148,7 +2148,7 @@ static Recurrence*
 daily_freq(GDate* start, int multiplier)
 {
      Recurrence *r = g_new0(Recurrence, 1);
-     recurrenceSet(r, multiplier, PERIOD_DAY, start);
+     recurrenceSet(r, multiplier, PERIOD_DAY, start, WEEKEND_ADJ_NONE);
      return r;
 }
 
@@ -2156,7 +2156,7 @@ static Recurrence*
 once_freq(GDate *when)
 {
      Recurrence *r = g_new0(Recurrence, 1);
-     recurrenceSet(r, 1, PERIOD_ONCE, when);
+     recurrenceSet(r, 1, PERIOD_ONCE, when, WEEKEND_ADJ_NONE);
      return r;
 }
 

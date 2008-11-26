@@ -296,7 +296,7 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
     priv->fd.show_zero_total = TRUE;
 
     priv->sigFigs = 1;
-    recurrenceSet(&priv->r, 1, PERIOD_MONTH, NULL); 
+    recurrenceSet(&priv->r, 1, PERIOD_MONTH, NULL, WEEKEND_ADJ_NONE); 
 
     LEAVE("page %p, priv %p, action group %p",
           plugin_page, priv, action_group);
@@ -935,7 +935,8 @@ gnc_plugin_page_budget_cmd_estimate_budget(GtkAction *action,
         
         gnc_date_edit_get_gdate(GNC_DATE_EDIT(gde), &date);
         recurrenceSet(&priv->r, recurrenceGetMultiplier(r), 
-                      recurrenceGetPeriodType(r), &date);
+                      recurrenceGetPeriodType(r), &date,
+                      recurrenceGetWeekendAdjust(r));
         priv->sigFigs = 
             gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(dtr));
 

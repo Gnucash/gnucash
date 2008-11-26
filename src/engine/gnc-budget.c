@@ -94,7 +94,7 @@ gnc_budget_init(GncBudget* budget)
 	priv->num_periods = 12;
     g_date_set_time_t(&date, time(NULL));
     g_date_subtract_days(&date, g_date_get_day(&date)-1);
-    recurrenceSet(&priv->recurrence, 1, PERIOD_MONTH, &date);
+    recurrenceSet(&priv->recurrence, 1, PERIOD_MONTH, &date, WEEKEND_ADJ_NONE);
 }
 
 static void

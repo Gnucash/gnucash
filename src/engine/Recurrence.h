@@ -57,12 +57,21 @@ typedef enum {
     PERIOD_INVALID = -1,
 } PeriodType;
 
+typedef enum {
+    WEEKEND_ADJ_NONE,
+    WEEKEND_ADJ_BACK,    /* Previous weekday */
+    WEEKEND_ADJ_FORWARD, /* Next weekday */
+    NUM_WEEKEND_ADJS,
+    WEEKEND_ADJ_INVALID = -1,
+} WeekendAdjust;
+
 /* Recurrences represent both the phase and period of a recurring event. */
 
 typedef struct {
-    GDate start;       /* First date in the recurrence; specifies phase. */
-    PeriodType ptype;  /* see PeriodType enum */
-    guint16 mult;      /* a period multiplier */
+    GDate start;         /* First date in the recurrence; specifies phase. */
+    PeriodType ptype;    /* see PeriodType enum */
+    guint16 mult;        /* a period multiplier */
+	WeekendAdjust wadj;  /* see WeekendAdjust enum */
 } Recurrence;
 
 
@@ -90,12 +99,13 @@ typedef struct {
 
 */
 void recurrenceSet(Recurrence *r, guint16 mult, PeriodType pt,
-                   const GDate *date);
+                   const GDate *date, WeekendAdjust wadj);
 
 /* get the fields */
 PeriodType recurrenceGetPeriodType(const Recurrence *r);
 guint recurrenceGetMultiplier(const Recurrence *r);
 GDate recurrenceGetDate(const Recurrence *r);
+WeekendAdjust recurrenceGetWeekendAdjust(const Recurrence *r);
 
 /* Get the occurence immediately after refDate.
  *
@@ -135,9 +145,11 @@ gnc_numeric recurrenceGetAccountPeriodValue(const Recurrence *r,
 void recurrenceListNextInstance(const GList *r, const GDate *refDate,
                                 GDate *nextDate);
 
-/* These two functions are only for xml storage, not user presentation. */
+/* These four functions are only for xml storage, not user presentation. */
 gchar *recurrencePeriodTypeToString(PeriodType pt);
 PeriodType recurrencePeriodTypeFromString(const gchar *str);
+gchar *recurrenceWeekendAdjustToString(WeekendAdjust wadj);
+WeekendAdjust recurrenceWeekendAdjustFromString(const gchar *str);
 
 /* For debugging.  Caller owns the returned string.  Not intl. */
 gchar *recurrenceToString(const Recurrence *r);

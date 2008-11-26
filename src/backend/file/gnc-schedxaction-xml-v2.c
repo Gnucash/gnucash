@@ -394,7 +394,8 @@ _fixup_recurrence_start_dates(GDate *sx_start_date, GList *schedule)
         recurrenceSet(r,
                       recurrenceGetMultiplier(r),
                       recurrenceGetPeriodType(r), 
-                      &next);
+                      &next,
+                      recurrenceGetWeekendAdjust(r));
     }
 
     if (g_list_length(schedule) == 1
@@ -403,7 +404,7 @@ _fixup_recurrence_start_dates(GDate *sx_start_date, GList *schedule)
         char date_buf[128];
         Recurrence *fixup = (Recurrence*)g_list_nth_data(schedule, 0);
         g_date_strftime(date_buf, 127, "%x", sx_start_date);
-        recurrenceSet(fixup, 1, PERIOD_ONCE, sx_start_date);
+        recurrenceSet(fixup, 1, PERIOD_ONCE, sx_start_date, WEEKEND_ADJ_NONE);
         g_debug("fixed up period=ONCE Recurrence to date [%s]", date_buf);
     }
 }
