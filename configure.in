@@ -37,8 +37,9 @@ GNUCASH_MICRO_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\
 # --enable-debug:
 USER_OPTIMIZATION=""
 for flag in $CFLAGS; do
-  if test -z $(echo $flag | sed -e 's,-O.,,'); then
-    USER_OPTIMIZATION="$USER_OPTIMIZATION ${flag}"
+  tmp_flag=`echo $flag | sed -e 's,-O.,,'`
+  if test -z "$tmp_flag"; then
+    USER_OPTIMIZATION="$USER_OPTIMIZATION ${tmp_flag}"
   fi
 done
 
@@ -703,13 +704,14 @@ AC_SUBST(GNC_LIBEXECDIR)
 
 AC_ARG_ENABLE( debug,
   [  --enable-debug               compile with debugging flags set],
+  [
        # remove any optimization flags...
-       CFLAGS=$(echo $CFLAGS | sed -e 's,-O.,,g')
+       CFLAGS=`echo ${CFLAGS} | sed -e 's,-O.,,g'`
        # ...except for those the user wants.
        CFLAGS="${CFLAGS} -g ${USER_OPTIMIZATION}"
        LDFLAGS="${LDFLAGS} -g"
        AC_DEFINE(DEBUG_MEMORY,1,Enable debug memory),
-       AC_DEFINE(DEBUG_MEMORY,0,Enable debug memory) )
+       AC_DEFINE(DEBUG_MEMORY,0,Enable debug memory)])
 
 AC_ARG_ENABLE( profile,
   [  --enable-profile             compile with profiling set],
@@ -1183,8 +1185,8 @@ dnl if Mac OSX, also scrub /sw/include
 dnl GIVEN_CFLAGS=$(echo $GIVEN_CFLAGS | sed -e "s;-I/sw/include ;;" | sed -e "s;-I/sw/include$;;")
 case $host_os in
 	darwin*)
-		GTKHTML_CFLAGS=$(echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include ;;" | ${SED} -e "s;-I/sw/include$;;")
-		GTKHTML_CFLAGS=$(echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include/gtkhtml ;;" | ${SED} -e "s;-I/sw/includ/gtkhtmle$;;")
+		GTKHTML_CFLAGS=`echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include ;;" | ${SED} -e "s;-I/sw/include$;;"`
+		GTKHTML_CFLAGS=`echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include/gtkhtml ;;" | ${SED} -e "s;-I/sw/includ/gtkhtmle$;;"`
 		;;
 esac
     AC_SUBST(GTKHTML_CFLAGS)
