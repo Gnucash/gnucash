@@ -42,6 +42,7 @@
 (define gnc:pagename-accounts (N_ "Accounts"))
 (define gnc:pagename-display (N_ "Display"))
 (define gnc:optname-reportname (N_ "Report name"))
+(define gnc:optname-stylesheet (N_ "Stylesheet"))
 
 ;; we want to warn users if they've got an old-style, non-guid saved
 ;; report, but only once
@@ -240,7 +241,7 @@
           (_ (gnc:report-template-name report-template))))
         (stylesheet 
          (gnc:make-multichoice-option 
-          gnc:pagename-general (N_ "Stylesheet") "0b"
+          gnc:pagename-general gnc:optname-stylesheet "0b"
           (N_ "Select a stylesheet for the report.")
           (string->symbol (N_ "Default"))
           (map 
@@ -263,7 +264,7 @@
                (gnc:new-options))))
       (or (gnc:lookup-option options gnc:pagename-general gnc:optname-reportname)
           (gnc:register-option options namer))
-      (or (gnc:lookup-option options gnc:pagename-general (N_ "Stylesheet"))
+      (or (gnc:lookup-option options gnc:pagename-general gnc:optname-stylesheet)
           (gnc:register-option options stylesheet))
       options)))
 
@@ -425,14 +426,14 @@
                     (gnc:lookup-option 
                      (gnc:report-options report)
                      gnc:pagename-general 
-                     (N_ "Stylesheet"))))))
+                     gnc:optname-stylesheet)))))
 
 (define (gnc:report-set-stylesheet! report stylesheet)
   (gnc:option-set-value
    (gnc:lookup-option 
     (gnc:report-options report)
     gnc:pagename-general 
-    (N_ "Stylesheet"))
+    gnc:optname-stylesheet)
    (string->symbol 
     (gnc:html-style-sheet-name stylesheet))))
 
