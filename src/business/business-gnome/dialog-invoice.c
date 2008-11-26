@@ -71,6 +71,8 @@
 #include "gnc-plugin-page-invoice.h"
 #include "gnc-main-window.h"
 
+#include "dialog-transfer.h"
+
 /* Disable -Waddress.  GCC 4.2 warns (and fails to compile with -Werror) when
  * passing the address of a guid on the stack to QOF_BOOK_LOOKUP_ENTITY via
  * gncInvoiceLookup and friends.  When the macro gets inlined, the compiler
@@ -608,6 +610,11 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   QofInstance *owner_inst;
   KvpFrame *kvpf;
   KvpValue *kvp_val;
+  const char *text;
+  EntryList *entries;
+  GncEntry* entry;
+  gboolean reverse;
+  gboolean show_dialog=TRUE;
 
   /* Make sure the invoice is ok */
   if (!gnc_invoice_window_verify_ok (iw))
@@ -624,6 +631,8 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
 		      _("The Invoice must have at least one Entry."));
     return;
   }
+
+  reverse = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
 
   /* Make sure that the invoice has a positive balance */
   if (gnc_numeric_negative_p(gncInvoiceGetTotal(invoice))) {
@@ -680,6 +689,70 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   gnc_suspend_gui_refresh ();
   gncInvoiceBeginEdit (invoice);
   gnc_invoice_window_ok_save (iw);
+
+  /* Fill in the conversion prices with feedback from the user */
+  text = _("One or more of the entries are for accounts different from the invoice/bill currency.  You will be asked a conversion rate for each.");
+
+  for (entries=gncInvoiceGetEntries(invoice); entries != NULL; entries=g_list_next(entries))
+  {
+    Account *this_acc;
+    
+    entry = (GncEntry*)entries->data;
+    this_acc = (reverse ? gncEntryGetInvAccount (entry) :
+		gncEntryGetBillAccount (entry));
+
+    if (!gnc_commodity_equal(gncInvoiceGetCurrency (invoice), xaccAccountGetCommodity(this_acc)))
+    {
+      GNCPrice *convprice;
+
+      if (show_dialog)
+      {
+        gnc_info_dialog(iw_get_window(iw), "%s", text);
+        show_dialog=FALSE;
+      }
+      
+      convprice = gncInvoiceGetPrice(invoice, xaccAccountGetCommodity(this_acc));
+      if (convprice == NULL)
+      {
+        XferDialog *xfer;
+        gnc_numeric exch_rate;
+        Timespec date;
+        gnc_numeric amount = gnc_numeric_create(1,1);
+        
+
+        /* create the exchange-rate dialog */
+        xfer = gnc_xfer_dialog (iw_get_window(iw), this_acc); 
+        gnc_xfer_dialog_select_to_account(xfer,acc);
+        gnc_xfer_dialog_set_amount(xfer, amount);
+
+        /* All we want is the exchange rate so prevent the user from thinking 
+           it makes sense to mess with other stuff */
+        gnc_xfer_dialog_set_from_show_button_active(xfer, FALSE);
+        gnc_xfer_dialog_set_to_show_button_active(xfer, FALSE);
+        gnc_xfer_dialog_hide_from_account_tree(xfer);
+        gnc_xfer_dialog_hide_to_account_tree(xfer);
+        gnc_xfer_dialog_is_exchange_dialog(xfer, &exch_rate);
+        gnc_xfer_dialog_run_until_done(xfer);
+        
+        convprice = gnc_price_create(iw->book);
+        gnc_price_begin_edit (convprice);
+        gnc_price_set_commodity (convprice, xaccAccountGetCommodity(this_acc));
+        gnc_price_set_currency (convprice, gncInvoiceGetCurrency (invoice));
+        date.tv_sec = time (NULL);
+        date.tv_nsec = 0;
+        gnc_price_set_time (convprice, date);
+        gnc_price_set_source (convprice, "user:invoice-post");
+
+        /* Yes, magic strings are evil but I can't find any defined constants
+           for this..*/
+        gnc_price_set_typestr (convprice, "last");
+        gnc_price_set_value (convprice, exch_rate);
+        gncInvoiceAddPrice(invoice, convprice);
+        gnc_price_commit_edit (convprice);        
+      }
+    }
+  }
+
 
   /* Save acc as last used account in the kvp frame of the invoice owner */
   kvp_val = kvp_value_new_guid (qof_instance_get_guid (QOF_INSTANCE (acc)));;

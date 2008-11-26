@@ -54,6 +54,7 @@ struct _gncInvoice
   char        *printname;
   GncBillTerm *terms;
   GList       *entries;
+  GList       *prices;
   GncOwner    owner;
   GncOwner    billto;
   GncJob      *job;
@@ -164,6 +165,7 @@ static void gncInvoiceFree (GncInvoice *invoice)
   CACHE_REMOVE (invoice->notes);
   CACHE_REMOVE (invoice->billing_id);
   g_list_free (invoice->entries);
+  g_list_free (invoice->prices);
 
   if (invoice->printname) g_free (invoice->printname);
 
@@ -210,6 +212,14 @@ gncCloneInvoice (GncInvoice *from, QofBook *book)
     GncEntry *entry = node->data;
     entry = gncEntryObtainTwin (entry, book);
     invoice->entries = g_list_prepend (invoice->entries, entry);
+  }
+
+  invoice->prices = NULL;
+  for (node = g_list_last(from->prices); node; node=node->next)
+  {
+    GNCPrice *price = node->data;
+    price = gnc_price_clone(price, book);
+    invoice->prices = g_list_prepend (invoice->prices, price);
   }
 
   /* XXX should probably be obtain-twin not lookup-twin */
@@ -433,6 +443,22 @@ void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry)
   mark_invoice (invoice);
 }
 
+void gncInvoiceAddPrice (GncInvoice *invoice, GNCPrice *price)
+{
+  if (!invoice || !price) return;
+
+  invoice->prices = g_list_prepend(invoice->prices, price);
+  mark_invoice (invoice);
+}
+
+void gncInvoiceRemovePrice (GncInvoice *invoice, GNCPrice *price)
+{
+  if (!invoice || !price) return;
+
+  invoice->prices = g_list_remove (invoice->prices, price);
+  mark_invoice (invoice);
+}
+
 void gncBillAddEntry (GncInvoice *bill, GncEntry *entry)
 {
   GncInvoice *old;
@@ -457,6 +483,23 @@ void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry)
   bill->entries = g_list_remove (bill->entries, entry);
   mark_invoice (bill);
 }
+
+void gncBillAddPrice (GncInvoice *bill, GNCPrice *price)
+{
+  if (!bill || !price) return;
+
+  bill->prices = g_list_prepend(bill->prices, price);
+  mark_invoice (bill);
+}
+
+void gncBillRemovePrice (GncInvoice *bill, GNCPrice *price)
+{
+  if (!bill || !price) return;
+
+  bill->prices = g_list_remove (bill->prices, price);
+  mark_invoice (bill);
+}
+
 
 void gncInvoiceSortEntries (GncInvoice *invoice)
 {
@@ -543,7 +586,7 @@ const char * gncInvoiceGetNotes (const GncInvoice *invoice)
   return invoice->notes;
 }
 
-static GncOwnerType gncInvoiceGetOwnerType (GncInvoice *invoice)
+GncOwnerType gncInvoiceGetOwnerType (GncInvoice *invoice)
 {
   GncOwner *owner;
   g_return_val_if_fail (invoice, GNC_OWNER_NONE);
@@ -676,6 +719,29 @@ EntryList * gncInvoiceGetEntries (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
   return invoice->entries;
+}
+
+GList * gncInvoiceGetPrices(GncInvoice *invoice)
+{
+  if (!invoice) return NULL;
+  return invoice->prices;
+}
+
+GNCPrice * gncInvoiceGetPrice(GncInvoice *invoice, gnc_commodity *commodity)
+{
+  GList *node=g_list_first(invoice->prices);
+
+  while (node != NULL)
+  {
+    GNCPrice *curr = (GNCPrice*)node->data;
+
+    if (gnc_commodity_equal(commodity, gnc_price_get_commodity(curr)))
+        return curr;
+
+    node = g_list_next(node);
+  }
+
+  return NULL;
 }
 
 static QofCollection*
@@ -988,9 +1054,35 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 	  xaccAccountInsertSplit (this_acc, split);
 	  xaccAccountCommitEdit (this_acc);
 	  xaccTransAppendSplit (txn, split);
-	  xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (value)
+
+	  if (gnc_commodity_equal(xaccAccountGetCommodity(this_acc), invoice->currency))
+	  {
+	      xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (value)
 					 : value),
 				 invoice->currency);
+	  }
+          else
+          {
+              /*need to do conversion */
+              GNCPrice *price = gncInvoiceGetPrice(invoice, xaccAccountGetCommodity(this_acc));
+
+              if (price == NULL)
+              {
+                  /*This is an error, which shouldn't even be able to happen.
+                    We can't really do anything sensible about it, and this is
+		    a user-interface free zone so we can't try asking the user 
+                    again either, have to return NULL*/
+		  return NULL;
+              }
+              else
+              {
+                  gnc_numeric converted_amount;
+                  xaccSplitSetValue(split, (reverse ? gnc_numeric_neg(value): value));
+                  converted_amount = gnc_numeric_div(value, gnc_price_get_value(price), GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
+                  printf("converting from %f to %f\n", gnc_numeric_to_double(value), gnc_numeric_to_double(converted_amount));
+                  xaccSplitSetAmount(split, reverse ? gnc_numeric_neg(converted_amount): converted_amount);
+              }
+          }
 	}
 
 	/* If there is a credit-card account, and this is a CCard
@@ -1049,9 +1141,36 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccAccountInsertSplit (acc_val->account, split);
     xaccAccountCommitEdit (acc_val->account);
     xaccTransAppendSplit (txn, split);
-    xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (acc_val->value)
-				   : acc_val->value),
-			   invoice->currency);
+
+    if (gnc_commodity_equal(xaccAccountGetCommodity(acc_val->account), invoice->currency))
+    {
+        xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (acc_val->value)
+                                       : acc_val->value),
+                               invoice->currency);
+    }
+    else
+    {
+        /*need to do conversion */
+        GNCPrice *price = gncInvoiceGetPrice(invoice, xaccAccountGetCommodity(acc_val->account));
+
+        if (price == NULL)
+        {
+            /*This is an error, which shouldn't even be able to happen.
+              We can't really do anything sensible about it, and this is
+              a user-interface free zone so we can't try asking the user 
+              again either, have to return NULL*/
+            return NULL;
+        }
+        else
+        {
+            gnc_numeric converted_amount;
+            xaccSplitSetValue(split, (reverse ? gnc_numeric_neg(acc_val->value): acc_val->value));
+            converted_amount = gnc_numeric_div(acc_val->value, gnc_price_get_value(price), GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
+            printf("converting from %f to %f\n", gnc_numeric_to_double(acc_val->value), gnc_numeric_to_double(converted_amount));
+
+            xaccSplitSetAmount(split, reverse ? gnc_numeric_neg(converted_amount): converted_amount);
+        }
+    }
   }
 
   /* If there is a ccard account, we may have an additional "to_card" payment.

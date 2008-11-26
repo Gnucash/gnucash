@@ -45,6 +45,8 @@ typedef struct _gncInvoiceClass GncInvoiceClass;
 #include "gncOwner.h"
 #include "gnc-lot.h"
 #include "qofbook.h"
+#include "qofbook.h"
+#include "gnc-pricedb.h"
 
 #define GNC_ID_INVOICE    "gncInvoice"
 
@@ -85,10 +87,14 @@ void gncInvoiceSetToChargeAmount (GncInvoice *invoice, gnc_numeric amount);
 
 void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry);
 void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry);
+void gncInvoiceAddPrice (GncInvoice *invoice, GNCPrice *price);
+void gncInvoiceRemovePrice (GncInvoice *invoice, GNCPrice *price);
 
 /** Call this function when adding an entry to a bill instead of an invoice */
 void gncBillAddEntry (GncInvoice *bill, GncEntry *entry);
 void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry);
+void gncBillAddPrice (GncInvoice *bill, GNCPrice *price);
+void gncBillRemovePrice (GncInvoice *bill, GNCPrice *price);
 
 /** Call this function when an Entry is changed and you want to
     re-sort the list of entries
@@ -105,6 +111,7 @@ Timespec gncInvoiceGetDateDue (const GncInvoice *invoice);
 GncBillTerm * gncInvoiceGetTerms (const GncInvoice *invoice);
 const char * gncInvoiceGetBillingID (const GncInvoice *invoice);
 const char * gncInvoiceGetNotes (const GncInvoice *invoice);
+GncOwnerType gncInvoiceGetOwnerType (GncInvoice *invoice);
 const char * gncInvoiceGetType (GncInvoice *invoice); 
 gnc_commodity * gncInvoiceGetCurrency (const GncInvoice *invoice);
 GncOwner * gncInvoiceGetBillTo (GncInvoice *invoice);
@@ -124,6 +131,8 @@ gnc_numeric gncInvoiceGetTotalTax (GncInvoice *invoice);
 
 typedef GList EntryList;
 EntryList * gncInvoiceGetEntries (GncInvoice *invoice);
+GList * gncInvoiceGetPrices(GncInvoice *invoice);
+GNCPrice * gncInvoiceGetPrice(GncInvoice *invoice, gnc_commodity* commodity);
 
 /** Post this invoice to an account.  Returns the new Transaction
  * that is tied to this invoice.   The transaction is set with
