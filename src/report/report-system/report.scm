@@ -252,21 +252,20 @@
                              " " (_ "Stylesheet"))))
            (gnc:get-html-style-sheets)))))
 
-    (if (procedure? generator)
-        (let ((options (gnc:backtrace-if-exception generator)))
-          (if (not options)
-              (begin
-                (gnc:warn "BUG DETECTED: Scheme exception raised in "
-                          "report options generator procedure named "
-                          (procedure-name generator))
-                (set! options (gnc:new-options))))
-          (gnc:register-option options stylesheet)
-          (gnc:register-option options namer)
-          options)
-        (let ((options (gnc:new-options)))
-          (gnc:register-option options stylesheet)
-          (gnc:register-option options namer)
-          options))))
+    (let ((options
+           (if (procedure? generator)
+               (or (gnc:backtrace-if-exception generator)
+                   (begin
+                     (gnc:warn "BUG DETECTED: Scheme exception raised in "
+                               "report options generator procedure named "
+                               (procedure-name generator))
+                     (gnc:new-options)))
+               (gnc:new-options))))
+      (or (gnc:lookup-option options gnc:pagename-general gnc:optname-reportname)
+          (gnc:register-option options namer))
+      (or (gnc:lookup-option options gnc:pagename-general (N_ "Stylesheet"))
+          (gnc:register-option options stylesheet))
+      options)))
 
 ;; A <report> represents an instantiation of a particular report type.
 (define <report>
