@@ -217,6 +217,7 @@ AM_CONDITIONAL(GNUCASH_SEPARATE_BUILDDIR, test "x${srcdir}" != "x.")
 
 # These are unavailable on windows/mingw32
 AC_CHECK_HEADERS(X11/Xlib.h glob.h)
+AM_CONDITIONAL(HAVE_X11_XLIB_H, test "x$ac_cv_header_X11_Xlib_h" = "xyes")
 AC_CHECK_FUNCS(chown gethostname getppid getuid gettimeofday gmtime_r)
 AC_CHECK_FUNCS(gethostid link)
 
