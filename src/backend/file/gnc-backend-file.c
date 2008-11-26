@@ -144,7 +144,7 @@ gnc_file_be_get_file_lock (FileBackend *be)
     if (rc)
     {
         /* If hard links aren't supported, just allow the lock. */
-        if (errno == EPERM
+        if (errno == EPERM || errno == ENOSYS
 # ifdef EOPNOTSUPP
             || errno == EOPNOTSUPP
 # endif
@@ -412,7 +412,7 @@ gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
     if(err_ret != 0)
     {
 #ifdef HAVE_LINK
-        if(errno == EPERM
+        if(errno == EPERM || errno == ENOSYS
 # ifdef EOPNOTSUPP
            || errno == EOPNOTSUPP
 # endif
@@ -654,6 +654,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
             case ENOENT:     /* tmp_name doesn't exist?  Assume "RO" error */
             case EACCES:
             case EPERM:
+            case ENOSYS:
             case EROFS:
               be_err = ERR_BACKEND_READONLY;
               break;
