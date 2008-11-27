@@ -71,9 +71,9 @@ gnc_gobject_tracking_table (void)
 static void
 gnc_gobject_dump_gobject (GObject *object, const gchar *name)
 {
-  //printf("Enter %s: object %p, name %s\n", __FUNCTION__, object, name);
+  //printf("Enter %s: object %p, name %s\n", G_STRFUNC, object, name);
   g_message("    object %p, ref count %d", object, object->ref_count);
-  //printf("Leave %s:\n", __FUNCTION__);
+  //printf("Leave %s:\n", G_STRFUNC);
 }
 
 
@@ -86,10 +86,10 @@ gnc_gobject_dump_gobject (GObject *object, const gchar *name)
 static gboolean
 gnc_gobject_dump_list (const gchar *name, GList *list, gpointer user_data)
 {
-  //printf("Enter %s: name %s, list %p\n", __FUNCTION__, name, list);
+  //printf("Enter %s: name %s, list %p\n", G_STRFUNC, name, list);
   g_message("  %d %s", g_list_length(list), name);
   g_list_foreach(list, (GFunc)gnc_gobject_dump_gobject, (gpointer)name);
-  //printf("Leave %s:\n", __FUNCTION__);
+  //printf("Leave %s:\n", G_STRFUNC);
   return TRUE;
 }
 
@@ -105,14 +105,14 @@ gnc_gobject_tracking_dump (void)
 {
   GHashTable *table;
 
-  //printf("Enter %s:\n", __FUNCTION__);
+  //printf("Enter %s:\n", G_STRFUNC);
   table = gnc_gobject_tracking_table();
 
   if (g_hash_table_size(table) > 0) {
     g_message("The following objects remain alive:");
     g_hash_table_foreach_remove(table, (GHRFunc)gnc_gobject_dump_list, NULL);
   }
-  //printf("Leave %s:\n", __FUNCTION__);
+  //printf("Leave %s:\n", G_STRFUNC);
 }
 
 
@@ -135,13 +135,13 @@ gnc_gobject_tracking_remember (GObject *object, GObjectClass *klass)
     klass = G_OBJECT_GET_CLASS(object);
   name = g_type_name(G_TYPE_FROM_CLASS(klass));
 
-  //printf("Enter %s: object %p of type %s\n", __FUNCTION__, object, name);
+  //printf("Enter %s: object %p of type %s\n", G_STRFUNC, object, name);
   table = gnc_gobject_tracking_table();
   list = g_hash_table_lookup(table, name);
 
   if (g_list_index(list, object) != -1) {
     g_critical("Object %p is already in list of %s", object, name);
-    //printf("Leave %s: already in list\n", __FUNCTION__);
+    //printf("Leave %s: already in list\n", G_STRFUNC);
     return;
   }
 
@@ -149,7 +149,7 @@ gnc_gobject_tracking_remember (GObject *object, GObjectClass *klass)
   g_hash_table_insert(table, g_strdup(name), list);
 
   g_object_weak_ref(object, gnc_gobject_weak_cb, NULL);
-  //printf("Leave %s:\n", __FUNCTION__);
+  //printf("Leave %s:\n", G_STRFUNC);
 }
 
 
@@ -163,17 +163,17 @@ gnc_gobject_tracking_forget_internal (GObject *object)
   g_return_val_if_fail(G_IS_OBJECT(object), FALSE);
 
   name = G_OBJECT_TYPE_NAME(object);
-  //printf("Enter %s: object %p of type %s\n", __FUNCTION__, object, name);
+  //printf("Enter %s: object %p of type %s\n", G_STRFUNC, object, name);
   table = gnc_gobject_tracking_table();
   list = g_hash_table_lookup(table, name);
   if (!list) {
-    //printf("Leave %s: list for %s objects not found.\n", __FUNCTION__, name);
+    //printf("Leave %s: list for %s objects not found.\n", G_STRFUNC, name);
     return FALSE;
   }
 
   item = g_list_find(list, object);
   if (!item) {
-    //printf("Leave %s: object %p not in %s object list.\n", __FUNCTION__,
+    //printf("Leave %s: object %p not in %s object list.\n", G_STRFUNC,
     //       object, name);
     return FALSE;
   }
@@ -181,10 +181,10 @@ gnc_gobject_tracking_forget_internal (GObject *object)
   list = g_list_remove_link(list, item);
   if (list) {
     g_hash_table_replace(table, g_strdup(name), list);
-    //printf("Leave %s: object removed.\n", __FUNCTION__);
+    //printf("Leave %s: object removed.\n", G_STRFUNC);
   } else {
     g_hash_table_remove(table, name);
-    //printf("Leave %s: object and list removed.\n", __FUNCTION__);
+    //printf("Leave %s: object and list removed.\n", G_STRFUNC);
   }
   return TRUE;
 }
@@ -224,9 +224,9 @@ gnc_gobject_tracking_get_list (const gchar *name)
   GHashTable *table;
   GList *list;
 
-  //printf("Enter %s: name %s\n", __FUNCTION__, name);
+  //printf("Enter %s: name %s\n", G_STRFUNC, name);
   table = gnc_gobject_tracking_table();
   list = g_hash_table_lookup(table, name);
-  //printf("Leave %s: list %p\n", __FUNCTION__, list);
+  //printf("Leave %s: list %p\n", G_STRFUNC, list);
   return list;
 }

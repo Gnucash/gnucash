@@ -39,7 +39,7 @@
 #include "business-gnome-utils.h"
 #include "dialog-invoice.h"
 
-#define FUNC_NAME __FUNCTION__
+#define FUNC_NAME G_STRFUNC
 
 static GtkWidget *
 create_owner_widget (GNCOption *option, GncOwnerType type, GtkWidget *hbox)
@@ -98,7 +98,7 @@ get_owner_type_from_option (GNCOption *option)
   SCM odata = gnc_option_get_option_data (option);
 
   /* The option data is enum-typed.  It's just the enum value. */
-  return (GncOwnerType) scm_num2int(odata, SCM_ARG1, __FUNCTION__);
+  return (GncOwnerType) scm_num2int(odata, SCM_ARG1, G_STRFUNC);
 }
 
 

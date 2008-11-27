@@ -26,7 +26,7 @@
 #include "gncBusGuile.h"
 #include "engine-helpers.h"
 #include "swig-runtime.h"
-#define FUNC_NAME __FUNCTION__
+#define FUNC_NAME G_STRFUNC
 
 static swig_type_info *
 get_acct_type ()

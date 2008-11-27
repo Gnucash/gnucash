@@ -53,7 +53,7 @@
 #include "gnc-date-format.h"
 #include "misc-gnome-utils.h"
 
-#define FUNC_NAME __FUNCTION__
+#define FUNC_NAME G_STRFUNC
 /* TODO: clean up "register-stocks" junk
  */
 
@@ -2435,7 +2435,7 @@ gnc_option_set_ui_value_number_range (GNCOption *option, gboolean use_default,
 
   if (SCM_NUMBERP(value))
   {
-    d_value = scm_num2dbl(value, __FUNCTION__);
+    d_value = scm_num2dbl(value, G_STRFUNC);
     gtk_spin_button_set_value(spinner, d_value);
     return FALSE;
   }

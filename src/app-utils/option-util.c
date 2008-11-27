@@ -821,7 +821,7 @@ gnc_option_num_permissible_values(GNCOption *option)
 
   if(SCM_EXACTP(value))
   {
-    return scm_num2int(value, SCM_ARG1, __FUNCTION__);
+    return scm_num2int(value, SCM_ARG1, G_STRFUNC);
   }
   else
   {
@@ -850,7 +850,7 @@ gnc_option_permissible_value_index(GNCOption *option, SCM search_value)
   }
   else
   {
-    return scm_num2int(value, SCM_ARG1, __FUNCTION__);
+    return scm_num2int(value, SCM_ARG1, G_STRFUNC);
   }
 }
 
@@ -1032,7 +1032,7 @@ gnc_option_get_account_type_list(GNCOption *option)
     if (SCM_FALSEP (scm_integer_p (item))) {
       PERR ("Invalid type");
     } else {
-      type = scm_num2long (item, SCM_ARG1, __FUNCTION__);
+      type = scm_num2long (item, SCM_ARG1, G_STRFUNC);
       type_list = g_list_prepend (type_list, GINT_TO_POINTER (type));
     }
   }
@@ -1074,7 +1074,7 @@ gboolean gnc_option_get_range_info(GNCOption *option,
     return FALSE;
 
   if (lower_bound != NULL)
-    *lower_bound = scm_num2dbl(value, __FUNCTION__);
+    *lower_bound = scm_num2dbl(value, G_STRFUNC);
 
   if (!SCM_LISTP(list) || SCM_NULLP(list))
     return FALSE;
@@ -1087,7 +1087,7 @@ gboolean gnc_option_get_range_info(GNCOption *option,
     return FALSE;
 
   if (upper_bound != NULL)
-    *upper_bound = scm_num2dbl(value, __FUNCTION__);
+    *upper_bound = scm_num2dbl(value, G_STRFUNC);
 
   if (!SCM_LISTP(list) || SCM_NULLP(list))
     return FALSE;
@@ -1103,7 +1103,7 @@ gboolean gnc_option_get_range_info(GNCOption *option,
    * This is still safe for earlier guiles, too -- tested with 1.3.4.
    */
   if (num_decimals != NULL) {
-    double decimals = scm_num2dbl(value, __FUNCTION__);
+    double decimals = scm_num2dbl(value, G_STRFUNC);
     *num_decimals = (int)decimals;
   }
 
@@ -1118,7 +1118,7 @@ gboolean gnc_option_get_range_info(GNCOption *option,
     return FALSE;
 
   if (step_size != NULL)
-    *step_size = scm_num2dbl(value, __FUNCTION__);
+    *step_size = scm_num2dbl(value, G_STRFUNC);
 
   return TRUE;
 }
@@ -1148,7 +1148,7 @@ gnc_option_color_range(GNCOption *option)
   if (!SCM_NUMBERP(value))
     return 0.0;
 
-  return scm_num2dbl(value, __FUNCTION__);
+  return scm_num2dbl(value, G_STRFUNC);
 }
 
 
@@ -1261,7 +1261,7 @@ gnc_option_get_color_info(GNCOption *option,
 
   scale = 1.0 / scale;
 
-  rgba = scm_num2dbl(SCM_CAR(value), __FUNCTION__);
+  rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
   if (red != NULL)
     *red = MIN(1.0, rgba * scale);
 
@@ -1269,7 +1269,7 @@ gnc_option_get_color_info(GNCOption *option,
   if (!SCM_LISTP(value) || SCM_NULLP(value) || !SCM_NUMBERP(SCM_CAR(value)))
     return FALSE;
 
-  rgba = scm_num2dbl(SCM_CAR(value), __FUNCTION__);
+  rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
   if (green != NULL)
     *green = MIN(1.0, rgba * scale);
 
@@ -1277,7 +1277,7 @@ gnc_option_get_color_info(GNCOption *option,
   if (!SCM_LISTP(value) || SCM_NULLP(value) || !SCM_NUMBERP(SCM_CAR(value)))
     return FALSE;
 
-  rgba = scm_num2dbl(SCM_CAR(value), __FUNCTION__);
+  rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
   if (blue != NULL)
     *blue = MIN(1.0, rgba * scale);
 
@@ -1285,7 +1285,7 @@ gnc_option_get_color_info(GNCOption *option,
   if (!SCM_LISTP(value) || SCM_NULLP(value) || !SCM_NUMBERP(SCM_CAR(value)))
     return FALSE;
 
-  rgba = scm_num2dbl(SCM_CAR(value), __FUNCTION__);
+  rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
   if (alpha != NULL)
     *alpha = MIN(1.0, rgba * scale);
 
@@ -2215,7 +2215,7 @@ gnc_option_db_lookup_number_option(GNCOptionDB *odb,
     {
       value = scm_call_0(getter);
       if (SCM_NUMBERP(value))
-        return scm_num2dbl(value, __FUNCTION__);
+        return scm_num2dbl(value, G_STRFUNC);
     }
   }
 

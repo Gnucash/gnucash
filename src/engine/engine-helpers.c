@@ -42,7 +42,7 @@ cannot be considered "standard" or public parts of QOF. */
 #include "qofquery-p.h"
 #include "qofquerycore-p.h"
 
-#define FUNC_NAME __FUNCTION__
+#define FUNC_NAME G_STRFUNC
 
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
@@ -106,7 +106,7 @@ gnc_timepair2timespec(SCM x)
   if (gnc_timepair_p (x))
   {
     result.tv_sec = gnc_scm_to_gint64(SCM_CAR(x));
-    result.tv_nsec = scm_num2long(SCM_CDR(x), SCM_ARG1, __FUNCTION__);
+    result.tv_nsec = scm_num2long(SCM_CDR(x), SCM_ARG1, G_STRFUNC);
   }
   return(result);
 }
@@ -203,42 +203,42 @@ typedef enum {
 static QofQueryCompare
 gnc_query_scm2compare (SCM how_scm)
 {
-  return scm_num2int(how_scm, SCM_ARG1, __FUNCTION__);
+  return scm_num2int(how_scm, SCM_ARG1, G_STRFUNC);
 }
 
 /* QofStringMatch */
 static QofStringMatch
 gnc_query_scm2string (SCM how_scm)
 {
-  return scm_num2int(how_scm, SCM_ARG1, __FUNCTION__);
+  return scm_num2int(how_scm, SCM_ARG1, G_STRFUNC);
 }
 
 /* QofDateMatch */
 static QofDateMatch
 gnc_query_scm2date (SCM how_scm)
 {
-  return scm_num2int(how_scm, SCM_ARG1, __FUNCTION__);
+  return scm_num2int(how_scm, SCM_ARG1, G_STRFUNC);
 }
 
 /* QofNumericMatch */
 static QofNumericMatch
 gnc_query_scm2numericop (SCM how_scm)
 {
-  return scm_num2int(how_scm, SCM_ARG1, __FUNCTION__);
+  return scm_num2int(how_scm, SCM_ARG1, G_STRFUNC);
 }
 
 /* QofGuidMatch */
 static QofGuidMatch
 gnc_query_scm2guid (SCM how_scm)
 {
-  return scm_num2int(how_scm, SCM_ARG1, __FUNCTION__);
+  return scm_num2int(how_scm, SCM_ARG1, G_STRFUNC);
 }
 
 /* QofCharMatch */
 static QofCharMatch
 gnc_query_scm2char (SCM how_scm)
 {
-  return scm_num2int(how_scm, SCM_ARG1, __FUNCTION__);
+  return scm_num2int(how_scm, SCM_ARG1, G_STRFUNC);
 }
 
 static QofGuidMatch
@@ -319,7 +319,7 @@ gnc_scm2bitfield (SCM field_scm)
     scm = SCM_CAR (field_scm);
     field_scm = SCM_CDR (field_scm);
 
-    bit = scm_num2int(scm, SCM_ARG2, __FUNCTION__);
+    bit = scm_num2int(scm, SCM_ARG2, G_STRFUNC);
     field |= bit;
   }
 
@@ -516,7 +516,7 @@ gnc_query_path_free (GSList *path)
 static KvpValueType
 gnc_scm2KvpValueTypeype (SCM value_type_scm)
 {
-  return scm_num2int(value_type_scm, SCM_ARG1, __FUNCTION__);
+  return scm_num2int(value_type_scm, SCM_ARG1, G_STRFUNC);
 }
 
 static SCM gnc_kvp_frame2scm (KvpFrame *frame);
@@ -653,7 +653,7 @@ gnc_scm2KvpValue (SCM value_scm)
       break;
 
     case KVP_TYPE_DOUBLE:
-      value = kvp_value_new_double (scm_num2dbl (val_scm, __FUNCTION__));
+      value = kvp_value_new_double (scm_num2dbl (val_scm, G_STRFUNC));
       break;
 
     case KVP_TYPE_STRING: {
@@ -988,7 +988,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       qt_scm = SCM_CDR (qt_scm);
       if (!SCM_NUMBERP (scm))
         break;
-      val = scm_num2dbl (scm, __FUNCTION__);
+      val = scm_num2dbl (scm, G_STRFUNC);
 
       pd = qof_query_double_predicate (compare_how, val);
 
@@ -1179,7 +1179,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
         break;
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
-      amount = scm_num2dbl (scm, __FUNCTION__);
+      amount = scm_num2dbl (scm, G_STRFUNC);
 
       val = double_to_gnc_numeric (amount, GNC_DENOM_AUTO, 
                        GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND);
@@ -1573,7 +1573,7 @@ gnc_query_scm2sort (SCM sort_scm, GSList **path, gint *options, gboolean *inc)
     gnc_query_path_free (p);
     return FALSE;
   }
-  o = scm_num2int (val, SCM_ARG1, __FUNCTION__);
+  o = scm_num2int (val, SCM_ARG1, G_STRFUNC);
 
   /* increasing */
   val = SCM_CAR (sort_scm);
@@ -1813,7 +1813,7 @@ gnc_scm2query_v1 (SCM query_scm)
         break;
       }
 
-      max_splits = scm_num2int (value, SCM_ARG1, __FUNCTION__);
+      max_splits = scm_num2int (value, SCM_ARG1, G_STRFUNC);
 
     } else {
       PERR ("Unknown symbol: %s", symbol);
@@ -1925,7 +1925,7 @@ gnc_scm2query_v2 (SCM query_scm)
         break;
       }
 
-      max_results = scm_num2int (value, SCM_ARG1, __FUNCTION__);
+      max_results = scm_num2int (value, SCM_ARG1, G_STRFUNC);
 
     } else {
       ok = FALSE;
@@ -2047,7 +2047,7 @@ gnc_scm_to_gint64(SCM num)
    */
   for (i = 48; i >=0; i-= 16) {
     bits = scm_ash(magnitude, SCM_MAKINUM(-i));
-    c_bits = scm_num2ulong(scm_logand(bits, bits00to15_mask), SCM_ARG1, __FUNCTION__);
+    c_bits = scm_num2ulong(scm_logand(bits, bits00to15_mask), SCM_ARG1, G_STRFUNC);
     c_result += ((long long)c_bits << i);
     magnitude = scm_difference(magnitude, scm_ash(bits, SCM_MAKINUM(i)));
   }

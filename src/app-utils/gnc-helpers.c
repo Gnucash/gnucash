@@ -68,11 +68,11 @@ gnc_scm2printinfo(SCM info_scm)
 
   info_scm = SCM_CDR (info_scm);
   info.max_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1,
-                                         __FUNCTION__);
+                                         G_STRFUNC);
 
   info_scm = SCM_CDR (info_scm);
   info.min_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1,
-                                         __FUNCTION__);
+                                         G_STRFUNC);
 
   info_scm = SCM_CDR (info_scm);
   info.use_separators = SCM_NFALSEP (SCM_CAR (info_scm));

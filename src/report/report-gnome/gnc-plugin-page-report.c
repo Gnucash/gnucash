@@ -808,7 +808,7 @@ gnc_plugin_page_report_recreate_page (GtkWidget *window,
 	  return NULL;
 	}
 
-	report_id = scm_num2int(final_id, SCM_ARG1, __FUNCTION__);
+	report_id = scm_num2int(final_id, SCM_ARG1, G_STRFUNC);
 	report = gnc_report_find(report_id);
 	if (!report) {
 	  LEAVE("report doesn't exist");
