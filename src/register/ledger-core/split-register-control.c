@@ -188,6 +188,111 @@ gnc_split_register_old_split_empty_p (SplitRegister *reg, Split *split)
   return TRUE;
 }
 
+/* This function checks a cell for an account change, and takes
+ * any necessary action if an account change has occurred. */
+static void
+gnc_split_register_check_account (SplitRegister *reg, 
+                                  const char *cell_name)
+{
+  SRInfo *info;
+  ComboCell *cell = NULL;
+  Account* new_acct;
+  char *name;
+
+  g_return_if_fail(reg);
+
+  ENTER("reg=%p, cell_name=%s", reg, cell_name? cell_name : "NULL");
+
+  /* See if we are leaving an account field */
+  if (gnc_cell_name_equal (cell_name, XFRM_CELL))
+  {
+    if (gnc_table_layout_get_cell_changed (reg->table->layout,
+                                           XFRM_CELL, FALSE))
+      cell = (ComboCell *) gnc_table_layout_get_cell (reg->table->layout,
+                                                      XFRM_CELL);
+  }
+  else if (gnc_cell_name_equal (cell_name, MXFRM_CELL))
+  {
+    if (gnc_table_layout_get_cell_changed (reg->table->layout,
+                                           MXFRM_CELL, FALSE))
+      cell = (ComboCell *) gnc_table_layout_get_cell (reg->table->layout,
+                                                      MXFRM_CELL);
+  }
+
+  if (!cell)
+  {
+    LEAVE(" ");
+    return;
+  }
+
+  /* The account has been changed. */
+  name = cell->cell.value;
+  DEBUG("Account now %s", name ? name : "NULL");
+  if (!name || *name == '\0' ||
+      safe_strcmp (name, SPLIT_TRANS_STR) == 0 ||
+      safe_strcmp (name, STOCK_SPLIT_STR) == 0)
+  {
+    LEAVE(" ");
+    return;
+  }
+
+  /* Create the account if necessary. Also checks for a placeholder. */
+  info = gnc_split_register_get_info (reg);
+  new_acct = gnc_split_register_get_account_by_name (reg,
+                                                     (BasicCell *) cell,
+                                                     cell->cell.value,
+                                                     &info->full_refresh);
+
+  /* See if we need to reset the exchange rate. */
+  if (new_acct)
+  {
+    PriceCell *rate_cell = (PriceCell *)
+      gnc_table_layout_get_cell (reg->table->layout, RATE_CELL);
+
+    if (rate_cell)
+    {
+      Split         *split     = gnc_split_register_get_current_split(reg);
+      Account       *orig_acct = xaccSplitGetAccount(split);
+      gnc_commodity *orig_com  = xaccAccountGetCommodity(orig_acct);
+      gnc_commodity *new_com   = xaccAccountGetCommodity(new_acct);
+
+      if (!gnc_commodity_equal(orig_com, new_com))
+      {
+        DEBUG("Commodity now %s (originally %s). Clearing rate.",
+              new_com  ? gnc_commodity_get_mnemonic(new_com) : "NULL",
+              orig_com ? gnc_commodity_get_mnemonic(orig_com) : "NULL");
+
+        gnc_price_cell_set_value (rate_cell, gnc_numeric_zero());
+        info->rate_reset = TRUE;
+      }
+      else
+      {
+        /* Get the original rate from the split. */
+        gnc_numeric amt       = xaccSplitGetAmount(split);
+        gnc_numeric val       = xaccSplitGetValue(split);
+        gnc_numeric orig_rate = gnc_numeric_div(amt, val, GNC_DENOM_AUTO,
+                                                GNC_DENOM_REDUCE);
+
+        if (!gnc_numeric_check(orig_rate))
+        {
+          DEBUG("Using original rate of %s.",
+                gnc_num_dbg_to_string(orig_rate));
+          gnc_price_cell_set_value (rate_cell, orig_rate);
+          info->rate_reset = FALSE;
+        }
+        else
+        {
+          DEBUG("Can't get rate. Using zero.");
+          gnc_price_cell_set_value (rate_cell, gnc_numeric_zero());
+          info->rate_reset = TRUE;
+        }
+      }
+    }
+  }
+
+  LEAVE(" ");
+}
+
 static void
 gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
                                 gpointer user_data)
@@ -209,13 +314,18 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
   gboolean saved;
   SRInfo *info;
 
+  ENTER("reg=%p, p_new_virt_loc=%p (%d, %d)",
+        reg, p_new_virt_loc,
+        new_virt_loc.vcell_loc.virt_row,
+        new_virt_loc.vcell_loc.virt_col);
+
   if (!reg)
+  {
+    LEAVE("no register");
     return;
+  }
 
   info = gnc_split_register_get_info (reg);
-  PINFO ("start callback %d %d \n",
-         new_virt_loc.vcell_loc.virt_row,
-         new_virt_loc.vcell_loc.virt_col);
 
   /* The transaction we are coming from */
   old_split = gnc_split_register_get_current_split (reg);
@@ -335,7 +445,10 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
   }
 
   if (old_split != new_split)
+  {
     info->change_confirmed = FALSE;
+    info->rate_reset = FALSE;
+  }
 
   gnc_resume_gui_refresh ();
 
@@ -389,6 +502,8 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
   if (saved)
   {
     gnc_split_register_set_cell_fractions (reg, new_split);
+
+    LEAVE("saved");
     return;
   }
 
@@ -446,6 +561,8 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
                                         &vc_loc);
     gnc_split_register_show_trans (reg, vc_loc);
   }
+
+  LEAVE(" ");
 }
 
 static Split *
@@ -871,8 +988,8 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 }
 
 static void
-gnc_split_register_traverse_check_stock_action (SplitRegister *reg, 
-                                                const char *cell_name)
+gnc_split_register_check_stock_action (SplitRegister *reg, 
+                                       const char *cell_name)
 {
   BasicCell *cell;
   gnc_numeric shares;
@@ -909,8 +1026,8 @@ gnc_split_register_traverse_check_stock_action (SplitRegister *reg,
 }
 
 static void
-gnc_split_register_traverse_check_stock_shares (SplitRegister *reg, 
-                                                const char *cell_name)
+gnc_split_register_check_stock_shares (SplitRegister *reg, 
+                                       const char *cell_name)
 {
   BasicCell *cell;
   gnc_numeric shares;
@@ -940,6 +1057,25 @@ gnc_split_register_traverse_check_stock_shares (SplitRegister *reg,
       gnc_combo_cell_set_value((ComboCell *)cell, 
                                buy ? ACTION_BUY_STR : ACTION_SELL_STR);
       gnc_basic_cell_set_changed (cell, TRUE);
+  }
+}
+
+/* This function checks a cell for changes and takes appropriate
+ * action if a change has occurred. It is useful, for example, to
+ * call this function just before leaving a cell. */
+void
+gnc_split_register_check_cell (SplitRegister *reg, const char *cell_name)
+{
+  /* See if we are leaving an account field. */
+  gnc_split_register_check_account (reg, cell_name);
+
+  /* See if we are leaving an action field */
+  if ((reg->type == STOCK_REGISTER) ||
+      (reg->type == PORTFOLIO_LEDGER) ||
+      (reg->type == CURRENCY_REGISTER))
+  {
+    gnc_split_register_check_stock_action (reg, cell_name);
+    gnc_split_register_check_stock_shares (reg, cell_name);
   }
 }
 
@@ -1001,6 +1137,7 @@ gnc_split_register_get_cell_date (SplitRegister *reg, const char *cell_name)
 gboolean
 gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
 {
+  SRInfo *info;
   Transaction *txn;
   Split *split, *osplit;
   Account *xfer_acc, *reg_acc;
@@ -1012,19 +1149,30 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   const char *message;
   CursorClass cursor_class;
   
+  ENTER("reg=%p, force_dialog=%s", reg, force_dialog ? "TRUE" : "FALSE" );
+
   /* Make sure we NEED this for this type of register */
   if (!gnc_split_reg_has_rate_cell (reg->type))
+  {
+    LEAVE("No rate cell.");
     return FALSE;
+  }
 
   rate_cell = (PriceCell*) gnc_table_layout_get_cell(
       reg->table->layout, RATE_CELL);
   if (!rate_cell)
+  {
+    LEAVE("Null rate cell.");
     return FALSE;
+  }
 
   /* See if we already have an exchange rate... */
   exch_rate = gnc_price_cell_get_value (rate_cell);
   if (!gnc_numeric_zero_p(exch_rate) && !force_dialog)
+  {
+    LEAVE("Rate already non-zero.");
     return FALSE;
+  }
 
   /* Are we expanded? */
   expanded = gnc_split_register_current_trans_expanded (reg);
@@ -1032,7 +1180,10 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
 
   /* If we're expanded AND a transaction cursor, there is nothing to do */
   if (expanded && cursor_class == CURSOR_CLASS_TRANS)
+  {
+    LEAVE("Expanded with transaction cursor. Nothing to do.");
     return FALSE;
+  }
 
   /* Grab the xfer account */
   xfer_acc = gnc_split_register_get_account_always(
@@ -1044,12 +1195,16 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   /* If this is an un-expanded, multi-split transaction, then warn the user */
   if (force_dialog && !expanded && !xfer_acc) {
     gnc_error_dialog (gnc_split_register_get_parent (reg), "%s", message);
+    LEAVE("%s", message);
     return TRUE;
   }
 
   /* No account -- don't run the dialog */
   if (!xfer_acc)
+  {
+    LEAVE("No xfer account.");
     return FALSE;
+  }
 
   /* Grab the txn currency and xfer commodity */
   txn = gnc_split_register_get_current_trans (reg);
@@ -1070,11 +1225,17 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
      * go on.  We're using the correct accounts.
      */
     if (!force_dialog)
+    {
+      LEAVE("Txn currency and account currency match, and not forcing dialog.");
       return FALSE;
+    }
 
     /* Only proceed with two-split, basic, non-expanded registers */
     if (expanded || osplit == NULL)
+    {
+      LEAVE("Register is expanded, or osplit == NULL. Not forcing dialog.");
       return FALSE;
+    }
 
     /* If we're forcing, then compare the current account
      * commodity to the transaction commodity.
@@ -1082,7 +1243,10 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     xfer_acc = reg_acc;
     xfer_com = reg_com;
     if (gnc_commodity_equal (txn_cur, xfer_com))
+    {
+      LEAVE("Register commodity == txn commodity. Not forcing dialog.");
       return FALSE;
+    }
   }
 
   /* If this is a non-expanded, two-split txn where BOTH splits need
@@ -1093,6 +1257,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
       gnc_split_register_split_needs_amount (reg, split) &&
       gnc_split_register_split_needs_amount (reg, osplit)) {
     gnc_error_dialog (gnc_split_register_get_parent (reg), "%s", message);
+    LEAVE("%s", message);
     return TRUE;
   }
 
@@ -1118,15 +1283,23 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
    * FALSE to let the user continue on.
    */
   if (gnc_numeric_zero_p (amount))
+  {
+    LEAVE("Amount is zero. No exchange rate needed.");
     return FALSE;
+  }
 
   /* If the exch_rate is zero, we're not forcing the dialog, and this is
    * _not_ the blank split, then return FALSE -- this is a "special"
    * gain/loss stock transaction.
    */
+  info = gnc_split_register_get_info (reg);
   if (gnc_numeric_zero_p(exch_rate) && !force_dialog && split &&
+      !info->rate_reset &&
       split != gnc_split_register_get_blank_split (reg))
+  {
+    LEAVE("Gain/loss split. No exchange rate needed.");
     return FALSE;
+  }
 
   /* create the exchange-rate dialog */
   xfer = gnc_xfer_dialog (NULL, NULL); /* XXX */
@@ -1145,11 +1318,16 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
 
   if (gnc_xfer_dialog_run_exchange_dialog(
           xfer, &exch_rate, amount, reg_acc, txn, xfer_com))
-      return TRUE;
+  {
+    LEAVE("Leaving rate unchanged.");
+    return TRUE;
+  }
 
   /* Set the RATE_CELL on this cursor and mark it changed */
   gnc_price_cell_set_value (rate_cell, exch_rate);
   gnc_basic_cell_set_changed (&rate_cell->cell, TRUE);
+  info->rate_reset = FALSE;
+  LEAVE("set rate=%s", gnc_num_dbg_to_string(exch_rate));
   return FALSE;
 }
 
@@ -1222,6 +1400,18 @@ transaction_changed_confirm(VirtualLocation *p_new_virt_loc,
     return FALSE;
 }
 
+/** Examine a request to traverse to a new location in the register and
+ *  decide whether it should be allowed to proceed, and where the new
+ *  location will be.
+ *
+ *  @param p_new_virt_loc a pointer to storage for the new location
+ *
+ *  @param dir the direction of the traversal
+ *
+ *  @param user_data pointer to a ::SplitRegister to traverse
+ *
+ *  @return @c TRUE if the traversal cannot be completed. Otherwise,
+ *  @c FALSE is returned and the new location is stored at @a p_new_virt_loc. */
 static gboolean
 gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
                              gncTableTraversalDir dir,
@@ -1236,13 +1426,26 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   Split *split;
   const char *cell_name;
 
+  g_return_val_if_fail(p_new_virt_loc, TRUE);
+
+  ENTER("reg=%p, p_new_virt_loc=%p (%d,%d), dir=%d",
+         reg, p_new_virt_loc, dir,
+         (*p_new_virt_loc).vcell_loc.virt_row,
+         (*p_new_virt_loc).vcell_loc.virt_col);
+
   if (!reg)
+  {
+    LEAVE("no register");
     return FALSE;
+  }
 
   info = gnc_split_register_get_info (reg);
 
   if (info->first_pass)
+  {
+    LEAVE("first pass");
     return FALSE;
+  }
 
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
                                    gnc_get_current_book ());
@@ -1253,7 +1456,10 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   split = gnc_split_register_get_current_split (reg);
   trans = gnc_split_register_get_current_trans (reg);
   if (trans == NULL)
+  {
+    LEAVE("no transaction");
     return FALSE;
+  }
 
   /* no changes, make sure we aren't going off the end */
   changed = gnc_table_current_cursor_changed (reg->table, FALSE);
@@ -1264,71 +1470,14 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
     *p_new_virt_loc = virt_loc;
 
+    LEAVE("no changes");
     return FALSE;
   }
 
-  /* Get the current cell-name to check it.. */
+  /* Get the current cell-name and check it for changes. */
   cell_name = gnc_table_get_current_cell_name (reg->table);
+  gnc_split_register_check_cell (reg, cell_name);
 
-  /* See if we are leaving an account field */
-  do
-  {
-    ComboCell *cell = NULL;
-    char *name;
-
-    if (!gnc_cell_name_equal (cell_name, XFRM_CELL) &&
-        !gnc_cell_name_equal (cell_name, MXFRM_CELL))
-      break;
-
-    if (gnc_cell_name_equal (cell_name, XFRM_CELL))
-    {
-      if (gnc_table_layout_get_cell_changed (reg->table->layout,
-                                             XFRM_CELL, FALSE))
-        cell = (ComboCell *) gnc_table_layout_get_cell (reg->table->layout,
-                                                        XFRM_CELL);
-    }
-
-    if (gnc_cell_name_equal (cell_name, MXFRM_CELL))
-    {
-      if (gnc_table_layout_get_cell_changed (reg->table->layout,
-                                             MXFRM_CELL, FALSE))
-        cell = (ComboCell *) gnc_table_layout_get_cell (reg->table->layout,
-                                                        MXFRM_CELL);
-    }
-
-    if (!cell)
-      break;
-
-    /* The account changed -- reset the rate
-     * XXX: perhaps we should only do this is the currency changed?
-     */
-    {
-      PriceCell *rate_cell = (PriceCell*)
-        gnc_table_layout_get_cell (reg->table->layout, RATE_CELL);
-
-      if (rate_cell)
-        gnc_price_cell_set_value (rate_cell, gnc_numeric_zero());
-    }
-
-    name = cell->cell.value;
-    if (!name || *name == '\0' ||
-        safe_strcmp (name, SPLIT_TRANS_STR) == 0 ||
-        safe_strcmp (name, STOCK_SPLIT_STR) == 0)
-      break;
-
-    /* Create the account if necessary. Also checks for a placeholder */
-    (void) gnc_split_register_get_account_by_name(
-        reg, (BasicCell *)cell, cell->cell.value, &info->full_refresh);
-  } while (FALSE);
-
-  /* See if we are leaving an action field */
-  if ((reg->type == STOCK_REGISTER) ||
-      (reg->type == PORTFOLIO_LEDGER) ||
-      (reg->type == CURRENCY_REGISTER)) {
-    gnc_split_register_traverse_check_stock_action (reg, cell_name);
-    gnc_split_register_traverse_check_stock_shares (reg, cell_name);
-  }
- 
   /* See if we are tabbing off the end of the very last line */
   do {
     VirtualLocation virt_loc;
@@ -1349,7 +1498,10 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
     /* Deal with the exchange-rate */
     if (gnc_split_register_handle_exchange (reg, FALSE))
+    {
+      LEAVE("no exchange rate");
       return TRUE;
+    }
 
     *p_new_virt_loc = reg->table->current_cursor_loc;
     (p_new_virt_loc->vcell_loc.virt_row)++;
@@ -1358,6 +1510,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
     info->traverse_to_new = TRUE;
 
+    LEAVE("off end of last line");
     return FALSE;
 
   } while (FALSE);
@@ -1367,7 +1520,10 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   if (!gnc_table_virtual_cell_out_of_bounds (reg->table, virt_loc.vcell_loc))
   {
     if (gnc_split_register_auto_completion (reg, dir, p_new_virt_loc))
+    {
+      LEAVE("auto-complete");
       return FALSE;
+    }
   }
 
   /* See if we are tabbing off the end of a blank split */
@@ -1400,7 +1556,10 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
     /* Deal with the exchange-rate */
     if (gnc_split_register_handle_exchange (reg, FALSE))
+    {
+      LEAVE("no exchange rate");
       return TRUE;
+    }
 
     info->cursor_hint_trans = trans;
     info->cursor_hint_split = split;
@@ -1409,6 +1568,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     info->cursor_hint_cursor_class = CURSOR_CLASS_SPLIT;
     info->hint_set_by_traverse = TRUE;
 
+    LEAVE("off end of blank split");
     return FALSE;
 
   } while(FALSE);
@@ -1425,7 +1585,10 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     if (virt_loc.vcell_loc.virt_row != old_virt_row)
       /* Deal with the exchange-rate */
       if (gnc_split_register_handle_exchange (reg, FALSE))
+      {
+        LEAVE("no exchange rate");
         return TRUE;
+      }
   }
 
 
@@ -1434,11 +1597,15 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   if (trans == new_trans)
   {
     *p_new_virt_loc = virt_loc;
-    return FALSE;
+    {
+      LEAVE("staying within txn");
+      return FALSE;
+    }
   }
 
   /* Ok, we are changing transactions and the current transaction has
    * changed. See what the user wants to do. */
+  LEAVE("txn change");
   return transaction_changed_confirm(p_new_virt_loc, &virt_loc, reg, 
                                      new_trans, info->exact_traversal);
 }
