@@ -364,6 +364,7 @@ add_text_column(GtkTreeView *view, const gchar *title, int col_num)
      "text", col_num,
      "background", DOWNLOADED_COL_COLOR,
      NULL);
+  gtk_tree_view_column_set_sort_column_id(column, col_num);
   g_object_set(G_OBJECT(column),
 	       "reorderable", TRUE,
 	       "resizable", TRUE,
@@ -385,6 +386,7 @@ add_toggle_column(GtkTreeView *view, const gchar *title, int col_num,
      "active", col_num,
      "cell-background", DOWNLOADED_COL_COLOR,
      NULL);
+  gtk_tree_view_column_set_sort_column_id(column, col_num);
   g_object_set(G_OBJECT(column),
 	       "reorderable", TRUE,
 	       NULL);
@@ -442,6 +444,7 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
 				      "text", DOWNLOADED_COL_ACTION_INFO,
 				      "background", DOWNLOADED_COL_COLOR,
 				      NULL);
+  gtk_tree_view_column_set_sort_column_id(column, DOWNLOADED_COL_ACTION_INFO);
   g_object_set(G_OBJECT(column),
 	       "reorderable", TRUE,
 	       "resizable", TRUE,
