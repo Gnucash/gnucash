@@ -532,6 +532,19 @@ AC_CHECK_LIB(xml2, xmlElemDump, [:], [
 LIBS="$oLIBS"
 
 ### --------------------------------------------------------------------------
+### Zlib
+
+ZLIB_LIBS=-lz
+AC_SUBST(ZLIB_LIBS)
+
+oLIBS="$LIBS"
+LIBS="$LIBS $ZLIB_LIBS"
+AC_CHECK_LIB(z, gzopen, [:], [
+  AC_MSG_ERROR([zlib is required for GnuCash])
+])
+LIBS="$oLIBS"
+
+### --------------------------------------------------------------------------
 ### QOF, the Query Object Framework.  Check if there is a native version.
 
 dnl XXX: FIXME: RELEASE HACK
