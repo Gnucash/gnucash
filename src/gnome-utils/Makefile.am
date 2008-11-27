@@ -195,6 +195,10 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${REGEX_LIBS} \
   ${LIBXML2_LIBS}
 
+if HAVE_X11_XLIB_H
+  libgncmod_gnome_utils_la_LIBADD += -lX11
+endif
+
 if BUILDING_FROM_SVN
 swig-gnome-utils.c: gnome-utils.i gnc-html.h \
                     ${top_srcdir}/src/base-typemaps.i
