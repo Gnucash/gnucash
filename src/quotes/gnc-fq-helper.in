@@ -210,7 +210,11 @@ sub get_quote_time {
   }
 
   my $parsestr = $datestr;
-  if($timestr) {
+  if(!$timestr) {
+    #fix date handling for quotes with no time. 
+    #Keeps gnucash from getting date wrong in west longitude places.
+    $parsestr .= " 12:00:00"
+  } else {
     $parsestr .= " $timestr";
   }
 
