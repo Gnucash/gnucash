@@ -1280,10 +1280,10 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   if (!expanded && osplit &&
       gnc_split_register_split_needs_amount (reg, split) &&
       gnc_split_register_split_needs_amount (reg, osplit)) {
+    message = _("You need to expand the transaction in order to modify its "
+		"exchange rates.");
     if (force_dialog)
     {
-      message = _("You need to expand the transaction in order to modify its "
-                  "exchange rates.");
       gnc_error_dialog (gnc_split_register_get_parent (reg), "%s", message);
     }
     LEAVE("%s", message);
