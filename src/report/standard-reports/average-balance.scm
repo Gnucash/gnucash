@@ -211,7 +211,14 @@
                 (gnc:debug "split " split)
                 (gnc:debug "split-time " split-time)
                 (gnc:debug "split-amt " split-amt)
-                (gnc:debug "splits " splits)
+                ;; gnc:debug converts its input to a string before
+                ;; deciding whether to print it, and converting
+                ;; |splits| to a string is O(N) in its length.  Since
+                ;; this code runs for every split, leaving that
+                ;; gnc:debug in makes the whole thing O(N^2) in number
+                ;; of splits.  If someone really needs this output,
+                ;; they should uncomment the gnc:debug call.
+                ; (gnc:debug "splits " splits)
                 (update-stats split-amt split-time)
                 (set! splits (cdr splits))
 		(split-recurse))))
