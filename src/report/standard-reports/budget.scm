@@ -50,6 +50,12 @@
 (define optname-show-rates (N_ "Show Exchange Rates"))
 (define optname-show-full-names (N_ "Show Full Account Names"))
 (define optname-select-columns (N_ "Select Columns"))
+(define optname-show-budget (N_ "Show Budget"))
+(define optname-show-actual (N_ "Show Actual"))
+(define optname-show-difference (N_ "Show Difference"))
+(define opthelp-show-budget (N_ "Display a column for the budget values"))
+(define opthelp-show-actual (N_ "Display a column for the actual values"))
+(define opthelp-show-difference (N_ "Display the difference as budget - actual"))
 
 (define optname-budget (N_ "Budget"))
 
@@ -65,25 +71,6 @@
      (gnc:make-budget-option
       gnc:pagename-general optname-budget
       "a" (N_ "Budget")))
-
-    (add-option
-     (gnc:make-multichoice-option
-      gnc:pagename-general optname-select-columns
-      "f" (N_ "Select the columns of the budget report") 
-      'opt-all
-      (list (vector 'opt-all
-                    (N_ "All")
-                    (N_ "Display all colums"))
-            (vector 'opt-budget 
-                    (N_ "Budget")
-                    (N_ "Display only the budget values"))
-            (vector 'opt-actual
-                    (N_ "Actual")
-                    (N_ "Display only the actual values"))
-            (vector 'opt-diff
-                    (N_ "Difference")
-                    (N_ "Display only the difference"))
-            )))
 
     ;; date interval
     ;;(gnc:options-add-date-interval!
@@ -117,7 +104,21 @@
         (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
      #f)
 
-    ;; Set the general page as default option tab
+    ;; columns to display
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-show-budget
+      "s1" opthelp-show-budget #t))
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-show-actual
+      "s2" opthelp-show-actual #t))
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-show-difference
+      "s3" opthelp-show-difference #f))
+
+      ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)
 
     options)
@@ -128,11 +129,10 @@
   (let* ((get-val (lambda (alist key)
                     (let ((lst (assoc-ref alist key)))
                       (if lst (car lst) lst))))
-         (select-columns (get-val params 'selected-columns))
-         (show-actual? (or (eq? select-columns 'opt-all) (eq? select-columns 'opt-actual)))
-         (show-budget? (or (eq? select-columns 'opt-all) (eq? select-columns 'opt-budget)))
-         (show-diff? (or (eq? select-columns 'opt-all) (eq? select-columns 'opt-diff)))
-         )
+         (show-actual? (get-val params 'show-actual))
+         (show-budget? (get-val params 'show-budget))
+         (show-diff? (get-val params 'show-difference))
+        )
   
   (define (gnc:html-table-add-budget-line!
            html-table rownum colnum
@@ -300,14 +300,12 @@
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))
          (row-num 0) ;; ???
-	 (work-done 0)
-	 (work-to-do 0)
+         (work-done 0)
+         (work-to-do 0)
          ;;(report-currency (get-option gnc:pagename-general
          ;;                             optname-report-currency))
          (show-full-names? (get-option gnc:pagename-general
                                        optname-show-full-names))
-         (select-columns (get-option gnc:pagename-general
-                                       optname-select-columns))
          (doc (gnc:make-html-document))
          ;;(table (gnc:make-html-table))
          ;;(txt (gnc:make-html-text))
@@ -381,10 +379,16 @@
                (acct-table #f)
                (html-table (gnc:make-html-table))
                (params '())
-               (paramsBudget (list
-                        (list 'selected-columns select-columns)
-                        )
-                       )
+               (paramsBudget
+                (list
+                 (list 'show-actual
+                       (get-option gnc:pagename-display optname-show-actual))
+                 (list 'show-budget
+                       (get-option gnc:pagename-display optname-show-budget))
+                 (list 'show-difference
+                       (get-option gnc:pagename-display optname-show-difference))
+                )
+               )
                (report-name (get-option gnc:pagename-general
                                         gnc:optname-reportname))
                )
