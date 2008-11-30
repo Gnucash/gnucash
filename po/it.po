@@ -3,11 +3,11 @@
 # This file is distributed under the same license as the Gnucash package.
 # <>, 2008.
 # , fuzzy
-# Cristian Marchi<cri79@libero.it>, 2008.
 # Alessandro Seveso <aleseveso@tiscalinet.it>, 2000;
 # Lorenzo Cappelletti <L.Cappelletti@mail.com>, 2002 2003;
 # Lorenzo Cappelletti <lorenzo.cappelletti@email.com>, 2003-2005.
-# Cristian Marchi <cri79@libero.it>, 2008.
+# Simone Zinanni <simone@develer.com>,2008;
+# Cristian Marchi<cri79@libero.it>, 2008;
 #
 # Common translations other than those of the glossary:
 #
@@ -148,7 +148,7 @@ msgstr "Utili non distribuiti"
 #: ../intl-scm/guile-strings.c:1906 ../intl-scm/guile-strings.c:1910
 #: ../intl-scm/guile-strings.c:2294 ../intl-scm/guile-strings.c:2758
 msgid "Equity"
-msgstr "Capitali"
+msgstr "Capitale"
 
 #: ../src/app-utils/gnc-ui-util.c:723 ../src/gnome/dialog-chart-export.c:45
 #: ../src/gnome/druid-hierarchy.c:922 ../src/gnome/glade/account.glade.h:41
@@ -1831,7 +1831,7 @@ msgid ""
 "for you"
 msgstr ""
 "Numero di identificazione del cliente. Se lasciato vuoto, un numero "
-"ragionevole sarà scelto automaticamente."
+"appropriato sarà scelto automaticamente."
 
 #: ../src/business/business-gnome/glade/customer.glade.h:25
 msgid "What Tax Table should be applied to this customer?"
@@ -1913,7 +1913,7 @@ msgid ""
 "for you"
 msgstr ""
 "Numero di identificazione del dipendente. Se lasciato vuoto, un numero "
-"ragionevole sarà scelto automaticamente."
+"appropriato sarà scelto automaticamente."
 
 #: ../src/business/business-gnome/glade/employee.glade.h:22
 msgid "Username: "
@@ -1975,7 +1975,7 @@ msgid ""
 "you."
 msgstr ""
 "Numero di identificazione della fattura. Se lasciato vuoto, un numero "
-"ragionevole sarà scelto automaticamente."
+"appropriato sarà scelto automaticamente."
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:25
 msgid ""
@@ -2010,7 +2010,7 @@ msgid ""
 "The job ID number.  If left blank a reasonable number will be chosen for you"
 msgstr ""
 "Numero di identificazione del lavoro. Se lasciato vuoto, un numero "
-"ragionevole sarà scelto automaticamente."
+"appropriato sarà scelto automaticamente."
 
 #: ../src/business/business-gnome/glade/order.glade.h:4
 msgid "Close Order"
@@ -2055,7 +2055,7 @@ msgid ""
 "you"
 msgstr ""
 "Numero di identificazione dell'ordine. Se lasciato vuoto, un numero "
-"ragionevole sarà scelto automaticamente."
+"appropriato sarà scelto automaticamente."
 
 #. Add the columns
 #. src/business/business-reports/easy-invoice.scm
@@ -2171,7 +2171,7 @@ msgid ""
 "you"
 msgstr ""
 "Numero di identificazione del venditore. Se lasciato vuoto, un numero "
-"ragionevole sarà scelto automaticamente."
+"appropriato sarà scelto automaticamente."
 
 #. src/business/business-reports/gnucash/report/owner-report.scm
 #. src/business/business-reports/owner-report.scm
@@ -2496,7 +2496,7 @@ msgstr "Genera una fattura stampabile"
 #. Edit menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:110
 msgid "_Cut"
-msgstr "Personalizzato"
+msgstr "_Taglia"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:113
 msgid "Copy"
@@ -4180,7 +4180,7 @@ msgstr "Mutuo"
 #: ../src/gnome/druid-loan.c:1044
 msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
 msgstr ""
-"Si è sicuri di voler annullare il druido di impostazione ipoteche e mutui?"
+"Si è sicuri di voler annullare la procedura di impostazione ipoteche e mutui?"
 
 #: ../src/gnome/druid-loan.c:1163
 msgid "Please select a valid loan account."
@@ -4501,7 +4501,7 @@ msgid ""
 msgstr ""
 "Se si desidera assegnare un bilancio di apertura a un conto, cliccare sul "
 "conto e immettere il saldo iniziale nella cella sulla destra. Tutti i conti "
-"a eccezione del capitale e dei segnaposto possono avere un bilancio di "
+"a eccezione di quelli del capitale e dei segnaposto possono avere un bilancio di "
 "apertura."
 
 #: ../src/gnome/glade/account.glade.h:29
@@ -4699,7 +4699,7 @@ msgid ""
 "\n"
 "Click 'Cancel'  if you do not wish to create any new accounts now."
 msgstr ""
-"Questo druido assisterà nella creazione di un insieme di conti GnuCash per "
+"Questa procedura assisterà nella creazione di un insieme di conti GnuCash per "
 "gestire i propri beni (quali investimenti, conti correnti o di risparmio), "
 "debiti (quali mutui) e differenti tipi di entrate e uscite che si possono "
 "avere. \n"
@@ -4827,7 +4827,7 @@ msgid ""
 "development.  It will probably damage your data in such a way that it cannot "
 "be repaired!"
 msgstr ""
-"Questo druido assisterà nell'impostazione e nell'uso dei periodi contabili.\n"
+"Questa procedura assisterà nell'impostazione e nell'uso dei periodi contabili.\n"
 "\n"
 "ATTENZIONE: questa caratteristica non funziona correttamente poiché è ancora "
 "in fase di sviluppo. potrebbe danneggiare i dati in modo irreparabile."
@@ -5357,7 +5357,7 @@ msgid ""
 "\n"
 "Click 'Cancel'  if you do not wish to merge your QSF data now."
 msgstr ""
-"Questo druido unirà i dati QSF nel file aperto di GnuCash.\n"
+"Questo assistente unirà i dati QSF nel file aperto di GnuCash.\n"
 "\n"
 "Verrà chiesto come procedere nel caso che i dati QSF entrino in conflitto "
 "con i dati presenti nel file di GnuCash.\n"
@@ -6165,7 +6165,7 @@ msgstr "<b>Opzioni</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:48
 msgid "<b>Since Last Run Dialog</b>"
-msgstr "<b>Druido dall'ultima esecuzione</b>"
+msgstr "<b>Assistente dall'ultima esecuzione</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:49
 msgid "<b>Transaction Editor Defaults</b>"
@@ -6397,7 +6397,7 @@ msgstr "Mesi rimanenti:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:113
 msgid "Mortgage/Loan Druid"
-msgstr "Druido per ipoteche e mutui"
+msgstr "Assistente per ipoteche e mutui"
 
 #: ../src/gnome/glade/sched-xact.glade.h:114
 msgid "Mortgage/Loan Repayment Setup"
@@ -6624,7 +6624,7 @@ msgstr ""
 msgid ""
 "This druid will walk you through any scheduled transactions that should be "
 "created."
-msgstr "Questo druido guiderà nella creazione di una transazione pianificata."
+msgstr "Questo assistente guiderà nella creazione di una transazione pianificata."
 
 #: ../src/gnome/glade/sched-xact.glade.h:174
 msgid ""
@@ -6637,7 +6637,7 @@ msgid ""
 "created Scheduled Transactions directly."
 msgstr ""
 "Questa procedura passo-passo permette di impostare il rimborso di ipoteche e "
-"mutui in GnuCash. In questo druido è possibile inserire i parametri del "
+"mutui in GnuCash. In questo assistente è possibile inserire i parametri del "
 "prestito e del suo rimborso e fornire dettagli sul risarcimento. Utilizzando "
 "queste informazioni, verrà creata un'appropriata transazione pianificata.\n"
 "\n"
@@ -6757,7 +6757,7 @@ msgstr "settimane."
 
 #: ../src/gnome/glade/stocks.glade.h:1
 msgid "<b>A_sset Account</b>"
-msgstr "<b>Conto delle _attività</b>"
+msgstr "<b>Conto _attività</b>"
 
 #: ../src/gnome/glade/stocks.glade.h:2
 msgid "<b>_Income Account</b>"
@@ -6843,7 +6843,7 @@ msgstr "Dettagli sul frazionamento azionario"
 #: ../src/gnome/glade/stocks.glade.h:15
 msgid "This druid will help you record a stock split or stock merger."
 msgstr ""
-"Questo druido aiuterà a registrare un frazionamento o fusione azionaria."
+"Questo assistente aiuterà a registrare un frazionamento o fusione azionaria."
 
 #: ../src/gnome/glade/stocks.glade.h:16
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:4
@@ -10513,7 +10513,7 @@ msgstr "Termina l'importazione di Datafile in GnuCash"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:13
 msgid "GnuCash Datafile Import Druid"
-msgstr "Druido di importazione dei file dati di GnuCash"
+msgstr "Assistente all'importazione dei file dati di GnuCash"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:14
 msgid "GnuCash data files you have loaded"
@@ -13241,7 +13241,7 @@ msgstr ""
 "conti.\n"
 "\n"
 "Se si desiderasse aggiungere un'altra banca, un altro utente o un altro "
-"conto sarà possibile riutilizzare questo druido in qualsiasi momento.\n"
+"conto sarà possibile riutilizzare questo assistente in qualsiasi momento.\n"
 "\n"
 "Premere «Applica» per terminare."
 
@@ -13271,7 +13271,7 @@ msgid ""
 "Press \"Cancel\" if you do not wish to setup any Online Banking connection "
 "now."
 msgstr ""
-"Questo druido assiste nella configurazione della connessione per l'Online "
+"Questa procedura assiste nella configurazione della connessione per l'Online "
 "Banking con la propria banca.\n"
 "\n"
 "Innanzi tutto occorre richiedere l'abilitazione all'Online Banking presso la "
@@ -15135,7 +15135,7 @@ msgstr ""
 "\n"
 "Si noti che GnuCash creerà diversi conti che non esistono nell'altro "
 "programma di finanze personali, compresi dei conti separati per ogni azione, "
-"per le parcelle di mediazione, conti speciali per i capitali (sottoconti "
+"per le parcelle di mediazione, conti speciali di \"capitale\" (sottoconti "
 "degli utili non distribuiti) che rappresentano la fonte per i bilanci di "
 "apertura, ecc... Tutti questi conti verranno elencati nella pagina "
 "successiva dove sarà possibile cambiarli se lo si desidera, ma si raccomanda "
@@ -15206,7 +15206,7 @@ msgstr "Impostare il nome predefinito del conto QIF"
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:2
 msgid "Show some documentation-only pages in QIF Import druid."
 msgstr ""
-"Mostra alcune pagine di sola documentazione nel druido di importazione di "
+"Mostra alcune pagine di sola documentazione nell'assistente all'importazione di "
 "file QIF."
 
 #: ../src/import-export/qif-import/qif.glade.h:68
@@ -18956,7 +18956,7 @@ msgstr ""
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:2324 ../intl-scm/guile-strings.c:2788
 msgid "Income Accounts"
-msgstr "Conto entrate"
+msgstr "Conti entrate"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
@@ -21892,55 +21892,55 @@ msgstr "Opzione multi scelta"
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6136 ../intl-scm/guile-strings.c:6294
 msgid "This is a multi choice option."
-msgstr "Questa è una opzione multi scelta"
+msgstr "Questa è un'opzione multi scelta"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6138 ../intl-scm/guile-strings.c:6296
 msgid "First Option"
-msgstr "Prima opzione"
+msgstr "Opzione \"first\""
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6140 ../intl-scm/guile-strings.c:6298
 msgid "Help for first option"
-msgstr "Aiuto per la prima opzione"
+msgstr "Aiuto per l'opzione \"first\""
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6142 ../intl-scm/guile-strings.c:6300
 msgid "Second Option"
-msgstr "Seconda opzione"
+msgstr "Opzione \"second\""
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6144 ../intl-scm/guile-strings.c:6302
 msgid "Help for second option"
-msgstr "Aiuto per la seconda opzione"
+msgstr "Aiuto per l'opzione \"second\""
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6146 ../intl-scm/guile-strings.c:6304
 msgid "Third Option"
-msgstr "Terza opzione"
+msgstr "Opzione \"third\""
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6148 ../intl-scm/guile-strings.c:6306
 msgid "Help for third option"
-msgstr "Aiuto per la terza opzione"
+msgstr "Aiuto per l'opzione \"third\""
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6150 ../intl-scm/guile-strings.c:6308
 msgid "Fourth Options"
-msgstr "Quarta opzione"
+msgstr "Opzione \"fourth\""
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6152 ../intl-scm/guile-strings.c:6310
 msgid "The fourth option rules!"
-msgstr "La regola della quarta opzione!"
+msgstr "L'opzione \"fourth\" è la migliore!"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -22095,37 +22095,37 @@ msgstr "Questa è un'opzione di lista"
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6216 ../intl-scm/guile-strings.c:6374
 msgid "The Good"
-msgstr "Il buono"
+msgstr "Good"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6218 ../intl-scm/guile-strings.c:6376
 msgid "Good option"
-msgstr "Opzione buona"
+msgstr "Opzione \"good\""
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6220 ../intl-scm/guile-strings.c:6378
 msgid "The Bad"
-msgstr "Il cattivo"
+msgstr "Bad"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6222 ../intl-scm/guile-strings.c:6380
 msgid "Bad option"
-msgstr "Cattiva opzione"
+msgstr "Opzione \"Bad\""
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6224 ../intl-scm/guile-strings.c:6382
 msgid "The Ugly"
-msgstr "Il brutto"
+msgstr "Ugly"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6226 ../intl-scm/guile-strings.c:6384
 msgid "Ugly option"
-msgstr "Opzione brutta"
+msgstr "Opzione \"Ugly\""
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -22177,8 +22177,8 @@ msgstr ""
 msgid ""
 "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;."
 msgstr ""
-" Per dettagli su come iscriversi alla lista, visitare &lt;http://www.GnuCash."
-"org/&gt;."
+" Per dettagli su come iscriversi alla lista, visitare "
+"&lt;http://www.gnucash.org/&gt;."
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -22187,8 +22187,8 @@ msgid ""
 "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/"
 "&gt;."
 msgstr ""
-"Ulteriori informazioni sulla programmazione nel linguaggio scheme sono "
-"reperibili all'indirizzo&lt;http://www.scheme.com/tspl2d/&gt;."
+" Ulteriori informazioni sulla programmazione nel linguaggio scheme sono "
+"reperibili all'indirizzo &lt;http://www.scheme.com/tspl2d/&gt;."
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -22288,7 +22288,7 @@ msgstr "Elenca gli elementi selezionati"
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:6272 ../intl-scm/guile-strings.c:6430
 msgid "(You selected no list items.)"
-msgstr ""
+msgstr "(non è stato selezionato alcun elemento)"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
