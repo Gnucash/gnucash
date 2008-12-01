@@ -54,35 +54,6 @@ G_LOCK_DEFINE_STATIC(print_settings);
 G_LOCK_DEFINE_STATIC(page_setup);
 #endif
 
-static void gnc_print_session_fontsel_cb(GtkButton *widget, gpointer user_data)
-{
-  PrintSession *ps = (PrintSession *)user_data;
-  GtkWidget *dialog;
-  gint response;
-
-  dialog = gtk_font_selection_dialog_new("GnuCash Print Font");
-  if (ps->pango_font_string == NULL) {
-    GtkStyle *style = gtk_style_new();
-    ps->pango_font_string = pango_font_description_to_string(style->font_desc);
-    g_object_unref(style);
-  }
-  if (ps->pango_font_string != NULL)
-      gtk_font_selection_dialog_set_font_name((GtkFontSelectionDialog *)dialog, ps->pango_font_string);
-
-  response = gtk_dialog_run(GTK_DIALOG(dialog));
-  gtk_widget_destroy(dialog);
-
-  switch (response) {
-    case GTK_RESPONSE_OK:
-      g_free(ps->pango_font_string);
-      ps->pango_font_string = gtk_font_selection_dialog_get_font_name((GtkFontSelectionDialog *)dialog);
-      gnc_gconf_set_string(NULL, "pango_font_string", ps->pango_font_string, NULL);
-      break;
-
-    default:
-      break;
-  }
-}
 
 #ifdef HAVE_GTK_2_10
 void
@@ -156,6 +127,36 @@ gnc_ui_page_setup(GtkWindow *parent)
 
 
 #ifndef GTKHTML_USES_GTKPRINT
+static void gnc_print_session_fontsel_cb(GtkButton *widget, gpointer user_data)
+{
+  PrintSession *ps = (PrintSession *)user_data;
+  GtkWidget *dialog;
+  gint response;
+
+  dialog = gtk_font_selection_dialog_new("GnuCash Print Font");
+  if (ps->pango_font_string == NULL) {
+    GtkStyle *style = gtk_style_new();
+    ps->pango_font_string = pango_font_description_to_string(style->font_desc);
+    g_object_unref(style);
+  }
+  if (ps->pango_font_string != NULL)
+      gtk_font_selection_dialog_set_font_name((GtkFontSelectionDialog *)dialog, ps->pango_font_string);
+
+  response = gtk_dialog_run(GTK_DIALOG(dialog));
+  gtk_widget_destroy(dialog);
+
+  switch (response) {
+    case GTK_RESPONSE_OK:
+      g_free(ps->pango_font_string);
+      ps->pango_font_string = gtk_font_selection_dialog_get_font_name((GtkFontSelectionDialog *)dialog);
+      gnc_gconf_set_string(NULL, "pango_font_string", ps->pango_font_string, NULL);
+      break;
+
+    default:
+      break;
+  }
+}
+
 PrintSession * 
 gnc_print_session_create(gboolean hand_built_pages)
 {
