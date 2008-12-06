@@ -364,15 +364,15 @@ gnc_column_view_edit_options(SCM options, SCM view)
     gtk_tree_view_append_column(r->contents, column);
 
     renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Cols"), renderer,
-						      "text", CONTENTS_COL_REPORT_COLS,
+    column = gtk_tree_view_column_new_with_attributes(_("Rows"), renderer,
+						      "text", CONTENTS_COL_REPORT_ROWS,
 						      NULL);
     gtk_tree_view_append_column(r->contents, column);
 
     renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Rows"), renderer,
-						      "text", CONTENTS_COL_REPORT_ROWS,
-						      NULL);
+    column = gtk_tree_view_column_new_with_attributes(_("Cols"), renderer,
+                  "text", CONTENTS_COL_REPORT_COLS,
+                  NULL);
     gtk_tree_view_append_column(r->contents, column);
 
     selection = gtk_tree_view_get_selection(r->contents);
