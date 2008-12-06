@@ -42,6 +42,7 @@
 (define gnc:pagename-accounts (N_ "Accounts"))
 (define gnc:pagename-display (N_ "Display"))
 (define gnc:optname-reportname (N_ "Report name"))
+(define gnc:optname-stylesheet (N_ "Stylesheet"))
 
 ;; A <report-template> represents one of the available report types.
 (define <report-template>
@@ -170,7 +171,7 @@
           (_ (gnc:report-template-name report-template))))
         (stylesheet 
          (gnc:make-multichoice-option 
-          gnc:pagename-general (N_ "Stylesheet") "0b"
+          gnc:pagename-general gnc:optname-stylesheet "0b"
           (N_ "Select a stylesheet for the report.")
           (string->symbol (N_ "Default"))
           (map 
@@ -182,21 +183,20 @@
                              " " (_ "Stylesheet"))))
            (gnc:get-html-style-sheets)))))
 
-    (if (procedure? generator)
-        (let ((options (gnc:backtrace-if-exception generator)))
-          (if (not options)
-              (begin
-                (gnc:warn "BUG DETECTED: Scheme exception raised in "
-                          "report options generator procedure named "
-                          (procedure-name generator))
-                (set! options (gnc:new-options))))
-          (gnc:register-option options stylesheet)
-          (gnc:register-option options namer)
-          options)
-        (let ((options (gnc:new-options)))
-          (gnc:register-option options stylesheet)
-          (gnc:register-option options namer)
-          options))))
+    (let ((options
+           (if (procedure? generator)
+               (or (gnc:backtrace-if-exception generator)
+                   (begin
+                     (gnc:warn "BUG DETECTED: Scheme exception raised in "
+                               "report options generator procedure named "
+                               (procedure-name generator))
+                     (gnc:new-options)))
+               (gnc:new-options))))
+      (or (gnc:lookup-option options gnc:pagename-general gnc:optname-reportname)
+          (gnc:register-option options namer))
+      (or (gnc:lookup-option options gnc:pagename-general gnc:optname-stylesheet)
+          (gnc:register-option options stylesheet))
+      options)))
 
 ;; A <report> represents an instantiation of a particular report type.
 (define <report>
@@ -351,14 +351,14 @@
                     (gnc:lookup-option 
                      (gnc:report-options report)
                      gnc:pagename-general 
-                     (N_ "Stylesheet"))))))
+                     gnc:optname-stylesheet)))))
 
 (define (gnc:report-set-stylesheet! report stylesheet)
   (gnc:option-set-value
    (gnc:lookup-option 
     (gnc:report-options report)
     gnc:pagename-general 
-    (N_ "Stylesheet"))
+    gnc:optname-stylesheet)
    (string->symbol 
     (gnc:html-style-sheet-name stylesheet))))
 
