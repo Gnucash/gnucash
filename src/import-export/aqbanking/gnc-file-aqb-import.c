@@ -100,7 +100,11 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
         g_warning("gnc_file_aqbanking_import: Couldn't get AqBanking API");
         goto cleanup;
     }
-    if (AB_Banking_OnlineInit(api) != 0) {
+    if (AB_Banking_OnlineInit(api
+#ifdef AQBANKING_VERSION_4_PLUS
+			      , 0
+#endif
+			      ) != 0) {
         g_warning("gnc_file_aqbanking_import: "
                   "Couldn't initialize AqBanking API");
         goto cleanup;
@@ -198,7 +202,11 @@ cleanup:
     if (gui)
         gnc_GWEN_Gui_release(gui);
     if (online)
+#ifdef AQBANKING_VERSION_4_PLUS
+        AB_Banking_OnlineFini(api, 0);
+#else
         AB_Banking_OnlineFini(api);
+#endif
     if (api)
         gnc_AB_BANKING_fini(api);
     if (dtaus_fd != -1)
