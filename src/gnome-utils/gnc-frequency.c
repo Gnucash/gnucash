@@ -412,8 +412,12 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, GDate *start_date)
 
              dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_first");
              gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), _get_monthly_combobox_index(first));
+             dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_first_weekend");
+             gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), recurrenceGetWeekendAdjust(first));
              dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_second");
              gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), _get_monthly_combobox_index(second));
+             dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_second_weekend");
+             gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), recurrenceGetWeekendAdjust(second));
 
              gtk_notebook_set_current_page(gf->nb, PAGE_SEMI_MONTHLY);
              gtk_combo_box_set_active(gf->freqComboBox, PAGE_SEMI_MONTHLY);
@@ -464,7 +468,7 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, GDate *start_date)
          case PERIOD_YEAR:
          case PERIOD_LAST_WEEKDAY: {
              guint multiplier;
-             GtkWidget *multipler_spin, *day_of_month;
+             GtkWidget *multipler_spin, *day_of_month, *weekend_mode;
              
              multipler_spin = glade_xml_get_widget(gf->gxml, "monthly_spin");
              multiplier = recurrenceGetMultiplier(r);
@@ -474,6 +478,8 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, GDate *start_date)
 
              day_of_month = glade_xml_get_widget(gf->gxml, "monthly_day");
              gtk_combo_box_set_active(GTK_COMBO_BOX(day_of_month), _get_monthly_combobox_index(r));
+             weekend_mode = glade_xml_get_widget(gf->gxml, "monthly_weekend");
+             gtk_combo_box_set_active(GTK_COMBO_BOX(weekend_mode), recurrenceGetWeekendAdjust(r));
 
              gtk_notebook_set_current_page(gf->nb, PAGE_MONTHLY);
              gtk_combo_box_set_active(gf->freqComboBox, PAGE_MONTHLY);
@@ -507,7 +513,8 @@ _get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier
     Recurrence *r;
     GtkWidget *day_of_month_combo = glade_xml_get_widget(gf->gxml, combo_name);
     int day_of_month_index = gtk_combo_box_get_active(GTK_COMBO_BOX(day_of_month_combo));
-    int weekend_adjust = WEEKEND_ADJ_NONE;
+    GtkWidget *weekend_adjust_combo = glade_xml_get_widget(gf->gxml, combo_weekend_name);
+    int weekend_adjust = gtk_combo_box_get_active(GTK_COMBO_BOX(weekend_adjust_combo));
         
     r = g_new0(Recurrence, 1);
     if (day_of_month_index > LAST_DAY_OF_MONTH_OPTION_INDEX)

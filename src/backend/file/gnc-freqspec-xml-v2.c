@@ -245,6 +245,20 @@ fs_occurrence_handler( xmlNodePtr node, gpointer data )
 
 static
 gboolean
+fs_weekend_adj_handler( xmlNodePtr node, gpointer data )
+{
+        fsParseData *fspd = data;
+        gboolean        ret;
+        gint64          foo;
+        ret = dom_tree_to_integer( node, &foo );
+        if ( !ret )
+                return ret;
+        fspd->weekend_adj = foo;
+        return TRUE;
+}
+
+static
+gboolean
 fs_subelement_handler( xmlNodePtr node, gpointer data )
 {
         fsParseData *fspd = data;
@@ -273,13 +287,14 @@ fs_subelement_handler( xmlNodePtr node, gpointer data )
 }
 
 struct dom_tree_handler fs_union_dom_handlers[] = {
-        { "fs:date",       fs_date_handler,       0, 0 },
-        { "fs:interval",   fs_interval_handler,   0, 0 },
-        { "fs:offset",     fs_offset_handler,     0, 0 },
-        { "fs:day",        fs_day_handler,        0, 0 },
-        { "fs:weekday",    fs_weekday_handler,    0, 0 },
-        { "fs:occurrence", fs_occurrence_handler, 0, 0 },
-        { "gnc:freqspec",  fs_subelement_handler, 0, 0 },
+        { "fs:date",        fs_date_handler,        0, 0 },
+        { "fs:interval",    fs_interval_handler,    0, 0 },
+        { "fs:offset",      fs_offset_handler,      0, 0 },
+        { "fs:day",         fs_day_handler,         0, 0 },
+        { "fs:weekday",     fs_weekday_handler,     0, 0 },
+        { "fs:occurrence",  fs_occurrence_handler,  0, 0 },
+        { "fs:weekend_adj", fs_weekend_adj_handler, 0, 0 },
+        { "gnc:freqspec",   fs_subelement_handler,  0, 0 },
         { NULL, NULL, 0, 0 },
 };
 
