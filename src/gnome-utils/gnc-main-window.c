@@ -1234,7 +1234,8 @@ gnc_main_window_generate_title (GncMainWindow *window)
   GncMainWindowPrivate *priv;
   GncPluginPage *page;
   QofBook *book;
-  const gchar *filename = NULL, *dirty = "";
+  gchar *filename = NULL;
+  const gchar *dirty = "";
   gchar *title, *ptr;
   GtkAction* action;
 
@@ -1244,7 +1245,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
   	gtk_action_set_sensitive(action, FALSE);
   }
   if (gnc_current_session_exist()) {
-      filename = gnc_session_get_url (gnc_get_current_session ());
+      filename = (gchar*)gnc_session_get_url (gnc_get_current_session ());
       book = gnc_get_current_book();
       if (qof_instance_is_dirty(QOF_INSTANCE(book))) {
 		dirty = "*";
@@ -1255,12 +1256,44 @@ gnc_main_window_generate_title (GncMainWindow *window)
   }
 
   if (!filename)
-    filename = _("<no file>");
+    filename = g_strdup(_("<no file>"));
   else {
-    /* The Gnome HIG 2.0 recommends only the file name (no path) be used. (p15) */
-    ptr = g_utf8_strrchr(filename, -1, G_DIR_SEPARATOR);
-    if (ptr != NULL)
-      filename = g_utf8_next_char(ptr);
+	gint num_colons = 0;
+	for (ptr = filename; *ptr; ptr = g_utf8_next_char(ptr)) {
+	  gunichar c = g_utf8_get_char(ptr);
+	  if (c == ':') num_colons++;
+	}
+
+    if (num_colons != 4) {
+      /* The Gnome HIG 2.0 recommends only the file name (no path) be used. (p15) */
+      ptr = g_utf8_strrchr(filename, -1, G_DIR_SEPARATOR);
+      if (ptr != NULL)
+        filename = g_strdup(g_utf8_next_char(ptr));
+	} else {
+	  const gchar* src = filename;
+
+	  filename = g_strdup(filename);
+	  ptr = filename;
+	  num_colons = 0;
+
+	  /* Loop and copy chars, converting username and password (after 3rd ':') to
+	  asterisks. */
+	  for( ; *src; src = g_utf8_next_char(src)) {
+		gunichar unichar;
+
+	    if (num_colons < 3 || *src == ':') {
+	      unichar = g_utf8_get_char(src);
+		} else {
+		  unichar = '*';
+		}
+		ptr += g_unichar_to_utf8 (unichar, ptr);
+	    if (unichar == '_') {
+	      ptr += g_unichar_to_utf8 ('_', ptr);
+		} else if (unichar == ':') {
+		  num_colons++;
+		}
+	  }
+	}
   }
 
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
@@ -1272,6 +1305,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
   } else {
     title = g_strdup_printf("%s%s", dirty, filename);
   }
+  g_free(filename);
   
   return title;
 }

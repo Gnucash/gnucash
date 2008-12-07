@@ -287,19 +287,45 @@ gnc_history_generate_label (int index, const gchar *filename)
 	if (index < 10)
 	  dst += g_sprintf(result, "_%d ", (index + 1) % 10);
 
-	/* Find the filename portion of the path */
-	src = g_utf8_strrchr(filename, -1, G_DIR_SEPARATOR);
-	if (src) {
-	  src = g_utf8_next_char(src);
+	/* If the filename begins with "mysql://" or "postgres://", hide the
+	user name and password.  Otherwise, it is a filename - hide everything
+	except the file name. */
 
-	  /* Fix up any underline characters so they aren't mistaken as
-	   * command accelerator keys. */
-	  for ( ; *src; src = g_utf8_next_char(src)) {
-	    unichar = g_utf8_get_char(src);
-	    dst += g_unichar_to_utf8 (unichar, dst);
+	if (g_ascii_strncasecmp(filename, "mysql://", 8) == 0 ||
+		g_ascii_strncasecmp(filename, "postgres://", 11) == 0 ) {
+	  gint num_colons = 0;
 
-	    if (unichar == '_')
+	  /* Loop for all chars and copy from 'src' to 'dst'.  While doing this,
+	     convert username and password (after 3rd ':') to asterisks. */
+	  src = filename;
+	  for( ; *src; src = g_utf8_next_char(src)) {
+	    if (num_colons < 3 || *src == ':') {
+	      unichar = g_utf8_get_char(src);
+		} else {
+		  unichar = '*';
+		}
+		dst += g_unichar_to_utf8 (unichar, dst);
+	    if (unichar == '_') {
 	      dst += g_unichar_to_utf8 ('_', dst);
+		} else if (unichar == ':') {
+		  num_colons++;
+		}
+	  }
+	} else {
+	  /* Find the filename portion of the path */
+	  src = g_utf8_strrchr(filename, -1, G_DIR_SEPARATOR);
+	  if (src) {
+	    src = g_utf8_next_char(src);
+
+	    /* Fix up any underline characters so they aren't mistaken as
+	     * command accelerator keys. */
+	    for ( ; *src; src = g_utf8_next_char(src)) {
+	      unichar = g_utf8_get_char(src);
+	      dst += g_unichar_to_utf8 (unichar, dst);
+
+	      if (unichar == '_')
+	        dst += g_unichar_to_utf8 ('_', dst);
+	    }
 	  }
 	}
 
