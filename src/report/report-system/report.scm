@@ -394,6 +394,24 @@
     #f "  (gnc:restore-report ~S ~S options))\n"
     (gnc:report-id report) (gnc:report-type report))))
 
+;; Loop over embedded reports and concat result of each gnc:report-generate-restore-forms
+(define (gnc:report-generate-options-embedded report)
+  (let*
+      ((embedded-reports (gnc:report-embedded-list report))
+       (result-string ""))
+    (if embedded-reports
+        (for-each
+         (lambda (subreport-id)
+           (let*
+               ((subreport (gnc-report-find subreport-id))
+                (subreport-options-text (gnc:report-generate-restore-forms subreport)))
+             (set! result-string (string-append
+                                  result-string
+                                  ";;;; Options for embedded report\n"
+                                  subreport-options-text))))
+         embedded-reports))
+    result-string))
+
 (define (gnc:report-generate-saved-forms report)
   ;; clean up the options if necessary.  this is only needed 
   ;; in special cases.  
@@ -413,6 +431,8 @@
     #f "(let ()\n (define (options-gen)\n  (let ((options (gnc:report-template-new-options/name ~S)))\n"
     (gnc:report-type report))
    (gnc:generate-restore-forms (gnc:report-options report) "options")
+   ;; get options of embedded reports
+   (gnc:report-generate-options-embedded report)
    "  options))\n"
    (simple-format 
     #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'options-generator options-gen\n  'menu-path (list gnc:menuname-custom)\n  'renderer (gnc:report-template-renderer/name ~S)))\n\n"
