@@ -2367,7 +2367,8 @@ gnucash_sheet_init (GnucashSheet *sheet)
         sheet->width = 0;
         sheet->height = 0;
 
-        sheet->cursor_styles = g_hash_table_new (g_str_hash, g_str_equal);
+        sheet->cursor_styles = g_hash_table_new_full (g_str_hash, g_str_equal,
+						      g_free, NULL);
 
         sheet->blocks = g_table_new (sizeof (SheetBlock),
                                      gnucash_sheet_block_construct,
@@ -2426,8 +2427,9 @@ gnucash_sheet_new (Table *table)
         sheet->grid = item;
 
         /* some register data */
-        sheet->dimensions_hash_table = g_hash_table_new (g_int_hash,
-                                                         g_int_equal);
+        sheet->dimensions_hash_table = g_hash_table_new_full (g_int_hash,
+							      g_int_equal,
+							      g_free, NULL);
 
         /* The cursor */
         sheet->cursor = gnucash_cursor_new (sheet_group);
