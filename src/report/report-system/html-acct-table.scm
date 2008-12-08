@@ -650,7 +650,7 @@
 		   account start-date end-date #f)
 		  (gnc:account-get-comm-balance-at-date
 		   account end-date #f)))
-	     (closing (lambda(a)
+	     (closing (lambda(a) 
 			(gnc:account-get-trans-type-balance-interval
 			 (list account) closing-pattern
 			 start-date end-date)
@@ -663,24 +663,27 @@
 			  )
 			)
 	     )
-	;; what the heck is this? how about (case balance-mode blah)...
-	(or (and (equal? balance-mode 'post-closing) post-closing-bal)
-	    (and (equal? balance-mode 'pre-closing)
-		 (let* ((closing-amt (closing account))
-			)
-		   (post-closing-bal 'minusmerge closing-amt #f)
-		   post-closing-bal)
+
+	(cond
+	 ((equal? balance-mode 'post-closing)
+	  post-closing-bal)
+
+	 ((equal? balance-mode 'pre-closing)
+	  (let* ((closing-amt (closing account))
 		 )
-	    (and (equal? balance-mode 'pre-adjusting)
-		 (let* ((closing-amt (closing account))
-			(adjusting-amt (adjusting account))
-			)
-		   (post-closing-bal 'minusmerge closing-amt #f)
-		   (post-closing-bal 'minusmerge adjusting-amt #f)
-		   post-closing-bal)
-		 )
-	    ;; error if we get here.
-	    )
+	    (post-closing-bal 'minusmerge closing-amt #f))
+	  post-closing-bal)
+
+	 ((equal? balance-mode 'pre-adjusting)
+	  (let* ((closing-amt (closing account))
+		 (adjusting-amt (adjusting account))
+		 ))
+	  (post-closing-bal 'minusmerge closing-amt #f)
+	  (post-closing-bal 'minusmerge adjusting-amt #f)
+	  post-closing-bal)
+	 (else (begin (display "you fail it")
+		      (newline))))
+
 	)
       )
 
