@@ -253,6 +253,12 @@
 			    (lambda () '()) #f))
 
   (gnc:register-inv-option
+   (gnc:make-string-option 
+    invoice-page (N_ "Custom Title") 
+    "z" (N_ "A custom string to replace Invoice, Bill or Expense Voucher") 
+    ""))
+
+  (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Date")
     "b" (N_ "Display the date?") #f))
@@ -664,7 +670,7 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-myname-table book date-format)
+(define (make-myname-table book date-format title)
   (let* ((table (gnc:make-html-table))
 	 (slots (gnc-book-get-slots book))
 	 (name (kvp-frame-get-slot-path-gslist
@@ -704,7 +710,7 @@
      'attribute (list "cellpadding" 0)
      'attribute (list "width" "100%"))
     (gnc:html-table-cell-append-objects!
-	invoice-cell (_"INVOICE"))
+	invoice-cell title)
     (gnc:html-table-cell-set-style!
 	invoice-cell "td"
 	'font-size "+2")
@@ -754,14 +760,22 @@
     (gnc:option-value
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
+  (define (title-string title custom-title)
+    (if (not (equal? "" custom-title))
+	(string-expand custom-title
+		       #\space "&nbsp;")
+	title))
+
   (let* ((document (gnc:make-html-document))
 	 (table '())
 	 (orders '())
 	 (invoice (opt-val invoice-page invoice-name))
 	 (owner '())
 	 (references? (opt-val "Display" "References"))
-	 (title (_ "Invoice"))
+	 (default-title (_ "Invoice"))
+	 (custom-title (opt-val invoice-page "Custom Title"))
 	 (invoice? #f))
+
 
     (define (add-order o)
       (if (and references? (not (member o orders)))
@@ -776,20 +790,22 @@
 	      ((eqv? type GNC-OWNER-CUSTOMER)
 	       (set! invoice? #t))
 	      ((eqv? type GNC-OWNER-VENDOR)
-	       (set! title (_ "Bill")))
+	       (set! default-title (_ "Bill")))
 	      ((eqv? type GNC-OWNER-EMPLOYEE)
-	       (set! title (_ "Expense Voucher")))))
-	  (set! title (sprintf #f (_"%s #%d") title
-			       (gncInvoiceGetID invoice)))))
+	       (set! default-title (_ "Expense Voucher")))))
+	  ))
+
     ;; oli-custom - title redundant, "Invoice" moved to myname-table,
     ;; invoice number moved below
     ;;(gnc:html-document-set-title! document title)
 
+    
     (if (not (null? invoice))
 	(let* ((book (gncInvoiceGetBook invoice))
 	      (slots (gnc-book-get-slots book))
 	      (date-object #f)
-	      (helper-table (gnc:make-html-table)))
+	      (helper-table (gnc:make-html-table))
+	      (title (title-string default-title custom-title)))
 	  (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)
 					add-order invoice?))
@@ -819,7 +835,7 @@
 	  (gnc:html-document-add-object!
 	   document (make-myname-table
 		     book ;;(opt-val "Display" "Today Date Format")))
-		     ""))
+		     "" title))
 
 	  (make-break! document)
 	  (make-break! document)
@@ -843,9 +859,8 @@
 		  (set! date-table (make-date-table))
 		  ;; oli-custom - moved invoice number here
 		  (gnc:html-table-append-row!
-		   date-table (list (sprintf #f (_ "Invoice&nbsp;#&nbsp;%d")
-                                             (gncInvoiceGetID invoice))))
-		  (make-date-row! date-table (_ "Invoice&nbsp;Date") post-date)
+		   date-table (list (sprintf #f (_ "%s&nbsp;#") title) (gncInvoiceGetID invoice)))
+		  (make-date-row! date-table (string-append title (_ "&nbsp;Date")) post-date)
 		  (make-date-row! date-table (_ "Due&nbsp;Date") due-date)
 		  date-table)
 		(gnc:make-html-text
