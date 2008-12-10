@@ -35,6 +35,9 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gdk/gdkkeysyms.h>
+#ifdef HAVE_SYS_WAIT_H
+#    include <sys/wait.h>
+#endif
 #include <fcntl.h>
 #include <unistd.h>
 
