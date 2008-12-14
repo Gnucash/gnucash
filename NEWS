@@ -1,6 +1,52 @@
 Version history:
 ------- -------
 
+ 2.2.8 - 14 December 2008
+ 	 Welcome to the GnuCash 2.2.8 Release.
+	 Fixed Bugs:
+	 o #115066: "Search For" dialog shows all when criteria is left as
+	            default
+	 o #128774: "Edit exchange rate" context menu item disfunctional often
+	 o #137017: date of transaction change with time zone change
+	 o #339433: TiaaCref price quote dates off by one day
+	 o #340041: 0 as an amount should be allowed in Exchange Editor
+	 o #345980: changing Stylesheet doesn't commit
+	 o #347274: to track the difference between budgeted and actual amounts
+	            in the budget report
+	 o #348860: Error with saved multicolumn reports
+	 o #405472: Unable to save changes on files opened over FUSE and sshfs
+	 o #432457: Security/stock import should follow tutorial regarding
+	            Account Name
+	 o #435427: "Generic import transaction matcher" dialog does not sort by
+	            date
+	 o #436342: Currency exchange druid does not show on changed
+	 o #436920: crash on loading OFX data for a commodity that exists
+	            without cusip field
+	 o #492417: currency mapping of New Israeli Shekel
+	 o #529494: Wrong fractional precision in register with multi-currency
+	            transactions
+	 o #532889: Monthly scheduled payments preview shows wrong dates
+	 o #536299: Fix two underlinking issues
+	 o #539947: OpenSolaris:__FUNCTION__ not defined in sun cc
+	 o #543332: Severe performance regression in Average Balance report
+	 o #548218: OpenSolaris: $(expression) cause configure error on solaris
+	 o #554042: OpenSolaris: configure fail on checking 'unsigned long is at
+	            least as big as guint32'
+	 o #557604: date-utilities.scm typos
+	 o #557374: MT940 import does not work
+	 o #563160: Multicolumn report: Confusing order of "Column span" and
+	            "Row span"
+	 o #563273: crash in GnuCash Finance Management: Starting GnuCash
+	 o #564033: aqbanking plugin: g_module_open failed: WEXITSTATUS undefined
+	 Other Changes:
+	 o Fix account defaulting for posting vendor bill
+	 o Fix tax-related inconsistency in UI
+	 o Fix the average cost price source computation for a certain case
+	 o Add account templates: Dutch, Finnish
+	 o Update account templates: Italian, Slovak
+	 o Update translations: Finnish, German, Hebrew, Italian, Japanese,
+	                        Russian, Slovak, Simplified Chinese
+
  2.2.7 - 26 September 2008
  	 Welcome to the GnuCash 2.2.7 Release.
 	 Fixed Bugs:
