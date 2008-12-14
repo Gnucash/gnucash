@@ -677,7 +677,8 @@
 			   (list account-comm 
 				 share-amount value-amount)
 			   (list transaction-comm 
-				 value-amount share-amount)))
+				 (gnc-numeric-neg value-amount)
+				 (gnc-numeric-neg share-amount))))
 		      ;; second commodity already existing in comm-list?
 		      (pair (assoc (car foreignlist) (cadr comm-list))))
 		   ;; if not, create a new entry in comm-list.
