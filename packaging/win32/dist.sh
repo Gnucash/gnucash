@@ -243,15 +243,15 @@ function finish() {
 
     mv $DIST_UDIR/libexec/gconfd-2.exe $DIST_UDIR/bin
     exetype $DIST_UDIR/bin/gconfd-2.exe windows
-    cp $_BUILD_UDIR/packaging/win32/.libs/redirect.exe $DIST_UDIR/libexec/gconfd-2.exe
+    cp $_INSTALL_UDIR/bin/redirect.exe $DIST_UDIR/libexec/gconfd-2.exe
 
     if [ "$AQBANKING_WITH_QT" = "yes" ]; then
         if [ "$AQBANKING3" != "yes" ]; then
             mv ${DIST_UDIR}/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe $DIST_UDIR/bin
-            cp $_BUILD_UDIR/packaging/win32/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe
+            cp $_INSTALL_UDIR/bin/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe
         else
             mv ${DIST_UDIR}/lib/aqbanking/plugins/20/wizards/qt3-wizard.exe $DIST_UDIR/bin
-            cp $_BUILD_UDIR/packaging/win32/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/20/wizards/qt3-wizard.exe
+            cp $_INSTALL_UDIR/bin/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/20/wizards/qt3-wizard.exe
         fi
     fi
 
