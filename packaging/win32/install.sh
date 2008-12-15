@@ -1094,11 +1094,13 @@ function inst_docs() {
         fi
         setup docs
         _DOCS_INST_UDIR=`unix_path $INSTALL_DIR`/share/gnucash/help
-        mkdir -p $_DOCS_INST_UDIR/{C,de_DE}
+        mkdir -p $_DOCS_INST_UDIR/{C,de_DE,it_IT}
         make_chm guide C
         make_chm guide de_DE
+        make_chm guide it_IT
         make_chm help C
         make_chm help de_DE
+        make_chm help it_IT
     qpopd
 }
 
