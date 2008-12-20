@@ -298,6 +298,10 @@ recnRecalculateBalance (RecnWindow *recnData)
 					"RecnFinishAction");
   gtk_action_set_sensitive(action, gnc_numeric_zero_p (diff));
 
+  action = gtk_action_group_get_action (recnData->action_group,
+          "TransBalanceAction");
+  gtk_action_set_sensitive(action, !gnc_numeric_zero_p (diff));
+
   return diff;
 }
 
@@ -1117,6 +1121,35 @@ gnc_ui_reconcile_window_new_cb(GtkButton *button, gpointer data)
   if (gsr == NULL)
     return;
   gnc_split_reg_jump_to_blank( gsr );
+}
+
+static void
+gnc_ui_reconcile_window_balance_cb(GtkButton *button, gpointer data)
+{
+  RecnWindow *recnData = data;
+  GNCSplitReg *gsr;
+  Account *account;
+  gnc_numeric balancing_amount;
+  time_t statement_date;
+  
+  
+  gsr = gnc_reconcile_window_open_register(recnData);
+  if (gsr == NULL)
+    return;
+  
+  account = recn_get_account(recnData);
+  if (account == NULL)
+    return;
+
+  balancing_amount = recnRecalculateBalance(recnData);
+  if (gnc_numeric_zero_p(balancing_amount))
+    return;
+
+  statement_date = recnData->statement_date;
+  if (statement_date == 0)
+    statement_date = time(NULL); // default to 'now'
+  
+  gnc_split_reg_balancing_entry(gsr, account, statement_date, balancing_amount);
 }
 
 static void
@@ -2070,6 +2103,9 @@ static GtkActionEntry recnWindow_actions [] =
 	{ "TransNewAction", GTK_STOCK_NEW, N_("_New"),  "<control>n",
 	  N_("Add a new transaction to the account"),
 	  G_CALLBACK(gnc_ui_reconcile_window_new_cb)},
+  {"TransBalanceAction", GTK_STOCK_EXECUTE, N_("_Balance"), "<control>b",
+	  N_("Add a new balancing entry to the account"),
+	  G_CALLBACK(gnc_ui_reconcile_window_balance_cb)},
 	{ "TransEditAction", GTK_STOCK_PROPERTIES, N_("_Edit"),  "<control>e",
 	  N_("Edit the current transaction"),
 	  G_CALLBACK(gnc_ui_reconcile_window_edit_cb)},

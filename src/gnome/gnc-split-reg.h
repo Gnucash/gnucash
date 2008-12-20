@@ -222,6 +222,16 @@ void gnc_split_reg_jump_to_blank (GNCSplitReg *gsr);
 void gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split);
 void gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split);
 
+/*
+ * Create a transaction entry with given amount and date. One account is 
+ * specified, the other is undefined i.e. it defaults to orphan account.  
+ * Jump to the transaction entry in the register.
+ * The purpose of this function to create an adjustment entry from the reconcile
+ * window. 
+ */
+void gnc_split_reg_balancing_entry (GNCSplitReg *gsr, Account *account, 
+    time_t statement_date, gnc_numeric balancing_amount);
+
 void gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data );
 void gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction );
 void gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data );

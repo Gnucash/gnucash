@@ -86,6 +86,9 @@ static void gnc_split_reg_refresh_toolbar( GNCSplitReg *gsr );
 
 static void gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger );
 
+static Transaction* create_balancing_transaction(QofBook *book, Account *account,
+    time_t statement_date, gnc_numeric balancing_amount);
+
 void gsr_default_enter_handler    ( GNCSplitReg *w, gpointer ud );
 void gsr_default_cancel_handler   ( GNCSplitReg *w, gpointer ud );
 void gsr_default_delete_handler   ( GNCSplitReg *w, gpointer ud );
@@ -1334,6 +1337,72 @@ gnc_split_reg_jump_to_blank (GNCSplitReg *gsr)
     gnucash_register_goto_virt_cell (gsr->reg, vcell_loc);
 
   gnc_ledger_display_refresh (gsr->ledger);
+}
+
+void
+gnc_split_reg_balancing_entry(GNCSplitReg *gsr, Account *account,
+    time_t statement_date, gnc_numeric balancing_amount) {
+
+  Transaction *transaction;
+  Split *split;
+  
+  // create transaction
+  transaction = create_balancing_transaction(gnc_get_current_book(),
+      account, statement_date, balancing_amount);
+
+  // jump to transaction
+  split = xaccTransFindSplitByAccount(transaction, account);
+  if (split == NULL) {
+    // default behaviour: jump to blank split
+    g_warning("create_balancing_transaction failed");
+    gnc_split_reg_jump_to_blank(gsr);
+  } else {
+    // goto balancing transaction
+    gnc_split_reg_jump_to_split(gsr, split );
+  }
+}
+
+static Transaction*
+create_balancing_transaction(QofBook *book, Account *account,
+    time_t statement_date, gnc_numeric balancing_amount) {
+
+  Transaction *trans;
+  Split *split;
+
+  if (!account)
+    return NULL;
+  if (gnc_numeric_zero_p(balancing_amount))
+    return NULL;
+
+  xaccAccountBeginEdit(account);
+
+  trans = xaccMallocTransaction(book);
+  
+  xaccTransBeginEdit(trans);
+
+  // fill Transaction
+  xaccTransSetCurrency(trans, xaccAccountGetCommodity(account));
+  xaccTransSetDateSecs(trans, statement_date);
+  xaccTransSetDescription(trans, _("Balancing entry from reconcilation"));
+
+  // 1. Split
+  split = xaccMallocSplit(book);
+  xaccTransAppendSplit(trans, split);
+  xaccAccountInsertSplit(account, split);
+  xaccSplitSetAmount(split, balancing_amount);
+  xaccSplitSetValue(split, balancing_amount);
+
+  // 2. Split (no account is defined: split goes to orphan account)
+  split = xaccMallocSplit(book);
+  xaccTransAppendSplit(trans, split);
+
+  balancing_amount = gnc_numeric_neg(balancing_amount);
+  xaccSplitSetAmount(split, balancing_amount);
+  xaccSplitSetValue(split, balancing_amount);
+
+  xaccTransCommitEdit(trans);
+  xaccAccountCommitEdit(account);
+  return trans;
 }
 
 void

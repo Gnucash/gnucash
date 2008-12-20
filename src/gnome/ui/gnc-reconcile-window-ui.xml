@@ -18,9 +18,10 @@
     </menu>
 
     <menu name="Transaction" action="TransactionMenuAction">
-      <menuitem name="TransNew"    action="TransNewAction"/>
-      <menuitem name="TransEdit"   action="TransEditAction"/>
-      <menuitem name="TransDelete" action="TransDeleteAction"/>
+      <menuitem name="TransNew"     action="TransNewAction"/>
+      <menuitem name="TransBalance" action="TransBalanceAction"/>
+      <menuitem name="TransEdit"    action="TransEditAction"/>
+      <menuitem name="TransDelete"  action="TransDeleteAction"/>
     </menu>
 
     <menu name="Help" action="HelpMenuAction">
@@ -35,9 +36,10 @@
   </popup>
 
   <toolbar name="DefaultToolbar">
-    <toolitem name="TransNew"    action="TransNewAction"/>
-    <toolitem name="TransEdit"   action="TransEditAction"/>
-    <toolitem name="TransDelete" action="TransDeleteAction"/>
+    <toolitem name="TransNew"      action="TransNewAction"/>
+    <toolitem name="TransBalance"  action="TransBalanceAction"/>
+    <toolitem name="TransEdit"     action="TransEditAction"/>
+    <toolitem name="TransDelete"   action="TransDeleteAction"/>
     <separator name="ToolbarSep2"/>
     <toolitem name="AccountOpenAccount" action="AccountOpenAccountAction"/>
     <separator name="ToolbarSep3"/>
