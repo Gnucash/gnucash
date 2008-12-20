@@ -280,11 +280,12 @@ typedef struct
  * a column in a table.
  */
 typedef struct {
-	const gchar* name;		/**< Column name */
-	const gchar* type_name;	/**< Column SQL type name */
-	gint size;				/**< Column size (string types) */
-	gboolean is_primary_key;
-	gboolean null_allowed;
+	const gchar* name;			/**< Column name */
+	GType type;					/**< Column basic type */
+	gint size;					/**< Column size (string types) */
+	gboolean is_unicode;		/**< Column is unicode (string types) */
+	gboolean is_primary_key;	/**< Column is the primary key */
+	gboolean null_allowed;		/**< Column allows NULL values */
 } GncSqlColumnInfo;
 
 // Type for conversion of db row to object.

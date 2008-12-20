@@ -54,11 +54,43 @@
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
-static GncSqlConnection* create_dbi_connection( gint provider, dbi_conn conn );
+typedef gchar* (*CREATE_TABLE_DDL_FN)( GncSqlConnection* conn,
+								const gchar* table_name,
+								const GList* col_info_list );
+typedef struct {
+	CREATE_TABLE_DDL_FN create_table_ddl;
+} provider_functions_t;
 
-#define GNC_DBI_PROVIDER_SQLITE 0
-#define GNC_DBI_PROVIDER_MYSQL  1
-#define GNC_DBI_PROVIDER_PGSQL  2
+static gchar* conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
+										const gchar* table_name,
+										const GList* col_info_list );
+
+static provider_functions_t provider_sqlite3 =
+{
+	conn_create_table_ddl_sqlite3
+};
+
+static gchar* conn_create_table_ddl_mysql( GncSqlConnection* conn,
+										const gchar* table_name,
+										const GList* col_info_list );
+static provider_functions_t provider_mysql =
+{
+	conn_create_table_ddl_mysql
+};
+
+static gchar* conn_create_table_ddl_pgsql( GncSqlConnection* conn,
+										const gchar* table_name,
+										const GList* col_info_list );
+static provider_functions_t provider_pgsql =
+{
+	conn_create_table_ddl_pgsql
+};
+
+static GncSqlConnection* create_dbi_connection( provider_functions_t* provider, dbi_conn conn );
+
+#define GNC_DBI_PROVIDER_SQLITE (&provider_sqlite3)
+#define GNC_DBI_PROVIDER_MYSQL (&provider_mysql)
+#define GNC_DBI_PROVIDER_PGSQL (&provider_pgsql)
 
 struct GncDbiBackend_struct
 {
@@ -825,7 +857,7 @@ typedef struct
 	GncSqlConnection base;
 
 	dbi_conn conn;
-	gint provider;
+	provider_functions_t* provider;
 } GncDbiSqlConnection;
 
 static void
@@ -992,46 +1024,24 @@ conn_get_column_type_name( GncSqlConnection* conn, GType type, gint size )
 				return "";
 		}
 	} else {
-		PERR( "Unknown provider: %d\n", dbi_conn->provider );
+		PERR( "Unknown provider type\n" );
 		return "";
 	}
 }
 
-static void
-add_table_column( GString* ddl, const GncSqlColumnInfo* info )
+static gchar*
+conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
+							const gchar* table_name,
+							const GList* col_info_list )
 {
-    gchar* buf;
-	GError* error = NULL;
-	gboolean ok;
-
-	g_return_if_fail( ddl != NULL );
-	g_return_if_fail( info != NULL );
-
-	g_string_append_printf( ddl, "%s %s", info->name, info->type_name );
-    if( info->size != 0 ) {
-		g_string_append_printf( ddl, "(%d)", info->size );
-    }
-	if( info->is_primary_key ) {
-		g_string_append( ddl, " PRIMARY KEY" );
-	}
-	if( !info->null_allowed ) {
-		g_string_append( ddl, " NOT NULL" );
-	}
-}
-
-static gboolean
-conn_create_table( GncSqlConnection* conn, const gchar* table_name,
-				const GList* col_info_list )
-{
-	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 	GString* ddl;
 	const GList* list_node;
 	guint col_num;
-	dbi_result result;
+	gchar* ddl_result;
 
-	g_return_val_if_fail( conn != NULL, FALSE );
-	g_return_val_if_fail( table_name != NULL, FALSE );
-	g_return_val_if_fail( col_info_list != NULL, FALSE );
+	g_return_val_if_fail( conn != NULL, NULL );
+	g_return_val_if_fail( table_name != NULL, NULL );
+	g_return_val_if_fail( col_info_list != NULL, NULL );
     
 	ddl = g_string_new( "" );
 	g_string_printf( ddl, "CREATE TABLE %s (", table_name );
@@ -1042,14 +1052,141 @@ conn_create_table( GncSqlConnection* conn, const gchar* table_name,
 		if( col_num != 0 ) {
 			g_string_append( ddl, ", " );
 		}
-		add_table_column( ddl, info );
+		g_string_append_printf( ddl, "%s %s", info->name,
+			gnc_sql_connection_get_column_type_name( conn, info->type, info->size ) );
+    	if( info->size != 0 ) {
+			g_string_append_printf( ddl, "(%d)", info->size );
+    	}
+		if( info->is_primary_key ) {
+			g_string_append( ddl, " PRIMARY KEY" );
+		}
+		if( !info->null_allowed ) {
+			g_string_append( ddl, " NOT NULL" );
+		}
     }
 	g_string_append( ddl, ")" );
         
-	DEBUG( "SQL: %s\n", ddl->str );
-	result = dbi_conn_query( dbi_conn->conn, ddl->str );
-	dbi_result_free( result );
-	g_string_free( ddl, TRUE );
+	ddl_result = ddl->str;
+	g_string_free( ddl, FALSE );
+
+	return ddl_result;
+}
+
+static gchar*
+conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
+				const GList* col_info_list )
+{
+	GString* ddl;
+	const GList* list_node;
+	guint col_num;
+	gchar* ddl_result;
+
+	g_return_val_if_fail( conn != NULL, NULL );
+	g_return_val_if_fail( table_name != NULL, NULL );
+	g_return_val_if_fail( col_info_list != NULL, NULL );
+    
+	ddl = g_string_new( "" );
+	g_string_printf( ddl, "CREATE TABLE %s (", table_name );
+    for( list_node = col_info_list, col_num = 0; list_node != NULL;
+				list_node = list_node->next, col_num++ ) {
+		GncSqlColumnInfo* info = (GncSqlColumnInfo*)(list_node->data);
+
+		if( col_num != 0 ) {
+			g_string_append( ddl, ", " );
+		}
+		g_string_append_printf( ddl, "%s %s", info->name,
+			gnc_sql_connection_get_column_type_name( conn, info->type, info->size ) );
+    	if( info->size != 0 ) {
+			g_string_append_printf( ddl, "(%d)", info->size );
+    	}
+		if( info->is_unicode ) {
+		    g_string_append( ddl, " CHARACTER SET utf8" );
+		}
+		if( info->is_primary_key ) {
+			g_string_append( ddl, " PRIMARY KEY" );
+		}
+		if( !info->null_allowed ) {
+			g_string_append( ddl, " NOT NULL" );
+		}
+    }
+	g_string_append( ddl, ")" );
+        
+	ddl_result = ddl->str;
+	g_string_free( ddl, FALSE );
+
+	return ddl_result;
+}
+
+static gchar*
+conn_create_table_ddl_pgsql( GncSqlConnection* conn, const gchar* table_name,
+				const GList* col_info_list )
+{
+	GString* ddl;
+	const GList* list_node;
+	guint col_num;
+	gchar* ddl_result;
+	gboolean is_unicode = FALSE;
+
+	g_return_val_if_fail( conn != NULL, NULL );
+	g_return_val_if_fail( table_name != NULL, NULL );
+	g_return_val_if_fail( col_info_list != NULL, NULL );
+    
+	ddl = g_string_new( "" );
+	g_string_printf( ddl, "CREATE TABLE %s (", table_name );
+    for( list_node = col_info_list, col_num = 0; list_node != NULL;
+				list_node = list_node->next, col_num++ ) {
+		GncSqlColumnInfo* info = (GncSqlColumnInfo*)(list_node->data);
+
+		if( col_num != 0 ) {
+			g_string_append( ddl, ", " );
+		}
+		g_string_append_printf( ddl, "%s %s", info->name,
+			gnc_sql_connection_get_column_type_name( conn, info->type, info->size ) );
+    	if( info->size != 0 ) {
+			g_string_append_printf( ddl, "(%d)", info->size );
+    	}
+		if( info->is_primary_key ) {
+			g_string_append( ddl, " PRIMARY KEY" );
+		}
+		if( !info->null_allowed ) {
+			g_string_append( ddl, " NOT NULL" );
+		}
+		is_unicode = is_unicode || info->is_unicode;
+    }
+	g_string_append( ddl, ")" );
+	if( is_unicode ) {
+	}
+        
+	ddl_result = ddl->str;
+	g_string_free( ddl, FALSE );
+
+	return ddl_result;
+}
+
+static gboolean
+conn_create_table( GncSqlConnection* conn, const gchar* table_name,
+				const GList* col_info_list )
+{
+	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+	gchar* ddl;
+	const GList* list_node;
+	guint col_num;
+	dbi_result result;
+
+	g_return_val_if_fail( conn != NULL, FALSE );
+	g_return_val_if_fail( table_name != NULL, FALSE );
+	g_return_val_if_fail( col_info_list != NULL, FALSE );
+    
+
+	ddl = dbi_conn->provider->create_table_ddl( conn, table_name,
+										col_info_list );
+	if( ddl != NULL ) {
+		DEBUG( "SQL: %s\n", ddl );
+		result = dbi_conn_query( dbi_conn->conn, ddl );
+		dbi_result_free( result );
+	} else {
+		return FALSE;
+	}
 
 	return TRUE;
 }
@@ -1156,7 +1293,7 @@ conn_quote_string( const GncSqlConnection* conn, gchar* unquoted_str )
 }
 
 static GncSqlConnection*
-create_dbi_connection( gint provider, dbi_conn conn )
+create_dbi_connection( provider_functions_t* provider, dbi_conn conn )
 {
 	GncDbiSqlConnection* dbi_conn;
 

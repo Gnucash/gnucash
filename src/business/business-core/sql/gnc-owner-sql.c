@@ -166,21 +166,21 @@ add_owner_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntr
     buf = g_strdup_printf( "%s_type", table_row->col_name );
 	info = g_new0( GncSqlColumnInfo, 1 );
 	info->name = buf;
-	info->type_name = gnc_sql_connection_get_column_type_name( be->conn,
-											G_TYPE_INT, table_row->size );
+	info->type = G_TYPE_INT;
 	info->is_primary_key = (table_row->flags & COL_PKEY) ? TRUE : FALSE;
 	info->null_allowed = (table_row->flags & COL_NNUL) ? FALSE : TRUE;
 	info->size = table_row->size;
+	info->is_unicode = FALSE;
 	*pList = g_list_append( *pList, info );
 
    	buf = g_strdup_printf( "%s_guid", table_row->col_name );
 	info = g_new0( GncSqlColumnInfo, 1 );
 	info->name = buf;
-	info->type_name = gnc_sql_connection_get_column_type_name( be->conn,
-										G_TYPE_STRING, GUID_ENCODING_LENGTH );
+	info->type = G_TYPE_STRING;
 	info->size = GUID_ENCODING_LENGTH;
 	info->is_primary_key = (table_row->flags & COL_PKEY) ? TRUE : FALSE;
 	info->null_allowed = (table_row->flags & COL_NNUL) ? FALSE : TRUE;
+	info->is_unicode = FALSE;
 	*pList = g_list_append( *pList, info );
 }
 
