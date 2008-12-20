@@ -2367,8 +2367,7 @@ gnucash_sheet_init (GnucashSheet *sheet)
         sheet->width = 0;
         sheet->height = 0;
 
-        sheet->cursor_styles = g_hash_table_new_full (g_str_hash, g_str_equal,
-						      g_free, NULL);
+        sheet->cursor_styles = g_hash_table_new (g_str_hash, g_str_equal);
 
         sheet->blocks = g_table_new (sizeof (SheetBlock),
                                      gnucash_sheet_block_construct,
