@@ -133,7 +133,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">There are some predefined actions available that most new users prefer to get started with GnuCash. Select one of these actions from below and click the &lt;i&gt;OK&lt;/i&gt; button or press the &lt;i&gt;Cancel&lt;/i&gt; button if don't want to perform any of them.</property>
+		  <property name="label" translatable="yes">There are some predefined actions available that most new users prefer to get started with GnuCash. Select one of these actions from below and click the &lt;i&gt;OK&lt;/i&gt; button or press the &lt;i&gt;Cancel&lt;/i&gt; button if you don't want to perform any of them.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">True</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
