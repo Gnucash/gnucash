@@ -1,5 +1,7 @@
 SUBDIRS = . tests
 
+SWIG_SOURCES = gnucash_core.i timespec.i
+
 pkgpython_PYTHON = \
   __init__.py \
   function_class.py \
@@ -35,19 +37,20 @@ _gnucash_core_c_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la
 
 if BUILDING_FROM_SVN
-gnucash_core.c: gnucash_core.i
+gnucash_core.c: $(SWIG_SOURCES)
 	swig $(SWIG_PYTHON_OPT) -Wall -Werror \
         -I$(top_srcdir)/src -I$(top_srcdir)/src/engine \
 		-I$(top_srcdir)/src/business/business-core \
 		$(QOF_CFLAGS) -o $@ $<
+
+gnucash_core_c.py: gnucash_core.c $(SWIG_SOURCES)
 endif
 
 EXTRA_DIST = \
+  $(SWIG_SOURCES) \
   example_scripts/simple_book.py \
   example_scripts/simple_session.py \
   example_scripts/simple_test.py \
-  glib.i \
-  gnucash_core.i \
-  timespec.i
+  glib.i
 
 MAINTAINERCLEANFILES = gnucash-core.c
