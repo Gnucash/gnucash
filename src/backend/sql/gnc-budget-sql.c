@@ -83,6 +83,8 @@ load_single_budget( GncSqlBackend* be, GncSqlRow* row )
     gnc_sql_load_object( be, row, GNC_ID_BUDGET, pBudget, col_table );
 	r = g_new0( Recurrence, 1 );
 	gnc_sql_recurrence_load( be, gnc_budget_get_guid( pBudget ), r );
+	gnc_budget_set_recurrence( pBudget, r );
+	g_free( r );
 	gnc_budget_commit_edit( pBudget );
 
 	return pBudget;
