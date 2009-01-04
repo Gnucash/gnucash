@@ -84,7 +84,9 @@ set_lot_account( gpointer pObject, gpointer pValue )
 
     pBook = qof_instance_get_book( QOF_INSTANCE(lot) );
     pAccount = xaccAccountLookup( guid, pBook );
-    xaccAccountInsertLot( pAccount, lot );
+	if( pAccount != NULL ) {
+    	xaccAccountInsertLot( pAccount, lot );
+	}
 }
 
 static void
