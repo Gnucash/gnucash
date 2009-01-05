@@ -300,6 +300,7 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
     if( xaccAccountGetCommodity( pAcc ) != NULL ) {
 		gint op;
 
+		is_ok = TRUE;
 		if( qof_instance_get_destroying( inst ) ) {
 			op = OP_DB_DELETE;
 		} else if( be->is_pristine_db || is_infant ) {

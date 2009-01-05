@@ -325,7 +325,6 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
 {
     slot_info_t* pSlot_info = (slot_info_t*)data;
     gint curlen;
-	gboolean is_ok = FALSE;
 
 	g_return_if_fail( key != NULL );
 	g_return_if_fail( value != NULL );
