@@ -99,6 +99,7 @@ Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README"; DestDir: "{app}\doc\@PACK
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-de.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-fr.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-it.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
@@ -216,6 +217,7 @@ Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoAfterFile: "@pref
 Name: "el"; MessagesFile: "@prefix@\share\@PACKAGE@\Greek-4-5.1.11.isl"
 Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "fr"; MessagesFile: "compiler:Languages\French.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-fr.win32-bin.txt"
+Name: "it"; MessagesFile: "compiler:Languages\Italian.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-it.win32-bin.txt"
 Name: "pt_BR"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
 
 ;; The following language files are available as well, in alphabetical
@@ -258,6 +260,7 @@ LanguageCodePage=1252
 de.LanguageCodePage=1252
 el.LanguageCodePage=1253
 fr.LanguageCodePage=1252
+it.LanguageCodePage=1252
 pt_BR.LanguageCodePage=1252
 
 
@@ -288,7 +291,7 @@ de.IconName_Uninstall=Deinstallieren von GnuCash
 de.IconComment_Uninstall=Die OpenSource-Finanzverwaltung GnuCash wieder deinstallieren und vom Computer lˆschen
 
 
-;; ;;;;;;;;;;;;;;;;;;;;
+;; ;;;;;;;;;;;;;;;;;;;
 ;; Greek translation
 
 el.FullInstall=–ÎﬁÒÁÚ Â„Í·Ù‹ÛÙ·ÛÁ
@@ -340,6 +343,33 @@ fr.IconName_InstallFQ=Installer les quotations en ligne
 fr.IconComment_InstallFQ=Installation du module Finance-Quote requis pour le tÈlÈchargement du cours des devises et actions. Le programme ActivePerl 5.8 est aussi requis
 fr.IconName_Uninstall=DÈ-installer GnuCash
 fr.IconComment_Uninstall=DÈsinstalle le gestionnaire financier GnuCash
+
+
+;; ;;;;;;;;;;;;;;;;;;;;;
+;; Italian translation
+
+it.FullInstall=Installazione completa
+it.CustomInstall=Installazione personalizzata
+it.CreateDesktopIcon=Crea un'icona sul desktop
+it.CreateMenuLink=Crea un collegamento nel menu "start"
+it.RunPrg=Avvia GnuCash
+it.AdditionalIcons=Crea queste icone:
+it.StatusMsgFirewall=Installazione delle regole per il firewall di Windows...
+
+it.MainFiles=File del programma GnuCash
+it.TranslFiles=Traduzione Italiana
+it.TemplFiles=Modelli di strutture dei conti
+
+it.IconComment_GnuCash=GnuCash: gestore di finanze libero
+it.IconName_README=Mostra il file LEGGIMI
+it.IconComment_README=Mostra il file LEGGIMI
+it.IconFilename_README=README-it.win32-bin.txt
+it.IconName_FAQ=FAQ (online, in Inglese)
+it.IconName_Bugzilla=Comunicare un bug (online, in Inglese)
+it.IconName_InstallFQ=Installa la funzione di ricerca delle quotazioni online
+it.IconComment_InstallFQ=Installa il modulo di perl Finance-Quote necessario per ricevere le quotazioni online. Richiede ActivePerl 5.8
+it.IconName_Uninstall=Disinstalla GnuCash
+it.IconComment_Uninstall=Disinstalla il programma di gestione delle finanze GnuCash
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
