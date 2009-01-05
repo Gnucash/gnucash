@@ -212,10 +212,10 @@ end;
 
 
 [Languages]
-Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-de.win32-bin.txt"
-Name: "fr"; MessagesFile: "compiler:Languages\French.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-fr.win32-bin.txt"
 Name: "el"; MessagesFile: "@prefix@\share\@PACKAGE@\Greek-4-5.1.11.isl"
+Name: "en"; MessagesFile: "compiler:Default.isl"
+Name: "fr"; MessagesFile: "compiler:Languages\French.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-fr.win32-bin.txt"
 Name: "pt_BR"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
 
 ;; The following language files are available as well, in alphabetical
@@ -289,33 +289,6 @@ de.IconComment_Uninstall=Die OpenSource-Finanzverwaltung GnuCash wieder deinstal
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;
-;; French translation
-
-fr.FullInstall=Installation complète
-fr.CustomInstall=Installation personnalisée
-fr.CreateDesktopIcon=Créer un icône sur le bureau
-fr.CreateMenuLink=Créer un lien dans le menu de démarrage
-fr.RunPrg=Démarrer GnuCash maintenant
-fr.AdditionalIcons=Créer les icônes suivants:
-fr.StatusMsgFirewall=Installation des règles de pare-feu de Windows
-
-fr.MainFiles=Programme GnuCash
-fr.TranslFiles=Traduction française
-fr.TemplFiles=Modèle de plan comptable
-
-fr.IconComment_GnuCash=GnuCash, le gestionnaire financier OpenSource
-fr.IconName_README=Afficher le LISEZMOI
-fr.IconComment_README=Afficher le fichier LISEZMOI
-fr.IconFilename_README=README-fr.win32-bin.txt
-fr.IconName_FAQ=FAQ (En ligne, en anglais)
-fr.IconName_Bugzilla=Envoyer un rapport d'erreur (En ligne, en anglais)
-fr.IconName_InstallFQ=Installer les quotations en ligne
-fr.IconComment_InstallFQ=Installation du module Finance-Quote requis pour le téléchargement du cours des devises et actions. Le programme ActivePerl 5.8 est aussi requis
-fr.IconName_Uninstall=Dé-installer GnuCash
-fr.IconComment_Uninstall=Désinstalle le gestionnaire financier GnuCash
-
-
-;; ;;;;;;;;;;;;;;;;;;;;
 ;; Greek translation
 
 el.FullInstall=ĞëŞñçò åãêáôÜóôáóç
@@ -340,6 +313,33 @@ el.IconName_InstallFQ=ÅãêáôÜóôáóç ëŞøçò ôéìşí (online)
 el.IconComment_InstallFQ=ÅãêáôÜóôáóç ôïõ perl module Finance-Quote ãéá ëŞøç ôéìşí online.  Áğáéôåß ActivePerl 5.8
 el.IconName_Uninstall=ÁğåãêáôÜóôáóç GnuCash
 el.IconComment_Uninstall=ÁğåãêáôÜóôáóç ôïõ äéá÷åéñéóôŞ ïéêïíïìéêşí GnuCash
+
+
+;; ;;;;;;;;;;;;;;;;;;;;
+;; French translation
+
+fr.FullInstall=Installation complète
+fr.CustomInstall=Installation personnalisée
+fr.CreateDesktopIcon=Créer un icône sur le bureau
+fr.CreateMenuLink=Créer un lien dans le menu de démarrage
+fr.RunPrg=Démarrer GnuCash maintenant
+fr.AdditionalIcons=Créer les icônes suivants:
+fr.StatusMsgFirewall=Installation des règles de pare-feu de Windows
+
+fr.MainFiles=Programme GnuCash
+fr.TranslFiles=Traduction française
+fr.TemplFiles=Modèle de plan comptable
+
+fr.IconComment_GnuCash=GnuCash, le gestionnaire financier OpenSource
+fr.IconName_README=Afficher le LISEZMOI
+fr.IconComment_README=Afficher le fichier LISEZMOI
+fr.IconFilename_README=README-fr.win32-bin.txt
+fr.IconName_FAQ=FAQ (En ligne, en anglais)
+fr.IconName_Bugzilla=Envoyer un rapport d'erreur (En ligne, en anglais)
+fr.IconName_InstallFQ=Installer les quotations en ligne
+fr.IconComment_InstallFQ=Installation du module Finance-Quote requis pour le téléchargement du cours des devises et actions. Le programme ActivePerl 5.8 est aussi requis
+fr.IconName_Uninstall=Dé-installer GnuCash
+fr.IconComment_Uninstall=Désinstalle le gestionnaire financier GnuCash
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
