@@ -22,7 +22,7 @@ TESTS = \
   test-scm-dynload \
   test-scm-init
 
-GNC_TEST_DEPS := \
+GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/gnc-module/test/mod-foo \
   --gnc-module-dir ${top_builddir}/src/gnc-module/test/mod-bar \
@@ -38,7 +38,7 @@ GNC_TEST_DEPS := \
   --library-dir    ${top_builddir}/src/gnc-module/test/mod-bar \
   --library-dir    ${top_builddir}/src/gnc-module/test/mod-baz
 
-TESTS_ENVIRONMENT := \
+TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \

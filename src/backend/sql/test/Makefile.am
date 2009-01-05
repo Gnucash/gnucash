@@ -17,7 +17,7 @@ test_column_types_SOURCES = \
 TESTS = \
   test-column-types
 
-GNC_TEST_DEPS := \
+GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/lib/libqof/qof \
@@ -26,7 +26,7 @@ GNC_TEST_DEPS := \
   --library-dir    ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/backend/sql
 
-TESTS_ENVIRONMENT := \
+TESTS_ENVIRONMENT = \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
   SRCDIR=${srcdir} \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})

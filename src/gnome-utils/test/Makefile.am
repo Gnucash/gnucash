@@ -8,7 +8,7 @@ TESTS_GUI = test-gnc-recurrence test-gnc-dialog
 
 ##lib_LTLIBRARIES = libgncgnome.la
 
-GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
+GNC_TEST_DEPS = @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/gnome-utils \
   --guile-load-dir ${top_builddir}/src/gnc-module \
@@ -22,7 +22,7 @@ GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --library-dir    ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/gnome-utils
 
-TESTS_ENVIRONMENT := \
+TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \

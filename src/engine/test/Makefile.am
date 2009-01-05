@@ -46,7 +46,7 @@ TESTS = \
   test-scm-query \
   test-book-merge
 
-GNC_TEST_DEPS := \
+GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/engine \
@@ -55,7 +55,7 @@ GNC_TEST_DEPS := \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine
 
-TESTS_ENVIRONMENT := \
+TESTS_ENVIRONMENT = \
   SRCDIR=${srcdir} \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 

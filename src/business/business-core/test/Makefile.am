@@ -26,7 +26,7 @@ TESTS = \
   test-job \
   test-vendor
 
-GNC_TEST_DEPS := \
+GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/business/business-core \
   --guile-load-dir ${top_builddir}/src/gnc-module \
@@ -38,7 +38,7 @@ GNC_TEST_DEPS := \
   --library-dir    ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/business/business-core
 
-TESTS_ENVIRONMENT := \
+TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \

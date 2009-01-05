@@ -22,7 +22,7 @@ TESTS = \
   test-link \
   test-qif
 
-GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
+GNC_TEST_DEPS = @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_builddir}/src/core-utils \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
@@ -41,7 +41,7 @@ GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --guile-load-dir ${top_srcdir}/src/import-export \
   --guile-load-dir ${top_srcdir}/src/import-export/qif
 
-TESTS_ENVIRONMENT := \
+TESTS_ENVIRONMENT = \
   GNC_TEST_FILES=${srcdir}/test-files \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 

@@ -180,7 +180,7 @@ TESTS = \
   test-xml-transaction \
   test-xml2-is-file
 
-GNC_TEST_DEPS := \
+GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/lib/libqof/qof \
@@ -189,7 +189,7 @@ GNC_TEST_DEPS := \
   --library-dir    ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/backend/file
 
-TESTS_ENVIRONMENT := \
+TESTS_ENVIRONMENT = \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
   GNC_TEST_FILES=${srcdir}/test-files/xml2 \
   SRCDIR=${srcdir} \

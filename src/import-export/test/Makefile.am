@@ -21,7 +21,7 @@ TESTS = \
   test-link \
   test-import-parse
 
-GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
+GNC_TEST_DEPS = @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/import-export \
   --guile-load-dir ${top_builddir}/src/engine \
@@ -35,7 +35,7 @@ GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --library-dir    ${top_builddir}/src/gnome-utils \
   --library-dir    ${top_builddir}/src/import-export
 
-TESTS_ENVIRONMENT := \
+TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \
