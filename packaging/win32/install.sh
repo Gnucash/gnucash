@@ -591,8 +591,7 @@ EOF
             chmod +x bin/pkg-config{.exe,-msys.sh}
         qpopd
         quiet gconftool-2 --version &&
-#        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
-        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgtkhtml-3.14 &&  # not gnomeprint
+        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgtkhtml-3.14 &&
         quiet intltoolize --version || die "gnome not installed correctly"
     fi
     if [ "$CROSS_COMPILE" = "yes" ]; then
@@ -600,11 +599,6 @@ EOF
             perl -pi.bak -e"s!^prefix=.*\$!prefix=$_GNOME_UDIR!" *.pc
             #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
         qpopd
-        # Latest gnome-dev packages don't ship with *.la files
-        # anymore. What do we do...?
-        #qpushd $_GNOME_UDIR/bin
-        #    for A in *-0.dll; do ln -sf $A `echo $A|sed 's/\(.*\)-0.dll/\1.dll/'`; done
-        #qpopd
     fi
     [ ! -d $_GNOME_UDIR/share/aclocal ] || add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
