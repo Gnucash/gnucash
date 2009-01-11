@@ -103,7 +103,8 @@ function inst_wget() {
 function inst_dtk() {
     setup MSYS DTK
     _MSYS_UDIR=`unix_path $MSYS_DIR`
-    if quiet ${_MSYS_UDIR}/bin/perl --help
+    if quiet ${_MSYS_UDIR}/bin/perl --help &&
+        [ "`m4 --version | sed '1!d;s,.* [Mm]4 ,,'`" = "1.4.7" ]
     then
         echo "msys dtk already installed.  skipping."
     else
@@ -118,7 +119,10 @@ function inst_dtk() {
             while [ -e $_dst_file ]; do _dst_file=$_dst_file.bak; done
             mv $file $_dst_file
         done
-        quiet ${_MSYS_UDIR}/bin/perl --help || die "msys dtk not installed correctly"
+        wget_unpacked $M4_URL $DOWNLOAD_DIR $TMP_DIR
+        mv $TMP_UDIR/usr/bin/m4.exe /bin
+        quiet ${_MSYS_UDIR}/bin/perl --help &&
+        [ "`m4 --version | sed '1!d;s,.* [Mm]4 ,,'`" = "1.4.7" ] || die "msys dtk not installed correctly"
     fi
 }
 
@@ -217,6 +221,10 @@ function inst_active_perl() {
         echo "ActivePerl already installed.  skipping."
     else
         wget_unpacked $ACTIVE_PERL_URL $DOWNLOAD_DIR $ACTIVE_PERL_DIR
+        qpushd $_ACTIVE_PERL_UDIR
+            assert_one_dir ActivePerl-*
+            mv ActivePerl-* ActivePerl
+        qpopd
         quiet $INTLTOOL_PERL --help || die "ActivePerl not installed correctly"
     fi
 }
@@ -376,8 +384,11 @@ function inst_svn() {
     then
         echo "subversion already installed.  skipping."
     else
-        smart_wget $SVN_URL $DOWNLOAD_DIR
-        $LAST_FILE //SP- //SILENT //DIR="$SVN_DIR"
+        wget_unpacked $SVN_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/svn-win32-*
+        mkdir -p $_SVN_UDIR
+        mv $TMP_UDIR/svn-win32-*/* $_SVN_UDIR
+        quiet svn --version || die "svn not installed correctly"
     fi
 }
 
@@ -492,8 +503,7 @@ function inst_gnome() {
         add_to_env pkg-config PKG_CONFIG
     fi
     if quiet gconftool-2 --version &&
-        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
-#        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgtkhtml-3.14 &&  # not gnomeprint
+        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgtkhtml-3.14 &&
         quiet intltoolize --version
     then
         echo "gnome packages installed.  skipping."
@@ -509,8 +519,11 @@ function inst_gnome() {
         wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBPNG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBTIFF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ZLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $PKG_CONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $CAIRO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -550,28 +563,20 @@ function inst_gnome() {
         wget_unpacked $LIBGNOMEUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGLADE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOMEPRINT_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOMEPRINT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR $GNOME_DIR  # gnomeprint
-        wget_unpacked $LIBGNOMEPRINTUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR  # gnomeprint
         wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTKHTML_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GTK_DOC_URL $DOWNLOAD_DIR $TMP_DIR
         qpushd $_GNOME_UDIR
-            [ -f bin/zlib1.dll ] || mv zlib1.dll bin
-            if [ ! -f lib/libz.dll.a ]; then
-                qpushd bin
-                    ${DLLTOOL} -D zlib1.dll -d ../lib/zlib.def -l libz.dll.a
-                    mv libz.dll.a ../lib
-                qpopd
-            fi
+            assert_one_dir $TMP_UDIR/gtk-doc-*
+            mv $TMP_UDIR/gtk-doc-*/gtk-doc.m4 $_GNOME_UDIR/share/aclocal
             if [ ! -f libexec/gconfd-2.console.exe ]; then
                 cp libexec/gconfd-2.exe libexec/gconfd-2.console.exe
             fi
             exetype libexec/gconfd-2.exe windows
-            sed '1s,!.*perl,!/bin/perl,;s,/opt/gnu/bin/iconv,iconv,' bin/intltool-merge > tmp
-            mv tmp bin/intltool-merge
-#            sed 's#gtk+-unix-print-2.0 >= [0-9\.]* *##' lib/pkgconfig/libgtkhtml-3.14.pc > tmp  # not gnomeprint
-#            mv tmp lib/pkgconfig/libgtkhtml-3.14.pc  # not gnomeprint
+            for file in bin/intltool-*; do
+                sed '1s,!.*perl,!'"$INTLTOOL_PERL"',;s,/opt/gnu/bin/iconv,iconv,' $file > tmp
+                mv tmp $file
+            done
             # work around a bug in msys bash, adding 0x01 smilies
             cat > bin/pkg-config-msys.sh <<EOF
 #!/bin/sh
@@ -586,8 +591,8 @@ EOF
             chmod +x bin/pkg-config{.exe,-msys.sh}
         qpopd
         quiet gconftool-2 --version &&
-        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
-#        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgtkhtml-3.14 &&  # not gnomeprint
+#        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
+        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgtkhtml-3.14 &&  # not gnomeprint
         quiet intltoolize --version || die "gnome not installed correctly"
     fi
     if [ "$CROSS_COMPILE" = "yes" ]; then
@@ -671,7 +676,7 @@ function inst_goffice() {
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     add_to_env $_GOFFICE_UDIR/bin PATH
     add_to_env $_GOFFICE_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists libgoffice-0.4
+    if quiet ${PKG_CONFIG} --exists libgoffice-0.8
     then
         echo "goffice already installed.  skipping."
     else
@@ -687,14 +692,14 @@ function inst_goffice() {
             automake
             autoconf
             ./configure ${HOST_XCOMPILE} --prefix=$_GOFFICE_UDIR \
-                CPPFLAGS="${GNOME_CPPFLAGS} ${PCRE_CPPFLAGS}" \
-                LDFLAGS="${GNOME_LDFLAGS} ${PCRE_LDFLAGS}"
+                CPPFLAGS="${GNOME_CPPFLAGS} ${PCRE_CPPFLAGS} ${HH_CPPFLAGS}" \
+                LDFLAGS="${GNOME_LDFLAGS} ${PCRE_LDFLAGS} ${HH_LDFLAGS}"
             [ -d ../libgsf-* ] || die "We need the unpacked package $TMP_UDIR/libgsf-*; please unpack it in $TMP_UDIR"
             [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
             make
             make install
         qpopd
-        ${PKG_CONFIG} --exists libgoffice-0.4 || die "goffice not installed correctly"
+        ${PKG_CONFIG} --exists libgoffice-0.8 || die "goffice not installed correctly"
     fi
 }
 
@@ -1140,7 +1145,7 @@ function inst_gnucash() {
         grep -v "need_relink=yes" ltmain.sh > ltmain.sh.new ; mv ltmain.sh.new ltmain.sh
     qpopd
 
-    qpushd $BUILD_DIR
+   qpushd $BUILD_DIR
         $_REL_REPOS_UDIR/configure ${HOST_XCOMPILE} \
             --prefix=$_INSTALL_WFSDIR \
             --enable-debug \
