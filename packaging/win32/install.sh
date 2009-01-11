@@ -1160,6 +1160,7 @@ function inst_gnucash() {
 
 # This function will be called by make_install.sh as well,
 # so do not regard variables from inst_* functions as set
+# Parameters allowed: skip_scripts, skip_schemas
 function make_install() {
     _BUILD_UDIR=`unix_path $BUILD_DIR`
     _INSTALL_UDIR=`unix_path $INSTALL_DIR`
@@ -1180,15 +1181,22 @@ function make_install() {
     AQBANKING_UPATH="${_OPENSSL_UDIR}/bin:${_GWENHYWFAR_UDIR}/bin:${_AQBANKING_UDIR}/bin"
     AQBANKING_PATH="${OPENSSL_DIR}\\bin;${GWENHYWFAR_DIR}\\bin;${AQBANKING_DIR}\\bin"
 
-    # Try to fix the paths in the "gnucash" script
-    qpushd $_BUILD_UDIR/src/bin
-        rm gnucash
-        make PATH_SEPARATOR=";" \
-            bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin:${_LIBDBI_UDIR}/bin:${_SQLITE3_UDIR}/bin" \
-            gnucash
-    qpopd
+    for param in "$@"; do
+        [ "$param" = "skip_scripts" ] && _skip_scripts=1
+        [ "$param" = "skip_schemas" ] && _skip_schemas=1
+    done
 
-make install
+    if [ -z $_skip_scripts ]; then
+        # Try to fix the paths in the "gnucash" script
+        qpushd $_BUILD_UDIR/src/bin
+            rm gnucash
+            make PATH_SEPARATOR=";" \
+                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin:${_LIBDBI_UDIR}/bin:${_SQLITE3_UDIR}/bin" \
+                gnucash
+        qpopd
+    fi
+    
+    make install
 
     qpushd $_INSTALL_UDIR/lib
         # Move modules that are compiled without -module to lib/gnucash and
@@ -1204,26 +1212,30 @@ make install
         done
     qpopd
 
-    qpushd $_INSTALL_UDIR/etc/gconf/schemas
-        for file in *.schemas; do
-            gconftool-2 \
-                --config-source=xml:merged:${_INSTALL_WFSDIR}/etc/gconf/gconf.xml.defaults \
-                --install-schema-file $file
-        done
-        gconftool-2 --shutdown
-    qpopd
+    if [ -z $_skip_schemas ]; then
+        qpushd $_INSTALL_UDIR/etc/gconf/schemas
+            for file in *.schemas; do
+                gconftool-2 \
+                    --config-source=xml:merged:${_INSTALL_WFSDIR}/etc/gconf/gconf.xml.defaults \
+                    --install-schema-file $file
+            done
+            gconftool-2 --shutdown
+        qpopd
+    fi
 
-    # Create a startup script that works without the msys shell
-    qpushd $_INSTALL_UDIR/bin
-        echo "setlocal" > gnucash.bat
-        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBDBI_DIR}\\bin;${SQLITE3_DIR}\\bin;%PATH%" > gnucash.bat
-        echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
-        echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
-        echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
-        echo "set LTDL_LIBRARY_PATH=${INSTALL_DIR}\\lib" >> gnucash.bat
-        echo "set GNC_DBD_DIR=${LIBDBI_DRIVERS_DIR}\\lib\\dbd" >> gnucash.bat
-        echo "start gnucash-bin %*" >> gnucash.bat
-    qpopd
+    if [ -z $_skip_scripts ]; then
+        # Create a startup script that works without the msys shell
+        qpushd $_INSTALL_UDIR/bin
+            echo "setlocal" > gnucash.bat
+            echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBDBI_DIR}\\bin;${SQLITE3_DIR}\\bin;%PATH%" > gnucash.bat
+            echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
+            echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
+            echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
+            echo "set LTDL_LIBRARY_PATH=${INSTALL_DIR}\\lib" >> gnucash.bat
+            echo "set GNC_DBD_DIR=${LIBDBI_DRIVERS_DIR}\\lib\\dbd" >> gnucash.bat
+            echo "start gnucash-bin %*" >> gnucash.bat
+        qpopd
+    fi
 }
 
 function make_chm() {
