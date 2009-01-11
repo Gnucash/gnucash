@@ -1145,7 +1145,7 @@ function inst_gnucash() {
         grep -v "need_relink=yes" ltmain.sh > ltmain.sh.new ; mv ltmain.sh.new ltmain.sh
     qpopd
 
-   qpushd $BUILD_DIR
+    qpushd $BUILD_DIR
         $_REL_REPOS_UDIR/configure ${HOST_XCOMPILE} \
             --prefix=$_INSTALL_WFSDIR \
             --enable-debug \
