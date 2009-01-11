@@ -1770,6 +1770,20 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
       LEAVE("already in table");
       return c;
     }
+
+    /* Backward compatability support for currencies that have
+     * recently changed. */
+    if (priv->namespace->iso4217) {
+      guint i;
+      for (i = 0; i < GNC_NEW_ISO_CODES; i++) {
+        if (!priv->mnemonic
+            || !strcmp(priv->mnemonic, gnc_new_iso_codes[i].old_code)) {
+          gnc_commodity_set_mnemonic(comm, gnc_new_iso_codes[i].new_code);
+          break;
+        }
+      }
+    }
+
     gnc_commodity_copy (c, comm);
     gnc_commodity_destroy (comm);
     LEAVE("found at %p", c);

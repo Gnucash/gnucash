@@ -249,7 +249,7 @@ gnc_commodity_end_handler(gpointer data_for_children,
                           gpointer parent_data, gpointer global_data,
                           gpointer *result, const gchar *tag)
 {
-    gnc_commodity *com;
+    gnc_commodity *com, *old_com;
     xmlNodePtr achild;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
@@ -269,9 +269,10 @@ gnc_commodity_end_handler(gpointer data_for_children,
     
     g_return_val_if_fail(tree, FALSE);
 
-    com = gnc_commodity_find_currency(book, tree);
-    if (!com)
-      com = gnc_commodity_new(book, NULL, NULL, NULL, NULL, 0); 
+    com = gnc_commodity_new(book, NULL, NULL, NULL, NULL, 0); 
+    old_com = gnc_commodity_find_currency(book, tree);
+    if (old_com)
+        gnc_commodity_copy(com, old_com);
 
     for(achild = tree->xmlChildrenNode; achild; achild = achild->next)
     {
