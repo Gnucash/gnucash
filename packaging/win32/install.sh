@@ -1135,8 +1135,6 @@ function inst_gnucash() {
         if [ "$BUILD_FROM_TARBALL" != "yes" ]; then
             ./autogen.sh
         fi
-        # Windows DLLs don't need relinking
-        grep -v "need_relink=yes" ltmain.sh > ltmain.sh.new ; mv ltmain.sh.new ltmain.sh
     qpopd
 
     qpushd $BUILD_DIR
@@ -1154,27 +1152,43 @@ function inst_gnucash() {
             LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS} ${LIBDBI_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS}" \
             PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
 
-        # Windows DLLs don't need relinking
-        grep -v "need_relink=yes" libtool   > libtool.new   ; mv libtool.new   libtool
-
         make
-
-        # Try to fix the paths in the "gnucash" script
-        qpushd src/bin
-            rm gnucash
-            make PATH_SEPARATOR=";" \
-                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin:${_LIBDBI_UDIR}/bin:${_SQLITE3_UDIR}/bin" \
-                gnucash
-        qpopd
 
         make_install
     qpopd
 }
 
+# This function will be called by make_install.sh as well,
+# so do not regard variables from inst_* functions as set
 function make_install() {
+    _BUILD_UDIR=`unix_path $BUILD_DIR`
+    _INSTALL_UDIR=`unix_path $INSTALL_DIR`
+    _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
+    _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
+    _PCRE_UDIR=`unix_path $PCRE_DIR`
+    _GNOME_UDIR=`unix_path $GNOME_DIR`
+    _GUILE_UDIR=`unix_path $GUILE_DIR`
+    _REGEX_UDIR=`unix_path $REGEX_DIR`
+    _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
+    _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
+    _GWENHYWFAR_UDIR=`unix_path ${GWENHYWFAR_DIR}`
+    _AQBANKING_UDIR=`unix_path ${AQBANKING_DIR}`
+    _LIBOFX_UDIR=`unix_path ${LIBOFX_DIR}`
+    _OPENSP_UDIR=`unix_path ${OPENSP_DIR}`
+    _LIBDBI_UDIR=`unix_path ${LIBDBI_DIR}`
+    _SQLITE3_UDIR=`unix_path ${SQLITE3_DIR}`
+    AQBANKING_UPATH="${_OPENSSL_UDIR}/bin:${_GWENHYWFAR_UDIR}/bin:${_AQBANKING_UDIR}/bin"
     AQBANKING_PATH="${OPENSSL_DIR}\\bin;${GWENHYWFAR_DIR}\\bin;${AQBANKING_DIR}\\bin"
 
-    make install
+    # Try to fix the paths in the "gnucash" script
+    qpushd $_BUILD_UDIR/src/bin
+        rm gnucash
+        make PATH_SEPARATOR=";" \
+            bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin:${_LIBDBI_UDIR}/bin:${_SQLITE3_UDIR}/bin" \
+            gnucash
+    qpopd
+
+make install
 
     qpushd $_INSTALL_UDIR/lib
         # Move modules that are compiled without -module to lib/gnucash and
@@ -1188,10 +1202,6 @@ function make_install() {
         for A in *.la; do
             sed '/dependency_libs/d' $A > tmp ; mv tmp $A
         done
-
-        # gettext 0.17 installs translations to \share\locale, but not all
-        # gnome packages have been recompiled against it
-        [ -d locale ] && cp -a locale ../share && rm -rf locale
     qpopd
 
     qpushd $_INSTALL_UDIR/etc/gconf/schemas
@@ -1206,7 +1216,7 @@ function make_install() {
     # Create a startup script that works without the msys shell
     qpushd $_INSTALL_UDIR/bin
         echo "setlocal" > gnucash.bat
-        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBDBI_DIR}\\bin;${SQLITE3_DIR}\\bin;%PATH%" > gnucash.bat
+        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBDBI_DIR}\\bin;${SQLITE3_DIR}\\bin;%PATH%" > gnucash.bat
         echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
         echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
         echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
