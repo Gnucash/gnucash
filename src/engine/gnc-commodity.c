@@ -889,7 +889,7 @@ gnc_commodity_copy(gnc_commodity * dest, const gnc_commodity *src)
   CommodityPrivate* dest_priv = GET_PRIVATE(dest);
 
   gnc_commodity_set_fullname (dest, src_priv->fullname);
-  gnc_commodity_set_mnemonic (dest, gnc_commodity_get_mnemonic(src));
+  gnc_commodity_set_mnemonic (dest, src_priv->mnemonic);
   dest_priv->namespace = src_priv->namespace;
   gnc_commodity_set_fraction (dest, src_priv->fraction);
   gnc_commodity_set_cusip (dest, src_priv->cusip);
