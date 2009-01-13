@@ -870,6 +870,8 @@ function inst_gwenhywfar() {
                     CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS}" \
                     LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -lintl"
             else
+                [ -n "$GWENHYWFAR_PATCH" -a -f "$GWENHYWFAR_PATCH" ] && \
+                    patch -p1 < $GWENHYWFAR_PATCH
                 ./configure ${HOST_XCOMPILE} \
                     --with-openssl-includes=$_OPENSSL_UDIR/include \
                     --with-openssl-libs=$_OPENSSL_UDIR/lib \
@@ -957,14 +959,15 @@ function inst_aqbanking() {
         qpushd $TMP_UDIR/aqbanking-*
             _AQ_CPPFLAGS="-I${_LIBOFX_UDIR}/include ${KTOBLZCHECK_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS}"
             _AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib ${KTOBLZCHECK_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS}"
-            if [ -n "$AQBANKING_PATCH" -a -f "$AQBANKING_PATCH" ]; then
-                patch -p1 < $AQBANKING_PATCH
-                make -f Makefile.cvs
-            fi
             if test x$CROSS_COMPILE = xyes; then
                 XMLMERGE="xmlmerge"
             else
-                XMLMERGE="${GWENHYWFAR_UDIR}/bin/xmlmerge"
+                XMLMERGE="${_GWENHYWFAR_UDIR}/bin/xmlmerge"
+            fi
+            if test x$AQBANKING3 = xyes; then
+                _AQ_BACKENDS="aqhbci aqofxconnect"
+            else
+                _AQ_BACKENDS="aqdtaus aqhbci aqofxconnect"
             fi
             if test x$AQBANKING_WITH_QT = xyes; then
                 inst_qt4
@@ -972,7 +975,7 @@ function inst_aqbanking() {
                     --with-gwen-dir=${_GWENHYWFAR_UDIR} \
                     --with-xmlmerge=${XMLMERGE} \
                     --with-frontends="cbanking qbanking" \
-                    --with-backends="aqhbci aqofxconnect" \
+                    --with-backends="${_AQ_BACKENDS}" \
                     CPPFLAGS="${_AQ_CPPFLAGS} ${GMP_CPPFLAGS}" \
                     LDFLAGS="${_AQ_LDFLAGS} ${GMP_LDFLAGS}" \
                     qt3_libs="-L${_QTDIR}/lib -L${_QTDIR}/bin -lQtCore4 -lQtGui4 -lQt3Support4" \
@@ -985,7 +988,7 @@ function inst_aqbanking() {
                     --with-gwen-dir=${_GWENHYWFAR_UDIR} \
                     --with-xmlmerge=${XMLMERGE} \
                     --with-frontends="cbanking" \
-                    --with-backends="aqdtaus aqhbci aqofxconnect" \
+                    --with-backends="${_AQ_BACKENDS}" \
                     CPPFLAGS="${_AQ_CPPFLAGS} ${GMP_CPPFLAGS}" \
                     LDFLAGS="${_AQ_LDFLAGS} ${GMP_LDFLAGS}" \
                     --prefix=${_AQBANKING_UDIR}

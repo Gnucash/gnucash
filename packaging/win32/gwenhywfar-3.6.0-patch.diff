@@ -1,0 +1,76 @@
+--- gwenhywfar-3.6.0-old/src/cryptmsg/cryptmgrkeys.c	Sun Dec  7 16:56:04 2008
++++ gwenhywfar-3.6.0/src/cryptmsg/cryptmgrkeys.c	Tue Jan 13 01:05:44 2009
+@@ -74,6 +74,7 @@
+ 
+ 
+ 
++GWENHYWFAR_CB
+ void GWEN_CryptMgrKeys_FreeData(void *bp, void *p) {
+   GWEN_CRYPTMGR_KEYS *xcm;
+ 
+@@ -104,6 +105,7 @@
+ 
+ 
+ 
++GWENHYWFAR_CB
+ int GWEN_CryptMgrKeys_SignData(GWEN_CRYPTMGR *cm,
+ 			       const uint8_t *pData, uint32_t lData,
+ 			       GWEN_BUFFER *dbuf) {
+@@ -176,6 +178,7 @@
+ 
+ 
+ 
++GWENHYWFAR_CB
+ int GWEN_CryptMgrKeys_VerifyData(GWEN_CRYPTMGR *cm,
+ 				 const uint8_t *pData, uint32_t lData,
+ 				 const uint8_t *pSignature, uint32_t lSignature) {
+@@ -271,6 +274,7 @@
+ 
+ 
+ 
++GWENHYWFAR_CB
+ int GWEN_CryptMgrKeys_EncryptKey(GWEN_CRYPTMGR *cm,
+ 				 const uint8_t *pData, uint32_t lData,
+ 				 GWEN_BUFFER *dbuf) {
+@@ -322,6 +326,7 @@
+ 
+ 
+ 
++GWENHYWFAR_CB
+ int GWEN_CryptMgrKeys_DecryptKey(GWEN_CRYPTMGR *cm,
+ 				 const uint8_t *pData, uint32_t lData,
+ 				 GWEN_BUFFER *dbuf) {
+--- gwenhywfar-3.6.0-old/src/cryptmsg/cryptmgr_be.h	Tue Dec  2 17:06:50 2008
++++ gwenhywfar-3.6.0/src/cryptmsg/cryptmgr_be.h	Tue Jan 13 01:17:30 2009
+@@ -22,19 +22,19 @@
+ GWEN_INHERIT_FUNCTION_LIB_DEFS(GWEN_CRYPTMGR, GWENHYWFAR_API)
+ 
+ 
+-typedef int (*GWEN_CRYPTMGR_SIGNDATA_FN)(GWEN_CRYPTMGR *cm,
+-					 const uint8_t *pData, uint32_t lData,
+-					 GWEN_BUFFER *dbuf);
+-typedef int (*GWEN_CRYPTMGR_ENCRYPTKEY_FN)(GWEN_CRYPTMGR *cm,
+-					   const uint8_t *pData, uint32_t lData,
+-					   GWEN_BUFFER *dbuf);
++typedef GWENHYWFAR_CB int (*GWEN_CRYPTMGR_SIGNDATA_FN)(GWEN_CRYPTMGR *cm,
++						       const uint8_t *pData, uint32_t lData,
++						       GWEN_BUFFER *dbuf);
++typedef GWENHYWFAR_CB int (*GWEN_CRYPTMGR_ENCRYPTKEY_FN)(GWEN_CRYPTMGR *cm,
++							 const uint8_t *pData, uint32_t lData,
++							 GWEN_BUFFER *dbuf);
+ 
+-typedef int (*GWEN_CRYPTMGR_VERIFYDATA_FN)(GWEN_CRYPTMGR *cm,
+-					   const uint8_t *pData, uint32_t lData,
+-					   const uint8_t *pSignature, uint32_t lSignature);
+-typedef int (*GWEN_CRYPTMGR_DECRYPTKEY_FN)(GWEN_CRYPTMGR *cm,
+-					   const uint8_t *pData, uint32_t lData,
+-					   GWEN_BUFFER *dbuf);
++typedef GWENHYWFAR_CB int (*GWEN_CRYPTMGR_VERIFYDATA_FN)(GWEN_CRYPTMGR *cm,
++							 const uint8_t *pData, uint32_t lData,
++							 const uint8_t *pSignature, uint32_t lSignature);
++typedef GWENHYWFAR_CB int (*GWEN_CRYPTMGR_DECRYPTKEY_FN)(GWEN_CRYPTMGR *cm,
++							 const uint8_t *pData, uint32_t lData,
++							 GWEN_BUFFER *dbuf);
+ 
+ 
+ 
