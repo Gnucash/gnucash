@@ -243,7 +243,7 @@ void
 qof_log_parse_log_config(const char *filename)
 {
      const gchar *levels_group = "levels", *output_group = "output";
-     GError *err;
+     GError *err = NULL;
      GKeyFile *conf = g_key_file_new();
 
      if (!g_key_file_load_from_file(conf, filename, G_KEY_FILE_NONE, &err))
