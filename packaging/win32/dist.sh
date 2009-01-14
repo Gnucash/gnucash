@@ -81,11 +81,9 @@ function dist_gnome() {
     unzip -q $LAST_FILE bin/iconv.dll -d $DIST_DIR
     wget_unpacked $GLIB_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $DIST_DIR
-    smart_wget $LIBPNG_URL $DOWNLOAD_DIR
-    unzip -q $LAST_FILE bin/libpng13.dll -d $DIST_DIR
+    wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $DIST_DIR
-    smart_wget $ZLIB_URL $DOWNLOAD_DIR
-    unzip -q $LAST_FILE zlib1.dll -d $DIST_DIR\\bin
+    wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $EXPAT_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $FONTCONFIG_URL $DOWNLOAD_DIR $DIST_DIR
@@ -106,8 +104,6 @@ function dist_gnome() {
     wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBGNOMEPRINT_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR $DIST_DIR  # gnomeprint
     wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $DIST_DIR
     rm -rf $DIST_UDIR/etc/gconf/gconf.xml.defaults/{desktop,schemas}
     cp -a $DIST_UDIR/lib/locale $DIST_UDIR/share
