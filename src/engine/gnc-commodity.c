@@ -1194,10 +1194,12 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
      * Backward compatability support for currencies that have
      * recently changed.
      */
-    for (i = 0; i < GNC_NEW_ISO_CODES; i++) {
-      if (strcmp(mnemonic, gnc_new_iso_codes[i].old_code) == 0) {
-	mnemonic = gnc_new_iso_codes[i].new_code;
-	break;
+    if (nsp->iso4217) {
+      for (i = 0; i < GNC_NEW_ISO_CODES; i++) {
+	if (strcmp(mnemonic, gnc_new_iso_codes[i].old_code) == 0) {
+	  mnemonic = gnc_new_iso_codes[i].new_code;
+	  break;
+	}
       }
     }
     return g_hash_table_lookup(nsp->cm_table, (gpointer)mnemonic);
