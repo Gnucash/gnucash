@@ -663,8 +663,8 @@ AC_ARG_ENABLE( debug,
        # ...except for those the user wants.
        CFLAGS="${CFLAGS} -g ${USER_OPTIMIZATION}"
        LDFLAGS="${LDFLAGS} -g"
-       AC_DEFINE(DEBUG_MEMORY,1,Enable debug memory),
-       AC_DEFINE(DEBUG_MEMORY,0,Enable debug memory)])
+       AC_DEFINE(DEBUG_MEMORY,1,[Enable debug memory])
+       AC_DEFINE(DEBUG_MEMORY,0,[Enable debug memory])])
 
 AC_ARG_ENABLE( profile,
   [  --enable-profile             compile with profiling set],
@@ -673,8 +673,8 @@ AC_ARG_ENABLE( profile,
 
 AC_ARG_ENABLE( ref-counts-dumps,
   [  --enable-ref-counts-dumps    compile with ref count dumps],
-       AC_DEFINE(DEBUG_REFERENCE_COUNTING,1,Enable reference count dumps),
-       AC_DEFINE(DEBUG_REFERENCE_COUNTING,0,Enable reference count dumps) )
+       AC_DEFINE(DEBUG_REFERENCE_COUNTING,1,[Enable reference count dumps])
+       AC_DEFINE(DEBUG_REFERENCE_COUNTING,0,[Enable reference count dumps]) )
 
 
 ### --------------------------------------------------------------------------
