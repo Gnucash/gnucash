@@ -34,7 +34,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	( cd gnucash/import-export; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/import-export/
 gncscmmod_DATA = qif-io-core.scm
