@@ -145,7 +145,8 @@ update_display_lists(gnc_column_view_edit * view)
     for(i = 0; !SCM_NULLP(names); names = SCM_CDR(names), i++) {
       if (SCM_EQUALP (SCM_CAR(names), selection))
         row = i;
-      name = SCM_STRING_CHARS(scm_call_2(template_menu_name, SCM_CAR(names), SCM_BOOL_F));
+      name = _(SCM_STRING_CHARS(scm_call_2(template_menu_name, SCM_CAR(names),
+    		  SCM_BOOL_F)));
       gtk_list_store_append(store, &iter);
       gtk_list_store_set(store, &iter,
 			 AVAILABLE_COL_NAME, name,
@@ -185,12 +186,12 @@ update_display_lists(gnc_column_view_edit * view)
 
       id = scm_num2int(SCM_CAAR(contents), SCM_ARG1, G_STRFUNC);
       this_report = gnc_report_find(id);
+      name = _(SCM_STRING_CHARS(scm_call_1(report_menu_name, this_report)));
 
       gtk_list_store_append(store, &iter);
       gtk_list_store_set
 	(store, &iter,
-	 CONTENTS_COL_NAME, SCM_STRING_CHARS(scm_call_1(report_menu_name,
-							this_report)),
+	 CONTENTS_COL_NAME, name,
 	 CONTENTS_COL_ROW, i,
 	 CONTENTS_COL_REPORT_COLS, scm_num2int(SCM_CADR(SCM_CAR(contents)),
 					       SCM_ARG1, G_STRFUNC),
