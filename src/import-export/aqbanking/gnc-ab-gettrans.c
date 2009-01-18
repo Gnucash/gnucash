@@ -39,19 +39,11 @@
 #include "gnc-ab-kvp.h"
 #include "gnc-ab-utils.h"
 #include "gnc-gwen-gui.h"
-#include "import-main-matcher.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
-typedef struct _TransListData TransListData;
-
 static gboolean gettrans_dates(GtkWidget *parent, Account *gnc_acc, GWEN_TIME **from_date, GWEN_TIME **to_date);
-
-struct _TransListData {
-    Account *gnc_acc;
-    GNCImportMainMatcher *importer_generic;
-};
 
 static gboolean
 gettrans_dates(GtkWidget *parent, Account *gnc_acc,
