@@ -1256,9 +1256,12 @@ xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
 {
     xaccTransBeginEdit(trans);
 
-    PINFO ("addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s",
-           trans, val.tv_sec, val.tv_nsec, 
-           ctime (({time_t secs = (time_t) val.tv_sec; &secs;})));
+    {
+        time_t secs = (time_t) val.tv_sec;
+        gchar *tstr = ctime(&secs);
+        PINFO ("addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s",
+               trans, val.tv_sec, val.tv_nsec, tstr ? tstr : "(null)");
+    }
     
     *dadate = val;
     qof_instance_set_dirty(QOF_INSTANCE(trans));
