@@ -62,8 +62,10 @@ gnc_commodity * gnc_import_select_commodity(char * cusip,
   char * tmp_namespace = NULL;
   GList * commodity_list=NULL;
   GList * namespace_list=NULL;
-  DEBUG("Default fullname received: %s", default_fullname);
-  DEBUG("Default mnemonic received: %s", default_mnemonic);
+  DEBUG("Default fullname received: %s",
+        default_fullname ? default_fullname : "(null)");
+  DEBUG("Default mnemonic received: %s",
+        default_mnemonic ? default_mnemonic : "(null)");
   
   DEBUG("Looking for commodity with exchange_code: %s", cusip);
 
