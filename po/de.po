@@ -2,9 +2,10 @@
 # Messages in Deutsch für GnuCash
 # Copyright (C) 1999-2001, 2004 Free Software Foundation, Inc.
 # Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
-# Christian Stimming <stimming@tuhh.de>, 2001-2003, 2004, 2005, 2006, 2007.
+# Christian Stimming <stimming@tuhh.de>, 2001-2009.
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
+# Frank H. Ellenberger <f.ellenberger@online.de>, 2007, 2009.
 # Rolf Leggewie 2008
 #
 msgid ""
@@ -12,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-12-07 14:05+0100\n"
-"PO-Revision-Date: 2008-12-07 14:27+0100\n"
+"PO-Revision-Date: 2009-01-18 01:13+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3142,7 +3143,7 @@ msgstr "Kreditkarte"
 
 #: ../src/engine/Account.c:3671
 msgid "Liability"
-msgstr "Passiva"
+msgstr "Fremdkapital"
 
 #: ../src/engine/Account.c:3672
 msgid "Stock"
@@ -3173,11 +3174,11 @@ msgstr "Erträge"
 
 #: ../src/engine/Account.c:3678
 msgid "A/Receivable"
-msgstr "Forderungen"
+msgstr "offene Forderungen"
 
 #: ../src/engine/Account.c:3679
 msgid "A/Payable"
-msgstr "Verbindlichkeit"
+msgstr "offene Verbindlichkeiten"
 
 #: ../src/engine/cap-gains.c:236
 msgid "Orphaned Gains"
@@ -3509,8 +3510,8 @@ msgstr "Buchungen suchen"
 #, c-format
 msgid "Are you sure you want to delete the %d selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "Sind Sie sicher, dass Sie den %d gewählten Preis löschen wollen?"
-msgstr[1] "Sind Sie sicher, dass Sie die %d gewählten Preise löschen wollen?"
+msgstr[0] "Sind Sie sicher, dass Sie den %d gewählten Kurswert löschen wollen?"
+msgstr[1] "Sind Sie sicher, dass Sie die %d gewählten Kurswerte löschen wollen?"
 
 #: ../src/gnome/dialog-price-edit-db.c:180
 msgid "Delete prices?"
@@ -5171,7 +5172,7 @@ msgstr "Die _Einführung für neue Benutzer öffnen"
 
 #: ../src/gnome/glade/price.glade.h:1
 msgid "Add a new price."
-msgstr "Neuen Preis hinzufügen."
+msgstr "Neuen Kurswert hinzufügen."
 
 #: ../src/gnome/glade/price.glade.h:2
 msgid ""
@@ -5194,11 +5195,11 @@ msgstr "_Währung:"
 
 #: ../src/gnome/glade/price.glade.h:8
 msgid "Delete _last price for a stock"
-msgstr "Auch _letzten Preis eines Wertpapieres löschen"
+msgstr "Auch _letzten Kurswert eines Wertpapieres löschen"
 
 #: ../src/gnome/glade/price.glade.h:9
 msgid "Delete _manually entered prices"
-msgstr "Auch _manuell eingegebene Preise löschen"
+msgstr "Auch _manuell eingegebene Kurswerte löschen"
 
 #: ../src/gnome/glade/price.glade.h:10
 msgid "Delete all stock prices based upon the critera below:"
@@ -5206,7 +5207,7 @@ msgstr "Alle Kurse mit folgenden Kriterien löschen:"
 
 #: ../src/gnome/glade/price.glade.h:11
 msgid "Edit the current price."
-msgstr "Aktuellen Preis bearbeiten."
+msgstr "Aktuellen Kurs bearbeiten."
 
 #: ../src/gnome/glade/price.glade.h:12
 msgid "Get _Quotes"
@@ -5222,9 +5223,9 @@ msgid ""
 "last stock price dated before the date will be kept and all earlier quotes "
 "deleted."
 msgstr ""
-"Wenn gewählt, werden alle Preise vor dem gewählten Datum gelöscht.  "
-"Andernfalls wird der letzte Preis vor dem Datum behalten und alle früheren "
-"Preise gelöscht."
+"Wenn gewählt, werden alle Kurswerte vor dem gewählten Datum gelöscht.  "
+"Andernfalls wird der letzte Kurs vor dem Datum behalten und alle früheren "
+"werden gelöscht."
 
 #: ../src/gnome/glade/price.glade.h:15
 msgid ""
@@ -5234,11 +5235,11 @@ msgid ""
 msgstr ""
 "Wenn gewählt, werden auch manuell eingegebene Preise/Kurse vor dem gewählten "
 "Datum gelöscht. Andernfalls werden nur von Finance::Quote hinzugefügte "
-"Preise gelöscht."
+"Kurse gelöscht."
 
 #: ../src/gnome/glade/price.glade.h:16
 msgid "Price Editor"
-msgstr "Preis-Editor"
+msgstr "Kurs-Editor"
 
 #: ../src/gnome/glade/price.glade.h:17
 msgid "Remove _Old"
@@ -5246,11 +5247,11 @@ msgstr "Alte ent_fernen"
 
 #: ../src/gnome/glade/price.glade.h:18
 msgid "Remove prices older than a user-entered date"
-msgstr "Entferne Preise, die älter als ein bestimmtes Datum sind"
+msgstr "Entferne Kurse, die älter als ein bestimmtes Datum sind"
 
 #: ../src/gnome/glade/price.glade.h:19
 msgid "Remove the current price"
-msgstr "Aktuellen Preis entfernen."
+msgstr "Aktuellen Kurswert entfernen."
 
 #: ../src/gnome/glade/price.glade.h:20
 msgid "S_ource:"
@@ -6522,7 +6523,7 @@ msgid ""
 "If you want to record a stock price for the split, enter it below. You may "
 "safely leave it blank."
 msgstr ""
-"Wenn Sie einen Aktienkurs für die Buchung eingeben wollen, geben Sie den "
+"Wenn Sie einen Wertpapierkurs für die Buchung eingeben wollen, geben Sie den "
 "Kurs unten an. Sie können das Kurseingabefeld auch leer lassen."
 
 #: ../src/gnome/glade/stocks.glade.h:10
@@ -6753,11 +6754,11 @@ msgstr "Alte Daten abschließen und in vorigen Buchführungsperioden speichern."
 #. Tools menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:154
 msgid "_Price Editor"
-msgstr "_Preis-Editor"
+msgstr "_Kurs-Datenbank"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:155
 msgid "View and edit the prices for stocks and mutual funds"
-msgstr "Preise für Währungen/Wertpapiere anzeigen und bearbeiten"
+msgstr "Kurse für Währungen/Wertpapiere anzeigen und bearbeiten"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:157
 msgid "_Security Editor"
@@ -7984,8 +7985,7 @@ msgid ""
 msgstr ""
 "Vor dem Abgleichen eines Kontos mit Haben- oder Sollzinsen nachfragen, um "
 "eine Buchung für die Zinszahlung zu erstellen.\n"
-"Zur Zeit nur möglich für Konten der Art Bank, Kreditkarte, Aktienfond, "
-"Aktiva, Forderungen und Verbindlichkeiten."
+"Zur Zeit nur möglich für Konten der Art Aktiva, Bank, Investmentfonds, Forderungen, Fremdkapital, Verbindlichkeiten und Kreditkarte."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
 msgid "Prompt for credit card payment"
@@ -10872,7 +10872,7 @@ msgstr "Ertrags- und Aufwandskonten mit umgekehrten Vorzeichen"
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
-msgstr "Passiva-, Eigenkapitals- und Ertragskonten mit umgekehrten Vorzeichen"
+msgstr "Passiv- (Eigen- & Fremdkapital)- und Ertragskonten mit umgekehrten Vorzeichen"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:124
 msgid "Text _below icons"
@@ -13788,8 +13788,7 @@ msgstr ""
 msgid ""
 "This transaction probably requires your intervention or it will be imported "
 "unbalanced."
-msgstr ""
-"Diese Buchung benötigt Ihre Auswahl oder sie würde unausgeglichen importiert."
+msgstr "Diese Buchung benötigt Ihre Zuordnung, ansonsten sie würde unausgeglichen importiert."
 
 #: ../src/import-export/generic-import.glade.h:49
 msgid "This transaction requires your intervention or it will NOT be imported."
@@ -17579,7 +17578,7 @@ msgstr "Reingewinn anzeigen"
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:1146 ../intl-scm/guile-strings.c:1230
 msgid "Show Asset & Liability bars"
-msgstr "Aktiva und Passiva Balken anzeigen"
+msgstr "Aktiva und Fremdkapital Balken anzeigen"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -17644,7 +17643,7 @@ msgstr ""
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1170
 msgid "Price Database"
-msgstr "Preis-Editor"
+msgstr "Kurs-Datenbank"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1172
@@ -17775,7 +17774,7 @@ msgstr "Erträge/Aufwendungen anzeigen"
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:1242
 msgid "Show the Asset and the Liability bars?"
-msgstr "Balken für Aktiva und Passiva anzeigen?"
+msgstr "Balken für Aktiva und Fremdkapital anzeigen?"
 
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:1244
@@ -17832,7 +17831,7 @@ msgstr "Aufwendungen Diagramm"
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:1274
 msgid "Liability Chart"
-msgstr "Passiva Diagramm"
+msgstr "Fremdkapital Diagramm"
 
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:1290
@@ -18686,7 +18685,7 @@ msgstr "Aktiva Balkendiagramm"
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:1686
 msgid "Liability Barchart"
-msgstr "Passiva Balkendiagramm"
+msgstr "Fremdkapital Balkendiagramm"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:1688
@@ -19691,7 +19690,7 @@ msgid ""
 "Reverse amount display for Liability, Payable, Equity, Credit Card, and "
 "Income accounts"
 msgstr ""
-"Verbindlichkeiten, Passiva-, Kreditkarten-, Eigenkapital- und Ertragskonten "
+"Passiv- (Kreditkarten, Eigen- & Fremdkapital)- und Ertragskonten "
 "mit umgekehrten Vorzeichen"
 
 #. src/report/standard-reports/transaction.scm
@@ -19972,7 +19971,7 @@ msgstr "Aktiva Tortendiagramm"
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:2924
 msgid "Liability Piechart"
-msgstr "Passiva Tortendiagramm"
+msgstr "Fremdkapital Tortendiagramm"
 
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:2926
@@ -20116,7 +20115,7 @@ msgstr "1. Januar - 31. März letzten Jahres"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:3022 ../intl-scm/guile-strings.c:3110
 msgid "Last Yr 2nd Est Tax Qtr"
-msgstr "Letztes Jahr zweites vermutliches Steuerquartal"
+msgstr "Steuerschätzung des 2. Quartals des letzten Jahres"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20271,8 +20270,7 @@ msgstr "Steuer-Bericht & Elster Export"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:3148
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
-msgstr ""
-"Besteuertes Erträge / Absetzbare Aufwendungen / Exportieren nach Elster-XML"
+msgstr "Besteuerte Erträge / Absetzbare Aufwendungen / Exportieren nach Elster-XML"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:3154
@@ -20574,7 +20572,7 @@ msgstr "Die Adresse (URL) Ihrer Webseite"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3326
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)"
-msgstr "Eine Nummer ihrer Firma (z.B. Tax-ID: 00-000000)"
+msgstr "Eine Nummer ihrer Firma (z.B. USt-IdNr.: DE123456789)"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3328

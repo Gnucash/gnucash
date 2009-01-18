@@ -59,7 +59,7 @@ msgstr "Ertrag"
 
 #. "A debt, a financial obligation"
 msgid "account type: Liability"
-msgstr "Passiva"
+msgstr "Fremdkapital (bis <=2.2.8: Passiva)"
 
 #. "-"
 msgid "account type: money-market"
@@ -486,7 +486,7 @@ msgstr "Passwort (Mantra, Passphrase)"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
-msgstr "Verbindlichkeiten/Forderungen (an Lieferungen und Leistungen)"
+msgstr "offene Verbindlichkeiten/Forderungen (an Lieferungen und Leistungen, bis <=2.2.8: ohne "offene")"
 
 #. "A person to whom sth is paid"
 msgid "payee"
