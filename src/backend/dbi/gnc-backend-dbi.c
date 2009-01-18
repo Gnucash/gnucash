@@ -160,9 +160,6 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
 		return;
 	}
 
-	dirname = g_path_get_dirname( book_id );
-	basename = g_path_get_basename( book_id );
-
 	be->conn = dbi_conn_new( "sqlite3" );
 	if( be->conn == NULL ) {
 		PERR( "Unable to create sqlite3 dbi connection\n" );
@@ -170,6 +167,9 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
 		LEAVE( " " );
 		return;
 	}
+
+	dirname = g_path_get_dirname( book_id );
+	basename = g_path_get_basename( book_id );
 	dbi_conn_error_handler( be->conn, error_fn, be );
 	dbi_conn_set_option( be->conn, "host", "localhost" );
 	dbi_conn_set_option( be->conn, "dbname", basename );
