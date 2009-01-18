@@ -35,6 +35,7 @@
 (define gnc:menuname-reports "Reports/StandardReports")
 (define gnc:menuname-asset-liability (N_ "_Assets & Liabilities"))
 (define gnc:menuname-income-expense (N_ "_Income & Expense"))
+(define gnc:menuname-budget (N_ "B_udget"))
 (define gnc:menuname-taxes (N_ "_Taxes"))
 (define gnc:menuname-utility (N_ "_Sample & Custom"))
 (define gnc:menuname-custom (N_ "_Custom"))

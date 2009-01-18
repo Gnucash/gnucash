@@ -111,6 +111,7 @@ Dennis Björklund <dennisb@cs.chalmers.se> Swedish translation
 Andreas Bogk <andreas@andreas.org> Postgres backend patch
 Per Bojsen <bojsen@worldnet.att.net> several core dump fixes
 Terry Boldt <tboldt@attglobal.net> financial calculator and expression parser
+Forest Bond <forest@alittletooquiet.net> Budget report improvements
 Richard Braakman <dark@xs4all.nl> xml version configure patch
 Simon Britnell <simon.britnell@peace.com> patch to RPM spec
 Christopher B. Browne <cbbrowne@hex.net> for perl, lots of scheme and documentation updates

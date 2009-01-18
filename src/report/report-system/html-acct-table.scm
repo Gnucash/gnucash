@@ -601,6 +601,7 @@
          ;; someone was thinking price-source?
 	 (exchange-fn (or (get-val env 'exchange-fn)
                           #f))
+         (get-balance-fn (or (get-val env 'get-balance-fn) #f))
          ;;'weighted-average))
 	 (column-header (let ((cell (get-val env 'column-header)))
 			  (if (equal? cell #t)
@@ -688,14 +689,14 @@
       )
 
     ;; helper to calculate the balances for all required accounts
-    (define (calculate-balances accts start-date end-date)
+    (define (calculate-balances accts start-date end-date get-balance-fn)
       (define (calculate-balances-helper accts start-date end-date acct-balances)
         (if (not (null? accts))
             (begin
                 ;; using the existing function that cares about balance-mode
                 ;; maybe this should get replaces at some point.
                 (hash-set! acct-balances (gncAccountGetGUID (car accts))
-                    (get-balance-nosub-mode (car accts) start-date end-date))
+                    (get-balance-fn (car accts) start-date end-date))
                 (calculate-balances-helper (cdr accts) start-date end-date acct-balances)
             )
             acct-balances)
@@ -899,7 +900,7 @@
       ) ;; end of definition of traverse-accounts!
 
     ;; do it
-    (traverse-accounts! toplvl-accts 0 0 (calculate-balances accounts start-date end-date))
+    (traverse-accounts! toplvl-accts 0 0 (calculate-balances accounts start-date end-date (or get-balance-fn get-balance-nosub-mode)))
     
     ;; set the column-header colspan
     (if gnc:colspans-are-working-right

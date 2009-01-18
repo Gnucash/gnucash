@@ -20,7 +20,7 @@
 (define (options-generator)    
   (let* ((options (gnc:new-options)) 
          ;; This is just a helper function for making options.
-         ;; See gnucash/src/scm/options.scm for details.
+         ;; See gnucash/src/app-utils/options.scm for details.
          (add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))

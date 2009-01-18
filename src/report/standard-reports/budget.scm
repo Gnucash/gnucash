@@ -434,7 +434,7 @@
  'version 1
  'name reportname
  'report-guid "810ed4b25ef0486ea43bbd3dddb32b11"
- 'menu-path (list gnc:menuname-income-expense)
+ 'menu-path (list gnc:menuname-budget)
  'options-generator budget-report-options-generator
  'renderer budget-renderer)
 

@@ -101,6 +101,8 @@
     (gnc:make-menu gnc:menuname-asset-liability (list gnc:menuname-reports)))
   (define income-expense-menu
     (gnc:make-menu gnc:menuname-income-expense (list gnc:menuname-reports)))
+  (define budget-menu
+    (gnc:make-menu gnc:menuname-budget (list gnc:menuname-reports)))
   (define utility-menu
     (gnc:make-menu gnc:menuname-utility (list gnc:menuname-reports)))
   (define custom-menu
@@ -111,6 +113,7 @@
   ;; (gnc-add-scm-extension tax-menu)
   (gnc-add-scm-extension income-expense-menu)
   (gnc-add-scm-extension asset-liability-menu)
+  (gnc-add-scm-extension budget-menu)
   (gnc-add-scm-extension utility-menu)
   (gnc-add-scm-extension custom-menu)
 

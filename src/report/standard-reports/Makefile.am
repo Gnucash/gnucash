@@ -24,10 +24,12 @@ gncscmmod_DATA = \
    advanced-portfolio.scm \
    average-balance.scm \
    balance-sheet.scm \
-   cash-flow.scm \
    budget.scm \
+   budget-balance-sheet.scm \
    budget-barchart.scm \
    budget-flow.scm \
+   budget-income-statement.scm \
+   cash-flow.scm \
    category-barchart.scm \
    daily-reports.scm \
    equity-statement.scm \

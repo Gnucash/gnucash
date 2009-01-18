@@ -408,6 +408,17 @@
 	((list) commoditylist) ; this one is only for internal use
 	(else (gnc:warn "bad commodity-collector action: " action))))))
 
+(define (gnc:commodity-collector-get-negated collector)
+  (let
+    ((negated (gnc:make-commodity-collector)))
+    (negated 'minusmerge collector #f)
+    negated))
+
+(define (gnc:commodity-collectorlist-get-merged collectorlist)
+  (let
+    ((merged (gnc:make-commodity-collector)))
+    (for-each (lambda (collector) (merged 'merge collector #f)) collectorlist)
+    merged))
 
 ;; Bah. Let's get back to normal data types -- this procedure thingy
 ;; from above makes every code almost unreadable. First step: replace
@@ -855,3 +866,111 @@
     )
   )
 
+;; Returns the start date of the first period (period 0) of the budget.
+(define (gnc:budget-get-start-date budget)
+  (gnc-budget-get-period-start-date budget 0))
+
+(define (gnc:budget-accountlist-helper accountlist get-fn)
+  (let
+    (
+      (net (gnc:make-commodity-collector)))
+    (for-each
+      (lambda (account)
+        (net 'merge
+          (get-fn account)
+          #f))
+      accountlist)
+    net))
+
+;; Sums budget values for a single account from start-period (inclusive) to
+;; end-period (exclusive).
+;;
+;; start-period may be #f to specify the start of the budget
+;; end-period may be #f to specify the end of the budget
+;;
+;; Returns a commodity-collector.
+(define (gnc:budget-account-get-net budget account start-period end-period)
+  (if (not start-period) (set! start-period 0))
+  (if (not end-period) (set! end-period (gnc-budget-get-num-periods budget)))
+  (let*
+    (
+      (period start-period)
+      (net (gnc:make-commodity-collector))
+      (acct-comm (xaccAccountGetCommodity account)))
+    (while (< period end-period)
+      (net 'add acct-comm
+          (gnc-budget-get-account-period-value budget account period))
+      (set! period (+ period 1)))
+    net))
+
+;; Sums budget values for accounts in accountlist from start-period (inclusive)
+;; to end-period (exclusive).
+;;
+;; Note that budget values are never sign-reversed, so accountlist should
+;; contain only income accounts, only expense accounts, etc.  It would not be
+;; meaningful to include both income and expense accounts, or both asset and
+;; liability accounts.
+;;
+;; start-period may be #f to specify the start of the budget
+;; end-period may be #f to specify the end of the budget
+;;
+;; Returns a commodity-collector.
+(define (gnc:budget-accountlist-get-net budget accountlist start-period end-period)
+  (gnc:budget-accountlist-helper accountlist (lambda (account)
+    (gnc:budget-account-get-net budget account start-period end-period))))
+
+;; Finds the balance for an account at the start date of the budget.  The
+;; resulting balance is not sign-adjusted.
+;;
+;; Returns a commodity-collector.
+(define (gnc:budget-account-get-initial-balance budget account)
+  (gnc:account-get-comm-balance-at-date
+    account
+    (gnc:budget-get-start-date budget)
+    #f))
+
+;; Sums the balances of all accounts in accountlist at the start date of the
+;; budget.  The resulting balance is not sign-adjusted.
+;;
+;; Returns a commodity-collector.
+(define (gnc:budget-accountlist-get-initial-balance budget accountlist)
+  (gnc:budget-accountlist-helper accountlist (lambda (account)
+    (gnc:budget-account-get-initial-balance budget account))))
+
+(define (gnc:get-assoc-account-balances accounts get-balance-fn)
+  (let*
+    (
+      (initial-balances (list)))
+    (for-each
+      (lambda (account)
+        (set! initial-balances
+          (append initial-balances
+            (list (list account (get-balance-fn account))))))
+      accounts)
+    initial-balances))
+
+(define (gnc:select-assoc-account-balance account-balances account)
+  (let*
+    (
+      (account-balance (car account-balances))
+      (result
+        (if
+          (equal? account-balance '())
+          #f
+          (if
+            (equal? (car account-balance) account)
+            (car (cdr account-balance))
+            (gnc:select-assoc-account-balance
+              (cdr account-balances)
+              account)))))
+    result))
+
+(define (gnc:get-assoc-account-balances-total account-balances)
+  (let
+    (
+      (total (gnc:make-commodity-collector)))
+    (for-each
+      (lambda (account-balance)
+        (total 'merge (car (cdr account-balance)) #f))
+      account-balances)
+    total))
