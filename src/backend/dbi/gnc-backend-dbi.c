@@ -153,6 +153,13 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
 
     ENTER (" ");
 
+	if (!create_if_nonexistent
+		&& !g_file_test(book_id, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS)) {
+		qof_backend_set_error(qbe, ERR_FILEIO_FILE_NOT_FOUND);
+		LEAVE(" ");
+		return;
+	}
+
 	dirname = g_path_get_dirname( book_id );
 	basename = g_path_get_basename( book_id );
 
