@@ -40,7 +40,8 @@
 
 
 /* This static indicates the debugging module that this .o belongs to. */
-/* static short module = MOD_LEDGER; */
+static QofLogModule log_module = GNC_MOD_LEDGER;
+
 
 static void gnc_split_register_load_xfer_cells (SplitRegister *reg,
 						Account *base_account);
@@ -205,6 +206,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   int new_split_row = -1;
   time_t present;
 
+  ENTER("reg=%p, slist=%p, default_account=%p", reg, slist, default_account);
+
   blank_split = xaccSplitLookup (&info->blank_split_guid,
                                  gnc_get_current_book ());
 
@@ -278,6 +281,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     info->blank_split_guid = *xaccSplitGetGUID (blank_split);
     info->blank_split_edited = FALSE;
+    DEBUG("blank_split=%p", blank_split);
 
     gnc_resume_gui_refresh ();
   }
@@ -594,6 +598,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
   if (we_own_slist)
     g_list_free(slist);
+
+  LEAVE(" ");
 }
 
 /* ===================================================================== */

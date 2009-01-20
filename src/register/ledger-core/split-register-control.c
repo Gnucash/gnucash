@@ -838,6 +838,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
             blank_split = xaccTransGetSplit(trans, 0);
             info->blank_split_guid = *xaccSplitGetGUID(blank_split);
         }
+        DEBUG("blank_split=%p", blank_split);
 
         info->blank_split_edited = TRUE;
 
@@ -1463,9 +1464,8 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   g_return_val_if_fail(p_new_virt_loc, TRUE);
 
   ENTER("reg=%p, p_new_virt_loc=%p (%d,%d), dir=%d",
-         reg, p_new_virt_loc, dir,
-         (*p_new_virt_loc).vcell_loc.virt_row,
-         (*p_new_virt_loc).vcell_loc.virt_col);
+         reg, p_new_virt_loc, (*p_new_virt_loc).vcell_loc.virt_row,
+         (*p_new_virt_loc).vcell_loc.virt_col, dir);
 
   if (!reg)
   {

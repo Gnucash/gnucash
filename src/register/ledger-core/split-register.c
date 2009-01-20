@@ -387,6 +387,8 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
   gboolean changed;
   Split *split;
 
+  ENTER("reg=%p", reg);
+
   blank_split = xaccSplitLookup(&info->blank_split_guid,
                                 gnc_get_current_book ());
   split = gnc_split_register_get_current_split (reg);
@@ -395,24 +397,36 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
 
   /* This shouldn't happen, but be paranoid. */
   if (trans == NULL)
+  {
+    LEAVE("no transaction");
     return NULL;
+  }
 
   cursor_class = gnc_split_register_get_current_cursor_class (reg);
 
   /* Can't do anything with this. */
   if (cursor_class == CURSOR_CLASS_NONE)
+  {
+    LEAVE("no cursor class");
     return NULL;
+  }
 
   /* This shouldn't happen, but be paranoid. */
   if ((split == NULL) && (cursor_class == CURSOR_CLASS_TRANS))
+  {
+    LEAVE("no split with transaction class");
     return NULL;
+  }
 
   changed = gnc_table_current_cursor_changed (reg->table, FALSE);
 
   /* See if we were asked to duplicate an unchanged blank split.
    * There's no point in doing that! */
   if (!changed && ((split == NULL) || (split == blank_split)))
+  {
+    LEAVE("skip unchanged blank split");
     return NULL;
+  }
 
   gnc_suspend_gui_refresh ();
 
@@ -444,6 +458,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
     if (response != GTK_RESPONSE_ACCEPT)
     {
       gnc_resume_gui_refresh ();
+      LEAVE("save cancelled");
       return NULL;
     }
 
@@ -505,6 +520,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
                                &date, in_num, &out_num))
     {
       gnc_resume_gui_refresh ();
+      LEAVE("dup cancelled");
       return NULL;
     }
 
@@ -515,6 +531,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
     if (split_index < 0)
     {
       gnc_resume_gui_refresh ();
+      LEAVE("no split");
       return NULL;
     }
 
@@ -551,6 +568,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
   /* Refresh the GUI. */
   gnc_resume_gui_refresh ();
 
+  LEAVE(" ");
   return return_split;
 }
 
@@ -705,8 +723,13 @@ gnc_split_register_paste_current (SplitRegister *reg)
   Split *trans_split;
   Split *split;
 
+  ENTER("reg=%p", reg);
+
   if (copied_class == CURSOR_CLASS_NONE)
+  {
+    LEAVE("no copied class");
     return;
+  }
 
   blank_split = xaccSplitLookup (&info->blank_split_guid,
                                  gnc_get_current_book ());
@@ -717,17 +740,26 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
   /* This shouldn't happen, but be paranoid. */
   if (trans == NULL)
+  {
+    LEAVE("no transaction");
     return;
+  }
 
   cursor_class = gnc_split_register_get_current_cursor_class (reg);
 
   /* Can't do anything with this. */
   if (cursor_class == CURSOR_CLASS_NONE)
+  {
+    LEAVE("no cursor class");
     return;
+  }
 
   /* This shouldn't happen, but be paranoid. */
   if ((split == NULL) && (cursor_class == CURSOR_CLASS_TRANS))
+  {
+    LEAVE("null split with transaction class");
     return;
+  }
 
   if (cursor_class == CURSOR_CLASS_SPLIT)
   {
@@ -736,7 +768,10 @@ gnc_split_register_paste_current (SplitRegister *reg)
     gboolean result;
 
     if (copied_class == CURSOR_CLASS_TRANS)
+    {
+      LEAVE("can't copy trans to split");
       return;
+    }
 
     if (split != NULL)
       result = gnc_verify_dialog (gnc_split_register_get_parent (reg),
@@ -745,7 +780,10 @@ gnc_split_register_paste_current (SplitRegister *reg)
       result = TRUE;
 
     if (!result)
+    {
+      LEAVE("user cancelled");
       return;
+    }
 
     gnc_suspend_gui_refresh ();
 
@@ -772,7 +810,10 @@ gnc_split_register_paste_current (SplitRegister *reg)
     int num_splits;
 
     if (copied_class == CURSOR_CLASS_SPLIT)
+    {
+      LEAVE("can't copy split to transaction");
       return;
+    }
 
     if (split != blank_split)
       result = gnc_verify_dialog(gnc_split_register_get_parent(reg),
@@ -781,7 +822,10 @@ gnc_split_register_paste_current (SplitRegister *reg)
       result = TRUE;
 
     if (!result)
+    {
+      LEAVE("user cancelled");
       return;
+    }
 
     gnc_suspend_gui_refresh ();
 
@@ -822,6 +866,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
   /* Refresh the GUI. */
   gnc_resume_gui_refresh ();
+  LEAVE(" ");
 }
 
 void
@@ -885,7 +930,12 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
   Split *split;
   gboolean was_open;
 
-  if (!reg) return;
+  ENTER("reg=%p", reg);
+  if (!reg)
+  {
+    LEAVE("no register");
+    return;
+  }
 
   blank_split = xaccSplitLookup (&info->blank_split_guid,
                                  gnc_get_current_book ());
@@ -895,7 +945,10 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
   /* get the current split based on cursor position */
   split = gnc_split_register_get_current_split (reg);
   if (split == NULL)
+  {
+    LEAVE("no split");
     return;
+  }
 
   gnc_suspend_gui_refresh ();
   trans = xaccSplitGetParent(split);
@@ -904,6 +957,7 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
    * allowed to delete the blank split as a method for discarding
    * any edits they may have made to it. */
   if (split == blank_split) {
+      DEBUG("deleting blank split");
       info->blank_split_guid = *guid_null();
   } else {
       info->trans_expanded = FALSE;      
@@ -911,6 +965,7 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
   
   /* Check pending transaction */
   if (trans == pending_trans) {
+      DEBUG("clearing pending trans");
       info->pending_trans_guid = *guid_null();
       pending_trans = NULL;
   }
@@ -918,8 +973,12 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
   was_open = xaccTransIsOpen(trans);
   xaccTransDestroy(trans);
   if (was_open)
+  {
+      DEBUG("committing");
       xaccTransCommitEdit(trans);
+  }
   gnc_resume_gui_refresh ();
+  LEAVE(" ");
 }
 
 void
@@ -1327,7 +1386,13 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    Split *split;
    gboolean blank_edited = FALSE;
 
-   if (!reg) return FALSE;
+   ENTER("reg=%p, do_commit=%s", reg, do_commit ? "TRUE" : "FALSE");
+
+   if (!reg)
+   {
+     LEAVE("no register");
+     return FALSE;
+   }
 
    blank_split = xaccSplitLookup (&info->blank_split_guid,
                                   gnc_get_current_book ());
@@ -1341,7 +1406,10 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    split = gnc_split_register_get_current_split (reg);
    trans = gnc_split_register_get_current_trans (reg);
    if (trans == NULL)
+   {
+     LEAVE("no transaction");
      return FALSE;
+   }
 
    /* use the changed flag to avoid heavy-weight updates
     * of the split & transaction fields. This will help
@@ -1349,10 +1417,16 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    if (!gnc_table_current_cursor_changed (reg->table, FALSE))
    {
      if (!do_commit)
+     {
+       LEAVE("commit unnecessary");
        return FALSE;
+     }
 
      if (!xaccTransIsOpen(trans))
-         return FALSE;
+     {
+       LEAVE("transaction not open");
+       return FALSE;
+     }
 
      gnc_suspend_gui_refresh ();
 
@@ -1376,17 +1450,23 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
 
      gnc_resume_gui_refresh ();
 
+     LEAVE("no changes, but committed");
      return TRUE;
    }
 
    DEBUG ("save split is %p \n", split);
+   DEBUG("blank_split=%p, blank_trans=%p, pending_trans=%p, trans=%p",
+         blank_split, blank_trans, pending_trans, trans);
 
    /* Act on any changes to the current cell before the save. */
    gnc_split_register_check_cell (reg,
                                   gnc_table_get_current_cell_name (reg->table));
 
    if (!gnc_split_register_auto_calc (reg, split))
+   {
+     LEAVE("auto calc failed");
      return FALSE;
+   }
 
    /* Validate the transfer account names */
    (void)gnc_split_register_get_account (reg, MXFRM_CELL);
@@ -1394,7 +1474,10 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
 
    /* Maybe deal with exchange-rate transfers */
    if (gnc_split_register_handle_exchange (reg, FALSE))
+   {
+     LEAVE("no exchange rate");
      return TRUE;
+   }
 
    gnc_suspend_gui_refresh ();
 
@@ -1424,6 +1507,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
            if (gnc_split_register_begin_edit_or_warn(info, trans))
 	   {
 	       gnc_resume_gui_refresh ();
+               LEAVE("transaction opened elsewhere");
                return FALSE;
 	   }
        }
@@ -1519,6 +1603,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
 
    gnc_resume_gui_refresh ();
 
+   LEAVE(" ");
    return TRUE;
 }
 
