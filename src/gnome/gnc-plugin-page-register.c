@@ -2493,6 +2493,7 @@ gnc_plugin_page_register_cmd_blank_transaction (GtkAction *action,
     gnc_split_register_redraw (reg);
 
   gnc_split_reg_jump_to_blank (priv->gsr);
+  LEAVE(" ");
 }
 
 static void
