@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-backend-xml.c: load and save data to XML files               *
+ * gnc-backend-file.c: load and save data to XML files              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,7 +18,7 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file gnc-backend-xml.c
+/** @file gnc-backend-file.c
  *  @brief load and save data to XML files 
  *  @author Copyright (c) 2000 Gnumatic Inc.
  *  @author Copyright (c) 2002 Derek Atkins <warlord@MIT.EDU>

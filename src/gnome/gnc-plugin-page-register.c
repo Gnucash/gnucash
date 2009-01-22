@@ -1609,7 +1609,7 @@ gnc_plugin_page_register_filter_gde_changed_cb (GtkWidget *unused,
  *  make a kind of sense, as radio buttons are nothing more than
  *  linked toggle buttons where only one can be active.
  *
- *  @param button The button whose state is changing.  This will be
+ *  @param radio The button whose state is changing.  This will be
  *  the previously selected button the first of the pair of calls to
  *  this function, and will be the newly selected button the second
  *  time.
@@ -1655,7 +1655,7 @@ gnc_plugin_page_register_filter_start_cb (GtkWidget *radio,
  *  make a kind of sense, as radio buttons are nothing more than
  *  linked toggle buttons where only one can be active.
  *
- *  @param button The button whose state is changing.  This will be
+ *  @param radio The button whose state is changing.  This will be
  *  the previously selected button the first of the pair of calls to
  *  this function, and will be the newly selected button the second
  *  time.

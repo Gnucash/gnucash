@@ -124,8 +124,7 @@ GType gnc_tree_view_account_get_type (void);
  *  but this code provides one so that it can be used with all parts
  *  of the gnucash gui.
  *
- *  @param group A list of the accounts to use as the first level of
- *  accounts in the created tree.  This list may not be NULL.
+ *  @param root The account to use as the first level of the created tree.
  *
  *  @param show_root Show the pseudo top-level account in this view.
  *

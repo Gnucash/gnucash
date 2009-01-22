@@ -148,10 +148,6 @@ gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
  *
  *  @param parent The parent window of the new dialog.
  *
- *  @param user_message A string that will be installed in the top of
- *  the dialog box as an instruction to the user.  If NULL, a generic
- *  instruction will be used.
- *
  *  @param cusip If present, this will be the default exchange
  *  specific data for the new commodity.
  *
@@ -177,7 +173,7 @@ gnc_ui_new_commodity_modal_full(const char * namespace,
 /** Ask the user to provide the information necessary to create a new
  *  commodity.
  *
- *  @param namespace If present, this will be the default namespace
+ *  @param default_namespace If present, this will be the default namespace
  *  for the new commodity.  This value will be ignored if it is the
  *  namespace for ISO 4217 currencies.
  *

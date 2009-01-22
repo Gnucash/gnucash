@@ -65,9 +65,10 @@ static QofLogModule log_module = QOF_MOD_ENGINE;
 
 /**
  * gnc_value_get_guid
- * @value: a #GValue whose value we want to get.
  *
- * Returns: the value stored in @value.
+ * @param value a @c GValue whose value we want to get.
+ *
+ * @return the value stored in @a value
  */
 G_CONST_RETURN GUID*
 gnc_value_get_guid (const GValue *value)

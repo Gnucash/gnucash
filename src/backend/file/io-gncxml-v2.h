@@ -156,8 +156,8 @@ typedef struct {
 } conv_type;
 
 /** Read a file as plain byte stream to find words that are not completely ASCII.
- * On error, @unique, @ambiguous and @impossible will be filled up to that point,
- * @error may contain an io channel error, -1 will be returned.
+ * On error, @a unique, @a ambiguous and @a impossible will be filled up to
+ * that point, -1 will be returned.
  *
  * @param filename Name of the file to read.
  *
@@ -173,8 +173,6 @@ typedef struct {
  *
  * @param impossible Location used for a list for undecodable byte sequences,
  * if not NULL.
- *
- * @param error Location to return an io channel error.
  *
  * @return Size of impossible, -1 on error.
  */

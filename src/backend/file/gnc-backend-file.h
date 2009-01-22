@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-backend-xml.h: load and save data to XML files               *
+ * gnc-backend-file.h: load and save data to XML files              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

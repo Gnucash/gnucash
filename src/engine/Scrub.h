@@ -141,7 +141,7 @@ void xaccAccountTreeScrubCommodities (Account *acc);
  *  out as part of the account.  Just in case anyone needs to fall
  *  back from CVS to a production version of code.
  *
- *  @param acc A pointer to the root account containing all
+ *  @param root A pointer to the root account containing all
  *  accounts in the current book.
  *
  *  @param table A pointer to the commodity table for the current

@@ -838,6 +838,8 @@ GList * gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * t);
  *
  *  @param namespace The new namespace to be added.
  *
+ *  @param book The book that the new namespace will belong to.
+ *
  *  @return A pointer to the newly created namespace. */
 gnc_commodity_namespace * gnc_commodity_table_add_namespace(gnc_commodity_table * table,
 							    const char * namespace,

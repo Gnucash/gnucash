@@ -40,7 +40,8 @@
         _(MONTH_RELATIVE,) \
         _(COMPOSITE,)
 
-DEFINE_ENUM(FreqType, ENUM_LIST_TYPE) /**< \enum Frequency specification.
+DEFINE_ENUM(FreqType, ENUM_LIST_TYPE) /**< \enum FreqType
+Frequency specification.
 
 For BI_WEEKLY, use weekly[2] 
  SEMI_MONTHLY, use composite 

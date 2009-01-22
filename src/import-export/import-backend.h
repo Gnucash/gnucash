@@ -62,7 +62,7 @@ gboolean gnc_import_exists_online_id (Transaction *trans);
  * transaction, find all matching splits there, and store them in the
  * GNCImportTransInfo structure.
  *
- * @param transaction_info The TransInfo for which the corresponding
+ * @param trans_info The TransInfo for which the corresponding
  * matching existing transactions should be found.
  *
  * @param process_threshold Each match whose heuristics are smaller
@@ -82,7 +82,7 @@ gboolean gnc_import_exists_online_id (Transaction *trans);
  * with paper checks (e.g. OFX, QIF), values like 42 (days) seem more
  * appropriate. 
  */
-void gnc_import_find_split_matches(GNCImportTransInfo *transaction_info,
+void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
 				   gint process_threshold, 
 				   double fuzzy_amount_difference,
 				   gint match_date_hardlimit);

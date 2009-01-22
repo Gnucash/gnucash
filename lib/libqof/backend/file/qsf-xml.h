@@ -612,8 +612,8 @@ otherwise FALSE.
 gboolean is_qsf_object_with_map_be(gchar *map_path, qsf_param *params);
 /** \brief Validate a QSF file and a selected QSF map
 
-@param	map_path	Absolute or relative path to the selected QSF map file
-@param	params	Pointer to qsf_param context
+@param	path	Absolute or relative path to the selected QSF map file
+@param	map_file	Name of the map file
 
 The file is validated against the QSF object schema, qsf-object.xsd.xml and
 each object described in the file is checked to find out if the supplied QSF

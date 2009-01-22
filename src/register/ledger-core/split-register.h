@@ -21,11 +21,7 @@
 \********************************************************************/
 /** @addtogroup GUI
 @{ */
-/** @addtogroup Ledger Checkbook Register Display Area
-
-    @file split-register.h
-    @brief Checkbook Register Display Area
-    @author Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>
+/** @addtogroup Ledger Checkbook Register
 
     The register is the spread-sheet-like area that looks like a 
     checkbook register.  It displays transactions, and allows the 
@@ -125,6 +121,12 @@ to store an SRInfo structure containing the blank split.
     The actual GUI-toolkit specific code is supposed to be in a 
     GUI portability layer.  Over the years, some gnome-isms may 
     have snuck in; these should also be cleaned up.
+*/
+/** @{
+    @file split-register.h
+    @brief API for checkbook register display area
+    @author Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>
+
 */
 /** @{
 
@@ -434,6 +436,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog);
 gboolean
 gnc_split_register_begin_edit_or_warn(SRInfo *info, Transaction *trans);
 
+/** @} */
 /** @} */
 /** @} */
 /* -------------------------------------------------------------- */

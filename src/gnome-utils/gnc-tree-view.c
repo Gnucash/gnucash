@@ -488,7 +488,7 @@ view_column_find_by_model_id (GncTreeView *view,
  *
  *  @param view The visible tree widget.
  *
- *  @param id The "pref name" to find.
+ *  @param wanted The "pref name" to find.
  *
  */
 GtkTreeViewColumn *

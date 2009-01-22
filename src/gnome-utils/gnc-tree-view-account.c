@@ -1698,7 +1698,7 @@ gppat_filter_select_all_cb (GtkWidget *button,
  *
  *  @param button The button that was clicked.
  *
- *  @param page A pointer to the account tree page to update. */
+ *  @param fd A pointer to the account filter dialog struct. */
 void
 gppat_filter_select_default_cb (GtkWidget *button,
 				AccountFilterDialog *fd)

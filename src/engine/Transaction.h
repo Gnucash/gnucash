@@ -510,7 +510,7 @@ Transaction * xaccTransReverse(Transaction *transaction);
  *
  *  @param trans a Transaction that has been reversed
  *
- *  @param the transaction that reversed the given transaction, or
+ *  @return the transaction that reversed the given transaction, or
  *  NULL if the given transaction has not been reversed.
  */
 Transaction * xaccTransGetReversedBy(const Transaction *trans);

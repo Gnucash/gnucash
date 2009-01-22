@@ -25,11 +25,12 @@
 
 #include "table-layout.h"
 #include "split-register.h"
-/** @addtogroup GUI
+/** @addtogroup Ledger
     @{ */
-/** @addtogroup Register Register visual layout.
-
- *  pick specific cell types to sit in specific columns, and add 
+/** @file split-register-layout.h
+ *  @brief Create the actual register visual layout
+ *  @author Copyright (C) 1998, 2004 Linas Vepstas <linas@linas.org>
+ *  Pick specific cell types to sit in specific columns, and add 
  *  connections so that user can tab from one field to the next.  
  *
  *  The actual layout depends on the register type, but, typically,
@@ -40,16 +41,10 @@
  *  original intent was that the layout would be fetched from a 
  *  config file that could be tweaked for a specific, non-GnuCash 
  *  application.
-    @{
- */
-/** @file split-register-layout.h
-    @brief Create the actual register visual layout
-    @author Copyright (C) 1998, 2004 Linas Vepstas <linas@linas.org>
 */
 
 /** Generate the split register layout. */
 TableLayout * gnc_split_register_layout_new (SplitRegister *reg);
 
-/** @} */
 /** @} */
 #endif

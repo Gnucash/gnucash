@@ -121,7 +121,7 @@ typedef void (* renderer_toggled) (GtkCellRendererToggle *cell_renderer_toggle,
  *  will be displayed at all.  Use GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS
  *  if the checkbox should be displayed in all rows.
  *
- *  @param column_sort_function The function that GtkTreeModelSort
+ *  @param column_sort_fn The function that GtkTreeModelSort
  *  will call to compare two rows to determine their displayed order.
  *
  *  @param toggle_edited_cb The function to call when the user toggles
@@ -173,7 +173,7 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
  *  will be displayed at all.  Use GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS
  *  if the checkbox should be displayed in all rows.
  *
- *  @param column_sort_function The function that GtkTreeModelSort
+ *  @param column_sort_fn The function that GtkTreeModelSort
  *  will call to compare two rows to determine their displayed
  *  order.
  *
@@ -243,7 +243,7 @@ gnc_tree_view_add_combo_column (GncTreeView *view,
  *  will be displayed at all.  Use GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS
  *  if the checkbox should be displayed in all rows.
  *
- *  @param column_sort_function The function that GtkTreeModelSort
+ *  @param column_sort_fn The function that GtkTreeModelSort
  *  will call to compare two rows to determine their displayed
  *  order.
  *
@@ -308,7 +308,7 @@ void gnc_tree_view_configure_columns (GncTreeView *view);
  *
  *  @param view The visible tree widget.
  *
- *  @param id The "pref name" to find.
+ *  @param wanted The "pref name" to find.
  *
  */
 GtkTreeViewColumn *
