@@ -1444,13 +1444,15 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
      }
      
      if (trans == pending_trans || blank_edited) {
-         PINFO("commiting trans (%p)", trans);
+         PINFO("committing trans (%p)", trans);
          xaccTransCommitEdit(trans);
      }
+     else
+       DEBUG("leaving trans (%p) open", trans);
 
      gnc_resume_gui_refresh ();
 
-     LEAVE("no changes, but committed");
+     LEAVE("unchanged cursor");
      return TRUE;
    }
 
