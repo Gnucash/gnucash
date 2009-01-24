@@ -22,9 +22,10 @@
 /** @addtogroup GUI
 @{ */
 /** @addtogroup Ledger Checkbook Register
+    @brief The register is the spreadsheet-like area that looks like a
+    checkbook register.
 
-    The register is the spread-sheet-like area that looks like a 
-    checkbook register.  It displays transactions, and allows the 
+    @details It displays transactions, and allows the 
     user to edit transactions in-place.  The register does *not*
     contain any of the other window decorations that one might want 
     to have for a free standing window (e.g. menubars, toolbars, etc.)
@@ -40,10 +41,10 @@
     the fact that this register can display multiple rows of 
     transaction splits underneath a transaction title/summary row.
 
-\par Design Notes.
+@par Design Notes.
 @{
-Some notes about the "blank split":\n
-Q: What is the "blank split"?\n
+Some notes about the "blank split":@n
+Q: What is the "blank split"?@n
 A: A new, empty split appended to the bottom of the ledger
  window.  The blank split provides an area where the user
  can type in new split/transaction info.  
@@ -59,7 +60,7 @@ to store an SRInfo structure containing the blank split.
 
  @}
 
-\par Some notes on Commit/Rollback:
+@par Some notes on Commit/Rollback:
  @{
  * 
  * There's an engine component and a gui component to the commit/rollback
@@ -85,7 +86,7 @@ to store an SRInfo structure containing the blank split.
  * 
 
  @}
- \par Some notes on Reloads & Redraws:
+ @par Some notes on Reloads & Redraws:
  @{
  * Reloads and redraws tend to be heavyweight. We try to use change flags
  * as much as possible in this code, but imagine the following scenario:
@@ -126,11 +127,8 @@ to store an SRInfo structure containing the blank split.
     @file split-register.h
     @brief API for checkbook register display area
     @author Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>
-
 */
-/** @{
-
-*/
+/** @{ */
 
 #ifndef SPLIT_REGISTER_H
 #define SPLIT_REGISTER_H
@@ -140,7 +138,7 @@ to store an SRInfo structure containing the blank split.
 #include "Transaction.h"
 #include "table-allgui.h"
 
-/** \brief Register types.
+/** @brief Register types
  *
  * "registers" are single-account display windows.
  * "ledgers" are multiple-account display windows */
@@ -168,6 +166,7 @@ typedef enum
   NUM_REGISTER_TYPES
 } SplitRegisterType;
 
+/** Register styles */
 typedef enum
 {
   REG_STYLE_LEDGER,
@@ -175,7 +174,10 @@ typedef enum
   REG_STYLE_JOURNAL
 } SplitRegisterStyle;
 
-/** Cell Names. T* cells are transaction summary cells  */
+/** @name Cell Names
+ *  T* cells are transaction summary cells
+ *  @{
+ */
 #define ACTN_CELL  "action"
 #define BALN_CELL  "balance"
 #define CRED_CELL  "credit"
@@ -200,13 +202,17 @@ typedef enum
 #define TYPE_CELL  "split-type"
 #define XFRM_CELL  "account"
 #define VNOTES_CELL "void-notes"
+/** @} */
 
-/** Cursor Names  */
+/** @name Cursor Names
+  * @{
+  */
 #define CURSOR_SINGLE_LEDGER  "cursor-single-ledger"
 #define CURSOR_DOUBLE_LEDGER  "cursor-double-ledger"
 #define CURSOR_SINGLE_JOURNAL "cursor-single-journal"
 #define CURSOR_DOUBLE_JOURNAL "cursor-double-journal"
 #define CURSOR_SPLIT          "cursor-split"
+/** @} */
 
 
 /** Types of cursors */
@@ -233,10 +239,11 @@ typedef struct split_register_colors
 } SplitRegisterColors;
 
 
+/** @brief A split register created with ::gnc_split_register_new */
 typedef struct split_register SplitRegister;
 typedef struct sr_info SRInfo;
 
-/** \brief The type, style and table for the register. */
+/** @brief The type, style and table for the register. */
 struct split_register
 {
   Table * table;   /**< The table itself that implements the underlying GUI. */
@@ -244,11 +251,11 @@ struct split_register
   SplitRegisterType type;
   SplitRegisterStyle style;
 
-  gboolean use_double_line;
+  gboolean use_double_line;  /**< whether to use two lines per tranasaction */
   gboolean is_template;
-  gboolean do_auto_complete;
+  gboolean do_auto_complete; /**< whether to use auto-competion */
 
-  SRInfo * sr_info;   /**< \internal private data; outsiders should not access this */
+  SRInfo * sr_info;   /**< private data; outsiders should not access this */
 };
 
 /** Callback function type */
@@ -257,74 +264,171 @@ typedef gncUIWidget (*SRGetParentCallback) (gpointer user_data);
 
 /* Prototypes ******************************************************/
 
-/** Create and return a new split register. */
+/** Creates a new split register.
+ *
+ *  @param type a ::SplitRegisterType to use for the new register
+ *
+ *  @param style a ::SplitRegisterStyle to use for the new register
+ *
+ *  @param use_double_line @c TRUE to show two lines for transactions,
+ *  @c FALSE for one
+ *
+ *  @param is_template @c TRUE for a new template, @c FALSE otherwise
+ *
+ *  @return a newly created ::SplitRegister
+ */
 SplitRegister * gnc_split_register_new (SplitRegisterType type,
                                         SplitRegisterStyle style,
                                         gboolean use_double_line,
                                         gboolean is_template);
 
-/** Configure the split register. */
+/** Destroys a split register.
+ *
+ *  @param reg a ::SplitRegister
+ */
+void gnc_split_register_destroy (SplitRegister *reg);
+
+/** Sets a split register's type, style or line use.
+ *
+ *  @param reg a ::SplitRegister
+ *
+ *  @param type a ::SplitRegisterType to use for the register
+ *
+ *  @param style a ::SplitRegisterStyle to use for the register
+ *
+ *  @param use_double_line @c TRUE to show two lines for transactions,
+ *  @c FALSE for one
+ */
 void gnc_split_register_config (SplitRegister *reg,
                                 SplitRegisterType type,
                                 SplitRegisterStyle style,
                                 gboolean use_double_line);
 
-/** Change the auto-completion behavior. **/
+/** Sets whether a register uses auto-completion.
+ *
+ *  @param reg a ::SplitRegister
+ *
+ *  @param do_auto_complete @c TRUE to use auto-completion, @c FALSE otherwise
+ */
 void gnc_split_register_set_auto_complete(SplitRegister *reg,
                                           gboolean do_auto_complete);
 
-/** Destroy the split register. */
-void gnc_split_register_destroy (SplitRegister *reg);
-
-/** Make a register window read-only. */
+/** Sets whether a register window is "read only".
+ *
+ *  @param reg a ::SplitRegister
+ *
+ *  @param read_only @c TRUE to use "read only" mode, @c FALSE otherwise
+ */
 void gnc_split_register_set_read_only (SplitRegister *reg, gboolean read_only);
 
-/** Set the template account used by template registers */
+
+/** Set the template account for use in a template register.
+ *
+ *  @param reg a ::SplitRegister
+ *
+ *  @param template_account the account to use for the template
+ */
 void gnc_split_register_set_template_account (SplitRegister *reg,
                                               Account *template_account);
-
-/** Returns the class of the current cursor */
-CursorClass gnc_split_register_get_current_cursor_class (SplitRegister *reg);
-
-/** Returns the class of the cursor at the given virtual cell location. */
-CursorClass gnc_split_register_get_cursor_class
-                                              (SplitRegister *reg,
-                                               VirtualCellLocation vcell_loc);
 
 /** Sets the user data and callback hooks for the register. */
 void gnc_split_register_set_data (SplitRegister *reg, gpointer user_data,
                                   SRGetParentCallback get_parent);
 
-/** Returns the transaction which is the parent of the current split. */
+/** Returns the class of a register's current cursor.
+ *
+ *  @param reg a ::SplitRegister
+ *
+ *  @return the ::CursorClass of the current cursor
+ */
+CursorClass gnc_split_register_get_current_cursor_class (SplitRegister *reg);
+
+/** Returns the class of the cursor at the given virtual cell location.
+ *
+ *  @param reg a ::SplitRegister
+ *
+ *  @param vcell_loc the location of a virtual cell
+ *
+ *  @return the ::CursorClass of the cursor at @a vcell_loc
+ */
+CursorClass gnc_split_register_get_cursor_class
+                                              (SplitRegister *reg,
+                                               VirtualCellLocation vcell_loc);
+
+/** Gets the transaction at the current cursor location, which may be on
+ *  the transaction itself or on any of its splits.
+ * 
+ *  @param reg a ::SplitRegister
+ *
+ *  @return the ::Transaction at the cursor location, or @c NULL
+ */
 Transaction * gnc_split_register_get_current_trans (SplitRegister *reg);
 
-/** Returns the split at which the cursor is currently located. */
-Split * gnc_split_register_get_current_split (SplitRegister *reg);
-
-/** Returns the blank split or NULL if there is none. */
-Split * gnc_split_register_get_blank_split (SplitRegister *reg);
-
-/**  Searches the split register for the given split. If found, it
- *    returns TRUE and vcell_loc is set to the location of the
- *    split. Otherwise, returns FALSE. */
-gboolean
-gnc_split_register_get_split_virt_loc (SplitRegister *reg, Split *split,
-                                       VirtualCellLocation *vcell_loc);
-
-/** Searches the split register for the given split. If found, it
- *    returns TRUE and virt_loc is set to the location of either the
- *    debit or credit column in the split, whichever one is
- *    non-blank. Otherwise, returns FALSE. */
-gboolean
-gnc_split_register_get_split_amount_virt_loc (SplitRegister *reg, Split *split,
-                                              VirtualLocation *virt_loc);
-
-/** Given the current virtual location, find the split that anchors
- * this transaction to the current register. Otherwise, returns NULL.
+/** Gets the anchoring split of the transaction at the current cursor location,
+ *  which may be on the transaction itself or on any of its splits.
+ * 
+ *  @param reg a ::SplitRegister
+ *
+ *  @param vcell_loc a pointer to be filled with the location of the
+ *  transaction's virtual cell
+ *
+ *  @return the anchoring ::Split of the transaction
  */
 Split *
 gnc_split_register_get_current_trans_split (SplitRegister *reg,
                                             VirtualCellLocation *vcell_loc);
+
+/** Returns the split at which the cursor is currently located.
+ * 
+ *  @param reg a ::SplitRegister
+ *
+ *  @return the ::Split at the cursor location, or the anchoring split
+ *  if the cursor is currently on a transaction
+ */
+Split * gnc_split_register_get_current_split (SplitRegister *reg);
+
+/** Gets the blank split for a register.
+ * 
+ *  @param reg a ::SplitRegister
+ *
+ *  @return the ::Split used as the blank split, or @c NULL if
+ *  there currently isn't one
+ */
+Split * gnc_split_register_get_blank_split (SplitRegister *reg);
+
+/** Searches the split register for a given split.
+ *  The search begins from the bottom row and works backwards. The location
+ *  of the first virtual cell that matches will be returned in @a vcell_loc.
+ *
+ *  @param reg a ::SplitRegister
+ *
+ *  @param split the ::Split to find
+ *
+ *  @param vcell_loc a pointer to be filled with the location of the matching
+ *  virtual cell
+ *
+ *  @return @c TRUE if the split was found and the location has been stored
+ *  at @a vcell_loc, @c FALSE otherwise
+ */
+gboolean
+gnc_split_register_get_split_virt_loc (SplitRegister *reg, Split *split,
+                                       VirtualCellLocation *vcell_loc);
+
+/** Searches the split register for the given split and determines the
+ *  location of either its credit (if non-zero) or debit cell.
+ *
+ *  @param reg a ::SplitRegister
+ *
+ *  @param split the ::Split to find
+ *
+ *  @param virt_loc a pointer to be filled with the amount cell's location
+ *
+ *  @return @c TRUE if the split was found and the location has been stored
+ *  at @a virt_loc, @c FALSE otherwise
+ */
+gboolean
+gnc_split_register_get_split_amount_virt_loc (SplitRegister *reg, Split *split,
+                                              VirtualLocation *virt_loc);
 
 /** Duplicates either the current transaction or the current split
  *    depending on the register mode and cursor position. Returns the
@@ -376,15 +480,24 @@ void gnc_split_register_cancel_cursor_split_changes (SplitRegister *reg);
  *    change flags are cleared. */
 void gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg);
 
-/** Copy transaction information from a list of splits to the rows of
- *    the register GUI.  The third argument, default_source_acc, will
- *    be used to initialize the source account of a new, blank split
- *    appended to the tail end of the register.  This "blank split" is
- *    the place where the user can edit info to create new
- *    transactions. */
-void gnc_split_register_load (SplitRegister *reg, GList * split_list,
-                              Account *default_source_acc);
-
+/** Populates the rows of a register.
+ *
+ *  The rows are filled, based on the register style, with data associated
+ *  with the given list of splits, @a slist. In addition, a new, blank split
+ *  is appended to the tail end of the register.  This "blank split" is
+ *  the place where the user can create new transactions.
+ *  The account @a default_account, if provided, is used to determine default
+ *  various default values for the blank split (such as currency, last check
+ *  number, and transfer account) for the blank split.
+ *
+ *  @param reg a ::SplitRegister
+ *
+ *  @param slist a list of splits
+ *
+ *  @param default_account an account to provide defaults for the blank split
+ */
+void gnc_split_register_load (SplitRegister *reg, GList * slist,
+                              Account *default_account);
 
 /** Copy the contents of the current cursor to a split. The split and
  *    transaction that are updated are the ones associated with the
