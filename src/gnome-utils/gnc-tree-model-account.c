@@ -676,19 +676,19 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 		case GNC_TREE_MODEL_ACCOUNT_COL_CLEARED:
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetClearedBalanceInCurrency,
-								  account, FALSE, &negative);
+								  account, TRUE, &negative);
 			g_value_take_string (value, string);
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_CLEARED_REPORT:
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_report_balance(xaccAccountGetClearedBalanceInCurrency,
-									 account, FALSE, &negative);
+									 account, TRUE, &negative);
 			g_value_take_string (value, string);
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_CLEARED:
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetClearedBalanceInCurrency,
-								  account, FALSE, &negative);
+								  account, TRUE, &negative);
 			gnc_tree_model_account_set_color(model, negative, value);
 			g_free(string);
 			break;
