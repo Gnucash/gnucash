@@ -293,6 +293,7 @@
 
   ;; get all option's values
   (let* ((budget (get-option gnc:pagename-general optname-budget))
+         (budget-valid? (and budget (not (null? budget))))
          (display-depth (get-option gnc:pagename-accounts
                                     optname-display-depth))
          (show-subaccts? (get-option gnc:pagename-accounts
@@ -363,8 +364,18 @@
                   (set! accounts (append accounts sub-accounts))))
             sub-accounts)))
 
-    (if (not (or (null? accounts) (null? budget) (not budget)))
-
+    (cond
+      ((null? accounts)
+        ;; No accounts selected.
+        (gnc:html-document-add-object! 
+         doc 
+         (gnc:html-make-no-account-warning 
+	  reportname (gnc:report-id report-obj))))
+      ((not budget-valid?)
+        ;; No budget selected.
+        (gnc:html-document-add-object!
+          doc (gnc:html-make-generic-budget-warning reportname)))
+      (else (begin
         (let* ((tree-depth (if (equal? display-depth 'all)
                                (accounts-get-children-depth accounts)
                                display-depth))
@@ -418,14 +429,8 @@
           ;; table width, since the add-account-balance had put stuff
           ;; there, but it doesn't seem to matter.
 
-          (gnc:html-document-add-object! doc html-table)
-          )
-
-        ;; error condition: either no accounts or no budgets specified
-        (gnc:html-document-add-object!
-         doc
-         (gnc:html-make-generic-options-warning
-	  reportname (gnc:report-id report-obj))))
+          (gnc:html-document-add-object! doc html-table))))
+      ) ;; end cond
 
     (gnc:report-finished)
     doc))

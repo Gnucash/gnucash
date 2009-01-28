@@ -266,6 +266,7 @@
   ;; get all option's values
   (let* (
       (budget (get-option gnc:pagename-general optname-budget))
+      (budget-valid? (and budget (not (null? budget))))
       (accounts (get-option gnc:pagename-accounts optname-accounts))
       (period (inexact->exact (get-option gnc:pagename-general
         optname-periods)))
@@ -282,9 +283,21 @@
       (doc (gnc:make-html-document))
     )
 
-    ;; If no account are select show a warring page    
-    (if (not (or (null? accounts) (null? budget) (not budget)))
-      (let* (
+    (cond
+      ((null? accounts)
+        ;; No accounts selected
+        (gnc:html-document-add-object!
+          doc
+            (gnc:html-make-no-account-warning 
+              report-title (gnc:report-id report-obj))))
+
+      ((not budget-valid?)
+        ;; No budget selected.
+        (gnc:html-document-add-object!
+          doc (gnc:html-make-generic-budget-warning reportname)))
+
+      (else (begin
+        (let* (
           (html-table (gnc:make-html-table))
           (report-name (get-option gnc:pagename-general
             gnc:optname-reportname))
@@ -306,14 +319,7 @@
         (gnc:html-table-add-budget-totals! html-table accounts-totals exchange-fn report-currency)
 
         ;; Display table
-        (gnc:html-document-add-object! doc html-table)
-      )
-
-      ;; error condition: either no accounts or no budgets specified
-      (gnc:html-document-add-object!
-        doc (gnc:html-make-generic-options-warning
-	  reportname (gnc:report-id report-obj)))
-    )
+        (gnc:html-document-add-object! doc html-table)))))
 
     ;; Update progress bar
     (gnc:report-finished)

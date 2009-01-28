@@ -311,7 +311,8 @@
 	 (report-title (get-option gnc:pagename-general optname-report-title))
 	 (company-name (get-option gnc:pagename-general optname-party-name))
          (budget (get-option gnc:pagename-general optname-budget))
-         (date-tp (gnc:budget-get-start-date budget))
+         (budget-valid? (and budget (not (null? budget))))
+         (date-tp (if budget-valid? (gnc:budget-get-start-date budget) #f))
          (report-form? (get-option gnc:pagename-general
                                optname-report-form))
          (accounts (get-option gnc:pagename-accounts
@@ -381,7 +382,6 @@
          ;; exchange rates calculation parameters
 	 (exchange-fn
 	  (gnc:case-exchange-fn price-source report-commodity date-tp))
-
 	 )
     
     ;; Wrapper to call gnc:html-table-add-labeled-amount-line!
@@ -423,23 +423,18 @@
        (+ (* 2 tree-depth)
 	  (if (equal? tabbing 'canonically-tabbed) 1 0))))
 
-    ;;(gnc:warn "account names" liability-account-names)
-    (gnc:html-document-set-title! 
-     doc (string-append company-name " " report-title " "
-                        (gnc-budget-get-name budget))
-     )
-    
-    (if (null? accounts)
-	
-        ;; error condition: no accounts specified
-	;; is this *really* necessary??
-	;; i'd be fine with an all-zero balance sheet
-	;; that would, technically, be correct....
+    (cond
+      ((null? accounts)
+        ;; No accounts selected.
         (gnc:html-document-add-object! 
          doc 
          (gnc:html-make-no-account-warning 
-	  reportname (gnc:report-id report-obj)))
-	
+	  reportname (gnc:report-id report-obj))))
+      ((not budget-valid?)
+        ;; No budget selected.
+        (gnc:html-document-add-object!
+          doc (gnc:html-make-generic-budget-warning reportname)))
+      (else (begin
         ;; Get all the balances for each of the account types.
         (let* ((asset-balance #f)
                (asset-account-initial-balances #f)
@@ -485,6 +480,8 @@
 	       (left-table (gnc:make-html-table)) ;; gnc:html-table
 	       (right-table (if report-form? left-table
 				(gnc:make-html-table)))
+
+               (budget-name (gnc-budget-get-name budget))
 	       )
 	  
 
@@ -710,6 +707,8 @@
 
 	  (gnc:report-percent-done 30)
 	  
+          (gnc:html-document-set-title! 
+            doc (string-append company-name " " report-title " " budget-name))
 
 	  (set! table-env
 		(list
@@ -917,13 +916,11 @@
 		)
 	      )
 	  )
-	)
+	))) ;; end cond
     
     (gnc:report-finished)
     
-    doc
-    )
-  )
+    doc))
 
 (gnc:define-report 
  'version 1

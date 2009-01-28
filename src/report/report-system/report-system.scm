@@ -90,6 +90,7 @@
 (export gnc:first-html-build-acct-table)
 (export gnc:html-make-exchangerates)
 (export gnc:html-make-no-account-warning)
+(export gnc:html-make-generic-budget-warning)
 (export gnc:html-make-generic-options-warning)
 (export gnc:html-make-empty-data-warning)
 

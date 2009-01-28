@@ -266,7 +266,8 @@
 	 (report-title (get-option gnc:pagename-general optname-report-title))
 	 (company-name (get-option gnc:pagename-general optname-party-name))
          (budget (get-option gnc:pagename-general optname-budget))
-         (date-tp (gnc:budget-get-start-date budget))
+         (budget-valid? (and budget (not (null? budget))))
+         (date-tp (if budget-valid? (gnc:budget-get-start-date budget) #f))
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))	 
 	 (depth-limit (get-option gnc:pagename-accounts 
@@ -328,8 +329,6 @@
          ;; exchange rates calculation parameters
 	 (exchange-fn
 	  (gnc:case-exchange-fn price-source report-commodity date-tp))
-
-         (budget-name (gnc-budget-get-name budget))
 	 )
     
     ;; Wrapper to call gnc:html-table-add-labeled-amount-line!
@@ -370,20 +369,18 @@
        (+ (* 2 tree-depth)
 	  (if (equal? tabbing 'canonically-tabbed) 1 0))))
     
-    (gnc:html-document-set-title! 
-     doc (sprintf #f "%s %s %s" company-name report-title budget-name))
-    
-    (if (null? accounts)
-	
-        ;; error condition: no accounts specified
-	;; is this *really* necessary??
-	;; i'd be fine with an all-zero P&L
-	;; that would, technically, be correct....
+    (cond
+      ((null? accounts)
+        ;; No accounts selected.
         (gnc:html-document-add-object! 
          doc 
          (gnc:html-make-no-account-warning 
-	  reportname (gnc:report-id report-obj)))
-	
+	  reportname (gnc:report-id report-obj))))
+      ((not budget-valid?)
+        ;; No budget selected.
+        (gnc:html-document-add-object!
+          doc (gnc:html-make-generic-budget-warning report-title)))
+      (else (begin
         ;; Get all the balances for each of the account types.
         (let* (
                (revenue-account-balances #f)
@@ -406,7 +403,7 @@
 	       (params #f)                         ;; and -add-account-
                (revenue-table #f)                  ;; gnc:html-acct-table
                (expense-table #f)                  ;; gnc:html-acct-table
-	       
+               (budget-name (gnc-budget-get-name budget))
 	       (period-for (string-append " " (_ "for Budget ") budget-name))
 	       )
 
@@ -499,6 +496,8 @@
 
 	  (gnc:report-percent-done 30)
 
+          (gnc:html-document-set-title! 
+            doc (sprintf #f "%s %s %s" company-name report-title budget-name))
 
 	  (set! table-env
 		(list
@@ -633,13 +632,11 @@
 	  (gnc:report-percent-done 100)
 	  
 	  )
-	)
+	))) ;; end cond
     
     (gnc:report-finished)
     
-    doc
-    )
-  )
+    doc))
 
 (define is-reportname (N_ "Budget Income Statement"))
 (define pnl-reportname (N_ "Budget Profit & Loss"))

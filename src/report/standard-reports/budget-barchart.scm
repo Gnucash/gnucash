@@ -177,28 +177,34 @@
 
   (let* (
       (budget (get-option gnc:pagename-general optname-budget))
+      (budget-valid? (and budget (not (null? budget))))
       (running-sum (get-option gnc:pagename-general optname-running-sum))
       (accounts (get-option gnc:pagename-accounts optname-accounts))
       (report-title (get-option gnc:pagename-general
         gnc:optname-reportname))
       (document (gnc:make-html-document))
     )
-    (if (null? accounts)
-      ;; No accounts selected
-      (gnc:html-document-add-object!
-        document
-          (gnc:html-make-no-account-warning 
-            report-title (gnc:report-id report-obj)))
+    (cond
+      ((null? accounts)
+        ;; No accounts selected
+        (gnc:html-document-add-object!
+          document
+            (gnc:html-make-no-account-warning 
+              report-title (gnc:report-id report-obj))))
+
+      ((not budget-valid?)
+        ;; No budget selected.
+        (gnc:html-document-add-object!
+          document (gnc:html-make-generic-budget-warning reportname)))
 
       ;; Else create chart for each account
-      (for-each (lambda (acct)
+      (else
+        (for-each (lambda (acct)
           (if (null? (gnc-account-get-descendants acct))
             (gnc:html-document-add-object! document
-              (gnc:chart-create-budget-actual budget acct running-sum)))
-        )
-        accounts
-      )
-    )
+              (gnc:chart-create-budget-actual budget acct running-sum))))
+          accounts))
+    ) ;; end cond
     
     document
 ))
