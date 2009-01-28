@@ -10,6 +10,9 @@
 ;;   http://www.evertype.com/standards/iso4217/iso4217-en.html
 ;;   http://www.xe.com/iso4217.htm
 ;;   http://www.thefinancials.com/vortex/CurrencyFormats.html
+;;
+;; Learned from some bugs (543061, 564450), please keep in mind: 
+;; If there are no coins for subunits, subunits might still be in use on the paper
 
 ( "Afghanistan Afghani (old)" "afghani" "pul" "ISO4217" "AFA" "004" 100 100 ) ;; through 2003-01-02
 ( "Afghanistan Afghani" "afghani" "afghani" "ISO4217" "AFN" "971" 1 1 ) ;; from 2002-10-07
@@ -94,7 +97,7 @@
 ( "Haitian Gourde" "gourde" "centime"  "ISO4217" "HTG" "332" 100 100 )
 ( "Honduran Lempira" "lempira" "centavo"  "ISO4217" "HNL" "340" 100 100 )
 ( "Hong Kong Dollar" "dollar" "cent"  "ISO4217" "HKD" "344" 100 100 )
-( "Hungarian Forint" "forint" "forint" "ISO4217" "HUF" "348" 1 1)
+( "Hungarian Forint" "forint" "forint" "ISO4217" "HUF" "348" 100 100)
 ( "Iceland Krona" "krona" "aur" "ISO4217" "ISK" "352" 100 100 )
 ( "Indian Rupee" "rupee" "paise" "ISO4217" "INR" "356" 100 100 )
 ( "Indonesian Rupiah" "rupiah" "sen" "ISO4217" "IDR" "360" 100 100 )
