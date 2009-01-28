@@ -14,7 +14,8 @@ account_DATA = \
   acctchrt_studium.gnucash-xea \
   acctchrt_skr03.gnucash-xea \
   acctchrt_wohnungsw.gnucash-xea \
-  acctchrt_skr04.gnucash-xea
+  acctchrt_skr04.gnucash-xea \
+  acctchrt_skr49.gnucash-xea
 
 
 EXTRA_DIST = \
