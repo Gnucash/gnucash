@@ -221,10 +221,20 @@ gnc_split_register_find_split (SplitRegister *reg,
       cursor_class = gnc_split_register_get_cursor_class (reg, vc_loc);
 
       if (t == trans)
+      {
         found_trans = TRUE;
-
-      if ((cursor_class == CURSOR_CLASS_TRANS) && (s == trans_split))
-        found_trans_split = TRUE;
+        
+        if (cursor_class == CURSOR_CLASS_TRANS)
+        {
+          found_trans_split = TRUE;
+          if (find_class == CURSOR_CLASS_TRANS)
+          {
+            if (vcell_loc != NULL)
+              *vcell_loc = vc_loc;
+            return TRUE;
+          }
+        }
+      }
 
       if (found_trans && (s == split) && s)
       {
