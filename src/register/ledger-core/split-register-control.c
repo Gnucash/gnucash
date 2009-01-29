@@ -1160,7 +1160,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
       message = _("This register does not support editing exchange rates.");
       gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
     }
-    LEAVE("No rate cell.");
+    LEAVE("no rate cell");
     return FALSE;
   }
 
@@ -1173,7 +1173,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
       message = _("This register does not support editing exchange rates.");
       gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
     }
-    LEAVE("Null rate cell.");
+    LEAVE("null rate cell");
     return FALSE;
   }
 
@@ -1181,7 +1181,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   exch_rate = gnc_price_cell_get_value (rate_cell);
   if (!gnc_numeric_zero_p(exch_rate) && !force_dialog)
   {
-    LEAVE("Rate already non-zero.");
+    LEAVE("rate already non-zero");
     return FALSE;
   }
 
@@ -1198,7 +1198,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
                   "rate.");
       gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
     }
-    LEAVE("Expanded with transaction cursor. Nothing to do.");
+    LEAVE("expanded with transaction cursor; nothing to do");
     return FALSE;
   }
 
@@ -1223,7 +1223,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
       message = _("The entered account could not be found.");
       gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
     }
-    LEAVE("No xfer account.");
+    LEAVE("no xfer account");
     return FALSE;
   }
 
@@ -1247,7 +1247,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
      */
     if (!force_dialog)
     {
-      LEAVE("Txn currency and account currency match, and not forcing dialog.");
+      LEAVE("txn and account currencies match, and not forcing");
       return FALSE;
     }
 
@@ -1256,7 +1256,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     {
       message = _("The two currencies involved equal each other.");
       gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
-      LEAVE("Register is expanded, or osplit == NULL. Not forcing dialog.");
+      LEAVE("register is expanded or osplit == NULL; not forcing dialog");
       return FALSE;
     }
 
@@ -1269,7 +1269,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     {
       message = _("The two currencies involved equal each other.");
       gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
-      LEAVE("Register commodity == txn commodity. Not forcing dialog.");
+      LEAVE("reg commodity == txn commodity; not forcing");
       return FALSE;
     }
   }
@@ -1319,7 +1319,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
       message = _("The split's amount is zero, so no exchange rate is needed.");
       gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
     }
-    LEAVE("Amount is zero. No exchange rate needed.");
+    LEAVE("amount is zero; no exchange rate needed");
     return FALSE;
   }
 
@@ -1332,7 +1332,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
       !info->rate_reset &&
       split != gnc_split_register_get_blank_split (reg))
   {
-    LEAVE("Gain/loss split. No exchange rate needed.");
+    LEAVE("gain/loss split; no exchange rate needed");
     return FALSE;
   }
 
@@ -1354,7 +1354,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   if (gnc_xfer_dialog_run_exchange_dialog(
           xfer, &exch_rate, amount, reg_acc, txn, xfer_com))
   {
-    LEAVE("Leaving rate unchanged.");
+    LEAVE("leaving rate unchanged");
     return TRUE;
   }
 

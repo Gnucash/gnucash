@@ -1,5 +1,5 @@
 /********************************************************************\
- * split-register.h -- split register api                           *
+ * split-register.h -- split register API                           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,81 +20,90 @@
  *                                                                  *
 \********************************************************************/
 /** @addtogroup GUI
-@{ */
-/** @addtogroup Ledger Checkbook Register
-    @brief The register is the spreadsheet-like area that looks like a
-    checkbook register.
-
-    @details It displays transactions, and allows the 
-    user to edit transactions in-place.  The register does *not*
-    contain any of the other window decorations that one might want 
-    to have for a free standing window (e.g. menubars, toolbars, etc.)
-
-    All user input to the register is handled by the 'cursor', which
-    is mapped onto one of the displayed rows in the register.
-
-    The layout of the register is configurable.  There's a broad
-    variety of cell types to choose from:  date cells, which know 
-    how to parse dates; price cells, which know how to parse prices,
-    etc.  These cells can be laid out in any column; even a multi-row
-    layout is supported.  The name 'split-register' is derived from
-    the fact that this register can display multiple rows of 
-    transaction splits underneath a transaction title/summary row.
-
-@par Design Notes.
-@{
-Some notes about the "blank split":@n
-Q: What is the "blank split"?@n
-A: A new, empty split appended to the bottom of the ledger
- window.  The blank split provides an area where the user
- can type in new split/transaction info.  
- The "blank split" is treated in a special way for a number
- of reasons:
--  it must always appear as the bottom-most split
-  in the Ledger window,
--  it must be committed if the user edits it, and 
-  a new blank split must be created.
--   it must be deleted when the ledger window is closed.
-To implement the above, the register "user_data" is used
-to store an SRInfo structure containing the blank split.
-
- @}
-
-@par Some notes on Commit/Rollback:
- @{
- * 
- * There's an engine component and a gui component to the commit/rollback
- * scheme.  On the engine side, one must always call BeginEdit()
- * before starting to edit a transaction.  When you think you're done,
- * you can call CommitEdit() to commit the changes, or RollbackEdit() to
- * go back to how things were before you started the edit. Think of it as
- * a one-shot mega-undo for that transaction.
- * 
- * Note that the query engine uses the original values, not the currently
- * edited values, when performing a sort.  This allows your to e.g. edit
- * the date without having the transaction hop around in the gui while you
- * do it.
- * 
- * On the gui side, commits are now performed on a per-transaction basis,
- * rather than a per-split (per-journal-entry) basis.  This means that
- * if you have a transaction with a lot of splits in it, you can edit them
- * all you want without having to commit one before moving to the next.
- * 
+ *  @{
+ */
+/** @addtogroup Register
+ *  @{
+ */
+/** @addtogroup SplitRegister Split Register
+ *  @brief GnuCash-specific ledger and journal displays based on
+ *  @ref RegisterCore.
+ *
+ *  @details The split register is a spreadsheet-like area that looks like
+ *  a checkbook register. It is a GnuCash-specific implementation built
+ *  atop the @ref RegisterCore.
+ *
+ *  It displays transactions and allows the user to edit them in-place.
+ *  The register does @b not contain any of the other window decorations
+ *  that one might want to have for a free standing window (e.g. menubars,
+ *  toolbars, etc.)
+ *
+ *  The layout of the register is configurable.  There's a broad
+ *  variety of cell types to choose from:  date cells, which know
+ *  how to parse dates; price cells, which know how to parse prices,
+ *  etc.  These cells can be laid out in any column; even a multi-row
+ *  layout is supported.  The name "split register" is derived from
+ *  the fact that this register can display multiple rows of
+ *  transaction splits underneath a transaction title/summary row.
+ *
+ *  An area for entering new transactions is provided at the bottom of
+ *  the register.
+ *
+ *  All user input to the register is handled by the 'cursor', which
+ *  is mapped onto one of the displayed rows in the register.
+ *
+ *  @par Design Notes.
+ *  @{
+ *  Some notes about the "blank split":@n
+ *  Q: What is the "blank split"?@n
+ *  A: A new, empty split appended to the bottom of the ledger
+ *  window.  The blank split provides an area where the user
+ *  can type in new split/transaction info.
+ *  The "blank split" is treated in a special way for a number
+ *  of reasons:
+ *  -  it must always appear as the bottom-most split
+ *     in the Ledger window,
+ *  -  it must be committed if the user edits it, and
+ *     a new blank split must be created.
+ *  -  it must be deleted when the ledger window is closed.
+ *
+ *  To implement the above, the register "user_data" is used
+ *  to store an SRInfo structure containing the blank split.
+ *  @}
+ *
+ *  @par Some notes on Commit/Rollback:
+ *  @{
+ *  There's an engine component and a gui component to the commit/rollback
+ *  scheme.  On the engine side, one must always call BeginEdit()
+ *  before starting to edit a transaction.  When you think you're done,
+ *  you can call CommitEdit() to commit the changes, or RollbackEdit() to
+ *  go back to how things were before you started the edit. Think of it as
+ *  a one-shot mega-undo for that transaction.
+ *
+ *  Note that the query engine uses the original values, not the currently
+ *  edited values, when performing a sort.  This allows your to e.g. edit
+ *  the date without having the transaction hop around in the gui while you
+ *  do it.
+ *
+ *  On the gui side, commits are now performed on a per-transaction basis,
+ *  rather than a per-split (per-journal-entry) basis.  This means that
+ *  if you have a transaction with a lot of splits in it, you can edit them
+ *  all you want without having to commit one before moving to the next.
+ *
  * Similarly, the "cancel" button will now undo the changes to all of the
  * lines in the transaction display, not just to one line (one split) at a
  * time.
- * 
-
- @}
- @par Some notes on Reloads & Redraws:
- @{
+ * @}
+ *
+ * @par Some notes on Reloads & Redraws:
+ * @{
  * Reloads and redraws tend to be heavyweight. We try to use change flags
  * as much as possible in this code, but imagine the following scenario:
  *
  * Create two bank accounts.  Transfer money from one to the other.
  * Open two registers, showing each account. Change the amount in one window.
  * Note that the other window also redraws, to show the new correct amount.
- * 
+ *
  * Since you changed an amount value, potentially *all* displayed
  * balances change in *both* register windows (as well as the ledger
  * balance in the main window).  Three or more windows may be involved
@@ -107,27 +116,28 @@ to store an SRInfo structure containing the blank split.
  * entry, stating 'this entry has changed since lst time, redraw it'.
  * But that still doesn't avoid the overhead of reloading the table
  * from the engine.
- @}
-
-    The Register itself is independent of GnuCash, and is designed 
-    so that it can be used with other applications.
-    The Ledger is an adaptation of the Register for use by GnuCash.
-    The Ledger sets up an explicit visual layout, putting certain 
-    types of cells in specific locations (e.g. date on left, summary 
-    in middle, value at right), and hooks up these cells to 
-    the various GnuCash financial objects.
-
-    This code is also theoretically independent of the actual GUI
-    toolkit/widget-set (it once worked with both Motif and Gnome).
-    The actual GUI-toolkit specific code is supposed to be in a 
-    GUI portability layer.  Over the years, some gnome-isms may 
-    have snuck in; these should also be cleaned up.
-*/
-/** @{
-    @file split-register.h
-    @brief API for checkbook register display area
-    @author Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>
-*/
+ * @}
+ *
+ *  The Register itself is independent of GnuCash, and is designed
+ *  so that it can be used with other applications.
+ *  The Ledger is an adaptation of the Register for use by GnuCash.
+ *  The Ledger sets up an explicit visual layout, putting certain
+ *  types of cells in specific locations (e.g. date on left, summary
+ *  in middle, value at right), and hooks up these cells to
+ *  the various GnuCash financial objects.
+ *
+ *  This code is also theoretically independent of the actual GUI
+ *  toolkit/widget-set (it once worked with both Motif and Gnome).
+ *  The actual GUI-toolkit specific code is supposed to be in a
+ *  GUI portability layer.  Over the years, some gnome-isms may
+ *  have snuck in; these should also be cleaned up.
+ *
+ *  @{
+ */
+/** @file split-register.h
+ *  @brief API for checkbook register display area
+ *  @author Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>
+ */
 /** @{ */
 
 #ifndef SPLIT_REGISTER_H
@@ -251,7 +261,7 @@ struct split_register
   SplitRegisterType type;
   SplitRegisterStyle style;
 
-  gboolean use_double_line;  /**< whether to use two lines per tranasaction */
+  gboolean use_double_line;  /**< whether to use two lines per transaction */
   gboolean is_template;
   gboolean do_auto_complete; /**< whether to use auto-competion */
 
@@ -357,7 +367,7 @@ CursorClass gnc_split_register_get_cursor_class
 
 /** Gets the transaction at the current cursor location, which may be on
  *  the transaction itself or on any of its splits.
- * 
+ *
  *  @param reg a ::SplitRegister
  *
  *  @return the ::Transaction at the cursor location, or @c NULL
@@ -366,7 +376,7 @@ Transaction * gnc_split_register_get_current_trans (SplitRegister *reg);
 
 /** Gets the anchoring split of the transaction at the current cursor location,
  *  which may be on the transaction itself or on any of its splits.
- * 
+ *
  *  @param reg a ::SplitRegister
  *
  *  @param vcell_loc a pointer to be filled with the location of the
@@ -379,7 +389,7 @@ gnc_split_register_get_current_trans_split (SplitRegister *reg,
                                             VirtualCellLocation *vcell_loc);
 
 /** Returns the split at which the cursor is currently located.
- * 
+ *
  *  @param reg a ::SplitRegister
  *
  *  @return the ::Split at the cursor location, or the anchoring split
@@ -388,7 +398,7 @@ gnc_split_register_get_current_trans_split (SplitRegister *reg,
 Split * gnc_split_register_get_current_split (SplitRegister *reg);
 
 /** Gets the blank split for a register.
- * 
+ *
  *  @param reg a ::SplitRegister
  *
  *  @return the ::Split used as the blank split, or @c NULL if
@@ -483,10 +493,11 @@ void gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg);
 /** Populates the rows of a register.
  *
  *  The rows are filled, based on the register style, with data associated
- *  with the given list of splits, @a slist. In addition, a new, blank split
- *  is appended to the tail end of the register.  This "blank split" is
- *  the place where the user can create new transactions.
- *  The account @a default_account, if provided, is used to determine default
+ *  with the given list of splits @a slist. In addition, an area for the
+ *  user to begin entering new transactions is placed at the tail end of the
+ *  register. This area is anchored by the "blank split".
+ *
+ *  The account @a default_account, if provided, is used to determine
  *  various default values for the blank split (such as currency, last check
  *  number, and transfer account) for the blank split.
  *
@@ -549,6 +560,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog);
 gboolean
 gnc_split_register_begin_edit_or_warn(SRInfo *info, Transaction *trans);
 
+/** @} */
 /** @} */
 /** @} */
 /** @} */

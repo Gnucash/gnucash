@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
- /*
+/*
  * split-register.c
  * author Copyright (c) 1998-2000 Linas Vepstas <linas@linas.org>
  * author Copyright (c) 2000-2001 Dave Peticolas <dave@krondo.com>
@@ -1433,11 +1433,13 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
      if (trans == blank_trans) {
          blank_edited = info->blank_split_edited;
          info->last_date_entered = xaccTransGetDate (trans);
+         /* Q: Why should we nullify the blank split GUID if the blank split
+          *    wasn't edited? We still might not be committing! */
          info->blank_split_guid = *guid_null ();
          info->blank_split_edited = FALSE;
      }
 
-     /* We have to clear the pending guid *before* commiting the
+     /* We have to clear the pending guid *before* committing the
         trans, because the event handler will find it otherwise. */
      if (trans == pending_trans) { 
          info->pending_trans_guid = *guid_null ();
@@ -1517,9 +1519,20 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    }
    g_assert(xaccTransIsOpen(trans));
 
-   /* If we are committing the blank split, add it to the account now */
+   /* If we are saving a brand new transaction and the blank split hasn't
+    * been edited, then we need to give it a default account. */
+   /* Q: Why check 'split == blank_split'? Isn't 'trans == blank_trans'
+    *    even better? What if there were some way that we could be on
+    *    a row other than the transaction row or blank split row, but
+    *    the blank split still hasn't been edited? It seems to be assumed
+    *    that it isn't possible, but... -Charles, Jan 2009 */
    if (split == blank_split && !info->blank_split_edited)
    {
+     /* If we've reached this point, it means that the blank split is
+      * anchoring the transaction - see gnc_split_register_add_transaction()
+      * for an explanation - and the transaction has been edited (as evidenced
+      * by the earlier check for a changed cursor.) Since the blank split
+      * itself has not been edited, we'll have to assign a default account. */
      account = gnc_split_register_get_default_account(reg);
      if (account)
        xaccSplitSetAccount(blank_split, account);
@@ -1529,8 +1542,10 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    if (split == NULL)
    {
      /* If we were asked to save data for a row for which there is no
-      * associated split, then assume that this was a row that was
-      * set aside for adding splits to an existing transaction.
+      * associated split, then assume that this was an "empty" row - see
+      * gnc_split_register_add_transaction() for an explanation. This row
+      * is used to add splits to an existing transaction, or to add the
+      * 2nd through nth split rows to a brand new transaction.
       * xaccSRGetCurrent will handle this case, too. We will create
       * a new split, copy the row contents to that split, and append
       * the split to the pre-existing transaction. */

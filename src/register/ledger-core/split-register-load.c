@@ -82,6 +82,68 @@ gnc_split_register_load_type_cells (SplitRegister *reg)
   gnc_recn_cell_set_flag_order (cell, "IP");
 }
 
+/** Add a transaction to the register.
+ *
+ *  Virtual cells are set up to hold the data, beginning at @a vcell_loc and
+ *  continuing downward in the same virtual column. The first virtual cell
+ *  will be a "leading" cell, followed by a virtual cell for each split of
+ *  transaction @a trans. For example, the "transaction journal" register
+ *  style keeps all the transaction-level data and totals in the leading
+ *  cell, and all split-level data in the cells that follow.
+ *
+ *  Each of these cells will remember the GUID of the ::Split to which it
+ *  is associated. The leading virtual cell will be assigned the GUID of
+ *  the "anchoring split" specified by @a split.
+ *
+ *  Optionally an extra, empty virtual cell will be assigned to no split.
+ *  This should not be confused with the "blank split", because this cell is
+ *  not tied to any split at all, not even the "blank split". A null GUID
+ *  is assigned to it.
+ *
+ *  The caller can find out which virtual row was used for a particular virtual
+ *  cell by using parameters @a find_trans, @a find_split, and @a find_class.
+ *  If a match is found, the row is returned in @a new_split_row. Otherwise,
+ *  @a new_split_row is not changed.
+ *  - To find the virtual cell for a particular split, set @a find_split to
+ *    the target ::Split and @a find_class to ::CURSOR_CLASS_SPLIT.
+ *  - To find the empty row, set @a find_trans equal to @a trans, @a find_split
+ *    to @c NULL, and @a find_class to ::CURSOR_CLASS_SPLIT.
+ *  - The leading virtual cell is always placed in the row specified by
+ *    @a vcell_loc, but this will not be returned in @a new_split_row unless
+ *    @a find_split is set to the anchoring split and @a find_class is not
+ *    ::CURSOR_CLASS_SPLIT.
+ *
+ *  @param reg a ::SplitRegister
+ *
+ *  @param trans the transaction to add to the register
+ *
+ *  @param split a ::Split to use as the "anchoring split" in the "leading"
+ *  virtual cell
+ *
+ *  @param lead_cursor the cursor to use for the "leading" virtual cell
+ *
+ *  @param split_cursor the cursor to use in the split rows that follow
+ *
+ *  @param visible_splits @c TRUE to make the split rows visible, @c FALSE
+ *  otherwise
+ *
+ *  @param start_primary_color @c TRUE to use the primary color for the
+ *  "leading" row, @c FALSE otherwise
+ *
+ *  @param add_empty @c TRUE if an empty row should be added, @c FALSE
+ *  otherwise
+ *
+ *  @param find_trans the transaction parameter for row searching
+ *
+ *  @param find_split the split parameter for row searching
+ *
+ *  @param find_class the cursor class parameter for row searching
+ *
+ *  @param new_split_row a pointer to be filled with the matching virtual row.
+ *
+ *  @param vcell_loc the location to begin setting virtual cells. The row
+ *  will be changed to the row below the last row filled.
+ */
 static void
 gnc_split_register_add_transaction (SplitRegister *reg,
                                     Transaction *trans,
@@ -90,7 +152,7 @@ gnc_split_register_add_transaction (SplitRegister *reg,
                                     CellBlock *split_cursor,
                                     gboolean visible_splits,
                                     gboolean start_primary_color,
-                                    gboolean add_blank,
+                                    gboolean add_empty,
                                     Transaction *find_trans,
                                     Split *find_split,
                                     CursorClass find_class,
@@ -102,10 +164,13 @@ gnc_split_register_add_transaction (SplitRegister *reg,
   if (split == find_split)
     *new_split_row = vcell_loc->virt_row;
 
+  /* Set the "leading" virtual cell. */
   gnc_table_set_vcell (reg->table, lead_cursor, xaccSplitGetGUID (split),
                        TRUE, start_primary_color, *vcell_loc);
   vcell_loc->virt_row++;
 
+  /* Continue setting up virtual cells in a column, using a row for each
+   * split in the transaction. */
   for (node = xaccTransGetSplitList (trans); node; node = node->next) {
       Split *secondary = node->data;
 
@@ -119,14 +184,14 @@ gnc_split_register_add_transaction (SplitRegister *reg,
       vcell_loc->virt_row++;
   }
 
-  if (add_blank) {
+  /* If requested, add an empty split row at the end. */
+  if (add_empty) {
       
       if (find_trans == trans && find_split == NULL &&
           find_class == CURSOR_CLASS_SPLIT) {
           *new_split_row = vcell_loc->virt_row;
       }
       
-      /* Add blank transaction split */
       gnc_table_set_vcell(reg->table, split_cursor, xaccSplitGetGUID(NULL), 
                           FALSE, TRUE, *vcell_loc);
       vcell_loc->virt_row++;
@@ -281,12 +346,15 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     info->blank_split_guid = *xaccSplitGetGUID (blank_split);
     info->blank_split_edited = FALSE;
-    DEBUG("blank_split=%p", blank_split);
+    DEBUG("created new blank_split=%p", blank_split);
 
     gnc_resume_gui_refresh ();
   }
 
   blank_trans = xaccSplitGetParent (blank_split);
+
+  DEBUG("blank_split=%p, blank_trans=%p, pending_trans=%p",
+        blank_split, blank_trans, pending_trans);
 
   info->default_account = *xaccAccountGetGUID (default_account);
 

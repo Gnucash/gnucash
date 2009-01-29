@@ -25,8 +25,9 @@
 
 #include "table-layout.h"
 #include "split-register.h"
-/** @addtogroup Ledger
-    @{ */
+/** @addtogroup SplitRegister
+ *  @{
+ */
 /** @file split-register-layout.h
  *  @brief Create the actual register visual layout
  *  @author Copyright (C) 1998, 2004 Linas Vepstas <linas@linas.org>
@@ -41,7 +42,7 @@
  *  original intent was that the layout would be fetched from a 
  *  config file that could be tweaked for a specific, non-GnuCash 
  *  application.
-*/
+ */
 
 /** Generate the split register layout. */
 TableLayout * gnc_split_register_layout_new (SplitRegister *reg);
