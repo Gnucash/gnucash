@@ -74,6 +74,7 @@ struct _RecnWindow
 
   GtkWidget *starting;      /* The starting balance                 */
   GtkWidget *ending;        /* The ending balance                   */
+  GtkWidget *recn_date;     /* The statement date                   */
   GtkWidget *reconciled;    /* The reconciled balance               */
   GtkWidget *difference;    /* Text field, amount left to reconcile */
 
@@ -248,6 +249,10 @@ recnRecalculateBalance (RecnWindow *recnData)
   gtk_label_set_text(GTK_LABEL(recnData->starting), amount);
   if (reverse_balance)
     starting = gnc_numeric_neg (starting);
+
+  /* update the statement date */
+  amount = qof_print_date(recnData->statement_date);
+  gtk_label_set_text(GTK_LABEL(recnData->recn_date), amount);
 
   /* update the ending balance */
   ending = recnData->new_ending;
@@ -1674,6 +1679,16 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
       /* vbox to hold values */
       value_vbox = gtk_vbox_new(FALSE, 3);
       gtk_box_pack_start(GTK_BOX(totals_hbox), value_vbox, TRUE, TRUE, 0);
+
+      /* statement date title/value */
+      title = gtk_label_new(_("Statement Date:"));
+      gtk_misc_set_alignment(GTK_MISC(title), 1.0, 0.5);
+      gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
+
+      value = gtk_label_new("");
+      recnData->recn_date = value;
+      gtk_misc_set_alignment(GTK_MISC(value), 1.0, 0.5);
+      gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
 
       /* starting balance title/value */
       title = gtk_label_new(_("Starting Balance:"));
