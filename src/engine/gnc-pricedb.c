@@ -1847,6 +1847,18 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
     return balance;
   }
 
+  /* Look for a price of the new currency in the balance currency and use
+   * the reciprocal if we find it 
+   */
+  price = gnc_pricedb_lookup_latest (pdb, new_currency, balance_currency);
+  if (price) {
+    balance = gnc_numeric_div (balance, gnc_price_get_value (price),
+                               gnc_commodity_get_fraction (new_currency),
+                               GNC_HOW_RND_ROUND);
+    gnc_price_unref (price);
+    return balance;
+  }
+
   /*
    * no direct price found, try if we find a price in another currency
    * and convert in two stages
@@ -1884,7 +1896,7 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
 
     list_helper = list_helper->next;
   } while((list_helper != NULL) &&
-          (!gnc_numeric_zero_p(currency_price_value)));
+          (gnc_numeric_zero_p(currency_price_value)));
 
   balance = gnc_numeric_mul (balance, currency_price_value,
                              GNC_DENOM_AUTO,
@@ -1917,6 +1929,18 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
   price = gnc_pricedb_lookup_nearest_in_time (pdb, balance_currency, new_currency, t);
   if (price) {
     balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
+                               gnc_commodity_get_fraction (new_currency),
+                               GNC_HOW_RND_ROUND);
+    gnc_price_unref (price);
+    return balance;
+  }
+
+  /* Look for a price of the new currency in the balance currency and use
+   * the reciprocal if we find it 
+   */
+  price = gnc_pricedb_lookup_nearest_in_time (pdb, new_currency, balance_currency, t);
+  if (price) {
+    balance = gnc_numeric_div (balance, gnc_price_get_value (price),
                                gnc_commodity_get_fraction (new_currency),
                                GNC_HOW_RND_ROUND);
     gnc_price_unref (price);
@@ -1960,7 +1984,7 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
 
     list_helper = list_helper->next;
   } while((list_helper != NULL) &&
-          (!gnc_numeric_zero_p(currency_price_value)));
+	  (gnc_numeric_zero_p(currency_price_value)));
 
   balance = gnc_numeric_mul (balance, currency_price_value,
                              gnc_commodity_get_fraction (new_currency),
@@ -2002,6 +2026,18 @@ gnc_pricedb_convert_balance_latest_before(GNCPriceDB *pdb,
     return balance;
   }
 
+  /* Look for a price of the new currency in the balance currency and use
+   * the reciprocal if we find it.
+   */
+  price = gnc_pricedb_lookup_latest_before (pdb, new_currency, balance_currency, t);
+  if (price) {
+    balance = gnc_numeric_div (balance, gnc_price_get_value (price),
+                               gnc_commodity_get_fraction (new_currency),
+                               GNC_HOW_RND_ROUND);
+    gnc_price_unref (price);
+    return balance;
+  }
+  
   /*
    * no direct price found, try if we find a price in another currency
    * and convert in two stages
@@ -2039,7 +2075,7 @@ gnc_pricedb_convert_balance_latest_before(GNCPriceDB *pdb,
 
     list_helper = list_helper->next;
   } while((list_helper != NULL) &&
-          (!gnc_numeric_zero_p(currency_price_value)));
+          (gnc_numeric_zero_p(currency_price_value)));
 
   balance = gnc_numeric_mul (balance, currency_price_value,
                              gnc_commodity_get_fraction (new_currency),
