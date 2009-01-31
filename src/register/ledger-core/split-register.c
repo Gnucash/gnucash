@@ -2372,7 +2372,7 @@ gnc_split_register_cleanup (SplitRegister *reg)
 {
    SRInfo *info = gnc_split_register_get_info (reg);
    Transaction *pending_trans;
-   Transaction *trans = NULL;
+   Transaction *blank_trans = NULL;
    Split *blank_split;
 
    ENTER("reg=%p", reg);
@@ -2390,16 +2390,19 @@ gnc_split_register_cleanup (SplitRegister *reg)
    {
       /* split destroy will automatically remove it
        * from its parent account */
-      trans = xaccSplitGetParent (blank_split);
+      blank_trans = xaccSplitGetParent (blank_split);
+
+      DEBUG("blank_split=%p, blank_trans=%p, pending_trans=%p",
+            blank_split, blank_trans, pending_trans);
 
       /* Make sure we don't commit this below */
-      if (trans == pending_trans)
+      if (blank_trans == pending_trans)
       {
         info->pending_trans_guid = *guid_null ();
         pending_trans = NULL;
       }
 
-      xaccTransDestroy (trans);
+      xaccTransDestroy (blank_trans);
 
       info->blank_split_guid = *guid_null ();
       blank_split = NULL;
@@ -2408,8 +2411,8 @@ gnc_split_register_cleanup (SplitRegister *reg)
    /* be sure to take care of any open transactions */
    if (pending_trans != NULL)
    {
-      g_critical("BUG DETECTED: pending_trans=%p, blank_split=%p, trans=%p",
-                 pending_trans, blank_split, trans);
+      g_critical("BUG DETECTED: pending_trans=%p, blank_split=%p, blank_trans=%p",
+                 pending_trans, blank_split, blank_trans);
       g_assert_not_reached();
       info->pending_trans_guid = *guid_null ();
       /* CAS: It's not clear to me that we'd really want to commit
