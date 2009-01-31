@@ -56,6 +56,7 @@
 #include "dialog-utils.h"
 
 // static QofLogModule log_module = GNC_MOD_SX;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /***** PROTOTYPES ***************************************************/
 void gnc_split_reg_raise( GNCSplitReg *gsr );
@@ -1393,12 +1394,15 @@ gsr_default_blank_handler( GNCSplitReg *gsr, gpointer data )
 {
   SplitRegister *reg;
 
+  ENTER("gsr=%p, gpointer=%p", gsr, data);
+
   reg = gnc_ledger_display_get_split_register (gsr->ledger);
 
   if (gnc_split_register_save (reg, TRUE))
     gnc_split_register_redraw (reg);
 
   gnc_split_reg_jump_to_blank (gsr);
+  LEAVE(" ");
 }
 
 void
@@ -1641,17 +1645,23 @@ gnc_split_reg_record (GNCSplitReg *gsr)
   SplitRegister *reg;
   Transaction *trans;
 
+  ENTER("gsr=%p", gsr);
+
   reg = gnc_ledger_display_get_split_register (gsr->ledger);
   trans = gnc_split_register_get_current_trans (reg);
 
   if (!gnc_split_register_save (reg, TRUE))
+  {
+    LEAVE("no save");
     return;
+  }
 
   gsr_emit_include_date_signal( gsr, xaccTransGetDate(trans) );
 
   /* Explicit redraw shouldn't be needed, 
    * since gui_refresh events should handle this. */
   /* gnc_split_register_redraw (reg); */
+  LEAVE(" ");
 }
 
 static gboolean
