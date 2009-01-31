@@ -44,7 +44,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	( cd gnucash/report/locale-specific; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../../$$A . ; done )
 	( cd gnucash/report; for A in $(gncscmothermod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
 
 clean-local:
 	$(RM) -rf gnucash

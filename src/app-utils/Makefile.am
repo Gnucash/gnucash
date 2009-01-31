@@ -130,7 +130,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
 
 CLEANFILES = ${SCM_FILE_LINKS} gnucash .scm-links
 MAINTAINERCLEANFILES = swig-app-utils.c
