@@ -452,6 +452,8 @@ gnc_module_load_common(char * module_name, gint iface, gboolean optional)
 {
 
   GNCLoadedModule * info;
+  GModule         * gmodule;
+  GNCModuleInfo   * modinfo;
 
   if(!loaded_modules)
   {
@@ -485,65 +487,72 @@ gnc_module_load_common(char * module_name, gint iface, gboolean optional)
       g_warning ("module has no init func: %s", module_name);
       return NULL;
     }
+    /* NOTREACHED */
+    g_error("internal error");
+    return NULL;
   }
-  else
+
+  modinfo = gnc_module_locate(module_name, iface);
+  if (!modinfo)
   {
-    GNCModuleInfo * modinfo = gnc_module_locate(module_name, iface);
-    GModule       * gmodule;
+    if (optional)
+    {
+      g_message ("Could not locate optional module %s interface v.%d",
+	module_name, iface);
+    }
+    else
+    {
+      g_warning ("Could not locate module %s interface v.%d",
+	module_name, iface);
+    }
+    return NULL;
+  }
 
 /*     if (modinfo) */
 /*       g_debug("(init) loading '%s' from '%s'\n", module_name, */
 /*               modinfo->module_filepath); */
 
-    if (modinfo &&
-        ((gmodule = g_module_open(modinfo->module_filepath, 0))
-         != NULL))
+  if ((gmodule = g_module_open(modinfo->module_filepath, 0)) != NULL)
+  {
+    gpointer initfunc;
+
+    if (gnc_module_get_symbol(gmodule, "gnc_module_init", &initfunc))
     {
-      gpointer initfunc;
+      /* stick it in the hash table */
+      info = g_new0(GNCLoadedModule, 1);
+      info->gmodule    = gmodule;
+      info->filename   = g_strdup(modinfo->module_filepath);
+      info->load_count = 1;
+      info->init_func  = initfunc;
+      g_hash_table_insert(loaded_modules, info, info);
 
-      if (gnc_module_get_symbol(gmodule, "gnc_module_init", &initfunc))
+      /* now call its init function.  this should load any dependent
+       * modules, too.  If it doesn't return TRUE unload the module. */
+      if (!info->init_func(0))
       {
-        /* stick it in the hash table */
-        info = g_new0(GNCLoadedModule, 1);
-        info->gmodule    = gmodule;
-        info->filename   = g_strdup(modinfo->module_filepath);
-        info->load_count = 1;
-        info->init_func  = initfunc;
-        g_hash_table_insert(loaded_modules, info, info);
-
-        /* now call its init function.  this should load any dependent
-         * modules, too.  If it doesn't return TRUE unload the module. */
-        if (!info->init_func(0))
-        {
-          /* init failed. unload the module. */
-          g_warning ("Initialization failed for module %s\n", module_name);
-          g_hash_table_remove(loaded_modules, info);
-          g_free(info->filename);
-          g_free(info);
-          /* g_module_close(module); */
-          return NULL;
-        }
-
-        return info;
+	/* init failed. unload the module. */
+	g_warning ("Initialization failed for module %s\n", module_name);
+	g_hash_table_remove(loaded_modules, info);
+	g_free(info->filename);
+	g_free(info);
+	/* g_module_close(module); */
+	return NULL;
       }
-      else
-      {
-        g_warning ("Module %s (%s) is not a gnc-module.\n", module_name,
-                   modinfo->module_filepath);
-        //lt_dlclose(handle);
-      }
+
       return info;
     }
-    else if (!optional)
+    else
     {
-      g_warning ("Failed to open module %s", module_name);
-      if(modinfo) printf(": %s\n", g_module_error());
-      else g_warning (": could not locate %s interface v.%d\n",
-                      module_name, iface);
-      return NULL;
+      g_warning ("Module %s (%s) is not a gnc-module.\n", module_name,
+		 modinfo->module_filepath);
+      //lt_dlclose(handle);
     }
-    return NULL;
+    return info;
   }
+
+  g_warning ("Failed to open module %s: %s\n", module_name, g_module_error());
+
+  return NULL;
 }
 
 
