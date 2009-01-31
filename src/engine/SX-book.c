@@ -116,6 +116,7 @@ sxtg_book_begin (QofBook *book)
   	root = xaccMallocAccount(book);
   	xaccAccountBeginEdit(root);
   	xaccAccountSetType(root, ACCT_TYPE_ROOT);
+        xaccAccountSetName(root, "Template Root");
   	xaccAccountCommitEdit(root);
   	gnc_book_set_template_root (book, root);
   }
