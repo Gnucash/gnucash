@@ -25,7 +25,7 @@
     Splits that debit that Account. To ensure consistency, if a Split points
     to an Account, then the Account must point to the Split, and vice-versa.
     A Split can belong to at most one Account. Besides merely containing a
-    list of Splits, the Account structure also give the Account a name, a
+    list of Splits, the Account structure also gives the Account a name, a
     code number, description and notes fields, a key-value frame, a pointer
     to the commodity that is used for all splits in this account. The
     commodity can be the name of anything traded and tradable: a stock

@@ -509,7 +509,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
   g_assert (trans_info);
 
   /* This will store the destination account of the selected match if 
-     the recondile match selected has only two split.  Good idea  
+     the reconcile match selected has only two split.  Good idea  
      Christian! */ 
   dest = ((use_match) ?
 	  xaccSplitGetAccount

@@ -201,7 +201,7 @@ void          xaccTransRollbackEdit (Transaction *trans);
 /** The xaccTransIsOpen() method returns TRUE if the transaction
     is open for editing. Otherwise, it returns false.  
     XXX this routne should probably be deprecated.  its, umm,
-    hard to imagine legitamate uses (but it is used by
+    hard to imagine legitimate uses (but it is used by
     the import/export code for reasons I can't understand.)
  */
 gboolean      xaccTransIsOpen (const Transaction *trans);
