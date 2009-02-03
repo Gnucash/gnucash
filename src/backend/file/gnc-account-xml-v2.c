@@ -79,6 +79,7 @@ gnc_account_dom_tree_create(Account *act,
     xmlNodePtr ret;
     GList *lots, *n;
     Account *parent;
+    gnc_commodity *acct_commodity;
 
     ENTER ("(account=%p)", act);
 
@@ -94,14 +95,18 @@ gnc_account_dom_tree_create(Account *act,
                     act_type_string,
                     xaccAccountTypeEnumAsString(xaccAccountGetType(act))));
 
-    xmlAddChild(ret, commodity_ref_to_dom_tree(act_commodity_string,
-                                               xaccAccountGetCommodity(act)));
-
-    xmlAddChild(ret, int_to_dom_tree(act_commodity_scu_string,
-                                     xaccAccountGetCommoditySCUi(act)));
+    acct_commodity = xaccAccountGetCommodity(act);
+    if (acct_commodity != NULL)
+    {
+        xmlAddChild(ret, commodity_ref_to_dom_tree(act_commodity_string,
+                                                   acct_commodity));
     
-    if (xaccAccountGetNonStdSCU(act))
-      xmlNewChild(ret, NULL, BAD_CAST act_non_standard_scu_string, NULL);
+        xmlAddChild(ret, int_to_dom_tree(act_commodity_scu_string,
+                                         xaccAccountGetCommoditySCUi(act)));
+        
+        if (xaccAccountGetNonStdSCU(act))
+            xmlNewChild(ret, NULL, BAD_CAST act_non_standard_scu_string, NULL);
+    }
     
     str = xaccAccountGetCode(act);
     if (str && strlen(str) > 0)
