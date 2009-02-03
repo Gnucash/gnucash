@@ -21,7 +21,7 @@
 /** @internal
      @file gnc-ofx-import.c
      @brief Ofx import module code
-     @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
+     @author Copyright (c) 2002 Benoit GrÃ©goire <bock@step.polymtl.ca>
  */
 #include "config.h"
 

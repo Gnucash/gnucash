@@ -21,7 +21,7 @@
 /** @internal
     @file import-utilities.c
     @brief Utility functions for writing import modules.
-    @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
+    @author Copyright (C) 2002 Benoit GrÃ©goire <bock@step.polymtl.ca>
 */
 #include "config.h"
 

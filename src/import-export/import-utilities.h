@@ -20,7 +20,7 @@
     @{ */
 /** @file import-utilities.h
     @brief Utility functions for writing import modules.
-    @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
+    @author Copyright (C) 2002 Benoit GrÃ©goire <bock@step.polymtl.ca>
 */
 #ifndef IMPORT_UTILITIES_H
 #define IMPORT_UTILITIES_H

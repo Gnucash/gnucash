@@ -20,7 +20,7 @@
      @brief dtaus import module interface
      *
      gnc-dtaus-import.h
-     @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
+     @author Copyright (c) 2002 Benoit GrÃ©goire <bock@step.polymtl.ca>
  */
 #ifndef DTAUS_IMPORT_H
 #define DTAUS_IMPORT_H

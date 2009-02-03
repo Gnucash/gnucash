@@ -20,7 +20,7 @@
      @brief .log replay module interface
      *
      gnc-log-replay.h
-     @author Copyright (c) 2003 Benoit Grégoire <bock@step.polymtl.ca>
+     @author Copyright (c) 2003 Benoit GrÃ©goire <bock@step.polymtl.ca>
  */
 #ifndef OFX_IMPORT_H
 #define OFX_IMPORT_H

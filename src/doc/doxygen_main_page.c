@@ -243,6 +243,6 @@ News about GnuCash as well as the latest version can always be found at http://w
 If you have any suggestions concerning this documentation, do not hesitate to send suggestions to 
 gnucash-devel (see http://www.gnucash.org/en/lists.phtml for details)
 
-Benoit Grégoire <bock@step.polymtl.ca>
+Benoit GrÃ©goire <bock@step.polymtl.ca>
 Neil Williams <linux@codehelp.co.uk>
  */

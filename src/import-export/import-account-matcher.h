@@ -20,7 +20,7 @@
     @{ */
 /**@file import-account-matcher.h
   @brief  Generic and very flexible account matcher/picker
- @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
+ @author Copyright (C) 2002 Benoit GrÃ©goire <bock@step.polymtl.ca>
  */
 #ifndef ACCOUNT_MATCHER_H
 #define ACCOUNT_MATCHER_H

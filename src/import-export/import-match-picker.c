@@ -22,7 +22,7 @@
 @file import-match-picker.c
    @brief The transaction match picker dialog 
    implementation
-   @author Copyright (C) 2002 Benoit Grégoire
+   @author Copyright (C) 2002 Benoit GrÃ©goire
    @author Copyright (c) 2006 David Hampton <hampton@employees.org>
 */
  

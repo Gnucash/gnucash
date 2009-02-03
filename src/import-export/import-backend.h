@@ -20,7 +20,7 @@
     @{ */
 /** @file import-backend.h
     @brief Generic importer backend interface
-    @author Copyright (C) 2002 Benoit Grégoire
+    @author Copyright (C) 2002 Benoit GrÃ©goire
     @author Christian Stimming
     @author Copyright (c) 2006 David Hampton <hampton@employees.org>
 */

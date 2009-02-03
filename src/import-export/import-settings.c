@@ -22,7 +22,7 @@
    @file import-settings.c
    @brief User preference handling for 
    transaction matching (for both the gui and the backend)
-   @author Copyright (C) 2002 Benoit Grégoire
+   @author Copyright (C) 2002 Benoit GrÃ©goire
 */
 #include "config.h"
 

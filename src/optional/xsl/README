@@ -12,7 +12,7 @@ GnuCash, XSL and QSF.
 
        Current stylesheets are works in progress, but include:
 
-       · gnucash-gnccustomer-vcard2.xsl 
+       Â· gnucash-gnccustomer-vcard2.xsl 
 
           This  stylesheet  converts  QSF  export  gnucash  customer  data into a brief Vcard, 
           suitable  for  upload  to  Kaddressbook. Each  VCard is written into a separate .vcf 
@@ -20,7 +20,7 @@ GnuCash, XSL and QSF.
           replaced with underscores.  Specify  the  '-o dir/' option to xsltproc to output all
           vcards into a directory.
 
-       ·  Others
+       Â·  Others
 
           Stylesheets for ICS, vcal and possibly LDAP are planned. Any plain text, XML or HTML
           format can be generated, theoretically. If you  have a request for an XSL stylesheet
@@ -29,7 +29,7 @@ GnuCash, XSL and QSF.
 
        Also included is a perl script: 
 
-       ·  vcard-gnccustomer.pl
+       Â·  vcard-gnccustomer.pl
 
           The  script  uses  the Text::vCard::Addressbook  CPAN  module  to parse VCard files, 
           including those from other applications,  into QSF XML that  could  be imported into 

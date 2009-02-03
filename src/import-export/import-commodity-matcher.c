@@ -21,7 +21,7 @@
 /**@internal
  @file import-commodity-matcher.c
   @brief  A Generic commodity matcher/picker
-  @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>    
+  @author Copyright (C) 2002 Benoit GrÃ©goire <bock@step.polymtl.ca>    
  */
 #include "config.h"
 

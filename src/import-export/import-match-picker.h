@@ -20,7 +20,7 @@
     @{ */
 /** @file import-match-picker.h
    @brief The transaction match picker dialog interface
-   @author Copyright (C) 2002 Benoit Grégoire
+   @author Copyright (C) 2002 Benoit GrÃ©goire
 */
  
 #ifndef GNC_GEN_MATCH_PICKER_H

@@ -21,7 +21,7 @@
  /**@internal
  @file gncmod-csv-import.c
  @brief module definition/initialization for the csv importer
- @author Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
+ @author Copyright (c) 2002 Benoit GrÃ©goire bock@step.polymtl.ca
  */
 #include "config.h"
 
