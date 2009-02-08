@@ -1163,6 +1163,18 @@ then
       AC_MSG_ERROR([Goffice uses Cairo/GtkPrint but didn't find GtkHTML with GtkPrint support])
     fi
 
+    # check for gtkhtml >= 3.16 (includes gtk_html_print_operation_run())
+    if test x$gtkhtml = x1; then
+      AC_MSG_CHECKING(for GtkHTML - version >= 3.16.0)
+      if $PKG_CONFIG 'libgtkhtml-3.14 >= 3.16.0'; then
+        AC_MSG_RESULT(yes)
+        AC_DEFINE(HAVE_GTKHTML_3_16,1,[System has gtkhtml 3.16.0 or better])
+        HAVE_GTKHTML_3_16=1
+      else
+        AC_MSG_RESULT(no)
+      fi
+    fi
+
     # fallback to older gtkhtml versions and gnomeprint
     if test x$gtkhtml = x0
     then
