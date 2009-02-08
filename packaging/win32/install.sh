@@ -589,6 +589,8 @@ fi
 \${PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
 EOF
             chmod +x bin/pkg-config{.exe,-msys.sh}
+            sed '/Requires/s,\(.*\) enchant\(.*\) iso-codes\(.*\),\1\2\3,' lib/pkgconfig/libgtkhtml-3.14.pc > tmp
+            mv tmp lib/pkgconfig/libgtkhtml-3.14.pc
         qpopd
         quiet gconftool-2 --version &&
         quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgtkhtml-3.14 &&
