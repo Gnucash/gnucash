@@ -41,18 +41,18 @@ Name: desktopicon; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm
 Name: menuicon; Description: "{cm:CreateMenuLink}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Icons]
-Name: "{group}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: menuicon; Flags: runminimized
+Name: "{group}\GnuCash"; Filename: "{app}\bin\gnucash.cmd"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: menuicon; Flags: runminimized
 Name: "{group}\{cm:IconName_README}"; Filename: "{app}\doc\gnucash\{cm:IconFilename_README}"; Comment: "{cm:IconComment_README}"; Tasks: menuicon
 Name: "{group}\{cm:IconName_FAQ}"; Filename: "http://wiki.gnucash.org/wiki/FAQ"; Tasks: menuicon
 Name: "{group}\{cm:IconName_Bugzilla}"; Filename: "http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash"; Tasks: menuicon
-Name: "{group}\{cm:IconName_InstallFQ}"; Filename: "{app}\bin\install-fq-mods.bat"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_InstallFQ}"; Tasks: menuicon
+Name: "{group}\{cm:IconName_InstallFQ}"; Filename: "{app}\bin\install-fq-mods.cmd"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_InstallFQ}"; Tasks: menuicon
 Name: "{group}\{cm:IconName_Uninstall}"; Filename: "{uninstallexe}"; Comment: "{cm:IconComment_Uninstall}"; Tasks: menuicon
 
-Name: "{commondesktop}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: desktopicon; Flags: runminimized
+Name: "{commondesktop}\GnuCash"; Filename: "{app}\bin\gnucash.cmd"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: desktopicon; Flags: runminimized
 
 [Run]
-Filename: "{app}\bin\gnucash.bat"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; OnlyBelowVersion: 0,6; Flags: postinstall skipifsilent runhidden
-Filename: "{app}\bin\guile.bat"; Parameters: "-c ""(use-modules (ice-9 slib)) (require 'printf)"""; Flags: runhidden
+Filename: "{app}\bin\gnucash.cmd"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; OnlyBelowVersion: 0,6; Flags: postinstall skipifsilent runhidden
+Filename: "{app}\bin\guile.cmd"; Parameters: "-c ""(use-modules (ice-9 slib)) (require 'printf)"""; Flags: runhidden
 ;; The Windows firewall exceptions, see http://www.vincenzo.net/isxkb/index.php?title=Adding_a_rule_to_the_Windows_firewall
 Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bin\gnucash-bin.exe"" ""GnuCash Free Finance Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
 Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bin\gconfd-2.exe"" ""GConf Settings Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
@@ -70,7 +70,7 @@ Filename: "{sys}\netsh.exe"; Parameters: "firewall delete allowedprogram program
 ; The main executables and DLLs
 Source: "@prefix@\..\dist\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs ignoreversion; Components: main; AfterInstall: MyAfterInstallConfig()
 ; Note: The above AfterInstall function will create the 
-; gnucash.bat file on-the-fly by the Pascal script below.
+; gnucash.cmd file on-the-fly by the Pascal script below.
 
 Source: "@prefix@\..\dist\etc\*"; DestDir: "{app}\etc"; Flags: recursesubdirs; Components: main
 Source: "@prefix@\..\dist\lib\*"; DestDir: "{app}\lib"; Flags: recursesubdirs; Components: main
@@ -145,8 +145,8 @@ Root: HKLM; Subkey: "Software\AqBanking\Paths"; ValueType: string; ValueName: "c
 ; Delete the created config script on uninstall
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [UninstallDelete]
-Type: files; Name: "{app}\bin\gnucash.bat"
-Type: files; Name: "{app}\bin\guile.bat"
+Type: files; Name: "{app}\bin\gnucash.cmd"
+Type: files; Name: "{app}\bin\guile.cmd"
 Type: files; Name: "{app}\share\guile\1.6\slibcat"
 Type: filesandordirs; Name: "{app}\share\guile"
 Type: filesandordirs; Name: "{app}\etc\gconf"
@@ -183,8 +183,8 @@ begin
   pkglibdir := libdir + '\gnucash';
   pkgdatadir := appdir + '\share\gnucash';
 
-  { Create the gnucash.bat file; #10 is the linefeed character and #13 CR }
-  FileName := appdir + '\bin\gnucash.bat' ;
+  { Create the gnucash.cmd file; #10 is the linefeed character and #13 CR }
+  FileName := appdir + '\bin\gnucash.cmd' ;
   FileString := 'setlocal'#13#10 ;
   FileString := FileString + 'chcp ' + ExpandConstant('{cm:LanguageCodePage}') + ''#13#10 ;
   FileString := FileString + 'set PATH=' + appdir + '\bin;' + libdir + ';' + libdir + '\gnucash;%PATH%'#13#10 ;
@@ -202,7 +202,7 @@ begin
   if Res = False then
     MsgBox('Error on saving '+FileName+' for completing the installation', mbInformation, MB_OK);
 
-  FileName := appdir + '\bin\guile.bat' ;
+  FileName := appdir + '\bin\guile.cmd' ;
   FileString := 'set GUILE_LOAD_PATH=' + pkgdatadir + '\guile-modules;' + pkgdatadir + '\scm;' + appdir + '\share\guile\1.6;%GUILE_LOAD_PATH%'#13#10 ;
   FileString := FileString + 'start guile.exe %*'#13#10 ;
   Res := SaveStringToFile(FileName, FileString, False);
@@ -255,7 +255,7 @@ IconComment_InstallFQ=Install the necessary perl module Finance-Quote for online
 IconName_Uninstall=Uninstall GnuCash
 IconComment_Uninstall=Uninstall the Finance Manager GnuCash
 
-;; List of Code pages, used in gnucash.bat
+;; List of Code pages, used in gnucash.cmd
 LanguageCodePage=1252
 de.LanguageCodePage=1252
 el.LanguageCodePage=1253

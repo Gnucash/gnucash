@@ -6,7 +6,7 @@ EXTRA_DIST = \
   functions.sh \
   goffice-0.4.3-patch.diff \
   install.sh \
-  install-fq-mods.bat \
+  install-fq-mods.cmd \
   libofx-0.8.3-patch.diff \
   opensp-1.5.2-patch.diff \
   libgda-3.1.2-patch.diff \
