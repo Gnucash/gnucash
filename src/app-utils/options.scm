@@ -314,7 +314,7 @@
   (define (budget->guid budget)
     (cond ((eq? budget #f) #f)
           ((string? budget) budget)
-          (t (gncBudgetGetGUID budget))))
+          (else (gncBudgetGetGUID budget))))
 
   (define (guid->budget budget)
     (if (string? budget)
