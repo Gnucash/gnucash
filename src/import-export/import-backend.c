@@ -47,13 +47,13 @@
 #define BAYES_OPTION  "use_bayes"
 
 /********************************************************************\
- *   Constants   *
+ *   Constants                                                      *
 \********************************************************************/
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /********************************************************************\
- *   Constants, should idealy be defined a user preference dialog    *
+ *   Constants, should ideally be defined a user preference dialog  *
 \********************************************************************/
 
 static const int MATCH_DATE_THRESHOLD=4; /*within 4 days*/
@@ -70,7 +70,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
 
 
 /********************************************************************\
- *               Structures passed between the functions             *
+ *               Structures passed between the functions            *
 \********************************************************************/
 
 struct _transactioninfo
@@ -346,7 +346,7 @@ GdkPixbuf* gen_probability_pixbuf(gint score_original, GNCImportSettings *settin
   return retval;
 }
 
-/*-************************************************************************
+/*************************************************************************
  * MatchMap- related functions (storing and retrieving)
  */
 
@@ -403,8 +403,8 @@ TransactionGetTokens(GNCImportTransInfo *info)
   text = xaccTransGetDescription(transaction);
   tokens = tokenize_string(tokens, text);
 
-  /* the day of week the transaction occured is a good indicator of
-   * what account this transaction belongs in get the date and covert
+  /* The day of week the transaction occured is a good indicator of
+   * what account this transaction belongs in.  Get the date and covert
    * it to day of week as a token
    */
   transtime = xaccTransGetDate(transaction);
@@ -503,7 +503,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
   g_assert (trans_info);
 
   /* This will store the destination account of the selected match if 
-     the reconcile match selected has only two split.  Good idea  
+     the reconcile match selected has only two splits.  Good idea  
      Christian! */ 
   dest = ((use_match) ?
 	  xaccSplitGetAccount
@@ -584,7 +584,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       match_split_amount = gnc_numeric_to_double(xaccSplitGetAmount(split));
       /*DEBUG(" match_split_amount=%f", match_split_amount);*/
       if(fabs(downloaded_split_amount - match_split_amount) < 1e-6)
-	/* bug#347791: Doubly type shouldn't be compared for exact
+	/* bug#347791: Double type shouldn't be compared for exact
 	   equality, so we're using fabs() instead. */
 	/*if (gnc_numeric_equal(xaccSplitGetAmount
 	  (new_trans_fsplit),
@@ -670,7 +670,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
           if ( (conversion_ok && (split_number == new_trans_number)) || 
 	       (safe_strcmp(new_trans_str, split_str) == 0) )
             {  
-              /*An exact match of the Check number gives a +4 */
+              /* An exact match of the Check number gives a +4 */
               prob += 4;
               /*DEBUG("heuristics:  probability + 4 (Check number)");*/
             }
@@ -799,7 +799,7 @@ void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
        have to change its behaviour: Accept the imported txns via
        gnc_gen_trans_list_add_trans(), and only when
        gnc_gen_trans_list_run() is called, then calculate all the
-       different match candidates. Thats too much work for now.
+       different match candidates. That's too much work for now.
     */
   }
 
