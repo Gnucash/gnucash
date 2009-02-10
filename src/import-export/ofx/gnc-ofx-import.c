@@ -139,10 +139,6 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	transaction = xaccMallocTransaction(book);
 	xaccTransBeginEdit(transaction);
 	
-	if(data.fi_id_valid==true){
-	  gnc_import_set_trans_online_id(transaction, data.fi_id);
-	}
-	
 	if(data.date_initiated_valid==true){
 	  xaccTransSetDateSecs(transaction, data.date_initiated);
 	}
@@ -339,6 +335,9 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 		if(data.memo_valid==true){
 		  xaccSplitSetMemo(split, data.memo);
 		}
+		if(data.fi_id_valid==true){
+		  gnc_import_set_split_online_id(split, data.fi_id);
+		}
 	      }
 	    else if(data.unique_id_valid == true
 		    && data.security_data_valid
@@ -392,6 +391,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 			if(data.security_data_ptr->memo_valid==true)
 			  {
 			    xaccSplitSetMemo(split, data.security_data_ptr->memo);
+			  }
+			if(data.fi_id_valid==true)
+			  {
+			    gnc_import_set_split_online_id(split, data.fi_id);
 			  }
 		      }
 		    else

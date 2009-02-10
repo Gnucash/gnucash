@@ -357,11 +357,6 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     gnc_trans = xaccMallocTransaction(book);
     xaccTransBeginEdit(gnc_trans);
 
-    /* Set OFX unique transaction ID */
-    fitid = AB_Transaction_GetFiId(ab_trans);
-    if (fitid && *fitid)
-        gnc_import_set_trans_online_id(gnc_trans, fitid);
-
     /* Date / Time */
     valuta_date = AB_Transaction_GetValutaDate(ab_trans);
     if (!valuta_date) {
@@ -399,6 +394,11 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     split = xaccMallocSplit(book);
     xaccSplitSetParent(split, gnc_trans);
     xaccSplitSetAccount(split, gnc_acc);
+
+    /* Set OFX unique transaction ID */
+    fitid = AB_Transaction_GetFiId(ab_trans);
+    if (fitid && *fitid)
+        gnc_import_set_split_online_id(split, fitid);
 
     /* Amount into the split */
     ab_value = AB_Transaction_GetValue(ab_trans);

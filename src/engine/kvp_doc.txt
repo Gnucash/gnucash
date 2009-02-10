@@ -426,6 +426,19 @@ Use: This holds the old security scu. This may be deleted at
      some point in the future.
 \endverbatim
 
+\verbatim
+Name: online-id
+Type: string
+Entities: All
+Use: This holds a unique identifier for accounts, transactions and splits
+     created by the generic import layer.  This allows imports of
+     successive statements to automatically match accounts and transactions
+     which have already been imported.
+
+     This used to be set on transactions but not splits.  It is now set on
+     splits but not transactions.  It is still checked on transactions, but
+     this may change at some point in the future.
+
 \subsection kvpP P
 
 \subsection kvpQ Q

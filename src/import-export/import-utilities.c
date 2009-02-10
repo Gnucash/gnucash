@@ -37,7 +37,7 @@
 
 /********************************************************************\
  * Setter and getter functions for the online_id kvp frame in
- * Account and Transaction 
+ * Account, Transaction and Split
 \********************************************************************/
 
 const gchar * gnc_import_get_acc_online_id(Account * account)
@@ -68,6 +68,35 @@ void gnc_import_set_trans_online_id(Transaction * transaction,
   kvp_frame * frame;
   frame = xaccTransGetSlots(transaction);
   kvp_frame_set_str (frame, "online_id", string_value);
+}
+
+gboolean gnc_import_trans_has_online_id(Transaction * transaction)
+{
+	const gchar * online_id;
+	online_id = gnc_import_get_trans_online_id(transaction);
+	return (online_id != NULL && strlen(online_id) > 0);
+}
+
+const gchar * gnc_import_get_split_online_id(Split * split)
+{
+  kvp_frame * frame;
+  frame = xaccSplitGetSlots(split);
+  return kvp_frame_get_string(frame, "online_id");
+}
+
+void gnc_import_set_split_online_id(Split * split,
+				    const gchar * string_value)
+{
+  kvp_frame * frame;
+  frame = xaccSplitGetSlots(split);
+  kvp_frame_set_str (frame, "online_id", string_value);
+}
+
+gboolean gnc_import_split_has_online_id(Split * split)
+{
+	const gchar * online_id;
+	online_id = gnc_import_get_split_online_id(split);
+	return (online_id != NULL && strlen(online_id) > 0);
 }
 
 /* @} */

@@ -58,12 +58,6 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 
 static const int MATCH_DATE_THRESHOLD=4; /*within 4 days*/
 static const int MATCH_DATE_NOT_THRESHOLD = 14;
-/**Transaction's who have an online_id kvp frame have been downloaded 
-  online can probably be skipped in the match list, since it is very 
-  unlikely that they would match a transaction downloaded at a later
-  date and yet not have the same online_id.  This also increases
-  performance of the matcher. */
-static const int SHOW_TRANSACTIONS_WITH_UNIQUE_ID = TRUE; /* DISABLE once account transfer bug is fixed! */
 
 /********************************************************************\
  *   Forward declared prototypes                                    *
@@ -570,13 +564,8 @@ static void split_find_match (GNCImportTransInfo * trans_info,
   /* DEBUG("Begin"); */
   
   /*Ignore the split if the transaction is open for edit, meaning it
-    was just downloaded.  Ignore the split if the transaction has an
-    online ID , unless overriden in prefs (i.e. do not ignore the
-    split if the online_id kvp is NULL or if it has zero length). */
-  if ((xaccTransIsOpen(xaccSplitGetParent(split)) == FALSE) &&
-      ((gnc_import_get_trans_online_id(xaccSplitGetParent(split))==NULL) ||
-       (strlen(gnc_import_get_trans_online_id(xaccSplitGetParent(split))) == 0) ||
-       SHOW_TRANSACTIONS_WITH_UNIQUE_ID==TRUE))
+    was just downloaded. */
+  if (xaccTransIsOpen(xaccSplitGetParent(split)) == FALSE)
     {
       GNCImportMatchInfo * match_info;
       gint prob = 0;
@@ -745,17 +734,6 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	}
       }
 
-      /*Online id punishment*/
-/*       if ((gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL) && */
-/* 	  (strlen(gnc_import_get_trans_online_id(xaccSplitGetParent(split)))>0)) */
-/* 	{ */
-	  /* If the pref is to show match even with online ID's,
-	     puninsh the transaction with online id */
-	  
-	  /* DISABLED, it's the wrong solution to the problem. benoitg, 24/2/2003 */
-	  /*prob = prob-3;*/
-/* 	} */
-      
       /* Is the probability high enough? Otherwise do nothing and return. */
       if(prob < display_threshold)
 	{
@@ -933,13 +911,10 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
 
 	      /* Copy the online id to the reconciled transaction, so
 		 the match will be remembered */ 
-	      if ((gnc_import_get_trans_online_id(trans_info->trans)
-		   != NULL) && 
-		  (strlen (gnc_import_get_trans_online_id(trans_info->trans))
-		   > 0))
-		gnc_import_set_trans_online_id
-		  (selected_match->trans, 
-		   gnc_import_get_trans_online_id(trans_info->trans));
+	      if (gnc_import_split_has_online_id(trans_info->first_split))
+		gnc_import_set_split_online_id
+		  (selected_match->split,
+		   gnc_import_get_split_online_id(trans_info->first_split));
 	      
 	      /* Done editing. */
 	      /*DEBUG("CommitEdit selected_match")*/
@@ -969,19 +944,38 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
 }
 
 /********************************************************************\
- * check_trans_online_id() Callback function to be used by
- * gnc_import_exists_online_id.  Takes pointers to two transaction and
- * returns 0 if their online_id kvp_frame do NOT match, or if both
- * pointers point to the same transaction.
- * \********************************************************************/
+ * check_trans_online_id() Callback function used by
+ * gnc_import_exists_online_id.  Takes pointers to transaction and split,
+ * returns 0 if their online_id kvp_frames do NOT match, or if the split
+ * belongs to the transaction
+\********************************************************************/
 static gint check_trans_online_id(Transaction *trans1, void *user_data)
 {
-  Transaction *trans2 = user_data;
-  const gchar *online_id1 = gnc_import_get_trans_online_id(trans1);
-  const gchar *online_id2 = gnc_import_get_trans_online_id(trans2);
+  Account *account;
+  Split *split1;
+  Split *split2 = user_data;
+  const gchar *online_id1;
+  const gchar *online_id2;
 
-  if ((trans1 == trans2) || (online_id1 == NULL) || 
-      (online_id2 == NULL) || (strcmp(online_id1, online_id2) != 0))
+  account = xaccSplitGetAccount(split2);
+  split1 = xaccTransFindSplitByAccount(trans1, account);
+  if (split1 == split2)
+    return 0;
+
+  /* hack - we really want to iterate over the _splits_ of the account
+     instead of the transactions */
+  g_assert(split1 != NULL);
+
+  if (gnc_import_split_has_online_id(split1))
+    online_id1 = gnc_import_get_split_online_id(split1);
+  else
+    online_id1 = gnc_import_get_trans_online_id(trans1);
+
+  online_id2 = gnc_import_get_split_online_id(split2);
+
+  if ((online_id1 == NULL) ||
+      (online_id2 == NULL) ||
+      (strcmp(online_id1, online_id2) != 0))
     {
       return 0;
     }
@@ -1000,20 +994,15 @@ gboolean gnc_import_exists_online_id (Transaction *trans)
   gboolean online_id_exists = FALSE;
   Account *dest_acct;
   Split *source_split;
-  
-  /* For each split in the transaction, check whether the parent account
-     contains a transaction with the same online id. */
-  for (i=0; 
-       ((source_split = xaccTransGetSplit(trans, i)) != NULL) &&
-	 (online_id_exists == FALSE);
-       i++)
-    {
-      /* DEBUG("%s%d%s","Checking split ",i," for duplicates"); */
-      dest_acct = xaccSplitGetAccount(source_split);
-      online_id_exists = xaccAccountForEachTransaction(dest_acct,
-							check_trans_online_id,
-							trans);
-    }
+
+  /* Look for an online_id in the first split */
+  source_split = xaccTransGetSplit(trans, 0);
+
+  /* DEBUG("%s%d%s","Checking split ",i," for duplicates"); */
+  dest_acct = xaccSplitGetAccount(source_split);
+  online_id_exists = xaccAccountForEachTransaction(dest_acct,
+						   check_trans_online_id,
+						   source_split);
 
   /* If it does, abort the process for this transaction, since it is
      already in the system. */

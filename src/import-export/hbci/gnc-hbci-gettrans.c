@@ -262,13 +262,6 @@ AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
   /* Create new gnucash transaction for the given hbci one */
   gnc_trans = xaccMallocTransaction(book);
   xaccTransBeginEdit(gnc_trans);
-    
-  {
-    /* OFX unique transaction ID */
-    const char *fitid = AB_Transaction_GetFiId(h_trans);
-    if (fitid && (strlen (fitid) > 0))
-      gnc_import_set_trans_online_id(gnc_trans, fitid);
-  }
 
   normalDate = AB_Transaction_GetDate(h_trans);
   valutaDate = AB_Transaction_GetValutaDate(h_trans);
@@ -317,6 +310,14 @@ AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
   xaccTransAppendSplit(gnc_trans, split);
   xaccAccountInsertSplit(gnc_acc, split);
     
+
+  {
+    /* OFX unique transaction ID */
+    const char *fitid = AB_Transaction_GetFiId(h_trans);
+    if (fitid && (strlen (fitid) > 0))
+      gnc_import_set_split_online_id(split, fitid);
+  }
+
   {
     /* Amount into the split */
     const AB_VALUE *h_value = AB_Transaction_GetValue (h_trans);
