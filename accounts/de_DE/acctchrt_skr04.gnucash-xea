@@ -15562,7 +15562,7 @@
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erträge aus der Auflösung von Sonderposten mit Rücklageanteil nach  52 Abs. 16 EStG</act:name>
+    <act:name>Erträge aus der Auflösung von Sonderposten mit Rücklageanteil nach 52 Abs. 16 EStG</act:name>
     <act:id type="new">4d0b40d8fbaf84d08430ab32ed2e35e5</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -17219,7 +17219,7 @@
     <act:parent type="new">59bf2e65d45938c741124bcadeaec5d7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Waren aus einem Umsatzsteuerlager,  13a UStG 7% Vorsteuer und 7% Umsatzsteuer</act:name>
+    <act:name>Waren aus einem Umsatzsteuerlager, 13a UStG 7% Vorsteuer und 7% Umsatzsteuer</act:name>
     <act:id type="new">eb471a7842288bc20eaf44798a207f1f</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -17241,7 +17241,7 @@
     <act:parent type="new">59bf2e65d45938c741124bcadeaec5d7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Waren aus einem Umsatzsteuerlager,  13a UStG 16% Vorsteuer und 16% Umsatzsteuer</act:name>
+    <act:name>Waren aus einem Umsatzsteuerlager, 13a UStG 16% Vorsteuer und 16% Umsatzsteuer</act:name>
     <act:id type="new">ee4fbeca33ba890c7d9f0530aac81998</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -17951,7 +17951,7 @@
     <act:parent type="new">62133a447283b07ff0502169b12fbd1c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>02. Umstäze, für die als Leistungsempfänger die Steuer nach  13b Abs. 2 UStG geschuldet wird</act:name>
+    <act:name>02. Umstäze, für die als Leistungsempfänger die Steuer nach 13b Abs. 2 UStG geschuldet wird</act:name>
     <act:id type="new">6a2cb0c78ebe7460483db55b133914ea</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -18332,7 +18332,7 @@
     <act:parent type="new">d7762789c469b9ba0c995ecac00fa353</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Vergütung an angestellte Mitunternehmer  15 EStG</act:name>
+    <act:name>Vergütung an angestellte Mitunternehmer 15 EStG</act:name>
     <act:id type="new">830b44d416a1a3595da7bbd123cdc3cb</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -18649,7 +18649,7 @@
     <act:parent type="new">2906a27180c72875652cef912c773d4e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Aufwendungen für Altersversorgung für Mitunternehmer  15 EStG</act:name>
+    <act:name>Aufwendungen für Altersversorgung für Mitunternehmer 15 EStG</act:name>
     <act:id type="new">e781f4fa8558d4a1c924f9f54be61a92</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -18693,7 +18693,7 @@
     <act:parent type="new">a943872d0d0623064a3c76ccff77965e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Gesetzliche soziale Aufwendungen für Mitunternehmer  15 EStG</act:name>
+    <act:name>Gesetzliche soziale Aufwendungen für Mitunternehmer 15 EStG</act:name>
     <act:id type="new">ccacd70a1bf655433cff4825c8c6ce85</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -19142,7 +19142,7 @@
     <act:parent type="new">135aeefb7cce9adb6f4b62a86a81385a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderabschreibungen nach  7g Abs. 1 und 2 EStG (ohne Kfz)</act:name>
+    <act:name>Sonderabschreibungen nach 7g Abs. 1 und 2 EStG (ohne Kfz)</act:name>
     <act:id type="new">afffbf8ca31e8d9c5a0f876d5201b0b7</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -19164,7 +19164,7 @@
     <act:parent type="new">135aeefb7cce9adb6f4b62a86a81385a</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonderabschreibungen nach  7g Abs. 1 und 2 EStG (fr Kfz)</act:name>
+    <act:name>Sonderabschreibungen nach 7g Abs. 1 und 2 EStG (fr Kfz)</act:name>
     <act:id type="new">cc91573a656468e69f74547f7a15729a</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
