@@ -24242,7 +24242,7 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>7351</act:code>
-    <act:description>inländische Kap. Ges.</act:description>
+    <act:description>inländische Kap.Ges.</act:description>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
@@ -24734,7 +24734,7 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>7350</act:code>
-    <act:description>inländische Kap. Ges.</act:description>
+    <act:description>inländische Kap.Ges.</act:description>
     <act:slots>
       <slot>
 	<slot:key>placeholder</slot:key>
