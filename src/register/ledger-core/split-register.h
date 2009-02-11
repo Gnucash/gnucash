@@ -30,17 +30,14 @@
  *  @ref RegisterCore.
  *
  *  @details The split register is a spreadsheet-like area that looks like
- *  a checkbook register. It is a GnuCash-specific implementation built
- *  atop the @ref RegisterCore.
+ *  a checkbook register. It displays transactions and allows the user to
+ *  edit them in-place. The register does @b not contain any of the other
+ *  window decorations that one might want to have for a free standing window
+ *  (e.g. menubars, *  toolbars, etc.)
  *
- *  It displays transactions and allows the user to edit them in-place.
- *  The register does @b not contain any of the other window decorations
- *  that one might want to have for a free standing window (e.g. menubars,
- *  toolbars, etc.)
- *
- *  The layout of the register is configurable.  There's a broad
- *  variety of cell types to choose from:  date cells, which know
- *  how to parse dates; price cells, which know how to parse prices,
+ *  The layout of the register is configurable. There's a broad
+ *  variety of cell types to choose from: date cells that know
+ *  how to parse dates, price cells that know how to parse prices,
  *  etc.  These cells can be laid out in any column; even a multi-row
  *  layout is supported.  The name "split register" is derived from
  *  the fact that this register can display multiple rows of
@@ -50,7 +47,7 @@
  *  the register.
  *
  *  All user input to the register is handled by the 'cursor', which
- *  is mapped onto one of the displayed rows in the register.
+ *  is mapped onto one of the displayed rows.
  *
  *  @par Design Notes.
  *  @{
