@@ -1458,7 +1458,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
      return TRUE;
    }
 
-   DEBUG ("save split is %p \n", split);
+   DEBUG("save split=%p", split);
    DEBUG("blank_split=%p, blank_trans=%p, pending_trans=%p, trans=%p",
          blank_split, blank_trans, pending_trans, trans);
 
@@ -1557,6 +1557,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
      gnc_table_set_virt_cell_data (reg->table,
                                    reg->table->current_cursor_loc.vcell_loc,
                                    xaccSplitGetGUID (split));
+     DEBUG("assigned cell to new split=%p", split);
 
      trans_split = gnc_split_register_get_current_trans_split (reg, NULL);
      if ((info->cursor_hint_trans == trans) &&
@@ -1568,7 +1569,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
      }
    }
 
-   DEBUG ("updating trans addr=%p\n", trans);
+   DEBUG("updating trans=%p", trans);
 
    {
      SRSaveData *sd;
@@ -1585,7 +1586,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    memo = memo ? memo : "(null)";
    desc = xaccTransGetDescription (trans);
    desc = desc ? desc : "(null)";
-   PINFO ("finished saving split %s of trans %s \n", memo, desc);
+   PINFO ("finished saving split \"%s\" of trans \"%s\"", memo, desc);
 
    /* If the modified split is the "blank split", then it is now an
     * official part of the account. Set the blank split to NULL, so we
