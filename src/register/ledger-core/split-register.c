@@ -1384,7 +1384,6 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    const char *memo;
    const char *desc;
    Split *split;
-   gboolean blank_edited = FALSE;
 
    ENTER("reg=%p, do_commit=%s", reg, do_commit ? "TRUE" : "FALSE");
 
@@ -1428,31 +1427,32 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
        return FALSE;
      }
 
-     gnc_suspend_gui_refresh ();
+     if (trans == pending_trans ||
+         (trans == blank_trans && info->blank_split_edited)) {
+       /* We are going to commit. */
 
-     if (trans == blank_trans) {
-         blank_edited = info->blank_split_edited;
-         info->last_date_entered = xaccTransGetDate (trans);
-         /* Q: Why should we nullify the blank split GUID if the blank split
-          *    wasn't edited? We still might not be committing! */
-         info->blank_split_guid = *guid_null ();
-         info->blank_split_edited = FALSE;
-     }
+       gnc_suspend_gui_refresh ();
 
-     /* We have to clear the pending guid *before* committing the
-        trans, because the event handler will find it otherwise. */
-     if (trans == pending_trans) { 
-         info->pending_trans_guid = *guid_null ();
-     }
-     
-     if (trans == pending_trans || blank_edited) {
-         PINFO("committing trans (%p)", trans);
-         xaccTransCommitEdit(trans);
+       if (trans == blank_trans) {
+           /* We have to clear the blank split before the
+            * refresh or a new one won't be created. */
+           info->last_date_entered = xaccTransGetDate (trans);
+           info->blank_split_guid = *guid_null ();
+           info->blank_split_edited = FALSE;
+       }
+
+       /* We have to clear the pending guid *before* committing the
+        * trans, because the event handler will find it otherwise. */
+       if (trans == pending_trans)
+           info->pending_trans_guid = *guid_null ();
+
+       PINFO("committing trans (%p)", trans);
+       xaccTransCommitEdit(trans);
+
+       gnc_resume_gui_refresh ();
      }
      else
        DEBUG("leaving trans (%p) open", trans);
-
-     gnc_resume_gui_refresh ();
 
      LEAVE("unchanged cursor");
      return TRUE;
