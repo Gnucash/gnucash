@@ -133,14 +133,20 @@ GType gnc_transaction_get_type(void);
  the xaccTransDestroy() method should be called. */ 
 Transaction * xaccMallocTransaction (QofBook *book); 
 
-/**
- The xaccTransDestroy() method will remove all 
- of the splits from each of their accounts, free the memory
- associated with them.  This routine must be followed by either
- an xaccTransCommitEdit(), in which case the transaction 
- memory will be freed, or by xaccTransRollbackEdit(), in which 
- case nothing at all is freed, and everything is put back into 
- original order. */
+/** Destroys a transaction.
+ *  Each split in transaction @a trans is removed from its
+ *  account and destroyed as well.
+ *
+ *  If the transaction has not already been opened for editing with
+ *  ::xaccTransBeginEdit() then the changes are committed immediately.
+ *  Otherwise, the caller must follow up with either
+ *  ::xaccTransCommitEdit(), in which case the transaction and
+ *  split memory will be freed, or xaccTransRollbackEdit(), in which 
+ *  case nothing at all is freed, and everything is put back into 
+ *  original order.
+ *
+ *  @param trans the transaction to destroy
+ */
 void          xaccTransDestroy (Transaction *trans);
 
 /**
