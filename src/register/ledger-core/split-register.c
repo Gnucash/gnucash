@@ -2519,6 +2519,8 @@ gnc_split_register_cleanup (SplitRegister *reg)
    /* be sure to destroy the "blank split" */
    if (blank_split != NULL)
    {
+      gboolean was_open;
+
       /* split destroy will automatically remove it
        * from its parent account */
       blank_trans = xaccSplitGetParent (blank_split);
@@ -2533,7 +2535,10 @@ gnc_split_register_cleanup (SplitRegister *reg)
         pending_trans = NULL;
       }
 
+      was_open = xaccTransIsOpen (blank_trans);
       xaccTransDestroy (blank_trans);
+      if (was_open)
+        xaccTransCommitEdit (blank_trans);
 
       info->blank_split_guid = *guid_null ();
       blank_split = NULL;
