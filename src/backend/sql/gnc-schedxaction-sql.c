@@ -42,6 +42,7 @@
 #include "Recurrence.h"
 
 #include "gnc-recurrence-sql.h"
+#include "gnc-transaction-sql.h"
 
 #define SCHEDXACTION_TABLE "schedxactions"
 #define TABLE_VERSION 1
@@ -204,6 +205,7 @@ load_single_sx( GncSqlBackend* be, GncSqlRow* row )
 	gnc_sql_recurrence_load_list( be, guid, &schedule );
 	gnc_sx_set_schedule( pSx, schedule );
 	gnc_sx_commit_edit( pSx );
+	gnc_sql_transaction_load_tx_for_account( be, pSx->template_acct );
 
     return pSx;
 }
