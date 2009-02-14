@@ -76,7 +76,7 @@ These steps need to be performed:
 
 5. The content of $GNUCASH_DIR (as well as all the other binary
    packages) should then be copied to a windows machine. The paths
-   in $GNUCASH_DIR/bin/gnucash and/or $GNUCASH_DIR/bin/gnucash.bat
+   in $GNUCASH_DIR/bin/gnucash and/or $GNUCASH_DIR/bin/gnucash.cmd
    need to be adjusted for the installation location on the
    windows machine.
 
