@@ -972,8 +972,6 @@ function inst_gnucash() {
         if [ "$BUILD_FROM_TARBALL" != "yes" ]; then
             ./autogen.sh
         fi
-        # Windows DLLs don't need relinking
-        grep -v "need_relink=yes" ltmain.sh > ltmain.sh.new ; mv ltmain.sh.new ltmain.sh
     qpopd
 
     qpushd $BUILD_DIR
@@ -988,9 +986,6 @@ function inst_gnucash() {
             CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} -D_WIN32" \
             LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS}" \
             PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
-
-        # Windows DLLs don't need relinking
-        grep -v "need_relink=yes" libtool   > libtool.new   ; mv libtool.new   libtool
 
         make
 
@@ -1017,10 +1012,6 @@ function inst_gnucash() {
         for A in *.la; do
             sed '/dependency_libs/d' $A > tmp ; mv tmp $A
         done
-
-        # gettext 0.17 installs translations to \share\locale, but not all
-        # gnome packages have been recompiled against it
-        cp -a locale ../share && rm -rf locale
     qpopd
 
     qpushd $_INSTALL_UDIR/etc/gconf/schemas
@@ -1035,7 +1026,7 @@ function inst_gnucash() {
     # Create a startup script that works without the msys shell
     qpushd $_INSTALL_UDIR/bin
         echo "setlocal" > gnucash.bat
-        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;%PATH%" >> gnucash.bat
+        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;%PATH%" >> gnucash.bat
         echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
         echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
         echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
