@@ -25,7 +25,7 @@ AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 
 # Initialize automake -- make sure we have at least version 1.9
-AM_INIT_AUTOMAKE(1.9)
+AM_INIT_AUTOMAKE([1.9 dist-bzip2])
 
 # Parse out the version number
 GNUCASH_VERSION_STRING=AC_PACKAGE_VERSION
