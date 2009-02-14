@@ -109,6 +109,12 @@ Source: "@prefix@\..\dist\share\@PACKAGE@\doc\ChangeLog"; DestDir: "{app}\doc\@P
 ; Define the registry keys Setup should create (HKLM = HKEY_LOCAL_MACHINE)
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [Registry]
+Root: HKCR; Subkey: ".gnucash"; ValueType: string; ValueName: ""; ValueData: "GnuCash.Financial.Data"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: ".gnucash"; ValueType: string; ValueName: "Content Type"; ValueData: "application/x-gnucash"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "GnuCash.Financial.Data"; ValueType: string; ValueName: ""; ValueData: "GnuCash Financial Data"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "GnuCash.Financial.Data\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\share\gnucash\pixmaps\gnucash-icon.ico,0" 
+Root: HKCR; Subkey: "GnuCash.Financial.Data\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\gnucash.cmd"" ""%1""" 
+
 Root: HKLM; Subkey: "Software\GnuCash"; ValueType: none; Flags: uninsdeletekeyifempty
 Root: HKLM; Subkey: "Software\GnuCash\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
 Root: HKLM; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"; Flags: uninsdeletevalue
