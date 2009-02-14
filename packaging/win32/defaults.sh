@@ -206,8 +206,8 @@ set_default LIBGNOMEUI_URL "$GNOME_WIN32_URL/libgnomeui/2.22/libgnomeui-2.22.1.z
 set_default LIBGNOMEUI_DEV_URL "$GNOME_WIN32_URL/libgnomeui/2.22/libgnomeui-dev-2.22.1.zip"
 set_default LIBGLADE_URL "$GNOME_WIN32_URL/libglade/2.6/libglade_2.6.3-1_win32.zip"
 set_default LIBGLADE_DEV_URL "$GNOME_WIN32_URL/libglade/2.6/libglade-dev_2.6.3-1_win32.zip"
-set_default GTKHTML_URL "$GNOME_WIN32_URL/gtkhtml/3.18/gtkhtml-3.18.2.zip"
-set_default GTKHTML_DEV_URL "$GNOME_WIN32_URL/gtkhtml/3.18/gtkhtml-dev-3.18.2.zip"
+set_default GTKHTML_URL "$GNOME_WIN32_URL/gtkhtml/3.24/gtkhtml_3.24.2-1_win32.zip"
+set_default GTKHTML_DEV_URL "$GNOME_WIN32_URL/gtkhtml/3.24/gtkhtml-dev_3.24.2-1_win32.zip"
 set_default GTK_DOC_URL "$GNOME_MIRROR/sources/gtk-doc/1.11/gtk-doc-1.11.tar.bz2"
 set_default GNOME_DIR $GLOBAL_DIR\\gnome
 
