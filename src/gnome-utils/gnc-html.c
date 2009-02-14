@@ -1231,6 +1231,7 @@ gnc_html_export(gnc_html * html, const char *filepath)
 }
 
 #ifdef GTKHTML_USES_GTKPRINT
+#ifndef HAVE_GTKHTML_3_16
 static void
 draw_page_cb(GtkPrintOperation *operation, GtkPrintContext *context,
              gint page_nr, gpointer user_data)
@@ -1239,6 +1240,7 @@ draw_page_cb(GtkPrintOperation *operation, GtkPrintContext *context,
 
     gtk_html_print_page((GtkHTML*) html->html, context);
 }
+#endif
 
 void
 gnc_html_print(gnc_html *html)
@@ -1255,11 +1257,18 @@ gnc_html_print(gnc_html *html)
 
     gtk_print_operation_set_use_full_page(print, FALSE);
     gtk_print_operation_set_unit(print, GTK_UNIT_POINTS);
+
+#ifdef HAVE_GTKHTML_3_16
+    res = gtk_html_print_operation_run((GtkHTML*) html->html, print,
+                                       GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+                                       GTK_WINDOW(html->window), NULL, NULL,
+                                       NULL, NULL, NULL, NULL);
+#else
     gtk_print_operation_set_n_pages(print, 1);
     g_signal_connect(print, "draw_page", G_CALLBACK(draw_page_cb), html);
-
     res = gtk_print_operation_run(print, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
                                   GTK_WINDOW(html->window), NULL);
+#endif
 
     if (res == GTK_PRINT_OPERATION_RESULT_APPLY) {
         G_LOCK(print_settings);
