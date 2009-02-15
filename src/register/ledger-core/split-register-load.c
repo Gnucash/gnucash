@@ -240,7 +240,7 @@ void
 gnc_split_register_load (SplitRegister *reg, GList * slist,
                          Account *default_account)
 {
-  SRInfo *info = gnc_split_register_get_info (reg);
+  SRInfo *info;
   Transaction *pending_trans;
   CursorBuffer *cursor_buffer;
   GHashTable *trans_table = NULL;
