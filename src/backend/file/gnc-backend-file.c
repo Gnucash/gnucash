@@ -907,11 +907,13 @@ file_commit_edit (QofBackend *be, QofInstance *inst)
    way. */
 
 static void
-gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
+gnc_file_be_load_from_file (QofBackend *bend, QofBook *book, QofBackendLoadType loadType)
 {
     QofBackendError error;
     gboolean rc;
     FileBackend *be = (FileBackend *) bend;
+
+	if (loadType != LOAD_TYPE_INITIAL_LOAD) return;
 
     error = ERR_BACKEND_NO_ERR;
     be->primary_book = book;

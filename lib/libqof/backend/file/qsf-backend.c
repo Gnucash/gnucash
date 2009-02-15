@@ -449,7 +449,7 @@ returns NULL on error, otherwise a pointer to the QofBook. Use
 	QofBook. 
 */
 static void
-qsf_file_type(QofBackend *be, QofBook *book)
+qsf_file_type(QofBackend *be, QofBook *book, QofBackendLoadType loadType)
 {
 	QSFBackend *qsf_be;
 	qsf_param *params;

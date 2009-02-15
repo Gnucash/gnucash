@@ -90,7 +90,7 @@ void gnc_sql_init( GncSqlBackend* be );
  * @param be SQL backend
  * @param book Book to be loaded
  */
-void gnc_sql_load( GncSqlBackend* be, QofBook *book );
+void gnc_sql_load( GncSqlBackend* be, QofBook *book, QofBackendLoadType loadType );
 
 /**
  * Save the contents of a book to an SQL database.

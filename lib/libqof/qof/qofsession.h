@@ -441,5 +441,9 @@ gboolean qof_session_export (QofSession *tmp_session,
  */
 GList* qof_backend_get_registered_access_method_list(void);
 
+/** Ensure all of the data is loaded from the session.
+ */
+void qof_session_ensure_all_data_loaded(QofSession* session);
+
 #endif /* QOF_SESSION_H */
 /** @} */

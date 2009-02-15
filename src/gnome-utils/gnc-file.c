@@ -1072,6 +1072,9 @@ gnc_file_do_save_as (const char* filename)
     return;
   }
 
+  /* Make sure all of the data from the old file is loaded */
+  qof_session_ensure_all_data_loaded(session);
+
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
   xaccLogSetBaseName(newfile); //FIXME: This is premature.

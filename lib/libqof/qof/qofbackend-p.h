@@ -283,6 +283,11 @@ struct QofBackendProvider_s
   void (*provider_free) (QofBackendProvider *);
 };
 
+typedef enum {
+  LOAD_TYPE_INITIAL_LOAD,
+  LOAD_TYPE_LOAD_ALL
+} QofBackendLoadType;
+
 struct QofBackend_s
 {
   void (*session_begin) (QofBackend *be,
@@ -293,7 +298,7 @@ struct QofBackend_s
   void (*session_end) (QofBackend *);
   void (*destroy_backend) (QofBackend *);
 
-  void (*load) (QofBackend *, QofBook *);
+  void (*load) (QofBackend *, QofBook *, QofBackendLoadType);
 
   void (*begin) (QofBackend *, QofInstance *);
   void (*commit) (QofBackend *, QofInstance *);

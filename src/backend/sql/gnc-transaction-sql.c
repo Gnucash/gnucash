@@ -327,10 +327,13 @@ load_single_tx( GncSqlBackend* be, GncSqlRow* row )
     guid = gnc_sql_load_guid( be, row );
     tx_guid = *guid;
 
+	// Don't overwrite the transaction if it's already been loaded (and possibly modified).
     pTx = xaccTransLookup( &tx_guid, be->primary_book );
-    if( pTx == NULL ) {
-        pTx = xaccMallocTransaction( be->primary_book );
+    if( pTx != NULL ) {
+		return NULL;
     }
+
+    pTx = xaccMallocTransaction( be->primary_book );
     xaccTransBeginEdit( pTx );
     gnc_sql_load_object( be, row, GNC_ID_TRANS, pTx, tx_col_table );
 
@@ -389,22 +392,6 @@ save_account_balances( Account* acc, gpointer pData )
 	newbal->start_reconciled_bal = *pstart_r;
 	newbal->end_reconciled_bal = *pend_r;
 	*pBal_list = g_slist_append( *pBal_list, newbal );
-
-#if 0
-{
-	if( g_acct == NULL ) {
-		const gchar* name = xaccAccountGetName( acc );
-		if( strcmp( name, "Dividend Income" ) == 0 ) {
-			g_acct = acc;
-		}
-	}
-	if( g_acct != NULL && g_acct == acc ) {
-		printf( "save_account_balance: baln = %s: %s\n",
-				gnc_numeric_to_string( newbal->start_bal ),
-				gnc_numeric_to_string( newbal->end_bal ) );
-	}
-}
-#endif
 }
 
 /**
@@ -478,36 +465,11 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
 					"end-reconciled-balance", &pnew_end_r_bal,
 					NULL );
 
-#if 0
-{
-	if( g_acct != NULL && balns->acc == g_acct ) {
-		printf( "Before: %s after %s\n",
-				gnc_numeric_to_string( balns->end_bal ),
-				gnc_numeric_to_string( *pnew_end_bal ) );
-	}
-}
-#endif
-
 			if( !gnc_numeric_eq( *pnew_end_bal, balns->end_bal ) ) {
 				adj = gnc_numeric_sub( balns->end_bal, *pnew_end_bal,
 									GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD );
-#if 0
-{
-	if( g_acct != NULL && balns->acc == g_acct ) {
-		printf( "adj: %s start (before) = %s", gnc_numeric_to_string( adj ), gnc_numeric_to_string( balns->start_bal ) );
-	}
-}
-#endif
-
 				balns->start_bal = gnc_numeric_add( balns->start_bal, adj,
 									GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD );
-#if 0
-{
-	if( g_acct != NULL && balns->acc == g_acct ) {
-		printf( " start (after) = %s\n", gnc_numeric_to_string( balns->start_bal ) );
-	}
-}
-#endif
 				g_object_set( balns->acc, "start-balance", &balns->start_bal, NULL );
 			}
 			if( !gnc_numeric_eq( *pnew_end_c_bal, balns->end_cleared_bal ) ) {
@@ -775,14 +737,6 @@ void gnc_sql_transaction_load_tx_for_account( GncSqlBackend* be, Account* accoun
 	gnc_sql_statement_dispose( stmt );
 }
 
-static void
-load_all_tx_helper( Account* a, gpointer data )
-{
-    GncSqlBackend* be = (GncSqlBackend*)data;
-
-	gnc_sql_transaction_load_tx_for_account( be, a );
-}
-
 /**
  * Loads all transactions.  This might be used during a save-as operation to ensure that
  * all data is in memory and ready to be saved.
@@ -791,12 +745,15 @@ load_all_tx_helper( Account* a, gpointer data )
  */
 void gnc_sql_transaction_load_all_tx( GncSqlBackend* be )
 {
-	Account* root;
+	gchar* query_sql;
+    GncSqlStatement* stmt;
 
 	g_return_if_fail( be != NULL );
 
-	root = gnc_book_get_root_account( be->primary_book );
-	gnc_account_foreach_descendant( root, load_all_tx_helper, be );
+	query_sql = g_strdup_printf( "SELECT * FROM %s", TRANSACTION_TABLE );
+	stmt = gnc_sql_create_statement_from_sql( be, query_sql );
+    query_transactions( be, stmt );
+	gnc_sql_statement_dispose( stmt );
 }
 
 typedef struct {

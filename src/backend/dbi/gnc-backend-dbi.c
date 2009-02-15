@@ -333,7 +333,7 @@ gnc_dbi_destroy_backend( QofBackend *be )
 /* ================================================================= */
 
 static void
-gnc_dbi_load( QofBackend* qbe, QofBook *book )
+gnc_dbi_load( QofBackend* qbe, QofBook *book, QofBackendLoadType loadType )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
     GncSqlObjectBackend* pData;
@@ -345,16 +345,18 @@ gnc_dbi_load( QofBackend* qbe, QofBook *book )
 
     ENTER( "be=%p, book=%p", be, book );
 
-    g_assert( be->primary_book == NULL );
-    be->primary_book = book;
+	if( loadType == LOAD_TYPE_INITIAL_LOAD ) {
+    	g_assert( be->primary_book == NULL );
+    	be->primary_book = book;
 
-	// Set up table version information
-	gnc_sql_init_version_info( &be->sql_be );
+		// Set up table version information
+		gnc_sql_init_version_info( &be->sql_be );
 
-    // Call all object backends to create any required tables
-    qof_object_foreach_backend( GNC_SQL_BACKEND, create_tables_cb, be );
+    	// Call all object backends to create any required tables
+    	qof_object_foreach_backend( GNC_SQL_BACKEND, create_tables_cb, be );
+	}
 
-	gnc_sql_load( &be->sql_be, book );
+	gnc_sql_load( &be->sql_be, book, loadType );
 
     LEAVE( "" );
 }
@@ -674,13 +676,22 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
 	GncDbiSqlRow* dbi_row = (GncDbiSqlRow*)row;
 	gushort type;
 	GValue* value;
+	gint64 raw_int64_value;
+	gint raw_int_value;
 
 	type = dbi_result_get_field_type( dbi_row->result, col_name );
 	value = g_new0( GValue, 1 );
 	switch( type ) {
 		case DBI_TYPE_INTEGER:
-			g_value_init( value, G_TYPE_INT );
-			g_value_set_int( value, dbi_result_get_int( dbi_row->result, col_name ) );
+			g_value_init( value, G_TYPE_INT64 );
+
+			// FIXME: Bug in LibDBI: 64 bit int values returned incorrectly
+			raw_int64_value = dbi_result_get_longlong( dbi_row->result, col_name );
+			raw_int_value = dbi_result_get_int( dbi_row->result, col_name );
+			if( raw_int_value < 0 && raw_int64_value > 0 ) {
+				raw_int64_value = raw_int_value;
+			}
+			g_value_set_int64( value, raw_int64_value );
 			break;
 		case DBI_TYPE_DECIMAL:
 			g_value_init( value, G_TYPE_DOUBLE );

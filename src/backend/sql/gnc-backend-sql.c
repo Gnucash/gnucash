@@ -151,7 +151,7 @@ initial_load_cb( const gchar* type, gpointer data_p, gpointer be_p )
 }
 
 void
-gnc_sql_load( GncSqlBackend* be, QofBook *book )
+gnc_sql_load( GncSqlBackend* be, QofBook *book, QofBackendLoadType loadType )
 {
     GncSqlObjectBackend* pData;
 	int i;
@@ -163,26 +163,30 @@ gnc_sql_load( GncSqlBackend* be, QofBook *book )
 
     ENTER( "be=%p, book=%p", be, book );
 
-    g_assert( be->primary_book == NULL );
-    be->primary_book = book;
-
-    /* Load any initial stuff */
     be->loading = TRUE;
     
-    /* Some of this needs to happen in a certain order */
-	for( i = 0; fixed_load_order[i] != NULL; i++ ) {
-    	pData = qof_object_lookup_backend( fixed_load_order[i], GNC_SQL_BACKEND );
-    	if( pData->initial_load != NULL ) {
-        	(pData->initial_load)( be );
-		}
-    }
+	if( loadType == LOAD_TYPE_INITIAL_LOAD ) {
+    	g_assert( be->primary_book == NULL );
+    	be->primary_book = book;
 
-	root = gnc_book_get_root_account( book );
-	gnc_account_foreach_descendant( root, (AccountCb)xaccAccountBeginEdit, NULL );
+    	/* Load any initial stuff. Some of this needs to happen in a certain order */
+		for( i = 0; fixed_load_order[i] != NULL; i++ ) {
+    		pData = qof_object_lookup_backend( fixed_load_order[i], GNC_SQL_BACKEND );
+    		if( pData->initial_load != NULL ) {
+        		(pData->initial_load)( be );
+			}
+    	}
 
-    qof_object_foreach_backend( GNC_SQL_BACKEND, initial_load_cb, be );
+		root = gnc_book_get_root_account( book );
+		gnc_account_foreach_descendant( root, (AccountCb)xaccAccountBeginEdit, NULL );
 
-	gnc_account_foreach_descendant( root, (AccountCb)xaccAccountCommitEdit, NULL );
+    	qof_object_foreach_backend( GNC_SQL_BACKEND, initial_load_cb, be );
+
+		gnc_account_foreach_descendant( root, (AccountCb)xaccAccountCommitEdit, NULL );
+	} else if( loadType == LOAD_TYPE_LOAD_ALL ) {
+		// Load all transactions
+		gnc_sql_transaction_load_all_tx( be );
+	}
 
     be->loading = FALSE;
 
@@ -1136,7 +1140,7 @@ load_boolean( const GncSqlBackend* be, GncSqlRow* row,
     if( val == NULL ) {
         int_value = 0;
     } else {
-        int_value = g_value_get_int( val );
+        int_value = g_value_get_int64( val );
     }
     if( table_row->gobj_param_name != NULL ) {
 		g_object_set( pObject, table_row->gobj_param_name, int_value, NULL );
@@ -1888,28 +1892,28 @@ gnc_sql_load_tx_guid( const GncSqlBackend* be, GncSqlRow* row )
 void
 gnc_sql_load_object( const GncSqlBackend* be, GncSqlRow* row,
                     QofIdTypeConst obj_name, gpointer pObject,
-                    const GncSqlColumnTableEntry* table_row )
+                    const GncSqlColumnTableEntry* table )
 {
-    int col;
     QofSetterFunc setter;
     GncSqlColumnTypeHandler* pHandler;
+	const GncSqlColumnTableEntry* table_row;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( row != NULL );
 	g_return_if_fail( pObject != NULL );
-	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( table != NULL );
 
-    for( col = 0; table_row[col].col_name != NULL; col++ ) {
-		if( (table_row[col].flags & COL_AUTOINC) != 0 ) {
+    for( table_row = table; table_row->col_name != NULL; table_row++ ) {
+		if( (table_row->flags & COL_AUTOINC) != 0 ) {
 			setter = set_autoinc_id;
-        } else if( table_row[col].qof_param_name != NULL ) {
+        } else if( table_row->qof_param_name != NULL ) {
             setter = qof_class_get_parameter_setter( obj_name,
-                                                table_row[col].qof_param_name );
+                                                table_row->qof_param_name );
         } else {
-            setter = table_row[col].setter;
+            setter = table_row->setter;
         }
-        pHandler = get_handler( &table_row[col] );
-        pHandler->load_fn( be, row, setter, pObject, &table_row[col] );
+        pHandler = get_handler( table_row );
+        pHandler->load_fn( be, row, setter, pObject, table_row );
     }
 }
 
@@ -2493,7 +2497,7 @@ gnc_sql_init_version_info( GncSqlBackend* be )
 				version = gnc_sql_row_get_value_at_col_name( row, VERSION_COL_NAME );
 				g_hash_table_insert( be->versions,
 									g_strdup( g_value_get_string( name ) ),
-									GINT_TO_POINTER(g_value_get_int( version )) );
+									GINT_TO_POINTER((gint)g_value_get_int64( version )) );
 				row = gnc_sql_result_get_next_row( result );
 			}
 			gnc_sql_result_dispose( result );

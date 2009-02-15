@@ -317,6 +317,20 @@ qof_session_get_url (const QofSession *session)
    return session->book_id;
 }
 
+void
+qof_session_ensure_all_data_loaded (QofSession *session)
+{
+    QofBackend* backend;
+
+	if (session == NULL) return;
+    backend = qof_session_get_backend(session);
+	if (backend == NULL) return;
+
+	if (backend->load == NULL) return;
+	backend->load(backend, qof_session_get_book(session), LOAD_TYPE_LOAD_ALL);
+	qof_session_push_error (session, qof_backend_get_error(backend), NULL);
+}
+
 /* =============================================================== */
 
 typedef struct qof_instance_copy_data {
@@ -1150,7 +1164,7 @@ qof_session_load (QofSession *session,
 		
 		if (be->load) 
 		{
-			be->load (be, newbook);
+			be->load (be, newbook, LOAD_TYPE_INITIAL_LOAD);
 			qof_session_push_error (session, qof_backend_get_error(be), NULL);
 		}
 	}
