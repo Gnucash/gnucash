@@ -706,7 +706,7 @@ gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst )
 	g_return_val_if_fail( inst != NULL, FALSE );
 	g_return_val_if_fail( GNC_IS_TRANS(inst), FALSE );
 
-	return save_transaction( be, GNC_TRANS(inst), TRUE );
+	return save_transaction( be, GNC_TRANS(inst), /* do_save_splits */TRUE );
 }
 
 static gboolean
@@ -716,7 +716,7 @@ commit_transaction( GncSqlBackend* be, QofInstance* inst )
 	g_return_val_if_fail( inst != NULL, FALSE );
 	g_return_val_if_fail( GNC_IS_TRANS(inst), FALSE );
 
-	return save_transaction( be, GNC_TRANS(inst), FALSE );
+	return save_transaction( be, GNC_TRANS(inst), /* do_save_splits */FALSE );
 }
 
 /* ================================================================= */
@@ -746,6 +746,57 @@ get_guid_from_query( QofQuery* pQuery )
     } else {
         return NULL;
     }
+}
+
+/**
+ * Loads all transactions for an account.
+ *
+ * @param be SQL backend
+ * @param account Account
+ */
+void gnc_sql_transaction_load_tx_for_account( GncSqlBackend* be, Account* account )
+{
+	const GUID* guid;
+    gchar guid_buf[GUID_ENCODING_LENGTH+1];
+	gchar* subquery_sql;
+	gchar* query_sql;
+    GncSqlStatement* stmt;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( account != NULL );
+
+	guid = qof_instance_get_guid( QOF_INSTANCE(account) );
+    guid_to_string_buff( guid, guid_buf );
+	subquery_sql = g_strdup_printf( "SELECT DISTINCT tx_guid FROM %s WHERE account_guid='%s'", SPLIT_TABLE, guid_buf );
+	query_sql = g_strdup_printf( "SELECT * FROM %s WHERE guid IN (%s)", TRANSACTION_TABLE, subquery_sql );
+	g_free( subquery_sql );
+	stmt = gnc_sql_create_statement_from_sql( be, query_sql );
+    query_transactions( be, stmt );
+	gnc_sql_statement_dispose( stmt );
+}
+
+static void
+load_all_tx_helper( Account* a, gpointer data )
+{
+    GncSqlBackend* be = (GncSqlBackend*)data;
+
+	gnc_sql_transaction_load_tx_for_account( be, a );
+}
+
+/**
+ * Loads all transactions.  This might be used during a save-as operation to ensure that
+ * all data is in memory and ready to be saved.
+ *
+ * @param be SQL backend
+ */
+void gnc_sql_transaction_load_all_tx( GncSqlBackend* be )
+{
+	Account* root;
+
+	g_return_if_fail( be != NULL );
+
+	root = gnc_book_get_root_account( be->primary_book );
+	gnc_account_foreach_descendant( root, load_all_tx_helper, be );
 }
 
 typedef struct {
