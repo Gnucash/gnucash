@@ -161,6 +161,9 @@ gnc_split_register_add_transaction (SplitRegister *reg,
 {
   GList *node;
 
+  g_return_if_fail(reg);
+  g_return_if_fail(vcell_loc);
+
   if (split == find_split)
     *new_split_row = vcell_loc->virt_row;
 
@@ -271,6 +274,12 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   int new_split_row = -1;
   time_t present;
 
+  g_return_if_fail(reg);
+  table = reg->table;
+  g_return_if_fail(table);
+  info = gnc_split_register_get_info (reg);
+  g_return_if_fail(info);
+
   ENTER("reg=%p, slist=%p, default_account=%p", reg, slist, default_account);
 
   blank_split = xaccSplitLookup (&info->blank_split_guid,
@@ -357,8 +366,6 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         blank_split, blank_trans, pending_trans);
 
   info->default_account = *xaccAccountGetGUID (default_account);
-
-  table = reg->table;
 
   // gnc_table_leave_update (table, table->current_cursor_loc);
 
