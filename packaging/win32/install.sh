@@ -1033,6 +1033,7 @@ function inst_gnucash() {
         echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.cmd
         echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.cmd
         echo "set LTDL_LIBRARY_PATH=${INSTALL_DIR}\\lib" >> gnucash.cmd
+        echo "set SCHEME_LIBRARY_PATH=" >> gnucash.cmd
         echo "start gnucash-bin %*" >> gnucash.cmd
     qpopd
 }
