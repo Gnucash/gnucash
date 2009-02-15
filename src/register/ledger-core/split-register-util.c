@@ -222,22 +222,41 @@ gnc_split_register_find_split (SplitRegister *reg,
 
       if (t == trans)
       {
+        /* A register entry for the correct transaction. */
         found_trans = TRUE;
-        
+
         if (cursor_class == CURSOR_CLASS_TRANS)
         {
-          found_trans_split = TRUE;
-          if (find_class == CURSOR_CLASS_TRANS)
+          /* This row is the transaction split for this transaction. */
+          if (s == trans_split)
+            /* It's the copy of the transaction that we want. */
+            found_trans_split = TRUE;
+          else
+            found_trans_split = FALSE;
+
+          if (find_class == CURSOR_CLASS_TRANS &&
+              (s == split || reg->style == REG_STYLE_JOURNAL))
           {
+            /* We're looking for a transaction split and this is the split we're looking for
+               or there is only one entry for this transaction in this register (since it's
+               a journal style register) so we must return the only transaction split there is. */
             if (vcell_loc != NULL)
               *vcell_loc = vc_loc;
             return TRUE;
           }
         }
       }
+      else
+      {
+        /* Not the correct transaction.  We shouldn't get here if this is true, but just
+           to be safe reset it. */
+        found_trans = FALSE;
+      }
 
       if (found_trans && (s == split) && s)
       {
+        /* We're on the right transaction, but perhaps not the copy of it we want, and
+           this is the correct split, return it if we don't find anything better. */
         if (vcell_loc != NULL)
           *vcell_loc = vc_loc;
 
@@ -246,6 +265,9 @@ gnc_split_register_find_split (SplitRegister *reg,
 
       if (found_trans_split && (s == split))
       {
+        /* We're on the right copy of the right transaction, and this is the split we
+           want, return it (it should be the right class since if we wanted a transaction
+           split we would have returned it above. */
         if (vcell_loc != NULL)
           *vcell_loc = vc_loc;
 
