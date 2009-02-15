@@ -285,19 +285,8 @@ add_template_transaction_local( sixtp_gdv2 *data,
     /* . transactions in those accounts. */
     for ( n = txd->accts; n; n = n->next ) {
         if ( gnc_account_get_parent( (Account*)n->data ) == NULL ) {
-            /* remove the gnc_book_init-created account of the same name */
-            acctRoot = gnc_book_get_template_root(book);
-            tmpAcct = gnc_account_lookup_by_name( acctRoot,
-                                    xaccAccountGetName( (Account*)n->data ) );
-            if ( tmpAcct != NULL ) {
-/* XXX hack alert FIXME .... Should this be 'Remove', or 'Destroy'?
- * If we just remove, then this seems to be a memory leak to me, since
- * it is never reparented.  Shouldn't it be a Destroy ???
- */
-                gnc_account_remove_child( acctRoot, tmpAcct );
-            }
-
-            gnc_account_append_child( acctRoot, (Account*)n->data );
+            /* replace the gnc_book_init-created root account */
+            gnc_book_set_template_root(book, (Account *)n->data);
         }
 
     }
