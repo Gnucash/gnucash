@@ -697,4 +697,9 @@ gpointer gnc_sql_compile_query( QofBackend* pBEnd, QofQuery* pQuery );
 void gnc_sql_free_query( QofBackend* pBEnd, gpointer pQuery );
 void gnc_sql_run_query( QofBackend* pBEnd, gpointer pQuery );
 
+typedef struct {
+	GncSqlBackend* be;
+	gboolean is_ok;
+} write_objects_t;
+
 #endif /* GNC_BACKEND_SQL_H_ */

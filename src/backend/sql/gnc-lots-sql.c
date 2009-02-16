@@ -49,11 +49,13 @@ static void set_lot_is_closed( gpointer pObject, gboolean value );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
+	/*# -fullinitblock */
     { "guid",         CT_GUID,    0, COL_NNUL|COL_PKEY, "guid" },
     { "account_guid", CT_GUID,    0, 0,                 NULL, NULL, get_lot_account,   set_lot_account },
     { "is_closed",    CT_BOOLEAN, 0, COL_NNUL,          NULL, NULL,
 		(QofAccessFunc)gnc_lot_is_closed, (QofSetterFunc)set_lot_is_closed },
     { NULL }
+	/*# +fullinitblock */
 };
 
 /* ================================================================= */
@@ -129,7 +131,6 @@ load_all_lots( GncSqlBackend* be )
     result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
-        int r;
 		GList* list = NULL;
         GncSqlRow* row = gnc_sql_result_get_first_row( result );
 		GNCLot* lot;
@@ -184,11 +185,6 @@ commit_lot( GncSqlBackend* be, QofInstance* inst )
 
     return gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_LOT, col_table );
 }
-
-typedef struct {
-	GncSqlBackend* be;
-	gboolean is_ok;
-} write_objects_t;
 
 static void
 do_save_lot( QofInstance* inst, gpointer data )

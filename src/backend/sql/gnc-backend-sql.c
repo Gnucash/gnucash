@@ -59,7 +59,9 @@
 #include "gnc-slots-sql.h"
 #include "gnc-transaction-sql.h"
 
+#if 0
 static const gchar* convert_search_obj( QofIdType objType );
+#endif
 static void gnc_sql_init_object_handlers( void );
 static void update_save_progress( GncSqlBackend* be );
 static void register_standard_col_type_handlers( void );
@@ -156,7 +158,6 @@ gnc_sql_load( GncSqlBackend* be, QofBook *book, QofBackendLoadType loadType )
     GncSqlObjectBackend* pData;
 	int i;
 	Account* root;
-	GError* error = NULL;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( book != NULL );
@@ -166,7 +167,7 @@ gnc_sql_load( GncSqlBackend* be, QofBook *book, QofBackendLoadType loadType )
     be->loading = TRUE;
     
 	if( loadType == LOAD_TYPE_INITIAL_LOAD ) {
-    	g_assert( be->primary_book == NULL );
+		/*# -ifempty */ g_assert( be->primary_book == NULL );
     	be->primary_book = book;
 
     	/* Load any initial stuff. Some of this needs to happen in a certain order */
@@ -198,6 +199,7 @@ gnc_sql_load( GncSqlBackend* be, QofBook *book, QofBackendLoadType loadType )
 
 /* ================================================================= */
 
+#if 0
 static gint
 compare_namespaces(gconstpointer a, gconstpointer b)
 {
@@ -244,6 +246,7 @@ write_commodities( GncSqlBackend* be, QofBook* book )
         }
     }
 }
+#endif
 
 static gboolean
 write_account_tree( GncSqlBackend* be, Account* root )
@@ -272,11 +275,6 @@ write_accounts( GncSqlBackend* be )
 
     return write_account_tree( be, gnc_book_get_root_account( be->primary_book ) );
 }
-
-typedef struct {
-	GncSqlBackend* be;
-	gboolean is_ok;
-} write_objects_t;
 
 static int
 write_tx( Transaction* tx, gpointer data )
@@ -369,10 +367,10 @@ static void
 update_save_progress( GncSqlBackend* be )
 {
 	if( be->be.percentage != NULL ) {
-		gint percent_done;
+		double percent_done;
 
 		be->operations_done++;
-		percent_done = be->operations_done * 100 / be->obj_total;
+		percent_done = be->operations_done * 100.0 / be->obj_total;
 		if( percent_done > 100 ) {
 			percent_done = 100;
 		}
@@ -383,9 +381,6 @@ update_save_progress( GncSqlBackend* be )
 void
 gnc_sql_sync_all( GncSqlBackend* be, QofBook *book )
 {
-    GError* error = NULL;
-    gint row;
-    gint numTables;
 	gboolean is_ok;
 
 	g_return_if_fail( be != NULL );
@@ -406,7 +401,6 @@ gnc_sql_sync_all( GncSqlBackend* be, QofBook *book )
 	be->obj_total += gnc_book_count_transactions( book );
 	be->operations_done = 0;
 
-	error = NULL;
 	gnc_sql_connection_begin_transaction( be->conn );
 
 	// FIXME: should write the set of commodities that are used 
@@ -480,7 +474,6 @@ void
 gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
 {
     sql_backend be_data;
-	GError* error;
 	gboolean is_dirty;
 	gboolean is_destroying;
 	gboolean is_infant;
@@ -517,7 +510,6 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
 		return;
 	}
 
-	error = NULL;
 	gnc_sql_connection_begin_transaction( be->conn );
 
     be_data.is_known = FALSE;
@@ -554,7 +546,7 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
 /* ---------------------------------------------------------------------- */
 
 /* Query processing */
-
+#if 0
 static const gchar*
 convert_search_obj( QofIdType objType )
 {
@@ -651,6 +643,7 @@ handle_and_term( QofQueryTerm* pTerm, gchar* sql )
 
     strcat( sql, ")" );
 }
+#endif
 
 static void
 compile_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
@@ -677,9 +670,7 @@ gpointer
 gnc_sql_compile_query( QofBackend* pBEnd, QofQuery* pQuery )
 {
     GncSqlBackend *be = (GncSqlBackend*)pBEnd;
-    GList* pBookList;
     QofIdType searchObj;
-    gchar sql[1000];
     sql_backend be_data;
     gnc_sql_query_info* pQueryInfo;
 
@@ -690,7 +681,7 @@ gnc_sql_compile_query( QofBackend* pBEnd, QofQuery* pQuery )
 
     searchObj = qof_query_get_search_for( pQuery );
 
-    pQueryInfo = g_malloc( sizeof( gnc_sql_query_info ) );
+    pQueryInfo = g_malloc( (gsize)sizeof( gnc_sql_query_info ) );
 
     // Try various objects first
     be_data.is_ok = FALSE;
@@ -705,6 +696,7 @@ gnc_sql_compile_query( QofBackend* pBEnd, QofQuery* pQuery )
         return be_data.pQueryInfo;
     }
 
+#if 0
     pBookList = qof_query_get_books( pQuery );
 
     /* Convert search object type to table name */
@@ -733,6 +725,7 @@ gnc_sql_compile_query( QofBackend* pBEnd, QofQuery* pQuery )
 
     DEBUG( "Compiled: %s\n", sql );
     pQueryInfo->pCompiledQuery =  g_strdup( sql );
+#endif
 
 	LEAVE( "" );
 
@@ -871,17 +864,17 @@ gnc_sql_get_integer_value( const GValue* value )
 	g_return_val_if_fail( value != NULL, 0 );
 
 	if( G_VALUE_HOLDS_INT(value) ) {
-		return g_value_get_int( value );
+		return (gint64)g_value_get_int( value );
 	} else if( G_VALUE_HOLDS_UINT(value) ) {
-		return g_value_get_uint( value );
+		return (gint64)g_value_get_uint( value );
 	} else if( G_VALUE_HOLDS_LONG(value) ) {
-		return g_value_get_long( value );
+		return (gint64)g_value_get_long( value );
 	} else if( G_VALUE_HOLDS_ULONG(value) ) {
-		return g_value_get_ulong( value );
+		return (gint64)g_value_get_ulong( value );
 	} else if( G_VALUE_HOLDS_INT64(value) ) {
 		return g_value_get_int64( value );
 	} else if( G_VALUE_HOLDS_UINT64(value) ) {
-		return g_value_get_uint64( value );
+		return (gint64)g_value_get_uint64( value );
 	} else {
 		PWARN( "Unknown type: %s", G_VALUE_TYPE_NAME( value ) );
 	}
@@ -1010,7 +1003,6 @@ add_gvalue_string_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     QofAccessFunc getter;
     gchar* s;
 	GValue* value = g_new0( GValue, 1 );
-	gchar* buf;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( obj_name != NULL );
@@ -1025,7 +1017,7 @@ add_gvalue_string_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     	getter = gnc_sql_get_getter( obj_name, table_row );
     	s = (gchar*)(*getter)( pObject, NULL );
 	}
-	g_value_init( value, G_TYPE_STRING );
+	(void)g_value_init( value, G_TYPE_STRING );
     if( s ) {
         g_value_set_string( value, s );
 	}
@@ -1060,7 +1052,7 @@ load_int( const GncSqlBackend* be, GncSqlRow* row,
     if( val == NULL ) {
         int_value = 0;
     } else {
-        int_value = gnc_sql_get_integer_value( val );
+        int_value = (gint)gnc_sql_get_integer_value( val );
     }
     if( table_row->gobj_param_name != NULL ) {
 		g_object_set( pObject, table_row->gobj_param_name, int_value, NULL );
@@ -1100,7 +1092,7 @@ add_gvalue_int_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	g_return_if_fail( pList != NULL );
 
 	value = g_new0( GValue, 1 );
-    g_value_init( value, G_TYPE_INT );
+    (void)g_value_init( value, G_TYPE_INT );
 
 	if( table_row->gobj_param_name != NULL ) {
 		g_object_get_property( pObject, table_row->gobj_param_name, value );
@@ -1140,7 +1132,7 @@ load_boolean( const GncSqlBackend* be, GncSqlRow* row,
     if( val == NULL ) {
         int_value = 0;
     } else {
-        int_value = g_value_get_int64( val );
+        int_value = (gint)gnc_sql_get_integer_value( val );
     }
     if( table_row->gobj_param_name != NULL ) {
 		g_object_set( pObject, table_row->gobj_param_name, int_value, NULL );
@@ -1187,7 +1179,7 @@ add_gvalue_boolean_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     	b_getter = (BooleanAccessFunc)gnc_sql_get_getter( obj_name, table_row );
     	int_value = ((*b_getter)( pObject )) ? 1 : 0;
 	}
-    g_value_init( value, G_TYPE_INT );
+    (void)g_value_init( value, G_TYPE_INT );
     g_value_set_int( value, int_value );
 
 	(*pList) = g_slist_append( (*pList), value );
@@ -1260,7 +1252,7 @@ add_gvalue_int64_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     	getter = (Int64AccessFunc)gnc_sql_get_getter( obj_name, table_row );
     	i64_value = (*getter)( pObject );
 	}
-    g_value_init( value, G_TYPE_INT64 );
+    (void)g_value_init( value, G_TYPE_INT64 );
     g_value_set_int64( value, i64_value );
 
 	(*pList) = g_slist_append( (*pList), value );
@@ -1291,7 +1283,7 @@ load_double( const GncSqlBackend* be, GncSqlRow* row,
         (*setter)( pObject, (gpointer)NULL );
     } else {
 		if( G_VALUE_HOLDS(val, G_TYPE_INT) ) {
-			d_value = g_value_get_int( val );
+			d_value = (gdouble)g_value_get_int( val );
 		} else {
 			d_value = g_value_get_double( val );
 		}
@@ -1333,11 +1325,11 @@ add_gvalue_double_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     pDouble = (*getter)( pObject, NULL );
     if( pDouble != NULL ) {
         d_value = *pDouble;
-        g_value_init( value, G_TYPE_DOUBLE );
+        (void)g_value_init( value, G_TYPE_DOUBLE );
         g_value_set_double( value, d_value );
     } else {
-        g_value_init( value, G_TYPE_DOUBLE );
-		g_value_set_double( value, 0 );
+        (void)g_value_init( value, G_TYPE_DOUBLE );
+		g_value_set_double( value, 0.0 );
 	}
 
 	(*pList) = g_slist_append( (*pList), value );
@@ -1414,7 +1406,7 @@ add_gvalue_guid_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     	getter = gnc_sql_get_getter( obj_name, table_row );
     	guid = (*getter)( pObject, NULL );
 	}
-    g_value_init( value, G_TYPE_STRING );
+    (void)g_value_init( value, G_TYPE_STRING );
     if( guid != NULL ) {
         (void)guid_to_string_buff( guid, guid_buf );
         g_value_set_string( value, guid_buf );
@@ -1455,7 +1447,7 @@ gnc_sql_add_gvalue_objectref_guid_to_slist( const GncSqlBackend* be, QofIdTypeCo
 	if( inst != NULL ) {
 		guid = qof_instance_get_guid( inst );
 	}
-    g_value_init( value, G_TYPE_STRING );
+    (void)g_value_init( value, G_TYPE_STRING );
     if( guid != NULL ) {
         (void)guid_to_string_buff( guid, guid_buf );
         g_value_set_string( value, guid_buf );
@@ -1485,7 +1477,6 @@ load_timespec( const GncSqlBackend* be, GncSqlRow* row,
             const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
-    GDate* date;
     Timespec ts = {0, 0};
 	TimespecSetterFunc ts_setter;
 
@@ -1564,7 +1555,7 @@ add_gvalue_timespec_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 
 	datebuf = g_strdup_printf( TIMESPEC_STR_FORMAT,
 					year, tm->tm_mon+1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec );
-    g_value_init( value, G_TYPE_STRING );
+    (void)g_value_init( value, G_TYPE_STRING );
 	g_value_take_string( value, datebuf );
 
 	(*pList) = g_slist_append( (*pList), value );
@@ -1601,15 +1592,16 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
 			// Format of date is YYYYMMDD
 			const gchar* s = g_value_get_string( val );
 			gchar buf[5];
-			guint year, month, day;
+			guint month, day;
+			GDateYear year;
 
 			strncpy( buf, &s[0], 4 );
 			buf[4] = '\0';
-			year = atoi( buf );
+			year = (GDateYear)atoi( buf );
 			strncpy( buf, &s[4], 2 );
 			buf[2] = '\0';
-			month = atoi( buf );
-			day = atoi( &s[6] );
+			month = (guint)atoi( buf );
+			day = (guint)atoi( &s[6] );
 
 			if( year != 0 || month != 0 || day != 0 ) {
 				date = g_date_new_dmy( day, month, year );
@@ -1657,7 +1649,7 @@ add_gvalue_date_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     date = (GDate*)(*getter)( pObject, NULL );
 	buf = g_strdup_printf( "%04d%02d%02d",
 					g_date_get_year( date ), g_date_get_month( date ), g_date_get_day( date ) );
-    g_value_init( value, G_TYPE_STRING );
+    (void)g_value_init( value, G_TYPE_STRING );
     g_value_take_string( value, buf );
 
 	(*pList) = g_slist_append( (*pList), value );
@@ -1674,9 +1666,11 @@ typedef void (*NumericSetterFunc)( gpointer, gnc_numeric );
 
 static const GncSqlColumnTableEntry numeric_col_table[] =
 {
+	/*# -fullinitblock */
     { "num",    CT_INT64, 0, COL_NNUL, "guid" },
     { "denom",  CT_INT64, 0, COL_NNUL, "guid" },
 	{ NULL }
+	/*# +fullinitblock */
 };
 
 static void
@@ -1727,7 +1721,6 @@ add_numeric_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEn
 	GncSqlColumnInfo* info;
     gchar* buf;
 	const GncSqlColumnTableEntry* subtable_row;
-	const gchar* type;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( table_row != NULL );
@@ -1773,10 +1766,10 @@ add_gvalue_numeric_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 //	}
 
     num_value = g_new0( GValue, 1 );
-    g_value_init( num_value, G_TYPE_INT64 );
+    (void)g_value_init( num_value, G_TYPE_INT64 );
     g_value_set_int64( num_value, gnc_numeric_num( n ) );
     denom_value = g_new0( GValue, 1 );
-    g_value_init( denom_value, G_TYPE_INT64 );
+    (void)g_value_init( denom_value, G_TYPE_INT64 );
     g_value_set_int64( denom_value, gnc_numeric_denom( n ) );
 
 	(*pList) = g_slist_append( (*pList), num_value );
@@ -1852,8 +1845,10 @@ _retrieve_guid_( gpointer pObject, gpointer pValue )
 // Table to retrieve just the guid
 static GncSqlColumnTableEntry guid_table[] =
 {
+	/*# -fullinitblock */
     { "guid", CT_GUID, 0, 0, NULL, NULL, NULL, _retrieve_guid_ },
     { NULL }
+	/*# +fullinitblock */
 };
 
 const GUID*
@@ -1872,8 +1867,10 @@ gnc_sql_load_guid( const GncSqlBackend* be, GncSqlRow* row )
 // Table to retrieve just the guid
 static GncSqlColumnTableEntry tx_guid_table[] =
 {
+	/*# -fullinitblock */
     { "tx_guid", CT_GUID, 0, 0, NULL, NULL, NULL, _retrieve_guid_ },
     { NULL }
+	/*# +fullinitblock */
 };
 
 const GUID*
@@ -2052,14 +2049,14 @@ gnc_sql_append_guid_list_to_sql( GString* sql, GList* list, guint maxCount )
 
 	for( count = 0; list != NULL && count < maxCount; list = list->next, count++ ) {
 		QofInstance* inst = QOF_INSTANCE(list->data);
-    	guid_to_string_buff( qof_instance_get_guid( inst ), guid_buf );
+    	(void)guid_to_string_buff( qof_instance_get_guid( inst ), guid_buf );
 
 		if( !first_guid ) {
-			g_string_append( sql, "," );
+			(void)g_string_append( sql, "," );
 		}
-		g_string_append( sql, "'" );
-		g_string_append( sql, guid_buf );
-		g_string_append( sql, "'" );
+		(void)g_string_append( sql, "'" );
+		(void)g_string_append( sql, guid_buf );
+		(void)g_string_append( sql, "'" );
 		first_guid = FALSE;
     }
 
@@ -2233,16 +2230,16 @@ build_insert_statement( GncSqlBackend* be,
 		GValue* value = (GValue*)node->data;
 		gchar* value_str;
 		if( node != values ) {
-			g_string_append( sql, "," );
+			(void)g_string_append( sql, "," );
 		}
 		value_str = gnc_sql_get_sql_value( be->conn, value );
-		g_string_append( sql, value_str );
+		(void)g_string_append( sql, value_str );
 		g_free( value_str );
-		g_value_reset( value );
+		(void)g_value_reset( value );
 		g_free( value );
 	}
 	g_slist_free( values );
-	g_string_append( sql, ")" );
+	(void)g_string_append( sql, ")" );
 
 	stmt = gnc_sql_connection_create_statement_from_sql( be->conn, sql->str );
 	return stmt;
@@ -2291,12 +2288,12 @@ build_update_statement( GncSqlBackend* be,
 					colname = colname->next, value = value->next ) {
 		gchar* value_str;
 		if( !firstCol ) {
-			g_string_append( sql, "," );
+			(void)g_string_append( sql, "," );
 		}
-		g_string_append( sql, (gchar*)colname->data );
-		g_string_append( sql, "=" );
+		(void)g_string_append( sql, (gchar*)colname->data );
+		(void)g_string_append( sql, "=" );
 		value_str = gnc_sql_get_sql_value( be->conn, (GValue*)(value->data) );
-		g_string_append( sql, value_str );
+		(void)g_string_append( sql, value_str );
 		g_free( value_str );
 		firstCol = FALSE;
 	}
@@ -2472,7 +2469,6 @@ gnc_sql_upgrade_table( GncSqlBackend* be, const gchar* table_name,
 {
 	gchar* sql;
 	gchar* temp_table_name;
-	GncSqlStatement* stmt;
 
     g_return_if_fail( be != NULL );
 	g_return_if_fail( table_name != NULL );
@@ -2502,9 +2498,11 @@ gnc_sql_upgrade_table( GncSqlBackend* be, const gchar* table_name,
 
 static GncSqlColumnTableEntry version_table[] =
 {
+	/*# -fullinitblock */
     { TABLE_COL_NAME,   CT_STRING, MAX_TABLE_NAME_LEN },
 	{ VERSION_COL_NAME, CT_INT },
     { NULL }
+	/*# +fullinitblock */
 };
 
 /**

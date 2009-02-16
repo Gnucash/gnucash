@@ -76,6 +76,7 @@ static void set_numeric_val( gpointer pObject, gnc_numeric value );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
+	/*# -fullinitblock */
     { "obj_guid",     CT_GUID,     0,                     COL_NNUL, NULL, NULL,
 			get_obj_guid,     set_obj_guid },
     { "name",         CT_STRING,   SLOT_MAX_PATHNAME_LEN, COL_NNUL, NULL, NULL,
@@ -95,14 +96,17 @@ static const GncSqlColumnTableEntry col_table[] =
     { "numeric_val",  CT_NUMERIC,  0,                     0,        NULL, NULL,
 			(QofAccessFunc)get_numeric_val, (QofSetterFunc)set_numeric_val },
     { NULL }
+	/*# +fullinitblock */
 };
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
 static const GncSqlColumnTableEntry obj_guid_col_table[] =
 {
+	/*# -fullinitblock */
     { "obj_guid", CT_GUID, 0, 0, NULL, NULL, get_obj_guid, _retrieve_guid_ },
     { NULL }
+	/*# +fullinitblock */
 };
 
 /* ================================================================= */
@@ -324,7 +328,7 @@ static void
 save_slot( const gchar* key, KvpValue* value, gpointer data )
 {
     slot_info_t* pSlot_info = (slot_info_t*)data;
-    gint curlen;
+    gsize curlen;
 
 	g_return_if_fail( key != NULL );
 	g_return_if_fail( value != NULL );
@@ -338,9 +342,9 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
     curlen = pSlot_info->path->len;
     pSlot_info->pKvpValue = value;
     if( curlen != 0 ) {
-        g_string_append( pSlot_info->path, "/" );
+        (void)g_string_append( pSlot_info->path, "/" );
     }
-    g_string_append( pSlot_info->path, key );
+    (void)g_string_append( pSlot_info->path, key );
 
     if( kvp_value_get_type( value ) == KVP_TYPE_FRAME ) {
         KvpFrame* pKvpFrame = kvp_value_get_frame( value );
@@ -352,7 +356,7 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
 												col_table );
     }
 
-    g_string_truncate( pSlot_info->path, curlen );
+    (void)g_string_truncate( pSlot_info->path, curlen );
 }
 
 gboolean
@@ -374,7 +378,7 @@ gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid, gboolean is_infant, Kvp
     slot_info.path = g_string_new( "" );
 	slot_info.is_ok = TRUE;
     kvp_frame_for_each_slot( pFrame, save_slot, &slot_info );
-    g_string_free( slot_info.path, TRUE );
+    (void)g_string_free( slot_info.path, TRUE );
 
 	return slot_info.is_ok;
 }
@@ -412,7 +416,7 @@ load_slot( GncSqlBackend* be, GncSqlRow* row, KvpFrame* pFrame )
     gnc_sql_load_object( be, row, TABLE_NAME, &slot_info, col_table );
 
     if( slot_info.path != NULL ) {
-        g_string_free( slot_info.path, TRUE );
+        (void)g_string_free( slot_info.path, TRUE );
     }
 }
 
@@ -422,21 +426,19 @@ gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst )
     gchar* buf;
     GncSqlResult* result;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
-    gchar* field_name;
     GncSqlStatement* stmt;
     GValue value;
 	const GUID* guid;
 	KvpFrame* pFrame;
-	GError* error = NULL;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 
 	guid = qof_instance_get_guid( inst );
 	pFrame = qof_instance_get_slots( inst );
-    guid_to_string_buff( guid, guid_buf );
+    (void)guid_to_string_buff( guid, guid_buf );
     memset( &value, 0, sizeof( value ) );
-    g_value_init( &value, G_TYPE_STRING );
+    (void)g_value_init( &value, G_TYPE_STRING );
     g_value_set_string( &value, guid_buf );
 
 	buf = g_strdup_printf( "SELECT * FROM %s WHERE obj_guid='%s'", TABLE_NAME, guid_buf );
@@ -488,7 +490,7 @@ load_slot_for_list_item( GncSqlBackend* be, GncSqlRow* row, QofCollection* coll 
     gnc_sql_load_object( be, row, TABLE_NAME, &slot_info, col_table );
 
     if( slot_info.path != NULL ) {
-        g_string_free( slot_info.path, TRUE );
+        (void)g_string_free( slot_info.path, TRUE );
     }
 }
 
@@ -498,8 +500,6 @@ gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list )
 	QofCollection* coll;
 	GncSqlStatement* stmt;
 	GString* sql;
-    gchar guid_buf[GUID_ENCODING_LENGTH+1];
-	gboolean first_guid = TRUE;
 	GncSqlResult* result;
 	gboolean single_item;
 
@@ -514,15 +514,15 @@ gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list )
 	sql = g_string_sized_new( 40+(GUID_ENCODING_LENGTH+3)*g_list_length( list ) );
 	g_string_append_printf( sql, "SELECT * FROM %s WHERE %s ", TABLE_NAME, obj_guid_col_table[0].col_name );
 	if( g_list_length( list ) != 1 ) {
-		g_string_append( sql, "IN (" );
+		(void)g_string_append( sql, "IN (" );
 		single_item = FALSE;
 	} else {
-		g_string_append( sql, "= " );
+		(void)g_string_append( sql, "= " );
 		single_item = TRUE;
 	}
 	(void)gnc_sql_append_guid_list_to_sql( sql, list, G_MAXUINT );
 	if( !single_item ) {
-		g_string_append( sql, ")" );
+		(void)g_string_append( sql, ")" );
 	}
 
 	// Execute the query and load the slots
@@ -538,7 +538,7 @@ gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list )
         }
 		gnc_sql_result_dispose( result );
     }
-	g_string_free( sql, FALSE );
+	(void)g_string_free( sql, FALSE );
 }
 
 /* ================================================================= */
@@ -577,7 +577,11 @@ gnc_sql_init_slots_handler( void )
         GNC_ID_ACCOUNT,
         NULL,                    /* commit - cannot occur */
         NULL,                    /* initial_load - cannot occur */
-        create_slots_tables        /* create_tables */
+        create_slots_tables,     /* create_tables */
+		NULL,                    /* compile_query */
+		NULL,                    /* run_query */
+		NULL,                    /* free_query */
+		NULL                     /* write */
     };
 
     qof_object_register_backend( TABLE_NAME, GNC_SQL_BACKEND, &be_data );

@@ -12,7 +12,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/lib/libc\
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${LIBGDA_CFLAGS} \
   ${GCONF_CFLAGS} \
   ${WARN_CFLAGS}
 

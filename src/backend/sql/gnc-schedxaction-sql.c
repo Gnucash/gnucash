@@ -61,6 +61,7 @@ static void set_template_act_guid( gpointer pObject, gpointer pValue );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
+	/*# -fullinitblock */
     { "guid",              CT_GUID,    0,               COL_NNUL|COL_PKEY, "guid" },
     { "name",              CT_STRING,  SX_MAX_NAME_LEN, 0,                 NULL, GNC_SX_NAME },
 	{ "enabled",           CT_BOOLEAN, 0,               COL_NNUL,          NULL, NULL,
@@ -84,6 +85,7 @@ static const GncSqlColumnTableEntry col_table[] =
     { "template_act_guid", CT_GUID,    0,               COL_NNUL,          NULL, NULL,
 			get_template_act_guid, set_template_act_guid },
     { NULL }
+	/*# +fullinitblock */
 };
 
 /* ================================================================= */
@@ -223,7 +225,6 @@ load_all_sxes( GncSqlBackend* be )
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
 		GncSqlRow* row;
-        int r;
      	SchedXactions *sxes;
 		GList* list = NULL;
      	sxes = gnc_book_get_schedxactions( be->primary_book );
@@ -311,7 +312,11 @@ gnc_sql_init_schedxaction_handler( void )
         GNC_ID_SCHEDXACTION,
         gnc_sql_save_schedxaction,    /* commit */
         load_all_sxes,                /* initial_load */
-        create_sx_tables              /* create_tables */
+        create_sx_tables,             /* create_tables */
+		NULL,                         /* compile_query */
+		NULL,                         /* run_query */
+		NULL,                         /* free_query */
+		NULL                          /* write */
     };
 
     qof_object_register_backend( GNC_ID_SCHEDXACTION, GNC_SQL_BACKEND, &be_data );

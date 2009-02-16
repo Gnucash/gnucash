@@ -49,6 +49,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 static const GncSqlColumnTableEntry col_table[] =
 {
+	/*# -fullinitblock */
     { "guid",           CT_GUID,           0,                    COL_NNUL|COL_PKEY, "guid" },
     { "commodity_guid", CT_COMMODITYREF,   0,                    COL_NNUL,          NULL, PRICE_COMMODITY },
     { "currency_guid",  CT_COMMODITYREF,   0,                    COL_NNUL,          NULL, PRICE_CURRENCY },
@@ -57,6 +58,7 @@ static const GncSqlColumnTableEntry col_table[] =
     { "type",           CT_STRING,         PRICE_MAX_TYPE_LEN,   0,                 NULL, PRICE_TYPE },
     { "value",          CT_NUMERIC,        0,                    COL_NNUL,          NULL, PRICE_VALUE },
     { NULL }
+	/*# +fullinitblock */
 };
 
 /* ================================================================= */
@@ -94,7 +96,6 @@ load_all_prices( GncSqlBackend* be )
     result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
-        int r;
         GNCPrice* pPrice;
 		GList* list = NULL;
 		GncSqlRow* row = gnc_sql_result_get_first_row( result );
@@ -169,11 +170,6 @@ save_price( GncSqlBackend* be, QofInstance* inst )
 
 	return is_ok;
 }
-
-typedef struct {
-	GncSqlBackend* be;
-	gboolean is_ok;
-} write_objects_t;
 
 static gboolean
 write_price( GNCPrice* p, gpointer data )

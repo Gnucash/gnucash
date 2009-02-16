@@ -54,10 +54,12 @@ static void set_root_template_guid( gpointer pObject, gpointer pValue );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
+	/*# -fullinitblock */
     { "guid",               CT_GUID, 0, COL_NNUL|COL_PKEY, "guid" },
     { "root_account_guid",  CT_GUID, 0, COL_NNUL,          NULL, NULL, get_root_account_guid,  set_root_account_guid },
     { "root_template_guid", CT_GUID, 0, COL_NNUL,          NULL, NULL, get_root_template_guid, set_root_template_guid },
     { NULL }
+	/*# +fullinitblock */
 };
 
 /* ================================================================= */
@@ -193,10 +195,6 @@ create_book_tables( GncSqlBackend* be )
 gboolean
 gnc_sql_save_book( GncSqlBackend* be, QofInstance* inst)
 {
-    const GUID* guid;
-	gint op;
-	gboolean is_infant;
-
 	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( inst != NULL, FALSE );
 	g_return_val_if_fail( QOF_IS_BOOK(inst), FALSE );
@@ -212,11 +210,15 @@ gnc_sql_init_book_handler( void )
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_BOOK,
-        gnc_sql_save_book,                 /* commit */
-        load_all_books,                    /* initial_load */
-        create_book_tables 		           /* create_tables */
+        gnc_sql_save_book,      /* commit */
+        load_all_books,         /* initial_load */
+        create_book_tables,		/* create_tables */
+		NULL,                   /* compile_query */
+		NULL,                   /* run_query */
+		NULL,                   /* free_query */
+		NULL                    /* write */
     };
 
-    qof_object_register_backend( GNC_ID_BOOK, GNC_SQL_BACKEND, &be_data );
+    (void)qof_object_register_backend( GNC_ID_BOOK, GNC_SQL_BACKEND, &be_data );
 }
 /* ========================== END OF FILE ===================== */

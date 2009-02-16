@@ -52,11 +52,13 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 static const GncSqlColumnTableEntry col_table[] =
 {
+	/*# -fullinitblock */
     { "guid",        CT_GUID,   0,                          COL_NNUL|COL_PKEY, "guid" },
     { "name",        CT_STRING, BUDGET_MAX_NAME_LEN,        COL_NNUL,          "name" },
     { "description", CT_STRING, BUDGET_MAX_DESCRIPTION_LEN, 0,                 "description" },
     { "num_periods", CT_INT,    0,                          COL_NNUL,          "num_periods" },
     { NULL }
+	/*# +fullinitblock */
 };
 
 /* ================================================================= */
@@ -95,7 +97,6 @@ load_all_budgets( GncSqlBackend* be )
 {
     GncSqlStatement* stmt;
     GncSqlResult* result;
-    int r;
 	GList* list = NULL;
 
 	g_return_if_fail( be != NULL );
@@ -179,11 +180,6 @@ save_budget( GncSqlBackend* be, QofInstance* inst )
 	return is_ok;
 }
 
-typedef struct {
-	GncSqlBackend* be;
-	gboolean is_ok;
-} write_objects_t;
-
 static void
 do_save_budget( QofInstance* inst, gpointer data )
 {
@@ -220,7 +216,9 @@ gnc_sql_init_budget_handler( void )
         save_budget,    		        /* commit */
         load_all_budgets,               /* initial_load */
         create_budget_tables,	        /* create_tables */
-		NULL, NULL, NULL,
+		NULL,                           /* compile_query */
+		NULL,                           /* run_query */
+		NULL,                           /* free_query */
 		write_budgets					/* write */
     };
 

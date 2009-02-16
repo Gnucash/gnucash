@@ -58,6 +58,7 @@ static void set_parent_guid( gpointer pObject, gpointer pValue );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
+	/*# -fullinitblock */
     { "guid",           CT_GUID,         0,                           COL_NNUL|COL_PKEY, "guid" },
     { "name",           CT_STRING,       ACCOUNT_MAX_NAME_LEN,        COL_NNUL,          "name" },
     { "account_type",   CT_STRING,       ACCOUNT_MAX_TYPE_LEN,        COL_NNUL,          NULL, ACCOUNT_TYPE_ },
@@ -68,11 +69,14 @@ static const GncSqlColumnTableEntry col_table[] =
     { "code",           CT_STRING,       ACCOUNT_MAX_CODE_LEN,        0,                 "code" },
     { "description",    CT_STRING,       ACCOUNT_MAX_DESCRIPTION_LEN, 0,                 "description" },
     { NULL }
+	/*# +fullinitblock */
 };
 static GncSqlColumnTableEntry parent_col_table[] =
 {
+	/*# -fullinitblock */
     { "parent_guid", CT_GUID, 0, 0, NULL, NULL, NULL, set_parent_guid },
     { NULL }
+	/*# +fullinitblock */
 };
 
 typedef struct {
@@ -162,7 +166,7 @@ load_single_account( GncSqlBackend* be, GncSqlRow* row,
 	/* If we don't have a parent, it might be because the parent account hasn't
 	   been loaded yet.  Remember the account and its parent guid for later. */
 	if( gnc_account_get_parent( pAccount ) == NULL ) {
-		account_parent_guid_struct* s = g_slice_new( account_parent_guid_struct );
+		account_parent_guid_struct* s = g_malloc( (gsize)sizeof(account_parent_guid_struct) );
 		s->pAccount = pAccount;
 		gnc_sql_load_object( be, row, GNC_ID_ACCOUNT, s, parent_col_table );
 		*l_accounts_needing_parents = g_list_prepend( *l_accounts_needing_parents, s );
@@ -178,15 +182,14 @@ load_all_accounts( GncSqlBackend* be )
     GncSqlResult* result;
     QofBook* pBook;
     gnc_commodity_table* pTable;
-    int numRows;
-    int r;
-    Account* parent;
 	GList* l_accounts_needing_parents = NULL;
 	GList* list = NULL;
 	GSList* bal_slist;
 	GSList* bal;
 
 	g_return_if_fail( be != NULL );
+
+	ENTER( "" );
 
     pBook = be->primary_book;
     pTable = gnc_commodity_table_get_table( pBook );
@@ -226,13 +229,13 @@ load_all_accounts( GncSqlBackend* be )
 				progress_made = FALSE;
 				for( elem = l_accounts_needing_parents; elem != NULL; elem = g_list_next( elem ) ) {
 					account_parent_guid_struct* s = (account_parent_guid_struct*)elem->data;
-					const gchar* name = xaccAccountGetName( s->pAccount );
    					pParent = xaccAccountLookup( &s->guid, be->primary_book );
 					if( pParent != NULL ) {
 						gnc_account_append_child( pParent, s->pAccount );
 						l_accounts_needing_parents = g_list_delete_link( l_accounts_needing_parents, elem );
 						progress_made = TRUE;
 					}
+					g_free( elem );
 				}
 			}
 	
@@ -262,6 +265,8 @@ load_all_accounts( GncSqlBackend* be )
 		}
 		g_slist_free( bal_slist );
 	}
+
+	LEAVE( "" );
 }
 
 /* ================================================================= */
@@ -274,7 +279,7 @@ create_account_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
     if( version == 0 ) {
-        gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
+        (void)gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
     }
 }
 
@@ -290,6 +295,8 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
 	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( inst != NULL, FALSE );
 	g_return_val_if_fail( GNC_IS_ACCOUNT(inst), FALSE );
+
+	ENTER( "" );
 
 	is_infant = qof_instance_get_infant( inst );
 
@@ -328,6 +335,8 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
 			}
 		}
     }
+
+	LEAVE( "" );
 
 	return is_ok;
 }
@@ -380,7 +389,11 @@ gnc_sql_init_account_handler( void )
         GNC_ID_ACCOUNT,
         gnc_sql_save_account,		/* commit */
         load_all_accounts,			/* initial_load */
-        create_account_tables		/* create_tables */
+        create_account_tables,		/* create_tables */
+		NULL,                       /* compile_query */
+		NULL,                       /* run_query */
+		NULL,                       /* free_query */
+		NULL                        /* write */
     };
 
     qof_object_register_backend( GNC_ID_ACCOUNT, GNC_SQL_BACKEND, &be_data );

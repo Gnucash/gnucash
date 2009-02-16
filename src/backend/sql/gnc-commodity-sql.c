@@ -54,6 +54,7 @@ static void set_quote_source_name( gpointer pObject, gpointer pValue );
 #define COMMODITY_MAX_QUOTE_TZ_LEN 2048
 
 static const GncSqlColumnTableEntry col_table[] = {
+	/*# -fullinitblock */
     { "guid",         CT_GUID,    0,                             COL_NNUL|COL_PKEY, "guid" },
     { "namespace",    CT_STRING,  COMMODITY_MAX_NAMESPACE_LEN,   COL_NNUL,          NULL, NULL,
             (QofAccessFunc)gnc_commodity_get_namespace,
@@ -67,6 +68,7 @@ static const GncSqlColumnTableEntry col_table[] = {
             get_quote_source_name, set_quote_source_name },
     { "quote_tz",     CT_STRING,  COMMODITY_MAX_QUOTE_TZ_LEN,    0,                 "quote-tz" },
     { NULL }
+	/*# +fullinitblock */
 };
 
 /* ================================================================= */
@@ -103,8 +105,6 @@ static gnc_commodity*
 load_single_commodity( GncSqlBackend* be, GncSqlRow* row )
 {
     QofBook* pBook = be->primary_book;
-    int col;
-    const GValue* val;
     gnc_commodity* pCommodity;
 
     pCommodity = gnc_commodity_new( pBook, NULL, NULL, NULL, NULL, 100 );
@@ -127,14 +127,11 @@ load_all_commodities( GncSqlBackend* be )
     result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
-        int r;
         gnc_commodity* pCommodity;
 		GList* list = NULL;
 		GncSqlRow* row = gnc_sql_result_get_first_row( result );
 
         while( row != NULL ) {
-            gnc_commodity* c;
-
             pCommodity = load_single_commodity( be, row );
 
             if( pCommodity != NULL ) {
@@ -172,8 +169,6 @@ create_commodities_tables( GncSqlBackend* be )
 static gboolean
 commit_commodity( GncSqlBackend* be, QofInstance* inst )
 {
-    const GUID* guid;
-
 	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( inst != NULL, FALSE );
 	g_return_val_if_fail( GNC_IS_COMMODITY(inst), FALSE );
@@ -255,7 +250,11 @@ gnc_sql_init_commodity_handler( void )
         GNC_ID_COMMODITY,
         commit_commodity,            /* commit */
         load_all_commodities,        /* initial_load */
-        create_commodities_tables    /* create_tables */
+        create_commodities_tables,   /* create_tables */
+		NULL,                        /* compile_query */
+		NULL,                        /* run_query */
+		NULL,                        /* free_query */
+		NULL                         /* write */
     };
 
     qof_object_register_backend( GNC_ID_COMMODITY, GNC_SQL_BACKEND, &be_data );

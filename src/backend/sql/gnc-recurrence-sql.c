@@ -62,6 +62,7 @@ static void set_recurrence_period_start( gpointer pObject, gpointer pValue );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
+	/*# -fullinitblock */
     { "obj_guid",                CT_GUID,   0,                                     COL_NNUL, NULL, NULL,
             get_obj_guid, set_obj_guid },
     { "recurrence_mult",         CT_INT,    0,                                     COL_NNUL, NULL, NULL,
@@ -71,14 +72,17 @@ static const GncSqlColumnTableEntry col_table[] =
     { "recurrence_period_start", CT_GDATE,  0,                                     COL_NNUL, NULL, NULL,
             get_recurrence_period_start, set_recurrence_period_start },
     { NULL }
+	/*# +fullinitblock */
 };
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
 static const GncSqlColumnTableEntry guid_col_table[] =
 {
+	/*# -fullinitblock */
     { "obj_guid", CT_GUID, 0, 0, NULL, NULL, get_obj_guid, set_obj_guid },
     { NULL }
+	/*# +fullinitblock */
 };
 
 /* ================================================================= */
@@ -107,7 +111,7 @@ get_recurrence_mult( gpointer pObject )
 	g_return_val_if_fail( pObject != NULL, 0 );
 	g_return_val_if_fail( pInfo->pRecurrence != NULL, 0 );
 
-	return pInfo->pRecurrence->mult;
+	return (gint)pInfo->pRecurrence->mult;
 }
 
 static void
@@ -118,7 +122,7 @@ set_recurrence_mult( gpointer pObject, gint value )
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( pInfo->pRecurrence != NULL );
 
-    pInfo->pRecurrence->mult = value;
+    pInfo->pRecurrence->mult = (guint16)value;
 }
 
 static gpointer
@@ -245,15 +249,13 @@ gnc_sql_set_recurrences_from_db( GncSqlBackend* be, const GUID* guid )
 {
     gchar* buf;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
-    gchar* field_name;
     GncSqlStatement* stmt;
-	GError* error = NULL;
 	GncSqlResult* result;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( guid != NULL, NULL );
 
-    guid_to_string_buff( guid, guid_buf );
+    (void)guid_to_string_buff( guid, guid_buf );
 	buf = g_strdup_printf( "SELECT * FROM %s WHERE obj_guid='%s'", TABLE_NAME, guid_buf );
 	stmt = gnc_sql_connection_create_statement_from_sql( be->conn, buf );
     result = gnc_sql_execute_select_statement( be, stmt );
@@ -332,9 +334,13 @@ gnc_sql_init_recurrence_handler( void )
     {
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_ACCOUNT,
-        NULL,                    /* commit - cannot occur */
-        NULL,                    /* initial_load - cannot occur */
-        create_recurrence_tables        /* create_tables */
+        NULL,                           /* commit - cannot occur */
+        NULL,                           /* initial_load - cannot occur */
+        create_recurrence_tables,       /* create_tables */
+		NULL,                           /* compile_query */
+		NULL,                           /* run_query */
+		NULL,                           /* free_query */
+		NULL                            /* write */
     };
 
     qof_object_register_backend( TABLE_NAME, GNC_SQL_BACKEND, &be_data );
