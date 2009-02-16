@@ -676,24 +676,13 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
 	GncDbiSqlRow* dbi_row = (GncDbiSqlRow*)row;
 	gushort type;
 	GValue* value;
-	long long v64;
-	gint64 raw_int64_value;
-	gint raw_int_value;
 
 	type = dbi_result_get_field_type( dbi_row->result, col_name );
 	value = g_new0( GValue, 1 );
 	switch( type ) {
 		case DBI_TYPE_INTEGER:
 			g_value_init( value, G_TYPE_INT64 );
-
-			// FIXME: Bug in LibDBI: 64 bit int values returned incorrectly
-			v64 = dbi_result_get_longlong( dbi_row->result, col_name );
-			raw_int64_value = dbi_result_get_longlong( dbi_row->result, col_name );
-			raw_int_value = dbi_result_get_int( dbi_row->result, col_name );
-			if( raw_int_value < 0 && raw_int64_value > 0 ) {
-				raw_int64_value = raw_int_value;
-			}
-			g_value_set_int64( value, raw_int64_value );
+			g_value_set_int64( value, dbi_result_get_longlong( dbi_row->result, col_name ) );
 			break;
 		case DBI_TYPE_DECIMAL:
 			g_value_init( value, G_TYPE_DOUBLE );
@@ -998,8 +987,10 @@ conn_get_column_type_name( GncSqlConnection* conn, GType type, gint size )
 	if( dbi_conn->provider == GNC_DBI_PROVIDER_SQLITE ) {
 		switch( type ) {
 			case G_TYPE_INT:
-			case G_TYPE_INT64:
 				return "integer";
+				break;
+			case G_TYPE_INT64:
+				return "bigint";
 				break;
 			case G_TYPE_DOUBLE:
 				return "real";
@@ -1014,8 +1005,10 @@ conn_get_column_type_name( GncSqlConnection* conn, GType type, gint size )
 	} else if( dbi_conn->provider == GNC_DBI_PROVIDER_MYSQL ) {
 		switch( type ) {
 			case G_TYPE_INT:
-			case G_TYPE_INT64:
 				return "integer";
+				break;
+			case G_TYPE_INT64:
+				return "bigint";
 				break;
 			case G_TYPE_DOUBLE:
 				return "double";
@@ -1030,8 +1023,10 @@ conn_get_column_type_name( GncSqlConnection* conn, GType type, gint size )
 	} else if( dbi_conn->provider == GNC_DBI_PROVIDER_PGSQL ) {
 		switch( type ) {
 			case G_TYPE_INT:
-			case G_TYPE_INT64:
 				return "integer";
+				break;
+			case G_TYPE_INT64:
+				return "int8";
 				break;
 			case G_TYPE_DOUBLE:
 				return "double precision";

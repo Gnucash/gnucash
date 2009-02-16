@@ -40,7 +40,7 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "slots"
-#define TABLE_VERSION 1
+#define TABLE_VERSION 2
 
 typedef struct {
     GncSqlBackend* be;
@@ -560,6 +560,10 @@ create_slots_tables( GncSqlBackend* be )
 			PERR( "Unable to create index: %s\n", error->message );
 		}
 #endif
+	} else if( version == 1 ) {
+		/* Upgrade 64-bit int values to proper definition */
+		gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
+		gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
 	}
 }
 

@@ -2405,6 +2405,12 @@ gnc_sql_create_table( GncSqlBackend* be, const gchar* table_name,
 {
 	gboolean ok;
 
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( table_name != NULL, FALSE );
+	g_return_val_if_fail( col_table != NULL, FALSE );
+
+	DEBUG( "Creating %s table\n", table_name );
+
 	ok = do_create_table( be, table_name, col_table );
 	if( ok ) {
 		ok = gnc_sql_set_table_version( be, table_name, table_version );
@@ -2416,6 +2422,10 @@ gboolean
 gnc_sql_create_temp_table( const GncSqlBackend* be, const gchar* table_name,
 							const GncSqlColumnTableEntry* col_table )
 {
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( table_name != NULL, FALSE );
+	g_return_val_if_fail( col_table != NULL, FALSE );
+
 	return do_create_table( be, table_name, col_table );
 }
 
@@ -2452,6 +2462,36 @@ gnc_sql_get_table_version( const GncSqlBackend* be, const gchar* table_name )
 	}
 
 	return GPOINTER_TO_INT(g_hash_table_lookup( be->versions, table_name ));
+}
+
+/* Create a temporary table, copy the data from the old table, delete the
+   old table, then rename the new one. */
+void
+gnc_sql_upgrade_table( GncSqlBackend* be, const gchar* table_name,
+               			const GncSqlColumnTableEntry* col_table )
+{
+	gchar* sql;
+	gchar* temp_table_name;
+	GncSqlStatement* stmt;
+
+    g_return_if_fail( be != NULL );
+	g_return_if_fail( table_name != NULL );
+	g_return_if_fail( col_table != NULL );
+
+	DEBUG( "Upgrading %s table\n", table_name );
+
+	temp_table_name = g_strdup_printf( "%s_new", table_name );
+    gnc_sql_create_temp_table( be, temp_table_name, col_table );
+	sql = g_strdup_printf( "INSERT INTO %s SELECT * FROM %s",
+								temp_table_name, table_name );
+	(void)gnc_sql_execute_nonselect_sql( be, sql );
+
+	sql = g_strdup_printf( "DROP TABLE %s", table_name );
+	(void)gnc_sql_execute_nonselect_sql( be, sql );
+
+	sql = g_strdup_printf( "ALTER TABLE %s RENAME TO %s", temp_table_name, table_name );
+	(void)gnc_sql_execute_nonselect_sql( be, sql );
+	g_free( temp_table_name );
 }
 
 /* ================================================================= */

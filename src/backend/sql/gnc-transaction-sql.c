@@ -506,11 +506,19 @@ create_transaction_tables( GncSqlBackend* be )
 	version = gnc_sql_get_table_version( be, TRANSACTION_TABLE );
     if( version == 0 ) {
         gnc_sql_create_table( be, TRANSACTION_TABLE, TX_TABLE_VERSION, tx_col_table );
+    } else if( version == 1 ) {
+		/* Upgrade 64 bit int handling */
+		gnc_sql_upgrade_table( be, TRANSACTION_TABLE, tx_col_table );
+		gnc_sql_set_table_version( be, TRANSACTION_TABLE, TX_TABLE_VERSION );
     }
 
 	version = gnc_sql_get_table_version( be, SPLIT_TABLE );
     if( version == 0 ) {
         gnc_sql_create_table( be, SPLIT_TABLE, SPLIT_TABLE_VERSION, split_col_table );
+    } else if( version == 1 ) {
+		/* Upgrade 64 bit int handling */
+		gnc_sql_upgrade_table( be, SPLIT_TABLE, split_col_table );
+		gnc_sql_set_table_version( be, SPLIT_TABLE, SPLIT_TABLE_VERSION );
     }
 }
 /* ================================================================= */

@@ -259,11 +259,19 @@ create_taxtable_tables( GncSqlBackend* be )
 	version = gnc_sql_get_table_version( be, TT_TABLE_NAME );
     if( version == 0 ) {
         gnc_sql_create_table( be, TT_TABLE_NAME, TT_TABLE_VERSION, tt_col_table );
+    } else if( version == 1 ) {
+		/* Upgrade 64 bit int handling */
+		gnc_sql_upgrade_table( be, TT_TABLE_NAME, tt_col_table );
+		gnc_sql_set_table_version( be, TT_TABLE_NAME, TT_TABLE_VERSION );
     }
 
 	version = gnc_sql_get_table_version( be, TTENTRIES_TABLE_NAME );
     if( version == 0 ) {
         gnc_sql_create_table( be, TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION, ttentries_col_table );
+    } else if( version == 1 ) {
+		/* Upgrade 64 bit int handling */
+		gnc_sql_upgrade_table( be, TTENTRIES_TABLE_NAME, ttentries_col_table );
+		gnc_sql_set_table_version( be, TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION );
     }
 }
 

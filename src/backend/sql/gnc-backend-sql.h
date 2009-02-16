@@ -678,6 +678,19 @@ gboolean gnc_sql_commit_standard_item( GncSqlBackend* be, QofInstance* inst, con
  */
 gint64 gnc_sql_get_integer_value( const GValue* value );
 
+/**
+ * Upgrades a table to a new structure.  The upgrade is done by creating a new table with
+ * the new structure, SELECTing the old data into the new table, deleting the old table,
+ * then renaming the new table.  Therefore, this will only work if the new table structure
+ * is similar enough to the old table that the SELECT will work.
+ *
+ * @param be SQL backend
+ * @param table_name SQL table name
+ * @param col_table Column table
+ */
+void gnc_sql_upgrade_table( GncSqlBackend* be, const gchar* table_name,
+	               			const GncSqlColumnTableEntry* col_table );
+
 void _retrieve_guid_( gpointer pObject, gpointer pValue );
 
 gpointer gnc_sql_compile_query( QofBackend* pBEnd, QofQuery* pQuery );
