@@ -68,7 +68,7 @@ load_owner( const GncSqlBackend* be, GncSqlRow* row,
 	book = be->primary_book;
     buf = g_strdup_printf( "%s_type", table_row->col_name );
     val = gnc_sql_row_get_value_at_col_name( row, buf );
-	type = (GncOwnerType)g_value_get_int( val );
+	type = (GncOwnerType)gnc_sql_get_integer_value( val );
     g_free( buf );
     buf = g_strdup_printf( "%s_guid", table_row->col_name );
     val = gnc_sql_row_get_value_at_col_name( row, buf );

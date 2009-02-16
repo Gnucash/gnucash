@@ -657,7 +657,6 @@ void gnc_sql_init_version_info( GncSqlBackend* be );
 void gnc_sql_finalize_version_info( GncSqlBackend* be );
 
 /**
- *
  * Commits a "standard" item to the database.  In most cases, a commit of one object vs
  * another differs only in the table name and column table.
  *
@@ -670,6 +669,14 @@ void gnc_sql_finalize_version_info( GncSqlBackend* be );
  */
 gboolean gnc_sql_commit_standard_item( GncSqlBackend* be, QofInstance* inst, const gchar* tableName,
                         	QofIdTypeConst obj_name, const GncSqlColumnTableEntry* col_table );
+
+/**
+ * Gets an integer value (of any size) from a GValue.
+ *
+ * @param value Source value
+ * @return Integer value
+ */
+gint64 gnc_sql_get_integer_value( const GValue* value );
 
 void _retrieve_guid_( gpointer pObject, gpointer pValue );
 

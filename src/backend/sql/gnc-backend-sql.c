@@ -865,8 +865,8 @@ gnc_sql_init_object_handlers( void )
 
 /* ================================================================= */
 
-static gint64
-get_integer_value( const GValue* value )
+gint64
+gnc_sql_get_integer_value( const GValue* value )
 {
 	g_return_val_if_fail( value != NULL, 0 );
 
@@ -1060,7 +1060,7 @@ load_int( const GncSqlBackend* be, GncSqlRow* row,
     if( val == NULL ) {
         int_value = 0;
     } else {
-        int_value = get_integer_value( val );
+        int_value = gnc_sql_get_integer_value( val );
     }
     if( table_row->gobj_param_name != NULL ) {
 		g_object_set( pObject, table_row->gobj_param_name, int_value, NULL );
@@ -1219,7 +1219,7 @@ load_int64( const GncSqlBackend* be, GncSqlRow* row,
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
     if( val != NULL ) {
-        i64_value = get_integer_value( val );
+        i64_value = gnc_sql_get_integer_value( val );
     }
     (*i64_setter)( pObject, i64_value );
 }
@@ -1703,7 +1703,7 @@ load_numeric( const GncSqlBackend* be, GncSqlRow* row,
         isNull = TRUE;
         num = 0;
     } else {
-        num = get_integer_value( val );
+        num = gnc_sql_get_integer_value( val );
     }
     buf = g_strdup_printf( "%s_denom", table_row->col_name );
     val = gnc_sql_row_get_value_at_col_name( row, buf );
@@ -1712,7 +1712,7 @@ load_numeric( const GncSqlBackend* be, GncSqlRow* row,
         isNull = TRUE;
         denom = 1;
     } else {
-        denom = get_integer_value( val );
+        denom = gnc_sql_get_integer_value( val );
     }
     n = gnc_numeric_create( num, denom );
     if( !isNull ) {
