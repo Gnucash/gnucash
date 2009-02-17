@@ -294,8 +294,13 @@ gnc_date_edit_popup (GNCDateEdit *gde)
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (gde));
   if (GTK_IS_WINDOW (toplevel))
   {
-    gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),
-                                 GTK_WINDOW (gde->cal_popup));
+    gtk_window_group_add_window (
+#ifdef HAVE_GTK_2_10
+      gtk_window_get_group (GTK_WINDOW (toplevel)),
+#else
+      _gtk_window_get_group (GTK_WINDOW (toplevel)),
+#endif
+      GTK_WINDOW (gde->cal_popup));
     gtk_window_set_transient_for (GTK_WINDOW (gde->cal_popup),
                                   GTK_WINDOW (toplevel));
   }
@@ -860,8 +865,10 @@ create_children (GNCDateEdit *gde)
 	gde->cal_popup = gtk_window_new (GTK_WINDOW_POPUP);
         gtk_widget_set_name (gde->cal_popup, "gnc-date-edit-popup-window");
 
+#ifdef HAVE_GTK_2_10
         gtk_window_set_type_hint (GTK_WINDOW (gde->cal_popup),
                                   GDK_WINDOW_TYPE_HINT_COMBO);
+#endif
 
 	gtk_widget_set_events (GTK_WIDGET(gde->cal_popup),
 			       gtk_widget_get_events (GTK_WIDGET(gde->cal_popup)) |
