@@ -1023,7 +1023,7 @@ Transaction * xaccAccountFindTransByDesc(const Account *account,
 Split * xaccAccountFindSplitByDesc(const Account *account, 
                                    const char *description);
 
-/*@}*/
+/** @} */
 
 /* ------------------ */
 
