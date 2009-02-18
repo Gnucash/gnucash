@@ -359,11 +359,6 @@ save_taxtable( GncSqlBackend* be, QofInstance* inst )
 }
 
 /* ================================================================= */
-typedef struct {
-	GncSqlBackend* be;
-	gboolean is_ok;
-} write_objects_t;
-
 static void
 save_next_taxtable( QofInstance* inst, gpointer data )
 {

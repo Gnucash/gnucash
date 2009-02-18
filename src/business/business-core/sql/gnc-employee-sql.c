@@ -210,11 +210,6 @@ employee_should_be_saved( GncEmployee *employee )
     return TRUE;
 }
 
-typedef struct {
-	GncSqlBackend* be;
-	gboolean is_ok;
-} write_objects_t;
-
 static void
 write_single_employee( QofInstance *term_p, gpointer data_p )
 {

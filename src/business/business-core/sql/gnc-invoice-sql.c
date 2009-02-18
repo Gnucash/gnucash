@@ -217,11 +217,6 @@ invoice_should_be_saved( GncInvoice *invoice )
     return TRUE;
 }
 
-typedef struct {
-	GncSqlBackend* be;
-	gboolean is_ok;
-} write_objects_t;
-
 static void
 write_single_invoice( QofInstance *term_p, gpointer data_p )
 {

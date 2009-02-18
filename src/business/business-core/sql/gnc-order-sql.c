@@ -162,11 +162,6 @@ order_should_be_saved( GncOrder *order )
     return TRUE;
 }
 
-typedef struct {
-	GncSqlBackend* be;
-	gboolean is_ok;
-} write_objects_t;
-
 static void
 write_single_order( QofInstance *term_p, gpointer data_p )
 {

@@ -161,11 +161,6 @@ job_should_be_saved( GncJob *job )
     return TRUE;
 }
 
-typedef struct {
-	GncSqlBackend* be;
-	gboolean is_ok;
-} write_objects_t;
-
 static void
 write_single_job( QofInstance *term_p, gpointer data_p )
 {

@@ -182,11 +182,6 @@ save_entry( GncSqlBackend* be, QofInstance* inst )
 }
 
 /* ================================================================= */
-typedef struct {
-	GncSqlBackend* be;
-	gboolean is_ok;
-} write_objects_t;
-
 static void
 write_single_entry( QofInstance *term_p, gpointer data_p )
 {

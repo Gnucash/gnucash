@@ -209,11 +209,6 @@ vendor_should_be_saved( GncVendor *vendor )
     return TRUE;
 }
 
-typedef struct {
-	GncSqlBackend* be;
-	gboolean is_ok;
-} write_objects_t;
-
 static void
 write_single_vendor( QofInstance *term_p, gpointer data_p )
 {
