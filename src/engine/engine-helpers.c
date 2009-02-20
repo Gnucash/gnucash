@@ -125,7 +125,7 @@ gnc_guid2scm(GUID guid)
   char string[GUID_ENCODING_LENGTH + 1];
 
   if (!guid_to_string_buff(&guid, string))
-    return SCM_UNDEFINED;
+    return SCM_BOOL_F;
 
   return scm_makfrom0str(string);
 }
@@ -409,10 +409,13 @@ gnc_scm2guid_glist (SCM guids_scm)
   while (!SCM_NULLP (guids_scm))
   {
     SCM guid_scm = SCM_CAR (guids_scm);
-    GUID *guid;
+    GUID *guid = NULL;
 
-    guid = guid_malloc ();
-    *guid = gnc_scm2guid (guid_scm);
+    if (guids_scm != SCM_BOOL_F)
+    {
+      guid = guid_malloc ();
+      *guid = gnc_scm2guid (guid_scm);
+    }
 
     guids = g_list_prepend (guids, guid);
 
@@ -663,8 +666,13 @@ gnc_scm2KvpValue (SCM value_scm)
     }
 
     case KVP_TYPE_GUID: {
-      GUID guid = gnc_scm2guid (val_scm);
-      value = kvp_value_new_guid (&guid);
+      if (val_scm != SCM_BOOL_F)
+      {
+        GUID guid = gnc_scm2guid (val_scm);
+        value = kvp_value_new_guid (&guid);
+      }
+      else
+        value = NULL;
       break;
     }
 
