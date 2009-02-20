@@ -584,6 +584,10 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
   Split *split;
   SCM new_item;
 
+  g_return_if_fail(reg);
+  ENTER("reg=%p, use_cut_semantics=%s", reg,
+        use_cut_semantics? "TRUE" : "FALSE");
+
   blank_split = xaccSplitLookup(&info->blank_split_guid,
                                 gnc_get_current_book ());
   split = gnc_split_register_get_current_split (reg);
@@ -591,23 +595,43 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
 
   /* This shouldn't happen, but be paranoid. */
   if (trans == NULL)
+  {
+    LEAVE("no trans");
     return;
+  }
 
   cursor_class = gnc_split_register_get_current_cursor_class (reg);
 
   /* Can't do anything with this. */
   if (cursor_class == CURSOR_CLASS_NONE)
+  {
+    LEAVE("no cursor class");
     return;
+  }
 
   /* This shouldn't happen, but be paranoid. */
   if ((split == NULL) && (cursor_class == CURSOR_CLASS_TRANS))
+  {
+    g_warning("BUG DETECTED: transaction cursor with no anchoring split!");
+    LEAVE("transaction cursor with no anchoring split");
     return;
+  }
 
   changed = gnc_table_current_cursor_changed (reg->table, FALSE);
 
   /* See if we were asked to copy an unchanged blank split. Don't. */
   if (!changed && ((split == NULL) || (split == blank_split)))
+  {
+    /* We're either on an unedited, brand-new split or an unedited, brand-new
+     * transaction (the transaction anchored by the blank split.) */
+    /* FIXME: This doesn't work exactly right. When entering a new transaction,
+     *        you can edit the description, move to a split row, then move
+     *        back to the description, then ask for a copy, and this code will
+     *        be reached. It forgets that you changed the row the first time
+     *        you were there.  -Charles */
+    LEAVE("nothing to copy/cut");
     return;
+  }
 
   /* Ok, we are now ready to make the copy. */
 
@@ -652,7 +676,11 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
   }
 
   if (new_item == SCM_UNDEFINED)
+  {
+    g_warning("BUG DETECTED: copy failed");
+    LEAVE("copy failed");
     return;
+  }
 
   /* unprotect the old object, if any */
   if (copied_item != SCM_UNDEFINED)
@@ -662,6 +690,7 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
   scm_gc_protect_object(copied_item);
 
   copied_class = cursor_class;
+  LEAVE("");
 }
 
 void
