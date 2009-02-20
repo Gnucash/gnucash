@@ -118,6 +118,7 @@
 	      (begin
 		;; we've got an old style report with no report-id, give it an arbitrary one
 		(gnc:report-template-set-report-guid! report-rec (guid-new-return))
+		
 		;; we also need to give it a parent-type, so that it will restore from the open state properly
 		;; we'll key that from the only known good way to tie back to the original report -- the renderer
 		(hash-for-each
@@ -129,12 +130,20 @@
 			 (gnc:debug "gnc:define-report: setting parent-type of " (gnc:report-template-name report-rec) " to " (gnc:report-template-report-guid rec))
 			 (gnc:report-template-set-parent-type! report-rec (gnc:report-template-report-guid rec))
 			 (gnc:debug "done setting, is now " (gnc:report-template-parent-type report-rec))))) 
-		 *gnc:_report-templates_*)))
+		 *gnc:_report-templates_*)
+
+
+		;; re-save this old-style report in the new format
+		(gnc:report-template-save-to-savefile report-rec)
+		(gnc:debug "complete saving " (gnc:report-template-name report-rec) " in new format")
+		))
+
+
 	  
 	  (if (not gnc:old-style-report-warned)
 	      (begin
 		(set! gnc:old-style-report-warned #t)
-		(gnc-error-dialog '() (string-append (_ "Your report system includes one or more reports without a proper report-guid field. This report may break without warning in future versions of GnuCash. Please review your saved reports file and update those reports.")))))
+		(gnc-error-dialog '() (string-append (_ "The GnuCash report system has been upgraded. Your old saved reports have been transfered into a new format. If you experience trouble with saved reports, please contact the GnuCash development team.")))))
 	  (hash-set! *gnc:_report-templates_*
 		     (gnc:report-template-report-guid report-rec) report-rec)
 	  (gnc:warn "gnc:define-report: old-style report. setting guid for " (gnc:report-template-name report-rec) " to " (gnc:report-template-report-guid report-rec)))
@@ -518,8 +527,31 @@
     (gnc:report-type report)
     (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))))
 
+(define (gnc:report-template-generate-saved-forms report-template)
+  (string-append
+   ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
+   (simple-format #f ";; Options for saved report ~S, based on template ~S\n"
+		  (gnc:report-template-name report-template) (gnc:report-template-parent-type report-template))
+   (simple-format
+    #f "(let ()\n (define (options-gen)\n  (let ((options (gnc:report-template-new-options/report-guid ~S ~S)))\n"
+    (gnc:report-template-parent-type report-template) (gnc:report-template-name report-template))
+   (gnc:generate-restore-forms (gnc:report-template-new-options report-template) "options")
+
+   ;; get options of embedded reports
+   ;; (gnc:report-generate-options-embedded report)
+   ;; we really should do this, except the whole embedded report thing is broken
+
+   "  options))\n"
+   (simple-format 
+    #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'report-guid ~S\n  'parent-type ~S\n  'options-generator options-gen\n  'menu-path (list gnc:menuname-custom)\n  'renderer (gnc:report-template-renderer/report-guid ~S ~S)))\n\n"
+    (gnc:report-template-name report-template)
+    (gnc:report-template-report-guid report-template)
+    (gnc:report-template-parent-type report-template) ;;a saved report also needs its type stored separately to reference the template
+    (gnc:report-template-parent-type report-template) 
+    (gnc:report-template-name report-template))))
+
 (define gnc:current-saved-reports
-  (gnc-build-dotgnucash-path "saved-reports-2.0"))
+  (gnc-build-dotgnucash-path "saved-reports-2.4"))
 
 (define (gnc:report-save-to-savefile report)
   (let* ((conf-file-name gnc:current-saved-reports)
@@ -534,16 +566,28 @@
           (display saved-form
                    (open-file conf-file-name "a"))
           (force-output)
-	  (let ((report-name (gnc:report-name report)))
-	    (gnc-info-dialog
-	     '()
-	     (sprintf 
-	      #f (_ "Your report \"%s\" has been saved into the configuration file \"%s\".  The report will be available in the menu Reports -> Custom at the next startup of GnuCash.")
-	      (if (and report-name (not (string-null? report-name)))
-		  (gnc:gettext report-name)
-		  (gnc:gettext "Untitled"))
-	      conf-file-name)))
+	      (let ((report-name (gnc:report-name report)))
+		(gnc-info-dialog
+		 '()
+		 (sprintf 
+		  #f (_ "Your report \"%s\" has been saved into the configuration file \"%s\".  The report will be available in the menu Reports -> Custom at the next startup of GnuCash.")
+		  (if (and report-name (not (string-null? report-name)))
+		      (gnc:gettext report-name)
+		      (gnc:gettext "Untitled"))
+		  conf-file-name)))
 	  ))))
+
+(define (gnc:report-template-save-to-savefile report-template)
+  (let* ((conf-file-name gnc:current-saved-reports)
+	 (saved-form (gnc:report-template-generate-saved-forms report-template))
+	 (save-result (eval-string saved-form)))
+    (if (record? save-result)
+	(begin
+	  (display saved-form
+		   (open-file conf-file-name "a"))
+	  (force-output)
+	  ))))
+
 
 ;; gets the renderer from the report template;
 ;; gets the stylesheet from the report;
