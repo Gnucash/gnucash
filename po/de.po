@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-20 20:38+0100\n"
-"PO-Revision-Date: 2009-02-20 20:42+0100\n"
+"PO-Revision-Date: 2009-02-22 22:03+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -13793,9 +13793,7 @@ msgstr ""
 msgid ""
 "This transaction probably requires your intervention or it will be imported "
 "unbalanced."
-msgstr ""
-"Diese Buchung benötigt Ihre Zuordnung, ansonsten sie würde unausgeglichen "
-"importiert."
+msgstr "Diese Buchung benötigt Ihre Zuordnung, ansonsten würde sie unausgeglichen importiert."
 
 #: ../src/import-export/generic-import.glade.h:49
 msgid "This transaction requires your intervention or it will NOT be imported."
@@ -17338,7 +17336,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1068
 msgid ""
 "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;."
-msgstr "Einzelheiten zum Abonnieren der Liste siehe http://www.gnucash.org/ ."
+msgstr "Einzelheiten zum Abonnieren der Liste siehe http://www.gnucash.org/de ."
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:1070
@@ -20048,7 +20046,7 @@ msgstr "Benutzen Sie Von - Bis"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:2988 ../intl-scm/guile-strings.c:3076
 msgid "Use From - To period"
-msgstr "Benutzen SIe den Von-Bis Zeitraum"
+msgstr "Benutzen Sie den Von-Bis Zeitraum"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20405,12 +20403,12 @@ msgstr "Buchungsbetrag"
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:3250
 msgid "Share price"
-msgstr "Wertpapierpreis"
+msgstr "Anteilspreis"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:3252
 msgid "Share quantity"
-msgstr "Wertpapieranzahl"
+msgstr "Anzahl der Anteile"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:3254
@@ -20420,7 +20418,7 @@ msgstr ""
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:3256
 msgid "Reconciliation status"
-msgstr "Abgeglichen-Zustand"
+msgstr "Abgleichungszustand"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:3258
