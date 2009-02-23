@@ -4,7 +4,8 @@ EXTRA_DIST = \
   dist.sh \
   exetype.pl \
   functions.sh \
-  goffice-0.4.3-patch.diff \
+  goffice-0.7.2-patch.diff \
+  gwenhywfar-3.6.0-patch.diff \
   install.sh \
   install-fq-mods.cmd \
   libofx-0.8.3-patch.diff \
