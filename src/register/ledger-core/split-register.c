@@ -2545,30 +2545,30 @@ gnc_split_register_cleanup (SplitRegister *reg)
 
    gnc_suspend_gui_refresh ();
 
-   /* be sure to destroy the "blank split" */
+   /* Destroy the transaction containing the "blank split", which was only
+    * created to support the area for entering a new transaction. Since the
+    * register is closing, this transaction is no longer needed. */
    if (blank_split != NULL)
    {
       gboolean was_open;
 
-      /* split destroy will automatically remove it
-       * from its parent account */
       blank_trans = xaccSplitGetParent (blank_split);
 
       DEBUG("blank_split=%p, blank_trans=%p, pending_trans=%p",
             blank_split, blank_trans, pending_trans);
 
-      /* Make sure we don't commit this below */
-      if (blank_trans == pending_trans)
-      {
-        info->pending_trans_guid = *guid_null ();
-        pending_trans = NULL;
-      }
-
+      /* Destroying the transaction will automatically remove its splits. */
       was_open = xaccTransIsOpen (blank_trans);
       xaccTransDestroy (blank_trans);
       if (was_open)
         xaccTransCommitEdit (blank_trans);
 
+      /* Update the register info. */
+      if (blank_trans == pending_trans)
+      {
+        info->pending_trans_guid = *guid_null ();
+        pending_trans = NULL;
+      }
       info->blank_split_guid = *guid_null ();
       blank_split = NULL;
    }
