@@ -1,6 +1,43 @@
 Version history:
 ------- -------
 
+ 2.2.9 - 23 February 2009
+ 	 Welcome to the GnuCash 2.2.9 Release.
+	 Fixed Bugs:
+	 o #339027: Reconcile window should display the date
+	 o #435642: Crash editing results of a find
+	 o #438132: Warning about commodity being NULL for root account on save
+	 o #462148: Report output is vertically inverted and bottom up
+	            printed (mirror, reverse, &c.)
+	 o #514455: Dutch (Netherlands) translation of account templates
+	 o #526775: Win32: Crashes when importing brokerage account data
+	 o #542382: Assign GnuCash to file name extension .gnucash
+	 o #564209: Improved debuggability for module loading
+
+	 o #564450: HUF currency handling incorrect as 1HUF divided into
+	            100FILLERs
+	 o #564928: Segfault when closing a invoice tab
+	 o #565421: gnc-date-edit.c did not compile with Gtk < 2.10
+	 o #565721: Multicolumn report options: Report names are not translated
+	 o #566198: Slovakia joined the Euro
+	 o #566352: Crash during OFX import under Win 2000 / SP4
+	 o #566567: Scheme modifications are not built on windows
+	 o #567174: Files with NIS stocks fail to open
+
+	 o #568327: Using most "budget" reports, without a budget
+	            defined crashes gnucash
+	 o #568653: Add SKR49 template
+	 o #568945: The gnc_pricedb_convert_balance_... methods should
+	            look for the reciprocal of the exchange rate
+	 o #569734: Give the template root account a name
+	 o #570166: Weird text entry box when typing on Account Tree page
+	 o #570894: Use of symbol t, which is not defined in all guile versions
+	 o #571220: Program won't start if SCHEME_LIBRARY_PATH is set
+	 Other Changes:
+	 o Added German account template for a Wohnungswirtschaft business
+	 o Fixed french business account templates
+	 o Updated translations: Catalan, Chinese, German, Italian
+
  2.2.8 - 14 December 2008
  	 Welcome to the GnuCash 2.2.8 Release.
 	 Fixed Bugs:
