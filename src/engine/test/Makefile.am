@@ -33,6 +33,7 @@ TESTS = \
   test-create-account \
   test-account-object \
   test-group-vs-book \
+  test-lots \
   test-period \
   test-querynew \
   test-query \
@@ -44,7 +45,6 @@ TESTS = \
   test-recurrence \
   test-scm-query \
   test-book-merge
-#  test-lots
 
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/engine \
