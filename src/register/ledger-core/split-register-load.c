@@ -507,15 +507,13 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     if (pending_trans == trans)
       found_pending = TRUE;
 
-    /* do not load the blank split */
-    if (split == blank_split)
-      continue;
+    /* Do not load splits from the blank transaction. */
+    if (trans == blank_trans)
+        continue;
 
     if (multi_line)
     {
-      if (trans == blank_trans)
-        continue;
-
+      /* Skip this split if its transaction has already been loaded. */
       if (g_hash_table_lookup (trans_table, trans))
         continue;
 
