@@ -690,7 +690,8 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
   scm_gc_protect_object(copied_item);
 
   copied_class = cursor_class;
-  LEAVE("");
+  LEAVE("%s %s", use_cut_semantics? "cut" : "copied",
+        cursor_class == CURSOR_CLASS_SPLIT? "split" : "transaction");
 }
 
 void
@@ -748,6 +749,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
   SRInfo *info = gnc_split_register_get_info(reg);
   CursorClass cursor_class;
   Transaction *trans;
+  Transaction *blank_trans;
   Split *blank_split;
   Split *trans_split;
   Split *split;
@@ -756,12 +758,13 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
   if (copied_class == CURSOR_CLASS_NONE)
   {
-    LEAVE("no copied class");
+    LEAVE("no copied cursor class");
     return;
   }
 
   blank_split = xaccSplitLookup (&info->blank_split_guid,
                                  gnc_get_current_book ());
+  blank_trans = xaccSplitGetParent (blank_split);
   split = gnc_split_register_get_current_split (reg);
   trans = gnc_split_register_get_current_trans (reg);
 
@@ -779,14 +782,15 @@ gnc_split_register_paste_current (SplitRegister *reg)
   /* Can't do anything with this. */
   if (cursor_class == CURSOR_CLASS_NONE)
   {
-    LEAVE("no cursor class");
+    LEAVE("no current cursor class");
     return;
   }
 
   /* This shouldn't happen, but be paranoid. */
   if ((split == NULL) && (cursor_class == CURSOR_CLASS_TRANS))
   {
-    LEAVE("null split with transaction class");
+    g_warning("BUG DETECTED: transaction cursor with no anchoring split!");
+    LEAVE("transaction cursor with no anchoring split");
     return;
   }
 
@@ -794,21 +798,18 @@ gnc_split_register_paste_current (SplitRegister *reg)
   {
     const char *message = _("You are about to overwrite an existing split. "
                             "Are you sure you want to do that?");
-    gboolean result;
 
     if (copied_class == CURSOR_CLASS_TRANS)
     {
+      /* An entire transaction was copied, but we're just on a split. */
       LEAVE("can't copy trans to split");
       return;
     }
 
-    if (split != NULL)
-      result = gnc_verify_dialog (gnc_split_register_get_parent (reg),
-				  FALSE, "%s", message);
-    else
-      result = TRUE;
-
-    if (!result)
+    /* Ask before overwriting an existing split. */
+    if (split != NULL &&
+        !gnc_verify_dialog (gnc_split_register_get_parent (reg),
+                            FALSE, "%s", message))
     {
       LEAVE("user cancelled");
       return;
@@ -830,8 +831,6 @@ gnc_split_register_paste_current (SplitRegister *reg)
     const char *message = _("You are about to overwrite an existing "
                             "transaction. "
                             "Are you sure you want to do that?");
-    gboolean result;
-
     Account * copied_leader;
     const GUID *new_guid;
     int trans_split_index;
@@ -844,26 +843,26 @@ gnc_split_register_paste_current (SplitRegister *reg)
       return;
     }
 
-    if (split != blank_split)
-      result = gnc_verify_dialog(gnc_split_register_get_parent(reg),
-				 FALSE, "%s", message);
-    else
-      result = TRUE;
-
-    if (!result)
+    /* Ask before overwriting an existing transaction. */
+    if (split != blank_split &&
+        !gnc_verify_dialog(gnc_split_register_get_parent(reg),
+                           FALSE, "%s", message))
     {
       LEAVE("user cancelled");
       return;
     }
 
+    /* Open the transaction for editing. */
+    if (gnc_split_register_begin_edit_or_warn(info, trans))
+    {
+      LEAVE("can't begin editing");
+      return;
+    }
+
     gnc_suspend_gui_refresh ();
 
-    /* in pasting, the old split is deleted. */
-    if (split == blank_split)
-    {
-      info->blank_split_guid = *guid_null();
-      blank_split = NULL;
-    }
+    DEBUG("Pasting txn, trans=%p, split=%p, blank_trans=%p, blank_split=%p",
+          trans, split, blank_trans, blank_split);
 
     split_index = xaccTransGetSplitIndex(trans, split);
     trans_split_index = xaccTransGetSplitIndex(trans, trans_split);
@@ -875,16 +874,29 @@ gnc_split_register_paste_current (SplitRegister *reg)
       new_guid = &info->default_account;
       gnc_copy_trans_scm_onto_trans_swap_accounts(copied_item, trans,
                                                   &copied_leader_guid,
-                                                  new_guid, TRUE,
+                                                  new_guid, FALSE,
                                                   gnc_get_current_book ());
     }
     else
-      gnc_copy_trans_scm_onto_trans(copied_item, trans, TRUE,
+      gnc_copy_trans_scm_onto_trans(copied_item, trans, FALSE,
                                     gnc_get_current_book ());
 
     num_splits = xaccTransCountSplits(trans);
     if (split_index >= num_splits)
       split_index = 0;
+
+    if (trans == blank_trans)
+    {
+      /* In pasting, the blank split is deleted. Pick a new one. */
+      blank_split = xaccTransGetSplit(trans, 0);
+      info->blank_split_guid = *xaccSplitGetGUID (blank_split);
+      info->blank_split_edited = TRUE;
+      DEBUG("replacement blank_split=%p", blank_split);
+
+      /* NOTE: At this point, the blank transaction virtual cell is still
+       *       anchored by the old, deleted blank split. The register will
+       *       have to be reloaded (redrawn) to correct this. */
+    }
 
     info->cursor_hint_trans = trans;
     info->cursor_hint_split = xaccTransGetSplit(trans, split_index);
