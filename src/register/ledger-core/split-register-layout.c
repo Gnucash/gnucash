@@ -569,7 +569,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
                          XFRM_CELL,
                          COMBO_CELL_TYPE_NAME,
                          N_("Transfer"),
-                         CELL_ALIGN_LEFT,
+                         CELL_ALIGN_RIGHT,
                          FALSE,
                          FALSE);
 
