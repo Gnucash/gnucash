@@ -2100,16 +2100,30 @@ gnc_split_register_changed (SplitRegister *reg)
   SRInfo *info = gnc_split_register_get_info (reg);
   Transaction *pending_trans;
 
+  ENTER("reg=%p", reg);
+
   if (reg == NULL)
+  {
+    LEAVE("no register");
     return FALSE;
+  }
 
   if (gnc_table_current_cursor_changed (reg->table, FALSE))
+  {
+    LEAVE("cursor changed");
     return TRUE;
+  }
 
   pending_trans = xaccTransLookup (&info->pending_trans_guid,
                                    gnc_get_current_book ());
+  if (xaccTransIsOpen (pending_trans))
+  {
+    LEAVE("open and pending txn");
+    return TRUE;
+  }
 
-  return xaccTransIsOpen (pending_trans);
+  LEAVE("register unchanged");
+  return FALSE;
 }
 
 void
