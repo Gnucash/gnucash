@@ -560,7 +560,7 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
   gnc_commodity * default_commodity;
   GNCAccountType default_type=ACCT_TYPE_NONE;
   gchar * account_description;
-  gchar * account_type_name = NULL;
+  const gchar * account_type_name = _("Unknown OFX account");
 
   if(data.account_id_valid==true){
     commodity_table = gnc_get_current_commodities ();
@@ -580,31 +580,31 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
       switch(data.account_type){
       case OFX_CHECKING : 
 	default_type=ACCT_TYPE_BANK;
-	account_type_name = g_strdup_printf(_("Unknown OFX checking account"));
+	account_type_name = _("Unknown OFX checking account");
 	break;
       case OFX_SAVINGS : 
 	default_type=ACCT_TYPE_BANK;
-	account_type_name = g_strdup_printf(_("Unknown OFX savings account"));
+	account_type_name = _("Unknown OFX savings account");
 	break;
       case OFX_MONEYMRKT : 
 	default_type=ACCT_TYPE_MONEYMRKT;
-	account_type_name = g_strdup_printf(_("Unknown OFX money market account"));
+	account_type_name = _("Unknown OFX money market account");
 	break;
       case OFX_CREDITLINE : 
 	default_type=ACCT_TYPE_CREDITLINE;
-	account_type_name = g_strdup_printf(_("Unknown OFX credit line account"));
+	account_type_name = _("Unknown OFX credit line account");
 	break;
       case OFX_CMA : 
 	default_type=ACCT_TYPE_NONE;
-	account_type_name = g_strdup_printf(_("Unknown OFX CMA account"));
+	account_type_name = _("Unknown OFX CMA account");
 	break;
       case OFX_CREDITCARD : 
 	default_type=ACCT_TYPE_CREDIT;
-	account_type_name = g_strdup_printf(_("Unknown OFX credit card account"));
+	account_type_name = _("Unknown OFX credit card account");
 	break;
       case OFX_INVESTMENT :
 	default_type=ACCT_TYPE_BANK;
-	account_type_name = g_strdup_printf(_("Unknown OFX investment account"));
+	account_type_name = _("Unknown OFX investment account");
 	break;
       default: PERR("WRITEME: ofx_proc_account() This is an unknown account type!");
       }
@@ -623,7 +623,6 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
 						 account_description, default_commodity,
 						 default_type, NULL, NULL);
     g_free(account_description);
-    g_free(account_type_name);
   }
   else
     {
