@@ -1,70 +1,43 @@
-<?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
-<!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
-
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
+<!--*- mode: xml -*-->
 <glade-interface>
-<requires lib="gnome"/>
-
-<widget class="GtkWindow" id="New Commodity Format Druid">
-  <property name="visible">True</property>
-  <property name="title" translatable="yes">Import currency and stock information</property>
-  <property name="type">GTK_WINDOW_TOPLEVEL</property>
-  <property name="window_position">GTK_WIN_POS_NONE</property>
-  <property name="modal">False</property>
-  <property name="resizable">True</property>
-  <property name="destroy_with_parent">False</property>
-  <property name="decorated">True</property>
-  <property name="skip_taskbar_hint">False</property>
-  <property name="skip_pager_hint">False</property>
-  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
-  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="focus_on_map">True</property>
-
-  <child>
-    <widget class="GnomeDruid" id="commodity_druid">
-      <property name="border_width">4</property>
-      <property name="visible">True</property>
-      <property name="show_help">False</property>
-
-      <child>
-	<widget class="GnomeDruidPageEdge" id="start_page">
-	  <property name="visible">True</property>
-	  <property name="position">GNOME_EDGE_START</property>
-	  <property name="title" translatable="yes">Import currency and stock information</property>
-	  <property name="text" translatable="yes">The file you are loading is from an older version of GnuCash. Information about currencies, stocks, and mutual funds needs to be updated for the new version. 
+  <requires lib="gnome"/>
+  <widget class="GtkWindow" id="New Commodity Format Druid">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Import currency and stock information</property>
+    <child>
+      <widget class="GnomeDruid" id="commodity_druid">
+        <property name="visible">True</property>
+        <property name="border_width">4</property>
+        <child>
+          <widget class="GnomeDruidPageEdge" id="start_page">
+            <property name="visible">True</property>
+            <property name="position">GNOME_EDGE_START</property>
+            <property name="title" translatable="yes">Import currency and stock information</property>
+            <property name="text" translatable="yes">The file you are loading is from an older version of GnuCash. Information about currencies, stocks, and mutual funds needs to be updated for the new version. 
 
 This dialog will prompt you for some additional information about each currency, stock, and mutual fund that appear in your accounts.  After you have entered this information, you can update your accounts for the new version of GnuCash.
 
-Hit &quot;Cancel&quot; now to stop loading the file.</property>
-	  <property name="title_color">#ffffffffffff</property>
-	  <property name="text_color">#000000000000</property>
-	  <property name="background_color">#9999bfbf9999</property>
-	  <property name="logo_background_color">#ffffffffffff</property>
-	  <property name="textbox_color">#ffffffffffff</property>
-	  <signal name="cancel" handler="gnc_ui_commodity_druid_cancel_cb"/>
-	</widget>
-      </child>
+Hit "Cancel" now to stop loading the file.</property>
+            <signal name="cancel" handler="gnc_ui_commodity_druid_cancel_cb"/>
+          </widget>
+        </child>
+        <child>
+          <widget class="GnomeDruidPageEdge" id="finish_page">
+            <property name="visible">True</property>
+            <property name="position">GNOME_EDGE_FINISH</property>
+            <property name="title" translatable="yes">Update your accounts with the new information</property>
+            <property name="text" translatable="yes">Click "Finish" to update your accounts to use the new information you have entered.
 
-      <child>
-	<widget class="GnomeDruidPageEdge" id="finish_page">
-	  <property name="visible">True</property>
-	  <property name="position">GNOME_EDGE_FINISH</property>
-	  <property name="title" translatable="yes">Update your accounts with the new information</property>
-	  <property name="text" translatable="yes">Click &quot;Finish&quot; to update your accounts to use the new information you have entered.
+Click "Cancel" to cancel the file-loading process.  
 
-Click &quot;Cancel&quot; to cancel the file-loading process.  
-
-Click &quot;Back&quot; to review your currency selections.</property>
-	  <property name="title_color">#ffffffffffff</property>
-	  <property name="text_color">#000000000000</property>
-	  <property name="background_color">#9b9bbfbf9c9c</property>
-	  <property name="logo_background_color">#ffffffffffff</property>
-	  <property name="textbox_color">#ffffffffffff</property>
-	  <signal name="finish" handler="gnc_ui_commodity_druid_finish_cb"/>
-	  <signal name="cancel" handler="gnc_ui_commodity_druid_cancel_cb"/>
-	</widget>
-      </child>
-    </widget>
-  </child>
-</widget>
-
+Click "Back" to review your currency selections.</property>
+            <signal name="cancel" handler="gnc_ui_commodity_druid_cancel_cb"/>
+            <signal name="finish" handler="gnc_ui_commodity_druid_finish_cb"/>
+          </widget>
+        </child>
+      </widget>
+    </child>
+  </widget>
 </glade-interface>
