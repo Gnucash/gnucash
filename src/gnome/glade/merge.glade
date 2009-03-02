@@ -1,23 +1,37 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--*- mode: xml -*-->
+<?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
+<!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
+
 <glade-interface>
-  <requires lib="gnome"/>
-  <widget class="GtkWindow" id="Merge Druid">
-    <property name="visible">True</property>
-    <property name="title" translatable="yes">QSF Data Import Setup</property>
-    <property name="window_position">GTK_WIN_POS_CENTER</property>
-    <child>
-      <widget class="GnomeDruid" id="merge_druid">
-        <property name="visible">True</property>
-        <property name="border_width">4</property>
-        <signal name="cancel" handler="on_cancel"/>
-        <child>
-          <widget class="GnomeDruidPageEdge" id="start_page">
-            <property name="visible">True</property>
-            <property name="position">GNOME_EDGE_START</property>
-            <property name="title" translatable="yes">QSF Data Import Setup</property>
-            <property name="text" translatable="yes">This druid will merge your QSF data into the currently open GnuCash file.
+<requires lib="gnome"/>
+
+<widget class="GtkWindow" id="Merge Druid">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">QSF Data Import Setup</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_CENTER</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="focus_on_map">True</property>
+
+  <child>
+    <widget class="GnomeDruid" id="merge_druid">
+      <property name="border_width">4</property>
+      <property name="visible">True</property>
+      <property name="show_help">False</property>
+      <signal name="cancel" handler="on_cancel"/>
+
+      <child>
+	<widget class="GnomeDruidPageEdge" id="start_page">
+	  <property name="visible">True</property>
+	  <property name="position">GNOME_EDGE_START</property>
+	  <property name="title" translatable="yes">QSF Data Import Setup</property>
+	  <property name="text" translatable="yes">This druid will merge your QSF data into the currently open GnuCash file.
 
 You will be asked how to proceed if some QSF data clashes with the your existing GnuCash data file.
 
@@ -28,160 +42,255 @@ There is currently no currency or price support in the merge operation, the new 
 Your QSF data is ready to import
 
 Click 'Cancel'  if you do not wish to merge your QSF data now.</property>
-            <signal name="next" handler="on_start_page_next"/>
-          </widget>
-        </child>
-        <child>
-          <widget class="GnomeDruidPageStandard" id="qof_book_merge">
-            <property name="visible">True</property>
-            <property name="title" translatable="yes">Please resolve any conflicts in the merge</property>
-            <property name="title_foreground_gdk">#ffffffffffff</property>
-            <property name="background_gdk">#191919197070</property>
-            <property name="logo_background_gdk">#ffffffffffff</property>
-            <signal name="next" handler="on_qof_book_merge_next"/>
-            <signal name="prepare" handler="on_qof_book_merge_prepare"/>
-            <child internal-child="vbox">
-              <widget class="GtkVBox" id="druid-vbox6">
-                <property name="visible">True</property>
-                <property name="border_width">16</property>
-                <child>
-                  <widget class="GtkHBox" id="hbox105">
-                    <property name="visible">True</property>
-                    <child>
-                      <widget class="GtkVBox" id="vbox121">
-                        <property name="visible">True</property>
-                        <child>
-                          <widget class="GtkLabel" id="ResultsBox">
-                            <property name="visible">True</property>
-                            <property name="justify">GTK_JUSTIFY_CENTER</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkHBox" id="hbox106">
-                            <property name="visible">True</property>
-                            <child>
-                              <widget class="GtkScrolledWindow" id="scrolledwindow27">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
-                                <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                                <child>
-                                  <widget class="GtkViewport" id="viewport1">
-                                    <property name="height_request">51</property>
-                                    <property name="visible">True</property>
-                                    <property name="tooltip" translatable="yes">Shows how your QSF data conflicts with existing data in your file.</property>
-                                    <property name="border_width">5</property>
-                                    <child>
-                                      <widget class="GtkLabel" id="OutPut">
-                                        <property name="height_request">50</property>
-                                        <property name="visible">True</property>
-                                        <property name="mnemonic_widget">MergeUpdate</property>
-                                      </widget>
-                                    </child>
-                                  </widget>
-                                </child>
-                              </widget>
-                            </child>
-                          </widget>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="Static">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">You have three choices for each collision: 
+	  <property name="title_color">#ffffffffffff</property>
+	  <property name="text_color">#000000000000</property>
+	  <property name="background_color">#191919197070</property>
+	  <property name="logo_background_color">#ffffffffffff</property>
+	  <property name="textbox_color">#ffffffffffff</property>
+	  <signal name="next" handler="on_start_page_next"/>
+	</widget>
+      </child>
+
+      <child>
+	<widget class="GnomeDruidPageStandard" id="qof_book_merge">
+	  <property name="visible">True</property>
+	  <property name="title" translatable="yes">Please resolve any conflicts in the merge</property>
+	  <property name="title_foreground">#ffffffffffff</property>
+	  <property name="background">#191919197070</property>
+	  <property name="logo_background">#ffffffffffff</property>
+	  <signal name="prepare" handler="on_qof_book_merge_prepare"/>
+	  <signal name="next" handler="on_qof_book_merge_next"/>
+
+	  <child internal-child="vbox">
+	    <widget class="GtkVBox" id="druid-vbox6">
+	      <property name="border_width">16</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
+
+	      <child>
+		<widget class="GtkHBox" id="hbox105">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
+
+		  <child>
+		    <widget class="GtkVBox" id="vbox121">
+		      <property name="visible">True</property>
+		      <property name="homogeneous">False</property>
+		      <property name="spacing">0</property>
+
+		      <child>
+			<widget class="GtkLabel" id="ResultsBox">
+			  <property name="visible">True</property>
+			  <property name="label"></property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			  <property name="width_chars">-1</property>
+			  <property name="single_line_mode">False</property>
+			  <property name="angle">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkHBox" id="hbox106">
+			  <property name="visible">True</property>
+			  <property name="homogeneous">False</property>
+			  <property name="spacing">0</property>
+
+			  <child>
+			    <widget class="GtkScrolledWindow" id="scrolledwindow27">
+			      <property name="visible">True</property>
+			      <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
+			      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+			      <property name="shadow_type">GTK_SHADOW_NONE</property>
+			      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+			      <child>
+				<widget class="GtkViewport" id="viewport1">
+				  <property name="border_width">5</property>
+				  <property name="height_request">51</property>
+				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Shows how your QSF data conflicts with existing data in your file.</property>
+				  <property name="shadow_type">GTK_SHADOW_IN</property>
+
+				  <child>
+				    <widget class="GtkLabel" id="OutPut">
+				      <property name="height_request">50</property>
+				      <property name="visible">True</property>
+				      <property name="label" translatable="yes"></property>
+				      <property name="use_underline">False</property>
+				      <property name="use_markup">False</property>
+				      <property name="justify">GTK_JUSTIFY_LEFT</property>
+				      <property name="wrap">False</property>
+				      <property name="selectable">False</property>
+				      <property name="xalign">0.5</property>
+				      <property name="yalign">0.5</property>
+				      <property name="xpad">0</property>
+				      <property name="ypad">0</property>
+				      <property name="mnemonic_widget">MergeUpdate</property>
+				      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				      <property name="width_chars">-1</property>
+				      <property name="single_line_mode">False</property>
+				      <property name="angle">0</property>
+				    </widget>
+				  </child>
+				</widget>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">True</property>
+			  <property name="fill">True</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="Static">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">You have three choices for each collision: 
 1. The import object can be allowed to overwrite the target - use this to update your existing book. 
 2. The import object can be ignored - use this if the import is a duplicate of an object in the existing book. 
 3. The import object can be created as a new object in the existing book.</property>
-                            <property name="justify">GTK_JUSTIFY_FILL</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="MergeUpdate">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="has_focus">True</property>
-                            <property name="tooltip" translatable="yes">overwrite the original with the import data</property>
-                            <property name="border_width">5</property>
-                            <property name="label" translatable="yes">1. Update your existing book with the import data</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_MergeUpdate_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="MergeDuplicate">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip" translatable="yes">ignore the import, leave the original untouched</property>
-                            <property name="border_width">5</property>
-                            <property name="label" translatable="yes">2. Ignore the import data, leave original unchanged</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_MergeDuplicate_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">4</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="MergeNew">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip" translatable="yes">Add the import as a new object, leave original in place</property>
-                            <property name="border_width">5</property>
-                            <property name="label" translatable="yes">3. Import the data as a NEW object</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_MergeNew_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">5</property>
-                          </packing>
-                        </child>
-                      </widget>
-                    </child>
-                  </widget>
-                </child>
-              </widget>
-            </child>
-          </widget>
-        </child>
-        <child>
-          <widget class="GnomeDruidPageEdge" id="MergeDruidFinishPage">
-            <property name="visible">True</property>
-            <property name="position">GNOME_EDGE_FINISH</property>
-            <property name="title" translatable="yes">Commit QSF Import Data to data file</property>
-            <property name="text" translatable="yes">Press `Apply' to merge your QSF data into the current GnuCash file.
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_FILL</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			  <property name="width_chars">-1</property>
+			  <property name="single_line_mode">False</property>
+			  <property name="angle">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkButton" id="MergeUpdate">
+			  <property name="border_width">5</property>
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">overwrite the original with the import data</property>
+			  <property name="can_focus">True</property>
+			  <property name="has_focus">True</property>
+			  <property name="label" translatable="yes">1. Update your existing book with the import data</property>
+			  <property name="use_underline">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
+			  <signal name="clicked" handler="on_MergeUpdate_clicked"/>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkButton" id="MergeDuplicate">
+			  <property name="border_width">5</property>
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">ignore the import, leave the original untouched</property>
+			  <property name="can_focus">True</property>
+			  <property name="label" translatable="yes">2. Ignore the import data, leave original unchanged</property>
+			  <property name="use_underline">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
+			  <signal name="clicked" handler="on_MergeDuplicate_clicked"/>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkButton" id="MergeNew">
+			  <property name="border_width">5</property>
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Add the import as a new object, leave original in place</property>
+			  <property name="can_focus">True</property>
+			  <property name="label" translatable="yes">3. Import the data as a NEW object</property>
+			  <property name="use_underline">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
+			  <signal name="clicked" handler="on_MergeNew_clicked"/>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">True</property>
+		  <property name="fill">True</property>
+		</packing>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+      </child>
+
+      <child>
+	<widget class="GnomeDruidPageEdge" id="MergeDruidFinishPage">
+	  <property name="visible">True</property>
+	  <property name="position">GNOME_EDGE_FINISH</property>
+	  <property name="title" translatable="yes">Commit QSF Import Data to data file</property>
+	  <property name="text" translatable="yes">Press `Apply' to merge your QSF data into the current GnuCash file.
 
 Press `Back' to review your selections.
 
 Press `Cancel' to close this dialog without changing your current data file.
 
 REMEMBER: There is no way to undo this final operation! Make sure you have a backup before clicking 'Apply'.</property>
-            <signal name="finish" handler="on_finish"/>
-          </widget>
-        </child>
-      </widget>
-    </child>
-  </widget>
+	  <property name="title_color">#ffffffffffff</property>
+	  <property name="text_color">#000000000000</property>
+	  <property name="background_color">#191919197070</property>
+	  <property name="logo_background_color">#ffffffffffff</property>
+	  <property name="textbox_color">#ffffffffffff</property>
+	  <signal name="finish" handler="on_finish"/>
+	</widget>
+      </child>
+    </widget>
+  </child>
+</widget>
+
 </glade-interface>
