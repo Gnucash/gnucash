@@ -236,10 +236,7 @@ gnc_split_register_check_account (SplitRegister *reg,
                                                      cell->cell.value,
                                                      &info->full_refresh);
   if (!new_acct)
-  {
-    DEBUG("account check failed");
     return FALSE;
-  }
 
   /* See if we need to reset the exchange rate. */
   rate_cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
@@ -1067,7 +1064,10 @@ gnc_split_register_check_cell (SplitRegister *reg, const char *cell_name)
 
   /* See if we are leaving an account field. */
   if (!gnc_split_register_check_account (reg, cell_name))
+  {
+    LEAVE("account check failed");
     return FALSE;
+  }
 
   /* See if we are leaving an action field */
   if ((reg->type == STOCK_REGISTER) ||
@@ -1078,6 +1078,7 @@ gnc_split_register_check_cell (SplitRegister *reg, const char *cell_name)
     gnc_split_register_check_stock_shares (reg, cell_name);
   }
 
+  LEAVE(" ");
   return TRUE;
 }
 
