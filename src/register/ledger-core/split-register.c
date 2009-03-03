@@ -1504,8 +1504,8 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
          blank_split, blank_trans, pending_trans, trans);
 
    /* Act on any changes to the current cell before the save. */
-   gnc_split_register_check_cell (reg,
-                                  gnc_table_get_current_cell_name (reg->table));
+   (void) gnc_split_register_check_cell (reg,
+            gnc_table_get_current_cell_name (reg->table));
 
    if (!gnc_split_register_auto_calc (reg, split))
    {

@@ -188,20 +188,19 @@ gnc_split_register_old_split_empty_p (SplitRegister *reg, Split *split)
   return TRUE;
 }
 
-/* This function checks a cell for an account change, and takes
- * any necessary action if an account change has occurred. */
-static void
+/* Checks a cell for an account change and takes any necessary action if
+ * one has occurred. Returns TRUE if the check passes, FALSE if it fails. */
+static gboolean
 gnc_split_register_check_account (SplitRegister *reg, 
                                   const char *cell_name)
 {
   SRInfo *info;
   ComboCell *cell = NULL;
+  PriceCell *rate_cell;
   Account* new_acct;
   char *name;
 
-  g_return_if_fail(reg);
-
-  ENTER("reg=%p, cell_name=%s", reg, cell_name? cell_name : "NULL");
+  g_return_val_if_fail(reg, TRUE);
 
   /* See if we are leaving an account field */
   if (gnc_cell_name_equal (cell_name, XFRM_CELL))
@@ -220,21 +219,15 @@ gnc_split_register_check_account (SplitRegister *reg,
   }
 
   if (!cell)
-  {
-    LEAVE(" ");
-    return;
-  }
+    return TRUE;
 
   /* The account has been changed. */
   name = cell->cell.value;
-  DEBUG("Account now %s", name ? name : "NULL");
+  DEBUG("Changed to %s", name ? name : "NULL");
   if (!name || *name == '\0' ||
       safe_strcmp (name, SPLIT_TRANS_STR) == 0 ||
       safe_strcmp (name, STOCK_SPLIT_STR) == 0)
-  {
-    LEAVE(" ");
-    return;
-  }
+    return TRUE;
 
   /* Create the account if necessary. Also checks for a placeholder. */
   info = gnc_split_register_get_info (reg);
@@ -242,55 +235,56 @@ gnc_split_register_check_account (SplitRegister *reg,
                                                      (BasicCell *) cell,
                                                      cell->cell.value,
                                                      &info->full_refresh);
+  if (!new_acct)
+  {
+    DEBUG("account check failed");
+    return FALSE;
+  }
 
   /* See if we need to reset the exchange rate. */
-  if (new_acct)
+  rate_cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
+                                                       RATE_CELL);
+  if (rate_cell)
   {
-    PriceCell *rate_cell = (PriceCell *)
-      gnc_table_layout_get_cell (reg->table->layout, RATE_CELL);
+    Split         *split     = gnc_split_register_get_current_split(reg);
+    Account       *orig_acct = xaccSplitGetAccount(split);
+    gnc_commodity *orig_com  = xaccAccountGetCommodity(orig_acct);
+    gnc_commodity *new_com   = xaccAccountGetCommodity(new_acct);
 
-    if (rate_cell)
+    if (!gnc_commodity_equal(orig_com, new_com))
     {
-      Split         *split     = gnc_split_register_get_current_split(reg);
-      Account       *orig_acct = xaccSplitGetAccount(split);
-      gnc_commodity *orig_com  = xaccAccountGetCommodity(orig_acct);
-      gnc_commodity *new_com   = xaccAccountGetCommodity(new_acct);
+      DEBUG("Commodity now %s (originally %s). Clearing rate.",
+            new_com  ? gnc_commodity_get_mnemonic(new_com) : "NULL",
+            orig_com ? gnc_commodity_get_mnemonic(orig_com) : "NULL");
 
-      if (!gnc_commodity_equal(orig_com, new_com))
+      gnc_price_cell_set_value (rate_cell, gnc_numeric_zero());
+      info->rate_reset = TRUE;
+    }
+    else
+    {
+      /* Get the original rate from the split. */
+      gnc_numeric amt       = xaccSplitGetAmount(split);
+      gnc_numeric val       = xaccSplitGetValue(split);
+      gnc_numeric orig_rate = gnc_numeric_div(amt, val, GNC_DENOM_AUTO,
+                                              GNC_DENOM_REDUCE);
+
+      if (!gnc_numeric_check(orig_rate))
       {
-        DEBUG("Commodity now %s (originally %s). Clearing rate.",
-              new_com  ? gnc_commodity_get_mnemonic(new_com) : "NULL",
-              orig_com ? gnc_commodity_get_mnemonic(orig_com) : "NULL");
-
-        gnc_price_cell_set_value (rate_cell, gnc_numeric_zero());
-        info->rate_reset = TRUE;
+        DEBUG("Using original rate of %s.",
+              gnc_num_dbg_to_string(orig_rate));
+        gnc_price_cell_set_value (rate_cell, orig_rate);
+        info->rate_reset = FALSE;
       }
       else
       {
-        /* Get the original rate from the split. */
-        gnc_numeric amt       = xaccSplitGetAmount(split);
-        gnc_numeric val       = xaccSplitGetValue(split);
-        gnc_numeric orig_rate = gnc_numeric_div(amt, val, GNC_DENOM_AUTO,
-                                                GNC_DENOM_REDUCE);
-
-        if (!gnc_numeric_check(orig_rate))
-        {
-          DEBUG("Using original rate of %s.",
-                gnc_num_dbg_to_string(orig_rate));
-          gnc_price_cell_set_value (rate_cell, orig_rate);
-          info->rate_reset = FALSE;
-        }
-        else
-        {
-          DEBUG("Can't get rate. Using zero.");
-          gnc_price_cell_set_value (rate_cell, gnc_numeric_zero());
-          info->rate_reset = TRUE;
-        }
+        DEBUG("Can't get rate. Using zero.");
+        gnc_price_cell_set_value (rate_cell, gnc_numeric_zero());
+        info->rate_reset = TRUE;
       }
     }
   }
 
-  LEAVE(" ");
+  return TRUE;
 }
 
 static void
@@ -1061,14 +1055,19 @@ gnc_split_register_check_stock_shares (SplitRegister *reg,
   }
 }
 
-/* This function checks a cell for changes and takes appropriate
- * action if a change has occurred. It is useful, for example, to
- * call this function just before leaving a cell. */
-void
+/* This function checks a cell for changes and takes appropriate action if a
+ * change has occurred. It is recommended to call this function just before
+ * leaving a cell. Returns FALSE if control should remain in this cell. For
+ * example, the user may have made a mistake and needs another chance to
+ * edit the information before moving on. */
+gboolean
 gnc_split_register_check_cell (SplitRegister *reg, const char *cell_name)
 {
+  ENTER("reg=%p, cell_name=%s", reg, cell_name? cell_name : "NULL");
+
   /* See if we are leaving an account field. */
-  gnc_split_register_check_account (reg, cell_name);
+  if (!gnc_split_register_check_account (reg, cell_name))
+    return FALSE;
 
   /* See if we are leaving an action field */
   if ((reg->type == STOCK_REGISTER) ||
@@ -1078,6 +1077,8 @@ gnc_split_register_check_cell (SplitRegister *reg, const char *cell_name)
     gnc_split_register_check_stock_action (reg, cell_name);
     gnc_split_register_check_stock_shares (reg, cell_name);
   }
+
+  return TRUE;
 }
 
 static Account *
@@ -1510,7 +1511,11 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
   /* Get the current cell-name and check it for changes. */
   cell_name = gnc_table_get_current_cell_name (reg->table);
-  gnc_split_register_check_cell (reg, cell_name);
+  if (!gnc_split_register_check_cell (reg, cell_name))
+  {
+    LEAVE("check cell");
+    return TRUE;
+  }
 
   /* See if we are tabbing off the end of the very last line */
   do {

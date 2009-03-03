@@ -161,7 +161,8 @@ Account * gnc_split_register_get_account (SplitRegister *reg,
 
 gboolean gnc_split_register_recn_cell_confirm (char old_flag, gpointer data);
 
-void gnc_split_register_check_cell (SplitRegister *reg, const char *cell_name);
+gboolean gnc_split_register_check_cell (SplitRegister *reg,
+                                        const char *cell_name);
 
 CursorClass gnc_split_register_cursor_name_to_class (const char *cursor_name);
 
