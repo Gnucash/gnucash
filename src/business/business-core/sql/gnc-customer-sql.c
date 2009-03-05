@@ -50,7 +50,7 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "customers"
-#define TABLE_VERSION 1
+#define TABLE_VERSION 2
 
 #define MAX_NAME_LEN 2048
 #define MAX_ID_LEN 2048

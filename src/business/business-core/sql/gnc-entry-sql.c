@@ -53,7 +53,7 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "entries"
-#define TABLE_VERSION 1
+#define TABLE_VERSION 2
 #define MAX_DESCRIPTION_LEN 2048
 #define MAX_ACTION_LEN 2048
 #define MAX_NOTES_LEN 2048

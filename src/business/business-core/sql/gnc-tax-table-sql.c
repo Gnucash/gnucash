@@ -61,7 +61,7 @@ static void set_parent( gpointer pObject, gpointer pValue );
 #define MAX_NAME_LEN 50
 
 #define TT_TABLE_NAME "taxtables"
-#define TT_TABLE_VERSION 1
+#define TT_TABLE_VERSION 2
 
 static GncSqlColumnTableEntry tt_col_table[] =
 {
@@ -78,7 +78,7 @@ static GncSqlColumnTableEntry tt_col_table[] =
 };
 
 #define TTENTRIES_TABLE_NAME "taxtable_entries"
-#define TTENTRIES_TABLE_VERSION 1
+#define TTENTRIES_TABLE_VERSION 2
 
 static GncSqlColumnTableEntry ttentries_col_table[] =
 {

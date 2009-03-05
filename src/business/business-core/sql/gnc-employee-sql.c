@@ -54,7 +54,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_ACL_LEN 2048
 
 #define TABLE_NAME "employees"
-#define TABLE_VERSION 1
+#define TABLE_VERSION 2
 
 static GncSqlColumnTableEntry col_table[] =
 {

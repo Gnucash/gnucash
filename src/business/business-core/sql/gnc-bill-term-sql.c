@@ -53,7 +53,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 static void set_invisible( gpointer data, gboolean value );
 
 #define TABLE_NAME "billterms"
-#define TABLE_VERSION 1
+#define TABLE_VERSION 2
 
 static GncSqlColumnTableEntry col_table[] =
 {
