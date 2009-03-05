@@ -235,7 +235,6 @@ load_all_accounts( GncSqlBackend* be )
 						l_accounts_needing_parents = g_list_delete_link( l_accounts_needing_parents, elem );
 						progress_made = TRUE;
 					}
-					g_free( elem );
 				}
 			}
 	

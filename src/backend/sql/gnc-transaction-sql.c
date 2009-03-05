@@ -50,9 +50,9 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TRANSACTION_TABLE "transactions"
-#define TX_TABLE_VERSION 1
+#define TX_TABLE_VERSION 2
 #define SPLIT_TABLE "splits"
-#define SPLIT_TABLE_VERSION 1
+#define SPLIT_TABLE_VERSION 2
 
 typedef struct {
     GncSqlBackend* be;
