@@ -497,6 +497,31 @@
          embedded-reports))
     result-string))
 
+(define (gnc:report-generate-saved-forms-string name type templ-name options embedded-options guid)
+  (let ((result (string-append 
+   ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
+   (simple-format #f ";; Options for saved report ~S, based on template ~S\n"
+		  name type)
+   (simple-format
+    #f "(let ()\n (define (options-gen)\n  (let ((options (gnc:report-template-new-options/report-guid ~S ~S)))\n"
+    type templ-name)
+   (gnc:generate-restore-forms options "options")
+   (if embedded-options
+       embedded-options
+       "")
+   "  options))\n"
+   (simple-format 
+    #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'report-guid ~S\n  'parent-type ~S\n  'options-generator options-gen\n  'menu-path (list gnc:menuname-custom)\n  'renderer (gnc:report-template-renderer/report-guid ~S ~S)))\n\n"
+    name
+    (if guid
+	guid
+	(guid-new-return)) ;; when saving a report, we need to create a guid for it for later reloading
+    type
+    type
+    templ-name))))
+    (gnc:debug result)
+    result))
+
 (define (gnc:report-generate-saved-forms report)
   ;; clean up the options if necessary.  this is only needed 
   ;; in special cases.  
@@ -507,48 +532,23 @@
     (if thunk 
         (thunk report)))
   
-  ;; save them 
-  (string-append 
-   ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
-   (simple-format #f ";; Options for saved report ~S, based on template ~S\n"
-		  (gnc:report-name report) (gnc:report-type report))
-   (simple-format
-    #f "(let ()\n (define (options-gen)\n  (let ((options (gnc:report-template-new-options/report-guid ~S ~S)))\n"
-    (gnc:report-type report) (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
-   (gnc:generate-restore-forms (gnc:report-options report) "options")
-   ;; get options of embedded reports
-   (gnc:report-generate-options-embedded report)
-   "  options))\n"
-   (simple-format 
-    #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'report-guid ~S\n  'parent-type ~S\n  'options-generator options-gen\n  'menu-path (list gnc:menuname-custom)\n  'renderer (gnc:report-template-renderer/report-guid ~S ~S)))\n\n"
-    (gnc:report-name report)
-    (guid-new-return) ;; when saving a report, we need to create a guid for it for later reloading
-    (gnc:report-type report) ;;a saved report also needs its type stored separately to reference the template
-    (gnc:report-type report)
-    (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))))
+  ;; save them
+  (let ((name (gnc:report-name report))
+	(type (gnc:report-type report))
+	(templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
+	(options (gnc:report-options report))
+	(embedded-options (gnc:report-generate-options-embedded report)))
+    (gnc:report-generate-saved-forms-string name type templ-name options embedded-options #f)))
 
 (define (gnc:report-template-generate-saved-forms report-template)
-  (string-append
-   ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
-   (simple-format #f ";; Options for saved report ~S, based on template ~S\n"
-		  (gnc:report-template-name report-template) (gnc:report-template-parent-type report-template))
-   (simple-format
-    #f "(let ()\n (define (options-gen)\n  (let ((options (gnc:report-template-new-options/report-guid ~S ~S)))\n"
-    (gnc:report-template-parent-type report-template) (gnc:report-template-name report-template))
-   (gnc:generate-restore-forms (gnc:report-template-new-options report-template) "options")
-
-   ;; get options of embedded reports
-   ;; (gnc:report-generate-options-embedded report)
-   ;; we really should do this, except the whole embedded report thing is broken
-
-   "  options))\n"
-   (simple-format 
-    #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'report-guid ~S\n  'parent-type ~S\n  'options-generator options-gen\n  'menu-path (list gnc:menuname-custom)\n  'renderer (gnc:report-template-renderer/report-guid ~S ~S)))\n\n"
-    (gnc:report-template-name report-template)
-    (gnc:report-template-report-guid report-template)
-    (gnc:report-template-parent-type report-template) ;;a saved report also needs its type stored separately to reference the template
-    (gnc:report-template-parent-type report-template) 
-    (gnc:report-template-name report-template))))
+  (let* ((name (gnc:report-template-name report-template))
+	 (type (gnc:report-template-parent-type report-template))
+	 (templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* type)))
+	 (options (gnc:report-template-new-options report-template))
+	 (embedded-options #f)
+	 (guid (gnc:report-template-report-guid report-template))
+	 )
+    (gnc:report-generate-saved-forms-string name type templ-name options embedded-options guid)))
 
 (define gnc:current-saved-reports
   (gnc-build-dotgnucash-path "saved-reports-2.4"))
