@@ -41,7 +41,7 @@
 
 #include "dialog-book-close.h"
 #include "dialog-chart-export.h"
-#include "dialog-database-connection.h"
+#include "dialog-file-access.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
 #include "dialog-sx-since-last-run.h"
@@ -361,7 +361,11 @@ gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data)
     return;
 
   gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+#ifdef HAVE_DBI_DBI_H
+  gnc_ui_file_access_for_open();
+#else
   gnc_file_open ();
+#endif
   gnc_window_set_progressbar_window (NULL);
 }
 
@@ -373,7 +377,7 @@ gnc_main_window_cmd_file_db_connection (GtkAction *action, GncMainWindowActionDa
   if (!gnc_main_window_all_finish_pending())
     return;
 
-  gnc_ui_database_connection();
+  gnc_ui_file_access_for_open();
 }
 
 static void
@@ -399,7 +403,11 @@ gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *da
     return;
 
   gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+#ifdef HAVE_DBI_DBI_H
+  gnc_ui_file_access_for_save_as();
+#else
   gnc_file_save_as ();
+#endif
   gnc_window_set_progressbar_window (NULL);
   /* FIXME GNOME 2 Port (update the title etc.) */
 }

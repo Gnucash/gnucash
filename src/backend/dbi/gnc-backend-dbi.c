@@ -54,6 +54,11 @@
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
+#define FILE_URI_TYPE "file"
+#define FILE_URI_PREFIX (FILE_URI_TYPE "://")
+#define SQLITE3_URI_TYPE "sqlite3"
+#define SQLITE3_URI_PREFIX (SQLITE3_URI_TYPE "://")
+
 typedef gchar* (*CREATE_TABLE_DDL_FN)( GncSqlConnection* conn,
 								const gchar* table_name,
 								const GList* col_info_list );
@@ -103,6 +108,7 @@ struct GncDbiBackend_struct
   gboolean  in_query;
   gboolean  supports_transactions;
   gboolean  is_pristine_db;	// Are we saving to a new pristine db?
+  gboolean  exists;         // Does the database exist?
 
   gint obj_total;			// Total # of objects (for percentage calculation)
   gint operations_done;		// Number of operations (save/load) done
@@ -127,7 +133,7 @@ create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
 }
 
 static void
-error_fn( dbi_conn conn, void* user_data )
+sqlite3_error_fn( dbi_conn conn, void* user_data )
 {
     GncDbiBackend *be = (GncDbiBackend*)user_data;
 	const gchar* msg;
@@ -153,6 +159,14 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
 
     ENTER (" ");
 
+	/* Remove uri type if present */
+	if( g_str_has_prefix( book_id, FILE_URI_PREFIX ) ) {
+		book_id += strlen( FILE_URI_PREFIX );
+	}
+	if( g_str_has_prefix( book_id, SQLITE3_URI_PREFIX ) ) {
+		book_id += strlen( SQLITE3_URI_PREFIX );
+	}
+
 	if (!create_if_nonexistent
 		&& !g_file_test(book_id, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS)) {
 		qof_backend_set_error(qbe, ERR_FILEIO_FILE_NOT_FOUND);
@@ -170,7 +184,7 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
 
 	dirname = g_path_get_dirname( book_id );
 	basename = g_path_get_basename( book_id );
-	dbi_conn_error_handler( be->conn, error_fn, be );
+	dbi_conn_error_handler( be->conn, sqlite3_error_fn, be );
 	dbi_conn_set_option( be->conn, "host", "localhost" );
 	dbi_conn_set_option( be->conn, "dbname", basename );
 	dbi_conn_set_option( be->conn, "sqlite3_dbdir", dirname );
@@ -187,6 +201,19 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
 	be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_SQLITE, be->conn );
 
     LEAVE (" ");
+}
+
+static void
+mysql_error_fn( dbi_conn conn, void* user_data )
+{
+    GncDbiBackend *be = (GncDbiBackend*)user_data;
+	const gchar* msg;
+
+	dbi_conn_error( conn, &msg );
+	PERR( "DBI error: %s\n", msg );
+	if( g_str_has_prefix( msg, "1049: Unknown database" ) ) {
+		be->exists = FALSE;
+	}
 }
 
 static void
@@ -227,24 +254,51 @@ gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session,
 		LEAVE( " " );
 		return;
 	}
-	dbi_conn_error_handler( be->conn, error_fn, be );
+	dbi_conn_error_handler( be->conn, mysql_error_fn, be );
 	dbi_conn_set_option( be->conn, "host", host );
 	dbi_conn_set_option_numeric( be->conn, "port", 0 );
-	dbi_conn_set_option( be->conn, "dbname", dbname );
+	dbi_conn_set_option( be->conn, "dbname", "mysql" );
 	dbi_conn_set_option( be->conn, "username", username );
 	dbi_conn_set_option( be->conn, "password", password );
+	be->exists = TRUE;
 	result = dbi_conn_connect( be->conn );
-	g_free( dsn );
-	if( result < 0 ) {
+	if( result == 0 ) {
+		result = dbi_conn_select_db( be->conn, dbname );
+		if( result == 0 ) {
+			be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_MYSQL, be->conn );
+		} else {
+			if( create_if_nonexistent ) {
+				/* Couldn't select the db, so try to create it */
+				dbi_result dresult;
+				dresult = dbi_conn_queryf( be->conn, "CREATE DATABASE %s", dbname );
+				result = dbi_conn_select_db( be->conn, dbname );
+				if( result == 0 ) {
+					be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_MYSQL, be->conn );
+				} else {
+					PERR( "Unable to connect to %s: %d\n", book_id, result );
+        			qof_backend_set_error( qbe, ERR_BACKEND_CANT_CONNECT );
+				}
+			} else {
+        		qof_backend_set_error( qbe, ERR_BACKEND_NO_SUCH_DB );
+			}
+		}
+	} else {
 		PERR( "Unable to connect to %s: %d\n", book_id, result );
-        qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
-        LEAVE( " " );
-        return;
+        qof_backend_set_error( qbe, ERR_BACKEND_CANT_CONNECT );
 	}
 
-	be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_MYSQL, be->conn );
-
+	g_free( dsn );
     LEAVE (" ");
+}
+
+static void
+pgsql_error_fn( dbi_conn conn, void* user_data )
+{
+    GncDbiBackend *be = (GncDbiBackend*)user_data;
+	const gchar* msg;
+
+	dbi_conn_error( conn, &msg );
+	PERR( "DBI error: %s\n", msg );
 }
 
 static void
@@ -285,7 +339,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 		LEAVE( " " );
 		return;
 	}
-	dbi_conn_error_handler( be->conn, error_fn, be );
+	dbi_conn_error_handler( be->conn, pgsql_error_fn, be );
 	dbi_conn_set_option( be->conn, "host", host );
 	dbi_conn_set_option_numeric( be->conn, "port", 0 );
 	dbi_conn_set_option( be->conn, "dbname", dbname );
@@ -618,7 +672,16 @@ qof_backend_module_init(void)
 
     prov = g_new0 (QofBackendProvider, 1);
     prov->provider_name = "GnuCash Libdbi (SQLITE3) Backend";
-    prov->access_method = "file";
+    prov->access_method = FILE_URI_TYPE;
+    prov->partial_book_supported = FALSE;
+    prov->backend_new = gnc_dbi_backend_sqlite3_new;
+    prov->provider_free = gnc_dbi_provider_free;
+    prov->check_data_type = gnc_dbi_check_sqlite3_file;
+    qof_backend_register_provider( prov );
+
+    prov = g_new0 (QofBackendProvider, 1);
+    prov->provider_name = "GnuCash Libdbi (SQLITE3) Backend";
+    prov->access_method = SQLITE3_URI_TYPE;
     prov->partial_book_supported = FALSE;
     prov->backend_new = gnc_dbi_backend_sqlite3_new;
     prov->provider_free = gnc_dbi_provider_free;
