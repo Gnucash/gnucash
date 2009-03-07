@@ -292,6 +292,7 @@ gnc_ui_file_access( int type )
 
     /* Run the dialog */
     gtk_widget_show_all( faw->dialog );
+	on_rb_filetype_clicked( faw );
 }
 
 void
