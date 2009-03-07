@@ -236,6 +236,8 @@ gnc_ui_file_access( int type )
 	GtkWidget* align;
 	GtkFileChooserWidget* fileChooser;
 	GtkFileChooserAction fileChooserAction;
+	GList* list;
+	GList* node;
 
 	g_return_if_fail( type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS );
 
@@ -283,6 +285,24 @@ gnc_ui_file_access( int type )
     /* Autoconnect signals */
     glade_xml_signal_autoconnect_full( xml, gnc_glade_autoconnect_full_func,
 				    					faw->dialog );
+
+	/* See what qof backends are available, and disable sqlite3, mysql and postgres if not
+	available */
+	gtk_widget_set_sensitive( faw->rb_sqlite3, FALSE );
+	gtk_widget_set_sensitive( faw->rb_mysql, FALSE );
+	gtk_widget_set_sensitive( faw->rb_pgsql, FALSE );
+	list = qof_backend_get_registered_access_method_list();
+	for( node = list; node != NULL; node = node->next ) {
+		const gchar* access_method = node->data;
+		if( strcmp( access_method, "sqlite3" ) == 0 ) {
+			gtk_widget_set_sensitive( faw->rb_sqlite3, TRUE );
+		} else if( strcmp( access_method, "mysql" ) == 0 ) {
+			gtk_widget_set_sensitive( faw->rb_mysql, TRUE );
+		} else if( strcmp( access_method, "postgres" ) == 0 ) {
+			gtk_widget_set_sensitive( faw->rb_pgsql, TRUE );
+		}
+	}
+	g_list_free(list);
 
     /* Clean up the xml data structure when the dialog is destroyed */
     g_object_set_data_full( G_OBJECT(faw->dialog), "dialog-file-access.glade",
