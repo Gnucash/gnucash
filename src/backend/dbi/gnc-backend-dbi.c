@@ -510,7 +510,6 @@ gnc_dbi_commit_edit( QofBackend *qbe, QofInstance *inst )
 static void
 init_sql_backend( GncDbiBackend* dbi_be )
 {
-    static gboolean initialized = FALSE;
 	QofBackend* be;
 
     be = (QofBackend*)dbi_be;
@@ -542,34 +541,7 @@ init_sql_backend( GncDbiBackend* dbi_be )
 
     be->export = NULL;
 
-    if( !initialized ) {
-#define DEFAULT_DBD_DIR "/usr/lib/dbd"
-		const gchar* driver_dir;
-        int num_drivers;
-
-		driver_dir = g_getenv( "GNC_DBD_DIR" );
-		if( driver_dir == NULL ) {
-			PWARN( "GNC_DBD_DIR not set: using %s\n", DEFAULT_DBD_DIR );
-			driver_dir = DEFAULT_DBD_DIR;
-		}
-
-        num_drivers = dbi_initialize( driver_dir );
-		if( num_drivers == 0 ) {
-			PWARN( "No DBD drivers found\n" );
-		} else {
-			dbi_driver driver = NULL;
-			PINFO( "%d DBD drivers found\n", num_drivers );
-
-			do {
-				driver = dbi_driver_list( driver );
-				if( driver != NULL ) {
-					PINFO( "Driver: %s\n", dbi_driver_get_name( driver ) );
-				}
-			} while( driver != NULL );
-		}
-		gnc_sql_init( &dbi_be->sql_be );
-        initialized = TRUE;
-    }
+	gnc_sql_init( &dbi_be->sql_be );
 }
 
 static QofBackend*
@@ -669,40 +641,84 @@ G_MODULE_EXPORT void
 qof_backend_module_init(void)
 {
     QofBackendProvider *prov;
+#define DEFAULT_DBD_DIR "/usr/lib/dbd"
+	const gchar* driver_dir;
+    int num_drivers;
+	gboolean have_sqlite3_driver = FALSE;
+	gboolean have_mysql_driver = FALSE;
+	gboolean have_pgsql_driver = FALSE;
 
-    prov = g_new0 (QofBackendProvider, 1);
-    prov->provider_name = "GnuCash Libdbi (SQLITE3) Backend";
-    prov->access_method = FILE_URI_TYPE;
-    prov->partial_book_supported = FALSE;
-    prov->backend_new = gnc_dbi_backend_sqlite3_new;
-    prov->provider_free = gnc_dbi_provider_free;
-    prov->check_data_type = gnc_dbi_check_sqlite3_file;
-    qof_backend_register_provider( prov );
+	/* Initialize libdbi and see which drivers are available.  Only register qof backends which
+	   have drivers available. */
+	driver_dir = g_getenv( "GNC_DBD_DIR" );
+	if( driver_dir == NULL ) {
+		PWARN( "GNC_DBD_DIR not set: using %s\n", DEFAULT_DBD_DIR );
+		driver_dir = DEFAULT_DBD_DIR;
+	}
 
-    prov = g_new0 (QofBackendProvider, 1);
-    prov->provider_name = "GnuCash Libdbi (SQLITE3) Backend";
-    prov->access_method = SQLITE3_URI_TYPE;
-    prov->partial_book_supported = FALSE;
-    prov->backend_new = gnc_dbi_backend_sqlite3_new;
-    prov->provider_free = gnc_dbi_provider_free;
-    prov->check_data_type = gnc_dbi_check_sqlite3_file;
-    qof_backend_register_provider( prov );
+    num_drivers = dbi_initialize( driver_dir );
+	if( num_drivers == 0 ) {
+		PWARN( "No DBD drivers found\n" );
+	} else {
+		dbi_driver driver = NULL;
+		PINFO( "%d DBD drivers found\n", num_drivers );
 
-    prov = g_new0 (QofBackendProvider, 1);
-    prov->provider_name = "GnuCash Libdbi (MYSQL) Backend";
-    prov->access_method = "mysql";
-    prov->partial_book_supported = FALSE;
-    prov->backend_new = gnc_dbi_backend_mysql_new;
-    prov->provider_free = gnc_dbi_provider_free;
-    qof_backend_register_provider( prov );
+		do {
+			driver = dbi_driver_list( driver );
+			if( driver != NULL ) {
+				const gchar* name = dbi_driver_get_name( driver );
 
-    prov = g_new0 (QofBackendProvider, 1);
-    prov->provider_name = "GnuCash Libdbi (POSTGRESQL) Backend";
-    prov->access_method = "postgres";
-    prov->partial_book_supported = FALSE;
-    prov->backend_new = gnc_dbi_backend_postgres_new;
-    prov->provider_free = gnc_dbi_provider_free;
-    qof_backend_register_provider( prov );
+				PINFO( "Driver: %s\n", name );
+				if( strcmp( name, "sqlite3" ) == 0 ) {
+					have_sqlite3_driver = TRUE;
+				} else if( strcmp( name, "mysql" ) == 0 ) {
+					have_mysql_driver = TRUE;
+				} else if( strcmp( name, "pgsql" ) == 0 ) {
+					have_pgsql_driver = TRUE;
+				}
+			}
+		} while( driver != NULL );
+	}
+
+	if( have_sqlite3_driver ) {
+    	prov = g_new0 (QofBackendProvider, 1);
+    	prov->provider_name = "GnuCash Libdbi (SQLITE3) Backend";
+    	prov->access_method = FILE_URI_TYPE;
+    	prov->partial_book_supported = FALSE;
+    	prov->backend_new = gnc_dbi_backend_sqlite3_new;
+    	prov->provider_free = gnc_dbi_provider_free;
+    	prov->check_data_type = gnc_dbi_check_sqlite3_file;
+    	qof_backend_register_provider( prov );
+
+    	prov = g_new0 (QofBackendProvider, 1);
+    	prov->provider_name = "GnuCash Libdbi (SQLITE3) Backend";
+    	prov->access_method = SQLITE3_URI_TYPE;
+    	prov->partial_book_supported = FALSE;
+    	prov->backend_new = gnc_dbi_backend_sqlite3_new;
+    	prov->provider_free = gnc_dbi_provider_free;
+    	prov->check_data_type = gnc_dbi_check_sqlite3_file;
+    	qof_backend_register_provider( prov );
+	}
+
+	if( have_mysql_driver ) {
+    	prov = g_new0 (QofBackendProvider, 1);
+    	prov->provider_name = "GnuCash Libdbi (MYSQL) Backend";
+    	prov->access_method = "mysql";
+    	prov->partial_book_supported = FALSE;
+    	prov->backend_new = gnc_dbi_backend_mysql_new;
+    	prov->provider_free = gnc_dbi_provider_free;
+    	qof_backend_register_provider( prov );
+	}
+
+	if( have_pgsql_driver ) {
+    	prov = g_new0 (QofBackendProvider, 1);
+    	prov->provider_name = "GnuCash Libdbi (POSTGRESQL) Backend";
+    	prov->access_method = "postgres";
+    	prov->partial_book_supported = FALSE;
+    	prov->backend_new = gnc_dbi_backend_postgres_new;
+    	prov->provider_free = gnc_dbi_provider_free;
+    	qof_backend_register_provider( prov );
+	}
 }
 
 /* --------------------------------------------------------- */

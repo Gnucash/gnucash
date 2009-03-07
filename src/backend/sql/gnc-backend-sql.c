@@ -107,8 +107,13 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 void
 gnc_sql_init( GncSqlBackend* be )
 {
-	register_standard_col_type_handlers();
-	gnc_sql_init_object_handlers();
+	static gboolean initialized = FALSE;
+
+	if( !initialized ) {
+		register_standard_col_type_handlers();
+		gnc_sql_init_object_handlers();
+		initialized = TRUE;
+	}
 }
 
 /* ================================================================= */
