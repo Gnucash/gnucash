@@ -221,7 +221,9 @@ W      Private
 
          
 =====================================================================
-General Notes:
+General Notes
+=====================================================================
+
 
 Dates: 
 ------
@@ -238,6 +240,7 @@ European QIF files may have dates in the DD/MM/YY format.
 
 Monetary Amounts:
 -----------------
+
 These typically occur in either US or European format:
 
 10,000.00  Ten Thousand Dollars (US format)
@@ -256,8 +259,10 @@ radix-point is required and no limit on decimal places is evident, so
 it's possible to see the number "1,000" meaning "1 franc per share"
 "1,000" meaning "one thousand shares" in the same transaction (!).
 
+
 Investment Actions:
 -------------------
+
 The N line of investment transactions specifies the "action" of the
 transaction. Although not a complete list, possible values include
 the following:
@@ -327,6 +332,7 @@ WithDrwX      Same as XOut. Used for tax-advantaged accounts.
 XIn           Transfer cash from another account.
 XOut          Transfer cash to another account.
 
+
 Category/Transfer/Class line: 
 -----------------------------
 
@@ -350,3 +356,16 @@ separated by a '|', like so:
    NMiscExpX
    T1000.00
    Lexpense category/expense class|[Transfer account]/transfer class
+
+
+Cleared Status line:
+--------------------
+
+The "C" line of specifies the cleared status. The second character
+in the line, if present, may be any of:
+
+* Cleared
+X Reconciled
+? Budgeted
+! Budgeted
+
