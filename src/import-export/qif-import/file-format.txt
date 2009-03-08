@@ -365,7 +365,7 @@ The "C" line of specifies the cleared status. The second character
 in the line, if present, may be any of:
 
 * Cleared
-C Cleared
+c Cleared
 X Reconciled
 R Reconciled
 ? Budgeted
