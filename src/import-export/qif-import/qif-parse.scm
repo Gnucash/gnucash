@@ -275,25 +275,29 @@
       #f))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  parse-cleared-field : in a C (cleared) field in a QIF transaction,
-;;  * means cleared, x or X means reconciled, and ! or ? mean some
-;;  budget related stuff I don't understand.
+;;  parse-cleared-field : In a "C" (cleared status) QIF line,
+;;  * or C means cleared, X or R means reconciled, and ! or ?
+;;  mean some budget related stuff I don't understand.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-parse:parse-cleared-field read-value errorproc errortype)
   (if (and (string? read-value)
-           (> (string-length read-value) 0))
+           (not (string-null? read-value)))
       (let ((secondchar (string-ref read-value 0)))
-        (cond ((eq? secondchar #\*)
-               'cleared)
-              ((or (eq? secondchar #\x)
-                   (eq? secondchar #\X))
-               'reconciled)
-              ((or (eq? secondchar #\?)
-                   (eq? secondchar #\!))
-               'budgeted)
-              (else
-               #f)))
+        (case secondchar
+          ;; Reconciled is the most likely, especially for large imports,
+          ;; so check that first. Also allow for lowercase.
+          ((#\X #\x #\R #\r)
+           'reconciled)
+          ((#\* #\C #\c)
+           'cleared)
+          ((#\? #\!)
+           'budgeted)
+          (else
+            (errorproc errortype
+                       (sprintf #f (_ "Unrecognized status '%s'. Defaulting to uncleared.")
+                                read-value))
+            #f)))
       #f))
 
 
