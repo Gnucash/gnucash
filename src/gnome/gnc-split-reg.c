@@ -1330,14 +1330,20 @@ gnc_split_reg_jump_to_blank (GNCSplitReg *gsr)
   VirtualCellLocation vcell_loc;
   Split *blank;
 
+  ENTER("gsr=%p", gsr);
+
   blank = gnc_split_register_get_blank_split (reg);
   if (blank == NULL)
+  {
+    LEAVE("no blank split");
     return;
+  }
 
   if (gnc_split_register_get_split_virt_loc (reg, blank, &vcell_loc))
     gnucash_register_goto_virt_cell (gsr->reg, vcell_loc);
 
   gnc_ledger_display_refresh (gsr->ledger);
+  LEAVE(" ");
 }
 
 void
@@ -1698,9 +1704,11 @@ gnc_split_reg_match_trans_row( VirtualLocation virt_loc,
 static void
 gnc_split_reg_goto_next_trans_row (GNCSplitReg *gsr)
 {
+  ENTER("gsr=%p", gsr);
   gnucash_register_goto_next_matching_row( gsr->reg,
                                            gnc_split_reg_match_trans_row,
                                            gsr );
+  LEAVE(" ");
 }
 
 void
@@ -1708,6 +1716,8 @@ gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction )
 {
   SplitRegister *sr = gnc_ledger_display_get_split_register( gsr->ledger );
   gboolean goto_blank;
+
+  ENTER("gsr=%p, next_transaction=%s", gsr, next_transaction? "TRUE" : "FALSE");
 
   goto_blank = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
 				  "enter_moves_to_end", NULL);
@@ -1750,6 +1760,7 @@ gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction )
     gnc_split_reg_goto_next_trans_row( gsr );
   else
     gnucash_register_goto_next_virt_row( gsr->reg );
+  LEAVE(" ");
 }
 
 void
