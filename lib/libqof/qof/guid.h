@@ -183,7 +183,7 @@ const gchar * guid_to_string (const GUID * guid);
  *
  *  @return A pointer to the terminating null character of the string.
  */
-gchar * guid_to_string_buff (const GUID * guid, gchar *buff);
+gchar * guid_to_string_buff (const GUID * guid, /*@ out @*/ gchar *buff);
 
 
 /** Given a string, decode the id into the guid if guid is non-NULL.
@@ -191,7 +191,7 @@ gchar * guid_to_string_buff (const GUID * guid, gchar *buff);
  * hexadecimal number. This function accepts both upper and lower case
  * hex digits. If the return value is FALSE, the effect on guid is
  * undefined. */
-gboolean string_to_guid(const gchar * string, GUID * guid);
+gboolean string_to_guid(const gchar * string, /*@ out @*/ GUID * guid);
 
 
 /** Given two GUIDs, return TRUE if they are non-NULL and equal.

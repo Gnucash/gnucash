@@ -148,9 +148,9 @@ void gnc_sx_begin_edit (SchedXaction *sx);
 void gnc_sx_commit_edit (SchedXaction *sx);
 
 /** @return GList<Recurrence*> **/
-GList* gnc_sx_get_schedule(const SchedXaction *sx);
+/*@ dependent @*/ GList* gnc_sx_get_schedule(const SchedXaction *sx);
 /** @param[in] schedule A GList<Recurrence*> **/
-void gnc_sx_set_schedule(SchedXaction *sx, GList *schedule);
+void gnc_sx_set_schedule(SchedXaction *sx, /*@ null @*//*@ only @*/ GList *schedule);
 
 gchar *xaccSchedXactionGetName( const SchedXaction *sx );
 /**
@@ -196,7 +196,7 @@ void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
  * @param sx The instance whose state should be retrieved.
  * @param stateData may be NULL.
 */
-gint gnc_sx_get_instance_count( const SchedXaction *sx, void *stateData );
+gint gnc_sx_get_instance_count( const SchedXaction *sx, /*@ null @*/ void *stateData );
 /**
  * Sets the instance count to something other than the default.  As the
  * default is the incorrect value '0', callers should DTRT here.
@@ -210,8 +210,8 @@ gboolean xaccSchedXactionGetEnabled( const SchedXaction *sx );
 void xaccSchedXactionSetEnabled( SchedXaction *sx, gboolean newEnabled );
 
 void xaccSchedXactionGetAutoCreate( const SchedXaction *sx,
-                                    gboolean *outAutoCreate,
-                                    gboolean *outNotify );
+                                    /*@ out @*/ gboolean *outAutoCreate,
+                                    /*@ out @*/ gboolean *outNotify );
 void xaccSchedXactionSetAutoCreate( SchedXaction *sx,
                                     gboolean newAutoCreate,
                                     gboolean newNotify );

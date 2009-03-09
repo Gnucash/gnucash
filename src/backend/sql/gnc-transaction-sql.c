@@ -47,7 +47,11 @@
 
 #include "gnc-engine.h"
 
-static QofLogModule log_module = G_LOG_DOMAIN;
+#ifdef S_SPLINT_S
+#include "splint-defs.h"
+#endif
+
+/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TRANSACTION_TABLE "transactions"
 #define TX_TABLE_VERSION 2
@@ -55,8 +59,8 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define SPLIT_TABLE_VERSION 2
 
 typedef struct {
-    GncSqlBackend* be;
-    const GUID* guid;
+    /*@ dependent @*/ GncSqlBackend* be;
+    /*@ dependent @*/ const GUID* guid;
 	gboolean is_ok;
 } split_info_t;
 
@@ -65,7 +69,7 @@ typedef struct {
 
 static const GncSqlColumnTableEntry tx_col_table[] =
 {
-	/*# -fullinitblock */
+	/*@ -full_init_block @*/
     { "guid",          CT_GUID,           0,                      COL_NNUL|COL_PKEY, "guid" },
     { "currency_guid", CT_COMMODITYREF,   0,                      COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)xaccTransGetCurrency, (QofSetterFunc)xaccTransSetCurrency },
@@ -78,27 +82,27 @@ static const GncSqlColumnTableEntry tx_col_table[] =
     { "description",   CT_STRING,         TX_MAX_DESCRIPTION_LEN, 0,                 NULL, NULL,
             (QofAccessFunc)xaccTransGetDescription, (QofSetterFunc)xaccTransSetDescription },
     { NULL }
-	/*# +fullinitblock */
+	/*@ +full_init_block @*/
 };
 
-static gpointer get_split_reconcile_state( gpointer pObject, const QofParam* param );
-static void set_split_reconcile_state( gpointer pObject, gpointer pValue );
+static /*@ dependent @*//*@ null @*/ gpointer get_split_reconcile_state( gpointer pObject );
+static void set_split_reconcile_state( gpointer pObject, /*@ null @*/ gpointer pValue );
 static void set_split_reconcile_date( gpointer pObject, Timespec ts );
-static void set_split_lot( gpointer pObject, gpointer pLot );
+static void set_split_lot( gpointer pObject, /*@ null @*/ gpointer pLot );
 
 #define SPLIT_MAX_MEMO_LEN 2048
 #define SPLIT_MAX_ACTION_LEN 2048
 
 static const GncSqlColumnTableEntry split_col_table[] =
 {
-	/*# -fullinitblock */
+	/*@ -full_init_block @*/
     { "guid",            CT_GUID,         0,                    COL_NNUL|COL_PKEY, "guid" },
     { "tx_guid",         CT_TXREF,        0,                    COL_NNUL,          NULL, SPLIT_TRANS },
     { "account_guid",    CT_ACCOUNTREF,   0,                    COL_NNUL,          NULL, SPLIT_ACCOUNT },
     { "memo",            CT_STRING,       SPLIT_MAX_MEMO_LEN,   COL_NNUL,          NULL, SPLIT_MEMO },
     { "action",          CT_STRING,       SPLIT_MAX_ACTION_LEN, COL_NNUL,          NULL, SPLIT_ACTION },
     { "reconcile_state", CT_STRING,       1,                    COL_NNUL,          NULL, NULL,
-			get_split_reconcile_state, set_split_reconcile_state },
+			(QofAccessFunc)get_split_reconcile_state, set_split_reconcile_state },
     { "reconcile_date",  CT_TIMESPEC,     0,                    COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)xaccSplitRetDateReconciledTS, (QofSetterFunc)set_split_reconcile_date },
     { "value",           CT_NUMERIC,      0,                    COL_NNUL,          NULL, SPLIT_VALUE },
@@ -106,46 +110,42 @@ static const GncSqlColumnTableEntry split_col_table[] =
 	{ "lot_guid",        CT_LOTREF,       0,                    0,                 NULL, NULL,
 			(QofAccessFunc)xaccSplitGetLot, set_split_lot },
     { NULL }
-	/*# +fullinitblock */
+	/*@ +full_init_block @*/
 };
 
 static const GncSqlColumnTableEntry guid_col_table[] =
 {
-	/*# -fullinitblock */
+	/*@ -full_init_block @*/
     { "tx_guid", CT_GUID, 0, 0, "guid" },
     { NULL }
-	/*# +fullinitblock */
+	/*@ +full_init_block @*/
 };
-
-static void retrieve_numeric_value( gpointer pObject, gnc_numeric value );
 
 /* ================================================================= */
 
-static gpointer
-get_split_reconcile_state( gpointer pObject, const QofParam* param )
+static /*@ dependent @*//*@ null @*/ gpointer
+get_split_reconcile_state( gpointer pObject )
 {
-    const Split* pSplit = GNC_SPLIT(pObject);
     static gchar c[2];
 
 	g_return_val_if_fail( pObject != NULL, NULL );
 	g_return_val_if_fail( GNC_IS_SPLIT(pObject), NULL );
 
-    c[0] = xaccSplitGetReconcile( pSplit );
+    c[0] = xaccSplitGetReconcile( GNC_SPLIT(pObject) );
     c[1] = '\0';
     return (gpointer)c;
 }
 
 static void 
-set_split_reconcile_state( gpointer pObject, gpointer pValue )
+set_split_reconcile_state( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
-    Split* pSplit = GNC_SPLIT(pObject);
     const gchar* s = (const gchar*)pValue;
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( GNC_IS_SPLIT(pObject) );
 	g_return_if_fail( pValue != NULL );
 
-    xaccSplitSetReconcile( pSplit, s[0] );
+    xaccSplitSetReconcile( GNC_SPLIT(pObject), s[0] );
 }
 
 static void 
@@ -157,18 +157,8 @@ set_split_reconcile_date( gpointer pObject, Timespec ts )
     xaccSplitSetDateReconciledTS( GNC_SPLIT(pObject), &ts );
 }
 
-static void 
-retrieve_numeric_value( gpointer pObject, gnc_numeric value )
-{
-    gnc_numeric* pResult = (gnc_numeric*)pObject;
-
-	g_return_if_fail( pObject != NULL );
-
-    *pResult = value;
-}
-
 static void
-set_split_lot( gpointer pObject, gpointer pLot )
+set_split_lot( gpointer pObject, /*@ null @*/ gpointer pLot )
 {
 	GNCLot* lot;
 	Split* split;
@@ -185,18 +175,7 @@ set_split_lot( gpointer pObject, gpointer pLot )
 	gnc_lot_add_split( lot, split );
 }
 
-#if 0
-// Table to retrieve just the quantity
-static GncSqlColumnTableEntry quantity_table[] =
-{
-	/*# -fullinitblock */
-    { "quantity", CT_NUMERIC, 0, COL_NNUL, NULL, NULL, NULL, (QofSetterFunc)retrieve_numeric_value },
-    { NULL }
-	/*# +fullinitblock */
-};
-#endif
-
-static Split*
+static /*@ null @*/ Split*
 load_single_split( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
@@ -207,6 +186,7 @@ load_single_split( GncSqlBackend* be, GncSqlRow* row )
 	g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
+	if( guid == NULL ) return NULL;
     split_guid = *guid;
 
     pSplit = xaccSplitLookup( &split_guid, be->primary_book );
@@ -242,7 +222,7 @@ load_splits_for_tx_list( GncSqlBackend* be, GList* list )
 	// Execute the query and load the splits
 	result = gnc_sql_execute_select_sql( be, sql->str );
     if( result != NULL ) {
-		GList* list = NULL;
+		GList* split_list = NULL;
 		GncSqlRow* row;
 
 		row = gnc_sql_result_get_first_row( result );
@@ -250,13 +230,14 @@ load_splits_for_tx_list( GncSqlBackend* be, GList* list )
 			Split* s;
             s = load_single_split( be, row );
 			if( s != NULL ) {
-				list = g_list_append( list, s );
+				split_list = g_list_append( split_list, s );
 			}
 			row = gnc_sql_result_get_next_row( result );
         }
 
-		if( list != NULL ) {
-			gnc_sql_slots_load_for_list( be, list );
+		if( split_list != NULL ) {
+			gnc_sql_slots_load_for_list( be, split_list );
+			g_list_free( split_list );
 		}
 
 		gnc_sql_result_dispose( result );
@@ -264,7 +245,7 @@ load_splits_for_tx_list( GncSqlBackend* be, GList* list )
 	(void)g_string_free( sql, FALSE );
 }
 
-static Transaction*
+static /*@ null @*/ Transaction*
 load_single_tx( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
@@ -275,6 +256,7 @@ load_single_tx( GncSqlBackend* be, GncSqlRow* row )
 	g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
+	if( guid == NULL ) return NULL;
     tx_guid = *guid;
 
 	// Don't overwrite the transaction if it's already been loaded (and possibly modified).
@@ -299,7 +281,7 @@ load_single_tx( GncSqlBackend* be, GncSqlRow* row )
  * are unchanged.
  */
 typedef struct {
-	Account* acc;
+	/*@ dependent @*/ Account* acc;
 	gnc_numeric start_bal;
 	gnc_numeric end_bal;
 	gnc_numeric start_cleared_bal;
@@ -324,6 +306,8 @@ save_account_balances( Account* acc, gpointer pData )
 	gnc_numeric* pend_r;
 
 	newbal = g_malloc( (gsize)sizeof( full_acct_balances_t ) );
+	g_assert( newbal != NULL );
+
 	newbal->acc = acc;
 	g_object_get( acc,
 				"start-balance", &pstart,
@@ -436,7 +420,9 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
 			}
 			xaccAccountRecomputeBalance( balns->acc );
 		}
-		g_slist_free( bal_list );
+		if( bal_list != NULL ) {
+			g_slist_free( bal_list );
+		}
 
 		xaccAccountCommitEdit( root );
 		qof_event_resume();
@@ -453,20 +439,20 @@ create_transaction_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, TRANSACTION_TABLE );
     if( version == 0 ) {
-        gnc_sql_create_table( be, TRANSACTION_TABLE, TX_TABLE_VERSION, tx_col_table );
+        (void)gnc_sql_create_table( be, TRANSACTION_TABLE, TX_TABLE_VERSION, tx_col_table );
     } else if( version == 1 ) {
 		/* Upgrade 64 bit int handling */
 		gnc_sql_upgrade_table( be, TRANSACTION_TABLE, tx_col_table );
-		gnc_sql_set_table_version( be, TRANSACTION_TABLE, TX_TABLE_VERSION );
+		(void)gnc_sql_set_table_version( be, TRANSACTION_TABLE, TX_TABLE_VERSION );
     }
 
 	version = gnc_sql_get_table_version( be, SPLIT_TABLE );
     if( version == 0 ) {
-        gnc_sql_create_table( be, SPLIT_TABLE, SPLIT_TABLE_VERSION, split_col_table );
+        (void)gnc_sql_create_table( be, SPLIT_TABLE, SPLIT_TABLE_VERSION, split_col_table );
     } else if( version == 1 ) {
 		/* Upgrade 64 bit int handling */
 		gnc_sql_upgrade_table( be, SPLIT_TABLE, split_col_table );
-		gnc_sql_set_table_version( be, SPLIT_TABLE, SPLIT_TABLE_VERSION );
+		(void)gnc_sql_set_table_version( be, SPLIT_TABLE, SPLIT_TABLE_VERSION );
     }
 }
 /* ================================================================= */
@@ -638,7 +624,7 @@ commit_transaction( GncSqlBackend* be, QofInstance* inst )
 }
 
 /* ================================================================= */
-static const GUID*
+static /*@ dependent @*//*@ null @*/ const GUID*
 get_guid_from_query( QofQuery* pQuery )
 {
     GList* pOrTerms;
@@ -689,8 +675,11 @@ void gnc_sql_transaction_load_tx_for_account( GncSqlBackend* be, Account* accoun
 	query_sql = g_strdup_printf( "SELECT * FROM %s WHERE guid IN (%s)", TRANSACTION_TABLE, subquery_sql );
 	g_free( subquery_sql );
 	stmt = gnc_sql_create_statement_from_sql( be, query_sql );
-    query_transactions( be, stmt );
-	gnc_sql_statement_dispose( stmt );
+	g_free( query_sql );
+	if( stmt != NULL ) {
+    	query_transactions( be, stmt );
+		gnc_sql_statement_dispose( stmt );
+	}
 }
 
 /**
@@ -708,8 +697,11 @@ void gnc_sql_transaction_load_all_tx( GncSqlBackend* be )
 
 	query_sql = g_strdup_printf( "SELECT * FROM %s", TRANSACTION_TABLE );
 	stmt = gnc_sql_create_statement_from_sql( be, query_sql );
-    query_transactions( be, stmt );
-	gnc_sql_statement_dispose( stmt );
+	g_free( query_sql );
+	if( stmt != NULL ) {
+    	query_transactions( be, stmt );
+		gnc_sql_statement_dispose( stmt );
+	}
 }
 
 typedef struct {
@@ -718,12 +710,12 @@ typedef struct {
 	gboolean has_been_run;
 } split_query_info_t;
 
-static gpointer
+static /*@ null @*/ gpointer
 compile_split_query( GncSqlBackend* be, QofQuery* pQuery )
 {
     const GUID* acct_guid;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
-	split_query_info_t* query_info;
+	split_query_info_t* query_info = NULL;
 	gchar* subquery_sql;
 	gchar* query_sql;
 
@@ -731,16 +723,21 @@ compile_split_query( GncSqlBackend* be, QofQuery* pQuery )
 	g_return_val_if_fail( pQuery != NULL, NULL );
 
     acct_guid = get_guid_from_query( pQuery );
-    (void)guid_to_string_buff( acct_guid, guid_buf );
-	subquery_sql = g_strdup_printf( "SELECT DISTINCT tx_guid FROM %s WHERE account_guid='%s'", SPLIT_TABLE, guid_buf );
-	query_sql = g_strdup_printf( "SELECT * FROM %s WHERE guid IN (%s)", TRANSACTION_TABLE, subquery_sql );
+	if( acct_guid != NULL ) {
+    	(void)guid_to_string_buff( acct_guid, guid_buf );
+		subquery_sql = g_strdup_printf( "SELECT DISTINCT tx_guid FROM %s WHERE account_guid='%s'", SPLIT_TABLE, guid_buf );
+		query_sql = g_strdup_printf( "SELECT * FROM %s WHERE guid IN (%s)", TRANSACTION_TABLE, subquery_sql );
 
-	query_info = g_malloc( (gsize)sizeof(split_query_info_t) );
-	query_info->stmt = gnc_sql_create_statement_from_sql( be, query_sql );
-	query_info->has_been_run = FALSE;
-	query_info->acct = xaccAccountLookup( acct_guid, be->primary_book );
+		query_info = g_malloc( (gsize)sizeof(split_query_info_t) );
+		g_assert( query_info != NULL );
 
-	g_free( subquery_sql );
+		query_info->stmt = gnc_sql_create_statement_from_sql( be, query_sql );
+		g_free( query_sql );
+		query_info->has_been_run = FALSE;
+		query_info->acct = xaccAccountLookup( acct_guid, be->primary_book );
+
+		g_free( subquery_sql );
+	}
 
 	return query_info;
 }
@@ -775,8 +772,8 @@ free_split_query( GncSqlBackend* be, gpointer pQuery )
 
 /* ----------------------------------------------------------------- */
 typedef struct {
-    const GncSqlBackend* be;
-	Account* acct;
+    /*@ dependent @*/ const GncSqlBackend* be;
+	/*@ dependent @*/ Account* acct;
     char reconcile_state;
     gnc_numeric balance;
 } single_acct_balance_t;
@@ -817,15 +814,15 @@ set_acct_bal_balance( gpointer pObject, gnc_numeric value )
 
 static const GncSqlColumnTableEntry acct_balances_col_table[] =
 {
-	/*# -fullinitblock */
-    { "account_guid",    CT_GUID,    0, 0, NULL, NULL, NULL, set_acct_bal_account_from_guid },
-    { "reconcile_state", CT_STRING,  1, 0, NULL, NULL, NULL, set_acct_bal_reconcile_state },
+	/*@ -full_init_block @*/
+    { "account_guid",    CT_GUID,    0, 0, NULL, NULL, NULL, (QofSetterFunc)set_acct_bal_account_from_guid },
+    { "reconcile_state", CT_STRING,  1, 0, NULL, NULL, NULL, (QofSetterFunc)set_acct_bal_reconcile_state },
     { "quantity",        CT_NUMERIC, 0, 0, NULL, NULL, NULL, (QofSetterFunc)set_acct_bal_balance },
     { NULL }
-	/*# +fullinitblock */
+	/*@ +full_init_block @*/
 };
 
-static single_acct_balance_t*
+static /*@ null @*/ single_acct_balance_t*
 load_single_acct_balances( const GncSqlBackend* be, GncSqlRow* row )
 {
 	single_acct_balance_t* bal = NULL;
@@ -834,13 +831,15 @@ load_single_acct_balances( const GncSqlBackend* be, GncSqlRow* row )
 	g_return_val_if_fail( row != NULL, NULL );
 
 	bal = g_malloc( (gsize)sizeof(single_acct_balance_t) );
+	g_assert( bal != NULL );
+
 	bal->be = be;
     gnc_sql_load_object( be, row, NULL, bal, acct_balances_col_table );
 
 	return bal;
 }
 
-GSList*
+/*@ null @*/ GSList*
 gnc_sql_get_account_balances_slist( GncSqlBackend* be )
 {
     GncSqlResult* result;
@@ -853,7 +852,8 @@ gnc_sql_get_account_balances_slist( GncSqlBackend* be )
 	buf = g_strdup_printf( "SELECT account_guid, reconcile_state, sum(quantity_num) as quantity_num, quantity_denom FROM %s GROUP BY account_guid, reconcile_state, quantity_denom",
 						SPLIT_TABLE );
 	stmt = gnc_sql_create_statement_from_sql( be, buf );
-
+	g_assert( stmt != NULL );
+	g_free( buf );
     result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
@@ -877,6 +877,8 @@ gnc_sql_get_account_balances_slist( GncSqlBackend* be )
 				}
 				if( bal == NULL ) {
 					bal = g_malloc( (gsize)sizeof(acct_balances_t) );
+					g_assert( bal != NULL );
+
 					bal->acct = single_bal->acct;
 					bal->balance = gnc_numeric_zero();
 					bal->cleared_balance = gnc_numeric_zero();
@@ -892,6 +894,7 @@ gnc_sql_get_account_balances_slist( GncSqlBackend* be )
 					bal->reconciled_balance = gnc_numeric_add( bal->reconciled_balance, single_bal->balance,
 													GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD );
 				}
+				g_free( single_bal );
 			}
 			row = gnc_sql_result_get_next_row( result );
         }
@@ -913,13 +916,12 @@ gnc_sql_get_account_balances_slist( GncSqlBackend* be )
 /* ----------------------------------------------------------------- */
 static void
 load_tx_guid( const GncSqlBackend* be, GncSqlRow* row,
-            QofSetterFunc setter, gpointer pObject,
+            /*@ null @*/ QofSetterFunc setter, gpointer pObject,
             const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     GUID guid;
-    const GUID* pGuid;
-	Transaction* tx = NULL;
+	Transaction* tx;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( row != NULL );
@@ -927,18 +929,13 @@ load_tx_guid( const GncSqlBackend* be, GncSqlRow* row,
 	g_return_if_fail( table_row != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
-    if( val == NULL ) {
-        pGuid = NULL;
-    } else {
-        string_to_guid( g_value_get_string( val ), &guid );
-        pGuid = &guid;
-    }
-	if( pGuid != NULL ) {
-		tx = xaccTransLookup( pGuid, be->primary_book );
-	}
+	g_assert( val != NULL );
+    (void)string_to_guid( g_value_get_string( val ), &guid );
+	tx = xaccTransLookup( &guid, be->primary_book );
     if( table_row->gobj_param_name != NULL ) {
 		g_object_set( pObject, table_row->gobj_param_name, tx, NULL );
     } else {
+		g_return_if_fail( setter != NULL );
 		(*setter)( pObject, (const gpointer)tx );
     }
 }
@@ -977,8 +974,8 @@ gnc_sql_init_transaction_handler( void )
 		NULL                         /* write */
     };
 
-    qof_object_register_backend( GNC_ID_TRANS, GNC_SQL_BACKEND, &be_data_tx );
-    qof_object_register_backend( GNC_ID_SPLIT, GNC_SQL_BACKEND, &be_data_split );
+    (void)qof_object_register_backend( GNC_ID_TRANS, GNC_SQL_BACKEND, &be_data_tx );
+    (void)qof_object_register_backend( GNC_ID_SPLIT, GNC_SQL_BACKEND, &be_data_split );
 
 	gnc_sql_register_col_type_handler( CT_TXREF, &tx_guid_handler );
 }

@@ -43,10 +43,10 @@ int qof_query_get_max_results (const QofQuery *q);
  * Note that you should NOT modify this list in any way.  It belongs
  * to the query.
  */
-GList * qof_query_get_terms (const QofQuery *q);
+/*@ dependent @*/ GList * qof_query_get_terms (const QofQuery *q);
 
-GSList * qof_query_term_get_param_path (const QofQueryTerm *queryterm);
-QofQueryPredData *qof_query_term_get_pred_data (const QofQueryTerm *queryterm);
+/*@ dependent @*/ GSList * qof_query_term_get_param_path (const QofQueryTerm *queryterm);
+/*@ dependent @*/ QofQueryPredData *qof_query_term_get_pred_data (const QofQueryTerm *queryterm);
 gboolean qof_query_term_is_inverted (const QofQueryTerm *queryterm);
 
 
@@ -58,7 +58,7 @@ gboolean qof_query_term_is_inverted (const QofQueryTerm *queryterm);
 void qof_query_get_sorts (QofQuery *q, QofQuerySort **primary,
                        QofQuerySort **secondary, QofQuerySort **tertiary);
 
-GSList * qof_query_sort_get_param_path (const QofQuerySort *querysort);
+/*@ dependent @*/ GSList * qof_query_sort_get_param_path (const QofQuerySort *querysort);
 gint qof_query_sort_get_sort_options (const QofQuerySort *querysort);
 gboolean qof_query_sort_get_increasing (const QofQuerySort *querysort);
 

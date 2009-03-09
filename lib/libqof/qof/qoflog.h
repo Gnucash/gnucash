@@ -199,7 +199,7 @@ void qof_log_set_default(QofLogLevel log_level);
 
 /** Print a function entry debugging message */
 #define ENTER(format, args...) do { \
-    if (qof_log_check(log_module, G_LOG_LEVEL_DEBUG)) { \
+    if (qof_log_check(log_module, (QofLogLevel)G_LOG_LEVEL_DEBUG)) { \
       g_log (log_module, G_LOG_LEVEL_DEBUG, \
         "[enter %s:%s()] " format, __FILE__, \
         PRETTY_FUNC_NAME , ## args); \
@@ -221,7 +221,7 @@ void qof_log_set_default(QofLogLevel log_level);
 
 /** Print a function exit debugging message. **/
 #define LEAVE(format, args...) do { \
-    if (qof_log_check(log_module, G_LOG_LEVEL_DEBUG)) { \
+    if (qof_log_check(log_module, (QofLogLevel)G_LOG_LEVEL_DEBUG)) { \
       qof_log_dedent(); \
       g_log (log_module, G_LOG_LEVEL_DEBUG, \
         "[leave %s()] " format, \

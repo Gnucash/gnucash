@@ -38,44 +38,50 @@
 
 #include "gnc-lots-sql.h"
 
-static QofLogModule log_module = G_LOG_DOMAIN;
+#if defined( S_SPLINT_S )
+#include "splint-defs.h"
+#endif
+
+/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "lots"
 #define TABLE_VERSION 2
 
-static gpointer get_lot_account( gpointer pObject, const QofParam* param );
-static void set_lot_account( gpointer pObject, gpointer pValue );
+static /*@ dependent @*//*@ null @*/ gpointer get_lot_account( gpointer pObject );
+static void set_lot_account( gpointer pObject, /*@ null @*/ gpointer pValue );
 static void set_lot_is_closed( gpointer pObject, gboolean value );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
-	/*# -fullinitblock */
+	/*@ -full_init_block @*/
     { "guid",         CT_GUID,    0, COL_NNUL|COL_PKEY, "guid" },
-    { "account_guid", CT_GUID,    0, 0,                 NULL, NULL, get_lot_account,   set_lot_account },
+    { "account_guid", CT_GUID,    0, 0,                 NULL, NULL,
+		(QofAccessFunc)get_lot_account,   set_lot_account },
     { "is_closed",    CT_BOOLEAN, 0, COL_NNUL,          NULL, NULL,
 		(QofAccessFunc)gnc_lot_is_closed, (QofSetterFunc)set_lot_is_closed },
     { NULL }
-	/*# +fullinitblock */
+	/*@ +full_init_block @*/
 };
 
 /* ================================================================= */
-static gpointer
-get_lot_account( gpointer pObject, const QofParam* param )
+static /*@ dependent @*//*@ null @*/ gpointer
+get_lot_account( gpointer pObject )
 {
-    const GNCLot* lot = GNC_LOT(pObject);
+    const GNCLot* lot;
     const Account* pAccount;
 
 	g_return_val_if_fail( pObject != NULL, NULL );
 	g_return_val_if_fail( GNC_IS_LOT(pObject), NULL );
 
+    lot = GNC_LOT(pObject);
     pAccount = gnc_lot_get_account( lot );
     return (gpointer)qof_instance_get_guid( QOF_INSTANCE(pAccount) );
 }
 
 static void 
-set_lot_account( gpointer pObject, gpointer pValue )
+set_lot_account( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
-    GNCLot* lot = GNC_LOT(pObject);
+    GNCLot* lot;
     QofBook* pBook;
     GUID* guid = (GUID*)pValue;
     Account* pAccount;
@@ -84,6 +90,7 @@ set_lot_account( gpointer pObject, gpointer pValue )
 	g_return_if_fail( GNC_IS_LOT(pObject) );
 	g_return_if_fail( pValue != NULL );
 
+    lot = GNC_LOT(pObject);
     pBook = qof_instance_get_book( QOF_INSTANCE(lot) );
     pAccount = xaccAccountLookup( guid, pBook );
 	if( pAccount != NULL ) {
@@ -94,15 +101,16 @@ set_lot_account( gpointer pObject, gpointer pValue )
 static void
 set_lot_is_closed( gpointer pObject, gboolean closed )
 {
-    GNCLot* lot = GNC_LOT(pObject);
+    GNCLot* lot;
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( GNC_IS_LOT(pObject) );
 
-    lot->is_closed = closed;
+    lot = GNC_LOT(pObject);
+    lot->is_closed = (char)closed;
 }
 
-static GNCLot*
+static /*@ dependent @*//*@ null @*/ GNCLot*
 load_single_lot( GncSqlBackend* be, GncSqlRow* row )
 {
 	GNCLot* lot;
@@ -128,26 +136,29 @@ load_all_lots( GncSqlBackend* be )
 	g_return_if_fail( be != NULL );
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
-    result = gnc_sql_execute_select_statement( be, stmt );
-	gnc_sql_statement_dispose( stmt );
-    if( result != NULL ) {
-		GList* list = NULL;
-        GncSqlRow* row = gnc_sql_result_get_first_row( result );
-		GNCLot* lot;
+	if( stmt != NULL ) {
+    	result = gnc_sql_execute_select_statement( be, stmt );
+		gnc_sql_statement_dispose( stmt );
+    	if( result != NULL ) {
+			GList* list = NULL;
+        	GncSqlRow* row = gnc_sql_result_get_first_row( result );
+			GNCLot* lot;
 
-        while( row != NULL ) {
-            lot = load_single_lot( be, row );
-			if( lot != NULL ) {
-				list = g_list_append( list, lot );
+        	while( row != NULL ) {
+            	lot = load_single_lot( be, row );
+				if( lot != NULL ) {
+					list = g_list_append( list, lot );
+				}
+				row = gnc_sql_result_get_next_row( result );
+        	}
+			gnc_sql_result_dispose( result );
+
+			if( list != NULL ) {
+				gnc_sql_slots_load_for_list( be, list );
+				g_list_free( list );
 			}
-			row = gnc_sql_result_get_next_row( result );
-        }
-		gnc_sql_result_dispose( result );
-
-		if( list != NULL ) {
-			gnc_sql_slots_load_for_list( be, list );
-		}
-    }
+    	}
+	}
 }
 
 /* ================================================================= */
@@ -161,7 +172,7 @@ create_lots_tables( GncSqlBackend* be )
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
     if( version == 0 ) {
 		/* The table doesn't exist, so create it */
-        gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
+        (void)gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
 	} else if( version == 1 ) {
 		/* Version 1 -> 2 removes the 'NOT NULL' constraint on the account_guid
 		field. 
@@ -170,7 +181,7 @@ create_lots_tables( GncSqlBackend* be )
 		old table, then rename the new one. */
 
 		gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
-		gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
+		(void)gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
     }
 }
 
@@ -213,13 +224,12 @@ write_lots( GncSqlBackend* be )
 /* ================================================================= */
 static void
 load_lot_guid( const GncSqlBackend* be, GncSqlRow* row,
-            QofSetterFunc setter, gpointer pObject,
+            /*@ null @*/ QofSetterFunc setter, gpointer pObject,
             const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     GUID guid;
-    const GUID* pGuid;
-	GNCLot* lot = NULL;
+	GNCLot* lot;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( row != NULL );
@@ -227,18 +237,15 @@ load_lot_guid( const GncSqlBackend* be, GncSqlRow* row,
 	g_return_if_fail( table_row != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
-    if( val == NULL ) {
-        pGuid = NULL;
-    } else {
-        string_to_guid( g_value_get_string( val ), &guid );
-        pGuid = &guid;
-    }
-	if( pGuid != NULL ) {
-		lot = gnc_lot_lookup( pGuid, be->primary_book );
-	}
+
+	g_return_if_fail( val != NULL );
+
+    (void)string_to_guid( g_value_get_string( val ), &guid );
+	lot = gnc_lot_lookup( &guid, be->primary_book );
     if( table_row->gobj_param_name != NULL ) {
 		g_object_set( pObject, table_row->gobj_param_name, lot, NULL );
     } else {
+		g_return_if_fail( setter != NULL );
 		(*setter)( pObject, (const gpointer)lot );
     }
 }
@@ -263,7 +270,7 @@ gnc_sql_init_lot_handler( void )
 		write_lots             /* save all */
     };
 
-    qof_object_register_backend( GNC_ID_LOT, GNC_SQL_BACKEND, &be_data );
+    (void)qof_object_register_backend( GNC_ID_LOT, GNC_SQL_BACKEND, &be_data );
 
 	gnc_sql_register_col_type_handler( CT_LOTREF, &lot_guid_handler );
 }

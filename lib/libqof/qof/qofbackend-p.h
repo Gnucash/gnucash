@@ -241,12 +241,12 @@
 struct QofBackendProvider_s
 {
   /** Some arbitrary name given for this particular backend provider */
-  const char * provider_name;
+  /*@ observer @*/ const char * provider_name;
 
   /** The access method that this provider provides, for example,
    *  file:// http:// postgres:// or sqlite://, but without the :// at the end
    */
-  const char * access_method;
+  /*@ observer @*/ const char * access_method;
 
   /** \brief Partial QofBook handler
 	
@@ -277,10 +277,10 @@ struct QofBackendProvider_s
   types match the incoming data. The backend should not assume that
   returning TRUE will mean that the data will naturally follow.
   */
-  gboolean (*check_data_type) (const char*);
+  /*@ null @*/ gboolean (*check_data_type) (const char*);
   
   /** Free this structure, unregister this backend handler. */
-  void (*provider_free) (QofBackendProvider *);
+  void (*provider_free) (/*@ only @*/ QofBackendProvider *);
 };
 
 typedef enum {
@@ -296,9 +296,9 @@ struct QofBackend_s
                          gboolean ignore_lock,
                          gboolean create_if_nonexistent);
   void (*session_end) (QofBackend *);
-  void (*destroy_backend) (QofBackend *);
+  void (*destroy_backend) (/*@ only @*/ QofBackend *);
 
-  void (*load) (QofBackend *, QofBook *, QofBackendLoadType);
+  void (*load) (QofBackend *, /*@ dependent @*/ QofBook *, QofBackendLoadType);
 
   void (*begin) (QofBackend *, QofInstance *);
   void (*commit) (QofBackend *, QofInstance *);
@@ -308,9 +308,9 @@ struct QofBackend_s
   void (*free_query) (QofBackend *, gpointer);
   void (*run_query) (QofBackend *, gpointer);
 
-  void (*sync) (QofBackend *, QofBook *);
+  void (*sync) (QofBackend *, /*@ dependent @*/ QofBook *);
   void (*load_config) (QofBackend *, KvpFrame *);
-  KvpFrame* (*get_config) (QofBackend *);
+  /*@ observer @*/ KvpFrame* (*get_config) (QofBackend *);
   gint64 (*counter) (QofBackend *, const char *counter_name);
 
   gboolean (*events_pending) (QofBackend *);
@@ -370,7 +370,7 @@ struct QofBackend_s
  *  backend library may register more than one provider, if it is
  *  capable of handling more than one URL access method.
  */
-void qof_backend_register_provider (QofBackendProvider *);
+void qof_backend_register_provider (/*@ only @*/ QofBackendProvider *);
 
 /** The qof_backend_set_message() assigns a string to the backend error message.
  */

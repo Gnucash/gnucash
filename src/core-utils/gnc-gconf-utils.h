@@ -274,8 +274,8 @@ void gnc_gconf_general_remove_any_cb (GncGconfGeneralAnyCb func,
  *  returned by GConf.
  */
 gboolean gnc_gconf_get_bool (const gchar *section,
-			     const gchar *name,
-			     GError **error);
+			     /*@ null @*/ const gchar *name,
+			     /*@ null @*/ GError **error);
 
 /** Get a boolean value from GConf with no error argument.
  *

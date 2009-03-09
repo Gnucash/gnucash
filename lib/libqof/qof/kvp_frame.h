@@ -373,7 +373,7 @@ KvpValue  * kvp_frame_get_value(const KvpFrame *frame, const gchar *path);
  *  @return The KvpFrame at the specified path, or NULL if it doesn't
  *  exist.
 */
-KvpFrame  * kvp_frame_get_frame(const KvpFrame *frame, const gchar *path);
+/*@ dependent @*/ KvpFrame  * kvp_frame_get_frame(const KvpFrame *frame, const gchar *path);
 
 /** This routine returns the last frame of the path.
  *  If the frame path doesn't exist, it is created.  
@@ -641,7 +641,7 @@ GList       * kvp_value_get_glist(const KvpValue * value);
 
 /** Value accessor. This one is non-copying -- the caller can modify
  * the value directly. */
-KvpFrame   * kvp_value_get_frame(const KvpValue * value);
+/*@ dependent @*/ KvpFrame   * kvp_value_get_frame(const KvpValue * value);
 Timespec    kvp_value_get_timespec(const KvpValue * value);
 
 /**

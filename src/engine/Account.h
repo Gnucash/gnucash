@@ -228,7 +228,7 @@ const gchar *gnc_get_account_separator_string (void);
 gunichar gnc_get_account_separator (void);
 void gnc_set_account_separator (const gchar *separator);
 
-Account *gnc_book_get_root_account(QofBook *book);
+/*@ dependent @*/ Account *gnc_book_get_root_account(QofBook *book);
 void gnc_book_set_root_account(QofBook *book, Account *root);
 
 /** @deprecated */
@@ -238,7 +238,7 @@ void gnc_book_set_root_account(QofBook *book, Account *root);
 /** The xaccAccountLookup() subroutine will return the
  *    account associated with the given id, or NULL
  *    if there is no such account. */
-Account * xaccAccountLookup (const GUID *guid, QofBook *book);
+/*@ dependent @*/ Account * xaccAccountLookup (const GUID *guid, QofBook *book);
 #define xaccAccountLookupDirect(g,b) xaccAccountLookup(&(g),b)
 
 /** @} */
@@ -475,7 +475,7 @@ void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
 #define DxaccAccountSetSecurity xaccAccountSetCommodity
 
 /** Get the account's commodity  */
-gnc_commodity * xaccAccountGetCommodity (const Account *account);
+/*@ dependent @*/ gnc_commodity * xaccAccountGetCommodity (const Account *account);
 
 /** @deprecated do not use */
 #define DxaccAccountGetSecurity xaccAccountGetCommodity
@@ -627,7 +627,7 @@ void gnc_account_remove_child (Account *parent, Account *child);
  *
  *  @return A pointer to the parent account node, or NULL if there is
  *  no parent account. */
-Account * gnc_account_get_parent (const Account *account);
+/*@ dependent @*/ Account * gnc_account_get_parent (const Account *account);
 
 /** This routine returns the root account of the account tree that the
  *  specified account belongs to.  It is the equivalent of repeatedly
@@ -773,7 +773,7 @@ gint gnc_account_get_tree_depth (const Account *account);
  *
  *  @param user_data This data will be passed to each call of func. */
 void gnc_account_foreach_child (const Account *account,
-				AccountCb func, gpointer user_data);
+				AccountCb func, /*@ null @*/ gpointer user_data);
 
 /** This method will traverse the immediate children of this accounts,
  *  calling 'func' on each account.  Traversal will stop when func
@@ -791,7 +791,7 @@ void gnc_account_foreach_child (const Account *account,
  *
  *  @param user_data This data will be passed to each call of func. */
 gpointer gnc_account_foreach_child_until (const Account *account,
-					  AccountCb2 func, gpointer user_data);
+					  AccountCb2 func, /*@ null @*/ gpointer user_data);
 
 
 /** This method will traverse all children of this accounts and their
@@ -808,7 +808,7 @@ gpointer gnc_account_foreach_child_until (const Account *account,
  *
  *  @param user_data This data will be passed to each call of func. */
 void gnc_account_foreach_descendant (const Account *account,
-				     AccountCb func, gpointer user_data);
+				     AccountCb func, /*@ null @*/ gpointer user_data);
 
 /** This method will traverse all children of this accounts and their
  *  descendants, calling 'func' on each account.  Traversal will stop
@@ -826,7 +826,7 @@ void gnc_account_foreach_descendant (const Account *account,
  *
  *  @param user_data This data will be passed to each call of func. */
 gpointer gnc_account_foreach_descendant_until (const Account *account,
-					       AccountCb2 func, gpointer user_data);
+					       AccountCb2 func, /*@ null @*/ gpointer user_data);
 
 
 /** @} */
@@ -1056,7 +1056,7 @@ LotList* xaccAccountGetLotList (const Account *account);
  */
 gpointer xaccAccountForEachLot(
     const Account *acc,
-    gpointer (*proc)(GNCLot *lot, gpointer user_data), gpointer user_data);
+    gpointer (*proc)(GNCLot *lot, gpointer user_data), /*@ null @*/ gpointer user_data);
 
 
 /** Find a list of open lots that match the match_func.  Sort according
@@ -1067,7 +1067,7 @@ gpointer xaccAccountForEachLot(
 LotList * xaccAccountFindOpenLots (const Account *acc,
 				   gboolean (*match_func)(GNCLot *lot,
 							  gpointer user_data),
-				   gpointer user_data, GCompareFunc sort_func);
+				   /*@ null @*/ gpointer user_data, GCompareFunc sort_func);
 
 /** @} */
 /* ------------------ */

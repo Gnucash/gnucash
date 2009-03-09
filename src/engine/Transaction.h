@@ -215,7 +215,7 @@ gboolean      xaccTransIsOpen (const Transaction *trans);
 /** The xaccTransLookup() subroutine will return the
     transaction associated with the given id, or NULL
     if there is no such transaction. */
-Transaction * xaccTransLookup (const GUID *guid, QofBook *book);
+/*@ dependent @*//*@ null @*/ Transaction * xaccTransLookup (const GUID *guid, QofBook *book);
 #define xaccTransLookupDirect(g,b) xaccTransLookup(&(g),b)
 
 Split * xaccTransFindSplitByAccount(const Transaction *trans, 
@@ -303,7 +303,7 @@ int xaccTransGetSplitIndex(const Transaction *trans, const Split *split);
     in a transaction.  
     @return The list of splits. This list must NOT be modified.  Do *NOT* free
     this list when you are done with it. */
-SplitList *   xaccTransGetSplitList (const Transaction *trans);
+/*@ dependent @*/ SplitList *   xaccTransGetSplitList (const Transaction *trans);
 gboolean xaccTransStillHasSplit(const Transaction *trans, const Split *s);
 
 
@@ -337,7 +337,7 @@ gboolean      xaccTransHasSplitsInStateByAccount (const Transaction *trans,
  * The total value of the transaction must be zero when all splits 
  * are valued in this currency.
  * @note What happens if the Currency isn't set?  Ans: bad things.  */
-gnc_commodity * xaccTransGetCurrency (const Transaction *trans);
+/*@ dependent @*/ gnc_commodity * xaccTransGetCurrency (const Transaction *trans);
 
 /** Set the commodity of this transaction. */
 void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);

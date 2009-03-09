@@ -166,7 +166,7 @@ typedef GList PriceList;
 
 /** gnc_price_create - returns a newly allocated and initialized price
    with a reference count of 1. */
-GNCPrice *gnc_price_create(QofBook *book);
+/*@ dependent @*/ GNCPrice *gnc_price_create(QofBook *book);
 
 /** gnc_price_clone - returns a newly allocated price that's a
    content-wise duplicate of the given price, p.  The returned clone
@@ -219,8 +219,8 @@ void gnc_price_set_value(GNCPrice *p, gnc_numeric value);
 /** As mentioned above all of the getters return data that's internal
    to the GNCPrice, not copies, so don't free these values. */
 GNCPrice *      gnc_price_lookup (const GUID *guid, QofBook *book);
-gnc_commodity * gnc_price_get_commodity(const GNCPrice *p);
-gnc_commodity * gnc_price_get_currency(const GNCPrice *p);
+/*@ dependent @*/ gnc_commodity * gnc_price_get_commodity(const GNCPrice *p);
+/*@ dependent @*/ gnc_commodity * gnc_price_get_currency(const GNCPrice *p);
 Timespec        gnc_price_get_time(const GNCPrice *p);
 const char *    gnc_price_get_source(const GNCPrice *p);
 const char *    gnc_price_get_typestr(const GNCPrice *p);
@@ -281,7 +281,7 @@ typedef struct gnc_price_db_s GNCPriceDB;
 #define gnc_book_get_pricedb  gnc_pricedb_get_db
 
 /** return the pricedb associated with the book */
-GNCPriceDB * gnc_pricedb_get_db(QofBook *book);
+/*@ dependent @*/ GNCPriceDB * gnc_pricedb_get_db(QofBook *book);
 GNCPriceDB * gnc_collection_get_pricedb(QofCollection *col);
 
 /** gnc_pricedb_destroy - destroy the given pricedb and unref all of

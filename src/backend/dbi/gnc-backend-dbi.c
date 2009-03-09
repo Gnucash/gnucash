@@ -50,6 +50,10 @@
 
 #include "gnc-backend-dbi.h"
 
+#ifdef S_SPLINT_S
+#include "splint-defs.h"
+#endif
+
 #define TRANSACTION_NAME "trans"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -62,36 +66,43 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 typedef gchar* (*CREATE_TABLE_DDL_FN)( GncSqlConnection* conn,
 								const gchar* table_name,
 								const GList* col_info_list );
+typedef const gchar* (*GET_COLUMN_TYPE_NAME_FN)( GType type, gint size );
 typedef struct {
-	CREATE_TABLE_DDL_FN create_table_ddl;
+	CREATE_TABLE_DDL_FN		create_table_ddl;
+	GET_COLUMN_TYPE_NAME_FN	get_column_type_name;
 } provider_functions_t;
 
-static gchar* conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
+static /*@ null @*/ gchar* conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
 										const gchar* table_name,
 										const GList* col_info_list );
-
+static /*@ observer @*/ const gchar* sqlite3_get_column_type_name( GType type, gint size );
 static provider_functions_t provider_sqlite3 =
 {
-	conn_create_table_ddl_sqlite3
+	conn_create_table_ddl_sqlite3,
+	sqlite3_get_column_type_name
 };
 
-static gchar* conn_create_table_ddl_mysql( GncSqlConnection* conn,
+static /*@ null @*/ gchar* conn_create_table_ddl_mysql( GncSqlConnection* conn,
 										const gchar* table_name,
 										const GList* col_info_list );
+static /*@ observer @*/ const gchar* mysql_get_column_type_name( GType type, gint size );
 static provider_functions_t provider_mysql =
 {
-	conn_create_table_ddl_mysql
+	conn_create_table_ddl_mysql,
+	mysql_get_column_type_name
 };
 
-static gchar* conn_create_table_ddl_pgsql( GncSqlConnection* conn,
+static /*@ null @*/ gchar* conn_create_table_ddl_pgsql( GncSqlConnection* conn,
 										const gchar* table_name,
 										const GList* col_info_list );
+static /*@ observer @*/ const gchar* pgsql_get_column_type_name( GType type, gint size );
 static provider_functions_t provider_pgsql =
 {
-	conn_create_table_ddl_pgsql
+	conn_create_table_ddl_pgsql,
+	pgsql_get_column_type_name
 };
 
-static GncSqlConnection* create_dbi_connection( provider_functions_t* provider, dbi_conn conn );
+static GncSqlConnection* create_dbi_connection( /*@ observer @*/ provider_functions_t* provider, /*@ observer @*/ dbi_conn conn );
 
 #define GNC_DBI_PROVIDER_SQLITE (&provider_sqlite3)
 #define GNC_DBI_PROVIDER_MYSQL (&provider_mysql)
@@ -103,7 +114,7 @@ struct GncDbiBackend_struct
 
   dbi_conn conn;
 
-  QofBook *primary_book;	/* The primary, main open book */
+  /*@ dependent @*/ QofBook *primary_book;	/* The primary, main open book */
   gboolean	loading;		/* We are performing an initial load */
   gboolean  in_query;
   gboolean  supports_transactions;
@@ -133,20 +144,20 @@ create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
 }
 
 static void
-sqlite3_error_fn( dbi_conn conn, void* user_data )
+sqlite3_error_fn( dbi_conn conn, /*@ unused @*/ void* user_data )
 {
-    GncDbiBackend *be = (GncDbiBackend*)user_data;
+    //GncDbiBackend *be = (GncDbiBackend*)user_data;
 	const gchar* msg;
 
-	dbi_conn_error( conn, &msg );
+	(void)dbi_conn_error( conn, &msg );
 	PERR( "DBI error: %s\n", msg );
 }
 
 static void
 gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session, 
 	                   const gchar *book_id,
-                       gboolean ignore_lock,
-				       gboolean create_if_nonexistent )
+                       /*@ unused @*/ gboolean ignore_lock,
+				       /*@ unused @*/ gboolean create_if_nonexistent )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
 	gint result;
@@ -174,6 +185,9 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
 		return;
 	}
 
+	if( be->conn != NULL ) {
+		dbi_conn_close( be->conn );
+	}
 	be->conn = dbi_conn_new( "sqlite3" );
 	if( be->conn == NULL ) {
 		PERR( "Unable to create sqlite3 dbi connection\n" );
@@ -185,9 +199,9 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
 	dirname = g_path_get_dirname( book_id );
 	basename = g_path_get_basename( book_id );
 	dbi_conn_error_handler( be->conn, sqlite3_error_fn, be );
-	dbi_conn_set_option( be->conn, "host", "localhost" );
-	dbi_conn_set_option( be->conn, "dbname", basename );
-	dbi_conn_set_option( be->conn, "sqlite3_dbdir", dirname );
+	(void)dbi_conn_set_option( be->conn, "host", "localhost" );
+	(void)dbi_conn_set_option( be->conn, "dbname", basename );
+	(void)dbi_conn_set_option( be->conn, "sqlite3_dbdir", dirname );
 	result = dbi_conn_connect( be->conn );
 	g_free( basename );
 	g_free( dirname );
@@ -198,6 +212,9 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
         return;
 	}
 
+	if( be->sql_be.conn != NULL ) {
+		gnc_sql_connection_dispose( be->sql_be.conn );
+	}
 	be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_SQLITE, be->conn );
 
     LEAVE (" ");
@@ -209,7 +226,7 @@ mysql_error_fn( dbi_conn conn, void* user_data )
     GncDbiBackend *be = (GncDbiBackend*)user_data;
 	const gchar* msg;
 
-	dbi_conn_error( conn, &msg );
+	(void)dbi_conn_error( conn, &msg );
 	PERR( "DBI error: %s\n", msg );
 	if( g_str_has_prefix( msg, "1049: Unknown database" ) ) {
 		be->exists = FALSE;
@@ -219,8 +236,8 @@ mysql_error_fn( dbi_conn conn, void* user_data )
 static void
 gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session, 
 	                   const gchar *book_id,
-                       gboolean ignore_lock,
-				       gboolean create_if_nonexistent )
+                       /*@ unused @*/gboolean ignore_lock,
+				       /*@ unused @*/gboolean create_if_nonexistent )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
 	gchar* dsn;
@@ -247,6 +264,9 @@ gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session,
 	for( password = username; *password != ':'; password++ ) {}
 	*password++ = '\0';
 
+	if( be->conn != NULL ) {
+		dbi_conn_close( be->conn );
+	}
 	be->conn = dbi_conn_new( "mysql" );
 	if( be->conn == NULL ) {
 		PERR( "Unable to create mysql dbi connection\n" );
@@ -255,16 +275,19 @@ gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session,
 		return;
 	}
 	dbi_conn_error_handler( be->conn, mysql_error_fn, be );
-	dbi_conn_set_option( be->conn, "host", host );
-	dbi_conn_set_option_numeric( be->conn, "port", 0 );
-	dbi_conn_set_option( be->conn, "dbname", "mysql" );
-	dbi_conn_set_option( be->conn, "username", username );
-	dbi_conn_set_option( be->conn, "password", password );
+	(void)dbi_conn_set_option( be->conn, "host", host );
+	(void)dbi_conn_set_option_numeric( be->conn, "port", 0 );
+	(void)dbi_conn_set_option( be->conn, "dbname", "mysql" );
+	(void)dbi_conn_set_option( be->conn, "username", username );
+	(void)dbi_conn_set_option( be->conn, "password", password );
 	be->exists = TRUE;
 	result = dbi_conn_connect( be->conn );
 	if( result == 0 ) {
 		result = dbi_conn_select_db( be->conn, dbname );
 		if( result == 0 ) {
+			if( be->sql_be.conn != NULL ) {
+				gnc_sql_connection_dispose( be->sql_be.conn );
+			}
 			be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_MYSQL, be->conn );
 		} else {
 			if( create_if_nonexistent ) {
@@ -273,10 +296,16 @@ gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session,
 				dresult = dbi_conn_queryf( be->conn, "CREATE DATABASE %s", dbname );
 				result = dbi_conn_select_db( be->conn, dbname );
 				if( result == 0 ) {
+					if( be->sql_be.conn != NULL ) {
+						gnc_sql_connection_dispose( be->sql_be.conn );
+					}
 					be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_MYSQL, be->conn );
 				} else {
 					PERR( "Unable to connect to %s: %d\n", book_id, result );
         			qof_backend_set_error( qbe, ERR_BACKEND_CANT_CONNECT );
+				}
+				if( dresult != NULL ) {
+					(void)dbi_result_free( dresult );
 				}
 			} else {
         		qof_backend_set_error( qbe, ERR_BACKEND_NO_SUCH_DB );
@@ -292,20 +321,20 @@ gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session,
 }
 
 static void
-pgsql_error_fn( dbi_conn conn, void* user_data )
+pgsql_error_fn( dbi_conn conn, /*@ unused @*/ void* user_data )
 {
-    GncDbiBackend *be = (GncDbiBackend*)user_data;
+    //GncDbiBackend *be = (GncDbiBackend*)user_data;
 	const gchar* msg;
 
-	dbi_conn_error( conn, &msg );
+	(void)dbi_conn_error( conn, &msg );
 	PERR( "DBI error: %s\n", msg );
 }
 
 static void
 gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session, 
 	                   const gchar *book_id,
-                       gboolean ignore_lock,
-				       gboolean create_if_nonexistent )
+                       /*@ unused @*/ gboolean ignore_lock,
+				       /*@ unused @*/ gboolean create_if_nonexistent )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
 	gint result;
@@ -332,6 +361,9 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 	for( password = username; *password != ':'; password++ ) {}
 	*password++ = '\0';
 
+	if( be->conn != NULL ) {
+		dbi_conn_close( be->conn );
+	}
 	be->conn = dbi_conn_new( "pgsql" );
 	if( be->conn == NULL ) {
 		PERR( "Unable to create pgsql dbi connection\n" );
@@ -340,11 +372,11 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 		return;
 	}
 	dbi_conn_error_handler( be->conn, pgsql_error_fn, be );
-	dbi_conn_set_option( be->conn, "host", host );
-	dbi_conn_set_option_numeric( be->conn, "port", 0 );
-	dbi_conn_set_option( be->conn, "dbname", dbname );
-	dbi_conn_set_option( be->conn, "username", username );
-	dbi_conn_set_option( be->conn, "password", password );
+	(void)dbi_conn_set_option( be->conn, "host", host );
+	(void)dbi_conn_set_option_numeric( be->conn, "port", 0 );
+	(void)dbi_conn_set_option( be->conn, "dbname", dbname );
+	(void)dbi_conn_set_option( be->conn, "username", username );
+	(void)dbi_conn_set_option( be->conn, "password", password );
 	result = dbi_conn_connect( be->conn );
 	g_free( dsn );
 	if( result < 0 ) {
@@ -354,6 +386,9 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
         return;
 	}
 
+	if( be->sql_be.conn != NULL ) {
+		gnc_sql_connection_dispose( be->sql_be.conn );
+	}
 	be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_PGSQL, be->conn );
 
     LEAVE (" ");
@@ -377,7 +412,7 @@ gnc_dbi_session_end( QofBackend *be_start )
 }
 
 static void
-gnc_dbi_destroy_backend( QofBackend *be )
+gnc_dbi_destroy_backend( /*@ only @*/ QofBackend *be )
 {
 	g_return_if_fail( be != NULL );
 
@@ -387,12 +422,9 @@ gnc_dbi_destroy_backend( QofBackend *be )
 /* ================================================================= */
 
 static void
-gnc_dbi_load( QofBackend* qbe, QofBook *book, QofBackendLoadType loadType )
+gnc_dbi_load( QofBackend* qbe, /*@ dependent @*/ QofBook *book, QofBackendLoadType loadType )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
-    GncSqlObjectBackend* pData;
-	int i;
-	Account* root;
 
 	g_return_if_fail( qbe != NULL );
 	g_return_if_fail( book != NULL );
@@ -423,26 +455,22 @@ gnc_dbi_save_may_clobber_data( QofBackend* qbe )
     GncDbiBackend* be = (GncDbiBackend*)qbe;
 	const gchar* dbname;
 	dbi_result tables;
-	gint numTables;
+	unsigned long long numTables;
 
 	/* Data may be clobbered iff the number of tables != 0 */
 	dbname = dbi_conn_get_option( be->conn, "dbname" );
 	tables = dbi_conn_get_table_list( be->conn, dbname, NULL );
     numTables = dbi_result_get_numrows( tables );
-	dbi_result_free( tables );
+	(void)dbi_result_free( tables );
 
 	return (numTables != 0);
 }
 
 static void
-gnc_dbi_sync_all( QofBackend* qbe, QofBook *book )
+gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
 {
     GncDbiBackend* be = (GncDbiBackend*)qbe;
     dbi_result tables;
-    GError* error = NULL;
-    gint row;
-    gint numTables;
-	gboolean status;
 	const gchar* dbname;
 
 	g_return_if_fail( be != NULL );
@@ -453,15 +481,15 @@ gnc_dbi_sync_all( QofBackend* qbe, QofBook *book )
     /* Destroy the current contents of the database */
 	dbname = dbi_conn_get_option( be->conn, "dbname" );
 	tables = dbi_conn_get_table_list( be->conn, dbname, NULL );
-	while( dbi_result_next_row( tables ) ) {
+	while( dbi_result_next_row( tables ) != 0 ) {
 		const gchar* table_name;
 		dbi_result result;
 
 		table_name = dbi_result_get_string_idx( tables, 1 );
 		result = dbi_conn_queryf( be->conn, "DROP TABLE %s", table_name );
-		dbi_result_free( result );
+		(void)dbi_result_free( result );
 	}
-	dbi_result_free( tables );
+	(void)dbi_result_free( tables );
 
     /* Save all contents */
 	be->is_pristine_db = TRUE;
@@ -545,61 +573,48 @@ init_sql_backend( GncDbiBackend* dbi_be )
 }
 
 static QofBackend*
-gnc_dbi_backend_sqlite3_new( void )
+new_backend( void (*session_begin)( QofBackend *, QofSession *, const gchar *,
+									/*@ unused @*/ gboolean, /*@ unused @*/ gboolean ) )
 {
     GncDbiBackend *dbi_be;
     QofBackend *be;
 
     dbi_be = g_new0( GncDbiBackend, 1 );
+	g_assert( dbi_be != NULL );
+
     be = (QofBackend*)dbi_be;
     qof_backend_init( be );
 
-    be->session_begin = gnc_dbi_sqlite3_session_begin;
+    be->session_begin = session_begin;
 	init_sql_backend( dbi_be );
 
     return be;
+}
+
+static QofBackend*
+gnc_dbi_backend_sqlite3_new( void )
+{
+	return new_backend( gnc_dbi_sqlite3_session_begin );
 }
 
 static QofBackend*
 gnc_dbi_backend_mysql_new( void )
 {
-    GncDbiBackend *dbi_be;
-    QofBackend *be;
-
-    dbi_be = g_new0( GncDbiBackend, 1 );
-    be = (QofBackend*)dbi_be;
-    qof_backend_init( be );
-
-    be->session_begin = gnc_dbi_mysql_session_begin;
-	init_sql_backend( dbi_be );
-
-    return be;
+    return new_backend( gnc_dbi_mysql_session_begin );
 }
 
 static QofBackend*
 gnc_dbi_backend_postgres_new( void )
 {
-    GncDbiBackend *dbi_be;
-    QofBackend *be;
-
-    dbi_be = g_new0( GncDbiBackend, 1 );
-    be = (QofBackend*)dbi_be;
-    qof_backend_init( be );
-
-    be->session_begin = gnc_dbi_postgres_session_begin;
-	init_sql_backend( dbi_be );
-
-    return be;
+    return new_backend( gnc_dbi_postgres_session_begin );
 }
 
 static void
-gnc_dbi_provider_free( QofBackendProvider *prov )
+gnc_dbi_provider_free( /*@ only @*/ QofBackendProvider *prov )
 {
 	g_return_if_fail( prov != NULL );
 
-    prov->provider_name = NULL;
-    prov->access_method = NULL;
-    g_free (prov);
+    g_free( prov );
 }
 
 /*
@@ -611,7 +626,7 @@ gnc_dbi_check_sqlite3_file( const gchar *path )
 {
 	FILE* f;
 	gchar buf[50];
-	gint chars_read;
+	size_t chars_read;
 
 	// BAD if the path is null
 	g_return_val_if_fail( path != NULL, FALSE );
@@ -626,7 +641,7 @@ gnc_dbi_check_sqlite3_file( const gchar *path )
 
 	// OK if file has the correct header
 	chars_read = fread( buf, sizeof(buf), 1, f );
-	fclose( f );
+	(void)fclose( f );
 	if( g_str_has_prefix( buf, "SQLite format 3" ) ) {
 		PINFO( "has SQLite format string -> DBI" );
 		return TRUE;
@@ -681,7 +696,9 @@ qof_backend_module_init(void)
 	}
 
 	if( have_sqlite3_driver ) {
-    	prov = g_new0 (QofBackendProvider, 1);
+    	prov = g_new0( QofBackendProvider, 1 );
+		g_assert( prov != NULL );
+
     	prov->provider_name = "GnuCash Libdbi (SQLITE3) Backend";
     	prov->access_method = FILE_URI_TYPE;
     	prov->partial_book_supported = FALSE;
@@ -690,7 +707,9 @@ qof_backend_module_init(void)
     	prov->check_data_type = gnc_dbi_check_sqlite3_file;
     	qof_backend_register_provider( prov );
 
-    	prov = g_new0 (QofBackendProvider, 1);
+    	prov = g_new0( QofBackendProvider, 1 );
+		g_assert( prov != NULL );
+
     	prov->provider_name = "GnuCash Libdbi (SQLITE3) Backend";
     	prov->access_method = SQLITE3_URI_TYPE;
     	prov->partial_book_supported = FALSE;
@@ -701,22 +720,28 @@ qof_backend_module_init(void)
 	}
 
 	if( have_mysql_driver ) {
-    	prov = g_new0 (QofBackendProvider, 1);
+    	prov = g_new0( QofBackendProvider, 1 );
+		g_assert( prov != NULL );
+
     	prov->provider_name = "GnuCash Libdbi (MYSQL) Backend";
     	prov->access_method = "mysql";
     	prov->partial_book_supported = FALSE;
     	prov->backend_new = gnc_dbi_backend_mysql_new;
     	prov->provider_free = gnc_dbi_provider_free;
+		prov->check_data_type = NULL;
     	qof_backend_register_provider( prov );
 	}
 
 	if( have_pgsql_driver ) {
-    	prov = g_new0 (QofBackendProvider, 1);
+    	prov = g_new0( QofBackendProvider, 1 );
+		g_assert( prov != NULL );
+
     	prov->provider_name = "GnuCash Libdbi (POSTGRESQL) Backend";
     	prov->access_method = "postgres";
     	prov->partial_book_supported = FALSE;
     	prov->backend_new = gnc_dbi_backend_postgres_new;
     	prov->provider_free = gnc_dbi_provider_free;
+		prov->check_data_type = NULL;
     	qof_backend_register_provider( prov );
 	}
 }
@@ -726,12 +751,12 @@ typedef struct
 {
 	GncSqlRow base;
 
-	dbi_result result;
+	/*@ dependent @*/ dbi_result result;
 	GList* gvalue_list;
 } GncDbiSqlRow;
 
 static void
-row_dispose( GncSqlRow* row )
+row_dispose( /*@ only @*/ GncSqlRow* row )
 {
 	GncDbiSqlRow* dbi_row = (GncDbiSqlRow*)row;
 	GList* node;
@@ -749,7 +774,7 @@ row_dispose( GncSqlRow* row )
 	g_free( dbi_row );
 }
 
-static const GValue*
+static /*@ null @*/ const GValue*
 row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
 {
 	GncDbiSqlRow* dbi_row = (GncDbiSqlRow*)row;
@@ -758,17 +783,19 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
 
 	type = dbi_result_get_field_type( dbi_row->result, col_name );
 	value = g_new0( GValue, 1 );
+	g_assert( value != NULL );
+
 	switch( type ) {
 		case DBI_TYPE_INTEGER:
-			g_value_init( value, G_TYPE_INT64 );
+			(void)g_value_init( value, G_TYPE_INT64 );
 			g_value_set_int64( value, dbi_result_get_longlong( dbi_row->result, col_name ) );
 			break;
 		case DBI_TYPE_DECIMAL:
-			g_value_init( value, G_TYPE_DOUBLE );
+			(void)g_value_init( value, G_TYPE_DOUBLE );
 			g_value_set_double( value, dbi_result_get_double( dbi_row->result, col_name ) );
 			break;
 		case DBI_TYPE_STRING:
-			g_value_init( value, G_TYPE_STRING );
+			(void)g_value_init( value, G_TYPE_STRING );
 			g_value_take_string( value, dbi_result_get_string_copy( dbi_row->result, col_name ) );
 			break;
 		default:
@@ -782,11 +809,13 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
 }
 
 static GncSqlRow*
-create_dbi_row( dbi_result result )
+create_dbi_row( /*@ dependent @*/ dbi_result result )
 {
 	GncDbiSqlRow* row;
 
 	row = g_new0( GncDbiSqlRow, 1 );
+	g_assert( row != NULL );
+
 	row->base.getValueAtColName = row_get_value_at_col_name;
 	row->base.dispose = row_dispose;
 	row->result = result;
@@ -798,14 +827,14 @@ typedef struct
 {
 	GncSqlResult base;
 
-	dbi_result result;
-	gint num_rows;
-	gint cur_row;
+	/*@ owned @*/ dbi_result result;
+	guint num_rows;
+	guint cur_row;
 	GncSqlRow* row;
 } GncDbiSqlResult;
 
 static void
-result_dispose( GncSqlResult* result )
+result_dispose( /*@ only @*/ GncSqlResult* result )
 {
 	GncDbiSqlResult* dbi_result = (GncDbiSqlResult*)result;
 
@@ -813,12 +842,12 @@ result_dispose( GncSqlResult* result )
 		gnc_sql_row_dispose( dbi_result->row );
 	}
 	if( dbi_result->result != NULL ) {
-		dbi_result_free( dbi_result->result );
+		(void)dbi_result_free( dbi_result->result );
 	}
 	g_free( result );
 }
 
-static gint
+static guint
 result_get_num_rows( GncSqlResult* result )
 {
 	GncDbiSqlResult* dbi_result = (GncDbiSqlResult*)result;
@@ -826,7 +855,7 @@ result_get_num_rows( GncSqlResult* result )
 	return dbi_result->num_rows;
 }
 
-static GncSqlRow*
+static /*@ null @*/ GncSqlRow*
 result_get_first_row( GncSqlResult* result )
 {
 	GncDbiSqlResult* dbi_result = (GncDbiSqlResult*)result;
@@ -836,7 +865,7 @@ result_get_first_row( GncSqlResult* result )
 		dbi_result->row = NULL;
 	}
 	if( dbi_result->num_rows > 0 ) {
-		dbi_result_first_row( dbi_result->result );
+		(void)dbi_result_first_row( dbi_result->result );
 		dbi_result->cur_row = 1;
 		dbi_result->row = create_dbi_row( dbi_result->result );
 		return dbi_result->row;
@@ -845,7 +874,7 @@ result_get_first_row( GncSqlResult* result )
 	}
 }
 
-static GncSqlRow*
+static /*@ null @*/ GncSqlRow*
 result_get_next_row( GncSqlResult* result )
 {
 	GncDbiSqlResult* dbi_result = (GncDbiSqlResult*)result;
@@ -855,7 +884,7 @@ result_get_next_row( GncSqlResult* result )
 		dbi_result->row = NULL;
 	}
 	if( dbi_result->cur_row < dbi_result->num_rows ) {
-		dbi_result_next_row( dbi_result->result );
+		(void)dbi_result_next_row( dbi_result->result );
 		dbi_result->cur_row++;
 		dbi_result->row = create_dbi_row( dbi_result->result );
 		return dbi_result->row;
@@ -865,17 +894,19 @@ result_get_next_row( GncSqlResult* result )
 }
 
 static GncSqlResult*
-create_dbi_result( dbi_result result )
+create_dbi_result( /*@ owned @*/ dbi_result result )
 {
 	GncDbiSqlResult* dbi_result;
 
 	dbi_result = g_new0( GncDbiSqlResult, 1 );
+	g_assert( dbi_result != NULL );
+
 	dbi_result->base.dispose = result_dispose;
 	dbi_result->base.getNumRows = result_get_num_rows;
 	dbi_result->base.getFirstRow = result_get_first_row;
 	dbi_result->base.getNextRow = result_get_next_row;
 	dbi_result->result = result;
-	dbi_result->num_rows = dbi_result_get_numrows( result );
+	dbi_result->num_rows = (guint)dbi_result_get_numrows( result );
 	dbi_result->cur_row = 0;
 
 	return (GncSqlResult*)dbi_result;
@@ -886,16 +917,16 @@ typedef struct
 	GncSqlStatement base;
 
 	GString* sql;
-	GncSqlConnection* conn;
+	/*@ observer @*/ GncSqlConnection* conn;
 } GncDbiSqlStatement;
 
 static void
-stmt_dispose( GncSqlStatement* stmt )
+stmt_dispose( /*@ only @*/ GncSqlStatement* stmt )
 {
 	GncDbiSqlStatement* dbi_stmt = (GncDbiSqlStatement*)stmt;
 
 	if( dbi_stmt->sql != NULL ) {
-		g_string_free( dbi_stmt->sql, TRUE );
+		(void)g_string_free( dbi_stmt->sql, TRUE );
 	}
 	g_free( stmt );
 }
@@ -909,8 +940,8 @@ stmt_to_sql( GncSqlStatement* stmt )
 }
 
 static void
-stmt_add_where_cond( GncSqlStatement* stmt, QofIdTypeConst type_name,
-					gpointer obj, const GncSqlColumnTableEntry* table_row, GValue* value )
+stmt_add_where_cond( GncSqlStatement* stmt, /*@ unused @*/ QofIdTypeConst type_name,
+					/*@ unused @*/ gpointer obj, const GncSqlColumnTableEntry* table_row, GValue* value )
 {
 	GncDbiSqlStatement* dbi_stmt = (GncDbiSqlStatement*)stmt;
 	gchar* buf;
@@ -920,21 +951,22 @@ stmt_add_where_cond( GncSqlStatement* stmt, QofIdTypeConst type_name,
 	buf = g_strdup_printf( " WHERE %s = %s", table_row->col_name,
 						value_str );
 	g_free( value_str );
-	g_string_append( dbi_stmt->sql, buf );
+	(void)g_string_append( dbi_stmt->sql, buf );
 	g_free( buf );
 }
 
 static GncSqlStatement*
-create_dbi_statement( GncSqlConnection* conn, gchar* sql )
+create_dbi_statement( /*@ observer @*/ GncSqlConnection* conn, const gchar* sql )
 {
 	GncDbiSqlStatement* stmt;
 
 	stmt = g_new0( GncDbiSqlStatement, 1 );
+	g_assert( stmt != NULL );
+
 	stmt->base.dispose = stmt_dispose;
 	stmt->base.toSql = stmt_to_sql;
 	stmt->base.addWhereCond = stmt_add_where_cond;
 	stmt->sql = g_string_new( sql );
-	g_free( sql );
 	stmt->conn = conn;
 
 	return (GncSqlStatement*)stmt;
@@ -944,19 +976,19 @@ typedef struct
 {
 	GncSqlConnection base;
 
-	dbi_conn conn;
-	provider_functions_t* provider;
+	/*@ observer @*/ dbi_conn conn;
+	/*@ observer @*/ provider_functions_t* provider;
 } GncDbiSqlConnection;
 
 static void
-conn_dispose( GncSqlConnection* conn )
+conn_dispose( /*@ only @*/ GncSqlConnection* conn )
 {
-	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+	//GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 
 	g_free( conn );
 }
 
-static GncSqlResult*
+static /*@ null @*/ GncSqlResult*
 conn_execute_select_statement( GncSqlConnection* conn, GncSqlStatement* stmt )
 {
 	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
@@ -986,26 +1018,28 @@ conn_execute_nonselect_statement( GncSqlConnection* conn, GncSqlStatement* stmt 
 		return -1;
 	}
 	DEBUG( "SQL: %s\n", dbi_stmt->sql->str );
-	num_rows = dbi_result_get_numrows_affected( result );
-	dbi_result_free( result );
+	num_rows = (gint)dbi_result_get_numrows_affected( result );
+	(void)dbi_result_free( result );
 	return num_rows;
 }
 
 static GncSqlStatement*
-conn_create_statement_from_sql( GncSqlConnection* conn, gchar* sql )
+conn_create_statement_from_sql( /*@ observer @*/ GncSqlConnection* conn, const gchar* sql )
 {
-	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+	//GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 
 	return create_dbi_statement( conn, sql );
 }
 
 static GValue*
-create_gvalue_from_string( gchar* s )
+create_gvalue_from_string( /*@ only @*/ gchar* s )
 {
 	GValue* s_gval;
 
 	s_gval = g_new0( GValue, 1 );
-	g_value_init( s_gval, G_TYPE_STRING );
+	g_assert( s_gval != NULL );
+
+	(void)g_value_init( s_gval, G_TYPE_STRING );
 	g_value_take_string( s_gval, s );
 
 	return s_gval;
@@ -1024,8 +1058,8 @@ conn_does_table_exist( GncSqlConnection* conn, const gchar* table_name )
 
 	dbname = dbi_conn_get_option( dbi_conn->conn, "dbname" );
 	tables = dbi_conn_get_table_list( dbi_conn->conn, dbname, table_name );
-	nTables = dbi_result_get_numrows( tables );
-	dbi_result_free( tables );
+	nTables = (gint)dbi_result_get_numrows( tables );
+	(void)dbi_result_free( tables );
 
 	if( nTables == 1 ) {
 		return TRUE;
@@ -1035,95 +1069,109 @@ conn_does_table_exist( GncSqlConnection* conn, const gchar* table_name )
 }
 
 static gboolean
-conn_begin_transaction( GncSqlConnection* conn )
+conn_begin_transaction( /*@ unused @*/ GncSqlConnection* conn )
 {
-	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+	//GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 
 	return TRUE;
 }
 
 static gboolean
-conn_rollback_transaction( GncSqlConnection* conn )
+conn_rollback_transaction( /*@ unused @*/ GncSqlConnection* conn )
 {
-	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+	//GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 
 	return TRUE;
 }
 
 static gboolean
-conn_commit_transaction( GncSqlConnection* conn )
+conn_commit_transaction( /*@ unused @*/ GncSqlConnection* conn )
 {
-	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+	//GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 
 	return TRUE;
 }
 
-static const gchar*
-conn_get_column_type_name( GncSqlConnection* conn, GType type, gint size )
+static /*@ observer @*/ const gchar*
+sqlite3_get_column_type_name( GType type, /*@ unused @*/ gint size )
+{
+	switch( type ) {
+		case G_TYPE_INT:
+			return "integer";
+
+		case G_TYPE_INT64:
+			return "bigint";
+
+		case G_TYPE_DOUBLE:
+			return "real";
+
+		case G_TYPE_STRING:
+			return "text";
+
+		default:
+			PERR( "Unknown GType: %s\n", g_type_name( type ) );
+			return "";
+	}
+}
+
+static /*@ observer @*/ const gchar*
+mysql_get_column_type_name( GType type, /*@ unused @*/ gint size )
+{
+	switch( type ) {
+		case G_TYPE_INT:
+			return "integer";
+
+		case G_TYPE_INT64:
+			return "bigint";
+
+		case G_TYPE_DOUBLE:
+			return "double";
+
+		case G_TYPE_STRING:
+			return "varchar";
+
+		default:
+			PERR( "Unknown GType: %s\n", g_type_name( type ) );
+			return "";
+	}
+}
+
+static /*@ observer @*/ const gchar*
+pgsql_get_column_type_name( GType type, /*@ unused @*/ gint size )
+{
+	switch( type ) {
+		case G_TYPE_INT:
+			return "integer";
+
+		case G_TYPE_INT64:
+			return "int8";
+
+		case G_TYPE_DOUBLE:
+			return "double precision";
+
+		case G_TYPE_STRING:
+			return "varchar";
+
+		default:
+			PERR( "Unknown GType: %s\n", g_type_name( type ) );
+			return "";
+	}
+}
+
+static /*@ observer @*/ const gchar*
+conn_get_column_type_name( GncSqlConnection* conn, GType type, /*@ unused @*/ gint size )
 {
 	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 
-	if( dbi_conn->provider == GNC_DBI_PROVIDER_SQLITE ) {
-		switch( type ) {
-			case G_TYPE_INT:
-				return "integer";
-				break;
-			case G_TYPE_INT64:
-				return "bigint";
-				break;
-			case G_TYPE_DOUBLE:
-				return "real";
-				break;
-			case G_TYPE_STRING:
-				return "text";
-				break;
-			default:
-				PERR( "Unknown GType: %s\n", g_type_name( type ) );
-				return "";
-		}
-	} else if( dbi_conn->provider == GNC_DBI_PROVIDER_MYSQL ) {
-		switch( type ) {
-			case G_TYPE_INT:
-				return "integer";
-				break;
-			case G_TYPE_INT64:
-				return "bigint";
-				break;
-			case G_TYPE_DOUBLE:
-				return "double";
-				break;
-			case G_TYPE_STRING:
-				return "varchar";
-				break;
-			default:
-				PERR( "Unknown GType: %s\n", g_type_name( type ) );
-				return "";
-		}
-	} else if( dbi_conn->provider == GNC_DBI_PROVIDER_PGSQL ) {
-		switch( type ) {
-			case G_TYPE_INT:
-				return "integer";
-				break;
-			case G_TYPE_INT64:
-				return "int8";
-				break;
-			case G_TYPE_DOUBLE:
-				return "double precision";
-				break;
-			case G_TYPE_STRING:
-				return "varchar";
-				break;
-			default:
-				PERR( "Unknown GType: %s\n", g_type_name( type ) );
-				return "";
-		}
+	if( dbi_conn->provider != NULL && dbi_conn->provider->get_column_type_name != NULL ) {
+		return dbi_conn->provider->get_column_type_name( type, size );
 	} else {
 		PERR( "Unknown provider type\n" );
 		return "";
 	}
 }
 
-static gchar*
+static /*@ null @*/ gchar*
 conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
 							const gchar* table_name,
 							const GList* col_info_list )
@@ -1144,29 +1192,29 @@ conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
 		GncSqlColumnInfo* info = (GncSqlColumnInfo*)(list_node->data);
 
 		if( col_num != 0 ) {
-			g_string_append( ddl, ", " );
+			(void)g_string_append( ddl, ", " );
 		}
 		g_string_append_printf( ddl, "%s %s", info->name,
 			gnc_sql_connection_get_column_type_name( conn, info->type, info->size ) );
     	if( info->size != 0 ) {
-			g_string_append_printf( ddl, "(%d)", info->size );
+			(void)g_string_append_printf( ddl, "(%d)", info->size );
     	}
 		if( info->is_primary_key ) {
-			g_string_append( ddl, " PRIMARY KEY" );
+			(void)g_string_append( ddl, " PRIMARY KEY" );
 		}
 		if( !info->null_allowed ) {
-			g_string_append( ddl, " NOT NULL" );
+			(void)g_string_append( ddl, " NOT NULL" );
 		}
     }
-	g_string_append( ddl, ")" );
+	(void)g_string_append( ddl, ")" );
         
 	ddl_result = ddl->str;
-	g_string_free( ddl, FALSE );
+	(void)g_string_free( ddl, FALSE );
 
 	return ddl_result;
 }
 
-static gchar*
+static /*@ null @*/ gchar*
 conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
 				const GList* col_info_list )
 {
@@ -1186,7 +1234,7 @@ conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
 		GncSqlColumnInfo* info = (GncSqlColumnInfo*)(list_node->data);
 
 		if( col_num != 0 ) {
-			g_string_append( ddl, ", " );
+			(void)g_string_append( ddl, ", " );
 		}
 		g_string_append_printf( ddl, "%s %s", info->name,
 			gnc_sql_connection_get_column_type_name( conn, info->type, info->size ) );
@@ -1194,24 +1242,24 @@ conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
 			g_string_append_printf( ddl, "(%d)", info->size );
     	}
 		if( info->is_unicode ) {
-		    g_string_append( ddl, " CHARACTER SET utf8" );
+		    (void)g_string_append( ddl, " CHARACTER SET utf8" );
 		}
 		if( info->is_primary_key ) {
-			g_string_append( ddl, " PRIMARY KEY" );
+			(void)g_string_append( ddl, " PRIMARY KEY" );
 		}
 		if( !info->null_allowed ) {
-			g_string_append( ddl, " NOT NULL" );
+			(void)g_string_append( ddl, " NOT NULL" );
 		}
     }
-	g_string_append( ddl, ")" );
+	(void)g_string_append( ddl, ")" );
         
 	ddl_result = ddl->str;
-	g_string_free( ddl, FALSE );
+	(void)g_string_free( ddl, FALSE );
 
 	return ddl_result;
 }
 
-static gchar*
+static /*@ null @*/ gchar*
 conn_create_table_ddl_pgsql( GncSqlConnection* conn, const gchar* table_name,
 				const GList* col_info_list )
 {
@@ -1232,7 +1280,7 @@ conn_create_table_ddl_pgsql( GncSqlConnection* conn, const gchar* table_name,
 		GncSqlColumnInfo* info = (GncSqlColumnInfo*)(list_node->data);
 
 		if( col_num != 0 ) {
-			g_string_append( ddl, ", " );
+			(void)g_string_append( ddl, ", " );
 		}
 		g_string_append_printf( ddl, "%s %s", info->name,
 			gnc_sql_connection_get_column_type_name( conn, info->type, info->size ) );
@@ -1240,19 +1288,19 @@ conn_create_table_ddl_pgsql( GncSqlConnection* conn, const gchar* table_name,
 			g_string_append_printf( ddl, "(%d)", info->size );
     	}
 		if( info->is_primary_key ) {
-			g_string_append( ddl, " PRIMARY KEY" );
+			(void)g_string_append( ddl, " PRIMARY KEY" );
 		}
 		if( !info->null_allowed ) {
-			g_string_append( ddl, " NOT NULL" );
+			(void)g_string_append( ddl, " NOT NULL" );
 		}
 		is_unicode = is_unicode || info->is_unicode;
     }
-	g_string_append( ddl, ")" );
+	(void)g_string_append( ddl, ")" );
 	if( is_unicode ) {
 	}
         
 	ddl_result = ddl->str;
-	g_string_free( ddl, FALSE );
+	(void)g_string_free( ddl, FALSE );
 
 	return ddl_result;
 }
@@ -1263,8 +1311,6 @@ conn_create_table( GncSqlConnection* conn, const gchar* table_name,
 {
 	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 	gchar* ddl;
-	const GList* list_node;
-	guint col_num;
 	dbi_result result;
 
 	g_return_val_if_fail( conn != NULL, FALSE );
@@ -1277,7 +1323,7 @@ conn_create_table( GncSqlConnection* conn, const gchar* table_name,
 	if( ddl != NULL ) {
 		DEBUG( "SQL: %s\n", ddl );
 		result = dbi_conn_query( dbi_conn->conn, ddl );
-		dbi_result_free( result );
+		(void)dbi_result_free( result );
 	} else {
 		return FALSE;
 	}
@@ -1286,8 +1332,8 @@ conn_create_table( GncSqlConnection* conn, const gchar* table_name,
 }
 
 static gboolean
-conn_create_index( GncSqlConnection* conn, const gchar* index_name,
-					const gchar* table_name, const GncSqlColumnTableEntry* col_table )
+conn_create_index( /*@ unused @*/ GncSqlConnection* conn, /*@ unused @*/ const gchar* index_name,
+					/*@ unused @*/ const gchar* table_name, /*@ unused @*/ const GncSqlColumnTableEntry* col_table )
 {
 #if 0
     GdaServerOperation *op;
@@ -1370,12 +1416,12 @@ conn_create_index( GncSqlConnection* conn, const gchar* index_name,
 	return TRUE;
 }
 
-static gchar*
+static /*@ null @*/ gchar*
 conn_quote_string( const GncSqlConnection* conn, gchar* unquoted_str )
 {
 	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 	gchar* quoted_str;
-	gint size;
+	size_t size;
 
 	size = dbi_conn_quote_string_copy( dbi_conn->conn, unquoted_str,
 									&quoted_str );
@@ -1387,11 +1433,13 @@ conn_quote_string( const GncSqlConnection* conn, gchar* unquoted_str )
 }
 
 static GncSqlConnection*
-create_dbi_connection( provider_functions_t* provider, dbi_conn conn )
+create_dbi_connection( /*@ observer @*/ provider_functions_t* provider, /*@ observer @*/ dbi_conn conn )
 {
 	GncDbiSqlConnection* dbi_conn;
 
 	dbi_conn = g_new0( GncDbiSqlConnection, 1 );
+	g_assert( dbi_conn != NULL );
+
 	dbi_conn->base.dispose = conn_dispose;
 	dbi_conn->base.executeSelectStatement = conn_execute_select_statement;
 	dbi_conn->base.executeNonSelectStatement = conn_execute_nonselect_statement;

@@ -142,14 +142,14 @@ typedef struct _QofParam QofParam;
  * also provides a place for the user to hang additional user-defined
  * data.
  */
-typedef gpointer (*QofAccessFunc)(gpointer object, const QofParam *param);
+typedef gpointer (*QofAccessFunc)(gpointer object, /*@ null @*/ const QofParam *param);
 
 /** The QofSetterFunc defines an function pointer for parameter
  *  setters. Real functions must be of the form:
  *
  * void setter_func (object_type *self, param_type *param);
  */
-typedef void (*QofSetterFunc) (gpointer, gpointer);
+typedef void (*QofSetterFunc) (gpointer, /*@ null @*/ gpointer);
 
 /* A callback for how to compare two (same-type) objects based on a
  * common getter (parameter member), using the provided comparison

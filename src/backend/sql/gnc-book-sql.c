@@ -42,29 +42,35 @@
 #include "SX-book.h"
 #include "SX-book-p.h"
 
+#if defined( S_SPLINT_S )
+#include "splint-defs.h"
+#endif
+
 #define BOOK_TABLE "books"
 #define TABLE_VERSION 1
 
-static QofLogModule log_module = G_LOG_DOMAIN;
+/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
-static gpointer get_root_account_guid( gpointer pObject, const QofParam* );
-static void set_root_account_guid( gpointer pObject, gpointer pValue );
-static gpointer get_root_template_guid( gpointer pObject, const QofParam* );
-static void set_root_template_guid( gpointer pObject, gpointer pValue );
+static /*@ dependent @*//*@ null @*/ gpointer get_root_account_guid( gpointer pObject );
+static void set_root_account_guid( gpointer pObject, /*@ null @*/ gpointer pValue );
+static /*@ dependent @*//*@ null @*/ gpointer get_root_template_guid( gpointer pObject );
+static void set_root_template_guid( gpointer pObject, /*@ null @*/ gpointer pValue );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
-	/*# -fullinitblock */
+	/*@ -full_init_block @*/
     { "guid",               CT_GUID, 0, COL_NNUL|COL_PKEY, "guid" },
-    { "root_account_guid",  CT_GUID, 0, COL_NNUL,          NULL, NULL, get_root_account_guid,  set_root_account_guid },
-    { "root_template_guid", CT_GUID, 0, COL_NNUL,          NULL, NULL, get_root_template_guid, set_root_template_guid },
+    { "root_account_guid",  CT_GUID, 0, COL_NNUL,          NULL, NULL,
+			(QofAccessFunc)get_root_account_guid,  set_root_account_guid },
+    { "root_template_guid", CT_GUID, 0, COL_NNUL,          NULL, NULL,
+			(QofAccessFunc)get_root_template_guid, set_root_template_guid },
     { NULL }
-	/*# +fullinitblock */
+	/*@ +full_init_block @*/
 };
 
 /* ================================================================= */
-static gpointer
-get_root_account_guid( gpointer pObject, const QofParam* param )
+static /*@ dependent @*//*@ null @*/ gpointer
+get_root_account_guid( gpointer pObject )
 {
     GNCBook* book = QOF_BOOK(pObject);
     const Account* root;
@@ -77,7 +83,7 @@ get_root_account_guid( gpointer pObject, const QofParam* param )
 }
 
 static void 
-set_root_account_guid( gpointer pObject, gpointer pValue )
+set_root_account_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
     GNCBook* book = QOF_BOOK(pObject);
     const Account* root;
@@ -91,8 +97,8 @@ set_root_account_guid( gpointer pObject, gpointer pValue )
     qof_instance_set_guid( QOF_INSTANCE(root), guid );
 }
 
-static gpointer
-get_root_template_guid( gpointer pObject, const QofParam* param )
+static /*@ dependent @*//*@ null @*/ gpointer
+get_root_template_guid( gpointer pObject )
 {
     const GNCBook* book = QOF_BOOK(pObject);
     const Account* root;
@@ -105,7 +111,7 @@ get_root_template_guid( gpointer pObject, const QofParam* param )
 }
 
 static void 
-set_root_template_guid( gpointer pObject, gpointer pValue )
+set_root_template_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
     GNCBook* book = QOF_BOOK(pObject);
     GUID* guid = (GUID*)pValue;
@@ -131,14 +137,12 @@ static void
 load_single_book( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
-    GUID book_guid;
 	GNCBook* pBook;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( row != NULL );
 
     guid = gnc_sql_load_guid( be, row );
-    book_guid = *guid;
 
 	pBook = be->primary_book;
 	if( pBook == NULL ) {
@@ -160,20 +164,22 @@ load_all_books( GncSqlBackend* be )
 	g_return_if_fail( be != NULL );
 
     stmt = gnc_sql_create_select_statement( be, BOOK_TABLE );
-    result = gnc_sql_execute_select_statement( be, stmt );
-	gnc_sql_statement_dispose( stmt );
-	if( result != NULL ) {
-		GncSqlRow* row = gnc_sql_result_get_first_row( result );
+	if( stmt != NULL ) {
+    	result = gnc_sql_execute_select_statement( be, stmt );
+		gnc_sql_statement_dispose( stmt );
+		if( result != NULL ) {
+			GncSqlRow* row = gnc_sql_result_get_first_row( result );
 
-		// If there are no rows, try committing the book
-		if( row == NULL ) {
-   	    	gnc_sql_save_book( be, QOF_INSTANCE(be->primary_book) );
-		} else {
-			// Otherwise, load the 1st book.
-        	load_single_book( be, row );
+			// If there are no rows, try committing the book
+			if( row == NULL ) {
+   	    		(void)gnc_sql_save_book( be, QOF_INSTANCE(be->primary_book) );
+			} else {
+				// Otherwise, load the 1st book.
+        		load_single_book( be, row );
+			}
+
+			gnc_sql_result_dispose( result );
 		}
-
-		gnc_sql_result_dispose( result );
     }
 }
 
@@ -187,7 +193,7 @@ create_book_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, BOOK_TABLE );
     if( version == 0 ) {
-        gnc_sql_create_table( be, BOOK_TABLE, TABLE_VERSION, col_table );
+        (void)gnc_sql_create_table( be, BOOK_TABLE, TABLE_VERSION, col_table );
     }
 }
 

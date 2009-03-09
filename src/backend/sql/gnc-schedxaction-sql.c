@@ -44,10 +44,14 @@
 #include "gnc-recurrence-sql.h"
 #include "gnc-transaction-sql.h"
 
+#ifdef S_SPLINT_S
+#include "splint-defs.h"
+#endif
+
 #define SCHEDXACTION_TABLE "schedxactions"
 #define TABLE_VERSION 1
 
-static QofLogModule log_module = G_LOG_DOMAIN;
+/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define SX_MAX_NAME_LEN 2048
 
@@ -56,12 +60,12 @@ static void set_autocreate( gpointer pObject, gboolean value );
 static gboolean get_autonotify( gpointer pObject );
 static void set_autonotify( gpointer pObject, gboolean value );
 static gint get_instance_count( gpointer pObject );
-static gpointer get_template_act_guid( gpointer pObject, const QofParam* param );
-static void set_template_act_guid( gpointer pObject, gpointer pValue );
+static /*@ null @*/ gpointer get_template_act_guid( gpointer pObject );
+static void set_template_act_guid( gpointer pObject, /*@ null @*/ gpointer pValue );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
-	/*# -fullinitblock */
+	/*@ -full_init_block @*/
     { "guid",              CT_GUID,    0,               COL_NNUL|COL_PKEY, "guid" },
     { "name",              CT_STRING,  SX_MAX_NAME_LEN, 0,                 NULL, GNC_SX_NAME },
 	{ "enabled",           CT_BOOLEAN, 0,               COL_NNUL,          NULL, NULL,
@@ -83,9 +87,9 @@ static const GncSqlColumnTableEntry col_table[] =
 	{ "instance_count",    CT_INT,     0,               COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)get_instance_count, (QofSetterFunc)gnc_sx_set_instance_count },
     { "template_act_guid", CT_GUID,    0,               COL_NNUL,          NULL, NULL,
-			get_template_act_guid, set_template_act_guid },
+			(QofAccessFunc)get_template_act_guid, set_template_act_guid },
     { NULL }
-	/*# +fullinitblock */
+	/*@ +full_init_block @*/
 };
 
 /* ================================================================= */
@@ -93,13 +97,14 @@ static const GncSqlColumnTableEntry col_table[] =
 static gboolean
 get_autocreate( gpointer pObject )
 {
-    const SchedXaction* pSx = GNC_SX(pObject);
+    const SchedXaction* pSx;
     gboolean autoCreate;
     gboolean autoNotify;
 
 	g_return_val_if_fail( pObject != NULL, FALSE );
 	g_return_val_if_fail( GNC_IS_SX(pObject), FALSE );
 
+    pSx = GNC_SX(pObject);
     xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
     return autoCreate;
 }
@@ -107,13 +112,14 @@ get_autocreate( gpointer pObject )
 static void 
 set_autocreate( gpointer pObject, gboolean value )
 {
-    SchedXaction* pSx = GNC_SX(pObject);
+    SchedXaction* pSx;
     gboolean autoNotify;
 	gboolean dummy;
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( GNC_IS_SX(pObject) );
 
+    pSx = GNC_SX(pObject);
     xaccSchedXactionGetAutoCreate( pSx, &dummy, &autoNotify );
     xaccSchedXactionSetAutoCreate( pSx, value, autoNotify );
 }
@@ -121,13 +127,14 @@ set_autocreate( gpointer pObject, gboolean value )
 static gboolean
 get_autonotify( gpointer pObject )
 {
-    const SchedXaction* pSx = GNC_SX(pObject);
+    const SchedXaction* pSx;
     gboolean autoCreate;
     gboolean autoNotify;
 
 	g_return_val_if_fail( pObject != NULL, FALSE );
 	g_return_val_if_fail( GNC_IS_SX(pObject), FALSE );
 
+    pSx = GNC_SX(pObject);
     xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
     return autoNotify;
 }
@@ -135,13 +142,14 @@ get_autonotify( gpointer pObject )
 static void 
 set_autonotify( gpointer pObject, gboolean value )
 {
-    SchedXaction* pSx = GNC_SX(pObject);
+    SchedXaction* pSx;
     gboolean autoCreate;
     gboolean dummy;
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( GNC_IS_SX(pObject) );
 
+    pSx = GNC_SX(pObject);
     xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &dummy );
     xaccSchedXactionSetAutoCreate( pSx, autoCreate, value );
 }
@@ -149,29 +157,28 @@ set_autonotify( gpointer pObject, gboolean value )
 static gint
 get_instance_count( gpointer pObject )
 {
-    const SchedXaction* pSx = GNC_SX(pObject);
-
 	g_return_val_if_fail( pObject != NULL, FALSE );
 	g_return_val_if_fail( GNC_IS_SX(pObject), FALSE );
 
-    return gnc_sx_get_instance_count( pSx, NULL );
+    return gnc_sx_get_instance_count( GNC_SX(pObject), NULL );
 }
 
 static gpointer
-get_template_act_guid( gpointer pObject, const QofParam* param )
+get_template_act_guid( gpointer pObject )
 {
-    const SchedXaction* pSx = GNC_SX(pObject);
+    const SchedXaction* pSx;
 
 	g_return_val_if_fail( pObject != NULL, NULL );
 	g_return_val_if_fail( GNC_IS_SX(pObject), NULL );
 
+    pSx = GNC_SX(pObject);
     return (gpointer)xaccAccountGetGUID( pSx->template_acct );
 }
 
 static void 
 set_template_act_guid( gpointer pObject, gpointer pValue )
 {
-    SchedXaction* pSx = GNC_SX(pObject);
+    SchedXaction* pSx;
     QofBook* pBook;
     GUID* guid = (GUID*)pValue;
 	Account* pAcct;
@@ -180,31 +187,30 @@ set_template_act_guid( gpointer pObject, gpointer pValue )
 	g_return_if_fail( GNC_IS_SX(pObject) );
 	g_return_if_fail( pValue != NULL );
 
+    pSx = GNC_SX(pObject);
     pBook = qof_instance_get_book( QOF_INSTANCE(pSx) );
 	pAcct = xaccAccountLookup( guid, pBook );
 	sx_set_template_account( pSx, pAcct );
 }
 
 /* ================================================================= */
-static SchedXaction*
+static /*@ null @*/ SchedXaction*
 load_single_sx( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
-    GUID sx_guid;
 	SchedXaction* pSx;
-	GList* schedule = NULL;
+	GList* schedule;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
-    sx_guid = *guid;
-
+	g_assert( guid != NULL );
     pSx = xaccSchedXactionMalloc( be->primary_book );
 
 	gnc_sx_begin_edit( pSx );
     gnc_sql_load_object( be, row, GNC_SX_ID, pSx, col_table );
-	gnc_sql_recurrence_load_list( be, guid, &schedule );
+	schedule = gnc_sql_recurrence_load_list( be, guid );
 	gnc_sx_set_schedule( pSx, schedule );
 	gnc_sx_commit_edit( pSx );
 	gnc_sql_transaction_load_tx_for_account( be, pSx->template_acct );
@@ -221,6 +227,7 @@ load_all_sxes( GncSqlBackend* be )
 	g_return_if_fail( be != NULL );
 
     stmt = gnc_sql_create_select_statement( be, SCHEDXACTION_TABLE );
+	if( stmt == NULL ) return;
     result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
@@ -244,6 +251,7 @@ load_all_sxes( GncSqlBackend* be )
 
 		if( list != NULL ) {
 			gnc_sql_slots_load_for_list( be, list );
+			g_list_free( list );
 		}
     }
 }
@@ -258,7 +266,7 @@ create_sx_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, SCHEDXACTION_TABLE );
     if( version == 0 ) {
-        gnc_sql_create_table( be, SCHEDXACTION_TABLE, TABLE_VERSION, col_table );
+        (void)gnc_sql_create_table( be, SCHEDXACTION_TABLE, TABLE_VERSION, col_table );
     }
 }
 
@@ -319,6 +327,6 @@ gnc_sql_init_schedxaction_handler( void )
 		NULL                          /* write */
     };
 
-    qof_object_register_backend( GNC_ID_SCHEDXACTION, GNC_SQL_BACKEND, &be_data );
+    (void)qof_object_register_backend( GNC_ID_SCHEDXACTION, GNC_SQL_BACKEND, &be_data );
 }
 /* ========================== END OF FILE ===================== */

@@ -42,51 +42,55 @@
 
 #include "gnc-budget.h"
 
+#if defined( S_SPLINT_S )
+#include "splint-defs.h"
+#endif
+
 #define BUDGET_TABLE "budgets"
 #define TABLE_VERSION 1
 
-static QofLogModule log_module = G_LOG_DOMAIN;
+/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define BUDGET_MAX_NAME_LEN 2048
 #define BUDGET_MAX_DESCRIPTION_LEN 2048
 
 static const GncSqlColumnTableEntry col_table[] =
 {
-	/*# -fullinitblock */
+	/*@ -full_init_block @*/
     { "guid",        CT_GUID,   0,                          COL_NNUL|COL_PKEY, "guid" },
     { "name",        CT_STRING, BUDGET_MAX_NAME_LEN,        COL_NNUL,          "name" },
     { "description", CT_STRING, BUDGET_MAX_DESCRIPTION_LEN, 0,                 "description" },
     { "num_periods", CT_INT,    0,                          COL_NNUL,          "num_periods" },
     { NULL }
-	/*# +fullinitblock */
+	/*@ +full_init_block @*/
 };
 
 /* ================================================================= */
-static GncBudget*
+static /*@ dependent @*//*@ null @*/ GncBudget*
 load_single_budget( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
-    GUID budget_guid;
-	GncBudget* pBudget;
+	GncBudget* pBudget = NULL;
 	Recurrence* r;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
-    budget_guid = *guid;
-
-    pBudget = gnc_budget_lookup( &budget_guid, be->primary_book );
+	if( guid != NULL ) {
+    	pBudget = gnc_budget_lookup( guid, be->primary_book );
+	}
     if( pBudget == NULL ) {
         pBudget = gnc_budget_new( be->primary_book );
     }
 
 	gnc_budget_begin_edit( pBudget );
     gnc_sql_load_object( be, row, GNC_ID_BUDGET, pBudget, col_table );
-	r = g_new0( Recurrence, 1 );
-	gnc_sql_recurrence_load( be, gnc_budget_get_guid( pBudget ), r );
-	gnc_budget_set_recurrence( pBudget, r );
-	g_free( r );
+	r = gnc_sql_recurrence_load( be, gnc_budget_get_guid( pBudget ) );
+	if( r != NULL ) {
+		gnc_budget_set_recurrence( pBudget, r );
+		g_free( r );
+	}
 	gnc_budget_commit_edit( pBudget );
 
 	return pBudget;
@@ -102,23 +106,26 @@ load_all_budgets( GncSqlBackend* be )
 	g_return_if_fail( be != NULL );
 
     stmt = gnc_sql_create_select_statement( be, BUDGET_TABLE );
-    result = gnc_sql_execute_select_statement( be, stmt );
-	gnc_sql_statement_dispose( stmt );
-	if( result != NULL ) {
-		GncSqlRow* row = gnc_sql_result_get_first_row( result );
-		GncBudget* b;
+	if( stmt != NULL ) {
+    	result = gnc_sql_execute_select_statement( be, stmt );
+		gnc_sql_statement_dispose( stmt );
+		if( result != NULL ) {
+			GncSqlRow* row = gnc_sql_result_get_first_row( result );
+			GncBudget* b;
 
-        while( row != NULL ) {
-            b = load_single_budget( be, row );
-			if( b != NULL ) {
-				list = g_list_append( list, b );
+        	while( row != NULL ) {
+            	b = load_single_budget( be, row );
+				if( b != NULL ) {
+					list = g_list_append( list, b );
+				}
+				row = gnc_sql_result_get_next_row( result );
+        	}
+			gnc_sql_result_dispose( result );
+
+			if( list != NULL ) {
+				gnc_sql_slots_load_for_list( be, list );
+				g_list_free( list );
 			}
-			row = gnc_sql_result_get_next_row( result );
-        }
-		gnc_sql_result_dispose( result );
-
-		if( list != NULL ) {
-			gnc_sql_slots_load_for_list( be, list );
 		}
     }
 }
@@ -133,7 +140,7 @@ create_budget_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, BUDGET_TABLE );
     if( version == 0 ) {
-        gnc_sql_create_table( be, BUDGET_TABLE, TABLE_VERSION, col_table );
+        (void)gnc_sql_create_table( be, BUDGET_TABLE, TABLE_VERSION, col_table );
     }
 }
 
@@ -172,7 +179,7 @@ save_budget( GncSqlBackend* be, QofInstance* inst )
     	} else {
         	is_ok = gnc_sql_recurrence_delete( be, guid );
 			if( is_ok ) {
-        		gnc_sql_slots_delete( be, guid );
+        		(void)gnc_sql_slots_delete( be, guid );
 			}
     	}
 	}
@@ -222,6 +229,6 @@ gnc_sql_init_budget_handler( void )
 		write_budgets					/* write */
     };
 
-    qof_object_register_backend( GNC_ID_BUDGET, GNC_SQL_BACKEND, &be_data );
+    (void)qof_object_register_backend( GNC_ID_BUDGET, GNC_SQL_BACKEND, &be_data );
 }
 /* ========================== END OF FILE ===================== */

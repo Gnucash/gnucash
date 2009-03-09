@@ -175,7 +175,7 @@ void qof_book_mark_closed (QofBook *book);
  *  a non-NULL value.  (Unless the system malloc failed (out of
  *  memory) in which case what happens??).
  */
-QofCollection  * qof_book_get_collection (const QofBook *, QofIdType);
+/*@ dependent @*/ QofCollection  * qof_book_get_collection (const QofBook *, QofIdType);
 
 /** Invoke the indicated callback on each collection in the book. */
 typedef void (*QofCollectionForeachCB) (QofCollection *, gpointer user_data);

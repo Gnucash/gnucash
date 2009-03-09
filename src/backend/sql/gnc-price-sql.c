@@ -39,7 +39,11 @@
 #include "gnc-price-sql.h"
 #include "gnc-slots-sql.h"
 
-static QofLogModule log_module = G_LOG_DOMAIN;
+#if defined( S_SPLINT_S )
+#include "splint-defs.h"
+#endif
+
+/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "prices"
 #define TABLE_VERSION 2
@@ -49,7 +53,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 static const GncSqlColumnTableEntry col_table[] =
 {
-	/*# -fullinitblock */
+	/*@ -full_init_block @*/
     { "guid",           CT_GUID,           0,                    COL_NNUL|COL_PKEY, "guid" },
     { "commodity_guid", CT_COMMODITYREF,   0,                    COL_NNUL,          NULL, PRICE_COMMODITY },
     { "currency_guid",  CT_COMMODITYREF,   0,                    COL_NNUL,          NULL, PRICE_CURRENCY },
@@ -58,12 +62,12 @@ static const GncSqlColumnTableEntry col_table[] =
     { "type",           CT_STRING,         PRICE_MAX_TYPE_LEN,   0,                 NULL, PRICE_TYPE },
     { "value",          CT_NUMERIC,        0,                    COL_NNUL,          NULL, PRICE_VALUE },
     { NULL }
-	/*# +fullinitblock */
+	/*@ +full_init_block @*/
 };
 
 /* ================================================================= */
 
-static GNCPrice*
+static /*@ null @*//*@ dependent @*/ GNCPrice*
 load_single_price( GncSqlBackend* be, GncSqlRow* row )
 {
 	GNCPrice* pPrice;
@@ -93,26 +97,29 @@ load_all_prices( GncSqlBackend* be )
     pBook = be->primary_book;
     pPriceDB = gnc_book_get_pricedb( pBook );
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
-    result = gnc_sql_execute_select_statement( be, stmt );
-	gnc_sql_statement_dispose( stmt );
-    if( result != NULL ) {
-        GNCPrice* pPrice;
-		GList* list = NULL;
-		GncSqlRow* row = gnc_sql_result_get_first_row( result );
+	if( stmt != NULL ) {
+    	result = gnc_sql_execute_select_statement( be, stmt );
+		gnc_sql_statement_dispose( stmt );
+    	if( result != NULL ) {
+        	GNCPrice* pPrice;
+			GList* list = NULL;
+			GncSqlRow* row = gnc_sql_result_get_first_row( result );
 
-        while( row != NULL ) {
-            pPrice = load_single_price( be, row );
+        	while( row != NULL ) {
+            	pPrice = load_single_price( be, row );
 
-            if( pPrice != NULL ) {
-				list = g_list_append( list, pPrice );
-                gnc_pricedb_add_price( pPriceDB, pPrice );
-            }
-			row = gnc_sql_result_get_next_row( result );
-        }
-		gnc_sql_result_dispose( result );
+            	if( pPrice != NULL ) {
+					list = g_list_append( list, pPrice );
+                	(void)gnc_pricedb_add_price( pPriceDB, pPrice );
+            	}
+				row = gnc_sql_result_get_next_row( result );
+        	}
+			gnc_sql_result_dispose( result );
 
-		if( list != NULL ) {
-			gnc_sql_slots_load_for_list( be, list );
+			if( list != NULL ) {
+				gnc_sql_slots_load_for_list( be, list );
+				g_list_free( list );
+			}
 		}
     }
 }
@@ -127,11 +134,11 @@ create_prices_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
     if( version == 0 ) {
-        gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
+        (void)gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
     } else if( version == 1 ) {
 		/* Upgrade 64 bit int handling */
 		gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
-		gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
+		(void)gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
     }
 }
 
@@ -160,7 +167,7 @@ save_price( GncSqlBackend* be, QofInstance* inst )
 
 	if( op != OP_DB_DELETE ) {
     	/* Ensure commodity and currency are in the db */
-		gnc_sql_save_commodity( be, gnc_price_get_commodity( pPrice ) );
+		(void)gnc_sql_save_commodity( be, gnc_price_get_commodity( pPrice ) );
     	is_ok = gnc_sql_save_commodity( be, gnc_price_get_currency( pPrice ) );
 	}
 
@@ -216,7 +223,7 @@ gnc_sql_init_price_handler( void )
 		write_prices				/* write */
     };
 
-    qof_object_register_backend( GNC_ID_PRICE, GNC_SQL_BACKEND, &be_data );
+    (void)qof_object_register_backend( GNC_ID_PRICE, GNC_SQL_BACKEND, &be_data );
 }
 
 /* ========================== END OF FILE ===================== */

@@ -371,7 +371,7 @@ gboolean qof_query_equal (const QofQuery *q1, const QofQuery *q2);
 void qof_query_print (QofQuery *query);
 
 /** Return the type of data we're querying for */
-QofIdType qof_query_get_search_for (const QofQuery *q);
+/*@ dependent @*/ QofIdType qof_query_get_search_for (const QofQuery *q);
 
 /** Return the list of books we're using */
 GList * qof_query_get_books (QofQuery *q);

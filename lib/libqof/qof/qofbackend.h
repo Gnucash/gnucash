@@ -158,7 +158,7 @@ typedef struct QofBackendProvider_s QofBackendProvider;
 typedef struct QofBackend_s QofBackend;
 
 /** \brief DOCUMENT ME! */
-typedef void (*QofBePercentageFunc) (const char *message, double percent);
+typedef void (*QofBePercentageFunc) (/*@ null @*/ const char *message, double percent);
 
 /** @name Allow access to the begin routine for this backend. */
 //@{

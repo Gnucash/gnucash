@@ -167,7 +167,7 @@ gboolean qof_object_register_backend (QofIdTypeConst type_name,
                                       const char *backend_name,
                                       gpointer be_data);
 
-gpointer qof_object_lookup_backend (QofIdTypeConst type_name,
+/*@ dependent @*/ gpointer qof_object_lookup_backend (QofIdTypeConst type_name,
                                     const char *backend_name);
 
 void qof_object_foreach_backend (const char *backend_name,

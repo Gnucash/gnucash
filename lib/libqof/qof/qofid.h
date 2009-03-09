@@ -168,7 +168,7 @@ void qof_collection_destroy (QofCollection *col);
 QofIdType qof_collection_get_type (const QofCollection *);
 
 /** Find the entity going only from its guid */
-QofInstance * qof_collection_lookup_entity (const QofCollection *, const GUID *);
+/*@ dependent @*/ QofInstance * qof_collection_lookup_entity (const QofCollection *, const GUID *);
 
 /** Callback type for qof_collection_foreach */
 typedef void (*QofInstanceForeachCB) (QofInstance *, gpointer user_data);

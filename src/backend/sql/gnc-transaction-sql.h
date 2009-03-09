@@ -80,6 +80,6 @@ typedef struct {
  * @param be SQL backend
  * @return GSList of acct_balances_t structures
  */
-GSList* gnc_sql_get_account_balances_slist( GncSqlBackend* be );
+/*@ null @*/ GSList* gnc_sql_get_account_balances_slist( GncSqlBackend* be );
 
 #endif /* GNC_TRANSACTION_SQL_H_ */
