@@ -19,70 +19,78 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/*
- * FILE:
- * table-allgui.h
+/** @addtogroup GUI
+ *  @{
+ */
+/** @addtogroup Register Registers, Ledgers and Journals
+ *  @{
+ */
+/** @addtogroup RegisterCore Register Core
+ *  @{
+ */
+/** @file table-allgui.h
+ *  @brief Declarations for the Table object
+ *  @author Copyright (c) 1998,1999,2000 Linas Vepstas
+ *  @author Copyright (c) 2000-2001 Dave Peticolas
  *
- * FUNCTION:
- * The Table object defines the structure and the GUI required
- * to display a two-dimensional grid. It provides several 
- * important functions:
- * -- An array of virtual cells. These cells contain:
- *    -- the cellblock handler for that virtual cell.
- *    -- a user data pointer
- * -- Tab-traversing mechanism so that operator can tab in a
- *    predefined order between cells.
+ *  @details
+ *  The Table object defines the structure and the GUI required
+ *  to display a two-dimensional grid. It provides several 
+ *  important functions:
+ *  - An array of virtual cells. These cells contain:
+ *     - the cellblock handler for that virtual cell.
+ *     - a user data pointer
+ *  - Tab-traversing mechanism so that operator can tab in a
+ *     predefined order between cells.
  *
- * Please see src/doc/design/gnucash-design.info for additional information.
+ *  Please see src/doc/design/gnucash-design.info for additional information.
  *
- * This implements the gui-independent parts of the table 
- * infrastructure. Additional, GUI-dependent parts are implemented
- * in table-gnome.c.
+ *  This implements the gui-independent parts of the table 
+ *  infrastructure. Additional, GUI-dependent parts are implemented
+ *  in table-gnome.c.
  *
- * CONCEPTS:
- * The following apply to the rows in a table:
- * -- a cursor is always the same size as the virt row its on,
- * -- there is only one cursor for a given virt row.
- * -- there is no overlap; a phys row can only belong to one virt row.
+ *  The following concepts apply to the rows in a table:
+ *  - a cursor is always the same size as the virt row its on,
+ *  - there is only one cursor for a given virt row.
+ *  - there is no overlap; a phys row can only belong to one virt row.
  *
- * Lets say there are three cursors T(rans), S(plit), and B(lank).  
- * Lets say that these are used to 'print' the following table layout:
+ *  Lets say there are three cursors T(rans), S(plit), and B(lank).  
+ *  Lets say that these are used to 'print' the following table layout:
  * 
- *       virt row 1   T
- *       virt row 2   S
- *       virt row 3   B
- *       virt row 4   T
- *       virt row 5   S
- *       virt row 6   S
- *       virt row 7   S
- *       virt row 8   S
- *       virt row 9   B
+@verbatim
+virtual row 1   T
+virtual row 2   S
+virtual row 3   B
+virtual row 4   T
+virtual row 5   S
+virtual row 6   S
+virtual row 7   S
+virtual row 8   S
+virtual row 9   B
+@endverbatim
  *
- * You can see there is only one cursor per virt row.  There is no overlap
- * between cursors and virt rows, the correspondence is one to one.  Note
- * that the three cursors T,S and B may consist of one, or more phys rows,
- * e.g. B and S may be one line each, but T may be two lines.  Thus, we 
- * have the following physical layout:
+ *  You can see there is only one cursor per virtual row. There is no overlap
+ *  between cursors and virtual rows; the correspondence is one to one. Note
+ *  that the three cursors T, S and B may consist of one, or more physical rows,
+ *  e.g. B and S may be one line each, but T may be two lines. Thus, we 
+ *  have the following physical layout:
  *
- *      phys row 1    virt row 1   T
- *      phys row 2    virt row 1   T
- *      phys row 3    virt row 2   S
- *      phys row 4    virt row 3   B
- *      phys row 5    virt row 4   T
- *      phys row 6    virt row 4   T
- *      phys row 7    virt row 5   S
- *      phys row 8    virt row 6   S
- *      phys row 9    virt row 7   S
- *      phys row 10   virt row 8   S
- *      phys row 11   virt row 9   B
+@verbatim
+physical row 1    virtual row 1   T
+physical row 2    virtual row 1   T
+physical row 3    virtual row 2   S
+physical row 4    virtual row 3   B
+physical row 5    virtual row 4   T
+physical row 6    virtual row 4   T
+physical row 7    virtual row 5   S
+physical row 8    virtual row 6   S
+physical row 9    virtual row 7   S
+physical row 10   virtual row 8   S
+physical row 11   virtual row 9   B
+@endverbatim
  *
- * This layout remains static until the next time that the table is 
- * re-'printed'.
- *
- * HISTORY:
- * Copyright (c) 1998,1999,2000 Linas Vepstas
- * Copyright (c) 2000-2001 Dave Peticolas
+ *  This layout remains static until the next time that the table is 
+ *  re-'printed'.
  */
 
 #ifndef TABLE_ALLGUI_H
@@ -329,6 +337,19 @@ gboolean     gnc_table_move_tab (Table *table,
                                  VirtualLocation *virt_loc,
                                  gboolean move_right);
 
+/** Moves away from virtual location @a virt_loc by @a phys_row_offset physical
+ *  rows. Virtual cells that are not visible are skipped over.
+ *
+ *  @param table The table
+ *
+ *  @param virt_loc The virtual location to start from. If the move succeeds,
+ *  it is updated with the new location.
+ *
+ *  @param phys_row_offset The number of physical rows to move. A positive
+ *  number moves down and a negative number moves up.
+ *
+ *  @return TRUE if the location changed, FALSE otherwise
+ */
 gboolean     gnc_table_move_vertical_position (Table *table,
                                                VirtualLocation *virt_loc,
                                                int phys_row_offset);
@@ -368,3 +389,6 @@ gboolean     gnc_table_traverse_update(Table *table,
                                        VirtualLocation *dest_loc);
 
 #endif /* TABLE_ALLGUI_H */
+/** @} */
+/** @} */
+/** @} */
