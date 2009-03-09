@@ -1819,6 +1819,7 @@ gnucash_register_goto_next_virt_row (GnucashRegister *reg)
 {
         GnucashSheet *sheet;
         VirtualLocation virt_loc;
+        int start_virt_row;
 
         g_return_if_fail (reg != NULL);
         g_return_if_fail (GNUCASH_IS_REGISTER(reg));
@@ -1827,8 +1828,14 @@ gnucash_register_goto_next_virt_row (GnucashRegister *reg)
 
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
-        if (!gnc_table_move_vertical_position (sheet->table, &virt_loc, 1))
-                return;
+        /* Move down one physical row at a time until we
+         * reach the next visible virtual cell. */
+        start_virt_row = virt_loc.vcell_loc.virt_row;
+        do
+        {
+          if (!gnc_table_move_vertical_position (sheet->table, &virt_loc, 1))
+            return;
+        } while (start_virt_row == virt_loc.vcell_loc.virt_row);
 
         if (virt_loc.vcell_loc.virt_row >= sheet->num_virt_rows)
                 return;
