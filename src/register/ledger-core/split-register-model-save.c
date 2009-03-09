@@ -1,5 +1,5 @@
 /********************************************************************\
- * split-register-model.c -- split register model object            *
+ * split-register-model-save.c -- split register model object       *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
