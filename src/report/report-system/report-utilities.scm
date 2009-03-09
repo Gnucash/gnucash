@@ -624,39 +624,22 @@
 ;; the version which returns a commodity-collector
 (define (gnc:account-get-comm-balance-interval 
 	 account from to include-children?)
-  ;; Since this function calculates a balance difference it has to
-  ;; subtract the balance of the previous day's end (from-date)
-  ;; instead of the plain date.
-  (let ((this-collector (gnc:account-get-comm-balance-at-date 
-			 account to include-children?)))
-    (gnc-commodity-collector-minusmerge
-     this-collector
-     (gnc:account-get-comm-balance-at-date
-      account
-      (gnc:timepair-end-day-time (gnc:timepair-previous-day from))
-      include-children?))
-    this-collector))
+  (let ((account-list (if include-children?
+                          (let ((sub-accts (gnc-account-get-descendants-sorted account)))
+                            (if sub-accts
+                                (append (list account) sub-accts)
+                                (list account)))
+                          (list account))))
+    (gnc:account-get-trans-type-balance-interval account-list #f from to)))
 
 ;; This calculates the increase in the balance(s) of all accounts in
 ;; <accountlist> over the period from <from-date> to <to-date>.
 ;; Returns a commodity collector.
 (define (gnc:accountlist-get-comm-balance-interval accountlist from to)
-  (let ((collector (gnc:make-commodity-collector)))
-    (for-each (lambda (account)
-                (gnc-commodity-collector-merge
-                 collector (gnc:account-get-comm-balance-interval 
-                            account from to #f)))
-              accountlist)
-    collector))
+  (gnc:account-get-trans-type-balance-interval accountlist #f from to))
 
 (define (gnc:accountlist-get-comm-balance-at-date accountlist date)
-   (let ((collector (gnc:make-commodity-collector)))
-    (for-each (lambda (account)
-                (gnc-commodity-collector-merge
-                 collector (gnc:account-get-comm-balance-at-date 
-                            account date #f)))
-              accountlist)
-    collector))
+  (gnc:account-get-trans-type-balance-interval accountlist #f #f date))
 
 ;; utility function - ensure that a query matches only non-voids.  Destructive.
 (define (gnc:query-set-match-non-voids-only! query book)
@@ -720,40 +703,21 @@
 
 ;; Sums up any splits of a certain type affecting a set of accounts.
 ;; the type is an alist '((str "match me") (cased #f) (regexp #f))
+;; If type is #f, sums all splits in the interval
 (define (gnc:account-get-trans-type-balance-interval
 	 account-list type start-date-tp end-date-tp)
-  (let* ((query (qof-query-create-for-splits))
-	 (splits #f)
-	 (get-val (lambda (alist key)
-		    (let ((lst (assoc-ref alist key)))
-		      (if lst (car lst) lst))))
-	 (matchstr (get-val type 'str))
-	 (case-sens (if (get-val type 'cased) #t #f))
-	 (regexp (if (get-val type 'regexp) #t #f))
-	 (total (gnc:make-commodity-collector))
-	 )
-    (qof-query-set-book query (gnc-get-current-book))
-    (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
-    (xaccQueryAddAccountMatch query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTS
-     query
-     (and start-date-tp #t) start-date-tp
-     (and end-date-tp #t) end-date-tp QOF-QUERY-AND)
-    (xaccQueryAddDescriptionMatch
-     query matchstr case-sens regexp QOF-QUERY-AND)
-    
-    (set! splits (qof-query-run query))
+  (let* ((total (gnc:make-commodity-collector)))
     (map (lambda (split)
-		(let* ((shares (xaccSplitGetAmount split))
-		       (acct-comm (xaccAccountGetCommodity
-				   (xaccSplitGetAccount split)))
-		       )
-		  (gnc-commodity-collector-add total acct-comm shares)
-		  )
-		)
-	 splits
+           (let* ((shares (xaccSplitGetAmount split))
+                  (acct-comm (xaccAccountGetCommodity
+                              (xaccSplitGetAccount split)))
+                  )
+             (gnc-commodity-collector-add total acct-comm shares)
+             )
+           )
+	 (gnc:account-get-trans-type-splits-interval
+          account-list type start-date-tp end-date-tp)
 	 )
-    (qof-query-destroy query)
     total
     )
   )
@@ -817,6 +781,35 @@
          )
     (qof-query-destroy total-query)
     total
+    )
+  )
+
+;; Return the splits that match an account list, date range, and (optionally) type
+;; where type is defined as an alist '((str "match me") (cased #f) (regexp #f))
+(define (gnc:account-get-trans-type-splits-interval
+         account-list type start-date-tp end-date-tp)
+  (let* ((query (qof-query-create-for-splits))
+	 (splits #f)
+	 (get-val (lambda (alist key)
+		    (let ((lst (assoc-ref alist key)))
+		      (if lst (car lst) lst))))
+	 (matchstr (get-val type 'str))
+	 (case-sens (if (get-val type 'cased) #t #f))
+	 (regexp (if (get-val type 'regexp) #t #f))
+	 )
+    (qof-query-set-book query (gnc-get-current-book))
+    (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
+    (xaccQueryAddAccountMatch query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTS
+     query
+     (and start-date-tp #t) start-date-tp
+     (and end-date-tp #t) end-date-tp QOF-QUERY-AND)
+    (if type (xaccQueryAddDescriptionMatch
+              query matchstr case-sens regexp QOF-QUERY-AND))
+    
+    (set! splits (qof-query-run query))
+    (qof-query-destroy query)
+    splits
     )
   )
 

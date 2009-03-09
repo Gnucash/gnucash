@@ -638,74 +638,71 @@
 
     ;; the following function was adapted from html-utilities.scm
     ;; 
-    ;;
-    ;; there's got to be a prettier way to do this. maybe even make two
-    ;; of these. The balance-mode is only used by trial-balance.scm. so 
-    ;; make two versions of this animal, one that cares about balance-mode 
-    ;; one that doesn't. then check for a balance-mode !'post-closing and
-    ;; call the right one. later.
-    (define (get-balance-nosub-mode account start-date end-date)
-      (let* ((post-closing-bal
-	      (if start-date
-		  (gnc:account-get-comm-balance-interval
-		   account start-date end-date #f)
-		  (gnc:account-get-comm-balance-at-date
-		   account end-date #f)))
-	     (closing (lambda(a) 
-			(gnc:account-get-trans-type-balance-interval
-			 (list account) closing-pattern
-			 start-date end-date)
-			)
-		      )
-	     (adjusting (lambda(a)
-			  (gnc:account-get-trans-type-balance-interval
-			   (list account) adjusting-pattern
-			   start-date end-date)
-			  )
-			)
-	     )
-
-	(cond
-	 ((equal? balance-mode 'post-closing)
-	  post-closing-bal)
-
-	 ((equal? balance-mode 'pre-closing)
-	  (let* ((closing-amt (closing account))
-		 )
-	    (post-closing-bal 'minusmerge closing-amt #f))
-	  post-closing-bal)
-
-	 ((equal? balance-mode 'pre-adjusting)
-	  (let* ((closing-amt (closing account))
-		 (adjusting-amt (adjusting account))
-		 ))
-	  (post-closing-bal 'minusmerge closing-amt #f)
-	  (post-closing-bal 'minusmerge adjusting-amt #f)
-	  post-closing-bal)
-	 (else (begin (display "you fail it")
-		      (newline))))
-
-	)
-      )
 
     ;; helper to calculate the balances for all required accounts
     (define (calculate-balances accts start-date end-date get-balance-fn)
       (define (calculate-balances-helper accts start-date end-date acct-balances)
         (if (not (null? accts))
             (begin
-                ;; using the existing function that cares about balance-mode
-                ;; maybe this should get replaces at some point.
-                (hash-set! acct-balances (gncAccountGetGUID (car accts))
-                    (get-balance-fn (car accts) start-date end-date))
-                (calculate-balances-helper (cdr accts) start-date end-date acct-balances)
-            )
+              ;; using the existing function that cares about balance-mode
+              ;; maybe this should get replaces at some point.
+              (hash-set! acct-balances (gncAccountGetGUID (car accts))
+                         (get-balance-fn (car accts) start-date end-date))
+              (calculate-balances-helper (cdr accts) start-date end-date acct-balances)
+              )
             acct-balances)
         )
-        
-      (calculate-balances-helper accts start-date end-date
-                                 (make-hash-table 23))                                 
-      )
 
+      (define (calculate-balances-simple accts start-date end-date hash-table)
+        (define (merge-splits splits subtract?)
+          (for-each
+           (lambda (split)
+             (let* ((acct (xaccSplitGetAccount split))
+                    (guid (gncAccountGetGUID acct))
+                    (acct-comm (xaccAccountGetCommodity acct))
+                    (shares (xaccSplitGetAmount split))
+                    (hash (hash-ref hash-table guid)))
+;                (gnc:debug "Merging split for " (xaccAccountGetName acct) " for "
+;                           (gnc-commodity-numeric->string acct-comm shares)
+;                           " into hash entry " hash)
+               (if (not hash)
+                   (begin (set! hash (gnc:make-commodity-collector))
+                          (hash-set! hash-table guid hash)))
+               (hash 'add acct-comm (if subtract?
+                                        (gnc-numeric-neg shares)
+                                        shares))))
+           splits))
+
+        (merge-splits (gnc:account-get-trans-type-splits-interval
+                       accts #f start-date end-date)
+                      #f)
+        (cond
+         ((equal? balance-mode 'post-closing) #t)
+
+         ((equal? balance-mode 'pre-closing)
+          (merge-splits (gnc:account-get-trans-type-splits-interval
+                         accts closing-pattern start-date end-date)
+                        #t))
+
+         ((equal? balance-mode 'pre-adjusting)
+          (merge-splits (gnc:account-get-trans-type-splits-interval
+                         accts closing-pattern start-date end-date)
+                        #t)
+          (merge-splits (gnc:account-get-trans-type-splits-interval
+                         accts adjusting-pattern start-date end-date)
+                        #t))
+         (else (begin (display "you fail it")
+                      (newline))))
+        hash-table
+        )
+
+      (if get-balance-fn
+          (calculate-balances-helper accts start-date end-date
+                                     (make-hash-table 23))                               
+          (calculate-balances-simple accts start-date end-date
+                                     (make-hash-table 23))                               
+          )
+      )
 
     (define (traverse-accounts! accts acct-depth logi-depth new-balances)
       
@@ -900,7 +897,8 @@
       ) ;; end of definition of traverse-accounts!
 
     ;; do it
-    (traverse-accounts! toplvl-accts 0 0 (calculate-balances accounts start-date end-date (or get-balance-fn get-balance-nosub-mode)))
+    (traverse-accounts! toplvl-accts 0 0
+                        (calculate-balances accounts start-date end-date get-balance-fn))
     
     ;; set the column-header colspan
     (if gnc:colspans-are-working-right
