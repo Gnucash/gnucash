@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Mar  5 16:47:47 2009 -->
+<!--Generated with glade3 3.4.5 on Tue Mar 10 13:32:06 2009 -->
 <glade-interface>
   <widget class="GtkDialog" id="File Access">
     <property name="border_width">5</property>
@@ -18,65 +18,16 @@
               <widget class="GtkHBox" id="hbox1">
                 <property name="visible">True</property>
                 <child>
-                  <widget class="GtkVBox" id="vbox2">
+                  <widget class="GtkVBox" id="vb_uri_type_container">
                     <property name="visible">True</property>
                     <child>
-                      <widget class="GtkRadioButton" id="rb_xml">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">XML</property>
-                        <property name="response_id">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">rb_sqlite3</property>
-                        <signal name="clicked" handler="gnc_ui_file_access_rb_xml_clicked_cb"/>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkRadioButton" id="rb_sqlite3">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">SQLite3</property>
-                        <property name="response_id">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <signal name="clicked" handler="gnc_ui_file_access_rb_sqlite3_clicked_cb"/>
-                      </widget>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkRadioButton" id="rb_mysql">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">MySQL</property>
-                        <property name="response_id">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">rb_xml</property>
-                        <signal name="clicked" handler="gnc_ui_file_access_rb_mysql_clicked_cb"/>
-                      </widget>
-                      <packing>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkRadioButton" id="rb_pgsql">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">PostgreSQL</property>
-                        <property name="response_id">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">rb_xml</property>
-                        <signal name="clicked" handler="gnc_ui_file_access_rb_pgsql_clicked_cb"/>
-                      </widget>
-                      <packing>
-                        <property name="position">3</property>
-                      </packing>
+                      <placeholder/>
                     </child>
                   </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                  </packing>
                 </child>
                 <child>
                   <widget class="GtkFrame" id="frame_database">

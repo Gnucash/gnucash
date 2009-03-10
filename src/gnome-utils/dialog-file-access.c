@@ -42,10 +42,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #define FILE_ACCESS_SAVE_AS 1
 
 void gnc_ui_file_access_response_cb( GtkDialog *, gint, GtkDialog * );
-void gnc_ui_file_access_rb_xml_clicked_cb( GtkToggleButton* tb );
-void gnc_ui_file_access_rb_sqlite3_clicked_cb( GtkToggleButton* tb );
-void gnc_ui_file_access_rb_mysql_clicked_cb( GtkToggleButton* tb );
-void gnc_ui_file_access_rb_pgsql_clicked_cb( GtkToggleButton* tb );
+static void cb_uri_type_changed_cb( GtkComboBox* cb );
 
 typedef struct FileAccessWindow
 {
@@ -56,14 +53,11 @@ typedef struct FileAccessWindow
   GtkWidget* frame_file;
   GtkWidget* frame_database;
   GtkFileChooser* fileChooser;
-  GtkWidget* rb_xml;
-  GtkWidget* rb_sqlite3;
-  GtkWidget* rb_mysql;
-  GtkWidget* rb_pgsql;
-  GtkWidget* tf_host;
-  GtkWidget* tf_database;
-  GtkWidget* tf_username;
-  GtkWidget* tf_password;
+  GtkComboBox* cb_uri_type;
+  GtkEntry* tf_host;
+  GtkEntry* tf_database;
+  GtkEntry* tf_username;
+  GtkEntry* tf_password;
 } FileAccessWindow;
 
 static gchar*
@@ -77,24 +71,25 @@ geturl( FileAccessWindow* faw )
 	const gchar* type;
 	const gchar* file;
 
-	host = gtk_entry_get_text( GTK_ENTRY(faw->tf_host) );
-	database = gtk_entry_get_text( GTK_ENTRY(faw->tf_database) );
-	username = gtk_entry_get_text( GTK_ENTRY(faw->tf_username) );
-	password = gtk_entry_get_text( GTK_ENTRY(faw->tf_password) );
+	host = gtk_entry_get_text( faw->tf_host );
+	database = gtk_entry_get_text( faw->tf_database );
+	username = gtk_entry_get_text( faw->tf_username );
+	password = gtk_entry_get_text( faw->tf_password );
 	file = gtk_file_chooser_get_filename( faw->fileChooser );
 
-	if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(faw->rb_xml) ) ) {
+	type = gtk_combo_box_get_active_text( faw->cb_uri_type );
+	if( strcmp( type, "xml" ) == 0 ) {
 		type = "xml";
 		url = g_strdup_printf( "%s://%s", type, file );
-	} else if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(faw->rb_sqlite3) ) ) {
+	} else if( strcmp( type, "sqlite3" ) == 0 ) {
 		type = "sqlite3";
 		url = g_strdup_printf( "%s://%s", type, file );
-	} else if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(faw->rb_mysql) ) ) {
+	} else if( strcmp( type, "mysql" ) == 0 ) {
 		type = "mysql";
 		url = g_strdup_printf( "%s://%s:%s:%s:%s",
 							type, host, database, username, password );
 	} else {
-		g_assert( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(faw->rb_pgsql) ) );
+		g_assert( strcmp( type, "postgres" ) == 0 );
 		type = "postgres";
 		url = g_strdup_printf( "%s://%s:%s:%s:%s",
 							type, host, database, username, password );
@@ -143,86 +138,40 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
 
 /* Activate the file chooser and deactivate the db selection fields */
 static void
-on_rb_filetype_clicked( FileAccessWindow* faw )
+set_widget_sensitivity( FileAccessWindow* faw, gboolean is_file_based_uri )
 {
-    gtk_widget_set_sensitive( faw->frame_file, TRUE );
-	gtk_widget_set_sensitive( faw->frame_database, FALSE );
+    gtk_widget_set_sensitive( faw->frame_file, is_file_based_uri );
+	gtk_widget_set_sensitive( faw->frame_database, !is_file_based_uri );
 }
 
-void
-gnc_ui_file_access_rb_xml_clicked_cb( GtkToggleButton* tb )
-{
-	GtkWidget* dialog;
-    FileAccessWindow* faw;
-
-	g_return_if_fail( tb != NULL );
-
-	if( gtk_toggle_button_get_active( tb ) ) {
-		dialog = gtk_widget_get_toplevel( GTK_WIDGET(tb) );
-		g_return_if_fail( dialog != NULL );
-    	faw = g_object_get_data( G_OBJECT(dialog), "FileAccessWindow" );
-    	g_return_if_fail( faw != NULL );
-
-    	on_rb_filetype_clicked( faw );
-	}
-}
-
-void
-gnc_ui_file_access_rb_sqlite3_clicked_cb( GtkToggleButton* tb )
-{
-	GtkWidget* dialog;
-    FileAccessWindow* faw;
-
-	if( gtk_toggle_button_get_active( tb ) ) {
-		dialog = gtk_widget_get_toplevel( GTK_WIDGET(tb) );
-		g_return_if_fail( dialog != NULL );
-    	faw = g_object_get_data( G_OBJECT(dialog), "FileAccessWindow" );
-    	g_return_if_fail( faw != NULL );
-
-    	on_rb_filetype_clicked( faw );
-	}
-}
-
-/* Deactivate the file chooser and activate the db selection fields */
 static void
-on_rb_databasetype_clicked( FileAccessWindow* faw )
+set_widget_sensitivity_for_uri_type( FileAccessWindow* faw, const gchar* uri_type )
 {
-    gtk_widget_set_sensitive( faw->frame_file, FALSE );
-	gtk_widget_set_sensitive( faw->frame_database, TRUE );
-}
-
-void
-gnc_ui_file_access_rb_mysql_clicked_cb( GtkToggleButton* tb )
-{
-	GtkWidget* dialog;
-    FileAccessWindow* faw;
-
-	if( gtk_toggle_button_get_active( tb ) ) {
-		g_return_if_fail( tb != NULL );
-		dialog = gtk_widget_get_toplevel( GTK_WIDGET(tb) );
-		g_return_if_fail( dialog != NULL );
-    	faw = g_object_get_data( G_OBJECT(dialog), "FileAccessWindow" );
-    	g_return_if_fail( faw != NULL );
-
-    	on_rb_databasetype_clicked( faw );
+	if( strcmp( uri_type, "xml" ) == 0 || strcmp( uri_type, "sqlite3" ) == 0 ) {
+		set_widget_sensitivity( faw, /* is_file_based_uri */ TRUE );
+	} else if( strcmp( uri_type, "mysql" ) == 0 || strcmp( uri_type, "postgres" ) == 0 ) {
+		set_widget_sensitivity( faw, /* is_file_based_uri */ FALSE );
+	} else {
+		g_assert( FALSE );
 	}
 }
 
-void
-gnc_ui_file_access_rb_pgsql_clicked_cb( GtkToggleButton* tb )
+static void
+cb_uri_type_changed_cb( GtkComboBox* cb )
 {
 	GtkWidget* dialog;
     FileAccessWindow* faw;
+	const gchar* type;
 
-	if( gtk_toggle_button_get_active( tb ) ) {
-		g_return_if_fail( tb != NULL );
-		dialog = gtk_widget_get_toplevel( GTK_WIDGET(tb) );
-		g_return_if_fail( dialog != NULL );
-    	faw = g_object_get_data( G_OBJECT(dialog), "FileAccessWindow" );
-    	g_return_if_fail( faw != NULL );
+	g_return_if_fail( cb != NULL );
 
-    	on_rb_databasetype_clicked( faw );
-	}
+	dialog = gtk_widget_get_toplevel( GTK_WIDGET(cb) );
+	g_return_if_fail( dialog != NULL );
+    faw = g_object_get_data( G_OBJECT(dialog), "FileAccessWindow" );
+    g_return_if_fail( faw != NULL );
+
+	type = gtk_combo_box_get_active_text( cb );
+	set_widget_sensitivity_for_uri_type( faw, type );
 }
 
 static void
@@ -238,6 +187,7 @@ gnc_ui_file_access( int type )
 	GtkFileChooserAction fileChooserAction;
 	GList* list;
 	GList* node;
+	GtkWidget* uri_type_container;
 
 	g_return_if_fail( type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS );
 
@@ -252,16 +202,12 @@ gnc_ui_file_access( int type )
 
 	faw->frame_file = glade_xml_get_widget( xml, "frame_file" );
 	faw->frame_database = glade_xml_get_widget( xml, "frame_database" );
-    faw->rb_xml = glade_xml_get_widget( xml, "rb_xml" );
-    faw->rb_sqlite3 = glade_xml_get_widget( xml, "rb_sqlite3" );
-    faw->rb_mysql = glade_xml_get_widget( xml, "rb_mysql" );
-    faw->rb_pgsql = glade_xml_get_widget( xml, "rb_pgsql" );
-    faw->tf_host = glade_xml_get_widget( xml, "tf_host" );
-	gtk_entry_set_text( GTK_ENTRY(faw->tf_host), DEFAULT_HOST );
-    faw->tf_database = glade_xml_get_widget( xml, "tf_database" );
-	gtk_entry_set_text( GTK_ENTRY(faw->tf_database), DEFAULT_DATABASE );
-    faw->tf_username = glade_xml_get_widget( xml, "tf_username" );
-    faw->tf_password = glade_xml_get_widget( xml, "tf_password" );
+    faw->tf_host = GTK_ENTRY(glade_xml_get_widget( xml, "tf_host" ));
+	gtk_entry_set_text( faw->tf_host, DEFAULT_HOST );
+    faw->tf_database = GTK_ENTRY(glade_xml_get_widget( xml, "tf_database" ));
+	gtk_entry_set_text( faw->tf_database, DEFAULT_DATABASE );
+    faw->tf_username = GTK_ENTRY(glade_xml_get_widget( xml, "tf_username" ));
+    faw->tf_password = GTK_ENTRY(glade_xml_get_widget( xml, "tf_password" ));
 	op = GTK_BUTTON(glade_xml_get_widget( xml, "pb_op" ));
 	if( op != NULL ) {
 		switch( type ) {
@@ -282,27 +228,29 @@ gnc_ui_file_access( int type )
 	faw->fileChooser = GTK_FILE_CHOOSER(fileChooser);
 	gtk_container_add( GTK_CONTAINER(align), GTK_WIDGET(fileChooser) );
 
+	uri_type_container = glade_xml_get_widget( xml, "vb_uri_type_container" );
+	faw->cb_uri_type = GTK_COMBO_BOX(gtk_combo_box_new_text());
+	gtk_container_add( GTK_CONTAINER(uri_type_container), GTK_WIDGET(faw->cb_uri_type) );
+	g_object_connect( G_OBJECT(faw->cb_uri_type), "signal::changed", cb_uri_type_changed_cb, NULL );
+
     /* Autoconnect signals */
     glade_xml_signal_autoconnect_full( xml, gnc_glade_autoconnect_full_func,
 				    					faw->dialog );
 
-	/* See what qof backends are available, and disable sqlite3, mysql and postgres if not
-	available */
-	gtk_widget_set_sensitive( faw->rb_sqlite3, FALSE );
-	gtk_widget_set_sensitive( faw->rb_mysql, FALSE );
-	gtk_widget_set_sensitive( faw->rb_pgsql, FALSE );
+	/* See what qof backends are available and add appropriate ones to the combo box */
 	list = qof_backend_get_registered_access_method_list();
 	for( node = list; node != NULL; node = node->next ) {
 		const gchar* access_method = node->data;
-		if( strcmp( access_method, "sqlite3" ) == 0 ) {
-			gtk_widget_set_sensitive( faw->rb_sqlite3, TRUE );
-		} else if( strcmp( access_method, "mysql" ) == 0 ) {
-			gtk_widget_set_sensitive( faw->rb_mysql, TRUE );
-		} else if( strcmp( access_method, "postgres" ) == 0 ) {
-			gtk_widget_set_sensitive( faw->rb_pgsql, TRUE );
+		if( strcmp( access_method, "xml" ) == 0 ||
+			strcmp( access_method, "sqlite3" ) == 0 ||
+			strcmp( access_method, "mysql" ) == 0 ||
+			strcmp( access_method, "postgres" ) == 0 ) {
+			gtk_combo_box_append_text( faw->cb_uri_type, access_method );
 		}
 	}
 	g_list_free(list);
+	gtk_combo_box_set_active( faw->cb_uri_type, 0 );
+	set_widget_sensitivity_for_uri_type( faw, gtk_combo_box_get_active_text( faw->cb_uri_type ) );
 
     /* Clean up the xml data structure when the dialog is destroyed */
     g_object_set_data_full( G_OBJECT(faw->dialog), "dialog-file-access.glade",
@@ -312,7 +260,6 @@ gnc_ui_file_access( int type )
 
     /* Run the dialog */
     gtk_widget_show_all( faw->dialog );
-	on_rb_filetype_clicked( faw );
 }
 
 void
