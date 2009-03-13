@@ -1071,7 +1071,11 @@ conn_does_table_exist( GncSqlConnection* conn, const gchar* table_name )
 static gboolean
 conn_begin_transaction( /*@ unused @*/ GncSqlConnection* conn )
 {
-	//GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+	dbi_result result;
+
+	result = dbi_conn_queryf( dbi_conn->conn, "BEGIN" );
+	(void)dbi_result_free( result );
 
 	return TRUE;
 }
@@ -1079,7 +1083,11 @@ conn_begin_transaction( /*@ unused @*/ GncSqlConnection* conn )
 static gboolean
 conn_rollback_transaction( /*@ unused @*/ GncSqlConnection* conn )
 {
-	//GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+	dbi_result result;
+
+	result = dbi_conn_queryf( dbi_conn->conn, "ROLLBACK" );
+	(void)dbi_result_free( result );
 
 	return TRUE;
 }
@@ -1087,7 +1095,11 @@ conn_rollback_transaction( /*@ unused @*/ GncSqlConnection* conn )
 static gboolean
 conn_commit_transaction( /*@ unused @*/ GncSqlConnection* conn )
 {
-	//GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+	dbi_result result;
+
+	result = dbi_conn_queryf( dbi_conn->conn, "COMMIT" );
+	(void)dbi_result_free( result );
 
 	return TRUE;
 }
