@@ -13,7 +13,7 @@ use strict;
 use File::Basename;
 
 # Note: These are perl regexp patterns, *not* normal shell wildcards!
-my @ignorepatterns = ('gw-', 'test', 'experimental', 'swig-.*\.c');
+my @ignorepatterns = ('gw-', 'test', 'experimental', 'python-bindings', 'swig-.*\.c');
 
 my @skipped_files = `grep -v \# @-SRCDIR-@/po/POTFILES.skip`;
 my @ignored_files = `grep -v \# @-SRCDIR-@/po/POTFILES.ignore`;
