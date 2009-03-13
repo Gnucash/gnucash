@@ -440,7 +440,6 @@ src/import-export/qif/qif-context.c
 src/import-export/qif/qif-file.c
 src/import-export/qif/qif-objects.c
 src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in
-src/optional/python-bindings/gnucash_core.c
 src/register/ledger-core/dialog-dup-trans.c
 src/register/ledger-core/gnc-ledger-display.c
 src/register/ledger-core/gncmod-ledger-core.c
