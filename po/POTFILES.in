@@ -296,6 +296,7 @@ src/gnome-utils/druid-utils.c
 src/gnome-utils/glade/commodity.glade
 src/gnome-utils/glade/dialog-book-close.glade
 src/gnome-utils/glade/dialog-database-connection.glade
+src/gnome-utils/glade/dialog-file-access.glade
 src/gnome-utils/glade/dialog-query-list.glade
 src/gnome-utils/glade/dialog-reset-warnings.glade
 src/gnome-utils/glade/druid-gconf-setup.glade
