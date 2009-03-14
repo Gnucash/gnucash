@@ -70,7 +70,6 @@ static void gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin, GncMainW
 /* Command callbacks */
 static void gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_file_db_connection (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_qsf_import (GtkAction *action, GncMainWindowActionData *data);
@@ -105,9 +104,6 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "FileOpenAction", GTK_STOCK_OPEN, N_("_Open..."), NULL,
     N_("Open an existing GnuCash file"),
     G_CALLBACK (gnc_main_window_cmd_file_open) },
-  { "FileDatabaseConnectionAction", NULL, N_("_Database Connection"), NULL,
-    N_("Connect to a database"),
-    G_CALLBACK (gnc_main_window_cmd_file_db_connection) },
   { "FileSaveAction", GTK_STOCK_SAVE, N_("_Save"), "<control>s",
     N_("Save the current file"),
     G_CALLBACK (gnc_main_window_cmd_file_save) },
@@ -266,9 +262,6 @@ gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin,
 				       GncMainWindow *window,
 				       GQuark type)
 {
-#if !defined(HAVE_DBI_DBI_H)
-	gnc_main_window_all_action_set_sensitive("FileDatabaseConnectionAction", FALSE);
-#endif
 }
 
 /** Initialize the class for a new basic commands plugin.  This will
@@ -367,17 +360,6 @@ gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data)
   gnc_file_open ();
 #endif
   gnc_window_set_progressbar_window (NULL);
-}
-
-static void
-gnc_main_window_cmd_file_db_connection (GtkAction *action, GncMainWindowActionData *data)
-{
-  g_return_if_fail (data != NULL);
-
-  if (!gnc_main_window_all_finish_pending())
-    return;
-
-  gnc_ui_file_access_for_open();
 }
 
 static void
