@@ -1075,6 +1075,7 @@ conn_begin_transaction( /*@ unused @*/ GncSqlConnection* conn )
 	dbi_result result;
 
 	result = dbi_conn_queryf( dbi_conn->conn, "BEGIN" );
+	DEBUG( "BEGIN\n" );
 	(void)dbi_result_free( result );
 
 	return TRUE;
@@ -1087,6 +1088,7 @@ conn_rollback_transaction( /*@ unused @*/ GncSqlConnection* conn )
 	dbi_result result;
 
 	result = dbi_conn_queryf( dbi_conn->conn, "ROLLBACK" );
+	DEBUG( "ROLLBACK\n" );
 	(void)dbi_result_free( result );
 
 	return TRUE;
@@ -1099,6 +1101,7 @@ conn_commit_transaction( /*@ unused @*/ GncSqlConnection* conn )
 	dbi_result result;
 
 	result = dbi_conn_queryf( dbi_conn->conn, "COMMIT" );
+	DEBUG( "COMMIT\n" );
 	(void)dbi_result_free( result );
 
 	return TRUE;
