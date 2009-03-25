@@ -64,8 +64,13 @@
                          #f))))
           rv)
         (begin
+          ;; Parsing failed. Bug detected!
           (gnc:warn "qif-split:parse-category: can't parse [" value "].")
-          (list "" #f #f)))))
+          (throw 'bug
+                 "qif-split:parse-category"
+                 "Can't parse account or category ~A."
+                 (list value)
+                 #f)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -457,8 +462,7 @@
                    (lambda () (read))))
                date-parts))
 
-    ;; if the date parts list doesn't have 3 parts, we're in
-    ;; trouble
+    ;; if the date parts list doesn't have 3 parts, we're in trouble
     (if (not (eq? 3 (length date-parts)))
         (gnc:warn "qif-parse:parse-date/format: can't interpret date ["
                   date-string "]\nDate parts: " date-parts)
