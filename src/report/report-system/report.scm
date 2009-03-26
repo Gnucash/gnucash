@@ -455,6 +455,20 @@
     '() *gnc:_report-templates_*)
    string<?))
 
+;; return a list of the custom report template "names" (really a list
+;; of report-guids).
+(define (gnc:custom-report-template-names)
+  (sort 
+   (hash-fold
+    (lambda (k v p)
+       (if (gnc:report-template-parent-type v)
+	  (begin
+	    (gnc:debug "template " v)
+	    (cons k p))
+	  p))
+      '() *gnc:_report-templates_*)
+    string<?))
+
 (define (gnc:find-report-template report-type) 
   (hash-ref *gnc:_report-templates_* report-type))
 
@@ -570,7 +584,7 @@
 		(gnc-info-dialog
 		 '()
 		 (sprintf 
-		  #f (_ "Your report \"%s\" has been saved into the configuration file \"%s\".  The report will be available in the menu Reports -> Custom at the next startup of GnuCash.")
+		  #f (_ "Your report \"%s\" has been saved into the configuration file \"%s\".")
 		  (if (and report-name (not (string-null? report-name)))
 		      (gnc:gettext report-name)
 		      (gnc:gettext "Untitled"))
@@ -578,15 +592,24 @@
 	  ))))
 
 (define (gnc:report-template-save-to-savefile report-template)
-  (let* ((conf-file-name gnc:current-saved-reports)
-	 (saved-form (gnc:report-template-generate-saved-forms report-template))
-	 (save-result (eval-string saved-form)))
-    (if (record? save-result)
-	(begin
-	  (display saved-form
-		   (open-file conf-file-name "a"))
-	  (force-output)
-	  ))))
+  (let ((conf-file-name gnc:current-saved-reports)
+	(saved-form (gnc:report-template-generate-saved-forms report-template)))
+    (display saved-form
+	     (open-file conf-file-name "a"))
+    (force-output)))
+
+;; save all custom reports, moving the old version of the
+;; saved-reports file aside as a backup
+(define (gnc:save-all-reports)
+  (let ((temp-path (gnc-build-dotgnucash-path "saved-reports-2.4-backup")))
+    (gnc:debug "saving all reports...")
+    (rename-file gnc:current-saved-reports temp-path)
+    (hash-for-each (lambda (k v)
+		     (if (gnc:report-template-parent-type v)
+			 (begin
+			   (gnc:debug "saving report " k)
+			   (gnc:report-template-save-to-savefile v))))
+		   *gnc:_report-templates_*)))
 
 
 ;; gets the renderer from the report template;
@@ -646,3 +669,12 @@
 	(let ((opt-value (gnc:option-value option)))
 	  (map (lambda (x) (car x)) opt-value))
 	#f)))
+
+;; delete an existing report from the hash table and then call to
+;; resave the saved-reports file... report is gone
+(define (gnc:delete-report report)
+ (if (hash-ref *gnc:_report-templates_* report)
+     (begin
+       (gnc:debug "Deleting report " report)
+       (hash-remove! *gnc:_report-templates_* report)
+       (gnc:save-all-reports))))

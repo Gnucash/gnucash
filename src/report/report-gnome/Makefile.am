@@ -22,6 +22,7 @@ AM_CPPFLAGS = \
 libgncmod_report_gnome_la_SOURCES = \
   swig-report-gnome.c \
   dialog-column-view.c \
+  dialog-custom-report.c \
   dialog-style-sheet.c \
   gnc-plugin-page-report.c \
   gncmod-report-gnome.c \
@@ -30,6 +31,7 @@ libgncmod_report_gnome_la_SOURCES = \
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   dialog-column-view.h \
+  dialog-custom-report.h \
   dialog-style-sheet.h \
   gnc-plugin-page-report.h \
   window-report.h
@@ -61,7 +63,9 @@ gncmod_DATA = report-gnome.scm
 noinst_DATA = .scm-links
 
 gladedir = $(GNC_GLADE_DIR)
-glade_DATA = report.glade
+glade_DATA = \
+  report.glade \
+  custom-report-dialog.glade
 
 uidir = $(GNC_UI_DIR)
 

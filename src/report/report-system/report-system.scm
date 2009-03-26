@@ -155,6 +155,8 @@
 (export gnc:report-stylesheet)
 (export gnc:report-set-stylesheet!)
 (export gnc:all-report-template-names)
+(export gnc:custom-report-template-names)
+(export gnc:delete-report)
 (export gnc:find-report-template)
 (export gnc:report-generate-restore-forms)
 (export gnc:report-generate-saved-forms)

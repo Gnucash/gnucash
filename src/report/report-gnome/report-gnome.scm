@@ -96,6 +96,7 @@
      (add-template-menu-item (car item) (cdr item)))
    (sort *template-items* sort-templates)))
 
+
 (define (gnc:report-menu-setup)
   (define asset-liability-menu
     (gnc:make-menu gnc:menuname-asset-liability (list gnc:menuname-reports)))
@@ -105,17 +106,22 @@
     (gnc:make-menu gnc:menuname-budget (list gnc:menuname-reports)))
   (define utility-menu
     (gnc:make-menu gnc:menuname-utility (list gnc:menuname-reports)))
-  (define custom-menu
-    (gnc:make-menu gnc:menuname-custom (list gnc:menuname-reports)))
   (define tax-menu 
     (gnc:make-menu gnc:menuname-taxes (list gnc:menuname-reports)))
+
+  (gnc-add-scm-extension 
+   (gnc:make-menu-item
+   (N_ "Custom Reports")
+   (N_ "Manage and run custom reports")
+   (list gnc:menuname-reports)
+   (lambda (window)
+     (gnc:spawn-custom-report-dialog window))))
 
   ;; (gnc-add-scm-extension tax-menu)
   (gnc-add-scm-extension income-expense-menu)
   (gnc-add-scm-extension asset-liability-menu)
   (gnc-add-scm-extension budget-menu)
   (gnc-add-scm-extension utility-menu)
-  (gnc-add-scm-extension custom-menu)
 
   ;; run report-hook danglers
   (gnc:hook-run-danglers HOOK-REPORT)
@@ -131,4 +137,9 @@
     (list gnc:menuname-reports gnc:menuname-utility "")
     (lambda (window)
       (gnc-main-window-open-report (gnc:make-welcome-report) window))))
+  
 )
+
+(define (gnc:spawn-custom-report-dialog window)
+  (gnc:debug "called into custom report dialog, window is " window)
+  (gnc-ui-custom-report window))
