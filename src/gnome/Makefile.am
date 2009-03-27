@@ -110,6 +110,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnome-search \
+  -I${top_srcdir}/src/html \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \

@@ -69,10 +69,10 @@
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.html.graph.gog"
 
-static int handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
-static int handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
-static int handle_linechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
-static int handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
+static int handle_piechart( GncHtml* html, gpointer eb, gpointer d );
+static int handle_barchart( GncHtml* html, gpointer eb, gpointer d );
+static int handle_linechart( GncHtml* html, gpointer eb, gpointer d );
+static int handle_scatter( GncHtml* html, gpointer eb, gpointer d );
 
 #ifdef GTKHTML_USES_GTKPRINT
 static void draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer graph);
@@ -84,11 +84,10 @@ static gboolean create_basic_plot_elements(const char *plot_type, GogObject **ou
 
 static double * read_doubles(const char * string, int nvalues);
 
-static void set_chart_titles_from_hash(GogObject *chart, GtkHTMLEmbedded * eb);
+static void set_chart_titles_from_hash(GogObject *chart, gpointer eb);
 static void set_chart_titles(GogObject *chart, const char *title, const char* sub_title);
-static void set_chart_axis_labels_from_hash(GogObject *chart, GtkHTMLEmbedded * eb);
+static void set_chart_axis_labels_from_hash(GogObject *chart, gpointer eb);
 static void set_chart_axis_labels(GogObject *chart, const char *x_axis_label, const char* y_axis_label);
-static void gtkhtml_pre_3_10_1_bug_workaround(GtkHTMLEmbedded *eb);
 
 void
 gnc_html_graph_gog_init(void)
@@ -245,11 +244,11 @@ create_basic_plot_elements(const char *plot_type_name,
 }
 
 static void
-set_chart_titles_from_hash(GogObject *chart, GtkHTMLEmbedded * eb)
+set_chart_titles_from_hash(GogObject *chart, gpointer eb)
 {
   set_chart_titles(chart,
-                   (const char *)g_hash_table_lookup(eb->params, "title"), 
-                   (const char *)g_hash_table_lookup(eb->params, "subtitle"));
+                   (const char *)gnc_html_get_embedded_param(eb, "title"), 
+                   (const char *)gnc_html_get_embedded_param(eb, "subtitle"));
 }
 
 static void
@@ -274,11 +273,11 @@ set_chart_titles(GogObject *chart, const char *title, const char* sub_title)
 }
 
 static void
-set_chart_axis_labels_from_hash(GogObject *chart, GtkHTMLEmbedded * eb)
+set_chart_axis_labels_from_hash(GogObject *chart, gpointer eb)
 {
   set_chart_axis_labels(chart,
-                        (const char *)g_hash_table_lookup(eb->params, "x_axis_label"),
-                        (const char *)g_hash_table_lookup(eb->params, "y_axis_label"));
+                        gnc_html_get_embedded_param(eb, "x_axis_label"),
+                        gnc_html_get_embedded_param(eb, "y_axis_label"));
 }
 
 static void
@@ -305,18 +304,6 @@ set_chart_axis_labels(GogObject *chart, const char *x_axis_label, const char* y_
   }
 }
 
-static void
-gtkhtml_pre_3_10_1_bug_workaround(GtkHTMLEmbedded *eb)
-{
-  /* HACK ALERT! Compensate for bug in gtkhtml < 3.10.1
-     Gtkhtml set the width parameter twice (=width, =height), so both,
-     width (==height) and height (<1) were incorrect. */
-  if (eb->height < 1)
-  {
-      eb->height = eb->width;  /* only squares here :( */
-  }
-}
-
 /*
  * Handle the following parameters:
  * title: text
@@ -329,7 +316,7 @@ gtkhtml_pre_3_10_1_bug_workaround(GtkHTMLEmbedded *eb)
  * legend_urls_[123]: ?
  */
 static gboolean
-handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
+handle_piechart( GncHtml* html, gpointer eb, gpointer unused )
 {
   GogObject *graph, *chart;
   GogPlot *plot;
@@ -339,16 +326,14 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
   double *data = NULL;
   char **labels = NULL, **colors = NULL;
 
-  gtkhtml_pre_3_10_1_bug_workaround(eb);
-
   // parse data from the text-ized params.
   {
-    char *datasizeStr, *dataStr, *labelsStr, *colorStr;
+    const char *datasizeStr, *dataStr, *labelsStr, *colorStr;
 
-    datasizeStr = g_hash_table_lookup(eb->params, "datasize");
-    dataStr = g_hash_table_lookup(eb->params, "data" );
-    labelsStr = g_hash_table_lookup(eb->params, "labels");
-    colorStr = g_hash_table_lookup(eb->params, "colors");
+    datasizeStr = gnc_html_get_embedded_param(eb, "datasize");
+    dataStr = gnc_html_get_embedded_param(eb, "data" );
+    labelsStr = gnc_html_get_embedded_param(eb, "labels");
+    colorStr = gnc_html_get_embedded_param(eb, "colors");
     g_return_val_if_fail( datasizeStr != NULL
                           && dataStr != NULL
                           && labelsStr != NULL
@@ -398,7 +383,7 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
  * stacked:boolean
  **/
 static gboolean
-handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
+handle_barchart( GncHtml* html, gpointer eb, gpointer unused )
 {
   GogObject *graph, *chart;
   GogPlot *plot;
@@ -413,23 +398,21 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
   char *bar_type = "normal";
   int bar_overlap = 0 /*percent*/; // seperate bars; no overlap.
 
-  gtkhtml_pre_3_10_1_bug_workaround (eb);
-
   // parse data from the text-ized params
   // series => bars [gnc:cols]
   // series-elements => segments [gnc:rows]
   {
-    char *data_rows_str, *data_cols_str, *data_str, *col_labels_str, *row_labels_str;
-    char *col_colors_str, *rotate_row_labels_str = NULL, *stacked_str = NULL;
+    const char *data_rows_str, *data_cols_str, *data_str, *col_labels_str, *row_labels_str;
+    const char *col_colors_str, *rotate_row_labels_str = NULL, *stacked_str = NULL;
 
-    data_rows_str         = g_hash_table_lookup (eb->params, "data_rows");
-    data_cols_str         = g_hash_table_lookup (eb->params, "data_cols");
-    data_str              = g_hash_table_lookup (eb->params, "data" );
-    row_labels_str        = g_hash_table_lookup (eb->params, "row_labels");
-    col_labels_str        = g_hash_table_lookup (eb->params, "col_labels");
-    col_colors_str        = g_hash_table_lookup (eb->params, "col_colors");
-    rotate_row_labels_str = g_hash_table_lookup (eb->params, "rotate_row_labels");
-    stacked_str           = g_hash_table_lookup (eb->params, "stacked");
+    data_rows_str         = gnc_html_get_embedded_param (eb, "data_rows");
+    data_cols_str         = gnc_html_get_embedded_param (eb, "data_cols");
+    data_str              = gnc_html_get_embedded_param (eb, "data" );
+    row_labels_str        = gnc_html_get_embedded_param (eb, "row_labels");
+    col_labels_str        = gnc_html_get_embedded_param (eb, "col_labels");
+    col_colors_str        = gnc_html_get_embedded_param (eb, "col_colors");
+    rotate_row_labels_str = gnc_html_get_embedded_param (eb, "rotate_row_labels");
+    stacked_str           = gnc_html_get_embedded_param (eb, "stacked");
 
     rotate_row_labels     = (gboolean) atoi (rotate_row_labels_str);
     stacked               = (gboolean) atoi (stacked_str);
@@ -538,7 +521,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
  * minor_grid:boolean
  **/
 static gboolean
-handle_linechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
+handle_linechart( GncHtml* html, gpointer eb, gpointer unused )
 {
   GogObject *graph, *chart;
   GogPlot *plot;
@@ -555,27 +538,25 @@ handle_linechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
   gboolean minor_grid = FALSE;
   char *line_type = "normal";
 
-  gtkhtml_pre_3_10_1_bug_workaround (eb);
-
   // parse data from the text-ized params
   // series => lines [gnc:cols]
   // series-elements => segments [gnc:rows]
   {
-    char *data_rows_str, *data_cols_str, *data_str, *col_labels_str, *row_labels_str;
-    char *col_colors_str, *rotate_row_labels_str = NULL, *stacked_str = NULL, *markers_str = NULL;
-    char *major_grid_str = NULL, *minor_grid_str = NULL;
+    const char *data_rows_str, *data_cols_str, *data_str, *col_labels_str, *row_labels_str;
+    const char *col_colors_str, *rotate_row_labels_str = NULL, *stacked_str = NULL, *markers_str = NULL;
+    const char *major_grid_str = NULL, *minor_grid_str = NULL;
 
-    data_rows_str         = g_hash_table_lookup (eb->params, "data_rows");
-    data_cols_str         = g_hash_table_lookup (eb->params, "data_cols");
-    data_str              = g_hash_table_lookup (eb->params, "data" );
-    row_labels_str        = g_hash_table_lookup (eb->params, "row_labels");
-    col_labels_str        = g_hash_table_lookup (eb->params, "col_labels");
-    col_colors_str        = g_hash_table_lookup (eb->params, "col_colors");
-    rotate_row_labels_str = g_hash_table_lookup (eb->params, "rotate_row_labels");
-    stacked_str           = g_hash_table_lookup (eb->params, "stacked");
-    markers_str           = g_hash_table_lookup (eb->params, "markers");
-    major_grid_str        = g_hash_table_lookup (eb->params, "major_grid");
-    minor_grid_str        = g_hash_table_lookup (eb->params, "minor_grid");
+    data_rows_str         = gnc_html_get_embedded_param (eb, "data_rows");
+    data_cols_str         = gnc_html_get_embedded_param (eb, "data_cols");
+    data_str              = gnc_html_get_embedded_param (eb, "data" );
+    row_labels_str        = gnc_html_get_embedded_param (eb, "row_labels");
+    col_labels_str        = gnc_html_get_embedded_param (eb, "col_labels");
+    col_colors_str        = gnc_html_get_embedded_param (eb, "col_colors");
+    rotate_row_labels_str = gnc_html_get_embedded_param (eb, "rotate_row_labels");
+    stacked_str           = gnc_html_get_embedded_param (eb, "stacked");
+    markers_str           = gnc_html_get_embedded_param (eb, "markers");
+    major_grid_str        = gnc_html_get_embedded_param (eb, "major_grid");
+    minor_grid_str        = gnc_html_get_embedded_param (eb, "minor_grid");
 
     rotate_row_labels     = (gboolean) atoi (rotate_row_labels_str);
     stacked               = (gboolean) atoi (stacked_str);
@@ -682,7 +663,7 @@ handle_linechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
 
 
 static gboolean
-handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
+handle_scatter( GncHtml* html, gpointer eb, gpointer unused )
 {
   GogObject *graph, *chart;
   GogPlot *plot;
@@ -691,25 +672,23 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
   GogStyle *style;
   int datasize;
   double *xData, *yData;
-  gchar *marker_str, *color_str;
+  const gchar *marker_str, *color_str;
   gboolean fill = FALSE;
 
-  gtkhtml_pre_3_10_1_bug_workaround(eb);
-
   {
-    char *datasizeStr, *xDataStr, *yDataStr;
+    const char *datasizeStr, *xDataStr, *yDataStr;
 
-    datasizeStr = g_hash_table_lookup( eb->params, "datasize" );
+    datasizeStr = gnc_html_get_embedded_param( eb, "datasize" );
     datasize = atoi( datasizeStr );
 
-    xDataStr = g_hash_table_lookup( eb->params, "x_data" );
+    xDataStr = gnc_html_get_embedded_param( eb, "x_data" );
     xData = read_doubles( xDataStr, datasize );
 
-    yDataStr = g_hash_table_lookup( eb->params, "y_data" );
+    yDataStr = gnc_html_get_embedded_param( eb, "y_data" );
     yData = read_doubles( yDataStr, datasize );
 
-    marker_str = g_hash_table_lookup(eb->params, "marker");
-    color_str = g_hash_table_lookup(eb->params, "color");
+    marker_str = gnc_html_get_embedded_param(eb, "marker");
+    color_str = gnc_html_get_embedded_param(eb, "color");
   }
 
   if (!create_basic_plot_elements("GogXYPlot", &graph, &chart, &plot))

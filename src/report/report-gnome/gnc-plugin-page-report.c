@@ -53,6 +53,7 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-html-history.h"
 #include "gnc-html.h"
+#include "gnc-html-factory.h"
 #include "gnc-file.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-page-report.h"
@@ -112,7 +113,8 @@ typedef struct GncPluginPageReportPrivate
         gboolean	reloading;
 
         /// the gnc_html abstraction this PluginPage contains
-        gnc_html *html;
+//        gnc_html *html;
+        GncHtml *html;
 
         /// the container the above HTML widget is in.
         GtkContainer *container;
@@ -138,7 +140,8 @@ static void gnc_plugin_page_report_update_edit_menu (GncPluginPage *page, gboole
 static gboolean gnc_plugin_page_report_finish_pending (GncPluginPage *page);
 
 static int gnc_plugin_page_report_check_urltype(URLType t);
-static void gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
+//static void gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
+static void gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
                                       const gchar * location, const gchar * label,
                                       gpointer data);
 static void gnc_plugin_page_report_expose_event_cb(GtkWidget *unused, GdkEventExpose *unused1, gpointer data);
@@ -324,7 +327,9 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
         priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
         topLvl = GTK_WINDOW(gnc_ui_get_toplevel());
-        priv->html = gnc_html_new( topLvl );
+//        priv->html = gnc_html_new( topLvl );
+	priv->html = gnc_html_factory_create_html();
+		gnc_html_set_parent( priv->html, topLvl );
 
         gnc_html_history_set_node_destroy_cb(gnc_html_get_history(priv->html),
                                              gnc_plugin_page_report_history_destroy_cb,
@@ -427,7 +432,8 @@ gnc_plugin_page_report_setup( GncPluginPage *ppage )
  * called after a report is loaded into the gnc_html widget 
  ********************************************************************/
 static void 
-gnc_plugin_page_report_load_cb(gnc_html * html, URLType type, 
+//gnc_plugin_page_report_load_cb(gnc_html * html, URLType type, 
+gnc_plugin_page_report_load_cb(GncHtml * html, URLType type, 
                                const gchar * location, const gchar * label, 
                                gpointer data)
 {

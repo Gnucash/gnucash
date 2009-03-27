@@ -10,6 +10,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/html \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/lib/libc \
@@ -17,11 +18,9 @@ AM_CPPFLAGS = \
   ${GLADE_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GNOME_CFLAGS} \
-  ${GTKHTML_CFLAGS} \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} \
-  ${GOFFICE_CFLAGS} \
-  ${LIBGDA_CFLAGS}
+  ${GOFFICE_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \
@@ -64,9 +63,6 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-general-select.c \
   gnc-gnome-utils.c \
   gnc-gui-query.c \
-  gnc-html-graph-gog.c \
-  gnc-html-history.c \
-  gnc-html.c \
   gnc-icons.c \
   gnc-main-window.c \
   gnc-menu-extensions.c \
@@ -135,9 +131,6 @@ gncinclude_HEADERS = \
   gnc-general-select.h \
   gnc-gnome-utils.h \
   gnc-gui-query.h \
-  gnc-html-graph-gog.h \
-  gnc-html-history.h \
-  gnc-html.h \
   gnc-icons.h \
   gnc-main-window.h \
   gnc-menu-extensions.h \
@@ -187,7 +180,6 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \
   ${GNOME_LIBS} \
-  ${GTKHTML_LIBS} \
   ${GUILE_LIBS} \
   ${GDK_PIXBUF_LIBS} \
   ${GLADE_LIBS} \
@@ -200,7 +192,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${LIBXML2_LIBS}
 
 if BUILDING_FROM_SVN
-swig-gnome-utils.c: gnome-utils.i gnc-html.h \
+swig-gnome-utils.c: gnome-utils.i \
                     ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<

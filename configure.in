@@ -513,6 +513,13 @@ AC_SUBST(GCONF_CFLAGS)
 AC_SUBST(GCONF_LIBS)
 
 ### --------------------------------------------------------------------------
+### look for webkit
+
+PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.0")
+AC_SUBST(WEBKIT_CFLAGS)
+AC_SUBST(WEBKIT_LIBS)
+
+### --------------------------------------------------------------------------
 ### LIBXML -- GNOME_XML_LIB is defined by GNOME_XML_CHECK
 
 LIBXML2_REQUIRED=2.5.10
@@ -1520,6 +1527,7 @@ AC_CONFIG_FILES(po/Makefile.in
 	  src/gnome-utils/test/Makefile
 	  src/gnome-utils/ui/Makefile
           src/gnome-search/Makefile
+		  src/html/Makefile
           src/import-export/Makefile
           src/import-export/test/Makefile
           src/import-export/qif-import/Makefile

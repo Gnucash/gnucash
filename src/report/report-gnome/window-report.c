@@ -40,6 +40,7 @@
 #include "gnc-report.h"
 #include "gnc-ui.h"
 #include "option-util.h"
+#include "gnc-html.h"
 #include "window-report.h"
 #include "guile-mappings.h"
 

@@ -3,6 +3,7 @@
 /* Includes the header in the wrapper code */
 #include <config.h>
 #include <gtk/gtk.h>
+#include <glib-object.h>
 #include <dialog-options.h>
 #include <dialog-utils.h>
 #include <druid-utils.h>
@@ -25,7 +26,7 @@ SCM scm_init_sw_gnome_utils_module (void);
 %import "base-typemaps.i"
 
 /* Parse the header file to generate wrappers */
-%include "gnc-html.h"
+%include "gnc-html-extras.h"
 
 
 GNCOptionWin * gnc_options_dialog_new(gchar *title);
