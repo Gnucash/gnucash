@@ -92,6 +92,7 @@ static void webkit_navigation_requested_cb( WebKitWebView* web_view, GObject* ar
 												GObject* arg2, gpointer data );
 static void webkit_on_url_cb( WebKitWebView* web_view, gchar* title, gchar* url,
 							gpointer data );
+static gchar* handle_embedded_object( GncHtmlWebkit* self, gchar* html_str );
 #if 0
 static void gnc_html_set_base_cb( GtkHTML* gtkhtml, const gchar* base, gpointer data );
 static void gnc_html_link_clicked_cb( GtkHTML* html, const gchar* url, gpointer data );
@@ -312,15 +313,63 @@ https_allowed()
 	return TRUE;
 }
 
+static gchar*
+handle_embedded_object( GncHtmlWebkit* self, gchar* html_str )
+{
+	// Find the <object> tag and get the classid from it.  This will provide the correct
+	// object callback handler.  Pass the <object> entity text to the handler.  What should
+	// come back is embedded image information.
+	gchar* object_tag;
+	gchar* end_object_tag;
+	gchar* object_contents;
+	gchar* html_str_start;
+	gchar* html_str_middle;
+	gchar* html_str_result;
+	gchar* classid;
+	gchar* classid_end;
+	gchar* object_classid;
+	GncHTMLObjectCB h;
+
+	object_tag = g_strstr_len( html_str, -1, "<object classid=" );
+	if( object_tag == NULL ) {
+		//  Hmmm... no object tag
+		return html_str;
+	}
+	classid = object_tag+strlen( "<object classid=" )+1;
+	classid_end = g_strstr_len( classid, -1, "\"" );
+	object_classid = g_strndup( classid, (classid_end-classid) );
+	end_object_tag = g_strstr_len( object_tag, -1, "</object>" );
+	if( end_object_tag == NULL ) {
+		//  Hmmm... no object end tag
+		return html_str;
+	}
+	end_object_tag += strlen( "</object>" );
+	object_contents = g_strndup( object_tag, (end_object_tag-object_tag) );
+
+	h = g_hash_table_lookup( gnc_html_object_handlers, object_classid );
+	if( h != NULL ) {
+		(void)h( GNC_HTML(self), object_contents, &html_str_middle );
+	} else {
+		html_str_middle = g_strdup_printf( "No handler found for classid \"%s\"", object_classid );
+	}
+
+	html_str_start = g_strndup( html_str, (object_tag-html_str) );
+	html_str_result = g_strdup_printf( "%s%s%s", html_str_start, html_str_middle, end_object_tag );
+	
+	g_free( html_str_start );
+	g_free( html_str_middle );
+	return html_str_result;
+}
+
 /********************************************************************
- * gnc_html_load_to_stream : actually do the work of loading the HTML
+ * load_to_stream : actually do the work of loading the HTML
  * or binary data referenced by a URL and feeding it into the GtkHTML
  * widget.
  ********************************************************************/
 
 static void
-gnc_html_load_to_stream( GncHtmlWebkit* self, URLType type,
-						const gchar* location, const gchar* label )
+load_to_stream( GncHtmlWebkit* self, URLType type,
+				const gchar* location, const gchar* label )
 {
 	gchar* fdata = NULL;
 	int fdata_len = 0;
@@ -340,6 +389,16 @@ gnc_html_load_to_stream( GncHtmlWebkit* self, URLType type,
 
 			if( ok ) {
 				fdata = fdata ? fdata : g_strdup( "" );
+
+				// Until webkitgtk supports download requests, look for "<object classid="
+				// indicating the beginning of an embedded graph.  If found, handle it
+				if( g_strstr_len( fdata, -1, "<object classid=" ) != NULL ) {
+					gchar* new_fdata;
+					new_fdata = handle_embedded_object( self, fdata );
+					g_free( fdata );
+					fdata = new_fdata;
+				}
+
 				webkit_web_view_load_html_string( priv->web_view, fdata, "base-uri" );
 			} else {
 				fdata = fdata ? fdata :
@@ -442,7 +501,7 @@ webkit_navigation_requested_cb( WebKitWebView* web_view, GObject* arg1,
 	DEBUG( "requesting %s", url );
 	type = gnc_html_parse_url( GNC_HTML(self), url, &location, &label );
 	gnc_html_show_url( GNC_HTML(self), type, location, label, 0 );
-//	gnc_html_load_to_stream( self, type, location, label );
+//	load_to_stream( self, type, location, label );
 	g_free( location );
 	g_free( label );
 }
@@ -683,7 +742,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
 			DEBUG( "resetting base location to %s",
 					priv->base.base_location ? priv->base.base_location : "(null)" );
 
-			gnc_html_load_to_stream( GNC_HTML_WEBKIT(self), result.url_type,
+			load_to_stream( GNC_HTML_WEBKIT(self), result.url_type,
 									new_location, new_label );
 
 			if( priv->base.load_cb != NULL ) {
@@ -740,7 +799,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
 			/* FIXME : handle new_window = 1 */
 			gnc_html_history_append( priv->base.history,
 								gnc_html_history_node_new( type, location, label ) );
-			gnc_html_load_to_stream( GNC_HTML_WEBKIT(self), type, location, label );
+			load_to_stream( GNC_HTML_WEBKIT(self), type, location, label );
 
 		} while( FALSE );
 

@@ -67,11 +67,6 @@
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.html.graph.gog"
 
-static int handle_piechart( GncHtml* html, gpointer eb, gpointer d );
-static int handle_barchart( GncHtml* html, gpointer eb, gpointer d );
-static int handle_linechart( GncHtml* html, gpointer eb, gpointer d );
-static int handle_scatter( GncHtml* html, gpointer eb, gpointer d );
-
 static gboolean create_basic_plot_elements(const char *plot_type, GogObject **out_graph, GogObject **out_chart, GogPlot **out_plot);
 
 static void set_chart_titles(GogObject *chart, const char *title, const char* sub_title);
