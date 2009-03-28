@@ -41,7 +41,6 @@ typedef struct _GncHtmlClass GncHtmlClass;
 typedef struct _GncHtmlPrivate GncHtmlPrivate;
 
 #include "gnc-html-extras.h"
-#include "gnc-html-history.h"
 
 /* The result structure of url handlers. Strings should be g_malloc'd
  * by the handler and will be freed by gnc_html. */
@@ -66,6 +65,57 @@ typedef struct
 	gchar* error_message;
 } GNCURLResult;
 
+typedef gboolean (* GncHTMLObjectCB)(GncHtml* html, gpointer eb,
+                                 gpointer data); 
+typedef int  (* GncHTMLActionCB)(GncHtml* html, const gchar* method,
+                                 const gchar* action, GHashTable* form_data);
+typedef gboolean (* GncHTMLStreamCB)(const gchar* location, gchar** data, int* datalen);
+typedef gboolean (* GncHTMLUrlCB)(const gchar* location, const gchar* label,
+                                  gboolean new_window, GNCURLResult* result);
+
+/* Register a new URLType.
+ * returns TRUE if succesful, FALSE if type already exists.
+ *
+ * protocol should be an empty string if there is no corresponding protocol.
+ * if protocol is NULL, this function returns FALSE.
+ */
+gboolean gnc_html_register_urltype( URLType type, const gchar* protocol );
+
+/* Initialize the html subsystem */
+void gnc_html_initialize( void );
+
+gchar* gnc_html_encode_string( const gchar* in );
+gchar* gnc_html_decode_string( const gchar* in );
+gchar* gnc_html_escape_newlines( const gchar* in );
+gchar* gnc_html_unescape_newlines( const gchar* in );
+
+/* utilities for dealing with encoded argument strings for forms */
+gchar* gnc_html_pack_form_data( GHashTable* form_data );
+GHashTable* gnc_html_unpack_form_data( const gchar* encoding );
+void gnc_html_merge_form_data( GHashTable* fdata, const gchar* enc );
+void gnc_html_free_form_data( GHashTable* fdata );
+
+/* object handlers deal with <object classid="foo"> objects in HTML.
+ * the handlers are looked up at object load time. */
+void gnc_html_register_object_handler( const gchar* classid, GncHTMLObjectCB hand );
+void gnc_html_unregister_object_handler( const gchar* classid );
+
+/* action handlers deal with submitting forms of the type 
+ * <FORM action="gnc-action:action?args">.  Normal get/post http:
+ * forms are handled as would be expected, with no callback. */
+void gnc_html_register_action_handler( const gchar* action, GncHTMLActionCB hand );
+void gnc_html_unregister_action_handler( const gchar* action );
+
+/* stream handlers load data for particular URLTypes. */
+void gnc_html_register_stream_handler( URLType url_type, GncHTMLStreamCB hand );
+void gnc_html_unregister_stream_handler( URLType url_type );
+
+/* handlers for particular URLTypes. */
+void gnc_html_register_url_handler( URLType url_type, GncHTMLUrlCB hand );
+void gnc_html_unregister_url_handler( URLType url_type );
+
+#include "gnc-html-history.h"
+
 typedef int  (* GncHTMLUrltypeCB)(URLType ut);
 typedef void (* GncHTMLFlyoverCB)(GncHtml* html, const gchar* url,
                                   gpointer data);
@@ -74,15 +124,6 @@ typedef void (* GncHTMLLoadCB)(GncHtml* html, URLType type,
                                gpointer data);
 typedef int  (* GncHTMLButtonCB)(GncHtml* html, GdkEventButton* event,
                                  gpointer data);
-
-//typedef gboolean (* GncHTMLObjectCB)(GncHtml* html, GtkHTMLEmbedded* eb,
-typedef gboolean (* GncHTMLObjectCB)(GncHtml* html, gpointer eb,
-                                 gpointer data); 
-typedef int  (* GncHTMLActionCB)(GncHtml* html, const gchar* method,
-                                 const gchar* action, GHashTable* form_data);
-typedef gboolean (* GncHTMLStreamCB)(const gchar* location, gchar** data, int* datalen);
-typedef gboolean (* GncHTMLUrlCB)(const gchar* location, const gchar* label,
-                                  gboolean new_window, GNCURLResult* result);
 
 struct _GncHtmlClass
 {
@@ -156,5 +197,7 @@ void gnc_html_register_url_handler( URLType url_type, GncHTMLUrlCB hand );
 void gnc_html_unregister_url_handler( URLType url_type );
 
 const gchar* gnc_html_get_embedded_param( gpointer eb, const gchar* param_name );
+
+void show_type_signals( GType t );
 
 #endif

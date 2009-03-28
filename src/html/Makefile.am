@@ -15,30 +15,32 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/lib/libc \
+  -I/usr/include/xulrunner/gtkembedmoz \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${GLADE_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
-  ${GUILE_INCS} \
-  ${QOF_CFLAGS} \
   ${GOFFICE_CFLAGS} \
-  ${LIBGDA_CFLAGS} \
   ${WEBKIT_CFLAGS}
 
 libgncmod_html_la_SOURCES = \
   gnc-html.c \
-  gnc-html-extras.c \
   gnc-html-history.c \
   gnc-html-gtkhtml.c \
   gnc-html-graph-gog-gtkhtml.c \
+  gnc-html-webkit.c \
+  gnc-html-graph-gog-webkit.c \
+  gnc-html-gtkmozembed.c \
+  gnc-html-graph-gog-gtkmozembed.c \
   gnc-html-factory.c \
   swig-gnc-html.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
-  gnc-html-extras.h \
-  gnc-html-graph-gog.h \
+  gnc-html-graph-gog-gtkhtml.h \
+  gnc-html-graph-gog-webkit.h \
+  gnc-html-graph-gog-gtkmozembed.h \
   gnc-html-history.h \
   gnc-html.h \
   gnc-html-factory.h
@@ -53,18 +55,15 @@ libgncmod_html_la_LIBADD = \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \
+  -L/usr/lib/xulrunner -lgtkembedmoz \
   ${GNOME_LIBS} \
   ${GTKHTML_LIBS} \
-  ${GUILE_LIBS} \
   ${GDK_PIXBUF_LIBS} \
-  ${GLADE_LIBS} \
-  ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
   ${QOF_LIBS} \
   ${GOFFICE_LIBS} \
   ${REGEX_LIBS} \
-  ${LIBXML2_LIBS} \
   ${WEBKIT_LIBS}
 
 if BUILDING_FROM_SVN

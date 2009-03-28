@@ -1,7 +1,8 @@
 /********************************************************************
- * gnc-html-graph-gog.c -- GNC/HTML Graphing support via GOG        *
- *                                                                  *
+ * gnc-html-graph-gog_webkit.c -- GNC/HTML Graphing support via GOG *
+
  * Copyright (C) 2005 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2009 Phil Longstaff <plongstaff@rogers.com>        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,12 +25,11 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include <gtkhtml/gtkhtml.h>
-#include <gtkhtml/gtkhtml-embedded.h>
+#include <webkit/webkit.h>
 #include <string.h>
 
 #include "gnc-ui-util.h"
-#include "gnc-html-graph-gog-gtkhtml.h"
+#include "gnc-html-graph-gog-webkit.h"
 #include "gnc-html.h"
 #include "gnc-engine.h"
 #include <goffice/goffice.h>
@@ -67,17 +67,19 @@
  **/
 
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN "gnc.html.graph.gog.gtkhtml"
+#define G_LOG_DOMAIN "gnc.html.graph.gog.webkit"
 
 static int handle_piechart( GncHtml* html, gpointer eb, gpointer d );
 static int handle_barchart( GncHtml* html, gpointer eb, gpointer d );
 static int handle_linechart( GncHtml* html, gpointer eb, gpointer d );
 static int handle_scatter( GncHtml* html, gpointer eb, gpointer d );
 
+#if 0
 #ifdef GTKHTML_USES_GTKPRINT
 static void draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer graph);
 #else
 static void draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer graph);
+#endif
 #endif
 
 static gboolean create_basic_plot_elements(const char *plot_type, GogObject **out_graph, GogObject **out_chart, GogPlot **out_plot);
@@ -90,7 +92,7 @@ static void set_chart_axis_labels_from_hash(GogObject *chart, gpointer eb);
 static void set_chart_axis_labels(GogObject *chart, const char *x_axis_label, const char* y_axis_label);
 
 void
-gnc_html_graph_gog_gtkhtml_init( void )
+gnc_html_graph_gog_webkit_init( void )
 {
   g_debug( "init gog graphing" );
   
@@ -168,6 +170,7 @@ read_strings(const char * string, int nvalues)
   return retval;  
 }
 
+#if 0
 static void
 add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GogObject *graph )
 {
@@ -222,6 +225,7 @@ add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GogObject *graph )
   g_signal_connect (G_OBJECT (eb), "draw_print",
 		    G_CALLBACK (draw_print_cb), NULL);
 }
+#endif
 
 static gboolean
 create_basic_plot_elements(const char *plot_type_name,
@@ -364,7 +368,7 @@ handle_piechart( GncHtml* html, gpointer eb, gpointer unused )
   // fixme: colors
   set_chart_titles_from_hash(chart, eb);
 
-  add_pixbuf_graph_widget (eb, graph);
+//FIXME  add_pixbuf_graph_widget (eb, graph);
 
   return TRUE;
 }
@@ -497,7 +501,7 @@ handle_barchart( GncHtml* html, gpointer eb, gpointer unused )
   // we need to do this twice for the barchart... :p
   gog_object_update (GOG_OBJECT (graph));
 
-  add_pixbuf_graph_widget (eb, graph);
+//FIXME  add_pixbuf_graph_widget (eb, graph);
 
   g_debug("barchart rendered.");
   return TRUE;
@@ -654,7 +658,7 @@ handle_linechart( GncHtml* html, gpointer eb, gpointer unused )
   // we need to do this twice for the linechart... :p
   gog_object_update (GOG_OBJECT (graph));
 
-  add_pixbuf_graph_widget (eb, graph);
+//FIXME  add_pixbuf_graph_widget (eb, graph);
 
   g_debug("linechart rendered.");
   return TRUE;
@@ -768,11 +772,12 @@ handle_scatter( GncHtml* html, gpointer eb, gpointer unused )
   // And twice for the scatter, too... :p
   gog_object_update(GOG_OBJECT(graph));
 
-  add_pixbuf_graph_widget (eb, graph);
+//FIXME  add_pixbuf_graph_widget (eb, graph);
 
   return TRUE;
 }
 
+#if 0
 #ifdef GTKHTML_USES_GTKPRINT
 static void
 draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer unused)
@@ -797,8 +802,10 @@ draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer unused)
 #    endif
   g_object_unref(rend);
 }
+#endif
 
 #else /* !GTKHTML_USES_GTKPRINT */
+#if 0
 static void
 draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer unused)
 {
@@ -810,4 +817,5 @@ draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer unused)
   gnome_print_translate (context, 0, eb->height);
   gog_graph_print_to_gnome_print (graph, context, eb->width, eb->height);
 }
+#endif
 #endif /* GTKHTML_USES_GTKPRINT */

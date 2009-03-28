@@ -1,6 +1,6 @@
 /********************************************************************
  * gnc-html-gtkhtml-p.h -- display html with gnc special tags       *
- * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * Copyright (C) 2009 Phil Longstaff <plongstaff@rogers.com>        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

@@ -1,5 +1,7 @@
 /********************************************************************
- * gnc-html-extras.h -- display html with gnc special tags          *
+ * gnc-html_graph_gog_webkit.h -- display html with gnc special     *
+ *									tags			                *
+ * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  * Copyright (C) 2009 Phil Longstaff <plongstaff@rogers.com>        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,31 +22,9 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef GNC_HTML_EXTRAS_H
-#define GNC_HTML_EXTRAS_H
+#ifndef GNC_HTML_GRAPH_GOG_WEBKIT_H
+#define GNC_HTML_GRAPH_GOG_WEBKIT_H 1
 
-// This file is needed so that these definitions can be separately included in the
-// gnc-html.i file.  The full gnc-html.h file can't be parsed because of the new
-// use of GObject
+void gnc_html_graph_gog_webkit_init( void );
 
-typedef gchar* URLType;
-
-#define URL_TYPE_FILE	"file"
-#define URL_TYPE_JUMP	"jump"
-#define URL_TYPE_HTTP	"http"
-#define URL_TYPE_FTP	"ftp"
-#define URL_TYPE_SECURE	"secure"
-#define URL_TYPE_REGISTER	"register"   /* for gnucash register popups */
-#define URL_TYPE_ACCTTREE	"accttree"   /* for account tree windows */
-#define URL_TYPE_REPORT	"report"     /* for gnucash report popups */
-#define URL_TYPE_OPTIONS	"options"    /* for editing report options */ 
-#define URL_TYPE_SCHEME	"scheme"     /* for scheme code evaluation */
-#define URL_TYPE_HELP	"help"       /* for a gnucash help window */
-#define URL_TYPE_XMLDATA	"xmldata"    /* links to gnucash XML data files */ 
-#define URL_TYPE_PRICE	"price"      /* for price editor popups */
-#define URL_TYPE_OTHER	"other"
-#define URL_TYPE_BUDGET "budget"
-
-gchar* gnc_build_url( URLType type, const gchar* location, const gchar* label );
-
-#endif
+#endif /* GNC_HTML_GRAPH_GOG_WEBKIT_H */

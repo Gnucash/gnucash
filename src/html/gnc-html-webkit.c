@@ -1,9 +1,9 @@
 /********************************************************************
- * gnc-html-gtkhtml.c -- display HTML with some special gnucash     *
- *                       tags.                                      *
+ * gnc-html_webkit.c -- display HTML with some special gnucash tags.*
  *                                                                  *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  * Copyright (C) 2001 Linas Vepstas <linas@linas.org>               *
+ * Copyright (C) 2009 Phil Longstaff <plongstaff@rogers.com>        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,9 +23,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-// libgtkhtml docs:
-// http://www.fifi.org/doc/libgtkhtml-dev/html/
-
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -41,31 +38,30 @@
 #include <regex.h>
 #include <libguile.h>
 
-#include <gtkhtml/gtkhtml.h>
-#include <gtkhtml/gtkhtml-embedded.h>
+#include <webkit/webkit.h>
 
 #include "Account.h"
 #include "print-session.h"
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
 #include "gnc-html.h"
-#include "gnc-html-gtkhtml.h"
+#include "gnc-html-webkit.h"
 #include "gnc-html-history.h"
-#include "gnc-html-graph-gog-gtkhtml.h"
+#include "gnc-html-graph-gog-webkit.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 
-G_DEFINE_TYPE(GncHtmlGtkhtml, gnc_html_gtkhtml, GNC_TYPE_HTML )
+G_DEFINE_TYPE(GncHtmlWebkit, gnc_html_webkit, GNC_TYPE_HTML )
 
-static void gnc_html_gtkhtml_dispose( GObject* obj );
-static void gnc_html_gtkhtml_finalize( GObject* obj );
-static void gnc_html_gtkhtml_class_init( GncHtmlGtkhtmlClass* klass );
-static void gnc_html_gtkhtml_init( GncHtmlGtkhtml* gs );
+static void gnc_html_webkit_dispose( GObject* obj );
+static void gnc_html_webkit_finalize( GObject* obj );
+static void gnc_html_webkit_class_init( GncHtmlWebkitClass* klass );
+static void gnc_html_webkit_init( GncHtmlWebkit* gs );
 
-//#define GNC_HTML_GTKHTML_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_HTML_GTKHTML, GncHtmlGtkhtmlPrivate))
-#define GNC_HTML_GTKHTML_GET_PRIVATE(o) (GNC_HTML_GTKHTML(o)->priv)
+//#define GNC_HTML_WEBKIT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_HTML_WEBKIT, GncHtmlWebkitPrivate))
+#define GNC_HTML_WEBKIT_GET_PRIVATE(o) (GNC_HTML_WEBKIT(o)->priv)
 
-#include "gnc-html-gtkhtml-p.h"
+#include "gnc-html-webkit-p.h"
 
 /* indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_HTML;
@@ -92,42 +88,47 @@ static char error_404_format[] = "<html><body><h3>%s</h3><p>%s</body></html>";
 static char error_404_title[] = N_("Not found");
 static char error_404_body[] = N_("The specified URL could not be loaded.");
 
-static void gtkhtml_pre_3_10_1_bug_workaround( GtkHTMLEmbedded* eb );
-static void gnc_html_url_requested_cb( GtkHTML* html, gchar* url,
-                          GtkHTMLStream* handle, gpointer data );
-static void gnc_html_on_url_cb( GtkHTML* html, const gchar* url, gpointer data );
+static void webkit_navigation_requested_cb( WebKitWebView* web_view, GObject* arg1,
+												GObject* arg2, gpointer data );
+static void webkit_on_url_cb( WebKitWebView* web_view, gchar* title, gchar* url,
+							gpointer data );
+#if 0
 static void gnc_html_set_base_cb( GtkHTML* gtkhtml, const gchar* base, gpointer data );
 static void gnc_html_link_clicked_cb( GtkHTML* html, const gchar* url, gpointer data );
 static gboolean gnc_html_object_requested_cb( GtkHTML* html, GtkHTMLEmbedded* eb,
                              gpointer data );
+#endif
 static int gnc_html_button_press_cb( GtkWidget* widg, GdkEventButton* event,
                          gpointer user_data );
+#if 0
 static int gnc_html_submit_cb( GtkHTML* html, const gchar* method,
                    const gchar* action, const gchar* encoded_form_data,
                    gpointer user_data );
-static void impl_gtkhtml_show_url( GncHtml* self, URLType type,
+#endif
+static void impl_webkit_show_url( GncHtml* self, URLType type,
                   const gchar* location, const gchar* label,
                   gboolean new_window_hint );
-static void impl_gtkhtml_show_data( GncHtml* self, const gchar* data, int datalen );
-static void impl_gtkhtml_reload( GncHtml* self );
-static void impl_gtkhtml_copy( GncHtml* self );
-static gboolean impl_gtkhtml_export( GncHtml* self, const gchar* filepath );
-static void impl_gtkhtml_print( GncHtml* self );
-static void impl_gtkhtml_cancel( GncHtml* self );
-static void impl_gtkhtml_set_parent( GncHtml* self, GtkWindow* parent );
+static void impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen );
+static void impl_webkit_reload( GncHtml* self );
+static void impl_webkit_copy( GncHtml* self );
+static gboolean impl_webkit_export( GncHtml* self, const gchar* filepath );
+static void impl_webkit_print( GncHtml* self );
+static void impl_webkit_cancel( GncHtml* self );
+static void impl_webkit_set_parent( GncHtml* self, GtkWindow* parent );
 
 static void
-gnc_html_gtkhtml_init( GncHtmlGtkhtml* self )
+gnc_html_webkit_init( GncHtmlWebkit* self )
 {
-	GncHtmlGtkhtmlPrivate* priv;
-	GncHtmlGtkhtmlPrivate* new_priv;
+	GncHtmlWebkitPrivate* priv;
+	GncHtmlWebkitPrivate* new_priv;
 
-	new_priv = g_realloc( GNC_HTML(self)->priv, sizeof(GncHtmlGtkhtmlPrivate) );
+	new_priv = g_realloc( GNC_HTML(self)->priv, sizeof(GncHtmlWebkitPrivate) );
 	priv = self->priv = new_priv;
 
-	priv->html = gtk_html_new();
+	priv->web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
+
 	gtk_container_add( GTK_CONTAINER(priv->base.container),
-						GTK_WIDGET(priv->html) );
+						GTK_WIDGET(priv->web_view) );
 
 #ifdef HAVE_GTK_2_10
 	g_object_ref_sink( priv->base.container );
@@ -137,14 +138,15 @@ gnc_html_gtkhtml_init( GncHtmlGtkhtml* self )
 #endif
 
 	/* signals */
-	g_signal_connect( priv->html, "url_requested",
-					G_CALLBACK(gnc_html_url_requested_cb),
+	g_signal_connect( priv->web_view, "navigation-requested",
+					G_CALLBACK(webkit_navigation_requested_cb),
 					self);
 
-	g_signal_connect( priv->html, "on_url",
-				   G_CALLBACK(gnc_html_on_url_cb),
+	g_signal_connect( priv->web_view, "hovering-over-link",
+				   G_CALLBACK(webkit_on_url_cb),
 				   self );
 
+#if 0
 	g_signal_connect( priv->html, "set_base",
 		   G_CALLBACK(gnc_html_set_base_cb),
 		   self);
@@ -164,61 +166,63 @@ gnc_html_gtkhtml_init( GncHtmlGtkhtml* self )
 	g_signal_connect (priv->html, "submit",
 		    G_CALLBACK(gnc_html_submit_cb),
 		    self);
+#endif
 
-	gtk_html_load_empty(GTK_HTML(priv->html));
-
-	show_type_signals( GTK_TYPE_HTML );
+	printf( "WEBKIT_TYPE_WEB_VIEW:\n" );
+	show_type_signals( WEBKIT_TYPE_WEB_VIEW );
+	printf( "WEBKIT_TYPE_WEB_FRAME:\n" );
+	show_type_signals( WEBKIT_TYPE_WEB_FRAME );
 
 	LEAVE("retval %p", self);
 }
 
 static void
-gnc_html_gtkhtml_class_init( GncHtmlGtkhtmlClass* klass )
+gnc_html_webkit_class_init( GncHtmlWebkitClass* klass )
 {
 	GObjectClass* gobject_class = G_OBJECT_CLASS(klass);
 	GncHtmlClass* html_class = GNC_HTML_CLASS(klass);
 
-	gobject_class->dispose = gnc_html_gtkhtml_dispose;
-	gobject_class->finalize = gnc_html_gtkhtml_finalize;
+	gobject_class->dispose = gnc_html_webkit_dispose;
+	gobject_class->finalize = gnc_html_webkit_finalize;
 
-	html_class->show_url = impl_gtkhtml_show_url;
-	html_class->show_data = impl_gtkhtml_show_data;
-	html_class->reload = impl_gtkhtml_reload;
-	html_class->copy = impl_gtkhtml_copy;
-	html_class->export = impl_gtkhtml_export;
-	html_class->print = impl_gtkhtml_print;
-	html_class->cancel = impl_gtkhtml_cancel;
-	html_class->set_parent = impl_gtkhtml_set_parent;
+	html_class->show_url = impl_webkit_show_url;
+	html_class->show_data = impl_webkit_show_data;
+	html_class->reload = impl_webkit_reload;
+	html_class->copy = impl_webkit_copy;
+	html_class->export = impl_webkit_export;
+//	html_class->print = impl_webkit_print;
+	html_class->cancel = impl_webkit_cancel;
+	html_class->set_parent = impl_webkit_set_parent;
 
 	// Initialize graphing support
-	gnc_html_graph_gog_gtkhtml_init();
+	gnc_html_graph_gog_webkit_init();
 }
 
 static void
-gnc_html_gtkhtml_dispose( GObject* obj )
+gnc_html_webkit_dispose( GObject* obj )
 {
-	GncHtmlGtkhtml* self = GNC_HTML_GTKHTML(obj);
-	GncHtmlGtkhtmlPrivate* priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
+	GncHtmlWebkit* self = GNC_HTML_WEBKIT(obj);
+	GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
-	if( priv->html != NULL ) {
-		g_object_unref( G_OBJECT(priv->html) );
-		priv->html = NULL;
+	if( priv->web_view != NULL ) {
+		g_object_unref( G_OBJECT(priv->web_view) );
+		priv->web_view = NULL;
 	}
 
-	G_OBJECT_CLASS(gnc_html_gtkhtml_parent_class)->dispose( obj );
+	G_OBJECT_CLASS(gnc_html_webkit_parent_class)->dispose( obj );
 }
 
 static void
-gnc_html_gtkhtml_finalize( GObject* obj )
+gnc_html_webkit_finalize( GObject* obj )
 {
-	GncHtmlGtkhtml* self = GNC_HTML_GTKHTML(obj);
+	GncHtmlWebkit* self = GNC_HTML_WEBKIT(obj);
 
 //	if( self->priv != NULL ) {
 //		g_free( self->priv );
 		self->priv = NULL;
 //	}
 
-	G_OBJECT_CLASS(gnc_html_gtkhtml_parent_class)->finalize( obj );
+	G_OBJECT_CLASS(gnc_html_webkit_parent_class)->finalize( obj );
 }
 
 /*****************************************************************************/
@@ -308,34 +312,6 @@ https_allowed()
 	return TRUE;
 }
 
-/************************************************************
- * gnc_html_start_request: starts the gnc-http object working on an
- * http/https request.
- ************************************************************/
-static void
-gnc_html_start_request( GncHtmlGtkhtml* self, gchar * uri, GtkHTMLStream * handle )
-{
-	GList * handles = NULL;
-	gint  need_request = FALSE;
-	GncHtmlGtkhtmlPrivate* priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
-
-	/* we want to make a list of handles to fill with this URI.
-	 * multiple handles with the same URI will all get filled when the
-	 * request comes in. */
-	DEBUG("requesting %s", uri);
-	handles = g_hash_table_lookup( priv->base.request_info, uri );
-	if( handles == NULL ) {
-		need_request = TRUE;
-	}
-
-	handles = g_list_append( handles, handle );
-	g_hash_table_insert( priv->base.request_info, uri, handles );
-
-	if( need_request ) {
-		g_critical("we've not supported network requests for years");
-	}
-}
-
 /********************************************************************
  * gnc_html_load_to_stream : actually do the work of loading the HTML
  * or binary data referenced by a URL and feeding it into the GtkHTML
@@ -343,13 +319,12 @@ gnc_html_start_request( GncHtmlGtkhtml* self, gchar * uri, GtkHTMLStream * handl
  ********************************************************************/
 
 static void
-gnc_html_load_to_stream( GncHtmlGtkhtml* self, GtkHTMLStream* handle,
-                        URLType type, const gchar* location,
-                        const gchar* label )
+gnc_html_load_to_stream( GncHtmlWebkit* self, URLType type,
+						const gchar* location, const gchar* label )
 {
 	gchar* fdata = NULL;
 	int fdata_len = 0;
-	GncHtmlGtkhtmlPrivate* priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
+	GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
 	DEBUG( "type %s, location %s, label %s", type ? type : "(null)",
 			location ? location : "(null)", label ? label : "(null)");
@@ -365,14 +340,12 @@ gnc_html_load_to_stream( GncHtmlGtkhtml* self, GtkHTMLStream* handle,
 
 			if( ok ) {
 				fdata = fdata ? fdata : g_strdup( "" );
-				gtk_html_write( GTK_HTML(priv->html), handle, fdata, fdata_len );
-				gtk_html_end( GTK_HTML(priv->html), handle, GTK_HTML_STREAM_OK );
+				webkit_web_view_load_html_string( priv->web_view, fdata, "base-uri" );
 			} else {
 				fdata = fdata ? fdata :
 							g_strdup_printf( error_404_format,
 							_(error_404_title), _(error_404_body) );
-				gtk_html_write( GTK_HTML(priv->html), handle, fdata, strlen(fdata) );
-				gtk_html_end( GTK_HTML(priv->html), handle, GTK_HTML_STREAM_ERROR );
+				webkit_web_view_load_html_string( priv->web_view, fdata, "base-uri" );
 			}
 
 			g_free( fdata );
@@ -381,7 +354,8 @@ gnc_html_load_to_stream( GncHtmlGtkhtml* self, GtkHTMLStream* handle,
 				while( gtk_events_pending() ) {
 					gtk_main_iteration();
 				}
-				gtk_html_jump_to_anchor( GTK_HTML(priv->html), label );
+//				gtk_html_jump_to_anchor( GTK_HTML(priv->html), label );
+				g_assert( FALSE );
 			}
 
 			return;
@@ -411,7 +385,6 @@ gnc_html_load_to_stream( GncHtmlGtkhtml* self, GtkHTMLStream* handle,
 				char *fullurl;
 
 				fullurl = gnc_build_url( type, location, label );
-				gnc_html_start_request( self, fullurl, handle );
 			}
 
 		} else {
@@ -421,14 +394,14 @@ gnc_html_load_to_stream( GncHtmlGtkhtml* self, GtkHTMLStream* handle,
 					label ? label : "(null)" );
 			fdata = g_strdup_printf( error_404_format,
 								_(error_404_title), _(error_404_body) );
-			gtk_html_write( GTK_HTML(priv->html), handle, fdata, strlen (fdata) );
-			gtk_html_end( GTK_HTML(priv->html), handle, GTK_HTML_STREAM_ERROR );
+			webkit_web_view_load_html_string( priv->web_view, fdata, "base-uri" );
 			g_free( fdata );
 		}
 
 	} while( FALSE );
 }
 
+#if 0
 /********************************************************************
  * gnc_html_link_clicked_cb - called when user left-clicks on html
  * anchor.
@@ -440,7 +413,7 @@ gnc_html_link_clicked_cb( GtkHTML* html, const gchar* url, gpointer data )
 	URLType type;
 	gchar* location = NULL;
 	gchar* label = NULL;
-	GncHtmlGtkhtml* self = GNC_HTML_GTKHTML(data);
+	GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
 
 	DEBUG("Clicked %s", url);
 	type = gnc_html_parse_url( GNC_HTML(self), url, &location, &label );
@@ -448,30 +421,33 @@ gnc_html_link_clicked_cb( GtkHTML* html, const gchar* url, gpointer data )
 	g_free( location );
 	g_free( label );
 }
-
+#endif
 
 /********************************************************************
- * gnc_html_url_requested_cb - called when a URL needs to be
+ * webkit_navigation_requested_cb - called when a URL needs to be
  * loaded within the loading of a page (embedded image).
  ********************************************************************/
 
 static void
-gnc_html_url_requested_cb( GtkHTML* html, gchar* url,
-                          GtkHTMLStream* handle, gpointer data )
+webkit_navigation_requested_cb( WebKitWebView* web_view, GObject* arg1,
+												GObject* arg2, gpointer data )
 {
 	URLType type;
 	gchar* location = NULL;
 	gchar* label = NULL;
-	GncHtmlGtkhtml* self = GNC_HTML_GTKHTML(data);
+	GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
+	WebKitNetworkRequest* req = WEBKIT_NETWORK_REQUEST(arg2);
+	const gchar* url = webkit_network_request_get_uri( req );
 
 	DEBUG( "requesting %s", url );
 	type = gnc_html_parse_url( GNC_HTML(self), url, &location, &label );
-	gnc_html_load_to_stream( self, handle, type, location, label );
+	gnc_html_show_url( GNC_HTML(self), type, location, label, 0 );
+//	gnc_html_load_to_stream( self, type, location, label );
 	g_free( location );
 	g_free( label );
 }
 
-
+#if 0
 /********************************************************************
  * gnc_html_object_requested_cb - called when an applet needs to be
  * loaded.
@@ -481,13 +457,12 @@ static gboolean
 gnc_html_object_requested_cb( GtkHTML* html, GtkHTMLEmbedded* eb,
                              gpointer data )
 {
-	GncHtmlGtkhtml* self = GNC_HTML_GTKHTML(data);
+	GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
 	GncHTMLObjectCB h;
 
 	DEBUG( " " );
 	if( !eb || !(eb->classid) || !gnc_html_object_handlers ) return FALSE;
 
-	gtkhtml_pre_3_10_1_bug_workaround( eb );
 	h = g_hash_table_lookup( gnc_html_object_handlers, eb->classid );
 	if( h ) {
 		return h( GNC_HTML(self), eb, data );
@@ -495,17 +470,17 @@ gnc_html_object_requested_cb( GtkHTML* html, GtkHTMLEmbedded* eb,
 		return FALSE;
 	}
 }
-
+#endif
 
 /********************************************************************
- * gnc_html_on_url_cb - called when user rolls over html anchor
+ * webkit_on_url_cb - called when user rolls over html anchor
  ********************************************************************/
 
 static void
-gnc_html_on_url_cb( GtkHTML* html, const gchar* url, gpointer data )
+webkit_on_url_cb( WebKitWebView* web_view, gchar* title, gchar* url, gpointer data )
 {
-	GncHtmlGtkhtml* self = GNC_HTML_GTKHTML(data);
-	GncHtmlGtkhtmlPrivate* priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
+	GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
+	GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
 	DEBUG( "Rollover %s", url ? url : "(null)" );
 	g_free( priv->base.current_link );
@@ -515,7 +490,7 @@ gnc_html_on_url_cb( GtkHTML* html, const gchar* url, gpointer data )
 	}
 }
 
-
+#if 0
 /********************************************************************
  * gnc_html_set_base_cb
  ********************************************************************/
@@ -524,8 +499,8 @@ static void
 gnc_html_set_base_cb( GtkHTML* gtkhtml, const gchar* base,
                      gpointer data )
 {
-	GncHtmlGtkhtml* self = GNC_HTML_GTKHTML(data);
-	GncHtmlGtkhtmlPrivate* priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
+	GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
+	GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 	URLType type;
 	gchar* location = NULL;
 	gchar* label = NULL;
@@ -539,7 +514,7 @@ gnc_html_set_base_cb( GtkHTML* gtkhtml, const gchar* base,
 	priv->base.base_type = type;
 	priv->base.base_location = location;
 }
-
+#endif
 
 /********************************************************************
  * gnc_html_button_press_cb
@@ -550,8 +525,8 @@ static int
 gnc_html_button_press_cb( GtkWidget* widg, GdkEventButton* event,
                          gpointer user_data )
 {
-	GncHtmlGtkhtml* self = GNC_HTML_GTKHTML(user_data);
-	GncHtmlGtkhtmlPrivate* priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
+	GncHtmlWebkit* self = GNC_HTML_WEBKIT(user_data);
+	GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
 	DEBUG( "Button Press" );
 	if( priv->base.button_cb != NULL ) {
@@ -567,12 +542,13 @@ gnc_html_button_press_cb( GtkWidget* widg, GdkEventButton* event,
  * form submission callback
  ********************************************************************/
 
+#if 0
 static int
 gnc_html_submit_cb( GtkHTML* html, const gchar* method,
                    const gchar* action, const gchar* encoded_form_data,
                    gpointer user_data )
 {
-	GncHtmlGtkhtml* self = GNC_HTML_GTKHTML(user_data);
+	GncHtmlWebkit* self = GNC_HTML_WEBKIT(user_data);
 	gchar* location = NULL;
 	gchar* new_loc = NULL;
 	gchar* label = NULL;
@@ -591,7 +567,7 @@ gnc_html_submit_cb( GtkHTML* html, const gchar* method,
 	gnc_html_free_form_data( form_data );
 	return TRUE;
 }
-
+#endif
 
 /********************************************************************
  * gnc_html_open_scm
@@ -599,7 +575,7 @@ gnc_html_submit_cb( GtkHTML* html, const gchar* method,
  ********************************************************************/
 
 static void
-gnc_html_open_scm( GncHtmlGtkhtml* self, const gchar * location,
+gnc_html_open_scm( GncHtmlWebkit* self, const gchar * location,
                   const gchar * label, int newwin )
 {
 	PINFO("location='%s'", location ? location : "(null)");
@@ -613,15 +589,12 @@ gnc_html_open_scm( GncHtmlGtkhtml* self, const gchar * location,
  ********************************************************************/
 
 static void
-impl_gtkhtml_show_data( GncHtml* self, const char * data, int datalen )
+impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
 {
-	GtkHTMLStream * handle;
-	GncHtmlGtkhtmlPrivate* priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
+	GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
 	DEBUG( "datalen %d, data %20.20s", datalen, data );
-	handle = gtk_html_begin( GTK_HTML(priv->html) );
-	gtk_html_write( GTK_HTML(priv->html), handle, data, datalen );
-	gtk_html_end( GTK_HTML(priv->html), handle, GTK_HTML_STREAM_OK );
+	webkit_web_view_load_html_string( priv->web_view, data, "base-uri" );
 }
 
 /********************************************************************
@@ -633,14 +606,13 @@ impl_gtkhtml_show_data( GncHtml* self, const char * data, int datalen )
  ********************************************************************/
 
 static void
-impl_gtkhtml_show_url( GncHtml* self, URLType type,
+impl_webkit_show_url( GncHtml* self, URLType type,
                   const gchar* location, const gchar* label,
                   gboolean new_window_hint )
 {
 	GncHTMLUrlCB url_handler;
-	GtkHTMLStream * handle;
 	gboolean new_window;
-	GncHtmlGtkhtmlPrivate* priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
+	GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
 	DEBUG(" ");
 
@@ -697,7 +669,6 @@ impl_gtkhtml_show_url( GncHtml* self, URLType type,
 			gnc_html_history_node *hnode;
 			const char *new_location;
 			const char *new_label;
-			GtkHTMLStream * stream;
 
 			new_location = result.location ? result.location : location;
 			new_label = result.label ? result.label : label;
@@ -712,8 +683,7 @@ impl_gtkhtml_show_url( GncHtml* self, URLType type,
 			DEBUG( "resetting base location to %s",
 					priv->base.base_location ? priv->base.base_location : "(null)" );
 
-			stream = gtk_html_begin( GTK_HTML(priv->html) );
-			gnc_html_load_to_stream( GNC_HTML_GTKHTML(self), stream, result.url_type,
+			gnc_html_load_to_stream( GNC_HTML_WEBKIT(self), result.url_type,
 									new_location, new_label );
 
 			if( priv->base.load_cb != NULL ) {
@@ -731,10 +701,11 @@ impl_gtkhtml_show_url( GncHtml* self, URLType type,
 	}
 
 	if( safe_strcmp( type, URL_TYPE_SCHEME ) == 0 ) {
-		gnc_html_open_scm( GNC_HTML_GTKHTML(self), location, label, new_window );
+		gnc_html_open_scm( GNC_HTML_WEBKIT(self), location, label, new_window );
 
 	} else if( safe_strcmp( type, URL_TYPE_JUMP ) == 0 ) {
-		gtk_html_jump_to_anchor( GTK_HTML(priv->html), label );
+//		gtk_html_jump_to_anchor( GTK_HTML(priv->html), label );
+		g_assert( FALSE );
 
 	} else if( safe_strcmp( type, URL_TYPE_SECURE ) == 0 ||
 				safe_strcmp( type, URL_TYPE_HTTP ) == 0 ||
@@ -769,8 +740,7 @@ impl_gtkhtml_show_url( GncHtml* self, URLType type,
 			/* FIXME : handle new_window = 1 */
 			gnc_html_history_append( priv->base.history,
 								gnc_html_history_node_new( type, location, label ) );
-			handle = gtk_html_begin( GTK_HTML(priv->html) );
-			gnc_html_load_to_stream( GNC_HTML_GTKHTML(self), handle, type, location, label );
+			gnc_html_load_to_stream( GNC_HTML_WEBKIT(self), type, location, label );
 
 		} while( FALSE );
 
@@ -790,9 +760,9 @@ impl_gtkhtml_show_url( GncHtml* self, URLType type,
  ********************************************************************/
 
 static void
-impl_gtkhtml_reload( GncHtml* self )
+impl_webkit_reload( GncHtml* self )
 {
-	GncHtmlGtkhtmlPrivate* priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
+	GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 	gnc_html_history_node * n;
 
 	DEBUG(" ");
@@ -804,15 +774,15 @@ impl_gtkhtml_reload( GncHtml* self )
 
 
 /********************************************************************
- * gnc_html_gtkhtml_new
- * create and set up a new gtkhtml widget.
+ * gnc_html_new
+ * create and set up a new webkit widget.
  ********************************************************************/
 
 GncHtml*
-gnc_html_gtkhtml_new( void )
+gnc_html_webkit_new( void )
 {
-	GncHtmlGtkhtml* self = g_object_new( GNC_TYPE_HTML_GTKHTML, NULL );
-	GncHtmlGtkhtmlPrivate* priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
+	GncHtmlWebkit* self = g_object_new( GNC_TYPE_HTML_WEBKIT, NULL );
+	GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
 	return GNC_HTML(self);
 }
@@ -823,7 +793,7 @@ gnc_html_gtkhtml_new( void )
  ********************************************************************/
 
 static gboolean
-gtkhtml_cancel_helper(gpointer key, gpointer value, gpointer user_data)
+webkit_cancel_helper(gpointer key, gpointer value, gpointer user_data)
 {
 	g_free(key);
 	g_list_free((GList *)value);
@@ -831,28 +801,29 @@ gtkhtml_cancel_helper(gpointer key, gpointer value, gpointer user_data)
 }
 
 static void
-impl_gtkhtml_cancel( GncHtml* self )
+impl_webkit_cancel( GncHtml* self )
 {
-	GncHtmlGtkhtmlPrivate* priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
+	GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 	/* remove our own references to requests */
 	//gnc_http_cancel_requests( priv->http );
 
-	g_hash_table_foreach_remove( priv->base.request_info, gtkhtml_cancel_helper, NULL );
+	g_hash_table_foreach_remove( priv->base.request_info, webkit_cancel_helper, NULL );
 }
 
 static void
-impl_gtkhtml_copy( GncHtml* self )
+impl_webkit_copy( GncHtml* self )
 {
-	GncHtmlGtkhtmlPrivate* priv;
+	GncHtmlWebkitPrivate* priv;
 
 	g_return_if_fail( self != NULL );
 
-	priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
-	gtk_html_copy( GTK_HTML(priv->html) );
+	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+//	gtk_html_copy( GTK_HTML(priv->html) );
+	g_assert( FALSE );
 }
 
 /**************************************************************
- * gnc_html_export : wrapper around the builtin function in gtkhtml
+ * gnc_html_export : wrapper around the builtin function in webkit
  **************************************************************/
 
 static gboolean
@@ -872,45 +843,47 @@ raw_html_receiver( gpointer engine,
 }
 
 static gboolean
-impl_gtkhtml_export( GncHtml* self, const char *filepath )
+impl_webkit_export( GncHtml* self, const char *filepath )
 {
 	FILE *fh;
-	GncHtmlGtkhtmlPrivate* priv;
+	GncHtmlWebkitPrivate* priv;
 
 	g_return_val_if_fail( self != NULL, FALSE );
 	g_return_val_if_fail( filepath != NULL, FALSE );
 
-	priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
+	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 	fh = g_fopen( filepath, "w" );
 	if( fh == 0 )
 		return FALSE;
 
-	gtk_html_save( GTK_HTML(priv->html), GINT_TO_POINTER(raw_html_receiver), fh );
+//	gtk_html_save( GTK_HTML(priv->html), GINT_TO_POINTER(raw_html_receiver), fh );
+	g_assert( FALSE );
 	fclose (fh);
 
 	return TRUE;
 }
 
-#ifdef GTKHTML_USES_GTKPRINT
+#ifdef WEBKIT_USES_GTKPRINT
 static void
 draw_page_cb(GtkPrintOperation *operation, GtkPrintContext *context,
              gint page_nr, gpointer user_data)
 {
-    GncHtmlGtkhtml* self = GNC_HTML_GTKHTML(user_data);
-	GncHtmlGtkhtmlPrivate* priv;
+    GncHtmlWebkit* self = GNC_HTML_WEBKIT(user_data);
+	GncHtmlWebkitPrivate* priv;
 
-	priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
-    gtk_html_print_page( GTK_HTML(priv->html), context );
+	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+//    gtk_html_print_page( GTK_HTML(priv->html), context );
+	g_assert( FALSE );
 }
 
 static void
-impl_gtkhtml_print( GncHtml* self )
+impl_webkit_print( GncHtml* self )
 {
     GtkPrintOperation *print;
     GtkPrintOperationResult res;
-	GncHtmlGtkhtmlPrivate* priv;
+	GncHtmlWebkitPrivate* priv;
 
-	priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
+	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
     print = gtk_print_operation_new();
 
     gnc_print_operation_init(print);
@@ -929,7 +902,8 @@ impl_gtkhtml_print( GncHtml* self )
     g_object_unref(print);
 }
 
-#else /* !GTKHTML_USES_GTKPRINT */
+#else /* !WEBKIT_USES_GTKPRINT */
+#if 0
 void
 gnc_html_print( GncHtml* html )
 {
@@ -941,22 +915,25 @@ gnc_html_print( GncHtml* html )
 		return;
 	}
 
-	gtk_html_print( GTK_HTML(html->html), ps->context );
+//	gtk_html_print( GTK_HTML(html->html), ps->context );
+	g_assert( FALSE );
 	gnc_print_session_done( ps );
 }
-#endif /* GTKHTML_USES_GTKPRINT */
+#endif
+#endif /* WEBKIT_USES_GTKPRINT */
 
 static void
-impl_gtkhtml_set_parent( GncHtml* self, GtkWindow* parent )
+impl_webkit_set_parent( GncHtml* self, GtkWindow* parent )
 {
-	GncHtmlGtkhtmlPrivate* priv;
+	GncHtmlWebkitPrivate* priv;
 
 	g_return_if_fail( self != NULL );
 
-	priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
+	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 	priv->base.parent = GTK_WIDGET(parent);
 }
 
+#if 0
 const gchar*
 gnc_html_get_embedded_param( gpointer eb, const gchar* param_name )
 {
@@ -964,14 +941,4 @@ gnc_html_get_embedded_param( gpointer eb, const gchar* param_name )
 
 	return (const gchar *)g_hash_table_lookup(gtk_eb->params, param_name);
 }
-
-static void
-gtkhtml_pre_3_10_1_bug_workaround(GtkHTMLEmbedded *eb)
-{
-	/* HACK ALERT! Compensate for bug in gtkhtml < 3.10.1
-		Gtkhtml set the width parameter twice (=width, =height), so both,
-		width (==height) and height (<1) were incorrect. */
-	if( eb->height < 1 ) {
-		eb->height = eb->width;  /* only squares here :( */
-	}
-}
+#endif

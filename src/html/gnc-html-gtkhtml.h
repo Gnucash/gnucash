@@ -52,7 +52,7 @@ struct _GncHtmlGtkhtmlClass {
 
 GType gnc_html_gtkhtml_get_type( void );
 
-GncHtmlGtkhtml* gnc_html_gtkhtml_new( void );
+GncHtml* gnc_html_gtkhtml_new( void );
 
 G_END_DECLS
 
