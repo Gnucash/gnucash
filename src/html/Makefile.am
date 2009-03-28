@@ -28,6 +28,7 @@ libgncmod_html_la_SOURCES = \
   gnc-html.c \
   gnc-html-history.c \
   gnc-html-gtkhtml.c \
+  gnc-html-graph-gog.c \
   gnc-html-graph-gog-gtkhtml.c \
   gnc-html-webkit.c \
   gnc-html-graph-gog-webkit.c \
@@ -38,6 +39,7 @@ libgncmod_html_la_SOURCES = \
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
+  gnc-html-graph-gog.h \
   gnc-html-graph-gog-gtkhtml.h \
   gnc-html-graph-gog-webkit.h \
   gnc-html-graph-gog-gtkmozembed.h \

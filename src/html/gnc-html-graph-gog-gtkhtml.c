@@ -29,6 +29,7 @@
 #include <string.h>
 
 #include "gnc-ui-util.h"
+#include "gnc-html-graph-gog.h"
 #include "gnc-html-graph-gog-gtkhtml.h"
 #include "gnc-html.h"
 #include "gnc-engine.h"
@@ -92,12 +93,7 @@ static void set_chart_axis_labels(GogObject *chart, const char *x_axis_label, co
 void
 gnc_html_graph_gog_gtkhtml_init( void )
 {
-  g_debug( "init gog graphing" );
-  
-  libgoffice_init();
-  
-  /* Initialize plugins manager */
-  go_plugins_init( NULL, NULL, NULL, NULL, TRUE, GO_PLUGIN_LOADER_MODULE_TYPE );
+  gnc_html_graph_gog_init();
 
   gnc_html_register_object_handler( "gnc-guppi-pie", handle_piechart );
   gnc_html_register_object_handler( "gnc-guppi-bar", handle_barchart );
@@ -169,46 +165,11 @@ read_strings(const char * string, int nvalues)
 }
 
 static void
-add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GogObject *graph )
+add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GdkPixbuf* buf )
 {
   GtkWidget *widget;
-#if defined(HAVE_GOFFICE_0_5)
-  GogRenderer *renderer;
-#elif defined(GOFFICE_WITH_CAIRO)
-  GogRendererCairo *cairo_renderer;
-#else
-  GogRendererPixbuf *pixbuf_renderer;
-#endif
-  GdkPixbuf *buf;
   gboolean update_status;
-
-  // Note that this shouldn't be necessary as per discussion with Jody...
-  // ... but it is because we don't embed in a control which passes the
-  // update requests back to the graph widget, a-la the foo-canvas that
-  // gnumeric uses.  We probably _should_ do something like that, though.
-  gog_object_update (GOG_OBJECT (graph));
-
-#if defined(HAVE_GOFFICE_0_5)
-  renderer = GOG_RENDERER (g_object_new (GOG_RENDERER_TYPE,
-					 "model", graph,
-					 NULL));
-  update_status = gog_renderer_update (renderer, eb->width, eb->height);
-  buf = gog_renderer_get_pixbuf (renderer);
-#elif defined(GOFFICE_WITH_CAIRO)
-  cairo_renderer = GOG_RENDERER_CAIRO (g_object_new (GOG_RENDERER_CAIRO_TYPE,
-						     "model", graph,
-						     NULL));
-  update_status = gog_renderer_cairo_update (cairo_renderer,
-					     eb->width, eb->height, 1.0);
-  buf = gog_renderer_cairo_get_pixbuf (cairo_renderer);
-#else
-  pixbuf_renderer = GOG_RENDERER_PIXBUF (g_object_new (GOG_RENDERER_PIXBUF_TYPE,
-						       "model", graph,
-						       NULL));
-  update_status = gog_renderer_pixbuf_update (pixbuf_renderer,
-					      eb->width, eb->height, 1.0);
-  buf = gog_renderer_pixbuf_get (pixbuf_renderer);
-#endif
+  GogGraph *graph = GOG_GRAPH(g_object_get_data( G_OBJECT(buf), "graph" ));
 
   widget = gtk_image_new_from_pixbuf (buf);
   gtk_widget_set_size_request (widget, eb->width, eb->height);
@@ -317,13 +278,7 @@ set_chart_axis_labels(GogObject *chart, const char *x_axis_label, const char* y_
 static gboolean
 handle_piechart( GncHtml* html, gpointer eb, gpointer unused )
 {
-  GogObject *graph, *chart;
-  GogPlot *plot;
-  GogSeries *series;
-  GOData *labelData, *sliceData;
-  int datasize;
-  double *data = NULL;
-  char **labels = NULL, **colors = NULL;
+  GncHtmlPieChartInfo pieChartInfo;
 
   // parse data from the text-ized params.
   {
@@ -337,34 +292,18 @@ handle_piechart( GncHtml* html, gpointer eb, gpointer unused )
                           && dataStr != NULL
                           && labelsStr != NULL
                           && colorStr != NULL, FALSE );
-    datasize = atoi( datasizeStr );
-    data = read_doubles( dataStr, datasize );
-    labels = read_strings( labelsStr, datasize );
-    colors = read_strings( colorStr, datasize );
+    pieChartInfo.datasize = atoi( datasizeStr );
+    pieChartInfo.data = read_doubles( dataStr, pieChartInfo.datasize );
+    pieChartInfo.labels = read_strings( labelsStr, pieChartInfo.datasize );
+    pieChartInfo.colors = read_strings( colorStr, pieChartInfo.datasize );
   }
 
-  if (!create_basic_plot_elements("GogPiePlot", &graph, &chart, &plot))
-  {
-    return FALSE;
-  }
-  gog_object_add_by_name(chart, "Legend", NULL);
+  pieChartInfo.title = (const char *)gnc_html_get_embedded_param(eb, "title"); 
+  pieChartInfo.subtitle = (const char *)gnc_html_get_embedded_param(eb, "subtitle");
+  pieChartInfo.width = ((GtkHTMLEmbedded*)eb)->width;
+  pieChartInfo.height = ((GtkHTMLEmbedded*)eb)->height;
 
-  GOG_STYLED_OBJECT(graph)->style->outline.width = 5;
-  GOG_STYLED_OBJECT(graph)->style->outline.color = RGBA_BLACK;
-
-  series = gog_plot_new_series(plot);
-  labelData = go_data_vector_str_new((char const * const *)labels, datasize, NULL);
-  gog_series_set_dim(series, 0, labelData, NULL);
-  go_data_emit_changed(GO_DATA(labelData));
-
-  sliceData = go_data_vector_val_new(data, datasize, NULL);
-  gog_series_set_dim(series, 1, sliceData, NULL);
-  go_data_emit_changed(GO_DATA(sliceData));
-
-  // fixme: colors
-  set_chart_titles_from_hash(chart, eb);
-
-  add_pixbuf_graph_widget (eb, graph);
+  add_pixbuf_graph_widget( eb, gnc_html_graph_gog_create_piechart( &pieChartInfo ) );
 
   return TRUE;
 }
@@ -384,18 +323,7 @@ handle_piechart( GncHtml* html, gpointer eb, gpointer unused )
 static gboolean
 handle_barchart( GncHtml* html, gpointer eb, gpointer unused )
 {
-  GogObject *graph, *chart;
-  GogPlot *plot;
-  GogSeries *series;
-  GogStyle *style;
-  GOData *label_data, *slice_data;
-  int data_rows, data_cols;
-  double *data = NULL;
-  char **col_labels = NULL, **row_labels = NULL, **col_colors = NULL;
-  gboolean rotate_row_labels = FALSE;
-  gboolean stacked = FALSE;
-  char *bar_type = "normal";
-  int bar_overlap = 0 /*percent*/; // seperate bars; no overlap.
+  GncHtmlBarChartInfo barChartInfo;
 
   // parse data from the text-ized params
   // series => bars [gnc:cols]
@@ -413,8 +341,8 @@ handle_barchart( GncHtml* html, gpointer eb, gpointer unused )
     rotate_row_labels_str = gnc_html_get_embedded_param (eb, "rotate_row_labels");
     stacked_str           = gnc_html_get_embedded_param (eb, "stacked");
 
-    rotate_row_labels     = (gboolean) atoi (rotate_row_labels_str);
-    stacked               = (gboolean) atoi (stacked_str);
+    barChartInfo.rotate_row_labels     = (gboolean) atoi (rotate_row_labels_str);
+    barChartInfo.stacked               = (gboolean) atoi (stacked_str);
 
 #if 0 // too strong at the moment.
     g_return_val_if_fail (data_rows_str != NULL
@@ -424,80 +352,22 @@ handle_barchart( GncHtml* html, gpointer eb, gpointer unused )
                           && row_labels_str != NULL
                           && col_colors_str != NULL, FALSE );
 #endif // 0
-    data_rows = atoi (data_rows_str);
-    data_cols = atoi (data_cols_str);
-    data = read_doubles (data_str, data_rows*data_cols);
-    row_labels = read_strings (row_labels_str, data_rows);
-    col_labels = read_strings (col_labels_str, data_cols);
-    col_colors = read_strings (col_colors_str, data_cols);
+    barChartInfo.data_rows = atoi (data_rows_str);
+    barChartInfo.data_cols = atoi (data_cols_str);
+    barChartInfo.data = read_doubles (data_str, barChartInfo.data_rows*barChartInfo.data_cols);
+    barChartInfo.row_labels = read_strings (row_labels_str, barChartInfo.data_rows);
+    barChartInfo.col_labels = read_strings (col_labels_str, barChartInfo.data_cols);
+    barChartInfo.col_colors = read_strings (col_colors_str, barChartInfo.data_cols);
   }
 
-  if (!create_basic_plot_elements("GogBarColPlot", &graph, &chart, &plot)) {
-    return FALSE;
-  }
-  gog_object_add_by_name(chart, "Legend", NULL);
+  barChartInfo.title = (const char *)gnc_html_get_embedded_param(eb, "title"); 
+  barChartInfo.subtitle = (const char *)gnc_html_get_embedded_param(eb, "subtitle");
+  barChartInfo.width = ((GtkHTMLEmbedded*)eb)->width;
+  barChartInfo.height = ((GtkHTMLEmbedded*)eb)->height;
+  barChartInfo.x_axis_label = gnc_html_get_embedded_param(eb, "x_axis_label"),
+  barChartInfo.y_axis_label = gnc_html_get_embedded_param(eb, "y_axis_label");
 
-  if ( stacked ) {
-    // when stacked, we want the bars on _top_ of eachother.
-    bar_type = "stacked";
-    bar_overlap = 100 /*percent*/;
-  }
-
-  g_object_set (G_OBJECT (plot),
-                //"vary_style_by_element",	TRUE,
-                "type",                         bar_type,
-                "overlap_percentage",           bar_overlap, 
-                NULL);
-  label_data = go_data_vector_str_new ((char const * const *)row_labels, data_rows, NULL);
-  {
-    // foreach row:
-    //   series = row
-    GdkColor color;
-    int i;
-    for (i = 0; i < data_cols; i++) {
-      GError *err = NULL;
-
-      series = gog_plot_new_series (plot);
-      gog_object_set_name (GOG_OBJECT (series), col_labels[i], &err);
-      if (err != NULL)
-      {
-           g_warning("error setting name [%s] on series [%d]: [%s]",
-                     col_labels[i], i, err->message);
-      }
-
-      g_object_ref (label_data);
-      gog_series_set_dim (series, 0, label_data, NULL);
-      go_data_emit_changed (GO_DATA (label_data));
-
-      slice_data = go_data_vector_val_new (data + (i*data_rows), data_rows, NULL);
-      gog_series_set_dim (series, 1, slice_data, NULL);
-      go_data_emit_changed (GO_DATA (slice_data));
-
-      style = gog_styled_object_get_style (GOG_STYLED_OBJECT (series));
-      style->fill.type = GOG_FILL_STYLE_PATTERN;
-      if (gdk_color_parse (col_colors[i], &color)) {
-           style->fill.auto_back = FALSE;
-           go_pattern_set_solid (&style->fill.pattern, GDK_TO_UINT (color));
-      } else {
-           g_warning("cannot parse color [%s]", col_colors[i]);
-      }
-    }
-  }
-
-  if (rotate_row_labels) {
-    GogObject *object = gog_object_get_child_by_role (
-      chart, gog_object_find_role_by_name (chart, "X-Axis"));
-    style = gog_styled_object_get_style (GOG_STYLED_OBJECT (object));
-    gog_style_set_text_angle (style, 90.0);
-  }
-
-  set_chart_titles_from_hash (chart, eb);
-  set_chart_axis_labels_from_hash (chart, eb);
-
-  // we need to do this twice for the barchart... :p
-  gog_object_update (GOG_OBJECT (graph));
-
-  add_pixbuf_graph_widget (eb, graph);
+  add_pixbuf_graph_widget( eb, gnc_html_graph_gog_create_barchart( &barChartInfo ) );
 
   g_debug("barchart rendered.");
   return TRUE;
@@ -522,20 +392,7 @@ handle_barchart( GncHtml* html, gpointer eb, gpointer unused )
 static gboolean
 handle_linechart( GncHtml* html, gpointer eb, gpointer unused )
 {
-  GogObject *graph, *chart;
-  GogPlot *plot;
-  GogSeries *series;
-  GogStyle *style;
-  GOData *label_data, *slice_data;
-  int data_rows, data_cols;
-  double *data = NULL;
-  char **col_labels = NULL, **row_labels = NULL, **col_colors = NULL;
-  gboolean rotate_row_labels = FALSE;
-  gboolean stacked = FALSE;
-  gboolean markers = FALSE;
-  gboolean major_grid = FALSE;
-  gboolean minor_grid = FALSE;
-  char *line_type = "normal";
+  GncHtmlLineChartInfo lineChartInfo;
 
   // parse data from the text-ized params
   // series => lines [gnc:cols]
@@ -557,104 +414,28 @@ handle_linechart( GncHtml* html, gpointer eb, gpointer unused )
     major_grid_str        = gnc_html_get_embedded_param (eb, "major_grid");
     minor_grid_str        = gnc_html_get_embedded_param (eb, "minor_grid");
 
-    rotate_row_labels     = (gboolean) atoi (rotate_row_labels_str);
-    stacked               = (gboolean) atoi (stacked_str);
-    markers               = (gboolean) atoi (markers_str);
-    major_grid            = (gboolean) atoi (major_grid_str);
-    minor_grid            = (gboolean) atoi (minor_grid_str);
+    lineChartInfo.rotate_row_labels     = (gboolean) atoi (rotate_row_labels_str);
+    lineChartInfo.stacked               = (gboolean) atoi (stacked_str);
+    lineChartInfo.markers               = (gboolean) atoi (markers_str);
+    lineChartInfo.major_grid            = (gboolean) atoi (major_grid_str);
+    lineChartInfo.minor_grid            = (gboolean) atoi (minor_grid_str);
 
-#if 0 // too strong at the moment.
-    g_return_val_if_fail (data_rows_str != NULL
-                          && data_cols_str != NULL
-                          && data_str != NULL
-                          && col_labels_str != NULL
-                          && row_labels_str != NULL
-                          && col_colors_str != NULL, FALSE );
-#endif // 0
-
-    data_rows = atoi (data_rows_str);
-    data_cols = atoi (data_cols_str);
-    data = read_doubles (data_str, data_rows*data_cols);
-    row_labels = read_strings (row_labels_str, data_rows);
-    col_labels = read_strings (col_labels_str, data_cols);
-    col_colors = read_strings (col_colors_str, data_cols);
+    lineChartInfo.data_rows = atoi (data_rows_str);
+    lineChartInfo.data_cols = atoi (data_cols_str);
+    lineChartInfo.data = read_doubles (data_str, lineChartInfo.data_rows*lineChartInfo.data_cols);
+    lineChartInfo.row_labels = read_strings (row_labels_str, lineChartInfo.data_rows);
+    lineChartInfo.col_labels = read_strings (col_labels_str, lineChartInfo.data_cols);
+    lineChartInfo.col_colors = read_strings (col_colors_str, lineChartInfo.data_cols);
   }
 
-  if (!create_basic_plot_elements("GogLinePlot", &graph, &chart, &plot)) {
-    return FALSE;
-  }
-  gog_object_add_by_name(chart, "Legend", NULL);
+  lineChartInfo.title = (const char *)gnc_html_get_embedded_param(eb, "title"); 
+  lineChartInfo.subtitle = (const char *)gnc_html_get_embedded_param(eb, "subtitle");
+  lineChartInfo.width = ((GtkHTMLEmbedded*)eb)->width;
+  lineChartInfo.height = ((GtkHTMLEmbedded*)eb)->height;
+  lineChartInfo.x_axis_label = gnc_html_get_embedded_param(eb, "x_axis_label"),
+  lineChartInfo.y_axis_label = gnc_html_get_embedded_param(eb, "y_axis_label");
 
-  if ( stacked ) {
-    // when stacked, we want the lines on _top_ of eachother.
-    line_type = "stacked";
-  }
-
-  g_object_set (G_OBJECT (plot),
-                //"vary_style_by_element",	TRUE,
-                "type",                         line_type,
-                "default-style-has-markers",	markers,
-                NULL);
-  label_data = go_data_vector_str_new ((char const * const *)row_labels, data_rows, NULL);
-  {
-    // foreach row:
-    //   series = row
-    GdkColor color;
-    int i;
-    for (i = 0; i < data_cols; i++) {
-      GError *err = NULL;
-
-      series = gog_plot_new_series (plot);
-      gog_object_set_name (GOG_OBJECT (series), col_labels[i], &err);
-      if (err != NULL)
-      {
-           g_warning("error setting name [%s] on series [%d]: [%s]",
-                     col_labels[i], i, err->message);
-      }
-
-      g_object_ref (label_data);
-      gog_series_set_dim (series, 0, label_data, NULL);
-      go_data_emit_changed (GO_DATA (label_data));
-
-      slice_data = go_data_vector_val_new (data + (i*data_rows), data_rows, NULL);
-      gog_series_set_dim (series, 1, slice_data, NULL);
-      go_data_emit_changed (GO_DATA (slice_data));
-
-      style = gog_styled_object_get_style (GOG_STYLED_OBJECT (series));
-      style->fill.type = GOG_FILL_STYLE_PATTERN;
-      if (gdk_color_parse (col_colors[i], &color)) {
-           style->fill.auto_back = FALSE;
-           go_pattern_set_solid (&style->fill.pattern, GDK_TO_UINT (color));
-      } else {
-           g_warning("cannot parse color [%s]", col_colors[i]);
-      }
-    }
-  }
-
-  if (rotate_row_labels) {
-    GogObject *object = gog_object_get_child_by_role (
-      chart, gog_object_find_role_by_name (chart, "X-Axis"));
-    style = gog_styled_object_get_style (GOG_STYLED_OBJECT (object));
-    gog_style_set_text_angle (style, 90.0);
-  }
-
-  if (major_grid || minor_grid) {
-    GogObject *object;
-    gog_object_add_by_name(chart,"Grid", NULL);
-    object = gog_object_get_child_by_role (chart, gog_object_find_role_by_name (chart, "Y-Axis"));
-    if (major_grid)
-      gog_object_add_by_name (GOG_OBJECT (object),"MajorGrid", NULL);
-    if (minor_grid)
-      gog_object_add_by_name (GOG_OBJECT (object),"MinorGrid", NULL);
-  }
-
-  set_chart_titles_from_hash (chart, eb);
-  set_chart_axis_labels_from_hash (chart, eb);
-
-  // we need to do this twice for the linechart... :p
-  gog_object_update (GOG_OBJECT (graph));
-
-  add_pixbuf_graph_widget (eb, graph);
+  add_pixbuf_graph_widget( eb, gnc_html_graph_gog_create_linechart( &lineChartInfo ) );
 
   g_debug("linechart rendered.");
   return TRUE;
@@ -664,111 +445,32 @@ handle_linechart( GncHtml* html, gpointer eb, gpointer unused )
 static gboolean
 handle_scatter( GncHtml* html, gpointer eb, gpointer unused )
 {
-  GogObject *graph, *chart;
-  GogPlot *plot;
-  GogSeries *series;
-  GOData *sliceData;
-  GogStyle *style;
-  int datasize;
-  double *xData, *yData;
-  const gchar *marker_str, *color_str;
-  gboolean fill = FALSE;
+  GncHtmlScatterPlotInfo scatterPlotInfo;
 
   {
     const char *datasizeStr, *xDataStr, *yDataStr;
 
     datasizeStr = gnc_html_get_embedded_param( eb, "datasize" );
-    datasize = atoi( datasizeStr );
+    scatterPlotInfo.datasize = atoi( datasizeStr );
 
     xDataStr = gnc_html_get_embedded_param( eb, "x_data" );
-    xData = read_doubles( xDataStr, datasize );
+    scatterPlotInfo.xData = read_doubles( xDataStr, scatterPlotInfo.datasize );
 
     yDataStr = gnc_html_get_embedded_param( eb, "y_data" );
-    yData = read_doubles( yDataStr, datasize );
+    scatterPlotInfo.yData = read_doubles( yDataStr, scatterPlotInfo.datasize );
 
-    marker_str = gnc_html_get_embedded_param(eb, "marker");
-    color_str = gnc_html_get_embedded_param(eb, "color");
+    scatterPlotInfo.marker_str = gnc_html_get_embedded_param(eb, "marker");
+    scatterPlotInfo.color_str = gnc_html_get_embedded_param(eb, "color");
   }
 
-  if (!create_basic_plot_elements("GogXYPlot", &graph, &chart, &plot))
-  {
-    return FALSE;
-  }
+  scatterPlotInfo.title = (const char *)gnc_html_get_embedded_param(eb, "title"); 
+  scatterPlotInfo.subtitle = (const char *)gnc_html_get_embedded_param(eb, "subtitle");
+  scatterPlotInfo.width = ((GtkHTMLEmbedded*)eb)->width;
+  scatterPlotInfo.height = ((GtkHTMLEmbedded*)eb)->height;
+  scatterPlotInfo.x_axis_label = gnc_html_get_embedded_param(eb, "x_axis_label"),
+  scatterPlotInfo.y_axis_label = gnc_html_get_embedded_param(eb, "y_axis_label");
 
-  series = gog_plot_new_series( plot );
-  style = gog_styled_object_get_style(GOG_STYLED_OBJECT(series));
-
-  sliceData = go_data_vector_val_new( xData, datasize, NULL );
-  gog_series_set_dim( series, 0, sliceData, NULL );
-  go_data_emit_changed (GO_DATA (sliceData));
-
-  sliceData = go_data_vector_val_new( yData, datasize, NULL );
-  gog_series_set_dim( series, 1, sliceData, NULL );
-  go_data_emit_changed (GO_DATA (sliceData));
-
-  /* set marker shape */
-  if (marker_str) {
-    GOMarkerShape shape;
-
-    if (g_str_has_prefix(marker_str, "filled ")) {
-      fill = TRUE;
-      marker_str += 7;
-    }
-    shape = go_marker_shape_from_str(marker_str);
-    if (shape != GO_MARKER_NONE) {
-      style->marker.auto_shape = FALSE;
-      go_marker_set_shape(style->marker.mark, shape);
-    } else {
-      g_warning("cannot parse marker shape [%s]", marker_str);
-    }
-  }
-
-  /* set marker and line colors */
-  if (color_str) {
-    GdkColor color;
-    if (gdk_color_parse(color_str, &color)) {
-      style->marker.auto_outline_color = FALSE;
-      go_marker_set_outline_color(style->marker.mark, GDK_TO_UINT(color));
-      style->line.auto_color = FALSE;
-      style->line.color = GDK_TO_UINT(color);
-    } else {
-      g_warning("cannot parse color [%s]", color_str);
-    }
-  }
-
-  /* set marker fill colors */
-  if (fill) {
-    style->marker.auto_fill_color = style->marker.auto_outline_color;
-    go_marker_set_fill_color(style->marker.mark,
-                             go_marker_get_outline_color(style->marker.mark));
-  } else {
-    GogStyle *chart_style =
-      gog_styled_object_get_style(GOG_STYLED_OBJECT(chart));
-
-    if (chart_style->fill.type == GOG_FILL_STYLE_PATTERN
-        && chart_style->fill.pattern.pattern == GO_PATTERN_SOLID) {
-      style->marker.auto_fill_color = FALSE;
-      go_marker_set_fill_color(style->marker.mark,
-                               chart_style->fill.pattern.back);
-    } else if (chart_style->fill.type == GOG_FILL_STYLE_PATTERN
-               && chart_style->fill.pattern.pattern
-               == GO_PATTERN_FOREGROUND_SOLID) {
-      style->marker.auto_fill_color = FALSE;
-      go_marker_set_fill_color(style->marker.mark,
-                               chart_style->fill.pattern.fore);
-    } else {
-      g_warning("fill color of markers can only be set like a solid fill "
-                "pattern of the chart");
-    }
-  }
-
-  set_chart_titles_from_hash(chart, eb);
-  set_chart_axis_labels_from_hash(chart, eb);
-
-  // And twice for the scatter, too... :p
-  gog_object_update(GOG_OBJECT(graph));
-
-  add_pixbuf_graph_widget (eb, graph);
+  add_pixbuf_graph_widget( eb, gnc_html_graph_gog_create_scatterplot( &scatterPlotInfo ) );
 
   return TRUE;
 }
