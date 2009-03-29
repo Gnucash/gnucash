@@ -184,7 +184,7 @@ gnc_ui_file_access( int type )
 	GtkButton* op;
 	GtkWidget* align;
 	GtkFileChooserWidget* fileChooser;
-	GtkFileChooserAction fileChooserAction;
+	GtkFileChooserAction fileChooserAction = GTK_FILE_CHOOSER_ACTION_OPEN;
 	GList* list;
 	GList* node;
 	GtkWidget* uri_type_container;
