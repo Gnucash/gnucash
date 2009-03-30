@@ -210,11 +210,6 @@ EXTRA_DIST = \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 
-if !GTKHTML_USES_GTKPRINT
-  AM_CPPFLAGS += ${GNOME_PRINT_CFLAGS}
-  libgncmod_gnome_utils_la_LIBADD += ${GNOME_PRINT_LIBS}
-endif
-
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of

@@ -104,6 +104,12 @@ libgncmod_html_la_LIBADD = \
   ${QOF_LIBS} \
   ${GOFFICE_LIBS} \
   ${REGEX_LIBS}
+
+if !GTKHTML_USES_GTKPRINT
+  AM_CPPFLAGS += ${GNOME_PRINT_CFLAGS}
+  libgncmod_html_la_LIBADD += ${GNOME_PRINT_LIBS}
+endif
+
 endif
 
 if BUILDING_FROM_SVN

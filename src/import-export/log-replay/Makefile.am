@@ -33,7 +33,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/import-export \
   ${QOF_CFLAGS} \
   ${GNOME_CFLAGS} \
-  ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS}
