@@ -73,15 +73,19 @@ typedef gboolean (* GncHTMLStreamCB)(const gchar* location, gchar** data, int* d
 typedef gboolean (* GncHTMLUrlCB)(const gchar* location, const gchar* label,
                                   gboolean new_window, GNCURLResult* result);
 
-/* Register a new URLType.
+/**
+ * Registers a new URLType.
  * returns TRUE if succesful, FALSE if type already exists.
  *
- * protocol should be an empty string if there is no corresponding protocol.
- * if protocol is NULL, this function returns FALSE.
+ * @param type New URL type
+ * @param prococol Protocol - should be an empty string if there is no corresponding protocol.
+ * @return TRUE if successful, FALSE if type already exists or protocol is NULL.
  */
 gboolean gnc_html_register_urltype( URLType type, const gchar* protocol );
 
-/* Initialize the html subsystem */
+/**
+ * Initializes the html subsystem
+ */
 void gnc_html_initialize( void );
 
 gchar* gnc_html_encode_string( const gchar* in );
@@ -154,21 +158,82 @@ struct _GncHtml
 	GncHtmlPrivate* priv;
 };
 
-GncHtml* gnc_html_new( GtkWindow* parent );
+/**
+ * Destroys a GncHtml object.
+ *
+ * @param html GncHtml object to destroy
+ */
 void gnc_html_destroy( GncHtml* html );
+
+/**
+ * Displays a URL in a GncHtml object.
+ *
+ * @param html GncHtml object
+ */
 void gnc_html_show_url( GncHtml* html, URLType type, const gchar* location, 
 						const gchar* label, gboolean new_window_hint );
+
+/**
+ * Displays an HTML string in a GncHtml object.
+ *
+ * @param html GncHtml object
+ */
 void gnc_html_show_data( GncHtml* html, const gchar* data, int datalen );
+
+/**
+ * Reloads the current GncHtml object.
+ *
+ * @param html GncHtml object
+ */
 void gnc_html_reload( GncHtml* html );
+
+/**
+ * 
+ * @param html GncHtml object
+ */
 void gnc_html_copy( GncHtml* html );
+
+/**
+ *
+ * @param html GncHtml object
+ */
 gboolean gnc_html_export( GncHtml* html, const gchar* file );
+
+/**
+ *
+ * @param html GncHtml object
+ */
 void gnc_html_print( GncHtml* html );
+
+/**
+ *
+ * @param html GncHtml object
+ */
 void gnc_html_cancel( GncHtml* html );
+
+/**
+ *
+ * @param html GncHtml object
+ */
 URLType gnc_html_parse_url( GncHtml* html, const gchar* url, 
 							gchar** url_location, gchar** url_label );
 
+/**
+ *
+ * @param html GncHtml object
+ */
 gnc_html_history* gnc_html_get_history( GncHtml* html );
+
+/**
+ *
+ * @param html GncHtml object
+ */
 GtkWidget* gnc_html_get_widget( GncHtml* html );
+
+/**
+ *
+ * @param html GncHtml object
+ */
 void gnc_html_set_parent( GncHtml* html, GtkWindow* parent );
 
 /* setting callbacks */
@@ -197,7 +262,5 @@ void gnc_html_register_url_handler( URLType url_type, GncHTMLUrlCB hand );
 void gnc_html_unregister_url_handler( URLType url_type );
 
 const gchar* gnc_html_get_embedded_param( gpointer eb, const gchar* param_name );
-
-void show_type_signals( GType t );
 
 #endif

@@ -174,7 +174,6 @@ gnc_html_gtkmozembed_init( GncHtmlGtkmozembed* self )
 #endif
 
 	printf( "GTK_TYPE_MOZ_EMBED:\n" );
-	show_type_signals( GTK_TYPE_MOZ_EMBED );
 
 	LEAVE("retval %p", self);
 }

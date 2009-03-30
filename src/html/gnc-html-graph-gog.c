@@ -212,6 +212,7 @@ gnc_html_graph_gog_create_piechart( GncHtmlPieChartInfo* info )
 	GogPlot *plot;
 	GogSeries *series;
 	GOData *labelData, *sliceData;
+	GdkPixbuf* pixbuf;
 
 	if( !create_basic_plot_elements( "GogPiePlot", &graph, &chart, &plot ) ) {
 		return NULL;
@@ -233,7 +234,9 @@ gnc_html_graph_gog_create_piechart( GncHtmlPieChartInfo* info )
 	// fixme: colors
 	set_chart_titles( chart, info->title, info->subtitle );
 
-	return create_graph_pixbuf( graph, info->width, info->height );
+	pixbuf = create_graph_pixbuf( graph, info->width, info->height );
+
+	return pixbuf;
 }
 
 /**

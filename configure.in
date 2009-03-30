@@ -515,7 +515,20 @@ AC_SUBST(GCONF_LIBS)
 ### --------------------------------------------------------------------------
 ### look for webkit
 
-PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.0")
+AC_ARG_ENABLE(webkit,
+  [AS_HELP_STRING([--enable-webkit],[build with the webkit HTML engine])],
+  [case "${enableval}" in
+     yes) want_webkit=true ;;
+     no)  want_webkit=false ;;
+     *) want_webkit=false ;;
+   esac],
+   [want_webkit=false])
+if test x${want_webkit} = xtrue
+then
+  PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.0")
+  AC_DEFINE(WANT_WEBKIT,1,[Use webkit instead of gtkhtml])
+fi
+AM_CONDITIONAL(HTML_USING_WEBKIT, test x${want_webkit} = xtrue)
 AC_SUBST(WEBKIT_CFLAGS)
 AC_SUBST(WEBKIT_LIBS)
 

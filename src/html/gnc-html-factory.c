@@ -28,7 +28,7 @@
 #include "gnc-html.h"
 #include "gnc-html-gtkhtml.h"
 #include "gnc-html-webkit.h"
-#include "gnc-html-gtkmozembed.h"
+//#include "gnc-html-gtkmozembed.h"
 #include "qoflog.h"
 #include "gnc-engine.h"
 
@@ -39,6 +39,12 @@ static QofLogModule log_module = GNC_MOD_HTML;
 
 GncHtml* gnc_html_factory_create_html( void )
 {
+#ifdef WANT_WEBKIT
+	return gnc_html_webkit_new();
+#else
+	return gnc_html_gtkhtml_new();
+#endif
+#if 0
 	const gchar* html_type = g_getenv( "GNC_HTML" );
 
 	if( html_type == NULL ) {
@@ -52,4 +58,5 @@ GncHtml* gnc_html_factory_create_html( void )
 	} else {
 		return gnc_html_gtkhtml_new();
 	}
+#endif
 }

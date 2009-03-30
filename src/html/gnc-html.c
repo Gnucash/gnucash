@@ -40,16 +40,12 @@
 #include <regex.h>
 #include <libguile.h>
 
-#include <gtkhtml/gtkhtml.h>
-#include <gtkhtml/gtkhtml-embedded.h>
-
 #include "Account.h"
 #include "print-session.h"
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
 #include "gnc-html.h"
 #include "gnc-html-history.h"
-//#include "gnc-html-graph-gog.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 
@@ -209,6 +205,7 @@ gnc_html_parse_url( GncHtml* self, const gchar* url,
 	URLType retval;
 	GncHtmlPrivate* priv = GNC_HTML_GET_PRIVATE(self);
 
+	g_return_val_if_fail( self != NULL, NULL );
 	g_return_val_if_fail( GNC_IS_HTML(self), NULL );
 
 	DEBUG( "parsing %s, base_location %s",
@@ -307,9 +304,14 @@ gnc_html_parse_url( GncHtml* self, const gchar* url,
 void
 gnc_html_show_data( GncHtml* self, const gchar* data, int datalen )
 {
+	g_return_if_fail( self != NULL );
 	g_return_if_fail( GNC_IS_HTML(self) );
 
-	GNC_HTML_GET_CLASS(self)->show_data( self, data, datalen );
+	if( GNC_HTML_GET_CLASS(self)->show_data != NULL ) {
+		GNC_HTML_GET_CLASS(self)->show_data( self, data, datalen );
+	} else {
+		DEBUG( "'show_data' not implemented" );
+	}
 }
 
 
@@ -326,9 +328,14 @@ gnc_html_show_url( GncHtml* self, URLType type,
                   const gchar* location, const gchar* label,
                   gboolean new_window_hint )
 {
+	g_return_if_fail( self != NULL );
 	g_return_if_fail( GNC_IS_HTML(self) );
 
-	GNC_HTML_GET_CLASS(self)->show_url( self, type, location, label, new_window_hint );
+	if( GNC_HTML_GET_CLASS(self)->show_url != NULL ) {
+		GNC_HTML_GET_CLASS(self)->show_url( self, type, location, label, new_window_hint );
+	} else {
+		DEBUG( "'show_url' not implemented" );
+	}
 }
 
 
@@ -340,9 +347,14 @@ gnc_html_show_url( GncHtml* self, URLType type,
 void
 gnc_html_reload( GncHtml* self )
 {
+	g_return_if_fail( self != NULL );
 	g_return_if_fail( GNC_IS_HTML(self) );
 
-	GNC_HTML_GET_CLASS(self)->reload( self );
+	if( GNC_HTML_GET_CLASS(self)->reload != NULL ) {
+		GNC_HTML_GET_CLASS(self)->reload( self );
+	} else {
+		DEBUG( "'reload' not implemented" );
+	}
 }
 
 /********************************************************************
@@ -353,9 +365,14 @@ gnc_html_reload( GncHtml* self )
 void
 gnc_html_cancel( GncHtml* self )
 {
+	g_return_if_fail( self != NULL );
 	g_return_if_fail( GNC_IS_HTML(self) );
 
-	GNC_HTML_GET_CLASS(self)->cancel( self );
+	if( GNC_HTML_GET_CLASS(self)->cancel != NULL ) {
+		GNC_HTML_GET_CLASS(self)->cancel( self );
+	} else {
+		DEBUG( "'cancel' not implemented" );
+	}
 }
 
 
@@ -367,6 +384,9 @@ gnc_html_cancel( GncHtml* self )
 void
 gnc_html_destroy( GncHtml* self )
 {
+	g_return_if_fail( self != NULL );
+	g_return_if_fail( GNC_IS_HTML(self) );
+
 	g_object_unref( G_OBJECT(self) );
 }
 
@@ -374,6 +394,8 @@ void
 gnc_html_set_urltype_cb( GncHtml* self, GncHTMLUrltypeCB urltype_cb )
 {
 	GncHtmlPrivate* priv;
+
+	g_return_if_fail( self != NULL );
 	g_return_if_fail( GNC_IS_HTML(self) );
 
 	priv = GNC_HTML_GET_PRIVATE(self);
@@ -384,6 +406,8 @@ void
 gnc_html_set_load_cb( GncHtml* self, GncHTMLLoadCB load_cb, gpointer data )
 {
 	GncHtmlPrivate* priv;
+
+	g_return_if_fail( self != NULL );
 	g_return_if_fail( GNC_IS_HTML(self) );
 
 	priv = GNC_HTML_GET_PRIVATE(self);
@@ -395,6 +419,8 @@ void
 gnc_html_set_flyover_cb( GncHtml* self, GncHTMLFlyoverCB flyover_cb, gpointer data )
 {
 	GncHtmlPrivate* priv;
+
+	g_return_if_fail( self != NULL );
 	g_return_if_fail( GNC_IS_HTML(self) );
 
 	priv = GNC_HTML_GET_PRIVATE(self);
@@ -406,6 +432,8 @@ void
 gnc_html_set_button_cb( GncHtml* self, GncHTMLButtonCB button_cb, gpointer data )
 {
 	GncHtmlPrivate* priv;
+
+	g_return_if_fail( self != NULL );
 	g_return_if_fail( GNC_IS_HTML(self) );
 
 	priv = GNC_HTML_GET_PRIVATE(self);
@@ -416,9 +444,14 @@ gnc_html_set_button_cb( GncHtml* self, GncHTMLButtonCB button_cb, gpointer data 
 void
 gnc_html_copy( GncHtml* self )
 {
+	g_return_if_fail( self != NULL );
 	g_return_if_fail( GNC_IS_HTML(self) );
 
-	GNC_HTML_GET_CLASS(self)->copy( self );
+	if( GNC_HTML_GET_CLASS(self)->copy != NULL ) {
+		GNC_HTML_GET_CLASS(self)->copy( self );
+	} else {
+		DEBUG( "'copy' not implemented" );
+	}
 }
 
 /**************************************************************
@@ -428,23 +461,36 @@ gnc_html_copy( GncHtml* self )
 gboolean
 gnc_html_export( GncHtml* self, const gchar* filepath )
 {
+	g_return_val_if_fail( self != NULL, FALSE );
 	g_return_val_if_fail( GNC_IS_HTML(self), FALSE );
 
-	return GNC_HTML_GET_CLASS(self)->export( self, filepath );
+	if( GNC_HTML_GET_CLASS(self)->export != NULL ) {
+		return GNC_HTML_GET_CLASS(self)->export( self, filepath );
+	} else {
+		DEBUG( "'export' not implemented" );
+		return FALSE;
+	}
 }
 
 void
 gnc_html_print( GncHtml* self )
 {
+	g_return_if_fail( self != NULL );
 	g_return_if_fail( GNC_IS_HTML(self) );
 
-	GNC_HTML_GET_CLASS(self)->print( self );
+	if( GNC_HTML_GET_CLASS(self)->print != NULL ) {
+		GNC_HTML_GET_CLASS(self)->print( self );
+	} else {
+		DEBUG( "'print' not implemented" );
+	}
 }
 
 gnc_html_history *
 gnc_html_get_history( GncHtml* self )
 {
+	g_return_val_if_fail( self != NULL, NULL );
 	g_return_val_if_fail( GNC_IS_HTML(self), NULL );
+
 	return GNC_HTML_GET_PRIVATE(self)->history;
 }
 
@@ -452,15 +498,23 @@ gnc_html_get_history( GncHtml* self )
 GtkWidget *
 gnc_html_get_widget( GncHtml* self )
 {
+	g_return_val_if_fail( self != NULL, NULL );
 	g_return_val_if_fail( GNC_IS_HTML(self), NULL );
+
 	return GNC_HTML_GET_PRIVATE(self)->container;
 }
 
 void
 gnc_html_set_parent( GncHtml* self, GtkWindow* parent )
 {
+	g_return_if_fail( self != NULL );
 	g_return_if_fail( GNC_IS_HTML(self) );
-	GNC_HTML_GET_CLASS(self)->set_parent( self, parent );
+
+	if( GNC_HTML_GET_CLASS(self)->set_parent != NULL ) {
+		GNC_HTML_GET_CLASS(self)->set_parent( self, parent );
+	} else {
+		DEBUG( "'set_parent' not implemented" );
+	}
 }
 
 /* Register the URLType if it doesn't already exist.
@@ -887,18 +941,4 @@ void
 gnc_html_unregister_url_handler( URLType url_type )
 {
 	g_hash_table_remove( gnc_html_url_handlers, url_type );
-}
-
-void show_type_signals( GType t )
-{
-	guint* signals;
-	guint n_ids;
-	guint i;
-	GSignalQuery sig;
-
-	signals = g_signal_list_ids( t, &n_ids );
-	for( i = 0; i < n_ids; i++ ) {
-		g_signal_query( signals[i], &sig );
-		printf( "Signal: %s\n", sig.signal_name );
-	}
 }

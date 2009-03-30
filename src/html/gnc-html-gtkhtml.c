@@ -167,8 +167,6 @@ gnc_html_gtkhtml_init( GncHtmlGtkhtml* self )
 
 	gtk_html_load_empty(GTK_HTML(priv->html));
 
-	show_type_signals( GTK_TYPE_HTML );
-
 	LEAVE("retval %p", self);
 }
 

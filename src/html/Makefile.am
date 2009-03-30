@@ -5,6 +5,7 @@ pkglib_LTLIBRARIES = libgncmod-html.la
 
 # Note that src/gnome-utils CANNOT depend on src/gnome!
 
+if HTML_USING_WEBKIT
 AM_CPPFLAGS = \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
@@ -15,40 +16,61 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/lib/libc \
-  -I/usr/include/xulrunner/gtkembedmoz \
+  ${QOF_CFLAGS} \
+  ${GLIB_CFLAGS} \
+  ${GTK_CFLAGS} \
+  ${GNOME_CFLAGS} \
+  ${GOFFICE_CFLAGS} \
+  ${WEBKIT_CFLAGS}
+else
+AM_CPPFLAGS = \
+  -I${top_srcdir}/src/core-utils \
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/backend/file \
+  -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src \
+  -I${top_builddir}/src \
+  -I${top_srcdir}/lib/libc \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
-  ${GOFFICE_CFLAGS} \
-  ${WEBKIT_CFLAGS}
+  ${GOFFICE_CFLAGS}
+endif
 
+if HTML_USING_WEBKIT
+libgncmod_html_la_SOURCES = \
+  gnc-html.c \
+  gnc-html-history.c \
+  gnc-html-graph-gog.c \
+  gnc-html-webkit.c \
+  gnc-html-graph-gog-webkit.c \
+  gnc-html-factory.c \
+  swig-gnc-html.c
+else
 libgncmod_html_la_SOURCES = \
   gnc-html.c \
   gnc-html-history.c \
   gnc-html-gtkhtml.c \
   gnc-html-graph-gog.c \
   gnc-html-graph-gog-gtkhtml.c \
-  gnc-html-webkit.c \
-  gnc-html-graph-gog-webkit.c \
-  gnc-html-gtkmozembed.c \
-  gnc-html-graph-gog-gtkmozembed.c \
   gnc-html-factory.c \
   swig-gnc-html.c
+endif
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   gnc-html-graph-gog.h \
-  gnc-html-graph-gog-gtkhtml.h \
-  gnc-html-graph-gog-webkit.h \
-  gnc-html-graph-gog-gtkmozembed.h \
   gnc-html-history.h \
   gnc-html.h \
   gnc-html-factory.h
 
 libgncmod_html_la_LDFLAGS = -avoid-version
 
+if HTML_USING_WEBKIT
 libgncmod_html_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
@@ -57,9 +79,7 @@ libgncmod_html_la_LIBADD = \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \
-  -L/usr/lib/xulrunner -lgtkembedmoz \
   ${GNOME_LIBS} \
-  ${GTKHTML_LIBS} \
   ${GDK_PIXBUF_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
@@ -67,6 +87,24 @@ libgncmod_html_la_LIBADD = \
   ${GOFFICE_LIBS} \
   ${REGEX_LIBS} \
   ${WEBKIT_LIBS}
+else
+libgncmod_html_la_LIBADD = \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/backend/file/libgnc-backend-xml-utils.la \
+  ${top_builddir}/src/calculation/libgncmod-calculation.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  $(top_builddir)/lib/libc/libc-missing.la \
+  ${GNOME_LIBS} \
+  ${GTKHTML_LIBS} \
+  ${GDK_PIXBUF_LIBS} \
+  ${GLIB_LIBS} \
+  ${DB_LIBS} \
+  ${QOF_LIBS} \
+  ${GOFFICE_LIBS} \
+  ${REGEX_LIBS}
+endif
 
 if BUILDING_FROM_SVN
 swig-gnc-html.c: gnc-html.i gnc-html.h \

@@ -67,8 +67,10 @@
  * - general graph cleanup
  **/
 
+/* indicates the debugging module that this .o belongs to.  */
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.html.graph.gog.webkit"
+static QofLogModule log_module = GNC_MOD_HTML;
 
 static int handle_piechart( GncHtml* html, gpointer eb, gpointer d );
 static int handle_barchart( GncHtml* html, gpointer eb, gpointer d );
@@ -213,6 +215,24 @@ get_string_param( gchar** str, const gchar* name )
 	return val;
 }
 
+static gchar*
+convert_pixbuf_to_base64_string( GdkPixbuf* pixbuf )
+{
+	gchar* pixel_buffer;
+	gsize pixel_buffer_size;
+	GError* error = NULL;
+	gchar* base64_buf;
+
+    if( !gdk_pixbuf_save_to_buffer( pixbuf, &pixel_buffer, &pixel_buffer_size, "png",
+									&error, NULL ) ) {
+		PERR( "Unable to save pixbuf to buffer: %s\n", error->message );
+		return NULL;
+	}
+
+	base64_buf = g_base64_encode( pixel_buffer, pixel_buffer_size );
+	return base64_buf;
+}
+
 /*
  * Handle the following parameters:
  * title: text
@@ -234,7 +254,7 @@ handle_piechart( GncHtml* html, gpointer eb, gpointer d )
 	gchar* p;
 	gchar* p_end;
 	gchar* temp_str;
-	gchar* filename;
+	gchar* base64_buf;
 
 	pieChartInfo.width = get_int_value( &object_info, "width" );
 	pieChartInfo.height = get_int_value( &object_info, "height" );
@@ -260,9 +280,13 @@ handle_piechart( GncHtml* html, gpointer eb, gpointer d )
 	if( pieChartInfo.title != NULL ) g_free( (gchar*)pieChartInfo.title );
 	if( pieChartInfo.subtitle != NULL ) g_free( (gchar*)pieChartInfo.subtitle );
 
-	filename = "/tmp/piechart.png";
-	gdk_pixbuf_savev( pixbuf, filename, "png", NULL, NULL, NULL );
-	*pResult = g_strdup_printf( "<img src=\"%s\" alt=\"Cannot display piechart\"/>", filename );
+	base64_buf = convert_pixbuf_to_base64_string( pixbuf );
+	if( base64_buf == NULL ) {
+		return FALSE;
+	}
+
+	*pResult = g_strdup_printf( "<img src=\"data:image/png;base64,%s \" alt=\"Cannot display piechart\"/>", base64_buf );
+	g_free( base64_buf );
 
 	g_debug("piechart rendered.");
 	return TRUE;
@@ -290,7 +314,7 @@ handle_barchart( GncHtml* html, gpointer eb, gpointer d )
 	gchar* p;
 	gchar* p_end;
 	gchar* temp_str;
-	gchar* filename;
+	gchar* base64_buf;
 
 	barChartInfo.width = get_int_value( &object_info, "width" );
 	barChartInfo.height = get_int_value( &object_info, "height" );
@@ -328,9 +352,12 @@ handle_barchart( GncHtml* html, gpointer eb, gpointer d )
 	if( barChartInfo.x_axis_label != NULL ) g_free( (gchar*)barChartInfo.x_axis_label );
 	if( barChartInfo.y_axis_label != NULL ) g_free( (gchar*)barChartInfo.y_axis_label );
 
-	filename = "/tmp/barchart.png";
-	gdk_pixbuf_savev( pixbuf, filename, "png", NULL, NULL, NULL );
-	*pResult = g_strdup_printf( "<img src=\"%s\" alt=\"Cannot display barchart\"/>", filename );
+	base64_buf = convert_pixbuf_to_base64_string( pixbuf );
+	if( base64_buf == NULL ) {
+		return FALSE;
+	}
+
+	*pResult = g_strdup_printf( "<img src=\"data:image/png;base64,%s \" alt=\"Cannot display barchart\"/>", base64_buf );
 
 	g_debug("barchart rendered.");
 	return TRUE;
@@ -362,7 +389,7 @@ handle_linechart( GncHtml* html, gpointer eb, gpointer d )
 	gchar* p;
 	gchar* p_end;
 	gchar* temp_str;
-	gchar* filename;
+	gchar* base64_buf;
 
 	lineChartInfo.width = get_int_value( &object_info, "width" );
 	lineChartInfo.height = get_int_value( &object_info, "height" );
@@ -403,9 +430,12 @@ handle_linechart( GncHtml* html, gpointer eb, gpointer d )
 	if( lineChartInfo.x_axis_label != NULL ) g_free( (gchar*)lineChartInfo.x_axis_label );
 	if( lineChartInfo.y_axis_label != NULL ) g_free( (gchar*)lineChartInfo.y_axis_label );
 
-	filename = "/tmp/linechart.png";
-	gdk_pixbuf_savev( pixbuf, filename, "png", NULL, NULL, NULL );
-	*pResult = g_strdup_printf( "<img src=\"%s\" alt=\"Cannot display linechart\"/>", filename );
+	base64_buf = convert_pixbuf_to_base64_string( pixbuf );
+	if( base64_buf == NULL ) {
+		return FALSE;
+	}
+
+	*pResult = g_strdup_printf( "<img src=\"data:image/png;base64,%s \" alt=\"Cannot display linechart\"/>", base64_buf );
 
 	g_debug("linechart rendered.");
 	return TRUE;
@@ -422,7 +452,7 @@ handle_scatter( GncHtml* html, gpointer eb, gpointer d )
 	gchar* p;
 	gchar* p_end;
 	gchar* temp_str;
-	gchar* filename;
+	gchar* base64_buf;
 
 	scatterPlotInfo.width = get_int_value( &object_info, "width" );
 	scatterPlotInfo.height = get_int_value( &object_info, "height" );
@@ -446,9 +476,12 @@ handle_scatter( GncHtml* html, gpointer eb, gpointer d )
 	if( scatterPlotInfo.title != NULL ) g_free( (gchar*)scatterPlotInfo.title );
 	if( scatterPlotInfo.subtitle != NULL ) g_free( (gchar*)scatterPlotInfo.subtitle );
 
-	filename = "/tmp/scatterplot.png";
-	gdk_pixbuf_savev( pixbuf, filename, "png", NULL, NULL, NULL );
-	*pResult = g_strdup_printf( "<img src=\"%s\" alt=\"Cannot display scatterplot\"/>", filename );
+	base64_buf = convert_pixbuf_to_base64_string( pixbuf );
+	if( base64_buf == NULL ) {
+		return FALSE;
+	}
+
+	*pResult = g_strdup_printf( "<img src=\"data:image/png;base64,%s \" alt=\"Cannot display scatterplot\"/>", base64_buf );
 
 	g_debug("scatterplot rendered.");
 	return TRUE;

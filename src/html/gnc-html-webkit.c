@@ -37,11 +37,11 @@
 #include <unistd.h>
 #include <regex.h>
 #include <libguile.h>
+#include <dlfcn.h>
 
 #include <webkit/webkit.h>
 
 #include "Account.h"
-#include "print-session.h"
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
 #include "gnc-html.h"
@@ -58,7 +58,6 @@ static void gnc_html_webkit_finalize( GObject* obj );
 static void gnc_html_webkit_class_init( GncHtmlWebkitClass* klass );
 static void gnc_html_webkit_init( GncHtmlWebkit* gs );
 
-//#define GNC_HTML_WEBKIT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_HTML_WEBKIT, GncHtmlWebkitPrivate))
 #define GNC_HTML_WEBKIT_GET_PRIVATE(o) (GNC_HTML_WEBKIT(o)->priv)
 
 #include "gnc-html-webkit-p.h"
@@ -169,11 +168,6 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
 		    self);
 #endif
 
-	printf( "WEBKIT_TYPE_WEB_VIEW:\n" );
-	show_type_signals( WEBKIT_TYPE_WEB_VIEW );
-	printf( "WEBKIT_TYPE_WEB_FRAME:\n" );
-	show_type_signals( WEBKIT_TYPE_WEB_FRAME );
-
 	LEAVE("retval %p", self);
 }
 
@@ -189,9 +183,9 @@ gnc_html_webkit_class_init( GncHtmlWebkitClass* klass )
 	html_class->show_url = impl_webkit_show_url;
 	html_class->show_data = impl_webkit_show_data;
 	html_class->reload = impl_webkit_reload;
-	html_class->copy = impl_webkit_copy;
-	html_class->export = impl_webkit_export;
-//	html_class->print = impl_webkit_print;
+//	html_class->copy = impl_webkit_copy;
+//	html_class->export = impl_webkit_export;
+	html_class->print = impl_webkit_print;
 	html_class->cancel = impl_webkit_cancel;
 	html_class->set_parent = impl_webkit_set_parent;
 
@@ -650,9 +644,14 @@ gnc_html_open_scm( GncHtmlWebkit* self, const gchar * location,
 static void
 impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
 {
-	GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+	GncHtmlWebkitPrivate* priv;
+
+	g_return_if_fail( self != NULL );
+	g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
 
 	DEBUG( "datalen %d, data %20.20s", datalen, data );
+
+	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 	webkit_web_view_load_html_string( priv->web_view, data, "base-uri" );
 }
 
@@ -671,12 +670,13 @@ impl_webkit_show_url( GncHtml* self, URLType type,
 {
 	GncHTMLUrlCB url_handler;
 	gboolean new_window;
-	GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+	GncHtmlWebkitPrivate* priv;
 
-	DEBUG(" ");
+	g_return_if_fail( self != NULL );
+	g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
+	g_return_if_fail( location != NULL );
 
-	if( self == NULL ) return;
-	if( location == NULL ) return;
+	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
 	/* make sure it's OK to show this URL type in this window */
 	if( new_window_hint == 0 ) {
@@ -821,10 +821,13 @@ impl_webkit_show_url( GncHtml* self, URLType type,
 static void
 impl_webkit_reload( GncHtml* self )
 {
-	GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 	gnc_html_history_node * n;
+	GncHtmlWebkitPrivate* priv;
 
-	DEBUG(" ");
+	g_return_if_fail( self != NULL );
+	g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
+
+	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 	n = gnc_html_history_get_current( priv->base.history );
 	if( n != NULL ) {
 		gnc_html_show_url( self, n->type, n->location, n->label, 0 );
@@ -862,7 +865,13 @@ webkit_cancel_helper(gpointer key, gpointer value, gpointer user_data)
 static void
 impl_webkit_cancel( GncHtml* self )
 {
-	GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+	GncHtmlWebkitPrivate* priv;
+
+	g_return_if_fail( self != NULL );
+	g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
+
+	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+
 	/* remove our own references to requests */
 	//gnc_http_cancel_requests( priv->http );
 
@@ -875,9 +884,9 @@ impl_webkit_copy( GncHtml* self )
 	GncHtmlWebkitPrivate* priv;
 
 	g_return_if_fail( self != NULL );
+	g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
 
 	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-//	gtk_html_copy( GTK_HTML(priv->html) );
 	g_assert( FALSE );
 }
 
@@ -908,6 +917,7 @@ impl_webkit_export( GncHtml* self, const char *filepath )
 	GncHtmlWebkitPrivate* priv;
 
 	g_return_val_if_fail( self != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_HTML_WEBKIT(self), FALSE );
 	g_return_val_if_fail( filepath != NULL, FALSE );
 
 	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
@@ -922,64 +932,27 @@ impl_webkit_export( GncHtml* self, const char *filepath )
 	return TRUE;
 }
 
-#ifdef WEBKIT_USES_GTKPRINT
-static void
-draw_page_cb(GtkPrintOperation *operation, GtkPrintContext *context,
-             gint page_nr, gpointer user_data)
-{
-    GncHtmlWebkit* self = GNC_HTML_WEBKIT(user_data);
-	GncHtmlWebkitPrivate* priv;
-
-	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-//    gtk_html_print_page( GTK_HTML(priv->html), context );
-	g_assert( FALSE );
-}
-
 static void
 impl_webkit_print( GncHtml* self )
 {
-    GtkPrintOperation *print;
-    GtkPrintOperationResult res;
 	GncHtmlWebkitPrivate* priv;
+	static void (*webkit_web_frame_print)( WebKitWebFrame* frame ) = NULL;
+	WebKitWebFrame* frame;
+
+	/*  HACK ALERT
+	 *
+	 * The api to print isn't exported, but exists and works, so let's dig for it.
+	 */
+	if( webkit_web_frame_print == NULL ) {
+		void* handle = dlopen( "/usr/lib/libwebkit-1.0.so", RTLD_LAZY );
+		webkit_web_frame_print = dlsym( handle, "webkit_web_frame_print" );
+		dlclose( handle );
+	}
 
 	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-    print = gtk_print_operation_new();
-
-    gnc_print_operation_init(print);
-    gtk_print_operation_set_use_full_page(print, FALSE);
-    gtk_print_operation_set_unit(print, GTK_UNIT_POINTS);
-    gtk_print_operation_set_n_pages(print, 1);
-    g_signal_connect(print, "draw_page", G_CALLBACK(draw_page_cb), self);
-
-    res = gtk_print_operation_run(print, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
-                                  GTK_WINDOW(priv->base.parent), NULL);
-
-    if( res == GTK_PRINT_OPERATION_RESULT_APPLY ) {
-        gnc_print_operation_save_print_settings( print );
-	}
-
-    g_object_unref(print);
+	frame = webkit_web_view_get_main_frame( priv->web_view );
+	webkit_web_frame_print( frame );
 }
-
-#else /* !WEBKIT_USES_GTKPRINT */
-#if 0
-void
-gnc_html_print( GncHtml* html )
-{
-	PrintSession *ps;
-
-	ps = gnc_print_session_create( FALSE );
-	if( ps == NULL ) {
-		/* user cancelled */
-		return;
-	}
-
-//	gtk_html_print( GTK_HTML(html->html), ps->context );
-	g_assert( FALSE );
-	gnc_print_session_done( ps );
-}
-#endif
-#endif /* WEBKIT_USES_GTKPRINT */
 
 static void
 impl_webkit_set_parent( GncHtml* self, GtkWindow* parent )
@@ -987,17 +960,8 @@ impl_webkit_set_parent( GncHtml* self, GtkWindow* parent )
 	GncHtmlWebkitPrivate* priv;
 
 	g_return_if_fail( self != NULL );
+	g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
 
 	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 	priv->base.parent = GTK_WIDGET(parent);
 }
-
-#if 0
-const gchar*
-gnc_html_get_embedded_param( gpointer eb, const gchar* param_name )
-{
-	GtkHTMLEmbedded* gtk_eb = (GtkHTMLEmbedded*)eb;
-
-	return (const gchar *)g_hash_table_lookup(gtk_eb->params, param_name);
-}
-#endif
