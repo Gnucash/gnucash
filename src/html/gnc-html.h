@@ -23,6 +23,12 @@
 #ifndef GNC_HTML_H
 #define GNC_HTML_H
 
+/**
+ * A GncHtml object is an abstract base for an html engine used to display reports and
+ * charts in gnucash.  It must be overridden to create specific objects using specific
+ * html engines (e.g. gtkhtml, webkit).
+ */
+
 #include <glib-object.h>
 
 G_BEGIN_DECLS
@@ -194,45 +200,60 @@ void gnc_html_reload( GncHtml* html );
 void gnc_html_copy( GncHtml* html );
 
 /**
+ * Exports the html to an external file.
  *
  * @param html GncHtml object
+ * @param filename External file name
+ * @param TRUE if successful, FALSE if unsuccessful
  */
-gboolean gnc_html_export( GncHtml* html, const gchar* file );
+gboolean gnc_html_export( GncHtml* html, const gchar* filename );
 
 /**
+ * Prints the report.
  *
  * @param html GncHtml object
  */
 void gnc_html_print( GncHtml* html );
 
 /**
+ * Cancels the current operation
  *
  * @param html GncHtml object
  */
 void gnc_html_cancel( GncHtml* html );
 
 /**
+ * Parses a URL into URI and label
  *
  * @param html GncHtml object
+ * @param url URL
+ * @param url_location Pointer where to store address of string containing main URI
+ * @param url_label Pointer where to store address of string containing label
  */
 URLType gnc_html_parse_url( GncHtml* html, const gchar* url, 
 							gchar** url_location, gchar** url_label );
 
 /**
+ * Returns the history for this html engine
  *
  * @param html GncHtml object
+ * @return History
  */
 gnc_html_history* gnc_html_get_history( GncHtml* html );
 
 /**
+ * Returns the main widget for this html engine
  *
  * @param html GncHtml object
+ * @return Main widget
  */
 GtkWidget* gnc_html_get_widget( GncHtml* html );
 
 /**
+ * Sets the parent window for this html engine.  The engine will be embedded in this parent.
  *
  * @param html GncHtml object
+ * @param parent Parent window
  */
 void gnc_html_set_parent( GncHtml* html, GtkWindow* parent );
 
