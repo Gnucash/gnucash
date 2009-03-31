@@ -20,7 +20,8 @@ libgncmod_log_replay_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${GTK_LIBS} \
-  ${GLIB_LIBS} ${QOF_LIBS}
+  ${GLIB_LIBS} \
+  ${QOF_LIBS}
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \

@@ -68,7 +68,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   ${QOF_CFLAGS} \
   ${GNOME_CFLAGS} \
-  ${GDK_PIXBUF_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS}

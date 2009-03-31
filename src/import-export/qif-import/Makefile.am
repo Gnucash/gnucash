@@ -65,8 +65,7 @@ AM_CPPFLAGS = \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
-  ${GNOME_CFLAGS} \
-  ${GDK_PIXBUF_CFLAGS}
+  ${GNOME_CFLAGS} 
 
 uidir = $(GNC_UI_DIR)
 ui_DATA = \

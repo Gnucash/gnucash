@@ -10,7 +10,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/business/business-core \
   ${QOF_CFLAGS} \
   ${GUILE_INCS} \
-  ${GDK_PIXBUF_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLIB_CFLAGS}

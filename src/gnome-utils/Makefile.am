@@ -19,8 +19,7 @@ AM_CPPFLAGS = \
   ${GTK_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GUILE_INCS} \
-  ${QOF_CFLAGS} \
-  ${GOFFICE_CFLAGS}
+  ${QOF_CFLAGS} 
 
 libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \
@@ -181,13 +180,11 @@ libgncmod_gnome_utils_la_LIBADD = \
   $(top_builddir)/lib/libc/libc-missing.la \
   ${GNOME_LIBS} \
   ${GUILE_LIBS} \
-  ${GDK_PIXBUF_LIBS} \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
   ${QOF_LIBS} \
-  ${GOFFICE_LIBS} \
   ${REGEX_LIBS} \
   ${LIBXML2_LIBS}
 

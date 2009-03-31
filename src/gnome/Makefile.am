@@ -16,7 +16,10 @@ libgnc_gnome_la_LIBADD = \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${GLADE_LIBS} \
-  ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
+  ${GUILE_LIBS} \
+  ${GNOME_LIBS} \
+  ${GLIB_LIBS} \
+  ${QOF_LIBS}
 
 libgnc_gnome_la_SOURCES = \
   swig-gnome.c \
@@ -120,7 +123,6 @@ AM_CPPFLAGS = \
   ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GNOME_CFLAGS} \
-  ${GDK_PIXBUF_CFLAGS} \
   ${GLADE_CFLAGS} \
   $(GLIB_CFLAGS)
 
