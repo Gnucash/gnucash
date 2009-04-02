@@ -59,11 +59,6 @@ GHashTable * gnc_html_proto_to_type_hash = NULL;
 /* hashes an HTML <object classid="ID"> classid to a handler function */
 GHashTable* gnc_html_object_handlers = NULL;
 
-/* hashes an action name from a FORM definition to a handler function.
- * <form method=METHOD action=gnc-action:ACTION-NAME?ACTION-ARGS>
- * action-args is what gets passed to the handler. */
-GHashTable* gnc_html_action_handlers = NULL;
-
 /* hashes handlers for loading different URLType data */
 GHashTable* gnc_html_stream_handlers = NULL;
 
@@ -101,8 +96,8 @@ gnc_html_class_init( GncHtmlClass* klass )
 	klass->show_url = NULL;
 	klass->show_data = NULL;
 	klass->reload = NULL;
-	klass->copy = NULL;
-	klass->export = NULL;
+	klass->copy_to_clipboard = NULL;
+	klass->export_to_file = NULL;
 	klass->print = NULL;
 	klass->cancel = NULL;
 	klass->parse_url = NULL;
@@ -442,32 +437,32 @@ gnc_html_set_button_cb( GncHtml* self, GncHTMLButtonCB button_cb, gpointer data 
 }
 
 void
-gnc_html_copy( GncHtml* self )
+gnc_html_copy_to_clipboard( GncHtml* self )
 {
 	g_return_if_fail( self != NULL );
 	g_return_if_fail( GNC_IS_HTML(self) );
 
-	if( GNC_HTML_GET_CLASS(self)->copy != NULL ) {
-		GNC_HTML_GET_CLASS(self)->copy( self );
+	if( GNC_HTML_GET_CLASS(self)->copy_to_clipboard != NULL ) {
+		GNC_HTML_GET_CLASS(self)->copy_to_clipboard( self );
 	} else {
-		DEBUG( "'copy' not implemented" );
+		DEBUG( "'copy_to_clipboard' not implemented" );
 	}
 }
 
 /**************************************************************
- * gnc_html_export : wrapper around the builtin function in gtkhtml
+ * gnc_html_export_to_file : wrapper around the builtin function in gtkhtml
  **************************************************************/
 
 gboolean
-gnc_html_export( GncHtml* self, const gchar* filepath )
+gnc_html_export_to_file( GncHtml* self, const gchar* filepath )
 {
 	g_return_val_if_fail( self != NULL, FALSE );
 	g_return_val_if_fail( GNC_IS_HTML(self), FALSE );
 
-	if( GNC_HTML_GET_CLASS(self)->export != NULL ) {
-		return GNC_HTML_GET_CLASS(self)->export( self, filepath );
+	if( GNC_HTML_GET_CLASS(self)->export_to_file != NULL ) {
+		return GNC_HTML_GET_CLASS(self)->export_to_file( self, filepath );
 	} else {
-		DEBUG( "'export' not implemented" );
+		DEBUG( "'export_to_file' not implemented" );
 		return FALSE;
 	}
 }
@@ -586,108 +581,6 @@ gnc_build_url (URLType type, const gchar * location, const gchar * label)
     return g_strdup_printf("%s%s%s", type_name, (*type_name ? ":" : ""),
                            (location ? location : ""));
   }
-}
-
-/********************************************************************
- * gnc_html_pack/unpack_form_data
- * convert an encoded arg string to/from a name-value hash table
- ********************************************************************/
-
-GHashTable *
-gnc_html_unpack_form_data(const char * encoding)
-{
-  GHashTable * rv;
-
-  DEBUG(" ");
-  rv = g_hash_table_new(g_str_hash, g_str_equal);
-  gnc_html_merge_form_data(rv, encoding);
-  return rv;
-}
-
-void
-gnc_html_merge_form_data(GHashTable * rv, const char * encoding)
-{
-  char * next_pair = NULL;
-  char * name  = NULL;
-  char * value = NULL;
-  char * extr_name  = NULL;
-  char * extr_value = NULL;
-
-  DEBUG(" ");
-  if(!encoding) {
-    return;
-  }
-  next_pair = g_strdup(encoding);
-
-  while(next_pair) {
-    name = next_pair;
-    if((value = strchr(name, '=')) != NULL) {
-      extr_name = g_strndup(name, value-name);
-      next_pair = strchr(value, '&');
-      if(next_pair) {
-        extr_value = g_strndup(value+1, next_pair-value-1);
-        next_pair++;
-      }
-      else {
-        extr_value = g_strdup(value+1);
-      }
-
-      g_hash_table_insert(rv,
-                          gnc_html_decode_string(extr_name),
-                          gnc_html_decode_string(extr_value));
-      g_free(extr_name);
-      g_free(extr_value);
-    }
-    else {
-      next_pair = NULL;
-    }
-  }
-}
-
-static gboolean
-free_form_data_helper(gpointer k, gpointer v, gpointer user)
-{
-  DEBUG(" ");
-  g_free(k);
-  g_free(v);
-  return TRUE;
-}
-
-void
-gnc_html_free_form_data(GHashTable * d)
-{
-  DEBUG(" ");
-  g_hash_table_foreach_remove(d, free_form_data_helper, NULL);
-  g_hash_table_destroy(d);
-}
-
-static void
-pack_form_data_helper(gpointer key, gpointer val,
-                      gpointer user_data)
-{
-  char * old_str = *(char **)user_data;
-  char * enc_key = gnc_html_encode_string((char *)key);
-  char * enc_val = gnc_html_encode_string((char *)val);
-  char * new_str = NULL;
-
-  DEBUG(" ");
-  if(old_str) {
-    new_str = g_strconcat(old_str, "&", enc_key, "=", enc_val, NULL);
-  }
-  else {
-    new_str = g_strconcat(enc_key, "=", enc_val, NULL);
-  }
-  *(char **)user_data = new_str;
-  g_free(old_str);
-}
-
-char *
-gnc_html_pack_form_data(GHashTable * form_data)
-{
-  char * encoded = NULL;
-  DEBUG(" ");
-  g_hash_table_foreach(form_data, pack_form_data_helper, &encoded);
-  return encoded;
 }
 
 /********************************************************************
@@ -862,41 +755,6 @@ gnc_html_unregister_object_handler( const gchar* classid )
 											(gpointer *)p_keyptr,
 											(gpointer *)p_valptr) ) {
 		g_hash_table_remove( gnc_html_object_handlers, classid );
-		g_free( keyptr );
-	}
-}
-
-void
-gnc_html_register_action_handler( const gchar* actionid,
-								GncHTMLActionCB hand )
-{
-	g_return_if_fail( actionid != NULL );
-
-	if( gnc_html_action_handlers == NULL ) {
-		gnc_html_action_handlers = g_hash_table_new( g_str_hash, g_str_equal );
-	}
-
-	gnc_html_unregister_action_handler( actionid );
-	if( hand != NULL ) {
-		g_hash_table_insert( gnc_html_action_handlers, g_strdup( actionid ), hand );
-	}
-}
-
-void
-gnc_html_unregister_action_handler( const gchar* actionid )
-{
-	gchar* keyptr = NULL;
-	gchar* valptr = NULL;
-	gchar** p_keyptr = &keyptr;
-	gchar** p_valptr = &valptr;
-
-	g_return_if_fail( actionid != NULL );
-
-	if( g_hash_table_lookup_extended( gnc_html_action_handlers,
-											actionid,
-											(gpointer *)p_keyptr,
-											(gpointer *)p_valptr) ) {
-		g_hash_table_remove( gnc_html_action_handlers, actionid );
 		g_free( keyptr );
 	}
 }

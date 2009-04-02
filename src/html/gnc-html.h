@@ -73,8 +73,6 @@ typedef struct
 
 typedef gboolean (* GncHTMLObjectCB)(GncHtml* html, gpointer eb,
                                  gpointer data); 
-typedef int  (* GncHTMLActionCB)(GncHtml* html, const gchar* method,
-                                 const gchar* action, GHashTable* form_data);
 typedef gboolean (* GncHTMLStreamCB)(const gchar* location, gchar** data, int* datalen);
 typedef gboolean (* GncHTMLUrlCB)(const gchar* location, const gchar* label,
                                   gboolean new_window, GNCURLResult* result);
@@ -99,22 +97,10 @@ gchar* gnc_html_decode_string( const gchar* in );
 gchar* gnc_html_escape_newlines( const gchar* in );
 gchar* gnc_html_unescape_newlines( const gchar* in );
 
-/* utilities for dealing with encoded argument strings for forms */
-gchar* gnc_html_pack_form_data( GHashTable* form_data );
-GHashTable* gnc_html_unpack_form_data( const gchar* encoding );
-void gnc_html_merge_form_data( GHashTable* fdata, const gchar* enc );
-void gnc_html_free_form_data( GHashTable* fdata );
-
 /* object handlers deal with <object classid="foo"> objects in HTML.
  * the handlers are looked up at object load time. */
 void gnc_html_register_object_handler( const gchar* classid, GncHTMLObjectCB hand );
 void gnc_html_unregister_object_handler( const gchar* classid );
-
-/* action handlers deal with submitting forms of the type 
- * <FORM action="gnc-action:action?args">.  Normal get/post http:
- * forms are handled as would be expected, with no callback. */
-void gnc_html_register_action_handler( const gchar* action, GncHTMLActionCB hand );
-void gnc_html_unregister_action_handler( const gchar* action );
 
 /* stream handlers load data for particular URLTypes. */
 void gnc_html_register_stream_handler( URLType url_type, GncHTMLStreamCB hand );
@@ -147,8 +133,8 @@ struct _GncHtmlClass
                       gboolean new_window_hint );
 	void (*show_data)( GncHtml* html, const gchar* data, int datalen );
 	void (*reload)( GncHtml* html );
-	void (*copy)( GncHtml* html );
-	gboolean (*export)( GncHtml* html, const gchar* file );
+	void (*copy_to_clipboard)( GncHtml* html );
+	gboolean (*export_to_file)( GncHtml* html, const gchar* file );
 	void (*print)( GncHtml* html );
 	void (*cancel)( GncHtml* html );
 	URLType (*parse_url)( GncHtml* html, const gchar* url, 
@@ -194,10 +180,11 @@ void gnc_html_show_data( GncHtml* html, const gchar* data, int datalen );
 void gnc_html_reload( GncHtml* html );
 
 /**
- * 
+ * Copies the html to the clipboard
+ *
  * @param html GncHtml object
  */
-void gnc_html_copy( GncHtml* html );
+void gnc_html_copy_to_clipboard( GncHtml* html );
 
 /**
  * Exports the html to an external file.
@@ -206,7 +193,7 @@ void gnc_html_copy( GncHtml* html );
  * @param filename External file name
  * @param TRUE if successful, FALSE if unsuccessful
  */
-gboolean gnc_html_export( GncHtml* html, const gchar* filename );
+gboolean gnc_html_export_to_file( GncHtml* html, const gchar* filename );
 
 /**
  * Prints the report.
@@ -267,12 +254,6 @@ void gnc_html_set_button_cb( GncHtml* html, GncHTMLButtonCB button_cb, gpointer 
  * the handlers are looked up at object load time. */
 void gnc_html_register_object_handler( const gchar* classid, GncHTMLObjectCB hand );
 void gnc_html_unregister_object_handler( const gchar* classid );
-
-/* action handlers deal with submitting forms of the type 
- * <FORM action="gnc-action:action?args">.  Normal get/post http:
- * forms are handled as would be expected, with no callback. */
-void gnc_html_register_action_handler( const gchar* action, GncHTMLActionCB hand );
-void gnc_html_unregister_action_handler( const gchar* action );
 
 /* stream handlers load data for particular URLTypes. */
 void gnc_html_register_stream_handler( URLType url_type, GncHTMLStreamCB hand );

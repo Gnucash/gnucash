@@ -3,8 +3,6 @@ SUBDIRS = .
 
 pkglib_LTLIBRARIES = libgncmod-html.la
 
-# Note that src/gnome-utils CANNOT depend on src/gnome!
-
 if HTML_USING_WEBKIT
 AM_CPPFLAGS = \
   -I${top_srcdir}/src/core-utils \
@@ -43,6 +41,7 @@ endif
 
 if HTML_USING_WEBKIT
 libgncmod_html_la_SOURCES = \
+  gncmod-html.c \
   gnc-html.c \
   gnc-html-history.c \
   gnc-html-graph-gog.c \
@@ -52,6 +51,7 @@ libgncmod_html_la_SOURCES = \
   swig-gnc-html.c
 else
 libgncmod_html_la_SOURCES = \
+  gncmod-html.c \
   gnc-html.c \
   gnc-html-history.c \
   gnc-html-gtkhtml.c \
@@ -148,7 +148,7 @@ endif
 
 noinst_DATA = .scm-links
 CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}
-MAINTAINERCLEANFILES = swig-gnome-utils.c
+MAINTAINERCLEANFILES = swig-html.c
 
 # FIXME: Symlinking directories only works on non-win32.
 if !PLATFORM_WIN32

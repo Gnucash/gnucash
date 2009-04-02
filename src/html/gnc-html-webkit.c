@@ -72,11 +72,6 @@ extern GHashTable* gnc_html_proto_to_type_hash;
 /* hashes an HTML <object classid="ID"> classid to a handler function */
 extern GHashTable* gnc_html_object_handlers;
 
-/* hashes an action name from a FORM definition to a handler function.
- * <form method=METHOD action=gnc-action:ACTION-NAME?ACTION-ARGS>
- * action-args is what gets passed to the handler. */
-extern GHashTable* gnc_html_action_handlers;
-
 /* hashes handlers for loading different URLType data */
 extern GHashTable* gnc_html_stream_handlers;
 
@@ -100,18 +95,13 @@ static gboolean gnc_html_object_requested_cb( GtkHTML* html, GtkHTMLEmbedded* eb
 #endif
 static int gnc_html_button_press_cb( GtkWidget* widg, GdkEventButton* event,
                          gpointer user_data );
-#if 0
-static int gnc_html_submit_cb( GtkHTML* html, const gchar* method,
-                   const gchar* action, const gchar* encoded_form_data,
-                   gpointer user_data );
-#endif
 static void impl_webkit_show_url( GncHtml* self, URLType type,
                   const gchar* location, const gchar* label,
                   gboolean new_window_hint );
 static void impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen );
 static void impl_webkit_reload( GncHtml* self );
-static void impl_webkit_copy( GncHtml* self );
-static gboolean impl_webkit_export( GncHtml* self, const gchar* filepath );
+static void impl_webkit_copy_to_clipboard( GncHtml* self );
+static gboolean impl_webkit_export_to_file( GncHtml* self, const gchar* filepath );
 static void impl_webkit_print( GncHtml* self );
 static void impl_webkit_cancel( GncHtml* self );
 static void impl_webkit_set_parent( GncHtml* self, GtkWindow* parent );
@@ -124,7 +114,9 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
 
 	new_priv = g_realloc( GNC_HTML(self)->priv, sizeof(GncHtmlWebkitPrivate) );
 	priv = self->priv = new_priv;
+	GNC_HTML(self)->priv = (GncHtmlPrivate*)priv;
 
+	priv->html_string = NULL;
 	priv->web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
 
 	gtk_container_add( GTK_CONTAINER(priv->base.container),
@@ -183,8 +175,8 @@ gnc_html_webkit_class_init( GncHtmlWebkitClass* klass )
 	html_class->show_url = impl_webkit_show_url;
 	html_class->show_data = impl_webkit_show_data;
 	html_class->reload = impl_webkit_reload;
-//	html_class->copy = impl_webkit_copy;
-//	html_class->export = impl_webkit_export;
+	html_class->copy_to_clipboard = impl_webkit_copy_to_clipboard;
+	html_class->export_to_file = impl_webkit_export_to_file;
 	html_class->print = impl_webkit_print;
 	html_class->cancel = impl_webkit_cancel;
 	html_class->set_parent = impl_webkit_set_parent;
@@ -393,6 +385,11 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
 					fdata = new_fdata;
 				}
 
+				// Save a copy for export purposes
+				if( priv->html_string != NULL ) {
+					g_free( priv->html_string );
+				}
+				priv->html_string = g_strdup( fdata );
 				webkit_web_view_load_html_string( priv->web_view, fdata, "base-uri" );
 			} else {
 				fdata = fdata ? fdata :
@@ -589,38 +586,6 @@ gnc_html_button_press_cb( GtkWidget* widg, GdkEventButton* event,
 		return FALSE;
 	}
 }
-
-/********************************************************************
- * gnc_html_button_submit_cb
- * form submission callback
- ********************************************************************/
-
-#if 0
-static int
-gnc_html_submit_cb( GtkHTML* html, const gchar* method,
-                   const gchar* action, const gchar* encoded_form_data,
-                   gpointer user_data )
-{
-	GncHtmlWebkit* self = GNC_HTML_WEBKIT(user_data);
-	gchar* location = NULL;
-	gchar* new_loc = NULL;
-	gchar* label = NULL;
-	GHashTable * form_data;
-	URLType  type;
-
-	DEBUG(" ");
-	form_data = gnc_html_unpack_form_data( encoded_form_data );
-	type = gnc_html_parse_url( GNC_HTML(self), action, &location, &label );
-
-	g_critical( "form submission hasn't been supported in years." );
-
-	g_free( location );
-	g_free( label );
-	g_free( new_loc );
-	gnc_html_free_form_data( form_data );
-	return TRUE;
-}
-#endif
 
 /********************************************************************
  * gnc_html_open_scm
@@ -879,7 +844,7 @@ impl_webkit_cancel( GncHtml* self )
 }
 
 static void
-impl_webkit_copy( GncHtml* self )
+impl_webkit_copy_to_clipboard( GncHtml* self )
 {
 	GncHtmlWebkitPrivate* priv;
 
@@ -887,31 +852,16 @@ impl_webkit_copy( GncHtml* self )
 	g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
 
 	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-	g_assert( FALSE );
+	if( webkit_web_view_can_copy_clipboard( priv->web_view ) ) {
+		webkit_web_view_copy_clipboard( priv->web_view );
+	}
 }
 
 /**************************************************************
- * gnc_html_export : wrapper around the builtin function in webkit
+ * gnc_html_export_to_file : wrapper around the builtin function in webkit
  **************************************************************/
-
 static gboolean
-raw_html_receiver( gpointer engine,
-                   const gchar* data,
-                   size_t len,
-                   gpointer user_data )
-{
-	FILE *fh = (FILE *) user_data;
-	size_t written;
-
-	do {
-		written = fwrite (data, 1, len, fh);
-		len -= written;
-	} while (len > 0);
-	return TRUE;
-}
-
-static gboolean
-impl_webkit_export( GncHtml* self, const char *filepath )
+impl_webkit_export_to_file( GncHtml* self, const char *filepath )
 {
 	FILE *fh;
 	GncHtmlWebkitPrivate* priv;
@@ -921,33 +871,46 @@ impl_webkit_export( GncHtml* self, const char *filepath )
 	g_return_val_if_fail( filepath != NULL, FALSE );
 
 	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-	fh = g_fopen( filepath, "w" );
-	if( fh == 0 )
+	if( priv->html_string == NULL ) {
 		return FALSE;
+	}
+	fh = g_fopen( filepath, "w" );
+	if( fh != NULL ) {
+		gint written;
+		gint len = strlen( priv->html_string );
 
-//	gtk_html_save( GTK_HTML(priv->html), GINT_TO_POINTER(raw_html_receiver), fh );
-	g_assert( FALSE );
-	fclose (fh);
+		written = fwrite( priv->html_string, 1, len, fh );
+		fclose (fh);
 
-	return TRUE;
+		if( written != len ) {
+			return FALSE;
+		}
+
+		return TRUE;
+	} else {
+		return FALSE;
+	} 
 }
 
 static void
 impl_webkit_print( GncHtml* self )
 {
 	GncHtmlWebkitPrivate* priv;
-	static void (*webkit_web_frame_print)( WebKitWebFrame* frame ) = NULL;
+//	static void (*webkit_web_frame_print)( WebKitWebFrame* frame ) = NULL;
 	WebKitWebFrame* frame;
+	extern void webkit_web_frame_print( WebKitWebFrame* frame );
 
 	/*  HACK ALERT
 	 *
 	 * The api to print isn't exported, but exists and works, so let's dig for it.
 	 */
+#if 0
 	if( webkit_web_frame_print == NULL ) {
 		void* handle = dlopen( "/usr/lib/libwebkit-1.0.so", RTLD_LAZY );
 		webkit_web_frame_print = dlsym( handle, "webkit_web_frame_print" );
 		dlclose( handle );
 	}
+#endif
 
 	priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 	frame = webkit_web_view_get_main_frame( priv->web_view );

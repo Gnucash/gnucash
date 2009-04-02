@@ -29,6 +29,7 @@ struct _GncHtmlWebkitPrivate {
 	struct _GncHtmlPrivate base;
 
 	WebKitWebView* web_view;				/* webkit widget itself */
+	gchar* html_string;						/* html string being displayed */
 };
 
 #endif

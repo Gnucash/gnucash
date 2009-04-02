@@ -17,7 +17,8 @@
 
 (gnc:module-load "gnucash/engine" 0)
 (gnc:module-load "gnucash/app-utils" 0)
-(gnc:module-load "gnucash/gnome-utils" 0) ; for the html routines
+(gnc:module-load "gnucash/html" 0)
+(gnc:module-load "gnucash/gnome-utils" 0)
 
 ;; commodity-utilities.scm
 (export gnc:get-match-commodity-splits)

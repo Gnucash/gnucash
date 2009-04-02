@@ -1434,7 +1434,7 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
                 result = (res != SCM_BOOL_F);
         }
         else
-                result = gnc_html_export (priv->html, filepath);
+                result = gnc_html_export_to_file (priv->html, filepath);
 
         if (!result)
         {
@@ -1491,7 +1491,7 @@ gnc_plugin_page_report_copy_cb(GtkAction *action, GncPluginPageReport *report)
         GncPluginPageReportPrivate *priv;
 
         priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
-        gnc_html_copy(priv->html);
+        gnc_html_copy_to_clipboard(priv->html);
 }
 
 /********************************************************************

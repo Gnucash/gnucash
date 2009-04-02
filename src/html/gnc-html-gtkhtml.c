@@ -77,11 +77,6 @@ extern GHashTable* gnc_html_proto_to_type_hash;
 /* hashes an HTML <object classid="ID"> classid to a handler function */
 extern GHashTable* gnc_html_object_handlers;
 
-/* hashes an action name from a FORM definition to a handler function.
- * <form method=METHOD action=gnc-action:ACTION-NAME?ACTION-ARGS>
- * action-args is what gets passed to the handler. */
-extern GHashTable* gnc_html_action_handlers;
-
 /* hashes handlers for loading different URLType data */
 extern GHashTable* gnc_html_stream_handlers;
 
@@ -102,16 +97,13 @@ static gboolean gnc_html_object_requested_cb( GtkHTML* html, GtkHTMLEmbedded* eb
                              gpointer data );
 static int gnc_html_button_press_cb( GtkWidget* widg, GdkEventButton* event,
                          gpointer user_data );
-static int gnc_html_submit_cb( GtkHTML* html, const gchar* method,
-                   const gchar* action, const gchar* encoded_form_data,
-                   gpointer user_data );
 static void impl_gtkhtml_show_url( GncHtml* self, URLType type,
                   const gchar* location, const gchar* label,
                   gboolean new_window_hint );
 static void impl_gtkhtml_show_data( GncHtml* self, const gchar* data, int datalen );
 static void impl_gtkhtml_reload( GncHtml* self );
-static void impl_gtkhtml_copy( GncHtml* self );
-static gboolean impl_gtkhtml_export( GncHtml* self, const gchar* filepath );
+static void impl_gtkhtml_copy_to_clipboard( GncHtml* self );
+static gboolean impl_gtkhtml_export_to_file( GncHtml* self, const gchar* filepath );
 static void impl_gtkhtml_print( GncHtml* self );
 static void impl_gtkhtml_cancel( GncHtml* self );
 static void impl_gtkhtml_set_parent( GncHtml* self, GtkWindow* parent );
@@ -161,10 +153,6 @@ gnc_html_gtkhtml_init( GncHtmlGtkhtml* self )
 		    G_CALLBACK (gnc_html_button_press_cb),
 		    self);
 
-	g_signal_connect (priv->html, "submit",
-		    G_CALLBACK(gnc_html_submit_cb),
-		    self);
-
 	gtk_html_load_empty(GTK_HTML(priv->html));
 
 	LEAVE("retval %p", self);
@@ -182,8 +170,8 @@ gnc_html_gtkhtml_class_init( GncHtmlGtkhtmlClass* klass )
 	html_class->show_url = impl_gtkhtml_show_url;
 	html_class->show_data = impl_gtkhtml_show_data;
 	html_class->reload = impl_gtkhtml_reload;
-	html_class->copy = impl_gtkhtml_copy;
-	html_class->export = impl_gtkhtml_export;
+	html_class->copy_to_clipboard = impl_gtkhtml_copy_to_clipboard;
+	html_class->export_to_file = impl_gtkhtml_export_to_file;
 	html_class->print = impl_gtkhtml_print;
 	html_class->cancel = impl_gtkhtml_cancel;
 	html_class->set_parent = impl_gtkhtml_set_parent;
@@ -561,37 +549,6 @@ gnc_html_button_press_cb( GtkWidget* widg, GdkEventButton* event,
 }
 
 /********************************************************************
- * gnc_html_button_submit_cb
- * form submission callback
- ********************************************************************/
-
-static int
-gnc_html_submit_cb( GtkHTML* html, const gchar* method,
-                   const gchar* action, const gchar* encoded_form_data,
-                   gpointer user_data )
-{
-	GncHtmlGtkhtml* self = GNC_HTML_GTKHTML(user_data);
-	gchar* location = NULL;
-	gchar* new_loc = NULL;
-	gchar* label = NULL;
-	GHashTable * form_data;
-	URLType  type;
-
-	DEBUG(" ");
-	form_data = gnc_html_unpack_form_data( encoded_form_data );
-	type = gnc_html_parse_url( GNC_HTML(self), action, &location, &label );
-
-	g_critical( "form submission hasn't been supported in years." );
-
-	g_free( location );
-	g_free( label );
-	g_free( new_loc );
-	gnc_html_free_form_data( form_data );
-	return TRUE;
-}
-
-
-/********************************************************************
  * gnc_html_open_scm
  * insert some scheme-generated HTML
  ********************************************************************/
@@ -839,7 +796,7 @@ impl_gtkhtml_cancel( GncHtml* self )
 }
 
 static void
-impl_gtkhtml_copy( GncHtml* self )
+impl_gtkhtml_copy_to_clipboard( GncHtml* self )
 {
 	GncHtmlGtkhtmlPrivate* priv;
 
@@ -850,7 +807,7 @@ impl_gtkhtml_copy( GncHtml* self )
 }
 
 /**************************************************************
- * gnc_html_export : wrapper around the builtin function in gtkhtml
+ * gnc_html_export_to_file : wrapper around the builtin function in gtkhtml
  **************************************************************/
 
 static gboolean
@@ -870,7 +827,7 @@ raw_html_receiver( gpointer engine,
 }
 
 static gboolean
-impl_gtkhtml_export( GncHtml* self, const char *filepath )
+impl_gtkhtml_export_to_file( GncHtml* self, const char *filepath )
 {
 	FILE *fh;
 	GncHtmlGtkhtmlPrivate* priv;
