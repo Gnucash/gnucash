@@ -10,7 +10,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/app-utils \
-  -I${top_srcdir}/src/html \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/lib/libc \
@@ -18,6 +17,7 @@ AM_CPPFLAGS = \
   ${GLADE_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GNOME_CFLAGS} \
+  ${GNOME_PRINT_CFLAGS} \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} 
 
@@ -179,7 +179,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \
   ${GNOME_LIBS} \
-  ${GUILE_LIBS} \
+  ${GNOME_PRINT_LIBS} \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \

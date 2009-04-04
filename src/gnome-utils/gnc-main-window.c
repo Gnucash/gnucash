@@ -65,7 +65,7 @@
 #include "gnc-main.h"
 #include "gnc-gconf-utils.h"
 // +JSLED
-#include "gnc-html.h"
+//#include "gnc-html.h"
 #include "gnc-autosave.h"
 #ifdef HAVE_GTK_2_10
 #    include "print-session.h"

@@ -26,7 +26,6 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
-#include "gnc-ui-util.h"
 #include "gnc-html-graph-gog.h"
 #include "gnc-html.h"
 #include "gnc-engine.h"

@@ -3,14 +3,12 @@ SUBDIRS = .
 
 pkglib_LTLIBRARIES = libgncmod-html.la
 
-if HTML_USING_WEBKIT
 AM_CPPFLAGS = \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
-  -I${top_srcdir}/src/backend/file \
-  -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/lib/libc \
@@ -18,48 +16,15 @@ AM_CPPFLAGS = \
   ${GLIB_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GNOME_CFLAGS} \
-  ${GOFFICE_CFLAGS} \
-  ${WEBKIT_CFLAGS}
-else
-AM_CPPFLAGS = \
-  -I${top_srcdir}/src/core-utils \
-  -I${top_srcdir}/src/gnc-module \
-  -I${top_srcdir}/src/engine \
-  -I${top_srcdir}/src/backend/file \
-  -I${top_srcdir}/src/app-utils \
-  -I${top_srcdir}/src/gnome-utils \
-  -I${top_srcdir}/src \
-  -I${top_builddir}/src \
-  -I${top_srcdir}/lib/libc \
-  ${QOF_CFLAGS} \
-  ${GLIB_CFLAGS} \
-  ${GTK_CFLAGS} \
-  ${GNOME_CFLAGS} \
-  ${GTKHTML_CFLAGS} \
   ${GOFFICE_CFLAGS}
-endif
 
-if HTML_USING_WEBKIT
 libgncmod_html_la_SOURCES = \
   gncmod-html.c \
   gnc-html.c \
   gnc-html-history.c \
   gnc-html-graph-gog.c \
-  gnc-html-webkit.c \
-  gnc-html-graph-gog-webkit.c \
   gnc-html-factory.c \
   swig-gnc-html.c
-else
-libgncmod_html_la_SOURCES = \
-  gncmod-html.c \
-  gnc-html.c \
-  gnc-html-history.c \
-  gnc-html-gtkhtml.c \
-  gnc-html-graph-gog.c \
-  gnc-html-graph-gog-gtkhtml.c \
-  gnc-html-factory.c \
-  swig-gnc-html.c
-endif
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
@@ -70,13 +35,12 @@ gncinclude_HEADERS = \
 
 libgncmod_html_la_LDFLAGS = -avoid-version
 
-if HTML_USING_WEBKIT
 libgncmod_html_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/backend/file/libgnc-backend-xml-utils.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \
   ${GNOME_LIBS} \
@@ -85,25 +49,23 @@ libgncmod_html_la_LIBADD = \
   ${DB_LIBS} \
   ${QOF_LIBS} \
   ${GOFFICE_LIBS} \
-  ${REGEX_LIBS} \
+  ${GUILE_LIBS} \
+  ${REGEX_LIBS}
+
+if HTML_USING_WEBKIT
+AM_CPPFLAGS += ${WEBKIT_CFLAGS}
+libgncmod_html_la_SOURCES += \
+  gnc-html-webkit.c \
+  gnc-html-graph-gog-webkit.c
+libgncmod_html_la_LIBADD += \
   ${WEBKIT_LIBS}
 else
-libgncmod_html_la_LIBADD = \
-  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-  ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/backend/file/libgnc-backend-xml-utils.la \
-  ${top_builddir}/src/calculation/libgncmod-calculation.la \
-  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-  $(top_builddir)/lib/libc/libc-missing.la \
-  ${GNOME_LIBS} \
-  ${GTKHTML_LIBS} \
-  ${GDK_PIXBUF_LIBS} \
-  ${GLIB_LIBS} \
-  ${DB_LIBS} \
-  ${QOF_LIBS} \
-  ${GOFFICE_LIBS} \
-  ${REGEX_LIBS}
+AM_CPPFLAGS += ${GTKHTML_CFLAGS}
+libgncmod_html_la_SOURCES += \
+  gnc-html-gtkhtml.c \
+  gnc-html-graph-gog-gtkhtml.c
+libgncmod_html_la_LIBADD += \
+  ${GTKHTML_LIBS}
 
 if !GTKHTML_USES_GTKPRINT
   AM_CPPFLAGS += ${GNOME_PRINT_CFLAGS}
@@ -128,26 +90,7 @@ if !GTKHTML_USES_GTKPRINT
   libgncmod_html_la_LIBADD += ${GNOME_PRINT_LIBS}
 endif
 
-if GNUCASH_SEPARATE_BUILDDIR
-#For executing test cases
-SCM_FILE_LINKS = \
-  ${gncmod_DATA} \
-  ${gncscm_DATA}
-endif
-
-.scm-links: 
-	$(RM) -rf gnucash
-	mkdir -p  gnucash
-if GNUCASH_SEPARATE_BUILDDIR
-	for X in ${SCM_FILE_LINKS} ; do \
-	  $(LN_S) -f ${srcdir}/$$X . ; \
-	done
-endif
-	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
-	touch .scm-links
-
-noinst_DATA = .scm-links
-CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}
+CLEANFILES = $(BUILT_SOURCES) gnucash
 MAINTAINERCLEANFILES = swig-html.c
 
 # FIXME: Symlinking directories only works on non-win32.

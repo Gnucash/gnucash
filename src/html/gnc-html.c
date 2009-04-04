@@ -43,11 +43,8 @@
 #include "Account.h"
 #include "print-session.h"
 #include "gnc-engine.h"
-#include "gnc-gui-query.h"
 #include "gnc-html.h"
 #include "gnc-html-history.h"
-#include "gnc-ui.h"
-#include "gnc-ui-util.h"
 
 /* indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_HTML;

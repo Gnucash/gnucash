@@ -42,14 +42,12 @@
 #include <webkit/webkit.h>
 
 #include "Account.h"
-#include "gnc-engine.h"
 #include "gnc-gui-query.h"
+#include "gnc-engine.h"
 #include "gnc-html.h"
 #include "gnc-html-webkit.h"
 #include "gnc-html-history.h"
 #include "gnc-html-graph-gog-webkit.h"
-#include "gnc-ui.h"
-#include "gnc-ui-util.h"
 
 G_DEFINE_TYPE(GncHtmlWebkit, gnc_html_webkit, GNC_TYPE_HTML )
 

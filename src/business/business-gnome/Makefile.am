@@ -75,6 +75,7 @@ libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/html/libgncmod-html.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \

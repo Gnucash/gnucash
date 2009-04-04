@@ -12,6 +12,7 @@ libgnc_gnome_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/backend/file/libgnc-backend-xml-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/html/libgncmod-html.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
@@ -123,6 +124,7 @@ AM_CPPFLAGS = \
   ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GNOME_CFLAGS} \
+  ${GNOME_PRINT_CFLAGS} \
   ${GLADE_CFLAGS} \
   $(GLIB_CFLAGS)
 
