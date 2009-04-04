@@ -449,6 +449,9 @@ gnc_sql_begin_edit( GncSqlBackend *be, QofInstance *inst )
 {
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
+
+    ENTER( " " );
+	LEAVE( "" );
 }
 
 void
@@ -456,6 +459,9 @@ gnc_sql_rollback_edit( GncSqlBackend *be, QofInstance *inst )
 {
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
+
+    ENTER( " " );
+	LEAVE( "" );
 }
 
 static void

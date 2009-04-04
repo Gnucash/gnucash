@@ -735,6 +735,9 @@ compile_split_query( GncSqlBackend* be, QofQuery* pQuery )
 		g_free( query_sql );
 		query_info->has_been_run = FALSE;
 		query_info->acct = xaccAccountLookup( acct_guid, be->primary_book );
+		if( query_info->acct == NULL ) {
+			PWARN( "Unable to find account with guid='%s'\n", guid_buf );
+		}
 
 		g_free( subquery_sql );
 	}
@@ -749,6 +752,7 @@ run_split_query( GncSqlBackend* be, gpointer pQuery )
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( pQuery != NULL );
+	g_return_if_fail( query_info->acct != NULL );
 
 	// When the query to load all splits for the account has been run, set the
 	// mark so that this account's query is not reexecuted.
