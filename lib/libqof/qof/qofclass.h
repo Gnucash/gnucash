@@ -101,8 +101,8 @@ These are \b NOT the same as the main collections in the QofBook.
 -# Each ::QofCollection contains one or many entities - *all* of a single type.
 -# The entity type within the collection can be determined at run time.
 -# Easy conversions to GList or whatever in the param_setfcn handler.
--# Each parameter can have it's own collection.
--# Each entity can have a different *type* of collection to it's siblings, 
+-# Each parameter can have its own collection.
+-# Each entity can have a different *type* of collection to its siblings, 
 provided that it is acceptable to the set function.
 -# Each object decides which types are acceptable for which parameter in the 
 set functions. This is then part of the API for that object.

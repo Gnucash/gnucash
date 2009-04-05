@@ -127,7 +127,7 @@ available within the available QSF objects.
 
 Some defaults will relate to how to format descriptive dates, whether discount
 should be considered, which account to use for certain QSF data from applications
-that don't use accounts.
+that do not use accounts.
 
 Some defaults are pre-defined and cannot be over-written:
 - qsf_time_now
@@ -159,7 +159,7 @@ QSF deals with partial QofBooks - each object is fully described but the
 book does not have to contain any specific object types or have any
 particular structure. To merge partial books into usual QofBook data
 sources, the map must deal with entities that need to be referenced in
-the target QofBook but which simply don't exist in the QofBook used to generate
+the target QofBook but which simply do not exist in the QofBook used to generate
 the QSF. e.g. pilot-link knows nothing of Accounts yet when QSF creates
 a gncInvoice from qof-datebook, gncInvoice needs to know the GUID of 
 certain accounts in the target QofBook. This is handled in the map 
@@ -262,7 +262,7 @@ a more readable set function.
 #define QSF_CONDITIONAL_ELSE "else" /**< Alternative
 
 if(){} else{} is also supported. Nesting of conditionals causes problems for
-validating the final map against any sensible XML Schema and a map that doesn't 
+validating the final map against any sensible XML Schema and a map that does not 
 validate will be rejected. When editing conditionals in a QSF map, ALWAYS 
 validate the map using xmllint. If necessary, define a variable at the foot of 
 the definitions block, using a similar syntax to a default, then use that 

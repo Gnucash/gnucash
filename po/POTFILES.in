@@ -282,7 +282,7 @@ src/gnome-utils/cursors.c
 src/gnome-utils/dialog-account.c
 src/gnome-utils/dialog-book-close.c
 src/gnome-utils/dialog-commodity.c
-src/gnome-utils/dialog-database-connection.c
+src/gnome-utils/dialog-file-access.c
 src/gnome-utils/dialog-options.c
 src/gnome-utils/dialog-preferences.c
 src/gnome-utils/dialog-query-list.c
@@ -485,7 +485,9 @@ src/register/register-gnome/pricecell-gnome.c
 src/register/register-gnome/quickfillcell-gnome.c
 src/register/register-gnome/table-gnome.c
 src/report/locale-specific/us/gncmod-locale-reports-us.c
+src/report/report-gnome/custom-report-dialog.glade
 src/report/report-gnome/dialog-column-view.c
+src/report/report-gnome/dialog-custom-report.c
 src/report/report-gnome/dialog-style-sheet.c
 src/report/report-gnome/gncmod-report-gnome.c
 src/report/report-gnome/gnc-plugin-page-report.c
