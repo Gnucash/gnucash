@@ -231,7 +231,9 @@ gnc_ui_file_access( int type )
 	uri_type_container = glade_xml_get_widget( xml, "vb_uri_type_container" );
 	faw->cb_uri_type = GTK_COMBO_BOX(gtk_combo_box_new_text());
 	gtk_container_add( GTK_CONTAINER(uri_type_container), GTK_WIDGET(faw->cb_uri_type) );
-	g_object_connect( G_OBJECT(faw->cb_uri_type), "signal::changed", cb_uri_type_changed_cb, NULL );
+	g_object_connect( G_OBJECT(faw->cb_uri_type),
+					"signal::changed", cb_uri_type_changed_cb, NULL,
+					NULL );
 
     /* Autoconnect signals */
     glade_xml_signal_autoconnect_full( xml, gnc_glade_autoconnect_full_func,
