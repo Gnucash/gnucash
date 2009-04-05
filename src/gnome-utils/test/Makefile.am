@@ -18,7 +18,6 @@ GNC_TEST_DEPS = @GNC_TEST_SRFI_LOAD_CMD@ \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/backend/xml \
-  --library-dir    ${top_builddir}/src/calculation \
   --library-dir    ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/gnome-utils
 

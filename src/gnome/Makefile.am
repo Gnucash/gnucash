@@ -13,10 +13,12 @@ libgnc_gnome_la_LIBADD = \
   ${top_builddir}/src/backend/file/libgnc-backend-xml-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${GLADE_LIBS} \
-  ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
+  ${GUILE_LIBS} \
+  ${GNOME_LIBS} \
+  ${GLIB_LIBS} \
+  ${QOF_LIBS}
 
 libgnc_gnome_la_SOURCES = \
   swig-gnome.c \

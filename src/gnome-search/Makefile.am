@@ -7,11 +7,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnc-module \
-  -I${top_srcdir}/src/business/business-core \
   ${QOF_CFLAGS} \
   ${GUILE_INCS} \
-  ${GTKHTML_CFLAGS} \
-  ${GDK_PIXBUF_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLIB_CFLAGS}
@@ -57,7 +54,6 @@ libgncmod_gnome_search_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
-  ${GTKHTML_LIBS} \
   ${GLADE_LIBS} \
   ${GLIB_LIBS} \
   ${REGEX_LIBS} \
