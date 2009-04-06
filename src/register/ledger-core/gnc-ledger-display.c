@@ -355,6 +355,9 @@ gnc_ledger_display_simple (Account *account)
   SplitRegisterType reg_type;
   GNCAccountType acc_type = xaccAccountGetType (account);
   gboolean use_double_line;
+  GNCLedgerDisplay *ld;
+
+  ENTER("account=%p", account);
 
   switch (acc_type) {
   case ACCT_TYPE_PAYABLE:
@@ -368,9 +371,11 @@ gnc_ledger_display_simple (Account *account)
 
   reg_type = gnc_get_reg_type (account, LD_SINGLE);
 
-  return gnc_ledger_display_internal (account, NULL, LD_SINGLE, reg_type,
-                                      gnc_get_default_register_style(acc_type),
-                                      use_double_line, FALSE);
+  ld = gnc_ledger_display_internal (account, NULL, LD_SINGLE, reg_type,
+                                    gnc_get_default_register_style(acc_type),
+                                    use_double_line, FALSE);
+  LEAVE("%p", ld);
+  return ld;
 }
 
 /* Opens up a register window to display an account, and all of its
@@ -379,12 +384,17 @@ GNCLedgerDisplay *
 gnc_ledger_display_subaccounts (Account *account)
 {
   SplitRegisterType reg_type;
+  GNCLedgerDisplay *ld;
+
+  ENTER("account=%p", account);
 
   reg_type = gnc_get_reg_type (account, LD_SUBACCOUNT);
 
-  return gnc_ledger_display_internal (account, NULL, LD_SUBACCOUNT,
-                                      reg_type, REG_STYLE_JOURNAL, FALSE,
-                                      FALSE);
+  ld = gnc_ledger_display_internal (account, NULL, LD_SUBACCOUNT,
+                                    reg_type, REG_STYLE_JOURNAL, FALSE,
+                                    FALSE);
+  LEAVE("%p", ld);
+  return ld;
 }
 
 /* Opens up a general ledger window. */
@@ -394,6 +404,9 @@ gnc_ledger_display_gl (void)
   Query *query;
   time_t start;
   struct tm tm;
+  GNCLedgerDisplay *ld;
+
+  ENTER(" ");
 
   query = xaccMallocQuery ();
 
@@ -425,9 +438,10 @@ gnc_ledger_display_gl (void)
                            FALSE, 0, 
                            QUERY_AND);
 
-  return gnc_ledger_display_internal (NULL, query, LD_GL,
-                                      GENERAL_LEDGER,
-                                      REG_STYLE_JOURNAL, FALSE, FALSE);
+  ld = gnc_ledger_display_internal (NULL, query, LD_GL, GENERAL_LEDGER,
+                                    REG_STYLE_JOURNAL, FALSE, FALSE);
+  LEAVE("%p", ld);
+  return ld;
 }
 
 /**
@@ -447,6 +461,8 @@ gnc_ledger_display_template_gl (char *id)
   SplitRegister *sr;
   Account *root, *acct;
   gboolean isTemplateModeTrue;
+
+  ENTER("id=%s", id? id : "(null)");
 
   acct = NULL;
   isTemplateModeTrue = TRUE;
@@ -474,6 +490,7 @@ gnc_ledger_display_template_gl (char *id)
     gnc_split_register_set_template_account (sr, acct);
   }
 
+  LEAVE("%p", ld);
   return ld;
 }
 
@@ -527,8 +544,13 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   gboolean has_leader;
   GList *splits;
 
+  ENTER("changes=%p, user_data=%p", changes, user_data);
+
   if (ld->loading)
+  {
+    LEAVE("already loading");
     return;
+  }
 
   has_leader = (ld->ld_type == LD_SINGLE || ld->ld_type == LD_SUBACCOUNT);
 
@@ -538,6 +560,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
     if (!leader)
     {
       gnc_close_gui_component (ld->component_id);
+      LEAVE("no leader");
       return;
     }
   }
@@ -548,6 +571,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
     if (info && (info->event_mask & QOF_EVENT_DESTROY))
     {
       gnc_close_gui_component (ld->component_id);
+      LEAVE("destroy");
       return;
     }
   }
@@ -562,6 +586,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   gnc_ledger_display_set_watches (ld, splits);
 
   gnc_ledger_display_refresh_internal (ld, splits);
+  LEAVE(" ");
 }
 
 static void
@@ -643,8 +668,14 @@ GNCLedgerDisplay *
 gnc_ledger_display_query (Query *query, SplitRegisterType type,
                           SplitRegisterStyle style)
 {
-  return gnc_ledger_display_internal (NULL, query, LD_GL, type, style,
-                                      FALSE, FALSE);
+  GNCLedgerDisplay *ld;
+
+  ENTER("query=%p", query);
+
+  ld = gnc_ledger_display_internal (NULL, query, LD_GL, type, style,
+                                    FALSE, FALSE);
+  LEAVE("%p", ld);
+  return ld;
 }
 
 static GNCLedgerDisplay *
@@ -812,10 +843,22 @@ gnc_ledger_display_refresh_internal (GNCLedgerDisplay *ld, GList *splits)
 void
 gnc_ledger_display_refresh (GNCLedgerDisplay *ld)
 {
-  if (!ld || ld->loading)
+  ENTER("ld=%p", ld);
+
+  if (!ld)
+  {
+    LEAVE("no display");
     return;
+  }
+
+  if (ld->loading)
+  {
+    LEAVE("already loading");
+    return;
+  }
 
   gnc_ledger_display_refresh_internal (ld, xaccQueryGetSplits (ld->query));
+  LEAVE(" ");
 }
 
 void
