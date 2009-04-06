@@ -31,12 +31,20 @@
 #include "gnucash-item-edit.h"
 #include "gnucash-style.h"
 #include "gnc-gconf-utils.h"
-#include "gnc-engine.h"
+#include "gnc-engine.h"		// For debugging, e.g. ENTER(), LEAVE()
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
 #define DEFAULT_STYLE_WIDTH 680
 
+
+/** Static Globals *****************************************************/
+
+/* This static indicates the debugging module that this .o belongs to. */
+static QofLogModule log_module = GNC_MOD_REGISTER;
+
+
+/** Implementation *****************************************************/
 
 static gpointer
 style_get_key (SheetBlockStyle *style)
@@ -674,7 +682,11 @@ gnucash_sheet_compile_styles (GnucashSheet *sheet)
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET (sheet));
 
+	ENTER("sheet=%p", sheet);
+
         gnucash_sheet_styles_set_dimensions (sheet, DEFAULT_STYLE_WIDTH);
+
+	LEAVE(" ");
 }
 
 void

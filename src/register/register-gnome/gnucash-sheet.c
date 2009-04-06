@@ -40,6 +40,7 @@
 #include "gnucash-style.h"
 #include "gnucash-header.h"
 #include "gnucash-item-edit.h"
+#include "gnc-engine.h"		// For debugging, e.g. ENTER(), LEAVE()
 
 #define DEFAULT_REGISTER_HEIGHT 400
 #define DEFAULT_REGISTER_WIDTH  400
@@ -51,7 +52,27 @@
 /* jsled: and 2.9.{0,1}, as per http://bugzilla.gnome.org/show_bug.cgi?id=342182 */
 #define GTK_ALLOWED_SELECTION_WITHIN_INSERT_SIGNAL (GTK_MINOR_VERSION < 4)
 
+/* Register signals */
+enum
+{
+        ACTIVATE_CURSOR,
+        REDRAW_ALL,
+        REDRAW_HELP,
+        LAST_SIGNAL
+};
+
+
+/** Static Globals *****************************************************/
+
+/* This static indicates the debugging module that this .o belongs to. */
+static QofLogModule log_module = GNC_MOD_REGISTER;
 static guint gnucash_register_initial_rows = 15;
+static GnomeCanvasClass *sheet_parent_class;
+static GtkTableClass *register_parent_class;
+static guint register_signals[LAST_SIGNAL];
+
+
+/** Prototypes *********************************************************/
 
 static void gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet);
 
@@ -64,19 +85,7 @@ static void gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
 static void gnucash_sheet_stop_editing (GnucashSheet *sheet);
 
 
-/* Register signals */
-enum
-{
-        ACTIVATE_CURSOR,
-        REDRAW_ALL,
-        REDRAW_HELP,
-        LAST_SIGNAL
-};
-
-static GnomeCanvasClass *sheet_parent_class;
-static GtkTableClass *register_parent_class;
-static guint register_signals[LAST_SIGNAL];
-
+/** Implementation *****************************************************/
 
 void
 gnucash_register_set_initial_rows (guint num_rows)
@@ -674,6 +683,8 @@ gnucash_sheet_create (Table *table)
         GnucashSheet *sheet;
         GnomeCanvas  *canvas;
 
+	ENTER("table=%p", table);
+
         sheet = g_object_new (GNUCASH_TYPE_SHEET, NULL);
         canvas = GNOME_CANVAS (sheet);
 
@@ -688,6 +699,7 @@ gnucash_sheet_create (Table *table)
         g_signal_connect (G_OBJECT (sheet->hadj), "changed",
                 G_CALLBACK (gnucash_sheet_hadjustment_changed), sheet);
 
+	LEAVE("%p", sheet);
         return sheet;
 }
 
@@ -1071,13 +1083,18 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 {
         GnucashSheet *sheet = GNUCASH_SHEET(widget);
 
+	ENTER("widget=%p, allocation=%p", widget, allocation);
+
         if (GTK_WIDGET_CLASS(sheet_parent_class)->size_allocate)
                 (*GTK_WIDGET_CLASS (sheet_parent_class)->size_allocate)
                         (widget, allocation);
 
         if (allocation->height == sheet->window_height &&
             allocation->width == sheet->window_width)
+	{
+		LEAVE("size unchanged");
                 return;
+	}
 
         if (allocation->width != sheet->window_width)
                 gnucash_sheet_styles_set_dimensions (sheet, allocation->width);
@@ -1091,6 +1108,7 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 
         gnc_item_edit_configure (GNC_ITEM_EDIT(sheet->item_editor));
         gnucash_sheet_update_adjustments (sheet);
+	LEAVE(" ");
 }
 
 static gboolean
