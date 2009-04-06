@@ -700,12 +700,13 @@ gnc_sql_compile_query( QofBackend* pBEnd, QofQuery* pQuery )
 
     pQueryInfo = g_malloc( (gsize)sizeof( gnc_sql_query_info ) );
 	g_assert( pQueryInfo != NULL );
+	pQueryInfo->pCompiledQuery = NULL;
+    pQueryInfo->searchObj = searchObj;
 
     // Try various objects first
     be_data.is_ok = FALSE;
     be_data.be = be;
     be_data.pQuery = pQuery;
-    pQueryInfo->searchObj = searchObj;
     be_data.pQueryInfo = pQueryInfo;
 
     qof_object_foreach_backend( GNC_SQL_BACKEND, compile_query_cb, &be_data );
@@ -791,8 +792,10 @@ gnc_sql_free_query( QofBackend* pBEnd, gpointer pQuery )
         return;
     }
 
-    DEBUG( "%s\n", (gchar*)pQueryInfo->pCompiledQuery );
-    g_free( pQueryInfo->pCompiledQuery );
+	if( pQueryInfo->pCompiledQuery != NULL ) {
+    	DEBUG( "%s\n", (gchar*)pQueryInfo->pCompiledQuery );
+    	g_free( pQueryInfo->pCompiledQuery );
+	}
     g_free( pQueryInfo );
 
 	LEAVE( "" );
