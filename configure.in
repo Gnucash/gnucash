@@ -1478,10 +1478,10 @@ AC_CONFIG_FILES(po/Makefile.in
           src/backend/Makefile
 		  src/backend/dbi/Makefile
 		  src/backend/dbi/test/Makefile
-          src/backend/file/Makefile
-          src/backend/file/test/Makefile
-          src/backend/file/test/test-files/Makefile
-          src/backend/file/test/test-files/xml2/Makefile
+          src/backend/xml/Makefile
+          src/backend/xml/test/Makefile
+          src/backend/xml/test/test-files/Makefile
+          src/backend/xml/test/test-files/xml2/Makefile
           src/backend/postgres/Makefile
           src/backend/postgres/test/Makefile
 		  src/backend/sql/Makefile

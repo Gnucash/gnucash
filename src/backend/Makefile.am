@@ -1,3 +1,3 @@
 
-SUBDIRS = file sql ${SQL_DIR} ${DBI_DIR}
-DIST_SUBDIRS = file sql ${SQL_DIR} ${DBI_DIR}
+SUBDIRS = xml sql ${DBI_DIR}
+DIST_SUBDIRS = xml sql ${DBI_DIR}
