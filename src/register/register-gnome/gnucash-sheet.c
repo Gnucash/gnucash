@@ -1111,6 +1111,18 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 
         gnc_item_edit_configure (GNC_ITEM_EDIT(sheet->item_editor));
         gnucash_sheet_update_adjustments (sheet);
+
+        if (sheet->table)
+	{
+                VirtualLocation virt_loc;
+
+                virt_loc = sheet->table->current_cursor_loc;
+
+                if (gnucash_sheet_cell_valid (sheet, virt_loc))
+                        gnucash_sheet_show_row (sheet,
+                                                virt_loc.vcell_loc.virt_row);
+        }
+
 	LEAVE(" ");
 }
 
