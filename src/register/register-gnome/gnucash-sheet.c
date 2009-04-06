@@ -1097,7 +1097,10 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 	}
 
         if (allocation->width != sheet->window_width)
+	{
                 gnucash_sheet_styles_set_dimensions (sheet, allocation->width);
+		gnucash_sheet_recompute_block_offsets (sheet);
+	}
 
         sheet->window_height = allocation->height;
         sheet->window_width  = allocation->width;
