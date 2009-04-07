@@ -19,8 +19,9 @@ libgncmod_log_replay_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GTK_LIBS} \
-  ${GLIB_LIBS} ${QOF_LIBS}
+  ${GLIB_LIBS}
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
@@ -31,7 +32,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \

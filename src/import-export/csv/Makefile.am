@@ -26,7 +26,7 @@ libgncmod_csv_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/lib/stf/libgnc-stf.la \
   ${top_builddir}/lib/libc/libc-missing.la \
-  ${QOF_LIBS} \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GOFFICE_LIBS} \
   ${GLIB_LIBS}
 
@@ -39,9 +39,9 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
+  -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/lib \
-  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \

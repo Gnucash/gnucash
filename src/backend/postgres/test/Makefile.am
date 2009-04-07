@@ -63,7 +63,7 @@ test_escape_SOURCES = \
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \

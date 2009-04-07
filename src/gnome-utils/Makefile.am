@@ -13,13 +13,13 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/lib/libc \
+  -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GUILE_INCS} \
-  ${QOF_CFLAGS} \
   ${GOFFICE_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
@@ -184,6 +184,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/backend/xml/libgnc-backend-xml-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GNOME_LIBS} \
   ${GTKHTML_LIBS} \
   ${GUILE_LIBS} \
@@ -192,7 +193,6 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
-  ${QOF_LIBS} \
   ${GOFFICE_LIBS} \
   ${REGEX_LIBS} \
   ${LIBXML2_LIBS}

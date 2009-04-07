@@ -5,7 +5,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/business/business-core \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS}
 
@@ -14,8 +14,8 @@ LDADD = \
   ${top_builddir}/src/test-core/libgncmod-test.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ../libgncmod-business-core.la \
-  ${GLIB_LIBS} \
-  ${QOF_LIBS}
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${GLIB_LIBS}
 
 TESTS = \
   test-load-module \

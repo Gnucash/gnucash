@@ -7,7 +7,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnc-module \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
@@ -52,12 +52,12 @@ libgncmod_gnome_search_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
   ${GLIB_LIBS} \
-  ${REGEX_LIBS} \
-  ${QOF_LIBS}
+  ${REGEX_LIBS}
 
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \

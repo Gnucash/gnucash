@@ -16,9 +16,9 @@ _gnucash_core_c_la_SOURCES = \
 
 _gnucash_core_c_la_CPPFLAGS = \
   $(PYTHON_CPPFLAGS) \
-  $(QOF_CFLAGS) \
   $(GLIB_CFLAGS) \
   $(GUILE_INCS) \
+  -I${top_srcdir}/src/libqof/qof \
   -I$(top_srcdir)/src  \
   -I$(top_srcdir)/src/engine \
   -I$(top_srcdir)/src/business/business-core
@@ -29,9 +29,9 @@ AM_CFLAGS = -w
 _gnucash_core_c_la_LDFLAGS = -avoid-version -module
 
 _gnucash_core_c_la_LIBADD = \
-  ${QOF_LIBS} \
   ${GLIB_LIBS} \
   ${GUILE_LIBS} \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la
@@ -41,7 +41,8 @@ gnucash_core.c: $(SWIG_SOURCES)
 	swig $(SWIG_PYTHON_OPT) -Wall -Werror \
         -I$(top_srcdir)/src -I$(top_srcdir)/src/engine \
 		-I$(top_srcdir)/src/business/business-core \
-		$(QOF_CFLAGS) -o $@ $<
+        -I${top_srcdir}/src/libqof/qof \
+		-o $@ $<
 
 gnucash_core_c.py: gnucash_core.c $(SWIG_SOURCES)
 endif

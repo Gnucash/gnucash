@@ -1,4 +1,5 @@
 NONGUI_SUBDIRS = \
+  libqof \
   doc \
   pixmaps \
   core-utils \

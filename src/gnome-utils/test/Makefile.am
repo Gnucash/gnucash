@@ -35,7 +35,11 @@ INCLUDES= \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/test-core \
-  ${GLIB_CFLAGS} ${GUILE_INCS} ${GNOME_CFLAGS} ${GLADE_CFLAGS} ${QOF_CFLAGS}
+  -I${top_srcdir}/src/libqof/qof \
+  ${GLIB_CFLAGS} \
+  ${GUILE_INCS} \
+  ${GNOME_CFLAGS} \
+  ${GLADE_CFLAGS}
 
 LDADD = \
   ${GNOME_LIBS} \

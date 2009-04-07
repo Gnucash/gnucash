@@ -14,11 +14,11 @@ libgnc_gnome_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
-  ${GLIB_LIBS} \
-  ${QOF_LIBS}
+  ${GLIB_LIBS}
 
 libgnc_gnome_la_SOURCES = \
   swig-gnome.c \
@@ -118,7 +118,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/lib/libc \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GNOME_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \

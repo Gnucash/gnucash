@@ -11,7 +11,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/core-utils\
   -I${top_srcdir}/lib/libc\
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS}
@@ -59,17 +59,23 @@ noinst_HEADERS = \
   sixtp-utils.h
 
 libgnc_backend_xml_utils_la_LIBADD = \
-   ${GLIB_LIBS} ${GCONF_LIBS} ${LIBXML2_LIBS} ${ZLIB_LIBS} \
+   ${GLIB_LIBS} \
+   ${GCONF_LIBS} \
+   ${LIBXML2_LIBS} \
+   ${ZLIB_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
    ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-   ${QOF_LIBS}
+   ${top_builddir}/src/libqof/qof/libgnc-qof.la
 
 libgncmod_backend_xml_la_LDFLAGS = -module -avoid-version
 libgncmod_backend_xml_la_LIBADD = \
-   ${GLIB_LIBS} ${GCONF_LIBS} ${LIBXML2_LIBS} ${ZLIB_LIBS} \
+   ${GLIB_LIBS} \
+   ${GCONF_LIBS} \
+   ${LIBXML2_LIBS} \
+   ${ZLIB_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
    ${top_builddir}/src/core-utils/libgnc-core-utils.la \
    libgnc-backend-xml-utils.la \
-   ${QOF_LIBS}
+   ${top_builddir}/src/libqof/qof/libgnc-qof.la
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.xml\"

@@ -1464,10 +1464,6 @@ AC_CONFIG_FILES(po/Makefile.in
           lib/guile-www/Makefile
           lib/srfi/Makefile
           lib/libc/Makefile
-          lib/libqof/Makefile
-          lib/libqof/qof/Makefile
-          lib/libqof/backend/Makefile
-          lib/libqof/backend/file/Makefile
           lib/stf/Makefile
           packaging/Makefile
           packaging/win32/Makefile
@@ -1535,6 +1531,10 @@ AC_CONFIG_FILES(po/Makefile.in
           src/import-export/hbci/glade/Makefile
           src/import-export/hbci/schemas/Makefile
           src/import-export/hbci/test/Makefile
+          src/libqof/Makefile
+          src/libqof/qof/Makefile
+          src/libqof/backend/Makefile
+          src/libqof/backend/file/Makefile
           src/optional/Makefile
           src/optional/python-bindings/Makefile
           src/optional/python-bindings/tests/Makefile

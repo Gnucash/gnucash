@@ -225,7 +225,7 @@ LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
         ${top_builddir}/src/core-utils/libgnc-core-utils.la \
         ./libgnc-test-file-stuff.la \
         ${LIBXML2_LIBS} \
-        ${QOF_LIBS} \
+        ${top_builddir}/src/libqof/qof/libgnc-qof.la \
         ${top_builddir}/lib/libc/libc-missing.la
 
 AM_CPPFLAGS = \
@@ -238,7 +238,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine/test-core \
   -I${top_srcdir}/src/backend/xml \
   -I${top_srcdir}/src/backend/qsf \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS} \

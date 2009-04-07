@@ -6,7 +6,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/import-export \
   -I${top_srcdir}/src/import-export/qif \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS}
 
@@ -15,7 +15,7 @@ LDADD = \
   ${top_builddir}/src/test-core/libgncmod-test.la \
   ../../libgncmod-generic-import.la \
   ../libgncmod-qif.la \
-  ${QOF_LIBS} \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS}
 
 TESTS = \

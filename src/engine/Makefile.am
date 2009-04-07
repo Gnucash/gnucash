@@ -8,7 +8,7 @@ AM_CPPFLAGS = \
 	-I${top_srcdir}/src \
 	-I${top_builddir}/src \
 	-I${top_srcdir}/src/gnc-module \
-	${QOF_CFLAGS} \
+    -I${top_srcdir}/src/libqof/qof \
 	${GLIB_CFLAGS} \
 	${GUILE_INCS}
 
@@ -111,8 +111,8 @@ libgncmod_engine_la_LDFLAGS = -avoid-version
 libgncmod_engine_la_LIBADD = \
   ../gnc-module/libgnc-module.la \
   ../core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
-  ${QOF_LIBS} \
   ${REGEX_LIBS} \
   ${GLIB_LIBS} \
   ${BINRELOC_LIBS} \

@@ -11,6 +11,6 @@ test_link_LDADD=../libgncmod-qif-import.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-  ${LIBXML2_LIBS} \
-  ${QOF_LIBS}
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${LIBXML2_LIBS}
 

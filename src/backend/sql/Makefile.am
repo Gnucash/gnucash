@@ -10,7 +10,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/core-utils\
   -I${top_srcdir}/lib/libc\
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \
   ${WARN_CFLAGS}
@@ -42,8 +42,9 @@ noinst_HEADERS = \
   gnc-transaction-sql.h
 
 libgnc_backend_sql_la_LIBADD = \
-   ${GLIB_LIBS} ${GCONF_LIBS} \
+   ${GLIB_LIBS} \
+   ${GCONF_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
-   ${QOF_LIBS}
+   ${top_builddir}/src/libqof/qof/libgnc-qof.la
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.sql\"

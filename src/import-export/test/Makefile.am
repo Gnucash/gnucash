@@ -5,7 +5,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/import-export \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS}
 
@@ -15,7 +15,8 @@ LDADD = \
   ../libgncmod-generic-import.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${GLIB_LIBS} ${QOF_LIBS}
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${GLIB_LIBS}
 
 TESTS = \
   test-link \

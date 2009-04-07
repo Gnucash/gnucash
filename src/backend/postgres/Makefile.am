@@ -8,14 +8,14 @@ AM_CPPFLAGS = \
   -I${srcdir}/../.. \
   -I${top_srcdir}/src/backend \
   -I${top_srcdir}/src/engine \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${PGSQL_CFLAGS} \
   ${GLIB_CFLAGS}
 
 libgnc_backend_postgres_la_LDFLAGS = -module -avoid-version
 libgnc_backend_postgres_la_LIBADD  =  ${PGSQL_LIBS} -lpq  \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${QOF_LIBS} \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS}
 
 libgnc_backend_postgres_la_SOURCES = \

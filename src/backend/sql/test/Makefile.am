@@ -41,7 +41,7 @@ LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
         ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-        ${QOF_LIBS} \
+        ${top_builddir}/src/libqof/qof/libgnc-qof.la \
         ${top_builddir}/lib/libc/libc-missing.la
 
 AM_CFLAGS = \
@@ -53,8 +53,8 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
   -I${top_srcdir}/src/backend/sql \
+  -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GUILE_INCS} \
   ${GCONF_CFLAGS}
 

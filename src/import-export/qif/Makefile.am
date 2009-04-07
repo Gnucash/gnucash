@@ -22,7 +22,7 @@ noinst_HEADERS = \
 libgncmod_qif_la_LIBADD = \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${QOF_LIBS} \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${REGEX_LIBS} \
   ${GLIB_LIBS}
 
@@ -32,9 +32,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/import-export \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS}
-
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.import.qif\"

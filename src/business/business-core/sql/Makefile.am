@@ -9,7 +9,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/business/business-core \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
   ${LIBGDA_CFLAGS}
 
@@ -47,7 +47,7 @@ libgncmod_business_backend_sql_la_LIBADD = \
   ${top_builddir}/src/backend/sql/libgnc-backend-sql.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${QOF_LIBS} \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS} \
   ${LIBGDA_LIBS}
 
