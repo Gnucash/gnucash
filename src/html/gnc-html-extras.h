@@ -47,4 +47,6 @@ typedef gchar* URLType;
 
 gchar* gnc_build_url( URLType type, const gchar* location, const gchar* label );
 
+gboolean gnc_html_engine_supports_css( void );
+
 #endif

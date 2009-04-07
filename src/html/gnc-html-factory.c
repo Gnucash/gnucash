@@ -28,7 +28,6 @@
 #include "gnc-html.h"
 #include "gnc-html-gtkhtml.h"
 #include "gnc-html-webkit.h"
-//#include "gnc-html-gtkmozembed.h"
 #include "qoflog.h"
 #include "gnc-engine.h"
 
@@ -44,19 +43,14 @@ GncHtml* gnc_html_factory_create_html( void )
 #else
 	return gnc_html_gtkhtml_new();
 #endif
-#if 0
-	const gchar* html_type = g_getenv( "GNC_HTML" );
+}
 
-	if( html_type == NULL ) {
-		return gnc_html_gtkhtml_new();
-	} else if( strcmp( html_type, "webkit" ) == 0 ) {
-		return gnc_html_webkit_new();
-	} else if( strcmp( html_type, "gtkhtml" ) == 0 ) {
-		return gnc_html_gtkhtml_new();
-	} else if( strcmp( html_type, "gtkmozembed" ) == 0 ) {
-		return gnc_html_gtkmozembed_new();
-	} else {
-		return gnc_html_gtkhtml_new();
-	}
+gboolean
+gnc_html_engine_supports_css( void )
+{
+#ifdef WANT_WEBKIT
+	return TRUE;
+#else
+	return FALSE;
 #endif
 }
