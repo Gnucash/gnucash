@@ -604,8 +604,8 @@ else
 fi
 if test x$QOF_XML_DIR = x; then
 	QOF_LIB_DIR='${pkglibdir}'
-	QOF_CFLAGS='-I${top_builddir}/lib/libqof/qof -I${top_srcdir}/lib/libqof/qof'
-	QOF_LIBS='${top_builddir}/lib/libqof/qof/libgnc-qof.la'
+	QOF_CFLAGS='-I${top_builddir}/src/libqof/qof -I${top_srcdir}/src/libqof/qof'
+	QOF_LIBS='${top_builddir}/src/libqof/qof/libgnc-qof.la'
 	QOF_VERSION="internal"
 	QOF_PREFIX="internal"
 	QOF_XML_DIR='${pkgdatadir}/xml/qsf'
