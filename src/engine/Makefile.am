@@ -170,7 +170,7 @@ if BUILDING_FROM_SVN
 swig-engine.c: engine.i ${top_srcdir}/src/base-typemaps.i \
                ${gncinclude_HEADERS} ${noinst_HEADERS}
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
-	-I${top_srcdir}/lib/libqof/qof -I${top_srcdir}/src -o $@ $<
+	-I${top_srcdir}/src/libqof/qof -I${top_srcdir}/src -o $@ $<
 endif
 
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
