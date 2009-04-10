@@ -804,3 +804,24 @@ gnc_ab_ieci_run_matcher(GncABImExContextImport *ieci)
 
     return gnc_gen_trans_list_run(ieci->generic_importer);
 }
+
+GWEN_DB_NODE *
+gnc_ab_get_permanent_certs(void)
+{
+    int rv;
+    GWEN_DB_NODE *perm_certs = NULL;
+    AB_BANKING *banking = gnc_AB_BANKING_new();
+
+    g_return_val_if_fail(banking, NULL);
+#ifdef AQBANKING_VERSION_4_PLUS
+    rv = AB_Banking_LoadSharedConfig(banking, "certs", &perm_certs, 0);
+#else
+    /* FIXME: Add code for older AqBanking versions */
+    /* See QBankmanager 0.9.50 in src/kbanking/libs/kbanking.cpp lines 323ff
+       for a proper example of how to do this */
+    rv = 0;
+#endif
+    gnc_AB_BANKING_fini(banking);
+    g_return_val_if_fail(rv >= 0, NULL);
+    return perm_certs;
+}
