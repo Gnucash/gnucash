@@ -362,6 +362,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 
         gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
         gnc_html_show_url(priv->html, type, url_location, url_label, 0);
+		g_free(url_location);
         gnc_window_set_progressbar_window( NULL );
 
         g_signal_connect(priv->container, "expose_event",

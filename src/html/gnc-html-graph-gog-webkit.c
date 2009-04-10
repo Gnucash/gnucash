@@ -230,6 +230,7 @@ convert_pixbuf_to_base64_string( GdkPixbuf* pixbuf )
 	}
 
 	base64_buf = g_base64_encode( pixel_buffer, pixel_buffer_size );
+	g_free( pixel_buffer );
 	return base64_buf;
 }
 

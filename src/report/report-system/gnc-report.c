@@ -144,6 +144,7 @@ gnc_run_report (gint report_id, char ** data)
 
   str = g_strdup_printf("(gnc:report-run %d)", report_id);
   scm_text = gfec_eval_string(str, error_handler);
+  g_free(str);
 
   if (scm_text == SCM_UNDEFINED || !SCM_STRINGP (scm_text))
     return FALSE;

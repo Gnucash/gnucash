@@ -68,6 +68,7 @@ libgncmod_html_gnc_module_init( int refcount )
 	}
 
 	scm_init_sw_gnc_html_module();
+	gnc_html_initialize();
 	lmod( "(sw_gnc_html)" );
 //	lmod( "(gnucash gnc_html)" );
 

@@ -122,6 +122,7 @@ gnc_html_dispose( GObject* obj )
 	GncHtmlPrivate* priv = GNC_HTML_GET_PRIVATE(self);
 
 	if( priv->container != NULL ) {
+		gtk_widget_destroy( GTK_WIDGET(priv->container) );
 		g_object_unref( G_OBJECT(priv->container) );
 		priv->container = NULL;
 	}
@@ -531,7 +532,7 @@ gnc_html_register_urltype( URLType type, const char *protocol )
 }
 
 void
-gnc_html_initialize (void)
+gnc_html_initialize( void )
 {
   int i;
   static struct {
