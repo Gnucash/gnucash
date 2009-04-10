@@ -1778,7 +1778,7 @@ gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction )
 void
 gsr_default_enter_handler( GNCSplitReg *gsr, gpointer data )
 {
-  gnc_split_reg_enter( gsr, TRUE );
+  gnc_split_reg_enter( gsr, FALSE );
 }
 
 void
