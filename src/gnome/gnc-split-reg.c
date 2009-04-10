@@ -316,6 +316,9 @@ gnc_split_reg_new( GNCLedgerDisplay *ld,
 {
   GNCSplitReg *gsrToRet;
 
+  ENTER("ld=%p, parent=%p, numberOfLines=%d, read_only=%s",
+        ld, parent, numberOfLines, read_only? "TRUE" : "FALSE");
+
   gsrToRet = g_object_new( gnc_split_reg_get_type(), NULL );
 
   gsrToRet->numRows        = numberOfLines;
@@ -326,6 +329,7 @@ gnc_split_reg_new( GNCLedgerDisplay *ld,
 
   gnc_split_reg_init2( gsrToRet );
 
+  LEAVE("%p", gsrToRet);
   return GTK_WIDGET( gsrToRet );
 }
 
@@ -362,11 +366,15 @@ gsr_setup_table( GNCSplitReg *gsr )
 {
   SplitRegister *sr;
 
+  ENTER("gsr=%p", gsr);
+
   sr = gnc_ledger_display_get_split_register( gsr->ledger );
   gnc_split_register_show_present_divider( sr, TRUE );
   /* events should be sufficient to redraw this */
   /* gnc_ledger_display_refresh( gsr->ledger ); */
   gnc_split_reg_refresh_toolbar( gsr );
+
+  LEAVE(" ");
 }
 
 static
@@ -375,6 +383,8 @@ gsr_create_table( GNCSplitReg *gsr )
 {
   GtkWidget *register_widget;
   SplitRegister *sr;
+
+  ENTER("gsr=%p", gsr);
 
   gnc_ledger_display_set_user_data( gsr->ledger, (gpointer)gsr );
   gnc_ledger_display_set_handlers( gsr->ledger,
@@ -397,6 +407,8 @@ gsr_create_table( GNCSplitReg *gsr )
                     G_CALLBACK(gsr_redraw_all_cb), gsr);
   g_signal_connect (gsr->reg, "redraw_help",
                     G_CALLBACK(gsr_emit_help_changed), gsr);
+
+  LEAVE(" ");
 }
 
 static
@@ -1766,7 +1778,7 @@ gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction )
 void
 gsr_default_enter_handler( GNCSplitReg *gsr, gpointer data )
 {
-  gnc_split_reg_enter( gsr, FALSE );
+  gnc_split_reg_enter( gsr, TRUE );
 }
 
 void

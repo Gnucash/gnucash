@@ -485,6 +485,9 @@ gnc_plugin_page_register_new (Account *account, gboolean subaccounts)
 	GncPluginPage *page;
 	GncPluginPageRegisterPrivate *priv;
 
+	ENTER("account=%p, subaccounts=%s", account,
+	      subaccounts? "TRUE" : "FALSE");
+
 	if (subaccounts)
 	  ledger = gnc_ledger_display_subaccounts (account);
 	else
@@ -493,6 +496,8 @@ gnc_plugin_page_register_new (Account *account, gboolean subaccounts)
 	page = gnc_plugin_page_register_new_common(ledger);
 	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
 	priv->key = *xaccAccountGetGUID(account);
+
+	LEAVE("%p", page);
 	return page;
 }
 
