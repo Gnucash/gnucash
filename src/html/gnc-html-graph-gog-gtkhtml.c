@@ -31,6 +31,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-html-graph-gog.h"
 #include "gnc-html-graph-gog-gtkhtml.h"
+#include "gnc-html-graph-gog-extras.h"
 #include "gnc-html.h"
 #include "gnc-engine.h"
 #include <goffice/goffice.h>
@@ -93,12 +94,12 @@ static void set_chart_axis_labels(GogObject *chart, const char *x_axis_label, co
 void
 gnc_html_graph_gog_gtkhtml_init( void )
 {
-  gnc_html_graph_gog_init();
+	gnc_html_graph_gog_init();
 
-  gnc_html_register_object_handler( "gnc-guppi-pie", handle_piechart );
-  gnc_html_register_object_handler( "gnc-guppi-bar", handle_barchart );
-  gnc_html_register_object_handler( "gnc-guppi-scatter", handle_scatter );
-  gnc_html_register_object_handler( "gnc-guppi-line", handle_linechart );
+	gnc_html_register_object_handler( GNC_CHART_PIE, handle_piechart );
+	gnc_html_register_object_handler( GNC_CHART_BAR, handle_barchart );
+	gnc_html_register_object_handler( GNC_CHART_SCATTER, handle_scatter );
+	gnc_html_register_object_handler( GNC_CHART_LINE, handle_linechart );
 }
 
 static double * 

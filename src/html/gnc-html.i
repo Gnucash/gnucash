@@ -21,6 +21,7 @@ SCM scm_init_sw_gnc_html_module(void);
 
 /* Parse the header file to generate wrappers */
 %include "gnc-html-extras.h"
+%include "gnc-html-graph-gog-extras.h"
 
 
 %init {
@@ -44,6 +45,11 @@ SCM scm_init_sw_gnc_html_module(void);
     SET_ENUM("URL-TYPE-XMLDATA");
     SET_ENUM("URL-TYPE-PRICE");
     SET_ENUM("URL-TYPE-OTHER");
+
+    SET_ENUM("GNC-CHART-PIE");
+    SET_ENUM("GNC-CHART-BAR");
+    SET_ENUM("GNC-CHART-LINE");
+    SET_ENUM("GNC-CHART-SCATTER");
 
 #undefine SET_ENUM
   }

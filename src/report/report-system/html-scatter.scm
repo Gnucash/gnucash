@@ -53,7 +53,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-scatter> class
-;;  generate the <object> form for a guppi scatter plot. 
+;;  generate the <object> form for a scatter plot. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:make-html-scatter-internal
@@ -168,7 +168,7 @@
     (if (and (list? data)
              (not (null? data)))
         (begin 
-          (push "<object classid=\"gnc-guppi-scatter\" width=")
+          (push "<object classid=\"")(push GNC-CHART-SCATTER)(push "\" width=")
           (push (gnc:html-scatter-width scatter))
           (push " height=") 
           (push (gnc:html-scatter-height scatter))

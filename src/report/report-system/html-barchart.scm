@@ -48,7 +48,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-barchart> class
-;;  generate the <object> form for a guppi barchart. 
+;;  generate the <object> form for a barchart. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:make-html-barchart-internal
@@ -331,7 +331,7 @@
              (not (null? data))
 	     (gnc:not-all-zeros data))
         (begin 
-          (push "<object classid=\"gnc-guppi-bar\" width=")
+          (push "<object classid=\"")(push GNC-CHART-BAR)(push "\" width=")
           (push (gnc:html-barchart-width barchart))
           (push " height=") 
           (push (gnc:html-barchart-height barchart))
