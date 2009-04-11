@@ -885,18 +885,20 @@ impl_gtkhtml_print( GncHtml* self )
 }
 
 #else /* !GTKHTML_USES_GTKPRINT */
-void
-gnc_html_print( GncHtml* html )
+static void
+impl_gtkhtml_print( GncHtml* self )
 {
 	PrintSession *ps;
+	GncHtmlGtkhtmlPrivate* priv;
 
+	priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
 	ps = gnc_print_session_create( FALSE );
 	if( ps == NULL ) {
 		/* user cancelled */
 		return;
 	}
 
-	gtk_html_print( GTK_HTML(html->html), ps->context );
+	gtk_html_print( GTK_HTML(priv->html), ps->context );
 	gnc_print_session_done( ps );
 }
 #endif /* GTKHTML_USES_GTKPRINT */
