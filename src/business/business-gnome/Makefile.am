@@ -12,6 +12,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-search \
+  -I${top_srcdir}/src/html \
   -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/src/business/business-core \
   -I${top_srcdir}/src/business/business-ledger \
@@ -22,8 +23,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
-  ${GTKHTML_CFLAGS} \
-  ${GDK_PIXBUF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS}
 
@@ -76,6 +75,7 @@ libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/html/libgncmod-html.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \

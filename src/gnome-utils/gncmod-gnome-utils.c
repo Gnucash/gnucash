@@ -14,7 +14,6 @@
 #include "gnc-module-api.h"
 
 #include "dialog-options.h"
-#include "gnc-html.h"
 #include "qof.h"
 #include "gnc-gui-query.h"
 
@@ -77,7 +76,6 @@ libgncmod_gnome_utils_gnc_module_init(int refcount) {
   /* Initialize the options-ui database */
   if (refcount == 0) {
     gnc_options_ui_initialize ();
-    gnc_html_initialize ();
 
     /* register the druid pieces */
     gnc_druid_gnome_register();

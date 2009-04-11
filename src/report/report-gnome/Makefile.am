@@ -11,11 +11,11 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnome \
+  -I${top_srcdir}/src/html \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/libqof/qof \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
-  ${GTKHTML_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLIB_CFLAGS}
 
@@ -44,6 +44,7 @@ libgncmod_report_gnome_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/html/libgncmod-html.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLADE_LIBS} \

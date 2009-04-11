@@ -1,6 +1,7 @@
-/********************************************************************\
- * window-report.h -- a report window for hypertext report.         *
- * Copyright (C) 1997 Robin D. Clark                                *
+/********************************************************************
+ * gnc-html_factory.c -- Factory to create HTML component           *
+ *                                                                  *
+ * Copyright (C) 2009 Phil Longstaff <plongstaff@rogers.com>        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,30 +19,38 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
-\********************************************************************/
+ ********************************************************************/
 
-#ifndef GNC_REPORT_WINDOW_H
-#define GNC_REPORT_WINDOW_H
+#include "config.h"
 
-#include <libguile.h>
+#include <gtk/gtk.h>
 
-//#include "gnc-html.h"
-#include "qof.h"
-  
-typedef struct gnc_report_window_s gnc_report_window;
+#include "gnc-html.h"
+#include "gnc-html-gtkhtml.h"
+#include "gnc-html-webkit.h"
+#include "qoflog.h"
+#include "gnc-engine.h"
 
-/** PROTOTYPES ******************************************************/
+#include "gnc-html-factory.h"
 
-// scm-exposed
-GtkWidget * gnc_report_window_default_params_editor(SCM options, SCM report);
+/* indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = GNC_MOD_HTML;
 
-// called from multiple places
-// [business-gnome/dialog-invoice.c;gnome/window-register.c]; and
-// scm-exposed; 3-liner which calls gnc_main_window_open_report after handling busy-cursor.
-void       reportWindow(int id);
-// scm-exposed; ~priv
-void       gnc_report_raise_editor(SCM report);
-// module[/plugin]-init
-void       gnc_report_init (void);
-
+GncHtml* gnc_html_factory_create_html( void )
+{
+#ifdef WANT_WEBKIT
+	return gnc_html_webkit_new();
+#else
+	return gnc_html_gtkhtml_new();
 #endif
+}
+
+gboolean
+gnc_html_engine_supports_css( void )
+{
+#ifdef WANT_WEBKIT
+	return TRUE;
+#else
+	return FALSE;
+#endif
+}

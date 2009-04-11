@@ -1,6 +1,6 @@
-/********************************************************************\
- * window-report.h -- a report window for hypertext report.         *
- * Copyright (C) 1997 Robin D. Clark                                *
+/********************************************************************
+ * gnc-html-factory.h -- display html with gnc special tags         *
+ * Copyright (C) 2009 Phil Longstaff <plongstaff@rogers.com>        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,28 +20,11 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef GNC_REPORT_WINDOW_H
-#define GNC_REPORT_WINDOW_H
+#ifndef GNC_HTML_FACTORY_H
+#define GNC_HTML_FACTORY_H
 
-#include <libguile.h>
+#include "gnc-html.h"
 
-//#include "gnc-html.h"
-#include "qof.h"
-  
-typedef struct gnc_report_window_s gnc_report_window;
-
-/** PROTOTYPES ******************************************************/
-
-// scm-exposed
-GtkWidget * gnc_report_window_default_params_editor(SCM options, SCM report);
-
-// called from multiple places
-// [business-gnome/dialog-invoice.c;gnome/window-register.c]; and
-// scm-exposed; 3-liner which calls gnc_main_window_open_report after handling busy-cursor.
-void       reportWindow(int id);
-// scm-exposed; ~priv
-void       gnc_report_raise_editor(SCM report);
-// module[/plugin]-init
-void       gnc_report_init (void);
+GncHtml* gnc_html_factory_create_html( void );
 
 #endif

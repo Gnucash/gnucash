@@ -18,9 +18,9 @@ AM_CPPFLAGS = \
   ${GLADE_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GNOME_CFLAGS} \
-  ${GTKHTML_CFLAGS} \
+  ${GNOME_PRINT_CFLAGS} \
   ${GUILE_INCS} \
-  ${GOFFICE_CFLAGS}
+  ${QOF_CFLAGS} 
 
 libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \
@@ -63,9 +63,6 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-general-select.c \
   gnc-gnome-utils.c \
   gnc-gui-query.c \
-  gnc-html-graph-gog.c \
-  gnc-html-history.c \
-  gnc-html.c \
   gnc-icons.c \
   gnc-main-window.c \
   gnc-menu-extensions.c \
@@ -134,9 +131,6 @@ gncinclude_HEADERS = \
   gnc-general-select.h \
   gnc-gnome-utils.h \
   gnc-gui-query.h \
-  gnc-html-graph-gog.h \
-  gnc-html-history.h \
-  gnc-html.h \
   gnc-icons.h \
   gnc-main-window.h \
   gnc-menu-extensions.h \
@@ -186,14 +180,11 @@ libgncmod_gnome_utils_la_LIBADD = \
   $(top_builddir)/lib/libc/libc-missing.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GNOME_LIBS} \
-  ${GTKHTML_LIBS} \
-  ${GUILE_LIBS} \
-  ${GDK_PIXBUF_LIBS} \
+  ${GNOME_PRINT_LIBS} \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
-  ${GOFFICE_LIBS} \
   ${REGEX_LIBS} \
   ${LIBXML2_LIBS}
 
@@ -202,7 +193,7 @@ if HAVE_X11_XLIB_H
 endif
 
 if BUILDING_FROM_SVN
-swig-gnome-utils.c: gnome-utils.i gnc-html.h \
+swig-gnome-utils.c: gnome-utils.i \
                     ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
@@ -219,11 +210,6 @@ EXTRA_DIST = \
   gnome-utils.i \
   ${gncmod_DATA} \
   ${gncscm_DATA}
-
-if !GTKHTML_USES_GTKPRINT
-  AM_CPPFLAGS += ${GNOME_PRINT_CFLAGS}
-  libgncmod_gnome_utils_la_LIBADD += ${GNOME_PRINT_LIBS}
-endif
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

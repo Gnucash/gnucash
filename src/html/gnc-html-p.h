@@ -1,6 +1,6 @@
-/********************************************************************\
- * window-report.h -- a report window for hypertext report.         *
- * Copyright (C) 1997 Robin D. Clark                                *
+/********************************************************************
+ * gnc-html-p.h -- display html with gnc special tags               *
+ * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,28 +20,30 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef GNC_REPORT_WINDOW_H
-#define GNC_REPORT_WINDOW_H
+#ifndef GNC_HTML_P_H
+#define GNC_HTML_P_H
 
-#include <libguile.h>
+struct _GncHtmlPrivate {
+	GtkWidget* parent;				/* window this html goes into */
+	GtkWidget* container;			/* parent of the gtkhtml widget */
+	gchar* current_link;			/* link under mouse pointer */
 
-//#include "gnc-html.h"
-#include "qof.h"
-  
-typedef struct gnc_report_window_s gnc_report_window;
+	URLType base_type;				/* base of URL (path - filename) */
+	gchar* base_location;
 
-/** PROTOTYPES ******************************************************/
+	GHashTable* request_info;		/* hash uri to GList of GtkHTMLStream * */
 
-// scm-exposed
-GtkWidget * gnc_report_window_default_params_editor(SCM options, SCM report);
+	/* callbacks */
+	GncHTMLUrltypeCB urltype_cb;	/* is this type OK for this instance? */
+	GncHTMLLoadCB load_cb;
+	GncHTMLFlyoverCB flyover_cb;
+	GncHTMLButtonCB button_cb;
 
-// called from multiple places
-// [business-gnome/dialog-invoice.c;gnome/window-register.c]; and
-// scm-exposed; 3-liner which calls gnc_main_window_open_report after handling busy-cursor.
-void       reportWindow(int id);
-// scm-exposed; ~priv
-void       gnc_report_raise_editor(SCM report);
-// module[/plugin]-init
-void       gnc_report_init (void);
+	gpointer flyover_cb_data;
+	gpointer load_cb_data;
+	gpointer button_cb_data;
+
+	gnc_html_history * history;
+};
 
 #endif

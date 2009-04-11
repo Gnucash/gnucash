@@ -52,7 +52,6 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
-#include "gnc-html.h"
 #include "gnc-icons.h"
 #include "gnc-plugin-account-tree.h"
 #include "gnc-session.h"

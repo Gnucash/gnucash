@@ -43,7 +43,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/lib \
   ${GNOME_CFLAGS} \
-  ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \

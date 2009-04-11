@@ -11,8 +11,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
-  ${GTKHTML_CFLAGS} \
-  ${GDK_PIXBUF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS}
 

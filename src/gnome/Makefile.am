@@ -12,13 +12,15 @@ libgnc_gnome_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/backend/xml/libgnc-backend-xml-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/html/libgncmod-html.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
-  ${GLIB_LIBS}
+  ${GLIB_LIBS} \
+  ${QOF_LIBS}
 
 libgnc_gnome_la_SOURCES = \
   swig-gnome.c \
@@ -112,6 +114,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/backend/xml \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnome-search \
+  -I${top_srcdir}/src/html \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
@@ -121,8 +124,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GNOME_CFLAGS} \
-  ${GDK_PIXBUF_CFLAGS} \
-  ${GTKHTML_CFLAGS} \
+  ${GNOME_PRINT_CFLAGS} \
   ${GLADE_CFLAGS} \
   $(GLIB_CFLAGS)
 
