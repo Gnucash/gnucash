@@ -13,8 +13,8 @@ GUI_SUBDIRS_1 = \
   calculation \
   tax \
   app-utils \
-  html \
   gnome-utils \
+  html \
   gnome-search
 
 GUI_SUBDIRS_2 = \
