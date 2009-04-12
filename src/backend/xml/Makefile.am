@@ -9,7 +9,8 @@ AM_CPPFLAGS = \
   -DLOCALE_DIR=\""$(datadir)/locale"\" \
   -I${top_srcdir}/src/backend \
   -I${top_srcdir}/src/engine \
-  -I${top_srcdir}/src/core-utils\
+  -I${top_srcdir}/src/core-utils \
+  -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/lib/libc\
   -I${top_srcdir}/src/libqof/qof \
   ${LIBXML2_CFLAGS} \
@@ -40,10 +41,10 @@ libgnc_backend_xml_utils_la_SOURCES = \
   sixtp.c
 
 libgncmod_backend_xml_la_SOURCES = \
-  gnc-backend-file.c
+  gnc-backend-xml.c
 
 noinst_HEADERS = \
-  gnc-backend-file.h \
+  gnc-backend-xml.h \
   gnc-xml.h \
   gnc-xml-helper.h \
   io-example-account.h \

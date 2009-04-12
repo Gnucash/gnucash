@@ -1,5 +1,5 @@
 /*********************************************************************
- * gncmod-file-backend.c
+ * gncmod-backend-xml.c
  * module definition/initialization for the file backend module
  *
  * Copyright (c) 2001 Linux Developers Group, Inc.

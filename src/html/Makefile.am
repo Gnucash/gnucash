@@ -31,7 +31,16 @@ gncinclude_HEADERS = \
   gnc-html-graph-gog.h \
   gnc-html-history.h \
   gnc-html.h \
-  gnc-html-factory.h
+  gnc-html-p.h \
+  gnc-html-factory.h \
+  gnc-html-gtkhtml.h \
+  gnc-html-webkit.h \
+  gnc-html-extras.h \
+  gnc-html-gtkhtml-p.h \
+  gnc-html-webkit-p.h \
+  gnc-html-graph-gog-gtkhtml.h \
+  gnc-html-graph-gog-webkit.h \
+  gnc-html-graph-gog-extras.h
 
 libgncmod_html_la_LDFLAGS = -avoid-version
 
@@ -82,7 +91,6 @@ swig-gnc-html.c: gnc-html.i gnc-html.h \
 endif
 
 EXTRA_DIST = \
-  gnc-svninfo.h \
   gnc-html.i
 
 if !GTKHTML_USES_GTKPRINT

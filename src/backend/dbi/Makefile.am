@@ -10,8 +10,8 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/backend \
   -I${top_srcdir}/src/backend/sql \
   -I${top_srcdir}/src/engine \
-  -I${top_srcdir}/src/core-utils\
-  -I${top_srcdir}/lib/libc\
+  -I${top_srcdir}/src/core-utils \
+  -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \

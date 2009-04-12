@@ -30,7 +30,7 @@
 #include "druid-gnc-xml-import.h"
 #include "dialog-utils.h"
 #include "druid-utils.h"
-#include "gnc-backend-file.h"
+#include "gnc-backend-xml.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-module.h"
 #include "gnc-ui.h"

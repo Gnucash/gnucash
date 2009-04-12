@@ -50,7 +50,7 @@ foreach my $file (@possible_files) {
 }
 
 # These are also added, even though they are outside of src/
-print "lib/libqof/backend/file/qsf-backend.c\n";
-print "lib/libqof/qof/gnc-date.c\n";
+print "src/libqof/backend/file/qsf-backend.c\n";
+print "src/libqof/qof/gnc-date.c\n";
 print "intl-scm/guile-strings.c\n";
 print "doc/tip_of_the_day.list.in\n"
