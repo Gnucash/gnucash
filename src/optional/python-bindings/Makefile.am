@@ -38,7 +38,7 @@ _gnucash_core_c_la_LIBADD = \
 
 if BUILDING_FROM_SVN
 gnucash_core.c: $(SWIG_SOURCES)
-	swig $(SWIG_PYTHON_OPT) -Wall -Werror \
+	swig -python -Wall -Werror \
         -I$(top_srcdir)/src -I$(top_srcdir)/src/engine \
 		-I$(top_srcdir)/src/business/business-core \
         -I${top_srcdir}/src/libqof/qof \
