@@ -323,7 +323,7 @@
        (gnc:html-text-append! description (gnc:html-markup-b 
               total-line-text))
        (gnc:html-text-append! description (gnc:html-markup-b 
-              (_ " ")))
+              " "))
        (gnc:html-text-append! total (gnc:html-markup-b
               total-amount))
        (let ((description-cell (if (or tax_code? transaction-details?)
@@ -524,7 +524,7 @@
                                            (xaccSplitGetSharePrice split)
                                        )
                                        print-info)
-                                   (_ ")")
+                                   ")"
                                 )
                             )
                           )
@@ -541,7 +541,7 @@
                                  (_ " on ")
                                  (strftime "%Y-%b-%d"
                                     (localtime (car pricedb-lookup-price-time)))
-                                 (_ ")")
+                                 ")"
                                )
                                ""))
      )
@@ -704,7 +704,7 @@
                           ""
                           (string-append (_ " (Account Commodity: ")
                                   (gnc-commodity-get-mnemonic account-commodity)
-                                  (_ ")")))
+                                  ")"))
                       (if show-TXF-data?
                           (let* ((pns (if (or (eq? 'parent code-pns)
                                               (eq? 'current code-pns))
@@ -720,13 +720,13 @@
                                     (if (eq? line "")
                                         ""
                                         (string-append
-                                          (_ " (TXF Parameter: ") line (_ ")")))
+                                          (_ " (TXF Parameter: ") line ")"))
                                     (if (eq? line "")
                                         (string-append
-                                          (_ " (TXF Parameter: ") pns (_ ")"))
+                                          (_ " (TXF Parameter: ") pns ")")
                                         (string-append
-                                          (_ " (TXF Parameters: ") pns (_", ")
-                                          line (_ ")"))))
+                                          (_ " (TXF Parameters: ") pns ", "
+                                          line ")")))
                           )
                           "")))
      (print-info (gnc-account-print-info account #f))
@@ -760,10 +760,10 @@
                   (action-memo (if (and (string=? action "") (string=? memo ""))
                                    ""
                                    (begin
-                                     (string-append (_ "/") action
+                                     (string-append "/" action
                                        (if (string=? memo "")
                                            ""
-                                           (string-append (_ ":") memo))))))
+                                           (string-append ":" memo))))))
                   (notes-act-memo (string-append notes action-memo))
                   (trans-currency (xaccTransGetCurrency parent))
                   (splt-amount (xaccSplitGetAmount split))
@@ -975,12 +975,12 @@
                                  account-name
                                  (if (not (gnc-commodity-equiv account-commodity
                                                                USD-currency))
-                                     (string-append (_ " (")
+                                     (string-append " ("
                                                     amnt-acct-curr
                                                     (_ "  In ")
                                                     (gnc-commodity-get-mnemonic
                                                               account-commodity)
-                                                    (_ ") "))
+                                                    ") ")
                                      "")))
               )
               (render-total-row table
@@ -1524,10 +1524,10 @@
                               (set! need-tax-code-header? #t)
                               (set! tax-code-header-printed? #f)
                               (set! tax-code-text
-                                    (string-append description (_ " (")
-                                                   current-tax-code (_ ")")))
+                                    (string-append description " ("
+                                                   current-tax-code ")"))
                               (set! tax-code-heading-text
-                                    (string-append description (_ " (")
+                                    (string-append description " ("
                                       current-tax-code
                                       (if show-TXF-data?
                                           (string-append
@@ -1540,8 +1540,8 @@
                                                      (gnc:get-txf-pns tax-code
                                                           (eq? ACCT-TYPE-INCOME
                                                                type))))
-                                                (_ "Y")
-                                                (_ "N"))
+                                                "Y"
+                                                "N")
                                             (_ ", TXF Format ")
                                             (number->string 
                                                     (gnc:get-txf-format tax-code
@@ -1550,15 +1550,15 @@
                                             (_ ", Multiple Copies ")
                                             (if (gnc:get-txf-multiple tax-code
                                                     (eq? ACCT-TYPE-INCOME type))
-                                                (_ "Y")
-                                                (_ "N"))
+                                                "Y"
+                                                "N")
                                             (_ ", Special Dates ")
                                             (if (txf-special-split? tax-code)
-                                                (_ "Y")
-                                                (_ "N"))
+                                                "Y"
+                                                "N")
                                           )
                                       "")
-                                    (_ ")")))
+                                    ")"))
                          )
                          (set! saved-tax-code-text tax-code-text)
                       )
@@ -1629,9 +1629,9 @@
                                               file-name
                                               (_ ". The error is: ")
                                               (symbol->string key)
-                                              (_ " - ")
+                                              " - "
                                               (car (caddr args))
-                                              (_ ".")
+                                              "."
                                           ))
                                      #f)))
                    )
@@ -1841,7 +1841,7 @@ and Deductible Expenses.")
               report-obj
               #t
               #f))
- 'export-types (list (cons (_ "TXF") 'txf))
+ 'export-types (list (cons "TXF" 'txf))
  'export-thunk (lambda (report-obj choice file-name)
                  (generate-tax-schedule
                   (_ "Taxable Income/Deductible Expenses")
