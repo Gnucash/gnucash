@@ -47,13 +47,13 @@
                                 <child>
                                   <widget class="GtkLabel" id="label2">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">host</property>
+                                    <property name="label" translatable="yes">Host</property>
                                   </widget>
                                 </child>
                                 <child>
                                   <widget class="GtkLabel" id="label3">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">database</property>
+                                    <property name="label" translatable="yes">Database</property>
                                   </widget>
                                   <packing>
                                     <property name="position">1</property>
@@ -62,7 +62,7 @@
                                 <child>
                                   <widget class="GtkLabel" id="label4">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">username</property>
+                                    <property name="label" translatable="yes">Username</property>
                                   </widget>
                                   <packing>
                                     <property name="position">2</property>
@@ -71,7 +71,7 @@
                                 <child>
                                   <widget class="GtkLabel" id="label6">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">password</property>
+                                    <property name="label" translatable="yes">Password</property>
                                   </widget>
                                   <packing>
                                     <property name="position">3</property>
@@ -187,7 +187,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="label" translatable="no">gtk-cancel</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">-6</property>
               </widget>
@@ -197,7 +197,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="label" translatable="yes">gtk-save-as</property>
+                <property name="label" translatable="no">gtk-save-as</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">-5</property>
               </widget>
