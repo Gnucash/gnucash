@@ -56,6 +56,11 @@
 (define opthelp-show-budget (N_ "Display a column for the budget values"))
 (define opthelp-show-actual (N_ "Display a column for the actual values"))
 (define opthelp-show-difference (N_ "Display the difference as budget - actual"))
+(define optname-show-totalcol (N_ "Show Column with Totals"))
+(define opthelp-show-totalcol (N_ "Display a column with the row totals"))
+(define optname-bottom-behavior (N_ "Flatten list to depth limit"))
+(define opthelp-bottom-behavior
+  (N_ "Displays accounts which exceed the depth limit at the depth limit"))
 
 (define optname-budget (N_ "Budget"))
 
@@ -103,6 +108,10 @@
                           ACCT-TYPE-EXPENSE)
         (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
      #f)
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-accounts optname-bottom-behavior
+      "c" opthelp-bottom-behavior #f))
 
     ;; columns to display
     (add-option
@@ -117,6 +126,10 @@
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-difference
       "s3" opthelp-show-difference #f))
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-show-totalcol
+      "s4" opthelp-show-totalcol #f))
 
       ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)
@@ -132,6 +145,7 @@
          (show-actual? (get-val params 'show-actual))
          (show-budget? (get-val params 'show-budget))
          (show-diff? (get-val params 'show-difference))
+         (show-totalcol? (get-val params 'show-totalcol))
         )
   
   (define (gnc:html-table-add-budget-line!
@@ -140,11 +154,14 @@
     (let* ((num-periods (gnc-budget-get-num-periods budget))
            (period 0)
            (current-col (+ colnum 1))
+		   (bgt-total (gnc-numeric-zero))
+		   (bgt-total-unset? #t)
+		   (act-total (gnc-numeric-zero))
+           (comm (xaccAccountGetCommodity acct))
+           (reverse-balance? (gnc-reverse-balance acct))
            )
       (while (< period num-periods)
              (let* (
-                    (comm (xaccAccountGetCommodity acct))
-                    (reverse-balance? (gnc-reverse-balance acct))
                     
                     ;; budgeted amount
                     (bgt-unset? (not (gnc-budget-is-account-period-value-set 
@@ -170,6 +187,12 @@
                                  (gnc:make-gnc-monetary comm dif-numeric-val)))
                     )
 
+			   (if (not bgt-unset?)
+			     (begin
+			   		(set! bgt-total (gnc-numeric-add bgt-total bgt-numeric-val GNC-DENOM-AUTO GNC-RND-ROUND))
+					(set! bgt-total-unset? #f))
+				 )
+			   (set! act-total (gnc-numeric-add act-total act-numeric-val GNC-DENOM-AUTO GNC-RND-ROUND))
                (if show-budget?
                  (begin
                    (gnc:html-table-set-cell!
@@ -194,6 +217,41 @@
                (set! period (+ period 1))
              )
         )
+
+		;; Totals
+		(if show-totalcol?
+		   (begin
+              (if show-budget?
+                 (begin
+                   (gnc:html-table-set-cell!
+                          html-table rownum current-col
+                          (if bgt-total-unset? "."
+                               (gnc:make-gnc-monetary comm bgt-total)))
+                   (set! current-col (+ current-col 1))
+                 )
+               )
+               (if show-actual?
+                 (begin
+                   (gnc:html-table-set-cell!
+                    html-table rownum current-col
+                          (gnc:make-gnc-monetary comm act-total))
+                   (set! current-col (+ current-col 1))
+                 )
+               )
+               (if show-diff?
+                 (begin
+                   (gnc:html-table-set-cell!
+                    html-table rownum current-col
+                       (if bgt-total-unset? "."
+                          (gnc:make-gnc-monetary comm
+                              (gnc-numeric-sub bgt-total
+                                       act-total GNC-DENOM-AUTO
+                                       (+ GNC-DENOM-LCD GNC-RND-NEVER)))))
+                   (set! current-col (+ current-col 1))
+                 )
+               )
+	        )
+		 )
       )
     )
   (define (gnc:html-table-add-budget-headers!
@@ -211,7 +269,7 @@
       (while (< period num-periods)
              (let* ((date (gnc-budget-get-period-start-date budget period)))
                (gnc:html-table-set-cell!
-                html-table 0 current-col (gnc-print-date date))
+                html-table 0 (if show-diff? (+ current-col 1) current-col) (gnc-print-date date))
                (if show-budget?
                  (begin
                    (gnc:html-table-set-cell!
@@ -239,6 +297,36 @@
                (set! period (+ period 1))
                )
              )
+		 (if show-totalcol?
+		    (begin
+               (gnc:html-table-set-cell!
+                html-table 0 (if show-diff? (+ current-col 1) current-col) "Total")
+               (if show-budget?
+                 (begin
+                   (gnc:html-table-set-cell!
+                    html-table 1
+                    current-col (_ "Bgt")) ;; Translators: Abbreviation for "Budget"
+                   (set! current-col (+ current-col 1))
+                 )
+               )
+               (if show-actual?
+                 (begin 
+                   (gnc:html-table-set-cell!
+                    html-table 1
+                    current-col (_ "Act")) ;; Translators: Abbreviation for "Actual"
+                   (set! current-col (+ current-col 1))
+                 )
+               )
+               (if show-diff?
+                 (begin 
+                   (gnc:html-table-set-cell!
+                    html-table 1
+                    current-col (_ "Diff")) ;; Translators: Abbrevation for "Difference"
+                   (set! current-col (+ current-col 1))
+                 )
+               )
+			)
+		 )
       )
     )
 
@@ -300,6 +388,7 @@
                                      optname-show-subaccounts))
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))
+	     (bottom-behavior (get-option gnc:pagename-accounts optname-bottom-behavior))
          (row-num 0) ;; ???
          (work-done 0)
          (work-to-do 0)
@@ -385,7 +474,8 @@
                ;; _something_ but the actual value isn't used.
                (env (list (list 'end-date (gnc:get-today))
                           (list 'display-tree-depth tree-depth)
-                          (list 'depth-limit-behavior 'flatten)
+		 				  (list 'depth-limit-behavior
+						             (if bottom-behavior 'flatten 'summarize))
                           ))
                (acct-table #f)
                (html-table (gnc:make-html-table))
@@ -398,6 +488,8 @@
                        (get-option gnc:pagename-display optname-show-budget))
                  (list 'show-difference
                        (get-option gnc:pagename-display optname-show-difference))
+                 (list 'show-totalcol
+                       (get-option gnc:pagename-display optname-show-totalcol))
                 )
                )
                (report-name (get-option gnc:pagename-general
