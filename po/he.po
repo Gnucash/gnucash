@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-14 10:22+0200\n"
-"PO-Revision-Date: 2008-12-01 10:11+0200\n"
-"Last-Translator: Oren Weil\n"
+"PO-Revision-Date: 2009-04-21 14:37+0200\n"
+"Last-Translator: Ori Hoch <ori@uumpa.com>\n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../src/app-utils/gnc-exp-parser.c:633
 msgid "Illegal variable in expression."
-msgstr ""
+msgstr "משתנה לא חוקי בביטוי."
 
 #: ../src/app-utils/gnc-exp-parser.c:643
 msgid "Unbalanced parenthesis"
@@ -35,11 +35,11 @@ msgstr ""
 
 #: ../src/app-utils/gnc-exp-parser.c:649
 msgid "Undefined character"
-msgstr ""
+msgstr "סימן לא מוכר"
 
 #: ../src/app-utils/gnc-exp-parser.c:651
 msgid "Not a variable"
-msgstr ""
+msgstr "לא משתנה"
 
 #: ../src/app-utils/gnc-exp-parser.c:653
 msgid "Not a defined function"
@@ -47,11 +47,11 @@ msgstr ""
 
 #: ../src/app-utils/gnc-exp-parser.c:655
 msgid "Out of memory"
-msgstr ""
+msgstr "הזכרון מלא"
 
 #: ../src/app-utils/gnc-exp-parser.c:657
 msgid "Numeric error"
-msgstr ""
+msgstr "טעות מספרית"
 
 #. Translators: For the following strings, the single letters
 #. after the colon are abbreviations of the word before the
@@ -143,27 +143,27 @@ msgstr ""
 
 #: ../src/bin/gnucash-bin.c:84
 msgid "This is a development version. It may or may not work.\n"
-msgstr ""
+msgstr "זו גרסת פיתוח. היא עלולה לא לעבוד.\n"
 
 #: ../src/bin/gnucash-bin.c:85
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org.\n"
-msgstr ""
+msgstr "דווח על באגים ובעיות אחרות ל- gnucash@devel@gnucash.org.\n"
 
 #: ../src/bin/gnucash-bin.c:86
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
-msgstr ""
+msgstr "הנך יכול גם לחפש ולדווח על באגים ב- http://bugzilla.gnome.org\n"
 
 #: ../src/bin/gnucash-bin.c:87
 msgid "The last stable version was "
-msgstr ""
+msgstr "הגרסה היציבה האחרונה היתה"
 
 #: ../src/bin/gnucash-bin.c:88
 msgid "The next stable version will be "
-msgstr ""
+msgstr "הגרסה היציבה הבאה תהיה"
 
 #: ../src/bin/gnucash-bin.c:218
 msgid "Show GnuCash version"
-msgstr ""
+msgstr "הראה גרסת GnuCash"
 
 #: ../src/bin/gnucash-bin.c:221
 msgid "Enable debugging mode: increasing logging to provide deep detail."
@@ -198,7 +198,7 @@ msgstr ""
 
 #: ../src/bin/gnucash-bin.c:244
 msgid "Do not load the last file opened"
-msgstr ""
+msgstr "אל תטען את הקובץ האחרון שנפתח"
 
 #: ../src/bin/gnucash-bin.c:247
 msgid "Set configuration path"
@@ -1692,7 +1692,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:6
 msgid "question"
-msgstr ""
+msgstr "שאלה"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:1
 msgid "Access Control"
@@ -1757,7 +1757,7 @@ msgstr "שם משתמש: "
 #: ../src/business/business-gnome/glade/invoice.glade.h:1
 #: ../src/business/business-gnome/glade/order.glade.h:1
 msgid "(owner)"
-msgstr ""
+msgstr "(בעלים)"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:3
 msgid "Additional to Card:"
@@ -1847,15 +1847,15 @@ msgstr "מזהה המטלה. אם ריק מספר ייקבע באופן אוטו
 
 #: ../src/business/business-gnome/glade/order.glade.h:4
 msgid "Close Order"
-msgstr ""
+msgstr "סגור הזמנה"
 
 #: ../src/business/business-gnome/glade/order.glade.h:7
 msgid "Invoices"
-msgstr ""
+msgstr "קבלות"
 
 #: ../src/business/business-gnome/glade/order.glade.h:8
 msgid "New Order"
-msgstr ""
+msgstr "סדר חדש"
 
 #: ../src/business/business-gnome/glade/order.glade.h:10
 msgid "Order Entries"
@@ -2436,7 +2436,7 @@ msgstr ""
 #: ../src/gnome/glade/register.glade.h:6
 #: ../src/gnome/gnc-plugin-page-register.c:333
 msgid "Cancel"
-msgstr ""
+msgstr "ביטול"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:196
 #: ../src/gnome/glade/register.glade.h:16
@@ -2509,7 +2509,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:8
 msgid "Open new invoice in new window"
-msgstr ""
+msgstr "פתח קבלה חדשה בחלון חדש"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:9
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:7
@@ -2552,11 +2552,11 @@ msgstr ""
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:16
 msgid "Window position and size"
-msgstr ""
+msgstr "מיקום וגודל חלון"
 
 #: ../src/business/business-gnome/search-owner.c:163
 msgid "You have not selected an owner"
-msgstr ""
+msgstr "לא בחרת בעלים"
 
 #: ../src/business/business-gnome/search-owner.c:256
 #: ../src/gnome-search/search-boolean.c:177
@@ -3122,7 +3122,7 @@ msgstr ""
 
 #: ../src/engine/gnc-budget.c:91 ../src/gnome/gnc-plugin-page-budget.c:844
 msgid "Unnamed Budget"
-msgstr ""
+msgstr "תקציב ללא שם"
 
 #: ../src/engine/gnc-filepath-utils.c:349
 #, c-format
@@ -3613,11 +3613,11 @@ msgstr ""
 
 #: ../src/gnome/dialog-sx-since-last-run.c:383
 msgid "Created"
-msgstr ""
+msgstr "נוצר"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:446
 msgid "Never"
-msgstr ""
+msgstr "אף פעם"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:516
 msgid "(Need Value)"
@@ -3652,7 +3652,7 @@ msgstr "פעולות שנוצרו"
 
 #: ../src/gnome/dialog-tax-info.c:718
 msgid "Form"
-msgstr ""
+msgstr "טופס"
 
 #: ../src/gnome/druid-acct-period.c:169
 msgid "The book was closed successfully."
@@ -4576,11 +4576,11 @@ msgstr ""
 
 #: ../src/gnome/glade/commodities.glade.h:5
 msgid "Securities"
-msgstr ""
+msgstr "בטחונות"
 
 #: ../src/gnome/glade/commodities.glade.h:6
 msgid "Show National Currencies"
-msgstr ""
+msgstr "הראה מטבעות לאומיים"
 
 #: ../src/gnome/glade/fincalc.glade.h:1
 msgid "<b>Calculations</b>"
@@ -4600,11 +4600,11 @@ msgstr ""
 
 #: ../src/gnome/glade/fincalc.glade.h:5
 msgid "Account Information"
-msgstr ""
+msgstr "פרטי חשבון"
 
 #: ../src/gnome/glade/fincalc.glade.h:6
 msgid "Annual"
-msgstr ""
+msgstr "שנתי"
 
 #: ../src/gnome/glade/fincalc.glade.h:7
 msgid ""
@@ -11107,7 +11107,8 @@ msgstr ""
 msgid "translator_credits"
 msgstr ""
 "אורי הוך - ori@uumpa.com\n"
-"Oren Weil"
+"Oren Weil\n"
+"Shahar Or"
 
 #. CY Strings
 #. src/app-utils/date-utilities.scm
@@ -12126,6 +12127,7 @@ msgstr ""
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:457
 #: ../src/import-export/hbci/druid-hbci-initial.c:661
+#, fuzzy
 msgid ""
 "The external program \"AqBanking Setup Wizard\" failed to run successfully "
 "because the additional software \"Qt\" was not found.  Please install the "
@@ -12139,6 +12141,15 @@ msgid ""
 "Online Banking cannot be setup without Qt.  Press \"Close\" now, then "
 "\"Cancel\" to cancel the Online Banking setup."
 msgstr ""
+"הרצת התכנה החיצונית \"AqBanking Setup Wizard\"  נכשלה משום שהתכנה \"Qt\" לא "
+"נמצאה. אנא התקן את \"Qt/Windows Open Source Edition\" מ- Trolltech על ידי "
+"הורדתה מ- www.trolltech.com\n"
+"\n"
+"אם כבר התקנת את Qt, תצטרך להתאים את משתנה ה- PATH של המערכת שלך כראוי. צור "
+"קשר עם מפתחי GnuCash אם תצטרך עוד עזרה על איך להתקין את Qt נכונה.\n"
+"\n"
+"לא ניתן להתקין בנקאות מכוונת מבלי Qt. לחץ \"סגור\" כעת ואז לחץ \"ביטול\" כדי "
+"לבטל את התקנת הבנקאות המכוונת."
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:476
 #: ../src/import-export/hbci/druid-hbci-initial.c:678
@@ -12163,12 +12174,12 @@ msgstr ""
 #: ../src/import-export/aqbanking/druid-ab-initial.c:779
 #: ../src/import-export/hbci/druid-hbci-initial.c:755
 msgid "Online Banking Account Name"
-msgstr ""
+msgstr "שם חשבון בנקאות מכוונת"
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:784
 #: ../src/import-export/hbci/druid-hbci-initial.c:762
 msgid "GnuCash Account Name"
-msgstr ""
+msgstr "שם חשבון GnuCash"
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:790
 #: ../src/import-export/generic-import.glade.h:35
@@ -12675,7 +12686,7 @@ msgstr ""
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:12
 #, fuzzy
 msgid "Separated"
-msgstr "נוקה"
+msgstr "נוצר"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:13
 #, fuzzy
@@ -13357,7 +13368,7 @@ msgstr ""
 #: ../src/import-export/qif-import/druid-qif-import.c:2617
 #, fuzzy
 msgid "Canceled"
-msgstr "_ביטול"
+msgstr "ביטול"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:840
 #: ../src/import-export/qif-import/druid-qif-import.c:844
@@ -13478,7 +13489,7 @@ msgstr ""
 #: ../src/import-export/qif-import/druid-qif-import.c:2692
 #, fuzzy
 msgid "Canceling"
-msgstr "_ביטול"
+msgstr "ביטול"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2706
 #: ../src/import-export/qif-import/druid-qif-import.c:2710
@@ -13535,7 +13546,7 @@ msgstr ""
 #: ../src/import-export/qif-import/qif.glade.h:4
 #, fuzzy
 msgid "Change GnuCash _Account..."
-msgstr "ח_שבון חדש..."
+msgstr "שם חשבון GnuCash"
 
 #: ../src/import-export/qif-import/qif.glade.h:5
 msgid ""
@@ -16471,7 +16482,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1144
 #, fuzzy
 msgid "Invert prices"
-msgstr "רשומות חשבונית"
+msgstr "קבלות"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -17272,8 +17283,9 @@ msgstr ""
 
 #. src/report/standard-reports/budget-barchart.scm
 #: ../intl-scm/guile-strings.c:1452
+#, fuzzy
 msgid "Actual"
-msgstr ""
+msgstr "שנתי"
 
 #. src/report/standard-reports/general-journal.scm
 #: ../intl-scm/guile-strings.c:1456
@@ -21033,6 +21045,9 @@ msgid ""
 "already happened. Douglas Adams, \"The Restaurant at the End of the Universe"
 "\""
 msgstr ""
+
+#~ msgid "Query could not be executed"
+#~ msgstr "שאילתה לא יכלה להתבצע"
 
 #~ msgid "Save transaction before closing?"
 #~ msgstr "לשמור את הפעולה לפני סגירה?"
