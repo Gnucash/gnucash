@@ -28,6 +28,7 @@ Type of account identifiers
 !Type:Invoice  ??? (invoice presentment ???)
 !Type:Invst    Investment account
 !Type:Oth A    Asset account
+!Type:Oth S    Asset account (German)
 !Type:Oth L    Liability account
 !Type:Tax      ???
 

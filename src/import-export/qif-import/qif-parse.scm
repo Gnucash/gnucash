@@ -164,6 +164,8 @@
       (list GNC-ASSET-TYPE GNC-BANK-TYPE GNC-CASH-TYPE))
      ((string=? mangled-string "oth l")
       (list GNC-LIABILITY-TYPE GNC-CCARD-TYPE))
+     ((string=? mangled-string "oth s") ;; German asset account
+      (list GNC-ASSET-TYPE GNC-BANK-TYPE GNC-CASH-TYPE))
      ((string=? mangled-string "mutual")
       (list GNC-BANK-TYPE))
      (#t
