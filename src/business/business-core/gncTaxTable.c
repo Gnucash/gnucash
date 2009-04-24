@@ -36,7 +36,7 @@ struct _gncTaxTable
 {
   QofInstance     inst;
   char *          name;
-  GList *         entries;
+  GncTaxTableEntryList*  entries;
   Timespec        modtime;      /* internal date of last modtime */
 
   /* See src/doc/business.txt for an explanation of the following */
@@ -633,7 +633,7 @@ GncTaxTable *gncTaxTableGetParent (const GncTaxTable *table)
   return table->parent;
 }
 
-GList *gncTaxTableGetEntries (const GncTaxTable *table)
+GncTaxTableEntryList* gncTaxTableGetEntries (const GncTaxTable *table)
 {
   if (!table) return NULL;
   return table->entries;

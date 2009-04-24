@@ -73,6 +73,7 @@ static GncEmployee * gncEmployeeLookupFlip(GUID g, QofBook *b)
 %}
 
 GLIST_HELPER_INOUT(EntryList, SWIGTYPE_p__gncEntry);
+GLIST_HELPER_INOUT(GncTaxTableEntryList, SWIGTYPE_p__gncTaxTableEntry);
 
 %typemap(in) GncAccountValue * "$1 = gnc_scm_to_account_value_ptr($input);"
 %typemap(out) GncAccountValue * "$result = gnc_account_value_ptr_to_scm($1);"
