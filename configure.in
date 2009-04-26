@@ -1452,6 +1452,7 @@ AC_CONFIG_FILES(po/Makefile.in
           Makefile
           accounts/Makefile
           accounts/C/Makefile
+          accounts/cs/Makefile
           accounts/da/Makefile
           accounts/de_AT/Makefile
           accounts/de_CH/Makefile

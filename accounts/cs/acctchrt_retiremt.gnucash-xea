@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+	Penzijní účty
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Penzijní účet se vztahem na investiční podúčty
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Zvolte si tuto sadu účtů, pokud máte účty, ze kterých vám plyne renta (akcie, dluhopisy, podílové listy, index fondů).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Hlavní Účet</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aktiva</act:name>
+  <act:id type="new">e67ef2c52a4eaf3b9d37d317848a5812</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Aktiva</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Investice</act:name>
+  <act:id type="new">64cf99f6bafe0a539a5941ea713bdfcd</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Investice</act:description>
+  <act:parent type="new">e67ef2c52a4eaf3b9d37d317848a5812</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Penze</act:name>
+  <act:id type="new">4173f3047238f4b5595b11d6161b2f48</act:id>
+  <act:type>BANK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Penze</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>poznámky</slot:key>
+      <slot:value type="string">???</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">64cf99f6bafe0a539a5941ea713bdfcd</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Dluhopis</act:name>
+  <act:id type="new">9053199c1da747555d12272f48c719fd</act:id>
+  <act:type>STOCK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Dluhopis</act:description>
+  <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Akcie</act:name>
+  <act:id type="new">9bf53e9580991e323b297999fddff988</act:id>
+  <act:type>STOCK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Akcie</act:description>
+  <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Index</act:name>
+  <act:id type="new">2326b032fe4e8f434159310fccf17091</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Index</act:description>
+  <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Podílový fond</act:name>
+  <act:id type="new">a62d804729117e74a6c880cecb818b56</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Podílový fond</act:description>
+  <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->
