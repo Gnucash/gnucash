@@ -563,14 +563,14 @@ create_slots_tables( GncSqlBackend* be )
 
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
 	if( version == 0 ) {
+		gboolean ok;
+
     	(void)gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
-#if 0
-		// FIXME: Create index
-		ok = gnc_sql_create_index( be, "slots_guid_index", TABLE_NAME, obj_guid_col_table, &error );
+
+		ok = gnc_sql_create_index( be, "slots_guid_index", TABLE_NAME, obj_guid_col_table );
 		if( !ok ) {
-			PERR( "Unable to create index: %s\n", error->message );
+			PERR( "Unable to create index\n" );
 		}
-#endif
 	} else if( version == 1 ) {
 		/* Upgrade 64-bit int values to proper definition */
 		gnc_sql_upgrade_table( be, TABLE_NAME, col_table );

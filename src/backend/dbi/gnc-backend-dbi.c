@@ -102,6 +102,10 @@ static provider_functions_t provider_pgsql =
 	pgsql_get_column_type_name
 };
 
+static /*@ null @*/ gchar* create_index_ddl( GncSqlConnection* conn,
+											const gchar* index_name,
+											const gchar* table_name,
+											const GncSqlColumnTableEntry* col_table );
 static GncSqlConnection* create_dbi_connection( /*@ observer @*/ provider_functions_t* provider, /*@ observer @*/ QofBackend* qbe, /*@ observer @*/ dbi_conn conn );
 
 #define GNC_DBI_PROVIDER_SQLITE (&provider_sqlite3)
@@ -1336,7 +1340,6 @@ conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
 	GString* ddl;
 	const GList* list_node;
 	guint col_num;
-	gchar* ddl_result;
 
 	g_return_val_if_fail( conn != NULL, NULL );
 	g_return_val_if_fail( table_name != NULL, NULL );
@@ -1365,10 +1368,34 @@ conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
     }
 	(void)g_string_append( ddl, ")" );
         
-	ddl_result = ddl->str;
-	(void)g_string_free( ddl, FALSE );
+	return g_string_free( ddl, FALSE );
+}
 
-	return ddl_result;
+static /*@ null @*/ gchar*
+create_index_ddl( GncSqlConnection* conn,
+					const gchar* index_name,
+					const gchar* table_name,
+					const GncSqlColumnTableEntry* col_table )
+{
+	GString* ddl;
+	const GncSqlColumnTableEntry* table_row;
+
+	g_return_val_if_fail( conn != NULL, NULL );
+	g_return_val_if_fail( index_name != NULL, NULL );
+	g_return_val_if_fail( table_name != NULL, NULL );
+	g_return_val_if_fail( col_table != NULL, NULL );
+    
+	ddl = g_string_new( "" );
+	g_string_printf( ddl, "CREATE INDEX %s ON %s (", index_name, table_name );
+    for( table_row = col_table; table_row->col_name != NULL; ++table_row ) {
+		if( table_row != col_table ) {
+			(void)g_string_append( ddl, ", " );
+		}
+		g_string_append_printf( ddl, "%s", table_row->col_name );
+    }
+	(void)g_string_append( ddl, ")" );
+        
+	return g_string_free( ddl, FALSE );
 }
 
 static /*@ null @*/ gchar*
@@ -1378,7 +1405,6 @@ conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
 	GString* ddl;
 	const GList* list_node;
 	guint col_num;
-	gchar* ddl_result;
 
 	g_return_val_if_fail( conn != NULL, NULL );
 	g_return_val_if_fail( table_name != NULL, NULL );
@@ -1410,10 +1436,7 @@ conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
     }
 	(void)g_string_append( ddl, ")" );
         
-	ddl_result = ddl->str;
-	(void)g_string_free( ddl, FALSE );
-
-	return ddl_result;
+	return g_string_free( ddl, FALSE );
 }
 
 static /*@ null @*/ gchar*
@@ -1423,7 +1446,6 @@ conn_create_table_ddl_pgsql( GncSqlConnection* conn, const gchar* table_name,
 	GString* ddl;
 	const GList* list_node;
 	guint col_num;
-	gchar* ddl_result;
 	gboolean is_unicode = FALSE;
 
 	g_return_val_if_fail( conn != NULL, NULL );
@@ -1456,10 +1478,7 @@ conn_create_table_ddl_pgsql( GncSqlConnection* conn, const gchar* table_name,
 	if( is_unicode ) {
 	}
         
-	ddl_result = ddl->str;
-	(void)g_string_free( ddl, FALSE );
-
-	return ddl_result;
+	return g_string_free( ddl, FALSE );
 }
 
 static gboolean
@@ -1498,83 +1517,30 @@ static gboolean
 conn_create_index( /*@ unused @*/ GncSqlConnection* conn, /*@ unused @*/ const gchar* index_name,
 					/*@ unused @*/ const gchar* table_name, /*@ unused @*/ const GncSqlColumnTableEntry* col_table )
 {
-#if 0
-    GdaServerOperation *op;
-    GdaServerProvider *server;
-	GdaConnection* cnn;
 	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
-	GError* error = NULL;
-    
-    g_return_val_if_fail( conn != NULL, FALSE );
+	gchar* ddl;
+	dbi_result result;
+	gint status;
+
+	g_return_val_if_fail( conn != NULL, FALSE );
 	g_return_val_if_fail( index_name != NULL, FALSE );
 	g_return_val_if_fail( table_name != NULL, FALSE );
 	g_return_val_if_fail( col_table != NULL, FALSE );
     
-	cnn = gda_conn->conn;
-	g_return_if_fail( cnn != NULL );
-    g_return_if_fail( GDA_IS_CONNECTION(cnn) );
-    g_return_if_fail( gda_connection_is_opened(cnn) );
+	ddl = create_index_ddl( conn, index_name, table_name, col_table );
+	if( ddl != NULL ) {
+		gint status;
 
-    server = gda_conn->server;
-	g_return_if_fail( server != NULL );
-    
-    op = gda_server_provider_create_operation( server, cnn, 
-                           GDA_SERVER_OPERATION_CREATE_INDEX, NULL, &error );
-    if( error != NULL ) {
-		PERR( "gda_server_provider_create_operation(): %s\n", error->message );
+		DEBUG( "SQL: %s\n", ddl );
+		result = dbi_conn_query( dbi_conn->conn, ddl );
+		status = dbi_result_free( result );
+		if( status < 0 ) {
+			PERR( "Error in dbi_result_free() result\n" );
+			qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
+		}
+	} else {
+		return FALSE;
 	}
-    if( op != NULL && GDA_IS_SERVER_OPERATION(op) ) {
-        gint col;
-		gboolean ok;
-        
-		ok = gda_server_operation_set_value_at( op, index_name, &error,
-								"/INDEX_DEF_P/INDEX_NAME" );
-    	if( error != NULL ) {
-			PERR( "set INDEX_NAME: %s\n", error->message );
-		}
-		if( !ok ) return;
-		ok = gda_server_operation_set_value_at( op, "", &error,
-								"/INDEX_DEF_P/INDEX_TYPE" );
-    	if( error != NULL ) {
-			PERR( "set INDEX_TYPE: %s\n", error->message );
-		}
-		if( !ok ) return;
-		ok = gda_server_operation_set_value_at( op, "TRUE", &error,
-								"/INDEX_DEF_P/INDEX_IFNOTEXISTS" );
-    	if( error != NULL ) {
-			PERR( "set INDEX_IFNOTEXISTS: %s\n", error->message );
-		}
-		if( !ok ) return;
-		ok = gda_server_operation_set_value_at( op, table_name, &error,
-								"/INDEX_DEF_P/INDEX_ON_TABLE" );
-    	if( error != NULL ) {
-			PERR( "set INDEX_ON_TABLE: %s\n", error->message );
-		}
-		if( !ok ) return;
-
-        for( col = 0; col_table[col].col_name != NULL; col++ ) {
-			guint item;
-
-			if( col != 0 ) {
-				item = gda_server_operation_add_item_to_sequence( op, "/INDEX_FIELDS_S" );
-				g_assert( item == col );
-			}
-			ok = gda_server_operation_set_value_at( op, col_table->col_name, &error,
-													"/INDEX_FIELDS_S/%d/INDEX_FIELD", col );
-			if( error != NULL ) {
-				PERR( "set INDEX_FIELD %s: %s\n", col_table->col_name, error->message );
-			}
-			if( !ok ) break;
-        }
-        
-        if( !gda_server_provider_perform_operation( server, cnn, op, &error ) ) {
-            g_object_unref( op );
-            return;
-        }
-
-        g_object_unref( op );
-    }
-#endif
 
 	return TRUE;
 }

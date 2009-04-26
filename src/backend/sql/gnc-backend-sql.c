@@ -104,7 +104,6 @@ typedef struct {
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define SQLITE_PROVIDER_NAME "SQLite"
-#define URI_PREFIX "gda://"
 
 /* ================================================================= */
 
@@ -2544,11 +2543,7 @@ gnc_sql_get_table_version( const GncSqlBackend* be, const gchar* table_name )
 	g_return_val_if_fail( be != NULL, 0 );
 	g_return_val_if_fail( table_name != NULL, 0 );
 
-	/* If the db is pristine because it's being saved, the table does not
-	 * exist.  This gets around a GDA-3 bug where deleting all tables and
-	 * updating the meta-data leaves the meta-data still thinking 1 table
-	 * exists.
-	 */
+	/* If the db is pristine because it's being saved, the table does not exist. */
 	if( be->is_pristine_db ) {
 		return 0;
 	}
