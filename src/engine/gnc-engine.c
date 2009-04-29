@@ -83,7 +83,6 @@ gnc_engine_init(int argc, char ** argv)
 #if defined( HAVE_DBI_DBI_H )
     { "gncmod-backend-dbi", TRUE },
 #endif
-//    { "gncmod-backend-gda", TRUE },
     { "gncmod-backend-xml", TRUE },
     { NULL, FALSE } }, *lib;
   gnc_engine_init_hook_t hook;
