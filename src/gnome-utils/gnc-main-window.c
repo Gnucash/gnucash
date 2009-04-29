@@ -1722,9 +1722,10 @@ main_window_update_page_name (GncPluginPage *page,
     return;
   }
   name = g_strstrip(g_strdup(name_in));
-  if (*name == '\0') {
+  /* Optimization, if the name hasn't changed, don't update X. */
+  if (*name == '\0' || 0 == strcmp(name, gnc_plugin_page_get_page_name(page))) {
     g_free(name);
-    LEAVE("empty string");
+    LEAVE("empty string or name unchanged");
     return;
   }
 
