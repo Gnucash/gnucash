@@ -538,7 +538,12 @@ gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list )
 
 	// Execute the query and load the slots
 	stmt = gnc_sql_create_statement_from_sql( be, sql->str );
-	g_assert( stmt != NULL );
+	if( stmt == NULL ) {
+		PERR( "stmt == NULL, SQL = '%s'\n", sql->str );
+		(void)g_string_free( sql, TRUE );
+		return;
+	}
+	(void)g_string_free( sql, TRUE );
 	result = gnc_sql_execute_select_statement( be, stmt );
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
@@ -550,7 +555,6 @@ gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list )
         }
 		gnc_sql_result_dispose( result );
     }
-	(void)g_string_free( sql, FALSE );
 }
 
 /* ================================================================= */
