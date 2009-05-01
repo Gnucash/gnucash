@@ -48,7 +48,12 @@
 #ifndef GTKHTML_USES_GTKPRINT
 #    include <goffice/graph/gog-renderer-gnome-print.h>
 #endif
-#include <goffice/graph/gog-style.h>
+/* everything inside the following #ifndef can be safely removed when gnucash
+requires libgoffice >= 0.7.5. */
+#ifndef GOG_TYPE_GRAPH
+#	define GOG_TYPE_GRAPH GOG_GRAPH_TYPE
+#	define GOG_TYPE_RENDERER GOG_RENDERER_TYPE
+#endif
 #include <goffice/graph/gog-styled-object.h>
 #include <goffice/graph/gog-plot.h>
 #include <goffice/graph/gog-series.h>
@@ -191,7 +196,7 @@ create_basic_plot_elements(const char *plot_type_name,
                            GogObject **out_chart,
                            GogPlot **out_plot)
 {
-  *out_graph = g_object_new(GOG_GRAPH_TYPE, NULL);
+  *out_graph = g_object_new(GOG_TYPE_GRAPH, NULL);
   *out_chart = gog_object_add_by_name(*out_graph, "Chart", NULL);
   *out_plot = gog_plot_new_by_name(plot_type_name);
   if (!*out_plot)
@@ -482,7 +487,7 @@ draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer unused)
 {
   GogGraph *graph = GOG_GRAPH(g_object_get_data(G_OBJECT(eb), "graph"));
 #    ifdef HAVE_GOFFICE_0_5
-  GogRenderer *rend = g_object_new(GOG_RENDERER_TYPE, "model", graph, NULL);
+  GogRenderer *rend = g_object_new(GOG_TYPE_RENDERER, "model", graph, NULL);
 #    else
   GogRendererCairo *rend = g_object_new(GOG_RENDERER_CAIRO_TYPE, "model", graph,
                                         "cairo", cr, "is-vector", TRUE, NULL);

@@ -43,7 +43,22 @@
 #ifndef GTKHTML_USES_GTKPRINT
 #    include <goffice/graph/gog-renderer-gnome-print.h>
 #endif
-#include <goffice/graph/gog-style.h>
+/* everything inside the following #ifndef can be safely removed when gnucash
+requires libgoffice >= 0.7.5, the contents of the #else block must stay. */
+#ifndef GOG_TYPE_GRAPH
+#	define GOG_TYPE_GRAPH GOG_GRAPH_TYPE
+#	define GO_TYPE_PLUGIN_LOADER_MODULE GO_PLUGIN_LOADER_MODULE_TYPE
+#	define GOG_TYPE_RENDERER GOG_RENDERER_TYPE
+#	include <goffice/graph/gog-style.h>
+#	define GOStyle GogStyle
+#	define go_styled_object_get_style gog_styled_object_get_style
+#	define GO_STYLED_OBJECT GOG_STYLED_OBJECT
+#	define GO_STYLE_FILL_PATTERN GOG_FILL_STYLE_PATTERN
+#	define go_style_set_text_angle gog_style_set_text_angle
+#else
+#	include <goffice/utils/go-style.h>
+#	include <goffice/utils/go-styled-object.h>
+#endif
 #include <goffice/graph/gog-styled-object.h>
 #include <goffice/graph/gog-plot.h>
 #include <goffice/graph/gog-series.h>
@@ -82,7 +97,7 @@ gnc_html_graph_gog_init( void )
 		libgoffice_init();
   
 		/* Initialize plugins manager */
-		go_plugins_init( NULL, NULL, NULL, NULL, TRUE, GO_PLUGIN_LOADER_MODULE_TYPE );
+		go_plugins_init( NULL, NULL, NULL, NULL, TRUE, GO_TYPE_PLUGIN_LOADER_MODULE );
 
 		initialized = TRUE;
 	}
@@ -108,7 +123,7 @@ create_graph_pixbuf( GogObject *graph, int width, int height )
 	gog_object_update (GOG_OBJECT (graph));
 
 #if defined(HAVE_GOFFICE_0_5)
-	renderer = GOG_RENDERER(g_object_new( GOG_RENDERER_TYPE, "model", graph, NULL ));
+	renderer = GOG_RENDERER(g_object_new( GOG_TYPE_RENDERER, "model", graph, NULL ));
 	update_status = gog_renderer_update( renderer, width, height );
 	buf = gog_renderer_get_pixbuf( renderer );
 #elif defined(GOFFICE_WITH_CAIRO)
@@ -135,7 +150,7 @@ create_basic_plot_elements(const char *plot_type_name,
                            GogObject **out_chart,
                            GogPlot **out_plot)
 {
-  *out_graph = g_object_new(GOG_GRAPH_TYPE, NULL);
+  *out_graph = g_object_new(GOG_TYPE_GRAPH, NULL);
   *out_chart = gog_object_add_by_name(*out_graph, "Chart", NULL);
   *out_plot = gog_plot_new_by_name(plot_type_name);
   if (!*out_plot)
@@ -256,7 +271,7 @@ gnc_html_graph_gog_create_barchart( GncHtmlBarChartInfo* info )
 	GogObject *graph, *chart;
 	GogPlot *plot;
 	GogSeries *series;
-	GogStyle *style;
+	GOStyle *style;
 	GOData *label_data, *slice_data;
 	char *bar_type = "normal";
 	int bar_overlap = 0 /*percent*/; // seperate bars; no overlap.
@@ -302,8 +317,8 @@ gnc_html_graph_gog_create_barchart( GncHtmlBarChartInfo* info )
 			gog_series_set_dim( series, 1, slice_data, NULL );
 			go_data_emit_changed( GO_DATA(slice_data) );
 
-			style = gog_styled_object_get_style( GOG_STYLED_OBJECT(series) );
-			style->fill.type = GOG_FILL_STYLE_PATTERN;
+			style = go_styled_object_get_style( GO_STYLED_OBJECT(series) );
+			style->fill.type = GO_STYLE_FILL_PATTERN;
 			if( gdk_color_parse( info->col_colors[i], &color ) ) {
 				style->fill.auto_back = FALSE;
 				go_pattern_set_solid( &style->fill.pattern, GDK_TO_UINT(color) );
@@ -316,8 +331,8 @@ gnc_html_graph_gog_create_barchart( GncHtmlBarChartInfo* info )
 	if( info->rotate_row_labels ) {
 		GogObject *object = gog_object_get_child_by_role(
 									chart, gog_object_find_role_by_name( chart, "X-Axis" ) );
-		style = gog_styled_object_get_style( GOG_STYLED_OBJECT(object) );
-		gog_style_set_text_angle( style, 90.0 );
+		style = go_styled_object_get_style( GO_STYLED_OBJECT(object) );
+		go_style_set_text_angle( style, 90.0 );
 	}
 
 	set_chart_titles( chart, info->title, info->subtitle );
@@ -354,7 +369,7 @@ gnc_html_graph_gog_create_linechart( GncHtmlLineChartInfo* info )
 	GogObject *graph, *chart;
 	GogPlot *plot;
 	GogSeries *series;
-	GogStyle *style;
+	GOStyle *style;
 	GOData *label_data, *slice_data;
 	gchar* line_type = "normal";
 	GdkPixbuf* pixbuf;
@@ -398,8 +413,8 @@ gnc_html_graph_gog_create_linechart( GncHtmlLineChartInfo* info )
 			gog_series_set_dim( series, 1, slice_data, NULL );
 			go_data_emit_changed( GO_DATA(slice_data) );
 
-			style = gog_styled_object_get_style( GOG_STYLED_OBJECT(series) );
-			style->fill.type = GOG_FILL_STYLE_PATTERN;
+			style = go_styled_object_get_style( GO_STYLED_OBJECT(series) );
+			style->fill.type = GO_STYLE_FILL_PATTERN;
 			if( gdk_color_parse( info->col_colors[i], &color ) ) {
 				style->fill.auto_back = FALSE;
 				go_pattern_set_solid( &style->fill.pattern, GDK_TO_UINT(color) );
@@ -412,8 +427,8 @@ gnc_html_graph_gog_create_linechart( GncHtmlLineChartInfo* info )
 	if( info->rotate_row_labels ) {
 		GogObject *object = gog_object_get_child_by_role(
 								chart, gog_object_find_role_by_name( chart, "X-Axis" ) );
-		style = gog_styled_object_get_style( GOG_STYLED_OBJECT(object) );
-		gog_style_set_text_angle( style, 90.0 );
+		style = go_styled_object_get_style( GO_STYLED_OBJECT(object) );
+		go_style_set_text_angle( style, 90.0 );
 	}
 
 	if( info->major_grid ||  info->minor_grid ) {
@@ -448,7 +463,7 @@ gnc_html_graph_gog_create_scatterplot( GncHtmlScatterPlotInfo* info )
 	GogPlot *plot;
 	GogSeries *series;
 	GOData *sliceData;
-	GogStyle *style;
+	GOStyle *style;
 	gboolean fill = FALSE;
 
 	if( !create_basic_plot_elements( "GogXYPlot", &graph, &chart, &plot ) ) {
@@ -456,7 +471,7 @@ gnc_html_graph_gog_create_scatterplot( GncHtmlScatterPlotInfo* info )
 	}
 
 	series = gog_plot_new_series( plot );
-	style = gog_styled_object_get_style( GOG_STYLED_OBJECT(series) );
+	style = go_styled_object_get_style( GO_STYLED_OBJECT(series) );
 
 	sliceData = go_data_vector_val_new( info->xData, info->datasize, NULL );
 	gog_series_set_dim( series, 0, sliceData, NULL );
@@ -502,13 +517,13 @@ gnc_html_graph_gog_create_scatterplot( GncHtmlScatterPlotInfo* info )
 		go_marker_set_fill_color( style->marker.mark,
 								go_marker_get_outline_color( style->marker.mark ) );
 	} else {
-		GogStyle *chart_style = gog_styled_object_get_style( GOG_STYLED_OBJECT(chart) );
+		GOStyle *chart_style = go_styled_object_get_style( GO_STYLED_OBJECT(chart) );
 
-		if( chart_style->fill.type == GOG_FILL_STYLE_PATTERN
+		if( chart_style->fill.type == GO_STYLE_FILL_PATTERN
 				&& chart_style->fill.pattern.pattern == GO_PATTERN_SOLID ) {
 			style->marker.auto_fill_color = FALSE;
 			go_marker_set_fill_color( style->marker.mark, chart_style->fill.pattern.back );
-		} else if( chart_style->fill.type == GOG_FILL_STYLE_PATTERN
+		} else if( chart_style->fill.type == GO_STYLE_FILL_PATTERN
 				&& chart_style->fill.pattern.pattern == GO_PATTERN_FOREGROUND_SOLID ) {
 			style->marker.auto_fill_color = FALSE;
 			go_marker_set_fill_color( style->marker.mark, chart_style->fill.pattern.fore );
