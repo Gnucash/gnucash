@@ -2525,7 +2525,8 @@ static gboolean gnc_option_set_ui_value_budget(
     GtkTreeModel *tm;
     GtkTreeIter iter;
 
-    if (!SCM_NULLP(value)) {
+//    if (!SCM_NULLP(value)) {
+    if (value != SCM_BOOL_F) {
         if (!SWIG_IsPointer(value))
             scm_misc_error("gnc_option_set_ui_value_budget",
                            "Option Value not a wcp.", value);
