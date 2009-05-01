@@ -2144,6 +2144,8 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
     gnc_commodity *txn_cur = xaccTransGetCurrency(txn);
     gnc_commodity *reg_com = xaccAccountGetCommodity(reg_acc);
 
+    g_return_val_if_fail(txn_cur, TRUE);
+
     /* We know that "amount" is always in the reg_com currency.
      * Unfortunately it is possible that neither xfer_com or txn_cur are
      * the same as reg_com, in which case we need to convert to the txn
