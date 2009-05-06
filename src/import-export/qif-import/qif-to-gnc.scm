@@ -379,8 +379,9 @@
                                 (gnc-get-current-book))))
                   (xaccTransBeginEdit gnc-xtn)
 
-                  ;; FIXME. This is probably wrong
-                  (xaccTransSetCurrency gnc-xtn (gnc-default-currency))
+                  ;; All accounts & splits are required to be in the
+                  ;; user-specified currency. Use it for the txn too.
+                  (xaccTransSetCurrency gnc-xtn default-currency)
 
                   ;; Build the transaction.
                   (qif-import:qif-xtn-to-gnc-xtn xtn qif-file gnc-xtn
