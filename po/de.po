@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-14 10:22+0200\n"
-"PO-Revision-Date: 2009-04-14 10:43+0200\n"
+"PO-Revision-Date: 2009-05-10 22:44+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -9973,29 +9973,24 @@ msgid "Income Total:"
 msgstr "Erträge gesamt:"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:1
-#, fuzzy
 msgid "<b>Database Connection</b>"
-msgstr "<b>Position Reiter der Karteikarten</b>"
+msgstr "<b>Datenbankverbindung</b>"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:2
-#, fuzzy
 msgid "<b>File</b>"
-msgstr "<b>Dateien</b>"
+msgstr "<b>Datei</b>"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:3
-#, fuzzy
 msgid "Database"
-msgstr "Kurs-Datenbank"
+msgstr "Datenbank"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:4
-#, fuzzy
 msgid "Host"
-msgstr "Buchen"
+msgstr "Datenbankserver"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:5
-#, fuzzy
 msgid "Password"
-msgstr "Passwort:"
+msgstr "Passwort"
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:1
 msgid "No warnings to reset."
@@ -11232,9 +11227,8 @@ msgid "Transfer Funds"
 msgstr "Buchen"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:15
-#, fuzzy
 msgid "_Fetch Rate"
-msgstr "_Wechselkurs:"
+msgstr "_Wechselkurs abrufen"
 
 #. create the button.
 #: ../src/gnome-utils/gnc-account-sel.c:448
@@ -11864,9 +11858,8 @@ msgid "Print the currently active page"
 msgstr "Aktuelle Seite drucken"
 
 #: ../src/gnome-utils/gnc-main-window.c:250
-#, fuzzy
 msgid "Pa_ge Setup..."
-msgstr "_Einrichtung"
+msgstr "Seite _einrichten"
 
 #: ../src/gnome-utils/gnc-main-window.c:251
 msgid "Specify the page size and orientation for printing"
@@ -12630,14 +12623,12 @@ msgid "Add a new transaction to the account"
 msgstr "Dem Konto einen neuen Buchungssatz hinzufügen"
 
 #: ../src/gnome/window-reconcile.c:2121
-#, fuzzy
 msgid "_Balance"
-msgstr "_Saldo:"
+msgstr "_Saldo"
 
 #: ../src/gnome/window-reconcile.c:2122
-#, fuzzy
 msgid "Add a new balancing entry to the account"
-msgstr "Dem Konto einen neuen Buchungssatz hinzufügen"
+msgstr "Dem Konto eine ausgleichende Buchung hinzufügen"
 
 #: ../src/gnome/window-reconcile.c:2125
 msgid "Edit the current transaction"
@@ -13699,31 +13690,28 @@ msgstr "Ausführliche HBCI-Fehlermeldungen"
 
 #. If it fails, change back to the old encoding.
 #: ../src/import-export/csv/gnc-csv-import.c:211
-#, fuzzy
 msgid "Invalid encoding selected"
-msgstr "Gewählte Zuordnungen:"
+msgstr ""
 
 #: ../src/import-export/csv/gnc-csv-import.c:554
 msgid "Merge with column on _left"
-msgstr ""
+msgstr "Mit _linker Spalte vereinigen"
 
 #: ../src/import-export/csv/gnc-csv-import.c:556
 msgid "Merge with column on _right"
-msgstr ""
+msgstr "Mit _rechter Spalte vereinigen"
 
 #: ../src/import-export/csv/gnc-csv-import.c:559
-#, fuzzy
 msgid "_Split this column"
-msgstr "Preis-Spalte anzeigen"
+msgstr "Spalte _teilen"
 
 #: ../src/import-export/csv/gnc-csv-import.c:562
 msgid "_Widen this column"
-msgstr ""
+msgstr "Spalte ver_größern"
 
 #: ../src/import-export/csv/gnc-csv-import.c:564
-#, fuzzy
 msgid "_Narrow this column"
-msgstr "Preis-Spalte anzeigen"
+msgstr "Spalte ver_kleinern"
 
 #: ../src/import-export/csv/gnc-csv-import.c:1041
 msgid ""
@@ -13732,15 +13720,13 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/csv/gnc-csv-import.c:1055
-#, fuzzy
 msgid "Errors"
 msgstr "Fehler"
 
 #. Let the user select a file.
 #: ../src/import-export/csv/gnc-csv-import.c:1076
-#, fuzzy
 msgid "Select an CSV/Fixed-Width file to import"
-msgstr "Wählen Sie eine Datei, die importiert werden soll"
+msgstr "Wählen Sie eine CSV-Datei, die importiert werden soll"
 
 #: ../src/import-export/csv/gnc-csv-model.c:26
 #: ../src/import-export/gnc-import-format-gnome.c:112
@@ -13759,14 +13745,12 @@ msgid "m-d-y"
 msgstr "Monat-Tag-Jahr"
 
 #: ../src/import-export/csv/gnc-csv-model.c:29
-#, fuzzy
 msgid "d-m"
-msgstr "Tag-Monat-Jahr"
+msgstr "Tag-Monat"
 
 #: ../src/import-export/csv/gnc-csv-model.c:30
-#, fuzzy
 msgid "m-d"
-msgstr "Monat-Tag-Jahr"
+msgstr "Monat-Tag"
 
 #. src/app-utils/prefs.scm
 #: ../src/import-export/csv/gnc-csv-model.c:37
@@ -13781,96 +13765,86 @@ msgid "Withdrawal"
 msgstr "Abhebung"
 
 #: ../src/import-export/csv/gnc-csv-model.c:434
-#, fuzzy
 msgid "File opening failed."
-msgstr "Einlesen ist fehlgeschlagen."
+msgstr "Datei öffnen ist fehlgeschlagen."
 
 #: ../src/import-export/csv/gnc-csv-model.c:448
 #: ../src/import-export/csv/gnc-csv-model.c:457
 msgid "Unknown encoding."
-msgstr ""
+msgstr "Unbekannte Zeichenkodierung."
 
 #: ../src/import-export/csv/gnc-csv-model.c:758
-#, fuzzy
 msgid "No date column."
-msgstr "Datumsspalte anzeigen"
+msgstr "Keine Datumsspalte."
 
 #: ../src/import-export/csv/gnc-csv-model.c:759
 msgid "No balance, deposit, or withdrawal column."
 msgstr ""
 
 #: ../src/import-export/csv/gnc-csv-model.c:1031
-#, fuzzy, c-format
+#, c-format
 msgid "%s column could not be understood."
-msgstr "Das eingegebene Konto wurde nicht gefunden."
+msgstr ""
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:1
 msgid "Colon (:)"
-msgstr ""
+msgstr "Doppelpunkt (:)"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:2
 msgid "Comma (,)"
-msgstr ""
+msgstr "Kommma (,)"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:4
-#, fuzzy
 msgid "Data type: "
-msgstr "Datum:"
+msgstr "Datentyp: "
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:5
-#, fuzzy
 msgid "Date Format"
-msgstr "Datumsformat:"
+msgstr "Datumsformat"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:6
 msgid "Encoding: "
-msgstr ""
+msgstr "Zeichenkodierung: "
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:7
 msgid "Fixed-Width"
-msgstr ""
+msgstr "Feste Breite"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:8
 msgid "Hyphen (-)"
-msgstr ""
+msgstr "Bindestrich (-)"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:9
 msgid "Import CSV/Fixed-Width File"
-msgstr ""
+msgstr "CSV-Datei importieren"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:10
-#, fuzzy
 msgid "Select the type of each column below."
-msgstr "Die voreingestellte Kontenauswahl auswählen."
+msgstr "Wählen Sie die Bedeutung jeder Spalte."
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:11
 msgid "Semicolon (;)"
-msgstr ""
+msgstr "Semikolon (;)"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:12
-#, fuzzy
 msgid "Separated"
-msgstr "Anfangsdatum"
+msgstr "Getrennt"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:13
-#, fuzzy
 msgid "Separators"
-msgstr "Zeichen"
+msgstr "Trennzeichen"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:14
-#, fuzzy
 msgid "Space"
-msgstr "Speichern"
+msgstr "Leerstelle"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:15
-#, fuzzy
 msgid "Tab"
-msgstr "Tabelle"
+msgstr "Tabulator"
 
 #: ../src/import-export/csv/gnc-plugin-csv.c:45
-#, fuzzy
 msgid "Import _CSV/Fixed-Width..."
-msgstr "CSV importieren und _senden..."
+msgstr "_CSV importieren..."
 
 #: ../src/import-export/csv/gnc-plugin-csv.c:46
 msgid " a CSV/Fixed-Width file"
@@ -14551,9 +14525,8 @@ msgid "Income account for security \"%s\""
 msgstr "Einnahmenkonto für Wertpapier »%s«"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:563
-#, fuzzy
 msgid "Unknown OFX account"
-msgstr "Unbekannter OFX CMA Konto"
+msgstr "Unbekanntes OFX Konto"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:583
 msgid "Unknown OFX checking account"
@@ -15758,23 +15731,20 @@ msgid "List"
 msgstr "Liste"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:1
-#, fuzzy
 msgid "Delete the currently selected report"
-msgstr "Ausgewählte Überweisungsvorlage löschen"
+msgstr "Ausgewählten Bericht löschen"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:2
-#, fuzzy
 msgid "Exit the custom report dialog"
-msgstr "Den Dialog für das Anlegen neuer Kunden öffnen"
+msgstr "Benutzerdefinierte-Berichte-Fenster schließen"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:3
-#, fuzzy
 msgid "Run the currently selected report"
-msgstr "Aktuellen Bericht drucken"
+msgstr "Ausgewählten Bericht erstellen"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:4
 msgid "_Run"
-msgstr ""
+msgstr "_Erstellen"
 
 #: ../src/report/report-gnome/dialog-column-view.c:336
 msgid "Contents"
@@ -15798,14 +15768,12 @@ msgid "Cols"
 msgstr "Spalten"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:302
-#, fuzzy
 msgid "You must select a report to delete."
-msgstr "Sie müssen eine Devise/Wertpapier auswählen."
+msgstr "Sie müssen einen Bericht auswählen, den Sie löschen wollen."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:322
-#, fuzzy
 msgid "You must select a report to run."
-msgstr "Sie müssen eine Währung auswählen."
+msgstr "Sie müssen einen Bericht auswählen, den Sie erstellen wollen."
 
 #: ../src/report/report-gnome/dialog-style-sheet.c:140
 #, c-format
@@ -17106,9 +17074,8 @@ msgstr "_Erträge & Aufwendungen"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:820
-#, fuzzy
 msgid "B_udget"
-msgstr "Budget"
+msgstr "B_udget"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:822
@@ -17189,7 +17156,7 @@ msgid ""
 "The GnuCash report system has been upgraded. Your old saved reports have "
 "been transfered into a new format. If you experience trouble with saved "
 "reports, please contact the GnuCash development team."
-msgstr ""
+msgstr "Das System zum Erstellen von Berichten in GnuCash wurde erneuert. Ihre alten gespeicherten Berichte wurden ins neue System übernommen. Wenn es dabei Schwierigkeiten gibt, kontaktieren Sie bitte das GnuCash Entwicklerteam."
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:842
@@ -17205,7 +17172,7 @@ msgstr "Wählen Sie einen Stil für diesen Bericht."
 #: ../intl-scm/guile-strings.c:850
 #, c-format
 msgid "Your report \"%s\" has been saved into the configuration file \"%s\"."
-msgstr ""
+msgstr "Ihr Bericht »%s« wurde in die Konfigurationsdatei »%s« gespeichert."
 
 #. src/report/report-system/html-acct-table.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -17384,14 +17351,13 @@ msgstr "%s-Bericht anzeigen"
 
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:934
-#, fuzzy
 msgid "Custom Reports"
-msgstr "Kundenbericht"
+msgstr "_Benutzerdefinierte Berichte"
 
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:936
 msgid "Manage and run custom reports"
-msgstr ""
+msgstr "Benutzerdefinierte Berichte bearbeiten und erstellen"
 
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:938
@@ -17923,9 +17889,8 @@ msgstr "Preisberechnungsquelle"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1144
-#, fuzzy
 msgid "Invert prices"
-msgstr "Rechnungen"
+msgstr "Preise umkehren"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -18099,9 +18064,8 @@ msgstr "Preisdiagramm"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:1218
-#, fuzzy
 msgid "Budget Balance Sheet"
-msgstr "Bilanz"
+msgstr "Budget-Bilanz"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -18743,7 +18707,7 @@ msgstr "Laufender Saldo"
 #. src/report/standard-reports/budget-barchart.scm
 #: ../intl-scm/guile-strings.c:1446
 msgid "Calculate as running sum?"
-msgstr ""
+msgstr "Als laufende Summe erstellen?"
 
 #. src/report/standard-reports/budget-barchart.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -18756,9 +18720,8 @@ msgstr "Den Buchungsbericht für diese Konten erstellen"
 
 #. src/report/standard-reports/budget-barchart.scm
 #: ../intl-scm/guile-strings.c:1452
-#, fuzzy
 msgid "Actual"
-msgstr "Ist anzeigen"
+msgstr "Ist"
 
 #. src/report/standard-reports/general-journal.scm
 #: ../intl-scm/guile-strings.c:1456
@@ -19466,10 +19429,8 @@ msgstr "Lange Kontenbezeichung in der Legende anzeigen?"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:1900
-#, fuzzy
 msgid "Show barchart as stacked barchart?"
-msgstr ""
-"Balkendiagram mit gestapelten Balken anzeigen? (Benötigt Guppi >=0.35.4)"
+msgstr "Balkendiagram mit gestapelten Balken anzeigen?"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:1902
@@ -20474,9 +20435,8 @@ msgstr "Unterkonten-Saldo einrechnen"
 
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:3090
-#, fuzzy
 msgid "Exclude transactions between selected accounts?"
-msgstr "Buchungen von/nach allen Filter-Konten ausschließen"
+msgstr "Buchungen zwischen gewählten Konten ausschließen?"
 
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/daily-reports.scm
@@ -20666,7 +20626,6 @@ msgstr "Saldo am %s"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3284
-#, fuzzy
 msgid "Tax Schedule Report/TXF Export"
 msgstr "Steuer-Bericht / TXF Export"
 
@@ -20817,27 +20776,23 @@ msgstr "Unterdrücke 0,00 Euro Werte"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3340
-#, fuzzy
 msgid "$0.00 valued Tax codes won't be printed."
 msgstr "Konten mit Summe 0,00 Euro werden nicht gedruckt/angezeigt."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3342
-#, fuzzy
 msgid "Do not print full account names"
-msgstr "Vollen Kontonamen anzeigen"
+msgstr "Vollen Kontonamen nicht anzeigen"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3344
-#, fuzzy
 msgid "Do not print all Parent account names"
-msgstr "Drucke alle Haupt-Kontenbezeichnungen"
+msgstr "Drucke nicht alle Haupt-Kontenbezeichnungen"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3346
-#, fuzzy
 msgid "Print all Transfer To/From Accounts"
-msgstr "Herkunftskonto (Haben)"
+msgstr ""
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:3348
@@ -21767,9 +21722,8 @@ msgstr "St."
 #. src/business/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:3830 ../intl-scm/guile-strings.c:4238
 #: ../intl-scm/guile-strings.c:4494
-#, fuzzy
 msgid "Custom Title"
-msgstr "Kunde"
+msgstr "Eigener Titel"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -22237,9 +22191,8 @@ msgstr ""
 
 #. src/business/business-reports/job-report.scm
 #: ../intl-scm/guile-strings.c:4112
-#, fuzzy
 msgid "Job Report"
-msgstr "Bericht"
+msgstr "Auftragsbericht"
 
 #. src/business/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:4152
@@ -22695,18 +22648,6 @@ msgstr ""
 #~ "Unbekannte Zugriffsart '%s' auf die Datenbank. Voreinstellung 'multi-"
 #~ "user' wird verwendet. "
 
-#~ msgid "From the Postgresql Server: %s"
-#~ msgstr "Fehlermeldung vom Postgresql Server: %s"
-
-#~ msgid "Backend connection is not available"
-#~ msgstr "Postgresql-Verbindung nicht verfügbar"
-
-#~ msgid "Query could not be executed"
-#~ msgstr "SQL-Abfrage konnte nicht ausgeführt werden"
-
-#~ msgid "Save transaction before closing?"
-#~ msgstr "Geänderte Buchung speichern?"
-
 #~ msgid ""
 #~ "The current transaction has been changed.  Would you like to record the "
 #~ "changes before closing this page, close the page without recording the "
@@ -22734,6 +22675,3 @@ msgstr ""
 #~ "Ihr Bericht »%s« wurde in der Konfigurationsdatei »%s« gespeichert.  Der "
 #~ "Bericht wird nach dem nächsten Neustart von GnuCash im Menü »Berichte -> "
 #~ "Benutzerdefiniert« verfügbar sein."
-
-#~ msgid "Blue items are exportable to a .TXF file."
-#~ msgstr "Blaue Einträge können in eine .TXF-Datei exportiert werden."
