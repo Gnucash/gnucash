@@ -173,6 +173,7 @@ set_default ZLIB_DEV_URL "$GNOME_WIN32_DEPS_URL/zlib-dev-1.2.3.zip"
 set_default PKG_CONFIG_URL "$GNOME_WIN32_DEPS_URL/pkg-config-0.23.zip"
 set_default CAIRO_URL "$GNOME_WIN32_DEPS_URL/cairo_1.8.6-1_win32.zip"
 set_default CAIRO_DEV_URL "$GNOME_WIN32_DEPS_URL/cairo-dev_1.8.6-1_win32.zip"
+set_default PIXMAN_URL "http://cairographics.org/releases/pixman-0.14.0.tar.gz"
 set_default EXPAT_URL "$GNOME_WIN32_DEPS_URL/expat-2.0.0.zip"
 set_default FONTCONFIG_URL "$GNOME_WIN32_DEPS_URL/fontconfig-2.4.2-tml-20071015.zip"
 set_default FONTCONFIG_DEV_URL "$GNOME_WIN32_DEPS_URL/fontconfig-dev-2.4.2-tml-20071015.zip"
@@ -240,7 +241,11 @@ set_default INNO_DIR $GLOBAL_DIR\\inno
 set_default HH_URL "http://download.microsoft.com/download/OfficeXPProf/Install/4.71.1015.0/W98NT42KMe/EN-US/HTMLHELP.EXE"
 set_default HH_DIR $GLOBAL_DIR\\hh
 
-set_default SVN_URL "http://subversion.tigris.org/files/documents/15/44582/svn-win32-1.5.5.zip"
+set_default WEBKIT_URL "http://webkitgtk.org/webkit-1.1.5-win32.zip"
+#set_default WEBKIT_URL "http://webkitgtk.org/webkit_1.0.1.orig.tar.gz"
+set_default WEBKIT_DIR $GLOBAL_DIR\\webkit-1.1.5
+
+set_default SVN_URL "http://subversion.tigris.org/files/documents/15/35379/svn-1.4.2-setup.exe"
 set_default SVN_DIR $GLOBAL_DIR\\svn
 
 # OFX import in gnucash and ofx directconnect support for aqbanking
@@ -258,7 +263,7 @@ set_default AQBANKING3 yes
 if [ "$AQBANKING3" != "yes" ]; then
     set_default GWENHYWFAR_URL "$SF_MIRROR/gwenhywfar/gwenhywfar-2.6.2.tar.gz"
 else
-    set_default GWENHYWFAR_URL "http://www.aquamaniac.de/sites/download/download.php?package=01&release=17&file=01&dummy=gwenhywfar-3.6.0.tar.gz"
+    set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=17&file=01&dummy=gwenhywfar-3.6.0.tar.gz"
     set_default GWENHYWFAR_PATCH `pwd`/gwenhywfar-3.6.0-patch.diff
 fi
 set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
@@ -269,17 +274,12 @@ set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.20.tar.gz"
 if [ "$AQBANKING3" != "yes" ]; then
     set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.3.3.tar.gz"
 else
-    set_default AQBANKING_URL "http://www.aquamaniac.de/sites/download/download.php?package=03&release=19&file=01&dummy=aqbanking-3.8.1.tar.gz"
+    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=19&file=01&dummy=aqbanking-3.8.1.tar.gz"
 fi
 set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking
 set_default AQBANKING_WITH_QT yes
 # If set to yes, download Qt from http://www.trolltech.com/developer/downloads/qt/windows,
 # install it and set QTDIR in custom.sh, like "QTDIR=/c/Qt/4.2.3".
-
-set_default LIBGDA_URL "http://ftp.acc.umu.se/pub/GNOME/sources/libgda/3.1/libgda-3.1.2.tar.gz"
-set_default LIBGDA_DIR $GLOBAL_DIR\\libgda
-set_default LIBGDA_PATCH `pwd`/libgda-3.1.2-patch.diff
-set_default LIBGDA_PATCH2 `pwd`/libgda-3.1.2-patch2.diff
 
 set_default SQLITE3_URL "http://sqlite.org/sqlite-amalgamation-3.6.1.tar.gz"
 set_default SQLITE3_DIR $GLOBAL_DIR\\sqlite3
@@ -346,6 +346,7 @@ add_step inst_gwenhywfar
 add_step inst_ktoblzcheck
 add_step inst_aqbanking
 add_step inst_libdbi
+add_step inst_webkit
 ##
 if [ "$UPDATE_SOURCES" = "yes" ]; then
  add_step svn_up

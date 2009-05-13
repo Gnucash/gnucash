@@ -40,6 +40,8 @@ register_env_var READLINE_CPPFLAGS " "
 register_env_var READLINE_LDFLAGS " "
 register_env_var REGEX_CPPFLAGS " "
 register_env_var REGEX_LDFLAGS " "
+register_env_var WEBKIT_CFLAGS " "
+register_env_var WEBKIT_LIBS " "
 
 function prepare() {
     # Necessary so that intltoolize doesn't come up with some
@@ -592,6 +594,16 @@ EOF
             sed '/Requires/s,\(.*\) enchant\(.*\) iso-codes\(.*\),\1\2\3,' lib/pkgconfig/libgtkhtml-3.14.pc > tmp
             mv tmp lib/pkgconfig/libgtkhtml-3.14.pc
         qpopd
+        wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/pixman-*
+        qpushd $TMP_UDIR/pixman-*
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=$_GNOME_UDIR \
+                --disable-static
+            make
+            make install
+        qpopd
+        ${PKG_CONFIG} --exists pixman-1 || die "pixman not installed correctly"
         quiet gconftool-2 --version &&
         quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgtkhtml-3.14 &&
         quiet intltoolize --version || die "gnome not installed correctly"
@@ -1076,30 +1088,20 @@ function inst_libdbi() {
     fi
 }
 
-function inst_libgda() {
-    setup LibGDA
-    _LIBGDA_UDIR=`unix_path ${LIBGDA_DIR}`
-    add_to_env ${_LIBGDA_UDIR}/bin PATH
-    add_to_env ${_LIBGDA_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists libgda-3.0
+function inst_webkit() {
+    setup WebKit
+    _WEBKIT_UDIR=`unix_path ${WEBKIT_DIR}`
+    add_to_env ${_WEBKIT_UDIR}/bin PATH
+    add_to_env -lwebkit-1.0-2 WEBKIT_LIBS
+    add_to_env -L${_WEBKIT_UDIR}/bin WEBKIT_LIBS
+    add_to_env -I${_WEBKIT_UDIR}/include WEBKIT_CFLAGS
+    if quiet ${LD} ${WEBKIT_LIBS} -o $TMP_UDIR/ofile
     then
-        echo "Libgda already installed. skipping."
+        echo "webkit already installed.  skipping."
     else
-        wget_unpacked $LIBGDA_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/libgda-*
-        qpushd $TMP_UDIR/libgda-*
-            #patch to ignore vfs, as libgda uses depriciated header
-            patch libgda/gda-data-model-dir.c $LIBGDA_PATCH
-            #patch to use g_setenv instead of setenv (bug #510739)
-            patch tools/gda-sql.c $LIBGDA_PATCH2
-            ./configure ${HOST_XCOMPILE} \
-                --prefix=${_LIBGDA_UDIR} \
-                CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS}" \
-                LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -lintl"
-            make
-            make install
-        qpopd
-        ${PKG_CONFIG} --exists libgda-3.0 || die "Libgda not installed correctly"
+        wget_unpacked $WEBKIT_URL $DOWNLOAD_DIR $WEBKIT_DIR
+ls $WEBKIT_DIR
+        quiet ${LD} ${WEBKIT_LIBS} -o $TMP_UDIR/ofile || die "webkit not installed correctly"
     fi
 }
 
@@ -1153,6 +1155,7 @@ function inst_gnucash() {
             ${AQBANKING_OPTIONS} \
             --enable-binreloc \
             --enable-locale-specific-tax \
+            --enable-webkit \
             CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} ${LIBDBI_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} -D_WIN32" \
             LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS} ${LIBDBI_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS}" \
             PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
@@ -1183,6 +1186,8 @@ function make_install() {
     _OPENSP_UDIR=`unix_path ${OPENSP_DIR}`
     _LIBDBI_UDIR=`unix_path ${LIBDBI_DIR}`
     _SQLITE3_UDIR=`unix_path ${SQLITE3_DIR}`
+    _WEBKIT_UDIR=`unix_path ${WEBKIT_DIR}`
+    _GNUTLS_UDIR=`unix_path ${GNUTLS_DIR}`
     AQBANKING_UPATH="${_OPENSSL_UDIR}/bin:${_GWENHYWFAR_UDIR}/bin:${_AQBANKING_UDIR}/bin"
     AQBANKING_PATH="${OPENSSL_DIR}\\bin;${GWENHYWFAR_DIR}\\bin;${AQBANKING_DIR}\\bin"
 
@@ -1196,7 +1201,7 @@ function make_install() {
         qpushd $_BUILD_UDIR/src/bin
             rm gnucash
             make PATH_SEPARATOR=";" \
-                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin:${_LIBDBI_UDIR}/bin:${_SQLITE3_UDIR}/bin" \
+                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GNUTLS_UTIR}/bin:${_GMP_UDIR}/bin:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_GUILE_UDIR}/bin:${_WEBKIT_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin:${_LIBDBI_UDIR}/bin:${_SQLITE3_UDIR}/bin" \
                 gnucash
         qpopd
     fi
@@ -1232,7 +1237,7 @@ function make_install() {
         # Create a startup script that works without the msys shell
         qpushd $_INSTALL_UDIR/bin
             echo "setlocal" > gnucash.cmd
-            echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBDBI_DIR}\\bin;${SQLITE3_DIR}\\bin;%PATH%" > gnucash.cmd
+            echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GNUTLS_DIR}\\bin;${GMP_DIR}\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${WEBKIT_DIR}\\bin;${GNOME_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBDBI_DIR}\\bin;${SQLITE3_DIR}\\bin;%PATH%" > gnucash.cmd
             echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.cmd
             echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.cmd
             echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.cmd

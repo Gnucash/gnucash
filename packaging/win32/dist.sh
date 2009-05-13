@@ -110,6 +110,7 @@ function dist_gnome() {
     wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $DIST_DIR
+	wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $DIST_DIR
     rm -rf $DIST_UDIR/etc/gconf/gconf.xml.defaults/{desktop,schemas}
     cp -a $DIST_UDIR/lib/locale $DIST_UDIR/share
@@ -198,12 +199,9 @@ function dist_libdbi() {
     cp -a ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/* ${DIST_UDIR}/lib/dbd
 }
 
-function dist_libgda() {
-    setup Libgda
-    cp -a ${_LIBGDA_UDIR}/bin/* ${DIST_UDIR}/bin
-    cp -a ${_LIBGDA_UDIR}/lib/libgda-3.0 ${DIST_UDIR}/lib
-    cp -a ${_LIBGDA_UDIR}/share/libgda-3.0 ${DIST_UDIR}/share
-    cp -a ${_LIBGDA_UDIR}/share/locale ${DIST_UDIR}/lib
+function dist_webkit() {
+    setup WebKit
+    cp -a ${_WEBKIT_UDIR}/bin/* ${DIST_UDIR}/bin
 }
 
 function dist_gnucash() {
@@ -291,6 +289,7 @@ fi
 dist_gwenhywfar
 dist_aqbanking
 dist_libdbi
+dist_webkit
 dist_gnucash
 finish
 qpopd
