@@ -1,6 +1,403 @@
 Version history:
 ------- -------
 
+ 2.3.0 - 14 May 2009
+ 	 o Welcome to GnuCash 2.3.0 the first of several unstable releases of
+	 the GnuCash Open Source Accounting Software which will eventually lead
+	 to the stable version 2.4.0. This release is the very first to use an
+	 SQLite3 database as the default data store.  It is intended for
+	 developers and adventurous testers who want to help tracking down bugs.
+	 o WARNING WARNING WARNING - Make sure you make backups of any files
+	 used in testing versions of GnuCash in the 2.3.x series. Although the
+	 developers go to great lengths to ensure that no data will be lost we
+	 cannot guarentee that your data will not be affected if for some
+	 reason GnuCash crashes in testing these releases.
+	 o PLEASE TEST TEST AND TEST SOME MORE any and all features important
+	 to you. Then post any bugs you find to bugzilla
+	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 o If you have the urge to help beyond testing please get involved in
+	 the discussions on the GnuCash mailing lists which you will find at
+	 http://www.gnucash.org.  Please see http://wiki.gnucash.org/wiki/Development
+	 on how to get involved.
+	 o Major new features:
+	    * All features, including business features, are supported by a new
+		SQL datastore, which can use SQLite3 (default), MySQL or PostgreSQL.
+		The legacy XML data format is still supported
+		* Replacement of the aging GtkHTML engine used for reports/charts
+		with the WebKit engine used by Apple's Safari and Google's Chrome
+		web browsers.
+	 o PS I'm not going to list the many minor features changed or updated in
+	 this release because obviously there is so much that has changed.
+
+ 2.2.9 - 23 February 2009
+ 	 Welcome to the GnuCash 2.2.9 Release.
+	 Fixed Bugs:
+	 o #339027: Reconcile window should display the date
+	 o #435642: Crash editing results of a find
+	 o #438132: Warning about commodity being NULL for root account on save
+	 o #462148: Report output is vertically inverted and bottom up
+	            printed (mirror, reverse, &c.)
+	 o #514455: Dutch (Netherlands) translation of account templates
+	 o #526775: Win32: Crashes when importing brokerage account data
+	 o #542382: Assign GnuCash to file name extension .gnucash
+	 o #564209: Improved debuggability for module loading
+
+	 o #564450: HUF currency handling incorrect as 1HUF divided into
+	            100FILLERs
+	 o #564928: Segfault when closing a invoice tab
+	 o #565421: gnc-date-edit.c did not compile with Gtk < 2.10
+	 o #565721: Multicolumn report options: Report names are not translated
+	 o #566198: Slovakia joined the Euro
+	 o #566352: Crash during OFX import under Win 2000 / SP4
+	 o #566567: Scheme modifications are not built on windows
+	 o #567174: Files with NIS stocks fail to open
+
+	 o #568327: Using most "budget" reports, without a budget
+	            defined crashes gnucash
+	 o #568653: Add SKR49 template
+	 o #568945: The gnc_pricedb_convert_balance_... methods should
+	            look for the reciprocal of the exchange rate
+	 o #569734: Give the template root account a name
+	 o #570166: Weird text entry box when typing on Account Tree page
+	 o #570894: Use of symbol t, which is not defined in all guile versions
+	 o #571220: Program won't start if SCHEME_LIBRARY_PATH is set
+	 Other Changes:
+	 o Added German account template for a Wohnungswirtschaft business
+	 o Fixed french business account templates
+	 o Updated translations: Catalan, Chinese, German, Italian
+
+ 2.2.8 - 14 December 2008
+ 	 Welcome to the GnuCash 2.2.8 Release.
+	 Fixed Bugs:
+	 o #115066: "Search For" dialog shows all when criteria is left as
+	            default
+	 o #128774: "Edit exchange rate" context menu item disfunctional often
+	 o #137017: date of transaction change with time zone change
+	 o #339433: TiaaCref price quote dates off by one day
+	 o #340041: 0 as an amount should be allowed in Exchange Editor
+	 o #345980: changing Stylesheet doesn't commit
+	 o #347274: to track the difference between budgeted and actual amounts
+	            in the budget report
+	 o #348860: Error with saved multicolumn reports
+	 o #405472: Unable to save changes on files opened over FUSE and sshfs
+	 o #432457: Security/stock import should follow tutorial regarding
+	            Account Name
+	 o #435427: "Generic import transaction matcher" dialog does not sort by
+	            date
+	 o #436342: Currency exchange druid does not show on changed
+	 o #436920: crash on loading OFX data for a commodity that exists
+	            without cusip field
+	 o #492417: currency mapping of New Israeli Shekel
+	 o #529494: Wrong fractional precision in register with multi-currency
+	            transactions
+	 o #532889: Monthly scheduled payments preview shows wrong dates
+	 o #536299: Fix two underlinking issues
+	 o #539947: OpenSolaris:__FUNCTION__ not defined in sun cc
+	 o #543332: Severe performance regression in Average Balance report
+	 o #548218: OpenSolaris: $(expression) cause configure error on solaris
+	 o #554042: OpenSolaris: configure fail on checking 'unsigned long is at
+	            least as big as guint32'
+	 o #557604: date-utilities.scm typos
+	 o #557374: MT940 import does not work
+	 o #563160: Multicolumn report: Confusing order of "Column span" and
+	            "Row span"
+	 o #563273: crash in GnuCash Finance Management: Starting GnuCash
+	 o #564033: aqbanking plugin: g_module_open failed: WEXITSTATUS undefined
+	 Other Changes:
+	 o Fix account defaulting for posting vendor bill
+	 o Fix tax-related inconsistency in UI
+	 o Fix the average cost price source computation for a certain case
+	 o Add account templates: Dutch, Finnish
+	 o Update account templates: Italian, Slovak
+	 o Update translations: Finnish, German, Hebrew, Italian, Japanese,
+	                        Russian, Slovak, Simplified Chinese
+
+ 2.2.7 - 26 September 2008
+ 	 Welcome to the GnuCash 2.2.7 Release.
+	 Fixed Bugs:
+	 o #139651: Register: Split transaction with multiple currencies fails
+	 o #309863: Balance Sheet: Rounding errors with prices from pricedb
+	 o #341362: Price Editor: Price is displayed as fraction instead
+	            of decimal
+	 o #376298: Price Editor: Window Contents Corrupted After
+	            Manually Adding a Price
+	 o #378734: Drop down calendar only works once
+	 o #430121: Incorrect Sign Symbol for Fractional Commodity/Security Sale
+	 o #454340: Security Editor: duplicate rows after editing a security
+	 o #454827: Reports: Incorrect share value of stocks in foreign currency
+	 o #464771: Investment Portfolio: Report crashes without price data
+	 o #483393: Reports: Allow mixed denominators in numeric collectors
+	 o #504935: Add currencies XDR and XXX
+	 o #506873: Win32: Cannot install online price retrieval with
+	            ActivePerl 5.10
+	 o #520570: Drop-down calendar for "reconcile information" non-responsive
+	 o #522095: Updating stock prices does not update totals shown in windows
+	 o #526313: GnuCash does not support the new currency in Venezuela
+	 o #529816: Supplement "CUSIP" by "ISIN", to give people outside
+	            USA a hint
+	 o #539640: Price Editor: Security disappears from price list
+	 o #539962: Void function cannot return value with sun cc
+	 o #540148: GnuCash cannot be built with libgoffice-0.8
+	 o #541970: Balance Sheet: "Nearest in time" exchange rate not correct
+	 o #543061: Fractional not working in IDR (rupiah) currency
+	 o #543780: Transfer Dialog: CRIT messages in gnucash.trace from
+	            exchange rate dialog
+	 o #545316: Drop-down calendar is not clickable when posting invoice
+	 o #545722: Can't change date in dialog boxes
+	 o #546064: gnucash.desktop file does not comply with
+	            desktop-file-validate
+	 o #548601: AqBanking Import: Obscuring zero balance windows
+	            after getting transactions
+	 o #548891: QIF Import: GnuCash crashes when
+	            .gnucash/qif-accounts-map is readonly
+	 o #549115: Popup calendar unresponsive in modal dialogs
+	 o #549595: Silently removes main files while trying to save without lock
+	 o #549738: Reports: Default date on aging and customer reports
+	            is too far in the future
+	 o #551038: Reports: Alt-O shortcut in report options dialog crashes app
+	 o #552306: Fails to save file when using a network filesystem on Mac
+	 Other Changes:
+	 o New Finnish translation
+	 o Complete Romanian translation
+	 o Usability improvements in the price and the security editor
+	 o Lower number of false positives when checking aqbanking
+	   results for failures
+	 o Correct import of remote names, zero balances from aqbanking3
+	 o Update translations: Catalan, Dutch, German, Italian, Polish
+
+ 2.2.6 - 27 July 2008
+ 	 Welcome to the GnuCash 2.2.6 Release.
+	 Fixed Bugs:
+	 o #129099: Register: Optionally show leaf names instead of full names
+	 o #144669: Register: Shortcut to filter accounts by account number
+	 o #313660: QIF Import: Can't stop progress on long importing process
+	 o #336192: QIF Import: Allow new namespaces when defining new securities
+	 o #353880: Reports: Options dialog violates HIG, add borders.
+	 o #309359: QIF Import: "unknown Action '..'" shown many times
+	 o #452354: Average Balance Report: Translate account type option names
+	 o #454305: Trial Balance Report: Wrong after negative Stock Split
+	 o #460721: Balance Sheet: Should have a "value at cost" option
+	 o #463320: Trial Balance Report: Does not add up correctly
+	 o #470656: Preferences, Win32: Crash when setting accounting period
+	 o #475980: QIF Import: Forward and Back don't follow same path
+	 o #489502: Register: Account autocompletion ignores new
+	            separator until restart
+	 o #501490: Balance Sheet: Incorrect in presence of stock sale
+	 o #502646: Win32: Crash entering dates before 1/1/1970 in dialogs
+	 o #506499: Win32: Crash after online banking transfer
+	 o #512991: Invoices: Do not allow posting to placeholder accounts
+	 o #514210: QIF Import: Allow multiple selections for account mapping
+	 o #515163: QIF Import: Eliminate pointless mappings
+	 o #521403: Reports: One more option in "Price Source" in Stock
+	            Value Reports
+	 o #526883: Transaction Report: Question marks instead of month
+	            in cyrillic locale
+	 o #528835: Crash when creating SKR04 accounts with German locale
+	 o #530924: Customer Report: Honor the used column list
+	 o #531662: Budget report: Crash on #f in budget->guid
+	 o #532405: Win32: Guile crashes on strftime formats containing %e
+	 o #535407: QIF Import: Crash on invalid or unsupported date format
+	 o #538800: Balance Sheet: Gives wrong results
+	 o #539654: Reports: html-table-append-column! in html-table.scm crashes
+	 o #539829: Build Process: qofsession.c compile warning
+	 o #540207: Reports: Show a table of data beneath barcharts
+	 o #542472: Reports: Period does not default to Accounting Period
+	 o #542967: Reports: Options dialog title shows GUID
+	 Other Changes:
+	 o New Hebrew translation
+	 o Add support for aqbanking3
+	 o Correct quickfill directions in transfer dialogs
+	 o Add QIF importer support for importing to A/R and A/P account types
+	 o QIF importer loading speedup and visual feedback, further improvements
+	 o Avoid crashing if a report's option generating procedure
+	   causes a Scheme exception
+	 o Make the new option Average Cost the default for several
+	   reports
+	 o Make weighted average price source computations ignore zero
+	   amount splits
+	 o Support calculation of unrealized gains/losses on liabilities
+	   in balance sheet
+	 o Allow creating new accounts from the general ledger
+	 o Fix some compiler warnings, minor build system improvements
+	 o Update translations: Catalan, German, Russian, Traditional Chinese
+
+ 2.2.5 - 27 April 2008
+ 	 Welcome to the GnuCash 2.2.5 Release.
+	 Fixed Bugs:
+	 o #166101: Register: Topmost splits' accounts are rewritten confusingly
+	 o #341414: QIF Import: Changing account separator breaks saved account
+	            mappings
+	 o #341608: Transaction Report: Filtering void/non-void doesn't work
+	 o #347474: Register: Tab goes to wrong split
+	 o #396665: QIF Import: Detect and convert non-ascii character encoding
+	            of QIF files
+	 o #450354: QIF Import, Win32: Can only load files from ascii paths
+	 o #475960: Reconciliation: Postponed balances of liability accounts are
+	            not reversed correctly
+	 o #467529: Check Printing: Align_n not working in custom check
+	            definitions
+	 o #509089: QIF Import: Duplicates windows shown after Scheme error
+	 o #511182: QIF Import: Saved commodity mappings lost after import to
+	            new GnuCash file
+	 o #511231: QIF Import: Use QIF security type to provide better default
+	            namespace
+	 o #512208: QIF Import: New commodities remain if import canceled
+	 o #512841: Register: Crash in expression parser on nullary functions,
+	            like pmt()
+	 o #514027: QIF Import: Commodities page is skipped if you go back to
+	            currency page
+	 o #519988: QIF Import: Error reporting doesn't follow GnuCash guidelines
+	 o #520606: QIF import: Memo mappings for non-split, non-investment
+	            transactions are ignored
+	 o #521957: Auto-save not canceled on opening other files
+	 o #522795: QIF Import: Does not support "ShtSell" or "CvrShrt"
+	            transactions
+	 o #523194: QIF Import: Existing commodities can cause import failure
+	 o #523922: GnuCash ships the wrong scalable icon and no small (22²,
+	            24²) sizes
+	 o #527459: QIF Import: Support voided transactions
+	 o #527886: QIF Import: Support QIF numeric formats of 12'345.67 as
+	            produced by Quicken 4
+	 o #529232: Average Balance Report: Reversing the starting balance
+	            distorts the numbers
+	 Other Changes:
+	 o Add a new Liberty(tm) check format
+	 o Show QIF import documentation by default
+	 o Improve cancel behavior in reconciliation window
+	 o Fix a few memory leaks
+	 o Update translations: Brazilian Portuguese, German, Romanian, Russian,
+	                        Swiss German
+
+ 2.2.4 - 02 March 2008
+ 	 Welcome to the GnuCash 2.2.4 Release.
+	 Fixed Bugs:
+	 o #106242: qif Importer should warn users about dates before 1970
+	 o #106383: feature request: close year end
+	 o #123312: QIF Import: Autoselection of Stock Exchange during import
+	 o #336211: QIF Import generates spurious duplicate transactions
+	 o #360058: GnuCash crashes on QIF-import after changing
+	            account's separator to * (asterisk)
+	 o #373584: Rounding error in QIF import of commodity transactions
+	 o #454834: Memo Incorrect or missing in Transaction Report
+	 o #457591: QIF import does not handle tabs at top of file
+	 o #481528: QIF importer should show imported transaction as
+	            possible duplicate if original transaction is split
+	 o #503166: QIF Import Druid Flow incorrect
+	 o #506798: Custom Reports don't allow sorting by Account Code
+	 o #506873: 'Install Online Price Retrieval' fails with ActivePerl 5.10
+	 o #506810: QIF Import can mismatch account transfers
+	 o #510221: Include Mexican Accounts
+	 o #510630: typo in description of BUYMF transaction (OFX import)
+	 o #510725: crash importing a .OFX file
+	 o #510940: Unrecognized date format causes crash
+	 o #510962: QIF transactions without dates are silently ignored
+	 o #511006: Commodity creation skipped due to saved mappings
+	 o #512166: doesn't build with glib-2.15.3
+	 o #512173: Empty "match payees/memos" druid step shown
+	 o #512497: Investment transactions ignore payee/memo mappings
+	 o #513088: "Find" immediately unmaps window
+	 o #513829: Investment account may be created with Stock account type
+	 o #516178: Scheme error during progress dialog causes freeze
+	 Other Changes:
+	 o Recognize 401k/403b in QIF import
+	 o Remove superfluous trailing colons of de_DE SKR04 account names
+	 o Add russian account templates
+	 o Add Swiss German translation
+	 o Update translations: Brazilian Portugese, German, Greek, Russian,
+	                        Simplified Chinese, Slovak, Spanish
+
+ 2.2.3 - 06 January 2008
+ 	 Welcome to the GnuCash 2.2.3 Release.
+	 Fixed Bugs:
+	 o #114724: QIF importer drops split details for transfers with
+	            identical amount
+	 o #463678: xfer dialog from CC auto-payment from reconcile doesn't
+	            display accounts
+	 o #495219: QIF-Importer handles memo from transactions wrong
+	 o #497517: Transactions set to 'c' in the R(econciled) field of the
+	            register are incorrectly set to 'n' when postponing a
+	            reconciliation
+	 o #503889: Should install icons into expected locations
+	 o #504007: QIF Import Druid does not allow selecting currency
+	 o #504257: Need to replace old Afghanistan Afghani (AFA) with new
+	            Afghanistan Afghani (AFN)
+	 o #504261: Start on W2K fails with Entry Point Not Found (KERNEL32.dll)
+	 o #505386: Gnucash looses transactions if the file contains special
+	            characters
+	 o #505972: SX-related segfaults in 2.2.2
+	 o #506074: Fractional timezone offsets not always handled correctly
+	 o #506429: "Last Day of Month" SXes saved on wrong day of week
+	 o #506671: Add cyprus, maltese and slovenian currencies to EURO support
+	 o #506714: progress bar during launching
+	 Other Changes:
+	 o New Vietnamese translation
+	 o Improve several minor strings
+	 o Update translations: Dutch, German
+	 o Some business report improvements regarding date parameters
+	 o Fix gcc 4.2.x compiler warnings
+	 o Use aqbanking pkg-config file and require < v2.9, allow goffice v0.6
+
+ 2.2.2 - 16 December 2007
+	 Welcome to the GnuCash 2.2.2 Release.
+	 Fixed Bugs:
+	 o #336240: advanced portfolio - the basis calculation is not
+	            working properly in funds
+	 o #343245: Advanced Portfolio gets basis wrong with stock split
+	 o #343448: Hide unused horizontal scrollbar
+	 o #344566: Advance Portfolio has wrong Realized Gain
+	 o #347739: Advanced Portfolio calculates values incorrectly
+	            when it involves a capital loss
+	 o #438360: Case-insensitive search for non-ascii characters broken
+	 o #460232: advanced portfolio report fails
+	 o #467521: Persistent splash screen blocks "could not obtain
+	            lock" warning
+	 o #467532: Clipping check fields in gtkprint is not consistent
+	            with clipping in gnomeprint
+	 o #468681: RFE: Customizable summary bar position
+	 o #470750: src/design/*.texinfo refers to non-existent GncBooks API
+	 o #470801: Tip Of The Day says 2.2.1 is development version
+	 o #473827: chinese translate for gnucash account
+	 o #475666: Missing national currency CUC
+	 o #476189: Configure script should fail when gettext is not installed
+	 o #481110: Win32: Crash when opening SX Editor
+	 o #482177: Customer report shows no invoices or detail with 2nd
+	            A/Receivable
+	 o #483796: Fancy Invoice - Report Error
+	 o #484576: Configuration error with goffice 0.5
+	 o #487317: QIF import druid crash when stepping back and forth
+	            from the "loaded files page" without selection
+	 o #487326: Preferences dialog does not remove all its gconf callbacks
+	 o #487572: advanced portfolio breaks on "Most Recent to Report"
+	 o #488001: speed up several reports that rely on html-acct-table.scm
+	 o #488004: provide a two-column income-statement
+	 o #490679: GnuCash doesn't honor the GNOME toolbar settings
+	 o #491581: Import 'Cash' Action (in Investment Accounts)
+	 o #492137: Lot scrubber doesn't add splits to existing lots correctly
+	 o #496023: Pressing ESC Cancels modifications whether you
+	            choose yes or no.
+	 o #496178: gnucash segfaults with troublesome automatic transactions
+	 o #499360: Crash when editing a commodity whose quote source
+	            timezone is set to local time
+	 o #499788: gnucash-make-guids does not work, fails with
+	            "Unbound variable: gnc:guid-new"
+	 o #500026: [PATCH] Report correct package for qt3-wizard
+	 o #500427: SX creation doesn't include template transaction "Notes"
+	 o #501059: GnuCash leaks since last run dialogs
+	 o #502755: GnuCash hangs after modifying SX
+	 o #503579: win32 packaging fails installing mingw
+	 Other Changes:
+	 o Many changes to the german SKR03 and SKR04 account templates
+	 o Include updated GNOME libraries and a patched ORBit2 in Win32 build
+	 o Improve resizing of search and invoice posting dialogs
+	 o Add MimeType directive for GnuCash data files
+	 o Fix some new compiler warnings
+	 o Add AZN [Azerbaijani Manat]
+	 o Add COU [Colombian Unidad de Valor Real]
+	 o Add MZN [Mozambique Metical]
+	 o Some occurrences of "Open Source" were changed to "Free"
+	 o Update translations: Brazilian Portugese, Czech, German,
+	                        Japanese, Traditional Chinese
+
  2.2.1 - 19 August 2007
   	 Welcome to the GnuCash 2.2.1 Release.
 	 Fixed Bugs:
