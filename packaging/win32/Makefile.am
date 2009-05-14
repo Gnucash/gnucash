@@ -10,8 +10,6 @@ EXTRA_DIST = \
   install-fq-mods.cmd \
   libofx-0.8.3-patch.diff \
   opensp-1.5.2-patch.diff \
-  libgda-3.1.2-patch.diff \
-  libgda-3.1.2-patch2.diff \
   pi.sh \
   Greek-4-5.1.11.isl \
   reset.sh
