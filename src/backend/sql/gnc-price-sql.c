@@ -20,7 +20,7 @@
 \********************************************************************/
 /** @file gnc-price-sql.c
  *  @brief load and save data to SQL 
- *  @author Copyright (c) 2006-2008 Phil Longstaff <plongstaff@rogers.com>
+ *  @author Copyright (c) 2006-2009 Phil Longstaff <plongstaff@rogers.com>
  *
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db
@@ -105,6 +105,7 @@ load_all_prices( GncSqlBackend* be )
 			GList* list = NULL;
 			GncSqlRow* row = gnc_sql_result_get_first_row( result );
 
+			gnc_pricedb_set_bulk_update( pPriceDB, TRUE );
         	while( row != NULL ) {
             	pPrice = load_single_price( be, row );
 
@@ -115,6 +116,7 @@ load_all_prices( GncSqlBackend* be )
 				row = gnc_sql_result_get_next_row( result );
         	}
 			gnc_sql_result_dispose( result );
+			gnc_pricedb_set_bulk_update( pPriceDB, FALSE );
 
 			if( list != NULL ) {
 				gnc_sql_slots_load_for_list( be, list );
