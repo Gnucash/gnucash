@@ -340,6 +340,13 @@ gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session,
 			if( be->sql_be.conn != NULL ) {
 				gnc_sql_connection_dispose( be->sql_be.conn );
 			}
+			result = dbi_conn_set_option( be->conn, "dbname", dbname );
+			if( result < 0 ) {
+				PERR( "Error setting 'dbname' option\n" );
+        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+        		LEAVE( " " );
+        		return;
+			}
 			be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_MYSQL, qbe, be->conn );
 		} else {
 			if( create_if_nonexistent ) {
@@ -352,6 +359,13 @@ gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session,
 						gnc_sql_connection_dispose( be->sql_be.conn );
 					}
 					be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_MYSQL, qbe, be->conn );
+					result = dbi_conn_set_option( be->conn, "dbname", dbname );
+					if( result < 0 ) {
+						PERR( "Error setting 'dbname' option\n" );
+        				qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+        				LEAVE( " " );
+        				return;
+					}
 				} else {
 					PERR( "Unable to connect to %s: %d\n", book_id, result );
         			qof_backend_set_error( qbe, ERR_BACKEND_CANT_CONNECT );
@@ -579,10 +593,12 @@ gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
 
 		table_name = dbi_result_get_string_idx( tables, 1 );
 		result = dbi_conn_queryf( be->conn, "DROP TABLE %s", table_name );
-		status = dbi_result_free( result );
-		if( status < 0 ) {
-			PERR( "Error in dbi_result_free() result\n" );
-			qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+		if( result != NULL ) {
+			status = dbi_result_free( result );
+			if( status < 0 ) {
+				PERR( "Error in dbi_result_free() result\n" );
+				qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+			}
 		}
 	}
 	status = dbi_result_free( tables );
