@@ -249,9 +249,10 @@ mysql_error_fn( dbi_conn conn, void* user_data )
 	const gchar* msg;
 
 	(void)dbi_conn_error( conn, &msg );
-	PERR( "DBI error: %s\n", msg );
 	if( g_str_has_prefix( msg, "1049: Unknown database" ) ) {
 		be->exists = FALSE;
+	} else {
+		PERR( "DBI error: %s\n", msg );
 	}
 }
 
@@ -262,12 +263,13 @@ gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session,
 				       /*@ unused @*/gboolean create_if_nonexistent )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
-	gchar* dsn;
+	gchar* dsn = NULL;
 	gchar* host;
 	gchar* dbname;
     gchar* username;
     gchar* password;
 	gint result;
+	gboolean success = FALSE;
 
 	g_return_if_fail( qbe != NULL );
 	g_return_if_fail( session != NULL );
@@ -286,6 +288,9 @@ gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session,
 	for( password = username; *password != ':'; password++ ) {}
 	*password++ = '\0';
 
+	// Try to connect to the db.  If it doesn't exist and the create_if_nonexistent
+	// flag is TRUE, we'll need to connect to the 'mysql' db and execute the
+	// CREATE DATABASE ddl statement there.
 	if( be->conn != NULL ) {
 		dbi_conn_close( be->conn );
 	}
@@ -293,100 +298,135 @@ gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session,
 	if( be->conn == NULL ) {
 		PERR( "Unable to create mysql dbi connection\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
-		LEAVE( " " );
-		return;
+		goto exit;
 	}
 	dbi_conn_error_handler( be->conn, mysql_error_fn, be );
 	result = dbi_conn_set_option( be->conn, "host", host );
 	if( result < 0 ) {
 		PERR( "Error setting 'host' option\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        LEAVE( " " );
-        return;
+		goto exit;
 	}
 	result = dbi_conn_set_option_numeric( be->conn, "port", 0 );
 	if( result < 0 ) {
 		PERR( "Error setting 'port' option\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        LEAVE( " " );
-        return;
+		goto exit;
 	}
-	result = dbi_conn_set_option( be->conn, "dbname", "mysql" );
+	result = dbi_conn_set_option( be->conn, "dbname", dbname );
 	if( result < 0 ) {
 		PERR( "Error setting 'dbname' option\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        LEAVE( " " );
-        return;
+		goto exit;
 	}
 	result = dbi_conn_set_option( be->conn, "username", username );
 	if( result < 0 ) {
 		PERR( "Error setting 'username' option\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        LEAVE( " " );
-        return;
+		goto exit;
 	}
 	result = dbi_conn_set_option( be->conn, "password", password );
 	if( result < 0 ) {
 		PERR( "Error setting 'password' option\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        LEAVE( " " );
-        return;
+		goto exit;
 	}
 	be->exists = TRUE;
 	result = dbi_conn_connect( be->conn );
 	if( result == 0 ) {
-		result = dbi_conn_select_db( be->conn, dbname );
-		if( result == 0 ) {
-			if( be->sql_be.conn != NULL ) {
-				gnc_sql_connection_dispose( be->sql_be.conn );
+		success = TRUE;
+	} else {
+
+		if( be->exists ) {
+			PERR( "Unable to connect to database '%s'\n", dbname );
+        	qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+			goto exit;
+		}
+
+		// The db does not already exist.  Connect to the 'mysql' db and try to create it.
+		if( create_if_nonexistent ) {
+			dbi_result dresult;
+			result = dbi_conn_set_option( be->conn, "dbname", "mysql" );
+			if( result < 0 ) {
+				PERR( "Error setting 'dbname' option\n" );
+        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+				goto exit;
+			}
+			result = dbi_conn_connect( be->conn );
+			if( result < 0 ) {
+				PERR( "Unable to connect to 'mysql' database\n" );
+        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+				goto exit;
+			}
+			dresult = dbi_conn_queryf( be->conn, "CREATE DATABASE %s", dbname );
+			if( dresult == NULL ) {
+				PERR( "Unable to create database '%s'\n", dbname );
+        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+				goto exit;
+			}
+    		dbi_conn_close( be->conn );
+
+			// Try again to connect to the db
+			be->conn = dbi_conn_new( "mysql" );
+			if( be->conn == NULL ) {
+				PERR( "Unable to create mysql dbi connection\n" );
+        		qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
+				goto exit;
+			}
+			dbi_conn_error_handler( be->conn, mysql_error_fn, be );
+			result = dbi_conn_set_option( be->conn, "host", host );
+			if( result < 0 ) {
+				PERR( "Error setting 'host' option\n" );
+        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+				goto exit;
+			}
+			result = dbi_conn_set_option_numeric( be->conn, "port", 0 );
+			if( result < 0 ) {
+				PERR( "Error setting 'port' option\n" );
+        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+				goto exit;
 			}
 			result = dbi_conn_set_option( be->conn, "dbname", dbname );
 			if( result < 0 ) {
 				PERR( "Error setting 'dbname' option\n" );
         		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        		LEAVE( " " );
-        		return;
+				goto exit;
 			}
-			be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_MYSQL, qbe, be->conn );
+			result = dbi_conn_set_option( be->conn, "username", username );
+			if( result < 0 ) {
+				PERR( "Error setting 'username' option\n" );
+        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+				goto exit;
+			}
+			result = dbi_conn_set_option( be->conn, "password", password );
+			if( result < 0 ) {
+				PERR( "Error setting 'password' option\n" );
+        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+				goto exit;
+			}
+			result = dbi_conn_connect( be->conn );
+			if( result < 0 ) {
+				PERR( "Unable to create database '%s'\n", dbname );
+        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+				goto exit;
+			}
+			success = TRUE;
 		} else {
-			if( create_if_nonexistent ) {
-				/* Couldn't select the db, so try to create it */
-				dbi_result dresult;
-				dresult = dbi_conn_queryf( be->conn, "CREATE DATABASE %s", dbname );
-				result = dbi_conn_select_db( be->conn, dbname );
-				if( result == 0 ) {
-					if( be->sql_be.conn != NULL ) {
-						gnc_sql_connection_dispose( be->sql_be.conn );
-					}
-					be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_MYSQL, qbe, be->conn );
-					result = dbi_conn_set_option( be->conn, "dbname", dbname );
-					if( result < 0 ) {
-						PERR( "Error setting 'dbname' option\n" );
-        				qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        				LEAVE( " " );
-        				return;
-					}
-				} else {
-					PERR( "Unable to connect to %s: %d\n", book_id, result );
-        			qof_backend_set_error( qbe, ERR_BACKEND_CANT_CONNECT );
-				}
-				if( dresult != NULL ) {
-					gint status = dbi_result_free( dresult );
-					if( status < 0 ) {
-						PERR( "Error in dbi_result_free() result\n" );
-						qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-					}
-				}
-			} else {
-        		qof_backend_set_error( qbe, ERR_BACKEND_NO_SUCH_DB );
-			}
+        	qof_backend_set_error( qbe, ERR_BACKEND_NO_SUCH_DB );
 		}
-	} else {
-		PERR( "Unable to connect to %s: %d\n", book_id, result );
-        qof_backend_set_error( qbe, ERR_BACKEND_CANT_CONNECT );
 	}
 
-	g_free( dsn );
+	if( success ) {
+		if( be->sql_be.conn != NULL ) {
+			gnc_sql_connection_dispose( be->sql_be.conn );
+		}
+		be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_MYSQL, qbe, be->conn );
+	}
+exit:
+	if( dsn != NULL ) {
+		g_free( dsn );
+	}
+
     LEAVE (" ");
 }
 
