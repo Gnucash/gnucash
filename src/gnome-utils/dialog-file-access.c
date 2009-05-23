@@ -199,6 +199,8 @@ gnc_ui_file_access( int type )
     /* Open the dialog */
     xml = gnc_glade_xml_new( "dialog-file-access.glade", "File Access" );
     faw->dialog = glade_xml_get_widget( xml, "File Access" );
+    g_object_set_data_full( G_OBJECT(faw->dialog), "FileAccessWindow", faw,
+			 				g_free );
 
 	faw->frame_file = glade_xml_get_widget( xml, "frame_file" );
 	faw->frame_database = glade_xml_get_widget( xml, "frame_database" );
@@ -231,6 +233,8 @@ gnc_ui_file_access( int type )
 	uri_type_container = glade_xml_get_widget( xml, "vb_uri_type_container" );
 	faw->cb_uri_type = GTK_COMBO_BOX(gtk_combo_box_new_text());
 	gtk_container_add( GTK_CONTAINER(uri_type_container), GTK_WIDGET(faw->cb_uri_type) );
+	gtk_box_set_child_packing( GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type), 
+								/*expand*/TRUE, /*fill*/FALSE, /*padding*/0, GTK_PACK_START );
 	g_object_connect( G_OBJECT(faw->cb_uri_type),
 					"signal::changed", cb_uri_type_changed_cb, NULL,
 					NULL );
@@ -257,8 +261,6 @@ gnc_ui_file_access( int type )
     /* Clean up the xml data structure when the dialog is destroyed */
     g_object_set_data_full( G_OBJECT(faw->dialog), "dialog-file-access.glade",
 			 				xml, g_object_unref );
-    g_object_set_data_full( G_OBJECT(faw->dialog), "FileAccessWindow", faw,
-			 				g_free );
 
     /* Run the dialog */
     gtk_widget_show_all( faw->dialog );
