@@ -859,14 +859,14 @@
 		  (set! date-table (make-date-table))
 		  ;; oli-custom - moved invoice number here
 		  (gnc:html-table-append-row!
-		   date-table (list (sprintf #f (_ "%s&nbsp;#") title) (gncInvoiceGetID invoice)))
-		  (make-date-row! date-table (string-append title (_ "&nbsp;Date")) post-date)
-		  (make-date-row! date-table (_ "Due&nbsp;Date") due-date)
+		   date-table (list (sprintf #f "%s&nbsp;#" title) (gncInvoiceGetID invoice)))
+		  (make-date-row! date-table (string-append title "&nbsp;" (_ "Date")) post-date)
+		  (make-date-row! date-table (_ "Due Date") due-date)
 		  date-table)
 		(gnc:make-html-text
 		  ;; oli-custom - FIXME: I have a feeling I broke a
 		 ;; translation by not using string-expand for &nbsp;
-		  (string-append title (N_ "<br>Invoice&nbsp;in&nbsp;progress...."))))))
+		  (string-append title "<br>" (N_ "Invoice in progress..."))))))
 	  
 	  (gnc:html-table-append-row!
 	  	helper-table

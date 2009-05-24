@@ -690,13 +690,13 @@
 	    (if (not (equal? post-date (cons 0 0)))
 		(begin
 		  (set! date-table (make-date-table))
-		  (make-date-row! date-table (string-append title (_ " Date")) post-date)
+		  (make-date-row! date-table (string-append title " " (_ "Date")) post-date)
 		  (make-date-row! date-table (_ "Due Date") due-date)
 		  (gnc:html-document-add-object! document date-table))
 		(gnc:html-document-add-object!
 		 document
 		 (gnc:make-html-text
-		  (N_ "Invoice in progress....")))))
+		  (N_ "Invoice in progress...")))))
 
 	  (make-break! document)
 	  (make-break! document)

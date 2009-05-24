@@ -404,7 +404,7 @@
                (revenue-table #f)                  ;; gnc:html-acct-table
                (expense-table #f)                  ;; gnc:html-acct-table
                (budget-name (gnc-budget-get-name budget))
-	       (period-for (string-append " " (_ "for Budget ") budget-name))
+	       (period-for (string-append " " (_ "for Budget") " " budget-name))
 	       )
 
 	  ;; a helper to add a line to our report
