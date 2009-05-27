@@ -985,6 +985,8 @@ function inst_aqbanking() {
             fi
             if test x$AQBANKING_WITH_QT = xyes; then
                 inst_qt4
+                [ -n "$AQBANKING_PATCH" -a -f "$AQBANKING_PATCH" ] && \
+                    patch -p1 < $AQBANKING_PATCH
                 ./configure ${HOST_XCOMPILE} \
                     --with-gwen-dir=${_GWENHYWFAR_UDIR} \
                     --with-xmlmerge=${XMLMERGE} \
