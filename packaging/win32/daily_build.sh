@@ -3,6 +3,7 @@
 set -e
 
 function qpushd() { pushd "$@" >/dev/null; }
+svn update
 function qpopd() { popd >/dev/null; }
 function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
 
