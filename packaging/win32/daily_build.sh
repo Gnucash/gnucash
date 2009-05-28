@@ -16,9 +16,15 @@ LOGFILENAME=build-`date +'%Y-%m-%d'`.log
 
 _OUTPUT_DIR=`unix_path $OUTPUT_DIR`
 LOGFILE=${_OUTPUT_DIR}/${LOGFILENAME}
+mkdir -p ${_OUTPUT_DIR}
 
 # Run the compile
 ./install.sh 2>&1 | tee ${LOGFILE}
+
+# This directory needs to be removed before calling dist.sh
+DIST_DIR=${INSTALL_DIR}\\..\\dist
+_DIST_UDIR=`unix_path $DIST_DIR`
+rm -rf ${_DIST_UDIR}
 
 # Create the installer
 ./dist.sh 2>&1 | tee -a ${LOGFILE}
