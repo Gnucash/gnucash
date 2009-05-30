@@ -62,6 +62,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define FILE_URI_PREFIX (FILE_URI_TYPE "://")
 #define SQLITE3_URI_TYPE "sqlite3"
 #define SQLITE3_URI_PREFIX (SQLITE3_URI_TYPE "://")
+#define PGSQL_DEFAULT_PORT 5432
 
 typedef gchar* (*CREATE_TABLE_DDL_FN)( GncSqlConnection* conn,
 								const gchar* table_name,
@@ -489,7 +490,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
         LEAVE( " " );
         return;
 	}
-	result = dbi_conn_set_option_numeric( be->conn, "port", 0 );
+	result = dbi_conn_set_option_numeric( be->conn, "port", PGSQL_DEFAULT_PORT );
 	if( result < 0 ) {
 		PERR( "Error setting 'port' option\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
