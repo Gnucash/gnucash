@@ -162,7 +162,7 @@ static void
 gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session, 
 	                   const gchar *book_id,
                        /*@ unused @*/ gboolean ignore_lock,
-				       /*@ unused @*/ gboolean create_if_nonexistent )
+				       gboolean create_if_nonexistent )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
 	gint result;
@@ -251,17 +251,70 @@ mysql_error_fn( dbi_conn conn, void* user_data )
 
 	(void)dbi_conn_error( conn, &msg );
 	if( g_str_has_prefix( msg, "1049: Unknown database" ) ) {
+		PINFO( "DBI error: %s\n", msg );
 		be->exists = FALSE;
 	} else {
 		PERR( "DBI error: %s\n", msg );
 	}
 }
 
+/**
+ * Sets standard db options in a dbi_conn.
+ *
+ * @param qbe QOF backend
+ * @param conn dbi_conn connection
+ * @param host Hostname
+ * @param port Port number
+ * @param dbname Database name
+ * @param username User name
+ * @param password Password
+ * @return TRUE if successful, FALSE if error
+ */
+static gboolean
+set_standard_connection_options( QofBackend* qbe, dbi_conn conn, const gchar* host, int port,
+						const gchar* dbname, const gchar* username, const gchar* password )
+{
+	gint result;
+
+	result = dbi_conn_set_option( conn, "host", host );
+	if( result < 0 ) {
+		PERR( "Error setting 'host' option\n" );
+        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+		return FALSE;
+	}
+	result = dbi_conn_set_option_numeric( conn, "port", 0 );
+	if( result < 0 ) {
+		PERR( "Error setting 'port' option\n" );
+        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+		return FALSE;
+	}
+	result = dbi_conn_set_option( conn, "dbname", dbname );
+	if( result < 0 ) {
+		PERR( "Error setting 'dbname' option\n" );
+        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+		return FALSE;
+	}
+	result = dbi_conn_set_option( conn, "username", username );
+	if( result < 0 ) {
+		PERR( "Error setting 'username' option\n" );
+        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+		return FALSE;
+	}
+	result = dbi_conn_set_option( conn, "password", password );
+	if( result < 0 ) {
+		PERR( "Error setting 'password' option\n" );
+        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 static void
-gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session, 
+gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session, 
 	                   const gchar *book_id,
                        /*@ unused @*/gboolean ignore_lock,
-				       /*@ unused @*/gboolean create_if_nonexistent )
+				       gboolean create_if_nonexistent )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
 	gchar* dsn = NULL;
@@ -302,34 +355,7 @@ gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session,
 		goto exit;
 	}
 	dbi_conn_error_handler( be->conn, mysql_error_fn, be );
-	result = dbi_conn_set_option( be->conn, "host", host );
-	if( result < 0 ) {
-		PERR( "Error setting 'host' option\n" );
-        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-		goto exit;
-	}
-	result = dbi_conn_set_option_numeric( be->conn, "port", 0 );
-	if( result < 0 ) {
-		PERR( "Error setting 'port' option\n" );
-        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-		goto exit;
-	}
-	result = dbi_conn_set_option( be->conn, "dbname", dbname );
-	if( result < 0 ) {
-		PERR( "Error setting 'dbname' option\n" );
-        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-		goto exit;
-	}
-	result = dbi_conn_set_option( be->conn, "username", username );
-	if( result < 0 ) {
-		PERR( "Error setting 'username' option\n" );
-        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-		goto exit;
-	}
-	result = dbi_conn_set_option( be->conn, "password", password );
-	if( result < 0 ) {
-		PERR( "Error setting 'password' option\n" );
-        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+	if( !set_standard_connection_options( qbe, be->conn, host, 0, dbname, username, password ) ) {
 		goto exit;
 	}
 	be->exists = TRUE;
@@ -359,7 +385,7 @@ gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session,
         		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
 				goto exit;
 			}
-			dresult = dbi_conn_queryf( be->conn, "CREATE DATABASE %s", dbname );
+			dresult = dbi_conn_queryf( be->conn, "CREATE DATABASE %s CHARACTER SET utf8", dbname );
 			if( dresult == NULL ) {
 				PERR( "Unable to create database '%s'\n", dbname );
         		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
@@ -375,34 +401,7 @@ gnc_dbi_mysql_session_begin( QofBackend *qbe, QofSession *session,
 				goto exit;
 			}
 			dbi_conn_error_handler( be->conn, mysql_error_fn, be );
-			result = dbi_conn_set_option( be->conn, "host", host );
-			if( result < 0 ) {
-				PERR( "Error setting 'host' option\n" );
-        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-				goto exit;
-			}
-			result = dbi_conn_set_option_numeric( be->conn, "port", 0 );
-			if( result < 0 ) {
-				PERR( "Error setting 'port' option\n" );
-        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-				goto exit;
-			}
-			result = dbi_conn_set_option( be->conn, "dbname", dbname );
-			if( result < 0 ) {
-				PERR( "Error setting 'dbname' option\n" );
-        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-				goto exit;
-			}
-			result = dbi_conn_set_option( be->conn, "username", username );
-			if( result < 0 ) {
-				PERR( "Error setting 'username' option\n" );
-        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-				goto exit;
-			}
-			result = dbi_conn_set_option( be->conn, "password", password );
-			if( result < 0 ) {
-				PERR( "Error setting 'password' option\n" );
-        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+			if( !set_standard_connection_options( qbe, be->conn, host, 0, dbname, username, password ) ) {
 				goto exit;
 			}
 			result = dbi_conn_connect( be->conn );
@@ -432,20 +431,26 @@ exit:
 }
 
 static void
-pgsql_error_fn( dbi_conn conn, /*@ unused @*/ void* user_data )
+pgsql_error_fn( dbi_conn conn, void* user_data )
 {
-    //GncDbiBackend *be = (GncDbiBackend*)user_data;
+    GncDbiBackend *be = (GncDbiBackend*)user_data;
 	const gchar* msg;
 
 	(void)dbi_conn_error( conn, &msg );
-	PERR( "DBI error: %s\n", msg );
+	if( g_str_has_prefix( msg, "FATAL:  database" ) &&
+			g_str_has_suffix( msg, "does not exist\n" ) ) {
+		PINFO( "DBI error: %s\n", msg );
+		be->exists = FALSE;
+	} else {
+		PERR( "DBI error: %s\n", msg );
+	}
 }
 
 static void
 gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session, 
 	                   const gchar *book_id,
                        /*@ unused @*/ gboolean ignore_lock,
-				       /*@ unused @*/ gboolean create_if_nonexistent )
+				       gboolean create_if_nonexistent )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
 	gint result;
@@ -454,6 +459,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 	gchar* dbname;
     gchar* username;
     gchar* password;
+	gboolean success;
 
 	g_return_if_fail( qbe != NULL );
 	g_return_if_fail( session != NULL );
@@ -472,6 +478,9 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 	for( password = username; *password != ':'; password++ ) {}
 	*password++ = '\0';
 
+	// Try to connect to the db.  If it doesn't exist and the create_if_nonexistent
+	// flag is TRUE, we'll need to connect to the 'postgres' db and execute the
+	// CREATE DATABASE ddl statement there.
 	if( be->conn != NULL ) {
 		dbi_conn_close( be->conn );
 	}
@@ -479,58 +488,80 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 	if( be->conn == NULL ) {
 		PERR( "Unable to create pgsql dbi connection\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
-		LEAVE( " " );
-		return;
+		goto exit;
 	}
 	dbi_conn_error_handler( be->conn, pgsql_error_fn, be );
-	result = dbi_conn_set_option( be->conn, "host", host );
-	if( result < 0 ) {
-		PERR( "Error setting 'host' option\n" );
-        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        LEAVE( " " );
-        return;
+	if( !set_standard_connection_options( qbe, be->conn, host, PGSQL_DEFAULT_PORT, dbname, username, password ) ) {
+		goto exit;
 	}
-	result = dbi_conn_set_option_numeric( be->conn, "port", PGSQL_DEFAULT_PORT );
-	if( result < 0 ) {
-		PERR( "Error setting 'port' option\n" );
-        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        LEAVE( " " );
-        return;
-	}
-	result = dbi_conn_set_option( be->conn, "dbname", dbname );
-	if( result < 0 ) {
-		PERR( "Error setting 'dbname' option\n" );
-        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        LEAVE( " " );
-        return;
-	}
-	result = dbi_conn_set_option( be->conn, "username", username );
-	if( result < 0 ) {
-		PERR( "Error setting 'username' option\n" );
-        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        LEAVE( " " );
-        return;
-	}
-	result = dbi_conn_set_option( be->conn, "password", password );
-	if( result < 0 ) {
-		PERR( "Error setting 'password' option\n" );
-        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        LEAVE( " " );
-        return;
-	}
+	be->exists = TRUE;
 	result = dbi_conn_connect( be->conn );
-	g_free( dsn );
-	if( result < 0 ) {
-		PERR( "Unable to connect to %s: %d\n", book_id, result );
-        qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
-        LEAVE( " " );
-        return;
+	if( result == 0 ) {
+		success = TRUE;
+	} else {
+
+		if( be->exists ) {
+			PERR( "Unable to connect to database '%s'\n", dbname );
+        	qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+			goto exit;
+		}
+
+		// The db does not already exist.  Connect to the 'postgres' db and try to create it.
+		if( create_if_nonexistent ) {
+			dbi_result dresult;
+			result = dbi_conn_set_option( be->conn, "dbname", "postgres" );
+			if( result < 0 ) {
+				PERR( "Error setting 'dbname' option\n" );
+        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+				goto exit;
+			}
+			result = dbi_conn_connect( be->conn );
+			if( result < 0 ) {
+				PERR( "Unable to connect to 'postgres' database\n" );
+        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+				goto exit;
+			}
+			dresult = dbi_conn_queryf( be->conn, "CREATE DATABASE %s WITH ENCODING 'UTF8'", dbname );
+			if( dresult == NULL ) {
+				PERR( "Unable to create database '%s'\n", dbname );
+        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+				goto exit;
+			}
+    		dbi_conn_close( be->conn );
+
+			// Try again to connect to the db
+			be->conn = dbi_conn_new( "pgsql" );
+			if( be->conn == NULL ) {
+				PERR( "Unable to create pgsql dbi connection\n" );
+        		qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
+				goto exit;
+			}
+			dbi_conn_error_handler( be->conn, pgsql_error_fn, be );
+			if( !set_standard_connection_options( qbe, be->conn, host, PGSQL_DEFAULT_PORT, dbname, username, password ) ) {
+				goto exit;
+			}
+			result = dbi_conn_connect( be->conn );
+			if( result < 0 ) {
+				PERR( "Unable to create database '%s'\n", dbname );
+        		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+				goto exit;
+			}
+			success = TRUE;
+		} else {
+        	qof_backend_set_error( qbe, ERR_BACKEND_NO_SUCH_DB );
+		}
 	}
 
-	if( be->sql_be.conn != NULL ) {
-		gnc_sql_connection_dispose( be->sql_be.conn );
+	if( success ) {
+		if( be->sql_be.conn != NULL ) {
+			gnc_sql_connection_dispose( be->sql_be.conn );
+		}
+		be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_PGSQL, qbe, be->conn );
 	}
-	be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_PGSQL, qbe, be->conn );
+exit:
+	if( dsn != NULL ) {
+		g_free( dsn );
+	}
 
     LEAVE (" ");
 }
