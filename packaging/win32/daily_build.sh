@@ -38,3 +38,8 @@ SVN_REV=`grep GNUCASH_SVN_REV ${_BUILD_UDIR}/src/gnome-utils/gnc-svninfo.h | cut
 SETUP_FILENAME="gnucash-${PKG_VERSION}-svn-r${SVN_REV}-setup.exe"
 mv ${_GNUCASH_UDIR}/${SETUP_FILENAME} ${_OUTPUT_DIR}
 
+# If we're running on the build server than upload the files
+# Note: change this target if you're building a different branch
+if [ `hostname` = "gnucash-win32" ]; then
+  scp -p ${LOGFILE} ${_OUTPUT_DIR}/${SETUP_FILENAME} upload@code.gnucash.org:public_html/win32/trunk
+fi
