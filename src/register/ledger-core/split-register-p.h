@@ -142,6 +142,15 @@ gboolean gnc_split_register_find_split (SplitRegister *reg,
 void gnc_split_register_show_trans (SplitRegister *reg,
                                     VirtualCellLocation start_loc);
 
+// Set the visibility of the split rows belonging to a transaction located at
+// vcell_loc.
+//
+// If only_blank_split is TRUE, only the row used for entering an
+// additional split is affected. Despite the name, this should not be confused
+// with the "blank split" row used for entering the first split of a brand-new
+// transaction. Instead, here it only refers to rows not tied to any split at
+// all, such as those created for entering new splits on old transactions or
+// the 2nd through nth split on brand-new transactions.
 void gnc_split_register_set_trans_visible (SplitRegister *reg,
                                            VirtualCellLocation vcell_loc,
                                            gboolean visible,
