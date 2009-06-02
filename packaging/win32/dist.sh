@@ -45,6 +45,7 @@ function prepare() {
     _BUILD_UDIR=`unix_path $BUILD_DIR`
     _INSTALL_UDIR=`unix_path $INSTALL_DIR`
     _INNO_UDIR=`unix_path $INNO_DIR`
+    _WEBKIT_UDIR=`unix_path $WEBKIT_DIR`
     add_to_env $_UNZIP_UDIR/bin PATH # unzip
     add_to_env $_GNOME_UDIR/bin PATH # gconftool-2
     add_to_env $_EXETYPE_UDIR/bin PATH # exetype
