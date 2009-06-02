@@ -273,8 +273,7 @@ set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.20.tar.gz"
 if [ "$AQBANKING3" != "yes" ]; then
     set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.3.3.tar.gz"
 else
-    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=19&file=01&dummy=aqbanking-3.8.1.tar.gz"
-    set_default AQBANKING_PATCH `pwd`/aqbanking-3.8.1-patch.diff
+    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=35&file=01&dummy=aqbanking-3.8.3.tar.gz"
 fi
 set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking
 set_default AQBANKING_WITH_QT yes
