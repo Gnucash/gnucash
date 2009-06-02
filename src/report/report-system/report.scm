@@ -616,6 +616,8 @@
 ;; gets the stylesheet from the report;
 ;; renders the html doc and caches the resulting string;
 ;; returns the html string.
+;; Now accepts either an html-doc or finished HTML from the renderer -
+;; the former requires further processing, the latter is just returned.
 (define (gnc:report-render-html report headers?)
   (if (and (not (gnc:report-dirty? report))
            (gnc:report-ctext report))
@@ -633,8 +635,11 @@
                              (stylesheet (gnc:report-stylesheet report))
                              (doc (renderer report))
                              (html #f))
-                        (gnc:html-document-set-style-sheet! doc stylesheet)
-                        (set! html (gnc:html-document-render doc headers?))
+                        (if (string? doc)
+                          (set! html doc)
+                          (begin 
+                            (gnc:html-document-set-style-sheet! doc stylesheet)
+                            (set! html (gnc:html-document-render doc headers?))))
                         (gnc:report-set-ctext! report html) ;; cache the html
                         (gnc:report-set-dirty?! report #f)  ;; mark it clean
                         html)
