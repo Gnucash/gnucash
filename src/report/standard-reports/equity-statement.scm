@@ -49,6 +49,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash business-utils))
 
 (require 'printf)
 
@@ -111,10 +112,7 @@
     (add-option
       (gnc:make-string-option
       (N_ "General") optname-party-name
-      "b" opthelp-party-name ""))
-    ;; this should default to company name in (gnc-get-current-book)
-    ;; does anyone know the function to get the company name??
-    ;; (GnuCash is *so* well documented... sigh)
+      "b" opthelp-party-name (gnc:company-info gnc:*company-name*)))
     
     ;; date at which to report balance
     (gnc:options-add-date-interval!

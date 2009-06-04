@@ -45,6 +45,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash business-utils))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -144,10 +145,7 @@
     (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
-      "b" opthelp-party-name ""))
-    ;; this should default to company name in (gnc-get-current-book)
-    ;; does anyone know the function to get the company name??
-    ;; (GnuCash is *so* well documented... sigh)
+      "b" opthelp-party-name (gnc:company-info gnc:*company-name*)))
     
     ;; period over which to report income
     (gnc:options-add-date-interval!

@@ -54,6 +54,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash business-utils))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -148,8 +149,7 @@
     (add-option
       (gnc:make-string-option
       (N_ "General") optname-party-name
-      "b" opthelp-party-name ""))
-    ;; this should default to company name in (gnc-get-current-book)
+      "b" opthelp-party-name (gnc:company-info gnc:*company-name*)))
     
     ;; the period over which to collect adjusting/closing entries and
     ;; date at which to report the balance
