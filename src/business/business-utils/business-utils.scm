@@ -14,16 +14,9 @@
 (define gnc:*company-email* (N_ "Company Email Address"))
 (define gnc:*company-contact* (N_ "Company Contact Person"))
 
-(define (gnc:company-info key)
-  ;; Access company info from key-value pairs for current book
-  (kvp-frame-get-slot-path-gslist
-    (gnc-book-get-slots (gnc-get-current-book))
-    (append gnc:*kvp-option-path* (list gnc:*business-label* key))))
-
-(export gnc:*business-label* gnc:*company-name*  gnc:*company-addy* 
-        gnc:*company-id*     gnc:*company-phone* gnc:*company-fax* 
-        gnc:*company-url*    gnc:*company-email* gnc:*company-contact*
-        gnc:company-info)
+(export gnc:*business-label* gnc:*company-name* gnc:*company-addy* gnc:*company-id*
+            gnc:*company-phone* gnc:*company-fax* gnc:*company-url*
+            gnc:*company-email* gnc:*company-contact*)
 
 (load-from-path "business-options.scm")
 (load-from-path "business-prefs.scm")
