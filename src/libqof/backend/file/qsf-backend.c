@@ -237,6 +237,8 @@ qsf_session_begin(QofBackend *be, QofSession *session, const gchar *book_path,
 	}
 	if (g_str_has_prefix (book_path, "file:")) {
 		qsf_be->fullpath = g_strdup (book_path + 5);
+	} else if (g_str_has_prefix (book_path, "qsf:")) {
+		qsf_be->fullpath = g_strdup (book_path + 4);
 	} else {
 		qsf_be->fullpath = g_strdup (book_path);
 	}
@@ -1279,6 +1281,15 @@ qof_backend_module_init (void)
 	prov = g_new0 (QofBackendProvider, 1);
 	prov->provider_name = "QSF Backend Version 0.2";
 	prov->access_method = "file";
+	prov->partial_book_supported = TRUE;
+	prov->backend_new = qsf_backend_new;
+	prov->check_data_type = qsf_determine_file_type;
+	prov->provider_free = qsf_provider_free;
+	qof_backend_register_provider (prov);
+
+	prov = g_new0 (QofBackendProvider, 1);
+	prov->provider_name = "QSF Backend Version 0.2";
+	prov->access_method = "qsf";
 	prov->partial_book_supported = TRUE;
 	prov->backend_new = qsf_backend_new;
 	prov->check_data_type = qsf_determine_file_type;
