@@ -191,7 +191,6 @@ gnc_html_webkit_dispose( GObject* obj )
 	if( priv->web_view != NULL ) {
 		gtk_container_remove( GTK_CONTAINER(priv->base.container),
 						GTK_WIDGET(priv->web_view) );
-		g_object_unref( G_OBJECT(priv->web_view) );
 		priv->web_view = NULL;
 	}
 

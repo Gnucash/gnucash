@@ -380,6 +380,10 @@ gnc_html_destroy( GncHtml* self )
 	g_return_if_fail( self != NULL );
 	g_return_if_fail( GNC_IS_HTML(self) );
 
+	if( g_object_is_floating( G_OBJECT(self) ) ) {
+		(void)g_object_ref_sink( G_OBJECT(self) );
+	}
+
 	g_object_unref( G_OBJECT(self) );
 }
 
