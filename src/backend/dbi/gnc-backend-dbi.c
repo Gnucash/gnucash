@@ -282,7 +282,7 @@ set_standard_connection_options( QofBackend* qbe, dbi_conn conn, const gchar* ho
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
 		return FALSE;
 	}
-	result = dbi_conn_set_option_numeric( conn, "port", 0 );
+	result = dbi_conn_set_option_numeric( conn, "port", port );
 	if( result < 0 ) {
 		PERR( "Error setting 'port' option\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
