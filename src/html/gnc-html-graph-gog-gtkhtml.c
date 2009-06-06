@@ -87,14 +87,7 @@ static void draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer graph);
 static void draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer graph);
 #endif
 
-static gboolean create_basic_plot_elements(const char *plot_type, GogObject **out_graph, GogObject **out_chart, GogPlot **out_plot);
-
 static double * read_doubles(const char * string, int nvalues);
-
-static void set_chart_titles_from_hash(GogObject *chart, gpointer eb);
-static void set_chart_titles(GogObject *chart, const char *title, const char* sub_title);
-static void set_chart_axis_labels_from_hash(GogObject *chart, gpointer eb);
-static void set_chart_axis_labels(GogObject *chart, const char *x_axis_label, const char* y_axis_label);
 
 void
 gnc_html_graph_gog_gtkhtml_init( void )
@@ -188,86 +181,6 @@ add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GdkPixbuf* buf )
   g_object_set_data_full (G_OBJECT (eb), "graph", graph, g_object_unref);
   g_signal_connect (G_OBJECT (eb), "draw_print",
 		    G_CALLBACK (draw_print_cb), NULL);
-}
-
-static gboolean
-create_basic_plot_elements(const char *plot_type_name,
-                           GogObject **out_graph,
-                           GogObject **out_chart,
-                           GogPlot **out_plot)
-{
-  *out_graph = g_object_new(GOG_TYPE_GRAPH, NULL);
-  *out_chart = gog_object_add_by_name(*out_graph, "Chart", NULL);
-  *out_plot = gog_plot_new_by_name(plot_type_name);
-  if (!*out_plot)
-  {
-    // FIXME - log betterer; should probably use GError?
-    g_warning("gog: unable to load %s plugin", plot_type_name);
-    return FALSE;
-  }
-  gog_object_add_by_name(*out_chart, "Plot", GOG_OBJECT(*out_plot) );
-  return TRUE;
-}
-
-static void
-set_chart_titles_from_hash(GogObject *chart, gpointer eb)
-{
-  set_chart_titles(chart,
-                   (const char *)gnc_html_get_embedded_param(eb, "title"), 
-                   (const char *)gnc_html_get_embedded_param(eb, "subtitle"));
-}
-
-static void
-set_chart_titles(GogObject *chart, const char *title, const char* sub_title)
-{
-  gchar *my_sub_title, *total_title;
-  GOData *title_scalar;
-  GogObject *tmp;
-
-  if (sub_title)
-    my_sub_title = g_strdup_printf("%s(%s)", title ? " " : "", sub_title);
-  else
-    my_sub_title = g_strdup("");
-
-  total_title = g_strdup_printf("%s%s", title ? title : "", my_sub_title);
-
-  tmp = gog_object_add_by_name(chart, "Title", NULL);
-  title_scalar = go_data_scalar_str_new(total_title, TRUE);
-  gog_dataset_set_dim(GOG_DATASET(tmp), 0, title_scalar, NULL);
-
-  g_free(my_sub_title);
-}
-
-static void
-set_chart_axis_labels_from_hash(GogObject *chart, gpointer eb)
-{
-  set_chart_axis_labels(chart,
-                        gnc_html_get_embedded_param(eb, "x_axis_label"),
-                        gnc_html_get_embedded_param(eb, "y_axis_label"));
-}
-
-static void
-set_chart_axis_labels(GogObject *chart, const char *x_axis_label, const char* y_axis_label)
-{
-  if (x_axis_label != NULL)
-  {
-    GogObject *xaxis, *label;
-    GOData *data;
-    xaxis = gog_object_get_child_by_role(chart, gog_object_find_role_by_name(chart, "X-Axis"));
-    label = gog_object_add_by_name(xaxis, "Label", NULL);
-    data = go_data_scalar_str_new(x_axis_label, FALSE);
-    gog_dataset_set_dim(GOG_DATASET(label), 0, data, NULL);
-  }
-
-  if (y_axis_label != NULL)
-  {
-    GogObject *yaxis, *label;
-    GOData *data;
-    yaxis = gog_object_get_child_by_role(chart, gog_object_find_role_by_name(chart, "Y-Axis"));
-    label = gog_object_add_by_name(yaxis, "Label", NULL);
-    data = go_data_scalar_str_new(y_axis_label, FALSE);
-    gog_dataset_set_dim(GOG_DATASET(label), 0, data, NULL);
-  }
 }
 
 /*

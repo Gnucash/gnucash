@@ -27,6 +27,7 @@
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "gnc-ui-util.h"
 #include "gnc-html-graph-gog.h"
@@ -34,30 +35,6 @@
 #include "gnc-html-graph-gog-extras.h"
 #include "gnc-html.h"
 #include "gnc-engine.h"
-#include <goffice/goffice.h>
-#include <goffice/graph/gog-chart.h>
-#include <goffice/graph/gog-graph.h>
-#include <goffice/graph/gog-object.h>
-#if defined(HAVE_GOFFICE_0_5)
-#    include <goffice/graph/gog-renderer.h>
-#elif defined(GOFFICE_WITH_CAIRO)
-#    include <goffice/graph/gog-renderer-cairo.h>
-#else
-#    include <goffice/graph/gog-renderer-pixbuf.h>
-#endif
-#ifndef GTKHTML_USES_GTKPRINT
-#    include <goffice/graph/gog-renderer-gnome-print.h>
-#endif
-#include <goffice/graph/gog-style.h>
-#include <goffice/graph/gog-styled-object.h>
-#include <goffice/graph/gog-plot.h>
-#include <goffice/graph/gog-series.h>
-#include <goffice/utils/go-color.h>
-#include <goffice/utils/go-marker.h>
-#include <goffice/graph/gog-data-set.h>
-#include <goffice/data/go-data-simple.h>
-#include <goffice/app/go-plugin.h>
-#include <goffice/app/go-plugin-loader-module.h>
 
 /**
  * TODO:
