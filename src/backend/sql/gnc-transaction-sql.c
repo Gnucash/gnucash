@@ -853,7 +853,7 @@ gnc_sql_get_account_balances_slist( GncSqlBackend* be )
 
 	g_return_val_if_fail( be != NULL, NULL );
 
-	buf = g_strdup_printf( "SELECT account_guid, reconcile_state, sum(quantity_num) as quantity_num, quantity_denom FROM %s GROUP BY account_guid, reconcile_state, quantity_denom",
+	buf = g_strdup_printf( "SELECT account_guid, reconcile_state, sum(quantity_num) as quantity_num, quantity_denom FROM %s GROUP BY account_guid, reconcile_state, quantity_denom ORDER BY account_guid, reconcile_state",
 						SPLIT_TABLE );
 	stmt = gnc_sql_create_statement_from_sql( be, buf );
 	g_assert( stmt != NULL );
