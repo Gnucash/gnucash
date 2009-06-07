@@ -762,13 +762,15 @@ gnc_plugin_business_cmd_export_customer (GtkAction *action, GncMainWindowActionD
 			NULL, GNC_FILE_DIALOG_EXPORT);
 	if (filename)
 	{
-		qof_session_begin(chart_session, filename, TRUE, TRUE);
+	    gchar* url = g_strdup_printf( "qsf:%s", filename );
+		qof_session_begin(chart_session, url, TRUE, TRUE);
 		coll = qof_book_get_collection(book, GNC_ID_CUSTOMER);
 		success = qof_instance_copy_coll_r(chart_session, coll);
 		if(success) 
 		{ 
 			qof_session_save(chart_session, NULL);
 		}
+		g_free(url);
 	}
 	show_session_error(qof_session_get_error(chart_session), filename,
 			   GNC_FILE_DIALOG_EXPORT);
@@ -794,13 +796,15 @@ gnc_plugin_business_cmd_export_vendor (GtkAction *action, GncMainWindowActionDat
 			NULL, GNC_FILE_DIALOG_EXPORT);
 	if (filename)
 	{
-		qof_session_begin(chart_session, filename, TRUE, TRUE);
+	    gchar* url = g_strdup_printf( "qsf:%s", filename );
+		qof_session_begin(chart_session, url, TRUE, TRUE);
 		coll = qof_book_get_collection(book, GNC_ID_VENDOR);
 		success = qof_instance_copy_coll_r(chart_session, coll);
 		if(success) 
 		{ 
 			qof_session_save(chart_session, NULL);
 		}
+		g_free(url);
 	}
 	show_session_error(qof_session_get_error(chart_session), filename,
 			   GNC_FILE_DIALOG_EXPORT);
@@ -826,13 +830,15 @@ gnc_plugin_business_cmd_export_employee (GtkAction *action, GncMainWindowActionD
 			NULL, GNC_FILE_DIALOG_EXPORT);
 	if (filename)
 	{
-		qof_session_begin(chart_session, filename, TRUE, TRUE);
+	    gchar* url = g_strdup_printf( "qsf:%s", filename );
+		qof_session_begin(chart_session, url, TRUE, TRUE);
 		coll = qof_book_get_collection(book, GNC_ID_EMPLOYEE);
 		success = qof_instance_copy_coll_r(chart_session, coll);
 		if(success) 
 		{ 
 			qof_session_save(chart_session, NULL);
 		}
+		g_free(url);
 	}
 	show_session_error(qof_session_get_error(chart_session), filename,
 			   GNC_FILE_DIALOG_EXPORT);
