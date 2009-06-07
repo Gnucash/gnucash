@@ -725,7 +725,8 @@ gnc_plugin_business_cmd_export_invoice (GtkAction *action, GncMainWindowActionDa
 			NULL, GNC_FILE_DIALOG_EXPORT);
 	if (filename)
 	{
-		qof_session_begin(chart_session, filename, TRUE, TRUE);
+	    gchar* url = g_strdup_printf( "qsf:%s", filename );
+		qof_session_begin(chart_session, url, TRUE, TRUE);
 		coll = qof_book_get_collection(book, GNC_ID_INVOICE);
 		success = qof_instance_copy_coll_r(chart_session, coll);
 		/* Need to get the GList of GncEntry's - KVP */
@@ -735,6 +736,7 @@ gnc_plugin_business_cmd_export_invoice (GtkAction *action, GncMainWindowActionDa
 		{ 
 			qof_session_save(chart_session, NULL);
 		}
+		g_free(url);
 	}
 	show_session_error(qof_session_get_error(chart_session), filename,
 			   GNC_FILE_DIALOG_EXPORT);
