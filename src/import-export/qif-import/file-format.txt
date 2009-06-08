@@ -1,4 +1,3 @@
-
 QIF file format
 ---------------
 The QIF is an old and rather broken file format defined by Intuit
@@ -6,10 +5,11 @@ for exporting Quicken data.  It is 'broken' because the format
 is ambiguous in many places, non-standard between different releases
 and applications, and even varies subtly from country to country (in
 particular, the way dates and amounts are represented), and fails
-to define important data (such as the currency denomination, or the 
+to define important data (such as the currency denomination, or the
 exchange rates when transferring between accounts marked in different
 currencies).  Importing a QIF file can require significant manual
 intervention by the user in order to get the data straight.
+
 
 Extensions
 ----------
@@ -18,6 +18,7 @@ TEF -- Time and Expense Format (see below)
 QFX -- also known as 'Web Connect' --  very similar, and is the
        'new' standard for on-line bank statement downloads.
        (??? or is it just 'ofx in a file' ???)
+
 
 Type of account identifiers
 ----------------------------
@@ -32,12 +33,12 @@ Type of account identifiers
 !Type:Oth L    Liability account
 !Type:Tax      ???
 
-!Account         Account list or which account applies to following 
-                 transactions 
+!Account         Account list or which account applies to following
+                 transactions
 
 !Type:Cat        Category list
 !Type:Class      Class list
-!Type:Memorized  Memorized transaction list 
+!Type:Memorized  Memorized transaction list
 
 Note that !Account is used both to be a header for account information,
 and to be a header for a list of transactions.
@@ -45,37 +46,41 @@ and to be a header for a list of transactions.
 Also note that international versions of Quicken and MS Money often
 translate the Type: tags into the local language.  But not always.
 
+
 Account Information Format
 --------------------------
 The below typically follow an !Account identifier, and provide account
-data. 
+data.
 
 Letter Definition
 N      Name
 T      Type of account
 D      Description
-L      Credit limit (only for credit card accounts) 
+L      Credit limit (only for credit card accounts)
 /      Statement balance date
-$      Statement balance amount 
+$      Statement balance amount
 ^      End of entry
+
 
 Category Information Format
 ---------------------------
-N      Category name:subcategory name 
+N      Category name:subcategory name
 D      Description
-T      Tax related if included, not tax related if omitted 
+T      Tax related if included, not tax related if omitted
 I      Income category
-E      Expense category (if category type is unspecified, 
-       assumes expense type) 
-B      Budget amount (optional, only appears in a Budget QIF file) 
-R      Tax schedule information 
+E      Expense category (if category type is unspecified,
+       assumes expense type)
+B      Budget amount (optional, only appears in a Budget QIF file)
+R      Tax schedule information
 ^      End of entry
+
 
 Class Information Format
 ------------------------
 N      Class name
 D      Description
-^      End of entry 
+^      End of entry
+
 
 Memorized Transaction Format
 ----------------------------
@@ -83,23 +88,23 @@ KC     Check transaction
 KD     Deposit transaction
 KP     Payment transaction
 KI     Investment transaction
-KE     Electronic payee transaction 
+KE     Electronic payee transaction
 T      Amount
 C      Cleared status
 P      Payee
 M      Memo
 A      Address
-L      Category or Transfer/Class 
+L      Category or Transfer/Class
 S      Category/class in split
 E      Memo in split
 $      Dollar amount of split
-1      Amortization: First payment date 
-2      Amortization: Total years for loan 
-3      Amortization: Number of payments already made 
-4      Amortization: Number of periods per year 
-5      Amortization: Interest rate 
-6      Amortization: Current loan balance 
-7      Amortization: Original loan amount 
+1      Amortization: First payment date
+2      Amortization: Total years for loan
+3      Amortization: Number of payments already made
+4      Amortization: Number of periods per year
+5      Amortization: Interest rate
+6      Amortization: Current loan balance
+7      Amortization: Original loan amount
 ^      End of entry
 
 Note that the K* entries must be the *last* entries in the transaction.
@@ -121,12 +126,21 @@ M      Memo
 O      Commission
 L      Account for transfer
        (category/class or transfer/class)
-       (For MiscIncX or MiscExpX actions, this will be 
+       (For MiscIncX or MiscExpX actions, this will be
        category/class|transfer/class or |transfer/class)
 T      Amount of transaction
 U      Amount of transaction (higher possible value than T)
 $      Amount transferred
 ^      End of entry
+
+Note that numbers for investment transactions are positive in most
+cases.  The importation process automatically takes care of negating
+the values for Actions that move funds out of an account (for example:
+sales, expenses and transfers).
+
+Be aware that GnuCash's file format stores the share quantity and the
+total value of the transaction.  Prices are not stored.
+
 
 Non-investment transaction format
 ---------------------------------
@@ -138,10 +152,10 @@ C      Cleared status
 N      Number (check or reference number)
 P      Payee/description
 M      Memo
-A      Address (up to 5 lines; 6th line is an optional message) 
+A      Address (up to 5 lines; 6th line is an optional message)
 L      Category (category/class or transfer/class)
 
-S      Category in split (category/class or transfer/class) 
+S      Category in split (category/class or transfer/class)
 E      Memo in split
 $      Dollar amount of split
 %      Percentage of split if percentages are used
@@ -151,6 +165,7 @@ X      Small Business extensions
 
 Note that S,E and $ lines are repeated as needed for splits.
 
+
 Time and Expense Format
 -----------------------
 The following QIF extension added by Iambic Software
@@ -159,76 +174,74 @@ by handhelds (Palm and WinCE).  TEF is claimed to be a superset
 of the QIF format.
 
 TEF Files begin with the header:
-#TEF VERSION X.YYY 
+#TEF VERSION X.YYY
 Documented below is version 1.01
 
-#      Any line beginning with # is a comment and not parsed 
-B      City 
-F      Reported           
-H      Report # 
-J      Attendees 
-K      Reimbursable 
-R      Receipt 
-U      Begin Odometer 
-V      End Odometer 
-W      Private 
-X      Exchange Rate 
-Z      User 
+#      Any line beginning with # is a comment and not parsed
+B      City
+F      Reported
+H      Report #
+J      Attendees
+K      Reimbursable
+R      Receipt
+U      Begin Odometer
+V      End Odometer
+W      Private
+X      Exchange Rate
+Z      User
 
-1      Client 
-2      Project 
-3      Activity 
-4      Expense Type 
-5      Account 
-6      Vehicle 
-7      Currency 
-8      Task 
-9      (not used) 
-0      (not used) 
+1      Client
+2      Project
+3      Activity
+4      Expense Type
+5      Account
+6      Vehicle
+7      Currency
+8      Task
+9      (not used)
+0      (not used)
 
-@      Billing Code 
-!      Tax Amount 
-%      Uses Splits 
-(      SalesTaxRate1 
-)      SalesTaxRate2 
-=      Flat Fee Amount 
-\      Status1 
-/      Status2 
-&      Status3 
-<      Status4 
->      Status5 
+@      Billing Code
+!      Tax Amount
+%      Uses Splits
+(      SalesTaxRate1
+)      SalesTaxRate2
+=      Flat Fee Amount
+\      Status1
+/      Status2
+&      Status3
+<      Status4
+>      Status5
 ?      Keyword: TIME, EXPENSE, CLIENT, PROJECT, ACTIVITY, TYPE,
-       TASK, VEHICLE, PAYEE, CURRENCY. If absent, entry is 
-       assumed EXPENSE type as compatible with QIF 
+       TASK, VEHICLE, PAYEE, CURRENCY. If absent, entry is
+       assumed EXPENSE type as compatible with QIF
 
-*      Duration hh:mm:ss 
+*      Duration hh:mm:ss
 
-+      Timer On 
++      Timer On
 [      Start time
 ]      End Time
-{      TimerLastStoppedAt 
-}      (not used) 
-|      Notes 
+{      TimerLastStoppedAt
+}      (not used)
+|      Notes
 
 
 When importing type CLIENT, PROJECT, ACTIVITY, TYPE, TASK, VEHICLE,
-PAYEE, CURRENCY the following are used: 
+PAYEE, CURRENCY the following are used:
 
-N      Name 
-C      Code 
-R      Rate 
-L      Link 
-W      Private 
+N      Name
+C      Code
+R      Rate
+L      Link
+W      Private
 
-         
+
 =====================================================================
 General Notes
 =====================================================================
 
-
-Dates: 
-------
-
+Dates
+-----
 Dates in US QIF files are usually in the format MM/DD/YY, although
 four-digit years are not uncommon.  Dates sometimes occur without the
 slash separator, or using other separators in place of the slash,
@@ -237,11 +250,11 @@ post-2000 two-digit years (such as 01/01'00 for Jan 1 2000).  Some
 banks appear to be using a completely undifferentiated numeric string
 formateed YYYYMMDD in downloaded QIF files.
 
-European QIF files may have dates in the DD/MM/YY format.  
+European QIF files may have dates in the DD/MM/YY format.
 
-Monetary Amounts:
------------------
 
+Monetary Amounts
+----------------
 These typically occur in either US or European format:
 
 10,000.00  Ten Thousand Dollars (US format)
@@ -261,9 +274,8 @@ it's possible to see the number "1,000" meaning "1 franc per share"
 "1,000" meaning "one thousand shares" in the same transaction (!).
 
 
-Investment Actions:
--------------------
-
+Investment Actions
+------------------
 The N line of investment transactions specifies the "action" of the
 transaction. Although not a complete list, possible values include
 the following:
@@ -334,12 +346,11 @@ XIn           Transfer cash from another account.
 XOut          Transfer cash to another account.
 
 
-Category/Transfer/Class line: 
------------------------------
-
+Category/Transfer/Class line
+----------------------------
 The "L" line of most transactions specifies the category, transfer
-account, and class (if any) of the transaction.  Square brackets 
-surrounding the contents mean the transaction is a transfer to the 
+account, and class (if any) of the transaction.  Square brackets
+surrounding the contents mean the transaction is a transfer to the
 named account.  A forward slash separates the category/account from
 the class.  So overall, the format is one of the following:
 
@@ -352,16 +363,15 @@ In stock transactions, if the 'N' field (action) is MiscIncX or
 MiscExpX, there can be *two* account/class pairs on the L line, with
 the second guaranteed to be a transfer.  I believe they are
 separated by a '|', like so:
-   
+
    D01/01/2000
    NMiscExpX
    T1000.00
    Lexpense category/expense class|[Transfer account]/transfer class
 
 
-Cleared Status line:
---------------------
-
+Cleared Status line
+-------------------
 The "C" line of specifies the cleared status. The second character
 in the line, if present, may be any of:
 
@@ -372,3 +382,29 @@ R Reconciled
 ? Budgeted
 ! Budgeted
 
+
+=====================================================================
+Sample Files
+=====================================================================
+
+Investment Transactions
+-----------------------
+!Account
+NAssets:Investments:Mutual Fund
+TInvst
+D10/30/2006
+Q0.9
+T500
+PPurchase
+NBuyX
+L[Assets:Investments:Mutual Fund:Cash]
+YFOO
+^
+D11/28/2006
+Q0.897
+T100
+PSale
+NSellX
+L[Assets:Investments:Mutual Fund:Cash]
+YFOO
+^
