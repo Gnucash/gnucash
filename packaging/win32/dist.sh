@@ -37,6 +37,7 @@ function prepare() {
     _GWENHYWFAR_UDIR=`unix_path $GWENHYWFAR_DIR`
     _AQBANKING_UDIR=`unix_path $AQBANKING_DIR`
     _SQLITE3_UDIR=`unix_path ${SQLITE3_DIR}`
+    _MYSQL_LIB_UDIR=`unix_path ${MYSQL_LIB_DIR}`
     _LIBDBI_UDIR=`unix_path ${LIBDBI_DIR}`
     _LIBDBI_DRIVERS_UDIR=`unix_path ${LIBDBI_DRIVERS_DIR}`
     _LIBGDA_UDIR=`unix_path $LIBGDA_DIR`
@@ -194,6 +195,8 @@ function dist_libdbi() {
     setup LibDBI
     cp -a ${_SQLITE3_UDIR}/bin/* ${DIST_UDIR}/bin
     cp -a ${_SQLITE3_UDIR}/lib/* ${DIST_UDIR}/lib
+	cp -a ${_MYSQL_LIB_UDIR}/bin/* ${DIST_UDIR}/bin
+	cp -a ${_MYSQL_LIB_UDIR}/lib/* ${DIST_UDIR}/lib
     cp -a ${_LIBDBI_UDIR}/bin/* ${DIST_UDIR}/bin
     cp -a ${_LIBDBI_UDIR}/lib/* ${DIST_UDIR}/lib
     mkdir ${DIST_UDIR}/lib/dbd

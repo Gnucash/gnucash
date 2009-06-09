@@ -1026,6 +1026,7 @@ function inst_aqbanking() {
 function inst_libdbi() {
     setup LibDBI
     _SQLITE3_UDIR=`unix_path ${SQLITE3_DIR}`
+    _MYSQL_LIB_UDIR=`unix_path ${MYSQL_LIB_DIR}`
     _LIBDBI_UDIR=`unix_path ${LIBDBI_DIR}`
     _LIBDBI_DRIVERS_UDIR=`unix_path ${LIBDBI_DRIVERS_DIR}`
     add_to_env -I$_LIBDBI_UDIR/include LIBDBI_CPPFLAGS
@@ -1043,6 +1044,17 @@ function inst_libdbi() {
             make install
         qpopd
         test -f ${_SQLITE3_UDIR}/bin/libsqlite3-0.dll || die "SQLite3 not installed correctly"
+    fi
+    if test -f ${_MYSQL_LIB_UDIR}/lib/libmysql.dll
+    then
+        echo "MySQL library already installed.  skipping."
+    else
+        wget_unpacked $MYSQL_LIB_URL $DOWNLOAD_DIR $TMP_DIR
+        mkdir -p $_MYSQL_LIB_UDIR
+        assert_one_dir $TMP_UDIR/mysql*
+        cp -r $TMP_UDIR/mysql*/* $_MYSQL_LIB_UDIR
+        mv $TMP_UDIR/mysql*/include $_MYSQL_LIB_UDIR/include/mysql
+        test -f ${_MYSQL_LIB_UDIR}/lib/libmysql.dll || die "mysql not installed correctly"
     fi
     if test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll
     then
@@ -1063,7 +1075,8 @@ function inst_libdbi() {
         qpopd
         test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll || die "libdbi not installed correctly"
     fi
-    if test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdsqlite3.dll
+    if test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdsqlite3.dll &&
+       test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdmysql.dll
     then
         echo "libdbi drivers already installed.  skipping."
     else
@@ -1074,12 +1087,16 @@ function inst_libdbi() {
                 patch -p0 < $LIBDBI_DRIVERS_PATCH
             [ -n "$LIBDBI_DRIVERS_PATCH2" -a -f "$LIBDBI_DRIVERS_PATCH2" ] && \
                 patch -p0 < $LIBDBI_DRIVERS_PATCH2
+            [ -n "$LIBDBI_DRIVERS_PATCH3" -a -f "$LIBDBI_DRIVERS_PATCH3" ] && \
+                patch -p0 < $LIBDBI_DRIVERS_PATCH3
             ./configure ${HOST_XCOMPILE} \
                 --disable-docs \
                 --with-dbi-incdir=${_LIBDBI_UDIR}/include \
                 --with-dbi-libdir=${_LIBDBI_UDIR}/lib \
                 --with-sqlite3 \
                 --with-sqlite3-dir=${_SQLITE3_UDIR} \
+                --with-mysql \
+                --with-mysql-dir=${_MYSQL_LIB_UDIR} \
                 --prefix=${_LIBDBI_DRIVERS_UDIR}
             make
             make install

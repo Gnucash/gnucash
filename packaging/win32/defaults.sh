@@ -282,6 +282,8 @@ set_default AQBANKING_WITH_QT yes
 
 set_default SQLITE3_URL "http://sqlite.org/sqlite-amalgamation-3.6.1.tar.gz"
 set_default SQLITE3_DIR $GLOBAL_DIR\\sqlite3
+set_default MYSQL_LIB_URL "http://mirror.csclub.uwaterloo.ca/mysql/Downloads/Connector-C/mysql-connector-c-noinstall-6.0.1-win32.zip"
+set_default MYSQL_LIB_DIR $GLOBAL_DIR\\mysql
 set_default LIBDBI_URL "http://downloads.sourceforge.net/libdbi/libdbi-0.8.3.tar.gz"
 set_default LIBDBI_DIR $GLOBAL_DIR\\libdbi
 set_default LIBDBI_PATCH `pwd`/libdbi-0.8.3.patch
@@ -289,6 +291,7 @@ set_default LIBDBI_DRIVERS_URL "http://downloads.sourceforge.net/libdbi-drivers/
 set_default LIBDBI_DRIVERS_DIR $GLOBAL_DIR\\libdbi-drivers
 set_default LIBDBI_DRIVERS_PATCH `pwd`/libdbi-drivers-dbd_sqlite3.c.patch
 set_default LIBDBI_DRIVERS_PATCH2 `pwd`/libdbi-drivers-Makefile.in.patch
+set_default LIBDBI_DRIVERS_PATCH3 `pwd`/libdbi-drivers-dbd_mysql.c.patch
 
 set_default DOCBOOK_XSL_URL "$SF_MIRROR/docbook/docbook-xsl-1.72.0.zip"
 set_default UPDATE_DOCS yes
