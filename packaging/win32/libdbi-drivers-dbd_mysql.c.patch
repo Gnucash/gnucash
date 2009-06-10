@@ -1,0 +1,27 @@
+Index: dbd_mysql.c
+===================================================================
+RCS file: /cvsroot/libdbi-drivers/libdbi-drivers/drivers/mysql/dbd_mysql.c,v
+retrieving revision 1.31
+diff -u -r1.31 dbd_mysql.c
+--- drivers/mysql/dbd_mysql.c	13 Aug 2008 22:56:03 -0000	1.31
++++ drivers/mysql/dbd_mysql.c	16 Aug 2008 20:23:23 -0000
+@@ -553,15 +553,15 @@
+ 	return db;
+ }
+ 
+-int dbd_geterror(dbi_conn_t *conn, int *errno, char **errstr) {
+-	/* put error number into errno, error string into errstr
+-	 * return 0 if error, 1 if errno filled, 2 if errstr filled, 3 if both errno and errstr filled */
++int dbd_geterror(dbi_conn_t *conn, int *err_no, char **errstr) {
++	/* put error number into err_no, error string into errstr
++	 * return 0 if error, 1 if err_no filled, 2 if errstr filled, 3 if both err_no and errstr filled */
+ 
+ 	if (strcmp("",mysql_error((MYSQL *)conn->connection)) == 0) {
+ 		return -1;
+ 	}
+ 	
+-	*errno = mysql_errno((MYSQL *)conn->connection);
++	*err_no = mysql_errno((MYSQL *)conn->connection);
+ 	*errstr = strdup(mysql_error((MYSQL *)conn->connection));
+ 	return 3;
+ }
