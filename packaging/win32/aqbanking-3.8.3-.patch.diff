@@ -1,0 +1,11 @@
+--- aqbanking-3.8.3/configure.ac~	Fri May 29 14:57:00 2009
++++ aqbanking-3.8.3/configure.ac	Sat Jun 13 15:45:49 2009
+@@ -476,7 +476,7 @@
+ AC_PROG_INSTALL
+ 
+ AC_LIBTOOL_WIN32_DLL
+-AC_LIBTOOL_RC
++AC_CHECK_TOOL([RC], [windres], [no])
+ AC_PROG_LIBTOOL
+ AC_CHECK_PROG(USE_DOT,dot,YES,NO)
+ AC_CHECK_PROG(SED,sed,sed)
