@@ -33,7 +33,7 @@ svn ls ${TAG_URL} > ${tagfile}.new
 tags="`diff --suppress-common-lines ${tagfile} ${tagfile}.new | grep '^> ' | sed -e 's/^> //g' -e 's#/$##g'`"
 
 # move the new file into place
-mv -f ${tagile}.new ${tagfile}
+mv -f ${tagfile}.new ${tagfile}
 
 ################################################################
 # Now iterate over all the new tags (if any) and build a package
