@@ -6,11 +6,13 @@ function qpushd() { pushd "$@" >/dev/null; }
 function qpopd() { popd >/dev/null; }
 function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
 
+TAG_URL=http://svn.gnucash.org/repo/gnucash/tags
+
 ################################################################
 # Setup our environment  (we need the DOWNLOAD_DIR)
 
-pkgdir="$(dirname $(unix_path "$0"))"
-qpushd "${pkgdir}"
+qpushd "$(dirname $(unix_path "$0"))"
+pkgdir="`pwd`"
 svn update
 . functions.sh
 . defaults.sh
@@ -23,11 +25,11 @@ svn update
 # If we don't have a tagfile then start from 'now'
 tagfile=tags
 if [ ! -f ${tagfile} ] ; then
-  svn ls http://svn.gnucash.org/repo/gnucash/tags > ${tagfile}
+  svn ls ${TAG_URL} > ${tagfile}
 fi
 
 # Figure out the new set of tags
-svn ls http://svn.gnucash.org/repo/gnucash/tags > ${tagfile}.new
+svn ls ${TAG_URL} > ${tagfile}.new
 tags="`diff --suppress-common-lines ${tagfile} ${tagfile}.new | grep '^> ' | sed -e 's/^> //g' -e 's#/$##g'`"
 
 # move the new file into place
@@ -46,7 +48,7 @@ for tag in $tags ; do
   cp -p $(unix_path ${DOWNLOAD_DIR})/* ${tagbasedir}/downloads
 
   # Check out the tag and setup custom.sh
-  svn co -q http://svn.gnucash.org/repo/gnucash/tags/${tag} ${tagdir}/repos
+  svn co -q ${TAG_URL}/${tag} ${tagdir}/repos
   w32pkg=${tagdir}/repos/packaging/win32
   cp -p "${pkgdir}/custom.sh" ${w32pkg}/custom.sh
 
