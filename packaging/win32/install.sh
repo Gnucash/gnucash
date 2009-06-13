@@ -985,6 +985,10 @@ function inst_aqbanking() {
             fi
             if test x$AQBANKING_WITH_QT = xyes; then
                 inst_qt4
+                if [ -n "$AQBANKING_PATCH" -a -f "$AQBANKING_PATCH" ] ; then
+                    patch -p1 < $AQBANKING_PATCH
+                    autoconf
+                fi
                 ./configure ${HOST_XCOMPILE} \
                     --with-gwen-dir=${_GWENHYWFAR_UDIR} \
                     --with-xmlmerge=${XMLMERGE} \
@@ -1328,27 +1332,29 @@ function inst_docs() {
 
 function finish() {
     setup Finish...
-    _NEW=x
-    for _ENV in $ENV_VARS; do
-        _ADDS=`eval echo '"\$'"${_ENV}"'_ADDS"'`
-        if [ "$_ADDS" ]; then
-            if [ "$_NEW" ]; then
-                echo
-                echo "Environment variables changed, please do the following"
-                echo
-                [ -d /etc/profile.d ] || echo "mkdir -p /etc/profile.d"
-                _NEW=
+    if [ "$NO_SAVE_PROFILE" != "yes" ]; then
+        _NEW=x
+        for _ENV in $ENV_VARS; do
+            _ADDS=`eval echo '"\$'"${_ENV}"'_ADDS"'`
+            if [ "$_ADDS" ]; then
+                if [ "$_NEW" ]; then
+                    echo
+                    echo "Environment variables changed, please do the following"
+                    echo
+                    [ -d /etc/profile.d ] || echo "mkdir -p /etc/profile.d"
+                    _NEW=
+                fi
+                _VAL=`eval echo '"$'"${_ENV}_BASE"'"'`
+                if [ "$_VAL" ]; then
+                    _CHANGE="export ${_ENV}=\"${_ADDS}"'$'"${_ENV}\""
+                else
+                    _CHANGE="export ${_ENV}=\"${_ADDS}\""
+                fi
+                echo $_CHANGE
+                echo echo "'${_CHANGE}' >> /etc/profile.d/installer.sh"
             fi
-            _VAL=`eval echo '"$'"${_ENV}_BASE"'"'`
-            if [ "$_VAL" ]; then
-                _CHANGE="export ${_ENV}=\"${_ADDS}"'$'"${_ENV}\""
-            else
-                _CHANGE="export ${_ENV}=\"${_ADDS}\""
-            fi
-            echo $_CHANGE
-            echo echo "'${_CHANGE}' >> /etc/profile.d/installer.sh"
-        fi
-    done
+        done
+    fi
     if [ "$CROSS_COMPILE" = "yes" ]; then
         echo "You might want to create a binary tarball now as follows:"
         qpushd $GLOBAL_DIR

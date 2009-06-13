@@ -53,7 +53,8 @@ for tag in $tags ; do
   cp -p "${pkgdir}/custom.sh" ${w32pkg}/custom.sh
 
   # Set the global directory to the tag build
-  echo "GLOBAL_DIR=c:\soft\gnucash-${tag}" >> ${w32pkg}/custom.sh
+  echo -n 'GLOBAL_DIR=c:\\soft\\gnucash-' >> ${w32pkg}/custom.sh
+  echo "${tag}" >> ${w32pkg}/custom.sh
 
   # No need to update the sources we just checked out
   echo "UPDATE_SOURCES=no" >> ${w32pkg}/custom.sh
@@ -64,8 +65,13 @@ for tag in $tags ; do
   # so this hack works!
   echo "BUILD_FROM_TARBALL=maybe" >> ${w32pkg}/custom.sh
 
+  # Point HH_DIR at the global installation because we don't need to redo it
+  echo -n "HH_DIR=" >> ${w32pkg}/custom.sh
+  echo "${GLOBAL_DIR}\\hh" | sed -e 's/\\/\\\\/g' >> ${w32pkg}/custom.sh
+
   # Now build the tag!  (this will upload it too)
+  # Use the build_package script from trunk (cwd), not from the tag
   qpushd ${w32pkg}
-    ./build_package.sh ${tag}
+    ${pkgdir}/build_package.sh ${tag}
   qpopd
 done

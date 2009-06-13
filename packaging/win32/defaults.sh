@@ -24,6 +24,7 @@
 # AQBANKING_WITH_QT=no
 # GLOBAL_DIR=Z:\\mydir  # all directories will use this
 # WGET_RATE=50k         #limit download bandwith to 50KB/s
+# NO_SAVE_PROFILE=yes   # don't save env settings to /etc/profile.d
 # late_eval 'INSTALL_DIR=$GNUCASH_DIR\\myinst'  # no need to define GNUCASH_DIR
 # block_step inst_docs
 # late_eval 'add_step greetings'
@@ -274,6 +275,7 @@ if [ "$AQBANKING3" != "yes" ]; then
     set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.3.3.tar.gz"
 else
     set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=35&file=01&dummy=aqbanking-3.8.3.tar.gz"
+    #set_default AQBANKING_PATCH `pwd`/aqbanking-3.8.3-patch.diff
 fi
 set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking
 set_default AQBANKING_WITH_QT yes
