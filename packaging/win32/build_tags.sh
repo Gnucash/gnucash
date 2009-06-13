@@ -58,6 +58,12 @@ for tag in $tags ; do
   # No need to update the sources we just checked out
   echo "UPDATE_SOURCES=no" >> ${w32pkg}/custom.sh
 
+  # BUILD_FROM_TARBALL is special:
+  # in install.sh place we check !=yes, in defaults.sh =yes, in dist.sh =no
+  # We want it to look like 'no' in install and defaults, but yes in dist
+  # so this hack works!
+  echo "BUILD_FROM_TARBALL=maybe" >> ${w32pkg}/custom.sh
+
   # Now build the tag!  (this will upload it too)
   qpushd ${w32pkg}
     ./build_package.sh ${tag}

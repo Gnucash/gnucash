@@ -38,7 +38,14 @@ _BUILD_UDIR=`unix_path $BUILD_DIR`
 _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
 PKG_VERSION=`grep PACKAGE_VERSION ${_BUILD_UDIR}/config.h | cut -d" " -f3 | cut -d\" -f2 `
 SVN_REV=`grep GNUCASH_SVN_REV ${_BUILD_UDIR}/src/gnome-utils/gnc-svninfo.h | cut -d" " -f3 | cut -d\" -f2 `
-SETUP_FILENAME="gnucash-${PKG_VERSION}-svn-r${SVN_REV}-setup.exe"
+
+# Choose the output filename based on our "build_from_tarball" setting
+# Make sure this logic matches the logic in dist.sh!
+if [ "$BUILD_FROM_TARBALL" = "no" ]; then
+  SETUP_FILENAME="gnucash-${PKG_VERSION}-svn-r${SVN_REV}-setup.exe"
+else
+  SETUP_FILENAME="gnucash-${PKG_VERSION}-setup.exe"
+fi
 mv ${_GNUCASH_UDIR}/${SETUP_FILENAME} ${_OUTPUT_DIR}
 
 #
