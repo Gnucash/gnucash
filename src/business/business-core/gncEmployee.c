@@ -37,6 +37,10 @@
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
 
+static gint gs_address_event_handler_id = 0;
+static void listen_for_address_events(QofInstance *entity, QofEventId event_type,
+			    gpointer user_data, gpointer event_data);
+
 struct _gncEmployee 
 {
   QofInstance     inst;
@@ -108,6 +112,10 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
   employee->rate = gnc_numeric_zero();
   employee->active = TRUE;
   
+  if (gs_address_event_handler_id == 0) {
+    gs_address_event_handler_id = qof_event_register_handler(listen_for_address_events, NULL);
+  }
+
   qof_event_gen (&employee->inst, QOF_EVENT_CREATE, NULL);
 
   return employee;
@@ -416,6 +424,36 @@ static const char * _gncEmployeePrintable (gpointer item)
   GncEmployee *v = item;
   if (!item) return NULL;
   return gncAddressGetName(v->addr);
+}
+
+/**
+ * Listens for MODIFY events from addresses.   If the address belongs to an employee,
+ * mark the employee as dirty.
+ *
+ * @param entity Entity for the event
+ * @param event_type Event type
+ * @param user_data User data registered with the handler
+ * @param event_data Event data passed with the event.
+ */
+static void
+listen_for_address_events(QofInstance *entity, QofEventId event_type,
+			    gpointer user_data, gpointer event_data)
+{
+  GncEmployee* empl;
+
+  if ((event_type & QOF_EVENT_MODIFY) == 0) {
+  	return;
+  }
+  if (!GNC_IS_ADDRESS(entity)) {
+    return;
+  }
+  if (!GNC_IS_EMPLOYEE(event_data)) {
+    return;
+  }
+  empl = GNC_EMPLOYEE(event_data);
+  gncEmployeeBeginEdit(empl);
+  mark_employee(empl);
+  gncEmployeeCommitEdit(empl);
 }
 
 static QofObject gncEmployeeDesc = 

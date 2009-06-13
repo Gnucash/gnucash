@@ -40,6 +40,10 @@
 #include "gncVendor.h"
 #include "gncVendorP.h"
 
+static gint gs_address_event_handler_id = 0;
+static void listen_for_address_events(QofInstance *entity, QofEventId event_type,
+			    gpointer user_data, gpointer event_data);
+
 struct _gncVendor 
 {
   QofInstance     inst;
@@ -112,6 +116,10 @@ GncVendor *gncVendorCreate (QofBook *book)
   vendor->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   vendor->active = TRUE;
   vendor->jobs = NULL;
+
+  if (gs_address_event_handler_id == 0) {
+    gs_address_event_handler_id = qof_event_register_handler(listen_for_address_events, NULL);
+  }
 
   qof_event_gen (&vendor->inst, QOF_EVENT_CREATE, NULL);
 
@@ -509,6 +517,35 @@ gboolean gncVendorIsDirty (const GncVendor *vendor)
           || gncAddressIsDirty (vendor->addr));
 }
 
+/**
+ * Listens for MODIFY events from addresses.   If the address belongs to a vendor,
+ * mark the vendor as dirty.
+ *
+ * @param entity Entity for the event
+ * @param event_type Event type
+ * @param user_data User data registered with the handler
+ * @param event_data Event data passed with the event.
+ */
+static void
+listen_for_address_events(QofInstance *entity, QofEventId event_type,
+			    gpointer user_data, gpointer event_data)
+{
+  GncVendor* v;
+
+  if ((event_type & QOF_EVENT_MODIFY) == 0) {
+  	return;
+  }
+  if (!GNC_IS_ADDRESS(entity)) {
+    return;
+  }
+  if (!GNC_IS_VENDOR(event_data)) {
+    return;
+  }
+  v = GNC_VENDOR(event_data);
+  gncVendorBeginEdit(v);
+  mark_vendor(v);
+  gncVendorCommitEdit(v);
+}
 /* ============================================================== */
 /* Package-Private functions */
 

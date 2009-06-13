@@ -64,6 +64,7 @@ void mark_address (GncAddress *address)
 {
   address->dirty = TRUE;
 
+  qof_event_gen (QOF_INSTANCE(address), QOF_EVENT_MODIFY, address->parent);
   qof_event_gen (address->parent, QOF_EVENT_MODIFY, NULL);
 }
 

@@ -45,6 +45,10 @@
 #include "gncJobP.h"
 #include "gncTaxTableP.h"
 
+static gint gs_address_event_handler_id = 0;
+static void listen_for_address_events(QofInstance *entity, QofEventId event_type,
+			    gpointer user_data, gpointer event_data);
+
 struct _gncCustomer
 {
   QofInstance     inst;
@@ -128,6 +132,10 @@ GncCustomer *gncCustomerCreate (QofBook *book)
   cust->discount = gnc_numeric_zero();
   cust->credit = gnc_numeric_zero();
   cust->shipaddr = gncAddressCreate (book, &cust->inst);
+
+  if (gs_address_event_handler_id == 0) {
+    gs_address_event_handler_id = qof_event_register_handler(listen_for_address_events, NULL);
+  }
 
   qof_event_gen (&cust->inst, QOF_EVENT_CREATE, NULL);
 
@@ -567,6 +575,35 @@ int gncCustomerCompare (const GncCustomer *a, const GncCustomer *b)
   return(strcmp(a->name, b->name));
 }
 
+/**
+ * Listens for MODIFY events from addresses.   If the address belongs to a customer,
+ * mark the customer as dirty.
+ *
+ * @param entity Entity for the event
+ * @param event_type Event type
+ * @param user_data User data registered with the handler
+ * @param event_data Event data passed with the event.
+ */
+static void
+listen_for_address_events(QofInstance *entity, QofEventId event_type,
+			    gpointer user_data, gpointer event_data)
+{
+  GncCustomer* cust;
+
+  if ((event_type & QOF_EVENT_MODIFY) == 0) {
+  	return;
+  }
+  if (!GNC_IS_ADDRESS(entity)) {
+    return;
+  }
+  if (!GNC_IS_CUSTOMER(event_data)) {
+    return;
+  }
+  cust = GNC_CUSTOMER(event_data);
+  gncCustomerBeginEdit(cust);
+  mark_customer(cust);
+  gncCustomerCommitEdit(cust);
+}
 /* ============================================================== */
 /* Package-Private functions */
 static const char * _gncCustomerPrintable (gpointer item)
