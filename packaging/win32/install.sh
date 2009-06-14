@@ -4,6 +4,9 @@
 
 set -e
 
+echo -n "Build Starting at "
+date
+
 function qpushd() { pushd "$@" >/dev/null; }
 function qpopd() { popd >/dev/null; }
 function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
@@ -1377,6 +1380,8 @@ for step in "${steps[@]}" ; do
 done
 qpopd
 
+echo -n "Build Finished at "
+date
 
 ### Local Variables: ***
 ### sh-basic-offset: 4 ***
