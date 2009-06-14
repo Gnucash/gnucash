@@ -56,7 +56,7 @@
 #define TRANSACTION_TABLE "transactions"
 #define TX_TABLE_VERSION 2
 #define SPLIT_TABLE "splits"
-#define SPLIT_TABLE_VERSION 2
+#define SPLIT_TABLE_VERSION 3
 
 typedef struct {
     /*@ dependent @*/ GncSqlBackend* be;
@@ -434,6 +434,7 @@ static void
 create_transaction_tables( GncSqlBackend* be )
 {
 	gint version;
+	gboolean ok;
 
 	g_return_if_fail( be != NULL );
 
@@ -449,9 +450,26 @@ create_transaction_tables( GncSqlBackend* be )
 	version = gnc_sql_get_table_version( be, SPLIT_TABLE );
     if( version == 0 ) {
         (void)gnc_sql_create_table( be, SPLIT_TABLE, SPLIT_TABLE_VERSION, split_col_table );
-    } else if( version == 1 ) {
-		/* Upgrade 64 bit int handling */
-		gnc_sql_upgrade_table( be, SPLIT_TABLE, split_col_table );
+	    ok = gnc_sql_create_index( be, "splits_tx_guid_index", SPLIT_TABLE, guid_col_table );
+	    if( !ok ) {
+		    PERR( "Unable to create index\n" );
+	    }
+    } else if( version < SPLIT_TABLE_VERSION ) {
+
+		/* Perform the various upgrades based on the current version number */
+	    switch( version ) {
+		case 1:
+		    /* Upgrade 64 bit int handling */
+		    gnc_sql_upgrade_table( be, SPLIT_TABLE, split_col_table );
+
+			/* fallthrough */
+
+		case 2:
+			ok = gnc_sql_create_index( be, "splits_tx_guid_index", SPLIT_TABLE, guid_col_table );
+			if( !ok ) {
+				PERR( "Unable to create index\n" );
+			}
+		}
 		(void)gnc_sql_set_table_version( be, SPLIT_TABLE, SPLIT_TABLE_VERSION );
     }
 }
