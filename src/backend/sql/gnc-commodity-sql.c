@@ -135,8 +135,8 @@ load_all_commodities( GncSqlBackend* be )
 	gnc_sql_statement_dispose( stmt );
     if( result != NULL ) {
         gnc_commodity* pCommodity;
-		GList* list = NULL;
 		GncSqlRow* row = gnc_sql_result_get_first_row( result );
+		gchar* sql;
 
         while( row != NULL ) {
             pCommodity = load_single_commodity( be, row );
@@ -146,17 +146,16 @@ load_all_commodities( GncSqlBackend* be )
 
                 guid = *qof_instance_get_guid( QOF_INSTANCE(pCommodity) );
                 pCommodity = gnc_commodity_table_insert( pTable, pCommodity );
-				list = g_list_append( list, pCommodity );
                 qof_instance_set_guid( QOF_INSTANCE(pCommodity), &guid );
             }
 			row = gnc_sql_result_get_next_row( result );
         }
 		gnc_sql_result_dispose( result );
 
-		if( list != NULL ) {
-			gnc_sql_slots_load_for_list( be, list );
-			g_list_free( list );
-		}
+		sql = g_strdup_printf( "SELECT DISTINCT guid FROM %s", COMMODITIES_TABLE );
+		gnc_sql_slots_load_for_sql_subquery( be, sql,
+										(BookLookupFn)gnc_commodity_find_commodity_by_guid );
+		g_free( sql );
     }
 }
 /* ================================================================= */

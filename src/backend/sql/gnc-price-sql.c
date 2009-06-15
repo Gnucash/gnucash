@@ -102,15 +102,14 @@ load_all_prices( GncSqlBackend* be )
 		gnc_sql_statement_dispose( stmt );
     	if( result != NULL ) {
         	GNCPrice* pPrice;
-			GList* list = NULL;
 			GncSqlRow* row = gnc_sql_result_get_first_row( result );
+			gchar* sql;
 
 			gnc_pricedb_set_bulk_update( pPriceDB, TRUE );
         	while( row != NULL ) {
             	pPrice = load_single_price( be, row );
 
             	if( pPrice != NULL ) {
-					list = g_list_append( list, pPrice );
                 	(void)gnc_pricedb_add_price( pPriceDB, pPrice );
             	}
 				row = gnc_sql_result_get_next_row( result );
@@ -118,10 +117,9 @@ load_all_prices( GncSqlBackend* be )
 			gnc_sql_result_dispose( result );
 			gnc_pricedb_set_bulk_update( pPriceDB, FALSE );
 
-			if( list != NULL ) {
-				gnc_sql_slots_load_for_list( be, list );
-				g_list_free( list );
-			}
+			sql = g_strdup_printf( "SELECT DISTINCT guid FROM %s", TABLE_NAME );
+		    gnc_sql_slots_load_for_sql_subquery( be, sql, (BookLookupFn)gnc_price_lookup );
+			g_free( sql );
 		}
     }
 }

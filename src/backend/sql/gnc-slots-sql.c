@@ -557,6 +557,79 @@ gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list )
     }
 }
 
+static void
+load_slot_for_book_object( GncSqlBackend* be, GncSqlRow* row, BookLookupFn lookup_fn )
+{
+    slot_info_t slot_info;
+	const GUID* guid;
+	QofInstance* inst;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( row != NULL );
+	g_return_if_fail( lookup_fn != NULL );
+
+	guid = load_obj_guid( be, row );
+	g_return_if_fail( guid != NULL );
+	inst = lookup_fn( guid, be->primary_book );
+	g_return_if_fail( inst != NULL );
+
+    slot_info.be = be;
+    slot_info.pKvpFrame = qof_instance_get_slots( inst );
+    slot_info.path = NULL;
+
+    gnc_sql_load_object( be, row, TABLE_NAME, &slot_info, col_table );
+
+    if( slot_info.path != NULL ) {
+        (void)g_string_free( slot_info.path, TRUE );
+    }
+}
+
+/**
+ * gnc_sql_slots_load_for_sql_subquery - Loads slots for all objects whose guid is
+ * supplied by a subquery.  The subquery should be of the form "SELECT DISTINCT guid FROM ...".
+ * This is faster than loading for one object at a time because fewer SQL queries * are used.
+ *
+ * @param be SQL backend
+ * @param subquery Subquery SQL string
+ * @param lookup_fn Lookup function
+ */
+void gnc_sql_slots_load_for_sql_subquery( GncSqlBackend* be, const gchar* subquery,
+									BookLookupFn lookup_fn )
+{
+	gchar* sql;
+	GncSqlStatement* stmt;
+	GncSqlResult* result;
+
+	g_return_if_fail( be != NULL );
+
+	// Ignore empty subquery
+	if( subquery == NULL ) return;
+
+	sql = g_strdup_printf( "SELECT * FROM %s WHERE %s IN (%s)",
+						TABLE_NAME, obj_guid_col_table[0].col_name,
+						subquery );
+
+	// Execute the query and load the slots
+	stmt = gnc_sql_create_statement_from_sql( be, sql );
+	if( stmt == NULL ) {
+		PERR( "stmt == NULL, SQL = '%s'\n", sql );
+		g_free( sql );
+		return;
+	}
+	g_free( sql );
+	result = gnc_sql_execute_select_statement( be, stmt );
+	gnc_sql_statement_dispose( stmt );
+    if( result != NULL ) {
+        GncSqlRow* row = gnc_sql_result_get_first_row( result );
+
+        while( row != NULL ) {
+            load_slot_for_book_object( be, row, lookup_fn );
+			row = gnc_sql_result_get_next_row( result );
+        }
+		gnc_sql_result_dispose( result );
+    }
+}
+
 /* ================================================================= */
 static void
 create_slots_tables( GncSqlBackend* be )

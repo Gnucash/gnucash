@@ -140,23 +140,19 @@ load_all_lots( GncSqlBackend* be )
     	result = gnc_sql_execute_select_statement( be, stmt );
 		gnc_sql_statement_dispose( stmt );
     	if( result != NULL ) {
-			GList* list = NULL;
         	GncSqlRow* row = gnc_sql_result_get_first_row( result );
 			GNCLot* lot;
+			gchar* sql;
 
         	while( row != NULL ) {
             	lot = load_single_lot( be, row );
-				if( lot != NULL ) {
-					list = g_list_append( list, lot );
-				}
 				row = gnc_sql_result_get_next_row( result );
         	}
 			gnc_sql_result_dispose( result );
 
-			if( list != NULL ) {
-				gnc_sql_slots_load_for_list( be, list );
-				g_list_free( list );
-			}
+			sql = g_strdup_printf( "SELECT DISTINCT guid FROM %s", TABLE_NAME );
+			gnc_sql_slots_load_for_sql_subquery( be, sql, (BookLookupFn)gnc_lot_lookup );
+			g_free( sql );
     	}
 	}
 }

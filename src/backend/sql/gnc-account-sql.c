@@ -189,7 +189,6 @@ load_all_accounts( GncSqlBackend* be )
     QofBook* pBook;
     gnc_commodity_table* pTable;
 	GList* l_accounts_needing_parents = NULL;
-	GList* list = NULL;
 	GSList* bal_slist;
 	GSList* bal;
 
@@ -210,20 +209,17 @@ load_all_accounts( GncSqlBackend* be )
 	if( result != NULL ) {
 	    GncSqlRow* row = gnc_sql_result_get_first_row( result );
 		Account* acc;
+		gchar* sql;
 
     	while( row != NULL ) {
         	acc = load_single_account( be, row, &l_accounts_needing_parents );
-			if( acc != NULL ) {
-				list = g_list_append( list, acc );
-			}
 			row = gnc_sql_result_get_next_row( result );
     	}
 		gnc_sql_result_dispose( result );
 
-		if( list != NULL ) {
-			gnc_sql_slots_load_for_list( be, list );
-			g_list_free( list );
-		}
+		sql = g_strdup_printf( "SELECT DISTINCT guid FROM %s", TABLE_NAME );
+		gnc_sql_slots_load_for_sql_subquery( be, sql, (BookLookupFn)xaccAccountLookup );
+		g_free( sql );
 
 		/* While there are items on the list of accounts needing parents,
 		   try to see if the parent has now been loaded.  Theory says that if

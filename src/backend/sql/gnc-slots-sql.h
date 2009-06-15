@@ -45,31 +45,45 @@ gboolean gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid,
 					gboolean is_infant, KvpFrame* pFrame );
 
 /**
-* gnc_sql_slots_delete - Deletes slots for an object from the db.
-*
-* @param be SQL backend
-* @param guid Object guid
+ * gnc_sql_slots_delete - Deletes slots for an object from the db.
+ *
+ * @param be SQL backend
+ * @param guid Object guid
  * @return TRUE if successful, FALSE if error
-*/
+ */
 gboolean gnc_sql_slots_delete( GncSqlBackend* be, const GUID* guid );
 
 /**
-* gnc_sql_slots_load - Loads slots for an object from the db.
-*
-* @param be SQL backend
-* @param guid Object guid
-*/
+ * gnc_sql_slots_load - Loads slots for an object from the db.
+ *
+ * @param be SQL backend
+ * @param guid Object guid
+ */
 void gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst );
 
 /**
-* gnc_sql_slots_load_for_list - Loads slots for a list of objects from the db.
-* Loading slots for a list of objects can be faster than loading for one object
-* at a time because fewer SQL queries are used.
-*
-* @param be SQL backend
-* @param list List of objects
-*/
+ * gnc_sql_slots_load_for_list - Loads slots for a list of objects from the db.
+ * Loading slots for a list of objects can be faster than loading for one object
+ * at a time because fewer SQL queries are used.
+ *
+ * @param be SQL backend
+ * @param list List of objects
+ */
 void gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list );
+
+/**
+ * gnc_sql_slots_load_for_sql_subquery - Loads slots for all objects whose guid is
+ * supplied by a subquery.  The subquery should be of the form "SELECT DISTINCT guid FROM ...".
+ * This is faster than loading for one object at a time because fewer SQL queries * are used.
+ *
+ * @param be SQL backend
+ * @param subquery Subquery SQL string
+ * @param lookup_fn Lookup function to get the right object from the book
+ */
+typedef QofInstance* (*BookLookupFn)( const GUID* guid, const QofBook* book );
+
+void gnc_sql_slots_load_for_sql_subquery( GncSqlBackend* be, const gchar* subquery,
+						BookLookupFn lookup_fn );
 
 void gnc_sql_init_slots_handler( void );
 
