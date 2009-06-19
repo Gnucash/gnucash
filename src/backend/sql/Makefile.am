@@ -26,7 +26,8 @@ libgnc_backend_sql_la_SOURCES = \
   gnc-recurrence-sql.c \
   gnc-schedxaction-sql.c \
   gnc-slots-sql.c \
-  gnc-transaction-sql.c
+  gnc-transaction-sql.c \
+  escape.c
 
 noinst_HEADERS = \
   gnc-account-sql.h \
@@ -39,7 +40,8 @@ noinst_HEADERS = \
   gnc-recurrence-sql.h \
   gnc-schedxaction-sql.h \
   gnc-slots-sql.h \
-  gnc-transaction-sql.h
+  gnc-transaction-sql.h \
+  escape.h
 
 libgnc_backend_sql_la_LIBADD = \
    ${GLIB_LIBS} \

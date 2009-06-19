@@ -47,6 +47,8 @@
 
 #include "gnc-engine.h"
 
+#include "escape.h"
+
 #ifdef S_SPLINT_S
 #include "splint-defs.h"
 #endif
@@ -722,42 +724,316 @@ void gnc_sql_transaction_load_all_tx( GncSqlBackend* be )
 	}
 }
 
+static void
+convert_query_comparison_to_sql( QofQueryPredData* pPredData, gboolean isInverted, GString* sql )
+{
+    if( pPredData->how == QOF_COMPARE_LT
+			|| ( isInverted && pPredData->how == QOF_COMPARE_GTE ) ) {
+        g_string_append( sql, "<" );
+    } else if( pPredData->how == QOF_COMPARE_LTE
+			|| ( isInverted && pPredData->how == QOF_COMPARE_GT ) ) {
+        g_string_append( sql, "<=" );
+    } else if( pPredData->how == QOF_COMPARE_EQUAL
+			|| ( isInverted && pPredData->how == QOF_COMPARE_NEQ ) ) {
+        g_string_append( sql, "=" );
+    } else if( pPredData->how == QOF_COMPARE_GT
+			|| ( isInverted && pPredData->how == QOF_COMPARE_LTE ) ) {
+        g_string_append( sql, ">" );
+    } else if( pPredData->how == QOF_COMPARE_GTE
+			|| ( isInverted && pPredData->how == QOF_COMPARE_LT ) ) {
+        g_string_append( sql, ">=" );
+    } else if( pPredData->how == QOF_COMPARE_NEQ
+			|| ( isInverted && pPredData->how == QOF_COMPARE_EQUAL ) ) {
+        g_string_append( sql, "~=" );
+    } else {
+		PERR( "Unknown comparison type\n" );
+        g_string_append( sql, "??" );
+    }
+}
+
+static void
+convert_query_term_to_sql( const gchar* fieldName, QofQueryTerm* pTerm, GString* sql )
+{
+    GSList* pParamPath;
+    QofQueryPredData* pPredData;
+    gboolean isInverted;
+    GSList* name;
+    gchar val[GUID_ENCODING_LENGTH+1];
+
+	g_return_if_fail( pTerm != NULL );
+	g_return_if_fail( sql != NULL );
+
+    pParamPath = qof_query_term_get_param_path( pTerm );
+    pPredData = qof_query_term_get_pred_data( pTerm );
+    isInverted = qof_query_term_is_inverted( pTerm );
+
+    if( safe_strcmp( pPredData->type_name, QOF_TYPE_GUID ) == 0 ) {
+        query_guid_t guid_data = (query_guid_t)pPredData;
+		GList* guid_entry;
+
+        g_string_append( sql, "(" );
+        g_string_append( sql, fieldName );
+
+		switch( guid_data->options ) {
+		case QOF_GUID_MATCH_ANY:
+		    if( isInverted ) g_string_append( sql, " NOT IN (" );
+		    else g_string_append( sql, " IN (" );
+			break;
+
+		case QOF_GUID_MATCH_NONE:
+		    if( isInverted ) g_string_append( sql, " IN (" );
+		    else g_string_append( sql, " NOT IN (" );
+			break;
+
+		default:
+			PERR( "Unexpected GUID match type: %d\n", guid_data->options );
+		}
+
+		for( guid_entry = guid_data->guids; guid_entry != NULL; guid_entry = guid_entry->next ) {
+		    if( guid_entry != guid_data->guids ) g_string_append( sql, "," );
+        	(void)guid_to_string_buff( guid_entry->data, val );
+        	g_string_append( sql, "'" );
+        	g_string_append( sql, val );
+        	g_string_append( sql, "'" );
+			break;
+		}
+		g_string_append( sql, ")" );
+		g_string_append( sql, ")" );
+		return;
+
+    } else if( safe_strcmp( pPredData->type_name, QOF_TYPE_CHAR ) == 0 ) {
+	    query_char_t char_data = (query_char_t)pPredData;
+		int i;
+		
+		if( isInverted ) {
+		    g_string_append( sql, "NOT(" );
+		}
+		if( char_data->options == QOF_CHAR_MATCH_NONE ) {
+			g_string_append( sql, "NOT " );
+		}
+		g_string_append( sql, "(" );
+		for( i = 0; char_data->char_list[i] != '\0'; i++ ) {
+			if( i != 0 ) {
+				g_string_append( sql, " OR " );
+			}
+			g_string_append( sql, fieldName );
+			g_string_append( sql, " = '" );
+			g_string_append_c( sql, char_data->char_list[i] );
+			g_string_append( sql, "'" );
+		}
+		g_string_append( sql, ") " );
+		if( isInverted ) {
+			g_string_append( sql, ") " );
+		}
+		return;
+
+    } else if( safe_strcmp( pPredData->type_name, QOF_TYPE_DATE ) == 0 ) {
+        query_date_t date_data = (query_date_t)pPredData;
+		gchar* datebuf;
+
+        g_string_append( sql, "(" );
+        g_string_append( sql, fieldName );
+	    convert_query_comparison_to_sql( pPredData, isInverted, sql );
+		datebuf = gnc_sql_convert_timespec_to_string( date_data->date );
+        g_string_append( sql, "'" );
+        g_string_append( sql, datebuf );
+        g_string_append( sql, "')" );
+		return;
+
+    } else if( safe_strcmp( pPredData->type_name, QOF_TYPE_STRING ) == 0 ) {
+        query_string_t string_data = (query_string_t)pPredData;
+		sqlEscape* escape = sqlEscape_new();
+
+		if( isInverted ) {
+			g_string_append( sql, "NOT(" );
+		}
+		if( pPredData->how == QOF_COMPARE_NEQ ) {
+			g_string_append( sql, "NOT(" );
+		}
+		g_string_append( sql, fieldName );
+		if( string_data->is_regex || string_data->options == QOF_STRING_MATCH_CASEINSENSITIVE ) {
+			PWARN( "String is_regex || option = QOF_STRING_MATCH_INSENSITIVE\n" );
+		}
+//			g_string_append( sql, " ~" );
+//		} else {
+			g_string_append( sql, " =" );
+//		}
+//		if( string_data->options == QOF_STRING_MATCH_CASEINSENSITIVE ) {
+//			g_string_append( sql, "*" );
+//		}
+        g_string_append( sql, "'" );
+        g_string_append( sql, sqlEscapeString( escape, string_data->matchstring ) );
+        g_string_append( sql, "'" );
+		if( pPredData->how == QOF_COMPARE_NEQ ) {
+			g_string_append( sql, ")" );
+		}
+		if( isInverted ) {
+			g_string_append( sql, ")" );
+		}
+		sqlEscape_destroy( escape );
+		return;
+	}
+
+    g_string_append( sql, "(" );
+    g_string_append( sql, fieldName );
+	convert_query_comparison_to_sql( pPredData, isInverted, sql );
+
+    if( strcmp( pPredData->type_name, "numeric" ) == 0 ) {
+        query_numeric_t pData = (query_numeric_t)pPredData;
+    
+        g_string_append( sql, "numeric" );
+    } else if( strcmp( pPredData->type_name, "gint32" ) == 0 ) {
+        query_int32_t pData = (query_int32_t)pPredData;
+
+        sprintf( val, "%d", pData->val );
+        g_string_append( sql, val );
+    } else if( strcmp( pPredData->type_name, "gint64" ) == 0 ) {
+        query_int64_t pData = (query_int64_t)pPredData;
+    
+        sprintf( val, "%" G_GINT64_FORMAT, pData->val );
+        g_string_append( sql, val );
+    } else if( strcmp( pPredData->type_name, "double" ) == 0 ) {
+        query_double_t pData = (query_double_t)pPredData;
+
+        sprintf( val, "%f", pData->val );
+        g_string_append( sql, val );
+    } else if( strcmp( pPredData->type_name, "boolean" ) == 0 ) {
+        query_boolean_t pData = (query_boolean_t)pPredData;
+
+        sprintf( val, "%d", pData->val );
+        g_string_append( sql, val );
+    } else {
+        PERR( "Unknown query predicate type: %s\n", pPredData->type_name );
+    }
+
+    g_string_append( sql, ")" );
+}
+
 typedef struct {
     GncSqlStatement* stmt;
-	Account* acct;
 	gboolean has_been_run;
 } split_query_info_t;
 
 static /*@ null @*/ gpointer
-compile_split_query( GncSqlBackend* be, QofQuery* pQuery )
+compile_split_query( GncSqlBackend* be, QofQuery* query )
 {
     const GUID* acct_guid;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	split_query_info_t* query_info = NULL;
 	gchar* subquery_sql;
 	gchar* query_sql;
+	GString* subquery_tables;
+	gboolean has_transactions_table = FALSE;
 
 	g_return_val_if_fail( be != NULL, NULL );
-	g_return_val_if_fail( pQuery != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
 
-    acct_guid = get_guid_from_query( pQuery );
-	if( acct_guid != NULL ) {
-    	(void)guid_to_string_buff( acct_guid, guid_buf );
-		subquery_sql = g_strdup_printf( "SELECT DISTINCT tx_guid FROM %s WHERE account_guid='%s'", SPLIT_TABLE, guid_buf );
-		query_sql = g_strdup_printf( "SELECT * FROM %s WHERE guid IN (%s)", TRANSACTION_TABLE, subquery_sql );
+	query_info = g_malloc( (gsize)sizeof(split_query_info_t) );
+	g_assert( query_info != NULL );
+	query_info->has_been_run = FALSE;
 
-		query_info = g_malloc( (gsize)sizeof(split_query_info_t) );
-		g_assert( query_info != NULL );
+	subquery_tables = g_string_new( SPLIT_TABLE );
 
+	if( qof_query_has_terms( query ) ) {
+        GList* orterms = qof_query_get_terms( query );
+        GList* orTerm;
+		GString* sql = g_string_new( "" );
+		gboolean need_OR = FALSE;
+
+        for( orTerm = orterms; orTerm != NULL; orTerm = orTerm->next ) {
+            GList* andterms = (GList*)orTerm->data;
+            GList* andTerm;
+			gboolean need_AND = FALSE;
+			gboolean has_tx_guid_check = FALSE;
+
+            if( need_OR ) {
+				g_string_append( sql, " OR " );
+			}
+            g_string_append( sql, "(" );
+            for( andTerm = andterms; andTerm != NULL; andTerm = andTerm->next ) {
+				QofQueryTerm* term;
+				GSList* paramPath;
+				gboolean unknownPath = FALSE;
+
+                term = (QofQueryTerm*)andTerm->data;
+				paramPath = qof_query_term_get_param_path( term );
+
+				if( strcmp( paramPath->data, QOF_PARAM_BOOK ) == 0 ) continue;
+
+                if( need_AND ) g_string_append( sql, " AND " );
+
+				if( strcmp( paramPath->data, SPLIT_ACCOUNT ) == 0
+						&& strcmp( paramPath->next->data, QOF_PARAM_GUID ) == 0 ) {
+                	convert_query_term_to_sql( "account_guid", term, sql );
+
+				} else if( strcmp( paramPath->data, SPLIT_RECONCILE ) == 0 ) {
+                	convert_query_term_to_sql( "reconcile_state", term, sql );
+
+				} else if( strcmp( paramPath->data, SPLIT_TRANS ) == 0 ) {
+					if( !has_transactions_table ) {
+						g_string_append( subquery_tables, ", " );
+						g_string_append( subquery_tables, TRANSACTION_TABLE );
+						has_transactions_table = TRUE;
+					}
+					if( !has_tx_guid_check ) {
+						g_string_append( sql, "(splits.tx_guid = transactions.guid) AND " );
+						has_tx_guid_check = TRUE;
+					}
+					if( strcmp( paramPath->next->data, TRANS_DATE_POSTED ) == 0 ) {
+				        convert_query_term_to_sql( "transactions.post_date", term, sql );
+					} else if( strcmp( paramPath->next->data, TRANS_DESCRIPTION ) == 0 ) {
+					    convert_query_term_to_sql( "transactions.description", term, sql );
+					} else {
+						unknownPath = TRUE;
+					}
+
+				} else {
+					unknownPath = TRUE;
+				}
+
+				if( unknownPath ) {
+				    GString* name = g_string_new( (gchar*)paramPath->data );
+					while( paramPath->next != NULL ) {
+					    g_string_append( name, "." );
+						g_string_append( name, paramPath->next->data );
+						paramPath = paramPath->next;
+					}
+					PERR( "Unknown SPLIT query field: %s\n", name->str );
+					g_string_free( name, TRUE );
+				}
+				need_AND = TRUE;
+            }
+
+			/* If the last char in the string is a '(', then for some reason, there were
+			   no terms added to the SQL.  If so, remove it and ignore the OR term. */
+			if( sql->str[sql->len-1] == '(' ) {
+			    g_string_truncate( sql, sql->len-1 );
+				need_OR = FALSE;
+			} else {
+            	g_string_append( sql, ")" );
+				need_OR = TRUE;
+			}
+        }
+
+		if( sql->len != 0 ) {
+			subquery_sql = g_strdup_printf( "SELECT DISTINCT tx_guid FROM %s WHERE %s",
+											g_string_free( subquery_tables, FALSE ),
+											sql->str );
+			query_sql = g_strdup_printf( "SELECT * FROM %s WHERE guid IN (%s)",
+										TRANSACTION_TABLE, subquery_sql );
+			g_free( subquery_sql );
+		} else {
+	    	query_sql = g_strdup_printf( "SELECT * FROM %s", TRANSACTION_TABLE );
+		}
+		query_info->stmt = gnc_sql_create_statement_from_sql( be, query_sql );
+
+		g_string_free( sql, TRUE );
+		g_free( query_sql );
+
+	} else {
+	    query_sql = g_strdup_printf( "SELECT * FROM %s", TRANSACTION_TABLE );
 		query_info->stmt = gnc_sql_create_statement_from_sql( be, query_sql );
 		g_free( query_sql );
-		query_info->has_been_run = FALSE;
-		query_info->acct = xaccAccountLookup( acct_guid, be->primary_book );
-		if( query_info->acct == NULL ) {
-			PWARN( "Unable to find account with guid='%s'\n", guid_buf );
-		}
-
-		g_free( subquery_sql );
 	}
 
 	return query_info;
@@ -770,16 +1046,12 @@ run_split_query( GncSqlBackend* be, gpointer pQuery )
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( pQuery != NULL );
-	g_return_if_fail( query_info->acct != NULL );
 
-	// When the query to load all splits for the account has been run, set the
-	// mark so that this account's query is not reexecuted.
-	if( !query_info->has_been_run && xaccAccountGetMark( query_info->acct ) == 0 ) {
+	if( !query_info->has_been_run ) {
     	query_transactions( be, query_info->stmt );
 		query_info->has_been_run = TRUE;
 		gnc_sql_statement_dispose( query_info->stmt );
 		query_info->stmt = NULL;
-		xaccAccountSetMark( query_info->acct, 1 );
 	}
 }
 

@@ -679,6 +679,14 @@ gboolean gnc_sql_commit_standard_item( GncSqlBackend* be, QofInstance* inst, con
 gint64 gnc_sql_get_integer_value( const GValue* value );
 
 /**
+ * Converts a Timespec value to a string value for the database.
+ *
+ * @param ts Timespec to be converted
+ * @return String representation of the Timespec
+ */
+gchar* gnc_sql_convert_timespec_to_string( Timespec ts );
+
+/**
  * Upgrades a table to a new structure.  The upgrade is done by creating a new table with
  * the new structure, SELECTing the old data into the new table, deleting the old table,
  * then renaming the new table.  Therefore, this will only work if the new table structure

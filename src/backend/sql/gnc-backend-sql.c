@@ -562,15 +562,8 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
 /* ---------------------------------------------------------------------- */
 
 /* Query processing */
-#if 0
-static const gchar*
-convert_search_obj( QofIdType objType )
-{
-    return (gchar*)objType;
-}
-
 static void
-handle_and_term( QofQueryTerm* pTerm, gchar* sql )
+handle_and_term( QofQueryTerm* pTerm, GString* sql )
 {
     GSList* pParamPath;
     QofQueryPredData* pPredData;
@@ -585,81 +578,100 @@ handle_and_term( QofQueryTerm* pTerm, gchar* sql )
     pPredData = qof_query_term_get_pred_data( pTerm );
     isInverted = qof_query_term_is_inverted( pTerm );
 
-    strcat( sql, "(" );
+    if( strcmp( pPredData->type_name, QOF_TYPE_GUID ) == 0 ) {
+        query_guid_t guid_data = (query_guid_t)pPredData;
+		GList* guid_entry;
+
+    	for( name = pParamPath; name != NULL; name = name->next ) {
+        	if( name != pParamPath ) g_string_append( sql, "." );
+        	g_string_append( sql, name->data );
+    	}
+
+		if( guid_data->options == QOF_GUID_MATCH_ANY ) {
+		    if( isInverted ) g_string_append( sql, " NOT " );
+		    g_string_append( sql, " IN (" );
+		}
+		for( guid_entry = guid_data->guids; guid_entry != NULL; guid_entry = guid_entry->next ) {
+		    if( guid_entry != guid_data->guids ) g_string_append( sql, "." );
+        	(void)guid_to_string_buff( guid_entry->data, val );
+        	g_string_append( sql, "'" );
+        	g_string_append( sql, val );
+        	g_string_append( sql, "'" );
+		}
+		if( guid_data->options == QOF_GUID_MATCH_ANY ) {
+			g_string_append( sql, ")" );
+		}
+    }
+
+    g_string_append( sql, "(" );
     if( isInverted ) {
-        strcat( sql, "!" );
+        g_string_append( sql, "!" );
     }
 
     for( name = pParamPath; name != NULL; name = name->next ) {
-        if( name != pParamPath ) strcat( sql, "." );
-        strcat( sql, name->data );
+        if( name != pParamPath ) g_string_append( sql, "." );
+        g_string_append( sql, name->data );
     }
 
     if( pPredData->how == QOF_COMPARE_LT ) {
-        strcat( sql, "<" );
+        g_string_append( sql, "<" );
     } else if( pPredData->how == QOF_COMPARE_LTE ) {
-        strcat( sql, "<=" );
+        g_string_append( sql, "<=" );
     } else if( pPredData->how == QOF_COMPARE_EQUAL ) {
-        strcat( sql, "=" );
+        g_string_append( sql, "=" );
     } else if( pPredData->how == QOF_COMPARE_GT ) {
-        strcat( sql, ">" );
+        g_string_append( sql, ">" );
     } else if( pPredData->how == QOF_COMPARE_GTE ) {
-        strcat( sql, ">=" );
+        g_string_append( sql, ">=" );
     } else if( pPredData->how == QOF_COMPARE_NEQ ) {
-        strcat( sql, "~=" );
+        g_string_append( sql, "~=" );
     } else {
-        strcat( sql, "??" );
+        g_string_append( sql, "??" );
     }
 
     if( strcmp( pPredData->type_name, "string" ) == 0 ) {
         query_string_t pData = (query_string_t)pPredData;
-        strcat( sql, "'" );
-        strcat( sql, pData->matchstring );
-        strcat( sql, "'" );
+        g_string_append( sql, "'" );
+        g_string_append( sql, pData->matchstring );
+        g_string_append( sql, "'" );
     } else if( strcmp( pPredData->type_name, "date" ) == 0 ) {
         query_date_t pData = (query_date_t)pPredData;
 
         (void)gnc_timespec_to_iso8601_buff( pData->date, val );
-        strcat( sql, "'" );
-        strncat( sql, val, 4+1+2+1+2 );
-        strcat( sql, "'" );
+        g_string_append( sql, "'" );
+        //g_string_append( sql, val, 4+1+2+1+2 );
+        g_string_append( sql, "'" );
     } else if( strcmp( pPredData->type_name, "numeric" ) == 0 ) {
         query_numeric_t pData = (query_numeric_t)pPredData;
     
-        strcat( sql, "numeric" );
-    } else if( strcmp( pPredData->type_name, "guid" ) == 0 ) {
-        query_guid_t pData = (query_guid_t)pPredData;
-        (void)guid_to_string_buff( pData->guids->data, val );
-        strcat( sql, "'" );
-        strcat( sql, val );
-        strcat( sql, "'" );
+        g_string_append( sql, "numeric" );
+    } else if( strcmp( pPredData->type_name, QOF_TYPE_GUID ) == 0 ) {
     } else if( strcmp( pPredData->type_name, "gint32" ) == 0 ) {
         query_int32_t pData = (query_int32_t)pPredData;
 
         sprintf( val, "%d", pData->val );
-        strcat( sql, val );
+        g_string_append( sql, val );
     } else if( strcmp( pPredData->type_name, "gint64" ) == 0 ) {
         query_int64_t pData = (query_int64_t)pPredData;
     
         sprintf( val, "%" G_GINT64_FORMAT, pData->val );
-        strcat( sql, val );
+        g_string_append( sql, val );
     } else if( strcmp( pPredData->type_name, "double" ) == 0 ) {
         query_double_t pData = (query_double_t)pPredData;
 
         sprintf( val, "%f", pData->val );
-        strcat( sql, val );
+        g_string_append( sql, val );
     } else if( strcmp( pPredData->type_name, "boolean" ) == 0 ) {
         query_boolean_t pData = (query_boolean_t)pPredData;
 
         sprintf( val, "%d", pData->val );
-        strcat( sql, val );
+        g_string_append( sql, val );
     } else {
         g_assert( FALSE );
     }
 
-    strcat( sql, ")" );
+    g_string_append( sql, ")" );
 }
-#endif
 
 static void
 compile_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
@@ -682,6 +694,8 @@ compile_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
     }
 }
 
+gchar* gnc_sql_compile_query_to_sql( GncSqlBackend* be, QofQuery* query );
+
 /*@ null @*/ gpointer
 gnc_sql_compile_query( QofBackend* pBEnd, QofQuery* pQuery )
 {
@@ -695,6 +709,7 @@ gnc_sql_compile_query( QofBackend* pBEnd, QofQuery* pQuery )
 
 	ENTER( " " );
 
+//gnc_sql_compile_query_to_sql( be, pQuery );
     searchObj = qof_query_get_search_for( pQuery );
 
     pQueryInfo = g_malloc( (gsize)sizeof( gnc_sql_query_info ) );
@@ -714,40 +729,58 @@ gnc_sql_compile_query( QofBackend* pBEnd, QofQuery* pQuery )
         return be_data.pQueryInfo;
     }
 
-#if 0
-    pBookList = qof_query_get_books( pQuery );
-
-    /* Convert search object type to table name */
-    sprintf( sql, "SELECT * from %s", convert_search_obj( searchObj ) );
-    if( !qof_query_has_terms( pQuery ) ) {
-        strcat( sql, ";" );
-    } else {
-        GList* pOrTerms = qof_query_get_terms( pQuery );
-        GList* orTerm;
-
-        strcat( sql, " WHERE " );
-
-        for( orTerm = pOrTerms; orTerm != NULL; orTerm = orTerm->next ) {
-            GList* pAndTerms = (GList*)orTerm->data;
-            GList* andTerm;
-
-            if( orTerm != pOrTerms ) strcat( sql, " OR " );
-            strcat( sql, "(" );
-            for( andTerm = pAndTerms; andTerm != NULL; andTerm = andTerm->next ) {
-                if( andTerm != pAndTerms ) strcat( sql, " AND " );
-                handle_and_term( (QofQueryTerm*)andTerm->data, sql );
-            }
-            strcat( sql, ")" );
-        }
-    }
-
-    DEBUG( "Compiled: %s\n", sql );
-    pQueryInfo->pCompiledQuery =  g_strdup( sql );
-#endif
-
 	LEAVE( "" );
 
     return pQueryInfo;
+}
+
+static const gchar*
+convert_search_obj( QofIdType objType )
+{
+    return (gchar*)objType;
+}
+
+gchar*
+gnc_sql_compile_query_to_sql( GncSqlBackend* be, QofQuery* query )
+{
+    QofIdType searchObj;
+	GList* bookList;
+	GString* sql;
+
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
+
+    searchObj = qof_query_get_search_for( query );
+    bookList = qof_query_get_books( query );
+
+    /* Convert search object type to table name */
+	sql = g_string_new( "" );
+	g_string_append( sql, "SELECT * FROM " );
+	g_string_append( sql, convert_search_obj( searchObj ) );
+    if( !qof_query_has_terms( query ) ) {
+        g_string_append( sql, ";" );
+    } else {
+        GList* orterms = qof_query_get_terms( query );
+        GList* orTerm;
+
+        g_string_append( sql, " WHERE " );
+
+        for( orTerm = orterms; orTerm != NULL; orTerm = orTerm->next ) {
+            GList* andterms = (GList*)orTerm->data;
+            GList* andTerm;
+
+            if( orTerm != orterms ) g_string_append( sql, " OR " );
+            g_string_append( sql, "(" );
+            for( andTerm = andterms; andTerm != NULL; andTerm = andTerm->next ) {
+                if( andTerm != andterms ) g_string_append( sql, " AND " );
+                handle_and_term( (QofQueryTerm*)andTerm->data, sql );
+            }
+            g_string_append( sql, ")" );
+        }
+    }
+
+    DEBUG( "Compiled: %s\n", sql->str );
+    return g_string_free( sql, FALSE );
 }
 
 static void
@@ -1520,6 +1553,25 @@ typedef void (*TimespecSetterFunc)( const gpointer, Timespec );
 #define TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 #define TIMESPEC_COL_SIZE (4+2+2+2+2+2)
 
+gchar*
+gnc_sql_convert_timespec_to_string( Timespec ts )
+{
+	time_t time;
+	struct tm* tm;
+	gint year;
+	gchar* datebuf;
+
+	time = timespecToTime_t( ts );
+	tm = gmtime( &time );	
+
+	if( tm->tm_year < 60 ) year = tm->tm_year + 2000;
+	else year = tm->tm_year + 1900;
+
+	datebuf = g_strdup_printf( TIMESPEC_STR_FORMAT,
+					year, tm->tm_mon+1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec );
+    return datebuf;
+}
+
 static void
 load_timespec( const GncSqlBackend* be, GncSqlRow* row,
             /*@ null @*/ QofSetterFunc setter, gpointer pObject,
@@ -1582,9 +1634,6 @@ add_gvalue_timespec_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     TimespecAccessFunc ts_getter;
     Timespec ts;
 	gchar* datebuf;
-	time_t time;
-	struct tm* tm;
-	gint year;
 	GValue* value;
 
 	g_return_if_fail( be != NULL );
@@ -1597,14 +1646,7 @@ add_gvalue_timespec_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	g_return_if_fail( ts_getter != NULL );
     ts = (*ts_getter)( pObject );
 
-	time = timespecToTime_t( ts );
-	tm = gmtime( &time );	
-
-	if( tm->tm_year < 60 ) year = tm->tm_year + 2000;
-	else year = tm->tm_year + 1900;
-
-	datebuf = g_strdup_printf( TIMESPEC_STR_FORMAT,
-					year, tm->tm_mon+1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec );
+    datebuf = gnc_sql_convert_timespec_to_string( ts );
     value = g_new0( GValue, 1 );
 	g_assert( value != NULL );
     (void)g_value_init( value, G_TYPE_STRING );
