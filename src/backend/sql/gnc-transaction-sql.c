@@ -795,7 +795,6 @@ convert_query_term_to_sql( const gchar* fieldName, QofQueryTerm* pTerm, GString*
         	g_string_append( sql, "'" );
         	g_string_append( sql, val );
         	g_string_append( sql, "'" );
-			break;
 		}
 		g_string_append( sql, ")" );
 		g_string_append( sql, ")" );
