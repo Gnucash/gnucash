@@ -51,11 +51,10 @@ _br_find_exe (GbrInitError *error)
 	gchar *prefix;
 	gchar *result;
 
-	/* From the glib docs: This function looks in the Windows
-	   Registry for the value #InstallationDirectory in the key
-	   #HKLM\Software\${package}, and if that value exists and is
-	   a string, returns that. */
-	prefix = g_win32_get_package_installation_directory ("GnuCash", NULL);
+	/* From the glib docs: When passed NULL, this function looks
+	   up installation the directory of the main executable of
+	   the current process */
+	prefix = g_win32_get_package_installation_directory_of_module (NULL);
 	result = g_build_filename (prefix,
 				   "bin", "gnucash-bin.exe",
 				   (char*)NULL);
