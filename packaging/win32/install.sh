@@ -119,6 +119,7 @@ function inst_dtk() {
             /bin/{aclocal*,auto*,ifnames,libtool*,guile*} \
             /share/{aclocal,aclocal-1.7,autoconf,autogen,automake-1.7,guile,libtool}
         do
+			[ -f $file ] || continue
             [ "${file##*.bak}" ] || continue
             _dst_file=$file.bak
             while [ -e $_dst_file ]; do _dst_file=$_dst_file.bak; done
