@@ -144,7 +144,7 @@ set_default GUILE_DIR $GLOBAL_DIR\\guile
 set_default OPENSSL_URL "http://www.openssl.org/source/openssl-0.9.8j.tar.gz"
 set_default OPENSSL_DIR $GLOBAL_DIR\\openssl
 
-set_default GNUTLS_URL "http://josefsson.org/gnutls4win/gnutls-2.7.3.zip"
+set_default GNUTLS_URL "http://josefsson.org/gnutls4win/gnutls-2.8.1.zip"
 set_default GNUTLS_DIR $GLOBAL_DIR\\gnutls
 
 set_default MINGW_UTILS_URL "$SF_MIRROR/mingw/mingw-utils-0.3.tar.gz"
@@ -286,6 +286,8 @@ set_default SQLITE3_URL "http://sqlite.org/sqlite-amalgamation-3.6.1.tar.gz"
 set_default SQLITE3_DIR $GLOBAL_DIR\\sqlite3
 set_default MYSQL_LIB_URL "http://mirror.csclub.uwaterloo.ca/mysql/Downloads/Connector-C/mysql-connector-c-noinstall-6.0.1-win32.zip"
 set_default MYSQL_LIB_DIR $GLOBAL_DIR\\mysql
+set_default LIBMYSQL_DEF `pwd`/libmysql.def
+set_default PGSQL_LIB_DIR $GLOBAL_DIR\\pgsql
 set_default LIBDBI_URL "http://downloads.sourceforge.net/libdbi/libdbi-0.8.3.tar.gz"
 set_default LIBDBI_DIR $GLOBAL_DIR\\libdbi
 set_default LIBDBI_PATCH `pwd`/libdbi-0.8.3.patch
@@ -294,6 +296,7 @@ set_default LIBDBI_DRIVERS_DIR $GLOBAL_DIR\\libdbi-drivers
 set_default LIBDBI_DRIVERS_PATCH `pwd`/libdbi-drivers-dbd_sqlite3.c.patch
 set_default LIBDBI_DRIVERS_PATCH2 `pwd`/libdbi-drivers-Makefile.in.patch
 set_default LIBDBI_DRIVERS_PATCH3 `pwd`/libdbi-drivers-dbd_mysql.c.patch
+set_default LIBDBI_DRIVERS_PATCH4 `pwd`/libdbi-drivers-dbd_pgsql.c.patch
 
 set_default DOCBOOK_XSL_URL "$SF_MIRROR/docbook/docbook-xsl-1.72.0.zip"
 set_default UPDATE_DOCS yes
