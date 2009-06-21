@@ -1204,12 +1204,12 @@ conn_execute_select_statement( GncSqlConnection* conn, GncSqlStatement* stmt )
 	GncDbiSqlStatement* dbi_stmt = (GncDbiSqlStatement*)stmt;
 	dbi_result result;
 														
+	DEBUG( "SQL: %s\n", dbi_stmt->sql->str );
 	result = dbi_conn_query( dbi_conn->conn, dbi_stmt->sql->str );
 	if( result == NULL ) {
 		PERR( "Error executing SQL %s\n", dbi_stmt->sql->str );
 		return NULL;
 	}
-	DEBUG( "SQL: %s\n", dbi_stmt->sql->str );
 	return create_dbi_result( dbi_conn, result );
 }
 
@@ -1222,12 +1222,12 @@ conn_execute_nonselect_statement( GncSqlConnection* conn, GncSqlStatement* stmt 
 	gint num_rows;
 	gint status;
 
+	DEBUG( "SQL: %s\n", dbi_stmt->sql->str );
 	result = dbi_conn_query( dbi_conn->conn, dbi_stmt->sql->str );
 	if( result == NULL ) {
 		PERR( "Error executing SQL %s\n", dbi_stmt->sql->str );
 		return -1;
 	}
-	DEBUG( "SQL: %s\n", dbi_stmt->sql->str );
 	num_rows = (gint)dbi_result_get_numrows_affected( result );
 	status = dbi_result_free( result );
 	if( status < 0 ) {
@@ -1294,8 +1294,8 @@ conn_begin_transaction( /*@ unused @*/ GncSqlConnection* conn )
 	dbi_result result;
 	gint status;
 
-	result = dbi_conn_queryf( dbi_conn->conn, "BEGIN" );
 	DEBUG( "BEGIN\n" );
+	result = dbi_conn_queryf( dbi_conn->conn, "BEGIN" );
 	status = dbi_result_free( result );
 	if( status < 0 ) {
 		PERR( "Error in dbi_result_free() result\n" );
@@ -1312,8 +1312,8 @@ conn_rollback_transaction( /*@ unused @*/ GncSqlConnection* conn )
 	dbi_result result;
 	gint status;
 
-	result = dbi_conn_queryf( dbi_conn->conn, "ROLLBACK" );
 	DEBUG( "ROLLBACK\n" );
+	result = dbi_conn_queryf( dbi_conn->conn, "ROLLBACK" );
 	status = dbi_result_free( result );
 	if( status < 0 ) {
 		PERR( "Error in dbi_result_free() result\n" );
@@ -1330,8 +1330,8 @@ conn_commit_transaction( /*@ unused @*/ GncSqlConnection* conn )
 	dbi_result result;
 	gint status;
 
-	result = dbi_conn_queryf( dbi_conn->conn, "COMMIT" );
 	DEBUG( "COMMIT\n" );
+	result = dbi_conn_queryf( dbi_conn->conn, "COMMIT" );
 	status = dbi_result_free( result );
 	if( status < 0 ) {
 		PERR( "Error in dbi_result_free() result\n" );
