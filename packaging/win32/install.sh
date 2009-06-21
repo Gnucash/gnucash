@@ -1222,12 +1222,12 @@ function make_install() {
     done
 
     if [ -z $_skip_scripts ]; then
-        # Try to fix the paths in the "gnucash" script
+        # Try to fix the paths in the "gnucash" and related scripts
         qpushd $_BUILD_UDIR/src/bin
             rm gnucash
             make PATH_SEPARATOR=";" \
                 bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GNUTLS_UTIR}/bin:${_GMP_UDIR}/bin:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_GUILE_UDIR}/bin:${_WEBKIT_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin:${_LIBDBI_UDIR}/bin:${_SQLITE3_UDIR}/bin" \
-                gnucash
+                gnucash gnucash-gdb gnucash-valgrind
         qpopd
     fi
     
