@@ -39,8 +39,8 @@ gnucash: gnucash.in ${top_builddir}/config.status Makefile
 		-e 's#@-GNC_DBD_DIR-@#${GNC_DBD_DIR}#g' \
 	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
 	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
-            -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
-            -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
+        -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
+        -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
 	    -e 's#@-PATH_SEPARATOR-@#${PATH_SEPARATOR}#g'
 	mv $@.tmp $@
 	chmod u+x $@
@@ -52,9 +52,10 @@ gnucash-gdb: gnucash-gdb.in ${top_builddir}/config.status Makefile
 		-e 's#@-GNC_DBD_DIR-@#${GNC_DBD_DIR}#g' \
 	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
 	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
-            -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
-            -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
-	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g"
+        -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
+        -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
+	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g" \
+	    -e 's#@-PATH_SEPARATOR-@#${PATH_SEPARATOR}#g'
 	mv $@.tmp $@
 	chmod u+x $@
 
@@ -65,9 +66,10 @@ gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 		-e 's#@-GNC_DBD_DIR-@#${GNC_DBD_DIR}#g' \
 	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
 	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
-            -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
-            -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
-	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g"
+        -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
+        -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
+	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g" \
+	    -e 's#@-PATH_SEPARATOR-@#${PATH_SEPARATOR}#g'
 	mv $@.tmp $@
 	chmod u+x $@
 
