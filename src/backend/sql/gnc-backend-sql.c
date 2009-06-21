@@ -2368,7 +2368,7 @@ build_insert_statement( GncSqlBackend* be,
 	(void)g_string_append( sql, ")" );
 
 	stmt = gnc_sql_connection_create_statement_from_sql( be->conn, sql->str );
-	(void)g_string_free( sql, FALSE );
+	(void)g_string_free( sql, TRUE );
 
 	return stmt;
 }
@@ -2435,7 +2435,7 @@ build_update_statement( GncSqlBackend* be,
 	stmt = gnc_sql_connection_create_statement_from_sql( be->conn, sql->str );
 	gnc_sql_statement_add_where_cond( stmt, obj_name, pObject, &table[0], (GValue*)(values->data) );
 	g_slist_free( values );
-	(void)g_string_free( sql, FALSE );
+	(void)g_string_free( sql, TRUE );
 
 	return stmt;
 }
@@ -2447,7 +2447,6 @@ build_delete_statement( GncSqlBackend* be,
                         const GncSqlColumnTableEntry* table )
 {
 	GncSqlStatement* stmt;
-	GString* sql;
     GncSqlColumnTypeHandler* pHandler;
 	GSList* list = NULL;
 	gchar* sqlbuf;
@@ -2459,10 +2458,8 @@ build_delete_statement( GncSqlBackend* be,
 	g_return_val_if_fail( table != NULL, NULL );
 
 	sqlbuf = g_strdup_printf( "DELETE FROM %s ", table_name );
-	sql = g_string_new( sqlbuf );
+	stmt = gnc_sql_connection_create_statement_from_sql( be->conn, sqlbuf );
 	g_free( sqlbuf );
-	stmt = gnc_sql_connection_create_statement_from_sql( be->conn, sql->str );
-	(void)g_string_free( sql, FALSE );
 
     /* WHERE */
     pHandler = get_handler( table );
