@@ -244,7 +244,7 @@ load_splits_for_tx_list( GncSqlBackend* be, GList* list )
 
 		gnc_sql_result_dispose( result );
     }
-	(void)g_string_free( sql, FALSE );
+	(void)g_string_free( sql, TRUE );
 }
 
 static /*@ null @*/ Transaction*
@@ -326,6 +326,13 @@ save_account_balances( Account* acc, gpointer pData )
 	newbal->start_reconciled_bal = *pstart_r;
 	newbal->end_reconciled_bal = *pend_r;
 	*pBal_list = g_slist_append( *pBal_list, newbal );
+
+	g_free( pstart );
+	g_free( pend );
+	g_free( pstart_c );
+	g_free( pend_c );
+	g_free( pstart_r );
+	g_free( pend_r );
 }
 
 /**
@@ -421,6 +428,10 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
 				g_object_set( balns->acc, "start-reconciled-balance", &balns->start_reconciled_bal, NULL );
 			}
 			xaccAccountRecomputeBalance( balns->acc );
+			g_free( pnew_end_bal );
+			g_free( pnew_end_c_bal );
+			g_free( pnew_end_r_bal );
+			g_free( balns );
 		}
 		if( bal_list != NULL ) {
 			g_slist_free( bal_list );
