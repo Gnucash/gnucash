@@ -32,34 +32,29 @@ gnucash_bin_LDADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la
 
-gnucash: gnucash.in ${top_builddir}/config.status Makefile
+gnucash: gnucash.in gnucash-setup-env ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's#@-BIN_DIR-@#${bindir}#g' \
-		-e 's#@-GNC_DBD_DIR-@#${GNC_DBD_DIR}#g' \
-	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
-	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
-        -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
-        -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
-	    -e 's#@-PATH_SEPARATOR-@#${PATH_SEPARATOR}#g'
+	    -e 's#@-BIN_DIR-@#${bindir}#g'
 	mv $@.tmp $@
 	chmod u+x $@
 
-gnucash-gdb: gnucash-gdb.in ${top_builddir}/config.status Makefile
+gnucash-gdb: gnucash-gdb.in gnucash-setup-env ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's#@-BIN_DIR-@#${bindir}#g' \
-		-e 's#@-GNC_DBD_DIR-@#${GNC_DBD_DIR}#g' \
-	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
-	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
-        -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
-        -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
-	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g" \
-	    -e 's#@-PATH_SEPARATOR-@#${PATH_SEPARATOR}#g'
+	    -e 's#@-BIN_DIR-@#${bindir}#g'
 	mv $@.tmp $@
 	chmod u+x $@
 
 gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
+	rm -f $@.tmp
+	sed < $< > $@.tmp \
+	    -e 's#@-BIN_DIR-@#${bindir}#g' \
+	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g"
+	mv $@.tmp $@
+	chmod u+x $@
+
+gnucash-setup-env: gnucash-setup-env.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's#@-BIN_DIR-@#${bindir}#g' \
@@ -92,13 +87,24 @@ CLEANFILES = $(BUILT_SOURCES) gnucash gnucash-valgrind gnucash-gdb
 # by these top-level "common" scripts.
 gnc_common_scripts = gnucash-env gnucash-make-guids
 
-bin_SCRIPTS = ${gnc_common_scripts} update-gnucash-gconf gnucash gnucash-valgrind gnucash-gdb
+bin_SCRIPTS = \
+    ${gnc_common_scripts} \
+	update-gnucash-gconf \
+	gnucash \
+	gnucash-valgrind \
+	gnucash-gdb \
+	gnucash-setup-env
 
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
 
-EXTRA_DIST = generate-gnc-script update-gnucash-gconf.in \
-	gnucash.in gnucash-valgrind.in gnucash-gdb.in
+EXTRA_DIST = \
+    generate-gnc-script \
+	update-gnucash-gconf.in \
+	gnucash.in \
+	gnucash-valgrind.in \
+	gnucash-gdb.in \
+	gnucash-setup-env.in
 
 ## Gnucash scripts -- real code is in overrides, these just get you there.
 ${gnc_common_scripts}: generate-gnc-script ${top_builddir}/config.status
