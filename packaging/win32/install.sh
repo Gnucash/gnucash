@@ -390,10 +390,8 @@ function inst_svn() {
     then
         echo "subversion already installed.  skipping."
     else
-        wget_unpacked $SVN_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/svn-win32-*
-        mkdir -p $_SVN_UDIR
-        mv $TMP_UDIR/svn-win32-*/* $_SVN_UDIR
+		smart_wget $SVN_URL $DOWNLOAD_DIR
+		$LAST_FILE //SP- //SILENT //DIR="$SVN_DIR"
         quiet svn --version || die "svn not installed correctly"
     fi
 }
