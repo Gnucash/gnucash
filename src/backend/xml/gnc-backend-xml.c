@@ -201,6 +201,8 @@ gnc_file_be_get_file_lock (FileBackend *be)
 }
 
 /* ================================================================= */
+#define XML_URI_PREFIX "xml://"
+#define FILE_URI_PREFIX "file://"
 
 static void
 file_session_begin(QofBackend *be_start, QofSession *session, 
@@ -208,10 +210,15 @@ file_session_begin(QofBackend *be_start, QofSession *session,
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
     FileBackend *be = (FileBackend*) be_start;
+	gchar* resolved_path;
 
     ENTER (" ");
 
     /* Make sure the directory is there */
+	if (g_str_has_prefix(book_id, XML_URI_PREFIX))
+		book_id += strlen(XML_URI_PREFIX);
+	if (g_str_has_prefix(book_id, FILE_URI_PREFIX))
+		book_id += strlen(FILE_URI_PREFIX);
     be->fullpath = xaccResolveFilePath(book_id);
     if (NULL == be->fullpath)
     {
