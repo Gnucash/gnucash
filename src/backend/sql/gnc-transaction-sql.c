@@ -693,7 +693,6 @@ void gnc_sql_transaction_load_tx_for_account( GncSqlBackend* be, Account* accoun
 {
 	const GUID* guid;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
-	gchar* subquery_sql;
 	gchar* query_sql;
     GncSqlStatement* stmt;
 
@@ -702,9 +701,9 @@ void gnc_sql_transaction_load_tx_for_account( GncSqlBackend* be, Account* accoun
 
 	guid = qof_instance_get_guid( QOF_INSTANCE(account) );
     (void)guid_to_string_buff( guid, guid_buf );
-	subquery_sql = g_strdup_printf( "SELECT DISTINCT tx_guid FROM %s WHERE account_guid='%s'", SPLIT_TABLE, guid_buf );
-	query_sql = g_strdup_printf( "SELECT * FROM %s WHERE guid IN (%s)", TRANSACTION_TABLE, subquery_sql );
-	g_free( subquery_sql );
+	query_sql = g_strdup_printf(
+					"SELECT DISTINCT t.* FROM %s AS t, %s AS s WHERE s.tx_guid=t.guid AND s.account_guid ='%s'",
+					TRANSACTION_TABLE, SPLIT_TABLE, guid_buf );
 	stmt = gnc_sql_create_statement_from_sql( be, query_sql );
 	g_free( query_sql );
 	if( stmt != NULL ) {
@@ -930,10 +929,7 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
     const GUID* acct_guid;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	split_query_info_t* query_info = NULL;
-	gchar* subquery_sql;
 	gchar* query_sql;
-	GString* subquery_tables;
-	gboolean has_transactions_table = FALSE;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( query != NULL, NULL );
@@ -941,8 +937,6 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
 	query_info = g_malloc( (gsize)sizeof(split_query_info_t) );
 	g_assert( query_info != NULL );
 	query_info->has_been_run = FALSE;
-
-	subquery_tables = g_string_new( SPLIT_TABLE );
 
 	if( qof_query_has_terms( query ) ) {
         GList* orterms = qof_query_get_terms( query );
@@ -974,25 +968,22 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
 
 				if( strcmp( paramPath->data, SPLIT_ACCOUNT ) == 0
 						&& strcmp( paramPath->next->data, QOF_PARAM_GUID ) == 0 ) {
-                	convert_query_term_to_sql( "account_guid", term, sql );
+                	convert_query_term_to_sql( "s.account_guid", term, sql );
 
 				} else if( strcmp( paramPath->data, SPLIT_RECONCILE ) == 0 ) {
-                	convert_query_term_to_sql( "reconcile_state", term, sql );
+                	convert_query_term_to_sql( "s.reconcile_state", term, sql );
 
 				} else if( strcmp( paramPath->data, SPLIT_TRANS ) == 0 ) {
-					if( !has_transactions_table ) {
-						g_string_append( subquery_tables, ", " );
-						g_string_append( subquery_tables, TRANSACTION_TABLE );
-						has_transactions_table = TRUE;
-					}
+#if 0
 					if( !has_tx_guid_check ) {
 						g_string_append( sql, "(splits.tx_guid = transactions.guid) AND " );
 						has_tx_guid_check = TRUE;
 					}
+#endif
 					if( strcmp( paramPath->next->data, TRANS_DATE_POSTED ) == 0 ) {
-				        convert_query_term_to_sql( "transactions.post_date", term, sql );
+				        convert_query_term_to_sql( "t.post_date", term, sql );
 					} else if( strcmp( paramPath->next->data, TRANS_DESCRIPTION ) == 0 ) {
-					    convert_query_term_to_sql( "transactions.description", term, sql );
+					    convert_query_term_to_sql( "t.description", term, sql );
 					} else {
 						unknownPath = TRUE;
 					}
@@ -1026,12 +1017,9 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
         }
 
 		if( sql->len != 0 ) {
-			subquery_sql = g_strdup_printf( "SELECT DISTINCT tx_guid FROM %s WHERE %s",
-											g_string_free( subquery_tables, FALSE ),
-											sql->str );
-			query_sql = g_strdup_printf( "SELECT * FROM %s WHERE guid IN (%s)",
-										TRANSACTION_TABLE, subquery_sql );
-			g_free( subquery_sql );
+			query_sql = g_strdup_printf(
+					"SELECT DISTINCT t.* FROM %s AS t, %s AS s WHERE s.tx_guid=t.guid AND %s",
+					TRANSACTION_TABLE, SPLIT_TABLE, sql->str );
 		} else {
 	    	query_sql = g_strdup_printf( "SELECT * FROM %s", TRANSACTION_TABLE );
 		}
