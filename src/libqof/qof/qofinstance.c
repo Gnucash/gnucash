@@ -919,12 +919,14 @@ gboolean qof_commit_edit (QofInstance *inst)
     priv->editlevel--;
     if (0 < priv->editlevel) return FALSE;
 
+#if 0
     if ((0 == priv->editlevel) && priv->dirty) {
         be = qof_book_get_backend(priv->book);
         if (be && qof_backend_commit_exists(be)) {
             qof_backend_run_commit(be, inst);
         }
     }
+#endif
     if (0 > priv->editlevel) { 
         PERR ("unbalanced call - resetting (was %d)", priv->editlevel);
         priv->editlevel = 0;
