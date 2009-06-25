@@ -1059,7 +1059,8 @@ function inst_libdbi() {
         qpopd
         test -f ${_SQLITE3_UDIR}/bin/libsqlite3-0.dll || die "SQLite3 not installed correctly"
     fi
-    if test -f ${_MYSQL_LIB_UDIR}/lib/libmysql.dll
+    if test -f ${_MYSQL_LIB_UDIR}/lib/libmysql.dll -a \
+	        -f ${_MYSQL_LIB_UDIR}/lib/libmysqlclient.a
     then
         echo "MySQL library already installed.  skipping."
     else
@@ -1068,7 +1069,10 @@ function inst_libdbi() {
         assert_one_dir $TMP_UDIR/mysql*
         cp -r $TMP_UDIR/mysql*/* $_MYSQL_LIB_UDIR
         mv $TMP_UDIR/mysql*/include $_MYSQL_LIB_UDIR/include/mysql
-        test -f ${_MYSQL_LIB_UDIR}/lib/libmysql.dll || die "mysql not installed correctly"
+		cd $_MYSQL_LIB_UDIR/lib
+		dlltool --input-def $LIBMYSQL_DEF --dllname libmysql.dll --output-lib libmysqlclient.a -k
+        test -f ${_MYSQL_LIB_UDIR}/lib/libmysql.dll || die "mysql not installed correctly - libmysql.dll"
+        test -f ${_MYSQL_LIB_UDIR}/lib/libmysqlclient.a || die "mysql not installed correctly - libmysqlclient.a"
     fi
     if test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll
     then
@@ -1103,7 +1107,7 @@ function inst_libdbi() {
                 patch -p0 < $LIBDBI_DRIVERS_PATCH2
             [ -n "$LIBDBI_DRIVERS_PATCH3" -a -f "$LIBDBI_DRIVERS_PATCH3" ] && \
                 patch -p0 < $LIBDBI_DRIVERS_PATCH3
-            ./configure ${HOST_XCOMPILE} \
+            LDFLAGS=-no-undefined ./configure ${HOST_XCOMPILE} \
                 --disable-docs \
                 --with-dbi-incdir=${_LIBDBI_UDIR}/include \
                 --with-dbi-libdir=${_LIBDBI_UDIR}/lib \
@@ -1115,7 +1119,8 @@ function inst_libdbi() {
             make
             make install
         qpopd
-        test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdsqlite3.dll || die "libdbi drivers not installed correctly"
+        test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdsqlite3.dll || die "libdbi sqlite3 driver not installed correctly"
+        test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdmysql.dll || die "libdbi mysql driver not installed correctly"
     fi
 }
 
