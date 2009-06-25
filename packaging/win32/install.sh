@@ -1006,6 +1006,12 @@ function inst_aqbanking() {
                 make qt4-port
                 make clean
             else
+                if [ -n "$AQBANKING_PATCH" -a -f "$AQBANKING_PATCH" ] ; then
+                    patch -p1 < $AQBANKING_PATCH
+                    automake
+                    aclocal -I m4 ${ACLOCAL_FLAGS}
+                    autoconf
+                fi
                 ./configure ${HOST_XCOMPILE} \
                     --with-gwen-dir=${_GWENHYWFAR_UDIR} \
                     --with-xmlmerge=${XMLMERGE} \
