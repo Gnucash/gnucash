@@ -12,6 +12,7 @@ test_column_types_SOURCES = \
   ${top_srcdir}/src/backend/sql/gnc-schedxaction-sql.c \
   ${top_srcdir}/src/backend/sql/gnc-slots-sql.c \
   ${top_srcdir}/src/backend/sql/gnc-transaction-sql.c \
+  ${top_srcdir}/src/backend/sql/escape.c \
   test-column-types.c
 
 TESTS = \
