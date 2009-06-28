@@ -293,7 +293,10 @@ typedef struct {
 } full_acct_balances_t;
 
 /**
- * Save the start/end balances for an account.
+ * Saves the start/end balances for an account.
+ *
+ * @param acc Account
+ * @param pData Pointer to balances info list
  */
 static void
 save_account_balances( Account* acc, gpointer pData )
@@ -338,6 +341,9 @@ save_account_balances( Account* acc, gpointer pData )
 /**
  * Executes a transaction query statement and loads the transactions and all
  * of the splits.
+ *
+ * @param be SQL backend
+ * @param stmt SQL statement
  */
 static void
 query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
@@ -443,6 +449,11 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
 }
 
 /* ================================================================= */
+/**
+ * Creates the transaction and split tables.
+ *
+ * @param be SQL backend
+ */
 static void
 create_transaction_tables( GncSqlBackend* be )
 {
@@ -487,6 +498,12 @@ create_transaction_tables( GncSqlBackend* be )
     }
 }
 /* ================================================================= */
+/**
+ * Callback function to delete slots for a split
+ *
+ * @param data Split
+ * @param user_data split_info_t structure contain operation info
+ */
 static void
 delete_split_slots_cb( gpointer data, gpointer user_data )
 {
@@ -503,6 +520,13 @@ delete_split_slots_cb( gpointer data, gpointer user_data )
 	}
 }
 
+/**
+ * Deletes all of the splits for a transaction
+ *
+ * @param be SQL backend
+ * @param pTx Transaction
+ * @return TRUE if successful, FALSE if unsuccessful
+ */
 static gboolean
 delete_splits( GncSqlBackend* be, Transaction* pTx )
 {
@@ -523,6 +547,13 @@ delete_splits( GncSqlBackend* be, Transaction* pTx )
 	return split_info.is_ok;
 }
 
+/**
+ * Commits a split to the database
+ *
+ * @param be SQL backend
+ * @param inst Split
+ * @return TRUE if successful, FALSE if error
+ */
 static gboolean
 commit_split( GncSqlBackend* be, QofInstance* inst )
 {
