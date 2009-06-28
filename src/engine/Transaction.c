@@ -1056,6 +1056,7 @@ xaccTransCommitEdit (Transaction *trans)
 #endif
       trans->date_entered.tv_sec = tv.tv_sec;
       trans->date_entered.tv_nsec = 1000 * tv.tv_usec;
+      qof_instance_set_dirty(QOF_INSTANCE(trans));
    }
 
    qof_commit_edit_part2(QOF_INSTANCE(trans),
