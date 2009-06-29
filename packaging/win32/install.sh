@@ -1041,6 +1041,7 @@ function inst_libdbi() {
     setup LibDBI
     _SQLITE3_UDIR=`unix_path ${SQLITE3_DIR}`
     _MYSQL_LIB_UDIR=`unix_path ${MYSQL_LIB_DIR}`
+    _PGSQL_UDIR=`unix_path ${PGSQL_DIR}`
     _LIBDBI_UDIR=`unix_path ${LIBDBI_DIR}`
     _LIBDBI_DRIVERS_UDIR=`unix_path ${LIBDBI_DRIVERS_DIR}`
     add_to_env -I$_LIBDBI_UDIR/include LIBDBI_CPPFLAGS
@@ -1074,6 +1075,13 @@ function inst_libdbi() {
         test -f ${_MYSQL_LIB_UDIR}/lib/libmysql.dll || die "mysql not installed correctly - libmysql.dll"
         test -f ${_MYSQL_LIB_UDIR}/lib/libmysqlclient.a || die "mysql not installed correctly - libmysqlclient.a"
     fi
+    if test -f ${_PSQL_LIB_UDIR}/lib/libpqsql.dll
+    then
+        echo "PGSQL library already installed.  skipping."
+    else
+        wget_unpacked $PGSQL_LIB_URL $DOWNLOAD_DIR $TMP_DIR
+        mv $TMP_UDIR/pgsql* $PGSQL_DIR
+    fi
     if test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll
     then
         echo "libdbi already installed.  skipping."
@@ -1093,8 +1101,9 @@ function inst_libdbi() {
         qpopd
         test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll || die "libdbi not installed correctly"
     fi
-    if test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdsqlite3.dll &&
-       test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdmysql.dll
+    if test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdsqlite3.dll -a \
+            -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdmysql.dll -a \
+            -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdpgsql.dll
     then
         echo "libdbi drivers already installed.  skipping."
     else
@@ -1107,6 +1116,8 @@ function inst_libdbi() {
                 patch -p0 < $LIBDBI_DRIVERS_PATCH2
             [ -n "$LIBDBI_DRIVERS_PATCH3" -a -f "$LIBDBI_DRIVERS_PATCH3" ] && \
                 patch -p0 < $LIBDBI_DRIVERS_PATCH3
+            [ -n "$LIBDBI_DRIVERS_PATCH4" -a -f "$LIBDBI_DRIVERS_PATCH4" ] && \
+                patch -p0 < $LIBDBI_DRIVERS_PATCH4
             LDFLAGS=-no-undefined ./configure ${HOST_XCOMPILE} \
                 --disable-docs \
                 --with-dbi-incdir=${_LIBDBI_UDIR}/include \
@@ -1115,12 +1126,15 @@ function inst_libdbi() {
                 --with-sqlite3-dir=${_SQLITE3_UDIR} \
                 --with-mysql \
                 --with-mysql-dir=${_MYSQL_LIB_UDIR} \
+                --with-pgsql \
+                --with-pgsql-dir=${_PGSQL_UDIR} \
                 --prefix=${_LIBDBI_DRIVERS_UDIR}
             make
             make install
         qpopd
         test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdsqlite3.dll || die "libdbi sqlite3 driver not installed correctly"
         test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdmysql.dll || die "libdbi mysql driver not installed correctly"
+        test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdpgsql.dll || die "libdbi pgsql driver not installed correctly"
     fi
 }
 
