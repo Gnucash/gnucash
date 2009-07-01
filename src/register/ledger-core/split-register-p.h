@@ -94,6 +94,9 @@ struct sr_info
   /* true if the exchange rate has been reset on the current split */
   gboolean rate_reset;
 
+  /* account on the current split when the exchange rate was last set */
+  Account *rate_account;
+
   /* User data for users of SplitRegisters */
   gpointer user_data;
 

@@ -246,15 +246,22 @@ gnc_split_register_check_account (SplitRegister *reg,
     Split         *split     = gnc_split_register_get_current_split(reg);
     Account       *orig_acct = xaccSplitGetAccount(split);
     gnc_commodity *orig_com  = xaccAccountGetCommodity(orig_acct);
+    gnc_commodity *last_com  = xaccAccountGetCommodity(info->rate_account);
     gnc_commodity *new_com   = xaccAccountGetCommodity(new_acct);
 
-    if (!gnc_commodity_equal(orig_com, new_com))
+    if (gnc_commodity_equal(last_com? last_com : orig_com, new_com))
     {
-      DEBUG("Commodity now %s (originally %s). Clearing rate.",
+      DEBUG("Commodity is still %s. Leaving rate unchanged.",
+            new_com  ? gnc_commodity_get_mnemonic(new_com) : "NULL");
+    }
+    else if (!gnc_commodity_equal(orig_com, new_com))
+    {
+      DEBUG("Commodity now %s (was %s). Clearing rate.",
             new_com  ? gnc_commodity_get_mnemonic(new_com) : "NULL",
             orig_com ? gnc_commodity_get_mnemonic(orig_com) : "NULL");
 
       gnc_price_cell_set_value (rate_cell, gnc_numeric_zero());
+      info->rate_account = new_acct;
       info->rate_reset = TRUE;
     }
     else
@@ -270,12 +277,14 @@ gnc_split_register_check_account (SplitRegister *reg,
         DEBUG("Using original rate of %s.",
               gnc_num_dbg_to_string(orig_rate));
         gnc_price_cell_set_value (rate_cell, orig_rate);
+        info->rate_account = new_acct;
         info->rate_reset = FALSE;
       }
       else
       {
         DEBUG("Can't get rate. Using zero.");
         gnc_price_cell_set_value (rate_cell, gnc_numeric_zero());
+        info->rate_account = new_acct;
         info->rate_reset = TRUE;
       }
     }
@@ -438,6 +447,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
   if (old_split != new_split)
   {
     info->change_confirmed = FALSE;
+    info->rate_account = NULL;
     info->rate_reset = FALSE;
   }
 
@@ -1363,6 +1373,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   /* Set the RATE_CELL on this cursor and mark it changed */
   gnc_price_cell_set_value (rate_cell, exch_rate);
   gnc_basic_cell_set_changed (&rate_cell->cell, TRUE);
+  info->rate_account = xfer_acc;
   info->rate_reset = FALSE;
   LEAVE("set rate=%s", gnc_num_dbg_to_string(exch_rate));
   return FALSE;
