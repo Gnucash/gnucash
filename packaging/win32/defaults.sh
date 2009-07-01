@@ -287,7 +287,7 @@ set_default SQLITE3_DIR $GLOBAL_DIR\\sqlite3
 set_default MYSQL_LIB_URL "http://mirror.csclub.uwaterloo.ca/mysql/Downloads/Connector-C/mysql-connector-c-noinstall-6.0.1-win32.zip"
 set_default MYSQL_LIB_DIR $GLOBAL_DIR\\mysql
 set_default LIBMYSQL_DEF `pwd`/libmysql.def
-set_default PGSQL_LIB_URL pgsql-win32.tar.gz
+set_default PGSQL_LIB_URL "http://www.gnucash.org/pub/gnucash/sources/unstable/2.3.x/pgsql-win32.tar.gz"
 set_default PGSQL_DIR $GLOBAL_DIR\\pgsql
 set_default LIBDBI_URL "http://downloads.sourceforge.net/libdbi/libdbi-0.8.3.tar.gz"
 set_default LIBDBI_DIR $GLOBAL_DIR\\libdbi
