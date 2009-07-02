@@ -236,6 +236,13 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
             /* Create a context to store possible results */
             context = AB_ImExporterContext_new();
 
+            gui = gnc_GWEN_Gui_get(parent);
+            if (!gui) {
+                g_warning("gnc_ab_maketrans: Couldn't initialize Gwenhywfar GUI");
+                aborted = TRUE;
+                goto repeat;
+            }
+
             /* Finally, execute the job */
             AB_Banking_ExecuteJobs(api, job_list, context, 0);
 
