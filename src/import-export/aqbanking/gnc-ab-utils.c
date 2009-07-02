@@ -84,8 +84,8 @@ gnc_GWEN_Init(void)
     GWEN_Init();
 
     /* Initialize gwen logging */
-    GWEN_Logger_SetLevel(NULL, GWEN_LoggerLevel_Debug);
-    GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevel_Debug);
+    GWEN_Logger_SetLevel(NULL, GWEN_LoggerLevel_Info);
+    GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevel_Info);
     GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevel_Debug);
     gnc_GWEN_Gui_log_init();
 }
