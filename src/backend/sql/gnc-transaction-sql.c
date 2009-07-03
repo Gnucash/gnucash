@@ -799,7 +799,6 @@ convert_query_term_to_sql( const gchar* fieldName, QofQueryTerm* pTerm, GString*
     QofQueryPredData* pPredData;
     gboolean isInverted;
     GSList* name;
-    gchar val[GUID_ENCODING_LENGTH+1];
 
 	g_return_if_fail( pTerm != NULL );
 	g_return_if_fail( sql != NULL );
@@ -831,15 +830,13 @@ convert_query_term_to_sql( const gchar* fieldName, QofQueryTerm* pTerm, GString*
 		}
 
 		for( guid_entry = guid_data->guids; guid_entry != NULL; guid_entry = guid_entry->next ) {
+    		gchar guid_buf[GUID_ENCODING_LENGTH+1];
+
 		    if( guid_entry != guid_data->guids ) g_string_append( sql, "," );
-        	(void)guid_to_string_buff( guid_entry->data, val );
-        	g_string_append( sql, "'" );
-        	g_string_append( sql, val );
-        	g_string_append( sql, "'" );
+        	(void)guid_to_string_buff( guid_entry->data, guid_buf );
+        	g_string_append_printf( sql, "'%s'", guid_buf );
 		}
-		g_string_append( sql, ")" );
-		g_string_append( sql, ")" );
-		return;
+		g_string_append( sql, "))" );
 
     } else if( safe_strcmp( pPredData->type_name, QOF_TYPE_CHAR ) == 0 ) {
 	    query_char_t char_data = (query_char_t)pPredData;
@@ -865,20 +862,6 @@ convert_query_term_to_sql( const gchar* fieldName, QofQueryTerm* pTerm, GString*
 		if( isInverted ) {
 			g_string_append( sql, ") " );
 		}
-		return;
-
-    } else if( safe_strcmp( pPredData->type_name, QOF_TYPE_DATE ) == 0 ) {
-        query_date_t date_data = (query_date_t)pPredData;
-		gchar* datebuf;
-
-        g_string_append( sql, "(" );
-        g_string_append( sql, fieldName );
-	    convert_query_comparison_to_sql( pPredData, isInverted, sql );
-		datebuf = gnc_sql_convert_timespec_to_string( date_data->date );
-        g_string_append( sql, "'" );
-        g_string_append( sql, datebuf );
-        g_string_append( sql, "')" );
-		return;
 
     } else if( safe_strcmp( pPredData->type_name, QOF_TYPE_STRING ) == 0 ) {
         query_string_t string_data = (query_string_t)pPredData;
@@ -911,42 +894,51 @@ convert_query_term_to_sql( const gchar* fieldName, QofQueryTerm* pTerm, GString*
 			g_string_append( sql, ")" );
 		}
 		sqlEscape_destroy( escape );
-		return;
+
+	} else {
+    	g_string_append( sql, "(" );
+    	g_string_append( sql, fieldName );
+		convert_query_comparison_to_sql( pPredData, isInverted, sql );
+
+    	if( strcmp( pPredData->type_name, QOF_TYPE_NUMERIC ) == 0 ) {
+        	query_numeric_t pData = (query_numeric_t)pPredData;
+			double d = gnc_numeric_to_double( pData->amount );
+    
+        	g_string_append_printf( sql, "%f", d );
+
+    	} else if( safe_strcmp( pPredData->type_name, QOF_TYPE_DATE ) == 0 ) {
+        	query_date_t date_data = (query_date_t)pPredData;
+			gchar* datebuf;
+
+			datebuf = gnc_sql_convert_timespec_to_string( date_data->date );
+        	g_string_append_printf( sql, "'%s'", datebuf );
+
+    	} else if( strcmp( pPredData->type_name, QOF_TYPE_INT32 ) == 0 ) {
+        	query_int32_t pData = (query_int32_t)pPredData;
+
+        	g_string_append_printf( sql, "%d", pData->val );
+
+    	} else if( strcmp( pPredData->type_name, QOF_TYPE_INT64 ) == 0 ) {
+        	query_int64_t pData = (query_int64_t)pPredData;
+    
+        	g_string_append_printf( sql, "%" G_GINT64_FORMAT, pData->val );
+
+    	} else if( strcmp( pPredData->type_name, QOF_TYPE_DOUBLE ) == 0 ) {
+        	query_double_t pData = (query_double_t)pPredData;
+
+        	g_string_append_printf( sql, "%f", pData->val );
+
+    	} else if( strcmp( pPredData->type_name, QOF_TYPE_BOOLEAN ) == 0 ) {
+        	query_boolean_t pData = (query_boolean_t)pPredData;
+
+        	g_string_append_printf( sql, "%d", pData->val );
+
+    	} else {
+        	PERR( "Unknown query predicate type: %s\n", pPredData->type_name );
+    	}
+
+    	g_string_append( sql, ")" );
 	}
-
-    g_string_append( sql, "(" );
-    g_string_append( sql, fieldName );
-	convert_query_comparison_to_sql( pPredData, isInverted, sql );
-
-    if( strcmp( pPredData->type_name, "numeric" ) == 0 ) {
-        query_numeric_t pData = (query_numeric_t)pPredData;
-    
-        g_string_append( sql, "numeric" );
-    } else if( strcmp( pPredData->type_name, "gint32" ) == 0 ) {
-        query_int32_t pData = (query_int32_t)pPredData;
-
-        sprintf( val, "%d", pData->val );
-        g_string_append( sql, val );
-    } else if( strcmp( pPredData->type_name, "gint64" ) == 0 ) {
-        query_int64_t pData = (query_int64_t)pPredData;
-    
-        sprintf( val, "%" G_GINT64_FORMAT, pData->val );
-        g_string_append( sql, val );
-    } else if( strcmp( pPredData->type_name, "double" ) == 0 ) {
-        query_double_t pData = (query_double_t)pPredData;
-
-        sprintf( val, "%f", pData->val );
-        g_string_append( sql, val );
-    } else if( strcmp( pPredData->type_name, "boolean" ) == 0 ) {
-        query_boolean_t pData = (query_boolean_t)pPredData;
-
-        sprintf( val, "%d", pData->val );
-        g_string_append( sql, val );
-    } else {
-        PERR( "Unknown query predicate type: %s\n", pPredData->type_name );
-    }
-
-    g_string_append( sql, ")" );
 }
 
 typedef struct {
@@ -1018,6 +1010,9 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
 					} else {
 						unknownPath = TRUE;
 					}
+
+				} else if( strcmp( paramPath->data, SPLIT_VALUE ) == 0 ) {
+                	convert_query_term_to_sql( "s.value_num/s.value_denom", term, sql );
 
 				} else {
 					unknownPath = TRUE;
