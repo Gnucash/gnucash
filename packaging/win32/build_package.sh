@@ -8,6 +8,13 @@
 
 set -e
 
+function on_error() {
+  if [ `hostname` = "gnucash-win32" ]; then
+    scp -p ${LOGFILE} upload@code.gnucash.org:public_html/win32/trunk
+  fi
+  exit
+}
+
 function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
 
 tag="$1"
@@ -21,6 +28,8 @@ LOGFILENAME=build${tag:+-${tag}}-`date +'%Y-%m-%d'`.log
 _OUTPUT_DIR=`unix_path $OUTPUT_DIR`
 LOGFILE=${_OUTPUT_DIR}/${LOGFILENAME}
 mkdir -p ${_OUTPUT_DIR}
+
+trap on_error ERR
 
 # Run the compile
 ./install.sh 2>&1 | tee ${LOGFILE}
