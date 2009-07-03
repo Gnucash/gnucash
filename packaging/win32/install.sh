@@ -1075,12 +1075,13 @@ function inst_libdbi() {
         test -f ${_MYSQL_LIB_UDIR}/lib/libmysql.dll || die "mysql not installed correctly - libmysql.dll"
         test -f ${_MYSQL_LIB_UDIR}/lib/libmysqlclient.a || die "mysql not installed correctly - libmysqlclient.a"
     fi
-    if test -f ${_PSQL_LIB_UDIR}/lib/libpqsql.dll
+    if test -f ${_PGSQL_UDIR}/lib/libpq.dll
     then
         echo "PGSQL library already installed.  skipping."
     else
         wget_unpacked $PGSQL_LIB_URL $DOWNLOAD_DIR $TMP_DIR
         mv $TMP_UDIR/pgsql* $PGSQL_DIR
+        test -f ${_PGSQL_UDIR}/lib/libpq.dll || die "libpq not installed correctly"
     fi
     if test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll
     then
