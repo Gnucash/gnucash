@@ -60,6 +60,7 @@ typedef struct
   QofSession *session;
   QofBook *book;
   GNCPriceDB *price_db;
+  GNCPriceEditType type;
 
   GtkWidget * namespace_cbe;
   GtkWidget * commodity_cbe;
@@ -189,9 +190,6 @@ gui_to_price (PriceEditDialog *pedit_dialog)
   gnc_numeric value;
   Timespec date;
 
-  if (!pedit_dialog->price)
-    return NULL;
-
   namespace = gnc_ui_namespace_picker_ns (pedit_dialog->namespace_cbe);
   fullname = gtk_combo_box_get_active_text(GTK_COMBO_BOX(pedit_dialog->commodity_cbe));
   commodity = gnc_commodity_table_find_full(gnc_get_current_commodities(), namespace, fullname);
@@ -217,6 +215,8 @@ gui_to_price (PriceEditDialog *pedit_dialog)
   value = gnc_amount_edit_get_amount
     (GNC_AMOUNT_EDIT (pedit_dialog->price_edit));
 
+  if (!pedit_dialog->price)
+      pedit_dialog->price = gnc_price_create (pedit_dialog->book);
   gnc_price_begin_edit (pedit_dialog->price);
   gnc_price_set_commodity (pedit_dialog->price, commodity);
   gnc_price_set_currency (pedit_dialog->price, currency);
@@ -507,15 +507,16 @@ gnc_price_edit_dialog (GtkWidget * parent,
   pedit_dialog = g_new0 (PriceEditDialog, 1);
   gnc_price_pedit_dialog_create (parent, pedit_dialog, session);
   gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(pedit_dialog->dialog));
+  pedit_dialog->type = type;
 
   switch (type) {
    case GNC_PRICE_NEW:
     if (price) {
       price = gnc_price_clone(price, pedit_dialog->book);
-    } else {
-      price = gnc_price_create (pedit_dialog->book);
-    }
+//  } else {
+//      price = gnc_price_create (pedit_dialog->book);
     gnc_price_set_source (price, DIALOG_PRICE_EDIT_SOURCE);
+    }
 
     pedit_dialog->new = TRUE;
     /* New price will only have one ref, this dialog. */
