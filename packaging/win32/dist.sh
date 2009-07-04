@@ -198,7 +198,6 @@ function dist_libdbi() {
     cp -a ${_SQLITE3_UDIR}/lib/* ${DIST_UDIR}/lib
     cp -a ${_MYSQL_LIB_UDIR}/bin/* ${DIST_UDIR}/bin
     cp -a ${_MYSQL_LIB_UDIR}/lib/* ${DIST_UDIR}/lib
-    cp -a ${_PGSQL_UDIR}/bin/* ${DIST_UDIR}/bin
     cp -a ${_PGSQL_UDIR}/lib/* ${DIST_UDIR}/lib
     cp -a ${_LIBDBI_UDIR}/bin/* ${DIST_UDIR}/bin
     cp -a ${_LIBDBI_UDIR}/lib/* ${DIST_UDIR}/lib
