@@ -1142,6 +1142,69 @@ gnc_split_register_get_cell_date (SplitRegister *reg, const char *cell_name)
   return ts;
 }
 
+/* Creates a transfer dialog and fills its values from register cells (if
+ * available) or from the provided transaction and split.
+ */
+static XferDialog *
+gnc_split_register_xfer_dialog(SplitRegister *reg, Transaction *txn,
+                               Split *split)
+{
+  XferDialog *xfer;
+  CellBlock *cur;
+  BasicCell *cell;
+
+  g_return_val_if_fail(reg, NULL);
+  g_return_val_if_fail(reg->table, NULL);
+  cur = reg->table->current_cursor;
+
+  /* Create the exchange rate dialog. */
+  xfer = gnc_xfer_dialog(NULL, NULL);
+  g_return_val_if_fail(xfer, NULL);
+
+  /* Set the description. */
+  cell = gnc_cellblock_get_cell_by_name(cur, DESC_CELL, NULL, NULL);
+  if (cell)
+    gnc_xfer_dialog_set_description(xfer, gnc_basic_cell_get_value(cell));
+  else
+  {
+    const char *str = xaccTransGetDescription(txn);
+    gnc_xfer_dialog_set_description(xfer, str? str : "");
+  }
+
+  /* Set the memo. */
+  cell = gnc_cellblock_get_cell_by_name(cur, MEMO_CELL, NULL, NULL);
+  if (cell)
+    gnc_xfer_dialog_set_memo(xfer, gnc_basic_cell_get_value(cell));
+  else
+  {
+    const char *str = xaccSplitGetMemo(split);
+    gnc_xfer_dialog_set_memo(xfer, str? str : "");
+  }
+
+  /* Set the num. */
+  cell = gnc_cellblock_get_cell_by_name(cur, NUM_CELL, NULL, NULL);
+  if (cell)
+    gnc_xfer_dialog_set_num(xfer, gnc_basic_cell_get_value(cell));
+  else
+  {
+    const char *str = xaccTransGetNum(txn);
+    gnc_xfer_dialog_set_num(xfer, str? str : "");
+  }
+
+  /* Set the date. */
+  cell = gnc_cellblock_get_cell_by_name(cur, DATE_CELL, NULL, NULL);
+  if (cell)
+  {
+    Timespec ts;
+    gnc_date_cell_get_date((DateCell*) cell, &ts);
+    gnc_xfer_dialog_set_date(xfer, timespecToTime_t(ts));
+  }
+  else
+    gnc_xfer_dialog_set_date(xfer, xaccTransGetDate(txn));
+
+  return xfer;
+}
+
 /* This function checks to see if we need to determine an exchange rate.
  * If we need to determine an exchange rate, then pop up the dialog.
  * If the dialog does not complete successfully, then return TRUE.
@@ -1348,27 +1411,17 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     return FALSE;
   }
 
-  /* create the exchange-rate dialog */
-  xfer = gnc_xfer_dialog (NULL, NULL); /* XXX */
-  gnc_xfer_dialog_is_exchange_dialog (xfer, &exch_rate);
-
-  /* fill in the dialog entries */
-  gnc_xfer_dialog_set_description(
-      xfer, gnc_split_register_get_cell_string (reg, DESC_CELL));
-  gnc_xfer_dialog_set_memo(
-      xfer, gnc_split_register_get_cell_string (reg, MEMO_CELL));
-  gnc_xfer_dialog_set_num(
-      xfer, gnc_split_register_get_cell_string (reg, NUM_CELL));
-  gnc_xfer_dialog_set_date(
-      xfer, timespecToTime_t(
-          gnc_split_register_get_cell_date(reg, DATE_CELL)));
-
+  /* Show the exchange-rate dialog */
+  xfer = gnc_split_register_xfer_dialog(reg, txn, split);
+  gnc_xfer_dialog_is_exchange_dialog(xfer, &exch_rate);
   if (gnc_xfer_dialog_run_exchange_dialog(
           xfer, &exch_rate, amount, reg_acc, txn, xfer_com))
   {
+    /* FIXME: How should the dialog be destroyed? */
     LEAVE("leaving rate unchanged");
     return TRUE;
   }
+  /* FIXME: How should the dialog be destroyed? */
 
   /* Set the RATE_CELL on this cursor and mark it changed */
   gnc_price_cell_set_value (rate_cell, exch_rate);

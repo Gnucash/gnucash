@@ -19,19 +19,24 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/* 
- * FILE:
- * cellblock.h
+/** @addtogroup GUI
+ *  @{
+ */
+/** @addtogroup Register Registers, Ledgers and Journals
+ *  @{
+ */
+/** @addtogroup RegisterCore Register Core
+ *  @{
+ */
+/** @file cellblock.h
+ *  @brief Declarations for the CellBlock object
+ *  @author Copyright (c) 1988 Linas Vepstas
+ *  @author Copyright (c) 2000-2001 Dave Peticolas <dave@krondo.com>
  *
- * FUNCTION:
- * The CellBlock struct is a rectangular grid of cells that 
- * define an arrangement of cells.  It is typically used to
- * define a virtual cursor within a larger table of cells.
- *
- * HISTORY:
- * Copyright (c) 1988 Linas Vepstas
- * Copyright (c) 2000-2001 Dave Peticolas <dave@krondo.com>
+ *  @details
+ *  The CellBlock struct is a rectangular grid of cells that 
+ *  define an arrangement of cells.  It is typically used to
+ *  define a virtual cursor within a larger table of cells.
  */
 
 #ifndef XACC_CELL_BLOCK_H
@@ -66,6 +71,25 @@ void        gnc_cellblock_set_cell (CellBlock *cellblock,
 BasicCell * gnc_cellblock_get_cell (CellBlock *cellblock,
                                     int row, int col);
 
+/** Searches by name for a particular cell in a CellBlock. Parameters @row
+ *  and/or @col may be @c NULL.
+ *
+ *  @param cellblock a ::CellBlock to search
+ *
+ *  @param cell_name the name of the cell to find
+ *
+ *  @param row pointer for returning the row in which the cell was
+ *  found, or @c NULL
+ *
+ *  @param col pointer for returning the column in which the cell was
+ *  found, or @c NULL
+ *
+ *  @return the matching cell, or @c NULL
+ */
+BasicCell * gnc_cellblock_get_cell_by_name(CellBlock *cellblock,
+                                           const char *cell_name,
+                                           int *row, int *col);
+
 /* Return number of changed cells. */
 int         gnc_cellblock_changed (CellBlock *cursor,
                                    gboolean include_conditional);
@@ -73,3 +97,6 @@ int         gnc_cellblock_changed (CellBlock *cursor,
 void        gnc_cellblock_clear_changes (CellBlock *cursor);
 
 #endif
+/** @} */
+/** @} */
+/** @} */
