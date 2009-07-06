@@ -105,7 +105,7 @@ msgstr "이익 잉여금"
 #: ../intl-scm/guile-strings.c:3174
 #: ../intl-scm/guile-strings.c:4328
 msgid "Equity"
-msgstr "지분"
+msgstr "자기자본"
 
 #: ../src/app-utils/gnc-ui-util.c:696
 #: ../src/gnome/dialog-chart-export.c:45
@@ -166,11 +166,13 @@ msgid ""
 "There is a problem with option %s:%s.\n"
 "%s"
 msgstr ""
+"설정 %s를 가진 프로그램입니다:%s.\n"
+"%s"
 
 #: ../src/backend/postgres/PostgresBackend.c:1866
 #, c-format
 msgid "Unknown database access mode '%s'. Using default mode: multi-user."
-msgstr ""
+msgstr "미지의 데이타베이스 접근 모드 '%s'. 기본 모드 사용 중: 다수 사용자."
 
 #: ../src/backend/postgres/PostgresBackend.c:1984
 #: ../src/backend/postgres/putil.c:79
@@ -195,11 +197,11 @@ msgstr "이것은 개발버전입니다. 작동이 될 수도 안될 수도 있�
 
 #: ../src/bin/gnucash-bin.c:85
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org.\n"
-msgstr ""
+msgstr "버그 및 기타 문제를 gnucash-devel@gnucash.org에 보고하여 주세요.\n"
 
 #: ../src/bin/gnucash-bin.c:86
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
-msgstr ""
+msgstr "http://bugzilla.gnome.org에서 찾을 수 있고, 파일 버그 보고도 할 수 있습니다\n"
 
 #: ../src/bin/gnucash-bin.c:87
 msgid "The last stable version was "
@@ -227,12 +229,12 @@ msgstr ""
 
 #: ../src/bin/gnucash-bin.c:231
 msgid "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."
-msgstr ""
+msgstr "파일 로그의 기본값은 \"/tmp/gnucash.trace\"; \"stderr\" 또는 \"stdout\"이 될 수 있습니다."
 
 #. Translators: This is the command line option autohelp text; see popt(3)
 #: ../src/bin/gnucash-bin.c:237
 msgid "Set the logging level from 0 (least) to 6 (most)"
-msgstr ""
+msgstr "로깅 레벨을 0(최소)에서 6(최대)까지 설정"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -268,7 +270,7 @@ msgstr "공유경로"
 #: ../src/bin/gnucash-bin.c:258
 #: ../intl-scm/guile-strings.c:6
 msgid "Set the search path for documentation files"
-msgstr ""
+msgstr "문서화 파일의 찾기 경로 설정"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -608,11 +610,11 @@ msgstr "\"%s\"를 삭제하겠습니까?"
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:72
 msgid "This transaction needs to be assigned to a Customer.  Please choose the Customer below."
-msgstr ""
+msgstr "이 거래가 고객에게 할당되는 것이 필요합니다. 아래 고객을 선택하세요."
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:77
 msgid "This transaction needs to be assigned to a Vendor.  Please choose the Vendor below."
-msgstr ""
+msgstr "이 거래는 판매자에게 할당되는 것이 필요합니다. 아래 판매자를 선택하세요."
 
 #: ../src/business/business-gnome/dialog-customer.c:268
 msgid "You must enter a company name. If this customer is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
@@ -624,11 +626,11 @@ msgstr "어음 수신처를 넣어야 합니다."
 
 #: ../src/business/business-gnome/dialog-customer.c:289
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
-msgstr ""
+msgstr "할인율은 0-100사이 또는 공란으로 두어야 합니다."
 
 #: ../src/business/business-gnome/dialog-customer.c:294
 msgid "Credit must be a positive amount or you must leave it blank."
-msgstr ""
+msgstr "대변은 양의 값이거나 또는 공백으로 두어야 합니다."
 
 #: ../src/business/business-gnome/dialog-customer.c:365
 #: ../src/business/business-gnome/dialog-employee.c:301
@@ -668,16 +670,16 @@ msgstr "고객 청구서"
 #: ../src/business/business-gnome/dialog-invoice.c:2455
 #: ../src/business/business-gnome/dialog-job.c:516
 msgid "Process Payment"
-msgstr "지불 진행"
+msgstr "지불 절차"
 
 #: ../src/business/business-gnome/dialog-customer.c:794
 msgid "Shipping Contact"
-msgstr "선적 접촉"
+msgstr "선적 연락처"
 
 #: ../src/business/business-gnome/dialog-customer.c:796
 #: ../src/business/business-gnome/dialog-vendor.c:659
 msgid "Billing Contact"
-msgstr "청구서 접촉"
+msgstr "청구서 연락처"
 
 #: ../src/business/business-gnome/dialog-customer.c:798
 msgid "Customer ID"
@@ -814,7 +816,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/dialog-invoice.c:605
 msgid "The Invoice must have at least one Entry."
-msgstr ""
+msgstr "청구서는 최소 하나의 엔트리를 가져야 합니다."
 
 #: ../src/business/business-gnome/dialog-invoice.c:612
 msgid "You may not post an invoice with a negative total value."
@@ -829,7 +831,7 @@ msgstr ""
 #.
 #: ../src/business/business-gnome/dialog-invoice.c:626
 msgid "Do you really want to post the invoice?"
-msgstr "송장을 부치겠습니까?"
+msgstr "청구서를 부치겠습니까?"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -858,7 +860,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/dialog-invoice.c:630
 msgid "Accumulate Splits?"
-msgstr ""
+msgstr "분할을 모을까요?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:920
 #: ../src/gnome/window-reconcile.c:1051
@@ -951,7 +953,7 @@ msgstr "청구서 소유자"
 #: ../intl-scm/guile-strings.c:7130
 #: ../intl-scm/guile-strings.c:7370
 msgid "Invoice Notes"
-msgstr "청구서 노트"
+msgstr "청구서 장부"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -1024,7 +1026,7 @@ msgstr "증서 소유자"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2251
 msgid "Bill Notes"
-msgstr "증서 노트"
+msgstr "증서 장부"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2273
 msgid "Bill ID"
@@ -1036,7 +1038,7 @@ msgstr "영수증 소유자"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2281
 msgid "Voucher Notes"
-msgstr "영수증 노트"
+msgstr "영수증 장부"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2303
 msgid "Voucher ID"
@@ -1213,7 +1215,7 @@ msgstr "작업 보기/편집"
 
 #: ../src/business/business-gnome/dialog-job.c:515
 msgid "View Invoices"
-msgstr "송장 보기"
+msgstr "청구서 보기"
 
 #: ../src/business/business-gnome/dialog-job.c:524
 msgid "Owner's Name"
@@ -1268,7 +1270,7 @@ msgstr "순서 보기/편집"
 
 #: ../src/business/business-gnome/dialog-order.c:808
 msgid "Order Notes"
-msgstr "오더 노트"
+msgstr "오더 장부"
 
 #: ../src/business/business-gnome/dialog-order.c:810
 #: ../src/business/business-gnome/glade/order.glade.h:5
@@ -1311,12 +1313,12 @@ msgstr ""
 
 #: ../src/business/business-gnome/dialog-payment.c:253
 msgid "You must enter an account name for posting."
-msgstr ""
+msgstr "포스팅을 위한 계정 이름을 입력하여야 합니다."
 
 #: ../src/business/business-gnome/dialog-payment.c:262
 #, c-format
 msgid "Your selected post account, %s, does not exist"
-msgstr ""
+msgstr "선택된 은행 계정 %s이 없습니다."
 
 #: ../src/business/business-gnome/dialog-payment.c:463
 #, c-format
@@ -1465,23 +1467,23 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:25
 msgid "The day of the month bills are due"
-msgstr ""
+msgstr "월 어음일이 만기입니다."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:26
 msgid "The description of the Billing Term, printed on invoices"
-msgstr ""
+msgstr "청구서에 인쇄된 어음 조건의 요약"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:27
 msgid "The discount percentage applied if paid early."
-msgstr ""
+msgstr "사전 지불할 경우 적용된 할인 백분율"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:28
 msgid "The internal name of the Billing Term."
-msgstr ""
+msgstr "어음 조건의 내부 이름"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:29
 msgid "The last day of the month for the early payment discount."
-msgstr ""
+msgstr "사전 지불 할인 월의 마지막 날"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:30
 msgid "The number of days after the post date during which a discount will be applied for early payment."
@@ -1493,7 +1495,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:32
 msgid "The percentage discount applied for early payment."
-msgstr ""
+msgstr "조기 지불에 적용된 백분율 할인"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:33
 #: ../src/report/report-gnome/report.glade.h:18
@@ -1515,7 +1517,7 @@ msgstr "<b>증서</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:3
 msgid "Default number of register rows to display in Invoices."
-msgstr ""
+msgstr "청구서에서 나타내는 등록 행의 기본 갯수"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:4
 msgid "How many days in the future to warn about Bills coming due."
@@ -1556,7 +1558,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:12
 msgid "Whether to display the list of Bills Due at startup."
-msgstr ""
+msgstr "시동시 어음 만기 목록을 나타낼지"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:13
 msgid "_Accumulate splits on post"
@@ -1649,7 +1651,7 @@ msgstr "소유자 대화창 선택"
 #: ../intl-scm/guile-strings.c:7264
 #: ../intl-scm/guile-strings.c:7292
 msgid "Description"
-msgstr "요약"
+msgstr "사용 내역"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:1
 #: ../src/business/business-gnome/glade/employee.glade.h:3
@@ -1746,12 +1748,12 @@ msgstr "이름: "
 #: ../intl-scm/guile-strings.c:3288
 #: ../intl-scm/guile-strings.c:4442
 msgid "Notes"
-msgstr "노트"
+msgstr "장부"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:17
 #: ../src/business/business-gnome/glade/vendor.glade.h:11
 msgid "Override the global Tax Table?"
-msgstr ""
+msgstr "전역 세금표를 겹쳐씁니까?"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:18
 #: ../src/business/business-gnome/glade/employee.glade.h:20
@@ -1786,7 +1788,7 @@ msgstr "소비자 ID 번호."
 
 #: ../src/business/business-gnome/glade/customer.glade.h:25
 msgid "What Tax Table should be applied to this customer?"
-msgstr ""
+msgstr "세금표는 이 고객에게 어떻게 적용됩니까?"
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:2
 msgid "Question"
@@ -1882,7 +1884,7 @@ msgstr "소비자: "
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:10
 msgid "Default Chargeback Project"
-msgstr ""
+msgstr "기본 "
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:11
 msgid "Extra Payments"
@@ -1890,24 +1892,24 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:13
 msgid "Invoice Entries"
-msgstr "송장 엔트리"
+msgstr "청구서 엔트리"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:15
 msgid "Invoice Information"
-msgstr "송장 정보"
+msgstr "청구서 정보"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:16
 #: ../src/business/business-gnome/search-owner.c:239
 msgid "Job"
-msgstr ""
+msgstr "작업"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:17
 msgid "Job: "
-msgstr ""
+msgstr "작업:"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:19
 msgid "No, keep them as they are"
-msgstr ""
+msgstr "아님, 그대로 유지"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:21
 msgid "Posted Account"
@@ -1953,7 +1955,7 @@ msgstr "작업 ID 번호. "
 
 #: ../src/business/business-gnome/glade/order.glade.h:4
 msgid "Close Order"
-msgstr ""
+msgstr "마감 순서"
 
 #: ../src/business/business-gnome/glade/order.glade.h:7
 msgid "Invoices"
@@ -2337,7 +2339,7 @@ msgstr "QSF 청구서(_I)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:228
 msgid "Export one or more invoices to QSF"
-msgstr ""
+msgstr "하나 이상의 청구서를 QSF로 내보내기"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:230
 msgid "QSF _Customer..."
@@ -2345,7 +2347,7 @@ msgstr "QSF 고객(_C)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:231
 msgid "Export one or more customers to QSF"
-msgstr ""
+msgstr "한 명 이상의 고객을 QSF로 내보내기"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:233
 msgid "QSF _Vendor..."
@@ -2353,7 +2355,7 @@ msgstr "QSF 판매자(_V)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:234
 msgid "Export one or more vendors to QSF"
-msgstr ""
+msgstr "한 명 이상의 판매자를 QSF로 내보내기"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:236
 msgid "QSF _Employee..."
@@ -2361,7 +2363,7 @@ msgstr "QSF 종업원(_E)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:237
 msgid "Export one or more employees to QSF"
-msgstr ""
+msgstr "한 명 이상의 종업원을 QSF로 내보내기"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:242
 #: ../src/business/business-gnome/gnc-plugin-business.c:243
@@ -2374,7 +2376,7 @@ msgstr "청구서 보고서 다시 읽어오기"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:246
 msgid "Reload invoice report scheme file"
-msgstr ""
+msgstr "청구서 보고서 스킴 파일을 다시 읽어오기"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:248
 msgid "Reload owner report"
@@ -2382,7 +2384,7 @@ msgstr "소유자 보고서 다시 읽어오기"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:249
 msgid "Reload owner report scheme file"
-msgstr ""
+msgstr "소유자 보고서 스킴 파일 다시 읽어오기"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:251
 msgid "Reload receivable report"
@@ -2390,7 +2392,7 @@ msgstr "믿을만한 보고서를 다시 읽어오기"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:252
 msgid "Reload receivable report scheme file"
-msgstr ""
+msgstr "받을 수 있는 보고서 스킴 파일 다시 읽어오기"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:254
 #: ../src/business/business-gnome/gnc-plugin-business.c:255
@@ -2439,11 +2441,11 @@ msgstr "새 계정 생성"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:104
 msgid "Print Invoice"
-msgstr "송장 인쇄"
+msgstr "청구서 인쇄"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:105
 msgid "Make a printable invoice"
-msgstr "인쇄 가능 송장 만들기"
+msgstr "인쇄 가능 청구서 만들기"
 
 #. Edit menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:109
@@ -2489,11 +2491,11 @@ msgstr ""
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:129
 #: ../src/gnome/glade/register.glade.h:86
 msgid "_Enter"
-msgstr ""
+msgstr "입력(_E)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:130
 msgid "Record the current entry"
-msgstr ""
+msgstr "현재 엔트리 기록"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:132
 #: ../src/gnome/glade/register.glade.h:79
@@ -2503,18 +2505,18 @@ msgstr "취소(_C)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:133
 msgid "Cancel the current entry"
-msgstr ""
+msgstr "현재 엔트리 취소"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:135
 #: ../src/gnome/glade/register.glade.h:82
 #: ../src/gnome/gnc-plugin-page-sx-list.c:124
 #: ../src/gnome/window-reconcile.c:2038
 msgid "_Delete"
-msgstr ""
+msgstr "삭제(_D)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:136
 msgid "Delete the current entry"
-msgstr ""
+msgstr "현재 엔트리 삭제"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:138
 #: ../src/gnome/glade/register.glade.h:78
@@ -2523,15 +2525,15 @@ msgstr "빔(_B)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:139
 msgid "Move to the blank entry at the bottom of the Invoice"
-msgstr ""
+msgstr "청구서 하단에 빈 엔트리로 이동"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:141
 msgid "Dup_licate Entry"
-msgstr ""
+msgstr "엔트리 복제(_L)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:142
 msgid "Make a copy of the current entry"
-msgstr ""
+msgstr "현재 엔트리를 복사"
 
 #. Business menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:146
@@ -2540,7 +2542,7 @@ msgstr "청구서 지불"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:147
 msgid "Enter a payment for the owner of this Invoice"
-msgstr ""
+msgstr "이 청구서 소유주의 지불 입력"
 
 #. Reports menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:151
@@ -2549,7 +2551,7 @@ msgstr "회사 보고서"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:152
 msgid "Open a company report window for the owner of this Invoice"
-msgstr ""
+msgstr "이 청구서의 소유주의 회사 보고서 창 열기"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:159
 #: ../src/gnome/glade/register.glade.h:95
@@ -2647,29 +2649,29 @@ msgstr ""
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:7
 msgid "Is tax included in this type of business entry?"
-msgstr ""
+msgstr "세금이 사업 엔트리의 이 형태에서 포함됩니까?"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:8
 msgid "Open new invoice in new window"
-msgstr ""
+msgstr "새 창에서 새 청구서 열기"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:9
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:8
 msgid "Search only in active items"
-msgstr ""
+msgstr "활성 항목에서만 찾기"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:10
 msgid "Show bills due reminder at startup"
-msgstr ""
+msgstr "시작시 어음 만기 여분 보이기"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:11
 msgid "Show bills due within this many days"
-msgstr ""
+msgstr "이 많은 날 내에서 어음 만기일 보이기"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:12
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:53
 msgid "The number of rows in an invoice"
-msgstr ""
+msgstr "청구서에서 열 갯수"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:13
 msgid "This field defines the number of days in advance that GnuCash will check for due bills. Its value is only used if the \"Notify when due\" setting is active."
@@ -2685,30 +2687,30 @@ msgstr ""
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:16
 msgid "Window position and size"
-msgstr ""
+msgstr "창 위치 및 크기"
 
 #: ../src/business/business-gnome/search-owner.c:163
 msgid "You have not selected an owner"
-msgstr ""
+msgstr "선택된 소유주가 없습니다"
 
 #: ../src/business/business-gnome/search-owner.c:256
 #: ../src/gnome-search/search-boolean.c:177
 #: ../src/gnome-search/search-reconciled.c:185
 msgid "is"
-msgstr ""
+msgstr "은"
 
 #: ../src/business/business-gnome/search-owner.c:257
 #: ../src/gnome-search/search-boolean.c:178
 #: ../src/gnome-search/search-reconciled.c:186
 msgid "is not"
-msgstr ""
+msgstr "아님"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:81
 #: ../src/gnome-utils/dialog-transfer.c:1264
 #: ../src/register/ledger-core/split-register.c:1498
 #, c-format
 msgid "The account %s does not allow transactions."
-msgstr ""
+msgstr "계정 %s 은 거래를 허용하지 않습니다."
 
 #: ../src/business/business-ledger/gncEntryLedger.c:82
 #: ../src/register/ledger-core/split-register.c:1499
@@ -2736,7 +2738,7 @@ msgstr "현재 엔트리를 저장할까요?"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:807
 msgid "The current transaction has been changed. Would you like to record the changes before duplicating this entry, or cancel the duplication?"
-msgstr ""
+msgstr "현재 계정이 변경되었습니다. 이 엔트리를 복제하기 전 이 변경을 기록하겠습니까 아니면 복제를 취소하겠습니까?"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:822
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:504
@@ -2790,7 +2792,7 @@ msgstr "샘플:12/12/2000"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:77
 msgid "sample:Description of an Entry"
-msgstr "샘플: 엔트리 요약"
+msgstr "샘플: 엔트리 사용 내역"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:79
 msgid "sample:Action"
@@ -2901,7 +2903,7 @@ msgstr "현금"
 #: ../intl-scm/guile-strings.c:3994
 #: ../intl-scm/guile-strings.c:5148
 msgid "Charge"
-msgstr "요금"
+msgstr "수수료"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:55
 msgid "Income Account"
@@ -3051,7 +3053,7 @@ msgstr "부분총합"
 #: ../intl-scm/guile-strings.c:7158
 #: ../intl-scm/guile-strings.c:7398
 msgid "Tax"
-msgstr ""
+msgstr "세금"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:135
 msgid "Billable?"
@@ -3059,15 +3061,15 @@ msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:528
 msgid "Enter the income/expense account for the Entry, or choose one from the list"
-msgstr ""
+msgstr "엔트리의 수입/지출 계정을 입력 또는 목록에서 하나를 선택"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:541
 msgid "Enter the type of Entry"
-msgstr ""
+msgstr "엔트리 형태 입력"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:577
 msgid "Enter the Entry Description"
-msgstr "기입 요약 입력"
+msgstr "에트리 사용 내역 입력"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:592
 msgid "Enter the Discount Amount"
@@ -3095,31 +3097,31 @@ msgstr "할인형태 선택"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:637
 msgid "Tax computed after discount is applied"
-msgstr ""
+msgstr "할인 후 계산된 세금 적용"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:640
 msgid "Discount and tax both applied on pretax value"
-msgstr ""
+msgstr "할인과 세금 모두 사전 세금 값으로 적용"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:643
 msgid "Discount computed after tax is applied"
-msgstr ""
+msgstr "세금 후 계산된 할인으로 적용"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:646
 msgid "Select how to compute the Discount and Taxes"
-msgstr ""
+msgstr "할인과 세금 계산 방법 선택"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:659
 msgid "Enter the unit-Price for this Entry"
-msgstr ""
+msgstr "이 엔트리의 단위 가격 입력"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:671
 msgid "Enter the Quantity of units for this Entry"
-msgstr ""
+msgstr "이 엔트리의 단위량 입력"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:683
 msgid "Enter the Tax Table to apply to this entry"
-msgstr ""
+msgstr "이 엔트리에 적용하기 위한 세금표 입력"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:692
 msgid "Is this entry taxable?"
@@ -3139,15 +3141,15 @@ msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:725
 msgid "Unknown EntryLedger Type"
-msgstr ""
+msgstr "미지의 엔트리 장부 형태"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:738
 msgid "The subtotal value of this entry "
-msgstr ""
+msgstr "이 엔트리의 부분합계 값"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:750
 msgid "The total tax of this entry "
-msgstr ""
+msgstr "이 엔트리의 총 세금"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:759
 msgid "Is this entry billable to a customer or job?"
@@ -3155,7 +3157,7 @@ msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:768
 msgid "How did you pay for this item?"
-msgstr ""
+msgstr "이 항목에 어떻게 지불하겠습니까?"
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:112
 msgid "You must provide a name for this Tax Table."
@@ -3168,12 +3170,12 @@ msgstr ""
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:144
 msgid "You must choose a Tax Account."
-msgstr ""
+msgstr "세금 계정을 선택해야 합니다."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:534
 #, c-format
 msgid "Tax table \"%s\" is in use.  You cannot delete it."
-msgstr ""
+msgstr "세금표 \"%s\"는 사용 중입니다. 이것을 지울 수 없습니다."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:580
 msgid "You cannot remove the last entry from the tax table. Try deleting the tax table if you want to do that."
@@ -3181,7 +3183,7 @@ msgstr ""
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:587
 msgid "Are you sure you want to delete this entry?"
-msgstr ""
+msgstr "정말 이 엔트리를 삭제하겠습니까?"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:1
 msgid "<b>Tax Table Entries</b>"
@@ -3301,11 +3303,11 @@ msgstr "버린 이익"
 #: ../src/engine/cap-gains.c:980
 #: ../src/engine/cap-gains.c:981
 msgid "Realized Gain/Loss"
-msgstr ""
+msgstr "실제 이익/손실"
 
 #: ../src/engine/cap-gains.c:252
 msgid "Realized Gains or Losses from Commodity or Trading Accounts that haven't been recorded elsewhere."
-msgstr ""
+msgstr "그밖의 기록되지 않은 상품과 교역 계정에서 실제 이득 또는 손실"
 
 #: ../src/engine/cap-gains.c:585
 msgid "Lot"
@@ -3314,13 +3316,13 @@ msgstr ""
 #. This is displayed instead of the number of the day of month.
 #: ../src/engine/FreqSpec.c:690
 msgid "last day"
-msgstr ""
+msgstr "마지막 일"
 
 #. %s is the strftime-string of the one-time date.
 #: ../src/engine/FreqSpec.c:738
 #, c-format
 msgid "Once: %s"
-msgstr ""
+msgstr "한번: %s"
 
 #. %u is the number of intervals
 #: ../src/engine/FreqSpec.c:747
@@ -3339,7 +3341,7 @@ msgstr "일"
 #: ../src/engine/FreqSpec.c:772
 #, c-format
 msgid "Weekdays: (x%u)"
-msgstr ""
+msgstr "주: (x%u)"
 
 #: ../src/engine/FreqSpec.c:777
 #, c-format
@@ -3351,7 +3353,7 @@ msgstr "주"
 #: ../src/engine/FreqSpec.c:816
 #, c-format
 msgid "Weekly (x%d): %s"
-msgstr ""
+msgstr "매주 (x%d): %s"
 
 #. Translators: %s is the name of the weekday
 #: ../src/engine/FreqSpec.c:822
@@ -3372,7 +3374,7 @@ msgstr "격주, %ss"
 #: ../src/engine/FreqSpec.c:852
 #, c-format
 msgid "Semi-monthly (x%u): %s, %s"
-msgstr ""
+msgstr "월 2회 (x%u): %s, %s"
 
 #. Translators: %s is the day of month of the
 #. starting month (or the string "last day"); %s
@@ -3380,59 +3382,59 @@ msgstr ""
 #: ../src/engine/FreqSpec.c:863
 #, c-format
 msgid "Semi-monthly: %s, %s"
-msgstr "月2回: %s, %s"
+msgstr "월 2회: %s, %s"
 
 #. %u is the number of intervals; %u is
 #. the day of month
 #: ../src/engine/FreqSpec.c:879
 #, c-format
 msgid "Monthly (x%u): %u"
-msgstr ""
+msgstr "매월 (x%u): %u"
 
 #. %u is the day of month
 #: ../src/engine/FreqSpec.c:887
 #, c-format
 msgid "Monthly: %u"
-msgstr ""
+msgstr "매월: %u"
 
 #. %u is the number of intervals; %u is
 #. the day of month
 #: ../src/engine/FreqSpec.c:897
 #, c-format
 msgid "Quarterly (x%u): %u"
-msgstr ""
+msgstr "매분기 (x%u): %u"
 
 #. %u is the day of month
 #: ../src/engine/FreqSpec.c:905
 #, c-format
 msgid "Quarterly: %u"
-msgstr ""
+msgstr "매분기: %u"
 
 #. %u is the number of intervals; %u is
 #. the day of month
 #: ../src/engine/FreqSpec.c:916
 #, c-format
 msgid "Tri-Yearly (x%u): %u"
-msgstr ""
+msgstr "연간 3회 (x%u): %u"
 
 #. %u is the day of month
 #: ../src/engine/FreqSpec.c:924
 #, c-format
 msgid "Tri-Yearly: %u"
-msgstr ""
+msgstr "연간 3회: %u"
 
 #. %u is the number of intervals; %u
 #. is the day of month
 #: ../src/engine/FreqSpec.c:939
 #, c-format
 msgid "Semi-Yearly (x%u): %u"
-msgstr ""
+msgstr "연간 2회 (x%u): %u"
 
 #. %u is the day of month
 #: ../src/engine/FreqSpec.c:947
 #, c-format
 msgid "Semi-Yearly: %u"
-msgstr ""
+msgstr "연간 2회: %u"
 
 #. FIXME: This string *must* be translated for
 #. en_GB, en_AU and everywhere else with the
@@ -3446,14 +3448,14 @@ msgstr ""
 #: ../src/engine/FreqSpec.c:970
 #, c-format
 msgid "Yearly (x%u): %s/%u"
-msgstr ""
+msgstr "매년 (x%u): %s/%u"
 
 #. %s is the abbreviated name of the
 #. month; %u is the day of month
 #: ../src/engine/FreqSpec.c:980
 #, c-format
 msgid "Yearly: %s/%u"
-msgstr ""
+msgstr "매년: %s/%u"
 
 #: ../src/engine/gnc-budget.c:132
 #: ../src/gnome/gnc-plugin-page-budget.c:846
@@ -3511,7 +3513,7 @@ msgstr ""
 #: ../src/gnome/glade/fincalc.glade.h:45
 #: ../src/gnome/glade/sched-xact.glade.h:190
 msgid "Weekly"
-msgstr ""
+msgstr "매주"
 
 #. translators: %u is the recurrence multipler.
 #. translators: %u is the recurrence multiplier
@@ -3531,7 +3533,7 @@ msgstr " (x%u)"
 #: ../src/engine/Recurrence.c:463
 #, c-format
 msgid "last %s"
-msgstr ""
+msgstr "마지막 %s"
 
 #: ../src/engine/Recurrence.c:500
 #: ../src/gnome/glade/fincalc.glade.h:42
@@ -3542,12 +3544,12 @@ msgstr "반 달"
 #: ../src/engine/Recurrence.c:515
 #, c-format
 msgid "Unknown, %d-size list."
-msgstr ""
+msgstr "알려지지 않음, %d 크기 목록"
 
 #: ../src/engine/Recurrence.c:526
 #: ../src/gnome/glade/sched-xact.glade.h:130
 msgid "Once"
-msgstr ""
+msgstr "한번"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -3573,11 +3575,11 @@ msgstr "매년"
 
 #: ../src/engine/Scrub.c:85
 msgid "Orphan"
-msgstr ""
+msgstr "고아"
 
 #: ../src/engine/Scrub.c:388
 msgid "Imbalance"
-msgstr ""
+msgstr "불균형"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/gnucash/report/register.scm
@@ -3590,7 +3592,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5038
 #: ../intl-scm/guile-strings.c:5060
 msgid "-- Split Transaction --"
-msgstr ""
+msgstr "-- 거래 분할 --"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -3602,7 +3604,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3502
 #: ../intl-scm/guile-strings.c:4656
 msgid "Split"
-msgstr "분리"
+msgstr "분할"
 
 #: ../src/engine/Transaction.c:1695
 msgid "Voided transaction"
@@ -3627,11 +3629,11 @@ msgstr ""
 
 #: ../src/gnome/dialog-commodities.c:154
 msgid "Are you sure you want to delete the selected commodity?"
-msgstr ""
+msgstr "선택된 상품을 삭제할까요?"
 
 #: ../src/gnome/dialog-commodities.c:163
 msgid "Delete commodity?"
-msgstr ""
+msgstr "상품을 삭제할까요?"
 
 #: ../src/gnome/dialog-fincalc.c:308
 msgid "This program can only calculate one value at a time. You must enter values for all but one quantity."
@@ -3643,19 +3645,19 @@ msgstr ""
 
 #: ../src/gnome/dialog-fincalc.c:349
 msgid "The interest rate cannot be zero."
-msgstr ""
+msgstr "이자율은 0으로 할 수 없습니다."
 
 #: ../src/gnome/dialog-fincalc.c:368
 msgid "The number of payments cannot be zero."
-msgstr ""
+msgstr "지불 갯수는 0으로 할 수 없습니다."
 
 #: ../src/gnome/dialog-fincalc.c:373
 msgid "The number of payments cannot be negative."
-msgstr ""
+msgstr "지불 갯수를 음수로 할 수 없습니다."
 
 #: ../src/gnome/dialog-find-transactions.c:99
 msgid "All Accounts"
-msgstr ""
+msgstr "전체 계정"
 
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/cash-flow.scm
@@ -3701,22 +3703,22 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6126
 #: ../intl-scm/guile-strings.c:6650
 msgid "Account"
-msgstr ""
+msgstr "계정"
 
 #: ../src/gnome/dialog-find-transactions.c:106
 #: ../src/import-export/import-match-picker.c:337
 msgid "Balanced"
-msgstr ""
+msgstr "수지"
 
 #: ../src/gnome/dialog-find-transactions.c:109
 #: ../src/gnome/gnc-plugin-page-register.c:331
 #: ../src/gnome/window-reconcile.c:1174
 msgid "Reconcile"
-msgstr ""
+msgstr "통장정리"
 
 #: ../src/gnome/dialog-find-transactions.c:111
 msgid "Share Price"
-msgstr ""
+msgstr "주식 가격"
 
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/general-ledger.scm
@@ -3748,7 +3750,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5054
 #: ../intl-scm/guile-strings.c:5100
 msgid "Shares"
-msgstr ""
+msgstr "구매 계좌수"
 
 #. src/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/gnucash/report/portfolio.scm
@@ -3787,32 +3789,32 @@ msgstr "분할 찾기"
 #: ../src/gnome/dialog-price-edit-db.c:172
 #, c-format
 msgid "Are you sure you want to delete the %d selected price?"
-msgstr ""
+msgstr "%d 선택된 가격을 정말 삭제하겠습니까?"
 
 #: ../src/gnome/dialog-price-edit-db.c:180
 msgid "Delete prices?"
-msgstr ""
+msgstr "가격을 삭제할까요?"
 
 #: ../src/gnome/dialog-price-editor.c:176
 msgid "You must select a commodity."
-msgstr ""
+msgstr "상품을 선택해야 합니다."
 
 #: ../src/gnome/dialog-price-editor.c:181
 msgid "You must select a currency."
-msgstr ""
+msgstr "통화를 선택해야 합니다."
 
 #: ../src/gnome/dialog-price-editor.c:190
 #: ../src/gnome-utils/dialog-transfer.c:1290
 msgid "You must enter a valid amount."
-msgstr ""
+msgstr "유효한 수량을 입력하여야 합니다."
 
 #: ../src/gnome/dialog-print-check.c:551
 msgid "Cannot save check format file."
-msgstr ""
+msgstr "체크 형식 파일을 저장할 수 없습니다."
 
 #: ../src/gnome/dialog-print-check.c:1083
 msgid "There is a duplicate check format file."
-msgstr ""
+msgstr "체크 형식 파일 복제품입니다."
 
 #. Translators: %1$s is the type of the first check
 #. * format (user defined or application defined); %2$s
@@ -3829,24 +3831,24 @@ msgstr ""
 #. * gnucash application.
 #: ../src/gnome/dialog-print-check.c:1128
 msgid "application"
-msgstr ""
+msgstr "어플리케이션"
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by a
 #. * user herself.
 #: ../src/gnome/dialog-print-check.c:1136
 msgid "user"
-msgstr ""
+msgstr "사용자"
 
 #: ../src/gnome/dialog-print-check.c:1159
 #: ../src/gnome/dialog-print-check.c:2078
 msgid "Custom"
-msgstr ""
+msgstr "고객"
 
 #: ../src/gnome/dialog-progress.c:331
 #: ../src/gnome/dialog-progress.c:334
 msgid "Complete"
-msgstr ""
+msgstr "완료"
 
 #: ../src/gnome/dialog-sx-editor.c:186
 #: ../src/gnome/glade/price.glade.h:22
@@ -3912,11 +3914,11 @@ msgid "Scheduled Transactions without a template transaction cannot be automatic
 msgstr ""
 
 msgid "Please provide a valid end selection."
-msgstr ""
+msgstr "유효한 끝 선택을 제공하시오."
 
 #: ../src/gnome/dialog-sx-editor.c:809
 msgid "There must be some number of occurrences."
-msgstr ""
+msgstr "발생 갯수이어야 합니다."
 
 #: ../src/gnome/dialog-sx-editor.c:817
 #, c-format
@@ -4003,7 +4005,7 @@ msgstr "양식"
 
 #: ../src/gnome/druid-acct-period.c:169
 msgid "The book was closed successfully."
-msgstr ""
+msgstr "장부를 성공적으로 닫기했습니다."
 
 #: ../src/gnome/druid-acct-period.c:243
 #, c-format
@@ -4042,11 +4044,11 @@ msgstr ""
 #. Change the text so that its more mainingful for this druid
 #: ../src/gnome/druid-acct-period.c:556
 msgid "Period:"
-msgstr ""
+msgstr "기간:"
 
 #: ../src/gnome/druid-acct-period.c:557
 msgid "Closing Date:"
-msgstr ""
+msgstr "종료일:"
 
 #: ../src/gnome/druid-hierarchy.c:397
 msgid "Selected"
@@ -4095,11 +4097,11 @@ msgstr "세금 지불"
 
 #: ../src/gnome/druid-loan.c:162
 msgid "Insurance"
-msgstr ""
+msgstr "보험"
 
 #: ../src/gnome/druid-loan.c:162
 msgid "Insurance Payment"
-msgstr ""
+msgstr "보험료 지불"
 
 #. Translators: PMI stands for Private Mortgage Insurance.
 #: ../src/gnome/druid-loan.c:164
@@ -4108,15 +4110,15 @@ msgstr "PMI"
 
 #: ../src/gnome/druid-loan.c:164
 msgid "PMI Payment"
-msgstr ""
+msgstr "PMI 지불"
 
 #: ../src/gnome/druid-loan.c:165
 msgid "Other Expense"
-msgstr ""
+msgstr "다른 지출"
 
 #: ../src/gnome/druid-loan.c:165
 msgid "Miscellaneous Payment"
-msgstr ""
+msgstr "다양한 지불"
 
 #. Add payment checkbox.
 #. Translators: %s is "Taxes",
@@ -4124,53 +4126,53 @@ msgstr ""
 #: ../src/gnome/druid-loan.c:632
 #, c-format
 msgid "... pay \"%s\"?"
-msgstr ""
+msgstr "... \"%s\" 지불하겠습니까?"
 
 #: ../src/gnome/druid-loan.c:644
 msgid "via Escrow account?"
-msgstr ""
+msgstr "대 에스크로 계정?"
 
 #: ../src/gnome/druid-loan.c:811
 #: ../src/register/ledger-core/split-register.c:2026
 msgid "Loan"
-msgstr ""
+msgstr "대출"
 
 #: ../src/gnome/druid-loan.c:1041
 msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
-msgstr ""
+msgstr "저당/대출 설정 드루이드를 취소하겠습니까?"
 
 #: ../src/gnome/druid-loan.c:1160
 msgid "Please select a valid loan account."
-msgstr ""
+msgstr "유효한 대출 계정을 선택하시오."
 
 #: ../src/gnome/druid-loan.c:1247
 msgid "Please select a valid Escrow Account."
-msgstr ""
+msgstr "조건부날인 증서(에스크로) 계정을 선택하시오."
 
 #: ../src/gnome/druid-loan.c:1313
 #: ../src/gnome/druid-loan.c:1532
 msgid "Please select a valid \"from\" account."
-msgstr ""
+msgstr "유효한 \"에서\"계정을 선택하시오."
 
 #: ../src/gnome/druid-loan.c:1320
 #: ../src/gnome/druid-loan.c:1541
 msgid "Please select a valid \"to\" account."
-msgstr ""
+msgstr "유효한 \"로\"계정을 선택하시오."
 
 #: ../src/gnome/druid-loan.c:1327
 msgid "Please select a valid \"interest\" account."
-msgstr ""
+msgstr "유효한 \"이자\"계정을 선택하시오."
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
 #: ../src/gnome/druid-loan.c:1440
 #, c-format
 msgid "Payment: \"%s\""
-msgstr ""
+msgstr "지불: \"%s\""
 
 #: ../src/gnome/druid-loan.c:1798
 #: ../src/gnome/druid-loan.c:2371
 msgid "Principal"
-msgstr ""
+msgstr "원금"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
@@ -4183,18 +4185,18 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5768
 #: ../intl-scm/guile-strings.c:5790
 msgid "Interest"
-msgstr ""
+msgstr "이자"
 
 #: ../src/gnome/druid-loan.c:2272
 msgid "Escrow "
-msgstr ""
+msgstr "요구불 날인 증서(에스크로) "
 
 #: ../src/gnome/druid-merge.c:101
 #: ../src/gnome/druid-merge.c:129
 #: ../src/gnome/druid-merge.c:154
 #: ../src/gnome/druid-merge.c:259
 msgid "No conflicts to be resolved."
-msgstr ""
+msgstr "충돌이 해결되지 않음"
 
 #: ../src/gnome/druid-merge.c:170
 #, c-format
@@ -4204,21 +4206,21 @@ msgstr ""
 #: ../src/gnome/druid-merge.c:225
 #, c-format
 msgid "Error: the Commit operation failed, error code %d."
-msgstr ""
+msgstr "오류: 작동 허용 실패, 오류 코드 %d."
 
 #. Translators: %i is the number of conflicts. This is a
 #. ngettext(3) message.
 #: ../src/gnome/druid-merge.c:336
 #, c-format
 msgid "%i conflict needs to be resolved."
-msgstr ""
+msgstr "%i 충돌이 해결되어야 합니다."
 
 #. Translators: %i is the number of values. This is a
 #. ngettext(3) message.
 #: ../src/gnome/druid-merge.c:342
 #, c-format
 msgid "%i parameter value for this \"%s\" object."
-msgstr ""
+msgstr "%i 인자 값 (이 \"%s\" 객체)."
 
 #. FIXME: each g_strdup_printf as well as g_strconcat
 #. will allocate a new string; all of these need to be
@@ -4227,7 +4229,7 @@ msgstr ""
 #: ../src/gnome/druid-merge.c:355
 #, c-format
 msgid "%i:Parameter name: %s "
-msgstr ""
+msgstr "%i:인자 이름: %s "
 
 #: ../src/gnome/druid-merge.c:359
 #, c-format
@@ -4246,15 +4248,15 @@ msgstr "오류"
 
 #: ../src/gnome/druid-stock-split.c:299
 msgid "You must enter a valid distribution amount."
-msgstr ""
+msgstr "유효한 분배량을 입력하여야 합니다."
 
 #: ../src/gnome/druid-stock-split.c:308
 msgid "You must enter a distribution amount."
-msgstr ""
+msgstr "분배량을 입력하여야 합니다."
 
 #: ../src/gnome/druid-stock-split.c:316
 msgid "You must either enter a valid price or leave it blank."
-msgstr ""
+msgstr "적합한 가격을 입력하거나 공란으로 두시오."
 
 #: ../src/gnome/druid-stock-split.c:325
 msgid "The price must be positive."
@@ -4262,15 +4264,15 @@ msgstr "가격이 양수이어야 합니다."
 
 #: ../src/gnome/druid-stock-split.c:363
 msgid "You must either enter a valid cash amount or leave it blank."
-msgstr ""
+msgstr "유효한 현금량 또는 공백으로 입력해야 합니다."
 
 #: ../src/gnome/druid-stock-split.c:372
 msgid "The cash distribution must be positive."
-msgstr ""
+msgstr "현금 분배는 양수이어야 합니다."
 
 #: ../src/gnome/druid-stock-split.c:384
 msgid "You must select an income account for the cash distribution."
-msgstr ""
+msgstr "현금 분배를 위한 수입 계정을 선택하여야 합니다."
 
 #: ../src/gnome/druid-stock-split.c:393
 msgid "You must select an asset account for the cash distribution."
@@ -4278,7 +4280,7 @@ msgstr ""
 
 #: ../src/gnome/druid-stock-split.c:485
 msgid "Error adding price."
-msgstr ""
+msgstr "가격 더하는 중 오류."
 
 #. src/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/gnucash/report/portfolio.scm
@@ -4311,7 +4313,7 @@ msgstr "<b>카테고리</b>"
 
 #: ../src/gnome/glade/account.glade.h:4
 msgid "<b>Category Description</b>"
-msgstr "<b>카테고리 요약</b>"
+msgstr "<b>카테고리 사용 내역</b>"
 
 #: ../src/gnome/glade/account.glade.h:5
 msgid "<b>Contained Accounts</b>"
@@ -4319,7 +4321,7 @@ msgstr "<b>포함 계정</b>"
 
 #: ../src/gnome/glade/account.glade.h:6
 msgid "<b>Description</b>"
-msgstr "<b>요약</b>"
+msgstr "<b>사용 내역</b>"
 
 #: ../src/gnome/glade/account.glade.h:7
 msgid "<b>Identification</b>"
@@ -4327,7 +4329,7 @@ msgstr "<b>신원</b>"
 
 #: ../src/gnome/glade/account.glade.h:8
 msgid "<b>Initial Balance Transfer</b>"
-msgstr "<b>초기 수지 이전</b>"
+msgstr "<b>초기 수지 이체</b>"
 
 #: ../src/gnome/glade/account.glade.h:9
 msgid "<b>New Account Currency</b>"
@@ -4335,16 +4337,16 @@ msgstr "<b>새 계정 통화</b>"
 
 #: ../src/gnome/glade/account.glade.h:10
 msgid "<b>Sub-account Transactions</b>"
-msgstr ""
+msgstr "<b>하위 계정 거래</b>"
 
 #: ../src/gnome/glade/account.glade.h:11
 msgid "<b>Sub-accounts</b>"
-msgstr ""
+msgstr "<b>하위 계정</b>"
 
 #: ../src/gnome/glade/account.glade.h:12
 #: ../src/gnome/glade/sched-xact.glade.h:50
 msgid "<b>Transactions</b>"
-msgstr ""
+msgstr "<b>거래</b>"
 
 #: ../src/gnome/glade/account.glade.h:13
 msgid "<b>_Parent Account</b>"
@@ -4477,7 +4479,7 @@ msgstr "숨김(_I)"
 
 #: ../src/gnome/glade/account.glade.h:27
 msgid "Hide accounts which have a zero total value."
-msgstr ""
+msgstr "전체 값이 0인 계정 숨기기"
 
 #: ../src/gnome/glade/account.glade.h:28
 msgid "If you would like an account to have an opening balance, click on the account and enter the starting balance in the box on the right. All accounts except Equity and placeholder accounts may have an opening balance."
@@ -4513,7 +4515,7 @@ msgstr "새 계정 체계 설정"
 
 #: ../src/gnome/glade/account.glade.h:38
 msgid "No_tes:"
-msgstr "노트(_T):"
+msgstr "장부(_T):"
 
 #: ../src/gnome/glade/account.glade.h:39
 msgid "One or more sub-accounts contain read-only transactions which may not be deleted."
@@ -4564,7 +4566,7 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:51
 msgid "Renumber sub-accounts"
-msgstr ""
+msgstr "하위 계정 재 번호화"
 
 #: ../src/gnome/glade/account.glade.h:52
 #: ../src/import-export/generic-import.glade.h:44
@@ -4579,7 +4581,7 @@ msgstr "GnuCash에서 사용할 항목에 대응하는 목록을 선택. 선택�
 #: ../src/gnome/glade/account.glade.h:54
 #: ../src/import-export/qif-import/qif.glade.h:65
 msgid "Select or add a GnuCash account"
-msgstr ""
+msgstr "GnuCash 계정 선택 또는 더하기"
 
 #: ../src/gnome/glade/account.glade.h:55
 msgid "Setup new accounts"
@@ -4631,7 +4633,7 @@ msgid ""
 "\n"
 "Click 'Cancel'  if you do not wish to create any new accounts now."
 msgstr ""
-"이 드루이드는 자산(투자,저축계정 체크등),채무(융자),수입과 지출을 위한 GnuCash 계정을 생성하도록 도와 줄 것입니다.. \n"
+"이 드루이드는 자산(투자,저축계정 체크등),부채(대출),수입과 지출을 위한 GnuCash 계정을 생성하도록 도와 줄 것입니다.. \n"
 "\n"
 "지금 새 계정의 생성을 원하지 않으면 취소를 누르시오."
 
@@ -4678,7 +4680,7 @@ msgstr "기본값(_D)"
 
 #: ../src/gnome/glade/account.glade.h:81
 msgid "_Description:"
-msgstr "요약(_D)"
+msgstr "사용 내역(_D)"
 
 #: ../src/gnome/glade/account.glade.h:82
 msgid "_Move to:"
@@ -4691,7 +4693,7 @@ msgstr "재번호화(_R)"
 #: ../src/gnome/glade/account.glade.h:84
 #: ../src/gnome-utils/dialog-commodity.c:270
 msgid "_Security/currency:"
-msgstr "담보/통화(_S):"
+msgstr "단위/통화(_S):"
 
 #: ../src/gnome/glade/account.glade.h:85
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:6
@@ -4704,7 +4706,7 @@ msgstr "송금 계정 선택(_S)"
 
 #: ../src/gnome/glade/account.glade.h:87
 msgid "_Use equity 'Opening Balances' account"
-msgstr "주식 수지치 계정 사용(_U)"
+msgstr "자기자본 수지치 계정 사용(_U)"
 
 #: ../src/gnome/glade/acctperiod.glade.h:1
 msgid "Book Closing Dates"
@@ -4712,7 +4714,7 @@ msgstr "장부 종료 날짜"
 
 #: ../src/gnome/glade/acctperiod.glade.h:2
 msgid "_Close Book"
-msgstr "장부 닫기(_C)"
+msgstr "장부 마감(_C)"
 
 #: ../src/gnome/glade/acctperiod.glade.h:3
 msgid "Enter a title for this book."
@@ -4720,7 +4722,7 @@ msgstr "장부 제목 입력"
 
 #: ../src/gnome/glade/acctperiod.glade.h:4
 msgid "Enter notes that describe this book."
-msgstr "이 장부를 설명하기 위한 노트 입력"
+msgstr "이 장부를 설명하기 위한 장부 입력"
 
 #: ../src/gnome/glade/acctperiod.glade.h:5
 msgid "Finish Closing Books"
@@ -4729,7 +4731,7 @@ msgstr "종료 장부 끝내기"
 #: ../src/gnome/glade/acctperiod.glade.h:6
 #: ../src/gnome/glade/budget.glade.h:13
 msgid "Notes:"
-msgstr "노트:"
+msgstr "장부:"
 
 #: ../src/gnome/glade/acctperiod.glade.h:7
 msgid "Select an accounting period and the closing date for the period.  Books will be closed on midnight of the selected date."
@@ -4908,7 +4910,7 @@ msgstr ""
 
 #: ../src/gnome/glade/commodities.glade.h:1
 msgid "<b>Securities</b>"
-msgstr "<b>담보</b>"
+msgstr "<b>단위</b>"
 
 #: ../src/gnome/glade/commodities.glade.h:2
 msgid "Add a new commodity."
@@ -4926,7 +4928,7 @@ msgstr "현재 상품 제거"
 
 #: ../src/gnome/glade/commodities.glade.h:5
 msgid "Securities"
-msgstr "담보"
+msgstr "단위"
 
 #: ../src/gnome/glade/commodities.glade.h:6
 msgid "Show National Currencies"
@@ -5071,7 +5073,7 @@ msgstr "사분기"
 
 #: ../src/gnome/glade/fincalc.glade.h:39
 msgid "Recalculate the (single) blank entry in the above fields."
-msgstr ""
+msgstr "위 필드에서 (단일) 빈 엔트리를 재 계산."
 
 #: ../src/gnome/glade/fincalc.glade.h:40
 #: ../src/gnome/glade/register.glade.h:41
@@ -5118,11 +5120,11 @@ msgstr ""
 
 #: ../src/gnome/glade/lots.glade.h:2
 msgid "<b>_Mini-Viewer</b>"
-msgstr ""
+msgstr "<b>최소 뷰어(_M)</b>"
 
 #: ../src/gnome/glade/lots.glade.h:3
 msgid "<b>_Notes</b>"
-msgstr ""
+msgstr "<b>장부(_N)</b>"
 
 #: ../src/gnome/glade/lots.glade.h:4
 msgid "<b>_Title</b>"
@@ -5176,7 +5178,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4066
 #: ../intl-scm/guile-strings.c:5220
 msgid "Gain/Loss"
-msgstr ""
+msgstr "이득/손실"
 
 #: ../src/gnome/glade/lots.glade.h:14
 msgid "Lot Viewer"
@@ -5196,27 +5198,27 @@ msgstr ""
 
 #: ../src/gnome/glade/merge.glade.h:1
 msgid "1. Update your existing book with the import data"
-msgstr ""
+msgstr "1. 자료 읽어오기로 기존 장부 업데이트"
 
 #: ../src/gnome/glade/merge.glade.h:2
 msgid "2. Ignore the import data, leave original unchanged"
-msgstr ""
+msgstr "2. 자로 읽어오기 무시, 원래 변경되지 않은 원본으로 두기"
 
 #: ../src/gnome/glade/merge.glade.h:3
 msgid "3. Import the data as a NEW object"
-msgstr ""
+msgstr "3. 자료를 새 객체로 읽어오기"
 
 #: ../src/gnome/glade/merge.glade.h:4
 msgid "Add the import as a new object, leave original in place"
-msgstr ""
+msgstr "읽어온 것을 새 객체로 더하기, 원래 위치에 두기"
 
 #: ../src/gnome/glade/merge.glade.h:5
 msgid "Commit QSF Import Data to data file"
-msgstr ""
+msgstr "QSF 읽기 자ㅇ료를 자료 파일로 허요"
 
 #: ../src/gnome/glade/merge.glade.h:6
 msgid "Please resolve any conflicts in the merge"
-msgstr ""
+msgstr "병합시 충돌을 해결하시오"
 
 #: ../src/gnome/glade/merge.glade.h:7
 msgid ""
@@ -5238,11 +5240,11 @@ msgstr ""
 
 #: ../src/gnome/glade/merge.glade.h:14
 msgid "QSF Data Import Setup"
-msgstr ""
+msgstr "QSF 자료 읽어오기 설정"
 
 #: ../src/gnome/glade/merge.glade.h:15
 msgid "Shows how your QSF data conflicts with existing data in your file."
-msgstr ""
+msgstr "파일에서 QSF 자료와 기존자료가 충돌하는지를 보이기."
 
 #: ../src/gnome/glade/merge.glade.h:16
 msgid ""
@@ -5385,15 +5387,15 @@ msgstr "가격(_P):"
 #: ../src/gnome/glade/price.glade.h:24
 #: ../src/gnome-utils/dialog-commodity.c:274
 msgid "_Security:"
-msgstr "담보(_S)"
+msgstr "단위(_S)"
 
 #: ../src/gnome/glade/print.glade.h:1
 msgid "Amount (_numbers):"
-msgstr "양 (번호)(_N):"
+msgstr "수량 (번호)(_N):"
 
 #: ../src/gnome/glade/print.glade.h:2
 msgid "Amount (_words):"
-msgstr "양 (단어)(_W):"
+msgstr "수량 (단어)(_W):"
 
 #: ../src/gnome/glade/print.glade.h:3
 msgid "Check _format:"
@@ -5449,11 +5451,11 @@ msgstr "사용자 체크 형식 저장"
 
 #: ../src/gnome/glade/print.glade.h:20
 msgid "The origin point is the lower left-hand corner of the page."
-msgstr ""
+msgstr "원래 점은 페이지 왼쪽 아래 모서리임."
 
 #: ../src/gnome/glade/print.glade.h:21
 msgid "The origin point is the upper left-hand corner of the page."
-msgstr ""
+msgstr "원래 점은 페이지의 왼쪽 위 모서리임"
 
 #: ../src/gnome/glade/print.glade.h:22
 msgid ""
@@ -5473,7 +5475,7 @@ msgstr "날짜 형식(_D):"
 
 #: ../src/gnome/glade/print.glade.h:28
 msgid "_Notes:"
-msgstr "노트(_N):"
+msgstr "장부(_N):"
 
 #: ../src/gnome/glade/print.glade.h:29
 msgid "_Rotation"
@@ -5621,21 +5623,21 @@ msgstr "이동"
 #: ../src/gnome/glade/register.glade.h:29
 #: ../src/gnome/gnc-plugin-page-register.c:246
 msgid "Jump to the corresponding transaction in the other account"
-msgstr ""
+msgstr "다른 계정에서 대응 거래로 이동"
 
 #: ../src/gnome/glade/register.glade.h:30
 msgid "Keep normal account order"
-msgstr ""
+msgstr "일반 계정 순서를 유지"
 
 #: ../src/gnome/glade/register.glade.h:31
 #: ../src/gnome/gnc-plugin-page-register.c:197
 msgid "Make a copy of the current transaction"
-msgstr ""
+msgstr "현재 거래를 복사"
 
 #: ../src/gnome/glade/register.glade.h:32
 #: ../src/gnome/gnc-plugin-page-register.c:240
 msgid "Move to the blank transaction at the bottom of the register"
-msgstr ""
+msgstr "등록하단의 빈 거래로 이동"
 
 #: ../src/gnome/glade/register.glade.h:33
 msgid "Num_ber"
@@ -5648,7 +5650,7 @@ msgstr "거래 붙여넣기"
 #: ../src/gnome/glade/register.glade.h:35
 #: ../src/gnome/gnc-plugin-page-register.c:194
 msgid "Paste the transaction from the clipboard"
-msgstr ""
+msgstr "클립보드에서 거래 붙여넣기"
 
 #: ../src/gnome/glade/register.glade.h:36
 msgid "Reason for voiding transaction:"
@@ -5657,11 +5659,11 @@ msgstr ""
 #: ../src/gnome/glade/register.glade.h:37
 #: ../src/gnome/gnc-plugin-page-register.c:206
 msgid "Record the current transaction"
-msgstr ""
+msgstr "현재 거래 기록"
 
 #: ../src/gnome/glade/register.glade.h:38
 msgid "Remove Transaction Splits"
-msgstr ""
+msgstr "거래 스플릿 제거"
 
 #: ../src/gnome/glade/register.glade.h:39
 #: ../src/gnome/gnc-plugin-page-register.c:272
@@ -5692,17 +5694,17 @@ msgstr "전체 보이기(_A)"
 #: ../src/gnome/glade/register.glade.h:46
 #: ../src/gnome/gnc-plugin-page-register.c:273
 msgid "Show all splits in the current transaction"
-msgstr ""
+msgstr "현재 거래의 전체 스플릿 보이기"
 
 #: ../src/gnome/glade/register.glade.h:47
 #: ../src/gnome/gnc-plugin-page-register.c:288
 msgid "Show expanded transactions with all splits"
-msgstr ""
+msgstr "전체 스플릿의 확장 거래 보이기"
 
 #: ../src/gnome/glade/register.glade.h:48
 #: ../src/gnome/gnc-plugin-page-register.c:282
 msgid "Show transactions on one or two lines"
-msgstr ""
+msgstr "하나나 두 줄로 거래 보이기"
 
 #: ../src/gnome/glade/register.glade.h:49
 #: ../src/gnome/gnc-plugin-page-register.c:285
@@ -5713,7 +5715,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register.c:269
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:46
 msgid "Show two lines of information for each transaction"
-msgstr ""
+msgstr "각 거래에서 2줄 정보 보이기"
 
 #: ../src/gnome/glade/register.glade.h:52
 msgid "Sort by Amount"
@@ -5725,7 +5727,7 @@ msgstr "날짜에 의한 배열"
 
 #: ../src/gnome/glade/register.glade.h:54
 msgid "Sort by Description"
-msgstr "요약에 의한 배열"
+msgstr "사용 내역에 의한 배열"
 
 #: ../src/gnome/glade/register.glade.h:55
 msgid "Sort by Memo"
@@ -5761,7 +5763,7 @@ msgstr "날짜에 의한 배열"
 #: ../intl-scm/guile-strings.c:3702
 #: ../intl-scm/guile-strings.c:4856
 msgid "Sort by description"
-msgstr "요약에 의한 배열"
+msgstr "사용 내역에 의한 배열"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -5773,7 +5775,7 @@ msgstr "메모에 의한 배열"
 
 #: ../src/gnome/glade/register.glade.h:62
 msgid "Sort by notes field"
-msgstr ""
+msgstr "장부 필드에 의한 정렬"
 
 #: ../src/gnome/glade/register.glade.h:63
 msgid "Sort by number"
@@ -5856,7 +5858,7 @@ msgstr "메모(_M)"
 
 #: ../src/gnome/glade/register.glade.h:91
 msgid "_Notes"
-msgstr "노트(_N)"
+msgstr "장부(_N)"
 
 #: ../src/gnome/glade/register.glade.h:92
 msgid "_Number"
@@ -5868,7 +5870,7 @@ msgstr "번호(_N):"
 
 #: ../src/gnome/glade/register.glade.h:94
 msgid "_Reconciled"
-msgstr ""
+msgstr "통장정리(_R)"
 
 #: ../src/gnome/glade/register.glade.h:96
 msgid "_Standard Order"
@@ -5884,11 +5886,11 @@ msgstr "오늘(_T)"
 
 #: ../src/gnome/glade/register.glade.h:99
 msgid "_Transaction Journal"
-msgstr "거래 일지(_T)"
+msgstr "전체 거래 보기(_T)"
 
 #: ../src/gnome/glade/register.glade.h:100
 msgid "_Unreconciled"
-msgstr "조정안함(_U)"
+msgstr "통장정리 안함(_U)"
 
 #: ../src/gnome/glade/register.glade.h:102
 msgid "_Voided"
@@ -5900,7 +5902,7 @@ msgstr " 일"
 
 #: ../src/gnome/glade/sched-xact.glade.h:4
 msgid "... utilize an escrow account for payments?"
-msgstr ""
+msgstr "... 지불을 위한 에스크로 계정 사용합니까?"
 
 #: ../src/gnome/glade/sched-xact.glade.h:5
 msgid ""
@@ -6024,15 +6026,15 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:64
 msgid "Created Transaction Review"
-msgstr ""
+msgstr "생성된 거래 다시 보기"
 
 #: ../src/gnome/glade/sched-xact.glade.h:65
 msgid "Creating transactions..."
-msgstr ""
+msgstr "거래 생성 중..."
 
 #: ../src/gnome/glade/sched-xact.glade.h:66
 msgid "Creation State"
-msgstr ""
+msgstr "생성 상태"
 
 #: ../src/gnome/glade/sched-xact.glade.h:67
 msgid ""
@@ -6043,7 +6045,7 @@ msgid ""
 msgstr ""
 "금년\n"
 "금년 + 1 년\n"
-"전체 융자\n"
+"전체 대출\n"
 "사용자"
 
 #: ../src/gnome/glade/sched-xact.glade.h:72
@@ -6109,7 +6111,7 @@ msgstr "매일 "
 
 #: ../src/gnome/glade/sched-xact.glade.h:90
 msgid "First on the:"
-msgstr ""
+msgstr "첫 번째:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:91
 msgid ""
@@ -6119,6 +6121,11 @@ msgid ""
 "7/1 Year ARM\n"
 "10/1 Year ARM"
 msgstr ""
+"고정 비율\n"
+"3/1 년 ARM\n"
+"5/1 년 ARM\n"
+"7/1 년 ARM\n"
+"10/1 년 ARM"
 
 #: ../src/gnome/glade/sched-xact.glade.h:96
 msgid "For:"
@@ -6148,7 +6155,7 @@ msgstr "무시"
 
 #: ../src/gnome/glade/sched-xact.glade.h:102
 msgid "Interest Rate Change Frequency"
-msgstr ""
+msgstr "이자율 변경 주기"
 
 #: ../src/gnome/glade/sched-xact.glade.h:103
 msgid "Interest Rate:"
@@ -6156,7 +6163,7 @@ msgstr "이익 비율"
 
 #: ../src/gnome/glade/sched-xact.glade.h:104
 msgid "Interest To:"
-msgstr ""
+msgstr "이자:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:105
 msgid "Last Occurred: "
@@ -6168,11 +6175,11 @@ msgstr "길이:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:107
 msgid "Loan Account:"
-msgstr "융자 값:"
+msgstr "대출 계정:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:108
 msgid "Loan Information"
-msgstr "융자 정보"
+msgstr "대출 정보"
 
 #: ../src/gnome/glade/sched-xact.glade.h:109
 msgid "Make Scheduled Transaction"
@@ -6188,11 +6195,11 @@ msgstr "월"
 
 #: ../src/gnome/glade/sched-xact.glade.h:112
 msgid "Months Remaining:"
-msgstr ""
+msgstr "잔여 월:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:113
 msgid "Mortgage/Loan Druid"
-msgstr ""
+msgstr "저당/대부 드루이드"
 
 #: ../src/gnome/glade/sched-xact.glade.h:114
 msgid "Mortgage/Loan Repayment Setup"
@@ -6770,7 +6777,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:138
 msgid "_Mortgage & Loan Repayment..."
-msgstr "저당 & 융자 지불(_M)..."
+msgstr "저당 & 대출 지불(_M)..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:139
 msgid "Setup scheduled transactions for repayment of a loan"
@@ -6795,11 +6802,11 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:150
 msgid "_Security Editor"
-msgstr "담보 편집기(_S)	"
+msgstr "단위 편집기(_S)	"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:151
 msgid "View and edit the commodities for stocks and mutual funds"
-msgstr ""
+msgstr "주식 및 뮤추얼 펀드의 상품 보기 및 편집"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:153
 msgid "_Financial Calculator"
@@ -6807,7 +6814,7 @@ msgstr "재무제표(_F)"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:154
 msgid "Use the financial calculator"
-msgstr ""
+msgstr "제무제표 사용"
 
 #. Help menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:159
@@ -6816,7 +6823,7 @@ msgstr "오늘의 도움말(_T)"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:160
 msgid "View the Tips of the Day"
-msgstr ""
+msgstr "오늘의 도움말 보기"
 
 #. Translators: %d is the error number; %s is the error message as
 #. text.
@@ -7289,7 +7296,7 @@ msgstr "거래 일지(_J)"
 #: ../intl-scm/guile-strings.c:3898
 #: ../intl-scm/guile-strings.c:5052
 msgid "Transfer"
-msgstr "양도"
+msgstr "이체"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/gnucash/report/general-ledger.scm
@@ -7336,7 +7343,7 @@ msgstr "포트폴리오"
 #: ../src/gnome/gnc-plugin-page-register.c:1150
 #: ../src/gnome/gnc-plugin-page-register.c:1721
 msgid "Search Results"
-msgstr ""
+msgstr "결과 찾기"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1711
 msgid "General Ledger Report"
@@ -7411,15 +7418,15 @@ msgstr "새로(_N)"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:121
 msgid "Create a new scheduled transaction"
-msgstr ""
+msgstr "새 예약 거래 생성"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:123
 msgid "Edit the selected scheduled transaction"
-msgstr ""
+msgstr "선택된 예약 거래 편집"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:125
 msgid "Delete the selected scheduled transaction"
-msgstr ""
+msgstr "선택된 예약 거래 삭제"
 
 #. FIXME: Does this always refer to only one transaction? Or could
 #. multiple SXs be deleted as well? Ideally, the number of
@@ -7427,7 +7434,7 @@ msgstr ""
 #. dialog-sx-since-last-run.c:807
 #: ../src/gnome/gnc-plugin-page-sx-list.c:581
 msgid "Do you really want to delete this scheduled transaction?"
-msgstr ""
+msgstr "이 예약 거래를 삭제하겠습니까?"
 
 #: ../src/gnome/gnc-plugin-register.c:48
 msgid "_General Ledger"
@@ -7473,15 +7480,15 @@ msgstr "분리 제거(_R)"
 #: ../src/gnome/gnc-split-reg.c:1068
 #, c-format
 msgid "Delete the split '%s' from the transaction '%s'?"
-msgstr ""
+msgstr "스플릿 '%s' 를 거래 '%s'에서 삭제하겠습니까?"
 
 #: ../src/gnome/gnc-split-reg.c:1069
 msgid "You would be deleting a reconciled split! This is not a good idea as it will cause your reconciled balance to be off."
-msgstr ""
+msgstr "통장정리된 스플릿만 삭제될 것입니다! 이것은 통장정리 수지가 맞지 않기 때문에 좋은 생각이 아닙니다."
 
 #: ../src/gnome/gnc-split-reg.c:1072
 msgid "You cannot delete this split."
-msgstr ""
+msgstr "이 스플릿을 삭제할 수 없습니다."
 
 #: ../src/gnome/gnc-split-reg.c:1073
 msgid "This is the split anchoring this transaction to the register. You may not delete it from this register window.  You may delete the entire transaction from this window, or you may navigate to a register that shows another side of this same transaction and delete the split from that register."
@@ -7489,11 +7496,11 @@ msgstr ""
 
 #: ../src/gnome/gnc-split-reg.c:1100
 msgid "(no memo)"
-msgstr ""
+msgstr "(메모 없음)"
 
 #: ../src/gnome/gnc-split-reg.c:1103
 msgid "(no description)"
-msgstr ""
+msgstr "(사용 내역 없음)"
 
 #: ../src/gnome/gnc-split-reg.c:1126
 msgid "_Delete Split"
@@ -7799,19 +7806,19 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:9
 msgid "Position of check on page"
-msgstr ""
+msgstr "페이지상 체크 위치"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:10
 msgid "Position of date line"
-msgstr ""
+msgstr "날짜 선 위치"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:11
 msgid "Position of memo line"
-msgstr ""
+msgstr "메모 선 위치"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:12
 msgid "Position of payee name"
-msgstr ""
+msgstr "수취인 이름 위치"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:13
 msgid "Print '***' before and after strings."
@@ -7884,19 +7891,19 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
 msgid "Prompt for credit card payment"
-msgstr ""
+msgstr "신용카드 지불에 대한 프롬프트"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
 msgid "Prompt for interest charges"
-msgstr ""
+msgstr "연체 이자에 대한 프롬프트"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:1
 msgid "How many days in advance to notify the user."
-msgstr ""
+msgstr "사전에 얼마나 많은 날을 사용자에게 통보."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:2
 msgid "How many days in advance to remind the user."
-msgstr ""
+msgstr "사전에 얼마나 많은 날을 사용자에게 상기"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:3
 msgid "If active, any newly created scheduled transaction will have its 'auto create' flag set active by default. The user can change this flag during transaction creation, or at any later time by editing the scheduled transaction."
@@ -7932,11 +7939,11 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:3
 msgid "The next tip to show."
-msgstr ""
+msgstr "보이기 위한 다음 도구 설명."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:1
 msgid "\"Enter\" key moves to bottom of register"
-msgstr ""
+msgstr "\"엔터\"키를 등록 하단으로 이동"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:2
 msgid "Accounts to reverse the balance"
@@ -7976,31 +7983,31 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:11
 msgid "Compress the data file"
-msgstr ""
+msgstr "자료 파일 압축"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:12
 msgid "Create a new window for each new register"
-msgstr ""
+msgstr "각 새 등록을 위하여 새 창 생성"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:13
 msgid "Create a new window for each new report"
-msgstr ""
+msgstr "각 새 보고서를 위하여 새 창 생성"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:14
 msgid "Date format choice"
-msgstr ""
+msgstr "날짜 형식 선택"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:15
 msgid "Default currency for new accounts"
-msgstr ""
+msgstr "새 계정의 기본 통화"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:16
 msgid "Default currency for new reports"
-msgstr ""
+msgstr "새 보고서의 기본 통화"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:17
 msgid "Default view style for new register"
-msgstr ""
+msgstr "새 등록의 기본 보기 스타일"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:18
 msgid "Delete old log/backup files after this many days (0 = never)"
@@ -8085,11 +8092,11 @@ msgstr "도구 마개 단추에서 라벨"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:38
 msgid "Number of automatic decimal places"
-msgstr ""
+msgstr "자동 소수점 갯수"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:39
 msgid "Position of the notebook tabs"
-msgstr "노트북 탭 위치"
+msgstr "장부북 탭 위치"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:40
 msgid "Save window sizes and locations"
@@ -8101,7 +8108,7 @@ msgstr "자동 저장 설명 보이기"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:42
 msgid "Show close buttons on notebook tabs"
-msgstr "노트북 탭의 닫기 단추 보이기"
+msgstr "장부북 탭의 닫기 단추 보이기"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:43
 msgid "Show horizontal borders between rows in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked."
@@ -8198,15 +8205,15 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:68
 msgid "Use 24 hour time format"
-msgstr ""
+msgstr "24시간 형식 사용"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:69
 msgid "Use formal account labels"
-msgstr ""
+msgstr "정규 계정 라벨 사용"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:70
 msgid "Width of notebook tabs"
-msgstr ""
+msgstr "장부북 탭 너비"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:1
 msgid "Change contents of reconciled split"
@@ -8222,15 +8229,15 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:4
 msgid "Delete a commodity"
-msgstr ""
+msgstr "상품 삭제"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:5
 msgid "Delete a commodity and prices"
-msgstr ""
+msgstr "상품과 가격 삭제"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:6
 msgid "Delete a transaction"
-msgstr ""
+msgstr "거래 삭제"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:7
 msgid "Delete multiple price quotes"
@@ -8242,7 +8249,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:9
 msgid "Duplicating a changed transaction"
-msgstr ""
+msgstr "변경된 거래 복제 중"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:10
 msgid "Mark transaction split as unreconciled"
@@ -8250,15 +8257,15 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:11
 msgid "Read only register"
-msgstr ""
+msgstr "등록만 읽기"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:12
 msgid "Remove a splits from a transaction"
-msgstr ""
+msgstr "거래에서 스플릿 제거"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:13
 msgid "Remove all the splits from a transaction"
-msgstr ""
+msgstr "거래에서 전체 스플릿 제거"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:14
 msgid "This dialog is presented before allowing you to change the contents of a reconciled split. Allowing these changes can make it hard to perform future reconciliations."
@@ -8326,7 +8333,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:1
 msgid "Ending date (in seconds from Jan 1, 1970)"
-msgstr ""
+msgstr "종료 일(1970년 1월 1일부터 초 단위)"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:2
 msgid "Ending time period identifier"
@@ -8338,11 +8345,11 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:4
 msgid "Profit/loss ending date type"
-msgstr ""
+msgstr "이익/손실 종료 날짜 형태"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:5
 msgid "Profit/loss starting date type"
-msgstr ""
+msgstr "이익/손실 시작 날짜 형태"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:6
 msgid "Show a grand total of all accounts converted to the default report currency"
@@ -8350,7 +8357,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:7
 msgid "Show non currency commodities"
-msgstr ""
+msgstr "현재 상품 아닌 것 보이기"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:8
 msgid "Starting date (in seconds from Jan 1, 1970)"
@@ -8463,7 +8470,7 @@ msgstr "참 설정"
 
 #: ../src/gnome-search/search-date.c:191
 msgid "is before"
-msgstr ""
+msgstr "이전 임"
 
 #: ../src/gnome-search/search-date.c:192
 msgid "is before or on"
@@ -8489,7 +8496,7 @@ msgstr "켬 또는 후 상태"
 #: ../src/gnome-search/search-int64.c:185
 #: ../src/gnome-search/search-numeric.c:216
 msgid "is less than"
-msgstr ""
+msgstr "보다 작음"
 
 #: ../src/gnome-search/search-double.c:184
 #: ../src/gnome-search/search-int64.c:186
@@ -8737,7 +8744,7 @@ msgstr "유효한 기초 잔액을 입력시커나 그대로 두십시오."
 
 #: ../src/gnome-utils/dialog-account.c:841
 msgid "You must select a transfer account or choose the opening balances equity account."
-msgstr "이전 계정을 선택하거나 기초 잔액 지분 계정을 선택하여야 합니다."
+msgstr "이체 계정을 선택하거나 기초 잔액 자기자본 계정을 선택하여야 합니다."
 
 #: ../src/gnome-utils/dialog-account.c:1324
 msgid "Edit Account"
@@ -8785,11 +8792,11 @@ msgstr ""
 
 #: ../src/gnome-utils/dialog-commodity.c:269
 msgid "Select security/currency"
-msgstr "증서/통화 선택"
+msgstr "단위/통화 선택"
 
 #: ../src/gnome-utils/dialog-commodity.c:273
 msgid "Select security"
-msgstr "증서 선택"
+msgstr "단위 선택"
 
 #: ../src/gnome-utils/dialog-commodity.c:278
 msgid "Select currency"
@@ -8813,15 +8820,15 @@ msgstr "통화 정보"
 
 #: ../src/gnome-utils/dialog-commodity.c:959
 msgid "Edit security"
-msgstr "증서 편집"
+msgstr "단위 편집"
 
 #: ../src/gnome-utils/dialog-commodity.c:959
 msgid "New security"
-msgstr "새 증서"
+msgstr "새 단위"
 
 #: ../src/gnome-utils/dialog-commodity.c:960
 msgid "Security Information"
-msgstr "증서 정보"
+msgstr "단위 정보"
 
 #: ../src/gnome-utils/dialog-commodity.c:1206
 msgid "You may not create a new national currency."
@@ -8911,7 +8918,7 @@ msgstr "수입과 지출 계정 보이기"
 
 #: ../src/gnome-utils/dialog-transfer.c:1243
 msgid "You must specify an account to transfer from, or to, or both, for this transaction. Otherwise, it will not be recorded."
-msgstr "이 거래에서 양쪽 방향으로 이전하기 위한 계정을 지정하여야 합니다. 그렇지 않으면 기록되지 않을 것입니다."
+msgstr "이 거래에서 양쪽 방향으로 이체하기 위한 계정을 지정하여야 합니다. 그렇지 않으면 기록되지 않을 것입니다."
 
 #: ../src/gnome-utils/dialog-transfer.c:1253
 msgid "You can't transfer from and to the same account!"
@@ -8919,11 +8926,11 @@ msgstr "동일 계정으로 받거나 내보낼 수 없습니다!"
 
 #: ../src/gnome-utils/dialog-transfer.c:1279
 msgid "You can't transfer from a non-currency account.  Try reversing the \"from\" and \"to\" accounts and making the \"amount\" negative."
-msgstr "비 통화 계정에서 이전할 수 없습니다. "
+msgstr "비 통화 계정에서 이체할 수 없습니다. "
 
 #: ../src/gnome-utils/dialog-transfer.c:1304
 msgid "You must enter an amount to transfer."
-msgstr "이전할 계정을 입력하시오."
+msgstr "이체할 계정을 입력하시오."
 
 #: ../src/gnome-utils/dialog-transfer.c:1319
 msgid "You must enter a valid price."
@@ -8939,11 +8946,11 @@ msgstr "차변 계정"
 
 #: ../src/gnome-utils/dialog-transfer.c:1648
 msgid "Transfer From"
-msgstr "이전"
+msgstr "이체"
 
 #: ../src/gnome-utils/dialog-transfer.c:1652
 msgid "Transfer To"
-msgstr "이전"
+msgstr "이체"
 
 #: ../src/gnome-utils/dialog-transfer.c:1713
 msgid "Debit Amount:"
@@ -9014,96 +9021,96 @@ msgstr ""
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:234
 msgid "Unicode"
-msgstr ""
+msgstr "유니코드"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:236
 msgid "European"
-msgstr ""
+msgstr "유럽"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:237
 msgid "ISO-8859-1 (West European)"
-msgstr ""
+msgstr "ISO-8859-1 (서유럽)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:238
 msgid "ISO-8859-2 (East European)"
-msgstr ""
+msgstr "ISO-8859-2 (동유럽)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:239
 msgid "ISO-8859-3 (South European)"
-msgstr ""
+msgstr "ISO-8859-3 (남유럽)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:240
 msgid "ISO-8859-4 (North European)"
-msgstr ""
+msgstr "ISO-8859-4 (북유럽)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:241
 msgid "ISO-8859-5 (Cyrillic)"
-msgstr ""
+msgstr "ISO-8859-5 (키릴)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:242
 msgid "ISO-8859-6 (Arabic)"
-msgstr ""
+msgstr "ISO-8859-6 (아라비아)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:243
 msgid "ISO-8859-7 (Greek)"
-msgstr ""
+msgstr "ISO-8859-7 (그리스)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:244
 msgid "ISO-8859-8 (Hebrew)"
-msgstr ""
+msgstr "ISO-8859-8 (유대어)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:245
 msgid "ISO-8859-9 (Turkish)"
-msgstr ""
+msgstr "ISO-8859-9 (터어키)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:246
 msgid "ISO-8859-10 (Nordic)"
-msgstr ""
+msgstr "ISO-8859-10 (노르딕)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:247
 msgid "ISO-8859-11 (Thai)"
-msgstr ""
+msgstr "ISO-8859-11 (타이i)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:248
 msgid "ISO-8859-13 (Baltic)"
-msgstr ""
+msgstr "ISO-8859-13 (발틱)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:249
 msgid "ISO-8859-14 (Celtic)"
-msgstr ""
+msgstr "ISO-8859-14 (셀틱)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:250
 msgid "ISO-8859-15 (West European, Euro sign)"
-msgstr ""
+msgstr "ISO-8859-15 (서유럽, 유로 표시)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:251
 msgid "ISO-8859-16 (South-East European)"
-msgstr ""
+msgstr "ISO-8859-16 (남동 유럽)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:252
 msgid "Cyrillic"
-msgstr ""
+msgstr "키릭"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:253
 msgid "KOI8-R (Russian)"
-msgstr ""
+msgstr "KOI8-R (러시아)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:254
 msgid "KOI8-U (Ukrainian)"
-msgstr ""
+msgstr "KOI8-U (우크라이나)"
 
 #. Translators: Please insert encodings here that are typically used in your
 #. * locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
 #. * for assistance with spelling.
 #: ../src/gnome-utils/druid-gnc-xml-import.c:577
 msgid "ISO-8859-1 KOI8-U"
-msgstr ""
+msgstr "ISO-8859-1 KOI8-U"
 
 #. another error, cannot handle this here
 #: ../src/gnome-utils/druid-gnc-xml-import.c:698
 #: ../src/gnome-utils/druid-gnc-xml-import.c:717
 msgid "The file could not be reopened."
-msgstr ""
+msgstr "파일을 다시 열 수 없습니다."
 
 #. try to load once again
 #: ../src/gnome-utils/druid-gnc-xml-import.c:705
@@ -9186,15 +9193,15 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/commodity.glade.h:8
 msgid "F_raction traded:"
-msgstr ""
+msgstr "기준가 정밀도:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:9
 msgid "Select security/currency "
-msgstr ""
+msgstr "단위/통화 선택"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:10
 msgid "Select user information here..."
-msgstr ""
+msgstr "사용자 정보를 여기서 선택..."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:11
 msgid "Si_ngle:"
@@ -9214,7 +9221,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/commodity.glade.h:15
 msgid "Time_zone:"
-msgstr ""
+msgstr "시간대(_Z):"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:16
 msgid "Type of quote source:"
@@ -9226,7 +9233,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/commodity.glade.h:18
 msgid "_Full name:"
-msgstr ""
+msgstr "전체 이름(_F):"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:19
 msgid "_Get Online Quotes"
@@ -9238,27 +9245,27 @@ msgstr "다수행(_M):"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:21
 msgid "_Symbol/abbreviation:"
-msgstr ""
+msgstr "심볼/약어(_S)"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:23
 msgid "_Unknown:"
-msgstr ""
+msgstr "미지(_U):"
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:1
 msgid "No warnings to reset."
-msgstr ""
+msgstr "초기화시 경고 없음."
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:2
 msgid "Permanent Warnings"
-msgstr ""
+msgstr "영구 경고"
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:3
 msgid "Reset Warnings"
-msgstr ""
+msgstr "초기화 경고"
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:4
 msgid "Temporary Warnings"
-msgstr ""
+msgstr "일시 경고"
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:5
 msgid "You have requested that the following warning dialogs not be presented.  To re-enable any of these dialogs, select the check box next to the dialog, then click OK."
@@ -9266,7 +9273,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:7
 msgid "_Unselect All"
-msgstr ""
+msgstr "전체 선택 해제(_U)"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:1
 msgid ""
@@ -9277,15 +9284,15 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:4
 msgid "Choose method"
-msgstr ""
+msgstr "방법 선택"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:5
 msgid "Finish changes"
-msgstr ""
+msgstr "변경 종료"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:6
 msgid "GnuCash will install the data for you."
-msgstr ""
+msgstr "GnuCash가 자료를 설치할 것입니다."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:7
 msgid "GnuCash will update the system path for you."
@@ -9293,7 +9300,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:8
 msgid "Install into home directory"
-msgstr ""
+msgstr "홈 폴더에 설치"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:9
 msgid "Please add the following lines at the end of your ~/.gconf.path file:"
@@ -9301,11 +9308,11 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:10
 msgid "Please run the following commands:"
-msgstr ""
+msgstr "다음 명령어를 실행하시오:"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:11
 msgid "S_kip"
-msgstr ""
+msgstr "건너뛰기(_K)"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:12
 msgid "The configuration data is stored in a non-standard location.  There are two methods that can be used to make this data visible to GnuCash.  The first is to modify a system search path to include the data location.  The second is to copy the data into your home directory."
@@ -9726,7 +9733,7 @@ msgstr "자동 저장 시간 간격(_I):"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:39
 msgid "Automatic _interest transfer"
-msgstr "자동 이익 이전(_I)"
+msgstr "자동 이자 이체(_I)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:40
 msgid "Automatic credit card _payment"
@@ -9806,19 +9813,19 @@ msgstr "음수값을 빨간색으로 보이기(_G)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:61
 msgid "Display the notebook tabs at the bottom of the window."
-msgstr "창 하단에 노트북 탭 보이기"
+msgstr "창 하단에 장부북 탭 보이기"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:62
 msgid "Display the notebook tabs at the left of the window."
-msgstr "창 왼쪽에 노트북 탭 보이기"
+msgstr "창 왼쪽에 장부북 탭 보이기"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:63
 msgid "Display the notebook tabs at the right of the window."
-msgstr "창 오른쪽에 노트북 탭 보이기"
+msgstr "창 오른쪽에 장부북 탭 보이기"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:64
 msgid "Display the notebook tabs at the top of the window."
-msgstr "창 상단에 노트북 탭 보이기"
+msgstr "창 상단에 장부북 탭 보이기"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:65
 msgid "Display this many rows when a register is created."
@@ -9982,7 +9989,7 @@ msgstr "자동저장 확인 질문 보이기(_Q"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:110
 msgid "Show close button on _notebook tabs"
-msgstr "노트북 탭에서 닫기버튼 보이기(_N)"
+msgstr "장부북 탭에서 닫기버튼 보이기(_N)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:111
 msgid "Show horizontal borders on the cells."
@@ -10006,11 +10013,11 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:116
 msgid "Show vertical borders on the cells."
-msgstr ""
+msgstr "셀에서 수직 경계 보이기"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:117
 msgid "Sign reverse balances on income and expense accounts."
-msgstr ""
+msgstr "수입과 지출 계정상 역 수지 표시"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:118
 msgid "Sign reverse balances on the following: Credit Card, Payable, Liability, Equity, and Income."
@@ -10130,7 +10137,7 @@ msgstr "자동-상승 목록(A)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:148
 msgid "_Auto-split ledger"
-msgstr "원장 자동 분할"
+msgstr "부분 거래 원장 보기"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:149
 msgid "_Automatic decimal point"
@@ -10138,7 +10145,7 @@ msgstr "자동 소수점 자리(_A)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:150
 msgid "_Basic ledger"
-msgstr "기본 원장(_B)"
+msgstr "기본 거래 원장 보기(_B)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:151
 msgid "_Decimal places:"
@@ -10233,15 +10240,15 @@ msgstr "<b>기본 정보</b>"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:2
 msgid "<b>Currency Transfer</b>"
-msgstr "<b>통화 이전</b>"
+msgstr "<b>통화 이체</b>"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:3
 msgid "<b>Transfer From</b>"
-msgstr "<b>이전할 내용</b>"
+msgstr "<b>이체할 내용</b>"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:4
 msgid "<b>Transfer To</b>"
-msgstr "<b>이전받을 내용</b>"
+msgstr "<b>이체받을 내용</b>"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:6
 msgid "Currency:"
@@ -10253,7 +10260,7 @@ msgstr "날짜:"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:8
 msgid "Description:"
-msgstr "요약:"
+msgstr "사용 내역:"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:9
 msgid "Exchange Rate:"
@@ -10316,7 +10323,7 @@ msgstr "아니오, 전혀(_E)"
 
 #: ../src/gnome-utils/gnc-autosave.c:110
 msgid "_No, not this time"
-msgstr "아니오, 이번만 아님"
+msgstr "아니오, 이번만 아님(_N)"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/gnucash/report/price-scatter.scm
@@ -10357,27 +10364,27 @@ msgstr "달력"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:239
 msgid "12 months"
-msgstr "12 월"
+msgstr "12 개월"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:240
 msgid "6 months"
-msgstr "6 월"
+msgstr "6 개월"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:241
 msgid "4 months"
-msgstr "4 월"
+msgstr "4 개월"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:242
 msgid "3 months"
-msgstr "3 월"
+msgstr "3 개월"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:243
 msgid "2 months"
-msgstr "2 월"
+msgstr "2 개월"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:244
 msgid "1 month"
-msgstr "1 월"
+msgstr "1 개월"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:277
 msgid "View:"
@@ -10410,12 +10417,12 @@ msgstr "(미정)"
 #: ../src/gnome-utils/gnc-druid-provider-file-gnome.c:99
 #, c-format
 msgid "Failed to process file: %s"
-msgstr ""
+msgstr "파일 진행 실패: %s"
 
 #: ../src/gnome-utils/gnc-druid-provider-file-gnome.c:132
 #, c-format
 msgid "Failed to open file: %s: %s"
-msgstr ""
+msgstr "파일 열기 실패: %s: %s"
 
 #: ../src/gnome-utils/gnc-file.c:100
 #: ../src/gnome-utils/gnc-main-window.c:235
@@ -10458,7 +10465,7 @@ msgstr "(null)"
 #: ../src/gnome-utils/gnc-file.c:204
 #, c-format
 msgid "No suitable backend was found for %s."
-msgstr ""
+msgstr "%s의 적당한 백엔드를 찾지 못했습니다."
 
 #: ../src/gnome-utils/gnc-file.c:209
 #, c-format
@@ -10468,7 +10475,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:214
 #, c-format
 msgid "Can't parse the URL %s."
-msgstr ""
+msgstr "URL %s를 파싱할 수 없습니다."
 
 #: ../src/gnome-utils/gnc-file.c:219
 #, c-format
@@ -10593,17 +10600,17 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:403
 #, c-format
 msgid "There was an error parsing the file %s."
-msgstr ""
+msgstr "파일 %s를 파싱 중 오류입니다."
 
 #: ../src/gnome-utils/gnc-file.c:408
 #, c-format
 msgid "The file %s is empty."
-msgstr ""
+msgstr "파일 %s 가 비었습니다."
 
 #: ../src/gnome-utils/gnc-file.c:416
 #, c-format
 msgid "The file %s could not be found."
-msgstr ""
+msgstr "파일 %s를 찾을 수 없습니다."
 
 #: ../src/gnome-utils/gnc-file.c:422
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
@@ -10612,12 +10619,12 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:428
 #, c-format
 msgid "The file type of file %s is unknown."
-msgstr ""
+msgstr "파일 %s의 파일 형태가 미지의 형식입니다."
 
 #: ../src/gnome-utils/gnc-file.c:433
 #, c-format
 msgid "Could not make a backup of the file %s"
-msgstr ""
+msgstr "파일 %s의 백업 생성을 할 수 없습니다"
 
 #: ../src/gnome-utils/gnc-file.c:438
 #, c-format
@@ -10627,7 +10634,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:445
 #, c-format
 msgid "No read permission to read from file %s."
-msgstr ""
+msgstr "파일 %s를 읽을 수 있는 권한을 읽을 수 없습니다."
 
 #: ../src/gnome-utils/gnc-file.c:450
 msgid "This database is from an older version of GnuCash. Do you want to want to upgrade the database to the current version?"
@@ -10640,7 +10647,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:467
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
-msgstr ""
+msgstr "알려지지 않은 I?O 오류 (%d) 발생함."
 
 #: ../src/gnome-utils/gnc-file.c:562
 msgid "Save changes to the file?"
@@ -10699,7 +10706,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-general-select.c:221
 msgid "View..."
-msgstr ""
+msgstr "보기..."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:280
 msgid "GnuCash could not find the files for the help documentation.  This is likely because the 'gnucash-docs' package is not installed."
@@ -10707,15 +10714,15 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:310
 msgid "GnuCash could not find the files for the help documentation."
-msgstr ""
+msgstr "GnuCash가 도움말 파일을 찾을 수 없습니다."
 
 #: ../src/gnome-utils/gnc-html.c:106
 msgid "Not found"
-msgstr ""
+msgstr "찾지 못함"
 
 #: ../src/gnome-utils/gnc-html.c:108
 msgid "The specified URL could not be loaded."
-msgstr ""
+msgstr "지정 URL을 읽어올 수 없습니다."
 
 #: ../src/gnome-utils/gnc-html.c:507
 #: ../src/gnome-utils/gnc-html.c:962
@@ -10735,7 +10742,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-icons.c:17
 msgid "_Delete Account"
-msgstr ""
+msgstr "계정 삭제(_D)"
 
 #: ../src/gnome-utils/gnc-icons.c:18
 #: ../src/gnome/window-reconcile.c:2019
@@ -10759,7 +10766,7 @@ msgstr "파일(_F)"
 
 #: ../src/gnome-utils/gnc-main-window.c:224
 msgid "Tra_nsaction"
-msgstr ""
+msgstr "거래(_N)"
 
 #: ../src/gnome-utils/gnc-main-window.c:225
 msgid "_Reports"
@@ -10798,11 +10805,11 @@ msgstr "현재 활성 페이지 인쇄"
 
 #: ../src/gnome-utils/gnc-main-window.c:239
 msgid "Proper_ties"
-msgstr "북 설정(_T)"
+msgstr "장부 설정(_T)"
 
 #: ../src/gnome-utils/gnc-main-window.c:240
 msgid "Edit the properties of the current file"
-msgstr ""
+msgstr "현재 파일 속성 편집"
 
 #: ../src/gnome-utils/gnc-main-window.c:242
 msgid "_Close"
@@ -10810,7 +10817,7 @@ msgstr "닫기(_C)"
 
 #: ../src/gnome-utils/gnc-main-window.c:243
 msgid "Close the currently active page"
-msgstr ""
+msgstr "현재 활성화 페이지 닫기"
 
 #: ../src/gnome-utils/gnc-main-window.c:245
 msgid "_Quit"
@@ -10826,7 +10833,7 @@ msgstr "기본설정(_E)"
 
 #: ../src/gnome-utils/gnc-main-window.c:261
 msgid "Edit the global preferences of GnuCash"
-msgstr ""
+msgstr "GnuCash 전역 설정 편집"
 
 #: ../src/gnome-utils/gnc-main-window.c:267
 msgid "Select sorting criteria for this page view"
@@ -11280,7 +11287,7 @@ msgstr "세금 정보"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-account.c:643
 msgid "Column letter for 'Placeholder'|P"
-msgstr ""
+msgstr "플레이스홀더의 열 문자|P"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1388
@@ -11359,7 +11366,7 @@ msgstr "시간대"
 
 #: ../src/gnome-utils/gnc-tree-view-price.c:435
 msgid "Security"
-msgstr "보호"
+msgstr "단위"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/general-journal.scm
@@ -11431,20 +11438,20 @@ msgstr "다음 발생"
 
 #: ../src/gnome-utils/print-session.c:45
 msgid "Print GnuCash Document"
-msgstr ""
+msgstr "GnuCash  문서 출력"
 
 #. ********************* END OF FILE *********************************\*******************************************************************
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:1
 msgid "Most recently opened file"
-msgstr ""
+msgstr "가장 최근 열려진 파일"
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:2
 msgid "Next most recently opened file"
-msgstr ""
+msgstr "다음 가장 최근 열린 파일"
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:3
 msgid "Number of files in history"
-msgstr ""
+msgstr "작업 내역의 파일 갯수"
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:4
 msgid "This field contains the full path of the most recently opened file."
@@ -11488,11 +11495,11 @@ msgstr "이익:"
 
 #: ../src/gnome/window-reconcile.c:432
 msgid "Interest Payment"
-msgstr ""
+msgstr "이자 지불"
 
 #: ../src/gnome/window-reconcile.c:435
 msgid "Interest Charge"
-msgstr ""
+msgstr "이자 수수료"
 
 #: ../src/gnome/window-reconcile.c:453
 msgid "Payment From"
@@ -11600,7 +11607,7 @@ msgstr "계정 조정을 취소"
 
 #: ../src/gnome/window-reconcile.c:2017
 msgid "Open the account"
-msgstr ""
+msgstr "계정 열기"
 
 #: ../src/gnome/window-reconcile.c:2020
 msgid "Edit the main account for this register"
@@ -11621,11 +11628,11 @@ msgstr "GnuCash 도움말 창 열기"
 
 #: ../src/import-export/generic-import.glade.h:1
 msgid "\"A\""
-msgstr ""
+msgstr "\"A\""
 
 #: ../src/import-export/generic-import.glade.h:2
 msgid "\"R\""
-msgstr ""
+msgstr "\"R\""
 
 #: ../src/import-export/generic-import.glade.h:3
 msgid "\"Select Import Action\" allows you to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required)."
@@ -11665,7 +11672,7 @@ msgstr "형식 선택"
 
 #: ../src/import-export/generic-import.glade.h:14
 msgid "Commercial ATM _fees threshold"
-msgstr "상업적 ATM 요금 허용치"
+msgstr "상업적 ATM 수수료 허용치"
 
 #: ../src/import-export/generic-import.glade.h:18
 msgid "Enable edit match action"
@@ -11742,19 +11749,19 @@ msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:41
 msgid "Red"
-msgstr ""
+msgstr "빨강"
 
 #: ../src/import-export/generic-import.glade.h:42
 msgid "Select \"A\" to add the transaction as new."
-msgstr ""
+msgstr "거래를 새로 더하기 위하여 \"A\" 선택"
 
 #: ../src/import-export/generic-import.glade.h:43
 msgid "Select \"R\" to reconcile a matching transaction."
-msgstr ""
+msgstr "거래를 일치하기 위하여 정리를 하기 위하여 \"R\" 선택"
 
 #: ../src/import-export/generic-import.glade.h:45
 msgid "Select matching existing transaction"
-msgstr ""
+msgstr "기존 거래 일치를 선택"
 
 #: ../src/import-export/generic-import.glade.h:46
 msgid "Select neither to skip the transaction (it won't be imported at all)."
@@ -11804,28 +11811,28 @@ msgstr ""
 #. Numeric formats
 #: ../src/import-export/gnc-import-format-gnome.c:106
 msgid "Period-as-decimal (1,000.00)"
-msgstr ""
+msgstr "소수점을 점으로"
 
 #: ../src/import-export/gnc-import-format-gnome.c:107
 msgid "Comma-as-decimal (1.000,00)"
-msgstr ""
+msgstr "소수점을 콤마로"
 
 #. Date formats
 #: ../src/import-export/gnc-import-format-gnome.c:110
 msgid "m-d-y"
-msgstr ""
+msgstr "월-일-년"
 
 #: ../src/import-export/gnc-import-format-gnome.c:111
 msgid "d-m-y"
-msgstr ""
+msgstr "일-월-년"
 
 #: ../src/import-export/gnc-import-format-gnome.c:112
 msgid "y-m-d"
-msgstr ""
+msgstr "년-월-일"
 
 #: ../src/import-export/gnc-import-format-gnome.c:113
 msgid "y-d-m"
-msgstr ""
+msgstr "년-일-월"
 
 #. Translators: Strings from this file are needed only in
 #. * countries that have one of aqbanking's Online Banking
@@ -11910,12 +11917,12 @@ msgstr ""
 #: ../src/import-export/hbci/druid-hbci-initial.c:140
 #, c-format
 msgid "%s at %s (code %s)"
-msgstr ""
+msgstr "%s (%s 에서) (코드 %s)"
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:145
 #, c-format
 msgid "%s at bank code %s"
-msgstr ""
+msgstr "%s (은행 코드 %s에서)"
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:503
 msgid "Choose AqBanking Backend"
@@ -11923,7 +11930,7 @@ msgstr "aq뱅킹 백엔드 선택"
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:504
 msgid "Please choose an AqBanking backend to be configured"
-msgstr ""
+msgstr "설정된 Aq뱅킹 백엔드 선택하시오."
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:505
 msgid "Co_nfigure"
@@ -11969,11 +11976,11 @@ msgstr ""
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:1
 msgid "(filled in automatically)"
-msgstr ""
+msgstr "(자동 채워짐)"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:2
 msgid "<b>From</b>"
-msgstr ""
+msgstr "<b>에서</b>"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:3
 msgid "<b>Log Messages</b>"
@@ -12467,7 +12474,7 @@ msgstr "직접 차변(_D)..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:122
 msgid "Issue a new direct debit note online through Online Banking"
-msgstr "온라인 계정통한 온라인 새 직접 차변 노트 발행"
+msgstr "온라인 계정통한 온라인 새 직접 차변 장부 발행"
 
 #. File -> Import menu item
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:126
@@ -12750,11 +12757,11 @@ msgstr "선택한 로그 파일을 읽을 수 없습니다. 파일 헤더가 일
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:45
 msgid "_Replay GnuCash .log file..."
-msgstr "GnuCash .log 파일을 재생하기(_R)..."
+msgstr "GnuCash .log파일 재생하기(_R)..."
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:46
 msgid "Replay a GnuCash log file after a crash.  This cannot be undone."
-msgstr "프로그램 충돌 후 GunCash 로그 파일을 재생하기"
+msgstr "충돌 후 GunCash 로그 파일을 재생하기. 이것을 취소할 수 없습니다."
 
 #. This string is a default account
 #. name. It MUST NOT contain the
@@ -12763,7 +12770,7 @@ msgstr "프로그램 충돌 후 GunCash 로그 파일을 재생하기"
 #: ../src/import-export/ofx/gnc-ofx-import.c:357
 #, c-format
 msgid "Stock account for security \"%s\""
-msgstr "증권 \"%s\" 위한 주식 계좌"
+msgstr "단위 \"%s\" 위한 주식 계좌"
 
 #. This string is a default account
 #. name. It MUST NOT contain the
@@ -12772,7 +12779,7 @@ msgstr "증권 \"%s\" 위한 주식 계좌"
 #: ../src/import-export/ofx/gnc-ofx-import.c:423
 #, c-format
 msgid "Income account for security \"%s\""
-msgstr "증권 \"%s\" 위한 수입 계좌"
+msgstr "단위 \"%s\" 위한 수입 계좌"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:578
 msgid "Unknown OFX checking account"
@@ -12842,25 +12849,25 @@ msgstr "QIF 파일 읽기 경고: %s"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:534
 msgid "An error occurred while loading the QIF file."
-msgstr ""
+msgstr "QIF 파일 읽는 중 발생한 오류"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:542
 #, c-format
 msgid "QIF file load failed: %s"
-msgstr ""
+msgstr "QIF 파일 읽기 오류: %s"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:605
 msgid "An error occurred while parsing the QIF file."
-msgstr ""
+msgstr "QIF 파일 파싱 중 발생한 오류"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:615
 #, c-format
 msgid "QIF file parse failed: %s"
-msgstr ""
+msgstr "QIF 파일 파싱 오류: %s"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:864
 msgid "You must enter an account name."
-msgstr ""
+msgstr "게정 이름을 입력해야 합니다."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1047
 msgid "GnuCash account name"
@@ -12868,28 +12875,28 @@ msgstr "GnuCash 계정명"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1298
 msgid "An error occurred while importing QIF transactions into GnuCash. Your accounts are unchanged."
-msgstr ""
+msgstr "QIF 거래를 GnuCash로 읽는 동안 발생한 오류. 계정이 변하지 않았습니다."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1342
 #: ../src/import-export/qif-import/druid-qif-import.c:1794
 msgid "(split)"
-msgstr ""
+msgstr "(분리)"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1513
 msgid "You must enter a Type for the commodity."
-msgstr ""
+msgstr "상품 형태를 입력해야 합니다."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1520
 msgid "You must enter a name for the commodity."
-msgstr ""
+msgstr "상품명을 입력해야 합니다."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1525
 msgid "You must enter an abbreviation for the commodity."
-msgstr ""
+msgstr "상품의 약어를 입력해야 합니다."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1534
 msgid "You must enter an existing national currency or enter a different type."
-msgstr ""
+msgstr "기존 국가 통화 또는 다른 형태를 입력해야 합니다."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1672
 #, c-format
@@ -12898,19 +12905,19 @@ msgstr "\"%s\"에 대한 정보 입력"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1684
 msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-msgstr ""
+msgstr "상품 교환 또는 목록을 고르시오(NASDAQ, NYSE, 기타 등등)."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1708
 msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
-msgstr ""
+msgstr "\"레드햇 주식\"과 같은 상품의 전체 이름 입력"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1730
 msgid "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for the name."
-msgstr ""
+msgstr "시세 기호(예\"RHAT\") 또는 다른 유일한 약어를 입력"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1751
 msgid "Click \"Next\" to accept the information and move on."
-msgstr ""
+msgstr "정보를 허용하고 계속 하기 위하여 \"다음\" 클릭"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2141
 msgid "QIF account name"
@@ -13117,7 +13124,7 @@ msgstr ""
 
 #: ../src/import-export/qif-import/qif.glade.h:83
 msgid "Tradable commodities"
-msgstr ""
+msgstr "거래 가능한 상품"
 
 #: ../src/import-export/qif-import/qif.glade.h:85
 msgid "Update your GnuCash accounts"
@@ -13342,7 +13349,7 @@ msgstr ""
 #: ../src/register/ledger-core/split-register.c:1710
 #: ../src/register/ledger-core/split-register.c:1712
 msgid "_Shares"
-msgstr "주식(_S)"
+msgstr "구매 계좌수(_S)"
 
 #: ../src/register/ledger-core/split-register.c:1710
 #: ../src/register/ledger-core/split-register.c:1717
@@ -13430,7 +13437,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:120
 #: ../intl-scm/guile-strings.c:122
 msgid "Buy"
-msgstr "매입"
+msgstr "구매 가격"
 
 #. src/app-utils/prefs.scm
 #: ../src/register/ledger-core/split-register.c:2007
@@ -13445,13 +13452,13 @@ msgstr "매입"
 #: ../intl-scm/guile-strings.c:148
 #: ../intl-scm/guile-strings.c:150
 msgid "Sell"
-msgstr "판매"
+msgstr "판매 가격"
 
 #: ../src/register/ledger-core/split-register.c:2012
 #: ../src/register/ledger-core/split-register.c:2018
 #: ../src/register/ledger-core/split-register.c:2061
 msgid "Fee"
-msgstr ""
+msgstr "수수료"
 
 #. src/app-utils/prefs.scm
 #: ../src/register/ledger-core/split-register.c:2043
@@ -13462,7 +13469,7 @@ msgstr "할인"
 #. Action: Dividend
 #: ../src/register/ledger-core/split-register.c:2063
 msgid "Div"
-msgstr ""
+msgstr "나누기"
 
 #. Action: Long Term Capital Gains
 #: ../src/register/ledger-core/split-register.c:2066
@@ -13477,35 +13484,35 @@ msgstr ""
 #. Action: Distribution
 #: ../src/register/ledger-core/split-register.c:2071
 msgid "Dist"
-msgstr ""
+msgstr "분배"
 
 #: ../src/register/ledger-core/split-register-control.c:57
 msgid "Rebalance Transaction"
-msgstr ""
+msgstr "거래 재 수지화"
 
 #: ../src/register/ledger-core/split-register-control.c:58
 msgid "The current transaction is not balanced."
-msgstr ""
+msgstr "현재 거래가 수지가 맞지 않음."
 
 #: ../src/register/ledger-core/split-register-control.c:106
 msgid "Balance it _manually"
-msgstr ""
+msgstr "수동으로 수지를 맞춤"
 
 #: ../src/register/ledger-core/split-register-control.c:108
 msgid "Let GnuCash _add an adjusting split"
-msgstr ""
+msgstr "GnuCash에 조정 스플릿 더하기(_A)"
 
 #: ../src/register/ledger-core/split-register-control.c:113
 msgid "Adjust current account _split total"
-msgstr ""
+msgstr "현재 계정 스플릿 총합계 조정(_S)"
 
 #: ../src/register/ledger-core/split-register-control.c:119
 msgid "Adjust _other account split total"
-msgstr ""
+msgstr "다른 계정 스플릿 총합계 조정(_O)"
 
 #: ../src/register/ledger-core/split-register-control.c:130
 msgid "_Rebalance"
-msgstr ""
+msgstr "재 수지화(_R)"
 
 #: ../src/register/ledger-core/split-register-control.c:1042
 msgid "You need to expand the transaction in order to modify its exchange rates."
@@ -13550,7 +13557,7 @@ msgstr "샘플:99999"
 
 #: ../src/register/ledger-core/split-register-layout.c:539
 msgid "sample:Description of a transaction"
-msgstr "샘플: 거래 요약"
+msgstr "샘플: 거래 사용 내역"
 
 #: ../src/register/ledger-core/split-register-layout.c:563
 #: ../src/register/ledger-core/split-register-layout.c:603
@@ -13574,7 +13581,7 @@ msgstr "형태:T"
 
 #: ../src/register/ledger-core/split-register-layout.c:677
 msgid "sample:Notes field sample text string"
-msgstr "샘플: 노트 항목 샘플 문자열"
+msgstr "샘플: 장부 항목 샘플 문자열"
 
 #: ../src/register/ledger-core/split-register-layout.c:685
 msgid "sample:No Particular Reason"
@@ -13605,7 +13612,7 @@ msgstr "전체 차변"
 
 #: ../src/register/ledger-core/split-register-model.c:295
 msgid "Tot Shares"
-msgstr "전체 주식"
+msgstr "전체 구매 계좌수"
 
 #: ../src/register/ledger-core/split-register-model.c:316
 msgid "Debit Formula"
@@ -13623,7 +13630,7 @@ msgstr "예정"
 
 #: ../src/register/ledger-core/split-register-model.c:836
 msgid "Enter the transaction reference, such as the invoice or check number"
-msgstr "송장이나 체크번호아 같은 거래 참조를 입력"
+msgstr "청구서이나 체크번호아 같은 거래 참조를 입력"
 
 #: ../src/register/ledger-core/split-register-model.c:840
 msgid "Enter the transaction number, such as the check number"
@@ -13639,11 +13646,11 @@ msgstr "판매자 이름 입력"
 
 #: ../src/register/ledger-core/split-register-model.c:880
 msgid "Enter a description of the transaction"
-msgstr "거래 요약 입력"
+msgstr "거래 사용 내역 입력"
 
 #: ../src/register/ledger-core/split-register-model.c:910
 msgid "Enter notes for the transaction"
-msgstr "거래 노트 입력"
+msgstr "거래 장부 입력"
 
 #: ../src/register/ledger-core/split-register-model.c:940
 msgid "Reason the transaction was voided"
@@ -13655,7 +13662,7 @@ msgstr "거래 형태를 입력, 또는 목록에서 하나를 선택"
 
 #: ../src/register/ledger-core/split-register-model.c:1060
 msgid "Enter a description of the split"
-msgstr "분리 요약 입력"
+msgstr "스플릿 사용 내역 입력"
 
 #: ../src/register/ledger-core/split-register-model.c:1135
 msgid "Enter the effective share price"
@@ -14005,7 +14012,7 @@ msgstr "QSF는 기본적으로 UF-8 사용."
 #. src/scm/main-window.scm
 #: ../intl-scm/guile-strings.c:2
 msgid "Book Options"
-msgstr "북 설정"
+msgstr "장부 설정"
 
 #. src/scm/command-line.scm
 #: ../intl-scm/guile-strings.c:4
@@ -14019,7 +14026,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:52
 #: ../intl-scm/guile-strings.c:54
 msgid "No commodities marked for quote retrieval."
-msgstr ""
+msgstr "견적 검색을 위해 표시된 상품이 없음."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
@@ -14032,7 +14039,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:74
 #: ../intl-scm/guile-strings.c:76
 msgid "Unable to get quotes or diagnose the problem."
-msgstr ""
+msgstr "견적을 얻거나 또는 프로그램 진단할 수 없음."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
@@ -14044,6 +14051,8 @@ msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
 msgstr ""
+"빠진 몇몇 필요한 펄 라이브러리가 필요합니다.\n"
+"그들을 설치하기 위하여 루트에서 'gnc-fq-update' 실행."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
@@ -14052,7 +14061,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:66
 #: ../intl-scm/guile-strings.c:68
 msgid "There was a system error while retrieving the price quotes."
-msgstr ""
+msgstr "가격 견적을 검색하는 동안 시스템 오류 발생."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
@@ -14061,7 +14070,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:70
 #: ../intl-scm/guile-strings.c:72
 msgid "There was an unknown error while retrieving the price quotes."
-msgstr ""
+msgstr "가격 견적을 검색하는 동안 미지의 오류 발생."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
@@ -14072,21 +14081,21 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:82
 #: ../intl-scm/guile-strings.c:84
 msgid "Unable to retrieve quotes for these items:"
-msgstr ""
+msgstr "이들 항목의 견적을 검색할 수 없음:"
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
 #: ../intl-scm/guile-strings.c:36
 #: ../intl-scm/guile-strings.c:80
 msgid "Continue using only the good quotes?"
-msgstr ""
+msgstr "계속 좋은 견적으로만 계속하겠습니까?"
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
 #: ../intl-scm/guile-strings.c:42
 #: ../intl-scm/guile-strings.c:86
 msgid "Continuing with good quotes."
-msgstr ""
+msgstr "좋은 견적으로 계속하는 중."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
@@ -14095,35 +14104,32 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:88
 #: ../intl-scm/guile-strings.c:92
 msgid "Unable to create prices for these items:"
-msgstr ""
+msgstr "이들 항목 가격으로 생성할 수 없음:"
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
 #: ../intl-scm/guile-strings.c:46
 #: ../intl-scm/guile-strings.c:90
 msgid "Add remaining good quotes?"
-msgstr ""
+msgstr "여분의 좋은 견적으로 더하겠습니까?"
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
 #: ../intl-scm/guile-strings.c:50
 #: ../intl-scm/guile-strings.c:94
 msgid "Adding remaining good quotes."
-msgstr ""
+msgstr "여분의 좋은 견적으로 더하는 중."
 
 #. src/tax/us/de_DE.scm
 #. src/tax/us/gnucash/tax/de_DE.scm
 #: ../intl-scm/guile-strings.c:98
 #: ../intl-scm/guile-strings.c:102
 msgid "Tax Number"
-msgstr ""
+msgstr "세금 번호"
 
 #. src/tax/us/txf-de_DE.scm
-#: ../intl-scm/guile-strings.c:104
-msgid "The electronic tax number of your business"
-msgstr ""
-
 #. src/app-utils/prefs.scm
+#: ../intl-scm/guile-strings.c:104
 #: ../intl-scm/guile-strings.c:106
 msgid "Funds In"
 msgstr "입금"
@@ -14131,7 +14137,7 @@ msgstr "입금"
 #. src/app-utils/prefs.scm
 #: ../intl-scm/guile-strings.c:110
 msgid "Receive"
-msgstr "수금"
+msgstr "입금"
 
 #. src/app-utils/prefs.scm
 #: ../intl-scm/guile-strings.c:114
@@ -14210,7 +14216,7 @@ msgstr "재정 기간 시작"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:180
 msgid "Start of the accounting period, as set in the global preferences"
-msgstr ""
+msgstr "계정 기간의 시작, 전역 설정에서 설정"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:182
@@ -14220,27 +14226,27 @@ msgstr "재정 기간 종료"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:184
 msgid "End of the accounting period, as set in the global preferences"
-msgstr ""
+msgstr "계정 기간의 종료, 전역 설정에서 설정"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:188
 msgid "Start of the current month"
-msgstr ""
+msgstr "현재 달의 시작"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:192
 msgid "End of the current month"
-msgstr ""
+msgstr "현재 달의 끝"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:196
 msgid "The beginning of the previous month"
-msgstr ""
+msgstr "이전 달의 시작"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:200
 msgid "Last day of previous month"
-msgstr ""
+msgstr "이전 달의 마지막 일"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:202
@@ -14250,7 +14256,7 @@ msgstr "현 분기의 시작"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:204
 msgid "The start of the latest quarterly accounting period"
-msgstr ""
+msgstr "최근 분기의 계정 기간의 시작"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:206
@@ -14260,17 +14266,17 @@ msgstr "현 분기의 끝"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:208
 msgid "The end of the latest quarterly accounting period"
-msgstr ""
+msgstr "최근 분기의 게정 기간의 끝"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:212
 msgid "The start of the previous quarterly accounting period"
-msgstr ""
+msgstr "이전 분기의 계정 기간의 시작"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:216
 msgid "End of previous quarterly accounting period"
-msgstr ""
+msgstr "이전 분기의 계정 기간의 끝"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:220
@@ -14331,7 +14337,7 @@ msgstr "준비자"
 #: ../intl-scm/guile-strings.c:670
 #: ../intl-scm/guile-strings.c:882
 msgid "Name of person preparing the report"
-msgstr ""
+msgstr "보고서 준비하는 사람의 이름"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -14357,7 +14363,7 @@ msgstr "준비"
 #: ../intl-scm/guile-strings.c:676
 #: ../intl-scm/guile-strings.c:888
 msgid "Name of organization or company prepared for"
-msgstr ""
+msgstr "준비된 기관이나 회사의 이름"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -14383,7 +14389,7 @@ msgstr "준비자 정보 보이기"
 #: ../intl-scm/guile-strings.c:682
 #: ../intl-scm/guile-strings.c:894
 msgid "Name of organization or company"
-msgstr ""
+msgstr "기관이나 회사 이름"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -14413,7 +14419,7 @@ msgstr "링크 가능"
 #: ../intl-scm/guile-strings.c:688
 #: ../intl-scm/guile-strings.c:900
 msgid "Enable hyperlinks in reports"
-msgstr ""
+msgstr "보고서에 하이퍼링크 가능"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -14571,7 +14577,7 @@ msgstr "중간"
 #: ../intl-scm/guile-strings.c:714
 #: ../intl-scm/guile-strings.c:926
 msgid "Align the banner in the center"
-msgstr ""
+msgstr "중앙에 배너 정렬"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -14593,7 +14599,7 @@ msgstr "오른쪽"
 #: ../intl-scm/guile-strings.c:718
 #: ../intl-scm/guile-strings.c:930
 msgid "Align the banner to the right"
-msgstr ""
+msgstr "오른쪽에 배너 정렬"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -14619,7 +14625,7 @@ msgstr "로고"
 #: ../intl-scm/guile-strings.c:724
 #: ../intl-scm/guile-strings.c:936
 msgid "Company logo image."
-msgstr ""
+msgstr "회사 로고 이미지."
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -14766,7 +14772,7 @@ msgstr "문자열 색상"
 #: ../intl-scm/guile-strings.c:736
 #: ../intl-scm/guile-strings.c:948
 msgid "Normal body text color."
-msgstr ""
+msgstr "일반 몸체 문자열 색상."
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -14818,7 +14824,7 @@ msgstr "표 셀 색상"
 #: ../intl-scm/guile-strings.c:748
 #: ../intl-scm/guile-strings.c:960
 msgid "Default background for table cells."
-msgstr ""
+msgstr "표 셀의 기본 배경."
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -14844,7 +14850,7 @@ msgstr "대체 표 셀 색상"
 #: ../intl-scm/guile-strings.c:754
 #: ../intl-scm/guile-strings.c:966
 msgid "Default alternate background for table cells."
-msgstr ""
+msgstr "표 셀의 기본 대체 배경"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -14859,7 +14865,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:970
 #: ../intl-scm/guile-strings.c:1042
 msgid "Subheading/Subtotal Cell Color"
-msgstr "하위헤딩/하위합계 셀 색상"
+msgstr "하위헤딩/부분총합 셀 색상"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -14870,7 +14876,7 @@ msgstr "하위헤딩/하위합계 셀 색상"
 #: ../intl-scm/guile-strings.c:760
 #: ../intl-scm/guile-strings.c:972
 msgid "Default color for subtotal rows."
-msgstr ""
+msgstr "부분총합 행의 기본 색상"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -14885,7 +14891,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:976
 #: ../intl-scm/guile-strings.c:1046
 msgid "Sub-subheading/total Cell Color"
-msgstr "하위-하위헤딩/합계 셀 색상"
+msgstr "하위-하위헤딩/총합 셀 색상"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -14896,7 +14902,7 @@ msgstr "하위-하위헤딩/합계 셀 색상"
 #: ../intl-scm/guile-strings.c:766
 #: ../intl-scm/guile-strings.c:978
 msgid "Color for subsubtotals"
-msgstr "하위합계 색상"
+msgstr "부분총합 색상"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -15359,17 +15365,17 @@ msgstr ""
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1250
 msgid "Width of plot in pixels."
-msgstr ""
+msgstr "도표 너비(화소)"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1252
 msgid "Height of plot in pixels."
-msgstr ""
+msgstr "도표 높이(화소)"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1254
 msgid "Choose the marker for each data point."
-msgstr ""
+msgstr "각 자료점의 마커 선택"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1256
@@ -15759,7 +15765,7 @@ msgstr "자산"
 #: ../intl-scm/guile-strings.c:4324
 #: ../intl-scm/guile-strings.c:5340
 msgid "Liabilities"
-msgstr "채무"
+msgstr "부채"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:1374
@@ -16785,7 +16791,7 @@ msgstr "마커 색상"
 #: ../intl-scm/guile-strings.c:5288
 #: ../intl-scm/guile-strings.c:5360
 msgid "Plot Width"
-msgstr "플롯 너비"
+msgstr "도표 너비"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -16814,7 +16820,7 @@ msgstr "플롯 너비"
 #: ../intl-scm/guile-strings.c:5290
 #: ../intl-scm/guile-strings.c:5362
 msgid "Plot Height"
-msgstr "플롯 높이"
+msgstr "도표 높이"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/gnucash/report/price-scatter.scm
@@ -16969,7 +16975,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1910
 #: ../intl-scm/guile-strings.c:2534
 msgid "Price Scatterplot"
-msgstr ""
+msgstr "가격 분산도표"
 
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/gnucash/report/net-barchart.scm
@@ -17065,7 +17071,7 @@ msgstr "비용 차트"
 #: ../intl-scm/guile-strings.c:1968
 #: ../intl-scm/guile-strings.c:2592
 msgid "Liability Chart"
-msgstr ""
+msgstr "부채 차트"
 
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/gnucash/report/net-barchart.scm
@@ -17145,7 +17151,7 @@ msgstr "합계"
 #: ../intl-scm/guile-strings.c:2002
 #: ../intl-scm/guile-strings.c:2626
 msgid "Cash Flow"
-msgstr "자금 흐름"
+msgstr "현금 흐름표"
 
 #. src/report/standard-reports/cash-flow.scm
 #. src/report/standard-reports/gnucash/report/cash-flow.scm
@@ -17322,8 +17328,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2154
 #: ../intl-scm/guile-strings.c:2668
 #: ../intl-scm/guile-strings.c:2778
-msgid "Trial Balance"
-msgstr ""
+msgid "_Trial Balance"
+msgstr "시산표(_T)"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -17443,7 +17449,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2060
 #: ../intl-scm/guile-strings.c:2684
 msgid "Kind of trial balance to generate"
-msgstr ""
+msgstr "생성할 시산표 종류"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -17543,7 +17549,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2076
 #: ../intl-scm/guile-strings.c:2700
 msgid "Income summary accounts"
-msgstr ""
+msgstr "수입 요약 계정"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
@@ -17622,7 +17628,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3434
 #: ../intl-scm/guile-strings.c:4588
 msgid "Closing Entries pattern"
-msgstr ""
+msgstr "종료 엔트리 패턴"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -17637,7 +17643,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3436
 #: ../intl-scm/guile-strings.c:4590
 msgid "Any text in the Description column which identifies closing entries"
-msgstr ""
+msgstr "종료 엔트리를 인신하는 사용 내역 열의 임의 문자열"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -17754,7 +17760,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4274
 #: ../intl-scm/guile-strings.c:4382
 msgid "Display accounts as hyperlinks"
-msgstr ""
+msgstr "계정을 하이버링크로 보이기"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -17773,7 +17779,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4276
 #: ../intl-scm/guile-strings.c:4384
 msgid "Shows each account in the table as a hyperlink to its register window"
-msgstr ""
+msgstr "등록 창에 표의 각 계정을 하이퍼링크로 보이기"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -17796,7 +17802,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4406
 #: ../intl-scm/guile-strings.c:4572
 msgid "Commodities"
-msgstr ""
+msgstr "상품"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -17819,7 +17825,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4412
 #: ../intl-scm/guile-strings.c:4578
 msgid "Show Foreign Currencies"
-msgstr ""
+msgstr "외국 통화 보이기"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -17842,49 +17848,49 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4414
 #: ../intl-scm/guile-strings.c:4580
 msgid "Display any foreign currency amount in an account"
-msgstr ""
+msgstr "계정에서 임의 외국 통화량 보이기"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
 #: ../intl-scm/guile-strings.c:2132
 #: ../intl-scm/guile-strings.c:2756
 msgid "Current Trial Balance"
-msgstr ""
+msgstr "현재 시산표"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
 #: ../intl-scm/guile-strings.c:2134
 #: ../intl-scm/guile-strings.c:2758
 msgid "Uses the exact balances in the general ledger"
-msgstr ""
+msgstr "일반 장부에서 정확한 수지를 사용"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
 #: ../intl-scm/guile-strings.c:2136
 #: ../intl-scm/guile-strings.c:2760
 msgid "Pre-adjustment Trial Balance"
-msgstr ""
+msgstr "시산표 사전 조정"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
 #: ../intl-scm/guile-strings.c:2138
 #: ../intl-scm/guile-strings.c:2762
 msgid "Ignores Adjusting/Closing entries"
-msgstr ""
+msgstr "조정/종료 엔트리 무시"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
 #: ../intl-scm/guile-strings.c:2140
 #: ../intl-scm/guile-strings.c:2764
 msgid "Work Sheet"
-msgstr ""
+msgstr "작업 시트"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
 #: ../intl-scm/guile-strings.c:2142
 #: ../intl-scm/guile-strings.c:2766
 msgid "Creates a complete end-of-period work sheet"
-msgstr ""
+msgstr "완전한 기간 말 작업 시트 생성"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -17899,7 +17905,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3454
 #: ../intl-scm/guile-strings.c:4608
 msgid "for Period"
-msgstr ""
+msgstr "기간"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -17915,21 +17921,21 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4606
 #, c-format
 msgid "For Period Covering %s to %s"
-msgstr ""
+msgstr "%s 에서 %s 까지 기간"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
 #: ../intl-scm/guile-strings.c:2156
 #: ../intl-scm/guile-strings.c:2780
 msgid "Adjustments"
-msgstr ""
+msgstr "조정"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
 #: ../intl-scm/guile-strings.c:2158
 #: ../intl-scm/guile-strings.c:2782
 msgid "Adjusted Trial Balance"
-msgstr ""
+msgstr "조정된 시산표"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -17966,7 +17972,7 @@ msgstr "대차 대조표"
 #: ../intl-scm/guile-strings.c:4334
 #: ../intl-scm/guile-strings.c:4622
 msgid "Unrealized Gains"
-msgstr ""
+msgstr "미회수 이득"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
@@ -18034,7 +18040,7 @@ msgstr "무효 거래입니까?"
 #: ../intl-scm/guile-strings.c:4834
 #: ../intl-scm/guile-strings.c:4922
 msgid "Reconciled Date"
-msgstr "조정 날짜"
+msgstr "통장정리한 날짜"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/gnucash/report/general-ledger.scm
@@ -18164,7 +18170,7 @@ msgstr "계정 코드를 보일까요?"
 #: ../intl-scm/guile-strings.c:3484
 #: ../intl-scm/guile-strings.c:4638
 msgid "Primary Subtotal"
-msgstr "제1의 하위총합"
+msgstr "제1의 부분총합"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/gnucash/report/general-ledger.scm
@@ -18175,7 +18181,7 @@ msgstr "제1의 하위총합"
 #: ../intl-scm/guile-strings.c:3486
 #: ../intl-scm/guile-strings.c:4640
 msgid "Primary Subtotal for Date Key"
-msgstr "날짜 키를 위한 제1의 하위총합"
+msgstr "날짜 키를 위한 제1의 부분총합"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/gnucash/report/general-ledger.scm
@@ -18208,7 +18214,7 @@ msgstr "제2의 키"
 #: ../intl-scm/guile-strings.c:3490
 #: ../intl-scm/guile-strings.c:4644
 msgid "Secondary Subtotal"
-msgstr "제2의 하위총합"
+msgstr "제2의 부분총합"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/gnucash/report/general-ledger.scm
@@ -18219,7 +18225,7 @@ msgstr "제2의 하위총합"
 #: ../intl-scm/guile-strings.c:3492
 #: ../intl-scm/guile-strings.c:4646
 msgid "Secondary Subtotal for Date Key"
-msgstr "날짜 키를 위한 제2의 하위총합"
+msgstr "날짜 키를 위한 제2의 부분총합"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/gnucash/report/general-ledger.scm
@@ -18289,7 +18295,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4258
 #: ../intl-scm/guile-strings.c:4366
 msgid "Parent account balances"
-msgstr ""
+msgstr "부모 계정 수지"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
@@ -18318,8 +18324,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3220
 #: ../intl-scm/guile-strings.c:4266
 #: ../intl-scm/guile-strings.c:4374
-msgid "Omit zero balance figures"
-msgstr ""
+msgid "Omit zero balaㅂnce figures"
+msgstr "제로 수지 값 빠짐"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
@@ -18379,28 +18385,28 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2286
 #: ../intl-scm/guile-strings.c:2910
 msgid "Label the revenue section"
-msgstr "수입 부분 라벨"
+msgstr "매출 부분 라벨"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
 #: ../intl-scm/guile-strings.c:2288
 #: ../intl-scm/guile-strings.c:2912
 msgid "Whether or not to include a label for the revenue section"
-msgstr "수입 부분의 라벨을 포함할지 안하는지"
+msgstr "매출 부분의 라벨을 포함할지 안하는지"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
 #: ../intl-scm/guile-strings.c:2290
 #: ../intl-scm/guile-strings.c:2914
 msgid "Include revenue total"
-msgstr "수입 전체 포함"
+msgstr "매출 전체 포함"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
 #: ../intl-scm/guile-strings.c:2292
 #: ../intl-scm/guile-strings.c:2916
 msgid "Whether or not to include a line indicating total revenue"
-msgstr "전체 수입을 지시하는 라인 포함할 지 안할지"
+msgstr "전체 매출을 지시하는 라인 포함할 지 안할지"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
@@ -18421,35 +18427,35 @@ msgstr "비용 부분 라벨을 포함할지 안할지"
 #: ../intl-scm/guile-strings.c:2298
 #: ../intl-scm/guile-strings.c:2922
 msgid "Include expense total"
-msgstr "비용 전체 포함"
+msgstr "지출 전체 포함"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
 #: ../intl-scm/guile-strings.c:2300
 #: ../intl-scm/guile-strings.c:2924
 msgid "Whether or not to include a line indicating total expense"
-msgstr "전체 비용을 나타내는 라인을 포함할 지 안할지"
+msgstr "전체 지출을 나타내는 라인을 포함할 지 안할지"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
 #: ../intl-scm/guile-strings.c:2338
 #: ../intl-scm/guile-strings.c:2962
 msgid "Revenues"
-msgstr "수입"
+msgstr "매출"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
 #: ../intl-scm/guile-strings.c:2340
 #: ../intl-scm/guile-strings.c:2964
 msgid "Total Revenue"
-msgstr "전체 수입"
+msgstr "전체 매출"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
 #: ../intl-scm/guile-strings.c:2344
 #: ../intl-scm/guile-strings.c:2968
 msgid "Total Expenses"
-msgstr "전체 비용"
+msgstr "전체 지출"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
@@ -18485,7 +18491,7 @@ msgstr "수입 막대차트"
 #: ../intl-scm/guile-strings.c:2352
 #: ../intl-scm/guile-strings.c:2976
 msgid "Expense Barchart"
-msgstr "비용 막대차트"
+msgstr "지출 막대차트"
 
 #. src/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/gnucash/report/category-barchart.scm
@@ -18673,14 +18679,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4228
 #: ../intl-scm/guile-strings.c:5382
 msgid "and"
-msgstr ""
+msgstr "와 "
 
 #. src/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/gnucash/report/portfolio.scm
 #: ../intl-scm/guile-strings.c:2418
 #: ../intl-scm/guile-strings.c:3042
 msgid "Investment Portfolio"
-msgstr ""
+msgstr "투자 포트폴리오"
 
 #. src/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/gnucash/report/portfolio.scm
@@ -18702,7 +18708,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3296
 #: ../intl-scm/guile-strings.c:4450
 msgid "Include accounts with no shares"
-msgstr ""
+msgstr "구매 계좌수가 없는 계정 포함"
 
 #. src/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/gnucash/report/portfolio.scm
@@ -18789,105 +18795,105 @@ msgstr "단일 열 대차 대조표"
 #: ../intl-scm/guile-strings.c:3090
 #: ../intl-scm/guile-strings.c:4244
 msgid "Print liability/equity section in the same column under the assets section as opposed to a second column right of the assets section"
-msgstr ""
+msgstr "동일 열에서 부채/자기자본 부분 출력"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3124
 #: ../intl-scm/guile-strings.c:4278
 msgid "Label the assets section"
-msgstr ""
+msgstr "자산 부분 라벨"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3126
 #: ../intl-scm/guile-strings.c:4280
 msgid "Whether or not to include a label for the assets section"
-msgstr ""
+msgstr "자산 부분의 라벨을 포함할 지 안할지"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3128
 #: ../intl-scm/guile-strings.c:4282
 msgid "Include assets total"
-msgstr ""
+msgstr "자산 총계 포함"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3130
 #: ../intl-scm/guile-strings.c:4284
 msgid "Whether or not to include a line indicating total assets"
-msgstr ""
+msgstr "총 자산을 지시하는 라인을 포함할 지 안할지"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3132
 #: ../intl-scm/guile-strings.c:4286
 msgid "Label the liabilities section"
-msgstr ""
+msgstr "부채 부분 라벨"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3134
 #: ../intl-scm/guile-strings.c:4288
 msgid "Whether or not to include a label for the liabilities section"
-msgstr ""
+msgstr "부채부분 라벨을 포함할 지 안할 지"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3136
 #: ../intl-scm/guile-strings.c:4290
 msgid "Include liabilities total"
-msgstr ""
+msgstr "부채 총합 포함"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3138
 #: ../intl-scm/guile-strings.c:4292
 msgid "Whether or not to include a line indicating total liabilities"
-msgstr ""
+msgstr "총 부채를 지시하는 라인을 포함할지 안할지"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3140
 #: ../intl-scm/guile-strings.c:4294
 msgid "Label the equity section"
-msgstr ""
+msgstr "자기자본 부분 라벨"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3142
 #: ../intl-scm/guile-strings.c:4296
 msgid "Whether or not to include a label for the equity section"
-msgstr ""
+msgstr "자기자본 부분 라벨을 포함할지 안할"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3144
 #: ../intl-scm/guile-strings.c:4298
 msgid "Include equity total"
-msgstr ""
+msgstr "자기자본 총합 포함"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3146
 #: ../intl-scm/guile-strings.c:4300
 msgid "Whether or not to include a line indicating total equity"
-msgstr ""
+msgstr "총 자기자본을 지시하는 라인을 포함할 지 안할지"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3162
 #: ../intl-scm/guile-strings.c:4316
 msgid "Compute unrealized gains and losses"
-msgstr ""
+msgstr "미회수 이득과 손실 계산"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3164
 #: ../intl-scm/guile-strings.c:4318
 msgid "Include unrealized gains and losses in the computation.  Will produce incorrect results if the current file uses commodity trading accounts"
-msgstr ""
+msgstr "계산에서 미회수 이득과 손실을 포함. 현재 파일이 상품 거래 계정을 사용시 부적확한 결과가 나옴"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -18908,7 +18914,7 @@ msgstr "전체 부채"
 #: ../intl-scm/guile-strings.c:3178
 #: ../intl-scm/guile-strings.c:4332
 msgid "Retained Losses"
-msgstr ""
+msgstr "잉여금 손실"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/equity-statement.scm
@@ -18919,21 +18925,21 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4336
 #: ../intl-scm/guile-strings.c:4624
 msgid "Unrealized Losses"
-msgstr ""
+msgstr "미회수 손실"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3184
 #: ../intl-scm/guile-strings.c:4338
 msgid "Total Equity"
-msgstr ""
+msgstr "총 자기자본"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3186
 #: ../intl-scm/guile-strings.c:4340
 msgid "Total Liabilities & Equity"
-msgstr ""
+msgstr "총 부채 & 자기자본"
 
 #. src/report/standard-reports/gnucash/report/account-summary.scm
 #. src/report/standard-reports/account-summary.scm
@@ -18947,7 +18953,7 @@ msgstr "계정 요약"
 #: ../intl-scm/guile-strings.c:3208
 #: ../intl-scm/guile-strings.c:4362
 msgid "Depth limit behavior"
-msgstr ""
+msgstr "깊이 제한 행동"
 
 #. src/report/standard-reports/gnucash/report/account-summary.scm
 #. src/report/standard-reports/account-summary.scm
@@ -18961,7 +18967,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3234
 #: ../intl-scm/guile-strings.c:4388
 msgid "Show an account's balance"
-msgstr ""
+msgstr "계정 수지 보이기"
 
 #. src/report/standard-reports/gnucash/report/account-summary.scm
 #. src/report/standard-reports/account-summary.scm
@@ -18975,42 +18981,42 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3242
 #: ../intl-scm/guile-strings.c:4396
 msgid "Show an account's account type"
-msgstr ""
+msgstr "계정의 계정 형태 보이기"
 
 #. src/report/standard-reports/gnucash/report/account-summary.scm
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:3244
 #: ../intl-scm/guile-strings.c:4398
 msgid "Account Description"
-msgstr "계정 요약"
+msgstr "계정 사용 내역"
 
 #. src/report/standard-reports/gnucash/report/account-summary.scm
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:3246
 #: ../intl-scm/guile-strings.c:4400
 msgid "Show an account's description"
-msgstr "계정 요약 보이기"
+msgstr "계정 사용 내역 보이기"
 
 #. src/report/standard-reports/gnucash/report/account-summary.scm
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:3248
 #: ../intl-scm/guile-strings.c:4402
 msgid "Account Notes"
-msgstr "계정 노트"
+msgstr "계정 장부"
 
 #. src/report/standard-reports/gnucash/report/account-summary.scm
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:3250
 #: ../intl-scm/guile-strings.c:4404
 msgid "Show an account's notes"
-msgstr "계정 노트 보이기"
+msgstr "계정 장부 보이기"
 
 #. src/report/standard-reports/gnucash/report/account-summary.scm
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:3266
 #: ../intl-scm/guile-strings.c:4420
 msgid "Recursive Balance"
-msgstr ""
+msgstr "반복 수지"
 
 #. src/report/standard-reports/gnucash/report/account-summary.scm
 #. src/report/standard-reports/account-summary.scm
@@ -19066,42 +19072,42 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3290
 #: ../intl-scm/guile-strings.c:4444
 msgid "Advanced Portfolio"
-msgstr ""
+msgstr "고급 포트폴리오"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3298
 #: ../intl-scm/guile-strings.c:4452
 msgid "Include gains and losses"
-msgstr ""
+msgstr "이득과 손실 포함"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3300
 #: ../intl-scm/guile-strings.c:4454
 msgid "Show ticker symbols"
-msgstr ""
+msgstr "시세 기호 보이기"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3302
 #: ../intl-scm/guile-strings.c:4456
 msgid "Show listings"
-msgstr ""
+msgstr "목록 보이기"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3304
 #: ../intl-scm/guile-strings.c:4458
 msgid "Show prices"
-msgstr ""
+msgstr "가격 보이기"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3306
 #: ../intl-scm/guile-strings.c:4460
 msgid "Show number of shares"
-msgstr ""
+msgstr "구매 계좌 갯수 보이기"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -19110,7 +19116,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4462
 #: ../intl-scm/guile-strings.c:4484
 msgid "Basis calculation method"
-msgstr ""
+msgstr "기본 계산 방법"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -19124,14 +19130,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3326
 #: ../intl-scm/guile-strings.c:4480
 msgid "Most recent to report"
-msgstr ""
+msgstr "보고할 가장 최근 내용"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3328
 #: ../intl-scm/guile-strings.c:4482
 msgid "The most recent recorded price before report date"
-msgstr ""
+msgstr "보고 날짜 전 기록된 가격의 가장 최근 내용"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/gnucash/report/average-balance.scm
@@ -19144,42 +19150,42 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5212
 #: ../intl-scm/guile-strings.c:5232
 msgid "Average"
-msgstr ""
+msgstr "평균"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3334
 #: ../intl-scm/guile-strings.c:4488
 msgid "Use average cost of all shares for basis"
-msgstr ""
+msgstr "기준에 대한 전체 주식의 평균 비용을 사용"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3336
 #: ../intl-scm/guile-strings.c:4490
 msgid "FIFO"
-msgstr ""
+msgstr "FIFO"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3338
 #: ../intl-scm/guile-strings.c:4492
 msgid "Use first-in first-out method for basis"
-msgstr ""
+msgstr "기준에 대한 처음 들어가면 처음 나오는 방법(FIFO) 사용"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3340
 #: ../intl-scm/guile-strings.c:4494
 msgid "FILO"
-msgstr ""
+msgstr "FILO"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3342
 #: ../intl-scm/guile-strings.c:4496
 msgid "Use first-in last-out method for basis"
-msgstr ""
+msgstr "기준에 대한 처음 들어가 마지막 나오는 방법(FILO) 사용"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -19200,63 +19206,63 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3348
 #: ../intl-scm/guile-strings.c:4502
 msgid "Display the ticker symbols"
-msgstr ""
+msgstr "시세 기호 보이기"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3350
 #: ../intl-scm/guile-strings.c:4504
 msgid "Display exchange listings"
-msgstr ""
+msgstr "교환 목록 보이기"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3352
 #: ../intl-scm/guile-strings.c:4506
 msgid "Display numbers of shares in accounts"
-msgstr ""
+msgstr "계정의 주식수 보이기"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3356
 #: ../intl-scm/guile-strings.c:4510
 msgid "Display share prices"
-msgstr ""
+msgstr "주식 가격 보이기"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3376
 #: ../intl-scm/guile-strings.c:4530
 msgid "Basis"
-msgstr ""
+msgstr "기준"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3384
 #: ../intl-scm/guile-strings.c:4538
 msgid "Realized Gain"
-msgstr ""
+msgstr "실제 이득"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3386
 #: ../intl-scm/guile-strings.c:4540
 msgid "Unrealized Gain"
-msgstr ""
+msgstr "미회수 이득"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3388
 #: ../intl-scm/guile-strings.c:4542
 msgid "Total Gain"
-msgstr ""
+msgstr "전체 이득"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3390
 #: ../intl-scm/guile-strings.c:4544
 msgid "Total Return"
-msgstr ""
+msgstr "총 수익"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -19277,14 +19283,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3396
 #: ../intl-scm/guile-strings.c:4550
 msgid "_Equity Statement"
-msgstr "지분 명세서(_E)"
+msgstr "자기자본 명세서(_E)"
 
 #. src/report/standard-reports/gnucash/report/equity-statement.scm
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:3412
 #: ../intl-scm/guile-strings.c:4566
 msgid "Report only on these accounts"
-msgstr ""
+msgstr "이들 계정만 보고"
 
 #. src/report/standard-reports/gnucash/report/equity-statement.scm
 #. src/report/standard-reports/equity-statement.scm
@@ -19293,14 +19299,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4612
 #: ../intl-scm/guile-strings.c:4630
 msgid "Capital"
-msgstr ""
+msgstr "자본"
 
 #. src/report/standard-reports/gnucash/report/equity-statement.scm
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:3464
 #: ../intl-scm/guile-strings.c:4618
 msgid "Investments"
-msgstr ""
+msgstr "투자"
 
 #. src/report/standard-reports/gnucash/report/equity-statement.scm
 #. src/report/standard-reports/equity-statement.scm
@@ -19574,7 +19580,7 @@ msgstr "정확한 시간에 의한 정렬"
 #: ../intl-scm/guile-strings.c:3682
 #: ../intl-scm/guile-strings.c:4836
 msgid "Sort by the Reconciled Date"
-msgstr "조정 날짜에 의한 정렬"
+msgstr "통장정리한 날짜에 의한 정렬"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19644,14 +19650,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3736
 #: ../intl-scm/guile-strings.c:4890
 msgid "Sort by this criterion first"
-msgstr ""
+msgstr "처음 이 기준에 의해 정렬"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3740
 #: ../intl-scm/guile-strings.c:4894
 msgid "Show the full account name for subtotals and subtitles?"
-msgstr ""
+msgstr "부분총합와 하위제목의 전체 계정 이름을 보일까요?"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19695,14 +19701,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3756
 #: ../intl-scm/guile-strings.c:4910
 msgid "Subtotal according to the secondary key?"
-msgstr ""
+msgstr "두번째 키에 의한 부분합계"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3762
 #: ../intl-scm/guile-strings.c:4916
 msgid "Order of Secondary sorting"
-msgstr ""
+msgstr "두번째 정렬 순서"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/gnucash/report/register.scm
@@ -19725,14 +19731,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7048
 #: ../intl-scm/guile-strings.c:7288
 msgid "Display the date?"
-msgstr ""
+msgstr "날짜를 보일까요?"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3770
 #: ../intl-scm/guile-strings.c:4924
 msgid "Display the reconciled date?"
-msgstr ""
+msgstr "통장정리한 날짜를 보일까요?"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/gnucash/report/register.scm
@@ -19743,7 +19749,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4928
 #: ../intl-scm/guile-strings.c:5084
 msgid "Display the check number?"
-msgstr ""
+msgstr "체크 번호를 보일까요?"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/gnucash/report/register.scm
@@ -19766,21 +19772,21 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7054
 #: ../intl-scm/guile-strings.c:7294
 msgid "Display the description?"
-msgstr ""
+msgstr "사용 내역을 보일까요?"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3782
 #: ../intl-scm/guile-strings.c:4936
 msgid "Display the memo?"
-msgstr ""
+msgstr "메모를 보일까요?"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3786
 #: ../intl-scm/guile-strings.c:4940
 msgid "Display the account name?"
-msgstr ""
+msgstr "계정 이름을 보일까요?"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19789,28 +19795,28 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4944
 #: ../intl-scm/guile-strings.c:4956
 msgid "Display the full account name"
-msgstr ""
+msgstr "전체 계정명을 보이기"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3794
 #: ../intl-scm/guile-strings.c:4948
 msgid "Display the account code"
-msgstr ""
+msgstr "계정 코드를 보이기"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3798
 #: ../intl-scm/guile-strings.c:4952
 msgid "Display the other account name? (if this is a split transaction, this parameter is guessed)."
-msgstr ""
+msgstr "다른 계정명을 보일까요?(분할거래시 이 인자로 추측함)."
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3806
 #: ../intl-scm/guile-strings.c:4960
 msgid "Display the other account code"
-msgstr ""
+msgstr "다른 계정 코드 보이기"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/gnucash/report/register.scm
@@ -19821,7 +19827,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4964
 #: ../intl-scm/guile-strings.c:5102
 msgid "Display the number of shares?"
-msgstr ""
+msgstr "주식 갯수 보이기"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/gnucash/report/register.scm
@@ -19832,7 +19838,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4968
 #: ../intl-scm/guile-strings.c:5108
 msgid "Display the shares price?"
-msgstr ""
+msgstr "주식 가격 보일까요?"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/gnucash/report/register.scm
@@ -19843,7 +19849,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4972
 #: ../intl-scm/guile-strings.c:5128
 msgid "Display a running balance"
-msgstr ""
+msgstr "운용 수지 보이기"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/gnucash/report/register.scm
@@ -19866,7 +19872,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7108
 #: ../intl-scm/guile-strings.c:7348
 msgid "Display the totals?"
-msgstr ""
+msgstr "총합계를 보일까요?"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/gnucash/report/register.scm
@@ -19877,14 +19883,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4980
 #: ../intl-scm/guile-strings.c:5114
 msgid "Display the amount?"
-msgstr ""
+msgstr "수량을 보일까요?"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3830
 #: ../intl-scm/guile-strings.c:4984
 msgid "No amount display"
-msgstr ""
+msgstr "보일 수량이 없습니다"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/gnucash/report/register.scm
@@ -19895,7 +19901,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4988
 #: ../intl-scm/guile-strings.c:5118
 msgid "Single Column Display"
-msgstr ""
+msgstr "단일 열 보이기"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/gnucash/report/register.scm
@@ -19906,7 +19912,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4990
 #: ../intl-scm/guile-strings.c:5120
 msgid "Double"
-msgstr ""
+msgstr "이중"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/gnucash/report/register.scm
@@ -19917,49 +19923,49 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4992
 #: ../intl-scm/guile-strings.c:5122
 msgid "Two Column Display"
-msgstr ""
+msgstr "2 열 보이기"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3842
 #: ../intl-scm/guile-strings.c:4996
 msgid "Reverse amount display for certain account types"
-msgstr ""
+msgstr "계정 형태의 역 수량 보이기"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3846
 #: ../intl-scm/guile-strings.c:5000
 msgid "Don't change any displayed amounts"
-msgstr ""
+msgstr "보이는 수량을 변경하지 않음"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3848
 #: ../intl-scm/guile-strings.c:5002
 msgid "Income and Expense"
-msgstr ""
+msgstr "수입 및 지출"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3850
 #: ../intl-scm/guile-strings.c:5004
 msgid "Reverse amount display for Income and Expense Accounts"
-msgstr ""
+msgstr "수입 및 지출 계정의 반전 양 보이기"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3852
 #: ../intl-scm/guile-strings.c:5006
 msgid "Credit Accounts"
-msgstr ""
+msgstr "신용 계정"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3854
 #: ../intl-scm/guile-strings.c:5008
 msgid "Reverse amount display for Liability, Payable, Equity, Credit Card, and Income accounts"
-msgstr ""
+msgstr "부채, 급여, 주식, 신용 카드, 소득 계정에 대한 역 수량 보이기"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19967,91 +19973,91 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5010
 #, c-format
 msgid "From %s To %s"
-msgstr ""
+msgstr "%s 에서 %s 까지"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3860
 #: ../intl-scm/guile-strings.c:5014
 msgid "Primary Subtotals/headings"
-msgstr ""
+msgstr "주 부분총합계/헤딩"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3864
 #: ../intl-scm/guile-strings.c:5018
 msgid "Secondary Subtotals/headings"
-msgstr ""
+msgstr "부 부분총합계/헤딩"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3872
 #: ../intl-scm/guile-strings.c:5026
 msgid "Split Odd"
-msgstr ""
+msgstr "홀수 분할"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3876
 #: ../intl-scm/guile-strings.c:5030
 msgid "Split Even"
-msgstr ""
+msgstr "짝수 분할"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3886
 #: ../intl-scm/guile-strings.c:5040
 msgid "No matching transactions found"
-msgstr ""
+msgstr "일치 거래가 없음"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3888
 #: ../intl-scm/guile-strings.c:5042
 msgid "No transactions were found that match the time interval and account selection specified in the Options panel."
-msgstr ""
+msgstr "설정 패널에서 지정한 시간 간격과 계정 선택과 일치하는 거래를 찾을 수 없습니다."
 
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3916
 #: ../intl-scm/guile-strings.c:5070
 msgid "The title of the report"
-msgstr ""
+msgstr "보고서의 제목"
 
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3942
 #: ../intl-scm/guile-strings.c:5096
 msgid "Display the account?"
-msgstr ""
+msgstr "계정을 보일까요?"
 
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3982
 #: ../intl-scm/guile-strings.c:5136
 msgid "Total Debits"
-msgstr ""
+msgstr "전체 차변"
 
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3984
 #: ../intl-scm/guile-strings.c:5138
 msgid "Total Credits"
-msgstr ""
+msgstr "전체 대변"
 
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3986
 #: ../intl-scm/guile-strings.c:5140
 msgid "Net Change"
-msgstr ""
+msgstr "변경하지 않음"
 
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3988
 #: ../intl-scm/guile-strings.c:5142
 msgid "Client"
-msgstr ""
+msgstr "클라이언트"
 
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
@@ -20111,14 +20117,14 @@ msgstr "하위계정 포함"
 #: ../intl-scm/guile-strings.c:5194
 #: ../intl-scm/guile-strings.c:5294
 msgid "Include sub-accounts of all selected accounts"
-msgstr ""
+msgstr "전체 선택된 계정의 하위 계정을 포함"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:4044
 #: ../intl-scm/guile-strings.c:5198
 msgid "Do transaction report on this account"
-msgstr ""
+msgstr "이 계정에서 거래 보고서 실행"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
@@ -20127,14 +20133,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5200
 #: ../intl-scm/guile-strings.c:5250
 msgid "Show table"
-msgstr ""
+msgstr "표 보이기"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:4048
 #: ../intl-scm/guile-strings.c:5202
 msgid "Display a table of the selected data."
-msgstr ""
+msgstr "선택된 자료의 표 보이기"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
@@ -20143,14 +20149,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5204
 #: ../intl-scm/guile-strings.c:5248
 msgid "Show plot"
-msgstr ""
+msgstr "도표 보이기"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:4052
 #: ../intl-scm/guile-strings.c:5206
 msgid "Display a graph of the selected data."
-msgstr ""
+msgstr "선택된 자료의 그래프 보이기"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
@@ -20159,14 +20165,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5208
 #: ../intl-scm/guile-strings.c:5246
 msgid "Plot Type"
-msgstr ""
+msgstr "도표 형태"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:4056
 #: ../intl-scm/guile-strings.c:5210
 msgid "The type of graph to generate"
-msgstr ""
+msgstr "생성하기 위한 그래프 형태"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
@@ -20175,63 +20181,63 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5216
 #: ../intl-scm/guile-strings.c:5242
 msgid "Profit"
-msgstr ""
+msgstr "이익"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:4064
 #: ../intl-scm/guile-strings.c:5218
 msgid "Profit (Gain minus Loss)"
-msgstr ""
+msgstr "이익 (이익 - 손실)"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:4068
 #: ../intl-scm/guile-strings.c:5222
 msgid "Gain And Loss"
-msgstr ""
+msgstr "이익과 손실"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:4074
 #: ../intl-scm/guile-strings.c:5228
 msgid "Period start"
-msgstr ""
+msgstr "기간 시작"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:4076
 #: ../intl-scm/guile-strings.c:5230
 msgid "Period end"
-msgstr ""
+msgstr "기간 종료"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:4080
 #: ../intl-scm/guile-strings.c:5234
 msgid "Maximum"
-msgstr ""
+msgstr "최대값"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:4082
 #: ../intl-scm/guile-strings.c:5236
 msgid "Minimum"
-msgstr ""
+msgstr "최소값"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:4084
 #: ../intl-scm/guile-strings.c:5238
 msgid "Gain"
-msgstr ""
+msgstr "이익"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:4086
 #: ../intl-scm/guile-strings.c:5240
 msgid "Loss"
-msgstr ""
+msgstr "손실"
 
 #. src/report/standard-reports/gnucash/report/daily-reports.scm
 #. src/report/standard-reports/daily-reports.scm
@@ -20240,7 +20246,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5256
 #: ../intl-scm/guile-strings.c:5264
 msgid "Income vs. Day of Week"
-msgstr ""
+msgstr "수입 대 주일"
 
 #. src/report/standard-reports/gnucash/report/daily-reports.scm
 #. src/report/standard-reports/daily-reports.scm
@@ -20249,7 +20255,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5258
 #: ../intl-scm/guile-strings.c:5266
 msgid "Expenses vs. Day of Week"
-msgstr ""
+msgstr "지출 대 주일"
 
 #. src/report/standard-reports/gnucash/report/daily-reports.scm
 #. src/report/standard-reports/daily-reports.scm
@@ -20274,7 +20280,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5284
 #: ../intl-scm/guile-strings.c:5356
 msgid "Show Totals"
-msgstr ""
+msgstr "총 합계 보이기"
 
 #. src/report/standard-reports/gnucash/report/daily-reports.scm
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
@@ -20285,7 +20291,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5286
 #: ../intl-scm/guile-strings.c:5358
 msgid "Maximum Slices"
-msgstr ""
+msgstr "부문 최대값"
 
 #. src/report/standard-reports/gnucash/report/daily-reports.scm
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
@@ -20296,28 +20302,28 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5300
 #: ../intl-scm/guile-strings.c:5372
 msgid "Show the total balance in legend?"
-msgstr ""
+msgstr "레전드에서 총 수지를 보일까요?"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4164
 #: ../intl-scm/guile-strings.c:5318
 msgid "Income Piechart"
-msgstr ""
+msgstr "수입 파이차트"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4166
 #: ../intl-scm/guile-strings.c:5320
 msgid "Expense Piechart"
-msgstr ""
+msgstr "지출 파이차트"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4168
 #: ../intl-scm/guile-strings.c:5322
 msgid "Asset Piechart"
-msgstr ""
+msgstr "자산 파이차트"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -20338,35 +20344,35 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4174
 #: ../intl-scm/guile-strings.c:5328
 msgid "Shows a piechart with the Expenses per given time interval"
-msgstr ""
+msgstr "주어진 시간 간격당 비용 파이차트 보이기"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4176
 #: ../intl-scm/guile-strings.c:5330
 msgid "Shows a piechart with the Assets balance at a given time"
-msgstr ""
+msgstr "주어진 시간의 자산 수지 파이차트 보이기"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4178
 #: ../intl-scm/guile-strings.c:5332
 msgid "Shows a piechart with the Liabilities balance at a given time"
-msgstr ""
+msgstr "주어진 시간의 부채 수지 파이차트 보이기"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4180
 #: ../intl-scm/guile-strings.c:5334
 msgid "Income Accounts"
-msgstr ""
+msgstr "수입 계정"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4182
 #: ../intl-scm/guile-strings.c:5336
 msgid "Expense Accounts"
-msgstr ""
+msgstr "지출 계정"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -20381,7 +20387,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5380
 #, c-format
 msgid "Balance at %s"
-msgstr ""
+msgstr "%s 수지"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20403,7 +20409,7 @@ msgstr "세금 보고서 / TXF 내보내기"
 #: ../intl-scm/guile-strings.c:5570
 #: ../intl-scm/guile-strings.c:5660
 msgid "Alternate Period"
-msgstr ""
+msgstr "대체 기간"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20414,7 +20420,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5572
 #: ../intl-scm/guile-strings.c:5662
 msgid "Override or modify From: & To:"
-msgstr ""
+msgstr ": & 에서 :로 중복 또는 수정"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20425,7 +20431,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5574
 #: ../intl-scm/guile-strings.c:5664
 msgid "Use From - To"
-msgstr ""
+msgstr " - 에서 로 사용"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20436,7 +20442,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5576
 #: ../intl-scm/guile-strings.c:5666
 msgid "Use From - To period"
-msgstr ""
+msgstr " - 에서 로 기간 사용"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20447,7 +20453,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5578
 #: ../intl-scm/guile-strings.c:5668
 msgid "1st Est Tax Quarter"
-msgstr ""
+msgstr "1분기 추정치 세금"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20458,7 +20464,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5580
 #: ../intl-scm/guile-strings.c:5670
 msgid "Jan 1 - Mar 31"
-msgstr ""
+msgstr "1월 1일 - 3월 31일"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20469,7 +20475,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5582
 #: ../intl-scm/guile-strings.c:5672
 msgid "2nd Est Tax Quarter"
-msgstr ""
+msgstr "2분기 추정치 세금"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20480,7 +20486,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5584
 #: ../intl-scm/guile-strings.c:5674
 msgid "Apr 1 - May 31"
-msgstr ""
+msgstr "4월 1일 - 5월 31일"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20491,7 +20497,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5586
 #: ../intl-scm/guile-strings.c:5676
 msgid "3rd Est Tax Quarter"
-msgstr ""
+msgstr "3분기 추정치 세금"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20502,7 +20508,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5588
 #: ../intl-scm/guile-strings.c:5678
 msgid "Jun 1 - Aug 31"
-msgstr ""
+msgstr "6월 1일 - 8월 31일"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20513,7 +20519,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5590
 #: ../intl-scm/guile-strings.c:5680
 msgid "4th Est Tax Quarter"
-msgstr ""
+msgstr "4분기 추정치 세금"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20524,7 +20530,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5592
 #: ../intl-scm/guile-strings.c:5682
 msgid "Sep 1 - Dec 31"
-msgstr ""
+msgstr "9월 1일 12월 31일"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20539,7 +20545,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5684
 #: ../intl-scm/guile-strings.c:5686
 msgid "Last Year"
-msgstr ""
+msgstr "미지막 해"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20550,7 +20556,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5598
 #: ../intl-scm/guile-strings.c:5688
 msgid "Last Yr 1st Est Tax Qtr"
-msgstr ""
+msgstr "마지막 해 1분기 추정치 세금"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20561,7 +20567,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5600
 #: ../intl-scm/guile-strings.c:5690
 msgid "Jan 1 - Mar 31, Last year"
-msgstr ""
+msgstr "1월 1일 - 3월 31일, 마지막 해"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20572,7 +20578,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5602
 #: ../intl-scm/guile-strings.c:5692
 msgid "Last Yr 2nd Est Tax Qtr"
-msgstr ""
+msgstr "마지막 해 2분기 추정치 세금"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20583,7 +20589,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5604
 #: ../intl-scm/guile-strings.c:5694
 msgid "Apr 1 - May 31, Last year"
-msgstr ""
+msgstr "4월 1일 - 5월 31일, 마지막 해"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20594,7 +20600,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5606
 #: ../intl-scm/guile-strings.c:5696
 msgid "Last Yr 3rd Est Tax Qtr"
-msgstr ""
+msgstr "마지막 해 3분기 추정치 세금"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20605,7 +20611,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5608
 #: ../intl-scm/guile-strings.c:5698
 msgid "Jun 1 - Aug 31, Last year"
-msgstr ""
+msgstr "6월 1일 - 8월 31일, 마지막 해"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20616,7 +20622,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5610
 #: ../intl-scm/guile-strings.c:5700
 msgid "Last Yr 4th Est Tax Qtr"
-msgstr ""
+msgstr "마지막 해 4분기 추정치 세금"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20627,7 +20633,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5612
 #: ../intl-scm/guile-strings.c:5702
 msgid "Sep 1 - Dec 31, Last year"
-msgstr ""
+msgstr "9월 1일 - 12월 31일, 마지막 해"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20638,7 +20644,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5614
 #: ../intl-scm/guile-strings.c:5704
 msgid "Select Accounts (none = all)"
-msgstr ""
+msgstr "계정 선택 (없음 = 전체)"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20660,7 +20666,7 @@ msgstr "계정 선택"
 #: ../intl-scm/guile-strings.c:5618
 #: ../intl-scm/guile-strings.c:5708
 msgid "Suppress $0.00 values"
-msgstr ""
+msgstr "$0.00 가격으로 억제"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20671,7 +20677,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5620
 #: ../intl-scm/guile-strings.c:5710
 msgid "$0.00 valued Accounts won't be printed."
-msgstr ""
+msgstr "$0.00 가격의 계정을 출력할 수 없습니다."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20682,7 +20688,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5622
 #: ../intl-scm/guile-strings.c:5712
 msgid "Print Full account names"
-msgstr ""
+msgstr "전체 계정명 출력"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20693,7 +20699,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5624
 #: ../intl-scm/guile-strings.c:5714
 msgid "Print all Parent account names"
-msgstr ""
+msgstr "전체 부모 계정명 출력"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20704,7 +20710,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5626
 #: ../intl-scm/guile-strings.c:5716
 msgid "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF codes with payer sources may be repeated."
-msgstr ""
+msgstr "주의: 몇몇 계정에 할당된 TXF 코드를 중복할 수 있습니다. 지불자 소스의 TXF 코드만을 반복할 수 있습니다."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20715,7 +20721,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5632
 #: ../intl-scm/guile-strings.c:5722
 msgid "Sub-"
-msgstr ""
+msgstr "하위-"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -21795,7 +21801,7 @@ msgstr "거래 형태를 보입니까?"
 #: ../intl-scm/guile-strings.c:6186
 #: ../intl-scm/guile-strings.c:6710
 msgid "Display the transaction description?"
-msgstr "거래 내역을 보입니까?"
+msgstr "거래 사용 내역을 보입니까?"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -21843,7 +21849,7 @@ msgstr "지출 보고서"
 #: ../intl-scm/guile-strings.c:6736
 #: ../intl-scm/guile-strings.c:6738
 msgid "Report:"
-msgstr "ㅂ고서:"
+msgstr "보고서:"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
@@ -21896,28 +21902,28 @@ msgstr "종업원 보고서"
 #: ../intl-scm/guile-strings.c:6316
 #: ../intl-scm/guile-strings.c:6840
 msgid "My Company"
-msgstr "회사"
+msgstr "내 회사"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/gnucash/report/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:6318
 #: ../intl-scm/guile-strings.c:6842
 msgid "Display my company name and address?"
-msgstr "회사명과 주소 보입니까?"
+msgstr "내 회사명과 주소 보입니까?"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/gnucash/report/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:6322
 #: ../intl-scm/guile-strings.c:6846
 msgid "My Company ID"
-msgstr "회사 ID"
+msgstr "내 회사 ID"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/gnucash/report/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:6324
 #: ../intl-scm/guile-strings.c:6848
 msgid "Display my company ID?"
-msgstr "회사 ID 보이기"
+msgstr "내 회사 ID 보일까요"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/gnucash/report/easy-invoice.scm
@@ -21931,7 +21937,7 @@ msgstr "만기 날짜 보일까요?"
 #: ../intl-scm/guile-strings.c:6348
 #: ../intl-scm/guile-strings.c:6872
 msgid "Display the subtotals?"
-msgstr "하위 합계를 보입니까?"
+msgstr "부분합계를 보입니까?"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/gnucash/report/easy-invoice.scm
@@ -21945,7 +21951,7 @@ msgstr "청구서 너비"
 #: ../intl-scm/guile-strings.c:6384
 #: ../intl-scm/guile-strings.c:6908
 msgid "The minimum width of the invoice."
-msgstr "송장의 최소 너비"
+msgstr "청구서의 최소 너비"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/gnucash/report/easy-invoice.scm
@@ -21998,7 +22004,7 @@ msgstr "청구서가 첨부안됨"
 #: ../intl-scm/guile-strings.c:6954
 #: ../intl-scm/guile-strings.c:6956
 msgid "Easy Invoice"
-msgstr "약세 청구서"
+msgstr "쉬운 청구서"
 
 #. src/business/business-reports/gnucash/report/aging.scm
 #. src/business/business-reports/aging.scm
@@ -22262,7 +22268,7 @@ msgid "Business Accounts"
 msgstr "사업 계정"
 
 msgid "Car Loan"
-msgstr "차 융자"
+msgstr "차 대출"
 
 msgid "CD and Money Market"
 msgstr "양도성 예금증서(CD) 및 머니마켓"
