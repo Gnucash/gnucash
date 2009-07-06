@@ -1033,7 +1033,8 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
          * "Cancel" is clicked, the flag will still be true, and this
          * SX will be cleaned, here. -- jsled
          */
-        xaccSchedXactionFree( sxed->sx );
+		gnc_sx_begin_edit( sxed->sx );
+        xaccSchedXactionDestroy( sxed->sx );
     }
     sxed->sx = NULL;
 

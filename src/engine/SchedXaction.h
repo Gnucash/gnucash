@@ -140,9 +140,9 @@ SchedXaction *xaccSchedXactionMalloc(QofBook *book);
 void sx_set_template_account (SchedXaction *sx, Account *account);
 
 /**
- * Cleans up and frees a SchedXaction and it's associated data.
+ * Cleans up and frees a SchedXaction and its associated data.
 */
-void xaccSchedXactionFree( SchedXaction *sx );
+void xaccSchedXactionDestroy( SchedXaction *sx );
 
 void gnc_sx_begin_edit (SchedXaction *sx);
 void gnc_sx_commit_edit (SchedXaction *sx);

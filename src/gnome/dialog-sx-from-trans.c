@@ -527,7 +527,8 @@ static void
 sxftd_close(SXFromTransInfo *sxfti, gboolean delete_sx)
 {
   if ( sxfti->sx && delete_sx ) {
-    xaccSchedXactionFree(sxfti->sx);
+	gnc_sx_begin_edit(sxfti->sx);
+    xaccSchedXactionDestroy(sxfti->sx);
   }
   sxfti->sx = NULL;
 
@@ -627,7 +628,8 @@ sxftd_destroy( GtkWidget *w, gpointer user_data )
   SXFromTransInfo *sxfti = (SXFromTransInfo*)user_data;
 
   if ( sxfti->sx ) {
-    xaccSchedXactionFree(sxfti->sx);
+	gnc_sx_begin_edit(sxfti->sx);
+    xaccSchedXactionDestroy(sxfti->sx);
     sxfti->sx = NULL;
   }
 

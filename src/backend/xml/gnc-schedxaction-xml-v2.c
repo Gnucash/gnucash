@@ -673,7 +673,8 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
     {
             g_critical("failed to parse scheduled xaction");
             xmlElemDump( stdout, NULL, tree );
-            xaccSchedXactionFree( sx );
+			gnc_sx_begin_edit( sx );
+            xaccSchedXactionDestroy( sx );
             goto done;
     }
 
