@@ -79,20 +79,19 @@ geturl( FileAccessWindow* faw )
 
 	type = gtk_combo_box_get_active_text( faw->cb_uri_type );
 	if( strcmp( type, "xml" ) == 0 ) {
-		type = "xml";
-		url = g_strdup_printf( "%s://%s", type, file );
+		url = g_strdup_printf( "xml://%s", file );
 	} else if( strcmp( type, "sqlite3" ) == 0 ) {
-		type = "sqlite3";
-		url = g_strdup_printf( "%s://%s", type, file );
+		url = g_strdup_printf( "sqlite3://%s", file );
+	} else if( strcmp( type, "file" ) == 0 ) {
+		url = g_strdup_printf( "file://%s", file );
 	} else if( strcmp( type, "mysql" ) == 0 ) {
-		type = "mysql";
-		url = g_strdup_printf( "%s://%s:%s:%s:%s",
-							type, host, database, username, password );
+		url = g_strdup_printf( "mysql://%s:%s:%s:%s",
+							host, database, username, password );
 	} else {
 		g_assert( strcmp( type, "postgres" ) == 0 );
 		type = "postgres";
-		url = g_strdup_printf( "%s://%s:%s:%s:%s",
-							type, host, database, username, password );
+		url = g_strdup_printf( "postgres://%s:%s:%s:%s",
+							host, database, username, password );
 	}
 
 	return url;
@@ -147,7 +146,8 @@ set_widget_sensitivity( FileAccessWindow* faw, gboolean is_file_based_uri )
 static void
 set_widget_sensitivity_for_uri_type( FileAccessWindow* faw, const gchar* uri_type )
 {
-	if( strcmp( uri_type, "xml" ) == 0 || strcmp( uri_type, "sqlite3" ) == 0 ) {
+	if( strcmp( uri_type, "file" ) == 0 || strcmp( uri_type, "xml" ) == 0
+			|| strcmp( uri_type, "sqlite3" ) == 0 ) {
 		set_widget_sensitivity( faw, /* is_file_based_uri */ TRUE );
 	} else if( strcmp( uri_type, "mysql" ) == 0 || strcmp( uri_type, "postgres" ) == 0 ) {
 		set_widget_sensitivity( faw, /* is_file_based_uri */ FALSE );
@@ -188,6 +188,13 @@ gnc_ui_file_access( int type )
 	GList* list;
 	GList* node;
 	GtkWidget* uri_type_container;
+	gboolean need_access_method_file = FALSE;
+	gboolean need_access_method_mysql = FALSE;
+	gboolean need_access_method_postgres = FALSE;
+	gboolean need_access_method_sqlite3 = FALSE;
+	gboolean need_access_method_xml = FALSE;
+	gint access_method_index = -1;
+	gint active_access_method_index = -1;
 
 	g_return_if_fail( type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS );
 
@@ -247,15 +254,55 @@ gnc_ui_file_access( int type )
 	list = qof_backend_get_registered_access_method_list();
 	for( node = list; node != NULL; node = node->next ) {
 		const gchar* access_method = node->data;
-		if( strcmp( access_method, "xml" ) == 0 ||
-			strcmp( access_method, "sqlite3" ) == 0 ||
-			strcmp( access_method, "mysql" ) == 0 ||
-			strcmp( access_method, "postgres" ) == 0 ) {
-			gtk_combo_box_append_text( faw->cb_uri_type, access_method );
+
+		/* For the different access methods, "mysql" and "postgres" are added if available.  Access
+		methods "xml" and "sqlite3" are compressed to "file" if opening a file, but when saving a file,
+		both access methods are added. */
+		if( strcmp( access_method, "mysql" ) == 0 ) {
+			need_access_method_mysql = TRUE;
+		} else if( strcmp( access_method, "postgres" ) == 0 ) {
+			need_access_method_postgres = TRUE;
+		} else if( strcmp( access_method, "xml" ) == 0 ) {
+			if( type == FILE_ACCESS_OPEN ) {
+				need_access_method_file = TRUE;
+			} else {
+				need_access_method_xml = TRUE;
+			}
+		} else if( strcmp( access_method, "sqlite3" ) == 0 ) {
+			if( type == FILE_ACCESS_OPEN ) {
+				need_access_method_file = TRUE;
+			} else {
+				need_access_method_sqlite3 = TRUE;
+			}
 		}
 	}
 	g_list_free(list);
-	gtk_combo_box_set_active( faw->cb_uri_type, 0 );
+
+	/* Now that the set of access methods has been ascertained, add them to the list, and set the
+	default. */
+	access_method_index = -1;
+	if( need_access_method_file ) {
+		gtk_combo_box_append_text( faw->cb_uri_type, "file" );
+		active_access_method_index = ++access_method_index;
+	}
+	if( need_access_method_mysql ) {
+		gtk_combo_box_append_text( faw->cb_uri_type, "mysql" );
+		++access_method_index;
+	}
+	if( need_access_method_postgres ) {
+		gtk_combo_box_append_text( faw->cb_uri_type, "postgres" );
+		++access_method_index;
+	}
+	if( need_access_method_sqlite3 ) {
+		gtk_combo_box_append_text( faw->cb_uri_type, "sqlite3" );
+		active_access_method_index = ++access_method_index;
+	}
+	if( need_access_method_xml ) {
+		gtk_combo_box_append_text( faw->cb_uri_type, "xml" );
+		++access_method_index;
+	}
+	g_assert( active_access_method_index >= 0 );
+	gtk_combo_box_set_active( faw->cb_uri_type, active_access_method_index );
 	set_widget_sensitivity_for_uri_type( faw, gtk_combo_box_get_active_text( faw->cb_uri_type ) );
 
     /* Clean up the xml data structure when the dialog is destroyed */
