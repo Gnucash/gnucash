@@ -256,7 +256,8 @@ gnc_split_register_check_account (SplitRegister *reg,
     }
     else if (!gnc_commodity_equal(orig_com, new_com))
     {
-      DEBUG("Commodity now %s (was %s). Clearing rate.",
+      /* The commodity has changed but is not the original. Reset the rate. */
+      DEBUG("Commodity now %s (originally %s). Clearing rate.",
             new_com  ? gnc_commodity_get_mnemonic(new_com) : "NULL",
             orig_com ? gnc_commodity_get_mnemonic(orig_com) : "NULL");
 
