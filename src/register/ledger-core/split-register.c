@@ -1684,7 +1684,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
   /* Find the account */
   account = gnc_account_lookup_for_register (gnc_get_current_root_account (), name);
   if (!account)
-	  account = gnc_account_lookup_by_code (gnc_get_current_root_account (), name);
+    account = gnc_account_lookup_by_code(gnc_get_current_root_account(), name);
 
   if (!account) {
     /* Ask if they want to create a new one. */
@@ -1699,11 +1699,15 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
       return NULL;
   }
 
-  /* Now have the account. Update the cell with the name as created. */
-  *refresh = TRUE;
+  /* Now have the account. */
   account_name = gnc_get_account_name_for_register (account);
-  gnc_combo_cell_set_value (cell, account_name);
-  gnc_basic_cell_set_changed (&cell->cell, TRUE);
+  if (safe_strcmp(account_name, gnc_basic_cell_get_value(bcell)))
+  {
+    /* The name has changed. Update the cell. */
+    gnc_combo_cell_set_value (cell, account_name);
+    gnc_basic_cell_set_changed (&cell->cell, TRUE);
+    *refresh = TRUE;
+  }
   g_free (account_name);
 
   /* See if the account (either old or new) is a placeholder. */
