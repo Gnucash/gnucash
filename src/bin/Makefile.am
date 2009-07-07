@@ -68,7 +68,7 @@ gnucash-setup-env: gnucash-setup-env.in ${top_builddir}/config.status Makefile
 	mv $@.tmp $@
 	chmod u+x $@
 
-CLEANFILES = $(BUILT_SOURCES) gnucash gnucash-valgrind gnucash-gdb
+CLEANFILES = $(BUILT_SOURCES) gnucash gnucash-valgrind gnucash-gdb gnucash-setup-env
 
 # We handle gnucash scripts in a somewhat unexpected way, but we do
 # this so that a user who doesn't necessarily have the right
