@@ -29,6 +29,7 @@ _OUTPUT_DIR=`unix_path $OUTPUT_DIR`
 LOGFILE=${_OUTPUT_DIR}/${LOGFILENAME}
 mkdir -p ${_OUTPUT_DIR}
 
+set +e
 trap on_error ERR
 
 # Run the compile
