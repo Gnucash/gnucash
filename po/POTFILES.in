@@ -24,6 +24,7 @@ src/app-utils/gnc-ui-util.c
 src/app-utils/guile-util.c
 src/app-utils/option-util.c
 src/backend/dbi/gnc-backend-dbi.c
+src/backend/sql/escape.c
 src/backend/sql/gnc-account-sql.c
 src/backend/sql/gnc-backend-sql.c
 src/backend/sql/gnc-book-sql.c
