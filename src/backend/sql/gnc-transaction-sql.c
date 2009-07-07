@@ -53,6 +53,8 @@
 #include "splint-defs.h"
 #endif
 
+#define SIMPLE_QUERY_COMPILATION 1
+
 /*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TRANSACTION_TABLE "transactions"
@@ -987,11 +989,19 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
 
 				if( strcmp( paramPath->data, QOF_PARAM_BOOK ) == 0 ) continue;
 
+#if SIMPLE_QUERY_COMPILATION
+				if( strcmp( paramPath->data, SPLIT_ACCOUNT ) != 0
+						|| strcmp( paramPath->next->data, QOF_PARAM_GUID ) != 0 ) continue;
+#endif
+
                 if( need_AND ) g_string_append( sql, " AND " );
 
 				if( strcmp( paramPath->data, SPLIT_ACCOUNT ) == 0
 						&& strcmp( paramPath->next->data, QOF_PARAM_GUID ) == 0 ) {
                 	convert_query_term_to_sql( "s.account_guid", term, sql );
+#if SIMPLE_QUERY_COMPILATION
+					goto done_compiling_query;
+#endif
 
 				} else if( strcmp( paramPath->data, SPLIT_RECONCILE ) == 0 ) {
                 	convert_query_term_to_sql( "s.reconcile_state", term, sql );
@@ -1042,7 +1052,13 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
 			}
         }
 
+#if SIMPLE_QUERY_COMPILATION
+done_compiling_query:
+#endif
 		if( sql->len != 0 ) {
+#if SIMPLE_QUERY_COMPILATION
+			g_string_append( sql, ")" );
+#endif
 			query_sql = g_strdup_printf(
 					"SELECT DISTINCT t.* FROM %s AS t, %s AS s WHERE s.tx_guid=t.guid AND %s",
 					TRANSACTION_TABLE, SPLIT_TABLE, sql->str );
