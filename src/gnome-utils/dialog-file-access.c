@@ -300,6 +300,11 @@ gnc_ui_file_access( int type )
 	if( need_access_method_xml ) {
 		gtk_combo_box_append_text( faw->cb_uri_type, "xml" );
 		++access_method_index;
+		
+		// If we haven't set a default yet, set it now
+		if( active_access_method_index == -1 ) {
+			active_access_method_index = access_method_index;
+		}
 	}
 	g_assert( active_access_method_index >= 0 );
 	gtk_combo_box_set_active( faw->cb_uri_type, active_access_method_index );
