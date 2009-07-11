@@ -21,6 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(gnc:module-load "gnucash/html" 0)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-document> class 
@@ -29,7 +30,7 @@
 
 (define <html-document> 
   (make-record-type "<html-document>" 
-                    '(style-sheet style-stack style title headline objects)))
+                    '(style-sheet style-stack style style-text title headline objects)))
 
 (define gnc:html-document? 
   (record-predicate <html-document>))
@@ -42,6 +43,7 @@
    #f                    ;; the stylesheet 
    '()                   ;; style stack
    (gnc:make-html-style-table) ;; document style info
+   #f                    ;; style text
    ""                    ;; document title
    #f                    ;; headline
    '()                   ;; subobjects 
@@ -73,6 +75,12 @@
 
 (define gnc:html-document-style-stack
   (record-accessor <html-document> 'style-stack))
+
+(define gnc:html-document-set-style-text!
+  (record-modifier <html-document> 'style-text))
+
+(define gnc:html-document-style-text
+  (record-accessor <html-document> 'style-text))
 
 (define gnc:html-document-set-style-internal!
   (record-modifier <html-document> 'style))
@@ -120,7 +128,9 @@
 ;; returns the html document as a string, I think.
 (define (gnc:html-document-render doc . rest) 
   (let ((stylesheet (gnc:html-document-style-sheet doc))
-        (headers? (if (null? rest) #f (if (car rest) #t #f))))
+        (headers? (if (null? rest) #f (if (car rest) #t #f)))
+		(style-text (gnc:html-document-style-text doc))
+	   )
     (if stylesheet 
         ;; if there's a style sheet, let it do the rendering 
         (gnc:html-style-sheet-render stylesheet doc headers?)
@@ -130,6 +140,7 @@
                (push (lambda (l) (set! retval (cons l retval))))
 	       (objs (gnc:html-document-objects doc))
 	       (work-to-do (length objs))
+           (css? (gnc-html-engine-supports-css))
 	       (work-done 0)
                (title (gnc:html-document-title doc)))
           ;; compile the doc style 
@@ -143,6 +154,9 @@
               (begin 
                 (push "<html>\n")
                 (push "<head>\n")
+				(if css? 
+				  (if style-text
+				    (push (list "</style>" style-text "<style type=\"text/css\">\n"))))
                 (let ((title (gnc:html-document-title doc)))
                   (if title 
                       (push (list "</title>" title "<title>\n"))))
