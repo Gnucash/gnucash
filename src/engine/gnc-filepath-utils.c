@@ -203,11 +203,17 @@ xaccResolveFilePath (const char * filefrag)
   if (!g_ascii_strncasecmp(filefrag, "file:", 5))
   {
       LEAVE("filefrag is file uri");
-      return g_strdup(filefrag + 5);
+      if (!g_ascii_strncasecmp(filefrag, "file://", 7))
+        return g_strdup(filefrag + 7);
+      else
+        return g_strdup(filefrag + 5);
   }
   if( g_ascii_strncasecmp( filefrag, "xml:", 4 ) == 0 ) {
   	  LEAVE( "filefrag is xml file uri" );
-	  return g_strdup( filefrag + 4);
+      if( g_ascii_strncasecmp( filefrag, "xml://", 6 ) == 0 )
+        return g_strdup( filefrag + 6);
+      else
+	    return g_strdup( filefrag + 4);
   }
 
   /* get conservative on the length so that sprintf(getpid()) works ... */
