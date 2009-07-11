@@ -26,8 +26,51 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
+(use-modules (srfi srfi-13))
+(use-modules (srfi srfi-14))
 
 (gnc:module-load "gnucash/report/report-system" 0)
+
+(define (font-name-to-style-info font-name)
+    (let*
+	  (
+	    (font-family "Arial")
+	    (font-size "20")
+		(font-style #f)
+		(font-style-idx 0)
+		(font-weight #f)
+		(font-weight-idx 0)
+		(result "")
+		(len (string-length font-name))
+		(idx 0)
+	  )
+	(gnc:debug font-name)
+	(set! idx (string-index-right font-name (string->char-set "0123456789")))
+	(set! font-size (substring font-name (- idx 1) len))
+	(set! font-name (string-take font-name (- idx 2)))
+	(set! font-weight-idx (string-contains-ci font-name " bold"))
+	(if font-weight-idx
+	    (begin
+		    (set! font-weight "bold")
+			(set! font-name (string-append (string-take font-name font-weight-idx)
+			                               (string-drop font-name (+ font-weight-idx 5))))
+		))
+	(set! font-style-idx (string-contains-ci font-name " italic"))
+	(if font-style-idx
+	    (begin
+		    (set! font-style "italic")
+			(set! font-name (string-append (string-take font-name font-style-idx)
+			                               (string-drop font-name (+ font-style-idx 7))))
+		))
+	(set! font-family font-name)
+	(set! result (string-append
+		"font-family: " font-family "; "
+		"font-size: " font-size "pt; "
+		(if font-style (string-append "font-style: " font-style "; ") "")
+		(if font-weight (string-append "font-weight: " font-weight "; ") "")))
+    (gnc:debug result)
+	result
+    ))
 
 ;; css style sheet 
 ;; this should generally be the default style sheet for most reports.
@@ -69,45 +112,45 @@
            (N_ "Table border width") "e" (N_ "Bevel depth on tables")
            0 0 20 0 1))
 		 (opt-register
-		  (gnc:make-string-option
+		  (gnc:make-font-option
            (N_ "Fonts")
 		   (N_ "Title") "a" (N_ "Font info for the report title")
-		   "font-family: Ariel; font-size: 15pt; font-weight: bold;"))
+		   "Arial Bold 15"))
          (opt-register
-          (gnc:make-string-option
+          (gnc:make-font-option
            (N_ "Fonts")
 		   (N_ "Account link") "b" (N_ "Font info for account name")
-		   "font-family: Ariel; font-size: 8pt; font-style: italic;"))
+		   "Arial Italic 8"))
          (opt-register
-          (gnc:make-string-option
+          (gnc:make-font-option
            (N_ "Fonts")
 		   (N_ "Number cell") "c" (N_ "Font info for regular number cells")
-		   "font-family: Ariel; font-size: 10pt; text-align: right;"))
+		   "Arial 10"))
          (opt-register
-          (gnc:make-string-option
+          (gnc:make-font-option
            (N_ "Fonts")
 		   (N_ "Number header") "c" (N_ "Font info for number headers")
-		   "font-family: Ariel; font-size: 10pt; text-align: right;"))
+		   "Arial 10"))
          (opt-register
-          (gnc:make-string-option
+          (gnc:make-font-option
            (N_ "Fonts")
 		   (N_ "Text cell") "c" (N_ "Font info for regular text cells")
-		   "font-family: Ariel; font-size: 10pt; text-align: left;"))
+		   "Arial 10"))
          (opt-register
-          (gnc:make-string-option
+          (gnc:make-font-option
            (N_ "Fonts")
 		   (N_ "Total number cell") "c" (N_ "Font info for number cells containing a total")
-		   "font-family: Ariel; font-size: 12pt; text-align: right; font-weight: bold;"))
+		   "Arial Bold 12"))
          (opt-register
-          (gnc:make-string-option
+          (gnc:make-font-option
            (N_ "Fonts")
 		   (N_ "Total label cell") "c" (N_ "Font info for cells containing total labels")
-		   "font-family: Ariel; font-size: 12pt; text-align: left; font-weight: bold;"))
+		   "Arial Bold 12"))
          (opt-register
-          (gnc:make-string-option
+          (gnc:make-font-option
            (N_ "Fonts")
 		   (N_ "Centered label cell") "c" (N_ "Font info for centered label cells")
-		   "font-family: Ariel; font-size: 12pt; text-align: center; font-weight: bold;"))
+		   "Arial Bold 12"))
 
          options))
 
@@ -128,14 +171,14 @@
 	 (spacing (opt-val "Tables" "Table cell spacing"))
 	 (padding (opt-val "Tables" "Table cell padding"))
 	 (border (opt-val "Tables" "Table border width"))
-	 (title-font-info (opt-val "Fonts" "Title"))
-	 (account-link-font-info (opt-val "Fonts" "Account link"))
-	 (number-cell-font-info (opt-val "Fonts" "Number cell"))
-	 (number-header-font-info (opt-val "Fonts" "Number header"))
-	 (text-cell-font-info (opt-val "Fonts" "Text cell"))
-	 (total-number-cell-font-info (opt-val "Fonts" "Total number cell"))
-	 (total-label-cell-font-info (opt-val "Fonts" "Total label cell"))
-	 (centered-label-cell-font-info (opt-val "Fonts" "Centered label cell"))
+	 (title-font-info (font-name-to-style-info (opt-val "Fonts" "Title")))
+	 (account-link-font-info (font-name-to-style-info (opt-val "Fonts" "Account link")))
+	 (number-cell-font-info (font-name-to-style-info (opt-val "Fonts" "Number cell")))
+	 (number-header-font-info (font-name-to-style-info (opt-val "Fonts" "Number header")))
+	 (text-cell-font-info (font-name-to-style-info (opt-val "Fonts" "Text cell")))
+	 (total-number-cell-font-info (font-name-to-style-info (opt-val "Fonts" "Total number cell")))
+	 (total-label-cell-font-info (font-name-to-style-info (opt-val "Fonts" "Total label cell")))
+	 (centered-label-cell-font-info (font-name-to-style-info (opt-val "Fonts" "Centered label cell")))
     )
 
     (gnc:html-document-set-style! 
@@ -216,12 +259,12 @@
 	  (string-append
 		  "h3 { " title-font-info " }\n"
 		  "a { " account-link-font-info " }\n"
-	      "td.number-cell { " number-cell-font-info " }\n"
-		  "td.number-header { " number-header-font-info " }\n"
-		  "td.text-cell { " text-cell-font-info " }\n"
-		  "td.total-number-cell { " total-number-cell-font-info " }\n"
-		  "td.total-label-cell { " total-label-cell-font-info " }\n"
-		  "td.centered-label-cell { " centered-label-cell-font-info " }\n"
+	      "td.number-cell { text-align:right; " number-cell-font-info " }\n"
+		  "td.number-header { text-align:right; " number-header-font-info " }\n"
+		  "td.text-cell { text-align: left; " text-cell-font-info " }\n"
+		  "td.total-number-cell { text-align:right; " total-number-cell-font-info " }\n"
+		  "td.total-label-cell { text-align: left; " total-label-cell-font-info " }\n"
+		  "td.centered-label-cell { text-align: center; " centered-label-cell-font-info " }\n"
 		  ))
 
     (let* ((title (gnc:html-document-title doc))
