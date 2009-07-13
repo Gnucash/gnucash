@@ -54,7 +54,7 @@ gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 	mv $@.tmp $@
 	chmod u+x $@
 
-gnucash-setup-env: gnucash-setup-env.in ${top_builddir}/config.status Makefile
+gnucash-setup-env: ${GNUCASH_SETUP_ENV}.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's#@-BIN_DIR-@#${bindir}#g' \
@@ -64,7 +64,8 @@ gnucash-setup-env: gnucash-setup-env.in ${top_builddir}/config.status Makefile
         -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
         -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
 	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g" \
-	    -e 's#@-PATH_SEPARATOR-@#${PATH_SEPARATOR}#g'
+	    -e 's#@-PATH_SEPARATOR-@#${PATH_SEPARATOR}#g' \
+	-e 's#@-PREFIX-@#${prefix}#g'
 	mv $@.tmp $@
 	chmod u+x $@
 
@@ -104,7 +105,8 @@ EXTRA_DIST = \
 	gnucash.in \
 	gnucash-valgrind.in \
 	gnucash-gdb.in \
-	gnucash-setup-env.in
+	gnucash-setup-env.in\
+	gnucash-setup-env-osx.in
 
 ## Gnucash scripts -- real code is in overrides, these just get you there.
 ${gnc_common_scripts}: generate-gnc-script ${top_builddir}/config.status
