@@ -37,7 +37,7 @@ typedef struct _GncImportMatchMap GncImportMatchMap;
 /** @{
 Obtain an ImportMatchMap object from an Account or a Book */
 GncImportMatchMap * gnc_imap_create_from_account (Account *acc);
-GncImportMatchMap * gnc_imap_create_from_book (GNCBook *book);
+GncImportMatchMap * gnc_imap_create_from_book (QofBook *book);
 /*@}*/
 
 /** Destroy an import map. But all stored entries will still continue

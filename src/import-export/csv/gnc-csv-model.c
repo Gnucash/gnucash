@@ -732,7 +732,7 @@ static void trans_property_list_add(TransProperty* property)
  * @param book The book where the split should be stored
  * @param amount The amount of the split
  */
-static void trans_add_split(Transaction* trans, Account* account, GNCBook* book,
+static void trans_add_split(Transaction* trans, Account* account, QofBook* book,
                             gnc_numeric amount)
 {
   Split* split = xaccMallocSplit(book);
@@ -842,7 +842,7 @@ static GncCsvTransLine* trans_property_list_to_trans(TransPropertyList* list, gc
 {
   GncCsvTransLine* trans_line = g_new(GncCsvTransLine, 1);
   GList* properties_begin = list->properties;
-  GNCBook* book = gnc_account_get_book(list->account);
+  QofBook* book = gnc_account_get_book(list->account);
   gnc_commodity* currency = xaccAccountGetCommodity(list->account);
   gnc_numeric amount = double_to_gnc_numeric(0.0, xaccAccountGetCommoditySCU(list->account),
                                              GNC_RND_ROUND);

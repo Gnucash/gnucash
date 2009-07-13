@@ -44,14 +44,14 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 struct _GncImportMatchMap {
   kvp_frame *	frame;
   Account *	acc;
-  GNCBook *	book;
+  QofBook *	book;
 };
 
 #define IMAP_FRAME		"import-map"
 #define IMAP_FRAME_BAYES	"import-map-bayes"
 
 static GncImportMatchMap *
-gnc_imap_create_from_frame (kvp_frame *frame, Account *acc, GNCBook *book)
+gnc_imap_create_from_frame (kvp_frame *frame, Account *acc, QofBook *book)
 {
   GncImportMatchMap *imap;
 
@@ -84,7 +84,7 @@ GncImportMatchMap * gnc_imap_create_from_account (Account *acc)
   return gnc_imap_create_from_frame (frame, acc, NULL);
 }
 
-GncImportMatchMap * gnc_imap_create_from_book (GNCBook *book)
+GncImportMatchMap * gnc_imap_create_from_book (QofBook *book)
 {
   kvp_frame * frame;
 

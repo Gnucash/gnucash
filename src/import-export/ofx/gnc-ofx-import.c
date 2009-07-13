@@ -112,7 +112,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
   gnc_commodity *currency=NULL;
   gnc_commodity *investment_commodity=NULL;
   gnc_numeric gnc_amount, gnc_units;
-  GNCBook *book;
+  QofBook *book;
   Transaction *transaction;
   Split *split;
   gchar *notes, *tmp;

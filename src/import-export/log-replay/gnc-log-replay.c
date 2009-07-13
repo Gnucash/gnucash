@@ -360,7 +360,7 @@ static void  process_trans_record(  FILE *log_file)
   Transaction * trans = NULL;
   Split * split = NULL;
   Account * acct = NULL;
-  GNCBook * book = gnc_get_current_book();
+  QofBook * book = gnc_get_current_book();
 
   DEBUG("process_trans_record(): Begin...\n");
 
