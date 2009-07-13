@@ -10,6 +10,7 @@ AM_CPPFLAGS = \
 	-I${top_srcdir}/src/gnc-module \
     -I${top_srcdir}/src/libqof/qof \
 	${GLIB_CFLAGS} \
+	${IGE_MAC_CFLAGS} \
 	${GUILE_INCS}
 
 libgncmod_engine_la_SOURCES = \
@@ -116,6 +117,7 @@ libgncmod_engine_la_LIBADD = \
   ${REGEX_LIBS} \
   ${GLIB_LIBS} \
   ${BINRELOC_LIBS} \
+  ${IGE_MAC_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash

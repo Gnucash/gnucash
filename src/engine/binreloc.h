@@ -28,6 +28,10 @@ typedef enum {
 	GBR_INIT_ERROR_READ_MAPS,
 	/** The file format of /proc/self/maps is invalid; kernel bug? */
 	GBR_INIT_ERROR_INVALID_MAPS,
+	/** BinReloc determined that gnucash is not running from a bundle */
+	GBR_INIT_ERROR_MAC_NOT_BUNDLE,
+	/** Binreloc determined that the bundle is not an app bundle */
+	GBR_INIT_ERROR_MAC_NOT_APP_BUNDLE,
 	/** BinReloc is disabled (the ENABLE_BINRELOC macro is not defined). */
 	GBR_INIT_ERROR_DISABLED
 } GbrInitError;

@@ -18,6 +18,9 @@
 	#include <sys/types.h>
 	#include <sys/stat.h>
 	#include <unistd.h>
+#ifdef MAC_INTEGRATION
+#include <igemacintegration/ige-mac-bundle.h>
+#endif
 #endif /* ENABLE_BINRELOC */
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,7 +30,9 @@
 #include <glib.h>
 
 G_BEGIN_DECLS
-
+#if defined ENABLE_BINRELOC && defined MAC_INTEGRATION
+static IgeMacBundle *bundle = NULL;
+#endif
 
 /** @internal
  * Find the canonical filename of the executable. Returns the filename
@@ -59,6 +64,26 @@ _br_find_exe (GbrInitError *error)
 				   "bin", "gnucash-bin.exe",
 				   (char*)NULL);
 	g_free (prefix);
+	return result;
+#elif MAC_INTEGRATION
+	gchar *prefix = NULL, *result = NULL;
+	g_type_init();
+	bundle = ige_mac_bundle_new();
+	if (!bundle) {
+	    *error = GBR_INIT_ERROR_MAC_NOT_BUNDLE;
+	    return NULL;
+	}
+	if (!ige_mac_bundle_get_is_app_bundle (bundle)) {
+	    g_object_unref(bundle);
+	    bundle = NULL;
+	    *error = GBR_INIT_ERROR_MAC_NOT_APP_BUNDLE;
+	    return NULL;
+	}
+	ige_mac_bundle_setup_environment(bundle);
+	prefix = g_strdup(ige_mac_bundle_get_path(bundle));
+	result = g_build_filename(prefix, "Contents/MacOS", 
+					 "gnucash-bin", NULL);
+	g_free(prefix);
 	return result;
 #else
 	char *path, *path2, *line, *result;
@@ -201,7 +226,7 @@ _br_find_exe_for_symbol (const void *symbol, GbrInitError *error)
 		*error = GBR_INIT_ERROR_DISABLED;
 	return (char *) NULL;
 #else
-#ifdef G_OS_WIN32
+#if defined G_OS_WIN32 
 	g_warning ("_br_find_exe_for_symbol not implemented on win32.");
 	if (error)
 		*error = GBR_INIT_ERROR_DISABLED;
@@ -390,6 +415,12 @@ set_gerror (GError **error, GbrInitError errcode)
 	case GBR_INIT_ERROR_INVALID_MAPS:
 		error_message = "The file format of /proc/self/maps is invalid.";
 		break;
+        case GBR_INIT_ERROR_MAC_NOT_BUNDLE:
+	    error_message = "Binreloc did not find a bundle";
+	    break;
+	case GBR_INIT_ERROR_MAC_NOT_APP_BUNDLE:
+	    error_message = "Binreloc found that the bundle is not an app bundle";
+	    break;
 	case GBR_INIT_ERROR_DISABLED:
 		error_message = "Binary relocation support is disabled.";
 		break;
@@ -473,6 +504,21 @@ gbr_find_prefix (const gchar *default_prefix)
 {
 	gchar *dir1, *dir2;
 
+#if defined ENABLE_BINRELOC && defined MAC_INTEGRATION
+	gchar *prefix = NULL, *result = NULL;
+	if (bundle == NULL) {
+		/* BinReloc not initialized. */
+		if (default_prefix != NULL)
+			return g_strdup (default_prefix);
+		else
+			return NULL;
+	}
+	prefix = g_strdup(ige_mac_bundle_get_path(bundle));
+	result = g_build_filename(prefix, "Contents/Resources", NULL);
+	g_free(prefix);
+	return result;
+#else
+
 	if (exe == NULL) {
 		/* BinReloc not initialized. */
 		if (default_prefix != NULL)
@@ -480,11 +526,11 @@ gbr_find_prefix (const gchar *default_prefix)
 		else
 			return NULL;
 	}
-
 	dir1 = g_path_get_dirname (exe);
 	dir2 = g_path_get_dirname (dir1);
 	g_free (dir1);
 	return dir2;
+#endif //ENABLE_BINRELOC && MAC_INTEGRATION
 }
 
 
@@ -505,6 +551,19 @@ gchar *
 gbr_find_bin_dir (const gchar *default_bin_dir)
 {
 	gchar *prefix, *dir;
+#if defined ENABLE_BINRELOC && defined MAC_INTEGRATION
+	if (bundle == NULL) {
+	    /* BinReloc not initialized. */
+	    if (default_bin_dir != NULL)
+		return g_strdup (default_bin_dir);
+	    else
+		return NULL;
+	}
+	prefix = g_strdup(ige_mac_bundle_get_path(bundle));
+	dir = g_build_filename(prefix, "Contents/MacOS", NULL);
+	g_free(prefix);
+	return dir;
+#else
 
 	prefix = gbr_find_prefix (NULL);
 	if (prefix == NULL) {
@@ -518,6 +577,7 @@ gbr_find_bin_dir (const gchar *default_bin_dir)
 	dir = g_build_filename (prefix, "bin", NULL);
 	g_free (prefix);
 	return dir;
+#endif //ENABLE_BINRELOC && MAC_INTEGRATION
 }
 
 
