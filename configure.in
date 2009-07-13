@@ -215,12 +215,6 @@ AM_CONDITIONAL(BUILDING_FROM_SVN, test "x$BUILDING_FROM_SVN" = "xyes")
 # Build dir adjustments
 AM_CONDITIONAL(GNUCASH_SEPARATE_BUILDDIR, test "x${srcdir}" != "x.")
 
-# These are unavailable on windows/mingw32
-AC_CHECK_HEADERS(X11/Xlib.h glob.h)
-AM_CONDITIONAL(HAVE_X11_XLIB_H, test "x$ac_cv_header_X11_Xlib_h" = "xyes")
-AC_CHECK_FUNCS(chown gethostname getppid getuid gettimeofday gmtime_r)
-AC_CHECK_FUNCS(gethostid link)
-
 # Init binreloc
 AM_BINRELOC
 
@@ -317,10 +311,10 @@ LIBS="$LIBS $DL_LIB"
 AC_CHECK_FUNCS(dlerror,,)
 LIBS="$oLIBS"
 AC_SUBST(DL_LIB)
+ 10.x requires some special handling...
 
 ### --------------------------------------------------------------------------
-### MacOS 10.x requires some special handling...
-
+### MacOS
 # Some systems (MacOS) require -lintl
 # not true for darwin 10.3 - halts the build.
 #AC_SEARCH_LIBS(gettext, intl, ,[
@@ -336,7 +330,7 @@ case $host_os in
 update to latest  darwin])
 		;;
 	darwin*)
-		AC_MSG_RESULT([yes, moving on...])
+
 #		AC_CHECK_HEADERS(popt.h)
 #		AC_MSG_RESULT([yes, patching libtool to always build dylibs])
 #		mv libtool libtool.old
@@ -345,11 +339,43 @@ update to latest  darwin])
 #			-e 's|^soname_spec.*|soname_spec="\\$libname\\$release\\$major.dylib"|g' \
 #			< libtool.old > libtool
 #		rm libtool.old
+		AC_MSG_RESULT(yes)
+		AC_MSG_CHECKING(For GDK-Quartz)
+		_gdk_tgt=`$PKG_CONFIG --variable=target gdk-2.0`
+		if test "x$_gdk_tgt" = xquartz; then 
+		   AC_MSG_RESULT(yes)
+		   AC_DEFINE(GDK_QUARTZ,,[Using GDK Quartz (not X11)])
+		   AC_MSG_CHECKING(For ige-mac-integration)   
+		   PKG_CHECK_MODULES(IGE_MAC, ige-mac-integration,
+		   		     AC_MSG_RESULT(yes),
+				     AC_MSG_RESULT(no))
+		   AC_SUBST(IGE_MAC_LIBS)
+		   AC_SUBST(IGE_MAC_CFLAGS)
+		   GNUCASH_SETUP_ENV="gnucash-setup-env-osx"
+		else
+		   GNUCASH_SETUP_ENV="gnucash-setup-env"
+		   AC_MSG_RESULT(no)
+		fi
 		;;
 	*)
 		AC_MSG_RESULT(no)
+		   GNUCASH_SETUP_ENV="gnucash-setup-env"
+
 		;;	
 esac
+AC_SUBST(GNUCASH_SETUP_ENV)
+
+# These are unavailable on windows/mingw32 and X11 isn't desired or
+# required for MacOSX Quartz
+if test "x$_gdk_tgt" = xquartz; 
+then 
+    AC_CHECK_HEADERS(glob.h)
+else
+    AC_CHECK_HEADERS(X11/Xlib.h glob.h)
+fi
+AM_CONDITIONAL(HAVE_X11_XLIB_H, test "x$ac_cv_header_X11_Xlib_h" = "xyes")
+AC_CHECK_FUNCS(chown gethostname getppid getuid gettimeofday gmtime_r)
+AC_CHECK_FUNCS(gethostid link)
 
 
 ### --------------------------------------------------------------------------
