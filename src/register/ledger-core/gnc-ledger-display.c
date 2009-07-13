@@ -455,7 +455,7 @@ gnc_ledger_display_gl (void)
 GNCLedgerDisplay *
 gnc_ledger_display_template_gl (char *id)
 {
-  GNCBook *book;
+  QofBook *book;
   Query *q;
   GNCLedgerDisplay *ld;
   SplitRegister *sr;
