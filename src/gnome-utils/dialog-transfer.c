@@ -117,7 +117,7 @@ struct _xferDialog
 
   GtkTooltips *tips;
 
-  GNCBook *	book;
+  QofBook *	book;
   GNCPriceDB *	pricedb;
 
   /* Where to store the "exchange_rate" at exit (in lieu of
@@ -1830,7 +1830,7 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
   XferDialog *xferData;
   GNCAmountEdit *gae;
   GtkWidget *amount_entry;
-  GNCBook *book = NULL;
+  QofBook *book = NULL;
 
   xferData = g_new0 (XferDialog, 1);
 
