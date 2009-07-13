@@ -20,7 +20,10 @@ AM_CPPFLAGS = \
   ${GNOME_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
   ${GUILE_INCS} \
-  ${QOF_CFLAGS} 
+  ${QOF_CFLAGS} \
+  ${GOFFICE_CFLAGS} \
+  ${LIBGDA_CFLAGS} \
+  ${IGE_MAC_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \
@@ -186,7 +189,8 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
   ${REGEX_LIBS} \
-  ${LIBXML2_LIBS}
+  ${LIBXML2_LIBS} \
+  ${IGE_MAC_LIBS}
 
 if HAVE_X11_XLIB_H
   libgncmod_gnome_utils_la_LIBADD += -lX11
