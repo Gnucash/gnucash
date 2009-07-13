@@ -67,7 +67,7 @@ typedef enum
 } OrderDialogType;
 
 struct _order_select_window {
-  GNCBook *	book;
+  QofBook *	book;
   GncOwner *	owner;
   QueryNew *	q;
   GncOwner	owner_def;
@@ -95,7 +95,7 @@ struct _order_window {
   OrderDialogType	dialog_type;
   GUID		order_guid;
   gint		component_id;
-  GNCBook *	book;
+  QofBook *	book;
   GncOrder *	created_order;
   GncOwner	owner;
 
@@ -522,7 +522,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static OrderWindow *
-gnc_order_new_window (GNCBook *bookp, OrderDialogType type,
+gnc_order_new_window (QofBook *bookp, OrderDialogType type,
 		      GncOrder *order, GncOwner *owner)
 {
   OrderWindow *ow;
@@ -641,7 +641,7 @@ gnc_order_new_window (GNCBook *bookp, OrderDialogType type,
 }
 
 static OrderWindow *
-gnc_order_window_new_order (GNCBook *bookp, GncOwner *owner)
+gnc_order_window_new_order (QofBook *bookp, GncOwner *owner)
 {
   OrderWindow *ow;
   GladeXML *xml;
@@ -720,7 +720,7 @@ gnc_ui_order_edit (GncOrder *order)
 }
 
 OrderWindow *
-gnc_ui_order_new (GncOwner *ownerp, GNCBook *bookp)
+gnc_ui_order_new (GncOwner *ownerp, QofBook *bookp)
 {
   OrderWindow *ow;
   GncOwner owner;
@@ -789,7 +789,7 @@ free_order_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_order_search (GncOrder *start, GncOwner *owner, GNCBook *book)
+gnc_order_search (GncOrder *start, GncOwner *owner, QofBook *book)
 {
   GNCIdType type = GNC_ORDER_MODULE_NAME;
   struct _order_select_window *sw;

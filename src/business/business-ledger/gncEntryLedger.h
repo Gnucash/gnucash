@@ -79,7 +79,7 @@ typedef struct GncEntryLedger_s GncEntryLedger;
 /** Prototypes ***************************************************/
 
 /* Create and return a new GncEntry Ledger */
-GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type);
+GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type);
 
 /* Set the default order for this ledger */
 void gnc_entry_ledger_set_default_order (GncEntryLedger *ledger,

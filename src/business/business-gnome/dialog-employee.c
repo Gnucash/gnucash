@@ -66,7 +66,7 @@ typedef enum
 } EmployeeDialogType;
 
 struct _employee_select_window {
-  GNCBook *	book;
+  QofBook *	book;
   QueryNew *	q;
 };
 
@@ -100,7 +100,7 @@ struct _employee_window {
   EmployeeDialogType	dialog_type;
   GUID		employee_guid;
   gint		component_id;
-  GNCBook *	book;
+  QofBook *	book;
   GncEmployee *	created_employee;
 };
 
@@ -373,7 +373,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static EmployeeWindow *
-gnc_employee_new_window (GNCBook *bookp,
+gnc_employee_new_window (QofBook *bookp,
 			 GncEmployee *employee)
 {
   EmployeeWindow *ew;
@@ -567,7 +567,7 @@ gnc_employee_new_window (GNCBook *bookp,
 }
 
 EmployeeWindow *
-gnc_ui_employee_new (GNCBook *bookp)
+gnc_ui_employee_new (QofBook *bookp)
 {
   EmployeeWindow *ew;
 
@@ -671,7 +671,7 @@ free_employee_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_employee_search (GncEmployee *start, GNCBook *book)
+gnc_employee_search (GncEmployee *start, QofBook *book)
 {
   GNCIdType type = GNC_EMPLOYEE_MODULE_NAME;
   struct _employee_select_window *sw;

@@ -9,4 +9,4 @@ SCM scm_init_sw_dialog_tax_table_module (void);
 
 %import "base-typemaps.i"
 
-TaxTableWindow * gnc_ui_tax_table_window_new (GNCBook *book);
+TaxTableWindow * gnc_ui_tax_table_window_new (QofBook *book);

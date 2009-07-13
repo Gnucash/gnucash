@@ -66,7 +66,7 @@ typedef enum
 } VendorDialogType;
 
 struct _vendor_select_window {
-  GNCBook *	book;
+  QofBook *	book;
   QueryNew *	q;
 };
 
@@ -99,7 +99,7 @@ struct _vendor_window {
   VendorDialogType	dialog_type;
   GUID		vendor_guid;
   gint		component_id;
-  GNCBook *	book;
+  QofBook *	book;
   GncVendor *	created_vendor;
 
   GncTaxTable *	taxtable;
@@ -344,7 +344,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static VendorWindow *
-gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
+gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
 {
   VendorWindow *vw;
   GladeXML *xml;
@@ -495,7 +495,7 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
 }
 
 VendorWindow *
-gnc_ui_vendor_new (GNCBook *bookp)
+gnc_ui_vendor_new (QofBook *bookp)
 {
   VendorWindow *vw;
 
@@ -635,7 +635,7 @@ free_vendor_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_vendor_search (GncVendor *start, GNCBook *book)
+gnc_vendor_search (GncVendor *start, QofBook *book)
 {
   GNCIdType type = GNC_VENDOR_MODULE_NAME;
   struct _vendor_select_window *sw;

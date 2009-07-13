@@ -63,7 +63,7 @@ struct _payment_window {
   GtkWidget *	acct_tree;
 
   gint		component_id;
-  GNCBook *	book;
+  QofBook *	book;
   GncOwner	owner;
   GncInvoice *	invoice;
   GList *	acct_types;
@@ -395,7 +395,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static PaymentWindow *
-new_payment_window (GncOwner *owner, GNCBook *book, GncInvoice *invoice)
+new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
 {
   PaymentWindow *pw;
   GladeXML *xml;
@@ -533,7 +533,7 @@ gnc_ui_payment_window_destroy (PaymentWindow *pw)
 }
 
 PaymentWindow *
-gnc_ui_payment_new_with_invoice (GncOwner *owner, GNCBook *book,
+gnc_ui_payment_new_with_invoice (GncOwner *owner, QofBook *book,
 				 GncInvoice *invoice)
 {
   GncOwner owner_def;
@@ -551,7 +551,7 @@ gnc_ui_payment_new_with_invoice (GncOwner *owner, GNCBook *book,
 }
 
 PaymentWindow *
-gnc_ui_payment_new (GncOwner *owner, GNCBook *book)
+gnc_ui_payment_new (GncOwner *owner, QofBook *book)
 {
   return gnc_ui_payment_new_with_invoice (owner, book, NULL);
 }

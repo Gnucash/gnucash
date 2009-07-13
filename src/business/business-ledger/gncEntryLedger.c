@@ -264,7 +264,7 @@ gnc_entry_ledger_config_cells (GncEntryLedger *ledger)
 }
 
 /* Create and return a new GncEntry Ledger */
-GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
+GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type)
 {
   GncEntryLedger *ledger;
 

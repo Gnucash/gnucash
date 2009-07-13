@@ -57,7 +57,7 @@ typedef enum {
 } GNCSearchType;
 
 static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
-				  GNCBook *book, GncOwner *owner,
+				  QofBook *book, GncOwner *owner,
 				  GNCSearchType type)
 {
   GtkWidget *edit;
@@ -129,7 +129,7 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
 }
 
 GtkWidget * gnc_owner_select_create (GtkWidget *label, GtkWidget *hbox,
-				     GNCBook *book, GncOwner *owner)
+				     QofBook *book, GncOwner *owner)
 {
   g_return_val_if_fail (hbox != NULL, NULL);
   g_return_val_if_fail (book != NULL, NULL);
@@ -139,7 +139,7 @@ GtkWidget * gnc_owner_select_create (GtkWidget *label, GtkWidget *hbox,
 }
 
 GtkWidget * gnc_owner_edit_create (GtkWidget *label, GtkWidget *hbox,
-				   GNCBook *book, GncOwner *owner)
+				   QofBook *book, GncOwner *owner)
 {
   g_return_val_if_fail (hbox != NULL, NULL);
   g_return_val_if_fail (book != NULL, NULL);
@@ -175,7 +175,7 @@ void gnc_owner_set_owner (GtkWidget *widget, GncOwner *owner)
 
 typedef struct _invoice_select_info {
   GtkWidget *label;
-  GNCBook *book;
+  QofBook *book;
   GncOwner owner;
   gboolean have_owner;
 } GncISI;
@@ -225,7 +225,7 @@ gnc_invoice_select_search_set_label(GncISI* isi)
   gtk_label_set_text(GTK_LABEL(isi->label), label);
 }
 
-GtkWidget * gnc_invoice_select_create (GtkWidget *hbox, GNCBook *book,
+GtkWidget * gnc_invoice_select_create (GtkWidget *hbox, QofBook *book,
 				       const GncOwner *owner,
 				       GncInvoice *invoice,
 				       GtkWidget *label)
@@ -304,7 +304,7 @@ void gnc_invoice_set_owner (GtkWidget *widget, GncOwner *owner)
 }
 
 void
-gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
+gnc_fill_account_select_combo (GtkWidget *combo, QofBook *book,
 			       GList *acct_types, GList *acct_commodities)
 {
   GtkListStore *store;
@@ -396,10 +396,10 @@ typedef const char * (*GenericLookup_t)(gpointer);
 typedef struct {
   gint		component_id;
   GtkWidget *	omenu;
-  GNCBook *	book;
+  QofBook *	book;
   gboolean	none_ok;
   const char *	(*get_name)(gpointer);
-  GList *	(*get_list)(GNCBook*);
+  GList *	(*get_list)(QofBook*);
 
   gboolean	building_menu;
   gpointer	result;
@@ -493,9 +493,9 @@ generic_omenu_refresh_handler (GHashTable *changes, gpointer user_data)
 }
 
 static OpMenuData *
-make_generic_optionmenu (GtkWidget *omenu, GNCBook *book,
+make_generic_optionmenu (GtkWidget *omenu, QofBook *book,
 			 gboolean none_ok, GNCIdType type_name,
-			 GList * (*get_list)(GNCBook*),
+			 GList * (*get_list)(QofBook*),
 			 GenericLookup_t get_name,
 			 gpointer *result)
 {
@@ -610,7 +610,7 @@ gnc_ui_optionmenu_set_value (GtkWidget *omenu, gpointer data)
  * created.
  */
 void
-gnc_ui_billterms_optionmenu (GtkWidget *omenu, GNCBook *book,
+gnc_ui_billterms_optionmenu (GtkWidget *omenu, QofBook *book,
 			     gboolean none_ok, GncBillTerm **choice)
 {
   if (!omenu || !book) return;
@@ -622,7 +622,7 @@ gnc_ui_billterms_optionmenu (GtkWidget *omenu, GNCBook *book,
 }
 
 void
-gnc_ui_taxtables_optionmenu (GtkWidget *omenu, GNCBook *book,
+gnc_ui_taxtables_optionmenu (GtkWidget *omenu, QofBook *book,
 			     gboolean none_ok, GncTaxTable **choice)
 {
   if (!omenu || !book) return;

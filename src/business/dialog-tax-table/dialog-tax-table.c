@@ -73,7 +73,7 @@ struct _taxtable_window {
 
   GncTaxTable *	current_table;
   GncTaxTableEntry *	current_entry;
-  GNCBook *	book;
+  QofBook *	book;
   gint		component_id;
 };
 
@@ -640,14 +640,14 @@ static gboolean
 find_handler (gpointer find_data, gpointer user_data)
 {
   TaxTableWindow *ttw = user_data;
-  GNCBook *book = find_data;
+  QofBook *book = find_data;
 
   return (ttw != NULL && ttw->book == book);
 }
 
 /* Create a tax-table window */
 TaxTableWindow *
-gnc_ui_tax_table_window_new (GNCBook *book)
+gnc_ui_tax_table_window_new (QofBook *book)
 {
   TaxTableWindow *ttw;
   GladeXML *xml;
@@ -749,7 +749,7 @@ gnc_ui_tax_table_window_destroy (TaxTableWindow *ttw)
 
 /* Create a new tax-table by name */
 GncTaxTable *
-gnc_ui_tax_table_new_from_name (GNCBook *book, const char *name)
+gnc_ui_tax_table_new_from_name (QofBook *book, const char *name)
 {
   TaxTableWindow *ttw;
 

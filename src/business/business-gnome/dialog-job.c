@@ -61,7 +61,7 @@ typedef enum
 } JobDialogType;
 
 struct _job_select_window {
-  GNCBook *	book;
+  QofBook *	book;
   GncOwner *	owner;
   QueryNew *	q;
   GncOwner	owner_def;
@@ -78,7 +78,7 @@ struct _job_window {
   JobDialogType	dialog_type;
   GUID		job_guid;
   gint		component_id;
-  GNCBook *	book;
+  QofBook *	book;
   GncJob *	created_job;
 
   GncOwner	owner;
@@ -286,7 +286,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static JobWindow *
-gnc_job_new_window (GNCBook *bookp, GncOwner *owner, GncJob *job)
+gnc_job_new_window (QofBook *bookp, GncOwner *owner, GncJob *job)
 {
   JobWindow *jw;
   GladeXML *xml;
@@ -386,7 +386,7 @@ gnc_job_new_window (GNCBook *bookp, GncOwner *owner, GncJob *job)
 }
 
 GncJob *
-gnc_ui_job_new_return_handle (GncOwner *owner, GNCBook *book)
+gnc_ui_job_new_return_handle (GncOwner *owner, QofBook *book)
 {
   JobWindow *jw;
   if (!book) return NULL;
@@ -395,7 +395,7 @@ gnc_ui_job_new_return_handle (GncOwner *owner, GNCBook *book)
 }
 
 JobWindow *
-gnc_ui_job_new (GncOwner *ownerp, GNCBook *bookp)
+gnc_ui_job_new (GncOwner *ownerp, QofBook *bookp)
 {
   JobWindow *jw;
   GncOwner owner;
@@ -503,7 +503,7 @@ free_userdata_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_job_search (GncJob *start, GncOwner *owner, GNCBook *book)
+gnc_job_search (GncJob *start, GncOwner *owner, QofBook *book)
 {
   QueryNew *q, *q2 = NULL;
   GNCIdType type = GNC_JOB_MODULE_NAME;

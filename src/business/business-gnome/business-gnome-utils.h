@@ -38,10 +38,10 @@
 #define GCONF_SECTION_EMPLOYEE "dialogs/business/employee"
 
 GtkWidget * gnc_owner_select_create (GtkWidget *label, GtkWidget *hbox,
-				     GNCBook *book, GncOwner *owner);
+				     QofBook *book, GncOwner *owner);
 
 GtkWidget * gnc_owner_edit_create (GtkWidget *label, GtkWidget *hbox,
-				   GNCBook *book, GncOwner *owner);
+				   QofBook *book, GncOwner *owner);
 
 void gnc_owner_get_owner (GtkWidget *widget, GncOwner *owner);
 void gnc_owner_set_owner (GtkWidget *widget, GncOwner *owner);
@@ -50,7 +50,7 @@ void gnc_owner_set_owner (GtkWidget *widget, GncOwner *owner);
 /* An invoice select widget.. 
  * the owner, invoice, and label parameters are optional
  */
-GtkWidget * gnc_invoice_select_create (GtkWidget *hbox, GNCBook *book,
+GtkWidget * gnc_invoice_select_create (GtkWidget *hbox, QofBook *book,
 				       const GncOwner *owner,
 				       GncInvoice *invoice,
 				       GtkWidget *label);
@@ -66,7 +66,7 @@ GList * gnc_business_account_types (GncOwner *owner);
 GList * gnc_business_commodities (GncOwner *owner);
 
 /* Fill in a combo box with the appropriate list of accounts */
-void gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
+void gnc_fill_account_select_combo (GtkWidget *combo, QofBook *book,
 				    GList *acct_types, 
 				    GList *acct_commodities);
 
@@ -78,12 +78,12 @@ void gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
  * then that will be the default option setting when the menu is
  * created.
  */
-void gnc_ui_billterms_optionmenu (GtkWidget *omenu, GNCBook *book,
+void gnc_ui_billterms_optionmenu (GtkWidget *omenu, QofBook *book,
 				  gboolean none_ok, GncBillTerm **choice);
 
 /* Same thing except for the tax tables */
 void
-gnc_ui_taxtables_optionmenu (GtkWidget *omenu, GNCBook *book,
+gnc_ui_taxtables_optionmenu (GtkWidget *omenu, QofBook *book,
 			     gboolean none_ok, GncTaxTable **choice);
 
 /* Build an option menu for choosing a GncTaxIncluded */

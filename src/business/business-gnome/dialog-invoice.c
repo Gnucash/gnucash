@@ -108,7 +108,7 @@ FROM_STRING_FUNC(InvoiceDialogType, ENUM_INVOICE_TYPE)
 AS_STRING_FUNC(InvoiceDialogType, ENUM_INVOICE_TYPE)
 
 struct _invoice_select_window {
-  GNCBook *	book;
+  QofBook *	book;
   GncOwner *	owner;
   QueryNew *	q;
   GncOwner	owner_def;
@@ -172,7 +172,7 @@ struct _invoice_window {
   InvoiceDialogType	dialog_type;
   GUID		invoice_guid;
   gint		component_id;
-  GNCBook *	book;
+  QofBook *	book;
   GncInvoice *	created_invoice;
   GncOwner	owner;
   GncOwner	job;
@@ -1730,7 +1730,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static InvoiceWindow *
-gnc_invoice_new_page (GNCBook *bookp, InvoiceDialogType type,
+gnc_invoice_new_page (QofBook *bookp, InvoiceDialogType type,
 		      GncInvoice *invoice, GncOwner *owner,
 		      GncMainWindow *window)
 {
@@ -2083,7 +2083,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 }
 
 static InvoiceWindow *
-gnc_invoice_window_new_invoice (GNCBook *bookp, GncOwner *owner,
+gnc_invoice_window_new_invoice (QofBook *bookp, GncOwner *owner,
 				GncInvoice *invoice)
 {
   InvoiceWindow *iw;
@@ -2217,7 +2217,7 @@ gnc_ui_invoice_modify (GncInvoice *invoice)
 }
 
 InvoiceWindow *
-gnc_ui_invoice_new (GncOwner *ownerp, GNCBook *bookp)
+gnc_ui_invoice_new (GncOwner *ownerp, QofBook *bookp)
 {
   InvoiceWindow *iw;
   GncOwner owner;
@@ -2296,7 +2296,7 @@ free_invoice_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
+gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
 {
   GNCIdType type = GNC_INVOICE_MODULE_NAME;
   struct _invoice_select_window *sw;
@@ -2554,7 +2554,7 @@ gnc_invoice_search_edit (gpointer start, gpointer book)
 }
 
 DialogQueryList *
-gnc_invoice_show_bills_due (GNCBook *book, double days_in_advance)
+gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
 {
   GNCIdType type = GNC_INVOICE_MODULE_NAME;
   Query *q;
@@ -2629,7 +2629,7 @@ gnc_invoice_show_bills_due (GNCBook *book, double days_in_advance)
 void
 gnc_invoice_remind_bills_due (void)
 {
-  GNCBook *book;
+  QofBook *book;
   gint days;
 
   if (!gnc_current_session_exist()) return;

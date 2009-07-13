@@ -48,7 +48,7 @@ typedef struct _dialog_date_close_window {
   Timespec *ts, *ts2;
   GList * acct_types;
   GList * acct_commodities;
-  GNCBook *book;
+  QofBook *book;
   Account *acct;
   char **memo;
   gboolean retval;
@@ -230,7 +230,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 				gboolean ok_is_default,
                                 gboolean set_default_acct,
 				GList * acct_types, GList * acct_commodities, 
-                                GNCBook *book, GncBillTerm *terms,
+                                QofBook *book, GncBillTerm *terms,
 				/* Returned Data... */
 				Timespec *ddue, Timespec *post,
 				char **memo, Account **acct, gboolean *answer)
@@ -345,7 +345,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
 			       const char *date_label_message,
 			       const char *acct_label_message,
 			       gboolean ok_is_default,
-			       GList * acct_types, GNCBook *book,
+			       GList * acct_types, QofBook *book,
 			       /* Returned Data... */
 			       Timespec *date, Account **acct)
 {

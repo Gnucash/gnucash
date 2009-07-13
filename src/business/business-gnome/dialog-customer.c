@@ -70,7 +70,7 @@ typedef enum
 } CustomerDialogType;
 
 struct _customer_select_window {
-  GNCBook *	book;
+  QofBook *	book;
   QueryNew *	q;
 };
 
@@ -115,7 +115,7 @@ struct _customer_window {
   CustomerDialogType	dialog_type;
   GUID		customer_guid;
   gint		component_id;
-  GNCBook *	book;
+  QofBook *	book;
   GncCustomer *	created_customer;
 
   GncTaxTable *	taxtable;
@@ -422,7 +422,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static CustomerWindow *
-gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
+gnc_customer_new_window (QofBook *bookp, GncCustomer *cust)
 {
   CustomerWindow *cw;
   GladeXML *xml;
@@ -640,7 +640,7 @@ gnc_ui_customer_edit (GncCustomer *cust)
 }
 
 CustomerWindow *
-gnc_ui_customer_new (GNCBook *bookp)
+gnc_ui_customer_new (QofBook *bookp)
 {
   CustomerWindow *cw;
 
@@ -770,7 +770,7 @@ free_userdata_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_customer_search (GncCustomer *start, GNCBook *book)
+gnc_customer_search (GncCustomer *start, QofBook *book)
 {
   QueryNew *q, *q2 = NULL;
   GNCIdType type = GNC_CUSTOMER_MODULE_NAME;
