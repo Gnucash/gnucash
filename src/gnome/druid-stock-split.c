@@ -456,7 +456,7 @@ gnc_stock_split_druid_finish (GnomeDruidPage *druidpage,
   amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (info->price_edit));
   if (gnc_numeric_positive_p (amount))
   {
-    GNCBook *book;
+    QofBook *book;
     GNCPrice *price;
     GNCPriceDB *pdb;
     GNCCurrencyEdit *ce;

@@ -246,7 +246,7 @@ editor_help_button_clicked(GtkButton *b, GncSxEditorDialog *sxed)
 static void
 editor_ok_button_clicked( GtkButton *b, GncSxEditorDialog *sxed )
 {
-    GNCBook *book;
+    QofBook *book;
     SchedXactions *sxes;
 
     if ( !gnc_sxed_check_consistent( sxed ) ) 

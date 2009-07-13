@@ -553,7 +553,7 @@ _destroy_sx(gpointer data, gpointer user_data)
 {
     SchedXactions *sxes;
     SchedXaction *sx = (SchedXaction*)data;
-    GNCBook *book;
+    QofBook *book;
     book = gnc_get_current_book();
     sxes = gnc_book_get_schedxactions(book);
     gnc_sxes_del_sx(sxes, sx);
