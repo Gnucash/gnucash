@@ -68,39 +68,46 @@ typedef gchar* (*CREATE_TABLE_DDL_FN)( GncSqlConnection* conn,
 								const gchar* table_name,
 								const GList* col_info_list );
 typedef const gchar* (*GET_COLUMN_TYPE_NAME_FN)( GType type, gint size );
+typedef GSList* (*GET_TABLE_LIST_FN)( dbi_conn conn, const gchar* dbname );
 typedef struct {
 	CREATE_TABLE_DDL_FN		create_table_ddl;
 	GET_COLUMN_TYPE_NAME_FN	get_column_type_name;
+	GET_TABLE_LIST_FN		get_table_list;
 } provider_functions_t;
 
 static /*@ null @*/ gchar* conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
 										const gchar* table_name,
 										const GList* col_info_list );
-static /*@ observer @*/ const gchar* sqlite3_get_column_type_name( GType type, gint size );
+static /*@ observer @*/ const gchar* get_column_type_name_sqlite3( GType type, gint size );
+static GSList* conn_get_table_list( dbi_conn conn, const gchar* dbname );
 static provider_functions_t provider_sqlite3 =
 {
 	conn_create_table_ddl_sqlite3,
-	sqlite3_get_column_type_name
+	get_column_type_name_sqlite3,
+	conn_get_table_list
 };
 
 static /*@ null @*/ gchar* conn_create_table_ddl_mysql( GncSqlConnection* conn,
 										const gchar* table_name,
 										const GList* col_info_list );
-static /*@ observer @*/ const gchar* mysql_get_column_type_name( GType type, gint size );
+static /*@ observer @*/ const gchar* get_column_type_name_mysql( GType type, gint size );
 static provider_functions_t provider_mysql =
 {
 	conn_create_table_ddl_mysql,
-	mysql_get_column_type_name
+	get_column_type_name_mysql,
+	conn_get_table_list
 };
 
 static /*@ null @*/ gchar* conn_create_table_ddl_pgsql( GncSqlConnection* conn,
 										const gchar* table_name,
 										const GList* col_info_list );
-static /*@ observer @*/ const gchar* pgsql_get_column_type_name( GType type, gint size );
+static /*@ observer @*/ const gchar* get_column_type_name_pgsql( GType type, gint size );
+static GSList* conn_get_table_list_pgsql( dbi_conn conn, const gchar* dbname );
 static provider_functions_t provider_pgsql =
 {
 	conn_create_table_ddl_pgsql,
-	pgsql_get_column_type_name
+	get_column_type_name_pgsql,
+	conn_get_table_list_pgsql
 };
 
 static /*@ null @*/ gchar* create_index_ddl( GncSqlConnection* conn,
@@ -131,6 +138,15 @@ struct GncDbiBackend_struct
 //  GHashTable* versions;		// Version number for each table
 };
 typedef struct GncDbiBackend_struct GncDbiBackend;
+
+typedef struct
+{
+	GncSqlConnection base;
+
+	/*@ observer @*/ QofBackend* qbe;
+	/*@ observer @*/ dbi_conn conn;
+	/*@ observer @*/ provider_functions_t* provider;
+} GncDbiSqlConnection;
 
 /* ================================================================= */
 
@@ -626,18 +642,16 @@ gnc_dbi_save_may_clobber_data( QofBackend* qbe )
 {
     GncDbiBackend* be = (GncDbiBackend*)qbe;
 	const gchar* dbname;
-	dbi_result tables;
-	unsigned long long numTables;
+	GSList* table_name_list;
+	gint numTables = 0;
 	gint status;
 
 	/* Data may be clobbered iff the number of tables != 0 */
 	dbname = dbi_conn_get_option( be->conn, "dbname" );
-	tables = dbi_conn_get_table_list( be->conn, dbname, NULL );
-    numTables = dbi_result_get_numrows( tables );
-	status = dbi_result_free( tables );
-	if( status < 0 ) {
-		PERR( "Error in dbi_result_free() result\n" );
-		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+	table_name_list = ((GncDbiSqlConnection*)(be->sql_be.conn))->provider->get_table_list( be->conn, dbname );
+	if( table_name_list != NULL ) {
+    	numTables = g_slist_length( table_name_list );
+		g_slist_free( table_name_list );
 	}
 
 	return (numTables != 0);
@@ -647,7 +661,7 @@ static void
 gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
 {
     GncDbiBackend* be = (GncDbiBackend*)qbe;
-    dbi_result tables;
+	GSList* table_name_list;
 	const gchar* dbname;
 	gint status;
 
@@ -658,25 +672,24 @@ gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
 
     /* Destroy the current contents of the database */
 	dbname = dbi_conn_get_option( be->conn, "dbname" );
-	tables = dbi_conn_get_table_list( be->conn, dbname, NULL );
-	while( dbi_result_next_row( tables ) != 0 ) {
-		const gchar* table_name;
-		dbi_result result;
+	table_name_list = ((GncDbiSqlConnection*)(be->sql_be.conn))->provider->get_table_list( be->conn, dbname );
+	if( table_name_list != NULL ) {
+		GSList* node;
 
-		table_name = dbi_result_get_string_idx( tables, 1 );
-		result = dbi_conn_queryf( be->conn, "DROP TABLE %s", table_name );
-		if( result != NULL ) {
-			status = dbi_result_free( result );
-			if( status < 0 ) {
-				PERR( "Error in dbi_result_free() result\n" );
-				qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+		for( node = table_name_list; node != NULL; node = node->next ) {
+			const gchar* table_name = (const gchar*)node->data;
+			dbi_result result;
+
+			result = dbi_conn_queryf( be->conn, "DROP TABLE %s", table_name );
+			if( result != NULL ) {
+				status = dbi_result_free( result );
+				if( status < 0 ) {
+					PERR( "Error in dbi_result_free() result\n" );
+					qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+				}
 			}
 		}
-	}
-	status = dbi_result_free( tables );
-	if( status < 0 ) {
-		PERR( "Error in dbi_result_free() result\n" );
-		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+		g_slist_free( table_name_list );
 	}
 
     /* Save all contents */
@@ -1017,15 +1030,6 @@ create_dbi_row( /*@ dependent @*/ dbi_result result )
 /* --------------------------------------------------------- */
 typedef struct
 {
-	GncSqlConnection base;
-
-	/*@ observer @*/ QofBackend* qbe;
-	/*@ observer @*/ dbi_conn conn;
-	/*@ observer @*/ provider_functions_t* provider;
-} GncDbiSqlConnection;
-
-typedef struct
-{
 	GncSqlResult base;
 
 	/*@ observer @*/ GncDbiSqlConnection* dbi_conn;
@@ -1342,7 +1346,7 @@ conn_commit_transaction( /*@ unused @*/ GncSqlConnection* conn )
 }
 
 static /*@ observer @*/ const gchar*
-sqlite3_get_column_type_name( GType type, /*@ unused @*/ gint size )
+get_column_type_name_sqlite3( GType type, /*@ unused @*/ gint size )
 {
 	switch( type ) {
 		case G_TYPE_INT:
@@ -1364,7 +1368,7 @@ sqlite3_get_column_type_name( GType type, /*@ unused @*/ gint size )
 }
 
 static /*@ observer @*/ const gchar*
-mysql_get_column_type_name( GType type, /*@ unused @*/ gint size )
+get_column_type_name_mysql( GType type, /*@ unused @*/ gint size )
 {
 	switch( type ) {
 		case G_TYPE_INT:
@@ -1386,7 +1390,7 @@ mysql_get_column_type_name( GType type, /*@ unused @*/ gint size )
 }
 
 static /*@ observer @*/ const gchar*
-pgsql_get_column_type_name( GType type, /*@ unused @*/ gint size )
+get_column_type_name_pgsql( GType type, /*@ unused @*/ gint size )
 {
 	switch( type ) {
 		case G_TYPE_INT:
@@ -1647,6 +1651,56 @@ conn_quote_string( const GncSqlConnection* conn, gchar* unquoted_str )
 	} else {
 		return NULL;
 	}
+}
+
+static GSList*
+conn_get_table_list( dbi_conn conn, const gchar* dbname )
+{
+	dbi_result tables;
+	GSList* list = NULL;
+
+	tables = dbi_conn_get_table_list( conn, dbname, NULL );
+	while( dbi_result_next_row( tables ) != 0 ) {
+		const gchar* table_name;
+		dbi_result result;
+
+		table_name = dbi_result_get_string_idx( tables, 1 );
+		list = g_slist_prepend( list, strdup( table_name ) );
+	}
+	dbi_result_free( tables );
+    return list;
+}
+
+static GSList*
+conn_get_table_list_pgsql( dbi_conn conn, const gchar* dbname )
+{
+	gboolean change_made;
+
+	/* Return the list, but remove the tables that postgresql adds from the information schema. */
+	GSList* list = conn_get_table_list( conn, dbname );
+	change_made = TRUE;
+	while( list != NULL && change_made ) {
+		GSList* node;
+
+		change_made = FALSE;
+		for( node = list; node != NULL; node = node->next ) {
+			const gchar* table_name = (const gchar*)node->data;
+
+			if( strcmp( table_name, "sql_features" ) == 0 ||
+					strcmp( table_name, "sql_implementation_info" ) == 0 ||
+					strcmp( table_name, "sql_languages" ) == 0 ||
+					strcmp( table_name, "sql_packages" ) == 0 ||
+					strcmp( table_name, "sql_parts" ) == 0 ||
+					strcmp( table_name, "sql_sizing" ) == 0 ||
+					strcmp( table_name, "sql_sizing_profiles" ) == 0 ) {
+				g_free( node->data );
+				list = g_slist_delete_link( list, node );
+				change_made = TRUE;
+				break;
+			}
+		}
+	}
+    return list;
 }
 
 static GncSqlConnection*
