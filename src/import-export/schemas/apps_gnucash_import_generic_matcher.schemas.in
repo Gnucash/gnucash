@@ -70,7 +70,7 @@
       <applyto>/apps/gnucash/dialogs/import/generic_matcher/use_bayes</applyto>
       <owner>gnucash</owner>
       <type>bool</type>
-      <default>FALSE</default>
+      <default>TRUE</default>
       <locale name="C">
         <short>Use bayesian matching</short>
         <long>Enables bayesian matching when matching imported
