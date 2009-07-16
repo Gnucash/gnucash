@@ -72,7 +72,7 @@ static const GncSqlColumnTableEntry col_table[] =
 static /*@ dependent @*//*@ null @*/ gpointer
 get_root_account_guid( gpointer pObject )
 {
-    GNCBook* book = QOF_BOOK(pObject);
+    QofBook* book = QOF_BOOK(pObject);
     const Account* root;
 
 	g_return_val_if_fail( pObject != NULL, NULL );
@@ -85,7 +85,7 @@ get_root_account_guid( gpointer pObject )
 static void 
 set_root_account_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
-    GNCBook* book = QOF_BOOK(pObject);
+    QofBook* book = QOF_BOOK(pObject);
     const Account* root;
     GUID* guid = (GUID*)pValue;
 
@@ -100,7 +100,7 @@ set_root_account_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 static /*@ dependent @*//*@ null @*/ gpointer
 get_root_template_guid( gpointer pObject )
 {
-    const GNCBook* book = QOF_BOOK(pObject);
+    const QofBook* book = QOF_BOOK(pObject);
     const Account* root;
 
 	g_return_val_if_fail( pObject != NULL, NULL );
@@ -113,7 +113,7 @@ get_root_template_guid( gpointer pObject )
 static void 
 set_root_template_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
-    GNCBook* book = QOF_BOOK(pObject);
+    QofBook* book = QOF_BOOK(pObject);
     GUID* guid = (GUID*)pValue;
     Account* root;
 
@@ -137,7 +137,7 @@ static void
 load_single_book( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
-	GNCBook* pBook;
+	QofBook* pBook;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( row != NULL );
