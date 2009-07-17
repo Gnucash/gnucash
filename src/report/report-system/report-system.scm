@@ -580,6 +580,7 @@
 (export gnc:html-table-prepend-row!)
 (export gnc:html-table-get-cell)
 (export gnc:html-table-set-cell!)
+(export gnc:html-table-set-cell/tag!)
 (export gnc:html-table-append-column!)
 (export gnc:html-table-prepend-column!)
 (export gnc:html-table-merge)

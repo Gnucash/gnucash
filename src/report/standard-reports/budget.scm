@@ -195,22 +195,22 @@
 			   (set! act-total (gnc-numeric-add act-total act-numeric-val GNC-DENOM-AUTO GNC-RND-ROUND))
                (if show-budget?
                  (begin
-                   (gnc:html-table-set-cell!
-                    html-table rownum current-col bgt-val)
+                   (gnc:html-table-set-cell/tag!
+                    html-table rownum current-col "number-cell" bgt-val)
                    (set! current-col (+ current-col 1))
                  )
                )
                (if show-actual?
                  (begin
-                   (gnc:html-table-set-cell!
-                    html-table rownum current-col act-val)
+                   (gnc:html-table-set-cell/tag!
+                    html-table rownum current-col "number-cell" act-val)
                    (set! current-col (+ current-col 1))
                  )
                )
                (if show-diff?
                  (begin
-                   (gnc:html-table-set-cell!
-                    html-table rownum current-col dif-val)
+                   (gnc:html-table-set-cell/tag!
+                    html-table rownum current-col "number-cell" dif-val)
                    (set! current-col (+ current-col 1))
                  )
                )
@@ -268,29 +268,30 @@
       ;; make the column headers
       (while (< period num-periods)
              (let* ((date (gnc-budget-get-period-start-date budget period)))
-               (gnc:html-table-set-cell!
-                html-table 0 (if show-diff? (+ current-col 1) current-col) (gnc-print-date date))
+               (gnc:html-table-set-cell/tag!
+                html-table 0 (if show-diff? (+ current-col 1) current-col) "centered-label-cell"
+				(gnc-print-date date))
                (if show-budget?
                  (begin
-                   (gnc:html-table-set-cell!
-                    html-table 1
-                    current-col (_ "Bgt")) ;; Translators: Abbreviation for "Budget"
+                   (gnc:html-table-set-cell/tag!
+                    html-table 1 current-col "centered-label-cell"
+					(_ "Bgt")) ;; Translators: Abbreviation for "Budget"
                    (set! current-col (+ current-col 1))
                  )
                )
                (if show-actual?
                  (begin 
-                   (gnc:html-table-set-cell!
-                    html-table 1
-                    current-col (_ "Act")) ;; Translators: Abbreviation for "Actual"
+                   (gnc:html-table-set-cell/tag!
+                    html-table 1 current-col "centered-label-cell"
+					(_ "Act")) ;; Translators: Abbreviation for "Actual"
                    (set! current-col (+ current-col 1))
                  )
                )
                (if show-diff?
                  (begin 
-                   (gnc:html-table-set-cell!
-                    html-table 1
-                    current-col (_ "Diff")) ;; Translators: Abbrevation for "Difference"
+                   (gnc:html-table-set-cell/tag!
+                    html-table 1 current-col "centered-label-cell"
+					(_ "Diff")) ;; Translators: Abbrevation for "Difference"
                    (set! current-col (+ current-col 1))
                  )
                )
@@ -299,29 +300,30 @@
              )
 		 (if show-totalcol?
 		    (begin
-               (gnc:html-table-set-cell!
-                html-table 0 (if show-diff? (+ current-col 1) current-col) "Total")
+               (gnc:html-table-set-cell/tag!
+                html-table 0 (if show-diff? (+ current-col 1) current-col) "centered-label-cell"
+				"Total")
                (if show-budget?
                  (begin
-                   (gnc:html-table-set-cell!
-                    html-table 1
-                    current-col (_ "Bgt")) ;; Translators: Abbreviation for "Budget"
+                   (gnc:html-table-set-cell/tag!
+                    html-table 1 current-col "centered-label-cell"
+					(_ "Bgt")) ;; Translators: Abbreviation for "Budget"
                    (set! current-col (+ current-col 1))
                  )
                )
                (if show-actual?
                  (begin 
-                   (gnc:html-table-set-cell!
-                    html-table 1
-                    current-col (_ "Act")) ;; Translators: Abbreviation for "Actual"
+                   (gnc:html-table-set-cell/tag!
+                    html-table 1 current-col "centered-label-cell"
+					(_ "Act")) ;; Translators: Abbreviation for "Actual"
                    (set! current-col (+ current-col 1))
                  )
                )
                (if show-diff?
                  (begin 
-                   (gnc:html-table-set-cell!
-                    html-table 1
-                    current-col (_ "Diff")) ;; Translators: Abbrevation for "Difference"
+                   (gnc:html-table-set-cell/tag!
+                    html-table 1 current-col "centered-label-cell"
+					(_ "Diff")) ;; Translators: Abbrevation for "Difference"
                    (set! current-col (+ current-col 1))
                  )
                )
