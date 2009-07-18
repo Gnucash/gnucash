@@ -44,10 +44,13 @@
 		(len (string-length font-name))
 		(idx 0)
 	  )
-	(gnc:debug font-name)
-	(set! idx (string-index-right font-name (string->char-set "0123456789")))
-	(set! font-size (substring font-name (- idx 1) len))
-	(set! font-name (string-take font-name (- idx 2)))
+	(gnc:debug "'" font-name "'")
+	(set! idx (string-index-right font-name #\space))
+	(gnc:debug idx)
+	(set! font-size (substring font-name (+ idx 1) len))
+	(gnc:debug "font-size '" font-size "'")
+	(set! font-name (string-take font-name idx))
+	(gnc:debug "font-name: '" font-name "'")
 	(set! font-weight-idx (string-contains-ci font-name " bold"))
 	(if font-weight-idx
 	    (begin
@@ -55,6 +58,8 @@
 			(set! font-name (string-append (string-take font-name font-weight-idx)
 			                               (string-drop font-name (+ font-weight-idx 5))))
 		))
+	(gnc:debug "font-name: '" font-name "'")
+	(gnc:debug "font-weight: " font-weight)
 	(set! font-style-idx (string-contains-ci font-name " italic"))
 	(if font-style-idx
 	    (begin
@@ -62,6 +67,8 @@
 			(set! font-name (string-append (string-take font-name font-style-idx)
 			                               (string-drop font-name (+ font-style-idx 7))))
 		))
+	(gnc:debug "font-name: '" font-name "'")
+	(gnc:debug "font-style: " font-style)
 	(set! font-family font-name)
 	(set! result (string-append
 		"font-family: " font-family "; "
