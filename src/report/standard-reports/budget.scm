@@ -223,8 +223,8 @@
 		   (begin
               (if show-budget?
                  (begin
-                   (gnc:html-table-set-cell!
-                          html-table rownum current-col
+                   (gnc:html-table-set-cell/tag!
+                          html-table rownum current-col "total-number-cell"
                           (if bgt-total-unset? "."
                                (gnc:make-gnc-monetary comm bgt-total)))
                    (set! current-col (+ current-col 1))
@@ -232,16 +232,16 @@
                )
                (if show-actual?
                  (begin
-                   (gnc:html-table-set-cell!
-                    html-table rownum current-col
+                   (gnc:html-table-set-cell/tag!
+                    html-table rownum current-col "total-number-cell"
                           (gnc:make-gnc-monetary comm act-total))
                    (set! current-col (+ current-col 1))
                  )
                )
                (if show-diff?
                  (begin
-                   (gnc:html-table-set-cell!
-                    html-table rownum current-col
+                   (gnc:html-table-set-cell/tag!
+                    html-table rownum current-col "total-number-cell"
                        (if bgt-total-unset? "."
                           (gnc:make-gnc-monetary comm
                               (gnc-numeric-sub bgt-total

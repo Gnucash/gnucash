@@ -453,10 +453,11 @@
 		    account-cols
 		    )
 		)
-	  (if show-account-bals?
-	      (gnc:html-table-set-cell!
-	       build-table 0 (+ cur-col account-cols) (_ "Balance"))
-	      )
+          (if show-account-bals?
+              (gnc:html-table-set-cell/tag!
+               build-table 0 (+ cur-col account-cols) "number-header"
+	       (_ "Balance"))
+              )
 	  (let ((row 0))
 	    (while (< row table-rows)
 		   (gnc:html-table-set-row-markup! build-table (+ row 1)
@@ -476,8 +477,9 @@
 	  (set! cur-col (+ cur-col hold-table-width))
 	  (if show-account-notes?
 	      (begin
-		(gnc:html-table-set-cell!
-		 build-table 0 cur-col (_ "Notes"))
+		(gnc:html-table-set-cell/tag!
+		 build-table 0 cur-col "text-cell"
+		 (_ "Notes"))
 		(add-col 'account-notes)
 		)
 	      )
