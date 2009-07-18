@@ -44,13 +44,9 @@
 		(len (string-length font-name))
 		(idx 0)
 	  )
-	(gnc:debug "'" font-name "'")
 	(set! idx (string-index-right font-name #\space))
-	(gnc:debug idx)
 	(set! font-size (substring font-name (+ idx 1) len))
-	(gnc:debug "font-size '" font-size "'")
 	(set! font-name (string-take font-name idx))
-	(gnc:debug "font-name: '" font-name "'")
 	(set! font-weight-idx (string-contains-ci font-name " bold"))
 	(if font-weight-idx
 	    (begin
@@ -58,8 +54,6 @@
 			(set! font-name (string-append (string-take font-name font-weight-idx)
 			                               (string-drop font-name (+ font-weight-idx 5))))
 		))
-	(gnc:debug "font-name: '" font-name "'")
-	(gnc:debug "font-weight: " font-weight)
 	(set! font-style-idx (string-contains-ci font-name " italic"))
 	(if font-style-idx
 	    (begin
@@ -67,15 +61,12 @@
 			(set! font-name (string-append (string-take font-name font-style-idx)
 			                               (string-drop font-name (+ font-style-idx 7))))
 		))
-	(gnc:debug "font-name: '" font-name "'")
-	(gnc:debug "font-style: " font-style)
 	(set! font-family font-name)
 	(set! result (string-append
 		"font-family: " font-family "; "
 		"font-size: " font-size "pt; "
 		(if font-style (string-append "font-style: " font-style "; ") "")
 		(if font-weight (string-append "font-weight: " font-weight "; ") "")))
-    (gnc:debug result)
 	result
     ))
 
@@ -266,8 +257,9 @@
 	  (string-append
 		  "h3 { " title-font-info " }\n"
 		  "a { " account-link-font-info " }\n"
-	      "td.number-cell { text-align:right; " number-cell-font-info " }\n"
-		  "td.number-header { text-align:right; " number-header-font-info " }\n"
+		  "th { text-align: right; " number-header-font-info " }\n"
+	      "td.number-cell { text-align: right; " number-cell-font-info " }\n"
+		  "td.number-header { text-align: right; " number-header-font-info " }\n"
 		  "td.text-cell { text-align: left; " text-cell-font-info " }\n"
 		  "td.total-number-cell { text-align:right; " total-number-cell-font-info " }\n"
 		  "td.total-label-cell { text-align: left; " total-label-cell-font-info " }\n"

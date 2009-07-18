@@ -216,12 +216,12 @@
      table
      subtotal-style 
      (if export?
-      (append! (cons (gnc:make-html-table-cell subtotal-string)
+      (append! (cons (gnc:make-html-table-cell/markup "total-label-cell" subtotal-string)
                      (gnc:html-make-empty-cells (- width 2)))
                (list (gnc:make-html-table-cell/markup 
                       "total-number-cell"
                       (car currency-totals))))
-     (list (gnc:make-html-table-cell/size 1 (- width 1) 
+     (list (gnc:make-html-table-cell/size/markup 1 (- width 1) "total-label-cell"
                                           subtotal-string)
            (gnc:make-html-table-cell/markup 
             "total-number-cell"
@@ -473,23 +473,27 @@
     (if (used-date column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (gnc-print-date (gnc-transaction-get-date-posted parent))
+                    (gnc:make-html-table-cell/markup "text-cell"
+                        (gnc-print-date (gnc-transaction-get-date-posted parent)))
                     " ")))
     (if (used-reconciled-date column-vector)
         (addto! row-contents
-		(let ((date (gnc-split-get-date-reconciled split)))
-		  (if (equal? date (cons 0 0))
-		      " "
-		      (gnc-print-date date)))))
+                (gnc:make-html-table-cell/markup "text-cell"
+		    (let ((date (gnc-split-get-date-reconciled split)))
+		      (if (equal? date (cons 0 0))
+		          " "
+		          (gnc-print-date date))))))
     (if (used-num column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (xaccTransGetNum parent)
+                    (gnc:make-html-table-cell/markup "text-cell"
+                        (xaccTransGetNum parent))
                     " ")))
     (if (used-description column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (xaccTransGetDescription parent)
+                    (gnc:make-html-table-cell/markup "text-cell"
+                        (xaccTransGetDescription parent))
                     " ")))
     
     (if (used-memo column-vector)

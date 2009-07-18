@@ -444,7 +444,7 @@
            table
            "grand-total"
            (list
-             (_ "Money In")
+             (gnc:make-html-table-header-cell/markup "text-cell" (_ "Money In"))
              (gnc:make-html-table-header-cell/markup
               "total-number-cell" (gnc:sum-collector-commodity money-in-collector report-currency exchange-fn))))
 
@@ -489,7 +489,7 @@
            table
            "grand-total"
            (list
-             (_ "Money Out")
+             (gnc:make-html-table-header-cell/markup "text-cell" (_ "Money Out"))
              (gnc:make-html-table-header-cell/markup
               "total-number-cell" (gnc:sum-collector-commodity money-out-collector report-currency exchange-fn))))
 
@@ -499,7 +499,7 @@
            table
            "grand-total"
            (list
-             (_ "Difference")
+             (gnc:make-html-table-header-cell/markup "text-cell" (_ "Difference"))
              (gnc:make-html-table-header-cell/markup
               "total-number-cell" (gnc:sum-collector-commodity money-diff-collector report-currency exchange-fn))))
 

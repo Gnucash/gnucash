@@ -147,55 +147,69 @@
     (if (date-col column-vector)
         (addto! row-contents
                 (if transaction-info?
-                    (gnc-print-date
-                     (gnc-transaction-get-date-posted parent))
-                    " ")))
+                    (gnc:make-html-table-cell/markup
+					    "text-cell"
+                        (gnc-print-date
+                             (gnc-transaction-get-date-posted parent)))
+                        " ")))
     (if (num-col column-vector)
         (addto! row-contents
-                (if transaction-info?
-                    (xaccTransGetNum parent)
-                    (if split-info?
-                        (xaccSplitGetAction split)
-                        " "))))
+                (gnc:make-html-table-cell/markup
+					"text-cell"
+                    (if transaction-info?
+                        (xaccTransGetNum parent)
+                        (if split-info?
+                            (xaccSplitGetAction split)
+                            " ")))))
     (if (description-col column-vector)
         (addto! row-contents
-                (if transaction-info?
-                    (if description?
-                        (xaccTransGetDescription parent)
-                        " " )
-                    (if split-info?
-                        (if memo?
-                            (xaccSplitGetMemo split)
-                            " ")
-                        " "))))
+                (gnc:make-html-table-cell/markup
+					"text-cell"
+                    (if transaction-info?
+                        (if description?
+                            (xaccTransGetDescription parent)
+                            " " )
+                        (if split-info?
+                            (if memo?
+                                (xaccSplitGetMemo split)
+                                " ")
+                            " ")))))
     (if (memo-col column-vector)
         (addto! row-contents
-                (if transaction-info?
-                    (xaccSplitGetMemo split)
-                    " ")))
+                (gnc:make-html-table-cell/markup
+					"text-cell"
+                    (if transaction-info?
+                        (xaccSplitGetMemo split)
+                        " "))))
     (if (account-col column-vector)
         (addto! row-contents
-                (if split-info?
-                    (if transaction-info?
-                        (let ((other-split
-                               (xaccSplitGetOtherSplit split)))
-                          (if (not (null? other-split))
-                              (gnc-account-get-full-name
-                               (xaccSplitGetAccount other-split))
-                              (_ "-- Split Transaction --")))
-                        (gnc-account-get-full-name account))
-                    " ")))
+                (gnc:make-html-table-cell/markup
+					"text-cell"
+                    (if split-info?
+                        (if transaction-info?
+                            (let ((other-split
+                                   (xaccSplitGetOtherSplit split)))
+                              (if (not (null? other-split))
+                                  (gnc-account-get-full-name
+                                   (xaccSplitGetAccount other-split))
+                                  (_ "-- Split Transaction --")))
+                            (gnc-account-get-full-name account))
+                        " "))))
     (if (shares-col column-vector)
         (addto! row-contents
-                (if split-info?
-                    (xaccSplitGetAmount split)
-                    " ")))
+                (gnc:make-html-table-cell/markup
+					"text-cell"
+                    (if split-info?
+                        (xaccSplitGetAmount split)
+                        " "))))
     (if (price-col column-vector)
         (addto! row-contents 
-                (if split-info?
-                    (gnc:make-gnc-monetary
-                     currency (xaccSplitGetSharePrice split))
-                    " ")))
+                (gnc:make-html-table-cell/markup
+					"text-cell"
+                    (if split-info?
+                        (gnc:make-gnc-monetary
+                         currency (xaccSplitGetSharePrice split))
+                        " "))))
     (if (amount-single-col column-vector)
         (addto! row-contents
                 (if split-info?

@@ -146,8 +146,8 @@
 			table
 			row-style
 			(list (gnc:html-account-anchor current)
-			      ticker-symbol
-			      listing
+			      (gnc:make-html-table-header-cell/markup "text-cell" ticker-symbol)
+			      (gnc:make-html-table-header-cell/markup "text-cell" listing)
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell" 
 			       (xaccPrintAmount units share-print-info))

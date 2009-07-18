@@ -682,8 +682,8 @@
 	      (total-basis 'add currency (sum-basis basis-list))
 
 	      ;; build a list for the row  based on user selections
-	      (if show-symbol (append! activecols (list ticker-symbol)))
-	      (if show-listing (append! activecols (list listing)))
+	      (if show-symbol (append! activecols (list (gnc:make-html-table-header-cell/markup "text-cell" ticker-symbol))))
+	      (if show-listing (append! activecols (list (gnc:make-html-table-header-cell/markup "text-cell" listing))))
 	      (if show-shares (append! activecols (list (gnc:make-html-table-header-cell/markup
  	        "number-cell" (xaccPrintAmount units share-print-info)))))
 	      (if show-price (append! activecols (list (gnc:make-html-table-header-cell/markup
