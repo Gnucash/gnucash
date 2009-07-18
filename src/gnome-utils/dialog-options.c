@@ -389,6 +389,19 @@ gnc_option_default_cb(GtkWidget *widget, GNCOption *option)
   gnc_options_dialog_changed_internal (widget, TRUE);
 }
 
+static void
+gnc_option_show_hidden_toggled_cb(GtkWidget *widget, GNCOption* option)
+{
+	AccountViewInfo avi;
+    GncTreeViewAccount *tree_view;
+
+    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_widget (option));
+    gnc_tree_view_account_get_view_info (tree_view, &avi);
+	avi.show_hidden = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+    gnc_tree_view_account_set_view_info (tree_view, &avi);
+    gnc_option_changed_widget_cb(widget, option);
+}
+
 #ifdef GTKCOMBOBOX_TOOLTIPS_WORK
 static void
 gnc_option_multichoice_cb(GtkWidget *widget, gpointer data)
@@ -852,6 +865,7 @@ gnc_option_create_account_widget(GNCOption *option, char *name, GtkTooltips *too
 
     for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
       avi.include_type[i] = FALSE;
+    avi.show_hidden = FALSE;
 
     for (node = acct_type_list; node; node = node->next) {
       GNCAccountType type = GPOINTER_TO_INT (node->data);
@@ -860,6 +874,16 @@ gnc_option_create_account_widget(GNCOption *option, char *name, GtkTooltips *too
 
     gnc_tree_view_account_set_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
     g_list_free (acct_type_list);    
+  } else {
+    AccountViewInfo avi;
+    int i;
+
+    gnc_tree_view_account_get_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
+
+    for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
+      avi.include_type[i] = TRUE;
+	avi.show_hidden = FALSE;
+    gnc_tree_view_account_set_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
   }
 
   scroll_win = gtk_scrolled_window_new(NULL, NULL);
@@ -898,6 +922,13 @@ gnc_option_create_account_widget(GNCOption *option, char *name, GtkTooltips *too
 
   g_signal_connect(G_OBJECT(button), "clicked",
 		   G_CALLBACK(gnc_option_default_cb), option);
+
+  button = gtk_check_button_new_with_label(_("Show Hidden"));
+  gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip(tooltips, button, _("Show hidden accounts."), NULL);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), FALSE);
+  g_signal_connect(G_OBJECT(button), "toggled",
+		   G_CALLBACK(gnc_option_show_hidden_toggled_cb), option);
 
   gnc_option_set_widget (option, tree);
 

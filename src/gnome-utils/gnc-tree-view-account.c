@@ -158,6 +158,7 @@ gnc_init_account_view_info(AccountViewInfo *avi)
 
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
     avi->include_type[i] = TRUE;
+  avi->show_hidden = FALSE;
 }
 
 static void
@@ -849,13 +850,9 @@ gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
       sel_bits |= avi->include_type[i] ? (1 << i): 0;
   }
 
-  /* FIXME: if we want to allow a truly empty bitfield, we'll have to fix
-     the callers who don't set the include_type fields. */
-  if (sel_bits) {
-      gnc_tree_view_account_set_filter(
-          account_view, gnc_tree_view_account_filter_by_type_selection, 
-          GUINT_TO_POINTER(sel_bits), NULL);
-  }
+  gnc_tree_view_account_set_filter(
+          account_view, gnc_tree_view_account_filter_by_view_info,
+		  &priv->avi, NULL);
 
   LEAVE(" ");
 }
@@ -940,6 +937,20 @@ gnc_tree_view_account_filter_by_type_selection(Account* acct, gpointer data)
     /* Because of some silly '== TRUE' comparisons in treemodelfilter,
        we have to return exactly TRUE */
     return (sel_bits & (1 << acct_type)) ? TRUE : FALSE;
+}
+
+gboolean 
+gnc_tree_view_account_filter_by_view_info(Account* acct, gpointer data)
+{
+    GNCAccountType acct_type;
+	AccountViewInfo* avi = (AccountViewInfo*)data;
+
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acct), FALSE);
+    acct_type = xaccAccountGetType(acct);
+
+	if(!avi->include_type[acct_type]) return FALSE;
+	if(!avi->show_hidden && xaccAccountIsHidden(acct)) return FALSE;
+	return TRUE;
 }
 
 /************************************************************/
@@ -1131,6 +1142,12 @@ gnc_tree_view_account_set_selected_account (GncTreeViewAccount *view,
   gtk_tree_path_free(s_path);
 }
 
+/* Information re selection process */
+typedef struct {
+  GList* return_list;
+  GncTreeViewAccountPrivate* priv;
+} GncTreeViewSelectionInfo;
+
 /*
  * This helper function is called once for each row in the tree view
  * that is currently selected.  Its task is to append the corresponding
@@ -1142,7 +1159,7 @@ get_selected_accounts_helper (GtkTreeModel *s_model,
 			      GtkTreeIter *s_iter,
 			      gpointer data)
 {
-  GList **return_list = data;
+  GncTreeViewSelectionInfo *gtvsi = data;
   GtkTreeModel *f_model;
   GtkTreeIter iter, f_iter;
   Account *account;
@@ -1154,7 +1171,12 @@ get_selected_accounts_helper (GtkTreeModel *s_model,
   gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (f_model),
 						    &iter, &f_iter);
   account = iter.user_data;
-  *return_list = g_list_append(*return_list, account);
+
+  /* Only selected if it passes the filter */
+  if (gtvsi->priv->filter_fn == NULL || gtvsi->priv->filter_fn(account, gtvsi->priv->filter_data))
+  {
+    gtvsi->return_list = g_list_append(gtvsi->return_list, account);
+  }
 }
 
 /*
@@ -1168,13 +1190,15 @@ GList *
 gnc_tree_view_account_get_selected_accounts (GncTreeViewAccount *view)
 {
   GtkTreeSelection *selection;
-  GList *return_list = NULL;
+  GncTreeViewSelectionInfo info;
 
   g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), NULL);
 
+  info.return_list = NULL;
+  info.priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
-  gtk_tree_selection_selected_foreach(selection, get_selected_accounts_helper, &return_list);
-  return return_list;
+  gtk_tree_selection_selected_foreach(selection, get_selected_accounts_helper, &info);
+  return info.return_list;
 }
 
 /*
