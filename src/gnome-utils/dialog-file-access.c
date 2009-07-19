@@ -174,6 +174,19 @@ cb_uri_type_changed_cb( GtkComboBox* cb )
 	set_widget_sensitivity_for_uri_type( faw, type );
 }
 
+static const char*
+get_default_database( void )
+{
+	const gchar* default_db;
+
+	default_db = g_getenv( "GNC_DEFAULT_DATABASE" );
+	if( default_db == NULL ) {
+	    default_db = DEFAULT_DATABASE;
+	}
+
+	return default_db;
+}
+
 static void
 gnc_ui_file_access( int type )
 {
@@ -195,6 +208,7 @@ gnc_ui_file_access( int type )
 	gboolean need_access_method_xml = FALSE;
 	gint access_method_index = -1;
 	gint active_access_method_index = -1;
+	const gchar* default_db;
 
 	g_return_if_fail( type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS );
 
@@ -214,7 +228,8 @@ gnc_ui_file_access( int type )
     faw->tf_host = GTK_ENTRY(glade_xml_get_widget( xml, "tf_host" ));
 	gtk_entry_set_text( faw->tf_host, DEFAULT_HOST );
     faw->tf_database = GTK_ENTRY(glade_xml_get_widget( xml, "tf_database" ));
-	gtk_entry_set_text( faw->tf_database, DEFAULT_DATABASE );
+	default_db = get_default_database();
+	gtk_entry_set_text( faw->tf_database, default_db );
     faw->tf_username = GTK_ENTRY(glade_xml_get_widget( xml, "tf_username" ));
     faw->tf_password = GTK_ENTRY(glade_xml_get_widget( xml, "tf_password" ));
 	op = GTK_BUTTON(glade_xml_get_widget( xml, "pb_op" ));
