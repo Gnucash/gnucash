@@ -337,10 +337,10 @@ qsf_map_default_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params )
 	g_return_if_fail(params->qsf_define_hash != NULL);
 	iterate = NULL;
 	if (qsf_is_element(child, ns, MAP_DEFINE_TAG)) {
-        iterate = xmlGetProp(child, MAP_ITERATE_ATTR);
+        iterate = (gchar*)xmlGetProp(child, BAD_CAST MAP_ITERATE_ATTR);
         if(qof_util_bool_to_int(iterate) == 1) 
         {
-            params->qof_foreach = xmlGetProp(child, BAD_CAST MAP_E_TYPE);
+            params->qof_foreach = (QofIdType)xmlGetProp(child, BAD_CAST MAP_E_TYPE);
         }
 		if(NULL == g_hash_table_lookup(params->qsf_define_hash,
 			xmlGetProp(child, BAD_CAST MAP_E_TYPE)))
@@ -661,7 +661,8 @@ qsf_map_calculate_output(xmlNodePtr param_node, xmlNodePtr child, qsf_param *par
 	output_content = xmlNodeGetContent(param_node);
 	/* source refers to the source object that provides the data */
 	source = g_list_find_custom(params->qsf_object_list, 
-		BAD_CAST xmlGetProp(param_node, MAP_OBJECT_ATTR), identify_source_func);
+		BAD_CAST xmlGetProp(param_node, BAD_CAST MAP_OBJECT_ATTR),
+                                             identify_source_func);
 	if(!source) return;
 	params->object_set = source->data;
 	node = g_hash_table_lookup(params->object_set->parameters, output_content);
@@ -744,7 +745,7 @@ iterator_cb(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 	/* count the number of iterators in the QSF file */
 	if(qsf_is_element(child, ns, QSF_OBJECT_TAG))
 	{
-		object_name = xmlGetProp(child, QSF_OBJECT_TYPE);
+		object_name = (gchar *)xmlGetProp(child, BAD_CAST QSF_OBJECT_TYPE);
 		if(0 == safe_strcmp(object_name, params->qof_foreach))
 		{
 			params->foreach_limit++;
@@ -793,8 +794,9 @@ qsf_object_convert(xmlDocPtr mapDoc, xmlNodePtr qsf_root, qsf_param *params)
 
 			params->lister = NULL;
 			/* cur_node describes the target object */
-			if(!qof_class_is_registered(BAD_CAST 
-				xmlGetProp(cur_node, MAP_TYPE_ATTR))) { continue; }
+			if(!qof_class_is_registered(
+				(QofIdTypeConst)xmlGetProp(cur_node,
+                     BAD_CAST MAP_TYPE_ATTR))) { continue; }
 			qsf_add_object_tag(params, params->count);
 			params->count++;
 			iter.ns = params->map_ns;

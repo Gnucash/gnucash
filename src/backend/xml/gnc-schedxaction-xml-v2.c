@@ -153,7 +153,8 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 
     if (allow_2_2_incompat)
     {
-        xmlNodePtr schedule_node = xmlNewNode(NULL, "sx:schedule");
+        xmlNodePtr schedule_node = xmlNewNode(NULL,
+                                   BAD_CAST "sx:schedule");
         GList *schedule = gnc_sx_get_schedule(sx);
         for (; schedule != NULL; schedule = schedule->next)
         {
@@ -686,7 +687,7 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
          {
               xmlChar *attr_value = attr->children->content;
               g_debug("sx attribute name[%s] value[%s]", attr->name, attr_value);
-              if (strcmp(attr->name, "version") != 0)
+              if (strcmp((const char *)attr->name, "version") != 0)
               {
                    g_warning("unknown sx attribute [%s]", attr->name);
                    continue;
@@ -694,7 +695,8 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
 
               // if version == 1.0.0: ensure freqspec, no recurrence
               // if version == 2.0.0: ensure recurrence, no freqspec.
-              if (strcmp(attr_value, schedxaction_version_string) == 0)
+              if (strcmp((const char *)attr_value,
+                               schedxaction_version_string) == 0)
               {
                    if (!sx_pdata.saw_freqspec)
                         g_critical("did not see freqspec in version 1 sx [%s]", sx_name);
@@ -702,7 +704,8 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
                         g_warning("saw recurrence in supposedly version 1 sx [%s]", sx_name);
               }
 
-              if (strcmp(attr_value, schedxaction_version2_string) == 0)
+              if (strcmp((const char *)attr_value,
+                             schedxaction_version2_string) == 0)
               {
                    if (sx_pdata.saw_freqspec)
                         g_warning("saw freqspec in version 2 sx [%s]", sx_name);

@@ -1541,7 +1541,8 @@ gnc_item_edit_selection_received (GncItemEdit       *item_edit,
                 if (sel)
                 {
                         gtk_editable_insert_text(editable,
-                                                 sel, strlen(sel),
+                                             (gchar *)sel,
+                                      strlen((char *)sel),
                                                  &tmp_pos);
                         gtk_editable_set_position(editable, tmp_pos);
                         g_free(sel);

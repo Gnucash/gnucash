@@ -133,8 +133,8 @@ recurrence_to_dom_tree(const gchar *tag, const Recurrence *r)
     GDate d;
     WeekendAdjust wadj;
 
-    n = xmlNewNode(NULL, tag);
-    xmlSetProp(n, "version", recurrence_version_string );
+    n = xmlNewNode(NULL, BAD_CAST tag);
+    xmlSetProp(n, BAD_CAST "version", BAD_CAST recurrence_version_string );
     xmlAddChild(n, guint_to_dom_tree(recurrence_mult,
                                      recurrenceGetMultiplier(r)));
     pt = recurrenceGetPeriodType(r);

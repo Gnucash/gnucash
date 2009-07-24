@@ -61,8 +61,8 @@ gnc_budget_dom_tree_create(GncBudget *bgt)
 
     ENTER ("(budget=%p)", bgt);
 
-    ret = xmlNewNode(NULL, gnc_budget_string);
-    xmlSetProp(ret, "version", budget_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_budget_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST budget_version_string);
 
     /* field: GUID */
     xmlAddChild(ret, guid_to_dom_tree(bgt_id_string,
