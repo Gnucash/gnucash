@@ -218,7 +218,7 @@ gchar * ultostr (gulong val, gint base);
 
 /** Returns true if string s is a number, possibly surrounded by
  * whitespace. */
-gboolean gnc_strisnum(const guchar *s);
+gboolean gnc_strisnum(const gchar *s);
 
 #ifndef HAVE_STPCPY
 #define stpcpy g_stpcpy

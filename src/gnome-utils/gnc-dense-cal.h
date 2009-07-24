@@ -88,7 +88,7 @@ struct _GncDenseCal
 
     guint label_width;
     guint label_height;
-    guint dayLabelHeight;
+    gint dayLabelHeight;
 
     GncDenseCalModel *model;
 

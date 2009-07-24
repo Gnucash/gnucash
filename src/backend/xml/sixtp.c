@@ -810,7 +810,7 @@ sixtp_parse_push (sixtp *sixtp,
 
 /***********************************************************************/
 static gboolean
-eat_whitespace(unsigned char **cursor)
+eat_whitespace(char **cursor)
 {
     while(**cursor && isspace(**cursor))
     {
@@ -828,7 +828,7 @@ eat_whitespace(unsigned char **cursor)
 }
 
 static gboolean
-search_for(unsigned char marker, unsigned char **cursor)
+search_for(unsigned char marker, char **cursor)
 {
     while(**cursor && **cursor != marker)
     {
@@ -879,7 +879,7 @@ gboolean
 gnc_is_our_first_xml_chunk(char *chunk, const char *first_tag,
                            gboolean *with_encoding)
 {
-  unsigned char* cursor = NULL;
+  char *cursor = NULL;
 
   if (with_encoding) {
     *with_encoding = FALSE;

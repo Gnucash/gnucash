@@ -852,7 +852,7 @@ dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
 }
 
 gboolean
-dom_tree_valid_timespec (Timespec *ts, const gchar *name)
+dom_tree_valid_timespec (Timespec *ts, const xmlChar *name)
 {
 
   if (ts->tv_sec || ts->tv_nsec)

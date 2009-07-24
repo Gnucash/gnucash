@@ -821,10 +821,10 @@ char dateSeparator (void)
         return locale_separator;
       else
       { /* Make a guess */
-        unsigned char string[256];
+        gchar string[256];
         struct tm tm;
         time_t secs;
-        unsigned char *s;
+        gchar *s;
 
         secs = time(NULL);
         localtime_r(&secs, &tm);

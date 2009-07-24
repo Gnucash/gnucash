@@ -51,7 +51,7 @@ static QofLogModule log_module = GNC_MOD_IO;
 gboolean
 isspace_str(const gchar *str, int nomorethan)
 {
-  const guchar *cursor = str;
+  const gchar *cursor = str;
   while(*cursor && (nomorethan != 0)) {
     if(!isspace(*cursor)) {
       return(FALSE);
@@ -273,7 +273,7 @@ gboolean
 hex_string_to_binary(const gchar *str,  void **v, guint64 *data_len)
 {
   /* Convert a hex string to binary.  No whitespace allowed. */
-  const guchar *cursor = str;
+  const gchar *cursor = str;
   guint64 str_len;
   gboolean error = FALSE;
   

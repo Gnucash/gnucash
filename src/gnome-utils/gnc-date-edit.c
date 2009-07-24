@@ -985,7 +985,7 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 {
 	struct tm tm = {0};
 	char *str;
-	unsigned char *flags = NULL;
+	gchar *flags = NULL;
 
 	/* Assert, because we're just hosed if it's NULL */
 	g_assert(gde != NULL);
@@ -1004,7 +1004,7 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 
 	if (gde->flags & GNC_DATE_EDIT_SHOW_TIME) {
 		char *tokp = NULL;
-		unsigned char *temp;
+		gchar *temp;
 
 		str = g_strdup (gtk_entry_get_text
                                 (GTK_ENTRY (gde->time_entry)));

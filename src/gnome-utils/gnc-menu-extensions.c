@@ -187,8 +187,8 @@ gnc_extension_path (SCM extension, char **fullpath)
 static gchar*
 gnc_ext_gen_action_name (const gchar *name)
 {
-  //gchar *extName;
-  const guchar *extChar;
+
+  const gchar *extChar;
   GString *actionName;
 
   actionName = g_string_sized_new( strlen( name ) + 7 );

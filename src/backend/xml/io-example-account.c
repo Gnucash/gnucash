@@ -172,7 +172,7 @@ generic_callback(const char *tag, gpointer globaldata, gpointer data)
 }
 
 static char*
-squash_extra_whitespace(unsigned char *text)
+squash_extra_whitespace(char *text)
 {
     int spot;
     int length = strlen(text);

@@ -41,7 +41,7 @@ GList* dom_tree_freqSpec_to_recurrences(xmlNodePtr node, QofBook *book);
 Recurrence* dom_tree_to_recurrence(xmlNodePtr node);
 
 Timespec dom_tree_to_timespec(xmlNodePtr node);
-gboolean dom_tree_valid_timespec(Timespec *ts, const gchar *name);
+gboolean dom_tree_valid_timespec(Timespec *ts, const xmlChar *name);
 GDate* dom_tree_to_gdate(xmlNodePtr node);
 gnc_numeric* dom_tree_to_gnc_numeric(xmlNodePtr node);
 gchar * dom_tree_to_text(xmlNodePtr tree);

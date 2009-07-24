@@ -589,7 +589,7 @@ encode_md5_data(const unsigned char *data, char *buffer)
  * a hex number. returns false otherwise. Decoded number
  * is packed into data in little endian order. */
 static gboolean
-decode_md5_string(const unsigned char *string, unsigned char *data)
+decode_md5_string(const gchar *string, unsigned char *data)
 {
   unsigned char n1, n2;
   size_t count = -1;

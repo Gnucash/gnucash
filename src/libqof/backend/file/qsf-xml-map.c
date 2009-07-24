@@ -77,7 +77,7 @@ qsf_map_validation_handler(xmlNodePtr child, xmlNsPtr ns, qsf_validator *valid)
 	xmlChar *qof_version, *match;
 	GString *buff;
 	xmlNodePtr child_node;
-	QofIdType obj_type;
+	xmlChar *obj_type;
 
 	if (qsf_is_element(child, ns, MAP_DEFINITION_TAG)) {
 		qof_version = xmlGetProp(child, BAD_CAST MAP_QOF_VERSION);

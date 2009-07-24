@@ -177,7 +177,7 @@ ultostr (gulong val, gint base)
 /* =================================================================== */
 
 gboolean
-gnc_strisnum(const guchar *s)
+gnc_strisnum(const gchar *s)
 {
   if (s == NULL) return FALSE;
   if (*s == 0) return FALSE;
