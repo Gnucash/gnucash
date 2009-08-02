@@ -260,10 +260,13 @@
                     (dif-numeric-val (gnc-numeric-sub bgt-numeric-val
                                  act-numeric-val GNC-DENOM-AUTO
                                  (+ GNC-DENOM-LCD GNC-RND-NEVER)))
-                    (dif-val (if bgt-unset? "."
-                                 (gnc:make-gnc-monetary comm dif-numeric-val)))
+                    (dif-val #f)
                     )
 
+               (if (eq? ACCT-TYPE-INCOME (xaccAccountGetType acct))
+                 (set! dif-numeric-val (gnc-numeric-neg dif-numeric-val)))
+               (set! dif-val (if (and bgt-unset? (gnc-numeric-zero-p act-numeric-val)) "."
+                                 (gnc:make-gnc-monetary comm dif-numeric-val)))
     		   (if (not bgt-unset?)
 			     (begin
 			   		(set! bgt-total (gnc-numeric-add bgt-total bgt-numeric-val GNC-DENOM-AUTO GNC-RND-ROUND))
@@ -316,13 +319,19 @@
                  )
                )
                (if show-diff?
-                 (let* ((diff-val 
+                 (let* ((dif-total 
                               (gnc-numeric-sub bgt-total
                                        act-total GNC-DENOM-AUTO
-                                       (+ GNC-DENOM-LCD GNC-RND-NEVER))))
+                                       (+ GNC-DENOM-LCD GNC-RND-NEVER)))
+                        (dif-val #f)
+                       )
+                   (if (eq? ACCT-TYPE-INCOME (xaccAccountGetType acct))
+                     (set! dif-total (gnc-numeric-neg dif-total)))
+                   (set! dif-val (if (and bgt-total-unset? (gnc-numeric-zero-p act-total)) "."
+                                 (gnc:make-gnc-monetary comm dif-total)))
                    (gnc:html-table-set-cell/tag!
-                    html-table rownum current-col (total-number-cell-tag diff-val)
-                    (if bgt-total-unset? "." (gnc:make-gnc-monetary comm diff-val))
+                    html-table rownum current-col (total-number-cell-tag dif-total)
+                    dif-val
                    )
                    (set! current-col (+ current-col 1))
                  )
