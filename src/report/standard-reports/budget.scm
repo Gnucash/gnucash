@@ -335,38 +335,49 @@
       (gnc:html-table-prepend-row! html-table '())
       (gnc:html-table-prepend-row! html-table '())
 
-      ;; make the column headers
-      (while (< period num-periods)
-             (let* ((date (gnc-budget-get-period-start-date budget period)))
-               (gnc:html-table-set-cell/tag!
-                html-table 0 (if show-diff? (+ current-col 1) current-col) "centered-label-cell"
-				(gnc-print-date date))
-               (if show-budget?
-                 (begin
-                   (gnc:html-table-set-cell/tag!
-                    html-table 1 current-col "centered-label-cell"
-					(_ "Bgt")) ;; Translators: Abbreviation for "Budget"
-                   (set! current-col (+ current-col 1))
-                 )
-               )
-               (if show-actual?
-                 (begin 
-                   (gnc:html-table-set-cell/tag!
-                    html-table 1 current-col "centered-label-cell"
-					(_ "Act")) ;; Translators: Abbreviation for "Actual"
-                   (set! current-col (+ current-col 1))
-                 )
-               )
-               (if show-diff?
-                 (begin 
-                   (gnc:html-table-set-cell/tag!
-                    html-table 1 current-col "centered-label-cell"
-					(_ "Diff")) ;; Translators: Abbrevation for "Difference"
-                   (set! current-col (+ current-col 1))
-                 )
-               )
+	  (while (< period num-periods)
+             (let* (
+					 (tc #f)
+                     (date (gnc-budget-get-period-start-date budget period))
+                   )
+               (gnc:html-table-set-cell!
+                  html-table 0 (+ current-col period)
+				  (gnc-print-date date))
+               (set! tc (gnc:html-table-get-cell html-table 0 (+ current-col period)))
+			   (gnc:html-table-cell-set-colspan! tc (if show-diff? 3 2))
+			   (gnc:html-table-cell-set-tag! tc "centered-label-cell")
                (set! period (+ period 1))
+             )
+      )
+
+      ;; make the column headers
+      (set! period 0)
+      (while (< period num-periods)
+             (if show-budget?
+               (begin
+                 (gnc:html-table-set-cell/tag!
+                  html-table 1 current-col "centered-label-cell"
+                  (_ "Bgt")) ;; Translators: Abbreviation for "Budget"
+                  (set! current-col (+ current-col 1))
                )
+             )
+             (if show-actual?
+               (begin 
+                 (gnc:html-table-set-cell/tag!
+                  html-table 1 current-col "centered-label-cell"
+                  (_ "Act")) ;; Translators: Abbreviation for "Actual"
+                 (set! current-col (+ current-col 1))
+               )
+             )
+             (if show-diff?
+               (begin 
+                 (gnc:html-table-set-cell/tag!
+                  html-table 1 current-col "centered-label-cell"
+                  (_ "Diff")) ;; Translators: Abbrevation for "Difference"
+                 (set! current-col (+ current-col 1))
+               )
+             )
+             (set! period (+ period 1))
              )
 		 (if show-totalcol?
 		    (begin
