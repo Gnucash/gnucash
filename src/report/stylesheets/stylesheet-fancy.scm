@@ -231,6 +231,12 @@
      'attribute (list "align" "right")
      'attribute (list "nowrap"))
 
+    (gnc:html-document-set-style!
+     ssdoc "number-cell-neg"
+     'tag "td"
+     'attribute (list "align" "right")
+     'attribute (list "nowrap"))
+
     (if (and bgpixmap
 	     (not (string=? bgpixmap "")))
 	(gnc:html-document-set-style!
@@ -271,6 +277,11 @@
 
     (gnc:html-document-set-style!
      ssdoc "total-number-cell"
+     'tag '("td" "b")
+     'attribute (list "align" "right"))
+
+    (gnc:html-document-set-style!
+     ssdoc "total-number-cell-neg"
      'tag '("td" "b")
      'attribute (list "align" "right"))
 

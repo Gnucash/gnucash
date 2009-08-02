@@ -125,29 +125,34 @@
 		   (N_ "Number cell") "c" (N_ "Font info for regular number cells")
 		   "Arial 10"))
          (opt-register
+          (gnc:make-simple-boolean-option
+           (N_ "Fonts")
+           (N_ "Negative Values in Red") "d" (N_ "Display negative values in red.")
+           #t))
+         (opt-register
           (gnc:make-font-option
            (N_ "Fonts")
-		   (N_ "Number header") "c" (N_ "Font info for number headers")
+		   (N_ "Number header") "e" (N_ "Font info for number headers")
 		   "Arial 10"))
          (opt-register
           (gnc:make-font-option
            (N_ "Fonts")
-		   (N_ "Text cell") "c" (N_ "Font info for regular text cells")
+		   (N_ "Text cell") "f" (N_ "Font info for regular text cells")
 		   "Arial 10"))
          (opt-register
           (gnc:make-font-option
            (N_ "Fonts")
-		   (N_ "Total number cell") "c" (N_ "Font info for number cells containing a total")
+		   (N_ "Total number cell") "g" (N_ "Font info for number cells containing a total")
 		   "Arial Bold 12"))
          (opt-register
           (gnc:make-font-option
            (N_ "Fonts")
-		   (N_ "Total label cell") "c" (N_ "Font info for cells containing total labels")
+		   (N_ "Total label cell") "h" (N_ "Font info for cells containing total labels")
 		   "Arial Bold 12"))
          (opt-register
           (gnc:make-font-option
            (N_ "Fonts")
-		   (N_ "Centered label cell") "c" (N_ "Font info for centered label cells")
+		   (N_ "Centered label cell") "i" (N_ "Font info for centered label cells")
 		   "Arial Bold 12"))
 
          options))
@@ -169,6 +174,7 @@
 	 (spacing (opt-val "Tables" "Table cell spacing"))
 	 (padding (opt-val "Tables" "Table cell padding"))
 	 (border (opt-val "Tables" "Table border width"))
+	 (negative-red? (opt-val "Fonts" "Negative Values in Red"))
 	 (title-font-info (font-name-to-style-info (opt-val "Fonts" "Title")))
 	 (account-link-font-info (font-name-to-style-info (opt-val "Fonts" "Account link")))
 	 (number-cell-font-info (font-name-to-style-info (opt-val "Fonts" "Number cell")))
@@ -201,6 +207,11 @@
        'attribute (list "class" "number-cell"))
 
     (gnc:html-document-set-style!
+       ssdoc "number-cell-neg"
+       'tag "td"
+       'attribute (list "class" "number-cell-neg"))
+
+    (gnc:html-document-set-style!
        ssdoc "number-header"
        'tag "th"
        'attribute (list "class" "number-header"))
@@ -214,6 +225,11 @@
        ssdoc "total-number-cell"
        'tag "td"
        'attribute (list "class" "total-number-cell"))
+
+    (gnc:html-document-set-style!
+       ssdoc "total-number-cell-neg"
+       'tag "td"
+       'attribute (list "class" "total-number-cell-neg"))
 
     (gnc:html-document-set-style!
        ssdoc "total-label-cell"
@@ -259,9 +275,11 @@
 		  "a { " account-link-font-info " }\n"
 		  "th { text-align: right; " number-header-font-info " }\n"
 	      "td.number-cell { text-align: right; " number-cell-font-info " }\n"
+	      "td.number-cell-neg { text-align: right; " (if negative-red? "color: red; " "") number-cell-font-info " }\n"
 		  "td.number-header { text-align: right; " number-header-font-info " }\n"
 		  "td.text-cell { text-align: left; " text-cell-font-info " }\n"
 		  "td.total-number-cell { text-align:right; " total-number-cell-font-info " }\n"
+		  "td.total-number-cell-neg { text-align:right; " (if negative-red? "color: red; " "") total-number-cell-font-info " }\n"
 		  "td.total-label-cell { text-align: left; " total-label-cell-font-info " }\n"
 		  "td.centered-label-cell { text-align: center; " centered-label-cell-font-info " }\n"
 		  ))

@@ -206,6 +206,9 @@
     amount)
   )
 
+  (define (negative-numeric-p x)
+    (if (gnc-numeric-p x) (gnc-numeric-negative-p x) #f))
+
   ;; Adds a line to tbe budget report.
   ;;
   ;; Parameters:
@@ -273,14 +276,14 @@
                (if show-actual?
                  (begin
                    (gnc:html-table-set-cell/tag!
-                    html-table rownum current-col "number-cell" act-val)
+                    html-table rownum current-col (if (negative-numeric-p act-numeric-val) "number-cell-neg" "number-cell") act-val)
                    (set! current-col (+ current-col 1))
                  )
                )
                (if show-diff?
                  (begin
                    (gnc:html-table-set-cell/tag!
-                    html-table rownum current-col "number-cell" dif-val)
+                    html-table rownum current-col (if (negative-numeric-p dif-numeric-val) "number-cell-neg" "number-cell") dif-val)
                    (set! current-col (+ current-col 1))
                  )
                )
@@ -303,20 +306,21 @@
                (if show-actual?
                  (begin
                    (gnc:html-table-set-cell/tag!
-                    html-table rownum current-col "total-number-cell"
+                    html-table rownum current-col (if (negative-numeric-p act-total) "total-number-cell" "total-number-cell-neg")
                           (gnc:make-gnc-monetary comm act-total))
                    (set! current-col (+ current-col 1))
                  )
                )
                (if show-diff?
-                 (begin
-                   (gnc:html-table-set-cell/tag!
-                    html-table rownum current-col "total-number-cell"
-                       (if bgt-total-unset? "."
+                 (let* ((diff-val 
                           (gnc:make-gnc-monetary comm
                               (gnc-numeric-sub bgt-total
                                        act-total GNC-DENOM-AUTO
                                        (+ GNC-DENOM-LCD GNC-RND-NEVER)))))
+                   (gnc:html-table-set-cell/tag!
+                    html-table rownum current-col (if (negative-numeric-p diff-val) "total-number-cell-neg" "total-number-cell")
+                    (if bgt-total-unset? "." diff-val)
+                   )
                    (set! current-col (+ current-col 1))
                  )
                )
