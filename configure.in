@@ -311,12 +311,12 @@ LIBS="$LIBS $DL_LIB"
 AC_CHECK_FUNCS(dlerror,,)
 LIBS="$oLIBS"
 AC_SUBST(DL_LIB)
- 10.x requires some special handling...
 
 ### --------------------------------------------------------------------------
 ### MacOS
 # Some systems (MacOS) require -lintl
 # not true for darwin 10.3 - halts the build.
+# 10.x requires some special handling...
 #AC_SEARCH_LIBS(gettext, intl, ,[
 #	AC_MSG_ERROR([Cannot find gettext -- do you need to build -lintl?])], )
 
@@ -541,22 +541,39 @@ AC_SUBST(GCONF_CFLAGS)
 AC_SUBST(GCONF_LIBS)
 
 ### --------------------------------------------------------------------------
-### look for webkit
+### determine the HTML engine
 
-AC_ARG_ENABLE(webkit,
-  [AS_HELP_STRING([--enable-webkit],[build with the webkit HTML engine])],
-  [case "${enableval}" in
-     yes) want_webkit=true ;;
-     no)  want_webkit=false ;;
-     *) want_webkit=false ;;
-   esac],
-   [want_webkit=false])
-if test x${want_webkit} = xtrue
-then
-  PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.0")
-  AC_DEFINE(WANT_WEBKIT,1,[Use webkit instead of gtkhtml])
-fi
-AM_CONDITIONAL(HTML_USING_WEBKIT, test x${want_webkit} = xtrue)
+AC_MSG_CHECKING([the html engine])
+AC_ARG_WITH(html_engine,
+            AS_HELP_STRING([--with-html-engine=@<:@webkit/gtkhtml@:>@],
+                           [Select HTML engine [default=gtkhtml]]),
+            [],[with_html_engine="gtkhtml"])
+
+case "$with_html_engine" in
+     gtkhtml) ;;
+	 webkit)
+  		PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.0")
+  		AC_DEFINE(WANT_WEBKIT,1,[Use webkit instead of gtkhtml])
+		;;
+	 *) AC_MSG_ERROR([Invalid HTML engine: must be gtkhtml or webkit]) ;;
+esac
+
+AC_MSG_RESULT([$with_html_engine])
+
+#AC_ARG_ENABLE(webkit,
+#  [AS_HELP_STRING([--enable-webkit],[build with the webkit HTML engine])],
+#  [case "${enableval}" in
+#     yes) want_webkit=true ;;
+#     no)  want_webkit=false ;;
+#     *) want_webkit=false ;;
+#   esac],
+#   [want_webkit=false])
+#if test x${want_webkit} = xtrue
+#then
+#  PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.0")
+#  AC_DEFINE(WANT_WEBKIT,1,[Use webkit instead of gtkhtml])
+#fi
+AM_CONDITIONAL(HTML_USING_WEBKIT, [test x${with_html_engine} = xwebkit])
 AC_SUBST(WEBKIT_CFLAGS)
 AC_SUBST(WEBKIT_LIBS)
 
@@ -1660,16 +1677,17 @@ AC_MSG_RESULT([
   -------------------------
   gnucash version ...... : $VERSION
   Build for host ....... : $host
-  Optional components....: $components
+  Optional components... : $components
+  HTML engine .......... : $with_html_engine
   Extra Warnings ....... : $warnFLAGS
   CPPFLAGS ............. : $CPPFLAGS
   CFLAGS ............... : $CFLAGS
   LDFLAGS .............. : $LDFLAGS
-  prefix.................: ${prefix}
-  QOF support ...........: $QOF_VERSION
-  QOF location ..........: $output_qof_prefix
-  QOF library dir .......: $output_qof_lib_dir
-  QOF backend config ....: $output_qof_xml_dir
+  prefix................ : ${prefix}
+  QOF support .......... : $QOF_VERSION
+  QOF location ......... : $output_qof_prefix
+  QOF library dir ...... : $output_qof_lib_dir
+  QOF backend config ... : $output_qof_xml_dir
 
 
 ])
