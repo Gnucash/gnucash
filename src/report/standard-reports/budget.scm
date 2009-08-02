@@ -208,6 +208,10 @@
 
   (define (negative-numeric-p x)
     (if (gnc-numeric-p x) (gnc-numeric-negative-p x) #f))
+  (define (number-cell-tag x)
+    (if (negative-numeric-p x) "number-cell-neg" "number-cell"))
+  (define (total-number-cell-tag x)
+    (if (negative-numeric-p x) "total-number-cell-neg" "total-number-cell"))
 
   ;; Adds a line to tbe budget report.
   ;;
@@ -276,14 +280,14 @@
                (if show-actual?
                  (begin
                    (gnc:html-table-set-cell/tag!
-                    html-table rownum current-col (if (negative-numeric-p act-numeric-val) "number-cell-neg" "number-cell") act-val)
+                    html-table rownum current-col (number-cell-tag act-numeric-val) act-val)
                    (set! current-col (+ current-col 1))
                  )
                )
                (if show-diff?
                  (begin
                    (gnc:html-table-set-cell/tag!
-                    html-table rownum current-col (if (negative-numeric-p dif-numeric-val) "number-cell-neg" "number-cell") dif-val)
+                    html-table rownum current-col (number-cell-tag dif-numeric-val) dif-val)
                    (set! current-col (+ current-col 1))
                  )
                )
@@ -306,20 +310,19 @@
                (if show-actual?
                  (begin
                    (gnc:html-table-set-cell/tag!
-                    html-table rownum current-col (if (negative-numeric-p act-total) "total-number-cell" "total-number-cell-neg")
+                    html-table rownum current-col (total-number-cell-tag act-total)
                           (gnc:make-gnc-monetary comm act-total))
                    (set! current-col (+ current-col 1))
                  )
                )
                (if show-diff?
                  (let* ((diff-val 
-                          (gnc:make-gnc-monetary comm
                               (gnc-numeric-sub bgt-total
                                        act-total GNC-DENOM-AUTO
-                                       (+ GNC-DENOM-LCD GNC-RND-NEVER)))))
+                                       (+ GNC-DENOM-LCD GNC-RND-NEVER))))
                    (gnc:html-table-set-cell/tag!
-                    html-table rownum current-col (if (negative-numeric-p diff-val) "total-number-cell-neg" "total-number-cell")
-                    (if bgt-total-unset? "." diff-val)
+                    html-table rownum current-col (total-number-cell-tag diff-val)
+                    (if bgt-total-unset? "." (gnc:make-gnc-monetary comm diff-val))
                    )
                    (set! current-col (+ current-col 1))
                  )
@@ -353,6 +356,16 @@
                (set! period (+ period 1))
              )
       )
+      (if show-totalcol?
+         (let* (
+            (tc #f))
+           (gnc:html-table-set-cell/tag!
+            html-table 0 (+ current-col num-periods) "centered-label-cell"
+            "Total")
+           (set! tc (gnc:html-table-get-cell html-table 0 (+ current-col num-periods)))
+           (gnc:html-table-cell-set-colspan! tc (if show-diff? 3 2))
+         )
+      )
 
       ;; make the column headers
       (set! period 0)
@@ -385,9 +398,6 @@
              )
 		 (if show-totalcol?
 		    (begin
-               (gnc:html-table-set-cell/tag!
-                html-table 0 (if show-diff? (+ current-col 1) current-col) "centered-label-cell"
-				"Total")
                (if show-budget?
                  (begin
                    (gnc:html-table-set-cell/tag!

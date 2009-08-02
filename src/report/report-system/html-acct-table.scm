@@ -1291,7 +1291,7 @@
 	      label
               indented-depth
               account-colspan               ;; label-colspan
-              #f                            ;; label-markup
+              "anchor-cell"                 ;; label-markup
 	      amount
 	      (+ account-cols (- 0 1)
 		 (- logical-cols display-depth)

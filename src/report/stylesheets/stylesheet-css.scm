@@ -202,14 +202,22 @@
        'attribute (list "cellpadding" padding))
 
     (gnc:html-document-set-style!
+       ssdoc "anchor-cell"
+       'tag "td"
+       'attribute (list "class" "anchor-cell")
+	   'attribute (list "nowrap"))
+
+    (gnc:html-document-set-style!
        ssdoc "number-cell"
        'tag "td"
-       'attribute (list "class" "number-cell"))
+       'attribute (list "class" "number-cell")
+	   'attribute (list "nowrap"))
 
     (gnc:html-document-set-style!
        ssdoc "number-cell-neg"
        'tag "td"
-       'attribute (list "class" "number-cell-neg"))
+       'attribute (list "class" "number-cell-neg")
+	   'attribute (list "nowrap"))
 
     (gnc:html-document-set-style!
        ssdoc "number-header"
@@ -224,12 +232,14 @@
     (gnc:html-document-set-style!
        ssdoc "total-number-cell"
        'tag "td"
-       'attribute (list "class" "total-number-cell"))
+       'attribute (list "class" "total-number-cell")
+	   'attribute (list "nowrap"))
 
     (gnc:html-document-set-style!
        ssdoc "total-number-cell-neg"
        'tag "td"
-       'attribute (list "class" "total-number-cell-neg"))
+       'attribute (list "class" "total-number-cell-neg")
+	   'attribute (list "nowrap"))
 
     (gnc:html-document-set-style!
        ssdoc "total-label-cell"
