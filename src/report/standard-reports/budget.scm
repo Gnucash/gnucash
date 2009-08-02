@@ -57,6 +57,8 @@
 (define opthelp-show-actual (N_ "Display a column for the actual values"))
 (define opthelp-show-difference (N_ "Display the difference as budget - actual"))
 (define optname-show-totalcol (N_ "Show Column with Totals"))
+(define optname-rollup-budget (N_ "Roll up budget amounts to parent"))
+(define opthelp-rollup-budget (N_ "If parent account does not have its own budget value, use the sum of the child account budget values"))
 (define opthelp-show-totalcol (N_ "Display a column with the row totals"))
 (define optname-bottom-behavior (N_ "Flatten list to depth limit"))
 (define opthelp-bottom-behavior
@@ -130,6 +132,10 @@
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-totalcol
       "s4" opthelp-show-totalcol #f))
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-rollup-budget
+      "s4" opthelp-rollup-budget #f))
 
       ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)
@@ -137,6 +143,13 @@
     options)
   )
 
+;; Create the html table for the budget report
+;;
+;; Parameters
+;;   html-table - HTML table to fill in
+;;   acct-table - Table of accounts to use
+;;   budget - budget to use
+;;   params - report parameters
 (define (gnc:html-table-add-budget-values!
          html-table acct-table budget params)
   (let* ((get-val (lambda (alist key)
@@ -146,17 +159,72 @@
          (show-budget? (get-val params 'show-budget))
          (show-diff? (get-val params 'show-difference))
          (show-totalcol? (get-val params 'show-totalcol))
+		 (rollup-budget? (get-val params 'rollup-budget))
         )
   
+  ;; Calculate the sum of all budgets of all children of an account for a specific period
+  ;;
+  ;; Parameters:
+  ;;   budget - budget to use
+  ;;   children - list of children
+  ;;   period - budget period to use
+  ;;
+  ;; Return value:
+  ;;   budget value to use for account for specified period.
+  (define (budget-account-sum budget children period)
+    (let* ((sum (cond
+                   ((null? children) (gnc-numeric-zero))
+                   (else (gnc-numeric-add
+				             (gnc:get-account-period-rolledup-budget-value budget (car children) period)
+                             (budget-account-sum budget (cdr children) period)
+                             GNC-DENOM-AUTO GNC-RND-ROUND))
+                 )
+          ))
+    sum)
+  )
+
+  ;; Calculate the value to use for the budget of an account for a specific period.
+  ;; 1) If the account has a budget value set for the period, use it
+  ;; 2) If the account has children, use the sum of budget values for the children
+  ;; 3) Otherwise, use 0.
+  ;;
+  ;; Parameters:
+  ;;   budget - budget to use
+  ;;   acct - account
+  ;;   period - budget period to use
+  ;;
+  ;; Return value:
+  ;;   sum of all budgets for list of children for specified period.
+  (define (gnc:get-account-period-rolledup-budget-value budget acct period)
+    (let* ((bgt-set? (gnc-budget-is-account-period-value-set budget acct period))
+          (children (gnc-account-get-children acct))
+          (amount (cond
+                    (bgt-set? (gnc-budget-get-account-period-value budget acct period))
+            ((not (null? children)) (budget-account-sum budget children period))
+            (else (gnc-numeric-zero)))
+          ))
+    amount)
+  )
+
+  ;; Adds a line to tbe budget report.
+  ;;
+  ;; Parameters:
+  ;;   html-table - html table being created
+  ;;   rownum - row number
+  ;;   colnum - starting column number
+  ;;   budget - budget to use
+  ;;   acct - account being displayed
+  ;;   rollup-budget? - rollup budget values for account children if account budget not set
+  ;;   exchange-fn - exchange function (not used)
   (define (gnc:html-table-add-budget-line!
            html-table rownum colnum
-           budget acct exchange-fn)
+           budget acct rollup-budget? exchange-fn)
     (let* ((num-periods (gnc-budget-get-num-periods budget))
            (period 0)
            (current-col (+ colnum 1))
-		   (bgt-total (gnc-numeric-zero))
-		   (bgt-total-unset? #t)
-		   (act-total (gnc-numeric-zero))
+           (bgt-total (gnc-numeric-zero))
+           (bgt-total-unset? #t)
+           (act-total (gnc-numeric-zero))
            (comm (xaccAccountGetCommodity acct))
            (reverse-balance? (gnc-reverse-balance acct))
            )
@@ -164,10 +232,12 @@
              (let* (
                     
                     ;; budgeted amount
-                    (bgt-unset? (not (gnc-budget-is-account-period-value-set 
-                                      budget acct period)))
-                    (bgt-numeric-val (gnc-budget-get-account-period-value
-                                  budget acct period))
+                    (bgt-numeric-val (if rollup-budget?
+                                     (gnc:get-account-period-rolledup-budget-value budget acct period)
+                                     (gnc-budget-get-account-period-value budget acct period)))
+                    (bgt-unset? (if rollup-budget?
+                                (gnc-numeric-zero-p bgt-numeric-val)
+                                (not (gnc-budget-is-account-period-value-set budget acct period))))
                     (bgt-val (if bgt-unset? "."
                                  (gnc:make-gnc-monetary comm bgt-numeric-val)))
 
@@ -187,7 +257,7 @@
                                  (gnc:make-gnc-monetary comm dif-numeric-val)))
                     )
 
-			   (if (not bgt-unset?)
+    		   (if (not bgt-unset?)
 			     (begin
 			   		(set! bgt-total (gnc-numeric-add bgt-total bgt-numeric-val GNC-DENOM-AUTO GNC-RND-ROUND))
 					(set! bgt-total-unset? #f))
@@ -356,7 +426,7 @@
                   )
              (gnc:html-table-add-budget-line!
               html-table rownum colnum
-              budget acct exchange-fn)
+              budget acct rollup-budget? exchange-fn)
              (set! rownum (+ rownum 1)) ;; increment rownum
              )
            ) ;; end of while
@@ -391,6 +461,8 @@
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))
 	     (bottom-behavior (get-option gnc:pagename-accounts optname-bottom-behavior))
+         (rollup-budget? (get-option gnc:pagename-display
+                                     optname-rollup-budget))
          (row-num 0) ;; ???
          (work-done 0)
          (work-to-do 0)
@@ -492,6 +564,8 @@
                        (get-option gnc:pagename-display optname-show-difference))
                  (list 'show-totalcol
                        (get-option gnc:pagename-display optname-show-totalcol))
+                 (list 'rollup-budget
+                       (get-option gnc:pagename-display optname-rollup-budget))
                 )
                )
                (report-name (get-option gnc:pagename-general
