@@ -1,5 +1,5 @@
 /*
- * gnc-dateedit.c -- Date editor widget
+ * gnc-date-edit.c -- Date editor widget
  *
  * Copyright (C) 1997, 1998, 1999, 2000 Free Software Foundation
  * All rights reserved.
@@ -464,11 +464,8 @@ fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (gde->time_popup), menu);
 
 	time (&current_time);
-	tm_returned = localtime (&current_time);
+	tm_returned = localtime_r (&current_time, &mtm);
 	g_return_if_fail(tm_returned != NULL);
-        /* The return value points to statically allocated, shared memory.
-         * Copy the contents so we don't risk unexpected changes. */
-        mtm = *tm_returned;
 	
 	for (i = gde->lower_hour; i <= gde->upper_hour; i++){
 		GtkWidget *item, *submenu;
@@ -698,11 +695,8 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
           gde->initial_time = the_time;
 
         /* Convert time_t to tm. */
-	tm_returned = localtime (&the_time);
+	tm_returned = localtime_r (&the_time, &tm_to_set);
 	g_return_if_fail(tm_returned != NULL);
-        /* The return value points to statically allocated, shared memory.
-         * Copy the contents so we don't risk unexpected changes. */
-        tm_to_set = *tm_returned;
 
 	gnc_date_edit_set_time_tm(gde, &tm_to_set);
 }
