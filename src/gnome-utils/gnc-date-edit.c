@@ -43,6 +43,9 @@
 #include <stdio.h>
 #include <time.h>
 
+#ifndef HAVE_LOCALTIME_R
+# include "localtime_r.h"
+#endif
 #include "gnc-date.h"
 #include "gnc-engine.h"
 #include "dialog-utils.h"
