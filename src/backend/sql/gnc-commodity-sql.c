@@ -174,13 +174,44 @@ create_commodities_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 static gboolean
+do_commit_commodity( GncSqlBackend* be, QofInstance* inst, gboolean force_insert )
+{
+	const GUID* guid;
+	gboolean is_infant;
+	gint op;
+	gboolean is_ok;
+
+	is_infant = qof_instance_get_infant( inst );
+	if( qof_instance_get_destroying( inst ) ) {
+		op = OP_DB_DELETE;
+	} else if( be->is_pristine_db || is_infant || force_insert ) {
+		op = OP_DB_INSERT;
+	} else {
+		op = OP_DB_UPDATE;
+	}
+    is_ok = gnc_sql_do_db_operation( be, op, COMMODITIES_TABLE, GNC_ID_COMMODITY, inst, col_table );
+
+	if( is_ok ) {
+    	// Now, commit any slots
+    	guid = qof_instance_get_guid( inst );
+    	if( !qof_instance_get_destroying(inst) ) {
+        	is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+    	} else {
+        	is_ok = gnc_sql_slots_delete( be, guid );
+    	}
+	}
+
+	return is_ok;
+}
+
+static gboolean
 commit_commodity( GncSqlBackend* be, QofInstance* inst )
 {
 	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( inst != NULL, FALSE );
 	g_return_val_if_fail( GNC_IS_COMMODITY(inst), FALSE );
 
-    return gnc_sql_commit_standard_item( be, inst, COMMODITIES_TABLE, GNC_ID_COMMODITY, col_table );
+    return do_commit_commodity( be, inst, FALSE );
 }
 
 static gboolean
@@ -202,7 +233,7 @@ gnc_sql_save_commodity( GncSqlBackend* be, gnc_commodity* pCommodity )
 	g_return_val_if_fail( pCommodity != NULL, FALSE );
 
     if( !is_commodity_in_db( be, pCommodity ) ) {
-        is_ok = commit_commodity( be, QOF_INSTANCE(pCommodity) );
+        is_ok = do_commit_commodity( be, QOF_INSTANCE(pCommodity), TRUE );
     }
 
 	return is_ok;
