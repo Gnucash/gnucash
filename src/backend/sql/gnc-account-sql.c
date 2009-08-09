@@ -167,9 +167,10 @@ load_single_account( GncSqlBackend* be, GncSqlRow* row,
     gnc_sql_load_object( be, row, GNC_ID_ACCOUNT, pAccount, col_table );
 	xaccAccountCommitEdit( pAccount );
 
-	/* If we don't have a parent, it might be because the parent account hasn't
-	   been loaded yet.  Remember the account and its parent guid for later. */
-	if( gnc_account_get_parent( pAccount ) == NULL ) {
+	/* If we don't have a parent and this isn't the root account, it might be because the parent
+	   account hasn't been loaded yet.  Remember the account and its parent guid for later. */
+	if( gnc_account_get_parent( pAccount ) == NULL
+			&& pAccount != gnc_book_get_root_account( be->primary_book ) ) {
 		account_parent_guid_struct* s = g_malloc( (gsize)sizeof(account_parent_guid_struct) );
 		g_assert( s != NULL );
 

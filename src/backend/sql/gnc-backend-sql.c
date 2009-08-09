@@ -267,12 +267,16 @@ write_account_tree( GncSqlBackend* be, Account* root )
 	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( root != NULL, FALSE );
 
-    descendants = gnc_account_get_descendants( root );
-    for( node = descendants; node != NULL && is_ok; node = g_list_next(node) ) {
-        is_ok = gnc_sql_save_account( be, QOF_INSTANCE(GNC_ACCOUNT(node->data)) );
-		update_save_progress( be );
-    }
-    g_list_free( descendants );
+	is_ok = gnc_sql_save_account( be, QOF_INSTANCE(root) );
+	if( is_ok ) {
+        descendants = gnc_account_get_descendants( root );
+        for( node = descendants; node != NULL && is_ok; node = g_list_next(node) ) {
+            is_ok = gnc_sql_save_account( be, QOF_INSTANCE(GNC_ACCOUNT(node->data)) );
+			if( !is_ok ) break;
+		    update_save_progress( be );
+        }
+        g_list_free( descendants );
+	}
 
 	return is_ok;
 }
