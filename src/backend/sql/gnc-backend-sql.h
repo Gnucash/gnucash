@@ -166,7 +166,6 @@ struct GncSqlConnection
 	gboolean (*beginTransaction)( GncSqlConnection* ); /**< Returns TRUE if successful, FALSE if error */
 	gboolean (*rollbackTransaction)( GncSqlConnection* ); /**< Returns TRUE if successful, FALSE if error */
 	gboolean (*commitTransaction)( GncSqlConnection* ); /**< Returns TRUE if successful, FALSE if error */
-	const gchar* (*getColumnTypeName)( GncSqlConnection*, GType, gint size );
 	gboolean (*createTable)( GncSqlConnection*, const gchar*, const GList* ); /**< Returns TRUE if successful, FALSE if error */
 	gboolean (*createIndex)( GncSqlConnection*, const gchar*, const gchar*, const GncSqlColumnTableEntry* ); /**< Returns TRUE if successful, FALSE if error */
 	gchar* (*quoteString)( const GncSqlConnection*, gchar* );
@@ -186,8 +185,6 @@ struct GncSqlConnection
 		(CONN)->rollbackTransaction(CONN)
 #define gnc_sql_connection_commit_transaction(CONN) \
 		(CONN)->commitTransaction(CONN)
-#define gnc_sql_connection_get_column_type_name(CONN,TYPE,SIZE) \
-		(CONN)->getColumnTypeName(CONN,TYPE,SIZE)
 #define gnc_sql_connection_create_table(CONN,NAME,COLLIST) \
 		(CONN)->createTable(CONN,NAME,COLLIST)
 #define gnc_sql_connection_create_index(CONN,INDEXNAME,TABLENAME,COLTABLE) \
@@ -284,6 +281,7 @@ typedef struct {
 	GType type;					/**< Column basic type */
 	gint size;					/**< Column size (string types) */
 	gboolean is_unicode;		/**< Column is unicode (string types) */
+	gboolean is_autoinc;		/**< Column is autoinc (int type) */
 	gboolean is_primary_key;	/**< Column is the primary key */
 	gboolean null_allowed;		/**< Column allows NULL values */
 } GncSqlColumnInfo;

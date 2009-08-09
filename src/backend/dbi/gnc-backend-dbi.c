@@ -67,46 +67,38 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 typedef gchar* (*CREATE_TABLE_DDL_FN)( GncSqlConnection* conn,
 								const gchar* table_name,
 								const GList* col_info_list );
-typedef const gchar* (*GET_COLUMN_TYPE_NAME_FN)( GType type, gint size );
 typedef GSList* (*GET_TABLE_LIST_FN)( dbi_conn conn, const gchar* dbname );
 typedef struct {
 	CREATE_TABLE_DDL_FN		create_table_ddl;
-	GET_COLUMN_TYPE_NAME_FN	get_column_type_name;
 	GET_TABLE_LIST_FN		get_table_list;
 } provider_functions_t;
 
 static /*@ null @*/ gchar* conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
 										const gchar* table_name,
 										const GList* col_info_list );
-static /*@ observer @*/ const gchar* get_column_type_name_sqlite3( GType type, gint size );
 static GSList* conn_get_table_list( dbi_conn conn, const gchar* dbname );
 static provider_functions_t provider_sqlite3 =
 {
 	conn_create_table_ddl_sqlite3,
-	get_column_type_name_sqlite3,
 	conn_get_table_list
 };
 
 static /*@ null @*/ gchar* conn_create_table_ddl_mysql( GncSqlConnection* conn,
 										const gchar* table_name,
 										const GList* col_info_list );
-static /*@ observer @*/ const gchar* get_column_type_name_mysql( GType type, gint size );
 static provider_functions_t provider_mysql =
 {
 	conn_create_table_ddl_mysql,
-	get_column_type_name_mysql,
 	conn_get_table_list
 };
 
 static /*@ null @*/ gchar* conn_create_table_ddl_pgsql( GncSqlConnection* conn,
 										const gchar* table_name,
 										const GList* col_info_list );
-static /*@ observer @*/ const gchar* get_column_type_name_pgsql( GType type, gint size );
 static GSList* conn_get_table_list_pgsql( dbi_conn conn, const gchar* dbname );
 static provider_functions_t provider_pgsql =
 {
 	conn_create_table_ddl_pgsql,
-	get_column_type_name_pgsql,
 	conn_get_table_list_pgsql
 };
 
@@ -1345,124 +1337,6 @@ conn_commit_transaction( /*@ unused @*/ GncSqlConnection* conn )
 	return TRUE;
 }
 
-static /*@ observer @*/ const gchar*
-get_column_type_name_sqlite3( GType type, /*@ unused @*/ gint size )
-{
-	switch( type ) {
-		case G_TYPE_INT:
-			return "integer";
-
-		case G_TYPE_INT64:
-			return "bigint";
-
-		case G_TYPE_DOUBLE:
-			return "real";
-
-		case G_TYPE_STRING:
-			return "text";
-
-		default:
-			PERR( "Unknown GType: %s\n", g_type_name( type ) );
-			return "";
-	}
-}
-
-static /*@ observer @*/ const gchar*
-get_column_type_name_mysql( GType type, /*@ unused @*/ gint size )
-{
-	switch( type ) {
-		case G_TYPE_INT:
-			return "integer";
-
-		case G_TYPE_INT64:
-			return "bigint";
-
-		case G_TYPE_DOUBLE:
-			return "double";
-
-		case G_TYPE_STRING:
-			return "varchar";
-
-		default:
-			PERR( "Unknown GType: %s\n", g_type_name( type ) );
-			return "";
-	}
-}
-
-static /*@ observer @*/ const gchar*
-get_column_type_name_pgsql( GType type, /*@ unused @*/ gint size )
-{
-	switch( type ) {
-		case G_TYPE_INT:
-			return "integer";
-
-		case G_TYPE_INT64:
-			return "int8";
-
-		case G_TYPE_DOUBLE:
-			return "double precision";
-
-		case G_TYPE_STRING:
-			return "varchar";
-
-		default:
-			PERR( "Unknown GType: %s\n", g_type_name( type ) );
-			return "";
-	}
-}
-
-static /*@ observer @*/ const gchar*
-conn_get_column_type_name( GncSqlConnection* conn, GType type, /*@ unused @*/ gint size )
-{
-	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
-
-	if( dbi_conn->provider != NULL && dbi_conn->provider->get_column_type_name != NULL ) {
-		return dbi_conn->provider->get_column_type_name( type, size );
-	} else {
-		PERR( "Unknown provider type\n" );
-		return "";
-	}
-}
-
-static /*@ null @*/ gchar*
-conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
-							const gchar* table_name,
-							const GList* col_info_list )
-{
-	GString* ddl;
-	const GList* list_node;
-	guint col_num;
-
-	g_return_val_if_fail( conn != NULL, NULL );
-	g_return_val_if_fail( table_name != NULL, NULL );
-	g_return_val_if_fail( col_info_list != NULL, NULL );
-    
-	ddl = g_string_new( "" );
-	g_string_printf( ddl, "CREATE TABLE %s (", table_name );
-    for( list_node = col_info_list, col_num = 0; list_node != NULL;
-				list_node = list_node->next, col_num++ ) {
-		GncSqlColumnInfo* info = (GncSqlColumnInfo*)(list_node->data);
-
-		if( col_num != 0 ) {
-			(void)g_string_append( ddl, ", " );
-		}
-		g_string_append_printf( ddl, "%s %s", info->name,
-			gnc_sql_connection_get_column_type_name( conn, info->type, info->size ) );
-    	if( info->size != 0 ) {
-			(void)g_string_append_printf( ddl, "(%d)", info->size );
-    	}
-		if( info->is_primary_key ) {
-			(void)g_string_append( ddl, " PRIMARY KEY" );
-		}
-		if( !info->null_allowed ) {
-			(void)g_string_append( ddl, " NOT NULL" );
-		}
-    }
-	(void)g_string_append( ddl, ")" );
-        
-	return g_string_free( ddl, FALSE );
-}
-
 static /*@ null @*/ gchar*
 create_index_ddl( GncSqlConnection* conn,
 					const gchar* index_name,
@@ -1491,12 +1365,14 @@ create_index_ddl( GncSqlConnection* conn,
 }
 
 static /*@ null @*/ gchar*
-conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
-				const GList* col_info_list )
+conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
+							const gchar* table_name,
+							const GList* col_info_list )
 {
 	GString* ddl;
 	const GList* list_node;
 	guint col_num;
+	gchar* type_name;
 
 	g_return_val_if_fail( conn != NULL, NULL );
 	g_return_val_if_fail( table_name != NULL, NULL );
@@ -1511,8 +1387,90 @@ conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
 		if( col_num != 0 ) {
 			(void)g_string_append( ddl, ", " );
 		}
-		g_string_append_printf( ddl, "%s %s", info->name,
-			gnc_sql_connection_get_column_type_name( conn, info->type, info->size ) );
+		switch( info->type ) {
+			case G_TYPE_INT:
+				type_name = "integer";
+				break;
+
+			case G_TYPE_INT64:
+				type_name = "bigint";
+				break;
+
+			case G_TYPE_DOUBLE:
+				type_name = "real";
+				break;
+
+			case G_TYPE_STRING:
+				type_name = "text";
+				break;
+
+			default:
+				PERR( "Unknown GType: %s\n", g_type_name( info->type ) );
+				type_name = "";
+		}
+		g_string_append_printf( ddl, "%s %s", info->name, type_name );
+    	if( info->size != 0 ) {
+			(void)g_string_append_printf( ddl, "(%d)", info->size );
+    	}
+		if( info->is_primary_key ) {
+			(void)g_string_append( ddl, " PRIMARY KEY" );
+		}
+		if( info->is_autoinc ) {
+		    (void)g_string_append( ddl, " AUTOINCREMENT" );
+		}
+		if( !info->null_allowed ) {
+			(void)g_string_append( ddl, " NOT NULL" );
+		}
+    }
+	(void)g_string_append( ddl, ")" );
+        
+	return g_string_free( ddl, FALSE );
+}
+
+static /*@ null @*/ gchar*
+conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
+				const GList* col_info_list )
+{
+	GString* ddl;
+	const GList* list_node;
+	guint col_num;
+	gchar* type_name;
+
+	g_return_val_if_fail( conn != NULL, NULL );
+	g_return_val_if_fail( table_name != NULL, NULL );
+	g_return_val_if_fail( col_info_list != NULL, NULL );
+    
+	ddl = g_string_new( "" );
+	g_string_printf( ddl, "CREATE TABLE %s (", table_name );
+    for( list_node = col_info_list, col_num = 0; list_node != NULL;
+				list_node = list_node->next, col_num++ ) {
+		GncSqlColumnInfo* info = (GncSqlColumnInfo*)(list_node->data);
+
+		if( col_num != 0 ) {
+			(void)g_string_append( ddl, ", " );
+		}
+		switch( info->type ) {
+			case G_TYPE_INT:
+				type_name = "integer";
+				break;
+
+			case G_TYPE_INT64:
+				type_name = "bigint";
+				break;
+
+			case G_TYPE_DOUBLE:
+				type_name = "double";
+				break;
+
+			case G_TYPE_STRING:
+				type_name = "varchar";
+				break;
+
+			default:
+				PERR( "Unknown GType: %s\n", g_type_name( info->type ) );
+				type_name = "";
+		}
+		g_string_append_printf( ddl, "%s %s", info->name, type_name );
     	if( info->size != 0 ) {
 			g_string_append_printf( ddl, "(%d)", info->size );
     	}
@@ -1521,6 +1479,9 @@ conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
 		}
 		if( info->is_primary_key ) {
 			(void)g_string_append( ddl, " PRIMARY KEY" );
+		}
+		if( info->is_autoinc ) {
+		    (void)g_string_append( ddl, " AUTO_INCREMENT" );
 		}
 		if( !info->null_allowed ) {
 			(void)g_string_append( ddl, " NOT NULL" );
@@ -1538,6 +1499,7 @@ conn_create_table_ddl_pgsql( GncSqlConnection* conn, const gchar* table_name,
 	GString* ddl;
 	const GList* list_node;
 	guint col_num;
+	gchar* type_name;
 	gboolean is_unicode = FALSE;
 
 	g_return_val_if_fail( conn != NULL, NULL );
@@ -1553,8 +1515,32 @@ conn_create_table_ddl_pgsql( GncSqlConnection* conn, const gchar* table_name,
 		if( col_num != 0 ) {
 			(void)g_string_append( ddl, ", " );
 		}
-		g_string_append_printf( ddl, "%s %s", info->name,
-			gnc_sql_connection_get_column_type_name( conn, info->type, info->size ) );
+		switch( info->type ) {
+			case G_TYPE_INT:
+				if( info->is_autoinc ) {
+					type_name = "sequence";
+				} else {
+					type_name = "integer";
+				}
+				break;
+
+			case G_TYPE_INT64:
+				type_name = "int8";
+				break;
+
+			case G_TYPE_DOUBLE:
+				type_name = "double precision";
+				break;
+
+			case G_TYPE_STRING:
+				type_name = "varchar";
+				break;
+
+			default:
+				PERR( "Unknown GType: %s\n", g_type_name( info->type ) );
+				type_name = "";
+		}
+		g_string_append_printf( ddl, "%s %s", info->name, type_name );
     	if( info->size != 0 ) {
 			g_string_append_printf( ddl, "(%d)", info->size );
     	}
@@ -1721,7 +1707,6 @@ create_dbi_connection( /*@ observer @*/ provider_functions_t* provider,
 	dbi_conn->base.beginTransaction = conn_begin_transaction;
 	dbi_conn->base.rollbackTransaction = conn_rollback_transaction;
 	dbi_conn->base.commitTransaction = conn_commit_transaction;
-	dbi_conn->base.getColumnTypeName = conn_get_column_type_name;
 	dbi_conn->base.createTable = conn_create_table;
 	dbi_conn->base.createIndex = conn_create_index;
 	dbi_conn->base.quoteString = conn_quote_string;
