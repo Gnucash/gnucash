@@ -2635,8 +2635,8 @@ gnc_sql_upgrade_table( GncSqlBackend* be, const gchar* table_name,
 static GncSqlColumnTableEntry version_table[] =
 {
 	/*@ -full_init_block @*/
-    { TABLE_COL_NAME,   CT_STRING, MAX_TABLE_NAME_LEN },
-	{ VERSION_COL_NAME, CT_INT },
+    { TABLE_COL_NAME,   CT_STRING, MAX_TABLE_NAME_LEN, COL_PKEY|COL_NNUL },
+	{ VERSION_COL_NAME, CT_INT,    0,                  COL_NNUL },
     { NULL }
 	/*@ +full_init_block @*/
 };
