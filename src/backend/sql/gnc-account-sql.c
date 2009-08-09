@@ -66,7 +66,7 @@ static const GncSqlColumnTableEntry col_table[] =
     { "guid",           CT_GUID,         0,                           COL_NNUL|COL_PKEY, "guid" },
     { "name",           CT_STRING,       ACCOUNT_MAX_NAME_LEN,        COL_NNUL,          "name" },
     { "account_type",   CT_STRING,       ACCOUNT_MAX_TYPE_LEN,        COL_NNUL,          NULL, ACCOUNT_TYPE_ },
-    { "commodity_guid", CT_COMMODITYREF, 0,                           COL_NNUL,          "commodity" },
+    { "commodity_guid", CT_COMMODITYREF, 0,                           0,          "commodity" },
 	{ "commodity_scu",  CT_INT,          0,                           COL_NNUL,          "commodity-scu" },
 	{ "non_std_scu",    CT_BOOLEAN,      0,                           COL_NNUL,          "non-std-scu" },
     { "parent_guid",    CT_GUID,         0,                           0,                 NULL, NULL,
@@ -301,12 +301,13 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
 	gboolean is_infant;
 	gboolean is_ok = FALSE;
 	gnc_commodity* commodity;
+	gint op;
 
 	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( inst != NULL, FALSE );
 	g_return_val_if_fail( GNC_IS_ACCOUNT(inst), FALSE );
 
-	ENTER( "" );
+	ENTER( "inst=%p", inst );
 
 	is_infant = qof_instance_get_infant( inst );
 
@@ -315,39 +316,36 @@ gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
 	// be opened.  The account info is not complete yet, but the name has been
 	// set, triggering this commit
     commodity = xaccAccountGetCommodity( pAcc );
-    if( commodity != NULL ) {
-		gint op;
 
-		is_ok = TRUE;
-		if( qof_instance_get_destroying( inst ) ) {
-			op = OP_DB_DELETE;
-		} else if( be->is_pristine_db || is_infant ) {
-			op = OP_DB_INSERT;
-		} else {
-			op = OP_DB_UPDATE;
+	is_ok = TRUE;
+	if( qof_instance_get_destroying( inst ) ) {
+		op = OP_DB_DELETE;
+	} else if( be->is_pristine_db || is_infant ) {
+		op = OP_DB_INSERT;
+	} else {
+		op = OP_DB_UPDATE;
+	}
+
+    // If not deleting the account, ensure the commodity is in the db
+	if( op != OP_DB_DELETE && commodity != NULL ) {
+       	is_ok = gnc_sql_save_commodity( be, commodity );
+	}
+
+	if( is_ok ) {
+       	is_ok = gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_ACCOUNT, pAcc, col_table );
+	}
+
+	if( is_ok ) {
+       	// Now, commit or delete any slots
+       	guid = qof_instance_get_guid( inst );
+       	if( !qof_instance_get_destroying(inst) ) {
+           	is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+	    } else {
+           	is_ok = gnc_sql_slots_delete( be, guid );
 		}
+	}
 
-        // If not deleting the account, ensure the commodity is in the db
-		if( op != OP_DB_DELETE ) {
-        	is_ok = gnc_sql_save_commodity( be, commodity );
-		}
-
-		if( is_ok ) {
-        	is_ok = gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_ACCOUNT, pAcc, col_table );
-		}
-
-		if( is_ok ) {
-        	// Now, commit or delete any slots
-        	guid = qof_instance_get_guid( inst );
-        	if( !qof_instance_get_destroying(inst) ) {
-            	is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-	        } else {
-            	is_ok = gnc_sql_slots_delete( be, guid );
-			}
-		}
-    }
-
-	LEAVE( "" );
+	LEAVE( "is_ok=%d", is_ok );
 
 	return is_ok;
 }
