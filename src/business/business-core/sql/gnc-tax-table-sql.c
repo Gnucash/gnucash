@@ -78,10 +78,11 @@ static GncSqlColumnTableEntry tt_col_table[] =
 };
 
 #define TTENTRIES_TABLE_NAME "taxtable_entries"
-#define TTENTRIES_TABLE_VERSION 2
+#define TTENTRIES_TABLE_VERSION 3
 
 static GncSqlColumnTableEntry ttentries_col_table[] =
 {
+	{ "id",       CT_INT,         0, COL_PKEY|COL_NNUL|COL_AUTOINC },
 	{ "taxtable", CT_TAXTABLEREF, 0, COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncTaxTableEntryGetTable, set_obj_guid },
 	{ "account",  CT_ACCOUNTREF,  0, COL_NNUL, NULL, NULL,

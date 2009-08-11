@@ -945,7 +945,7 @@ gnc_sql_get_integer_value( const GValue* value )
 /*@ null @*/ static gpointer
 get_autoinc_id()
 {
-    // Just need a 0 to force a new recurrence id
+    // Just need a 0 to force a new autoinc value
     return (gpointer)0;
 }
 
@@ -998,7 +998,7 @@ gnc_sql_add_subtable_colnames_to_list( const GncSqlColumnTableEntry* table_row, 
 
 static GncSqlColumnInfo*
 create_column_info( const GncSqlColumnTableEntry* table_row, GType type,
-							gint size, gboolean is_unicode )
+							gint size, gboolean is_unicode, gboolean is_autoinc )
 {
 	GncSqlColumnInfo* info;
 
@@ -1010,6 +1010,7 @@ create_column_info( const GncSqlColumnTableEntry* table_row, GType type,
 	info->is_primary_key = ((table_row->flags & COL_PKEY) != 0) ? TRUE : FALSE;
 	info->null_allowed = ((table_row->flags & COL_NNUL) != 0) ? FALSE : TRUE;
 	info->is_unicode = is_unicode;
+	info->is_autoinc = is_autoinc;
 
 	return info;
 }
@@ -1049,7 +1050,7 @@ add_string_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEnt
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_STRING, table_row->size, TRUE );
+	info = create_column_info( table_row, G_TYPE_STRING, table_row->size, TRUE, FALSE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1135,7 +1136,7 @@ add_int_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntry*
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_INT, 0, FALSE );
+	info = create_column_info( table_row, G_TYPE_INT, 0, FALSE, ((table_row->flags & COL_AUTOINC) != 0) );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1219,7 +1220,7 @@ add_boolean_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEn
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_INT, 0, FALSE );
+	info = create_column_info( table_row, G_TYPE_INT, 0, FALSE, FALSE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1296,7 +1297,7 @@ add_int64_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntr
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_INT64, 0, FALSE );
+	info = create_column_info( table_row, G_TYPE_INT64, 0, FALSE, FALSE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1375,7 +1376,7 @@ add_double_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEnt
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_DOUBLE, 0, FALSE );
+	info = create_column_info( table_row, G_TYPE_DOUBLE, 0, FALSE, FALSE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1460,7 +1461,7 @@ add_guid_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntry
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_STRING, GUID_ENCODING_LENGTH, FALSE );
+	info = create_column_info( table_row, G_TYPE_STRING, GUID_ENCODING_LENGTH, FALSE, FALSE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1626,7 +1627,7 @@ add_timespec_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableE
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_STRING, TIMESPEC_COL_SIZE, FALSE );
+	info = create_column_info( table_row, G_TYPE_STRING, TIMESPEC_COL_SIZE, FALSE, FALSE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1724,7 +1725,7 @@ add_date_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntry
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_STRING, DATE_COL_SIZE, FALSE );
+	info = create_column_info( table_row, G_TYPE_STRING, DATE_COL_SIZE, FALSE, FALSE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -2345,6 +2346,9 @@ build_insert_statement( GncSqlBackend* be,
 	GSList* values;
 	GSList* node;
 	gchar* sqlbuf;
+	GList* colnames = NULL;
+	GList* colname;
+	const GncSqlColumnTableEntry* table_row;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( table_name != NULL, NULL );
@@ -2352,9 +2356,32 @@ build_insert_statement( GncSqlBackend* be,
 	g_return_val_if_fail( pObject != NULL, NULL );
 	g_return_val_if_fail( table != NULL, NULL );
 
-	sqlbuf = g_strdup_printf( "INSERT INTO %s VALUES(", table_name );
+	sqlbuf = g_strdup_printf( "INSERT INTO %s(", table_name );
 	sql = g_string_new( sqlbuf );
 	g_free( sqlbuf );
+
+    // Get all col names and all values
+	for( table_row = table; table_row->col_name != NULL; table_row++ ) {
+		if(( table_row->flags & COL_AUTOINC ) == 0 ) {
+    		GncSqlColumnTypeHandler* pHandler;
+
+			// Add col names to the list
+			pHandler = get_handler( table_row );
+			g_assert( pHandler != NULL );
+			pHandler->add_colname_to_list_fn( table_row, &colnames );
+		}
+	}
+	g_assert( colnames != NULL );
+
+	for( colname = colnames; colname != NULL; colname = colname->next ) {
+	    if( colname != colnames ) {
+		    g_string_append( sql, "," );
+		}
+		g_string_append( sql, (gchar*)colname->data );
+	}
+	g_list_free( colnames );
+
+	g_string_append( sql, ") VALUES(" );
 	values = create_gslist_from_values( be, obj_name, pObject, table );
 	for( node = values; node != NULL; node = node->next ) {
 		GValue* value = (GValue*)node->data;
@@ -2390,7 +2417,7 @@ build_update_statement( GncSqlBackend* be,
 	GSList* value;
 	GList* colname;
 	gboolean firstCol;
-	const GncSqlColumnTableEntry* table_row = table;
+	const GncSqlColumnTableEntry* table_row;
 	gchar* sqlbuf;
 
 	g_return_val_if_fail( be != NULL, NULL );
@@ -2400,13 +2427,15 @@ build_update_statement( GncSqlBackend* be,
 	g_return_val_if_fail( table != NULL, NULL );
 
     // Get all col names and all values
-	for( ; table_row->col_name != NULL; table_row++ ) {
-    	GncSqlColumnTypeHandler* pHandler;
+	for( table_row = table; table_row->col_name != NULL; table_row++ ) {
+		if(( table_row->flags & COL_AUTOINC ) == 0 ) {
+    		GncSqlColumnTypeHandler* pHandler;
 
-		// Add col names to the list
-		pHandler = get_handler( table_row );
-		g_assert( pHandler != NULL );
-		pHandler->add_colname_to_list_fn( table_row, &colnames );
+			// Add col names to the list
+			pHandler = get_handler( table_row );
+			g_assert( pHandler != NULL );
+			pHandler->add_colname_to_list_fn( table_row, &colnames );
+		}
 	}
 	g_assert( colnames != NULL );
 	values = create_gslist_from_values( be, obj_name, pObject, table );

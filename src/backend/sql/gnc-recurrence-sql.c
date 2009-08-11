@@ -67,6 +67,7 @@ static void set_recurrence_period_start( gpointer pObject, /*@ null @*/ gpointer
 static const GncSqlColumnTableEntry col_table[] =
 {
 	/*@ -full_init_block @*/
+	{ "id",                      CT_INT,    0,                                     COL_PKEY|COL_NNUL|COL_AUTOINC },
     { "obj_guid",                CT_GUID,   0,                                     COL_NNUL, NULL, NULL,
             (QofAccessFunc)get_obj_guid, (QofSetterFunc)set_obj_guid },
     { "recurrence_mult",         CT_INT,    0,                                     COL_NNUL, NULL, NULL,

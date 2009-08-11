@@ -81,6 +81,7 @@ static void set_numeric_val( gpointer pObject, gnc_numeric value );
 static const GncSqlColumnTableEntry col_table[] =
 {
 	/*@ -full_init_block @*/
+	{ "id",           CT_INT,      0,                     COL_PKEY|COL_NNUL|COL_AUTOINC },
     { "obj_guid",     CT_GUID,     0,                     COL_NNUL, NULL, NULL,
 			(QofAccessFunc)get_obj_guid,     (QofSetterFunc)set_obj_guid },
     { "name",         CT_STRING,   SLOT_MAX_PATHNAME_LEN, COL_NNUL, NULL, NULL,
