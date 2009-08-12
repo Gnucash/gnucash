@@ -746,6 +746,16 @@ gnc_account_class_init (AccountClass *klass)
 			       "account tree.",
                                FALSE,
                                G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_PLACEHOLDER,
+         g_param_spec_boolean ("placeholder",
+                               "Placeholder",
+                               "Whether the account is a placeholder account which does not "
+							   "allow transactions to be created, edited or deleted.",
+                               FALSE,
+                               G_PARAM_READWRITE));
 }
 
 static void
