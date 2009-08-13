@@ -64,6 +64,7 @@ kvp_value* dom_tree_to_frame_kvp_value(xmlNodePtr node);
 gboolean dom_tree_to_integer(xmlNodePtr node, gint64 *daint);
 gboolean dom_tree_to_guint16(xmlNodePtr node, guint16 *i);
 gboolean dom_tree_to_guint(xmlNodePtr node, guint *i);
+gboolean dom_tree_to_boolean(xmlNodePtr node, gboolean* b);
 
 /* higher level structures */
 Account* dom_tree_to_account(xmlNodePtr node, QofBook *book);

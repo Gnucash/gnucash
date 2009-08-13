@@ -34,6 +34,12 @@
 static QofLogModule log_module = GNC_MOD_IO;
 
 xmlNodePtr
+boolean_to_dom_tree(const char* tag, gboolean val)
+{
+    return text_to_dom_tree(tag, val ? "TRUE" : "FALSE");
+}
+
+xmlNodePtr
 text_to_dom_tree(const char *tag, const char *str)
 {
     xmlNodePtr result;

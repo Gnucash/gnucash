@@ -68,6 +68,8 @@ const gchar *account_version_string = "2.0.0";
 #define act_currency_scu_string "act:currency-scu"
 #define act_security_string "act:security"
 #define act_security_scu_string "act:security-scu"
+#define act_hidden_string "act:hidden"
+#define act_placeholder_string "act:placeholder"
 
 xmlNodePtr
 gnc_account_dom_tree_create(Account *act,
@@ -94,6 +96,13 @@ gnc_account_dom_tree_create(Account *act,
     xmlAddChild(ret, text_to_dom_tree(
                     act_type_string,
                     xaccAccountTypeEnumAsString(xaccAccountGetType(act))));
+
+	xmlAddChild(ret, boolean_to_dom_tree(
+							act_hidden_string,
+							xaccAccountGetHidden(act)));
+	xmlAddChild(ret, boolean_to_dom_tree(
+							act_placeholder_string,
+							xaccAccountGetPlaceholder(act)));
 
     acct_commodity = xaccAccountGetCommodity(act);
     if (acct_commodity != NULL)
@@ -239,6 +248,30 @@ account_commodity_scu_handler (xmlNodePtr node, gpointer act_pdata)
 
     dom_tree_to_integer(node, &val);
     xaccAccountSetCommoditySCU(pdata->account, val);
+
+    return TRUE;
+}
+
+static gboolean
+account_hidden_handler (xmlNodePtr node, gpointer act_pdata)
+{
+    struct account_pdata *pdata = act_pdata;
+	gboolean val;
+
+	dom_tree_to_boolean(node, &val);
+    xaccAccountSetHidden(pdata->account, val);
+
+    return TRUE;
+}
+
+static gboolean
+account_placeholder_handler (xmlNodePtr node, gpointer act_pdata)
+{
+    struct account_pdata *pdata = act_pdata;
+	gboolean val;
+
+	dom_tree_to_boolean(node, &val);
+    xaccAccountSetPlaceholder(pdata->account, val);
 
     return TRUE;
 }
@@ -400,6 +433,8 @@ static struct dom_tree_handler account_handlers_v2[] = {
     { act_slots_string, account_slots_handler, 0, 0 },
     { act_parent_string, account_parent_handler, 0, 0 },
     { act_lots_string, account_lots_handler, 0, 0 },
+	{ act_hidden_string, account_hidden_handler, 0, 0 },
+	{ act_placeholder_string, account_placeholder_handler, 0, 0 },
     
     /* These should not appear in  newer xml files; only in old
      * (circa gnucash-1.6) xml files. We maintain them for backward 

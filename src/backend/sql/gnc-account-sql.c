@@ -73,6 +73,8 @@ static const GncSqlColumnTableEntry col_table[] =
 		(QofAccessFunc)get_parent, set_parent },
     { "code",           CT_STRING,       ACCOUNT_MAX_CODE_LEN,        0,                 "code" },
     { "description",    CT_STRING,       ACCOUNT_MAX_DESCRIPTION_LEN, 0,                 "description" },
+	{ "hidden",         CT_BOOLEAN,      0,                           0,                 "hidden" },
+	{ "placeholder",    CT_BOOLEAN,      0,                           0,                 "placeholder" },
     { NULL }
 	/*@ +full_init_block @*/
 };

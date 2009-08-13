@@ -138,6 +138,24 @@ dom_tree_to_guint(xmlNodePtr node, guint *i)
     return ret;
 }
 
+gboolean
+dom_tree_to_boolean(xmlNodePtr node, gboolean* b)
+{
+    gchar* text;
+
+	text = dom_tree_to_text(node);
+	if (strcasecmp(text, "true") == 0) {
+	    *b = TRUE;
+		return TRUE;
+	} else if(strcasecmp(text, "false") == 0) {
+	    *b = FALSE;
+		return TRUE;
+	} else {
+	    *b = FALSE;
+		return FALSE;
+	}
+}
+
 kvp_value*
 dom_tree_to_double_kvp_value(xmlNodePtr node)
 {
