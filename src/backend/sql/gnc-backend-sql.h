@@ -65,15 +65,16 @@ typedef struct GncSqlConnection GncSqlConnection;
  */
 struct GncSqlBackend
 {
-  QofBackend be;			/**< QOF backend */
-  GncSqlConnection* conn;	/**< SQL connection */
+  QofBackend be;				/**< QOF backend */
+  GncSqlConnection* conn;		/**< SQL connection */
   /*@ dependent @*/ QofBook *primary_book;	/**< The primary, main open book */
-  gboolean	loading;		/**< We are performing an initial load */
-  gboolean  in_query;		/**< We are processing a query */
-  gboolean  is_pristine_db;	/**< Are we saving to a new pristine db? */
-  gint obj_total;			/**< Total # of objects (for percentage calculation) */
-  gint operations_done;		/**< Number of operations (save/load) done */
-  GHashTable* versions;		/**< Version number for each table */
+  gboolean loading;				/**< We are performing an initial load */
+  gboolean in_query;			/**< We are processing a query */
+  gboolean is_pristine_db;		/**< Are we saving to a new pristine db? */
+  gint obj_total;				/**< Total # of objects (for percentage calculation) */
+  gint operations_done;			/**< Number of operations (save/load) done */
+  GHashTable* versions;			/**< Version number for each table */
+  const gchar* timespec_format;	/**< Format string for SQL for timespec values */
 };
 typedef struct GncSqlBackend GncSqlBackend;
 
@@ -271,6 +272,18 @@ typedef struct
 #define GNC_SQL_BACKEND_VERSION	1
 
 /**
+ * Basic column type
+ */
+typedef enum {
+    BCT_STRING,
+	BCT_INT,
+	BCT_INT64,
+	BCT_DATE,
+	BCT_DOUBLE,
+	BCT_DATETIME
+} GncSqlBasicColumnType;
+
+/**
  * @struct GncSqlColumnInfo
  *
  * The GncSqlColumnInfo structure contains information required to create
@@ -278,12 +291,12 @@ typedef struct
  */
 typedef struct {
 	/*@ only @*/ const gchar* name;			/**< Column name */
-	GType type;					/**< Column basic type */
-	gint size;					/**< Column size (string types) */
-	gboolean is_unicode;		/**< Column is unicode (string types) */
-	gboolean is_autoinc;		/**< Column is autoinc (int type) */
-	gboolean is_primary_key;	/**< Column is the primary key */
-	gboolean null_allowed;		/**< Column allows NULL values */
+	GncSqlBasicColumnType type;				/**< Column basic type */
+	gint size;								/**< Column size (string types) */
+	gboolean is_unicode;					/**< Column is unicode (string types) */
+	gboolean is_autoinc;					/**< Column is autoinc (int type) */
+	gboolean is_primary_key;				/**< Column is the primary key */
+	gboolean null_allowed;					/**< Column allows NULL values */
 } GncSqlColumnInfo;
 
 // Type for conversion of db row to object.
@@ -679,10 +692,11 @@ gint64 gnc_sql_get_integer_value( const GValue* value );
 /**
  * Converts a Timespec value to a string value for the database.
  *
+ * @param be SQL backend
  * @param ts Timespec to be converted
  * @return String representation of the Timespec
  */
-gchar* gnc_sql_convert_timespec_to_string( Timespec ts );
+gchar* gnc_sql_convert_timespec_to_string( const GncSqlBackend* be, Timespec ts );
 
 /**
  * Upgrades a table to a new structure.  The upgrade is done by creating a new table with

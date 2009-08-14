@@ -795,7 +795,7 @@ convert_query_comparison_to_sql( QofQueryPredData* pPredData, gboolean isInverte
 }
 
 static void
-convert_query_term_to_sql( const gchar* fieldName, QofQueryTerm* pTerm, GString* sql )
+convert_query_term_to_sql( const GncSqlBackend* be, const gchar* fieldName, QofQueryTerm* pTerm, GString* sql )
 {
     GSList* pParamPath;
     QofQueryPredData* pPredData;
@@ -912,7 +912,7 @@ convert_query_term_to_sql( const gchar* fieldName, QofQueryTerm* pTerm, GString*
         	query_date_t date_data = (query_date_t)pPredData;
 			gchar* datebuf;
 
-			datebuf = gnc_sql_convert_timespec_to_string( date_data->date );
+			datebuf = gnc_sql_convert_timespec_to_string( be, date_data->date );
         	g_string_append_printf( sql, "'%s'", datebuf );
 
     	} else if( strcmp( pPredData->type_name, QOF_TYPE_INT32 ) == 0 ) {
@@ -998,13 +998,13 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
 
 				if( strcmp( paramPath->data, SPLIT_ACCOUNT ) == 0
 						&& strcmp( paramPath->next->data, QOF_PARAM_GUID ) == 0 ) {
-                	convert_query_term_to_sql( "s.account_guid", term, sql );
+                	convert_query_term_to_sql( be, "s.account_guid", term, sql );
 #if SIMPLE_QUERY_COMPILATION
 					goto done_compiling_query;
 #endif
 
 				} else if( strcmp( paramPath->data, SPLIT_RECONCILE ) == 0 ) {
-                	convert_query_term_to_sql( "s.reconcile_state", term, sql );
+                	convert_query_term_to_sql( be, "s.reconcile_state", term, sql );
 
 				} else if( strcmp( paramPath->data, SPLIT_TRANS ) == 0 ) {
 #if 0
@@ -1014,15 +1014,15 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
 					}
 #endif
 					if( strcmp( paramPath->next->data, TRANS_DATE_POSTED ) == 0 ) {
-				        convert_query_term_to_sql( "t.post_date", term, sql );
+				        convert_query_term_to_sql( be, "t.post_date", term, sql );
 					} else if( strcmp( paramPath->next->data, TRANS_DESCRIPTION ) == 0 ) {
-					    convert_query_term_to_sql( "t.description", term, sql );
+					    convert_query_term_to_sql( be, "t.description", term, sql );
 					} else {
 						unknownPath = TRUE;
 					}
 
 				} else if( strcmp( paramPath->data, SPLIT_VALUE ) == 0 ) {
-                	convert_query_term_to_sql( "s.value_num/s.value_denom", term, sql );
+                	convert_query_term_to_sql( be, "s.value_num/s.value_denom", term, sql );
 
 				} else {
 					unknownPath = TRUE;

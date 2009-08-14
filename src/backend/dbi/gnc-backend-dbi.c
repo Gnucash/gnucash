@@ -82,6 +82,7 @@ static provider_functions_t provider_sqlite3 =
 	conn_create_table_ddl_sqlite3,
 	conn_get_table_list
 };
+#define SQLITE3_TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 
 static /*@ null @*/ gchar* conn_create_table_ddl_mysql( GncSqlConnection* conn,
 										const gchar* table_name,
@@ -91,6 +92,7 @@ static provider_functions_t provider_mysql =
 	conn_create_table_ddl_mysql,
 	conn_get_table_list
 };
+#define MYSQL_TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 
 static /*@ null @*/ gchar* conn_create_table_ddl_pgsql( GncSqlConnection* conn,
 										const gchar* table_name,
@@ -101,6 +103,7 @@ static provider_functions_t provider_pgsql =
 	conn_create_table_ddl_pgsql,
 	conn_get_table_list_pgsql
 };
+#define PGSQL_TIMESPEC_STR_FORMAT "%04d%02d%02d %02d%02d%02d"
 
 static /*@ null @*/ gchar* create_index_ddl( GncSqlConnection* conn,
 											const gchar* index_name,
@@ -247,6 +250,7 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
 		gnc_sql_connection_dispose( be->sql_be.conn );
 	}
 	be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_SQLITE, qbe, be->conn );
+	be->sql_be.timespec_format = SQLITE3_TIMESPEC_STR_FORMAT;
 
     LEAVE (" ");
 }
@@ -430,6 +434,7 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
 		}
 		be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_MYSQL, qbe, be->conn );
 	}
+	be->sql_be.timespec_format = MYSQL_TIMESPEC_STR_FORMAT;
 exit:
 	if( dsn != NULL ) {
 		g_free( dsn );
@@ -566,6 +571,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 		}
 		be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_PGSQL, qbe, be->conn );
 	}
+	be->sql_be.timespec_format = PGSQL_TIMESPEC_STR_FORMAT;
 exit:
 	if( dsn != NULL ) {
 		g_free( dsn );
@@ -1387,18 +1393,17 @@ conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
 		if( col_num != 0 ) {
 			(void)g_string_append( ddl, ", " );
 		}
-		if( info->type == G_TYPE_INT ) {
+		if( info->type == BCT_INT ) {
 			type_name = "integer";
-		} else if( info->type == G_TYPE_INT64 ) {
+		} else if( info->type == BCT_INT64 ) {
 			type_name = "bigint";
-		} else if( info->type == G_TYPE_DOUBLE ) {
+		} else if( info->type == BCT_DOUBLE ) {
 			type_name = "real";
-		} else if( info->type == G_TYPE_STRING ) {
-			type_name = "text";
-		} else if( info->type == G_TYPE_DATE ) {
+		} else if( info->type == BCT_STRING || info->type == BCT_DATE
+				|| info->type == BCT_DATETIME ) {
 			type_name = "text";
 		} else {
-			PERR( "Unknown GType: %s\n", g_type_name( info->type ) );
+			PERR( "Unknown column type: %d\n", info->type );
 			type_name = "";
 		}
 		g_string_append_printf( ddl, "%s %s", info->name, type_name );
@@ -1442,19 +1447,22 @@ conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
 		if( col_num != 0 ) {
 			(void)g_string_append( ddl, ", " );
 		}
-		if( info->type == G_TYPE_INT ) {
+		if( info->type == BCT_INT ) {
 			type_name = "integer";
-		} else if( info->type == G_TYPE_INT64 ) {
+		} else if( info->type == BCT_INT64 ) {
 			type_name = "bigint";
-		} else if( info->type == G_TYPE_DOUBLE ) {
+		} else if( info->type == BCT_DOUBLE ) {
 			type_name = "double";
-		} else if( info->type == G_TYPE_STRING ) {
+		} else if( info->type == BCT_STRING ) {
 			type_name = "varchar";
-		} else if( info->type == G_TYPE_DATE ) {
+		} else if( info->type == BCT_DATE ) {
 			info->size = 0;
 			type_name = "date";
+		} else if( info->type == BCT_DATETIME ) {
+			info->size = 0;
+			type_name = "timestamp";
 		} else {
-			PERR( "Unknown GType: %s\n", g_type_name( info->type ) );
+			PERR( "Unknown column type: %d\n", info->type );
 			type_name = "";
 		}
 		g_string_append_printf( ddl, "%s %s", info->name, type_name );
@@ -1502,23 +1510,26 @@ conn_create_table_ddl_pgsql( GncSqlConnection* conn, const gchar* table_name,
 		if( col_num != 0 ) {
 			(void)g_string_append( ddl, ", " );
 		}
-		if( info->type == G_TYPE_INT ) {
+		if( info->type == BCT_INT ) {
 			if( info->is_autoinc ) {
 				type_name = "serial";
 			} else {
 				type_name = "integer";
 			}
-		} else if( info->type == G_TYPE_INT64 ) {
+		} else if( info->type == BCT_INT64 ) {
 			type_name = "int8";
-		} else if( info->type == G_TYPE_DOUBLE ) {
+		} else if( info->type == BCT_DOUBLE ) {
 			type_name = "double precision";
-		} else if( info->type == G_TYPE_STRING ) {
+		} else if( info->type == BCT_STRING ) {
 			type_name = "varchar";
-		} else if( info->type == G_TYPE_DATE ) {
+		} else if( info->type == BCT_DATE ) {
 			info->size = 0;
 			type_name = "date";
+		} else if( info->type == BCT_DATETIME ) {
+			info->size = 0;
+			type_name = "timestamp without time zone";
 		} else {
-			PERR( "Unknown GType: %s\n", g_type_name( info->type ) );
+			PERR( "Unknown column type: %d\n", info->type );
 			type_name = "";
 		}
 		g_string_append_printf( ddl, "%s %s", info->name, type_name );

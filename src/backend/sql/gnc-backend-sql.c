@@ -997,7 +997,7 @@ gnc_sql_add_subtable_colnames_to_list( const GncSqlColumnTableEntry* table_row, 
 }
 
 static GncSqlColumnInfo*
-create_column_info( const GncSqlColumnTableEntry* table_row, GType type,
+create_column_info( const GncSqlColumnTableEntry* table_row, GncSqlBasicColumnType type,
 							gint size, gboolean is_unicode )
 {
 	GncSqlColumnInfo* info;
@@ -1050,7 +1050,7 @@ add_string_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEnt
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_STRING, table_row->size, TRUE );
+	info = create_column_info( table_row, BCT_STRING, table_row->size, TRUE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1136,7 +1136,7 @@ add_int_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntry*
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_INT, 0, FALSE );
+	info = create_column_info( table_row, BCT_INT, 0, FALSE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1220,7 +1220,7 @@ add_boolean_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEn
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_INT, 0, FALSE );
+	info = create_column_info( table_row, BCT_INT, 0, FALSE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1297,7 +1297,7 @@ add_int64_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntr
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_INT64, 0, FALSE );
+	info = create_column_info( table_row, BCT_INT64, 0, FALSE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1376,7 +1376,7 @@ add_double_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEnt
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_DOUBLE, 0, FALSE );
+	info = create_column_info( table_row, BCT_DOUBLE, 0, FALSE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1461,7 +1461,7 @@ add_guid_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntry
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_STRING, GUID_ENCODING_LENGTH, FALSE );
+	info = create_column_info( table_row, BCT_STRING, GUID_ENCODING_LENGTH, FALSE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1559,7 +1559,7 @@ typedef void (*TimespecSetterFunc)( const gpointer, Timespec );
 #define TIMESPEC_COL_SIZE (4+2+2+2+2+2)
 
 gchar*
-gnc_sql_convert_timespec_to_string( Timespec ts )
+gnc_sql_convert_timespec_to_string( const GncSqlBackend* be, Timespec ts )
 {
 	time_t time;
 	struct tm* tm;
@@ -1572,7 +1572,7 @@ gnc_sql_convert_timespec_to_string( Timespec ts )
 	if( tm->tm_year < 60 ) year = tm->tm_year + 2000;
 	else year = tm->tm_year + 1900;
 
-	datebuf = g_strdup_printf( TIMESPEC_STR_FORMAT,
+	datebuf = g_strdup_printf( be->timespec_format,
 					year, tm->tm_mon+1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec );
     return datebuf;
 }
@@ -1627,7 +1627,7 @@ add_timespec_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableE
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_STRING, TIMESPEC_COL_SIZE, FALSE );
+	info = create_column_info( table_row, BCT_DATETIME, TIMESPEC_COL_SIZE, FALSE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1651,7 +1651,7 @@ add_gvalue_timespec_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	g_return_if_fail( ts_getter != NULL );
     ts = (*ts_getter)( pObject );
 
-    datebuf = gnc_sql_convert_timespec_to_string( ts );
+    datebuf = gnc_sql_convert_timespec_to_string( be, ts );
     value = g_new0( GValue, 1 );
 	g_assert( value != NULL );
     (void)g_value_init( value, G_TYPE_STRING );
@@ -1725,7 +1725,7 @@ add_date_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntry
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-	info = create_column_info( table_row, G_TYPE_DATE, DATE_COL_SIZE, FALSE );
+	info = create_column_info( table_row, BCT_DATE, DATE_COL_SIZE, FALSE );
 
 	*pList = g_list_append( *pList, info );
 }
@@ -1836,7 +1836,7 @@ add_numeric_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEn
 		info = g_new0( GncSqlColumnInfo, 1 );
 		g_assert( info != NULL );
 		info->name = buf;
-		info->type = G_TYPE_INT64;
+		info->type = BCT_INT64;
 		info->is_primary_key = ((table_row->flags & COL_PKEY) != 0) ? TRUE : FALSE;
 		info->null_allowed = ((table_row->flags & COL_NNUL) != 0) ? FALSE : TRUE;
 		info->is_unicode = FALSE;
