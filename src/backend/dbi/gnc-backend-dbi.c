@@ -1387,26 +1387,19 @@ conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
 		if( col_num != 0 ) {
 			(void)g_string_append( ddl, ", " );
 		}
-		switch( info->type ) {
-			case G_TYPE_INT:
-				type_name = "integer";
-				break;
-
-			case G_TYPE_INT64:
-				type_name = "bigint";
-				break;
-
-			case G_TYPE_DOUBLE:
-				type_name = "real";
-				break;
-
-			case G_TYPE_STRING:
-				type_name = "text";
-				break;
-
-			default:
-				PERR( "Unknown GType: %s\n", g_type_name( info->type ) );
-				type_name = "";
+		if( info->type == G_TYPE_INT ) {
+			type_name = "integer";
+		} else if( info->type == G_TYPE_INT64 ) {
+			type_name = "bigint";
+		} else if( info->type == G_TYPE_DOUBLE ) {
+			type_name = "real";
+		} else if( info->type == G_TYPE_STRING ) {
+			type_name = "text";
+		} else if( info->type == G_TYPE_DATE ) {
+			type_name = "text";
+		} else {
+			PERR( "Unknown GType: %s\n", g_type_name( info->type ) );
+			type_name = "";
 		}
 		g_string_append_printf( ddl, "%s %s", info->name, type_name );
     	if( info->size != 0 ) {
@@ -1449,26 +1442,20 @@ conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
 		if( col_num != 0 ) {
 			(void)g_string_append( ddl, ", " );
 		}
-		switch( info->type ) {
-			case G_TYPE_INT:
-				type_name = "integer";
-				break;
-
-			case G_TYPE_INT64:
-				type_name = "bigint";
-				break;
-
-			case G_TYPE_DOUBLE:
-				type_name = "double";
-				break;
-
-			case G_TYPE_STRING:
-				type_name = "varchar";
-				break;
-
-			default:
-				PERR( "Unknown GType: %s\n", g_type_name( info->type ) );
-				type_name = "";
+		if( info->type == G_TYPE_INT ) {
+			type_name = "integer";
+		} else if( info->type == G_TYPE_INT64 ) {
+			type_name = "bigint";
+		} else if( info->type == G_TYPE_DOUBLE ) {
+			type_name = "double";
+		} else if( info->type == G_TYPE_STRING ) {
+			type_name = "varchar";
+		} else if( info->type == G_TYPE_DATE ) {
+			info->size = 0;
+			type_name = "date";
+		} else {
+			PERR( "Unknown GType: %s\n", g_type_name( info->type ) );
+			type_name = "";
 		}
 		g_string_append_printf( ddl, "%s %s", info->name, type_name );
     	if( info->size != 0 ) {
@@ -1515,30 +1502,24 @@ conn_create_table_ddl_pgsql( GncSqlConnection* conn, const gchar* table_name,
 		if( col_num != 0 ) {
 			(void)g_string_append( ddl, ", " );
 		}
-		switch( info->type ) {
-			case G_TYPE_INT:
-				if( info->is_autoinc ) {
-					type_name = "sequence";
-				} else {
-					type_name = "integer";
-				}
-				break;
-
-			case G_TYPE_INT64:
-				type_name = "int8";
-				break;
-
-			case G_TYPE_DOUBLE:
-				type_name = "double precision";
-				break;
-
-			case G_TYPE_STRING:
-				type_name = "varchar";
-				break;
-
-			default:
-				PERR( "Unknown GType: %s\n", g_type_name( info->type ) );
-				type_name = "";
+		if( info->type == G_TYPE_INT ) {
+			if( info->is_autoinc ) {
+				type_name = "serial";
+			} else {
+				type_name = "integer";
+			}
+		} else if( info->type == G_TYPE_INT64 ) {
+			type_name = "int8";
+		} else if( info->type == G_TYPE_DOUBLE ) {
+			type_name = "double precision";
+		} else if( info->type == G_TYPE_STRING ) {
+			type_name = "varchar";
+		} else if( info->type == G_TYPE_DATE ) {
+			info->size = 0;
+			type_name = "date";
+		} else {
+			PERR( "Unknown GType: %s\n", g_type_name( info->type ) );
+			type_name = "";
 		}
 		g_string_append_printf( ddl, "%s %s", info->name, type_name );
     	if( info->size != 0 ) {

@@ -231,7 +231,7 @@ load_all_accounts( GncSqlBackend* be )
 		   shrink to size 0. */
 		if( l_accounts_needing_parents != NULL ) {
 			gboolean progress_made = TRUE;
-	
+            Account* root;	
 			Account* pParent;
 			GList* elem;
 				
@@ -248,15 +248,13 @@ load_all_accounts( GncSqlBackend* be )
 				}
 			}
 	
-			/* Any accounts left over must be parented by the root account */
+			/* Any non-ROOT accounts left over must be parented by the root account */
+	        root = gnc_book_get_root_account( pBook );
 			for( elem = l_accounts_needing_parents; elem != NULL; elem = g_list_next( elem ) ) {
 				account_parent_guid_struct* s = (account_parent_guid_struct*)elem->data;
-	            Account* root;
-	            root = gnc_book_get_root_account( pBook );
-            	if( root == NULL ) {
-                	root = gnc_account_create_root( pBook );
-            	}
-            	gnc_account_append_child( root, s->pAccount ); 
+				if( xaccAccountGetType( s->pAccount ) != ACCT_TYPE_ROOT ) {
+            		gnc_account_append_child( root, s->pAccount ); 
+				}
 			}
 		}
 
