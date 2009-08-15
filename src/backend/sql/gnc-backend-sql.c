@@ -284,9 +284,16 @@ write_account_tree( GncSqlBackend* be, Account* root )
 static gboolean
 write_accounts( GncSqlBackend* be )
 {
+	gboolean is_ok;
+
 	g_return_val_if_fail( be != NULL, FALSE );
 
-    return write_account_tree( be, gnc_book_get_root_account( be->primary_book ) );
+    is_ok = write_account_tree( be, gnc_book_get_root_account( be->primary_book ) );
+	if( is_ok ) {
+        is_ok = write_account_tree( be, gnc_book_get_template_root( be->primary_book ) );
+	}
+
+	return is_ok;
 }
 
 static int
@@ -334,10 +341,7 @@ write_template_transactions( GncSqlBackend* be )
 	data.be = be;
     ra = gnc_book_get_template_root( be->primary_book );
     if( gnc_account_n_descendants( ra ) > 0 ) {
-        data.is_ok = write_account_tree( be, ra );
-		if( data.is_ok ) {
-        	(void)xaccAccountTreeForEachTransaction( ra, write_tx, &data );
-		}
+        (void)xaccAccountTreeForEachTransaction( ra, write_tx, &data );
     }
 
 	return data.is_ok;
