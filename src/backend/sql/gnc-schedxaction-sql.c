@@ -71,6 +71,8 @@ static const GncSqlColumnTableEntry col_table[] =
 	{ "enabled",           CT_BOOLEAN, 0,               COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)xaccSchedXactionGetEnabled, (QofSetterFunc)xaccSchedXactionSetEnabled },
     { "start_date",        CT_GDATE,   0,               COL_NNUL,          NULL, GNC_SX_START_DATE },
+    { "end_date",          CT_GDATE,   0,               0,                 NULL, NULL,
+			(QofAccessFunc)xaccSchedXactionGetEndDate, (QofSetterFunc)xaccSchedXactionSetEndDate },
     { "last_occur",        CT_GDATE,   0,               0,                 NULL, GNC_SX_LAST_DATE },
     { "num_occur",         CT_INT,     0,               COL_NNUL,          NULL, GNC_SX_NUM_OCCUR },
     { "rem_occur",         CT_INT,     0,               COL_NNUL,          NULL, GNC_SX_REM_OCCUR },
