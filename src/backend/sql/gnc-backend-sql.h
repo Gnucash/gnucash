@@ -310,9 +310,10 @@ typedef struct {
 #define CT_DOUBLE "ct_double"
 #define CT_BOOLEAN "ct_boolean"
 #define CT_ACCOUNTREF "ct_accountref"
+#define CT_BUDGETREF "ct_budgetref"
 #define CT_COMMODITYREF "ct_commodityref"
-#define CT_TXREF "ct_txref"
 #define CT_LOTREF "ct_lotref"
+#define CT_TXREF "ct_txref"
 
 /**
  * @struct GncSqlColumnTableEntry
