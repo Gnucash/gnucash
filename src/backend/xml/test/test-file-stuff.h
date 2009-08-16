@@ -33,6 +33,7 @@ gboolean equals_node_val_vs_commodity(xmlNodePtr node,
 gboolean equals_node_val_vs_kvp_frame(xmlNodePtr node, const kvp_frame *frm);
 gboolean equals_node_val_vs_date(xmlNodePtr node, const Timespec tm);
 gboolean equals_node_val_vs_int(xmlNodePtr node, gint64 val);
+gboolean equals_node_val_vs_boolean(xmlNodePtr node, gboolean val);
 
 void
 test_files_in_dir(int argc, char **argv, gxpf_callback cb,

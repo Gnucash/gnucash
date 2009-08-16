@@ -180,6 +180,12 @@ equals_node_val_vs_int(xmlNodePtr node, gint64 val)
 }
 
 gboolean
+equals_node_val_vs_boolean(xmlNodePtr node, gboolean val)
+{
+    return equals_node_val_vs_string(node, val ? "TRUE" : "FALSE");
+}
+
+gboolean
 equals_node_val_vs_guid(xmlNodePtr node, const GUID *id)
 {
     GUID *cmpid;

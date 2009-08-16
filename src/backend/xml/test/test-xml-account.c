@@ -158,6 +158,20 @@ node_and_account_equal(xmlNodePtr node, Account *act)
                 return g_strdup("commodity scus differ");
             }
         }
+		else if (safe_strcmp((char*)mark->name, "act:hidden") == 0)
+		{
+			if(!equals_node_val_vs_boolean(mark, xaccAccountGetHidden(act)))
+			{
+		    	return g_strdup("Hidden flags differ");
+			}
+		}
+		else if (safe_strcmp((char*)mark->name, "act:placeholder") == 0)
+		{
+			if(!equals_node_val_vs_boolean(mark, xaccAccountGetPlaceholder(act)))
+			{
+		    	return g_strdup("Placeholder flags differ");
+			}
+		}
         else if (safe_strcmp((char*)mark->name, "act:security") == 0)
         {
             return NULL; // This tag is ignored.
