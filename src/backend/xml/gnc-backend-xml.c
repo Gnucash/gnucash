@@ -83,7 +83,7 @@ typedef enum
 /* ================================================================= */
 
 static gboolean
-gnc_file_be_get_file_lock (FileBackend *be)
+gnc_xml_be_get_file_lock (FileBackend *be)
 {
     struct stat statbuf;
 #ifndef G_OS_WIN32
@@ -205,7 +205,7 @@ gnc_file_be_get_file_lock (FileBackend *be)
 #define FILE_URI_PREFIX "file://"
 
 static void
-file_session_begin(QofBackend *be_start, QofSession *session, 
+xml_session_begin(QofBackend *be_start, QofSession *session, 
                    const char *book_id,
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
@@ -277,7 +277,7 @@ file_session_begin(QofBackend *be_start, QofSession *session,
 
     be->lockfile = g_strconcat(be->fullpath, ".LCK", NULL);
 
-    if (!ignore_lock && !gnc_file_be_get_file_lock (be))
+    if (!ignore_lock && !gnc_xml_be_get_file_lock (be))
     {
         g_free (be->lockfile); be->lockfile = NULL;
         LEAVE("");
@@ -291,7 +291,7 @@ file_session_begin(QofBackend *be_start, QofSession *session,
 /* ================================================================= */
 
 static void
-file_session_end(QofBackend *be_start)
+xml_session_end(QofBackend *be_start)
 {
     FileBackend *be = (FileBackend*)be_start;
     ENTER (" ");
@@ -331,7 +331,7 @@ file_session_end(QofBackend *be_start)
 }
 
 static void
-file_destroy_backend(QofBackend *be)
+xml_destroy_backend(QofBackend *be)
 {
     qof_backend_destroy(be);
     g_free(be);
@@ -450,7 +450,7 @@ gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
 /* ================================================================= */
 
 static QofBookFileType
-gnc_file_be_determine_file_type(const char *path)
+gnc_xml_be_determine_file_type(const char *path)
 {
   gboolean with_encoding;
   if (gnc_is_xml_data_file_v2(path, &with_encoding)) {
@@ -493,7 +493,7 @@ gnc_determine_file_type (const char *path)
 }	
 
 static gboolean
-gnc_file_be_backup_file(FileBackend *be)
+gnc_xml_be_backup_file(FileBackend *be)
 {
     gboolean bkup_ret;
     char *timestamp;
@@ -508,7 +508,7 @@ gnc_file_be_backup_file(FileBackend *be)
     if (rc)
       return (errno == ENOENT);
 
-    if(gnc_file_be_determine_file_type(datafile) == GNC_BOOK_BIN_FILE)
+    if(gnc_xml_be_determine_file_type(datafile) == GNC_BOOK_BIN_FILE)
     {
         /* make a more permament safer backup */
         const char *back = "-binfmt.bkup";
@@ -540,7 +540,7 @@ gnc_file_be_backup_file(FileBackend *be)
 /* ================================================================= */
  
 static gboolean
-gnc_file_be_write_to_file(FileBackend *fbe, 
+gnc_xml_be_write_to_file(FileBackend *fbe, 
                           QofBook *book, 
                           const gchar *datafile,
                           gboolean make_backup)
@@ -570,7 +570,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
   
     if(make_backup)
     {
-        if(!gnc_file_be_backup_file(fbe))
+        if(!gnc_xml_be_backup_file(fbe))
         {
             LEAVE("");
             return FALSE;
@@ -685,7 +685,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
 /* ================================================================= */
 
 static int
-gnc_file_be_select_files (const gchar *d)
+gnc_xml_be_select_files (const gchar *d)
 {
     return (g_str_has_suffix(d, ".LNK") ||
             g_str_has_suffix(d, ".xac") ||
@@ -693,7 +693,7 @@ gnc_file_be_select_files (const gchar *d)
 }
 
 static void
-gnc_file_be_remove_old_files(FileBackend *be)
+gnc_xml_be_remove_old_files(FileBackend *be)
 {
     const gchar *dent;
     GDir *dir;
@@ -732,7 +732,7 @@ gnc_file_be_remove_old_files(FileBackend *be)
         char *name;
         int len;
 
-        if (gnc_file_be_select_files (dent) == 0)
+        if (gnc_xml_be_select_files (dent) == 0)
              continue;
 
         name = g_build_filename(be->dirname, dent, (gchar*)NULL);
@@ -785,7 +785,7 @@ gnc_file_be_remove_old_files(FileBackend *be)
 }
 
 static void
-file_sync_all(QofBackend* be, QofBook *book)
+xml_sync_all(QofBackend* be, QofBook *book)
 {
     FileBackend *fbe = (FileBackend *) be;
     ENTER ("book=%p, primary=%p", book, fbe->primary_book);
@@ -801,8 +801,8 @@ file_sync_all(QofBackend* be, QofBook *book)
     if (NULL == fbe->primary_book) fbe->primary_book = book;
     if (book != fbe->primary_book) return;
 
-    gnc_file_be_write_to_file (fbe, book, fbe->fullpath, TRUE);
-    gnc_file_be_remove_old_files (fbe);
+    gnc_xml_be_write_to_file (fbe, book, fbe->fullpath, TRUE);
+    gnc_xml_be_remove_old_files (fbe);
     LEAVE ("book=%p", book);
 }
 
@@ -840,7 +840,7 @@ build_period_filepath (FileBackend *fbe, QofBook *book)
 }
 
 static void
-file_begin_edit (QofBackend *be, QofInstance *inst)
+xml_begin_edit (QofBackend *be, QofInstance *inst)
 {
     if (0) build_period_filepath(0, 0);
 #if BORKEN_FOR_NOW
@@ -868,7 +868,7 @@ file_begin_edit (QofBackend *be, QofInstance *inst)
 }
 
 static void
-file_rollback_edit (QofBackend *be, QofInstance *inst)
+xml_rollback_edit (QofBackend *be, QofInstance *inst)
 {
 #if BORKEN_FOR_NOW
     QofBook *book = gp;
@@ -879,7 +879,7 @@ file_rollback_edit (QofBackend *be, QofInstance *inst)
 }
 
 static void
-file_commit_edit (QofBackend *be, QofInstance *inst)
+xml_commit_edit (QofBackend *be, QofInstance *inst)
 {
     if (qof_instance_get_dirty(inst) && qof_get_alt_dirty_mode() && 
         !(qof_instance_get_infant(inst) && qof_instance_get_destroying(inst))) {
@@ -894,13 +894,13 @@ file_commit_edit (QofBackend *be, QofInstance *inst)
     if (strcmp (GNC_ID_PERIOD, typ)) return;
     filepath = build_period_filepath(fbe, book);
     PINFO (" ====================== book=%p filepath=%s\n", book, filepath);
-    gnc_file_be_write_to_file(fbe, book, filepath, FALSE);
+    gnc_xml_be_write_to_file(fbe, book, filepath, FALSE);
 
     /* We want to force a save of the current book at this point,
      * because if we don't, and the user forgets to do so, then
      * there'll be the same transactions in the closed book,
      * and also in the current book. */
-    gnc_file_be_write_to_file (fbe, fbe->primary_book, fbe->fullpath, TRUE);
+    gnc_xml_be_write_to_file (fbe, fbe->primary_book, fbe->fullpath, TRUE);
 #endif
 }
 
@@ -914,7 +914,7 @@ file_commit_edit (QofBackend *be, QofInstance *inst)
    way. */
 
 static void
-gnc_file_be_load_from_file (QofBackend *bend, QofBook *book, QofBackendLoadType loadType)
+gnc_xml_be_load_from_file (QofBackend *bend, QofBook *book, QofBackendLoadType loadType)
 {
     QofBackendError error;
     gboolean rc;
@@ -925,7 +925,7 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book, QofBackendLoadType 
     error = ERR_BACKEND_NO_ERR;
     be->primary_book = book;
 
-    switch (gnc_file_be_determine_file_type(be->fullpath))
+    switch (gnc_xml_be_determine_file_type(be->fullpath))
     {
     case GNC_BOOK_XML2_FILE:
         rc = qof_session_load_from_xml_file_v2 (be, book);
@@ -973,7 +973,7 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book, QofBackendLoadType 
 /* ---------------------------------------------------------------------- */
 
 static gboolean
-gnc_file_be_save_may_clobber_data (QofBackend *bend)
+gnc_xml_be_save_may_clobber_data (QofBackend *bend)
 {
   struct stat statbuf;
   if (!bend->fullpath) return FALSE;
@@ -986,7 +986,7 @@ gnc_file_be_save_may_clobber_data (QofBackend *bend)
 
 
 static void
-gnc_file_be_write_accounts_to_file(QofBackend *be, QofBook *book)
+gnc_xml_be_write_accounts_to_file(QofBackend *be, QofBook *book)
 {
     const gchar *datafile;
 
@@ -1038,17 +1038,17 @@ gnc_backend_new(void)
 	be = (QofBackend*) gnc_be;
 	qof_backend_init(be);
 
-	be->session_begin = file_session_begin;
-	be->session_end = file_session_end;
-	be->destroy_backend = file_destroy_backend;
+	be->session_begin = xml_session_begin;
+	be->session_end = xml_session_end;
+	be->destroy_backend = xml_destroy_backend;
 
-	be->load = gnc_file_be_load_from_file;
-	be->save_may_clobber_data = gnc_file_be_save_may_clobber_data;
+	be->load = gnc_xml_be_load_from_file;
+	be->save_may_clobber_data = gnc_xml_be_save_may_clobber_data;
 
 	/* The file backend treats accounting periods transactionally. */
-	be->begin = file_begin_edit;
-	be->commit = file_commit_edit;
-	be->rollback = file_rollback_edit;
+	be->begin = xml_begin_edit;
+	be->commit = xml_commit_edit;
+	be->rollback = xml_rollback_edit;
 
 	/* The file backend always loads all data ... */
 	be->compile_query = NULL;
@@ -1061,11 +1061,11 @@ gnc_backend_new(void)
 	be->events_pending = NULL;
 	be->process_events = NULL;
 
-	be->sync = file_sync_all;
+	be->sync = xml_sync_all;
 	be->load_config = NULL;
 	be->get_config = NULL;
 
-    be->export = gnc_file_be_write_accounts_to_file;
+    be->export = gnc_xml_be_write_accounts_to_file;
 
 	gnc_be->dirname = NULL;
 	gnc_be->fullpath = NULL;
