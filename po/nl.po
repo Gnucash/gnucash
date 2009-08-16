@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-07-07 18:40-0400\n"
-"PO-Revision-Date: 2009-08-02 21:04+0100\n"
+"PO-Revision-Date: 2009-08-16 18:21+0100\n"
 "Last-Translator: Erwin Poeze <erwin.poeze@gmail.com>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -193,7 +193,7 @@ msgstr "Versie van GnuCash tonen"
 
 #: ../src/bin/gnucash-bin.c:221
 msgid "Enable debugging mode: increasing logging to provide deep detail."
-msgstr ""
+msgstr "Debugmodus inschakelen: meer uitvoer creëren om meer details vast te leggen."
 
 #: ../src/bin/gnucash-bin.c:224
 msgid "Enable extra/development/debugging features."
@@ -201,7 +201,7 @@ msgstr ""
 
 #: ../src/bin/gnucash-bin.c:227
 msgid "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}\""
-msgstr ""
+msgstr "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}\""
 
 #: ../src/bin/gnucash-bin.c:231
 msgid "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."
@@ -439,7 +439,7 @@ msgstr "Bewerken..."
 
 #: ../src/business/business-gnome/business-gnome-utils.c:219
 msgid "Voucher"
-msgstr "Voucher"
+msgstr "Onkostendeclaratie"
 
 #. This array contains all of the different strings for different column types.
 #. src/report/standard-reports/gnucash/report/transaction.scm
@@ -514,7 +514,7 @@ msgstr "Verkeerde URL %s"
 #: ../src/business/business-gnome/business-urls.c:296
 #, c-format
 msgid "No such Account entity: %s"
-msgstr "Een dergelijk dagboekgegeven bestaat niet: %s"
+msgstr "Een dergelijk rekeningitem bestaat niet: %s"
 
 #: ../src/business/business-gnome/dialog-billterms.c:262
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:129
@@ -573,11 +573,11 @@ msgstr "Weet u zeker dat u \"%s\" wilt verwijderen?"
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:72
 msgid "This transaction needs to be assigned to a Customer.  Please choose the Customer below."
-msgstr ""
+msgstr "Deze transactie moet worden toegekend aan een Klant. Kies een Klant hieronder."
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:77
 msgid "This transaction needs to be assigned to a Vendor.  Please choose the Vendor below."
-msgstr ""
+msgstr "Deze transactie moet worden toegekend aan een Leverancier. Kies een Leverancier hieronder."
 
 #: ../src/business/business-gnome/dialog-customer.c:268
 msgid "You must enter a company name. If this customer is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
@@ -722,7 +722,7 @@ msgstr "Werknemer bewerken"
 
 #: ../src/business/business-gnome/dialog-employee.c:683
 msgid "Expense Vouchers"
-msgstr "Uitgaven bon"
+msgstr "Onkostendeclaraties"
 
 #: ../src/business/business-gnome/dialog-employee.c:692
 msgid "Employee ID"
@@ -784,18 +784,18 @@ msgstr "De factuur moet tenminste één boeking bevatten."
 
 #: ../src/business/business-gnome/dialog-invoice.c:640
 msgid "You may not post an invoice with a negative total value."
-msgstr ""
+msgstr "U kunt geen factuur boeken met een negatieve totaalwaarde."
 
 #: ../src/business/business-gnome/dialog-invoice.c:647
 msgid "You may not post an expense voucher with a negative total cash value."
-msgstr ""
+msgstr "U kunt geen onkostendeclaratie met een negatief totaalbedrag boeken."
 
 #. Ok, we can post this invoice.  Ask for verification, set the due date,
 #. * post date, and posted account
 #.
 #: ../src/business/business-gnome/dialog-invoice.c:654
 msgid "Do you really want to post the invoice?"
-msgstr "Weet u zeker dat u de factuur boeken?"
+msgstr "Weet u zeker dat u de factuur wilt boeken?"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -862,11 +862,11 @@ msgstr "Nieuwe factuur"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1658
 msgid "Edit Invoice"
-msgstr "Bewerk factuur"
+msgstr "Factuur bewerken"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1661
 msgid "View Invoice"
-msgstr "Bekijk factuur"
+msgstr "Factuur bekijken"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1669
 msgid "New Bill"
@@ -886,11 +886,11 @@ msgstr "Nieuwe onkostendeclaratie"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1688
 msgid "Edit Expense Voucher"
-msgstr "Bewerk onkostendeclaratie"
+msgstr "Onkostendeclaratie bewerken"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1691
 msgid "View Expense Voucher"
-msgstr "Bekijk onkostendeclaratie"
+msgstr "Onkostendeclaratie bekijken"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2310
 msgid "View/Edit Invoice"
@@ -905,7 +905,7 @@ msgstr "Factuur bewerken"
 #. interchangeably in gnucash and mean the same thing.
 #: ../src/business/business-gnome/dialog-invoice.c:2322
 msgid "View/Edit Voucher"
-msgstr "voucher bewerken"
+msgstr "Onkostendeclaratie bewerken"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2332
 msgid "Invoice Owner"
@@ -973,7 +973,7 @@ msgstr "Geboekt?"
 #: ../src/business/business-gnome/glade/invoice.glade.h:8
 #: ../src/business/business-gnome/glade/order.glade.h:6
 msgid "Date Opened"
-msgstr "Datum geopend"
+msgstr "Factuurdatum"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2353
 #: ../src/business/business-gnome/dialog-invoice.c:2383
@@ -999,15 +999,15 @@ msgstr "Factuurnummer"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2392
 msgid "Voucher Owner"
-msgstr "Eigenaar voucher"
+msgstr "Eigenaar declaratie"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2395
 msgid "Voucher Notes"
-msgstr "Voucher-opmerkingen"
+msgstr "Declaratieopmerkingen"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2417
 msgid "Voucher ID"
-msgstr "Voucher-ID"
+msgstr "Declaratienummer"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/job-report.scm
@@ -1073,7 +1073,7 @@ msgstr "Zoek factuur"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2512
 msgid "Find Expense Voucher"
-msgstr "Zoek uitgavenbon"
+msgstr "Onkostendeclaratie zoeken"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -1086,7 +1086,7 @@ msgstr "Zoek uitgavenbon"
 #: ../intl-scm/guile-strings.c:1458 ../intl-scm/guile-strings.c:1658
 #: ../intl-scm/guile-strings.c:1830 ../intl-scm/guile-strings.c:2030
 msgid "Expense Voucher"
-msgstr "Uitgavenbon"
+msgstr "Onkostendeclaratie"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2518
 msgid "Find Invoice"
@@ -1265,7 +1265,7 @@ msgstr "U moet een bedrijf selecteren om de betaling te verwerken."
 
 #: ../src/business/business-gnome/dialog-payment.c:269
 msgid "You must select a transfer account from the account tree."
-msgstr "U moet een transactiedagboek uit de balans selecteren."
+msgstr "U moet een transactierekening uit de balans selecteren."
 
 #: ../src/business/business-gnome/dialog-payment.c:277
 msgid "You must enter an account name for posting."
@@ -1278,7 +1278,7 @@ msgstr "De door u geselecteerde grootboekrekening, %s, bestaat niet"
 
 #: ../src/business/business-gnome/dialog-payment.c:311
 msgid "The transfer and post accounts are associated with different currencies.  Please specify the conversion rate."
-msgstr ""
+msgstr "De transactie- en boekrekeningen hebben betrekking op verschillende valuta. Geef de wisselkoers op."
 
 #: ../src/business/business-gnome/dialog-payment.c:515
 #, c-format
@@ -1483,7 +1483,7 @@ msgstr "Hoeveel dagen van tevoren waarschuwen voor verstrijken vervaldatum factu
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:5
 msgid "If checked, each invoice will be opened in its own top level window.  If clear, the invoice will be opened in the current window."
-msgstr ""
+msgstr "Aanvinken betekent dat iedere factuur geopend wordt in een apart venster. Niet aanvinken opent de factuur in het huidige venster."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
 #: ../src/gnome-utils/glade/preferences.glade.h:93
@@ -1504,15 +1504,15 @@ msgstr "Inclusief _BTW:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:9
 msgid "Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog."
-msgstr ""
+msgstr "Geeft aan of meerdere boekregels in een factuur die geboekt worden op dezelfde rekening, standaard samengevoegd moeten worden in een enkele opsplitsing. Deze instelling kan in het Boekvenster worden gewijzigd."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:10
 msgid "Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors."
-msgstr ""
+msgstr "Geeft aan of belasting standaard onderdeel is van de boekregels op facturen. Deze instelling wordt overgenomen bij nieuwe klanten en leveranciers. "
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:11
 msgid "Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors."
-msgstr ""
+msgstr "Geeft aan of belasting standaard onderdeel is van de boekregels op facturen. Deze instelling wordt overgenomen bij nieuwe klanten en leveranciers. "
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:12
 msgid "Whether to display the list of Bills Due at startup."
@@ -1520,7 +1520,7 @@ msgstr "Lijst met vervallen facturen al dan niet tonen bij het opstarten."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:13
 msgid "_Accumulate splits on post"
-msgstr ""
+msgstr "Opsplitsingen tijdens boeken _samennemen"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:14
 msgid "_Days in advance:"
@@ -1783,7 +1783,7 @@ msgstr "Factureren"
 #: ../src/business/business-gnome/glade/employee.glade.h:6
 #: ../src/gnome-utils/dialog-transfer.c:1707
 msgid "Credit Account"
-msgstr "Krediet dagboek"
+msgstr "Kredietrekening"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:8
 msgid "Default Hours per Day: "
@@ -2066,7 +2066,7 @@ msgstr "Betalingsinformatie"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:6
 msgid "Post To"
-msgstr "Plaatsen op"
+msgstr "Boeken op"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:7
 msgid "Transfer Account"
@@ -2078,11 +2078,11 @@ msgstr "Inclusief BTW:"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:16
 msgid "Tax Table:"
-msgstr "BTW tabel:"
+msgstr "BTW-tabel:"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:18
 msgid "The vendor ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "Het leverancier ID nummer. Indien niet opgegeven, dan wordt een getal vóór u gekozen."
+msgstr "Het leveranciersnummer. Indien niet opgegeven, dan wordt een getal vóór u gekozen."
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/job-report.scm
@@ -2102,7 +2102,7 @@ msgstr "Leveranciersnummer:"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:21
 msgid "What Tax Table should be applied to this vendor?"
-msgstr "Welk BTW tarief moet er toegepast worden op deze leverancier?"
+msgstr "Welk BTW-tarief is op deze leverancier van toepassing?"
 
 #. src/business/business-utils/business-utils.scm
 #. src/business/business-utils/gnucash/business-utils.scm
@@ -2140,7 +2140,7 @@ msgstr "_Klant zoeken..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:156
 msgid "Open the Find Customer dialog"
-msgstr ""
+msgstr "Het 'Klant zoeken'-venster openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:158
 msgid "New _Invoice..."
@@ -2148,7 +2148,7 @@ msgstr "Nieuwe _factuur..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:159
 msgid "Open the New Invoice dialog"
-msgstr ""
+msgstr "Het 'Nieuwe factuur'-venster openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:161
 msgid "Find In_voice..."
@@ -2166,7 +2166,7 @@ msgstr "Nieuwe opdracht..."
 #: ../src/business/business-gnome/gnc-plugin-business.c:165
 #: ../src/business/business-gnome/gnc-plugin-business.c:189
 msgid "Open the New Job dialog"
-msgstr ""
+msgstr "Het 'Nieuwe opdracht'-venster openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:167
 #: ../src/business/business-gnome/gnc-plugin-business.c:191
@@ -2176,7 +2176,7 @@ msgstr "_Opdracht zoeken..."
 #: ../src/business/business-gnome/gnc-plugin-business.c:168
 #: ../src/business/business-gnome/gnc-plugin-business.c:192
 msgid "Open the Find Job dialog"
-msgstr ""
+msgstr "Het 'Opdracht zoeken'-venster open"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:170
 #: ../src/business/business-gnome/gnc-plugin-business.c:194
@@ -2188,7 +2188,7 @@ msgstr "_Betaling verwerken..."
 #: ../src/business/business-gnome/gnc-plugin-business.c:195
 #: ../src/business/business-gnome/gnc-plugin-business.c:213
 msgid "Open the Process Payment dialog"
-msgstr ""
+msgstr "Het 'Betaling verwerken'-venster openen"
 
 #. Vendor submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:175
@@ -2201,7 +2201,7 @@ msgstr "_Nieuwe leverancier..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:177
 msgid "Open the New Vendor dialog"
-msgstr ""
+msgstr "Het 'Nieuwe leverancier'-venster openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:179
 msgid "_Find Vendor..."
@@ -2209,7 +2209,7 @@ msgstr "Leverancier _zoeken..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:180
 msgid "Open the Find Vendor dialog"
-msgstr ""
+msgstr "Het 'Leverancier zoeken'-venster openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:182
 msgid "New _Bill..."
@@ -2238,7 +2238,7 @@ msgstr "_Nieuwe werknemer..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:201
 msgid "Open the New Employee dialog"
-msgstr ""
+msgstr "Het 'Nieuwe werknemer'-venster openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:203
 msgid "_Find Employee..."
@@ -2246,7 +2246,7 @@ msgstr "Werknemer _zoeken..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:204
 msgid "Open the Find Employee dialog"
-msgstr ""
+msgstr "Het 'Werknemer zoeken'-venster openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:206
 msgid "New _Expense Voucher..."
@@ -2254,24 +2254,24 @@ msgstr "Nieuwe _onkostendeclaratie..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:207
 msgid "Open the New Expense Voucher dialog"
-msgstr ""
+msgstr "Venster 'Nieuwe onkostendeclaratie' openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:209
 msgid "Find Expense _Voucher..."
-msgstr "Uitgavenbon _zoeken..."
+msgstr "Onkostendeclaratie _zoeken..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:210
 msgid "Open the Find Expense Voucher dialog"
-msgstr ""
+msgstr "Venster 'Onkostendeclaratie zoeken' openen"
 
 #. Other menu items
 #: ../src/business/business-gnome/gnc-plugin-business.c:217
 msgid "_Tax Table Editor"
-msgstr "Belasting_tabel bewerken"
+msgstr "BTW-_tabel bewerken"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:218
 msgid "View and edit the list of Tax Tables"
-msgstr "Bekijk en bewerk de lijst met belastingtabellen"
+msgstr "Bekijk en bewerk de lijst met BTW-tabellen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:220
 msgid "_Billing Terms Editor"
@@ -2299,7 +2299,7 @@ msgstr "QSF-_factuur..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:228
 msgid "Export one or more invoices to QSF"
-msgstr ""
+msgstr "Eén of meer facturen naar QSF exporteren"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:230
 msgid "QSF _Customer..."
@@ -2307,7 +2307,7 @@ msgstr "QSF-_klant..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:231
 msgid "Export one or more customers to QSF"
-msgstr ""
+msgstr "Eén of meer klanten naar QSF exporteren"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:233
 msgid "QSF _Vendor..."
@@ -2315,7 +2315,7 @@ msgstr "QSF-_leverancier..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:234
 msgid "Export one or more vendors to QSF"
-msgstr ""
+msgstr "Eén of meer leveranciers naar QSF exporteren"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:236
 msgid "QSF _Employee..."
@@ -2323,7 +2323,7 @@ msgstr "QSF-_werknemer..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:237
 msgid "Export one or more employees to QSF"
-msgstr ""
+msgstr "Eén of meer werknemers naar QSF exporteren"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:242
 #: ../src/business/business-gnome/gnc-plugin-business.c:243
@@ -2344,24 +2344,24 @@ msgstr "Gebruikersrapport opnieuw inladen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:249
 msgid "Reload owner report scheme file"
-msgstr "Gebruikersrapport schema bestand opnieuw inladen"
+msgstr "Bestand gebruikersrapportschema opnieuw inladen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:251
 msgid "Reload receivable report"
-msgstr "Debiteuren rapport opnieuw laden"
+msgstr "Debiteurenrapport opnieuw laden"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:252
 msgid "Reload receivable report scheme file"
-msgstr "Debiteurenrapport schema bestand opnieuw laden"
+msgstr "Bestand debiteurenrapportschema opnieuw laden"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:254
 #: ../src/business/business-gnome/gnc-plugin-business.c:255
 msgid "Initialize Test Data"
-msgstr "Initialiseer test gegevens"
+msgstr "Initialiseer testgegevens"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:724
 msgid "Export Invoices to XML"
-msgstr ""
+msgstr "Facturen naar XML exporteren"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:761
 msgid "Export Customers to XML"
@@ -2369,7 +2369,7 @@ msgstr "Klanten naar XML exporteren"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:795
 msgid "Export Vendors to XML"
-msgstr ""
+msgstr "Leveranciers naar XML exporteren"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:829
 msgid "Export Employees to XML"
@@ -2387,7 +2387,7 @@ msgstr "Nieuwe _factuur"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:100
 msgid "Create a new invoice"
-msgstr "Genereer een nieuwe factuur"
+msgstr "Een nieuwe factuur aanmaken"
 
 #. File menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:102
@@ -2397,7 +2397,7 @@ msgstr "Nieuwe _grootboekrekening..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:103
 msgid "Create a new account"
-msgstr "Maak een nieuw dagboek aan"
+msgstr "Een nieuwe grootboekrekening aanmaken"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:105
 msgid "Print Invoice"
@@ -2484,7 +2484,7 @@ msgstr "_Leeg"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:140
 msgid "Move to the blank entry at the bottom of the Invoice"
-msgstr "De lege boeking naar het einde van de factuur verplaatsen"
+msgstr "Spring naar lege regel aan het einde van de factuur"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:142
 msgid "Dup_licate Entry"
@@ -2584,19 +2584,19 @@ msgstr "Boeking ongedaan maken"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:1
 msgid "Accumulate multiple splits into one"
-msgstr ""
+msgstr "Meerdere opsplitsingen samenvoegen tot één."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:2
 msgid "If active, at startup GnuCash will check to see whether any bills will become due soon. If so, it will present the user with a reminder dialog. The definition of \"soon\" is controlled by the \"Days in Advance\" setting. Otherwise GnuCash does not check for due bills."
-msgstr ""
+msgstr "Als ingeschakeld, wordt tijdens het opstarten van GnuCash gecontroleerd of er binnenkort te betalen facturen vervallen. Is dit het geval, dan ziet de gebruiker een herinneringsmelding. De definitie van \"binnenkort\" wordt bepaald door de instelling \"Dagen vooruit\". Is de optie niet ingeschakeld, dan controleert GnuCash niet op verlopen facturen."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:3
 msgid "If active, each new invoice will be opened in a new window. Otherwise a new invoice will be opened as a tab in the main window."
-msgstr ""
+msgstr "Als ingeschakeld, wordt iedere nieuwe factuur in een nieuw venster geopend. Anders wordt een nieuwe factuur geopend als tabblad in het hoofdvenster."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:4
 msgid "If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched."
-msgstr ""
+msgstr "Als ingeschakeld, worden alleen de 'actieve' onderdelen in de huidige klasse doorzocht en anders alle onderdelen."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:5
 msgid "If set to active then tax is included by default in entries of this type. This setting is inherited by new customers and vendors."
@@ -3504,7 +3504,7 @@ msgstr "In balans"
 #: ../src/gnome/gnc-plugin-page-register.c:339
 #: ../src/gnome/window-reconcile.c:1217
 msgid "Reconcile"
-msgstr "Corrigeer"
+msgstr "Afstemmen"
 
 #: ../src/gnome/dialog-find-transactions.c:111
 msgid "Share Price"
@@ -3648,7 +3648,7 @@ msgstr "_Transactie"
 #: ../src/gnome/dialog-sx-editor.c:187 ../src/gnome/glade/register.glade.h:101
 #: ../src/gnome-utils/gnc-main-window.c:229
 msgid "_View"
-msgstr "_Bekijk"
+msgstr "_Beeld"
 
 #: ../src/gnome/dialog-sx-editor.c:188 ../src/gnome/glade/register.glade.h:74
 #: ../src/gnome-utils/gnc-main-window.c:230
@@ -3823,9 +3823,8 @@ msgstr ""
 
 #. Change the text so that its more mainingful for this druid
 #: ../src/gnome/druid-acct-period.c:556
-#, fuzzy
 msgid "Period:"
-msgstr ". (punt)"
+msgstr "Periode:"
 
 #: ../src/gnome/druid-acct-period.c:557
 #: ../src/gnome-utils/glade/dialog-book-close.glade.h:2
@@ -4140,9 +4139,8 @@ msgid "Account _name:"
 msgstr "Rekeningnaam:"
 
 #: ../src/gnome/glade/account.glade.h:16
-#, fuzzy
 msgid "C_lear All"
-msgstr "Alles goedkeuren"
+msgstr "Alles _goedkeuren"
 
 #: ../src/gnome/glade/account.glade.h:17
 msgid "Choose Currency"
@@ -4267,7 +4265,6 @@ msgid "New Account Hierarchy Setup"
 msgstr "Nieuw rekeningschema instellen"
 
 #: ../src/gnome/glade/account.glade.h:38
-#, fuzzy
 msgid "No_tes:"
 msgstr "_Opmerkingen:"
 
@@ -4291,9 +4288,8 @@ msgid "Other"
 msgstr "Andere"
 
 #: ../src/gnome/glade/account.glade.h:43
-#, fuzzy
 msgid "Placeholde_r"
-msgstr "Opvulling"
+msgstr "_Opvulling"
 
 #: ../src/gnome/glade/account.glade.h:44
 msgid "Please choose the currency to use for new accounts."
@@ -4438,7 +4434,6 @@ msgstr "_Hernummer"
 
 #: ../src/gnome/glade/account.glade.h:85
 #: ../src/gnome-utils/dialog-commodity.c:275
-#, fuzzy
 msgid "_Security/currency:"
 msgstr "_Waarde/valua:"
 
@@ -5001,11 +4996,11 @@ msgstr ""
 
 #: ../src/gnome/glade/newuser.glade.h:1
 msgid "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
-msgstr ""
+msgstr "<span size=\"larger\" weight=\"bold\">Welkom bij GnuCash!</span>"
 
 #: ../src/gnome/glade/newuser.glade.h:2
 msgid "<span weight=\"bold\" size=\"larger\">Display Welcome Dialog Again?</span>"
-msgstr ""
+msgstr "<span weight=\"bold\" size=\"larger\">Welkomsboodschap nogmaals tonen??</span>"
 
 #: ../src/gnome/glade/newuser.glade.h:3
 msgid "C_reate a new set of accounts"
@@ -5121,12 +5116,12 @@ msgstr "Hoeveelheid (als _tekst):"
 #: ../src/gnome/glade/print.glade.h:3
 #, fuzzy
 msgid "Check _format:"
-msgstr "Cheque formaat:"
+msgstr "Cheque_formaat:"
 
 #: ../src/gnome/glade/print.glade.h:4
 #, fuzzy
 msgid "Check po_sition:"
-msgstr "Cheque positie:"
+msgstr "Chequepositie:"
 
 #: ../src/gnome/glade/print.glade.h:5
 msgid "Custom format"
@@ -5195,12 +5190,10 @@ msgid "_Notes:"
 msgstr "_Opmerkingen:"
 
 #: ../src/gnome/glade/print.glade.h:29
-#, fuzzy
 msgid "_Rotation"
-msgstr "_Actie"
+msgstr "_Rotatie"
 
 #: ../src/gnome/glade/print.glade.h:30
-#, fuzzy
 msgid "_Save format"
 msgstr "Indeling _opslaan"
 
@@ -5350,7 +5343,7 @@ msgstr "De geselecteerde transactie kopiëren"
 #: ../src/gnome/glade/register.glade.h:32
 #: ../src/gnome/gnc-plugin-page-register.c:248
 msgid "Move to the blank transaction at the bottom of the register"
-msgstr "Naar de lege boekingsregel onderaan het scherm springen"
+msgstr "Naar de lege regel onderaan het scherm springen"
 
 #: ../src/gnome/glade/register.glade.h:33
 msgid "Num_ber"
@@ -6383,7 +6376,6 @@ msgstr "Nieuwe rekeningenpagina openen"
 
 #. File menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:101
-#, fuzzy
 msgid "New _File"
 msgstr "_Nieuw bestand"
 
@@ -6409,7 +6401,7 @@ msgstr "Het huidige bestand opslaan"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:110
 msgid "Save _As..."
-msgstr ""
+msgstr "Opslaan _als..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:115
 msgid "_QSF Import"
@@ -6448,7 +6440,7 @@ msgstr "Vind transacties met een zoekopdracht"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:133
 msgid "Ta_x Options"
-msgstr "Belas_ting opties"
+msgstr "Belasting_opties"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:134
 msgid "Setup tax information for all income and expense accounts"
@@ -6652,19 +6644,18 @@ msgstr "De geselecteerde rekening afstemmen"
 #: ../src/gnome/gnc-plugin-page-register.c:235
 #: ../src/gnome-utils/gnc-icons.c:21 ../src/gnome/window-reconcile.c:2108
 msgid "_Transfer..."
-msgstr "_Boeken..."
+msgstr "_Overboeken..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:182
 #: ../src/gnome/gnc-plugin-page-register.c:236
 #: ../src/gnome/window-reconcile.c:2109
 msgid "Transfer funds from one account to another"
-msgstr "Fondsen overboeken van een rekening naar een andere"
+msgstr "Bedragen van één rekening naar een andere overboeken"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:184
 #: ../src/gnome/gnc-plugin-page-register.c:241
-#, fuzzy
 msgid "Stoc_k Split..."
-msgstr "Aandelen _Splitsen --"
+msgstr "Aandelen _splitsen..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:185
 #: ../src/gnome/gnc-plugin-page-register.c:242
@@ -6684,7 +6675,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:190
 msgid "Check & Repair A_ccount"
-msgstr "_Controleer & repareer rekening"
+msgstr "_Rekening controleren & repareren"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:191
 #: ../src/gnome/window-reconcile.c:2112
@@ -6693,7 +6684,7 @@ msgstr "Zoek en repareer niet-gebalanceerde transacties en verweesde opslitsinge
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:193
 msgid "Check & Repair Su_baccounts"
-msgstr "Controleer & repareer _subrekeningen"
+msgstr "_Subrekeningen controleren & repareren"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:194
 msgid "Check for and repair unbalanced transactions and orphan splits in this account and its subaccounts"
@@ -6701,7 +6692,7 @@ msgstr "Zoek en repareer niet-gebalanceerde transacties en verweesde opsplitsing
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:197
 msgid "Check & Repair A_ll"
-msgstr "Controleer & repareer _alles"
+msgstr "_Alles controleren & repareren"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:198
 msgid "Check for and repair unbalanced transactions and orphan splits in all accounts"
@@ -6751,9 +6742,8 @@ msgid "Accounts"
 msgstr "Grootboekrekeningen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:905
-#, fuzzy
 msgid "(no name)"
-msgstr "(geen)"
+msgstr "(geen naam)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:926
 #, c-format
@@ -6771,9 +6761,8 @@ msgid "All transactions in this account will be moved to the account %s."
 msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1032
-#, fuzzy
 msgid "All transactions in this account will be deleted."
-msgstr "Alle prijzen ouder dan onderstaande datum worden verwijderd."
+msgstr "Alle transacties in deze rekening worden verwijderd."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1039
 #, c-format
@@ -6794,9 +6783,8 @@ msgid "All sub-account transactions will be deleted."
 msgstr "Alle transacties van subrekening worden verwijderd."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1056
-#, fuzzy
 msgid "Are you sure you want to do this?"
-msgstr "Weet u zeker dat u het laatste artikel wilt verwijderen?"
+msgstr "Weet u zeker dat u dit wilt?"
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-budget.c:135
@@ -6847,14 +6835,13 @@ msgid "Budget"
 msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-budget.c:768
-#, fuzzy
 msgid "Set the budget options using this dialog."
-msgstr "Kies de rapport opties die u wilt gebruiken in dit venster."
+msgstr "De budgetopties instellen in dit venster."
 
 #: ../src/gnome/gnc-plugin-page-budget.c:847
-#, fuzzy, c-format
+#, c-format
 msgid "Delete %s?"
-msgstr "Verwijderen"
+msgstr "%s verwijderen?"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:911
 msgid "You must select at least one account to estimate."
@@ -6864,7 +6851,7 @@ msgstr "U moet een minstens één rekening selecteren om te voorspellen."
 #: ../src/gnome/gnc-plugin-page-register.c:172
 #, fuzzy
 msgid "_Print Check..."
-msgstr "Cheque afdrukken"
+msgstr "Cheque _afdrukken..."
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-register.c:177
@@ -6876,23 +6863,20 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register.c:178
 #: ../src/gnome-utils/gnc-main-window.c:267
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:966
-#, fuzzy
 msgid "Cut the current selection and copy it to clipboard"
-msgstr "Plak de transactie van het klembord"
+msgstr "De huidige selectie knippen en naar het klembord kopiëren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:180
 #: ../src/gnome-utils/gnc-main-window.c:269
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:968
-#, fuzzy
 msgid "_Copy"
-msgstr "Bedrijf"
+msgstr "_Kopiëren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:181
 #: ../src/gnome-utils/gnc-main-window.c:270
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:969
-#, fuzzy
 msgid "Copy the current selection to clipboard"
-msgstr "Plak de transactie van het klembord"
+msgstr "De huidige selectie naar klembord kopiëren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:184
 #: ../src/gnome-utils/gnc-main-window.c:273
@@ -6902,101 +6886,83 @@ msgstr ""
 
 #. Transaction menu
 #: ../src/gnome/gnc-plugin-page-register.c:195
-#, fuzzy
 msgid "Cu_t Transaction"
-msgstr "Knip transactie"
+msgstr "Transactie _knippen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:196
-#, fuzzy
 msgid "Cut the selected transaction into clipboard"
-msgstr "Knip de geselecteerde transactie"
+msgstr "De geselecteerde transactie naar het klembord verplaatsen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:198
-#, fuzzy
 msgid "_Copy Transaction"
-msgstr "Copiëer Transactie"
+msgstr "Transactie _kopiëren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:199
-#, fuzzy
 msgid "Copy the selected transaction into clipboard"
-msgstr "Copiëer de geselecteerde transactie"
+msgstr "De geselecteerde transactie naar klembord kopiëren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:201
-#, fuzzy
 msgid "_Paste Transaction"
-msgstr "Plak transactie"
+msgstr "Transactie _plakken"
 
 #: ../src/gnome/gnc-plugin-page-register.c:204
-#, fuzzy
 msgid "Dup_licate Transaction"
-msgstr "Dupliceer de transactie"
+msgstr "Transactie _dupliceren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:207
 #: ../src/gnome/gnc-split-reg.c:1127
-#, fuzzy
 msgid "_Delete Transaction"
-msgstr "Verwijder boekingsregel"
+msgstr "Transactie _verwijderen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:210
-#, fuzzy
 msgid "Remo_ve Transaction Splits"
-msgstr "Verwijder boekingsopsplitsing"
+msgstr "Transactie_splitsing verwijderen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:211
 msgid "Remove all splits in the current transaction"
 msgstr "Alle opsplitsingen van de geselecteerde transactie tonen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:213
-#, fuzzy
 msgid "_Enter Transaction"
-msgstr "Om een transactie te boeken"
+msgstr "Transactie _invoeren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:216
-#, fuzzy
 msgid "Ca_ncel Transaction"
-msgstr "Transactie Opnieuw Balanceren"
+msgstr "Transactie _annuleren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:219
-#, fuzzy
 msgid "_Void Transaction"
-msgstr "Transacties leegmaken?"
+msgstr "Transactie _legen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:221
-#, fuzzy
 msgid "_Unvoid Transaction"
-msgstr "_Vind transacties"
+msgstr "Transactie _herstellen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:223
-#, fuzzy
 msgid "Add _Reversing Transaction"
-msgstr "_Vind transacties"
+msgstr "Omkerende transactie _toevoegen"
 
 #. View menu
 #: ../src/gnome/gnc-plugin-page-register.c:228
 #: ../src/gnome-utils/gnc-main-window.c:281
-#, fuzzy
 msgid "_Sort By..."
-msgstr "Sorteer op"
+msgstr "_Sorteer op ..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:247
-#, fuzzy
 msgid "_Blank Transaction"
-msgstr "_Transactie"
+msgstr "Lege _transactie"
 
 #: ../src/gnome/gnc-plugin-page-register.c:250
-#, fuzzy
 msgid "Edit E_xchange Rate"
-msgstr "Bewerk wisselkoers"
+msgstr "_Wisselkoers bewerken"
 
 #: ../src/gnome/gnc-plugin-page-register.c:251
-#, fuzzy
 msgid "Edit the exchange rate for the current transaction"
-msgstr "Bewerk de wisselkoers voor de huidige opsplitsing"
+msgstr "De wisselkoers voor de huidige transactie bewerken"
 
 #: ../src/gnome/gnc-plugin-page-register.c:256
-#, fuzzy
 msgid "Sche_dule..."
-msgstr "Plan..."
+msgstr "_Plan..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:259
 msgid "_All transactions"
@@ -7012,24 +6978,21 @@ msgid "Account Report"
 msgstr "Rekeningrapport"
 
 #: ../src/gnome/gnc-plugin-page-register.c:267
-#, fuzzy
 msgid "Open a register report for this Account"
-msgstr "Open een boekingsformulier rapportage venster voor deze transactie"
+msgstr "Een dagboek voor deze rekening openen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:269
 msgid "Account Transaction Report"
 msgstr "Rekeningentransactierapport"
 
 #: ../src/gnome/gnc-plugin-page-register.c:270
-#, fuzzy
 msgid "Open a register report for the selected Transaction"
-msgstr "Open een boekingsformulier rapportage venster voor deze transactie"
+msgstr "Een dagboek voor de geselecteerde transactie openen"
 
 #. Translators: This is a menu item in the View menu
 #: ../src/gnome/gnc-plugin-page-register.c:295
-#, fuzzy
 msgid "Transaction _Journal"
-msgstr "Transactie journaal"
+msgstr "Transactie _dagboek"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/register.scm
@@ -7053,23 +7016,21 @@ msgstr "Grootboek"
 #. Translators: %s is the name
 #. of the tab page
 #: ../src/gnome/gnc-plugin-page-register.c:1107
-#, fuzzy, c-format
+#, c-format
 msgid "Save changes to %s?"
-msgstr "Saldi %s tot %s"
+msgstr "Wijzigingen opslaan naar %s?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1111
 msgid "This register has pending changes to a transaction.  Would you like to save the changes to this transaction, discard the transaction, or cancel the operation?"
 msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register.c:1114
-#, fuzzy
 msgid "_Discard Transaction"
-msgstr "_Vind transacties"
+msgstr "Transactie _negeren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1118
-#, fuzzy
 msgid "_Save Transaction"
-msgstr "_Transactie"
+msgstr "Transactie op_slaan"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1149
 #: ../src/gnome/gnc-plugin-page-register.c:1181
@@ -7078,9 +7039,8 @@ msgstr "_Transactie"
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:316
 #: ../src/import-export/hbci/gnc-hbci-utils.c:884
 #: ../src/import-export/hbci/gnc-hbci-utils.c:886
-#, fuzzy
 msgid "unknown"
-msgstr "(onbekend)"
+msgstr "onbekend"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1170
 #: ../src/gnome/gnc-plugin-page-register.c:1766
@@ -7127,9 +7087,8 @@ msgid "and subaccounts"
 msgstr "en subrekeningen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:2065
-#, fuzzy
 msgid "You cannot void a transaction with reconciled or cleared splits."
-msgstr "Toon uitgebreide transacties met alle opsplitsingen"
+msgstr "U kunt geen transacties leegmaken met afgestemde of goedgekeurde opsplitsingen."
 
 #: ../src/gnome/gnc-plugin-page-register.c:2133
 #: ../src/gnome/gnc-split-reg.c:871
@@ -7138,21 +7097,20 @@ msgstr ""
 
 #. Translations: The %s is the name of the plugin page
 #: ../src/gnome/gnc-plugin-page-register.c:2181
-#, fuzzy, c-format
+#, c-format
 msgid "Sort %s by..."
-msgstr "Sorteer bedrijven op"
+msgstr "%s sorteren op..."
 
 #. Translators: The %s is the name of the plugin page
 #: ../src/gnome/gnc-plugin-page-register.c:2233
 #: ../src/gnome-utils/gnc-tree-view-account.c:1828
-#, fuzzy, c-format
+#, c-format
 msgid "Filter %s by..."
-msgstr "Filter op type"
+msgstr "%s filteren op..."
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:119
-#, fuzzy
 msgid "_Scheduled"
-msgstr "Gepland"
+msgstr "_Gepland"
 
 #. File menu
 #. Transaction menu
@@ -7163,28 +7121,24 @@ msgid "_New"
 msgstr "_Nieuw"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:121
-#, fuzzy
 msgid "Create a new scheduled transaction"
-msgstr "Een geplande transactie uitvoeren"
+msgstr "Een nieuwe geplande transactie aanmaken"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:123
-#, fuzzy
 msgid "Edit the selected scheduled transaction"
-msgstr "Het geselecteerde transactieschema verwijderen?"
+msgstr "Een geselecteerde, geplande transactie bewerken"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:125
-#, fuzzy
 msgid "Delete the selected scheduled transaction"
-msgstr "Het geselecteerde transactieschema verwijderen?"
+msgstr "De geselecteerde, geplande transactie verwijderen"
 
 #. FIXME: Does this always refer to only one transaction? Or could
 #. multiple SXs be deleted as well? Ideally, the number of
 #. to-be-deleted SXs should be mentioned here; see
 #. dialog-sx-since-last-run.c:807
 #: ../src/gnome/gnc-plugin-page-sx-list.c:595
-#, fuzzy
 msgid "Do you really want to delete this scheduled transaction?"
-msgstr "Weet u zeker dat u de geselecteerde transactie wilt verwijderen?"
+msgstr "Wilt u deze geplande transactie verwijderen?"
 
 #: ../src/gnome/gnc-plugin-register.c:48
 msgid "_General Ledger"
@@ -7199,9 +7153,8 @@ msgid "<No information>"
 msgstr "<Geen gegevens>"
 
 #: ../src/gnome/gnc-split-reg.c:898
-#, fuzzy
 msgid "Cannot modify or delete this transaction."
-msgstr "Dubbelkleuringe modus; alterneert op transacties"
+msgstr "Deze transactie kan niet bewerkt of verwijderd worden."
 
 #: ../src/gnome/gnc-split-reg.c:900
 #, c-format
@@ -7209,21 +7162,16 @@ msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr ""
 
 #: ../src/gnome/gnc-split-reg.c:932
-#, fuzzy
 msgid "Remove the splits from this transaction?"
-msgstr "Weet u zeker dat u de opsplitsingen van deze transactie wilt verwijderen?"
+msgstr "De opsplitsingen van deze transactie verwijderen?"
 
 #: ../src/gnome/gnc-split-reg.c:933
-#, fuzzy
 msgid "This transaction contains reconciled splits. Modifying it is not a good idea because that will cause your reconciled balance to be off."
-msgstr ""
-"U gaat nu een transactie met gecorrigeerde opsplitsingen verwijderen!\n"
-"Dit is niet verstandig aangezien dit fouten kan geven in uw gecorrigeerde balans."
+msgstr "Deze transactie bevat afgestemde opsplitsingen. Het bewerken hiervan is onverstandig omdat dit de afgestemde balans verstoord."
 
 #: ../src/gnome/gnc-split-reg.c:957
-#, fuzzy
 msgid "_Remove Splits"
-msgstr "Verwijder boekingsopsplitsing"
+msgstr "Opsplitsing _verwijderen"
 
 #: ../src/gnome/gnc-split-reg.c:1032
 #, c-format
@@ -7231,16 +7179,12 @@ msgid "Delete the split '%s' from the transaction '%s'?"
 msgstr "De opsplitsing '%s' van translactie '%s' verwijderen?"
 
 #: ../src/gnome/gnc-split-reg.c:1033
-#, fuzzy
 msgid "You would be deleting a reconciled split! This is not a good idea as it will cause your reconciled balance to be off."
-msgstr ""
-"U gaat nu een gecorrigeerde opsplitsing verwijderen!\n"
-"Dit is niet verstandig aangezien dit fouten kan geven in uw gecorrigeerde balans."
+msgstr "U zou een afgestemde opsplitsing verwijderen! Dit is onverstandig omdat dit de afgestemde balans verstoord."
 
 #: ../src/gnome/gnc-split-reg.c:1036
-#, fuzzy
 msgid "You cannot delete this split."
-msgstr "U kunt niet bewaren in dat bestand"
+msgstr "U kunt deze opsplitsing niet verwijderen."
 
 #: ../src/gnome/gnc-split-reg.c:1037
 msgid "This is the split anchoring this transaction to the register. You may not delete it from this register window.  You may delete the entire transaction from this window, or you may navigate to a register that shows another side of this same transaction and delete the split from that register."
@@ -7255,20 +7199,16 @@ msgid "(no description)"
 msgstr "(geen omschrijving)"
 
 #: ../src/gnome/gnc-split-reg.c:1090
-#, fuzzy
 msgid "_Delete Split"
-msgstr "_Verwijder"
+msgstr "Opsplitsing _verwijderen"
 
 #: ../src/gnome/gnc-split-reg.c:1106
 msgid "Delete the current transaction?"
 msgstr "De geselecteerde transactie verwijderen?"
 
 #: ../src/gnome/gnc-split-reg.c:1107
-#, fuzzy
 msgid "You would be deleting a transaction with reconciled splits! This is not a good idea as it will cause your reconciled balance to be off."
-msgstr ""
-"U gaat nu een transactie met gecorrigeerde opsplitsingen verwijderen!\n"
-"Dit is niet verstandig aangezien dit fouten kan geven in uw gecorrigeerde balans."
+msgstr "U zou een transactie met een afgestemde opsplitsing verwijderen! Dit is onverstandig omdat dit de afgestemde balans verstoord."
 
 #: ../src/gnome/gnc-split-reg.c:1405
 msgid "Balancing entry from reconcilation"
@@ -7303,9 +7243,8 @@ msgid "Current Value:"
 msgstr "Huidige waarde:"
 
 #: ../src/gnome/gnc-split-reg.c:1924
-#, fuzzy
 msgid "This account register is read-only."
-msgstr "Dit rekeningenformulier is alleen-lezen."
+msgstr "Dit dagboek is alleen-lezen."
 
 #: ../src/gnome/gnc-split-reg.c:1958
 msgid "This account may not be edited.  If you want to edit transactions in this register, please open the account options and turn off the placeholder checkbox."
@@ -8805,19 +8744,19 @@ msgstr "Naar bedrag:"
 
 #: ../src/gnome-utils/dialog-utils.c:958
 msgid "Remember and don't _ask me again."
-msgstr ""
+msgstr "Onthoud en _vraag mij niet opnieuw."
 
 #: ../src/gnome-utils/dialog-utils.c:959
 msgid "Don't _tell me again."
-msgstr ""
+msgstr "_Niet meer vertellen"
 
 #: ../src/gnome-utils/dialog-utils.c:962
 msgid "Remember and don't ask me again this _session."
-msgstr ""
+msgstr "Onthoud en vraag mij niet opnieuw tijdens deze _sessie."
 
 #: ../src/gnome-utils/dialog-utils.c:963
 msgid "Don't tell me again this _session."
-msgstr ""
+msgstr "Tijdens deze _sessie niet meer vertellen."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:409
 msgid "When you click Apply, GnuCash will modify your ~/.gconf.path file and restart the gconf backend."
@@ -8871,82 +8810,82 @@ msgstr ""
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:237
 msgid "ISO-8859-1 (West European)"
-msgstr ""
+msgstr "ISO-8859-1 (West-Europees)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:238
 msgid "ISO-8859-2 (East European)"
-msgstr ""
+msgstr "ISO-8859-2 (Oost-Europees)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:239
 msgid "ISO-8859-3 (South European)"
-msgstr ""
+msgstr "ISO-8859-3 (Zuid-Europees)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:240
 msgid "ISO-8859-4 (North European)"
-msgstr ""
+msgstr "ISO-8859-4 (Noord-Europees)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:241
 msgid "ISO-8859-5 (Cyrillic)"
-msgstr ""
+msgstr "ISO-8859-5 (Cyrillisch)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:242
 msgid "ISO-8859-6 (Arabic)"
-msgstr ""
+msgstr "ISO-8859-6 (Arabisch)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:243
 msgid "ISO-8859-7 (Greek)"
-msgstr ""
+msgstr "ISO-8859-7 (Grieks)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:244
 msgid "ISO-8859-8 (Hebrew)"
-msgstr ""
+msgstr "ISO-8859-8 (Hebreeuws)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:245
 msgid "ISO-8859-9 (Turkish)"
-msgstr ""
+msgstr "ISO-8859-9 (Turks)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:246
 msgid "ISO-8859-10 (Nordic)"
-msgstr ""
+msgstr "ISO-8859-10 (Scandinavisch)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:247
 msgid "ISO-8859-11 (Thai)"
-msgstr ""
+msgstr "ISO-8859-11 (Thais)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:248
 msgid "ISO-8859-13 (Baltic)"
-msgstr ""
+msgstr "ISO-8859-13 (Baltisch)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:249
 msgid "ISO-8859-14 (Celtic)"
-msgstr ""
+msgstr "ISO-8859-14 (Celtisch)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:250
 msgid "ISO-8859-15 (West European, Euro sign)"
-msgstr ""
+msgstr "ISO-8859-15 (West-Europees, Euroteken)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:251
 msgid "ISO-8859-16 (South-East European)"
-msgstr ""
+msgstr "ISO-8859-16 (Zuidoost-Europees)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:252
 msgid "Cyrillic"
-msgstr ""
+msgstr "Cyrillisch"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:253
 msgid "KOI8-R (Russian)"
-msgstr ""
+msgstr "KOI8-R (Russisch)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:254
 msgid "KOI8-U (Ukrainian)"
-msgstr ""
+msgstr "KOI8-U (Oekraïens)"
 
 #. Translators: Please insert encodings here that are typically used in your
 #. * locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
 #. * for assistance with spelling.
 #: ../src/gnome-utils/druid-gnc-xml-import.c:577
 msgid "ISO-8859-1 KOI8-U"
-msgstr ""
+msgstr "ISO-8859-1"
 
 #. another error, cannot handle this here
 #: ../src/gnome-utils/druid-gnc-xml-import.c:698
@@ -8976,7 +8915,7 @@ msgstr "Bestand schrijven..."
 #: ../src/gnome-utils/druid-gnc-xml-import.c:833
 #, c-format
 msgid "There are %d unassigned and %d undecodable words. Please add encodings."
-msgstr ""
+msgstr "Er zijn %d niet-toegekende en %d niet-decodeerbare woorden. Voeg de coderingen toe."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:839
 #, c-format
@@ -9130,9 +9069,8 @@ msgid "Database"
 msgstr "Prijs database"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:4
-#, fuzzy
 msgid "Host"
-msgstr "Boeken"
+msgstr "Host"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:5
 #, fuzzy
@@ -10257,9 +10195,8 @@ msgid "New..."
 msgstr "Nieuw..."
 
 #: ../src/gnome-utils/gnc-autosave.c:99
-#, fuzzy
 msgid "Save file automatically?"
-msgstr "(automatisch ingevuld)"
+msgstr "Bestand automatisch opslaan?"
 
 #: ../src/gnome-utils/gnc-autosave.c:102
 #, c-format
@@ -10903,7 +10840,7 @@ msgstr "Vernieuw dit venster"
 #: ../src/gnome-utils/gnc-main-window.c:291
 #: ../src/gnome/window-reconcile.c:2111
 msgid "_Check & Repair"
-msgstr "_Controleer & repareer"
+msgstr "_Controleren & repareren"
 
 #: ../src/gnome-utils/gnc-main-window.c:292
 msgid "Reset _Warnings..."
@@ -11296,7 +11233,7 @@ msgstr "Totaal (periode)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:637
 msgid "Tax Info"
-msgstr "Belasting informatie"
+msgstr "Belastinginformatie"
 
 #. Translators: This string has a context prefix; the translation
 #. must only contain the part after the | character.
@@ -11512,7 +11449,7 @@ msgstr "Betaling van"
 
 #: ../src/gnome/window-reconcile.c:471 ../src/gnome/window-reconcile.c:481
 msgid "Reconcile Account"
-msgstr "Corrigeer dagboek"
+msgstr "Rekening afstemmen"
 
 #: ../src/gnome/window-reconcile.c:486
 msgid "Payment To"
@@ -11579,20 +11516,20 @@ msgstr "Wilt u deze correctie uitstellen en later afmaken?"
 #. Toplevel
 #: ../src/gnome/window-reconcile.c:2079
 msgid "_Reconcile"
-msgstr "Co_rrigeer"
+msgstr "_Afstemmen"
 
 #: ../src/gnome/window-reconcile.c:2080
 msgid "_Account"
-msgstr "D_agboek"
+msgstr "_Rekening"
 
 #. Reconcile menu
 #: ../src/gnome/window-reconcile.c:2086
 msgid "_Reconcile Information..."
-msgstr "Co_rrectie informatie..."
+msgstr "_Afsteminformatie..."
 
 #: ../src/gnome/window-reconcile.c:2087
 msgid "Change the reconcile information including statement date and ending balance."
-msgstr "Verander de correctie informatie inclusief de aangiftedatum en eindbalans."
+msgstr "Verander de afsteminformatie inclusief de afschriftdatum en eindbalans."
 
 #: ../src/gnome/window-reconcile.c:2090
 msgid "_Finish"
@@ -11600,7 +11537,7 @@ msgstr "_Beëindig"
 
 #: ../src/gnome/window-reconcile.c:2091
 msgid "Finish the reconciliation of this account"
-msgstr "Beëindig de correctie voor dit dagboek"
+msgstr "Beëindig de afstemming voor deze rekening"
 
 #: ../src/gnome/window-reconcile.c:2093
 msgid "_Postpone"
@@ -11608,19 +11545,19 @@ msgstr "_Uitstellen"
 
 #: ../src/gnome/window-reconcile.c:2094
 msgid "Postpone the reconciliation of this account"
-msgstr "Stel de correctie van dit dagboek uit"
+msgstr "Stel de afstemming van deze rekening uit"
 
 #: ../src/gnome/window-reconcile.c:2097
 msgid "Cancel the reconciliation of this account"
-msgstr "Annuleer de correctie van dit dagboek"
+msgstr "Annuleer de afstemming van deze rekening"
 
 #: ../src/gnome/window-reconcile.c:2103
 msgid "Open the account"
-msgstr "Open het dagboek"
+msgstr "Open de grootboekrekening"
 
 #: ../src/gnome/window-reconcile.c:2106
 msgid "Edit the main account for this register"
-msgstr "Bewerk het hoofd dagboek van dit boekingsformulier"
+msgstr "Bewerk het hoofdrekening van dit boekingsformulier"
 
 #: ../src/gnome/window-reconcile.c:2119
 msgid "Add a new transaction to the account"
@@ -12315,26 +12252,23 @@ msgstr ""
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:726
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:315
 msgid "Reconcile account now?"
-msgstr "Dagboek nu Corrigeren?"
+msgstr "Rekening nu afstemmen?"
 
 #: ../src/import-export/aqbanking/gnc-file-aqb-import.c:77
 #: ../src/import-export/hbci/gnc-file-aqb-import.c:76
-#, fuzzy
 msgid "Select a file to import"
-msgstr "Selecteer een te laden OFX bestand."
+msgstr "Selecteer een bestand om te importeren"
 
 #: ../src/import-export/aqbanking/gnc-file-aqb-import.c:126
 msgid "Import module for DTAUS import not found."
-msgstr ""
+msgstr "Importmodule voor DTAUS is niet gevonden."
 
 #: ../src/import-export/aqbanking/gnc-gwen-gui.c:867
 #, fuzzy, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
 "long. Do you want to try again?"
-msgstr ""
-"Het PIN moet tenminste %d karakters lang zijn.\n"
-"Wilt u het nogmaals proberen?"
+msgstr "Het PIN moet uit tenminste %d karakters bestaan. Wilt u het nogmaals proberen?"
 
 #: ../src/import-export/aqbanking/gnc-gwen-gui.c:1320
 #, fuzzy
@@ -13092,11 +13026,9 @@ msgid "Import a CSV file into GnuCash and send the transfers online through Onli
 msgstr ""
 
 #: ../src/import-export/hbci/hbci-interaction.c:401
-#, fuzzy, c-format
+#, c-format
 msgid "The PIN needs to be at least %d characters long. Do you want to try again?"
-msgstr ""
-"Het PIN moet tenminste %d karakters lang zijn.\n"
-"Wilt u het nogmaals proberen?"
+msgstr "Het PIN moet uit tenminste %d karakters bestaan. Wilt u het nogmaals proberen?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:414
 #, fuzzy, c-format
@@ -13176,9 +13108,8 @@ msgid "R"
 msgstr "R"
 
 #: ../src/import-export/import-main-matcher.c:451
-#, fuzzy
 msgid "Info"
-msgstr "Belasting informatie"
+msgstr "Informatie"
 
 #: ../src/import-export/import-main-matcher.c:603
 msgid "New, already balanced"
@@ -13206,11 +13137,11 @@ msgstr "Nieuw, Ongebalanceerd (dagboek is nodig om %s over te zetten)!"
 
 #: ../src/import-export/import-main-matcher.c:658
 msgid "Reconcile (manual) match"
-msgstr "Corrigeer (handmatig) overeenkomstig"
+msgstr "Overeenkomst (handmatig) afstemmen"
 
 #: ../src/import-export/import-main-matcher.c:662
 msgid "Reconcile (auto) match"
-msgstr "Corrigeer (automatisch) overeenkomstig"
+msgstr "Overeenkomst (automatisch) afstemmen"
 
 #: ../src/import-export/import-main-matcher.c:668
 msgid "Match missing!"
@@ -13218,7 +13149,7 @@ msgstr "Geen overeenkomst!"
 
 #: ../src/import-export/import-main-matcher.c:677
 msgid "Do not import (no action selected)"
-msgstr "Importeer niet (geen actie gekozen)"
+msgstr "Niet importeren (geen actie gekozen)"
 
 #: ../src/import-export/import-match-picker.c:363
 msgid "Confidence"
@@ -13945,7 +13876,7 @@ msgstr "Geïmporteerde transacties met duplicaten"
 
 #: ../src/register/ledger-core/split-register.c:441
 msgid "The current transaction has been changed. Would you like to record the changes before duplicating the transaction, or cancel the duplication?"
-msgstr "Het huidige transactie is veranderd. Wilt u de veranderingen opslaan voordat de transactie wordt gedupliceerd of de duplicatie annuleren?"
+msgstr "De huidige transactie is veranderd. Wilt u de veranderingen opslaan voordat de transactie wordt gedupliceerd of de duplicatie annuleren?"
 
 #: ../src/register/ledger-core/split-register.c:799
 #, fuzzy
@@ -13963,7 +13894,7 @@ msgstr ""
 
 #: ../src/register/ledger-core/split-register.c:1884
 msgid "Recalculate Transaction"
-msgstr "Transactie Opnieuw Berekenen"
+msgstr "Transactie opnieuw berekenen"
 
 #: ../src/register/ledger-core/split-register.c:1885
 #, fuzzy
@@ -14165,7 +14096,7 @@ msgstr "De aangepaste transactie opslaan?"
 
 #: ../src/register/ledger-core/split-register-control.c:1447
 msgid "The current transaction has been changed.  Would you like to record the changes before moving to a new transaction, discard the changes, or return to the changed transaction?"
-msgstr ""
+msgstr "De huidige transactie is veranderd. Wilt u deze veranderingen opslaan, negeren of de aangepaste transactie verder wijzigen voordat u naar een nieuwe transactie gaat?"
 
 #: ../src/register/ledger-core/split-register-control.c:1460
 msgid "_Discard Changes"
@@ -14173,7 +14104,7 @@ msgstr "Veranderingen _negeren"
 
 #: ../src/register/ledger-core/split-register-control.c:1462
 msgid "_Record Changes"
-msgstr "Veranderingen _registreren"
+msgstr "Veranderingen _opslaan"
 
 #: ../src/register/ledger-core/split-register-control.c:1735
 msgid "Mark split as unreconciled?"
@@ -14458,7 +14389,7 @@ msgstr "Rapport_opties"
 #: ../intl-scm/guile-strings.c:7028 ../intl-scm/guile-strings.c:7034
 #: ../intl-scm/guile-strings.c:7040
 msgid "Edit report options"
-msgstr "Bewerk rapport opies"
+msgstr "Rapportopties bewerken"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:990
 msgid "Back"
@@ -15747,7 +15678,7 @@ msgstr "Belastbaar"
 #: ../intl-scm/guile-strings.c:1694 ../intl-scm/guile-strings.c:1750
 #: ../intl-scm/guile-strings.c:1864 ../intl-scm/guile-strings.c:1920
 msgid "Tax Amount"
-msgstr "Belasting totaal"
+msgstr "Belastingbedrag"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -15783,7 +15714,7 @@ msgstr "Eigen titel"
 #: ../intl-scm/guile-strings.c:1332 ../intl-scm/guile-strings.c:1502
 #: ../intl-scm/guile-strings.c:1704 ../intl-scm/guile-strings.c:1874
 msgid "A custom string to replace Invoice, Bill or Expense Voucher"
-msgstr ""
+msgstr "Een eigen tekst om Factuur of Onkostendeclaratie te vervangen"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -19053,7 +18984,7 @@ msgstr "Valuta rapportage"
 #: ../intl-scm/guile-strings.c:3992 ../intl-scm/guile-strings.c:5390
 #: ../intl-scm/guile-strings.c:7242 ../intl-scm/guile-strings.c:7558
 msgid "Total For "
-msgstr "Totaal voor"
+msgstr "Totaal voor "
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/gnucash/report/category-barchart.scm
@@ -21228,7 +21159,7 @@ msgstr "De geselecteerde dagboeken bevatten geen gegevens/transacties (of alleen
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:7042 ../intl-scm/guile-strings.c:7358
 msgid "Tax Report / TXF Export"
-msgstr "Belasting rapport / TXF export"
+msgstr "Belastingrapport / TXF-export"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -21495,9 +21426,8 @@ msgstr "Er zijn geen belastinggerelateerde rekeningen gevonden. Ga naar Bewerken
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:7116 ../intl-scm/guile-strings.c:7432
-#, fuzzy
 msgid "Tax Report & XML Export"
-msgstr "Belasting Rapport & TXF export"
+msgstr "Belastingrapport & TXF-export"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
@@ -21537,9 +21467,8 @@ msgstr "Deze pagina toont uw belastbare inkomen en aftrekbare uitgaven"
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7130 ../intl-scm/guile-strings.c:7446
-#, fuzzy
 msgid "Tax Schedule Report/TXF Export"
-msgstr "Belasting rapport / TXF export"
+msgstr "Belastingrapport / TXF-export"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -21997,9 +21926,8 @@ msgstr "De in verhouding tot de rapportdatum, meest recente opgeslagen prijs"
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7346 ../intl-scm/guile-strings.c:7662
-#, fuzzy
 msgid "Tax Schedule Report & TXF Export"
-msgstr "Belasting Rapport & TXF export"
+msgstr "Belastingrapport & TXF-export"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
