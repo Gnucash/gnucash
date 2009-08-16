@@ -1,7 +1,7 @@
 ;; -*-scheme-*-
 ;; register.scm
 
-(define-module (gnucash report register))
+(define-module (gnucash report standard-reports register))
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))

@@ -7,7 +7,7 @@
 ;;  or indirect losses incurred as a result of using this software.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report average-balance))
+(define-module (gnucash report standard-reports average-balance))
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
 

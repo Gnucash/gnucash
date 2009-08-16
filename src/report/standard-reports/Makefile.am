@@ -15,10 +15,15 @@ libgncmod_standard_reports_la_LIBADD = \
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
-  ${GUILE_INCS} ${GLIB_CFLAGS}
+  ${GUILE_INCS} \
+  ${GLIB_CFLAGS}
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA = \
+   standard-reports.scm
+
+gncscmreportmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/standard-reports
+gncscmreportmod_DATA = \
    account-piecharts.scm \
    account-summary.scm \
    advanced-portfolio.scm \
@@ -38,7 +43,6 @@ gncscmmod_DATA = \
    portfolio.scm \
    price-scatter.scm \
    register.scm \
-   standard-reports.scm \
    trial-balance.scm \
    general-journal.scm \
    general-ledger.scm \
@@ -69,7 +73,7 @@ clean-local:
 
 noinst_DATA = .scm-links
 
-EXTRA_DIST = ${gncscmmod_DATA}
+EXTRA_DIST = ${gncscmmod_DATA} ${gncscmreportmod_DATA}
 
 CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}
