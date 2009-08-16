@@ -68,6 +68,7 @@ static const GncSqlColumnTableEntry col_table[] =
 };
 
 static /*@ dependent @*//*@ null @*/ QofInstance* get_budget( gpointer pObj );
+static void set_budget( gpointer pObj, gpointer val );
 static /*@ dependent @*//*@ null @*/ QofInstance* get_account( gpointer pObj );
 static void set_account( gpointer pObj, gpointer val );
 static gint get_period_num( gpointer pObj );
@@ -86,7 +87,7 @@ static const GncSqlColumnTableEntry budget_amounts_col_table[] =
 	/*@ -full_init_block @*/
     { "id",           CT_INT,        0, COL_NNUL|COL_PKEY|COL_AUTOINC },
 	{ "budget_guid",  CT_BUDGETREF,  0, COL_NNUL,                     NULL, NULL,
-	    (QofAccessFunc)get_budget },
+	    (QofAccessFunc)get_budget, (QofSetterFunc)set_budget },
 	{ "account_guid", CT_ACCOUNTREF, 0, COL_NNUL,                     NULL, NULL,
 	    (QofAccessFunc)get_account, (QofSetterFunc)set_account },
 	{ "period_num",   CT_INT,        0, COL_NNUL,                     NULL, NULL,
@@ -106,6 +107,11 @@ get_budget( gpointer pObj )
 	g_return_val_if_fail( pObj != NULL, NULL );
 
 	return QOF_INSTANCE(info->budget);
+}
+
+static void
+set_budget( gpointer pObj, gpointer val )
+{
 }
 
 static /*@ dependent @*//*@ null @*/ QofInstance*
