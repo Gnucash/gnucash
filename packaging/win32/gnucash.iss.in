@@ -190,6 +190,9 @@ begin
   pkgdatadir := appdir + '\share\gnucash';
 
   { Create the gnucash.cmd file; #10 is the linefeed character and #13 CR }
+
+  { If you make any changes here, you should probably also change the equivalent sections }
+  { in packaging/win32/install.sh, src/bin/gnucash-setup-env.in and src/bin/gnucash-setup-env-osx.in }
   FileName := appdir + '\bin\gnucash.cmd' ;
   FileString := 'setlocal'#13#10 ;
   FileString := FileString + 'chcp ' + ExpandConstant('{cm:LanguageCodePage}') + ''#13#10 ;
@@ -201,6 +204,7 @@ begin
   FileString := FileString + 'set LTDL_LIBRARY_PATH=' + libdir + ''#13#10 ;
   FileString := FileString + 'set QOF_LIB_DIR=' + pkglibdir + ''#13#10 ;
   FileString := FileString + 'set GNC_DBD_DIR=' + libdir + '\dbd'#13#10 ;
+  FileString := FileString + 'set GNC_STANDARD_REPORTS_DIR=' + pkgdatadir + '\guile-modules\gnucash\report\standard-reports'#13#10 ;
   FileString := FileString + 'set SCHEME_LIBRARY_PATH='#13#10 ;
   FileString := FileString + 'start gnucash-bin %*'#13#10 ;
 

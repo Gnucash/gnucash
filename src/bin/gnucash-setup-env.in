@@ -1,6 +1,10 @@
 # gnucash-setup-env
 #
 # Common environment setup used by different gnucash startup scripts
+#
+# If you make any changes here, you should probably also change the equivalent sections
+# in packaging/win32/gnucash.iss.in, packaging/win32/install.sh and
+# src/bin/gnucash-setup-env-osx.in
 
 PATH="@-BIN_DIR-@:${PATH}"
 export PATH

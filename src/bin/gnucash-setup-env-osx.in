@@ -1,3 +1,6 @@
+# If you make any changes here, you should probably also change the equivalent sections
+# in packaging/win32/gnucash.iss.in, packaging/win32/install.sh and src/bin/gnucash-setup-env.in
+
 PATH="@-BIN_DIR-@:${PATH}"
 export PATH
 XDG_CONFIG_DIRS=@-PREFIX-@/etc/xdg

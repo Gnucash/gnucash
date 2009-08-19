@@ -1286,6 +1286,9 @@ function make_install() {
 
     if [ -z $_skip_scripts ]; then
         # Create a startup script that works without the msys shell
+        # If you make any changes here, you should probably also change
+		# the equivalent sections in packaging/win32/gnucash.iss.in,
+		# src/bin/gnucash-setup-env.in and src/bin/gnucash-setup-env-osx.in
         qpushd $_INSTALL_UDIR/bin
             echo "setlocal" > gnucash.cmd
             echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GNUTLS_DIR}\\bin;${GMP_DIR}\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${WEBKIT_DIR}\\bin;${GNOME_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBDBI_DIR}\\bin;${SQLITE3_DIR}\\bin;%PATH%" >> gnucash.cmd
