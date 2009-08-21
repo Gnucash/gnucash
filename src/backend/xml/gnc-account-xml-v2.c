@@ -97,12 +97,17 @@ gnc_account_dom_tree_create(Account *act,
                     act_type_string,
                     xaccAccountTypeEnumAsString(xaccAccountGetType(act))));
 
+    /* Don't write new XML tags in version 2.3.x and 2.4.x because it
+       would mean 2.2.x cannot read those files again. But we can
+       enable writing these tags in 2.5.x or late in 2.4.x. */
+    /*
 	xmlAddChild(ret, boolean_to_dom_tree(
 							act_hidden_string,
 							xaccAccountGetHidden(act)));
 	xmlAddChild(ret, boolean_to_dom_tree(
 							act_placeholder_string,
 							xaccAccountGetPlaceholder(act)));
+    */
 
     acct_commodity = xaccAccountGetCommodity(act);
     if (acct_commodity != NULL)
