@@ -153,7 +153,7 @@ set_period_num( gpointer pObj, gpointer val )
 
 	g_return_if_fail( pObj != NULL );
 
-	info->period_num = (guint)val;
+	info->period_num = GPOINTER_TO_UINT(val);
 }
 
 static gnc_numeric
