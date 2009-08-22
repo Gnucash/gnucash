@@ -311,7 +311,7 @@
 		          (style-tag (if total? "total-number-cell" "number-cell"))
 				  (style-tag-neg (string-append style-tag "-neg"))
 		         )
-             (if bgt-numeric-val
+             (if show-budget?
                (begin
                  (set! bgt-val (if (gnc-numeric-zero-p bgt-numeric-val) "."
                            (gnc:make-gnc-monetary comm bgt-numeric-val)))
@@ -320,7 +320,7 @@
                  (set! current-col (+ current-col 1))
                )
              )
-             (if act-numeric-val
+             (if show-actual?
                (begin
                  (set! act-val (gnc:make-gnc-monetary comm act-numeric-val))
                  (gnc:html-table-set-cell/tag!
@@ -330,7 +330,7 @@
                  (set! current-col (+ current-col 1))
                )
              )
-             (if dif-numeric-val
+             (if show-diff?
                (begin
                  (set! dif-val
                    (if (and (gnc-numeric-zero-p bgt-numeric-val) (gnc-numeric-zero-p act-numeric-val))
@@ -434,7 +434,13 @@
            (period 0)
            (current-col (+ colnum 1))
            (col-list column-list)
+	   (col-span 0)
            )
+
+	(if show-budget? (set! col-span (+ col-span 1)))
+	(if show-actual? (set! col-span (+ col-span 1)))
+	(if show-diff? (set! col-span (+ col-span 1)))
+	(if (eqv? col-span 0) (set! col-span 1))
 
       ;; prepend 2 empty rows
       (gnc:html-table-prepend-row! html-table '())
@@ -462,7 +468,7 @@
             )
           )
           (set! tc (gnc:html-table-get-cell html-table 0 current-col))
-          (gnc:html-table-cell-set-colspan! tc (if show-diff? 3 2))
+          (gnc:html-table-cell-set-colspan! tc col-span)
           (gnc:html-table-cell-set-tag! tc "centered-label-cell")
           (set! current-col (+ current-col 1))
           (set! col-list (cdr col-list))
