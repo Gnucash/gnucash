@@ -294,12 +294,23 @@ gnc_history_generate_label (int index, const gchar *filename)
 	if (g_ascii_strncasecmp(filename, "mysql://", 8) == 0 ||
 		g_ascii_strncasecmp(filename, "postgres://", 11) == 0 ) {
 	  gint num_colons = 0;
+	  gboolean has_explicit_port;
+
+	  /* Count the number of colons to see if there is an explicit port number or not */
+	  for (src = filename; *src; src = g_utf8_next_char(src)) {
+	    gunichar c = g_utf8_get_char(src);
+	    if (c == ':') num_colons++;
+	  }
+	  has_explicit_port = (num_colons == 5);
+	  num_colons = 0;
 
 	  /* Loop for all chars and copy from 'src' to 'dst'.  While doing this,
-	     convert username and password (after 3rd ':') to asterisks. */
+	     convert username and password (after 2nd ':', 3rd if explicit port) to asterisks. */
 	  src = filename;
 	  for( ; *src; src = g_utf8_next_char(src)) {
-	    if (num_colons < 3 || *src == ':') {
+		if (*src == ':' ||
+			(!has_explicit_port && num_colons < 3) ||
+			(has_explicit_port && num_colons < 4)) {
 	      unichar = g_utf8_get_char(src);
 		} else {
 		  unichar = '*';

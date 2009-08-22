@@ -1269,24 +1269,27 @@ gnc_main_window_generate_title (GncMainWindow *window)
 	  if (c == ':') num_colons++;
 	}
 
-    if (num_colons != 4) {
+    if (num_colons < 4) {
       /* The Gnome HIG 2.0 recommends only the file name (no path) be used. (p15) */
       ptr = g_utf8_strrchr(filename, -1, G_DIR_SEPARATOR);
       if (ptr != NULL)
         filename = g_strdup(g_utf8_next_char(ptr));
 	} else {
 	  const gchar* src = filename;
+	  gboolean has_explicit_port = (num_colons == 5);
 
 	  filename = g_strdup(filename);
 	  ptr = filename;
 	  num_colons = 0;
 
-	  /* Loop and copy chars, converting username and password (after 3rd ':') to
-	  asterisks. */
+	  /* Loop and copy chars, converting username and password (after 3rd ':' (4th if there's
+	     an explicit port number) to asterisks. */
 	  for( ; *src; src = g_utf8_next_char(src)) {
 		gunichar unichar;
 
-	    if (num_colons < 3 || *src == ':') {
+		if (*src == ':' ||
+			(!has_explicit_port && num_colons < 3) ||
+			(has_explicit_port && num_colons < 4)) {
 	      unichar = g_utf8_get_char(src);
 		} else {
 		  unichar = '*';

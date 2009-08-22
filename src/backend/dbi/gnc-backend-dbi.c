@@ -331,9 +331,11 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
     GncDbiBackend *be = (GncDbiBackend*)qbe;
 	gchar* dsn = NULL;
 	gchar* host;
+	gchar* port = NULL;
 	gchar* dbname;
     gchar* username;
     gchar* password;
+	gint portnum;
 	gint result;
 	gboolean success = FALSE;
 
@@ -343,16 +345,28 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
 
     ENTER (" ");
 
-	/* Split the book-id (format host:dbname:username:password) */
+	/* Split the book-id (format host:dbname:username:password or
+	   host:port:dbname:username:password) */
 	dsn = g_strdup( book_id );
 	for( host = dsn; *host != '/'; host++ ) {}
 	host += 2;
 	for( dbname = host; *dbname != ':'; dbname++ ) {}
 	*dbname++ = '\0';
+	if( *dbname >= '0' && *dbname <= '9' ) {
+	    port = dbname;
+	    for( ; *dbname != ':'; dbname++ ) {}
+		*dbname++ = '\0';
+	}
 	for( username = dbname; *username != ':'; username++ ) {}
 	*username++ = '\0';
 	for( password = username; *password != ':'; password++ ) {}
 	*password++ = '\0';
+
+	if( port != NULL && *port != '\0' ) {
+		portnum = atoi( port );
+	} else {
+		portnum = 0;
+	}
 
 	// Try to connect to the db.  If it doesn't exist and the create_if_nonexistent
 	// flag is TRUE, we'll need to connect to the 'mysql' db and execute the
@@ -367,7 +381,7 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
 		goto exit;
 	}
 	dbi_conn_error_handler( be->conn, mysql_error_fn, be );
-	if( !set_standard_connection_options( qbe, be->conn, host, 0, dbname, username, password ) ) {
+	if( !set_standard_connection_options( qbe, be->conn, host, portnum, dbname, username, password ) ) {
 		goto exit;
 	}
 	be->exists = TRUE;
@@ -469,10 +483,12 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 	gint result;
 	gchar* dsn;
 	gchar* host;
+	gchar* port = NULL;
 	gchar* dbname;
     gchar* username;
     gchar* password;
 	gboolean success;
+	gint portnum;
 
 	g_return_if_fail( qbe != NULL );
 	g_return_if_fail( session != NULL );
@@ -480,16 +496,28 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 
     ENTER (" ");
 
-	/* Split the book-id (format host:dbname:username:password) */
+	/* Split the book-id (format host:dbname:username:password or
+	   host:port:dbname:username:password) */
 	dsn = g_strdup( book_id );
 	for( host = dsn; *host != '/'; host++ ) {}
 	host += 2;
 	for( dbname = host; *dbname != ':'; dbname++ ) {}
 	*dbname++ = '\0';
+	if( *dbname >= '0' && *dbname <= '9' ) {
+	    port = dbname;
+	    for( ; *dbname != ':'; dbname++ ) {}
+		*dbname++ = '\0';
+	}
 	for( username = dbname; *username != ':'; username++ ) {}
 	*username++ = '\0';
 	for( password = username; *password != ':'; password++ ) {}
 	*password++ = '\0';
+
+	if( port != NULL && *port != '\0' ) {
+		portnum = atoi( port );
+	} else {
+		portnum = PGSQL_DEFAULT_PORT;
+	}
 
 	// Try to connect to the db.  If it doesn't exist and the create_if_nonexistent
 	// flag is TRUE, we'll need to connect to the 'postgres' db and execute the
@@ -504,7 +532,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 		goto exit;
 	}
 	dbi_conn_error_handler( be->conn, pgsql_error_fn, be );
-	if( !set_standard_connection_options( qbe, be->conn, host, PGSQL_DEFAULT_PORT, dbname, username, password ) ) {
+	if( !set_standard_connection_options( qbe, be->conn, host, portnum, dbname, username, password ) ) {
 		goto exit;
 	}
 	be->exists = TRUE;
