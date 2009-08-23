@@ -1011,6 +1011,8 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
 	GncDbiSqlRow* dbi_row = (GncDbiSqlRow*)row;
 	gushort type;
 	GValue* value;
+	time_t time;
+	struct tm tm_struct;
 
 	type = dbi_result_get_field_type( dbi_row->result, col_name );
 	value = g_new0( GValue, 1 );
@@ -1029,8 +1031,21 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
 			(void)g_value_init( value, G_TYPE_STRING );
 			g_value_take_string( value, dbi_result_get_string_copy( dbi_row->result, col_name ) );
 			break;
+		case DBI_TYPE_DATETIME:
+			if( dbi_result_field_is_null( dbi_row->result, col_name ) ) {
+				return NULL;
+			} else {
+		    	time = dbi_result_get_datetime( dbi_row->result, col_name );
+				(void)gmtime_r( &time, &tm_struct );
+				(void)g_value_init( value, G_TYPE_STRING );
+				g_value_take_string( value,
+						g_strdup_printf( "%d%02d%02d%02d%02d%02d",
+										1900+tm_struct.tm_year, tm_struct.tm_mon+1, tm_struct.tm_mday,
+										tm_struct.tm_hour, tm_struct.tm_min, tm_struct.tm_sec ) );
+			}
+		    break;
 		default:
-			PERR( "Unknown DBI_TYPE: %d\n", type );
+			PERR( "Field %s: unknown DBI_TYPE: %d\n", col_name, type );
 			g_free( value );
 			return NULL;
 	}

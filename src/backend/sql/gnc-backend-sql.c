@@ -1687,11 +1687,7 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
 	g_return_if_fail( table_row != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
-    if( val == NULL ) {
-		date = g_date_new_dmy( (GDateDay)1, 1, 1970 );
-        (*setter)( pObject, date );
-		g_date_free( date );
-    } else {
+    if( val != NULL ) {
 		if( G_VALUE_HOLDS_STRING( val ) ) {
 			// Format of date is YYYYMMDD
 			const gchar* s = g_value_get_string( val );
@@ -1706,7 +1702,8 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
 			strncpy( buf, &s[4], 2 );
 			buf[2] = '\0';
 			month = (guint)atoi( buf );
-			day = (GDateDay)atoi( &s[6] );
+			strncpy( buf, &s[6], 2 );
+			day = (GDateDay)atoi( buf );
 
 			if( year != 0 || month != 0 || day != (GDateDay)0 ) {
 				date = g_date_new_dmy( day, month, year );
@@ -1753,11 +1750,13 @@ add_gvalue_date_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	g_assert( value != NULL );
     getter = gnc_sql_get_getter( obj_name, table_row );
 	if( getter != NULL ) {
-    	date = (GDate*)(*getter)( pObject, NULL );
-		buf = g_strdup_printf( "%04d%02d%02d",
-					g_date_get_year( date ), g_date_get_month( date ), g_date_get_day( date ) );
     	(void)g_value_init( value, G_TYPE_STRING );
-    	g_value_take_string( value, buf );
+    	date = (GDate*)(*getter)( pObject, NULL );
+		if( g_date_valid( date ) ) {
+			buf = g_strdup_printf( "%04d%02d%02d",
+					g_date_get_year( date ), g_date_get_month( date ), g_date_get_day( date ) );
+    		g_value_take_string( value, buf );
+		}
 	}
 
 	(*pList) = g_slist_append( (*pList), value );
