@@ -504,7 +504,7 @@ Unknown</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="label" translatable="yes">gtk-apply</property>
+                <property name="label" translatable="no">gtk-apply</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">-10</property>
               </widget>

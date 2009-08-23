@@ -184,7 +184,9 @@
              (set! s-expression (read)))))
 
   (define (error-handler key subr message args . rest)
-    (display (_ "<p>An error occurred when processing the template:<br>"))
+    (display "<p>")
+    (display (_ "An error occurred when processing the template:"))
+    (display "<br>")
     (display
       (escape-html
         (with-output-to-string
@@ -200,7 +202,7 @@
 ;; Process a template file and return the result as a string
 (define (eguile-file-to-string infile environment)
   (if (not (access? infile R_OK))  
-    (string-append (_ "Template file ") infile (_ " can not be read"))
+    (sprintf #f (_ "Template file \"%s\" can not be read") infile)
     (let ((script (with-input-from-file
                     infile
                     (lambda () (with-output-to-string template->script)))))
