@@ -32,6 +32,9 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
+#if !HAVE_GMTIME_R
+#include "gmtime_r.h"
+#endif
 
 #include <dbi/dbi.h>
 
