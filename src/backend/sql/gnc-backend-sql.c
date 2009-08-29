@@ -1691,25 +1691,28 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
 		if( G_VALUE_HOLDS_STRING( val ) ) {
 			// Format of date is YYYYMMDD
 			const gchar* s = g_value_get_string( val );
-			gchar buf[5];
-			GDateDay day;
-			guint month;
-			GDateYear year;
 
-			strncpy( buf, &s[0], 4 );
-			buf[4] = '\0';
-			year = (GDateYear)atoi( buf );
-			strncpy( buf, &s[4], 2 );
-			buf[2] = '\0';
-			month = (guint)atoi( buf );
-			strncpy( buf, &s[6], 2 );
-			day = (GDateDay)atoi( buf );
+			if( s != NULL ) {
+			    gchar buf[5];
+			    GDateDay day;
+			    guint month;
+			    GDateYear year;
 
-			if( year != 0 || month != 0 || day != (GDateDay)0 ) {
-				date = g_date_new_dmy( day, month, year );
-				(*setter)( pObject, date );
-				g_date_free( date );
-			}
+			    strncpy( buf, &s[0], 4 );
+			    buf[4] = '\0';
+			    year = (GDateYear)atoi( buf );
+			    strncpy( buf, &s[4], 2 );
+			    buf[2] = '\0';
+			    month = (guint)atoi( buf );
+			    strncpy( buf, &s[6], 2 );
+			    day = (GDateDay)atoi( buf );
+
+			    if( year != 0 || month != 0 || day != (GDateDay)0 ) {
+				    date = g_date_new_dmy( day, month, year );
+				    (*setter)( pObject, date );
+				    g_date_free( date );
+			    }
+		    }
 		} else {
 			PWARN( "Unknown date type: %s", G_VALUE_TYPE_NAME( val ) );
         }
