@@ -1013,11 +1013,13 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
 {
 	GncDbiSqlRow* dbi_row = (GncDbiSqlRow*)row;
 	gushort type;
+	guint attrs;
 	GValue* value;
 	time_t time;
 	struct tm tm_struct;
 
 	type = dbi_result_get_field_type( dbi_row->result, col_name );
+	attrs = dbi_result_get_field_attribs( dbi_row->result, col_name );
 	value = g_new0( GValue, 1 );
 	g_assert( value != NULL );
 
@@ -1027,8 +1029,15 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
 			g_value_set_int64( value, dbi_result_get_longlong( dbi_row->result, col_name ) );
 			break;
 		case DBI_TYPE_DECIMAL:
-			(void)g_value_init( value, G_TYPE_DOUBLE );
-			g_value_set_double( value, dbi_result_get_double( dbi_row->result, col_name ) );
+			if( (attrs & DBI_DECIMAL_SIZEMASK) == DBI_DECIMAL_SIZE4 ) {
+				(void)g_value_init( value, G_TYPE_FLOAT );
+				g_value_set_float( value, dbi_result_get_float( dbi_row->result, col_name ) );
+			} else if( (attrs & DBI_DECIMAL_SIZEMASK) == DBI_DECIMAL_SIZE8 ) {
+				(void)g_value_init( value, G_TYPE_DOUBLE );
+				g_value_set_double( value, dbi_result_get_double( dbi_row->result, col_name ) );
+			} else {
+				PERR( "Field %s: strange decimal length attrs=%d\n", col_name, attrs );
+			}
 			break;
 		case DBI_TYPE_STRING:
 			(void)g_value_init( value, G_TYPE_STRING );
