@@ -1453,7 +1453,7 @@ conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
 		} else if( info->type == BCT_INT64 ) {
 			type_name = "bigint";
 		} else if( info->type == BCT_DOUBLE ) {
-			type_name = "real";
+			type_name = "float8";
 		} else if( info->type == BCT_STRING || info->type == BCT_DATE
 				|| info->type == BCT_DATETIME ) {
 			type_name = "text";
