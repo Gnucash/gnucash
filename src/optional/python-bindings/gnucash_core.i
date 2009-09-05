@@ -79,7 +79,7 @@
 
 %include <gnc-commodity.h>
 
-/* %include <gnc-lot.h> */
+%include <gnc-lot.h>
 
 //business-core includes
 %include <gncCustomer.h>
@@ -93,6 +93,6 @@
 g_type_init();
 scm_init_guile();
 gnc_module_load("gnucash/engine", 0);
-gnc_module_load("gnucash/business-core-file", 0);
+gnc_module_load("gnucash/business-core", 0);
 
 %}

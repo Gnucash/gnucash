@@ -37,6 +37,18 @@ class GnuCashBackendException(Exception):
         self.errors = errors
 
 class Session(GnuCashCoreClass):
+    """A GnuCash book editing session
+
+    To commit changes to the session you may need to call save,
+    (this is allways the case with the file backend).
+    
+    When you're down with a session you may need to call end()
+
+    Every Session has a Book in the book attribute, which you'll definetely
+    be interested in, as every GnuCash entity (Transaction, Split, Vendor,
+    Invoice..) is associated with a particular book where it is stored.
+    """
+
     def __init__(self, book_uri=None, is_new=False):
         """A convienent contructor that allows you to specify a book URI,
         begin the session, and load the book.
@@ -104,10 +116,37 @@ class Session(GnuCashCoreClass):
             return return_value
         return new_function
 
-class Book(GnuCashCoreClass): pass
+class Book(GnuCashCoreClass):
+    """A Book encapsulates all of the GnuCash data, it is the place where
+    all GnuCash entities (Transaction, Split, Vendor, Invoice...), are
+    stored. You'll notice that all of the constructors for those entities
+    need a book to be associated with.
+
+    The most common way to get a book is through the book property in the
+    Session class, that is, create a session that connects to some storage,
+    such as through 'my_session = Session('file:my_books.xac')', and access
+    the book via the book property, 'my_session.book'
+
+    If you would like to create a Book without any backing storage, call the
+    Book constructor wihout any parameters, 'Book()'. You can later merge
+    such a book into a book with actual store by using merge_init.
+
+    Methods of interest
+    get_root_account -- Returns the root level Account
+    get_table -- Returns a commodity lookup table, of type GncCommodityTable
+    """
+    pass
 
 class GncNumeric(GnuCashCoreClass):
-    def __init__(self, num=0, denom=0, **kargs):
+    """Object used by GnuCash to store all numbers. Always consists of a
+    numerator and denominator.
+    """
+
+    def __init__(self, num=0, denom=1, **kargs):
+        """Constructor that allows you to set the numerator and denominator or
+        leave them blank with a default value of 0 (not a good idea since there
+        is currently no way to alter the value after instantiation)
+        """
         GnuCashCoreClass.__init__(self, num, denom, **kargs)
         #if INSTANCE_ARG in kargs:
         #    GnuCashCoreClass.__init__(**kargs)
@@ -115,28 +154,60 @@ class GncNumeric(GnuCashCoreClass):
         #    self.set_denom(denom) # currently undefined
         #    self.set_num(num)     # currently undefined
 
-class GncCommodity(GnuCashCoreClass):
-    def __init__(self, book, name=None, namespace=None, mnemonic=None, cusip=None, fraction=1, **kargs):
-        GnuCashCoreClass.__init__(self, book, name, namespace, mnemonic, cusip, fraction, **kargs)
+class GncCommodity(GnuCashCoreClass): pass
 
-class GncCommodityTable(GnuCashCoreClass): pass
+class GncCommodityTable(GnuCashCoreClass):
+    """A CommodityTable provides a way to store and lookup commoditys.
+    Commoditys are primarily currencies, but other tradable things such as
+    stocks, mutual funds, and material substances are posible.
+
+    Users of this library should not create thier own CommodityTable, instead
+    the get_table method from the Book class should be used.
+
+    This table is automatically populated with the GnuCash default commodity's
+    which includes most of the world's currencies.
+    """
+    pass
 
 class GncLot(GnuCashCoreClass):
-    def __init__(self, book, **kargs):
-        GnuCashCoreClass.__init__(self, book, **kargs)
+    pass
 
 class Transaction(GnuCashCoreClass):
+    """A GnuCash Transaction
+    
+    Consists of at least one (generally two) splits to represent a transaction
+    between two accounts.
+    """
     _new_instance = 'xaccMallocTransaction'
     def GetNthSplit(self, n):
         return self.GetSplitList().pop(n)
 
 class Split(GnuCashCoreClass):
+    """A GnuCash Split
+
+    The most basic representation of a movement of currency from one account to
+    another.
+    """
     _new_instance = 'xaccMallocSplit'
 
 class Account(GnuCashCoreClass):
+    """A GnuCash Account.
+
+    A fundamental entity in accounting, an Account provides representation
+    for a financial object, such as a BANK account, an ASSET (like a building),
+    a LIABILITY (such as a bank loan), a summary of some type of EXPENSE, or
+    a summary of some source of INCOME.
+
+    The words in upper case are the constants that GnuCash and this library uses
+    to describe account type. Here is the full list:
+    BANK, CASH, CREDIT, ASSET, LIABILITY, STOCK, MUTUAL
+    CURRENCY, INCOME, EXPENSE, EQUITY, RECEIVABLE, PAYABLE, 
+    CHECKING, SAVINGS, MONEYMRKT, CREDITLINE
+
+    These are not strings, they are attributes you can import from this
+    module
+    """
     _new_instance = 'xaccMallocAccount'
-    def GetNthChild(self, n):
-        return self.get_children().pop(n)
 
 class GUID(GnuCashCoreClass):
     _new_instance = 'guid_new_return'
@@ -165,9 +236,13 @@ for error_name, error_value, error_name_after_prefix in \
 Book.add_constructor_and_methods_with_prefix('qof_book_', 'new')
 Book.add_method('gnc_book_get_root_account', 'get_root_account')
 Book.add_method('gnc_book_set_root_account', 'set_root_account')
+Book.add_method('gnc_commodity_table_get_table', 'get_table')
 #Functions that return Account
 Book.get_root_account = method_function_returns_instance(
     Book.get_root_account, Account )
+#Functions that return GncCommodityTable
+Book.get_table = method_function_returns_instance(
+    Book.get_table, GncCommodityTable ) 
 
 # GncNumeric
 GncNumeric.add_constructor_and_methods_with_prefix('gnc_numeric_', 'create')
@@ -198,8 +273,7 @@ GncCommodity.clone = method_function_returns_instance(
     GncCommodity.clone, GncCommodity )
 
 # GncCommodityTable
-GncCommodityTable.add_constructor_and_methods_with_prefix('gnc_commodity_table_', 'get_table')
-
+GncCommodityTable.add_methods_with_prefix('gnc_commodity_table_')
 commoditytable_dict =   { 
                             'lookup' : GncCommodity, 
                             'lookup_unique' : GncCommodity, 
@@ -224,6 +298,7 @@ methods_return_instance(GncLot, gnclot_dict)
 
 # Transaction
 Transaction.add_methods_with_prefix('xaccTrans')
+Transaction.add_method('gncTransGetGUID', 'GetGUID');
 
 trans_dict =    {
                     'GetSplit': Split, 
@@ -237,12 +312,14 @@ trans_dict =    {
                     'GetAccountAmount': GncNumeric, 
                     'GetAccountConvRate': GncNumeric, 
                     'GetAccountBalance': GncNumeric, 
-                    'GetCurrency': GncCommodity 
+                    'GetCurrency': GncCommodity,
+                    'GetGUID': GUID
                 }
 methods_return_instance(Transaction, trans_dict)
 
 # Split
 Split.add_methods_with_prefix('xaccSplit')
+Split.add_method('gncSplitGetGUID', 'GetGUID');
 
 split_dict =    {
                     'GetBook': Book, 
@@ -259,7 +336,8 @@ split_dict =    {
                     'GetClearedBalance': GncNumeric, 
                     'GetReconciledBalance': GncNumeric, 
                     'VoidFormerAmount': GncNumeric, 
-                    'VoidFormerValue': GncNumeric 
+                    'VoidFormerValue': GncNumeric,
+                    'GetGUID': GUID
                 }
 methods_return_instance(Split, split_dict)
 
@@ -269,6 +347,7 @@ Split.parent = property( Split.GetParent, Split.SetParent )
 # Account
 Account.add_methods_with_prefix('xaccAccount')
 Account.add_methods_with_prefix('gnc_account_')
+Account.add_method('gncAccountGetGUID', 'GetGUID');
 
 account_dict =  {   
                     'get_book' : Book, 
@@ -278,7 +357,6 @@ account_dict =  {
                     'nth_child' : Account, 
                     'lookup_by_name' : Account, 
                     'lookup_by_full_name' : Account, 
-                    'GetNthChild' : Account, 
                     'FindTransByDesc' : Transaction, 
                     'FindSplitByDesc' : Split, 
                     'get_start_balance' : GncNumeric, 
@@ -298,7 +376,8 @@ account_dict =  {
                     'GetProjectedMinimumBalanceInCurrency' : GncNumeric, 
                     'GetBalanceAsOfDateInCurrency' : GncNumeric, 
                     'GetBalanceChangeForPeriod' : GncNumeric, 
-                    'GetCommodity' : GncCommodity 
+                    'GetCommodity' : GncCommodity,
+                    'GetGUID': GUID 
                 }
 methods_return_instance(Account, account_dict)
 
@@ -306,4 +385,15 @@ Account.name = property( Account.GetName, Account.SetName )
 
 #GUID
 GUID.add_methods_with_prefix('guid_')
+GUID.add_method('xaccAccountLookup', 'AccountLookup')
+GUID.add_method('xaccTransLookup', 'TransLookup')
+GUID.add_method('xaccSplitLookup', 'SplitLookup')
 
+guid_dict = {
+                'copy' : GUID,
+                'TransLookup': Transaction,
+                'AccountLookup': Account,
+                'SplitLookup': Split
+            }
+methods_return_instance(GUID, guid_dict)
+                
