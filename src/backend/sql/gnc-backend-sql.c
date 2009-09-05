@@ -1363,8 +1363,13 @@ load_double( const GncSqlBackend* be, GncSqlRow* row,
     } else {
 		if( G_VALUE_HOLDS(val, G_TYPE_INT) ) {
 			d_value = (gdouble)g_value_get_int( val );
-		} else {
+		} else if( G_VALUE_HOLDS(val, G_TYPE_FLOAT) ) {
+			d_value = g_value_get_float( val );
+		} else if (G_VALUE_HOLDS(val, G_TYPE_DOUBLE) ) {
 			d_value = g_value_get_double( val );
+		} else {
+		    PWARN( "Unknown float value type: %s\n", g_type_name( G_VALUE_TYPE(val) ) );
+			d_value = 0;
 		}
         (*setter)( pObject, (gpointer)&d_value );
     }

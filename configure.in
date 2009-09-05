@@ -926,6 +926,24 @@ else
   AC_MSG_RESULT(yes - $GMSGFMT)
 fi
 
+# -------------------------------------------------------------------------
+# URLs for MySQL and PostgreSQL testing
+AC_ARG_WITH(test-mysql-url,
+            AS_HELP_STRING([--with-test-mysql-url=URL],
+                           [MySQL database URL for testing [default=none]]),
+            [],[with_test_mysql_url=""])
+
+TEST_MYSQL_URL=$with_test_mysql_url
+AC_SUBST(TEST_MYSQL_URL)
+
+AC_ARG_WITH(test-pgsql-url,
+            AS_HELP_STRING([--with-test-pgsql-url=URL],
+                           [PgSQL database URL for testing [default=none]]),
+            [],[with_test_pgsql_url=""])
+
+TEST_PGSQL_URL=$with_test_pgsql_url
+AC_SUBST(TEST_PGSQL_URL)
+
 ### --------------------------------------------------------------------------
 ### help files
 

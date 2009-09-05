@@ -1,6 +1,16 @@
 SUBDIRS = .
 
+test_dbi_basic_SOURCES = \
+  test-dbi-basic.c \
+  test-dbi-stuff.c
+
+test_dbi_SOURCES = \
+  test-dbi.c \
+  test-dbi-stuff.c
+
 TESTS = \
+  test-dbi-basic \
+  test-dbi \
   test-load-backend
 
 GNC_TEST_DEPS = \
@@ -9,8 +19,7 @@ GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/lib/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
-  --library-dir    ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/src/backend/gda
+  --library-dir    ${top_builddir}/src/engine
 
 TESTS_ENVIRONMENT = \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
@@ -18,6 +27,8 @@ TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \
+  test-dbi-basic \
+  test-dbi \
   test-load-backend
 
 #noinst_HEADERS = test-file-stuff.h
@@ -38,9 +49,10 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
-  -I${top_srcdir}/src/backend/gda \
   -I${top_srcdir}/src/backend/qsf \
   -I${top_srcdir}/src/libqof/qof \
+  -DTEST_MYSQL_URL=\"${TEST_MYSQL_URL}\" \
+  -DTEST_PGSQL_URL=\"${TEST_PGSQL_URL}\" \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS} \
   ${GCONF_CFLAGS}
