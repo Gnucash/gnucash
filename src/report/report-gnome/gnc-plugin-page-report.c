@@ -353,7 +353,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
         // FIXME.  This is f^-1(f(x)), isn't it?
         DEBUG( "id=%d", priv->reportId );
         id_name = g_strdup_printf("id=%d", priv->reportId );
-        child_name = gnc_build_url( URL_TYPE_REPORT, id_name, NULL );
+        child_name = gnc_html_build_url( URL_TYPE_REPORT, id_name, NULL );
         type = gnc_html_parse_url( priv->html, child_name, &url_location, &url_label);
         DEBUG( "passing id_name=[%s] child_name=[%s] type=[%s], location=[%s], label=[%s]",
                id_name, child_name ? child_name : "(null)",

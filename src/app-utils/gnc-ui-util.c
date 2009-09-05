@@ -750,9 +750,16 @@ gnc_account_create_opening_balance (Account *account,
 char *
 gnc_account_get_full_name (const Account *account)
 {
+  static gchar result[1000];
+  gchar* name;
+
   if (!account) return NULL;
 
-  return xaccAccountGetFullName (account);
+  name = xaccAccountGetFullName (account);
+  strncpy( result, name, sizeof(result)-1 );
+  result[sizeof(result)] = '\0';
+
+  return result;
 }
 
 static void
