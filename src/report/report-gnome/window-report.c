@@ -283,7 +283,7 @@ gnc_html_report_url_cb (const char *location, const char *label,
   {
     char *url;
 
-    url = gnc_build_url (URL_TYPE_REPORT, location, label);
+    url = gnc_html_build_url (URL_TYPE_REPORT, location, label);
     gnc_main_window_open_report_url (url, NULL);
     g_free (url);
 

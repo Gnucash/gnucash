@@ -564,8 +564,37 @@ gnc_html_initialize( void )
     gnc_html_register_urltype (types[i].type, types[i].protocol);
 }
 
-char  *
-gnc_build_url (URLType type, const gchar * location, const gchar * label)
+/**
+ * Creates a new HMTL url.
+ *
+ * @param type URL type
+ * @param location URL location
+ * @param label URL label (optional)
+ * @return Newly created URL.  This string must be *NOT* freed by the caller.
+ */
+gchar*
+gnc_build_url( URLType type, const gchar* location, const gchar* label )
+{
+    static gchar buf[1000];
+	gchar* url;
+
+	url = gnc_html_build_url( type, location, label );
+	strncpy( buf, url, sizeof(buf) );
+	g_free( url );
+
+	return buf;
+}
+
+/**
+ * Creates a new HMTL url.
+ *
+ * @param type URL type
+ * @param location URL location
+ * @param label URL label (optional)
+ * @return Newly created URL.  This string must be freed by the caller.
+ */
+gchar*
+gnc_html_build_url( URLType type, const gchar* location, const gchar* label )
 {
   char * type_name;
 
