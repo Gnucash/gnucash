@@ -2,16 +2,17 @@
 # Copyright (C) 2001 Free Software Foundation, Inc.
 # Keld Simonsen <keld@dkuug.dk>, 2001-2003.
 # Christian Rose <menthos@menthos.com>, 2001.
+# Joe Hansen <joedalton2@yahoo.dk>, 2009.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-glossary 1.7.4\n"
+"Project-Id-Version: gnucash-glossary 2.3.5\n"
 "POT-Creation-Date: 2005-11-14 21:55+0100\n"
-"PO-Revision-Date: 2003-03-09 20:08+0200\n"
-"Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
-"Language-Team: Danish <dansk@klid.dk>\n"
+"PO-Revision-Date: 2009-09-04 22:41+0200\n"
+"Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
+"Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. "English Definition"
@@ -61,7 +62,7 @@ msgstr "kontotype: Salg"
 
 #. "A debt, a financial obligation"
 msgid "account type: Liability"
-msgstr "kontotype: Gæld"
+msgstr "kontotype: GÃ¦ld"
 
 #. "-"
 msgid "account type: money-market"
@@ -81,7 +82,7 @@ msgstr "kontotype: aktie"
 
 #. "-"
 msgid "account: parent account"
-msgstr "konto: ophavskonto"
+msgstr "konto: samlekonto"
 
 #. "-"
 msgid "account: subaccount"
@@ -93,83 +94,83 @@ msgstr "konto: hovedkonto"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
-msgstr "Hændelse (kassekladde)"
+msgstr "HÃ¦ndelse (kassekladde)"
 
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr "hændelse: pengeautomat"
+msgstr "hÃ¦ndelse: pengeautomat"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
-msgstr "hændelse: fast overføring"
+msgstr "hÃ¦ndelse: fast overfÃ¸ring"
 
 #. "-"
 msgid "action: buy"
-msgstr "hændelse: køb"
+msgstr "hÃ¦ndelse: kÃ¸b"
 
 #. "-"
 msgid "action: deposit"
-msgstr "hændelse: indsættelse"
+msgstr "hÃ¦ndelse: indsÃ¦ttelse"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
-msgstr "hændelse: betalingsservice"
+msgstr "hÃ¦ndelse: betalingsservice"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
-msgstr "hændelse: dist"
+msgstr "hÃ¦ndelse: dist"
 
 #. "transaction is a dividend"
 msgid "action: div"
-msgstr "hændelse: dividendeudbetaling"
+msgstr "hÃ¦ndelse: dividendeudbetaling"
 
 #. "-"
 msgid "action: fee"
-msgstr "hændelse: gebyr"
+msgstr "hÃ¦ndelse: gebyr"
 
 #. "transaction comes from interest"
 msgid "action: int"
-msgstr "hændelse: rente"
+msgstr "hÃ¦ndelse: rente"
 
 #. "-"
 msgid "action: loan"
-msgstr "hændelse: lån"
+msgstr "hÃ¦ndelse: lÃ¥n"
 
 #. "see: payment 1."
 msgid "action: payment"
-msgstr "hændelse: betaling"
+msgstr "hÃ¦ndelse: betaling"
 
 #. "-"
 msgid "action: POS"
-msgstr "hændelse: kasseapparat"
+msgstr "hÃ¦ndelse: kasseapparat"
 
 #. "-"
 msgid "action: rebate"
-msgstr "hændelse: rabat"
+msgstr "hÃ¦ndelse: rabat"
 
 #. "-"
 msgid "action: sell"
-msgstr "hændelse: salg"
+msgstr "hÃ¦ndelse: salg"
 
 #. "-"
 msgid "action: Teller"
-msgstr "hændelse: Kasse"
+msgstr "hÃ¦ndelse: Kasse"
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
-msgstr "hændelse: overførsel"
+msgstr "hÃ¦ndelse: overfÃ¸rsel"
 
 #. "-"
 msgid "action: wire"
-msgstr "hændelse: elektronisk overførsel"
+msgstr "hÃ¦ndelse: elektronisk overfÃ¸rsel"
 
 #. "-"
 msgid "action: withdraw"
-msgstr "hændelse: hævning"
+msgstr "hÃ¦ndelse: hÃ¦vning"
 
 #. "A sum of money"
 msgid "amount"
-msgstr "beløb"
+msgstr "belÃ¸b"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -201,15 +202,15 @@ msgstr "betalingsbetingelser"
 
 #. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
 msgid "Book"
-msgstr ""
+msgstr "Regnskabsbog"
 
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr ""
+msgstr "afslutte regnskab"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
-msgstr ""
+msgstr "Budget"
 
 #. "-"
 msgid "business (adjective)"
@@ -225,7 +226,7 @@ msgstr "kapitalgevinster"
 
 #. "Distinguishing the uppercase and lowercase letters"
 msgid "case sensitive"
-msgstr "versalfølsom"
+msgstr "versalfÃ¸lsom"
 
 #. "Money in coins or notes"
 msgid "cash"
@@ -269,7 +270,7 @@ msgstr "Kreditkort"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
-msgstr "overførsel"
+msgstr "overfÃ¸rsel"
 
 #. "The system of money used in a country"
 msgid "currency"
@@ -301,11 +302,11 @@ msgstr "Debet (kolonne i kassekladde)"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
-msgstr "standardværdi"
+msgstr "standardvÃ¦rdi"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
-msgstr "indsætning (i afstemningsdialogen)"
+msgstr "indsÃ¦tning (i afstemningsdialogen)"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
@@ -385,12 +386,12 @@ msgstr "hovedbog"
 
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
-msgstr "gæld/egenkapital"
+msgstr "gÃ¦ld/egenkapital"
 
 # src/languages.h:184
 #. "A sum of money that is lent (by a bank)"
 msgid "loan"
-msgstr "lån"
+msgstr "lÃ¥n"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -401,14 +402,12 @@ msgid "Lost Accounts"
 msgstr "Tabte konti"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
-#, fuzzy
 msgid "Lot"
-msgstr "Tot"
+msgstr "Parti"
 
 #. "Combine two books into one (see book)."
-#, fuzzy
 msgid "merge, to"
-msgstr "genindlæse, at"
+msgstr "slÃ¥ sammen, til"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
@@ -424,7 +423,7 @@ msgstr "Note"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
-msgstr "Huslån"
+msgstr "HuslÃ¥n"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -444,7 +443,7 @@ msgstr "nettoresultat"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
-msgstr "nettoværdi"
+msgstr "nettovÃ¦rdi"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
@@ -456,11 +455,11 @@ msgstr "Nr (kolonne i kassekladde)"
 
 #. "to make accessible"
 msgid "open, to"
-msgstr "åbne, at"
+msgstr "Ã¥bne, at"
 
 #. "If an account starts with a non-zero balance, then this amount is called the opening balance."
 msgid "opening balance"
-msgstr "åbningssaldo"
+msgstr "Ã¥bningssaldo"
 
 #. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
 msgid "options"
@@ -473,7 +472,7 @@ msgstr "ordre"
 # src/languages.h:184
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
-msgstr "forældreløs"
+msgstr "forÃ¦ldrelÃ¸s"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -497,11 +496,11 @@ msgstr "betaling"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
-msgstr ""
+msgstr "sumkonto"
 
 #. "A set of investments owned by a person"
 msgid "portfolio"
-msgstr "portefølge"
+msgstr "portefÃ¸lge"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
@@ -517,7 +516,7 @@ msgstr "pristype: salgspris"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
 msgid "price type: bid"
-msgstr "pristype: købspris"
+msgstr "pristype: kÃ¸bspris"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
@@ -529,7 +528,7 @@ msgstr "gevinst"
 
 #. "(rather: profit and loss account!?) A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr "Resultatopgørelse"
+msgstr "ResultatopgÃ¸relse"
 
 #. "-"
 msgid "quick-fill"
@@ -545,7 +544,7 @@ msgstr "afstemme, at"
 
 #. "-"
 msgid "record keeping"
-msgstr "bogføring"
+msgstr "bogfÃ¸ring"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
@@ -561,15 +560,15 @@ msgstr "kassekladdepost: aktiedeling"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr "kassekladde: autodelings bogføring"
+msgstr "kassekladde: autodelings bogfÃ¸ring"
 
 #. "another form of register"
 msgid "register: basic ledger"
-msgstr "kassekladde: grundlæggende bogføring"
+msgstr "kassekladde: grundlÃ¦ggende bogfÃ¸ring"
 
 #. "another form of register"
 msgid "register: general ledger"
-msgstr "kassekladde: generel bogføring"
+msgstr "kassekladde: generel bogfÃ¸ring"
 
 #. "another form of register"
 msgid "register: transaction journal"
@@ -577,11 +576,11 @@ msgstr "kassekladde: transaktionsjournal"
 
 #. "reload the current document"
 msgid "reload, to"
-msgstr "genindlæse, at"
+msgstr "genindlÃ¦se, at"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr "Overført resultat"
+msgstr "OverfÃ¸rt resultat"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -590,7 +589,7 @@ msgstr "gemme, at (til en fil)"
 # src/prefs.c:239
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
 msgid "Scheduled Transaction"
-msgstr "planlagt transaktion"
+msgstr "Planlagt transaktion"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
@@ -598,7 +597,7 @@ msgstr "rense op, at"
 
 #. "A document or certificate showing who owns shares"
 msgid "security"
-msgstr "værdipapir"
+msgstr "vÃ¦rdipapir"
 
 #. "-"
 msgid "Share Balance (register)"
@@ -667,15 +666,15 @@ msgstr "transaktionstilstand: ugyldig"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
-msgstr "overførsel (substantiv)"
+msgstr "overfÃ¸rsel (substantiv)"
 
 #. "The account where an amount is transferred to"
 msgid "transfer account"
-msgstr "overførselskonto"
+msgstr "overfÃ¸rselskonto"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr "overføre, at (kassekladdeværktøjslinje)"
+msgstr "overfÃ¸re, at (kassekladdevÃ¦rktÃ¸jslinje)"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
@@ -691,12 +690,12 @@ msgstr "URL"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
-msgstr "værdi (i en deling)"
+msgstr "vÃ¦rdi (i en deling)"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
-msgstr "leverandør"
+msgstr "leverandÃ¸r"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr "hævning (i afstemningsdialogen)"
+msgstr "hÃ¦vning (i afstemningsdialogen)"
