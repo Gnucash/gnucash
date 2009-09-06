@@ -366,7 +366,7 @@
 	  <child>
 	    <widget class="GtkEntry" id="fullname_entry">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Enter the full name of the commodity. Example: Cisco Sytems Inc, or Apple Computer, Inc.</property>
+	      <property name="tooltip" translatable="yes">Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple Computer, Inc.</property>
 	      <property name="can_focus">True</property>
 	      <property name="has_focus">True</property>
 	      <property name="editable">True</property>
