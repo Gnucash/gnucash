@@ -70,7 +70,7 @@ static const GncSqlColumnTableEntry col_table[] =
     { "name",              CT_STRING,  SX_MAX_NAME_LEN, 0,                 NULL, GNC_SX_NAME },
 	{ "enabled",           CT_BOOLEAN, 0,               COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)xaccSchedXactionGetEnabled, (QofSetterFunc)xaccSchedXactionSetEnabled },
-    { "start_date",        CT_GDATE,   0,               COL_NNUL,          NULL, GNC_SX_START_DATE },
+    { "start_date",        CT_GDATE,   0,               0,                 NULL, GNC_SX_START_DATE },
     { "end_date",          CT_GDATE,   0,               0,                 NULL, NULL,
 			(QofAccessFunc)xaccSchedXactionGetEndDate, (QofSetterFunc)xaccSchedXactionSetEndDate },
     { "last_occur",        CT_GDATE,   0,               0,                 NULL, GNC_SX_LAST_DATE },
