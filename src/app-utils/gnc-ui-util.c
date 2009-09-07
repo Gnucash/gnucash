@@ -756,8 +756,8 @@ gnc_account_get_full_name (const Account *account)
   if (!account) return NULL;
 
   name = xaccAccountGetFullName (account);
-  strncpy( result, name, sizeof(result)-1 );
-  result[sizeof(result)] = '\0';
+  strncpy( result, name, sizeof(result)-2 );
+  result[sizeof(result)-1] = '\0';
 
   return result;
 }
