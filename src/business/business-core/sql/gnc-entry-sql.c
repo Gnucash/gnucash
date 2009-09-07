@@ -60,6 +60,8 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_DISCTYPE_LEN 2048
 #define MAX_DISCHOW_LEN 2048
 
+static void entry_set_invoice( gpointer pObject, gpointer val );
+
 static GncSqlColumnTableEntry col_table[] =
 {
 	{ "guid",          CT_GUID,        0,                   COL_NNUL|COL_PKEY, "guid" },
@@ -74,7 +76,7 @@ static GncSqlColumnTableEntry col_table[] =
 	{ "i_discount",    CT_NUMERIC,     0,                   0,                 NULL, NULL,
 			(QofAccessFunc)gncEntryGetInvDiscount, (QofSetterFunc)gncEntrySetInvDiscount },
 	{ "invoice",       CT_INVOICEREF,  0,                   0,                 NULL, NULL,
-			(QofAccessFunc)gncEntryGetInvoice, (QofSetterFunc)gncEntrySetInvoice },
+			(QofAccessFunc)gncEntryGetInvoice, (QofSetterFunc)entry_set_invoice },
 	{ "i_disc_type",   CT_STRING,      MAX_DISCTYPE_LEN,    0,        			NULL, ENTRY_INV_DISC_TYPE },
 	{ "i_disc_how",    CT_STRING,      MAX_DISCHOW_LEN,     0,        			NULL, ENTRY_INV_DISC_HOW },
 	{ "i_taxable",     CT_BOOLEAN,     0,                   0,        			NULL, ENTRY_INV_TAXABLE },
@@ -97,6 +99,23 @@ static GncSqlColumnTableEntry col_table[] =
 			(QofAccessFunc)gncEntryGetOrder, (QofSetterFunc)gncEntrySetOrder },
 	{ NULL }
 };
+
+static void
+entry_set_invoice( gpointer pObject, gpointer val )
+{
+	GncEntry* entry;
+	GncInvoice* invoice;
+
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( GNC_IS_ENTRY(pObject) );
+	g_return_if_fail( val != NULL );
+	g_return_if_fail( GNC_IS_INVOICE(val) );
+
+	entry = GNC_ENTRY(pObject);
+	invoice = GNC_INVOICE(val);
+
+	gncInvoiceAddEntry( invoice, entry );
+}
 
 static GncEntry*
 load_single_entry( GncSqlBackend* be, GncSqlRow* row )
