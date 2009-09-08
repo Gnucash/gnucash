@@ -33,6 +33,12 @@ GLIST_HELPER_INOUT(CommodityList, SWIGTYPE_p_gnc_commodity);
 
 %typemap(newfree) gchar * "g_free($1);"
 
+/* These need to be here so that they are *before* the function
+declarations in the header files, some of which are included by
+engine-common.i */
+
+%newobject xaccAccountGetFullName;
+
 %include "engine-common.i"
 
 %inline %{

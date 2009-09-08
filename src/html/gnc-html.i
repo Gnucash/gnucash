@@ -20,6 +20,8 @@ SCM scm_init_sw_gnc_html_module(void);
 %import "base-typemaps.i"
 
 /* Parse the header file to generate wrappers */
+%newobject gnc_build_url;
+
 %include "gnc-html-extras.h"
 %include "gnc-html-graph-gog-extras.h"
 

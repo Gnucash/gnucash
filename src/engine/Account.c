@@ -2747,7 +2747,7 @@ xaccAccountGetName (const Account *acc)
     return GET_PRIVATE(acc)->accountName;
 }
 
-char *
+gchar *
 xaccAccountGetFullName(const Account *account)
 {
   AccountPrivate *priv;

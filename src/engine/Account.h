@@ -407,7 +407,7 @@ void xaccAccountSortSplits (Account *acc, gboolean force);
  * hack alert -- since it breaks the rule of string allocation, maybe this
  * routine should not be in this library, but some utility library?
  */
-char * xaccAccountGetFullName (const Account *account);
+gchar * xaccAccountGetFullName (const Account *account);
 
 /** Set a string that identifies the Finance::Quote backend that
  *  should be used to retrieve online prices.  See price-quotes.scm
