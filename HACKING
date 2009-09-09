@@ -7,7 +7,7 @@ Related Documents
 -----------------
 
 In addition to this file, you should read the README file, which
-explains the details of getting the CVS source, building GnuCash,
+explains the details of getting the SVN source, building GnuCash,
 and creating patches for submission.
 
 The src/doc/design directory contains a preliminary design document
@@ -85,6 +85,10 @@ Starting GnuCash in GDB
 -----------------------
 To run gdb on an installed version of gnucash (installed in /opt/gnc/unstable:)
 
+    % /opt/gnc/unstable/bin/gnucash-gdb
+
+The old method (pre 2.2) also still works, but is slightly more complicated:
+
     % /opt/gnc/unstable/bin/gnucash &
     [ pid number output here ]
     % gdb /opt/gnc/unstable/bin/gnucash-bin
@@ -124,7 +128,7 @@ Don't know why, efence does not currently work with gnucash:
 I get a bunch of errors:
    warning: Cannot initialize thread debugging library: unknown thread_db error '22'
 
-If you know how to fix this, please update tehse instructions.
+If you know how to fix this, please update these instructions.
 
 
 Using Valgrind with GnuCash
