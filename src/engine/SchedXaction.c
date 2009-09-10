@@ -678,7 +678,7 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
 
   kvp_value_delete(tmp_value);
 
-  acc_guid = xaccAccountGetGUID(gnc_ttsplitinfo_get_account(s_info));
+  acc_guid = qof_entity_get_guid(QOF_INSTANCE(gnc_ttsplitinfo_get_account(s_info)));
 
   tmp_value = kvp_value_new_guid(acc_guid);
 

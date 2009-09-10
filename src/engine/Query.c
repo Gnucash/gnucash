@@ -235,7 +235,7 @@ xaccQueryAddAccountMatch(Query *q, AccountList *acct_list,
       continue;
     }
 
-    guid = xaccAccountGetGUID (acc);
+    guid = qof_entity_get_guid (QOF_INSTANCE(acc));
     if (!guid) {
       PWARN ("acct returns NULL GUID");
       continue;
@@ -285,7 +285,7 @@ xaccQueryAddSingleAccountMatch(Query *q, Account *acc, QofQueryOp op)
   if (!q || !acc)
     return;
 
-  guid = xaccAccountGetGUID (acc);
+  guid = qof_entity_get_guid (QOF_INSTANCE(acc));
   g_return_if_fail (guid);
 
   list = g_list_prepend (NULL, (gpointer)guid);

@@ -670,7 +670,7 @@ add_closing_balances (Account *parent,
        * of this account. */
       xaccAccountBeginEdit (twin);
       cwd = xaccAccountGetSlots (twin);
-      kvp_frame_set_guid (cwd, "/book/prev-acct", xaccAccountGetGUID (candidate));
+      kvp_frame_set_guid (cwd, "/book/prev-acct", qof_entity_get_guid (QOF_INSTANCE(candidate)));
       kvp_frame_set_guid (cwd, "/book/prev-book", qof_book_get_guid(closed_book));
 
       qof_instance_set_slots(QOF_INSTANCE(twin), twin->inst.kvp_data);
@@ -681,7 +681,7 @@ add_closing_balances (Account *parent,
       xaccAccountBeginEdit (candidate);
       cwd = xaccAccountGetSlots (candidate);
       kvp_frame_set_guid (cwd, "/book/next-book", qof_book_get_guid(open_book));
-      kvp_frame_set_guid (cwd, "/book/next-acct", xaccAccountGetGUID (twin));
+      kvp_frame_set_guid (cwd, "/book/next-acct", qof_entity_get_guid (QOF_INSTANCE(twin)));
 
       qof_instance_set_slots(QOF_INSTANCE(candidate), candidate->inst.kvp_data);
 
@@ -740,7 +740,7 @@ add_closing_balances (Account *parent,
              * transaction came from */
             cwd = xaccTransGetSlots (trans);
             kvp_frame_set_guid (cwd, "/book/closed-book", qof_book_get_guid(closed_book));
-            kvp_frame_set_guid (cwd, "/book/closed-acct", xaccAccountGetGUID(candidate));
+            kvp_frame_set_guid (cwd, "/book/closed-acct", qof_entity_get_guid(QOF_INSTANCE(candidate)));
             
             xaccTransCommitEdit (trans);
    
