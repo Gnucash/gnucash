@@ -337,7 +337,7 @@ gnc_fill_account_select_combo (GtkWidget *combo, QofBook *book,
 	== -1)
       continue;
 
-    /* Only present accounts with the right commodity, if that's a 
+    /* Only present accounts with the right commodity, if that's a
        restriction */
     if (acct_commodities)
     {
@@ -404,7 +404,7 @@ typedef struct {
   gboolean	building_menu;
   gpointer	result;
   gpointer *	result_p;
-  
+
   void		(*changed_cb)(GtkWidget*, gpointer);
   gpointer	cb_arg;
 } OpMenuData;
@@ -469,7 +469,7 @@ build_generic_optionmenu (OpMenuData *omd)
 
   /* Make a menu */
   menu = gtk_menu_new ();
-  
+
   omd->building_menu = TRUE;
 
   if (omd->none_ok || items == NULL)
@@ -531,7 +531,7 @@ make_generic_optionmenu (GtkWidget *omenu, QofBook *book,
       gnc_gui_component_watch_entity_type (omd->component_id,
 					   type_name,
 					   QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
-    
+
     g_signal_connect (G_OBJECT (omenu), "destroy",
 		      G_CALLBACK (generic_omenu_destroy_cb), omd);
 
@@ -648,7 +648,7 @@ gnc_ui_taxincluded_optionmenu (GtkWidget *omenu, GncTaxIncluded *choice)
   g_return_if_fail (omd);
 
   menu = gtk_menu_new ();
-  
+
   add_menu_item (menu, _("Yes"), omd,
 		 GINT_TO_POINTER (GNC_TAXINCLUDED_YES));
   if (*choice == GNC_TAXINCLUDED_YES) current = index;

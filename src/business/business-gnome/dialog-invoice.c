@@ -366,7 +366,7 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
     gtk_entry_set_text (GTK_ENTRY (iw->id_entry), string);
     g_free(string);
   }
-      
+
   return TRUE;
 }
 
@@ -662,7 +662,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
 
   /* Determine which commodity we're working with */
   acct_commodities = gnc_business_commodities(&(iw->owner));
-  
+
   /* Get the due date and posted account */
   timespecFromTime_t (&postdate, time(NULL));
   ddue = postdate;
@@ -682,7 +682,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
 				       &ddue, &postdate, &memo, &acc, &accumulate))
     return;
 
-  /* Yep, we're posting.  So, save the invoice... 
+  /* Yep, we're posting.  So, save the invoice...
    * Note that we can safely ignore the return value; we checked
    * the verify_ok earlier, so we know it's ok.
    */
@@ -696,7 +696,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   for (entries=gncInvoiceGetEntries(invoice); entries != NULL; entries=g_list_next(entries))
   {
     Account *this_acc;
-    
+
     entry = (GncEntry*)entries->data;
     this_acc = (reverse ? gncEntryGetInvAccount (entry) :
 		gncEntryGetBillAccount (entry));
@@ -710,7 +710,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
         gnc_info_dialog(iw_get_window(iw), "%s", text);
         show_dialog=FALSE;
       }
-      
+
       convprice = gncInvoiceGetPrice(invoice, xaccAccountGetCommodity(this_acc));
       if (convprice == NULL)
       {
@@ -718,14 +718,14 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
         gnc_numeric exch_rate;
         Timespec date;
         gnc_numeric amount = gnc_numeric_create(1,1);
-        
+
 
         /* create the exchange-rate dialog */
-        xfer = gnc_xfer_dialog (iw_get_window(iw), this_acc); 
+        xfer = gnc_xfer_dialog (iw_get_window(iw), this_acc);
         gnc_xfer_dialog_select_to_account(xfer,acc);
         gnc_xfer_dialog_set_amount(xfer, amount);
 
-        /* All we want is the exchange rate so prevent the user from thinking 
+        /* All we want is the exchange rate so prevent the user from thinking
            it makes sense to mess with other stuff */
         gnc_xfer_dialog_set_from_show_button_active(xfer, FALSE);
         gnc_xfer_dialog_set_to_show_button_active(xfer, FALSE);
@@ -733,7 +733,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
         gnc_xfer_dialog_hide_to_account_tree(xfer);
         gnc_xfer_dialog_is_exchange_dialog(xfer, &exch_rate);
         gnc_xfer_dialog_run_until_done(xfer);
-        
+
         convprice = gnc_price_create(iw->book);
         gnc_price_begin_edit (convprice);
         gnc_price_set_commodity (convprice, xaccAccountGetCommodity(this_acc));
@@ -748,7 +748,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
         gnc_price_set_typestr (convprice, "last");
         gnc_price_set_value (convprice, exch_rate);
         gncInvoiceAddPrice(invoice, convprice);
-        gnc_price_commit_edit (convprice);        
+        gnc_price_commit_edit (convprice);
       }
     }
   }
@@ -760,7 +760,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   kvp_frame_set_slot_nc (kvpf, LAST_POSTED_TO_ACCT, kvp_val);
   qof_instance_set_dirty (owner_inst);
   qof_commit_edit (owner_inst);
-  
+
   /* ... post it; post date is set to now ... */
   gncInvoicePostToAccount (invoice, acc, &postdate, &ddue, memo, accumulate);
   gncInvoiceCommitEdit (invoice);
@@ -1052,7 +1052,7 @@ gnc_invoice_job_changed_cb (GtkWidget *widget, gpointer data)
   InvoiceWindow *iw = data;
   GncInvoice *invoice;
   char const *msg = "";
-  
+
   if (!iw)
     return FALSE;
 
@@ -1119,12 +1119,12 @@ gnc_invoice_update_job_choice (InvoiceWindow *iw)
 				      TRUE);
       gtk_box_pack_start (GTK_BOX (iw->job_box), iw->job_choice,
 			  TRUE, TRUE, 0);
-      
+
       g_signal_connect (G_OBJECT (iw->job_choice), "changed",
 			G_CALLBACK (gnc_invoice_job_changed_cb), iw);
       break;
     }
-  
+
   if (iw->job_choice)
     gtk_widget_show_all (iw->job_choice);
 }
@@ -1151,7 +1151,7 @@ static int
 gnc_invoice_proj_job_changed_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
-  
+
   if (!iw)
     return FALSE;
 
@@ -1190,7 +1190,7 @@ gnc_invoice_update_proj_job (InvoiceWindow *iw)
 				      TRUE);
       gtk_box_pack_start (GTK_BOX (iw->proj_job_box), iw->proj_job_choice,
 			  TRUE, TRUE, 0);
-      
+
       g_signal_connect (G_OBJECT (iw->proj_job_choice), "changed",
 			G_CALLBACK (gnc_invoice_proj_job_changed_cb), iw);
     }
@@ -1207,7 +1207,7 @@ gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
   InvoiceWindow *iw = data;
   GncBillTerm *term = NULL;
   GncOwner owner;
-  
+
   if (!iw)
     return FALSE;
 
@@ -1259,7 +1259,7 @@ gnc_invoice_proj_cust_changed_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
   GncOwner owner;
-  
+
   if (!iw)
     return FALSE;
 
@@ -1365,7 +1365,7 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
   if (iw->total_charge_label) {
     amount = gncInvoiceGetTotalOf (invoice, GNC_PAYMENT_CARD);
-    amount = gnc_numeric_add (amount, to_charge_amt, 
+    amount = gnc_numeric_add (amount, to_charge_amt,
 			      gnc_commodity_get_fraction (currency), GNC_RND_ROUND);
     gnc_invoice_reset_total_label (GTK_LABEL (iw->total_charge_label), amount, currency);
   }
@@ -1550,7 +1550,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
      * may be times in the future when we cannot.
      */
     can_unpost = TRUE;
-    
+
     ts = gncInvoiceGetDatePosted (invoice);
     gnc_date_edit_set_time_ts (GNC_DATE_EDIT (iw->posted_date), ts);
 
@@ -1629,7 +1629,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     gtk_widget_set_sensitive (iw->id_entry, FALSE);
     gtk_widget_set_sensitive (iw->terms_menu, FALSE);
     gtk_widget_set_sensitive (iw->notes_text, FALSE); *//* XXX: should notes remain writable? */
-  }  
+  }
 
   if (widget)
     gtk_widget_show (widget);
@@ -1645,10 +1645,10 @@ gnc_invoice_get_title (InvoiceWindow *iw)
 
   if (!iw) return NULL;
 
-  switch (gncOwnerGetType (&iw->owner)) 
+  switch (gncOwnerGetType (&iw->owner))
     {
     case GNC_OWNER_CUSTOMER:
-      switch (iw->dialog_type) 
+      switch (iw->dialog_type)
 	{
 	case NEW_INVOICE:
 	  wintitle = _("New Invoice");
@@ -1663,7 +1663,7 @@ gnc_invoice_get_title (InvoiceWindow *iw)
 	}
       break;
     case GNC_OWNER_VENDOR:
-      switch (iw->dialog_type) 
+      switch (iw->dialog_type)
 	{
 	case NEW_INVOICE:
 	  wintitle = _("New Bill");
@@ -1678,7 +1678,7 @@ gnc_invoice_get_title (InvoiceWindow *iw)
 	}
       break;
     case GNC_OWNER_EMPLOYEE:
-      switch (iw->dialog_type) 
+      switch (iw->dialog_type)
 	{
 	case NEW_INVOICE:
 	  wintitle = _("New Expense Voucher");
@@ -1694,7 +1694,7 @@ gnc_invoice_get_title (InvoiceWindow *iw)
       break;
     default:
       break;
-    }  
+    }
 
   if (iw->id_entry)
     id = gtk_entry_get_text (GTK_ENTRY (iw->id_entry));
@@ -1756,7 +1756,7 @@ gnc_invoice_new_page (QofBook *bookp, InvoiceDialogType type,
       return(iw);
     }
   }
-  
+
   /*
    * No existing invoice window found.  Build a new one.
    */
@@ -2057,7 +2057,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 
     frame = glade_xml_get_widget (xml, "ledger_frame");
     gtk_container_add (GTK_CONTAINER (frame), regWidget);
-    
+
     iw->reg = GNUCASH_REGISTER (regWidget);
     window = gnc_plugin_page_get_window(iw->page);
     GNUCASH_SHEET (iw->reg->sheet)->window = window;
@@ -2069,7 +2069,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
   }
 
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
- 
+
   /* Now fill in a lot of the pieces and display properly */
   gnc_ui_billterms_optionmenu (iw->terms_menu, iw->book, TRUE, &iw->terms);
   gnc_invoice_update_window (iw, dialog);
@@ -2277,7 +2277,7 @@ new_invoice_cb (gpointer user_data)
 {
   struct _invoice_select_window *sw = user_data;
   InvoiceWindow *iw;
-  
+
   g_return_val_if_fail (user_data, NULL);
 
   iw = gnc_ui_invoice_new (sw->owner, sw->book);
@@ -2305,18 +2305,18 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
   static GList *inv_params = NULL, *bill_params = NULL, *emp_params = NULL, *params;
   static GList *columns = NULL;
   const gchar *title, *label;
-  static GNCSearchCallbackButton *buttons; 
-  static GNCSearchCallbackButton inv_buttons[] = { 
+  static GNCSearchCallbackButton *buttons;
+  static GNCSearchCallbackButton inv_buttons[] = {
     { N_("View/Edit Invoice"), edit_invoice_cb},
     { N_("Process Payment"), pay_invoice_cb},
     { NULL },
   };
-  static GNCSearchCallbackButton bill_buttons[] = { 
+  static GNCSearchCallbackButton bill_buttons[] = {
     { N_("View/Edit Bill"), edit_invoice_cb},
     { N_("Process Payment"), pay_invoice_cb},
     { NULL },
   };
-  static GNCSearchCallbackButton emp_buttons[] = { 
+  static GNCSearchCallbackButton emp_buttons[] = {
     /* Translators: The terms 'Voucher' and 'Expense Voucher' are used
        interchangeably in gnucash and mean the same thing. */
     { N_("View/Edit Voucher"), edit_invoice_cb},
