@@ -1266,11 +1266,27 @@ load_tx_guid( const GncSqlBackend* be, GncSqlRow* row,
 	g_assert( val != NULL );
     (void)string_to_guid( g_value_get_string( val ), &guid );
 	tx = xaccTransLookup( &guid, be->primary_book );
-    if( table_row->gobj_param_name != NULL ) {
-		g_object_set( pObject, table_row->gobj_param_name, tx, NULL );
-    } else {
-		g_return_if_fail( setter != NULL );
-		(*setter)( pObject, (const gpointer)tx );
+
+	// If the transaction is not found, try loading it
+	if( tx == NULL ) {
+		gchar* buf;
+		GncSqlStatement* stmt;
+
+		buf = g_strdup_printf( "SELECT * FROM %s WHERE guid='%s'",
+                               TRANSACTION_TABLE, g_value_get_string( val ) );
+		stmt = gnc_sql_create_statement_from_sql( (GncSqlBackend*)be, buf );
+		g_free( buf );
+		query_transactions( (GncSqlBackend*)be, stmt );
+	    tx = xaccTransLookup( &guid, be->primary_book );
+	}
+
+	if( tx != NULL ) {
+        if( table_row->gobj_param_name != NULL ) {
+		    g_object_set( pObject, table_row->gobj_param_name, tx, NULL );
+        } else {
+		    g_return_if_fail( setter != NULL );
+		    (*setter)( pObject, (const gpointer)tx );
+		}
     }
 }
 

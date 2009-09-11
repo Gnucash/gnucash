@@ -358,7 +358,6 @@ load_account_guid( const GncSqlBackend* be, GncSqlRow* row,
 {
     const GValue* val;
     GUID guid;
-    const GUID* pGuid;
 	Account* account = NULL;
 
 	g_return_if_fail( be != NULL );
@@ -367,22 +366,19 @@ load_account_guid( const GncSqlBackend* be, GncSqlRow* row,
 	g_return_if_fail( table_row != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
-    if( val == NULL ) {
-        pGuid = NULL;
-    } else {
+    if( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL ) {
         (void)string_to_guid( g_value_get_string( val ), &guid );
-        pGuid = &guid;
-    }
-	if( pGuid != NULL ) {
-		account = xaccAccountLookup( pGuid, be->primary_book );
-	}
-	if( account != NULL ) {
-    	if( table_row->gobj_param_name != NULL ) {
-			g_object_set( pObject, table_row->gobj_param_name, account, NULL );
-    	} else {
-			g_return_if_fail( setter != NULL );
-			(*setter)( pObject, (const gpointer)account );
-    	}
+		account = xaccAccountLookup( &guid, be->primary_book );
+		if( account != NULL ) {
+    		if( table_row->gobj_param_name != NULL ) {
+				g_object_set( pObject, table_row->gobj_param_name, account, NULL );
+    		} else {
+				g_return_if_fail( setter != NULL );
+				(*setter)( pObject, (const gpointer)account );
+    		}
+		} else {
+	    	PWARN( "Account ref '%s' not found", g_value_get_string( val ) );
+		}
 	}
 }
 

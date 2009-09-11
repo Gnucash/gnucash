@@ -256,16 +256,19 @@ load_commodity_guid( const GncSqlBackend* be, GncSqlRow* row,
 	g_return_if_fail( table_row != NULL );
 
 	val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
-	g_assert( val != NULL );
-    (void)string_to_guid( g_value_get_string( val ), &guid );
-	commodity = gnc_commodity_find_commodity_by_guid( &guid, be->primary_book );
-	if( commodity != NULL ) {
-    	if( table_row->gobj_param_name != NULL ) {
-			g_object_set( pObject, table_row->gobj_param_name, commodity, NULL );
-    	} else if( setter != NULL ) {
-			(*setter)( pObject, (const gpointer)commodity );
+    if( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL ) {
+    	(void)string_to_guid( g_value_get_string( val ), &guid );
+		commodity = gnc_commodity_find_commodity_by_guid( &guid, be->primary_book );
+		if( commodity != NULL ) {
+    		if( table_row->gobj_param_name != NULL ) {
+				g_object_set( pObject, table_row->gobj_param_name, commodity, NULL );
+    		} else if( setter != NULL ) {
+				(*setter)( pObject, (const gpointer)commodity );
+			}
+    	} else {
+	    	PWARN( "Commodity ref '%s' not found", g_value_get_string( val ) );
 		}
-    }
+	}
 }
 
 static GncSqlColumnTypeHandler commodity_guid_handler
