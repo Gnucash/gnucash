@@ -59,6 +59,9 @@ requires libgoffice >= 0.7.5, the contents of the #else block must stay. */
 #	include <goffice/utils/go-style.h>
 #	include <goffice/utils/go-styled-object.h>
 #endif
+#ifndef GO_COLOR_FROM_GDK
+#	define GO_COLOR_FROM_GDK GDK_TO_UINT
+#endif
 #include <goffice/graph/gog-styled-object.h>
 #include <goffice/graph/gog-plot.h>
 #include <goffice/graph/gog-series.h>
@@ -233,8 +236,13 @@ gnc_html_graph_gog_create_piechart( GncHtmlPieChartInfo* info )
 	}
 	gog_object_add_by_name( chart, "Legend", NULL );
 
+#ifdef GO_COLOR_BLACK
+	GOG_STYLED_OBJECT(graph)->style->line.width = 5;
+	GOG_STYLED_OBJECT(graph)->style->line.color = GO_COLOR_BLACK;
+#else
 	GOG_STYLED_OBJECT(graph)->style->outline.width = 5;
 	GOG_STYLED_OBJECT(graph)->style->outline.color = RGBA_BLACK;
+#endif
 
 	series = gog_plot_new_series( plot );
 	labelData = go_data_vector_str_new( (gchar const * const *)info->labels, info->datasize, NULL );
@@ -321,7 +329,7 @@ gnc_html_graph_gog_create_barchart( GncHtmlBarChartInfo* info )
 			style->fill.type = GO_STYLE_FILL_PATTERN;
 			if( gdk_color_parse( info->col_colors[i], &color ) ) {
 				style->fill.auto_back = FALSE;
-				go_pattern_set_solid( &style->fill.pattern, GDK_TO_UINT(color) );
+				go_pattern_set_solid( &style->fill.pattern, GO_COLOR_FROM_GDK(color) );
 			} else {
 				g_warning( "cannot parse color [%s]", info->col_colors[i] );
 			}
@@ -417,7 +425,7 @@ gnc_html_graph_gog_create_linechart( GncHtmlLineChartInfo* info )
 			style->fill.type = GO_STYLE_FILL_PATTERN;
 			if( gdk_color_parse( info->col_colors[i], &color ) ) {
 				style->fill.auto_back = FALSE;
-				go_pattern_set_solid( &style->fill.pattern, GDK_TO_UINT(color) );
+				go_pattern_set_solid( &style->fill.pattern, GO_COLOR_FROM_GDK(color) );
 			} else {
 				g_warning( "cannot parse color [%s]", info->col_colors[i] );
 			}
@@ -503,9 +511,9 @@ gnc_html_graph_gog_create_scatterplot( GncHtmlScatterPlotInfo* info )
 		GdkColor color;
 		if( gdk_color_parse( info->color_str, &color ) ) {
 			style->marker.auto_outline_color = FALSE;
-			go_marker_set_outline_color( style->marker.mark, GDK_TO_UINT(color) );
+			go_marker_set_outline_color( style->marker.mark, GO_COLOR_FROM_GDK(color) );
 			style->line.auto_color = FALSE;
-			style->line.color = GDK_TO_UINT(color);
+			style->line.color = GO_COLOR_FROM_GDK(color);
 		} else {
 			g_warning( "cannot parse color [%s]", info->color_str );
 		}
