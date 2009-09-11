@@ -253,7 +253,6 @@ load_invoice_guid( const GncSqlBackend* be, GncSqlRow* row,
 {
     const GValue* val;
     GUID guid;
-    const GUID* pGuid;
 	GncInvoice* invoice = NULL;
 
 	g_return_if_fail( be != NULL );
@@ -262,20 +261,19 @@ load_invoice_guid( const GncSqlBackend* be, GncSqlRow* row,
 	g_return_if_fail( table_row != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
-    if( val == NULL || !G_VALUE_HOLDS_STRING( val ) || g_value_get_string( val ) == NULL ) {
-        pGuid = NULL;
-    } else {
+    if( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL ) {
         string_to_guid( g_value_get_string( val ), &guid );
-        pGuid = &guid;
-    }
-	if( pGuid != NULL ) {
-		invoice = gncInvoiceLookup( be->primary_book, pGuid );
+		invoice = gncInvoiceLookup( be->primary_book, &guid );
+		if( invoice != NULL ) {
+        	if( table_row->gobj_param_name != NULL ) {
+		    	g_object_set( pObject, table_row->gobj_param_name, invoice, NULL );
+        	} else {
+		    	(*setter)( pObject, (const gpointer)invoice );
+        	}
+		} else {
+	    	PWARN( "Invoice ref '%s' not found", g_value_get_string( val ) );
+		}
 	}
-    if( table_row->gobj_param_name != NULL ) {
-		g_object_set( pObject, table_row->gobj_param_name, invoice, NULL );
-    } else {
-		(*setter)( pObject, (const gpointer)invoice );
-    }
 }
 
 static GncSqlColumnTypeHandler invoice_guid_handler

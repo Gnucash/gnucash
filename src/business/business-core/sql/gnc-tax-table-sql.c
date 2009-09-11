@@ -393,7 +393,6 @@ load_taxtable_guid( const GncSqlBackend* be, GncSqlRow* row,
 {
     const GValue* val;
     GUID guid;
-    const GUID* pGuid;
 	GncTaxTable* taxtable = NULL;
 
 	g_return_if_fail( be != NULL );
@@ -402,19 +401,18 @@ load_taxtable_guid( const GncSqlBackend* be, GncSqlRow* row,
 	g_return_if_fail( table_row != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
-    if( val == NULL || !G_VALUE_HOLDS_STRING( val ) || g_value_get_string( val ) == NULL ) {
-        pGuid = NULL;
-    } else {
+    if( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL ) {
         string_to_guid( g_value_get_string( val ), &guid );
-        pGuid = &guid;
-    }
-	if( pGuid != NULL ) {
-		taxtable = gncTaxTableLookup( be->primary_book, pGuid );
-	}
-    if( table_row->gobj_param_name != NULL ) {
-		g_object_set( pObject, table_row->gobj_param_name, taxtable, NULL );
-    } else {
-		(*setter)( pObject, (const gpointer)taxtable );
+		taxtable = gncTaxTableLookup( be->primary_book, &guid );
+		if( taxtable != NULL ) {
+    		if( table_row->gobj_param_name != NULL ) {
+				g_object_set( pObject, table_row->gobj_param_name, taxtable, NULL );
+    		} else {
+				(*setter)( pObject, (const gpointer)taxtable );
+    		}
+		} else {
+	    	PWARN( "Taxtable ref '%s' not found", g_value_get_string( val ) );
+		}
     }
 }
 
