@@ -472,7 +472,7 @@ void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account 
     return;
   }
 
-  account_fullname = xaccAccountGetFullName(acc);
+  account_fullname = gnc_account_get_full_name(acc);
 
   PINFO("account name: '%s'\n", account_fullname);
 

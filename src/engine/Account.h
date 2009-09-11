@@ -394,7 +394,7 @@ void xaccAccountRecomputeBalance (Account *);
  */
 void xaccAccountSortSplits (Account *acc, gboolean force);
 
-/** The xaccAccountGetFullName routine returns the fully qualified name
+/** The gnc_account_get_full_name routine returns the fully qualified name
  * of the account using the given separator char. The name must be
  * g_free'd after use. The fully qualified name of an account is the
  * concatenation of the names of the account and all its ancestor
@@ -402,12 +402,12 @@ void xaccAccountSortSplits (Account *acc, gboolean force);
  * given account. Each name is separated by the given character.
  *
  * @note: WAKE UP!
- * Unlike all other gets, the string returned by xaccAccountGetFullName() 
+ * Unlike all other gets, the string returned by gnc_account_get_full_name() 
  * must be freed by you the user !!!
  * hack alert -- since it breaks the rule of string allocation, maybe this
  * routine should not be in this library, but some utility library?
  */
-gchar * xaccAccountGetFullName (const Account *account);
+gchar * gnc_account_get_full_name (const Account *account);
 
 /** Set a string that identifies the Finance::Quote backend that
  *  should be used to retrieve online prices.  See price-quotes.scm

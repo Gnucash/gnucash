@@ -691,8 +691,8 @@ int gncTaxTableEntryCompare (const GncTaxTableEntry *a, const GncTaxTableEntry *
   if (!a) return -1;
   if (!b) return 1;
     
-  name_a = xaccAccountGetFullName (a->account);
-  name_b = xaccAccountGetFullName (b->account);
+  name_a = gnc_account_get_full_name (a->account);
+  name_b = gnc_account_get_full_name (b->account);
   retval = safe_strcmp(name_a, name_b);
   g_free(name_a);
   g_free(name_b);

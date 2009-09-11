@@ -903,7 +903,7 @@ gnc_plugin_page_register_save_page (GncPluginPage *plugin_page,
     leader = gnc_ledger_display_leader(priv->ledger);
     g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE, label);
     g_key_file_set_string(key_file, group_name, KEY_ACCOUNT_NAME,
-			  xaccAccountGetFullName(leader));
+			  gnc_account_get_full_name(leader));
   } else if (reg->type == GENERAL_LEDGER) {
     g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE,
 			  LABEL_GL);
@@ -1200,10 +1200,10 @@ gnc_plugin_page_register_get_long_name (GncPluginPage *plugin_page)
 
 	switch (ledger_type) {
 	 case LD_SINGLE:
-	  return g_strdup(xaccAccountGetFullName (leader));
+	  return g_strdup(gnc_account_get_full_name (leader));
 
 	 case LD_SUBACCOUNT:
-	  return g_strdup_printf("%s+", xaccAccountGetFullName (leader));
+	  return g_strdup_printf("%s+", gnc_account_get_full_name (leader));
 
 	 default:
 	  break;
@@ -1785,7 +1785,7 @@ gnc_reg_get_name (GNCLedgerDisplay *ledger, gboolean for_window)
 
   if ((leader != NULL) && (ledger_type != LD_GL))
   {
-    account_name = xaccAccountGetFullName (leader);
+    account_name = gnc_account_get_full_name (leader);
 
     if (ledger_type == LD_SINGLE)
     {

@@ -192,16 +192,6 @@ gboolean gnc_account_create_opening_balance (Account *account,
                                              time_t date,
                                              QofBook *book);
 
-/**
- * Returns the account full name.  Unlike xaccAccountGetFullName(), the
- * string returned must *NOT* be freed.
- *
- * @param account Account
- * @return Account full name
- */
-char * gnc_account_get_full_name (const Account *account);
-
-
 /* Locale functions *************************************************/
 
 /* The gnc_localeconv() subroutine returns an lconv structure

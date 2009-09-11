@@ -718,7 +718,7 @@ gnc_common_ok (AccountWindow *aw)
   if (parent == NULL) {
     account = gnc_account_lookup_by_full_name(root, name);
   } else {
-    fullname_parent = xaccAccountGetFullName(parent);
+    fullname_parent = gnc_account_get_full_name(parent);
     fullname = g_strconcat(fullname_parent, separator, name, NULL);
 
     account = gnc_account_lookup_by_full_name(root, fullname);
@@ -1297,7 +1297,7 @@ get_ui_fullname (AccountWindow *aw)
     char *parent_name;
     const gchar *separator;
 
-    parent_name = xaccAccountGetFullName (parent_account);
+    parent_name = gnc_account_get_full_name (parent_account);
 
     separator = gnc_get_account_separator_string ();
     fullname = g_strconcat (parent_name, separator, name, NULL);
@@ -1838,7 +1838,7 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
   string = g_strdup_printf(_( "Renumber the immediate sub-accounts of %s?  "
 			      "This will replace the account code field of "
 			      "each child account with a newly generated code."),
-			   xaccAccountGetFullName(account));
+			   gnc_account_get_full_name(account));
   gtk_label_set_text(GTK_LABEL(widget), string);
   g_free(string);
 

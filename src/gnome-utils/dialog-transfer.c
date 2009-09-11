@@ -1291,9 +1291,9 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
       char *name;
 
       if (xaccAccountGetPlaceholder(from_account))
-	name = xaccAccountGetFullName(from_account);
+	name = gnc_account_get_full_name(from_account);
       else
-	name = xaccAccountGetFullName(to_account);
+	name = gnc_account_get_full_name(to_account);
       gnc_error_dialog(xferData->dialog, placeholder_format, name);
       g_free(name);
       LEAVE("placeholder");

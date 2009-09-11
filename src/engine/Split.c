@@ -1264,7 +1264,7 @@ xaccSplitGetCorrAccountFullName(const Split *sa)
 
     return g_strdup(split_const);
   }
-  return xaccAccountGetFullName(other_split->acc);
+  return gnc_account_get_full_name(other_split->acc);
 }
 
 const char *
@@ -1296,8 +1296,8 @@ xaccSplitCompareAccountFullNames(const Split *sa, const Split *sb)
 
   aa = sa->acc;
   ab = sb->acc;
-  full_a = xaccAccountGetFullName(aa);
-  full_b = xaccAccountGetFullName(ab);
+  full_a = gnc_account_get_full_name(aa);
+  full_b = gnc_account_get_full_name(ab);
   retval = g_utf8_collate(full_a, full_b);
   g_free(full_a);
   g_free(full_b);

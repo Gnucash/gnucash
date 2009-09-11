@@ -285,7 +285,7 @@ gnc_account_get_property (GObject         *object,
 	    g_value_set_string(value, priv->accountName);
 	    break;
 	case PROP_FULL_NAME:
-	    g_value_take_string(value, xaccAccountGetFullName(account));
+	    g_value_take_string(value, gnc_account_get_full_name(account));
 	    break;
 	case PROP_CODE:
 	    g_value_set_string(value, priv->accountCode);
@@ -2748,7 +2748,7 @@ xaccAccountGetName (const Account *acc)
 }
 
 gchar *
-xaccAccountGetFullName(const Account *account)
+gnc_account_get_full_name(const Account *account)
 {
   AccountPrivate *priv;
   const Account *a;

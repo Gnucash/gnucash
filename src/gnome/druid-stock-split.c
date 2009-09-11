@@ -151,7 +151,7 @@ fill_account_list (StockSplitInfo *info, Account *selected_account)
 
     commodity = xaccAccountGetCommodity (account);
 
-    full_name = xaccAccountGetFullName (account);
+    full_name = gnc_account_get_full_name (account);
     print_info = gnc_account_print_info (account, FALSE);
 
     gtk_list_store_append(list, &iter);

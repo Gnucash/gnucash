@@ -176,7 +176,7 @@ update_accountlist_acc_cb (AB_ACCOUNT *hacc, gpointer user_data)
   if (gacc == NULL)
     gnc_name = g_strdup("");
   else 
-    gnc_name = xaccAccountGetFullName (gacc);
+    gnc_name = gnc_account_get_full_name (gacc);
 
   gtk_list_store_append(info->accountstore, &iter);
   gtk_list_store_set(info->accountstore, &iter,
@@ -397,7 +397,7 @@ on_accountlist_changed (GtkTreeSelection *selection,
       if (old_value) 
 	g_hash_table_remove (info->gnc_hash, hbci_acc);
       g_hash_table_insert (info->gnc_hash, hbci_acc, gnc_acc);
-      gnc_name = xaccAccountGetFullName (gnc_acc);
+      gnc_name = gnc_account_get_full_name (gnc_acc);
       gtk_list_store_set(info->accountstore, &iter,
 			 ACCOUNT_LIST_COL_GNC_NAME, gnc_name,
 			 -1);

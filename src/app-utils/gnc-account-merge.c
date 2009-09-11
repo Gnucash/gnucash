@@ -39,7 +39,7 @@ determine_merge_disposition(Account *existing_root, Account *new_acct)
   Account *existing_acct;
   gchar *full_name;
   
-  full_name = xaccAccountGetFullName(new_acct);
+  full_name = gnc_account_get_full_name(new_acct);
   existing_acct = gnc_account_lookup_by_full_name(existing_root, full_name);
   g_free(full_name);
 

@@ -61,8 +61,6 @@ void gnc_option_db_register_option(GNCOptionDBHandle handle,
 
 const char * gnc_locale_default_iso_currency_code (void);
 
-char * gnc_account_get_full_name (const Account *account);
-
 GNCPrintAmountInfo gnc_default_print_info (gboolean use_symbol);
 GNCPrintAmountInfo gnc_account_print_info (const Account *account,
         gboolean use_symbol);

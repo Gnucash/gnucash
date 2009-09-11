@@ -222,7 +222,7 @@ gnc_get_account_name_for_register(const Account *account)
   if (show_leaf_accounts)
     return g_strdup (xaccAccountGetName (account));
   else
-    return xaccAccountGetFullName (account);
+    return gnc_account_get_full_name (account);
 }
 
 Account *
@@ -745,21 +745,6 @@ gnc_account_create_opening_balance (Account *account,
   xaccAccountCommitEdit (account);
 
   return TRUE;
-}
-
-char *
-gnc_account_get_full_name (const Account *account)
-{
-  static gchar result[1000];
-  gchar* name;
-
-  if (!account) return NULL;
-
-  name = xaccAccountGetFullName (account);
-  strncpy( result, name, sizeof(result)-2 );
-  result[sizeof(result)-1] = '\0';
-
-  return result;
 }
 
 static void

@@ -1937,7 +1937,7 @@ tree_save_expanded_row (GncTreeViewAccount *view,
     if (account == NULL)
         return;
     
-    account_name = xaccAccountGetFullName(account);
+    account_name = gnc_account_get_full_name(account);
     if (account_name == NULL)
         return;
 
@@ -1970,7 +1970,7 @@ tree_save_selected_row (GncTreeViewAccount *view,
     if (account == NULL)
         return;
 
-    account_name = xaccAccountGetFullName (account);
+    account_name = gnc_account_get_full_name (account);
     if (account_name == NULL)
         return;
 

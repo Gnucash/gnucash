@@ -348,7 +348,7 @@ gnc_fill_account_select_combo (GtkWidget *combo, QofBook *book,
         }
     }
 
-    name = xaccAccountGetFullName (account);
+    name = gnc_account_get_full_name (account);
     gtk_combo_box_append_text(GTK_COMBO_BOX(combo), name);
     g_free(name);
   }

@@ -37,7 +37,7 @@ GLIST_HELPER_INOUT(CommodityList, SWIGTYPE_p_gnc_commodity);
 declarations in the header files, some of which are included by
 engine-common.i */
 
-%newobject xaccAccountGetFullName;
+%newobject gnc_account_get_full_name;
 
 %include "engine-common.i"
 

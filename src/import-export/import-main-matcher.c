@@ -616,7 +616,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
 	  if (gnc_import_TransInfo_get_destacc (info) != NULL)
 	    {
 	      color = COLOR_GREEN;
-	      tmp = xaccAccountGetFullName 
+	      tmp = gnc_account_get_full_name 
 		(gnc_import_TransInfo_get_destacc (info));
 	      if(gnc_import_TransInfo_get_destacc_selected_manually(info)
 		 == TRUE)

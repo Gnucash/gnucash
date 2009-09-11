@@ -350,7 +350,7 @@ tax_table_entries_refresh (TaxTableWindow *ttw)
     Account *acc = gncTaxTableEntryGetAccount (entry);
     gnc_numeric amount = gncTaxTableEntryGetAmount (entry);
 
-    row_text[0] = xaccAccountGetFullName (acc);
+    row_text[0] = gnc_account_get_full_name (acc);
     switch (gncTaxTableEntryGetType (entry)) {
     case GNC_AMT_TYPE_PERCENT:
      row_text[1] =

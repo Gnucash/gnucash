@@ -787,7 +787,7 @@ placeholder_cell_data_func (GtkTreeViewColumn *tree_column,
                 /* find the existing account, do whatever it is. */
                 gchar *full_name;
                 Account *existing_acct;
-                full_name = xaccAccountGetFullName(account);
+                full_name = gnc_account_get_full_name(account);
                 existing_acct = gnc_account_lookup_by_full_name(root, full_name);
                 willbe_placeholder = xaccAccountGetPlaceholder(existing_acct);
                 g_free(full_name);

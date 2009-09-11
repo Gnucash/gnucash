@@ -596,7 +596,7 @@
                                              ))
                         (splt-print-amnt (car splt-curr-conv-data))
                         (splt-account-name (if full-names?
-                                               (xaccAccountGetFullName split-acct)
+                                               (gnc-account-get-full-name split-acct)
                                                (xaccAccountGetName split-acct)
                                            ))
                         (cell (gnc:make-html-table-cell
@@ -804,7 +804,7 @@
                   (other-account-name (if (null? other-account)
                                           (_ "Split")
                                           (if full-names?
-                                              (xaccAccountGetFullName
+                                              (gnc-account-get-full-name
                                                                   other-account)
                                               (xaccAccountGetName other-account)
                                           )))

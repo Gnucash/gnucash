@@ -1554,7 +1554,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     ts = gncInvoiceGetDatePosted (invoice);
     gnc_date_edit_set_time_ts (GNC_DATE_EDIT (iw->posted_date), ts);
 
-    tmp_string = xaccAccountGetFullName (acct);
+    tmp_string = gnc_account_get_full_name (acct);
     gtk_entry_set_text (GTK_ENTRY (acct_entry), tmp_string);
     g_free(tmp_string);
 

@@ -208,7 +208,7 @@ gas_populate_list( GNCAccountSel *gas )
 	gtk_list_store_clear(gas->store);
 	for (ptr = filteredAccts, i = 0; ptr; ptr = g_list_next(ptr), i++) {
 	  acc = ptr->data;
-	  name = xaccAccountGetFullName(acc);
+	  name = gnc_account_get_full_name(acc);
 	  gtk_list_store_append(gas->store, &iter);
 	  gtk_list_store_set(gas->store, &iter,
 			     ACCT_COL_NAME, name,
