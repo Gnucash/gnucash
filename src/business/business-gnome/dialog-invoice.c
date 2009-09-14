@@ -344,7 +344,7 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
   gnc_owner_get_owner (iw->owner_choice, &(iw->owner));
   res = gncOwnerGetName (&(iw->owner));
   if (res == NULL || safe_strcmp (res, "") == 0) {
-    gnc_error_dialog (iw_get_window(iw),
+    gnc_error_dialog (iw_get_window(iw), "%s",
 		      /* Translators: In this context,
 		       * 'Billing information' maps to the
 		       * label in the frame and means
@@ -627,7 +627,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   /* Check that there is at least one Entry */
   invoice = iw_get_invoice (iw);
   if (gncInvoiceGetEntries (invoice) == NULL) {
-    gnc_error_dialog (iw_get_window(iw),
+    gnc_error_dialog (iw_get_window(iw), "%s",
 		      _("The Invoice must have at least one Entry."));
     return;
   }
@@ -636,14 +636,14 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
 
   /* Make sure that the invoice has a positive balance */
   if (gnc_numeric_negative_p(gncInvoiceGetTotal(invoice))) {
-    gnc_error_dialog(iw_get_window(iw),
+    gnc_error_dialog(iw_get_window(iw), "%s",
 		     _("You may not post an invoice with a negative total value."));
     return;
   }
 
   if (iw->total_cash_label &&
       gnc_numeric_negative_p(gncInvoiceGetTotalOf(invoice, GNC_PAYMENT_CASH))) {
-    gnc_error_dialog(iw_get_window(iw),
+    gnc_error_dialog(iw_get_window(iw), "%s",
 		     _("You may not post an expense voucher with a negative total cash value."));
     return;
   }

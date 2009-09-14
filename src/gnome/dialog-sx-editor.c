@@ -765,7 +765,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                 GTK_TOGGLE_BUTTON(sxed->notifyOpt) );
 
         if (((ttVarCount > 0) || multi_commodity) && autocreateState) {
-            gnc_warning_dialog(sxed->dialog,
+            gnc_warning_dialog(sxed->dialog, "%s", 
                                _("Scheduled Transactions with variables "
                                  "cannot be automatically created."));
             return FALSE;
@@ -774,7 +774,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         /* Fix for part of Bug#121740 -- auto-create transactions are
          * only valid if there's actually a transaction to create. */
         if ( autocreateState && splitCount == 0 ) {
-            gnc_warning_dialog( sxed->dialog,
+            gnc_warning_dialog(sxed->dialog, "%s", 
                                 _("Scheduled Transactions without a template "
                                   "transaction cannot be automatically created.") );
             return FALSE;

@@ -583,7 +583,7 @@ tax_table_delete_entry_cb (GtkButton *button, TaxTableWindow *ttw)
     return;
   }
 
-  if (gnc_verify_dialog (ttw->dialog, FALSE,
+  if (gnc_verify_dialog (ttw->dialog, FALSE, "%s",
 			 _("Are you sure you want to delete this entry?"))) {
     /* Ok, let's remove it */
     gnc_suspend_gui_refresh ();

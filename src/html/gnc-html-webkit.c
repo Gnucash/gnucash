@@ -416,7 +416,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
 
 			if( !safe_strcmp( type, URL_TYPE_SECURE ) ) {
 				if( !https_allowed() ) {
-					gnc_error_dialog( priv->base.parent,
+					gnc_error_dialog( priv->base.parent, "%s",
                             _("Secure HTTP access is disabled. "
                               "You can enable it in the Network section of "
                               "the Preferences dialog."));
@@ -425,7 +425,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
 			}
 
 			if( !http_allowed() ) {
-				gnc_error_dialog( priv->base.parent,
+				gnc_error_dialog( priv->base.parent,"%s",
                           _("Network HTTP access is disabled. "
                             "You can enable it in the Network section of "
                             "the Preferences dialog."));
@@ -736,7 +736,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
 		do {
 			if( safe_strcmp( type, URL_TYPE_SECURE ) == 0 ) {
 				if( !https_allowed() ) {
-					gnc_error_dialog( priv->base.parent,
+					gnc_error_dialog( priv->base.parent,"%s",
 									_("Secure HTTP access is disabled. "
 									"You can enable it in the Network section of "
 									"the Preferences dialog.") );
@@ -746,7 +746,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
 
 			if( safe_strcmp( type, URL_TYPE_HTTP ) == 0 ) {
 				if( !http_allowed() ) {
-					gnc_error_dialog( priv->base.parent,
+					gnc_error_dialog( priv->base.parent,"%s",
 									_("Network HTTP access is disabled. "
 									"You can enable it in the Network section of "
 									"the Preferences dialog.") );

@@ -160,7 +160,7 @@ gncs_validate (GNCSearchCoreType *fe)
   priv = GNC_SEARCH_OWNER_GET_PRIVATE(fi);
   if (priv->owner.owner.undefined == NULL) {
     valid = FALSE;
-    gnc_error_dialog (NULL, _("You have not selected an owner"));
+    gnc_error_dialog (NULL, "%s", _("You have not selected an owner"));
   }
 
   /* XXX */

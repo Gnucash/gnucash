@@ -863,7 +863,7 @@ dat_add_templ_cb(GtkButton *button, gpointer user_data)
         gtk_tree_model_foreach(GTK_TREE_MODEL(td->template_list_store),
                                find_templ_helper, &data);
         if (data.pointer) {
-            gnc_error_dialog(dialog,
+            gnc_error_dialog(dialog, "%s",
                              _("A template with the given name already exists.  "
                                "Please enter another name."));
             continue;

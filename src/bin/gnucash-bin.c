@@ -387,7 +387,7 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     scm_c_eval_string("(gnc:price-quotes-install-sources)");
 
     if (!gnc_quote_source_fq_installed()) {
-        g_print(_("No quotes retrieved. Finance::Quote isn't "
+        g_print("%s", _("No quotes retrieved. Finance::Quote isn't "
                   "installed properly.\n"));
         goto fail;
     }

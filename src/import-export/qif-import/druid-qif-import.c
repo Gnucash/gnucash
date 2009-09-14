@@ -683,9 +683,9 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 
   /* Validate the chosen filename. */
   if (strlen(path_to_load) == 0)
-    gnc_error_dialog(wind->window, _("Please select a file to load."));
+    gnc_error_dialog(wind->window, "%s", _("Please select a file to load."));
   else if (g_access(path_to_load, R_OK) < 0)
-    gnc_error_dialog(wind->window,
+    gnc_error_dialog(wind->window, "%s",
                      _("File not found or read permission denied. "
                        "Please select another file."));
   else
@@ -696,7 +696,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     if (scm_call_2(qif_file_loaded,
                    scm_makfrom0str(path_to_load),
                    wind->imported_files) == SCM_BOOL_T)
-      gnc_error_dialog(wind->window,
+      gnc_error_dialog(wind->window, "%s",
                        _("That QIF file is already loaded. "
                          "Please select another file."));
     else
@@ -840,7 +840,7 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
                      _( "A bug was detected while reading the QIF file."));
     gnc_progress_dialog_set_sub(wind->load_progress, _("Failed"));
     gnc_progress_dialog_reset_value(wind->load_progress);
-    gnc_error_dialog(wind->window,
+    gnc_error_dialog(wind->window, "%s",
                      _( "A bug was detected while reading the QIF file."));
     /* FIXME: How should we request that the user report this problem? */
 
@@ -917,7 +917,7 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
                      _( "A bug was detected while parsing the QIF file."));
     gnc_progress_dialog_set_sub(wind->load_progress, _("Failed"));
     gnc_progress_dialog_reset_value(wind->load_progress);
-    gnc_error_dialog(wind->window,
+    gnc_error_dialog(wind->window, "%s",
                      _( "A bug was detected while parsing the QIF file."));
     /* FIXME: How should we request that the user report this problem? */
 
@@ -1387,7 +1387,7 @@ gnc_ui_qif_import_default_acct_next_cb(GnomeDruidPage * page,
 
   g_return_val_if_fail(wind->selected_file != SCM_BOOL_F, FALSE);
   if (!acct_name || acct_name[0] == 0) {
-    gnc_warning_dialog(wind->window, _("You must enter an account name."));
+    gnc_warning_dialog(wind->window, "%s", _("You must enter an account name."));
     return TRUE;
   }
   else {
@@ -2067,20 +2067,20 @@ gnc_ui_qif_import_comm_next_cb(GnomeDruidPage * page,
   const gchar *mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->mnemonic_entry));
 
   if (!name || (name[0] == 0)) {
-    gnc_warning_dialog(wind->window,
+    gnc_warning_dialog(wind->window, "%s",
      _("Enter a name or short description, such as \"Red Hat Stock\"."));
     g_free(namespace);
     return TRUE;
   }
   else if (!mnemonic || (mnemonic[0] == 0)) {
-    gnc_warning_dialog(wind->window,
+    gnc_warning_dialog(wind->window, "%s",
      _("Enter the ticker symbol or other well known abbreviation, such as"
        " \"RHT\". If there isn't one, or you don't know it, create your own."));
     g_free(namespace);
     return TRUE;
   }
   else if (!namespace || (namespace[0] == 0)) {
-    gnc_warning_dialog(wind->window,
+    gnc_warning_dialog(wind->window, "%s",
      _("Select the exchange on which the symbol is traded, or select the"
        " type of investment (such as FUND for mutual funds.) If you don't"
        " see your exchange or an appropriate investment type, you can"
@@ -2100,7 +2100,7 @@ gnc_ui_qif_import_comm_next_cb(GnomeDruidPage * page,
   if (gnc_commodity_namespace_is_iso(namespace) &&
       !gnc_commodity_table_lookup(table, namespace, mnemonic))
   {
-    gnc_warning_dialog(wind->window,
+    gnc_warning_dialog(wind->window, "%s",
                        _("You must enter an existing national "
                          "currency or enter a different type."));
 
@@ -2636,7 +2636,7 @@ gnc_ui_qif_import_convert_progress_show_cb(GtkWidget *widget,
                      _( "A bug was detected while converting the QIF data."));
     gnc_progress_dialog_set_sub(wind->convert_progress, _("Failed"));
     gnc_progress_dialog_reset_value(wind->convert_progress);
-    gnc_error_dialog(wind->window,
+    gnc_error_dialog(wind->window, "%s",
                      _( "A bug was detected while converting the QIF data."));
     /* FIXME: How should we request that the user report this problem? */
 
@@ -2706,7 +2706,7 @@ gnc_ui_qif_import_convert_progress_show_cb(GtkWidget *widget,
                      _( "A bug was detected while detecting duplicates."));
     gnc_progress_dialog_set_sub(wind->convert_progress, _("Failed"));
     gnc_progress_dialog_reset_value(wind->convert_progress);
-    gnc_error_dialog(wind->window,
+    gnc_error_dialog(wind->window, "%s",
                      _( "A bug was detected while detecting duplicates."));
     /* FIXME: How should we request that the user report this problem? */
 
@@ -3027,7 +3027,7 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
                                    wind->security_prefs),
                          SCM_EOL);
   if (scm_result == SCM_BOOL_F)
-    gnc_warning_dialog(wind->window,
+    gnc_warning_dialog(wind->window, "%s",
             _("GnuCash was unable to save your mapping preferences."));
 
   /* Open an account tab in the main window if one doesn't exist already. */

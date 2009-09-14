@@ -2062,7 +2062,7 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
   if (xaccTransHasSplitsInState(trans, VREC))
     return;
   if (xaccTransHasReconciledSplits(trans) || xaccTransHasSplitsInState(trans, CREC)) {
-    gnc_error_dialog(NULL, _("You cannot void a transaction with reconciled or cleared splits."));
+    gnc_error_dialog(NULL, "%s", _("You cannot void a transaction with reconciled or cleared splits."));
     return;
   }
 
@@ -2129,7 +2129,7 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action,
     return;
 
   if (xaccTransGetReversedBy(trans)) {
-      gnc_error_dialog(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page)),
+      gnc_error_dialog(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page)), "%s",
         _("A reversing entry has already been created for this transaction."));
       return;
   }

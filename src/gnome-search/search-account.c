@@ -167,7 +167,7 @@ gncs_validate (GNCSearchCoreType *fe)
   priv = _PRIVATE(fi);
   if (priv->selected_accounts == NULL && fi->how ) {
     valid = FALSE;
-    gnc_error_dialog (NULL, _("You have not selected any accounts"));
+    gnc_error_dialog (NULL, "%s", _("You have not selected any accounts"));
   }
 
   /* XXX */

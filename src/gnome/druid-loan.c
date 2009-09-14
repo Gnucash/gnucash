@@ -1159,7 +1159,7 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
         ldd->ld.primaryAcct = gnc_account_sel_get_account( ldd->prmAccountGAS );
         if ( ldd->ld.primaryAcct == NULL ) {
-                gnc_info_dialog( ldd->dialog,
+                gnc_info_dialog( ldd->dialog, "%s", 
                                  _("Please select a valid loan account.") );
                 return TRUE;
         } 
@@ -1246,7 +1246,7 @@ ld_opts_save_state( LoanDruidData *ldd )
                 ldd->ld.escrowAcct =
                         gnc_account_sel_get_account( ldd->optEscrowGAS );
                 if ( ldd->ld.escrowAcct == NULL ) {
-                        gnc_info_dialog( ldd->dialog,
+                        gnc_info_dialog( ldd->dialog, "%s", 
                                          _("Please select a valid "
                                            "Escrow Account.") );
                         return TRUE;
@@ -1312,21 +1312,21 @@ ld_rep_save( LoanDruidData *ldd )
         ldd->ld.repFromAcct =
                 gnc_account_sel_get_account( ldd->repAssetsFromGAS );
         if ( ldd->ld.repFromAcct == NULL ) {
-                gnc_info_dialog( ldd->dialog,
+                gnc_info_dialog( ldd->dialog, "%s", 
                                  _("Please select a valid \"from\" account."));
                 return TRUE;
         }
         ldd->ld.repPriAcct =
                 gnc_account_sel_get_account( ldd->repPrincToGAS );
         if ( ldd->ld.repPriAcct == NULL ) {
-                gnc_info_dialog( ldd->dialog,
+                gnc_info_dialog( ldd->dialog, "%s", 
                                  _("Please select a valid \"to\" account.") );
                 return TRUE;
         }
         ldd->ld.repIntAcct =
                 gnc_account_sel_get_account( ldd->repIntToGAS );
         if ( ldd->ld.repIntAcct == NULL ) {
-                gnc_info_dialog( ldd->dialog,
+                gnc_info_dialog( ldd->dialog, "%s", 
                                  _("Please select a valid "
                                    "\"interest\" account.") );
                 return TRUE;
@@ -1531,7 +1531,7 @@ ld_pay_save_current( LoanDruidData *ldd )
         if ( rod->specSrcAcctP ) {
                 rod->from = gnc_account_sel_get_account( ldd->payAcctFromGAS );
                 if ( rod->from == NULL ) {
-                        gnc_info_dialog( ldd->dialog,
+                        gnc_info_dialog( ldd->dialog, "%s", 
                                          _("Please select a valid "
                                            "\"from\" account.") );
                         return TRUE;
@@ -1540,7 +1540,7 @@ ld_pay_save_current( LoanDruidData *ldd )
 
         rod->to   = gnc_account_sel_get_account( ldd->payAcctToGAS );
         if ( rod->to == NULL ) {
-                gnc_info_dialog( ldd->dialog,
+                gnc_info_dialog( ldd->dialog, "%s", 
                                  _("Please select a valid "
                                    "\"to\" account.") );
                 return TRUE;

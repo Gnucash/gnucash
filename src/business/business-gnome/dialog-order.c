@@ -161,7 +161,7 @@ gnc_order_window_verify_ok (OrderWindow *ow)
   /* Check the ID */
   res = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
   if (safe_strcmp (res, "") == 0) {
-    gnc_error_dialog (ow->dialog,
+    gnc_error_dialog (ow->dialog, "%s",
 		      _("The Order must be given an ID."));
     return FALSE;
   }
@@ -170,7 +170,7 @@ gnc_order_window_verify_ok (OrderWindow *ow)
   gnc_owner_get_owner (ow->owner_choice, &(ow->owner));
   res = gncOwnerGetName (&(ow->owner));
   if (res == NULL || safe_strcmp (res, "") == 0) {
-    gnc_error_dialog (ow->dialog,
+    gnc_error_dialog (ow->dialog, "%s",
 		      _("You need to supply Billing Information."));
     return FALSE;
   }
@@ -264,7 +264,7 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
 
   /* Check that there is at least one Entry */
   if (gncOrderGetEntries (order) == NULL) {
-    gnc_error_dialog (ow->dialog,
+    gnc_error_dialog (ow->dialog, "%s",
 		      _("The Order must have at least one Entry."));
     return;
   }

@@ -531,7 +531,7 @@ _weekly_list_to_compact_string(GList *rs, GString *buf)
         // and purposes this will be fine.
         multiplier = recurrenceGetMultiplier(r);
     }
-    g_string_printf(buf, _("Weekly"));
+    g_string_printf(buf, "%s", _("Weekly"));
     if (multiplier > 1)
     {
         /* translators: %u is the recurrence multipler, i.e. this
@@ -584,7 +584,7 @@ recurrenceListToCompactString(GList *rs)
 
     if (g_list_length(rs) == 0)
     {
-        g_string_printf(buf, _("None"));
+        g_string_printf(buf, "%s", _("None"));
         goto rtn;
     }
 
@@ -605,7 +605,7 @@ recurrenceListToCompactString(GList *rs)
                           recurrenceGetMultiplier(first), recurrenceGetMultiplier(second));
             }
 
-            g_string_printf(buf, _("Semi-monthly"));
+            g_string_printf(buf, "%s", _("Semi-monthly"));
             g_string_append_printf(buf, " ");
             if (recurrenceGetMultiplier(first) > 1)
             {
@@ -631,10 +631,10 @@ recurrenceListToCompactString(GList *rs)
         switch (recurrenceGetPeriodType(r))
         {
         case PERIOD_ONCE: {
-            g_string_printf(buf, _("Once"));
+            g_string_printf(buf, "%s", _("Once"));
         } break;
         case PERIOD_DAY: {
-            g_string_printf(buf, _("Daily"));
+            g_string_printf(buf, "%s", _("Daily"));
             if (multiplier > 1)
             {
                 /* translators: %u is the recurrence multiplier. */
@@ -647,7 +647,7 @@ recurrenceListToCompactString(GList *rs)
         case PERIOD_MONTH:
         case PERIOD_END_OF_MONTH:
         case PERIOD_LAST_WEEKDAY: {
-            g_string_printf(buf, _("Monthly"));
+            g_string_printf(buf, "%s", _("Monthly"));
             if (multiplier > 1)
             {
                 /* translators: %u is the recurrence multiplier. */
@@ -661,7 +661,7 @@ recurrenceListToCompactString(GList *rs)
             g_string_printf(buf, "@fixme: nth weekday not handled");
         } break;
         case PERIOD_YEAR: {
-            g_string_printf(buf, _("Yearly"));
+            g_string_printf(buf, "%s", _("Yearly"));
             if (multiplier > 1)
             {
                 /* translators: %u is the recurrence multiplier. */

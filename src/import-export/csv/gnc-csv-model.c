@@ -431,7 +431,7 @@ int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
     /* TODO Handle file opening errors more specifically,
      * e.g. inexistent file versus no read permission. */
     parse_data->raw_str.begin = NULL;
-    g_set_error(error, 0, GNC_CSV_FILE_OPEN_ERR, _("File opening failed."));
+    g_set_error(error, 0, GNC_CSV_FILE_OPEN_ERR, "%s", _("File opening failed."));
     return 1;
   }
 
@@ -445,7 +445,7 @@ int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
                                 "UTF-8", NULL);
   if(guess_enc == NULL)
   {
-    g_set_error(error, 0, GNC_CSV_ENCODING_ERR, _("Unknown encoding."));
+    g_set_error(error, 0, GNC_CSV_ENCODING_ERR, "%s", _("Unknown encoding."));
     return 1;
   }
 
@@ -454,7 +454,7 @@ int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
   gnc_csv_convert_encoding(parse_data, guess_enc, error);
   if(parse_data->file_str.begin == NULL)
   {
-    g_set_error(error, 0, GNC_CSV_ENCODING_ERR, _("Unknown encoding."));
+    g_set_error(error, 0, GNC_CSV_ENCODING_ERR, "%s", _("Unknown encoding."));
     return 1;
   }
   else

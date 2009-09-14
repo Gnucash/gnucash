@@ -1471,7 +1471,7 @@ gnc_plugin_page_report_options_cb( GtkAction *action, GncPluginPageReport *repor
         result = gfec_apply(start_editor, scm_cons(priv->cur_report, SCM_EOL), 
                             error_handler);
         if (result == SCM_BOOL_F || result == SCM_UNDEFINED) {
-                gnc_warning_dialog(GTK_WIDGET(gnc_ui_get_toplevel()),
+                gnc_warning_dialog(GTK_WIDGET(gnc_ui_get_toplevel()), "%s", 
                                    _("There are no options for this report."));
         }
         else {

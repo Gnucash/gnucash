@@ -907,7 +907,7 @@ gnc_plugin_page_budget_cmd_estimate_budget(GtkAction *action,
         dialog = gtk_message_dialog_new (
             GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))),
             GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
-            GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
+            GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s", 
             _("You must select at least one account to estimate."));
         gtk_dialog_run (GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);

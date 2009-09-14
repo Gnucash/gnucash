@@ -545,7 +545,7 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
         dialog = gtk_message_dialog_new(GTK_WINDOW(pcd->dialog),
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_ERROR,
-                                        GTK_BUTTONS_CLOSE,
+                                        GTK_BUTTONS_CLOSE, "%s", 
                                         _("Cannot save check format file."));
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                                                  "%s", error->message);
@@ -1078,7 +1078,7 @@ read_one_check_directory(PrintCheckDialog * pcd, GtkListStore *store,
             dialog = gtk_message_dialog_new
                 (GTK_WINDOW(pcd->dialog),
                  GTK_DIALOG_DESTROY_WITH_PARENT,
-                 GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
+                 GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s", 
                  _("There is a duplicate check format file."));
             gtk_message_dialog_format_secondary_text
                 (GTK_MESSAGE_DIALOG(dialog),

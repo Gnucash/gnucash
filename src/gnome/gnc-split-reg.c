@@ -867,7 +867,7 @@ gsr_default_reverse_txn_handler (GNCSplitReg *gsr, gpointer data)
     return;
 
   if (xaccTransGetReversedBy(trans)) {
-      gnc_error_dialog(gsr->window,
+      gnc_error_dialog(gsr->window, "%s",
         _("A reversing entry has already been created for this transaction."));
       return;
   }

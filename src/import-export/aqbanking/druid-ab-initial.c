@@ -453,7 +453,7 @@ child_exit_cb(GPid pid, gint status, gpointer data)
                       "value: %d. The called program was \"%s\".\n",
                       exit_status, deferred_info->wizard_path);
             gnc_error_dialog
-                (info->window,
+                (info->window, "%s",
                  _("The external program \"AqBanking Setup Wizard\" failed "
                    "to run successfully because the "
                    "additional software \"Qt\" was not found.  "
@@ -472,7 +472,7 @@ child_exit_cb(GPid pid, gint status, gpointer data)
                       "value: %d. The called program was \"%s\".\n",
                       exit_status, deferred_info->wizard_path);
             gnc_error_dialog
-                (info->window,
+                (info->window, "%s",
                  _("The external program \"AqBanking Setup Wizard\" failed "
                    "to run successfully.  Online Banking can only be setup "
                    "if this wizard has run successfully.  "

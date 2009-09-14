@@ -1207,7 +1207,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
       gnc_commodity_commit_edit(c);
       return TRUE;
     }
-    gnc_warning_dialog(w->dialog,
+    gnc_warning_dialog(w->dialog, "%s", 
 		       _("You may not create a new national currency."));
     return FALSE;
   }
@@ -1220,7 +1220,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
 
     if ((!w->edit_commodity && c) ||
         (w->edit_commodity && c && (c != w->edit_commodity))) {
-      gnc_warning_dialog (w->dialog, _("That commodity already exists."));
+      gnc_warning_dialog (w->dialog, "%s",  _("That commodity already exists."));
       g_free(namespace);
       return FALSE;
     }
@@ -1262,7 +1262,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     c = gnc_commodity_table_insert(gnc_get_current_commodities(), c);
   }
   else {
-    gnc_warning_dialog(w->dialog,
+    gnc_warning_dialog(w->dialog, "%s", 
 		       _("You must enter a non-empty \"Full name\", "
 			 "\"Symbol/abbreviation\", "
 			 "and \"Type\" for the commodity."));

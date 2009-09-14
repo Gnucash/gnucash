@@ -208,7 +208,7 @@ static void encoding_selected(GOCharmapSel* selector, const char* encoding,
        gnc_csv_parse(preview->parse_data, FALSE, &error))
     {
       /* If it fails, change back to the old encoding. */
-      gnc_error_dialog(NULL, _("Invalid encoding selected"));
+      gnc_error_dialog(NULL, "%s", _("Invalid encoding selected"));
       preview->encoding_selected_called = FALSE;
       go_charmap_sel_set_encoding(selector, previous_encoding);
       return;
