@@ -115,11 +115,11 @@ static gint inputbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
 static guint32 showbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
                           const gchar *text, guint32 guiid);
 static void hidebox_cb(GWEN_GUI *gwen_gui, guint32 id);
-static guint32 progress_start_cb(GWEN_GUI *gwen_gui, guint32 progressFlags,
-                                 const gchar *title, const gchar *text,
-                                 guint64 total, guint32 guiid);
-static gint progress_advance_cb(GWEN_GUI *gwen_gui, guint32 id,
-                                guint64 new_progress);
+static guint32 progress_start_cb(GWEN_GUI *gwen_gui, uint32_t progressFlags,
+                                 const char *title, const char *text,
+                                 uint64_t total, uint32_t guiid);
+static gint progress_advance_cb(GWEN_GUI *gwen_gui, uint32_t id,
+                                uint64_t new_progress);
 static gint progress_log_cb(GWEN_GUI *gwen_gui, guint32 id,
                             GWEN_LOGGER_LEVEL level, const gchar *text);
 static gint progress_end_cb(GWEN_GUI *gwen_gui, guint32 id);
@@ -1028,8 +1028,8 @@ hidebox_cb(GWEN_GUI *gwen_gui, guint32 id)
 }
 
 static guint32
-progress_start_cb(GWEN_GUI *gwen_gui, guint32 progressFlags, const gchar *title,
-                  const gchar *text, guint64 total, guint32 guiid)
+progress_start_cb(GWEN_GUI *gwen_gui, uint32_t progressFlags, const char *title,
+                  const char *text, uint64_t total, uint32_t guiid)
 {
     GncGWENGui *gui = GETDATA_GUI(gwen_gui);
     Progress *progress;
@@ -1037,7 +1037,7 @@ progress_start_cb(GWEN_GUI *gwen_gui, guint32 progressFlags, const gchar *title,
     g_return_val_if_fail(gui, -1);
 
     ENTER("gui=%p, flags=%d, title=%s, total=%" G_GUINT64_FORMAT, gui,
-          progressFlags, title ? title : "(null)", total);
+          progressFlags, title ? title : "(null)", (guint64)total);
 
     if (!gui->progresses) {
         /* Top-level progress */
@@ -1075,13 +1075,13 @@ progress_start_cb(GWEN_GUI *gwen_gui, guint32 progressFlags, const gchar *title,
 }
 
 static gint
-progress_advance_cb(GWEN_GUI *gwen_gui, guint32 id, guint64 progress)
+progress_advance_cb(GWEN_GUI *gwen_gui, uint32_t id, uint64_t progress)
 {
     GncGWENGui *gui = GETDATA_GUI(gwen_gui);
 
     g_return_val_if_fail(gui, -1);
 
-    ENTER("gui=%p, progress=%" G_GUINT64_FORMAT, gui, progress);
+    ENTER("gui=%p, progress=%" G_GUINT64_FORMAT, gui, (guint64)progress);
 
     if (id == 1                                  /* top-level progress */
         && gui->max_actions > 0                  /* progressbar active */
