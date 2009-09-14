@@ -324,7 +324,7 @@ AC_SUBST(SED)
 
 AC_MSG_CHECKING(for darwin)
 case $host_os in
-	rhapsody* | darwin1*)
+	rhapsody* | darwin[1567].*)
 		AC_MSG_RESULT([yes, but too old])
 		AC_MSG_ERROR([This platform is not supported, please
 update to latest  darwin])
