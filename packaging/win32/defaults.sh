@@ -292,6 +292,7 @@ set_default PGSQL_DIR $GLOBAL_DIR\\pgsql
 set_default LIBDBI_URL "http://downloads.sourceforge.net/libdbi/libdbi-0.8.3.tar.gz"
 set_default LIBDBI_DIR $GLOBAL_DIR\\libdbi
 set_default LIBDBI_PATCH `pwd`/libdbi-0.8.3.patch
+set_default LIBDBI_PATCH2 `pwd`/libdbi-dbd_helper.c.patch
 set_default LIBDBI_DRIVERS_URL "http://downloads.sourceforge.net/libdbi-drivers/libdbi-drivers-0.8.3-1.tar.gz"
 set_default LIBDBI_DRIVERS_DIR $GLOBAL_DIR\\libdbi-drivers
 set_default LIBDBI_DRIVERS_PATCH `pwd`/libdbi-drivers-dbd_sqlite3.c.patch

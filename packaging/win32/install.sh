@@ -111,7 +111,7 @@ function inst_dtk() {
     if quiet ${_MSYS_UDIR}/bin/perl --help &&
         [ "`m4 --version | sed '1!d;s,.* [Mm]4 ,,'`" = "1.4.7" ]
     then
-        echo "msys dtk already installed.  skipping."
+    echo "msys dtk already installed.  skipping."
     else
         smart_wget $DTK_URL $DOWNLOAD_DIR
         $LAST_FILE //SP- //SILENT //DIR="$MSYS_DIR"
@@ -1094,6 +1094,9 @@ function inst_libdbi() {
                 patch -p1 < $LIBDBI_PATCH
                 ./autogen.sh
             fi
+            if [ -n "$LIBDBI_PATCH2" -a -f "$LIBDBI_PATCH2" ]; then
+                patch -p1 < $LIBDBI_PATCH2
+	    fi
             ./configure ${HOST_XCOMPILE} \
                 --disable-docs \
                 --prefix=${_LIBDBI_UDIR}
