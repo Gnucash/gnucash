@@ -180,14 +180,12 @@
     (define (account-full-name<? a b)
       (string<? (gnc-account-get-full-name a) (gnc-account-get-full-name b)))
 
-    ;; helper for account depth
+    ;; return maximum depth over accounts and their children, if any
     (define (accounts-get-children-depth accounts)
       (apply max
 	     (map (lambda (acct)
-		    (let ((children (gnc-account-get-children acct)))
-		      (if (null? children)
-			  1
-			  (+ 1 (accounts-get-children-depth children)))))
+		    (let ((acct-depth (gnc-account-get-current-depth acct)))
+		      (+ acct-depth (- (gnc-account-get-tree-depth acct) 1))))
 		  accounts)))
 
 
