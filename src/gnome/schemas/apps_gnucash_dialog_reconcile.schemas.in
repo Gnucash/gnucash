@@ -53,5 +53,21 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/reconcile/always_reconcile_to_today</key>
+      <applyto>/apps/gnucash/dialogs/reconcile/always_reconcile_to_today</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Always reconcile to today</short>
+        <long>
+	  If active, always open the reconcile dialog using today's
+	  date for the statement date, regardless of previous
+	  reconciliations.
+	</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>

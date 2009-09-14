@@ -1329,13 +1329,18 @@ gnc_get_reconcile_info (Account *account,
                         gnc_numeric *new_ending,
                         time_t *statement_date)
 {
+  gboolean always_today;
   GDate date;
   time_t today;
   struct tm tm;
 
   g_date_clear(&date, 1);
 
-  if (xaccAccountGetReconcileLastDate (account, statement_date))
+  always_today = gnc_gconf_get_bool(GCONF_RECONCILE_SECTION,
+                    "always_reconcile_to_today", NULL);
+
+  if (!always_today &&
+      xaccAccountGetReconcileLastDate (account, statement_date))
   {
     int months = 1, days = 0;
 

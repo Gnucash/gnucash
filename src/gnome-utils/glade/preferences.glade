@@ -2535,7 +2535,7 @@
 	    <widget class="GtkTable" id="table3">
 	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
-	      <property name="n_rows">14</property>
+	      <property name="n_rows">15</property>
 	      <property name="n_columns">4</property>
 	      <property name="homogeneous">False</property>
 	      <property name="row_spacing">0</property>
@@ -2694,8 +2694,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">1</property>
-		  <property name="top_attach">8</property>
-		  <property name="bottom_attach">9</property>
+		  <property name="top_attach">9</property>
+		  <property name="bottom_attach">10</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
 		</packing>
@@ -2774,6 +2774,30 @@
 	      </child>
 
 	      <child>
+		<widget class="GtkCheckButton" id="gconf/dialogs/reconcile/always_reconcile_to_today">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Always open the reconcile dialog using today's date for the statement date, regardless of previous reconciliations.</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Always reconcile to t_oday</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">4</property>
+		  <property name="top_attach">8</property>
+		  <property name="bottom_attach">9</property>
+		  <property name="x_padding">12</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
 		<widget class="GtkCheckButton" id="gconf/general/register/draw_vertical_lines">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Show vertical borders on the cells.</property>
@@ -2789,8 +2813,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">4</property>
-		  <property name="top_attach">13</property>
-		  <property name="bottom_attach">14</property>
+		  <property name="top_attach">14</property>
+		  <property name="bottom_attach">15</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
@@ -2813,8 +2837,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">4</property>
-		  <property name="top_attach">12</property>
-		  <property name="bottom_attach">13</property>
+		  <property name="top_attach">13</property>
+		  <property name="bottom_attach">14</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
@@ -2837,8 +2861,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">4</property>
-		  <property name="top_attach">11</property>
-		  <property name="bottom_attach">12</property>
+		  <property name="top_attach">12</property>
+		  <property name="bottom_attach">13</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
@@ -2861,8 +2885,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">4</property>
-		  <property name="top_attach">10</property>
-		  <property name="bottom_attach">11</property>
+		  <property name="top_attach">11</property>
+		  <property name="bottom_attach">12</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
@@ -2890,8 +2914,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">2</property>
-		  <property name="top_attach">9</property>
-		  <property name="bottom_attach">10</property>
+		  <property name="top_attach">10</property>
+		  <property name="bottom_attach">11</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
 		</packing>
