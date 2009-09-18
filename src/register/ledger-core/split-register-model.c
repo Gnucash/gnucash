@@ -1061,12 +1061,6 @@ gnc_split_register_get_memo_help (VirtualLocation virt_loc,
   return g_strdup (help);
 }
 
-static GNCPrintAmountInfo gnc_split_register_print_info (SplitRegister *reg)
-{
-  return gnc_account_print_info (gnc_split_register_get_default_account (reg),
-      FALSE);
-}
-
 static const char *
 gnc_split_register_get_balance_entry (VirtualLocation virt_loc,
                                       gboolean translate,
@@ -1078,6 +1072,7 @@ gnc_split_register_get_balance_entry (VirtualLocation virt_loc,
   gnc_numeric balance;
   gboolean is_trans;
   Split *split;
+  Account *account;
 
   split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
@@ -1093,18 +1088,14 @@ gnc_split_register_get_balance_entry (VirtualLocation virt_loc,
   else
     balance = xaccSplitGetBalance (split);
 
-  {
-    Account *account;
+  account = xaccSplitGetAccount (split);
+  if (!account)
+    account = gnc_split_register_get_default_account (reg);
 
-    account = xaccSplitGetAccount (split);
-    if (!account)
-      account = gnc_split_register_get_default_account (reg);
+  if (gnc_reverse_balance (account))
+    balance = gnc_numeric_neg (balance);
 
-    if (gnc_reverse_balance (account))
-      balance = gnc_numeric_neg (balance);
-  }
-
-  return xaccPrintAmount (balance, gnc_split_register_print_info (reg));
+  return xaccPrintAmount (balance, gnc_account_print_info (account, FALSE));
 }
 
 static const char *
@@ -1458,11 +1449,12 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
 				       GNC_RND_ROUND);
     }
 
-    return xaccPrintAmount (imbalance, gnc_split_register_print_info (reg));
+    return xaccPrintAmount (imbalance, gnc_account_print_info (acc, FALSE));
   }
 
   {
     gnc_numeric amount;
+    GNCPrintAmountInfo print_info;
 
     /* If this account is not a stock/mutual/currency account, and
      * currency != the account commodity, then use the SplitAmount
@@ -1472,6 +1464,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
     case STOCK_REGISTER:
     case CURRENCY_REGISTER:
       amount = xaccSplitGetValue (split);
+      print_info = gnc_commodity_print_info (currency, FALSE);
       break;
 
     default:
@@ -1487,6 +1480,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
 	  amount = xaccSplitConvertAmount(split, account);
 	else
 	  amount = xaccSplitGetValue (split);
+	print_info = gnc_account_print_info (account, FALSE);
       }
     }
 
@@ -1501,7 +1495,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
 
     amount = gnc_numeric_abs (amount);
 
-    return xaccPrintAmount (amount, gnc_split_register_print_info (reg));
+    return xaccPrintAmount (amount, print_info);
   }
 }
 
@@ -1867,7 +1861,7 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
     amount = gnc_numeric_abs (amount);
 
     /* FIXME: This should be fixed to be correct for the "fake" account. */
-    return xaccPrintAmount (amount, gnc_split_register_print_info (reg));
+    return xaccPrintAmount (amount, gnc_default_print_info (FALSE));
   }
 
   return NULL;
