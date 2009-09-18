@@ -31,6 +31,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <libguile.h>
+#include <math.h>
 
 #include <libofx/libofx.h>
 #include "import-account-matcher.h"
@@ -71,6 +72,7 @@ int ofx_proc_status_cb(struct OfxStatusData data)
 int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user_data);
 int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_user_data);
 int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data);
+double ofx_get_investment_amount(struct OfxTransactionData data);
 
 int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user_data)
 {
@@ -379,7 +381,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 			xaccTransAppendSplit(transaction,split);
 			xaccAccountInsertSplit(investment_account,split);
 
-			gnc_amount = double_to_gnc_numeric (-(data.amount),
+			gnc_amount = double_to_gnc_numeric (ofx_get_investment_amount(data),
 							    gnc_commodity_get_fraction(investment_commodity),
 							    GNC_RND_ROUND);
 			gnc_units = double_to_gnc_numeric (data.units,
@@ -505,7 +507,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 			xaccTransAppendSplit(transaction,split);
 			xaccAccountInsertSplit(account,split);
 
-			gnc_amount = double_to_gnc_numeric (data.amount,
+			gnc_amount = double_to_gnc_numeric (-ofx_get_investment_amount(data),
 							    gnc_commodity_get_fraction(xaccTransGetCurrency(transaction)),
 							    GNC_RND_ROUND);
 			xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
@@ -630,6 +632,26 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
     }
 
   return 0;
+}
+
+double ofx_get_investment_amount(struct OfxTransactionData data)
+{
+  switch(data.invtransactiontype){
+  case OFX_BUYDEBT: 
+  case OFX_BUYMF:
+  case OFX_BUYOPT:
+  case OFX_BUYOTHER:
+  case OFX_BUYSTOCK:
+    return fabs(data.amount);
+  case OFX_SELLDEBT:
+  case OFX_SELLMF:
+  case OFX_SELLOPT:
+  case OFX_SELLOTHER:
+  case OFX_SELLSTOCK:
+    return -1*fabs(data.amount);
+  default:
+    return -1*data.amount;
+  }
 }
 
 void gnc_file_ofx_import (void)
