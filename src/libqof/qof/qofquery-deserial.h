@@ -20,9 +20,9 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/* 
+/*
  qofquery-deserial.h
- Convert Qof-Query XML to QofQuery 
+ Convert Qof-Query XML to QofQuery
 author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
 */
 
@@ -38,7 +38,7 @@ author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
     routine needed to convert the XML back into a C struct.
 
     Unfinished. XXX Why is this easier than reading a text/sql
-    file? 
+    file?
 
 NOTE: Development of this idea has ceased and this file is
 no longer included in the QOF library. It remains in CVS for now.

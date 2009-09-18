@@ -22,7 +22,7 @@
 /*
  * Object instance holds many common fields that most
  * gnucash objects use.
- * 
+ *
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2007 David Hampton <hampton@employees.org>
  */
@@ -40,8 +40,8 @@ void qof_instance_set_collection (gconstpointer ptr, QofCollection *col);
 void qof_instance_set_slots (QofInstance *, KvpFrame *);
 
 /*  Set the last_update time. Reserved for use by the SQL backend;
- *  used for comparing version in local memory to that in remote 
- *  server. 
+ *  used for comparing version in local memory to that in remote
+ *  server.
  */
 void qof_instance_set_last_update (QofInstance *inst, Timespec ts);
 

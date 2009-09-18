@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-date.c -- misc utility functions to handle date and time     * 
+ * gnc-date.c -- misc utility functions to handle date and time     *
  *         (to be renamed qofdate.c in libqof2)                     *
  *                                                                  *
  * Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>            *
@@ -31,9 +31,9 @@
 /* to be renamed qofdate.c */
 #include <ctype.h>
 
-#ifdef HAVE_LANGINFO_D_FMT 
-#  include <langinfo.h> 
-#endif 
+#ifdef HAVE_LANGINFO_D_FMT
+#  include <langinfo.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,19 +64,19 @@
 #  define GNC_T_FMT (qof_win32_get_time_format(QOF_WIN32_PICTURE_TIME))
 #  define GNC_D_T_FMT (qof_win32_get_time_format(QOF_WIN32_PICTURE_DATETIME))
 #else
-#  define GNC_D_FMT "%Y-%m-%d" 
-#  define GNC_D_T_FMT "%Y-%m-%d %r" 
-#  define GNC_T_FMT "%r" 
+#  define GNC_D_FMT "%Y-%m-%d"
+#  define GNC_D_T_FMT "%Y-%m-%d %r"
+#  define GNC_T_FMT "%r"
 #endif
 
 /* The default date format for use with strftime. */
 const char *gnc_default_strftime_date_format =
 #ifdef G_OS_WIN32
- N_("%B %#d, %Y")
+    N_("%B %#d, %Y")
 #else
- N_("%B %e, %Y")
+    N_("%B %e, %Y")
 #endif
- ;
+    ;
 
 /* This is now user configured through the gnome options system() */
 static QofDateFormat dateFormat = QOF_DATE_FORMAT_LOCALE;
@@ -91,84 +91,86 @@ static QofLogModule log_module = QOF_MOD_ENGINE;
 const char*
 gnc_date_dateformat_to_string(QofDateFormat format)
 {
-  switch (format) {
-  case QOF_DATE_FORMAT_US:
-    return "us";
-  case QOF_DATE_FORMAT_UK:
-    return "uk";
-  case QOF_DATE_FORMAT_CE:
-    return "ce";
-  case QOF_DATE_FORMAT_ISO:
-    return "iso";
-  case QOF_DATE_FORMAT_UTC:
-   return "utc";
-  case QOF_DATE_FORMAT_LOCALE:
-    return "locale";
-  case QOF_DATE_FORMAT_CUSTOM:
-    return "custom";
-  default:
-    return NULL;    
-  }
+    switch (format)
+    {
+    case QOF_DATE_FORMAT_US:
+        return "us";
+    case QOF_DATE_FORMAT_UK:
+        return "uk";
+    case QOF_DATE_FORMAT_CE:
+        return "ce";
+    case QOF_DATE_FORMAT_ISO:
+        return "iso";
+    case QOF_DATE_FORMAT_UTC:
+        return "utc";
+    case QOF_DATE_FORMAT_LOCALE:
+        return "locale";
+    case QOF_DATE_FORMAT_CUSTOM:
+        return "custom";
+    default:
+        return NULL;
+    }
 }
 
 gboolean
 gnc_date_string_to_dateformat(const char* fmt_str, QofDateFormat *format)
 {
-  if (!fmt_str)
-    return TRUE;
+    if (!fmt_str)
+        return TRUE;
 
-  if (!strcmp(fmt_str, "us"))
-    *format = QOF_DATE_FORMAT_US;
-  else if (!strcmp(fmt_str, "uk"))
-    *format = QOF_DATE_FORMAT_UK;
-  else if (!strcmp(fmt_str, "ce"))
-    *format = QOF_DATE_FORMAT_CE;
-  else if (!strcmp(fmt_str, "utc"))
-    *format = QOF_DATE_FORMAT_UTC;
-  else if (!strcmp(fmt_str, "iso"))
-    *format = QOF_DATE_FORMAT_ISO;
-  else if (!strcmp(fmt_str, "locale"))
-    *format = QOF_DATE_FORMAT_LOCALE;
-  else if (!strcmp(fmt_str, "custom"))
-    *format = QOF_DATE_FORMAT_CUSTOM;
-  else
-    return TRUE;
+    if (!strcmp(fmt_str, "us"))
+        *format = QOF_DATE_FORMAT_US;
+    else if (!strcmp(fmt_str, "uk"))
+        *format = QOF_DATE_FORMAT_UK;
+    else if (!strcmp(fmt_str, "ce"))
+        *format = QOF_DATE_FORMAT_CE;
+    else if (!strcmp(fmt_str, "utc"))
+        *format = QOF_DATE_FORMAT_UTC;
+    else if (!strcmp(fmt_str, "iso"))
+        *format = QOF_DATE_FORMAT_ISO;
+    else if (!strcmp(fmt_str, "locale"))
+        *format = QOF_DATE_FORMAT_LOCALE;
+    else if (!strcmp(fmt_str, "custom"))
+        *format = QOF_DATE_FORMAT_CUSTOM;
+    else
+        return TRUE;
 
-  return FALSE;
+    return FALSE;
 }
 
 
 const char*
 gnc_date_monthformat_to_string(GNCDateMonthFormat format)
 {
-  switch (format) {
-  case GNCDATE_MONTH_NUMBER:
-    return "number";
-  case GNCDATE_MONTH_ABBREV:
-    return "abbrev";
-  case GNCDATE_MONTH_NAME:
-    return "name";
-  default:
-    return NULL;
-  }
+    switch (format)
+    {
+    case GNCDATE_MONTH_NUMBER:
+        return "number";
+    case GNCDATE_MONTH_ABBREV:
+        return "abbrev";
+    case GNCDATE_MONTH_NAME:
+        return "name";
+    default:
+        return NULL;
+    }
 }
 
 gboolean
 gnc_date_string_to_monthformat(const char *fmt_str, GNCDateMonthFormat *format)
 {
-  if (!fmt_str)
-    return TRUE;
+    if (!fmt_str)
+        return TRUE;
 
-  if (!strcmp(fmt_str, "number"))
-    *format = GNCDATE_MONTH_NUMBER;
-  else if (!strcmp(fmt_str, "abbrev"))
-    *format = GNCDATE_MONTH_ABBREV;
-  else if (!strcmp(fmt_str, "name"))
-    *format = GNCDATE_MONTH_NAME;
-  else
-    return TRUE;
+    if (!strcmp(fmt_str, "number"))
+        *format = GNCDATE_MONTH_NUMBER;
+    else if (!strcmp(fmt_str, "abbrev"))
+        *format = GNCDATE_MONTH_ABBREV;
+    else if (!strcmp(fmt_str, "name"))
+        *format = GNCDATE_MONTH_NAME;
+    else
+        return TRUE;
 
-  return FALSE;
+    return FALSE;
 }
 
 /********************************************************************\
@@ -177,76 +179,76 @@ gnc_date_string_to_monthformat(const char *fmt_str, GNCDateMonthFormat *format)
 static void
 timespec_normalize(Timespec *t)
 {
-  if(t->tv_nsec > NANOS_PER_SECOND)
-  {
-    t->tv_sec+= (t->tv_nsec / NANOS_PER_SECOND);
-    t->tv_nsec= t->tv_nsec % NANOS_PER_SECOND;
-  }
+    if (t->tv_nsec > NANOS_PER_SECOND)
+    {
+        t->tv_sec += (t->tv_nsec / NANOS_PER_SECOND);
+        t->tv_nsec = t->tv_nsec % NANOS_PER_SECOND;
+    }
 
-  if(t->tv_nsec < - NANOS_PER_SECOND)
-  {
-    t->tv_sec+= - (-t->tv_nsec / NANOS_PER_SECOND);
-    t->tv_nsec = - (-t->tv_nsec % NANOS_PER_SECOND);
-  }
+    if (t->tv_nsec < - NANOS_PER_SECOND)
+    {
+        t->tv_sec += - (-t->tv_nsec / NANOS_PER_SECOND);
+        t->tv_nsec = - (-t->tv_nsec % NANOS_PER_SECOND);
+    }
 
-  if (t->tv_sec > 0 && t->tv_nsec < 0)
-  {
-    t->tv_sec--;
-    t->tv_nsec = NANOS_PER_SECOND + t->tv_nsec;
-  }
-  
-  if (t->tv_sec < 0 && t->tv_nsec > 0)
-  {
-    t->tv_sec++;
-    t->tv_nsec = - NANOS_PER_SECOND + t->tv_nsec;
-  }
-  return;
+    if (t->tv_sec > 0 && t->tv_nsec < 0)
+    {
+        t->tv_sec--;
+        t->tv_nsec = NANOS_PER_SECOND + t->tv_nsec;
+    }
+
+    if (t->tv_sec < 0 && t->tv_nsec > 0)
+    {
+        t->tv_sec++;
+        t->tv_nsec = - NANOS_PER_SECOND + t->tv_nsec;
+    }
+    return;
 }
-  
+
 
 gboolean
 timespec_equal (const Timespec *ta, const Timespec *tb)
 {
-  if(ta == tb) return TRUE;
-  if(ta->tv_sec != tb->tv_sec) return FALSE;
-  if(ta->tv_nsec != tb->tv_nsec) return FALSE;
-  return TRUE;
+    if (ta == tb) return TRUE;
+    if (ta->tv_sec != tb->tv_sec) return FALSE;
+    if (ta->tv_nsec != tb->tv_nsec) return FALSE;
+    return TRUE;
 }
 
 gint
 timespec_cmp(const Timespec *ta, const Timespec *tb)
 {
-  if(ta == tb) return 0;
-  if(ta->tv_sec < tb->tv_sec) return -1;
-  if(ta->tv_sec > tb->tv_sec) return 1;
-  if(ta->tv_nsec < tb->tv_nsec) return -1;
-  if(ta->tv_nsec > tb->tv_nsec) return 1;
-  return 0;
+    if (ta == tb) return 0;
+    if (ta->tv_sec < tb->tv_sec) return -1;
+    if (ta->tv_sec > tb->tv_sec) return 1;
+    if (ta->tv_nsec < tb->tv_nsec) return -1;
+    if (ta->tv_nsec > tb->tv_nsec) return 1;
+    return 0;
 }
 
 Timespec
 timespec_diff(const Timespec *ta, const Timespec *tb)
 {
-  Timespec retval;
-  retval.tv_sec = ta->tv_sec - tb->tv_sec;
-  retval.tv_nsec = ta->tv_nsec - tb->tv_nsec;
-  timespec_normalize(&retval);
-  return retval;
+    Timespec retval;
+    retval.tv_sec = ta->tv_sec - tb->tv_sec;
+    retval.tv_nsec = ta->tv_nsec - tb->tv_nsec;
+    timespec_normalize(&retval);
+    return retval;
 }
 
 Timespec
 timespec_abs(const Timespec *t)
 {
-  Timespec retval = *t;
+    Timespec retval = *t;
 
-  timespec_normalize(&retval);
-  if (retval.tv_sec < 0)
-  {
-    retval.tv_sec = - retval.tv_sec;
-    retval.tv_nsec = - retval.tv_nsec;
-  }
-  
-  return retval;
+    timespec_normalize(&retval);
+    if (retval.tv_sec < 0)
+    {
+        retval.tv_sec = - retval.tv_sec;
+        retval.tv_nsec = - retval.tv_nsec;
+    }
+
+    return retval;
 }
 
 /* Converts any time on a day to midday that day.
@@ -257,28 +259,29 @@ timespec_abs(const Timespec *t)
 Timespec
 timespecCanonicalDayTime(Timespec t)
 {
-  struct tm tm;
-  Timespec retval;
-  time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
-  localtime_r(&t_secs, &tm);
-  gnc_tm_set_day_middle(&tm);
-  retval.tv_sec = mktime(&tm);
-  retval.tv_nsec = 0;
-  return retval;
+    struct tm tm;
+    Timespec retval;
+    time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
+    localtime_r(&t_secs, &tm);
+    gnc_tm_set_day_middle(&tm);
+    retval.tv_sec = mktime(&tm);
+    retval.tv_nsec = 0;
+    return retval;
 }
 
 int gnc_date_my_last_mday (int month, int year)
 {
-  static int last_day_of_month[2][12] = {
-  /* non leap */ {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
-  /*   leap   */ {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-  };
+    static int last_day_of_month[2][12] =
+    {
+        /* non leap */ {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
+        /*   leap   */ {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+    };
 
-  /* Is this a leap year? */
-  if (year % 2000 == 0) return last_day_of_month[1][month-1];
-  if (year % 400 == 0 ) return last_day_of_month[0][month-1];
-  if (year % 4   == 0 ) return last_day_of_month[1][month-1];
-  return last_day_of_month[0][month-1];
+    /* Is this a leap year? */
+    if (year % 2000 == 0) return last_day_of_month[1][month-1];
+    if (year % 400 == 0 ) return last_day_of_month[0][month-1];
+    if (year % 4   == 0 ) return last_day_of_month[1][month-1];
+    return last_day_of_month[0][month-1];
 }
 
 /* Retrieve the last numerical day of the month
@@ -291,7 +294,7 @@ return the last day of the month, integer.
 */
 int date_get_last_mday(const struct tm *tm)
 {
-  return gnc_date_my_last_mday (tm->tm_mon+1, tm->tm_year+1900);
+    return gnc_date_my_last_mday (tm->tm_mon + 1, tm->tm_year + 1900);
 }
 
 /* Determines if tm_mday is the last day of the month.
@@ -303,7 +306,7 @@ return TRUE if tm_mday matches the last day of the month, else FALSE.
 */
 gboolean date_is_last_mday(const struct tm *tm)
 {
-  return(tm->tm_mday == date_get_last_mday(tm));
+    return(tm->tm_mday == date_get_last_mday(tm));
 }
 
 /* Return the set dateFormat.
@@ -314,7 +317,7 @@ Global: dateFormat
 */
 QofDateFormat qof_date_format_get (void)
 {
-  return dateFormat;
+    return dateFormat;
 }
 
 /* set date format
@@ -330,19 +333,19 @@ Globals: dateFormat
 */
 void qof_date_format_set(QofDateFormat df)
 {
-  if(df >= DATE_FORMAT_FIRST && df <= DATE_FORMAT_LAST)
-  {
-    prevQofDateFormat = dateFormat;
-    dateFormat = df;
-  }
-  else
-  {    /* hack alert - Use a neutral default. */
-    PERR("non-existent date format set attempted. Setting ISO default");
-    prevQofDateFormat = dateFormat;
-    dateFormat = QOF_DATE_FORMAT_ISO;
-  }
+    if (df >= DATE_FORMAT_FIRST && df <= DATE_FORMAT_LAST)
+    {
+        prevQofDateFormat = dateFormat;
+        dateFormat = df;
+    }
+    else
+    {    /* hack alert - Use a neutral default. */
+        PERR("non-existent date format set attempted. Setting ISO default");
+        prevQofDateFormat = dateFormat;
+        dateFormat = QOF_DATE_FORMAT_ISO;
+    }
 
-  return;
+    return;
 }
 
 /*
@@ -354,21 +357,22 @@ void qof_date_format_set(QofDateFormat df)
 */
 const gchar *qof_date_format_get_string(QofDateFormat df)
 {
-  switch(df) {
-   case QOF_DATE_FORMAT_US:
-    return "%m/%d/%y";
-   case QOF_DATE_FORMAT_UK:
-    return "%d/%m/%y";
-   case QOF_DATE_FORMAT_CE:
-    return "%d.%m.%y";
-   case QOF_DATE_FORMAT_UTC:
-    return "%Y-%m-%dT%H:%M:%SZ";
-   case QOF_DATE_FORMAT_ISO:
-    return "%Y-%m-%d";
-   case QOF_DATE_FORMAT_LOCALE:
-   default:
-    return GNC_D_FMT;
-  };
+    switch (df)
+    {
+    case QOF_DATE_FORMAT_US:
+        return "%m/%d/%y";
+    case QOF_DATE_FORMAT_UK:
+        return "%d/%m/%y";
+    case QOF_DATE_FORMAT_CE:
+        return "%d.%m.%y";
+    case QOF_DATE_FORMAT_UTC:
+        return "%Y-%m-%dT%H:%M:%SZ";
+    case QOF_DATE_FORMAT_ISO:
+        return "%Y-%m-%d";
+    case QOF_DATE_FORMAT_LOCALE:
+    default:
+        return GNC_D_FMT;
+    };
 }
 
 /* get the date format string for the current format
@@ -382,20 +386,21 @@ Globals: dateFormat
 */
 const gchar *qof_date_text_format_get_string(QofDateFormat df)
 {
-  switch(df) {
-   case QOF_DATE_FORMAT_US:
-    return "%b %d, %y";
-   case QOF_DATE_FORMAT_UK:
-   case QOF_DATE_FORMAT_CE:
-    return "%d %b, %y";
-   case QOF_DATE_FORMAT_UTC:
-    return "%Y-%m-%dT%H:%M:%SZ";
-   case QOF_DATE_FORMAT_ISO:
-    return "%Y-%b-%d";
-   case QOF_DATE_FORMAT_LOCALE:
-   default:
-    return GNC_D_FMT;
-  };
+    switch (df)
+    {
+    case QOF_DATE_FORMAT_US:
+        return "%b %d, %y";
+    case QOF_DATE_FORMAT_UK:
+    case QOF_DATE_FORMAT_CE:
+        return "%d %b, %y";
+    case QOF_DATE_FORMAT_UTC:
+        return "%Y-%m-%dT%H:%M:%SZ";
+    case QOF_DATE_FORMAT_ISO:
+        return "%Y-%b-%d";
+    case QOF_DATE_FORMAT_LOCALE:
+    default:
+        return GNC_D_FMT;
+    };
 }
 
 /* Convert day, month and year values to a date string
@@ -416,99 +421,99 @@ Globals: global dateFormat value
 size_t
 qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
 {
-  int flen;
-  if (!buff) return 0;
+    int flen;
+    if (!buff) return 0;
 
-  /* Note that when printing year, we use %-4d in format string;
-   * this causes a one, two or three-digit year to be left-adjusted
-   * when printed (i.e. padded with blanks on the right).  This is 
-   * important while the user is editing the year, since erasing a 
-   * digit can temporarily cause a three-digit year, and having the 
-   * blank on the left is a real pain for the user.  So pad on the 
-   * right.
-   */
-  switch(dateFormat)
-  {
+    /* Note that when printing year, we use %-4d in format string;
+     * this causes a one, two or three-digit year to be left-adjusted
+     * when printed (i.e. padded with blanks on the right).  This is
+     * important while the user is editing the year, since erasing a
+     * digit can temporarily cause a three-digit year, and having the
+     * blank on the left is a real pain for the user.  So pad on the
+     * right.
+     */
+    switch (dateFormat)
+    {
     case QOF_DATE_FORMAT_UK:
-      flen = g_snprintf (buff, len, "%02d/%02d/%-4d", day, month, year);
-      break;
+        flen = g_snprintf (buff, len, "%02d/%02d/%-4d", day, month, year);
+        break;
     case QOF_DATE_FORMAT_CE:
-      flen = g_snprintf (buff, len, "%02d.%02d.%-4d", day, month, year);
-      break;
-   case QOF_DATE_FORMAT_LOCALE:
-      {
+        flen = g_snprintf (buff, len, "%02d.%02d.%-4d", day, month, year);
+        break;
+    case QOF_DATE_FORMAT_LOCALE:
+    {
         struct tm tm_str;
-	time_t t;
+        time_t t;
 
         tm_str.tm_mday = day;
         tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
-        tm_str.tm_year = year - 1900; /* this is what the standard 
-                                       * says, it's not a Y2K thing */
+        tm_str.tm_year = year - 1900; /* this is what the standard
+                                 * says, it's not a Y2K thing */
 
         gnc_tm_set_day_start (&tm_str);
-	t = mktime (&tm_str);
-	localtime_r (&t, &tm_str);
+        t = mktime (&tm_str);
+        localtime_r (&t, &tm_str);
         flen = qof_strftime (buff, len, GNC_D_FMT, &tm_str);
-       if (flen != 0)
-         break;
-      }
-      /* FALLTHROUGH */
+        if (flen != 0)
+            break;
+    }
+    /* FALLTHROUGH */
     case QOF_DATE_FORMAT_ISO:
     case QOF_DATE_FORMAT_UTC:
-      flen = g_snprintf (buff, len, "%04d-%02d-%02d", year, month, day);
-      break;
+        flen = g_snprintf (buff, len, "%04d-%02d-%02d", year, month, day);
+        break;
     case QOF_DATE_FORMAT_US:
     default:
-      flen = g_snprintf (buff, len, "%02d/%02d/%-4d", month, day, year);
-      break;
-  }
+        flen = g_snprintf (buff, len, "%02d/%02d/%-4d", month, day, year);
+        break;
+    }
 
-  return flen;
+    return flen;
 }
 
 size_t
 qof_print_date_buff (char * buff, size_t len, time_t t)
 {
-  struct tm theTime;
+    struct tm theTime;
 
-  if (!buff) return 0 ;
+    if (!buff) return 0 ;
 
-  localtime_r(&t, &theTime);
+    localtime_r(&t, &theTime);
 
-  return qof_print_date_dmy_buff (buff, len,
-                   theTime.tm_mday, 
-                   theTime.tm_mon + 1,
-                   theTime.tm_year + 1900);
+    return qof_print_date_dmy_buff (buff, len,
+                                    theTime.tm_mday,
+                                    theTime.tm_mon + 1,
+                                    theTime.tm_year + 1900);
 }
 
 size_t
 qof_print_gdate( char *buf, size_t len, const GDate *gd )
 {
-  return qof_print_date_dmy_buff( buf, len,
-             g_date_get_day(gd),
-             g_date_get_month(gd),
-             g_date_get_year(gd) );
+    return qof_print_date_dmy_buff( buf, len,
+                                    g_date_get_day(gd),
+                                    g_date_get_month(gd),
+                                    g_date_get_year(gd) );
 }
 
-char * 
+char *
 qof_print_date (time_t t)
 {
-   char buff[MAX_DATE_LENGTH];
-   qof_print_date_buff (buff, MAX_DATE_LENGTH, t);
-   return g_strdup (buff);
+    char buff[MAX_DATE_LENGTH];
+    qof_print_date_buff (buff, MAX_DATE_LENGTH, t);
+    return g_strdup (buff);
 }
 
 const char *
 gnc_print_date (Timespec ts)
 {
-  static char buff[MAX_DATE_LENGTH];
-  time_t t;
+    static char buff[MAX_DATE_LENGTH];
+    time_t t;
 
-  t = ts.tv_sec + (ts.tv_nsec / 1000000000.0);
+    t = ts.tv_sec + (ts.tv_nsec / 1000000000.0);
 
-  qof_print_date_buff (buff, MAX_DATE_LENGTH, t);
+    qof_print_date_buff (buff, MAX_DATE_LENGTH, t);
 
-  return buff;
+    return buff;
 }
 
 /* ============================================================== */
@@ -516,76 +521,76 @@ gnc_print_date (Timespec ts)
 size_t
 qof_print_date_time_buff (char * buff, size_t len, time_t secs)
 {
-  int flen;
-  int day, month, year, hour, min, sec;
-  struct tm ltm, gtm;
-  
-  if (!buff) return 0;
+    int flen;
+    int day, month, year, hour, min, sec;
+    struct tm ltm, gtm;
 
-  /* Note that when printing year, we use %-4d in format string;
-   * this causes a one, two or three-digit year to be left-adjusted
-   * when printed (i.e. padded with blanks on the right).  This is 
-   * important while the user is editing the year, since erasing a 
-   * digit can temporarily cause a three-digit year, and having the 
-   * blank on the left is a real pain for the user.  So pad on the 
-   * right.
-   */
-  ltm = *localtime (&secs);
-  day = ltm.tm_mday;
-  month = ltm.tm_mon +1;
-  year = ltm.tm_year +1900;
-  hour = ltm.tm_hour;
-  min = ltm.tm_min;
-  sec = ltm.tm_sec;
-  
-  switch(dateFormat)
-  {
+    if (!buff) return 0;
+
+    /* Note that when printing year, we use %-4d in format string;
+     * this causes a one, two or three-digit year to be left-adjusted
+     * when printed (i.e. padded with blanks on the right).  This is
+     * important while the user is editing the year, since erasing a
+     * digit can temporarily cause a three-digit year, and having the
+     * blank on the left is a real pain for the user.  So pad on the
+     * right.
+     */
+    ltm = *localtime (&secs);
+    day = ltm.tm_mday;
+    month = ltm.tm_mon + 1;
+    year = ltm.tm_year + 1900;
+    hour = ltm.tm_hour;
+    min = ltm.tm_min;
+    sec = ltm.tm_sec;
+
+    switch (dateFormat)
+    {
     case QOF_DATE_FORMAT_UK:
-      flen = g_snprintf (buff, len, "%02d/%02d/%-4d %2d:%02d", day, month, year, hour, min);
-      break;
+        flen = g_snprintf (buff, len, "%02d/%02d/%-4d %2d:%02d", day, month, year, hour, min);
+        break;
     case QOF_DATE_FORMAT_CE:
-      flen = g_snprintf (buff, len, "%02d.%02d.%-4d %2d:%02d", day, month, year, hour, min);
-      break;
+        flen = g_snprintf (buff, len, "%02d.%02d.%-4d %2d:%02d", day, month, year, hour, min);
+        break;
     case QOF_DATE_FORMAT_ISO:
-      flen = g_snprintf (buff, len, "%04d-%02d-%02d %02d:%02d", year, month, day, hour, min);
-      break;
-	case QOF_DATE_FORMAT_UTC:
-	{
-		gtm = *gmtime (&secs);
-		flen = qof_strftime (buff, len, QOF_UTC_DATE_FORMAT, &gtm);
-		break;
-	}
+        flen = g_snprintf (buff, len, "%04d-%02d-%02d %02d:%02d", year, month, day, hour, min);
+        break;
+    case QOF_DATE_FORMAT_UTC:
+    {
+        gtm = *gmtime (&secs);
+        flen = qof_strftime (buff, len, QOF_UTC_DATE_FORMAT, &gtm);
+        break;
+    }
     case QOF_DATE_FORMAT_LOCALE:
-      {
+    {
         flen = qof_strftime (buff, len, GNC_D_T_FMT, &ltm);
-      }
-      break;
+    }
+    break;
 
     case QOF_DATE_FORMAT_US:
     default:
-      flen = g_snprintf (buff, len, "%02d/%02d/%-4d %2d:%02d", month, day, year, hour, min);
-      break;
-  }
-  return flen;
+        flen = g_snprintf (buff, len, "%02d/%02d/%-4d %2d:%02d", month, day, year, hour, min);
+        break;
+    }
+    return flen;
 }
 
-size_t 
+size_t
 qof_print_time_buff (char * buff, size_t len, time_t secs)
 {
-	int flen;
-	struct tm ltm, gtm;
-	
-	if (!buff) return 0;
-	if(dateFormat == QOF_DATE_FORMAT_UTC)
-	{
-		gtm = *gmtime (&secs);
-		flen = qof_strftime(buff, len, QOF_UTC_DATE_FORMAT, &gtm);
-		return flen;
-	}
-	ltm = *localtime (&secs);
-	flen = qof_strftime (buff, len, GNC_T_FMT, &ltm);
-	
-	return flen;
+    int flen;
+    struct tm ltm, gtm;
+
+    if (!buff) return 0;
+    if (dateFormat == QOF_DATE_FORMAT_UTC)
+    {
+        gtm = *gmtime (&secs);
+        flen = qof_strftime(buff, len, QOF_UTC_DATE_FORMAT, &gtm);
+        return flen;
+    }
+    ltm = *localtime (&secs);
+    flen = qof_strftime (buff, len, GNC_T_FMT, &ltm);
+
+    return flen;
 }
 
 /* ============================================================== */
@@ -614,188 +619,222 @@ return TRUE if date appeared to be valid.
 */
 static gboolean
 qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
-                  QofDateFormat which_format)
+                        QofDateFormat which_format)
 {
-   char *dupe, *tmp, *first_field, *second_field, *third_field;
-   int iday, imonth, iyear;
-   struct tm *now, utc;
-   time_t secs;
+    char *dupe, *tmp, *first_field, *second_field, *third_field;
+    int iday, imonth, iyear;
+    struct tm *now, utc;
+    time_t secs;
 
-   if (!buff) return(FALSE);
+    if (!buff) return(FALSE);
 
-	if(which_format == QOF_DATE_FORMAT_UTC)
-	{
-		if(strptime(buff, QOF_UTC_DATE_FORMAT, &utc)) {
-			*day = utc.tm_mday;
-			*month = utc.tm_mon + 1;
-			*year = utc.tm_year + 1900;
-			return TRUE;
-		}
-		else { return FALSE; }
-	}
-   dupe = g_strdup (buff);
+    if (which_format == QOF_DATE_FORMAT_UTC)
+    {
+        if (strptime(buff, QOF_UTC_DATE_FORMAT, &utc))
+        {
+            *day = utc.tm_mday;
+            *month = utc.tm_mon + 1;
+            *year = utc.tm_year + 1900;
+            return TRUE;
+        }
+        else
+        {
+            return FALSE;
+        }
+    }
+    dupe = g_strdup (buff);
 
-   tmp = dupe;
-   first_field = NULL;
-   second_field = NULL;
-   third_field = NULL;
+    tmp = dupe;
+    first_field = NULL;
+    second_field = NULL;
+    third_field = NULL;
 
-   /* Use strtok to find delimiters */
-   if (tmp) {
-     static char *delims = ".,-+/\\()년월年月 ";
+    /* Use strtok to find delimiters */
+    if (tmp)
+    {
+        static char *delims = ".,-+/\\()년월年月 ";
 
-      first_field = strtok (tmp, delims);
-      if (first_field) {
-         second_field = strtok (NULL, delims);
-         if (second_field) {
-            third_field = strtok (NULL, delims);
-         }
-      }
-   }
+        first_field = strtok (tmp, delims);
+        if (first_field)
+        {
+            second_field = strtok (NULL, delims);
+            if (second_field)
+            {
+                third_field = strtok (NULL, delims);
+            }
+        }
+    }
 
-   /* If any fields appear to be blank, use today's date */
-   time (&secs);
-   now = localtime (&secs);
-   iday = now->tm_mday; 
-   imonth = now->tm_mon+1;
-   iyear = now->tm_year+1900;
+    /* If any fields appear to be blank, use today's date */
+    time (&secs);
+    now = localtime (&secs);
+    iday = now->tm_mday;
+    imonth = now->tm_mon + 1;
+    iyear = now->tm_year + 1900;
 
-   /* get numeric values */
-   switch (which_format)
-   {
-     case QOF_DATE_FORMAT_LOCALE:
-       if (buff[0] != '\0')
-       {
-         struct tm thetime;
+    /* get numeric values */
+    switch (which_format)
+    {
+    case QOF_DATE_FORMAT_LOCALE:
+        if (buff[0] != '\0')
+        {
+            struct tm thetime;
 
-         /* Parse time string. */
-         memset(&thetime, -1, sizeof(struct tm));
-         strptime (buff, GNC_D_FMT, &thetime);
+            /* Parse time string. */
+            memset(&thetime, -1, sizeof(struct tm));
+            strptime (buff, GNC_D_FMT, &thetime);
 
-         if (third_field) {
-           /* Easy.  All three values were parsed. */
-           iyear = thetime.tm_year + 1900;
-           iday = thetime.tm_mday;
-           imonth = thetime.tm_mon + 1;
-         } else if (second_field) {
-           /* Hard. Two values parsed.  Figure out the ordering. */
-           if (thetime.tm_year == -1) {
-             /* %m-%d or %d-%m. Don't care. Already parsed correctly. */
-             iday = thetime.tm_mday;
-             imonth = thetime.tm_mon + 1;
-           } else if (thetime.tm_mon != -1) {
-             /* Must be %Y-%m-%d. Reparse as %m-%d.*/
-             imonth = atoi(first_field);
-             iday = atoi(second_field);
-           } else {
-             /* Must be %Y-%d-%m. Reparse as %d-%m. */
-             iday = atoi(first_field);
-             imonth = atoi(second_field);
-           }
-         } else if (first_field) {
-           iday = atoi(first_field);
-         }
-       }
-       break;
-     case QOF_DATE_FORMAT_UK:
-     case QOF_DATE_FORMAT_CE:
-       if (third_field) {
-         iday = atoi(first_field);
-         imonth = atoi(second_field);
-         iyear = atoi(third_field);
-       } else if (second_field) {
-         iday = atoi(first_field);
-         imonth = atoi(second_field);
-       } else if (first_field) {
-         iday = atoi(first_field);
-       }
-       break;
-     case QOF_DATE_FORMAT_ISO:
-       if (third_field) {
-         iyear = atoi(first_field);
-         imonth = atoi(second_field);
-         iday = atoi(third_field);
-       } else if (second_field) {
-         imonth = atoi(first_field);
-         iday = atoi(second_field);
-       } else if (first_field) {
-         iday = atoi(first_field);
-       }
-       break;
+            if (third_field)
+            {
+                /* Easy.  All three values were parsed. */
+                iyear = thetime.tm_year + 1900;
+                iday = thetime.tm_mday;
+                imonth = thetime.tm_mon + 1;
+            }
+            else if (second_field)
+            {
+                /* Hard. Two values parsed.  Figure out the ordering. */
+                if (thetime.tm_year == -1)
+                {
+                    /* %m-%d or %d-%m. Don't care. Already parsed correctly. */
+                    iday = thetime.tm_mday;
+                    imonth = thetime.tm_mon + 1;
+                }
+                else if (thetime.tm_mon != -1)
+                {
+                    /* Must be %Y-%m-%d. Reparse as %m-%d.*/
+                    imonth = atoi(first_field);
+                    iday = atoi(second_field);
+                }
+                else
+                {
+                    /* Must be %Y-%d-%m. Reparse as %d-%m. */
+                    iday = atoi(first_field);
+                    imonth = atoi(second_field);
+                }
+            }
+            else if (first_field)
+            {
+                iday = atoi(first_field);
+            }
+        }
+        break;
+    case QOF_DATE_FORMAT_UK:
+    case QOF_DATE_FORMAT_CE:
+        if (third_field)
+        {
+            iday = atoi(first_field);
+            imonth = atoi(second_field);
+            iyear = atoi(third_field);
+        }
+        else if (second_field)
+        {
+            iday = atoi(first_field);
+            imonth = atoi(second_field);
+        }
+        else if (first_field)
+        {
+            iday = atoi(first_field);
+        }
+        break;
+    case QOF_DATE_FORMAT_ISO:
+        if (third_field)
+        {
+            iyear = atoi(first_field);
+            imonth = atoi(second_field);
+            iday = atoi(third_field);
+        }
+        else if (second_field)
+        {
+            imonth = atoi(first_field);
+            iday = atoi(second_field);
+        }
+        else if (first_field)
+        {
+            iday = atoi(first_field);
+        }
+        break;
     case QOF_DATE_FORMAT_US:
     default:
-       if (third_field) {
-         imonth = atoi(first_field);
-         iday = atoi(second_field);
-         iyear = atoi(third_field);
-       } else if (second_field) {
-         imonth = atoi(first_field);
-         iday = atoi(second_field);
-       } else if (first_field) {
-         iday = atoi(first_field);
-       }
-       break;
-   }
+        if (third_field)
+        {
+            imonth = atoi(first_field);
+            iday = atoi(second_field);
+            iyear = atoi(third_field);
+        }
+        else if (second_field)
+        {
+            imonth = atoi(first_field);
+            iday = atoi(second_field);
+        }
+        else if (first_field)
+        {
+            iday = atoi(first_field);
+        }
+        break;
+    }
 
-   g_free (dupe);
+    g_free (dupe);
 
-   if ((12 < imonth) || (31 < iday)) 
-   {
-     /* 
-      * Ack! Thppfft!  Someone just fed this routine a string in the
-      * wrong date format.  This is known to happen if a register
-      * window is open when changing the date format.  Try the
-      * previous date format.  If that doesn't work, see if we can
-      * exchange month and day. If that still doesn't work,
-      * bail and give the caller what they asked for (garbage) 
-      * parsed in the new format.
-      *
-      * Note: This test cannot detect any format change that only
-      * swaps month and day field, if the day is 12 or less.  This is
-      * deemed acceptable given the obscurity of this bug.
-      */
-     if ((which_format != prevQofDateFormat) &&
-         qof_scan_date_internal(buff, day, month, year, prevQofDateFormat))
-     {
-       return(TRUE);
-     }
-     if ((12 < imonth) && (12 >= iday))
-     {
-        int tmp = imonth; imonth = iday; iday = tmp;
-     } 
-	  else
-	  {
-        return FALSE;
-	  }
-   }
+    if ((12 < imonth) || (31 < iday))
+    {
+        /*
+         * Ack! Thppfft!  Someone just fed this routine a string in the
+         * wrong date format.  This is known to happen if a register
+         * window is open when changing the date format.  Try the
+         * previous date format.  If that doesn't work, see if we can
+         * exchange month and day. If that still doesn't work,
+         * bail and give the caller what they asked for (garbage)
+         * parsed in the new format.
+         *
+         * Note: This test cannot detect any format change that only
+         * swaps month and day field, if the day is 12 or less.  This is
+         * deemed acceptable given the obscurity of this bug.
+         */
+        if ((which_format != prevQofDateFormat) &&
+                qof_scan_date_internal(buff, day, month, year, prevQofDateFormat))
+        {
+            return(TRUE);
+        }
+        if ((12 < imonth) && (12 >= iday))
+        {
+            int tmp = imonth;
+            imonth = iday;
+            iday = tmp;
+        }
+        else
+        {
+            return FALSE;
+        }
+    }
 
-   /* If the year entered is smaller than 100, assume we mean the current
-      century (and are not revising some roman emperor's books) */
-   if (iyear < 100)
-     iyear += ((int) ((now->tm_year+1950-iyear)/100)) * 100;
+    /* If the year entered is smaller than 100, assume we mean the current
+       century (and are not revising some roman emperor's books) */
+    if (iyear < 100)
+        iyear += ((int) ((now->tm_year + 1950 - iyear) / 100)) * 100;
 
-   if (year) *year=iyear;
-   if (month) *month=imonth;
-   if (day) *day=iday;
-   return(TRUE);
+    if (year) *year = iyear;
+    if (month) *month = imonth;
+    if (day) *day = iday;
+    return(TRUE);
 }
 
 gboolean
 qof_scan_date (const char *buff, int *day, int *month, int *year)
 {
-  return qof_scan_date_internal(buff, day, month, year, dateFormat);
+    return qof_scan_date_internal(buff, day, month, year, dateFormat);
 }
 
 gboolean
 qof_scan_date_secs (const char *buff, time_t *secs)
 {
-  gboolean rc;
-  int day, month, year;
-  
-  rc = qof_scan_date_internal(buff, &day, &month, &year, dateFormat);
-  if (secs) *secs = xaccDMYToSec (day, month, year);
+    gboolean rc;
+    int day, month, year;
 
-  return rc;
+    rc = qof_scan_date_internal(buff, &day, &month, &year, dateFormat);
+    if (secs) *secs = xaccDMYToSec (day, month, year);
+
+    return rc;
 }
 
 /* Return the field separator for the current date format
@@ -803,40 +842,40 @@ return date character
 */
 char dateSeparator (void)
 {
-  static char locale_separator = '\0';
+    static char locale_separator = '\0';
 
-  switch (dateFormat)
-  {
+    switch (dateFormat)
+    {
     case QOF_DATE_FORMAT_CE:
-      return '.';
+        return '.';
     case QOF_DATE_FORMAT_ISO:
     case QOF_DATE_FORMAT_UTC:
-      return '-';
+        return '-';
     case QOF_DATE_FORMAT_US:
     case QOF_DATE_FORMAT_UK:
     default:
-      return '/';
+        return '/';
     case QOF_DATE_FORMAT_LOCALE:
-      if (locale_separator != '\0')
-        return locale_separator;
-      else
-      { /* Make a guess */
-        gchar string[256];
-        struct tm tm;
-        time_t secs;
-        gchar *s;
+        if (locale_separator != '\0')
+            return locale_separator;
+        else
+        { /* Make a guess */
+            gchar string[256];
+            struct tm tm;
+            time_t secs;
+            gchar *s;
 
-        secs = time(NULL);
-        localtime_r(&secs, &tm);
-        qof_strftime(string, sizeof(string), GNC_D_FMT, &tm);
+            secs = time(NULL);
+            localtime_r(&secs, &tm);
+            qof_strftime(string, sizeof(string), GNC_D_FMT, &tm);
 
-        for (s = string; s != '\0'; s++)
-          if (!isdigit(*s))
-            return (locale_separator = *s);
-      }
-  }
+            for (s = string; s != '\0'; s++)
+                if (!isdigit(*s))
+                    return (locale_separator = *s);
+        }
+    }
 
-  return '\0';
+    return '\0';
 }
 
 
@@ -849,7 +888,8 @@ qof_time_format_from_utf8(const gchar *utf8_format)
 
     retval = g_locale_from_utf8(utf8_format, -1, NULL, NULL, &error);
 
-    if (!retval) {
+    if (!retval)
+    {
         g_warning("Could not convert format '%s' from UTF-8: %s", utf8_format,
                   error->message);
         g_error_free(error);
@@ -865,7 +905,8 @@ qof_formatted_time_to_utf8(const gchar *locale_string)
 
     retval = g_locale_to_utf8(locale_string, -1, NULL, NULL, &error);
 
-    if (!retval) {
+    if (!retval)
+    {
         g_warning("Could not convert '%s' to UTF-8: %s", locale_string,
                   error->message);
         g_error_free(error);
@@ -888,7 +929,8 @@ qof_format_time(const gchar *format, const struct tm *tm)
         return NULL;
 
     tmpbufsize = MAX(128, strlen(locale_format) * 2);
-    while (TRUE) {
+    while (TRUE)
+    {
         tmpbuf = g_malloc(tmpbufsize);
 
         /* Set the first byte to something other than '\0', to be able to
@@ -897,18 +939,22 @@ qof_format_time(const gchar *format, const struct tm *tm)
         tmpbuf[0] = '\1';
         tmplen = strftime(tmpbuf, tmpbufsize, locale_format, tm);
 
-        if (tmplen == 0 && tmpbuf[0] != '\0') {
+        if (tmplen == 0 && tmpbuf[0] != '\0')
+        {
             g_free(tmpbuf);
             tmpbufsize *= 2;
 
-            if (tmpbufsize > 65536) {
+            if (tmpbufsize > 65536)
+            {
                 g_warning("Maximum buffer size for qof_format_time "
                           "exceeded: giving up");
                 g_free(locale_format);
 
                 return NULL;
             }
-        } else {
+        }
+        else
+        {
             break;
         }
     }
@@ -932,14 +978,16 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
     g_return_val_if_fail(tm, 0);
 
     convbuf = qof_format_time(format, tm);
-    if (!convbuf) {
+    if (!convbuf)
+    {
         buf[0] = '\0';
         return 0;
     }
 
     convlen = strlen(convbuf);
 
-    if (max <= convlen) {
+    if (max <= convlen)
+    {
         /* Ensure only whole characters are copied into the buffer. */
         gchar *end = g_utf8_find_prev_char(convbuf, convbuf + max);
         g_assert(end != NULL);
@@ -947,7 +995,9 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
 
         /* Return 0 because the buffer isn't large enough. */
         retval = 0;
-    } else {
+    }
+    else
+    {
         retval = convlen;
     }
 
@@ -961,7 +1011,7 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
 
 /********************************************************************\
 \********************************************************************/
-                                                                                
+
 /* Convert time in seconds to a textual.
 
 The xaccDateUtilGetStamp() routine will take the given time in
@@ -974,21 +1024,21 @@ The caller owns this buffer and must free it when done.
 char *
 xaccDateUtilGetStamp (time_t thyme)
 {
-   struct tm *stm;
-                                                                                
-   stm = localtime (&thyme);
-                                                                                
-   return g_strdup_printf("%04d%02d%02d%02d%02d%02d",
-      (stm->tm_year + 1900),
-      (stm->tm_mon +1),
-      stm->tm_mday,
-      stm->tm_hour,
-      stm->tm_min,
-      stm->tm_sec
-   );
+    struct tm *stm;
+
+    stm = localtime (&thyme);
+
+    return g_strdup_printf("%04d%02d%02d%02d%02d%02d",
+                           (stm->tm_year + 1900),
+                           (stm->tm_mon + 1),
+                           stm->tm_mday,
+                           stm->tm_hour,
+                           stm->tm_min,
+                           stm->tm_sec
+                          );
 }
-                                                                                
-                                                                                
+
+
 /* Convert textual to time in seconds.
 
 The xaccDateUtilGetStampNow() routine returns the current time in
@@ -1001,247 +1051,299 @@ note The caller owns this buffer and must free it when done.
 char *
 xaccDateUtilGetStampNow (void)
 {
-   time_t now;
-   time (&now);
-   return xaccDateUtilGetStamp (now);
+    time_t now;
+    time (&now);
+    return xaccDateUtilGetStamp (now);
 }
 
 /********************************************************************\
  * iso 8601 datetimes should look like 1998-07-02 11:00:00.68-05
 \********************************************************************/
-/* hack alert -- this routine returns incorrect values for 
+/* hack alert -- this routine returns incorrect values for
  * dates before 1970 */
 
 Timespec
 gnc_iso8601_to_timespec_gmt(const char *str)
 {
-  char buf[4];
-  gchar *dupe;
-  Timespec ts;
-  struct tm stm;
-  long int nsec =0;
+    char buf[4];
+    gchar *dupe;
+    Timespec ts;
+    struct tm stm;
+    long int nsec = 0;
 
-  ts.tv_sec=0;
-  ts.tv_nsec=0;
-  if (!str) return ts;
-  dupe = g_strdup(str);
-  stm.tm_year = atoi(str) - 1900;
-  str = strchr (str, '-'); if (str) { str++; } else { return ts; }
-  stm.tm_mon = atoi(str) - 1;
-  str = strchr (str, '-'); if (str) { str++; } else { return ts; }
-  stm.tm_mday = atoi(str);
-
-  str = strchr (str, ' '); if (str) { str++; } else { return ts; }
-  stm.tm_hour = atoi(str);
-  str = strchr (str, ':'); if (str) { str++; } else { return ts; }
-  stm.tm_min = atoi(str);
-  str = strchr (str, ':'); if (str) { str++; } else { return ts; }
-  stm.tm_sec = atoi (str);
-
-  /* The decimal point, optionally present ... */
-  /* hack alert -- this algo breaks if more than 9 decimal places present */
-  if (strchr (str, '.')) 
-  { 
-     int decimals, i, multiplier=1000000000;
-     str = strchr (str, '.') +1;
-     decimals = strcspn (str, "+- ");
-     for (i=0; i<decimals; i++) multiplier /= 10;
-     nsec = atoi(str) * multiplier;
-  }
-  stm.tm_isdst = -1;
-
-  /* Timezone format can be +hh or +hhmm or +hh.mm (or -) (or not present) */
-  str += strcspn (str, "+-");
-  if (*str)
-  {
-    buf[0] = str[0];
-    buf[1] = str[1];
-    buf[2] = str[2];
-    buf[3] = 0;
-    stm.tm_hour -= atoi(buf);
-
-    str +=3;
-    if ('.' == *str) str++;
-    if (isdigit ((unsigned char)*str) && isdigit ((unsigned char)*(str+1)))
+    ts.tv_sec = 0;
+    ts.tv_nsec = 0;
+    if (!str) return ts;
+    dupe = g_strdup(str);
+    stm.tm_year = atoi(str) - 1900;
+    str = strchr (str, '-');
+    if (str)
     {
-      int cyn;
-      /* copy sign from hour part */
-      if ('+' == buf[0]) { cyn = -1; } else { cyn = +1; } 
-      buf[0] = str[0];
-      buf[1] = str[1];
-      buf[2] = str[2];
-      buf[3] = 0;
-      stm.tm_min += cyn * atoi(buf);
+        str++;
     }
-  }
-
-  /* Note that mktime returns 'local seconds' which is the true time
-   * minus the timezone offset.  We don't want to work with local 
-   * seconds, since they swim around acording to daylight savings, etc. 
-   * We want to work with universal time.  Thus, add an offset
-   * to undo the damage that mktime causes.
-   */
- {
-    struct tm tmp_tm;
-    struct tm tm;
-    long int tz;
-    int tz_hour;
-    time_t secs;
-
-    /* Use a temporary tm struct so the mktime call below
-     * doesn't mess up stm. */
-    tmp_tm = stm;
-    tmp_tm.tm_isdst = -1;
-
-    secs = mktime (&tmp_tm);
-
-    if(secs < 0) 
+    else
     {
-    /* Workaround buggy mktime implementations that get confused
-       on the day daylight saving starts or ends. (OSX) */
-      PWARN (" mktime failed to handle daylight saving: "
-       "tm_hour=%d tm_year=%d tm_min=%d tm_sec=%d tm_isdst=%d for string=%s", 
-        stm.tm_hour, stm.tm_year, stm.tm_min,
-        stm.tm_sec, stm.tm_isdst, dupe ); 
-      tmp_tm.tm_hour++;
-      secs = mktime (&tmp_tm);
-      if (secs < 0) 
-      { 
-      /* if, for some strange reason, first attempt didn't fix it,
-         try reversing the workaround. */
-        tmp_tm.tm_hour -= 2;
-        secs = mktime (&tmp_tm);
-      }
-    /* CAS: Even correct implementations of mktime can return
-       (time_t)(-1): From the libc info page: "If the specified
-       broken-down time cannot be represented as a simple time,
-       `mktime' returns a value of `(time_t)(-1)' and does not modify
-       the contents of BROKENTIME."  This happens for dates after 2038
-       when time_t is 32 bits.  In those cases, this code above is
-       just noisy and has a slight risk of returning the incorrect
-       time.
-     */
-      if (secs < 0) 
-      {
-        /* Seriously buggy mktime - give up.  */
-        PERR (" unable to recover from buggy mktime ");
-        g_free(dupe);
         return ts;
-      }
+    }
+    stm.tm_mon = atoi(str) - 1;
+    str = strchr (str, '-');
+    if (str)
+    {
+        str++;
+    }
+    else
+    {
+        return ts;
+    }
+    stm.tm_mday = atoi(str);
+
+    str = strchr (str, ' ');
+    if (str)
+    {
+        str++;
+    }
+    else
+    {
+        return ts;
+    }
+    stm.tm_hour = atoi(str);
+    str = strchr (str, ':');
+    if (str)
+    {
+        str++;
+    }
+    else
+    {
+        return ts;
+    }
+    stm.tm_min = atoi(str);
+    str = strchr (str, ':');
+    if (str)
+    {
+        str++;
+    }
+    else
+    {
+        return ts;
+    }
+    stm.tm_sec = atoi (str);
+
+    /* The decimal point, optionally present ... */
+    /* hack alert -- this algo breaks if more than 9 decimal places present */
+    if (strchr (str, '.'))
+    {
+        int decimals, i, multiplier = 1000000000;
+        str = strchr (str, '.') + 1;
+        decimals = strcspn (str, "+- ");
+        for (i = 0; i < decimals; i++) multiplier /= 10;
+        nsec = atoi(str) * multiplier;
+    }
+    stm.tm_isdst = -1;
+
+    /* Timezone format can be +hh or +hhmm or +hh.mm (or -) (or not present) */
+    str += strcspn (str, "+-");
+    if (*str)
+    {
+        buf[0] = str[0];
+        buf[1] = str[1];
+        buf[2] = str[2];
+        buf[3] = 0;
+        stm.tm_hour -= atoi(buf);
+
+        str += 3;
+        if ('.' == *str) str++;
+        if (isdigit ((unsigned char)*str) && isdigit ((unsigned char)*(str + 1)))
+        {
+            int cyn;
+            /* copy sign from hour part */
+            if ('+' == buf[0])
+            {
+                cyn = -1;
+            }
+            else
+            {
+                cyn = +1;
+            }
+            buf[0] = str[0];
+            buf[1] = str[1];
+            buf[2] = str[2];
+            buf[3] = 0;
+            stm.tm_min += cyn * atoi(buf);
+        }
     }
 
-    /* The call to localtime is 'bogus', but it forces 'timezone' to
-     * be set. Note that we must use the accurate date, since the
-     * value of 'gnc_timezone' includes daylight savings corrections
-     * for that date. */
+    /* Note that mktime returns 'local seconds' which is the true time
+     * minus the timezone offset.  We don't want to work with local
+     * seconds, since they swim around acording to daylight savings, etc.
+     * We want to work with universal time.  Thus, add an offset
+     * to undo the damage that mktime causes.
+     */
+    {
+        struct tm tmp_tm;
+        struct tm tm;
+        long int tz;
+        int tz_hour;
+        time_t secs;
 
-    localtime_r (&secs, &tm);
+        /* Use a temporary tm struct so the mktime call below
+         * doesn't mess up stm. */
+        tmp_tm = stm;
+        tmp_tm.tm_isdst = -1;
 
-    tz = gnc_timezone (&tmp_tm);
+        secs = mktime (&tmp_tm);
 
-    tz_hour = tz / 3600;
-    stm.tm_hour -= tz_hour;
-    stm.tm_min -= (tz % 3600) / 60;
-    stm.tm_isdst = tmp_tm.tm_isdst;
-    ts.tv_sec = mktime (&stm);
-    if(ts.tv_sec < 0) { 
-      PWARN (" mktime failed to adjust calculated time:"
-        " tm_hour=%d tm_year=%d tm_min=%d tm_sec=%d tm_isdst=%d", 
-        stm.tm_hour, stm.tm_year, stm.tm_min,
-        stm.tm_sec, stm.tm_isdst ); 
-      /* Try and make some sense of the result. */
-      ts.tv_sec = secs - tz;  
+        if (secs < 0)
+        {
+            /* Workaround buggy mktime implementations that get confused
+               on the day daylight saving starts or ends. (OSX) */
+            PWARN (" mktime failed to handle daylight saving: "
+                   "tm_hour=%d tm_year=%d tm_min=%d tm_sec=%d tm_isdst=%d for string=%s",
+                   stm.tm_hour, stm.tm_year, stm.tm_min,
+                   stm.tm_sec, stm.tm_isdst, dupe );
+            tmp_tm.tm_hour++;
+            secs = mktime (&tmp_tm);
+            if (secs < 0)
+            {
+                /* if, for some strange reason, first attempt didn't fix it,
+                   try reversing the workaround. */
+                tmp_tm.tm_hour -= 2;
+                secs = mktime (&tmp_tm);
+            }
+            /* CAS: Even correct implementations of mktime can return
+               (time_t)(-1): From the libc info page: "If the specified
+               broken-down time cannot be represented as a simple time,
+               `mktime' returns a value of `(time_t)(-1)' and does not modify
+               the contents of BROKENTIME."  This happens for dates after 2038
+               when time_t is 32 bits.  In those cases, this code above is
+               just noisy and has a slight risk of returning the incorrect
+               time.
+             */
+            if (secs < 0)
+            {
+                /* Seriously buggy mktime - give up.  */
+                PERR (" unable to recover from buggy mktime ");
+                g_free(dupe);
+                return ts;
+            }
+        }
+
+        /* The call to localtime is 'bogus', but it forces 'timezone' to
+         * be set. Note that we must use the accurate date, since the
+         * value of 'gnc_timezone' includes daylight savings corrections
+         * for that date. */
+
+        localtime_r (&secs, &tm);
+
+        tz = gnc_timezone (&tmp_tm);
+
+        tz_hour = tz / 3600;
+        stm.tm_hour -= tz_hour;
+        stm.tm_min -= (tz % 3600) / 60;
+        stm.tm_isdst = tmp_tm.tm_isdst;
+        ts.tv_sec = mktime (&stm);
+        if (ts.tv_sec < 0)
+        {
+            PWARN (" mktime failed to adjust calculated time:"
+                   " tm_hour=%d tm_year=%d tm_min=%d tm_sec=%d tm_isdst=%d",
+                   stm.tm_hour, stm.tm_year, stm.tm_min,
+                   stm.tm_sec, stm.tm_isdst );
+            /* Try and make some sense of the result. */
+            ts.tv_sec = secs - tz;
+        }
+        ts.tv_nsec = nsec;
     }
-    ts.tv_nsec = nsec;
-  }
-  g_free(dupe);
-  return ts;
+    g_free(dupe);
+    return ts;
 }
 
 /********************************************************************\
 \********************************************************************/
 
-char * 
+char *
 gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
 {
-  int len, tz_hour, tz_min;
-  long int secs;
-  char cyn;
-  time_t tmp;
-  struct tm parsed;
+    int len, tz_hour, tz_min;
+    long int secs;
+    char cyn;
+    time_t tmp;
+    struct tm parsed;
 
-  tmp = ts.tv_sec;
-  localtime_r(&tmp, &parsed);
+    tmp = ts.tv_sec;
+    localtime_r(&tmp, &parsed);
 
-  secs = gnc_timezone (&parsed);
+    secs = gnc_timezone (&parsed);
 
-  /* We also have to print the sign by hand, to work around a bug
-   * in the glibc 2.1.3 printf (where %+02d fails to zero-pad).
-   */
-  cyn = '-';
-  if (0>secs) { cyn = '+'; secs = -secs; }
+    /* We also have to print the sign by hand, to work around a bug
+     * in the glibc 2.1.3 printf (where %+02d fails to zero-pad).
+     */
+    cyn = '-';
+    if (0 > secs)
+    {
+        cyn = '+';
+        secs = -secs;
+    }
 
-  tz_hour = secs / 3600;
-  tz_min = (secs % 3600) / 60;
+    tz_hour = secs / 3600;
+    tz_min = (secs % 3600) / 60;
 
-  len = sprintf (buff, "%4d-%02d-%02d %02d:%02d:%02d.%06ld %c%02d%02d",
-                 parsed.tm_year + 1900,
-                 parsed.tm_mon + 1,
-                 parsed.tm_mday,
-                 parsed.tm_hour,
-                 parsed.tm_min,
-                 parsed.tm_sec,
-                 ts.tv_nsec / 1000,
-                 cyn,
-                 tz_hour,
-                 tz_min);
+    len = sprintf (buff, "%4d-%02d-%02d %02d:%02d:%02d.%06ld %c%02d%02d",
+                   parsed.tm_year + 1900,
+                   parsed.tm_mon + 1,
+                   parsed.tm_mday,
+                   parsed.tm_hour,
+                   parsed.tm_min,
+                   parsed.tm_sec,
+                   ts.tv_nsec / 1000,
+                   cyn,
+                   tz_hour,
+                   tz_min);
 
-  /* Return pointer to end of string. */
-  buff += len;
-  return buff;
+    /* Return pointer to end of string. */
+    buff += len;
+    return buff;
 }
 
 int
 gnc_timespec_last_mday (Timespec t)
 {
-  struct tm result;
-  time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
-  localtime_r(&t_secs, &result);
-  return date_get_last_mday (&result);
+    struct tm result;
+    time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
+    localtime_r(&t_secs, &result);
+    return date_get_last_mday (&result);
 }
 
 void
 gnc_timespec2dmy (Timespec t, int *day, int *month, int *year)
 {
-  struct tm result;
-  time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
-  localtime_r(&t_secs, &result);
+    struct tm result;
+    time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
+    localtime_r(&t_secs, &result);
 
-  if (day) *day = result.tm_mday;
-  if (month) *month = result.tm_mon+1;
-  if (year) *year = result.tm_year+1900;
+    if (day) *day = result.tm_mday;
+    if (month) *month = result.tm_mon + 1;
+    if (year) *year = result.tm_year + 1900;
 }
 
 /********************************************************************\
 \********************************************************************/
-/* hack alert -- this routine returns incorrect values for 
+/* hack alert -- this routine returns incorrect values for
  * dates before 1970 */
 
-time_t 
+time_t
 xaccDMYToSec (int day, int month, int year)
 {
-  struct tm stm;
-  time_t secs;
+    struct tm stm;
+    time_t secs;
 
-  stm.tm_year = year - 1900;
-  stm.tm_mon = month - 1;
-  stm.tm_mday = day;
-  gnc_tm_set_day_start(&stm);
+    stm.tm_year = year - 1900;
+    stm.tm_mon = month - 1;
+    stm.tm_mday = day;
+    gnc_tm_set_day_start(&stm);
 
-  /* compute number of seconds */
-  secs = mktime (&stm);
+    /* compute number of seconds */
+    secs = mktime (&stm);
 
-  return secs;
+    return secs;
 }
 
 
@@ -1250,53 +1352,57 @@ xaccDMYToSec (int day, int month, int year)
 static Timespec
 gnc_dmy2timespec_internal (int day, int month, int year, gboolean start_of_day)
 {
-  Timespec result;
-  struct tm date;
-  long long secs = 0;
-  long long era = 0;
+    Timespec result;
+    struct tm date;
+    long long secs = 0;
+    long long era = 0;
 
-  year -= 1900;
+    year -= 1900;
 
-  /* make a crude attempt to deal with dates outside the range of Dec
-   * 1901 to Jan 2038. Note we screw up centennial leap years here so
-   * hack alert */
-  if ((2 > year) || (136 < year)) 
-  {
-    era = year / 32;
-    year %= 32;
-    if (0 > year) { year += 32; era -= 1; } 
-  }
+    /* make a crude attempt to deal with dates outside the range of Dec
+     * 1901 to Jan 2038. Note we screw up centennial leap years here so
+     * hack alert */
+    if ((2 > year) || (136 < year))
+    {
+        era = year / 32;
+        year %= 32;
+        if (0 > year)
+        {
+            year += 32;
+            era -= 1;
+        }
+    }
 
-  date.tm_year = year;
-  date.tm_mon = month - 1;
-  date.tm_mday = day;
+    date.tm_year = year;
+    date.tm_mon = month - 1;
+    date.tm_mday = day;
 
-  if (start_of_day)
-    gnc_tm_set_day_start(&date);
-  else
-    gnc_tm_set_day_end(&date);
+    if (start_of_day)
+        gnc_tm_set_day_start(&date);
+    else
+        gnc_tm_set_day_end(&date);
 
-  /* compute number of seconds */
-  secs = mktime (&date);
+    /* compute number of seconds */
+    secs = mktime (&date);
 
-  secs += era * THIRTY_TWO_YEARS;
+    secs += era * THIRTY_TWO_YEARS;
 
-  result.tv_sec = secs;
-  result.tv_nsec = 0;
+    result.tv_sec = secs;
+    result.tv_nsec = 0;
 
-  return result;
+    return result;
 }
 
 Timespec
 gnc_dmy2timespec (int day, int month, int year)
 {
-  return gnc_dmy2timespec_internal (day, month, year, TRUE);
+    return gnc_dmy2timespec_internal (day, month, year, TRUE);
 }
 
 Timespec
 gnc_dmy2timespec_end (int day, int month, int year)
 {
-  return gnc_dmy2timespec_internal (day, month, year, FALSE);
+    return gnc_dmy2timespec_internal (day, month, year, FALSE);
 }
 
 /********************************************************************\
@@ -1305,17 +1411,17 @@ gnc_dmy2timespec_end (int day, int month, int year)
 long int
 gnc_timezone (const struct tm *tm)
 {
-  g_return_val_if_fail (tm != NULL, 0);
+    g_return_val_if_fail (tm != NULL, 0);
 
 #ifdef HAVE_STRUCT_TM_GMTOFF
-  /* tm_gmtoff is seconds *east* of UTC and is
-   * already adjusted for daylight savings time. */
-  return -(tm->tm_gmtoff);
+    /* tm_gmtoff is seconds *east* of UTC and is
+     * already adjusted for daylight savings time. */
+    return -(tm->tm_gmtoff);
 #else
-  /* timezone is seconds *west* of UTC and is
-   * not adjusted for daylight savings time.
-   * In Spring, we spring forward, wheee! */
-  return (long int)(timezone - (tm->tm_isdst > 0 ? 3600 : 0));
+    /* timezone is seconds *west* of UTC and is
+     * not adjusted for daylight savings time.
+     * In Spring, we spring forward, wheee! */
+    return (long int)(timezone - (tm->tm_isdst > 0 ? 3600 : 0));
 #endif
 }
 
@@ -1327,7 +1433,7 @@ timespecFromTime_t( Timespec *ts, time_t t )
     ts->tv_nsec = 0;
 }
 
-time_t 
+time_t
 timespecToTime_t (Timespec ts)
 {
     return ts.tv_sec;
@@ -1336,35 +1442,35 @@ timespecToTime_t (Timespec ts)
 void
 gnc_tm_get_day_start (struct tm *tm, time_t time_val)
 {
-  /* Get the equivalent time structure */
-  tm = localtime_r(&time_val, tm);
-  gnc_tm_set_day_start(tm);
+    /* Get the equivalent time structure */
+    tm = localtime_r(&time_val, tm);
+    gnc_tm_set_day_start(tm);
 }
 
 void
 gnc_tm_get_day_end (struct tm *tm, time_t time_val)
 {
-  /* Get the equivalent time structure */
-  tm = localtime_r(&time_val, tm);
-  gnc_tm_set_day_end(tm);
+    /* Get the equivalent time structure */
+    tm = localtime_r(&time_val, tm);
+    gnc_tm_set_day_end(tm);
 }
 
 time_t
 gnc_timet_get_day_start (time_t time_val)
 {
-  struct tm tm;
+    struct tm tm;
 
-  gnc_tm_get_day_start(&tm, time_val);
-  return mktime(&tm);
+    gnc_tm_get_day_start(&tm, time_val);
+    return mktime(&tm);
 }
 
 time_t
 gnc_timet_get_day_end (time_t time_val)
 {
-  struct tm tm;
+    struct tm tm;
 
-  gnc_tm_get_day_end(&tm, time_val);
-  return mktime(&tm);
+    gnc_tm_get_day_end(&tm, time_val);
+    return mktime(&tm);
 }
 
 
@@ -1373,31 +1479,31 @@ gnc_timet_get_day_end (time_t time_val)
 void
 gnc_tm_get_today_start (struct tm *tm)
 {
-  gnc_tm_get_day_start(tm, time(NULL));
+    gnc_tm_get_day_start(tm, time(NULL));
 }
 
 void
 gnc_tm_get_today_end (struct tm *tm)
 {
-  gnc_tm_get_day_end(tm, time(NULL));
+    gnc_tm_get_day_end(tm, time(NULL));
 }
 
 time_t
 gnc_timet_get_today_start (void)
 {
-  struct tm tm;
+    struct tm tm;
 
-  gnc_tm_get_day_start(&tm, time(NULL));
-  return mktime(&tm);
+    gnc_tm_get_day_start(&tm, time(NULL));
+    return mktime(&tm);
 }
 
 time_t
 gnc_timet_get_today_end (void)
 {
-  struct tm tm;
+    struct tm tm;
 
-  gnc_tm_get_day_end(&tm, time(NULL));
-  return mktime(&tm);
+    gnc_tm_get_day_end(&tm, time(NULL));
+    return mktime(&tm);
 }
 
 void

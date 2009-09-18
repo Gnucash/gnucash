@@ -28,7 +28,7 @@
     @{ */
 
 #ifndef QOF_ID_P_H
-#define QOF_ID_P_H 
+#define QOF_ID_P_H
 
 #include "qofid.h"
 

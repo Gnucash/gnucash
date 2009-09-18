@@ -64,61 +64,61 @@ typedef void (*QofBookDirtyCB) (QofBook *, gboolean dirty, gpointer user_data);
 /* Book structure */
 struct _QofBook
 {
-  QofInstance   inst;     /* Unique guid for this book. */
+    QofInstance   inst;     /* Unique guid for this book. */
 
-  /* The time when the book was first dirtied.  This is a secondary
-   * indicator. It should only be used when inst.dirty is TRUE. */
-  time_t dirty_time;
+    /* The time when the book was first dirtied.  This is a secondary
+     * indicator. It should only be used when inst.dirty is TRUE. */
+    time_t dirty_time;
 
-  /* This callback function is called any time the book dirty flag
-   * changes state. Both clean->dirty and dirty->clean transitions
-   * trigger a callback. */
-  QofBookDirtyCB dirty_cb;
+    /* This callback function is called any time the book dirty flag
+     * changes state. Both clean->dirty and dirty->clean transitions
+     * trigger a callback. */
+    QofBookDirtyCB dirty_cb;
 
-  /* This is the user supplied data that is returned in the dirty
-   * callback function.*/
-  gpointer dirty_data;
+    /* This is the user supplied data that is returned in the dirty
+     * callback function.*/
+    gpointer dirty_data;
 
-  /* The entity table associates the GUIDs of all the objects
-   * belonging to this book, with their pointers to the respective
-   * objects.  This allows a lookup of objects based on thier guid.
-   */
-  GHashTable * hash_of_collections;
+    /* The entity table associates the GUIDs of all the objects
+     * belonging to this book, with their pointers to the respective
+     * objects.  This allows a lookup of objects based on thier guid.
+     */
+    GHashTable * hash_of_collections;
 
-  /* In order to store arbitrary data, for extensibility, add a table
-   * that will be used to hold arbitrary pointers.
-   */
-  GHashTable *data_tables;
+    /* In order to store arbitrary data, for extensibility, add a table
+     * that will be used to hold arbitrary pointers.
+     */
+    GHashTable *data_tables;
 
-  /* Hash table of destroy callbacks for the data table. */
-  GHashTable *data_table_finalizers;
+    /* Hash table of destroy callbacks for the data table. */
+    GHashTable *data_table_finalizers;
 
-  /* state flag: 'y' means 'open for editing',
-   * 'n' means 'book is closed'
-   * xxxxx shouldn't this be replaced by the instance editlevel ???
-   */
-  char book_open;
+    /* state flag: 'y' means 'open for editing',
+     * 'n' means 'book is closed'
+     * xxxxx shouldn't this be replaced by the instance editlevel ???
+     */
+    char book_open;
 
-  /* a flag denoting whether the book is closing down, used to
-   * help the QOF objects shut down cleanly without maintaining
-   * internal consistency.
-   * XXX shouldn't this be replaced by instance->do_free ???
-   */
-  gboolean shutting_down;
+    /* a flag denoting whether the book is closing down, used to
+     * help the QOF objects shut down cleanly without maintaining
+     * internal consistency.
+     * XXX shouldn't this be replaced by instance->do_free ???
+     */
+    gboolean shutting_down;
 
-  /* version number, used for tracking multiuser updates */
-  gint32  version;
+    /* version number, used for tracking multiuser updates */
+    gint32  version;
 
-  /* To be technically correct, backends belong to sessions and
-   * not books.  So the pointer below "really shouldn't be here",
-   * except that it provides a nice convenience, avoiding a lookup
-   * from the session.  Better solutions welcome ... */
-  QofBackend *backend;
+    /* To be technically correct, backends belong to sessions and
+     * not books.  So the pointer below "really shouldn't be here",
+     * except that it provides a nice convenience, avoiding a lookup
+     * from the session.  Better solutions welcome ... */
+    QofBackend *backend;
 };
 
 struct _QofBookClass
 {
-   QofInstanceClass parent_class;
+    QofInstanceClass parent_class;
 };
 
 GType qof_book_get_type(void);
@@ -175,7 +175,8 @@ void qof_book_mark_closed (QofBook *book);
  *  a non-NULL value.  (Unless the system malloc failed (out of
  *  memory) in which case what happens??).
  */
-/*@ dependent @*/ QofCollection  * qof_book_get_collection (const QofBook *, QofIdType);
+/*@ dependent @*/
+QofCollection  * qof_book_get_collection (const QofBook *, QofIdType);
 
 /** Invoke the indicated callback on each collection in the book. */
 typedef void (*QofCollectionForeachCB) (QofCollection *, gpointer user_data);
@@ -206,7 +207,7 @@ void qof_book_set_data (QofBook *book, const gchar *key, gpointer data);
  *  when the book is destroyed.  The argument to the callback will be
  *  the book followed by the data pointer.
  */
-void qof_book_set_data_fin (QofBook *book, const gchar *key, gpointer data, 
+void qof_book_set_data_fin (QofBook *book, const gchar *key, gpointer data,
                             QofBookFinalCB);
 
 /** Retrieves arbitrary pointers to structs stored by qof_book_set_data. */
@@ -227,7 +228,7 @@ gboolean qof_book_not_saved (const QofBook *book);
 
 /** The qof_book_mark_saved() routine marks the book as having been
  *    saved (to a file, to a database). Used by backends to mark the
- *    notsaved flag as FALSE just after loading.  Can also be used 
+ *    notsaved flag as FALSE just after loading.  Can also be used
  *    by the frontend when the used has said to abandon any changes.
  */
 void qof_book_mark_saved(QofBook *book);

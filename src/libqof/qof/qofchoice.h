@@ -151,8 +151,8 @@ GList* qof_object_get_choices(QofIdType type, QofParam *param);
 this parameter of this object. Otherwise, FALSE
 */
 gboolean qof_choice_check(const char* choice_obj,
-			  const char *param_name,
-			  const char* choice);
+                          const char *param_name,
+                          const char* choice);
 /** @} */
 
 /** @} */

@@ -27,9 +27,9 @@
     will want to use.
 
     @{ */
-/** @file qofinstance.h 
+/** @file qofinstance.h
  *  @brief Object instance holds common fields that most gnucash objects use.
- * 
+ *
  *  @author Copyright (C) 2003,2004 Linas Vepstas <linas@linas.org>
  *  @author Copyright (c) 2007 David Hampton <hampton@employees.org>
  */
@@ -64,20 +64,20 @@ typedef struct _QofBook       QofBook;
 
 struct QofInstance_s
 {
-   GObject object;
+    GObject object;
 
-   QofIdType        e_type;		   /**<	Entity type */
+    QofIdType        e_type;		   /**<	Entity type */
 
-  /* kvp_data is a key-value pair database for storing arbirtary
-   * information associated with this instance.  
-   * See src/engine/kvp_doc.txt for a list and description of the 
-   * important keys. */
-   KvpFrame *kvp_data;
+    /* kvp_data is a key-value pair database for storing arbirtary
+     * information associated with this instance.
+     * See src/engine/kvp_doc.txt for a list and description of the
+     * important keys. */
+    KvpFrame *kvp_data;
 };
 
 struct _QofInstanceClass
 {
-   GObjectClass parent_class;
+    GObjectClass parent_class;
 };
 
 /** Return the GType of a QofInstance */
@@ -87,7 +87,8 @@ GType qof_instance_get_type(void);
 void qof_instance_init_data (QofInstance *, QofIdType, QofBook *);
 
 /** Return the book pointer */
-/*@ dependent @*/ QofBook *qof_instance_get_book (gconstpointer);
+/*@ dependent @*/
+QofBook *qof_instance_get_book (gconstpointer);
 
 /** Set the book pointer */
 void qof_instance_set_book (gconstpointer inst, QofBook *book);
@@ -99,14 +100,17 @@ void qof_instance_copy_book (gpointer ptr1, gconstpointer ptr2);
 gboolean qof_instance_books_equal (gconstpointer ptr1, gconstpointer ptr2);
 
 /** Return the GUID of this instance */
-/*@ dependent @*/ const GUID * qof_instance_get_guid (gconstpointer);
+/*@ dependent @*/
+const GUID * qof_instance_get_guid (gconstpointer);
 
 /** \deprecated Use qof_instance_get_guid instead.
  *  Works like qof_instance_get_guid, but returns NULL on NULL */
-/*@ dependent @*/ const GUID * qof_entity_get_guid (gconstpointer);
+/*@ dependent @*/
+const GUID * qof_entity_get_guid (gconstpointer);
 
 /** Return the collection this instance belongs to */
-/*@ dependent @*/ QofCollection* qof_instance_get_collection (gconstpointer inst);
+/*@ dependent @*/
+QofCollection* qof_instance_get_collection (gconstpointer inst);
 
 /** Set the GUID of this instance */
 void qof_instance_set_guid (gpointer inst, const GUID *guid);
@@ -125,13 +129,14 @@ gint qof_instance_guid_compare(const gconstpointer ptr1, const gconstpointer ptr
 //void qof_instance_set_e_type (QofInstance *ent, QofIdType e_type);
 
 /** Return the pointer to the kvp_data */
-/*@ dependent @*/ KvpFrame* qof_instance_get_slots (const QofInstance *);
+/*@ dependent @*/
+KvpFrame* qof_instance_get_slots (const QofInstance *);
 
 /** Return the last time this instance was modified.  If QofInstances
  *  are used with the QofObject storage backends, then the instance
  *  update times are reserved for use by the backend, for managing
- *  multi-user updates.  Non-backend code should not set the update 
- *  times. 
+ *  multi-user updates.  Non-backend code should not set the update
+ *  times.
  */
 Timespec qof_instance_get_last_update (const QofInstance *inst);
 
@@ -140,9 +145,9 @@ void qof_instance_increase_editlevel (gpointer ptr);
 void qof_instance_decrease_editlevel (gpointer ptr);
 void qof_instance_reset_editlevel (gpointer ptr);
 
-/** Compare two instances, based on thier last update times. 
- *  Returns a negative, zero or positive value, respectively, 
- *  if 'left' is earlier, same as or later than 'right'.  
+/** Compare two instances, based on thier last update times.
+ *  Returns a negative, zero or positive value, respectively,
+ *  if 'left' is earlier, same as or later than 'right'.
  *  Accepts NULL pointers, NULL's are by definition earlier
  *  than any value.
  */
@@ -250,7 +255,7 @@ void qof_instance_gemini (QofInstance *to, const QofInstance *from);
  *    That's what this routine does.  Given some book 'book', and an
  *    instance 'src', it will find the sibling instance of 'src' that is
  *    in 'book', and return it.  If not found, it returns NULL.  This
- *    routine uses the 'gemini' kvp values to do its work. 
+ *    routine uses the 'gemini' kvp values to do its work.
  */
 QofInstance * qof_instance_lookup_twin (const QofInstance *src, QofBook *book);
 

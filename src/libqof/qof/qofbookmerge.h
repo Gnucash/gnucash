@@ -39,20 +39,20 @@
     that do not have a GUID match cannot be assumed to be ::MERGE_NEW - parameter
     values must be checked.
 	-# If import contains data from closed books, store the data from the closed
-	books in the current book as active. i.e. re-open the books. 
+	books in the current book as active. i.e. re-open the books.
 
 - If a GUID match exists, set qof_book_merge_rule::mergeAbsolute to \a TRUE.
 	-# If ALL parameters in the import object match the target object with
-    the same \a GUID, 
+    the same \a GUID,
 	set ::qof_book_merge_result to \a MERGE_ABSOLUTE.
 	-# If any parameters differ, set ::MERGE_UPDATE.
 - If the import object \a GUID does not match an existing object,
 mergeAbsolute is unchanged from the default \a FALSE
 The parameter values of the object are compared to other objects of the same
 type in the target book.
-	-# If the same data exists in the target book with a different GUID, the object 
+	-# If the same data exists in the target book with a different GUID, the object
 	is tagged as DUPLICATE.
-	-# If the data has changed, the object is tagged as REPORT. 
+	-# If the data has changed, the object is tagged as REPORT.
 	-# If the data does not match, the object is tagged as NEW
 
 More information is at http://code.neil.williamsleesmill.me.uk/
@@ -64,7 +64,7 @@ is only used for critical errors that arise from programming errors, not for
 invalid import data which should be cleaned up before creating the import
 QofBook.
 
-Only ::qof_book_merge_update_result and ::qof_book_merge_commit return 
+Only ::qof_book_merge_update_result and ::qof_book_merge_commit return
 any error values to the calling process. ::qof_book_merge_init returns a
 pointer to the ::QofBookMergeData struct - the calling process needs to
 make sure this is non-NULL to know that the Init has been successful.
@@ -97,7 +97,7 @@ preferences option for each result. (Always accept new items: Y/N default NO,
 ignores all MERGE_NEW if set to Y etc.) This option would not require any
 changes to qofbookmerge.
 
-\a MERGE_NEW, \a MERGE_DUPLICATE and \a MERGE_UPDATE are only actioned after 
+\a MERGE_NEW, \a MERGE_DUPLICATE and \a MERGE_UPDATE are only actioned after
 conflicts are resolved by the user using a dialog and all \a MERGE_REPORT
 objects are re-assigned to one of MERGE_NEW, MERGE_DUPLICATE or MERGE_UPDATE.
 There is no automatic merge, even if no entities are tagged as MERGE_REPORT,
@@ -110,37 +110,38 @@ concerns that the rest of the data may be corrupted, damaged or otherwise
 altered. If any entity is tagged as MERGE_INVALID, the merge operation will
 abort and leave the target book completely unchanged.
 
-\a MERGE_ABSOLUTE is only used for a complete match. The import object contains 
+\a MERGE_ABSOLUTE is only used for a complete match. The import object contains
 the same data in the same parameters with no omissions or amendments. If any
-data is missing, amended or added, the data is labelled \a MERGE_UPDATE. 
+data is missing, amended or added, the data is labelled \a MERGE_UPDATE.
 
  Every piece of data has a corresponding result. Only when the count of items
- labelled \a MERGE_REPORT is equal to zero are \a MERGE_NEW and \a MERGE_UPDATE 
+ labelled \a MERGE_REPORT is equal to zero are \a MERGE_NEW and \a MERGE_UPDATE
  items added to the existing book.\n \a MERGE_DUPLICATE items are silently
  ignored. Aborting the dialogue/process (by the user or in a program crash) at
  any point before the final commit leaves the existing book completely untouched.
 */
-typedef enum { 
-	MERGE_UNDEF,     /**< default value before comparison is made. */
-	MERGE_ABSOLUTE,  /**< GUID exact match, no new data - \b ignore */
-	MERGE_NEW,       /**< import object does \b not exist in the target
+typedef enum
+{
+    MERGE_UNDEF,     /**< default value before comparison is made. */
+    MERGE_ABSOLUTE,  /**< GUID exact match, no new data - \b ignore */
+    MERGE_NEW,       /**< import object does \b not exist in the target
                         book - \b add */
-	MERGE_REPORT,    /**< import object needs user intervention - \b report */
-	MERGE_DUPLICATE, /**< import object with different GUID exactly matches
+    MERGE_REPORT,    /**< import object needs user intervention - \b report */
+    MERGE_DUPLICATE, /**< import object with different GUID exactly matches
                         existing GUID - \b ignore */
-	MERGE_UPDATE,    /**< import object matches an existing entity but includes
+    MERGE_UPDATE,    /**< import object matches an existing entity but includes
                         new or modified parameter data - \b update */
-	MERGE_INVALID    /**< import object didn't match registered object or
+    MERGE_INVALID    /**< import object didn't match registered object or
                         parameter types or user decided to abort - \b abort */
-}QofBookMergeResult;
+} QofBookMergeResult;
 
-/** \brief One rule per entity, built into a single GList for the entire merge 
+/** \brief One rule per entity, built into a single GList for the entire merge
 
 All rules are stored in the GList QofBookMergeData::mergeList.
 
 If the ::GUID matches it's the always same semantic object,
 regardless of whether other data fields are changed.
-\n	
+\n
 The boolean value mergeAbsolute defaults to \c FALSE
 
 NOTE 1: if mergeAbsolute == \c TRUE, ::QofBookMergeResult will still be set
@@ -158,22 +159,22 @@ same name in mergeData.
 
 */
 
-typedef struct 
+typedef struct
 {
-	/* internal counters and reference variables */
-	gboolean mergeAbsolute;   /**< Only set if the GUID of the import matches
+    /* internal counters and reference variables */
+    gboolean mergeAbsolute;   /**< Only set if the GUID of the import matches
                                 the target */
-	double difference;       /**< used to find best match in a book where no
+    double difference;       /**< used to find best match in a book where no
                                 GUID matches */
-	gboolean updated;        /**< prevent the mergeResult from being
+    gboolean updated;        /**< prevent the mergeResult from being
                                 overwritten. */
-	/* rule objects set from or by external calls */
-	QofIdType mergeType;     /**< type of comparison required for check for
+    /* rule objects set from or by external calls */
+    QofIdType mergeType;     /**< type of comparison required for check for
                                 collision */
-	const gchar* mergeLabel;  /**< Descriptive label for the object type,
+    const gchar* mergeLabel;  /**< Descriptive label for the object type,
                                 useful for the user intervention dialogue. */
-	GSList *mergeParam;      /**< list of usable parameters for the object type */
-	GSList *linkedEntList;   /**< list of complex data types included in this object. 
+    GSList *mergeParam;      /**< list of usable parameters for the object type */
+    GSList *linkedEntList;   /**< list of complex data types included in this object.
 
 	linkedEntList contains an ::QofInstance reference to any parameter that is not
 	one of the core QOF_TYPE data types. This entity must be already
@@ -182,43 +183,43 @@ typedef struct
     same value but for a different customer, the invoice will be set to
     MERGE_REPORT and the customer as MERGE_NEW.
 	*/
-	QofBookMergeResult mergeResult; /**< result of comparison with main ::QofBook */
-	QofInstance *importEnt;    /**< pointer to the current entity in the import book. */
-	QofInstance *targetEnt;    /**< pointer to the corresponding entity in the
+    QofBookMergeResult mergeResult; /**< result of comparison with main ::QofBook */
+    QofInstance *importEnt;    /**< pointer to the current entity in the import book. */
+    QofInstance *targetEnt;    /**< pointer to the corresponding entity in the
                                 target book, if any. */
-}QofBookMergeRule;
+} QofBookMergeRule;
 
 
 /** \brief 	mergeData contains the essential context data for any merge.
 
 Used to dictate what to merge, how to merge it, where to get the new data and
-where to put the amended data. 
+where to put the amended data.
 
 Combines lists of \a ::QofParam, \a ::QofInstance and \a ::QofBookMergeRule
 into one struct that can be easily passed between callbacks. Also holds the
 pointers to the import and target ::QofBook structures.
-	
+
 - targetList and mergeObjectParams change each time a new object type
-is set for compare. 
+is set for compare.
 - mergeList is the complete list of rules for all objects in the import book.
 
 */
 typedef struct
 {
-	GSList 	*mergeObjectParams;  /**< GSList of ::QofParam details for each
+    GSList 	*mergeObjectParams;  /**< GSList of ::QofParam details for each
                                     parameter in the current object. */
-	GList 	*mergeList;          /**< GList of all ::QofBookMergeRule rules
+    GList 	*mergeList;          /**< GList of all ::QofBookMergeRule rules
                                     for the merge operation. */
-	GSList 	*targetList;         /**< GSList of ::QofInstance * for each object
+    GSList 	*targetList;         /**< GSList of ::QofInstance * for each object
                                     of this type in the target book */
-	QofBook *mergeBook;          /**< pointer to the import book for this
+    QofBook *mergeBook;          /**< pointer to the import book for this
                                     merge operation. */
-	QofBook *targetBook;         /**< pointer to the target book for this
+    QofBook *targetBook;         /**< pointer to the target book for this
                                     merge operation. */
-	gboolean abort;	             /**< set to TRUE if MERGE_INVALID is set. */
-	QofBookMergeRule *currentRule; /**< placeholder for the rule currently
+    gboolean abort;	             /**< set to TRUE if MERGE_INVALID is set. */
+    QofBookMergeRule *currentRule; /**< placeholder for the rule currently
                                     being tested or applied. */
-	GSList *orphan_list;         /**< List of QofInstance's that need to be rematched.
+    GSList *orphan_list;         /**< List of QofInstance's that need to be rematched.
 
 	When one QofInstance has a lower difference to the targetEnt than the
     previous best_match, the new match takes precedence. This list holds those
@@ -226,10 +227,10 @@ typedef struct
     rematched later. The ranking is handled using the private QofInstanceRating
     struct and the GHashTable ::QofBookMergeData::target_table.
 	*/
-	GHashTable *target_table;    /**< The GHashTable to hold the
+    GHashTable *target_table;    /**< The GHashTable to hold the
                                     QofInstanceRating values.  */
 
-}QofBookMergeData;
+} QofBookMergeData;
 
 
 /* ======================================================================== */
@@ -246,7 +247,7 @@ typedef struct
 Process:
 
  	-# Invoke the callback ::qof_book_merge_foreach_type on every registered
-    object class definition. 
+    object class definition.
 	-# Callback obtains the registered parameter list for each object type.
     This provides run time access to all registered objects and all object
     parameters without any changes to QofBookMerge - no registered object or
@@ -295,7 +296,7 @@ void test_rule_loop(QofBookMergeData *mergeData, QofBookMergeRule *rule, guint r
 
 The dialogue is free to call ::qof_book_merge_update_result in the loop or at the end
 as long as the link between the rule and the result is maintained, e.g. by using a
-GHashTable. 
+GHashTable.
 \n
 The parameters are:
 	- data : pointer to the ::QofBookMergeData metadata context returned by init.
@@ -342,8 +343,8 @@ and again the QofBookMergeRule::targetEnt to return the two specific entities.
 
 */
 void qof_book_merge_rule_foreach( QofBookMergeData* mergeData,
-                                QofBookMergeRuleForeachCB callback , 
-                                QofBookMergeResult mergeResult);
+                                  QofBookMergeRuleForeachCB callback ,
+                                  QofBookMergeResult mergeResult);
 
 /** \brief provides easy string access to parameter data for dialogue use
 
@@ -366,8 +367,8 @@ gchar* qof_book_merge_param_as_string(QofParam *qtparam, QofInstance *qtEnt);
 Set \b any rule result to ::MERGE_INVALID to abort the import when
 ::qof_book_merge_commit is called, without changing the target book.
 
-The calling process should make it absolutely clear that a merge operation 
-\b cannot be undone and that a backup copy should always be available 
+The calling process should make it absolutely clear that a merge operation
+\b cannot be undone and that a backup copy should always be available
 \b before a merge is initialised.
 
 Recommended method: Only offer three options to the user per rule:
@@ -404,16 +405,16 @@ add an entity when mergeAbsolute is TRUE will always force a MERGE_UPDATE.
 It is not possible to update the same rule more than once.
 
 -# \b MERGE_NEW is reserved for new objects and is only pre-set if
-all parameters, including GUID, have already failed to match any 
-relevant object. ::qof_book_merge_commit will create new 
-entities for all rules tagged as MERGE_NEW. 
-	- if mergeAbsolute is TRUE and the user wants to import the 
-		data, requests to set MERGE_NEW will be forced to MERGE_UPDATE 
+all parameters, including GUID, have already failed to match any
+relevant object. ::qof_book_merge_commit will create new
+entities for all rules tagged as MERGE_NEW.
+	- if mergeAbsolute is TRUE and the user wants to import the
+		data, requests to set MERGE_NEW will be forced to MERGE_UPDATE
 		because an entity with that GUID already exists in the target book.
-	- if MERGE_NEW is pre-set, requests to change to MERGE_UPDATE will be 
+	- if MERGE_NEW is pre-set, requests to change to MERGE_UPDATE will be
 		ignored because a new entity is needed.
--# \b MERGE_UPDATE is reserved for existing objects - ::qof_book_merge_commit 
-will require a matching entity to update and will force a change to back to 
+-# \b MERGE_UPDATE is reserved for existing objects - ::qof_book_merge_commit
+will require a matching entity to update and will force a change to back to
 MERGE_NEW if none is known to exist, using the principle above.
 -# \b MERGE_INVALID will cause an abort of the merge process.
 -# \b MERGE_UNDEF and \b MERGE_REPORT cannot be set - the entity result will
@@ -426,7 +427,7 @@ be unchanged.
 	- if mergeAbsolute is FALSE but MERGE_ABSOLUTE is requested,
 		force a change to MERGE_DUPLICATE.
 
-::qof_book_merge_commit only commits entities tagged 
+::qof_book_merge_commit only commits entities tagged
 with MERGE_NEW and MERGE_UPDATE results.
 \n
 Entities tagged with MERGE_ABSOLUTE and MERGE_DUPLICATE results are ignored.
@@ -438,7 +439,7 @@ The calling process must check the return value and call
 @param	tag			the result to attempt to set, ::QofBookMergeResult
 
 \return -1 if supplied parameters are invalid or NULL, 0 on success.
-		
+
 */
 QofBookMergeData*
 qof_book_merge_update_result(QofBookMergeData *mergeData, QofBookMergeResult tag);
@@ -448,9 +449,9 @@ qof_book_merge_update_result(QofBookMergeData *mergeData, QofBookMergeResult tag
 	The last function in the API and the final part of any QofBookMerge operation.
 
 qof_book_merge_commit will abort the \b entire merge operation if any rule
-is set to ::MERGE_INVALID. It is the responsibility of the calling 
+is set to ::MERGE_INVALID. It is the responsibility of the calling
 function to handle the error code from ::qof_book_merge_commit, close the
-dialogue and return. qof_book_merge_commit will already have halted the merge 
+dialogue and return. qof_book_merge_commit will already have halted the merge
 operation and freed any memory allocated to all merge structures before
 returning the error code. There is no way for the dialogue process to report
 back to qof_book_merge in this situation.
@@ -462,9 +463,9 @@ qof_book_merge_commit checks for any entities still tagged as
 <b>This final process cannot be UNDONE!</b>\n
 \n
 
-@param	mergeData	the merge context, ::QofBookMergeData* 
+@param	mergeData	the merge context, ::QofBookMergeData*
 
-\return 
+\return
 	- -2 if any rules are tagged as ::MERGE_INVALID
 		- mergeData will have been g_free'd).
 		- note that this will be before any operations are done on the target
@@ -472,7 +473,7 @@ qof_book_merge_commit checks for any entities still tagged as
 	- -1 if mergeData is invalid or no merge has been initialised with
 		::qof_book_merge_init - the calling process must check the value of
         mergeData
-	- +1 if some entities are still tagged as \a MERGE_REPORT - use 
+	- +1 if some entities are still tagged as \a MERGE_REPORT - use
 		::qof_book_merge_update_rule and try again (mergeData is retained).
 	- 0 on success - mergeData will have been freed.
 */
@@ -483,7 +484,7 @@ qof_book_merge_commit(QofBookMergeData *mergeData );
 
 Sometimes, setting ::MERGE_INVALID is insufficient: e.g. if the user aborts the
 merge from outside the functions dealing with the merge ruleset. This function
-causes an immediate abort - the calling process must start again at Init if 
+causes an immediate abort - the calling process must start again at Init if
 a new merge is required.
 */
 void

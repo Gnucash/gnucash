@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
+
 #ifndef _QOFREFERENCE_H
 #define _QOFREFERENCE_H
 
@@ -41,22 +41,22 @@ Different backends have different requirements for a complete book - some
 (like gnucash) are highly customised to that application - however all complete
 QofBooks must be self-contained, only a partial book uses QofInstanceReference.
 
-To retain the relationships between entities, including between a partial and 
+To retain the relationships between entities, including between a partial and
 a complete book, QofInstanceReference data is stored in the QofBook. This data
-should be read by backends that support partial books so that the exported 
-data contains the GUID and QofIdType of the referenced entity. Even if that 
+should be read by backends that support partial books so that the exported
+data contains the GUID and QofIdType of the referenced entity. Even if that
 entity does not then exist within the partial book, it can be located when
-the partial book is merged back into the original, complete, book. (Remember 
+the partial book is merged back into the original, complete, book. (Remember
 that given the GUID and QofIdType of any QofInstance it is possible to uniquely
 identify that entity in another book.)
 
 Entities in partial books may need to refer to the entities that remain within
 the partial book. Once all the entities you want are in the partial book,
 call qof_book_set_references to restore as many references as possible. Each
-object type is checked in turn, each entity of that type and then each 
+object type is checked in turn, each entity of that type and then each
 parameter that can relate to another entity. Any references that cannot be
 found are left unset - depending on the object these may be undefined or NULL.
-(It is advisable to set all QOF parameters to either a default value or NULL 
+(It is advisable to set all QOF parameters to either a default value or NULL
 in the create: routine for the object but QOF has no way of guaranteeing this.)
 
 @{
@@ -73,9 +73,9 @@ in the create: routine for the object but QOF has no way of guaranteeing this.)
 
 Part of the handling for partial books requires a storage mechanism for
 references to entities that are not within reach of the partial book.
-This requires a GList in the book data to contain the reference 
+This requires a GList in the book data to contain the reference
 QofIdType and GUID so that when the book is written out, the
-reference can be included. See ::qof_book_get_data. 
+reference can be included. See ::qof_book_get_data.
 
 When the file is imported back in, the list needs to be rebuilt.
 The QSF backend rebuilds the references by linking to real entities.
@@ -85,7 +85,7 @@ The list stores the QofInstanceReference to the referenced entity -
 a struct that contains the GUID and the QofIdType of the referenced
 entity as well as the parameter used to obtain the reference.
 
-Partial books need to be differentiated in the backend, the 
+Partial books need to be differentiated in the backend, the
 flag in the book data is used by qof_session_save to prevent a partial
 book being saved using a backend that requires a full book. Forcing this
 flag would cause data loss so always merge a partial book with the complete
@@ -102,17 +102,18 @@ It is used by the entity copy functions and by the QSF backend.
 Creates a GList stored in the Book hashtable to contain
 repeated references for a single entity.
 */
-typedef struct qof_instance_reference {
-	QofIdType       choice_type;/**< Used when the reference is a QOF_TYPE_CHOICE type
+typedef struct qof_instance_reference
+{
+    QofIdType       choice_type;/**< Used when the reference is a QOF_TYPE_CHOICE type
 	- stores the actual type of the reference from the list of available choices. */
-	QofIdType       type;       /**< The type of the original entity -
+    QofIdType       type;       /**< The type of the original entity -
 	use the param->param_type to obtain the type of the reference entity.
 	For a QOF_TYPE_COLLECT, obtain the collection and get the type from that. */
-	GUID            *ref_guid;  /**< The GUID of the REFERENCE entity */
-	const QofParam  *param;      /**< The parameter of the original entity to use 
+    GUID            *ref_guid;  /**< The GUID of the REFERENCE entity */
+    const QofParam  *param;      /**< The parameter of the original entity to use
 	to get or set the reference. */
-	const GUID      *ent_guid;   /**< The GUID of the original entity. */
-}QofInstanceReference;
+    const GUID      *ent_guid;   /**< The GUID of the original entity. */
+} QofInstanceReference;
 
 /** \brief Adds a new reference to the partial book data hash.
 
@@ -187,7 +188,7 @@ to the reference list which is added to the partial book data hash.
 The reference itself is used to preserve the relationship
 between entities within and outside the partial book.
 
-See also ::qof_class_get_referenceList to obtain the list of 
+See also ::qof_class_get_referenceList to obtain the list of
 parameters that provide references to the known entity whilst
 excluding parameters that return known QOF data types.
 

@@ -21,7 +21,7 @@
 
 #ifndef QOF_H_
 #define QOF_H_
-/** @defgroup QOF Query Object Framework 
+/** @defgroup QOF Query Object Framework
  @{
 */
 

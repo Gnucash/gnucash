@@ -55,17 +55,17 @@ typedef u_int32_t md5_uint32;
 # endif
 
 # if UINT_MAX == UINT_MAX_32_BITS
-   typedef unsigned int md5_uint32;
+typedef unsigned int md5_uint32;
 # else
 #  if USHRT_MAX == UINT_MAX_32_BITS
-    typedef unsigned short md5_uint32;
+typedef unsigned short md5_uint32;
 #  else
 #   if ULONG_MAX == UINT_MAX_32_BITS
-     typedef unsigned long md5_uint32;
+typedef unsigned long md5_uint32;
 #   else
-     /* The following line is intended to evoke an error.
-        Using #error is not portable enough.  */
-     "Cannot determine unsigned 32-bit data type."
+/* The following line is intended to evoke an error.
+   Using #error is not portable enough.  */
+"Cannot determine unsigned 32-bit data type."
 #   endif
 #  endif
 # endif
@@ -81,14 +81,14 @@ typedef u_int32_t md5_uint32;
 /* Structure to save state of computation between the single steps.  */
 struct md5_ctx
 {
-  md5_uint32 A;
-  md5_uint32 B;
-  md5_uint32 C;
-  md5_uint32 D;
+    md5_uint32 A;
+    md5_uint32 B;
+    md5_uint32 C;
+    md5_uint32 D;
 
-  md5_uint32 total[2];
-  md5_uint32 buflen;
-  char buffer[128];
+    md5_uint32 total[2];
+    md5_uint32 buflen;
+    char buffer[128];
 };
 
 /*
@@ -110,7 +110,7 @@ extern void md5_init_ctx __P ((struct md5_ctx *ctx));
    IMPORTANT: On some systems it is required that buffer be 32-bit
    aligned.  */
 extern void md5_process_block __P ((const void *buffer, size_t len,
-				    struct md5_ctx *ctx));
+                                    struct md5_ctx *ctx));
 
 /* Starting with the result of former calls of this function (or the
    initialization function) update the context for the next LEN bytes
@@ -121,7 +121,7 @@ extern void md5_process_block __P ((const void *buffer, size_t len,
    IMPORTANT: On some systems it is required that buffer be 32-bit
    aligned.  */
 extern void md5_process_bytes __P ((const void *buffer, size_t len,
-				    struct md5_ctx *ctx));
+                                    struct md5_ctx *ctx));
 
 /* Process the remaining bytes in the buffer and put result from CTX
    in first 16 bytes following RESBUF.  The result is always in little

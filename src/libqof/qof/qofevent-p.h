@@ -30,10 +30,10 @@
 /* for backwards compatibility - to be moved back to qofevent.c in libqof2 */
 typedef struct
 {
-  QofEventHandler handler;
-  gpointer user_data;
+    QofEventHandler handler;
+    gpointer user_data;
 
-  gint handler_id;
+    gint handler_id;
 } HandlerInfo;
 
 /* generates an event even when events are suspended! */

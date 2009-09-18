@@ -59,7 +59,7 @@ event identifiers must be based on this when using QOF_MAKE_EVENT(). */
 /** \brief Default events for backwards compatibility.
 
 These defaults merely replicate previous behaviour,
-any process can define their own events. 
+any process can define their own events.
 
 \note events 5, 6, and 7 are "undefined" as of v0.6.3
 for future libqof1 or libqof2 usage.
@@ -82,7 +82,7 @@ for future libqof1 or libqof2 usage.
  * @param event_data:   data to be supplied when handler is invoked.
  */
 typedef void (*QofEventHandler) (QofInstance *ent,  QofEventId event_type,
-                               gpointer handler_data, gpointer event_data);
+                                 gpointer handler_data, gpointer event_data);
 
 /** \brief Register a handler for events.
  *
@@ -120,7 +120,7 @@ void qof_event_unregister_handler (gint handler_id);
  @param event_data: Data to be passed to the event handler just for
  this one event. Can be NULL.
 */
-void qof_event_gen (QofInstance *entity, QofEventId event_type, 
+void qof_event_gen (QofInstance *entity, QofEventId event_type,
                     gpointer event_data);
 
 /** \brief  Suspend all engine events.

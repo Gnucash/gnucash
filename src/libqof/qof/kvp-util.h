@@ -21,31 +21,32 @@
 \********************************************************************/
 
 /** @addtogroup KVP
-    @{ 
+    @{
 */
-/** @file kvp-util.h 
-    @brief QOF KVP utility functions 
+/** @file kvp-util.h
+    @brief QOF KVP utility functions
  */
 /**  @name Hash Utilities
- @{ 
+ @{
 */
 
 #ifndef GNC_KVP_UTIL_H
 #define GNC_KVP_UTIL_H
 
-typedef struct {
-  gpointer key;
-  gpointer value;
+typedef struct
+{
+    gpointer key;
+    gpointer value;
 } GHashTableKVPair;
 
-/** 
+/**
   Returns a GSList* of all the
   keys and values in a given hash table.  Data elements of lists are
   actual hash elements, so be careful, and deallocation of the
   GHashTableKVPairs in the result list are the caller's
   responsibility.  A typical sequence might look like this:
 
-    GSList *kvps = g_hash_table_key_value_pairs(hash);  
+    GSList *kvps = g_hash_table_key_value_pairs(hash);
     ... use kvps->data->key and kvps->data->val, etc. here ...
     g_slist_foreach(kvps, g_hash_table_kv_pair_free_gfunc, NULL);
     g_slist_free(kvps);

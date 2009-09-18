@@ -31,8 +31,8 @@
     with the QOF system, as a QOF Object Class.  This allows
     the QOF Query routines to be used to search over collections
     of GObjects.
- 
-    XXX Only GObject properties are searchable, data and other 
+
+    XXX Only GObject properties are searchable, data and other
     hanging off the GObject is not.  Fix this. This needs fixing.
 
 @{ */
@@ -55,7 +55,7 @@ void qof_gobject_shutdown (void);
  *  this GObject searchable using the QOF subsystem.
  *
  *  The QofType can be any string you desire, although typically
- *  you might want to set it to G_OBJECT_CLASS_NAME() of the 
+ *  you might want to set it to G_OBJECT_CLASS_NAME() of the
  *  object class.  Note that this type will become the name of
  *  the "table" that is searched by SQL queries:
  *  e.g. in order to be able to say "SELECT * FROM MyStuff;"
@@ -67,7 +67,7 @@ void qof_gobject_register (QofType type, GObjectClass *obclass);
 /** Register an instance of a GObject with the QOF subsystem.
  *
  *  The QofType can be any string you desire, although typically
- *  you might want to set it to G_OBJECT_CLASS_NAME() of the 
+ *  you might want to set it to G_OBJECT_CLASS_NAME() of the
  *  object class.  Note that this type will become the name of
  *  the "table" that is searched by SQL queries:
  *  e.g. in order to be able to say "SELECT * FROM MyStuff;"

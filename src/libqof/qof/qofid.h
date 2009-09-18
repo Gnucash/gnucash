@@ -21,33 +21,33 @@
 \********************************************************************/
 
 #ifndef QOF_ID_H
-#define QOF_ID_H 
+#define QOF_ID_H
 
-/** @addtogroup Entity 
+/** @addtogroup Entity
     @{ */
 /** @addtogroup Entities
 
     This file defines an API that adds types to the GUID's.
-    GUID's with types can be used to identify and reference 
-    typed entities.  
+    GUID's with types can be used to identify and reference
+    typed entities.
 
     The idea here is that a GUID can be used to uniquely identify
-    some thing.  By adding a type, one can then talk about the 
+    some thing.  By adding a type, one can then talk about the
     type of thing identified.  By adding a collection, one can
     then work with a handle to a collection of things of a given
     type, each uniquely identified by a given ID.  QOF Entities
     can be used independently of any other part of the system.
     In particular, Entities can be useful even if one is not using
     the Query ond Object parts of the QOF system.
-  
+
     Identifiers are globally-unique and permanent, i.e., once
     an entity has been assigned an identifier, it retains that same
     identifier for its lifetime.
-    Identifiers can be encoded as hex strings. 
-   
-    GUID Identifiers are 'typed' with strings.  The native ids used 
+    Identifiers can be encoded as hex strings.
+
+    GUID Identifiers are 'typed' with strings.  The native ids used
     by QOF are defined below.
-	-# An id with type QOF_ID_NONE does not 
+	-# An id with type QOF_ID_NONE does not
     refer to any entity.
 	-# An id with type QOF_ID_NULL does not refer
 	to any entity, and will never refer to any entity.
@@ -57,7 +57,7 @@
 	Also, creating a new entity from a data source involves creating
 	a temporary GUID and then setting the value from the data source.
 	If an id does refer to an entity, the type of the entity will match
-	the type of the identifier. 
+	the type of the identifier.
 
     If you have a type name, and you want to have a way of finding
     a collection that is associated with that type, then you must use
@@ -68,8 +68,8 @@
 
  @{ */
 /** @file qofid.h
-    @brief QOF entity type identification system 
-    @author Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu> 
+    @brief QOF entity type identification system
+    @author Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>
     @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
 */
 
@@ -126,7 +126,7 @@ print error message if its bad  */
   }))
 
 
-/** QofCollection declaration 
+/** QofCollection declaration
 
 @param e_type QofIdType
 @param is_dirty gboolean
@@ -152,7 +152,7 @@ gboolean qof_get_alt_dirty_mode (void);
  *  collection (and therefore the book) is never changed. */
 void qof_set_alt_dirty_mode (gboolean enabled);
 
-/** @name Collections of Entities 
+/** @name Collections of Entities
  @{ */
 
 /** create a new collection of entities of type */
@@ -168,16 +168,17 @@ void qof_collection_destroy (QofCollection *col);
 QofIdType qof_collection_get_type (const QofCollection *);
 
 /** Find the entity going only from its guid */
-/*@ dependent @*/ QofInstance * qof_collection_lookup_entity (const QofCollection *, const GUID *);
+/*@ dependent @*/
+QofInstance * qof_collection_lookup_entity (const QofCollection *, const GUID *);
 
 /** Callback type for qof_collection_foreach */
 typedef void (*QofInstanceForeachCB) (QofInstance *, gpointer user_data);
 
 /** Call the callback for each entity in the collection. */
-void qof_collection_foreach (const QofCollection *, QofInstanceForeachCB, 
+void qof_collection_foreach (const QofCollection *, QofInstanceForeachCB,
                              gpointer user_data);
 
-/** Store and retreive arbitrary object-defined data 
+/** Store and retreive arbitrary object-defined data
  *
  * XXX We need to add a callback for when the collection is being
  * destroyed, so that the user has a chance to clean up anything
@@ -206,7 +207,7 @@ of one object type as references of another entity.
 Entities can be
 freely added and merged across these secondary collections, they
 will not be removed from the original collection as they would
-by using ::qof_instance_insert_entity or ::qof_instance_remove_entity. 
+by using ::qof_instance_insert_entity or ::qof_instance_remove_entity.
 
 */
 gboolean
@@ -243,7 +244,7 @@ qof_collection_compare (QofCollection *target, QofCollection *merge);
 
 /** \brief Create a secondary collection from a GList
 
-@param type The QofIdType of the QofCollection \b and of 
+@param type The QofIdType of the QofCollection \b and of
 	\b all entities in the GList.
 @param glist GList of entities of the same QofIdType.
 

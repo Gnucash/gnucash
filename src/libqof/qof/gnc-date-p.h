@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-date-p.h
  *
  * Copyright (C) 2007 Andreas Koehler <andi5.py@gmx.net>
@@ -45,10 +45,11 @@ gchar *qof_formatted_time_to_utf8(const gchar *locale_string);
 
 #ifdef G_OS_WIN32
 
-typedef enum {
-  QOF_WIN32_PICTURE_DATE,
-  QOF_WIN32_PICTURE_TIME,
-  QOF_WIN32_PICTURE_DATETIME
+typedef enum
+{
+    QOF_WIN32_PICTURE_DATE,
+    QOF_WIN32_PICTURE_TIME,
+    QOF_WIN32_PICTURE_DATETIME
 } QofWin32Picture;
 
 /** Get a strftime/strptime format specification for date, time or date and time,

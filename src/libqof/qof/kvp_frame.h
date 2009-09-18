@@ -22,16 +22,16 @@
 
  * A KvpFrame is a set of associations between character strings
  * (keys) and KvpValue structures.  A KvpValue is a union with
- * possible types enumerated in the KvpValueType enum, and includes, 
+ * possible types enumerated in the KvpValueType enum, and includes,
  * among other things, ints, doubles, strings, guid's, lists, time
  * and numeric values.  KvpValues may also be other frames, so
  * KVP is inherently hierarchical.
- * 
+ *
  * Values are stored in a 'slot' associated with a key.
  * Pointers passed as arguments into set_slot and get_slot are the
  * responsibility of the caller.  Pointers returned by get_slot are
  * owned by the kvp_frame.  Make copies as needed.
- * 
+ *
  * A 'path' is a sequence of keys that can be followed to a value.
  * Paths may be specified as varargs (variable number of arguments
  * to a subrutine, NULL-terminated), as a GSList, or as a standard
@@ -42,14 +42,14 @@
  *
  * Note that although, in principle, keys may contain the / and . and
  * .. characters,  doing so may lead to confusion, and will make
- * path-string parsing routines fail.  In other words, don't use 
+ * path-string parsing routines fail.  In other words, don't use
  * a key such as 'some/key' or 'some/./other/../key' because you
  * may get unexpected results.
- * 
- * To set a value into a frame, you will want to use one of the 
+ *
+ * To set a value into a frame, you will want to use one of the
  * kvp_frame_set_xxx() routines.  Most of the other routines provide
  * only low-level access that you probably shouldn't use.
- 
+
 @{
 */
 /** @file kvp_frame.h
@@ -73,40 +73,41 @@ typedef struct _KvpFrame KvpFrame;
 /** A KvpValue is a union with possible types enumerated in the
  * KvpValueType enum. */
 typedef struct _KvpValue KvpValue;
- 
-/** \brief possible types in the union KvpValue 
- * \todo : People have asked for boolean values, 
+
+/** \brief possible types in the union KvpValue
+ * \todo : People have asked for boolean values,
  *  e.g. in xaccAccountSetAutoInterestXfer
  *
- * \todo In the long run, this should be synchronized with the 
+ * \todo In the long run, this should be synchronized with the
  * core QOF types, which in turn should be synced to the g_types
  * in GLib.  Unfortunately, this requires writing a pile of code
  * to handle all of the different cases.
- * An alternative might be to make kvp values inherit from the 
+ * An alternative might be to make kvp values inherit from the
  * core g_types (i.e. add new core g_types) ??
  */
-typedef enum {
-  KVP_TYPE_GINT64=1,   /**< QOF_TYPE_INT64  gint64 */
-  KVP_TYPE_DOUBLE,     /**< QOF_TYPE_DOUBLE  gdouble */
-  KVP_TYPE_NUMERIC,    /**< QOF_TYPE_NUMERIC */
-  KVP_TYPE_STRING,     /**< QOF_TYPE_STRING gchar* */
-  KVP_TYPE_GUID,       /**< QOF_TYPE_GUID */
-  KVP_TYPE_TIMESPEC,   /**< QOF_TYPE_DATE */
-  KVP_TYPE_BINARY,     /**< no QOF equivalent. */
-  KVP_TYPE_GLIST,      /**< no QOF equivalent. */
-  KVP_TYPE_FRAME       /**< no QOF equivalent. */
+typedef enum
+{
+    KVP_TYPE_GINT64 = 1, /**< QOF_TYPE_INT64  gint64 */
+    KVP_TYPE_DOUBLE,     /**< QOF_TYPE_DOUBLE  gdouble */
+    KVP_TYPE_NUMERIC,    /**< QOF_TYPE_NUMERIC */
+    KVP_TYPE_STRING,     /**< QOF_TYPE_STRING gchar* */
+    KVP_TYPE_GUID,       /**< QOF_TYPE_GUID */
+    KVP_TYPE_TIMESPEC,   /**< QOF_TYPE_DATE */
+    KVP_TYPE_BINARY,     /**< no QOF equivalent. */
+    KVP_TYPE_GLIST,      /**< no QOF equivalent. */
+    KVP_TYPE_FRAME       /**< no QOF equivalent. */
 } KvpValueType;
 
 /** \deprecated Deprecated backwards compat token
 
-do \b not use these in new code. 
+do \b not use these in new code.
 */
 #define kvp_frame KvpFrame
 /** \deprecated Deprecated backwards compat token */
 #define kvp_value KvpValue
 /** \deprecated Deprecated backwards compat token */
 #define kvp_value_t KvpValueType
-  
+
 /** @name KvpFrame Constructors
  @{
 */
@@ -114,14 +115,14 @@ do \b not use these in new code.
 /** Return a new empty instance of KvpFrame */
 KvpFrame   * kvp_frame_new(void);
 
-/** Perform a deep (recursive) delete of the frame and any subframes. 
+/** Perform a deep (recursive) delete of the frame and any subframes.
 
  * kvp_frame_delete and kvp_value_delete are deep (recursive) deletes.
- * kvp_frame_copy and kvp_value_copy are deep value copies. 
+ * kvp_frame_copy and kvp_value_copy are deep value copies.
  */
 void         kvp_frame_delete(KvpFrame * frame);
 
-/** Perform a deep (recursive) value copy, copying the fraame, 
+/** Perform a deep (recursive) value copy, copying the fraame,
  *  subframes, and the values as well. */
 KvpFrame   * kvp_frame_copy(const KvpFrame * frame);
 
@@ -134,15 +135,15 @@ gboolean     kvp_frame_is_empty(const KvpFrame * frame);
 @{
 */
 
-/**    store the value of the 
- *     gint64 at the indicated path. If not all frame components of 
+/**    store the value of the
+ *     gint64 at the indicated path. If not all frame components of
  *     the path exist, they are created.
  *
  */
 void kvp_frame_set_gint64(KvpFrame * frame, const gchar * path, gint64 ival);
 /**
- *     store the value of the 
- *     double at the indicated path. If not all frame components of 
+ *     store the value of the
+ *     double at the indicated path. If not all frame components of
  *     the path exist, they are created.
 */
 void kvp_frame_set_double(KvpFrame * frame, const gchar * path, double dval);
@@ -152,15 +153,15 @@ void kvp_frame_set_double(KvpFrame * frame, const gchar * path, double dval);
 Use kvp_frame_set_numeric instead of kvp_frame_set_gnc_numeric
 */
 #define kvp_frame_set_gnc_numeric kvp_frame_set_numeric
-/**    store the value of the 
+/**    store the value of the
  *     gnc_numeric at the indicated path.
- *     If not all frame components of 
+ *     If not all frame components of
  *     the path exist, they are created.
  */
 void kvp_frame_set_numeric(KvpFrame * frame, const gchar * path, gnc_numeric nval);
-/**    store the value of the 
+/**    store the value of the
  *     Timespec at the indicated path.
- *     If not all frame components of 
+ *     If not all frame components of
  *     the path exist, they are created.
  */
 void kvp_frame_set_timespec(KvpFrame * frame, const gchar * path, Timespec ts);
@@ -173,15 +174,15 @@ Use kvp_frame_set_string instead of kvp_frame_set_str
 
 /** \brief Store a copy of the string at the indicated path.
 
- *    If not all frame components of the path 
+ *    If not all frame components of the path
  *    exist, they are created.  If there was another string previously
  *    stored at that path, the old copy is deleted.
  *
  *    Similarly, the set_guid and set_frame will make copies and
- *    store those.  Old copies, if any, are deleted.  
+ *    store those.  Old copies, if any, are deleted.
  *
- * The kvp_frame_set_frame_nc() routine works as above, but does 
- *    *NOT* copy the frame. 
+ * The kvp_frame_set_frame_nc() routine works as above, but does
+ *    *NOT* copy the frame.
  */
 void kvp_frame_set_string(KvpFrame * frame, const gchar * path, const gchar* str);
 void kvp_frame_set_guid(KvpFrame * frame, const gchar * path, const GUID *guid);
@@ -190,40 +191,40 @@ void kvp_frame_set_frame(KvpFrame *frame, const gchar *path, KvpFrame *chld);
 void kvp_frame_set_frame_nc(KvpFrame *frame, const gchar *path, KvpFrame *chld);
 
 /** The kvp_frame_set_value() routine copies the value into the frame,
- *    at the location 'path'.   If the path contains slashes '/', these 
- *    are assumed to represent a sequence of keys.  The returned value 
+ *    at the location 'path'.   If the path contains slashes '/', these
+ *    are assumed to represent a sequence of keys.  The returned value
  *    is a pointer to the actual frame into which the value was inserted;
- *    it is NULL if the frame couldn't be found (and thus the value wasn't 
+ *    it is NULL if the frame couldn't be found (and thus the value wasn't
  *    inserted).  The old value at this location, if any, is destroyed.
  *
- *    Pointers passed as arguments into this routine are the responsibility 
+ *    Pointers passed as arguments into this routine are the responsibility
  *    of the caller; the pointers are *not* taken over or managed.
  */
-KvpFrame *   kvp_frame_set_value(KvpFrame * frame, 
+KvpFrame *   kvp_frame_set_value(KvpFrame * frame,
                                  const gchar * path, const KvpValue * value);
 /**
  * The kvp_frame_set_value_nc() routine puts the value (without copying
- *    it) into the frame, putting it at the location 'path'.  If the path 
+ *    it) into the frame, putting it at the location 'path'.  If the path
  *    contains slashes '/', these are assumed to represent a sequence of keys.
- *    The returned value is a pointer to the actual frame into which the value 
- *    was inserted; it is NULL if the frame couldn't be found (and thus the 
+ *    The returned value is a pointer to the actual frame into which the value
+ *    was inserted; it is NULL if the frame couldn't be found (and thus the
  *    value wasn't inserted).  The old value at this location, if any,
  *    is destroyed.
  *
  *    This routine is handy for avoiding excess memory allocations & frees.
- *    Note that because the KvpValue was grabbed, you can't just delete 
+ *    Note that because the KvpValue was grabbed, you can't just delete
  *    unless you remove the key as well (or unless you replace the value).
  */
-KvpFrame *    kvp_frame_set_value_nc(KvpFrame * frame, 
-                                 const gchar * path, KvpValue * value);
+KvpFrame *    kvp_frame_set_value_nc(KvpFrame * frame,
+                                     const gchar * path, KvpValue * value);
 
-/** The kvp_frame_replace_value_nc() routine places the new value 
- *    at the indicated path.   It returns the old value, if any.  
- *    It returns NULL if there was an error, or if there was no 
+/** The kvp_frame_replace_value_nc() routine places the new value
+ *    at the indicated path.   It returns the old value, if any.
+ *    It returns NULL if there was an error, or if there was no
  *    old value. If the path doesn't exist, it is created, unless
- *    new_value is NULL.  Passing in a NULL new_value has the 
+ *    new_value is NULL.  Passing in a NULL new_value has the
  *    effect of deleting the trailing slot (i.e. the trailing path
- *    element).  
+ *    element).
  */
 KvpValue * kvp_frame_replace_value_nc (KvpFrame * frame, const gchar * slot,
                                        KvpValue * new_value);
@@ -236,8 +237,8 @@ KvpValue * kvp_frame_replace_value_nc (KvpFrame * frame, const gchar * slot,
  *  turning it into a set of key-value pairs, and adding those to the
  *  indicated frame.  URL-encoded strings are the things that are
  *  returned by web browsers when a form is filled out.  For example,
- *  'start-date=June&end-date=November' consists of two keys, 
- *  'start-date' and 'end-date', which have the values 'June' and 
+ *  'start-date=June&end-date=November' consists of two keys,
+ *  'start-date' and 'end-date', which have the values 'June' and
  *  'November', respectively.  This routine also handles % encoding.
  *
  *  This routine treats all values as strings; it does *not* attempt
@@ -246,19 +247,19 @@ KvpValue * kvp_frame_replace_value_nc (KvpFrame * frame, const gchar * slot,
 void     kvp_frame_add_url_encoding (KvpFrame *frame, const gchar *enc);
 /** @} */
 
-/** @name KvpFrame Glist Bag Storing 
+/** @name KvpFrame Glist Bag Storing
  @{
 */
 
-/** The kvp_frame_add_gint64() routine will add the value of the 
- *     gint64 to the glist bag of values at the indicated path. 
- *     If not all frame components of the path exist, they are 
- *     created.  If the value previously stored at this path was 
- *     not a glist bag, then a bag will be formed there, the old 
+/** The kvp_frame_add_gint64() routine will add the value of the
+ *     gint64 to the glist bag of values at the indicated path.
+ *     If not all frame components of the path exist, they are
+ *     created.  If the value previously stored at this path was
+ *     not a glist bag, then a bag will be formed there, the old
  *     value placed in the bag, and the new value added to the bag.
  *
- *     Similarly, the add_double, add_numeric, and add_timespec 
- *     routines perform the same function, for each of the respective 
+ *     Similarly, the add_double, add_numeric, and add_timespec
+ *     routines perform the same function, for each of the respective
  *     types.
  */
 void kvp_frame_add_gint64(KvpFrame * frame, const gchar * path, gint64 ival);
@@ -280,17 +281,17 @@ Use kvp_frame_add_string instead of kvp_frame_add_str
 
 /** \brief Copy of the string to the glist bag at the indicated path.
 
- *    If not all frame components 
- *    of the path exist, they are created.  If there was another 
+ *    If not all frame components
+ *    of the path exist, they are created.  If there was another
  *    item previously stored at that path, then the path is converted
  *    to a bag, and the old value, along with the new value, is added
  *    to the bag.
  *
  *    Similarly, the add_guid and add_frame will make copies and
- *    add those.  
+ *    add those.
  *
- * The kvp_frame_add_frame_nc() routine works as above, but does 
- *    *NOT* copy the frame. 
+ * The kvp_frame_add_frame_nc() routine works as above, but does
+ *    *NOT* copy the frame.
  */
 void kvp_frame_add_string(KvpFrame * frame, const gchar * path, const gchar* str);
 void kvp_frame_add_guid(KvpFrame * frame, const gchar * path, const GUID *guid);
@@ -306,7 +307,7 @@ void kvp_frame_add_frame_nc(KvpFrame *frame, const gchar *path, KvpFrame *chld);
  *    to the bag.  This routine returns the pointer to the last frame
  *    (the actual frame to which the value was added), or NULL if there
  *    was an error of any sort (typically, a parse error in the path).
- * 
+ *
  *    The *_nc() routine is analogous, except that it doesn't copy the
  *    value.
  */
@@ -318,22 +319,22 @@ KvpFrame * kvp_frame_add_value_nc(KvpFrame * frame, const gchar * path, KvpValue
 
 /** @name KvpFrame Value Fetching
 
-  Value accessors.  These all take a unix-style slash-separated 
+  Value accessors.  These all take a unix-style slash-separated
   path as an argument, and return the value stored at that location.
   If the object at the end of that path is not of the type that was
   asked for, then a NULL or a zero is returned.  So, for example,
   asking for a string when the path stored an int will return a NULL.
-  In some future date, this may be changed to a looser type system, 
+  In some future date, this may be changed to a looser type system,
   such as perl's automatic re-typing (e.g. an integer value might be
   converted to a printed string representing that value).
 
   If any part of the path does not exist, then NULL or zero will be
   returned.
 
-  The values returned for GUID, binary, GList, KvpFrame and string 
+  The values returned for GUID, binary, GList, KvpFrame and string
   are "non-copying" -- the returned item is the actual item stored.
   Do not delete this item unless you take the required care to avoid
-  possible bad pointer derefrences (i.e. core dumps).  Also, be 
+  possible bad pointer derefrences (i.e. core dumps).  Also, be
   careful hanging on to those references if you are also storing
   at the same path names: the referenced item will be freed during
   the store.
@@ -351,7 +352,7 @@ gnc_numeric kvp_frame_get_numeric(const KvpFrame *frame, const gchar *path);
 const gchar * kvp_frame_get_string(const KvpFrame *frame, const gchar *path);
 GUID      * kvp_frame_get_guid(const KvpFrame *frame, const gchar *path);
 void      * kvp_frame_get_binary(const KvpFrame *frame, const gchar *path,
-                                   guint64 * size_return); 
+                                 guint64 * size_return);
 Timespec    kvp_frame_get_timespec(const KvpFrame *frame, const gchar *path);
 KvpValue  * kvp_frame_get_value(const KvpFrame *frame, const gchar *path);
 
@@ -373,10 +374,11 @@ KvpValue  * kvp_frame_get_value(const KvpFrame *frame, const gchar *path);
  *  @return The KvpFrame at the specified path, or NULL if it doesn't
  *  exist.
 */
-/*@ dependent @*/ KvpFrame  * kvp_frame_get_frame(const KvpFrame *frame, const gchar *path);
+/*@ dependent @*/
+KvpFrame  * kvp_frame_get_frame(const KvpFrame *frame, const gchar *path);
 
 /** This routine returns the last frame of the path.
- *  If the frame path doesn't exist, it is created.  
+ *  If the frame path doesn't exist, it is created.
  *  Note that this is *VERY DIFFERENT FROM* like kvp_frame_get_frame()
  *
  *  @note The semantics of this function implemented the gnucash-1.8
@@ -388,28 +390,28 @@ KvpValue  * kvp_frame_get_value(const KvpFrame *frame, const gchar *path);
  *  kvp_frame_get_frame_path(). This happened on 2003-09-14, revision
  *  1.31.
  */
-KvpFrame    * kvp_frame_get_frame_path (KvpFrame *frame, const gchar *,...);
+KvpFrame    * kvp_frame_get_frame_path (KvpFrame *frame, const gchar *, ...);
 
 /** This routine returns the last frame of the path.
- *  If the frame path doesn't exist, it is created.  
+ *  If the frame path doesn't exist, it is created.
  *  Note that this is *VERY DIFFERENT FROM* kvp_frame_get_frame()
  */
 KvpFrame    * kvp_frame_get_frame_gslist (KvpFrame *frame,
-                                           const GSList *key_path);
+        const GSList *key_path);
 
 /** This routine returns the last frame of the path.
- *  If the frame path doesn't exist, it is created.  
+ *  If the frame path doesn't exist, it is created.
  *  Note that this is *VERY DIFFERENT FROM* kvp_frame_get_frame()
  *
  * The kvp_frame_get_frame_slash() routine takes a single string
  *    where the keys are separated by slashes; thus, for example:
  *    /this/is/a/valid/path  and///so//is////this/
  *    Multiple slashes are compresed.  Leading slash is optional.
- *    The pointers . and .. are *not* currently followed/obeyed.  
+ *    The pointers . and .. are *not* currently followed/obeyed.
  *    (This is a bug that needs fixing).
  */
 KvpFrame    * kvp_frame_get_frame_slash (KvpFrame *frame,
-                                          const gchar *path);
+        const gchar *path);
 
 /** @} */
 /** @name KvpFrame KvpValue low-level storing routines.
@@ -418,8 +420,8 @@ You probably shouldn't be using these low-level routines
 
  All of the kvp_frame_set_slot_*() routines set the slot values
     "destructively", in that if there was an old value there, that
-    old value is destroyed (and the memory freed).  Thus, one 
-    should not hang on to value pointers, as these will get 
+    old value is destroyed (and the memory freed).  Thus, one
+    should not hang on to value pointers, as these will get
     trashed if set_slot is called on the corresponding key.
 
     If you want the old value, use kvp_frame_replace_slot().
@@ -434,31 +436,31 @@ You probably shouldn't be using these low-level routines
  *    slot.
  */
 KvpValue * kvp_frame_replace_slot_nc (KvpFrame * frame, const gchar * slot,
-                                 KvpValue * new_value);
+                                      KvpValue * new_value);
 
 
 /** The kvp_frame_set_slot() routine copies the value into the frame,
- *    associating it with a copy of 'key'.  Pointers passed as arguments 
+ *    associating it with a copy of 'key'.  Pointers passed as arguments
  *    into kvp_frame_set_slot are the responsibility of the caller;
  *    the pointers are *not* taken over or managed.  The old value at
  *    this location, if any, is destroyed.
  */
-void          kvp_frame_set_slot(KvpFrame * frame, 
+void          kvp_frame_set_slot(KvpFrame * frame,
                                  const gchar * key, const KvpValue * value);
 /**
  * The kvp_frame_set_slot_nc() routine puts the value (without copying
- *    it) into the frame, associating it with a copy of 'key'.  This 
+ *    it) into the frame, associating it with a copy of 'key'.  This
  *    routine is handy for avoiding excess memory allocations & frees.
- *    Note that because the KvpValue was grabbed, you can't just delete 
+ *    Note that because the KvpValue was grabbed, you can't just delete
  *    unless you remove the key as well (or unless you replace the value).
  *    The old value at this location, if any, is destroyed.
  */
-void          kvp_frame_set_slot_nc(KvpFrame * frame, 
+void          kvp_frame_set_slot_nc(KvpFrame * frame,
                                     const gchar * key, KvpValue * value);
 
 /** The kvp_frame_set_slot_path() routine walks the hierarchy,
- *     using the key values to pick each branch.  When the terminal 
- *     node is reached, the value is copied into it.  The old value 
+ *     using the key values to pick each branch.  When the terminal
+ *     node is reached, the value is copied into it.  The old value
  *     at this location, if any, is destroyed.
  */
 void          kvp_frame_set_slot_path (KvpFrame *frame,
@@ -471,8 +473,8 @@ void          kvp_frame_set_slot_path (KvpFrame *frame,
  *     location, if any, is destroyed.
  */
 void          kvp_frame_set_slot_path_gslist (KvpFrame *frame,
-                                              const KvpValue *value,
-                                              GSList *key_path);
+        const KvpValue *value,
+        GSList *key_path);
 
 /** @} */
 
@@ -480,9 +482,9 @@ void          kvp_frame_set_slot_path_gslist (KvpFrame *frame,
 
   You probably shouldn't be using these low-level routines
 
-  Returns the KvpValue in the given KvpFrame 'frame' that is 
+  Returns the KvpValue in the given KvpFrame 'frame' that is
   associated with 'key'.  If there is no key in the frame, NULL
-  is returned.  If the value associated with the key is NULL, 
+  is returned.  If the value associated with the key is NULL,
   NULL is returned.
 
   Pointers passed as arguments into get_slot are the responsibility
@@ -496,13 +498,13 @@ KvpValue   * kvp_frame_get_slot(const KvpFrame * frame, const gchar * key);
  * path, or NULL if any portion of the path doesn't exist.
  */
 KvpValue   * kvp_frame_get_slot_path (KvpFrame *frame,
-                                       const gchar *first_key, ...);
+                                      const gchar *first_key, ...);
 
 /** This routine return the value at the end of the
  * path, or NULL if any portion of the path doesn't exist.
  */
 KvpValue   * kvp_frame_get_slot_path_gslist (KvpFrame *frame,
-                                              const GSList *key_path);
+        const GSList *key_path);
 
 /**
  * Similar returns as strcmp.
@@ -513,7 +515,7 @@ gint          double_compare(double v1, double v2);
 /** @} */
 /** @name KvpValue List Convenience Functions
 
-  You probably shouldn't be using these low-level routines 
+  You probably shouldn't be using these low-level routines
 
  kvp_glist_compare() compares <b>GLists of kvp_values</b> (not to
  be confused with GLists of something else):  it iterates over
@@ -522,7 +524,7 @@ gint          double_compare(double v1, double v2);
 */
 gint        kvp_glist_compare(const GList * list1, const GList * list2);
 
-/** kvp_glist_copy() performs a deep copy of a <b>GList of 
+/** kvp_glist_copy() performs a deep copy of a <b>GList of
  *     kvp_values</b> (not to be confused with GLists of something
  *     else): same as mapping kvp_value_copy() over the elements and
  *     then copying the spine.
@@ -544,7 +546,7 @@ void        kvp_glist_delete(GList * list);
 
  The following routines are constructors for kvp_value.
  Those with pointer arguments copy in the value.
- The *_nc() versions do *not* copy in thier values, 
+ The *_nc() versions do *not* copy in thier values,
  but use them directly.
  @{
  */
@@ -572,7 +574,7 @@ KvpValue   * kvp_value_new_glist(const GList * value);
 KvpValue   * kvp_value_new_binary_nc(void * data, guint64 datasize);
 
 /** Creates a KvpValue from a <b>GList of kvp_value's</b>! (Not to be
- * confused with GList's of something else!) 
+ * confused with GList's of something else!)
  *
  * This value constructor is non-copying (KvpValue takes pointer
  * ownership). The values *must* have been allocated via glib
@@ -600,7 +602,7 @@ GList * kvp_value_replace_glist_nc(KvpValue *value, GList *newlist);
 
 /** @name KvpValue Value access
 
- You probably shouldn't be using these low-level routines 
+ You probably shouldn't be using these low-level routines
  @{
 */
 
@@ -608,11 +610,11 @@ KvpValueType kvp_value_get_type(const KvpValue * value);
 
 
 /** Value accessors. Those for GUID, binary, GList, KvpFrame and
- *   string are non-copying -- the caller can modify the value 
+ *   string are non-copying -- the caller can modify the value
  *   directly. Just don't free it, or you screw up everything.
  *   Note that if another value is stored at the key location
- *   that this value came from, then this value will be 
- *   uncermoniously deleted, and you will be left pointing to 
+ *   that this value came from, then this value will be
+ *   uncermoniously deleted, and you will be left pointing to
  *   garbage.  So don't store values at the same time you are
  *   examining their contents.
  */
@@ -632,7 +634,7 @@ GUID        * kvp_value_get_guid(const KvpValue * value);
 /** Value accessor. This one is non-copying -- the caller can modify
  * the value directly. */
 void        * kvp_value_get_binary(const KvpValue * value,
-                                   guint64 * size_return); 
+                                   guint64 * size_return);
 
 /** Returns the GList of kvp_frame's (not to be confused with GList's
  * of something else!) from the given kvp_frame.  This one is
@@ -641,7 +643,8 @@ GList       * kvp_value_get_glist(const KvpValue * value);
 
 /** Value accessor. This one is non-copying -- the caller can modify
  * the value directly. */
-/*@ dependent @*/ KvpFrame   * kvp_value_get_frame(const KvpValue * value);
+/*@ dependent @*/
+KvpFrame   * kvp_value_get_frame(const KvpValue * value);
 Timespec    kvp_value_get_timespec(const KvpValue * value);
 
 /**
@@ -664,7 +667,7 @@ itself a debugging and development utility function.
 */
 gchar* kvp_value_to_string(const KvpValue *val);
 
-/** Manipulator: 
+/** Manipulator:
  *
  * copying - but more efficient than creating a new KvpValue manually. */
 gboolean kvp_value_binary_append(KvpValue *v, void *data, guint64 size);

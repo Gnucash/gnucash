@@ -21,7 +21,7 @@
 /** @addtogroup Object
     @{ */
 /** @addtogroup Object_Private
-    Private interfaces, not meant to be used by applications. 
+    Private interfaces, not meant to be used by applications.
     @{ */
 /** @name  Objects_Private
     @{ */
@@ -52,7 +52,7 @@ calling more than once, pass FALSE.
 
 \return TRUE if object can be created and supports iteration, else FALSE.
 */
-gboolean 
+gboolean
 qof_object_compliance (QofIdTypeConst type_name, gboolean warn);
 
 #endif /* QOF_OBJECT_P_H_ */

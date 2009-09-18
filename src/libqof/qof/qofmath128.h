@@ -32,11 +32,12 @@
  * @{
  */
 
-typedef struct {
-  guint64 hi;
-  guint64 lo;
-  short isneg;    /**< sign-bit -- T if number is negative */
-  short isbig;    /**< sizeflag -- T if number won't fit in signed 64-bit */
+typedef struct
+{
+    guint64 hi;
+    guint64 lo;
+    short isneg;    /**< sign-bit -- T if number is negative */
+    short isbig;    /**< sizeflag -- T if number won't fit in signed 64-bit */
 } qofint128;
 
 /** Return true of two numbers are equal */
@@ -57,7 +58,7 @@ inline qofint128 inc128 (qofint128 a);
 /** Add a pair of 128-bit numbers, returning a 128-bit number */
 inline qofint128 add128 (qofint128 a, qofint128 b);
 
-/** Multiply a pair of signed 64-bit numbers, 
+/** Multiply a pair of signed 64-bit numbers,
  *  returning a signed 128-bit number.
  */
 inline qofint128 mult128 (gint64 a, gint64 b);
@@ -67,10 +68,10 @@ inline qofint128 mult128 (gint64 a, gint64 b);
  */
 inline qofint128 div128 (qofint128 n, gint64 d);
 
-/** Return the remainder of a signed 128-bit number modulo 
+/** Return the remainder of a signed 128-bit number modulo
  *  a signed 64-bit.  That is, return n%d in 128-bit math.
- *  I beleive that ths algo is overflow-free, but should be 
- *  audited some more ... 
+ *  I beleive that ths algo is overflow-free, but should be
+ *  audited some more ...
  */
 inline gint64 rem128 (qofint128 n, gint64 d);
 

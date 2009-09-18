@@ -104,10 +104,10 @@
   Similar but used when the enum is NOT a typedef
   Make sure you use the DEFINE_ENUM_NON_TYPEDEF macro.
 
- You can precede the FROM_STRING_FUNC_NON_TYPEDEF 
- and AS_STRING_FUNC_NON_TYPEDEF macros with the 
+ You can precede the FROM_STRING_FUNC_NON_TYPEDEF
+ and AS_STRING_FUNC_NON_TYPEDEF macros with the
  keyword static if appropriate.
-  
+
  ENUM_BODY is used in both types.
  */
 
@@ -146,17 +146,17 @@
 /** @name Convenience wrappers
    @{
 */
-   
-/** \brief Initialise the Query Object Framework 
+
+/** \brief Initialise the Query Object Framework
 
 Use in place of separate init functions (like guid_init()
 and qof_query_init() etc.) to protect against future changes.
 */
 void qof_init (void);
 
-/** \brief Safely close down the Query Object Framework 
+/** \brief Safely close down the Query Object Framework
 
-Use in place of separate close / shutdown functions 
+Use in place of separate close / shutdown functions
 (like guid_shutdown(), qof_query_shutdown() etc.) to protect
 against future changes.
 */
@@ -179,29 +179,29 @@ gint qof_utf8_strcasecmp (const gchar *da, const gchar *db);
 /** The safe_strcmp compares strings da and db the same way that strcmp()
  does, except that either may be null.  This routine assumes that
  a non-null string is always greater than a null string.
- 
+
  @param da string 1.
  @param db string 2.
- 
+
  @return If da == NULL && db != NULL, returns -1.
          If da != NULL && db == NULL, returns +1.
-         If da != NULL && db != NULL, returns the result of 
+         If da != NULL && db != NULL, returns the result of
                    strcmp(da, db).
-         If da == NULL && db == NULL, returns 0. 
+         If da == NULL && db == NULL, returns 0.
 */
 gint safe_strcmp (const gchar * da, const gchar * db);
 
 /** case sensitive comparison of strings da and db - either
 may be NULL. A non-NULL string is greater than a NULL string.
- 
+
  @param da string 1.
  @param db string 2.
- 
+
  @return If da == NULL && db != NULL, returns -1.
          If da != NULL && db == NULL, returns +1.
-         If da != NULL && db != NULL, returns the result of 
+         If da != NULL && db != NULL, returns the result of
                    strcmp(da, db).
-         If da == NULL && db == NULL, returns 0. 
+         If da == NULL && db == NULL, returns 0.
 */
 gint safe_strcasecmp (const gchar * da, const gchar * db);
 
@@ -224,13 +224,13 @@ gboolean gnc_strisnum(const gchar *s);
 #define stpcpy g_stpcpy
 #endif
 
-/** Return NULL if the field is whitespace (blank, tab, formfeed etc.)  
- *  Else return pointer to first non-whitespace character. 
+/** Return NULL if the field is whitespace (blank, tab, formfeed etc.)
+ *  Else return pointer to first non-whitespace character.
  */
 const gchar * qof_util_whitespace_filter (const gchar * val);
 
-/** Return integer 1 if the string starts with 't' or 'T' or 
- *  contains the word 'true' or 'TRUE'; if string is a number, 
+/** Return integer 1 if the string starts with 't' or 'T' or
+ *  contains the word 'true' or 'TRUE'; if string is a number,
  *  return that number. (Leading whitespace is ignored). */
 gint qof_util_bool_to_int (const gchar * val);
 
@@ -311,31 +311,31 @@ gboolean qof_begin_edit(QofInstance *inst);
 /**
  * commit_edit helpers
  *
- * The caller should call PART1 as the first thing, then 
+ * The caller should call PART1 as the first thing, then
  * perform any local operations prior to calling the backend.
- * Then call PART2.  
+ * Then call PART2.
  */
 
 /**
  * part1 -- deal with the editlevel
- * 
+ *
  * @param inst: an instance of QofInstance
  */
 gboolean qof_commit_edit(QofInstance *inst);
 
 /**
  * part2 -- deal with the backend
- * 
+ *
  * @param inst: an instance of QofInstance
  * @param on_error: a function called if there is a backend error.
  *                void (*on_error)(inst, QofBackendError)
- * @param on_done: a function called after the commit is completed 
+ * @param on_done: a function called after the commit is completed
  *                successfully for an object which remained valid.
  *                void (*on_done)(inst)
  * @param on_free: a function called if the commit succeeded and the instance
- *                 is to be freed. 
+ *                 is to be freed.
  *                void (*on_free)(inst)
- * 
+ *
  * Note that only *one* callback will be called (or zero, if that
  * callback is NULL).  In particular, 'on_done' will not be called for
  * an object which is to be freed.
@@ -343,10 +343,10 @@ gboolean qof_commit_edit(QofInstance *inst);
  * Returns TRUE, if the commit succeeded, FALSE otherwise.
  */
 gboolean
-qof_commit_edit_part2(QofInstance *inst, 
-                      void (*on_error)(QofInstance *, QofBackendError), 
-                      void (*on_done)(QofInstance *), 
+qof_commit_edit_part2(QofInstance *inst,
+                      void (*on_error)(QofInstance *, QofBackendError),
+                      void (*on_done)(QofInstance *),
                       void (*on_free)(QofInstance *));
-    
+
 #endif /* QOF_UTIL_H */
 /** @} */

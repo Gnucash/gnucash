@@ -33,84 +33,96 @@ static GHashTable *qof_choice_table = NULL;
 qof_object_register for the choice object. */
 static gboolean qof_choice_is_initialized(void)
 {
-	if(!qof_choice_table)
-	{
-		qof_choice_table = g_hash_table_new(g_str_hash, g_str_equal);
-	}
-	if(!qof_choice_table) { return FALSE; }
-	return TRUE;
+    if (!qof_choice_table)
+    {
+        qof_choice_table = g_hash_table_new(g_str_hash, g_str_equal);
+    }
+    if (!qof_choice_table)
+    {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 gboolean qof_object_is_choice(QofIdTypeConst type)
 {
-	gpointer value, check;
+    gpointer value, check;
 
-	value = NULL;
-	check = NULL;
-	if(!qof_choice_is_initialized()) { return FALSE; }
-	g_return_val_if_fail(type != NULL, FALSE);
-	value = g_hash_table_lookup(qof_choice_table, type);
-	if((GHashTable*)value) { return TRUE; }
-	DEBUG (" QOF_TYPE_CHOICE setup failed for %s\n", type);
-	return FALSE;
+    value = NULL;
+    check = NULL;
+    if (!qof_choice_is_initialized())
+    {
+        return FALSE;
+    }
+    g_return_val_if_fail(type != NULL, FALSE);
+    value = g_hash_table_lookup(qof_choice_table, type);
+    if ((GHashTable*)value)
+    {
+        return TRUE;
+    }
+    DEBUG (" QOF_TYPE_CHOICE setup failed for %s\n", type);
+    return FALSE;
 }
 
 gboolean
 qof_choice_create(char* type)
 {
-	GHashTable *param_table;
+    GHashTable *param_table;
 
-	g_return_val_if_fail(type != NULL, FALSE);
-	g_return_val_if_fail(qof_choice_is_initialized() == TRUE, FALSE);
-	param_table = g_hash_table_new(g_str_hash, g_str_equal);
-	g_hash_table_insert(qof_choice_table, type, param_table);
-	return TRUE;
+    g_return_val_if_fail(type != NULL, FALSE);
+    g_return_val_if_fail(qof_choice_is_initialized() == TRUE, FALSE);
+    param_table = g_hash_table_new(g_str_hash, g_str_equal);
+    g_hash_table_insert(qof_choice_table, type, param_table);
+    return TRUE;
 }
 
 gboolean qof_choice_add_class(const char* select,
-			      char* option,
-			      char* param_name)
+                              char* option,
+                              char* param_name)
 {
-	GHashTable *param_table;
-	GList *option_list;
+    GHashTable *param_table;
+    GList *option_list;
 
-	option_list = NULL;
-	param_table = NULL;
-	g_return_val_if_fail(select != NULL, FALSE);
-	g_return_val_if_fail(qof_object_is_choice(select), FALSE);
-	param_table = (GHashTable*)g_hash_table_lookup(qof_choice_table, select);
-	g_return_val_if_fail(param_table, FALSE);
-	option_list = (GList*)g_hash_table_lookup(param_table, param_name);
-	option_list = g_list_append(option_list, option);
-	g_hash_table_insert(param_table, param_name, option_list);
-	return TRUE;
+    option_list = NULL;
+    param_table = NULL;
+    g_return_val_if_fail(select != NULL, FALSE);
+    g_return_val_if_fail(qof_object_is_choice(select), FALSE);
+    param_table = (GHashTable*)g_hash_table_lookup(qof_choice_table, select);
+    g_return_val_if_fail(param_table, FALSE);
+    option_list = (GList*)g_hash_table_lookup(param_table, param_name);
+    option_list = g_list_append(option_list, option);
+    g_hash_table_insert(param_table, param_name, option_list);
+    return TRUE;
 }
 
 GList* qof_object_get_choices(QofIdType type, QofParam *param)
 {
-	GList *choices;
-	GHashTable *param_table;
+    GList *choices;
+    GHashTable *param_table;
 
-	g_return_val_if_fail(type != NULL, NULL);
-	g_return_val_if_fail(qof_choice_is_initialized() == TRUE, FALSE);
-	choices = NULL;
-	param_table = g_hash_table_lookup(qof_choice_table, type);
-	choices = g_hash_table_lookup(param_table, param->param_name);
-	return choices;
+    g_return_val_if_fail(type != NULL, NULL);
+    g_return_val_if_fail(qof_choice_is_initialized() == TRUE, FALSE);
+    choices = NULL;
+    param_table = g_hash_table_lookup(qof_choice_table, type);
+    choices = g_hash_table_lookup(param_table, param->param_name);
+    return choices;
 }
 
 gboolean qof_choice_check(const char* choice_obj,
-			  const char *param_name,
-			  const char* choice )
+                          const char *param_name,
+                          const char* choice )
 {
-	GList *choices, *result;
-	GHashTable *param_table;
+    GList *choices, *result;
+    GHashTable *param_table;
 
-	choices = result = NULL;
-	g_return_val_if_fail(qof_object_is_choice(choice_obj), FALSE);
-	param_table = g_hash_table_lookup(qof_choice_table, choice_obj);
-	choices = g_hash_table_lookup(param_table, param_name);
-	result = g_list_find(choices, choice);
-	if(!result) { return FALSE; }
-	return TRUE;
+    choices = result = NULL;
+    g_return_val_if_fail(qof_object_is_choice(choice_obj), FALSE);
+    param_table = g_hash_table_lookup(qof_choice_table, choice_obj);
+    choices = g_hash_table_lookup(param_table, param_name);
+    result = g_list_find(choices, choice);
+    if (!result)
+    {
+        return FALSE;
+    }
+    return TRUE;
 }

@@ -28,7 +28,7 @@
  * @ingroup QOF
  * @brief Logging and tracing facility.
  * @sa "Logging overhaul" announcement <http://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019836.html>
- * 
+ *
  * qof_log_init(void) installs a handler that interprets the "log_domain"
  * as a "."-separated path.  Log level thresholds can be set for each level
  * in the tree.  When a message is logged, the longest level match is
@@ -59,7 +59,7 @@
  * The timestamp and level are constant width (level is 5 characters).  The
  * log domain is re-iterated, which gives some context, but could become
  * annoying if they get long.
- * 
+ *
  * Trailing newlines (e.g. <tt>PINFO("...\n", ...)</tt>) are removed; the logger
  * will newline separate output.
  *
@@ -136,7 +136,7 @@ void qof_log_init_filename_special(const char *log_to_filename);
 /**
  * Parse a log-configuration file.  A GKeyFile-format file of the schema:
  * @verbatim
-    [levels] 
+    [levels]
     # log.ger.path=level
     gnc.engine.sx=debug
     gnc.gui.sx=debug
@@ -231,8 +231,8 @@ void qof_log_set_default(QofLogLevel log_level);
 
 /* -------------------------------------------------------- */
 
-/** Infrastructure to make timing measurements for critical pieces 
- * of code. Used for only for performance tuning & debugging. 
+/** Infrastructure to make timing measurements for critical pieces
+ * of code. Used for only for performance tuning & debugging.
  */
 
 void qof_start_clock (gint clockno, QofLogModule log_module, QofLogLevel log_level,

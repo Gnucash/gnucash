@@ -24,46 +24,46 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /** @addtogroup Date
-    Utility functions to handle date and time (adjusting, getting 
-    the current date, printing the date and time, etc.) 
+    Utility functions to handle date and time (adjusting, getting
+    the current date, printing the date and time, etc.)
 
-    Overall, this file is quite a mess.  Note, however, that other 
+    Overall, this file is quite a mess.  Note, however, that other
     applications, besides just GnuCash, use this file.  In particular,
-    GnoTime (gttr.sourcefore.net) uses this file, and this file is 
+    GnoTime (gttr.sourcefore.net) uses this file, and this file is
     formally a part of QOF (qof.sourceforge.net).
 
-    An important note about time-keeping:  The general goal of any 
+    An important note about time-keeping:  The general goal of any
     program that works with numeric time values SHOULD BE to always
     stores and use UNIVERSAL TIME internally.  Universal time is the
     'one true time' that is independent of one's location on planet
     Earth.  It is measured in seconds from midnight January 1, 1970
     in localtime-Grenwich (GMT).  If one wants to display the local
-    time, then the display-print routine should make all final 
+    time, then the display-print routine should make all final
     tweaks to print the local time.   The local time *must not* be
     kept as a numeric value anywhere in the program.   If one wants
     to parse a user's input string as if it were local time, then
-    the output of the parse routine MUST BE universal time.  
-    A sane program must never ever store (to file or db) a time 
-    that is not Universal Time.  Break these rules, and you will 
+    the output of the parse routine MUST BE universal time.
+    A sane program must never ever store (to file or db) a time
+    that is not Universal Time.  Break these rules, and you will
     rue the day...
 
     \warning HACK ALERT -- the scan and print routines should probably be moved
     to somewhere else. The engine really isn't involved with things
     like printing formats. This is needed mostly by the GUI and so on.
     If a file-io backend needs date handling, it should do it itself,
-    instead of depending on the routines here. 
+    instead of depending on the routines here.
 
 	(to be renamed qofdate.h in libqof2.)
 
-    @author Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu> 
+    @author Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>
     @author Copyright (C) 1998-2001,2003 Linas Vepstas <linas@linas.org>
 */
 
-/** @{ 
-    @file gnc-date.h 
-    @brief Date and Time handling routines  
+/** @{
+    @file gnc-date.h
+    @brief Date and Time handling routines
 */
-    
+
 #ifndef GNC_DATE_H
 #define GNC_DATE_H
 
@@ -81,8 +81,8 @@ extern const char *gnc_default_strftime_date_format;
 Timezone independent, date and time inclusive, as used in the QSF backend.
 The T and Z characters are from xsd:dateTime format in coordinated universal time, UTC.
 You can reproduce the string from the GNU/Linux command line using the date utility:
-date -u +%Y-%m-%dT%H:M:SZ = 2004-12-12T23:39:11Z The datestring must be timezone independent 
-and include all specified fields. Remember to use gmtime() NOT localtime()! 
+date -u +%Y-%m-%dT%H:M:SZ = 2004-12-12T23:39:11Z The datestring must be timezone independent
+and include all specified fields. Remember to use gmtime() NOT localtime()!
 */
 
 #define QOF_UTC_DATE_FORMAT     "%Y-%m-%dT%H:%M:%SZ"
@@ -90,13 +90,13 @@ and include all specified fields. Remember to use gmtime() NOT localtime()!
 /** Enum for determining a date format */
 typedef enum
 {
-  QOF_DATE_FORMAT_US,       /**< United states: mm/dd/yyyy */
-  QOF_DATE_FORMAT_UK,       /**< Britain: dd/mm/yyyy */
-  QOF_DATE_FORMAT_CE,       /**< Continental Europe: dd.mm.yyyy */
-  QOF_DATE_FORMAT_ISO,      /**< ISO: yyyy-mm-dd */
-  QOF_DATE_FORMAT_UTC,      /**< UTC: 2004-12-12T23:39:11Z */
-  QOF_DATE_FORMAT_LOCALE,   /**< Take from locale information */
-  QOF_DATE_FORMAT_CUSTOM    /**< Used by the check printing code */
+    QOF_DATE_FORMAT_US,       /**< United states: mm/dd/yyyy */
+    QOF_DATE_FORMAT_UK,       /**< Britain: dd/mm/yyyy */
+    QOF_DATE_FORMAT_CE,       /**< Continental Europe: dd.mm.yyyy */
+    QOF_DATE_FORMAT_ISO,      /**< ISO: yyyy-mm-dd */
+    QOF_DATE_FORMAT_UTC,      /**< UTC: 2004-12-12T23:39:11Z */
+    QOF_DATE_FORMAT_LOCALE,   /**< Take from locale information */
+    QOF_DATE_FORMAT_CUSTOM    /**< Used by the check printing code */
 } QofDateFormat;
 
 #define DATE_FORMAT_FIRST QOF_DATE_FORMAT_US
@@ -110,15 +110,16 @@ by qof_date_text_format_get_string */
  * This is how to format the month, as a number, an abbreviated string,
  * or the full name.
  */
-typedef enum {
-  GNCDATE_MONTH_NUMBER,
-  GNCDATE_MONTH_ABBREV,
-  GNCDATE_MONTH_NAME
+typedef enum
+{
+    GNCDATE_MONTH_NUMBER,
+    GNCDATE_MONTH_ABBREV,
+    GNCDATE_MONTH_NAME
 } GNCDateMonthFormat;
 
 
 /** \name String / DateFormat conversion. */
-//@{ 
+//@{
 
 /** \brief The string->value versions return FALSE on success and TRUE on failure */
 const gchar* gnc_date_dateformat_to_string(QofDateFormat format);
@@ -129,7 +130,7 @@ Note the reversed return values!
 @return FALSE on success, TRUE on failure.
 */
 gboolean gnc_date_string_to_dateformat(const gchar* format_string,
-				       QofDateFormat *format);
+                                       QofDateFormat *format);
 
 const gchar* gnc_date_monthformat_to_string(GNCDateMonthFormat format);
 
@@ -139,14 +140,14 @@ Note the reversed return values!
 @return FALSE on success, TRUE on failure.
 */
 gboolean gnc_date_string_to_monthformat(const gchar *format_string,
-					GNCDateMonthFormat *format);
+                                        GNCDateMonthFormat *format);
 // @}
 
 /* Datatypes *******************************************************/
 
 /** \brief Use a 64-bit unsigned int timespec
  *
- * struct timespec64 is just like the unix 'struct timespec' except 
+ * struct timespec64 is just like the unix 'struct timespec' except
  * that we use a 64-bit
  * unsigned int to store the seconds.  This should adequately cover
  * dates in the distant future as well as the distant past, as long as
@@ -158,12 +159,12 @@ gboolean gnc_date_string_to_monthformat(const gchar *format_string,
 #ifndef SWIG   /* swig 1.1p5 can't hack the long long type */
 struct timespec64
 {
-   gint64 tv_sec;     
-   glong tv_nsec;
+    gint64 tv_sec;
+    glong tv_nsec;
 };
 #endif /* SWIG */
 
-/** The Timespec is just like the unix 'struct timespec' 
+/** The Timespec is just like the unix 'struct timespec'
  * except that we use a 64-bit unsigned int to
  * store the seconds.  This should adequately cover dates in the
  * distant future as well as the distant past, as long as they're not
@@ -177,7 +178,7 @@ typedef struct timespec64 Timespec;
 /* Prototypes ******************************************************/
 
 /** \name Timespec functions */
-// @{ 
+// @{
 /** strict equality */
 gboolean timespec_equal(const Timespec *ta, const Timespec *tb);
 
@@ -208,16 +209,16 @@ Timespec gnc_dmy2timespec (gint day, gint month, gint year);
 /** Same as gnc_dmy2timespec, but last second of the day */
 Timespec gnc_dmy2timespec_end (gint day, gint month, gint year);
 
-/** The gnc_iso8601_to_timespec_gmt() routine converts an ISO-8601 style 
+/** The gnc_iso8601_to_timespec_gmt() routine converts an ISO-8601 style
  *    date/time string to Timespec.  Please note that ISO-8601 strings
  *    are a representation of Universal Time (UTC), and as such, they
- *    'store' UTC.  To make them human readable, they show timezone 
+ *    'store' UTC.  To make them human readable, they show timezone
  *    information along with a local-time string.  But fundamentally,
- *    they *are* UTC.  Thus, thir routine takes a UTC input, and 
+ *    they *are* UTC.  Thus, thir routine takes a UTC input, and
  *    returns a UTC output.
  *
- *    For example: 1998-07-17 11:00:00.68-0500 
- *    is 680 milliseconds after 11 o'clock, central daylight time 
+ *    For example: 1998-07-17 11:00:00.68-0500
+ *    is 680 milliseconds after 11 o'clock, central daylight time
  *    It is also 680 millisecs after 16:00:00 hours UTC.
  *    \return The universl time.
  *
@@ -226,16 +227,16 @@ Timespec gnc_dmy2timespec_end (gint day, gint month, gint year);
  */
 Timespec gnc_iso8601_to_timespec_gmt(const gchar *);
 
-/** The gnc_timespec_to_iso8601_buff() routine takes the input 
- *    UTC Timespec value and prints it as an ISO-8601 style string.  
- *    The buffer must be long enough to contain the NULL-terminated 
- *    string (32 characters + NUL).  This routine returns a pointer 
- *    to the null terminator (and can thus be used in the 'stpcpy' 
+/** The gnc_timespec_to_iso8601_buff() routine takes the input
+ *    UTC Timespec value and prints it as an ISO-8601 style string.
+ *    The buffer must be long enough to contain the NULL-terminated
+ *    string (32 characters + NUL).  This routine returns a pointer
+ *    to the null terminator (and can thus be used in the 'stpcpy'
  *    metaphor of string concatenation).
  *
- *    Please note that ISO-8601 strings are a representation of 
- *    Universal Time (UTC), and as such, they 'store' UTC.  To make them 
- *    human readable, they show timezone information along with a 
+ *    Please note that ISO-8601 strings are a representation of
+ *    Universal Time (UTC), and as such, they 'store' UTC.  To make them
+ *    human readable, they show timezone information along with a
  *    local-time string.  But fundamentally, they *are* UTC.  Thus,
  *    this routine takes a UTC input, and returns a UTC output.
  *
@@ -249,11 +250,11 @@ gchar * gnc_timespec_to_iso8601_buff (Timespec ts, gchar * buff);
 void gnc_timespec2dmy (Timespec ts, gint *day, gint *month, gint *year);
 
 /** \warning hack alert XXX FIXME -- these date routines return incorrect
- * values for dates before 1970.  Most of them are good only up 
- * till 2038.  This needs fixing ... 
+ * values for dates before 1970.  Most of them are good only up
+ * till 2038.  This needs fixing ...
  *
- * XXX  This routine should be modified to assume that the 
- * the user wanted the time at noon, localtime.  The returned 
+ * XXX  This routine should be modified to assume that the
+ * the user wanted the time at noon, localtime.  The returned
  * time_t should be seconds (at GMT) of the local noon-time.
 */
 time_t xaccDMYToSec (gint day, gint month, gint year);
@@ -277,13 +278,13 @@ glong gnc_timezone (const struct tm *tm);
 /** \name QofDateFormat functions */
 // @{
 /** The qof_date_format_get routine returns the date format that
- *  the date printing will use when printing a date, and the scaning 
+ *  the date printing will use when printing a date, and the scaning
  *  routines will assume when parsing a date.
  * @returns: the one of the enumerated date formats.
  */
 QofDateFormat qof_date_format_get(void);
 
-/** 
+/**
  * The qof_date_format_set() routine sets date format to one of
  *    US, UK, CE, OR ISO.  Checks to make sure it's a legal value.
  *    Args: QofDateFormat: enumeration indicating preferred format
@@ -322,7 +323,7 @@ const gchar *qof_date_text_format_get_string(QofDateFormat df);
  */
 gchar dateSeparator(void);
 
-/** \name Date Printing/Scanning functions 
+/** \name Date Printing/Scanning functions
  */
 // @{
 /**
@@ -385,12 +386,12 @@ size_t qof_print_date_buff (char * buff, size_t buflen, time_t secs);
 /** Convenience; calls through to qof_print_date_dmy_buff(). **/
 size_t qof_print_gdate(char *buf, size_t bufflen, const GDate *gd);
 
-/** Convenience; calls through to qof_print_date_dmy_buff(). 
+/** Convenience; calls through to qof_print_date_dmy_buff().
  *  Return: string, which should be freed when no longer needed.
  * **/
 char * qof_print_date (time_t secs);
 
-/** Convenience; calls through to qof_print_date_dmy_buff(). 
+/** Convenience; calls through to qof_print_date_dmy_buff().
  *  Return: static global string.
  *  \warning This routine is not thread-safe, because it uses a single
  *      global buffer to store the return value.  Use qof_print_date_buff()
@@ -416,7 +417,7 @@ size_t qof_print_date_time_buff (char * buff, size_t len, time_t secs);
  *  @return A pointer to the generated string.
  *  @note The caller owns this buffer and must free it when done. */
 char * xaccDateUtilGetStamp (time_t thyme);
- 
+
 /** qof_scan_date
  *    Convert a string into  day / month / year integers according to
  *    the current dateFormat value.
@@ -448,11 +449,11 @@ gboolean qof_scan_date_secs (const char *buff, time_t *secs);
 static inline
 void gnc_tm_set_day_start (struct tm *tm)
 {
-  /* First second of the day */
-  tm->tm_hour = 0;
-  tm->tm_min = 0;
-  tm->tm_sec = 0;
-  tm->tm_isdst = -1;
+    /* First second of the day */
+    tm->tm_hour = 0;
+    tm->tm_min = 0;
+    tm->tm_sec = 0;
+    tm->tm_isdst = -1;
 }
 
 /** The gnc_tm_set_day_start() inline routine will set the appropriate
@@ -462,11 +463,11 @@ void gnc_tm_set_day_start (struct tm *tm)
 static inline
 void gnc_tm_set_day_middle (struct tm *tm)
 {
-  /* First second of the day */
-  tm->tm_hour = 12;
-  tm->tm_min = 0;
-  tm->tm_sec = 0;
-  tm->tm_isdst = -1;
+    /* First second of the day */
+    tm->tm_hour = 12;
+    tm->tm_min = 0;
+    tm->tm_sec = 0;
+    tm->tm_isdst = -1;
 }
 
 /** The gnc_tm_set_day_start() inline routine will set the appropriate
@@ -476,11 +477,11 @@ void gnc_tm_set_day_middle (struct tm *tm)
 static inline
 void gnc_tm_set_day_end (struct tm *tm)
 {
-  /* Last second of the day */
-  tm->tm_hour = 23;
-  tm->tm_min = 59;
-  tm->tm_sec = 59;
-  tm->tm_isdst = -1;
+    /* Last second of the day */
+    tm->tm_hour = 23;
+    tm->tm_min = 59;
+    tm->tm_sec = 59;
+    tm->tm_isdst = -1;
 }
 
 /** The gnc_tm_get_day_start() routine will convert the given time in

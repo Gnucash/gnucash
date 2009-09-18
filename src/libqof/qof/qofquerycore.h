@@ -47,22 +47,24 @@ typedef struct _QofQueryPredData QofQueryPredData;
 /** Standard Query comparitors, for how to compare objects in a predicate.
  *  Note that not all core types implement all comparitors
  */
-typedef enum {
-  QOF_COMPARE_LT = 1,
-  QOF_COMPARE_LTE,
-  QOF_COMPARE_EQUAL,
-  QOF_COMPARE_GT,
-  QOF_COMPARE_GTE,
-  QOF_COMPARE_NEQ
+typedef enum
+{
+    QOF_COMPARE_LT = 1,
+    QOF_COMPARE_LTE,
+    QOF_COMPARE_EQUAL,
+    QOF_COMPARE_GT,
+    QOF_COMPARE_GTE,
+    QOF_COMPARE_NEQ
 } QofQueryCompare;
 
 /** List of known core query data-types...
  *  Each core query type defines it's set of optional "comparitor qualifiers".
  */
 /* Comparisons for QOF_TYPE_STRING */
-typedef enum {
-  QOF_STRING_MATCH_NORMAL = 1,
-  QOF_STRING_MATCH_CASEINSENSITIVE
+typedef enum
+{
+    QOF_STRING_MATCH_NORMAL = 1,
+    QOF_STRING_MATCH_CASEINSENSITIVE
 } QofStringMatch;
 
 /** Comparisons for QOF_TYPE_DATE
@@ -72,9 +74,10 @@ typedef enum {
  *     down to the second.
  */
 
-typedef enum {
-  QOF_DATE_MATCH_NORMAL = 1,
-  QOF_DATE_MATCH_DAY
+typedef enum
+{
+    QOF_DATE_MATCH_NORMAL = 1,
+    QOF_DATE_MATCH_DAY
 } QofDateMatch;
 
 /** Comparisons for QOF_TYPE_NUMERIC, QOF_TYPE_DEBCRED
@@ -89,25 +92,27 @@ typedef enum {
  * debit' predicate is equivalent to (amount <= 0) && (abs(amount) 'op' value)
 */
 
-typedef enum {
-  QOF_NUMERIC_MATCH_DEBIT = 1,
-  QOF_NUMERIC_MATCH_CREDIT,
-  QOF_NUMERIC_MATCH_ANY
+typedef enum
+{
+    QOF_NUMERIC_MATCH_DEBIT = 1,
+    QOF_NUMERIC_MATCH_CREDIT,
+    QOF_NUMERIC_MATCH_ANY
 } QofNumericMatch;
 
 /* Comparisons for QOF_TYPE_GUID */
-typedef enum {
-  /** These expect a single object and expect the
-   * QofAccessFunc returns GUID* */
-  QOF_GUID_MATCH_ANY = 1,
-  QOF_GUID_MATCH_NONE,
-  QOF_GUID_MATCH_NULL,
-  /** These expect a GList* of objects and calls the QofAccessFunc routine
-   * on each item in the list to obtain a GUID* for each object */
-  QOF_GUID_MATCH_ALL,
-  /** These expect a single object and expect the QofAccessFunc function
-   * to return a GList* of GUID* (the list is the property of the caller) */
-  QOF_GUID_MATCH_LIST_ANY,
+typedef enum
+{
+    /** These expect a single object and expect the
+     * QofAccessFunc returns GUID* */
+    QOF_GUID_MATCH_ANY = 1,
+    QOF_GUID_MATCH_NONE,
+    QOF_GUID_MATCH_NULL,
+    /** These expect a GList* of objects and calls the QofAccessFunc routine
+     * on each item in the list to obtain a GUID* for each object */
+    QOF_GUID_MATCH_ALL,
+    /** These expect a single object and expect the QofAccessFunc function
+     * to return a GList* of GUID* (the list is the property of the caller) */
+    QOF_GUID_MATCH_LIST_ANY,
 } QofGuidMatch;
 
 /** A CHAR type is for a RECNCell, Comparisons for QOF_TYPE_CHAR
@@ -118,9 +123,10 @@ typedef enum {
  * Match 'NONE' is equivalent to
  * (value != char1) && (value != char2) && etc.
  */
-typedef enum {
-  QOF_CHAR_MATCH_ANY = 1,
-  QOF_CHAR_MATCH_NONE
+typedef enum
+{
+    QOF_CHAR_MATCH_ANY = 1,
+    QOF_CHAR_MATCH_NONE
 } QofCharMatch;
 
 /** No extended comparisons for QOF_TYPE_INT32, QOF_TYPE_INT64,
@@ -128,26 +134,27 @@ typedef enum {
  */
 
 /** Head of Predicate Data structures.  All PData must start like this. */
-struct _QofQueryPredData {
-  QofType               type_name;  /* QOF_TYPE_* */
-  QofQueryCompare       how;
+struct _QofQueryPredData
+{
+    QofType               type_name;  /* QOF_TYPE_* */
+    QofQueryCompare       how;
 };
 
 
 /** @name Core Data Type Predicates
     @{ */
 QofQueryPredData *qof_query_string_predicate (QofQueryCompare how,
-                                              const gchar *str,
-                                              QofStringMatch options,
-                                              gboolean is_regex);
+        const gchar *str,
+        QofStringMatch options,
+        gboolean is_regex);
 
 QofQueryPredData *qof_query_date_predicate (QofQueryCompare how,
-                                            QofDateMatch options,
-                                            Timespec date);
+        QofDateMatch options,
+        Timespec date);
 
 QofQueryPredData *qof_query_numeric_predicate (QofQueryCompare how,
-                                               QofNumericMatch options,
-                                               gnc_numeric value);
+        QofNumericMatch options,
+        gnc_numeric value);
 
 QofQueryPredData *qof_query_guid_predicate (QofGuidMatch options, GList *guids);
 QofQueryPredData *qof_query_int32_predicate (QofQueryCompare how, gint32 val);
@@ -155,9 +162,9 @@ QofQueryPredData *qof_query_int64_predicate (QofQueryCompare how, gint64 val);
 QofQueryPredData *qof_query_double_predicate (QofQueryCompare how, double val);
 QofQueryPredData *qof_query_boolean_predicate (QofQueryCompare how, gboolean val);
 QofQueryPredData *qof_query_char_predicate (QofCharMatch options,
-                                            const gchar *chars);
+        const gchar *chars);
 QofQueryPredData *qof_query_collect_predicate (QofGuidMatch options,
-                                            QofCollection *coll);
+        QofCollection *coll);
 QofQueryPredData *qof_query_choice_predicate  (QofGuidMatch options, GList *guids);
 
 /** The qof_query_kvp_predicate() matches the object that has
@@ -165,14 +172,14 @@ QofQueryPredData *qof_query_choice_predicate  (QofGuidMatch options, GList *guid
  *  sense, the 'path' is handled as if it were a paramter.
  */
 QofQueryPredData *qof_query_kvp_predicate (QofQueryCompare how,
-                                           GSList *path,
-                                           const KvpValue *value);
+        GSList *path,
+        const KvpValue *value);
 
 /** Same predicate as above, except that 'path' is assumed to be
  * a string containing slash-separated pathname. */
 QofQueryPredData *qof_query_kvp_predicate_path (QofQueryCompare how,
-                                                const gchar *path,
-                                                const KvpValue *value);
+        const gchar *path,
+        const KvpValue *value);
 
 /** Copy a predicate. */
 QofQueryPredData *qof_query_core_predicate_copy (const QofQueryPredData *pdata);

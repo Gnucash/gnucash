@@ -37,8 +37,8 @@
 
 /** @addtogroup SQL SQL Interface to Query
 
-The types of SQL queries that are allowed at this point are very 
-limited.  In general, only the following types of queries are 
+The types of SQL queries that are allowed at this point are very
+limited.  In general, only the following types of queries are
 supported:
   SELECT * FROM SomeObj WHERE (param_a < 10.0) AND (param_b = "asdf")
          SORT BY param_c DESC;
@@ -47,9 +47,9 @@ supported:
 
 For SELECT, the returned list is a list of all of the instances of 'SomeObj' that
 match the query.  The 'SORT' term is optional. The 'WHERE' term is
-optional; but if you don't include 'WHERE', you will get a list of 
+optional; but if you don't include 'WHERE', you will get a list of
 all of the object instances.  The Boolean operations 'AND' and 'OR'
-together with parenthesis can be used to construct arbitrarily 
+together with parenthesis can be used to construct arbitrarily
 nested predicates.
 
 For INSERT, the returned list is a list containing the newly created instance
@@ -85,8 +85,8 @@ user input into UTC time using the ::QOF_UTC_DATE_FORMAT string.
 e.g. set the UTC date format and call ::qof_print_time_buff
 with a time_t obtained via ::timespecToTime_t.
 
-If the param is a KVP frame, then we use a special markup to 
-indicate frame values.  The markup should look like 
+If the param is a KVP frame, then we use a special markup to
+indicate frame values.  The markup should look like
 /some/kvp/path:value. Thus, for example,
   SELECT * FROM SomeObj WHERE (param_a < '/some/kvp:10.0')
 will search for the object where param_a is a KVP frame, and this
@@ -108,8 +108,8 @@ SELECT d,f,k FROM ObjB; qof_object_new_instance(); ObjC_set_a(value_c);
 ObjC_set_b(value_k) etc. What's needed is for the SELECT to return
 a complete object that only contains the parameters selected.
 
- Also unsupported:  UPDATE. 
- 
+ Also unsupported:  UPDATE.
+
 Certain SQL commands can have no QOF equivalent and will
 generate a runtime parser error:
  - ALTER
@@ -141,7 +141,7 @@ void qof_sql_query_set_book (QofSqlQuery *q, QofBook *book);
 
  *  The book must be set in order to be able to perform a query.
  *
- *  The returned list will have been sorted using the indicated sort 
+ *  The returned list will have been sorted using the indicated sort
  *  order, (by default ascending order) and trimmed to the
  *  max_results length.
  *  Do NOT free the resulting list.  This list is managed internally
@@ -161,7 +161,7 @@ void qof_sql_query_parse (QofSqlQuery *query, const gchar * str);
 /** Return the QofQuery form of the previously parsed query. */
 QofQuery * qof_sql_query_get_query (QofSqlQuery *);
 
-/** Run the previously parsed query.  The QofBook must be set 
+/** Run the previously parsed query.  The QofBook must be set
  *  before this function can be called.  Note, teh QofBook can
  *  be changed between each successive call to this routine.
  *  This routine can be called after either qof_sql_query_parse()
@@ -169,29 +169,29 @@ QofQuery * qof_sql_query_get_query (QofSqlQuery *);
  */
 GList * qof_sql_query_rerun (QofSqlQuery *query);
 
-/** 
+/**
  * Set the kvp frame to be used for formulating 'indirect' predicates.
  *
  * Although joins are not supported (see above), there is one special
  * hack that one can use to pass data indirectly into the predicates.
  * This is by using a KVP key name to reference the value to be used
- * for a predicate.  Thus, for example, 
+ * for a predicate.  Thus, for example,
  *   SELECT * FROM SomeObj WHERE (param_a = KVP:/some/key/path);
  * will look up the value stored at '/some/key/path', and use that
- * value to form the actual predicate.   So, for example, if 
- * the value stored at '/some/key/path' was 2, then the actual 
- * query run will be 
+ * value to form the actual predicate.   So, for example, if
+ * the value stored at '/some/key/path' was 2, then the actual
+ * query run will be
  *   SELECT * FROM SomeObj WHERE (param_a = 2);
  * The lookup occurs at the time that the query is formulated.
  *
  * The query does *not* take over ownership of the kvp frame,
  * nor does it copy it. Thus, the kvp frame must exist when the
- * query is formulated, and it is the responsibility of the 
+ * query is formulated, and it is the responsibility of the
  * caller to free it when no longer needed.
  *
  * Note that because this feature is a kind of a hack put in place
  * due to the lack of support for joins, it will probably go away
- * (be deprecated) if/when joins are implemented. 
+ * (be deprecated) if/when joins are implemented.
  */
 void qof_sql_query_set_kvp (QofSqlQuery *, KvpFrame *);
 
