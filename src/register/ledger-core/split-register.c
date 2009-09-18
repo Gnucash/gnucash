@@ -2180,13 +2180,19 @@ gnc_split_register_config_action (SplitRegister *reg)
   {
     case BANK_REGISTER:
       /* broken ! FIXME bg */
-    case SEARCH_LEDGER:  
+    case SEARCH_LEDGER:
       gnc_combo_cell_add_menu_item (cell, _("Deposit"));
       gnc_combo_cell_add_menu_item (cell, _("Withdraw"));
       gnc_combo_cell_add_menu_item (cell, _("Check"));
       gnc_combo_cell_add_menu_item (cell, _("Int"));
-      gnc_combo_cell_add_menu_item (cell, _("ATM"));
+      gnc_combo_cell_add_menu_item (cell, _("ATM Deposit"));
+      gnc_combo_cell_add_menu_item (cell, _("ATM Draw"));
       gnc_combo_cell_add_menu_item (cell, _("Teller"));
+      gnc_combo_cell_add_menu_item (cell, _("Charge"));
+      gnc_combo_cell_add_menu_item (cell, _("Payment"));
+      gnc_combo_cell_add_menu_item (cell, _("Receipt"));
+      gnc_combo_cell_add_menu_item (cell, _("Increase"));
+      gnc_combo_cell_add_menu_item (cell, _("Decrease"));
       /* Action: Point Of Sale */
       gnc_combo_cell_add_menu_item (cell, _("POS"));
       gnc_combo_cell_add_menu_item (cell, _("Phone"));
@@ -2199,6 +2205,8 @@ gnc_split_register_config_action (SplitRegister *reg)
       gnc_combo_cell_add_menu_item (cell, _("Transfer"));
       break;
     case CASH_REGISTER:
+      gnc_combo_cell_add_menu_item (cell, _("Increase"));
+      gnc_combo_cell_add_menu_item (cell, _("Decrease"));
       gnc_combo_cell_add_menu_item (cell, _("Buy"));
       gnc_combo_cell_add_menu_item (cell, _("Sell"));
       break;
@@ -2208,7 +2216,8 @@ gnc_split_register_config_action (SplitRegister *reg)
       gnc_combo_cell_add_menu_item (cell, _("Fee"));
       break;
     case CREDIT_REGISTER:
-      gnc_combo_cell_add_menu_item (cell, _("ATM"));
+      gnc_combo_cell_add_menu_item (cell, _("ATM Deposit"));
+      gnc_combo_cell_add_menu_item (cell, _("ATM Draw"));
       gnc_combo_cell_add_menu_item (cell, _("Buy"));
       gnc_combo_cell_add_menu_item (cell, _("Credit"));
       gnc_combo_cell_add_menu_item (cell, _("Fee"));
@@ -2232,13 +2241,18 @@ gnc_split_register_config_action (SplitRegister *reg)
       break;
     case INCOME_LEDGER:
     case INCOME_REGISTER:
+      gnc_combo_cell_add_menu_item (cell, _("Increase"));
+      gnc_combo_cell_add_menu_item (cell, _("Decrease"));
       gnc_combo_cell_add_menu_item (cell, _("Buy"));
       gnc_combo_cell_add_menu_item (cell, _("Sell"));
       gnc_combo_cell_add_menu_item (cell, _("Int"));
       gnc_combo_cell_add_menu_item (cell, _("Payment"));
       gnc_combo_cell_add_menu_item (cell, _("Rebate"));
+      gnc_combo_cell_add_menu_item (cell, _("Paycheck"));
       break;
     case EXPENSE_REGISTER:
+      gnc_combo_cell_add_menu_item (cell, _("Increase"));
+      gnc_combo_cell_add_menu_item (cell, _("Decrease"));
       gnc_combo_cell_add_menu_item (cell, _("Buy"));
       gnc_combo_cell_add_menu_item (cell, _("Sell"));
       break;
@@ -2264,11 +2278,13 @@ gnc_split_register_config_action (SplitRegister *reg)
       gnc_combo_cell_add_menu_item (cell, _("STCG"));
       gnc_combo_cell_add_menu_item (cell, _("Income"));
       /* Action: Distribution */
-      gnc_combo_cell_add_menu_item (cell, _("Dist")); 
+      gnc_combo_cell_add_menu_item (cell, _("Dist"));
       gnc_combo_cell_add_menu_item (cell, _("Split"));
       break;
 
     default:
+      gnc_combo_cell_add_menu_item (cell, _("Increase"));
+      gnc_combo_cell_add_menu_item (cell, _("Decrease"));
       gnc_combo_cell_add_menu_item (cell, _("Buy"));
       gnc_combo_cell_add_menu_item (cell, _("Sell"));
       break;
