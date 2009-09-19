@@ -1,5 +1,5 @@
 # translation of lt.po to lithuanian
-# Translation of gnucash messages to Russian.
+# Translation of gnucash messages to Lithuanian.
 # Copyright (C) 2009 Free Software Foundation, Inc.
 #
 # Tadas Masiulionis <tadzikaz@gmail.com>, 2009.
@@ -24,7 +24,7 @@ msgstr "Klaidingas kintamasis reikšmėje"
 
 #: ../src/app-utils/gnc-exp-parser.c:643
 msgid "Unbalanced parenthesis"
-msgstr ""
+msgstr "Nesubalansuotas tarpas"
 
 #: ../src/app-utils/gnc-exp-parser.c:645
 msgid "Stack overflow"
@@ -96,7 +96,7 @@ msgstr "Atidaromas balansas"
 #: ../intl-scm/guile-strings.c:6966 ../intl-scm/guile-strings.c:7004
 #: ../intl-scm/guile-strings.c:7008
 msgid "Retained Earnings"
-msgstr ""
+msgstr "Nepaskirstytasis pelnas"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/budget-balance-sheet.scm
@@ -111,7 +111,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6960 ../intl-scm/guile-strings.c:6964
 #: ../intl-scm/guile-strings.c:7002 ../intl-scm/guile-strings.c:7006
 msgid "Equity"
-msgstr ""
+msgstr "Akcinis kapitalas"
 
 #: ../src/app-utils/gnc-ui-util.c:723 ../src/gnome/dialog-chart-export.c:45
 #: ../src/gnome/druid-hierarchy.c:922 ../src/gnome/glade/account.glade.h:41
@@ -178,6 +178,8 @@ msgstr ""
 #: ../src/bin/gnucash-bin.c:86
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
 msgstr ""
+"Taip pat galite ieškoti ir rinkmenos klaidų pranešimų per http://bugzilla."
+"gnome.org\n"
 
 #: ../src/bin/gnucash-bin.c:87
 msgid "The last stable version was "
@@ -204,17 +206,21 @@ msgid ""
 "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}"
 "\""
 msgstr ""
+"Įrašinėti lygio peržiūrėjimus formoje \"log.ger.path={debug,info,warn,crit,"
+"error}\""
 
 #: ../src/bin/gnucash-bin.c:231
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
+"Rinkmena įrašinėjama į; numatyta į \"/tmp/gnucash.trace\"; gali būti \"stderr"
+"\" arba \"stdout\"."
 
 #. Translators: This is the command line option autohelp text; see popt(3)
 #: ../src/bin/gnucash-bin.c:237
 msgid "Set the logging level from 0 (least) to 6 (most)"
-msgstr ""
+msgstr "Nustatyti įrašynėjimo lygį nuo 0 (mažiausiai) iki 6 (daugiausiai)"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -238,7 +244,7 @@ msgstr "CONFIGPATH"
 
 #: ../src/bin/gnucash-bin.c:253
 msgid "Set shared data file search path"
-msgstr ""
+msgstr "Nustatyti bendrų duomenų rinkmenos paieškos kelią"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -269,13 +275,13 @@ msgstr "GCONFPATH"
 
 #: ../src/bin/gnucash-bin.c:268
 msgid "Add price quotes to given GnuCash datafile"
-msgstr ""
+msgstr "Pridėti kainos kvotą į nurodytą GnuCash duomenų rinkmeną"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
 #: ../src/bin/gnucash-bin.c:271
 msgid "FILE"
-msgstr "Rinkmena"
+msgstr "FILE"
 
 #: ../src/bin/gnucash-bin.c:273
 msgid ""
@@ -305,7 +311,7 @@ msgstr "GnuCash %s"
 #: ../src/bin/gnucash-bin.c:312
 #, c-format
 msgid "Built %s from r%s"
-msgstr ""
+msgstr "Surinkta %s iš r%s"
 
 #: ../src/bin/gnucash-bin.c:390
 msgid "No quotes retrieved. Finance::Quote isn't installed properly.\n"
@@ -356,7 +362,7 @@ msgstr "Sąskaita-faktūra"
 #: ../intl-scm/guile-strings.c:7526 ../intl-scm/guile-strings.c:7628
 #: ../intl-scm/guile-strings.c:7838 ../intl-scm/guile-strings.c:8064
 msgid "Bill"
-msgstr ""
+msgstr "Atsiskaitymai"
 
 #. src/app-utils/prefs.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -398,11 +404,11 @@ msgstr "Automatinis skirtukas"
 #: ../intl-scm/guile-strings.c:112 ../intl-scm/guile-strings.c:128
 #: ../intl-scm/guile-strings.c:158
 msgid "Payment"
-msgstr ""
+msgstr "Mokėjimas"
 
 #: ../src/business/business-core/gncInvoice.c:1578
 msgid "Pre-Payment"
-msgstr ""
+msgstr "Avansas"
 
 #: ../src/business/business-core/gncInvoice.c:1676
 msgid " (posted)"
@@ -515,7 +521,7 @@ msgstr "Procentinė suma privalo būti nuo 0 iki 100."
 
 #: ../src/business/business-gnome/dialog-billterms.c:290
 msgid "You must provide a name for this Billing Term."
-msgstr ""
+msgstr "Šiam atsiskaitymų terminui privalote suteikti pavadinimą."
 
 #: ../src/business/business-gnome/dialog-billterms.c:296
 #, c-format
@@ -523,6 +529,8 @@ msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
 "already in use."
 msgstr ""
+"Atsiskaitymų terminui privalote suteikti unikalų pavadinimą. Jūsų "
+"pasirinkimas \"%s\" jau yra naudojamas."
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/gnucash/report/price-scatter.scm
@@ -549,7 +557,7 @@ msgstr "Nežinomas"
 #: ../src/business/business-gnome/dialog-billterms.c:592
 #, c-format
 msgid "Term \"%s\" is in use.  You cannot delete it."
-msgstr ""
+msgstr "Terminas \"%s\" yra naudojamas. Jūs negalite ištirnti jo."
 
 #: ../src/business/business-gnome/dialog-billterms.c:598
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:542
@@ -574,18 +582,22 @@ msgid ""
 "You must enter a company name. If this customer is an individual (and not a "
 "company) you should set the \"company name\" and \"contact name\" the same."
 msgstr ""
+"Privalote įvesti įmonės pavadinimą. Jei šis pirkėjas yra individualus (ir "
+"nėra įmonė) tuomet turite pavadinti \"įmonės pavadinimą\" ir \"kontakto vardą"
+"\" taip pat."
 
 #: ../src/business/business-gnome/dialog-customer.c:279
 msgid "You must enter a billing address."
-msgstr ""
+msgstr "Jūs turite įvesti atsiskaitymo adresą."
 
 #: ../src/business/business-gnome/dialog-customer.c:289
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
 msgstr ""
+"Nuolaidos procentinė reikšmė turi būti intervale 0-100 arba palikite tuščia."
 
 #: ../src/business/business-gnome/dialog-customer.c:294
 msgid "Credit must be a positive amount or you must leave it blank."
-msgstr ""
+msgstr "Kreditas turi būti teigiamas dydis arba palikite tuščią."
 
 #: ../src/business/business-gnome/dialog-customer.c:365
 #: ../src/business/business-gnome/dialog-employee.c:301
@@ -634,7 +646,7 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-customer.c:796
 #: ../src/business/business-gnome/dialog-vendor.c:659
 msgid "Billing Contact"
-msgstr ""
+msgstr "Atsiskaitymo kontaktas"
 
 #: ../src/business/business-gnome/dialog-customer.c:798
 msgid "Customer ID"
@@ -755,11 +767,11 @@ msgstr "Ieškoti darbuotojo"
 #: ../src/business/business-gnome/dialog-invoice.c:353
 #: ../src/business/business-gnome/dialog-order.c:174
 msgid "You need to supply Billing Information."
-msgstr ""
+msgstr "Jums reikia pateikti atsiskaitymo informaciją."
 
 #: ../src/business/business-gnome/dialog-invoice.c:512
 msgid "Are you sure you want to delete the selected entry?"
-msgstr ""
+msgstr "Ar tikrai norite ištrinti pasirinktą įrašą?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:514
 msgid ""
@@ -783,7 +795,7 @@ msgstr ""
 #.
 #: ../src/business/business-gnome/dialog-invoice.c:654
 msgid "Do you really want to post the invoice?"
-msgstr ""
+msgstr "Ar tikrai norite perkelti sąskaitą-faktūrą?"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/job-report.scm
@@ -800,11 +812,11 @@ msgstr ""
 
 #: ../src/business/business-gnome/dialog-invoice.c:656
 msgid "Post Date"
-msgstr ""
+msgstr "Perkėlimo data"
 
 #: ../src/business/business-gnome/dialog-invoice.c:657
 msgid "Post to Account"
-msgstr ""
+msgstr "Perkelti į paskyrą"
 
 #: ../src/business/business-gnome/dialog-invoice.c:658
 msgid "Accumulate Splits?"
@@ -824,7 +836,7 @@ msgstr "Iš viso:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1032
 msgid "Subtotal:"
-msgstr ""
+msgstr "Viso"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1033
 msgid "Tax:"
@@ -853,15 +865,15 @@ msgstr "Peržiūrėti sąskaitą-faktūrą"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1669
 msgid "New Bill"
-msgstr ""
+msgstr "Naujas atsiskaitymas"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1673
 msgid "Edit Bill"
-msgstr ""
+msgstr "Keisti atsiskaitymą"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1676
 msgid "View Bill"
-msgstr ""
+msgstr "Peržiūrėti atsiskaitymą"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1684
 msgid "New Expense Voucher"
@@ -882,7 +894,7 @@ msgstr "Peržiūrėti/keisti sąskaitą-faktūrą"
 #: ../src/business/business-gnome/dialog-invoice.c:2315
 #: ../src/business/business-gnome/dialog-invoice.c:2568
 msgid "View/Edit Bill"
-msgstr ""
+msgstr "Peržiūrėti/keisti atsiskaitymą"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
@@ -918,7 +930,7 @@ msgstr "Sąskaitos-faktūros pastabos"
 #: ../intl-scm/guile-strings.c:7360 ../intl-scm/guile-strings.c:7790
 #: ../intl-scm/guile-strings.c:7846 ../intl-scm/guile-strings.c:8022
 msgid "Billing ID"
-msgstr ""
+msgstr "Atsiskaitymo ID"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2341
 #: ../src/business/business-gnome/dialog-invoice.c:2371
@@ -932,13 +944,13 @@ msgstr "Ar užmokėta?"
 #: ../src/business/business-gnome/glade/invoice.glade.h:9
 #: ../src/gnome/dialog-find-transactions.c:117
 msgid "Date Posted"
-msgstr ""
+msgstr "Perkėlimo data"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2347
 #: ../src/business/business-gnome/dialog-invoice.c:2377
 #: ../src/business/business-gnome/dialog-invoice.c:2407
 msgid "Is Posted?"
-msgstr ""
+msgstr "Ar perkeltas?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2350
 #: ../src/business/business-gnome/dialog-invoice.c:2380
@@ -961,15 +973,15 @@ msgstr "Sąskaitos-faktūros ID"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2362
 msgid "Bill Owner"
-msgstr ""
+msgstr "Atiskaitymo savininkas"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2365
 msgid "Bill Notes"
-msgstr ""
+msgstr "Atsiskaitymo pastabos"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2387
 msgid "Bill ID"
-msgstr ""
+msgstr "Atsiskaitymo ID"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2392
 msgid "Voucher Owner"
@@ -1003,7 +1015,7 @@ msgstr "Užmokėtas"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2430
 msgid "Posted"
-msgstr ""
+msgstr "Perkeltas"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2435
 #: ../src/business/business-gnome/dialog-order.c:831
@@ -1040,7 +1052,7 @@ msgstr "Numeris"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2506
 msgid "Find Bill"
-msgstr ""
+msgstr "Rasti atsiskaitymą"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2512
 msgid "Find Expense Voucher"
@@ -1057,7 +1069,7 @@ msgstr "Išlaidų kvitas"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2518
 msgid "Find Invoice"
-msgstr "Ieškoti sąskaitą-faktūra"
+msgstr "Rasti sąskaitą-faktūra"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/general-journal.scm
@@ -1158,11 +1170,11 @@ msgstr "Operacijos pavadinimas"
 
 #: ../src/business/business-gnome/dialog-job.c:590
 msgid "Find Job"
-msgstr "Ieškoti operacijos"
+msgstr "Rasti operaciją"
 
 #: ../src/business/business-gnome/dialog-order.c:165
 msgid "The Order must be given an ID."
-msgstr ""
+msgstr "Užsakymui turi būti suteiktas ID."
 
 #: ../src/business/business-gnome/dialog-order.c:268
 msgid "The Order must have at least one Entry."
@@ -1184,7 +1196,7 @@ msgstr "Ar tikrai norite uždaryti užsakymą?"
 
 #: ../src/business/business-gnome/dialog-order.c:297
 msgid "Close Date"
-msgstr "Uždarymo data"
+msgstr "Užverimo data"
 
 #: ../src/business/business-gnome/dialog-order.c:800
 msgid "View/Edit Order"
@@ -1201,7 +1213,7 @@ msgstr "Uždarymo data"
 
 #: ../src/business/business-gnome/dialog-order.c:812
 msgid "Is Closed?"
-msgstr "Ar uždarytas?"
+msgstr "Ar užvertas?"
 
 #: ../src/business/business-gnome/dialog-order.c:816
 msgid "Owner Name "
@@ -1215,40 +1227,43 @@ msgstr "Užsakymo ID"
 #: ../src/business/business-gnome/dialog-order.c:829
 #: ../src/gnome/lot-viewer.c:623
 msgid "Closed"
-msgstr "Uždarytas"
+msgstr "Užvertas"
 
 #: ../src/business/business-gnome/dialog-order.c:884
 msgid "Find Order"
-msgstr "Ieškoti užsakymo"
+msgstr "Rasti užsakymą"
 
 #: ../src/business/business-gnome/dialog-payment.c:252
 msgid ""
 "You must enter the amount of the payment.  The payment amount must be "
 "greater than zero."
 msgstr ""
+"Privalote įvesti mokėjimo sumą. Mokėjimo suma turi būti didesnė už nulį."
 
 #: ../src/business/business-gnome/dialog-payment.c:261
 msgid "You must select a company for payment processing."
-msgstr ""
+msgstr "Norėdami vykdyti mokėjimą turite pasirinkti įmonę."
 
 #: ../src/business/business-gnome/dialog-payment.c:269
 msgid "You must select a transfer account from the account tree."
-msgstr ""
+msgstr "Jūs turite pasirinkti pervedimo paskyrą iš paskyrų medžio."
 
 #: ../src/business/business-gnome/dialog-payment.c:277
 msgid "You must enter an account name for posting."
-msgstr ""
+msgstr "Perkėlimui Jūs turite įvesti paskyros pavadinimą."
 
 #: ../src/business/business-gnome/dialog-payment.c:286
 #, c-format
 msgid "Your selected post account, %s, does not exist"
-msgstr ""
+msgstr "Jūsų pasirinkta perkėlimo paskyra %s neegzistuoja"
 
 #: ../src/business/business-gnome/dialog-payment.c:311
 msgid ""
 "The transfer and post accounts are associated with different currencies.  "
 "Please specify the conversion rate."
 msgstr ""
+"Perdavimo ir perkėlimo paskyros yra susijusios skirtingomis valiutomis. "
+"Prašome nurodyti perskaičiavimo kursą."
 
 #: ../src/business/business-gnome/dialog-payment.c:515
 #, c-format
@@ -1263,10 +1278,13 @@ msgid ""
 "You must enter a company name. If this vendor is an individual (and not a "
 "company) you should set the \"company name\" and \"contact name\" the same."
 msgstr ""
+"Jūs turite įvesti įmonės pavadinimą. Jeigu šis pardavėjas yra idividualus "
+"(ir nėra įmonės), Jūs turite nustatyti \"įmonės pavadinimas\" ir \"kontakto "
+"vardas\" vienodai."
 
 #: ../src/business/business-gnome/dialog-vendor.c:216
 msgid "You must enter a payment address."
-msgstr ""
+msgstr "Jūs turite įvesti mokėjimo adresą."
 
 #: ../src/business/business-gnome/dialog-vendor.c:294
 msgid "Edit Vendor"
@@ -1279,7 +1297,7 @@ msgstr "Naujas pardavėjas"
 
 #: ../src/business/business-gnome/dialog-vendor.c:646
 msgid "View/Edit Vendor"
-msgstr ""
+msgstr "Peržiūrėti/keisti pardavėją"
 
 #: ../src/business/business-gnome/dialog-vendor.c:647
 msgid "Vendor's Jobs"
@@ -1288,7 +1306,7 @@ msgstr "Pardavėjo operacijos"
 #. { N_("Vendor Orders"), order_vendor_cb},
 #: ../src/business/business-gnome/dialog-vendor.c:649
 msgid "Vendor's Bills"
-msgstr ""
+msgstr "Pardavėjo atsiskaitymai"
 
 #: ../src/business/business-gnome/dialog-vendor.c:650
 msgid "Pay Bill"
@@ -1300,19 +1318,19 @@ msgstr "Pardavėjo ID"
 
 #: ../src/business/business-gnome/dialog-vendor.c:694
 msgid "Find Vendor"
-msgstr "Ieškoti pardavėjo"
+msgstr "Rasti pardavėją"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:1
 msgid "<b>New Billing Term</b>"
-msgstr ""
+msgstr "<b>Naujas atsiskaitimo terminas</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:2
 msgid "<b>Term Definition</b>"
-msgstr ""
+msgstr "<b>Termino apibrėžimas</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:3
 msgid "<b>Terms</b>"
-msgstr ""
+msgstr "<b>Terminai</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:4
 msgid "Cancel your changes"
@@ -1320,15 +1338,15 @@ msgstr "Atšaukti jūsų pakeitimus"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:5
 msgid "Close this window"
-msgstr "Uždaryti šį langą"
+msgstr "Užverti šį langą"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:6
 msgid "Commit this Billing Term"
-msgstr ""
+msgstr "Įsipareigoti šį atsiskaitymo terminą"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:7
 msgid "Create a new Billing Term"
-msgstr ""
+msgstr "Sukurti naują atsiskaitymo terminą"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:8
 msgid "Cutoff Day: "
@@ -1348,7 +1366,7 @@ msgstr "_Aprašymas:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:13
 msgid "Delete the current Billing Term"
-msgstr ""
+msgstr "Ištrinti esamą atsiskaitymo terminą"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:15
 #, no-c-format
@@ -1373,7 +1391,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:20
 msgid "Edit the current Billing Term"
-msgstr ""
+msgstr "Keisti esamą atsiskaitymo terminą"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:22
 msgid "Table"
@@ -1387,7 +1405,7 @@ msgstr "Lentelė"
 #: ../intl-scm/guile-strings.c:7446 ../intl-scm/guile-strings.c:7848
 #: ../intl-scm/guile-strings.c:8078
 msgid "Terms"
-msgstr ""
+msgstr "Terminai"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:24
 msgid ""
@@ -1403,6 +1421,7 @@ msgstr ""
 #: ../src/business/business-gnome/glade/billterms.glade.h:26
 msgid "The description of the Billing Term, printed on invoices"
 msgstr ""
+"Atsiskaitymo termino aprašymas, kuris atspausdintas ant sąskaitos-faktūros"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:27
 msgid "The discount percentage applied if paid early."
@@ -1410,7 +1429,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:28
 msgid "The internal name of the Billing Term."
-msgstr ""
+msgstr "Atsiskaitymo termino vidinis pavadinimas."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:29
 msgid "The last day of the month for the early payment discount."
@@ -1443,7 +1462,7 @@ msgstr "_Tipas:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:1
 msgid "<b>Bills</b>"
-msgstr ""
+msgstr "<b>Atsiskaitymai</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:2
 msgid "<b>Invoices</b>"
@@ -1594,13 +1613,13 @@ msgstr "Adresas: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:3
 msgid "Billing Address"
-msgstr ""
+msgstr "Atsiskaitymo adresas"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:4
 #: ../src/business/business-gnome/glade/invoice.glade.h:5
 #: ../src/business/business-gnome/glade/order.glade.h:3
 msgid "Billing Information"
-msgstr ""
+msgstr "Atsiskaitymo informacija"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:5
 #: ../src/business/business-gnome/glade/vendor.glade.h:3
@@ -1684,7 +1703,7 @@ msgstr "Pastabos"
 #: ../src/business/business-gnome/glade/customer.glade.h:17
 #: ../src/business/business-gnome/glade/vendor.glade.h:11
 msgid "Override the global Tax Table?"
-msgstr ""
+msgstr "Perrašyti bendrą mokesčių lentelę?"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:18
 #: ../src/business/business-gnome/glade/employee.glade.h:20
@@ -1694,11 +1713,11 @@ msgstr "Telefonas: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:19
 msgid "Shipping Address"
-msgstr ""
+msgstr "Shipping adresas"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:20
 msgid "Shipping Information"
-msgstr ""
+msgstr "Shipping informacija"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:21
 msgid "Tax Included: "
@@ -1711,7 +1730,7 @@ msgstr "Mokesčių lentelė: "
 #: ../src/business/business-gnome/glade/customer.glade.h:23
 #: ../src/business/business-gnome/glade/vendor.glade.h:17
 msgid "Terms: "
-msgstr ""
+msgstr "Terminai: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:24
 msgid ""
@@ -1753,7 +1772,7 @@ msgstr "Prieigos valdymo sąrašas"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:5
 msgid "Billing"
-msgstr ""
+msgstr "Atsiskaitymas"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:6
 #: ../src/gnome-utils/dialog-transfer.c:1707
@@ -1791,7 +1810,7 @@ msgstr "Kalba:"
 #: ../src/business/business-gnome/glade/employee.glade.h:19
 #: ../src/business/business-gnome/glade/vendor.glade.h:12
 msgid "Payment Address"
-msgstr ""
+msgstr "Mokėjimo adresas"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:21
 msgid ""
@@ -1849,7 +1868,7 @@ msgstr "Ne, išsaugoti jas, kokios jos yra"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:21
 msgid "Posted Account"
-msgstr "Введенный счет"
+msgstr "Perkelta paskyra"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:22
 msgid "Reset Tax Tables to present Values?"
@@ -1877,7 +1896,7 @@ msgstr "Esama operacija"
 
 #: ../src/business/business-gnome/glade/job.glade.h:4
 msgid "Job Dialog"
-msgstr "Operacijos dialogas"
+msgstr "Operacijos langas"
 
 #: ../src/business/business-gnome/glade/job.glade.h:5
 msgid "Job Information"
@@ -1894,7 +1913,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/order.glade.h:4
 msgid "Close Order"
-msgstr "Uždaryti užsakymą"
+msgstr "Užverti užsakymą"
 
 #: ../src/business/business-gnome/glade/order.glade.h:7
 msgid "Invoices"
@@ -2025,15 +2044,15 @@ msgstr "Mokėjimo informacija"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:6
 msgid "Post To"
-msgstr ""
+msgstr "Perkelti į"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:7
 msgid "Transfer Account"
-msgstr ""
+msgstr "Perkelti paskyrą"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:15
 msgid "Tax Included:"
-msgstr ""
+msgstr "Mokestis įterptas:"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:16
 msgid "Tax Table:"
@@ -2060,7 +2079,7 @@ msgstr "Pardavėjo numeris: "
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:21
 msgid "What Tax Table should be applied to this vendor?"
-msgstr ""
+msgstr "Kokia mokesčių lentelė turi būti taikoma šiam tiekėjui?"
 
 #. src/business/business-utils/business-utils.scm
 #: ../src/business/business-gnome/gncmod-business-gnome.c:135
@@ -2075,7 +2094,7 @@ msgstr "Verslas"
 #: ../src/business/business-gnome/gnc-plugin-business.c:241
 #: ../intl-scm/guile-strings.c:7452
 msgid "_Business"
-msgstr "_Деятельность"
+msgstr "V_eikla"
 
 #. Customer submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:151
@@ -2092,7 +2111,7 @@ msgstr "Atveti naujo pirkėjo dialogo langą"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:155
 msgid "_Find Customer..."
-msgstr "_Ieškoti pirkėjo..."
+msgstr "_Rasti pirkėją..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:156
 msgid "Open the Find Customer dialog"
@@ -2108,11 +2127,11 @@ msgstr "Atverti naujos sąskaitos-faktūros dialogo langą"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:161
 msgid "Find In_voice..."
-msgstr "Ieškoti _sąskaitos-faktūros..."
+msgstr "Rasti _sąskaitą-faktūrą..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:162
 msgid "Open the Find Invoice dialog"
-msgstr "Atverti sąskaitos-faktūros paieškos langą"
+msgstr "Atverti rastų sąskaitų-faktūrų langą"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:164
 #: ../src/business/business-gnome/gnc-plugin-business.c:188
@@ -2127,24 +2146,24 @@ msgstr "Atverti naujos operacijos langą"
 #: ../src/business/business-gnome/gnc-plugin-business.c:167
 #: ../src/business/business-gnome/gnc-plugin-business.c:191
 msgid "Find Jo_b..."
-msgstr "Ieškoti o_peracijos..."
+msgstr "Rasti o_peraciją..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:168
 #: ../src/business/business-gnome/gnc-plugin-business.c:192
 msgid "Open the Find Job dialog"
-msgstr "Atverti operacijos paieškos langą"
+msgstr "Atverti rastų operacijų langą"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:170
 #: ../src/business/business-gnome/gnc-plugin-business.c:194
 #: ../src/business/business-gnome/gnc-plugin-business.c:212
 msgid "_Process Payment..."
-msgstr ""
+msgstr "_Vykdyti mokėjimą"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:171
 #: ../src/business/business-gnome/gnc-plugin-business.c:195
 #: ../src/business/business-gnome/gnc-plugin-business.c:213
 msgid "Open the Process Payment dialog"
-msgstr ""
+msgstr "Atverti vykdomų mokėjimų langą"
 
 #. Vendor submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:175
@@ -2157,31 +2176,31 @@ msgstr "_Naujas pardavėjas..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:177
 msgid "Open the New Vendor dialog"
-msgstr "Atverti naujo pardavėjo dialogo langą"
+msgstr "Atverti naujo pardavėjo langą"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:179
 msgid "_Find Vendor..."
-msgstr "_Ieškoti pardavėjo..."
+msgstr "_Rasti pardavėją..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:180
 msgid "Open the Find Vendor dialog"
-msgstr "Atverti pardavėjo paieškos dialogo langą"
+msgstr "Atverti rasto pardavėjo langą"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:182
 msgid "New _Bill..."
-msgstr ""
+msgstr "Naujas _atsiskaitymas..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:183
 msgid "Open the New Bill dialog"
-msgstr ""
+msgstr "Atverti naujo atsiskaitymo langą"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:185
 msgid "Find Bi_ll..."
-msgstr ""
+msgstr "Rasti _atsiskaitymą..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:186
 msgid "Open the Find Bill dialog"
-msgstr ""
+msgstr "Atverti rasto atsiskaitymo langą"
 
 #. Employee submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:199
@@ -2194,15 +2213,15 @@ msgstr "_Naujas darbuotojas..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:201
 msgid "Open the New Employee dialog"
-msgstr "Atverti naujo darbuotojo dialogo langą"
+msgstr "Atverti naujo darbuotojo langą"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:203
 msgid "_Find Employee..."
-msgstr "_Ieškoti darbuotojo..."
+msgstr "_Rasti darbuotoją..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:204
 msgid "Open the Find Employee dialog"
-msgstr "Atverti darbuotojo paieškos dialogo langą"
+msgstr "Atverti rasto darbuotojo langą"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:206
 msgid "New _Expense Voucher..."
@@ -2210,15 +2229,15 @@ msgstr "Naujas _išlaidų kvitas..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:207
 msgid "Open the New Expense Voucher dialog"
-msgstr "Atverti naują išlaidų kvito dialogo langą"
+msgstr "Atverti naują išlaidų kvito langą"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:209
 msgid "Find Expense _Voucher..."
-msgstr "Ieškoti išlaidų _kvito..."
+msgstr "Rasti išlaidų _kvitą..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:210
 msgid "Open the Find Expense Voucher dialog"
-msgstr "Atverti išlaidų kvito paieškos dialogo langą"
+msgstr "Atverti rasto išlaidų kvito langą"
 
 #. Other menu items
 #: ../src/business/business-gnome/gnc-plugin-business.c:217
@@ -2231,11 +2250,11 @@ msgstr "Peržiūrėti ir keisti mokesčių lentelių sąrašą"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:220
 msgid "_Billing Terms Editor"
-msgstr "Редактор сроков платежей"
+msgstr "_Atsiskaitymo terminų redaktorius"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:221
 msgid "View and edit the list of Billing Terms"
-msgstr "Просмотреть и изменить список сроков платежей"
+msgstr "Peržiūrėti ir keisti atsiskaitymo terminų sąrašą"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:223
 msgid "Bills _Due Reminder"
@@ -2308,12 +2327,12 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:252
 msgid "Reload receivable report scheme file"
-msgstr ""
+msgstr "Įkelti iš naujo priimtos ataskaitos schemos rinkmeną"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:254
 #: ../src/business/business-gnome/gnc-plugin-business.c:255
 msgid "Initialize Test Data"
-msgstr ""
+msgstr "Įkeliami bandomieji duomenys"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:724
 msgid "Export Invoices to XML"
@@ -2389,7 +2408,7 @@ msgstr "Keisti šią sąskaitą-faktūrą"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:122
 msgid "_Post Invoice"
-msgstr ""
+msgstr "Į_kelti sąskaitą-faktūrą"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:123
 msgid "Post this Invoice to your Chart of Accounts"
@@ -2397,11 +2416,11 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:125
 msgid "_Unpost Invoice"
-msgstr ""
+msgstr "_Iškelti sąskaitą-faktūrą"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:126
 msgid "Unpost this Invoice and make it editable"
-msgstr ""
+msgstr "Iškelti šią sąskaitą-faktūrą ir padaryti ją keičiama"
 
 #. Actions menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:130
@@ -2440,7 +2459,7 @@ msgstr "_Tuščias"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:140
 msgid "Move to the blank entry at the bottom of the Invoice"
-msgstr ""
+msgstr "Perkelti tuščią įrašą į sąskaitos-faktūros apačią"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:142
 msgid "Dup_licate Entry"
@@ -2457,7 +2476,7 @@ msgstr "_Apmokėti sąskaitą-faktūrą"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:148
 msgid "Enter a payment for the owner of this Invoice"
-msgstr ""
+msgstr "Įvesti mokėjimą šios sąskaitos-faktūros savininkui"
 
 #. Reports menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:152
@@ -2466,7 +2485,7 @@ msgstr "Į_monės ataskaita"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:153
 msgid "Open a company report window for the owner of this Invoice"
-msgstr ""
+msgstr "Atverti įmonės ataskaitos langą šios sąskaitos-faktūros savininkui"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:160
 #: ../src/gnome/glade/register.glade.h:95
@@ -2532,11 +2551,11 @@ msgstr "Tuščias"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:199
 msgid "Post"
-msgstr "Ввести"
+msgstr "Įkelti"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:200
 msgid "Unpost"
-msgstr ""
+msgstr "Iškelti"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:1
 msgid "Accumulate multiple splits into one"
@@ -2586,7 +2605,7 @@ msgstr "Atverti naują sąskaitą-faktūrą naujame lange"
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:9
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:7
 msgid "Search only in active items"
-msgstr ""
+msgstr "Ieškoti tik aktyviuose punktuose"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:10
 msgid "Show bills due reminder at startup"
@@ -2666,7 +2685,7 @@ msgstr "Projektas"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:230
 msgid "Material"
-msgstr ""
+msgstr "Žaliava"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:805
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:487
@@ -2689,7 +2708,7 @@ msgstr "Į_rašyti"
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:140
 #, c-format
 msgid "Invalid Entry:  You need to supply %s."
-msgstr ""
+msgstr "Neteisingas įrašas: reikia pateikti"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:164
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:170
@@ -2699,7 +2718,7 @@ msgstr "Paskyra"
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:376
 #, c-format
 msgid "The tax table %s does not exist. Would you like to create it?"
-msgstr ""
+msgstr "Tokios mokesčio lentelė %s nėra. Ar norėtumėte sukurti ją?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:489
 msgid ""
@@ -2787,7 +2806,7 @@ msgstr "sample:BI"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:111
 msgid "sample:Payment"
-msgstr ""
+msgstr "sample:Mokestis"
 
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:49
 msgid "$"
@@ -2832,7 +2851,7 @@ msgstr "Grynais"
 #: ../intl-scm/guile-strings.c:124 ../intl-scm/guile-strings.c:140
 #: ../intl-scm/guile-strings.c:4648 ../intl-scm/guile-strings.c:5990
 msgid "Charge"
-msgstr ""
+msgstr "Pavedimas"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:55
 msgid "Income Account"
@@ -2904,7 +2923,7 @@ msgstr "Ar įskaičiuoti mokesčiai?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:120
 msgid "Invoiced?"
-msgstr "Ar yra sąsakita?"
+msgstr "Ar yra sąskaita-faktūra?"
 
 #. src/report/report-system/options-utilities.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -2915,7 +2934,7 @@ msgstr "Ar yra sąsakita?"
 #: ../intl-scm/guile-strings.c:7772 ../intl-scm/guile-strings.c:7828
 #: ../intl-scm/guile-strings.c:8054
 msgid "Subtotal"
-msgstr ""
+msgstr "Viso"
 
 #. src/tax/us/de_DE.scm
 #. src/tax/us/gnucash/tax/de_DE.scm
@@ -2931,12 +2950,12 @@ msgstr "Mokesčiai"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:135
 msgid "Billable?"
-msgstr "Оплачиваемо?"
+msgstr "Atsiskaitomas?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:528
 msgid ""
 "Enter the income/expense account for the Entry, or choose one from the list"
-msgstr ""
+msgstr "Įveskite įplaukų/išlaidų paskyrą įrašui arba pasirinkite iš sąrašo"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:541
 msgid "Enter the type of Entry"
@@ -2972,7 +2991,7 @@ msgstr "Pasirinkite nuolaidos tipą"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:637
 msgid "Tax computed after discount is applied"
-msgstr ""
+msgstr "Mokestis apskaičiuojamas po nuolaidos"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:640
 msgid "Discount and tax both applied on pretax value"
@@ -2980,11 +2999,11 @@ msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:643
 msgid "Discount computed after tax is applied"
-msgstr ""
+msgstr "Nuolaida apskaičiuojama po užmokeščio"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:646
 msgid "Select how to compute the Discount and Taxes"
-msgstr ""
+msgstr "Pasirinkite, kaip apskaičiuoti nuolaidą ir mokesčius"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:659
 msgid "Enter the unit-Price for this Entry"
@@ -3000,7 +3019,7 @@ msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:692
 msgid "Is this entry taxable?"
-msgstr ""
+msgstr "Ar šis įrašas apmokestinamas?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:701
 msgid "Is the tax already included in the price of this entry?"
@@ -3008,23 +3027,23 @@ msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:718
 msgid "Is this entry Invoiced?"
-msgstr ""
+msgstr "Ar šis įrašas turi sąskaitą-faktūra?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:722
 msgid "Include this entry on this invoice?"
-msgstr ""
+msgstr "Įterpti šį įrašą į šią sąskaitą-faktūrą?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:725
 msgid "Unknown EntryLedger Type"
-msgstr ""
+msgstr "Nežinomas įrašo didžiosios knygos tipas"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:738
 msgid "The subtotal value of this entry "
-msgstr ""
+msgstr "Tarpinė šio įrašo reikšmė "
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:750
 msgid "The total tax of this entry "
-msgstr ""
+msgstr "Visas šio įrašo mokestis "
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:759
 msgid "Is this entry billable to a customer or job?"
@@ -3036,7 +3055,7 @@ msgstr ""
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:112
 msgid "You must provide a name for this Tax Table."
-msgstr ""
+msgstr "Jūs turite suteikti šiai mokesčių lentelei pavadinimą."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:118
 #, c-format
@@ -3311,7 +3330,7 @@ msgstr "Dukart į mėnesį"
 #: ../src/engine/Recurrence.c:623
 #, c-format
 msgid "Unknown, %d-size list."
-msgstr ""
+msgstr "Nežinomas, %d-dydžio sąrašas."
 
 #: ../src/engine/Recurrence.c:634 ../src/gnome/glade/sched-xact.glade.h:133
 msgid "Once"
@@ -3387,12 +3406,16 @@ msgid ""
 "That commodity is currently used by at least one of your accounts. You may "
 "not delete it."
 msgstr ""
+"Ši prekė yra dabar naudojama mažiausiai vienos iš Jūsų paskyrų. Jūs negalite "
+"jos ištrinti."
 
 #: ../src/gnome/dialog-commodities.c:169
 msgid ""
 "This commodity has price quotes. Are you sure you want to delete the "
 "selected commodity and its price quotes?"
 msgstr ""
+"Ši prekė turi kainos kvotas. Ar tikrai norite ištrinti pasirinktą prekę ir "
+"jos kainos kvotas?"
 
 #: ../src/gnome/dialog-commodities.c:174
 msgid "Are you sure you want to delete the selected commodity?"
@@ -3407,6 +3430,8 @@ msgid ""
 "This program can only calculate one value at a time. You must enter values "
 "for all but one quantity."
 msgstr ""
+"Ši programa gali apskaičiuoti tik vieną reikšmę vienu metu. Jūs galite "
+"įvesti reikšmes visur, bet tik po vieną reikšmę."
 
 #: ../src/gnome/dialog-fincalc.c:310
 msgid ""
@@ -3670,6 +3695,7 @@ msgstr ""
 #: ../src/gnome/dialog-sx-editor.c:769
 msgid "Scheduled Transactions with variables cannot be automatically created."
 msgstr ""
+"Suplanuotas pervedinimas su kintamaisiais negali būti automatiškai sukurtas."
 
 #: ../src/gnome/dialog-sx-editor.c:778
 msgid ""
@@ -3820,7 +3846,7 @@ msgstr ""
 
 #: ../src/gnome/druid-acct-period.c:372
 msgid "You must select closing date that is not in the future."
-msgstr ""
+msgstr "Turite pasirinkti artimiausią datą, kuri jau yra praėjusi."
 
 #. Translation FIXME: Can this %s-containing message please be
 #. replaced by one single message? Either this closing went
@@ -3875,7 +3901,7 @@ msgstr "esama paskyra"
 #: ../src/gnome/druid-hierarchy.c:905
 #: ../src/gnome-utils/gnc-tree-view-account.c:643
 msgid "Placeholder"
-msgstr ""
+msgstr "Vietos savininkas"
 
 #: ../src/gnome/druid-hierarchy.c:936
 msgid "Use Existing"
@@ -3990,8 +4016,8 @@ msgstr ""
 msgid ""
 "Error: Please resolve all %d conflicts before trying to commit the data."
 msgstr ""
-"Klaida: пожалуйста разрешите все %d конфликтов перед попыткой принять "
-"изменения."
+"Klaida: prašome ištaisyti visus %d konfliktus prieš bandydami patvirtinti "
+"duomenis."
 
 #: ../src/gnome/druid-merge.c:225
 #, c-format
@@ -4256,6 +4282,9 @@ msgid ""
 "account and enter the starting balance in the box on the right. All accounts "
 "except Equity and placeholder accounts may have an opening balance."
 msgstr ""
+"Jei norite paskyroje turėti pradinį likutį, spauskite ant paskyros ir "
+"įveskite pradinį likutį į laukelį dešinėje. Visos paskyros, išskyrus akcinis "
+"kapitalas ir vietos savininko paskyros gali turėti pradinį likutį."
 
 #: ../src/gnome/glade/account.glade.h:29
 msgid ""
@@ -4267,6 +4296,11 @@ msgid ""
 "If you would like an account to be a placeholder account, just click the "
 "checkbox for that account.\n"
 msgstr ""
+"Jei norite paskyroje turėti pradinį likutį, spauskite ant paskyros eilutės "
+"ir įveskite pradinį likutį į laukelį dešinėje. Visos paskyros, išskyrus "
+"akcinis kapitalas ir vietos savininko paskyros gali turėti pradinį likutį.\n"
+"Jei norite, kad paskyra taptų vieto savininko pasyra, tiesiog spragtelkite "
+"šios paskyros kvadratėlį.\n"
 
 #: ../src/gnome/glade/account.glade.h:33
 msgid "Interval:"
@@ -4318,7 +4352,7 @@ msgstr "Kiti"
 
 #: ../src/gnome/glade/account.glade.h:43
 msgid "Placeholde_r"
-msgstr ""
+msgstr "_Vietos savininkas"
 
 #: ../src/gnome/glade/account.glade.h:44
 msgid "Please choose the currency to use for new accounts."
@@ -6985,7 +7019,7 @@ msgstr "Numanomas biudžetas"
 #: ../src/gnome/gnc-plugin-page-budget.c:143
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions"
-msgstr ""
+msgstr "Įvertinti biudžeto vertę pasirinktų paskyrų iš ankstesnių sandorių"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:166
 msgid "Estimate"
@@ -7016,7 +7050,7 @@ msgstr "Biudžetas"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:768
 msgid "Set the budget options using this dialog."
-msgstr ""
+msgstr "Nustatyti biudžeto patinktis naudojant šį langą."
 
 #: ../src/gnome/gnc-plugin-page-budget.c:847
 #, c-format
@@ -7043,7 +7077,7 @@ msgstr "_Iškirpti"
 #: ../src/gnome-utils/gnc-main-window.c:272
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:966
 msgid "Cut the current selection and copy it to clipboard"
-msgstr ""
+msgstr "Iškirpti esamą pasirinkimą ir perkelti į iškarpų krepšį"
 
 #: ../src/gnome/gnc-plugin-page-register.c:180
 #: ../src/gnome-utils/gnc-main-window.c:274
@@ -7119,7 +7153,7 @@ msgstr "_Atšaukti pervedimo panaikinimą"
 
 #: ../src/gnome/gnc-plugin-page-register.c:223
 msgid "Add _Reversing Transaction"
-msgstr ""
+msgstr "Pridėti _atvirkštinį sandorį"
 
 #. View menu
 #: ../src/gnome/gnc-plugin-page-register.c:228
@@ -7133,11 +7167,11 @@ msgstr "_Tuščias pervedimas"
 
 #: ../src/gnome/gnc-plugin-page-register.c:250
 msgid "Edit E_xchange Rate"
-msgstr "Изменить курс обмена"
+msgstr "Keisti valiutų kursus"
 
 #: ../src/gnome/gnc-plugin-page-register.c:251
 msgid "Edit the exchange rate for the current transaction"
-msgstr ""
+msgstr "Keisti esamo pavedimo valiutos kursą"
 
 #: ../src/gnome/gnc-plugin-page-register.c:256
 msgid "Sche_dule..."
@@ -7166,7 +7200,7 @@ msgstr "Paskyros pervedimų ataskaita"
 
 #: ../src/gnome/gnc-plugin-page-register.c:270
 msgid "Open a register report for the selected Transaction"
-msgstr ""
+msgstr "Atverti registro ataskaitą pasirinkto sandorio"
 
 #. Translators: This is a menu item in the View menu
 #: ../src/gnome/gnc-plugin-page-register.c:295
@@ -7208,7 +7242,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register.c:1114
 msgid "_Discard Transaction"
-msgstr "_Atsisakyti pervedimo"
+msgstr "_Atsisakyti sandorio"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1118
 msgid "_Save Transaction"
@@ -7236,7 +7270,7 @@ msgstr "Paieškos rezultatai"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1762
 msgid "General Ledger Report"
-msgstr "Отчет по главной книге"
+msgstr "Didžiosios knygos ataskaita"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1768
 msgid "Portfolio Report"
@@ -7275,7 +7309,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register.c:2133
 #: ../src/gnome/gnc-split-reg.c:871
 msgid "A reversing entry has already been created for this transaction."
-msgstr ""
+msgstr "Atvirkštinis įrašas jau sukurtas sandoriui."
 
 #. Translations: The %s is the name of the plugin page
 #: ../src/gnome/gnc-plugin-page-register.c:2181
@@ -7304,11 +7338,11 @@ msgstr "_Naujas"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:121
 msgid "Create a new scheduled transaction"
-msgstr ""
+msgstr "Sukurti naują planinį sandorį"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:123
 msgid "Edit the selected scheduled transaction"
-msgstr ""
+msgstr "Keisti pasirinktą planinį sandorį"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:125
 msgid "Delete the selected scheduled transaction"
@@ -7424,7 +7458,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-split-reg.c:1847
 msgid "Projected Minimum:"
-msgstr ""
+msgstr "Projektuojamas minimumas:"
 
 #: ../src/gnome/gnc-split-reg.c:1851
 msgid "Shares:"
@@ -7466,7 +7500,7 @@ msgstr "Pavadinimas"
 
 #: ../src/gnome/lot-viewer.c:638
 msgid "Gains"
-msgstr ""
+msgstr "Pelnas"
 
 #: ../src/gnome/lot-viewer.c:660
 #, c-format
@@ -7482,7 +7516,7 @@ msgstr "Reconciled:R"
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:1
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:1
 msgid "Order of columns in the dialog"
-msgstr ""
+msgstr "Tvarkyti stulpelius lange"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:2
 msgid "Show currencies in this dialog"
@@ -7498,35 +7532,35 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:5
 msgid "Show the Namespace column"
-msgstr ""
+msgstr "Rodyti pavadinimo stulpelį"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:6
 msgid "Show the Print Name column"
-msgstr ""
+msgstr "Rodyti spausdinio pavadinimo stulpelį"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:7
 msgid "Show the Quote Flag column"
-msgstr ""
+msgstr "Rodyti nustatytos vėliavos stulpelį"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:8
 msgid "Show the Quote Source column"
-msgstr ""
+msgstr "Rodyti nustatyto šaltinio stulpelį"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:9
 msgid "Show the Quote Timezone column"
-msgstr ""
+msgstr "Rodyti nustatytos laiko juostos stulpelį"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:10
 msgid "Show the Unique Name column"
-msgstr "Rodyti unikalaus pavadinimo stulpelius"
+msgstr "Rodyti unikalaus pavadinimo stulpelį"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:11
 msgid "Show the fraction column"
-msgstr ""
+msgstr "Rodyti trupmenos stulpelį"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:12
 msgid "Show the name column"
-msgstr ""
+msgstr "Rodyti pavadinimo stulpelį"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:13
 msgid "Show the symbol column"
@@ -7558,14 +7592,16 @@ msgstr ""
 msgid ""
 "If active, the new user dialog will be shown. Otherwise it will not be shown."
 msgstr ""
+"Jei aktyvus, naujas vartotojo langas bus rodomas. Jei atvirkščiai, tai nebus "
+"rodomas."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:5
 msgid "Last pathname used"
-msgstr ""
+msgstr "Paskutinis naudojamas kelio vardas"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:6
 msgid "New hierarchy dialog on \"New File\""
-msgstr ""
+msgstr "Naujas hierarchijos langas esantis \"Nauja rinkmena\""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:8
 msgid "Show the new user dialog"
@@ -7583,13 +7619,15 @@ msgid ""
 "The X,Y coordinates of the top left corner of the dialog when it was last "
 "closed."
 msgstr ""
+"Kairiojo viršutinio kampo X, Y lango koordinatės, kai ji buvo paskutinį "
+"kartą užvertas."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:11
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:11
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:11
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:11
 msgid "The width and size of the dialog when it was last closed."
-msgstr ""
+msgstr "Lango plotis ir dydis, kada jis buvo paskutinį kartą užvertas."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:12
 msgid ""
@@ -7713,11 +7751,11 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:7
 msgid "Position of check amount in numbers"
-msgstr ""
+msgstr "Kvito sumos padėtis skaičiais"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:8
 msgid "Position of check amount in words"
-msgstr ""
+msgstr "Kvito sumos padėtis žodžiais"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:9
 msgid "Position of check on page"
@@ -7733,11 +7771,11 @@ msgstr "Atminties eilutės padėtis"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:12
 msgid "Position of payee name"
-msgstr ""
+msgstr "Gavėjo vardo vieta"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:13
 msgid "Print '***' before and after strings."
-msgstr ""
+msgstr "Spausdinti '***' prieš ir po masyvų."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:14
 msgid "Print the date format below the date."
@@ -7752,6 +7790,8 @@ msgid ""
 "The default font to use when printing checks. This value will be overridden "
 "by any font specified in a check description file."
 msgstr ""
+"Naudojamas numatytasis šriftas, kai spausdinami kvitai. Ši reikšmė nepaisys "
+"jokių kitų apibrėžtų šriftų aprašytoje kvito rinkmenoje."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:17
 msgid "This is the numerical identifier of the predefined date format to use."
@@ -7783,6 +7823,7 @@ msgid ""
 "This value contains the X,Y coordinates for the start of the payee line on "
 "the check."
 msgstr ""
+"Šia reikšmę sudaro pradinės linijos X, Y koordinatės pinigų gavėjo kvite."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:22
 msgid ""
@@ -7835,7 +7876,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
 msgid "Prompt for credit card payment"
-msgstr ""
+msgstr "Klausti dėl mokėjimo kreditine kortele"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
 msgid "Prompt for interest charges"
@@ -7843,11 +7884,11 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:1
 msgid "How many days in advance to notify the user."
-msgstr ""
+msgstr "Prieš kiek dienų apie tai pranešti vartotojui."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:2
 msgid "How many days in advance to remind the user."
-msgstr ""
+msgstr "Prieš kiek dienų apie tai priminti vartotojui."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:3
 msgid ""
@@ -7893,11 +7934,11 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:2
 msgid "Show \"Tip Of The Day\" at GnuCash start"
-msgstr ""
+msgstr "Rodyti \"Dienos paratimus\" paleidus GnuCash"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:3
 msgid "The next tip to show."
-msgstr ""
+msgstr "Rodyti sekantį patarimą."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:1
 msgid "\"Enter\" key moves to bottom of register"
@@ -7909,7 +7950,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:3
 msgid "Allow file incompatibility with older versions."
-msgstr ""
+msgstr "Leisti rinkmenos nesuderinamumą su senesnėmis versijomis."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:4
 msgid "Auto-save time interval"
@@ -7925,7 +7966,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:7
 msgid "Character to use as separator between account names"
-msgstr ""
+msgstr "Simbolis, kuris naudojamas atskyrimui tarp paskyrų pavadinimų"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:8
 msgid "Closing a tab moves to the most recently visited tab."
@@ -7969,7 +8010,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:18
 msgid "Delete old log/backup files after this many days (0 = never)"
-msgstr ""
+msgstr "Ištrinti senus įrašų/kopijų rinkmenas po tiek dienų (0 = niekada)"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:19
 #: ../src/gnome-utils/glade/preferences.glade.h:62
@@ -7982,11 +8023,11 @@ msgstr "Įjungti Euro palaikymą"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:21
 msgid "Enables additional support for the European Union EURO currency."
-msgstr ""
+msgstr "Įjungti papildomą Europos sąjungos EURO valiutos palaikymą."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:22
 msgid "Enables file compression when writing the data file."
-msgstr ""
+msgstr "Suspausti rinkmeną, kai įrašynėjami duomenys."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:23
 msgid ""
@@ -8478,7 +8519,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:7
 msgid "Show non currency commodities"
-msgstr ""
+msgstr "Rodyti bevaliutines prekes"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:8
 msgid "Starting date (in seconds from Jan 1, 1970)"
@@ -8541,11 +8582,11 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_register.schemas.in.h:2
 msgid "Width of a column in the dialog"
-msgstr ""
+msgstr "Stulpelio plotis lange"
 
 #: ../src/gnome-search/dialog-search.c:157
 msgid "You must select an item from the list"
-msgstr ""
+msgstr "Turite pasirinkti puktą iš sąrašo"
 
 #: ../src/gnome-search/dialog-search.c:274
 msgid "Select"
@@ -8568,7 +8609,7 @@ msgstr "Naujas %s"
 
 #: ../src/gnome-search/dialog-search.c:872
 msgid "item"
-msgstr ""
+msgstr "punktas"
 
 #: ../src/gnome-search/search-account.c:170
 msgid "You have not selected any accounts"
@@ -8680,7 +8721,6 @@ msgid "()"
 msgstr "()"
 
 #: ../src/gnome-search/search.glade.h:3
-#, fuzzy
 msgid "<b>Match all entries</b>"
 msgstr "<b>Mokesčių lentelės įrašai</b>"
 
@@ -8725,7 +8765,7 @@ msgstr "Paieškos tipas"
 
 #: ../src/gnome-search/search.glade.h:13
 msgid "_New item..."
-msgstr ""
+msgstr "_Naujas punktas..."
 
 #: ../src/gnome-search/search-numeric.c:216
 msgid "less than"
@@ -10591,7 +10631,7 @@ msgstr "<b>Dienos patarimas:</b>"
 
 #: ../src/gnome-utils/glade/totd.glade.h:2
 msgid "GnuCash Tip Of The Day"
-msgstr "<b>GnuCash dienos patarimas</b>"
+msgstr "GnuCash dienos patarimas"
 
 #: ../src/gnome-utils/glade/totd.glade.h:3
 msgid "_Show tips at startup"
@@ -10885,7 +10925,9 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:301
 #, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
-msgstr "Этот файл/URL \"%s\" не содержит данных GnuCash или данные повреждены."
+msgstr ""
+"Rinkmena/URL \"%s\" nesudaryta iš GnuCash duomenų arba duomenys yra "
+"sugadinti."
 
 #: ../src/gnome-utils/gnc-file.c:307
 #, c-format
@@ -10981,12 +11023,12 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:396
 msgid "There was an error reading the file. Do you want to continue?"
-msgstr "Įvyko klaida skaitant rinkmeną. Tęsti?"
+msgstr "Įvyko klaida skaitant rinkmeną. Ar norite tęsti?"
 
 #: ../src/gnome-utils/gnc-file.c:402
 #, c-format
 msgid "There was an error parsing the file %s."
-msgstr ""
+msgstr "Įvyko klaida nagrinėjant rinkmeną %s."
 
 #: ../src/gnome-utils/gnc-file.c:407
 #, c-format
@@ -11000,7 +11042,7 @@ msgstr "Rinkmenos \"%s\" neįmanoma rasti."
 
 #: ../src/gnome-utils/gnc-file.c:421
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
-msgstr ""
+msgstr "Ši rinkmena yra iš senesnės GnuCash versijos. Ar norite tęsti?"
 
 #: ../src/gnome-utils/gnc-file.c:427
 #, c-format
@@ -11040,7 +11082,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:466
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
-msgstr ""
+msgstr "Įvyko nežinoma Įvesties/Išvesties klaida (%d)."
 
 #: ../src/gnome-utils/gnc-file.c:561
 msgid "Save changes to the file?"
@@ -11049,7 +11091,7 @@ msgstr "Išsaugoti pakeitimus į rinkmeną?"
 #: ../src/gnome-utils/gnc-file.c:564 ../src/gnome-utils/gnc-main-window.c:1020
 #, c-format
 msgid "If you don't save, changes from the past %d minutes will be discarded."
-msgstr ""
+msgstr "Jei neišsaugosite, buvę pakeitimai prieš %d min. bus išmesti."
 
 #: ../src/gnome-utils/gnc-file.c:578
 msgid "Continue _Without Saving"
@@ -11058,13 +11100,15 @@ msgstr "_Tęsti be išsaugojimo"
 #: ../src/gnome-utils/gnc-file.c:658
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
-msgstr ""
+msgstr "GnuCash negalėjo atrakinti %s."
 
 #: ../src/gnome-utils/gnc-file.c:660
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
 msgstr ""
+"Ši duomenų bazė gali būti naudojama kito vartotojo, todėl negalite jos "
+"atverti. Ką pageidaujate daryti?"
 
 #: ../src/gnome-utils/gnc-file.c:663
 msgid ""
@@ -11072,6 +11116,9 @@ msgid ""
 "permission for the directory. If you proceed you may not be able to save any "
 "changes. What would you like to do?"
 msgstr ""
+"Ši duomenų bazė gali būti tik skaitymui skirtoje rinkmenų sistemoje arba jūs "
+"galite neturėti aplankale rašymui skirtos prieigos. Jeigu tęsite, tai "
+"neturėsite galimybės išsaugoti pakeitimus. Ką pageidaujate daryti?"
 
 #: ../src/gnome-utils/gnc-file.c:683
 msgid "_Open Anyway"
@@ -11140,7 +11187,7 @@ msgstr "Atverti _paskyrą"
 #. Toplevel
 #: ../src/gnome-utils/gnc-main-window.c:232
 msgid "_File"
-msgstr "_Rinkmena"
+msgstr "_Dokumentas"
 
 #: ../src/gnome-utils/gnc-main-window.c:236
 msgid "Tra_nsaction"
@@ -11187,7 +11234,7 @@ msgstr "_Nustatyti"
 
 #: ../src/gnome-utils/gnc-main-window.c:256
 msgid "Specify the page size and orientation for printing"
-msgstr ""
+msgstr "Apibrėžti spausdinamo puslapio dydį ir orientaciją"
 
 #: ../src/gnome-utils/gnc-main-window.c:259
 msgid "Proper_ties"
@@ -11243,15 +11290,15 @@ msgstr "Atnaujinti šį langą"
 #: ../src/gnome-utils/gnc-main-window.c:296
 #: ../src/gnome/window-reconcile.c:2111
 msgid "_Check & Repair"
-msgstr ""
+msgstr "_Patikra ir taisymas"
 
 #: ../src/gnome-utils/gnc-main-window.c:297
 msgid "Reset _Warnings..."
-msgstr ""
+msgstr "Atstatyti į_spėjimus..."
 
 #: ../src/gnome-utils/gnc-main-window.c:298
 msgid "Reset the state of all warning messages so they will be shown again."
-msgstr ""
+msgstr "Atstatyti visų įspėjimųjų žinučių būseną, kad jos būtų vėl matomos."
 
 #: ../src/gnome-utils/gnc-main-window.c:300
 msgid "Re_name Page"
@@ -11268,7 +11315,7 @@ msgstr "_Naujas langas"
 
 #: ../src/gnome-utils/gnc-main-window.c:307
 msgid "Open a new top-level GnuCash window."
-msgstr ""
+msgstr "Atverti naują aukštesnio lygio GnuCash langą."
 
 #: ../src/gnome-utils/gnc-main-window.c:309
 msgid "New Window with _Page"
@@ -11276,12 +11323,12 @@ msgstr "Naujas langas su _Puslapiu"
 
 #: ../src/gnome-utils/gnc-main-window.c:310
 msgid "Move the current page to a new top-level GnuCash window."
-msgstr ""
+msgstr "Perkelti esamą puslapį į naują aukštesnio lygio GnuCash langą."
 
 #. Help menu
 #: ../src/gnome-utils/gnc-main-window.c:315
 msgid "Tutorial and Concepts _Guide"
-msgstr ""
+msgstr "Žinynas ir sąvokų vadovas"
 
 #: ../src/gnome-utils/gnc-main-window.c:316
 msgid "Open the GnuCash Tutorial"
@@ -11293,7 +11340,7 @@ msgstr "_Turinys"
 
 #: ../src/gnome-utils/gnc-main-window.c:319
 msgid "Open the GnuCash Help"
-msgstr "Atvert GnuCash pagalbą"
+msgstr "Atverti GnuCash pagalbą"
 
 #: ../src/gnome-utils/gnc-main-window.c:321
 msgid "_About"
@@ -11371,7 +11418,7 @@ msgstr "Langas _0"
 #: ../src/gnome-utils/gnc-main-window.c:1017
 #, c-format
 msgid "Save changes to file %s before closing?"
-msgstr "Išsaugoti pakeitimus į rinkmeną \"%s\" prieš uždarant?"
+msgstr "Išsaugoti pakeitimus į rinkmeną \"%s\" prieš užveriant?"
 
 #: ../src/gnome-utils/gnc-main-window.c:1022
 #, c-format
@@ -11379,6 +11426,7 @@ msgid ""
 "If you don't save, changes from the past %d hours and %d minutes will be "
 "discarded."
 msgstr ""
+"Jei neišsaugosite, pakeitimai prieš %d valandą ir %d minučių bus išmesti."
 
 #: ../src/gnome-utils/gnc-main-window.c:1024
 #, c-format
@@ -11386,6 +11434,7 @@ msgid ""
 "If you don't save, changes from the past %d days and %d hours will be "
 "discarded."
 msgstr ""
+"Jei neišsaugosite, pakeitimai prieš %d dienų ir %d valandų bus išmesti."
 
 #: ../src/gnome-utils/gnc-main-window.c:1032
 msgid "<unknown>"
@@ -11393,7 +11442,7 @@ msgstr "<nežinomas>"
 
 #: ../src/gnome-utils/gnc-main-window.c:1062
 msgid "Close _Without Saving"
-msgstr "_Uždaryti neišsaugojus"
+msgstr "_Užverti neišsaugojus"
 
 #: ../src/gnome-utils/gnc-main-window.c:1264
 msgid "<no file>"
@@ -11412,13 +11461,11 @@ msgstr "%s Ši kopija sukurta iš svn r%s %s"
 #: ../src/gnome-utils/gnc-main-window.c:3628
 #, c-format
 msgid "%s  This copy was built from r%s on %s."
-msgstr ""
+msgstr "%s  Ši kopija sukurta iš r%s %s"
 
 #: ../src/gnome-utils/gnc-main-window.c:3640
 msgid "translator_credits"
-msgstr ""
-"Valek Filippov, Vitaly Lipatov, Vladimir Turbaevsky, Sergey Belyashov, Tadas "
-"Masiulionis."
+msgstr "Tadas Masiulionis"
 
 #. CY Strings
 #. src/app-utils/date-utilities.scm
@@ -11430,74 +11477,74 @@ msgstr "Šiandien"
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:67 ../intl-scm/guile-strings.c:188
 msgid "Start of this month"
-msgstr ""
+msgstr "Šio mėnesio pradžia"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:68 ../intl-scm/guile-strings.c:196
 msgid "Start of previous month"
-msgstr ""
+msgstr "Praėjusio mėnesio pradžia"
 
 #: ../src/gnome-utils/gnc-period-select.c:69
 msgid "Start of this quarter"
-msgstr ""
+msgstr "Šio ketvirčio pradžia"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:70 ../intl-scm/guile-strings.c:212
 msgid "Start of previous quarter"
-msgstr ""
+msgstr "Praėjusio ketvirčio pradžia"
 
 #: ../src/gnome-utils/gnc-period-select.c:71
 msgid "Start of this year"
-msgstr ""
+msgstr "Šių metų pradžia"
 
 #: ../src/gnome-utils/gnc-period-select.c:72
 msgid "Start of previous year"
-msgstr ""
+msgstr "Praėjusių metų pradžia"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:75
 msgid "Start of this fiscal year"
-msgstr ""
+msgstr "Šių fiskalinių metų pradžia"
 
 #: ../src/gnome-utils/gnc-period-select.c:76
 msgid "Start of previous fiscal year"
-msgstr ""
+msgstr "Praėjusių fiskalinių metų pradžia"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:82 ../intl-scm/guile-strings.c:192
 msgid "End of this month"
-msgstr ""
+msgstr "Šio mėnesio pabaiga"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:83 ../intl-scm/guile-strings.c:200
 msgid "End of previous month"
-msgstr ""
+msgstr "Praėjusio mėnesio pabaiga"
 
 #: ../src/gnome-utils/gnc-period-select.c:84
 msgid "End of this quarter"
-msgstr ""
+msgstr "Šio ketvirčio pabaiga"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:85 ../intl-scm/guile-strings.c:216
 msgid "End of previous quarter"
-msgstr ""
+msgstr "Praėjusio ketvirčio pabaiga"
 
 #: ../src/gnome-utils/gnc-period-select.c:86
 msgid "End of this year"
-msgstr ""
+msgstr "Šių metų pabaiga"
 
 #: ../src/gnome-utils/gnc-period-select.c:87
 msgid "End of previous year"
-msgstr ""
+msgstr "Praėjusių metų pabaiga"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:90
 msgid "End of this fiscal year"
-msgstr ""
+msgstr "Šių fiskalinių metų pabaiga"
 
 #: ../src/gnome-utils/gnc-period-select.c:91
 msgid "End of previous fiscal year"
-msgstr ""
+msgstr "Praėjusių fiskalinių metų pabaiga"
 
 #. Development version
 #: ../src/gnome-utils/gnc-splash.c:98
@@ -11517,7 +11564,7 @@ msgstr "Įkeliama..."
 
 #: ../src/gnome-utils/gnc-tree-model-account.c:602
 msgid "New top level account"
-msgstr ""
+msgstr "Nauja aukšto lygio paskyra"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/general-ledger.scm
@@ -11580,7 +11627,7 @@ msgstr "Balansas (laikotarpis)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:581
 msgid "Cleared (Report)"
-msgstr ""
+msgstr "Išvalytas (ataskaita)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:594
 msgid "Reconciled (Report)"
@@ -11588,11 +11635,11 @@ msgstr "Suderintas (ataskaita)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:600
 msgid "Future Minimum"
-msgstr ""
+msgstr "Ateities minimumas"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:607
 msgid "Future Minimum (Report)"
-msgstr ""
+msgstr "Ateities minimumas (ataskaita)"
 
 #. src/report/report-system/html-acct-table.scm
 #. src/report/report-system/html-utilities.scm
@@ -11664,7 +11711,7 @@ msgstr "Suderintas (%s)"
 #: ../src/gnome-utils/gnc-tree-view-account.c:1431
 #, c-format
 msgid "Future Minimum (%s)"
-msgstr ""
+msgstr "Ateities minimumas (%s)"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1434
@@ -11674,7 +11721,7 @@ msgstr "Viso (%s)"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:393
 msgid "Namespace"
-msgstr ""
+msgstr "Pavadinimas"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:410
 msgid "Print Name"
@@ -11715,7 +11762,7 @@ msgstr "Laiko juosta"
 
 #: ../src/gnome-utils/gnc-tree-view-price.c:432
 msgid "Security"
-msgstr ""
+msgstr "Užstatas"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/general-journal.scm
@@ -11787,11 +11834,14 @@ msgstr "Rinkmenų skaičius istorijoje"
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:4
 msgid "This field contains the full path of the most recently opened file."
 msgstr ""
+"Šį laukelį sudaro dažniausiai neseniai atvertos rinkmenos pilnas kelias."
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:5
 msgid ""
 "This field contains the full path of the next most recently opened file."
 msgstr ""
+"Šį laukelį sudaro kitos dažniausiai neseniai atvertos rinkmenos pilnas "
+"kelias."
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:6
 msgid ""
@@ -11808,12 +11858,12 @@ msgstr "%s, Viso:"
 #: ../src/gnome-utils/window-main-summarybar.c:315
 #, c-format
 msgid "%s, Non Currency Commodities Total:"
-msgstr ""
+msgstr "%s, Bevaliutinės prekės. Viso:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:318
 #, c-format
 msgid "%s, Grand Total:"
-msgstr "%s, bendra suma:"
+msgstr "%s, Bendra suma:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:322
 #, c-format
@@ -11838,15 +11888,15 @@ msgstr "Procentinės išmokos"
 
 #: ../src/gnome/window-reconcile.c:465
 msgid "Payment From"
-msgstr ""
+msgstr "Mokėjimas iš"
 
 #: ../src/gnome/window-reconcile.c:471 ../src/gnome/window-reconcile.c:481
 msgid "Reconcile Account"
-msgstr ""
+msgstr "Suderinti paskyrą"
 
 #: ../src/gnome/window-reconcile.c:486
 msgid "Payment To"
-msgstr ""
+msgstr "Mokėjimas kam"
 
 #: ../src/gnome/window-reconcile.c:499
 msgid "No Auto Interest Payments for this Account"
@@ -11875,19 +11925,18 @@ msgstr "Ar tikrai norite ištrinti pasirinktą pervedimą?"
 
 #. statement date title/value
 #: ../src/gnome/window-reconcile.c:1721
-#, fuzzy
 msgid "Statement Date:"
 msgstr "_Deklaracijos data:"
 
 #. ending balance title/value
 #: ../src/gnome/window-reconcile.c:1741
 msgid "Ending Balance:"
-msgstr ""
+msgstr "Galutinis balansas:"
 
 #. reconciled balance title/value
 #: ../src/gnome/window-reconcile.c:1751
 msgid "Reconciled Balance:"
-msgstr ""
+msgstr "Suderintas balansas:"
 
 #. difference title/value
 #: ../src/gnome/window-reconcile.c:1761
@@ -11899,10 +11948,11 @@ msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
 msgstr ""
+"Padarėte pakeitimus šiame suderintame lange. Ar tikrai norite atšaukti?"
 
 #: ../src/gnome/window-reconcile.c:1986
 msgid "The account is not balanced. Are you sure you want to finish?"
-msgstr ""
+msgstr "Paskyra yra be balanso. Ar tikrai norite baigti?"
 
 #: ../src/gnome/window-reconcile.c:2043
 msgid "Do you want to postpone this reconciliation and finish it later?"
@@ -22049,7 +22099,7 @@ msgstr "Internetu"
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:7024 ../intl-scm/guile-strings.c:7114
 msgid "Read aborted."
-msgstr ""
+msgstr "Skaitymas nutrauktas."
 
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-file.scm
@@ -22071,19 +22121,19 @@ msgstr "Kai kurie pavedimai gali būti išmesti."
 #: ../intl-scm/guile-strings.c:7120 ../intl-scm/guile-strings.c:7124
 #, fuzzy
 msgid "Converted to: "
-msgstr "Konvertuoti rinkmena"
+msgstr "Konvertuota į: "
 
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:7032 ../intl-scm/guile-strings.c:7122
 msgid "Some characters have been converted according to your locale."
-msgstr ""
+msgstr "Kai kurie simboliai konvertuoti priklausomai nuo Jūsų vietovės."
 
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:7036 ../intl-scm/guile-strings.c:7126
 msgid "Ignoring unknown option"
-msgstr ""
+msgstr "Nepaisoma nežinoma parinktis"
 
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-file.scm
@@ -22103,7 +22153,7 @@ msgstr "_Atsisakyti pervedimo"
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:7042 ../intl-scm/guile-strings.c:7132
 msgid "Ignoring class line"
-msgstr ""
+msgstr "Nepaisoma klasės linijos"
 
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-file.scm
@@ -22116,13 +22166,13 @@ msgstr "QIF kategorijos pavadinimas"
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:7046 ../intl-scm/guile-strings.c:7136
 msgid "Ignoring security line"
-msgstr ""
+msgstr "Nepaisoma saugumo linijos"
 
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:7048 ../intl-scm/guile-strings.c:7138
 msgid "File does not appear to be in QIF format"
-msgstr ""
+msgstr "Rinkmena tikriausiai nėra QIF formato"
 
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-file.scm
@@ -22253,7 +22303,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7086 ../intl-scm/guile-strings.c:7176
 #, c-format
 msgid "Value '%s' could be %s or %s."
-msgstr ""
+msgstr "Reikšmė '%s' gali būti %s arba %s."
 
 #. src/import-export/qif-import/qif-import/qif-to-gnc.scm
 #. src/import-export/qif-import/qif-to-gnc.scm
@@ -22265,7 +22315,7 @@ msgstr "QIF įkėlimas: Konfliktas su kitos paskyros pavadinimu."
 #. src/import-export/qif-import/qif-to-gnc.scm
 #: ../intl-scm/guile-strings.c:7090 ../intl-scm/guile-strings.c:7180
 msgid "Preparing to convert your QIF data"
-msgstr ""
+msgstr "Ruošiamasi versti Jūsų QIF duomenis"
 
 #. src/import-export/qif-import/qif-import/qif-to-gnc.scm
 #. src/import-export/qif-import/qif-to-gnc.scm
@@ -22326,7 +22376,6 @@ msgstr ""
 #. src/import-export/qif-import/qif-import/qif-merge-groups.scm
 #. src/import-export/qif-import/qif-merge-groups.scm
 #: ../intl-scm/guile-strings.c:7108 ../intl-scm/guile-strings.c:7198
-#, fuzzy
 msgid "Finding duplicate transactions"
 msgstr "Ieškomi dubliuoti pervedimai..."
 
@@ -22373,22 +22422,22 @@ msgstr "Jūsų įmonės ID (pvz. 'Tax-ID:00-000000)"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7216
 msgid "Default Customer TaxTable"
-msgstr ""
+msgstr "Numatytoji pirkėjo mokesčių lentelė"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7218
 msgid "The default tax table to apply to customers."
-msgstr ""
+msgstr "Numatytoji mokesčių lentelė, kurią pateiksite pirkėjams."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7220
 msgid "Default Vendor TaxTable"
-msgstr ""
+msgstr "Numatytoji tiekėjo mokesčių lentelė"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7222
 msgid "The default tax table to apply to vendors."
-msgstr ""
+msgstr "Numatytoji mokesčių lentelė, kurią pateiksite tiekėjams."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7224
@@ -22439,12 +22488,12 @@ msgstr "Įmonės kontaktinis asmuo"
 #. src/business/business-reports/payables.scm
 #: ../intl-scm/guile-strings.c:7246
 msgid "Payable Account"
-msgstr ""
+msgstr "Mokėtinos paskyros"
 
 #. src/business/business-reports/payables.scm
 #: ../intl-scm/guile-strings.c:7248
 msgid "The payable account you wish to examine"
-msgstr ""
+msgstr "Mokėtinos paskyros, kurias norite išnagrinėti"
 
 #. src/business/business-reports/payables.scm
 #: ../intl-scm/guile-strings.c:7250
@@ -22465,7 +22514,7 @@ msgstr "Sąskaitos-faktūros numeris"
 #: ../intl-scm/guile-strings.c:7258 ../intl-scm/guile-strings.c:7664
 #: ../intl-scm/guile-strings.c:7920
 msgid "Charge Type"
-msgstr ""
+msgstr "Mokesčio tipas"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -22474,7 +22523,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7672 ../intl-scm/guile-strings.c:7724
 #: ../intl-scm/guile-strings.c:7928 ../intl-scm/guile-strings.c:7980
 msgid "Taxable"
-msgstr ""
+msgstr "Apmokestinamas"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -22552,7 +22601,7 @@ msgstr "Rodyti veiksmą?"
 #: ../intl-scm/guile-strings.c:7302 ../intl-scm/guile-strings.c:7708
 #: ../intl-scm/guile-strings.c:7964
 msgid "Display the quantity of items?"
-msgstr ""
+msgstr "Rodyti punktų kiekį?"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -22560,7 +22609,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7308 ../intl-scm/guile-strings.c:7714
 #: ../intl-scm/guile-strings.c:7970
 msgid "Display the price per item?"
-msgstr ""
+msgstr "Rodyti kiekvieno punkto kainą"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -22576,7 +22625,7 @@ msgstr "Rodyti įrašo nuolaidą"
 #: ../intl-scm/guile-strings.c:7320 ../intl-scm/guile-strings.c:7726
 #: ../intl-scm/guile-strings.c:7982
 msgid "Display the entry's taxable status"
-msgstr ""
+msgstr "Rodyti įrašo mokesčių būseną"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -22584,7 +22633,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7326 ../intl-scm/guile-strings.c:7732
 #: ../intl-scm/guile-strings.c:7988
 msgid "Display each entry's total total tax"
-msgstr ""
+msgstr "Rodyti kiekvieno įrašo visus mokesčius"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -22632,7 +22681,7 @@ msgstr "Rodyti sąskaitos-faktūros nuorodas?"
 #: ../intl-scm/guile-strings.c:7354 ../intl-scm/guile-strings.c:7784
 #: ../intl-scm/guile-strings.c:8016
 msgid "Billing Terms"
-msgstr ""
+msgstr "Atsiskaitymo terminai"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -22640,7 +22689,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7356 ../intl-scm/guile-strings.c:7786
 #: ../intl-scm/guile-strings.c:8018
 msgid "Display the invoice billing terms?"
-msgstr ""
+msgstr "Rodyti sąskaitos-faktūros atsiskaitymo terminus?"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -22648,7 +22697,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7362 ../intl-scm/guile-strings.c:7792
 #: ../intl-scm/guile-strings.c:8024
 msgid "Display the billing id?"
-msgstr ""
+msgstr "Rodyti atsiskaitymo ID?"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -22664,7 +22713,7 @@ msgstr "Rodyti sąskaitos-faktūros pastabas?"
 #: ../intl-scm/guile-strings.c:7372 ../intl-scm/guile-strings.c:7802
 #: ../intl-scm/guile-strings.c:8034
 msgid "Payments"
-msgstr ""
+msgstr "Mokėjimai"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -22736,7 +22785,7 @@ msgstr "Rodyti įmonės kontaktinė informaciją"
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:7410
 msgid "Company contact string"
-msgstr ""
+msgstr "Įmonės kontaktų masyvas"
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:7412
@@ -22793,7 +22842,6 @@ msgstr "Žiniatinklis:"
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:7442 ../intl-scm/guile-strings.c:8074
-#, fuzzy
 msgid "Invoice in progress..."
 msgstr "Sąskaikta-faktūra vykdoma...."
 
@@ -22860,15 +22908,14 @@ msgstr "Iš viso skolinga"
 
 #. src/business/business-reports/job-report.scm
 #: ../intl-scm/guile-strings.c:7488
-#, fuzzy
 msgid "The job for this report"
-msgstr "Šios ataskaitos įmonė"
+msgstr "Operacija šiai ataskaitai"
 
 #. src/business/business-reports/job-report.scm
 #. src/business/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:7490 ../intl-scm/guile-strings.c:7598
 msgid "The account to search for transactions"
-msgstr ""
+msgstr "Paskyros paieška pavedimams"
 
 #. src/business/business-reports/job-report.scm
 #. src/business/business-reports/owner-report.scm
@@ -22936,6 +22983,8 @@ msgid ""
 "No valid account selected.  Click on the Options button and select the "
 "account to use."
 msgstr ""
+"Nepasirinkta nė viena tinkama paskyra. Spragtelkite mygtuką Parinktys ir "
+"pasirinkite norimą paskyrą."
 
 #. src/business/business-reports/job-report.scm
 #. src/business/business-reports/owner-report.scm
@@ -22943,10 +22992,11 @@ msgstr ""
 #, c-format
 msgid "No valid %s selected.  Click on the Options button to select a company."
 msgstr ""
+"Nėra tinkamų %s pasirinkimų. Spragtelkite ant parinkčių mygtuko, kad "
+"pasirinktumėte įmonę."
 
 #. src/business/business-reports/job-report.scm
 #: ../intl-scm/guile-strings.c:7556
-#, fuzzy
 msgid "Job Report"
 msgstr "Ataskaita"
 
@@ -23018,7 +23068,7 @@ msgstr "Теkstas"
 #. src/business/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:7816
 msgid "Extra notes to put on the invoice (simple HTML is accepted)"
-msgstr ""
+msgstr "Papilomos pastabos dėti į sąskaitą-faktūrą (paprastas HTML priimtinas)"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/invoice.scm
@@ -23056,12 +23106,12 @@ msgstr "Rikiuoti užsakymus"
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:7864
 msgid "Show Multi-currency Totals?"
-msgstr ""
+msgstr "Rodyti daugiavaliutinę sumą?"
 
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:7866
 msgid "Show zero balance items?"
-msgstr ""
+msgstr "Rodyti nulinio balanso punktus?"
 
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:7868
@@ -23164,6 +23214,9 @@ msgid ""
 "bugs and unstable features! If you are looking for a stable personal finance "
 "application, you should use the latest release of GnuCash 2.2."
 msgstr ""
+"Įspėjimas! Tai yra GnuCash KURIAMOJI versija. Ji tikriausiai turi daug "
+"klaidų ir nestabilių ypatybių! Jei Jūs ieškote stabilios asmeninės finansų "
+"programos, Jūs turėtumėte naudoti naujausią GnuCash 2.2 leidimą."
 
 #: ../doc/tip_of_the_day.list.in:6
 msgid ""
@@ -23172,6 +23225,9 @@ msgid ""
 "GnuCash 2.0\" is particularly interesting. You can access the manual under "
 "the Help menu."
 msgstr ""
+"GnuCash internetinis žinynas turi daug naudingos informacijos. Jei "
+"atnaujinate iš senesnės GnuCash versijos, skiltis \"Kas naujo GnuCash 2.0\" "
+"yra pakankamai įdomi. Žinyną galite pasiekti per meniu Pagalba."
 
 #: ../doc/tip_of_the_day.list.in:11
 msgid ""
@@ -23180,6 +23236,10 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
+"Jūs galite lengvai įkelti savo esamus finansinius duomenis iš Quiken, MS "
+"Money arba kitų programų, kurios eksportuoja QIF ir QFX rinkmenas. Iš meniu "
+"Rinkmena, spragtelkite Importuoti ir atitinkamai pasirinkite QIF arba QFX "
+"rinkmeną. Toliau sekite nurodymus."
 
 #: ../doc/tip_of_the_day.list.in:16
 msgid ""
