@@ -56,6 +56,67 @@ static QofLogModule log_module = GNC_MOD_LEDGER;
 static gboolean use_red_for_negative = TRUE;
 
 
+static gnc_numeric
+gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  Split *split;
+  SRInfo *info = gnc_split_register_get_info (reg);
+  gnc_numeric value = gnc_numeric_zero(), balance = gnc_numeric_zero();
+  Account *account;
+  Transaction *trans;
+  GList *node, *children, *child;
+  int i, row;
+
+  /* This function calculates the register balance for a particular split at runtime.
+   * It works regardless of the sort order. */
+  balance = gnc_numeric_zero();
+
+    /* Return NULL if this is a blank transaction. */
+    split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+    if (split == xaccSplitLookup (&info->blank_split_guid,
+                                  gnc_get_current_book ()))
+      return gnc_numeric_zero();
+
+    trans = xaccSplitGetParent (split);
+    if (!trans)
+      return gnc_numeric_zero();
+
+    /* Get a list of all subaccounts for matching */
+    children = gnc_account_get_descendants(gnc_split_register_get_default_account(reg));
+    children = g_list_append(children, gnc_split_register_get_default_account(reg));
+
+    /* Get the row number we're on, then start with the first row. */
+    row = virt_loc.vcell_loc.virt_row;
+    virt_loc.vcell_loc.virt_row=0;
+
+    while (virt_loc.vcell_loc.virt_row <= row ) {
+      /* Get new temporary split and its parent transaction */
+      split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+      trans = xaccSplitGetParent (split);
+
+      i = 1;
+      for (node = xaccTransGetSplitList (trans); node; node = node->next) {
+        Split *secondary = node->data;
+        i++;
+
+        /* Add up the splits that belong to the transaction if they are
+         * from the lead account or one of the subaccounts. */
+        account = xaccSplitGetAccount (secondary);
+
+        for (child = children; child; child = child->next) {
+          if (account == child->data) {
+            balance = gnc_numeric_add_fixed(balance, xaccSplitGetAmount(secondary));
+            break;
+          }
+        }
+      }
+      virt_loc.vcell_loc.virt_row+=i;
+    }
+
+  return balance;
+}
+
 static gboolean
 gnc_split_register_use_security_cells (SplitRegister *reg,
                                        VirtualLocation virt_loc)
@@ -402,6 +463,8 @@ gnc_split_register_get_balance_fg_color (VirtualLocation virt_loc,
 
   if (gnc_cell_name_equal (cell_name, BALN_CELL))
     balance = xaccSplitGetBalance (split);
+  else if (gnc_cell_name_equal (cell_name, RBALN_CELL))
+    balance = gnc_split_register_get_rbaln (virt_loc,user_data);
   else
     balance = get_trans_total_balance (reg, xaccSplitGetParent (split));
 
@@ -1304,6 +1367,25 @@ gnc_split_register_get_mxfrm_help (VirtualLocation virt_loc,
   return g_strdup (help);
 }
 
+/* Return the total amount of the transaction for splits of default account
+ * and all subaccounts of the register. */
+static gnc_numeric
+get_trans_total_amount_subaccounts (SplitRegister *reg, Transaction *trans)
+{
+  GList *children, *child;
+  gnc_numeric total = gnc_numeric_zero();
+
+  /* Get a list of all subaccounts for matching */
+  children = gnc_account_get_descendants(gnc_split_register_get_default_account(reg));
+  children = g_list_append(children, gnc_split_register_get_default_account(reg));
+
+  for (child = children; child; child = child->next) {
+    total = gnc_numeric_add_fixed(total, xaccTransGetAccountAmount(trans, child->data));
+  }
+
+  return total;
+}
+
 static const char *
 gnc_split_register_get_tdebcred_entry (VirtualLocation virt_loc,
                                        gboolean translate,
@@ -1321,7 +1403,16 @@ gnc_split_register_get_tdebcred_entry (VirtualLocation virt_loc,
 
   cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
 
-  total = get_trans_total_amount (reg, xaccSplitGetParent (split));
+  switch (reg->type)
+  {
+    case GENERAL_LEDGER:
+    case INCOME_LEDGER:
+      total = get_trans_total_amount_subaccounts (reg, xaccSplitGetParent (split));
+      break;
+    default:
+      total = get_trans_total_amount (reg, xaccSplitGetParent (split));
+  }
+
   if (gnc_numeric_zero_p (total))
     return NULL;
 
@@ -1497,6 +1588,43 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
 
     return xaccPrintAmount (amount, print_info);
   }
+}
+
+/* Calculates the register balance for each split at runtime.
+ * This works regardless of the sort order. */
+static const char *
+gnc_split_register_get_rbaln_entry (VirtualLocation virt_loc,
+                                      gboolean translate,
+                                      gboolean *conditionally_changed,
+                                      gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  SRInfo *info = gnc_split_register_get_info (reg);
+  Split *split;
+  Transaction *trans;
+  gnc_numeric balance;
+  Account *account;
+
+  /* Return NULL if this is a blank transaction. */
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+  if (split == xaccSplitLookup (&info->blank_split_guid,
+                                gnc_get_current_book ()))
+    return NULL;
+
+  trans = xaccSplitGetParent (split);
+  if (!trans)
+    return NULL;
+
+  balance = gnc_split_register_get_rbaln (virt_loc,user_data);
+
+  account = xaccSplitGetAccount (split);
+  if (!account)
+    account = gnc_split_register_get_default_account (reg);
+
+  if (gnc_reverse_balance (account))
+    balance = gnc_numeric_neg (balance);
+
+  return xaccPrintAmount (balance, gnc_account_print_info (account, FALSE));
 }
 
 static gboolean
@@ -2006,6 +2134,10 @@ gnc_split_register_model_new (void)
                                      gnc_split_register_get_debcred_entry,
                                      CRED_CELL);
 
+  gnc_table_model_set_entry_handler (model,
+                                     gnc_split_register_get_rbaln_entry,
+                                     RBALN_CELL);
+
 
   gnc_table_model_set_label_handler (model,
                                      gnc_split_register_get_date_label,
@@ -2094,6 +2226,10 @@ gnc_split_register_model_new (void)
   gnc_table_model_set_label_handler (model,
                                      gnc_split_register_get_fcredit_label,
                                      FCRED_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_tbalance_label,
+                                     RBALN_CELL);
 
 
   gnc_table_model_set_default_help_handler(
@@ -2224,6 +2360,9 @@ gnc_split_register_model_new (void)
 
   gnc_table_model_set_fg_color_handler(
       model, gnc_split_register_get_balance_fg_color, TBALN_CELL);
+
+  gnc_table_model_set_fg_color_handler(
+      model, gnc_split_register_get_balance_fg_color, RBALN_CELL);
 
 
   gnc_table_model_set_default_bg_color_handler(

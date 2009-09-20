@@ -209,6 +209,7 @@ typedef enum
 #define TYPE_CELL  "split-type"
 #define XFRM_CELL  "account"
 #define VNOTES_CELL "void-notes"
+#define RBALN_CELL "reg-run-balance"
 /** @} */
 
 /** @name Cursor Names
