@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.1.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-23 22:37+0200\n"
+"POT-Creation-Date: 2009-09-20 22:18+0200\n"
 "PO-Revision-Date: 2009-02-06 17:32+0100\n"
 "Last-Translator: David Planella <david.planella@gmail.com>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -157,7 +157,7 @@ msgstr "Guanys retinguts"
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../src/app-utils/gnc-ui-util.c:668 ../src/engine/Account.c:3719
-#: ../src/register/ledger-core/split-register.c:2249
+#: ../src/register/ledger-core/split-register.c:2263
 #: ../intl-scm/guile-strings.c:2140 ../intl-scm/guile-strings.c:2968
 #: ../intl-scm/guile-strings.c:3696 ../intl-scm/guile-strings.c:5038
 #: ../intl-scm/guile-strings.c:6960 ../intl-scm/guile-strings.c:6964
@@ -198,9 +198,9 @@ msgstr "Deure"
 #. src/report/standard-reports/register.scm
 #: ../src/app-utils/guile-util.c:1139
 #: ../src/register/ledger-core/split-register.c:2108
-#: ../src/register/ledger-core/split-register.c:2197
-#: ../src/register/ledger-core/split-register.c:2213
-#: ../src/register/ledger-core/split-register.c:2231
+#: ../src/register/ledger-core/split-register.c:2203
+#: ../src/register/ledger-core/split-register.c:2222
+#: ../src/register/ledger-core/split-register.c:2240
 #: ../intl-scm/guile-strings.c:2274 ../intl-scm/guile-strings.c:2460
 #: ../intl-scm/guile-strings.c:3102 ../intl-scm/guile-strings.c:3288
 #: ../intl-scm/guile-strings.c:4234 ../intl-scm/guile-strings.c:4558
@@ -401,7 +401,7 @@ msgstr "S'estan carregant les dades..."
 #: ../src/business/business-gnome/dialog-invoice.c:2601
 #: ../src/business/business-gnome/glade/invoice.glade.h:12
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:317
-#: ../src/register/ledger-core/split-register.c:2228
+#: ../src/register/ledger-core/split-register.c:2237
 #: ../intl-scm/guile-strings.c:130 ../intl-scm/guile-strings.c:4646
 #: ../intl-scm/guile-strings.c:5988 ../intl-scm/guile-strings.c:7432
 #: ../intl-scm/guile-strings.c:7522 ../intl-scm/guile-strings.c:7524
@@ -461,9 +461,10 @@ msgstr "Desglossament automàtic"
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:140
 #: ../src/gnome/druid-loan.c:1795 ../src/gnome/druid-loan.c:2276
 #: ../src/gnome/druid-loan.c:2339 ../src/gnome/druid-loan.c:2353
-#: ../src/register/ledger-core/split-register.c:2224
-#: ../src/register/ledger-core/split-register.c:2229
+#: ../src/register/ledger-core/split-register.c:2192
+#: ../src/register/ledger-core/split-register.c:2233
 #: ../src/register/ledger-core/split-register.c:2238
+#: ../src/register/ledger-core/split-register.c:2249
 #: ../intl-scm/guile-strings.c:112 ../intl-scm/guile-strings.c:128
 #: ../intl-scm/guile-strings.c:158
 msgid "Payment"
@@ -871,7 +872,7 @@ msgstr "Esteu segur que voleu comptabilitzar la factura?"
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/invoice.scm
 #: ../src/business/business-gnome/dialog-invoice.c:655
-#: ../src/register/ledger-core/split-register-model.c:108
+#: ../src/register/ledger-core/split-register-model.c:169
 #: ../intl-scm/guile-strings.c:7440 ../intl-scm/guile-strings.c:7460
 #: ../intl-scm/guile-strings.c:7568 ../intl-scm/guile-strings.c:7754
 #: ../intl-scm/guile-strings.c:8072
@@ -1070,14 +1071,14 @@ msgstr "Identificador del comprovant"
 #: ../src/business/business-gnome/dialog-invoice.c:2425
 #: ../src/gnome-utils/gnc-tree-view-account.c:515
 #: ../src/gnome-utils/gnc-tree-view-price.c:456
-#: ../src/register/ledger-core/split-register-model.c:197
+#: ../src/register/ledger-core/split-register-model.c:258
 #: ../intl-scm/guile-strings.c:3904 ../intl-scm/guile-strings.c:5246
 #: ../intl-scm/guile-strings.c:7464 ../intl-scm/guile-strings.c:7572
 msgid "Type"
 msgstr "Tipus"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2427
-#: ../src/register/ledger-core/split-register-model.c:151
+#: ../src/register/ledger-core/split-register-model.c:212
 msgid "Paid"
 msgstr "Pagat"
 
@@ -1106,7 +1107,7 @@ msgstr "Obert"
 #: ../src/business/business-gnome/glade/payment.glade.h:4
 #: ../src/gnome/glade/lots.glade.h:15 ../src/gnome/reconcile-list.c:223
 #: ../src/import-export/csv/gnc-csv-model.c:39
-#: ../src/register/ledger-core/split-register-model.c:122
+#: ../src/register/ledger-core/split-register-model.c:183
 #: ../intl-scm/guile-strings.c:2280 ../intl-scm/guile-strings.c:2484
 #: ../intl-scm/guile-strings.c:3108 ../intl-scm/guile-strings.c:3312
 #: ../intl-scm/guile-strings.c:4146 ../intl-scm/guile-strings.c:4212
@@ -1562,7 +1563,7 @@ msgstr ""
 "no s'habilita, la factura s'obrirà a la finestra actual."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
-#: ../src/gnome-utils/glade/preferences.glade.h:93
+#: ../src/gnome-utils/glade/preferences.glade.h:95
 msgid "Number of _rows:"
 msgstr "Nomb_re de files:"
 
@@ -1667,7 +1668,7 @@ msgstr "Diàleg per a triar el propietari"
 #: ../src/import-export/import-match-picker.c:375
 #: ../src/import-export/qif-import/druid-qif-import.c:3582
 #: ../src/import-export/qif-import/druid-qif-import.c:3620
-#: ../src/register/ledger-core/split-register-model.c:138
+#: ../src/register/ledger-core/split-register-model.c:199
 #: ../intl-scm/guile-strings.c:2282 ../intl-scm/guile-strings.c:2486
 #: ../intl-scm/guile-strings.c:3110 ../intl-scm/guile-strings.c:3314
 #: ../intl-scm/guile-strings.c:3906 ../intl-scm/guile-strings.c:4150
@@ -1730,7 +1731,7 @@ msgstr "Divisa: "
 #: ../src/business/business-gnome/glade/customer.glade.h:8
 #: ../src/business/business-gnome/glade/invoice.glade.h:6
 #: ../src/business/business-gnome/search-owner.c:236
-#: ../src/register/ledger-core/split-register-model.c:134
+#: ../src/register/ledger-core/split-register-model.c:195
 #: ../intl-scm/guile-strings.c:7534 ../intl-scm/guile-strings.c:7632
 msgid "Customer"
 msgstr "Client"
@@ -1779,7 +1780,7 @@ msgstr "Nom: "
 #: ../src/business/business-gnome/glade/vendor.glade.h:10
 #: ../src/gnome/dialog-find-transactions.c:120
 #: ../src/gnome-utils/gnc-tree-view-account.c:633
-#: ../src/register/ledger-core/split-register-model.c:309
+#: ../src/register/ledger-core/split-register-model.c:370
 #: ../intl-scm/guile-strings.c:3912 ../intl-scm/guile-strings.c:4206
 #: ../intl-scm/guile-strings.c:4218 ../intl-scm/guile-strings.c:4420
 #: ../intl-scm/guile-strings.c:4468 ../intl-scm/guile-strings.c:5254
@@ -2092,7 +2093,7 @@ msgstr ""
 #: ../src/import-export/import-match-picker.c:373
 #: ../src/import-export/qif-import/druid-qif-import.c:3574
 #: ../src/import-export/qif-import/druid-qif-import.c:3612
-#: ../src/register/ledger-core/split-register-model.c:101
+#: ../src/register/ledger-core/split-register-model.c:162
 #: ../intl-scm/guile-strings.c:2230 ../intl-scm/guile-strings.c:2278
 #: ../intl-scm/guile-strings.c:2480 ../intl-scm/guile-strings.c:2730
 #: ../intl-scm/guile-strings.c:2744 ../intl-scm/guile-strings.c:3058
@@ -2127,7 +2128,7 @@ msgstr "Data"
 #: ../src/import-export/import-main-matcher.c:438
 #: ../src/import-export/import-match-picker.c:336
 #: ../src/import-export/import-match-picker.c:376
-#: ../src/register/ledger-core/split-register-model.c:190
+#: ../src/register/ledger-core/split-register-model.c:251
 #: ../intl-scm/guile-strings.c:2488 ../intl-scm/guile-strings.c:3316
 #: ../intl-scm/guile-strings.c:4182 ../intl-scm/guile-strings.c:4216
 #: ../intl-scm/guile-strings.c:4220 ../intl-scm/guile-strings.c:4344
@@ -2173,7 +2174,7 @@ msgstr ""
 #. src/business/business-reports/owner-report.scm
 #: ../src/business/business-gnome/glade/vendor.glade.h:19
 #: ../src/business/business-gnome/search-owner.c:237
-#: ../src/register/ledger-core/split-register-model.c:136
+#: ../src/register/ledger-core/split-register-model.c:197
 #: ../intl-scm/guile-strings.c:7538 ../intl-scm/guile-strings.c:7634
 msgid "Vendor"
 msgstr "Proveïdor"
@@ -2540,7 +2541,7 @@ msgid "Record the current entry"
 msgstr "Registra l'entrada actual"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:133
-#: ../src/gnome/glade/register.glade.h:79 ../src/gnome/window-reconcile.c:2096
+#: ../src/gnome/glade/register.glade.h:79 ../src/gnome/window-reconcile.c:2101
 msgid "_Cancel"
 msgstr "_Cancel·la"
 
@@ -2551,7 +2552,7 @@ msgstr "Cancel·la l'entrada actual"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:136
 #: ../src/gnome/glade/register.glade.h:82
 #: ../src/gnome/gnc-plugin-page-sx-list.c:124
-#: ../src/gnome/window-reconcile.c:2127
+#: ../src/gnome/window-reconcile.c:2132
 msgid "_Delete"
 msgstr "_Suprimeix"
 
@@ -2881,8 +2882,8 @@ msgid "sample:X"
 msgstr "sample:X"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:74
-#: ../src/register/ledger-core/split-register-layout.c:510
-#: ../src/register/ledger-core/split-register-layout.c:518
+#: ../src/register/ledger-core/split-register-layout.c:511
+#: ../src/register/ledger-core/split-register-layout.c:519
 msgid "sample:12/12/2000"
 msgstr "sample:12/12/2007"
 
@@ -2916,8 +2917,8 @@ msgstr "sample(DH):+%"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:94
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:97
-#: ../src/register/ledger-core/split-register-layout.c:579
-#: ../src/register/ledger-core/split-register-layout.c:587
+#: ../src/register/ledger-core/split-register-layout.c:580
+#: ../src/register/ledger-core/split-register-layout.c:588
 msgid "sample:Expenses:Automobile:Gasoline"
 msgstr "sample:Despeses:Cotxe:Gasolina"
 
@@ -2985,6 +2986,7 @@ msgstr "Efectiu"
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:122
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:512
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:1038
+#: ../src/register/ledger-core/split-register.c:2191
 #: ../intl-scm/guile-strings.c:124 ../intl-scm/guile-strings.c:140
 #: ../intl-scm/guile-strings.c:4648 ../intl-scm/guile-strings.c:5990
 msgid "Charge"
@@ -3003,7 +3005,7 @@ msgstr "Compte de despeses"
 #. src/business/business-reports/invoice.scm
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:65
 #: ../src/gnome/dialog-find-transactions.c:122
-#: ../src/register/ledger-core/split-register-model.c:169
+#: ../src/register/ledger-core/split-register-model.c:230
 #: ../intl-scm/guile-strings.c:7294 ../intl-scm/guile-strings.c:7700
 #: ../intl-scm/guile-strings.c:7956
 msgid "Action"
@@ -3327,7 +3329,7 @@ msgstr "Divises"
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../src/engine/Account.c:3717
-#: ../src/register/ledger-core/split-register.c:2265
+#: ../src/register/ledger-core/split-register.c:2279
 #: ../intl-scm/guile-strings.c:152 ../intl-scm/guile-strings.c:1480
 #: ../intl-scm/guile-strings.c:2210 ../intl-scm/guile-strings.c:2232
 #: ../intl-scm/guile-strings.c:3038 ../intl-scm/guile-strings.c:3060
@@ -3533,7 +3535,7 @@ msgstr "-- Assentament desglossat --"
 #: ../src/engine/Split.c:1279 ../src/gnome/druid-stock-split.c:454
 #: ../src/gnome/glade/register.glade.h:67
 #: ../src/gnome/gnc-plugin-page-register.c:336
-#: ../src/register/ledger-core/split-register.c:2268
+#: ../src/register/ledger-core/split-register.c:2282
 #: ../intl-scm/guile-strings.c:4130 ../intl-scm/guile-strings.c:5472
 #: ../intl-scm/guile-strings.c:6424 ../intl-scm/guile-strings.c:6740
 msgid "Split"
@@ -3633,7 +3635,7 @@ msgstr "Tots els comptes"
 #: ../src/import-export/import-main-matcher.c:434
 #: ../src/import-export/import-match-picker.c:332
 #: ../src/import-export/qif-import/dialog-account-picker.c:339
-#: ../src/register/ledger-core/split-register-model.c:176
+#: ../src/register/ledger-core/split-register-model.c:237
 #: ../intl-scm/guile-strings.c:2284 ../intl-scm/guile-strings.c:2306
 #: ../intl-scm/guile-strings.c:2756 ../intl-scm/guile-strings.c:3112
 #: ../intl-scm/guile-strings.c:3134 ../intl-scm/guile-strings.c:3584
@@ -3674,7 +3676,7 @@ msgstr "Cotització de l'acció"
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/dialog-find-transactions.c:113
 #: ../src/gnome/druid-stock-split.c:621
-#: ../src/register/ledger-core/split-register-model.c:239
+#: ../src/register/ledger-core/split-register-model.c:300
 #: ../intl-scm/guile-strings.c:2286 ../intl-scm/guile-strings.c:2502
 #: ../intl-scm/guile-strings.c:3114 ../intl-scm/guile-strings.c:3330
 #: ../intl-scm/guile-strings.c:3996 ../intl-scm/guile-strings.c:4162
@@ -3792,12 +3794,12 @@ msgstr "Finalitzat"
 #: ../src/gnome/glade/register.glade.h:85
 #: ../src/gnome/gnc-plugin-page-sx-list.c:122
 #: ../src/gnome-utils/gnc-main-window.c:233
-#: ../src/gnome/window-reconcile.c:2124
+#: ../src/gnome/window-reconcile.c:2129
 #: ../src/report/report-gnome/report.glade.h:17
 msgid "_Edit"
 msgstr "_Edita"
 
-#: ../src/gnome/dialog-sx-editor.c:186 ../src/gnome/window-reconcile.c:2081
+#: ../src/gnome/dialog-sx-editor.c:186 ../src/gnome/window-reconcile.c:2086
 msgid "_Transaction"
 msgstr "_Assentament"
 
@@ -4133,7 +4135,7 @@ msgid "via Escrow account?"
 msgstr "a través del compte d'aval?"
 
 #: ../src/gnome/druid-loan.c:811
-#: ../src/register/ledger-core/split-register.c:2222
+#: ../src/register/ledger-core/split-register.c:2231
 msgid "Loan"
 msgstr "Préstec"
 
@@ -4177,7 +4179,7 @@ msgstr "Capital total"
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../src/gnome/druid-loan.c:1807 ../src/gnome/druid-loan.c:2395
-#: ../src/register/ledger-core/split-register.c:2230
+#: ../src/register/ledger-core/split-register.c:2239
 #: ../intl-scm/guile-strings.c:6916 ../intl-scm/guile-strings.c:6942
 #: ../intl-scm/guile-strings.c:6984
 msgid "Interest"
@@ -4417,7 +4419,7 @@ msgstr "Finalització de la configuració dels comptes"
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/glade/account.glade.h:25
-#: ../src/gnome-utils/glade/preferences.glade.h:78
+#: ../src/gnome-utils/glade/preferences.glade.h:80
 #: ../intl-scm/guile-strings.c:244 ../intl-scm/guile-strings.c:250
 #: ../intl-scm/guile-strings.c:256 ../intl-scm/guile-strings.c:262
 #: ../intl-scm/guile-strings.c:370 ../intl-scm/guile-strings.c:374
@@ -5201,8 +5203,8 @@ msgstr "Un resum de totes les transaccions en el paquet seleccionat"
 #: ../src/gnome/glade/lots.glade.h:7 ../src/gnome/lot-viewer.c:633
 #: ../src/gnome-utils/gnc-tree-view-account.c:554
 #: ../src/import-export/csv/gnc-csv-model.c:36
-#: ../src/register/ledger-core/split-register-model.c:162
-#: ../src/register/ledger-core/split-register-model.c:302
+#: ../src/register/ledger-core/split-register-model.c:223
+#: ../src/register/ledger-core/split-register-model.c:363
 #: ../intl-scm/guile-strings.c:1510 ../intl-scm/guile-strings.c:3910
 #: ../intl-scm/guile-strings.c:4236 ../intl-scm/guile-strings.c:4552
 #: ../intl-scm/guile-strings.c:5252 ../intl-scm/guile-strings.c:5578
@@ -5663,7 +5665,7 @@ msgid "Include _subaccounts"
 msgstr "Inclou els _subcomptes"
 
 #. starting balance title/value
-#: ../src/gnome/glade/reconcile.glade.h:4 ../src/gnome/window-reconcile.c:1731
+#: ../src/gnome/glade/reconcile.glade.h:4 ../src/gnome/window-reconcile.c:1736
 msgid "Starting Balance:"
 msgstr "Saldo inicial:"
 
@@ -6719,7 +6721,7 @@ msgid "_Run when data file opened"
 msgstr "_Executa'l en obrir el fitxer de dades"
 
 #: ../src/gnome/glade/sched-xact.glade.h:199
-#: ../src/gnome-utils/glade/preferences.glade.h:175
+#: ../src/gnome-utils/glade/preferences.glade.h:177
 msgid "days"
 msgstr "dies"
 
@@ -7211,13 +7213,13 @@ msgstr "Concilia el compte seleccionat"
 #. Actions menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:181
 #: ../src/gnome/gnc-plugin-page-register.c:235
-#: ../src/gnome-utils/gnc-icons.c:21 ../src/gnome/window-reconcile.c:2108
+#: ../src/gnome-utils/gnc-icons.c:21 ../src/gnome/window-reconcile.c:2113
 msgid "_Transfer..."
 msgstr "_Transferència..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:182
 #: ../src/gnome/gnc-plugin-page-register.c:236
-#: ../src/gnome/window-reconcile.c:2109
+#: ../src/gnome/window-reconcile.c:2114
 msgid "Transfer funds from one account to another"
 msgstr "Transfereix fons d'un compte a un altre"
 
@@ -7246,7 +7248,7 @@ msgid "Check & Repair A_ccount"
 msgstr "Comprova i repara el _compte"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:191
-#: ../src/gnome/window-reconcile.c:2112
+#: ../src/gnome/window-reconcile.c:2117
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
@@ -7281,7 +7283,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-account-tree.c:220
 #: ../src/gnome/gnc-plugin-page-budget.c:163 ../src/gnome/lot-viewer.c:448
 #: ../src/gnome-utils/gnc-file.c:96 ../src/gnome-utils/gnc-file.c:853
-#: ../src/gnome/window-reconcile.c:1617
+#: ../src/gnome/window-reconcile.c:1622
 msgid "Open"
 msgstr "Obre"
 
@@ -7581,9 +7583,9 @@ msgstr "Diari d'a_ssentaments"
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/gnc-plugin-page-register.c:331
-#: ../src/register/ledger-core/split-register.c:2199
-#: ../src/register/ledger-core/split-register-layout.c:571
-#: ../src/register/ledger-core/split-register-model.c:183
+#: ../src/register/ledger-core/split-register.c:2205
+#: ../src/register/ledger-core/split-register-layout.c:572
+#: ../src/register/ledger-core/split-register-model.c:244
 #: ../intl-scm/guile-strings.c:4546 ../intl-scm/guile-strings.c:5888
 msgid "Transfer"
 msgstr "Transferència"
@@ -7658,7 +7660,7 @@ msgstr "Informe dels resultats de la cerca"
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/gnc-plugin-page-register.c:1778
-#: ../src/gnome-utils/glade/preferences.glade.h:105
+#: ../src/gnome-utils/glade/preferences.glade.h:107
 #: ../intl-scm/guile-strings.c:2270 ../intl-scm/guile-strings.c:3098
 #: ../intl-scm/guile-strings.c:4652 ../intl-scm/guile-strings.c:5994
 msgid "Register"
@@ -7706,7 +7708,7 @@ msgstr "_Planificat"
 #. Transaction menu
 #: ../src/gnome/gnc-plugin-page-sx-list.c:120
 #: ../src/gnome-utils/gnc-main-window.c:245
-#: ../src/gnome/window-reconcile.c:2118
+#: ../src/gnome/window-reconcile.c:2123
 msgid "_New"
 msgstr "_Nou"
 
@@ -7901,8 +7903,8 @@ msgid "Lots in Account %s"
 msgstr "Paquets del compte %s"
 
 #: ../src/gnome/reconcile-list.c:211
-#: ../src/register/ledger-core/split-register-layout.c:555
-#: ../src/register/ledger-core/split-register-model.c:154
+#: ../src/register/ledger-core/split-register-layout.c:556
+#: ../src/register/ledger-core/split-register-model.c:215
 msgid "Reconciled:R"
 msgstr "Reconciled:C"
 
@@ -8291,6 +8293,11 @@ msgid "Which check position to print"
 msgstr "Quina posició del "
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:1
+#, fuzzy
+msgid "Always reconcile to today"
+msgstr "Voleu mostrar la data de conciliació?"
+
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:2
 msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
 "a credit card payment. Otherwise do not prompt the user for this."
@@ -8299,7 +8306,7 @@ msgstr ""
 "crèdit després de conciliar un compte de targeta de crèdit. En cas contrari, "
 "no li ho demanis a l'usuari."
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:2
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:3
 msgid ""
 "If active, all transactions marked as cleared in the register will appear "
 "already selected in the reconcile dialog. Otherwise no transactions will be "
@@ -8309,12 +8316,18 @@ msgstr ""
 "apareixeran en el diàleg de conciliació. en cas contrari, no se seleccionarà "
 "cap assentament de manera inicial."
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:3
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:4
+msgid ""
+"If active, always open the reconcile dialog using today's date for the "
+"statement date, regardless of previous reconciliations."
+msgstr ""
+
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
 msgid "Pre-select cleared transactions"
 msgstr "Preselecciona els assentaments liquidats"
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:4
-#: ../src/gnome-utils/glade/preferences.glade.h:102
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
+#: ../src/gnome-utils/glade/preferences.glade.h:104
 msgid ""
 "Prior to reconciling an account which charges or pays interest, prompt the "
 "user to enter a transaction for the interest charge or payment. Currently "
@@ -8326,11 +8339,11 @@ msgstr ""
 "Actualment només és disponible per als comptes de tipus Banc, Crèdit, Fons "
 "d'inversió, Actiu, Deutors, Creditors i Passiu."
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:7
 msgid "Prompt for credit card payment"
 msgstr "Demana per un pagament de targeta de crèdit"
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:8
 msgid "Prompt for interest charges"
 msgstr "Demana pel càrrec d'interès"
 
@@ -8483,7 +8496,7 @@ msgstr ""
 "d'aquest nombre de dies (0 = mai)"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:19
-#: ../src/gnome-utils/glade/preferences.glade.h:62
+#: ../src/gnome-utils/glade/preferences.glade.h:64
 msgid "Display negative amounts in red"
 msgstr "Mostra els imports negatius en vermell"
 
@@ -8732,7 +8745,7 @@ msgid "Source of default report currency"
 msgstr "Font de la divisa predeterminada dels informes"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:55
-#: ../src/gnome-utils/glade/preferences.glade.h:126
+#: ../src/gnome-utils/glade/preferences.glade.h:128
 msgid ""
 "The number of minutes until saving of the data file to harddisk will be "
 "started automatically. If zero, no saving will be started automatically."
@@ -10178,8 +10191,9 @@ msgstr ""
 "camp en blanc."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:4
+#, fuzzy
 msgid ""
-"Enter the full name of the commodity. Example: Cisco Sytems Inc, or Apple "
+"Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
 msgstr ""
 "Entreu el nom complet de la divisa o valor, com ara Gas Natural, Abertis, "
@@ -10674,7 +10688,7 @@ msgid "Months:"
 msgstr "Mesos:"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:11
-#: ../src/gnome-utils/glade/preferences.glade.h:110
+#: ../src/gnome-utils/glade/preferences.glade.h:112
 msgid "Sample:"
 msgstr "Mostra:"
 
@@ -10875,18 +10889,28 @@ msgstr ""
 "per cada fila."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:39
+msgid ""
+"Always open the reconcile dialog using today's date for the statement date, "
+"regardless of previous reconciliations."
+msgstr ""
+
+#: ../src/gnome-utils/glade/preferences.glade.h:40
+msgid "Always reconcile to t_oday"
+msgstr ""
+
+#: ../src/gnome-utils/glade/preferences.glade.h:41
 msgid "Auto-save time _interval:"
 msgstr "_Interval de temps del desament automàtic:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:40
+#: ../src/gnome-utils/glade/preferences.glade.h:42
 msgid "Automatic _interest transfer"
 msgstr "Assentament d'_interès automàtic"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:41
+#: ../src/gnome-utils/glade/preferences.glade.h:43
 msgid "Automatic credit card _payment"
 msgstr "_Pagament de targeta de crèdit automàtic"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:42
+#: ../src/gnome-utils/glade/preferences.glade.h:44
 msgid ""
 "Automatically expand the current transaction to show all splits.  All other "
 "transactions are shown on one line. (Two in double line mode.)"
@@ -10895,125 +10919,125 @@ msgstr ""
 "els desglossaments. La resta d'assentaments es mostraran en una línia (o bé "
 "dues en el mode de línia doble)."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:43
+#: ../src/gnome-utils/glade/preferences.glade.h:45
 msgid ""
 "Automatically insert a decimal point into values that are entered without "
 "one."
 msgstr ""
 "Insereix automàticament una coma decimal en els valors entrats sense cap"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:44
+#: ../src/gnome-utils/glade/preferences.glade.h:46
 msgid "Automatically raise the list of accounts or actions during input."
 msgstr "Obre la llista de comptes o accions en començar a introduir dades."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:45
+#: ../src/gnome-utils/glade/preferences.glade.h:47
 msgid "B_ottom"
 msgstr "A _baix"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:46
+#: ../src/gnome-utils/glade/preferences.glade.h:48
 msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr ""
 "Representa les dates anteriors a l'actual en un tipus de lletra de 8 punts."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:47
+#: ../src/gnome-utils/glade/preferences.glade.h:49
 msgid "Bottom"
 msgstr "A baix"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:48
+#: ../src/gnome-utils/glade/preferences.glade.h:50
 msgid "Bring the most _recent tab to the front"
 msgstr "Mou el focus a la pestanya més _recent"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:49
+#: ../src/gnome-utils/glade/preferences.glade.h:51
 msgid "C_redit accounts"
 msgstr "Comptes de c_rèdit"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:50
+#: ../src/gnome-utils/glade/preferences.glade.h:52
 msgid "Ch_oose:"
 msgstr "E_lecció:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:51
+#: ../src/gnome-utils/glade/preferences.glade.h:53
 msgid "Character:"
 msgstr "Caràcter:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:52
+#: ../src/gnome-utils/glade/preferences.glade.h:54
 msgid "Check cleared _transactions"
 msgstr "Activa els _assentaments liquidats"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:53
+#: ../src/gnome-utils/glade/preferences.glade.h:55
 msgid "Com_press files"
 msgstr "Com_primeix els fitxers"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:54
+#: ../src/gnome-utils/glade/preferences.glade.h:56
 msgid "Compress the data file with gzip when saving it to disk."
 msgstr "Comprimeix el fitxer de dades amb el gzip en desar-lo."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:55
+#: ../src/gnome-utils/glade/preferences.glade.h:57
 msgid "Date/Time"
 msgstr "Data/hora"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:56
+#: ../src/gnome-utils/glade/preferences.glade.h:58
 msgid "Default _font:"
 msgstr "Tipus de _lletra per defecte:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:57
+#: ../src/gnome-utils/glade/preferences.glade.h:59
 msgid "Default to 'new search' if fewer than this number of items is returned."
 msgstr ""
 "Canvia a «Cerca nova» si la cerca retorna menys que aquest nombre d'elements."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:58
+#: ../src/gnome-utils/glade/preferences.glade.h:60
 msgid "Delete old log/backup files after this many days (0 = never)."
 msgstr ""
 "Esborra els fitxers de registre antics després d'aquest període (0 = mai)."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:59
+#: ../src/gnome-utils/glade/preferences.glade.h:61
 msgid "Display \"_tip of the day\" dialog"
 msgstr "Mostra el diàleg del «_Consell del Dia»"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:60
+#: ../src/gnome-utils/glade/preferences.glade.h:62
 msgid "Display hints for using GnuCash at startup"
 msgstr "Mostra els consells d'utilització del GnuCash a l'inici"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:61
+#: ../src/gnome-utils/glade/preferences.glade.h:63
 msgid "Display ne_gative amounts in red"
 msgstr "Mostra els imports ne_gatius en vermell"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:63
+#: ../src/gnome-utils/glade/preferences.glade.h:65
 msgid "Display the notebook tabs at the bottom of the window."
 msgstr "Mostra les pestanyes a la part de sota de la finestra."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:64
+#: ../src/gnome-utils/glade/preferences.glade.h:66
 msgid "Display the notebook tabs at the left of the window."
 msgstr "Mostra les pestanyes a l'esquerra de la finestra."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:65
+#: ../src/gnome-utils/glade/preferences.glade.h:67
 msgid "Display the notebook tabs at the right of the window."
 msgstr "Mostra les pestanyes a la dreta de la finestra."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:66
+#: ../src/gnome-utils/glade/preferences.glade.h:68
 msgid "Display the notebook tabs at the top of the window."
 msgstr "Mostra les pestanyes a la part de dalt de la finestra."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:67
+#: ../src/gnome-utils/glade/preferences.glade.h:69
 msgid "Display the summary bar at the bottom of the page."
 msgstr "Mostra la barra de resum a la part de sota de la pàgina."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:68
+#: ../src/gnome-utils/glade/preferences.glade.h:70
 msgid "Display the summary bar at the top of the page."
 msgstr "Mostra la barra de resum a la part de dalt de la pàgina."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:69
+#: ../src/gnome-utils/glade/preferences.glade.h:71
 msgid "Display this many rows when a register is created."
 msgstr "Mostra aquest nombre de files en crear un registre."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:70
+#: ../src/gnome-utils/glade/preferences.glade.h:72
 msgid "Display toolbar items as icons only."
 msgstr "Mostra els elements de la barra d'eines només com a icones."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:71
+#: ../src/gnome-utils/glade/preferences.glade.h:73
 msgid "Display toolbar items as text only."
 msgstr "Mostra els elements de la barra d'eines només com a text."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:72
+#: ../src/gnome-utils/glade/preferences.glade.h:74
 msgid ""
 "Display toolbar items with the text label below the icon.  Labels are show "
 "for all items."
@@ -11021,7 +11045,7 @@ msgstr ""
 "Mostra els elements de la barra d'eines amb l'etiqueta de text sota la "
 "icona. Les etiquetes es mostraran per a tots els elements."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:73
+#: ../src/gnome-utils/glade/preferences.glade.h:75
 msgid ""
 "Display toolbar items with the text label beside the icon.  Labels are only "
 "shown for the most important items."
@@ -11029,35 +11053,35 @@ msgstr ""
 "Mostra els elements de la barra d'eines amb l'etiqueta de text al costat de "
 "la icona. Les etiquetes es mostraran només per a les icones més importants."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:74
+#: ../src/gnome-utils/glade/preferences.glade.h:76
 msgid "Don't sign reverse any accounts."
 msgstr "No inverteixis el signe de cap compte."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:75
+#: ../src/gnome-utils/glade/preferences.glade.h:77
 msgid "Double _mode colors alternate with transactions"
 msgstr "Els colors del _mode doble s'alternen a cada assentament"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:76
+#: ../src/gnome-utils/glade/preferences.glade.h:78
 msgid "Draw _vertical lines between columns"
 msgstr "Mostra línies _verticals entre les columnes"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:77
+#: ../src/gnome-utils/glade/preferences.glade.h:79
 msgid "Draw hori_zontal lines between rows"
 msgstr "Mostra línies horit_zontals entre les files"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:79
+#: ../src/gnome-utils/glade/preferences.glade.h:81
 msgid "GnuCash Options"
 msgstr "Opcions del GnuCash"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:80
+#: ../src/gnome-utils/glade/preferences.glade.h:82
 msgid "GnuCash Preferences"
 msgstr "Preferències del GnuCash"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:81
+#: ../src/gnome-utils/glade/preferences.glade.h:83
 msgid "How many automatic decimal places will be filled in."
 msgstr "Quantes xifres de coma decimal s'ompliran de manera automàtica."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:82
+#: ../src/gnome-utils/glade/preferences.glade.h:84
 msgid ""
 "If active, GnuCash shows a confirmation question each time the auto-save "
 "feature is started. Otherwise no extra explanation is shown."
@@ -11066,7 +11090,7 @@ msgstr ""
 "funció de desament automàtic s'iniciï. En cas contrari, no es mostrarà cap "
 "aclariment addicional."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:83
+#: ../src/gnome-utils/glade/preferences.glade.h:85
 msgid ""
 "If checked, each register will be opened in its own top level window.  If "
 "clear, the register will be opened in the current window."
@@ -11074,7 +11098,7 @@ msgstr ""
 "Si s'habilita, cada registre s'obrirà en la seva pròpia finestra de nivell "
 "superior. Si no s'habilita, el registre s'obrirà a la finestra actual."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:84
+#: ../src/gnome-utils/glade/preferences.glade.h:86
 msgid ""
 "If checked, each report will be opened in its own top level window.  If "
 "clear, the report will be opened in the current window."
@@ -11082,7 +11106,7 @@ msgstr ""
 "Si s'habilita, cada informe s'obrirà en la seva pròpia finestra de nivell "
 "superior. Si no s'habilita, l'informe s'obrirà a la finestra actual."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:85
+#: ../src/gnome-utils/glade/preferences.glade.h:87
 msgid ""
 "If checked, non-currency commodities will be shown in the summary bar.  If "
 "clear, only currencies will be shown."
@@ -11090,7 +11114,7 @@ msgstr ""
 "Si s'habilita, es mostraran els béns no monetaris a la barra de sumari. Si "
 "no s'habilita, només es mostraran els béns monetaris."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:86
+#: ../src/gnome-utils/glade/preferences.glade.h:88
 msgid ""
 "If checked, only the names of the leaf accounts are displayed in the "
 "register and in the account selection popup. The default behaviour is to "
@@ -11102,7 +11126,7 @@ msgstr ""
 "mostra del nom complet, el qual inclou el camí en l'arbre de comptes. En "
 "habilitar aquesta opció, s'assumeix que utilitzeu noms finals únics."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:87
+#: ../src/gnome-utils/glade/preferences.glade.h:89
 msgid ""
 "If checked, pressing the 'Enter' key will move to the blank transaction at "
 "the bottom of the register.  If clear, pressing the 'Enter' key will move "
@@ -11112,7 +11136,7 @@ msgstr ""
 "registre en prémer la tecla de retorn. Si no s'habilita, la tecla de retorn "
 "avançarà una fila cap avall."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:88
+#: ../src/gnome-utils/glade/preferences.glade.h:90
 msgid ""
 "If checked, the system color theme will be applied to register windows.  If "
 "clear, the original GnuCash register colors will be used."
@@ -11121,37 +11145,37 @@ msgstr ""
 "de registre. Si no s'habilita, s'utilitzaran els colors originals del "
 "GnuCash per als registres."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:89
+#: ../src/gnome-utils/glade/preferences.glade.h:91
 msgid "Include _grand total"
 msgstr "Inclou la _suma total"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:90
+#: ../src/gnome-utils/glade/preferences.glade.h:92
 msgid "Include _non-currency totals"
 msgstr "Inclou els totals _no monetaris"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:91
+#: ../src/gnome-utils/glade/preferences.glade.h:93
 msgid "Loc_ale:"
 msgstr "Loc_ale:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:92
+#: ../src/gnome-utils/glade/preferences.glade.h:94
 msgid "New search _limit:"
 msgstr "_Límit de cerca nova:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:94
+#: ../src/gnome-utils/glade/preferences.glade.h:96
 msgid "Number of _transactions:"
 msgstr "Nombre d'_assentaments:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:95
+#: ../src/gnome-utils/glade/preferences.glade.h:97
 msgid "Perform account list _setup on new file"
 msgstr "Inicia la _configuració d'un arbre de comptes en crear un fitxer nou"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:96
+#: ../src/gnome-utils/glade/preferences.glade.h:98
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
 msgstr ""
 "Activa automàticament la casella de verificació dels assentaments liquidats "
 "en obrir el diàleg de conciliació."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:97
+#: ../src/gnome-utils/glade/preferences.glade.h:99
 msgid ""
 "Present the new account list dialog when you choose \"New File\" from the "
 "\"File\" menu"
@@ -11159,48 +11183,48 @@ msgstr ""
 "Mostra el diàleg de la llista de comptes nova en executar «Fitxer nou» en el "
 "menú «Fitxer»"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:98
+#: ../src/gnome-utils/glade/preferences.glade.h:100
 msgid "Print '***' before and after each text field on the check."
 msgstr "Imprimeix '***' abans i després de cada camp de text en el xec."
 
 # FIXME: a la traducció alemanya fan servir Abschlusszeichen (dpm)
-#: ../src/gnome-utils/glade/preferences.glade.h:99
+#: ../src/gnome-utils/glade/preferences.glade.h:101
 msgid "Print _blocking chars"
 msgstr "Imprimeix els caràcters de _final de línia"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:100
+#: ../src/gnome-utils/glade/preferences.glade.h:102
 msgid "Print _date format"
 msgstr "Format de la _data per a la impressió"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:101
+#: ../src/gnome-utils/glade/preferences.glade.h:103
 msgid "Printing"
 msgstr "Impressió"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:103
+#: ../src/gnome-utils/glade/preferences.glade.h:105
 msgid "Priority text besi_de icons"
 msgstr "Text al co_stat de les icones més importants"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:104
+#: ../src/gnome-utils/glade/preferences.glade.h:106
 msgid "Re_lative:"
 msgstr "Re_lativa:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:106
+#: ../src/gnome-utils/glade/preferences.glade.h:108
 msgid "Register Defaults"
 msgstr "Valors per defecte del registre"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:107
+#: ../src/gnome-utils/glade/preferences.glade.h:109
 msgid "Register opens in a new _window"
 msgstr "Obre els registres en una _finestra nova"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:108
+#: ../src/gnome-utils/glade/preferences.glade.h:110
 msgid "Report opens in a new _window"
 msgstr "Obre els informes en una _finestra nova"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:109
+#: ../src/gnome-utils/glade/preferences.glade.h:111
 msgid "Reports"
 msgstr "Informes"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:111
+#: ../src/gnome-utils/glade/preferences.glade.h:113
 msgid ""
 "Show a close button on each notebook tab.  These function identically to the "
 "'Close' menu item."
@@ -11208,39 +11232,39 @@ msgstr ""
 "Mostra un botó per a tancar a cada pestanya. La seva funcionalitat és "
 "idèntica a la de l'element de menú «Tanca»."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:112
+#: ../src/gnome-utils/glade/preferences.glade.h:114
 msgid ""
 "Show a grand total of all accounts converted to the default report currency."
 msgstr ""
 "Mosta la suma total de tots els comptes convertida a la divisa per defecte "
 "de l'informe."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:113
+#: ../src/gnome-utils/glade/preferences.glade.h:115
 msgid "Show all transactions on one line. (Two in double line mode.)"
 msgstr ""
 "Mostra tots els assentaments en una línia (dues en el mode de línia doble)."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:114
+#: ../src/gnome-utils/glade/preferences.glade.h:116
 msgid "Show auto-save confirmation _question"
 msgstr "Mostra la _pregunta de confirmació del desament automàtic"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:115
+#: ../src/gnome-utils/glade/preferences.glade.h:117
 msgid "Show close button on _notebook tabs"
 msgstr "Mostra el botó per tancar a les _pestanyes"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:116
+#: ../src/gnome-utils/glade/preferences.glade.h:118
 msgid "Show horizontal borders on the cells."
 msgstr "Mostra les vores horitzontals de les cel·les."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:117
+#: ../src/gnome-utils/glade/preferences.glade.h:119
 msgid "Show splash scree_n"
 msgstr "Mostra la pantalla de be_nvinguda"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:118
+#: ../src/gnome-utils/glade/preferences.glade.h:120
 msgid "Show splash screen at startup."
 msgstr "Mostra la pantalla de benvinguda a l'inici"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:119
+#: ../src/gnome-utils/glade/preferences.glade.h:121
 msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
@@ -11248,7 +11272,7 @@ msgstr ""
 "Mostra aquest nombre d'assentaments en un registre. Un valor de zero "
 "significa que es mostraran totes les transaccions."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:120
+#: ../src/gnome-utils/glade/preferences.glade.h:122
 msgid ""
 "Show two lines of information for each transaction instead of one.  Does not "
 "affect expanded transactions."
@@ -11256,15 +11280,15 @@ msgstr ""
 "Mostra dues línies d'informació per a cada assentament en lloc d'una. Això "
 "no afecta els assentaments ampliats."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:121
+#: ../src/gnome-utils/glade/preferences.glade.h:123
 msgid "Show vertical borders on the cells."
 msgstr "Mostra les vores verticals de les cel·les."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:122
+#: ../src/gnome-utils/glade/preferences.glade.h:124
 msgid "Sign reverse balances on income and expense accounts."
 msgstr "Inverteix el signe dels saldos en els comptes d'ingressos i despeses."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:123
+#: ../src/gnome-utils/glade/preferences.glade.h:125
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
@@ -11272,11 +11296,11 @@ msgstr ""
 "Inverteix el signe dels saldos en els següents tipus de compte: targets de "
 "crèdit, creditors, passiu, patrimoni i ingressos"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:124
+#: ../src/gnome-utils/glade/preferences.glade.h:126
 msgid "Text _below icons"
 msgstr "Text _sota les icones"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:125
+#: ../src/gnome-utils/glade/preferences.glade.h:127
 msgid ""
 "The character that will be used between components of an account name.  A "
 "legal value is any single character except letters and numbers, or any of "
@@ -11287,68 +11311,68 @@ msgstr ""
 "qualsevol caràcter únic excepte lletres i números, o qualsevol de les "
 "cadenes de text següents: «colon», «slash», «backslash», «dash» i «period»."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:127
+#: ../src/gnome-utils/glade/preferences.glade.h:129
 msgid "To_p"
 msgstr "A dal_t"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:128
+#: ../src/gnome-utils/glade/preferences.glade.h:130
 msgid "Top"
 msgstr "A daltt"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:129
+#: ../src/gnome-utils/glade/preferences.glade.h:131
 msgid "Transaction _journal"
 msgstr "_Diari d'assentaments"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:130
+#: ../src/gnome-utils/glade/preferences.glade.h:132
 msgid "US Dollars (USD)"
 msgstr "Dòlars EUA (USD)"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:131
+#: ../src/gnome-utils/glade/preferences.glade.h:133
 msgid "U_K:"
 msgstr "_Regne Unit:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:132
+#: ../src/gnome-utils/glade/preferences.glade.h:134
 msgid "U_se 24-hour clock"
 msgstr "U_tilitza el format horari de 24 hores"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:133
+#: ../src/gnome-utils/glade/preferences.glade.h:135
 msgid "Use _formal accounting labels"
 msgstr "Empra etiquetes de comptabilitat _formals"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:134
+#: ../src/gnome-utils/glade/preferences.glade.h:136
 msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr "Empra un format horari de 24 hores (en lloc d'un de 12)"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:135
+#: ../src/gnome-utils/glade/preferences.glade.h:137
 msgid "Use only 'debit' and 'credit' instead of informal synonyms"
 msgstr "Utilitza només «deure» i «haver» en lloc de sinònims informals"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:136
+#: ../src/gnome-utils/glade/preferences.glade.h:138
 msgid "Use s_ystem default"
 msgstr "Utilitza el valor per defecte del s_istema"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:137
+#: ../src/gnome-utils/glade/preferences.glade.h:139
 msgid "Use the date format common in continental Europe."
 msgstr "Utilitza el format de data habitual a l'Europa continental."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:138
+#: ../src/gnome-utils/glade/preferences.glade.h:140
 msgid "Use the date format common in the United Kingdom."
 msgstr "Utilitza el format de data habitual al Regne Unit"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:139
+#: ../src/gnome-utils/glade/preferences.glade.h:141
 msgid "Use the date format common in the United States."
 msgstr "Utilitza el format de data habitual als Estats Units."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:140
+#: ../src/gnome-utils/glade/preferences.glade.h:142
 msgid "Use the date format specified by the ISO-8601 standard."
 msgstr "Utilitza el format de data especificat a l'estàndard ISO-8601."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:141
+#: ../src/gnome-utils/glade/preferences.glade.h:143
 msgid "Use the date format specified by the system locale."
 msgstr ""
 "Utilitza el format de data especificat per la localització del sistema."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:142
+#: ../src/gnome-utils/glade/preferences.glade.h:144
 msgid ""
 "Use the specified absolute ending date for profit/loss calculations.  Also "
 "use this date for net assets calculations."
@@ -11357,21 +11381,21 @@ msgstr ""
 "beneficis i pèrdues. També s'utilitzarà aquesta dara per als càlculs del "
 "valor net patrimonial."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:143
+#: ../src/gnome-utils/glade/preferences.glade.h:145
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr ""
 "Utilitza la data d'inici absoluta especificada per als càlculs dels "
 "beneficis i pèrdues."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:144
+#: ../src/gnome-utils/glade/preferences.glade.h:146
 msgid "Use the specified currency for all newly created accounts."
 msgstr "Utilitza la divisa especificada per als comptes nous."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:145
+#: ../src/gnome-utils/glade/preferences.glade.h:147
 msgid "Use the specified currency for all newly created reports."
 msgstr "Utilitza la divisa especificada per a tots els informes nous."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:146
+#: ../src/gnome-utils/glade/preferences.glade.h:148
 msgid ""
 "Use the specified relative ending date for profit/loss calculations.  Also "
 "use this date for net assets calculations."
@@ -11380,129 +11404,129 @@ msgstr ""
 "beneficis i pèrdues. També s'utilitzarà aquesta dara per als càlculs del "
 "valor net patrimonial."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:147
+#: ../src/gnome-utils/glade/preferences.glade.h:149
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr ""
 "Utilitza la data d'inici relativa especificada per als càlculs dels "
 "beneficis i pèrdues."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:148
+#: ../src/gnome-utils/glade/preferences.glade.h:150
 msgid "Use the system locale currency for all newly created accounts."
 msgstr ""
 "Utilitza la divisa especificada per la localització del sistema per als "
 "comptes nous."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:149
+#: ../src/gnome-utils/glade/preferences.glade.h:151
 msgid "Use the system locale currency for all newly created reports."
 msgstr ""
 "Utilitza la divisa especificada per la localització del sistema per als "
 "informes nous."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:150
+#: ../src/gnome-utils/glade/preferences.glade.h:152
 msgid "Use the system setting for displaying toolbar items."
 msgstr ""
 "Utilitza la configuració del sistema en mostrar els elements de la barra "
 "d'eines."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:151
+#: ../src/gnome-utils/glade/preferences.glade.h:153
 msgid "Windows"
 msgstr "Finestres"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:152
+#: ../src/gnome-utils/glade/preferences.glade.h:154
 msgid "_Absolute:"
 msgstr "_Absoluta:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:153
+#: ../src/gnome-utils/glade/preferences.glade.h:155
 msgid "_Auto-raise lists"
 msgstr "Amplia les llistes _automàticament"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:154
+#: ../src/gnome-utils/glade/preferences.glade.h:156
 msgid "_Auto-split ledger"
 msgstr "Llibre major _autodesglossat"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:155
+#: ../src/gnome-utils/glade/preferences.glade.h:157
 msgid "_Automatic decimal point"
 msgstr "Coma decimal _automàtica"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:156
+#: ../src/gnome-utils/glade/preferences.glade.h:158
 msgid "_Basic ledger"
 msgstr "Llibre major _Bàsic"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:157
+#: ../src/gnome-utils/glade/preferences.glade.h:159
 msgid "_Decimal places:"
 msgstr "_Xifres decimals:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:158
+#: ../src/gnome-utils/glade/preferences.glade.h:160
 msgid "_Double line mode"
 msgstr "Mode de línia _doble"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:159
+#: ../src/gnome-utils/glade/preferences.glade.h:161
 msgid "_Europe:"
 msgstr "_Europa:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:160
+#: ../src/gnome-utils/glade/preferences.glade.h:162
 msgid "_ISO:"
 msgstr "_ISO:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:161
+#: ../src/gnome-utils/glade/preferences.glade.h:163
 msgid "_Icons only"
 msgstr "Només _icones"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:162
+#: ../src/gnome-utils/glade/preferences.glade.h:164
 msgid "_Income & expense"
 msgstr "_Ingressos i despeses"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:163
+#: ../src/gnome-utils/glade/preferences.glade.h:165
 msgid "_Left"
 msgstr "_Esquerra"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:164
+#: ../src/gnome-utils/glade/preferences.glade.h:166
 msgid "_None"
 msgstr "_Cap"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:165
+#: ../src/gnome-utils/glade/preferences.glade.h:167
 msgid "_Only display leaf account names"
 msgstr ""
 "_Mostra només l'última part dels noms dels comptesVoleu mostrar el nom del "
 "compte?"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:166
+#: ../src/gnome-utils/glade/preferences.glade.h:168
 msgid "_Relative:"
 msgstr "_Relativa:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:167
+#: ../src/gnome-utils/glade/preferences.glade.h:169
 msgid "_Retain log files:"
 msgstr "_Mantingues els fitxers de registre:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:168
+#: ../src/gnome-utils/glade/preferences.glade.h:170
 msgid "_Right"
 msgstr "D_reta"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:169
+#: ../src/gnome-utils/glade/preferences.glade.h:171
 msgid "_Save window size and position"
 msgstr "_Desa la posició i la mida de les finestres"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:170
+#: ../src/gnome-utils/glade/preferences.glade.h:172
 msgid "_Text only"
 msgstr "Només _text"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:171
+#: ../src/gnome-utils/glade/preferences.glade.h:173
 msgid "_US:"
 msgstr "E_UA:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:172
+#: ../src/gnome-utils/glade/preferences.glade.h:174
 msgid "_Use system theme colors"
 msgstr "_Utilitza els colors del tema del sistema"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:173
+#: ../src/gnome-utils/glade/preferences.glade.h:175
 msgid "_Width:"
 msgstr "A_mplada:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:174
+#: ../src/gnome-utils/glade/preferences.glade.h:176
 msgid "characters"
 msgstr "caràcters"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:176
+#: ../src/gnome-utils/glade/preferences.glade.h:178
 msgid "minutes"
 msgstr "minuts"
 
@@ -12124,7 +12148,7 @@ msgstr "El GnuCash no ha trobat els fitxers de documentació de l'ajuda."
 msgid "_Delete Account"
 msgstr "_Suprimeix el compte"
 
-#: ../src/gnome-utils/gnc-icons.c:18 ../src/gnome/window-reconcile.c:2105
+#: ../src/gnome-utils/gnc-icons.c:18 ../src/gnome/window-reconcile.c:2110
 msgid "_Edit Account"
 msgstr "_Edita el compte"
 
@@ -12133,7 +12157,7 @@ msgid "_New Account"
 msgstr "Compte _nou"
 
 #. Account menu
-#: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/window-reconcile.c:2102
+#: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/window-reconcile.c:2107
 msgid "_Open Account"
 msgstr "_Obre el compte"
 
@@ -12164,7 +12188,7 @@ msgstr "Fine_stres"
 
 #. Help menu
 #: ../src/gnome-utils/gnc-main-window.c:241
-#: ../src/gnome/window-reconcile.c:2082 ../src/gnome/window-reconcile.c:2133
+#: ../src/gnome/window-reconcile.c:2087 ../src/gnome/window-reconcile.c:2138
 msgid "_Help"
 msgstr "_Ajuda"
 
@@ -12241,7 +12265,7 @@ msgstr "Refresca aquesta finestra"
 
 #. Actions menu
 #: ../src/gnome-utils/gnc-main-window.c:296
-#: ../src/gnome/window-reconcile.c:2111
+#: ../src/gnome/window-reconcile.c:2116
 msgid "_Check & Repair"
 msgstr "_Comprova i repara"
 
@@ -12744,8 +12768,8 @@ msgstr "Valor"
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/invoice.scm
 #: ../src/gnome-utils/gnc-tree-view-price.c:462
-#: ../src/register/ledger-core/split-register.c:2256
-#: ../src/register/ledger-core/split-register-model.c:227
+#: ../src/register/ledger-core/split-register.c:2270
+#: ../src/register/ledger-core/split-register-model.c:288
 #: ../intl-scm/guile-strings.c:1948 ../intl-scm/guile-strings.c:2026
 #: ../intl-scm/guile-strings.c:2288 ../intl-scm/guile-strings.c:2504
 #: ../intl-scm/guile-strings.c:2764 ../intl-scm/guile-strings.c:2776
@@ -12886,27 +12910,27 @@ msgid "Are you sure you want to delete the selected transaction?"
 msgstr "Esteu segur de voler suprimir l'assentament seleccionat?"
 
 #. statement date title/value
-#: ../src/gnome/window-reconcile.c:1721
+#: ../src/gnome/window-reconcile.c:1726
 #, fuzzy
 msgid "Statement Date:"
 msgstr "_Data de l'extracte de compte:"
 
 #. ending balance title/value
-#: ../src/gnome/window-reconcile.c:1741
+#: ../src/gnome/window-reconcile.c:1746
 msgid "Ending Balance:"
 msgstr "Saldo final:"
 
 #. reconciled balance title/value
-#: ../src/gnome/window-reconcile.c:1751
+#: ../src/gnome/window-reconcile.c:1756
 msgid "Reconciled Balance:"
 msgstr "Saldo conciliat:"
 
 #. difference title/value
-#: ../src/gnome/window-reconcile.c:1761
+#: ../src/gnome/window-reconcile.c:1766
 msgid "Difference:"
 msgstr "Diferència:"
 
-#: ../src/gnome/window-reconcile.c:1874
+#: ../src/gnome/window-reconcile.c:1879
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
@@ -12914,86 +12938,86 @@ msgstr ""
 "Heu fet canvis en aquesta finestra de conciliació. Esteu segur de voler "
 "cancel·lar?"
 
-#: ../src/gnome/window-reconcile.c:1986
+#: ../src/gnome/window-reconcile.c:1991
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr "Aquest compte no està saldat. Esteu segur de voler finalitzar?"
 
-#: ../src/gnome/window-reconcile.c:2043
+#: ../src/gnome/window-reconcile.c:2048
 msgid "Do you want to postpone this reconciliation and finish it later?"
 msgstr "Voleu ajornar aquesta conciliació i acabar-la més tard?"
 
 #. Toplevel
-#: ../src/gnome/window-reconcile.c:2079
+#: ../src/gnome/window-reconcile.c:2084
 msgid "_Reconcile"
 msgstr "_Concilia"
 
-#: ../src/gnome/window-reconcile.c:2080
+#: ../src/gnome/window-reconcile.c:2085
 msgid "_Account"
 msgstr "_Compte"
 
 #. Reconcile menu
-#: ../src/gnome/window-reconcile.c:2086
+#: ../src/gnome/window-reconcile.c:2091
 msgid "_Reconcile Information..."
 msgstr "Informació de la _conciliació..."
 
-#: ../src/gnome/window-reconcile.c:2087
+#: ../src/gnome/window-reconcile.c:2092
 msgid ""
 "Change the reconcile information including statement date and ending balance."
 msgstr ""
 "Canvia la informació de la conciliació, incloent la data de l'extracte de "
 "compte i el saldo final."
 
-#: ../src/gnome/window-reconcile.c:2090
+#: ../src/gnome/window-reconcile.c:2095
 msgid "_Finish"
 msgstr "_Finalitza"
 
-#: ../src/gnome/window-reconcile.c:2091
+#: ../src/gnome/window-reconcile.c:2096
 msgid "Finish the reconciliation of this account"
 msgstr "Finalitza la conciliació d'aquest compte"
 
-#: ../src/gnome/window-reconcile.c:2093
+#: ../src/gnome/window-reconcile.c:2098
 msgid "_Postpone"
 msgstr "_Ajorna"
 
-#: ../src/gnome/window-reconcile.c:2094
+#: ../src/gnome/window-reconcile.c:2099
 msgid "Postpone the reconciliation of this account"
 msgstr "Ajorna la conciliació d'aquest compte"
 
-#: ../src/gnome/window-reconcile.c:2097
+#: ../src/gnome/window-reconcile.c:2102
 msgid "Cancel the reconciliation of this account"
 msgstr "Cancel·la la conciliació d'aquest compte"
 
-#: ../src/gnome/window-reconcile.c:2103
+#: ../src/gnome/window-reconcile.c:2108
 msgid "Open the account"
 msgstr "Obre el compte"
 
-#: ../src/gnome/window-reconcile.c:2106
+#: ../src/gnome/window-reconcile.c:2111
 msgid "Edit the main account for this register"
 msgstr "Edita el compte principal d'aquest registre"
 
-#: ../src/gnome/window-reconcile.c:2119
+#: ../src/gnome/window-reconcile.c:2124
 msgid "Add a new transaction to the account"
 msgstr "Afegeix un assentament nou al compte"
 
-#: ../src/gnome/window-reconcile.c:2121
+#: ../src/gnome/window-reconcile.c:2126
 #, fuzzy
 msgid "_Balance"
 msgstr "_Saldo:"
 
-#: ../src/gnome/window-reconcile.c:2122
+#: ../src/gnome/window-reconcile.c:2127
 #, fuzzy
 msgid "Add a new balancing entry to the account"
 msgstr "Afegeix un assentament nou al compte"
 
-#: ../src/gnome/window-reconcile.c:2125
+#: ../src/gnome/window-reconcile.c:2130
 msgid "Edit the current transaction"
 msgstr "Edita l'assentament actual"
 
-#: ../src/gnome/window-reconcile.c:2128
+#: ../src/gnome/window-reconcile.c:2133
 msgid "Delete the selected transaction"
 msgstr "Suprimeix l'assentament seleccionat"
 
-#: ../src/gnome/window-reconcile.c:2134
+#: ../src/gnome/window-reconcile.c:2139
 msgid "Open the GnuCash help window"
 msgstr "Obre la finestra d'ajuda del GnuCash"
 
@@ -14896,7 +14920,7 @@ msgstr ""
 #. name. It MUST NOT contain the
 #. character ':' anywhere in it or
 #. in any translations.
-#: ../src/import-export/ofx/gnc-ofx-import.c:360
+#: ../src/import-export/ofx/gnc-ofx-import.c:362
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "Compte d'accions del valor «%s»"
@@ -14905,45 +14929,45 @@ msgstr "Compte d'accions del valor «%s»"
 #. name. It MUST NOT contain the
 #. character ':' anywhere in it or
 #. in any translations.
-#: ../src/import-export/ofx/gnc-ofx-import.c:430
+#: ../src/import-export/ofx/gnc-ofx-import.c:432
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "Compte d'ingressos del valor «%s»"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:563
+#: ../src/import-export/ofx/gnc-ofx-import.c:565
 #, fuzzy
 msgid "Unknown OFX account"
 msgstr "Compte OFX CMA desconegut"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:583
+#: ../src/import-export/ofx/gnc-ofx-import.c:585
 msgid "Unknown OFX checking account"
 msgstr "Compte corrent OFX desconegut"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:587
+#: ../src/import-export/ofx/gnc-ofx-import.c:589
 msgid "Unknown OFX savings account"
 msgstr "Compte d'estalvis OFX desconegut"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:591
+#: ../src/import-export/ofx/gnc-ofx-import.c:593
 msgid "Unknown OFX money market account"
 msgstr "Compte de mercat de diners OFX desconegut"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:595
+#: ../src/import-export/ofx/gnc-ofx-import.c:597
 msgid "Unknown OFX credit line account"
 msgstr "Línia de crèdit OFX desconeguda"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:599
+#: ../src/import-export/ofx/gnc-ofx-import.c:601
 msgid "Unknown OFX CMA account"
 msgstr "Compte OFX CMA desconegut"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:603
+#: ../src/import-export/ofx/gnc-ofx-import.c:605
 msgid "Unknown OFX credit card account"
 msgstr "Compte OFX de targeta de crèdit desconegut"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:607
+#: ../src/import-export/ofx/gnc-ofx-import.c:609
 msgid "Unknown OFX investment account"
 msgstr "Compte d'inversió OFX desconegut"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:657
+#: ../src/import-export/ofx/gnc-ofx-import.c:679
 msgid "Select an OFX/QFX file to process"
 msgstr "Seleccioneu un fitxer OFX/QFX a processar"
 
@@ -15771,106 +15795,144 @@ msgstr "Xec"
 
 # Es refereix a l'interès (dpm)
 #: ../src/register/ledger-core/split-register.c:2187
-#: ../src/register/ledger-core/split-register.c:2215
-#: ../src/register/ledger-core/split-register.c:2223
-#: ../src/register/ledger-core/split-register.c:2237
-#: ../src/register/ledger-core/split-register.c:2260
+#: ../src/register/ledger-core/split-register.c:2224
+#: ../src/register/ledger-core/split-register.c:2232
+#: ../src/register/ledger-core/split-register.c:2248
+#: ../src/register/ledger-core/split-register.c:2274
 msgid "Int"
 msgstr "Int"
 
 #: ../src/register/ledger-core/split-register.c:2188
-#: ../src/register/ledger-core/split-register.c:2211
-msgid "ATM"
-msgstr "Caixer automàtic"
+#: ../src/register/ledger-core/split-register.c:2219
+#, fuzzy
+msgid "ATM Deposit"
+msgstr "Ingrés"
 
 #: ../src/register/ledger-core/split-register.c:2189
+#: ../src/register/ledger-core/split-register.c:2220
+msgid "ATM Draw"
+msgstr ""
+
+#: ../src/register/ledger-core/split-register.c:2190
 msgid "Teller"
 msgstr "Caixer"
 
+#: ../src/register/ledger-core/split-register.c:2193
+#, fuzzy
+msgid "Receipt"
+msgstr "Rebut"
+
+#. src/app-utils/prefs.scm
+#: ../src/register/ledger-core/split-register.c:2194
+#: ../src/register/ledger-core/split-register.c:2208
+#: ../src/register/ledger-core/split-register.c:2244
+#: ../src/register/ledger-core/split-register.c:2254
+#: ../src/register/ledger-core/split-register.c:2286
+#: ../intl-scm/guile-strings.c:114 ../intl-scm/guile-strings.c:144
+#: ../intl-scm/guile-strings.c:160
+msgid "Increase"
+msgstr "Increment"
+
+#. src/app-utils/prefs.scm
+#: ../src/register/ledger-core/split-register.c:2195
+#: ../src/register/ledger-core/split-register.c:2209
+#: ../src/register/ledger-core/split-register.c:2245
+#: ../src/register/ledger-core/split-register.c:2255
+#: ../src/register/ledger-core/split-register.c:2287
+#: ../intl-scm/guile-strings.c:116 ../intl-scm/guile-strings.c:132
+#: ../intl-scm/guile-strings.c:142
+msgid "Decrease"
+msgstr "Reducció"
+
 #. Action: Point Of Sale
-#: ../src/register/ledger-core/split-register.c:2191
+#: ../src/register/ledger-core/split-register.c:2197
 msgid "POS"
 msgstr "Punt de venda"
 
-#: ../src/register/ledger-core/split-register.c:2192
+#: ../src/register/ledger-core/split-register.c:2198
 msgid "Phone"
 msgstr "Telèfon"
 
-#: ../src/register/ledger-core/split-register.c:2193
-#: ../src/register/ledger-core/split-register.c:2216
+#: ../src/register/ledger-core/split-register.c:2199
+#: ../src/register/ledger-core/split-register.c:2225
 msgid "Online"
 msgstr "En línia"
 
 #. Action: Automatic Deposit ?!?
-#: ../src/register/ledger-core/split-register.c:2195
+#: ../src/register/ledger-core/split-register.c:2201
 msgid "AutoDep"
 msgstr "Abonament"
 
-#: ../src/register/ledger-core/split-register.c:2196
+#: ../src/register/ledger-core/split-register.c:2202
 msgid "Wire"
 msgstr "Ordre de transferència"
 
-#: ../src/register/ledger-core/split-register.c:2198
+#: ../src/register/ledger-core/split-register.c:2204
 msgid "Direct Debit"
 msgstr "Domiciliació"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2202
-#: ../src/register/ledger-core/split-register.c:2206
-#: ../src/register/ledger-core/split-register.c:2212
-#: ../src/register/ledger-core/split-register.c:2220
-#: ../src/register/ledger-core/split-register.c:2235
-#: ../src/register/ledger-core/split-register.c:2242
-#: ../src/register/ledger-core/split-register.c:2247
-#: ../src/register/ledger-core/split-register.c:2272
+#: ../src/register/ledger-core/split-register.c:2210
+#: ../src/register/ledger-core/split-register.c:2214
+#: ../src/register/ledger-core/split-register.c:2221
+#: ../src/register/ledger-core/split-register.c:2229
+#: ../src/register/ledger-core/split-register.c:2246
+#: ../src/register/ledger-core/split-register.c:2256
+#: ../src/register/ledger-core/split-register.c:2261
+#: ../src/register/ledger-core/split-register.c:2288
 #: ../intl-scm/guile-strings.c:118 ../intl-scm/guile-strings.c:120
 #: ../intl-scm/guile-strings.c:122
 msgid "Buy"
 msgstr "Compra"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2203
-#: ../src/register/ledger-core/split-register.c:2207
-#: ../src/register/ledger-core/split-register.c:2217
-#: ../src/register/ledger-core/split-register.c:2221
-#: ../src/register/ledger-core/split-register.c:2236
-#: ../src/register/ledger-core/split-register.c:2243
-#: ../src/register/ledger-core/split-register.c:2248
-#: ../src/register/ledger-core/split-register.c:2273
+#: ../src/register/ledger-core/split-register.c:2211
+#: ../src/register/ledger-core/split-register.c:2215
+#: ../src/register/ledger-core/split-register.c:2226
+#: ../src/register/ledger-core/split-register.c:2230
+#: ../src/register/ledger-core/split-register.c:2247
+#: ../src/register/ledger-core/split-register.c:2257
+#: ../src/register/ledger-core/split-register.c:2262
+#: ../src/register/ledger-core/split-register.c:2289
 #: ../intl-scm/guile-strings.c:146 ../intl-scm/guile-strings.c:148
 #: ../intl-scm/guile-strings.c:150
 msgid "Sell"
 msgstr "Venda"
 
-#: ../src/register/ledger-core/split-register.c:2208
-#: ../src/register/ledger-core/split-register.c:2214
-#: ../src/register/ledger-core/split-register.c:2257
+#: ../src/register/ledger-core/split-register.c:2216
+#: ../src/register/ledger-core/split-register.c:2223
+#: ../src/register/ledger-core/split-register.c:2271
 msgid "Fee"
 msgstr "Comissió"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2239
+#: ../src/register/ledger-core/split-register.c:2250
 #: ../intl-scm/guile-strings.c:154
 msgid "Rebate"
 msgstr "Descompte"
 
+#: ../src/register/ledger-core/split-register.c:2251
+#, fuzzy
+msgid "Paycheck"
+msgstr "Xec"
+
 #. Action: Dividend
-#: ../src/register/ledger-core/split-register.c:2259
+#: ../src/register/ledger-core/split-register.c:2273
 msgid "Div"
 msgstr "Dividends"
 
 #. Action: Long Term Capital Gains
-#: ../src/register/ledger-core/split-register.c:2262
+#: ../src/register/ledger-core/split-register.c:2276
 msgid "LTCG"
 msgstr "Guanys de capital a llarg termini"
 
 #. Action: Short Term Capital Gains
-#: ../src/register/ledger-core/split-register.c:2264
+#: ../src/register/ledger-core/split-register.c:2278
 msgid "STCG"
 msgstr "Guanys de capital a curt termini"
 
 #. Action: Distribution
-#: ../src/register/ledger-core/split-register.c:2267
+#: ../src/register/ledger-core/split-register.c:2281
 msgid "Dist"
 msgstr "Distribució"
 
@@ -15979,44 +16041,45 @@ msgstr "_Desfés la conciliació"
 #. used to estimate widths. Please only
 #. translate the portion after the ':' and
 #. leave the rest ("sample:") as is.
-#: ../src/register/ledger-core/split-register-layout.c:531
+#: ../src/register/ledger-core/split-register-layout.c:532
 msgid "sample:99999"
 msgstr "sample:99999"
 
-#: ../src/register/ledger-core/split-register-layout.c:539
+#: ../src/register/ledger-core/split-register-layout.c:540
 msgid "sample:Description of a transaction"
 msgstr "sample:Descripció d'un assentament"
 
-#: ../src/register/ledger-core/split-register-layout.c:563
-#: ../src/register/ledger-core/split-register-layout.c:603
-#: ../src/register/ledger-core/split-register-layout.c:611
-#: ../src/register/ledger-core/split-register-layout.c:619
-#: ../src/register/ledger-core/split-register-layout.c:629
-#: ../src/register/ledger-core/split-register-layout.c:637
-#: ../src/register/ledger-core/split-register-layout.c:645
-#: ../src/register/ledger-core/split-register-layout.c:653
-#: ../src/register/ledger-core/split-register-layout.c:661
+#: ../src/register/ledger-core/split-register-layout.c:564
+#: ../src/register/ledger-core/split-register-layout.c:604
+#: ../src/register/ledger-core/split-register-layout.c:612
+#: ../src/register/ledger-core/split-register-layout.c:620
+#: ../src/register/ledger-core/split-register-layout.c:630
+#: ../src/register/ledger-core/split-register-layout.c:638
+#: ../src/register/ledger-core/split-register-layout.c:646
+#: ../src/register/ledger-core/split-register-layout.c:654
+#: ../src/register/ledger-core/split-register-layout.c:662
+#: ../src/register/ledger-core/split-register-layout.c:710
 msgid "sample:999,999.000"
 msgstr "sample:999.999,000"
 
-#: ../src/register/ledger-core/split-register-layout.c:595
+#: ../src/register/ledger-core/split-register-layout.c:596
 msgid "sample:Memo field sample text string"
 msgstr "sample:Text de mostra del camp de notes d'abonament"
 
-#: ../src/register/ledger-core/split-register-layout.c:669
+#: ../src/register/ledger-core/split-register-layout.c:670
 msgid "Type:T"
 msgstr "Type:T"
 
-#: ../src/register/ledger-core/split-register-layout.c:677
+#: ../src/register/ledger-core/split-register-layout.c:678
 msgid "sample:Notes field sample text string"
 msgstr "sample:Text de mostra del camp de notes"
 
-#: ../src/register/ledger-core/split-register-layout.c:685
+#: ../src/register/ledger-core/split-register-layout.c:686
 msgid "sample:No Particular Reason"
 msgstr "sample:Per cap raó particular"
 
-#: ../src/register/ledger-core/split-register-layout.c:693
-#: ../src/register/ledger-core/split-register-layout.c:701
+#: ../src/register/ledger-core/split-register-layout.c:694
+#: ../src/register/ledger-core/split-register-layout.c:702
 msgid "sample:(x + 0.33 * y + (x+y) )"
 msgstr "sample:(x + 0.33 * y + (x+y) )"
 
@@ -16028,108 +16091,108 @@ msgstr ""
 "No s'ha pogut determinar la divisa del compte, per la qual cosa s'utilitzarà "
 "la predeterminada del vostre sistema."
 
-#: ../src/register/ledger-core/split-register-model.c:120
+#: ../src/register/ledger-core/split-register-model.c:181
 msgid "Ref"
 msgstr "Ref"
 
-#: ../src/register/ledger-core/split-register-model.c:256
-#: ../src/register/ledger-core/split-register-model.c:280
+#: ../src/register/ledger-core/split-register-model.c:317
+#: ../src/register/ledger-core/split-register-model.c:341
 #, c-format
 msgid "Tot %s"
 msgstr "%s Total"
 
-#: ../src/register/ledger-core/split-register-model.c:262
+#: ../src/register/ledger-core/split-register-model.c:323
 msgid "Tot Credit"
 msgstr "Tot. crèdit"
 
-#: ../src/register/ledger-core/split-register-model.c:286
+#: ../src/register/ledger-core/split-register-model.c:347
 msgid "Tot Debit"
 msgstr "Tot. dèbit"
 
-#: ../src/register/ledger-core/split-register-model.c:295
+#: ../src/register/ledger-core/split-register-model.c:356
 msgid "Tot Shares"
 msgstr "Tot. accions"
 
-#: ../src/register/ledger-core/split-register-model.c:316
+#: ../src/register/ledger-core/split-register-model.c:377
 msgid "Debit Formula"
 msgstr "Fórmula del dèbit"
 
-#: ../src/register/ledger-core/split-register-model.c:323
+#: ../src/register/ledger-core/split-register-model.c:384
 msgid "Credit Formula"
 msgstr "Fórmula del crèdit"
 
 #. This seems to be the one that initially gets used, the InactiveDateCell
 #. is set to, and subsequently displayed.
-#: ../src/register/ledger-core/split-register-model.c:805
+#: ../src/register/ledger-core/split-register-model.c:868
 msgid "Scheduled"
 msgstr "Planificat"
 
-#: ../src/register/ledger-core/split-register-model.c:836
+#: ../src/register/ledger-core/split-register-model.c:899
 msgid "Enter the transaction reference, such as the invoice or check number"
 msgstr ""
 "Escriviu la referència de l'assentament, com ara el número de factura o de "
 "xec"
 
-#: ../src/register/ledger-core/split-register-model.c:840
+#: ../src/register/ledger-core/split-register-model.c:903
 msgid "Enter the transaction number, such as the check number"
 msgstr "Escriviu el número de l'assentament, com ara el número de xec"
 
-#: ../src/register/ledger-core/split-register-model.c:874
+#: ../src/register/ledger-core/split-register-model.c:937
 msgid "Enter the name of the Customer"
 msgstr "Escriviu el nom del client"
 
-#: ../src/register/ledger-core/split-register-model.c:877
+#: ../src/register/ledger-core/split-register-model.c:940
 msgid "Enter the name of the Vendor"
 msgstr "Escriviu el nom del proveïdor"
 
-#: ../src/register/ledger-core/split-register-model.c:880
+#: ../src/register/ledger-core/split-register-model.c:943
 msgid "Enter a description of the transaction"
 msgstr "Escriviu una descripció per a l'assentament"
 
-#: ../src/register/ledger-core/split-register-model.c:910
+#: ../src/register/ledger-core/split-register-model.c:973
 msgid "Enter notes for the transaction"
 msgstr "Escriviu notes per a l'assentament"
 
-#: ../src/register/ledger-core/split-register-model.c:940
+#: ../src/register/ledger-core/split-register-model.c:1003
 msgid "Reason the transaction was voided"
 msgstr "Raó per la qual fou invalidada"
 
-#: ../src/register/ledger-core/split-register-model.c:1032
+#: ../src/register/ledger-core/split-register-model.c:1095
 msgid "Enter the type of transaction, or choose one from the list"
 msgstr "Escriviu el tipus de l'assentament, o bé trieu-ne un de la llista"
 
-#: ../src/register/ledger-core/split-register-model.c:1060
+#: ../src/register/ledger-core/split-register-model.c:1123
 msgid "Enter a description of the split"
 msgstr "Escriviu una descripció per al desglossament"
 
-#: ../src/register/ledger-core/split-register-model.c:1141
+#: ../src/register/ledger-core/split-register-model.c:1195
 msgid "Enter the effective share price"
 msgstr "Introduïu la cotització efectiva de l'acció"
 
-#: ../src/register/ledger-core/split-register-model.c:1177
+#: ../src/register/ledger-core/split-register-model.c:1231
 msgid "Enter the number of shares bought or sold"
 msgstr "Introduïu el nombre d'accions comprats o venuts"
 
-#: ../src/register/ledger-core/split-register-model.c:1228
-#: ../src/register/ledger-core/split-register-model.c:1294
+#: ../src/register/ledger-core/split-register-model.c:1282
+#: ../src/register/ledger-core/split-register-model.c:1348
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "Introduïu el compte d'origen o bé seleccioneu-ne un de la llista"
 
-#: ../src/register/ledger-core/split-register-model.c:1304
+#: ../src/register/ledger-core/split-register-model.c:1358
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
 "Aquest assentament té diversos desglossaments. Premeu el botó «Desglossa» "
 "per a veure'ls tots"
 
-#: ../src/register/ledger-core/split-register-model.c:1307
+#: ../src/register/ledger-core/split-register-model.c:1361
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr ""
 "Aquest assentament és una divisió d'accions. Premeu el botó «Desglossa» per "
 "a veure'n els detalls"
 
-#: ../src/register/ledger-core/split-register-model.c:1623
+#: ../src/register/ledger-core/split-register-model.c:1745
 #, c-format
 msgid ""
 "Cannot modify or delete this transaction. This transaction is marked read-"
@@ -16142,11 +16205,11 @@ msgstr ""
 "\n"
 "'%s'"
 
-#: ../src/register/ledger-core/split-register-model.c:1675
+#: ../src/register/ledger-core/split-register-model.c:1797
 msgid "Change reconciled split?"
 msgstr "Voleu canviar l'assentament conciliat?"
 
-#: ../src/register/ledger-core/split-register-model.c:1677
+#: ../src/register/ledger-core/split-register-model.c:1799
 msgid ""
 "You are about to change a reconciled split.  Doing so might make future "
 "reconciliation difficult!  Continue with this change?"
@@ -16155,15 +16218,15 @@ msgstr ""
 "dificultarà una possible futura conciliació. voleu continuar amb aquest "
 "canvi?"
 
-#: ../src/register/ledger-core/split-register-model.c:1690
+#: ../src/register/ledger-core/split-register-model.c:1812
 msgid "Chan_ge Split"
 msgstr "Mo_difica el desglossament"
 
-#: ../src/register/ledger-core/split-register-model.c:1776
+#: ../src/register/ledger-core/split-register-model.c:1898
 msgid "Enter debit formula for real transaction"
 msgstr "Introduïu la fórmula del dèbit per a l'assentament real"
 
-#: ../src/register/ledger-core/split-register-model.c:1806
+#: ../src/register/ledger-core/split-register-model.c:1928
 msgid "Enter credit formula for real transaction"
 msgstr "Introduïu la fórmula del crèdit per a l'assentament real"
 
@@ -16589,18 +16652,6 @@ msgstr "Ingressat"
 #: ../intl-scm/guile-strings.c:110
 msgid "Receive"
 msgstr "Rebut"
-
-#. src/app-utils/prefs.scm
-#: ../intl-scm/guile-strings.c:114 ../intl-scm/guile-strings.c:144
-#: ../intl-scm/guile-strings.c:160
-msgid "Increase"
-msgstr "Increment"
-
-#. src/app-utils/prefs.scm
-#: ../intl-scm/guile-strings.c:116 ../intl-scm/guile-strings.c:132
-#: ../intl-scm/guile-strings.c:142
-msgid "Decrease"
-msgstr "Reducció"
 
 #. src/app-utils/prefs.scm
 #: ../intl-scm/guile-strings.c:134
@@ -24967,6 +25018,9 @@ msgstr ""
 "l'univers i perquè és aquí, aquest desapareixerà de cop i el reemplaçarà "
 "quelcom encara més estrany i inexplicable. Hi ha una altra teoria que diu "
 "que això ja ha passat. Douglas Adams, «El restaurant de la fi del món»"
+
+#~ msgid "ATM"
+#~ msgstr "Caixer automàtic"
 
 #, fuzzy
 #~ msgid "gtk-apply"

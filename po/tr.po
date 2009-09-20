@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 1.8.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-23 22:37+0200\n"
+"POT-Creation-Date: 2009-09-20 22:18+0200\n"
 "PO-Revision-Date: 2003-10-10 19:54+0300\n"
 "Last-Translator:  A. Alper Atıcı <alper_atici@yahoo.com>\n"
 "Language-Team: TR\n"
@@ -104,7 +104,7 @@ msgstr "Kâr/Zarar"
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../src/app-utils/gnc-ui-util.c:668 ../src/engine/Account.c:3719
-#: ../src/register/ledger-core/split-register.c:2249
+#: ../src/register/ledger-core/split-register.c:2263
 #: ../intl-scm/guile-strings.c:2140 ../intl-scm/guile-strings.c:2968
 #: ../intl-scm/guile-strings.c:3696 ../intl-scm/guile-strings.c:5038
 #: ../intl-scm/guile-strings.c:6960 ../intl-scm/guile-strings.c:6964
@@ -145,9 +145,9 @@ msgstr "Borç"
 #. src/report/standard-reports/register.scm
 #: ../src/app-utils/guile-util.c:1139
 #: ../src/register/ledger-core/split-register.c:2108
-#: ../src/register/ledger-core/split-register.c:2197
-#: ../src/register/ledger-core/split-register.c:2213
-#: ../src/register/ledger-core/split-register.c:2231
+#: ../src/register/ledger-core/split-register.c:2203
+#: ../src/register/ledger-core/split-register.c:2222
+#: ../src/register/ledger-core/split-register.c:2240
 #: ../intl-scm/guile-strings.c:2274 ../intl-scm/guile-strings.c:2460
 #: ../intl-scm/guile-strings.c:3102 ../intl-scm/guile-strings.c:3288
 #: ../intl-scm/guile-strings.c:4234 ../intl-scm/guile-strings.c:4558
@@ -330,7 +330,7 @@ msgstr "Dosya yükleniyor..."
 #: ../src/business/business-gnome/dialog-invoice.c:2601
 #: ../src/business/business-gnome/glade/invoice.glade.h:12
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:317
-#: ../src/register/ledger-core/split-register.c:2228
+#: ../src/register/ledger-core/split-register.c:2237
 #: ../intl-scm/guile-strings.c:130 ../intl-scm/guile-strings.c:4646
 #: ../intl-scm/guile-strings.c:5988 ../intl-scm/guile-strings.c:7432
 #: ../intl-scm/guile-strings.c:7522 ../intl-scm/guile-strings.c:7524
@@ -388,9 +388,10 @@ msgstr ""
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:140
 #: ../src/gnome/druid-loan.c:1795 ../src/gnome/druid-loan.c:2276
 #: ../src/gnome/druid-loan.c:2339 ../src/gnome/druid-loan.c:2353
-#: ../src/register/ledger-core/split-register.c:2224
-#: ../src/register/ledger-core/split-register.c:2229
+#: ../src/register/ledger-core/split-register.c:2192
+#: ../src/register/ledger-core/split-register.c:2233
 #: ../src/register/ledger-core/split-register.c:2238
+#: ../src/register/ledger-core/split-register.c:2249
 #: ../intl-scm/guile-strings.c:112 ../intl-scm/guile-strings.c:128
 #: ../intl-scm/guile-strings.c:158
 msgid "Payment"
@@ -798,7 +799,7 @@ msgstr "Fatura muhasebe kaydı yapılsın mı?"
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/invoice.scm
 #: ../src/business/business-gnome/dialog-invoice.c:655
-#: ../src/register/ledger-core/split-register-model.c:108
+#: ../src/register/ledger-core/split-register-model.c:169
 #: ../intl-scm/guile-strings.c:7440 ../intl-scm/guile-strings.c:7460
 #: ../intl-scm/guile-strings.c:7568 ../intl-scm/guile-strings.c:7754
 #: ../intl-scm/guile-strings.c:8072
@@ -1005,14 +1006,14 @@ msgstr "Satıcı No"
 #: ../src/business/business-gnome/dialog-invoice.c:2425
 #: ../src/gnome-utils/gnc-tree-view-account.c:515
 #: ../src/gnome-utils/gnc-tree-view-price.c:456
-#: ../src/register/ledger-core/split-register-model.c:197
+#: ../src/register/ledger-core/split-register-model.c:258
 #: ../intl-scm/guile-strings.c:3904 ../intl-scm/guile-strings.c:5246
 #: ../intl-scm/guile-strings.c:7464 ../intl-scm/guile-strings.c:7572
 msgid "Type"
 msgstr "Türü"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2427
-#: ../src/register/ledger-core/split-register-model.c:151
+#: ../src/register/ledger-core/split-register-model.c:212
 msgid "Paid"
 msgstr "Ödenmiş"
 
@@ -1041,7 +1042,7 @@ msgstr "Düz.Tar."
 #: ../src/business/business-gnome/glade/payment.glade.h:4
 #: ../src/gnome/glade/lots.glade.h:15 ../src/gnome/reconcile-list.c:223
 #: ../src/import-export/csv/gnc-csv-model.c:39
-#: ../src/register/ledger-core/split-register-model.c:122
+#: ../src/register/ledger-core/split-register-model.c:183
 #: ../intl-scm/guile-strings.c:2280 ../intl-scm/guile-strings.c:2484
 #: ../intl-scm/guile-strings.c:3108 ../intl-scm/guile-strings.c:3312
 #: ../intl-scm/guile-strings.c:4146 ../intl-scm/guile-strings.c:4212
@@ -1502,7 +1503,7 @@ msgid ""
 msgstr ""
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
-#: ../src/gnome-utils/glade/preferences.glade.h:93
+#: ../src/gnome-utils/glade/preferences.glade.h:95
 #, fuzzy
 msgid "Number of _rows:"
 msgstr "Satır Sayısı"
@@ -1605,7 +1606,7 @@ msgstr "GnuCash Başlangıç belgesini aç"
 #: ../src/import-export/import-match-picker.c:375
 #: ../src/import-export/qif-import/druid-qif-import.c:3582
 #: ../src/import-export/qif-import/druid-qif-import.c:3620
-#: ../src/register/ledger-core/split-register-model.c:138
+#: ../src/register/ledger-core/split-register-model.c:199
 #: ../intl-scm/guile-strings.c:2282 ../intl-scm/guile-strings.c:2486
 #: ../intl-scm/guile-strings.c:3110 ../intl-scm/guile-strings.c:3314
 #: ../intl-scm/guile-strings.c:3906 ../intl-scm/guile-strings.c:4150
@@ -1668,7 +1669,7 @@ msgstr "Para birimi: "
 #: ../src/business/business-gnome/glade/customer.glade.h:8
 #: ../src/business/business-gnome/glade/invoice.glade.h:6
 #: ../src/business/business-gnome/search-owner.c:236
-#: ../src/register/ledger-core/split-register-model.c:134
+#: ../src/register/ledger-core/split-register-model.c:195
 #: ../intl-scm/guile-strings.c:7534 ../intl-scm/guile-strings.c:7632
 msgid "Customer"
 msgstr "Müşteri"
@@ -1717,7 +1718,7 @@ msgstr "Ad: "
 #: ../src/business/business-gnome/glade/vendor.glade.h:10
 #: ../src/gnome/dialog-find-transactions.c:120
 #: ../src/gnome-utils/gnc-tree-view-account.c:633
-#: ../src/register/ledger-core/split-register-model.c:309
+#: ../src/register/ledger-core/split-register-model.c:370
 #: ../intl-scm/guile-strings.c:3912 ../intl-scm/guile-strings.c:4206
 #: ../intl-scm/guile-strings.c:4218 ../intl-scm/guile-strings.c:4420
 #: ../intl-scm/guile-strings.c:4468 ../intl-scm/guile-strings.c:5254
@@ -2031,7 +2032,7 @@ msgstr ""
 #: ../src/import-export/import-match-picker.c:373
 #: ../src/import-export/qif-import/druid-qif-import.c:3574
 #: ../src/import-export/qif-import/druid-qif-import.c:3612
-#: ../src/register/ledger-core/split-register-model.c:101
+#: ../src/register/ledger-core/split-register-model.c:162
 #: ../intl-scm/guile-strings.c:2230 ../intl-scm/guile-strings.c:2278
 #: ../intl-scm/guile-strings.c:2480 ../intl-scm/guile-strings.c:2730
 #: ../intl-scm/guile-strings.c:2744 ../intl-scm/guile-strings.c:3058
@@ -2066,7 +2067,7 @@ msgstr "Tarih"
 #: ../src/import-export/import-main-matcher.c:438
 #: ../src/import-export/import-match-picker.c:336
 #: ../src/import-export/import-match-picker.c:376
-#: ../src/register/ledger-core/split-register-model.c:190
+#: ../src/register/ledger-core/split-register-model.c:251
 #: ../intl-scm/guile-strings.c:2488 ../intl-scm/guile-strings.c:3316
 #: ../intl-scm/guile-strings.c:4182 ../intl-scm/guile-strings.c:4216
 #: ../intl-scm/guile-strings.c:4220 ../intl-scm/guile-strings.c:4344
@@ -2112,7 +2113,7 @@ msgstr ""
 #. src/business/business-reports/owner-report.scm
 #: ../src/business/business-gnome/glade/vendor.glade.h:19
 #: ../src/business/business-gnome/search-owner.c:237
-#: ../src/register/ledger-core/split-register-model.c:136
+#: ../src/register/ledger-core/split-register-model.c:197
 #: ../intl-scm/guile-strings.c:7538 ../intl-scm/guile-strings.c:7634
 msgid "Vendor"
 msgstr "Satıcı"
@@ -2524,7 +2525,7 @@ msgid "Record the current entry"
 msgstr "Cari fatura kalemini kaydet"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:133
-#: ../src/gnome/glade/register.glade.h:79 ../src/gnome/window-reconcile.c:2096
+#: ../src/gnome/glade/register.glade.h:79 ../src/gnome/window-reconcile.c:2101
 msgid "_Cancel"
 msgstr "İ_ptal"
 
@@ -2536,7 +2537,7 @@ msgstr "Cari girişi iptal et"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:136
 #: ../src/gnome/glade/register.glade.h:82
 #: ../src/gnome/gnc-plugin-page-sx-list.c:124
-#: ../src/gnome/window-reconcile.c:2127
+#: ../src/gnome/window-reconcile.c:2132
 msgid "_Delete"
 msgstr "_Sil"
 
@@ -2855,8 +2856,8 @@ msgid "sample:X"
 msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:74
-#: ../src/register/ledger-core/split-register-layout.c:510
-#: ../src/register/ledger-core/split-register-layout.c:518
+#: ../src/register/ledger-core/split-register-layout.c:511
+#: ../src/register/ledger-core/split-register-layout.c:519
 msgid "sample:12/12/2000"
 msgstr ""
 
@@ -2890,8 +2891,8 @@ msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:94
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:97
-#: ../src/register/ledger-core/split-register-layout.c:579
-#: ../src/register/ledger-core/split-register-layout.c:587
+#: ../src/register/ledger-core/split-register-layout.c:580
+#: ../src/register/ledger-core/split-register-layout.c:588
 msgid "sample:Expenses:Automobile:Gasoline"
 msgstr ""
 
@@ -2959,6 +2960,7 @@ msgstr "Nakit"
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:122
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:512
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:1038
+#: ../src/register/ledger-core/split-register.c:2191
 #: ../intl-scm/guile-strings.c:124 ../intl-scm/guile-strings.c:140
 #: ../intl-scm/guile-strings.c:4648 ../intl-scm/guile-strings.c:5990
 msgid "Charge"
@@ -2977,7 +2979,7 @@ msgstr "Gider Hesabı"
 #. src/business/business-reports/invoice.scm
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:65
 #: ../src/gnome/dialog-find-transactions.c:122
-#: ../src/register/ledger-core/split-register-model.c:169
+#: ../src/register/ledger-core/split-register-model.c:230
 #: ../intl-scm/guile-strings.c:7294 ../intl-scm/guile-strings.c:7700
 #: ../intl-scm/guile-strings.c:7956
 msgid "Action"
@@ -3304,7 +3306,7 @@ msgstr "Döviz"
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../src/engine/Account.c:3717
-#: ../src/register/ledger-core/split-register.c:2265
+#: ../src/register/ledger-core/split-register.c:2279
 #: ../intl-scm/guile-strings.c:152 ../intl-scm/guile-strings.c:1480
 #: ../intl-scm/guile-strings.c:2210 ../intl-scm/guile-strings.c:2232
 #: ../intl-scm/guile-strings.c:3038 ../intl-scm/guile-strings.c:3060
@@ -3490,7 +3492,7 @@ msgstr "-- Bileşenli Hareket --"
 #: ../src/engine/Split.c:1279 ../src/gnome/druid-stock-split.c:454
 #: ../src/gnome/glade/register.glade.h:67
 #: ../src/gnome/gnc-plugin-page-register.c:336
-#: ../src/register/ledger-core/split-register.c:2268
+#: ../src/register/ledger-core/split-register.c:2282
 #: ../intl-scm/guile-strings.c:4130 ../intl-scm/guile-strings.c:5472
 #: ../intl-scm/guile-strings.c:6424 ../intl-scm/guile-strings.c:6740
 msgid "Split"
@@ -3593,7 +3595,7 @@ msgstr "Tüm hesaplar"
 #: ../src/import-export/import-main-matcher.c:434
 #: ../src/import-export/import-match-picker.c:332
 #: ../src/import-export/qif-import/dialog-account-picker.c:339
-#: ../src/register/ledger-core/split-register-model.c:176
+#: ../src/register/ledger-core/split-register-model.c:237
 #: ../intl-scm/guile-strings.c:2284 ../intl-scm/guile-strings.c:2306
 #: ../intl-scm/guile-strings.c:2756 ../intl-scm/guile-strings.c:3112
 #: ../intl-scm/guile-strings.c:3134 ../intl-scm/guile-strings.c:3584
@@ -3636,7 +3638,7 @@ msgstr "Yeni Fiyat:"
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/dialog-find-transactions.c:113
 #: ../src/gnome/druid-stock-split.c:621
-#: ../src/register/ledger-core/split-register-model.c:239
+#: ../src/register/ledger-core/split-register-model.c:300
 #: ../intl-scm/guile-strings.c:2286 ../intl-scm/guile-strings.c:2502
 #: ../intl-scm/guile-strings.c:3114 ../intl-scm/guile-strings.c:3330
 #: ../intl-scm/guile-strings.c:3996 ../intl-scm/guile-strings.c:4162
@@ -3758,12 +3760,12 @@ msgstr "Tamamlandı"
 #: ../src/gnome/glade/register.glade.h:85
 #: ../src/gnome/gnc-plugin-page-sx-list.c:122
 #: ../src/gnome-utils/gnc-main-window.c:233
-#: ../src/gnome/window-reconcile.c:2124
+#: ../src/gnome/window-reconcile.c:2129
 #: ../src/report/report-gnome/report.glade.h:17
 msgid "_Edit"
 msgstr "Dü_zenle"
 
-#: ../src/gnome/dialog-sx-editor.c:186 ../src/gnome/window-reconcile.c:2081
+#: ../src/gnome/dialog-sx-editor.c:186 ../src/gnome/window-reconcile.c:2086
 msgid "_Transaction"
 msgstr "_Hareket"
 
@@ -4104,7 +4106,7 @@ msgid "via Escrow account?"
 msgstr ""
 
 #: ../src/gnome/druid-loan.c:811
-#: ../src/register/ledger-core/split-register.c:2222
+#: ../src/register/ledger-core/split-register.c:2231
 msgid "Loan"
 msgstr ""
 
@@ -4146,7 +4148,7 @@ msgstr "Ana Para"
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../src/gnome/druid-loan.c:1807 ../src/gnome/druid-loan.c:2395
-#: ../src/register/ledger-core/split-register.c:2230
+#: ../src/register/ledger-core/split-register.c:2239
 #: ../intl-scm/guile-strings.c:6916 ../intl-scm/guile-strings.c:6942
 #: ../intl-scm/guile-strings.c:6984
 msgid "Interest"
@@ -4408,7 +4410,7 @@ msgstr "Hesap Planı için son adım"
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/glade/account.glade.h:25
-#: ../src/gnome-utils/glade/preferences.glade.h:78
+#: ../src/gnome-utils/glade/preferences.glade.h:80
 #: ../intl-scm/guile-strings.c:244 ../intl-scm/guile-strings.c:250
 #: ../intl-scm/guile-strings.c:256 ../intl-scm/guile-strings.c:262
 #: ../intl-scm/guile-strings.c:370 ../intl-scm/guile-strings.c:374
@@ -5213,8 +5215,8 @@ msgstr ""
 #: ../src/gnome/glade/lots.glade.h:7 ../src/gnome/lot-viewer.c:633
 #: ../src/gnome-utils/gnc-tree-view-account.c:554
 #: ../src/import-export/csv/gnc-csv-model.c:36
-#: ../src/register/ledger-core/split-register-model.c:162
-#: ../src/register/ledger-core/split-register-model.c:302
+#: ../src/register/ledger-core/split-register-model.c:223
+#: ../src/register/ledger-core/split-register-model.c:363
 #: ../intl-scm/guile-strings.c:1510 ../intl-scm/guile-strings.c:3910
 #: ../intl-scm/guile-strings.c:4236 ../intl-scm/guile-strings.c:4552
 #: ../intl-scm/guile-strings.c:5252 ../intl-scm/guile-strings.c:5578
@@ -5628,7 +5630,7 @@ msgid "Include _subaccounts"
 msgstr "Tali Hesaplar dahil"
 
 #. starting balance title/value
-#: ../src/gnome/glade/reconcile.glade.h:4 ../src/gnome/window-reconcile.c:1731
+#: ../src/gnome/glade/reconcile.glade.h:4 ../src/gnome/window-reconcile.c:1736
 msgid "Starting Balance:"
 msgstr "Başlangıç Bakiye:"
 
@@ -6661,7 +6663,7 @@ msgid "_Run when data file opened"
 msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:199
-#: ../src/gnome-utils/glade/preferences.glade.h:175
+#: ../src/gnome-utils/glade/preferences.glade.h:177
 #, fuzzy
 msgid "days"
 msgstr "günde bir."
@@ -7181,13 +7183,13 @@ msgstr "Seçili hesabaı mutabakata sok"
 #. Actions menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:181
 #: ../src/gnome/gnc-plugin-page-register.c:235
-#: ../src/gnome-utils/gnc-icons.c:21 ../src/gnome/window-reconcile.c:2108
+#: ../src/gnome-utils/gnc-icons.c:21 ../src/gnome/window-reconcile.c:2113
 msgid "_Transfer..."
 msgstr "_Aktarma..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:182
 #: ../src/gnome/gnc-plugin-page-register.c:236
-#: ../src/gnome/window-reconcile.c:2109
+#: ../src/gnome/window-reconcile.c:2114
 msgid "Transfer funds from one account to another"
 msgstr "Hesaplararası fon aktarma"
 
@@ -7218,7 +7220,7 @@ msgid "Check & Repair A_ccount"
 msgstr "_Hesap Denetim/Onarımı"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:191
-#: ../src/gnome/window-reconcile.c:2112
+#: ../src/gnome/window-reconcile.c:2117
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
@@ -7254,7 +7256,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-account-tree.c:220
 #: ../src/gnome/gnc-plugin-page-budget.c:163 ../src/gnome/lot-viewer.c:448
 #: ../src/gnome-utils/gnc-file.c:96 ../src/gnome-utils/gnc-file.c:853
-#: ../src/gnome/window-reconcile.c:1617
+#: ../src/gnome/window-reconcile.c:1622
 msgid "Open"
 msgstr "Aç"
 
@@ -7588,9 +7590,9 @@ msgstr "Yevmiye Defteri"
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/gnc-plugin-page-register.c:331
-#: ../src/register/ledger-core/split-register.c:2199
-#: ../src/register/ledger-core/split-register-layout.c:571
-#: ../src/register/ledger-core/split-register-model.c:183
+#: ../src/register/ledger-core/split-register.c:2205
+#: ../src/register/ledger-core/split-register-layout.c:572
+#: ../src/register/ledger-core/split-register-model.c:244
 #: ../intl-scm/guile-strings.c:4546 ../intl-scm/guile-strings.c:5888
 msgid "Transfer"
 msgstr "Aktarma"
@@ -7669,7 +7671,7 @@ msgstr "Arama Sonuçları Raporu"
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/gnc-plugin-page-register.c:1778
-#: ../src/gnome-utils/glade/preferences.glade.h:105
+#: ../src/gnome-utils/glade/preferences.glade.h:107
 #: ../intl-scm/guile-strings.c:2270 ../intl-scm/guile-strings.c:3098
 #: ../intl-scm/guile-strings.c:4652 ../intl-scm/guile-strings.c:5994
 msgid "Register"
@@ -7719,7 +7721,7 @@ msgstr "Tarifeli"
 #. Transaction menu
 #: ../src/gnome/gnc-plugin-page-sx-list.c:120
 #: ../src/gnome-utils/gnc-main-window.c:245
-#: ../src/gnome/window-reconcile.c:2118
+#: ../src/gnome/window-reconcile.c:2123
 msgid "_New"
 msgstr "_Yeni"
 
@@ -7915,8 +7917,8 @@ msgid "Lots in Account %s"
 msgstr "Münferit Hesaplar"
 
 #: ../src/gnome/reconcile-list.c:211
-#: ../src/register/ledger-core/split-register-layout.c:555
-#: ../src/register/ledger-core/split-register-model.c:154
+#: ../src/register/ledger-core/split-register-layout.c:556
+#: ../src/register/ledger-core/split-register-model.c:215
 msgid "Reconciled:R"
 msgstr "Mutabık:M"
 
@@ -8265,6 +8267,10 @@ msgid "Which check position to print"
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:1
+msgid "Always reconcile to today"
+msgstr ""
+
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:2
 #, fuzzy
 msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
@@ -8273,20 +8279,26 @@ msgstr ""
 "Kredi kartı ekstresi ile mutabık olduktan sonra, kullanıcıdan bir kredi "
 "kartı ödemesi girmesini ister"
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:2
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:3
 msgid ""
 "If active, all transactions marked as cleared in the register will appear "
 "already selected in the reconcile dialog. Otherwise no transactions will be "
 "initially selected."
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:3
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:4
+msgid ""
+"If active, always open the reconcile dialog using today's date for the "
+"statement date, regardless of previous reconciliations."
+msgstr ""
+
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
 #, fuzzy
 msgid "Pre-select cleared transactions"
 msgstr "Netleşen hareketleri işaretle"
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:4
-#: ../src/gnome-utils/glade/preferences.glade.h:102
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
+#: ../src/gnome-utils/glade/preferences.glade.h:104
 #, fuzzy
 msgid ""
 "Prior to reconciling an account which charges or pays interest, prompt the "
@@ -8299,12 +8311,12 @@ msgstr ""
 "Halen sadece Banka, Kredi, Yatırım Fonu, Varlık, Alıcı, Satıcı ve Borçlar "
 "türü hesaplar için geçerlidir."
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:7
 #, fuzzy
 msgid "Prompt for credit card payment"
 msgstr "Otomatik kredi kartı ödemeleri"
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:8
 #, fuzzy
 msgid "Prompt for interest charges"
 msgstr "Faiz girişi..."
@@ -8455,7 +8467,7 @@ msgstr ""
 "silinmez)."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:19
-#: ../src/gnome-utils/glade/preferences.glade.h:62
+#: ../src/gnome-utils/glade/preferences.glade.h:64
 msgid "Display negative amounts in red"
 msgstr "Eksi miktarları kırmızı renkte göster"
 
@@ -8660,7 +8672,7 @@ msgid "Source of default report currency"
 msgstr "Rapor Varsayılan Birim"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:55
-#: ../src/gnome-utils/glade/preferences.glade.h:126
+#: ../src/gnome-utils/glade/preferences.glade.h:128
 msgid ""
 "The number of minutes until saving of the data file to harddisk will be "
 "started automatically. If zero, no saving will be started automatically."
@@ -9947,7 +9959,7 @@ msgstr "Kıymete münhasır bir kod giriniz. Bu alanı boş bırakabilirsiniz."
 #: ../src/gnome-utils/glade/commodity.glade.h:4
 #, fuzzy
 msgid ""
-"Enter the full name of the commodity. Example: Cisco Sytems Inc, or Apple "
+"Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
 msgstr "Kıymetin tam adını giriniz. Örnek: Türk Lirası"
 
@@ -10424,7 +10436,7 @@ msgid "Months:"
 msgstr "Ay"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:11
-#: ../src/gnome-utils/glade/preferences.glade.h:110
+#: ../src/gnome-utils/glade/preferences.glade.h:112
 #, fuzzy
 msgid "Sample:"
 msgstr "Örnek"
@@ -10641,226 +10653,236 @@ msgstr ""
 "Birincil ve ikincil renk geçişlerini satır değil, hareket bazında uygula"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:39
-msgid "Auto-save time _interval:"
+msgid ""
+"Always open the reconcile dialog using today's date for the statement date, "
+"regardless of previous reconciliations."
 msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:40
+msgid "Always reconcile to t_oday"
+msgstr ""
+
+#: ../src/gnome-utils/glade/preferences.glade.h:41
+msgid "Auto-save time _interval:"
+msgstr ""
+
+#: ../src/gnome-utils/glade/preferences.glade.h:42
 #, fuzzy
 msgid "Automatic _interest transfer"
 msgstr "Otomatik faiz aktarımı"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:41
+#: ../src/gnome-utils/glade/preferences.glade.h:43
 #, fuzzy
 msgid "Automatic credit card _payment"
 msgstr "Otomatik kredi kartı ödemeleri"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:42
+#: ../src/gnome-utils/glade/preferences.glade.h:44
 msgid ""
 "Automatically expand the current transaction to show all splits.  All other "
 "transactions are shown on one line. (Two in double line mode.)"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:43
+#: ../src/gnome-utils/glade/preferences.glade.h:45
 msgid ""
 "Automatically insert a decimal point into values that are entered without "
 "one."
 msgstr "Girilen miktarlara ondalık işaretini otomatik olarak ekle."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:44
-msgid "Automatically raise the list of accounts or actions during input."
-msgstr ""
-
-#: ../src/gnome-utils/glade/preferences.glade.h:45
-#, fuzzy
-msgid "B_ottom"
-msgstr "Rapor ayarlarını düzenle"
-
 #: ../src/gnome-utils/glade/preferences.glade.h:46
-msgid "Below the actual date, print the format of that date in 8 point type."
+msgid "Automatically raise the list of accounts or actions during input."
 msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:47
 #, fuzzy
-msgid "Bottom"
+msgid "B_ottom"
 msgstr "Rapor ayarlarını düzenle"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:48
-msgid "Bring the most _recent tab to the front"
+msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:49
 #, fuzzy
+msgid "Bottom"
+msgstr "Rapor ayarlarını düzenle"
+
+#: ../src/gnome-utils/glade/preferences.glade.h:50
+msgid "Bring the most _recent tab to the front"
+msgstr ""
+
+#: ../src/gnome-utils/glade/preferences.glade.h:51
+#, fuzzy
 msgid "C_redit accounts"
 msgstr "Alacak Hesaplar"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:50
+#: ../src/gnome-utils/glade/preferences.glade.h:52
 #, fuzzy
 msgid "Ch_oose:"
 msgstr "Kapat"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:51
+#: ../src/gnome-utils/glade/preferences.glade.h:53
 #, fuzzy
 msgid "Character:"
 msgstr "Oluştur"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:52
+#: ../src/gnome-utils/glade/preferences.glade.h:54
 #, fuzzy
 msgid "Check cleared _transactions"
 msgstr "Netleşen hareketleri işaretle"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:53
+#: ../src/gnome-utils/glade/preferences.glade.h:55
 #, fuzzy
 msgid "Com_press files"
 msgstr "Dosyaları sıkıştır."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:54
+#: ../src/gnome-utils/glade/preferences.glade.h:56
 msgid "Compress the data file with gzip when saving it to disk."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:55
+#: ../src/gnome-utils/glade/preferences.glade.h:57
 #, fuzzy
 msgid "Date/Time"
 msgstr "Tarih"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:56
+#: ../src/gnome-utils/glade/preferences.glade.h:58
 #, fuzzy
 msgid "Default _font:"
 msgstr "Normal mesai ücreti (saat): "
 
-#: ../src/gnome-utils/glade/preferences.glade.h:57
+#: ../src/gnome-utils/glade/preferences.glade.h:59
 msgid "Default to 'new search' if fewer than this number of items is returned."
 msgstr ""
 "Arama ekranında, burada yazandan az sayıda öğe bulunursa Arama türünü 'Yeni "
 "arama' olarak işaretle"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:58
+#: ../src/gnome-utils/glade/preferences.glade.h:60
 msgid "Delete old log/backup files after this many days (0 = never)."
 msgstr ""
 "Kütük/yedek dosyaların kaç gün saklandıktan sonra silineceği (0 = hiç "
 "silinmez)."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:59
+#: ../src/gnome-utils/glade/preferences.glade.h:61
 #, fuzzy
 msgid "Display \"_tip of the day\" dialog"
 msgstr "\"Günün Püfü\"nü göster"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:60
+#: ../src/gnome-utils/glade/preferences.glade.h:62
 msgid "Display hints for using GnuCash at startup"
 msgstr "Açılışta GnuCash püflerini göster"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:61
+#: ../src/gnome-utils/glade/preferences.glade.h:63
 #, fuzzy
 msgid "Display ne_gative amounts in red"
 msgstr "Eksi miktarları kırmızı renkte göster"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:63
+#: ../src/gnome-utils/glade/preferences.glade.h:65
 #, fuzzy
 msgid "Display the notebook tabs at the bottom of the window."
 msgstr "Yeni kalem girişi için son satıra git"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:64
+#: ../src/gnome-utils/glade/preferences.glade.h:66
 msgid "Display the notebook tabs at the left of the window."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:65
+#: ../src/gnome-utils/glade/preferences.glade.h:67
 msgid "Display the notebook tabs at the right of the window."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:66
+#: ../src/gnome-utils/glade/preferences.glade.h:68
 msgid "Display the notebook tabs at the top of the window."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:67
+#: ../src/gnome-utils/glade/preferences.glade.h:69
 #, fuzzy
 msgid "Display the summary bar at the bottom of the page."
 msgstr "Yeni kalem girişi için son satıra git"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:68
+#: ../src/gnome-utils/glade/preferences.glade.h:70
 #, fuzzy
 msgid "Display the summary bar at the top of the page."
 msgstr "Yeni kalem girişi için son satıra git"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:69
+#: ../src/gnome-utils/glade/preferences.glade.h:71
 msgid "Display this many rows when a register is created."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:70
+#: ../src/gnome-utils/glade/preferences.glade.h:72
 msgid "Display toolbar items as icons only."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:71
+#: ../src/gnome-utils/glade/preferences.glade.h:73
 msgid "Display toolbar items as text only."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:72
+#: ../src/gnome-utils/glade/preferences.glade.h:74
 msgid ""
 "Display toolbar items with the text label below the icon.  Labels are show "
 "for all items."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:73
+#: ../src/gnome-utils/glade/preferences.glade.h:75
 msgid ""
 "Display toolbar items with the text label beside the icon.  Labels are only "
 "shown for the most important items."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:74
+#: ../src/gnome-utils/glade/preferences.glade.h:76
 #, fuzzy
 msgid "Don't sign reverse any accounts."
 msgstr "Hesaplar ters işaretsiz"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:75
+#: ../src/gnome-utils/glade/preferences.glade.h:77
 #, fuzzy
 msgid "Double _mode colors alternate with transactions"
 msgstr "Çift kipli renkler hareketi baz alsın"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:76
+#: ../src/gnome-utils/glade/preferences.glade.h:78
 msgid "Draw _vertical lines between columns"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:77
+#: ../src/gnome-utils/glade/preferences.glade.h:79
 msgid "Draw hori_zontal lines between rows"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:79
+#: ../src/gnome-utils/glade/preferences.glade.h:81
 #, fuzzy
 msgid "GnuCash Options"
 msgstr "GnuCash Ekranları"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:80
+#: ../src/gnome-utils/glade/preferences.glade.h:82
 #, fuzzy
 msgid "GnuCash Preferences"
 msgstr "GnuCash Tercihleri"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:81
+#: ../src/gnome-utils/glade/preferences.glade.h:83
 msgid "How many automatic decimal places will be filled in."
 msgstr "Kaç basamakta bir ondalık işareti otomatik girilecek."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:82
+#: ../src/gnome-utils/glade/preferences.glade.h:84
 msgid ""
 "If active, GnuCash shows a confirmation question each time the auto-save "
 "feature is started. Otherwise no extra explanation is shown."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:83
+#: ../src/gnome-utils/glade/preferences.glade.h:85
 msgid ""
 "If checked, each register will be opened in its own top level window.  If "
 "clear, the register will be opened in the current window."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:84
+#: ../src/gnome-utils/glade/preferences.glade.h:86
 msgid ""
 "If checked, each report will be opened in its own top level window.  If "
 "clear, the report will be opened in the current window."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:85
+#: ../src/gnome-utils/glade/preferences.glade.h:87
 msgid ""
 "If checked, non-currency commodities will be shown in the summary bar.  If "
 "clear, only currencies will be shown."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:86
+#: ../src/gnome-utils/glade/preferences.glade.h:88
 msgid ""
 "If checked, only the names of the leaf accounts are displayed in the "
 "register and in the account selection popup. The default behaviour is to "
@@ -10868,7 +10890,7 @@ msgid ""
 "option implies that you use unique leaf names."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:87
+#: ../src/gnome-utils/glade/preferences.glade.h:89
 #, fuzzy
 msgid ""
 "If checked, pressing the 'Enter' key will move to the blank transaction at "
@@ -10878,47 +10900,47 @@ msgstr ""
 "'Kaydet' düğmesi veya Enter tuşuna basınca sayfa sonunda boş satıra, yoksa "
 "bir satır aşağıya gider."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:88
+#: ../src/gnome-utils/glade/preferences.glade.h:90
 msgid ""
 "If checked, the system color theme will be applied to register windows.  If "
 "clear, the original GnuCash register colors will be used."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:89
+#: ../src/gnome-utils/glade/preferences.glade.h:91
 #, fuzzy
 msgid "Include _grand total"
 msgstr "Genel toplamlar için renk"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:90
+#: ../src/gnome-utils/glade/preferences.glade.h:92
 msgid "Include _non-currency totals"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:91
+#: ../src/gnome-utils/glade/preferences.glade.h:93
 #, fuzzy
 msgid "Loc_ale:"
 msgstr "Sistem ayarı"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:92
+#: ../src/gnome-utils/glade/preferences.glade.h:94
 #, fuzzy
 msgid "New search _limit:"
 msgstr "Yeni Arama Sınırı"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:94
+#: ../src/gnome-utils/glade/preferences.glade.h:96
 #, fuzzy
 msgid "Number of _transactions:"
 msgstr "Hareket Listesi"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:95
+#: ../src/gnome-utils/glade/preferences.glade.h:97
 #, fuzzy
 msgid "Perform account list _setup on new file"
 msgstr "Yeni dosya için Hesap Planı başlatma"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:96
+#: ../src/gnome-utils/glade/preferences.glade.h:98
 #, fuzzy
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
 msgstr "Mutabakat esnasında netleşen hareketleri otomatik işaretle"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:97
+#: ../src/gnome-utils/glade/preferences.glade.h:99
 #, fuzzy
 msgid ""
 "Present the new account list dialog when you choose \"New File\" from the "
@@ -10927,114 +10949,114 @@ msgstr ""
 "\"Dosya\" menüsünden \"Yeni Dosya\" seçilince Hesap Planı seçim işlemi "
 "başlatmasın"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:98
+#: ../src/gnome-utils/glade/preferences.glade.h:100
 msgid "Print '***' before and after each text field on the check."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:99
+#: ../src/gnome-utils/glade/preferences.glade.h:101
 msgid "Print _blocking chars"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:100
+#: ../src/gnome-utils/glade/preferences.glade.h:102
 #, fuzzy
 msgid "Print _date format"
 msgstr "Özel biçim"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:101
+#: ../src/gnome-utils/glade/preferences.glade.h:103
 #, fuzzy
 msgid "Printing"
 msgstr "Yazdır"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:103
+#: ../src/gnome-utils/glade/preferences.glade.h:105
 msgid "Priority text besi_de icons"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:104
+#: ../src/gnome-utils/glade/preferences.glade.h:106
 #, fuzzy
 msgid "Re_lative:"
 msgstr "İndirim"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:106
+#: ../src/gnome-utils/glade/preferences.glade.h:108
 #, fuzzy
 msgid "Register Defaults"
 msgstr "Defter yazıtipi"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:107
+#: ../src/gnome-utils/glade/preferences.glade.h:109
 #, fuzzy
 msgid "Register opens in a new _window"
 msgstr "Yeni pencerede aç"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:108
+#: ../src/gnome-utils/glade/preferences.glade.h:110
 #, fuzzy
 msgid "Report opens in a new _window"
 msgstr "Yeni pencerede aç"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:109
+#: ../src/gnome-utils/glade/preferences.glade.h:111
 #, fuzzy
 msgid "Reports"
 msgstr "_Raporlar"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:111
+#: ../src/gnome-utils/glade/preferences.glade.h:113
 msgid ""
 "Show a close button on each notebook tab.  These function identically to the "
 "'Close' menu item."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:112
+#: ../src/gnome-utils/glade/preferences.glade.h:114
 msgid ""
 "Show a grand total of all accounts converted to the default report currency."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:113
+#: ../src/gnome-utils/glade/preferences.glade.h:115
 #, fuzzy
 msgid "Show all transactions on one line. (Two in double line mode.)"
 msgstr "Hareketleri bir veya iki satırda göster"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:114
+#: ../src/gnome-utils/glade/preferences.glade.h:116
 msgid "Show auto-save confirmation _question"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:115
+#: ../src/gnome-utils/glade/preferences.glade.h:117
 msgid "Show close button on _notebook tabs"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:116
+#: ../src/gnome-utils/glade/preferences.glade.h:118
 #, fuzzy
 msgid "Show horizontal borders on the cells."
 msgstr "Hücrelerde yatay sınır çizgilerini göster"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:117
+#: ../src/gnome-utils/glade/preferences.glade.h:119
 msgid "Show splash scree_n"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:118
+#: ../src/gnome-utils/glade/preferences.glade.h:120
 msgid "Show splash screen at startup."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:119
+#: ../src/gnome-utils/glade/preferences.glade.h:121
 msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:120
+#: ../src/gnome-utils/glade/preferences.glade.h:122
 #, fuzzy
 msgid ""
 "Show two lines of information for each transaction instead of one.  Does not "
 "affect expanded transactions."
 msgstr "Her hareket bilgilerini iki satırda göster"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:121
+#: ../src/gnome-utils/glade/preferences.glade.h:123
 #, fuzzy
 msgid "Show vertical borders on the cells."
 msgstr "Hücrelerde dikey sınır çizgilerini göster"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:122
+#: ../src/gnome-utils/glade/preferences.glade.h:124
 #, fuzzy
 msgid "Sign reverse balances on income and expense accounts."
 msgstr "Gelir ve Gider hesapları ters işaretli olsun"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:123
+#: ../src/gnome-utils/glade/preferences.glade.h:125
 #, fuzzy
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
@@ -11043,11 +11065,11 @@ msgstr ""
 "Kredi Kartı, Satıcılar, Borçlar, Sermaye, Gelir hesapları gibi alacak "
 "kalanlı hesaplar ters işaretli olsun"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:124
+#: ../src/gnome-utils/glade/preferences.glade.h:126
 msgid "Text _below icons"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:125
+#: ../src/gnome-utils/glade/preferences.glade.h:127
 msgid ""
 "The character that will be used between components of an account name.  A "
 "legal value is any single character except letters and numbers, or any of "
@@ -11055,228 +11077,228 @@ msgid ""
 "\"period\"."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:127
+#: ../src/gnome-utils/glade/preferences.glade.h:129
 #, fuzzy
 msgid "To_p"
 msgstr "Bugün"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:128
+#: ../src/gnome-utils/glade/preferences.glade.h:130
 #, fuzzy
 msgid "Top"
 msgstr "Bugün"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:129
+#: ../src/gnome-utils/glade/preferences.glade.h:131
 #, fuzzy
 msgid "Transaction _journal"
 msgstr "Yevmiye Defteri"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:130
+#: ../src/gnome-utils/glade/preferences.glade.h:132
 msgid "US Dollars (USD)"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:131
+#: ../src/gnome-utils/glade/preferences.glade.h:133
 msgid "U_K:"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:132
+#: ../src/gnome-utils/glade/preferences.glade.h:134
 #, fuzzy
 msgid "U_se 24-hour clock"
 msgstr "24-saat biçimi kullan"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:133
+#: ../src/gnome-utils/glade/preferences.glade.h:135
 #, fuzzy
 msgid "Use _formal accounting labels"
 msgstr "Muhasebe Terimleri Kullan"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:134
+#: ../src/gnome-utils/glade/preferences.glade.h:136
 msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr "24 saat üzerinden saati göster"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:135
+#: ../src/gnome-utils/glade/preferences.glade.h:137
 #, fuzzy
 msgid "Use only 'debit' and 'credit' instead of informal synonyms"
 msgstr "Gayriresmi karşılıklardan ziyade 'borç' ve 'alacak' terimlerini kullan"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:136
+#: ../src/gnome-utils/glade/preferences.glade.h:138
 #, fuzzy
 msgid "Use s_ystem default"
 msgstr "Varsayılan GNOME ayarı"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:137
+#: ../src/gnome-utils/glade/preferences.glade.h:139
 msgid "Use the date format common in continental Europe."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:138
+#: ../src/gnome-utils/glade/preferences.glade.h:140
 msgid "Use the date format common in the United Kingdom."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:139
+#: ../src/gnome-utils/glade/preferences.glade.h:141
 msgid "Use the date format common in the United States."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:140
+#: ../src/gnome-utils/glade/preferences.glade.h:142
 msgid "Use the date format specified by the ISO-8601 standard."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:141
+#: ../src/gnome-utils/glade/preferences.glade.h:143
 msgid "Use the date format specified by the system locale."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:142
+#: ../src/gnome-utils/glade/preferences.glade.h:144
 msgid ""
 "Use the specified absolute ending date for profit/loss calculations.  Also "
 "use this date for net assets calculations."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:143
+#: ../src/gnome-utils/glade/preferences.glade.h:145
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:144
+#: ../src/gnome-utils/glade/preferences.glade.h:146
 #, fuzzy
 msgid "Use the specified currency for all newly created accounts."
 msgstr "Yeni hesaplarda kullanılacak kıymet birimini seçin."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:145
+#: ../src/gnome-utils/glade/preferences.glade.h:147
 msgid "Use the specified currency for all newly created reports."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:146
+#: ../src/gnome-utils/glade/preferences.glade.h:148
 msgid ""
 "Use the specified relative ending date for profit/loss calculations.  Also "
 "use this date for net assets calculations."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:147
+#: ../src/gnome-utils/glade/preferences.glade.h:149
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:148
+#: ../src/gnome-utils/glade/preferences.glade.h:150
 #, fuzzy
 msgid "Use the system locale currency for all newly created accounts."
 msgstr "Yeni hesaplarda kullanılacak kıymet birimini seçin."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:149
+#: ../src/gnome-utils/glade/preferences.glade.h:151
 msgid "Use the system locale currency for all newly created reports."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:150
+#: ../src/gnome-utils/glade/preferences.glade.h:152
 msgid "Use the system setting for displaying toolbar items."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:151
+#: ../src/gnome-utils/glade/preferences.glade.h:153
 #, fuzzy
 msgid "Windows"
 msgstr "_Pencereler"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:152
+#: ../src/gnome-utils/glade/preferences.glade.h:154
 #, fuzzy
 msgid "_Absolute:"
 msgstr "Günü Geçmiş"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:153
+#: ../src/gnome-utils/glade/preferences.glade.h:155
 msgid "_Auto-raise lists"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:154
+#: ../src/gnome-utils/glade/preferences.glade.h:156
 #, fuzzy
 msgid "_Auto-split ledger"
 msgstr "B_ileşenli Defter"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:155
+#: ../src/gnome-utils/glade/preferences.glade.h:157
 #, fuzzy
 msgid "_Automatic decimal point"
 msgstr "Otomatik ondalık işareti"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:156
+#: ../src/gnome-utils/glade/preferences.glade.h:158
 #, fuzzy
 msgid "_Basic ledger"
 msgstr "_Basit Defter"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:157
+#: ../src/gnome-utils/glade/preferences.glade.h:159
 #, fuzzy
 msgid "_Decimal places:"
 msgstr "Basamak sayısı"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:158
+#: ../src/gnome-utils/glade/preferences.glade.h:160
 #, fuzzy
 msgid "_Double line mode"
 msgstr "Çift Satır Kipi"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:159
+#: ../src/gnome-utils/glade/preferences.glade.h:161
 msgid "_Europe:"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:160
+#: ../src/gnome-utils/glade/preferences.glade.h:162
 msgid "_ISO:"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:161
+#: ../src/gnome-utils/glade/preferences.glade.h:163
 #, fuzzy
 msgid "_Icons only"
 msgstr "Sadece ikon"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:162
+#: ../src/gnome-utils/glade/preferences.glade.h:164
 #, fuzzy
 msgid "_Income & expense"
 msgstr "Gelir/Gider"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:163
+#: ../src/gnome-utils/glade/preferences.glade.h:165
 #, fuzzy
 msgid "_Left"
 msgstr "En Yeni Tarih"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:164
+#: ../src/gnome-utils/glade/preferences.glade.h:166
 #, fuzzy
 msgid "_None"
 msgstr "Yok"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:165
+#: ../src/gnome-utils/glade/preferences.glade.h:167
 msgid "_Only display leaf account names"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:166
+#: ../src/gnome-utils/glade/preferences.glade.h:168
 #, fuzzy
 msgid "_Relative:"
 msgstr "İndirim"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:167
+#: ../src/gnome-utils/glade/preferences.glade.h:169
 #, fuzzy
 msgid "_Retain log files:"
 msgstr "Kütük dosyalarının kaç gün tutulacağı"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:168
+#: ../src/gnome-utils/glade/preferences.glade.h:170
 msgid "_Right"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:169
+#: ../src/gnome-utils/glade/preferences.glade.h:171
 #, fuzzy
 msgid "_Save window size and position"
 msgstr "Pencere boyut ve konumlarını kaydet"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:170
+#: ../src/gnome-utils/glade/preferences.glade.h:172
 #, fuzzy
 msgid "_Text only"
 msgstr "Sadece yazı"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:171
+#: ../src/gnome-utils/glade/preferences.glade.h:173
 msgid "_US:"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:172
+#: ../src/gnome-utils/glade/preferences.glade.h:174
 msgid "_Use system theme colors"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:173
+#: ../src/gnome-utils/glade/preferences.glade.h:175
 msgid "_Width:"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:174
+#: ../src/gnome-utils/glade/preferences.glade.h:176
 #, fuzzy
 msgid "characters"
 msgstr "Oluştur"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:176
+#: ../src/gnome-utils/glade/preferences.glade.h:178
 msgid "minutes"
 msgstr ""
 
@@ -11937,7 +11959,7 @@ msgstr ""
 msgid "_Delete Account"
 msgstr "Hesabı _Sil"
 
-#: ../src/gnome-utils/gnc-icons.c:18 ../src/gnome/window-reconcile.c:2105
+#: ../src/gnome-utils/gnc-icons.c:18 ../src/gnome/window-reconcile.c:2110
 msgid "_Edit Account"
 msgstr "Hesabı Dü_zenle"
 
@@ -11947,7 +11969,7 @@ msgid "_New Account"
 msgstr "Yeni Hesap"
 
 #. Account menu
-#: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/window-reconcile.c:2102
+#: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/window-reconcile.c:2107
 msgid "_Open Account"
 msgstr "_Hesabı Aç"
 
@@ -11981,7 +12003,7 @@ msgstr "_Pencereler"
 
 #. Help menu
 #: ../src/gnome-utils/gnc-main-window.c:241
-#: ../src/gnome/window-reconcile.c:2082 ../src/gnome/window-reconcile.c:2133
+#: ../src/gnome/window-reconcile.c:2087 ../src/gnome/window-reconcile.c:2138
 msgid "_Help"
 msgstr "_Yardım"
 
@@ -12069,7 +12091,7 @@ msgstr "Pencere görüntüsünü tazele"
 
 #. Actions menu
 #: ../src/gnome-utils/gnc-main-window.c:296
-#: ../src/gnome/window-reconcile.c:2111
+#: ../src/gnome/window-reconcile.c:2116
 msgid "_Check & Repair"
 msgstr "Denetim/_Onarım"
 
@@ -12602,8 +12624,8 @@ msgstr "Kıymet seçimi"
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/invoice.scm
 #: ../src/gnome-utils/gnc-tree-view-price.c:462
-#: ../src/register/ledger-core/split-register.c:2256
-#: ../src/register/ledger-core/split-register-model.c:227
+#: ../src/register/ledger-core/split-register.c:2270
+#: ../src/register/ledger-core/split-register-model.c:288
 #: ../intl-scm/guile-strings.c:1948 ../intl-scm/guile-strings.c:2026
 #: ../intl-scm/guile-strings.c:2288 ../intl-scm/guile-strings.c:2504
 #: ../intl-scm/guile-strings.c:2764 ../intl-scm/guile-strings.c:2776
@@ -12746,27 +12768,27 @@ msgid "Are you sure you want to delete the selected transaction?"
 msgstr "Seçilen hareket silinsin mi?"
 
 #. statement date title/value
-#: ../src/gnome/window-reconcile.c:1721
+#: ../src/gnome/window-reconcile.c:1726
 #, fuzzy
 msgid "Statement Date:"
 msgstr "Ekstre Tarihi:"
 
 #. ending balance title/value
-#: ../src/gnome/window-reconcile.c:1741
+#: ../src/gnome/window-reconcile.c:1746
 msgid "Ending Balance:"
 msgstr "Bitiş Bakiye:"
 
 #. reconciled balance title/value
-#: ../src/gnome/window-reconcile.c:1751
+#: ../src/gnome/window-reconcile.c:1756
 msgid "Reconciled Balance:"
 msgstr "Mutabık Bakiye:"
 
 #. difference title/value
-#: ../src/gnome/window-reconcile.c:1761
+#: ../src/gnome/window-reconcile.c:1766
 msgid "Difference:"
 msgstr "Fark:"
 
-#: ../src/gnome/window-reconcile.c:1874
+#: ../src/gnome/window-reconcile.c:1879
 #, fuzzy
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
@@ -12775,88 +12797,88 @@ msgstr ""
 "Bu mutabakat ekranında değişiklikler yaptınız.\n"
 "İptal edilsin mi?"
 
-#: ../src/gnome/window-reconcile.c:1986
+#: ../src/gnome/window-reconcile.c:1991
 #, fuzzy
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr ""
 "Hesap denk değil.\n"
 "Bitirmek istediğinize emin misiniz?"
 
-#: ../src/gnome/window-reconcile.c:2043
+#: ../src/gnome/window-reconcile.c:2048
 msgid "Do you want to postpone this reconciliation and finish it later?"
 msgstr "Bu mutabakat işlemi ertelensin mi?"
 
 #. Toplevel
-#: ../src/gnome/window-reconcile.c:2079
+#: ../src/gnome/window-reconcile.c:2084
 msgid "_Reconcile"
 msgstr "_Mutabakat"
 
-#: ../src/gnome/window-reconcile.c:2080
+#: ../src/gnome/window-reconcile.c:2085
 msgid "_Account"
 msgstr "_Hesap"
 
 #. Reconcile menu
-#: ../src/gnome/window-reconcile.c:2086
+#: ../src/gnome/window-reconcile.c:2091
 msgid "_Reconcile Information..."
 msgstr "M_utabakat Bilgileri..."
 
-#: ../src/gnome/window-reconcile.c:2087
+#: ../src/gnome/window-reconcile.c:2092
 msgid ""
 "Change the reconcile information including statement date and ending balance."
 msgstr ""
 "Mutabakat bilgilerini değiştir (ekstre tarihi ve bitiş bakiyesi dahil)."
 
-#: ../src/gnome/window-reconcile.c:2090
+#: ../src/gnome/window-reconcile.c:2095
 msgid "_Finish"
 msgstr "_Bitir"
 
-#: ../src/gnome/window-reconcile.c:2091
+#: ../src/gnome/window-reconcile.c:2096
 msgid "Finish the reconciliation of this account"
 msgstr "Hesap mutabakatını bitir"
 
-#: ../src/gnome/window-reconcile.c:2093
+#: ../src/gnome/window-reconcile.c:2098
 msgid "_Postpone"
 msgstr "_Ertele"
 
-#: ../src/gnome/window-reconcile.c:2094
+#: ../src/gnome/window-reconcile.c:2099
 msgid "Postpone the reconciliation of this account"
 msgstr "Hesap mutabakatını ertele"
 
-#: ../src/gnome/window-reconcile.c:2097
+#: ../src/gnome/window-reconcile.c:2102
 msgid "Cancel the reconciliation of this account"
 msgstr "Hesap mutabakatını iptal et"
 
-#: ../src/gnome/window-reconcile.c:2103
+#: ../src/gnome/window-reconcile.c:2108
 msgid "Open the account"
 msgstr "Hesabı aç"
 
-#: ../src/gnome/window-reconcile.c:2106
+#: ../src/gnome/window-reconcile.c:2111
 msgid "Edit the main account for this register"
 msgstr "Bu defterin toplu hesabını düzenle"
 
-#: ../src/gnome/window-reconcile.c:2119
+#: ../src/gnome/window-reconcile.c:2124
 msgid "Add a new transaction to the account"
 msgstr "Hesaba yeni bir hareket ekle"
 
-#: ../src/gnome/window-reconcile.c:2121
+#: ../src/gnome/window-reconcile.c:2126
 #, fuzzy
 msgid "_Balance"
 msgstr "Bakiye:"
 
-#: ../src/gnome/window-reconcile.c:2122
+#: ../src/gnome/window-reconcile.c:2127
 #, fuzzy
 msgid "Add a new balancing entry to the account"
 msgstr "Hesaba yeni bir hareket ekle"
 
-#: ../src/gnome/window-reconcile.c:2125
+#: ../src/gnome/window-reconcile.c:2130
 msgid "Edit the current transaction"
 msgstr "Cari hareketi düzenle"
 
-#: ../src/gnome/window-reconcile.c:2128
+#: ../src/gnome/window-reconcile.c:2133
 msgid "Delete the selected transaction"
 msgstr "Seçili hareketi sil"
 
-#: ../src/gnome/window-reconcile.c:2134
+#: ../src/gnome/window-reconcile.c:2139
 msgid "Open the GnuCash help window"
 msgstr "GnuCash yardım ekranını aç"
 
@@ -14554,7 +14576,7 @@ msgstr ""
 #. name. It MUST NOT contain the
 #. character ':' anywhere in it or
 #. in any translations.
-#: ../src/import-export/ofx/gnc-ofx-import.c:360
+#: ../src/import-export/ofx/gnc-ofx-import.c:362
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr ""
@@ -14563,44 +14585,44 @@ msgstr ""
 #. name. It MUST NOT contain the
 #. character ':' anywhere in it or
 #. in any translations.
-#: ../src/import-export/ofx/gnc-ofx-import.c:430
+#: ../src/import-export/ofx/gnc-ofx-import.c:432
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr ""
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:563
+#: ../src/import-export/ofx/gnc-ofx-import.c:565
 msgid "Unknown OFX account"
 msgstr ""
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:583
+#: ../src/import-export/ofx/gnc-ofx-import.c:585
 msgid "Unknown OFX checking account"
 msgstr ""
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:587
+#: ../src/import-export/ofx/gnc-ofx-import.c:589
 msgid "Unknown OFX savings account"
 msgstr ""
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:591
+#: ../src/import-export/ofx/gnc-ofx-import.c:593
 msgid "Unknown OFX money market account"
 msgstr ""
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:595
+#: ../src/import-export/ofx/gnc-ofx-import.c:597
 msgid "Unknown OFX credit line account"
 msgstr ""
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:599
+#: ../src/import-export/ofx/gnc-ofx-import.c:601
 msgid "Unknown OFX CMA account"
 msgstr ""
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:603
+#: ../src/import-export/ofx/gnc-ofx-import.c:605
 msgid "Unknown OFX credit card account"
 msgstr ""
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:607
+#: ../src/import-export/ofx/gnc-ofx-import.c:609
 msgid "Unknown OFX investment account"
 msgstr ""
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:657
+#: ../src/import-export/ofx/gnc-ofx-import.c:679
 msgid "Select an OFX/QFX file to process"
 msgstr ""
 
@@ -15292,106 +15314,143 @@ msgid "Check"
 msgstr ""
 
 #: ../src/register/ledger-core/split-register.c:2187
-#: ../src/register/ledger-core/split-register.c:2215
-#: ../src/register/ledger-core/split-register.c:2223
-#: ../src/register/ledger-core/split-register.c:2237
-#: ../src/register/ledger-core/split-register.c:2260
+#: ../src/register/ledger-core/split-register.c:2224
+#: ../src/register/ledger-core/split-register.c:2232
+#: ../src/register/ledger-core/split-register.c:2248
+#: ../src/register/ledger-core/split-register.c:2274
 msgid "Int"
 msgstr ""
 
 #: ../src/register/ledger-core/split-register.c:2188
-#: ../src/register/ledger-core/split-register.c:2211
-msgid "ATM"
-msgstr "ATM"
+#: ../src/register/ledger-core/split-register.c:2219
+#, fuzzy
+msgid "ATM Deposit"
+msgstr "Yatan"
 
 #: ../src/register/ledger-core/split-register.c:2189
+#: ../src/register/ledger-core/split-register.c:2220
+msgid "ATM Draw"
+msgstr ""
+
+#: ../src/register/ledger-core/split-register.c:2190
 msgid "Teller"
 msgstr "Vezne"
 
+#: ../src/register/ledger-core/split-register.c:2193
+#, fuzzy
+msgid "Receipt"
+msgstr "Rapor"
+
+#. src/app-utils/prefs.scm
+#: ../src/register/ledger-core/split-register.c:2194
+#: ../src/register/ledger-core/split-register.c:2208
+#: ../src/register/ledger-core/split-register.c:2244
+#: ../src/register/ledger-core/split-register.c:2254
+#: ../src/register/ledger-core/split-register.c:2286
+#: ../intl-scm/guile-strings.c:114 ../intl-scm/guile-strings.c:144
+#: ../intl-scm/guile-strings.c:160
+msgid "Increase"
+msgstr "Artış"
+
+#. src/app-utils/prefs.scm
+#: ../src/register/ledger-core/split-register.c:2195
+#: ../src/register/ledger-core/split-register.c:2209
+#: ../src/register/ledger-core/split-register.c:2245
+#: ../src/register/ledger-core/split-register.c:2255
+#: ../src/register/ledger-core/split-register.c:2287
+#: ../intl-scm/guile-strings.c:116 ../intl-scm/guile-strings.c:132
+#: ../intl-scm/guile-strings.c:142
+msgid "Decrease"
+msgstr "İndirim"
+
 #. Action: Point Of Sale
-#: ../src/register/ledger-core/split-register.c:2191
+#: ../src/register/ledger-core/split-register.c:2197
 msgid "POS"
 msgstr "POS"
 
-#: ../src/register/ledger-core/split-register.c:2192
+#: ../src/register/ledger-core/split-register.c:2198
 msgid "Phone"
 msgstr "Telefon"
 
-#: ../src/register/ledger-core/split-register.c:2193
-#: ../src/register/ledger-core/split-register.c:2216
+#: ../src/register/ledger-core/split-register.c:2199
+#: ../src/register/ledger-core/split-register.c:2225
 msgid "Online"
 msgstr "Çevrim İçi"
 
 #. Action: Automatic Deposit ?!?
-#: ../src/register/ledger-core/split-register.c:2195
+#: ../src/register/ledger-core/split-register.c:2201
 msgid "AutoDep"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register.c:2196
+#: ../src/register/ledger-core/split-register.c:2202
 msgid "Wire"
 msgstr "EFT"
 
-#: ../src/register/ledger-core/split-register.c:2198
+#: ../src/register/ledger-core/split-register.c:2204
 msgid "Direct Debit"
 msgstr ""
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2202
-#: ../src/register/ledger-core/split-register.c:2206
-#: ../src/register/ledger-core/split-register.c:2212
-#: ../src/register/ledger-core/split-register.c:2220
-#: ../src/register/ledger-core/split-register.c:2235
-#: ../src/register/ledger-core/split-register.c:2242
-#: ../src/register/ledger-core/split-register.c:2247
-#: ../src/register/ledger-core/split-register.c:2272
+#: ../src/register/ledger-core/split-register.c:2210
+#: ../src/register/ledger-core/split-register.c:2214
+#: ../src/register/ledger-core/split-register.c:2221
+#: ../src/register/ledger-core/split-register.c:2229
+#: ../src/register/ledger-core/split-register.c:2246
+#: ../src/register/ledger-core/split-register.c:2256
+#: ../src/register/ledger-core/split-register.c:2261
+#: ../src/register/ledger-core/split-register.c:2288
 #: ../intl-scm/guile-strings.c:118 ../intl-scm/guile-strings.c:120
 #: ../intl-scm/guile-strings.c:122
 msgid "Buy"
 msgstr "Alış"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2203
-#: ../src/register/ledger-core/split-register.c:2207
-#: ../src/register/ledger-core/split-register.c:2217
-#: ../src/register/ledger-core/split-register.c:2221
-#: ../src/register/ledger-core/split-register.c:2236
-#: ../src/register/ledger-core/split-register.c:2243
-#: ../src/register/ledger-core/split-register.c:2248
-#: ../src/register/ledger-core/split-register.c:2273
+#: ../src/register/ledger-core/split-register.c:2211
+#: ../src/register/ledger-core/split-register.c:2215
+#: ../src/register/ledger-core/split-register.c:2226
+#: ../src/register/ledger-core/split-register.c:2230
+#: ../src/register/ledger-core/split-register.c:2247
+#: ../src/register/ledger-core/split-register.c:2257
+#: ../src/register/ledger-core/split-register.c:2262
+#: ../src/register/ledger-core/split-register.c:2289
 #: ../intl-scm/guile-strings.c:146 ../intl-scm/guile-strings.c:148
 #: ../intl-scm/guile-strings.c:150
 msgid "Sell"
 msgstr "Satış"
 
-#: ../src/register/ledger-core/split-register.c:2208
-#: ../src/register/ledger-core/split-register.c:2214
-#: ../src/register/ledger-core/split-register.c:2257
+#: ../src/register/ledger-core/split-register.c:2216
+#: ../src/register/ledger-core/split-register.c:2223
+#: ../src/register/ledger-core/split-register.c:2271
 msgid "Fee"
 msgstr "Ücret"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2239
+#: ../src/register/ledger-core/split-register.c:2250
 #: ../intl-scm/guile-strings.c:154
 msgid "Rebate"
 msgstr "İndirim"
 
+#: ../src/register/ledger-core/split-register.c:2251
+msgid "Paycheck"
+msgstr ""
+
 #. Action: Dividend
-#: ../src/register/ledger-core/split-register.c:2259
+#: ../src/register/ledger-core/split-register.c:2273
 msgid "Div"
 msgstr ""
 
 #. Action: Long Term Capital Gains
-#: ../src/register/ledger-core/split-register.c:2262
+#: ../src/register/ledger-core/split-register.c:2276
 msgid "LTCG"
 msgstr ""
 
 #. Action: Short Term Capital Gains
-#: ../src/register/ledger-core/split-register.c:2264
+#: ../src/register/ledger-core/split-register.c:2278
 msgid "STCG"
 msgstr ""
 
 #. Action: Distribution
-#: ../src/register/ledger-core/split-register.c:2267
+#: ../src/register/ledger-core/split-register.c:2281
 msgid "Dist"
 msgstr ""
 
@@ -15501,44 +15560,45 @@ msgstr "M_utabık değil"
 #. used to estimate widths. Please only
 #. translate the portion after the ':' and
 #. leave the rest ("sample:") as is.
-#: ../src/register/ledger-core/split-register-layout.c:531
+#: ../src/register/ledger-core/split-register-layout.c:532
 msgid "sample:99999"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-layout.c:539
+#: ../src/register/ledger-core/split-register-layout.c:540
 msgid "sample:Description of a transaction"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-layout.c:563
-#: ../src/register/ledger-core/split-register-layout.c:603
-#: ../src/register/ledger-core/split-register-layout.c:611
-#: ../src/register/ledger-core/split-register-layout.c:619
-#: ../src/register/ledger-core/split-register-layout.c:629
-#: ../src/register/ledger-core/split-register-layout.c:637
-#: ../src/register/ledger-core/split-register-layout.c:645
-#: ../src/register/ledger-core/split-register-layout.c:653
-#: ../src/register/ledger-core/split-register-layout.c:661
+#: ../src/register/ledger-core/split-register-layout.c:564
+#: ../src/register/ledger-core/split-register-layout.c:604
+#: ../src/register/ledger-core/split-register-layout.c:612
+#: ../src/register/ledger-core/split-register-layout.c:620
+#: ../src/register/ledger-core/split-register-layout.c:630
+#: ../src/register/ledger-core/split-register-layout.c:638
+#: ../src/register/ledger-core/split-register-layout.c:646
+#: ../src/register/ledger-core/split-register-layout.c:654
+#: ../src/register/ledger-core/split-register-layout.c:662
+#: ../src/register/ledger-core/split-register-layout.c:710
 msgid "sample:999,999.000"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-layout.c:595
+#: ../src/register/ledger-core/split-register-layout.c:596
 msgid "sample:Memo field sample text string"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-layout.c:669
+#: ../src/register/ledger-core/split-register-layout.c:670
 msgid "Type:T"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-layout.c:677
+#: ../src/register/ledger-core/split-register-layout.c:678
 msgid "sample:Notes field sample text string"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-layout.c:685
+#: ../src/register/ledger-core/split-register-layout.c:686
 msgid "sample:No Particular Reason"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-layout.c:693
-#: ../src/register/ledger-core/split-register-layout.c:701
+#: ../src/register/ledger-core/split-register-layout.c:694
+#: ../src/register/ledger-core/split-register-layout.c:702
 msgid "sample:(x + 0.33 * y + (x+y) )"
 msgstr ""
 
@@ -15548,103 +15608,103 @@ msgid ""
 "provided by your system."
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-model.c:120
+#: ../src/register/ledger-core/split-register-model.c:181
 msgid "Ref"
 msgstr "Ref"
 
-#: ../src/register/ledger-core/split-register-model.c:256
-#: ../src/register/ledger-core/split-register-model.c:280
+#: ../src/register/ledger-core/split-register-model.c:317
+#: ../src/register/ledger-core/split-register-model.c:341
 #, c-format
 msgid "Tot %s"
 msgstr "Top %s"
 
-#: ../src/register/ledger-core/split-register-model.c:262
+#: ../src/register/ledger-core/split-register-model.c:323
 msgid "Tot Credit"
 msgstr "Top Alacak"
 
-#: ../src/register/ledger-core/split-register-model.c:286
+#: ../src/register/ledger-core/split-register-model.c:347
 msgid "Tot Debit"
 msgstr "Top Borç"
 
-#: ../src/register/ledger-core/split-register-model.c:295
+#: ../src/register/ledger-core/split-register-model.c:356
 msgid "Tot Shares"
 msgstr "Top Tutar"
 
-#: ../src/register/ledger-core/split-register-model.c:316
+#: ../src/register/ledger-core/split-register-model.c:377
 msgid "Debit Formula"
 msgstr "Borç Formülü"
 
-#: ../src/register/ledger-core/split-register-model.c:323
+#: ../src/register/ledger-core/split-register-model.c:384
 msgid "Credit Formula"
 msgstr "Alacak Formülü"
 
 #. This seems to be the one that initially gets used, the InactiveDateCell
 #. is set to, and subsequently displayed.
-#: ../src/register/ledger-core/split-register-model.c:805
+#: ../src/register/ledger-core/split-register-model.c:868
 msgid "Scheduled"
 msgstr "Tarifeli"
 
-#: ../src/register/ledger-core/split-register-model.c:836
+#: ../src/register/ledger-core/split-register-model.c:899
 msgid "Enter the transaction reference, such as the invoice or check number"
 msgstr "Hareket referans numarasını girin, fatura veya çek no. gibi"
 
-#: ../src/register/ledger-core/split-register-model.c:840
+#: ../src/register/ledger-core/split-register-model.c:903
 msgid "Enter the transaction number, such as the check number"
 msgstr "Hareket numarasını girin, çek no. gibi"
 
-#: ../src/register/ledger-core/split-register-model.c:874
+#: ../src/register/ledger-core/split-register-model.c:937
 msgid "Enter the name of the Customer"
 msgstr "Müşteri adını girin"
 
-#: ../src/register/ledger-core/split-register-model.c:877
+#: ../src/register/ledger-core/split-register-model.c:940
 msgid "Enter the name of the Vendor"
 msgstr "Satıcı adını girin"
 
-#: ../src/register/ledger-core/split-register-model.c:880
+#: ../src/register/ledger-core/split-register-model.c:943
 msgid "Enter a description of the transaction"
 msgstr "Hareket için bir açıklama satırı girin"
 
-#: ../src/register/ledger-core/split-register-model.c:910
+#: ../src/register/ledger-core/split-register-model.c:973
 msgid "Enter notes for the transaction"
 msgstr "Hareket için notları girin"
 
-#: ../src/register/ledger-core/split-register-model.c:940
+#: ../src/register/ledger-core/split-register-model.c:1003
 #, fuzzy
 msgid "Reason the transaction was voided"
 msgstr "Hareket Gözden Geçirme"
 
-#: ../src/register/ledger-core/split-register-model.c:1032
+#: ../src/register/ledger-core/split-register-model.c:1095
 msgid "Enter the type of transaction, or choose one from the list"
 msgstr "Hareket türünü girin, veya listeden bir seçim yapın"
 
-#: ../src/register/ledger-core/split-register-model.c:1060
+#: ../src/register/ledger-core/split-register-model.c:1123
 msgid "Enter a description of the split"
 msgstr "Bileşen için açıklama girin"
 
-#: ../src/register/ledger-core/split-register-model.c:1141
+#: ../src/register/ledger-core/split-register-model.c:1195
 msgid "Enter the effective share price"
 msgstr "Efektif hisse fiyatını girin"
 
-#: ../src/register/ledger-core/split-register-model.c:1177
+#: ../src/register/ledger-core/split-register-model.c:1231
 msgid "Enter the number of shares bought or sold"
 msgstr "Alınan/satılan hisse adetini girin"
 
-#: ../src/register/ledger-core/split-register-model.c:1228
-#: ../src/register/ledger-core/split-register-model.c:1294
+#: ../src/register/ledger-core/split-register-model.c:1282
+#: ../src/register/ledger-core/split-register-model.c:1348
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "Aktarma yapılacak hesabı girin, veya listeden birini seçin"
 
-#: ../src/register/ledger-core/split-register-model.c:1304
+#: ../src/register/ledger-core/split-register-model.c:1358
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr "Bu bileşik bir harekettir; hepsini görmek için Bileşen düğmesine basın"
 
-#: ../src/register/ledger-core/split-register-model.c:1307
+#: ../src/register/ledger-core/split-register-model.c:1361
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-model.c:1623
+#: ../src/register/ledger-core/split-register-model.c:1745
 #, c-format
 msgid ""
 "Cannot modify or delete this transaction. This transaction is marked read-"
@@ -15653,26 +15713,26 @@ msgid ""
 "'%s'"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-model.c:1675
+#: ../src/register/ledger-core/split-register-model.c:1797
 msgid "Change reconciled split?"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-model.c:1677
+#: ../src/register/ledger-core/split-register-model.c:1799
 msgid ""
 "You are about to change a reconciled split.  Doing so might make future "
 "reconciliation difficult!  Continue with this change?"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-model.c:1690
+#: ../src/register/ledger-core/split-register-model.c:1812
 #, fuzzy
 msgid "Chan_ge Split"
 msgstr "_Sil"
 
-#: ../src/register/ledger-core/split-register-model.c:1776
+#: ../src/register/ledger-core/split-register-model.c:1898
 msgid "Enter debit formula for real transaction"
 msgstr "Gerçek hareket için borç formülünü girin"
 
-#: ../src/register/ledger-core/split-register-model.c:1806
+#: ../src/register/ledger-core/split-register-model.c:1928
 msgid "Enter credit formula for real transaction"
 msgstr "Gerçek hareket için alacak formülünü girin"
 
@@ -16117,18 +16177,6 @@ msgstr "Giren"
 #: ../intl-scm/guile-strings.c:110
 msgid "Receive"
 msgstr ""
-
-#. src/app-utils/prefs.scm
-#: ../intl-scm/guile-strings.c:114 ../intl-scm/guile-strings.c:144
-#: ../intl-scm/guile-strings.c:160
-msgid "Increase"
-msgstr "Artış"
-
-#. src/app-utils/prefs.scm
-#: ../intl-scm/guile-strings.c:116 ../intl-scm/guile-strings.c:132
-#: ../intl-scm/guile-strings.c:142
-msgid "Decrease"
-msgstr "İndirim"
 
 #. src/app-utils/prefs.scm
 #: ../intl-scm/guile-strings.c:134
@@ -24391,6 +24439,9 @@ msgid ""
 "already happened. Douglas Adams, \"The Restaurant at the End of the Universe"
 "\""
 msgstr ""
+
+#~ msgid "ATM"
+#~ msgstr "ATM"
 
 #, fuzzy
 #~ msgid "Template file "

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-1.8.10pre2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-23 22:37+0200\n"
+"POT-Creation-Date: 2009-09-20 22:18+0200\n"
 "PO-Revision-Date: 2005-08-05 10:45+0200\n"
 "Last-Translator: Mikel Olasagasti <hey_neken@mundurat.net>\n"
 "Language-Team: Basque <translation-team-eu@lists.sourceforge.net>\n"
@@ -106,7 +106,7 @@ msgstr "Mozkin banatu gabea"
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../src/app-utils/gnc-ui-util.c:668 ../src/engine/Account.c:3719
-#: ../src/register/ledger-core/split-register.c:2249
+#: ../src/register/ledger-core/split-register.c:2263
 #: ../intl-scm/guile-strings.c:2140 ../intl-scm/guile-strings.c:2968
 #: ../intl-scm/guile-strings.c:3696 ../intl-scm/guile-strings.c:5038
 #: ../intl-scm/guile-strings.c:6960 ../intl-scm/guile-strings.c:6964
@@ -147,9 +147,9 @@ msgstr "Zor"
 #. src/report/standard-reports/register.scm
 #: ../src/app-utils/guile-util.c:1139
 #: ../src/register/ledger-core/split-register.c:2108
-#: ../src/register/ledger-core/split-register.c:2197
-#: ../src/register/ledger-core/split-register.c:2213
-#: ../src/register/ledger-core/split-register.c:2231
+#: ../src/register/ledger-core/split-register.c:2203
+#: ../src/register/ledger-core/split-register.c:2222
+#: ../src/register/ledger-core/split-register.c:2240
 #: ../intl-scm/guile-strings.c:2274 ../intl-scm/guile-strings.c:2460
 #: ../intl-scm/guile-strings.c:3102 ../intl-scm/guile-strings.c:3288
 #: ../intl-scm/guile-strings.c:4234 ../intl-scm/guile-strings.c:4558
@@ -338,7 +338,7 @@ msgstr "Datuak kargatzen..."
 #: ../src/business/business-gnome/dialog-invoice.c:2601
 #: ../src/business/business-gnome/glade/invoice.glade.h:12
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:317
-#: ../src/register/ledger-core/split-register.c:2228
+#: ../src/register/ledger-core/split-register.c:2237
 #: ../intl-scm/guile-strings.c:130 ../intl-scm/guile-strings.c:4646
 #: ../intl-scm/guile-strings.c:5988 ../intl-scm/guile-strings.c:7432
 #: ../intl-scm/guile-strings.c:7522 ../intl-scm/guile-strings.c:7524
@@ -396,9 +396,10 @@ msgstr "Zatitze automatikoa"
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:140
 #: ../src/gnome/druid-loan.c:1795 ../src/gnome/druid-loan.c:2276
 #: ../src/gnome/druid-loan.c:2339 ../src/gnome/druid-loan.c:2353
-#: ../src/register/ledger-core/split-register.c:2224
-#: ../src/register/ledger-core/split-register.c:2229
+#: ../src/register/ledger-core/split-register.c:2192
+#: ../src/register/ledger-core/split-register.c:2233
 #: ../src/register/ledger-core/split-register.c:2238
+#: ../src/register/ledger-core/split-register.c:2249
 #: ../intl-scm/guile-strings.c:112 ../intl-scm/guile-strings.c:128
 #: ../intl-scm/guile-strings.c:158
 msgid "Payment"
@@ -808,7 +809,7 @@ msgstr "Benetan kontabilizatu nahi duzu faktura?"
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/invoice.scm
 #: ../src/business/business-gnome/dialog-invoice.c:655
-#: ../src/register/ledger-core/split-register-model.c:108
+#: ../src/register/ledger-core/split-register-model.c:169
 #: ../intl-scm/guile-strings.c:7440 ../intl-scm/guile-strings.c:7460
 #: ../intl-scm/guile-strings.c:7568 ../intl-scm/guile-strings.c:7754
 #: ../intl-scm/guile-strings.c:8072
@@ -1015,14 +1016,14 @@ msgstr "Hornitzailearen IDa"
 #: ../src/business/business-gnome/dialog-invoice.c:2425
 #: ../src/gnome-utils/gnc-tree-view-account.c:515
 #: ../src/gnome-utils/gnc-tree-view-price.c:456
-#: ../src/register/ledger-core/split-register-model.c:197
+#: ../src/register/ledger-core/split-register-model.c:258
 #: ../intl-scm/guile-strings.c:3904 ../intl-scm/guile-strings.c:5246
 #: ../intl-scm/guile-strings.c:7464 ../intl-scm/guile-strings.c:7572
 msgid "Type"
 msgstr "Mota"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2427
-#: ../src/register/ledger-core/split-register-model.c:151
+#: ../src/register/ledger-core/split-register-model.c:212
 msgid "Paid"
 msgstr "Ordainduta"
 
@@ -1051,7 +1052,7 @@ msgstr "Irekita"
 #: ../src/business/business-gnome/glade/payment.glade.h:4
 #: ../src/gnome/glade/lots.glade.h:15 ../src/gnome/reconcile-list.c:223
 #: ../src/import-export/csv/gnc-csv-model.c:39
-#: ../src/register/ledger-core/split-register-model.c:122
+#: ../src/register/ledger-core/split-register-model.c:183
 #: ../intl-scm/guile-strings.c:2280 ../intl-scm/guile-strings.c:2484
 #: ../intl-scm/guile-strings.c:3108 ../intl-scm/guile-strings.c:3312
 #: ../intl-scm/guile-strings.c:4146 ../intl-scm/guile-strings.c:4212
@@ -1520,7 +1521,7 @@ msgid ""
 msgstr ""
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
-#: ../src/gnome-utils/glade/preferences.glade.h:93
+#: ../src/gnome-utils/glade/preferences.glade.h:95
 #, fuzzy
 msgid "Number of _rows:"
 msgstr "Errenkada-kopurua"
@@ -1624,7 +1625,7 @@ msgstr "Itxierako elkarrizketa"
 #: ../src/import-export/import-match-picker.c:375
 #: ../src/import-export/qif-import/druid-qif-import.c:3582
 #: ../src/import-export/qif-import/druid-qif-import.c:3620
-#: ../src/register/ledger-core/split-register-model.c:138
+#: ../src/register/ledger-core/split-register-model.c:199
 #: ../intl-scm/guile-strings.c:2282 ../intl-scm/guile-strings.c:2486
 #: ../intl-scm/guile-strings.c:3110 ../intl-scm/guile-strings.c:3314
 #: ../intl-scm/guile-strings.c:3906 ../intl-scm/guile-strings.c:4150
@@ -1687,7 +1688,7 @@ msgstr "Moneta: "
 #: ../src/business/business-gnome/glade/customer.glade.h:8
 #: ../src/business/business-gnome/glade/invoice.glade.h:6
 #: ../src/business/business-gnome/search-owner.c:236
-#: ../src/register/ledger-core/split-register-model.c:134
+#: ../src/register/ledger-core/split-register-model.c:195
 #: ../intl-scm/guile-strings.c:7534 ../intl-scm/guile-strings.c:7632
 msgid "Customer"
 msgstr "Bezeroa"
@@ -1736,7 +1737,7 @@ msgstr "Izena: "
 #: ../src/business/business-gnome/glade/vendor.glade.h:10
 #: ../src/gnome/dialog-find-transactions.c:120
 #: ../src/gnome-utils/gnc-tree-view-account.c:633
-#: ../src/register/ledger-core/split-register-model.c:309
+#: ../src/register/ledger-core/split-register-model.c:370
 #: ../intl-scm/guile-strings.c:3912 ../intl-scm/guile-strings.c:4206
 #: ../intl-scm/guile-strings.c:4218 ../intl-scm/guile-strings.c:4420
 #: ../intl-scm/guile-strings.c:4468 ../intl-scm/guile-strings.c:5254
@@ -2049,7 +2050,7 @@ msgstr ""
 #: ../src/import-export/import-match-picker.c:373
 #: ../src/import-export/qif-import/druid-qif-import.c:3574
 #: ../src/import-export/qif-import/druid-qif-import.c:3612
-#: ../src/register/ledger-core/split-register-model.c:101
+#: ../src/register/ledger-core/split-register-model.c:162
 #: ../intl-scm/guile-strings.c:2230 ../intl-scm/guile-strings.c:2278
 #: ../intl-scm/guile-strings.c:2480 ../intl-scm/guile-strings.c:2730
 #: ../intl-scm/guile-strings.c:2744 ../intl-scm/guile-strings.c:3058
@@ -2084,7 +2085,7 @@ msgstr "Data"
 #: ../src/import-export/import-main-matcher.c:438
 #: ../src/import-export/import-match-picker.c:336
 #: ../src/import-export/import-match-picker.c:376
-#: ../src/register/ledger-core/split-register-model.c:190
+#: ../src/register/ledger-core/split-register-model.c:251
 #: ../intl-scm/guile-strings.c:2488 ../intl-scm/guile-strings.c:3316
 #: ../intl-scm/guile-strings.c:4182 ../intl-scm/guile-strings.c:4216
 #: ../intl-scm/guile-strings.c:4220 ../intl-scm/guile-strings.c:4344
@@ -2130,7 +2131,7 @@ msgstr ""
 #. src/business/business-reports/owner-report.scm
 #: ../src/business/business-gnome/glade/vendor.glade.h:19
 #: ../src/business/business-gnome/search-owner.c:237
-#: ../src/register/ledger-core/split-register-model.c:136
+#: ../src/register/ledger-core/split-register-model.c:197
 #: ../intl-scm/guile-strings.c:7538 ../intl-scm/guile-strings.c:7634
 msgid "Vendor"
 msgstr "Hornitzailea"
@@ -2547,7 +2548,7 @@ msgid "Record the current entry"
 msgstr "Grabatu sarrera hau"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:133
-#: ../src/gnome/glade/register.glade.h:79 ../src/gnome/window-reconcile.c:2096
+#: ../src/gnome/glade/register.glade.h:79 ../src/gnome/window-reconcile.c:2101
 msgid "_Cancel"
 msgstr "_Utzi"
 
@@ -2559,7 +2560,7 @@ msgstr "Utzi sarrera hau bertan behera"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:136
 #: ../src/gnome/glade/register.glade.h:82
 #: ../src/gnome/gnc-plugin-page-sx-list.c:124
-#: ../src/gnome/window-reconcile.c:2127
+#: ../src/gnome/window-reconcile.c:2132
 msgid "_Delete"
 msgstr "Ez_abatu"
 
@@ -2884,8 +2885,8 @@ msgid "sample:X"
 msgstr "sample:X"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:74
-#: ../src/register/ledger-core/split-register-layout.c:510
-#: ../src/register/ledger-core/split-register-layout.c:518
+#: ../src/register/ledger-core/split-register-layout.c:511
+#: ../src/register/ledger-core/split-register-layout.c:519
 msgid "sample:12/12/2000"
 msgstr "sample:12/12/2000"
 
@@ -2919,8 +2920,8 @@ msgstr "sample(DH):+%"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:94
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:97
-#: ../src/register/ledger-core/split-register-layout.c:579
-#: ../src/register/ledger-core/split-register-layout.c:587
+#: ../src/register/ledger-core/split-register-layout.c:580
+#: ../src/register/ledger-core/split-register-layout.c:588
 msgid "sample:Expenses:Automobile:Gasoline"
 msgstr "sample:Gatuak:Automobila:Gasolina"
 
@@ -2988,6 +2989,7 @@ msgstr "Kutxa"
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:122
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:512
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:1038
+#: ../src/register/ledger-core/split-register.c:2191
 #: ../intl-scm/guile-strings.c:124 ../intl-scm/guile-strings.c:140
 #: ../intl-scm/guile-strings.c:4648 ../intl-scm/guile-strings.c:5990
 msgid "Charge"
@@ -3006,7 +3008,7 @@ msgstr "Gastu-kontua"
 #. src/business/business-reports/invoice.scm
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:65
 #: ../src/gnome/dialog-find-transactions.c:122
-#: ../src/register/ledger-core/split-register-model.c:169
+#: ../src/register/ledger-core/split-register-model.c:230
 #: ../intl-scm/guile-strings.c:7294 ../intl-scm/guile-strings.c:7700
 #: ../intl-scm/guile-strings.c:7956
 msgid "Action"
@@ -3333,7 +3335,7 @@ msgstr "Dibisa"
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../src/engine/Account.c:3717
-#: ../src/register/ledger-core/split-register.c:2265
+#: ../src/register/ledger-core/split-register.c:2279
 #: ../intl-scm/guile-strings.c:152 ../intl-scm/guile-strings.c:1480
 #: ../intl-scm/guile-strings.c:2210 ../intl-scm/guile-strings.c:2232
 #: ../intl-scm/guile-strings.c:3038 ../intl-scm/guile-strings.c:3060
@@ -3519,7 +3521,7 @@ msgstr "-- Zatidun transakzioa --"
 #: ../src/engine/Split.c:1279 ../src/gnome/druid-stock-split.c:454
 #: ../src/gnome/glade/register.glade.h:67
 #: ../src/gnome/gnc-plugin-page-register.c:336
-#: ../src/register/ledger-core/split-register.c:2268
+#: ../src/register/ledger-core/split-register.c:2282
 #: ../intl-scm/guile-strings.c:4130 ../intl-scm/guile-strings.c:5472
 #: ../intl-scm/guile-strings.c:6424 ../intl-scm/guile-strings.c:6740
 msgid "Split"
@@ -3626,7 +3628,7 @@ msgstr "Kontu guztiak"
 #: ../src/import-export/import-main-matcher.c:434
 #: ../src/import-export/import-match-picker.c:332
 #: ../src/import-export/qif-import/dialog-account-picker.c:339
-#: ../src/register/ledger-core/split-register-model.c:176
+#: ../src/register/ledger-core/split-register-model.c:237
 #: ../intl-scm/guile-strings.c:2284 ../intl-scm/guile-strings.c:2306
 #: ../intl-scm/guile-strings.c:2756 ../intl-scm/guile-strings.c:3112
 #: ../intl-scm/guile-strings.c:3134 ../intl-scm/guile-strings.c:3584
@@ -3667,7 +3669,7 @@ msgstr "Akzio-prezioa:"
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/dialog-find-transactions.c:113
 #: ../src/gnome/druid-stock-split.c:621
-#: ../src/register/ledger-core/split-register-model.c:239
+#: ../src/register/ledger-core/split-register-model.c:300
 #: ../intl-scm/guile-strings.c:2286 ../intl-scm/guile-strings.c:2502
 #: ../intl-scm/guile-strings.c:3114 ../intl-scm/guile-strings.c:3330
 #: ../intl-scm/guile-strings.c:3996 ../intl-scm/guile-strings.c:4162
@@ -3793,12 +3795,12 @@ msgstr "Osoa"
 #: ../src/gnome/glade/register.glade.h:85
 #: ../src/gnome/gnc-plugin-page-sx-list.c:122
 #: ../src/gnome-utils/gnc-main-window.c:233
-#: ../src/gnome/window-reconcile.c:2124
+#: ../src/gnome/window-reconcile.c:2129
 #: ../src/report/report-gnome/report.glade.h:17
 msgid "_Edit"
 msgstr "_Editatu"
 
-#: ../src/gnome/dialog-sx-editor.c:186 ../src/gnome/window-reconcile.c:2081
+#: ../src/gnome/dialog-sx-editor.c:186 ../src/gnome/window-reconcile.c:2086
 msgid "_Transaction"
 msgstr "_Transakzioa"
 
@@ -4152,7 +4154,7 @@ msgid "via Escrow account?"
 msgstr "kontu fiduziarioaren bidez?"
 
 #: ../src/gnome/druid-loan.c:811
-#: ../src/register/ledger-core/split-register.c:2222
+#: ../src/register/ledger-core/split-register.c:2231
 msgid "Loan"
 msgstr "Mailegua"
 
@@ -4195,7 +4197,7 @@ msgstr "Printzipala"
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../src/gnome/druid-loan.c:1807 ../src/gnome/druid-loan.c:2395
-#: ../src/register/ledger-core/split-register.c:2230
+#: ../src/register/ledger-core/split-register.c:2239
 #: ../intl-scm/guile-strings.c:6916 ../intl-scm/guile-strings.c:6942
 #: ../intl-scm/guile-strings.c:6984
 msgid "Interest"
@@ -4463,7 +4465,7 @@ msgstr "Amaitu kontu-konfigurazioa"
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/glade/account.glade.h:25
-#: ../src/gnome-utils/glade/preferences.glade.h:78
+#: ../src/gnome-utils/glade/preferences.glade.h:80
 #: ../intl-scm/guile-strings.c:244 ../intl-scm/guile-strings.c:250
 #: ../intl-scm/guile-strings.c:256 ../intl-scm/guile-strings.c:262
 #: ../intl-scm/guile-strings.c:370 ../intl-scm/guile-strings.c:374
@@ -5271,8 +5273,8 @@ msgstr ""
 #: ../src/gnome/glade/lots.glade.h:7 ../src/gnome/lot-viewer.c:633
 #: ../src/gnome-utils/gnc-tree-view-account.c:554
 #: ../src/import-export/csv/gnc-csv-model.c:36
-#: ../src/register/ledger-core/split-register-model.c:162
-#: ../src/register/ledger-core/split-register-model.c:302
+#: ../src/register/ledger-core/split-register-model.c:223
+#: ../src/register/ledger-core/split-register-model.c:363
 #: ../intl-scm/guile-strings.c:1510 ../intl-scm/guile-strings.c:3910
 #: ../intl-scm/guile-strings.c:4236 ../intl-scm/guile-strings.c:4552
 #: ../intl-scm/guile-strings.c:5252 ../intl-scm/guile-strings.c:5578
@@ -5688,7 +5690,7 @@ msgid "Include _subaccounts"
 msgstr "Sartu azpikontuak"
 
 #. starting balance title/value
-#: ../src/gnome/glade/reconcile.glade.h:4 ../src/gnome/window-reconcile.c:1731
+#: ../src/gnome/glade/reconcile.glade.h:4 ../src/gnome/window-reconcile.c:1736
 msgid "Starting Balance:"
 msgstr "Hasierako saldoa:"
 
@@ -6726,7 +6728,7 @@ msgid "_Run when data file opened"
 msgstr "Ez kargatu azken irekitako fitxategia"
 
 #: ../src/gnome/glade/sched-xact.glade.h:199
-#: ../src/gnome-utils/glade/preferences.glade.h:175
+#: ../src/gnome-utils/glade/preferences.glade.h:177
 #, fuzzy
 msgid "days"
 msgstr "egun."
@@ -7264,13 +7266,13 @@ msgstr "Berdinkatu hautatutako kontua"
 #. Actions menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:181
 #: ../src/gnome/gnc-plugin-page-register.c:235
-#: ../src/gnome-utils/gnc-icons.c:21 ../src/gnome/window-reconcile.c:2108
+#: ../src/gnome-utils/gnc-icons.c:21 ../src/gnome/window-reconcile.c:2113
 msgid "_Transfer..."
 msgstr "_Transferitu..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:182
 #: ../src/gnome/gnc-plugin-page-register.c:236
-#: ../src/gnome/window-reconcile.c:2109
+#: ../src/gnome/window-reconcile.c:2114
 msgid "Transfer funds from one account to another"
 msgstr "Transferitu funtsak kontu batetik bestera"
 
@@ -7301,7 +7303,7 @@ msgid "Check & Repair A_ccount"
 msgstr "Egiaztatu eta konpondu _kontua"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:191
-#: ../src/gnome/window-reconcile.c:2112
+#: ../src/gnome/window-reconcile.c:2117
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
@@ -7337,7 +7339,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-account-tree.c:220
 #: ../src/gnome/gnc-plugin-page-budget.c:163 ../src/gnome/lot-viewer.c:448
 #: ../src/gnome-utils/gnc-file.c:96 ../src/gnome-utils/gnc-file.c:853
-#: ../src/gnome/window-reconcile.c:1617
+#: ../src/gnome/window-reconcile.c:1622
 msgid "Open"
 msgstr "Ireki"
 
@@ -7674,9 +7676,9 @@ msgstr "Transakzioen egunkaria"
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/gnc-plugin-page-register.c:331
-#: ../src/register/ledger-core/split-register.c:2199
-#: ../src/register/ledger-core/split-register-layout.c:571
-#: ../src/register/ledger-core/split-register-model.c:183
+#: ../src/register/ledger-core/split-register.c:2205
+#: ../src/register/ledger-core/split-register-layout.c:572
+#: ../src/register/ledger-core/split-register-model.c:244
 #: ../intl-scm/guile-strings.c:4546 ../intl-scm/guile-strings.c:5888
 msgid "Transfer"
 msgstr "Transferitu"
@@ -7754,7 +7756,7 @@ msgstr "Bilaketaren emaitzaren txostena"
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/gnc-plugin-page-register.c:1778
-#: ../src/gnome-utils/glade/preferences.glade.h:105
+#: ../src/gnome-utils/glade/preferences.glade.h:107
 #: ../intl-scm/guile-strings.c:2270 ../intl-scm/guile-strings.c:3098
 #: ../intl-scm/guile-strings.c:4652 ../intl-scm/guile-strings.c:5994
 msgid "Register"
@@ -7804,7 +7806,7 @@ msgstr "Planifikatua"
 #. Transaction menu
 #: ../src/gnome/gnc-plugin-page-sx-list.c:120
 #: ../src/gnome-utils/gnc-main-window.c:245
-#: ../src/gnome/window-reconcile.c:2118
+#: ../src/gnome/window-reconcile.c:2123
 msgid "_New"
 msgstr "_Berria"
 
@@ -8013,8 +8015,8 @@ msgid "Lots in Account %s"
 msgstr "Kontu galduak"
 
 #: ../src/gnome/reconcile-list.c:211
-#: ../src/register/ledger-core/split-register-layout.c:555
-#: ../src/register/ledger-core/split-register-model.c:154
+#: ../src/register/ledger-core/split-register-layout.c:556
+#: ../src/register/ledger-core/split-register-model.c:215
 msgid "Reconciled:R"
 msgstr "Berdinkatua:B"
 
@@ -8369,6 +8371,11 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:1
 #, fuzzy
+msgid "Always reconcile to today"
+msgstr "Berdinkatze-data bistaratu?"
+
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:2
+#, fuzzy
 msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
 "a credit card payment. Otherwise do not prompt the user for this."
@@ -8376,20 +8383,26 @@ msgstr ""
 "Kreditu-txartelaren kontu-laburpen bat berdinkatu ondoren, eskatu "
 "erabiltzaileari sar dezala kreditu-txartelaren ordainketa bat"
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:2
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:3
 msgid ""
 "If active, all transactions marked as cleared in the register will appear "
 "already selected in the reconcile dialog. Otherwise no transactions will be "
 "initially selected."
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:3
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:4
+msgid ""
+"If active, always open the reconcile dialog using today's date for the "
+"statement date, regardless of previous reconciliations."
+msgstr ""
+
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
 #, fuzzy
 msgid "Pre-select cleared transactions"
 msgstr "Markatu kitatutako transakzioak"
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:4
-#: ../src/gnome-utils/glade/preferences.glade.h:102
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
+#: ../src/gnome-utils/glade/preferences.glade.h:104
 #, fuzzy
 msgid ""
 "Prior to reconciling an account which charges or pays interest, prompt the "
@@ -8402,12 +8415,12 @@ msgstr ""
 "Oraingoz Bankuak, Kredituak, Funtsak, Aktiboa, Kobratzekoak, Ordaintzekoak, "
 "eta Pasiboa izeneko kontuekin egin daiteke."
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:7
 #, fuzzy
 msgid "Prompt for credit card payment"
 msgstr "Kreditu-txartelaren ordainketa automatikoak"
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
+#: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:8
 #, fuzzy
 msgid "Prompt for interest charges"
 msgstr "Sartu interesen kargua..."
@@ -8559,7 +8572,7 @@ msgstr ""
 "(0 = inoiz ere ez)"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:19
-#: ../src/gnome-utils/glade/preferences.glade.h:62
+#: ../src/gnome-utils/glade/preferences.glade.h:64
 msgid "Display negative amounts in red"
 msgstr "Erakutsi zenbateko negatiboak gorriz"
 
@@ -8768,7 +8781,7 @@ msgid "Source of default report currency"
 msgstr "Txostenen moneta lehenetsia"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:55
-#: ../src/gnome-utils/glade/preferences.glade.h:126
+#: ../src/gnome-utils/glade/preferences.glade.h:128
 msgid ""
 "The number of minutes until saving of the data file to harddisk will be "
 "started automatically. If zero, no saving will be started automatically."
@@ -10075,7 +10088,7 @@ msgstr "Sartu balorea identifikatzeko kode esklusiboa. Edo utzi eremua hutsik."
 #: ../src/gnome-utils/glade/commodity.glade.h:4
 #, fuzzy
 msgid ""
-"Enter the full name of the commodity. Example: Cisco Sytems Inc, or Apple "
+"Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
 msgstr "Idatzi balorearen izen osoa. Adibidez: US dolarrak"
 
@@ -10574,7 +10587,7 @@ msgid "Months:"
 msgstr "Hilabete"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:11
-#: ../src/gnome-utils/glade/preferences.glade.h:110
+#: ../src/gnome-utils/glade/preferences.glade.h:112
 #, fuzzy
 msgid "Sample:"
 msgstr "sample:X"
@@ -10796,227 +10809,237 @@ msgstr ""
 "txandakatu, ez lerro bakoitzean"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:39
-msgid "Auto-save time _interval:"
+msgid ""
+"Always open the reconcile dialog using today's date for the statement date, "
+"regardless of previous reconciliations."
 msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:40
+msgid "Always reconcile to t_oday"
+msgstr ""
+
+#: ../src/gnome-utils/glade/preferences.glade.h:41
+msgid "Auto-save time _interval:"
+msgstr ""
+
+#: ../src/gnome-utils/glade/preferences.glade.h:42
 #, fuzzy
 msgid "Automatic _interest transfer"
 msgstr "Interes-transferentzia automatikoa"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:41
+#: ../src/gnome-utils/glade/preferences.glade.h:43
 #, fuzzy
 msgid "Automatic credit card _payment"
 msgstr "Kreditu-txartelaren ordainketa automatikoak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:42
+#: ../src/gnome-utils/glade/preferences.glade.h:44
 msgid ""
 "Automatically expand the current transaction to show all splits.  All other "
 "transactions are shown on one line. (Two in double line mode.)"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:43
+#: ../src/gnome-utils/glade/preferences.glade.h:45
 msgid ""
 "Automatically insert a decimal point into values that are entered without "
 "one."
 msgstr ""
 "Automatikoki txertatu hamartarren koma, komarik gabe sartzen diren balioetan."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:44
+#: ../src/gnome-utils/glade/preferences.glade.h:46
 msgid "Automatically raise the list of accounts or actions during input."
 msgstr "Automatikoki goratu kontuen edo ekintzen zerrenda sarreretan."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:45
+#: ../src/gnome-utils/glade/preferences.glade.h:47
 #, fuzzy
 msgid "B_ottom"
 msgstr "Laugarren aukera"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:46
-msgid "Below the actual date, print the format of that date in 8 point type."
-msgstr ""
-
-#: ../src/gnome-utils/glade/preferences.glade.h:47
-#, fuzzy
-msgid "Bottom"
-msgstr "Laugarren aukera"
-
 #: ../src/gnome-utils/glade/preferences.glade.h:48
-msgid "Bring the most _recent tab to the front"
+msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:49
 #, fuzzy
+msgid "Bottom"
+msgstr "Laugarren aukera"
+
+#: ../src/gnome-utils/glade/preferences.glade.h:50
+msgid "Bring the most _recent tab to the front"
+msgstr ""
+
+#: ../src/gnome-utils/glade/preferences.glade.h:51
+#, fuzzy
 msgid "C_redit accounts"
 msgstr "Pasiboko kontuak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:50
+#: ../src/gnome-utils/glade/preferences.glade.h:52
 #, fuzzy
 msgid "Ch_oose:"
 msgstr "Itxi"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:51
+#: ../src/gnome-utils/glade/preferences.glade.h:53
 #, fuzzy
 msgid "Character:"
 msgstr "Kargua"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:52
+#: ../src/gnome-utils/glade/preferences.glade.h:54
 #, fuzzy
 msgid "Check cleared _transactions"
 msgstr "Markatu kitatutako transakzioak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:53
+#: ../src/gnome-utils/glade/preferences.glade.h:55
 #, fuzzy
 msgid "Com_press files"
 msgstr "Konprimitu datu-fitxategia."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:54
+#: ../src/gnome-utils/glade/preferences.glade.h:56
 msgid "Compress the data file with gzip when saving it to disk."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:55
+#: ../src/gnome-utils/glade/preferences.glade.h:57
 #, fuzzy
 msgid "Date/Time"
 msgstr "Ordu zehatza"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:56
+#: ../src/gnome-utils/glade/preferences.glade.h:58
 #, fuzzy
 msgid "Default _font:"
 msgstr "Tasa lehenetsia: "
 
-#: ../src/gnome-utils/glade/preferences.glade.h:57
+#: ../src/gnome-utils/glade/preferences.glade.h:59
 msgid "Default to 'new search' if fewer than this number of items is returned."
 msgstr ""
 "'Bilaketa berria' egiteko balio lehenetsia, emaitza gutxiago aurkitzen "
 "badira."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:58
+#: ../src/gnome-utils/glade/preferences.glade.h:60
 msgid "Delete old log/backup files after this many days (0 = never)."
 msgstr ""
 "Ezabatu egunkariko/babeskopiako fitxategi zaharrak hainbat egun igarotakoan "
 "(0 = inoiz ere ez)"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:59
+#: ../src/gnome-utils/glade/preferences.glade.h:61
 #, fuzzy
 msgid "Display \"_tip of the day\" dialog"
 msgstr "Erakutsi \"Eguneko aholkua\""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:60
+#: ../src/gnome-utils/glade/preferences.glade.h:62
 msgid "Display hints for using GnuCash at startup"
 msgstr "Programa irekitzean, erakutsi GnuCash erabiltzeko iradokizunak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:61
+#: ../src/gnome-utils/glade/preferences.glade.h:63
 #, fuzzy
 msgid "Display ne_gative amounts in red"
 msgstr "Erakutsi zenbateko negatiboak gorriz"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:63
+#: ../src/gnome-utils/glade/preferences.glade.h:65
 #, fuzzy
 msgid "Display the notebook tabs at the bottom of the window."
 msgstr "Joan fakturaren behealdeko sarrera hutsera"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:64
+#: ../src/gnome-utils/glade/preferences.glade.h:66
 msgid "Display the notebook tabs at the left of the window."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:65
+#: ../src/gnome-utils/glade/preferences.glade.h:67
 msgid "Display the notebook tabs at the right of the window."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:66
+#: ../src/gnome-utils/glade/preferences.glade.h:68
 msgid "Display the notebook tabs at the top of the window."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:67
+#: ../src/gnome-utils/glade/preferences.glade.h:69
 #, fuzzy
 msgid "Display the summary bar at the bottom of the page."
 msgstr "Joan fakturaren behealdeko sarrera hutsera"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:68
+#: ../src/gnome-utils/glade/preferences.glade.h:70
 #, fuzzy
 msgid "Display the summary bar at the top of the page."
 msgstr "Joan fakturaren behealdeko sarrera hutsera"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:69
+#: ../src/gnome-utils/glade/preferences.glade.h:71
 msgid "Display this many rows when a register is created."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:70
+#: ../src/gnome-utils/glade/preferences.glade.h:72
 msgid "Display toolbar items as icons only."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:71
+#: ../src/gnome-utils/glade/preferences.glade.h:73
 msgid "Display toolbar items as text only."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:72
+#: ../src/gnome-utils/glade/preferences.glade.h:74
 msgid ""
 "Display toolbar items with the text label below the icon.  Labels are show "
 "for all items."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:73
+#: ../src/gnome-utils/glade/preferences.glade.h:75
 msgid ""
 "Display toolbar items with the text label beside the icon.  Labels are only "
 "shown for the most important items."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:74
+#: ../src/gnome-utils/glade/preferences.glade.h:76
 #, fuzzy
 msgid "Don't sign reverse any accounts."
 msgstr "Ez alderantzikatu konturik"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:75
+#: ../src/gnome-utils/glade/preferences.glade.h:77
 #, fuzzy
 msgid "Double _mode colors alternate with transactions"
 msgstr "Bi modutako koloreak txandakatu transakzioekin"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:76
+#: ../src/gnome-utils/glade/preferences.glade.h:78
 msgid "Draw _vertical lines between columns"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:77
+#: ../src/gnome-utils/glade/preferences.glade.h:79
 msgid "Draw hori_zontal lines between rows"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:79
+#: ../src/gnome-utils/glade/preferences.glade.h:81
 #, fuzzy
 msgid "GnuCash Options"
 msgstr "Laugarren aukera"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:80
+#: ../src/gnome-utils/glade/preferences.glade.h:82
 #, fuzzy
 msgid "GnuCash Preferences"
 msgstr "GnuCash-en hobespenak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:81
+#: ../src/gnome-utils/glade/preferences.glade.h:83
 msgid "How many automatic decimal places will be filled in."
 msgstr "Zenbat hamartar jarri behar diren automatikoki."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:82
+#: ../src/gnome-utils/glade/preferences.glade.h:84
 msgid ""
 "If active, GnuCash shows a confirmation question each time the auto-save "
 "feature is started. Otherwise no extra explanation is shown."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:83
+#: ../src/gnome-utils/glade/preferences.glade.h:85
 msgid ""
 "If checked, each register will be opened in its own top level window.  If "
 "clear, the register will be opened in the current window."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:84
+#: ../src/gnome-utils/glade/preferences.glade.h:86
 msgid ""
 "If checked, each report will be opened in its own top level window.  If "
 "clear, the report will be opened in the current window."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:85
+#: ../src/gnome-utils/glade/preferences.glade.h:87
 msgid ""
 "If checked, non-currency commodities will be shown in the summary bar.  If "
 "clear, only currencies will be shown."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:86
+#: ../src/gnome-utils/glade/preferences.glade.h:88
 msgid ""
 "If checked, only the names of the leaf accounts are displayed in the "
 "register and in the account selection popup. The default behaviour is to "
@@ -11024,7 +11047,7 @@ msgid ""
 "option implies that you use unique leaf names."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:87
+#: ../src/gnome-utils/glade/preferences.glade.h:89
 #, fuzzy
 msgid ""
 "If checked, pressing the 'Enter' key will move to the blank transaction at "
@@ -11034,47 +11057,47 @@ msgstr ""
 "Hautatzen bada, 'Sartu' sakatutakoan transakzio hutsera joango da. Bestela, "
 "beheko lerrora joango da."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:88
+#: ../src/gnome-utils/glade/preferences.glade.h:90
 msgid ""
 "If checked, the system color theme will be applied to register windows.  If "
 "clear, the original GnuCash register colors will be used."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:89
+#: ../src/gnome-utils/glade/preferences.glade.h:91
 #, fuzzy
 msgid "Include _grand total"
 msgstr "Erakutsi total orokorra"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:90
+#: ../src/gnome-utils/glade/preferences.glade.h:92
 msgid "Include _non-currency totals"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:91
+#: ../src/gnome-utils/glade/preferences.glade.h:93
 #, fuzzy
 msgid "Loc_ale:"
 msgstr "Konfigurazio lokala"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:92
+#: ../src/gnome-utils/glade/preferences.glade.h:94
 #, fuzzy
 msgid "New search _limit:"
 msgstr "Bilaketa berriaren muga"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:94
+#: ../src/gnome-utils/glade/preferences.glade.h:96
 #, fuzzy
 msgid "Number of _transactions:"
 msgstr "Zutabe-kopurua"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:95
+#: ../src/gnome-utils/glade/preferences.glade.h:97
 #, fuzzy
 msgid "Perform account list _setup on new file"
 msgstr "Kontu-zerrendarik ez fitxategi berria sortzean"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:96
+#: ../src/gnome-utils/glade/preferences.glade.h:98
 #, fuzzy
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
 msgstr "Automatikoki markatu kitatutako transakzioak berdinkatzean"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:97
+#: ../src/gnome-utils/glade/preferences.glade.h:99
 #, fuzzy
 msgid ""
 "Present the new account list dialog when you choose \"New File\" from the "
@@ -11083,60 +11106,60 @@ msgstr ""
 "Ez erakutsi kontu berriaren zerrendaren elkarrizketa-koadroa, \"Fitxategia\" "
 "menuko \"Fitxategi berria\" hautatzen denean"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:98
+#: ../src/gnome-utils/glade/preferences.glade.h:100
 msgid "Print '***' before and after each text field on the check."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:99
+#: ../src/gnome-utils/glade/preferences.glade.h:101
 msgid "Print _blocking chars"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:100
+#: ../src/gnome-utils/glade/preferences.glade.h:102
 #, fuzzy
 msgid "Print _date format"
 msgstr "Formatu pertsonalizatua"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:101
+#: ../src/gnome-utils/glade/preferences.glade.h:103
 #, fuzzy
 msgid "Printing"
 msgstr "Inprimatu"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:103
+#: ../src/gnome-utils/glade/preferences.glade.h:105
 msgid "Priority text besi_de icons"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:104
+#: ../src/gnome-utils/glade/preferences.glade.h:106
 #, fuzzy
 msgid "Re_lative:"
 msgstr "Deskontua"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:106
+#: ../src/gnome-utils/glade/preferences.glade.h:108
 #, fuzzy
 msgid "Register Defaults"
 msgstr "Erregistroaren letra-tipoa"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:107
+#: ../src/gnome-utils/glade/preferences.glade.h:109
 #, fuzzy
 msgid "Register opens in a new _window"
 msgstr "Ireki leiho berrian"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:108
+#: ../src/gnome-utils/glade/preferences.glade.h:110
 #, fuzzy
 msgid "Report opens in a new _window"
 msgstr "Ireki leiho berrian"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:109
+#: ../src/gnome-utils/glade/preferences.glade.h:111
 #, fuzzy
 msgid "Reports"
 msgstr "_Txostenak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:111
+#: ../src/gnome-utils/glade/preferences.glade.h:113
 msgid ""
 "Show a close button on each notebook tab.  These function identically to the "
 "'Close' menu item."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:112
+#: ../src/gnome-utils/glade/preferences.glade.h:114
 #, fuzzy
 msgid ""
 "Show a grand total of all accounts converted to the default report currency."
@@ -11144,56 +11167,56 @@ msgstr ""
 "Erakutsi kontu guztien total orokorra txostenaren moneta lehenetsira "
 "bihurtuta"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:113
+#: ../src/gnome-utils/glade/preferences.glade.h:115
 #, fuzzy
 msgid "Show all transactions on one line. (Two in double line mode.)"
 msgstr "Erakutsi transakzioak lerro batean edo bitan"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:114
+#: ../src/gnome-utils/glade/preferences.glade.h:116
 msgid "Show auto-save confirmation _question"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:115
+#: ../src/gnome-utils/glade/preferences.glade.h:117
 msgid "Show close button on _notebook tabs"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:116
+#: ../src/gnome-utils/glade/preferences.glade.h:118
 #, fuzzy
 msgid "Show horizontal borders on the cells."
 msgstr "Lehenespenez, erakutsi gelaxken ertz horizontalak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:117
+#: ../src/gnome-utils/glade/preferences.glade.h:119
 msgid "Show splash scree_n"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:118
+#: ../src/gnome-utils/glade/preferences.glade.h:120
 msgid "Show splash screen at startup."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:119
+#: ../src/gnome-utils/glade/preferences.glade.h:121
 msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:120
+#: ../src/gnome-utils/glade/preferences.glade.h:122
 #, fuzzy
 msgid ""
 "Show two lines of information for each transaction instead of one.  Does not "
 "affect expanded transactions."
 msgstr "Erakutsi bi informazio-lerro transakzio bakoitzeko"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:121
+#: ../src/gnome-utils/glade/preferences.glade.h:123
 #, fuzzy
 msgid "Show vertical borders on the cells."
 msgstr "Lehenespenez, erakutsi gelaxken ertz bertikalak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:122
+#: ../src/gnome-utils/glade/preferences.glade.h:124
 #, fuzzy
 msgid "Sign reverse balances on income and expense accounts."
 msgstr "Alderantzikatu sarrera- eta gastu-kontuak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:123
+#: ../src/gnome-utils/glade/preferences.glade.h:125
 #, fuzzy
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
@@ -11202,11 +11225,11 @@ msgstr ""
 "Alderantzikatu kreditu txartelaren, ordaintzekoen, galdagarrien, funts "
 "propioen eta sarreren kontuak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:124
+#: ../src/gnome-utils/glade/preferences.glade.h:126
 msgid "Text _below icons"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:125
+#: ../src/gnome-utils/glade/preferences.glade.h:127
 msgid ""
 "The character that will be used between components of an account name.  A "
 "legal value is any single character except letters and numbers, or any of "
@@ -11214,74 +11237,74 @@ msgid ""
 "\"period\"."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:127
+#: ../src/gnome-utils/glade/preferences.glade.h:129
 #, fuzzy
 msgid "To_p"
 msgstr "Nora"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:128
+#: ../src/gnome-utils/glade/preferences.glade.h:130
 #, fuzzy
 msgid "Top"
 msgstr "Nora"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:129
+#: ../src/gnome-utils/glade/preferences.glade.h:131
 #, fuzzy
 msgid "Transaction _journal"
 msgstr "Transakzioen egunkaria"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:130
+#: ../src/gnome-utils/glade/preferences.glade.h:132
 msgid "US Dollars (USD)"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:131
+#: ../src/gnome-utils/glade/preferences.glade.h:133
 msgid "U_K:"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:132
+#: ../src/gnome-utils/glade/preferences.glade.h:134
 #, fuzzy
 msgid "U_se 24-hour clock"
 msgstr "Erabili 24 orduko ordu-formatua"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:133
+#: ../src/gnome-utils/glade/preferences.glade.h:135
 #, fuzzy
 msgid "Use _formal accounting labels"
 msgstr "Erabili kontabilitateko etiketak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:134
+#: ../src/gnome-utils/glade/preferences.glade.h:136
 msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr "Erabili 24 orduko ordu-formatua (12 ordukoaren ordez)"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:135
+#: ../src/gnome-utils/glade/preferences.glade.h:137
 #, fuzzy
 msgid "Use only 'debit' and 'credit' instead of informal synonyms"
 msgstr "Erabili 'zor' eta 'hartzeko', ez erabili beste sinonimorik"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:136
+#: ../src/gnome-utils/glade/preferences.glade.h:138
 #, fuzzy
 msgid "Use s_ystem default"
 msgstr "Erabili GNOMEren lehenespenak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:137
+#: ../src/gnome-utils/glade/preferences.glade.h:139
 msgid "Use the date format common in continental Europe."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:138
+#: ../src/gnome-utils/glade/preferences.glade.h:140
 msgid "Use the date format common in the United Kingdom."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:139
+#: ../src/gnome-utils/glade/preferences.glade.h:141
 msgid "Use the date format common in the United States."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:140
+#: ../src/gnome-utils/glade/preferences.glade.h:142
 msgid "Use the date format specified by the ISO-8601 standard."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:141
+#: ../src/gnome-utils/glade/preferences.glade.h:143
 msgid "Use the date format specified by the system locale."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:142
+#: ../src/gnome-utils/glade/preferences.glade.h:144
 #, fuzzy
 msgid ""
 "Use the specified absolute ending date for profit/loss calculations.  Also "
@@ -11290,24 +11313,24 @@ msgstr ""
 "Irabaziak/galerak kalkulatzeko amaiera-data, eta aktibo garbia kalkulatzeko "
 "data"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:143
+#: ../src/gnome-utils/glade/preferences.glade.h:145
 #, fuzzy
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr "Irabaziak/galerak kalkulatzeko hasiera-data"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:144
+#: ../src/gnome-utils/glade/preferences.glade.h:146
 #, fuzzy
 msgid "Use the specified currency for all newly created accounts."
 msgstr "Idatzi kontu berrietan erabiltzeko moneta"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:145
+#: ../src/gnome-utils/glade/preferences.glade.h:147
 #, fuzzy
 msgid "Use the specified currency for all newly created reports."
 msgstr ""
 "Sartu erabiltzaile sortu\n"
 "berriaren txip-txartela."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:146
+#: ../src/gnome-utils/glade/preferences.glade.h:148
 #, fuzzy
 msgid ""
 "Use the specified relative ending date for profit/loss calculations.  Also "
@@ -11316,139 +11339,139 @@ msgstr ""
 "Irabaziak/galerak kalkulatzeko amaiera-data, eta aktibo garbia kalkulatzeko "
 "data"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:147
+#: ../src/gnome-utils/glade/preferences.glade.h:149
 #, fuzzy
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr "Irabaziak/galerak kalkulatzeko hasiera-data"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:148
+#: ../src/gnome-utils/glade/preferences.glade.h:150
 #, fuzzy
 msgid "Use the system locale currency for all newly created accounts."
 msgstr "Aukeratu kontu berrietan erabiltzeko moneta."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:149
+#: ../src/gnome-utils/glade/preferences.glade.h:151
 msgid "Use the system locale currency for all newly created reports."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:150
+#: ../src/gnome-utils/glade/preferences.glade.h:152
 msgid "Use the system setting for displaying toolbar items."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:151
+#: ../src/gnome-utils/glade/preferences.glade.h:153
 #, fuzzy
 msgid "Windows"
 msgstr "Lei_hoak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:152
+#: ../src/gnome-utils/glade/preferences.glade.h:154
 #, fuzzy
 msgid "_Absolute:"
 msgstr "Zaharkituta"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:153
+#: ../src/gnome-utils/glade/preferences.glade.h:155
 #, fuzzy
 msgid "_Auto-raise lists"
 msgstr "Automatikoki goratu zerrendak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:154
+#: ../src/gnome-utils/glade/preferences.glade.h:156
 #, fuzzy
 msgid "_Auto-split ledger"
 msgstr "_Zatiketa automatikoko liburu nagusia"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:155
+#: ../src/gnome-utils/glade/preferences.glade.h:157
 #, fuzzy
 msgid "_Automatic decimal point"
 msgstr "Hamartarren koma automatikoa"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:156
+#: ../src/gnome-utils/glade/preferences.glade.h:158
 #, fuzzy
 msgid "_Basic ledger"
 msgstr "_Oinarrizko liburu nagusia"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:157
+#: ../src/gnome-utils/glade/preferences.glade.h:159
 #, fuzzy
 msgid "_Decimal places:"
 msgstr "Hamartar-kopurua"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:158
+#: ../src/gnome-utils/glade/preferences.glade.h:160
 #, fuzzy
 msgid "_Double line mode"
 msgstr "Lerro biko modua"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:159
+#: ../src/gnome-utils/glade/preferences.glade.h:161
 msgid "_Europe:"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:160
+#: ../src/gnome-utils/glade/preferences.glade.h:162
 msgid "_ISO:"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:161
+#: ../src/gnome-utils/glade/preferences.glade.h:163
 #, fuzzy
 msgid "_Icons only"
 msgstr "Ikonoak bakarrik"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:162
+#: ../src/gnome-utils/glade/preferences.glade.h:164
 #, fuzzy
 msgid "_Income & expense"
 msgstr "_Sarrerak eta Gastuak"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:163
+#: ../src/gnome-utils/glade/preferences.glade.h:165
 #, fuzzy
 msgid "_Left"
 msgstr "Azkena"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:164
+#: ../src/gnome-utils/glade/preferences.glade.h:166
 #, fuzzy
 msgid "_None"
 msgstr "Bat ere ez"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:165
+#: ../src/gnome-utils/glade/preferences.glade.h:167
 #, fuzzy
 msgid "_Only display leaf account names"
 msgstr "Kontuaren izena bistaratu?"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:166
+#: ../src/gnome-utils/glade/preferences.glade.h:168
 #, fuzzy
 msgid "_Relative:"
 msgstr "Deskontua"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:167
+#: ../src/gnome-utils/glade/preferences.glade.h:169
 #, fuzzy
 msgid "_Retain log files:"
 msgstr "Egunkari-fitxategiak mantentzeko epea"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:168
+#: ../src/gnome-utils/glade/preferences.glade.h:170
 msgid "_Right"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:169
+#: ../src/gnome-utils/glade/preferences.glade.h:171
 #, fuzzy
 msgid "_Save window size and position"
 msgstr "Gorde leihoen tamainak eta kokalekuak."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:170
+#: ../src/gnome-utils/glade/preferences.glade.h:172
 #, fuzzy
 msgid "_Text only"
 msgstr "Testua bakarrik"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:171
+#: ../src/gnome-utils/glade/preferences.glade.h:173
 msgid "_US:"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:172
+#: ../src/gnome-utils/glade/preferences.glade.h:174
 msgid "_Use system theme colors"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:173
+#: ../src/gnome-utils/glade/preferences.glade.h:175
 msgid "_Width:"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:174
+#: ../src/gnome-utils/glade/preferences.glade.h:176
 #, fuzzy
 msgid "characters"
 msgstr "Kargua"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:176
+#: ../src/gnome-utils/glade/preferences.glade.h:178
 msgid "minutes"
 msgstr ""
 
@@ -12120,7 +12143,7 @@ msgstr ""
 msgid "_Delete Account"
 msgstr "_Ezabatu kontua"
 
-#: ../src/gnome-utils/gnc-icons.c:18 ../src/gnome/window-reconcile.c:2105
+#: ../src/gnome-utils/gnc-icons.c:18 ../src/gnome/window-reconcile.c:2110
 msgid "_Edit Account"
 msgstr "_Editatu kontua"
 
@@ -12130,7 +12153,7 @@ msgid "_New Account"
 msgstr "Kontu berria"
 
 #. Account menu
-#: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/window-reconcile.c:2102
+#: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/window-reconcile.c:2107
 msgid "_Open Account"
 msgstr "_Ireki kontua"
 
@@ -12164,7 +12187,7 @@ msgstr "Lei_hoak"
 
 #. Help menu
 #: ../src/gnome-utils/gnc-main-window.c:241
-#: ../src/gnome/window-reconcile.c:2082 ../src/gnome/window-reconcile.c:2133
+#: ../src/gnome/window-reconcile.c:2087 ../src/gnome/window-reconcile.c:2138
 msgid "_Help"
 msgstr "Lag_untza"
 
@@ -12252,7 +12275,7 @@ msgstr "Freskatu leiho hau"
 
 #. Actions menu
 #: ../src/gnome-utils/gnc-main-window.c:296
-#: ../src/gnome/window-reconcile.c:2111
+#: ../src/gnome/window-reconcile.c:2116
 msgid "_Check & Repair"
 msgstr "E_giaztatu eta konpondu"
 
@@ -12786,8 +12809,8 @@ msgstr "Segurtasuneko euskarria"
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/invoice.scm
 #: ../src/gnome-utils/gnc-tree-view-price.c:462
-#: ../src/register/ledger-core/split-register.c:2256
-#: ../src/register/ledger-core/split-register-model.c:227
+#: ../src/register/ledger-core/split-register.c:2270
+#: ../src/register/ledger-core/split-register-model.c:288
 #: ../intl-scm/guile-strings.c:1948 ../intl-scm/guile-strings.c:2026
 #: ../intl-scm/guile-strings.c:2288 ../intl-scm/guile-strings.c:2504
 #: ../intl-scm/guile-strings.c:2764 ../intl-scm/guile-strings.c:2776
@@ -12933,27 +12956,27 @@ msgid "Are you sure you want to delete the selected transaction?"
 msgstr "Ziur zaude hautatutako transakzioa ezabatu nahi duzula?"
 
 #. statement date title/value
-#: ../src/gnome/window-reconcile.c:1721
+#: ../src/gnome/window-reconcile.c:1726
 #, fuzzy
 msgid "Statement Date:"
 msgstr "Laburpenaren data:"
 
 #. ending balance title/value
-#: ../src/gnome/window-reconcile.c:1741
+#: ../src/gnome/window-reconcile.c:1746
 msgid "Ending Balance:"
 msgstr "Amaierako saldoa:"
 
 #. reconciled balance title/value
-#: ../src/gnome/window-reconcile.c:1751
+#: ../src/gnome/window-reconcile.c:1756
 msgid "Reconciled Balance:"
 msgstr "Saldo berdinkatua:"
 
 #. difference title/value
-#: ../src/gnome/window-reconcile.c:1761
+#: ../src/gnome/window-reconcile.c:1766
 msgid "Difference:"
 msgstr "Diferentzia:"
 
-#: ../src/gnome/window-reconcile.c:1874
+#: ../src/gnome/window-reconcile.c:1879
 #, fuzzy
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
@@ -12962,88 +12985,88 @@ msgstr ""
 "Berdinkatze-leiho honetan aldaketak egin dituzu.\n"
 "Ziur zaude bertan behera utzi nahi duzula?"
 
-#: ../src/gnome/window-reconcile.c:1986
+#: ../src/gnome/window-reconcile.c:1991
 #, fuzzy
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr ""
 "Kontua ez dago koadratuta.\n"
 "Ziur zaude amaitu nahi duzula?"
 
-#: ../src/gnome/window-reconcile.c:2043
+#: ../src/gnome/window-reconcile.c:2048
 msgid "Do you want to postpone this reconciliation and finish it later?"
 msgstr "Berdinkatzea atzeratu eta gero amaitzeko utzi nahi duzu?"
 
 #. Toplevel
-#: ../src/gnome/window-reconcile.c:2079
+#: ../src/gnome/window-reconcile.c:2084
 msgid "_Reconcile"
 msgstr "_Berdinkatu"
 
-#: ../src/gnome/window-reconcile.c:2080
+#: ../src/gnome/window-reconcile.c:2085
 msgid "_Account"
 msgstr "K_ontua"
 
 #. Reconcile menu
-#: ../src/gnome/window-reconcile.c:2086
+#: ../src/gnome/window-reconcile.c:2091
 msgid "_Reconcile Information..."
 msgstr "_Berdinkatze-informazioa..."
 
-#: ../src/gnome/window-reconcile.c:2087
+#: ../src/gnome/window-reconcile.c:2092
 msgid ""
 "Change the reconcile information including statement date and ending balance."
 msgstr ""
 "Aldatu berdinkatze-informazioa, laburpenaren data eta amaierako saldoa barne."
 
-#: ../src/gnome/window-reconcile.c:2090
+#: ../src/gnome/window-reconcile.c:2095
 msgid "_Finish"
 msgstr "_Amaitu"
 
-#: ../src/gnome/window-reconcile.c:2091
+#: ../src/gnome/window-reconcile.c:2096
 msgid "Finish the reconciliation of this account"
 msgstr "Kontu honen berdinkatzea amaitu"
 
-#: ../src/gnome/window-reconcile.c:2093
+#: ../src/gnome/window-reconcile.c:2098
 msgid "_Postpone"
 msgstr "A_tzeratu"
 
-#: ../src/gnome/window-reconcile.c:2094
+#: ../src/gnome/window-reconcile.c:2099
 msgid "Postpone the reconciliation of this account"
 msgstr "Kontu honen berdinkatzea gero egiteko utzi"
 
-#: ../src/gnome/window-reconcile.c:2097
+#: ../src/gnome/window-reconcile.c:2102
 msgid "Cancel the reconciliation of this account"
 msgstr "Kontu honen berdinkatzea bertan behera utzi"
 
-#: ../src/gnome/window-reconcile.c:2103
+#: ../src/gnome/window-reconcile.c:2108
 msgid "Open the account"
 msgstr "Ireki kontua"
 
-#: ../src/gnome/window-reconcile.c:2106
+#: ../src/gnome/window-reconcile.c:2111
 msgid "Edit the main account for this register"
 msgstr "Editatu erregistro honen kontu nagusia"
 
-#: ../src/gnome/window-reconcile.c:2119
+#: ../src/gnome/window-reconcile.c:2124
 msgid "Add a new transaction to the account"
 msgstr "Gehitu transakzio berri bat kontuan"
 
-#: ../src/gnome/window-reconcile.c:2121
+#: ../src/gnome/window-reconcile.c:2126
 #, fuzzy
 msgid "_Balance"
 msgstr "Saldoa:"
 
-#: ../src/gnome/window-reconcile.c:2122
+#: ../src/gnome/window-reconcile.c:2127
 #, fuzzy
 msgid "Add a new balancing entry to the account"
 msgstr "Gehitu transakzio berri bat kontuan"
 
-#: ../src/gnome/window-reconcile.c:2125
+#: ../src/gnome/window-reconcile.c:2130
 msgid "Edit the current transaction"
 msgstr "Editatu uneko transakzioa"
 
-#: ../src/gnome/window-reconcile.c:2128
+#: ../src/gnome/window-reconcile.c:2133
 msgid "Delete the selected transaction"
 msgstr "Ezabatu hautatutako transakzioa"
 
-#: ../src/gnome/window-reconcile.c:2134
+#: ../src/gnome/window-reconcile.c:2139
 msgid "Open the GnuCash help window"
 msgstr "Ireki GnuCash-en laguntza-leihoa"
 
@@ -14938,7 +14961,7 @@ msgstr "Kraskatu ondoren, erreproduzitu egunkari-fitxategia. Ezin da desegin."
 #. name. It MUST NOT contain the
 #. character ':' anywhere in it or
 #. in any translations.
-#: ../src/import-export/ofx/gnc-ofx-import.c:360
+#: ../src/import-export/ofx/gnc-ofx-import.c:362
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "\"%s\" tituluen akzio-kontua"
@@ -14947,45 +14970,45 @@ msgstr "\"%s\" tituluen akzio-kontua"
 #. name. It MUST NOT contain the
 #. character ':' anywhere in it or
 #. in any translations.
-#: ../src/import-export/ofx/gnc-ofx-import.c:430
+#: ../src/import-export/ofx/gnc-ofx-import.c:432
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "\"%s\" tituluen sarrera-kontua"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:563
+#: ../src/import-export/ofx/gnc-ofx-import.c:565
 #, fuzzy
 msgid "Unknown OFX account"
 msgstr "OFX CMA kontu ezezaguna"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:583
+#: ../src/import-export/ofx/gnc-ofx-import.c:585
 msgid "Unknown OFX checking account"
 msgstr "OFX kontu korronte ezezaguna"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:587
+#: ../src/import-export/ofx/gnc-ofx-import.c:589
 msgid "Unknown OFX savings account"
 msgstr "OFX aurrezki-kontu ezezaguna"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:591
+#: ../src/import-export/ofx/gnc-ofx-import.c:593
 msgid "Unknown OFX money market account"
 msgstr "OFX diru-merkatuko kontu ezezaguna"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:595
+#: ../src/import-export/ofx/gnc-ofx-import.c:597
 msgid "Unknown OFX credit line account"
 msgstr "OFX kreditu-lerroko kontu ezezaguna"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:599
+#: ../src/import-export/ofx/gnc-ofx-import.c:601
 msgid "Unknown OFX CMA account"
 msgstr "OFX CMA kontu ezezaguna"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:603
+#: ../src/import-export/ofx/gnc-ofx-import.c:605
 msgid "Unknown OFX credit card account"
 msgstr "OFX kreditu-txartelaren kontu ezezaguna"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:607
+#: ../src/import-export/ofx/gnc-ofx-import.c:609
 msgid "Unknown OFX investment account"
 msgstr "OFX inbertsio-kontu ezezaguna"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:657
+#: ../src/import-export/ofx/gnc-ofx-import.c:679
 msgid "Select an OFX/QFX file to process"
 msgstr "Hautatu OFX/QFX fitxategi bat prozesatzeko"
 
@@ -15802,106 +15825,144 @@ msgid "Check"
 msgstr "Txekea"
 
 #: ../src/register/ledger-core/split-register.c:2187
-#: ../src/register/ledger-core/split-register.c:2215
-#: ../src/register/ledger-core/split-register.c:2223
-#: ../src/register/ledger-core/split-register.c:2237
-#: ../src/register/ledger-core/split-register.c:2260
+#: ../src/register/ledger-core/split-register.c:2224
+#: ../src/register/ledger-core/split-register.c:2232
+#: ../src/register/ledger-core/split-register.c:2248
+#: ../src/register/ledger-core/split-register.c:2274
 msgid "Int"
 msgstr "Int"
 
 #: ../src/register/ledger-core/split-register.c:2188
-#: ../src/register/ledger-core/split-register.c:2211
-msgid "ATM"
-msgstr "Kutxazain automatikoa"
+#: ../src/register/ledger-core/split-register.c:2219
+#, fuzzy
+msgid "ATM Deposit"
+msgstr "Gordailua"
 
 #: ../src/register/ledger-core/split-register.c:2189
+#: ../src/register/ledger-core/split-register.c:2220
+msgid "ATM Draw"
+msgstr ""
+
+#: ../src/register/ledger-core/split-register.c:2190
 msgid "Teller"
 msgstr "Kutxazaina"
 
+#: ../src/register/ledger-core/split-register.c:2193
+#, fuzzy
+msgid "Receipt"
+msgstr "Kobratua"
+
+#. src/app-utils/prefs.scm
+#: ../src/register/ledger-core/split-register.c:2194
+#: ../src/register/ledger-core/split-register.c:2208
+#: ../src/register/ledger-core/split-register.c:2244
+#: ../src/register/ledger-core/split-register.c:2254
+#: ../src/register/ledger-core/split-register.c:2286
+#: ../intl-scm/guile-strings.c:114 ../intl-scm/guile-strings.c:144
+#: ../intl-scm/guile-strings.c:160
+msgid "Increase"
+msgstr "Gehitu"
+
+#. src/app-utils/prefs.scm
+#: ../src/register/ledger-core/split-register.c:2195
+#: ../src/register/ledger-core/split-register.c:2209
+#: ../src/register/ledger-core/split-register.c:2245
+#: ../src/register/ledger-core/split-register.c:2255
+#: ../src/register/ledger-core/split-register.c:2287
+#: ../intl-scm/guile-strings.c:116 ../intl-scm/guile-strings.c:132
+#: ../intl-scm/guile-strings.c:142
+msgid "Decrease"
+msgstr "Gutxiagotu"
+
 #. Action: Point Of Sale
-#: ../src/register/ledger-core/split-register.c:2191
+#: ../src/register/ledger-core/split-register.c:2197
 msgid "POS"
 msgstr "Saltokia"
 
-#: ../src/register/ledger-core/split-register.c:2192
+#: ../src/register/ledger-core/split-register.c:2198
 msgid "Phone"
 msgstr "Telefonoa"
 
-#: ../src/register/ledger-core/split-register.c:2193
-#: ../src/register/ledger-core/split-register.c:2216
+#: ../src/register/ledger-core/split-register.c:2199
+#: ../src/register/ledger-core/split-register.c:2225
 msgid "Online"
 msgstr "Linean"
 
 #. Action: Automatic Deposit ?!?
-#: ../src/register/ledger-core/split-register.c:2195
+#: ../src/register/ledger-core/split-register.c:2201
 msgid "AutoDep"
 msgstr "Gordailu auto."
 
-#: ../src/register/ledger-core/split-register.c:2196
+#: ../src/register/ledger-core/split-register.c:2202
 msgid "Wire"
 msgstr "Igorpena"
 
-#: ../src/register/ledger-core/split-register.c:2198
+#: ../src/register/ledger-core/split-register.c:2204
 msgid "Direct Debit"
 msgstr "Zuzeneko kargua"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2202
-#: ../src/register/ledger-core/split-register.c:2206
-#: ../src/register/ledger-core/split-register.c:2212
-#: ../src/register/ledger-core/split-register.c:2220
-#: ../src/register/ledger-core/split-register.c:2235
-#: ../src/register/ledger-core/split-register.c:2242
-#: ../src/register/ledger-core/split-register.c:2247
-#: ../src/register/ledger-core/split-register.c:2272
+#: ../src/register/ledger-core/split-register.c:2210
+#: ../src/register/ledger-core/split-register.c:2214
+#: ../src/register/ledger-core/split-register.c:2221
+#: ../src/register/ledger-core/split-register.c:2229
+#: ../src/register/ledger-core/split-register.c:2246
+#: ../src/register/ledger-core/split-register.c:2256
+#: ../src/register/ledger-core/split-register.c:2261
+#: ../src/register/ledger-core/split-register.c:2288
 #: ../intl-scm/guile-strings.c:118 ../intl-scm/guile-strings.c:120
 #: ../intl-scm/guile-strings.c:122
 msgid "Buy"
 msgstr "Erosi"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2203
-#: ../src/register/ledger-core/split-register.c:2207
-#: ../src/register/ledger-core/split-register.c:2217
-#: ../src/register/ledger-core/split-register.c:2221
-#: ../src/register/ledger-core/split-register.c:2236
-#: ../src/register/ledger-core/split-register.c:2243
-#: ../src/register/ledger-core/split-register.c:2248
-#: ../src/register/ledger-core/split-register.c:2273
+#: ../src/register/ledger-core/split-register.c:2211
+#: ../src/register/ledger-core/split-register.c:2215
+#: ../src/register/ledger-core/split-register.c:2226
+#: ../src/register/ledger-core/split-register.c:2230
+#: ../src/register/ledger-core/split-register.c:2247
+#: ../src/register/ledger-core/split-register.c:2257
+#: ../src/register/ledger-core/split-register.c:2262
+#: ../src/register/ledger-core/split-register.c:2289
 #: ../intl-scm/guile-strings.c:146 ../intl-scm/guile-strings.c:148
 #: ../intl-scm/guile-strings.c:150
 msgid "Sell"
 msgstr "Saldu"
 
-#: ../src/register/ledger-core/split-register.c:2208
-#: ../src/register/ledger-core/split-register.c:2214
-#: ../src/register/ledger-core/split-register.c:2257
+#: ../src/register/ledger-core/split-register.c:2216
+#: ../src/register/ledger-core/split-register.c:2223
+#: ../src/register/ledger-core/split-register.c:2271
 msgid "Fee"
 msgstr "Komisioa"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2239
+#: ../src/register/ledger-core/split-register.c:2250
 #: ../intl-scm/guile-strings.c:154
 msgid "Rebate"
 msgstr "Deskontua"
 
+#: ../src/register/ledger-core/split-register.c:2251
+#, fuzzy
+msgid "Paycheck"
+msgstr "Txekea"
+
 #. Action: Dividend
-#: ../src/register/ledger-core/split-register.c:2259
+#: ../src/register/ledger-core/split-register.c:2273
 msgid "Div"
 msgstr "Dib"
 
 #. Action: Long Term Capital Gains
-#: ../src/register/ledger-core/split-register.c:2262
+#: ../src/register/ledger-core/split-register.c:2276
 msgid "LTCG"
 msgstr "ELuKI"
 
 #. Action: Short Term Capital Gains
-#: ../src/register/ledger-core/split-register.c:2264
+#: ../src/register/ledger-core/split-register.c:2278
 msgid "STCG"
 msgstr "ELbKI"
 
 #. Action: Distribution
-#: ../src/register/ledger-core/split-register.c:2267
+#: ../src/register/ledger-core/split-register.c:2281
 msgid "Dist"
 msgstr "Banak"
 
@@ -16016,44 +16077,45 @@ msgstr "_Berdinkatu gabe"
 #. used to estimate widths. Please only
 #. translate the portion after the ':' and
 #. leave the rest ("sample:") as is.
-#: ../src/register/ledger-core/split-register-layout.c:531
+#: ../src/register/ledger-core/split-register-layout.c:532
 msgid "sample:99999"
 msgstr "sample:99999"
 
-#: ../src/register/ledger-core/split-register-layout.c:539
+#: ../src/register/ledger-core/split-register-layout.c:540
 msgid "sample:Description of a transaction"
 msgstr "sample:Transakzioaren azalpena"
 
-#: ../src/register/ledger-core/split-register-layout.c:563
-#: ../src/register/ledger-core/split-register-layout.c:603
-#: ../src/register/ledger-core/split-register-layout.c:611
-#: ../src/register/ledger-core/split-register-layout.c:619
-#: ../src/register/ledger-core/split-register-layout.c:629
-#: ../src/register/ledger-core/split-register-layout.c:637
-#: ../src/register/ledger-core/split-register-layout.c:645
-#: ../src/register/ledger-core/split-register-layout.c:653
-#: ../src/register/ledger-core/split-register-layout.c:661
+#: ../src/register/ledger-core/split-register-layout.c:564
+#: ../src/register/ledger-core/split-register-layout.c:604
+#: ../src/register/ledger-core/split-register-layout.c:612
+#: ../src/register/ledger-core/split-register-layout.c:620
+#: ../src/register/ledger-core/split-register-layout.c:630
+#: ../src/register/ledger-core/split-register-layout.c:638
+#: ../src/register/ledger-core/split-register-layout.c:646
+#: ../src/register/ledger-core/split-register-layout.c:654
+#: ../src/register/ledger-core/split-register-layout.c:662
+#: ../src/register/ledger-core/split-register-layout.c:710
 msgid "sample:999,999.000"
 msgstr "sample:999.999,000"
 
-#: ../src/register/ledger-core/split-register-layout.c:595
+#: ../src/register/ledger-core/split-register-layout.c:596
 msgid "sample:Memo field sample text string"
 msgstr "sample:Memo eremuaren adibidearen testua"
 
-#: ../src/register/ledger-core/split-register-layout.c:669
+#: ../src/register/ledger-core/split-register-layout.c:670
 msgid "Type:T"
 msgstr "Mota:M"
 
-#: ../src/register/ledger-core/split-register-layout.c:677
+#: ../src/register/ledger-core/split-register-layout.c:678
 msgid "sample:Notes field sample text string"
 msgstr "sample:Oharren eremuaren adibidearen testua"
 
-#: ../src/register/ledger-core/split-register-layout.c:685
+#: ../src/register/ledger-core/split-register-layout.c:686
 msgid "sample:No Particular Reason"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-layout.c:693
-#: ../src/register/ledger-core/split-register-layout.c:701
+#: ../src/register/ledger-core/split-register-layout.c:694
+#: ../src/register/ledger-core/split-register-layout.c:702
 msgid "sample:(x + 0.33 * y + (x+y) )"
 msgstr "sample:(x + 0.33 * y + (x+y) )"
 
@@ -16063,105 +16125,105 @@ msgid ""
 "provided by your system."
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-model.c:120
+#: ../src/register/ledger-core/split-register-model.c:181
 msgid "Ref"
 msgstr "Erf."
 
-#: ../src/register/ledger-core/split-register-model.c:256
-#: ../src/register/ledger-core/split-register-model.c:280
+#: ../src/register/ledger-core/split-register-model.c:317
+#: ../src/register/ledger-core/split-register-model.c:341
 #, c-format
 msgid "Tot %s"
 msgstr "%s guzt."
 
-#: ../src/register/ledger-core/split-register-model.c:262
+#: ../src/register/ledger-core/split-register-model.c:323
 msgid "Tot Credit"
 msgstr "Hartzeko guzt."
 
-#: ../src/register/ledger-core/split-register-model.c:286
+#: ../src/register/ledger-core/split-register-model.c:347
 msgid "Tot Debit"
 msgstr "Zor guzt."
 
-#: ../src/register/ledger-core/split-register-model.c:295
+#: ../src/register/ledger-core/split-register-model.c:356
 msgid "Tot Shares"
 msgstr "Akzioak guzt."
 
-#: ../src/register/ledger-core/split-register-model.c:316
+#: ../src/register/ledger-core/split-register-model.c:377
 msgid "Debit Formula"
 msgstr "Kargu-formula"
 
-#: ../src/register/ledger-core/split-register-model.c:323
+#: ../src/register/ledger-core/split-register-model.c:384
 msgid "Credit Formula"
 msgstr "Abonu-formula"
 
 #. This seems to be the one that initially gets used, the InactiveDateCell
 #. is set to, and subsequently displayed.
-#: ../src/register/ledger-core/split-register-model.c:805
+#: ../src/register/ledger-core/split-register-model.c:868
 msgid "Scheduled"
 msgstr "Planifikatua"
 
-#: ../src/register/ledger-core/split-register-model.c:836
+#: ../src/register/ledger-core/split-register-model.c:899
 msgid "Enter the transaction reference, such as the invoice or check number"
 msgstr "Sartu transakzioaren erreferentzia, adib. faktura- edo txeke-zenbakia"
 
-#: ../src/register/ledger-core/split-register-model.c:840
+#: ../src/register/ledger-core/split-register-model.c:903
 msgid "Enter the transaction number, such as the check number"
 msgstr "Sartu transakzio-zenbakia, adib. txeke-zenbakia"
 
-#: ../src/register/ledger-core/split-register-model.c:874
+#: ../src/register/ledger-core/split-register-model.c:937
 msgid "Enter the name of the Customer"
 msgstr "Sartu bezeroaren izena"
 
-#: ../src/register/ledger-core/split-register-model.c:877
+#: ../src/register/ledger-core/split-register-model.c:940
 msgid "Enter the name of the Vendor"
 msgstr "Sartu hornitzailearen izena"
 
-#: ../src/register/ledger-core/split-register-model.c:880
+#: ../src/register/ledger-core/split-register-model.c:943
 msgid "Enter a description of the transaction"
 msgstr "Sartu transakzioaren azalpena"
 
-#: ../src/register/ledger-core/split-register-model.c:910
+#: ../src/register/ledger-core/split-register-model.c:973
 msgid "Enter notes for the transaction"
 msgstr "Sartu transakzioaren oharrak"
 
-#: ../src/register/ledger-core/split-register-model.c:940
+#: ../src/register/ledger-core/split-register-model.c:1003
 #, fuzzy
 msgid "Reason the transaction was voided"
 msgstr "Transakzio-data bistaratu?"
 
-#: ../src/register/ledger-core/split-register-model.c:1032
+#: ../src/register/ledger-core/split-register-model.c:1095
 msgid "Enter the type of transaction, or choose one from the list"
 msgstr "Sartu transakzioaren mota, edo aukeratu zerrendan"
 
-#: ../src/register/ledger-core/split-register-model.c:1060
+#: ../src/register/ledger-core/split-register-model.c:1123
 msgid "Enter a description of the split"
 msgstr "Sartu zatiaren azalpena"
 
-#: ../src/register/ledger-core/split-register-model.c:1141
+#: ../src/register/ledger-core/split-register-model.c:1195
 msgid "Enter the effective share price"
 msgstr "Sartu akzioaren prezio efektiboa"
 
-#: ../src/register/ledger-core/split-register-model.c:1177
+#: ../src/register/ledger-core/split-register-model.c:1231
 msgid "Enter the number of shares bought or sold"
 msgstr "Sartu erosi edo saldutako akzio-kopurua"
 
-#: ../src/register/ledger-core/split-register-model.c:1228
-#: ../src/register/ledger-core/split-register-model.c:1294
+#: ../src/register/ledger-core/split-register-model.c:1282
+#: ../src/register/ledger-core/split-register-model.c:1348
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "Adierazi zein kontutatik transferitu, edo aukeratu zerrendan"
 
-#: ../src/register/ledger-core/split-register-model.c:1304
+#: ../src/register/ledger-core/split-register-model.c:1358
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
 "Transakzio honek hainbat zati ditu; sakatu zatien botoia denak ikusteko"
 
-#: ../src/register/ledger-core/split-register-model.c:1307
+#: ../src/register/ledger-core/split-register-model.c:1361
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr ""
 "Transakzio hau akzio-zatitzea da; sakatu zatien botoia xehetasunak ikusteko"
 
-#: ../src/register/ledger-core/split-register-model.c:1623
+#: ../src/register/ledger-core/split-register-model.c:1745
 #, c-format
 msgid ""
 "Cannot modify or delete this transaction. This transaction is marked read-"
@@ -16170,12 +16232,12 @@ msgid ""
 "'%s'"
 msgstr ""
 
-#: ../src/register/ledger-core/split-register-model.c:1675
+#: ../src/register/ledger-core/split-register-model.c:1797
 #, fuzzy
 msgid "Change reconciled split?"
 msgstr "Berdinkatze-data bistaratu?"
 
-#: ../src/register/ledger-core/split-register-model.c:1677
+#: ../src/register/ledger-core/split-register-model.c:1799
 #, fuzzy
 msgid ""
 "You are about to change a reconciled split.  Doing so might make future "
@@ -16184,16 +16246,16 @@ msgstr ""
 "Benetan markatu nahi duzu transakzio hau berdinkatu gabeko gisa?\n"
 "Horrek zaildu egingo du kontu-berdinkatzea aurrerantzean."
 
-#: ../src/register/ledger-core/split-register-model.c:1690
+#: ../src/register/ledger-core/split-register-model.c:1812
 #, fuzzy
 msgid "Chan_ge Split"
 msgstr "Aldatuta"
 
-#: ../src/register/ledger-core/split-register-model.c:1776
+#: ../src/register/ledger-core/split-register-model.c:1898
 msgid "Enter debit formula for real transaction"
 msgstr "Sartu transakzio errealaren kargu-formula"
 
-#: ../src/register/ledger-core/split-register-model.c:1806
+#: ../src/register/ledger-core/split-register-model.c:1928
 msgid "Enter credit formula for real transaction"
 msgstr "Sartu transakzio errealaren abonu-formula"
 
@@ -16648,18 +16710,6 @@ msgstr "Funts-sarrera"
 #: ../intl-scm/guile-strings.c:110
 msgid "Receive"
 msgstr "Kobratua"
-
-#. src/app-utils/prefs.scm
-#: ../intl-scm/guile-strings.c:114 ../intl-scm/guile-strings.c:144
-#: ../intl-scm/guile-strings.c:160
-msgid "Increase"
-msgstr "Gehitu"
-
-#. src/app-utils/prefs.scm
-#: ../intl-scm/guile-strings.c:116 ../intl-scm/guile-strings.c:132
-#: ../intl-scm/guile-strings.c:142
-msgid "Decrease"
-msgstr "Gutxiagotu"
 
 #. src/app-utils/prefs.scm
 #: ../intl-scm/guile-strings.c:134
@@ -25111,6 +25161,9 @@ msgstr ""
 "ulertezinago bat sortuko dela.\n"
 "Beste teoria batek dio hori dagoeneko gertatu dela.\n"
 "Douglas Adams, \"The Restaurant at the End of the Universe\""
+
+#~ msgid "ATM"
+#~ msgstr "Kutxazain automatikoa"
 
 #, fuzzy
 #~ msgid "Template file "
