@@ -17,6 +17,8 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+(use-modules (srfi srfi-13))
+
 (define (list-ref-safe list elt)
   (if (> (length list) elt)
       (list-ref list elt)
@@ -967,3 +969,12 @@
         (total 'merge (car (cdr account-balance)) #f))
       account-balances)
     total))
+
+;; Adds "file://" to the beginning of a URL if it doesn't already exist
+;;
+;; @param url URL
+;; @return URL with "file://" as the URL type if it isn't already there
+(define (make-file-url url)
+  (if (string-prefix? "file://" url)
+     url
+     (string-append "file://" url)))

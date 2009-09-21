@@ -679,6 +679,7 @@
 (export gnc:get-assoc-account-balances)
 (export gnc:select-assoc-account-balance)
 (export gnc:get-assoc-account-balances-total)
+(export make-file-url)
 
 (load-from-path "commodity-utilities.scm")
 (load-from-path "html-barchart.scm")

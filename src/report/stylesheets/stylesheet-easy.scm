@@ -358,7 +358,7 @@
           (gnc:html-table-set-cell!
             t 0 0
             (gnc:make-html-text
-	      (gnc:html-markup-img logopixmap)))))
+	      (gnc:html-markup-img (make-file-url logopixmap))))))
       
       (if (and headpixmap (> (string-length headpixmap) 0))
         (begin
@@ -367,7 +367,7 @@
             (gnc:make-html-text 
                (string-append 
                  "<div align=\"" align "\">"
-                 "<img src=\"" headpixmap "\">"
+                 "<img src=\"" (make-file-url headpixmap) "\">"
                  "</div>")))
         )
         (gnc:html-table-set-cell!
