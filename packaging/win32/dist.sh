@@ -249,13 +249,9 @@ function finish() {
     cp $_INSTALL_UDIR/bin/redirect.exe $DIST_UDIR/libexec/gconfd-2.exe
 
     if [ "$AQBANKING_WITH_QT" = "yes" ]; then
-        if [ "$AQBANKING3" != "yes" ]; then
-            mv ${DIST_UDIR}/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe $DIST_UDIR/bin
-            cp $_INSTALL_UDIR/bin/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe
-        else
-            mv ${DIST_UDIR}/lib/aqbanking/plugins/*/wizards/qt3-wizard.exe $DIST_UDIR/bin
-            cp $_INSTALL_UDIR/bin/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/*/wizards/qt3-wizard.exe
-        fi
+        _qt3_wizard_path=`ls ${DIST_UDIR}/lib/aqbanking/plugins/*/wizards/qt3-wizard.exe` 
+        mv ${_qt3_wizard_path} $DIST_UDIR/bin
+        cp $_INSTALL_UDIR/bin/redirect.exe ${_qt3_wizard_path}
     fi
 
     # Strip redirections in distributed libtool .la files
