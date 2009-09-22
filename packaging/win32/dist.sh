@@ -172,6 +172,8 @@ function dist_gwenhywfar() {
         cp -a ${_GWENHYWFAR_UDIR}/etc/* ${DIST_UDIR}/etc
     fi
     cp -a ${_GWENHYWFAR_UDIR}/lib/gwenhywfar ${DIST_UDIR}/lib
+    mkdir -p ${DIST_UDIR}/share/gwenhywfar
+    cp -a ${_GWENHYWFAR_UDIR}/share/gwenhywfar/ca-bundle.crt ${DIST_UDIR}/share/gwenhywfar
 }
 
 function dist_ktoblzcheck() {
@@ -251,8 +253,8 @@ function finish() {
             mv ${DIST_UDIR}/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe $DIST_UDIR/bin
             cp $_INSTALL_UDIR/bin/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe
         else
-            mv ${DIST_UDIR}/lib/aqbanking/plugins/20/wizards/qt3-wizard.exe $DIST_UDIR/bin
-            cp $_INSTALL_UDIR/bin/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/20/wizards/qt3-wizard.exe
+            mv ${DIST_UDIR}/lib/aqbanking/plugins/*/wizards/qt3-wizard.exe $DIST_UDIR/bin
+            cp $_INSTALL_UDIR/bin/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/*/wizards/qt3-wizard.exe
         fi
     fi
 
