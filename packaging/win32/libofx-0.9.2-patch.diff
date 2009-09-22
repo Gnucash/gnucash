@@ -1,0 +1,184 @@
+Index: ChangeLog
+===================================================================
+RCS file: /cvsroot/libofx/libofx/ChangeLog,v
+retrieving revision 1.96
+diff -u -r1.96 ChangeLog
+--- ChangeLog	15 May 2009 14:11:41 -0000	1.96
++++ ChangeLog	22 Sep 2009 20:28:40 -0000
+@@ -1,3 +1,8 @@
++2009-09-22  Christian Stimming  <stimming@tuhh.de>
++
++	* lib/ofx_preproc.cpp: Win32: Add gnucash patch that looks up the
++	dtd installation directory from the current executable's location.
++
+ 2009-05-09  Benoit Grégoire <benoitg@coeus.ca>
+ 	* Various C++ include fixes for building with recent compilers.  Patch by Bill Nottingham <notting@redhat.com>
+ 
+Index: lib/ofx_preproc.cpp
+===================================================================
+RCS file: /cvsroot/libofx/libofx/lib/ofx_preproc.cpp,v
+retrieving revision 1.24
+diff -u -r1.24 ofx_preproc.cpp
+--- lib/ofx_preproc.cpp	6 Dec 2008 22:28:39 -0000	1.24
++++ lib/ofx_preproc.cpp	22 Sep 2009 20:28:41 -0000
+@@ -36,6 +36,9 @@
+ 
+ #ifdef OS_WIN32
+ # include "win32.hh"
++# include <windows.h> // for GetModuleFileName()
++# undef ERROR
++# undef DELETE
+ #endif
+ 
+ #define LIBOFX_DEFAULT_INPUT_ENCODING "CP1252"
+@@ -505,6 +508,31 @@
+ }
+ 
+ 
++#ifdef OS_WIN32
++static std::string get_dtd_installation_directory()
++{
++  // Partial implementation of 
++  // http://developer.gnome.org/doc/API/2.0/glib/glib-Windows-Compatibility-Functions.html#g-win32-get-package-installation-directory
++  char ch_fn[MAX_PATH], *p;
++  std::string str_fn;
++
++  if (!GetModuleFileName(NULL, ch_fn, MAX_PATH)) return "";
++
++  if ((p = strrchr(ch_fn, '\\')) != NULL)
++    *p = '\0';
++
++  p = strrchr(ch_fn, '\\');
++  if (p && (_stricmp(p+1, "bin") == 0 ||
++            _stricmp(p+1, "lib") == 0))
++    *p = '\0';
++
++  str_fn = ch_fn;
++  str_fn += "\\share\\libofx\\dtd\\";
++
++  return str_fn;
++}
++#endif
++
+ 
+ /**
+    This function will try to find a DTD matching the requested_version and return the full path of the DTD found (or an empty string if unsuccessfull)
+@@ -513,45 +541,45 @@
+ */
+ string find_dtd(LibofxContextPtr ctx, string dtd_filename)
+ {
+-  int i;
+-  ifstream dtd_file;
+   string dtd_path_filename;
+-  bool dtd_found=false;
+ 
+-  dtd_path_filename=((LibofxContext*)ctx)->dtdDir();
++  dtd_path_filename = reinterpret_cast<const LibofxContext*>(ctx)->dtdDir();
+   if (!dtd_path_filename.empty()) {
+     dtd_path_filename.append(dtd_filename);
+-    dtd_file.clear();
+-    dtd_file.open(dtd_path_filename.c_str());
++    ifstream dtd_file(dtd_path_filename.c_str());
+     if(dtd_file){
+       message_out(STATUS,"find_dtd():DTD found: "+dtd_path_filename);
+-      dtd_file.close();
+-      dtd_found=true;
++      return dtd_path_filename;
+     }
+   }
+ 
+-  if (!dtd_found) {
+-    for(i=0;i<DTD_SEARCH_PATH_NUM&&dtd_found==false;i++){
++#ifdef OS_WIN32
++  dtd_path_filename = get_dtd_installation_directory();
++  if (!dtd_path_filename.empty()) {
++    dtd_path_filename.append(dtd_filename);
++    ifstream dtd_file(dtd_path_filename.c_str());
++    if(dtd_file){
++      message_out(STATUS,"find_dtd():DTD found: "+dtd_path_filename);
++      return dtd_path_filename;
++    }
++  }
++#endif
++
++  for(int i=0;i<DTD_SEARCH_PATH_NUM;i++){
+       dtd_path_filename=DTD_SEARCH_PATH[i];
+       dtd_path_filename.append(dtd_filename);
+-      dtd_file.clear();
+-      dtd_file.open(dtd_path_filename.c_str());
++      ifstream dtd_file(dtd_path_filename.c_str());
+       if(!dtd_file){
+ 	message_out(DEBUG,"find_dtd():Unable to open the file "+dtd_path_filename);
+       }
+       else{
+ 	message_out(STATUS,"find_dtd():DTD found: "+dtd_path_filename);
+-	dtd_file.close();
+-	dtd_found=true;
++	return dtd_path_filename;
+       }
+-    }
+   }
+ 
+-  if(dtd_found==false){
+-    message_out(ERROR,"find_dtd():Unable to find the DTD named " + dtd_filename);
+-    dtd_path_filename="";
+-  }
+-  return dtd_path_filename;
++  message_out(ERROR,"find_dtd():Unable to find the DTD named " + dtd_filename);
++  return "";
+ }
+ 
+ 
+Index: lib/ofx_utilities.cpp
+===================================================================
+RCS file: /cvsroot/libofx/libofx/lib/ofx_utilities.cpp,v
+retrieving revision 1.12
+diff -u -r1.12 ofx_utilities.cpp
+--- lib/ofx_utilities.cpp	15 May 2009 14:11:41 -0000	1.12
++++ lib/ofx_utilities.cpp	22 Sep 2009 20:28:41 -0000
+@@ -217,25 +217,29 @@
+ }
+ 
+ 
+-int mkTempFileName(const char *tmpl, char *buffer, unsigned int size) {
+-  const char *tmp_dir;
++std::string get_tmp_dir()
++{
++  // Tries to mimic the behaviour of
++  // http://developer.gnome.org/doc/API/2.0/glib/glib-Miscellaneous-Utility-Functions.html#g-get-tmp-dir
++  char *var;
++  var = getenv("TMPDIR");
++  if (var) return var;
++  var = getenv("TMP");
++  if (var) return var;
++  var = getenv("TEMP");
++  if (var) return var;
++#ifdef OS_WIN32
++  return "C:\\";
++#else
++  return "/tmp";
++#endif
++}
+ 
+-  tmp_dir = getenv ("TMPDIR");
+-  if (!tmp_dir)
+-    tmp_dir = getenv ("TMP");
+-  if (!tmp_dir)
+-    tmp_dir = getenv ("TEMP");
++int mkTempFileName(const char *tmpl, char *buffer, unsigned int size) {
+ 
+-  if (!tmp_dir)
+-    {
+-#ifdef OS_WIN32
+-      tmp_dir = "C:\\";
+-#else  
+-      tmp_dir = "/tmp";
+-#endif	/* !OS_WIN32 */
+-    }
++  std::string tmp_dir = get_tmp_dir();
+ 
+-  strncpy(buffer, tmp_dir, size);
++  strncpy(buffer, tmp_dir.c_str(), size);
+   assert((strlen(buffer)+strlen(tmpl)+2)<size);
+   strcat(buffer, DIRSEP);
+   strcat(buffer, tmpl);
