@@ -888,10 +888,13 @@ function inst_gwenhywfar() {
             else
                 [ -n "$GWENHYWFAR_PATCH" -a -f "$GWENHYWFAR_PATCH" ] && \
                     patch -p1 < $GWENHYWFAR_PATCH
+                # The current patch modifies configure.ac, so we need to call the autotools
+                aclocal -I ${ACLOCAL_FLAGS} -I m4
+                automake
+                autoconf
                 ./configure ${HOST_XCOMPILE} \
                     --with-openssl-includes=$_OPENSSL_UDIR/include \
                     --with-openssl-libs=$_OPENSSL_UDIR/lib \
-                    --with-libgnutls-prefix=$_GNUTLS_UDIR \
                     --with-libgcrypt-prefix=$_GNUTLS_UDIR \
                     --disable-binreloc \
                     --prefix=$_GWENHYWFAR_UDIR \
