@@ -886,12 +886,12 @@ function inst_gwenhywfar() {
                     CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS}" \
                     LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -lintl"
             else
-                [ -n "$GWENHYWFAR_PATCH" -a -f "$GWENHYWFAR_PATCH" ] && \
+                if [ -n "$GWENHYWFAR_PATCH" -a -f "$GWENHYWFAR_PATCH" ] ; then
                     patch -p1 < $GWENHYWFAR_PATCH
-                # The current patch modifies configure.ac, so we need to call the autotools
-                aclocal -I ${ACLOCAL_FLAGS} -I m4
-                automake
-                autoconf
+                    aclocal -I ${ACLOCAL_FLAGS} -I m4
+                    automake
+                    autoconf
+                fi
                 ./configure ${HOST_XCOMPILE} \
                     --with-openssl-includes=$_OPENSSL_UDIR/include \
                     --with-openssl-libs=$_OPENSSL_UDIR/lib \

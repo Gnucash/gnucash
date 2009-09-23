@@ -263,8 +263,8 @@ set_default AQBANKING3 yes
 if [ "$AQBANKING3" != "yes" ]; then
     set_default GWENHYWFAR_URL "$SF_MIRROR/gwenhywfar/gwenhywfar-2.6.2.tar.gz"
 else
-    set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=28&file=01&dummy=gwenhywfar-3.11.0.tar.gz"
-    set_default GWENHYWFAR_PATCH `pwd`/gwenhywfar-3.11.0-patch.diff
+    set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=29&file=01&dummy=gwenhywfar-3.11.1.tar.gz"
+    #set_default GWENHYWFAR_PATCH `pwd`/gwenhywfar-3.11.0-patch.diff
 fi
 set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
 
@@ -274,8 +274,8 @@ set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.23.tar.gz"
 if [ "$AQBANKING3" != "yes" ]; then
     set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.3.3.tar.gz"
 else
-    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=35&file=01&dummy=aqbanking-3.8.3.tar.gz"
-    set_default AQBANKING_PATCH `pwd`/aqbanking-3.8.3-patch.diff
+    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=44&file=01&dummy=aqbanking-4.1.7.tar.gz"
+    #set_default AQBANKING_PATCH `pwd`/aqbanking-4.1.6-patch.diff
 fi
 set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking
 set_default AQBANKING_WITH_QT yes
