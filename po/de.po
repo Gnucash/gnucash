@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-20 22:18+0200\n"
-"PO-Revision-Date: 2009-09-20 22:12+0200\n"
+"PO-Revision-Date: 2009-09-23 22:17+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3967,8 +3967,8 @@ msgid ""
 "'Forward' to start closing the earliest book."
 msgstr ""
 "Die früheste Buchung in diesem Buch ist datiert auf %s. Mit der Auswahl von "
-"oben wird die Buch-Teilung in %d Bücher durchgeführt. Klicken Sie »Vor«, um "
-"mit dem ersten abgeteilten Buch zu beginnen."
+"oben wird die Teilung in %d Bücher durchgeführt. Klicken Sie »Vor«, um mit "
+"dem ersten abgeteilten Buch zu beginnen."
 
 #: ../src/gnome/druid-acct-period.c:290
 #, c-format
@@ -5706,7 +5706,7 @@ msgstr "Wechselkurs bearbeiten"
 
 #: ../src/gnome/glade/register.glade.h:23
 msgid "Edit the exchange rate for the current split"
-msgstr "Den Wechselkurs für die gewählte Buchung bearbeiten"
+msgstr "Den Wechselkurs für den gewählten Buchungsteil bearbeiten"
 
 #: ../src/gnome/glade/register.glade.h:24
 msgid "End:"
@@ -5714,7 +5714,7 @@ msgstr "Ende:"
 
 #: ../src/gnome/glade/register.glade.h:26
 msgid "Erase all splits except the one for this account."
-msgstr "Alle Buchungen löschen, außer jene in diesem Konto."
+msgstr "Alle Buchungsteile löschen, außer jenen in diesem Konto."
 
 #: ../src/gnome/glade/register.glade.h:27
 msgid "Filter register by..."
@@ -5798,7 +5798,7 @@ msgstr "_Alle anzeigen"
 #: ../src/gnome/glade/register.glade.h:46
 #: ../src/gnome/gnc-plugin-page-register.c:281
 msgid "Show all splits in the current transaction"
-msgstr "Alle Buchungen im aktuellen Buchungssatz anzeigen"
+msgstr "Alle Buchungsteile des aktuellen Buchungsatzes anzeigen"
 
 #: ../src/gnome/glade/register.glade.h:47
 #: ../src/gnome/gnc-plugin-page-register.c:296
@@ -6781,7 +6781,7 @@ msgid ""
 "If you want to record a stock price for the split, enter it below. You may "
 "safely leave it blank."
 msgstr ""
-"Wenn Sie einen Wertpapierkurs für die Buchung eingeben wollen, geben Sie den "
+"Wenn Sie einen Wertpapierkurs für die Teilung eingeben wollen, geben Sie den "
 "Kurs unten an. Sie können das Kurseingabefeld auch leer lassen."
 
 #: ../src/gnome/glade/stocks.glade.h:10
@@ -6791,7 +6791,9 @@ msgstr "Neuer _Preis:"
 #: ../src/gnome/glade/stocks.glade.h:11
 msgid ""
 "Select the account for which you want to record a stock split or merger."
-msgstr "Wählen Sie das Konto, für das Sie eine Aktienteilung eingeben möchten."
+msgstr ""
+"Wählen Sie das Konto, für das Sie die Teilung oder den Zusammenschluss "
+"eingeben möchten."
 
 #: ../src/gnome/glade/stocks.glade.h:12
 msgid "Stock Account"
@@ -7723,7 +7725,7 @@ msgid ""
 "This transaction contains reconciled splits. Modifying it is not a good idea "
 "because that will cause your reconciled balance to be off."
 msgstr ""
-"Beachten Sie, dass Sie einen Buchungssatz mit abgeglichenen Buchungen "
+"Beachten Sie, dass Sie einen Buchungssatz mit abgeglichenen Buchungsteilen "
 "löschen würden. Dies bedeutet, dass ihr abgeglichener Saldo verändert wird."
 
 #: ../src/gnome/gnc-split-reg.c:957
@@ -7782,7 +7784,7 @@ msgid ""
 "You would be deleting a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"Beachten Sie, dass Sie einen Buchungssatz mit abgeglichenen Buchungen "
+"Beachten Sie, dass Sie einen Buchungssatz mit abgeglichenen Buchungsteilen "
 "löschen würden. Dies bedeutet, dass ihr abgeglichener Saldo verändert wird."
 
 #: ../src/gnome/gnc-split-reg.c:1405
@@ -8195,8 +8197,8 @@ msgid ""
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
 msgstr ""
-"Dieser Wert enthält die X/Y-Koordinaten für die Bemerkungszeile auf dem "
-"Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
+"Dieser Wert enthält die X/Y-Koordinaten für die Verwendungszweck-Zeile auf "
+"dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:20
 msgid ""
@@ -8938,9 +8940,9 @@ msgid ""
 "reconciled split. Allowing these changes can make it hard to perform future "
 "reconciliations."
 msgstr ""
-"Diese Rückfrage kommt vor dem Speichern von Änderungen in einer "
-"abgeglichenen Buchung. Wenn Sie die Änderungen speichern, kann zukünftiges "
-"Abgleichen erschwert werden."
+"Diese Rückfrage kommt vor dem Speichern von Änderungen in einem "
+"abgeglichenen Buchungsteil. Wenn Sie die Änderungen speichern, kann "
+"zukünftiges Abgleichen erschwert werden."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:16
 msgid ""
@@ -8962,7 +8964,7 @@ msgid ""
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
 "Diese Rückfrage kommt vor dem Löschen einer Buchung, die abgeglichene "
-"Buchungszeilen enthält. Löschen jener Buchung und Buchungszeilen wird den "
+"Buchungsteile enthält. Löschen jener Buchung und Buchungsteile wird den "
 "abgeglichenen Wert im Konto verändern und kann daher zukünftiges Abgleichen "
 "erschweren."
 
@@ -8983,9 +8985,9 @@ msgid ""
 "unreconciled. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
 msgstr ""
-"Diese Rückfrage kommt vor dem Markieren einer abgeglichenen Buchung wieder "
-"als nicht abgeglichen. Die Markierung ändern wird den abgeglichenen Saldo "
-"des Kontos verändern."
+"Diese Rückfrage kommt, wenn ein abgeglichener Buchungsteil wieder als nicht "
+"abgeglichen markiert wird. Das Ändern der Markierung wird den abgeglichenen "
+"Saldo des Kontos verändern."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:22
 msgid ""
@@ -8993,8 +8995,8 @@ msgid ""
 "from a transaction. Doing so will throw off the reconciled value of the "
 "register and can make it hard to perform future reconciliations."
 msgstr ""
-"Diese Rückfrage kommt vor dem Löschen einer abgeglichenen Buchungszeile aus "
-"einer Buchung. Löschen jener Buchungszeile wird den abgeglichenen Wert im "
+"Diese Rückfrage kommt vor dem Löschen eines abgeglichenen Buchungsteils aus "
+"einer Buchung. Löschen jenes Buchungsteils wird den abgeglichenen Wert im "
 "Konto verändern und kann daher zukünftiges Abgleichen erschweren."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:23
@@ -9002,7 +9004,7 @@ msgid ""
 "This dialog is presented before allowing you to remove a split from a "
 "transaction."
 msgstr ""
-"Diese Rückfrage kommt vor dem Löschen von Buchungszeilen einer Buchung."
+"Diese Rückfrage kommt vor dem Löschen von Buchungsteilen einer Buchung."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:24
 msgid ""
@@ -9011,17 +9013,17 @@ msgid ""
 "reconciled value of the register and can make it hard to perform future "
 "reconciliations."
 msgstr ""
-"Diese Rückfrage kommt vor dem Löschen aller Buchungszeilen einer Buchung, "
-"die abgeglichene Buchungszeilen enthält. Löschen jener Buchung und "
-"Buchungszeilen wird den abgeglichenen Wert im Konto verändern und kann daher "
-"zukünftiges Abgleichen erschweren."
+"Diese Rückfrage kommt vor dem Löschen aller Buchungsteile einer Buchung, die "
+"abgeglichene Buchungsteile enthält. Löschen jener Buchung und Buchungsteile "
+"wird den abgeglichenen Wert im Konto verändern und kann daher zukünftiges "
+"Abgleichen erschweren."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:25
 msgid ""
 "This dialog is presented before allowing you to remove all splits from a "
 "transaction."
 msgstr ""
-"Diese Rückfrage kommt vor dem Löschen aller Buchungszeilen aus einer Buchung."
+"Diese Rückfrage kommt vor dem Löschen aller Buchungsteile aus einer Buchung."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:26
 msgid "This dialog is presented when a read-only register is opened."
@@ -9578,13 +9580,13 @@ msgstr ""
 #: ../src/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
 msgstr ""
-"Bitte wählen Sie ein Eigenkapital-Konto, welches alle Erträge der Periode "
+"Bitte wählen Sie ein Eigenkapitalkonto, welches den Gesamtertrag der Periode "
 "enthalten soll."
 
 #: ../src/gnome-utils/dialog-book-close.c:301
 msgid "Please select an Equity account to hold the total Period Expense."
 msgstr ""
-"Bitte wählen Sie ein Eigenkapital-Konto, welches alle Aufwendungen der "
+"Bitte wählen Sie ein Eigenkapitalkonto, welches die Gesamtaufwendungen der "
 "Periode enthalten soll."
 
 #: ../src/gnome-utils/dialog-commodity.c:166
@@ -14993,7 +14995,7 @@ msgstr "GnuCash Kontobezeichnung"
 #: ../src/import-export/qif-import/druid-qif-import.c:2144
 msgid "Enter a name or short description, such as \"Red Hat Stock\"."
 msgstr ""
-"Geben Sie den vollen Namen des Wertpapiers an, z.B. »Deutsche Telekom«."
+"Geben Sie einen Namen oder kurze Beschreibung an, z.B. »Deutsche Telekom«."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2077
 #: ../src/import-export/qif-import/druid-qif-import.c:2146
@@ -15220,6 +15222,18 @@ msgid ""
 "\n"
 "Click \"Forward\" to review the possible matches."
 msgstr ""
+"Falls Sie eine QIF Datei von einer Bank oder einem anderen Finanzinstitut "
+"einlesen, kann es sein, dass gewisse Buchungen schon in ihren GnuCash Konten "
+"gebucht sind. Um Duplikate zu vermeiden, versucht GnuCash die "
+"Übereinstimmungen zu finden. Sie müssen diese aber noch kontrollieren.\n"
+"\n"
+"Auf der nächsten Seite werden Sie eine Liste der eingelesenen Buchungen "
+"sehen. Bei jedem, den Sie auswählen, wird darunter eine Liste der möglichen "
+"Übereinstimmungen angezeigt. Falls Sie eine korrekte Übereinstimmung finden, "
+"klicken Sie diese an. Ihre Auswahl wird mittels eines Häkchen in der "
+"»Passt?«-Spalte bestätigt.\n"
+"\n"
+"Klicken Sie auf »Vor«, um die möglichen Übereinstimmungen zu überprüfen."
 
 #: ../src/import-export/qif-import/qif.glade.h:30
 msgid "Import QIF files"
@@ -15242,6 +15256,22 @@ msgid ""
 "If you don't see your exchange listed, or none of the available choices are "
 "appropriate, you can enter a new one."
 msgstr ""
+"Auf den folgenden Seiten werden Sie nach Informationen bezüglich Aktien, "
+"Investmentfonds und anderen Finanzanlagen gefragt, welche sich in den zu "
+"importierenden QIF-Dateien befinden. GnuCash braucht mehr Information, als "
+"in der QIF-Datei zur Verfügung stehen.\n"
+"\n"
+"Jede Aktie, Investmentfonds oder andere Investition muss einen Namen und "
+"eine Abkürzung haben, zum Beispiel ein Tickersymbol. Weil manchmal "
+"unabhängig von einander zwei Finanzanlagen die gleiche Abkürzung haben, "
+"müssen Sie noch angeben um welche Art von Abkürzung es sich handelt. Sie "
+"können zum Beispiel den Börsenplatz angeben, welcher die Wertpapiere "
+"gelistet hat (NASDAQ, SWX, etc.). Oder sie können auch die Anlageart "
+"auswählen.\n"
+"\n"
+"Falls Sie ihren Börsenplatz nicht aufgelistet sehen oder keine der "
+"aufgeführten Wahlmöglichkeiten zutreffend sind, dann können Sie auch eine "
+"neue eingeben."
 
 #: ../src/import-export/qif-import/qif.glade.h:36
 msgid "Income and Expense categories"
@@ -23794,7 +23824,7 @@ msgstr "Die Adresse (URL) Ihrer Webseite"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7214
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)"
-msgstr "Eine Nummer ihrer Firma (z.B. USt-IdNr.: DE123456789)"
+msgstr "Eine Identifikationsnummer ihrer Firma (z.B. USt-IdNr.: DE123456789)"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7216
