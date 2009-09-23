@@ -1032,7 +1032,8 @@ function inst_aqbanking() {
                 exetype aqbanking-tool.exe console
                 exetype aqhbci-tool.exe console
             else
-                exetype aqhbci-tool3.exe console
+                exetype aqbanking-cli.exe console
+                exetype aqhbci-tool4.exe console
             fi
         qpopd
         ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
