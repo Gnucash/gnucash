@@ -1,0 +1,28 @@
+From ba9cf4b5f7ad999381d9cfa8bf4048ec4afb4b96 Mon Sep 17 00:00:00 2001
+From: christian <christian@5c42a225-8b10-0410-9873-89b7810ad06e>
+Date: Tue, 22 Sep 2009 19:31:39 +0000
+Subject: [PATCH] Add linking of libofxparser.la into ofx plugin again.
+
+Was probably accidentally removed in r1753.
+
+git-svn-id: https://devel.aqbanking.de/svn/aqbanking/trunk@1758 5c42a225-8b10-0410-9873-89b7810ad06e
+---
+ src/plugins/imexporters/ofx/Makefile.am |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/src/plugins/imexporters/ofx/Makefile.am b/src/plugins/imexporters/ofx/Makefile.am
+index ca89db1..5ea7496 100644
+--- a/src/plugins/imexporters/ofx/Makefile.am
++++ b/src/plugins/imexporters/ofx/Makefile.am
+@@ -18,7 +18,7 @@ imexporterplugin_LTLIBRARIES=ofx.la
+ imexporterplugin_DATA=ofx.xml
+ 
+ ofx_la_SOURCES=ofx.c
+-ofx_la_LIBADD=$(aqbanking_internal_libs) $(gwenhywfar_libs)
++ofx_la_LIBADD = parser/libofxparser.la $(aqbanking_internal_libs) $(gwenhywfar_libs)
+ ofx_la_LDFLAGS = -no-undefined @STRIPALL@ -module -avoid-version
+ 
+ 
+-- 
+1.6.1.rc3.51.g5832d
+
