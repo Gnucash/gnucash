@@ -57,7 +57,7 @@ libgncmod_generic_import_gnc_module_init(int refcount)
   if (!refcount) {
     gnc_import_format_gnome_register();
     gnc_preferences_add_to_page("generic-import.glade", "matcher_prefs",
-				"Online Banking");
+				_("Online Banking"));
 
   }
 

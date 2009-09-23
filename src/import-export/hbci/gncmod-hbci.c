@@ -64,7 +64,7 @@ libgncmod_hbci_gnc_module_init(int refcount)
   gnc_plugin_hbci_create_plugin();
 
   gnc_preferences_add_to_page("hbciprefs.glade", "hbci_prefs",
-			      "Online Banking");
+			      _("Online Banking"));
 
   /* Initialize gwen library */
   GWEN_Init();

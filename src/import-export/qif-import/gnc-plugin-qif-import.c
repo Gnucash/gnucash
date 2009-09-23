@@ -172,5 +172,5 @@ gnc_plugin_qif_import_create_plugin (void)
 
 	gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), plugin);
 	gnc_preferences_add_to_page ("qif.glade", "prefs_table",
-				     "Online Banking");
+				     _("Online Banking"));
 }
