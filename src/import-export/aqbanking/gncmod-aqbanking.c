@@ -28,6 +28,7 @@
  */
 
 #include "config.h"
+#include <glib/gi18n.h>
 
 #include "gnc-ab-utils.h"
 #include "gnc-module.h"
