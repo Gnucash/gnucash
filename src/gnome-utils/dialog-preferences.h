@@ -54,6 +54,9 @@
     selected) feel free to go ahead and add your own callbacks to the
     glade file.  This code will connect any callbacks that exist in
     the glade file.
+
+    The tab names are user-visible strings, so they must be translated
+    each time the tab name is accessed or specified.
 */
 
 #ifndef GNC_DIALOG_PREFERENCES_H
@@ -70,7 +73,7 @@
  *  
  *  @param widgetname The name of the widget to extract from the glade file.
  *  
- *  @param tabname The name this page of preferences should have in
+ *  @param tabname The (translated!) name this page of preferences should have in
  *  the dialog notebook. */
 void gnc_preferences_add_page (const gchar *filename,
 			       const gchar *widgetname,
@@ -88,7 +91,7 @@ void gnc_preferences_add_page (const gchar *filename,
  *  
  *  @param widgetname The name of the widget to extract from the glade file.
  *  
- *  @param tabname The name this page of preferences should have in
+ *  @param tabname The (translated!) name this page of preferences should have in
  *  the dialog notebook. */
 void gnc_preferences_add_to_page (const gchar *filename,
 				  const gchar *widgetname,
