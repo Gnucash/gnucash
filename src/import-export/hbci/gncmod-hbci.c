@@ -9,6 +9,7 @@
 
 #include <gmodule.h>
 #include <libguile.h>
+#include <glib/gi18n.h>
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"

@@ -7,6 +7,7 @@
 #include "config.h"
 #include <gmodule.h>
 #include <libguile.h>
+#include <glib/gi18n.h>
 
 #include "gnc-import-format-gnome.h"
 #include "dialog-preferences.h"
