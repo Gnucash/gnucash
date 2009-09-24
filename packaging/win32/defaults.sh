@@ -264,7 +264,7 @@ if [ "$AQBANKING3" != "yes" ]; then
     set_default GWENHYWFAR_URL "$SF_MIRROR/gwenhywfar/gwenhywfar-2.6.2.tar.gz"
 else
     set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=29&file=01&dummy=gwenhywfar-3.11.1.tar.gz"
-    #set_default GWENHYWFAR_PATCH `pwd`/gwenhywfar-3.11.0-patch.diff
+    set_default GWENHYWFAR_PATCH `pwd`/gwenhywfar-3.11.1-patch.diff
 fi
 set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
 

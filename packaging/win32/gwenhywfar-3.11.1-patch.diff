@@ -1,0 +1,113 @@
+From 1919a8e3c51e8c71f2c92a944cd07dc4e99a1265 Mon Sep 17 00:00:00 2001
+From: christian <christian@70169cfe-8b10-0410-8925-dcb4b91034d8>
+Date: Thu, 24 Sep 2009 20:04:08 +0000
+Subject: [PATCH] Fix GWEN_Url_fromString for windows paths which include a drive letter.
+
+Also, gracefully return NULL instead of abort on unknown port number.
+Also, improve error message output. Also, confirm this to work
+without breaking anything by adding several more unittests for
+this function.
+
+git-svn-id: https://devel.aqbanking.de/svn/gwenhywfar/trunk@1601 70169cfe-8b10-0410-8925-dcb4b91034d8
+---
+ checks/check_urlfns.c |  105 +++++++++++++++++++++++++++++++++++++++++++++---
+ src/parser/urlfns.c   |   33 ++++++++++++---
+ 2 files changed, 124 insertions(+), 14 deletions(-)
+
+diff --git a/src/parser/urlfns.c b/src/parser/urlfns.c
+index 363cdff..9a5e1d1 100644
+--- a/src/parser/urlfns.c
++++ b/src/parser/urlfns.c
+@@ -18,6 +18,7 @@
+ #include "url_p.h"
+ #include "urlfns.h"
+ #include <gwenhywfar/debug.h>
++#include <ctype.h> // for isalpha()
+ 
+ 
+ GWEN_URL *GWEN_Url_fromString(const char *str) {
+@@ -25,6 +26,7 @@ GWEN_URL *GWEN_Url_fromString(const char *str) {
+   GWEN_DB_NODE *dbVars;
+   const char *s;
+   const char *p;
++  int starts_with_drive_letter = 0;
+ 
+   url=GWEN_Url_new();
+   dbVars=GWEN_DB_Group_new("vars");
+@@ -33,8 +35,17 @@ GWEN_URL *GWEN_Url_fromString(const char *str) {
+   dbVars=0;
+ 
+   s=str;
++
++  /* Check for a drive letter, which occurs on windows, but this will
++     always be one single alpha character followed by a colon followed
++     by a directory separator. */
++  if (s && isalpha(s[0]) && s[1] == ':'
++      && (s[2] == '/' || s[2] == '\\')) {
++    starts_with_drive_letter = 1;
++  }
++
+   /* read protocol (if any) */
+-  p=strchr(s, ':');
++  p = starts_with_drive_letter ? s : strchr(s, ':');
+   if (p) {
+     if (p[1]=='/' && p[2]=='/') {
+       char *buf;
+@@ -51,7 +62,7 @@ GWEN_URL *GWEN_Url_fromString(const char *str) {
+   }
+ 
+   if (!*s) {
+-    DBG_ERROR(GWEN_LOGDOMAIN, "No server given");
++    DBG_ERROR(GWEN_LOGDOMAIN, "No server or path given in url \"%s\"", str);
+     GWEN_Url_free(url);
+     return 0;
+   }
+@@ -83,14 +94,21 @@ GWEN_URL *GWEN_Url_fromString(const char *str) {
+     s=p+1;
+   }
+ 
++  /* Do we now have a drive letter? (After the protocol?) */
++  if (!starts_with_drive_letter
++      && s && isalpha(s[0]) && s[1] == ':'
++      && (s[2] == '/' || s[2] == '\\')) {
++    starts_with_drive_letter = 1;
++  }
++
+   /* read server */
+   if (!*s) {
+-    DBG_ERROR(GWEN_LOGDOMAIN, "No server given");
++    DBG_ERROR(GWEN_LOGDOMAIN, "No server given in url \"%s\"", str);
+     GWEN_Url_free(url);
+     return 0;
+   }
+   p=s;
+-  while(*p && *p!=':' && *p!='/' && *p!='?')
++  while(!starts_with_drive_letter && *p && *p!=':' && *p!='/' && *p!='?')
+     p++;
+   if (p!=s) {
+     char *buf;
+@@ -120,9 +138,10 @@ GWEN_URL *GWEN_Url_fromString(const char *str) {
+       memmove(buf, s, p-s+1);
+       buf[p-s]=0;
+       if (sscanf(buf, "%d", &port)!=1) {
+-        DBG_ERROR(GWEN_LOGDOMAIN, "Bad port (%s)", buf);
++        DBG_ERROR(GWEN_LOGDOMAIN, "Bad port (%s) in url \"%s\"", buf, str);
+         free(buf);
+-        abort();
++	GWEN_Url_free(url);
++	return 0;
+       }
+       url->port=port;
+       free(buf);
+@@ -139,7 +158,7 @@ GWEN_URL *GWEN_Url_fromString(const char *str) {
+   }
+ 
+   /* get path */
+-  if (*s=='/') {
++  if (starts_with_drive_letter || *s=='/') {
+     p=s;
+     while(*p && *p!='?')
+       p++;
+-- 
+1.6.1.rc3.51.g5832d
+
