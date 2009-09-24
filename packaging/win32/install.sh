@@ -888,9 +888,9 @@ function inst_gwenhywfar() {
             else
                 if [ -n "$GWENHYWFAR_PATCH" -a -f "$GWENHYWFAR_PATCH" ] ; then
                     patch -p1 < $GWENHYWFAR_PATCH
-                    aclocal -I ${ACLOCAL_FLAGS} -I m4
-                    automake
-                    autoconf
+                    #aclocal -I m4 ${ACLOCAL_FLAGS}
+                    #automake
+                    #autoconf
                 fi
                 ./configure ${HOST_XCOMPILE} \
                     --with-openssl-includes=$_OPENSSL_UDIR/include \
