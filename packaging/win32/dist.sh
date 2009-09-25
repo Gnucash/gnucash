@@ -292,6 +292,7 @@ else
  dist_gmp
 fi
 dist_gwenhywfar
+dist_ktoblzcheck
 dist_aqbanking
 dist_libdbi
 dist_webkit
