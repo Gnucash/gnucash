@@ -77,7 +77,7 @@ typedef struct GncTreeViewAccountPrivate
 
     gnc_tree_view_account_filter_func filter_fn;
     gpointer                          filter_data;
-    GtkDestroyNotify                  filter_destroy;
+    GtkFunction                       filter_destroy;
 
   GtkTreeViewColumn *name_column;
   GtkTreeViewColumn *code_column;
@@ -889,7 +889,7 @@ void
 gnc_tree_view_account_set_filter (GncTreeViewAccount *view,
 				  gnc_tree_view_account_filter_func func,
 				  gpointer data,
-				  GtkDestroyNotify destroy)
+				  GtkFunction destroy)
 {
   GncTreeViewAccountPrivate *priv;
 

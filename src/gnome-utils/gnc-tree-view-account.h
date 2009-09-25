@@ -283,7 +283,7 @@ typedef gboolean (*gnc_tree_view_account_filter_func)(Account *account, gpointer
 void gnc_tree_view_account_set_filter (GncTreeViewAccount *account_view, 
 				       gnc_tree_view_account_filter_func func,
 				       gpointer data,
-				       GtkDestroyNotify destroy);
+				       GtkFunction destroy);
 
 /*  This is a convenient filter function for use with
  *  gnc_tree_view_account_set_filter() and the functions in
