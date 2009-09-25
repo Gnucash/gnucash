@@ -168,6 +168,8 @@ gnc_item_edit_update_offset (GncItemEdit *item_edit, TextDrawInfo *info)
 static void
 gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *info)
 {
+        const char LINE_FEED = 0x0a;
+
         SheetBlock *block;
         SheetBlockStyle *style;
         GtkEditable *editable;
@@ -178,7 +180,7 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
 
         int xd, yd, wd, hd, dx, dy;
         int start_pos, end_pos;
-        int toggle_space, cursor_pos, cursor_byte_pos;
+        int toggle_space, cursor_pos, cursor_byte_pos, pos, loc;
         const gchar *text;
 	PangoRectangle strong_pos;
 	PangoAttribute *attr;
@@ -213,6 +215,21 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         cursor_byte_pos = g_utf8_offset_to_pointer (text, cursor_pos) - text;
 
 	gtk_editable_get_selection_bounds (editable, &start_pos, &end_pos);
+
+        if (cursor_pos == cursor_byte_pos) {
+        /* display at character after LF before cursor_pos */
+        /* (but not for UTF-8, which is messier to implement) */
+            for (pos = 0, loc = 0; pos <= start_pos; pos++) {
+                if ((pos > 0) && (text[pos-1] == LINE_FEED)) {
+                        loc = pos;
+                }
+            }
+            text += loc;
+            start_pos -= loc;
+            end_pos -= loc;
+            cursor_pos -= loc;
+            cursor_byte_pos = g_utf8_offset_to_pointer (text, cursor_pos) - text;
+        }
 
 	info->layout = gtk_widget_create_pango_layout (GTK_WIDGET (item_edit->sheet), text);
 
