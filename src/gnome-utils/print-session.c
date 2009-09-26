@@ -26,7 +26,7 @@
 #    include <gtk/gtkprintoperation.h>
 #endif
 
-#ifndef GTKHTML_USES_GTKPRINT
+#if !WANT_WEBKIT && !defined(GTKHTML_USES_GTKPRINT)
 #    include <gnome.h>
 #    include <glib/gi18n.h>
 #    include <libgnomeprint/gnome-font.h>
@@ -126,7 +126,7 @@ gnc_ui_page_setup(GtkWindow *parent)
 #endif  /* HAVE_GTK_2_10 */
 
 
-#ifndef GTKHTML_USES_GTKPRINT
+#if !WANT_WEBKIT && !defined(GTKHTML_USES_GTKPRINT)
 static void gnc_print_session_fontsel_cb(GtkButton *widget, gpointer user_data)
 {
   PrintSession *ps = (PrintSession *)user_data;

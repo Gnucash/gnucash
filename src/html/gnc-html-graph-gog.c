@@ -40,7 +40,7 @@
 #else
 #    include <goffice/graph/gog-renderer-pixbuf.h>
 #endif
-#ifndef GTKHTML_USES_GTKPRINT
+#if !WANT_WEBKIT && !defined(GTKHTML_USES_GTKPRINT)
 #    include <goffice/graph/gog-renderer-gnome-print.h>
 #endif
 /* everything inside the following #ifndef can be safely removed when gnucash

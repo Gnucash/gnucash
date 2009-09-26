@@ -66,7 +66,7 @@ void gnc_ui_page_setup(GtkWindow *parent);
 #endif  /* HAVE_GTK_2_10 */
 
 
-#ifndef GTKHTML_USES_GTKPRINT
+#if !WANT_WEBKIT && !defined(GTKHTML_USES_GTKPRINT)
 
 #include <libgnomeprint/gnome-print.h>
 #include <libgnomeprint/gnome-print-job.h>
