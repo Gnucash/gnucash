@@ -74,8 +74,10 @@ typedef struct {
 
 GtkWidget *gnc_general_search_new            (GNCIdTypeConst type,
 					      const char *label,
+					      gboolean text_editable,
 					      GNCSearchCB search_cb,
-					      gpointer user_data);
+					      gpointer user_data,
+					      QofBook *book);
 
 void	   gnc_general_search_allow_clear    (GNCGeneralSearch *gsl,
 					      gboolean allow_clear);

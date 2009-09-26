@@ -64,13 +64,16 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
   GNCSearchCB search_cb = NULL;
   const char *type_name = NULL;
   const char *text = NULL;
+  gboolean text_editable = FALSE;
 
   switch (type) {
   case GNCSEARCH_TYPE_SELECT:
     text = _("Select...");
+    text_editable = TRUE;
     break;
   case GNCSEARCH_TYPE_EDIT:
     text = _("Edit...");
+    text_editable = FALSE;
   };
 
   switch (owner->type) {
@@ -115,7 +118,7 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
     return NULL;
   }
 
-  edit = gnc_general_search_new (type_name, text, search_cb, book);
+  edit = gnc_general_search_new (type_name, text, text_editable, search_cb, book, book);
   if (!edit)
     return NULL;
 
@@ -251,7 +254,7 @@ GtkWidget * gnc_invoice_select_create (GtkWidget *hbox, QofBook *book,
   isi->label = label;
 
   edit = gnc_general_search_new (GNC_INVOICE_MODULE_NAME, _("Select..."),
-				 gnc_invoice_select_search_cb, isi);
+				 TRUE, gnc_invoice_select_search_cb, isi, isi->book);
   if (!edit) {
     g_free(isi);
     return NULL;

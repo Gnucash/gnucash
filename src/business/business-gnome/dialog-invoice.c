@@ -1110,8 +1110,8 @@ gnc_invoice_update_job_choice (InvoiceWindow *iw)
     case NEW_INVOICE:
     case MOD_INVOICE:
       iw->job_choice =
-	gnc_general_search_new (GNC_JOB_MODULE_NAME, _("Select..."),
-				gnc_invoice_select_job_cb, iw);
+	gnc_general_search_new (GNC_JOB_MODULE_NAME, _("Select..."), TRUE,
+				gnc_invoice_select_job_cb, iw, iw->book);
 
       gnc_general_search_set_selected (GNC_GENERAL_SEARCH (iw->job_choice),
 				       gncOwnerGetJob (&iw->job));
@@ -1181,8 +1181,8 @@ gnc_invoice_update_proj_job (InvoiceWindow *iw)
       iw->proj_job_choice = NULL;
     } else {
       iw->proj_job_choice =
-	gnc_general_search_new (GNC_JOB_MODULE_NAME, _("Select..."),
-				gnc_invoice_select_proj_job_cb, iw);
+	gnc_general_search_new (GNC_JOB_MODULE_NAME, _("Select..."), TRUE,
+				gnc_invoice_select_proj_job_cb, iw, iw->book);
 
       gnc_general_search_set_selected (GNC_GENERAL_SEARCH(iw->proj_job_choice),
 				       gncOwnerGetJob (&iw->proj_job));
