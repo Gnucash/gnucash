@@ -55,9 +55,12 @@ static QofLogModule log_module = GNC_MOD_LEDGER;
 /* Flag for determining colorization of negative amounts. */
 static gboolean use_red_for_negative = TRUE;
 
-
+/* This returns the balance at runtime of a register at the split defined by virt_loc regardless of
+ * sort order. It always assumes that the first txn in the register is starting from a 0 balance. 
+ * If gboolean subaccounts is TRUE, then it will return the total balance of the parent account
+ * and all its subaccounts. FALSE will return the balance of just the parent account of the register. */
 static gnc_numeric
-gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data)
+gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data, gboolean subaccounts)
 {
   SplitRegister *reg = user_data;
   Split *split;
@@ -68,8 +71,6 @@ gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data)
   GList *node, *children, *child;
   int i, row;
 
-  /* This function calculates the register balance for a particular split at runtime.
-   * It works regardless of the sort order. */
   balance = gnc_numeric_zero();
 
     /* Return NULL if this is a blank transaction. */
@@ -82,9 +83,13 @@ gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data)
     if (!trans)
       return gnc_numeric_zero();
 
-    /* Get a list of all subaccounts for matching */
-    children = gnc_account_get_descendants(gnc_split_register_get_default_account(reg));
-    children = g_list_append(children, gnc_split_register_get_default_account(reg));
+    /* Get a list of accounts for matching */
+    if (subaccounts) {
+      children = gnc_account_get_descendants(gnc_split_register_get_default_account(reg));
+      children = g_list_append(children, gnc_split_register_get_default_account(reg));
+    } else
+      account = gnc_split_register_get_default_account(reg);
+      
 
     /* Get the row number we're on, then start with the first row. */
     row = virt_loc.vcell_loc.virt_row;
@@ -100,15 +105,20 @@ gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data)
         Split *secondary = node->data;
         i++;
 
-        /* Add up the splits that belong to the transaction if they are
-         * from the lead account or one of the subaccounts. */
-        account = xaccSplitGetAccount (secondary);
+        if (subaccounts) {
+          /* Add up the splits that belong to the transaction if they are
+           * from the lead account or one of the subaccounts. */
+          account = xaccSplitGetAccount (secondary);
 
-        for (child = children; child; child = child->next) {
-          if (account == child->data) {
-            balance = gnc_numeric_add_fixed(balance, xaccSplitGetAmount(secondary));
-            break;
+          for (child = children; child; child = child->next) {
+            if (account == child->data) {
+              balance = gnc_numeric_add_fixed(balance, xaccSplitGetAmount(secondary));
+              break;
+            }
           }
+        } else {
+          if ( account == xaccSplitGetAccount(secondary) )
+            balance = gnc_numeric_add_fixed( balance, xaccSplitGetAmount(secondary) );
         }
       }
       virt_loc.vcell_loc.virt_row+=i;
@@ -464,7 +474,7 @@ gnc_split_register_get_balance_fg_color (VirtualLocation virt_loc,
   if (gnc_cell_name_equal (cell_name, BALN_CELL))
     balance = xaccSplitGetBalance (split);
   else if (gnc_cell_name_equal (cell_name, RBALN_CELL))
-    balance = gnc_split_register_get_rbaln (virt_loc,user_data);
+    balance = gnc_split_register_get_rbaln (virt_loc,user_data, TRUE);
   else
     balance = get_trans_total_balance (reg, xaccSplitGetParent (split));
 
@@ -1615,7 +1625,7 @@ gnc_split_register_get_rbaln_entry (VirtualLocation virt_loc,
   if (!trans)
     return NULL;
 
-  balance = gnc_split_register_get_rbaln (virt_loc,user_data);
+  balance = gnc_split_register_get_rbaln (virt_loc,user_data, TRUE);
 
   account = xaccSplitGetAccount (split);
   if (!account)
