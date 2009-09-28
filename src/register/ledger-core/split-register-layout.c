@@ -268,7 +268,10 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         gnc_table_layout_set_cell (layout, curs, DESC_CELL,  0, 2);
         gnc_table_layout_set_cell (layout, curs, TDEBT_CELL, 0, 5);
         gnc_table_layout_set_cell (layout, curs, TCRED_CELL, 0, 6);
-        gnc_table_layout_set_cell (layout, curs, RBALN_CELL, 0, 7);
+        if (!reg->is_template)
+        {
+          gnc_table_layout_set_cell (layout, curs, RBALN_CELL, 0, 7);
+        }
         gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 8);
 
         curs_last = curs;
