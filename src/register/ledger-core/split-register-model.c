@@ -66,9 +66,10 @@ gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data, gboo
   Split *split;
   SRInfo *info = gnc_split_register_get_info (reg);
   gnc_numeric value = gnc_numeric_zero(), balance = gnc_numeric_zero();
-  Account *account;
+  Account *account = NULL;
   Transaction *trans;
-  GList *node, *children, *child;
+  GList *node, *child;
+  GList *children = NULL;
   int i, row;
 
   balance = gnc_numeric_zero();
