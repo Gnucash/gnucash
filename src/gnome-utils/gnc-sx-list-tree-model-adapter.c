@@ -32,6 +32,7 @@
 
 #include "config.h"
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <glib-object.h>
 #include "gnc-sx-instance-model.h"
 #include "gnc-sx-list-tree-model-adapter.h"
@@ -482,7 +483,7 @@ _format_conditional_date(GDate *date, char *date_buf, int buf_max_length)
 {
     if (date == NULL || !g_date_valid(date))
     {
-        g_stpcpy(date_buf, "never");
+	g_stpcpy(date_buf, _("never"));
     }
     else
     {
