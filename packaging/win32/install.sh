@@ -892,9 +892,8 @@ function inst_gwenhywfar() {
                     #automake
                     #autoconf
                 fi
+                # Note: gwenhywfar-3.x and higher don't use openssl anymore.
                 ./configure ${HOST_XCOMPILE} \
-                    --with-openssl-includes=$_OPENSSL_UDIR/include \
-                    --with-openssl-libs=$_OPENSSL_UDIR/lib \
                     --with-libgcrypt-prefix=$_GNUTLS_UDIR \
                     --disable-binreloc \
                     --prefix=$_GWENHYWFAR_UDIR \
