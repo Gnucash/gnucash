@@ -242,7 +242,7 @@ set_default INNO_DIR $GLOBAL_DIR\\inno
 set_default HH_URL "http://download.microsoft.com/download/OfficeXPProf/Install/4.71.1015.0/W98NT42KMe/EN-US/HTMLHELP.EXE"
 set_default HH_DIR $GLOBAL_DIR\\hh
 
-set_default WEBKIT_URL "http://www.gnucash.org/pub/gnucash/sources/unstable/2.3.x/webkit-1.1.5-win32.zip"
+set_default WEBKIT_URL "$SF_MIRROR/gnucash/webkit-1.1.5-win32.zip"
 set_default WEBKIT_DIR $GLOBAL_DIR\\webkit-1.1.5
 
 set_default SVN_URL "http://subversion.tigris.org/files/documents/15/35379/svn-1.4.2-setup.exe"
@@ -287,13 +287,13 @@ set_default SQLITE3_DIR $GLOBAL_DIR\\sqlite3
 set_default MYSQL_LIB_URL "http://mirror.csclub.uwaterloo.ca/mysql/Downloads/Connector-C/mysql-connector-c-noinstall-6.0.1-win32.zip"
 set_default MYSQL_LIB_DIR $GLOBAL_DIR\\mysql
 set_default LIBMYSQL_DEF `pwd`/libmysql.def
-set_default PGSQL_LIB_URL "http://www.gnucash.org/pub/gnucash/sources/unstable/2.3.x/pgsql-win32.tar.gz"
+set_default PGSQL_LIB_URL "$SF_MIRROR/gnucash/pgsql-win32-2.tar.gz"
 set_default PGSQL_DIR $GLOBAL_DIR\\pgsql
-set_default LIBDBI_URL "http://downloads.sourceforge.net/libdbi/libdbi-0.8.3.tar.gz"
+set_default LIBDBI_URL "$SF_MIRROR/libdbi/libdbi-0.8.3.tar.gz"
 set_default LIBDBI_DIR $GLOBAL_DIR\\libdbi
 set_default LIBDBI_PATCH `pwd`/libdbi-0.8.3.patch
 set_default LIBDBI_PATCH2 `pwd`/libdbi-dbd_helper.c.patch
-set_default LIBDBI_DRIVERS_URL "http://downloads.sourceforge.net/libdbi-drivers/libdbi-drivers-0.8.3-1.tar.gz"
+set_default LIBDBI_DRIVERS_URL "$SF_MIRROR/libdbi-drivers/libdbi-drivers-0.8.3-1.tar.gz"
 set_default LIBDBI_DRIVERS_DIR $GLOBAL_DIR\\libdbi-drivers
 set_default LIBDBI_DRIVERS_PATCH `pwd`/libdbi-drivers-dbd_sqlite3.c.patch
 set_default LIBDBI_DRIVERS_PATCH2 `pwd`/libdbi-drivers-Makefile.in.patch
