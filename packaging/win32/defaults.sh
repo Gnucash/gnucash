@@ -138,7 +138,7 @@ set_default GMP_ABI 32
 set_default GMP_DIR $GLOBAL_DIR\\gmp
 
 set_default GUILE_URL "http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
-set_default SLIB_URL "http://groups.csail.mit.edu/mac/ftpdir/scm/slib-3b2.zip"
+set_default SLIB_URL "http://swiss.csail.mit.edu/ftpdir/scm/OLD/slib3a3.zip"
 set_default GUILE_DIR $GLOBAL_DIR\\guile
 
 set_default OPENSSL_URL "http://www.openssl.org/source/openssl-0.9.8j.tar.gz"
