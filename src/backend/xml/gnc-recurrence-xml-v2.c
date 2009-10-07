@@ -143,7 +143,16 @@ recurrence_to_dom_tree(const gchar *tag, const Recurrence *r)
     d = recurrenceGetDate(r);
     xmlAddChild(n, gdate_to_dom_tree(recurrence_start, &d));
     wadj = recurrenceGetWeekendAdjust(r);
-    xmlAddChild(n, text_to_dom_tree(recurrence_weekend_adj,
-                                    recurrenceWeekendAdjustToString(wadj)));
+    if (wadj != WEEKEND_ADJ_NONE)
+    {
+      /* In r17725 and r17751, I introduced this extra XML child
+	 element, but this means a gnucash-2.2.x cannot read the SX
+	 recurrence of a >=2.3.x file anymore, which is bad. In order
+	 to improve this broken backward compatibility for most of the
+	 cases, we don't write out this XML element as long as it is
+	 only "none". */
+      xmlAddChild(n, text_to_dom_tree(recurrence_weekend_adj,
+				      recurrenceWeekendAdjustToString(wadj)));
+    }
     return n;
 }
