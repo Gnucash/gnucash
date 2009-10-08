@@ -857,13 +857,17 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 
         gnc_resume_gui_refresh ();
 
-        /* now move to the non-empty amount column */
-        amount = xaccSplitGetAmount (blank_split);
-        cell_name = (gnc_numeric_negative_p (amount)) ? CRED_CELL : DEBT_CELL;
-
-        if (gnc_table_get_current_cell_location (reg->table, cell_name,
-                                                 &new_virt_loc))
-          *p_new_virt_loc = new_virt_loc;
+        /* now move to the non-empty amount column unless config setting says not */
+        if ( !gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
+				  "tab_includes_transfer_on_memorised", NULL) )
+        {
+          amount = xaccSplitGetAmount (blank_split);
+          cell_name = (gnc_numeric_negative_p (amount)) ? CRED_CELL : DEBT_CELL;
+  
+          if (gnc_table_get_current_cell_location (reg->table, cell_name,
+                                                   &new_virt_loc))
+            *p_new_virt_loc = new_virt_loc;
+        }
       }
 
     break;

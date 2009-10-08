@@ -351,6 +351,18 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/register/tab_includes_transfer_on_memorised</key>
+      <applyto>/apps/gnucash/general/register/tab_includes_transfer_on_memorised</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Move to Transfer field when memorised transaction auto filled</short>
+        <long>If active then after a memorised transaction is automatically filled in the cursor will move to the Transfer field. If not active then it skips to the value field.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/register/use_new_window</key>
       <applyto>/apps/gnucash/general/register/use_new_window</applyto>
       <owner>gnucash</owner>
