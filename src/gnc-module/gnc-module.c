@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gmodule.h>
-#include <guile/gh.h>
 #include <sys/types.h>
 #include <dirent.h>
 
