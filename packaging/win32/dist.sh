@@ -249,6 +249,7 @@ function finish() {
     cp $_INSTALL_UDIR/bin/redirect.exe $DIST_UDIR/libexec/gconfd-2.exe
 
     if [ "$AQBANKING_WITH_QT" = "yes" ]; then
+        assert_one_dir ${DIST_UDIR}/lib/aqbanking/plugins/*/wizards
         _qt3_wizard_path=`ls ${DIST_UDIR}/lib/aqbanking/plugins/*/wizards/qt3-wizard.exe` 
         mv ${_qt3_wizard_path} $DIST_UDIR/bin
         cp $_INSTALL_UDIR/bin/redirect.exe ${_qt3_wizard_path}
