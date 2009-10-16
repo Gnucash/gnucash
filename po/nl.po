@@ -7,19 +7,20 @@
 # Jeroen ten Berge <twinbit@home.nl>, 2004.
 # Benno Schulenberg <benno@vertaalt.nl>, 2007.
 # Erwin Poeze <erwin.poeze@gmail.com>, 2009.
+# Mark Haanen <i18n@haanen.net>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.3.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-08-28 20:54-0400\n"
-"PO-Revision-Date: 2009-09-15 16:50+0100\n"
-"Last-Translator: Erwin Poeze <erwin.poeze@gmail.com>\n"
+"PO-Revision-Date: 2009-10-16 21:51+0200\n"
+"Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 0.3\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:633
 msgid "Illegal variable in expression."
@@ -82,11 +83,11 @@ msgstr "b"
 #. Translators: Please only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:552
 msgid "void:v"
-msgstr "o"
+msgstr "d"
 
 #: ../src/app-utils/gnc-ui-util.c:593 ../src/gnome/dialog-chart-export.c:44
 msgid "Opening Balances"
-msgstr "Openingsbalansen"
+msgstr "Openingssaldi"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
@@ -115,7 +116,7 @@ msgstr "Eigen vermogen"
 #: ../src/gnome/druid-hierarchy.c:922 ../src/gnome/glade/account.glade.h:41
 #: ../src/gnome-utils/dialog-account.c:273
 msgid "Opening Balance"
-msgstr "Openingsbalans"
+msgstr "Openingssaldo"
 
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/register.scm
@@ -358,7 +359,7 @@ msgstr "Factuur"
 #: ../intl-scm/guile-strings.c:3904 ../intl-scm/guile-strings.c:3926
 #: ../intl-scm/guile-strings.c:6750
 msgid "Expense"
-msgstr "Uitgaven"
+msgstr "Kosten"
 
 #. Set memo.  action?
 #: ../src/business/business-core/gncInvoice.c:1183
@@ -2176,7 +2177,7 @@ msgstr "Nieuwe _onkostendeclaratie..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:207
 msgid "Open the New Expense Voucher dialog"
-msgstr "Venster 'Nieuwe onkostendeclaratie' openen"
+msgstr "Het 'Nieuwe onkostendeclaratie'-venster openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:209
 msgid "Find Expense _Voucher..."
@@ -2184,7 +2185,7 @@ msgstr "Onkostendeclaratie _zoeken..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:210
 msgid "Open the Find Expense Voucher dialog"
-msgstr "Venster 'Onkostendeclaratie zoeken' openen"
+msgstr "Het 'Onkostendeclaratie zoeken'-venster openen"
 
 #. Other menu items
 #: ../src/business/business-gnome/gnc-plugin-business.c:217
@@ -2783,7 +2784,7 @@ msgstr "Opbrengstenrekening"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:60
 msgid "Expense Account"
-msgstr "Uitgavenrekening"
+msgstr "Kostenrekening"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -2907,7 +2908,7 @@ msgstr "Factureerbaar?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:528
 msgid "Enter the income/expense account for the Entry, or choose one from the list"
-msgstr "Geef de opbrengsten/uitgavenrekening op voor de boeking, of kies er een uit de lijst"
+msgstr "Geef de opbrengsten-/kostenrekening op voor de boeking, of kies er een uit de lijst"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:541
 msgid "Enter the type of Entry"
@@ -3096,7 +3097,7 @@ msgstr "Bank"
 
 #: ../src/engine/Account.c:3711
 msgid "Asset"
-msgstr "Activa"
+msgstr "Activum"
 
 #: ../src/engine/Account.c:3712
 msgid "Credit Card"
@@ -3104,7 +3105,7 @@ msgstr "Creditcard"
 
 #: ../src/engine/Account.c:3713
 msgid "Liability"
-msgstr "Passiva"
+msgstr "Passivum"
 
 #: ../src/engine/Account.c:3714
 msgid "Stock"
@@ -3310,12 +3311,12 @@ msgstr "Splitsen"
 
 #: ../src/engine/Transaction.c:1700
 msgid "Voided transaction"
-msgstr ""
+msgstr "Doorgehaalde transactie"
 
 #. Dirtying taken care of by SetReadOnly
 #: ../src/engine/Transaction.c:1711
 msgid "Transaction Voided"
-msgstr "Transactie geleegd"
+msgstr "Transactie doorgehaald"
 
 #: ../src/gnome/dialog-chart-export.c:233
 msgid "Export Chart of Accounts to QSF XML"
@@ -4255,7 +4256,7 @@ msgid ""
 "\n"
 "Click 'Cancel'  if you do not wish to create any new accounts now."
 msgstr ""
-"Deze assistent helpt u met het aanmaken van een aantal GnuCashrekeningen voor uw activa (zoals investeringen, rekeningen-courant of spaarrekeningen), passiva (zoals leningen) en verschillende soorten opbrengsten- en uitgavenrekeningen. \n"
+"Deze assistent helpt u met het aanmaken van een GnuCash-rekeningschema voor uw activa (zoals investeringen, rekeningen-courant of spaarrekeningen), passiva (zoals leningen) en verschillende soorten opbrengsten- en kostenrekeningen. \n"
 "\n"
 "Kies 'Annuleren' als u nu geen nieuwe rekeningen wilt aanmaken."
 
@@ -4898,6 +4899,11 @@ msgid ""
 "Net Asset Value\n"
 "Unknown"
 msgstr ""
+"Bied\n"
+"Laat\n"
+"Laatst\n"
+"Nettowaarde actief\n"
+"Onbekend"
 
 #: ../src/gnome/glade/price.glade.h:7
 #: ../src/gnome-utils/dialog-commodity.c:284
@@ -5220,7 +5226,7 @@ msgstr "Plak de transactie van het klembord"
 
 #: ../src/gnome/glade/register.glade.h:36
 msgid "Reason for voiding transaction:"
-msgstr "Reden om transactie te legen:"
+msgstr "Reden om transactie door te halen:"
 
 #: ../src/gnome/glade/register.glade.h:37
 #: ../src/gnome/gnc-plugin-page-register.c:214
@@ -5361,7 +5367,7 @@ msgstr "_Vandaag"
 
 #: ../src/gnome/glade/register.glade.h:72
 msgid "Void Transaction"
-msgstr "Transacties leegmaken"
+msgstr "Doorgehaalde transactie"
 
 #: ../src/gnome/glade/register.glade.h:73
 msgid "_Action"
@@ -5448,7 +5454,7 @@ msgstr "_niet verwerkt"
 
 #: ../src/gnome/glade/register.glade.h:102
 msgid "_Voided"
-msgstr "_Ongeldige gemaakt"
+msgstr "_Doorgehaald"
 
 #: ../src/gnome/glade/sched-xact.glade.h:1
 msgid " days"
@@ -6282,7 +6288,7 @@ msgstr "Belasting_opties"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:134
 msgid "Setup tax information for all income and expense accounts"
-msgstr "Instellen belastinggegevens voor alle opbrengsten- en uitgavenrekeningen"
+msgstr "Instellen belastinggegevens voor alle opbrengsten- en kostenrekeningen"
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:139
@@ -6747,11 +6753,11 @@ msgstr "Transactie _annuleren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:219
 msgid "_Void Transaction"
-msgstr "Transactie _legen"
+msgstr "Transactie _doorhalen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:221
 msgid "_Unvoid Transaction"
-msgstr "Transactie _herstellen"
+msgstr "Doorhalen transactie _terugdraaien"
 
 #: ../src/gnome/gnc-plugin-page-register.c:223
 msgid "Add _Reversing Transaction"
@@ -6897,7 +6903,7 @@ msgstr "en subrekeningen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:2065
 msgid "You cannot void a transaction with reconciled or cleared splits."
-msgstr "U kunt geen transacties leegmaken met afgestemde of goedgekeurde opsplitsingen."
+msgstr "U kunt transacties met afgestemde of goedgekeurde opsplitsingen niet doorhalen."
 
 #: ../src/gnome/gnc-plugin-page-register.c:2133
 #: ../src/gnome/gnc-split-reg.c:871
@@ -7386,6 +7392,7 @@ msgstr "Goedgekeurde transacties voorselecteren"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:4
 #: ../src/gnome-utils/glade/preferences.glade.h:102
+#, fuzzy
 msgid "Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment. Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts."
 msgstr "Vraag de gebruiker om een transactie voor te ontvangen of te betalen rente alvorens een rentedragende rekening af te stemmen. Dit werkt alleen met de bank-, creditcard-, beleggings-, activa-, passiva-, debiteuren- en crediteurenrekeningen."
 
@@ -8154,7 +8161,7 @@ msgstr "Bevroren"
 
 #: ../src/gnome-search/search-reconciled.c:234
 msgid "Voided"
-msgstr "Ongeldige gemaakt"
+msgstr "Doorgehaald"
 
 #: ../src/gnome-search/search-string.c:186
 msgid "You need to enter a string value"
@@ -8457,7 +8464,7 @@ msgstr "Inkomen%sSalaris%sBelastbaar"
 
 #: ../src/gnome-utils/dialog-transfer.c:461
 msgid "Show the income and expense accounts"
-msgstr "Toon de opbrengsten- en uitgavenrekeningen"
+msgstr "Toon de opbrengsten- en kostenrekeningen"
 
 #: ../src/gnome-utils/dialog-transfer.c:1269
 msgid "You must specify an account to transfer from, or to, or both, for this transaction. Otherwise, it will not be recorded."
@@ -8807,7 +8814,7 @@ msgstr "Omschrijving:"
 
 #: ../src/gnome-utils/glade/dialog-book-close.glade.h:4
 msgid "Expense Total:"
-msgstr "Totaal uitgaven:"
+msgstr "Totale kosten:"
 
 #: ../src/gnome-utils/glade/dialog-book-close.glade.h:5
 msgid "Income Total:"
@@ -9636,7 +9643,7 @@ msgstr "Toon standaard verticale grenzen van de cellen"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:122
 msgid "Sign reverse balances on income and expense accounts."
-msgstr "Teken balansen van opbrengsten- en uitgavenrekeningen omdraaien."
+msgstr "Het teken van de saldi van opbrengsten- en kostenrekeningen omdraaien."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:123
 msgid "Sign reverse balances on the following: Credit Card, Payable, Liability, Equity, and Income."
@@ -12272,7 +12279,7 @@ msgstr "Storten"
 #: ../src/import-export/csv/gnc-csv-model.c:38
 #: ../intl-scm/guile-strings.c:6760
 msgid "Withdrawal"
-msgstr "Opname"
+msgstr "Credit"
 
 #: ../src/import-export/csv/gnc-csv-model.c:434
 #, c-format
@@ -13296,9 +13303,9 @@ msgid ""
 "\n"
 "If you change your mind later, you can reorganize the account structure safely within GnuCash."
 msgstr ""
-"GnuCash maakt gebruik van gescheiden opbrengsten- en uitgavenrekeningen in plaats van categorieën om uw transacties te classificeren. Iedere categorie in uw QIF-bestand wordt omgezet naar een GnuCashrekening.\n"
+"GnuCash maakt gebruik van gescheiden opbrengsten- en kostenrekeningen in plaats van categorieën om uw transacties te classificeren. Iedere categorie in uw QIF-bestand wordt omgezet naar een GnuCash-rekening.\n"
 "\n"
-"Op de volgende pagina kunt u de voorgestelde omzetting van QIF-categorieën naar GnuCashrekeningen bekijken. U kunt relaties veranderen door te dubbelklikken op de regel met de categorienaam.\n"
+"Op de volgende pagina kunt u de voorgestelde koppeling van QIF-categorieën aan GnuCashrekeningen bekijken. U kunt ongewenste koppelingen veranderen door te dubbelklikken op de regel met de categorienaam.\n"
 "\n"
 "Als u zich later bedenkt dan kunt u het rekeningenschema in GnuCash zonder problemen wijzigen."
 
@@ -13326,7 +13333,7 @@ msgstr ""
 
 #: ../src/import-export/qif-import/qif.glade.h:36
 msgid "Income and Expense categories"
-msgstr "Opbrengsten- en uitgavencategorieën"
+msgstr "Opbrengsten- en kostencategorieën"
 
 #: ../src/import-export/qif-import/qif.glade.h:37
 msgid "Load QIF files"
@@ -13946,7 +13953,7 @@ msgstr "Notitie voor deze transactie"
 
 #: ../src/register/ledger-core/split-register-model.c:940
 msgid "Reason the transaction was voided"
-msgstr "Reden van leegmaken transactie"
+msgstr "Reden van doorhalen transactie"
 
 #: ../src/register/ledger-core/split-register-model.c:1032
 msgid "Enter the type of transaction, or choose one from the list"
@@ -14365,7 +14372,7 @@ msgstr "Rentemarge"
 #: ../intl-scm/guile-strings.c:3036 ../intl-scm/guile-strings.c:3826
 #: ../intl-scm/guile-strings.c:4614
 msgid "Expenses"
-msgstr "uitgaven"
+msgstr "Kosten"
 
 #. src/import-export/qif-import/qif-parse.scm
 #. src/import-export/qif-import/qif-import/qif-parse.scm
@@ -15042,7 +15049,7 @@ msgstr "Het format voor de datum -> string conversie voor de datum van vandaag."
 #: ../intl-scm/guile-strings.c:434 ../intl-scm/guile-strings.c:804
 #: ../intl-scm/guile-strings.c:906 ../intl-scm/guile-strings.c:1276
 msgid "Expense Report"
-msgstr "Uitgaven rapport"
+msgstr "Kostenrapport"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/job-report.scm
@@ -17493,7 +17500,7 @@ msgstr ""
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:2980 ../intl-scm/guile-strings.c:3788
 msgid "Label the expense section"
-msgstr "Uitgavensectie labellen"
+msgstr "Kostensectie labellen"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/budget-income-statement.scm
@@ -17580,7 +17587,7 @@ msgstr "Als tweekolomsrapport weergeven"
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:3018 ../intl-scm/guile-strings.c:3814
 msgid "Divides the report into an income column and an expense column"
-msgstr "Deelt het rapport in een opbrengsten- en uitgavenkolom"
+msgstr "Deelt het rapport op in een opbrengsten- en een kostenkolom"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/budget-income-statement.scm
@@ -17673,7 +17680,7 @@ msgstr "Taartgrafiek opbrengsten"
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:3050
 msgid "Expense Piechart"
-msgstr "Taartgrafiek uitgaven"
+msgstr "Taartgrafiek kosten"
 
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:3052
@@ -17713,7 +17720,7 @@ msgstr "Opbrengstenrekeningen"
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:3066
 msgid "Expense Accounts"
-msgstr "Uitgavenrekeningen"
+msgstr "Kostenrekeningen"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -17821,7 +17828,7 @@ msgstr "Investeringen"
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:3184
 msgid "Withdrawals"
-msgstr "Opnamen"
+msgstr "Crediteringen"
 
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:3190
@@ -17885,7 +17892,7 @@ msgstr "Secundair subtotaal voor data sleutel"
 #. src/report/standard-reports/general-ledger.scm
 #: ../intl-scm/guile-strings.c:3212 ../intl-scm/guile-strings.c:4196
 msgid "Void Transactions?"
-msgstr "Transacties leegmaken?"
+msgstr "Transacties doorhalen?"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3214
@@ -18066,27 +18073,27 @@ msgstr "Exclusief transacties van/naar alle filter rekeningen"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3372
 msgid "How to handle void transactions"
-msgstr "Hoe om te gaan met lege transacties"
+msgstr "Hoe om te gaan met doorgehaalde transacties"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3374
 msgid "Non-void only"
-msgstr "Alleen niet-lege transacties"
+msgstr "Alleen niet-doorgehaalde transacties"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3376
 msgid "Show only non-voided transactions"
-msgstr "Toon alleen niet-lege transacties"
+msgstr "Toon alleen niet-doorgehaalde transacties"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3378
 msgid "Void only"
-msgstr "Alleen lege transacties"
+msgstr "Alleen doorgehaalde transacties"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3380
 msgid "Show only voided transactions"
-msgstr "Toon alleen lege transacties"
+msgstr "Toon alleen doorgehaalde transacties"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3382
@@ -18096,7 +18103,7 @@ msgstr "Beide"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3384
 msgid "Show both (and include void transactions in totals)"
-msgstr "Toon beide (en neem lege transacties op in totalen)"
+msgstr "Toon beide (en tel doorgehaalde transacties mee in totalen)"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3388
@@ -18295,7 +18302,7 @@ msgstr "Inkomsten en uitgaven"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3586
 msgid "Reverse amount display for Income and Expense Accounts"
-msgstr "Draai de getoonde hoeveelheid om voor inkomsten en uitgaven dagboeken"
+msgstr "De getoonde hoeveelheden voor inkomsten- en kostenrekeningen omdraaien"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3588
@@ -18483,7 +18490,7 @@ msgstr "De meest recent opgeslagen prijs voor rapportdatum"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3670
 msgid "Use average cost of all shares for basis"
-msgstr ""
+msgstr "Gebruik de gemiddelde kostprijs van alle aandelen als basis"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3672
@@ -18639,7 +18646,7 @@ msgstr "Actief"
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:3858
 msgid "Income/Expense Chart"
-msgstr "Inkomsten/uitgaven grafiek"
+msgstr "Inkomsten-/kostengrafiek"
 
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/price-scatter.scm
@@ -18662,7 +18669,7 @@ msgstr "Toon Eigen vermogen balken"
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:3886
 msgid "Show Income and Expenses?"
-msgstr "Inkomsten en uitgaven weergeven ?"
+msgstr "Opbrengsten en kosten weergeven?"
 
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:3888
@@ -18702,7 +18709,7 @@ msgstr "Activa grafiek"
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:3918
 msgid "Expense Chart"
-msgstr "Uitgaven grafiek"
+msgstr "Kostengrafiek"
 
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:3920
@@ -18717,7 +18724,7 @@ msgstr "Eigen Vermogen balkgrafiek"
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:3938
 msgid "Income & Expense Chart"
-msgstr "Inkomsten en uitgaven grafiek"
+msgstr "Grafiek van opbrengsten en kosten"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3940
@@ -18811,7 +18818,7 @@ msgstr "Inkomsten balkgrafiek"
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4078
 msgid "Expense Barchart"
-msgstr "Uitgaven balkgrafiek"
+msgstr "Kosten balkgrafiek"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4080
@@ -18831,7 +18838,7 @@ msgstr "Toont een balkgrafiek met de ontwikkeling van de inkomsten per tijdsinte
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4086
 msgid "Shows a barchart with the Expenses per interval developing over time"
-msgstr "Toont een balkgrafiek met uitgaven op een interval dat zich over tijd ontwikkelt"
+msgstr "Toont een balkgrafiek met kosten per tijdinterval dat zich over tijd ontwikkelt"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4088
@@ -19038,7 +19045,7 @@ msgstr "Inkomsten tegen dag van de week"
 #. src/report/standard-reports/daily-reports.scm
 #: ../intl-scm/guile-strings.c:4344 ../intl-scm/guile-strings.c:4352
 msgid "Expenses vs. Day of Week"
-msgstr "Uitgaven tegen dag van de week"
+msgstr "Kosten per dag van de week"
 
 #. src/report/standard-reports/daily-reports.scm
 #: ../intl-scm/guile-strings.c:4346
@@ -19048,7 +19055,7 @@ msgstr "Toont een taartgrafiek met totale inkomsten over elke dag van de week"
 #. src/report/standard-reports/daily-reports.scm
 #: ../intl-scm/guile-strings.c:4348
 msgid "Shows a piechart with the total expenses for each day of the week"
-msgstr "Toont een taartgrafiek met totale uitgaven over elke dag van de week"
+msgstr "Toont een taartgrafiek met totale kosten per dag van de week"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:4404 ../intl-scm/guile-strings.c:4514
@@ -19506,14 +19513,13 @@ msgstr "Het saldo in de vreemde munteenheid van het dagboek weergeven ?"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4706
-#, fuzzy
 msgid "Average Cost"
-msgstr "Gemiddeld"
+msgstr "Gemiddelde kostprijs"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4708
 msgid "The volume-weighted average cost of purchases"
-msgstr ""
+msgstr "De volume-gewogen gemiddelde kostprijs van aankopen"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4722
@@ -19664,7 +19670,7 @@ msgstr "_Activa & Passiva"
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4802
 msgid "_Income & Expense"
-msgstr "W_inst & Verlies"
+msgstr "_Inkomsten & kosten"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4804
@@ -20056,9 +20062,8 @@ msgstr "Belastingrapport & TXF-export"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:4948 ../intl-scm/guile-strings.c:5264
-#, fuzzy
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
-msgstr "Belastbaar inkomen / aftrekbare uitgaven / exporteer naar .TXF bestand"
+msgstr "Belastbaar inkomen / aftrekbare uitgaven / exporteer naar .XML bestand"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
@@ -20556,24 +20561,21 @@ msgstr "Belastingrapport & TXF-export"
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5178 ../intl-scm/guile-strings.c:5494
-#, fuzzy
 msgid "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF file"
-msgstr "Belastbaar inkomen / aftrekbare uitgaven / exporteer naar .TXF bestand"
+msgstr "Belastbaar inkomen / aftrekbare uitgaven met transactiedetails / exporteer naar .TXF bestand"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5180 ../intl-scm/guile-strings.c:5184
 #: ../intl-scm/guile-strings.c:5496 ../intl-scm/guile-strings.c:5500
-#, fuzzy
 msgid "Taxable Income/Deductible Expenses"
 msgstr "Belastbaar inkomen / aftrekbare uitgaven"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5182 ../intl-scm/guile-strings.c:5498
-#, fuzzy
 msgid "This report shows transaction detail for your Taxable Income and Deductible Expenses."
-msgstr "Dit rapport toont uw belastbare inkomen en aftrekbare uitgaven"
+msgstr "Dit rapport toont de transactiedetails van uw belastbare inkomen en aftrekbare uitgaven"
 
 #. src/report/report-gnome/report-gnome.scm
 #. src/report/report-gnome/gnucash/report/report-gnome.scm
@@ -21599,17 +21601,12 @@ msgstr ""
 "het help menu."
 
 #: ../doc/tip_of_the_day.list.in:11
-#, fuzzy
 msgid "You can easily import your existing financial data from Quicken, MS Money or other programs that export QIF files or OFX files.  In the File menu, click on the sub-menu Import and click on QIF or OFX file, respectively. Then, follow the instructions provided."
-msgstr ""
-"U kunt eenvoudig bestaande financiële gegevens uit Quicken, MS Money\n"
-"of andere programma's die exporteren in QIF (Quicken Interchange Format)\n"
-"importeren. Kies in het bestandsmenu het submenu importeren en kies QIF of OFX\n"
-"bestand. Volg nu de instructies op."
+msgstr "U kunt eenvoudig uw bestaande financiële gegevens uit Quicken, MS Money of andere programma's die exporteren in QIF- of OFX-bestandsformaat importeren. Selecteer in menu Bestand het submenu Importeren en kies 'QIF of OFX bestand'. Volg vervolgens de gegeven instructies op."
 
 #: ../doc/tip_of_the_day.list.in:16
 msgid "If you are familiar with other financial programs such as Quicken, note that GnuCash uses accounts instead of categories to track income and expenses.  For more information on income and expense accounts, please see the GnuCash online manual."
-msgstr "Wanneer u bekend bent met andere financiële programma's, zoals Quicken, zult u opmerken dat GnuCash gebruik makt van rekeningen in plaats van categorieën om opbrengsten en uitgaven terug te vinden. Voor meer informatie over opbrengsten- en uitgavenrekeningen, zie ook de online GnuCashhandleiding."
+msgstr "Wanneer u bekend bent met andere financiële programma's, zoals Quicken, zult u opmerken dat GnuCash gebruik makt van rekeningen in plaats van categorieën om opbrengsten en kosten bij te houden. Meer informatie over opbrengsten- en kostenrekeningen treft u aan in de online GnuCash-handleiding."
 
 #: ../doc/tip_of_the_day.list.in:21
 #, fuzzy
