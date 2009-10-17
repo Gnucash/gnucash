@@ -45,7 +45,7 @@
 #include "gncVendor.h"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
-#include <guile/gh.h>
+#include <libguile.h>
 %}
 
 %include <timespec.i>

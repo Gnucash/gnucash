@@ -88,9 +88,8 @@ AC_DEFUN([GNOME_CHECK_GUILE],
 	AC_MSG_CHECKING(whether guile works)
 	AC_TRY_LINK([
 		#include <libguile.h>
-		#include <guile/gh.h>
 	],[
-		gh_eval_str("(newline)");
+		scm_c_eval_string("(newline)");
 		scm_boot_guile(0,NULL,NULL,NULL);
 	],[
 		ac_cv_guile_found=yes

@@ -22,7 +22,7 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <ctype.h>
 #include <locale.h>
 #include <string.h>
@@ -342,7 +342,10 @@ func_op(const char *fname, int argc, void **argv)
 
   realFnName = g_string_sized_new( strlen(fname) + 5 );
   g_string_printf( realFnName, "gnc:%s", fname );
-  scmFn = gh_eval_str_with_standard_handler( realFnName->str );
+//  scmFn = gh_eval_str_with_standard_handler( realFnName->str );
+  scmFn = scm_internal_catch(SCM_BOOL_T,
+                     (scm_catch_body_t)scm_c_eval_string, realFnName->str,
+					 scm_handle_by_message_noexit, NULL);
   g_string_free( realFnName, TRUE );
   if (!SCM_PROCEDUREP(scmFn)) {
     /* FIXME: handle errors correctly. */
