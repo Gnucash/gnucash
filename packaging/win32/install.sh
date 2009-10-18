@@ -90,6 +90,16 @@ function prepare() {
     fi
 }
 
+function check_m4_version_ok() {
+    v=`m4 --version | grep -e '[0-9]*\.[0-9]*\.[0-9]*' | sed -e 's/[mM]4//g' -e 's/[^\.0-9]//g'`
+    if [ "$v" = "1.4.7" -o "$v" = "1.4.11" -o "$v" = "1.4.13" ];
+	then
+	    return 1
+    else
+	    return 0
+    fi
+}
+
 function inst_wget() {
     setup Wget
     _WGET_UDIR=`unix_path $WGET_DIR`
@@ -108,8 +118,7 @@ function inst_wget() {
 function inst_dtk() {
     setup MSYS DTK
     _MSYS_UDIR=`unix_path $MSYS_DIR`
-    if quiet ${_MSYS_UDIR}/bin/perl --help &&
-        [ "`m4 --version | sed '1!d;s,.* [Mm]4 ,,'`" = "1.4.7" ]
+    if quiet ${_MSYS_UDIR}/bin/perl --help && [ check_m4_version_ok ]
     then
     echo "msys dtk already installed.  skipping."
     else
@@ -128,7 +137,7 @@ function inst_dtk() {
         wget_unpacked $M4_URL $DOWNLOAD_DIR $TMP_DIR
         mv $TMP_UDIR/usr/bin/m4.exe /bin
         quiet ${_MSYS_UDIR}/bin/perl --help &&
-        [ "`m4 --version | sed '1!d;s,.* [Mm]4 ,,'`" = "1.4.7" ] || die "msys dtk not installed correctly"
+        [ check_m4_version_ok ] || die "msys dtk not installed correctly"
     fi
 }
 
