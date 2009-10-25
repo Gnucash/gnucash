@@ -2181,7 +2181,9 @@ gnc_split_register_config_action (SplitRegister *reg)
     case BANK_REGISTER:
       /* broken ! FIXME bg */
     case SEARCH_LEDGER:
-      gnc_combo_cell_add_menu_item (cell, _("Deposit"));
+     /* Translators: This string has a context prefix; the translation
+	must only contain the part after the | character. */
+      gnc_combo_cell_add_menu_item (cell, Q_("Action Column|Deposit"));
       gnc_combo_cell_add_menu_item (cell, _("Withdraw"));
       gnc_combo_cell_add_menu_item (cell, _("Check"));
       gnc_combo_cell_add_menu_item (cell, _("Int"));
