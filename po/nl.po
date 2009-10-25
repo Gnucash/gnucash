@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-08-28 20:54-0400\n"
-"PO-Revision-Date: 2009-10-16 21:51+0200\n"
+"PO-Revision-Date: 2009-10-17 00:33+0200\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -250,7 +250,7 @@ msgstr ""
 
 #: ../src/bin/gnucash-bin.c:268
 msgid "Add price quotes to given GnuCash datafile"
-msgstr "Prijsopgaven toevoegen aan opgegeven bestand"
+msgstr "Koersnoteringen toevoegen aan opgegeven GnuCash databestand"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -290,12 +290,12 @@ msgstr "Gecompileerd op %s, uit svn-revisie r%s"
 #: ../src/bin/gnucash-bin.c:390
 #, c-format
 msgid "No quotes retrieved. Finance::Quote isn't installed properly.\n"
-msgstr "Geen opgaves gevonden.  Finance::Quote is niet correct geïnstalleerd.\n"
+msgstr "Geen koersen opgehaald. Finance::Quote is niet correct geïnstalleerd.\n"
 
 #. Install Price Quote Sources
 #: ../src/bin/gnucash-bin.c:468
 msgid "Checking Finance::Quote..."
-msgstr "Financiën controleren:: Citaat..."
+msgstr "Controleren van Finance::Quote..."
 
 #: ../src/bin/gnucash-bin.c:475
 msgid "Loading data..."
@@ -403,7 +403,7 @@ msgstr "(verzonden)"
 
 #: ../src/business/business-core/gncOrder.c:417
 msgid " (closed)"
-msgstr "(gesloten)"
+msgstr " (gesloten)"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:70
 #: ../src/business/business-gnome/business-gnome-utils.c:253
@@ -2530,6 +2530,7 @@ msgid "If this field is active then multiple entries in an invoice that transfer
 msgstr ""
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:7
+#, fuzzy
 msgid "Is tax included in this type of business entry?"
 msgstr "Is de prijs van deze boeking inclusief BTW?"
 
@@ -2836,7 +2837,7 @@ msgstr "Kortingswijze"
 #: ../intl-scm/guile-strings.c:1316 ../intl-scm/guile-strings.c:1486
 #: ../intl-scm/guile-strings.c:1688 ../intl-scm/guile-strings.c:1858
 msgid "Unit Price"
-msgstr "Eenheidsprijs"
+msgstr "Prijs per eenheid"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -2960,7 +2961,7 @@ msgstr "Kies hoe de korting en BTW moeten worden berekend"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:659
 msgid "Enter the unit-Price for this Entry"
-msgstr "Geef de eenheidsprijs op voor dit artikel"
+msgstr "Geef de prijs per eenheid op voor dit artikel"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:671
 msgid "Enter the Quantity of units for this Entry"
@@ -3214,7 +3215,7 @@ msgstr ""
 
 #: ../src/engine/gnc-lot.c:489
 msgid "Lot"
-msgstr ""
+msgstr "Cluster"
 
 #. translators: " + " is an separator in a list of string-representations of recurrence frequencies
 #: ../src/engine/Recurrence.c:423
@@ -3324,19 +3325,19 @@ msgstr "Rekeningenstelsel naar QSF-XML exporteren"
 
 #: ../src/gnome/dialog-commodities.c:155
 msgid "That commodity is currently used by at least one of your accounts. You may not delete it."
-msgstr "Dit artikel wordt in een of meer van uw grootboekrekeningen gebruikt. U kunt het niet verwijderen."
+msgstr "Dit waardepapier wordt in een of meer van uw grootboekrekeningen gebruikt. U kunt het niet verwijderen."
 
 #: ../src/gnome/dialog-commodities.c:169
 msgid "This commodity has price quotes. Are you sure you want to delete the selected commodity and its price quotes?"
-msgstr "Dit artikel bevat prijsopgaven. Weet u zeker dat u het geselecteerde artikel en de bijbehorende prijsopgaven wilt verwijderen?"
+msgstr "Dit waardepapier heeft gekoppelde koersnoteringen. Weet u zeker dat u het geselecteerde waardepapier en de bijbehorende koersnoteringen wilt verwijderen?"
 
 #: ../src/gnome/dialog-commodities.c:174
 msgid "Are you sure you want to delete the selected commodity?"
-msgstr "Weet u zeker dat u het geselecteerde artikel wilt verwijderen?"
+msgstr "Weet u zeker dat u het geselecteerde waardepapier wilt verwijderen?"
 
 #: ../src/gnome/dialog-commodities.c:183
 msgid "Delete commodity?"
-msgstr "Artikel verwijderen?"
+msgstr "Waardepapier verwijderen?"
 
 #: ../src/gnome/dialog-fincalc.c:308
 msgid "This program can only calculate one value at a time. You must enter values for all but one quantity."
@@ -3459,7 +3460,7 @@ msgstr "Prijzen verwijderen?"
 
 #: ../src/gnome/dialog-price-editor.c:197
 msgid "You must select a commodity."
-msgstr "U moet een artikel selecteren."
+msgstr "U moet een waardepapier selecteren."
 
 #: ../src/gnome/dialog-price-editor.c:202
 msgid "You must select a currency."
@@ -4224,7 +4225,7 @@ msgstr "Kleinste _deel:"
 
 #: ../src/gnome/glade/account.glade.h:59
 msgid "Smallest fraction of this commodity that can be referenced."
-msgstr "Kleinste eenheid van dit artikel waarnaar kan worden verwezen."
+msgstr "Kleinste eenheid van dit waardepapier waarnaar kan worden verwezen."
 
 #: ../src/gnome/glade/account.glade.h:60
 msgid "Ta_x related"
@@ -4271,6 +4272,14 @@ msgid ""
 "1/100000\n"
 "1/1000000"
 msgstr ""
+"Gebruik waarde van waardepapier\n"
+"1\n"
+"1/10\n"
+"1/100\n"
+"1/1000\n"
+"1/10000\n"
+"1/100000\n"
+"1/1000000"
 
 #: ../src/gnome/glade/account.glade.h:77
 msgid "Use Edit->Tax Options to set the tax-related flag and assign a tax code to this account."
@@ -4507,7 +4516,7 @@ msgstr ""
 
 #: ../src/gnome/glade/commodities.glade.h:2
 msgid "Add a new commodity."
-msgstr "Een nieuw artikel toevoegen."
+msgstr "Een nieuw waardepapier toevoegen."
 
 #: ../src/gnome/glade/commodities.glade.h:3
 #: ../src/gnome/gnc-plugin-page-account-tree.c:221
@@ -4517,7 +4526,7 @@ msgstr "Bewerken"
 
 #: ../src/gnome/glade/commodities.glade.h:4
 msgid "Remove the current commodity."
-msgstr "Het huidige artikel verwijderen"
+msgstr "Het huidige waardepapier verwijderen"
 
 #: ../src/gnome/glade/commodities.glade.h:5
 msgid "Securities"
@@ -4705,7 +4714,7 @@ msgstr "totaal"
 
 #: ../src/gnome/glade/lots.glade.h:1
 msgid "<b>_Lots in This Account</b>"
-msgstr ""
+msgstr "<b>_Clusters binnen deze rekening</b>"
 
 #: ../src/gnome/glade/lots.glade.h:2
 msgid "<b>_Mini-Viewer</b>"
@@ -4721,7 +4730,7 @@ msgstr ""
 
 #: ../src/gnome/glade/lots.glade.h:5
 msgid "A summary of all of the transactions in the selected lot"
-msgstr ""
+msgstr "Een samenvatting van alle transacties binnen het geselecteerde cluster."
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/job-report.scm
@@ -4744,18 +4753,16 @@ msgid "Balance"
 msgstr "Balanceren"
 
 #: ../src/gnome/glade/lots.glade.h:9
-#, fuzzy
 msgid "Delete the highlighted lot"
-msgstr "Het geselecteerde deel verwijderen"
+msgstr "Het geselecteerde cluster verwijderen"
 
 #: ../src/gnome/glade/lots.glade.h:11
-#, fuzzy
 msgid "Enter a name for the highlighted lot."
-msgstr "Voer een naam in voor het dagboek"
+msgstr "Het geselecteerde cluster een naam geven."
 
 #: ../src/gnome/glade/lots.glade.h:12
 msgid "Enter any notes you want to make about this lot."
-msgstr ""
+msgstr "Aantekeningen toevoegen over het geselecteerde cluster."
 
 #. src/report/standard-reports/average-balance.scm
 #: ../src/gnome/glade/lots.glade.h:13 ../intl-scm/guile-strings.c:2572
@@ -4764,7 +4771,7 @@ msgstr "Winst/verlies"
 
 #: ../src/gnome/glade/lots.glade.h:14
 msgid "Lot Viewer"
-msgstr ""
+msgstr "Cluster-viewer"
 
 #: ../src/gnome/glade/lots.glade.h:16
 #, fuzzy
@@ -4773,12 +4780,11 @@ msgstr "Aandelen dagboek"
 
 #: ../src/gnome/glade/lots.glade.h:17
 msgid "Scrub the highlighted lot"
-msgstr ""
+msgstr "Het geselecteerde cluster schoonmaken"
 
 #: ../src/gnome/glade/lots.glade.h:19
-#, fuzzy
 msgid "_New Lot"
-msgstr "Nieuwe debiteur"
+msgstr "_Nieuw cluster"
 
 #: ../src/gnome/glade/lots.glade.h:20
 #, fuzzy
@@ -4928,11 +4934,11 @@ msgstr "Bewerk de huidige prijs."
 
 #: ../src/gnome/glade/price.glade.h:12
 msgid "Get _Quotes"
-msgstr "_Prijsaanvragen ophalen"
+msgstr "Koersen o_phalen"
 
 #: ../src/gnome/glade/price.glade.h:13
 msgid "Get new online quotes for stock accounts."
-msgstr "Haal nieuwe online citaten voor aandelen-dagboeken"
+msgstr "Online nieuwe koersen voor aandelenportefeuilles ophalen."
 
 #: ../src/gnome/glade/price.glade.h:14
 msgid "If activated, delete all prices before the specified date.  Otherwise the last stock price dated before the date will be kept and all earlier quotes deleted."
@@ -6508,9 +6514,8 @@ msgstr "Aandelendeling of fusie registeren"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:187
 #: ../src/gnome/gnc-plugin-page-register.c:244
-#, fuzzy
 msgid "View _Lots..."
-msgstr "Bekijken..."
+msgstr "_Clusters bekijken..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:188
 #: ../src/gnome/gnc-plugin-page-register.c:245
@@ -7084,9 +7089,9 @@ msgid "Gains"
 msgstr "Winsten"
 
 #: ../src/gnome/lot-viewer.c:660
-#, fuzzy, c-format
+#, c-format
 msgid "Lots in Account %s"
-msgstr "Verloren dagboeken"
+msgstr "Clusters binnen rekening %s"
 
 #: ../src/gnome/reconcile-list.c:211
 #: ../src/register/ledger-core/split-register-layout.c:555
@@ -7121,16 +7126,15 @@ msgstr "Kolom 'Afdruknaam' tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:7
 msgid "Show the Quote Flag column"
-msgstr ""
+msgstr "Kolom 'Markering koers' tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:8
-#, fuzzy
 msgid "Show the Quote Source column"
-msgstr "Bron prijscitaat"
+msgstr "Kolom 'Bron koers' tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:9
 msgid "Show the Quote Timezone column"
-msgstr "Kolom 'Tijdzone offerte' tonen"
+msgstr "Kolom 'Tijdzone koers' tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:10
 msgid "Show the Unique Name column"
@@ -7243,7 +7247,7 @@ msgstr "Kolom `Type' tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:5
 msgid "Show the commodity column"
-msgstr ""
+msgstr "Kolom 'Waardepapier' tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:6
 msgid "Show the currency column"
@@ -7267,7 +7271,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:12
 msgid "This setting enables the commodity column."
-msgstr ""
+msgstr "Deze instelling activeert de waardepapier-kolom."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:13
 msgid "This setting enables the currency column."
@@ -7752,11 +7756,11 @@ msgstr "Veranderingen op een transactie toepassen"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:4
 msgid "Delete a commodity"
-msgstr "Een artikel verwijderen"
+msgstr "Een waardepapier verwijderen"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:5
 msgid "Delete a commodity and prices"
-msgstr "Een artikel en de bijbehorende prijzen verwijderen"
+msgstr "Een waardepapier met bijbehorende koersen verwijderen"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:6
 msgid "Delete a transaction"
@@ -7764,7 +7768,7 @@ msgstr "Een boekingsregel verwijderen"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:7
 msgid "Delete multiple price quotes"
-msgstr "Meervoudige prijsaanbiedingen verwijderen"
+msgstr "Meervoudige koersnoteringen verwijderen"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:8
 msgid "Duplicating a changed invoice_entry"
@@ -7800,11 +7804,11 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:16
 msgid "This dialog is presented before allowing you to delete a commodity that has price quotes attached. Deleting the commodity will delete the quotes as well."
-msgstr ""
+msgstr "Dit venster wordt getoond voordat u een waardepapier verwijdert met gekoppelde koersnoteringen. Het verwijderen van het waardepapier zal tevens de bijbehorende koersnoteringen verwijderen."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:17
 msgid "This dialog is presented before allowing you to delete a commodity."
-msgstr ""
+msgstr "Dit venster wordt getoond voordat u wordt toegestaan een waardepapier te verwijderen."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:18
 msgid "This dialog is presented before allowing you to delete a transaction that contains reconciled splits. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations."
@@ -7816,7 +7820,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:20
 msgid "This dialog is presented before allowing you to delete multiple price quotes at one time."
-msgstr ""
+msgstr "Dit venster wordt getoond voordat u wordt toegestaan meerdere koersnoteringen tegelijkertijd te verwijderen."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:21
 msgid "This dialog is presented before allowing you to mark a transaction split as unreconciled. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations."
@@ -8264,7 +8268,7 @@ msgstr ""
 
 #: ../src/gnome-utils/dialog-account.c:766
 msgid "You must choose a commodity."
-msgstr "U moet een artikel kiezen."
+msgstr "U moet een waardepapier selecteren."
 
 #: ../src/gnome-utils/dialog-account.c:818
 msgid "You must enter a valid opening balance or leave it blank."
@@ -8302,7 +8306,7 @@ msgid ""
 "Please select a commodity to match:"
 msgstr ""
 "\n"
-"Selecteer een overeenkomend stuk:"
+"Selecteer een overeenkomend waardepapier:"
 
 #: ../src/gnome-utils/dialog-commodity.c:173
 msgid ""
@@ -8310,7 +8314,7 @@ msgid ""
 "Commodity: "
 msgstr ""
 "\n"
-"Stuk: "
+"Waardepapier: "
 
 #. Translators: Replace here and later CUSIP by the name of your local
 #. National Securities Identifying Number
@@ -8346,7 +8350,7 @@ msgstr "valuta selecteren"
 
 #: ../src/gnome-utils/dialog-commodity.c:515
 msgid "You must select a commodity. To create a new one, click \"New\""
-msgstr "U moet een artikel selecteren. Om een nieuw artikel te maken, klikt u \"Nieuw\""
+msgstr "U moet een waardepapier selecteren. Om een nieuw waardepapier aan te maken klikt u op \"Nieuw\""
 
 #: ../src/gnome-utils/dialog-commodity.c:846
 msgid "Use local time"
@@ -8378,11 +8382,11 @@ msgstr "U kunt geen nieuwe (nationale) valuta maken."
 
 #: ../src/gnome-utils/dialog-commodity.c:1223
 msgid "That commodity already exists."
-msgstr "Dat artikel bestaat al."
+msgstr "Dat waardepapier bestaat al."
 
 #: ../src/gnome-utils/dialog-commodity.c:1266
 msgid "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type\" for the commodity."
-msgstr "U moet een \"Volledige naam\", \"Symbool/afkorting\" en \"Soort\" voor dit artikel opgeven."
+msgstr "U moet een \"Volledige naam\", \"Symbool/afkorting\" en \"Soort\" voor dit waardepapier opgeven."
 
 #: ../src/gnome-utils/dialog-options.c:906
 msgid "Select all accounts."
@@ -8718,23 +8722,23 @@ msgstr "1 /"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:2
 msgid "<b>Quote Source Information</b>"
-msgstr "<b>Informatie offertebron</b>"
+msgstr "<b>Informatie koersbron</b>"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:3
 msgid "Enter a unique code used to identify the commodity. Or, you may safely leave this field blank."
-msgstr "Geef een unieke code op die wordt gebruikt om het stuk te identificeren. Dit veld kunt u ook zonder problemen leeg laten."
+msgstr "Geef een unieke code op die wordt gebruikt om het waardepapier te identificeren. Dit veld kunt u ook zonder problemen leeg laten."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:4
 msgid "Enter the full name of the commodity. Example: Cisco Sytems Inc, or Apple Computer, Inc."
-msgstr "Geef de volledige naam van het artikel. Voorbeeld: Cisco Sytems BV of Apple Computer BV."
+msgstr "Geef de volledige naam van het waardepapier. Voorbeeld: Royal Dutch Shell plc of Unilever NV."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:5
 msgid "Enter the smallest fraction of the commodity which can be traded. For stocks which can only be traded in whole numbers, enter 1."
-msgstr "Geef de kleinste eenheid van de handelswaar op waarin kan worden gehandeld. Voor aandelen, die enkel in hele getallen worden verhandeld, geeft u 1 op."
+msgstr "Geef de kleinst verhandelbare eenheid van het waardepapier op. Voor aandelen, die enkel in hele getallen worden verhandeld, geeft u 1 op."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:6
 msgid "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). "
-msgstr ""
+msgstr "Geef de beurscode ('ticker symbol') voor het waardepapier (bijvoorbeeld RDSA of UNA). Als u de koersnoteringen online ophaalt, moet de inhoud van dit veld exact overeenkomen met de beurscode uit de noteringsbron (inclusief hoofdlettergebruik). "
 
 #: ../src/gnome-utils/glade/commodity.glade.h:7
 msgid "F_raction traded:"
@@ -8780,7 +8784,7 @@ msgstr "Type zoekactie"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:17
 msgid "Warning: Finance::Quote not installed properly."
-msgstr "Waarschuwing: Financieel::Citaten zijn niet correct geïnstalleerd."
+msgstr "Waarschuwing: Finance::Quote is niet correct geïnstalleerd."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:18
 #, fuzzy
@@ -8788,9 +8792,8 @@ msgid "_Full name:"
 msgstr "Volledige naam:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:19
-#, fuzzy
 msgid "_Get Online Quotes"
-msgstr "Haal online citaten op"
+msgstr "Koersen _online ophalen"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:20
 #, fuzzy
@@ -10362,13 +10365,8 @@ msgstr ""
 "Wilt u de database aanpassen aan de huidige versie?"
 
 #: ../src/gnome-utils/gnc-file.c:456
-#, fuzzy
 msgid "The SQL database is in use by other users, and the upgrade cannot be performed until they logoff. If there are currently no other users, consult the  documentation to learn how to clear out dangling login sessions."
-msgstr ""
-"De SQL database wordt gebruikt door andere gebruikers, en de upgrade kan niet worden uitgevoerd tot ze zijn afgemeld.\n"
-"Als er op dit moment geen andere gebruikers zijn, raadpleeg dan \n"
-"de documentatie om uit te zoeken hoe u problemen verhelpt met\n"
-"onafgesloten sessies."
+msgstr "De SQL database wordt gebruikt door andere gebruikers; de upgrade kan niet worden uitgevoerd tot deze zijn afgemeld. Als er op dit moment geen andere gebruikers zijn, raadpleeg dan de documentatie om uit te zoeken hoe u problemen verhelpt met onafgesloten sessies."
 
 #: ../src/gnome-utils/gnc-file.c:466
 #, fuzzy, c-format
@@ -10880,7 +10878,7 @@ msgstr "Rekeningnaam"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:519
 msgid "Commodity"
-msgstr "Artikel"
+msgstr "Waardepapier"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/transaction.scm
@@ -11037,13 +11035,13 @@ msgstr "Deel"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:436
 msgid "Get Quotes"
-msgstr "Haal citaten"
+msgstr "Koersen ophalen"
 
 #. Translators: This string has a context prefix; the translation
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:439
 msgid "Column letter for 'Get Quotes'|Q"
-msgstr ""
+msgstr "K"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:445
 #: ../src/gnome-utils/gnc-tree-view-price.c:450
@@ -12273,13 +12271,13 @@ msgstr "m-d"
 #: ../src/register/ledger-core/split-register.c:2184
 #: ../intl-scm/guile-strings.c:6732
 msgid "Deposit"
-msgstr "Storten"
+msgstr "Storting"
 
 #. src/app-utils/prefs.scm
 #: ../src/import-export/csv/gnc-csv-model.c:38
 #: ../intl-scm/guile-strings.c:6760
 msgid "Withdrawal"
-msgstr "Credit"
+msgstr "Opname"
 
 #: ../src/import-export/csv/gnc-csv-model.c:434
 #, c-format
@@ -12298,7 +12296,7 @@ msgstr "Geen datumkolom."
 
 #: ../src/import-export/csv/gnc-csv-model.c:759
 msgid "No balance, deposit, or withdrawal column."
-msgstr ""
+msgstr "Geen saldo-, storting- of opnamekolom."
 
 #: ../src/import-export/csv/gnc-csv-model.c:1031
 #, c-format
@@ -14144,7 +14142,7 @@ msgstr "Stoppen"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1000
 msgid "Cancel outstanding HTML requests"
-msgstr "Annuleer openstaande HTML aanvragen"
+msgstr "Openstaande HTML aanvragen annuleren"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1007
 msgid "Print"
@@ -15751,7 +15749,7 @@ msgstr ""
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:670 ../intl-scm/guile-strings.c:1142
 msgid "Make all cheques Payable to"
-msgstr ""
+msgstr "Stel alle cheques betaalbaar aan"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -17000,7 +16998,7 @@ msgstr "Winst en verlies"
 #: ../intl-scm/guile-strings.c:4120 ../intl-scm/guile-strings.c:4282
 #: ../intl-scm/guile-strings.c:4374
 msgid "Plot Width"
-msgstr "Afbeeldings breedte"
+msgstr "Grafiekbreedte"
 
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -17013,7 +17011,7 @@ msgstr "Afbeeldings breedte"
 #: ../intl-scm/guile-strings.c:4122 ../intl-scm/guile-strings.c:4284
 #: ../intl-scm/guile-strings.c:4376
 msgid "Plot Height"
-msgstr "Afbeeldings hoogte"
+msgstr "Grafiekhoogte"
 
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2580
@@ -17828,7 +17826,7 @@ msgstr "Investeringen"
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:3184
 msgid "Withdrawals"
-msgstr "Crediteringen"
+msgstr "Opnames"
 
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:3190
@@ -18910,7 +18908,7 @@ msgstr "Eenheden"
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:4264
 msgid "Price of Commodity"
-msgstr "Prijs van handelsgoederen"
+msgstr "Koers van waardepapier"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:4268
@@ -18931,7 +18929,7 @@ msgstr "Markerings kleur"
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:4286
 msgid "Calculate the price of this commodity."
-msgstr "Bereken de prijs van dit handelsgoed."
+msgstr "Bereken de prijs van dit waardepapier."
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/report-system/options-utilities.scm
@@ -19028,9 +19026,8 @@ msgstr "Identieke handelsgoederen"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:4336
-#, fuzzy
 msgid "Your selected commodity and the currency of the report are identical. It doesn't make sense to show prices for identical commodities."
-msgstr "De door u geselecteerde stukken en de munteenheid van het rapport zijn identiek. Het is zinloos om de prijzen te tonen voor identieke handelsgoederen."
+msgstr "Het door u geselecteerde waardepapier en de munteenheid van het rapport zijn identiek. Het is zinloos om de prijzen te tonen voor identieke waardepapieren."
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:4340
@@ -21504,9 +21501,8 @@ msgstr "boolean optie"
 #. src/scm/gnucash/price-quotes.scm
 #: ../intl-scm/guile-strings.c:6788 ../intl-scm/guile-strings.c:6790
 #: ../intl-scm/guile-strings.c:6836 ../intl-scm/guile-strings.c:6838
-#, fuzzy
 msgid "No commodities marked for quote retrieval."
-msgstr "Geen dagboeken gemarkeerd voor citaat opvraag."
+msgstr "Geen waardepapieren geselecteerd voor het opvragen van een koersnotering."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
@@ -21515,7 +21511,7 @@ msgstr "Geen dagboeken gemarkeerd voor citaat opvraag."
 #: ../intl-scm/guile-strings.c:6840 ../intl-scm/guile-strings.c:6842
 #: ../intl-scm/guile-strings.c:6858 ../intl-scm/guile-strings.c:6860
 msgid "Unable to get quotes or diagnose the problem."
-msgstr "Bron of diagnose van het probleem niet te vinden."
+msgstr "Koersen niet kunnen ophalen; probleem onbekend."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
@@ -21534,14 +21530,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6802 ../intl-scm/guile-strings.c:6804
 #: ../intl-scm/guile-strings.c:6850 ../intl-scm/guile-strings.c:6852
 msgid "There was a system error while retrieving the price quotes."
-msgstr "Er is een systeemfout opgetreden tijdens het ophalen van de prijsnoteringen."
+msgstr "Er is een systeemfout opgetreden tijdens het ophalen van de koersnoteringen."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
 #: ../intl-scm/guile-strings.c:6806 ../intl-scm/guile-strings.c:6808
 #: ../intl-scm/guile-strings.c:6854 ../intl-scm/guile-strings.c:6856
 msgid "There was an unknown error while retrieving the price quotes."
-msgstr "Er is een onbekende fout opgetreden tijdens het ophalen van de prijsnoteringen."
+msgstr "Er is een onbekende fout opgetreden tijdens het ophalen van de koersnoteringen."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
@@ -21549,19 +21545,19 @@ msgstr "Er is een onbekende fout opgetreden tijdens het ophalen van de prijsnote
 #: ../intl-scm/guile-strings.c:6820 ../intl-scm/guile-strings.c:6862
 #: ../intl-scm/guile-strings.c:6866 ../intl-scm/guile-strings.c:6868
 msgid "Unable to retrieve quotes for these items:"
-msgstr "Kan geen noteringen voor deze items vinden:"
+msgstr "Geen koersen kunnen ophalen voor deze items:"
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
 #: ../intl-scm/guile-strings.c:6816 ../intl-scm/guile-strings.c:6864
 msgid "Continue using only the good quotes?"
-msgstr "Doorgaan met alleen de goede noteringen?"
+msgstr "Doorgaan met uitsluitend de bruikbare noteringen?"
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
 #: ../intl-scm/guile-strings.c:6822 ../intl-scm/guile-strings.c:6870
 msgid "Continuing with good quotes."
-msgstr "Doorgaan met de goede noteringen."
+msgstr "Doorgaan met de bruikbare noteringen."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
@@ -21574,13 +21570,13 @@ msgstr "Kan geen prijzen genereren voor deze items."
 #. src/scm/gnucash/price-quotes.scm
 #: ../intl-scm/guile-strings.c:6826 ../intl-scm/guile-strings.c:6874
 msgid "Add remaining good quotes?"
-msgstr "Overgebleven goede noteringen toevoegen?"
+msgstr "Overgebleven bruikbare noteringen toevoegen?"
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
 #: ../intl-scm/guile-strings.c:6830 ../intl-scm/guile-strings.c:6878
 msgid "Adding remaining good quotes."
-msgstr "Toevoegen overgebleven goede noteringen."
+msgstr "Toevoegen overgebleven bruikbare noteringen."
 
 #. src/scm/command-line.scm
 #: ../intl-scm/guile-strings.c:6832
@@ -21592,13 +21588,8 @@ msgid "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots 
 msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:6
-#, fuzzy
 msgid "The GnuCash online manual has lots of helpful information. If you are upgrading from earlier versions of GnuCash, the section \"What's new in GnuCash 2.0\" is particularly interesting. You can access the manual under the Help menu."
-msgstr ""
-"De GnuCash online handleiding bevat veel handige informatie. \n"
-"Wanneer u een upgrade pleegt vanaf eerdere versies van GnuCash, is de sectie \"wat is er\n"
-"nieuw in GnuCash 1.8\" vooral interessant. U kunt de handleiding vinden in\n"
-"het help menu."
+msgstr "De GnuCash online handleiding bevat veel handige informatie. Wanneer u vanuit een oudere versie van GnuCash een upgrade pleegt, is de sectie \"wat is er nieuw in GnuCash 2.0\" vooral interessant. U kunt de handleiding vinden in het Help-menu."
 
 #: ../doc/tip_of_the_day.list.in:11
 msgid "You can easily import your existing financial data from Quicken, MS Money or other programs that export QIF files or OFX files.  In the File menu, click on the sub-menu Import and click on QIF or OFX file, respectively. Then, follow the instructions provided."
