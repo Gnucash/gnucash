@@ -411,7 +411,7 @@ gnc_combo_cell_use_list_store_cache (ComboCell * cell, gpointer data)
 }
 
 void 
-gnc_combo_cell_add_menu_item (ComboCell *cell, char * menustr)
+gnc_combo_cell_add_menu_item (ComboCell *cell, const char * menustr)
 { 
 	PopBox *box;
 

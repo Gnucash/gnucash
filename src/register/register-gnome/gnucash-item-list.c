@@ -82,7 +82,7 @@ gnc_item_list_clear (GncItemList *item_list)
 
 
 void
-gnc_item_list_append (GncItemList *item_list, char *string)
+gnc_item_list_append (GncItemList *item_list, const char *string)
 {
 	GtkTreeIter iter;
 

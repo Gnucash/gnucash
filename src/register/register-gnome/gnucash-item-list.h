@@ -65,7 +65,7 @@ gint gnc_item_list_num_entries (GncItemList *item_list);
 
 void gnc_item_list_clear (GncItemList *item_list);
 
-void gnc_item_list_append (GncItemList *item_list, char *string);
+void gnc_item_list_append (GncItemList *item_list, const char *string);
 
 void gnc_item_list_set_sort_enabled(GncItemList *item_list, gboolean enabled);
 

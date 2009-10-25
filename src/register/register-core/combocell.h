@@ -58,7 +58,7 @@ void         gnc_combo_cell_set_value (ComboCell *cell, const char *value);
 void         gnc_combo_cell_clear_menu (ComboCell *cell);
 
 /** Add a menu item to the list. */
-void         gnc_combo_cell_add_menu_item (ComboCell *cell, char * menustr);
+void         gnc_combo_cell_add_menu_item (ComboCell *cell, const char * menustr);
 
 /** Add a 'account name' menu item to the list. When testing for
  *  equality with the currently selected item, this function will
