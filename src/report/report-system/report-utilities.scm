@@ -865,6 +865,11 @@
 (define (gnc:budget-get-start-date budget)
   (gnc-budget-get-period-start-date budget 0))
 
+;; Returns the end date of the last period of the budget.
+(define (gnc:budget-get-end-date budget)
+  (gnc-budget-get-period-end-date budget (- (gnc-budget-get-num-periods budget) 1)))
+
+
 (define (gnc:budget-accountlist-helper accountlist get-fn)
   (let
     (
@@ -931,6 +936,77 @@
 (define (gnc:budget-accountlist-get-initial-balance budget accountlist)
   (gnc:budget-accountlist-helper accountlist (lambda (account)
     (gnc:budget-account-get-initial-balance budget account))))
+
+;; Calculate the sum of all budgets of all children of an account for a specific period
+;;
+;; Parameters:
+;;   budget - budget to use
+;;   children - list of children
+;;   period - budget period to use
+;;
+;; Return value:
+;;   budget value to use for account for specified period.
+(define (budget-account-sum budget children period)
+  (let* ((sum
+           (cond
+             ((null? children) (gnc-numeric-zero))
+             (else
+               (gnc-numeric-add
+                 (gnc:get-account-period-rolledup-budget-value budget (car children) period)
+                 (budget-account-sum budget (cdr children) period)
+                 GNC-DENOM-AUTO GNC-RND-ROUND))
+               )
+        ))
+  sum)
+)
+
+;; Calculate the value to use for the budget of an account for a specific period.
+;; - If the account has a budget value set for the period, use it
+;; - If the account has children, use the sum of budget values for the children
+;; - Otherwise, use 0.
+;;
+;; Parameters:
+;;   budget - budget to use
+;;   acct - account
+;;   period - budget period to use
+;;
+;; Return value:
+;;   sum of all budgets for list of children for specified period.
+(define (gnc:get-account-period-rolledup-budget-value budget acct period)
+  (let* ((bgt-set? (gnc-budget-is-account-period-value-set budget acct period))
+        (children (gnc-account-get-children acct))
+        (amount (cond
+                  (bgt-set? (gnc-budget-get-account-period-value budget acct period))
+          ((not (null? children)) (budget-account-sum budget children period))
+          (else (gnc-numeric-zero)))
+        ))
+  amount)
+)
+
+;; Sums rolled-up budget values for a single account from start-period (inclusive) to
+;; end-period (exclusive).
+;; - If the account has a budget value set for the period, use it
+;; - If the account has children, use the sum of budget values for the children
+;; - Otherwise, use 0.
+;;
+;; start-period may be #f to specify the start of the budget
+;; end-period may be #f to specify the end of the budget
+;;
+;; Returns a gnc-numeric value
+(define (gnc:budget-account-get-rolledup-net budget account start-period end-period)
+  (if (not start-period) (set! start-period 0))
+  (if (not end-period) (set! end-period (gnc-budget-get-num-periods budget)))
+  (let*
+    (
+      (period start-period)
+      (net (gnc-numeric-zero))
+      (acct-comm (xaccAccountGetCommodity account)))
+    (while (< period end-period)
+      (set! net (gnc-numeric-add net
+          (gnc:get-account-period-rolledup-budget-value budget account period)
+	  GNC-DENOM-AUTO GNC-RND-ROUND))
+      (set! period (+ period 1)))
+    net))
 
 (define (gnc:get-assoc-account-balances accounts get-balance-fn)
   (let*

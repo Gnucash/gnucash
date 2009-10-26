@@ -60,6 +60,8 @@
 (define opthelp-show-totalcol (N_ "Display a column with the row totals"))
 (define optname-rollup-budget (N_ "Roll up budget amounts to parent"))
 (define opthelp-rollup-budget (N_ "If parent account does not have its own budget value, use the sum of the child account budget values"))
+(define optname-show-zb-accounts (N_ "Include accounts with zero total balances and budget values"))
+(define opthelp-show-zb-accounts (N_ "Include accounts with zero total (recursive) balances and budget values in this report"))
 (define optname-compress-periods (N_ "Compress prior/later periods"))
 (define opthelp-compress-periods (N_ "Accumulate columns for periods before and after the current period to allow focus on the current period."))
 (define optname-bottom-behavior (N_ "Flatten list to depth limit"))
@@ -138,6 +140,10 @@
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-rollup-budget
       "s4" opthelp-rollup-budget #f))
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-show-zb-accounts
+      "s5" opthelp-show-zb-accounts #t))
 
       ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)
@@ -175,52 +181,6 @@
          (colnum (quotient numcolumns 2))
 
      )
-  
-  ;; Calculate the sum of all budgets of all children of an account for a specific period
-  ;;
-  ;; Parameters:
-  ;;   budget - budget to use
-  ;;   children - list of children
-  ;;   period - budget period to use
-  ;;
-  ;; Return value:
-  ;;   budget value to use for account for specified period.
-  (define (budget-account-sum budget children period)
-    (let* ((sum
-             (cond
-               ((null? children) (gnc-numeric-zero))
-               (else
-                 (gnc-numeric-add
-                   (gnc:get-account-period-rolledup-budget-value budget (car children) period)
-                   (budget-account-sum budget (cdr children) period)
-                   GNC-DENOM-AUTO GNC-RND-ROUND))
-                 )
-          ))
-    sum)
-  )
-
-  ;; Calculate the value to use for the budget of an account for a specific period.
-  ;; - If the account has a budget value set for the period, use it
-  ;; - If the account has children, use the sum of budget values for the children
-  ;; - Otherwise, use 0.
-  ;;
-  ;; Parameters:
-  ;;   budget - budget to use
-  ;;   acct - account
-  ;;   period - budget period to use
-  ;;
-  ;; Return value:
-  ;;   sum of all budgets for list of children for specified period.
-  (define (gnc:get-account-period-rolledup-budget-value budget acct period)
-    (let* ((bgt-set? (gnc-budget-is-account-period-value-set budget acct period))
-          (children (gnc-account-get-children acct))
-          (amount (cond
-                    (bgt-set? (gnc-budget-get-account-period-value budget acct period))
-            ((not (null? children)) (budget-account-sum budget children period))
-            (else (gnc-numeric-zero)))
-          ))
-    amount)
-  )
 
   (define (negative-numeric-p x)
     (if (gnc-numeric-p x) (gnc-numeric-negative-p x) #f))
@@ -583,6 +543,8 @@
          (bottom-behavior (get-option gnc:pagename-accounts optname-bottom-behavior))
          (rollup-budget? (get-option gnc:pagename-display
                                      optname-rollup-budget))
+	 (show-zb-accts? (get-option gnc:pagename-display
+                                     optname-show-zb-accounts))
          (row-num 0) ;; ???
          (work-done 0)
          (work-to-do 0)
@@ -664,12 +626,15 @@
                                display-depth))
                ;;(account-disp-list '())
 
-               ;; Things seem to crash if I don't set 'end-date to
-               ;; _something_ but the actual value isn't used.
-               (env (list (list 'end-date (gnc:get-today))
-                          (list 'display-tree-depth tree-depth)
+               (env (list  
+			   (list 'start-date (gnc:budget-get-start-date budget))
+			   (list 'end-date (gnc:budget-get-end-date budget))
+                           (list 'display-tree-depth tree-depth)
                            (list 'depth-limit-behavior
-                                     (if bottom-behavior 'flatten 'summarize))
+                                (if bottom-behavior 'flatten 'summarize))
+			   (list 'zero-balance-mode 
+				(if show-zb-accts? 'show-leaf-acct 'omit-leaf-acct))
+			   (list 'report-budget budget)
                           ))
                (acct-table #f)
                (html-table (gnc:make-html-table))

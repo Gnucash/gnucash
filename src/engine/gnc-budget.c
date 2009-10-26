@@ -545,6 +545,15 @@ gnc_budget_get_period_start_date(GncBudget *budget, guint period_num)
     return ts;
 }
 
+Timespec
+gnc_budget_get_period_end_date(GncBudget *budget, guint period_num)
+{
+    Timespec ts;
+    timespecFromTime_t(
+        &ts,  recurrenceGetPeriodTime(&GET_PRIVATE(budget)->recurrence, period_num, TRUE));
+    return ts;
+}
+
 gnc_numeric
 gnc_budget_get_account_period_actual_value(
     GncBudget *budget, Account *acc, guint period_num)

@@ -122,8 +122,11 @@ guint gnc_budget_get_num_periods(GncBudget* budget);
 void gnc_budget_set_recurrence(GncBudget *budget, const Recurrence *r);
 /*@ dependent @*/ const Recurrence * gnc_budget_get_recurrence(GncBudget *budget);
 
-/** Set/Get the starting date of the Budget */
+/** Get the starting date of the Budget period*/
 Timespec gnc_budget_get_period_start_date(GncBudget* budget, guint period_num);
+
+/** Get the ending date of the Budget period*/
+Timespec gnc_budget_get_period_end_date(GncBudget* budget, guint period_num);
 
 /* Period indices are zero-based. */
 void gnc_budget_set_account_period_value(
