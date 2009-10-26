@@ -23,6 +23,7 @@
 ( "Angolan New Kwanza" "new kwanza" "lwei" "ISO4217" "AON" "024" 100 100 )
 ( "Argentine Austral" "austral" "centavo" "ISO4217" "ARA" "XXX" 100 100 ) ;; replaced 1991
 ( "Argentine Peso" "peso" "centavo"  "ISO4217" "ARS" "032" 100 100 )
+( "Armenian Dram" "dram" "Luma" "ISO4217" "AMD" "051" 100 100 )
 ( "Aruban Florin" "florin" "cent" "ISO4217" "AWG" "533" 100 100 )
 ( "Australian Dollar" "dollar" "cent" "ISO4217" "AUD" "036" 100 100 )
 ( "Austrian Shilling" "shilling" "groschen"  "ISO4217" "ATS" "040" 100 100 ) ;; through 1998
@@ -164,6 +165,7 @@
 ( "Samoan Tala" "tala" "sene" "ISO4217" "WST" "882" 100 100 )
 ( "Sao Tome and Principe Dobra" "Dobra" "centimo" "ISO4217" "STD" "678" 100 100 )
 ( "Saudi Riyal" "riyal" "halalat"  "ISO4217" "SAR" "682" 100 100 )
+( "Serbian Dinar" "dinar" "para"  "ISO4217" "RSD"  "941" 100 100) ;; continuation of YUM
 ( "Seychelles Rupee" "rupee" "cents" "ISO4217" "SCR" "690" 100 100 )
 ( "Sierra Leone Leone" "leone" "cent"  "ISO4217" "SLL" "694" 100 100 )
 ( "Singapore Dollar" "dollar" "cent" "ISO4217" "SGD" "702" 100 100 )
@@ -205,7 +207,7 @@
 ( "Venezuelan Bolivar Fuerte" "bolivar" "centimo" "ISO4217" "VEF" "937" 100 100 ) ;; since 2008-01-01
 ( "Vietnamese Dong" "dong" "hao" "ISO4217" "VND" "704" 100 100 )
 ( "Yemeni Riyal" "riyal" "fils" "ISO4217" "YER" "886" 100 100 )
-( "Yugoslav Dinar" "dinar" "para"  "ISO4217" "YUM"  "890" 100 100)
+( "Yugoslav Dinar" "dinar" "para"  "ISO4217" "YUM"  "890" 100 100) ;; 2003 replaced by RSD
 ( "Zambian Kwacha" "kwacha" "ngwee"  "ISO4217" "ZMK" "894" 100 100 )
 ( "Zimbabwe Dollar" "dollar" "cent" "ISO4217" "ZWD" "716" 100 100 )
 
