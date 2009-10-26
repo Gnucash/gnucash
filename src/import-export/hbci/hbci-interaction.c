@@ -408,7 +408,7 @@ static int inputBoxCB(AB_BANKING *ab,
       if (!retval)
 	break;
     }
-    else if (strlen(passwd) >= (unsigned int)maxLen) {
+    else if (strlen(passwd) > (unsigned int)maxLen) {
       gboolean retval;
       char *msg = 
 	g_strdup_printf (  _("You entered %ld characters, but the PIN must "
@@ -489,7 +489,7 @@ static int getTanCB(AB_BANKING *ab,
       if (!retval)
 	break;
     }
-    else if (strlen(passwd) >= (unsigned int)maxLen) {
+    else if (strlen(passwd) > (unsigned int)maxLen) {
       gboolean retval;
       char *msg = 
 	g_strdup_printf (  _("You entered %ld characters, but the TAN must "
