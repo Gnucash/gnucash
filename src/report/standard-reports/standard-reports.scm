@@ -156,6 +156,9 @@
 (for-each
     (lambda (x) (resolve-module (append '(gnucash report standard-reports) (list x))))
 	(get-report-list))
+	
+; Need this to be able to call gnc:register-report-create-internal
+(use-modules (gnucash report standard-reports register))
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/engine" 0)
