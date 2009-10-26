@@ -64,17 +64,16 @@ gnc_ifg_option_changed (GtkComboBox *combo, GNCImportProvFormatGnome *prov_f)
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
-  gint value;
+  GncImportFormat value;
 
   g_return_if_fail(GTK_IS_COMBO_BOX(combo));
-  g_return_if_fail(value);
 
   model = gtk_combo_box_get_model(combo);
   if (!gtk_combo_box_get_active_iter(combo, &iter))
     return;
 
   gtk_tree_model_get(model, &iter, IFG_COL_VALUE, &value, -1);
-  prov_f->choice = (GncImportFormat)value;
+  prov_f->choice = value;
 }
 
 #define ADD_MENU_ITEM(str,op) { \
