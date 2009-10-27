@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Prosta książeczka czekowa
+    </gnc-act:title>
+    <gnc-act:short-description>
+     Minimalny zestaw kont GnuCash.
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+     Użyj tego zestawu, jeśli chcesz zbilansować swoją książeczkę czekową. Później, jeśli poczujesz taką potrzebę, możesz zacząć śledzić przychody i wydatki. 
+    </gnc-act:long-description>
+<gnc:account version="2.0.0">
+  <act:name>Konto główne</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aktywa</act:name>
+  <act:id type="new">bde24bbbe01829aff3dac8d038e174cc</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Aktywa</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aktywa bieżące</act:name>
+  <act:id type="new">d90864ec1d660176244b05a0e43e621a</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Aktywa bieżące</act:description>
+  <act:parent type="new">bde24bbbe01829aff3dac8d038e174cc</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ROR</act:name>
+  <act:id type="new">ab2dc28552256b8d1ef4fdea4ba45717</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>ROR</act:description>
+  <act:parent type="new">d90864ec1d660176244b05a0e43e621a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Przychód</act:name>
+  <act:id type="new">e96c0691c219f5f55590e20fb9a3309b</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Przychód</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Wydatki</act:name>
+  <act:id type="new">3b95fbbcc06ef20d61aa082b84938287</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Wydatki</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kapitał własny</act:name>
+  <act:id type="new">b8b72887da1adf889f171923d23efbdd</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Kapitał własny</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bilanse otwarcia</act:name>
+  <act:id type="new">bdb4dd9be2b98f03a0b400036452232c</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Bilanse otwarcia</act:description>
+  <act:parent type="new">b8b72887da1adf889f171923d23efbdd</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Kredyt na samochód
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Konta kredytu samochowego i związanych z nim odsetek
+    </gnc-act:short-description>
+    <gnc-act:long-description>    
+    Będziesz potrzebował tego zestawu, jeśli spłacasz kredyt na samochód (kredyt na samochód, odsetki od kredytu).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Konto główne</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pasywa</act:name>
+  <act:id type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Pasywa</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kredyty</act:name>
+  <act:id type="new">023e2343114b3d695feaeb96904e0da6</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Kredyty</act:description>
+  <act:parent type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kredyt na samochód</act:name>
+  <act:id type="new">3e5f44fd7bfaa9cae737a4113a749e36</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Kredyt na samochód</act:description>
+  <act:parent type="new">023e2343114b3d695feaeb96904e0da6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Wydatki</act:name>
+  <act:id type="new">acacdcb998e45fb741766622e8542f0b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Wydatki</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Odsetki</act:name>
+  <act:id type="new">9e8495e80ebfb762089be917dff7ab72</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Odsetki</act:description>
+  <act:parent type="new">acacdcb998e45fb741766622e8542f0b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Odsetki kredytu na samochód</act:name>
+  <act:id type="new">e9bd8477e27361238d2f53c4fe7594ab</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Odsetki kredytu na samochód</act:description>
+  <act:parent type="new">9e8495e80ebfb762089be917dff7ab72</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

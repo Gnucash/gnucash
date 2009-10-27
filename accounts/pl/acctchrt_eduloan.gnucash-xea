@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Pożyczka na edukację  
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Konta pożyczki na edukację i związanych z nią odsetek
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Ten zestaw wybierzesz, jeśli spłacasz pożyczkę zaciągniętą na zdobycie wykształcenia (pożyczka na edukację, odsetki).  
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Konto główne</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pasywa</act:name>
+  <act:id type="new">4e7e8e39487ad4aba0b62c2232c577c5</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Pasywa</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kredyty</act:name>
+  <act:id type="new">c3219e37044b0531d66a7b64433b026d</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Kredyty</act:description>
+  <act:parent type="new">4e7e8e39487ad4aba0b62c2232c577c5</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pożyczka na edukację</act:name>
+  <act:id type="new">ddeba367199bd025e00420a19d6f9ae4</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Pożyczka na edukację</act:description>
+  <act:parent type="new">c3219e37044b0531d66a7b64433b026d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Wydatki</act:name>
+  <act:id type="new">fdbf47b39f70e8818f325eee7931039a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Wydatki</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Odsetki</act:name>
+  <act:id type="new">1cfcd30ea97b954ffb550ab87d561033</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Odsetki</act:description>
+  <act:parent type="new">fdbf47b39f70e8818f325eee7931039a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Odsetki od pożyczki na edukację</act:name>
+  <act:id type="new">04e3d970dc60d3920f40b93fce8924a2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Odsetki od pożyczki na edukację</act:description>
+  <act:parent type="new">1cfcd30ea97b954ffb550ab87d561033</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

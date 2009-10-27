@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+     Konta inwestycyjne
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Konto maklerskie wraz powiązanymi kontami inwestycyjnymi (giełda, obligacje, fundusze wzajemne, fundusze indeksowe, odsetki, dywidendy)
+    </gnc-act:short-description>
+    <gnc-act:long-description>    
+    Ten zestaw kont potrzebny ci będzie, jeśli inwestujesz (giełda, obligacje, fundusze wzajemne, fundusze indeksowe, odsetki, dywidendy).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Konto główne</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aktywa</act:name>
+  <act:id type="new">52b5942b5beaec856eaca5a75ee71592</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Aktywa</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Inwestycje</act:name>
+  <act:id type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Inwestycje</act:description>
+  <act:parent type="new">52b5942b5beaec856eaca5a75ee71592</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Konto maklerskie</act:name>
+  <act:id type="new">f15ec9568727f08a5ebd8f3e66483876</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Konto maklerskie</act:description>
+  <act:parent type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Obligacje</act:name>
+  <act:id type="new">8196bf0015c25f501338f07a87c512d8</act:id>
+  <act:type>STOCK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Obligacje</act:description>
+  <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Giełda</act:name>
+  <act:id type="new">7d7db9bed07f21fc0b1f50674702aff0</act:id>
+  <act:type>STOCK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Giełda</act:description>
+  <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Indeks rynkowy</act:name>
+  <act:id type="new">fe9db8a7eedf2990e9846f634a922143</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Indeks rynkowy</act:description>
+  <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Fundusz wzajemny</act:name>
+  <act:id type="new">9da28c1aa7789e84bdc8484ba8f527b3</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Fundusz wzajemny</act:description>
+  <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Przychód</act:name>
+  <act:id type="new">9da3c880bd04b9db49eb7f5b06403bda</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Przychód</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Przychód z dywidendy</act:name>
+  <act:id type="new">1af1f4894aeab96d840e66254d023b88</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Przychód z dywidendy</act:description>
+  <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Przychód z odsetek</act:name>
+  <act:id type="new">7943bc59ffbb9a7be4afcd2996147119</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Przychód z odsetek</act:description>
+  <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Odsetki z obligacji</act:name>
+  <act:id type="new">8ceb4752a11e2d342b9009b343fdba38</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Odsetki z obligacji</act:description>
+  <act:parent type="new">7943bc59ffbb9a7be4afcd2996147119</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Expenses</act:name>
+  <act:id type="new">6de23244232785031501171abcc1d4aa</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Wydatki</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Prowizje</act:name>
+  <act:id type="new">77fdffddc79c662c93c482cefa5a4744</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Prowizje</act:description>
+  <act:parent type="new">6de23244232785031501171abcc1d4aa</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

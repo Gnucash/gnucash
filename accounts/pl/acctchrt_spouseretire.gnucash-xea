@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Konta emerytury małżeńskiej
+    </gnc-act:title>
+    <gnc-act:short-description>
+     Konto emerytalne wraz z powiązanymi kontami inwestycyjnymi dla małżonka
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Ten zestaw kont wybierzesz, jeśli gromadzisz środki emerytalne w imieniu współmałżonka (giełda, obligacje, fundusz wzajemny,  indeks rynkowy, dywidenda). 
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Konto główne</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aktywa</act:name>
+  <act:id type="new">96d9b17add59eb4c7edec7ed241af755</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Aktywa</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Inwestycje</act:name>
+  <act:id type="new">f46c9f777b1730c6b5f4a1faf9e31708</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Inwestycje</act:description>
+  <act:parent type="new">96d9b17add59eb4c7edec7ed241af755</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Emerytura małżeńska</act:name>
+  <act:id type="new">4426b41837adc284f96b291c31022844</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Emerytura małżeńska</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">IRA, 401(k), or other retirement</slot:value>
+    </slot>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">f46c9f777b1730c6b5f4a1faf9e31708</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Obligacje</act:name>
+  <act:id type="new">c8e7c315502547e51bfdd5a70b5cdd2e</act:id>
+  <act:type>STOCK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Obligacje</act:description>
+  <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Giełda</act:name>
+  <act:id type="new">b8838eb77b9603e035e1f7b440d468ae</act:id>
+  <act:type>STOCK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Giełda</act:description>
+  <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Indeks rynkowy</act:name>
+  <act:id type="new">0ec1a5b402ceea10d95445a2b31c41a1</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Indeks rynkowy</act:description>
+  <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Fundusz wzajemny</act:name>
+  <act:id type="new">d9ed01f9b8f9845bc3f68f3e0afb021f</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Fundusz wzajemny</act:description>
+  <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->
