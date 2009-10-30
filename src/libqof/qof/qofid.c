@@ -58,48 +58,13 @@ qof_set_alt_dirty_mode (gboolean enabled)
 
 /* =============================================================== */
 
-static guint
-id_hash (gconstpointer key)
-{
-    const GUID *guid = key;
-
-    if (key == NULL)
-        return 0;
-
-    /* Compiler should optimize this all away! */
-    if (sizeof(guint) <= 16)
-        return *((guint *) guid->data);
-    else
-    {
-        guint hash = 0;
-        unsigned int i, j;
-
-        for (i = 0, j = 0; i < sizeof(guint); i++, j++)
-        {
-            if (j == 16)
-                j = 0;
-
-            hash <<= 4;
-            hash |= guid->data[j];
-        }
-
-        return hash;
-    }
-}
-
-static gboolean
-id_compare(gconstpointer key_1, gconstpointer key_2)
-{
-    return guid_equal (key_1, key_2);
-}
-
 QofCollection *
 qof_collection_new (QofIdType type)
 {
     QofCollection *col;
     col = g_new0(QofCollection, 1);
     col->e_type = CACHE_INSERT (type);
-    col->hash_of_entities = g_hash_table_new (id_hash, id_compare);
+    col->hash_of_entities = guid_hash_table_new();
     col->data = NULL;
     return col;
 }

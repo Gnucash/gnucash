@@ -713,7 +713,8 @@ guid_hash_to_guint (gconstpointer ptr)
 
     if (sizeof(guint) <= sizeof(guid->data))
     {
-        return (*((guint *) guid->data));
+        const guint* ptr_data = (const guint *) guid->data;
+        return (*ptr_data);
     }
     else
     {
