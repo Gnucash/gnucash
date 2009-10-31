@@ -405,7 +405,10 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     AB_TRANSACTION_TYPE ab_type = AB_Transaction_GetType (ab_trans);
     gnc_numeric gnc_amount;
 
-    printf("Transaction with value %f has type %d\n", d_value, ab_type);
+    /*printf("Transaction with value %f has type %d\n", d_value, ab_type);*/
+    /* If the value is positive, but the transaction type says the
+       money is transferred away from our account (Transfer instead of
+       DebitNote), we switch the value to negative. */
     if (d_value > 0.0 && ab_type == AB_Transaction_TypeTransfer)
       d_value = -d_value;
 
