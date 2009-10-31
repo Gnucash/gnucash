@@ -321,8 +321,19 @@ AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
   {
     /* Amount into the split */
     const AB_VALUE *h_value = AB_Transaction_GetValue (h_trans);
-    gnc_numeric gnc_amount = double_to_gnc_numeric
-      (h_value ? AB_Value_GetValue (h_value) : 0.0,
+    double d_value = h_value ? AB_Value_GetValue (h_value) : 0.0;
+    AB_TRANSACTION_TYPE h_type = AB_Transaction_GetType (h_trans);
+    gnc_numeric gnc_amount;
+
+    /*printf("Transaction with value %f has type %d\n", d_value, h_type);*/
+    /* If the value is positive, but the transaction type says the
+       money is transferred away from our account (Transfer instead of
+       DebitNote), we switch the value to negative. */
+    if (d_value > 0.0 && h_type == AB_Transaction_TypeTransfer)
+      d_value = -d_value;
+
+    gnc_amount = double_to_gnc_numeric
+      (d_value,
        xaccAccountGetCommoditySCU(gnc_acc),
        GNC_RND_ROUND);
     if (!h_value)

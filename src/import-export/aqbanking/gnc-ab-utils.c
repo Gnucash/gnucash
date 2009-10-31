@@ -346,8 +346,6 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     const char *custref;
     gchar *description;
     Split *split;
-    const AB_VALUE *ab_value;
-    gnc_numeric gnc_amount;
     gchar *memo;
 
     g_return_val_if_fail(ab_trans && gnc_acc, NULL);
@@ -400,15 +398,25 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     if (fitid && *fitid)
         gnc_import_set_split_online_id(split, fitid);
 
+    {
     /* Amount into the split */
-    ab_value = AB_Transaction_GetValue(ab_trans);
+    const AB_VALUE *ab_value = AB_Transaction_GetValue(ab_trans);
+    double d_value = ab_value ? AB_Value_GetValueAsDouble (ab_value) : 0.0;
+    AB_TRANSACTION_TYPE ab_type = AB_Transaction_GetType (ab_trans);
+    gnc_numeric gnc_amount;
+
+    printf("Transaction with value %f has type %d\n", d_value, ab_type);
+    if (d_value > 0.0 && ab_type == AB_Transaction_TypeTransfer)
+      d_value = -d_value;
+
     gnc_amount = double_to_gnc_numeric(
-        ab_value ? AB_Value_GetValueAsDouble(ab_value) : 0.0,
+	d_value,
         xaccAccountGetCommoditySCU(gnc_acc),
         GNC_RND_ROUND);
     if (!ab_value)
         g_warning("transaction_cb: Oops, value was NULL.  Using 0");
     xaccSplitSetBaseValue(split, gnc_amount, xaccAccountGetCommodity(gnc_acc));
+    }
 
     /* Memo in the Split. */
     memo = gnc_ab_memo_to_gnc(ab_trans);
