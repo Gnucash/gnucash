@@ -74,6 +74,8 @@ struct _payment_window {
 void gnc_payment_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_window_destroy_cb (GtkWidget *widget, gpointer data);
+void gnc_payment_acct_tree_row_activated_cb (GtkWidget *widget, GtkTreePath *path,
+                                             GtkTreeViewColumn *column, PaymentWindow *pw);
 
 
 static void
@@ -360,6 +362,35 @@ gnc_payment_window_destroy_cb (GtkWidget *widget, gpointer data)
   g_free (pw);
 }
 
+void
+gnc_payment_acct_tree_row_activated_cb (GtkWidget *widget, GtkTreePath *path,
+                                        GtkTreeViewColumn *column, PaymentWindow *pw)
+{
+GtkTreeView *view;
+GtkTreeModel *model;
+GtkTreeIter iter;
+
+g_return_if_fail(widget);
+view = GTK_TREE_VIEW(widget);
+
+model = gtk_tree_view_get_model(view);
+if (gtk_tree_model_get_iter(model, &iter, path))
+{
+  if (gtk_tree_model_iter_has_child(model, &iter))
+  {
+    /* There are children,
+     * just expand or collapse the row. */
+    if (gtk_tree_view_row_expanded(view, path))
+      gtk_tree_view_collapse_row(view, path);
+    else
+      gtk_tree_view_expand_row(view, path, FALSE);
+  }
+  else
+    /* It's an account without any children, so click the Ok button. */
+    gnc_payment_ok_cb(widget, pw);
+}
+}
+
 /* Select the list of accounts to show in the tree */
 static void
 gnc_payment_set_account_types (GncTreeViewAccount *tree)
@@ -482,6 +513,9 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
 
   g_signal_connect (G_OBJECT (pw->invoice_choice), "changed",
 		    G_CALLBACK (gnc_payment_dialog_invoice_changed_cb), pw);
+
+  g_signal_connect (G_OBJECT (pw->acct_tree), "row-activated",
+		    G_CALLBACK (gnc_payment_acct_tree_row_activated_cb), pw);
 
   /* Register with the component manager */
   pw->component_id =
