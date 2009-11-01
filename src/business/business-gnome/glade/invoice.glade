@@ -779,7 +779,8 @@
 		<widget class="GtkHBox" id="hbox1">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">0</property>
+		  <property name="spacing">2</property>
+		  <property name="border_width">3</property>
 
 		  <child>
 		    <widget class="GtkVBox" id="vbox2">
@@ -1117,7 +1118,8 @@
 		<widget class="GtkHBox" id="hbox2">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">0</property>
+		  <property name="spacing">2</property>
+		  <property name="border_width">3</property>
 
 		  <child>
 		    <widget class="GtkVBox" id="vbox8">
@@ -1402,7 +1404,7 @@
 	      </child>
 	    </widget>
 	    <packing>
-	      <property name="padding">0</property>
+	      <property name="padding">1</property>
 	      <property name="expand">False</property>
 	      <property name="fill">True</property>
 	    </packing>
@@ -1422,6 +1424,7 @@
 		  <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
 		  <property name="shadow_type">GTK_SHADOW_IN</property>
 		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+		  <property name="border_width">3</property>
 
 		  <child>
 		    <widget class="GtkTextView" id="notes_text">
@@ -1495,7 +1498,8 @@
 	      <property name="border_width">3</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">0</property>
+	      <property name="spacing">2</property>
+	      <property name="border_width">3</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label24">
@@ -1624,7 +1628,8 @@
 	    <widget class="GtkHBox" id="hbox9">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">0</property>
+	      <property name="spacing">2</property>
+	      <property name="border_width">3</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label31">
