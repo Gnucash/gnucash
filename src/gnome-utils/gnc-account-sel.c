@@ -365,24 +365,10 @@ gnc_account_sel_set_acct_filters( GNCAccountSel *gas, GList *typeFilters, GList 
             gas->acctTypeFilters = g_list_copy( typeFilters );
         }
 
+		/* Save the commodity filter list */
         if (commodityFilters)
         {
-            src = commodityFilters;
-
-            while (src->data != NULL)
-            {
-                //gnc_commodity_clone would have been nice but it expects me to 
-                //insert the clone into a book, which I don't want to do.
-                commClone = gnc_commodity_new(qof_session_get_book(gnc_get_current_session()), "","","","",1);
-                gnc_commodity_copy(commClone, src->data);
-                dest = g_list_prepend(dest, commClone);
-                if (src->next == NULL)
-                {
-                    break;
-                }
-                src = src->next;
-            }
-            gas->acctCommodityFilters = dest;
+            gas->acctCommodityFilters = g_list_copy(commodityFilters);
         }
 
         gas_populate_list( gas );
