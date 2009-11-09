@@ -79,8 +79,11 @@ static char error_404_format[] = "<html><body><h3>%s</h3><p>%s</body></html>";
 static char error_404_title[] = N_("Not found");
 static char error_404_body[] = N_("The specified URL could not be loaded.");
 
-static void webkit_navigation_requested_cb( WebKitWebView* web_view, GObject* arg1,
-												GObject* arg2, gpointer data );
+static WebKitNavigationResponse webkit_navigation_requested_cb(
+								WebKitWebView* web_view,
+								WebKitWebFrame* frame,
+								WebKitNetworkRequest* request,
+								gpointer user_data );
 static void webkit_on_url_cb( WebKitWebView* web_view, gchar* title, gchar* url,
 							gpointer data );
 static gchar* handle_embedded_object( GncHtmlWebkit* self, gchar* html_str );
@@ -476,23 +479,28 @@ gnc_html_link_clicked_cb( GtkHTML* html, const gchar* url, gpointer data )
  * loaded within the loading of a page (embedded image).
  ********************************************************************/
 
-static void
-webkit_navigation_requested_cb( WebKitWebView* web_view, GObject* arg1,
-												GObject* arg2, gpointer data )
+static WebKitNavigationResponse
+webkit_navigation_requested_cb( WebKitWebView* web_view, WebKitWebFrame* frame,
+								WebKitNetworkRequest* request,
+								gpointer data )
 {
 	URLType type;
 	gchar* location = NULL;
 	gchar* label = NULL;
 	GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
-	WebKitNetworkRequest* req = WEBKIT_NETWORK_REQUEST(arg2);
-	const gchar* url = webkit_network_request_get_uri( req );
+	const gchar* url = webkit_network_request_get_uri( request );
 
 	DEBUG( "requesting %s", url );
+    if( strcmp( url, "base-uri" ) == 0 ) {
+	    return WEBKIT_NAVIGATION_RESPONSE_ACCEPT;
+	}
+
 	type = gnc_html_parse_url( GNC_HTML(self), url, &location, &label );
 	gnc_html_show_url( GNC_HTML(self), type, location, label, 0 );
 //	load_to_stream( self, type, location, label );
 	g_free( location );
 	g_free( label );
+	return WEBKIT_NAVIGATION_RESPONSE_IGNORE;
 }
 
 #if 0
