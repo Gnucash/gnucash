@@ -15,80 +15,31 @@
 ;; e.g. the Winston software
 ;; http://www.felfri.de/winston/schnittstellen.htm
 ;;
-
-(define txf-tax-entity-types
-  (list
-   (cons 'Ind #("Individual, Joint, etc." "Files Individual German Tax Return"))
-   (cons 'Other #("None" "No Income Tax Options Provided"))))
-
-(define (gnc:tax-type-txf-get-code-info tax-entity-types type-code index)
-  (let ((tax-entity-type (assv type-code tax-entity-types)))
-    (and tax-entity-type
-         (vector-ref (cdr tax-entity-type) index))))
-
-(define (gnc:txf-get-tax-entity-type type-code)
-  (gnc:tax-type-txf-get-code-info txf-tax-entity-types type-code 0))
-
-(define (gnc:txf-get-tax-entity-type-description type-code)
-  (gnc:tax-type-txf-get-code-info txf-tax-entity-types type-code 1))
-
-(define (gnc:txf-get-tax-entity-type-codes)
-  (map car txf-tax-entity-types))
-
-(define (gnc:txf-get-payer-name-source categories code tax-entity-type)
-  (gnc:txf-get-code-info categories code 0 tax-entity-type))
-(define (gnc:txf-get-form categories code tax-entity-type)
-  (gnc:txf-get-code-info categories code 1 tax-entity-type))
-(define (gnc:txf-get-description categories code tax-entity-type)
-  (gnc:txf-get-code-info categories code 2 tax-entity-type))
-(define (gnc:txf-get-format categories code tax-entity-type)
-  (gnc:txf-get-code-info categories code 3 tax-entity-type))
-(define (gnc:txf-get-multiple categories code tax-entity-type)
-  (gnc:txf-get-code-info categories code 4 tax-entity-type))
-(define (gnc:txf-get-category-key categories code tax-entity-type)
-  (gnc:txf-get-code-info categories code 5 tax-entity-type))
-(define (gnc:txf-get-line-data categories code tax-entity-type)
-  (let* ((tax-entity-codes (cdr (assv (string->symbol tax-entity-type)
-                                                                  categories)))
-         (category (assv code tax-entity-codes)))
-    (if (or (not category) (< (vector-length (cdr category)) 7))
-        #f
-        (gnc:txf-get-code-info categories code 6 tax-entity-type))))
-(define (gnc:txf-get-last-year categories code tax-entity-type)
-  (let* ((tax-entity-codes (cdr (assv (string->symbol tax-entity-type)
-                                                                  categories)))
-         (category (assv code tax-entity-codes)))
-    (if (or (not category) (< (vector-length (cdr category)) 8))
-        #f
-        (gnc:txf-get-code-info categories code 7 tax-entity-type))))
-
+(define (gnc:txf-get-payer-name-source categories code)
+  (gnc:txf-get-code-info categories code 0))
+(define (gnc:txf-get-form categories code)
+  (gnc:txf-get-code-info categories code 1))
+(define (gnc:txf-get-description categories code)
+  (gnc:txf-get-code-info categories code 2))
+(define (gnc:txf-get-format categories code)
+  (gnc:txf-get-code-info categories code 3))
+(define (gnc:txf-get-multiple categories code)
+  (gnc:txf-get-code-info categories code 4))
+(define (gnc:txf-get-category-key categories code)
+  (gnc:txf-get-code-info categories code 5))
 (define (gnc:txf-get-help categories code)
   (let ((pair (assv code txf-help-strings)))
     (if pair
         (cdr pair)
         "No help available.")))
 
-(define (gnc:txf-get-codes categories tax-entity-type)
-  (let* ((tax-entity-code-list-pair (assv (if (eqv? tax-entity-type "")
-                                              'Ind
-                                              (string->symbol tax-entity-type))
-                                          categories))
-         (tax-entity-codes (if tax-entity-code-list-pair
-                               (cdr tax-entity-code-list-pair)
-                               '())))
-    (map car tax-entity-codes)))
+(define (gnc:txf-get-codes categories)
+  (map car categories))
 
 ;;;; Private
 
-(define (gnc:txf-get-code-info categories code index tax-entity-type)
-  (let* ((tax-entity-code-list-pair (assv (if (eqv? tax-entity-type "")
-                                              'Ind
-                                              (string->symbol tax-entity-type))
-                                          categories))
-         (tax-entity-codes (if tax-entity-code-list-pair
-                               (cdr tax-entity-code-list-pair)
-                               '()))
-         (category (assv code tax-entity-codes)))
+(define (gnc:txf-get-code-info categories code index)
+  (let ((category (assv code categories)))
     (and category
          (vector-ref (cdr category) index))))
 
@@ -105,9 +56,7 @@
 
 ;; Format: (name-source  form  description  format  multiple  category-key)
 (define txf-income-categories
- (list
-  (cons 'Ind
-   (list
+  (list
    (cons 'N000 #(none "" "Nur zur Voransicht im Steuer-Bericht -- kein Export" 0 #f ""))
 
    (cons 'K35 #(none "35" "Umsätze, die anderen Steuersätzen unterliegen (Bemessungsgrundlage)" 2 #f "35"))
@@ -133,9 +82,7 @@
    (cons 'K97 #(none "97" "Steuerpflichtige innergemeinschaftliche Erwerbe zum Steuersatz von 16 v.H." 2 #f "97"))
    (cons 'K98 #(none "98" "Steuerpflichtige innergemeinschaftliche Erwerbe zu anderen Steuersätzen (Steuer)" 1 #f "98"))
 
-   )
-  )
-))
+   ))
 
 
 ;; We use several formats; nr. 1 means Euro+Cent, nr. 2 means only full Euro
@@ -145,9 +92,7 @@
 
 ;; Format: (name-source  form  description  format  multiple  category-key)
 (define txf-expense-categories
- (list
-  (cons 'Ind
-   (list
+  (list
    (cons 'N000 #(none "" "Nur zur Voransicht im Steuer-Bericht -- kein Export" 0 #f ""))
 
    (cons 'K52 #(none "52" "Leistungen eines im Ausland ansässigen Unternehmers (Bemessungsgrundlage)" 2 #f "52"))
@@ -169,28 +114,10 @@
    (cons 'K94 #(none "94" "Innergemeinschaftliche Erwerbe neuer Fahrzeuge von Lieferern ohne USt-IdNr. (Bemessungsgrundlage)" 2 #f "94"))
    (cons 'K95 #(none "95" "Steuerpflichtige innergemeinschaftliche Erwerbe zu anderen Steuersätzen (Bemessungsgrundlage)" 2 #f "95"))
    (cons 'K96 #(none "96" "Innergemeinschaftliche Erwerbe neuer Fahrzeuge von Lieferern ohne USt-IdNr. (Steuer)" 1 #f "96"))
-   )
-  )
 
    ))
 
-(define txf-asset-categories
- (list
-  (cons 'Ind
-   (list
-    (cons 'N000 #(none "" "Nur zur Voransicht im Steuer-Bericht -- kein Export" 0 #f ""))
-   )
-  )
-))
 
-(define txf-liab-eq-categories
- (list
-  (cons 'Ind
-   (list
-    (cons 'N000 #(none "" "Nur zur Voransicht im Steuer-Bericht -- kein Export" 0 #f ""))
-   )
-  )
-))
 
 ;;; Register global options in this book
 (define (book-options-generator options)
