@@ -3,6 +3,13 @@
 #include "gnc-book.h"
 
 #include <glib/gi18n.h>
+
+#include <goffice/goffice-features.h>
+#if (GO_VERSION_EPOCH == 0) && (GO_VERSION_MAJOR == 7) && (GO_VERSION_MINOR == 8)
+/* For libgoffice-0.7.8, disable its internal inclusion of <regutf8.h>
+   so to avoid clashing symbol definitions with <regex.h> */
+# define GO_REGUTF8_H
+#endif
 #include <goffice/utils/go-glib-extras.h>
 
 #include <string.h>
