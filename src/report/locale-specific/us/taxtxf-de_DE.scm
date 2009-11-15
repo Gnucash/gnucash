@@ -206,7 +206,7 @@
   (gnc:txf-get-format (if income?
                           txf-income-categories
                           txf-expense-categories)
-                      code))
+                      code ""))
 
 (define (gnc:account-get-txf-payer-source account)
   (let ((pns (xaccAccountGetTaxUSPayerNameSource account)))
@@ -341,9 +341,9 @@
                            "Aufwendungen"))
                (category-key (if (eq? type ACCT-TYPE-INCOME)
                                  (gnc:txf-get-category-key 
-                                  txf-income-categories code)
+                                  txf-income-categories code "")
                                  (gnc:txf-get-category-key
-                                  txf-expense-categories code)))
+                                  txf-expense-categories code "")))
                (value-name (if (equal? "ReinvD" action)
                                (string-append 
                                 (substring value 1 (string-length value))

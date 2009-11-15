@@ -78,6 +78,7 @@ enum {
   PROP_TAX_RELATED,
   PROP_TAX_CODE,
   PROP_TAX_SOURCE,
+  PROP_TAX_COPY_NUMBER,
 
   PROP_HIDDEN,
   PROP_PLACEHOLDER,
@@ -350,6 +351,10 @@ gnc_account_get_property (GObject         *object,
 	    g_value_set_string(value,
 			       xaccAccountGetTaxUSPayerNameSource(account));
 	    break;
+	case PROP_TAX_COPY_NUMBER:
+	    g_value_set_int64(value,
+			       xaccAccountGetTaxUSCopyNumber(account));
+	    break;
 	case PROP_HIDDEN:
 		g_value_set_boolean(value, xaccAccountGetHidden(account));
 		break;
@@ -434,6 +439,10 @@ gnc_account_set_property (GObject         *object,
 	case PROP_TAX_SOURCE:
 	    xaccAccountSetTaxUSPayerNameSource(account,
 					       g_value_get_string(value));
+	case PROP_TAX_COPY_NUMBER:
+	    xaccAccountSetTaxUSCopyNumber(account,
+			               g_value_get_int64(value));
+	    break;
 	case PROP_HIDDEN:
 		xaccAccountSetHidden(account, g_value_get_boolean(value));
 		break;
@@ -733,9 +742,21 @@ gnc_account_class_init (AccountClass *klass)
          PROP_TAX_SOURCE,
          g_param_spec_string ("tax-source",
                               "Tax Source",
-                              "This is an unknown tax related field.",
+                              "This specifies where exported name comes from.",
                               NULL,
                               G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_TAX_COPY_NUMBER,
+         g_param_spec_int ("tax-copy-number",
+                           "Tax Copy Number",
+                           "This specifies the copy number of the tax "
+                           "form/schedule.",
+                           1,
+			               G_MAXINT16,
+			               1,
+                           G_PARAM_READWRITE));
 
     g_object_class_install_property
         (gobject_class,
@@ -3482,6 +3503,11 @@ xaccAccountSetTaxUSCode (Account *acc, const char *code)
 
   xaccAccountBeginEdit (acc);
   kvp_frame_set_string (acc->inst.kvp_data, "/tax-US/code", code);
+  if (!code)
+  {
+    KvpFrame  *frame = NULL;
+    kvp_frame_set_frame (acc->inst.kvp_data, "/tax-US", frame);
+  }
   mark_account (acc);
   xaccAccountCommitEdit (acc);
 }
@@ -3502,6 +3528,39 @@ xaccAccountSetTaxUSPayerNameSource (Account *acc, const char *source)
   xaccAccountBeginEdit (acc);
   kvp_frame_set_string (acc->inst.kvp_data, 
                         "/tax-US/payer-name-source", source);
+  mark_account (acc);
+  xaccAccountCommitEdit (acc);
+}
+
+gint64
+xaccAccountGetTaxUSCopyNumber (const Account *acc)
+{
+  gint64 copy_number;
+
+  g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 1);
+  copy_number = kvp_frame_get_gint64(acc->inst.kvp_data,
+			      "tax-US/copy-number");
+  return (copy_number == 0) ? 1: copy_number;
+}
+
+void
+xaccAccountSetTaxUSCopyNumber (Account *acc, gint64 copy_number)
+{
+  g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
+  xaccAccountBeginEdit (acc);
+  if (copy_number != 0)
+    kvp_frame_set_gint64 (acc->inst.kvp_data, "/tax-US/copy-number", copy_number);
+  else
+  {
+    KvpFrame * frame;
+    KvpValue *value;
+
+    value = NULL;
+    frame = kvp_frame_set_value_nc (acc->inst.kvp_data,
+                                                 "/tax-US/copy-number", value);
+    if (!frame) kvp_value_delete (value);
+  }
   mark_account (acc);
   xaccAccountCommitEdit (acc);
 }

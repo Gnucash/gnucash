@@ -54,6 +54,10 @@ void gnc_set_default_directory (const gchar *gconf_section,
 
 /* Engine enhancements & i18n ***************************************/
 QofBook * gnc_get_current_book (void);
+void gnc_set_current_book_tax_name (const gchar *tax_name);
+const gchar * gnc_get_current_book_tax_name (void);
+void gnc_set_current_book_tax_type (const gchar *tax_type);
+const gchar * gnc_get_current_book_tax_type (void);
 Account * gnc_get_current_root_account (void);
 gnc_commodity_table * gnc_get_current_commodities (void);
 

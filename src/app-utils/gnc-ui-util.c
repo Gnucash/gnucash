@@ -200,6 +200,34 @@ gnc_get_current_book (void)
   return qof_session_get_book (gnc_get_current_session ());
 }
 
+void
+gnc_set_current_book_tax_name (const gchar *tax_name)
+{
+  kvp_frame_set_string (qof_book_get_slots (gnc_get_current_book()),
+                         "book/tax_US/name", tax_name);
+}
+
+const gchar *
+gnc_get_current_book_tax_name (void)
+{
+  return kvp_frame_get_string (qof_book_get_slots (gnc_get_current_book()),
+                         "book/tax_US/name");
+}
+
+void
+gnc_set_current_book_tax_type (const gchar *tax_type)
+{
+  kvp_frame_set_string(qof_book_get_slots(gnc_get_current_book()),
+                         "book/tax_US/type", tax_type);
+}
+
+const gchar *
+gnc_get_current_book_tax_type (void)
+{
+  return kvp_frame_get_string(qof_book_get_slots(gnc_get_current_book()),
+                         "book/tax_US/type");
+}
+
 Account *
 gnc_get_current_root_account (void)
 {
@@ -430,85 +458,163 @@ gnc_ui_account_get_tax_info_string (const Account *account)
   static SCM get_form = SCM_UNDEFINED;
   static SCM get_desc = SCM_UNDEFINED;
 
-  GNCAccountType atype;
+  gboolean tax_related = FALSE;
   const char *code;
+  QofBook *this_book;
+  KvpFrame *book_frame;
+  const gchar *tax_type;
+  GNCAccountType atype;
   SCM category;
   SCM code_scm;
-  const gchar *form, *desc;
+  SCM tax_entity_type;
+  const gchar *form, *desc, *copy_txt;
+  gint64 copy_number;
   SCM scm;
 
-  if (get_form == SCM_UNDEFINED)
+  if (!account)
+    return NULL;
+
+  tax_related = xaccAccountGetTaxRelated (account);
+  code = xaccAccountGetTaxUSCode (account);
+
+  if (!code)
   {
-    GNCModule module;
-    const gchar *tax_module;
+    if (!tax_related)
+      return NULL;
+    else /* tax_related && !code */
+      return g_strdup (_("Tax-related but has no tax code"));
+  }
+  else  /* with tax code */
+  {
+    tax_type = gnc_get_current_book_tax_type ();
+    atype = xaccAccountGetType (account);
+/*    tax_entity_type = scm_from_locale_string (tax_type); <- requires guile 1.8*/
+    tax_entity_type = scm_makfrom0str (tax_type); /* <-guile 1.6  */
+
+    if (get_form == SCM_UNDEFINED)
+    {
+      GNCModule module;
+      const gchar *tax_module;
     /* load the tax info */
 #ifdef LOCALE_SPECIFIC_TAX
     /* This is a very simple hack that loads the (new, special) German
        tax definition file in a German locale, or (default) loads the
        previous US tax file. */
 # ifdef G_OS_WIN32
-    gchar *thislocale = g_win32_getlocale();
-    gboolean is_de_DE = (strncmp(thislocale, "de_DE", 5) == 0);
-    g_free(thislocale);
+      gchar *thislocale = g_win32_getlocale();
+      gboolean is_de_DE = (strncmp(thislocale, "de_DE", 5) == 0);
+      g_free(thislocale);
 # else /* !G_OS_WIN32 */
-    const char *thislocale = setlocale(LC_ALL, NULL);
-    gboolean is_de_DE = (strncmp(thislocale, "de_DE", 5) == 0);
+      const char *thislocale = setlocale(LC_ALL, NULL);
+      gboolean is_de_DE = (strncmp(thislocale, "de_DE", 5) == 0);
 # endif /* G_OS_WIN32 */
 #else /* LOCALE_SPECIFIC_TAX */
-    gboolean is_de_DE = FALSE;
+      gboolean is_de_DE = FALSE;
 #endif /* LOCALE_SPECIFIC_TAX */
-    tax_module = is_de_DE ? 
-      "gnucash/tax/de_DE" : 
-      "gnucash/tax/us";
+      tax_module = is_de_DE ? 
+          "gnucash/tax/de_DE" : 
+          "gnucash/tax/us";
 
-    module = gnc_module_load ((char *)tax_module, 0);
+      module = gnc_module_load ((char *)tax_module, 0);
 
-    g_return_val_if_fail (module, NULL);
+      g_return_val_if_fail (module, NULL);
 
-    get_form = scm_c_eval_string ("(false-if-exception gnc:txf-get-form)");
-    get_desc = scm_c_eval_string ("(false-if-exception gnc:txf-get-description)");
+      get_form = scm_c_eval_string ("(false-if-exception gnc:txf-get-form)");
+      get_desc = scm_c_eval_string
+                              ("(false-if-exception gnc:txf-get-description)");
+    }
+
+    g_return_val_if_fail (SCM_PROCEDUREP (get_form), NULL);
+    g_return_val_if_fail (SCM_PROCEDUREP (get_desc), NULL);
+
+    category = scm_c_eval_string (atype == ACCT_TYPE_INCOME ?
+                                  "txf-income-categories" :
+                                  (atype == ACCT_TYPE_EXPENSE ?
+                                   "txf-expense-categories" :
+                                   (((atype == ACCT_TYPE_BANK)      || 
+                                     (atype == ACCT_TYPE_CASH)      ||
+                                     (atype == ACCT_TYPE_ASSET)     ||
+                                     (atype == ACCT_TYPE_STOCK)     ||
+                                     (atype == ACCT_TYPE_MUTUAL)    ||
+                                     (atype == ACCT_TYPE_RECEIVABLE)) ?
+                                      "txf-asset-categories" :
+                                     (((atype == ACCT_TYPE_CREDIT)    ||
+                                       (atype == ACCT_TYPE_LIABILITY) ||
+                                       (atype == ACCT_TYPE_EQUITY)    ||
+                                       (atype == ACCT_TYPE_PAYABLE)) ?
+                                        "txf-liab-eq-categories" : ""))));
+
+    if (category == SCM_UNDEFINED)
+    {
+      if (tax_related)
+        return g_strdup_printf
+           (_("Tax type %s: invalid code %s for account type"), code, tax_type);
+      else
+        return g_strdup_printf
+        (_("Not tax-related; tax type %s: invalid code %s for account type"),
+                                                                code, tax_type);
+    }
+
+    code_scm = scm_str2symbol (code);
+    scm = scm_call_3 (get_form, category, code_scm, tax_entity_type);
+    if (!SCM_STRINGP (scm))
+    {
+      if (tax_related)
+        return g_strdup_printf
+                         (_("Invalid code %s for tax type %s"), code, tax_type);
+      else
+        return g_strdup_printf
+        (_("Not tax-related; invalid code %s for tax type %s"), code, tax_type);
+    }
+
+    form = SCM_STRING_CHARS (scm);
+    if (!form)
+    {
+      if (tax_related)
+        return g_strdup_printf
+                           (_("No form: code %s, tax type %s"), code, tax_type);
+      else
+        return g_strdup_printf
+          (_("Not tax-related; no form: code %s, tax type %s"), code, tax_type);
+    }
+
+    scm = scm_call_3 (get_desc, category, code_scm, tax_entity_type);
+    if (!SCM_STRINGP (scm))
+    {
+      if (tax_related)
+        return g_strdup_printf
+        (_("No description: form %s, code %s, tax type %s (1)"),
+                                                          form, code, tax_type);
+      else
+        return g_strdup_printf
+        (_("Not tax-related; no description: form %s, code %s, tax type %s (1)"),
+                                                          form, code, tax_type);
+    }
+
+    desc = SCM_STRING_CHARS (scm);
+    if (!desc)
+    {
+      if (tax_related)
+        return g_strdup_printf
+        (_("No description: form %s, code %s, tax type %s (2)"),
+                                                          form, code, tax_type);
+      else
+        return g_strdup_printf
+        (_("Not tax-related; no description: form %s, code %s, tax type %s (2)"),
+                                                          form, code, tax_type);
+    }
+
+    copy_number = xaccAccountGetTaxUSCopyNumber (account);
+    copy_txt = (copy_number == 1) ? "" : g_strdup_printf ("(%d)",
+                                                            (gint) copy_number);
+
+    if (tax_related)
+      return g_strdup_printf ("%s%s %s", form, copy_txt, desc);
+    else
+      return g_strdup_printf
+      (_("Not tax-related; %s%s %s (code %s, tax type %s)"),
+                                          form, copy_txt, desc, code, tax_type);
   }
-
-  g_return_val_if_fail (SCM_PROCEDUREP (get_form), NULL);
-  g_return_val_if_fail (SCM_PROCEDUREP (get_desc), NULL);
-
-  if (!account)
-    return NULL;
-
-  if (!xaccAccountGetTaxRelated (account))
-    return NULL;
-
-  atype = xaccAccountGetType (account);
-  if (atype != ACCT_TYPE_INCOME && atype != ACCT_TYPE_EXPENSE)
-    return NULL;
-
-  code = xaccAccountGetTaxUSCode (account);
-  if (!code)
-    return NULL;
-
-  category = scm_c_eval_string (atype == ACCT_TYPE_INCOME ?
-				"txf-income-categories" :
-				"txf-expense-categories");
-
-  code_scm = scm_str2symbol (code);
-
-  scm = scm_call_2 (get_form, category, code_scm);
-  if (!SCM_STRINGP (scm))
-    return NULL;
-
-  form = SCM_STRING_CHARS (scm);
-  if (!form)
-    return NULL;
-
-  scm = scm_call_2 (get_desc, category, code_scm);
-  if (!SCM_STRINGP (scm))
-    return NULL;
-
-  desc = SCM_STRING_CHARS (scm);
-  if (!desc)
-    return NULL;
-
-  return g_strdup_printf ("%s %s", form, desc);
 }
 
 

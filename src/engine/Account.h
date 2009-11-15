@@ -1192,6 +1192,10 @@ void xaccAccountSetTaxUSCode (Account *account, const char *code);
 const char * xaccAccountGetTaxUSPayerNameSource (const Account *account);
 /** DOCUMENT ME! */
 void xaccAccountSetTaxUSPayerNameSource (Account *account, const char *source);
+/** DOCUMENT ME! */
+gint64 xaccAccountGetTaxUSCopyNumber (const Account *account);
+/** DOCUMENT ME! */
+void xaccAccountSetTaxUSCopyNumber (Account *account, gint64 copy_number);
 /** @} */
 
 
