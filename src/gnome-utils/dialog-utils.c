@@ -907,7 +907,7 @@ gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *s
 {
   GtkWidget *button;
 
-  button = gtk_button_new_with_label(label);
+  button = gtk_button_new_with_mnemonic(label);
   if (stock_id) {
     GtkWidget *image;
 
