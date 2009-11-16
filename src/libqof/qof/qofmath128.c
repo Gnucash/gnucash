@@ -37,7 +37,7 @@
 /** Multiply a pair of signed 64-bit numbers,
  *  returning a signed 128-bit number.
  */
-inline qofint128
+qofint128
 mult128 (gint64 a, gint64 b)
 {
     qofint128 prod;
@@ -106,7 +106,7 @@ mult128 (gint64 a, gint64 b)
 }
 
 /** Shift right by one bit (i.e. divide by two) */
-inline qofint128
+qofint128
 shift128 (qofint128 x)
 {
     guint64 sbit = x.hi & 0x1;
@@ -127,7 +127,7 @@ shift128 (qofint128 x)
 }
 
 /** Shift leftt by one bit (i.e. multiply by two) */
-inline qofint128
+qofint128
 shiftleft128 (qofint128 x)
 {
     guint64 sbit;
@@ -149,7 +149,7 @@ shiftleft128 (qofint128 x)
 }
 
 /** increment a 128-bit number by one */
-inline qofint128
+qofint128
 inc128 (qofint128 a)
 {
     if (0 == a.isneg)
@@ -176,7 +176,7 @@ inc128 (qofint128 a)
 /** Divide a signed 128-bit number by a signed 64-bit,
  *  returning a signed 128-bit number.
  */
-inline qofint128
+qofint128
 div128 (qofint128 n, gint64 d)
 {
     qofint128 quotient;
@@ -215,7 +215,7 @@ div128 (qofint128 n, gint64 d)
  *  I beleive that ths algo is overflow-free, but should be
  *  audited some more ...
  */
-inline gint64
+gint64
 rem128 (qofint128 n, gint64 d)
 {
     qofint128 quotient = div128 (n, d);
@@ -228,7 +228,7 @@ rem128 (qofint128 n, gint64 d)
 }
 
 /** Return true of two numbers are equal */
-inline gboolean
+gboolean
 equal128 (qofint128 a, qofint128 b)
 {
     if (a.lo != b.lo) return 0;
@@ -238,7 +238,7 @@ equal128 (qofint128 a, qofint128 b)
 }
 
 /** Return returns 1 if a>b, -1 if b>a, 0 if a == b */
-inline int
+int
 cmp128 (qofint128 a, qofint128 b)
 {
     if ((0 == a.isneg) && b.isneg) return 1;
@@ -260,7 +260,7 @@ cmp128 (qofint128 a, qofint128 b)
 }
 
 /** Return the greatest common factor of two 64-bit numbers */
-inline guint64
+guint64
 gcf64(guint64 num, guint64 denom)
 {
     guint64   t;
@@ -281,7 +281,7 @@ gcf64(guint64 num, guint64 denom)
 }
 
 /** Return the least common multiple of two 64-bit numbers. */
-inline qofint128
+qofint128
 lcm128 (guint64 a, guint64 b)
 {
     guint64 gcf = gcf64 (a, b);
@@ -290,7 +290,7 @@ lcm128 (guint64 a, guint64 b)
 }
 
 /** Add a pair of 128-bit numbers, returning a 128-bit number */
-inline qofint128
+qofint128
 add128 (qofint128 a, qofint128 b)
 {
     qofint128 sum;
