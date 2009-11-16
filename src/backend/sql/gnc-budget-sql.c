@@ -173,7 +173,7 @@ set_amount( gpointer pObj, gnc_numeric value )
 
 	g_return_if_fail( pObj != NULL );
 
-	return gnc_budget_set_account_period_value( info->budget, info->account, info->period_num, value );
+	gnc_budget_set_account_period_value( info->budget, info->account, info->period_num, value );
 }
 
 /*----------------------------------------------------------------*/
