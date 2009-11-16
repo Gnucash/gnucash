@@ -66,30 +66,13 @@
 	    (begin (gnc:debug "get-non-split...") (get-non-split type-info)))
 	#f)))
 
-;(use-modules (gnucash report account-piecharts))
-;(use-modules (gnucash report account-summary))
-;(use-modules (gnucash report advanced-portfolio))
-;(use-modules (gnucash report average-balance))
-;(use-modules (gnucash report balance-sheet))
-;(use-modules (gnucash report equity-statement))
-;(use-modules (gnucash report general-journal))
-;(use-modules (gnucash report general-ledger))
-;(use-modules (gnucash report cash-flow))
-;(use-modules (gnucash report budget))
-;(use-modules (gnucash report budget-balance-sheet))
-;(use-modules (gnucash report budget-barchart))
-;(use-modules (gnucash report budget-flow))
-;(use-modules (gnucash report budget-income-statement))
-;(use-modules (gnucash report category-barchart))
-;(use-modules (gnucash report daily-reports))
-;(use-modules (gnucash report net-barchart))
-;(use-modules (gnucash report income-statement))
-;(use-modules (gnucash report portfolio))
-;(use-modules (gnucash report price-scatter))
-;(use-modules (gnucash report register))
-;(use-modules (gnucash report trial-balance))
-;(use-modules (gnucash report transaction))
-
+;; Returns a list of files in a directory
+;;
+;; Param:
+;;   dir - directory name
+;;
+;; Return value:
+;;   list of files in the directory
 (define (directory-files dir)
     (let ((dir-stream (opendir dir)))
         (let loop ((new (readdir dir-stream))
@@ -112,38 +95,24 @@
     )
 )
 
+;; Process a list of files by removing the ".scm" suffix if it exists
+;;
+;; Param:
+;;   l - list of files
+;;
+;; Return value:
+;;   List of files with .scm suffix removed
 (define (process-file-list l)
     (map (lambda (s) (if (string-suffix? ".scm" s) (string-drop-right s 4) s))
          l
     )
 )
 
+;; Return a list of symbols representing reports in the GNC_STANDARD_REPORTS_DIR directory
+;;
+;; Return value:
+;;  List of symbols for reports
 (define (get-report-list)
-;	(list
-;		'account-piecharts
-;		'account-summary
-;		'advanced-portfolio
-;		'average-balance
-;		'balance-sheet
-;		'equity-statement
-;		'general-journal
-;		'general-ledger
-;		'cash-flow
-;		'budget
-;		'budget-balance-sheet
-;		'budget-barchart
-;		'budget-flow
-;		'budget-income-statement
-;		'category-barchart
-;		'daily-reports
-;		'net-barchart
-;		'income-statement
-;		'portfolio
-;		'price-scatter
-;		'register
-;		'trial-balance
-;		'transaction
-;	)
 	(map (lambda (s) (string->symbol s))
          (process-file-list (directory-files (getenv "GNC_STANDARD_REPORTS_DIR")))
     )
@@ -154,7 +123,10 @@
 (gnc:debug "report-list=" (get-report-list))
 
 (for-each
-    (lambda (x) (resolve-module (append '(gnucash report standard-reports) (list x))))
+    (lambda (x)
+	    (module-use!
+		    (current-module)
+			(resolve-module (append '(gnucash report standard-reports) (list x)))))
 	(get-report-list))
 
 (use-modules (gnucash gnc-module))
