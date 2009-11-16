@@ -14,6 +14,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/lib/libc \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
+  ${GUILE_INCS} \
   ${GTK_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GOFFICE_CFLAGS}
