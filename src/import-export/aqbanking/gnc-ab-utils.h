@@ -52,6 +52,7 @@ G_BEGIN_DECLS
 #define KEY_FORMAT_SWIFT940 "format_swift_mt940"
 #define KEY_FORMAT_SWIFT942 "format_swift_mt942"
 #define KEY_FORMAT_DTAUS "format_dtaus"
+#define KEY_VERBOSE_DEBUG   "verbose_debug"
 
 typedef struct _GncABImExContextImport GncABImExContextImport;
 

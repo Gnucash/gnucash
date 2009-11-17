@@ -38,6 +38,7 @@
 #include "dialog-ab-trans.h"
 #include "gnc-ab-kvp.h"
 #include "gnc-ab-utils.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-glib-utils.h"
 #include "gnc-gwen-gui.h"
 #include "gnc-ui.h"
@@ -84,9 +85,15 @@ gnc_GWEN_Init(void)
     GWEN_Init();
 
     /* Initialize gwen logging */
-    GWEN_Logger_SetLevel(NULL, GWEN_LoggerLevel_Info);
-    GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevel_Info);
-    GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevel_Debug);
+    if (gnc_gconf_get_bool(GCONF_SECTION_AQBANKING, KEY_VERBOSE_DEBUG, NULL)) {
+      GWEN_Logger_SetLevel(NULL, GWEN_LoggerLevel_Info);
+      GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevel_Info);
+      GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevel_Debug);
+    } else {
+      GWEN_Logger_SetLevel(NULL, GWEN_LoggerLevel_Error);
+      GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevel_Error);
+      GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevel_Warning);
+    }
     gnc_GWEN_Gui_log_init();
 }
 
@@ -95,7 +102,7 @@ gnc_GWEN_Fini(void)
 {
     /* Shutdown the GWEN_GUIs */
     gnc_GWEN_Gui_shutdown();
-    GWEN_Logger_SetLevel(NULL, GWEN_LoggerLevel_Warning);
+    GWEN_Logger_SetLevel(NULL, GWEN_LoggerLevel_Error);
     GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevel_Warning);
     GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevel_Warning);
 
