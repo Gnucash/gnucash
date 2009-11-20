@@ -597,6 +597,11 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
 				       GNC_TREE_MODEL_ACCOUNT_COL_COLOR_RECONCILED,
 				       GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
 				       sort_by_reconciled_value);
+  gnc_tree_view_add_text_column(view, _("Last Reconcile Date"), "last-recon-date", NULL,
+				"Last Reconcile Date",
+				GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_DATE,
+				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				sort_by_string);
   gnc_tree_view_add_numeric_column(view, _("Future Minimum"), "future_min",
 				   SAMPLE_ACCOUNT_VALUE,
 				   GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN,
