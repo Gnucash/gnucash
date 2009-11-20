@@ -1608,17 +1608,19 @@ load_timespec( const GncSqlBackend* be, GncSqlRow* row,
     } else {
 		if( G_VALUE_HOLDS_STRING( val ) ) {
 			const gchar* s = g_value_get_string( val );
-			gchar* buf;
-			buf = g_strdup_printf( "%c%c%c%c-%c%c-%c%c %c%c:%c%c:%c%c",
-									s[0], s[1], s[2], s[3],
-									s[4], s[5],
-									s[6], s[7],
-									s[8], s[9],
-									s[10], s[11],
-									s[12], s[13] );
-		    ts = gnc_iso8601_to_timespec_gmt( buf );
-			(*ts_setter)( pObject, ts );
-			g_free( buf );
+			if( s != NULL ) {
+			    gchar* buf;
+			    buf = g_strdup_printf( "%c%c%c%c-%c%c-%c%c %c%c:%c%c:%c%c",
+									    s[0], s[1], s[2], s[3],
+									    s[4], s[5],
+									    s[6], s[7],
+									    s[8], s[9],
+									    s[10], s[11],
+									    s[12], s[13] );
+		        ts = gnc_iso8601_to_timespec_gmt( buf );
+			    (*ts_setter)( pObject, ts );
+			    g_free( buf );
+		    }
 
 		} else {
 			PWARN( "Unknown timespec type: %s", G_VALUE_TYPE_NAME( val ) );
@@ -1660,11 +1662,13 @@ add_gvalue_timespec_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	g_return_if_fail( ts_getter != NULL );
     ts = (*ts_getter)( pObject );
 
-    datebuf = gnc_sql_convert_timespec_to_string( be, ts );
     value = g_new0( GValue, 1 );
 	g_assert( value != NULL );
     (void)g_value_init( value, G_TYPE_STRING );
-	g_value_take_string( value, datebuf );
+	if( ts.tv_sec != 0 || ts.tv_nsec != 0 ) {
+        datebuf = gnc_sql_convert_timespec_to_string( be, ts );
+	    g_value_take_string( value, datebuf );
+    }
 
 	(*pList) = g_slist_append( (*pList), value );
 }
@@ -1756,9 +1760,9 @@ add_gvalue_date_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 
     value = g_new0( GValue, 1 );
 	g_assert( value != NULL );
+    (void)g_value_init( value, G_TYPE_STRING );
     getter = gnc_sql_get_getter( obj_name, table_row );
 	if( getter != NULL ) {
-    	(void)g_value_init( value, G_TYPE_STRING );
     	date = (GDate*)(*getter)( pObject, NULL );
 		if( g_date_valid( date ) ) {
 			buf = g_strdup_printf( "%04d%02d%02d",

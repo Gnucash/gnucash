@@ -53,7 +53,7 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "entries"
-#define TABLE_VERSION 2
+#define TABLE_VERSION 3
 #define MAX_DESCRIPTION_LEN 2048
 #define MAX_ACTION_LEN 2048
 #define MAX_NOTES_LEN 2048
@@ -66,7 +66,7 @@ static GncSqlColumnTableEntry col_table[] =
 {
 	{ "guid",          CT_GUID,        0,                   COL_NNUL|COL_PKEY, "guid" },
 	{ "date",          CT_TIMESPEC,    0,                   COL_NNUL,          NULL, ENTRY_DATE },
-	{ "entered",       CT_TIMESPEC,    0,                   COL_NNUL,          NULL, ENTRY_DATE_ENTERED },
+	{ "date_entered",  CT_TIMESPEC,    0,                   0,                 NULL, ENTRY_DATE_ENTERED },
 	{ "description",   CT_STRING,      MAX_DESCRIPTION_LEN, 0,                 NULL, ENTRY_DESC },
 	{ "action",        CT_STRING,      MAX_ACTION_LEN,      0,                 NULL, ENTRY_ACTION },
 	{ "notes",         CT_STRING,      MAX_NOTES_LEN,       0,                 NULL, ENTRY_NOTES },
@@ -182,8 +182,11 @@ create_entry_tables( GncSqlBackend* be )
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
     if( version == 0 ) {
         gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
-    } else if( version == 1 ) {
-		/* Upgrade 64 bit int handling */
+    } else if( version < TABLE_VERSION ) {
+		/* Upgrade:
+		    1->2: 64 bit int handling
+			2->3: "entered" -> "date_entered", and it can be NULL
+		*/
 		gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
 		gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
     }

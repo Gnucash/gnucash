@@ -60,7 +60,7 @@
 #define TRANSACTION_TABLE "transactions"
 #define TX_TABLE_VERSION 2
 #define SPLIT_TABLE "splits"
-#define SPLIT_TABLE_VERSION 3
+#define SPLIT_TABLE_VERSION 4
 
 typedef struct {
     /*@ dependent @*/ GncSqlBackend* be;
@@ -107,7 +107,7 @@ static const GncSqlColumnTableEntry split_col_table[] =
     { "action",          CT_STRING,       SPLIT_MAX_ACTION_LEN, COL_NNUL,          NULL, SPLIT_ACTION },
     { "reconcile_state", CT_STRING,       1,                    COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)get_split_reconcile_state, set_split_reconcile_state },
-    { "reconcile_date",  CT_TIMESPEC,     0,                    COL_NNUL,          NULL, NULL,
+    { "reconcile_date",  CT_TIMESPEC,     0,                    0,                 NULL, NULL,
 			(QofAccessFunc)xaccSplitRetDateReconciledTS, (QofSetterFunc)set_split_reconcile_date },
     { "value",           CT_NUMERIC,      0,                    COL_NNUL,          NULL, SPLIT_VALUE },
     { "quantity",        CT_NUMERIC,      0,                    COL_NNUL,          NULL, SPLIT_AMOUNT },
@@ -495,6 +495,12 @@ create_transaction_tables( GncSqlBackend* be )
 			if( !ok ) {
 				PERR( "Unable to create index\n" );
 			}
+
+			/* fallthrough */
+
+		case 3:
+		    /* Split reconcile_date can be NULL */
+		    gnc_sql_upgrade_table( be, SPLIT_TABLE, split_col_table );
 		}
 		(void)gnc_sql_set_table_version( be, SPLIT_TABLE, SPLIT_TABLE_VERSION );
     }
