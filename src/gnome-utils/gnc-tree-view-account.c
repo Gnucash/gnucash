@@ -30,6 +30,7 @@
 
 #include "gnc-tree-view.h"
 #include "gnc-tree-model-account.h"
+#include "gnc-tree-model-account-drag.h"
 #include "gnc-tree-model-account-types.h"
 #include "gnc-tree-view-account.h"
 
@@ -62,9 +63,15 @@ static void gnc_tree_view_account_finalize (GObject *object);
 static void gtva_update_column_names (GncTreeView *view);
 static void gtva_currency_changed_cb (void);
 
+static Account* gnc_tree_view_account_loookup_account (GtkTreePath *path,
+						       gpointer data);
+
 static gboolean gnc_tree_view_account_filter_helper (GtkTreeModel *model,
                                                      GtkTreeIter *iter,
                                                      gpointer data);
+
+static GtkTreeModel*
+gnc_tree_view_account_get_sort_model (GncTreeViewAccount *view);
 
 static void gtva_setup_column_renderer_edited_cb(GncTreeViewAccount *account_view,
                                                  GtkTreeViewColumn *column,
@@ -469,7 +476,7 @@ GtkTreeView *
 gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
 {
   GncTreeView *view;
-  GtkTreeModel *model, *f_model, *s_model;
+  GtkTreeModel *model, *f_model, *s_model, *d_model;
   GtkTreePath *virtual_root_path = NULL;
   const gchar *sample_type, *sample_commodity;
   GncTreeViewAccountPrivate *priv;
@@ -497,8 +504,12 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
   /* Set up the view private sort layer on the common model. */
   s_model = gtk_tree_model_sort_new_with_model(f_model);
   g_object_unref(G_OBJECT(f_model));
-  gnc_tree_view_set_model (view, s_model);
+
+  d_model = gnc_tree_model_account_drag_new_with_model(s_model, GTK_WIDGET(view), gnc_tree_view_account_loookup_account, view);
   g_object_unref(G_OBJECT(s_model));
+
+  gnc_tree_view_set_model (view, d_model);
+  g_object_unref(G_OBJECT(d_model));
 
   /* Set default visibilities */
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(view), FALSE);
@@ -700,6 +711,28 @@ gnc_tree_view_account_new (gboolean show_root)
     g_free(path_string);				\
   }
 
+
+static Account*
+gnc_tree_view_account_loookup_account (GtkTreePath *path,
+				       gpointer data)
+{
+  g_return_val_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(data), NULL);
+
+  return gnc_tree_view_account_get_account_from_path(GNC_TREE_VIEW_ACCOUNT(data), path);
+}
+
+
+static GtkTreeModel*
+gnc_tree_view_account_get_sort_model (GncTreeViewAccount *view)
+{
+  GtkTreeModel *d_model, *s_model;
+
+  d_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  s_model = gnc_tree_model_account_drag_get_model(GNC_TREE_MODEL_ACCOUNT_DRAG(d_model));
+
+  return s_model;
+}
+
 static GtkTreePath *
 gnc_tree_view_account_get_path_from_account (GncTreeViewAccount *view,
 					     Account *account)
@@ -715,7 +748,7 @@ gnc_tree_view_account_get_path_from_account (GncTreeViewAccount *view,
   }
 
   /* Reach down to the real model and get a path for this account */
-  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  s_model = gnc_tree_view_account_get_sort_model(view);
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
   model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
   path = gnc_tree_model_account_get_path_from_account (GNC_TREE_MODEL_ACCOUNT(model), account);
@@ -754,7 +787,7 @@ gnc_tree_view_account_get_iter_from_account (GncTreeViewAccount *view,
   ENTER("view %p, account %p (%s)", view, account, xaccAccountGetName(account));
 
   /* Reach down to the real model and get an iter for this account */
-  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  s_model = gnc_tree_view_account_get_sort_model(view);
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
   model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
   if (!gnc_tree_model_account_get_iter_from_account (
@@ -793,7 +826,7 @@ gnc_tree_view_account_count_children (GncTreeViewAccount *view,
   }
 
   /* Any children? */
-  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  s_model = gnc_tree_view_account_get_sort_model(view);
   num_children = gtk_tree_model_iter_n_children(s_model, &s_iter);
   LEAVE("%d children", num_children);
   return num_children;
@@ -925,7 +958,7 @@ gnc_tree_view_account_refilter (GncTreeViewAccount *view)
 
   g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(view));
 
-  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  s_model = gnc_tree_view_account_get_sort_model(view);
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (f_model));
 }
@@ -979,7 +1012,7 @@ gnc_tree_view_account_get_account_from_path (GncTreeViewAccount *view,
     g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), NULL);
     g_return_val_if_fail (s_path != NULL, NULL);
     
-    s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+    s_model = gnc_tree_view_account_get_sort_model(view);
     f_path = gtk_tree_model_sort_convert_path_to_child_path (
         GTK_TREE_MODEL_SORT (s_model), s_path);
     if (!f_path) {
@@ -1010,17 +1043,19 @@ gnc_tree_view_account_get_account_from_path (GncTreeViewAccount *view,
 
 
 Account *
-gnc_tree_view_account_get_account_from_iter (GtkTreeModel *s_model,
+gnc_tree_view_account_get_account_from_iter (GtkTreeModel *d_model,
 					     GtkTreeIter  *s_iter)
 {
-  GtkTreeModel *model, *f_model;
+  GtkTreeModel *model, *f_model, *s_model;
   GtkTreeIter iter, f_iter;
   Account *account;
 
-  g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT(s_model), NULL);
+  g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT_DRAG(d_model), NULL);
   g_return_val_if_fail (s_iter != NULL, NULL);
 
-  ENTER("model %p, iter %p", s_model, s_iter);
+  ENTER("model %p, iter %p", d_model, s_iter);
+
+  s_model = gnc_tree_model_account_drag_get_model(GNC_TREE_MODEL_ACCOUNT_DRAG (d_model));  
 
   gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT(s_model),
 						  &f_iter,
@@ -1044,7 +1079,7 @@ Account *
 gnc_tree_view_account_get_selected_account (GncTreeViewAccount *view)
 {
     GtkTreeSelection *selection;
-    GtkTreeModel *f_model, *s_model;
+    GtkTreeModel *f_model, *s_model, *d_model;
     GtkTreeIter iter, f_iter, s_iter;
     Account *account;
     GtkSelectionMode mode;
@@ -1057,11 +1092,13 @@ gnc_tree_view_account_get_selected_account (GncTreeViewAccount *view)
     if ((mode != GTK_SELECTION_SINGLE) && (mode != GTK_SELECTION_BROWSE)) {
       return NULL;
     }
-    if (!gtk_tree_selection_get_selected (selection, &s_model, &s_iter)) {
+    if (!gtk_tree_selection_get_selected (selection, &d_model, &s_iter)) {
       LEAVE("no account, get_selected failed");
       return FALSE;
     }
 
+    
+    s_model = gnc_tree_model_account_drag_get_model(GNC_TREE_MODEL_ACCOUNT_DRAG (d_model));
     gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (s_model),
 						    &f_iter, &s_iter);
 
@@ -1097,7 +1134,7 @@ gnc_tree_view_account_set_selected_account (GncTreeViewAccount *view,
   if (account == NULL)
     return;
 
-  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  s_model = gnc_tree_view_account_get_sort_model(view);
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
   model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
 
@@ -1223,7 +1260,7 @@ gnc_tree_view_account_set_selected_accounts (GncTreeViewAccount *view,
 
   g_return_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view));
 
-  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  s_model = gnc_tree_view_account_get_sort_model(view);
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
   model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
 
@@ -1304,7 +1341,7 @@ gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
   }
 
   /* Any children? */
-  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  s_model = gnc_tree_view_account_get_sort_model(view);
   num_children = gtk_tree_model_iter_n_children(s_model, &si_account);
   if (num_children == 0) {
     LEAVE("no children");
@@ -1377,7 +1414,7 @@ gnc_tree_view_account_get_cursor_account (GncTreeViewAccount *view)
     ENTER("view %p", view);
     g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), NULL);
 
-    s_model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
+    s_model = gnc_tree_view_account_get_sort_model(view);
     gtk_tree_view_get_cursor (GTK_TREE_VIEW(view), &s_path, NULL);
     if (!s_path) {
       LEAVE("no account");
@@ -1457,15 +1494,14 @@ gtva_currency_changed_cb (void)
 static void
 account_cell_kvp_data_func (GtkTreeViewColumn *tree_column,
 			    GtkCellRenderer *cell,
-			    GtkTreeModel *s_model,
+			    GtkTreeModel *model,
 			    GtkTreeIter *s_iter,
 			    gpointer key)
 {
     Account *account;
     kvp_frame * frame;
     
-    g_return_if_fail (GTK_IS_TREE_MODEL_SORT (s_model));
-    account = gnc_tree_view_account_get_account_from_iter(s_model, s_iter);
+    account = gnc_tree_view_account_get_account_from_iter(model, s_iter);
     frame = xaccAccountGetSlots(account);
     
     g_object_set (G_OBJECT (cell),
@@ -1503,10 +1539,10 @@ gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
 }
 
 static void col_edited_helper(GtkCellRendererText *cell, gchar *path_string, 
-                              gchar *new_text, gpointer _s_model)
+                              gchar *new_text, gpointer _model)
 {
     Account *account;
-    GtkTreeModel *s_model;
+    GtkTreeModel *model;
     GtkTreeIter s_iter;
     GncTreeViewAccountColumnTextEdited col_edited_cb;
     GtkTreeViewColumn *col;
@@ -1515,26 +1551,25 @@ static void col_edited_helper(GtkCellRendererText *cell, gchar *path_string,
                                       "column_edited_callback");
     col = GTK_TREE_VIEW_COLUMN(g_object_get_data(G_OBJECT(cell), 
                                                  "column_view"));
-    s_model = GTK_TREE_MODEL(_s_model);
+    model = GTK_TREE_MODEL(_model);
 
-    if (!gtk_tree_model_get_iter_from_string(s_model, &s_iter, path_string))
+    if (!gtk_tree_model_get_iter_from_string(model, &s_iter, path_string))
         return;
         
-    account = gnc_tree_view_account_get_account_from_iter(s_model, &s_iter);
+    account = gnc_tree_view_account_get_account_from_iter(model, &s_iter);
     col_edited_cb(account, col, new_text);
 }
 
 static void col_source_helper(GtkTreeViewColumn *col, GtkCellRenderer *cell,
-                              GtkTreeModel *s_model, GtkTreeIter *s_iter,
+                              GtkTreeModel *model, GtkTreeIter *iter,
                               gpointer _col_source_cb)
 {
     Account *account;
     gchar *text;
     GncTreeViewAccountColumnSource col_source_cb;
     
-    g_return_if_fail (GTK_IS_TREE_MODEL_SORT (s_model));
     col_source_cb = (GncTreeViewAccountColumnSource) _col_source_cb;
-    account = gnc_tree_view_account_get_account_from_iter(s_model, s_iter);
+    account = gnc_tree_view_account_get_account_from_iter(model, iter);
     text = col_source_cb(account, col, cell);
     g_object_set (G_OBJECT (cell), "text", text, "xalign", 1.0, NULL);
     g_free(text);
@@ -1556,7 +1591,7 @@ gtva_setup_column_renderer_edited_cb(GncTreeViewAccount *account_view,
   {
     g_object_set(G_OBJECT(renderer), "editable", FALSE, NULL);
     g_object_set_data(G_OBJECT(renderer), "column_edited_callback", col_edited_cb);
-    s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(account_view));
+    s_model = gnc_tree_view_account_get_sort_model(account_view);
     g_signal_handlers_disconnect_by_func(G_OBJECT(renderer), col_edited_cb, s_model);
     g_object_set_data(G_OBJECT(renderer), "column_view", column);
   }
@@ -1565,7 +1600,7 @@ gtva_setup_column_renderer_edited_cb(GncTreeViewAccount *account_view,
     g_object_set(G_OBJECT(renderer), "editable", TRUE, NULL);
     g_object_set_data(G_OBJECT(renderer), "column_edited_callback",
                       col_edited_cb);
-    s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(account_view));
+    s_model = gnc_tree_view_account_get_sort_model(account_view);
     g_signal_connect(G_OBJECT(renderer), "edited", 
                      (GCallback) col_edited_helper, s_model);
     g_object_set_data(G_OBJECT(renderer), "column_view", column);
