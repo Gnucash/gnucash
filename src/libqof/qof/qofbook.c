@@ -462,8 +462,8 @@ gboolean qof_book_use_trading_accounts (const QofBook *book)
     if (options_name == NULL)
     {
         options_name = get_scm_string ("(car gnc:*kvp-option-path*)");
-        acct_section = get_scm_string ("gnc:*book-label*");
-        trading_opt = get_scm_string ("gnc:*trading-accounts*");
+        //acct_section = get_scm_string ("gnc:*book-label*");
+        //trading_opt = get_scm_string ("gnc:*trading-accounts*");
         if (options_name == NULL || acct_section == NULL || trading_opt == NULL)
         {
             PWARN ("Unable to find trading account preference");
