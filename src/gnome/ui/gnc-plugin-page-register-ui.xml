@@ -20,6 +20,7 @@
       <menuitem name="VoidTransaction"    	action="VoidTransactionAction"/>
       <menuitem name="UnvoidTransaction"  	action="UnvoidTransactionAction"/>
       <menuitem name="ReverseTransaction" 	action="ReverseTransactionAction"/>
+      <menuitem name="ShiftTransactionForward" 	action="ShiftTransactionForwardAction"/>
     </menu>
 
     <menu name="View" action="ViewAction">
