@@ -111,6 +111,31 @@ gnc_split_register_save_due_date_cell (BasicCell * cell,
 }
 
 static void
+gnc_split_register_save_trans_date_cell (BasicCell * cell,
+                                       gpointer save_data,
+                                       gpointer user_data)
+{
+  SRSaveData *sd = save_data;
+  const char *value;
+  Timespec ts;
+
+
+  g_return_if_fail (gnc_basic_cell_has_name (cell, DTRANS_CELL));
+
+  value = gnc_basic_cell_get_value (cell);
+
+  /* commit any pending changes */
+  gnc_date_cell_commit ((DateCell *) cell);
+
+
+  DEBUG ("TRANSACTION: %s", value ? value : "(null)");
+
+  gnc_date_cell_get_date ((DateCell *) cell, &ts);
+
+  xaccTransSetDateEnteredTS (sd->trans, &ts);
+}
+
+static void
 gnc_split_register_save_num_cell (BasicCell * cell,
                                   gpointer save_data,
                                   gpointer user_data)
@@ -711,6 +736,11 @@ gnc_split_register_model_add_save_handlers (TableModel *model)
                                     gnc_split_register_save_due_date_cell,
                                     DDUE_CELL);
 
+
+  gnc_table_model_set_save_handler (model,
+                                    gnc_split_register_save_trans_date_cell,
+                                    DTRANS_CELL);
+
   gnc_table_model_set_save_handler (model,
                                     gnc_split_register_save_type_cell,
                                     TYPE_CELL);
@@ -784,6 +814,12 @@ gnc_template_register_model_add_save_handlers (TableModel *model)
   gnc_table_model_set_save_handler (model,
                                     gnc_template_register_save_unexpected_cell,
                                     DDUE_CELL);
+
+
+  gnc_table_model_set_save_handler (model,
+                                    gnc_template_register_save_unexpected_cell,
+                                    DTRANS_CELL);
+
 
   gnc_table_model_set_save_handler (model,
                                     gnc_template_register_save_xfrm_cell,

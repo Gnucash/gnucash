@@ -190,6 +190,7 @@ typedef enum
 #define CRED_CELL  "credit"
 #define DATE_CELL  "date"
 #define DDUE_CELL  "date-due"
+#define DTRANS_CELL  "transaction-date"
 #define DEBT_CELL  "debit"
 #define DESC_CELL  "description"
 #define FCRED_CELL "credit-formula"
