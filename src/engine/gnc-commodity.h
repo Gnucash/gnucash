@@ -973,6 +973,70 @@ void gnc_commodity_commit_edit (gnc_commodity *cm);
 		  
 /** @} */
 
+/** @name Monetary value, commodity identity and numeric value
+@{
+  */
+struct _gnc_monetary
+{
+  gnc_commodity *commodity;
+  gnc_numeric value;
+};
+
+typedef struct _gnc_monetary gnc_monetary;
+
+/* A list of monetary values.  This could be a hash table, but as currently
+* used it rarely contains more than one or two different commodities so 
+* it doesn't seem worth the trouble. 
+*/
+typedef GList MonetaryList;
+
+/** @name Constructors
+@{
+  Make a gnc_monetary from a gnc_commodity and gnc_numeric */
+  static inline
+  gnc_monetary gnc_monetary_create(gnc_commodity *commod, gnc_numeric val) {
+    gnc_monetary out;
+    out.commodity = commod;
+    out.value = val;
+    return out;
+  }
+  /** @} */
+  
+  /** @name Accessors
+  @{
+    */
+  static inline
+  gnc_commodity * gnc_monetary_commodity(gnc_monetary a) { return a.commodity; }
+  
+  static inline
+  gnc_numeric gnc_monetary_value(gnc_monetary a) { return a.value; }
+  /** @} */
+  
+  /** @name Manipulate MonetaryList lists
+@{
+  */
+
+/** Add a gnc_monetary to the list */
+MonetaryList *gnc_monetary_list_add_monetary(MonetaryList *list, gnc_monetary mon);
+
+/** Add something to the list given a commodity and value */
+static inline
+MonetaryList *gnc_monetary_list_add_value(MonetaryList *list, 
+                                          gnc_commodity *commod, 
+                                          gnc_numeric value)
+{
+  return gnc_monetary_list_add_monetary(list,
+                                        gnc_monetary_create(commod, value));
+}
+
+/** Delete all the zero-value entries from a list */
+MonetaryList *gnc_monetary_list_delete_zeros(MonetaryList *list);
+
+/** Free a monetary list and all the items it points to */
+void gnc_monetary_list_free(MonetaryList *list);
+/** @} */
+
+/** @} */
 
 #endif /* GNC_COMMODITY_H */
 /** @} */

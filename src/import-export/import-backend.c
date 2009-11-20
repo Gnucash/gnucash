@@ -122,7 +122,10 @@ gboolean
 gnc_import_TransInfo_is_balanced (const GNCImportTransInfo *info)
 {
  g_assert (info);
- if(gnc_numeric_zero_p(xaccTransGetImbalance(gnc_import_TransInfo_get_trans(info))))
+ /* Assume that the importer won't create a transaction that involves two or more
+    currencies and no non-currency commodity.  In that case can use the simpler
+    value imbalance check. */
+ if(gnc_numeric_zero_p(xaccTransGetImbalanceValue(gnc_import_TransInfo_get_trans(info))))
    {
      return TRUE;
    }
@@ -860,9 +863,11 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
 	       (gnc_import_TransInfo_get_trans (trans_info)));*/
 	    {
 	      /* This is a quick workaround for the bug described in
-		 http://gnucash.org/pipermail/gnucash-devel/2003-August/009982.html  */
+		 http://gnucash.org/pipermail/gnucash-devel/2003-August/009982.html
+                 Assume that importers won't create transactions involving two or more
+                 currencies so we can use xaccTransGetImbalanceValue. */
 	      gnc_numeric v = 
-		gnc_numeric_neg (xaccTransGetImbalance 
+		gnc_numeric_neg (xaccTransGetImbalanceValue 
 				 (gnc_import_TransInfo_get_trans (trans_info)));
 	      xaccSplitSetValue (split, v);
 	      xaccSplitSetAmount (split, v);

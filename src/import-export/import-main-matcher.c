@@ -605,10 +605,12 @@ refresh_model_row (GNCImportMainMatcher *gui,
 	}
       else
 	{
+          /* Assume that importers won't create transactions in two or more
+             currencies so we can use xaccTransGetImbalanceValue */
 	  imbalance = 
 	    g_strdup 
 	    (xaccPrintAmount
-	     (gnc_numeric_neg(xaccTransGetImbalance
+	     (gnc_numeric_neg(xaccTransGetImbalanceValue
 			      (gnc_import_TransInfo_get_trans(info) )), 
 	      gnc_commodity_print_info 
 	      (xaccTransGetCurrency(gnc_import_TransInfo_get_trans (info)),

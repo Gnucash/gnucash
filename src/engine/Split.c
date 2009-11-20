@@ -1056,7 +1056,7 @@ xaccSplitConvertAmount (const Split *split, Account * account)
    * rate and just return the 'other' split amount.
    */
   txn = xaccSplitGetParent (split);
-  if (txn && gnc_numeric_zero_p (xaccTransGetImbalance (txn))) {
+  if (txn && xaccTransIsBalanced (txn)) {
     const Split *osplit = xaccSplitGetOtherSplit (split);
 
     if (osplit)
@@ -1668,6 +1668,9 @@ xaccSplitGetOtherSplit (const Split *split)
   int count, num_splits;
   Split *other = NULL;
   KvpValue *sva;
+  Account *trading_account = NULL;
+  Account *root_account = NULL;
+  gboolean trading_accts;
 
   if (!split) return NULL;
   trans = split->parent;
@@ -1684,15 +1687,19 @@ xaccSplitGetOtherSplit (const Split *split)
   return s1;
 #endif
 
+  trading_accts = xaccTransUseTradingAccounts (trans);
   num_splits = xaccTransCountSplits(trans);
   count = num_splits;
   sva = kvp_frame_get_slot (split->inst.kvp_data, "lot-split");
-  if (!sva && (2 != count)) return NULL;
+  if (!sva && !trading_accts && (2 != count)) return NULL;
 
   for (i = 0; i < num_splits; i++) {
       Split *s = xaccTransGetSplit(trans, i);
       if (s == split) { --count; continue; }
       if (kvp_frame_get_slot (s->inst.kvp_data, "lot-split")) 
+          { --count; continue; }
+      if (trading_accts && 
+          xaccAccountGetType(xaccSplitGetAccount(s)) == ACCT_TYPE_TRADING)
           { --count; continue; }
       other = s;
   }

@@ -133,7 +133,8 @@
                ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
                ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
                ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
-               ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
+               ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE
+               ACCT-TYPE-TRADING)
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
       #f #t))
     
@@ -245,7 +246,8 @@
           (assoc-ref split-up-accounts ACCT-TYPE-LIABILITY))
          (income-expense-accounts
           (append (assoc-ref split-up-accounts ACCT-TYPE-INCOME)
-                  (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)))
+                  (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)
+                  (assoc-ref split-up-accounts ACCT-TYPE-TRADING)))
          (equity-accounts
           (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
 

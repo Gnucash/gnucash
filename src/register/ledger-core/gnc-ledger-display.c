@@ -281,6 +281,9 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
 
       case ACCT_TYPE_CURRENCY:
         return CURRENCY_REGISTER;
+        
+      case ACCT_TYPE_TRADING:
+        return TRADING_REGISTER;
 
       default:
         PERR ("unknown account type %d\n", account_type);
@@ -327,6 +330,7 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
       break;
 
     case ACCT_TYPE_EQUITY:
+    case ACCT_TYPE_TRADING:
       reg_type = GENERAL_LEDGER;
       break;
 

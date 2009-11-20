@@ -163,6 +163,11 @@ gnc_split_register_use_security_cells (SplitRegister *reg,
   if (!account)
     return TRUE;
 
+  if (xaccTransUseTradingAccounts (xaccSplitGetParent (split))) {
+    if (!gnc_commodity_is_iso(xaccAccountGetCommodity(account)))
+      return TRUE;
+  }
+  
   return xaccAccountIsPriced(account);
 }
 
@@ -687,7 +692,7 @@ gnc_split_register_get_debcred_bg_color (VirtualLocation virt_loc,
     trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
 
     if (trans)
-      *hatching = !gnc_numeric_zero_p (xaccTransGetImbalance (trans));
+      *hatching = !xaccTransIsBalanced (trans);
     else
       *hatching = FALSE;
   }
@@ -1504,6 +1509,7 @@ gnc_split_reg_has_rate_cell (SplitRegisterType type)
   case INCOME_REGISTER:
   case EXPENSE_REGISTER:
   case EQUITY_REGISTER:
+  case TRADING_REGISTER:
   case GENERAL_LEDGER:
   case INCOME_LEDGER:
   case PORTFOLIO_LEDGER:
@@ -1569,10 +1575,43 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
     gnc_numeric imbalance;
     Account *acc;
 
-    imbalance = xaccTransGetImbalance (trans);
-
+    imbalance = xaccTransGetImbalanceValue (trans);
+ 
     if (gnc_numeric_zero_p (imbalance))
       return NULL;
+   
+    if (xaccTransUseTradingAccounts (trans)) {
+      MonetaryList *imbal_list;
+      gnc_monetary *imbal_mon;
+      imbal_list = xaccTransGetImbalance (trans);
+      
+      if (!imbal_list) {
+        /* No commodity imbalance, there shouldn't be a value imablance. */
+        return NULL;
+      }
+  
+      if (imbal_list->next) {
+        /* Multiple currency imbalance. */
+        gnc_monetary_list_free(imbal_list);
+        return NULL;
+      }
+      
+      imbal_mon = imbal_list->data;
+      if (!gnc_commodity_equal(gnc_monetary_commodity(*imbal_mon), currency)) {
+        /* Imbalance is in wrong currency */
+        gnc_monetary_list_free(imbal_list);
+        return NULL;
+      }
+      
+      if (!gnc_numeric_equal (gnc_monetary_value(*imbal_mon), imbalance)) {
+        /* Value and commodity imbalances differ */
+        gnc_monetary_list_free(imbal_list);
+        return NULL;
+      } 
+      
+      /* Done with the imbalance list */
+      gnc_monetary_list_free(imbal_list);
+    }
 
     imbalance = gnc_numeric_neg (imbalance);
 
@@ -1604,33 +1643,74 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
 
   {
     gnc_numeric amount;
+    gnc_commodity *split_commodity;
     GNCPrintAmountInfo print_info;
+    Account *account;
+    gnc_commodity * commodity;
+          
+    account = gnc_split_register_get_default_account (reg);
+    commodity = xaccAccountGetCommodity (account);
+    split_commodity = xaccAccountGetCommodity(xaccSplitGetAccount(split));
 
-    /* If this account is not a stock/mutual/currency account, and
-     * currency != the account commodity, then use the SplitAmount
-     * instead of the SplitValue.
-     */
-    switch (reg->type) {
-    case STOCK_REGISTER:
-    case CURRENCY_REGISTER:
-      amount = xaccSplitGetValue (split);
-      print_info = gnc_commodity_print_info (currency, FALSE);
-      break;
-
-    default:
-      {
-	Account *account;
-	gnc_commodity * commodity;
-
-	account = gnc_split_register_get_default_account (reg);
-	commodity = xaccAccountGetCommodity (account);
-
-	if (commodity && !gnc_commodity_equal (commodity, currency))
-	  /* Convert this to the "local" value */
-	  amount = xaccSplitConvertAmount(split, account);
-	else
-	  amount = xaccSplitGetValue (split);
-	print_info = gnc_account_print_info (account, FALSE);
+    if (xaccTransUseTradingAccounts (trans)) {
+      gboolean use_symbol, is_current;
+      is_current = virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
+                                        virt_loc.vcell_loc);
+      
+      if (reg->type == STOCK_REGISTER || 
+          reg->type == CURRENCY_REGISTER ||
+          reg->type == PORTFOLIO_LEDGER) {
+        gnc_commodity *amount_commodity;
+        /* security register.  If this split has price and shares columns,
+           use the value, otherwise use the amount.  */
+        if (gnc_split_register_use_security_cells(reg, virt_loc)) {
+          amount = xaccSplitGetValue(split);
+          amount_commodity = currency;
+        }
+        else {
+          amount = xaccSplitGetAmount(split);
+          amount_commodity = split_commodity;
+        }
+        /* Show the currency if it is not the default currency */
+        if (is_current ||
+            gnc_commodity_equiv(amount_commodity, gnc_default_currency())) 
+          use_symbol = FALSE;
+        else
+          use_symbol = TRUE;
+        print_info = gnc_commodity_print_info(amount_commodity, use_symbol);
+      }
+      else {
+        /* non-security register, always use the split amount. */
+        amount = xaccSplitGetAmount(split);
+        if (is_current ||
+            gnc_commodity_equiv(split_commodity, commodity)) 
+          use_symbol = FALSE;
+        else
+          use_symbol = TRUE;
+        print_info = gnc_commodity_print_info(split_commodity, use_symbol);
+      }
+    }
+    else {
+      /* If this account is not a stock/mutual/currency account, and
+      * currency != the account commodity, then use the SplitAmount
+      * instead of the SplitValue.
+      */
+      switch (reg->type) {
+        case STOCK_REGISTER:
+        case CURRENCY_REGISTER:
+          amount = xaccSplitGetValue (split);
+          print_info = gnc_commodity_print_info (currency, FALSE);
+          break;
+          
+        default:
+        {
+          if (commodity && !gnc_commodity_equal (commodity, currency))
+            /* Convert this to the "local" value */
+            amount = xaccSplitConvertAmount(split, account);
+          else
+            amount = xaccSplitGetValue (split);
+          print_info = gnc_account_print_info (account, FALSE);
+        }
       }
     }
 

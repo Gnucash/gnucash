@@ -244,6 +244,10 @@ guint gnc_book_count_transactions(QofBook *book);
  @{
 */
 
+/** Determine whether this transaction should use commodity trading accounts
+ */
+gboolean xaccTransUseTradingAccounts(const Transaction *trans);
+
 /** Sorts the splits in a transaction, putting the debits first,
  *  followed by the credits.
  */
@@ -342,15 +346,34 @@ gboolean      xaccTransHasSplitsInStateByAccount (const Transaction *trans,
 /** Set the commodity of this transaction. */
 void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
 
-/** The xaccTransGetImbalance() method returns the total value of the
+/** The xaccTransGetImbalanceValue() method returns the total value of the
  * transaction.  In a pure double-entry system, this imbalance
  * should be exactly zero, and if it is not, something is broken.
  * However, when double-entry semantics are not enforced, unbalanced
  * transactions can sneak in, and this routine can be used to find
  * out how much things are off by.  The value returned is denominated
  * in the currency that is returned by the xaccTransFindCommonCurrency()
- * method. */
-gnc_numeric xaccTransGetImbalance (const Transaction * trans);
+ * method. 
+ *
+ * If the use of currency exchange accounts is enabled then the a 
+ * a transaction must be balanced in each currency it uses to be considered
+ * to be balanced.  The method xaccTransGetImbalance is used by most
+ * code to take this into consideration.  This method is only used in a few
+ * places that want the transaction value even if currency exchange accounts
+ * are enabled. */
+gnc_numeric xaccTransGetImbalanceValue (const Transaction * trans);
+
+/** The xaccTransGetImbalance method returns a list giving the value of 
+ * the transaction in each currency for which the balance is not zero. 
+ * If the use of currency accounts is disabled, then this will be only
+ * the common currency for the transaction and xaccTransGetImbalance
+ * becomes equivalent to xaccTransGetImbalanceValue.  Otherwise it will
+ * return a list containing the imbalance in each currency. */
+MonetaryList *xaccTransGetImbalance (const Transaction * trans);
+
+/** Returns true if the transaction is balanced according to the rules
+ * currently in effect. */
+gboolean xaccTransIsBalanced(const Transaction * trans);
 
 /** The xaccTransGetAccountValue() method returns the total value applied
  *  to a particular account.  In some cases there may be multiple Splits

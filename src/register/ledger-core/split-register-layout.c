@@ -92,6 +92,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
     case INCOME_REGISTER:
     case EXPENSE_REGISTER:
     case EQUITY_REGISTER:
+    case TRADING_REGISTER:
       {
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SINGLE_LEDGER);
@@ -458,6 +459,7 @@ gnc_split_register_layout_add_cursors (SplitRegister *reg,
     case INCOME_REGISTER:
     case EXPENSE_REGISTER:
     case EQUITY_REGISTER:
+    case TRADING_REGISTER:
       num_cols = 9;
       break;
 

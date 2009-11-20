@@ -18,5 +18,10 @@
             gnc:*company-phone* gnc:*company-fax* gnc:*company-url*
             gnc:*company-email* gnc:*company-contact*)
 
+(define gnc:*book-label* (N_ "Accounts"))
+(define gnc:*trading-accounts* (N_ "Trading Accounts"))
+
+(export gnc:*book-label* gnc:*trading-accounts*)
+
 (load-from-path "business-options.scm")
 (load-from-path "business-prefs.scm")

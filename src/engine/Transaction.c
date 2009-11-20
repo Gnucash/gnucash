@@ -650,6 +650,18 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 }
 
 /********************************************************************\
+xaccTransUseTradingAccounts
+
+Returns true if the transaction should include trading account splits if
+it involves more than one commodity.
+\********************************************************************/
+
+gboolean xaccTransUseTradingAccounts(const Transaction *trans)
+{
+  return qof_book_use_trading_accounts(qof_instance_get_book (trans));
+}
+
+/********************************************************************\
 \********************************************************************/
 
 Transaction *
@@ -665,7 +677,7 @@ xaccTransLookup (const GUID *guid, QofBook *book)
 \********************************************************************/
 
 gnc_numeric
-xaccTransGetImbalance (const Transaction * trans)
+xaccTransGetImbalanceValue (const Transaction * trans)
 {
   gnc_numeric imbal = gnc_numeric_zero();
   if (!trans) return imbal;
@@ -678,6 +690,91 @@ xaccTransGetImbalance (const Transaction * trans)
                                  GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT));
   LEAVE("(trans=%p) imbal=%s", trans, gnc_num_dbg_to_string(imbal));
   return imbal;
+}
+
+MonetaryList *
+xaccTransGetImbalance (const Transaction * trans)
+{
+  /* imbal_value is used if either (1) the transaction has a non currency
+     split or (2) all the splits are in the same currency.  If there are 
+     no non-currency splits and not all splits are in the same currency then
+     imbal_list is used to compute the imbalance. */
+  MonetaryList *imbal_list = NULL;
+  gnc_numeric imbal_value = gnc_numeric_zero();
+  gboolean trading_accts;
+  
+  if (!trans) return imbal_list;
+  
+  ENTER("(trans=%p)", trans);
+  
+  trading_accts = xaccTransUseTradingAccounts (trans);
+  
+  /* If using trading accounts and there is at least one split that is not
+     in the transaction currency or a split that has a price or exchange 
+     rate other than 1, then compute the balance in each commodity in the
+     transaction.  Otherwise (all splits are in the transaction's currency)
+     then compute the balance using the value fields.
+     
+     Optimize for the common case of only one currency and a balanced 
+     transaction. */
+  FOR_EACH_SPLIT(trans, {
+    gnc_commodity *commodity;
+    commodity = xaccAccountGetCommodity(xaccSplitGetAccount(s));
+    if (trading_accts && 
+        (imbal_list ||
+         ! gnc_commodity_equiv(commodity, trans->common_currency) ||
+         ! gnc_numeric_equal(xaccSplitGetAmount(s), xaccSplitGetValue(s)))) {
+      /* Need to use (or already are using) a list of imbalances in each of 
+         the currencies used in the transaction. */
+      if (! imbal_list) {
+        /* All previous splits have been in the transaction's common
+           currency, so imbal_value is in this currency. */
+        imbal_list = gnc_monetary_list_add_value(imbal_list, 
+                                                 trans->common_currency,
+                                                 imbal_value);
+      }
+      imbal_list = gnc_monetary_list_add_value(imbal_list, commodity,
+                                               xaccSplitGetAmount(s));
+    }
+    
+    /* Add it to the value accumulator in case we need it. */
+    imbal_value = gnc_numeric_add(imbal_value, xaccSplitGetValue(s),
+                                  GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+  } );
+
+  
+  if (!imbal_list && !gnc_numeric_zero_p(imbal_value)) {
+    /* Not balanced and no list, create one.  If we found multiple currencies
+       and no non-currency commodity then imbal_list will already exist and
+       we won't get here. */
+    imbal_list = gnc_monetary_list_add_value(imbal_list,
+                                             trans->common_currency,
+                                             imbal_value);
+  }
+  
+  /* Delete all the zero entries from the list, perhaps leaving an
+     empty list */
+  imbal_list = gnc_monetary_list_delete_zeros(imbal_list);
+  
+  LEAVE("(trans=%p), imbal=%p", trans, imbal_list);
+  return imbal_list;
+}
+
+gboolean
+xaccTransIsBalanced (const Transaction *trans)
+{
+  MonetaryList *imbal_list;
+  gboolean result;
+  if (! gnc_numeric_zero_p(xaccTransGetImbalanceValue(trans)))
+    return FALSE;
+    
+  if (!xaccTransUseTradingAccounts (trans)) 
+    return TRUE;
+    
+  imbal_list = xaccTransGetImbalance(trans);
+  result = imbal_list == NULL;
+  gnc_monetary_list_free(imbal_list);
+  return result;
 }
 
 gnc_numeric
@@ -716,22 +813,28 @@ xaccTransGetAccountConvRate(Transaction *txn, Account *acc)
   GList *splits;
   Split *s;
   gboolean found_acc_match = FALSE;
+  gnc_commodity *acc_commod = xaccAccountGetCommodity(acc);
 
   /* We need to compute the conversion rate into _this account_.  So,
    * find the first split into this account, compute the conversion
    * rate (based on amount/value), and then return this conversion
    * rate.
    */
-  if (gnc_commodity_equal(xaccAccountGetCommodity(acc), 
-                          xaccTransGetCurrency(txn)))
+  if (gnc_commodity_equal(acc_commod, xaccTransGetCurrency(txn)))
       return gnc_numeric_create(1, 1);
 
   for (splits = txn->splits; splits; splits = splits->next) {
+    Account *split_acc;
+    gnc_commodity *split_commod;
+    
     s = splits->data;
 
     if (!xaccTransStillHasSplit(txn, s))
       continue;
-    if (xaccSplitGetAccount (s) != acc)
+    split_acc = xaccSplitGetAccount (s);
+    split_commod = xaccAccountGetCommodity (split_acc);
+    if (! (split_acc == acc ||
+          gnc_commodity_equal (split_commod, acc_commod)))
       continue;
 
     found_acc_match = TRUE;
@@ -1932,7 +2035,7 @@ static QofObject trans_object_def = {
 static gboolean
 trans_is_balanced_p (const Transaction *trans)
 {
-  return trans ? gnc_numeric_zero_p(xaccTransGetImbalance(trans)) : FALSE;
+  return trans ? xaccTransIsBalanced(trans) : FALSE;
 }
 
 gboolean xaccTransRegister (void)
@@ -1954,7 +2057,7 @@ gboolean xaccTransRegister (void)
     { TRANS_DATE_DUE, QOF_TYPE_DATE, 
       (QofAccessFunc)xaccTransRetDateDueTS, NULL },
     { TRANS_IMBALANCE, QOF_TYPE_NUMERIC, 
-      (QofAccessFunc)xaccTransGetImbalance, NULL },
+      (QofAccessFunc)xaccTransGetImbalanceValue, NULL },
     { TRANS_NOTES, QOF_TYPE_STRING, 
       (QofAccessFunc)xaccTransGetNotes, 
       (QofSetterFunc)qofTransSetNotes },

@@ -48,7 +48,7 @@
  * 
  *    This routine will also create 'equity transactions' in 
  *    order to preserve the balances on accounts.  For any
- *    account that is not of income, expense or equity type,
+ *    account that is not of income, expense, trading or equity type,
  *    this routine wil find the closing balance of each account
  *    in the closed book.  It will then create an 'equity
  *    transaction' in the open book, creating an opening balance 

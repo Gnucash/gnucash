@@ -411,6 +411,7 @@
 			(lambda (s)
 			(if (and (not (or (split-account-type? s ACCT-TYPE-EXPENSE)
 					  (split-account-type? s ACCT-TYPE-INCOME)
+					  (split-account-type? s ACCT-TYPE-TRADING)
 					  (split-account-type? s ACCT-TYPE-ROOT)))
 				 (not (same-account? current (xaccSplitGetAccount s))))
 			    (begin

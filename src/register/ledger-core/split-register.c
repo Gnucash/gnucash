@@ -1782,6 +1782,16 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
   if (!price_changed && !amount_changed && !shares_changed)
     return TRUE;
 
+  /* If we are using commodity trading accounts then the value may
+     not really be the value.  Punt if so. */
+  if (xaccTransUseTradingAccounts (xaccSplitGetParent (split))) {
+    gnc_commodity *acc_commodity;
+    acc_commodity = xaccAccountGetCommodity (account);
+    if (! (xaccAccountIsPriced (account) ||
+           !gnc_commodity_is_iso (acc_commodity)))
+      return TRUE;
+  }
+    
   if (shares_changed)
   {
     cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
@@ -2053,6 +2063,8 @@ gnc_split_register_type_to_account_type (SplitRegisterType sr_type)
       return ACCT_TYPE_STOCK;
     case CURRENCY_REGISTER:
       return ACCT_TYPE_CURRENCY;
+    case TRADING_REGISTER:
+      return ACCT_TYPE_TRADING;
     case GENERAL_LEDGER:  
       return ACCT_TYPE_NONE;
     case EQUITY_REGISTER:
@@ -2253,6 +2265,7 @@ gnc_split_register_config_action (SplitRegister *reg)
       gnc_combo_cell_add_menu_item (cell, _("Paycheck"));
       break;
     case EXPENSE_REGISTER:
+    case TRADING_REGISTER:
       gnc_combo_cell_add_menu_item (cell, _("Increase"));
       gnc_combo_cell_add_menu_item (cell, _("Decrease"));
       gnc_combo_cell_add_menu_item (cell, _("Buy"));

@@ -72,6 +72,7 @@ static void
 TransScrubOrphansFast (Transaction *trans, Account *root)
 {
   GList *node;
+  gchar *accname;
 
   if (!trans) return;
   g_return_if_fail (root);
@@ -85,7 +86,12 @@ TransScrubOrphansFast (Transaction *trans, Account *root)
 
     DEBUG ("Found an orphan \n");
 
-    orph = xaccScrubUtilityGetOrMakeAccount (root, trans->common_currency, _("Orphan"));
+    accname = g_strconcat (_("Orphan"), "-",
+                           gnc_commodity_get_mnemonic (trans->common_currency), 
+                           NULL);
+    orph = xaccScrubUtilityGetOrMakeAccount (root, trans->common_currency, 
+                                             accname, ACCT_TYPE_BANK, FALSE);
+    g_free (accname);
     if (!orph) continue;
 
     xaccSplitSetAccount(split, orph);
@@ -353,28 +359,15 @@ xaccTransScrubCurrencyFromSplits(Transaction *trans)
   }
 }
 
-void
-xaccTransScrubImbalance (Transaction *trans, Account *root,
-                         Account *account)
+static Split *
+get_balance_split (Transaction *trans, Account *root, Account *account,
+                     gnc_commodity *commodity)
 {
-  Split *balance_split = NULL;
-  gnc_numeric imbalance;
-
-  if (!trans) return;
-
-  ENTER ("()");
-
-  /* Must look for orphan splits even if there is no imbalance. */
-  xaccTransScrubSplits (trans);
-
-  /* If the transaction is balanced, nothing more to do */
-  imbalance = xaccTransGetImbalance (trans);
-  if (gnc_numeric_zero_p (imbalance)) {
-    LEAVE("zero imbalance");
-    return;
-  }
-
-  if (!account)
+  Split *balance_split;
+  gchar *accname;
+  
+  if (!account ||
+      !gnc_commodity_equiv (commodity, xaccAccountGetCommodity(account)))
   {
     if (!root) 
     {
@@ -383,16 +376,17 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
        {
           /* This can't occur, things should be in books */
           PERR ("Bad data corruption, no root account in book");
-          LEAVE("");
-          return;
+          return NULL;
        }
     }
-    account = xaccScrubUtilityGetOrMakeAccount (root, 
-        trans->common_currency, _("Imbalance"));
+    accname = g_strconcat (_("Imbalance"), "-",
+                           gnc_commodity_get_mnemonic (commodity), NULL);
+    account = xaccScrubUtilityGetOrMakeAccount (root, commodity, 
+                                                accname, ACCT_TYPE_BANK, FALSE);
+    g_free (accname);
     if (!account) {
         PERR ("Can't get balancing account");
-        LEAVE("");
-        return;
+        return NULL;
     }
   }
 
@@ -408,36 +402,403 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
     xaccSplitSetAccount(balance_split, account);
     xaccTransCommitEdit (trans);
   }
+  
+  return balance_split;
+}
 
-  PINFO ("unbalanced transaction");
-
+/* Get the trading split for a given commodity, creating it (and the 
+   necessary accounts) if it doesn't exist. */
+static Split *
+get_trading_split (Transaction *trans, Account *root, 
+                   gnc_commodity *commodity)
+{
+  Split *balance_split;
+  Account *trading_account;
+  Account *ns_account;
+  Account *account;
+  gnc_commodity *default_currency = NULL;
+  
+  if (!root) 
   {
-    const gnc_commodity *currency;
-    const gnc_commodity *commodity;
-    gnc_numeric old_value, new_value;
-
-    xaccTransBeginEdit (trans);
-
-    currency = xaccTransGetCurrency (trans);
-    old_value = xaccSplitGetValue (balance_split);
-
-    /* Note: We have to round for the commodity's fraction, NOT any
-     * already existing denominator (bug #104343), because either one
-     * of the denominators might already be reduced.  */
-    new_value = gnc_numeric_sub (old_value, imbalance,
-             gnc_commodity_get_fraction(currency), 
-             GNC_HOW_RND_ROUND);
-
-    xaccSplitSetValue (balance_split, new_value);
-
-    commodity = xaccAccountGetCommodity (account);
-    if (gnc_commodity_equiv (currency, commodity))
+    root = gnc_book_get_root_account (xaccTransGetBook (trans));
+    if (NULL == root)
     {
-      xaccSplitSetAmount (balance_split, new_value);
+      /* This can't occur, things should be in books */
+      PERR ("Bad data corruption, no root account in book");
+      return NULL;
+    }
+  }
+  
+  /* Get the default currency.  This is harder than it seems.  It's not
+     possible to call gnc_default_currency() since it's a UI function.  One
+     might think that the currency of the root account would do, but the root
+     account has no currency.  Instead look for the Income placeholder account
+     and use its currency.  */
+  default_currency = xaccAccountGetCommodity(gnc_account_lookup_by_name(root, 
+                                                                        _("Income")));
+  if (! default_currency) {
+    default_currency = commodity;
+  }
+  
+  trading_account = xaccScrubUtilityGetOrMakeAccount (root, 
+                                                      default_currency,
+                                                      _("Trading"),
+                                                      ACCT_TYPE_TRADING, TRUE);
+  if (!trading_account) {
+    PERR ("Can't get trading account");
+    return NULL;
+  }
+  
+  ns_account = xaccScrubUtilityGetOrMakeAccount (trading_account,
+                                                 default_currency,
+                                                 gnc_commodity_get_namespace(commodity),
+                                                 ACCT_TYPE_TRADING, TRUE);
+  if (!ns_account) {
+    PERR ("Can't get namespace account");
+    return NULL;
+  }
+  
+  account = xaccScrubUtilityGetOrMakeAccount (ns_account, commodity,
+                                              gnc_commodity_get_mnemonic(commodity),
+                                              ACCT_TYPE_TRADING, FALSE);
+  if (!account) {
+    PERR ("Can't get commodity account");
+    return NULL;
+  }
+  
+  
+  balance_split = xaccTransFindSplitByAccount(trans, account);
+  
+  /* Put split into account before setting split value */
+  if (!balance_split)
+  {
+    balance_split = xaccMallocSplit (qof_instance_get_book(trans));
+    
+    xaccTransBeginEdit (trans);
+    xaccSplitSetParent(balance_split, trans);
+    xaccSplitSetAccount(balance_split, account);
+    xaccTransCommitEdit (trans);
+  }
+  
+  return balance_split;
+}
+
+/* Find the trading split for a commodity, but don't create any splits
+   or accounts if they don't already exist. */
+static Split *
+find_trading_split (Transaction *trans, Account *root, 
+                    gnc_commodity *commodity)
+{
+  Account *trading_account;
+  Account *ns_account;
+  Account *account;
+  
+  if (!root) 
+  {
+    root = gnc_book_get_root_account (xaccTransGetBook (trans));
+    if (NULL == root)
+    {
+      /* This can't occur, things should be in books */
+      PERR ("Bad data corruption, no root account in book");
+      return NULL;
+    }
+  }
+  
+  trading_account = gnc_account_lookup_by_name (root, _("Trading"));
+  if (!trading_account) {
+    return NULL;
+  }
+  
+  ns_account = gnc_account_lookup_by_name (trading_account,
+                                           gnc_commodity_get_namespace(commodity));
+  if (!ns_account) {
+    return NULL;
+  }
+  
+  account = gnc_account_lookup_by_name (ns_account,
+                                        gnc_commodity_get_mnemonic(commodity));
+  if (!account) {
+    return NULL;
+  }
+  
+  return xaccTransFindSplitByAccount(trans, account);
+}
+
+static void
+add_balance_split (Transaction *trans, gnc_numeric imbalance,
+                   Account *root, Account *account)
+{
+  const gnc_commodity *commodity;
+  gnc_numeric old_value, new_value;
+  Split *balance_split;
+  gnc_commodity *currency = xaccTransGetCurrency (trans);
+  
+  balance_split = get_balance_split(trans, root, account, currency);
+  if (!balance_split)
+  {
+    /* Error already logged */
+    LEAVE("");
+    return;
+  }
+  account = xaccSplitGetAccount(balance_split);
+  
+  xaccTransBeginEdit (trans);
+  
+  old_value = xaccSplitGetValue (balance_split);
+  
+  /* Note: We have to round for the commodity's fraction, NOT any
+    * already existing denominator (bug #104343), because either one
+    * of the denominators might already be reduced.  */
+  new_value = gnc_numeric_sub (old_value, imbalance,
+                               gnc_commodity_get_fraction(currency), 
+                               GNC_HOW_RND_ROUND);
+  
+  xaccSplitSetValue (balance_split, new_value);
+  
+  commodity = xaccAccountGetCommodity (account);
+  if (gnc_commodity_equiv (currency, commodity))
+  {
+    xaccSplitSetAmount (balance_split, new_value);
+  }
+  
+  xaccSplitScrub (balance_split);
+  xaccTransCommitEdit (trans);
+}
+
+void
+xaccTransScrubImbalance (Transaction *trans, Account *root,
+                         Account *account)
+{
+  const gnc_commodity *currency;
+
+  if (!trans) return;
+
+  ENTER ("()");
+
+  /* Must look for orphan splits even if there is no imbalance. */
+  xaccTransScrubSplits (trans);
+
+  /* Return immediately if things are balanced. */
+  if (xaccTransIsBalanced (trans))
+    return;
+
+  currency = xaccTransGetCurrency (trans);
+
+  if (! xaccTransUseTradingAccounts (trans))
+  {
+    gnc_numeric imbalance;
+
+    /* Make the value sum to zero */
+    imbalance = xaccTransGetImbalanceValue (trans);
+    if (! gnc_numeric_zero_p (imbalance))
+    {
+      PINFO ("Value unbalanced transaction");
+
+      add_balance_split (trans, imbalance, root, account);
+    }
+  }
+  else
+  {
+    MonetaryList *imbal_list;
+    MonetaryList *imbalance_commod;
+    GList *splits;
+    gnc_numeric imbalance;
+    Split *balance_split = NULL;
+   
+    /* If there are existing trading splits, adjust the price or exchange
+       rate in each of them to agree with the non-trading splits for the
+       same commodity.  If there are multiple non-trading splits for the 
+       same commodity in the transaction this will use the exchange rate in
+       the last such split.  This shouldn't happen, and if it does then there's
+       not much we can do about it anyway.
+      
+       While we're at it, compute the value imbalance ignoring existing
+       trading splits. */
+    
+    imbalance = gnc_numeric_zero();
+    
+    for (splits = trans->splits; splits; splits = splits->next) 
+    {
+      Split *split = splits->data;
+      gnc_numeric value, amount;
+      gnc_commodity *commodity;
+      
+      if (! xaccTransStillHasSplit (trans, split)) continue;
+      
+      commodity = xaccAccountGetCommodity (xaccSplitGetAccount(split));
+      if (!commodity) 
+      {
+        PERR("Split has no commodity");
+        continue;
+      }
+      
+      balance_split = find_trading_split (trans, root, commodity);
+      
+      if (balance_split != split)
+        /* this is not a trading split */
+        imbalance = gnc_numeric_add(imbalance, xaccSplitGetValue (split),
+                                    GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+      
+      /* Ignore splits where value or amount is zero */
+      value = xaccSplitGetValue (split);
+      amount = xaccSplitGetAmount (split);
+      if (gnc_numeric_zero_p(amount) || gnc_numeric_zero_p(value))
+        continue;
+      
+      if (balance_split && balance_split != split) 
+      {
+        gnc_numeric convrate = gnc_numeric_div (amount, value, 
+                                                GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+        gnc_numeric old_value, new_value;
+        old_value = xaccSplitGetValue(balance_split);
+        new_value = gnc_numeric_div (xaccSplitGetAmount(balance_split), 
+                                     convrate,
+                                     gnc_commodity_get_fraction(currency),
+                                     GNC_RND_ROUND);
+        if (! gnc_numeric_equal (old_value, new_value)) 
+        {
+          xaccTransBeginEdit (trans);
+          xaccSplitSetValue (balance_split, new_value);
+          xaccSplitScrub (balance_split);
+          xaccTransCommitEdit (trans);
+        }
+      }
     }
 
-    xaccSplitScrub (balance_split);
-    xaccTransCommitEdit (trans);
+    /* Balance the value, ignoring existing trading splits */
+    if (! gnc_numeric_zero_p (imbalance))
+    {
+      PINFO ("Value unbalanced transaction");
+      
+      add_balance_split (trans, imbalance, root, account);
+    }
+    
+    /* If the transaction is balanced, nothing more to do */
+    imbal_list = xaccTransGetImbalance (trans);
+    if (!imbal_list) 
+    {
+      LEAVE("()");
+      return;
+    }
+  
+    PINFO ("Currency unbalanced transaction");
+    
+    for (imbalance_commod = imbal_list; imbalance_commod; 
+         imbalance_commod = imbalance_commod->next) {
+      gnc_monetary *imbal_mon = imbalance_commod->data;
+      gnc_commodity *commodity;
+      gnc_numeric convrate;
+      gnc_numeric old_amount, new_amount;
+      gnc_numeric old_value, new_value, val_imbalance;
+      GList *splits;
+      
+      commodity = gnc_monetary_commodity (*imbal_mon);
+      
+      balance_split = get_trading_split(trans, root, commodity);
+      if (!balance_split)
+      {
+        /* Error already logged */
+        gnc_monetary_list_free(imbal_list);
+        LEAVE("");
+        return;
+      }
+      
+      account = xaccSplitGetAccount(balance_split);
+      
+      if (! gnc_commodity_equal (currency, commodity)) {
+        /* Find the value imbalance in this commodity */
+        val_imbalance = gnc_numeric_zero();
+        for (splits = trans->splits; splits; splits = splits->next) {
+          Split *split = splits->data;
+          if (xaccTransStillHasSplit (trans, split) &&
+              gnc_commodity_equal (commodity, 
+                                   xaccAccountGetCommodity(xaccSplitGetAccount(split))))
+            val_imbalance = gnc_numeric_add (val_imbalance, xaccSplitGetValue (split),
+                                             GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+        }
+      }
+      
+      xaccTransBeginEdit (trans);
+      
+      old_amount = xaccSplitGetAmount (balance_split);
+      new_amount = gnc_numeric_sub (old_amount, gnc_monetary_value(*imbal_mon),
+                                    gnc_commodity_get_fraction(commodity), 
+                                    GNC_HOW_RND_ROUND);
+      
+      xaccSplitSetAmount (balance_split, new_amount);
+      
+      if (gnc_commodity_equal (currency, commodity)) {
+        /* Imbalance commodity is the transaction currency, value in the
+           split must be the same as the amount */
+        xaccSplitSetValue (balance_split, new_amount);
+      }
+      else {
+        old_value = xaccSplitGetValue (balance_split);
+        new_value = gnc_numeric_sub (old_value, val_imbalance,
+                                     gnc_commodity_get_fraction(currency), 
+                                     GNC_HOW_RND_ROUND);
+                                     
+        xaccSplitSetValue (balance_split, new_value);
+      }
+      
+      xaccSplitScrub (balance_split);
+      xaccTransCommitEdit (trans);     
+    }
+       
+    gnc_monetary_list_free(imbal_list);
+    
+    if (!gnc_numeric_zero_p(xaccTransGetImbalanceValue(trans))) {
+      /* This is probably because there are splits with zero amount
+         and non-zero value.  These are usually realized gain/loss
+         splits.  Add a reversing split for each of them to balance
+         the value. */
+
+      /* Copy the split list so we don't see the splits we're adding */
+      GList *splits_dup = g_list_copy(trans->splits);
+      for (splits = splits_dup; splits; splits = splits->next) {
+        Split *split = splits->data;
+        if (! xaccTransStillHasSplit(trans, split)) continue;
+        if (!gnc_numeric_zero_p(xaccSplitGetValue(split)) &&
+            gnc_numeric_zero_p(xaccSplitGetAmount(split))) {
+          gnc_commodity *commodity;
+          gnc_numeric old_value, new_value;
+
+          commodity = xaccAccountGetCommodity(xaccSplitGetAccount(split));
+          if (!commodity) {
+            PERR("Split has no commodity");
+            continue;
+          }
+          balance_split = get_trading_split(trans, root, commodity);
+          if (!balance_split)
+          {
+            /* Error already logged */
+            gnc_monetary_list_free(imbal_list);
+            LEAVE("");
+            return;
+          }
+          account = xaccSplitGetAccount(balance_split);
+          
+          xaccTransBeginEdit (trans);
+          
+          old_value = xaccSplitGetValue (balance_split);
+          new_value = gnc_numeric_sub (old_value, xaccSplitGetValue(split),
+                                       gnc_commodity_get_fraction(currency), 
+                                       GNC_HOW_RND_ROUND);
+          xaccSplitSetValue (balance_split, new_value);
+          
+          /* Don't change the balance split's amount since the amount
+             is zero in the split we're working on */
+
+          xaccSplitScrub (balance_split);
+          xaccTransCommitEdit (trans);     
+        }
+      }
+      
+      g_list_free(splits_dup);
+      
+      if (!gnc_numeric_zero_p(xaccTransGetImbalanceValue(trans)))
+        PERR("Balancing currencies unbalanced value");
+    }
   }
   LEAVE ("()");
 }
@@ -836,9 +1197,9 @@ xaccAccountScrubKvp (Account *account)
 
 Account *
 xaccScrubUtilityGetOrMakeAccount (Account *root, gnc_commodity * currency,
-                  const char *name_root)
+                                  const char *accname, GNCAccountType acctype,
+                                  gboolean placeholder)
 {
-  char * accname;
   Account * acc;
 
   g_return_val_if_fail (root, NULL);
@@ -850,9 +1211,6 @@ xaccScrubUtilityGetOrMakeAccount (Account *root, gnc_commodity * currency,
     return NULL;
   }
 
-  accname = g_strconcat (name_root, "-",
-                         gnc_commodity_get_mnemonic (currency), NULL);
-
   /* See if we've got one of these going already ... */
   acc = gnc_account_lookup_by_name(root, accname);
 
@@ -863,14 +1221,13 @@ xaccScrubUtilityGetOrMakeAccount (Account *root, gnc_commodity * currency,
     xaccAccountBeginEdit (acc);
     xaccAccountSetName (acc, accname);
     xaccAccountSetCommodity (acc, currency);
-    xaccAccountSetType (acc, ACCT_TYPE_BANK);
+    xaccAccountSetType (acc, acctype);
+    xaccAccountSetPlaceholder (acc, placeholder);
 
     /* Hang the account off the root. */
     gnc_account_append_child (root, acc);
     xaccAccountCommitEdit (acc);
   }
-
-  g_free (accname);
 
   return acc;
 }

@@ -59,12 +59,40 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
     Split *split;
     Split *other_split;
     gboolean two_accounts;
+    gboolean multi_currency;
 
 
-    imbalance = xaccTransGetImbalance (trans);
-    if (gnc_numeric_zero_p (imbalance))
-        return FALSE;
-  
+    if (xaccTransIsBalanced (trans))
+      return FALSE;
+    
+    if (xaccTransUseTradingAccounts (trans)) {
+      MonetaryList *imbal_list;
+      gnc_monetary *imbal_mon;
+      imbal_list = xaccTransGetImbalance (trans);
+      
+      /* See if the imbalance is only in the transaction's currency */
+      if (!imbal_list)
+        /* Value imbalance, but not commodity imbalance.  This shouldn't
+           be something that scrubbing can cause to happen.  Perhaps someone
+           entered invalid splits.  */
+        multi_currency = TRUE;
+      else {
+        imbal_mon = imbal_list->data;
+        if (!imbal_list->next && 
+            gnc_commodity_equiv(gnc_monetary_commodity(*imbal_mon),
+                                xaccTransGetCurrency(trans))) 
+          multi_currency = FALSE;
+        else 
+          multi_currency = TRUE;
+      }
+      
+      /* We're done with the imbalance list, the real work will be done
+         by xaccTransScrubImbalance which will get it again. */
+      gnc_monetary_list_free(imbal_list);
+    }
+    else 
+      multi_currency = FALSE;
+    
     split = xaccTransGetSplit (trans, 0);
     other_split = xaccSplitGetOtherSplit (split);
   
@@ -75,7 +103,7 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
        if (split) other_split = xaccSplitGetOtherSplit (split);
        else split = xaccTransGetSplit (trans, 0);
     }
-    if (other_split == NULL)
+    if (other_split == NULL || multi_currency)
     {
       two_accounts = FALSE;
       other_account = NULL;
@@ -107,7 +135,7 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
     radio_list = g_list_append (radio_list,
                                 _("Let GnuCash _add an adjusting split"));
 
-    if (reg->type < NUM_SINGLE_REGISTER_TYPES)
+    if (reg->type < NUM_SINGLE_REGISTER_TYPES && !multi_currency)
     {
       radio_list = g_list_append (radio_list,
                                   _("Adjust current account _split total"));

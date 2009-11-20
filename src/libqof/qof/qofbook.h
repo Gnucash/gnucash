@@ -213,6 +213,9 @@ void qof_book_set_data_fin (QofBook *book, const gchar *key, gpointer data,
 /** Retrieves arbitrary pointers to structs stored by qof_book_set_data. */
 gpointer qof_book_get_data (const QofBook *book, const gchar *key);
 
+/** Returns flag indicating whether this book uses trading accounts */
+gboolean qof_book_use_trading_accounts (const QofBook *book);
+
 /** Is the book shutting down? */
 gboolean qof_book_shutting_down (const QofBook *book);
 

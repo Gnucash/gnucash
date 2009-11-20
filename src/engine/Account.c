@@ -1919,7 +1919,7 @@ static int typeorder[NUM_ACCOUNT_TYPES] = {
      ACCT_TYPE_BANK, ACCT_TYPE_STOCK, ACCT_TYPE_MUTUAL, ACCT_TYPE_CURRENCY,
      ACCT_TYPE_CASH, ACCT_TYPE_ASSET, ACCT_TYPE_RECEIVABLE,
      ACCT_TYPE_CREDIT, ACCT_TYPE_LIABILITY, ACCT_TYPE_PAYABLE,
-     ACCT_TYPE_INCOME, ACCT_TYPE_EXPENSE, ACCT_TYPE_EQUITY };
+     ACCT_TYPE_INCOME, ACCT_TYPE_EXPENSE, ACCT_TYPE_EQUITY, ACCT_TYPE_TRADING };
 
 static int revorder[NUM_ACCOUNT_TYPES] = {
      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
@@ -3701,6 +3701,7 @@ xaccAccountTypeEnumAsString(GNCAccountType type)
     GNC_RETURN_ENUM_AS_STRING(RECEIVABLE);
     GNC_RETURN_ENUM_AS_STRING(PAYABLE);
     GNC_RETURN_ENUM_AS_STRING(ROOT);
+    GNC_RETURN_ENUM_AS_STRING(TRADING);
     GNC_RETURN_ENUM_AS_STRING(CHECKING);
     GNC_RETURN_ENUM_AS_STRING(SAVINGS);
     GNC_RETURN_ENUM_AS_STRING(MONEYMRKT);
@@ -3736,6 +3737,7 @@ xaccAccountStringToType(const char* str, GNCAccountType *type)
   GNC_RETURN_ON_MATCH(RECEIVABLE);
   GNC_RETURN_ON_MATCH(PAYABLE);
   GNC_RETURN_ON_MATCH(ROOT);
+  GNC_RETURN_ON_MATCH(TRADING);
   GNC_RETURN_ON_MATCH(CHECKING);
   GNC_RETURN_ON_MATCH(SAVINGS);
   GNC_RETURN_ON_MATCH(MONEYMRKT);
@@ -3777,7 +3779,9 @@ account_type_name[NUM_ACCOUNT_TYPES] = {
   N_("Expense"),
   N_("Equity"),
   N_("A/Receivable"),
-  N_("A/Payable")
+  N_("A/Payable"),
+  N_("Root"),
+  N_("Trading")
   /*
     N_("Checking"),
     N_("Savings"),
@@ -3848,6 +3852,10 @@ xaccParentAccountTypesCompatibleWith (GNCAccountType type)
   case ACCT_TYPE_EQUITY:
     return
       (1 << ACCT_TYPE_EQUITY)     |
+      (1 << ACCT_TYPE_ROOT);
+  case ACCT_TYPE_TRADING:
+    return
+      (1 << ACCT_TYPE_TRADING)    |
       (1 << ACCT_TYPE_ROOT);
   default:
     PERR("bad account type: %d", type);

@@ -140,18 +140,24 @@ typedef enum
   ACCT_TYPE_PAYABLE = 12,  /**< A/P account type */
 
   ACCT_TYPE_ROOT = 13, /**< The hidden root account of an account tree. */
+  
+  ACCT_TYPE_TRADING = 14, /**< Account used to record multiple commodity transactions.
+                           *   This is not the same as ACCT_TYPE_CURRENCY above.
+                           *   Multiple commodity transactions have splits in these
+                           *   accounts to make the transaction balance in each 
+                           *   commodity as well as in total value.  */
 
-  NUM_ACCOUNT_TYPES = 14,  /**< stop here; the following types
+  NUM_ACCOUNT_TYPES = 15,  /**< stop here; the following types
 			    * just aren't ready for prime time */
   
   /* bank account types */
-  ACCT_TYPE_CHECKING = 14, /**< bank account type -- don't use this
+  ACCT_TYPE_CHECKING = 15, /**< bank account type -- don't use this
 			    *   for now, see NUM_ACCOUNT_TYPES  */
-  ACCT_TYPE_SAVINGS = 15, /**< bank account type -- don't use this for
+  ACCT_TYPE_SAVINGS = 16, /**< bank account type -- don't use this for
 			   *   now, see NUM_ACCOUNT_TYPES  */
-  ACCT_TYPE_MONEYMRKT = 16, /**< bank account type -- don't use this
+  ACCT_TYPE_MONEYMRKT = 17, /**< bank account type -- don't use this
 			     *   for now, see NUM_ACCOUNT_TYPES  */
-  ACCT_TYPE_CREDITLINE = 17, /**< line of credit -- don't use this for
+  ACCT_TYPE_CREDITLINE = 18, /**< line of credit -- don't use this for
 			      *   now, see NUM_ACCOUNT_TYPES  */
 } GNCAccountType;
 

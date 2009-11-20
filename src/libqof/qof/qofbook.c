@@ -39,6 +39,7 @@
 #include <string.h>
 
 #include <glib.h>
+#include <libguile.h>
 
 #include "qof.h"
 #include "qofevent-p.h"
@@ -437,6 +438,48 @@ qof_book_get_counter (const QofBook *book, const char *counter_name)
 
     /* and return the value */
     return counter;
+}
+
+static char *get_scm_string(const char *str_name)
+{
+    SCM scm_string = scm_c_eval_string (str_name);
+    if (! SCM_STRINGP(scm_string))
+        return NULL;
+        
+    return g_strdup(SCM_STRING_CHARS(scm_string));
+}
+
+/* Determine whether this book uses trading accounts */
+gboolean qof_book_use_trading_accounts (const QofBook *book)
+{
+    static char *options_name = NULL;
+    static char *acct_section = NULL;
+    static char *trading_opt = NULL;
+    
+    const char *opt;
+    kvp_value *kvp_val;
+    
+    if (options_name == NULL)
+    {
+        options_name = get_scm_string ("(car gnc:*kvp-option-path*)");
+        acct_section = get_scm_string ("gnc:*book-label*");
+        trading_opt = get_scm_string ("gnc:*trading-accounts*");
+        if (options_name == NULL || acct_section == NULL || trading_opt == NULL)
+        {
+            PWARN ("Unable to find trading account preference");
+        }
+    }
+    
+    kvp_val = kvp_frame_get_slot_path (qof_book_get_slots (book), options_name, acct_section,
+                                       trading_opt, NULL);
+    if (kvp_val == NULL)
+        return FALSE;
+    
+    opt = kvp_value_get_string (kvp_val);
+    
+    if (opt && opt[0] == 't' && opt[1] == 0)
+        return TRUE;
+    return FALSE;
 }
 
 /* QofObject function implementation and registration */

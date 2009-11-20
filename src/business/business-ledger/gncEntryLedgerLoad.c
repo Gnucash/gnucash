@@ -134,7 +134,7 @@ skip_expense_acct_cb (Account *account, gpointer user_data)
   type = xaccAccountGetType (account);
   if (type == ACCT_TYPE_PAYABLE || type == ACCT_TYPE_RECEIVABLE ||
       type == ACCT_TYPE_CASH || type == ACCT_TYPE_BANK ||
-      type == ACCT_TYPE_EQUITY)
+      type == ACCT_TYPE_EQUITY || type == ACCT_TYPE_TRADING)
   {
     return TRUE;
   }
@@ -157,7 +157,7 @@ skip_income_acct_cb (Account *account, gpointer user_data)
   type = xaccAccountGetType (account);
   if (type == ACCT_TYPE_PAYABLE || type == ACCT_TYPE_RECEIVABLE ||
       type == ACCT_TYPE_CASH || type == ACCT_TYPE_BANK ||
-      type == ACCT_TYPE_EQUITY)
+      type == ACCT_TYPE_EQUITY || type == ACCT_TYPE_TRADING)
   {
     return TRUE;
   }

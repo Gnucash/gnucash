@@ -2146,6 +2146,19 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
 
     g_return_val_if_fail(txn_cur, TRUE);
 
+    if (xaccTransUseTradingAccounts (txn)) {
+      /* If we're using commodity trading accounts then "amount" is
+         really the split's amount and it's in xfer_com.  We need an
+         exchange rate that will convert this amount into a value in
+         the transaction currency.  */
+      if (gnc_commodity_equal(xfer_com, txn_cur)) {
+        /* Transaction is in the same currency as the split, exchange
+           rate is 1. */
+        *exch_rate = gnc_numeric_create(1, 1);
+        return FALSE;
+      }
+      swap_amounts = TRUE;
+    
     /* We know that "amount" is always in the reg_com currency.
      * Unfortunately it is possible that neither xfer_com or txn_cur are
      * the same as reg_com, in which case we need to convert to the txn
@@ -2153,7 +2166,7 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
      * need to flip-flop the commodities and the exchange rates.
      */
     
-    if (gnc_commodity_equal(reg_com, txn_cur)) {
+    } else if (gnc_commodity_equal(reg_com, txn_cur)) {
         /* we're working in the txn currency.  Great.  Nothing to do! */
         swap_amounts = FALSE;
         

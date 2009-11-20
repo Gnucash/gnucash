@@ -96,7 +96,8 @@
                     ACCT-TYPE-CREDITLINE))
 	(cons ACCT-TYPE-EQUITY (list ACCT-TYPE-EQUITY))
 	(cons ACCT-TYPE-INCOME (list ACCT-TYPE-INCOME))
-	(cons ACCT-TYPE-EXPENSE (list ACCT-TYPE-EXPENSE)))))
+	(cons ACCT-TYPE-EXPENSE (list ACCT-TYPE-EXPENSE))
+	(cons ACCT-TYPE-TRADING (list ACCT-TYPE-TRADING)))))
 
 ;; Returns the name of the account type as a string, and in its plural
 ;; form (as opposed to xaccAccountGetTypeStr which gives the
@@ -120,7 +121,8 @@
     (cons ACCT-TYPE-MONEYMRKT (_ "Money Market"))
     (cons ACCT-TYPE-RECEIVABLE (_ "Accounts Receivable"))
     (cons ACCT-TYPE-PAYABLE (_ "Accounts Payable"))
-    (cons ACCT-TYPE-CREDITLINE (_ "Credit Lines")))
+    (cons ACCT-TYPE-CREDITLINE (_ "Credit Lines"))
+    (cons ACCT-TYPE-TRADING (_ "Trading Accounts")))
    type))
 
 ;; Get the list of all different commodities that are used within the

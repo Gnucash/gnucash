@@ -151,7 +151,10 @@ downloaded_transaction_append(GNCImportMatchPicker * matcher,
   gtk_list_store_set(store, &iter, DOWNLOADED_COL_MEMO, ro_text, -1);
 
   /*Imbalance*/
-  ro_text = xaccPrintAmount(xaccTransGetImbalance(trans), 
+ /* Assume that the importer won't create a transaction that involves two or more
+    currencies and no non-currency commodity.  In that case can use the simpler
+    value imbalance check. */
+  ro_text = xaccPrintAmount(xaccTransGetImbalanceValue(trans), 
 			    gnc_default_print_info(TRUE));
   gtk_list_store_set(store, &iter, DOWNLOADED_COL_BALANCED, ro_text, -1);
 

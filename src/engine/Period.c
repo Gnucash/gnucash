@@ -689,7 +689,7 @@ add_closing_balances (Account *parent,
       /* We need to carry a balance on any account that is not
        * and income or expense or equity account */
       if ((ACCT_TYPE_INCOME != tip) && (ACCT_TYPE_EXPENSE != tip) &&
-	  (ACCT_TYPE_EQUITY != tip)) 
+	  (ACCT_TYPE_EQUITY != tip && ACCT_TYPE_TRADING != tip)) 
       {
          gnc_numeric baln;
          baln = xaccAccountGetBalance (candidate);

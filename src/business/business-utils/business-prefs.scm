@@ -81,6 +81,12 @@
     gnc:*business-label* (N_ "Fancy Date Format")
     "g" (N_ "The default date format used for fancy printed dates")
     #f))
+    
+  (reg-option 
+   (gnc:make-simple-boolean-option
+    gnc:*book-label* gnc:*trading-accounts*
+    "a" (N_ "True if trading accounts should be used for transactions involving more than one commodity")
+    #f))
 )
 
 (gnc-register-kvp-option-generator QOF-ID-BOOK-SCM book-options-generator)

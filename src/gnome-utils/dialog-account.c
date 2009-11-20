@@ -169,7 +169,9 @@ gnc_account_commodity_from_type (AccountWindow * aw, gboolean update)
 {
   dialog_commodity_mode new_mode;
 
-  if ((aw->type == ACCT_TYPE_STOCK) || (aw->type == ACCT_TYPE_MUTUAL))
+  if (aw->type == ACCT_TYPE_TRADING)
+    new_mode = DIAG_COMM_ALL;
+  else if ((aw->type == ACCT_TYPE_STOCK) || (aw->type == ACCT_TYPE_MUTUAL))
     new_mode = DIAG_COMM_NON_CURRENCY;
   else
     new_mode = DIAG_COMM_CURRENCY;
@@ -1026,7 +1028,8 @@ gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
     sensitive = (aw->type != ACCT_TYPE_EQUITY &&
 		 aw->type != ACCT_TYPE_CURRENCY &&
 		 aw->type != ACCT_TYPE_STOCK &&
-		 aw->type != ACCT_TYPE_MUTUAL);
+		 aw->type != ACCT_TYPE_MUTUAL &&
+		 aw->type != ACCT_TYPE_TRADING);
   }
 
   gtk_widget_set_sensitive (aw->opening_balance_page, sensitive);

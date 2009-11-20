@@ -2416,4 +2416,61 @@ gnc_commodity_table_register (void)
   return qof_object_register (&commodity_table_object_def);
 }
 
+/* *******************************************************************
+*  gnc_monetary methods
+********************************************************************/
+
+/** Add a gnc_monetary to the list */
+MonetaryList *
+gnc_monetary_list_add_monetary(MonetaryList *list, gnc_monetary add_mon)
+{
+  MonetaryList *l = list, *tmp;
+  for (tmp = list; tmp; tmp = tmp->next) {
+    gnc_monetary *list_mon = tmp->data;
+    if (gnc_commodity_equiv(list_mon->commodity, add_mon.commodity)) {
+      list_mon->value = gnc_numeric_add(list_mon->value, add_mon.value,
+                                        GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+      break;
+    }
+  }
+  
+  /* See if we found an entry, and add one if not */
+  if (tmp == NULL) {
+    gnc_monetary *new_mon = g_new0(gnc_monetary, 1);
+    *new_mon = add_mon;
+    l = g_list_prepend(l, new_mon);
+  }
+  
+  return l;
+}
+
+/** Delete all entries in the list that have zero value.  Return list
+    pointer will be a null pointer if there are no non-zero entries **/
+MonetaryList *
+gnc_monetary_list_delete_zeros(MonetaryList *list)
+{
+  MonetaryList *node, *next;
+  for (node = list; node; node = next) {
+    gnc_monetary *mon = node->data;
+    next = node->next;
+    if (gnc_numeric_zero_p(mon->value)) {
+      g_free(mon);
+      list = g_list_delete_link(list, node);
+    }
+  }
+  return list;
+}
+
+/** Free a MonetaryList and all the monetaries it points to */
+void
+gnc_monetary_list_free(MonetaryList *list)
+{
+  MonetaryList *tmp;
+  for (tmp = list; tmp; tmp = tmp->next) {
+    g_free(tmp->data);
+  }
+  
+  g_list_free(list);
+}
+
 /* ========================= END OF FILE ============================== */

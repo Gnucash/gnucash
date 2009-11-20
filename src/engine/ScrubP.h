@@ -34,7 +34,8 @@
 
 /* Utility to make account by name.  Not for public use. */
 Account * xaccScrubUtilityGetOrMakeAccount (Account *root, 
-       gnc_commodity * currency, const char *name_root);
+       gnc_commodity * currency, const char *accname,
+       GNCAccountType acctype, gboolean placeholder);
 
 
 #endif /* XACC_SCRUB_P_H */

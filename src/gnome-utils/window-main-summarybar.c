@@ -293,6 +293,12 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
       case ACCT_TYPE_EQUITY:
         /* no-op, see comments at top about summing assets */
 	break;
+      /**
+       * @fixme I don't know if this is right or if trading accounts should be
+       *        treated like income and expense accounts.
+       **/
+      case ACCT_TYPE_TRADING:
+        break;
       case ACCT_TYPE_CURRENCY:
       default:
 	break;

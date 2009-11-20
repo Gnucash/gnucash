@@ -612,7 +612,8 @@
              ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
              ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
              ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
-             ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
+             ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE
+             ACCT-TYPE-TRADING)
        (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
     #f #t))
 
