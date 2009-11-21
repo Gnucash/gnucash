@@ -59,7 +59,7 @@
 /*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TRANSACTION_TABLE "transactions"
-#define TX_TABLE_VERSION 2
+#define TX_TABLE_VERSION 3
 #define SPLIT_TABLE "splits"
 #define SPLIT_TABLE_VERSION 4
 
@@ -80,9 +80,9 @@ static const GncSqlColumnTableEntry tx_col_table[] =
 			(QofAccessFunc)xaccTransGetCurrency, (QofSetterFunc)xaccTransSetCurrency },
     { "num",           CT_STRING,         TX_MAX_NUM_LEN,         COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)xaccTransGetNum, (QofSetterFunc)xaccTransSetNum },
-    { "post_date",     CT_TIMESPEC,       0,                      COL_NNUL,          NULL, NULL,
+    { "post_date",     CT_TIMESPEC,       0,                      0,                 NULL, NULL,
 			(QofAccessFunc)xaccTransRetDatePostedTS, (QofSetterFunc)gnc_transaction_set_date_posted },
-    { "enter_date",    CT_TIMESPEC,       0,                      COL_NNUL,          NULL, NULL,
+    { "enter_date",    CT_TIMESPEC,       0,                      0,                 NULL, NULL,
 			(QofAccessFunc)xaccTransRetDateEnteredTS, (QofSetterFunc)gnc_transaction_set_date_entered },
     { "description",   CT_STRING,         TX_MAX_DESCRIPTION_LEN, 0,                 NULL, NULL,
             (QofAccessFunc)xaccTransGetDescription, (QofSetterFunc)xaccTransSetDescription },
@@ -472,8 +472,11 @@ create_transaction_tables( GncSqlBackend* be )
 	version = gnc_sql_get_table_version( be, TRANSACTION_TABLE );
     if( version == 0 ) {
         (void)gnc_sql_create_table( be, TRANSACTION_TABLE, TX_TABLE_VERSION, tx_col_table );
-    } else if( version == 1 ) {
-		/* Upgrade 64 bit int handling */
+    } else if( version < TX_TABLE_VERSION ) {
+		/* Upgrade:
+		    1->2: 64 bit int handling
+			2->3: allow dates to be NULL
+		*/
 		gnc_sql_upgrade_table( be, TRANSACTION_TABLE, tx_col_table );
 		(void)gnc_sql_set_table_version( be, TRANSACTION_TABLE, TX_TABLE_VERSION );
     }
