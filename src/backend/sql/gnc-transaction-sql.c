@@ -54,6 +54,7 @@
 #endif
 
 #define SIMPLE_QUERY_COMPILATION 1
+#define LOAD_TRANSACTIONS_AS_NEEDED 0
 
 /*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -365,6 +366,7 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
 		GSList* nextbal;
 		Account* root = gnc_book_get_root_account( be->primary_book );
 
+#if LOAD_TRANSACTIONS_AS_NEEDED
 		qof_event_suspend();
 		xaccAccountBeginEdit( root );
 
@@ -373,6 +375,7 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
 		gnc_account_foreach_descendant( gnc_book_get_root_account( be->primary_book ),
 										save_account_balances,
 										&bal_list );
+#endif
 
 		// Load the transactions
 		row = gnc_sql_result_get_first_row( result );
@@ -397,6 +400,7 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
     		xaccTransCommitEdit( pTx );
 		}
 
+#if LOAD_TRANSACTIONS_AS_NEEDED
 		// Update the account balances based on the loaded splits.  If the end
 		// balance has changed, update the start balance so that the end
 		// balance is the same as it was before the splits were loaded.
@@ -447,6 +451,7 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
 
 		xaccAccountCommitEdit( root );
 		qof_event_resume();
+#endif
     }
 }
 
@@ -1182,6 +1187,7 @@ load_single_acct_balances( const GncSqlBackend* be, GncSqlRow* row )
 /*@ null @*/ GSList*
 gnc_sql_get_account_balances_slist( GncSqlBackend* be )
 {
+#if LOAD_TRANSACTIONS_AS_NEEDED
     GncSqlResult* result;
     GncSqlStatement* stmt;
 	gchar* buf;
@@ -1251,6 +1257,9 @@ gnc_sql_get_account_balances_slist( GncSqlBackend* be )
     }
 
     return bal_slist;
+#else
+    return NULL;
+#endif
 }
 
 /* ----------------------------------------------------------------- */
@@ -1310,7 +1319,11 @@ gnc_sql_init_transaction_handler( void )
         GNC_SQL_BACKEND_VERSION,
         GNC_ID_TRANS,
         commit_transaction,          /* commit */
-        NULL,
+#if LOAD_TRANSACTIONS_AS_NEEDED
+        NULL,                        /* initial load */
+#else
+        gnc_sql_transaction_load_all_tx,
+#endif
         create_transaction_tables,   /* create tables */
 		NULL,                        /* compile_query */
 		NULL,                        /* run_query */
@@ -1324,9 +1337,15 @@ gnc_sql_init_transaction_handler( void )
         commit_split,                /* commit */
         NULL,                        /* initial_load */
         NULL,                        /* create tables */
+#if LOAD_TRANSACTIONS_AS_NEEDED
         compile_split_query,
         run_split_query,
         free_split_query,
+#else
+		NULL,                        /* compile_query */
+		NULL,                        /* run_query */
+		NULL,                        /* free_query */
+#endif
 		NULL                         /* write */
     };
 
