@@ -129,18 +129,21 @@ create_graph_pixbuf( GogObject *graph, int width, int height )
 	renderer = GOG_RENDERER(g_object_new( GOG_TYPE_RENDERER, "model", graph, NULL ));
 	update_status = gog_renderer_update( renderer, width, height );
 	buf = gog_renderer_get_pixbuf( renderer );
+	g_object_set_data_full( G_OBJECT(buf), "renderer", renderer, g_object_unref );
 #elif defined(GOFFICE_WITH_CAIRO)
 	cairo_renderer = GOG_RENDERER_CAIRO(g_object_new( GOG_RENDERER_CAIRO_TYPE,
 													"model", graph,
 													NULL ));
 	update_status = gog_renderer_cairo_update( cairo_renderer, width, height, 1.0 );
 	buf = gog_renderer_cairo_get_pixbuf( cairo_renderer );
+	g_object_set_data_full( G_OBJECT(buf), "renderer", cairo_renderer, g_object_unref );
 #else
 	pixbuf_renderer = GOG_RENDERER_PIXBUF(g_object_new( GOG_RENDERER_PIXBUF_TYPE,
 														"model", graph,
 														NULL));
 	update_status = gog_renderer_pixbuf_update( pixbuf_renderer, width, height, 1.0 );
 	buf = gog_renderer_pixbuf_get( pixbuf_renderer );
+	g_object_set_data_full( G_OBJECT(buf), "renderer", pixbuf_renderer, g_object_unref );
 #endif
 
 	g_object_set_data_full( G_OBJECT(buf), "graph", graph, g_object_unref );
