@@ -1058,7 +1058,7 @@ identity_edit_clicked_cb (GtkButton *button,
 {
   TaxInfoDialog *ti_dialog = user_data;
   GtkWidget *dialog;
-  GtkWidget *content_area;
+/*  GtkWidget *content_area;  <- requires GTK 2.14 */
   GtkWidget *name_entry;
   GtkWidget *label;
   GtkWidget *alignment;
@@ -1080,7 +1080,7 @@ identity_edit_clicked_cb (GtkButton *button,
                                         GTK_STOCK_APPLY,
                                         GTK_RESPONSE_APPLY,
                                         NULL);
-  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+/*  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog)); <- requires GTK 2.14 */
   name_entry = gtk_entry_new();
   ti_dialog->entity_name_entry = name_entry;
   gtk_entry_set_text (GTK_ENTRY (name_entry), ti_dialog->tax_name);
@@ -1137,7 +1137,8 @@ identity_edit_clicked_cb (GtkButton *button,
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 6, 6, 4, 4);
   gtk_container_add (GTK_CONTAINER (alignment), label);
   gtk_table_attach_defaults (GTK_TABLE (table), alignment, 0, 2, 2, 3);
-  gtk_container_add (GTK_CONTAINER (content_area), table);
+/*  gtk_container_add (GTK_CONTAINER (content_area), table);  <- requires GTK 2.14 */
+  gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), table);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_APPLY);
   g_signal_connect (G_OBJECT (dialog), "response",
                           G_CALLBACK (identity_edit_response_cb), ti_dialog);
