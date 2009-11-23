@@ -62,7 +62,7 @@ gnucash.1: gnucash.1.in Makefile
 	mv $@.tmp $@
 
 tip_of_the_day.list: tip_of_the_day.list.in Makefile
-	${CC} -E -P -D'N_(x)=x' -o $@.tmp $<
+	${CC} -E -P -x c -D'N_(x)=x' -o $@.tmp $<
 	cat -s $@.tmp | ${SED} -e 's/^ *\"\(.*\)\" *$$/\1/' > $@
 	rm -f $@.tmp
 
