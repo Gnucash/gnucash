@@ -786,13 +786,18 @@
 
 
 (define (gnc:html-make-generic-budget-warning report-title-string)
+  (gnc:html-make-generic-simple-warning
+    report-title-string
+    (_ "No budgets exist.  You must create at least one budget.")))
+
+
+(define (gnc:html-make-generic-simple-warning report-title-string message)
   (let ((p (gnc:make-html-text)))
     (gnc:html-text-append!
      p
-     (gnc:html-markup-h2 (string-append (_ report-title-string) ":"))
+     (gnc:html-markup-h2 (string-append report-title-string ":"))
      (gnc:html-markup-h2 "")
-     (gnc:html-markup-p
-       (_ "No budgets exist.  You must create at least one budget.")))
+     (gnc:html-markup-p message))
     p))
 
 

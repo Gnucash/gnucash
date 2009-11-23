@@ -93,6 +93,7 @@
 (export gnc:html-make-no-account-warning)
 (export gnc:html-make-generic-budget-warning)
 (export gnc:html-make-generic-options-warning)
+(export gnc:html-make-generic-simple-warning)
 (export gnc:html-make-empty-data-warning)
 
 ;; report.scm

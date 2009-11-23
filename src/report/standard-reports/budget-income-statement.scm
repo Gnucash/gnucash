@@ -58,6 +58,19 @@
 (define optname-budget (N_ "Budget"))
 (define opthelp-budget (N_ "Budget to use."))
 
+(define optname-use-budget-period-range
+  (N_ "Report for range of budget periods"))
+(define opthelp-use-budget-period-range
+  (N_ "Create report for a budget period range instead of the entire budget."))
+
+(define optname-budget-period-start (N_ "Range start"))
+(define opthelp-budget-period-start
+  (N_ "Select a budget period that begins the reporting range."))
+
+(define optname-budget-period-end (N_ "Range end"))
+(define opthelp-budget-period-end
+  (N_ "Select a budget period that ends the reporting range."))
+
 ;; FIXME this could use an indent option
 
 (define optname-accounts (N_ "Accounts to include"))
@@ -142,6 +155,47 @@
      (gnc:make-budget-option
       gnc:pagename-general optname-budget
       "c" opthelp-budget))
+
+    (add-option
+     (gnc:make-complex-boolean-option
+      gnc:pagename-general
+      optname-use-budget-period-range
+      "d"
+      opthelp-use-budget-period-range
+      #f
+      #f
+      ;; Make budget-period-start and budget-period-end option widgets
+      ;; selectable only when we are running the report for a budget period
+      ;; range.
+      (lambda (value)
+        (gnc-option-db-set-option-selectable-by-name
+          options
+          gnc:pagename-general
+          optname-budget-period-start
+          value)
+        (gnc-option-db-set-option-selectable-by-name
+          options
+          gnc:pagename-general
+          optname-budget-period-end
+          value))))
+
+    (add-option
+     (gnc:make-number-range-option
+      gnc:pagename-general optname-budget-period-start
+      "e" opthelp-budget-period-start
+      ;; FIXME: It would be nice if the max number of budget periods (60) was
+      ;; defined globally somewhere so we could reference it here.  However, it
+      ;; only appears to be defined currently in src/gnome/glade/budget.glade.
+      1 1 60 0 1))
+    
+    (add-option
+     (gnc:make-number-range-option
+      gnc:pagename-general optname-budget-period-end
+      "f" opthelp-budget-period-end
+      ;; FIXME: It would be nice if the max number of budget periods (60) was
+      ;; defined globally somewhere so we could reference it here.  However, it
+      ;; only appears to be defined currently in src/gnome/glade/budget.glade.
+      1 1 60 0 1))
     
     ;; accounts to work on
     (add-option
@@ -251,13 +305,25 @@
      (gnc:lookup-option 
       (gnc:report-options report-obj) pagename optname)))
   
-  (define (get-assoc-account-balances-budget budget accountlist get-balance-fn)
+  (define
+    (get-assoc-account-balances-budget
+      budget
+      accountlist
+      period-start
+      period-end
+      get-balance-fn)
     (gnc:get-assoc-account-balances
       accountlist
-      (lambda (account) (get-balance-fn budget account))))
+      (lambda (account)
+        (get-balance-fn budget account period-start period-end))))
 
-  (define (get-budget-account-budget-balance budget account)
-    (gnc:budget-account-get-net budget account #f #f))
+  (define
+    (get-budget-account-budget-balance
+      budget
+      account
+      period-start
+      period-end)
+    (gnc:budget-account-get-net budget account period-start period-end))
 
   (gnc:report-starting reportname)
   
@@ -267,7 +333,30 @@
 	 (company-name (get-option gnc:pagename-general optname-party-name))
          (budget (get-option gnc:pagename-general optname-budget))
          (budget-valid? (and budget (not (null? budget))))
-         (date-tp (if budget-valid? (gnc:budget-get-start-date budget) #f))
+         (use-budget-period-range?
+           (get-option gnc:pagename-general optname-use-budget-period-range))
+         (user-budget-period-start
+           (if use-budget-period-range?
+             (inexact->exact
+               (truncate
+                 (get-option gnc:pagename-general optname-budget-period-start)))
+             #f))
+         (user-budget-period-end
+           (if use-budget-period-range?
+             (inexact->exact
+               (truncate
+                 (get-option gnc:pagename-general optname-budget-period-end)))
+             #f))
+         (period-start
+           (if use-budget-period-range? (- user-budget-period-start 1) #f))
+         (period-end
+           (if use-budget-period-range? user-budget-period-end #f))
+         (date-tp
+           (if budget-valid?
+             (gnc-budget-get-period-start-date
+               budget
+               (if use-budget-period-range? period-start 0))
+             #f))
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))	 
 	 (depth-limit (get-option gnc:pagename-accounts 
@@ -373,13 +462,21 @@
       ((null? accounts)
         ;; No accounts selected.
         (gnc:html-document-add-object! 
-         doc 
-         (gnc:html-make-no-account-warning 
-	  reportname (gnc:report-id report-obj))))
+          doc 
+          (gnc:html-make-no-account-warning 
+	    reportname (gnc:report-id report-obj))))
       ((not budget-valid?)
         ;; No budget selected.
         (gnc:html-document-add-object!
           doc (gnc:html-make-generic-budget-warning report-title)))
+      ((and use-budget-period-range?
+          (< user-budget-period-end user-budget-period-start))
+        ;; User has selected a range with end period lower than start period.
+        (gnc:html-document-add-object!
+          doc
+          (gnc:html-make-generic-simple-warning
+            report-title
+            (_ "Reporting range end period cannot be less than start period."))))
       (else (begin
         ;; Get all the balances for each of the account types.
         (let* (
@@ -404,7 +501,24 @@
                (revenue-table #f)                  ;; gnc:html-acct-table
                (expense-table #f)                  ;; gnc:html-acct-table
                (budget-name (gnc-budget-get-name budget))
-	       (period-for (string-append " " (_ "for Budget") " " budget-name))
+               (period-for
+                 (if use-budget-period-range?
+                   (if (equal? user-budget-period-start user-budget-period-end)
+                     (sprintf
+                       #f
+                       (_ "for Budget %s Period %u")
+                       budget-name
+                       user-budget-period-start)
+                     (sprintf
+                       #f
+                       (_ "for Budget %s Periods %u - %u")
+                       budget-name
+                       user-budget-period-start
+                       user-budget-period-end))
+                   (sprintf
+                     #f
+                     (_ "for Budget %s")
+                     budget-name)))
 	       )
 
 	  ;; a helper to add a line to our report
@@ -451,6 +565,8 @@
             (get-assoc-account-balances-budget
               budget
               expense-accounts
+              period-start
+              period-end
               get-budget-account-budget-balance))
 
           ;; Total expenses.
@@ -471,6 +587,8 @@
             (get-assoc-account-balances-budget
               budget
               revenue-accounts
+              period-start
+              period-end
               get-budget-account-budget-balance))
 
           ;; Total revenue.
@@ -497,7 +615,8 @@
 	  (gnc:report-percent-done 30)
 
           (gnc:html-document-set-title! 
-            doc (sprintf #f "%s %s %s" company-name report-title budget-name))
+            doc
+            (sprintf #f "%s %s %s" company-name report-title period-for))
 
 	  (set! table-env
 		(list
@@ -569,8 +688,8 @@
 	   (if standard-order? 
 	       exp-table 
 	       inc-table)
-	   (string-append (_ "Net income") period-for)
-	   (string-append (_ "Net loss") period-for)
+	   (string-append (_ "Net income") " " period-for)
+	   (string-append (_ "Net loss") " " period-for)
 	   net-income
 	   (* 2 (- tree-depth 1)) exchange-fn #f #f
 	   )
