@@ -173,6 +173,25 @@ xaccUserPathPathGenerator(char *pathbuf, int which)
 
 /* ====================================================================== */
 
+/**
+ * Scrubs a filename by changing "strange" chars (e.g. those that are not
+ * valid in a win32 file name) to "_".
+ *
+ * @param filename File name - updated in place
+ */
+static void
+scrub_filename(char* filename)
+{
+    char* p;
+
+#define STRANGE_CHARS "/:"
+    p = strpbrk(filename, STRANGE_CHARS);
+    while (p) {
+      *p = '_';
+      p = strpbrk(filename, STRANGE_CHARS);
+    }
+}
+
 char * 
 xaccResolveFilePath (const char * filefrag)
 {
@@ -247,16 +266,10 @@ xaccResolveFilePath (const char * filefrag)
 
   filefrag_dup = g_strdup (filefrag);
 
-  /* Replace '/' with ',' for non file backends */
+  /* Replace "strange" chars with "_" for non-file backends. */
   if (strstr (filefrag, "://"))
   {
-    char *p;
-
-    p = strchr (filefrag_dup, '/');
-    while (p) {
-      *p = ',';
-      p = strchr (filefrag_dup, '/');
-    }
+	scrub_filename(filefrag_dup);
   }
 
   /* Lets try creating a new file in $HOME/.gnucash/data */
@@ -454,7 +467,13 @@ gnc_build_dotgnucash_path (const gchar *filename)
 gchar *
 gnc_build_book_path (const gchar *filename)
 {
-  return g_build_filename(gnc_dotgnucash_dir(), "books", filename, (gchar *)NULL);
+  char* filename_dup = g_strdup(filename);
+  char* result;
+
+  scrub_filename(filename_dup);
+  result = g_build_filename(gnc_dotgnucash_dir(), "books", filename_dup, (gchar *)NULL);
+  g_free(filename_dup);
+  return result;
 }
 
 /* =============================== END OF FILE ========================== */
