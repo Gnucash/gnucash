@@ -978,6 +978,10 @@ qof_backend_module_init( void )
 		prov->check_data_type = NULL;
     	qof_backend_register_provider( prov );
 	}
+
+	/* For now, set log level to DEBUG so that SQl statements will be put into
+	   the gnucash.trace file. */
+    qof_log_set_level( log_module, QOF_LOG_DEBUG );
 }
 
 /* --------------------------------------------------------- */
