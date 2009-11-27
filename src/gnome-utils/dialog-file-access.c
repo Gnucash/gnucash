@@ -79,6 +79,9 @@ geturl( FileAccessWindow* faw )
 
 	type = gtk_combo_box_get_active_text( faw->cb_uri_type );
 	if( strcmp( type, "xml" ) == 0 ) {
+	    if( file == NULL ) {
+		    return NULL;
+		}
 		url = g_strdup_printf( "xml://%s", file );
 	} else if( strcmp( type, "sqlite3" ) == 0 ) {
 		url = g_strdup_printf( "sqlite3://%s", file );
@@ -115,6 +118,9 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
   
 	case GTK_RESPONSE_OK:
 		url = geturl( faw );
+		if( url == NULL ) {
+		    return;
+		}
 		if( faw->type == FILE_ACCESS_OPEN ) {
 			gnc_file_open_file( url );
 		} else if( faw->type == FILE_ACCESS_SAVE_AS ) {
