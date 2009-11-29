@@ -452,6 +452,7 @@ static char *get_scm_string(const char *str_name)
 /* Determine whether this book uses trading accounts */
 gboolean qof_book_use_trading_accounts (const QofBook *book)
 {
+#if 0
     static char *options_name = NULL;
     static char *acct_section = NULL;
     static char *trading_opt = NULL;
@@ -479,6 +480,7 @@ gboolean qof_book_use_trading_accounts (const QofBook *book)
     
     if (opt && opt[0] == 't' && opt[1] == 0)
         return TRUE;
+#endif
     return FALSE;
 }
 
