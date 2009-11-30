@@ -636,13 +636,12 @@ static void
 create_slots_tables( GncSqlBackend* be )
 {
 	gint version;
+	gboolean ok;
 
 	g_return_if_fail( be != NULL );
 
 	version = gnc_sql_get_table_version( be, TABLE_NAME );
 	if( version == 0 ) {
-		gboolean ok;
-
     	(void)gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
 
 		ok = gnc_sql_create_index( be, "slots_guid_index", TABLE_NAME, obj_guid_col_table );
@@ -652,6 +651,10 @@ create_slots_tables( GncSqlBackend* be )
 	} else if( version == 1 ) {
 		/* Upgrade 64-bit int values to proper definition */
 		gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
+		ok = gnc_sql_create_index( be, "slots_guid_index", TABLE_NAME, obj_guid_col_table );
+		if( !ok ) {
+			PERR( "Unable to create index\n" );
+		}
 		(void)gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
 	}
 }

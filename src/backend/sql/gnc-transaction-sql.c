@@ -490,25 +490,13 @@ create_transaction_tables( GncSqlBackend* be )
 	    }
     } else if( version < SPLIT_TABLE_VERSION ) {
 
-		/* Perform the various upgrades based on the current version number */
-	    switch( version ) {
-		case 1:
-		    /* Upgrade 64 bit int handling */
-		    gnc_sql_upgrade_table( be, SPLIT_TABLE, split_col_table );
-
-			/* fallthrough */
-
-		case 2:
-			ok = gnc_sql_create_index( be, "splits_tx_guid_index", SPLIT_TABLE, guid_col_table );
-			if( !ok ) {
-				PERR( "Unable to create index\n" );
-			}
-
-			/* fallthrough */
-
-		case 3:
-		    /* Split reconcile_date can be NULL */
-		    gnc_sql_upgrade_table( be, SPLIT_TABLE, split_col_table );
+		/* Upgrade:
+		   1->2: 64 bit int handling
+		   3->4: Split reconcile date can be NULL */
+		gnc_sql_upgrade_table( be, SPLIT_TABLE, split_col_table );
+		ok = gnc_sql_create_index( be, "splits_tx_guid_index", SPLIT_TABLE, guid_col_table );
+		if( !ok ) {
+			PERR( "Unable to create index\n" );
 		}
 		(void)gnc_sql_set_table_version( be, SPLIT_TABLE, SPLIT_TABLE_VERSION );
     }
