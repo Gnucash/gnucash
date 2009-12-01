@@ -679,26 +679,31 @@
                                         shares))))
            splits))
 
-        (merge-splits (gnc:account-get-trans-type-splits-interval
-                       accts #f start-date end-date)
-                      #f)
-        (cond
-         ((equal? balance-mode 'post-closing) #t)
-
-         ((equal? balance-mode 'pre-closing)
-          (merge-splits (gnc:account-get-trans-type-splits-interval
-                         accts closing-pattern start-date end-date)
-                        #t))
-
-         ((equal? balance-mode 'pre-adjusting)
-          (merge-splits (gnc:account-get-trans-type-splits-interval
-                         accts closing-pattern start-date end-date)
-                        #t)
-          (merge-splits (gnc:account-get-trans-type-splits-interval
-                         accts adjusting-pattern start-date end-date)
-                        #t))
-         (else (begin (display "you fail it")
-                      (newline))))
+        ;; If you pass a null account list to gnc:account-get-trans-type-splits-interval
+        ;; it returns splits from all accounts rather than from no accounts.  This is
+        ;; probably a bug but we'll work around it for now.
+        (if (not (null? accts))
+            (begin
+              (merge-splits (gnc:account-get-trans-type-splits-interval
+                             accts #f start-date end-date)
+                            #f)
+              (cond
+               ((equal? balance-mode 'post-closing) #t)
+      
+               ((equal? balance-mode 'pre-closing)
+                (merge-splits (gnc:account-get-trans-type-splits-interval
+                               accts closing-pattern start-date end-date)
+                              #t))
+      
+               ((equal? balance-mode 'pre-adjusting)
+                (merge-splits (gnc:account-get-trans-type-splits-interval
+                               accts closing-pattern start-date end-date)
+                              #t)
+                (merge-splits (gnc:account-get-trans-type-splits-interval
+                               accts adjusting-pattern start-date end-date)
+                              #t))
+               (else (begin (display "you fail it")
+                            (newline))))))
         hash-table
         )
 

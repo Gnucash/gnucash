@@ -507,8 +507,13 @@
 			  neg-retained-earnings
 			  #f)
 	  (set! neg-trading-balance
-	        (gnc:accountlist-get-comm-balance-at-date
-	         trading-accounts date-tp))
+	        ;; If you pass a null account list to gnc:accountlist-get-comm-balance-at-date
+	        ;; it calculates a balance for all accounts, instead of no accounts.  This is 
+	        ;; probably a bug, but for now we'll work around it.
+	        (if (null? trading-accounts)
+	            (gnc:make-commodity-collector)
+	            (gnc:accountlist-get-comm-balance-at-date
+	             trading-accounts date-tp)))
 	  (set! trading-balance (gnc:make-commodity-collector))
 	  (trading-balance 'minusmerge
 	                   neg-trading-balance
