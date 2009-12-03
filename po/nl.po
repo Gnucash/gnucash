@@ -13,14 +13,14 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-08-28 20:54-0400\n"
-"PO-Revision-Date: 2009-10-17 00:33+0200\n"
+"PO-Revision-Date: 2009-11-29 21:23+0100\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 0.3\n"
+"X-Generator: Lokalize 1.0\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:633
 msgid "Illegal variable in expression."
@@ -20295,11 +20295,8 @@ msgstr ""
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5088 ../intl-scm/guile-strings.c:5404
-#, fuzzy
 msgid " (Account Commodity: "
 msgstr ""
-"\n"
-"Stuk: "
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -20317,33 +20314,32 @@ msgstr ""
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5094 ../intl-scm/guile-strings.c:5410
 msgid "Line "
-msgstr ""
+msgstr "Regel "
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5096 ../intl-scm/guile-strings.c:5098
 #: ../intl-scm/guile-strings.c:5412 ../intl-scm/guile-strings.c:5414
 msgid " (TXF Parameter: "
-msgstr ""
+msgstr " (TXF-parameter: "
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5100 ../intl-scm/guile-strings.c:5416
 msgid " (TXF Parameters: "
-msgstr ""
+msgstr " (TXF-parameters: "
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5104 ../intl-scm/guile-strings.c:5420
-#, fuzzy
 msgid "Account: "
-msgstr "D_agboek"
+msgstr "Dagboek: "
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5106 ../intl-scm/guile-strings.c:5422
 msgid "  In "
-msgstr ""
+msgstr "  in "
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -20354,64 +20350,57 @@ msgstr ""
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5110 ../intl-scm/guile-strings.c:5426
-#, fuzzy
 msgid ": Parameters"
-msgstr "Wisselkoersen"
+msgstr ": parameters"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5112 ../intl-scm/guile-strings.c:5428
 msgid ") / Account Name"
-msgstr ")/ rekeningnaam"
+msgstr ") / Rekeningnaam"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5114 ../intl-scm/guile-strings.c:5130
 #: ../intl-scm/guile-strings.c:5430 ../intl-scm/guile-strings.c:5446
 msgid "Line (Code): "
-msgstr ""
+msgstr "Regel (code): "
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5116 ../intl-scm/guile-strings.c:5432
-#, fuzzy
 msgid ": Payer Name Option "
-msgstr "Een datum optie"
+msgstr ""
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5118 ../intl-scm/guile-strings.c:5434
-#, fuzzy
 msgid ", TXF Format "
-msgstr "Format:"
+msgstr ", TXF opmaak "
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5120 ../intl-scm/guile-strings.c:5436
 msgid ", Multiple Copies "
-msgstr ""
+msgstr ", Meerdere kopieën "
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5122 ../intl-scm/guile-strings.c:5438
 msgid ", Special Dates "
-msgstr ""
+msgstr ", Speciale datums "
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5124 ../intl-scm/guile-strings.c:5440
-#, fuzzy
 msgid "Could not open the file: "
-msgstr ""
-"Kan het bestand\n"
-"     %s\n"
-"%s niet openenen"
+msgstr "Kon het bestand niet openen: "
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5126 ../intl-scm/guile-strings.c:5442
 msgid ". The error is: "
-msgstr ""
+msgstr ". De fout is: "
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -20590,15 +20579,14 @@ msgstr "Toon het %s rapport"
 #. src/report/report-gnome/report-gnome.scm
 #. src/report/report-gnome/gnucash/report/report-gnome.scm
 #: ../intl-scm/guile-strings.c:5510 ../intl-scm/guile-strings.c:5524
-#, fuzzy
 msgid "Custom Reports"
-msgstr "Klanten rapport"
+msgstr "Maatwerkrapportages"
 
 #. src/report/report-gnome/report-gnome.scm
 #. src/report/report-gnome/gnucash/report/report-gnome.scm
 #: ../intl-scm/guile-strings.c:5512 ../intl-scm/guile-strings.c:5526
 msgid "Manage and run custom reports"
-msgstr ""
+msgstr "Maatwerkrapportages beheren en genereren"
 
 #. src/report/report-gnome/report-gnome.scm
 #. src/report/report-gnome/gnucash/report/report-gnome.scm
@@ -20796,64 +20784,56 @@ msgstr "Grensvlak diepte in tabellen"
 #: ../intl-scm/guile-strings.c:5932 ../intl-scm/guile-strings.c:5938
 #: ../intl-scm/guile-strings.c:5944 ../intl-scm/guile-strings.c:5950
 #: ../intl-scm/guile-strings.c:5956 ../intl-scm/guile-strings.c:5962
-#, fuzzy
 msgid "Fonts"
-msgstr "Maanden"
+msgstr "Lettertypes"
 
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:5572 ../intl-scm/guile-strings.c:5918
-#, fuzzy
 msgid "Font info for the report title"
-msgstr "Exporteer HTML-geformatteerd rapport naar bestand"
+msgstr "Lettertype-informatie voor de rapporttitel"
 
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:5576 ../intl-scm/guile-strings.c:5922
-#, fuzzy
 msgid "Account link"
-msgstr "Grootboekrekening verwijdering"
+msgstr "Grootboekrekening-link"
 
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:5578 ../intl-scm/guile-strings.c:5924
-#, fuzzy
 msgid "Font info for account name"
-msgstr "Druk complete dagboek namen af"
+msgstr "Lettertype-informatie voor de grootboek-naam"
 
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:5582 ../intl-scm/guile-strings.c:5928
-#, fuzzy
 msgid "Number cell"
-msgstr "Nummer"
+msgstr "Nummercel"
 
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:5584 ../intl-scm/guile-strings.c:5930
 msgid "Font info for regular number cells"
-msgstr ""
+msgstr "Lettertype-informatie voor normale nummercellen"
 
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:5588 ../intl-scm/guile-strings.c:5934
-#, fuzzy
 msgid "Negative Values in Red"
-msgstr "Negatieve bedragen in rood tonen"
+msgstr "Negatieve bedragen in rood"
 
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:5590 ../intl-scm/guile-strings.c:5936
-#, fuzzy
 msgid "Display negative values in red."
-msgstr "Negatieve bedragen in rood tonen"
+msgstr "Negatieve bedragen in rood tonen."
 
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:5594 ../intl-scm/guile-strings.c:5940
-#, fuzzy
 msgid "Number header"
-msgstr "Nummer"
+msgstr ""
 
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
@@ -20864,9 +20844,8 @@ msgstr ""
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:5600 ../intl-scm/guile-strings.c:5946
-#, fuzzy
 msgid "Text cell"
-msgstr "Alleen tekst"
+msgstr ""
 
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
@@ -20877,9 +20856,8 @@ msgstr ""
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:5606 ../intl-scm/guile-strings.c:5952
-#, fuzzy
 msgid "Total number cell"
-msgstr "Totaal te betalen"
+msgstr ""
 
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
@@ -20890,9 +20868,8 @@ msgstr ""
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:5612 ../intl-scm/guile-strings.c:5958
-#, fuzzy
 msgid "Total label cell"
-msgstr "Totale passiva"
+msgstr ""
 
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
@@ -20916,20 +20893,19 @@ msgstr ""
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:5622 ../intl-scm/guile-strings.c:5968
 msgid "CSS"
-msgstr ""
+msgstr "CSS"
 
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:5624 ../intl-scm/guile-strings.c:5970
-#, fuzzy
 msgid "Default CSS"
-msgstr "Standaard"
+msgstr "Standaard CSS"
 
 #. src/report/stylesheets/stylesheet-plain.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-plain.scm
 #: ../intl-scm/guile-strings.c:5662 ../intl-scm/guile-strings.c:6008
 msgid "Plain"
-msgstr "Plain"
+msgstr "Zonder opmaak"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -20949,7 +20925,7 @@ msgstr "Voorbereider"
 #: ../intl-scm/guile-strings.c:5670 ../intl-scm/guile-strings.c:6016
 #: ../intl-scm/guile-strings.c:6228 ../intl-scm/guile-strings.c:6440
 msgid "Name of person preparing the report"
-msgstr "Naam van de persoon welke het rapport voorbereidt"
+msgstr "Naam van de persoon die het rapport voorbereidt"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -20960,7 +20936,7 @@ msgstr "Naam van de persoon welke het rapport voorbereidt"
 #: ../intl-scm/guile-strings.c:6232 ../intl-scm/guile-strings.c:6356
 #: ../intl-scm/guile-strings.c:6444 ../intl-scm/guile-strings.c:6568
 msgid "Prepared for"
-msgstr "Aangemaakt voor"
+msgstr "Voorbereid voor"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -20969,7 +20945,7 @@ msgstr "Aangemaakt voor"
 #: ../intl-scm/guile-strings.c:5676 ../intl-scm/guile-strings.c:6022
 #: ../intl-scm/guile-strings.c:6234 ../intl-scm/guile-strings.c:6446
 msgid "Name of organization or company prepared for"
-msgstr "Naam van de organisatie of het bedrijf waarvoor aangemaakt is"
+msgstr "Naam van de organisatie of het bedrijf waarvoor is voorbereid"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -20989,7 +20965,7 @@ msgstr "Toon gegevens voorbereider"
 #: ../intl-scm/guile-strings.c:5682 ../intl-scm/guile-strings.c:6028
 #: ../intl-scm/guile-strings.c:6240 ../intl-scm/guile-strings.c:6452
 msgid "Name of organization or company"
-msgstr "Naam van de organisatie of bedrijf"
+msgstr "Naam van organisatie of bedrijf"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -21043,7 +21019,7 @@ msgstr "Achtergrondpatroon"
 #: ../intl-scm/guile-strings.c:6256 ../intl-scm/guile-strings.c:6404
 #: ../intl-scm/guile-strings.c:6468 ../intl-scm/guile-strings.c:6616
 msgid "Heading Banner"
-msgstr "Koptekst bannier"
+msgstr "Koptekst"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -21054,7 +21030,7 @@ msgstr "Koptekst bannier"
 #: ../intl-scm/guile-strings.c:6258 ../intl-scm/guile-strings.c:6264
 #: ../intl-scm/guile-strings.c:6470 ../intl-scm/guile-strings.c:6476
 msgid "Banner for top of report."
-msgstr "Bannier voor bovenzijde rapport"
+msgstr "Tekst aan de bovenzijde van het rapport."
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -21064,9 +21040,8 @@ msgstr "Bannier voor bovenzijde rapport"
 #: ../intl-scm/guile-strings.c:6050 ../intl-scm/guile-strings.c:6200
 #: ../intl-scm/guile-strings.c:6262 ../intl-scm/guile-strings.c:6412
 #: ../intl-scm/guile-strings.c:6474 ../intl-scm/guile-strings.c:6624
-#, fuzzy
 msgid "Heading Alignment"
-msgstr "Koptekst bannier"
+msgstr "Uitlijning koptekst"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -21075,7 +21050,7 @@ msgstr "Koptekst bannier"
 #: ../intl-scm/guile-strings.c:5708 ../intl-scm/guile-strings.c:6054
 #: ../intl-scm/guile-strings.c:6266 ../intl-scm/guile-strings.c:6478
 msgid "Left"
-msgstr ""
+msgstr "Links"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -21084,7 +21059,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5710 ../intl-scm/guile-strings.c:6056
 #: ../intl-scm/guile-strings.c:6268 ../intl-scm/guile-strings.c:6480
 msgid "Align the banner to the left"
-msgstr ""
+msgstr "De tekst links uitlijnen"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -21092,9 +21067,8 @@ msgstr ""
 #. src/report/stylesheets/stylesheet-easy.scm
 #: ../intl-scm/guile-strings.c:5712 ../intl-scm/guile-strings.c:6058
 #: ../intl-scm/guile-strings.c:6270 ../intl-scm/guile-strings.c:6482
-#, fuzzy
 msgid "Center"
-msgstr "Invoegen"
+msgstr "Centreren"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -21103,7 +21077,7 @@ msgstr "Invoegen"
 #: ../intl-scm/guile-strings.c:5714 ../intl-scm/guile-strings.c:6060
 #: ../intl-scm/guile-strings.c:6272 ../intl-scm/guile-strings.c:6484
 msgid "Align the banner in the center"
-msgstr ""
+msgstr "De tekst in het midden centreren"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -21112,7 +21086,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5716 ../intl-scm/guile-strings.c:6062
 #: ../intl-scm/guile-strings.c:6274 ../intl-scm/guile-strings.c:6486
 msgid "Right"
-msgstr ""
+msgstr "Rechts"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -21121,7 +21095,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5718 ../intl-scm/guile-strings.c:6064
 #: ../intl-scm/guile-strings.c:6276 ../intl-scm/guile-strings.c:6488
 msgid "Align the banner to the right"
-msgstr ""
+msgstr "De tekst rechts uitlijnen"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -21159,7 +21133,7 @@ msgstr "Algemene achtergrondkleur voor rapport."
 #: ../intl-scm/guile-strings.c:5736 ../intl-scm/guile-strings.c:6082
 #: ../intl-scm/guile-strings.c:6294 ../intl-scm/guile-strings.c:6506
 msgid "Normal body text color."
-msgstr "Kleur normale alineatekst"
+msgstr "Kleur normale alineatekst."
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -21179,7 +21153,7 @@ msgstr "Linkkleur"
 #: ../intl-scm/guile-strings.c:5742 ../intl-scm/guile-strings.c:6088
 #: ../intl-scm/guile-strings.c:6300 ../intl-scm/guile-strings.c:6512
 msgid "Link text color."
-msgstr "Kleur linktekst"
+msgstr "Kleur linktekst."
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -21199,7 +21173,7 @@ msgstr "Kleur tabelcel"
 #: ../intl-scm/guile-strings.c:5748 ../intl-scm/guile-strings.c:6094
 #: ../intl-scm/guile-strings.c:6306 ../intl-scm/guile-strings.c:6518
 msgid "Default background for table cells."
-msgstr "Standaardachtergrond voor tabelcellen"
+msgstr "Standaardachtergrond voor tabelcellen."
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -21288,7 +21262,7 @@ msgstr "Kleur voor eindtotalen"
 #: ../intl-scm/guile-strings.c:5868 ../intl-scm/guile-strings.c:6214
 #: ../intl-scm/guile-strings.c:6426 ../intl-scm/guile-strings.c:6638
 msgid "Prepared by: "
-msgstr "Voorbereid door:"
+msgstr "Voorbereid door: "
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -21297,26 +21271,26 @@ msgstr "Voorbereid door:"
 #: ../intl-scm/guile-strings.c:5870 ../intl-scm/guile-strings.c:6216
 #: ../intl-scm/guile-strings.c:6428 ../intl-scm/guile-strings.c:6640
 msgid "Prepared for: "
-msgstr "Voorbereid voor:"
+msgstr "Voorbereid voor: "
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
 #: ../intl-scm/guile-strings.c:5874 ../intl-scm/guile-strings.c:6220
 msgid "Fancy"
-msgstr "Fancy"
+msgstr "Smaakvol"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
 #: ../intl-scm/guile-strings.c:5876 ../intl-scm/guile-strings.c:6222
 msgid "Technicolor"
-msgstr "Technicolor"
+msgstr "Kleurrijk"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
 #: ../intl-scm/guile-strings.c:6432 ../intl-scm/guile-strings.c:6434
 #: ../intl-scm/guile-strings.c:6644 ../intl-scm/guile-strings.c:6646
 msgid "Easy"
-msgstr ""
+msgstr "Eenvoudig"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:6650
@@ -21360,24 +21334,23 @@ msgstr "Einde van het voorgaande jaar"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:6666
-#, fuzzy
 msgid "Start of Financial Period"
-msgstr "Begin van de rapportage periode"
+msgstr "Begin van de rapportageperiode"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:6668
 msgid "Start of the accounting period, as set in the global preferences"
-msgstr ""
+msgstr "Begin van de boekhoudperiode welke staat ingesteld bij de algemene voorkeuren"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:6670
 msgid "End of Financial Period"
-msgstr "Einde financieële periode"
+msgstr "Einde van de rapportageperiode"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:6672
 msgid "End of the accounting period, as set in the global preferences"
-msgstr ""
+msgstr "Einde van de boekhoudperiode welke staat ingesteld bij de algemene voorkeuren"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:6676
@@ -21462,7 +21435,7 @@ msgstr "Een jaar geleden"
 #. src/app-utils/prefs.scm
 #: ../intl-scm/guile-strings.c:6730
 msgid "Funds In"
-msgstr "Fondsen in"
+msgstr "Inkomende fondsen"
 
 #. src/app-utils/prefs.scm
 #: ../intl-scm/guile-strings.c:6734
@@ -21484,7 +21457,7 @@ msgstr "Verkleinen"
 #. src/app-utils/prefs.scm
 #: ../intl-scm/guile-strings.c:6758
 msgid "Funds Out"
-msgstr "Fondsen uit"
+msgstr "Uitgaande fondsen"
 
 #. src/app-utils/prefs.scm
 #: ../intl-scm/guile-strings.c:6762
@@ -21493,9 +21466,8 @@ msgstr "Uitgeven"
 
 #. src/scm/main-window.scm
 #: ../intl-scm/guile-strings.c:6786
-#, fuzzy
 msgid "Book Options"
-msgstr "boolean optie"
+msgstr "Boekingsopties"
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
@@ -21517,13 +21489,12 @@ msgstr "Koersen niet kunnen ophalen; probleem onbekend."
 #. src/scm/gnucash/price-quotes.scm
 #: ../intl-scm/guile-strings.c:6796 ../intl-scm/guile-strings.c:6799
 #: ../intl-scm/guile-strings.c:6844 ../intl-scm/guile-strings.c:6847
-#, fuzzy
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
 msgstr ""
-"U mist enkele noodzakelijke Perl bestanden. \n"
-"Start 'update-financiële-notering' als root om ze te installeren."
+"U mist enkele noodzakelijke Perl-bibliotheken. \n"
+"Start 'gnc-fq-update' als root om deze te installeren."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
@@ -21581,15 +21552,15 @@ msgstr "Toevoegen overgebleven bruikbare noteringen."
 #. src/scm/command-line.scm
 #: ../intl-scm/guile-strings.c:6832
 msgid "A list of directories (strings) indicating where to look for html and parsed-html files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
-msgstr "Een lijst met mappen (strings) die aangeven waar de html en gecontroleerde html bestanden te vinden zijn. Ieder element moet een string zijn die een map of een symbool representeert met 'default als verwijzing naar het standaard pad en 'current verwijst naar het huidige pad."
+msgstr "Een lijst met mappen (strings) die aangeven waar (geïnterpreteerde) html-bestanden te vinden zijn. Ieder element moet een string zijn die een map of een symbool representeert met 'default als verwijzing naar het standaard pad en 'current verwijst naar het huidige pad."
 
 #: ../doc/tip_of_the_day.list.in:1
 msgid "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots of bugs and unstable features! If you are looking for a stable personal finance application, you should use the latest release of GnuCash 2.2."
-msgstr ""
+msgstr "Waarschuwing!! Dit is een ONTWIKKELversie van GnuCash, die waarschijnlijk veel fouten en instabiele opties bevat! Als u op zoek bent naar een stabiele toepassing voor het beheren van uw persoonlijke financiën, kunt u beter de laatste uitgave van GnuCash 2.2 gebruiken."
 
 #: ../doc/tip_of_the_day.list.in:6
 msgid "The GnuCash online manual has lots of helpful information. If you are upgrading from earlier versions of GnuCash, the section \"What's new in GnuCash 2.0\" is particularly interesting. You can access the manual under the Help menu."
-msgstr "De GnuCash online handleiding bevat veel handige informatie. Wanneer u vanuit een oudere versie van GnuCash een upgrade pleegt, is de sectie \"wat is er nieuw in GnuCash 2.0\" vooral interessant. U kunt de handleiding vinden in het Help-menu."
+msgstr "De GnuCash online handleiding bevat veel handige informatie. Wanneer u vanuit een oudere versie van GnuCash een upgrade pleegt, is vooral de sectie \"wat is er nieuw in GnuCash 2.0\" interessant. U kunt de handleiding vinden in het Help-menu."
 
 #: ../doc/tip_of_the_day.list.in:11
 msgid "You can easily import your existing financial data from Quicken, MS Money or other programs that export QIF files or OFX files.  In the File menu, click on the sub-menu Import and click on QIF or OFX file, respectively. Then, follow the instructions provided."
@@ -21667,7 +21638,7 @@ msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:60
 msgid "To switch between multiple tabs in the main window, press Control+Alt+Page Up/Down."
-msgstr ""
+msgstr "Gebruik de toetsen Control+Alt+Page Up/Down om te wisselen tussen de verschillende tabbladen in het hoofdvenster."
 
 #: ../doc/tip_of_the_day.list.in:63
 #, fuzzy
@@ -21690,41 +21661,31 @@ msgstr ""
 #: ../doc/tip_of_the_day.list.in:72
 #, fuzzy
 msgid "You can pack multiple reports into a single window,  providing all the financial information you want at a glance. To do so, use the Sample & Custom -> \"Custom Multicolumn Report\" report."
-msgstr ""
-"U kunt meerdere rapporten weer laten geven in een enkel venster. \n"
-"hiermee ziet u al de financiële gegevens die u nodig heeft in een oogopslag.\n"
-"Hiervoor gebruikt u het Voorbeeld & Aangepast -> \"Aangepaste meerkoloms-rapport\" rapport."
+msgstr "U kunt meerdere rapporten weer laten geven in een enkel venster, waardoor u alle financiële gegevens die u nodig heeft in een oogopslag kunt zien. Hiervoor gebruikt u het Voorbeeld & Aangepast -> \"Aangepaste meerkoloms-rapport\" rapport."
 
 #: ../doc/tip_of_the_day.list.in:77
 msgid "Style Sheets affect how reports are displayed.  Choose a style sheet for your report as a report option, and use the Edit -> Style Sheets menu to customize style sheets."
-msgstr ""
-"Stijlbladen hebben invloed op de weergave van uw rapporten.\n"
-"Kies een sjabloon voor uw rapport onder rapport opties, en\n"
-"gebruik het Bewerk -> Sjabloon menu om uw sjablonen aan te passen."
+msgstr "Sjablonen hebben invloed op de weergave van uw rapporten. Kies een sjabloon voor uw rapport onder rapportopties, en gebruik het Bewerk -> Sjabloon menu om uw sjablonen aan te passen."
 
 #: ../doc/tip_of_the_day.list.in:81
 msgid "To raise the accounts menu in the transfer field of a register page, press the Menu key or the Ctrl-Down key combination."
 msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:84
-#, fuzzy
 msgid "The GnuCash developers are easy to contact.  As well as several mailing lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome.org"
-msgstr ""
-"U kunt eenvoudig contact opnemen met de ontwikkelaars van GnuCash.\n"
-"Naast verschillende mailing lijsten, kunt u live met ze chatten op\n"
-"IRC! Kijk eens op #gnucash op irc.gnome.org"
+msgstr "U kunt eenvoudig contact opnemen met de ontwikkelaars van GnuCash. Naast verschillende mailing lijsten, kunt u live met ze chatten op IRC! Kijk eens op #gnucash op irc.gnome.org"
 
 #: ../doc/tip_of_the_day.list.in:88
-#, fuzzy
 msgid "There is a theory that if ever anyone discovers what the Universe is for and why it is here, it will instantly disappear and be replaced with something even more bizarre and inexplicable. There is another theory that this has already happened. Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr ""
-"Er is een theorie dat wanneer iedereen ontdekt waar het\n"
-"universum voor is en waarom het bestaat, dat het meteen zal\n"
-"verdwijnen en vervangen zal worden door iets nog vreemders en\n"
-"onverklaarbaarders.\n"
+"Er is een theorie dat, wanneer iedereen ontdekt waar het\n"
+"universum voor is en waarom het bestaat, het meteen zal\n"
+"verdwijnen en worden vervangen door iets dat nog vreemder\n"
+"en onverklaarbaar is.\n"
 "\n"
-"Er is een andere theorie die zegt dat dit al gebeurd is,\n"
-"Douglas Adams \"The Restaurant at the End of the Universe\""
+"Er is een andere theorie die zegt dat dit al is gebeurd.\n"
+"\n"
+"Douglas Adams, \"Het restaurant aan het eind van het heelal\""
 
 #~ msgid "Unknown database access mode '%s'. Using default mode: multi-user."
 #~ msgstr "Onbekende database toegangsmodus '%s'. De standaardmodus wordt gebruikt: meerdere gebruikers."
