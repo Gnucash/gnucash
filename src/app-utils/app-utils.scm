@@ -257,7 +257,7 @@
 (export simple-obj-from-list)
 (export make-simple-obj)
 
-(define gnc:*kvp-option-path* '("options"))
+(define gnc:*kvp-option-path* (list BOOK-OPTIONS-NAME))
 (export gnc:*kvp-option-path*)
 
 (load-from-path "c-interface.scm")
