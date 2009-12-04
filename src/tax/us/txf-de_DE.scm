@@ -135,6 +135,11 @@
 
    )
   )
+  (cons 'Other
+   (list
+    (cons 'N000 #(none "" "Nur zur Voransicht im Steuer-Bericht -- kein Export" 0 #f ""))
+   )
+  )
 ))
 
 
@@ -171,6 +176,11 @@
    (cons 'K96 #(none "96" "Innergemeinschaftliche Erwerbe neuer Fahrzeuge von Lieferern ohne USt-IdNr. (Steuer)" 1 #f "96"))
    )
   )
+  (cons 'Other
+   (list
+    (cons 'N000 #(none "" "Nur zur Voransicht im Steuer-Bericht -- kein Export" 0 #f ""))
+   )
+  )
 
    ))
 
@@ -181,11 +191,21 @@
     (cons 'N000 #(none "" "Nur zur Voransicht im Steuer-Bericht -- kein Export" 0 #f ""))
    )
   )
+  (cons 'Other
+   (list
+    (cons 'N000 #(none "" "Nur zur Voransicht im Steuer-Bericht -- kein Export" 0 #f ""))
+   )
+  )
 ))
 
 (define txf-liab-eq-categories
  (list
   (cons 'Ind
+   (list
+    (cons 'N000 #(none "" "Nur zur Voransicht im Steuer-Bericht -- kein Export" 0 #f ""))
+   )
+  )
+  (cons 'Other
    (list
     (cons 'N000 #(none "" "Nur zur Voransicht im Steuer-Bericht -- kein Export" 0 #f ""))
    )
