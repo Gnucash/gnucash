@@ -2,14 +2,12 @@ lib_LTLIBRARIES = libgnc-qof.la
 
 libgnc_qof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION)
 libgnc_qof_la_LIBADD= \
-  $(GUILE_LIBS) \
   $(GLIB_LIBS) \
   $(REGEX_LIBS) \
   $(top_builddir)/lib/libc/libc-missing.la
 
 AM_CPPFLAGS = \
   -I$(top_srcdir)/lib/libc \
-  $(GUILE_INCS) \
   $(GLIB_CFLAGS)
 
 libgnc_qof_la_SOURCES =  \
@@ -58,6 +56,7 @@ qofinclude_HEADERS = \
    qofinstance.h     \
    qofquery.h        \
    qofbook.h         \
+   qofbookslots.h    \
    qoflog.h          \
    qofobject.h       \
    qofquerycore.h    \

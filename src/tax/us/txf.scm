@@ -474,6 +474,11 @@
     (cons 'N528 #(parent "Sched K-1" "Tax-exempt interest income" 1 #t "" ((2004 "18") (1992 "19"))))
    )
   )
+  (cons 'Other
+   (list
+    (cons 'N000 #(none "" "Tax Report Only - No TXF Export" 0 #f ""))
+   )
+  )
  )
 )
 
@@ -1089,6 +1094,11 @@
     (cons 'N679 #(none "Sched K-1" "Total Foreign Taxes" 1 #t "" ((2004 "16") (2001 "17g") (2000 "17f") (1990 "17e"))))
    )
   )
+  (cons 'Other
+   (list
+    (cons 'N000 #(none "" "Tax Report Only - No TXF Export" 0 #f ""))
+   )
+  )
  )
 )
 
@@ -1174,6 +1184,11 @@
     (cons 'N1569 #(none "F1120S" "Other assets" 1 #f "" ((1990 "L14"))))
    )
   )
+  (cons 'Other
+   (list
+    (cons 'N000 #(none "" "Tax Report Only - No TXF Export" 0 #f ""))
+   )
+  )
  )
 )
 
@@ -1225,6 +1240,11 @@
     (cons 'N1585 #(none "F1120S" "Capital stock" 1 #f "" ((1992 "L22") (1990 "L22a"))))
     (cons 'N1587 #(none "F1120S" "Paid-in or capital surplus" 1 #f "" ((1990 "L23"))))
     (cons 'N1591 #(none "F1120S" "Treasury stock" 1 #f "" ((1997 "L26") (1990 "L25"))))
+   )
+  )
+  (cons 'Other
+   (list
+    (cons 'N000 #(none "" "Tax Report Only - No TXF Export" 0 #f ""))
    )
   )
  )

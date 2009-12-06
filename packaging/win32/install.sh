@@ -1375,7 +1375,7 @@ function inst_docs() {
         make_chm guide it_IT
         make_chm help C
         make_chm help de_DE
-        make_chm help it_IT
+#        make_chm help it_IT
     qpopd
 }
 

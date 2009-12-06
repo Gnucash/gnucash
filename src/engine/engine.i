@@ -114,6 +114,7 @@ SplitList * qof_query_run (QofQuery *q);
 %ignore qof_query_run;
 %include <qofquery.h>
 %include <qofquerycore.h>
+%include <qofbookslots.h>
 
 gnc_numeric gnc_numeric_create(gint64 num, gint64 denom);
 gnc_numeric gnc_numeric_zero(void);
@@ -297,6 +298,10 @@ static KvpFrame * gnc_book_get_slots(QofBook *book) {
     SET_ENUM("TRANS-DATE-POSTED");
     SET_ENUM("TRANS-DESCRIPTION");
     SET_ENUM("TRANS-NUM");
+    
+    SET_ENUM("BOOK-OPTIONS-NAME");
+    SET_ENUM("ACCOUNT-OPTIONS-SECTION");
+    SET_ENUM("TRADING-ACCOUNTS-OPTION");
 
     SET_ENUM("ACCOUNT-CODE-");  /* sic */
 

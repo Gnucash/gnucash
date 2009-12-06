@@ -18,8 +18,8 @@
             gnc:*company-phone* gnc:*company-fax* gnc:*company-url*
             gnc:*company-email* gnc:*company-contact*)
 
-(define gnc:*book-label* (N_ "Accounts"))
-(define gnc:*trading-accounts* (N_ "Trading Accounts"))
+(define gnc:*book-label* ACCOUNT-OPTIONS-SECTION)
+(define gnc:*trading-accounts* TRADING-ACCOUNTS-OPTION)
 
 (export gnc:*book-label* gnc:*trading-accounts*)
 
