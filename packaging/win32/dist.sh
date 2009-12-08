@@ -262,7 +262,7 @@ function finish() {
     done
 
     echo "Now running the Inno Setup Compiler for creating the setup.exe"
-    ${_INNO_UDIR}/iscc ${_GNUCASH_UDIR}/gnucash.iss
+    ${_INNO_UDIR}/iscc //Q ${_GNUCASH_UDIR}/gnucash.iss
 
     if [ "$BUILD_FROM_TARBALL" = "no" ]; then
         # And changing output filename

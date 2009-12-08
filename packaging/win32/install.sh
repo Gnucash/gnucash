@@ -1293,7 +1293,7 @@ function make_install() {
             for file in *.schemas; do
                 gconftool-2 \
                     --config-source=xml:merged:${_INSTALL_WFSDIR}/etc/gconf/gconf.xml.defaults \
-                    --install-schema-file $file
+                    --install-schema-file $file >/dev/null
             done
             gconftool-2 --shutdown
         qpopd
@@ -1342,7 +1342,7 @@ function make_chm() {
         echo "[MAP]" >> htmlhelp.hhp
         cat mymaps >> htmlhelp.hhp
         rm mymaps
-        hhc htmlhelp.hhp || true
+        hhc htmlhelp.hhp  >/dev/null  || true
         cp -fv htmlhelp.chm $_DOCS_INST_UDIR/$_CHM_LANG/gnucash-$_CHM_TYPE.chm
         cp -fv htmlhelp.hhmap $_DOCS_INST_UDIR/$_CHM_LANG/gnucash-$_CHM_TYPE.hhmap
     qpopd
