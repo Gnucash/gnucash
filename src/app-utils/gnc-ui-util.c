@@ -550,11 +550,11 @@ gnc_ui_account_get_tax_info_string (const Account *account)
     {
       if (tax_related)
         return g_strdup_printf
-           (_("Tax type %s: invalid code %s for account type"), code, tax_type);
+           (_("Tax type %s: invalid code %s for account type"), tax_type, code);
       else
         return g_strdup_printf
         (_("Not tax-related; tax type %s: invalid code %s for account type"),
-                                                                code, tax_type);
+                                                                tax_type, code);
     }
 
     code_scm = scm_str2symbol (code);
@@ -585,11 +585,11 @@ gnc_ui_account_get_tax_info_string (const Account *account)
     {
       if (tax_related)
         return g_strdup_printf
-        (_("No description: form %s, code %s, tax type %s (1)"),
+        (_("No description: form %s, code %s, tax type %s"),
                                                           form, code, tax_type);
       else
         return g_strdup_printf
-        (_("Not tax-related; no description: form %s, code %s, tax type %s (1)"),
+        (_("Not tax-related; no description: form %s, code %s, tax type %s"),
                                                           form, code, tax_type);
     }
 
@@ -598,11 +598,11 @@ gnc_ui_account_get_tax_info_string (const Account *account)
     {
       if (tax_related)
         return g_strdup_printf
-        (_("No description: form %s, code %s, tax type %s (2)"),
+        (_("No description: form %s, code %s, tax type %s"),
                                                           form, code, tax_type);
       else
         return g_strdup_printf
-        (_("Not tax-related; no description: form %s, code %s, tax type %s (2)"),
+        (_("Not tax-related; no description: form %s, code %s, tax type %s"),
                                                           form, code, tax_type);
     }
 
