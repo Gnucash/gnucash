@@ -68,6 +68,11 @@
       </child>
 
       <child>
+		<widget class="GtkHBox" id="hlayoutbox">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">3</property>
+      <child>
 	<widget class="GtkVBox" id="vbox1">
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
@@ -124,10 +129,10 @@
 			  <property name="label">(invoice)</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="justify">GTK_JUSTIFY_RIGHT</property>
 			  <property name="wrap">False</property>
 			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
+			  <property name="xalign">1</property>
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
@@ -144,7 +149,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkLabel" id="label3">
+			<widget class="GtkLabel" id="date_label">
 			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Date</property>
 			  <property name="use_underline">False</property>
@@ -169,7 +174,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkLabel" id="label2">
+			<widget class="GtkLabel" id="amount_label">
 			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Amount</property>
 			  <property name="use_underline">False</property>
@@ -194,7 +199,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkLabel" id="label4">
+			<widget class="GtkLabel" id="num_label">
 			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Num</property>
 			  <property name="use_underline">False</property>
@@ -219,7 +224,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkLabel" id="label5">
+			<widget class="GtkLabel" id="memo_label">
 			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Memo</property>
 			  <property name="use_underline">False</property>
@@ -449,6 +454,13 @@
 	    </packing>
 	  </child>
 
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
 	  <child>
 	    <widget class="GtkFrame" id="frame3">
 	      <property name="visible">True</property>
@@ -458,6 +470,7 @@
 
 	      <child>
 		<widget class="GtkScrolledWindow" id="acct_window">
+		  <property name="width_request">250</property>
 		  <property name="border_width">3</property>
 		  <property name="visible">True</property>
 		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -500,13 +513,14 @@
 	      <property name="fill">True</property>
 	    </packing>
 	  </child>
-	</widget>
-	<packing>
-	  <property name="padding">0</property>
-	  <property name="expand">True</property>
-	  <property name="fill">True</property>
-	</packing>
-      </child>
+		</widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">True</property>
+	      <property name="fill">True</property>
+	    </packing>
+       </child>
+
     </widget>
   </child>
 </widget>

@@ -431,6 +431,9 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
   PaymentWindow *pw;
   GladeXML *xml;
   GtkWidget *box, *label;
+  GtkTooltips *dialog_tips;
+  gchar *tooltip;
+  const gchar *ownerlabel, *invoicelabel;
   char * cm_class = (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER ?
 		     DIALOG_PAYMENT_CUSTOMER_CM_CLASS :
 		     DIALOG_PAYMENT_VENDOR_CM_CLASS);
@@ -464,6 +467,9 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
   /* Open and read the XML */
   xml = gnc_glade_xml_new ("payment.glade", "Payment Dialog");
   pw->dialog = glade_xml_get_widget (xml, "Payment Dialog");
+  
+  /* Prepare tooltips */
+  dialog_tips = gtk_tooltips_new();
 
   /* Grab the widgets and build the dialog */
   pw->num_entry = glade_xml_get_widget (xml, "num_entry");
@@ -474,11 +480,29 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
   label = glade_xml_get_widget (xml, "owner_label");
   box = glade_xml_get_widget (xml, "owner_box");
   pw->owner_choice = gnc_owner_select_create (label, box, book, owner);
+  ownerlabel = gtk_label_get_text(GTK_LABEL(label));
+
+  /* Add tooltip to onwer widgets*/
+  tooltip = g_strdup_printf(_("The %s this payment relates to."), ownerlabel);
+  gtk_tooltips_set_tip (dialog_tips, label, tooltip, NULL);
+  gtk_tooltips_set_tip (dialog_tips, box, tooltip, NULL);
+  g_free (tooltip);
 
   label = glade_xml_get_widget (xml, "invoice_label");
   box = glade_xml_get_widget (xml, "invoice_box");
   pw->invoice_choice = gnc_invoice_select_create (box, book, owner, invoice, label);
+  invoicelabel = gtk_label_get_text(GTK_LABEL(label));
 
+  /* Add tooltip */
+  tooltip = g_strdup_printf(_(
+		"The %s to assign this payment to.\n\nNote that is field is optional. "
+		"If you leave it blank, GnuCash will automatically assign the payment to the "
+		"first unpaid %s for this %s."), invoicelabel, invoicelabel, ownerlabel);
+  gtk_tooltips_set_tip (dialog_tips, label, tooltip, NULL);
+  gtk_tooltips_set_tip (dialog_tips, box, tooltip, NULL);
+  g_free (tooltip);
+  
+  label = glade_xml_get_widget (xml, "amount_label");
   box = glade_xml_get_widget (xml, "amount_box");
   pw->amount_edit = gnc_amount_edit_new ();
   gtk_box_pack_start (GTK_BOX (box), pw->amount_edit, TRUE, TRUE, 0);
@@ -486,6 +510,18 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
 					 TRUE);
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_edit), gnc_numeric_zero());
 
+  /* Add tooltip */
+  tooltip = g_strdup_printf(_(
+		"The amount to pay for this %s.\n\nIf you have selected a %s, GnuCash "
+		"will propose the amount still due for it here, but you can "
+		"decrease it for a partial payment or increase it for an over-payment. "
+		"In case of an over-payment or if no %s was selected, GnuCash will automatically "
+		"assign the  additional amount to the first unpaid %s for this %s."),
+		ownerlabel, invoicelabel, invoicelabel, invoicelabel, ownerlabel);
+  gtk_tooltips_set_tip (dialog_tips, label, tooltip, NULL);
+  gtk_tooltips_set_tip (dialog_tips, box, tooltip, NULL);
+  g_free (tooltip);
+  
   box = glade_xml_get_widget (xml, "date_box");
   pw->date_edit = gnc_date_edit_new (time(NULL), FALSE, FALSE);
   gtk_box_pack_start (GTK_BOX (box), pw->date_edit, TRUE, TRUE, 0);
