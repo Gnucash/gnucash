@@ -368,7 +368,7 @@
 			<widget class="GtkCheckButton" id="tax_related_button">
 			  <property name="visible">True</property>
 			  <property name="sensitive">False</property>
-			  <property name="tooltip" translatable="yes">Use Edit-&gt;Tax Options to set the tax-related flag and assign a tax code to this account.</property>
+			  <property name="tooltip" translatable="yes">Use Edit-&gt;Income Tax Options to set the tax-related flag and assign a tax code to this account.</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Ta_x related</property>
 			  <property name="use_underline">True</property>
