@@ -979,16 +979,6 @@ else
 fi
 AC_SUBST(PERL)
 
-# Now check for perl headers
-# This appears to be what Perl's ExtUtils::MakeMaker module does, so
-# I'm reasonably sure it's correct.
-# PERLINCL="/usr/lib/perl5/i386-linux/5.00404"
-#
-PERLINCL=`$PERL -MConfig -e 'print $Config{"archlibexp"}'`
-AC_ARG_WITH( perl-includes, 
-  [AS_HELP_STRING([--with-perl-includes=DIR],[specify where to look for perl includes])],
-       PERLINCL="$with_perl_includes" )
-AC_SUBST(PERLINCL)
 
 # check for doxygen, mostly stolen from http://log4cpp.sourceforge.net/
 # ----------------------------------------------------------------------------
