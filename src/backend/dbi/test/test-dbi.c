@@ -55,12 +55,20 @@ int main (int argc, char ** argv)
 	filename = tempnam( "/tmp", "test-sqlite3-" );
 	printf( "Using filename: %s\n", filename );
 	test_dbi_store_and_reload( "sqlite3", session_1, filename );
+
 	printf( "TEST_MYSQL_URL='%s'\n", TEST_MYSQL_URL );
 	if( strlen( TEST_MYSQL_URL ) > 0 ) {
+	    session_1 = qof_session_new();
+	    qof_session_begin( session_1, DBI_TEST_XML_FILENAME, FALSE, FALSE );
+	    qof_session_load( session_1, NULL );
 		test_dbi_store_and_reload( "mysql", session_1, TEST_MYSQL_URL );
 	}
+
 	printf( "TEST_PGSQL_URL='%s'\n", TEST_PGSQL_URL );
 	if( strlen( TEST_PGSQL_URL ) > 0 ) {
+	    session_1 = qof_session_new();
+	    qof_session_begin( session_1, DBI_TEST_XML_FILENAME, FALSE, FALSE );
+	    qof_session_load( session_1, NULL );
 		test_dbi_store_and_reload( "pgsql", session_1, TEST_PGSQL_URL );
 	}
     print_test_results();

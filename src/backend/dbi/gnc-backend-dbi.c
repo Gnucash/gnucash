@@ -622,7 +622,10 @@ gnc_dbi_session_end( QofBackend *be_start )
 
     ENTER (" ");
 
-    dbi_conn_close( be->conn );
+	if( be->conn != NULL ) {
+        dbi_conn_close( be->conn );
+		be->conn = NULL;
+	}
 	gnc_sql_finalize_version_info( &be->sql_be );
 
     LEAVE (" ");
@@ -679,7 +682,11 @@ gnc_dbi_save_may_clobber_data( QofBackend* qbe )
 	dbname = dbi_conn_get_option( be->conn, "dbname" );
 	table_name_list = ((GncDbiSqlConnection*)(be->sql_be.conn))->provider->get_table_list( be->conn, dbname );
 	if( table_name_list != NULL ) {
+		GSList* node;
     	numTables = g_slist_length( table_name_list );
+		for( node = table_name_list; node != NULL; node = node->next ) {
+		    g_free( node->data );
+		}
 		g_slist_free( table_name_list );
 	}
 
@@ -717,6 +724,7 @@ gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
 					qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
 				}
 			}
+			g_free( node->data );
 		}
 		g_slist_free( table_name_list );
 	}
@@ -1478,6 +1486,8 @@ conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
 		if( !info->null_allowed ) {
 			(void)g_string_append( ddl, " NOT NULL" );
 		}
+		g_free( info->name );
+		g_free( info );
     }
 	(void)g_string_append( ddl, ")" );
         
@@ -1540,6 +1550,8 @@ conn_create_table_ddl_mysql( GncSqlConnection* conn, const gchar* table_name,
 		if( !info->null_allowed ) {
 			(void)g_string_append( ddl, " NOT NULL" );
 		}
+		g_free( info->name );
+		g_free( info );
     }
 	(void)g_string_append( ddl, ")" );
         
@@ -1602,6 +1614,8 @@ conn_create_table_ddl_pgsql( GncSqlConnection* conn, const gchar* table_name,
 			(void)g_string_append( ddl, " NOT NULL" );
 		}
 		is_unicode = is_unicode || info->is_unicode;
+		g_free( info->name );
+		g_free( info );
     }
 	(void)g_string_append( ddl, ")" );
 	if( is_unicode ) {
@@ -1612,7 +1626,7 @@ conn_create_table_ddl_pgsql( GncSqlConnection* conn, const gchar* table_name,
 
 static gboolean
 conn_create_table( GncSqlConnection* conn, const gchar* table_name,
-				const GList* col_info_list )
+				    GList* col_info_list )
 {
 	GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 	gchar* ddl;
@@ -1625,11 +1639,13 @@ conn_create_table( GncSqlConnection* conn, const gchar* table_name,
 
 	ddl = dbi_conn->provider->create_table_ddl( conn, table_name,
 										col_info_list );
+    g_list_free( col_info_list );
 	if( ddl != NULL ) {
 		gint status;
 
 		DEBUG( "SQL: %s\n", ddl );
 		result = dbi_conn_query( dbi_conn->conn, ddl );
+		g_free( ddl );
 		status = dbi_result_free( result );
 		if( status < 0 ) {
 			PERR( "Error in dbi_result_free() result\n" );
@@ -1662,6 +1678,7 @@ conn_create_index( /*@ unused @*/ GncSqlConnection* conn, /*@ unused @*/ const g
 
 		DEBUG( "SQL: %s\n", ddl );
 		result = dbi_conn_query( dbi_conn->conn, ddl );
+		g_free( ddl );
 		status = dbi_result_free( result );
 		if( status < 0 ) {
 			PERR( "Error in dbi_result_free() result\n" );

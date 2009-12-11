@@ -167,7 +167,7 @@ struct GncSqlConnection
 	gboolean (*beginTransaction)( GncSqlConnection* ); /**< Returns TRUE if successful, FALSE if error */
 	gboolean (*rollbackTransaction)( GncSqlConnection* ); /**< Returns TRUE if successful, FALSE if error */
 	gboolean (*commitTransaction)( GncSqlConnection* ); /**< Returns TRUE if successful, FALSE if error */
-	gboolean (*createTable)( GncSqlConnection*, const gchar*, const GList* ); /**< Returns TRUE if successful, FALSE if error */
+	gboolean (*createTable)( GncSqlConnection*, const gchar*, GList* ); /**< Returns TRUE if successful, FALSE if error */
 	gboolean (*createIndex)( GncSqlConnection*, const gchar*, const gchar*, const GncSqlColumnTableEntry* ); /**< Returns TRUE if successful, FALSE if error */
 	gchar* (*quoteString)( const GncSqlConnection*, gchar* );
 };
@@ -290,7 +290,7 @@ typedef enum {
  * a column in a table.
  */
 typedef struct {
-	/*@ only @*/ const gchar* name;			/**< Column name */
+	/*@ only @*/ gchar* name;				/**< Column name */
 	GncSqlBasicColumnType type;				/**< Column basic type */
 	gint size;								/**< Column size (string types) */
 	gboolean is_unicode;					/**< Column is unicode (string types) */

@@ -398,4 +398,10 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
 
 	// Compare with the original data
 	compare_books( qof_session_get_book( session_2 ), qof_session_get_book( session_3 ) );
+	qof_session_end( session_1 );
+	qof_session_destroy( session_1 );
+	qof_session_end( session_2 );
+	qof_session_destroy( session_2 );
+	qof_session_end( session_3 );
+	qof_session_destroy( session_3 );
 }

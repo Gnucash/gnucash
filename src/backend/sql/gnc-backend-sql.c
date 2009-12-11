@@ -2393,6 +2393,7 @@ build_insert_statement( GncSqlBackend* be,
 		    g_string_append( sql, "," );
 		}
 		g_string_append( sql, (gchar*)colname->data );
+		g_free( colname->data );
 	}
 	g_list_free( colnames );
 
@@ -2469,6 +2470,7 @@ build_update_statement( GncSqlBackend* be,
 			(void)g_string_append( sql, "," );
 		}
 		(void)g_string_append( sql, (gchar*)colname->data );
+		g_free( colname->data );
 		(void)g_string_append( sql, "=" );
 		value_str = gnc_sql_get_sql_value( be->conn, (GValue*)(value->data) );
 		(void)g_string_append( sql, value_str );
@@ -2482,6 +2484,9 @@ build_update_statement( GncSqlBackend* be,
 
 	stmt = gnc_sql_connection_create_statement_from_sql( be->conn, sql->str );
 	gnc_sql_statement_add_where_cond( stmt, obj_name, pObject, &table[0], (GValue*)(values->data) );
+    for( value = values; value != NULL; value = value->next ) {
+		g_free( value->data );
+    }
 	g_slist_free( values );
 	(void)g_string_free( sql, TRUE );
 

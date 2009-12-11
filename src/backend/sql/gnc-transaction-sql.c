@@ -399,6 +399,7 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
 			Transaction* pTx = GNC_TRANSACTION(node->data);
     		xaccTransCommitEdit( pTx );
 		}
+		g_list_free( tx_list );
 
 #if LOAD_TRANSACTIONS_AS_NEEDED
 		// Update the account balances based on the loaded splits.  If the end
