@@ -229,9 +229,11 @@ function dist_gnucash() {
     cp -a $_REPOS_UDIR/packaging/win32/install-fq-mods.cmd $DIST_UDIR/bin
 
     _QTDIR_WIN=`echo $QTDIR | sed 's,^/\([A-Za-z]\)/,\1:/,g' `
+    _AQBANKING_SO_EFFECTIVE=$(awk '/AQBANKING_SO_EFFECTIVE/ { print $3 }' $TMP_UDIR/aqbanking-*/version.h )
     sed < $_BUILD_UDIR/packaging/win32/gnucash.iss \
         > $_GNUCASH_UDIR/gnucash.iss \
-        -e "s#@-qtbindir-@#${_QTDIR_WIN}/bin#g"
+        -e "s#@-qtbindir-@#${_QTDIR_WIN}/bin#g" \
+	-e "s#@-aqbanking_so_effective-@#${_AQBANKING_SO_EFFECTIVE}#g"
 }
 
 function finish() {
