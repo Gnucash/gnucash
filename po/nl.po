@@ -7,13 +7,14 @@
 # Jeroen ten Berge <twinbit@home.nl>, 2004.
 # Benno Schulenberg <benno@vertaalt.nl>, 2007.
 # Erwin Poeze <erwin.poeze@gmail.com>, 2009.
+# Jos <webnaam@gmail.com>, 2009.
 # Mark Haanen <i18n@haanen.net>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.3.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-08-28 20:54-0400\n"
-"PO-Revision-Date: 2009-11-29 21:23+0100\n"
+"PO-Revision-Date: 2009-12-10 23:08+0100\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -28,7 +29,7 @@ msgstr "Ongeoorloofde variabele in expressie."
 
 #: ../src/app-utils/gnc-exp-parser.c:643
 msgid "Unbalanced parenthesis"
-msgstr "Ongepaard haakje"
+msgstr "Eén (of meer) haakje(s) te weinig"
 
 #: ../src/app-utils/gnc-exp-parser.c:645
 msgid "Stack overflow"
@@ -164,6 +165,7 @@ msgstr "Rapporteer fouten en andere problemen aan: <gnucash-devel@gnucash.org>.\
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
 msgstr "U kunt ook foutrapportages bekijken en indienen op http://bugzilla.gnome.org\n"
 
+# Zo laten staan. We weten niet of na deze versie een nieuwe stabiele versie is uitgebracht.
 #: ../src/bin/gnucash-bin.c:87
 msgid "The last stable version was "
 msgstr "De laatste stabiele versie was "
@@ -186,7 +188,7 @@ msgstr "Extra/ontwikkeling/debugging-functionaliteiten inschakelen"
 
 #: ../src/bin/gnucash-bin.c:227
 msgid "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}\""
-msgstr "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}\""
+msgstr "Logniveau forceren, in de vorm \"log.ger.path={debug,info,warn,crit,error}\""
 
 #: ../src/bin/gnucash-bin.c:231
 msgid "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."
@@ -195,7 +197,7 @@ msgstr "Bestand voor logs; standaard is \"/tmp/gnucash.trace\"; kan ook \"stderr
 #. Translators: This is the command line option autohelp text; see popt(3)
 #: ../src/bin/gnucash-bin.c:237
 msgid "Set the logging level from 0 (least) to 6 (most)"
-msgstr "Kies het log niveau van 0 (minst) tot 6 (meest)"
+msgstr "Kies het log niveau van 0 (laagst) tot 6 (hoogst)"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -205,7 +207,7 @@ msgstr ""
 
 #: ../src/bin/gnucash-bin.c:244
 msgid "Do not load the last file opened"
-msgstr "Het laatst geopende bestand niet inlezen"
+msgstr "Het laatst geopende bestand niet laden"
 
 #: ../src/bin/gnucash-bin.c:247
 msgid "Set configuration path"
@@ -240,7 +242,7 @@ msgstr ""
 
 #: ../src/bin/gnucash-bin.c:263
 msgid "Set the prefix path for gconf queries"
-msgstr "Het padvoorvoegsel voor gconf-queries instellen"
+msgstr "Het voorkeurspad voor gconf-queries instellen"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -260,7 +262,7 @@ msgstr "BESTAND"
 
 #: ../src/bin/gnucash-bin.c:273
 msgid "Regular expression determining which namespace commodities will be retrieved"
-msgstr "Reguliere expressie bepaalt welke naamruimtecommodities zullen worden opgehaald."
+msgstr "Reguliere expressie die bepaalt welke {naam van commodities} zullen worden opgehaald."
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -299,7 +301,7 @@ msgstr "Controleren van Finance::Quote..."
 
 #: ../src/bin/gnucash-bin.c:475
 msgid "Loading data..."
-msgstr "Inlezen van gegevens..."
+msgstr "Laden van gegevens..."
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -364,11 +366,11 @@ msgstr "Kosten"
 #. Set memo.  action?
 #: ../src/business/business-core/gncInvoice.c:1183
 msgid "Extra to Charge Card"
-msgstr "Extra bedrag verrekening kaart"
+msgstr ""
 
 #: ../src/business/business-core/gncInvoice.c:1222
 msgid "Generated from an invoice.  Try unposting the invoice."
-msgstr "Gegenereerd vanaf een factuur. Probeer de verzending van de factuur ongedaan te maken."
+msgstr "Gegenereerd door een factuur. Probeer de boeking van de factuur ongedaan te maken."
 
 #. Translators: This is the memo of an auto-created split
 #: ../src/business/business-core/gncInvoice.c:1244
@@ -399,7 +401,7 @@ msgstr "Aanbetaling"
 
 #: ../src/business/business-core/gncInvoice.c:1676
 msgid " (posted)"
-msgstr "(verzonden)"
+msgstr " (geboekt)"
 
 #: ../src/business/business-core/gncOrder.c:417
 msgid " (closed)"
@@ -476,7 +478,7 @@ msgstr "Zoiets bestaat niet: %s"
 #: ../src/business/business-gnome/business-urls.c:170
 #, c-format
 msgid "No such owner entity: %s"
-msgstr "Dergelijk eigenaar type bestaat niet: %s"
+msgstr ""
 
 #: ../src/business/business-gnome/business-urls.c:274
 #, c-format
@@ -501,16 +503,16 @@ msgstr "Negatieve bedragen zijn niet toegestaan."
 #: ../src/business/business-gnome/dialog-billterms.c:267
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:136
 msgid "Percentage amount must be between 0 and 100."
-msgstr "Procentuele getallen moeten tussen de 0 en 100 liggen."
+msgstr "Percentage moet tussen 0 en 100 liggen."
 
 #: ../src/business/business-gnome/dialog-billterms.c:290
 msgid "You must provide a name for this Billing Term."
-msgstr "U moet een naam opgeven voor deze factureringsvoorwaarden."
+msgstr "U moet een naam opgeven voor deze factureringsvoorwaarde."
 
 #: ../src/business/business-gnome/dialog-billterms.c:296
 #, c-format
 msgid "You must provide a unique name for this Billing Term. Your choice \"%s\" is already in use."
-msgstr "U moet een unieke naam voor deze factureringsvoorwaarden opgeven. Uw keuze \"%s\" is al in gebruik."
+msgstr "U moet een unieke naam voor deze factureringsvoorwaarde opgeven. Uw keuze \"%s\" is al in gebruik."
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../src/business/business-gnome/dialog-billterms.c:465
@@ -548,15 +550,15 @@ msgstr "Weet u zeker dat u \"%s\" wilt verwijderen?"
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:72
 msgid "This transaction needs to be assigned to a Customer.  Please choose the Customer below."
-msgstr "Deze transactie moet worden toegekend aan een Klant. Kies een Klant hieronder."
+msgstr "Deze transactie moet worden toegekend aan een klant. Kies een klant uit onderstaande lijst."
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:77
 msgid "This transaction needs to be assigned to a Vendor.  Please choose the Vendor below."
-msgstr "Deze transactie moet worden toegekend aan een Leverancier. Kies een Leverancier hieronder."
+msgstr "Deze transactie moet worden toegekend aan een leverancier. Kies een leverancier uit onderstaande lijst."
 
 #: ../src/business/business-gnome/dialog-customer.c:268
 msgid "You must enter a company name. If this customer is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
-msgstr "U moet een bedrijfsnaam opgeven. Als deze klant een privé-persoon is (en geen bedrijf), dan kunt u het beste de \"bedrijfsnaam\" en de \"contactpersoon\" naam hetzelfde opgeven."
+msgstr "U moet een bedrijfsnaam opgeven. Als deze klant een privé-persoon is (en geen bedrijf), dan kunt u het beste dezelfde naam invullen bij \"bedrijfsnaam\" en \"contactpersoon\"."
 
 #: ../src/business/business-gnome/dialog-customer.c:279
 msgid "You must enter a billing address."
@@ -568,7 +570,7 @@ msgstr "Het kortingspercentage moet tussen de 0 en 100 liggen; u kunt het ook le
 
 #: ../src/business/business-gnome/dialog-customer.c:294
 msgid "Credit must be a positive amount or you must leave it blank."
-msgstr "Krediet moet een positief bedrag zijn, of u kunt het leeg laten."
+msgstr "Krediet moet een positief bedrag zijn of leeg blijven."
 
 #: ../src/business/business-gnome/dialog-customer.c:365
 #: ../src/business/business-gnome/dialog-employee.c:301
@@ -662,13 +664,15 @@ msgstr "ID #"
 msgid "Find Customer"
 msgstr "Zoek klant"
 
+# OVERAL DOOR TE VOEREN: DAGBOEK -> REKENING
 #: ../src/business/business-gnome/dialog-date-close.c:73
+#, fuzzy
 msgid "No Account selected.  Please try again."
 msgstr "Geen dagboek geselecteerd, probeert u het nogmaals."
 
 #: ../src/business/business-gnome/dialog-date-close.c:79
 msgid "Placeholder account selected.  Please try again."
-msgstr "Geen rekening geselecteerd, probeert u het nogmaals."
+msgstr "Verzamelrekening geselecteerd, probeert u het nogmaals."
 
 #: ../src/business/business-gnome/dialog-employee.c:216
 msgid "You must enter a username."
@@ -884,7 +888,7 @@ msgstr "Onkostendeclaratie bewerken"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2332
 msgid "Invoice Owner"
-msgstr "Eigenaar factuur"
+msgstr "Factuureigenaar"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -962,7 +966,7 @@ msgstr "Factuurnummer"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2362
 msgid "Bill Owner"
-msgstr "Eigenaar factuur"
+msgstr "Factuureigenaar"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2365
 msgid "Bill Notes"
@@ -974,7 +978,7 @@ msgstr "Factuurnummer"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2392
 msgid "Voucher Owner"
-msgstr "Eigenaar declaratie"
+msgstr "Declaratie-eigenaar"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2395
 msgid "Voucher Notes"
@@ -1224,7 +1228,7 @@ msgstr "U moet een bedrijf selecteren om de betaling te verwerken."
 
 #: ../src/business/business-gnome/dialog-payment.c:269
 msgid "You must select a transfer account from the account tree."
-msgstr "U moet een transactierekening uit de balans selecteren."
+msgstr "U moet een tegenrekening uit het rekeningschema selecteren."
 
 #: ../src/business/business-gnome/dialog-payment.c:277
 msgid "You must enter an account name for posting."
@@ -1246,7 +1250,7 @@ msgstr "U heeft geen geldige \"Boek naar\"-rekeningen. Maak een rekening van het
 
 #: ../src/business/business-gnome/dialog-vendor.c:205
 msgid "You must enter a company name. If this vendor is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
-msgstr "U moet een bedrijfsnaam opgeven. Wanneer de verkoper een privé-persoon is (en geen bedrijf), dan kunt u het beste de \"bedrijsnaam\" en de \"contactpersoon\" naam hetzelfde opgeven."
+msgstr "U moet een bedrijfsnaam opgeven. Als deze klant een privé-persoon is (en geen bedrijf), dan kunt u het beste dezelfde naam invullen bij \"bedrijfsnaam\" en \"contactpersoon\"."
 
 #: ../src/business/business-gnome/dialog-vendor.c:216
 msgid "You must enter a payment address."
@@ -1272,7 +1276,7 @@ msgstr "Opdrachten leverancier"
 #. { N_("Vendor Orders"), order_vendor_cb},
 #: ../src/business/business-gnome/dialog-vendor.c:649
 msgid "Vendor's Bills"
-msgstr "Facturen leveranciers"
+msgstr "Facturen leverancier"
 
 #: ../src/business/business-gnome/dialog-vendor.c:650
 msgid "Pay Bill"
@@ -1288,7 +1292,7 @@ msgstr "Zoek leverancier"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:1
 msgid "<b>New Billing Term</b>"
-msgstr "<b>Nieuwe factureringsvoorwaarden</b>"
+msgstr "<b>Nieuwe factureringsvoorwaarde</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:2
 msgid "<b>Term Definition</b>"
@@ -1357,7 +1361,7 @@ msgstr "Vervaldagen: "
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:20
 msgid "Edit the current Billing Term"
-msgstr "De geselecteerde factureringsvoorwaarden bewerken"
+msgstr "De geselecteerde factureringsvoorwaarde bewerken"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:22
 msgid "Table"
@@ -1387,7 +1391,7 @@ msgstr "De dag van de maand dat de facturen verlopen zijn"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:26
 msgid "The description of the Billing Term, printed on invoices"
-msgstr "De omschrijving van de factureringsvoorwaarden, afgedrukt op facturen"
+msgstr "De omschrijving van de factureringsvoorwaarde, afgedrukt op facturen"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:27
 msgid "The discount percentage applied if paid early."
@@ -1395,15 +1399,15 @@ msgstr "Het kortingspercentage dat wordt toegepast bij snelle betaling."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:28
 msgid "The internal name of the Billing Term."
-msgstr "De interne naam van de factureringsvoorwaarden."
+msgstr "De interne naam van de factureringsvoorwaarde."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:29
 msgid "The last day of the month for the early payment discount."
-msgstr "De laatste dag van de maand voor snelle betalers korting."
+msgstr "e laatste dag van de maand voor de korting voor snelle betalers."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:30
 msgid "The number of days after the post date during which a discount will be applied for early payment."
-msgstr "Het aantal dagen na de verzenddatum waarin een korting wordt gegeven voor vroeg betalen."
+msgstr "Het aantal dagen na de verzenddatum waarbinnen een korting wordt gegeven voor snelle betaling."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:31
 msgid "The number of days to pay the bill after the post date."
@@ -1411,7 +1415,7 @@ msgstr "Het aantal dagen om de factuur te betalen na de verzenddatum."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:32
 msgid "The percentage discount applied for early payment."
-msgstr "Het kortingspercentage voor tijdig betalen."
+msgstr "Het kortingspercentage voor snelle betaling."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:33
 #: ../src/report/report-gnome/report.glade.h:18
@@ -1993,7 +1997,7 @@ msgstr "Boeken op"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:7
 msgid "Transfer Account"
-msgstr "Transactierekening"
+msgstr "Tegenrekening"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:15
 msgid "Tax Included:"
@@ -2933,19 +2937,19 @@ msgstr "Geef korting onbekend type op"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:615
 msgid "Discount Type: Monetary Value"
-msgstr "Kortingstype: monetaire waarde"
+msgstr "Type korting: geldbedrag"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:618
 msgid "Discount Type: Percent"
-msgstr "Kortingstype: percentage"
+msgstr "Type korting: percentage"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:621
 msgid "Select the Discount Type"
-msgstr "Selecteer het kortingstype"
+msgstr "Selecteer het type korting"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:637
 msgid "Tax computed after discount is applied"
-msgstr "BTW wordt berekend over nettobedrag, na korting"
+msgstr "BTW wordt berekend nadat korting is toegepast"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:640
 msgid "Discount and tax both applied on pretax value"
@@ -3059,7 +3063,7 @@ msgid ""
 "Value $\n"
 "Percent %"
 msgstr ""
-"Waarde $\n"
+"Waarde €\n"
 "Procent %"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:9
@@ -3098,7 +3102,7 @@ msgstr "Bank"
 
 #: ../src/engine/Account.c:3711
 msgid "Asset"
-msgstr "Activum"
+msgstr "Bezitting"
 
 #: ../src/engine/Account.c:3712
 msgid "Credit Card"
@@ -3106,7 +3110,7 @@ msgstr "Creditcard"
 
 #: ../src/engine/Account.c:3713
 msgid "Liability"
-msgstr "Passivum"
+msgstr "Schuld"
 
 #: ../src/engine/Account.c:3714
 msgid "Stock"
@@ -3805,7 +3809,7 @@ msgstr "Lening"
 
 #: ../src/gnome/druid-loan.c:1044
 msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
-msgstr "Weet u zeker dat u de assistent 'Hypotheek/leningsinstellingen' wilt annuleren?"
+msgstr "Weet u zeker dat u de hypotheek- en lening-assistent wilt annuleren?"
 
 #: ../src/gnome/druid-loan.c:1163
 msgid "Please select a valid loan account."
@@ -3835,7 +3839,7 @@ msgstr "Betaling: \"%s\""
 
 #: ../src/gnome/druid-loan.c:1801 ../src/gnome/druid-loan.c:2374
 msgid "Principal"
-msgstr "Voornaamste"
+msgstr "Hoofdsom"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
@@ -4257,7 +4261,7 @@ msgid ""
 "\n"
 "Click 'Cancel'  if you do not wish to create any new accounts now."
 msgstr ""
-"Deze assistent helpt u met het aanmaken van een GnuCash-rekeningschema voor uw activa (zoals investeringen, rekeningen-courant of spaarrekeningen), passiva (zoals leningen) en verschillende soorten opbrengsten- en kostenrekeningen. \n"
+"Deze assistent helpt u met het aanmaken van een GnuCash-rekeningschema voor uw activa (zoals investeringen, betaal- of spaarrekeningen), uw passiva (zoals leningen) en verschillende soorten inkomsten en uitgaven.\n"
 "\n"
 "Kies 'Annuleren' als u nu geen nieuwe rekeningen wilt aanmaken."
 
@@ -4374,6 +4378,9 @@ msgid ""
 " \n"
 "Danger: this feature does not work correctly at this time; it is still under development.  It will probably damage your data in such a way that it cannot be repaired!"
 msgstr ""
+"Deze assistent helpt u bij het instellen en gebruiken van boekingsperiodes.\n"
+"\n"
+"WAARSCHUWING: Deze functionaliteit is nog in ontwikkeling, werkt nu nog niet op een juiste wijze en zal waarschijnlijk uw data onherstelbaar beschadigen!"
 
 #: ../src/gnome/glade/acctperiod.glade.h:12
 msgid "Title:"
@@ -5091,7 +5098,7 @@ msgstr "Bezig..."
 
 #: ../src/gnome/glade/reconcile.glade.h:1
 msgid "<b>Reconcile Information</b>"
-msgstr "<b>Afsteminformatie</b>"
+msgstr "<b>Af te stemmen informatie</b>"
 
 #: ../src/gnome/glade/reconcile.glade.h:2 ../src/gnome/window-reconcile.c:738
 msgid "Enter _Interest Payment..."
@@ -5353,7 +5360,7 @@ msgstr "Sorteer op aanmaak-datum"
 
 #: ../src/gnome/glade/register.glade.h:65
 msgid "Sort by the statement date (unreconciled items last)"
-msgstr "Sorteer op statement datum (niet-gecorrigeerde items als laatste)"
+msgstr "Sorteren op afschriftdatum (niet afgestemde items als laatste)"
 
 #: ../src/gnome/glade/register.glade.h:66
 msgid "Sort register by..."
@@ -5436,7 +5443,7 @@ msgstr "_Nummer:"
 
 #: ../src/gnome/glade/register.glade.h:94
 msgid "_Reconciled"
-msgstr "Verwe_rkt"
+msgstr "_Afgestemd"
 
 #: ../src/gnome/glade/register.glade.h:96
 msgid "_Standard Order"
@@ -5456,7 +5463,7 @@ msgstr "_Transactie journaal"
 
 #: ../src/gnome/glade/register.glade.h:100
 msgid "_Unreconciled"
-msgstr "_niet verwerkt"
+msgstr "_Niet afgestemd"
 
 #: ../src/gnome/glade/register.glade.h:102
 msgid "_Voided"
@@ -5746,7 +5753,7 @@ msgstr "Resterende maanden:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:113
 msgid "Mortgage/Loan Druid"
-msgstr "Assistent 'Hypotheek/leningen'"
+msgstr "Hypotheek- en lening-assistent"
 
 #: ../src/gnome/glade/sched-xact.glade.h:114
 msgid "Mortgage/Loan Repayment Setup"
@@ -5766,6 +5773,9 @@ msgid ""
 "Use previous weekday\n"
 "Use next weekday"
 msgstr ""
+"Geen verandering\n"
+"Gebruik vorige dag in de week\n"
+"Gebruik volgende dag in de week"
 
 #: ../src/gnome/glade/sched-xact.glade.h:122
 msgid ""
@@ -5776,6 +5786,12 @@ msgid ""
 "Semi-Monthly\n"
 "Monthly"
 msgstr ""
+"Niet\n"
+"Eenmalig\n"
+"Dagelijks\n"
+"Wekelijks\n"
+"Halfmaandelijks\n"
+"Maandelijks"
 
 #: ../src/gnome/glade/sched-xact.glade.h:128
 msgid "Not scheduled"
@@ -5783,7 +5799,7 @@ msgstr "Niet gepland"
 
 #: ../src/gnome/glade/sched-xact.glade.h:129
 msgid "Notify me when created"
-msgstr "Waarschuw me na aanmaken"
+msgstr "Waarschuw mij na aanmaken"
 
 #: ../src/gnome/glade/sched-xact.glade.h:130
 msgid "Number of Occurrences:"
@@ -5807,7 +5823,7 @@ msgstr "Deel van de aflossingstransactie"
 
 #: ../src/gnome/glade/sched-xact.glade.h:138
 msgid "Payment Frequency"
-msgstr "Aflossingsfrequentie"
+msgstr "Betalingsfrequentie"
 
 #: ../src/gnome/glade/sched-xact.glade.h:139
 msgid "Payment From (Escrow):"
@@ -5839,11 +5855,11 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:147
 msgid "Principal To:"
-msgstr "Voornamelijk aan:"
+msgstr "Hoofdsom naar:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:148
 msgid "R_emind in advance, days:"
-msgstr ""
+msgstr "H_erinnering vooraf, dagen:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:149
 msgid "Range: "
@@ -5955,7 +5971,7 @@ msgstr "De getoonde Geplande transacties worden binnenkort aangemaakt. Selecteer
 
 #: ../src/gnome/glade/sched-xact.glade.h:176
 msgid "This druid will walk you through any scheduled transactions that should be created."
-msgstr ""
+msgstr "Deze assistent helpt u met het aanmaken van de benodigde geplande transacties."
 
 #: ../src/gnome/glade/sched-xact.glade.h:177
 msgid ""
@@ -5963,9 +5979,9 @@ msgid ""
 "\n"
 "If you make a mistake or want to make changes later, you can edit the created Scheduled Transactions directly."
 msgstr ""
-"Dit is een stap-voor-stap-methode om de aflossing van een lening in te stellen. In deze assistent kunt u de voorwaarden van uw lening en zijn aflossing invoeren en details over de betalingen opgeven. Op basis daarvan zullen Geplande transacties (betalingsschema) worden gemaakt.\n"
+"Dit is een stap-voor-stap-methode om binnen GnuCash een betalingsschema van een lening in te stellen. In deze assistent kunt u de kenmerken van de lening en haar terugbetaling invoeren en details over de betalingen vastleggen. Op basis daarvan zal het betalingsschema als geplande transactie worden aangemaakt.\n"
 "\n"
-"Wanneer u een fout maakt of later veranderingen aan wilt brengen, kunt u het betalingsschema direct bewerken."
+"Wanneer u een fout maakt of later veranderingen wilt aanbrengen, kunt u de aangemaakte geplande transactie bewerken."
 
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:180 ../intl-scm/guile-strings.c:4396
@@ -6133,7 +6149,7 @@ msgstr "Details van de aandelen opsplitsing"
 
 #: ../src/gnome/glade/stocks.glade.h:15
 msgid "This druid will help you record a stock split or stock merger."
-msgstr "Deze Hulp helpt u een aandelen opsplitsing of fusie te archiveren"
+msgstr "Deze assistent helpt u een aandelensplitsing of -fusie te registreren."
 
 #: ../src/gnome/glade/stocks.glade.h:16
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:4
@@ -6987,7 +7003,7 @@ msgstr "De opsplitsingen van deze transactie verwijderen?"
 
 #: ../src/gnome/gnc-split-reg.c:933
 msgid "This transaction contains reconciled splits. Modifying it is not a good idea because that will cause your reconciled balance to be off."
-msgstr "Deze transactie bevat afgestemde opsplitsingen. Het bewerken hiervan is onverstandig omdat dit de afgestemde balans verstoord."
+msgstr "Deze transactie bevat afgestemde opsplitsingen. Het bewerken hiervan is onverstandig omdat dan het afgestemde saldo niet meer aansluit."
 
 #: ../src/gnome/gnc-split-reg.c:957
 msgid "_Remove Splits"
@@ -7000,7 +7016,7 @@ msgstr "De opsplitsing '%s' van translactie '%s' verwijderen?"
 
 #: ../src/gnome/gnc-split-reg.c:1033
 msgid "You would be deleting a reconciled split! This is not a good idea as it will cause your reconciled balance to be off."
-msgstr "U zou een afgestemde opsplitsing verwijderen! Dit is onverstandig omdat dit de afgestemde balans verstoord."
+msgstr "U zou een afgestemde opsplitsing verwijderen! Dit is onverstandig omdat dan het afgestemde saldo niet meer aansluit."
 
 #: ../src/gnome/gnc-split-reg.c:1036
 msgid "You cannot delete this split."
@@ -7028,11 +7044,11 @@ msgstr "De geselecteerde transactie verwijderen?"
 
 #: ../src/gnome/gnc-split-reg.c:1107
 msgid "You would be deleting a transaction with reconciled splits! This is not a good idea as it will cause your reconciled balance to be off."
-msgstr "U zou een transactie met een afgestemde opsplitsing verwijderen! Dit is onverstandig omdat dit de afgestemde balans verstoord."
+msgstr "U zou een transactie met een afgestemde opsplitsing verwijderen! Dit is onverstandig omdat dan het afgestemde saldo niet meer aansluit."
 
 #: ../src/gnome/gnc-split-reg.c:1405
 msgid "Balancing entry from reconcilation"
-msgstr ""
+msgstr "Afstemmingstransactie"
 
 #: ../src/gnome/gnc-split-reg.c:1843
 msgid "Present:"
@@ -7097,7 +7113,7 @@ msgstr "Clusters binnen rekening %s"
 #: ../src/register/ledger-core/split-register-layout.c:555
 #: ../src/register/ledger-core/split-register-model.c:154
 msgid "Reconciled:R"
-msgstr "Afgestemd:R"
+msgstr "Afgestemd:A"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:1
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:1
@@ -7382,9 +7398,8 @@ msgid "Which check position to print"
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:1
-#, fuzzy
 msgid "If active, after reconciling a credit card account, prompt the user to enter a credit card payment. Otherwise do not prompt the user for this."
-msgstr "Na het verwerken van een creditcard boeking, wordt u gevraagd een creditcard betaling op te geven."
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:2
 msgid "If active, all transactions marked as cleared in the register will appear already selected in the reconcile dialog. Otherwise no transactions will be initially selected."
@@ -7396,9 +7411,8 @@ msgstr "Goedgekeurde transacties voorselecteren"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:4
 #: ../src/gnome-utils/glade/preferences.glade.h:102
-#, fuzzy
 msgid "Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment. Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts."
-msgstr "Vraag de gebruiker om een transactie voor te ontvangen of te betalen rente alvorens een rentedragende rekening af te stemmen. Dit werkt alleen met de bank-, creditcard-, beleggings-, activa-, passiva-, debiteuren- en crediteurenrekeningen."
+msgstr "Vraag de gebruiker vóór afstemming van een rentedragende rekening of hij een boeking wil maken voor voor te ontvangen of te betalen rente. Dit werkt alleen met de bank-, creditcard-, beleggingsfonds-, activa-, passiva-, debiteuren- en crediteurenrekeningen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
 msgid "Prompt for credit card payment"
@@ -7744,7 +7758,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:1
 msgid "Change contents of reconciled split"
-msgstr ""
+msgstr "De inhoud van een afgestemde opsplitsing wijzigen"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:2
 msgid "Commit changes to a invoice_entry"
@@ -7780,7 +7794,7 @@ msgstr "Een veranderde transactie dupliceren"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:10
 msgid "Mark transaction split as unreconciled"
-msgstr ""
+msgstr "Een opsplitsing als niet-afgestemd aanmerken"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:11
 msgid "Read only register"
@@ -7788,7 +7802,7 @@ msgstr "Alleen-lezen journaal"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:12
 msgid "Remove a reconciled split from a transaction"
-msgstr "Een afgestemde opsplitsing uit een transactie verwijderne"
+msgstr "Een afgestemde opsplitsing uit een transactie verwijderen"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:13
 msgid "Remove a split from a transaction"
@@ -8157,7 +8171,7 @@ msgstr "Goedgekeurd"
 #: ../src/gnome-search/search-reconciled.c:228
 #: ../src/gnome-utils/gnc-tree-view-account.c:587
 msgid "Reconciled"
-msgstr "Gecorrigeerd"
+msgstr "Afgestemd"
 
 #: ../src/gnome-search/search-reconciled.c:231
 msgid "Frozen"
@@ -9044,7 +9058,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:13
 msgid "GnuCash Datafile Import Druid"
-msgstr ""
+msgstr "GnuCash Databestand-importeer-assistent"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:14
 msgid "GnuCash data files you have loaded"
@@ -9259,7 +9273,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:21
 msgid "<b>Reconciling</b>"
-msgstr "<b>Afstemmen</b>"
+msgstr "<b>Af aan het stemmen</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:22
 msgid "<b>Reverse Balanced Accounts</b>"
@@ -9314,8 +9328,9 @@ msgid "Accounting Period"
 msgstr "Boekperiode"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:36
+#, fuzzy
 msgid "After reconciling a credit card statement, prompt the user to enter a credit card payment."
-msgstr "Na het afstemmen van een creditcardboeking, wordt de gebruiker gevraagd een creditcardbetaling op te geven."
+msgstr "De gebruiker vragen een creditcard-betaling op te geven na het afstemmen van een creditcard-afschrift."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:37
 msgid "All transactions are expanded to show all splits."
@@ -10917,7 +10932,7 @@ msgstr "Goedgekeurd (rapport)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:594
 msgid "Reconciled (Report)"
-msgstr "Gecorrigeerd (rapport)"
+msgstr "Afgestemd (rapport)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:600
 msgid "Future Minimum"
@@ -11215,7 +11230,7 @@ msgstr "Eindbalans:"
 #. reconciled balance title/value
 #: ../src/gnome/window-reconcile.c:1751
 msgid "Reconciled Balance:"
-msgstr "Gecorrigeerde balans:"
+msgstr "Afgestemd saldo:"
 
 #. difference title/value
 #: ../src/gnome/window-reconcile.c:1761
@@ -11232,7 +11247,7 @@ msgstr "De rekening is niet in balans. Weet u zeker dat u wilt stoppen?"
 
 #: ../src/gnome/window-reconcile.c:2043
 msgid "Do you want to postpone this reconciliation and finish it later?"
-msgstr "Wilt u deze correctie uitstellen en later afmaken?"
+msgstr "Wilt u deze afstemming uitstellen en later afmaken?"
 
 #. Toplevel
 #: ../src/gnome/window-reconcile.c:2079
@@ -11246,11 +11261,11 @@ msgstr "_Rekening"
 #. Reconcile menu
 #: ../src/gnome/window-reconcile.c:2086
 msgid "_Reconcile Information..."
-msgstr "_Afsteminformatie..."
+msgstr "_Af te stemmen informatie..."
 
 #: ../src/gnome/window-reconcile.c:2087
 msgid "Change the reconcile information including statement date and ending balance."
-msgstr "Verander de afsteminformatie inclusief de afschriftdatum en eindbalans."
+msgstr "De af te stemmen informatie wijzigen, waaronder de afschriftdatum en het eindsaldo."
 
 #: ../src/gnome/window-reconcile.c:2090
 msgid "_Finish"
@@ -11258,7 +11273,7 @@ msgstr "_Beëindig"
 
 #: ../src/gnome/window-reconcile.c:2091
 msgid "Finish the reconciliation of this account"
-msgstr "Beëindig de afstemming voor deze rekening"
+msgstr "De afstemming voor deze rekening afronden"
 
 #: ../src/gnome/window-reconcile.c:2093
 msgid "_Postpone"
@@ -11266,11 +11281,11 @@ msgstr "_Uitstellen"
 
 #: ../src/gnome/window-reconcile.c:2094
 msgid "Postpone the reconciliation of this account"
-msgstr "Stel de afstemming van deze rekening uit"
+msgstr "De afstemming van deze rekening uitstellen"
 
 #: ../src/gnome/window-reconcile.c:2097
 msgid "Cancel the reconciliation of this account"
-msgstr "Annuleer de afstemming van deze rekening"
+msgstr "De afstemming van deze rekening annuleren"
 
 #: ../src/gnome/window-reconcile.c:2103
 msgid "Open the account"
@@ -11576,7 +11591,6 @@ msgstr ""
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:50
 #: ../src/import-export/hbci/glade/hbci.glade.h:47
-#, fuzzy
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now finished.  You can now invoke Online Banking actions on those accounts.\n"
 "\n"
@@ -11584,18 +11598,14 @@ msgid ""
 "\n"
 "Press \"Apply\" now."
 msgstr ""
-"Nu is de configuratie van alle HBCI rekeningen die gekoppeld zijn aan\n"
-"een GnuCash dagboek voltooid. U kunt nu HBCI acties aanroepen op\n"
-"die dagboeken.\n"
+"Het koppelen van via internetbankieren beschikbare rekeningen aan GnuCash-rekeningen is nu gereed. U kunt nu vanaf deze GnuCash-rekeningen transacties voor internetbankieren aanroepen.\n"
 "\n"
-"Wanneer u een andere HBCI bank, gebruiker of rekening wilt toevoegen, kunt \n"
-"u deze Hulp op ieder moment opnieuw oproepen.\n"
+"Wanneer u een andere bank, gebruiker of rekening wilt toevoegen, kunt u deze assistent op elk moment opnieuw oproepen.\n"
 "\n"
-"Kies nu 'Voltooien'."
+"Kies nu 'Toepassen'."
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:55
 #: ../src/import-export/hbci/glade/hbci.glade.h:52
-#, fuzzy
 msgid ""
 "This druid helps you setting up your Online Banking connection with your bank.\n"
 "\n"
@@ -11612,26 +11622,19 @@ msgid ""
 "\n"
 "Press \"Cancel\" if you do not wish to setup any Online Banking connection now."
 msgstr ""
-"Deze hulp helpt u bij het configureren van uw HBCI verbinding met uw bank.\n"
+"Deze assistent helpt u bij het configureren van uw internetbankieren-verbinding met uw bank.\n"
 "\n"
-"U moet eerst HBCI toegang aanvragen bij uw bank. Wanneer uw bank u \n"
-"toegang wil geven via HBCI, zal de bank u een brief sturen met \n"
-"\n"
-"* De bankcode van uw bank\n"
-"* Een gebruikers ID dat u identificeert bij uw bank\n"
-"* Het internetadres van de HBCI server van uw bank\n"
+"U moet de toegang voor internetbankieren eerst bij uw bank aanvragen. Wanneer uw bank u toegang wil geven tot internetbankieren, zal deze u een brief sturen met:\n"
+"* De bank-code van uw bank;\n"
+"* Een gebruikers-ID dat u identificeert bij uw bank;\n"
+"* Het internetadres van de internetbankieren-server van uw bank;\n"
 "* Informatie over de cryptografische publieke sleutel van uw bank (\"Ini-brief\").\n"
 "\n"
-"Deze informatie zal benodigd zijn voor de volgende vragen.\n"
-"Kies 'Volgende' als u door wilt gaan.\n"
+"Deze informatie heeft u bij deze assistent nodig. Kies 'Volgende' als u verder wilt gaan.\n"
 "\n"
-"Opmerking: WIJ GARANDEREN NIETS. Sommige banken gebruiken een\n"
-"slecht geïmplementeerde HBCI. U kunt niet vertrouwen op tijdkritische\n"
-"overdracht via HBCI, dit komt doordat uw bank soms verkeerd terugkoppeld\n"
-"wanneer een opdracht geweigerd wordt.\n"
+"LET OP: WIJ GARANDEREN NIETS. Sommige banken gebruiken een slecht geïmplementeerde internetbankieren-server. U kunt niet vertrouwen op tijdkritische overboekingen via internetbankieren, omdat de bank soms niet op de juiste manier terugkoppelt als een opdracht geweigerd wordt.\n"
 "\n"
-"Kies 'Annuleren' als u nu geen enkele HBCI verbinding wilt \n"
-"configureren."
+"Kies 'Annuleren' als u nu geen internetbankieren-verbinding wilt configureren."
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:69
 #: ../src/import-export/hbci/glade/hbci.glade.h:66
@@ -11968,7 +11971,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:713
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:301
 msgid "The booked balance is identical to the current reconciled balance of the account."
-msgstr ""
+msgstr "Het geboekte saldo is identiek aan het huidige afgestemde saldo op de rekening."
 
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:726
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:315
@@ -12484,7 +12487,7 @@ msgstr "Hier het online dagboek ID..."
 
 #: ../src/import-export/generic-import.glade.h:37
 msgid "Other Account"
-msgstr "Ander dagboek"
+msgstr "Andere rekening"
 
 #: ../src/import-export/generic-import.glade.h:38
 #, fuzzy
@@ -12505,10 +12508,11 @@ msgstr "Veld"
 msgid "Select \"A\" to add the transaction as new."
 msgstr "Verwijder de gehele boeking"
 
+# Onduidelijk of hier de sneltoets (uit de caption) of een hardcode-toets wordt bedoeld. Nazoeken!
 #: ../src/import-export/generic-import.glade.h:43
 #, fuzzy
 msgid "Select \"R\" to reconcile a matching transaction."
-msgstr "Selecteer overeenkomende bestaande transactie"
+msgstr "Kies \"A\" om een overeenkomende transactie af te stemmen."
 
 #: ../src/import-export/generic-import.glade.h:45
 msgid "Select matching existing transaction"
@@ -12774,11 +12778,11 @@ msgstr ""
 
 #: ../src/import-export/import-account-matcher.c:82
 msgid "Account ID"
-msgstr "Dagboek ID"
+msgstr "Rekening-ID"
 
 #: ../src/import-export/import-account-matcher.c:212
 msgid "(Full account ID: "
-msgstr "(Volledig dagboek ID:"
+msgstr ""
 
 #: ../src/import-export/import-account-matcher.c:241
 #, c-format
@@ -12817,8 +12821,9 @@ msgid "y/d/m"
 msgstr ""
 
 #: ../src/import-export/import-main-matcher.c:222
+#, fuzzy
 msgid "Destination account for the auto-balance split."
-msgstr "Doel dagboek voor de automatische balans opsplitsing."
+msgstr "Doelrekening voor de automatische saldo-opsplitsing."
 
 #: ../src/import-export/import-main-matcher.c:439
 msgid "A"
@@ -12963,7 +12968,7 @@ msgstr "GnuCash log bestand na vastloper afspelen. Dit kan niet ongedaan gemaakt
 #: ../src/import-export/ofx/gnc-ofx-import.c:360
 #, c-format
 msgid "Stock account for security \"%s\""
-msgstr "Aandelen dagboek voor waardepapier \"%s\""
+msgstr "Effectenrekening voor waardepapier \"%s\""
 
 #. This string is a default account
 #. name. It MUST NOT contain the
@@ -13022,7 +13027,7 @@ msgstr "Verwerk een QFX/OFX antwoord bestand"
 
 #: ../src/import-export/qif-import/dialog-account-picker.c:205
 msgid "Enter a name for the account"
-msgstr "Voer een naam in voor het dagboek"
+msgstr "Een naam voor de rekening invoeren"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:616
 msgid "Select QIF File"
@@ -13113,11 +13118,11 @@ msgstr "nummer"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1390
 msgid "You must enter an account name."
-msgstr "U moet een dagboeknaam opgeven."
+msgstr "U moet een rekeningnaam opgeven."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1469
 msgid "GnuCash account name"
-msgstr "GnuCash dagboek naam"
+msgstr "GnuCash rekeningnaam"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2071
 #: ../src/import-export/qif-import/druid-qif-import.c:2144
@@ -13225,7 +13230,7 @@ msgstr "QIF import"
 
 #: ../src/import-export/qif-import/qif.glade.h:2
 msgid "Account name:"
-msgstr "Dagboeknaam:"
+msgstr "Rekeningnaam:"
 
 #: ../src/import-export/qif-import/qif.glade.h:3
 msgid "Accounts and stock holdings"
@@ -13829,15 +13834,15 @@ msgstr "Veranderingen _opslaan"
 
 #: ../src/register/ledger-core/split-register-control.c:1735
 msgid "Mark split as unreconciled?"
-msgstr ""
+msgstr "Opsplitsing als niet-afgestemd aanmerken?"
 
 #: ../src/register/ledger-core/split-register-control.c:1737
 msgid "You are about to mark a reconciled split as unreconciled.  Doing so might make future reconciliation difficult!  Continue with this change?"
-msgstr "U staat op het punt een afgestemde opspliting te markeren als niet-afgestemd. Hierdoor kunnen toekomstige opsplitingen lastiger worden! Weet u zeker dat u wilt doorgaan?"
+msgstr "U staat op het punt een afgestemde opsplitsing als niet-afgestemd aan te merken. Dit kan toekomstige afstemming bemoeilijken! Weet u zeker dat u wilt doorgaan?"
 
 #: ../src/register/ledger-core/split-register-control.c:1754
 msgid "_Unreconcile"
-msgstr "_Niet-opgesplitst"
+msgstr "Afstemming ter_ugdraaien"
 
 #. Translators: The 'sample:' items are
 #. strings which are not displayed, but only
@@ -13996,7 +14001,7 @@ msgstr "Afgestemde opsplitsing veranderen?"
 
 #: ../src/register/ledger-core/split-register-model.c:1677
 msgid "You are about to change a reconciled split.  Doing so might make future reconciliation difficult!  Continue with this change?"
-msgstr "U staat op het punt een afgestemde opspliting te veranderen. Hierdoor kunnen toekomstige opsplitingen lastiger worden! Weet u zeker dat u wilt doorgaan?"
+msgstr "U staat op het punt een afgestemde opsplitsing te veranderen. Dit kan toekomstige afstemming bemoeilijken! Weet u zeker dat u wilt doorgaan?"
 
 #: ../src/register/ledger-core/split-register-model.c:1690
 msgid "Chan_ge Split"
@@ -14130,7 +14135,7 @@ msgstr "Ga een stap vooruit in de geschiedenis"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:996
 msgid "Reload"
-msgstr "Herinlezen"
+msgstr "Herladen"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:997
 msgid "Reload the current page"
@@ -14916,7 +14921,7 @@ msgstr "Het bedrijf voor dit rapport"
 #: ../intl-scm/guile-strings.c:402 ../intl-scm/guile-strings.c:766
 #: ../intl-scm/guile-strings.c:874 ../intl-scm/guile-strings.c:1238
 msgid "The account to search for transactions"
-msgstr "Het dagboek om te doorzoeken op transacties"
+msgstr "De rekening om te doorzoeken op transacties"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -16271,7 +16276,7 @@ msgstr "Nogmaals hallo"
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:2160 ../intl-scm/guile-strings.c:2348
 msgid "An account list option"
-msgstr "Een dagboek lijst optie"
+msgstr "Een rekeninglijst-optie"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -16905,7 +16910,7 @@ msgstr "Stap grootte"
 #. src/report/standard-reports/daily-reports.scm
 #: ../intl-scm/guile-strings.c:2540 ../intl-scm/guile-strings.c:4366
 msgid "Include Sub-Accounts"
-msgstr "Inclusief sub-dagboeken"
+msgstr "Inclusief subrekeningen"
 
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2542
@@ -17058,7 +17063,7 @@ msgstr "Weergaveniveau dagboek"
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:2616 ../intl-scm/guile-strings.c:4542
 msgid "Always show sub-accounts"
-msgstr "Sub-dagboeken altijd tonen"
+msgstr "Subrekeningen altijd tonen"
 
 #. src/report/standard-reports/cash-flow.scm
 #. src/report/standard-reports/budget.scm
@@ -17133,7 +17138,7 @@ msgstr "Verschil"
 #. src/report/standard-reports/general-journal.scm
 #: ../intl-scm/guile-strings.c:2650
 msgid "General Journal"
-msgstr "Algemeen dagboek"
+msgstr "Journaalposten"
 
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/register.scm
@@ -17931,7 +17936,7 @@ msgstr "Totaal"
 #: ../intl-scm/guile-strings.c:3406 ../intl-scm/guile-strings.c:3498
 #: ../intl-scm/guile-strings.c:4200
 msgid "Reconciled Date"
-msgstr "Datum gecorrigeerd"
+msgstr "Datum afstemming"
 
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/general-ledger.scm
@@ -18131,7 +18136,7 @@ msgstr "Sorteer op exacte tijd"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3408
 msgid "Sort by the Reconciled Date"
-msgstr "Sorteer op correctie datum"
+msgstr "Sorteren op datum afstemming"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3410
@@ -18238,7 +18243,7 @@ msgstr "Volgorde van secundaire sortering"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3500
 msgid "Display the reconciled date?"
-msgstr "De correctie datum weergeven ?"
+msgstr "De datum van afstemming tonen?"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3512
