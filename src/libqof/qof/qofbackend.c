@@ -502,6 +502,8 @@ qof_backend_commit_exists(const QofBackend *be)
     }
 }
 
+static GSList* backend_module_list = NULL;
+
 gboolean
 qof_load_backend_library (const char *directory, const char* module_name)
 {
@@ -523,7 +525,25 @@ qof_load_backend_library (const char *directory, const char* module_name)
         module_init_func();
 
     g_module_make_resident(backend);
+	backend_module_list = g_slist_prepend( backend_module_list, backend );
     return TRUE;
+}
+
+void
+qof_finalize_backend_libraries(void)
+{
+    GSList* node;
+	GModule* backend;
+    void (*module_finalize_func) (void);
+
+	for (node = backend_module_list; node != NULL; node = node->next) {
+	    backend = (GModule*)node->data;
+
+        if (g_module_symbol(backend, "qof_backend_module_finalize",
+                        (gpointer)&module_finalize_func))
+            module_finalize_func();
+
+	}
 }
 
 /************************* END OF FILE ********************************/

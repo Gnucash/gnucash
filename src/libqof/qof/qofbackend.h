@@ -269,6 +269,9 @@ KvpFrame* qof_backend_get_config(QofBackend *be);
 gboolean
 qof_load_backend_library(const gchar *directory, const gchar* module_name);
 
+/** \brief Finalize all loaded backend sharable libraries. */
+void qof_finalize_backend_libraries(void);
+
 /** \brief Retrieve the backend used by this book */
 QofBackend* qof_book_get_backend (const QofBook *book);
 
