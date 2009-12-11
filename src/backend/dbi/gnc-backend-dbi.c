@@ -992,6 +992,12 @@ qof_backend_module_init( void )
     qof_log_set_level( log_module, QOF_LOG_DEBUG );
 }
 
+G_MODULE_EXPORT void
+qof_backend_module_finalize( void )
+{
+    dbi_shutdown();
+}
+
 /* --------------------------------------------------------- */
 typedef struct
 {

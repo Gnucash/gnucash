@@ -31,7 +31,7 @@
 
 #include <gmodule.h>
 
-G_MODULE_EXPORT void
-qof_backend_module_init(void);
+G_MODULE_EXPORT void qof_backend_module_init(void);
+G_MODULE_EXPORT void qof_backend_module_finalize(void);
 
 #endif /* GNC_BACKEND_DBI_H_ */
