@@ -434,6 +434,26 @@ gnc_lot_get_latest_split (GNCLot *lot)
   return node->data;
 }
 
+/* When the book is being closed, destroy all lots */
+static void
+lot_destroy_book_end(GNCLot* lot)
+{
+    gnc_lot_begin_edit(lot);
+    while (lot->splits != NULL) {
+        gnc_lot_remove_split(lot, (Split*)lot->splits->data);
+    }
+   qof_instance_set_destroying(lot, TRUE);
+   gnc_lot_commit_edit(lot);
+}
+
+static void
+lot_book_end(QofBook* book)
+{
+  QofCollection *col;
+  col = qof_book_get_collection (book, GNC_ID_LOT);
+  qof_collection_foreach(col, (QofInstanceForeachCB)lot_destroy_book_end, NULL);
+}
+
 /* ============================================================= */
 
 static QofObject gncLotDesc =
@@ -443,7 +463,7 @@ static QofObject gncLotDesc =
     .type_label        = "Lot",
     .create            = (gpointer)gnc_lot_new,
     .book_begin        = NULL,
-    .book_end          = NULL,
+    .book_end          = lot_book_end,
     .is_dirty          = qof_collection_is_dirty,
     .mark_clean        = qof_collection_mark_clean,
     .foreach           = qof_collection_foreach,
