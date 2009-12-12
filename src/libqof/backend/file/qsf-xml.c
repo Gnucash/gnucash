@@ -83,6 +83,7 @@ qsf_is_valid(const gchar *schema_dir, const gchar* schema_filename, xmlDocPtr do
 	xmlSchemaFreeParserCtxt(qsf_schema_file);
 	xmlSchemaFreeValidCtxt(qsf_context);
 	xmlSchemaFree(qsf_schema);
+	g_free(schema_path);
 	if(result == 0) { return TRUE; }
 	return FALSE;
 }
@@ -155,6 +156,7 @@ gboolean is_our_qsf_object(const gchar *path)
 	if(TRUE != qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, doc)) { 
 		PINFO (" validation failed %s %s %s", QSF_SCHEMA_DIR, 
 			QSF_OBJECT_SCHEMA, path);
+		xmlFreeDoc(doc);
 		return FALSE; 
 	}
 	object_root = xmlDocGetRootElement(doc);
@@ -178,7 +180,11 @@ gboolean is_qsf_object(const gchar *path)
 	if(path == NULL) { return FALSE; }
 	doc = xmlParseFile(path);
 	if(doc == NULL) { return FALSE; }
-	if(TRUE != qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, doc)) { return FALSE; }
+	if(TRUE != qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, doc)) {
+		xmlFreeDoc(doc);
+	    return FALSE;
+	}
+	xmlFreeDoc(doc);
 	/* Note cannot test against a map here, so if the file is valid QSF,
 	accept it and work out the details later. */
 	return TRUE;

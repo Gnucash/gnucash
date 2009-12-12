@@ -626,6 +626,10 @@ gnc_dbi_session_end( QofBackend *be_start )
         dbi_conn_close( be->conn );
 		be->conn = NULL;
 	}
+	if( be->sql_be.conn != NULL ) {
+		gnc_sql_connection_dispose( be->sql_be.conn );
+		be->sql_be.conn = NULL;
+    }
 	gnc_sql_finalize_version_info( &be->sql_be );
 
     LEAVE (" ");
@@ -635,6 +639,8 @@ static void
 gnc_dbi_destroy_backend( /*@ only @*/ QofBackend *be )
 {
 	g_return_if_fail( be != NULL );
+
+	qof_backend_destroy( be );
 
     g_free( be );
 }

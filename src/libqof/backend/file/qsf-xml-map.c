@@ -311,6 +311,7 @@ gboolean is_qsf_map(const gchar *path)
 	doc = xmlParseFile(path);
 	if(doc == NULL) { return FALSE; }
 	if(TRUE != qsf_is_valid(QSF_SCHEMA_DIR, QSF_MAP_SCHEMA, doc)) {
+	    xmlFreeDoc(doc);
 		return FALSE;
 	}
 	map_root = xmlDocGetRootElement(doc);

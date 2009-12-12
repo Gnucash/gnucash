@@ -146,7 +146,7 @@ qof_book_destroy (QofBook *book)
     cols = book->hash_of_collections;
     g_object_unref (book);
     g_hash_table_destroy (cols);
-    book->hash_of_collections = NULL;
+    /*book->hash_of_collections = NULL;*/
 
     LEAVE ("book=%p", book);
 }

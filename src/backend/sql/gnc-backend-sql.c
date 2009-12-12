@@ -1082,11 +1082,14 @@ add_gvalue_string_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     	getter = gnc_sql_get_getter( obj_name, table_row );
 		if( getter != NULL ) {
     		s = (gchar*)(*getter)( pObject, NULL );
+			if( s != NULL ) {
+			    s = g_strdup( s );
+			}
 		}
 	}
 	(void)g_value_init( value, G_TYPE_STRING );
     if( s ) {
-        g_value_set_string( value, s );
+        g_value_take_string( value, s );
 	}
 
 	(*pList) = g_slist_append( (*pList), value );
@@ -2350,6 +2353,21 @@ gnc_sql_get_sql_value( const GncSqlConnection* conn, const GValue* value )
 	}
 }
 
+static void
+free_gvalue_list( GSList* list )
+{
+    GSList* node;
+	GValue* value;
+
+	for( node = list; node != NULL; node = node->next ) {
+	    value = (GValue*)node->data;
+
+		g_value_unset( value );
+		g_free( value );
+	}
+	g_slist_free( list );
+}
+
 /*@ null @*/ static GncSqlStatement*
 build_insert_statement( GncSqlBackend* be,
                         const gchar* table_name,
@@ -2409,9 +2427,8 @@ build_insert_statement( GncSqlBackend* be,
 		(void)g_string_append( sql, value_str );
 		g_free( value_str );
 		(void)g_value_reset( value );
-		g_free( value );
 	}
-	g_slist_free( values );
+	free_gvalue_list( values );
 	(void)g_string_append( sql, ")" );
 
 	stmt = gnc_sql_connection_create_statement_from_sql( be->conn, sql->str );
@@ -2470,12 +2487,14 @@ build_update_statement( GncSqlBackend* be,
 			(void)g_string_append( sql, "," );
 		}
 		(void)g_string_append( sql, (gchar*)colname->data );
-		g_free( colname->data );
 		(void)g_string_append( sql, "=" );
 		value_str = gnc_sql_get_sql_value( be->conn, (GValue*)(value->data) );
 		(void)g_string_append( sql, value_str );
 		g_free( value_str );
 		firstCol = FALSE;
+	}
+	for( colname = colnames; colname != NULL; colname = colname->next ) {
+		g_free( colname->data );
 	}
 	g_list_free( colnames );
 	if( value != NULL || colname != NULL ) {
@@ -2484,10 +2503,7 @@ build_update_statement( GncSqlBackend* be,
 
 	stmt = gnc_sql_connection_create_statement_from_sql( be->conn, sql->str );
 	gnc_sql_statement_add_where_cond( stmt, obj_name, pObject, &table[0], (GValue*)(values->data) );
-    for( value = values; value != NULL; value = value->next ) {
-		g_free( value->data );
-    }
-	g_slist_free( values );
+	free_gvalue_list( values );
 	(void)g_string_free( sql, TRUE );
 
 	return stmt;
@@ -2520,6 +2536,7 @@ build_delete_statement( GncSqlBackend* be,
 	pHandler->add_gvalue_to_slist_fn( be, obj_name, pObject, table, &list );
 	g_assert( list != NULL );
 	gnc_sql_statement_add_where_cond( stmt, obj_name, pObject, &table[0], (GValue*)(list->data) );
+	free_gvalue_list( list );
 
 	return stmt;
 }
@@ -2770,7 +2787,10 @@ gnc_sql_finalize_version_info( GncSqlBackend* be )
 {
 	g_return_if_fail( be != NULL );
 
-	g_hash_table_destroy( be->versions );
+	if( be->versions != NULL ) {
+	    g_hash_table_destroy( be->versions );
+	    be->versions = NULL;
+	}
 }
 
 /**

@@ -435,7 +435,6 @@ gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst )
     GncSqlResult* result;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
     GncSqlStatement* stmt;
-    GValue value;
 	const GUID* guid;
 	KvpFrame* pFrame;
 
@@ -445,9 +444,6 @@ gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst )
 	guid = qof_instance_get_guid( inst );
 	pFrame = qof_instance_get_slots( inst );
     (void)guid_to_string_buff( guid, guid_buf );
-    memset( &value, 0, sizeof( value ) );
-    (void)g_value_init( &value, G_TYPE_STRING );
-    g_value_set_string( &value, guid_buf );
 
 	buf = g_strdup_printf( "SELECT * FROM %s WHERE obj_guid='%s'", TABLE_NAME, guid_buf );
 	stmt = gnc_sql_create_statement_from_sql( be, buf );

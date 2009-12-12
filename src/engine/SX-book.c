@@ -253,8 +253,20 @@ book_sxes_setup(QofBook *book)
      sxes->sx_list = NULL;
      sxes->sx_notsaved = TRUE;
      qof_collection_set_data(col, sxes);
+}
 
-     /* XXX: FIXME:  MEMORY LEAK.  This object is never freed. */
+static void
+book_sxes_end(QofBook* book)
+{
+     QofCollection *col;
+     SchedXactions *sxes;
+
+     col = qof_book_get_collection(book, GNC_ID_SCHEDXACTION);
+	 sxes = qof_collection_get_data(col);
+	 if (sxes != NULL) {
+	     g_object_unref(sxes);
+	     qof_collection_set_data(col, NULL);
+    }
 }
 
 static void
@@ -300,7 +312,7 @@ static QofObject sxes_object_def =
   .type_label        = "Scheduled Transactions List",
   .create            = NULL,
   .book_begin        = book_sxes_setup,
-  .book_end          = NULL,
+  .book_end          = book_sxes_end,
   .is_dirty          = book_sxlist_notsaved,
   .mark_clean        = book_sxns_mark_saved,
   .foreach           = NULL,
