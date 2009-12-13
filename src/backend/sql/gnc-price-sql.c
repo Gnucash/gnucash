@@ -111,6 +111,7 @@ load_all_prices( GncSqlBackend* be )
 
             	if( pPrice != NULL ) {
                 	(void)gnc_pricedb_add_price( pPriceDB, pPrice );
+					gnc_price_unref( pPrice );
             	}
 				row = gnc_sql_result_get_next_row( result );
         	}
