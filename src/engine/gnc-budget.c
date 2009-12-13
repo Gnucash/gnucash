@@ -602,6 +602,21 @@ gnc_budget_get_default (QofBook *book)
     return bgt;
 }
 
+/* Book handling routines */
+
+/**
+ * Delete all budgets
+ *
+ * @param book Book
+ */
+static void
+budget_book_end(QofBook* book)
+{
+    QofCollection *col;
+    col = qof_book_get_collection(book, GNC_ID_BUDGET);
+    qof_collection_foreach(col, (QofInstanceForeachCB)gnc_budget_destroy, NULL);
+}
+
 /* Define the QofObject. */
 static QofObject budget_object_def =
 {
@@ -610,7 +625,7 @@ static QofObject budget_object_def =
     .type_label        = "Budget",
     .create            = (gpointer)gnc_budget_new,
     .book_begin        = NULL,
-    .book_end          = NULL,
+    .book_end          = budget_book_end,
     .is_dirty          = qof_collection_is_dirty,
     .mark_clean        = qof_collection_mark_clean,
     .foreach           = qof_collection_foreach,
