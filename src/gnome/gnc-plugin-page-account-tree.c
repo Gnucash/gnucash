@@ -407,25 +407,6 @@ gnc_plugin_page_account_tree_close_cb (gpointer user_data)
   gnc_main_window_close_page(plugin_page);
 }
 
-static const GtkTargetEntry dnd_targets[] = {
-  { "gnc_account", GTK_TARGET_SAME_WIDGET, 0 }
-};
-
-
-static void
-gnc_enable_account_dragging(GtkTreeView *tree_view)
-{
-  GtkTreeModel *model;
-
-  model = gtk_tree_view_get_model (tree_view);
-
-  g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (model, GTK_TYPE_TREE_DRAG_DEST));
-  g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (model, GTK_TYPE_TREE_DRAG_SOURCE));
-
-  gtk_tree_view_enable_model_drag_source(tree_view, GDK_BUTTON1_MASK, dnd_targets, 1, GDK_ACTION_MOVE);
-  gtk_tree_view_enable_model_drag_dest(tree_view, dnd_targets, 1, GDK_ACTION_MOVE);
-}
-
 static GtkWidget *
 gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 {
@@ -484,9 +465,6 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 			  G_CALLBACK (gnc_plugin_page_account_tree_button_press_cb), page);
 	g_signal_connect (G_OBJECT (tree_view), "row-activated",
 			  G_CALLBACK (gnc_plugin_page_account_tree_double_click_cb), page);
-
-	/* Support dragging accounts for re-ordering/re-parenting */
-	gnc_enable_account_dragging(tree_view);
 
 	gtk_tree_view_set_headers_visible(tree_view, TRUE);
 	gnc_plugin_page_account_tree_selection_changed_cb (NULL, page);

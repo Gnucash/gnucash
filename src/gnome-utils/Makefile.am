@@ -82,7 +82,6 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-tree-model.c \
   gnc-tree-model-account-types.c \
   gnc-tree-model-account.c \
-  gnc-tree-model-account-drag.c \
   gnc-tree-model-budget.c \
   gnc-tree-model-commodity.c \
   gnc-tree-model-price.c \
@@ -151,7 +150,6 @@ gncinclude_HEADERS = \
   gnc-tree-model.h \
   gnc-tree-model-account-types.h \
   gnc-tree-model-account.h \
-  gnc-tree-model-account-drag.h \
   gnc-tree-model-budget.h \
   gnc-tree-model-commodity.h \
   gnc-tree-model-price.h \
