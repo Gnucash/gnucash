@@ -129,7 +129,7 @@ Root: HKLM; Subkey: "Software\Gwenhywfar"; ValueType: none; Flags: uninsdeleteke
 Root: HKLM; Subkey: "Software\Gwenhywfar\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
 Root: HKLM; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"; Flags: uninsdeletevalue
 Root: HKLM; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"; Flags: uninsdeletevalue
-Root: HKLM; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "plugindir"; ValueData: "{app}\lib\gwenhywfar\plugins\38"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "plugindir"; ValueData: "{app}\lib\gwenhywfar\plugins\@-gwenhywfar_so_effective-@"; Flags: uninsdeletevalue
 Root: HKLM; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
 Root: HKLM; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"; Flags: uninsdeletevalue
 
