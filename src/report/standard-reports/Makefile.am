@@ -50,19 +50,21 @@ gncscmreportmod_DATA = \
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
-SCM_FILE_LINKS = ${gncscmmod_DATA}
+SCM_FILE_LINKS = ${gncscmmod_DATA} ${gncscmreportmod_DATA}
 endif
 
 .scm-links:
 	$(RM) -rf gnucash
 	mkdir -p  gnucash
 	mkdir -p  gnucash/report
+	mkdir -p  gnucash/report/standard-reports
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	( cd gnucash/report; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
+	( cd gnucash/report/standard-reports; for A in $(gncscmreportmod_DATA) ; do $(LN_S) -f ../../../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
