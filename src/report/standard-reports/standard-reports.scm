@@ -126,7 +126,7 @@
     (lambda (x)
 	    (module-use!
 		    (current-module)
-			(resolve-module (append '(gnucash report standard-reports) (list x)))))
+			(resolve-interface (append '(gnucash report standard-reports) (list x)))))
 	(get-report-list))
 
 (use-modules (gnucash gnc-module))
