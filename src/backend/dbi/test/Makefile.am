@@ -24,6 +24,7 @@ GNC_TEST_DEPS = \
 TESTS_ENVIRONMENT = \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
   SRCDIR=${srcdir} \
+  GNC_DBD_DIR=@GNC_DBD_DIR@ \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \
