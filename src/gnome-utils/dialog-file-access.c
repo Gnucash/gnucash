@@ -145,8 +145,16 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
 static void
 set_widget_sensitivity( FileAccessWindow* faw, gboolean is_file_based_uri )
 {
-    gtk_widget_set_sensitive( faw->frame_file, is_file_based_uri );
-	gtk_widget_set_sensitive( faw->frame_database, !is_file_based_uri );
+	if (is_file_based_uri)
+	{
+		gtk_widget_show(faw->frame_file);
+		gtk_widget_hide(faw->frame_database);
+	} else {
+		gtk_widget_show(faw->frame_database);
+		gtk_widget_hide(faw->frame_file);
+	}
+//    gtk_widget_set_sensitive( faw->frame_file, is_file_based_uri );
+//	gtk_widget_set_sensitive( faw->frame_database, !is_file_based_uri );
 }
 
 static void
@@ -215,6 +223,7 @@ gnc_ui_file_access( int type )
 	gint access_method_index = -1;
 	gint active_access_method_index = -1;
 	const gchar* default_db;
+	const gchar *button_label;
 
 	g_return_if_fail( type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS );
 
@@ -238,21 +247,27 @@ gnc_ui_file_access( int type )
 	gtk_entry_set_text( faw->tf_database, default_db );
     faw->tf_username = GTK_ENTRY(glade_xml_get_widget( xml, "tf_username" ));
     faw->tf_password = GTK_ENTRY(glade_xml_get_widget( xml, "tf_password" ));
+
+	switch( type ) {
+	case FILE_ACCESS_OPEN:
+		gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Open..."));
+		button_label = "gtk-open";
+		fileChooserAction = GTK_FILE_CHOOSER_ACTION_OPEN;
+		break;
+
+	case FILE_ACCESS_SAVE_AS:
+		gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Save As..."));
+		button_label = "gtk-save-as";
+		fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
+		break;
+		}
+
 	op = GTK_BUTTON(glade_xml_get_widget( xml, "pb_op" ));
 	if( op != NULL ) {
-		switch( type ) {
-		case FILE_ACCESS_OPEN:
-		    gtk_button_set_label( op, "gtk-open" );
-			fileChooserAction = GTK_FILE_CHOOSER_ACTION_OPEN;
-			break;
-
-		case FILE_ACCESS_SAVE_AS:
-		    gtk_button_set_label( op, "gtk-save-as" );
-			fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
-			break;
-		}
+		gtk_button_set_label( op, button_label );
 		gtk_button_set_use_stock( op, TRUE );
 	}
+
 	align = glade_xml_get_widget( xml, "alignment_file_chooser" );
 	fileChooser = GTK_FILE_CHOOSER_WIDGET(gtk_file_chooser_widget_new( fileChooserAction ));
 	faw->fileChooser = GTK_FILE_CHOOSER(fileChooser);
@@ -327,8 +342,6 @@ gnc_ui_file_access( int type )
 		active_access_method_index = access_method_index;
 	}
 	g_assert( active_access_method_index >= 0 );
-	gtk_combo_box_set_active( faw->cb_uri_type, active_access_method_index );
-	set_widget_sensitivity_for_uri_type( faw, gtk_combo_box_get_active_text( faw->cb_uri_type ) );
 
     /* Clean up the xml data structure when the dialog is destroyed */
     g_object_set_data_full( G_OBJECT(faw->dialog), "dialog-file-access.glade",
@@ -336,6 +349,11 @@ gnc_ui_file_access( int type )
 
     /* Run the dialog */
     gtk_widget_show_all( faw->dialog );
+    
+    /* Hide the frame that's not required for the active access method so either only 
+     * the File or only the Database frame are presented. */
+    gtk_combo_box_set_active( faw->cb_uri_type, active_access_method_index );
+    set_widget_sensitivity_for_uri_type( faw, gtk_combo_box_get_active_text( faw->cb_uri_type ) );
 }
 
 void
