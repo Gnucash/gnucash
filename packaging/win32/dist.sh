@@ -234,7 +234,6 @@ function dist_gnucash() {
     sed < $_BUILD_UDIR/packaging/win32/gnucash.iss \
         > $_GNUCASH_UDIR/gnucash.iss \
         -e "s#@-qtbindir-@#${_QTDIR_WIN}/bin#g" \
-	-e "s#@-gwenhywfar_so_effective-@#${_GWENHYWFAR_SO_EFFECTIVE}#g" \
 	-e "s#@-aqbanking_so_effective-@#${_AQBANKING_SO_EFFECTIVE}#g"
 }
 
