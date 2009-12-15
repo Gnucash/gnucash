@@ -230,7 +230,7 @@ function dist_gnucash() {
 
     _QTDIR_WIN=`echo $QTDIR | sed 's,^/\([A-Za-z]\)/,\1:/,g' `
     _AQBANKING_SO_EFFECTIVE=$(awk '/AQBANKING_SO_EFFECTIVE/ { print $3 }' ${_AQBANKING_UDIR}/include/aqbanking/version.h )
-    _GWENHYWFAR_SO_EFFECTIVE=$(awk '/GWENHYWFAR_SO_EFFECTIVE/ { print $3 }' ${_AQBANKING_UDIR}/include/gwenhywfar3/gwenhywfar/version.h )
+    _GWENHYWFAR_SO_EFFECTIVE=$(awk '/GWENHYWFAR_SO_EFFECTIVE/ { print $3 }' ${_GWENHYWFAR_UDIR}/include/gwenhywfar3/gwenhywfar/version.h )
     sed < $_BUILD_UDIR/packaging/win32/gnucash.iss \
         > $_GNUCASH_UDIR/gnucash.iss \
         -e "s#@-qtbindir-@#${_QTDIR_WIN}/bin#g" \
