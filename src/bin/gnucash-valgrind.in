@@ -7,8 +7,8 @@ TOP_SRC_DIR="@-TOP_SRC_DIR-@"
 # Other potentially useful options, particularly for valgrind-2.x:
 # --tool=memcheck --trace-children=yes
 #
-G_SLICE=always-malloc
-G_DEBUG=gc-friendly
+export G_SLICE=always-malloc
+export G_DEBUG=gc-friendly
 exec valgrind -v \
     --suppressions=${TOP_SRC_DIR}/src/valgrind-gnucash.supp \
     --suppressions=${TOP_SRC_DIR}/src/valgrind-glib.supp \
