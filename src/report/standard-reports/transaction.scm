@@ -171,7 +171,9 @@
   (let ((account (xaccSplitGetAccount (xaccSplitGetOtherSplit split))))
     (add-subheading-row (gnc:make-html-text
                          (gnc:html-markup-anchor
+                          (if (not (null? account))
                            (gnc:account-anchor-text account)
+                           "")
                            (account-namestring account
                                                (used-sort-account-code      column-vector)
                                                #t
