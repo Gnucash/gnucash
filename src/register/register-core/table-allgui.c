@@ -827,6 +827,7 @@ gnc_table_move_cursor_internal (Table *table,
   if (!gnc_table_virtual_loc_valid (table, new_virt_loc, TRUE))
   {
     PWARN("bad table location");
+    LEAVE("");
     return;
   }
 
@@ -997,7 +998,7 @@ gnc_table_wrap_verify_cursor_position (Table *table, VirtualLocation virt_loc)
     gnc_table_refresh_cursor_gui (table, save_loc.vcell_loc, FALSE);
   }
 
-  LEAVE ("\n");
+  LEAVE ("");
 }
 
 void        
@@ -1245,7 +1246,7 @@ gnc_table_modify_update (Table *table,
   cell_row = virt_loc.phys_row_offset;
   cell_col = virt_loc.phys_col_offset;
 
-  ENTER ("\n");
+  ENTER ("");
 
   if (!gnc_table_confirm_change (table, virt_loc))
   {
@@ -1338,7 +1339,7 @@ gnc_table_direct_update (Table *table,
   if (!cell)
     return FALSE;
 
-  ENTER ("\n");
+  ENTER ("");
 
   if (cell->direct_update == NULL)
   {

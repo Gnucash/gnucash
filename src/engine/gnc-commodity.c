@@ -388,7 +388,7 @@ gnc_quote_source_lookup_by_internal(const char * name)
       return source;
   }
 
-  LEAVE("Unknown source %s", name);
+  DEBUG("gnc_quote_source_lookup_by_internal: Unknown source %s", name);
   return NULL;
 }
 
