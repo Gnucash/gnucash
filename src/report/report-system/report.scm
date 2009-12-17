@@ -576,10 +576,9 @@
          ;; #Bug#342206.
          (save-result (eval-string saved-form)))
     (if (record? save-result)
-        (begin
-          (display saved-form
-                   (open-file conf-file-name "a"))
-          (force-output)
+        (let ((report-port (open-file conf-file-name "a")))
+          (display saved-form report-port)
+          (close report-port)
 	      (let ((report-name (gnc:report-name report)))
 		(gnc-info-dialog
 		 '()
@@ -592,11 +591,11 @@
 	  ))))
 
 (define (gnc:report-template-save-to-savefile report-template)
-  (let ((conf-file-name gnc:current-saved-reports)
-	(saved-form (gnc:report-template-generate-saved-forms report-template)))
-    (display saved-form
-	     (open-file conf-file-name "a"))
-    (force-output)))
+  (let* ((conf-file-name gnc:current-saved-reports)
+	(saved-form (gnc:report-template-generate-saved-forms report-template))
+	(report-port (open-file conf-file-name "a")))
+    (display saved-form report-port)
+    (close report-port)))
 
 ;; save all custom reports, moving the old version of the
 ;; saved-reports file aside as a backup
