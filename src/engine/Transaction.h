@@ -591,6 +591,10 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 #define TRANS_SPLITLIST		"split-list" /* for guid_match_all */
 /**@}*/
 
+#ifdef DUMP_FUNCTIONS
+void xaccTransDump (const Transaction *trans, const char *tag);
+#endif
+
 #define RECONCILED_MATCH_TYPE	"reconciled-match"
 
 /** \deprecated */

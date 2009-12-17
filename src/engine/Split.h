@@ -424,6 +424,10 @@ const char * xaccSplitGetCorrAccountName(const Split *sa);
 /** document me */
 const char * xaccSplitGetCorrAccountCode(const Split *sa);
 
+#ifdef DUMP_FUNCTIONS
+void xaccSplitDump (const Split *split, const char *tag);
+#endif
+
 /** @} */
 
 

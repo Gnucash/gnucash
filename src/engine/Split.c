@@ -232,15 +232,20 @@ xaccSplitClone (const Split *s)
 }
 
 #ifdef DUMP_FUNCTIONS
-static void
+void
 xaccSplitDump (const Split *split, const char *tag)
 {
   printf("  %s Split %p", tag, split);
-  printf("    GUID:     %s\n", guid_to_string(&split->guid));
   printf("    Book:     %p\n", qof_instance_get_book(split));
-  printf("    Account:  %p\n", split->acc);
+  printf("    Account:  %p (%s)\n", split->acc, 
+         split->acc ? xaccAccountGetName(split->acc) : "");
+  printf("    Commod:   %s\n", 
+         split->acc ? 
+         gnc_commodity_get_printname(xaccAccountGetCommodity(split->acc))
+                    : "");
   printf("    Lot:      %p\n", split->lot);
   printf("    Parent:   %p\n", split->parent);
+  printf("    Gains:    %p\n", split->gains_split);
   printf("    Memo:     %s\n", split->memo ? split->memo : "(null)");
   printf("    Action:   %s\n", split->action ? split->action : "(null)");
   printf("    KVP Data: %p\n", split->inst.kvp_data);
