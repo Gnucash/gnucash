@@ -739,6 +739,7 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price, gnc_numeric amt)
   mark_split (s);
   qof_instance_set_dirty(QOF_INSTANCE(s));
   xaccTransCommitEdit(s->parent);
+  LEAVE ("");
 }
 
 static void
@@ -765,6 +766,7 @@ xaccSplitSetSharePrice (Split *s, gnc_numeric price)
   mark_split (s);
   qof_instance_set_dirty(QOF_INSTANCE(s));
   xaccTransCommitEdit(s->parent);
+  LEAVE ("");
 }
 
 void 
@@ -798,6 +800,7 @@ DxaccSplitSetShareAmount (Split *s, double damt)
   mark_split (s);
   qof_instance_set_dirty(QOF_INSTANCE(s));
   xaccTransCommitEdit(s->parent);
+  LEAVE ("");
 }
 
 static void
