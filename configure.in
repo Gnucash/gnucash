@@ -499,7 +499,7 @@ for f in ${srcdir}/lib/srfi/srfi-*.scm
 do
   srfi=`echo $f | sed 's%.*/%%' | sed 's/.scm//'`
   AC_MSG_CHECKING(if guile needs our copy of ${srfi})
-  if ${GUILE} -c "(use-modules (srfi ${srfi}))" > /dev/null 2>&1
+  if ${GUILE} -c "(debug-set! stack    200000) (use-modules (srfi ${srfi}))" > /dev/null 2>&1
   then
     AC_MSG_RESULT(no)
   else

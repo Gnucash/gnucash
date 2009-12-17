@@ -440,6 +440,8 @@ inner_main (void *closure, int argc, char **argv)
     char* fn;
     GError *error = NULL;
 
+    scm_c_eval_string("(debug-set! stack 200000)");
+    
     main_mod = scm_c_resolve_module("gnucash main");
     scm_set_current_module(main_mod);
 
