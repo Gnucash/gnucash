@@ -614,7 +614,7 @@
 	    ;; now we determine which price data to use, the pricelist or the txn
 	    ;; and if we have a choice, use whichever is newest.
 	    (set! use-txn (if (not price) #t 
-			      (if prefer-pricelist #f
+			      (if (or prefer-pricelist (not pricing-txn)) #f
 				  (if (not (gnc:timepair-le txn-date (gnc-price-get-time price)))
 				      #t #f))))
 	    (gnc:debug "use txn is " use-txn)
