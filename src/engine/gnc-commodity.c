@@ -1912,6 +1912,12 @@ gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * table)
   return table->ns_list;
 }
 
+/* Because gnc_commodity_table_add_namespace maps GNC_COMMODITY_NS_ISO to
+   GNC_COMMODITY_NS_CURRENCY and then sets iso4217 if the namespace is
+   either of these, the net result is that the iso4217 bit is set only
+   for GNC_COMMODITY_NS_CURRENCY.  This means that gnc_commodity_is_iso is
+   a subset of gnc_commodity_is_currency.  Most callers seem to use 
+   gnc_commodity_is_iso. */
 gboolean
 gnc_commodity_is_iso(const gnc_commodity * cm)
 {
