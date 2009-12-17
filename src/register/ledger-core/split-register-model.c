@@ -1698,6 +1698,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
       switch (reg->type) {
         case STOCK_REGISTER:
         case CURRENCY_REGISTER:
+        case PORTFOLIO_LEDGER:
           amount = xaccSplitGetValue (split);
           print_info = gnc_commodity_print_info (currency, FALSE);
           break;
