@@ -490,7 +490,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 	gchar* dbname;
     gchar* username;
     gchar* password;
-	gboolean success;
+	gboolean success = FALSE;
 	gint portnum;
 
 	g_return_if_fail( qbe != NULL );

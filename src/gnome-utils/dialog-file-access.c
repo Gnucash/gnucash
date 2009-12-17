@@ -223,7 +223,7 @@ gnc_ui_file_access( int type )
 	gint access_method_index = -1;
 	gint active_access_method_index = -1;
 	const gchar* default_db;
-	const gchar *button_label;
+	const gchar *button_label = NULL;
 
 	g_return_if_fail( type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS );
 
