@@ -191,10 +191,10 @@ esac
 # All programs are available. So now actually call them in the
 # required order.
 
-echo "Creating $dr/po/POTFILES.in ..."
+echo "Creating po/POTFILES.in ..."
 test -r po/POTFILES.in || touch po/POTFILES.in
 
-echo "Creating $dr/aclocal.m4 ..."
+echo "Creating aclocal.m4 ..."
 test -r aclocal.m4 || touch aclocal.m4
 
 echo "Running ${GLIB_GETTEXTIZE} --force --copy ...  "
@@ -225,8 +225,8 @@ ${ACLOCAL} $aclocalinclude || \
 echo "Running ${AUTOHEADER}..."
 ${AUTOHEADER} || { echo "**Error**: ${AUTOHEADER} failed."; exit 1; }
 
-echo "Running ${AUTOMAKE} --add-missing --gnu $am_opt ..."
-${AUTOMAKE} --add-missing --gnu $am_opt || \
+echo "Running ${AUTOMAKE} --add-missing --gnu --warnings=no-portability $am_opt ..."
+${AUTOMAKE} --add-missing --gnu --warnings=no-portability $am_opt || \
     { echo "**Error**: ${AUTOMAKE} failed."; exit 1; }
 
 echo "Running ${AUTOCONF} ..."
