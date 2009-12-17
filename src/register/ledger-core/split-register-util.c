@@ -248,9 +248,10 @@ gnc_split_register_find_split (SplitRegister *reg,
       }
       else
       {
-        /* Not the correct transaction.  We shouldn't get here if this is true, but just
-           to be safe reset it. */
+        /* Not the correct transaction.  We shouldn't get here if these are true, but just 
+           to be safe reset them. */
         found_trans = FALSE;
+        found_trans_split = FALSE;
       }
 
       if (found_trans && (s == split) && s)
