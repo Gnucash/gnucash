@@ -302,8 +302,10 @@ gnc_book_close_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
       break;
     }
 
+    gnc_suspend_gui_refresh();
     close_accounts_of_type(cbw, income_acct, ACCT_TYPE_INCOME);
     close_accounts_of_type(cbw, expense_acct, ACCT_TYPE_EXPENSE);
+    gnc_resume_gui_refresh();
 
     /* FALLTHROUGH */ 
   default:

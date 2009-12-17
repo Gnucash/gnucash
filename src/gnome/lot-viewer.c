@@ -579,7 +579,9 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
      break;
 
    case RESPONSE_SCRUB_ACCOUNT:
+     gnc_suspend_gui_refresh ();
      xaccAccountScrubLots (lv->account);
+     gnc_resume_gui_refresh ();
      gnc_lot_viewer_fill (lv);
      lv_show_splits (lv);
      break;
