@@ -259,7 +259,7 @@
              #t
              (lambda ()
                (set! results (read from-child))
-               (gnc:debug (list 'results results))
+               (gnc:debug "results: " results)
                results)
              (lambda (key . args)
                key)))))
@@ -345,7 +345,7 @@
                (catch
                 #t
                 (lambda ()
-                  (gnc:debug (list 'handling-request request))
+                  (gnc:debug "handling-request: " request)
                   ;; we need to display the first element (the method, so it
                   ;; won't be quoted) and then write the rest
                   (display #\( to-child)
@@ -356,7 +356,7 @@
                   (newline to-child)
                   (force-output to-child)
                   (set! results (read from-child))
-                  (gnc:debug (list 'results results))
+                  (gnc:debug "results: " results)
                   results)
                 (lambda (key . args)
                   key)))
@@ -482,7 +482,7 @@
                     (and (pair? alist-item)
                          (not (eq? 'failed-conversion (cdr alist-item)))))
                   (cdr call-result)))
-            ;; OK, data is good (as far as we can tell.
+            ;; OK, data is good (as far as we can tell).
             (set! result-list
                   (cons (list (car call-data)
                               (caddr call-data)

@@ -643,8 +643,8 @@
 	    ;; what this means is gain = moneyout - moneyin + basis-of-current-shares, and
 	    ;; adjust for brokers and dividends.
 	    (gaincoll 'add currency (sum-basis basis-list))
-	    (gnc:debug (list "basis we're using to build rows is " (sum-basis basis-list)))
-	    (gnc:debug (list "but the actual basis list is " basis-list))
+	    (gnc:debug "basis we're using to build rows is " (sum-basis basis-list))
+	    (gnc:debug "but the actual basis list is " basis-list)
 
 	    (gaincoll 'merge moneyoutcoll #f)
 	    (gaincoll 'minusmerge moneyincoll #f)
