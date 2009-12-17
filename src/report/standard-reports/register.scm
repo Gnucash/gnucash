@@ -42,8 +42,16 @@
   (vector-ref columns-used 9))
 (define (balance-col columns-used)
   (vector-ref columns-used 10))
+(define (value-single-col columns-used)
+  (vector-ref columns-used 11))
+(define (value-debit-col columns-used)
+  (vector-ref columns-used 12))
+(define (value-credit-col columns-used)
+  (vector-ref columns-used 13))
+(define (lot-col columns-used)
+  (vector-ref columns-used 14))
 
-(define columns-used-size 11)
+(define columns-used-size 15)
 
 (define (num-columns-required columns-used)  
   (do ((i 0 (+ i 1)) 
@@ -83,6 +91,7 @@
         3)
     (set-col (opt-val "Display" "Account") 4)
     (set-col (opt-val "Display" "Shares") 5)
+    (set-col (opt-val "Display" "Lot") 14)
     (set-col (opt-val "Display" "Price") 6)
     (let ((invoice? #f)
           (amount-setting (opt-val "Display" "Amount")))
@@ -91,6 +100,12 @@
           (begin
             (set-col #t 8)
             (set-col #t 9))))
+    (if (opt-val "Display" "Value")
+        (if (amount-single-col col-vector)
+            (set-col #t 11)
+            (begin
+              (set-col #t 12)
+              (set-col #t 13))))
     (set-col (opt-val "Display" "Running Balance") 10)
 
     col-vector))
@@ -114,6 +129,8 @@
                                  (_ "Transfer"))))
     (if (shares-col column-vector)
         (addto! heading-list (_ "Shares")))
+    (if (lot-col column-vector)
+        (addto! heading-list (_ "Lot")))
     (if (price-col column-vector)
         (addto! heading-list (_ "Price")))
     (if (amount-single-col column-vector)
@@ -122,13 +139,23 @@
         (addto! heading-list debit-string))
     (if (credit-col column-vector)
         (addto! heading-list credit-string))
+    (if (value-single-col column-vector)
+        (addto! heading-list (_ "Value")))
+    (if (value-debit-col column-vector)
+        (addto! heading-list (_ "Debit Value")))
+    (if (value-credit-col column-vector)
+        (addto! heading-list (_ "Credit Value")))
     (if (balance-col column-vector)
         (addto! heading-list (_ "Balance")))
     (reverse heading-list)))
 
-(define (gnc:split-get-balance-display split)
-  (let ((account (xaccSplitGetAccount split))
-        (balance (xaccSplitGetBalance split)))
+(define (gnc:split-get-balance-display split-info? split)
+  (let* ((account (xaccSplitGetAccount split))
+         (balance
+          (if split-info?
+              (xaccSplitGetBalance split)
+              (xaccTransGetAccountBalance
+               (xaccSplitGetParent split) account))))
     (if (and (not (null? account)) (gnc-reverse-balance account))
         (gnc-numeric-neg balance)
         balance)))
@@ -141,6 +168,7 @@
          (currency (if (not (null? account))
                        (xaccAccountGetCommodity account)
                        (gnc-default-currency)))
+         (trans-currency (xaccTransGetCurrency parent))
          (damount (xaccSplitGetAmount split))
          (split-value (gnc:make-gnc-monetary currency damount)))
 
@@ -202,6 +230,13 @@
                     (if split-info?
                         (xaccSplitGetAmount split)
                         " "))))
+    (if (lot-col column-vector)
+        (addto! row-contents
+                (gnc:make-html-table-cell/markup
+					"text-cell"
+                        (if split-info?
+                            (gnc-lot-get-title (xaccSplitGetLot split))
+                            " "))))
     (if (price-col column-vector)
         (addto! row-contents 
                 (gnc:make-html-table-cell/markup
@@ -226,7 +261,7 @@
                          (gnc:html-split-anchor split split-value))
                         " "))
             (addto! row-contents " ")))
-    (if (debit-col column-vector)
+    (if (credit-col column-vector)
         (if (gnc-numeric-negative-p (gnc:gnc-monetary-amount split-value))
             (addto! row-contents
                     (if split-info?
@@ -236,6 +271,30 @@
                           split (gnc:monetary-neg split-value)))
                         " "))
             (addto! row-contents " ")))
+    (if (value-single-col column-vector)
+        (addto! row-contents
+                (if split-info?
+                    (gnc:make-html-table-cell/markup
+                     "number-cell"
+                     (gnc:make-gnc-monetary trans-currency
+                                             (xaccSplitGetValue split)))
+                    " ")))
+    (if (value-debit-col column-vector)
+        (addto! row-contents
+                (if (and split-info? (gnc-numeric-positive-p (xaccSplitGetValue split)))
+                    (gnc:make-html-table-cell/markup
+                     "number-cell"
+                     (gnc:make-gnc-monetary trans-currency
+                                            (xaccSplitGetValue split)))
+                    " ")))
+    (if (value-credit-col column-vector)
+        (addto! row-contents
+                (if (and split-info? (gnc-numeric-negative-p (xaccSplitGetValue split)))
+                    (gnc:make-html-table-cell/markup
+                     "number-cell"
+                     (gnc:make-gnc-monetary trans-currency
+                                            (gnc-numeric-neg (xaccSplitGetValue split))))
+                    " ")))
     (if (balance-col column-vector)
         (addto! row-contents
                 (if transaction-info?
@@ -244,7 +303,7 @@
                      (gnc:html-split-anchor
                       split
                       (gnc:make-gnc-monetary
-                       currency (gnc:split-get-balance-display split))))
+                       currency (gnc:split-get-balance-display split-info? split))))
                     " ")))
 
     (gnc:html-table-append-row/markup! table row-style
@@ -330,17 +389,27 @@
 
   (gnc:register-reg-option
    (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Lot")
+    "hb" (N_ "Display the name of lot the shares are in?") #f))
+
+  (gnc:register-reg-option
+   (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Price")
-    "hb" (N_ "Display the shares price?") #f))
+    "hc" (N_ "Display the shares price?") #f))
 
   (gnc:register-reg-option
    (gnc:make-multichoice-option
     (N_ "Display") (N_ "Amount")
-    "i" (N_ "Display the amount?")  
+    "ia" (N_ "Display the amount?")  
     'double
     (list
      (vector 'single (N_ "Single") (N_ "Single Column Display"))
      (vector 'double (N_ "Double") (N_ "Two Column Display")))))
+
+  (gnc:register-reg-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Value")
+    "ib" (N_ "Display the value in transaction currency?") #f))
 
   (gnc:register-reg-option
    (gnc:make-simple-boolean-option
@@ -371,19 +440,28 @@
     (opt-val "Display" "Totals"))
 
   (define (add-subtotal-row label leader table used-columns
-                            subtotal-collector subtotal-style)
+                            subtotal-collector subtotal-style
+                            value?)
     (let ((currency-totals (subtotal-collector
-                            'format gnc:make-gnc-monetary #f)))
+                            'format gnc:make-gnc-monetary #f))
+          (single-col (if value?
+                          (value-single-col used-columns)
+                          (amount-single-col used-columns)))
+          (credit-col (if value?
+                          (value-credit-col used-columns)
+                          (credit-col used-columns)))
+          (debit-col (if value?
+                         (value-debit-col used-columns)
+                         (debit-col used-columns))))
 
       (define (colspan monetary)
         (cond
-         ((amount-single-col used-columns) (amount-single-col used-columns))
-         ((gnc-numeric-negative-p (gnc:gnc-monetary-amount monetary))
-          (credit-col used-columns))
-         (else (debit-col used-columns))))
+         (single-col single-col)
+         ((gnc-numeric-negative-p (gnc:gnc-monetary-amount monetary)) credit-col)
+         (else debit-col)))
 
       (define (display-subtotal monetary)
-        (if (amount-single-col used-columns)
+        (if single-col
             (if (and (not (null? leader)) (gnc-reverse-balance leader))
                 (gnc:monetary-neg monetary)
                 monetary)
@@ -391,26 +469,48 @@
                 (gnc:monetary-neg monetary)
                 monetary)))
 
-      (if (not (reg-report-invoice?))
-          (gnc:html-table-append-row!
-           table
-           (list
-            (gnc:make-html-table-cell/size
-             1 (num-columns-required used-columns)
-             (gnc:make-html-text (gnc:html-markup-hr))))))
+      (if (or single-col credit-col debit-col)
+          (begin
+            (if (not (reg-report-invoice?))
+                (gnc:html-table-append-row!
+                 table
+                 (list
+                  (gnc:make-html-table-cell/size
+                   1 (num-columns-required used-columns)
+                   (gnc:make-html-text (gnc:html-markup-hr))))))
 
-      (for-each (lambda (currency)
-                  (gnc:html-table-append-row/markup! 
-                   table
-                   subtotal-style
-                   (append (cons (gnc:make-html-table-cell/markup
-                                  "total-label-cell" label)
-                                 '())
-                           (list (gnc:make-html-table-cell/size/markup
-                                  1 (colspan currency)
-                                  "total-number-cell"
-                                  (display-subtotal currency))))))
-                currency-totals)))
+            (for-each (lambda (currency)
+                        (gnc:html-table-append-row/markup! 
+                         table
+                         subtotal-style
+                         (append (cons (gnc:make-html-table-cell/markup
+                                        "total-label-cell" label)
+                                       '())
+                                 (list (gnc:make-html-table-cell/size/markup
+                                        1 (colspan currency)
+                                        "total-number-cell"
+                                        (display-subtotal currency))))))
+                      currency-totals)))))
+
+  (define (accumulate-totals split total-amount total-value
+                             debit-amount debit-value
+                             credit-amount credit-value)
+    (let* ((parent (xaccSplitGetParent split))
+           (account (xaccSplitGetAccount split))
+           (split-currency (if (not (null? account))
+                               (xaccAccountGetCommodity account)
+                               (gnc-default-currency)))
+           (split-amount (xaccSplitGetAmount split))
+           (trans-currency (xaccTransGetCurrency parent))
+           (split-value (xaccSplitGetValue split)))
+      (if (gnc-numeric-positive-p split-amount)
+          (debit-amount 'add split-currency split-amount)
+          (credit-amount 'add split-currency split-amount))
+      (if (gnc-numeric-positive-p split-value)
+          (debit-value 'add trans-currency split-value)
+          (credit-value 'add trans-currency split-value))
+      (total-amount 'add split-currency split-amount)
+      (total-value 'add trans-currency split-value)))
 
   (define (add-other-split-rows split table used-columns row-style)
     (define (other-rows-driver split parent table used-columns i)
@@ -434,18 +534,27 @@
                                   odd-row?
                                   total-collector
 				  debit-collector
-				  credit-collector)
+				  credit-collector
+                                  total-value
+                                  debit-value
+                                  credit-value)
     (if (null? splits)
 	(begin
 	  ;; add debit/credit totals
 	  (if (reg-report-show-totals?)
 	      (begin
 		(add-subtotal-row (_ "Total Debits") leader table used-columns
-				  debit-collector "grand-total")
+				  debit-collector "grand-total" #f)
 		(add-subtotal-row (_ "Total Credits") leader table used-columns
-				  credit-collector "grand-total")))
-	  (add-subtotal-row (_ "Net Change") leader table used-columns
-			    total-collector "grand-total"))
+				  credit-collector "grand-total" #f)
+                (add-subtotal-row (_ "Total Value Debits") leader table used-columns
+                                  debit-value "grand-total" #t)
+                (add-subtotal-row (_ "Total Value Credits") leader table used-columns
+                                  credit-value "grand-total" #t)))
+          (add-subtotal-row (_ "Net Change") leader table used-columns
+			    total-collector "grand-total" #f)
+          (add-subtotal-row (_ "Value Change") leader table used-columns
+                            total-value "grand-total" #t))
 
         (let* ((current (car splits))
                (current-row-style (if multi-rows? "normal-row"
@@ -468,19 +577,21 @@
               (add-other-split-rows 
                current table used-columns "alternate-row"))
 
-          (total-collector 'add
-                           (gnc:gnc-monetary-commodity split-value)
-                           (gnc:gnc-monetary-amount split-value))
-
-	  (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount split-value))
-	      (debit-collector 'add
-			       (gnc:gnc-monetary-commodity split-value)
-			       (gnc:gnc-monetary-amount split-value)))
-
-	  (if (gnc-numeric-negative-p (gnc:gnc-monetary-amount split-value))
-	      (credit-collector 'add
-			       (gnc:gnc-monetary-commodity split-value)
-			       (gnc:gnc-monetary-amount split-value)))
+          (if multi-rows?
+              (for-each (lambda (split)
+                          (if (string=? (gncAccountGetGUID
+                                         (xaccSplitGetAccount current))
+                                        (gncAccountGetGUID
+                                         (xaccSplitGetAccount split)))
+                              (accumulate-totals split
+                                                 total-collector total-value
+                                                 debit-collector debit-value
+                                                 credit-collector credit-value)))
+                        (xaccTransGetSplitList (xaccSplitGetParent current)))
+              (accumulate-totals current
+                                 total-collector total-value
+                                 debit-collector debit-value
+                                 credit-collector credit-value))
 
           (do-rows-with-subtotals leader
                                   rest
@@ -492,7 +603,10 @@
                                   (not odd-row?)                       
                                   total-collector
 				  debit-collector
-				  credit-collector))))
+				  credit-collector
+                                  total-value
+                                  debit-value
+                                  credit-value))))
 
   (define (splits-leader splits)
     (let ((accounts (map xaccSplitGetAccount splits)))
@@ -523,6 +637,9 @@
                             multi-rows?
                             double?
                             #t
+                            (gnc:make-commodity-collector)
+                            (gnc:make-commodity-collector)
+                            (gnc:make-commodity-collector)
                             (gnc:make-commodity-collector)
                             (gnc:make-commodity-collector)
                             (gnc:make-commodity-collector))
