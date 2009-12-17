@@ -1084,8 +1084,13 @@ xaccSplitConvertAmount (const Split *split, Account * account)
    * compute the conversion rate (based on amount/value), and then multiply
    * this times the split value.
    */
-  convrate = xaccTransGetAccountConvRate(txn, account);
   value = xaccSplitGetValue (split);
+  
+  if (gnc_numeric_zero_p (value)) {
+    return value;
+  }
+  
+  convrate = xaccTransGetAccountConvRate(txn, account);
   return gnc_numeric_mul (value, convrate,
 			  gnc_commodity_get_fraction (to_commodity),
 			  GNC_RND_ROUND);
