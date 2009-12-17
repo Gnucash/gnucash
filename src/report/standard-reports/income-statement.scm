@@ -678,7 +678,7 @@
 (define (profit-and-loss-options-generator)
   (income-statement-options-generator-internal pnl-reportname))
 (define (profit-and-loss-renderer report-obj)
-  (income-statement-renderer-internal report-obj is-reportname))
+  (income-statement-renderer-internal report-obj pnl-reportname))
 
 
 (gnc:define-report 
