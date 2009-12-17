@@ -436,7 +436,7 @@ gnc_ui_sx_loan_druid_create(void)
                 GNCAccountType paymentFroms[] = { ACCT_TYPE_BANK, ACCT_TYPE_CASH,
 						  ACCT_TYPE_CREDIT, ACCT_TYPE_ASSET,
 						  ACCT_TYPE_LIABILITY };
-                int toLen = 2;
+                int toLen = 1;
                 GNCAccountType paymentTos[] = { ACCT_TYPE_EXPENSE };
 
                 liabilityAcct = NULL;
