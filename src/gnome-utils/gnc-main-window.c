@@ -1244,7 +1244,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
   gchar *title, *ptr;
   GtkAction* action;
 
-  /* The save action is sensitive iff the book is dirty */
+  /* The save action is sensitive if the book is dirty */
   action = gnc_main_window_find_action (window, "FileSaveAction");
   if (action != NULL) {
   	gtk_action_set_sensitive(action, FALSE);
@@ -1261,7 +1261,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
   }
 
   if (!filename)
-    filename = g_strdup(_("<no file>"));
+    filename = g_strdup(_("Unsaved Book"));
   else {
 	gint num_colons = 0;
 	for (ptr = filename; *ptr; ptr = g_utf8_next_char(ptr)) {
@@ -1307,11 +1307,12 @@ gnc_main_window_generate_title (GncMainWindow *window)
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
   page = priv->current_page;
   if (page) {
-    /* The Gnome HIG 2.0 recommends the application name not be used. (p16) */
-    title = g_strdup_printf("%s%s - %s", dirty, filename,
+    /* The Gnome HIG 2.0 recommends the application name not be used. (p16) 
+     * but several developers prefer to use it anyway. */
+    title = g_strdup_printf("%s%s - %s - GnuCash", dirty, filename,
 			    gnc_plugin_page_get_page_name(page));
   } else {
-    title = g_strdup_printf("%s%s", dirty, filename);
+    title = g_strdup_printf("%s%s - GnuCash", dirty, filename);
   }
   g_free(filename);
   
