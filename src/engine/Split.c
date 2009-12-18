@@ -514,27 +514,30 @@ void
 xaccSplitCommitEdit(Split *s)
 {
     Account *acc, *orig_acc;
+	gboolean shutting_down = qof_book_shutting_down(qof_instance_get_book(s));
 
     g_return_if_fail(s);
-    if (!qof_instance_is_dirty(QOF_INSTANCE(s)))
+    if (!qof_instance_is_dirty(QOF_INSTANCE(s)) && !shutting_down) {
         return;
+    }
 
     orig_acc = s->orig_acc;
     acc = s->acc;
     /* Remove from lot (but only if it hasn't been moved to
        new lot already) */
-    if (s->lot && (s->lot->account != acc || qof_instance_get_destroying(s)))
+    if (s->lot && (s->lot->account != acc || qof_instance_get_destroying(s))) {
         gnc_lot_remove_split (s->lot, s);
+    }
 
     /* Possibly remove the split from the original account... */
     if (orig_acc && (orig_acc != acc || qof_instance_get_destroying(s))) {
         if (!gnc_account_remove_split(orig_acc, s)) {
           PERR("Account lost track of moved or deleted split.");
         }
-    }
+	}
 
     /* ... and insert it into the new account if needed */
-    if (acc && (orig_acc != acc) && !qof_instance_get_destroying(s)) {
+    if (acc && (orig_acc != acc) && !qof_instance_get_destroying(s) && !shutting_down) {
         if (gnc_account_insert_split(acc, s)) {
             /* If the split's lot belonged to some other account, we
                leave it so. */
@@ -565,7 +568,7 @@ xaccSplitCommitEdit(Split *s)
     qof_commit_edit_part2(QOF_INSTANCE(s), commit_err, NULL, 
                           (void (*) (QofInstance *)) xaccFreeSplit);
 
-    if (acc) {
+    if (acc && !shutting_down) {
         g_object_set(acc, "sort-dirty", TRUE, "balance-dirty", TRUE, NULL);
         xaccAccountRecomputeBalance(acc);
     }
@@ -1116,8 +1119,10 @@ xaccSplitDestroy (Split *split)
    acc = split->acc;
    trans = split->parent;
    if (acc && !qof_instance_get_destroying(acc)
-       && xaccTransGetReadOnly(trans))
+       && xaccTransGetReadOnly(trans)
+	   && !qof_book_shutting_down(qof_instance_get_book(split))) {
        return FALSE;
+   }
 
    xaccTransBeginEdit(trans);
    ed.node = split;

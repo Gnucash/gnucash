@@ -450,8 +450,16 @@ static void
 lot_book_end(QofBook* book)
 {
   QofCollection *col;
+  guint count;
+
   col = qof_book_get_collection (book, GNC_ID_LOT);
-  qof_collection_foreach(col, (QofInstanceForeachCB)lot_destroy_book_end, NULL);
+  count = qof_collection_count(col);
+  printf( "Book end: Lots left: %d\n", count);
+  while(count > 0) {
+      qof_collection_foreach(col, (QofInstanceForeachCB)lot_destroy_book_end, NULL);
+      count = qof_collection_count(col);
+      printf( "Lots left: %d\n", count);
+  }
 }
 
 /* ============================================================= */

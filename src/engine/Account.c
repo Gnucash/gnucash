@@ -997,6 +997,7 @@ xaccFreeAccount (Account *acc)
 {
   AccountPrivate *priv;
   GList *lp;
+  gboolean shutting_down = qof_book_shutting_down(qof_instance_get_book(acc));
 
   g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
@@ -1015,13 +1016,16 @@ xaccFreeAccount (Account *acc)
   /* remove lots -- although these should be gone by now. */
   if (priv->lots)
   {
-    PERR (" instead of calling xaccFreeAccount(), please call \n"
-          " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
+	/* If shutting down, just drop lots - don't worry about nicities. */
+    if (!shutting_down) {
+        PERR (" instead of calling xaccFreeAccount(), please call \n"
+              " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
   
-    for (lp=priv->lots; lp; lp=lp->next)
-    {
-      GNCLot *lot = lp->data;
-      gnc_lot_destroy (lot);
+        for (lp=priv->lots; lp; lp=lp->next)
+        {
+          GNCLot *lot = lp->data;
+          gnc_lot_destroy (lot);
+        }
     }
     g_list_free (priv->lots);
     priv->lots = NULL;
@@ -1033,20 +1037,34 @@ xaccFreeAccount (Account *acc)
    * check once we know the warning isn't occurring any more. */
   if (priv->splits) 
   {
-    GList *slist;
-    PERR (" instead of calling xaccFreeAccount(), please call \n"
-          " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
-  
-    qof_instance_reset_editlevel(acc);
+    GList *slist = priv->splits;
 
-    slist = g_list_copy(priv->splits);
-    for (lp = slist; lp; lp = lp->next) {
-      Split *s = (Split *) lp->data;
-      g_assert(xaccSplitGetAccount(s) == acc);
-      xaccSplitDestroy (s);
-    }
+	/* If shutting down, just drop lots - don't worry about nicities. */
+	if (!shutting_down) {
+        PERR (" instead of calling xaccFreeAccount(), please call \n"
+              " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
+  
+        qof_instance_reset_editlevel(acc);
+
+        slist = g_list_copy(priv->splits);
+        for (lp = slist; lp; lp = lp->next) {
+          Split *s = (Split *) lp->data;
+          g_assert(xaccSplitGetAccount(s) == acc);
+          xaccSplitDestroy (s);
+        }
+    } else {
+	    /* The book is being shut down.  Just break the link from the split
+		  to this account. */
+        for (lp = priv->splits; lp; lp = lp->next) {
+          Split *s = (Split *) lp->data;
+		  s->acc = NULL;
+		  s->orig_acc = NULL;
+		}
+	}
     g_list_free(slist);
-    g_assert(priv->splits == NULL);
+    if (!shutting_down && priv->splits != NULL) {
+	    PERR("priv->splits != NULL\n");
+    }
   }
 
   CACHE_REPLACE(priv->accountName, NULL);
@@ -1135,8 +1153,11 @@ xaccAccountCommitEdit (Account *acc)
   {
     GList *lp, *slist;
     QofCollection *col;
+	gboolean shutting_down;
  
     qof_instance_increase_editlevel(acc);
+    book = qof_instance_get_book(acc);
+	shutting_down = qof_book_shutting_down(book);
 
     /* First, recursively free children */
     xaccFreeAccountChildren(acc);
@@ -1145,10 +1166,12 @@ xaccAccountCommitEdit (Account *acc)
            acc, priv->accountName ? priv->accountName : "(null)");
 
     slist = g_list_copy(priv->splits);
-    for (lp = slist; lp; lp = lp->next)
-    {
-      Split *s = lp->data;
-      xaccSplitDestroy (s);
+	if (!shutting_down) {
+        for (lp = slist; lp; lp = lp->next)
+        {
+          Split *s = lp->data;
+          xaccSplitDestroy (s);
+		}
     }
     g_list_free(slist); 
     /* It turns out there's a case where this assertion does not hold:
@@ -1159,8 +1182,7 @@ xaccAccountCommitEdit (Account *acc)
        g_assert(priv->splits == NULL || qof_book_shutting_down(acc->inst.book));
     */
 
-    book = qof_instance_get_book(acc);
-    if (!qof_book_shutting_down(book)) {
+    if (!shutting_down) {
       col = qof_book_get_collection(book, GNC_ID_TRANS);
       qof_collection_foreach(col, destroy_pending_splits_for_account, acc);
     }
@@ -1566,8 +1588,10 @@ gnc_account_remove_split (Account *acc, Split *s)
     // And send the account-based event, too
     qof_event_gen(&acc->inst, GNC_EVENT_ITEM_REMOVED, s);
 
-    priv->balance_dirty = TRUE;
-    xaccAccountRecomputeBalance(acc);
+	if (!qof_book_shutting_down(qof_instance_get_book(acc))) {
+        priv->balance_dirty = TRUE;
+        xaccAccountRecomputeBalance(acc);
+	}
     return TRUE;
 }
 
@@ -4608,6 +4632,22 @@ xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
   return xaccAccountStagedTransactionTraversal(acc, 42, proc, data);
 }
 
+static void
+account_book_end(QofBook* book)
+{
+  QofCollection *col;
+  Account *root;
+
+  col = qof_book_get_collection (book, GNC_ID_ROOT_ACCOUNT);
+  root = gnc_coll_get_root_account (col);
+  if (root != NULL) {
+      xaccAccountBeginEdit(root);
+      xaccAccountDestroy(root);
+  }
+  col = qof_book_get_collection (book, GNC_ID_ACCOUNT);
+  printf("Accounts left: %d\n", qof_collection_count(col));
+}
+
 /* ================================================================ */
 /* QofObject function implementation and registration */
 
@@ -4617,7 +4657,7 @@ static QofObject account_object_def = {
   .type_label        = "Account",
   .create            = (gpointer)xaccMallocAccount,
   .book_begin        = NULL,
-  .book_end          = NULL,
+  .book_end          = account_book_end,
   .is_dirty          = qof_collection_is_dirty,
   .mark_clean        = qof_collection_mark_clean,
   .foreach           = qof_collection_foreach,
