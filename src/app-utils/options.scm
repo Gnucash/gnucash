@@ -325,9 +325,7 @@
          (value (budget->guid default-value))
          (option-set #f)
          (value->string (lambda ()
-                          (string-append
-                           "'" (gnc:value->string (if option-set option #f)))))
-
+                          (string-append "'" (gnc:value->string value))))
          )
     (gnc:make-option
      section name sort-tag 'budget documentation-string
