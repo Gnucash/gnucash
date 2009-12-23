@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-08 16:51-0500\n"
-"PO-Revision-Date: 2009-12-15 21:58+0200\n"
+"PO-Revision-Date: 2009-12-22 23:40+0100\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.3.1\n"
+"X-Generator: Lokalize 1.0\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:635
 msgid "Illegal variable in expression."
@@ -66,7 +66,7 @@ msgstr "Fiscaal relevant maar zonder belastingcode"
 
 #: ../src/app-utils/gnc-ui-util.c:491
 msgid "Tax entity type not specified"
-msgstr ""
+msgstr "Type belastingsubject niet gespecificeerd"
 
 #: ../src/app-utils/gnc-ui-util.c:553
 #, c-format
@@ -393,7 +393,7 @@ msgstr "Laden van gegevens..."
 #: ../intl-scm/guile-strings.c:1828 ../intl-scm/guile-strings.c:2028
 #: ../intl-scm/guile-strings.c:2790 ../intl-scm/guile-strings.c:6900
 msgid "Invoice"
-msgstr "Factuur"
+msgstr "Uitgaande factuur"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -416,7 +416,7 @@ msgstr "Factuur"
 #: ../intl-scm/guile-strings.c:1830 ../intl-scm/guile-strings.c:2030
 #: ../intl-scm/guile-strings.c:6928
 msgid "Bill"
-msgstr "Factuur"
+msgstr "Inkomende factuur"
 
 #. src/report/standard-reports/net-barchart.scm
 #. src/app-utils/prefs.scm
@@ -424,12 +424,12 @@ msgstr "Factuur"
 #: ../intl-scm/guile-strings.c:3928 ../intl-scm/guile-strings.c:3950
 #: ../intl-scm/guile-strings.c:6896
 msgid "Expense"
-msgstr "Kosten"
+msgstr "Onkostendeclaratie"
 
 #. Set memo.  action?
 #: ../src/business/business-core/gncInvoice.c:1183
 msgid "Extra to Charge Card"
-msgstr ""
+msgstr "Doorbelasting credit card"
 
 #: ../src/business/business-core/gncInvoice.c:1222
 msgid "Generated from an invoice.  Try unposting the invoice."
@@ -522,7 +522,7 @@ msgstr "Globale instellingen gebruiken"
 #: ../src/gnome/top-level.c:192
 #, c-format
 msgid "Badly formed URL %s"
-msgstr "Verkeerd geformuleerde URL %s"
+msgstr "Misvormde URL: %s"
 
 #. ==============================================================
 #. HTML Handler for reports.
@@ -533,18 +533,18 @@ msgstr "Verkeerd geformuleerde URL %s"
 #: ../src/gnome/top-level.c:89
 #, c-format
 msgid "Bad URL: %s"
-msgstr "Verkeerde URL: %s"
+msgstr "Misvormde URL: %s"
 
 #: ../src/business/business-gnome/business-urls.c:82
 #, c-format
 msgid "No such entity: %s"
-msgstr "Zoiets bestaat niet: %s"
+msgstr "Geen entiteit %s"
 
 #. =================================================================
 #: ../src/business/business-gnome/business-urls.c:170
 #, c-format
 msgid "No such owner entity: %s"
-msgstr ""
+msgstr "Geen eigenaar-entiteit %s"
 
 #: ../src/business/business-gnome/business-urls.c:274
 #, c-format
@@ -554,12 +554,12 @@ msgstr "Gegevens type komt niet overeen met %s: %s"
 #: ../src/business/business-gnome/business-urls.c:284
 #, c-format
 msgid "Bad URL %s"
-msgstr "Verkeerde URL %s"
+msgstr "Misvormde URL: %s"
 
 #: ../src/business/business-gnome/business-urls.c:296
 #, c-format
 msgid "No such Account entity: %s"
-msgstr "Een dergelijk rekeningitem bestaat niet: %s"
+msgstr "Geen rekening-entiteit %s"
 
 #: ../src/business/business-gnome/dialog-billterms.c:262
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:129
@@ -1558,7 +1558,7 @@ msgstr "_Dagen vantevoren:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:15
 msgid "_Notify when due"
-msgstr "_Waarschuw als verlopen"
+msgstr "_Herinneren aan vervaldatum"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:16
 msgid "_Open in new window"
@@ -2599,7 +2599,7 @@ msgstr "Deze items zijn standaard inclusief belasting als het geactieveerd wordt
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:6
 msgid "If this field is active then multiple entries in an invoice that transfer to the same account will be accumulated into a single split. This field can be overridden per invoice in the Posting dialog."
-msgstr ""
+msgstr "Als deze optie actief is, zullen alle factuurregels voor dezelfde tegenrekening per factuur in één boekingsregel worden geboekt. Dit kan per factuur worden onderdrukt tijdens de boekingsdialoog."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:7
 #, fuzzy
@@ -2630,15 +2630,15 @@ msgstr "Aantal boekingsregels in facturen"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:13
 msgid "This field defines the number of days in advance that GnuCash will check for due bills. Its value is only used if the \"Notify when due\" setting is active."
-msgstr ""
+msgstr "Dit veld definieert het aantal dagen vooruit dat GnuCash de vervaldatum van rekeningen controleert. Deze waarde wordt uitsluitend gebruikt als \"Herinneren aan vervaldatum\" is ingesteld."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:14
 msgid "This field sets the number of rows to show in an invoice. It does not actually affect the display of the contents of the window. It is only used to set the size of the window when first opened."
-msgstr ""
+msgstr "Dit veld bevat het aantal te tonen rijen van een factuur. Het heeft niet echt invloed op de weergave van de inhoud van het venster. Het wordt alleen gebruikt om de grootte van het venster bij de eerste keer openen te bepalen."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:15
 msgid "This setting contains the coordinates describing the last location of the window. The numbers are the X and Y coordinates of the top left corner of the window, and the width and height of the window."
-msgstr ""
+msgstr "Deze instelling bevat de coördinaten van de laatste locatie van het venster. De getallen zijn de X- en Y-coördinaten van de linkerbovenhoek van het venster, en de breedte en hoogte van het venster."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:16
 msgid "Window position and size"
@@ -2699,7 +2699,7 @@ msgstr "De huidige transactie is veranderd. Wilt u de veranderingen opslaan voor
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:506
 #: ../src/register/ledger-core/split-register.c:454
 msgid "_Record"
-msgstr "_Veld"
+msgstr "_Opslaan"
 
 #. Translators: %s is the string "an Account" i.e. its translation.
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:140
@@ -2723,7 +2723,7 @@ msgstr "De huidige boeking is veranderd. Deze boeking is echter onderdeel van ee
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:504
 msgid "_Don't Record"
-msgstr ""
+msgstr "_Niet opslaan"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:591
 msgid "The current entry has been changed. Would you like to save it?"
@@ -2742,70 +2742,70 @@ msgstr "sample:X"
 #: ../src/register/ledger-core/split-register-layout.c:533
 #: ../src/register/ledger-core/split-register-layout.c:541
 msgid "sample:12/12/2000"
-msgstr "Voorbeeld:31/12/2000"
+msgstr "sample:31/12/2000"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:77
 msgid "sample:Description of an Entry"
-msgstr "Voorbeeld: omschrijving van een boeking"
+msgstr "sample:Omschrijving van een boeking"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:79
 msgid "sample:Action"
-msgstr "Voorbeeld: Actie"
+msgstr "sample:Actie"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:81
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:85
 msgid "sample:9,999.00"
-msgstr "Voorbeeld: 9.999,00"
+msgstr "sample:9.999,00"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:83
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:105
 msgid "sample:999,999.00"
-msgstr "voorbeeld: 999.999,00"
+msgstr "sample:999.999,00"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:88
 #, no-c-format
 msgid "sample(DT):+%"
-msgstr "Voorbeeld (DT): +%"
+msgstr "sample(DT):+%"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:91
 #, no-c-format
 msgid "sample(DH):+%"
-msgstr "Voorbeeld (DH): +%"
+msgstr "sample(DH):+%"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:94
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:97
 #: ../src/register/ledger-core/split-register-layout.c:602
 #: ../src/register/ledger-core/split-register-layout.c:610
 msgid "sample:Expenses:Automobile:Gasoline"
-msgstr "voorbeeld:uitgaven:Auto:Brandstof"
+msgstr "sample:Uitgaven:Auto:Brandstof"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:99
 msgid "sample:T?"
-msgstr "Voorbeeld: T?"
+msgstr "sample:B?"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:101
 msgid "sample:TI"
-msgstr "Voorbeeld: TI"
+msgstr "sample:B+"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:103
 msgid "sample:Tax Table 1"
-msgstr "Voorbeeld: BTW tarief 1"
+msgstr "sample:Belastingtabel 1"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:107
 msgid "sample:999.00"
-msgstr "Voorbeeld: 999,00"
+msgstr "sample:999,00"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:109
 msgid "sample:BI"
-msgstr "Voorbeeld: BI"
+msgstr "sample:DB"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:111
 msgid "sample:Payment"
-msgstr "voorbeeld: Betaling"
+msgstr "sample:Betaling"
 
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:49
 msgid "$"
-msgstr "$"
+msgstr "€"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -2851,7 +2851,7 @@ msgstr "Contant"
 #: ../intl-scm/guile-strings.c:2792 ../intl-scm/guile-strings.c:6894
 #: ../intl-scm/guile-strings.c:6912
 msgid "Charge"
-msgstr "Verreken"
+msgstr "Declaratie"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:55
 msgid "Income Account"
@@ -2931,7 +2931,7 @@ msgstr "Hoeveelheid"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:105
 msgid "Tax Table"
-msgstr "BTW-tarief"
+msgstr "Belastingtabel"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:110
 msgid "Taxable?"
@@ -2939,7 +2939,7 @@ msgstr "Belastbaar?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:115
 msgid "Tax Included?"
-msgstr "Inclusief BTW?"
+msgstr "Inclusief belasting?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:120
 msgid "Invoiced?"
@@ -2975,7 +2975,7 @@ msgstr "Subtotaal"
 #: ../intl-scm/guile-strings.c:1450 ../intl-scm/guile-strings.c:1650
 #: ../intl-scm/guile-strings.c:1822 ../intl-scm/guile-strings.c:2022
 msgid "Tax"
-msgstr "BTW"
+msgstr "Belasting"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:135
 msgid "Billable?"
@@ -3155,12 +3155,12 @@ msgstr "_Waarde: "
 #: ../src/core-utils/gnc-gkeyfile-utils.c:111
 #, c-format
 msgid "Value '%s' cannot be interpreted as a float number."
-msgstr ""
+msgstr "Waarde '%s' kan niet worden geïnterpreteerd als drijvende komma-getal."
 
 #: ../src/core-utils/gnc-gkeyfile-utils.c:154
 #, c-format
 msgid "Key file contains key '%s' in group '%s' which has a value that cannot be interpreted."
-msgstr ""
+msgstr "Sleutelbestand bevat sleutel '%s' in groep '%s' met een waarde die niet kan worden geïnterpreteerd."
 
 #. src/report/report-system/report-utilities.scm
 #: ../src/engine/Account.c:3770
@@ -3184,7 +3184,7 @@ msgstr "Schuld"
 
 #: ../src/engine/Account.c:3775
 msgid "Stock"
-msgstr "Aandelen"
+msgstr "Aandeel"
 
 #: ../src/engine/Account.c:3776
 msgid "Mutual Fund"
@@ -3224,28 +3224,28 @@ msgid "A/Payable"
 msgstr "Crediteuren"
 
 #: ../src/engine/Account.c:3783
-#, fuzzy
 msgid "Root"
-msgstr "Rapporteer"
+msgstr "Hoofdniveau"
 
 #: ../src/engine/Account.c:3784 ../src/engine/Scrub.c:445
 #: ../src/engine/Scrub.c:507
 #, fuzzy
 msgid "Trading"
-msgstr "Lezen"
+msgstr "Voorraad"
 
 #: ../src/engine/cap-gains.c:236
 msgid "Orphaned Gains"
-msgstr "Niet-gerealiseerde winsten"
+msgstr "Verweesde resultaten"
 
 #: ../src/engine/cap-gains.c:250 ../src/engine/cap-gains.c:956
 #: ../src/engine/cap-gains.c:961 ../src/engine/cap-gains.c:962
 msgid "Realized Gain/Loss"
-msgstr "Gerealiseerde winsten"
+msgstr "Gerealiseerde winst/verlies"
 
 #: ../src/engine/cap-gains.c:252
+#, fuzzy
 msgid "Realized Gains or Losses from Commodity or Trading Accounts that haven't been recorded elsewhere."
-msgstr ""
+msgstr "Gerealiseerde winsten of verliezen op handelsgoederen- of handelsrekeningen die nergens anders zijn verantwoord."
 
 #: ../src/engine/gnc-budget.c:91 ../src/gnome/gnc-plugin-page-budget.c:844
 msgid "Unnamed Budget"
@@ -3259,6 +3259,10 @@ msgid ""
 "Please correct the problem and restart GnuCash.\n"
 "The reported error was '%s' (errno %d).\n"
 msgstr ""
+"Er is een fout opgetreden bij het creëren van de map:\n"
+"  %s\n"
+"Corrigeer het probleem en start GnuCash opnieuw.\n"
+"De gemelde fout was '%s' (foutnr %d).\n"
 
 #: ../src/engine/gnc-filepath-utils.c:380
 #, c-format
@@ -3269,6 +3273,11 @@ msgid ""
 "must have full access (read/write/execute) to \n"
 "the directory in order to function properly.\n"
 msgstr ""
+"De map\n"
+"  %s\n"
+"bestaat, maar kan niet worden geopend. Dit programma\n"
+"moet volledige toegang (lezen / schrijven / uitvoeren)\n"
+"tot de directory hebben om goed te kunnen functioneren.\n"
 
 #: ../src/engine/gnc-filepath-utils.c:390
 #: ../src/engine/gnc-filepath-utils.c:411
@@ -3279,6 +3288,10 @@ msgid ""
 "exists but it is not a directory. Please delete\n"
 "the file and start GnuCash again.\n"
 msgstr ""
+"Het pad\n"
+"  %s\n"
+"bestaat, maar het is niet een map. Verwijder\n"
+"het bestand en start GnuCash opnieuw.\n"
 
 #: ../src/engine/gnc-filepath-utils.c:399
 #, c-format
@@ -3289,6 +3302,11 @@ msgid ""
 "problem and restart GnuCash.  The reported error \n"
 "was '%s' (errno %d)."
 msgstr ""
+"Er is een onbekende fout opgetreden bij de controle \n"
+"op bestaan en bruikbaarheid van de map:\n"
+"  %s\n"
+"Corrigeer het probleem en start GnuCash opnieuw.\n"
+"De gemelde fout was '%s' (foutnr %d)."
 
 #: ../src/engine/gnc-filepath-utils.c:420
 #, c-format
@@ -3297,15 +3315,18 @@ msgid ""
 "  %s\n"
 "They must be at least 'rwx' for the user.\n"
 msgstr ""
+"De gebruiker heeft niet de juiste rechten op de map\n"
+"  %s\n"
+"Deze moeten ten minste 'rwx' zijn.\n"
 
 #: ../src/engine/gnc-lot.c:489
 msgid "Lot"
-msgstr "Cluster"
+msgstr "Partij"
 
 #. translators: " + " is an separator in a list of string-representations of recurrence frequencies
 #: ../src/engine/Recurrence.c:423
 msgid " + "
-msgstr ""
+msgstr " + "
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/engine/Recurrence.c:534 ../src/gnome/glade/fincalc.glade.h:45
@@ -3473,7 +3494,7 @@ msgstr "Alle grootboekrekeningen"
 #: ../intl-scm/guile-strings.c:4568 ../intl-scm/guile-strings.c:5198
 #: ../intl-scm/guile-strings.c:5572
 msgid "Account"
-msgstr "Dagboek"
+msgstr "Grootboekrekening"
 
 #: ../src/gnome/dialog-find-transactions.c:106
 #: ../src/import-export/import-match-picker.c:340
@@ -3766,7 +3787,7 @@ msgstr "Inkomstenbelasting-identiteit"
 
 #: ../src/gnome/dialog-tax-info.c:1134
 msgid "CAUTION: If you set TXF categories, and later change 'Type', you will need to manually reset those categories one at a time"
-msgstr ""
+msgstr "LET OP: Bij een wijziging van het type belastingsubject ná het instellen van TXF categorieën, moeten deze categorieën een voor een opnieuw worden ingesteld"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -3838,11 +3859,11 @@ msgstr "Rekeningsoorten"
 #: ../src/gnome/druid-hierarchy.c:486
 #, c-format
 msgid "Accounts in '%s'"
-msgstr "Grootboekrekeningen in `%s'"
+msgstr "Grootboekrekeningen in '%s'"
 
 #: ../src/gnome/druid-hierarchy.c:505
 msgid "Accounts in Category"
-msgstr "Rekeningen in Categorie"
+msgstr "Rekeningen in categorie"
 
 #: ../src/gnome/druid-hierarchy.c:712
 msgid "zero"
@@ -3855,7 +3876,7 @@ msgstr "bestaande rekening"
 #: ../src/gnome/druid-hierarchy.c:906
 #: ../src/gnome-utils/gnc-tree-view-account.c:659
 msgid "Placeholder"
-msgstr "Opvulling"
+msgstr "Plaatshouder"
 
 #: ../src/gnome/druid-hierarchy.c:937
 msgid "Use Existing"
@@ -3881,11 +3902,11 @@ msgstr "Betaling verzekering"
 #. Translators: PMI stands for Private Mortgage Insurance.
 #: ../src/gnome/druid-loan.c:164
 msgid "PMI"
-msgstr ""
+msgstr "PMI (VS)"
 
 #: ../src/gnome/druid-loan.c:164
 msgid "PMI Payment"
-msgstr "PMI-betaling"
+msgstr "Betaling PMI (VS)"
 
 #: ../src/gnome/druid-loan.c:165
 msgid "Other Expense"
@@ -3893,7 +3914,7 @@ msgstr "Andere onkosten"
 
 #: ../src/gnome/druid-loan.c:165
 msgid "Miscellaneous Payment"
-msgstr "Diverse-betaling"
+msgstr "Overige betaling"
 
 #. Add payment checkbox.
 #. Translators: %s is "Taxes",
@@ -3905,7 +3926,7 @@ msgstr "... betaal \"%s\"?"
 
 #: ../src/gnome/druid-loan.c:644
 msgid "via Escrow account?"
-msgstr "via rekening borg?"
+msgstr "via geblokkeerde rekening?"
 
 #: ../src/gnome/druid-loan.c:811
 #: ../src/register/ledger-core/split-register.c:2245
@@ -3918,23 +3939,23 @@ msgstr "Weet u zeker dat u de hypotheek- en lening-assistent wilt annuleren?"
 
 #: ../src/gnome/druid-loan.c:1163
 msgid "Please select a valid loan account."
-msgstr "Selecteer een geldig leningsdagboek."
+msgstr "Selecteer een geldig lening-rekening."
 
 #: ../src/gnome/druid-loan.c:1250
 msgid "Please select a valid Escrow Account."
-msgstr "Selecteer een geldige borg rekening."
+msgstr "Selecteer een geldige geblokkeerde rekening."
 
 #: ../src/gnome/druid-loan.c:1316 ../src/gnome/druid-loan.c:1535
 msgid "Please select a valid \"from\" account."
-msgstr "Selecteer een geldig \"van\" dagboek."
+msgstr "Selecteer een geldig \"van\"-rekening."
 
 #: ../src/gnome/druid-loan.c:1323 ../src/gnome/druid-loan.c:1544
 msgid "Please select a valid \"to\" account."
-msgstr "Selecteer een geldig \"naar\" dagboek"
+msgstr "Selecteer een geldig \"naar\"-rekening"
 
 #: ../src/gnome/druid-loan.c:1330
 msgid "Please select a valid \"interest\" account."
-msgstr "Selecteer een geldig \"rente\" dagboek."
+msgstr "Selecteer een geldige rente-rekening."
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
 #: ../src/gnome/druid-loan.c:1443
@@ -3958,7 +3979,7 @@ msgstr "Rente"
 
 #: ../src/gnome/druid-loan.c:2275
 msgid "Escrow "
-msgstr "Borg "
+msgstr "Geblokkeerde "
 
 #: ../src/gnome/druid-merge.c:101 ../src/gnome/druid-merge.c:129
 #: ../src/gnome/druid-merge.c:154 ../src/gnome/druid-merge.c:259
@@ -3968,12 +3989,12 @@ msgstr "Geen op te lossen conflicten."
 #: ../src/gnome/druid-merge.c:170
 #, c-format
 msgid "Error: Please resolve all %d conflicts before trying to commit the data."
-msgstr ""
+msgstr "Fout: Eerst alle %d conflicten oplossen voordat de gegevens verwerkt kunnen worden "
 
 #: ../src/gnome/druid-merge.c:225
 #, c-format
 msgid "Error: the Commit operation failed, error code %d."
-msgstr ""
+msgstr "Fout: het verwerken van de samengevoegde gegevens is mislukt, foutcode %d."
 
 #. Translators: %i is the number of conflicts. This is a
 #. ngettext(3) message.
@@ -3981,8 +4002,8 @@ msgstr ""
 #, c-format
 msgid "%i conflict needs to be resolved."
 msgid_plural "%i conflicts need to be resolved."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%i conflict nog op te lossen."
+msgstr[1] "%i conflicten nog op te lossen."
 
 #. Translators: %i is the number of values. This is a
 #. ngettext(3) message.
@@ -3990,8 +4011,8 @@ msgstr[1] ""
 #, c-format
 msgid "%i parameter value for this \"%s\" object."
 msgid_plural "%i parameter values for this \"%s\" object."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%i parameterwaarde voor dit \"%s\" object."
+msgstr[1] "%i parameterwaarden voor dit \"%s\" object."
 
 #. FIXME: each g_strdup_printf as well as g_strconcat
 #. will allocate a new string; all of these need to be
@@ -4000,17 +4021,17 @@ msgstr[1] ""
 #: ../src/gnome/druid-merge.c:355
 #, c-format
 msgid "%i: Parameter name: %s "
-msgstr ""
+msgstr "%i: Parameternaam: %s "
 
 #: ../src/gnome/druid-merge.c:359
 #, c-format
 msgid "Import data : %s "
-msgstr ""
+msgstr "Geïmporteerde gegevens: %s "
 
 #: ../src/gnome/druid-merge.c:362
 #, c-format
 msgid "Original data : %s\n"
-msgstr ""
+msgstr "Oorspronkelijke gegevens: %s\n"
 
 #: ../src/gnome/druid-stock-split.c:274
 #: ../src/gnome-utils/dialog-transfer.c:548
@@ -4063,7 +4084,7 @@ msgstr "Symbool"
 
 #: ../src/gnome/druid-stock-split.c:788
 msgid "You don't have any stock accounts with balances!"
-msgstr "Geen van uw aandelen rekeningen vertoont een saldo!"
+msgstr "Geen van uw aandelenrekeningen vertoont een saldo!"
 
 #: ../src/gnome/glade/account.glade.h:1
 msgid "<b>Acco_unt Type</b>"
@@ -4071,7 +4092,7 @@ msgstr "<b>_Rekeningsoort</b>"
 
 #: ../src/gnome/glade/account.glade.h:2
 msgid "<b>Balance Information</b>"
-msgstr "<b>Balansinformatie</b>"
+msgstr "<b>Saldo-informatie</b>"
 
 #: ../src/gnome/glade/account.glade.h:3
 msgid "<b>Categories</b>"
@@ -4095,7 +4116,7 @@ msgstr "<b>Identificatie</b>"
 
 #: ../src/gnome/glade/account.glade.h:8
 msgid "<b>Initial Balance Transfer</b>"
-msgstr ""
+msgstr "<b>Boeking openingssaldo</b>"
 
 #: ../src/gnome/glade/account.glade.h:9
 msgid "<b>New Account Currency</b>"
@@ -4341,8 +4362,9 @@ msgid "Ta_x related"
 msgstr "Belastinggerelateerd"
 
 #: ../src/gnome/glade/account.glade.h:61
+#, fuzzy
 msgid "This account (and any sub-accounts) will be hidden in the account tree and will not appear in the popup account list in the register.  To reset this option, you will first need to open the \"Filter By...\" dialog for the account tree and check the \"show hidden accounts\" option.  Doing so will allow you to select the account and reopen this dialog."
-msgstr ""
+msgstr "Deze rekening (en alle sub-rekeningen) worden verborgen in de rekeningboom en zal niet verschijnen in de popup rekeninglijst in het register. Voer een reset uit deze optie, dan moet u eerst te openen \"Filter By ...\" dialoogvenster voor rekening boom en controleer de \"toon verborgen rekeningen\" optie. Hierdoor zal u toelaten om de account te selecteren en deze dialoog te heropenen."
 
 #: ../src/gnome/glade/account.glade.h:62
 msgid "This account contains read-only transactions which may not be deleted."
@@ -5485,7 +5507,7 @@ msgstr "_Vandaag"
 
 #: ../src/gnome/glade/register.glade.h:72
 msgid "Void Transaction"
-msgstr "Doorgehaalde transactie"
+msgstr "Transactie doorhalen"
 
 #: ../src/gnome/glade/register.glade.h:73
 msgid "_Action"
@@ -5624,10 +5646,49 @@ msgid ""
 "Last Saturday\n"
 "Last Sunday"
 msgstr ""
+"1e\n"
+"2e\n"
+"3e\n"
+"4e\n"
+"5e\n"
+"6e\n"
+"7e\n"
+"8e\n"
+"9e\n"
+"10e\n"
+"11e\n"
+"12e\n"
+"13e\n"
+"14e\n"
+"15e\n"
+"16e\n"
+"17e\n"
+"18e\n"
+"19e\n"
+"20e\n"
+"21e\n"
+"22e\n"
+"23e\n"
+"24e\n"
+"25e\n"
+"26e\n"
+"27e\n"
+"28e\n"
+"29e\n"
+"30e\n"
+"31e\n"
+"Laatste dag van maand\n"
+"Laatste maandag\n"
+"Laatste dinsdag\n"
+"Laatste woensdag\n"
+"Laatste donderdag\n"
+"Laatste vrijdag\n"
+"Laatste zaterdag\n"
+"Laatste zondag"
 
 #: ../src/gnome/glade/sched-xact.glade.h:44
 msgid "<b>End</b>"
-msgstr ""
+msgstr "<b>Einde</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:45
 msgid "<b>Name</b>"
@@ -5708,11 +5769,11 @@ msgstr "Aangemaakte transactie herzien"
 
 #: ../src/gnome/glade/sched-xact.glade.h:65
 msgid "Creating transactions..."
-msgstr "transacties genereren..."
+msgstr "Transacties aan het aanmaken..."
 
 #: ../src/gnome/glade/sched-xact.glade.h:66
 msgid "Creation State"
-msgstr "Aanmaak status"
+msgstr "Aanmaakstatus"
 
 #: ../src/gnome/glade/sched-xact.glade.h:67
 msgid ""
@@ -5721,6 +5782,10 @@ msgid ""
 "Whole Loan\n"
 "Custom"
 msgstr ""
+"Huidig kalenderjaar\n"
+"Een jaar vanaf nu\n"
+"Volledige lening\n"
+"Maatwerk"
 
 #: ../src/gnome/glade/sched-xact.glade.h:72
 msgid ""
@@ -5731,6 +5796,12 @@ msgid ""
 "Quarterly\n"
 "Yearly"
 msgstr ""
+"Dagelijks\n"
+"Wekelijks\n"
+"Tweewekelijks\n"
+"Maandelijks\n"
+"Elk kwartaal\n"
+"Jaarlijks"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/job-report.scm
@@ -5791,6 +5862,11 @@ msgid ""
 "7/1 Year ARM\n"
 "10/1 Year ARM"
 msgstr ""
+"Vast rentetarief\n"
+"3/1-jaars geldmarkt\n"
+"5/1-jaars geldmarkt\n"
+"7/1-jaars geldmarkt\n"
+"10/1-jaars geldmarkt"
 
 #: ../src/gnome/glade/sched-xact.glade.h:96
 msgid "For:"
@@ -6166,7 +6242,7 @@ msgstr "dagen."
 
 #: ../src/gnome/glade/sched-xact.glade.h:201
 msgid "except on weekends:"
-msgstr ""
+msgstr "behalve in het weekend:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:202
 msgid ""
@@ -6476,7 +6552,7 @@ msgstr "Instellen geplande transacties voor de aflossing van een lening"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:150
 msgid "Close _Books"
-msgstr ""
+msgstr "_Periodeafsluiting"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:151
 msgid "Archive old data using accounting periods"
@@ -17442,13 +17518,13 @@ msgstr "Het aantal aandelen weergeven ?"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2752 ../intl-scm/guile-strings.c:3550
 msgid "Display the shares price?"
-msgstr "De aandelenprijs weergeven ?"
+msgstr "De aandelenprijs tonen?"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2758 ../intl-scm/guile-strings.c:3568
 msgid "Display the amount?"
-msgstr "Het bedrag weergeven ?"
+msgstr "Het bedrag tonen?"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/transaction.scm
@@ -18525,17 +18601,17 @@ msgstr "De opmerkingen tonen als het memo niet beschikbaar is?"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3522
 msgid "Display the account name?"
-msgstr "Dagboeknaam tonen ?"
+msgstr "De rekeningnaam laten zien?"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3526 ../intl-scm/guile-strings.c:3538
 msgid "Display the full account name"
-msgstr "Toon de volledige dagboeknaam"
+msgstr "De volledige rekeningnaam laten zien"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3530
 msgid "Display the account code"
-msgstr "De dagboekcode weergeven ?"
+msgstr "De rekeningcode laten zien?"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3534
