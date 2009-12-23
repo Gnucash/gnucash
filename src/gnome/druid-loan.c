@@ -2269,11 +2269,12 @@ ld_create_sxes( LoanDruidData *ldd )
         {
                 GString *payMainTxnDesc = g_string_sized_new( 32 );
                 g_string_printf( payMainTxnDesc,
-                                 "%s - %s%s",
+                                 "%s - %s",
                                  ldd->ld.repMemo,
                                  ( ldd->ld.escrowAcct == NULL
-                                   ? "" : _("Escrow ") ),
-                                 _("Payment") );
+                                   ? _("Payment")
+				   : _("Escrow Payment") )
+				 );
                 
                 gnc_ttinfo_set_description( paymentSX->mainTxn,
                                             payMainTxnDesc->str );
