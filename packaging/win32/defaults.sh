@@ -268,13 +268,13 @@ else
 fi
 set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
 
-set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.23.tar.gz"
+set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.24.tar.gz"
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
 if [ "$AQBANKING3" != "yes" ]; then
     set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.3.3.tar.gz"
 else
-    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=45&file=01&dummy=aqbanking-4.1.8.tar.gz"
+    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=47&file=01&dummy=aqbanking-4.2.1.tar.gz"
     #set_default AQBANKING_PATCH `pwd`/aqbanking-4.1.6-patch.diff
 fi
 set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking
