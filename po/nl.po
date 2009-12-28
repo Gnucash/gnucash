@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-08 16:51-0500\n"
-"PO-Revision-Date: 2009-12-22 23:40+0100\n"
+"PO-Revision-Date: 2009-12-27 13:12+0200\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Virtaal 0.3.1\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:635
 msgid "Illegal variable in expression."
@@ -1307,8 +1307,9 @@ msgid "Your selected post account, %s, does not exist"
 msgstr "De door u geselecteerde grootboekrekening, %s, bestaat niet"
 
 #: ../src/business/business-gnome/dialog-payment.c:313
+#, fuzzy
 msgid "The transfer and post accounts are associated with different currencies.  Please specify the conversion rate."
-msgstr "De transactie- en boekrekeningen hebben betrekking op verschillende valuta. Geef de wisselkoers op."
+msgstr "De rekeningen zijn niet in dezelfde valuta gesteld. Geef de wisselkoers op."
 
 #: ../src/business/business-gnome/dialog-payment.c:549
 #, c-format
@@ -2466,7 +2467,7 @@ msgstr "De huidige boeking annuleren"
 #: ../src/gnome/gnc-plugin-page-sx-list.c:124
 #: ../src/gnome/window-reconcile.c:2132
 msgid "_Delete"
-msgstr "_Verwijderen"
+msgstr "Ver_wijderen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:137
 msgid "Delete the current entry"
@@ -4459,7 +4460,7 @@ msgstr "Alles _selecteren"
 
 #: ../src/gnome/glade/account.glade.h:87
 msgid "_Select transfer account"
-msgstr "Tussenrekening _selecteren"
+msgstr "Tegenrekening _selecteren"
 
 #: ../src/gnome/glade/account.glade.h:88
 msgid "_Use equity 'Opening Balances' account"
@@ -8521,7 +8522,7 @@ msgstr "U moet een geldige openingsbalans opgeven of het veld leeg laten."
 
 #: ../src/gnome-utils/dialog-account.c:844
 msgid "You must select a transfer account or choose the opening balances equity account."
-msgstr "U moet een tussenrekening selecteren of de rekening 'openingsbalans eigen vemogen' kiezen."
+msgstr "U moet een tegenrekening selecteren of de rekening 'openingssaldo eigen vemogen' kiezen."
 
 #: ../src/gnome-utils/dialog-account.c:1328
 msgid "Edit Account"
@@ -8717,15 +8718,15 @@ msgstr "Toon de opbrengsten- en kostenrekeningen"
 
 #: ../src/gnome-utils/dialog-transfer.c:1269
 msgid "You must specify an account to transfer from, or to, or both, for this transaction. Otherwise, it will not be recorded."
-msgstr "U moet voor deze transactie een rekening opgeven om vanaf of naar te boeken. Anders zal dit niet worden geboekt."
+msgstr "U moet voor deze transactie een rekening opgeven om vanaf en/of naartoe te boeken. Anders zal dit niet worden geboekt."
 
 #: ../src/gnome-utils/dialog-transfer.c:1279
 msgid "You can't transfer from and to the same account!"
-msgstr "U kunt niet van en naar hetzelfde dagboek boeken!"
+msgstr "U kunt niet van en naar dezelfde rekening boeken!"
 
 #: ../src/gnome-utils/dialog-transfer.c:1305
 msgid "You can't transfer from a non-currency account.  Try reversing the \"from\" and \"to\" accounts and making the \"amount\" negative."
-msgstr "U kan niet boeken van een niet-monetair boekstuk. Probeer de \"van\" en \"naar\" boekstukken om te draaien en het \"aantal\" negatief."
+msgstr "U kan niet boeken van een niet in geld beboekte rekening. Probeer de \"van\"- en \"naar\"-rekeningen om te draaien en het \"aantal\" negatief te maken."
 
 #: ../src/gnome-utils/dialog-transfer.c:1330
 msgid "You must enter an amount to transfer."
@@ -10169,12 +10170,12 @@ msgstr "<b>Valuta overboeking</b>"
 #: ../src/gnome-utils/glade/transfer.glade.h:3
 #, fuzzy
 msgid "<b>Transfer From</b>"
-msgstr "Overboeken van"
+msgstr "<b>Overboeken van</b>"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:4
 #, fuzzy
 msgid "<b>Transfer To</b>"
-msgstr "Overboeken naar"
+msgstr "<b>Overboeken naar</b>"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:6
 msgid "Currency:"
@@ -11494,14 +11495,13 @@ msgstr "Weet u zeker dat u de geselecteerde transactie wilt verwijderen?"
 
 #. statement date title/value
 #: ../src/gnome/window-reconcile.c:1726
-#, fuzzy
 msgid "Statement Date:"
-msgstr "Datum afschrift:"
+msgstr "Afschriftdatum:"
 
 #. ending balance title/value
 #: ../src/gnome/window-reconcile.c:1746
 msgid "Ending Balance:"
-msgstr "Eindbalans:"
+msgstr "Eindsaldo:"
 
 #. reconciled balance title/value
 #: ../src/gnome/window-reconcile.c:1756
@@ -11629,7 +11629,7 @@ msgstr "(automatisch ingevuld)"
 #: ../src/import-export/aqbanking/aqbanking.glade.h:2
 #: ../src/import-export/hbci/glade/hbci.glade.h:2
 msgid "<b>From</b>"
-msgstr ""
+msgstr "<b>Van</b>"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:3
 #: ../src/import-export/hbci/glade/hbci.glade.h:3
@@ -11649,22 +11649,22 @@ msgstr "<b>Voortgang</b>"
 #: ../src/import-export/aqbanking/aqbanking.glade.h:6
 #: ../src/import-export/hbci/glade/hbci.glade.h:5
 msgid "<b>To</b>"
-msgstr ""
+msgstr "<b>Naar</b>"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:7
 #: ../src/import-export/hbci/glade/hbci.glade.h:6
 msgid "Add current"
-msgstr "Voeg een valuta toe"
+msgstr "Huidige toevoegen"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:8
 #: ../src/import-export/hbci/glade/hbci.glade.h:7
 msgid "Add the current online transaction as a new transaction template"
-msgstr "voeg de huidige online transactie toe als een nieuw transactiesjabloon"
+msgstr "De huidige online transactie als een nieuw transactiesjabloon toevoegen"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:10
 #: ../src/import-export/hbci/glade/hbci.glade.h:9
 msgid "Bank Code"
-msgstr "Bank code"
+msgstr "Bankcode"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:11
 #: ../src/import-export/hbci/glade/hbci.glade.h:11
@@ -11919,21 +11919,18 @@ msgstr "Gebruik transactiesjabloon"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:70
 #: ../src/import-export/hbci/glade/hbci.glade.h:68
-#, fuzzy
 msgid "_Earliest possible date"
-msgstr "Vroegst mogelijke datum"
+msgstr "_Vroegst mogelijke datum"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:71
 #: ../src/import-export/hbci/glade/hbci.glade.h:69
-#, fuzzy
 msgid "_Last retrieval date"
-msgstr "Laatste ophaal datum"
+msgstr "_Laatste ophaaldatum"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:72
 #: ../src/import-export/hbci/glade/hbci.glade.h:70
-#, fuzzy
 msgid "_Now"
-msgstr "Nu"
+msgstr "_Nu"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:73
 #: ../src/import-export/hbci/glade/hbci.glade.h:71
@@ -11942,9 +11939,8 @@ msgstr ""
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:74
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:6
-#, fuzzy
 msgid "_Verbose debug messages"
-msgstr "HBCI uitgebreide debug berichten"
+msgstr "_Uitgebreide debug-berichten"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:75
 #: ../src/import-export/hbci/glade/hbci.glade.h:72
@@ -12022,28 +12018,20 @@ msgstr "Bank code gecrediteerde rekening"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:370
 #: ../src/import-export/hbci/dialog-hbcitrans.c:714
-#, fuzzy, c-format
+#, c-format
 msgid "The internal check of the destination account number '%s' at the specified bank with bank code '%s' failed. This means the account number might contain an error. Should the online transfer job be sent with this account number anyway?"
-msgstr ""
-"De interne controle van het doel rekeningnummer '%s' \n"
-"bij de aangegeven bank met bank code '%s' is mislukt. Dit betekent \n"
-"dat het rekeningnummer misschien fout is. Moet de online transactie \n"
-"toch naar dit rekeningnummer worden gestuurd?"
+msgstr "De interne controle van het doelrekeningnummer '%s' bij de aangegeven bank met bankcode '%s' is mislukt. Dit betekent dat het rekeningnummer misschien fout is. Moet de online transactie toch naar dit rekeningnummer worden gestuurd?"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:455
 #: ../src/import-export/hbci/dialog-hbcitrans.c:534
-#, fuzzy
 msgid ""
 "The amount is zero or the amount field could not be interpreted correctly. You might have mixed up decimal point and comma, compared to your locale settings. This does not result in a valid online transfer job. \n"
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"Het bedrag is nul, of het bedragveld kon iet goed \n"
-"worden ingelezen. Misschien heeft u de decimale punt \n"
-"en de komma omgedraaid, in verhouding tot uw lokale instellingen. \n"
+"Het bedrag is nul, of het bedragveld kon niet goed worden ingelezen. Misschien heeft u de decimale punt en de komma omgedraaid ten opzichte van uw lokale instellingen. Dit resulteert niet in een geldige online transactie.\n"
 "\n"
-"Dit resulteert niet in een geldige online transactie.\n"
-"Wilt u de transactie nogmaals opgeven?"
+"Wilt u de transactie nogmaals invoeren?"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:478
 #: ../src/import-export/hbci/dialog-hbcitrans.c:556
@@ -12060,6 +12048,9 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
+"U heeft de naam van de ontvanger niet ingevoerd. Een naam van de ontvanger is vereist voor een online transactie.\n"
+"\n"
+"Wilt u de transactie nogmaals invoeren?"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:723
 #, c-format
@@ -12068,7 +12059,7 @@ msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:867
 msgid "A template with the given name already exists.  Please enter another name."
-msgstr ""
+msgstr "Er bestaat al een sjabloon met deze naam. Voer een andere naam in."
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:992
 #, c-format
@@ -12371,7 +12362,7 @@ msgstr "_MT940 importeren"
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:106
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:113
 msgid "Import a MT940 file into GnuCash"
-msgstr ""
+msgstr "Een MT940-bestand importeren in GnuCash"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:108
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:115
@@ -12381,7 +12372,7 @@ msgstr "MT94_2 importeren"
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:109
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:116
 msgid "Import a MT942 file into GnuCash"
-msgstr ""
+msgstr "Een MT942-bestand imporeteren in GnuCash"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:111
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:118
@@ -12391,7 +12382,7 @@ msgstr "_DTAUS importeren"
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:112
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:119
 msgid "Import a DTAUS file into GnuCash"
-msgstr ""
+msgstr "Een DTAUS-bestand importeren in GnuCash"
 
 #. #ifdef CSV_IMPORT_FUNCTIONAL
 #. { "CsvImportAction", GTK_STOCK_CONVERT, N_("Import _CSV"), NULL,
@@ -12404,12 +12395,12 @@ msgstr ""
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:122
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:129
 msgid "Import DTAUS and _send..."
-msgstr ""
+msgstr "DTAUS importeren en _verzenden..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:123
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:130
 msgid "Import a DTAUS file into GnuCash and send the transfers online through Online Banking"
-msgstr ""
+msgstr "Een DTAUS-bestand importeren in GnuCash en de transacties online versturen met Internetbankieren"
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
@@ -12494,24 +12485,23 @@ msgstr "Geen geldige factuur geselecteerd"
 
 #: ../src/import-export/csv/gnc-csv-import.c:554
 msgid "Merge with column on _left"
-msgstr ""
+msgstr "Samenvoegen met _linkerkolom"
 
 #: ../src/import-export/csv/gnc-csv-import.c:556
 msgid "Merge with column on _right"
-msgstr ""
+msgstr "Samenvoegen met _rechterkolom"
 
 #: ../src/import-export/csv/gnc-csv-import.c:559
 msgid "_Split this column"
-msgstr ""
+msgstr "Deze kolom _splitsen"
 
 #: ../src/import-export/csv/gnc-csv-import.c:562
 msgid "_Widen this column"
-msgstr ""
+msgstr "Deze kolom _verbreden"
 
 #: ../src/import-export/csv/gnc-csv-import.c:564
-#, fuzzy
 msgid "_Narrow this column"
-msgstr "De netto winst weergeven ?"
+msgstr "Deze kolom v_ersmallen"
 
 #: ../src/import-export/csv/gnc-csv-import.c:1041
 msgid "The rows displayed below had errors. You can attempt to correct these errors by changing the configuration."
@@ -12524,27 +12514,27 @@ msgstr "Fouten"
 #. Let the user select a file.
 #: ../src/import-export/csv/gnc-csv-import.c:1076
 msgid "Select an CSV/Fixed-Width file to import"
-msgstr "Selecteer een CSV of bestand met vaste-kolombreedte om te importeren"
+msgstr "Selecteer een CSV-bestand of bestand met vaste kolombreedte om te importeren"
 
 #: ../src/import-export/csv/gnc-csv-model.c:33
 #: ../src/import-export/gnc-import-format-gnome.c:111
 msgid "y-m-d"
-msgstr "y-m-d"
+msgstr "j-m-d"
 
 #: ../src/import-export/csv/gnc-csv-model.c:34
 #: ../src/import-export/gnc-import-format-gnome.c:110
 msgid "d-m-y"
-msgstr ""
+msgstr "d-m-j"
 
 #. Date formats
 #: ../src/import-export/csv/gnc-csv-model.c:35
 #: ../src/import-export/gnc-import-format-gnome.c:109
 msgid "m-d-y"
-msgstr ""
+msgstr "m-d-j"
 
 #: ../src/import-export/csv/gnc-csv-model.c:36
 msgid "d-m"
-msgstr ""
+msgstr "d-m"
 
 #: ../src/import-export/csv/gnc-csv-model.c:37
 msgid "m-d"
@@ -12564,12 +12554,12 @@ msgstr "Opname"
 
 #: ../src/import-export/csv/gnc-csv-model.c:441
 msgid "File opening failed."
-msgstr "Openen bestand is mislukt."
+msgstr "Openen bestand mislukt."
 
 #: ../src/import-export/csv/gnc-csv-model.c:455
 #: ../src/import-export/csv/gnc-csv-model.c:464
 msgid "Unknown encoding."
-msgstr ""
+msgstr "Onbekende tekenset"
 
 #: ../src/import-export/csv/gnc-csv-model.c:765
 msgid "No date column."
@@ -12582,15 +12572,15 @@ msgstr "Geen saldo-, storting- of opnamekolom."
 #: ../src/import-export/csv/gnc-csv-model.c:1038
 #, c-format
 msgid "%s column could not be understood."
-msgstr "%s-kolom kan niet worden verwerkt."
+msgstr "%s-kolom kon niet worden verwerkt."
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:1
 msgid "Colon (:)"
-msgstr ""
+msgstr "Dubbele punt (:)"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:2
 msgid "Comma (,)"
-msgstr ""
+msgstr "Komma (,)"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:4
 msgid "Data type: "
@@ -12602,19 +12592,19 @@ msgstr "Datumopmaak"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:6
 msgid "Encoding: "
-msgstr ""
+msgstr "Tekenset:"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:7
 msgid "Fixed-Width"
-msgstr ""
+msgstr "Vaste kolombreedte"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:8
 msgid "Hyphen (-)"
-msgstr ""
+msgstr "Streepje (-)"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:9
 msgid "Import CSV/Fixed-Width File"
-msgstr ""
+msgstr "CSV-/vaste kolombreedte-bestand importeren"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:10
 msgid "Select the type of each column below."
@@ -12622,7 +12612,7 @@ msgstr "Selecteer het soort van iedere onderstaande kolom."
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:11
 msgid "Semicolon (;)"
-msgstr ""
+msgstr "Puntkomma (;)"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:12
 msgid "Separated"
@@ -12642,19 +12632,19 @@ msgstr "Tab"
 
 #: ../src/import-export/csv/gnc-plugin-csv.c:45
 msgid "Import _CSV/Fixed-Width..."
-msgstr "Importeer _CSV/vaste-kolombreedte..."
+msgstr "_CSV/vaste-kolombreedte importeren..."
 
 #: ../src/import-export/csv/gnc-plugin-csv.c:46
 msgid " a CSV/Fixed-Width file"
-msgstr ""
+msgstr " een CSV/vaste kolombreedte-bestand"
 
 #: ../src/import-export/generic-import.glade.h:1
 msgid "\"A\""
-msgstr ""
+msgstr "\"A\""
 
 #: ../src/import-export/generic-import.glade.h:2
 msgid "\"R\""
-msgstr ""
+msgstr "\"R\""
 
 #: ../src/import-export/generic-import.glade.h:3
 msgid "\"Select Import Action\" allows you to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required)."
@@ -12670,7 +12660,7 @@ msgstr "<b>Kleuren</b>"
 
 #: ../src/import-export/generic-import.glade.h:7
 msgid "<b>Generic Importer</b>"
-msgstr ""
+msgstr "<b>Generieke importeermodule</b>"
 
 #: ../src/import-export/generic-import.glade.h:8
 msgid "A transaction whose best match's score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default."
@@ -12682,11 +12672,11 @@ msgstr "Een transactie die als beste score nog steeds in de rode zone ligt (bove
 
 #: ../src/import-export/generic-import.glade.h:11
 msgid "Auto-_add threshold"
-msgstr "Drempelwaarde automatische _toevoegen"
+msgstr "Drempelwaarde automatisch _toevoegen"
 
 #: ../src/import-export/generic-import.glade.h:12
 msgid "Auto-c_lear threshold"
-msgstr "Drempelwaarde automatische _legen"
+msgstr "Drempelwaarde automatisch _legen"
 
 #: ../src/import-export/generic-import.glade.h:13
 msgid "Choose a format"
@@ -12739,7 +12729,7 @@ msgstr "Algemene import-transactie-koppelaar"
 #: ../src/import-export/generic-import.glade.h:30
 #, fuzzy
 msgid "Green"
-msgstr "Huidig"
+msgstr "Groen"
 
 #: ../src/import-export/generic-import.glade.h:31
 msgid "Imported transaction's first split:"
@@ -12748,7 +12738,7 @@ msgstr "Eerste opsplitsing van geïmporteerde transacties:"
 #: ../src/import-export/generic-import.glade.h:32
 #, fuzzy
 msgid "In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores.  These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw $100, and you are charged $101,50 plus Interac fees.  If you manually entered that $100, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
-msgstr "Op sommige plaatsen staan commerciële PIN automaten (die niet zijn van een financiële instelling), zoals in warenhuizen. Deze pinautomaten tellen hun kosten op bij het te pinnen bedrag in plaats dat ze te zien zijn als losse transactie of bij uw maandelijkse bankkosten. Wanneer u bijvoorbeeld EUR 100 opneemt, wordt u EUR 101,50 in rekening gebracht wegens de automaatkosten. Als u handmatig aan heeft gegeven dat u EUR 100 heeft opgenomen, komen de bedragen niet overeen. U moet dit dan instellen op het maximum van dergelijke kosten in uw regio (in eenheden van uw lokale munteenheid), zodat de transactie herkend wordt als overeenkomstig."
+msgstr "Op sommige plaatsen staan commerciële PIN automaten (die niet zijn van een financiële instelling), zoals in warenhuizen. Deze pinautomaten tellen hun kosten op bij het te pinnen bedrag in plaats dat ze te zien zijn als losse transactie of bij uw maandelijkse bankkosten. Wanneer u bijvoorbeeld EUR 100 opneemt, wordt u EUR 101,50 in rekening gebracht wegens de automaatkosten. Als u handmatig aan heeft ingevoerd dat u EUR 100 heeft opgenomen, komen de bedragen niet overeen. U moet dit dan instellen op het maximum van dergelijke kosten in uw regio (in eenheden van uw lokale munteenheid), zodat de transactie herkend wordt als overeenkomstig."
 
 #: ../src/import-export/generic-import.glade.h:33
 msgid "List of downloaded transactions (source split shown):"
@@ -12779,7 +12769,7 @@ msgstr "Potentiële opsplitsingen komen overeen met de geselecteerde transactie:
 #: ../src/import-export/generic-import.glade.h:41
 #, fuzzy
 msgid "Red"
-msgstr "Veld"
+msgstr "Rood"
 
 #: ../src/import-export/generic-import.glade.h:42
 #, fuzzy
@@ -12832,20 +12822,20 @@ msgstr ""
 #: ../src/import-export/generic-import.glade.h:54
 #, fuzzy
 msgid "Yellow"
-msgstr "Verkopen"
+msgstr "Geel"
 
 #. Numeric formats
 #: ../src/import-export/gnc-import-format-gnome.c:105
 msgid "Period-as-decimal (1,000.00)"
-msgstr ""
+msgstr "Punt als decimaalteken (1,000.00)"
 
 #: ../src/import-export/gnc-import-format-gnome.c:106
 msgid "Comma-as-decimal (1.000,00)"
-msgstr ""
+msgstr "Komma als decimaalteken (1.000,00)"
 
 #: ../src/import-export/gnc-import-format-gnome.c:112
 msgid "y-d-m"
-msgstr ""
+msgstr "j-d-m"
 
 #: ../src/import-export/hbci/dialog-hbcitrans.c:806
 #, fuzzy
@@ -12854,20 +12844,14 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"De opdracht is succesvol verstuurd naar de bank, maar\n"
-"de bank weigert de opdracht uit te voeren. U kunt in het\n"
-"log venster de exacte foutmelding van de bank zien.\n"
-"De regel met de foutmelding heeft een code hoger dan\n"
-"9000.\n"
+"De opdracht is succesvol verstuurd naar de bank, maar de bank weigert de opdracht uit te voeren. U kunt in het log venster de exacte foutmelding van de bank zien. De regel met de foutmelding heeft een code hoger dan 9000.\n"
 "\n"
-"Wilt u de opdracht opnieuw invoeren ?"
+"Wilt u de opdracht opnieuw invoeren?"
 
 #: ../src/import-export/hbci/dialog-pass.c:145
 #, fuzzy
 msgid "The two passwords didn't match. Please try again."
-msgstr ""
-"De twee wachtwoorden komen niet overeen. \n"
-"Probeert u het nogmaals."
+msgstr "De twee wachtwoorden kwamen niet overeen. Probeer het nog eens."
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:506
 msgid "Choose AqBanking Backend"
@@ -12918,11 +12902,11 @@ msgstr "Versie"
 
 #: ../src/import-export/hbci/glade/hbcipass.glade.h:3
 msgid "Enter and confirm your new password"
-msgstr "Geef nieuwe wachtwoord in en bevestig het"
+msgstr "Een nieuw wachtwoord invoeren en bevestigen"
 
 #: ../src/import-export/hbci/glade/hbcipass.glade.h:4
 msgid "Enter new Password"
-msgstr "Geef nieuw wachtwoord in"
+msgstr "Nieuw wachtwoord invoeren"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:2
 #, fuzzy
@@ -12939,7 +12923,7 @@ msgid ""
 "The PIN you entered was wrong.\n"
 "Do you want to try again?"
 msgstr ""
-"Het door u opgegeven PIN was niet corect.\n"
+"Het door u ingevoerde PIN was niet corect.\n"
 "Wilt u het nogmaals proberen?"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:363
@@ -12948,17 +12932,13 @@ msgid ""
 "ATTENTION: You have zero further wrong retries left!\n"
 "Do you want to try again?"
 msgstr ""
-"Het door u opgegeven PIN was niet corect.\n"
+"Het door u ingevoerde PIN was niet corect.\n"
 "LET OP: U heeft geen foutieve pogingen over!\n"
 "Wilt u het nogmaals proberen?"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:370
-#, fuzzy
 msgid "Unfortunately you entered a wrong PIN for too many times. Your chip card is therefore destroyed. Aborting."
-msgstr ""
-"Helaas heeft u de verkeerde PIN code te vaak ingevoerd.\n"
-"Uw kaart is daarom onbruikbaar gemaakt.\n"
-"Bewerking wordt gestaakt."
+msgstr "Helaas heeft u te vaak een verkeerde PIN ingevoerd. Uw kaart is daarom onbruikbaar gemaakt. De bewerking wordt afgebroken."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:379
 #, fuzzy
@@ -13031,28 +13011,22 @@ msgstr ""
 #: ../src/import-export/hbci/hbci-interaction.c:401
 #, c-format
 msgid "The PIN needs to be at least %d characters long. Do you want to try again?"
-msgstr "Het PIN moet uit tenminste %d karakters bestaan. Wilt u het nogmaals proberen?"
+msgstr "Het PIN moet uit ten minste %d karakters bestaan. Wilt u het nogmaals proberen?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:414
-#, fuzzy, c-format
+#, c-format
 msgid "You entered %ld characters, but the PIN must be no longer than %d characters. Do you want to try again?"
-msgstr ""
-"Het PIN moet tenminste %d karakters lang zijn.\n"
-"Wilt u het nogmaals proberen?"
+msgstr "U heeft %ld karakters ingevoerd, maar het PIN mag niet langer dan %d karakters zijn. Wilt u het nogmaals proberen?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:482
-#, fuzzy, c-format
+#, c-format
 msgid "This TAN needs to be at least %d characters long. Do you want to try again?"
-msgstr ""
-"Het PIN moet tenminste %d karakters lang zijn.\n"
-"Wilt u het nogmaals proberen?"
+msgstr "Dit TAN moet uit ten minste %d karakters bestaan. Wilt u het nogmaals proberen?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:495
-#, fuzzy, c-format
+#, c-format
 msgid "You entered %ld characters, but the TAN must be no longer than %d characters. Do you want to try again?"
-msgstr ""
-"Het PIN moet tenminste %d karakters lang zijn.\n"
-"Wilt u het nogmaals proberen?"
+msgstr "U heeft %ld karakters ingevoerd, maar het TAN mag niet langer dan %d karakters zijn. Wilt u het nogmaals proberen?"
 
 #: ../src/import-export/import-account-matcher.c:82
 msgid "Account ID"
@@ -13076,30 +13050,29 @@ msgstr ""
 
 #: ../src/import-export/import-format-dialog.c:59
 msgid "Period: 123,456.78"
-msgstr ""
+msgstr "Punt: 123,456.78"
 
 #: ../src/import-export/import-format-dialog.c:67
 msgid "Comma: 123.456,78"
-msgstr ""
+msgstr "Komma: 123.456,78"
 
 #: ../src/import-export/import-format-dialog.c:75
 msgid "m/d/y"
-msgstr ""
+msgstr "m/d/j"
 
 #: ../src/import-export/import-format-dialog.c:83
 msgid "d/m/y"
-msgstr ""
+msgstr "d/m/j"
 
 #: ../src/import-export/import-format-dialog.c:91
 msgid "y/m/d"
-msgstr ""
+msgstr "j/m/d"
 
 #: ../src/import-export/import-format-dialog.c:99
 msgid "y/d/m"
-msgstr ""
+msgstr "j/d/m"
 
 #: ../src/import-export/import-main-matcher.c:222
-#, fuzzy
 msgid "Destination account for the auto-balance split."
 msgstr "Doelrekening voor de automatische saldo-opsplitsing."
 
