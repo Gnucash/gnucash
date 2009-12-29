@@ -40,8 +40,8 @@ second value and press Enter to record the calculated amount.")
 
  N_( "Quick-fill makes it easy to enter common transactions.  When you \
 type the first letter(s) of a common transaction description, \
-GnuCash will automatically complete the remainder of the \
-transaction as it was last entered.")
+then press the Tab key, GnuCash will automatically complete \
+the remainder of the transaction as it was last entered.")
 
  N_( "Type the first letter(s) of an existing account name in the \
 Transfer register column, and GnuCash will complete the name from \
