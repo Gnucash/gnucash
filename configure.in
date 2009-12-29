@@ -1653,11 +1653,6 @@ AC_CONFIG_FILES(po/Makefile.in
 )
 AC_OUTPUT
 
-pkgdatadir=${prefix}/${PACKAGE}
-output_qof_prefix=`eval eval eval echo $QOF_PREFIX`
-output_qof_lib_dir=`eval eval eval echo $QOF_LIB_DIR`
-output_qof_xml_dir=`eval eval eval echo $QOF_XML_DIR`
-
 if test x${DBI_DIR} != x; then
 components="$components dbi"
 fi
@@ -1683,10 +1678,6 @@ AC_MSG_RESULT([
   CFLAGS ............... : $CFLAGS
   LDFLAGS .............. : $LDFLAGS
   prefix................ : ${prefix}
-  QOF support .......... : $QOF_VERSION
-  QOF location ......... : $output_qof_prefix
-  QOF library dir ...... : $output_qof_lib_dir
-  QOF backend config ... : $output_qof_xml_dir
 
 
 ])
