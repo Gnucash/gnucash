@@ -195,7 +195,7 @@ gnc_ext_gen_action_name (const gchar *name)
 
   // 'Mum & ble' => 'Mumble'
   for ( extChar = name; *extChar != '\0'; extChar++ ) {
-    if ( ! isalpha( *extChar ) )
+    if ( ! isalnum( *extChar ) )
       continue;
     g_string_append_c( actionName, *extChar );
   }
