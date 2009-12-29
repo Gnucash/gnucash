@@ -38,6 +38,6 @@ gnc_xml_parse_file(sixtp *top_parser, const char *filename,
     gpdata.parsedata = parsedata;
     gpdata.bookdata = bookdata;
 
-    return sixtp_parse_file(top_parser, filename, 
+    return sixtp_parse_file(top_parser, filename,
                             NULL, &gpdata, &parse_result);
 }

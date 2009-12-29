@@ -19,7 +19,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/* 
+/*
  * FILE:
  * PostgresBackend.h
  *
@@ -47,76 +47,78 @@
 
 typedef struct _pgend PGBackend;
 
-typedef enum {
-   MODE_NONE = 0,
-   MODE_SINGLE_FILE =1,
-   MODE_SINGLE_UPDATE,
-   MODE_POLL,
-   MODE_EVENT
+typedef enum
+{
+    MODE_NONE = 0,
+    MODE_SINGLE_FILE = 1,
+    MODE_SINGLE_UPDATE,
+    MODE_POLL,
+    MODE_EVENT
 } AccessMode;
 
 #define MAX_VERSION_AGE 10
 
 #include "qofbackend-p.h"
-struct _pgend {
-   QofBackend be;
+struct _pgend
+{
+    QofBackend be;
 
-   /* session mode */
-   AccessMode session_mode;
-   GUID *sessionGuid;
-   char session_guid_str[GUID_ENCODING_LENGTH+1];
+    /* session mode */
+    AccessMode session_mode;
+    GUID *sessionGuid;
+    char session_guid_str[GUID_ENCODING_LENGTH+1];
 
-   /* sql query compiler */
-   sqlBuilder *builder;
+    /* sql query compiler */
+    sqlBuilder *builder;
 
-   /* postgres-specific connection data */
-   char * hostname;
-   char * portno;
-   char * username;
-   char * dbName;
-   PGconn * connection;
-   gboolean freshly_created_db;
-   gboolean freshly_created_prdb;
+    /* postgres-specific connection data */
+    char * hostname;
+    char * portno;
+    char * username;
+    char * dbName;
+    PGconn * connection;
+    gboolean freshly_created_db;
+    gboolean freshly_created_prdb;
 
-   /* counter used to nest callback disables */
-   int nest_count;
-   /* callback hooks are saved in snr during disables */
-   QofBackend snr;    
+    /* counter used to nest callback disables */
+    int nest_count;
+    /* callback hooks are saved in snr during disables */
+    QofBackend snr;
 
-   /* my postgres backend pid, used for telling apart notifies */
-   int my_pid;
+    /* my postgres backend pid, used for telling apart notifies */
+    int my_pid;
 
-   /* notify counters */
-   int do_account;
-   int do_book;
-   int do_checkpoint;
-   int do_price;
-   int do_session;
-   int do_transaction;
+    /* notify counters */
+    int do_account;
+    int do_book;
+    int do_checkpoint;
+    int do_price;
+    int do_session;
+    int do_transaction;
 
-   /* notify dates */
-   Timespec last_account;
-   Timespec last_price;
-   Timespec last_transaction;
+    /* notify dates */
+    Timespec last_account;
+    Timespec last_price;
+    Timespec last_transaction;
 
-   guint32 version_check; /* data aging timestamp */
+    guint32 version_check; /* data aging timestamp */
 
-   /* scratch space for constructing queries */ 
-   int bufflen;
-   char *buff;
-   int nrows;  /* number of rows in query result */
+    /* scratch space for constructing queries */
+    int bufflen;
+    char *buff;
+    int nrows;  /* number of rows in query result */
 
-   /* kvp path cache */
-   char **path_cache;
-   int path_cache_size;
-   int ipath_max;
+    /* kvp path cache */
+    char **path_cache;
+    int path_cache_size;
+    int ipath_max;
 
-   /* engine data caches */
-   QofSession *session;
-   QofBook *book;  /* the currently open book -- XXX -- depricate ???*/
-   QofBookList *blist;  /* list of books in this db */
+    /* engine data caches */
+    QofSession *session;
+    QofBook *book;  /* the currently open book -- XXX -- depricate ???*/
+    QofBookList *blist;  /* list of books in this db */
 
-   GList *tmp_return;
+    GList *tmp_return;
 };
 
 /*

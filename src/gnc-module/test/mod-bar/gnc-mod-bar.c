@@ -18,23 +18,26 @@ int libgncmodbar_gnc_module_age = 0;
 int libgncmodbar_gnc_module_revision = 0;
 
 char *
-libgncmodbar_gnc_module_path(void) {
-  return g_strdup("gnucash/bar");
+libgncmodbar_gnc_module_path(void)
+{
+    return g_strdup("gnucash/bar");
 }
 
 char *
-libgncmodbar_gnc_module_description(void) {
-  return g_strdup("this is a bar module");
+libgncmodbar_gnc_module_description(void)
+{
+    return g_strdup("this is a bar module");
 }
 
 int
-libgncmodbar_gnc_module_init(int refcount) {
-  /* publish the wrapped Scheme bindings for libbar */
-  scm_init_sw_bar_module();
-  scm_c_eval_string("(use-modules (sw_bar))");
+libgncmodbar_gnc_module_init(int refcount)
+{
+    /* publish the wrapped Scheme bindings for libbar */
+    scm_init_sw_bar_module();
+    scm_c_eval_string("(use-modules (sw_bar))");
 
-  /* use the Scheme "bar" module */
-  scm_c_eval_string("(use-modules (gnucash bar))");
+    /* use the Scheme "bar" module */
+    scm_c_eval_string("(use-modules (gnucash bar))");
 
-  return TRUE;
+    return TRUE;
 }

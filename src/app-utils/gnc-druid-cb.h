@@ -41,16 +41,16 @@ typedef struct _GNCDruidCBClass GNCDruidCBClass;
 
 struct _GNCDruidCB
 {
-  GObject obj;
+    GObject obj;
 
-  GNCDruid* druid_ctx;
-  GNCDruidProvider* prov_ctx;
-  gpointer be_ctx;
+    GNCDruid* druid_ctx;
+    GNCDruidProvider* prov_ctx;
+    gpointer be_ctx;
 };
 
 struct _GNCDruidCBClass
 {
-  GObjectClass parent_class;
+    GObjectClass parent_class;
 };
 
 GType	gnc_druid_cb_get_type(void);

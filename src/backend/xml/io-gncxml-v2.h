@@ -100,15 +100,15 @@ struct sixtp_gdv2
 #define GNC_FILE_BACKEND_VERS	2
 typedef struct
 {
-  int		version;	/* backend version number */
-  const char *	type_name;	/* The XML tag for this type */
+    int		version;	/* backend version number */
+    const char *	type_name;	/* The XML tag for this type */
 
-  sixtp *	(*create_parser) (void);
-  gboolean	(*add_item)(sixtp_gdv2 *, gpointer obj);
-  int	      (*get_count) (QofBook *);
-  void		(*write) (FILE*, QofBook*);
-  void		(*scrub) (QofBook *);
-  void		(*ns) (FILE*);
+    sixtp *	(*create_parser) (void);
+    gboolean	(*add_item)(sixtp_gdv2 *, gpointer obj);
+    int	      (*get_count) (QofBook *);
+    void		(*write) (FILE*, QofBook*);
+    void		(*scrub) (QofBook *);
+    void		(*ns) (FILE*);
 } GncXmlDataType_t;
 
 /**
@@ -119,9 +119,9 @@ typedef struct
  **/
 typedef struct
 {
-	AccountList	*accts;
-	TransList	*transactions;
-	QofBook *book;
+    AccountList	*accts;
+    TransList	*transactions;
+    QofBook *book;
 } gnc_template_xaction_data;
 
 /** Call after loading each record */
@@ -137,9 +137,9 @@ gboolean gnc_book_write_to_xml_file_v2(QofBook *book, const char *filename, gboo
 /** write just the commodities and accounts to a file */
 gboolean gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE *fh);
 gboolean gnc_book_write_accounts_to_xml_file_v2(QofBackend * be, QofBook *book,
-						const char *filename);
+        const char *filename);
 
-/** The is_gncxml_file() routine checks to see if the first few 
+/** The is_gncxml_file() routine checks to see if the first few
  * chars of the file look like gnc-xml data.
  */
 gboolean gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding);
@@ -150,9 +150,10 @@ gboolean gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding);
 void gnc_xml2_write_namespace_decl (FILE *out, const char *namespace);
 
 
-typedef struct {
-  GQuark encoding;
-  gchar *utf8_string;
+typedef struct
+{
+    GQuark encoding;
+    gchar *utf8_string;
 } conv_type;
 
 /** Read a file as plain byte stream to find words that are not completely ASCII.

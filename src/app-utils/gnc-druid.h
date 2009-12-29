@@ -44,31 +44,31 @@ typedef void GNCDruidPage;	/* completely opaque.Do we need to know anything? */
 
 struct _GNCDruid
 {
-  GObject obj;
+    GObject obj;
 
-  /* PROVIDED BY TOOLKIT IMPLEMENTATION... */
-  const gchar *ui_type;
+    /* PROVIDED BY TOOLKIT IMPLEMENTATION... */
+    const gchar *ui_type;
 
-  /* PROVIDED HEREIN */
-  GList *providers;		/* list of GNCProvider*; list is owned herein */
-  GList *this_provider;		/* a pointer to the current provider */
-  GNCDruidProvider *provider;	/* current provider */
+    /* PROVIDED HEREIN */
+    GList *providers;		/* list of GNCProvider*; list is owned herein */
+    GList *this_provider;		/* a pointer to the current provider */
+    GNCDruidProvider *provider;	/* current provider */
 
-  /* Backend information */
-  gpointer be_ctx;		/* backend context pointer */
-  gboolean (*finish)(gpointer);	/* backend 'finish process' pointer */
-  void (*cancel)(gpointer);	/* backend 'cancel process' pointer */
+    /* Backend information */
+    gpointer be_ctx;		/* backend context pointer */
+    gboolean (*finish)(gpointer);	/* backend 'finish process' pointer */
+    void (*cancel)(gpointer);	/* backend 'cancel process' pointer */
 
-  gint jump_count;
+    gint jump_count;
 };
 
 struct _GNCDruidClass
 {
-  GObjectClass parent_class;
+    GObjectClass parent_class;
 
-  /* virtual methods */
-  void	(*set_page)(GNCDruid*, GNCDruidPage*);
-  void	(*append_provider)(GNCDruid*, GNCDruidProvider*);
+    /* virtual methods */
+    void	(*set_page)(GNCDruid*, GNCDruidPage*);
+    void	(*append_provider)(GNCDruid*, GNCDruidProvider*);
 };
 
 GType	gnc_druid_get_type(void);
@@ -102,9 +102,9 @@ void gnc_druid_jump_to_provider(GNCDruid*, GNCDruidProvider*);
  * the druid and will be freed by the druid.
  */
 GNCDruid* gnc_druid_new(const gchar* title,
-			GList *providers, gpointer backend_ctx,
-			gboolean (*finish)(gpointer be_ctx),
-			void (*cancel)(gpointer be_ctx));
+                        GList *providers, gpointer backend_ctx,
+                        gboolean (*finish)(gpointer be_ctx),
+                        void (*cancel)(gpointer be_ctx));
 
 #ifdef __cplusplus
 //}

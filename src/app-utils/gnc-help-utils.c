@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-help-utils.c
  *
  * Copyright (C) 2007 Andreas Koehler <andi5.py@gmx.net>
@@ -55,12 +55,13 @@ parse_hhmap_file(const gchar *chmfile)
     keyfile = g_key_file_new();
     if (!g_key_file_load_from_file(keyfile, mapfile, G_KEY_FILE_NONE, &error))
         goto cleanup_parse;
-        
+
     if (NULL == (keys = g_key_file_get_keys(keyfile, "Map", NULL, &error)))
         goto cleanup_parse;
 
     ctxtmap = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
-    for (key=keys; *key; key++) {
+    for (key = keys; *key; key++)
+    {
         value = g_key_file_get_integer(keyfile, "Map", *key, &error);
         if (error)
             goto cleanup_parse;
@@ -68,8 +69,9 @@ parse_hhmap_file(const gchar *chmfile)
             g_hash_table_insert(ctxtmap, g_strdup(*key), GINT_TO_POINTER(value));
     }
 
- cleanup_parse:
-    if (error) {
+cleanup_parse:
+    if (error)
+    {
         g_warning("Could not load help map file: %s", error->message);
         g_error_free(error);
         if (ctxtmap)
@@ -98,22 +100,28 @@ gnc_show_htmlhelp(const gchar *chmfile, const gchar *anchor)
 
     g_return_if_fail(chmfile);
 
-    if (anchor) {
+    if (anchor)
+    {
         G_LOCK(chmfile_ctxtmap_map);
-        if (!chmfile_ctxtmap_map) {
+        if (!chmfile_ctxtmap_map)
+        {
             chmfile_ctxtmap_map = g_hash_table_new(g_str_hash, g_str_equal);
             create_map = TRUE;
-        } else {
+        }
+        else
+        {
             create_map = !g_hash_table_lookup_extended(
-                chmfile_ctxtmap_map, chmfile, NULL, (gpointer) &ctxtmap);
+                             chmfile_ctxtmap_map, chmfile, NULL, (gpointer) & ctxtmap);
         }
 
-        if (create_map) {
+        if (create_map)
+        {
             ctxtmap = parse_hhmap_file(chmfile);
             g_hash_table_insert(chmfile_ctxtmap_map, g_strdup(chmfile), ctxtmap);
         }
 
-        if (ctxtmap) {
+        if (ctxtmap)
+        {
             gpointer ptr = g_hash_table_lookup(ctxtmap, anchor);
             if (ptr)
                 id = GPOINTER_TO_INT(ptr);

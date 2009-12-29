@@ -28,10 +28,11 @@
 
 #include "sixtp.h"
 
-typedef struct {
-  Timespec ts;
-  guint s_block_count;
-  guint ns_block_count;
+typedef struct
+{
+    Timespec ts;
+    guint s_block_count;
+    guint ns_block_count;
 } TimespecParseInfo;
 
 #define TIMESPEC_TIME_FORMAT  "%Y-%m-%d %H:%M:%S"
@@ -41,11 +42,11 @@ typedef struct {
 gboolean isspace_str(const gchar *str, int nomorethan);
 
 gboolean allow_and_ignore_only_whitespace(GSList *sibling_data,
-                                          gpointer parent_data,
-                                          gpointer global_data,
-                                          gpointer *result,
-                                          const char *text,
-                                          int length);
+        gpointer parent_data,
+        gpointer global_data,
+        gpointer *result,
+        const char *text,
+        int length);
 
 gboolean generic_accumulate_chars(GSList *sibling_data,
                                   gpointer parent_data,
@@ -74,12 +75,12 @@ gboolean string_to_gint32(const gchar *str, gint32 *v);
 gboolean hex_string_to_binary(const gchar *str,  void **v, guint64 *data_len);
 
 gboolean generic_return_chars_end_handler(gpointer data_for_children,
-                                          GSList* data_from_children,
-                                          GSList* sibling_data,
-                                          gpointer parent_data,
-                                          gpointer global_data,
-                                          gpointer *result,
-                                          const gchar *tag);
+        GSList* data_from_children,
+        GSList* sibling_data,
+        gpointer parent_data,
+        gpointer global_data,
+        gpointer *result,
+        const gchar *tag);
 
 sixtp* simple_chars_only_parser_new(sixtp_end_handler end_handler);
 

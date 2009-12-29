@@ -18,23 +18,26 @@ int libgncmodfoo_gnc_module_age = 0;
 int libgncmodfoo_gnc_module_revision = 0;
 
 char *
-libgncmodfoo_gnc_module_path(void) {
-  return g_strdup("gnucash/foo");
+libgncmodfoo_gnc_module_path(void)
+{
+    return g_strdup("gnucash/foo");
 }
 
 char *
-libgncmodfoo_gnc_module_description(void) {
-  return g_strdup("this is a foo module");
+libgncmodfoo_gnc_module_description(void)
+{
+    return g_strdup("this is a foo module");
 }
 
 int
-libgncmodfoo_gnc_module_init(int refcount) {
-  /* publish the wrapped Scheme bindings for libfoo */
-  scm_init_sw_foo_module();
-  scm_c_eval_string("(use-modules (sw_foo))");
+libgncmodfoo_gnc_module_init(int refcount)
+{
+    /* publish the wrapped Scheme bindings for libfoo */
+    scm_init_sw_foo_module();
+    scm_c_eval_string("(use-modules (sw_foo))");
 
-  /* use the Scheme "foo" module */
-  scm_c_eval_string("(use-modules (gnucash foo))");
+    /* use the Scheme "foo" module */
+    scm_c_eval_string("(use-modules (gnucash foo))");
 
-  return TRUE;
+    return TRUE;
 }

@@ -49,66 +49,67 @@ static QofLogModule log_module = QOF_MOD_KVP;
 static gpointer
 iguid_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-  int iguid = atoi (DB_GET_VAL ("iguid", 0));
-  guint32 ret = iguid;
-  return GUINT_TO_POINTER (ret);
+    int iguid = atoi (DB_GET_VAL ("iguid", 0));
+    guint32 ret = iguid;
+    return GUINT_TO_POINTER (ret);
 }
 
 
 guint32
 pgendNewGUIDidx (PGBackend *be)
 {
-   guint32 iguid;
-   char * p;
+    guint32 iguid;
+    char * p;
 
-   p = "SELECT nextval('gnc_iguid_seq') AS iguid;";
-   SEND_QUERY (be, p, 0);
-   iguid = GPOINTER_TO_UINT (pgendGetResults (be, iguid_cb,
-                                              GUINT_TO_POINTER (0)));
-   return iguid;
+    p = "SELECT nextval('gnc_iguid_seq') AS iguid;";
+    SEND_QUERY (be, p, 0);
+    iguid = GPOINTER_TO_UINT (pgendGetResults (be, iguid_cb,
+                              GUINT_TO_POINTER (0)));
+    return iguid;
 }
 
 /* =========================================================== */
-/* given integer ipath (path id) and a string, poke the string 
+/* given integer ipath (path id) and a string, poke the string
  * into a cache in local memory
  */
 
 static void
 pgendPokePathCache (PGBackend *be, int ipath, const char *path_str)
 {
-   int i;
+    int i;
 
-   /* get more memory for cache if needed */
-   if (ipath >= be->path_cache_size)
-   {
-      be->path_cache = 
-         (char **) g_realloc (be->path_cache, (ipath+100)*sizeof (char *));
-      for (i=be->path_cache_size; i<ipath+100; i++) {
-        (be->path_cache)[i] = NULL;
-      }
-      be->path_cache_size = ipath+100;
-   }
+    /* get more memory for cache if needed */
+    if (ipath >= be->path_cache_size)
+    {
+        be->path_cache =
+            (char **) g_realloc (be->path_cache, (ipath + 100) * sizeof (char *));
+        for (i = be->path_cache_size; i < ipath + 100; i++)
+        {
+            (be->path_cache)[i] = NULL;
+        }
+        be->path_cache_size = ipath + 100;
+    }
 
-   /* poke string into slot ipath */
-   if (NULL == (be->path_cache)[ipath])
-   {
-       (be->path_cache)[ipath] = g_strdup (path_str);
-   }
+    /* poke string into slot ipath */
+    if (NULL == (be->path_cache)[ipath])
+    {
+        (be->path_cache)[ipath] = g_strdup (path_str);
+    }
 
-   if (be->ipath_max < ipath) be->ipath_max = ipath;
+    if (be->ipath_max < ipath) be->ipath_max = ipath;
 }
 
 /* =========================================================== */
-/* given an integer ipath (path id), return the path string 
- * from local memory 
+/* given an integer ipath (path id), return the path string
+ * from local memory
  */
 
 static char *
 pgendPeekPathCache (PGBackend *be, int ipath)
 {
-   if (ipath > be->ipath_max) return NULL;
-   if (0 >= ipath) return NULL;
-   return (be->path_cache)[ipath];
+    if (ipath > be->ipath_max) return NULL;
+    if (0 >= ipath) return NULL;
+    return (be->path_cache)[ipath];
 }
 
 /* =========================================================== */
@@ -117,46 +118,48 @@ pgendPeekPathCache (PGBackend *be, int ipath)
 static gpointer
 ival_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-  int ival = atoi (DB_GET_VAL ("ipath", 0));
-  return GINT_TO_POINTER(ival);
+    int ival = atoi (DB_GET_VAL ("ipath", 0));
+    return GINT_TO_POINTER(ival);
 }
 
 
 static int
 pgendGetCache (PGBackend *be, const char *val_str, sqlEscape *escape)
 {
-   char *p;
-   int ival =0;
+    char *p;
+    int ival = 0;
 
-   if (!be || !val_str || !escape) return 0;
+    if (!be || !val_str || !escape) return 0;
 
-   val_str = sqlEscapeString (escape, val_str);
+    val_str = sqlEscapeString (escape, val_str);
 
-   /* first, lets see if we can find the guid or path. 
-    * If we can then  just return it */
-   p = be->buff; *p = 0;
-   p = stpcpy (p, "SELECT ipath FROM gncPathCache WHERE path='");
-   p = stpcpy (p, val_str);
-   p = stpcpy (p, "';");
+    /* first, lets see if we can find the guid or path.
+     * If we can then  just return it */
+    p = be->buff;
+    *p = 0;
+    p = stpcpy (p, "SELECT ipath FROM gncPathCache WHERE path='");
+    p = stpcpy (p, val_str);
+    p = stpcpy (p, "';");
 
-   SEND_QUERY (be,be->buff, 0);
-   ival = GPOINTER_TO_INT(pgendGetResults (be, ival_cb, (gpointer) 0));
-   if (ival) return ival;
+    SEND_QUERY (be, be->buff, 0);
+    ival = GPOINTER_TO_INT(pgendGetResults (be, ival_cb, (gpointer) 0));
+    if (ival) return ival;
 
-   /* Else, this guid has never been stored before. 
-    * Poke it into the the database */
+    /* Else, this guid has never been stored before.
+     * Poke it into the the database */
 
-   p = be->buff; *p = 0;
-   p = stpcpy (p, "INSERT INTO gncPathCache (path) VALUES ('");
-   p = stpcpy (p, val_str);
-   p = stpcpy (p, "');");
+    p = be->buff;
+    *p = 0;
+    p = stpcpy (p, "INSERT INTO gncPathCache (path) VALUES ('");
+    p = stpcpy (p, val_str);
+    p = stpcpy (p, "');");
 
-   SEND_QUERY (be,be->buff, 0);
-   FINISH_QUERY(be->connection);
+    SEND_QUERY (be, be->buff, 0);
+    FINISH_QUERY(be->connection);
 
-   /* and requery to get the serial number ... */
-   ival = pgendGetCache (be, val_str, escape);
-   return ival;
+    /* and requery to get the serial number ... */
+    ival = pgendGetCache (be, val_str, escape);
+    return ival;
 }
 
 /* =========================================================== */
@@ -165,13 +168,13 @@ pgendGetCache (PGBackend *be, const char *val_str, sqlEscape *escape)
 static int
 pgendGetPathCache (PGBackend *be, const char *path_str, sqlEscape *escape)
 {
-   int ival;
-   ival = pgendGetCache (be, path_str, escape);
-   PINFO ("cached %d for %s", ival, path_str ? path_str : "(null)");
+    int ival;
+    ival = pgendGetCache (be, path_str, escape);
+    PINFO ("cached %d for %s", ival, path_str ? path_str : "(null)");
 
-   if (0 >= ival) return ival;
-   pgendPokePathCache (be, ival, path_str);
-   return ival;
+    if (0 >= ival) return ival;
+    pgendPokePathCache (be, ival, path_str);
+    return ival;
 }
 
 /* =========================================================== */
@@ -179,211 +182,214 @@ pgendGetPathCache (PGBackend *be, const char *path_str, sqlEscape *escape)
  * of a traversal callback.  The store_cb() routine is the callback.
  */
 
-typedef struct store_data_s {
-   PGBackend *be;
-   sqlEscape *escape;
-   int iguid;
-   int ipath;
-   char *path;
-   char *stype;
-   union {
-      gint64 ival;
-      double dbl;
-      gnc_numeric numeric;
-      const char *str;
-      const GUID *guid;
-      Timespec ts;
-      GList *list;
-   } u;
+typedef struct store_data_s
+{
+    PGBackend *be;
+    sqlEscape *escape;
+    int iguid;
+    int ipath;
+    char *path;
+    char *stype;
+    union
+    {
+        gint64 ival;
+        double dbl;
+        gnc_numeric numeric;
+        const char *str;
+        const GUID *guid;
+        Timespec ts;
+        GList *list;
+    } u;
 } store_data_t;
 
 #include "kvp-autogen.h"
 #include "kvp-autogen.c"
 
-static void 
+static void
 store_cb (const char *key, KvpValue *val, gpointer p)
 {
-   store_data_t *cb_data = (store_data_t *) p;
-   PGBackend *be = cb_data->be;
-   int ipath;
-   char *path_save;
+    store_data_t *cb_data = (store_data_t *) p;
+    PGBackend *be = cb_data->be;
+    int ipath;
+    char *path_save;
 
-   path_save = cb_data->path;
-   cb_data->path = g_strjoin ("/", path_save, key, NULL);
+    path_save = cb_data->path;
+    cb_data->path = g_strjoin ("/", path_save, key, NULL);
 
-   ipath = pgendGetPathCache (be, cb_data->path, cb_data->escape);
-   cb_data->ipath = ipath;
+    ipath = pgendGetPathCache (be, cb_data->path, cb_data->escape);
+    cb_data->ipath = ipath;
 
-   if (ipath)
-   {
+    if (ipath)
+    {
 
-      switch (kvp_value_get_type (val))
-      {
-         case KVP_TYPE_GINT64:
-            {
-               gint64 ival = kvp_value_get_gint64 (val);
-               PINFO ("path=%s type=gint64 val=%" G_GINT64_FORMAT,
-                      cb_data->path,
-                      ival);
+        switch (kvp_value_get_type (val))
+        {
+        case KVP_TYPE_GINT64:
+        {
+            gint64 ival = kvp_value_get_gint64 (val);
+            PINFO ("path=%s type=gint64 val=%" G_GINT64_FORMAT,
+                   cb_data->path,
+                   ival);
 
-               cb_data->stype = "int8";
-               cb_data->u.ival = ival;
-               pgendPutOneKVPint64Only (be, cb_data);
-            }
-            break;
+            cb_data->stype = "int8";
+            cb_data->u.ival = ival;
+            pgendPutOneKVPint64Only (be, cb_data);
+        }
+        break;
 
-         case KVP_TYPE_DOUBLE:
-            {
-               double ival = kvp_value_get_double (val);
-               PINFO ("path=%s type=double val=%g", cb_data->path, ival);
+        case KVP_TYPE_DOUBLE:
+        {
+            double ival = kvp_value_get_double (val);
+            PINFO ("path=%s type=double val=%g", cb_data->path, ival);
 
-               cb_data->stype = "flt8";
-               cb_data->u.dbl = ival;
-               pgendPutOneKVPdoubleOnly (be, cb_data);
-            }
-            break;
+            cb_data->stype = "flt8";
+            cb_data->u.dbl = ival;
+            pgendPutOneKVPdoubleOnly (be, cb_data);
+        }
+        break;
 
-         case KVP_TYPE_NUMERIC:
-            {
-               gnc_numeric ival = kvp_value_get_numeric (val);
-               PINFO ("path=%s type=numeric val=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
-                      cb_data->path,
-                      ival.num,
-                      ival.denom);
+        case KVP_TYPE_NUMERIC:
+        {
+            gnc_numeric ival = kvp_value_get_numeric (val);
+            PINFO ("path=%s type=numeric val=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
+                   cb_data->path,
+                   ival.num,
+                   ival.denom);
 
-               cb_data->stype = "frac";
-               cb_data->u.numeric = ival;
-               pgendPutOneKVPnumericOnly (be, cb_data);
-            }
-            break;
+            cb_data->stype = "frac";
+            cb_data->u.numeric = ival;
+            pgendPutOneKVPnumericOnly (be, cb_data);
+        }
+        break;
 
-         case KVP_TYPE_STRING:
-            {
-               const char *str = kvp_value_get_string (val);
-               PINFO ("path=%s type=str val=%s", cb_data->path, str);
+        case KVP_TYPE_STRING:
+        {
+            const char *str = kvp_value_get_string (val);
+            PINFO ("path=%s type=str val=%s", cb_data->path, str);
 
-               cb_data->stype = "text";
-               cb_data->u.str = str;
-               pgendPutOneKVPstringOnly (be, cb_data);
-            }
-            break;
+            cb_data->stype = "text";
+            cb_data->u.str = str;
+            pgendPutOneKVPstringOnly (be, cb_data);
+        }
+        break;
 
-         case KVP_TYPE_GUID:
-            {
-               char guid_str[GUID_ENCODING_LENGTH+1];
-               const GUID *guid = kvp_value_get_guid(val);
-               guid_to_string_buff (guid, guid_str);
-               PINFO ("path=%s type=guid val=%s", cb_data->path, guid_str);
+        case KVP_TYPE_GUID:
+        {
+            char guid_str[GUID_ENCODING_LENGTH+1];
+            const GUID *guid = kvp_value_get_guid(val);
+            guid_to_string_buff (guid, guid_str);
+            PINFO ("path=%s type=guid val=%s", cb_data->path, guid_str);
 
-               cb_data->stype = "guid";
-               cb_data->u.str = guid_str;
-               pgendPutOneKVPguidOnly (be, cb_data);
-            }
-            break;
+            cb_data->stype = "guid";
+            cb_data->u.str = guid_str;
+            pgendPutOneKVPguidOnly (be, cb_data);
+        }
+        break;
 
-         case KVP_TYPE_TIMESPEC:
-           {
-             PINFO ("path=%s type=timespec", cb_data->path);
-             cb_data->stype = "time";
-             cb_data->u.ts = kvp_value_get_timespec (val);
-             pgendPutOneKVPtimespecOnly (be, cb_data);
-           }
-           break;
+        case KVP_TYPE_TIMESPEC:
+        {
+            PINFO ("path=%s type=timespec", cb_data->path);
+            cb_data->stype = "time";
+            cb_data->u.ts = kvp_value_get_timespec (val);
+            pgendPutOneKVPtimespecOnly (be, cb_data);
+        }
+        break;
 
-         case KVP_TYPE_BINARY:
+        case KVP_TYPE_BINARY:
             PERR ("Binary KVP Type not yet implemented\n");
             break;
 
-         case KVP_TYPE_GLIST:
-            {
-               GList *start;
-               start = kvp_value_get_glist (val);
-               PINFO ("path=%s type=glist", cb_data->path);
+        case KVP_TYPE_GLIST:
+        {
+            GList *start;
+            start = kvp_value_get_glist (val);
+            PINFO ("path=%s type=glist", cb_data->path);
 
-               cb_data->stype = "list";
-               cb_data->u.list = start;
-               PERR ("List KVP Type not yet implemented\n");
-            }
-            break;
+            cb_data->stype = "list";
+            cb_data->u.list = start;
+            PERR ("List KVP Type not yet implemented\n");
+        }
+        break;
 
-         case KVP_TYPE_FRAME: 
-            {
-               KvpFrame *frame;
-               PINFO ("path=%s type=frame", cb_data->path);
-               frame = kvp_value_get_frame (val);
-               kvp_frame_for_each_slot (frame, store_cb, p);
-            }
-            break;
+        case KVP_TYPE_FRAME:
+        {
+            KvpFrame *frame;
+            PINFO ("path=%s type=frame", cb_data->path);
+            frame = kvp_value_get_frame (val);
+            kvp_frame_for_each_slot (frame, store_cb, p);
+        }
+        break;
 
-         default:
-            PERR("Unknown type %d for path=%s\n", 
+        default:
+            PERR("Unknown type %d for path=%s\n",
                  kvp_value_get_type (val), cb_data->path);
-      }
-   }
+        }
+    }
 
-   g_free (cb_data->path);
-   cb_data->path = path_save;
+    g_free (cb_data->path);
+    cb_data->path = path_save;
 }
 
-void 
+void
 pgendKVPStore (PGBackend *be, guint32 iguid, KvpFrame *kf)
 {
-   store_data_t cb_data;
-   if (!be || 0 == iguid || !kf) return;
-   ENTER (" ");
+    store_data_t cb_data;
+    if (!be || 0 == iguid || !kf) return;
+    ENTER (" ");
 
-   cb_data.be = be;
-   cb_data.escape = sqlEscape_new ();
-   cb_data.iguid = iguid;
-   cb_data.path = "";
+    cb_data.be = be;
+    cb_data.escape = sqlEscape_new ();
+    cb_data.iguid = iguid;
+    cb_data.path = "";
 
-   kvp_frame_for_each_slot (kf, store_cb, &cb_data);
+    kvp_frame_for_each_slot (kf, store_cb, &cb_data);
 
-   sqlEscape_destroy (cb_data.escape);
+    sqlEscape_destroy (cb_data.escape);
 
-   LEAVE (" ");
+    LEAVE (" ");
 }
 
 /* =========================================================== */
-/* These functions suck new, unknown paths out of the database 
+/* These functions suck new, unknown paths out of the database
  * and poke them into our local cache.
  */
 
-static gpointer 
+static gpointer
 path_loader (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   int ipath = atoi (DB_GET_VAL ("ipath", j));
-   char *path = DB_GET_VAL ("path", j);
-   pgendPokePathCache (be, ipath, path);
-   return 0;
+    int ipath = atoi (DB_GET_VAL ("ipath", j));
+    char *path = DB_GET_VAL ("path", j);
+    pgendPokePathCache (be, ipath, path);
+    return 0;
 }
 
 void
 pgendKVPInit (PGBackend *be)
 {
-   char *p;
+    char *p;
 
-   /* don't re-init multiple times in single-user mode.
-    * Once is enough.  But in multi-user mode, we need to
-    * check constantly, since other users may have added
-    * more paths. 
-    */
-   if (((MODE_SINGLE_UPDATE == be->session_mode) || 
-        (MODE_SINGLE_FILE   == be->session_mode)) &&
-        (0 < be->ipath_max)) return;
+    /* don't re-init multiple times in single-user mode.
+     * Once is enough.  But in multi-user mode, we need to
+     * check constantly, since other users may have added
+     * more paths.
+     */
+    if (((MODE_SINGLE_UPDATE == be->session_mode) ||
+            (MODE_SINGLE_FILE   == be->session_mode)) &&
+            (0 < be->ipath_max)) return;
 
-   /* get new paths out of the database */
-   p = be->buff; *p=0;
-   p = stpcpy (p, "SELECT * FROM gncPathCache WHERE ipath > ");
-   p += sprintf (p, "%d", be->ipath_max);
-   p = stpcpy (p, ";");
-   SEND_QUERY (be,be->buff, );
-   pgendGetResults (be, path_loader, NULL);
+    /* get new paths out of the database */
+    p = be->buff;
+    *p = 0;
+    p = stpcpy (p, "SELECT * FROM gncPathCache WHERE ipath > ");
+    p += sprintf (p, "%d", be->ipath_max);
+    p = stpcpy (p, ";");
+    SEND_QUERY (be, be->buff, );
+    pgendGetResults (be, path_loader, NULL);
 }
 
 /* =========================================================== */
 /* hack alert -- this code assumed that the path cache
- * is up to date, which it might not be in a multi-user world 
+ * is up to date, which it might not be in a multi-user world
  */
 
 #define KVP_HANDLER_SETUP				\
@@ -401,7 +407,7 @@ pgendKVPInit (PGBackend *be)
    tail ++;						\
 							\
    if (!kf) kf = kvp_frame_new();			\
-
+ 
 
 
 #define KVP_HANDLER_TAKEDOWN				\
@@ -413,74 +419,74 @@ pgendKVPInit (PGBackend *be)
    *tail = '/';						\
 							\
    return kf;						\
+ 
 
 
-
-static gpointer 
+static gpointer
 int64_handler (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   KVP_HANDLER_SETUP;
-   kv = kvp_value_new_gint64 (strtoll (DB_GET_VAL ("data", j), NULL, 0));
-   KVP_HANDLER_TAKEDOWN;
+    KVP_HANDLER_SETUP;
+    kv = kvp_value_new_gint64 (strtoll (DB_GET_VAL ("data", j), NULL, 0));
+    KVP_HANDLER_TAKEDOWN;
 }
 
-static gpointer 
+static gpointer
 dbl_handler (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   KVP_HANDLER_SETUP;
-   kv = kvp_value_new_double (atof (DB_GET_VAL ("data", j)));
-   KVP_HANDLER_TAKEDOWN;
+    KVP_HANDLER_SETUP;
+    kv = kvp_value_new_double (atof (DB_GET_VAL ("data", j)));
+    KVP_HANDLER_TAKEDOWN;
 }
 
-static gpointer 
+static gpointer
 numeric_handler (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   gnc_numeric gn;
-   KVP_HANDLER_SETUP;
-   gn.num = strtoll (DB_GET_VAL ("num", j), NULL, 0);
-   gn.denom = strtoll (DB_GET_VAL ("denom", j), NULL, 0);
-   kv = kvp_value_new_gnc_numeric (gn);
-   KVP_HANDLER_TAKEDOWN;
+    gnc_numeric gn;
+    KVP_HANDLER_SETUP;
+    gn.num = strtoll (DB_GET_VAL ("num", j), NULL, 0);
+    gn.denom = strtoll (DB_GET_VAL ("denom", j), NULL, 0);
+    kv = kvp_value_new_gnc_numeric (gn);
+    KVP_HANDLER_TAKEDOWN;
 }
 
 
-static gpointer 
+static gpointer
 str_handler (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   KVP_HANDLER_SETUP;
-   kv = kvp_value_new_string (DB_GET_VAL ("data", j));
-   KVP_HANDLER_TAKEDOWN;
+    KVP_HANDLER_SETUP;
+    kv = kvp_value_new_string (DB_GET_VAL ("data", j));
+    KVP_HANDLER_TAKEDOWN;
 }
 
 
-static gpointer 
+static gpointer
 guid_handler (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   gboolean rc;
-   GUID guid;
-   KVP_HANDLER_SETUP;
-   rc = string_to_guid ((DB_GET_VAL ("data", j)), &guid);
-   if (rc) kv = kvp_value_new_guid (&guid);
-   KVP_HANDLER_TAKEDOWN;
+    gboolean rc;
+    GUID guid;
+    KVP_HANDLER_SETUP;
+    rc = string_to_guid ((DB_GET_VAL ("data", j)), &guid);
+    if (rc) kv = kvp_value_new_guid (&guid);
+    KVP_HANDLER_TAKEDOWN;
 }
 
-static gpointer 
+static gpointer
 timespec_handler (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   Timespec ts;
-   KVP_HANDLER_SETUP;
-   ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL ("data", j));
-   kv = kvp_value_new_timespec (ts);
-   KVP_HANDLER_TAKEDOWN;
+    Timespec ts;
+    KVP_HANDLER_SETUP;
+    ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL ("data", j));
+    kv = kvp_value_new_timespec (ts);
+    KVP_HANDLER_TAKEDOWN;
 }
 
-static gpointer 
+static gpointer
 list_handler (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   KVP_HANDLER_SETUP;
-   PERR ("not implemented");
-   // kv = kvp_value_new_glist ();
-   KVP_HANDLER_TAKEDOWN;
+    KVP_HANDLER_SETUP;
+    PERR ("not implemented");
+    // kv = kvp_value_new_glist ();
+    KVP_HANDLER_TAKEDOWN;
 }
 
 #define GET_KVP(TYPE)					\
@@ -493,32 +499,32 @@ list_handler (PGBackend *be, PGresult *result, int j, gpointer data)
    kf = pgendGetResults (be, TYPE##_handler, kf);	\
 }
 
-KvpFrame * 
+KvpFrame *
 pgendKVPFetch (PGBackend *be, guint32 iguid, KvpFrame *kf)
 {
-   char * p;
-   char iguid_str[40];
-   if (!be || 0 == iguid) return kf;
+    char * p;
+    char iguid_str[40];
+    if (!be || 0 == iguid) return kf;
 
-   ENTER (" ");
+    ENTER (" ");
 
-   /* update the path cache; other users may have added more paths */
-   pgendKVPInit (be);   
+    /* update the path cache; other users may have added more paths */
+    pgendKVPInit (be);
 
-   /* get the effective iguid for this object */
-   snprintf (iguid_str, 40, "%d;", iguid);
+    /* get the effective iguid for this object */
+    snprintf (iguid_str, 40, "%d;", iguid);
 
-   /* now troll the individual tables for data */
-   GET_KVP(int64);
-   GET_KVP(dbl);
-   GET_KVP(numeric);
-   GET_KVP(str);
-   GET_KVP(guid);
-   GET_KVP(timespec);
-   GET_KVP(list);
+    /* now troll the individual tables for data */
+    GET_KVP(int64);
+    GET_KVP(dbl);
+    GET_KVP(numeric);
+    GET_KVP(str);
+    GET_KVP(guid);
+    GET_KVP(timespec);
+    GET_KVP(list);
 
-   LEAVE (" ");
-   return kf;
+    LEAVE (" ");
+    return kf;
 }
 
 /* =========================================================== */
@@ -533,49 +539,50 @@ pgendKVPFetch (PGBackend *be, guint32 iguid, KvpFrame *kf)
    p = stpcpy (p, iguid_str);						\
 }
 
-void 
+void
 pgendKVPDelete (PGBackend *be, guint32 iguid)
 {
-   char iguid_str[80], sess_str[80];
-   char * p;
+    char iguid_str[80], sess_str[80];
+    char * p;
 
-   if (!be || 0 == iguid)
-     return;
+    if (!be || 0 == iguid)
+        return;
 
-   sprintf (iguid_str, "%d;\n", iguid);
-   guid_to_string_buff (be->sessionGuid, sess_str);
+    sprintf (iguid_str, "%d;\n", iguid);
+    guid_to_string_buff (be->sessionGuid, sess_str);
 
-   /* first, copy values to the audit tables */
-   p = be->buff; *p = 0;
-   CPY_KVP("");
-   CPY_KVP("_dbl");
-   CPY_KVP("_guid");
-   CPY_KVP("_timespec");
-   CPY_KVP("_int64");
-   CPY_KVP("_list");
-   CPY_KVP("_numeric");
-   CPY_KVP("_str");
+    /* first, copy values to the audit tables */
+    p = be->buff;
+    *p = 0;
+    CPY_KVP("");
+    CPY_KVP("_dbl");
+    CPY_KVP("_guid");
+    CPY_KVP("_timespec");
+    CPY_KVP("_int64");
+    CPY_KVP("_list");
+    CPY_KVP("_numeric");
+    CPY_KVP("_str");
 
-   /* then delete the values */
-   p = stpcpy (p, "DELETE FROM gncKVPValue WHERE iguid=");
-   p = stpcpy (p, iguid_str);
-   p = stpcpy (p, "DELETE FROM gncKVPValue_dbl WHERE iguid=");
-   p = stpcpy (p, iguid_str);
-   p = stpcpy (p, "DELETE FROM gncKVPValue_guid WHERE iguid=");
-   p = stpcpy (p, iguid_str);
-   p = stpcpy (p, "DELETE FROM gncKVPValue_timespec WHERE iguid=");
-   p = stpcpy (p, iguid_str);
-   p = stpcpy (p, "DELETE FROM gncKVPValue_int64 WHERE iguid=");
-   p = stpcpy (p, iguid_str);
-   p = stpcpy (p, "DELETE FROM gncKVPValue_list WHERE iguid=");
-   p = stpcpy (p, iguid_str);
-   p = stpcpy (p, "DELETE FROM gncKVPValue_numeric WHERE iguid=");
-   p = stpcpy (p, iguid_str);
-   p = stpcpy (p, "DELETE FROM gncKVPValue_str WHERE iguid=");
-   p = stpcpy (p, iguid_str);
+    /* then delete the values */
+    p = stpcpy (p, "DELETE FROM gncKVPValue WHERE iguid=");
+    p = stpcpy (p, iguid_str);
+    p = stpcpy (p, "DELETE FROM gncKVPValue_dbl WHERE iguid=");
+    p = stpcpy (p, iguid_str);
+    p = stpcpy (p, "DELETE FROM gncKVPValue_guid WHERE iguid=");
+    p = stpcpy (p, iguid_str);
+    p = stpcpy (p, "DELETE FROM gncKVPValue_timespec WHERE iguid=");
+    p = stpcpy (p, iguid_str);
+    p = stpcpy (p, "DELETE FROM gncKVPValue_int64 WHERE iguid=");
+    p = stpcpy (p, iguid_str);
+    p = stpcpy (p, "DELETE FROM gncKVPValue_list WHERE iguid=");
+    p = stpcpy (p, iguid_str);
+    p = stpcpy (p, "DELETE FROM gncKVPValue_numeric WHERE iguid=");
+    p = stpcpy (p, iguid_str);
+    p = stpcpy (p, "DELETE FROM gncKVPValue_str WHERE iguid=");
+    p = stpcpy (p, iguid_str);
 
-   SEND_QUERY (be,be->buff, );
-   FINISH_QUERY(be->connection);
+    SEND_QUERY (be, be->buff, );
+    FINISH_QUERY(be->connection);
 }
 
 /* =========================== END OF FILE ===================== */

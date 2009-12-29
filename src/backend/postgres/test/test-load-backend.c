@@ -24,8 +24,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
- 
-#include "config.h" 
+
+#include "config.h"
 #include "qof.h"
 #include "cashobjects.h"
 #include "test-stuff.h"
@@ -34,13 +34,13 @@
 
 int main (int argc, char ** argv)
 {
-	qof_init();
-	cashobjects_register();
-	/* the test needs to run locally in case make install
-	 * has not yet been run. Use GNC_LIBDIR usually. */
-	do_test(qof_load_backend_library ("../.libs/", PG_LIB_NAME),
-		" loading gnc-backend-postgres GModule failed");
-	print_test_results();
-	qof_close();
-	return 0;
+    qof_init();
+    cashobjects_register();
+    /* the test needs to run locally in case make install
+     * has not yet been run. Use GNC_LIBDIR usually. */
+    do_test(qof_load_backend_library ("../.libs/", PG_LIB_NAME),
+            " loading gnc-backend-postgres GModule failed");
+    print_test_results();
+    qof_close();
+    return 0;
 }

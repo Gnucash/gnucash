@@ -6,8 +6,9 @@
 #include "foo.h"
 
 int
-baz_hello(void) {
-  foo_hello();  
-  return 1;
+baz_hello(void)
+{
+    foo_hello();
+    return 1;
 }
 

@@ -17,23 +17,26 @@ int libincompatdep_gnc_module_revision = 0;
 
 
 char *
-libincompatdep_gnc_module_path(void) {
-  return g_strdup("gnucash/incompatdep");
+libincompatdep_gnc_module_path(void)
+{
+    return g_strdup("gnucash/incompatdep");
 }
 
 char *
-libincompatdep_gnc_module_description(void) {
-  return g_strdup("this is a broken module");
+libincompatdep_gnc_module_description(void)
+{
+    return g_strdup("this is a broken module");
 }
 
 int
-libincompatdep_gnc_module_init(int refcount) {
-  if (gnc_module_load("gnucash/foo", 25))
-  {
-    return TRUE;
-  }
-  else
-  {
-    return FALSE;
-  }
+libincompatdep_gnc_module_init(int refcount)
+{
+    if (gnc_module_load("gnucash/foo", 25))
+    {
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
 }

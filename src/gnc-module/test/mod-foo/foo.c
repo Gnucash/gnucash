@@ -7,6 +7,7 @@
 #include "foo.h"
 
 int
-foo_hello(void) {
-  return 10;
+foo_hello(void)
+{
+    return 10;
 }

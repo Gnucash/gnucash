@@ -38,7 +38,7 @@
 #include <gtk/gtk.h>
 
 /** @name gtk Miscellaneous Functions
- @{ 
+ @{
 */
 
 void gnc_cbe_set_by_string(GtkComboBoxEntry *cbe, const gchar *text);

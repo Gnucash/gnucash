@@ -19,7 +19,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/* 
+/*
  * FILE:
  * txn.h
  *
@@ -41,7 +41,7 @@
 
 #include "PostgresBackend.h"
 
-int pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid); 
+int pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid);
 void pgendCopySplitsToEngine (PGBackend *be, Transaction *trans);
 
 void pgendStoreAllTransactions (PGBackend *be, Account *root);

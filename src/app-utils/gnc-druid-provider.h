@@ -42,38 +42,38 @@ typedef struct _GNCDruidProviderClass GNCDruidProviderClass;
 
 struct _GNCDruidProvider
 {
-  GObject obj;
+    GObject obj;
 
-  GNCDruid *druid;		/* The druid this object belongs to,
+    GNCDruid *druid;		/* The druid this object belongs to,
 				 * inserted by this class. */
-  GNCDruidProviderDesc *desc;	/* The description for this provider.
+    GNCDruidProviderDesc *desc;	/* The description for this provider.
 				 * inserted by this class,
 				 * destroyed at finalize() */
-  GList *pages;			/* list of ALL druid pages created by the
+    GList *pages;			/* list of ALL druid pages created by the
 				 * subclass. destroyed at finalize() */
-  GNCDruidPage* page;		/* The current page, used for reference */
+    GNCDruidPage* page;		/* The current page, used for reference */
 };
 
 struct _GNCDruidProviderClass
 {
-  GObjectClass parent_class;
+    GObjectClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  GNCDruidPage* (*first_page)(GNCDruidProvider*);
-  GNCDruidPage* (*last_page)(GNCDruidProvider*);
-  GNCDruidPage* (*next_page)(GNCDruidProvider*);
-  GNCDruidPage* (*prev_page)(GNCDruidProvider*);
+    GNCDruidPage* (*first_page)(GNCDruidProvider*);
+    GNCDruidPage* (*last_page)(GNCDruidProvider*);
+    GNCDruidPage* (*next_page)(GNCDruidProvider*);
+    GNCDruidPage* (*prev_page)(GNCDruidProvider*);
 };
 
 GType	gnc_druid_provider_get_type(void);
 GNCDruidProvider* gnc_druid_provider_new(GNCDruid* druid,
-					 GNCDruidProviderDesc* desc);
+        GNCDruidProviderDesc* desc);
 
 
 typedef GNCDruidProvider* (*GNCDruidProviderNew)(GNCDruid*, GNCDruidProviderDesc*);
 void	gnc_druid_provider_register(const gchar* ui_type, const gchar* name,
-				    GNCDruidProviderNew new_provider);
+                                 GNCDruidProviderNew new_provider);
 
 /* methods */
 

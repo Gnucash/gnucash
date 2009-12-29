@@ -7,6 +7,7 @@
 #include "bar.h"
 
 int
-bar_hello(void) {
-  return 1;
+bar_hello(void)
+{
+    return 1;
 }

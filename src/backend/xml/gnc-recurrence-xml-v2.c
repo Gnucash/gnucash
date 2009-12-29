@@ -92,13 +92,14 @@ recurrence_weekend_adj_handler(xmlNodePtr node, gpointer d)
 
     nodeTxt = dom_tree_to_text(node);
     g_return_val_if_fail(nodeTxt, FALSE);
-    wadj= recurrenceWeekendAdjustFromString(nodeTxt);
+    wadj = recurrenceWeekendAdjustFromString(nodeTxt);
     ((Recurrence *) d)->wadj = wadj;
     g_free(nodeTxt);
     return (wadj != -1);
 }
 
-static struct dom_tree_handler recurrence_dom_handlers[] = {
+static struct dom_tree_handler recurrence_dom_handlers[] =
+{
     { recurrence_mult, recurrence_mult_handler, 1, 0 },
     { recurrence_period_type, recurrence_period_type_handler, 1, 0 },
     { recurrence_start, recurrence_start_date_handler, 1, 0 },
@@ -116,7 +117,8 @@ dom_tree_to_recurrence(xmlNodePtr node)
     /* In case the file doesn't have a weekend adjustment element */
     r->wadj = WEEKEND_ADJ_NONE;
     successful = dom_tree_generic_parse (node, recurrence_dom_handlers, r);
-    if (!successful) {
+    if (!successful)
+    {
         PERR ("failed to parse recurrence node");
         xmlElemDump(stdout, NULL, node);
         g_free(r);
@@ -145,14 +147,14 @@ recurrence_to_dom_tree(const gchar *tag, const Recurrence *r)
     wadj = recurrenceGetWeekendAdjust(r);
     if (wadj != WEEKEND_ADJ_NONE)
     {
-      /* In r17725 and r17751, I introduced this extra XML child
-	 element, but this means a gnucash-2.2.x cannot read the SX
-	 recurrence of a >=2.3.x file anymore, which is bad. In order
-	 to improve this broken backward compatibility for most of the
-	 cases, we don't write out this XML element as long as it is
-	 only "none". */
-      xmlAddChild(n, text_to_dom_tree(recurrence_weekend_adj,
-				      recurrenceWeekendAdjustToString(wadj)));
+        /* In r17725 and r17751, I introduced this extra XML child
+        element, but this means a gnucash-2.2.x cannot read the SX
+        recurrence of a >=2.3.x file anymore, which is bad. In order
+        to improve this broken backward compatibility for most of the
+        cases, we don't write out this XML element as long as it is
+        only "none". */
+        xmlAddChild(n, text_to_dom_tree(recurrence_weekend_adj,
+                                        recurrenceWeekendAdjustToString(wadj)));
     }
     return n;
 }

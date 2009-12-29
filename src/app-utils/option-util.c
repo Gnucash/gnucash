@@ -36,7 +36,7 @@
 
 #include "swig-runtime.h"
 
-/* TODO: 
+/* TODO:
 
   - for make-date-option, there seems to be only support for getting,
     not for setting.
@@ -47,72 +47,73 @@
 
 struct gnc_option
 {
-  /* Handle to the scheme-side option */
-  SCM guile_option;
+    /* Handle to the scheme-side option */
+    SCM guile_option;
 
-  /* Flag to indicate change by the UI */
-  gboolean changed;
+    /* Flag to indicate change by the UI */
+    gboolean changed;
 
-  /* The widget which is holding this option */
-  gncUIWidget widget;
+    /* The widget which is holding this option */
+    gncUIWidget widget;
 
-  /* The option db which holds this option */
-  GNCOptionDB *odb;
+    /* The option db which holds this option */
+    GNCOptionDB *odb;
 };
 
 struct gnc_option_section
 {
-  char * section_name;
+    char * section_name;
 
-  GSList * options;
+    GSList * options;
 };
 
 struct gnc_option_db
 {
-  SCM guile_options;
+    SCM guile_options;
 
-  GSList *option_sections;
+    GSList *option_sections;
 
-  gboolean options_dirty;
+    gboolean options_dirty;
 
-  GNCOptionDBHandle handle;
+    GNCOptionDBHandle handle;
 
-  GNCOptionGetUIValue get_ui_value;
-  GNCOptionSetUIValue set_ui_value;
-  GNCOptionSetSelectable set_selectable;
+    GNCOptionGetUIValue get_ui_value;
+    GNCOptionSetUIValue set_ui_value;
+    GNCOptionSetSelectable set_selectable;
 };
 
 typedef struct _Getters Getters;
 struct _Getters
 {
-  SCM section;
-  SCM name;
-  SCM type;
-  SCM sort_tag;
-  SCM documentation;
-  SCM getter;
-  SCM setter;
-  SCM default_getter;
-  SCM value_validator;
-  SCM option_data;
-  SCM index_to_name;
-  SCM index_to_description;
-  SCM index_to_value;
-  SCM value_to_index;
-  SCM number_of_indices;
-  SCM option_widget_changed_cb;
-  SCM date_option_subtype;
-  SCM date_option_show_time;
-  SCM date_option_value_type;
-  SCM date_option_value_absolute;
-  SCM date_option_value_relative;
+    SCM section;
+    SCM name;
+    SCM type;
+    SCM sort_tag;
+    SCM documentation;
+    SCM getter;
+    SCM setter;
+    SCM default_getter;
+    SCM value_validator;
+    SCM option_data;
+    SCM index_to_name;
+    SCM index_to_description;
+    SCM index_to_value;
+    SCM value_to_index;
+    SCM number_of_indices;
+    SCM option_widget_changed_cb;
+    SCM date_option_subtype;
+    SCM date_option_show_time;
+    SCM date_option_value_type;
+    SCM date_option_value_absolute;
+    SCM date_option_value_relative;
 };
 
 
 /****** Globals ****************************************************/
 
 static Getters getters = {0, 0, 0, 0, 0, 0, 0, 0, 0,
-                          0, 0, 0, 0, 0, 0, 0, 0, 0};
+                          0, 0, 0, 0, 0, 0, 0, 0, 0
+                         };
 
 /* This static indicates the debugging module this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -126,61 +127,61 @@ static int last_db_handle = 0;
 gboolean
 gnc_option_get_changed (GNCOption *option)
 {
-  if (!option) return FALSE;
-  return option->changed;
+    if (!option) return FALSE;
+    return option->changed;
 }
 
 void
 gnc_option_set_changed (GNCOption *option, gboolean changed)
 {
-  g_return_if_fail (option != NULL);
-  option->changed = changed;
+    g_return_if_fail (option != NULL);
+    option->changed = changed;
 }
 
 gncUIWidget
 gnc_option_get_widget (GNCOption *option)
 {
-  if (!option) return NULL;
-  return option->widget;
+    if (!option) return NULL;
+    return option->widget;
 }
 
 void
 gnc_option_set_widget (GNCOption *option, gncUIWidget widget)
 {
-  g_return_if_fail (option != NULL);
-  option->widget = widget;
+    g_return_if_fail (option != NULL);
+    option->widget = widget;
 }
 
 SCM
 gnc_option_get_ui_value (GNCOption *option)
 {
-  g_return_val_if_fail (option != NULL, SCM_UNDEFINED);
-  g_return_val_if_fail (option->odb != NULL, SCM_UNDEFINED);
-  g_return_val_if_fail (option->odb->get_ui_value != NULL, SCM_UNDEFINED);
+    g_return_val_if_fail (option != NULL, SCM_UNDEFINED);
+    g_return_val_if_fail (option->odb != NULL, SCM_UNDEFINED);
+    g_return_val_if_fail (option->odb->get_ui_value != NULL, SCM_UNDEFINED);
 
-  return option->odb->get_ui_value (option);
+    return option->odb->get_ui_value (option);
 }
 
 void
 gnc_option_set_ui_value (GNCOption *option, gboolean use_default)
 {
-  g_return_if_fail (option != NULL);
-  g_return_if_fail (option->odb != NULL);
+    g_return_if_fail (option != NULL);
+    g_return_if_fail (option->odb != NULL);
 
-  if (!option->odb->set_ui_value)
-    return;
+    if (!option->odb->set_ui_value)
+        return;
 
-  option->odb->set_ui_value (option, use_default);
+    option->odb->set_ui_value (option, use_default);
 }
 
 void
 gnc_option_set_selectable (GNCOption *option, gboolean selectable)
 {
-  g_return_if_fail (option != NULL);
-  g_return_if_fail (option->odb != NULL);
-  g_return_if_fail (option->odb->set_selectable != NULL);
+    g_return_if_fail (option != NULL);
+    g_return_if_fail (option->odb != NULL);
+    g_return_if_fail (option->odb->set_selectable != NULL);
 
-  option->odb->set_selectable (option, selectable);
+    option->odb->set_selectable (option, selectable);
 }
 
 /********************************************************************\
@@ -193,9 +194,9 @@ gnc_option_set_selectable (GNCOption *option, gboolean selectable)
 static void
 gnc_option_db_init(GNCOptionDB *odb)
 {
-  SCM func = scm_c_eval_string("gnc:send-options");
+    SCM func = scm_c_eval_string("gnc:send-options");
 
-  scm_call_2(func, scm_int2num(odb->handle), odb->guile_options);
+    scm_call_2(func, scm_int2num(odb->handle), odb->guile_options);
 }
 
 
@@ -209,132 +210,141 @@ gnc_option_db_init(GNCOptionDB *odb)
 GNCOptionDB *
 gnc_option_db_new(SCM guile_options)
 {
-  GNCOptionDB *odb;
-  GNCOptionDB *lookup;
+    GNCOptionDB *odb;
+    GNCOptionDB *lookup;
 
-  odb = g_new0(GNCOptionDB, 1);
+    odb = g_new0(GNCOptionDB, 1);
 
-  odb->guile_options = guile_options;
-  scm_gc_protect_object(guile_options);
+    odb->guile_options = guile_options;
+    scm_gc_protect_object(guile_options);
 
-  odb->option_sections = NULL;
-  odb->options_dirty = FALSE;
+    odb->option_sections = NULL;
+    odb->options_dirty = FALSE;
 
-  if (option_dbs == NULL)
-    option_dbs = g_hash_table_new(g_int_hash, g_int_equal);
+    if (option_dbs == NULL)
+        option_dbs = g_hash_table_new(g_int_hash, g_int_equal);
 
-  do
-  {
-    odb->handle = last_db_handle++;
-    lookup = g_hash_table_lookup(option_dbs, &odb->handle);
-  } while (lookup != NULL);
+    do
+    {
+        odb->handle = last_db_handle++;
+        lookup = g_hash_table_lookup(option_dbs, &odb->handle);
+    }
+    while (lookup != NULL);
 
-  g_hash_table_insert(option_dbs, &odb->handle, odb);
+    g_hash_table_insert(option_dbs, &odb->handle, odb);
 
-  gnc_option_db_init(odb);
+    gnc_option_db_init(odb);
 
-  return odb;
+    return odb;
 }
 
 typedef struct
 {
-  GNCOptionDB *odb;
-  SCM guile_options;
+    GNCOptionDB *odb;
+    SCM guile_options;
 } ODBFindInfo;
 
 static void
 option_db_finder (gpointer key, gpointer value, gpointer data)
 {
-  ODBFindInfo *find_info = data;
-  GNCOptionDB *odb = value;
+    ODBFindInfo *find_info = data;
+    GNCOptionDB *odb = value;
 
-  if (odb && (odb->guile_options == find_info->guile_options))
-    find_info->odb = odb;
+    if (odb && (odb->guile_options == find_info->guile_options))
+        find_info->odb = odb;
 }
 
 static GNCOptionDB *
 gnc_option_db_find (SCM guile_options)
 {
-  ODBFindInfo find_info;
+    ODBFindInfo find_info;
 
-  find_info.odb = NULL;
-  find_info.guile_options = guile_options;
+    find_info.odb = NULL;
+    find_info.guile_options = guile_options;
 
-  g_hash_table_foreach (option_dbs, option_db_finder, &find_info);
+    g_hash_table_foreach (option_dbs, option_db_finder, &find_info);
 
-  return find_info.odb;
+    return find_info.odb;
 }
 
 /* Create an option DB for a particular data type */
 GNCOptionDB *
 gnc_option_db_new_for_type(QofIdType id_type)
 {
-  SCM options;
+    SCM options;
 
-  if (!id_type) return NULL;
-  options = gnc_make_kvp_options(id_type);
-  return gnc_option_db_new (options);
+    if (!id_type) return NULL;
+    options = gnc_make_kvp_options(id_type);
+    return gnc_option_db_new (options);
 }
 
 void
 gnc_option_db_load_from_kvp(GNCOptionDB* odb, kvp_frame *slots)
 {
-  static SCM kvp_to_scm = SCM_UNDEFINED;
-  static SCM kvp_option_path = SCM_UNDEFINED;
-  SCM scm_slots;
+    static SCM kvp_to_scm = SCM_UNDEFINED;
+    static SCM kvp_option_path = SCM_UNDEFINED;
+    SCM scm_slots;
 
-  if (!odb || !slots) return;
+    if (!odb || !slots) return;
 
-  if (kvp_to_scm == SCM_UNDEFINED) {
-    kvp_to_scm = scm_c_eval_string("gnc:options-kvp->scm");
-    if (!SCM_PROCEDUREP (kvp_to_scm)) {
-      PERR ("not a procedure\n");
-      kvp_to_scm = SCM_UNDEFINED;
-      return;
+    if (kvp_to_scm == SCM_UNDEFINED)
+    {
+        kvp_to_scm = scm_c_eval_string("gnc:options-kvp->scm");
+        if (!SCM_PROCEDUREP (kvp_to_scm))
+        {
+            PERR ("not a procedure\n");
+            kvp_to_scm = SCM_UNDEFINED;
+            return;
+        }
     }
-  }
 
-  if (kvp_option_path == SCM_UNDEFINED) {
-    kvp_option_path = scm_c_eval_string("gnc:*kvp-option-path*");
-    if (kvp_option_path == SCM_UNDEFINED) {
-      PERR ("can't find the option path"); 
-      return;
+    if (kvp_option_path == SCM_UNDEFINED)
+    {
+        kvp_option_path = scm_c_eval_string("gnc:*kvp-option-path*");
+        if (kvp_option_path == SCM_UNDEFINED)
+        {
+            PERR ("can't find the option path");
+            return;
+        }
     }
-  }
-  scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("_p_KvpFrame"), 0);
+    scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("_p_KvpFrame"), 0);
 
-  scm_call_3 (kvp_to_scm, odb->guile_options, scm_slots, kvp_option_path);
+    scm_call_3 (kvp_to_scm, odb->guile_options, scm_slots, kvp_option_path);
 }
 
 void
 gnc_option_db_save_to_kvp(GNCOptionDB* odb, kvp_frame *slots)
 {
-  static SCM scm_to_kvp = SCM_UNDEFINED;
-  static SCM kvp_option_path = SCM_UNDEFINED;
-  SCM scm_slots;
+    static SCM scm_to_kvp = SCM_UNDEFINED;
+    static SCM kvp_option_path = SCM_UNDEFINED;
+    SCM scm_slots;
 
-  if (!odb || !slots) return;
+    if (!odb || !slots) return;
 
-  if (scm_to_kvp == SCM_UNDEFINED) {
-    scm_to_kvp = scm_c_eval_string("gnc:options-scm->kvp");
-    if (!SCM_PROCEDUREP (scm_to_kvp)) {
-      PERR ("not a procedure\n");
-      scm_to_kvp = SCM_UNDEFINED;
-      return;
+    if (scm_to_kvp == SCM_UNDEFINED)
+    {
+        scm_to_kvp = scm_c_eval_string("gnc:options-scm->kvp");
+        if (!SCM_PROCEDUREP (scm_to_kvp))
+        {
+            PERR ("not a procedure\n");
+            scm_to_kvp = SCM_UNDEFINED;
+            return;
+        }
     }
-  }
 
-  if (kvp_option_path == SCM_UNDEFINED) {
-    kvp_option_path = scm_c_eval_string("gnc:*kvp-option-path*");
-    if (kvp_option_path == SCM_UNDEFINED) {
-      PERR ("can't find the option path"); 
-      return;
+    if (kvp_option_path == SCM_UNDEFINED)
+    {
+        kvp_option_path = scm_c_eval_string("gnc:*kvp-option-path*");
+        if (kvp_option_path == SCM_UNDEFINED)
+        {
+            PERR ("can't find the option path");
+            return;
+        }
     }
-  }
 
-  scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("p_KvpFrame"), 0);
+    scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("p_KvpFrame"), 0);
 
-  scm_call_3 (scm_to_kvp, odb->guile_options, scm_slots, kvp_option_path);
+    scm_call_3 (scm_to_kvp, odb->guile_options, scm_slots, kvp_option_path);
 }
 
 /********************************************************************\
@@ -349,52 +359,52 @@ gnc_option_db_save_to_kvp(GNCOptionDB* odb, kvp_frame *slots)
 void
 gnc_option_db_destroy(GNCOptionDB *odb)
 {
-  GSList *snode;
+    GSList *snode;
 
-  if (odb == NULL)
-    return;
+    if (odb == NULL)
+        return;
 
-  for (snode = odb->option_sections; snode; snode = snode->next)
-  {
-    GNCOptionSection *section = snode->data;
-    GSList *onode;
-
-    for (onode = section->options; onode; onode = onode->next)
+    for (snode = odb->option_sections; snode; snode = snode->next)
     {
-      GNCOption *option = onode->data;
+        GNCOptionSection *section = snode->data;
+        GSList *onode;
 
-      scm_gc_unprotect_object(option->guile_option);
-      g_free (option);
+        for (onode = section->options; onode; onode = onode->next)
+        {
+            GNCOption *option = onode->data;
+
+            scm_gc_unprotect_object(option->guile_option);
+            g_free (option);
+        }
+
+        /* Free the option list */
+        g_slist_free(section->options);
+        section->options = NULL;
+
+        if (section->section_name != NULL)
+            free(section->section_name);
+        section->section_name = NULL;
+
+        g_free (section);
     }
 
-    /* Free the option list */
-    g_slist_free(section->options);
-    section->options = NULL;
+    g_slist_free(odb->option_sections);
 
-    if (section->section_name != NULL)
-      free(section->section_name);
-    section->section_name = NULL;
+    odb->option_sections = NULL;
+    odb->options_dirty = FALSE;
 
-    g_free (section);
-  }
+    g_hash_table_remove(option_dbs, &odb->handle);
 
-  g_slist_free(odb->option_sections);
+    if (g_hash_table_size(option_dbs) == 0)
+    {
+        g_hash_table_destroy(option_dbs);
+        option_dbs = NULL;
+    }
 
-  odb->option_sections = NULL;
-  odb->options_dirty = FALSE;
+    scm_gc_unprotect_object(odb->guile_options);
+    odb->guile_options = SCM_UNDEFINED;
 
-  g_hash_table_remove(option_dbs, &odb->handle);
-
-  if (g_hash_table_size(option_dbs) == 0)
-  {
-    g_hash_table_destroy(option_dbs);
-    option_dbs = NULL;
-  }
-
-  scm_gc_unprotect_object(odb->guile_options);
-  odb->guile_options = SCM_UNDEFINED;
-
-  g_free(odb);
+    g_free(odb);
 }
 
 void
@@ -403,11 +413,11 @@ gnc_option_db_set_ui_callbacks (GNCOptionDB *odb,
                                 GNCOptionSetUIValue set_ui_value,
                                 GNCOptionSetSelectable set_selectable)
 {
-  g_return_if_fail (odb != NULL);
+    g_return_if_fail (odb != NULL);
 
-  odb->get_ui_value = get_ui_value;
-  odb->set_ui_value = set_ui_value;
-  odb->set_selectable = set_selectable;
+    odb->get_ui_value = get_ui_value;
+    odb->set_ui_value = set_ui_value;
+    odb->set_selectable = set_selectable;
 }
 
 /********************************************************************\
@@ -431,60 +441,60 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
                                        const char *section,
                                        const char *name)
 {
-  SCM register_proc;
-  SCM arg;
-  SCM args;
+    SCM register_proc;
+    SCM arg;
+    SCM args;
 
-  if (!odb || !callback)
-    return SCM_UNDEFINED;
+    if (!odb || !callback)
+        return SCM_UNDEFINED;
 
-  /* Get the register procedure */
-  register_proc = scm_c_eval_string("gnc:options-register-c-callback");
-  if (!SCM_PROCEDUREP(register_proc))
-  {
-    PERR("not a procedure\n");
-    return SCM_UNDEFINED;
-  }
+    /* Get the register procedure */
+    register_proc = scm_c_eval_string("gnc:options-register-c-callback");
+    if (!SCM_PROCEDUREP(register_proc))
+    {
+        PERR("not a procedure\n");
+        return SCM_UNDEFINED;
+    }
 
-  /* Now build the args list for apply */
-  args = SCM_EOL;
+    /* Now build the args list for apply */
+    args = SCM_EOL;
 
-  /* first the guile options database */
-  args = scm_cons(odb->guile_options, args);
+    /* first the guile options database */
+    args = scm_cons(odb->guile_options, args);
 
-  /* next the data */
-  arg = SWIG_NewPointerObj(data, SWIG_TypeQuery("_p_void"), 0);
-  args = scm_cons(arg, args);
+    /* next the data */
+    arg = SWIG_NewPointerObj(data, SWIG_TypeQuery("_p_void"), 0);
+    args = scm_cons(arg, args);
 
-  /* next the callback */
-  arg = SWIG_NewPointerObj(
-      callback, SWIG_TypeQuery("GNCOptionChangeCallback"), 0);
-  args = scm_cons(arg, args);
+    /* next the callback */
+    arg = SWIG_NewPointerObj(
+              callback, SWIG_TypeQuery("GNCOptionChangeCallback"), 0);
+    args = scm_cons(arg, args);
 
-  /* next the name */
-  if (name == NULL)
-  {
-    arg = SCM_BOOL_F;
-  }
-  else
-  {
-    arg = scm_makfrom0str(name);
-  }
-  args = scm_cons(arg, args);
+    /* next the name */
+    if (name == NULL)
+    {
+        arg = SCM_BOOL_F;
+    }
+    else
+    {
+        arg = scm_makfrom0str(name);
+    }
+    args = scm_cons(arg, args);
 
-  /* next the section */
-  if (section == NULL)
-  {
-    arg = SCM_BOOL_F;
-  }
-  else
-  {
-    arg = scm_makfrom0str(section);
-  }
-  args = scm_cons(arg, args);
+    /* next the section */
+    if (section == NULL)
+    {
+        arg = SCM_BOOL_F;
+    }
+    else
+    {
+        arg = scm_makfrom0str(section);
+    }
+    args = scm_cons(arg, args);
 
-  /* now apply the procedure */
-  return scm_apply(register_proc, args, SCM_EOL);
+    /* now apply the procedure */
+    return scm_apply(register_proc, args, SCM_EOL);
 }
 
 
@@ -499,81 +509,81 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
 void
 gnc_option_db_unregister_change_callback_id(GNCOptionDB *odb, SCM callback_id)
 {
-  SCM proc;
+    SCM proc;
 
-  if (callback_id == SCM_UNDEFINED)
-    return;
+    if (callback_id == SCM_UNDEFINED)
+        return;
 
-  proc = scm_c_eval_string("gnc:options-unregister-callback-id");
-  if (!SCM_PROCEDUREP(proc))
-  {
-    PERR("not a procedure\n");
-    return;
-  }
+    proc = scm_c_eval_string("gnc:options-unregister-callback-id");
+    if (!SCM_PROCEDUREP(proc))
+    {
+        PERR("not a procedure\n");
+        return;
+    }
 
-  scm_call_2(proc, callback_id, odb->guile_options);
+    scm_call_2(proc, callback_id, odb->guile_options);
 }
 
 void
 gncp_option_invoke_callback (GNCOptionChangeCallback callback, void *data)
 {
-  callback (data);
+    callback (data);
 }
 
 static void
 gnc_call_option_change_callbacks(GNCOptionDB *odb)
 {
-  SCM proc;
+    SCM proc;
 
-  proc = scm_c_eval_string("gnc:options-run-callbacks");
-  if (!SCM_PROCEDUREP(proc))
-  {
-    PERR("not a procedure\n");
-    return;
-  }
+    proc = scm_c_eval_string("gnc:options-run-callbacks");
+    if (!SCM_PROCEDUREP(proc))
+    {
+        PERR("not a procedure\n");
+        return;
+    }
 
-  scm_call_1(proc, odb->guile_options);
+    scm_call_1(proc, odb->guile_options);
 }
 
 
 static void
 initialize_getters(void)
 {
-  static gboolean getters_initialized = FALSE;
+    static gboolean getters_initialized = FALSE;
 
-  if (getters_initialized)
-    return;
+    if (getters_initialized)
+        return;
 
-  getters.section = scm_c_eval_string("gnc:option-section");
-  getters.name = scm_c_eval_string("gnc:option-name");
-  getters.type = scm_c_eval_string("gnc:option-type");
-  getters.sort_tag = scm_c_eval_string("gnc:option-sort-tag");
-  getters.documentation =
-    scm_c_eval_string("gnc:option-documentation");
-  getters.getter = scm_c_eval_string("gnc:option-getter");
-  getters.setter = scm_c_eval_string("gnc:option-setter");
-  getters.default_getter =
-    scm_c_eval_string("gnc:option-default-getter");
-  getters.value_validator =
-    scm_c_eval_string("gnc:option-value-validator");
-  getters.option_data = scm_c_eval_string("gnc:option-data");
-  getters.index_to_name = scm_c_eval_string("gnc:option-index-get-name");
-  getters.index_to_description =
-    scm_c_eval_string("gnc:option-index-get-description");
-  getters.number_of_indices = scm_c_eval_string("gnc:option-number-of-indices");
-  getters.index_to_value = scm_c_eval_string("gnc:option-index-get-value");
-  getters.value_to_index = scm_c_eval_string("gnc:option-value-get-index");
-  getters.option_widget_changed_cb =
-    scm_c_eval_string("gnc:option-widget-changed-proc");
-  getters.date_option_subtype = scm_c_eval_string("gnc:date-option-get-subtype");
-  getters.date_option_show_time = scm_c_eval_string("gnc:date-option-show-time?");
-  getters.date_option_value_type = scm_c_eval_string ("gnc:date-option-value-type");
-  getters.date_option_value_absolute =
-    scm_c_eval_string("gnc:date-option-absolute-time");
-  getters.date_option_value_relative =
-    scm_c_eval_string("gnc:date-option-relative-time");
+    getters.section = scm_c_eval_string("gnc:option-section");
+    getters.name = scm_c_eval_string("gnc:option-name");
+    getters.type = scm_c_eval_string("gnc:option-type");
+    getters.sort_tag = scm_c_eval_string("gnc:option-sort-tag");
+    getters.documentation =
+        scm_c_eval_string("gnc:option-documentation");
+    getters.getter = scm_c_eval_string("gnc:option-getter");
+    getters.setter = scm_c_eval_string("gnc:option-setter");
+    getters.default_getter =
+        scm_c_eval_string("gnc:option-default-getter");
+    getters.value_validator =
+        scm_c_eval_string("gnc:option-value-validator");
+    getters.option_data = scm_c_eval_string("gnc:option-data");
+    getters.index_to_name = scm_c_eval_string("gnc:option-index-get-name");
+    getters.index_to_description =
+        scm_c_eval_string("gnc:option-index-get-description");
+    getters.number_of_indices = scm_c_eval_string("gnc:option-number-of-indices");
+    getters.index_to_value = scm_c_eval_string("gnc:option-index-get-value");
+    getters.value_to_index = scm_c_eval_string("gnc:option-value-get-index");
+    getters.option_widget_changed_cb =
+        scm_c_eval_string("gnc:option-widget-changed-proc");
+    getters.date_option_subtype = scm_c_eval_string("gnc:date-option-get-subtype");
+    getters.date_option_show_time = scm_c_eval_string("gnc:date-option-show-time?");
+    getters.date_option_value_type = scm_c_eval_string ("gnc:date-option-value-type");
+    getters.date_option_value_absolute =
+        scm_c_eval_string("gnc:date-option-absolute-time");
+    getters.date_option_value_relative =
+        scm_c_eval_string("gnc:date-option-relative-time");
 
-  getters_initialized = TRUE;
+    getters_initialized = TRUE;
 }
 
 
@@ -588,9 +598,9 @@ initialize_getters(void)
 char *
 gnc_option_section(GNCOption *option)
 {
-  initialize_getters();
+    initialize_getters();
 
-  return gnc_guile_call1_to_string(getters.section, option->guile_option);
+    return gnc_guile_call1_to_string(getters.section, option->guile_option);
 }
 
 
@@ -605,9 +615,9 @@ gnc_option_section(GNCOption *option)
 char *
 gnc_option_name(GNCOption *option)
 {
-  initialize_getters();
+    initialize_getters();
 
-  return gnc_guile_call1_to_string(getters.name, option->guile_option);
+    return gnc_guile_call1_to_string(getters.name, option->guile_option);
 }
 
 
@@ -622,10 +632,10 @@ gnc_option_name(GNCOption *option)
 char *
 gnc_option_type(GNCOption *option)
 {
-  initialize_getters();
+    initialize_getters();
 
-  return gnc_guile_call1_symbol_to_string(getters.type,
-                                          option->guile_option);
+    return gnc_guile_call1_symbol_to_string(getters.type,
+                                            option->guile_option);
 }
 
 
@@ -640,9 +650,9 @@ gnc_option_type(GNCOption *option)
 char *
 gnc_option_sort_tag(GNCOption *option)
 {
-  initialize_getters();
+    initialize_getters();
 
-  return gnc_guile_call1_to_string(getters.sort_tag, option->guile_option);
+    return gnc_guile_call1_to_string(getters.sort_tag, option->guile_option);
 }
 
 
@@ -657,10 +667,10 @@ gnc_option_sort_tag(GNCOption *option)
 char *
 gnc_option_documentation(GNCOption *option)
 {
-  initialize_getters();
+    initialize_getters();
 
-  return gnc_guile_call1_to_string(getters.documentation,
-                                   option->guile_option);
+    return gnc_guile_call1_to_string(getters.documentation,
+                                     option->guile_option);
 }
 
 
@@ -675,10 +685,10 @@ gnc_option_documentation(GNCOption *option)
 SCM
 gnc_option_getter(GNCOption *option)
 {
-  initialize_getters();
+    initialize_getters();
 
-  return gnc_guile_call1_to_procedure(getters.getter,
-                                      option->guile_option);
+    return gnc_guile_call1_to_procedure(getters.getter,
+                                        option->guile_option);
 }
 
 
@@ -693,10 +703,10 @@ gnc_option_getter(GNCOption *option)
 SCM
 gnc_option_setter(GNCOption *option)
 {
-  initialize_getters();
+    initialize_getters();
 
-  return gnc_guile_call1_to_procedure(getters.setter,
-                                      option->guile_option);
+    return gnc_guile_call1_to_procedure(getters.setter,
+                                        option->guile_option);
 }
 
 
@@ -711,10 +721,10 @@ gnc_option_setter(GNCOption *option)
 SCM
 gnc_option_default_getter(GNCOption *option)
 {
-  initialize_getters();
+    initialize_getters();
 
-  return gnc_guile_call1_to_procedure(getters.default_getter,
-                                      option->guile_option);
+    return gnc_guile_call1_to_procedure(getters.default_getter,
+                                        option->guile_option);
 }
 
 
@@ -729,10 +739,10 @@ gnc_option_default_getter(GNCOption *option)
 SCM
 gnc_option_value_validator(GNCOption *option)
 {
-  initialize_getters();
+    initialize_getters();
 
-  return gnc_guile_call1_to_procedure(getters.value_validator,
-                                      option->guile_option);
+    return gnc_guile_call1_to_procedure(getters.value_validator,
+                                        option->guile_option);
 }
 
 
@@ -750,27 +760,27 @@ gnc_option_value_validator(GNCOption *option)
 SCM
 gnc_option_widget_changed_proc_getter(GNCOption *option)
 {
-  SCM cb;
+    SCM cb;
 
-  initialize_getters();
+    initialize_getters();
 
-  if( SCM_PROCEDUREP( getters.option_widget_changed_cb ) )
-  {
-    /* call the callback function getter to get the actual callback function */
-    cb = scm_call_1(getters.option_widget_changed_cb, option->guile_option);
-
-    if( SCM_PROCEDUREP( cb ) )   /* a callback exists */
+    if ( SCM_PROCEDUREP( getters.option_widget_changed_cb ) )
     {
-      return( cb );
-    }
-    /* else no callback exists -  this is a legal situation */
-  }
-  else  /* getters not set up correctly? */
-  {
-    PERR("getters.option_widget_changed_cb is not a valid procedure\n");
-  }
+        /* call the callback function getter to get the actual callback function */
+        cb = scm_call_1(getters.option_widget_changed_cb, option->guile_option);
 
-  return( SCM_UNDEFINED );
+        if ( SCM_PROCEDUREP( cb ) )  /* a callback exists */
+        {
+            return( cb );
+        }
+        /* else no callback exists -  this is a legal situation */
+    }
+    else  /* getters not set up correctly? */
+    {
+        PERR("getters.option_widget_changed_cb is not a valid procedure\n");
+    }
+
+    return( SCM_UNDEFINED );
 }
 
 
@@ -786,19 +796,19 @@ gnc_option_widget_changed_proc_getter(GNCOption *option)
 void
 gnc_option_call_option_widget_changed_proc(GNCOption *option)
 {
-  SCM cb, value;
+    SCM cb, value;
 
-  cb = gnc_option_widget_changed_proc_getter(option);
+    cb = gnc_option_widget_changed_proc_getter(option);
 
-  if( cb != SCM_UNDEFINED )
-  {
-    value = gnc_option_get_ui_value(option);
-
-    if( value != SCM_UNDEFINED )
+    if ( cb != SCM_UNDEFINED )
     {
-      scm_call_1(cb, value);
+        value = gnc_option_get_ui_value(option);
+
+        if ( value != SCM_UNDEFINED )
+        {
+            scm_call_1(cb, value);
+        }
     }
-  }
 }
 
 
@@ -813,20 +823,20 @@ gnc_option_call_option_widget_changed_proc(GNCOption *option)
 int
 gnc_option_num_permissible_values(GNCOption *option)
 {
-  SCM value;
+    SCM value;
 
-  initialize_getters();
+    initialize_getters();
 
-  value = scm_call_1(getters.number_of_indices, option->guile_option);
+    value = scm_call_1(getters.number_of_indices, option->guile_option);
 
-  if(SCM_EXACTP(value))
-  {
-    return scm_num2int(value, SCM_ARG1, G_STRFUNC);
-  }
-  else
-  {
-    return -1;
-  }
+    if (SCM_EXACTP(value))
+    {
+        return scm_num2int(value, SCM_ARG1, G_STRFUNC);
+    }
+    else
+    {
+        return -1;
+    }
 }
 
 
@@ -842,16 +852,16 @@ gnc_option_num_permissible_values(GNCOption *option)
 int
 gnc_option_permissible_value_index(GNCOption *option, SCM search_value)
 {
-  SCM value;
-  value = scm_call_2(getters.value_to_index, option->guile_option, search_value);
-  if (value == SCM_BOOL_F)
-  {
-    return -1;
-  }
-  else
-  {
-    return scm_num2int(value, SCM_ARG1, G_STRFUNC);
-  }
+    SCM value;
+    value = scm_call_2(getters.value_to_index, option->guile_option, search_value);
+    if (value == SCM_BOOL_F)
+    {
+        return -1;
+    }
+    else
+    {
+        return scm_num2int(value, SCM_ARG1, G_STRFUNC);
+    }
 }
 
 
@@ -868,17 +878,17 @@ gnc_option_permissible_value_index(GNCOption *option, SCM search_value)
 SCM
 gnc_option_permissible_value(GNCOption *option, int index)
 {
-  SCM value;
+    SCM value;
 
-  if (index < 0)
-    return SCM_UNDEFINED;
+    if (index < 0)
+        return SCM_UNDEFINED;
 
-  initialize_getters();
+    initialize_getters();
 
-  value = scm_call_2(getters.index_to_value, option->guile_option,
-                     scm_int2num(index));
+    value = scm_call_2(getters.index_to_value, option->guile_option,
+                       scm_int2num(index));
 
-  return value;
+    return value;
 }
 
 
@@ -895,21 +905,21 @@ gnc_option_permissible_value(GNCOption *option, int index)
 char *
 gnc_option_permissible_value_name(GNCOption *option, int index)
 {
-  SCM name;
+    SCM name;
 
-  if (index < 0)
-    return NULL;
+    if (index < 0)
+        return NULL;
 
-  initialize_getters();
+    initialize_getters();
 
-  name = scm_call_2(getters.index_to_name, option->guile_option,
-                    scm_int2num(index));
-  if (name == SCM_UNDEFINED)
-    return NULL;
-  if (!SCM_STRINGP(name))
-    return NULL;
-  
-  return g_strdup(SCM_STRING_CHARS(name));
+    name = scm_call_2(getters.index_to_name, option->guile_option,
+                      scm_int2num(index));
+    if (name == SCM_UNDEFINED)
+        return NULL;
+    if (!SCM_STRINGP(name))
+        return NULL;
+
+    return g_strdup(SCM_STRING_CHARS(name));
 }
 
 
@@ -926,21 +936,21 @@ gnc_option_permissible_value_name(GNCOption *option, int index)
 char *
 gnc_option_permissible_value_description(GNCOption *option, int index)
 {
-  SCM help;
+    SCM help;
 
-  if (index < 0)
-    return NULL;
+    if (index < 0)
+        return NULL;
 
-  initialize_getters();
+    initialize_getters();
 
-  help = scm_call_2(getters.index_to_description, option->guile_option,
-                    scm_int2num(index));
-  if (help == SCM_UNDEFINED)
-    return NULL;
-  if (!SCM_STRINGP(help))
-    return NULL;
+    help = scm_call_2(getters.index_to_description, option->guile_option,
+                      scm_int2num(index));
+    if (help == SCM_UNDEFINED)
+        return NULL;
+    if (!SCM_STRINGP(help))
+        return NULL;
 
-  return g_strdup(SCM_STRING_CHARS(help));
+    return g_strdup(SCM_STRING_CHARS(help));
 }
 
 
@@ -955,13 +965,13 @@ gnc_option_permissible_value_description(GNCOption *option, int index)
 gboolean
 gnc_option_show_time(GNCOption *option)
 {
-  SCM value;
+    SCM value;
 
-  initialize_getters();
+    initialize_getters();
 
-  value = scm_call_1(getters.date_option_show_time, option->guile_option);
+    value = scm_call_1(getters.date_option_show_time, option->guile_option);
 
-  return SCM_NFALSEP(value);
+    return SCM_NFALSEP(value);
 }
 
 /********************************************************************\
@@ -974,9 +984,9 @@ gnc_option_show_time(GNCOption *option)
 SCM
 gnc_option_get_option_data(GNCOption *option)
 {
-  initialize_getters();
+    initialize_getters();
 
-  return scm_call_1(getters.option_data, option->guile_option);
+    return scm_call_1(getters.option_data, option->guile_option);
 }
 
 
@@ -991,13 +1001,13 @@ gnc_option_get_option_data(GNCOption *option)
 gboolean
 gnc_option_multiple_selection(GNCOption *option)
 {
-  SCM pair;
+    SCM pair;
 
-  initialize_getters();
+    initialize_getters();
 
-  pair = scm_call_1(getters.option_data, option->guile_option);
+    pair = scm_call_1(getters.option_data, option->guile_option);
 
-  return !SCM_NFALSEP(scm_not(SCM_CAR(pair)));
+    return !SCM_NFALSEP(scm_not(SCM_CAR(pair)));
 }
 
 /********************************************************************\
@@ -1012,32 +1022,36 @@ gnc_option_multiple_selection(GNCOption *option)
 GList *
 gnc_option_get_account_type_list(GNCOption *option)
 {
-  SCM pair;
-  SCM lst;
-  GList *type_list = NULL;
+    SCM pair;
+    SCM lst;
+    GList *type_list = NULL;
 
-  initialize_getters();
+    initialize_getters();
 
-  pair = scm_call_1(getters.option_data, option->guile_option);
-  lst = SCM_CDR(pair);
+    pair = scm_call_1(getters.option_data, option->guile_option);
+    lst = SCM_CDR(pair);
 
-  while (!SCM_NULLP (lst)) {
-    GNCAccountType type;
-    SCM item;
+    while (!SCM_NULLP (lst))
+    {
+        GNCAccountType type;
+        SCM item;
 
-    /* Compute this item and the rest of the list */
-    item = SCM_CAR (lst);
-    lst = SCM_CDR (lst);
+        /* Compute this item and the rest of the list */
+        item = SCM_CAR (lst);
+        lst = SCM_CDR (lst);
 
-    if (SCM_FALSEP (scm_integer_p (item))) {
-      PERR ("Invalid type");
-    } else {
-      type = scm_num2long (item, SCM_ARG1, G_STRFUNC);
-      type_list = g_list_prepend (type_list, GINT_TO_POINTER (type));
+        if (SCM_FALSEP (scm_integer_p (item)))
+        {
+            PERR ("Invalid type");
+        }
+        else
+        {
+            type = scm_num2long (item, SCM_ARG1, G_STRFUNC);
+            type_list = g_list_prepend (type_list, GINT_TO_POINTER (type));
+        }
     }
-  }
 
-  return g_list_reverse (type_list);
+    return g_list_reverse (type_list);
 }
 
 
@@ -1056,71 +1070,72 @@ gboolean gnc_option_get_range_info(GNCOption *option,
                                    int    *num_decimals,
                                    double *step_size)
 {
-  SCM list;
-  SCM value;
+    SCM list;
+    SCM value;
 
-  initialize_getters();
+    initialize_getters();
 
-  list = scm_call_1(getters.option_data, option->guile_option);
+    list = scm_call_1(getters.option_data, option->guile_option);
 
-  if (!SCM_LISTP(list) || SCM_NULLP(list))
-    return FALSE;
+    if (!SCM_LISTP(list) || SCM_NULLP(list))
+        return FALSE;
 
-  /* lower bound */
-  value = SCM_CAR(list);
-  list = SCM_CDR(list);
+    /* lower bound */
+    value = SCM_CAR(list);
+    list = SCM_CDR(list);
 
-  if (!SCM_NUMBERP(value))
-    return FALSE;
+    if (!SCM_NUMBERP(value))
+        return FALSE;
 
-  if (lower_bound != NULL)
-    *lower_bound = scm_num2dbl(value, G_STRFUNC);
+    if (lower_bound != NULL)
+        *lower_bound = scm_num2dbl(value, G_STRFUNC);
 
-  if (!SCM_LISTP(list) || SCM_NULLP(list))
-    return FALSE;
+    if (!SCM_LISTP(list) || SCM_NULLP(list))
+        return FALSE;
 
-  /* upper bound */
-  value = SCM_CAR(list);
-  list = SCM_CDR(list);
+    /* upper bound */
+    value = SCM_CAR(list);
+    list = SCM_CDR(list);
 
-  if (!SCM_NUMBERP(value))
-    return FALSE;
+    if (!SCM_NUMBERP(value))
+        return FALSE;
 
-  if (upper_bound != NULL)
-    *upper_bound = scm_num2dbl(value, G_STRFUNC);
+    if (upper_bound != NULL)
+        *upper_bound = scm_num2dbl(value, G_STRFUNC);
 
-  if (!SCM_LISTP(list) || SCM_NULLP(list))
-    return FALSE;
+    if (!SCM_LISTP(list) || SCM_NULLP(list))
+        return FALSE;
 
-  /* number of decimals */
-  value = SCM_CAR(list);
-  list = SCM_CDR(list);
+    /* number of decimals */
+    value = SCM_CAR(list);
+    list = SCM_CDR(list);
 
-  if (!SCM_NUMBERP(value))
-    return FALSE;
+    if (!SCM_NUMBERP(value))
+        return FALSE;
 
-  /* Guile-1.6 returns this as a double, so let's use that in all cases.
-   * This is still safe for earlier guiles, too -- tested with 1.3.4.
-   */
-  if (num_decimals != NULL) {
-    double decimals = scm_num2dbl(value, G_STRFUNC);
-    *num_decimals = (int)decimals;
-  }
+    /* Guile-1.6 returns this as a double, so let's use that in all cases.
+     * This is still safe for earlier guiles, too -- tested with 1.3.4.
+     */
+    if (num_decimals != NULL)
+    {
+        double decimals = scm_num2dbl(value, G_STRFUNC);
+        *num_decimals = (int)decimals;
+    }
 
-  if (!SCM_LISTP(list) || SCM_NULLP(list))
-    return FALSE;
+    if (!SCM_LISTP(list) || SCM_NULLP(list))
+        return FALSE;
 
-  /* step size */
-  value = SCM_CAR(list);
-  list = SCM_CDR(list);
+    /* step size */
+    value = SCM_CAR(list);
+    list = SCM_CDR(list);
 
-  if (!SCM_NUMBERP(value))
-    return FALSE;
+    if (!SCM_NUMBERP(value))
+        return FALSE;
 
-  if (step_size != NULL)
-    *step_size = scm_num2dbl(value, G_STRFUNC);
+    if (step_size != NULL)
+        *step_size = scm_num2dbl(value, G_STRFUNC);
 
-  return TRUE;
+    return TRUE;
 }
 
 
@@ -1135,20 +1150,20 @@ gboolean gnc_option_get_range_info(GNCOption *option,
 gdouble
 gnc_option_color_range(GNCOption *option)
 {
-  SCM list;
-  SCM value;
+    SCM list;
+    SCM value;
 
-  initialize_getters();
+    initialize_getters();
 
-  list = scm_call_1(getters.option_data, option->guile_option);
-  if (!SCM_LISTP(list) || SCM_NULLP(list))
-    return 0.0;
+    list = scm_call_1(getters.option_data, option->guile_option);
+    if (!SCM_LISTP(list) || SCM_NULLP(list))
+        return 0.0;
 
-  value = SCM_CAR(list);
-  if (!SCM_NUMBERP(value))
-    return 0.0;
+    value = SCM_CAR(list);
+    if (!SCM_NUMBERP(value))
+        return 0.0;
 
-  return scm_num2dbl(value, G_STRFUNC);
+    return scm_num2dbl(value, G_STRFUNC);
 }
 
 
@@ -1163,24 +1178,24 @@ gnc_option_color_range(GNCOption *option)
 gdouble
 gnc_option_use_alpha(GNCOption *option)
 {
-  SCM list;
-  SCM value;
+    SCM list;
+    SCM value;
 
-  initialize_getters();
+    initialize_getters();
 
-  list = scm_call_1(getters.option_data, option->guile_option);
-  if (!SCM_LISTP(list) || SCM_NULLP(list))
-    return FALSE;
+    list = scm_call_1(getters.option_data, option->guile_option);
+    if (!SCM_LISTP(list) || SCM_NULLP(list))
+        return FALSE;
 
-  list = SCM_CDR(list);
-  if (!SCM_LISTP(list) || SCM_NULLP(list))
-    return FALSE;
+    list = SCM_CDR(list);
+    if (!SCM_LISTP(list) || SCM_NULLP(list))
+        return FALSE;
 
-  value = SCM_CAR(list);
-  if (!SCM_BOOLP(value))
-    return FALSE;
+    value = SCM_CAR(list);
+    if (!SCM_BOOLP(value))
+        return FALSE;
 
-  return SCM_NFALSEP(value);
+    return SCM_NFALSEP(value);
 }
 
 
@@ -1194,24 +1209,24 @@ gnc_option_use_alpha(GNCOption *option)
 guint32
 gnc_option_get_color_argb(GNCOption *option)
 {
-  gdouble red, green, blue, alpha;
-  guint32 color = 0;
+    gdouble red, green, blue, alpha;
+    guint32 color = 0;
 
-  if (!gnc_option_get_color_info(option, FALSE, &red, &green, &blue, &alpha))
-    return 0;
+    if (!gnc_option_get_color_info(option, FALSE, &red, &green, &blue, &alpha))
+        return 0;
 
-  color |= (guint32) (alpha * 255.0);
-  color <<= 8;
+    color |= (guint32) (alpha * 255.0);
+    color <<= 8;
 
-  color |= (guint32) (red * 255.0);
-  color <<= 8;
+    color |= (guint32) (red * 255.0);
+    color <<= 8;
 
-  color |= (guint32) (green * 255.0);
-  color <<= 8;
+    color |= (guint32) (green * 255.0);
+    color <<= 8;
 
-  color |= (guint32) (blue * 255.0);
+    color |= (guint32) (blue * 255.0);
 
-  return color;
+    return color;
 }
 
 
@@ -1236,60 +1251,60 @@ gnc_option_get_color_info(GNCOption *option,
                           gdouble *blue,
                           gdouble *alpha)
 {
-  gdouble scale;
-  gdouble rgba;
-  SCM getter;
-  SCM value;
+    gdouble scale;
+    gdouble rgba;
+    SCM getter;
+    SCM value;
 
-  if (option == NULL)
-    return FALSE;
+    if (option == NULL)
+        return FALSE;
 
-  if (use_default)
-    getter = gnc_option_default_getter(option);
-  else
-    getter = gnc_option_getter(option);
-  if (getter == SCM_UNDEFINED)
-    return FALSE;
+    if (use_default)
+        getter = gnc_option_default_getter(option);
+    else
+        getter = gnc_option_getter(option);
+    if (getter == SCM_UNDEFINED)
+        return FALSE;
 
-  value = scm_call_0(getter);
-  if (!SCM_LISTP(value) || SCM_NULLP(value) || !SCM_NUMBERP(SCM_CAR(value)))
-    return FALSE;
+    value = scm_call_0(getter);
+    if (!SCM_LISTP(value) || SCM_NULLP(value) || !SCM_NUMBERP(SCM_CAR(value)))
+        return FALSE;
 
-  scale = gnc_option_color_range(option);
-  if (scale <= 0.0)
-    return FALSE;
+    scale = gnc_option_color_range(option);
+    if (scale <= 0.0)
+        return FALSE;
 
-  scale = 1.0 / scale;
+    scale = 1.0 / scale;
 
-  rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
-  if (red != NULL)
-    *red = MIN(1.0, rgba * scale);
+    rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
+    if (red != NULL)
+        *red = MIN(1.0, rgba * scale);
 
-  value = SCM_CDR(value);
-  if (!SCM_LISTP(value) || SCM_NULLP(value) || !SCM_NUMBERP(SCM_CAR(value)))
-    return FALSE;
+    value = SCM_CDR(value);
+    if (!SCM_LISTP(value) || SCM_NULLP(value) || !SCM_NUMBERP(SCM_CAR(value)))
+        return FALSE;
 
-  rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
-  if (green != NULL)
-    *green = MIN(1.0, rgba * scale);
+    rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
+    if (green != NULL)
+        *green = MIN(1.0, rgba * scale);
 
-  value = SCM_CDR(value);
-  if (!SCM_LISTP(value) || SCM_NULLP(value) || !SCM_NUMBERP(SCM_CAR(value)))
-    return FALSE;
+    value = SCM_CDR(value);
+    if (!SCM_LISTP(value) || SCM_NULLP(value) || !SCM_NUMBERP(SCM_CAR(value)))
+        return FALSE;
 
-  rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
-  if (blue != NULL)
-    *blue = MIN(1.0, rgba * scale);
+    rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
+    if (blue != NULL)
+        *blue = MIN(1.0, rgba * scale);
 
-  value = SCM_CDR(value);
-  if (!SCM_LISTP(value) || SCM_NULLP(value) || !SCM_NUMBERP(SCM_CAR(value)))
-    return FALSE;
+    value = SCM_CDR(value);
+    if (!SCM_LISTP(value) || SCM_NULLP(value) || !SCM_NUMBERP(SCM_CAR(value)))
+        return FALSE;
 
-  rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
-  if (alpha != NULL)
-    *alpha = MIN(1.0, rgba * scale);
+    rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
+    if (alpha != NULL)
+        *alpha = MIN(1.0, rgba * scale);
 
-  return TRUE;
+    return TRUE;
 }
 
 
@@ -1303,75 +1318,75 @@ gnc_option_get_color_info(GNCOption *option,
 void
 gnc_option_set_default(GNCOption *option)
 {
-  SCM default_getter;
-  SCM setter;
-  SCM value;
+    SCM default_getter;
+    SCM setter;
+    SCM value;
 
-  if (option == NULL)
-    return;
+    if (option == NULL)
+        return;
 
-  default_getter = gnc_option_default_getter(option);
-  if (default_getter == SCM_UNDEFINED)
-    return;
+    default_getter = gnc_option_default_getter(option);
+    if (default_getter == SCM_UNDEFINED)
+        return;
 
-  value = scm_call_0(default_getter);
+    value = scm_call_0(default_getter);
 
-  setter = gnc_option_setter(option);
-  if (setter == SCM_UNDEFINED)
-    return;
+    setter = gnc_option_setter(option);
+    if (setter == SCM_UNDEFINED)
+        return;
 
-  scm_call_1(setter, value);
+    scm_call_1(setter, value);
 }
 
 
 static gint
 compare_sections(gconstpointer a, gconstpointer b)
 {
-  const GNCOptionSection *sa = a;
-  const GNCOptionSection *sb = b;
+    const GNCOptionSection *sa = a;
+    const GNCOptionSection *sb = b;
 
-  return safe_strcmp(sa->section_name, sb->section_name);
+    return safe_strcmp(sa->section_name, sb->section_name);
 }
 
 static gint
 compare_option_tags(gconstpointer a, gconstpointer b)
 {
-  GNCOption *oa = (GNCOption *) a;
-  GNCOption *ob = (GNCOption *) b;
-  char *tag_a = gnc_option_sort_tag(oa);
-  char *tag_b = gnc_option_sort_tag(ob);
-  gint result;
+    GNCOption *oa = (GNCOption *) a;
+    GNCOption *ob = (GNCOption *) b;
+    char *tag_a = gnc_option_sort_tag(oa);
+    char *tag_b = gnc_option_sort_tag(ob);
+    gint result;
 
-  result = safe_strcmp(tag_a, tag_b);
+    result = safe_strcmp(tag_a, tag_b);
 
-  if (tag_a != NULL)
-    free(tag_a);
+    if (tag_a != NULL)
+        free(tag_a);
 
-  if (tag_b != NULL)
-    free(tag_b);
+    if (tag_b != NULL)
+        free(tag_b);
 
-  return result;
+    return result;
 }
 
 #if 0
 static gint
 compare_option_names(gconstpointer a, gconstpointer b)
 {
-  GNCOption *oa = (GNCOption *) a;
-  GNCOption *ob = (GNCOption *) b;
-  char *name_a = gnc_option_name(oa);
-  char *name_b = gnc_option_name(ob);
-  gint result;
+    GNCOption *oa = (GNCOption *) a;
+    GNCOption *ob = (GNCOption *) b;
+    char *name_a = gnc_option_name(oa);
+    char *name_b = gnc_option_name(ob);
+    gint result;
 
-  result = safe_strcmp(name_a, name_b);
+    result = safe_strcmp(name_a, name_b);
 
-  if (name_a != NULL)
-    free(name_a);
+    if (name_a != NULL)
+        free(name_a);
 
-  if (name_b != NULL)
-    free(name_b);
+    if (name_b != NULL)
+        free(name_b);
 
-  return result;
+    return result;
 }
 #endif
 
@@ -1386,9 +1401,9 @@ compare_option_names(gconstpointer a, gconstpointer b)
 gboolean
 gnc_option_db_dirty(GNCOptionDB *odb)
 {
-  g_return_val_if_fail (odb, FALSE);
+    g_return_val_if_fail (odb, FALSE);
 
-  return odb->options_dirty;
+    return odb->options_dirty;
 }
 
 
@@ -1400,9 +1415,9 @@ gnc_option_db_dirty(GNCOptionDB *odb)
 void
 gnc_option_db_clean(GNCOptionDB *odb)
 {
-  g_return_if_fail (odb);
+    g_return_if_fail (odb);
 
-  odb->options_dirty = FALSE;
+    odb->options_dirty = FALSE;
 }
 
 
@@ -1418,51 +1433,51 @@ gnc_option_db_clean(GNCOptionDB *odb)
 void
 gnc_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
 {
-  GNCOptionDB *odb;
-  GNCOption *option;
-  GNCOptionSection *section;
+    GNCOptionDB *odb;
+    GNCOption *option;
+    GNCOptionSection *section;
 
-  odb = g_hash_table_lookup(option_dbs, &handle);
+    odb = g_hash_table_lookup(option_dbs, &handle);
 
-  g_return_if_fail (odb != NULL);
+    g_return_if_fail (odb != NULL);
 
-  odb->options_dirty = TRUE;
+    odb->options_dirty = TRUE;
 
-  /* Make the option structure */
-  option = g_new0(GNCOption, 1);
-  option->guile_option = guile_option;
-  option->changed = FALSE;
-  option->widget = NULL;
-  option->odb = odb;
+    /* Make the option structure */
+    option = g_new0(GNCOption, 1);
+    option->guile_option = guile_option;
+    option->changed = FALSE;
+    option->widget = NULL;
+    option->odb = odb;
 
-  /* Prevent guile from garbage collecting the option */
-  scm_gc_protect_object(guile_option);
+    /* Prevent guile from garbage collecting the option */
+    scm_gc_protect_object(guile_option);
 
-  /* Make the section structure */
-  section = g_new0(GNCOptionSection, 1);
-  section->section_name = gnc_option_section(option);
-  section->options = NULL;
+    /* Make the section structure */
+    section = g_new0(GNCOptionSection, 1);
+    section->section_name = gnc_option_section(option);
+    section->options = NULL;
 
-  /* See if the section is already there */
-  {
-    GSList *old;
-
-    old = g_slist_find_custom(odb->option_sections, section, compare_sections);
-
-    if (old != NULL)
+    /* See if the section is already there */
     {
-      if (section->section_name != NULL)
-        free(section->section_name);
-      g_free(section);
-      section = old->data;
-    }
-    else
-      odb->option_sections = g_slist_insert_sorted(odb->option_sections,
-                                                   section, compare_sections);
-  }
+        GSList *old;
 
-  section->options = g_slist_insert_sorted(section->options, option,
-                                           compare_option_tags);
+        old = g_slist_find_custom(odb->option_sections, section, compare_sections);
+
+        if (old != NULL)
+        {
+            if (section->section_name != NULL)
+                free(section->section_name);
+            g_free(section);
+            section = old->data;
+        }
+        else
+            odb->option_sections = g_slist_insert_sorted(odb->option_sections,
+                                   section, compare_sections);
+    }
+
+    section->options = g_slist_insert_sorted(section->options, option,
+                       compare_option_tags);
 }
 
 
@@ -1477,7 +1492,7 @@ gnc_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
 guint
 gnc_option_db_num_sections(GNCOptionDB *odb)
 {
-  return g_slist_length(odb->option_sections);
+    return g_slist_length(odb->option_sections);
 }
 
 
@@ -1492,7 +1507,7 @@ gnc_option_db_num_sections(GNCOptionDB *odb)
 GNCOptionSection *
 gnc_option_db_get_section(GNCOptionDB *odb, gint i)
 {
-  return g_slist_nth_data(odb->option_sections, i);
+    return g_slist_nth_data(odb->option_sections, i);
 }
 
 
@@ -1506,7 +1521,7 @@ gnc_option_db_get_section(GNCOptionDB *odb, gint i)
 const char *
 gnc_option_section_name(GNCOptionSection *section)
 {
-  return section->section_name;
+    return section->section_name;
 }
 
 
@@ -1520,7 +1535,7 @@ gnc_option_section_name(GNCOptionSection *section)
 guint
 gnc_option_section_num_options(GNCOptionSection *section)
 {
-  return g_slist_length(section->options);
+    return g_slist_length(section->options);
 }
 
 
@@ -1535,7 +1550,7 @@ gnc_option_section_num_options(GNCOptionSection *section)
 GNCOption *
 gnc_get_option_section_option(GNCOptionSection *section, int i)
 {
-  return g_slist_nth_data(section->options, i);
+    return g_slist_nth_data(section->options, i);
 }
 
 
@@ -1552,43 +1567,43 @@ GNCOption *
 gnc_option_db_get_option_by_name(GNCOptionDB *odb, const char *section_name,
                                  const char *name)
 {
-  GSList *section_node;
-  GSList *option_node;
-  GNCOptionSection section_key;
-  GNCOptionSection *section;
-  GNCOption *option;
-  gint result;
-  char *node_name;
+    GSList *section_node;
+    GSList *option_node;
+    GNCOptionSection section_key;
+    GNCOptionSection *section;
+    GNCOption *option;
+    gint result;
+    char *node_name;
 
-  if (odb == NULL)
+    if (odb == NULL)
+        return NULL;
+
+    section_key.section_name = (char *) section_name;
+
+    section_node = g_slist_find_custom(odb->option_sections, &section_key,
+                                       compare_sections);
+
+    if (section_node == NULL)
+        return NULL;
+
+    section = section_node->data;
+    option_node = section->options;
+
+    while (option_node != NULL)
+    {
+        option = option_node->data;
+
+        node_name = gnc_option_name(option);
+        result = safe_strcmp(name, node_name);
+        free(node_name);
+
+        if (result == 0)
+            return option;
+
+        option_node = option_node->next;
+    }
+
     return NULL;
-
-  section_key.section_name = (char *) section_name;
-
-  section_node = g_slist_find_custom(odb->option_sections, &section_key,
-                                     compare_sections);
-
-  if (section_node == NULL)
-    return NULL;
-
-  section = section_node->data;
-  option_node = section->options;
-
-  while (option_node != NULL)
-  {
-    option = option_node->data;
-
-    node_name = gnc_option_name(option);
-    result = safe_strcmp(name, node_name);
-    free(node_name);
-
-    if (result == 0)
-      return option;
-
-    option_node = option_node->next;
-  }
-
-  return NULL;
 }
 
 
@@ -1603,129 +1618,129 @@ gnc_option_db_get_option_by_name(GNCOptionDB *odb, const char *section_name,
 GNCOption *
 gnc_option_db_get_option_by_SCM(GNCOptionDB *odb, SCM guile_option)
 {
-  GNCOption option_key;
-  GNCOption *option;
-  char *section_name;
-  char *name;
+    GNCOption option_key;
+    GNCOption *option;
+    char *section_name;
+    char *name;
 
-  option_key.guile_option = guile_option;
+    option_key.guile_option = guile_option;
 
-  section_name = gnc_option_section(&option_key);
-  name = gnc_option_name(&option_key);
+    section_name = gnc_option_section(&option_key);
+    name = gnc_option_name(&option_key);
 
-  option = gnc_option_db_get_option_by_name(odb, section_name, name);
+    option = gnc_option_db_get_option_by_name(odb, section_name, name);
 
-  if (section_name != NULL)
-    free(section_name);
+    if (section_name != NULL)
+        free(section_name);
 
-  if (name != NULL)
-    free(name);
+    if (name != NULL)
+        free(name);
 
-  return option;
+    return option;
 }
 
 
 static SCM
 gnc_option_valid_value(GNCOption *option, SCM value)
 {
-  SCM validator;
-  SCM result, ok;
+    SCM validator;
+    SCM result, ok;
 
-  validator = gnc_option_value_validator(option);
+    validator = gnc_option_value_validator(option);
 
-  result = scm_call_1(validator, value);
-  if (!SCM_LISTP(result) || SCM_NULLP(result))
-    return SCM_UNDEFINED;
+    result = scm_call_1(validator, value);
+    if (!SCM_LISTP(result) || SCM_NULLP(result))
+        return SCM_UNDEFINED;
 
-  ok = SCM_CAR(result);
-  if (!SCM_BOOLP(ok))
-    return SCM_UNDEFINED;
+    ok = SCM_CAR(result);
+    if (!SCM_BOOLP(ok))
+        return SCM_UNDEFINED;
 
-  if (!SCM_NFALSEP(ok))
-    return SCM_UNDEFINED;
+    if (!SCM_NFALSEP(ok))
+        return SCM_UNDEFINED;
 
-  result = SCM_CDR(result);
-  if (!SCM_LISTP(result) || SCM_NULLP(result))
-    return SCM_UNDEFINED;
+    result = SCM_CDR(result);
+    if (!SCM_LISTP(result) || SCM_NULLP(result))
+        return SCM_UNDEFINED;
 
-  return SCM_CAR(result);
+    return SCM_CAR(result);
 }
 
 
 static void
 gnc_commit_option(GNCOption *option)
 {
-  SCM validator, setter, value;
-  SCM result, ok;
+    SCM validator, setter, value;
+    SCM result, ok;
 
-  /* Validate the ui's value */
-  value = gnc_option_get_ui_value(option);
-  if (value == SCM_UNDEFINED)
-    return;
+    /* Validate the ui's value */
+    value = gnc_option_get_ui_value(option);
+    if (value == SCM_UNDEFINED)
+        return;
 
-  validator = gnc_option_value_validator(option);
+    validator = gnc_option_value_validator(option);
 
-  result = scm_call_1(validator, value);
-  if (!SCM_LISTP(result) || SCM_NULLP(result))
-  {
-    PERR("bad validation result\n");
-    return;
-  }
-
-  /* First element determines validity */
-  ok = SCM_CAR(result);
-  if (!SCM_BOOLP(ok))
-  {
-    PERR("bad validation result\n");
-    return;
-  }
-
-  if (SCM_NFALSEP(ok))
-  {
-    /* Second element is value to use */
-    value = SCM_CADR(result);
-    setter = gnc_option_setter(option);
-
-    scm_call_1(setter, value);
-
-    gnc_option_set_ui_value (option, FALSE);
-  }
-  else
-  {
-    SCM oops;
-    char *section, *name;
-    GtkWidget *dialog;
-    const gchar *message;
-    const gchar *format = _("There is a problem with option %s:%s.\n%s");
-
-    /* Second element is error message */
-    oops = SCM_CADR(result);
-    if (!SCM_STRINGP(oops))
+    result = scm_call_1(validator, value);
+    if (!SCM_LISTP(result) || SCM_NULLP(result))
     {
-      PERR("bad validation result\n");
-      return;
+        PERR("bad validation result\n");
+        return;
     }
 
-    message = SCM_STRING_CHARS(oops);
-    name = gnc_option_name(option);
-    section = gnc_option_section(option);
+    /* First element determines validity */
+    ok = SCM_CAR(result);
+    if (!SCM_BOOLP(ok))
+    {
+        PERR("bad validation result\n");
+        return;
+    }
 
-    dialog = gtk_message_dialog_new(NULL,
-				    0,
-				    GTK_MESSAGE_ERROR,
-				    GTK_BUTTONS_OK,
-				    format,
-				    section ? section : "(null)",
-				    name ? name : "(null)",
-				    message ? message : "(null)");
-    gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy(dialog);
+    if (SCM_NFALSEP(ok))
+    {
+        /* Second element is value to use */
+        value = SCM_CADR(result);
+        setter = gnc_option_setter(option);
 
-    if (name != NULL)
-      free(name);
-    if (section != NULL)
-      free(section);
-  }
+        scm_call_1(setter, value);
+
+        gnc_option_set_ui_value (option, FALSE);
+    }
+    else
+    {
+        SCM oops;
+        char *section, *name;
+        GtkWidget *dialog;
+        const gchar *message;
+        const gchar *format = _("There is a problem with option %s:%s.\n%s");
+
+        /* Second element is error message */
+        oops = SCM_CADR(result);
+        if (!SCM_STRINGP(oops))
+        {
+            PERR("bad validation result\n");
+            return;
+        }
+
+        message = SCM_STRING_CHARS(oops);
+        name = gnc_option_name(option);
+        section = gnc_option_section(option);
+
+        dialog = gtk_message_dialog_new(NULL,
+                                        0,
+                                        GTK_MESSAGE_ERROR,
+                                        GTK_BUTTONS_OK,
+                                        format,
+                                        section ? section : "(null)",
+                                        name ? name : "(null)",
+                                        message ? message : "(null)");
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+
+        if (name != NULL)
+            free(name);
+        if (section != NULL)
+            free(section);
+    }
 }
 
 
@@ -1740,28 +1755,30 @@ gnc_commit_option(GNCOption *option)
 gboolean
 gnc_option_db_get_changed(GNCOptionDB *odb)
 {
-  GSList *section_node;
-  GSList *option_node;
-  GNCOptionSection *section;
-  GNCOption *option;
+    GSList *section_node;
+    GSList *option_node;
+    GNCOptionSection *section;
+    GNCOption *option;
 
-  g_return_val_if_fail (odb, FALSE);
+    g_return_val_if_fail (odb, FALSE);
 
-  for (section_node = odb->option_sections; section_node;
-       section_node = section_node->next) {
+    for (section_node = odb->option_sections; section_node;
+            section_node = section_node->next)
+    {
 
-    section = section_node->data;
+        section = section_node->data;
 
-    for (option_node = section->options; option_node;
-         option_node = option_node->next) {
+        for (option_node = section->options; option_node;
+                option_node = option_node->next)
+        {
 
-      option = option_node->data;
+            option = option_node->data;
 
-      if (option->changed)
-        return TRUE;
+            if (option->changed)
+                return TRUE;
+        }
     }
-  }
-  return FALSE;
+    return FALSE;
 }
 
 
@@ -1776,39 +1793,39 @@ gnc_option_db_get_changed(GNCOptionDB *odb)
 void
 gnc_option_db_commit(GNCOptionDB *odb)
 {
-  GSList *section_node;
-  GSList *option_node;
-  GNCOptionSection *section;
-  GNCOption *option;
-  gboolean changed_something = FALSE;
+    GSList *section_node;
+    GSList *option_node;
+    GNCOptionSection *section;
+    GNCOption *option;
+    gboolean changed_something = FALSE;
 
-  g_return_if_fail (odb);
+    g_return_if_fail (odb);
 
-  section_node = odb->option_sections;
-  while (section_node != NULL)
-  {
-    section = section_node->data;
-
-    option_node = section->options;
-    while (option_node != NULL)
+    section_node = odb->option_sections;
+    while (section_node != NULL)
     {
-      option = option_node->data;
+        section = section_node->data;
 
-      if (option->changed)
-      {
-        gnc_commit_option(option_node->data);
-        changed_something = TRUE;
-        option->changed = FALSE;
-      }
+        option_node = section->options;
+        while (option_node != NULL)
+        {
+            option = option_node->data;
 
-      option_node = option_node->next;
+            if (option->changed)
+            {
+                gnc_commit_option(option_node->data);
+                changed_something = TRUE;
+                option->changed = FALSE;
+            }
+
+            option_node = option_node->next;
+        }
+
+        section_node = section_node->next;
     }
 
-    section_node = section_node->next;
-  }
-
-  if (changed_something)
-    gnc_call_option_change_callbacks(odb);
+    if (changed_something)
+        gnc_call_option_change_callbacks(odb);
 }
 
 
@@ -1823,27 +1840,27 @@ gnc_option_db_commit(GNCOptionDB *odb)
 void
 gnc_option_db_section_reset_widgets (GNCOptionSection *section)
 {
-  GSList *option_node;
-  GNCOption *option;
+    GSList *option_node;
+    GNCOption *option;
 
-  g_return_if_fail (section);
+    g_return_if_fail (section);
 
-  /* Don't reset "invisible" options.
-   * If the section name begins "__" we should not reset
-   */
-  if (section->section_name == NULL ||
-      strncmp (section->section_name, "__", 2) == 0)
-    return;
+    /* Don't reset "invisible" options.
+     * If the section name begins "__" we should not reset
+     */
+    if (section->section_name == NULL ||
+            strncmp (section->section_name, "__", 2) == 0)
+        return;
 
-  for (option_node = section->options;
-       option_node != NULL;
-       option_node = option_node->next)
-  {
-    option = option_node->data;
+    for (option_node = section->options;
+            option_node != NULL;
+            option_node = option_node->next)
+    {
+        option = option_node->data;
 
-    gnc_option_set_ui_value (option, TRUE);
-    gnc_option_set_changed (option, TRUE);
-  }
+        gnc_option_set_ui_value (option, TRUE);
+        gnc_option_set_changed (option, TRUE);
+    }
 }
 
 
@@ -1857,18 +1874,18 @@ gnc_option_db_section_reset_widgets (GNCOptionSection *section)
 void
 gnc_option_db_reset_widgets (GNCOptionDB *odb)
 {
-  GSList *section_node;
-  GNCOptionSection *section;
+    GSList *section_node;
+    GNCOptionSection *section;
 
-  g_return_if_fail (odb);
+    g_return_if_fail (odb);
 
-  for (section_node = odb->option_sections;
-       section_node != NULL;
-       section_node = section_node->next)
-  {
-    section = section_node->data;
-    gnc_option_db_section_reset_widgets (section);
-  }
+    for (section_node = odb->option_sections;
+            section_node != NULL;
+            section_node = section_node->next)
+    {
+        section = section_node->data;
+        gnc_option_db_section_reset_widgets (section);
+    }
 }
 
 
@@ -1883,21 +1900,21 @@ gnc_option_db_reset_widgets (GNCOptionDB *odb)
 char *
 gnc_option_db_get_default_section(GNCOptionDB *odb)
 {
-  SCM getter;
-  SCM value;
+    SCM getter;
+    SCM value;
 
-  if (odb == NULL)
-    return NULL;
+    if (odb == NULL)
+        return NULL;
 
-  getter = scm_c_eval_string("gnc:options-get-default-section");
-  if (!SCM_PROCEDUREP(getter))
-    return NULL;
+    getter = scm_c_eval_string("gnc:options-get-default-section");
+    if (!SCM_PROCEDUREP(getter))
+        return NULL;
 
-  value = scm_call_1(getter, odb->guile_options);
-  if (!SCM_STRINGP(value))
-    return NULL;
+    value = scm_call_1(getter, odb->guile_options);
+    if (!SCM_STRINGP(value))
+        return NULL;
 
-  return g_strdup(SCM_STRING_CHARS(value));
+    return g_strdup(SCM_STRING_CHARS(value));
 }
 
 
@@ -1918,19 +1935,19 @@ gnc_option_db_lookup_option(GNCOptionDB *odb,
                             const char *name,
                             SCM default_value)
 {
-  GNCOption *option;
-  SCM getter;
+    GNCOption *option;
+    SCM getter;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
+    option = gnc_option_db_get_option_by_name(odb, section, name);
 
-  if (option == NULL)
-    return default_value;
+    if (option == NULL)
+        return default_value;
 
-  getter = gnc_option_getter(option);
-  if (getter == SCM_UNDEFINED)
-    return default_value;
+    getter = gnc_option_getter(option);
+    if (getter == SCM_UNDEFINED)
+        return default_value;
 
-  return scm_call_0(getter);
+    return scm_call_0(getter);
 }
 
 /********************************************************************\
@@ -1950,25 +1967,25 @@ gnc_option_db_lookup_boolean_option(GNCOptionDB *odb,
                                     const char *name,
                                     gboolean default_value)
 {
-  GNCOption *option;
-  SCM getter;
-  SCM value;
+    GNCOption *option;
+    SCM getter;
+    SCM value;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
+    option = gnc_option_db_get_option_by_name(odb, section, name);
 
-  if (option == NULL)
-    return default_value;
+    if (option == NULL)
+        return default_value;
 
-  getter = gnc_option_getter(option);
-  if (getter == SCM_UNDEFINED)
-    return default_value;
+    getter = gnc_option_getter(option);
+    if (getter == SCM_UNDEFINED)
+        return default_value;
 
-  value = scm_call_0(getter);
+    value = scm_call_0(getter);
 
-  if (SCM_BOOLP(value))
-    return SCM_NFALSEP(value);
-  else
-    return default_value;
+    if (SCM_BOOLP(value))
+        return SCM_NFALSEP(value);
+    else
+        return default_value;
 }
 
 
@@ -1990,27 +2007,27 @@ gnc_option_db_lookup_string_option(GNCOptionDB *odb,
                                    const char *name,
                                    const char *default_value)
 {
-  GNCOption *option;
-  SCM getter;
-  SCM value;
+    GNCOption *option;
+    SCM getter;
+    SCM value;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
+    option = gnc_option_db_get_option_by_name(odb, section, name);
 
-  if (option != NULL)
-  {
-    getter = gnc_option_getter(option);
-    if (getter != SCM_UNDEFINED)
+    if (option != NULL)
     {
-      value = scm_call_0(getter);
-      if (SCM_STRINGP(value))
-        return g_strdup(SCM_STRING_CHARS(value));
+        getter = gnc_option_getter(option);
+        if (getter != SCM_UNDEFINED)
+        {
+            value = scm_call_0(getter);
+            if (SCM_STRINGP(value))
+                return g_strdup(SCM_STRING_CHARS(value));
+        }
     }
-  }
 
-  if (default_value == NULL)
-    return NULL;
+    if (default_value == NULL)
+        return NULL;
 
-  return strdup(default_value);
+    return strdup(default_value);
 }
 
 
@@ -2032,7 +2049,7 @@ gnc_option_db_lookup_font_option(GNCOptionDB *odb,
                                  const char *name,
                                  const char *default_value)
 {
-  return gnc_option_db_lookup_string_option(odb, section, name, default_value);
+    return gnc_option_db_lookup_string_option(odb, section, name, default_value);
 }
 
 
@@ -2055,27 +2072,27 @@ gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
                                         const char *name,
                                         const char *default_value)
 {
-  GNCOption *option;
-  SCM getter;
-  SCM value;
+    GNCOption *option;
+    SCM getter;
+    SCM value;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
+    option = gnc_option_db_get_option_by_name(odb, section, name);
 
-  if (option != NULL)
-  {
-    getter = gnc_option_getter(option);
-    if (getter != SCM_UNDEFINED)
+    if (option != NULL)
     {
-      value = scm_call_0(getter);
-      if (SCM_SYMBOLP(value))
-        return g_strdup(SCM_SYMBOL_CHARS(value));
+        getter = gnc_option_getter(option);
+        if (getter != SCM_UNDEFINED)
+        {
+            value = scm_call_0(getter);
+            if (SCM_SYMBOLP(value))
+                return g_strdup(SCM_SYMBOL_CHARS(value));
+        }
     }
-  }
 
-  if (default_value == NULL)
-    return NULL;
+    if (default_value == NULL)
+        return NULL;
 
-  return strdup(default_value);
+    return strdup(default_value);
 }
 
 
@@ -2109,79 +2126,79 @@ gnc_option_db_lookup_date_option(GNCOptionDB *odb,
                                  const char *name,
                                  gboolean *is_relative,
                                  Timespec *set_ab_value,
-                                 char **set_rel_value, 
+                                 char **set_rel_value,
                                  Timespec *default_value)
 {
-  GNCOption *option;
-  Timespec temp = {0,0};
-  char *symbol;
-  SCM getter;
-  SCM value;
+    GNCOption *option;
+    Timespec temp = {0, 0};
+    char *symbol;
+    SCM getter;
+    SCM value;
 
-  initialize_getters();
+    initialize_getters();
 
-  if (set_ab_value == NULL)
-  {
-    set_ab_value = &temp;
-  }
-
-  if(set_rel_value != NULL)
-  {
-    *set_rel_value = NULL;
-  }
- 
-  if (is_relative != NULL)
-  {
-    *is_relative = FALSE;
-  }
-  
-  option = gnc_option_db_get_option_by_name(odb, section, name);
-
-  if (option != NULL)
-  {
-    getter = gnc_option_getter(option);
-    if (getter != SCM_UNDEFINED)
+    if (set_ab_value == NULL)
     {
-      value = scm_call_0(getter);
-
-      if (SCM_CONSP(value))
-      {
-        Timespec absolute;
-
-        absolute = gnc_date_option_value_get_absolute (value);
-
-        *set_ab_value = absolute;
-
-        symbol = gnc_date_option_value_get_type (value);
-
-        if (safe_strcmp(symbol, "relative") == 0)
-        {
-          SCM relative = gnc_date_option_value_get_relative (value);
-
-          if (is_relative != NULL)
-            *is_relative = TRUE;
-
-          if (set_rel_value != NULL)
-            *set_rel_value = g_strdup(SCM_SYMBOL_CHARS (relative));
-        }
-
-        if (symbol)
-          free (symbol);
-      }
+        set_ab_value = &temp;
     }
-  }
-  else
-  {
-    if (default_value == NULL)
+
+    if (set_rel_value != NULL)
     {
-      set_ab_value->tv_sec = time (NULL);
-      set_ab_value->tv_nsec = 0;
+        *set_rel_value = NULL;
+    }
+
+    if (is_relative != NULL)
+    {
+        *is_relative = FALSE;
+    }
+
+    option = gnc_option_db_get_option_by_name(odb, section, name);
+
+    if (option != NULL)
+    {
+        getter = gnc_option_getter(option);
+        if (getter != SCM_UNDEFINED)
+        {
+            value = scm_call_0(getter);
+
+            if (SCM_CONSP(value))
+            {
+                Timespec absolute;
+
+                absolute = gnc_date_option_value_get_absolute (value);
+
+                *set_ab_value = absolute;
+
+                symbol = gnc_date_option_value_get_type (value);
+
+                if (safe_strcmp(symbol, "relative") == 0)
+                {
+                    SCM relative = gnc_date_option_value_get_relative (value);
+
+                    if (is_relative != NULL)
+                        *is_relative = TRUE;
+
+                    if (set_rel_value != NULL)
+                        *set_rel_value = g_strdup(SCM_SYMBOL_CHARS (relative));
+                }
+
+                if (symbol)
+                    free (symbol);
+            }
+        }
     }
     else
-      *set_ab_value = *default_value;
-  }
+    {
+        if (default_value == NULL)
+        {
+            set_ab_value->tv_sec = time (NULL);
+            set_ab_value->tv_nsec = 0;
+        }
+        else
+            *set_ab_value = *default_value;
+    }
 
-  return set_ab_value->tv_sec;
+    return set_ab_value->tv_sec;
 }
 
 
@@ -2202,24 +2219,24 @@ gnc_option_db_lookup_number_option(GNCOptionDB *odb,
                                    const char *name,
                                    gdouble default_value)
 {
-  GNCOption *option;
-  SCM getter;
-  SCM value;
+    GNCOption *option;
+    SCM getter;
+    SCM value;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
+    option = gnc_option_db_get_option_by_name(odb, section, name);
 
-  if (option != NULL)
-  {
-    getter = gnc_option_getter(option);
-    if (getter != SCM_UNDEFINED)
+    if (option != NULL)
     {
-      value = scm_call_0(getter);
-      if (SCM_NUMBERP(value))
-        return scm_num2dbl(value, G_STRFUNC);
+        getter = gnc_option_getter(option);
+        if (getter != SCM_UNDEFINED)
+        {
+            value = scm_call_0(getter);
+            if (SCM_NUMBERP(value))
+                return scm_num2dbl(value, G_STRFUNC);
+        }
     }
-  }
 
-  return default_value;
+    return default_value;
 }
 
 
@@ -2238,18 +2255,18 @@ gnc_option_db_lookup_number_option(GNCOptionDB *odb,
  * Return: true if option was found                                 *
 \********************************************************************/
 gboolean gnc_option_db_lookup_color_option(GNCOptionDB *odb,
-                                           const char *section,
-                                           const char *name,
-                                           gdouble *red,
-                                           gdouble *green,
-                                           gdouble *blue,
-                                           gdouble *alpha)
+        const char *section,
+        const char *name,
+        gdouble *red,
+        gdouble *green,
+        gdouble *blue,
+        gdouble *alpha)
 {
-  GNCOption *option;
+    GNCOption *option;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
+    option = gnc_option_db_get_option_by_name(odb, section, name);
 
-  return gnc_option_get_color_info(option, FALSE, red, green, blue, alpha);
+    return gnc_option_get_color_info(option, FALSE, red, green, blue, alpha);
 }
 
 
@@ -2265,17 +2282,17 @@ gboolean gnc_option_db_lookup_color_option(GNCOptionDB *odb,
  * Return: argb value                                               *
 \********************************************************************/
 guint32 gnc_option_db_lookup_color_option_argb(GNCOptionDB *odb,
-                                               const char *section,
-                                               const char *name,
-                                               guint32 default_value)
+        const char *section,
+        const char *name,
+        guint32 default_value)
 {
-  GNCOption *option;
+    GNCOption *option;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
-  if (option == NULL)
-    return default_value;
+    option = gnc_option_db_get_option_by_name(odb, section, name);
+    if (option == NULL)
+        return default_value;
 
-  return gnc_option_get_color_argb(option);
+    return gnc_option_get_color_argb(option);
 }
 
 
@@ -2296,44 +2313,44 @@ gnc_option_db_lookup_list_option(GNCOptionDB *odb,
                                  const char *name,
                                  GSList *default_value)
 {
-  GNCOption *option;
-  GSList *list = NULL;
-  SCM getter;
-  SCM value;
-  SCM item;
+    GNCOption *option;
+    GSList *list = NULL;
+    SCM getter;
+    SCM value;
+    SCM item;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
-  if (option == NULL)
-    return default_value;
+    option = gnc_option_db_get_option_by_name(odb, section, name);
+    if (option == NULL)
+        return default_value;
 
-  getter = gnc_option_getter(option);
-  if (getter == SCM_UNDEFINED)
-    return default_value;
+    getter = gnc_option_getter(option);
+    if (getter == SCM_UNDEFINED)
+        return default_value;
 
-  value = scm_call_0(getter);
-  while (SCM_LISTP(value) && !SCM_NULLP(value))
-  {
-    item = SCM_CAR(value);
-    value = SCM_CDR(value);
-
-    if (!SCM_SYMBOLP(item))
+    value = scm_call_0(getter);
+    while (SCM_LISTP(value) && !SCM_NULLP(value))
     {
-      gnc_free_list_option_value(list);
+        item = SCM_CAR(value);
+        value = SCM_CDR(value);
 
-      return default_value;
+        if (!SCM_SYMBOLP(item))
+        {
+            gnc_free_list_option_value(list);
+
+            return default_value;
+        }
+
+        list = g_slist_prepend(list, g_strdup(SCM_SYMBOL_CHARS(item)));
     }
 
-    list = g_slist_prepend(list, g_strdup(SCM_SYMBOL_CHARS(item)));
-  }
+    if (!SCM_LISTP(value) || !SCM_NULLP(value))
+    {
+        gnc_free_list_option_value(list);
 
-  if (!SCM_LISTP(value) || !SCM_NULLP(value))
-  {
-    gnc_free_list_option_value(list);
+        return default_value;
+    }
 
-    return default_value;
-  }
-
-  return list;
+    return list;
 }
 
 
@@ -2354,34 +2371,34 @@ gnc_option_db_lookup_currency_option(GNCOptionDB *odb,
                                      const char *name,
                                      gnc_commodity *default_value)
 {
-  GNCOption *option;
-  SCM getter;
-  SCM value;
+    GNCOption *option;
+    SCM getter;
+    SCM value;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
-  if (option == NULL)
-    return default_value;
+    option = gnc_option_db_get_option_by_name(odb, section, name);
+    if (option == NULL)
+        return default_value;
 
-  getter = gnc_option_getter(option);
-  if (getter == SCM_UNDEFINED)
-    return default_value;
+    getter = gnc_option_getter(option);
+    if (getter == SCM_UNDEFINED)
+        return default_value;
 
-  value = scm_call_0(getter);
+    value = scm_call_0(getter);
 
-  return gnc_scm_to_commodity (value);
+    return gnc_scm_to_commodity (value);
 }
 
 static void
 free_helper(gpointer string, gpointer not_used)
 {
-  if (string) free(string);
+    if (string) free(string);
 }
 
 void
 gnc_free_list_option_value(GSList *list)
 {
-  g_slist_foreach(list, free_helper, NULL);
-  g_slist_free(list);
+    g_slist_foreach(list, free_helper, NULL);
+    g_slist_free(list);
 }
 
 
@@ -2399,11 +2416,11 @@ gnc_option_db_set_option_default(GNCOptionDB *odb,
                                  const char *section,
                                  const char *name)
 {
-  GNCOption *option;
+    GNCOption *option;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
+    option = gnc_option_db_get_option_by_name(odb, section, name);
 
-  gnc_option_set_default(option);
+    gnc_option_set_default(option);
 }
 
 
@@ -2424,24 +2441,24 @@ gnc_option_db_set_option(GNCOptionDB *odb,
                          const char *name,
                          SCM value)
 {
-  GNCOption *option;
-  SCM setter;
+    GNCOption *option;
+    SCM setter;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
-  if (option == NULL)
-    return FALSE;
+    option = gnc_option_db_get_option_by_name(odb, section, name);
+    if (option == NULL)
+        return FALSE;
 
-  value = gnc_option_valid_value(option, value);
-  if (value == SCM_UNDEFINED)
-    return FALSE;
+    value = gnc_option_valid_value(option, value);
+    if (value == SCM_UNDEFINED)
+        return FALSE;
 
-  setter = gnc_option_setter(option);
-  if (setter == SCM_UNDEFINED)
-    return FALSE;
+    setter = gnc_option_setter(option);
+    if (setter == SCM_UNDEFINED)
+        return FALSE;
 
-  scm_call_1(setter, value);
+    scm_call_1(setter, value);
 
-  return TRUE;
+    return TRUE;
 }
 
 
@@ -2462,27 +2479,27 @@ gnc_option_db_set_number_option(GNCOptionDB *odb,
                                 const char *name,
                                 gdouble value)
 {
-  GNCOption *option;
-  SCM scm_value;
-  SCM setter;
+    GNCOption *option;
+    SCM scm_value;
+    SCM setter;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
-  if (option == NULL)
-    return FALSE;
+    option = gnc_option_db_get_option_by_name(odb, section, name);
+    if (option == NULL)
+        return FALSE;
 
-  scm_value = scm_make_real(value);
+    scm_value = scm_make_real(value);
 
-  scm_value = gnc_option_valid_value(option, scm_value);
-  if (scm_value == SCM_UNDEFINED)
-    return FALSE;
+    scm_value = gnc_option_valid_value(option, scm_value);
+    if (scm_value == SCM_UNDEFINED)
+        return FALSE;
 
-  setter = gnc_option_setter(option);
-  if (setter == SCM_UNDEFINED)
-    return FALSE;
+    setter = gnc_option_setter(option);
+    if (setter == SCM_UNDEFINED)
+        return FALSE;
 
-  scm_call_1(setter, scm_value);
+    scm_call_1(setter, scm_value);
 
-  return TRUE;
+    return TRUE;
 }
 
 /********************************************************************\
@@ -2502,27 +2519,27 @@ gnc_option_db_set_boolean_option(GNCOptionDB *odb,
                                  const char *name,
                                  gboolean value)
 {
-  GNCOption *option;
-  SCM scm_value;
-  SCM setter;
+    GNCOption *option;
+    SCM scm_value;
+    SCM setter;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
-  if (option == NULL)
-    return FALSE;
+    option = gnc_option_db_get_option_by_name(odb, section, name);
+    if (option == NULL)
+        return FALSE;
 
-  scm_value = SCM_BOOL(value);
+    scm_value = SCM_BOOL(value);
 
-  scm_value = gnc_option_valid_value(option, scm_value);
-  if (scm_value == SCM_UNDEFINED)
-    return FALSE;
+    scm_value = gnc_option_valid_value(option, scm_value);
+    if (scm_value == SCM_UNDEFINED)
+        return FALSE;
 
-  setter = gnc_option_setter(option);
-  if (setter == SCM_UNDEFINED)
-    return FALSE;
+    setter = gnc_option_setter(option);
+    if (setter == SCM_UNDEFINED)
+        return FALSE;
 
-  scm_call_1(setter, scm_value);
+    scm_call_1(setter, scm_value);
 
-  return TRUE;
+    return TRUE;
 }
 
 /********************************************************************\
@@ -2542,30 +2559,30 @@ gnc_option_db_set_string_option(GNCOptionDB *odb,
                                 const char *name,
                                 const char *value)
 {
-  GNCOption *option;
-  SCM scm_value;
-  SCM setter;
+    GNCOption *option;
+    SCM scm_value;
+    SCM setter;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
-  if (option == NULL)
-    return FALSE;
+    option = gnc_option_db_get_option_by_name(odb, section, name);
+    if (option == NULL)
+        return FALSE;
 
-  if (value)
-    scm_value = scm_mem2string(value, strlen(value));
-  else
-    scm_value = SCM_BOOL_F;
+    if (value)
+        scm_value = scm_mem2string(value, strlen(value));
+    else
+        scm_value = SCM_BOOL_F;
 
-  scm_value = gnc_option_valid_value(option, scm_value);
-  if (scm_value == SCM_UNDEFINED)
-    return FALSE;
+    scm_value = gnc_option_valid_value(option, scm_value);
+    if (scm_value == SCM_UNDEFINED)
+        return FALSE;
 
-  setter = gnc_option_setter(option);
-  if (setter == SCM_UNDEFINED)
-    return FALSE;
+    setter = gnc_option_setter(option);
+    if (setter == SCM_UNDEFINED)
+        return FALSE;
 
-  scm_call_1(setter, scm_value);
+    scm_call_1(setter, scm_value);
 
-  return TRUE;
+    return TRUE;
 }
 
 /*******************************************************************\
@@ -2578,16 +2595,16 @@ gnc_option_db_set_string_option(GNCOptionDB *odb,
 char *
 gnc_option_date_option_get_subtype(GNCOption *option)
 {
-  SCM value;
+    SCM value;
 
-  initialize_getters();
+    initialize_getters();
 
-  value = scm_call_1(getters.date_option_subtype, option->guile_option);
+    value = scm_call_1(getters.date_option_subtype, option->guile_option);
 
-  if (SCM_SYMBOLP(value))
-    return g_strdup(SCM_SYMBOL_CHARS(value));
-  else
-    return NULL;
+    if (SCM_SYMBOLP(value))
+        return g_strdup(SCM_SYMBOL_CHARS(value));
+    else
+        return NULL;
 }
 
 /*******************************************************************\
@@ -2600,15 +2617,15 @@ gnc_option_date_option_get_subtype(GNCOption *option)
 char *
 gnc_date_option_value_get_type (SCM option_value)
 {
-  SCM value;
+    SCM value;
 
-  initialize_getters();
+    initialize_getters();
 
-  value = scm_call_1 (getters.date_option_value_type, option_value);
-  if (!SCM_SYMBOLP (value))
-    return NULL;
+    value = scm_call_1 (getters.date_option_value_type, option_value);
+    if (!SCM_SYMBOLP (value))
+        return NULL;
 
-  return g_strdup(SCM_SYMBOL_CHARS (value));
+    return g_strdup(SCM_SYMBOL_CHARS (value));
 }
 
 /*******************************************************************\
@@ -2621,13 +2638,13 @@ gnc_date_option_value_get_type (SCM option_value)
 Timespec
 gnc_date_option_value_get_absolute (SCM option_value)
 {
-  SCM value;
+    SCM value;
 
-  initialize_getters();
+    initialize_getters();
 
-  value = scm_call_1 (getters.date_option_value_absolute, option_value);
+    value = scm_call_1 (getters.date_option_value_absolute, option_value);
 
-  return gnc_timepair2timespec (value);
+    return gnc_timepair2timespec (value);
 }
 
 /*******************************************************************\
@@ -2640,9 +2657,9 @@ gnc_date_option_value_get_absolute (SCM option_value)
 SCM
 gnc_date_option_value_get_relative (SCM option_value)
 {
-  initialize_getters();
+    initialize_getters();
 
-  return scm_call_1 (getters.date_option_value_relative, option_value);
+    return scm_call_1 (getters.date_option_value_relative, option_value);
 }
 
 /*******************************************************************\
@@ -2657,22 +2674,22 @@ gnc_date_option_value_get_relative (SCM option_value)
 \*******************************************************************/
 void
 gnc_option_db_set_option_selectable_by_name(SCM guile_option,
-                                            const char *section, 
-                                            const char *name,
-                                            gboolean selectable)
+        const char *section,
+        const char *name,
+        gboolean selectable)
 {
-  GNCOptionDB *odb;
-  GNCOption *option;
+    GNCOptionDB *odb;
+    GNCOption *option;
 
-  odb = gnc_option_db_find (guile_option);
-  if (!odb)
-    return;
+    odb = gnc_option_db_find (guile_option);
+    if (!odb)
+        return;
 
-  option = gnc_option_db_get_option_by_name(odb, section, name);
-  if (!option)
-    return;
+    option = gnc_option_db_get_option_by_name(odb, section, name);
+    if (!option)
+        return;
 
-  gnc_option_set_selectable (option, selectable);
+    gnc_option_set_selectable (option, selectable);
 }
 
 /* the value is a list of:
@@ -2680,106 +2697,112 @@ gnc_option_db_set_option_selectable_by_name(SCM guile_option,
  */
 
 gboolean gnc_dateformat_option_value_parse(SCM value, QofDateFormat *format,
-                                           GNCDateMonthFormat *months,
-                                           gboolean *years, char **custom)
+        GNCDateMonthFormat *months,
+        gboolean *years, char **custom)
 {
-  SCM val;
-  const char *str;
+    SCM val;
+    const char *str;
 
-  if (!SCM_LISTP(value) || SCM_NULLP(value))
+    if (!SCM_LISTP(value) || SCM_NULLP(value))
+        return TRUE;
+
+    do
+    {
+
+        /* Parse the format */
+        val = SCM_CAR(value);
+        value = SCM_CDR(value);
+        if (!SCM_SYMBOLP(val))
+            break;
+        str = SCM_SYMBOL_CHARS (val);
+        if (!str)
+            break;
+
+        if (format)
+        {
+            if (gnc_date_string_to_dateformat(str, format))
+            {
+                break;
+            }
+        }
+
+        /* parse the months */
+        val = SCM_CAR(value);
+        value = SCM_CDR(value);
+        if (!SCM_SYMBOLP(val))
+            break;
+        str = SCM_SYMBOL_CHARS (val);
+        if (!str)
+            break;
+
+        if (months)
+        {
+            if (gnc_date_string_to_monthformat(str, months))
+            {
+                break;
+            }
+        }
+
+        /* parse the years */
+        val = SCM_CAR(value);
+        value = SCM_CDR(value);
+        if (!SCM_BOOLP(val))
+            break;
+
+        if (years)
+            *years = SCM_NFALSEP(val);
+
+        /* parse the custom */
+        val = SCM_CAR(value);
+        value = SCM_CDR(value);
+        if (!SCM_STRINGP(val))
+            break;
+        if (!SCM_NULLP(value))
+            break;
+
+        if (custom)
+            *custom = g_strdup(SCM_STRING_CHARS(val));
+
+        return FALSE;
+
+    }
+    while (FALSE);
+
     return TRUE;
-
-  do {
-
-    /* Parse the format */
-    val = SCM_CAR(value);
-    value = SCM_CDR(value);
-    if (!SCM_SYMBOLP(val))
-      break;
-    str = SCM_SYMBOL_CHARS (val);
-    if (!str)
-      break;
-
-    if (format) {
-      if (gnc_date_string_to_dateformat(str, format)) {
-        break;
-      }
-    }
-
-    /* parse the months */
-    val = SCM_CAR(value);
-    value = SCM_CDR(value);
-    if (!SCM_SYMBOLP(val))
-      break;
-    str = SCM_SYMBOL_CHARS (val);
-    if (!str)
-      break;
-
-    if (months) {
-      if (gnc_date_string_to_monthformat(str, months)) {
-        break;
-      }
-    }
-
-    /* parse the years */
-    val = SCM_CAR(value);
-    value = SCM_CDR(value);
-    if (!SCM_BOOLP(val))
-      break;
-
-    if (years)
-      *years = SCM_NFALSEP(val);
-
-    /* parse the custom */
-    val = SCM_CAR(value);
-    value = SCM_CDR(value);
-    if (!SCM_STRINGP(val))
-      break;
-    if (!SCM_NULLP(value))
-      break;
-
-    if (custom)
-      *custom = g_strdup(SCM_STRING_CHARS(val));
-
-    return FALSE;
-
-  } while (FALSE);
-
-  return TRUE;
 }
 
 SCM gnc_dateformat_option_set_value(QofDateFormat format, GNCDateMonthFormat months,
                                     gboolean years, const char *custom)
 {
-  SCM value = SCM_EOL;
-  SCM val;
-  const char *str;
+    SCM value = SCM_EOL;
+    SCM val;
+    const char *str;
 
-  /* build the list in reverse order */
-  if (custom)
-    val = scm_mem2string(custom, strlen(custom));
-  else
-    val = SCM_BOOL_F;
-  value = scm_cons(val, value);
+    /* build the list in reverse order */
+    if (custom)
+        val = scm_mem2string(custom, strlen(custom));
+    else
+        val = SCM_BOOL_F;
+    value = scm_cons(val, value);
 
-  val = SCM_BOOL(years);
-  value = scm_cons(val, value);
+    val = SCM_BOOL(years);
+    value = scm_cons(val, value);
 
-  str = gnc_date_monthformat_to_string(months);
-  if (str)
-    val = scm_str2symbol(str);
-  else
-    val = SCM_BOOL_F;
-  value = scm_cons(val, value);
+    str = gnc_date_monthformat_to_string(months);
+    if (str)
+        val = scm_str2symbol(str);
+    else
+        val = SCM_BOOL_F;
+    value = scm_cons(val, value);
 
-  str = gnc_date_dateformat_to_string(format);
-  if (str)
-    val = scm_str2symbol(str);
-  else
-    val = SCM_BOOL_F;
-  value = scm_cons(val, value);
+    str = gnc_date_dateformat_to_string(format);
+    if (str)
+        val = scm_str2symbol(str);
+    else
+        val = SCM_BOOL_F;
+    value = scm_cons(val, value);
 
-  return value;
+    return value;
 }
 
 /* For now, this is global, just like when it was in guile.
@@ -2823,7 +2846,8 @@ gnc_make_kvp_options(QofIdType id_type)
     gnc_new_options = scm_c_eval_string("gnc:new-options");
     options = scm_call_0(gnc_new_options);
 
-    for (p = list; p; p = p->next) {
+    for (p = list; p; p = p->next)
+    {
         SCM generator = p->data;
         scm_call_1(generator, options);
     }

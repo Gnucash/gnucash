@@ -28,7 +28,7 @@
 #include "sixtp.h"
 
 /* Create a parser that will turn the entire sub-tree into a DOM tree
-   an pass it in as (don't put anything into parent_data) 
+   an pass it in as (don't put anything into parent_data)
    you must deal with the xml tree in *result.
 */
 sixtp* sixtp_dom_parser_new(sixtp_end_handler ender,

@@ -445,17 +445,17 @@ gboolean qof_book_use_trading_accounts (const QofBook *book)
 {
     const char *opt;
     kvp_value *kvp_val;
-    
-    
-    kvp_val = kvp_frame_get_slot_path (qof_book_get_slots (book), 
-                                       BOOK_OPTIONS_NAME, 
+
+
+    kvp_val = kvp_frame_get_slot_path (qof_book_get_slots (book),
+                                       BOOK_OPTIONS_NAME,
                                        ACCOUNT_OPTIONS_SECTION,
                                        TRADING_ACCOUNTS_OPTION, NULL);
     if (kvp_val == NULL)
         return FALSE;
-    
+
     opt = kvp_value_get_string (kvp_val);
-    
+
     if (opt && opt[0] == 't' && opt[1] == 0)
         return TRUE;
     return FALSE;

@@ -14,8 +14,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
- 
-#include "config.h" 
+
+#include "config.h"
 #include <glib.h>
 #include <libpq-fe.h>
 #include <stdlib.h>
@@ -37,7 +37,8 @@
 
 static QofLogModule log_module = GNC_MOD_TEST;
 
-struct _dbinfo {
+struct _dbinfo
+{
     char *host;
     char *port;
     char *dbname;
@@ -93,7 +94,8 @@ db_file_url(DbInfo *dbinfo)
     g_return_val_if_fail(dbinfo->dbname && dbinfo->mode, NULL);
 
     if ((!g_ascii_strncasecmp(dbinfo->port, "7777", 4)) &&
-        (!g_ascii_strncasecmp(dbinfo->host, "localhost", 8))) {
+            (!g_ascii_strncasecmp(dbinfo->host, "localhost", 8)))
+    {
         /* TEST_DB_SOCKET_DIR must be an absolute path */
         db_socket_dir = getenv("TEST_DB_SOCKET_DIR");
         if (!db_socket_dir)
@@ -101,7 +103,9 @@ db_file_url(DbInfo *dbinfo)
         g_return_val_if_fail(db_socket_dir, NULL);
         url = g_strdup_printf("postgres://%s:7777/%s?mode=%s",
                               db_socket_dir, dbinfo->dbname, dbinfo->mode);
-    } else {
+    }
+    else
+    {
         url = g_strdup_printf("postgres://%s:%s/%s?mode=%s",
                               dbinfo->host, dbinfo->port,
                               dbinfo->dbname, dbinfo->mode);
@@ -183,7 +187,8 @@ load_db_file(QofSession * session, DbInfo *dbinfo, gboolean end_session)
                       dbinfo->dbname, dbinfo->mode))
         return FALSE;
 
-    if (end_session) {
+    if (end_session)
+    {
         qof_session_end(session);
         io_err = qof_session_get_error(session);
         if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
@@ -229,14 +234,17 @@ test_access(DbInfo *dbinfo, gboolean multi_user)
     qof_session_begin(session_2, filename, FALSE, FALSE);
     io_err = qof_session_get_error(session_2);
 
-    if (multi_user) {
+    if (multi_user)
+    {
         if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
                           "Beginning second multi-user db session",
                           __FILE__, __LINE__,
                           "can't begin second session for %s in mode %s",
                           dbinfo->dbname, dbinfo->mode))
             return FALSE;
-    } else {
+    }
+    else
+    {
         if (!do_test_args(io_err != ERR_BACKEND_NO_ERR,
                           "Beginning second single-user db session",
                           __FILE__, __LINE__,
@@ -280,7 +288,8 @@ mark_price_commodities(GNCPrice * p, gpointer data)
     return TRUE;
 }
 
-typedef struct {
+typedef struct
+{
     GHashTable *hash;
     GList *to_delete;
 } CommodityDeleteInfo;
@@ -310,10 +319,10 @@ remove_unneeded_commodities(QofSession * session)
     book = qof_session_get_book(session);
 
     gnc_account_foreach_descendant(gnc_book_get_root_account(book),
-                            mark_account_commodities, cdi.hash);
+                                   mark_account_commodities, cdi.hash);
 
     xaccAccountTreeForEachTransaction(gnc_book_get_root_account(book),
-                                mark_transaction_commodities, cdi.hash);
+                                      mark_transaction_commodities, cdi.hash);
 
     gnc_pricedb_foreach_price(gnc_book_get_pricedb(book),
                               mark_price_commodities, cdi.hash, FALSE);
@@ -395,7 +404,8 @@ test_updates(QofSession * session, DbInfo *dbinfo, gboolean multi_user)
 
     make_random_changes_to_session(session);
 
-    if (!multi_user) {
+    if (!multi_user)
+    {
         qof_session_end(session);
         io_err = qof_session_get_error(session);
         if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
@@ -427,7 +437,8 @@ test_updates(QofSession * session, DbInfo *dbinfo, gboolean multi_user)
                  "book 1: %s,\nbook 2: %s",
                  dbinfo->dbname, dbinfo->mode, str1, str2);
 
-    if (multi_user) {
+    if (multi_user)
+    {
         qof_session_end(session);
         io_err = qof_session_get_error(session);
         if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
@@ -447,7 +458,8 @@ test_updates(QofSession * session, DbInfo *dbinfo, gboolean multi_user)
             return FALSE;
     }
 
-    if (!ok) {
+    if (!ok)
+    {
         save_xml_files(session, session_2);
         return FALSE;
     }
@@ -485,7 +497,8 @@ session_num_trans(QofSession * session)
     return num;
 }
 
-typedef struct {
+typedef struct
+{
     QofSession *session_base;
     DbInfo *dbinfo;
     gint loaded;
@@ -516,14 +529,17 @@ test_raw_query(QofSession * session, Query * q)
     result = PQexec(be->connection, sql_query_string);
 
     ok = (result && PQresultStatus(result) == PGRES_TUPLES_OK);
-    if (!ok) {
+    if (!ok)
+    {
         failure_args("Raw query failed",
                      __FILE__, __LINE__,
                      "Error: %s\nQuery: %s",
                      PQresultErrorMessage(result),
                      sql_query_string);
         /* failure("raw query failed: %s", sql_query_string); */
-    } else {
+    }
+    else
+    {
         ok = ok && (PQntuples(result) == 1);
         if (!ok)
             failure_args("number returned test",
@@ -531,7 +547,8 @@ test_raw_query(QofSession * session, Query * q)
                          "query returned %d tuples", PQntuples(result));
     }
 
-    if (ok) {
+    if (ok)
+    {
         success("raw query succeeded");
     }
 
@@ -577,13 +594,15 @@ test_trans_query(Transaction * trans, gpointer data)
     q = make_trans_query(trans, get_random_query_type() | GUID_QT);
     xaccQuerySetBook(q, book);
 
-    if (!test_raw_query(session, q)) {
+    if (!test_raw_query(session, q))
+    {
         failure("raw query failed");
         return FALSE;
     }
 
     list = xaccQueryGetTransactions(q, QUERY_TXN_MATCH_ANY);
-    if (g_list_length(list) != 1) {
+    if (g_list_length(list) != 1)
+    {
         failure_args("test num returned", __FILE__, __LINE__,
                      "number of matching transactions %d not 1",
                      g_list_length(list));
@@ -594,7 +613,8 @@ test_trans_query(Transaction * trans, gpointer data)
     qtd->loaded += session_num_trans(session);
     qtd->total += session_num_trans(qtd->session_base);
 
-    if (!xaccTransEqual(trans, list->data, TRUE, TRUE, TRUE, FALSE)) {
+    if (!xaccTransEqual(trans, list->data, TRUE, TRUE, TRUE, FALSE))
+    {
         failure("matching transaction is wrong");
         g_list_free(list);
         return FALSE;
@@ -625,12 +645,14 @@ compare_balances(QofSession * session_1, QofSession * session_2)
     ok = TRUE;
 
     list = gnc_account_get_descendants(gnc_book_get_root_account(book_1));
-    for (node = list; node; node = node->next) {
+    for (node = list; node; node = node->next)
+    {
         Account *account_1 = node->data;
         Account *account_2;
 
         account_2 = xaccAccountLookup(xaccAccountGetGUID(account_1), book_2);
-        if (!account_2) {
+        if (!account_2)
+        {
             failure_args("", __FILE__, __LINE__,
                          "session_1 has account %s but not session_2",
                          guid_to_string(xaccAccountGetGUID(account_1)));
@@ -638,7 +660,8 @@ compare_balances(QofSession * session_1, QofSession * session_2)
         }
 
         if (!gnc_numeric_equal(xaccAccountGetBalance(account_1),
-                               xaccAccountGetBalance(account_2))) {
+                               xaccAccountGetBalance(account_2)))
+        {
             failure_args("", __FILE__, __LINE__,
                          "balances not equal for account %s",
                          guid_to_string(xaccAccountGetGUID(account_1)));
@@ -646,7 +669,8 @@ compare_balances(QofSession * session_1, QofSession * session_2)
         }
 
         if (!gnc_numeric_equal(xaccAccountGetClearedBalance(account_1),
-                               xaccAccountGetClearedBalance(account_2))) {
+                               xaccAccountGetClearedBalance(account_2)))
+        {
             failure_args("", __FILE__, __LINE__,
                          "cleared balances not equal for account %s",
                          guid_to_string(xaccAccountGetGUID(account_1)));
@@ -654,7 +678,8 @@ compare_balances(QofSession * session_1, QofSession * session_2)
         }
 
         if (!gnc_numeric_equal(xaccAccountGetReconciledBalance(account_1),
-                               xaccAccountGetReconciledBalance(account_2))) {
+                               xaccAccountGetReconciledBalance(account_2)))
+        {
             failure_args("", __FILE__, __LINE__,
                          "reconciled balances not equal for account %s",
                          guid_to_string(xaccAccountGetGUID(account_1)));
@@ -699,7 +724,8 @@ test_queries(QofSession * session_base, DbInfo *dbinfo)
     return ok;
 }
 
-typedef struct {
+typedef struct
+{
     QofSession *session_1;
     QofSession *session_2;
 
@@ -734,7 +760,7 @@ test_trans_update(Transaction * trans, gpointer data)
 
     xaccTransBeginEdit(trans);
     make_random_changes_to_transaction_and_splits(book_1, trans,
-                                                  td->accounts_1);
+            td->accounts_1);
     xaccTransCommitEdit(trans);
 
     io_err = qof_session_get_error(td->session_1);
@@ -748,10 +774,11 @@ test_trans_update(Transaction * trans, gpointer data)
     trans_2 = xaccTransLookup(&guid, book_2);
 
     /* This should get rolled back. */
-    if (trans_2) {
+    if (trans_2)
+    {
         xaccTransBeginEdit(trans_2);
         make_random_changes_to_transaction_and_splits(book_2, trans_2,
-                                                      td->accounts_2);
+                td->accounts_2);
         xaccTransCommitEdit(trans_2);
     }
 
@@ -759,7 +786,7 @@ test_trans_update(Transaction * trans, gpointer data)
 
     ok = xaccTransEqual(trans, trans_2, TRUE, TRUE, TRUE, FALSE);
     if (trans && trans_2)
-      ok = ok && (qof_instance_compare_version(trans, trans_2));
+        ok = ok && (qof_instance_compare_version(trans, trans_2));
 
     /*
        ok = ok && (qof_session_get_error (td->session_2) == ERR_BACKEND_MODIFIED);
@@ -790,10 +817,13 @@ drop_database(DbInfo *dbinfo)
     gchar *dropdb = NULL;
     int rc;
 
-    if (!g_ascii_strncasecmp(dbinfo->port, "7777", 4)) {
+    if (!g_ascii_strncasecmp(dbinfo->port, "7777", 4))
+    {
         dropdb = g_strdup_printf("dropdb -p %s %s",
                                  dbinfo->port, dbinfo->dbname);
-    } else {
+    }
+    else
+    {
         dropdb = g_strdup_printf("dropdb -p %s -h %s %s",
                                  dbinfo->port, dbinfo->host,
                                  dbinfo->dbname);
@@ -803,7 +833,8 @@ drop_database(DbInfo *dbinfo)
     sleep(5);
     rc = system(dropdb);
     printf("Executed %s,\nreturn code was %d\n", dropdb, rc);
-    if (rc) {
+    if (rc)
+    {
         printf("Please run the command\n"
                "\t%s\nwhen this process completes\n", dropdb);
     }
@@ -811,9 +842,9 @@ drop_database(DbInfo *dbinfo)
     dropdb = NULL;
     return rc == 0 ? TRUE : FALSE;
 }
-    
+
 static gboolean
-test_updates_2(QofSession * session_base, DbInfo *dbinfo) 
+test_updates_2(QofSession * session_base, DbInfo *dbinfo)
 {
     UpdateTestData td;
     char *filename;
@@ -849,7 +880,8 @@ test_updates_2(QofSession * session_base, DbInfo *dbinfo)
     ok = TRUE;
     transes = NULL;
     xaccAccountTreeForEachTransaction(td.root_1, add_trans_helper, &transes);
-    for (node = transes; node; node = node->next) {
+    for (node = transes; node; node = node->next)
+    {
         ok = test_trans_update(node->data, &td);
         if (!ok)
             return FALSE;
@@ -857,7 +889,8 @@ test_updates_2(QofSession * session_base, DbInfo *dbinfo)
     g_list_free(transes);
 
 #if 0
-    for (node = td.accounts_1; node; node = node->next) {
+    for (node = td.accounts_1; node; node = node->next)
+    {
         Account *account_1 = node->data;
         Account *account_2 =
             xaccAccountLookup(xaccAccountGetGUID(account_1), td.book_2);
@@ -870,7 +903,7 @@ test_updates_2(QofSession * session_base, DbInfo *dbinfo)
             ok = ok && (account_1->version == account_2->version);
 
         ok = ok
-            && (qof_session_get_error(td.session_2) == ERR_BACKEND_MODIFIED);
+             && (qof_session_get_error(td.session_2) == ERR_BACKEND_MODIFIED);
 
         if (!do_test_args(ok,
                           "test account rollback",
@@ -895,7 +928,8 @@ test_updates_2(QofSession * session_base, DbInfo *dbinfo)
         xaccAccountCommitEdit(account);
 
         xaccTransBeginEdit(trans);
-        for (node = xaccTransGetSplitList(trans); node; node = node->next) {
+        for (node = xaccTransGetSplitList(trans); node; node = node->next)
+        {
             Split *split = node->data;
 
             xaccAccountInsertSplit(child, split);
@@ -912,7 +946,8 @@ test_updates_2(QofSession * session_base, DbInfo *dbinfo)
 
         xaccFreeQuery(q);
 
-        if (ok) {
+        if (ok)
+        {
             Transaction *trans_2;
             Account *account_2;
             Account *child_2;
@@ -967,7 +1002,8 @@ test_mode(DbInfo *dbinfo, gboolean updates, gboolean multi_user)
     if (!load_db_file(session_db, dbinfo, !multi_user))
         return FALSE;
 
-    if (multi_user) {
+    if (multi_user)
+    {
         if (!compare_balances(session, session_db))
             return FALSE;
 
@@ -981,7 +1017,8 @@ test_mode(DbInfo *dbinfo, gboolean updates, gboolean multi_user)
                  "Books not equal for session %s in mode %s",
                  dbinfo->dbname, dbinfo->mode);
 
-    if (multi_user) {
+    if (multi_user)
+    {
         QofBackendError io_err;
 
         qof_session_end(session_db);
@@ -994,7 +1031,8 @@ test_mode(DbInfo *dbinfo, gboolean updates, gboolean multi_user)
             return FALSE;
     }
 
-    if (!ok) {
+    if (!ok)
+    {
         save_xml_files(session, session_db);
         return FALSE;
     }
@@ -1065,7 +1103,7 @@ test_performance(DbInfo *dbinfo)
         return;
     REPORT_CLOCK(0, "Finished saving session");
     dbinfo->mode = modesave;
-    
+
     qof_session_destroy(session);
     session = qof_session_new();
 
@@ -1091,16 +1129,17 @@ int
 main (int argc, char **argv)
 {
     DbInfo *dbinfo;
-    
+
     qof_init();
     do_test(qof_load_backend_library ("../.libs/", PG_LIB_NAME),
             " loading gnc-backend-postgres GModule failed");
 
     dbinfo = g_new0(DbInfo, 1);
-    
+
     if (argc >= 2)
         dbinfo->host = argv[1];
-    else {
+    else
+    {
         dbinfo->host = getenv("PGHOST");
         if (!dbinfo->host)
             dbinfo->host = "localhost";
@@ -1108,7 +1147,8 @@ main (int argc, char **argv)
 
     if (argc >= 3)
         dbinfo->port = argv[2];
-    else {
+    else
+    {
         dbinfo->port = getenv("PGPORT");
         if (!dbinfo->port)
             dbinfo->port = "5432";

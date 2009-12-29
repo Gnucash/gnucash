@@ -26,12 +26,12 @@
  *
  * FUNCTION:
  * Generic SQL query builder.  This class can be sued to construct
- * a basic sql query statement (of the type 'select', 'update' or 
- * 'insert') by simply making C calls indicating the table and the 
+ * a basic sql query statement (of the type 'select', 'update' or
+ * 'insert') by simply making C calls indicating the table and the
  * fields to query.
  *
  * Its fairly limited in the range of sql syntax that it supports,
- * but on the other hand, the code here is/should be general enough 
+ * but on the other hand, the code here is/should be general enough
  * to work with  any SQL implementation.
  *
  * HISTORY:
@@ -45,11 +45,12 @@
 
 #define SQL_DBL_FMT "%24.18g"
 
-typedef enum {
-   SQL_UPDATE = 'm',  /* m == modify */
-   SQL_INSERT = 'a',  /* a == add */
-   SQL_SELECT = 'q',  /* q == query */
-   SQL_DELETE = 'd'   /* d == drop, delete */
+typedef enum
+{
+    SQL_UPDATE = 'm',  /* m == modify */
+    SQL_INSERT = 'a',  /* a == add */
+    SQL_SELECT = 'q',  /* q == query */
+    SQL_DELETE = 'd'   /* d == drop, delete */
 } sqlBuild_QType;
 
 typedef struct _builder sqlBuilder;
@@ -57,11 +58,11 @@ typedef struct _builder sqlBuilder;
 sqlBuilder * sqlBuilder_new(void);
 void sqlBuilder_destroy (sqlBuilder *);
 
-/* The sqlBuild_Table() routine starts building a new SQL query 
+/* The sqlBuild_Table() routine starts building a new SQL query
  *    on table 'tablename'.  Any previously started query is erased.
  *
- *    When building 'select' type statments, crude table joins are 
- *    supported: the 'tablename' can in fact be a comma-separated list 
+ *    When building 'select' type statments, crude table joins are
+ *    supported: the 'tablename' can in fact be a comma-separated list
  *    of tables.  This field is copied directly as follows:
  *    "SELECT ... FROM tablename WHERE ..." so anything valid in that
  *    position is tolerated.
@@ -93,14 +94,14 @@ void sqlBuild_Where_GUID (sqlBuilder *b, const char *tag, const GUID *val);
 void sqlBuild_Where_Int32 (sqlBuilder *b, const char *tag, gint32 val);
 
 
-/* The sqlBuild_Query() routine returns a valid SQL query 
- *    statement that reflects the set of build calls just made.   
- *    This string is freed when sqlBuilder_destroy() is called, 
+/* The sqlBuild_Query() routine returns a valid SQL query
+ *    statement that reflects the set of build calls just made.
+ *    This string is freed when sqlBuilder_destroy() is called,
  *    so make a copy if you need it.
  *
- *    This resulting query string is probably general enough to 
- *    work with almost any SQL db, I beleive.     
- */   
+ *    This resulting query string is probably general enough to
+ *    work with almost any SQL db, I beleive.
+ */
 const char *sqlBuild_Query (sqlBuilder *b);
 
 

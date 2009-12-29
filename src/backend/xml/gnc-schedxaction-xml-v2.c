@@ -62,7 +62,7 @@
 #define SX_NUM_OCCUR            "sx:num-occur"
 #define SX_REM_OCCUR            "sx:rem-occur"
 #define SX_END                  "sx:end"
-#define SX_TEMPL_ACCT           "sx:templ-acct" 
+#define SX_TEMPL_ACCT           "sx:templ-acct"
 #define SX_FREQSPEC             "sx:freqspec"
 #define SX_SCHEDULE             "sx:schedule"
 #define SX_SLOTS                "sx:slots"
@@ -116,7 +116,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     xmlNewTextChild( ret, NULL, BAD_CAST SX_AUTOCREATE_NOTIFY,
                      BAD_CAST ( sx->autoCreateNotify ? "y" : "n" ) );
     xmlAddChild(ret, int_to_dom_tree(SX_ADVANCE_CREATE_DAYS,
-                                      sx->advanceCreateDays));
+                                     sx->advanceCreateDays));
     xmlAddChild(ret, int_to_dom_tree(SX_ADVANCE_REMIND_DAYS,
                                      sx->advanceRemindDays));
 
@@ -129,32 +129,36 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
                                     xaccSchedXactionGetStartDate(sx) ) );
 
     date = xaccSchedXactionGetLastOccurDate(sx);
-    if ( g_date_valid( date ) ) {
-            xmlAddChild( ret, gdate_to_dom_tree( SX_LAST, date ) );
+    if ( g_date_valid( date ) )
+    {
+        xmlAddChild( ret, gdate_to_dom_tree( SX_LAST, date ) );
     }
 
-    if ( xaccSchedXactionHasOccurDef(sx) ) {
+    if ( xaccSchedXactionHasOccurDef(sx) )
+    {
 
         xmlAddChild(ret, int_to_dom_tree( SX_NUM_OCCUR,
                                           xaccSchedXactionGetNumOccur(sx)));
         xmlAddChild(ret, int_to_dom_tree( SX_REM_OCCUR,
                                           xaccSchedXactionGetRemOccur(sx)));
 
-    } else if ( xaccSchedXactionHasEndDate(sx) ) {
-            xmlAddChild( ret,
-                         gdate_to_dom_tree( SX_END,
-                                            xaccSchedXactionGetEndDate(sx) ) );
+    }
+    else if ( xaccSchedXactionHasEndDate(sx) )
+    {
+        xmlAddChild( ret,
+                     gdate_to_dom_tree( SX_END,
+                                        xaccSchedXactionGetEndDate(sx) ) );
     }
 
     /* output template account GUID */
-    xmlAddChild( ret, 
-		 guid_to_dom_tree(SX_TEMPL_ACCT,
-				  templ_acc_guid));
+    xmlAddChild( ret,
+                 guid_to_dom_tree(SX_TEMPL_ACCT,
+                                  templ_acc_guid));
 
     if (allow_2_2_incompat)
     {
         xmlNodePtr schedule_node = xmlNewNode(NULL,
-                                   BAD_CAST "sx:schedule");
+                                              BAD_CAST "sx:schedule");
         GList *schedule = gnc_sx_get_schedule(sx);
         for (; schedule != NULL; schedule = schedule->next)
         {
@@ -162,35 +166,36 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
         }
         xmlAddChild(ret, schedule_node);
     }
-				  
+
     /* Output deferred-instance list. */
     {
-            xmlNodePtr instNode;
-            temporalStateData *tsd;
-            GList *l;
+        xmlNodePtr instNode;
+        temporalStateData *tsd;
+        GList *l;
 
-            for ( l = gnc_sx_get_defer_instances( sx ); l; l = l->next ) {
-                    tsd = (temporalStateData*)l->data;
+        for ( l = gnc_sx_get_defer_instances( sx ); l; l = l->next )
+        {
+            tsd = (temporalStateData*)l->data;
 
-                    instNode = xmlNewNode( NULL, BAD_CAST SX_DEFER_INSTANCE );
-                    if ( g_date_valid( &tsd->last_date ) )
-                    {
-                      xmlAddChild( instNode, gdate_to_dom_tree( SX_LAST,
-                                                                &tsd->last_date ) );
-                    }
-                    xmlAddChild( instNode, int_to_dom_tree( SX_REM_OCCUR,
-                                                            tsd->num_occur_rem ) );
-                    xmlAddChild( instNode, int_to_dom_tree( SX_INSTANCE_COUNT,
-                                                            tsd->num_inst ) );
-                    xmlAddChild( ret, instNode );
+            instNode = xmlNewNode( NULL, BAD_CAST SX_DEFER_INSTANCE );
+            if ( g_date_valid( &tsd->last_date ) )
+            {
+                xmlAddChild( instNode, gdate_to_dom_tree( SX_LAST,
+                             &tsd->last_date ) );
             }
+            xmlAddChild( instNode, int_to_dom_tree( SX_REM_OCCUR,
+                                                    tsd->num_occur_rem ) );
+            xmlAddChild( instNode, int_to_dom_tree( SX_INSTANCE_COUNT,
+                                                    tsd->num_inst ) );
+            xmlAddChild( ret, instNode );
+        }
     }
-    
+
     /* output kvp_frame */
     {
         xmlNodePtr kvpnode =
-                kvp_frame_to_dom_tree( SX_SLOTS,
-                                       xaccSchedXactionGetSlots(sx) );
+            kvp_frame_to_dom_tree( SX_SLOTS,
+                                   xaccSchedXactionGetSlots(sx) );
         if ( kvpnode )
         {
             xmlAddChild(ret, kvpnode);
@@ -202,10 +207,10 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 
 struct sx_pdata
 {
-  SchedXaction *sx;
-  QofBook *book;
-  gboolean saw_freqspec;
-  gboolean saw_recurrence;
+    SchedXaction *sx;
+    QofBook *book;
+    gboolean saw_freqspec;
+    gboolean saw_recurrence;
 };
 
 static
@@ -280,8 +285,9 @@ sx_advCreate_handler( xmlNodePtr node, gpointer sx_pdata )
     SchedXaction *sx = pdata->sx;
     gint64 advCreate;
 
-    if ( ! dom_tree_to_integer( node, &advCreate ) ) {
-      return FALSE;
+    if ( ! dom_tree_to_integer( node, &advCreate ) )
+    {
+        return FALSE;
     }
 
     xaccSchedXactionSetAdvanceCreation( sx, advCreate );
@@ -295,8 +301,9 @@ sx_advRemind_handler( xmlNodePtr node, gpointer sx_pdata )
     SchedXaction *sx = pdata->sx;
     gint64 advRemind;
 
-    if ( ! dom_tree_to_integer( node, &advRemind ) ) {
-      return FALSE;
+    if ( ! dom_tree_to_integer( node, &advRemind ) )
+    {
+        return FALSE;
     }
 
     xaccSchedXactionSetAdvanceReminder( sx, advRemind );
@@ -321,16 +328,17 @@ static
 gboolean
 sx_instcount_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-  struct sx_pdata *pdata = sx_pdata;
-  SchedXaction *sx = pdata->sx;
-  gint64 instanceNum;
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
+    gint64 instanceNum;
 
-  if ( ! dom_tree_to_integer( node, &instanceNum ) ) {
-    return FALSE;
-  }
+    if ( ! dom_tree_to_integer( node, &instanceNum ) )
+    {
+        return FALSE;
+    }
 
-  gnc_sx_set_instance_count( sx, instanceNum );
-  return TRUE;
+    gnc_sx_set_instance_count( sx, instanceNum );
+    return TRUE;
 }
 
 static
@@ -367,7 +375,8 @@ static void
 _fixup_recurrence_start_dates(GDate *sx_start_date, GList *schedule)
 {
     GList *iter;
-    for (iter = schedule; iter != NULL; iter = iter->next) {
+    for (iter = schedule; iter != NULL; iter = iter->next)
+    {
         Recurrence *r;
         GDate start, next;
 
@@ -394,13 +403,13 @@ _fixup_recurrence_start_dates(GDate *sx_start_date, GList *schedule)
 
         recurrenceSet(r,
                       recurrenceGetMultiplier(r),
-                      recurrenceGetPeriodType(r), 
+                      recurrenceGetPeriodType(r),
                       &next,
                       recurrenceGetWeekendAdjust(r));
     }
 
     if (g_list_length(schedule) == 1
-        && recurrenceGetPeriodType((Recurrence*)g_list_nth_data(schedule, 0)) == PERIOD_ONCE)
+            && recurrenceGetPeriodType((Recurrence*)g_list_nth_data(schedule, 0)) == PERIOD_ONCE)
     {
         char date_buf[128];
         Recurrence *fixup = (Recurrence*)g_list_nth_data(schedule, 0);
@@ -416,7 +425,7 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
     struct sx_pdata *pdata = sx_pdata;
     SchedXaction *sx = pdata->sx;
     GList *schedule;
-	gchar* debug_str;
+    gchar* debug_str;
 
     g_return_val_if_fail( node, FALSE );
 
@@ -424,7 +433,7 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
     gnc_sx_set_schedule(sx, schedule);
     debug_str = recurrenceListToString(schedule);
     g_debug("parsed from freqspec [%s]", debug_str);
-	g_free(debug_str);
+    g_free(debug_str);
 
     _fixup_recurrence_start_dates(xaccSchedXactionGetStartDate(sx), schedule);
     pdata->saw_freqspec = TRUE;
@@ -436,17 +445,18 @@ static gboolean
 sx_schedule_recurrence_handler(xmlNodePtr node, gpointer parsing_data)
 {
     GList **schedule = (GList**)parsing_data;
-	gchar* sched_str;
+    gchar* sched_str;
     Recurrence *r = dom_tree_to_recurrence(node);
     g_return_val_if_fail(r, FALSE);
     sched_str = recurrenceToString(r);
     g_debug("parsed recurrence [%s]", sched_str);
-	g_free(sched_str);
+    g_free(sched_str);
     *schedule = g_list_append(*schedule, r);
     return TRUE;
 }
 
-struct dom_tree_handler sx_recurrence_list_handlers[] = {
+struct dom_tree_handler sx_recurrence_list_handlers[] =
+{
     { "gnc:recurrence", sx_schedule_recurrence_handler, 0, 0 },
     { NULL, NULL, 0, 0 }
 };
@@ -456,8 +466,8 @@ sx_recurrence_handler(xmlNodePtr node, gpointer _pdata)
 {
     struct sx_pdata *parsing_data = _pdata;
     GList *schedule = NULL;
-	gchar* debug_str;
-     
+    gchar* debug_str;
+
     g_return_val_if_fail(node, FALSE);
 
     if (!dom_tree_generic_parse(node, sx_recurrence_list_handlers, &schedule))
@@ -465,7 +475,7 @@ sx_recurrence_handler(xmlNodePtr node, gpointer _pdata)
     // g_return_val_if_fail(schedule, FALSE);
     debug_str = recurrenceListToString(schedule);
     g_debug("setting freshly-parsed schedule: [%s]", debug_str);
-	g_free(debug_str);
+    g_free(debug_str);
     gnc_sx_set_schedule(parsing_data->sx, schedule);
     parsing_data->saw_recurrence = TRUE;
     return TRUE;
@@ -475,79 +485,83 @@ static
 gboolean
 sx_defer_last_handler( xmlNodePtr node, gpointer gpTSD )
 {
-        GDate *gd;
-        temporalStateData *tsd = (temporalStateData*)gpTSD;
+    GDate *gd;
+    temporalStateData *tsd = (temporalStateData*)gpTSD;
 
-        g_return_val_if_fail( node, FALSE );
-        gd = dom_tree_to_gdate( node );
-        g_return_val_if_fail( gd, FALSE );
-        tsd->last_date = *gd;
-        g_date_free( gd );
-        return TRUE;
+    g_return_val_if_fail( node, FALSE );
+    gd = dom_tree_to_gdate( node );
+    g_return_val_if_fail( gd, FALSE );
+    tsd->last_date = *gd;
+    g_date_free( gd );
+    return TRUE;
 }
 
 static
 gboolean
 sx_defer_rem_occur_handler( xmlNodePtr node, gpointer gpTSD )
 {
-        gint64 remOccur;
-        temporalStateData *tsd = (temporalStateData*)gpTSD;
-        g_return_val_if_fail( node, FALSE );
+    gint64 remOccur;
+    temporalStateData *tsd = (temporalStateData*)gpTSD;
+    g_return_val_if_fail( node, FALSE );
 
-        if ( ! dom_tree_to_integer( node, &remOccur ) ) {
-                return FALSE;
-        }
-        tsd->num_occur_rem = remOccur;
-        return TRUE;
+    if ( ! dom_tree_to_integer( node, &remOccur ) )
+    {
+        return FALSE;
+    }
+    tsd->num_occur_rem = remOccur;
+    return TRUE;
 }
 
 static
 gboolean
 sx_defer_inst_count_handler( xmlNodePtr node, gpointer gpTSD )
 {
-        gint64 instCount;
-        temporalStateData *tsd = (temporalStateData*)gpTSD;
-        g_return_val_if_fail( node, FALSE );
+    gint64 instCount;
+    temporalStateData *tsd = (temporalStateData*)gpTSD;
+    g_return_val_if_fail( node, FALSE );
 
-        if ( ! dom_tree_to_integer( node, &instCount ) ) {
-                return FALSE;
-        }
-        tsd->num_inst = instCount;
-        return TRUE;
+    if ( ! dom_tree_to_integer( node, &instCount ) )
+    {
+        return FALSE;
+    }
+    tsd->num_inst = instCount;
+    return TRUE;
 }
 
-struct dom_tree_handler sx_defer_dom_handlers[] = {
-       /* tag name, handler, opt, ? */
-        { SX_LAST,           sx_defer_last_handler,       1, 0 },
-        { SX_REM_OCCUR,      sx_defer_rem_occur_handler,  1, 0 },
-        { SX_INSTANCE_COUNT, sx_defer_inst_count_handler, 1, 0 },
-        { NULL, NULL, 0, 0 }
+struct dom_tree_handler sx_defer_dom_handlers[] =
+{
+    /* tag name, handler, opt, ? */
+    { SX_LAST,           sx_defer_last_handler,       1, 0 },
+    { SX_REM_OCCUR,      sx_defer_rem_occur_handler,  1, 0 },
+    { SX_INSTANCE_COUNT, sx_defer_inst_count_handler, 1, 0 },
+    { NULL, NULL, 0, 0 }
 };
 
 static
 gboolean
 sx_defer_inst_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-        struct sx_pdata *pdata = sx_pdata;
-        SchedXaction *sx = pdata->sx;
-        temporalStateData *tsd;
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
+    temporalStateData *tsd;
 
-        g_return_val_if_fail( node, FALSE );
+    g_return_val_if_fail( node, FALSE );
 
-        tsd = g_new0( temporalStateData, 1 );
-        g_assert( sx_defer_dom_handlers != NULL );
-        if ( !dom_tree_generic_parse( node,
-                                      sx_defer_dom_handlers,
-                                      tsd ) ) {
-                xmlElemDump(stdout, NULL, node);
-                g_free( tsd );
-                tsd = NULL;
-                return FALSE;
-        }
+    tsd = g_new0( temporalStateData, 1 );
+    g_assert( sx_defer_dom_handlers != NULL );
+    if ( !dom_tree_generic_parse( node,
+                                  sx_defer_dom_handlers,
+                                  tsd ) )
+    {
+        xmlElemDump(stdout, NULL, node);
+        g_free( tsd );
+        tsd = NULL;
+        return FALSE;
+    }
 
-        /* We assume they were serialized in sorted order, here. */
-        sx->deferredList = g_list_append( sx->deferredList, tsd );
-        return TRUE;
+    /* We assume they were serialized in sorted order, here. */
+    sx->deferredList = g_list_append( sx->deferredList, tsd );
+    return TRUE;
 }
 
 static
@@ -558,7 +572,8 @@ sx_numOccur_handler( xmlNodePtr node, gpointer sx_pdata )
     SchedXaction *sx = pdata->sx;
     gint64 numOccur;
 
-    if ( ! dom_tree_to_integer( node, &numOccur ) ) {
+    if ( ! dom_tree_to_integer( node, &numOccur ) )
+    {
         return FALSE;
     }
 
@@ -568,59 +583,61 @@ sx_numOccur_handler( xmlNodePtr node, gpointer sx_pdata )
 }
 
 
-static 
+static
 gboolean
 sx_templ_acct_handler( xmlNodePtr node, gpointer sx_pdata)
 {
-  struct sx_pdata *pdata = sx_pdata;
-  SchedXaction *sx = pdata->sx;
-  GUID *templ_acct_guid = dom_tree_to_guid(node);
-  Account *account;
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
+    GUID *templ_acct_guid = dom_tree_to_guid(node);
+    Account *account;
 
-  if (!templ_acct_guid)
-  {
-    return FALSE;
-  }
+    if (!templ_acct_guid)
+    {
+        return FALSE;
+    }
 
-  account = xaccAccountLookup(templ_acct_guid, pdata->book);
-  sx_set_template_account(sx, account);
-  g_free(templ_acct_guid);
+    account = xaccAccountLookup(templ_acct_guid, pdata->book);
+    sx_set_template_account(sx, account);
+    g_free(templ_acct_guid);
 
-  return TRUE;
+    return TRUE;
 }
 
-			
+
 static
 gboolean
 sx_remOccur_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-  struct sx_pdata *pdata = sx_pdata;
-  SchedXaction *sx = pdata->sx;
-  gint64        remOccur;
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
+    gint64        remOccur;
 
-  if ( ! dom_tree_to_integer( node, &remOccur ) ) {
-    return FALSE;
-  }
+    if ( ! dom_tree_to_integer( node, &remOccur ) )
+    {
+        return FALSE;
+    }
 
-  xaccSchedXactionSetRemOccur( sx, remOccur );
+    xaccSchedXactionSetRemOccur( sx, remOccur );
 
-  return TRUE;
+    return TRUE;
 }
 
 static
 gboolean
 sx_slots_handler( xmlNodePtr node, gpointer sx_pdata )
 {
-  struct sx_pdata *pdata = sx_pdata;
-  SchedXaction *sx = pdata->sx;
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
 
-  return dom_tree_to_kvp_frame_given( node, xaccSchedXactionGetSlots (sx) );
+    return dom_tree_to_kvp_frame_given( node, xaccSchedXactionGetSlots (sx) );
 }
 
-struct dom_tree_handler sx_dom_handlers[] = {
+struct dom_tree_handler sx_dom_handlers[] =
+{
     { SX_ID,                  sx_id_handler,         1, 0 },
     { SX_NAME,                sx_name_handler,       1, 0 },
-    { SX_ENABLED,             sx_enabled_handler,    0, 0 }, 
+    { SX_ENABLED,             sx_enabled_handler,    0, 0 },
     { SX_AUTOCREATE,          sx_autoCreate_handler, 1, 0 },
     { SX_AUTOCREATE_NOTIFY,   sx_notify_handler,     1, 0 },
     { SX_ADVANCE_CREATE_DAYS, sx_advCreate_handler,  1, 0 },
@@ -651,11 +668,13 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
     gxpf_data    *gdata = (gxpf_data*)global_data;
     struct sx_pdata sx_pdata;
 
-    if ( parent_data ) {
+    if ( parent_data )
+    {
         return TRUE;
     }
 
-    if ( !tag ) {
+    if ( !tag )
+    {
         return TRUE;
     }
 
@@ -670,49 +689,49 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
     g_assert( sx_dom_handlers != NULL );
 
     successful = dom_tree_generic_parse( tree, sx_dom_handlers, &sx_pdata );
-    if (!successful) 
+    if (!successful)
     {
-            g_critical("failed to parse scheduled xaction");
-            xmlElemDump( stdout, NULL, tree );
-			gnc_sx_begin_edit( sx );
-            xaccSchedXactionDestroy( sx );
-            goto done;
+        g_critical("failed to parse scheduled xaction");
+        xmlElemDump( stdout, NULL, tree );
+        gnc_sx_begin_edit( sx );
+        xaccSchedXactionDestroy( sx );
+        goto done;
     }
 
     if (tree->properties)
     {
-         gchar *sx_name = xaccSchedXactionGetName(sx);
-         xmlAttr *attr;
-         for (attr = tree->properties; attr != NULL; attr = attr->next)
-         {
-              xmlChar *attr_value = attr->children->content;
-              g_debug("sx attribute name[%s] value[%s]", attr->name, attr_value);
-              if (strcmp((const char *)attr->name, "version") != 0)
-              {
-                   g_warning("unknown sx attribute [%s]", attr->name);
-                   continue;
-              }
+        gchar *sx_name = xaccSchedXactionGetName(sx);
+        xmlAttr *attr;
+        for (attr = tree->properties; attr != NULL; attr = attr->next)
+        {
+            xmlChar *attr_value = attr->children->content;
+            g_debug("sx attribute name[%s] value[%s]", attr->name, attr_value);
+            if (strcmp((const char *)attr->name, "version") != 0)
+            {
+                g_warning("unknown sx attribute [%s]", attr->name);
+                continue;
+            }
 
-              // if version == 1.0.0: ensure freqspec, no recurrence
-              // if version == 2.0.0: ensure recurrence, no freqspec.
-              if (strcmp((const char *)attr_value,
-                               schedxaction_version_string) == 0)
-              {
-                   if (!sx_pdata.saw_freqspec)
-                        g_critical("did not see freqspec in version 1 sx [%s]", sx_name);
-                   if (sx_pdata.saw_recurrence)
-                        g_warning("saw recurrence in supposedly version 1 sx [%s]", sx_name);
-              }
+            // if version == 1.0.0: ensure freqspec, no recurrence
+            // if version == 2.0.0: ensure recurrence, no freqspec.
+            if (strcmp((const char *)attr_value,
+                       schedxaction_version_string) == 0)
+            {
+                if (!sx_pdata.saw_freqspec)
+                    g_critical("did not see freqspec in version 1 sx [%s]", sx_name);
+                if (sx_pdata.saw_recurrence)
+                    g_warning("saw recurrence in supposedly version 1 sx [%s]", sx_name);
+            }
 
-              if (strcmp((const char *)attr_value,
-                             schedxaction_version2_string) == 0)
-              {
-                   if (sx_pdata.saw_freqspec)
-                        g_warning("saw freqspec in version 2 sx [%s]", sx_name);
-                   if (!sx_pdata.saw_recurrence)
-                        g_critical("did not find recurrence in version 2 sx [%s]", sx_name);
-              }
-         }
+            if (strcmp((const char *)attr_value,
+                       schedxaction_version2_string) == 0)
+            {
+                if (sx_pdata.saw_freqspec)
+                    g_warning("saw freqspec in version 2 sx [%s]", sx_name);
+                if (!sx_pdata.saw_recurrence)
+                    g_critical("did not find recurrence in version 2 sx [%s]", sx_name);
+            }
+        }
     }
 
     // generic_callback -> book_callback: insert the SX in the book
@@ -721,47 +740,47 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
     /* FIXME: this should be removed somewhere near 1.8 release time. */
     if ( sx->template_acct == NULL )
     {
-            Account *ra = NULL;
-            const char *id = NULL;
-            Account *acct = NULL;
-            sixtp_gdv2 *sixdata = gdata->parsedata;
-            QofBook *book;
+        Account *ra = NULL;
+        const char *id = NULL;
+        Account *acct = NULL;
+        sixtp_gdv2 *sixdata = gdata->parsedata;
+        QofBook *book;
 
-            book = sixdata->book;
+        book = sixdata->book;
 
-            /* We're dealing with a pre-200107<near-end-of-month> rgmerk
-               change re: storing template accounts. */
-            /* Fix: get account with name of our GUID from the template
-               accounts.  Make that our template_acct pointer. */
-            /* THREAD-UNSAFE */
-            id = guid_to_string( xaccSchedXactionGetGUID( sx ) );
-            ra = gnc_book_get_template_root(book);
-            if ( ra == NULL )
-            {
-                    g_warning( "Error getting template root account from being-parsed Book." );
-                    xmlFreeNode( tree );
-                    return FALSE;
-            }
-            acct = gnc_account_lookup_by_name( ra, id );
-            if ( acct == NULL )
-            {
-                    g_warning("no template account with name [%s]", id);
-                    xmlFreeNode( tree );
-                    return FALSE;
-            }
-            g_debug("template account name [%s] for SX with GUID [%s]",
-                   xaccAccountGetName( acct ), id );
+        /* We're dealing with a pre-200107<near-end-of-month> rgmerk
+           change re: storing template accounts. */
+        /* Fix: get account with name of our GUID from the template
+           accounts.  Make that our template_acct pointer. */
+        /* THREAD-UNSAFE */
+        id = guid_to_string( xaccSchedXactionGetGUID( sx ) );
+        ra = gnc_book_get_template_root(book);
+        if ( ra == NULL )
+        {
+            g_warning( "Error getting template root account from being-parsed Book." );
+            xmlFreeNode( tree );
+            return FALSE;
+        }
+        acct = gnc_account_lookup_by_name( ra, id );
+        if ( acct == NULL )
+        {
+            g_warning("no template account with name [%s]", id);
+            xmlFreeNode( tree );
+            return FALSE;
+        }
+        g_debug("template account name [%s] for SX with GUID [%s]",
+                xaccAccountGetName( acct ), id );
 
-            /* FIXME: free existing template account. 
-             *  HUH????? We only execute this if there isn't
-             * currently an existing template account, don't we?
-             * <rgmerk>
-             */
+        /* FIXME: free existing template account.
+         *  HUH????? We only execute this if there isn't
+         * currently an existing template account, don't we?
+         * <rgmerk>
+         */
 
-            sx->template_acct = acct;
+        sx->template_acct = acct;
     }
 
- done:
+done:
     xmlFreeNode( tree );
 
     return successful;
@@ -777,71 +796,79 @@ static
 gboolean
 tt_act_handler( xmlNodePtr node, gpointer data )
 {
-        gnc_template_xaction_data *txd = data;
-        Account *acc;
-        gnc_commodity *com;
+    gnc_template_xaction_data *txd = data;
+    Account *acc;
+    gnc_commodity *com;
 
-        acc = dom_tree_to_account(node, txd->book);
+    acc = dom_tree_to_account(node, txd->book);
 
-        if ( acc == NULL ) {
-                return FALSE;
-        } else {
-                xaccAccountBeginEdit (acc);
+    if ( acc == NULL )
+    {
+        return FALSE;
+    }
+    else
+    {
+        xaccAccountBeginEdit (acc);
 
-                /* Check for the lack of a commodity [signifying that the
-                   pre-7/11/2001-CIT-change SX template Account was parsed [but
-                   incorrectly]. */
-                if ( xaccAccountGetCommodity( acc ) == NULL ) {
+        /* Check for the lack of a commodity [signifying that the
+           pre-7/11/2001-CIT-change SX template Account was parsed [but
+           incorrectly]. */
+        if ( xaccAccountGetCommodity( acc ) == NULL )
+        {
 #if 1
-						gnc_commodity_table* table;
+            gnc_commodity_table* table;
 
-						table = gnc_commodity_table_get_table( txd->book );
-						com = gnc_commodity_table_lookup( table,
-												"template", "template" );
+            table = gnc_commodity_table_get_table( txd->book );
+            com = gnc_commodity_table_lookup( table,
+                                              "template", "template" );
 #else
-                        /* FIXME: This should first look in the table of the
-                           book, maybe? The right thing happens [WRT file
-                           load/save] if we just _new all the time, but it
-                           doesn't seem right. This whole block should go
-                           away at some point, but the same concern still
-                           applies for
-                           SchedXaction.c:xaccSchedXactionInit... */
-                        com = gnc_commodity_new( txd->book,
-                                                 "template", "template",
-                                                 "template", "template",
-                                                 1 );
+            /* FIXME: This should first look in the table of the
+               book, maybe? The right thing happens [WRT file
+               load/save] if we just _new all the time, but it
+               doesn't seem right. This whole block should go
+               away at some point, but the same concern still
+               applies for
+               SchedXaction.c:xaccSchedXactionInit... */
+            com = gnc_commodity_new( txd->book,
+                                     "template", "template",
+                                     "template", "template",
+                                     1 );
 #endif
-                        xaccAccountSetCommodity( acc, com );
-                }
-
-                txd->accts = g_list_append( txd->accts, acc );
+            xaccAccountSetCommodity( acc, com );
         }
 
-        return TRUE;
+        txd->accts = g_list_append( txd->accts, acc );
+    }
+
+    return TRUE;
 }
 
 static
 gboolean
 tt_trn_handler( xmlNodePtr node, gpointer data )
 {
-        gnc_template_xaction_data *txd = data;
-        Transaction        *trn;
+    gnc_template_xaction_data *txd = data;
+    Transaction        *trn;
 
-        trn = dom_tree_to_transaction( node, txd->book );
+    trn = dom_tree_to_transaction( node, txd->book );
 
-        if ( trn == NULL ) {
-                return FALSE;
-        } else {
-                txd->transactions = g_list_append( txd->transactions, trn );
-        }
+    if ( trn == NULL )
+    {
+        return FALSE;
+    }
+    else
+    {
+        txd->transactions = g_list_append( txd->transactions, trn );
+    }
 
-        return TRUE;
+    return TRUE;
 }
 
-struct dom_tree_handler tt_dom_handlers[] = {
-        { GNC_ACCOUNT_TAG,     tt_act_handler, 0, 0 },
-        { GNC_TRANSACTION_TAG, tt_trn_handler, 0, 0 },
-        { NULL, NULL, 0, 0 },
+struct dom_tree_handler tt_dom_handlers[] =
+{
+    { GNC_ACCOUNT_TAG,     tt_act_handler, 0, 0 },
+    { GNC_TRANSACTION_TAG, tt_trn_handler, 0, 0 },
+    { NULL, NULL, 0, 0 },
 };
 
 static gboolean
@@ -853,65 +880,69 @@ gnc_template_transaction_end_handler(gpointer data_for_children,
                                      gpointer *result,
                                      const gchar *tag)
 {
-        gboolean   successful = FALSE;
-        xmlNodePtr tree = data_for_children;
-        gxpf_data  *gdata = global_data;
-        QofBook    *book = gdata->bookdata;
-        GList      *n;
-        gnc_template_xaction_data txd;
+    gboolean   successful = FALSE;
+    xmlNodePtr tree = data_for_children;
+    gxpf_data  *gdata = global_data;
+    QofBook    *book = gdata->bookdata;
+    GList      *n;
+    gnc_template_xaction_data txd;
 
-        txd.book = book;
-        txd.accts = NULL;
-        txd.transactions = NULL;
+    txd.book = book;
+    txd.accts = NULL;
+    txd.transactions = NULL;
 
-        /* the DOM tree will have an account tree [the template
-           accounts] and a list of transactions [which will be members
-           of the template account].
+    /* the DOM tree will have an account tree [the template
+       accounts] and a list of transactions [which will be members
+       of the template account].
 
-           we want to parse through the dom trees for each, placing
-           the null-parent account in the book's template-group slot,
-           the others under it, and the transactions as normal. */
+       we want to parse through the dom trees for each, placing
+       the null-parent account in the book's template-group slot,
+       the others under it, and the transactions as normal. */
 
-        if ( parent_data ) {
-                return TRUE;
-        }
+    if ( parent_data )
+    {
+        return TRUE;
+    }
 
-        if ( !tag ) {
-                return TRUE;
-        }
+    if ( !tag )
+    {
+        return TRUE;
+    }
 
-        g_return_val_if_fail( tree, FALSE );
-        
-        successful = dom_tree_generic_parse( tree, tt_dom_handlers, &txd );
+    g_return_val_if_fail( tree, FALSE );
 
-        if ( successful ) 
-        {
-                gdata->cb( tag, gdata->parsedata, &txd );
-        } 
-        else 
-        {
-                g_warning("failed to parse template transaction");
-                xmlElemDump( stdout, NULL, tree );
-        }
+    successful = dom_tree_generic_parse( tree, tt_dom_handlers, &txd );
 
-        /* cleanup */
-        for ( n = txd.accts; n; n = n->next ) {
-                n->data = NULL;
-        }
-        for ( n = txd.transactions; n; n = n->next ) {
-                n->data = NULL;
-        }
-        g_list_free( txd.accts );
-        g_list_free( txd.transactions );
+    if ( successful )
+    {
+        gdata->cb( tag, gdata->parsedata, &txd );
+    }
+    else
+    {
+        g_warning("failed to parse template transaction");
+        xmlElemDump( stdout, NULL, tree );
+    }
 
-        xmlFreeNode( tree );
+    /* cleanup */
+    for ( n = txd.accts; n; n = n->next )
+    {
+        n->data = NULL;
+    }
+    for ( n = txd.transactions; n; n = n->next )
+    {
+        n->data = NULL;
+    }
+    g_list_free( txd.accts );
+    g_list_free( txd.transactions );
 
-        return successful;
+    xmlFreeNode( tree );
+
+    return successful;
 }
 
 sixtp*
 gnc_template_transaction_sixtp_parser_create( void )
 {
-        return sixtp_dom_parser_new( gnc_template_transaction_end_handler,
-                                     NULL, NULL );
+    return sixtp_dom_parser_new( gnc_template_transaction_end_handler,
+                                 NULL, NULL );
 }

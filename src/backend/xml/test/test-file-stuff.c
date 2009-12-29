@@ -20,7 +20,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
- 
+
 #include "config.h"
 
 #include <unistd.h>
@@ -68,17 +68,18 @@ files_compare(const gchar* f1, const gchar* f2)
         amount_read1 = read(fd1, buf1, 512);
         amount_read2 = read(fd2, buf2, 512);
 
-        if(amount_read1 > amount_read2)
+        if (amount_read1 > amount_read2)
             return files_return(1, "read1 > read2");
-        if(amount_read1 < amount_read2)
+        if (amount_read1 < amount_read2)
             return files_return(-1, "read1 < read2");
 
-        if((memcmp_ret = memcmp(buf1, buf2, amount_read1)) != 0)
+        if ((memcmp_ret = memcmp(buf1, buf2, amount_read1)) != 0)
         {
             return files_return(memcmp_ret, "memcmp return");
         }
 
-    } while(amount_read1 == 512);
+    }
+    while (amount_read1 == 512);
 
     return 0;
 }
@@ -100,7 +101,7 @@ print_dom_tree(gpointer data_for_children, GSList* data_from_children,
                GSList* sibling_data, gpointer parent_data,
                gpointer global_data, gpointer *result, const gchar *tag)
 {
-    if (parent_data == NULL) 
+    if (parent_data == NULL)
     {
         xmlElemDump((FILE*)global_data, NULL, (xmlNodePtr)data_for_children);
         xmlFreeNode(data_for_children);
@@ -121,7 +122,7 @@ check_dom_tree_version(xmlNodePtr node, gchar *verstr)
                          FALSE);
 
     verteststr = (char*) node->properties->xmlAttrPropertyValue->content;
-    if(safe_strcmp(verstr, verteststr) == 0)
+    if (safe_strcmp(verstr, verteststr) == 0)
     {
         return TRUE;
     }
@@ -138,19 +139,19 @@ equals_node_val_vs_string(xmlNodePtr node, const gchar* str)
 
     g_return_val_if_fail(node, FALSE);
     g_return_val_if_fail(str, FALSE);
-    
+
     cmp1 = dom_tree_to_text(node);
 
-    if(!cmp1)
+    if (!cmp1)
     {
         return FALSE;
     }
-    else if(safe_strcmp(cmp1, str) == 0)
+    else if (safe_strcmp(cmp1, str) == 0)
     {
         g_free(cmp1);
         return TRUE;
     }
-    else 
+    else
     {
         printf("Differing types: node:`%s' vs string:`%s'\n", cmp1, str);
         g_free(cmp1);
@@ -163,12 +164,12 @@ equals_node_val_vs_int(xmlNodePtr node, gint64 val)
 {
     gchar *text;
     gint64 test_val;
-    
+
     g_return_val_if_fail(node, FALSE);
 
     text = dom_tree_to_text(node);
 
-    if(!string_to_gint64(text, &test_val))
+    if (!string_to_gint64(text, &test_val))
     {
         g_free(text);
         return FALSE;
@@ -196,8 +197,8 @@ equals_node_val_vs_guid(xmlNodePtr node, const GUID *id)
     cmpid = dom_tree_to_guid(node);
 
     g_return_val_if_fail(cmpid, FALSE);
-    
-    if(guid_compare(cmpid, id) == 0)
+
+    if (guid_compare(cmpid, id) == 0)
     {
         g_free(cmpid);
         return TRUE;
@@ -210,7 +211,7 @@ equals_node_val_vs_guid(xmlNodePtr node, const GUID *id)
 }
 
 gboolean
-equals_node_val_vs_commodity(xmlNodePtr node, const gnc_commodity *com, 
+equals_node_val_vs_commodity(xmlNodePtr node, const gnc_commodity *com,
                              QofBook *book)
 {
     gnc_commodity *cmpcom;
@@ -222,7 +223,7 @@ equals_node_val_vs_commodity(xmlNodePtr node, const gnc_commodity *com,
 
     g_return_val_if_fail(cmpcom, FALSE);
 
-    if(gnc_commodity_equiv(com, cmpcom))
+    if (gnc_commodity_equiv(com, cmpcom))
     {
         gnc_commodity_destroy(cmpcom);
         return TRUE;
@@ -246,7 +247,7 @@ equals_node_val_vs_kvp_frame(xmlNodePtr node, const kvp_frame *frm)
 
     g_return_val_if_fail(cmpfrm, FALSE);
 
-    if(kvp_frame_compare(frm, cmpfrm) == 0)
+    if (kvp_frame_compare(frm, cmpfrm) == 0)
     {
         kvp_frame_delete(cmpfrm);
         return TRUE;
@@ -263,7 +264,7 @@ equals_node_val_vs_kvp_frame(xmlNodePtr node, const kvp_frame *frm)
 
         g_free(frm1str);
         g_free(frm2str);
-        
+
         kvp_frame_delete(cmpfrm);
         return FALSE;
     }
@@ -274,7 +275,7 @@ equals_node_val_vs_date(xmlNodePtr node, const Timespec tm)
 {
     Timespec tm_test = dom_tree_to_timespec(node);
 
-    if(tm_test.tv_sec == tm.tv_sec && tm_test.tv_nsec == tm.tv_nsec)
+    if (tm_test.tv_sec == tm.tv_sec && tm_test.tv_nsec == tm.tv_nsec)
     {
         return TRUE;
     }
@@ -295,18 +296,18 @@ just_dom_tree_end_handler(gpointer data_for_children,
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     xmlNodePtr *globaldata = (xmlNodePtr*)global_data;
 
-    if(parent_data)
+    if (parent_data)
     {
         return TRUE;
     }
 
     /* OK.  For some messed up reason this is getting called again with a
        NULL tag.  So we ignore those cases */
-    if(!tag)
+    if (!tag)
     {
         return TRUE;
     }
-    
+
     g_return_val_if_fail(tree, FALSE);
 
     *globaldata = tree;
@@ -320,20 +321,20 @@ grab_file_doc(const char *filename)
     sixtp *parser;
     xmlNodePtr ret;
     gpointer parse_result = NULL;
-    
+
     parser = sixtp_dom_parser_new(just_dom_tree_end_handler, NULL, NULL);
 
     sixtp_parse_file(parser, filename, NULL, &ret, &parse_result);
 
     return ret;
 }
-    
+
 static void
-test_load_file(const char *filename, gxpf_callback cb, sixtp *top_parser, 
+test_load_file(const char *filename, gxpf_callback cb, sixtp *top_parser,
                QofBook *book)
 {
     xmlNodePtr node;
-    
+
     node = grab_file_doc(filename);
 
     if (!node)
@@ -351,7 +352,7 @@ test_load_file(const char *filename, gxpf_callback cb, sixtp *top_parser,
 
     xmlFreeNode(node);
 }
-    
+
 void
 test_files_in_dir(int argc, char **argv, gxpf_callback cb,
                   sixtp *parser, const char *parser_tag,
@@ -368,24 +369,24 @@ test_files_in_dir(int argc, char **argv, gxpf_callback cb,
     if (!sixtp_add_some_sub_parsers(top_parser, TRUE, "gnc-v2", main_parser,
                                     NULL, NULL))
         return;
-    
+
     if (!sixtp_add_some_sub_parsers(main_parser, TRUE, parser_tag, parser,
                                     NULL, NULL))
         return;
 
 
-    for(count = 1; count < argc; count++)
+    for (count = 1; count < argc; count++)
     {
         struct stat file_info;
         const char *to_open = argv[count];
-        if(g_stat(to_open, &file_info) != 0)
+        if (g_stat(to_open, &file_info) != 0)
         {
             printf("cannot stat %s.\n", to_open);
             failure("unable to stat file");
         }
         else
         {
-            if(!S_ISDIR(file_info.st_mode))
+            if (!S_ISDIR(file_info.st_mode))
             {
 #if 0
                 printf( "testing load of file \"%s\":\n", argv[count] );
@@ -394,6 +395,6 @@ test_files_in_dir(int argc, char **argv, gxpf_callback cb,
             }
         }
     }
-    
+
     sixtp_destroy(top_parser);
 }

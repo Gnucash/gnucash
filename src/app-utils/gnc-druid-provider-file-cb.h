@@ -40,16 +40,16 @@ typedef struct _GNCDruidProviderFileCBClass GNCDruidProviderFileCBClass;
 
 struct _GNCDruidProviderFileCB
 {
-  GNCDruidCB parent;
+    GNCDruidCB parent;
 
-  const gchar* filename;	/* owned by the provider */
+    const gchar* filename;	/* owned by the provider */
 
-  gpointer this_file;		/* set by the backend (return to the provider) */
+    gpointer this_file;		/* set by the backend (return to the provider) */
 };
 
 struct _GNCDruidProviderFileCBClass
 {
-  GNCDruidCBClass parent_class;
+    GNCDruidCBClass parent_class;
 };
 
 GType	gnc_druid_provider_file_cb_get_type(void);

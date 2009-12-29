@@ -63,13 +63,13 @@ static QofLogModule log_module = GNC_MOD_IO;
 
 static void
 append_account_tree (xmlNodePtr parent,
-		     Account *account,
-		     gboolean allow_incompat)
+                     Account *account,
+                     gboolean allow_incompat)
 {
     GList *children, *node;
 
     children = gnc_account_get_children(account);
-    for (node = children; node; node = node->next) 
+    for (node = children; node; node = node->next)
     {
         xmlNodePtr accnode;
         Account *account;
@@ -106,46 +106,48 @@ gnc_book_dom_tree_create(QofBook *book)
     ret = xmlNewNode(NULL, BAD_CAST gnc_book_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST gnc_v2_book_version_string);
 
-    xmlAddChild(ret, guid_to_dom_tree(book_id_string, 
+    xmlAddChild(ret, guid_to_dom_tree(book_id_string,
                                       qof_book_get_guid(book)));
 
-    if (qof_book_get_slots(book)) {
+    if (qof_book_get_slots(book))
+    {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree(book_slots_string,
-                                                   qof_book_get_slots(book));
+                             qof_book_get_slots(book));
         if (kvpnode)
             xmlAddChild(ret, kvpnode);
     }
 
 #ifdef IMPLEMENT_BOOK_DOM_TREES_LATER
     /* theoretically, we should be adding all the below to the book
-     * but in fact, there's enough brain damage in the code already 
+     * but in fact, there's enough brain damage in the code already
      * that we are only going to hand-edit the file at a higher layer.
      * And that's OK, since its probably a performance boost anyway.
      */
     xmlAddChild(ret, gnc_commodity_dom_tree_create(
                     gnc_book_get_commodity_table(book)));
     xmlAddChild(ret, gnc_pricedb_dom_tree_create(gnc_book_get_pricedb(book)));
-    if (allow_incompat) {
-      accnode = gnc_account_dom_tree_create(account, FALSE);
-      xmlAddChild (ret, rootAccNode);
+    if (allow_incompat)
+    {
+        accnode = gnc_account_dom_tree_create(account, FALSE);
+        xmlAddChild (ret, rootAccNode);
     }
     append_account_tree (ret, gnc_book_get_root(book));
 
     xaccAccountTreeForEachTransaction (gnc_book_get_root_account(book),
-				       traverse_txns, ret);
+                                       traverse_txns, ret);
 
-    /* xxx FIXME hack alert how are we going to handle 
+    /* xxx FIXME hack alert how are we going to handle
      *  gnc_book_get_template_group handled ???   */
     xmlAddChild(ret, gnc_schedXaction_dom_tree_create(
                     gnc_book_get_schedxactions(book)));
 
-#endif 
+#endif
 
     return ret;
 }
 
 /* ================================================================ */
-/* same as above, but we write out directly.  Only handle the guid 
+/* same as above, but we write out directly.  Only handle the guid
  * and slots, everything else is handled elsewhere */
 
 void
@@ -155,18 +157,21 @@ write_book_parts(FILE *out, QofBook *book)
 
     domnode = guid_to_dom_tree(book_id_string, qof_book_get_guid(book));
     xmlElemDump(out, NULL, domnode);
-    if (fprintf(out, "\n") < 0) {
-        qof_backend_set_error(qof_book_get_backend(book), 
+    if (fprintf(out, "\n") < 0)
+    {
+        qof_backend_set_error(qof_book_get_backend(book),
                               ERR_FILEIO_WRITE_ERROR);
         xmlFreeNode(domnode);
         return;
     }
     xmlFreeNode (domnode);
 
-    if (qof_book_get_slots(book)) {
+    if (qof_book_get_slots(book))
+    {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree(book_slots_string,
-                                                   qof_book_get_slots(book));
-        if(kvpnode) {
+                             qof_book_get_slots(book));
+        if (kvpnode)
+        {
             xmlElemDump(out, NULL, kvpnode);
             fprintf(out, "\n");
             xmlFreeNode(kvpnode);
@@ -186,7 +191,7 @@ book_id_handler(xmlNodePtr node, gpointer book_pdata)
     guid = dom_tree_to_guid(node);
     qof_instance_set_guid(QOF_INSTANCE(book), guid);
     g_free(guid);
-    
+
     return TRUE;
 }
 
@@ -196,17 +201,18 @@ book_slots_handler (xmlNodePtr node, gpointer book_pdata)
     QofBook *book = book_pdata;
     gboolean success;
 
-    /* the below works only because the get is gaurenteed to return 
+    /* the below works only because the get is gaurenteed to return
      * a frame, even if its empty */
     success = dom_tree_to_kvp_frame_given (node, qof_book_get_slots (book));
 
     g_return_val_if_fail(success, FALSE);
-    
+
     return TRUE;
 }
 
 
-static struct dom_tree_handler book_handlers_v2[] = {
+static struct dom_tree_handler book_handlers_v2[] =
+{
     { book_id_string, book_id_handler, 1, 0 },
     { book_slots_string, book_slots_handler, 0, 0 },
     { NULL, 0, 0, 0 }
@@ -293,7 +299,8 @@ dom_tree_to_book (xmlNodePtr node, QofBook *book)
 
     successful = dom_tree_generic_parse (node, book_handlers_v2,
                                          book);
-    if (!successful) {
+    if (!successful)
+    {
         PERR ("failed to parse book");
         book = NULL;
     }

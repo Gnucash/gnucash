@@ -34,12 +34,12 @@
 char * gncFindFile (const char * filename);
 
 /********************************************************************\
- * gncReadFile                                                      * 
- *                                                                  * 
+ * gncReadFile                                                      *
+ *                                                                  *
  * Args:   file - the name of the html file to read                 *
- *         data - pointer to data pointer                           * 
- * Return: file size                                                * 
- * Global: xxxPath - the path to search                             * 
+ *         data - pointer to data pointer                           *
+ * Return: file size                                                *
+ * Global: xxxPath - the path to search                             *
 \********************************************************************/
 int gncReadFile (const char * file, char ** data);
 

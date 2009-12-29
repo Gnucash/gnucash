@@ -43,23 +43,23 @@ typedef gboolean (*sixtp_start_handler)(GSList* sibling_data,
                                         gchar **attrs);
 
 typedef gboolean (*sixtp_before_child_handler)(gpointer data_for_children,
-                                               GSList* data_from_children,
-                                               GSList* sibling_data,
-                                               gpointer parent_data,
-                                               gpointer global_data,
-                                               gpointer *result,
-                                               const gchar *tag,
-                                               const gchar *child_tag);
+        GSList* data_from_children,
+        GSList* sibling_data,
+        gpointer parent_data,
+        gpointer global_data,
+        gpointer *result,
+        const gchar *tag,
+        const gchar *child_tag);
 
 typedef gboolean (*sixtp_after_child_handler)(gpointer data_for_children,
-                                              GSList* data_from_children,
-                                              GSList* sibling_data,
-                                              gpointer parent_data,
-                                              gpointer global_data,
-                                              gpointer *result,
-                                              const gchar *tag,
-                                              const gchar *child_tag,
-                                              sixtp_child_result *child_result);
+        GSList* data_from_children,
+        GSList* sibling_data,
+        gpointer parent_data,
+        gpointer global_data,
+        gpointer *result,
+        const gchar *tag,
+        const gchar *child_tag,
+        sixtp_child_result *child_result);
 
 typedef gboolean (*sixtp_end_handler)(gpointer data_for_children,
                                       GSList* data_from_children,
@@ -70,11 +70,11 @@ typedef gboolean (*sixtp_end_handler)(gpointer data_for_children,
                                       const gchar *tag);
 
 typedef gboolean (*sixtp_characters_handler)(GSList *sibling_data,
-                                             gpointer parent_data,
-                                             gpointer global_data,
-                                             gpointer *result,
-                                             const char *text,
-                                             int length);
+        gpointer parent_data,
+        gpointer global_data,
+        gpointer *result,
+        const char *text,
+        int length);
 
 typedef void (*sixtp_result_handler)(sixtp_child_result *result);
 
@@ -89,32 +89,33 @@ typedef void (*sixtp_fail_handler)(gpointer data_for_children,
 typedef void (*sixtp_push_handler)(xmlParserCtxtPtr xml_context,
                                    gpointer user_data);
 
-typedef struct sixtp 
+typedef struct sixtp
 {
-  /* If you change this, don't forget to modify all the copy/etc. functions */
-  sixtp_start_handler start_handler;
-  sixtp_before_child_handler before_child;
-  sixtp_after_child_handler after_child;
-  sixtp_end_handler end_handler;
-  sixtp_characters_handler characters_handler;
+    /* If you change this, don't forget to modify all the copy/etc. functions */
+    sixtp_start_handler start_handler;
+    sixtp_before_child_handler before_child;
+    sixtp_after_child_handler after_child;
+    sixtp_end_handler end_handler;
+    sixtp_characters_handler characters_handler;
 
-  sixtp_fail_handler fail_handler; 
-  /* called for failures before the close tag */
+    sixtp_fail_handler fail_handler;
+    /* called for failures before the close tag */
 
-  sixtp_result_handler cleanup_result; /* called unless failure */
-  sixtp_result_handler cleanup_chars; /* called unless failure */
+    sixtp_result_handler cleanup_result; /* called unless failure */
+    sixtp_result_handler cleanup_chars; /* called unless failure */
 
-  sixtp_result_handler result_fail_handler;
-  /* called to cleanup results from this node on failure */
+    sixtp_result_handler result_fail_handler;
+    /* called to cleanup results from this node on failure */
 
-  sixtp_result_handler chars_fail_handler;
-  /* called to cleanup character results when cleaning up this node's
-     children. */
+    sixtp_result_handler chars_fail_handler;
+    /* called to cleanup character results when cleaning up this node's
+       children. */
 
-  GHashTable *child_parsers;
+    GHashTable *child_parsers;
 } sixtp;
 
-typedef enum {
+typedef enum
+{
     SIXTP_NO_MORE_HANDLERS,
 
     SIXTP_START_HANDLER_ID,
@@ -136,31 +137,34 @@ typedef enum {
 /* completely invalid tag for xml */
 #define SIXTP_MAGIC_CATCHER "&MAGIX&"
 
-typedef enum {
-  SIXTP_CHILD_RESULT_CHARS,
-  SIXTP_CHILD_RESULT_NODE
+typedef enum
+{
+    SIXTP_CHILD_RESULT_CHARS,
+    SIXTP_CHILD_RESULT_NODE
 } sixtp_child_result_type;
 
-struct _sixtp_child_result {
-  sixtp_child_result_type type;
-  gchar *tag; /* NULL for a CHARS node. */
-  gpointer data;
-  gboolean should_cleanup;
-  sixtp_result_handler cleanup_handler;
-  sixtp_result_handler fail_handler;
+struct _sixtp_child_result
+{
+    sixtp_child_result_type type;
+    gchar *tag; /* NULL for a CHARS node. */
+    gpointer data;
+    gboolean should_cleanup;
+    sixtp_result_handler cleanup_handler;
+    sixtp_result_handler fail_handler;
 };
 
-typedef struct sixtp_sax_data {
-  gboolean parsing_ok;
-  GSList *stack;
-  gpointer global_data;
-  xmlParserCtxtPtr saxParserCtxt;
-  sixtp *bad_xml_parser;
+typedef struct sixtp_sax_data
+{
+    gboolean parsing_ok;
+    GSList *stack;
+    gpointer global_data;
+    xmlParserCtxtPtr saxParserCtxt;
+    sixtp *bad_xml_parser;
 } sixtp_sax_data;
 
 
 gboolean is_child_result_from_node_named(sixtp_child_result *cr,
-                                         const char *tag);
+        const char *tag);
 void sixtp_child_free_data(sixtp_child_result *result);
 void sixtp_child_result_destroy(sixtp_child_result *r);
 void sixtp_child_result_print(sixtp_child_result *cr, FILE *f);

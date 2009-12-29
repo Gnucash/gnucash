@@ -22,7 +22,7 @@ get_parser1_1_parser1(void)
     ret = sixtp_new();
     g_return_val_if_fail(ret, NULL);
     sixtp_set_chars(ret, allow_and_ignore_only_whitespace);
-    
+
     sixtp_add_sub_parser(ret, "foobar",
                          sixtp_dom_parser_new(print_dom_tree, NULL, NULL));
 

@@ -44,22 +44,22 @@ typedef gboolean (*GNCDruidProviderCB)(GNCDruidCB*);
 
 struct _GNCDruidProviderDesc
 {
-  GObject obj;
-  const gchar *name;		/* the (system-provided)name of this provider */
-  gchar *title;			/* the (user-supplied) druid page title */
+    GObject obj;
+    const gchar *name;		/* the (system-provided)name of this provider */
+    gchar *title;			/* the (user-supplied) druid page title */
 
-  /* Some providers require these, but not all. */
-  GNCDruidProviderCB	next_cb;
-  GNCDruidProviderCB	prev_cb;
-  GNCDruidProviderCB	provider_needed;
+    /* Some providers require these, but not all. */
+    GNCDruidProviderCB	next_cb;
+    GNCDruidProviderCB	prev_cb;
+    GNCDruidProviderCB	provider_needed;
 
-  /* The following are set internally for use by the backend */
-  GNCDruidProvider *	provider; /* a pointer to the provider */
+    /* The following are set internally for use by the backend */
+    GNCDruidProvider *	provider; /* a pointer to the provider */
 };
 
 struct _GNCDruidProviderDescClass
 {
-  GObjectClass obj;
+    GObjectClass obj;
 };
 
 GType	gnc_druid_provider_desc_get_type(void);

@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-help-utils.h
  *
  * Copyright (C) 2007 Andreas Koehler <andi5.py@gmx.net>

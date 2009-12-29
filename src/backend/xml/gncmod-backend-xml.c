@@ -28,38 +28,38 @@ static GNCModule engine;
 char *
 libgncmod_backend_file_gnc_module_path(void)
 {
-  return g_strdup("gnucash/backend/file");
+    return g_strdup("gnucash/backend/file");
 }
 
 char *
 libgncmod_backend_file_gnc_module_description(void)
 {
-  return g_strdup("The binary and XML (v1 and v2) backends for GnuCash");
+    return g_strdup("The binary and XML (v1 and v2) backends for GnuCash");
 }
 
 int
 libgncmod_backend_file_gnc_module_init(int refcount)
 {
-  engine = gnc_module_load("gnucash/engine", 0);
-  if(!engine) return FALSE;
+    engine = gnc_module_load("gnucash/engine", 0);
+    if (!engine) return FALSE;
 
-  /* Need to initialize g-type engine for gconf */
-  if (refcount == 0)
-    g_type_init();
+    /* Need to initialize g-type engine for gconf */
+    if (refcount == 0)
+        g_type_init();
 
-  return TRUE;
+    return TRUE;
 }
 
 int
 libgncmod_backend_file_gnc_module_end(int refcount)
 {
-  int unload = TRUE;
+    int unload = TRUE;
 
-  if (engine)
-    unload = libgnc_backend_file_utils_gnc_module_unload(engine);
+    if (engine)
+        unload = libgnc_backend_file_utils_gnc_module_unload(engine);
 
-  if (refcount == 0)
-    engine = NULL;
+    if (refcount == 0)
+        engine = NULL;
 
-  return unload;
+    return unload;
 }

@@ -58,7 +58,7 @@ add_gnc_num(xmlNodePtr node, const gchar *tag, gnc_numeric num)
 static void
 add_timespec(xmlNodePtr node, const gchar *tag, Timespec tms, gboolean always)
 {
-    if(always || !((tms.tv_sec == 0) && (tms.tv_nsec == 0)))
+    if (always || !((tms.tv_sec == 0) && (tms.tv_nsec == 0)))
     {
         xmlAddChild(node, timespec_to_dom_tree(tag, &tms));
     }
@@ -72,11 +72,11 @@ split_to_dom_tree(const gchar *tag, Split *spl)
     ret = xmlNewNode(NULL, BAD_CAST tag);
 
     xmlAddChild(ret, guid_to_dom_tree("split:id", xaccSplitGetGUID(spl)));
-    
+
     {
         const char *memo = xaccSplitGetMemo(spl);
 
-        if(memo && safe_strcmp(memo, "") != 0)
+        if (memo && safe_strcmp(memo, "") != 0)
         {
             xmlNewTextChild(ret, NULL, BAD_CAST "split:memo", (xmlChar*)memo);
         }
@@ -85,7 +85,7 @@ split_to_dom_tree(const gchar *tag, Split *spl)
     {
         const char *action = xaccSplitGetAction(spl);
 
-        if(action && safe_strcmp(action, "") != 0)
+        if (action && safe_strcmp(action, "") != 0)
         {
             xmlNewTextChild(ret, NULL, BAD_CAST "split:action", (xmlChar*)action);
         }
@@ -108,29 +108,29 @@ split_to_dom_tree(const gchar *tag, Split *spl)
     add_gnc_num(ret, "split:quantity", xaccSplitGetAmount(spl));
 
     {
-       Account * account = xaccSplitGetAccount (spl);
+        Account * account = xaccSplitGetAccount (spl);
 
-       xmlAddChild (ret, guid_to_dom_tree("split:account",
-                                         xaccAccountGetGUID (account)));
+        xmlAddChild (ret, guid_to_dom_tree("split:account",
+                                           xaccAccountGetGUID (account)));
     }
     {
-       GNCLot * lot = xaccSplitGetLot (spl);
+        GNCLot * lot = xaccSplitGetLot (spl);
 
-       if (lot)
-       {
-          xmlAddChild (ret, guid_to_dom_tree("split:lot",
-                                         gnc_lot_get_guid(lot)));
-       }
+        if (lot)
+        {
+            xmlAddChild (ret, guid_to_dom_tree("split:lot",
+                                               gnc_lot_get_guid(lot)));
+        }
     }
     {
-       xmlNodePtr kvpnode = kvp_frame_to_dom_tree("split:slots",
-                                                  xaccSplitGetSlots(spl));
-       if(kvpnode)
-       {
-           xmlAddChild(ret, kvpnode);
-       }
+        xmlNodePtr kvpnode = kvp_frame_to_dom_tree("split:slots",
+                             xaccSplitGetSlots(spl));
+        if (kvpnode)
+        {
+            xmlAddChild(ret, kvpnode);
+        }
     }
-    
+
     return ret;
 }
 
@@ -141,8 +141,8 @@ add_trans_splits(xmlNodePtr node, Transaction *trn)
     xmlNodePtr toaddto;
 
     toaddto = xmlNewChild(node, NULL, BAD_CAST "trn:splits", NULL);
-    
-    for (n=xaccTransGetSplitList(trn); n; n=n->next)
+
+    for (n = xaccTransGetSplitList(trn); n; n = n->next)
     {
         Split *s = n->data;
         xmlAddChild(toaddto, split_to_dom_tree("trn:split", s));
@@ -161,9 +161,9 @@ gnc_transaction_dom_tree_create(Transaction *trn)
     xmlAddChild(ret, guid_to_dom_tree("trn:id", xaccTransGetGUID(trn)));
 
     xmlAddChild(ret, commodity_ref_to_dom_tree("trn:currency",
-                                               xaccTransGetCurrency(trn)));
+                xaccTransGetCurrency(trn)));
 
-    if(xaccTransGetNum(trn) && (safe_strcmp(xaccTransGetNum(trn), "") != 0))
+    if (xaccTransGetNum(trn) && (safe_strcmp(xaccTransGetNum(trn), "") != 0))
     {
         xmlNewTextChild(ret, NULL, BAD_CAST "trn:num", (xmlChar*)xaccTransGetNum(trn));
     }
@@ -173,23 +173,23 @@ gnc_transaction_dom_tree_create(Transaction *trn)
     add_timespec(ret, "trn:date-entered",
                  xaccTransRetDateEnteredTS(trn), TRUE);
 
-    if(xaccTransGetDescription(trn))
+    if (xaccTransGetDescription(trn))
     {
         xmlNewTextChild(ret, NULL, BAD_CAST "trn:description",
                         (xmlChar*)xaccTransGetDescription(trn));
     }
-    
+
     {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree("trn:slots",
-                                                   xaccTransGetSlots(trn));
-        if(kvpnode)
+                             xaccTransGetSlots(trn));
+        if (kvpnode)
         {
             xmlAddChild(ret, kvpnode);
         }
     }
 
     add_trans_splits(ret, trn);
-    
+
     return ret;
 }
 
@@ -197,8 +197,8 @@ gnc_transaction_dom_tree_create(Transaction *trn)
 
 struct split_pdata
 {
-  Split *split;
-  QofBook *book;
+    Split *split;
+    QofBook *book;
 };
 
 static inline gboolean
@@ -207,7 +207,7 @@ set_spl_string(xmlNodePtr node, Split *spl,
 {
     gchar *tmp = dom_tree_to_text(node);
     g_return_val_if_fail(tmp, FALSE);
-    
+
     func(spl, tmp);
 
     g_free(tmp);
@@ -228,7 +228,7 @@ set_spl_gnc_num(xmlNodePtr node, Split* spl,
 
     return FALSE;
 }
-    
+
 static gboolean
 spl_id_handler(xmlNodePtr node, gpointer data)
 {
@@ -311,12 +311,12 @@ spl_account_handler(xmlNodePtr node, gpointer data)
 
     account = xaccAccountLookup (id, pdata->book);
     if (!account && gnc_transaction_xml_v2_testing &&
-        !guid_equal (id, guid_null ()))
+            !guid_equal (id, guid_null ()))
     {
-      account = xaccMallocAccount (pdata->book);
-      xaccAccountSetGUID (account, id);
-      xaccAccountSetCommoditySCU (account,
-                                  xaccSplitGetAmount (pdata->split).denom);
+        account = xaccMallocAccount (pdata->book);
+        xaccAccountSetGUID (account, id);
+        xaccAccountSetCommoditySCU (account,
+                                    xaccSplitGetAmount (pdata->split).denom);
     }
 
     xaccAccountInsertSplit (account, pdata->split);
@@ -337,10 +337,10 @@ spl_lot_handler(xmlNodePtr node, gpointer data)
 
     lot = gnc_lot_lookup (id, pdata->book);
     if (!lot && gnc_transaction_xml_v2_testing &&
-        !guid_equal (id, guid_null ()))
+            !guid_equal (id, guid_null ()))
     {
-      lot = gnc_lot_new (pdata->book);
-      gnc_lot_set_guid (lot, *id);
+        lot = gnc_lot_new (pdata->book);
+        gnc_lot_set_guid (lot, *id);
     }
 
     gnc_lot_add_split (lot, pdata->split);
@@ -357,7 +357,7 @@ spl_slots_handler(xmlNodePtr node, gpointer data)
     gboolean successful;
 
     successful = dom_tree_to_kvp_frame_given(node,
-                                             xaccSplitGetSlots (pdata->split));
+                 xaccSplitGetSlots (pdata->split));
     g_return_val_if_fail(successful, FALSE);
 
     return TRUE;
@@ -393,7 +393,7 @@ dom_tree_to_split(xmlNodePtr node, QofBook *book)
     pdata.book = book;
 
     /* this isn't going to work in a testing setup */
-    if(dom_tree_generic_parse(node, spl_dom_handlers, &pdata))
+    if (dom_tree_generic_parse(node, spl_dom_handlers, &pdata))
     {
         return ret;
     }
@@ -408,8 +408,8 @@ dom_tree_to_split(xmlNodePtr node, QofBook *book)
 
 struct trans_pdata
 {
-  Transaction *trans;
-  QofBook *book;
+    Transaction *trans;
+    QofBook *book;
 };
 
 static inline gboolean
@@ -421,7 +421,7 @@ set_tran_string(xmlNodePtr node, Transaction *trn,
     tmp = dom_tree_to_text(node);
 
     g_return_val_if_fail(tmp, FALSE);
-    
+
     func(trn, tmp);
 
     g_free(tmp);
@@ -438,7 +438,7 @@ set_tran_date(xmlNodePtr node, Transaction *trn,
     tm = dom_tree_to_timespec(node);
 
     if (!dom_tree_valid_timespec(&tm, node->name)) return FALSE;
-    
+
     func(trn, &tm);
 
     return TRUE;
@@ -456,7 +456,7 @@ trn_id_handler(xmlNodePtr node, gpointer trans_pdata)
     xaccTransSetGUID((Transaction*)trn, tmp);
 
     g_free(tmp);
-    
+
     return TRUE;
 }
 
@@ -533,21 +533,21 @@ trn_splits_handler(xmlNodePtr node, gpointer trans_pdata)
     g_return_val_if_fail(node, FALSE);
     g_return_val_if_fail(node->xmlChildrenNode, FALSE);
 
-    for(mark = node->xmlChildrenNode; mark; mark = mark->next)
+    for (mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
         Split *spl;
-        
-        if(safe_strcmp("text", (char*)mark->name) == 0)
-          continue;
 
-        if(safe_strcmp("trn:split", (char*)mark->name))
+        if (safe_strcmp("text", (char*)mark->name) == 0)
+            continue;
+
+        if (safe_strcmp("trn:split", (char*)mark->name))
         {
             return FALSE;
         }
 
         spl = dom_tree_to_split(mark, pdata->book);
 
-        if(spl)
+        if (spl)
         {
             xaccTransAppendSplit(trn, spl);
         }
@@ -583,14 +583,14 @@ gnc_transaction_end_handler(gpointer data_for_children,
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
 
-    if(parent_data)
+    if (parent_data)
     {
         return TRUE;
     }
 
     /* OK.  For some messed up reason this is getting called again with a
        NULL tag.  So we ignore those cases */
-    if(!tag)
+    if (!tag)
     {
         return TRUE;
     }
@@ -598,14 +598,14 @@ gnc_transaction_end_handler(gpointer data_for_children,
     g_return_val_if_fail(tree, FALSE);
 
     trn = dom_tree_to_transaction(tree, gdata->bookdata);
-    if(trn != NULL)
+    if (trn != NULL)
     {
         gdata->cb(tag, gdata->parsedata, trn);
         successful = TRUE;
     }
 
     xmlFreeNode(tree);
-    
+
     return trn != NULL;
 }
 
@@ -618,7 +618,7 @@ dom_tree_to_transaction( xmlNodePtr node, QofBook *book )
 
     g_return_val_if_fail(node, NULL);
     g_return_val_if_fail(book, NULL);
-    
+
     trn = xaccMallocTransaction(book);
     g_return_val_if_fail(trn, NULL);
     xaccTransBeginEdit(trn);

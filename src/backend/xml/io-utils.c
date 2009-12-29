@@ -40,9 +40,9 @@
 */
 
 static const gchar *emacs_trailer =
-"<!-- Local variables: -->\n"
-"<!-- mode: xml        -->\n"
-"<!-- End:             -->\n";
+    "<!-- Local variables: -->\n"
+    "<!-- mode: xml        -->\n"
+    "<!-- End:             -->\n";
 
 
 void
@@ -60,7 +60,7 @@ write_one_account(FILE *out,
     xmlNodePtr accnode;
 
     accnode =
-      gnc_account_dom_tree_create(account, gd && gd->exporting, allow_incompat);
+        gnc_account_dom_tree_create(account, gd && gd->exporting, allow_incompat);
 
     xmlElemDump(out, NULL, accnode);
     fprintf(out, "\n");
@@ -77,11 +77,11 @@ write_account_tree(FILE *out, Account *root, sixtp_gdv2 *gd)
     gboolean allow_incompat = TRUE;
 
     if (allow_incompat)
-      write_one_account(out, root, gd, allow_incompat);
+        write_one_account(out, root, gd, allow_incompat);
 
     descendants = gnc_account_get_descendants(root);
-    for (node = descendants; node; node = g_list_next(node)) 
-      write_one_account(out, node->data, gd, allow_incompat);
+    for (node = descendants; node; node = g_list_next(node))
+        write_one_account(out, node->data, gd, allow_incompat);
     g_list_free(descendants);
 }
 

@@ -15,16 +15,19 @@ int libagedver_gnc_module_age = 9;
 int libagedver_gnc_module_revision = 0;
 
 char *
-libagedver_gnc_module_path(void) {
-  return g_strdup("gnucash/agedver");
+libagedver_gnc_module_path(void)
+{
+    return g_strdup("gnucash/agedver");
 }
 
 char *
-libagedver_gnc_module_description(void) {
-  return g_strdup("this is a frequently extended module");
+libagedver_gnc_module_description(void)
+{
+    return g_strdup("this is a frequently extended module");
 }
 
 int
-libagedver_gnc_module_init(int refcount) {
-  return TRUE;
+libagedver_gnc_module_init(int refcount)
+{
+    return TRUE;
 }

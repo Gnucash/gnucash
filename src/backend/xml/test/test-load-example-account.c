@@ -20,7 +20,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
- 
+
 #include "config.h"
 #include <glib.h>
 #include <libguile.h>
@@ -51,7 +51,7 @@ test_load_file(const char *filename)
 
     gea = gnc_read_example_account(filename);
 
-    if(gea != NULL)
+    if (gea != NULL)
     {
         success("example account load");
         gnc_destroy_example_account(gea);
@@ -78,7 +78,7 @@ guile_main (void *closure, int argc, char **argv)
     gnc_module_system_init();
     gnc_module_load("gnucash/engine", 0);
 
-    if((ea_dir = g_dir_open(location, 0, NULL)) == NULL)
+    if ((ea_dir = g_dir_open(location, 0, NULL)) == NULL)
     {
         failure("unable to open ea directory");
     }
@@ -86,9 +86,9 @@ guile_main (void *closure, int argc, char **argv)
     {
         const gchar *entry;
 
-        while((entry = g_dir_read_name(ea_dir)) != NULL)
+        while ((entry = g_dir_read_name(ea_dir)) != NULL)
         {
-            if(g_str_has_suffix(entry, da_ending))
+            if (g_str_has_suffix(entry, da_ending))
             {
                 gchar *to_open = g_build_filename(location, entry, (gchar*)NULL);
                 if (!g_file_test(to_open, G_FILE_TEST_IS_DIR))
@@ -100,16 +100,16 @@ guile_main (void *closure, int argc, char **argv)
         }
     }
     g_dir_close(ea_dir);
-    
+
     {
         list = gnc_load_example_account_list(location);
 
         do_test(list != NULL, "gnc_load_example_account_list");
-        
+
         gnc_free_example_account_list(list);
     }
-    
-    
+
+
     print_test_results();
     exit(get_rv());
 }
@@ -117,6 +117,6 @@ guile_main (void *closure, int argc, char **argv)
 int
 main (int argc, char ** argv)
 {
-  scm_boot_guile (argc, argv, guile_main, NULL);
-  exit(get_rv());
+    scm_boot_guile (argc, argv, guile_main, NULL);
+    exit(get_rv());
 }

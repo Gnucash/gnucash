@@ -40,7 +40,7 @@
 #include <glib.h>
 
 /** @name Character Sets
- @{ 
+ @{
 */
 
 /** Collate two UTF-8 strings.  This function performs basic argument
@@ -74,7 +74,7 @@ int safe_utf8_collate (const char *str1, const char *str2);
  * routines @e require valid UTF-8 as input;
  * so data read from a file or the network should be checked
  * with g_utf8_validate() before doing anything else with it.
- * 
+ *
  * @param str a pointer to character data
  * @param max_len max bytes to validate, or -1 to go until NUL
  * @param end return location for end of valid data
@@ -139,7 +139,7 @@ gchar *gnc_locale_to_utf8(const gchar* str);
 /** @} */
 
 /** @name GList Manipulation
- @{ 
+ @{
 */
 typedef gpointer (*GncGMapFunc)(gpointer data, gpointer user_data);
 
@@ -158,7 +158,7 @@ void gnc_g_list_cut(GList **list, GList *cut_point);
 /** @} */
 
 /** @name Message Logging
- @{ 
+ @{
 */
 void gnc_scm_log_warn(const gchar *msg);
 void gnc_scm_log_error(const gchar *msg);
@@ -168,7 +168,7 @@ void gnc_scm_log_debug(const gchar *msg);
 /** @} */
 
 /** @name glib Miscellaneous Functions
- @{ 
+ @{
 */
 
 /** Kill a process.  On UNIX send a SIGKILL, on Windows call TerminateProcess.

@@ -19,7 +19,7 @@ test_kvp_get_slot(int run,
 {
     const kvp_value *test_val2;
     test_val2 = kvp_frame_get_slot(test_frame1, test_key);
-    if(kvp_value_compare(test_val1, test_val2) == 0)
+    if (kvp_value_compare(test_val1, test_val2) == 0)
     {
         success_args("kvp_frame_get_slot", __FILE__, __LINE__, "run=%d", run);
     }
@@ -45,10 +45,10 @@ test_kvp_copy_compare(int run,
     do_test_args(test_frame2 != NULL, "kvp_frame_copy",
                  __FILE__, __LINE__, "run=%d", run);
 
-    if(kvp_frame_compare(test_frame1, test_frame2) == 0)
+    if (kvp_frame_compare(test_frame1, test_frame2) == 0)
     {
         success_args("kvp_frame_copy->kvp_frame_compare",
-                     __FILE__, __LINE__, "run=%d",run);
+                     __FILE__, __LINE__, "run=%d", run);
     }
     else
     {
@@ -76,7 +76,7 @@ test_kvp_copy_get_slot(int run,
 
     test_frame2 = kvp_frame_copy(test_frame1);
     test_val2 = kvp_frame_get_slot(test_frame2, test_key);
-    if(kvp_value_compare(test_val1, test_val2) == 0)
+    if (kvp_value_compare(test_val1, test_val2) == 0)
     {
         success_args("kvp_frame_copy->kvp_frame_get_slot",
                      __FILE__, __LINE__, "run=%d", run);
@@ -93,17 +93,17 @@ test_kvp_copy_get_slot(int run,
         printf("Frame2 is %s\n", tmp);
         g_free(tmp);
     }
-    kvp_frame_delete(test_frame2); 
+    kvp_frame_delete(test_frame2);
 }
 
 static void
 test_kvp_create_delete(void)
 {
     kvp_frame *test_frame;
-    
+
     test_frame = kvp_frame_new();
 
-    if(test_frame != NULL)
+    if (test_frame != NULL)
     {
         kvp_frame_delete(test_frame);
         test_frame = NULL;
@@ -119,8 +119,8 @@ static void
 test_kvp_frames1(void)
 {
     int i;
-    
-    for(i = 0; i < 20; i++)
+
+    for (i = 0; i < 20; i++)
     {
         kvp_frame *test_frame1;
         gchar *test_key;
@@ -147,11 +147,11 @@ static void
 test_kvp_printing(void)
 {
     int i;
-    for(i = 0; i < 20; i++)
+    for (i = 0; i < 20; i++)
     {
         kvp_frame *ran_frame;
         gchar *char_rep;
-        
+
         ran_frame = get_random_kvp_frame();
         char_rep = kvp_frame_to_string(ran_frame);
 
@@ -167,7 +167,7 @@ static void
 test_kvp_xml_stuff(void)
 {
     int i;
-    for(i = 0; i < 20; i++)
+    for (i = 0; i < 20; i++)
     {
         kvp_frame *test_frame1;
         kvp_frame *test_frame2;
@@ -177,16 +177,16 @@ test_kvp_xml_stuff(void)
 
         test_node = kvp_frame_to_dom_tree("test-kvp", test_frame1);
 
-        if(!test_node)
+        if (!test_node)
         {
-            failure_args("xml stuff",__FILE__, __LINE__, 
+            failure_args("xml stuff", __FILE__, __LINE__,
                          "kvp_frame_to_dom_tree produced NULL");
         }
         else
         {
             test_frame2 = dom_tree_to_kvp_frame(test_node);
 
-            if(kvp_frame_compare(test_frame1, test_frame2) == 0)
+            if (kvp_frame_compare(test_frame1, test_frame2) == 0)
             {
                 success("xml stuff");
             }
@@ -207,7 +207,7 @@ test_kvp_xml_stuff(void)
             kvp_frame_delete(test_frame2);
             xmlFreeNode(test_node);
         }
-        
+
         kvp_frame_delete(test_frame1);
     }
 }

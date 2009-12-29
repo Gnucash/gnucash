@@ -39,7 +39,7 @@
 
 /*
  * The pgendKVPInit() routine initializes a local cache. This routine
- *    must be called before any db access that might require kvp 
+ *    must be called before any db access that might require kvp
  *    handling (e.g. a fetch of accounts).
  */
 void pgendKVPInit (PGBackend *);
@@ -49,12 +49,12 @@ void pgendKVPInit (PGBackend *);
  *    with the indicated GUID cache index 'iguid'.
  *    (Note that currently it does not delete excess kvp data.
  *    That is, if the database has more kvp data in it than
- *    what was passed to this routine, then it does not delete 
+ *    what was passed to this routine, then it does not delete
  *    the excess. This should be considered to be a bug that needs
  *    fixing.)
  *
  * The pgendKVPDelete() and pgendKVPDeleteStr() routines delete
- *    all kvp data in the database associated with the indicated 
+ *    all kvp data in the database associated with the indicated
  *    GUID cache index 'iguid'.
  *
  * The pgendKVPFetch() routine pulls kvp data out of the database.

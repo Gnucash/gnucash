@@ -22,7 +22,7 @@
 /** @name Book parameter names
 
  * These define the names used for the slots used to store book level parameters.
- * They are defined here so swig will find them since they need to be available to 
+ * They are defined here so swig will find them since they need to be available to
  * Scheme code too.
  @{
 */

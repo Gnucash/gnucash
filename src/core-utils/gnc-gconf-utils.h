@@ -30,9 +30,9 @@
     system from within Gnucash.  GConf is a shared key/value storage
     system.
 
-    The main benefits of these routines are that they 
-    -# maintain a GConfClient object, 
-    -# convert gnucash internal section names into full gconf pathnames, and 
+    The main benefits of these routines are that they
+    -# maintain a GConfClient object,
+    -# convert gnucash internal section names into full gconf pathnames, and
     -# optionally take care of error checking on return values.
 
     @{ */
@@ -74,7 +74,7 @@ typedef void (*GncGconfGeneralAnyCb) (gpointer user_data);
 
 
 /** @name GConf Miscellaneous Functions
- @{ 
+ @{
 */
 
 /** This function takes an enum value and returns its nickname.
@@ -105,8 +105,8 @@ const gchar * gnc_enum_to_nick(GType type, gint value);
  *  @return A pointer to the textual "nickname" for this enum.
  */
 gint gnc_enum_from_nick(GType type,
-			const gchar *name,
-			gint default_value);
+                        const gchar *name,
+                        gint default_value);
 
 /** Convert a local key name to a full gconf path name.
  *
@@ -161,8 +161,8 @@ void gnc_gconf_suggest_sync (void);
 
 
 
-/** @name GConf "General" Section Convenience Functions 
- @{ 
+/** @name GConf "General" Section Convenience Functions
+ @{
 */
 
 
@@ -181,8 +181,8 @@ void gnc_gconf_suggest_sync (void);
  *  function.
  */
 void gnc_gconf_general_register_cb (const gchar *key,
-				    GncGconfGeneralCb func,
-				    gpointer user_data);
+                                    GncGconfGeneralCb func,
+                                    gpointer user_data);
 
 
 /** Remove a function that was registered for a callback when a
@@ -200,8 +200,8 @@ void gnc_gconf_general_register_cb (const gchar *key,
  *  function.
  */
 void gnc_gconf_general_remove_cb (const gchar *key,
-				  GncGconfGeneralCb func,
-				  gpointer user_data);
+                                  GncGconfGeneralCb func,
+                                  gpointer user_data);
 
 
 /** Register a callback for when any key in the general section of
@@ -216,7 +216,7 @@ void gnc_gconf_general_remove_cb (const gchar *key,
  *  function.
  */
 void gnc_gconf_general_register_any_cb (GncGconfGeneralAnyCb func,
-					gpointer user_data);
+                                        gpointer user_data);
 
 
 /** Remove a function that was registered for a callback when any key
@@ -231,14 +231,14 @@ void gnc_gconf_general_register_any_cb (GncGconfGeneralAnyCb func,
  *  function.
  */
 void gnc_gconf_general_remove_any_cb (GncGconfGeneralAnyCb func,
-				      gpointer user_data);
+                                      gpointer user_data);
 
 /** @} */
 
 
 
-/** @name GConf Get Functions 
- @{ 
+/** @name GConf Get Functions
+ @{
 */
 
 /** Get a boolean value from GConf.
@@ -274,8 +274,8 @@ void gnc_gconf_general_remove_any_cb (GncGconfGeneralAnyCb func,
  *  returned by GConf.
  */
 gboolean gnc_gconf_get_bool (const gchar *section,
-			     /*@ null @*/ const gchar *name,
-			     /*@ null @*/ GError **error);
+                             /*@ null @*/ const gchar *name,
+                             /*@ null @*/ GError **error);
 
 /** Get a boolean value from GConf with no error argument.
  *
@@ -308,7 +308,7 @@ gboolean gnc_gconf_get_bool (const gchar *section,
  * functions.  It should not be called from C code.
  */
 gboolean gnc_gconf_get_bool_no_error (const gchar *section,
-				      const gchar *name);
+                                      const gchar *name);
 
 /** Get an integer value from GConf.
  *
@@ -343,8 +343,8 @@ gboolean gnc_gconf_get_bool_no_error (const gchar *section,
  *  by GConf.
  */
 gint gnc_gconf_get_int (const gchar *section,
-			const gchar *name,
-			GError **error);
+                        const gchar *name,
+                        GError **error);
 
 /** Get an float value from GConf.
  *
@@ -379,8 +379,8 @@ gint gnc_gconf_get_int (const gchar *section,
  *  by GConf.
  */
 gdouble gnc_gconf_get_float (const gchar *section,
-			     const gchar *name,
-			     GError **error);
+                             const gchar *name,
+                             GError **error);
 
 /** Get a string value from GConf.
  *
@@ -416,8 +416,8 @@ gdouble gnc_gconf_get_float (const gchar *section,
  *  returned by this function.
  */
 char *gnc_gconf_get_string (const gchar *section,
-			    const gchar *name,
-			    GError **error);
+                            const gchar *name,
+                            GError **error);
 
 /** Get a list of values from GConf.
  *
@@ -460,9 +460,9 @@ char *gnc_gconf_get_string (const gchar *section,
  *  list data that are string values.
  */
 GSList *gnc_gconf_get_list (const gchar *section,
-			    const gchar *name,
-			    GConfValueType list_type,
-			    GError **error);
+                            const gchar *name,
+                            GConfValueType list_type,
+                            GError **error);
 
 
 /** Get a schema value from GConf.
@@ -498,13 +498,13 @@ GSList *gnc_gconf_get_list (const gchar *section,
  *  calling the gconf_schema_free() function.
  */
 GConfSchema *gnc_gconf_get_schema (const gchar *section,
-				   const gchar *name,
-				   GError **caller_error);
+                                   const gchar *name,
+                                   GError **caller_error);
 
 /** @} */
 
-/** @name GConf Set/Unset Functions 
- @{ 
+/** @name GConf Set/Unset Functions
+ @{
 */
 
 
@@ -536,9 +536,9 @@ GConfSchema *gnc_gconf_get_schema (const gchar *section,
  *  will pass any error back to the calling function for it to handle.
  */
 void gnc_gconf_set_bool (const gchar *section,
-			 const gchar *name,
-			 const gboolean value,
-			 GError **error);
+                         const gchar *name,
+                         const gboolean value,
+                         GError **error);
 
 /** Store an integer value into GConf.
  *
@@ -568,9 +568,9 @@ void gnc_gconf_set_bool (const gchar *section,
  *  will pass any error back to the calling function for it to handle.
  */
 void gnc_gconf_set_int (const gchar *section,
-			const gchar *name,
-			const gint value,
-			GError **error);
+                        const gchar *name,
+                        const gint value,
+                        GError **error);
 
 /** Store an float value into GConf.
  *
@@ -600,9 +600,9 @@ void gnc_gconf_set_int (const gchar *section,
  *  will pass any error back to the calling function for it to handle.
  */
 void gnc_gconf_set_float (const gchar *section,
-			  const gchar *name,
-			  const gdouble value,
-			  GError **error);
+                          const gchar *name,
+                          const gdouble value,
+                          GError **error);
 
 /** Store a string into GConf.
  *
@@ -634,9 +634,9 @@ void gnc_gconf_set_float (const gchar *section,
  *  will pass any error back to the calling function for it to handle.
  */
 void gnc_gconf_set_string (const gchar *section,
-			   const gchar *name,
-			   const gchar *value,
-			   GError **error);
+                           const gchar *name,
+                           const gchar *value,
+                           GError **error);
 
 /** Store a list of values into GConf.
  *
@@ -674,10 +674,10 @@ void gnc_gconf_set_string (const gchar *section,
  *  will pass any error back to the calling function for it to handle.
  */
 void gnc_gconf_set_list (const gchar *section,
-			 const gchar *name,
-			 GConfValueType list_type,
-			 GSList *value,
-			 GError **error);
+                         const gchar *name,
+                         GConfValueType list_type,
+                         GSList *value,
+                         GError **error);
 
 /** Delete a value from GConf.
  *
@@ -707,8 +707,8 @@ void gnc_gconf_set_list (const gchar *section,
  *  will pass any error back to the calling function for it to handle.
  */
 void gnc_gconf_unset (const gchar *section,
-		      const gchar *name,
-		      GError **error);
+                      const gchar *name,
+                      GError **error);
 
 
 /** Delete a directory of values from GConf.
@@ -732,12 +732,12 @@ void gnc_gconf_unset (const gchar *section,
  *  will pass any error back to the calling function for it to handle.
  */
 void gnc_gconf_unset_dir (const gchar *section,
-			  GError **error);
+                          GError **error);
 
 /** @} */
 
-/** @name GConf Notification Functions 
- @{ 
+/** @name GConf Notification Functions
+ @{
 */
 
 /** Add a notification callback to GConf.
@@ -772,9 +772,9 @@ void gnc_gconf_unset_dir (const gchar *section,
  *  section and whoami should be unique across all callers.
  */
 void gnc_gconf_add_notification (GObject *object,
-				 const gchar *section,
-				 GConfClientNotifyFunc callback,
-				 const gchar *whoami);
+                                 const gchar *section,
+                                 GConfClientNotifyFunc callback,
+                                 const gchar *whoami);
 
 
 /** An alternative function for adding a notification callback to
@@ -808,8 +808,8 @@ void gnc_gconf_add_notification (GObject *object,
  *  reverse the actions of this function.
  */
 guint gnc_gconf_add_anon_notification (const gchar *section,
-				       GConfClientNotifyFunc callback,
-				       gpointer data);
+                                       GConfClientNotifyFunc callback,
+                                       gpointer data);
 
 
 /** Remove a callback from GConf.
@@ -832,8 +832,8 @@ guint gnc_gconf_add_anon_notification (const gchar *section,
  *  section and whoami should be unique across all callers.
  */
 void gnc_gconf_remove_notification (GObject *object,
-				    const gchar *section,
-				    const gchar *whoami);
+                                    const gchar *section,
+                                    const gchar *whoami);
 
 
 
@@ -852,7 +852,7 @@ void gnc_gconf_remove_notification (GObject *object,
  *  gnc_gconf_add_anon_notification() function.
  */
 void gnc_gconf_remove_anon_notification (const gchar *section,
-					 guint cnxn_id);
+        guint cnxn_id);
 
 
 /** Retrieve a list of all key/value pairs in the specified GConf
@@ -888,8 +888,8 @@ gboolean gnc_gconf_schemas_found (void);
 
 /** @} */
 
-/** @name GConf One Liners 
- @{ 
+/** @name GConf One Liners
+ @{
 */
 
 #define DESTKOP_TEAROFF_MENUS "/desktop/gnome/interface/menus_have_tearoff"
@@ -899,19 +899,19 @@ gboolean gnc_gconf_schemas_found (void);
 static inline gboolean
 gnc_gconf_menus_have_tearoff (void)
 {
-  return gnc_gconf_get_bool(DESTKOP_TEAROFF_MENUS, NULL, NULL);
+    return gnc_gconf_get_bool(DESTKOP_TEAROFF_MENUS, NULL, NULL);
 }
 
 static inline gboolean
 gnc_gconf_menubar_detachable (void)
 {
-  return gnc_gconf_get_bool(DESTKOP_MENUBAR_DETACHABLE, NULL, NULL);
+    return gnc_gconf_get_bool(DESTKOP_MENUBAR_DETACHABLE, NULL, NULL);
 }
 
 static inline gboolean
 gnc_gconf_toolbar_detachable (void)
 {
-  return gnc_gconf_get_bool(DESTKOP_TOOLBAR_DETACHABLE, NULL, NULL);
+    return gnc_gconf_get_bool(DESTKOP_TOOLBAR_DETACHABLE, NULL, NULL);
 }
 
 /** @} */

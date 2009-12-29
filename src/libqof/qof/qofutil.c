@@ -523,7 +523,7 @@ qof_close(void)
     qof_query_shutdown ();
     qof_object_shutdown ();
     guid_shutdown ();
-	qof_finalize_backend_libraries();
+    qof_finalize_backend_libraries();
     qof_util_string_cache_destroy ();
     qof_log_shutdown();
 }

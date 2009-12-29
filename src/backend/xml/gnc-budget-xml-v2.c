@@ -72,7 +72,7 @@ gnc_budget_dom_tree_create(GncBudget *bgt)
                                       gnc_budget_get_name(bgt)));
     /* field: char* description */
     xmlAddChild(ret, text_to_dom_tree(bgt_description_string,
-				      gnc_budget_get_description(bgt)));
+                                      gnc_budget_get_description(bgt)));
     /* field: guint num_periods */
     xmlAddChild(ret, guint_to_dom_tree(bgt_num_periods_string,
                                        gnc_budget_get_num_periods(bgt)));
@@ -81,7 +81,8 @@ gnc_budget_dom_tree_create(GncBudget *bgt)
                                             gnc_budget_get_recurrence(bgt)));
     /* slots */
     kf = qof_instance_get_slots(QOF_INSTANCE(bgt));
-    if (kf) {
+    if (kf)
+    {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree(bgt_slots_string, kf);
         if (kvpnode)
             xmlAddChild(ret, kvpnode);
@@ -94,7 +95,7 @@ gnc_budget_dom_tree_create(GncBudget *bgt)
 /***********************************************************************/
 static inline gboolean
 set_string(xmlNodePtr node, GncBudget* bgt,
-	       void (*func)(GncBudget *bgt, const gchar *txt))
+           void (*func)(GncBudget *bgt, const gchar *txt))
 {
     gchar* txt = dom_tree_to_text(node);
     g_return_val_if_fail(txt, FALSE);
@@ -133,34 +134,37 @@ budget_num_periods_handler (xmlNodePtr node, gpointer bgt)
 {
     guint num_periods;
 
-    if (dom_tree_to_guint(node, &num_periods)) {
+    if (dom_tree_to_guint(node, &num_periods))
+    {
         gnc_budget_set_num_periods(GNC_BUDGET(bgt), num_periods);
         return TRUE;
-    } else
+    }
+    else
         return FALSE;
 }
 
 static gboolean
 budget_recurrence_handler (xmlNodePtr node, gpointer bgt)
 {
-  Recurrence *r;
+    Recurrence *r;
 
-  if ((r = dom_tree_to_recurrence(node)) == NULL)
-      return FALSE;
+    if ((r = dom_tree_to_recurrence(node)) == NULL)
+        return FALSE;
 
-  gnc_budget_set_recurrence(GNC_BUDGET(bgt), r);
-  g_free(r);
-  return TRUE;
+    gnc_budget_set_recurrence(GNC_BUDGET(bgt), r);
+    g_free(r);
+    return TRUE;
 }
 
 static gboolean
 budget_slots_handler (xmlNodePtr node, gpointer bgt)
 {
     return dom_tree_to_kvp_frame_given(
-        node, qof_instance_get_slots(QOF_INSTANCE(bgt)));
+               node, qof_instance_get_slots(QOF_INSTANCE(bgt)));
 }
 
-static struct dom_tree_handler budget_handlers[] = {
+static struct dom_tree_handler budget_handlers[] =
+{
     { bgt_id_string, budget_id_handler, 1, 0 },
     { bgt_name_string, budget_name_handler, 0, 0 },
     { bgt_description_string, budget_description_handler, 0, 0 },
@@ -181,13 +185,15 @@ gnc_budget_end_handler(gpointer data_for_children,
     gxpf_data *gdata = (gxpf_data*)global_data;
     QofBook *book = gdata->bookdata;
 
-    if (parent_data) {
+    if (parent_data)
+    {
         return TRUE;
     }
 
     /* OK.  For some messed up reason this is getting called again with a
        NULL tag.  So we ignore those cases */
-    if(!tag) {
+    if (!tag)
+    {
         return TRUE;
     }
 
@@ -195,7 +201,8 @@ gnc_budget_end_handler(gpointer data_for_children,
 
     bgt = dom_tree_to_budget(tree, book);
     xmlFreeNode(tree);
-    if(bgt != NULL) {
+    if (bgt != NULL)
+    {
         /* ends up calling book_callback */
         gdata->cb(tag, gdata->parsedata, bgt);
     }
@@ -210,7 +217,8 @@ dom_tree_to_budget (xmlNodePtr node, QofBook *book)
     GncBudget *bgt;
 
     bgt = gnc_budget_new(book);
-    if (!dom_tree_generic_parse (node, budget_handlers, bgt)) {
+    if (!dom_tree_generic_parse (node, budget_handlers, bgt))
+    {
         PERR ("failed to parse budget tree");
         gnc_budget_destroy(bgt);
         bgt = NULL;

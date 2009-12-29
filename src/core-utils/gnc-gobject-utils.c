@@ -27,7 +27,7 @@
 #include "gnc-gobject-utils.h"
 
 #include <gtk/gtk.h>	// For gtk_main_quit(). Can't get this to work with
-			// a g_source attached to the main glib context.
+// a g_source attached to the main glib context.
 
 
 static void gnc_gobject_weak_cb (gpointer user_data, GObject *object);
@@ -48,15 +48,16 @@ static void gnc_gobject_weak_cb (gpointer user_data, GObject *object);
 static GHashTable*
 gnc_gobject_tracking_table (void)
 {
-  static GHashTable *singleton = NULL;
+    static GHashTable *singleton = NULL;
 
-  if (!singleton) {
-    singleton = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
+    if (!singleton)
+    {
+        singleton = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
 #if DEBUG_REFERENCE_COUNTING
-    gtk_quit_add (0, (GtkFunction)gnc_gobject_tracking_dump, NULL);
+        gtk_quit_add (0, (GtkFunction)gnc_gobject_tracking_dump, NULL);
 #endif
-  }
-  return singleton;
+    }
+    return singleton;
 }
 
 
@@ -71,9 +72,9 @@ gnc_gobject_tracking_table (void)
 static void
 gnc_gobject_dump_gobject (GObject *object, const gchar *name)
 {
-  //printf("Enter %s: object %p, name %s\n", G_STRFUNC, object, name);
-  g_message("    object %p, ref count %d", object, object->ref_count);
-  //printf("Leave %s:\n", G_STRFUNC);
+    //printf("Enter %s: object %p, name %s\n", G_STRFUNC, object, name);
+    g_message("    object %p, ref count %d", object, object->ref_count);
+    //printf("Leave %s:\n", G_STRFUNC);
 }
 
 
@@ -86,11 +87,11 @@ gnc_gobject_dump_gobject (GObject *object, const gchar *name)
 static gboolean
 gnc_gobject_dump_list (const gchar *name, GList *list, gpointer user_data)
 {
-  //printf("Enter %s: name %s, list %p\n", G_STRFUNC, name, list);
-  g_message("  %d %s", g_list_length(list), name);
-  g_list_foreach(list, (GFunc)gnc_gobject_dump_gobject, (gpointer)name);
-  //printf("Leave %s:\n", G_STRFUNC);
-  return TRUE;
+    //printf("Enter %s: name %s, list %p\n", G_STRFUNC, name, list);
+    g_message("  %d %s", g_list_length(list), name);
+    g_list_foreach(list, (GFunc)gnc_gobject_dump_gobject, (gpointer)name);
+    //printf("Leave %s:\n", G_STRFUNC);
+    return TRUE;
 }
 
 
@@ -103,16 +104,17 @@ gnc_gobject_dump_list (const gchar *name, GList *list, gpointer user_data)
 void
 gnc_gobject_tracking_dump (void)
 {
-  GHashTable *table;
+    GHashTable *table;
 
-  //printf("Enter %s:\n", G_STRFUNC);
-  table = gnc_gobject_tracking_table();
+    //printf("Enter %s:\n", G_STRFUNC);
+    table = gnc_gobject_tracking_table();
 
-  if (g_hash_table_size(table) > 0) {
-    g_message("The following objects remain alive:");
-    g_hash_table_foreach_remove(table, (GHRFunc)gnc_gobject_dump_list, NULL);
-  }
-  //printf("Leave %s:\n", G_STRFUNC);
+    if (g_hash_table_size(table) > 0)
+    {
+        g_message("The following objects remain alive:");
+        g_hash_table_foreach_remove(table, (GHRFunc)gnc_gobject_dump_list, NULL);
+    }
+    //printf("Leave %s:\n", G_STRFUNC);
 }
 
 
@@ -121,72 +123,78 @@ gnc_gobject_tracking_dump (void)
 void
 gnc_gobject_tracking_remember (GObject *object, GObjectClass *klass)
 {
-  GHashTable *table;
-  GList *list;
-  const gchar *name;
+    GHashTable *table;
+    GList *list;
+    const gchar *name;
 
-  g_return_if_fail(G_IS_OBJECT(object));
+    g_return_if_fail(G_IS_OBJECT(object));
 
-  /* Little dance here to handle startup conditions. During object
-   * initialization the object type changes as each each parent class
-   * is initialized.  The class passed to the initialization function
-   * is always the ultimate class of the object. */
-  if (klass == NULL)
-    klass = G_OBJECT_GET_CLASS(object);
-  name = g_type_name(G_TYPE_FROM_CLASS(klass));
+    /* Little dance here to handle startup conditions. During object
+     * initialization the object type changes as each each parent class
+     * is initialized.  The class passed to the initialization function
+     * is always the ultimate class of the object. */
+    if (klass == NULL)
+        klass = G_OBJECT_GET_CLASS(object);
+    name = g_type_name(G_TYPE_FROM_CLASS(klass));
 
-  //printf("Enter %s: object %p of type %s\n", G_STRFUNC, object, name);
-  table = gnc_gobject_tracking_table();
-  list = g_hash_table_lookup(table, name);
+    //printf("Enter %s: object %p of type %s\n", G_STRFUNC, object, name);
+    table = gnc_gobject_tracking_table();
+    list = g_hash_table_lookup(table, name);
 
-  if (g_list_index(list, object) != -1) {
-    g_critical("Object %p is already in list of %s", object, name);
-    //printf("Leave %s: already in list\n", G_STRFUNC);
-    return;
-  }
+    if (g_list_index(list, object) != -1)
+    {
+        g_critical("Object %p is already in list of %s", object, name);
+        //printf("Leave %s: already in list\n", G_STRFUNC);
+        return;
+    }
 
-  list = g_list_append(list, object);
-  g_hash_table_insert(table, g_strdup(name), list);
+    list = g_list_append(list, object);
+    g_hash_table_insert(table, g_strdup(name), list);
 
-  g_object_weak_ref(object, gnc_gobject_weak_cb, NULL);
-  //printf("Leave %s:\n", G_STRFUNC);
+    g_object_weak_ref(object, gnc_gobject_weak_cb, NULL);
+    //printf("Leave %s:\n", G_STRFUNC);
 }
 
 
 static gboolean
 gnc_gobject_tracking_forget_internal (GObject *object)
 {
-  GHashTable *table;
-  GList *list, *item;
-  const gchar *name;
+    GHashTable *table;
+    GList *list, *item;
+    const gchar *name;
 
-  g_return_val_if_fail(G_IS_OBJECT(object), FALSE);
+    g_return_val_if_fail(G_IS_OBJECT(object), FALSE);
 
-  name = G_OBJECT_TYPE_NAME(object);
-  //printf("Enter %s: object %p of type %s\n", G_STRFUNC, object, name);
-  table = gnc_gobject_tracking_table();
-  list = g_hash_table_lookup(table, name);
-  if (!list) {
-    //printf("Leave %s: list for %s objects not found.\n", G_STRFUNC, name);
-    return FALSE;
-  }
+    name = G_OBJECT_TYPE_NAME(object);
+    //printf("Enter %s: object %p of type %s\n", G_STRFUNC, object, name);
+    table = gnc_gobject_tracking_table();
+    list = g_hash_table_lookup(table, name);
+    if (!list)
+    {
+        //printf("Leave %s: list for %s objects not found.\n", G_STRFUNC, name);
+        return FALSE;
+    }
 
-  item = g_list_find(list, object);
-  if (!item) {
-    //printf("Leave %s: object %p not in %s object list.\n", G_STRFUNC,
-    //       object, name);
-    return FALSE;
-  }
+    item = g_list_find(list, object);
+    if (!item)
+    {
+        //printf("Leave %s: object %p not in %s object list.\n", G_STRFUNC,
+        //       object, name);
+        return FALSE;
+    }
 
-  list = g_list_remove_link(list, item);
-  if (list) {
-    g_hash_table_replace(table, g_strdup(name), list);
-    //printf("Leave %s: object removed.\n", G_STRFUNC);
-  } else {
-    g_hash_table_remove(table, name);
-    //printf("Leave %s: object and list removed.\n", G_STRFUNC);
-  }
-  return TRUE;
+    list = g_list_remove_link(list, item);
+    if (list)
+    {
+        g_hash_table_replace(table, g_strdup(name), list);
+        //printf("Leave %s: object removed.\n", G_STRFUNC);
+    }
+    else
+    {
+        g_hash_table_remove(table, name);
+        //printf("Leave %s: object and list removed.\n", G_STRFUNC);
+    }
+    return TRUE;
 }
 
 
@@ -195,8 +203,8 @@ gnc_gobject_tracking_forget_internal (GObject *object)
 void
 gnc_gobject_tracking_forget (GObject *object)
 {
-  if (gnc_gobject_tracking_forget_internal(object))
-    g_object_weak_unref(object, gnc_gobject_weak_cb, NULL);
+    if (gnc_gobject_tracking_forget_internal(object))
+        g_object_weak_unref(object, gnc_gobject_weak_cb, NULL);
 }
 
 
@@ -212,7 +220,7 @@ gnc_gobject_tracking_forget (GObject *object)
 static void
 gnc_gobject_weak_cb (gpointer user_data, GObject *object)
 {
-  gnc_gobject_tracking_forget_internal(object);
+    gnc_gobject_tracking_forget_internal(object);
 }
 
 
@@ -221,12 +229,12 @@ gnc_gobject_weak_cb (gpointer user_data, GObject *object)
 const GList *
 gnc_gobject_tracking_get_list (const gchar *name)
 {
-  GHashTable *table;
-  GList *list;
+    GHashTable *table;
+    GList *list;
 
-  //printf("Enter %s: name %s\n", G_STRFUNC, name);
-  table = gnc_gobject_tracking_table();
-  list = g_hash_table_lookup(table, name);
-  //printf("Leave %s: list %p\n", G_STRFUNC, list);
-  return list;
+    //printf("Enter %s: name %s\n", G_STRFUNC, name);
+    table = gnc_gobject_tracking_table();
+    list = g_hash_table_lookup(table, name);
+    //printf("Leave %s: list %p\n", G_STRFUNC, list);
+    return list;
 }

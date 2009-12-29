@@ -38,80 +38,80 @@
 SCM
 gnc_printinfo2scm(GNCPrintAmountInfo info)
 {
-  SCM info_scm = SCM_EOL;
+    SCM info_scm = SCM_EOL;
 
-  info_scm = scm_cons (SCM_BOOL (info.round), info_scm);
-  info_scm = scm_cons (SCM_BOOL (info.force_fit), info_scm);
-  info_scm = scm_cons (SCM_BOOL (info.monetary), info_scm);
-  info_scm = scm_cons (SCM_BOOL (info.use_locale), info_scm);
-  info_scm = scm_cons (SCM_BOOL (info.use_symbol), info_scm);
-  info_scm = scm_cons (SCM_BOOL (info.use_separators), info_scm);
+    info_scm = scm_cons (SCM_BOOL (info.round), info_scm);
+    info_scm = scm_cons (SCM_BOOL (info.force_fit), info_scm);
+    info_scm = scm_cons (SCM_BOOL (info.monetary), info_scm);
+    info_scm = scm_cons (SCM_BOOL (info.use_locale), info_scm);
+    info_scm = scm_cons (SCM_BOOL (info.use_symbol), info_scm);
+    info_scm = scm_cons (SCM_BOOL (info.use_separators), info_scm);
 
-  info_scm = scm_cons (scm_int2num (info.min_decimal_places), info_scm);
-  info_scm = scm_cons (scm_int2num (info.max_decimal_places), info_scm);
+    info_scm = scm_cons (scm_int2num (info.min_decimal_places), info_scm);
+    info_scm = scm_cons (scm_int2num (info.max_decimal_places), info_scm);
 
-  info_scm = scm_cons (gnc_commodity_to_scm (info.commodity), info_scm);
+    info_scm = scm_cons (gnc_commodity_to_scm (info.commodity), info_scm);
 
-  info_scm = scm_cons (scm_str2symbol ("print-info"), info_scm);
+    info_scm = scm_cons (scm_str2symbol ("print-info"), info_scm);
 
-  return info_scm;
+    return info_scm;
 }
 
 GNCPrintAmountInfo
 gnc_scm2printinfo(SCM info_scm)
 {
-  GNCPrintAmountInfo info;
+    GNCPrintAmountInfo info;
 
-  /* skip type */
-  info_scm = SCM_CDR (info_scm);
-  info.commodity = gnc_scm_to_commodity (SCM_CAR (info_scm));
+    /* skip type */
+    info_scm = SCM_CDR (info_scm);
+    info.commodity = gnc_scm_to_commodity (SCM_CAR (info_scm));
 
-  info_scm = SCM_CDR (info_scm);
-  info.max_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1,
-                                         G_STRFUNC);
+    info_scm = SCM_CDR (info_scm);
+    info.max_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1,
+                                           G_STRFUNC);
 
-  info_scm = SCM_CDR (info_scm);
-  info.min_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1,
-                                         G_STRFUNC);
+    info_scm = SCM_CDR (info_scm);
+    info.min_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1,
+                                           G_STRFUNC);
 
-  info_scm = SCM_CDR (info_scm);
-  info.use_separators = SCM_NFALSEP (SCM_CAR (info_scm));
+    info_scm = SCM_CDR (info_scm);
+    info.use_separators = SCM_NFALSEP (SCM_CAR (info_scm));
 
-  info_scm = SCM_CDR (info_scm);
-  info.use_symbol = SCM_NFALSEP (SCM_CAR (info_scm));
+    info_scm = SCM_CDR (info_scm);
+    info.use_symbol = SCM_NFALSEP (SCM_CAR (info_scm));
 
-  info_scm = SCM_CDR (info_scm);
-  info.use_locale = SCM_NFALSEP (SCM_CAR (info_scm));
+    info_scm = SCM_CDR (info_scm);
+    info.use_locale = SCM_NFALSEP (SCM_CAR (info_scm));
 
-  info_scm = SCM_CDR (info_scm);
-  info.monetary = SCM_NFALSEP (SCM_CAR (info_scm));
+    info_scm = SCM_CDR (info_scm);
+    info.monetary = SCM_NFALSEP (SCM_CAR (info_scm));
 
-  info_scm = SCM_CDR (info_scm);
-  info.force_fit = SCM_NFALSEP (SCM_CAR (info_scm));
+    info_scm = SCM_CDR (info_scm);
+    info.force_fit = SCM_NFALSEP (SCM_CAR (info_scm));
 
-  info_scm = SCM_CDR (info_scm);
-  info.round = SCM_NFALSEP (SCM_CAR (info_scm));
+    info_scm = SCM_CDR (info_scm);
+    info.round = SCM_NFALSEP (SCM_CAR (info_scm));
 
-  return info;
+    return info;
 }
 
 int
 gnc_printinfo_p(SCM info_scm)
 {
-  const gchar *symbol;
+    const gchar *symbol;
 
-  if (!SCM_LISTP(info_scm) || SCM_NULLP(info_scm))
-    return 0;
+    if (!SCM_LISTP(info_scm) || SCM_NULLP(info_scm))
+        return 0;
 
-  info_scm = SCM_CAR (info_scm);
-  if (!SCM_SYMBOLP (info_scm))
-    return 0;
+    info_scm = SCM_CAR (info_scm);
+    if (!SCM_SYMBOLP (info_scm))
+        return 0;
 
-  symbol = SCM_SYMBOL_CHARS (info_scm);
-  if (symbol == NULL)
-    return 0;
+    symbol = SCM_SYMBOL_CHARS (info_scm);
+    if (symbol == NULL)
+        return 0;
 
-  return (strcmp (symbol, "print-info") == 0);
+    return (strcmp (symbol, "print-info") == 0);
 }
 
 /* This is a scaled down version of the routine that would be needed
@@ -131,41 +131,41 @@ gnc_printinfo_p(SCM info_scm)
 SCM
 gnc_quoteinfo2scm(gnc_commodity *comm)
 {
-  gnc_quote_source *source;
-  const char *name, *tz;
-  SCM info_scm = SCM_EOL, comm_scm, def_comm_scm;
+    gnc_quote_source *source;
+    const char *name, *tz;
+    SCM info_scm = SCM_EOL, comm_scm, def_comm_scm;
 
-  if (!comm)
-    return SCM_EOL;
+    if (!comm)
+        return SCM_EOL;
 
-  source = gnc_commodity_get_quote_source (comm);
-  name = gnc_quote_source_get_internal_name (source);
-  tz = gnc_commodity_get_quote_tz (comm);
-  comm_scm = SWIG_NewPointerObj(comm, SWIG_TypeQuery("_p_gnc_commodity"), 0);
-  def_comm_scm = SWIG_NewPointerObj(gnc_default_currency (),
-                                    SWIG_TypeQuery("_p_gnc_commodity"), 0);
+    source = gnc_commodity_get_quote_source (comm);
+    name = gnc_quote_source_get_internal_name (source);
+    tz = gnc_commodity_get_quote_tz (comm);
+    comm_scm = SWIG_NewPointerObj(comm, SWIG_TypeQuery("_p_gnc_commodity"), 0);
+    def_comm_scm = SWIG_NewPointerObj(gnc_default_currency (),
+                                      SWIG_TypeQuery("_p_gnc_commodity"), 0);
 
-  if (tz)
-    info_scm = scm_cons (scm_makfrom0str (tz), info_scm);
-  else
-    info_scm = scm_cons (SCM_BOOL_F, info_scm);
-  info_scm = scm_cons (def_comm_scm, info_scm);
-  info_scm = scm_cons (comm_scm, info_scm);
-  info_scm = scm_cons (scm_makfrom0str (name), info_scm);
-  return info_scm;
+    if (tz)
+        info_scm = scm_cons (scm_makfrom0str (tz), info_scm);
+    else
+        info_scm = scm_cons (SCM_BOOL_F, info_scm);
+    info_scm = scm_cons (def_comm_scm, info_scm);
+    info_scm = scm_cons (comm_scm, info_scm);
+    info_scm = scm_cons (scm_makfrom0str (name), info_scm);
+    return info_scm;
 }
 
 SCM
 gnc_parse_amount_helper (const char * string, gboolean monetary)
 {
-  gnc_numeric result;
-  gboolean ok;
+    gnc_numeric result;
+    gboolean ok;
 
-  g_return_val_if_fail (string, SCM_BOOL_F);
+    g_return_val_if_fail (string, SCM_BOOL_F);
 
-  ok = xaccParseAmount (string, monetary, &result, NULL);
-  if (!ok)
-    return SCM_BOOL_F;
+    ok = xaccParseAmount (string, monetary, &result, NULL);
+    if (!ok)
+        return SCM_BOOL_F;
 
-  return gnc_numeric_to_scm (result);
+    return gnc_numeric_to_scm (result);
 }

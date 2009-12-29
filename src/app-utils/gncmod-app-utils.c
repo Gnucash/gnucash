@@ -28,21 +28,23 @@ int libgncmod_app_utils_gnc_module_age      = 0;
 
 
 char *
-libgncmod_app_utils_gnc_module_path(void) {
-  return g_strdup("gnucash/app-utils");
+libgncmod_app_utils_gnc_module_path(void)
+{
+    return g_strdup("gnucash/app-utils");
 }
 
 char *
-libgncmod_app_utils_gnc_module_description(void) {
-  return g_strdup("Utilities for building gnc applications");
+libgncmod_app_utils_gnc_module_description(void)
+{
+    return g_strdup("Utilities for building gnc applications");
 }
 
 static void
 lmod(char * mn)
 {
-  char * form = g_strdup_printf("(use-modules %s)\n", mn);
-  scm_c_eval_string(form);
-  g_free(form);
+    char * form = g_strdup_printf("(use-modules %s)\n", mn);
+    scm_c_eval_string(form);
+    g_free(form);
 }
 
 static void
@@ -58,36 +60,39 @@ extern SCM scm_init_sw_app_utils_module(void);
 int
 libgncmod_app_utils_gnc_module_init(int refcount)
 {
-  /* load the engine (we depend on it) */
-  if(!gnc_module_load("gnucash/engine", 0)) {
-    return FALSE;
-  }
+    /* load the engine (we depend on it) */
+    if (!gnc_module_load("gnucash/engine", 0))
+    {
+        return FALSE;
+    }
 
-  /* load the calculation module (we depend on it) */
-  if(!gnc_module_load("gnucash/calculation", 0)) {
-    return FALSE;
-  }
+    /* load the calculation module (we depend on it) */
+    if (!gnc_module_load("gnucash/calculation", 0))
+    {
+        return FALSE;
+    }
 
-  scm_init_sw_app_utils_module();
-  /* publish swig bindings */
-  /* load the scheme code */
-  lmod("(sw_app_utils)");
-  lmod("(gnucash app-utils)");
+    scm_init_sw_app_utils_module();
+    /* publish swig bindings */
+    /* load the scheme code */
+    lmod("(sw_app_utils)");
+    lmod("(gnucash app-utils)");
 
-  if (refcount == 0) {
-    gnc_component_manager_init ();
-    gnc_hook_add_dangler(HOOK_STARTUP, (GFunc)gnc_exp_parser_init, NULL);
-    gnc_hook_add_dangler(HOOK_SHUTDOWN, (GFunc)app_utils_shutdown, NULL);
-  }
+    if (refcount == 0)
+    {
+        gnc_component_manager_init ();
+        gnc_hook_add_dangler(HOOK_STARTUP, (GFunc)gnc_exp_parser_init, NULL);
+        gnc_hook_add_dangler(HOOK_SHUTDOWN, (GFunc)app_utils_shutdown, NULL);
+    }
 
-  return TRUE;
+    return TRUE;
 }
 
 int
 libgncmod_app_utils_gnc_module_end(int refcount)
 {
-  if (refcount == 0)
-    gnc_component_manager_shutdown ();
+    if (refcount == 0)
+        gnc_component_manager_shutdown ();
 
-  return TRUE;
+    return TRUE;
 }

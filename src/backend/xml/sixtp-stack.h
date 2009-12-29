@@ -28,19 +28,20 @@
 
 #include "sixtp.h"
 
-typedef struct sixtp_stack_frame {
-  sixtp *parser;
-  gchar *tag;
-  gpointer data_for_children;
-  GSList *data_from_children; /* in reverse chronological order */
-  gpointer frame_data;
+typedef struct sixtp_stack_frame
+{
+    sixtp *parser;
+    gchar *tag;
+    gpointer data_for_children;
+    GSList *data_from_children; /* in reverse chronological order */
+    gpointer frame_data;
 
-  /* Line and column [of the start tag]; set during parsing. */
-  int line;
-  int col;
+    /* Line and column [of the start tag]; set during parsing. */
+    int line;
+    int col;
 } sixtp_stack_frame;
 
-struct _sixtp_parser_context_struct 
+struct _sixtp_parser_context_struct
 {
     xmlSAXHandler handler;
     sixtp_sax_data data;

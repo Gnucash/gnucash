@@ -21,7 +21,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
- 
+
 #include "config.h"
 
 #include <glib.h>
@@ -51,56 +51,56 @@ node_and_account_equal(xmlNodePtr node, Account *act)
     xmlNodePtr mark;
 
     while (safe_strcmp ((char*)node->name, "text") == 0)
-	{
-      node = node->next;
-	}
+    {
+        node = node->next;
+    }
 
-    if(!check_dom_tree_version(node, "2.0.0"))
+    if (!check_dom_tree_version(node, "2.0.0"))
     {
         return g_strdup("version wrong.  Not 2.0.0 or not there");
     }
 
-    if(!node->name || safe_strcmp((char*)node->name, "gnc:account"))
+    if (!node->name || safe_strcmp((char*)node->name, "gnc:account"))
     {
         return g_strdup("Name of toplevel node is bad");
     }
 
-    for(mark = node->xmlChildrenNode; mark; mark = mark->next)
+    for (mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
-        if(safe_strcmp((char*)mark->name, "text") == 0)
+        if (safe_strcmp((char*)mark->name, "text") == 0)
         {
         }
-        else if(safe_strcmp((char*)mark->name, "act:name") == 0)
+        else if (safe_strcmp((char*)mark->name, "act:name") == 0)
         {
-            if(!equals_node_val_vs_string(mark, xaccAccountGetName(act)))
+            if (!equals_node_val_vs_string(mark, xaccAccountGetName(act)))
             {
                 return g_strdup("names differ");
             }
         }
-        else if(safe_strcmp((char*)mark->name, "act:id") == 0)
+        else if (safe_strcmp((char*)mark->name, "act:id") == 0)
         {
-            if(!equals_node_val_vs_guid(mark, xaccAccountGetGUID(act)))
+            if (!equals_node_val_vs_guid(mark, xaccAccountGetGUID(act)))
             {
                 return g_strdup("ids differ");
             }
         }
-        else if(safe_strcmp((char*)mark->name, "act:type") == 0)
+        else if (safe_strcmp((char*)mark->name, "act:type") == 0)
         {
             gchar *txt;
             int type;
-            
+
             txt = dom_tree_to_text(mark);
 
-            if(!txt)
+            if (!txt)
             {
                 return g_strdup("couldn't get type string");
             }
-            else if(!xaccAccountStringToType(txt, &type))
+            else if (!xaccAccountStringToType(txt, &type))
             {
                 g_free(txt);
                 return g_strdup("couldn't convert type string to int");
             }
-            else if(type != xaccAccountGetType(act))
+            else if (type != xaccAccountGetType(act))
             {
                 g_free(txt);
                 return g_strdup("types differ");
@@ -110,68 +110,68 @@ node_and_account_equal(xmlNodePtr node, Account *act)
                 g_free(txt);
             }
         }
-        else if(safe_strcmp((char*)mark->name, "act:commodity") == 0)
+        else if (safe_strcmp((char*)mark->name, "act:commodity") == 0)
         {
-            if(!equals_node_val_vs_commodity(
-                   mark, xaccAccountGetCommodity(act),
-                   gnc_account_get_book(act)))
+            if (!equals_node_val_vs_commodity(
+                        mark, xaccAccountGetCommodity(act),
+                        gnc_account_get_book(act)))
             {
                 return g_strdup("commodities differ");
             }
         }
-        else if(safe_strcmp((char*)mark->name, "act:code") == 0)
+        else if (safe_strcmp((char*)mark->name, "act:code") == 0)
         {
-            if(!equals_node_val_vs_string(mark, xaccAccountGetCode(act)))
+            if (!equals_node_val_vs_string(mark, xaccAccountGetCode(act)))
             {
                 return g_strdup("codes differ");
             }
         }
-        else if(safe_strcmp((char*)mark->name, "act:description") == 0)
+        else if (safe_strcmp((char*)mark->name, "act:description") == 0)
         {
-            if(!equals_node_val_vs_string(
-                   mark, xaccAccountGetDescription(act)))
+            if (!equals_node_val_vs_string(
+                        mark, xaccAccountGetDescription(act)))
             {
                 return g_strdup("descriptions differ");
             }
         }
-        else if(safe_strcmp((char*)mark->name, "act:slots") == 0)
+        else if (safe_strcmp((char*)mark->name, "act:slots") == 0)
         {
             /* xaccAccountDeleteOldData (act); */
 
-            if(!equals_node_val_vs_kvp_frame(mark, xaccAccountGetSlots(act)))
+            if (!equals_node_val_vs_kvp_frame(mark, xaccAccountGetSlots(act)))
             {
                 return g_strdup("slots differ");
             }
         }
-        else if(safe_strcmp((char*)mark->name, "act:parent") == 0)
+        else if (safe_strcmp((char*)mark->name, "act:parent") == 0)
         {
-            if(!equals_node_val_vs_guid(
-                   mark, xaccAccountGetGUID(gnc_account_get_parent(act))))
+            if (!equals_node_val_vs_guid(
+                        mark, xaccAccountGetGUID(gnc_account_get_parent(act))))
             {
                 return g_strdup("parent ids differ");
             }
         }
-        else if(safe_strcmp((char*)mark->name, "act:commodity-scu") == 0)
+        else if (safe_strcmp((char*)mark->name, "act:commodity-scu") == 0)
         {
-            if(!equals_node_val_vs_int(mark, xaccAccountGetCommoditySCU(act)))
+            if (!equals_node_val_vs_int(mark, xaccAccountGetCommoditySCU(act)))
             {
                 return g_strdup("commodity scus differ");
             }
         }
-		else if (safe_strcmp((char*)mark->name, "act:hidden") == 0)
-		{
-			if(!equals_node_val_vs_boolean(mark, xaccAccountGetHidden(act)))
-			{
-		    	return g_strdup("Hidden flags differ");
-			}
-		}
-		else if (safe_strcmp((char*)mark->name, "act:placeholder") == 0)
-		{
-			if(!equals_node_val_vs_boolean(mark, xaccAccountGetPlaceholder(act)))
-			{
-		    	return g_strdup("Placeholder flags differ");
-			}
-		}
+        else if (safe_strcmp((char*)mark->name, "act:hidden") == 0)
+        {
+            if (!equals_node_val_vs_boolean(mark, xaccAccountGetHidden(act)))
+            {
+                return g_strdup("Hidden flags differ");
+            }
+        }
+        else if (safe_strcmp((char*)mark->name, "act:placeholder") == 0)
+        {
+            if (!equals_node_val_vs_boolean(mark, xaccAccountGetPlaceholder(act)))
+            {
+                return g_strdup("Placeholder flags differ");
+            }
+        }
         else if (safe_strcmp((char*)mark->name, "act:security") == 0)
         {
             return NULL; // This tag is ignored.
@@ -181,7 +181,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
             return g_strdup_printf("unknown node in dom tree: %s", mark->name);
         }
     }
-    
+
     return NULL;
 }
 
@@ -216,11 +216,14 @@ test_add_account(const char *tag, gpointer globaldata, gpointer data)
                                           gnc_commodity_get_namespace (com),
                                           gnc_commodity_get_mnemonic (com));
 
-    if (new_com) { xaccAccountSetCommodity (account, new_com); }
+    if (new_com)
+    {
+        xaccAccountSetCommodity (account, new_com);
+    }
 
     do_test_args(xaccAccountEqual((Account*)account, (Account*)(gdata->act),
                                   TRUE),
-                        "gnc_account_sixtp_parser_create", 
+                 "gnc_account_sixtp_parser_create",
                  __FILE__, __LINE__, "%d", gdata->value );
 
     return TRUE;
@@ -236,16 +239,16 @@ test_account(int i, Account *test_act)
 
     test_node = gnc_account_dom_tree_create(test_act, FALSE, TRUE);
 
-    if(!test_node)
+    if (!test_node)
     {
-        failure_args("account_xml", __FILE__, __LINE__, 
+        failure_args("account_xml", __FILE__, __LINE__,
                      "gnc_account_dom_tree_create returned NULL");
         return;
     }
 
-    if((compare_msg = node_and_account_equal(test_node, test_act)) != NULL)
+    if ((compare_msg = node_and_account_equal(test_node, test_act)) != NULL)
     {
-        failure_args("account_xml", __FILE__, __LINE__, 
+        failure_args("account_xml", __FILE__, __LINE__,
                      "node and account were not equal: %s", compare_msg);
         xmlElemDump(stdout, NULL, test_node);
         fprintf(stdout, "\n");
@@ -257,11 +260,11 @@ test_account(int i, Account *test_act)
     {
         success("account_xml");
     }
-        
+
     filename1 = g_strdup_printf("test_file_XXXXXX");
-        
+
     fd = g_mkstemp(filename1);
-        
+
     write_dom_node_to_file(test_node, fd);
 
     close(fd);
@@ -274,9 +277,9 @@ test_account(int i, Account *test_act)
         data.value = i;
 
         parser = gnc_account_sixtp_parser_create();
-            
-        if(!gnc_xml_parse_file(parser, filename1, test_add_account,
-                               &data, sixbook))
+
+        if (!gnc_xml_parse_file(parser, filename1, test_add_account,
+                                &data, sixbook))
         {
             failure_args("gnc_xml_parse_file returned FALSE",
                          __FILE__, __LINE__, "%d", i);
@@ -285,7 +288,7 @@ test_account(int i, Account *test_act)
         /* no handling of circular data structures.  We'll do that later */
         /* sixtp_destroy(parser); */
     }
-        
+
 
     g_unlink(filename1);
     g_free(filename1);
@@ -297,7 +300,7 @@ test_generation()
 {
     int i;
 
-    for(i = 0; i < 20; i++)
+    for (i = 0; i < 20; i++)
     {
         Account *ran_act;
 
@@ -307,7 +310,7 @@ test_generation()
 
         delete_random_account(ran_act);
     }
-    
+
     {
         /* empty some things. */
         Account *act;
@@ -322,23 +325,23 @@ test_generation()
 
         delete_random_account(act);
     }
-    
-/*     { */
-/*         Account *act1; */
-/*         Account *act2; */
 
-/*         act1 = get_random_account(); */
-/*         act2 = get_random_account(); */
+    /*     { */
+    /*         Account *act1; */
+    /*         Account *act2; */
 
-/*         gnc_account_append_child(act1, act2); */
+    /*         act1 = get_random_account(); */
+    /*         act2 = get_random_account(); */
 
-/*         test_account(-1, act2); */
-/*         test_account(-1, act1); */
+    /*         gnc_account_append_child(act1, act2); */
 
-/*         delete_random_account(act2); */
-/*         delete_random_account(act1); */
-/*     } */
-    
+    /*         test_account(-1, act2); */
+    /*         test_account(-1, act1); */
+
+    /*         delete_random_account(act2); */
+    /*         delete_random_account(act1); */
+    /*     } */
+
 }
 
 static gboolean
@@ -347,7 +350,7 @@ test_real_account(const char *tag, gpointer global_data, gpointer data)
     char *msg;
     Account *act = (Account*)data;
 
-    if(!gnc_account_get_parent(act))
+    if (!gnc_account_get_parent(act))
     {
         gnc_account_append_child(gnc_book_get_root_account(sixbook), act);
     }
@@ -369,9 +372,9 @@ main (int argc, char ** argv)
     cashobjects_register();
     session = qof_session_new();
     sixbook = qof_session_get_book (session);
-    if(argc > 1)
+    if (argc > 1)
     {
-        test_files_in_dir(argc, argv, test_real_account, 
+        test_files_in_dir(argc, argv, test_real_account,
                           gnc_account_sixtp_parser_create(),
                           "gnc:account", sixbook);
     }
@@ -379,8 +382,8 @@ main (int argc, char ** argv)
     {
         test_generation();
     }
-    
-    qof_session_destroy(session);        
+
+    qof_session_destroy(session);
     print_test_results();
     qof_close();
     exit(get_rv());

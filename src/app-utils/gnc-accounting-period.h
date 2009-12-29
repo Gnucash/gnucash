@@ -1,5 +1,5 @@
 /*
- * gnc-accounting-period.h -- 
+ * gnc-accounting-period.h --
  *
  * Copyright (c) 2005 David Hampton <hampton@employees.org>
  * All rights reserved.
@@ -51,20 +51,21 @@
 /**
  * This specifies a time interval.
  */
-typedef enum {
-  GNC_ACCOUNTING_PERIOD_TODAY,
-  GNC_ACCOUNTING_PERIOD_MONTH,
-  GNC_ACCOUNTING_PERIOD_MONTH_PREV,
-  GNC_ACCOUNTING_PERIOD_QUARTER,
-  GNC_ACCOUNTING_PERIOD_QUARTER_PREV,
-  GNC_ACCOUNTING_PERIOD_CYEAR,
-  GNC_ACCOUNTING_PERIOD_CYEAR_PREV,
-  GNC_ACCOUNTING_PERIOD_CYEAR_LAST,
+typedef enum
+{
+    GNC_ACCOUNTING_PERIOD_TODAY,
+    GNC_ACCOUNTING_PERIOD_MONTH,
+    GNC_ACCOUNTING_PERIOD_MONTH_PREV,
+    GNC_ACCOUNTING_PERIOD_QUARTER,
+    GNC_ACCOUNTING_PERIOD_QUARTER_PREV,
+    GNC_ACCOUNTING_PERIOD_CYEAR,
+    GNC_ACCOUNTING_PERIOD_CYEAR_PREV,
+    GNC_ACCOUNTING_PERIOD_CYEAR_LAST,
 
-  GNC_ACCOUNTING_PERIOD_FYEAR = GNC_ACCOUNTING_PERIOD_CYEAR_LAST,
-  GNC_ACCOUNTING_PERIOD_FYEAR_PREV,
-  GNC_ACCOUNTING_PERIOD_FYEAR_LAST,
-  GNC_ACCOUNTING_PERIOD_LAST = GNC_ACCOUNTING_PERIOD_FYEAR_LAST,
+    GNC_ACCOUNTING_PERIOD_FYEAR = GNC_ACCOUNTING_PERIOD_CYEAR_LAST,
+    GNC_ACCOUNTING_PERIOD_FYEAR_PREV,
+    GNC_ACCOUNTING_PERIOD_FYEAR_LAST,
+    GNC_ACCOUNTING_PERIOD_LAST = GNC_ACCOUNTING_PERIOD_FYEAR_LAST,
 } GncAccountingPeriod;
 
 
@@ -91,8 +92,8 @@ typedef enum {
  *  @return The starting day of the specified time interval, as a
  *  GDate. */
 GDate *gnc_accounting_period_start_gdate (GncAccountingPeriod which,
-					  const GDate *fy_end,
-					  const GDate *contains);
+        const GDate *fy_end,
+        const GDate *contains);
 
 
 /** This function returns the starting time for an accounting period.
@@ -115,8 +116,8 @@ GDate *gnc_accounting_period_start_gdate (GncAccountingPeriod which,
  *  @return The starting second of the specified time interval, based
  *  on a zero value of January 1st, 1970. */
 time_t gnc_accounting_period_start_timet (GncAccountingPeriod which,
-					  const GDate *fy_end,
-					  const GDate *contains);
+        const GDate *fy_end,
+        const GDate *contains);
 
 
 /** This function returns the ending date for an accounting period.
@@ -139,8 +140,8 @@ time_t gnc_accounting_period_start_timet (GncAccountingPeriod which,
  *  @return The final day of the specified time interval, as a
  *  GDate. */
 GDate *gnc_accounting_period_end_gdate (GncAccountingPeriod which,
-					const GDate *fy_end,
-					const GDate *contains);
+                                        const GDate *fy_end,
+                                        const GDate *contains);
 
 
 /** This function returns the ending time for an accounting period.
@@ -163,8 +164,8 @@ GDate *gnc_accounting_period_end_gdate (GncAccountingPeriod which,
  *  @return The ending second of the specified time interval, based
  *  on a zero value of January 1st, 1970. */
 time_t gnc_accounting_period_end_timet (GncAccountingPeriod which,
-					const GDate *fy_end,
-					const GDate *contains);
+                                        const GDate *fy_end,
+                                        const GDate *contains);
 
 
 /* Get the fiscal accounting period from the preferences and return

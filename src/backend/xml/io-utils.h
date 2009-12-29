@@ -38,4 +38,4 @@ void write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd);
 void write_emacs_trailer(FILE *out);
 
 
-#endif /* IO_UTILS_H */    
+#endif /* IO_UTILS_H */

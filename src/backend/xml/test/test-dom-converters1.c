@@ -21,7 +21,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
- 
+
 #include "config.h"
 
 #include <stdlib.h>
@@ -47,7 +47,7 @@ static void
 test_dom_tree_to_commodity_ref(void)
 {
     int i;
-    for(i = 0; i < 20; i++)
+    for (i = 0; i < 20; i++)
     {
         gnc_commodity *test_com1;
         gchar *test_str1;
@@ -60,14 +60,14 @@ test_dom_tree_to_commodity_ref(void)
 
         test_str1 = get_random_string();
         test_str2 = get_random_string();
-        
+
         test_com1 = gnc_commodity_new(book, NULL, test_str1, test_str2, NULL, 0);
         test_node = commodity_ref_to_dom_tree("test-com", test_com1);
 
         test_com2 = dom_tree_to_commodity_ref_no_engine(test_node, book);
 
         do_test(gnc_commodity_equiv(test_com1, test_com2),
-                            "dom_tree_to_commodity_ref_no_engine");
+                "dom_tree_to_commodity_ref_no_engine");
 
         xmlFreeNode(test_node);
         gnc_commodity_destroy(test_com1);
@@ -75,7 +75,7 @@ test_dom_tree_to_commodity_ref(void)
         g_free(test_str1);
         g_free(test_str2);
 
-	qof_book_destroy (book);
+        qof_book_destroy (book);
     }
 }
 
@@ -84,7 +84,7 @@ test_dom_tree_to_text(void)
 {
     int i;
 
-    for(i = 0; i < 20; i++)
+    for (i = 0; i < 20; i++)
     {
         gchar *test_string1;
         gchar *test_string2;
@@ -97,13 +97,13 @@ test_dom_tree_to_text(void)
 
         test_string2 = dom_tree_to_text(test_node);
 
-        if(!test_string2)
+        if (!test_string2)
         {
-            failure_args("dom_tree_to_text", __FILE__, __LINE__, 
+            failure_args("dom_tree_to_text", __FILE__, __LINE__,
                          "null return from dom_tree_to_text");
             xmlElemDump(stdout, NULL, test_node);
         }
-        else if(safe_strcmp(test_string1, test_string2) == 0)
+        else if (safe_strcmp(test_string1, test_string2) == 0)
         {
             success_args("dom_tree_to_text", __FILE__, __LINE__, "with string %s",
                          test_string1);
@@ -116,7 +116,7 @@ test_dom_tree_to_text(void)
 
         xmlFreeNode(test_node);
         g_free(test_string1);
-        if(test_string2) g_free(test_string2);
+        if (test_string2) g_free(test_string2);
     }
 }
 
@@ -125,7 +125,7 @@ static void
 test_dom_tree_to_timespec(void)
 {
     int i;
-    for(i = 0; i < 20; i++)
+    for (i = 0; i < 20; i++)
     {
         Timespec *test_spec1;
         Timespec test_spec2;
@@ -137,7 +137,7 @@ test_dom_tree_to_timespec(void)
 
         test_spec2 = dom_tree_to_timespec(test_node);
 
-	if (!dom_tree_valid_timespec(&test_spec2, (const xmlChar*)"test-spec"))
+        if (!dom_tree_valid_timespec(&test_spec2, (const xmlChar*)"test-spec"))
         {
             failure_args("dom_tree_to_timespec",
                          __FILE__, __LINE__, "NULL return");
@@ -145,8 +145,8 @@ test_dom_tree_to_timespec(void)
             xmlElemDump(stdout, NULL, test_node);
             printf("\n");
         }
-        
-        else if(timespec_cmp(test_spec1, &test_spec2) == 0)
+
+        else if (timespec_cmp(test_spec1, &test_spec2) == 0)
         {
             success("dom_tree_to_timespec");
         }
@@ -177,35 +177,35 @@ test_gnc_nums_internal(gnc_numeric to_test)
     xmlNodePtr to_gen = NULL;
 
     to_gen = gnc_numeric_to_dom_tree("test-num", &to_test);
-    if(!to_gen)
+    if (!to_gen)
     {
         ret =  "no dom tree created";
     }
     else
     {
         to_compare = dom_tree_to_gnc_numeric(to_gen);
-        if(!to_compare)
+        if (!to_compare)
         {
             ret = "no gnc_numeric parsed";
         }
         else
         {
-            if(!gnc_numeric_equal(to_test, *to_compare))
+            if (!gnc_numeric_equal(to_test, *to_compare))
             {
                 ret = "numerics compared different";
             }
         }
     }
 
-    if(to_compare)
+    if (to_compare)
     {
         g_free(to_compare);
     }
-    if(to_gen)
+    if (to_gen)
     {
         xmlFreeNode(to_gen);
     }
-    
+
     return ret;
 }
 
@@ -214,7 +214,7 @@ test_dom_tree_to_gnc_numeric(void)
 {
     int i;
 
-    for(i = 0; i < 20; i++)
+    for (i = 0; i < 20; i++)
     {
         gchar *message = NULL;
 
@@ -228,7 +228,7 @@ test_dom_tree_to_gnc_numeric(void)
         gchar *message = NULL;
 
         message = test_gnc_nums_internal
-          (gnc_numeric_create(18768786810LL, 100000));
+                  (gnc_numeric_create(18768786810LL, 100000));
 
         do_test_args(message == NULL, "gnc_num 18768786810/100000",
                      __FILE__, __LINE__, message);
@@ -240,7 +240,7 @@ static void
 test_dom_tree_to_guid(void)
 {
     int i;
-    for(i = 0;i < 20; i++)
+    for (i = 0; i < 20; i++)
     {
         GUID *test_guid1;
         GUID *test_guid2;
@@ -250,14 +250,14 @@ test_dom_tree_to_guid(void)
 
         if (!(test_node = guid_to_dom_tree("test-guid", test_guid1)))
         {
-             failure_args("guid_to_dom_tree", __FILE__, __LINE__, 
-                          "conversion to dom tree failed");
+            failure_args("guid_to_dom_tree", __FILE__, __LINE__,
+                         "conversion to dom tree failed");
         }
 
         test_guid2 = dom_tree_to_guid(test_node);
 
         do_test(guid_equal(test_guid1, test_guid2),
-                            "dom_tree_to_guid" );
+                "dom_tree_to_guid" );
 
         xmlFreeNode(test_node);
         g_free(test_guid1);
@@ -268,8 +268,8 @@ test_dom_tree_to_guid(void)
 int
 main(int argc, char **argv)
 {
-     qof_init();
-     cashobjects_register();
+    qof_init();
+    cashobjects_register();
     test_dom_tree_to_guid();
     fflush(stdout);
     test_dom_tree_to_commodity_ref();
@@ -281,6 +281,6 @@ main(int argc, char **argv)
     test_dom_tree_to_gnc_numeric();
     fflush(stdout);
     print_test_results();
-     qof_close();
+    qof_close();
     exit(get_rv());
 }

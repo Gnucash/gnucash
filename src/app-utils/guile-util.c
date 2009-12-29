@@ -47,96 +47,96 @@ static QofLogModule log_module = GNC_MOD_GUILE;
 
 struct _setters
 {
-  SCM split_scm_account_guid;
-  SCM split_scm_memo;
-  SCM split_scm_action;
-  SCM split_scm_reconcile_state;
-  SCM split_scm_amount;
-  SCM split_scm_value;
+    SCM split_scm_account_guid;
+    SCM split_scm_memo;
+    SCM split_scm_action;
+    SCM split_scm_reconcile_state;
+    SCM split_scm_amount;
+    SCM split_scm_value;
 
-  SCM trans_scm_date;
-  SCM trans_scm_num;
-  SCM trans_scm_description;
-  SCM trans_scm_notes;
-  SCM trans_scm_append_split_scm;
+    SCM trans_scm_date;
+    SCM trans_scm_num;
+    SCM trans_scm_description;
+    SCM trans_scm_notes;
+    SCM trans_scm_append_split_scm;
 } setters;
 
 struct _getters
 {
-  SCM split_scm_memo;
-  SCM split_scm_action;
-  SCM split_scm_amount;
-  SCM split_scm_value;
+    SCM split_scm_memo;
+    SCM split_scm_action;
+    SCM split_scm_amount;
+    SCM split_scm_value;
 
-  SCM trans_scm_split_scms;
-  SCM trans_scm_split_scm;
-  SCM trans_scm_other_split_scm;
+    SCM trans_scm_split_scms;
+    SCM trans_scm_split_scm;
+    SCM trans_scm_other_split_scm;
 
-  SCM debit_string;
-  SCM credit_string;
+    SCM debit_string;
+    SCM credit_string;
 } getters;
 
 struct _predicates
 {
-  SCM is_split_scm;
-  SCM is_trans_scm;
+    SCM is_split_scm;
+    SCM is_trans_scm;
 } predicates;
 
 struct _Process
 {
-  GPid pid;
-  gint fd_stdin;
-  gint fd_stdout;
-  gint fd_stderr;
-  gboolean dead;
-  gboolean detached;
+    GPid pid;
+    gint fd_stdin;
+    gint fd_stdout;
+    gint fd_stderr;
+    gboolean dead;
+    gboolean detached;
 };
 
 
 static void
 initialize_scm_functions()
 {
-  static gboolean scm_funcs_inited = FALSE;
+    static gboolean scm_funcs_inited = FALSE;
 
-  if (scm_funcs_inited)
-    return;
+    if (scm_funcs_inited)
+        return;
 
-  setters.split_scm_account_guid =
-    scm_c_eval_string("gnc:split-scm-set-account-guid");
-  setters.split_scm_memo = scm_c_eval_string("gnc:split-scm-set-memo");
-  setters.split_scm_action = scm_c_eval_string("gnc:split-scm-set-action");
-  setters.split_scm_reconcile_state =
-    scm_c_eval_string("gnc:split-scm-set-reconcile-state");
-  setters.split_scm_amount = scm_c_eval_string("gnc:split-scm-set-amount");
-  setters.split_scm_value = scm_c_eval_string("gnc:split-scm-set-value");
+    setters.split_scm_account_guid =
+        scm_c_eval_string("gnc:split-scm-set-account-guid");
+    setters.split_scm_memo = scm_c_eval_string("gnc:split-scm-set-memo");
+    setters.split_scm_action = scm_c_eval_string("gnc:split-scm-set-action");
+    setters.split_scm_reconcile_state =
+        scm_c_eval_string("gnc:split-scm-set-reconcile-state");
+    setters.split_scm_amount = scm_c_eval_string("gnc:split-scm-set-amount");
+    setters.split_scm_value = scm_c_eval_string("gnc:split-scm-set-value");
 
-  setters.trans_scm_date = scm_c_eval_string("gnc:transaction-scm-set-date-posted");
-  setters.trans_scm_num = scm_c_eval_string("gnc:transaction-scm-set-num");
-  setters.trans_scm_description =
-    scm_c_eval_string("gnc:transaction-scm-set-description");
-  setters.trans_scm_notes = scm_c_eval_string("gnc:transaction-scm-set-notes");
-  setters.trans_scm_append_split_scm =
-    scm_c_eval_string("gnc:transaction-scm-append-split-scm");
+    setters.trans_scm_date = scm_c_eval_string("gnc:transaction-scm-set-date-posted");
+    setters.trans_scm_num = scm_c_eval_string("gnc:transaction-scm-set-num");
+    setters.trans_scm_description =
+        scm_c_eval_string("gnc:transaction-scm-set-description");
+    setters.trans_scm_notes = scm_c_eval_string("gnc:transaction-scm-set-notes");
+    setters.trans_scm_append_split_scm =
+        scm_c_eval_string("gnc:transaction-scm-append-split-scm");
 
-  getters.split_scm_memo = scm_c_eval_string("gnc:split-scm-get-memo");
-  getters.split_scm_action = scm_c_eval_string("gnc:split-scm-get-action");
-  getters.split_scm_amount = scm_c_eval_string("gnc:split-scm-get-amount");
-  getters.split_scm_value = scm_c_eval_string("gnc:split-scm-get-value");
+    getters.split_scm_memo = scm_c_eval_string("gnc:split-scm-get-memo");
+    getters.split_scm_action = scm_c_eval_string("gnc:split-scm-get-action");
+    getters.split_scm_amount = scm_c_eval_string("gnc:split-scm-get-amount");
+    getters.split_scm_value = scm_c_eval_string("gnc:split-scm-get-value");
 
-  getters.trans_scm_split_scms =
-    scm_c_eval_string("gnc:transaction-scm-get-split-scms");
-  getters.trans_scm_split_scm =
-    scm_c_eval_string("gnc:transaction-scm-get-split-scm");
-  getters.trans_scm_other_split_scm =
-    scm_c_eval_string("gnc:transaction-scm-get-other-split-scm");
+    getters.trans_scm_split_scms =
+        scm_c_eval_string("gnc:transaction-scm-get-split-scms");
+    getters.trans_scm_split_scm =
+        scm_c_eval_string("gnc:transaction-scm-get-split-scm");
+    getters.trans_scm_other_split_scm =
+        scm_c_eval_string("gnc:transaction-scm-get-other-split-scm");
 
-  getters.debit_string = scm_c_eval_string("gnc:get-debit-string");
-  getters.credit_string = scm_c_eval_string("gnc:get-credit-string");
+    getters.debit_string = scm_c_eval_string("gnc:get-debit-string");
+    getters.credit_string = scm_c_eval_string("gnc:get-credit-string");
 
-  predicates.is_split_scm = scm_c_eval_string("gnc:split-scm?");
-  predicates.is_trans_scm = scm_c_eval_string("gnc:transaction-scm?");
+    predicates.is_split_scm = scm_c_eval_string("gnc:split-scm?");
+    predicates.is_trans_scm = scm_c_eval_string("gnc:transaction-scm?");
 
-  scm_funcs_inited = TRUE;
+    scm_funcs_inited = TRUE;
 }
 
 
@@ -152,25 +152,25 @@ initialize_scm_functions()
 char *
 gnc_guile_call1_to_string(SCM func, SCM arg)
 {
-  SCM value;
+    SCM value;
 
-  if (SCM_PROCEDUREP(func))
-  {
-    value = scm_call_1(func, arg);
+    if (SCM_PROCEDUREP(func))
+    {
+        value = scm_call_1(func, arg);
 
-    if (SCM_STRINGP(value))
-      return g_strdup(SCM_STRING_CHARS(value));
+        if (SCM_STRINGP(value))
+            return g_strdup(SCM_STRING_CHARS(value));
+        else
+        {
+            PERR("bad value\n");
+        }
+    }
     else
     {
-      PERR("bad value\n");
+        PERR("not a procedure\n");
     }
-  }
-  else
-  {
-    PERR("not a procedure\n");
-  }
 
-  return NULL;
+    return NULL;
 }
 
 
@@ -187,25 +187,25 @@ gnc_guile_call1_to_string(SCM func, SCM arg)
 char *
 gnc_guile_call1_symbol_to_string(SCM func, SCM arg)
 {
-  SCM value;
+    SCM value;
 
-  if (SCM_PROCEDUREP(func))
-  {
-    value = scm_call_1(func, arg);
+    if (SCM_PROCEDUREP(func))
+    {
+        value = scm_call_1(func, arg);
 
-    if (SCM_SYMBOLP(value))
-      return g_strdup(SCM_SYMBOL_CHARS(value));
+        if (SCM_SYMBOLP(value))
+            return g_strdup(SCM_SYMBOL_CHARS(value));
+        else
+        {
+            PERR("bad value\n");
+        }
+    }
     else
     {
-      PERR("bad value\n");
+        PERR("not a procedure\n");
     }
-  }
-  else
-  {
-    PERR("not a procedure\n");
-  }
 
-  return NULL;
+    return NULL;
 }
 
 
@@ -221,25 +221,25 @@ gnc_guile_call1_symbol_to_string(SCM func, SCM arg)
 SCM
 gnc_guile_call1_to_procedure(SCM func, SCM arg)
 {
-  SCM value;
+    SCM value;
 
-  if (SCM_PROCEDUREP(func))
-  {
-    value = scm_call_1(func, arg);
+    if (SCM_PROCEDUREP(func))
+    {
+        value = scm_call_1(func, arg);
 
-    if (SCM_PROCEDUREP(value))
-      return value;
+        if (SCM_PROCEDUREP(value))
+            return value;
+        else
+        {
+            PERR("bad value\n");
+        }
+    }
     else
     {
-      PERR("bad value\n");
+        PERR("not a procedure\n");
     }
-  }
-  else
-  {
-    PERR("not a procedure\n");
-  }
 
-  return SCM_UNDEFINED;
+    return SCM_UNDEFINED;
 }
 
 
@@ -255,25 +255,25 @@ gnc_guile_call1_to_procedure(SCM func, SCM arg)
 SCM
 gnc_guile_call1_to_list(SCM func, SCM arg)
 {
-  SCM value;
+    SCM value;
 
-  if (SCM_PROCEDUREP(func))
-  {
-    value = scm_call_1(func, arg);
+    if (SCM_PROCEDUREP(func))
+    {
+        value = scm_call_1(func, arg);
 
-    if (SCM_LISTP(value))
-      return value;
+        if (SCM_LISTP(value))
+            return value;
+        else
+        {
+            PERR("bad value\n");
+        }
+    }
     else
     {
-      PERR("bad value\n");
+        PERR("not a procedure\n");
     }
-  }
-  else
-  {
-    PERR("not a procedure\n");
-  }
 
-  return SCM_UNDEFINED;
+    return SCM_UNDEFINED;
 }
 
 
@@ -289,30 +289,30 @@ gnc_guile_call1_to_list(SCM func, SCM arg)
 SCM
 gnc_guile_call1_to_vector(SCM func, SCM arg)
 {
-  SCM value;
+    SCM value;
 
-  if (SCM_PROCEDUREP(func))
-  {
-    value = scm_call_1(func, arg);
+    if (SCM_PROCEDUREP(func))
+    {
+        value = scm_call_1(func, arg);
 
-    if (SCM_VECTORP(value))
-      return value;
+        if (SCM_VECTORP(value))
+            return value;
+        else
+        {
+            PERR("bad value\n");
+        }
+    }
     else
     {
-      PERR("bad value\n");
+        PERR("not a procedure\n");
     }
-  }
-  else
-  {
-    PERR("not a procedure\n");
-  }
 
-  return SCM_UNDEFINED;
+    return SCM_UNDEFINED;
 }
 
 
 /********************************************************************\
-  gnc_scm_lookup                    
+  gnc_scm_lookup
 
     returns the SCM binding associated with the given symbol function,
     or SCM_UNDEFINED if it couldn't be retrieved.
@@ -321,7 +321,7 @@ gnc_guile_call1_to_vector(SCM func, SCM arg)
     to a given module unless the C code you're writing is considered
     part of that module.
 
-  Args: 
+  Args:
 
     module - where to lookup the symbol, something like "ice-9 debug"
     symbol - what to look up.
@@ -331,43 +331,43 @@ gnc_guile_call1_to_vector(SCM func, SCM arg)
 
 #if 0
 
-  ************ NOT TESTED YET **************
+************ NOT TESTED YET **************
 
 SCM
 gnc_scm_lookup(const char *module, const char *symbol)
 {
 #if defined(SCM_GUILE_MAJOR_VERSION) && \
     (SCM_GUILE_MAJOR_VERSION > 0) && (SCM_GUILE_MINOR_VERSION > 4)
-  
-  SCM scm_module = scm_c_resolve_module(module);
-  SCM value = scm_c_module_lookup(scm_module, symbol);
-  return value;
+
+    SCM scm_module = scm_c_resolve_module(module);
+    SCM value = scm_c_module_lookup(scm_module, symbol);
+    return value;
 #else
-  
-  gchar *in_guard_str;
-  gchar *thunk_str;
-  SCM in_guard;
-  SCM thunk;
-  SCM out_guard;
-  SCM result;
 
-  in_guard_str =
-    g_strdup_printf("(lambda () (set-current-module (resolve-module (%s))))",
-                    module);
+    gchar *in_guard_str;
+    gchar *thunk_str;
+    SCM in_guard;
+    SCM thunk;
+    SCM out_guard;
+    SCM result;
 
-  thunk_str = g_strdup_printf("(lambda () (eval '%s))", symbol);
+    in_guard_str =
+        g_strdup_printf("(lambda () (set-current-module (resolve-module (%s))))",
+                        module);
 
-  in_guard = scm_c_eval_string(in_guard_str);
-  thunk = scm_c_eval_string(thunk_str);
-  out_guard = scm_c_eval_string("(let ((cm (current-module)))"
-                          "  (lambda () (set-current-module cm)))");
+    thunk_str = g_strdup_printf("(lambda () (eval '%s))", symbol);
 
-  result = scm_dynamic_wind(in_guard, thunk, out_guard);
+    in_guard = scm_c_eval_string(in_guard_str);
+    thunk = scm_c_eval_string(thunk_str);
+    out_guard = scm_c_eval_string("(let ((cm (current-module)))"
+                                  "  (lambda () (set-current-module cm)))");
 
-  g_free(in_guard_str);
-  g_free(thunk_str);
+    result = scm_dynamic_wind(in_guard, thunk, out_guard);
 
-  return result;
+    g_free(in_guard_str);
+    g_free(thunk_str);
+
+    return result;
 #endif
 }
 
@@ -385,23 +385,23 @@ gnc_scm_lookup(const char *module, const char *symbol)
 SCM
 gnc_copy_split(Split *split, gboolean use_cut_semantics)
 {
-  static swig_type_info *split_type = NULL;
-  SCM func;
-  SCM arg;
+    static swig_type_info *split_type = NULL;
+    SCM func;
+    SCM arg;
 
-  if (split == NULL)
-    return SCM_UNDEFINED;
+    if (split == NULL)
+        return SCM_UNDEFINED;
 
-  func = scm_c_eval_string("gnc:split->split-scm");
-  if (!SCM_PROCEDUREP(func))
-    return SCM_UNDEFINED;
+    func = scm_c_eval_string("gnc:split->split-scm");
+    if (!SCM_PROCEDUREP(func))
+        return SCM_UNDEFINED;
 
-  if (!split_type)
-      split_type = SWIG_TypeQuery("_p_Split");
+    if (!split_type)
+        split_type = SWIG_TypeQuery("_p_Split");
 
-  arg = SWIG_NewPointerObj(split, split_type, 0);
+    arg = SWIG_NewPointerObj(split, split_type, 0);
 
-  return scm_call_2(func, arg, SCM_BOOL(use_cut_semantics));
+    return scm_call_2(func, arg, SCM_BOOL(use_cut_semantics));
 }
 
 
@@ -417,37 +417,37 @@ void
 gnc_copy_split_scm_onto_split(SCM split_scm, Split *split,
                               QofBook * book)
 {
-  static swig_type_info *split_type = NULL;
-  SCM result;
-  SCM func;
-  SCM arg;
+    static swig_type_info *split_type = NULL;
+    SCM result;
+    SCM func;
+    SCM arg;
 
-  if (split_scm == SCM_UNDEFINED)
-    return;
+    if (split_scm == SCM_UNDEFINED)
+        return;
 
-  if (split == NULL)
-    return;
+    if (split == NULL)
+        return;
 
-  g_return_if_fail (book);
+    g_return_if_fail (book);
 
-  func = scm_c_eval_string("gnc:split-scm?");
-  if (!SCM_PROCEDUREP(func))
-    return;
+    func = scm_c_eval_string("gnc:split-scm?");
+    if (!SCM_PROCEDUREP(func))
+        return;
 
-  result = scm_call_1(func, split_scm);
-  if (!SCM_NFALSEP(result))
-    return;
+    result = scm_call_1(func, split_scm);
+    if (!SCM_NFALSEP(result))
+        return;
 
-  func = scm_c_eval_string("gnc:split-scm-onto-split");
-  if (!SCM_PROCEDUREP(func))
-    return;
+    func = scm_c_eval_string("gnc:split-scm-onto-split");
+    if (!SCM_PROCEDUREP(func))
+        return;
 
-  if (!split_type)
-      split_type = SWIG_TypeQuery("_p_Split");
+    if (!split_type)
+        split_type = SWIG_TypeQuery("_p_Split");
 
-  arg = SWIG_NewPointerObj(split, split_type, 0);
+    arg = SWIG_NewPointerObj(split, split_type, 0);
 
-  scm_call_3(func, split_scm, arg, gnc_book_to_scm (book));
+    scm_call_3(func, split_scm, arg, gnc_book_to_scm (book));
 }
 
 
@@ -461,9 +461,9 @@ gnc_copy_split_scm_onto_split(SCM split_scm, Split *split,
 gboolean
 gnc_is_split_scm(SCM scm)
 {
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  return SCM_NFALSEP(scm_call_1(predicates.is_split_scm, scm));
+    return SCM_NFALSEP(scm_call_1(predicates.is_split_scm, scm));
 }
 
 
@@ -477,9 +477,9 @@ gnc_is_split_scm(SCM scm)
 gboolean
 gnc_is_trans_scm(SCM scm)
 {
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  return SCM_NFALSEP(scm_call_1(predicates.is_trans_scm, scm));
+    return SCM_NFALSEP(scm_call_1(predicates.is_trans_scm, scm));
 }
 
 
@@ -494,23 +494,23 @@ gnc_is_trans_scm(SCM scm)
 void
 gnc_split_scm_set_account(SCM split_scm, Account *account)
 {
-  const char *guid_string;
-  SCM arg;
+    const char *guid_string;
+    SCM arg;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_split_scm(split_scm))
-    return;
-  if (account == NULL)
-    return;
+    if (!gnc_is_split_scm(split_scm))
+        return;
+    if (account == NULL)
+        return;
 
-  guid_string = guid_to_string(xaccAccountGetGUID(account));
-  if (guid_string == NULL)
-    return;
+    guid_string = guid_to_string(xaccAccountGetGUID(account));
+    if (guid_string == NULL)
+        return;
 
-  arg = scm_makfrom0str(guid_string);
+    arg = scm_makfrom0str(guid_string);
 
-  scm_call_2(setters.split_scm_account_guid, split_scm, arg);
+    scm_call_2(setters.split_scm_account_guid, split_scm, arg);
 }
 
 
@@ -525,18 +525,18 @@ gnc_split_scm_set_account(SCM split_scm, Account *account)
 void
 gnc_split_scm_set_memo(SCM split_scm, const char *memo)
 {
-  SCM arg;
+    SCM arg;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_split_scm(split_scm))
-    return;
-  if (memo == NULL)
-    return;
+    if (!gnc_is_split_scm(split_scm))
+        return;
+    if (memo == NULL)
+        return;
 
-  arg = scm_makfrom0str(memo);
+    arg = scm_makfrom0str(memo);
 
-  scm_call_2(setters.split_scm_memo, split_scm, arg);
+    scm_call_2(setters.split_scm_memo, split_scm, arg);
 }
 
 
@@ -551,18 +551,18 @@ gnc_split_scm_set_memo(SCM split_scm, const char *memo)
 void
 gnc_split_scm_set_action(SCM split_scm, const char *action)
 {
-  SCM arg;
+    SCM arg;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_split_scm(split_scm))
-    return;
-  if (action == NULL)
-    return;
+    if (!gnc_is_split_scm(split_scm))
+        return;
+    if (action == NULL)
+        return;
 
-  arg = scm_makfrom0str(action);
+    arg = scm_makfrom0str(action);
 
-  scm_call_2(setters.split_scm_action, split_scm, arg);
+    scm_call_2(setters.split_scm_action, split_scm, arg);
 }
 
 
@@ -577,16 +577,16 @@ gnc_split_scm_set_action(SCM split_scm, const char *action)
 void
 gnc_split_scm_set_reconcile_state(SCM split_scm, char reconcile_state)
 {
-  SCM arg;
+    SCM arg;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_split_scm(split_scm))
-    return;
+    if (!gnc_is_split_scm(split_scm))
+        return;
 
-  arg = SCM_MAKE_CHAR(reconcile_state);
+    arg = SCM_MAKE_CHAR(reconcile_state);
 
-  scm_call_2(setters.split_scm_reconcile_state, split_scm, arg);
+    scm_call_2(setters.split_scm_reconcile_state, split_scm, arg);
 }
 
 
@@ -601,15 +601,15 @@ gnc_split_scm_set_reconcile_state(SCM split_scm, char reconcile_state)
 void
 gnc_split_scm_set_amount(SCM split_scm, gnc_numeric amount)
 {
-  SCM arg;
+    SCM arg;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_split_scm(split_scm))
-    return;
+    if (!gnc_is_split_scm(split_scm))
+        return;
 
-  arg = gnc_numeric_to_scm(amount);
-  scm_call_2(setters.split_scm_amount, split_scm, arg);
+    arg = gnc_numeric_to_scm(amount);
+    scm_call_2(setters.split_scm_amount, split_scm, arg);
 }
 
 
@@ -624,15 +624,15 @@ gnc_split_scm_set_amount(SCM split_scm, gnc_numeric amount)
 void
 gnc_split_scm_set_value(SCM split_scm, gnc_numeric value)
 {
-  SCM arg;
+    SCM arg;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_split_scm(split_scm))
-    return;
+    if (!gnc_is_split_scm(split_scm))
+        return;
 
-  arg = gnc_numeric_to_scm(value);
-  scm_call_2(setters.split_scm_value, split_scm, arg);
+    arg = gnc_numeric_to_scm(value);
+    scm_call_2(setters.split_scm_value, split_scm, arg);
 }
 
 
@@ -646,18 +646,18 @@ gnc_split_scm_set_value(SCM split_scm, gnc_numeric value)
 char *
 gnc_split_scm_get_memo(SCM split_scm)
 {
-  SCM result;
+    SCM result;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_split_scm(split_scm))
-    return NULL;
+    if (!gnc_is_split_scm(split_scm))
+        return NULL;
 
-  result = scm_call_1(getters.split_scm_memo, split_scm);
-  if (!SCM_STRINGP(result))
-    return NULL;
+    result = scm_call_1(getters.split_scm_memo, split_scm);
+    if (!SCM_STRINGP(result))
+        return NULL;
 
-  return g_strdup(SCM_STRING_CHARS(result));
+    return g_strdup(SCM_STRING_CHARS(result));
 }
 
 
@@ -671,18 +671,18 @@ gnc_split_scm_get_memo(SCM split_scm)
 char *
 gnc_split_scm_get_action(SCM split_scm)
 {
-  SCM result;
+    SCM result;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_split_scm(split_scm))
-    return NULL;
+    if (!gnc_is_split_scm(split_scm))
+        return NULL;
 
-  result = scm_call_1(getters.split_scm_action, split_scm);
-  if (!SCM_STRINGP(result))
-    return NULL;
+    result = scm_call_1(getters.split_scm_action, split_scm);
+    if (!SCM_STRINGP(result))
+        return NULL;
 
-  return g_strdup(SCM_STRING_CHARS(result));
+    return g_strdup(SCM_STRING_CHARS(result));
 }
 
 
@@ -696,18 +696,18 @@ gnc_split_scm_get_action(SCM split_scm)
 gnc_numeric
 gnc_split_scm_get_amount(SCM split_scm)
 {
-  SCM result;
+    SCM result;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_split_scm(split_scm))
-    return gnc_numeric_zero ();
+    if (!gnc_is_split_scm(split_scm))
+        return gnc_numeric_zero ();
 
-  result = scm_call_1(getters.split_scm_amount, split_scm);
-  if (!gnc_numeric_p(result))
-    return gnc_numeric_zero ();
+    result = scm_call_1(getters.split_scm_amount, split_scm);
+    if (!gnc_numeric_p(result))
+        return gnc_numeric_zero ();
 
-  return gnc_scm_to_numeric(result);
+    return gnc_scm_to_numeric(result);
 }
 
 
@@ -721,18 +721,18 @@ gnc_split_scm_get_amount(SCM split_scm)
 gnc_numeric
 gnc_split_scm_get_value(SCM split_scm)
 {
-  SCM result;
+    SCM result;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_split_scm(split_scm))
-    return gnc_numeric_zero ();
+    if (!gnc_is_split_scm(split_scm))
+        return gnc_numeric_zero ();
 
-  result = scm_call_1(getters.split_scm_value, split_scm);
-  if (!gnc_numeric_p(result))
-    return gnc_numeric_zero ();
+    result = scm_call_1(getters.split_scm_value, split_scm);
+    if (!gnc_numeric_p(result))
+        return gnc_numeric_zero ();
 
-  return gnc_scm_to_numeric(result);
+    return gnc_scm_to_numeric(result);
 }
 
 
@@ -748,23 +748,23 @@ gnc_split_scm_get_value(SCM split_scm)
 SCM
 gnc_copy_trans(Transaction *trans, gboolean use_cut_semantics)
 {
-  static swig_type_info *trans_type = NULL;
-  SCM func;
-  SCM arg;
+    static swig_type_info *trans_type = NULL;
+    SCM func;
+    SCM arg;
 
-  if (trans == NULL)
-    return SCM_UNDEFINED;
+    if (trans == NULL)
+        return SCM_UNDEFINED;
 
-  func = scm_c_eval_string("gnc:transaction->transaction-scm");
-  if (!SCM_PROCEDUREP(func))
-    return SCM_UNDEFINED;
+    func = scm_c_eval_string("gnc:transaction->transaction-scm");
+    if (!SCM_PROCEDUREP(func))
+        return SCM_UNDEFINED;
 
-  if (!trans_type)
-      trans_type = SWIG_TypeQuery("_p_Transaction");
+    if (!trans_type)
+        trans_type = SWIG_TypeQuery("_p_Transaction");
 
-  arg = SWIG_NewPointerObj(trans, trans_type, 0);
+    arg = SWIG_NewPointerObj(trans, trans_type, 0);
 
-  return scm_call_2(func, arg, SCM_BOOL(use_cut_semantics));
+    return scm_call_2(func, arg, SCM_BOOL(use_cut_semantics));
 }
 
 
@@ -781,8 +781,8 @@ void
 gnc_copy_trans_scm_onto_trans(SCM trans_scm, Transaction *trans,
                               gboolean do_commit, QofBook *book)
 {
-  gnc_copy_trans_scm_onto_trans_swap_accounts(trans_scm, trans, NULL, NULL,
-                                              do_commit, book);
+    gnc_copy_trans_scm_onto_trans_swap_accounts(trans_scm, trans, NULL, NULL,
+            do_commit, book);
 }
 
 
@@ -801,82 +801,82 @@ gnc_copy_trans_scm_onto_trans(SCM trans_scm, Transaction *trans,
 \********************************************************************/
 void
 gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
-                                            Transaction *trans,
-                                            const GUID *guid_1,
-                                            const GUID *guid_2,
-                                            gboolean do_commit,
-                                            QofBook *book)
+        Transaction *trans,
+        const GUID *guid_1,
+        const GUID *guid_2,
+        gboolean do_commit,
+        QofBook *book)
 {
-  static swig_type_info *trans_type = NULL;
-  SCM result;
-  SCM func;
-  SCM arg;
+    static swig_type_info *trans_type = NULL;
+    SCM result;
+    SCM func;
+    SCM arg;
 
-  if (trans_scm == SCM_UNDEFINED)
-    return;
+    if (trans_scm == SCM_UNDEFINED)
+        return;
 
-  if (trans == NULL)
-    return;
+    if (trans == NULL)
+        return;
 
-  g_return_if_fail (book);
+    g_return_if_fail (book);
 
-  func = scm_c_eval_string("gnc:transaction-scm?");
-  if (!SCM_PROCEDUREP(func))
-    return;
+    func = scm_c_eval_string("gnc:transaction-scm?");
+    if (!SCM_PROCEDUREP(func))
+        return;
 
-  result = scm_call_1(func, trans_scm);
-  if (!SCM_NFALSEP(result))
-    return;
+    result = scm_call_1(func, trans_scm);
+    if (!SCM_NFALSEP(result))
+        return;
 
-  func = scm_c_eval_string("gnc:transaction-scm-onto-transaction");
-  if (!SCM_PROCEDUREP(func))
-    return;
+    func = scm_c_eval_string("gnc:transaction-scm-onto-transaction");
+    if (!SCM_PROCEDUREP(func))
+        return;
 
-  if (!trans_type)
-      trans_type = SWIG_TypeQuery("_p_Transaction");
+    if (!trans_type)
+        trans_type = SWIG_TypeQuery("_p_Transaction");
 
-  arg = SWIG_NewPointerObj(trans, trans_type, 0);
+    arg = SWIG_NewPointerObj(trans, trans_type, 0);
 
-  if ((guid_1 == NULL) || (guid_2 == NULL))
-  {
-    SCM args = SCM_EOL;
-    SCM commit;
+    if ((guid_1 == NULL) || (guid_2 == NULL))
+    {
+        SCM args = SCM_EOL;
+        SCM commit;
 
-    commit = SCM_BOOL(do_commit);
+        commit = SCM_BOOL(do_commit);
 
-    args = scm_cons(gnc_book_to_scm (book), args);
-    args = scm_cons(commit, args);
-    args = scm_cons(SCM_EOL, args);
-    args = scm_cons(arg, args);
-    args = scm_cons(trans_scm, args);
+        args = scm_cons(gnc_book_to_scm (book), args);
+        args = scm_cons(commit, args);
+        args = scm_cons(SCM_EOL, args);
+        args = scm_cons(arg, args);
+        args = scm_cons(trans_scm, args);
 
-    scm_apply(func, args, SCM_EOL);
-  }
-  else
-  {
-    SCM from, to;
-    SCM map = SCM_EOL;
-    SCM args = SCM_EOL;
-    SCM commit;
+        scm_apply(func, args, SCM_EOL);
+    }
+    else
+    {
+        SCM from, to;
+        SCM map = SCM_EOL;
+        SCM args = SCM_EOL;
+        SCM commit;
 
-    args = scm_cons(gnc_book_to_scm (book), args);
+        args = scm_cons(gnc_book_to_scm (book), args);
 
-    commit = SCM_BOOL(do_commit);
+        commit = SCM_BOOL(do_commit);
 
-    args = scm_cons(commit, args);
+        args = scm_cons(commit, args);
 
-    from = scm_makfrom0str(guid_to_string(guid_1));
-    to = scm_makfrom0str(guid_to_string(guid_2));
+        from = scm_makfrom0str(guid_to_string(guid_1));
+        to = scm_makfrom0str(guid_to_string(guid_2));
 
-    map = scm_cons(scm_cons(from, to), map);
-    map = scm_cons(scm_cons(to, from), map);
+        map = scm_cons(scm_cons(from, to), map);
+        map = scm_cons(scm_cons(to, from), map);
 
-    args = scm_cons(map, args);
-    args = scm_cons(arg, args);
-    args = scm_cons(trans_scm, args);
+        args = scm_cons(map, args);
+        args = scm_cons(arg, args);
+        args = scm_cons(trans_scm, args);
 
-    scm_apply(func, args, SCM_EOL);
-  }
+        scm_apply(func, args, SCM_EOL);
+    }
 }
 
 /********************************************************************\
@@ -890,18 +890,18 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
 void
 gnc_trans_scm_set_date(SCM trans_scm, Timespec *ts)
 {
-  SCM arg;
+    SCM arg;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_trans_scm(trans_scm))
-    return;
-  if (ts == NULL)
-    return;
+    if (!gnc_is_trans_scm(trans_scm))
+        return;
+    if (ts == NULL)
+        return;
 
-  arg = gnc_timespec2timepair(*ts);
+    arg = gnc_timespec2timepair(*ts);
 
-  scm_call_2(setters.trans_scm_date, trans_scm, arg);
+    scm_call_2(setters.trans_scm_date, trans_scm, arg);
 }
 
 
@@ -916,18 +916,18 @@ gnc_trans_scm_set_date(SCM trans_scm, Timespec *ts)
 void
 gnc_trans_scm_set_num(SCM trans_scm, const char *num)
 {
-  SCM arg;
+    SCM arg;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_trans_scm(trans_scm))
-    return;
-  if (num == NULL)
-    return;
+    if (!gnc_is_trans_scm(trans_scm))
+        return;
+    if (num == NULL)
+        return;
 
-  arg = scm_makfrom0str(num);
+    arg = scm_makfrom0str(num);
 
-  scm_call_2(setters.trans_scm_num, trans_scm, arg);
+    scm_call_2(setters.trans_scm_num, trans_scm, arg);
 }
 
 
@@ -942,18 +942,18 @@ gnc_trans_scm_set_num(SCM trans_scm, const char *num)
 void
 gnc_trans_scm_set_description(SCM trans_scm, const char *description)
 {
-  SCM arg;
+    SCM arg;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_trans_scm(trans_scm))
-    return;
-  if (description == NULL)
-    return;
+    if (!gnc_is_trans_scm(trans_scm))
+        return;
+    if (description == NULL)
+        return;
 
-  arg = scm_makfrom0str(description);
+    arg = scm_makfrom0str(description);
 
-  scm_call_2(setters.trans_scm_description, trans_scm, arg);
+    scm_call_2(setters.trans_scm_description, trans_scm, arg);
 }
 
 
@@ -968,18 +968,18 @@ gnc_trans_scm_set_description(SCM trans_scm, const char *description)
 void
 gnc_trans_scm_set_notes(SCM trans_scm, const char *notes)
 {
-  SCM arg;
+    SCM arg;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_trans_scm(trans_scm))
-    return;
-  if (notes == NULL)
-    return;
+    if (!gnc_is_trans_scm(trans_scm))
+        return;
+    if (notes == NULL)
+        return;
 
-  arg = scm_makfrom0str(notes);
+    arg = scm_makfrom0str(notes);
 
-  scm_call_2(setters.trans_scm_notes, trans_scm, arg);
+    scm_call_2(setters.trans_scm_notes, trans_scm, arg);
 }
 
 
@@ -994,14 +994,14 @@ gnc_trans_scm_set_notes(SCM trans_scm, const char *notes)
 void
 gnc_trans_scm_append_split_scm(SCM trans_scm, SCM split_scm)
 {
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_trans_scm(trans_scm))
-    return;
-  if (!gnc_is_split_scm(split_scm))
-    return;
+    if (!gnc_is_trans_scm(trans_scm))
+        return;
+    if (!gnc_is_split_scm(split_scm))
+        return;
 
-  scm_call_2(setters.trans_scm_append_split_scm, trans_scm, split_scm);
+    scm_call_2(setters.trans_scm_append_split_scm, trans_scm, split_scm);
 }
 
 
@@ -1016,16 +1016,16 @@ gnc_trans_scm_append_split_scm(SCM trans_scm, SCM split_scm)
 SCM
 gnc_trans_scm_get_split_scm(SCM trans_scm, int index)
 {
-  SCM arg;
+    SCM arg;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_trans_scm(trans_scm))
-    return SCM_UNDEFINED;
+    if (!gnc_is_trans_scm(trans_scm))
+        return SCM_UNDEFINED;
 
-  arg = scm_int2num(index);
+    arg = scm_int2num(index);
 
-  return scm_call_2(getters.trans_scm_split_scm, trans_scm, arg);
+    return scm_call_2(getters.trans_scm_split_scm, trans_scm, arg);
 }
 
 
@@ -1040,21 +1040,21 @@ gnc_trans_scm_get_split_scm(SCM trans_scm, int index)
 SCM
 gnc_trans_scm_get_other_split_scm(SCM trans_scm, SCM split_scm)
 {
-  SCM result;
+    SCM result;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_trans_scm(trans_scm))
-    return SCM_UNDEFINED;
-  if (!gnc_is_split_scm(split_scm))
-    return SCM_UNDEFINED;
+    if (!gnc_is_trans_scm(trans_scm))
+        return SCM_UNDEFINED;
+    if (!gnc_is_split_scm(split_scm))
+        return SCM_UNDEFINED;
 
-  result = scm_call_2(getters.trans_scm_other_split_scm, trans_scm, split_scm);
+    result = scm_call_2(getters.trans_scm_other_split_scm, trans_scm, split_scm);
 
-  if (!gnc_is_split_scm(result))
-    return SCM_UNDEFINED;
+    if (!gnc_is_split_scm(result))
+        return SCM_UNDEFINED;
 
-  return result;
+    return result;
 }
 
 
@@ -1068,19 +1068,19 @@ gnc_trans_scm_get_other_split_scm(SCM trans_scm, SCM split_scm)
 int
 gnc_trans_scm_get_num_splits(SCM trans_scm)
 {
-  SCM result;
+    SCM result;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (!gnc_is_trans_scm(trans_scm))
-    return 0;
+    if (!gnc_is_trans_scm(trans_scm))
+        return 0;
 
-  result = scm_call_1(getters.trans_scm_split_scms, trans_scm);
+    result = scm_call_1(getters.trans_scm_split_scms, trans_scm);
 
-  if (!SCM_LISTP(result))
-    return 0;
+    if (!SCM_LISTP(result))
+        return 0;
 
-  return SCM_LENGTH(result);
+    return SCM_LENGTH(result);
 }
 
 
@@ -1094,28 +1094,28 @@ gnc_trans_scm_get_num_splits(SCM trans_scm)
 char *
 gnc_get_debit_string(GNCAccountType account_type)
 {
-  const gchar *string;
-  SCM result;
-  SCM arg;
+    const gchar *string;
+    SCM result;
+    SCM arg;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL))
-    return g_strdup(_("Debit"));
+    if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL))
+        return g_strdup(_("Debit"));
 
-  if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
-    account_type = ACCT_TYPE_NONE;
+    if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
+        account_type = ACCT_TYPE_NONE;
 
-  arg = scm_long2num(account_type);
+    arg = scm_long2num(account_type);
 
-  result = scm_call_1(getters.debit_string, arg);
-  if (!SCM_STRINGP(result))
+    result = scm_call_1(getters.debit_string, arg);
+    if (!SCM_STRINGP(result))
+        return NULL;
+
+    string = SCM_STRING_CHARS(result);
+    if (string)
+        return g_strdup(string);
     return NULL;
-
-  string = SCM_STRING_CHARS(result);
-  if (string)
-    return g_strdup(string);
-  return NULL;
 }
 
 
@@ -1129,28 +1129,28 @@ gnc_get_debit_string(GNCAccountType account_type)
 char *
 gnc_get_credit_string(GNCAccountType account_type)
 {
-  const gchar *string;
-  SCM result;
-  SCM arg;
+    const gchar *string;
+    SCM result;
+    SCM arg;
 
-  initialize_scm_functions();
+    initialize_scm_functions();
 
-  if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL))
-    return g_strdup(_("Credit"));
+    if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL))
+        return g_strdup(_("Credit"));
 
-  if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
-    account_type = ACCT_TYPE_NONE;
+    if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
+        account_type = ACCT_TYPE_NONE;
 
-  arg = scm_long2num(account_type);
+    arg = scm_long2num(account_type);
 
-  result = scm_call_1(getters.credit_string, arg);
-  if (!SCM_STRINGP(result))
+    result = scm_call_1(getters.credit_string, arg);
+    if (!SCM_STRINGP(result))
+        return NULL;
+
+    string = SCM_STRING_CHARS(result);
+    if (string)
+        return g_strdup(string);
     return NULL;
-
-  string = SCM_STRING_CHARS(result);
-  if (string)
-    return g_strdup(string);
-  return NULL;
 }
 
 
@@ -1159,153 +1159,163 @@ gnc_get_credit_string(GNCAccountType account_type)
  *  lines, and removes all leading/trailing white space. */
 gchar *gnc_guile_strip_comments (const gchar *raw_text)
 {
-  gchar *text, **splits;
-  gint i, j;
+    gchar *text, **splits;
+    gint i, j;
 
-  splits = g_strsplit(raw_text, "\n", -1);
-  for (i = j = 0; splits[i]; i++) {
-    if ((splits[i][0] == ';') || (splits[i][0] == '\0')) {
-      g_free(splits[i]);
-      continue;
+    splits = g_strsplit(raw_text, "\n", -1);
+    for (i = j = 0; splits[i]; i++)
+    {
+        if ((splits[i][0] == ';') || (splits[i][0] == '\0'))
+        {
+            g_free(splits[i]);
+            continue;
+        }
+        splits[j++] = g_strstrip(splits[i]);
     }
-    splits[j++] = g_strstrip(splits[i]);
-  }
-  splits[j] = NULL;
+    splits[j] = NULL;
 
-  text = g_strjoinv(" ", splits);
-  g_strfreev(splits);
-  return text;
+    text = g_strjoinv(" ", splits);
+    g_strfreev(splits);
+    return text;
 }
 
 
 static void
 on_child_exit (GPid pid, gint status, gpointer data)
 {
-  Process *proc = data;
-  g_return_if_fail (proc && proc->pid == pid);
+    Process *proc = data;
+    g_return_if_fail (proc && proc->pid == pid);
 
-  g_spawn_close_pid (proc->pid);
+    g_spawn_close_pid (proc->pid);
 
-  /* free if the process is both dead and detached */
-  if (!proc->detached)
-    proc->dead = TRUE;
-  else
-    g_free (proc);
+    /* free if the process is both dead and detached */
+    if (!proc->detached)
+        proc->dead = TRUE;
+    else
+        g_free (proc);
 }
 
 Process *
 gnc_spawn_process_async (GList *argl, const gboolean search_path)
 {
-  gboolean retval;
-  Process *proc;
-  GList *l_iter;
-  guint argc;
-  gchar **argv, **v_iter;
-  GSpawnFlags flags;
-  GError *error = NULL;
+    gboolean retval;
+    Process *proc;
+    GList *l_iter;
+    guint argc;
+    gchar **argv, **v_iter;
+    GSpawnFlags flags;
+    GError *error = NULL;
 
-  proc = g_new0 (Process, 1);
+    proc = g_new0 (Process, 1);
 
-  argc = g_list_length (argl);
-  argv = g_malloc ((argc+1) * sizeof(gchar*));
+    argc = g_list_length (argl);
+    argv = g_malloc ((argc + 1) * sizeof(gchar*));
 
-  for (l_iter=argl, v_iter=argv; l_iter; l_iter=l_iter->next, v_iter++) {
-    *v_iter = (gchar*) l_iter->data;
-  }
-  *v_iter = NULL;
-  g_list_free (argl);
+    for (l_iter = argl, v_iter = argv; l_iter; l_iter = l_iter->next, v_iter++)
+    {
+        *v_iter = (gchar*) l_iter->data;
+    }
+    *v_iter = NULL;
+    g_list_free (argl);
 
-  flags = G_SPAWN_DO_NOT_REAP_CHILD;
-  if (search_path)
-    flags |= G_SPAWN_SEARCH_PATH;
+    flags = G_SPAWN_DO_NOT_REAP_CHILD;
+    if (search_path)
+        flags |= G_SPAWN_SEARCH_PATH;
 
-  retval = g_spawn_async_with_pipes (
-    NULL, argv, NULL, flags, NULL, NULL, &proc->pid,
-    &proc->fd_stdin, &proc->fd_stdout, &proc->fd_stderr, &error);
+    retval = g_spawn_async_with_pipes (
+                 NULL, argv, NULL, flags, NULL, NULL, &proc->pid,
+                 &proc->fd_stdin, &proc->fd_stdout, &proc->fd_stderr, &error);
 
-  if (retval) {
-    g_child_watch_add (proc->pid, on_child_exit, proc);
-  } else {
-    g_warning ("Could not spawn %s: %s", *argv ? *argv : "(null)",
-               error->message ? error->message : "(null)");
-    g_free (proc);
-    proc = NULL;
-  }
-  g_strfreev (argv);
+    if (retval)
+    {
+        g_child_watch_add (proc->pid, on_child_exit, proc);
+    }
+    else
+    {
+        g_warning ("Could not spawn %s: %s", *argv ? *argv : "(null)",
+                   error->message ? error->message : "(null)");
+        g_free (proc);
+        proc = NULL;
+    }
+    g_strfreev (argv);
 
-  return proc;
+    return proc;
 }
 
 gint
 gnc_process_get_fd (const Process *proc, const gint std_fd)
 {
-  const gint *retptr = NULL;
-  g_return_val_if_fail (proc, -1);
+    const gint *retptr = NULL;
+    g_return_val_if_fail (proc, -1);
 
-  if (std_fd == 0)
-    retptr = &proc->fd_stdin;
-  else if (std_fd == 1)
-    retptr = &proc->fd_stdout;
-  else if (std_fd == 2)
-    retptr = &proc->fd_stderr;
-  else
-    g_return_val_if_reached (-1);
+    if (std_fd == 0)
+        retptr = &proc->fd_stdin;
+    else if (std_fd == 1)
+        retptr = &proc->fd_stdout;
+    else if (std_fd == 2)
+        retptr = &proc->fd_stderr;
+    else
+        g_return_val_if_reached (-1);
 
-  if (*retptr == -1)
-    g_warning ("Pipe to childs file descriptor %d is -1", std_fd);
-  return *retptr;
+    if (*retptr == -1)
+        g_warning ("Pipe to childs file descriptor %d is -1", std_fd);
+    return *retptr;
 }
 
 void
 gnc_detach_process (Process *proc, const gboolean kill_it)
 {
-  g_return_if_fail (proc && proc->pid);
+    g_return_if_fail (proc && proc->pid);
 
-  errno = 0;
-  close (proc->fd_stdin);
-  if (errno) {
-    g_message ("Close of childs stdin (%d) failed: %s", proc->fd_stdin,
-	       g_strerror (errno));
     errno = 0;
-  }
-  close (proc->fd_stdout);
-  if (errno) {
-    g_message ("Close of childs stdout (%d) failed: %s", proc->fd_stdout,
-	       g_strerror(errno));
-    errno = 0;
-  }
-  close (proc->fd_stderr);
-  if (errno) {
-    g_message ("Close of childs stderr (%d) failed: %s", proc->fd_stderr,
-	       g_strerror(errno));
-    errno = 0;
-  }
+    close (proc->fd_stdin);
+    if (errno)
+    {
+        g_message ("Close of childs stdin (%d) failed: %s", proc->fd_stdin,
+                   g_strerror (errno));
+        errno = 0;
+    }
+    close (proc->fd_stdout);
+    if (errno)
+    {
+        g_message ("Close of childs stdout (%d) failed: %s", proc->fd_stdout,
+                   g_strerror(errno));
+        errno = 0;
+    }
+    close (proc->fd_stderr);
+    if (errno)
+    {
+        g_message ("Close of childs stderr (%d) failed: %s", proc->fd_stderr,
+                   g_strerror(errno));
+        errno = 0;
+    }
 
-  if (kill_it && !proc->dead) {
-    /* give it a chance to die */
-    while (g_main_context_iteration (NULL, FALSE) && !proc->dead)
-      ;
+    if (kill_it && !proc->dead)
+    {
+        /* give it a chance to die */
+        while (g_main_context_iteration (NULL, FALSE) && !proc->dead)
+            ;
+        if (!proc->dead)
+            gnc_gpid_kill (proc->pid);
+    }
+
+    /* free if the process is both dead and detached */
     if (!proc->dead)
-      gnc_gpid_kill (proc->pid);
-  }
-
-  /* free if the process is both dead and detached */
-  if (!proc->dead)
-    proc->detached = TRUE;
-  else
-    g_free (proc);
+        proc->detached = TRUE;
+    else
+        g_free (proc);
 }
 
 
 time_t
 gnc_parse_time_to_timet(const gchar *s, const gchar *format)
 {
-  struct tm tm;
+    struct tm tm;
 
-  g_return_val_if_fail(s && format, -1);
+    g_return_val_if_fail(s && format, -1);
 
-  if (!strptime(s, format, &tm))
-    return -1;
+    if (!strptime(s, format, &tm))
+        return -1;
 
-  return mktime(&tm);
+    return mktime(&tm);
 }

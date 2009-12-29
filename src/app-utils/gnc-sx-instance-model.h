@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-sx-instance-model.h
  *
  * Copyright (C) 2006 Josh Sled <jsled@asynchronous.org>
@@ -40,45 +40,45 @@ G_BEGIN_DECLS
 
 typedef struct _GncSxInstanceModel
 {
-     GObject parent;
-     gboolean disposed;
+    GObject parent;
+    gboolean disposed;
 
-     /* private */
-     gint qof_event_handler_id;
+    /* private */
+    gint qof_event_handler_id;
 
-     /* signals */
-     /* void (*added)(SchedXaction *sx); // gpointer user_data */
-     /* void (*updated)(SchedXaction *sx); // gpointer user_data */
-     /* void (*removing)(SchedXaction *sx); // gpointer user_data */
+    /* signals */
+    /* void (*added)(SchedXaction *sx); // gpointer user_data */
+    /* void (*updated)(SchedXaction *sx); // gpointer user_data */
+    /* void (*removing)(SchedXaction *sx); // gpointer user_data */
 
-     /* public */
-     GDate range_end;
-     gboolean include_disabled;
-     GList *sx_instance_list; /* <GncSxInstances*> */
+    /* public */
+    GDate range_end;
+    gboolean include_disabled;
+    GList *sx_instance_list; /* <GncSxInstances*> */
 } GncSxInstanceModel;
 
 typedef struct _GncSxInstanceModelClass
 {
-     GObjectClass parent;
+    GObjectClass parent;
 
-     guint removing_signal_id;
-     guint updated_signal_id;
-     guint added_signal_id;
+    guint removing_signal_id;
+    guint updated_signal_id;
+    guint added_signal_id;
 } GncSxInstanceModelClass;
 
 typedef struct _GncSxInstances
 {
-     SchedXaction *sx;
-     GHashTable /** <name:char*,GncSxVariable*> **/ *variable_names;
-     gboolean variable_names_parsed;
-     
-     GDate next_instance_date;
-     
-     /** GList<GncSxInstance*> **/
+    SchedXaction *sx;
+    GHashTable /** <name:char*,GncSxVariable*> **/ *variable_names;
+    gboolean variable_names_parsed;
+
+    GDate next_instance_date;
+
+    /** GList<GncSxInstance*> **/
     GList *instance_list;
 } GncSxInstances;
 
-typedef enum 
+typedef enum
 {
     SX_INSTANCE_STATE_IGNORED,
     SX_INSTANCE_STATE_POSTPONED,
@@ -145,29 +145,29 @@ void gnc_sx_variable_free(GncSxVariable *var);
  * but upcoming reminders are not.  As such, a reminder can never be before any
  * other (modeled) instance type.  For instance, the following sequences are
  * disallowed:
- * 
+ *
  * [...]
  * remind    <- will be lost/skipped over; must be converted to `postponed`.
  * to-create <- this will be the last-recorded state.
  * [...]
- * 
+ *
  * [...]
  * remind    <- same as previous; will be lost/skipped; must be `postponed`.
  * postponed
  * [...]
- * 
+ *
  * remind    <- same...
  * ignore
  * [...]
- * 
- * 
+ *
+ *
  * As such, the SinceLastRun model will enforce that there are no previous
  * `remind` instances at every state change.  They will be silently converted to
  * `postponed`-state transactions.
  **/
 void gnc_sx_instance_model_change_instance_state(GncSxInstanceModel *model,
-                                                 GncSxInstance *instance,
-                                                 GncSxInstanceState new_state);
+        GncSxInstance *instance,
+        GncSxInstanceState new_state);
 
 void gnc_sx_instance_model_set_variable(GncSxInstanceModel *model,
                                         GncSxInstance *instance,
@@ -180,9 +180,9 @@ void gnc_sx_instance_model_set_variable(GncSxInstanceModel *model,
  **/
 GList* gnc_sx_instance_model_check_variables(GncSxInstanceModel *model);
 void gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
-                                         gboolean auto_create_only,
-                                         GList **created_transaction_guids,
-                                         GList **creation_errors);
+        gboolean auto_create_only,
+        GList **created_transaction_guids,
+        GList **creation_errors);
 
 typedef struct _GncSxSummary
 {

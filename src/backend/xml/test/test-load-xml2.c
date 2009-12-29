@@ -21,7 +21,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
- 
+
 /* @file test-load-xml2.c
  * @brief test the loading of a version-2 gnucash XML file
  */
@@ -59,16 +59,16 @@ remove_locks(const char *filename)
 {
     struct stat buf;
     char *to_remove;
-    
+
     {
         to_remove = g_strdup_printf("%s.LCK", filename);
-        if(g_stat(to_remove, &buf) != -1)
+        if (g_stat(to_remove, &buf) != -1)
         {
             g_unlink(to_remove);
         }
         g_free(to_remove);
     }
-    
+
     remove_files_pattern(filename, ".LCK");
 }
 
@@ -95,7 +95,7 @@ test_load_file(const char *filename)
              "book and root account don't match");
 
     do_test_args(qof_session_get_error(session) == ERR_BACKEND_NO_ERR,
-                 "session load xml2", __FILE__, __LINE__, 
+                 "session load xml2", __FILE__, __LINE__,
                  "qof error=%d for file [%s]",
                  qof_session_get_error(session), filename);
 
@@ -120,8 +120,8 @@ main (int argc, char ** argv)
     }
 
     xaccLogDisable();
-    
-    if((xml2_dir = g_dir_open(location, 0, NULL)) == NULL)
+
+    if ((xml2_dir = g_dir_open(location, 0, NULL)) == NULL)
     {
         failure("unable to open xml2 directory");
     }
@@ -129,12 +129,12 @@ main (int argc, char ** argv)
     {
         const gchar *entry;
 
-        while((entry = g_dir_read_name(xml2_dir)) != NULL)
+        while ((entry = g_dir_read_name(xml2_dir)) != NULL)
         {
-            if(g_str_has_suffix(entry, ".gml2"))
+            if (g_str_has_suffix(entry, ".gml2"))
             {
                 gchar *to_open = g_build_filename(location, entry, (gchar*)NULL);
-                if(!g_file_test(to_open, G_FILE_TEST_IS_DIR))
+                if (!g_file_test(to_open, G_FILE_TEST_IS_DIR))
                 {
                     test_load_file(to_open);
                 }

@@ -67,53 +67,55 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
     xmlNodePtr ret;
     gboolean currency = gnc_commodity_is_iso(com);
     xmlNodePtr kvpnode =
-      kvp_frame_to_dom_tree(cmdty_slots,
-			    qof_instance_get_slots(QOF_INSTANCE(com)));
+        kvp_frame_to_dom_tree(cmdty_slots,
+                              qof_instance_get_slots(QOF_INSTANCE(com)));
 
     if (currency && !gnc_commodity_get_quote_flag(com) && !kvpnode)
-      return NULL;
+        return NULL;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_commodity_string);
 
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST commodity_version_string);
-    
+
     xmlAddChild(ret, text_to_dom_tree(cmdty_namespace,
                                       gnc_commodity_get_namespace_compat(com)));
     xmlAddChild(ret, text_to_dom_tree(cmdty_id,
                                       gnc_commodity_get_mnemonic(com)));
 
-    if (!currency) {
-      if(gnc_commodity_get_fullname(com))
-      {
-      	  xmlAddChild(ret, text_to_dom_tree(cmdty_name,
-                                            gnc_commodity_get_fullname(com)));
-      }
-      
-      if(gnc_commodity_get_cusip(com) &&
-         strlen(gnc_commodity_get_cusip(com)) > 0)
-      {
-          xmlAddChild(ret, text_to_dom_tree(
-                          cmdty_xcode,
-                          gnc_commodity_get_cusip(com)));
-      }
-      
-      xmlAddChild(ret, int_to_dom_tree(cmdty_fraction,
-                                       gnc_commodity_get_fraction(com)));
+    if (!currency)
+    {
+        if (gnc_commodity_get_fullname(com))
+        {
+            xmlAddChild(ret, text_to_dom_tree(cmdty_name,
+                                              gnc_commodity_get_fullname(com)));
+        }
+
+        if (gnc_commodity_get_cusip(com) &&
+                strlen(gnc_commodity_get_cusip(com)) > 0)
+        {
+            xmlAddChild(ret, text_to_dom_tree(
+                            cmdty_xcode,
+                            gnc_commodity_get_cusip(com)));
+        }
+
+        xmlAddChild(ret, int_to_dom_tree(cmdty_fraction,
+                                         gnc_commodity_get_fraction(com)));
     }
 
-    if (gnc_commodity_get_quote_flag(com)) {
-      xmlNewChild(ret, NULL, BAD_CAST cmdty_get_quotes, NULL);
-      source = gnc_commodity_get_quote_source(com);
-      if (source)
-	xmlAddChild(ret, text_to_dom_tree(cmdty_quote_source,
-					  gnc_quote_source_get_internal_name(source)));
-      string = gnc_commodity_get_quote_tz(com);
-      if (string)
-	xmlAddChild(ret, text_to_dom_tree(cmdty_quote_tz, string));
+    if (gnc_commodity_get_quote_flag(com))
+    {
+        xmlNewChild(ret, NULL, BAD_CAST cmdty_get_quotes, NULL);
+        source = gnc_commodity_get_quote_source(com);
+        if (source)
+            xmlAddChild(ret, text_to_dom_tree(cmdty_quote_source,
+                                              gnc_quote_source_get_internal_name(source)));
+        string = gnc_commodity_get_quote_tz(com);
+        if (string)
+            xmlAddChild(ret, text_to_dom_tree(cmdty_quote_tz, string));
     }
 
     if (kvpnode)
-      xmlAddChild(ret, kvpnode);
+        xmlAddChild(ret, kvpnode);
 
     return ret;
 }
@@ -126,7 +128,8 @@ struct com_char_handler
     void(*func)(gnc_commodity *com, const char*val);
 };
 
-struct com_char_handler com_handlers[] = {
+struct com_char_handler com_handlers[] =
+{
     { cmdty_namespace,    gnc_commodity_set_namespace },
     { cmdty_id,           gnc_commodity_set_mnemonic },
     { cmdty_name,         gnc_commodity_set_fullname },
@@ -138,47 +141,47 @@ struct com_char_handler com_handlers[] = {
 static void
 set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 {
-    if(safe_strcmp((char*) node->name, cmdty_fraction) == 0)
+    if (safe_strcmp((char*) node->name, cmdty_fraction) == 0)
     {
         gint64 val;
         char *string;
 
         string = (char*) xmlNodeGetContent (node->xmlChildrenNode);
-        if(string_to_gint64(string, &val))
+        if (string_to_gint64(string, &val))
         {
             gnc_commodity_set_fraction(com, val);
         }
         xmlFree (string);
     }
-    else if(safe_strcmp((char*)node->name, cmdty_get_quotes) == 0)
+    else if (safe_strcmp((char*)node->name, cmdty_get_quotes) == 0)
     {
-	gnc_commodity_set_quote_flag(com, TRUE);
+        gnc_commodity_set_quote_flag(com, TRUE);
     }
-    else if(safe_strcmp((char*)node->name, cmdty_quote_source) == 0)
+    else if (safe_strcmp((char*)node->name, cmdty_quote_source) == 0)
     {
         gnc_quote_source *source;
         char *string;
 
         string = (char*) xmlNodeGetContent (node->xmlChildrenNode);
-	source = gnc_quote_source_lookup_by_internal(string);
-	if (!source)
-	  source = gnc_quote_source_add_new(string, FALSE);
-	gnc_commodity_set_quote_source(com, source);
+        source = gnc_quote_source_lookup_by_internal(string);
+        if (!source)
+            source = gnc_quote_source_add_new(string, FALSE);
+        gnc_commodity_set_quote_source(com, source);
         xmlFree (string);
     }
-    else if(safe_strcmp((char*)node->name, cmdty_slots) == 0)
+    else if (safe_strcmp((char*)node->name, cmdty_slots) == 0)
     {
-      /* We ignore the results here */
-      dom_tree_to_kvp_frame_given(node,
-				  qof_instance_get_slots(QOF_INSTANCE(com)));
+        /* We ignore the results here */
+        dom_tree_to_kvp_frame_given(node,
+                                    qof_instance_get_slots(QOF_INSTANCE(com)));
     }
-    else 
+    else
     {
         struct com_char_handler *mark;
 
-        for(mark = com_handlers; mark->tag; mark++)
+        for (mark = com_handlers; mark->tag; mark++)
         {
-            if(safe_strcmp(mark->tag, (char*)node->name) == 0)
+            if (safe_strcmp(mark->tag, (char*)node->name) == 0)
             {
                 gchar* val = dom_tree_to_text(node);
                 g_strstrip(val);
@@ -193,17 +196,17 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 static gboolean
 valid_commodity(gnc_commodity *com)
 {
-    if(gnc_commodity_get_namespace(com) == NULL)
+    if (gnc_commodity_get_namespace(com) == NULL)
     {
         PWARN("Invalid commodity: no namespace");
         return FALSE;
     }
-    if(gnc_commodity_get_mnemonic(com) == NULL)
+    if (gnc_commodity_get_mnemonic(com) == NULL)
     {
         PWARN("Invalid commodity: no mnemonic");
         return FALSE;
     }
-    if(gnc_commodity_get_fraction(com) == 0)
+    if (gnc_commodity_get_fraction(com) == 0)
     {
         PWARN("Invalid commodity: 0 fraction");
         return FALSE;
@@ -219,26 +222,26 @@ gnc_commodity_find_currency (QofBook *book, xmlNodePtr tree)
     gchar *exchange = NULL, *mnemonic = NULL;
     xmlNodePtr node;
 
-    for(node = tree->xmlChildrenNode; node; node = node->next)
+    for (node = tree->xmlChildrenNode; node; node = node->next)
     {
-      if (safe_strcmp((char*) node->name, cmdty_namespace) == 0)
-	exchange = (gchar*) xmlNodeGetContent (node->xmlChildrenNode);
-      if (safe_strcmp((char*) node->name, cmdty_id) == 0)
-	mnemonic = (gchar*) xmlNodeGetContent (node->xmlChildrenNode);
+        if (safe_strcmp((char*) node->name, cmdty_namespace) == 0)
+            exchange = (gchar*) xmlNodeGetContent (node->xmlChildrenNode);
+        if (safe_strcmp((char*) node->name, cmdty_id) == 0)
+            mnemonic = (gchar*) xmlNodeGetContent (node->xmlChildrenNode);
     }
 
     if (exchange
-        && gnc_commodity_namespace_is_iso(exchange)
-        && mnemonic)
+            && gnc_commodity_namespace_is_iso(exchange)
+            && mnemonic)
     {
-      table = gnc_commodity_table_get_table(book);
-      currency = gnc_commodity_table_lookup(table, exchange, mnemonic);
+        table = gnc_commodity_table_get_table(book);
+        currency = gnc_commodity_table_lookup(table, exchange, mnemonic);
     }
 
     if (exchange)
-      xmlFree(exchange);
+        xmlFree(exchange);
     if (mnemonic)
-      xmlFree(mnemonic);
+        xmlFree(mnemonic);
 
     return currency;
 }
@@ -255,31 +258,31 @@ gnc_commodity_end_handler(gpointer data_for_children,
     gxpf_data *gdata = (gxpf_data*)global_data;
     QofBook *book = gdata->bookdata;
 
-    if(parent_data)
+    if (parent_data)
     {
         return TRUE;
     }
 
     /* OK.  For some messed up reason this is getting called again with a
        NULL tag.  So we ignore those cases */
-    if(!tag)
+    if (!tag)
     {
         return TRUE;
     }
-    
+
     g_return_val_if_fail(tree, FALSE);
 
-    com = gnc_commodity_new(book, NULL, NULL, NULL, NULL, 0); 
+    com = gnc_commodity_new(book, NULL, NULL, NULL, NULL, 0);
     old_com = gnc_commodity_find_currency(book, tree);
     if (old_com)
         gnc_commodity_copy(com, old_com);
 
-    for(achild = tree->xmlChildrenNode; achild; achild = achild->next)
+    for (achild = tree->xmlChildrenNode; achild; achild = achild->next)
     {
         set_commodity_value(achild, com);
     }
 
-    if(!valid_commodity(com))
+    if (!valid_commodity(com))
     {
         PWARN("Invalid commodity parsed");
         xmlElemDump(stdout, NULL, tree);
@@ -292,7 +295,7 @@ gnc_commodity_end_handler(gpointer data_for_children,
     gdata->cb(tag, gdata->parsedata, com);
 
     xmlFreeNode(tree);
-    
+
     return TRUE;
 }
 

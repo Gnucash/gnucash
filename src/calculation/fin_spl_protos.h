@@ -26,19 +26,19 @@
 /* expression_parser.c */
 /* Line Number:  344 */
 parser_env_ptr init_parser(
-                           var_store_ptr  predefined_vars,
-                           gchar  *radix_point,
-                           gchar  *group_char,
-                           void          *trans_numeric(const char *digit_str,
-                                                        gchar *radix_point,
-                                                        gchar *group_char,
-                                                        char **rstr),
-                           void          *numeric_ops(char  op_sym,
-                                                      void *left_value,
-                                                      void *right_value),
-                           void          *negate_numeric(void *value),
-                           void           free_numeric(void *numeric_value),
-                           void		 *func_op( const char *fname,
-                                                   int argc, void **argv ) );
+    var_store_ptr  predefined_vars,
+    gchar  *radix_point,
+    gchar  *group_char,
+    void          *trans_numeric(const char *digit_str,
+                                 gchar *radix_point,
+                                 gchar *group_char,
+                                 char **rstr),
+    void          *numeric_ops(char  op_sym,
+                               void *left_value,
+                               void *right_value),
+    void          *negate_numeric(void *value),
+    void           free_numeric(void *numeric_value),
+    void		 *func_op( const char *fname,
+                     int argc, void **argv ) );
 
 #endif

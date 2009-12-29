@@ -36,18 +36,18 @@
 int
 safe_utf8_collate (const char * da, const char * db)
 {
-  if (da && !(*da))
-    da = NULL;
-  if (db && !(*db))
-    db = NULL;
+    if (da && !(*da))
+        da = NULL;
+    if (db && !(*db))
+        db = NULL;
 
-  if (da && db)
-    return g_utf8_collate(da, db);
-  if (da)
-    return 1;
-  if (db)
-    return -1;
-  return 0;
+    if (da && db)
+        return g_utf8_collate(da, db);
+    if (da)
+        return 1;
+    if (db)
+        return -1;
+    return 0;
 }
 
 /********************************************************************
@@ -97,7 +97,7 @@ safe_utf8_collate (const char * da, const char * db)
     ((Char) < 0x10000 ? 3 :            \
      ((Char) < 0x200000 ? 4 :          \
       ((Char) < 0x4000000 ? 5 : 6)))))
-   
+
 
 #define UTF8_GET(Result, Chars, Count, Mask, Len)			      \
   (Result) = (Chars)[0] & (Mask);					      \
@@ -121,151 +121,155 @@ safe_utf8_collate (const char * da, const char * db)
 
 gboolean
 gnc_utf8_validate(const gchar  *str,
-                  gssize        max_len,    
+                  gssize        max_len,
                   const gchar **end)
 {
 
-  const gchar *p;
+    const gchar *p;
 
-  g_return_val_if_fail (str != NULL, FALSE);
-  
-  if (end)
-    *end = str;
-  
-  p = str;
-  
-  while ((max_len < 0 || (p - str) < max_len) && *p)
+    g_return_val_if_fail (str != NULL, FALSE);
+
+    if (end)
+        *end = str;
+
+    p = str;
+
+    while ((max_len < 0 || (p - str) < max_len) && *p)
     {
-      int i, mask = 0, len;
-      gunichar result;
-      unsigned char c = (unsigned char) *p;
-      
-      UTF8_COMPUTE (c, mask, len);
+        int i, mask = 0, len;
+        gunichar result;
+        unsigned char c = (unsigned char) * p;
 
-      if (len == -1)
-        break;
+        UTF8_COMPUTE (c, mask, len);
 
-      /* check that the expected number of bytes exists in str */
-      if (max_len >= 0 &&
-          ((max_len - (p - str)) < len))
-        break;
-        
-      UTF8_GET (result, p, i, mask, len);
+        if (len == -1)
+            break;
 
-      if (UTF8_LENGTH (result) != len) /* Check for overlong UTF-8 */
-	break;
+        /* check that the expected number of bytes exists in str */
+        if (max_len >= 0 &&
+                ((max_len - (p - str)) < len))
+            break;
 
-      if (result == (gunichar)-1)
-        break;
+        UTF8_GET (result, p, i, mask, len);
 
-      if (!UNICODE_VALID (result))
-	break;
-      
-      p += len;
+        if (UTF8_LENGTH (result) != len) /* Check for overlong UTF-8 */
+            break;
+
+        if (result == (gunichar) - 1)
+            break;
+
+        if (!UNICODE_VALID (result))
+            break;
+
+        p += len;
     }
 
-  if (end)
-    *end = p;
+    if (end)
+        *end = p;
 
-  /* See that we covered the entire length if a length was
-   * passed in, or that we ended on a nul if not
-   */
-  if (max_len >= 0 &&
-      p != (str + max_len))
-    return FALSE;
-  else if (max_len < 0 &&
-           *p != '\0')
-    return FALSE;
-  else
-    return TRUE;
+    /* See that we covered the entire length if a length was
+     * passed in, or that we ended on a nul if not
+     */
+    if (max_len >= 0 &&
+            p != (str + max_len))
+        return FALSE;
+    else if (max_len < 0 &&
+             *p != '\0')
+        return FALSE;
+    else
+        return TRUE;
 }
 
 void
 gnc_utf8_strip_invalid (gchar *str)
 {
-  gchar *end;
-  gint len;
+    gchar *end;
+    gint len;
 
-  g_return_if_fail(str);
+    g_return_if_fail(str);
 
-  if (gnc_utf8_validate(str, -1, (const gchar **)&end))
-    return;
+    if (gnc_utf8_validate(str, -1, (const gchar **)&end))
+        return;
 
-  g_warning("Invalid utf8 string: %s", str);
-  do {
-    len = strlen(end);
-    memmove(end, end+1, len);	/* shuffle the remainder one byte */
-  } while (!gnc_utf8_validate(str, -1, (const gchar **)&end));
+    g_warning("Invalid utf8 string: %s", str);
+    do
+    {
+        len = strlen(end);
+        memmove(end, end + 1, len);	/* shuffle the remainder one byte */
+    }
+    while (!gnc_utf8_validate(str, -1, (const gchar **)&end));
 }
 
 gchar *
 gnc_utf8_strip_invalid_strdup(const gchar* str)
 {
-  gchar *result = g_strdup (str);
-  gnc_utf8_strip_invalid (result);
-  return result;
+    gchar *result = g_strdup (str);
+    gnc_utf8_strip_invalid (result);
+    return result;
 }
 
 gchar *
 gnc_locale_from_utf8(const gchar* str)
 {
-  gchar *   locale_str;
-  gsize     bytes_written = 0;
-  GError *  err = NULL;
+    gchar *   locale_str;
+    gsize     bytes_written = 0;
+    GError *  err = NULL;
 
-  /* Convert from UTF-8 to the encoding used in the current locale. */
-  locale_str = g_locale_from_utf8(str, -1, NULL, &bytes_written, &err);
-  if (err) {
-    g_warning("g_locale_from_utf8 failed: %s", err->message);
-    g_error_free(err);
-  }
+    /* Convert from UTF-8 to the encoding used in the current locale. */
+    locale_str = g_locale_from_utf8(str, -1, NULL, &bytes_written, &err);
+    if (err)
+    {
+        g_warning("g_locale_from_utf8 failed: %s", err->message);
+        g_error_free(err);
+    }
 
-  return locale_str;
+    return locale_str;
 }
 
 gchar *
 gnc_locale_to_utf8(const gchar* str)
 {
-  gchar *   utf8_str;
-  gsize     bytes_written = 0;
-  GError *  err = NULL;
+    gchar *   utf8_str;
+    gsize     bytes_written = 0;
+    GError *  err = NULL;
 
-  /* Convert to UTF-8 from the encoding used in the current locale. */
-  utf8_str = g_locale_to_utf8(str, -1, NULL, &bytes_written, &err);
-  if (err) {
-    g_warning("g_locale_to_utf8 failed: %s", err->message);
-    g_error_free(err);
-  }
+    /* Convert to UTF-8 from the encoding used in the current locale. */
+    utf8_str = g_locale_to_utf8(str, -1, NULL, &bytes_written, &err);
+    if (err)
+    {
+        g_warning("g_locale_to_utf8 failed: %s", err->message);
+        g_error_free(err);
+    }
 
-  return utf8_str;
+    return utf8_str;
 }
 
 GList*
 gnc_g_list_map(GList* list, GncGMapFunc fn, gpointer user_data)
 {
-  GList *rtn = NULL;
-  for (; list != NULL; list = list->next)
-  {
-    rtn = g_list_append(rtn, (*fn)(list->data, user_data));
-  }
-  return rtn;
+    GList *rtn = NULL;
+    for (; list != NULL; list = list->next)
+    {
+        rtn = g_list_append(rtn, (*fn)(list->data, user_data));
+    }
+    return rtn;
 }
 
 void
 gnc_g_list_cut(GList **list, GList *cut_point)
 {
-  if (list == NULL || *list == NULL)
-    return;
+    if (list == NULL || *list == NULL)
+        return;
 
-  // if it's the first element.
-  if (cut_point->prev == NULL)
-  {
-    *list = NULL;
-    return;
-  }
+    // if it's the first element.
+    if (cut_point->prev == NULL)
+    {
+        *list = NULL;
+        return;
+    }
 
-  cut_point->prev->next = NULL;
-  cut_point->prev = NULL;
+    cut_point->prev->next = NULL;
+    cut_point->prev = NULL;
 }
 
 void
@@ -295,13 +299,15 @@ gnc_scm_log_debug(const gchar *msg)
 void gnc_gpid_kill(GPid pid)
 {
 #ifdef G_OS_WIN32
-    if (!TerminateProcess((HANDLE) pid, 0)) {
+    if (!TerminateProcess((HANDLE) pid, 0))
+    {
         gchar *msg = g_win32_error_message(GetLastError());
         g_warning("Could not kill child process: %s", msg ? msg : "(null)");
         g_free(msg);
     }
 #else /* !G_OS_WIN32 */
-    if (kill(pid, SIGKILL)) {
+    if (kill(pid, SIGKILL))
+    {
         g_warning("Could not kill child process: %s", g_strerror(errno));
     }
 #endif /* G_OS_WIN32 */

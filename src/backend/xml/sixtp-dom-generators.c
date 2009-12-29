@@ -70,7 +70,7 @@ guint_to_dom_tree(const char *tag, guint an_int)
 {
     gchar *text;
     xmlNodePtr result;
-    
+
     text = g_strdup_printf("%u", an_int );
     g_return_val_if_fail(text, NULL);
     result = text_to_dom_tree(tag, text);
@@ -106,14 +106,14 @@ commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c)
     xmlNodePtr ret;
 
     g_return_val_if_fail(c, NULL);
-    
+
     ret = xmlNewNode(NULL, BAD_CAST tag);
 
-    if(!gnc_commodity_get_namespace(c) || !gnc_commodity_get_mnemonic(c))
+    if (!gnc_commodity_get_namespace(c) || !gnc_commodity_get_mnemonic(c))
     {
         return NULL;
     }
-    
+
     xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:space", BAD_CAST gnc_commodity_get_namespace_compat(c));
     xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:id", BAD_CAST gnc_commodity_get_mnemonic(c));
 
@@ -127,7 +127,7 @@ timespec_sec_to_string(const Timespec *ts)
 
     ret = g_new(gchar, TIMESPEC_SEC_FORMAT_MAX);
 
-    if(!timespec_secs_to_given_string (ts, ret))
+    if (!timespec_secs_to_given_string (ts, ret))
     {
         g_free(ret);
         return NULL;
@@ -145,55 +145,59 @@ timespec_nsec_to_string(const Timespec *ts)
 xmlNodePtr
 timespec_to_dom_tree(const char *tag, const Timespec *spec)
 {
-	xmlNodePtr ret;
-	gchar *date_str = NULL;
-	gchar *ns_str = NULL;
-    
-	g_return_val_if_fail(spec, NULL);
+    xmlNodePtr ret;
+    gchar *date_str = NULL;
+    gchar *ns_str = NULL;
 
-	date_str = timespec_sec_to_string(spec);
+    g_return_val_if_fail(spec, NULL);
 
-	if(!date_str) {
-		return NULL;
-	}
-    
-	ret = xmlNewNode(NULL, BAD_CAST tag);
-    
-	xmlNewTextChild(ret, NULL, BAD_CAST "ts:date", BAD_CAST date_str);
+    date_str = timespec_sec_to_string(spec);
 
-	if(spec->tv_nsec > 0){
-		ns_str = timespec_nsec_to_string(spec);
-		if(ns_str){
-			xmlNewTextChild(ret, NULL, BAD_CAST "ts:ns", BAD_CAST ns_str);
-		}
-	}
+    if (!date_str)
+    {
+        return NULL;
+    }
 
-	g_free(date_str);
-	if(ns_str){
-		g_free(ns_str);
-	}
-    
-	return ret;
+    ret = xmlNewNode(NULL, BAD_CAST tag);
+
+    xmlNewTextChild(ret, NULL, BAD_CAST "ts:date", BAD_CAST date_str);
+
+    if (spec->tv_nsec > 0)
+    {
+        ns_str = timespec_nsec_to_string(spec);
+        if (ns_str)
+        {
+            xmlNewTextChild(ret, NULL, BAD_CAST "ts:ns", BAD_CAST ns_str);
+        }
+    }
+
+    g_free(date_str);
+    if (ns_str)
+    {
+        g_free(ns_str);
+    }
+
+    return ret;
 }
 
 xmlNodePtr
 gdate_to_dom_tree(const char *tag, const GDate *date)
 {
-	xmlNodePtr ret;
-	gchar *date_str = NULL;
+    xmlNodePtr ret;
+    gchar *date_str = NULL;
 
-	g_return_val_if_fail(date, NULL);
-	date_str = g_new( gchar, 512 );
+    g_return_val_if_fail(date, NULL);
+    date_str = g_new( gchar, 512 );
 
-	g_date_strftime( date_str, 512, "%Y-%m-%d", date );
+    g_date_strftime( date_str, 512, "%Y-%m-%d", date );
 
-	ret = xmlNewNode(NULL, BAD_CAST tag);
+    ret = xmlNewNode(NULL, BAD_CAST tag);
 
-	xmlNewTextChild(ret, NULL, BAD_CAST "gdate", BAD_CAST date_str);
+    xmlNewTextChild(ret, NULL, BAD_CAST "gdate", BAD_CAST date_str);
 
-	g_free(date_str);
+    g_free(date_str);
 
-	return ret;
+    return ret;
 }
 
 xmlNodePtr
@@ -203,7 +207,7 @@ gnc_numeric_to_dom_tree(const char *tag, const gnc_numeric *num)
     gchar *numstr;
 
     g_return_val_if_fail(num, NULL);
-    
+
     numstr = gnc_numeric_to_string(*num);
     g_return_val_if_fail(numstr, NULL);
 
@@ -220,9 +224,9 @@ gchar*
 double_to_string(double value)
 {
     gchar *numstr;
-#ifdef USE_GUILE_FOR_DOUBLE_CONVERSION 
+#ifdef USE_GUILE_FOR_DOUBLE_CONVERSION
     numstr = gh_scm2newstr(scm_call_1(scm_c_eval_string("number->string"),
-				      scm_make_real(value)),
+                                      scm_make_real(value)),
                            NULL);
 
 #else /* don't USE_GUILE_FOR_DOUBLE_CONVERSION */
@@ -235,10 +239,10 @@ double_to_string(double value)
     numstr = g_strdup_printf ("%24.18g", value);
 
 #endif /* USE_GUILE_FOR_DOUBLE_CONVERSION */
-    if(!numstr)
+    if (!numstr)
     {
         return NULL;
-        
+
     }
     else
     {
@@ -269,13 +273,13 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     kvp_type = kvp_value_get_type(val);
 
     if (kvp_type == KVP_TYPE_STRING)
-      val_node = xmlNewTextChild(node, NULL, BAD_CAST tag, BAD_CAST kvp_value_get_string(val));
+        val_node = xmlNewTextChild(node, NULL, BAD_CAST tag, BAD_CAST kvp_value_get_string(val));
     else if (kvp_type == KVP_TYPE_TIMESPEC)
-      val_node = NULL;
+        val_node = NULL;
     else
-      val_node = xmlNewTextChild(node, NULL, BAD_CAST tag, NULL);
+        val_node = xmlNewTextChild(node, NULL, BAD_CAST tag, NULL);
 
-    switch(kvp_value_get_type(val))
+    switch (kvp_value_get_type(val))
     {
     case KVP_TYPE_GINT64:
         add_text_to_node(val_node, "integer",
@@ -283,11 +287,11 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
                                          kvp_value_get_gint64(val)));
         break;
     case KVP_TYPE_DOUBLE:
-        add_text_to_node(val_node,"double",
+        add_text_to_node(val_node, "double",
                          double_to_string(kvp_value_get_double(val)));
         break;
     case KVP_TYPE_NUMERIC:
-        add_text_to_node(val_node,"numeric",
+        add_text_to_node(val_node, "numeric",
                          gnc_numeric_to_string(kvp_value_get_numeric(val)));
         break;
     case KVP_TYPE_STRING:
@@ -295,16 +299,16 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
         break;
     case KVP_TYPE_GUID:
         /* THREAD-UNSAFE */
-        add_text_to_node(val_node,"guid",
+        add_text_to_node(val_node, "guid",
                          g_strdup(guid_to_string(kvp_value_get_guid(val))));
         break;
     case KVP_TYPE_TIMESPEC:
     {
-      Timespec ts = kvp_value_get_timespec (val);
+        Timespec ts = kvp_value_get_timespec (val);
 
-      val_node = timespec_to_dom_tree (tag, &ts);
-      xmlSetProp (val_node, BAD_CAST "type", BAD_CAST "timespec");
-      xmlAddChild (node, val_node);
+        val_node = timespec_to_dom_tree (tag, &ts);
+        xmlSetProp (val_node, BAD_CAST "type", BAD_CAST "timespec");
+        xmlAddChild (node, val_node);
     }
     break;
     case KVP_TYPE_BINARY:
@@ -321,15 +325,15 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     case KVP_TYPE_GLIST:
     {
         GList *cursor;
-        
+
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "list");
-        for(cursor = kvp_value_get_glist(val); cursor; cursor = cursor->next)
+        for (cursor = kvp_value_get_glist(val); cursor; cursor = cursor->next)
         {
             kvp_value *val = (kvp_value*)cursor->data;
             add_kvp_value_node(val_node, "slot:value", val);
         }
     }
-    
+
     break;
     case KVP_TYPE_FRAME:
     {
@@ -339,7 +343,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
 
         frame = kvp_value_get_frame (val);
         if (!frame || !kvp_frame_get_hash (frame))
-          break;
+            break;
 
         g_hash_table_foreach(kvp_frame_get_hash(frame),
                              add_kvp_slot, val_node);
@@ -363,31 +367,31 @@ add_kvp_slot(gpointer key, gpointer value, gpointer data)
 
     add_kvp_value_node(slot_node, "slot:value", (kvp_value*)value);
 }
-    
+
 xmlNodePtr
 kvp_frame_to_dom_tree(const char *tag, const kvp_frame *frame)
 {
     xmlNodePtr ret;
 
-    if(!frame)
+    if (!frame)
     {
         return NULL;
     }
 
-    if(!kvp_frame_get_hash(frame))
+    if (!kvp_frame_get_hash(frame))
     {
         return NULL;
     }
 
-    if(g_hash_table_size(kvp_frame_get_hash(frame)) == 0)
+    if (g_hash_table_size(kvp_frame_get_hash(frame)) == 0)
     {
         return NULL;
     }
-    
+
     ret = xmlNewNode(NULL, BAD_CAST tag);
-    
+
     g_hash_table_foreach(kvp_frame_get_hash(frame), add_kvp_slot, ret);
-    
+
     return ret;
 }
 

@@ -448,7 +448,7 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
         tm_str.tm_mday = day;
         tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
         tm_str.tm_year = year - 1900; /* this is what the standard
-                                 * says, it's not a Y2K thing */
+				       * says, it's not a Y2K thing */
 
         gnc_tm_set_day_start (&tm_str);
         t = mktime (&tm_str);

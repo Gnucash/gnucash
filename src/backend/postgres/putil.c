@@ -19,7 +19,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/* 
+/*
  * FILE:
  * putil.c
  *
@@ -28,14 +28,14 @@
  *
  * HISTORY:
  * Copyright (c) 2002 Matthew Vanecek <mevanecek@yahoo.com>
- * 
+ *
  */
 
-#include "config.h" 
-#include <glib.h> 
+#include "config.h"
+#include <glib.h>
 #include <glib/gi18n.h>
-#include <libpq-fe.h>  
-#include <stdlib.h>  
+#include <libpq-fe.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "qof.h"
@@ -45,69 +45,75 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 #include "putil.h"
 
-ExecStatusType execQuery(PGBackend *be, const char * q) {
-	PGresult * result;
-	ExecStatusType status;
-	gchar * msg;
+ExecStatusType execQuery(PGBackend *be, const char * q)
+{
+    PGresult * result;
+    ExecStatusType status;
+    gchar * msg;
 
     ENTER(" ");
-    
-    if (!be || !be->connection) {
+
+    if (!be || !be->connection)
+    {
         LEAVE("Backend or connection is not available");
         qof_backend_set_message(&be->be, _("Backend connection is not available"));
         qof_backend_set_error(&be->be, ERR_BACKEND_CONN_LOST);
         return -1;
     }
-     
-	result = PQexec(be->connection, q);
 
-	if (!result) {
-		PINFO("Query could not be executed");
+    result = PQexec(be->connection, q);
+
+    if (!result)
+    {
+        PINFO("Query could not be executed");
         qof_backend_set_message(&be->be, _("Query could not be executed"));
         qof_backend_set_error(&be->be, ERR_BACKEND_SERVER_ERR);
-		return -1;
-	}
+        return -1;
+    }
 
-	status = PQresultStatus(result);
-	msg = (gchar *)PQresultErrorMessage(result);
-	PINFO("Result status: %s/%s",
-		PQresStatus(status), (strlen(msg)) > 0 ? msg : "(No Message)");
-	PINFO("Number of rows affected: %d", atoi(PQcmdTuples(result)));
-    
-    if (status != PGRES_COMMAND_OK) {
+    status = PQresultStatus(result);
+    msg = (gchar *)PQresultErrorMessage(result);
+    PINFO("Result status: %s/%s",
+          PQresStatus(status), (strlen(msg)) > 0 ? msg : "(No Message)");
+    PINFO("Number of rows affected: %d", atoi(PQcmdTuples(result)));
+
+    if (status != PGRES_COMMAND_OK)
+    {
         PINFO("Query causing error: %s", q);
         qof_backend_set_message(&be->be, _("From the Postgresql Server: %s"), msg);
         qof_backend_set_error(&be->be, ERR_BACKEND_SERVER_ERR);
     }
 
-	PQclear(result);
+    PQclear(result);
     return status;
 }
 
 
 /* ============================================================= */
-/* The sendQuery function sends the sql statement off to the server. 
+/* The sendQuery function sends the sql statement off to the server.
  * It performs a minimal check to see that the send succeeded. The
  * return value indicates success or failure of the send.
  */
-int sendQuery(PGBackend *be,char * buff) {
-   int rc = 0;
+int sendQuery(PGBackend *be, char * buff)
+{
+    int rc = 0;
 
-   ENTER(" ");
-   if (NULL == be->connection) return ERR_BACKEND_CONN_LOST;
-   PINFO("Connectionn is %p", be->connection);
-   PINFO ("sending query %s", buff);
-   rc = PQsendQuery (be->connection, buff);
-   if (!rc) {
-      gchar * msg = (gchar *)PQerrorMessage(be->connection);
-      PERR("send query failed:\n"
-           "\t%s", msg);
-      qof_backend_set_message(&be->be, _("From the Postgresql Server: %s"), msg);
-      qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
-      return ERR_BACKEND_SERVER_ERR;
-   }
-   LEAVE("PQsendQuery rc = %d", rc);
-   return ERR_BACKEND_NO_ERR;
+    ENTER(" ");
+    if (NULL == be->connection) return ERR_BACKEND_CONN_LOST;
+    PINFO("Connectionn is %p", be->connection);
+    PINFO ("sending query %s", buff);
+    rc = PQsendQuery (be->connection, buff);
+    if (!rc)
+    {
+        gchar * msg = (gchar *)PQerrorMessage(be->connection);
+        PERR("send query failed:\n"
+             "\t%s", msg);
+        qof_backend_set_message(&be->be, _("From the Postgresql Server: %s"), msg);
+        qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
+        return ERR_BACKEND_SERVER_ERR;
+    }
+    LEAVE("PQsendQuery rc = %d", rc);
+    return ERR_BACKEND_NO_ERR;
 }
 
 /* --------------------------------------------------------------- */
@@ -118,39 +124,44 @@ int sendQuery(PGBackend *be,char * buff) {
  * rows affected by the query is returned.
  */
 
-int finishQuery(PGBackend *be) {
-   int i=0;
-   PGresult *result;
+int finishQuery(PGBackend *be)
+{
+    int i = 0;
+    PGresult *result;
 
-   ENTER(" ");
-   /* complete/commit the transaction, check the status */
-   PINFO("Connection is %p", be->connection);
-   do {
-      int x;
-      ExecStatusType status;
-      result = PQgetResult(be->connection);
-      if (!result) {
-          PINFO("Result is (null)");
-          break;
-      }
-      
-      status = PQresultStatus(result);
-      x = atoi(PQcmdTuples(result));
-      PINFO("Result status: %s, rows affected: %d, by %s",
-            PQresStatus(status), x, PQcmdStatus(result));
-      i += x;
+    ENTER(" ");
+    /* complete/commit the transaction, check the status */
+    PINFO("Connection is %p", be->connection);
+    do
+    {
+        int x;
+        ExecStatusType status;
+        result = PQgetResult(be->connection);
+        if (!result)
+        {
+            PINFO("Result is (null)");
+            break;
+        }
 
-      if (PGRES_COMMAND_OK != status) {
-         gchar * msg = (gchar *)PQerrorMessage(be->connection);
-         PERR("finish query failed:\n\t%s", msg);
-         PQclear(result);
-         qof_backend_set_message(&be->be, _("From the Postgresql Server: %s"), msg);
-         qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
-         break; 
-      }
-      PQclear(result);
-   } while (result);
+        status = PQresultStatus(result);
+        x = atoi(PQcmdTuples(result));
+        PINFO("Result status: %s, rows affected: %d, by %s",
+              PQresStatus(status), x, PQcmdStatus(result));
+        i += x;
 
-   LEAVE("%d rows affected by SQL statement", i);
-   return i;
+        if (PGRES_COMMAND_OK != status)
+        {
+            gchar * msg = (gchar *)PQerrorMessage(be->connection);
+            PERR("finish query failed:\n\t%s", msg);
+            PQclear(result);
+            qof_backend_set_message(&be->be, _("From the Postgresql Server: %s"), msg);
+            qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
+            break;
+        }
+        PQclear(result);
+    }
+    while (result);
+
+    LEAVE("%d rows affected by SQL statement", i);
+    return i;
 }

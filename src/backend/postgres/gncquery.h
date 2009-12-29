@@ -26,13 +26,13 @@
  *
  * FUNCTION:
  * Convert gnucash engine Query (a la Query.h) into an SQL Query
- * 
- * The gnc engine query consists of doubly nested list of 
- * query terms.  The inner list consists of terms that need to be 
+ *
+ * The gnc engine query consists of doubly nested list of
+ * query terms.  The inner list consists of terms that need to be
  * AND'ed together; the outer list OR's together the inner lists.
  *
  * The resulting query will resemble
- * SELECT * FROM gncSplit WHERE 
+ * SELECT * FROM gncSplit WHERE
  * (splitguid='deadbeef') OR
  * (memo='deposit' AND date_reconciled>'1998-07-01 11:00:00.345678 -0500')
  *

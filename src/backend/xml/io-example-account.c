@@ -60,33 +60,33 @@ static QofLogModule log_module = GNC_MOD_IO;
 void
 gnc_destroy_example_account(GncExampleAccount *gea)
 {
-    if(gea->title != NULL)
+    if (gea->title != NULL)
     {
         g_free(gea->title);
         gea->title = NULL;
     }
-    if(gea->filename != NULL)
+    if (gea->filename != NULL)
     {
         g_free(gea->filename);
         gea->filename = NULL;
     }
-    if(gea->root != NULL)
+    if (gea->root != NULL)
     {
         xaccAccountBeginEdit (gea->root);
         xaccAccountDestroy(gea->root);
         gea->root = NULL;
     }
-    if(gea->short_description != NULL)
+    if (gea->short_description != NULL)
     {
         g_free(gea->short_description);
         gea->short_description = NULL;
     }
-    if(gea->long_description != NULL)
+    if (gea->long_description != NULL)
     {
         g_free(gea->long_description);
         gea->long_description = NULL;
     }
-    if(gea->book != NULL)
+    if (gea->book != NULL)
     {
         qof_book_destroy(gea->book);
         gea->book = NULL;
@@ -103,7 +103,7 @@ clear_up_account_commodity(
     gnc_commodity *gcom;
     gnc_commodity *com = getter(act);
 
-    if(!com)
+    if (!com)
     {
         return;
     }
@@ -114,14 +114,14 @@ clear_up_account_commodity(
                                       gnc_commodity_get_namespace(com),
                                       gnc_commodity_get_mnemonic(com));
 
-    if(gcom == com)
+    if (gcom == com)
     {
         return;
     }
-    else if(!gcom)
+    else if (!gcom)
     {
         PWARN("unable to find global commodity for %s adding new",
-                  gnc_commodity_get_unique_name(com));
+              gnc_commodity_get_unique_name(com));
         gnc_commodity_table_insert(tbl, com);
     }
     else
@@ -150,9 +150,10 @@ add_account_local(GncExampleAccount *gea, Account *act)
     }
     else if (!gnc_account_get_parent(act))
     {
-        if (!gea->root) {
+        if (!gea->root)
+        {
             g_warning("The example account file should declared a ROOT "
-		      "account before declaring any other accounts.");
+                      "account before declaring any other accounts.");
             gea->root = gnc_book_get_root_account(gea->book);
         }
         gnc_account_append_child(gea->root, act);
@@ -164,7 +165,7 @@ generic_callback(const char *tag, gpointer globaldata, gpointer data)
 {
     GncExampleAccount *gea = (GncExampleAccount*)globaldata;
 
-    if(safe_strcmp(tag, "gnc:account") == 0)
+    if (safe_strcmp(tag, "gnc:account") == 0)
     {
         add_account_local(gea, (Account*)data);
     }
@@ -176,10 +177,10 @@ squash_extra_whitespace(char *text)
 {
     int spot;
     int length = strlen(text);
-    
-    for(spot = 1; spot < length; spot++)
+
+    for (spot = 1; spot < length; spot++)
     {
-        if(isspace(text[spot]) && isspace(text[spot - 1]))
+        if (isspace(text[spot]) && isspace(text[spot - 1]))
         {
             memmove(text + spot, text + spot + 1, length - spot + 1);
             length--;
@@ -205,10 +206,10 @@ gnc_short_descrip_end_handler(gpointer data_for_children,
                               gpointer *result, const gchar *tag)
 {
     GncExampleAccount *gea =
-    (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
+        (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
 
     gea->short_description = grab_clean_string((xmlNodePtr)data_for_children);
-    
+
     return TRUE;
 }
 
@@ -225,10 +226,10 @@ gnc_long_descrip_end_handler(gpointer data_for_children,
                              gpointer *result, const gchar *tag)
 {
     GncExampleAccount *gea =
-    (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
+        (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
 
     gea->long_description = grab_clean_string((xmlNodePtr)data_for_children);
-    
+
     return TRUE;
 }
 
@@ -240,17 +241,17 @@ gnc_long_descrip_sixtp_parser_create(void)
 
 static gboolean
 gnc_excludep_end_handler(gpointer data_for_children,
-                             GSList* data_from_children, GSList* sibling_data,
-                             gpointer parent_data, gpointer global_data,
-                             gpointer *result, const gchar *tag)
+                         GSList* data_from_children, GSList* sibling_data,
+                         gpointer parent_data, gpointer global_data,
+                         gpointer *result, const gchar *tag)
 {
     GncExampleAccount *gea =
-    (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
+        (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
     gint64 val = 0;
 
     dom_tree_to_integer ((xmlNodePtr)data_for_children, &val);
     gea->exclude_from_select_all = (val ? TRUE : FALSE);
-    
+
     return TRUE;
 }
 
@@ -262,17 +263,17 @@ gnc_excludep_sixtp_parser_create(void)
 
 static gboolean
 gnc_selected_end_handler(gpointer data_for_children,
-                             GSList* data_from_children, GSList* sibling_data,
-                             gpointer parent_data, gpointer global_data,
-                             gpointer *result, const gchar *tag)
+                         GSList* data_from_children, GSList* sibling_data,
+                         gpointer parent_data, gpointer global_data,
+                         gpointer *result, const gchar *tag)
 {
     GncExampleAccount *gea =
-    (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
+        (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
     gint64 val = 0;
 
     dom_tree_to_integer ((xmlNodePtr)data_for_children, &val);
     gea->start_selected = (val ? TRUE : FALSE);
-    
+
     return TRUE;
 }
 
@@ -284,15 +285,15 @@ gnc_selected_sixtp_parser_create(void)
 
 static gboolean
 gnc_title_end_handler(gpointer data_for_children,
-                             GSList* data_from_children, GSList* sibling_data,
-                             gpointer parent_data, gpointer global_data,
-                             gpointer *result, const gchar *tag)
+                      GSList* data_from_children, GSList* sibling_data,
+                      gpointer parent_data, gpointer global_data,
+                      gpointer *result, const gchar *tag)
 {
     GncExampleAccount *gea =
-    (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
+        (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
 
     gea->title = grab_clean_string((xmlNodePtr)data_for_children);
-    
+
     return TRUE;
 }
 
@@ -320,29 +321,29 @@ gnc_read_example_account(const gchar *filename)
     top_parser = sixtp_new();
     main_parser = sixtp_new();
 
-    if(!sixtp_add_some_sub_parsers(
-        top_parser, TRUE,
-        GNC_ACCOUNT_STRING, main_parser,
-        NULL, NULL))
+    if (!sixtp_add_some_sub_parsers(
+                top_parser, TRUE,
+                GNC_ACCOUNT_STRING, main_parser,
+                NULL, NULL))
     {
         return FALSE;
     }
 
-    if(!sixtp_add_some_sub_parsers(
-           main_parser, TRUE,
-           GNC_ACCOUNT_TITLE, gnc_titse_sixtp_parser_create(),
-           GNC_ACCOUNT_SHORT, gnc_short_descrip_sixtp_parser_create(),
-           GNC_ACCOUNT_LONG, gnc_long_descrip_sixtp_parser_create(),
-	   GNC_ACCOUNT_EXCLUDEP, gnc_excludep_sixtp_parser_create(),
-	   GNC_ACCOUNT_SELECTED, gnc_selected_sixtp_parser_create(),
-           "gnc:account", gnc_account_sixtp_parser_create(),
-           NULL, NULL))
+    if (!sixtp_add_some_sub_parsers(
+                main_parser, TRUE,
+                GNC_ACCOUNT_TITLE, gnc_titse_sixtp_parser_create(),
+                GNC_ACCOUNT_SHORT, gnc_short_descrip_sixtp_parser_create(),
+                GNC_ACCOUNT_LONG, gnc_long_descrip_sixtp_parser_create(),
+                GNC_ACCOUNT_EXCLUDEP, gnc_excludep_sixtp_parser_create(),
+                GNC_ACCOUNT_SELECTED, gnc_selected_sixtp_parser_create(),
+                "gnc:account", gnc_account_sixtp_parser_create(),
+                NULL, NULL))
     {
         return FALSE;
     }
 
-    if(!gnc_xml_parse_file(top_parser, filename,
-                           generic_callback, gea, gea->book))
+    if (!gnc_xml_parse_file(top_parser, filename,
+                            generic_callback, gea, gea->book))
     {
         sixtp_destroy(top_parser);
         xaccLogEnable ();
@@ -394,21 +395,21 @@ gnc_write_example_account(GncExampleAccount *gea, const gchar *filename)
     fprintf(out, "<" GNC_ACCOUNT_STRING ">\n");
 
     write_string_part(out, GNC_ACCOUNT_TITLE, gea->title);
-    
+
     write_string_part(out, GNC_ACCOUNT_SHORT, gea->short_description);
 
     write_string_part(out, GNC_ACCOUNT_LONG, gea->long_description);
-    
+
     write_bool_part(out, GNC_ACCOUNT_EXCLUDEP, gea->exclude_from_select_all);
 
     write_account_tree(out, gea->root, &data);
 
     fprintf(out, "</" GNC_ACCOUNT_STRING ">\n\n");
-    
+
     write_emacs_trailer(out);
 
     fclose(out);
-    
+
     return TRUE;
 
 }
@@ -418,7 +419,7 @@ gnc_write_example_account(GncExampleAccount *gea, const gchar *filename)
 static void
 slist_destroy_example_account(gpointer data, gpointer user_data)
 {
-    if(data != NULL)
+    if (data != NULL)
     {
         gnc_destroy_example_account((GncExampleAccount*)data);
     }
@@ -444,28 +445,28 @@ gnc_load_example_account_list(const char *dirname)
 
     dir = g_dir_open(dirname, 0, NULL);
 
-    if(dir == NULL)
+    if (dir == NULL)
     {
         return NULL;
     }
-    
+
     ret = NULL;
 
-    for(direntry = g_dir_read_name(dir); direntry != NULL;
-        direntry = g_dir_read_name(dir))
+    for (direntry = g_dir_read_name(dir); direntry != NULL;
+            direntry = g_dir_read_name(dir))
     {
         gchar *filename;
         GncExampleAccount *gea;
         if (!g_str_has_suffix(direntry, "xea"))
-          continue;
+            continue;
 
         filename = g_build_filename(dirname, direntry, (gchar*) NULL);
 
-        if(!g_file_test(filename, G_FILE_TEST_IS_DIR))
+        if (!g_file_test(filename, G_FILE_TEST_IS_DIR))
         {
             gea = gnc_read_example_account(filename);
 
-            if(gea == NULL)
+            if (gea == NULL)
             {
                 g_free(filename);
                 gnc_free_example_account_list(ret);

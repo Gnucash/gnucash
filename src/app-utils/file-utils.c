@@ -38,7 +38,7 @@
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gkeyfile-utils.h"
- 
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUILE;
 
@@ -46,24 +46,24 @@ static QofLogModule log_module = GNC_MOD_GUILE;
 \********************************************************************/
 
 char *
-gncFindFile (const char * filename) 
+gncFindFile (const char * filename)
 {
-  const gchar *full_filename = NULL;
-  SCM find_doc_file;
-  SCM scm_filename;
-  SCM scm_result;
+    const gchar *full_filename = NULL;
+    SCM find_doc_file;
+    SCM scm_filename;
+    SCM scm_result;
 
-  if (!filename || *filename == '\0')
-    return NULL;
+    if (!filename || *filename == '\0')
+        return NULL;
 
-  find_doc_file = scm_c_eval_string("gnc:find-doc-file");
-  scm_filename = scm_makfrom0str ((char *) filename);
-  scm_result = scm_call_1(find_doc_file, scm_filename);
+    find_doc_file = scm_c_eval_string("gnc:find-doc-file");
+    scm_filename = scm_makfrom0str ((char *) filename);
+    scm_result = scm_call_1(find_doc_file, scm_filename);
 
-  if (SCM_STRINGP(scm_result))
-    full_filename = SCM_STRING_CHARS(scm_result);
+    if (SCM_STRINGP(scm_result))
+        full_filename = SCM_STRING_CHARS(scm_result);
 
-  return g_strdup (full_filename);
+    return g_strdup (full_filename);
 }
 
 /********************************************************************\
@@ -74,59 +74,60 @@ gncFindFile (const char * filename)
  * Return: size of data read                                        *
  * Global: helpPath - the path to the help files                    *
 \********************************************************************/
-int 
+int
 gncReadFile (const char * file, char ** data)
 {
-  char *buf=NULL;
-  char  *filename;
-  int   size=0;
-  int   fd;
+    char *buf = NULL;
+    char  *filename;
+    int   size = 0;
+    int   fd;
 
-  /* construct absolute path -- twiddle the relative path we received */
-  if (!file || file[0] == '\0') return 0;
+    /* construct absolute path -- twiddle the relative path we received */
+    if (!file || file[0] == '\0') return 0;
 
-  /* take absolute paths without searching */
-  if (!g_path_is_absolute (file))
-    filename = gncFindFile (file);
-  else
-    filename = g_strdup (file);
+    /* take absolute paths without searching */
+    if (!g_path_is_absolute (file))
+        filename = gncFindFile (file);
+    else
+        filename = g_strdup (file);
 
-  if (!filename) return 0;
+    if (!filename) return 0;
 
-  /* Open file: */
-  fd = g_open( filename, O_RDONLY, 0 );
+    /* Open file: */
+    fd = g_open( filename, O_RDONLY, 0 );
 
-  g_free(filename); filename = NULL;
+    g_free(filename);
+    filename = NULL;
 
-  if( fd == -1 )
-  {
-    int norr = errno;
-    PERR ("file %s: (%d) %s \n", file, norr, strerror(norr));
-    return 0;
-  }
+    if ( fd == -1 )
+    {
+        int norr = errno;
+        PERR ("file %s: (%d) %s \n", file, norr, strerror(norr));
+        return 0;
+    }
 
-  /* Find size: */
-  size = lseek( fd, 0, SEEK_END );
-  lseek( fd, 0, SEEK_SET );
+    /* Find size: */
+    size = lseek( fd, 0, SEEK_END );
+    lseek( fd, 0, SEEK_SET );
 
-  /* Allocate memory */
-  buf = g_new(char, size + 1);
+    /* Allocate memory */
+    buf = g_new(char, size + 1);
 
-  /* read in file */
-  if( read(fd,buf,size) == -1 )
-  {
-    g_free(buf);
-    buf=NULL;
-  }
-  else
-  {
-    buf[size] = '\0';
-  }
+    /* read in file */
+    if ( read(fd, buf, size) == -1 )
+    {
+        g_free(buf);
+        buf = NULL;
+    }
+    else
+    {
+        buf[size] = '\0';
+    }
 
-  close(fd);
-  *data = buf;
+    close(fd);
+    *data = buf;
 
-  return size;
+    return size;
 }
 
 /**
@@ -145,28 +146,29 @@ gncReadFile (const char * file, char ** data)
 gint64
 gnc_getline (gchar **line, FILE *file)
 {
-  char str[BUFSIZ];
-  gint64 len;
-  GString *gs;
+    char str[BUFSIZ];
+    gint64 len;
+    GString *gs;
 
-  g_return_val_if_fail(line, -1);
-  *line = NULL;
-  g_return_val_if_fail(file, -1);
+    g_return_val_if_fail(line, -1);
+    *line = NULL;
+    g_return_val_if_fail(file, -1);
 
-  gs = g_string_new("");
+    gs = g_string_new("");
 
-  while (fgets(str, sizeof(str), file) != NULL) {
-    g_string_append(gs, str);
+    while (fgets(str, sizeof(str), file) != NULL)
+    {
+        g_string_append(gs, str);
 
-    len = strlen(str);
-    if (str[len-1] == '\n')
-      break;
-  }
+        len = strlen(str);
+        if (str[len-1] == '\n')
+            break;
+    }
 
-  len = gs->len;
-  *line = gs->str;
-  g_string_free(gs, FALSE);
-  return len;
+    len = gs->len;
+    *line = gs->str;
+    g_string_free(gs, FALSE);
+    return len;
 }
 
 
@@ -182,48 +184,54 @@ gnc_getline (gchar **line, FILE *file)
 static gboolean
 gnc_update_state_file_keys(const gchar *filename)
 {
-  gchar *contents, **lines, *line, **kv, **parts, *part, *newkey;
-  GError *error = NULL;
-  int i, j;
+    gchar *contents, **lines, *line, **kv, **parts, *part, *newkey;
+    GError *error = NULL;
+    int i, j;
 
-  if (!g_file_get_contents(filename, &contents, NULL, &error)) {
-    DEBUG("Error reading state file: %s", error->message);
-    g_error_free(error);
-    return FALSE;
-  }
-
-  lines = g_strsplit_set(contents, "\r\n", -1);
-  g_free(contents);
-
-  /* Strip spaces from non-comment lines, and rewrite the new text
-   * over top of the old text.  The new line is guaranteed to be at
-   * most the same number of characters as the old. */
-  for (i = 0, line = lines[i++]; line; line = lines[i++]) {
-    if ((*line == '\0') || (*line == '#') || (*line == '[')) {
-      continue;
-    } else {
-      kv = g_strsplit(line, "=", 2);
-      parts = g_strsplit(kv[0], " ", -1);
-      for (j = 0, part = parts[j++]; part; part = parts[j++])
-	part[0] = g_ascii_toupper(part[0]);
-      newkey = g_strjoinv("", parts);
-      g_sprintf(line, "%s=%s", newkey, kv[1] ? kv[1] : "");
-      g_free(newkey);
-      g_strfreev(parts);
-      g_strfreev(kv);
+    if (!g_file_get_contents(filename, &contents, NULL, &error))
+    {
+        DEBUG("Error reading state file: %s", error->message);
+        g_error_free(error);
+        return FALSE;
     }
-  }
 
-  contents = g_strjoinv("\n", lines);
-  if (!g_file_set_contents(filename, contents, -1, &error)) {
-    DEBUG("Error writing state file: %s", error->message);
-    g_error_free(error);
+    lines = g_strsplit_set(contents, "\r\n", -1);
     g_free(contents);
-    return FALSE;
-  }
 
-  g_free(contents);
-  return TRUE;
+    /* Strip spaces from non-comment lines, and rewrite the new text
+     * over top of the old text.  The new line is guaranteed to be at
+     * most the same number of characters as the old. */
+    for (i = 0, line = lines[i++]; line; line = lines[i++])
+    {
+        if ((*line == '\0') || (*line == '#') || (*line == '['))
+        {
+            continue;
+        }
+        else
+        {
+            kv = g_strsplit(line, "=", 2);
+            parts = g_strsplit(kv[0], " ", -1);
+            for (j = 0, part = parts[j++]; part; part = parts[j++])
+                part[0] = g_ascii_toupper(part[0]);
+            newkey = g_strjoinv("", parts);
+            g_sprintf(line, "%s=%s", newkey, kv[1] ? kv[1] : "");
+            g_free(newkey);
+            g_strfreev(parts);
+            g_strfreev(kv);
+        }
+    }
+
+    contents = g_strjoinv("\n", lines);
+    if (!g_file_set_contents(filename, contents, -1, &error))
+    {
+        DEBUG("Error writing state file: %s", error->message);
+        g_error_free(error);
+        g_free(contents);
+        return FALSE;
+    }
+
+    g_free(contents);
+    return TRUE;
 }
 
 /*  Find the state file that corresponds to this URL and guid.  The
@@ -232,98 +240,107 @@ gnc_update_state_file_keys(const gchar *filename)
  *  user has multiple data files with the same name. */
 GKeyFile *
 gnc_find_state_file (const gchar *url,
-		     const gchar *guid,
-		     gchar **filename_p)
+                     const gchar *guid,
+                     gchar **filename_p)
 {
-  gchar *basename, *original = NULL, *filename, *tmp, *file_guid;
-  GKeyFile *key_file = NULL;
-  GError *error = NULL;
-  gboolean do_increment;
-  gint i;
+    gchar *basename, *original = NULL, *filename, *tmp, *file_guid;
+    GKeyFile *key_file = NULL;
+    GError *error = NULL;
+    gboolean do_increment;
+    gint i;
 
-  ENTER("url %s, guid %s", url, guid);
-  tmp = strchr(url, ':');
-  if (tmp)
-    url = tmp + 1;
+    ENTER("url %s, guid %s", url, guid);
+    tmp = strchr(url, ':');
+    if (tmp)
+        url = tmp + 1;
 
-  basename = g_path_get_basename(url);
-  DEBUG("Basename %s", basename);
-  original = gnc_build_book_path(basename);
-  g_free(basename);
-  DEBUG("Original %s", original);
+    basename = g_path_get_basename(url);
+    DEBUG("Basename %s", basename);
+    original = gnc_build_book_path(basename);
+    g_free(basename);
+    DEBUG("Original %s", original);
 
-  i = 1;
-  while (1) {
-    if (i == 1)
-      filename = g_strdup(original);
+    i = 1;
+    while (1)
+    {
+        if (i == 1)
+            filename = g_strdup(original);
+        else
+            filename = g_strdup_printf("%s_%d", original, i);
+        DEBUG("Trying %s", filename);
+        key_file = gnc_key_file_load_from_file(filename, FALSE, FALSE, &error);
+        DEBUG("Result %p", key_file);
+
+        if (error &&
+                (error->domain == G_KEY_FILE_ERROR) &&
+                (error->code == G_KEY_FILE_ERROR_PARSE))
+        {
+            /* Handle the case where glib was updated first, and is refusing
+             * to read old state files. */
+            if (gnc_update_state_file_keys(filename))
+            {
+                DEBUG("Trying %s again", filename);
+                key_file = gnc_key_file_load_from_file(filename, FALSE, FALSE, NULL);
+                DEBUG("Result %p", key_file);
+            }
+        }
+        if (error)
+        {
+            g_error_free(error);
+            error = NULL;
+        }
+        if (!key_file)
+        {
+            DEBUG("No key file by that name");
+            break;
+        }
+
+        file_guid = g_key_file_get_string(key_file,
+                                          STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
+                                          NULL);
+        DEBUG("File GUID is %s", file_guid ? file_guid : "<not found>");
+        if (safe_strcmp(guid, file_guid) == 0)
+        {
+            DEBUG("Matched !!!");
+            g_free(file_guid);
+            break;
+        }
+        g_free(file_guid);
+
+        /* Handle the case where gnucash was updated first, and is trying
+         * to find new key names in an old state files. */
+        file_guid = g_key_file_get_string(key_file,
+                                          STATE_FILE_TOP, STATE_FILE_BOOK_GUID_OLD,
+                                          NULL);
+        DEBUG("%s is %s", STATE_FILE_BOOK_GUID,
+              file_guid ? file_guid : "<not found>");
+        if (safe_strcmp(guid, file_guid) == 0)
+        {
+            DEBUG("Matched !!!");
+            do_increment = !gnc_update_state_file_keys(filename);
+        }
+        else
+        {
+            do_increment = TRUE;
+        }
+
+        DEBUG("Clean up this pass");
+        g_free(file_guid);
+        g_key_file_free(key_file);
+        g_free(filename);
+        if (do_increment)
+            i++;
+    }
+
+    DEBUG("Clean up");
+    g_free(original);
+    if (filename_p)
+        *filename_p = filename;
     else
-      filename = g_strdup_printf("%s_%d", original, i);
-    DEBUG("Trying %s", filename);
-    key_file = gnc_key_file_load_from_file(filename, FALSE, FALSE, &error);
-    DEBUG("Result %p", key_file);
-
-    if (error &&
-	(error->domain == G_KEY_FILE_ERROR) && 
-	(error->code == G_KEY_FILE_ERROR_PARSE)) {
-      /* Handle the case where glib was updated first, and is refusing
-       * to read old state files. */
-      if (gnc_update_state_file_keys(filename)) {
-	DEBUG("Trying %s again", filename);
-	key_file = gnc_key_file_load_from_file(filename, FALSE, FALSE, NULL);
-	DEBUG("Result %p", key_file);
-      }
-    }
-    if (error) {
-      g_error_free(error);
-      error = NULL;
-    }
-    if (!key_file) {
-      DEBUG("No key file by that name");
-      break;
-    }
-
-    file_guid = g_key_file_get_string(key_file,
-				      STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
-				      NULL);
-    DEBUG("File GUID is %s", file_guid ? file_guid : "<not found>");
-    if (safe_strcmp(guid, file_guid) == 0) {
-      DEBUG("Matched !!!");
-      g_free(file_guid);
-      break;
-    }
-	g_free(file_guid);
-
-    /* Handle the case where gnucash was updated first, and is trying
-     * to find new key names in an old state files. */
-    file_guid = g_key_file_get_string(key_file,
-				      STATE_FILE_TOP, STATE_FILE_BOOK_GUID_OLD,
-				      NULL);
-    DEBUG("%s is %s", STATE_FILE_BOOK_GUID,
-	  file_guid ? file_guid : "<not found>");
-    if (safe_strcmp(guid, file_guid) == 0) {
-      DEBUG("Matched !!!");
-      do_increment = !gnc_update_state_file_keys(filename);
-    } else {
-      do_increment = TRUE;
-    }
-
-    DEBUG("Clean up this pass");
-    g_free(file_guid);
-    g_key_file_free(key_file);
-    g_free(filename);
-    if (do_increment)
-      i++;
-  }
-
-  DEBUG("Clean up");
-  g_free(original);
-  if (filename_p)
-    *filename_p = filename;
-  else
-    g_free(filename);
-  LEAVE("key_file %p, filename %s", key_file,
-	filename_p ? *filename_p : "(none)");
-  return key_file;
+        g_free(filename);
+    LEAVE("key_file %p, filename %s", key_file,
+          filename_p ? *filename_p : "(none)");
+    return key_file;
 }
 
 /* ----------------------- END OF FILE ---------------------  */

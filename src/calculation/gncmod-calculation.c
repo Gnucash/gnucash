@@ -23,21 +23,25 @@ int libgncmod_calculation_gnc_module_age      = 0;
 
 
 char *
-libgncmod_calculation_gnc_module_path(void) {
-  return g_strdup("gnucash/calculation");
+libgncmod_calculation_gnc_module_path(void)
+{
+    return g_strdup("gnucash/calculation");
 }
 
 char *
-libgncmod_calculation_gnc_module_description(void) {
-  return g_strdup("GnuCash calculation module");
+libgncmod_calculation_gnc_module_description(void)
+{
+    return g_strdup("GnuCash calculation module");
 }
 
 int
-libgncmod_calculation_gnc_module_init(int refcount) {
-  return TRUE;
+libgncmod_calculation_gnc_module_init(int refcount)
+{
+    return TRUE;
 }
 
 int
-libgncmod_calculation_gnc_module_end(int refcount) {
-  return TRUE;
+libgncmod_calculation_gnc_module_end(int refcount)
+{
+    return TRUE;
 }

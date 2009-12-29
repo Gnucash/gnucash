@@ -19,7 +19,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/* 
+/*
  * FILE:
  * putil.h
  *
@@ -28,17 +28,17 @@
  *
  * HISTORY:
  * Copyright (c) 2000, 2001, 2002 Linas Vepstas <linas@linas.org>
- * 
+ *
  */
 
-#ifndef P_UTIL_H 
-#define P_UTIL_H 
+#ifndef P_UTIL_H
+#define P_UTIL_H
 
 #include <glib.h>
-#include <string.h>  
-#include <sys/types.h>  
+#include <string.h>
+#include <sys/types.h>
 
-#include <libpq-fe.h>  
+#include <libpq-fe.h>
 
 #include "qof.h"
 
@@ -56,8 +56,8 @@ extern GUID nullguid;
  */
 
 gpointer pgendGetResults (PGBackend *be,
-            gpointer (*handler) (PGBackend *, PGresult *, int, gpointer),
-            gpointer data);
+                          gpointer (*handler) (PGBackend *, PGresult *, int, gpointer),
+                          gpointer data);
 
 /* The gnc_string_to_commodity() routine finds the commodity by
  *     parsing a string of the form NAMESPACE::MNEMONIC
@@ -65,20 +65,20 @@ gpointer pgendGetResults (PGBackend *be,
 gnc_commodity * gnc_string_to_commodity (const char *str, QofBook *book);
 
 ExecStatusType execQuery(PGBackend *be, const char * q);
-int sendQuery(PGBackend *be,char * buff);
+int sendQuery(PGBackend *be, char * buff);
 int finishQuery(PGBackend *be);
 
-/* hack alert -- calling PQfinish() on error is quite harsh, since 
+/* hack alert -- calling PQfinish() on error is quite harsh, since
  * all subsequent sql queries will fail. On the other hand, killing
- * anything that follows *is* a way of minimizing data corruption 
- * due to subsequent mishaps ... so anyway, error handling in these 
+ * anything that follows *is* a way of minimizing data corruption
+ * due to subsequent mishaps ... so anyway, error handling in these
  * routines needs to be redone.   There are notes describing the
  * 'correct' solution in src/doc/backend-error.txt.
  */
 
 /* ============================================================= */
-/* The SEND_QUERY macro sends the sql statement off to the server. 
- * It performs a minimal check to see that the send succeeded. 
+/* The SEND_QUERY macro sends the sql statement off to the server.
+ * It performs a minimal check to see that the send succeeded.
  */
 
 #define SEND_QUERY(be,buff,retval)                              \
@@ -97,7 +97,7 @@ int finishQuery(PGBackend *be);
       return retval;                                            \
    }                                                            \
 }                                                               \
-
+ 
 /* --------------------------------------------------------------- */
 /* The FINISH_QUERY macro makes sure that the previously sent
  * query complete with no errors.  It assumes that the query
@@ -129,10 +129,10 @@ int finishQuery(PGBackend *be);
       i++;                                                      \
    } while (result);                                            \
 }                                                               \
-
+ 
 /* --------------------------------------------------------------- */
 /* The GET_RESULTS macro grabs the result of an pgSQL query off the
- * wire, and makes sure that no errors occured. Results are left 
+ * wire, and makes sure that no errors occured. Results are left
  * in the result buffer.
  */
 #define GET_RESULTS(conn,result)                            \
@@ -153,10 +153,10 @@ int finishQuery(PGBackend *be);
       break;                                                \
    }                                                        \
 }                                                           \
-
+ 
 /* --------------------------------------------------------------- */
 /* The EXEC_QUERY macro executes a query and returns the results
- * and makes sure that no errors occured. Results are left 
+ * and makes sure that no errors occured. Results are left
  * in the result buffer.
  */
 #define EXEC_QUERY(conn,buff,result)                        \
@@ -183,13 +183,13 @@ int finishQuery(PGBackend *be);
       qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);\
    }                                                        \
 }                                                           \
-
+ 
 /* --------------------------------------------------------------- */
-/* The IF_ONE_ROW macro counts the number of rows returned by 
+/* The IF_ONE_ROW macro counts the number of rows returned by
  * a query, reports an error if there is more than one row, and
  * conditionally executes a block for the first row.
  */
- 
+
 #define IF_ONE_ROW(result,nrows,loopcounter)			\
    {								\
       int ncols = PQnfields (result);				\
@@ -201,7 +201,7 @@ int finishQuery(PGBackend *be);
       PERR ("unexpected duplicate records");			\
       qof_backend_set_error (&be->be, ERR_BACKEND_DATA_CORRUPT);	\
       break;							\
-   } else if (1 == nrows) 
+   } else if (1 == nrows)
 
 /* --------------------------------------------------------------- */
 /* Some utility macros for comparing values returned from the
@@ -209,7 +209,7 @@ int finishQuery(PGBackend *be);
  * all take three arguments:
  * -- sqlname -- input -- the name of the field in the sql table
  * -- fun -- input -- a subroutine returning a value
- * -- ndiffs -- input/output -- integer, incremented if the 
+ * -- ndiffs -- input/output -- integer, incremented if the
  *              value of the field and the value returned by
  *              the subroutine differ.
  *
@@ -218,7 +218,7 @@ int finishQuery(PGBackend *be);
 
 #define DB_GET_VAL(str,n) (PQgetvalue (result, n, PQfnumber (result, str)))
 
-/* Compare string types.  Null strings and empty strings are  
+/* Compare string types.  Null strings and empty strings are
  * considered to be equal */
 #define COMP_STR(sqlname,fun,ndiffs) { 				\
    if (null_strcmp (DB_GET_VAL(sqlname,0),fun)) {		\
@@ -228,7 +228,7 @@ int finishQuery(PGBackend *be);
    }								\
 }
 
-/* Compare commodities. This routine is almost identical to 
+/* Compare commodities. This routine is almost identical to
  * COMP_STR, except that a NULL currency from the engine
  * is allowed to match any currency in the sql DB.  This is
  * used to facilitate deletion, where the currency has been
@@ -244,8 +244,8 @@ int finishQuery(PGBackend *be);
    }								\
 }
 
-/* Compare guids. A NULL GUID from the engine is considered to 
- * match any value of a GUID in the sql database.  This is 
+/* Compare guids. A NULL GUID from the engine is considered to
+ * match any value of a GUID in the sql database.  This is
  * equality is used to enable deletion, where the GUID may have
  * already been set to NULL in the engine, but not yet in the DB.
  */
@@ -260,7 +260,7 @@ int finishQuery(PGBackend *be);
          ndiffs++; 						\
       }								\
    }								\
-} 
+}
 
 /* Comapre one char only */
 #define COMP_CHAR(sqlname,fun, ndiffs) { 			\
@@ -272,11 +272,11 @@ int finishQuery(PGBackend *be);
 }
 
 /* Compare dates.
- * Assumes the datestring is in ISO-8601 format 
- * i.e. looks like 1998-07-17 11:00:00.68-05  
- * hack-alert doesn't compare nano-seconds ..  
+ * Assumes the datestring is in ISO-8601 format
+ * i.e. looks like 1998-07-17 11:00:00.68-05
+ * hack-alert doesn't compare nano-seconds ..
  * this is intentional,  its because I suspect
- * the sql db round nanoseconds off ... 
+ * the sql db round nanoseconds off ...
  */
 #define COMP_DATE(sqlname,fun,ndiffs) { 			\
     Timespec eng_time = fun;					\
@@ -291,10 +291,10 @@ int finishQuery(PGBackend *be);
    }								\
 }
 
-/* Compare the date of last modification. 
- * This is a special date comp to 
+/* Compare the date of last modification.
+ * This is a special date comp to
  * (1) make the m4 macros simpler, and
- * (2) avoid needless updates 
+ * (2) avoid needless updates
  */
 #define COMP_NOW(sqlname,fun,ndiffs) { 	 			\
     Timespec eng_time = xaccTransRetDateEnteredTS(ptr);		\

@@ -17,16 +17,19 @@ int libfuturemodsys_gnc_module_revision = 0;
 
 
 char *
-libfuturemodsys_gnc_module_path(void) {
-  return g_strdup("gnucash/futuremodsys");
+libfuturemodsys_gnc_module_path(void)
+{
+    return g_strdup("gnucash/futuremodsys");
 }
 
 char *
-libfuturemodsys_gnc_module_description(void) {
-  return g_strdup("this is a broken future module");
+libfuturemodsys_gnc_module_description(void)
+{
+    return g_strdup("this is a broken future module");
 }
 
 int
-libfuturemodsys_gnc_module_init(int refcount) {
-  return TRUE;
+libfuturemodsys_gnc_module_init(int refcount)
+{
+    return TRUE;
 }

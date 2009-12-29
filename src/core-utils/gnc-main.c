@@ -29,7 +29,7 @@ static gboolean is_debugging = 0;
 static gboolean extras_enabled = 0;
 static const gchar *gconf_path;
 
-void 
+void
 gnc_main_set_namespace_regexp(const gchar *str)
 {
     if (namespace_regexp)

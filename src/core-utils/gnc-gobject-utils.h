@@ -42,7 +42,7 @@
 #include <glib-object.h>
 
 /** @name Gobject Tracking Functions
- *  @{ 
+ *  @{
  *
  *  This set of functions is used to maintain a "database" of objects
  *  that are built on top of a GObject (any level of nesting).  This

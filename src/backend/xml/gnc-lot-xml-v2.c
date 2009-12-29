@@ -70,7 +70,7 @@ gnc_lot_dom_tree_create(GNCLot *lot)
     if (kf)
     {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree(lot_slots_string, kf);
-        if(kvpnode)
+        if (kvpnode)
         {
             xmlAddChild(ret, kvpnode);
         }
@@ -84,8 +84,8 @@ gnc_lot_dom_tree_create(GNCLot *lot)
 
 struct lot_pdata
 {
-  GNCLot  *lot;
-  QofBook *book;
+    GNCLot  *lot;
+    QofBook *book;
 };
 
 static gboolean
@@ -99,7 +99,7 @@ lot_id_handler (xmlNodePtr node, gpointer p)
     gnc_lot_set_guid(pdata->lot, *guid);
 
     g_free(guid);
-    
+
     LEAVE("");
     return TRUE;
 }
@@ -112,7 +112,7 @@ lot_slots_handler (xmlNodePtr node, gpointer p)
 
     ENTER("(lot=%p)", pdata->lot);
     success = dom_tree_to_kvp_frame_given
-         (node, gnc_lot_get_slots (pdata->lot));
+              (node, gnc_lot_get_slots (pdata->lot));
 
     LEAVE("");
     g_return_val_if_fail(success, FALSE);
@@ -120,7 +120,8 @@ lot_slots_handler (xmlNodePtr node, gpointer p)
 }
 
 
-static struct dom_tree_handler lot_handlers_v2[] = {
+static struct dom_tree_handler lot_handlers_v2[] =
+{
     { lot_id_string, lot_id_handler, 1, 0 },
     { lot_slots_string, lot_slots_handler, 0, 0 },
     { NULL, 0, 0, 0 }
@@ -128,9 +129,9 @@ static struct dom_tree_handler lot_handlers_v2[] = {
 
 static gboolean
 gnc_lot_end_handler(gpointer data_for_children,
-                        GSList* data_from_children, GSList* sibling_data,
-                        gpointer parent_data, gpointer global_data,
-                        gpointer *result, const gchar *tag)
+                    GSList* data_from_children, GSList* sibling_data,
+                    gpointer parent_data, gpointer global_data,
+                    gpointer *result, const gchar *tag)
 {
     int successful;
     GNCLot *lot;
@@ -140,14 +141,14 @@ gnc_lot_end_handler(gpointer data_for_children,
 
     successful = TRUE;
 
-    if(parent_data)
+    if (parent_data)
     {
         return TRUE;
     }
 
     /* OK.  For some messed up reason this is getting called again with a
        NULL tag.  So we ignore those cases */
-    if(!tag)
+    if (!tag)
     {
         return TRUE;
     }
@@ -156,7 +157,7 @@ gnc_lot_end_handler(gpointer data_for_children,
 
     lot = dom_tree_to_lot(tree, book);
     ENTER("(lot=%p)", lot);
-    if(lot != NULL)
+    if (lot != NULL)
     {
         gdata->cb(tag, gdata->parsedata, lot);
     }

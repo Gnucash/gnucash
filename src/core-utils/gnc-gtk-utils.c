@@ -39,39 +39,42 @@
  *  entry. */
 void
 gnc_cbe_set_by_string(GtkComboBoxEntry *cbe,
-		      const gchar *text)
+                      const gchar *text)
 {
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  gchar *tree_string;
-  gint column, index, id;
-  gboolean match;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    gchar *tree_string;
+    gint column, index, id;
+    gboolean match;
 
-  model = gtk_combo_box_get_model(GTK_COMBO_BOX(cbe));
-  if (!gtk_tree_model_get_iter_first(model, &iter)) {
-    /* empty tree */
-    gtk_combo_box_set_active(GTK_COMBO_BOX(cbe), -1);
-    return;
-  }
+    model = gtk_combo_box_get_model(GTK_COMBO_BOX(cbe));
+    if (!gtk_tree_model_get_iter_first(model, &iter))
+    {
+        /* empty tree */
+        gtk_combo_box_set_active(GTK_COMBO_BOX(cbe), -1);
+        return;
+    }
 
-  column = gtk_combo_box_entry_get_text_column(cbe);
-  do {
-    gtk_tree_model_get(model, &iter, column, &tree_string, -1);
-    match = g_utf8_collate(text, tree_string) == 0;
-    g_free(tree_string);
-    if (!match)
-      continue;
+    column = gtk_combo_box_entry_get_text_column(cbe);
+    do
+    {
+        gtk_tree_model_get(model, &iter, column, &tree_string, -1);
+        match = g_utf8_collate(text, tree_string) == 0;
+        g_free(tree_string);
+        if (!match)
+            continue;
 
-    /* Found a matching string */
-    id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cbe), CHANGED_ID));
-    g_signal_handler_block(cbe, id);
-    gtk_combo_box_set_active_iter(GTK_COMBO_BOX(cbe), &iter);
-    g_signal_handler_unblock(cbe, id);
+        /* Found a matching string */
+        id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cbe), CHANGED_ID));
+        g_signal_handler_block(cbe, id);
+        gtk_combo_box_set_active_iter(GTK_COMBO_BOX(cbe), &iter);
+        g_signal_handler_unblock(cbe, id);
 
-    index = gtk_combo_box_get_active(GTK_COMBO_BOX(cbe));
-    g_object_set_data(G_OBJECT(cbe), LAST_INDEX, GINT_TO_POINTER(index));
-    return;
-  } while (gtk_tree_model_iter_next(model, &iter));
+        index = gtk_combo_box_get_active(GTK_COMBO_BOX(cbe));
+        g_object_set_data(G_OBJECT(cbe), LAST_INDEX, GINT_TO_POINTER(index));
+        return;
+    }
+    while (gtk_tree_model_iter_next(model, &iter));
 }
 
 
@@ -84,14 +87,14 @@ gnc_cbe_set_by_string(GtkComboBoxEntry *cbe,
  *   @param cbe A pointer to a GtkComboBoxEntry widget. */
 static void
 gnc_cbe_changed_cb (GtkComboBox *widget,
-		    GtkComboBoxEntry *cbe)
+                    GtkComboBoxEntry *cbe)
 {
-  gint index;
+    gint index;
 
-  index = gtk_combo_box_get_active(widget);
-  if (index == -1)
-    return;
-  g_object_set_data(G_OBJECT(cbe), LAST_INDEX, GINT_TO_POINTER(index));
+    index = gtk_combo_box_get_active(widget);
+    if (index == -1)
+        return;
+    g_object_set_data(G_OBJECT(cbe), LAST_INDEX, GINT_TO_POINTER(index));
 }
 
 
@@ -113,18 +116,18 @@ gnc_cbe_changed_cb (GtkComboBox *widget,
  *   @param cbe A pointer to a currency entry widget. */
 static gboolean
 gnc_cbe_match_selected_cb (GtkEntryCompletion *completion,
-			   GtkTreeModel       *comp_model,
-			   GtkTreeIter        *comp_iter,
-			   GtkComboBoxEntry   *cbe)
+                           GtkTreeModel       *comp_model,
+                           GtkTreeIter        *comp_iter,
+                           GtkComboBoxEntry   *cbe)
 {
-  gint column;
-  gchar *text;
+    gint column;
+    gchar *text;
 
-  column = gtk_combo_box_entry_get_text_column(cbe);
-  gtk_tree_model_get(comp_model, comp_iter, column, &text, -1);
-  gnc_cbe_set_by_string(cbe, text);
-  g_free(text);
-  return FALSE;
+    column = gtk_combo_box_entry_get_text_column(cbe);
+    gtk_tree_model_get(comp_model, comp_iter, column, &text, -1);
+    gnc_cbe_set_by_string(cbe, text);
+    g_free(text);
+    return FALSE;
 }
 
 
@@ -142,79 +145,81 @@ gnc_cbe_match_selected_cb (GtkEntryCompletion *completion,
  *   @param cbe A pointer to a currency entry widget. */
 static gboolean
 gnc_cbe_focus_out_cb (GtkEntry *entry,
-		      GdkEventFocus *event,
-		      GtkComboBoxEntry *cbe)
+                      GdkEventFocus *event,
+                      GtkComboBoxEntry *cbe)
 {
-  const gchar *text;
-  gint index;
+    const gchar *text;
+    gint index;
 
-  /* Make a final attempt to match the current text. */
-  text = gtk_entry_get_text(entry);
-  gnc_cbe_set_by_string(cbe, text);
+    /* Make a final attempt to match the current text. */
+    text = gtk_entry_get_text(entry);
+    gnc_cbe_set_by_string(cbe, text);
 
-  /* Get the last known index (which may have just been set). */
-  index = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cbe), LAST_INDEX));
-  gtk_combo_box_set_active(GTK_COMBO_BOX(cbe), index);
-  return FALSE;
+    /* Get the last known index (which may have just been set). */
+    index = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cbe), LAST_INDEX));
+    gtk_combo_box_set_active(GTK_COMBO_BOX(cbe), index);
+    return FALSE;
 }
 
 void
 gnc_cbe_add_completion (GtkComboBoxEntry *cbe)
 {
-  GtkEntry *entry;
-  GtkEntryCompletion *completion;
-  GtkTreeModel *model;
+    GtkEntry *entry;
+    GtkEntryCompletion *completion;
+    GtkTreeModel *model;
 
-  entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbe)));
-  completion = gtk_entry_get_completion(entry);
-  if (completion)
-    return;
+    entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbe)));
+    completion = gtk_entry_get_completion(entry);
+    if (completion)
+        return;
 
-  /* No completion yet? Set one up. */
-  completion = gtk_entry_completion_new();
-  model = gtk_combo_box_get_model(GTK_COMBO_BOX(cbe));
-  gtk_entry_completion_set_model(completion, model);
-  gtk_entry_completion_set_text_column(completion, 0);
-  gtk_entry_completion_set_inline_completion(completion, TRUE);
-  gtk_entry_set_completion(entry, completion);
-  g_object_unref(completion);
+    /* No completion yet? Set one up. */
+    completion = gtk_entry_completion_new();
+    model = gtk_combo_box_get_model(GTK_COMBO_BOX(cbe));
+    gtk_entry_completion_set_model(completion, model);
+    gtk_entry_completion_set_text_column(completion, 0);
+    gtk_entry_completion_set_inline_completion(completion, TRUE);
+    gtk_entry_set_completion(entry, completion);
+    g_object_unref(completion);
 }
 
 void
 gnc_cbe_require_list_item (GtkComboBoxEntry *cbe)
 {
-  GtkEntry *entry;
-  GtkEntryCompletion *completion;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  gint index, id;
+    GtkEntry *entry;
+    GtkEntryCompletion *completion;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    gint index, id;
 
-  /* Ensure completion is set up. */
-  gnc_cbe_add_completion(cbe);
+    /* Ensure completion is set up. */
+    gnc_cbe_add_completion(cbe);
 
-  /* If an item in the combo box isn't already selected, then force
-   * select the first item. Take care, the combo box may not have been
-   * filled yet.  */
-  entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbe)));
-  completion = gtk_entry_get_completion(entry);
-  index = gtk_combo_box_get_active(GTK_COMBO_BOX(cbe));
-  if (index == -1) {
-    model = gtk_entry_completion_get_model(completion);
-    if (gtk_tree_model_get_iter_first(model, &iter)) {
-      gtk_combo_box_set_active(GTK_COMBO_BOX(cbe), 0);
-      index = 0;
+    /* If an item in the combo box isn't already selected, then force
+     * select the first item. Take care, the combo box may not have been
+     * filled yet.  */
+    entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbe)));
+    completion = gtk_entry_get_completion(entry);
+    index = gtk_combo_box_get_active(GTK_COMBO_BOX(cbe));
+    if (index == -1)
+    {
+        model = gtk_entry_completion_get_model(completion);
+        if (gtk_tree_model_get_iter_first(model, &iter))
+        {
+            gtk_combo_box_set_active(GTK_COMBO_BOX(cbe), 0);
+            index = 0;
+        }
     }
-  }
-  g_object_set_data(G_OBJECT(cbe), LAST_INDEX, GINT_TO_POINTER(index));
+    g_object_set_data(G_OBJECT(cbe), LAST_INDEX, GINT_TO_POINTER(index));
 
-  /* Now the signals to make sure the user can't leave the
-     widget without a valid currency. */
-  id = g_signal_connect(cbe, "changed",
-			G_CALLBACK(gnc_cbe_changed_cb), cbe);
-  g_signal_connect(completion, "match_selected",
-		   G_CALLBACK(gnc_cbe_match_selected_cb), cbe);
-  g_signal_connect(entry, "focus-out-event",
-		   G_CALLBACK(gnc_cbe_focus_out_cb), cbe);
+    /* Now the signals to make sure the user can't leave the
+       widget without a valid currency. */
+    id = g_signal_connect(cbe, "changed",
+                          G_CALLBACK(gnc_cbe_changed_cb), cbe);
+    g_signal_connect(completion, "match_selected",
+                     G_CALLBACK(gnc_cbe_match_selected_cb), cbe);
+    g_signal_connect(entry, "focus-out-event",
+                     G_CALLBACK(gnc_cbe_focus_out_cb), cbe);
 
-  g_object_set_data(G_OBJECT(cbe), CHANGED_ID, GINT_TO_POINTER(id));
+    g_object_set_data(G_OBJECT(cbe), CHANGED_ID, GINT_TO_POINTER(id));
 }

@@ -35,7 +35,7 @@ void pgendGetAllAccounts (PGBackend *be);
 
 void pgendStoreAccountTree (PGBackend *be, Account *root);
 void pgendStoreAccountTreeNoLock (PGBackend *be, Account *root,
-                       gboolean do_mark, gboolean do_check_version);
+                                  gboolean do_mark, gboolean do_check_version);
 Account * pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid);
 
 void pgend_account_commit_edit (QofBackend * bend, Account * acct);
