@@ -328,7 +328,6 @@ src/gnome-utils/gnc-splash.c
 src/gnome-utils/gnc-sx-instance-dense-cal-adapter.c
 src/gnome-utils/gnc-sx-list-tree-model-adapter.c
 src/gnome-utils/gnc-tree-model-account.c
-src/gnome-utils/gnc-tree-model-account-drag.c
 src/gnome-utils/gnc-tree-model-account-types.c
 src/gnome-utils/gnc-tree-model-budget.c
 src/gnome-utils/gnc-tree-model.c
