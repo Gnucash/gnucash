@@ -131,6 +131,16 @@ struct _xferDialog
   gpointer transaction_user_data;
 };
 
+/** Structure passed to "filter tree accounts" function to provide it information */
+typedef struct
+{
+	/** Show income/expense accounts in tree */
+    gboolean show_inc_exp;
+
+	/** Show hidden accounts in tree */
+	gboolean show_hidden;
+} AccountTreeFilterInfo;
+
 struct _acct_list_item
 {
   char *acct_full_name;
@@ -439,13 +449,16 @@ static gboolean
 gnc_xfer_dialog_show_inc_exp_visible_cb (Account *account,
 					 gpointer data)
 {
-  GtkCheckButton *show_button;
+  AccountTreeFilterInfo* info;
   GNCAccountType type;
 
-  g_return_val_if_fail (GTK_IS_CHECK_BUTTON (data), FALSE);
+  info = (AccountTreeFilterInfo*)data;
 
-  show_button = GTK_CHECK_BUTTON (data);
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (show_button))) {
+  if (!info->show_hidden && xaccAccountIsHidden(account)) {
+      return FALSE;
+  }
+
+  if (info->show_inc_exp) {
     return TRUE;
   }
 
@@ -463,6 +476,7 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
   GtkWidget *button;
   GtkTreeSelection *selection;
   gboolean  use_accounting_labels;
+  AccountTreeFilterInfo info;
 
   use_accounting_labels = gnc_gconf_get_bool(GCONF_GENERAL,
 					     KEY_ACCOUNTING_LABELS, NULL);
@@ -497,10 +511,13 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
 
   tree_view = GTK_TREE_VIEW(gnc_tree_view_account_new(FALSE));
   gtk_container_add(GTK_CONTAINER(scroll_win), GTK_WIDGET(tree_view));
+  info.show_inc_exp = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
+  info.show_hidden = FALSE;
   gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree_view),
 				    gnc_xfer_dialog_show_inc_exp_visible_cb,
-				    button, /* user data */
+				    &info,  /* user data */
 				    NULL    /* destroy callback */);
+
  /* Have to force the filter once. Alt is to show income/expense by default. */
   gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT (tree_view));
   gtk_widget_show(GTK_WIDGET(tree_view));
