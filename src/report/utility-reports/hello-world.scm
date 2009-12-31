@@ -12,7 +12,7 @@
 (debug-enable 'backtrace)
 
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
+(gnc:module-load "gnucash/html" 0) ;for gnc-build-url
 
 ;; This function will generate a set of options that GnuCash
 ;; will use to display a dialog where the user can select
