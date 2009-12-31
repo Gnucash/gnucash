@@ -225,7 +225,7 @@ hook_remove_scm_runner (GHook *hook, gpointer data)
   SCM res;
 
   res = scm_equal_p(scm1->proc, scm2->proc);
-  return(SCM_NFALSEP(res));
+  return(scm_is_true(res));
 }
 
 void

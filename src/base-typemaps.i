@@ -14,14 +14,14 @@ typedef char gchar;
 
 %typemap (out) char * {
   $result = scm_makfrom0str((const char *)$1);
-  if (!SCM_NFALSEP($result)) {
+  if (!scm_is_true($result)) {
     $result = scm_makstr(0, 0);
   }
 }
 %typemap(in) GNCPrintAmountInfo "$1 = gnc_scm2printinfo($input);"
 %typemap(out) GNCPrintAmountInfo "$result = gnc_printinfo2scm($1);"
 
-%typemap(in) gboolean "$1 = SCM_NFALSEP($input) ? TRUE : FALSE;"
+%typemap(in) gboolean "$1 = scm_is_true($input) ? TRUE : FALSE;"
 %typemap(out) gboolean "$result = $1 ? SCM_BOOL_T : SCM_BOOL_F;"
 
 %typemap(in) Timespec "$1 = gnc_timepair2timespec($input);"
@@ -43,11 +43,11 @@ typedef char gchar;
   SCM list = $input;
   GList *c_list = NULL;
 
-  while (!SCM_NULLP(list)) {
+  while (!scm_is_null(list)) {
         void *p;
 
         SCM p_scm = SCM_CAR(list);
-        if (SCM_FALSEP(p_scm) || SCM_NULLP(p_scm))
+        if (scm_is_false(p_scm) || scm_is_null(p_scm))
            p = NULL;
         else
            p = SWIG_MustGetPtr(p_scm, ElemSwigType, 1, 0);

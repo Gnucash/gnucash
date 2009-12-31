@@ -3286,7 +3286,7 @@ static void
 gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window)
 {
   SCM func = scm_c_eval_string("gnc:main-window-properties-cb");
-  if (!SCM_PROCEDUREP (func)) {
+  if (!scm_is_procedure (func)) {
       PERR ("not a procedure\n");
       return;
   }

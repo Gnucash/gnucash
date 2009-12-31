@@ -76,7 +76,7 @@ gint gnc_report_add(SCM report)
     gnc_report_init_table();
 
     value = scm_call_1(get_id, report);
-    if (SCM_NUMBERP(value)) {
+    if (scm_is_number(value)) {
       id = scm_num2int(value, SCM_ARG1, G_STRFUNC);
       if (!g_hash_table_lookup(reports, &id)) {
 	key = g_new(gint, 1);
@@ -146,10 +146,10 @@ gnc_run_report (gint report_id, char ** data)
   scm_text = gfec_eval_string(str, error_handler);
   g_free(str);
 
-  if (scm_text == SCM_UNDEFINED || !SCM_STRINGP (scm_text))
+  if (scm_text == SCM_UNDEFINED || !scm_is_string (scm_text))
     return FALSE;
 
-  free_data = SCM_STRING_CHARS (scm_text);
+  free_data = scm_to_locale_string (scm_text);
   *data = g_strdup (free_data);
 
   return TRUE;
@@ -183,9 +183,9 @@ gnc_report_name( SCM report )
     return NULL;
 
   value = scm_call_1(get_name, report);
-  if (!SCM_STRINGP(value))
+  if (!scm_is_string(value))
     return NULL;
 
-  return g_strdup(SCM_STRING_CHARS(value));
+  return g_strdup(scm_to_locale_string(value));
 }
 

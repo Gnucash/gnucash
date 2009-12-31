@@ -526,8 +526,8 @@ gnc_ui_account_get_tax_info_string (const Account *account)
                        ("(false-if-exception gnc:txf-get-description)");
         }
 
-        g_return_val_if_fail (SCM_PROCEDUREP (get_form), NULL);
-        g_return_val_if_fail (SCM_PROCEDUREP (get_desc), NULL);
+        g_return_val_if_fail (scm_is_procedure (get_form), NULL);
+        g_return_val_if_fail (scm_is_procedure (get_desc), NULL);
 
         category = scm_c_eval_string (atype == ACCT_TYPE_INCOME ?
                                       "txf-income-categories" :
@@ -559,7 +559,7 @@ gnc_ui_account_get_tax_info_string (const Account *account)
 
         code_scm = scm_str2symbol (code);
         scm = scm_call_3 (get_form, category, code_scm, tax_entity_type);
-        if (!SCM_STRINGP (scm))
+        if (!scm_is_string (scm))
         {
             if (tax_related)
                 return g_strdup_printf
@@ -569,7 +569,7 @@ gnc_ui_account_get_tax_info_string (const Account *account)
                        (_("Not tax-related; invalid code %s for tax type %s"), code, tax_type);
         }
 
-        form = SCM_STRING_CHARS (scm);
+        form = scm_to_locale_string (scm);
         if (!form)
         {
             if (tax_related)
@@ -581,7 +581,7 @@ gnc_ui_account_get_tax_info_string (const Account *account)
         }
 
         scm = scm_call_3 (get_desc, category, code_scm, tax_entity_type);
-        if (!SCM_STRINGP (scm))
+        if (!scm_is_string (scm))
         {
             if (tax_related)
                 return g_strdup_printf
@@ -593,7 +593,7 @@ gnc_ui_account_get_tax_info_string (const Account *account)
                         form, code, tax_type);
         }
 
-        desc = SCM_STRING_CHARS (scm);
+        desc = scm_to_locale_string (scm);
         if (!desc)
         {
             if (tax_related)

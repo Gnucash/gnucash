@@ -236,9 +236,9 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
   /* clear the list */
   gtk_list_store_clear(store);
 
-  while(!SCM_NULLP(accts_left)) {
-    qif_name = SCM_STRING_CHARS(scm_call_1(get_qif_name, SCM_CAR(accts_left)));
-    gnc_name = SCM_STRING_CHARS(scm_call_1(get_gnc_name, SCM_CAR(accts_left)));
+  while(!scm_is_null(accts_left)) {
+    qif_name = scm_to_locale_string(scm_call_1(get_qif_name, SCM_CAR(accts_left)));
+    gnc_name = scm_to_locale_string(scm_call_1(get_gnc_name, SCM_CAR(accts_left)));
     checked  = (scm_call_1(get_new, SCM_CAR(accts_left)) == SCM_BOOL_T);
 
     gtk_list_store_append(store, &iter);
@@ -489,7 +489,7 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
   }
 
   /* If no duplicates were found, skip all post-conversion pages. */
-  if (where == 3 && SCM_NULLP(wind->match_transactions))
+  if (where == 3 && scm_is_null(wind->match_transactions))
     prev = NULL;
   else
     prev = current->prev;
@@ -651,7 +651,7 @@ gnc_ui_qif_import_load_file_back_cb(GnomeDruidPage * page, gpointer arg1,
 {
   QIFImportWindow * wind = user_data;
 
-  if (SCM_LISTP(wind->imported_files) &&
+  if (scm_is_list(wind->imported_files) &&
       (scm_ilength(wind->imported_files) > 0)) {
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
                          get_named_page(wind, "loaded_files_page"));
@@ -828,7 +828,7 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
     wind->busy = FALSE;
     return;
   }
-  else if (load_return == SCM_BOOL_F || !SCM_LISTP(load_return))
+  else if (load_return == SCM_BOOL_F || !scm_is_list(load_return))
   {
     /* A bug was detected. */
 
@@ -847,9 +847,9 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
     wind->busy = FALSE;
     return;
   }
-  else if (!SCM_NULLP(load_return))
+  else if (!scm_is_null(load_return))
   {
-    const gchar *str = SCM_STRING_CHARS(SCM_CADR(load_return));
+    const gchar *str = scm_to_locale_string(SCM_CADR(load_return));
 
     if (SCM_CAR(load_return) == SCM_BOOL_F)
     {
@@ -901,7 +901,7 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
     wind->busy = FALSE;
     return;
   }
-  else if (parse_return == SCM_BOOL_F || !SCM_LISTP(parse_return))
+  else if (parse_return == SCM_BOOL_F || !scm_is_list(parse_return))
   {
     /* A bug was detected. */
 
@@ -924,7 +924,7 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
     wind->busy = FALSE;
     return;
   }
-  else if (!SCM_NULLP(parse_return))
+  else if (!scm_is_null(parse_return))
   {
     /* Are there only warnings? */
     if (SCM_CAR(parse_return) == SCM_BOOL_T)
@@ -949,7 +949,7 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
           gtk_combo_box_remove_text(GTK_COMBO_BOX(wind->date_format_combo), 0);
 
         /* Add the formats for the user to select from. */
-        while(SCM_LISTP(date_formats) && !SCM_NULLP(date_formats))
+        while(scm_is_list(date_formats) && !scm_is_null(date_formats))
         {
           gtk_combo_box_append_text(GTK_COMBO_BOX(wind->date_format_combo),
                                     SCM_SYMBOL_CHARS(SCM_CAR(date_formats)));
@@ -1061,7 +1061,7 @@ gnc_ui_qif_import_load_progress_next_cb(GnomeDruidPage * page,
     const gchar * default_acctname;
 
     /* Go to the "ask account name" page. */
-    default_acctname = SCM_STRING_CHARS(scm_call_1(default_acct,
+    default_acctname = scm_to_locale_string(scm_call_1(default_acct,
                                                    wind->selected_file));
     gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
 
@@ -1162,7 +1162,7 @@ gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page,
     SCM default_acct = scm_c_eval_string("qif-file:path-to-accountname");
     const gchar * default_acctname;
 
-    default_acctname = SCM_STRING_CHARS(scm_call_1(default_acct,
+    default_acctname = scm_to_locale_string(scm_call_1(default_acct,
                                                    wind->selected_file));
     gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
 
@@ -1193,7 +1193,7 @@ update_file_page(QIFImportWindow * wind)
   SCM       scm_qiffile = SCM_BOOL_F;
   SCM       qif_file_path;
   int       row = 0;
-  char      * row_text;
+  const char  * row_text;
   GtkTreeView *view;
   GtkListStore *store;
   GtkTreeIter iter;
@@ -1206,9 +1206,9 @@ update_file_page(QIFImportWindow * wind)
   gtk_list_store_clear(store);
   qif_file_path = scm_c_eval_string("qif-file:path");
 
-  while(!SCM_NULLP(loaded_file_list)) {
+  while(!scm_is_null(loaded_file_list)) {
     scm_qiffile = SCM_CAR(loaded_file_list);
-    row_text    = SCM_STRING_CHARS(scm_call_1(qif_file_path, scm_qiffile));
+    row_text    = scm_to_locale_string(scm_call_1(qif_file_path, scm_qiffile));
 
     gtk_list_store_append(store, &iter);
     gtk_list_store_set(store, &iter,
@@ -1254,7 +1254,7 @@ gnc_ui_qif_import_select_loaded_file_cb(GtkTreeSelection *selection,
   button = gnc_glade_lookup_widget(wind->window, "unload_file_button");
   if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
     gtk_tree_model_get(model, &iter, FILENAME_COL_INDEX, &row, -1);
-    if (SCM_LISTP(wind->imported_files) &&
+    if (scm_is_list(wind->imported_files) &&
        (scm_ilength(wind->imported_files) > row)) {
       scm_gc_unprotect_object(wind->selected_file);
       wind->selected_file = scm_list_ref(wind->imported_files,
@@ -1799,11 +1799,11 @@ gnc_ui_qif_import_account_next_cb(GnomeDruidPage * page,
   QIFImportWindow * wind = user_data;
 
   /* If there are category mappings then proceed as usual. */
-  if (SCM_LISTP(wind->cat_display_info) && !SCM_NULLP(wind->cat_display_info))
+  if (scm_is_list(wind->cat_display_info) && !scm_is_null(wind->cat_display_info))
     return gnc_ui_qif_import_generic_next_cb(page, arg1, user_data);
 
   /* If there are memo mappings then skip to that step. */
-  if (SCM_LISTP(wind->memo_display_info) && !SCM_NULLP(wind->memo_display_info))
+  if (scm_is_list(wind->memo_display_info) && !scm_is_null(wind->memo_display_info))
   {
     if (wind->show_doc_pages)
       gnome_druid_set_page(GNOME_DRUID(wind->druid),
@@ -1859,7 +1859,7 @@ gnc_ui_qif_import_category_next_cb(GnomeDruidPage * page,
   QIFImportWindow * wind = user_data;
 
   /* If there aren't any payee/memo mappings then skip that step. */
-  if (!SCM_LISTP(wind->memo_display_info) || SCM_NULLP(wind->memo_display_info))
+  if (!scm_is_list(wind->memo_display_info) || scm_is_null(wind->memo_display_info))
   {
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
                          get_named_page(wind, "currency_page"));
@@ -1906,7 +1906,7 @@ gnc_ui_qif_import_memo_doc_back_cb(GnomeDruidPage * page, gpointer arg1,
   QIFImportWindow * wind = user_data;
 
   /* If there are no categories to show, go to account matching. */
-  if (!SCM_LISTP(wind->cat_display_info) || SCM_NULLP(wind->cat_display_info))
+  if (!scm_is_list(wind->cat_display_info) || scm_is_null(wind->cat_display_info))
   {
 
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
@@ -1933,7 +1933,7 @@ gnc_ui_qif_import_memo_back_cb(GnomeDruidPage * page, gpointer arg1,
   /* If documentation is off and there are no categories to show,
    * skip directly to account matching. */
   if (!wind->show_doc_pages &&
-      (!SCM_LISTP(wind->cat_display_info) || SCM_NULLP(wind->cat_display_info)))
+      (!scm_is_list(wind->cat_display_info) || scm_is_null(wind->cat_display_info)))
   {
 
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
@@ -2003,7 +2003,7 @@ gnc_ui_qif_import_currency_back_cb(GnomeDruidPage * page,
   QIFImportWindow * wind = user_data;
 
   /* If there are payee/memo mappings to display, go there. */
-  if (SCM_LISTP(wind->memo_display_info) && !SCM_NULLP(wind->memo_display_info))
+  if (scm_is_list(wind->memo_display_info) && !scm_is_null(wind->memo_display_info))
   {
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
                          get_named_page(wind, "memo_match_page"));
@@ -2011,7 +2011,7 @@ gnc_ui_qif_import_currency_back_cb(GnomeDruidPage * page,
   }
 
   /* If there are category mappings to display, go there. */
-  if (SCM_LISTP(wind->cat_display_info) && !SCM_NULLP(wind->cat_display_info))
+  if (scm_is_list(wind->cat_display_info) && !scm_is_null(wind->cat_display_info))
   {
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
                          get_named_page(wind, "category_match_page"));
@@ -2279,7 +2279,7 @@ prepare_security_pages(QIFImportWindow * wind)
   gnc_set_busy_cursor(NULL, TRUE);
   securities = wind->new_securities;
   current = wind->commodity_pages;
-  while (!SCM_NULLP(securities) && (securities != SCM_BOOL_F))
+  while (!scm_is_null(securities) && (securities != SCM_BOOL_F))
   {
     if (current)
     {
@@ -2430,12 +2430,12 @@ gnc_ui_qif_import_prepare_duplicates(QIFImportWindow * wind)
   store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
   gtk_list_store_clear(store);
 
-  if (!SCM_LISTP(wind->match_transactions))
+  if (!scm_is_list(wind->match_transactions))
     return;
 
   /* Loop through the list of new, potentially duplicate transactions. */
   duplicates = wind->match_transactions;
-  while (!SCM_NULLP(duplicates))
+  while (!scm_is_null(duplicates))
   {
     current_xtn = SCM_CAAR(duplicates);
     #define FUNC_NAME "xaccTransCountSplits"
@@ -2643,7 +2643,7 @@ gnc_ui_qif_import_convert_progress_show_cb(GtkWidget *widget,
     wind->busy = FALSE;
     return;
   }
-  else if (SCM_SYMBOLP(retval))
+  else if (scm_is_symbol(retval))
   {
     /* An error was encountered during conversion. */
 
@@ -2789,7 +2789,7 @@ gnc_ui_qif_import_convert_progress_next_cb(GnomeDruidPage * page,
 {
   QIFImportWindow *wind = user_data;
 
-  if (SCM_NULLP(wind->match_transactions))
+  if (scm_is_null(wind->match_transactions))
   {
     /* No potential duplicates, so skip to the last page. */
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
@@ -2881,7 +2881,7 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
     scm_call_2(scm_c_eval_string("qif-import:refresh-match-selection"),
                possible_matches, scm_int2num(selection));
 
-    while(!SCM_NULLP(possible_matches)) {
+    while(!scm_is_null(possible_matches)) {
       current_xtn = SCM_CAR(possible_matches);
       #define FUNC_NAME "xaccTransCountSplits"
       gnc_xtn     = SWIG_MustGetPtr(SCM_CAR(current_xtn),

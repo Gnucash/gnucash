@@ -25,14 +25,14 @@ gfec_catcher(void *data, SCM tag, SCM throw_args)
 {
     SCM func;
     SCM result;
-    char *msg = NULL;
+    const char *msg = NULL;
 
     func = scm_c_eval_string("gnc:error->string");
-    if (SCM_PROCEDUREP(func))
+    if (scm_is_procedure(func))
     {
         result = scm_call_2(func, tag, throw_args);
-        if (SCM_STRINGP(result))
-            msg = SCM_STRING_CHARS(result);
+        if (scm_is_string(result))
+            msg = scm_to_locale_string(result);
     }
 
     if (msg == NULL)

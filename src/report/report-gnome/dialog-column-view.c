@@ -126,7 +126,7 @@ update_display_lists(gnc_column_view_edit * view)
   /* Update the list of available reports (left selection box). */
   row = view->available_selected;
 
-  if(SCM_LISTP(view->available_list) && !SCM_NULLP (view->available_list)) {
+  if(scm_is_list(view->available_list) && !scm_is_null (view->available_list)) {
     row = MIN (row, scm_ilength (view->available_list) - 1);
     selection = scm_list_ref (view->available_list, scm_int2num (row));
   }
@@ -141,11 +141,11 @@ update_display_lists(gnc_column_view_edit * view)
   store = GTK_LIST_STORE(gtk_tree_view_get_model(view->available));
   gtk_list_store_clear(store);
 
-  if(SCM_LISTP(names)) {
-    for(i = 0; !SCM_NULLP(names); names = SCM_CDR(names), i++) {
-      if (SCM_EQUALP (SCM_CAR(names), selection))
+  if(scm_is_list(names)) {
+    for(i = 0; !scm_is_null(names); names = SCM_CDR(names), i++) {
+      if (scm_is_equal (SCM_CAR(names), selection))
         row = i;
-      name = _(SCM_STRING_CHARS(scm_call_2(template_menu_name, SCM_CAR(names),
+      name = _(scm_to_locale_string(scm_call_2(template_menu_name, SCM_CAR(names),
     		  SCM_BOOL_F)));
       gtk_list_store_append(store, &iter);
       gtk_list_store_set(store, &iter,
@@ -165,7 +165,7 @@ update_display_lists(gnc_column_view_edit * view)
   /* Update the list of selected reports (right selection box). */
   row = view->contents_selected;
 
-  if(SCM_LISTP(view->contents_list) && !SCM_NULLP (view->contents_list)) {
+  if(scm_is_list(view->contents_list) && !scm_is_null (view->contents_list)) {
     row = MIN (row, scm_ilength (view->contents_list) - 1);
     selection = scm_list_ref (view->contents_list, scm_int2num (row));
   }
@@ -179,14 +179,14 @@ update_display_lists(gnc_column_view_edit * view)
 
   store = GTK_LIST_STORE(gtk_tree_view_get_model(view->contents));
   gtk_list_store_clear(store);
-  if(SCM_LISTP(contents)) {
-    for(i = 0; !SCM_NULLP(contents); contents = SCM_CDR(contents), i++) {
-      if (SCM_EQUALP (SCM_CAR(contents), selection))
+  if(scm_is_list(contents)) {
+    for(i = 0; !scm_is_null(contents); contents = SCM_CDR(contents), i++) {
+      if (scm_is_equal (SCM_CAR(contents), selection))
         row = i;
 
       id = scm_num2int(SCM_CAAR(contents), SCM_ARG1, G_STRFUNC);
       this_report = gnc_report_find(id);
-      name = _(SCM_STRING_CHARS(scm_call_1(report_menu_name, this_report)));
+      name = _(scm_to_locale_string(scm_call_1(report_menu_name, this_report)));
 
       gtk_list_store_append(store, &iter);
       gtk_list_store_set
@@ -409,7 +409,7 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
   int count;
   int oldlength, id;
   
-  if(SCM_LISTP(r->available_list) && 
+  if(scm_is_list(r->available_list) && 
      (scm_ilength(r->available_list) > r->available_selected)) {
     template_name = scm_list_ref(r->available_list, 
                                 scm_int2num(r->available_selected));
@@ -464,7 +464,7 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data)
   int count;
   int oldlength;
   
-  if(SCM_LISTP(r->contents_list)) {
+  if(scm_is_list(r->contents_list)) {
     oldlength = scm_ilength(r->contents_list);
     if(oldlength > r->contents_selected) {
       for(count=0; count < r->contents_selected; count++) {

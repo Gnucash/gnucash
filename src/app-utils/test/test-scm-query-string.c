@@ -30,7 +30,7 @@ test_query (Query *q, SCM val2str)
     args = scm_cons (scm_makfrom0str ("'"), scm_cons (str_q, SCM_EOL));
     str_q = scm_string_append (args);
 
-    str = SCM_STRING_CHARS (str_q);
+    str = scm_to_locale_string (str_q);
     if (str) str2 = g_strdup(str);
     if (str2)
     {
@@ -69,7 +69,7 @@ run_tests (void)
     int i;
 
     val2str = scm_c_eval_string ("gnc:value->string");
-    g_return_if_fail (SCM_PROCEDUREP (val2str));
+    g_return_if_fail (scm_is_procedure (val2str));
 
     for (i = 0; i < 1000; i++)
     {

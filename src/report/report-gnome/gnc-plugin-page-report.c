@@ -705,7 +705,7 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
 	report = GNC_PLUGIN_PAGE_REPORT(plugin_page);
         priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
-        if (!priv || !priv->cur_report || SCM_NULLP(priv->cur_report) || 
+        if (!priv || !priv->cur_report || scm_is_null(priv->cur_report) || 
             SCM_UNBNDP(priv->cur_report) || SCM_BOOL_F == priv->cur_report) {
             LEAVE("not saving invalid report");
             return;
@@ -718,30 +718,30 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
 	while (count-- > 0) {
 	  item = SCM_CAR(embedded);
 	  embedded = SCM_CDR(embedded);
-	  if (!SCM_NUMBERP(item))
+	  if (!scm_is_number(item))
 	    continue;
 	  id = SCM_INUM(item);
 	  tmp_report = gnc_report_find(id);
 	  scm_text = scm_call_1(gen_save_text, tmp_report);
-	  if (!SCM_STRINGP (scm_text)) {
+	  if (!scm_is_string (scm_text)) {
 	    DEBUG("child report %d: nothing to save", id);
 	    continue;
 	  }
 
 	  key_name = g_strdup_printf(SCHEME_OPTIONS_N, id);
-	  text = gnc_guile_strip_comments(SCM_STRING_CHARS(scm_text));
+	  text = gnc_guile_strip_comments(scm_to_locale_string(scm_text));
 	  g_key_file_set_string(key_file, group_name, key_name, text);
 	  g_free(text);
 	  g_free(key_name);
 	}
 
         scm_text = scm_call_1(gen_save_text, priv->cur_report);
-	if (!SCM_STRINGP (scm_text)) {
+	if (!scm_is_string (scm_text)) {
 	  LEAVE("nothing to save");
 	  return;
 	}
 
-	text = gnc_guile_strip_comments(SCM_STRING_CHARS(scm_text));
+	text = gnc_guile_strip_comments(scm_to_locale_string(scm_text));
 	g_key_file_set_string(key_file, group_name, SCHEME_OPTIONS, text);
 	g_free(text);
 	LEAVE(" ");
@@ -924,7 +924,7 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
         SCM  edited, editor; 
 
         /* close any open editors */
-        for (edited = scm_list_copy(priv->edited_reports); !SCM_NULLP(edited);
+        for (edited = scm_list_copy(priv->edited_reports); !scm_is_null(edited);
              edited = SCM_CDR(edited)) {
                 editor = scm_call_1(get_editor, SCM_CAR(edited));
                 scm_call_2(set_editor, SCM_CAR(edited), SCM_BOOL_F);
@@ -1251,16 +1251,16 @@ gnc_get_export_type_choice (SCM export_types)
         int choice;
         SCM tail;
 
-        if (!SCM_LISTP (export_types))
+        if (!scm_is_list (export_types))
                 return SCM_BOOL_F;
 
-        for (tail = export_types; !SCM_NULLP (tail); tail = SCM_CDR (tail))
+        for (tail = export_types; !scm_is_null (tail); tail = SCM_CDR (tail))
         {
                 SCM pair = SCM_CAR (tail);
                 const gchar * name;
                 SCM scm;
 
-                if (!SCM_CONSP (pair))
+                if (!scm_is_pair (pair))
                 {
                         g_warning ("unexpected list element");
                         bad = TRUE;
@@ -1268,14 +1268,14 @@ gnc_get_export_type_choice (SCM export_types)
                 }
 
                 scm = SCM_CAR (pair);
-                if (!SCM_STRINGP (scm))
+                if (!scm_is_string (scm))
                 {
                         g_warning ("unexpected pair element");
                         bad = TRUE;
                         break;
                 }
 
-                name = SCM_STRING_CHARS (scm);
+                name = scm_to_locale_string (scm);
                 choices = g_list_prepend (choices, g_strdup (name));
         }
 
@@ -1323,7 +1323,7 @@ gnc_get_export_filename (SCM choice)
                 type = _("HTML");
         else
         {
-                type = SCM_STRING_CHARS(SCM_CAR (choice));
+                type = scm_to_locale_string(SCM_CAR (choice));
         }
 
         /* %s is the type of what is about to be saved, e.g. "HTML". */
@@ -1412,7 +1412,7 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
         export_thunk = scm_call_1 (scm_c_eval_string ("gnc:report-export-thunk"),
                                    priv->cur_report);
 
-        if (SCM_LISTP (export_types) && SCM_PROCEDUREP (export_thunk))
+        if (scm_is_list (export_types) && scm_is_procedure (export_thunk))
                 choice = gnc_get_export_type_choice (export_types);
         else
                 choice = SCM_BOOL_T;
@@ -1424,7 +1424,7 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
         if (!filepath)
                 return;
 
-        if (SCM_CONSP (choice))
+        if (scm_is_pair (choice))
         {
                 SCM file_scm;
                 SCM res;

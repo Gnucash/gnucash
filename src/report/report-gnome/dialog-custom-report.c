@@ -112,13 +112,13 @@ update_report_list(GtkListStore *store, CustomReportDialog *crd)
 
   gtk_list_store_clear(store);
         
-    if(SCM_LISTP(names)) {
+    if(scm_is_list(names)) {
 
       /* for all the names in the list, store them, with a reference,
 	 in the gtkliststore */
-      for (i=0; !SCM_NULLP(names); i++) {
+      for (i=0; !scm_is_null(names); i++) {
 
-	name = SCM_STRING_CHARS(scm_call_2(template_menu_name, SCM_CAR(names), SCM_BOOL_F));
+	name = scm_to_locale_string(scm_call_2(template_menu_name, SCM_CAR(names), SCM_BOOL_F));
 
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter,
@@ -184,7 +184,7 @@ custom_report_run_report(SCM guid,
   int report_id;  
   GncMainWindow *window = crd->window;
   
-  if(!SCM_NULLP(guid))
+  if(!scm_is_null(guid))
     {
 
       /* this runs the report */
@@ -295,15 +295,15 @@ on_delete_custom_report_clicked(GtkWidget *button,
 
   SCM template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/report-guid");
   SCM guid;
-  gchar* report_name;
+  const gchar* report_name;
   
   sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(crd->reportview));
   
   guid = get_custom_report_selection(crd, _("You must select a report to delete."));
-  report_name = SCM_STRING_CHARS(scm_call_2(template_menu_name, guid, SCM_BOOL_F));
+  report_name = scm_to_locale_string(scm_call_2(template_menu_name, guid, SCM_BOOL_F));
   
   /* we must confirm the user wants to delete their precious custom report! */
-  if (!SCM_NULLP(guid)
+  if (!scm_is_null(guid)
       && gnc_verify_dialog(crd->dialog, FALSE, "Are you sure you want to delete %s?", report_name)) 
     {
       SCM del_report = scm_c_eval_string("gnc:delete-report");

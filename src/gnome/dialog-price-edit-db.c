@@ -267,13 +267,13 @@ gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data)
 
   ENTER(" ");
   quotes_func = scm_c_eval_string ("gnc:book-add-quotes");
-  if (!SCM_PROCEDUREP (quotes_func)) {
+  if (!scm_is_procedure (quotes_func)) {
     LEAVE(" no procedure");
     return;
   }
 
   book_scm = gnc_book_to_scm (pdb_dialog->book);
-  if (SCM_NFALSEP (scm_not (book_scm))) {
+  if (scm_is_true (scm_not (book_scm))) {
     LEAVE("no book");
     return;
   }

@@ -265,13 +265,13 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
   }
 
   codes = scm_call_2 (getters.codes, category, tax_entity_type);
-  if (!SCM_LISTP (codes))
+  if (!scm_is_list (codes))
   {
     destroy_txf_infos (infos);
     return NULL;
   }
 
-  while (!SCM_NULLP (codes))
+  while (!scm_is_null (codes))
   {
     TXFInfo *txf_info;
     SCM code_scm;
@@ -301,31 +301,31 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
     else
       txf_info->payer_name_source = g_strdup (str);
 
-    str = SCM_SYMBOLP(code_scm) ? SCM_SYMBOL_CHARS(code_scm) : "";
+    str = scm_is_symbol(code_scm) ? SCM_SYMBOL_CHARS(code_scm) : "";
     txf_info->code = g_strdup (str);
 
     scm = scm_call_3 (getters.form, category, code_scm, tax_entity_type);
-    str = SCM_STRINGP(scm) ? SCM_STRING_CHARS(scm) : "";
+    str = scm_is_string(scm) ? scm_to_locale_string(scm) : "";
     txf_info->form = g_strdup (str);
 
     scm = scm_call_3 (getters.description, category, code_scm, tax_entity_type);
-    str = SCM_STRINGP(scm) ? SCM_STRING_CHARS(scm) : "";
+    str = scm_is_string(scm) ? scm_to_locale_string(scm) : "";
     txf_info->description = g_strdup (str);
 
     scm = scm_call_2 (getters.help, category, code_scm);
-    str = SCM_STRINGP(scm) ? SCM_STRING_CHARS(scm) : "";
+    str = scm_is_string(scm) ? scm_to_locale_string(scm) : "";
     scm = scm_call_3 (getters.last_year, category, code_scm, tax_entity_type);
 /*    year = scm_is_bool (scm) ? 0 : scm_to_int(scm); <- Req's guile 1.8 */
-    year = SCM_BOOLP (scm) ? 0 : SCM_INUM(scm); /* <-guile 1.6  */
+    year = scm_is_bool (scm) ? 0 : SCM_INUM(scm); /* <-guile 1.6  */
     scm = scm_call_3 (getters.line_data, category, code_scm, tax_entity_type);
-    if (SCM_LISTP (scm))
+    if (scm_is_list (scm))
     {
       const gchar *until = _("now");
 
       if (year != 0)
         until = g_strdup_printf ("%d", year);
       form_line_data = g_strconcat ("\n", "\n", form_line, NULL);
-      while (!SCM_NULLP (scm))
+      while (!scm_is_null (scm))
       {
         SCM year_scm;
         gint line_year;
@@ -337,10 +337,10 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
 
 /*        line_year = scm_is_bool (SCM_CAR (year_scm)) ? 0 :
                           scm_to_int (SCM_CAR (year_scm)); <- Req's guile 1.8 */
-        line_year = SCM_BOOLP (SCM_CAR (year_scm)) ? 0 :
+        line_year = scm_is_bool (SCM_CAR (year_scm)) ? 0 :
                             SCM_INUM (SCM_CAR (year_scm)); /* <-guile 1.6  */
-        line = SCM_STRINGP((SCM_CAR (SCM_CDR (year_scm))))
-                        ? SCM_STRING_CHARS((SCM_CAR (SCM_CDR (year_scm)))) : "";
+        line = scm_is_string((SCM_CAR (SCM_CDR (year_scm))))
+                        ? scm_to_locale_string((SCM_CAR (SCM_CDR (year_scm)))) : "";
         temp = g_strconcat (form_line_data, "\n",
                             g_strdup_printf ("%d", line_year), " - ", until,
                             "   ", line, NULL);
@@ -372,7 +372,7 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
 
     scm = scm_call_3 (getters.copy, category, code_scm, tax_entity_type);
 /*    cpy = scm_is_bool (scm) ? (scm_is_false (scm) ? FALSE : TRUE): FALSE; <- Req's guile 1.8 */
-    cpy = SCM_BOOLP (scm) ? (SCM_FALSEP (scm) ? FALSE : TRUE): FALSE; /* <-guile 1.6  */
+    cpy = scm_is_bool (scm) ? (scm_is_false (scm) ? FALSE : TRUE): FALSE; /* <-guile 1.6  */
     txf_info->copy = cpy;
 
     infos = g_list_prepend (infos, txf_info);
@@ -402,13 +402,13 @@ load_tax_entity_type_list (TaxInfoDialog *ti_dialog)
 
   ti_dialog->tax_type_combo_text = NULL;
   tax_types = scm_call_0 (getters.tax_entity_types);
-  if (!SCM_LISTP (tax_types))
+  if (!scm_is_list (tax_types))
   {
     destroy_tax_type_infos (types);
     return;
   }
 
-  while (!SCM_NULLP (tax_types))
+  while (!scm_is_null (tax_types))
   {
     TaxTypeInfo *tax_type_info;
     SCM type_scm;
@@ -422,15 +422,15 @@ load_tax_entity_type_list (TaxInfoDialog *ti_dialog)
 
     tax_type_info = g_new0 (TaxTypeInfo, 1);
 
-    str = SCM_SYMBOLP(type_scm) ? SCM_SYMBOL_CHARS(type_scm) : "";
+    str = scm_is_symbol(type_scm) ? SCM_SYMBOL_CHARS(type_scm) : "";
     tax_type_info->type_code = g_strdup (str);
 
     scm = scm_call_1 (getters.tax_entity_type, type_scm);
-    str = SCM_STRINGP(scm) ? SCM_STRING_CHARS (scm) : "";
+    str = scm_is_string(scm) ? scm_to_locale_string (scm) : "";
     tax_type_info->type = g_strdup (str);
 
     scm = scm_call_1 (getters.tax_entity_desc, type_scm);
-    str = SCM_STRINGP(scm) ? SCM_STRING_CHARS (scm) : "";
+    str = scm_is_string(scm) ? scm_to_locale_string (scm) : "";
     tax_type_info->description = g_strdup (str);
 
     tax_type_info->combo_box_entry = g_strconcat(tax_type_info->type, " - ", 

@@ -1583,13 +1583,13 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
 
   quotes_func = scm_c_eval_string ("gnc:book-add-quotes");
 
-  if (!SCM_PROCEDUREP (quotes_func)) {
+  if (!scm_is_procedure (quotes_func)) {
     LEAVE("quote retrieval failed");
     return;
   }
 
   book_scm = gnc_book_to_scm (xferData->book);
-  if (SCM_NFALSEP (scm_not (book_scm))) {
+  if (scm_is_true (scm_not (book_scm))) {
     LEAVE("no book");
     return;
   }
@@ -1597,7 +1597,7 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
   scm_window =  SWIG_NewPointerObj(xferData->dialog,
                                    SWIG_TypeQuery("_p_GtkWidget"), 0);
 
-  if (SCM_NFALSEP (scm_not (book_scm))) {
+  if (scm_is_true (scm_not (book_scm))) {
     LEAVE("no scm window");
     return;
   }

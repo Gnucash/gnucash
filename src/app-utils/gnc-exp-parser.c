@@ -350,7 +350,7 @@ func_op(const char *fname, int argc, void **argv)
                                (scm_t_catch_body)scm_c_eval_string, realFnName->str,
                                scm_handle_by_message_noexit, NULL);
     g_string_free( realFnName, TRUE );
-    if (!SCM_PROCEDUREP(scmFn))
+    if (!scm_is_procedure(scmFn))
     {
         /* FIXME: handle errors correctly. */
         printf( "gnc:\"%s\" is not a scm procedure\n", fname );

@@ -115,7 +115,7 @@ cancel_cb(GtkWidget * widget, gpointer data)
 
     result = scm_call_0(progress->cancel_scm_func);
 
-    if (!SCM_NFALSEP(result))
+    if (!scm_is_true(result))
       return;
   }
 
@@ -160,7 +160,7 @@ delete_cb(GtkWidget *widget, GdkEvent  *event, gpointer data)
 
     result = scm_call_0(progress->cancel_scm_func);
 
-    if (SCM_NFALSEP(result))
+    if (scm_is_true(result))
     {
       if (progress->dialog != NULL)
         gtk_widget_hide(progress->dialog);
@@ -601,7 +601,7 @@ gnc_progress_dialog_set_cancel_scm_func(GNCProgressDialog *progress,
   if (progress->cancel_scm_func != SCM_UNDEFINED)
     scm_gc_unprotect_object(progress->cancel_scm_func);
 
-  if (SCM_PROCEDUREP(cancel_scm_func))
+  if (scm_is_procedure(cancel_scm_func))
   {
     progress->cancel_scm_func = cancel_scm_func;
     scm_gc_protect_object(cancel_scm_func);

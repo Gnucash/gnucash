@@ -59,9 +59,9 @@ gnc_scm_list_to_glist(SCM rest)
   SCM scm_item;
 
   SWIG_GetModule(NULL); /* Work-around for SWIG bug. */
-  SCM_ASSERT(SCM_LISTP(rest), rest, SCM_ARG1, "gnc_scm_list_to_glist");
+  SCM_ASSERT(scm_is_list(rest), rest, SCM_ARG1, "gnc_scm_list_to_glist");
 
-  while(!SCM_NULLP(rest))
+  while(!scm_is_null(rest))
   {
     void *item;
 
@@ -119,9 +119,9 @@ gnc_scm_to_glist_string(SCM list)
 {
   GList *glist = NULL;
 
-  while (!SCM_NULLP (list))
+  while (!scm_is_null (list))
   {
-    const gchar * str = SCM_STRING_CHARS (SCM_CAR(list));
+    const gchar * str = scm_to_locale_string (SCM_CAR(list));
     if (str)
       glist = g_list_prepend (glist, g_strdup (str));
     list = SCM_CDR (list);
@@ -135,9 +135,9 @@ gnc_scm_to_gslist_string(SCM list)
 {
   GSList *gslist = NULL;
 
-  while (!SCM_NULLP (list))
+  while (!scm_is_null (list))
   {
-    const gchar * str = SCM_STRING_CHARS (SCM_CAR(list));
+    const gchar * str = scm_to_locale_string (SCM_CAR(list));
     if (str)
       gslist = g_slist_prepend (gslist, g_strdup (str));
     list = SCM_CDR (list);
@@ -152,5 +152,5 @@ gnc_scm_to_gslist_string(SCM list)
 
 int
 gnc_glist_string_p(SCM list) {
-  return SCM_LISTP(list);
+  return scm_is_list(list);
 }

@@ -23,10 +23,10 @@ gnc_kvp_value_ptr_p(SCM arg)
 KvpValue *
 gnc_scm_to_kvp_value_ptr(SCM val)
 {
-    if(SCM_NUMBERP(val))
+    if(scm_is_number(val))
     {
         /* in guile 1.8 (exact? ) only works on numbers */
-        if(SCM_EXACTP (val) && gnc_gh_gint64_p(val))
+        if(scm_is_exact (val) && gnc_gh_gint64_p(val))
         {
             return kvp_value_new_gint64(gnc_scm_to_gint64(val));
         }
@@ -49,11 +49,11 @@ gnc_scm_to_kvp_value_ptr(SCM val)
         Timespec ts = gnc_timepair2timespec(val);
 	return kvp_value_new_timespec(ts);
     }
-    else if(SCM_STRINGP(val))
+    else if(scm_is_string(val))
     {
         const gchar *newstr;
         KvpValue *ret;
-        newstr = SCM_STRING_CHARS (val);
+        newstr = scm_to_locale_string (val);
         ret = kvp_value_new_string(newstr);
         return ret;
     }

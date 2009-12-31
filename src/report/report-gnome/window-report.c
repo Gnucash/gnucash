@@ -153,8 +153,8 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
       ptr = scm_call_1(get_template, ptr);
       if (ptr != SCM_BOOL_F) {
         ptr = scm_call_1(get_template_name, ptr);
-        if (SCM_STRINGP(ptr))
-          title = SCM_STRING_CHARS(ptr);
+        if (scm_is_string(ptr))
+          title = scm_to_locale_string(ptr);
       }
     }
 

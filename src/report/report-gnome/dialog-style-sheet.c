@@ -71,15 +71,15 @@ dirty_same_stylesheet(gpointer key, gpointer val, gpointer data)
     SCM func = NULL;
 
     func = scm_c_eval_string("gnc:report-stylesheet");
-    if (SCM_PROCEDUREP(func))
+    if (scm_is_procedure(func))
         rep_ss = scm_call_1(func, report);
     else
         return;
 
-    if (SCM_NFALSEP(scm_eq_p(rep_ss, dirty_ss))) {
+    if (scm_is_true(scm_eq_p(rep_ss, dirty_ss))) {
         func = scm_c_eval_string("gnc:report-set-dirty?!");
         /* This makes _me_ feel dirty! */
-        if (SCM_PROCEDUREP(func))
+        if (scm_is_procedure(func))
             scm_call_2(func, report, SCM_BOOL_T);
     }
 }
@@ -191,10 +191,10 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
   gtk_list_store_clear(GTK_LIST_STORE(template_model));
 
   /* put in the list of style sheet type names */
-  for(; !SCM_NULLP(templates); templates=SCM_CDR(templates)) {
+  for(; !scm_is_null(templates); templates=SCM_CDR(templates)) {
     SCM t = SCM_CAR(templates);
     gtk_combo_box_append_text(GTK_COMBO_BOX(template_combo),
-			      SCM_STRING_CHARS(scm_call_1(t_name, t)));
+		    scm_to_locale_string(scm_call_1(t_name, t)));
   }
   gtk_combo_box_set_active(GTK_COMBO_BOX(template_combo), 0);
   
@@ -233,7 +233,7 @@ gnc_style_sheet_select_dialog_add_one(StyleSheetDialog * ss,
 
   get_name = scm_c_eval_string("gnc:html-style-sheet-name");
   scm_name = scm_call_1(get_name, sheet_info);
-  c_name = SCM_STRING_CHARS(scm_name);
+  c_name = scm_to_locale_string(scm_name);
   if (!c_name)
     return;
 
@@ -258,7 +258,7 @@ gnc_style_sheet_select_dialog_fill(StyleSheetDialog * ss)
   SCM sheet_info;
 
   /* pack it full of content */
-  for(; !SCM_NULLP(stylesheets); stylesheets=SCM_CDR(stylesheets)) {
+  for(; !scm_is_null(stylesheets); stylesheets=SCM_CDR(stylesheets)) {
     sheet_info = SCM_CAR(stylesheets);
     gnc_style_sheet_select_dialog_add_one(ss, sheet_info, FALSE);
   }

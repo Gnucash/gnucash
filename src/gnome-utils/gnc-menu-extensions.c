@@ -132,7 +132,7 @@ gnc_extension_path (SCM extension, char **fullpath)
   initialize_getters();
 
   path = gnc_guile_call1_to_list(getters.path, extension);
-  if ((path == SCM_UNDEFINED) || SCM_NULLP(path)) {
+  if ((path == SCM_UNDEFINED) || scm_is_null(path)) {
     *fullpath = g_strdup("");
     return;
   }
@@ -142,19 +142,19 @@ gnc_extension_path (SCM extension, char **fullpath)
   strings[0] = "/menubar";
 
   i = 1;
-  while (!SCM_NULLP(path))
+  while (!scm_is_null(path))
   {
     SCM item;
 
     item = SCM_CAR(path);
     path = SCM_CDR(path);
 
-    if (SCM_STRINGP(item))
+    if (scm_is_string(item))
     {
       if (i == 1)
-	strings[i] = g_strdup(SCM_STRING_CHARS(item));
+	strings[i] = g_strdup(scm_to_locale_string(item));
       else
-	strings[i] = g_strdup(gettext(SCM_STRING_CHARS(item)));
+	strings[i] = g_strdup(gettext(scm_to_locale_string(item)));
     }
     else
     {

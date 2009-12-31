@@ -75,22 +75,22 @@ gnc_scm2printinfo(SCM info_scm)
                                            G_STRFUNC);
 
     info_scm = SCM_CDR (info_scm);
-    info.use_separators = SCM_NFALSEP (SCM_CAR (info_scm));
+    info.use_separators = scm_is_true (SCM_CAR (info_scm));
 
     info_scm = SCM_CDR (info_scm);
-    info.use_symbol = SCM_NFALSEP (SCM_CAR (info_scm));
+    info.use_symbol = scm_is_true (SCM_CAR (info_scm));
 
     info_scm = SCM_CDR (info_scm);
-    info.use_locale = SCM_NFALSEP (SCM_CAR (info_scm));
+    info.use_locale = scm_is_true (SCM_CAR (info_scm));
 
     info_scm = SCM_CDR (info_scm);
-    info.monetary = SCM_NFALSEP (SCM_CAR (info_scm));
+    info.monetary = scm_is_true (SCM_CAR (info_scm));
 
     info_scm = SCM_CDR (info_scm);
-    info.force_fit = SCM_NFALSEP (SCM_CAR (info_scm));
+    info.force_fit = scm_is_true (SCM_CAR (info_scm));
 
     info_scm = SCM_CDR (info_scm);
-    info.round = SCM_NFALSEP (SCM_CAR (info_scm));
+    info.round = scm_is_true (SCM_CAR (info_scm));
 
     return info;
 }
@@ -100,11 +100,11 @@ gnc_printinfo_p(SCM info_scm)
 {
     const gchar *symbol;
 
-    if (!SCM_LISTP(info_scm) || SCM_NULLP(info_scm))
+    if (!scm_is_list(info_scm) || scm_is_null(info_scm))
         return 0;
 
     info_scm = SCM_CAR (info_scm);
-    if (!SCM_SYMBOLP (info_scm))
+    if (!scm_is_symbol (info_scm))
         return 0;
 
     symbol = SCM_SYMBOL_CHARS (info_scm);

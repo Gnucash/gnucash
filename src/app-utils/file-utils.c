@@ -60,8 +60,8 @@ gncFindFile (const char * filename)
     scm_filename = scm_makfrom0str ((char *) filename);
     scm_result = scm_call_1(find_doc_file, scm_filename);
 
-    if (SCM_STRINGP(scm_result))
-        full_filename = SCM_STRING_CHARS(scm_result);
+    if (scm_is_string(scm_result))
+        full_filename = scm_to_locale_string(scm_result);
 
     return g_strdup (full_filename);
 }

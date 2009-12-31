@@ -70,27 +70,27 @@ acct_tree_add_accts(SCM accts,
                     GtkTreeRowReference **reference)
 {
   GtkTreeIter  iter;
-  char         * compname;
+  const char   * compname;
   char         * acctname;
   gboolean     leafnode;
   SCM          current;
   gboolean     checked;
 
-  while(!SCM_NULLP(accts)) {
+  while(!scm_is_null(accts)) {
     current = SCM_CAR(accts);
 
-    if(SCM_NULLP(current)) {
+    if(scm_is_null(current)) {
       g_critical("QIF import: BUG DETECTED in acct_tree_add_accts!");
       accts = SCM_CDR(accts);
       continue;
     }
 
-    if (SCM_STRINGP(SCM_CAR(current)))
-      compname = SCM_STRING_CHARS(SCM_CAR(current));
+    if (scm_is_string(SCM_CAR(current)))
+      compname = scm_to_locale_string(SCM_CAR(current));
     else
       compname = "";
 
-    if (!SCM_NULLP(SCM_CADDR(current))) {
+    if (!scm_is_null(SCM_CADDR(current))) {
       leafnode = FALSE;
     }
     else {
@@ -309,7 +309,7 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
   scm_gc_protect_object(wind->map_entry);
 
   /* Set the initial account to be selected. */
-  wind->selected_name = g_strdup(SCM_STRING_CHARS(orig_acct));
+  wind->selected_name = g_strdup(scm_to_locale_string(orig_acct));
 
 
   xml = gnc_glade_xml_new("qif.glade", "QIF Import Account Picker");

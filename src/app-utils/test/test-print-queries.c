@@ -39,7 +39,7 @@ run_tests (int count)
     int i;
 
     val2str = scm_c_eval_string ("gnc:value->string");
-    g_return_if_fail (SCM_PROCEDUREP (val2str));
+    g_return_if_fail (scm_is_procedure (val2str));
 
     for (i = 0; i < count; i++)
     {

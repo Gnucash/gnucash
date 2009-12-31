@@ -1820,7 +1820,7 @@ report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
   args = SCM_EOL;
 
   func = scm_c_eval_string ("gnc:register-report-create");
-  g_return_val_if_fail (SCM_PROCEDUREP (func), -1);
+  g_return_val_if_fail (scm_is_procedure (func), -1);
 
   arg = scm_makfrom0str (gnc_split_register_get_credit_string (reg));
   args = scm_cons (arg, args);
@@ -1878,7 +1878,7 @@ report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
 
   /* Apply the function to the args */
   arg = scm_apply (func, args, SCM_EOL);
-  g_return_val_if_fail (SCM_EXACTP (arg), -1);
+  g_return_val_if_fail (scm_is_exact (arg), -1);
 
   return scm_num2int (arg, SCM_ARG1, G_STRFUNC);
 }

@@ -409,7 +409,7 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR) goto fail;
 
     qof_session_destroy(session);
-    if (!SCM_NFALSEP(scm_result)) {
+    if (!scm_is_true(scm_result)) {
         g_warning("Failed to add quotes to %s.", add_quotes_file);
         goto fail;
     }

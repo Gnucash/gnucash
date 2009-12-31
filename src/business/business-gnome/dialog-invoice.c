@@ -580,7 +580,7 @@ gnc_invoice_window_printCB (GtkWidget *widget, gpointer data)
   g_return_if_fail (invoice);
 
   func = scm_c_eval_string ("gnc:invoice-report-create");
-  g_return_if_fail (SCM_PROCEDUREP (func));
+  g_return_if_fail (scm_is_procedure (func));
 
   arg = SWIG_NewPointerObj(invoice, SWIG_TypeQuery("_p__gncInvoice"), 0);
   args = scm_cons (arg, args);
@@ -588,7 +588,7 @@ gnc_invoice_window_printCB (GtkWidget *widget, gpointer data)
   /* scm_gc_protect_object(func); */
 
   arg = scm_apply (func, args, SCM_EOL);
-  g_return_if_fail (SCM_EXACTP (arg));
+  g_return_if_fail (scm_is_exact (arg));
   report_id = scm_num2int (arg, SCM_ARG1, G_STRFUNC);
 
   /* scm_gc_unprotect_object(func); */
@@ -846,7 +846,7 @@ void gnc_business_call_owner_report (GncOwner *owner, Account *acc)
   args = SCM_EOL;
 
   func = scm_c_eval_string ("gnc:owner-report-create");
-  g_return_if_fail (SCM_PROCEDUREP (func));
+  g_return_if_fail (scm_is_procedure (func));
 
   if (acc) {
     swig_type_info * qtype = SWIG_TypeQuery("_p_Account");
@@ -865,7 +865,7 @@ void gnc_business_call_owner_report (GncOwner *owner, Account *acc)
 
   /* Apply the function to the args */
   arg = scm_apply (func, args, SCM_EOL);
-  g_return_if_fail (SCM_EXACTP (arg));
+  g_return_if_fail (scm_is_exact (arg));
   id = scm_num2int (arg, SCM_ARG1, G_STRFUNC);
 
   if (id >= 0)

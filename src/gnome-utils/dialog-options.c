@@ -2183,10 +2183,10 @@ static gboolean
 gnc_option_set_ui_value_boolean (GNCOption *option, gboolean use_default,
 				 GtkWidget *widget, SCM value)
 {
-  if (SCM_BOOLP(value))
+  if (scm_is_bool(value))
   {
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
-				 SCM_NFALSEP(value));
+				 scm_is_true(value));
     return FALSE;
   }
   else
@@ -2197,9 +2197,9 @@ static gboolean
 gnc_option_set_ui_value_string (GNCOption *option, gboolean use_default,
 				 GtkWidget *widget, SCM value)
 {
-  if (SCM_STRINGP(value))
+  if (scm_is_string(value))
   {
-    const gchar *string = SCM_STRING_CHARS(value);
+    const gchar *string = scm_to_locale_string(value);
     gtk_entry_set_text(GTK_ENTRY(widget), string);
     return FALSE;
   }
@@ -2218,10 +2218,10 @@ gnc_option_set_ui_value_text (GNCOption *option, gboolean use_default,
   else
     buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(object));
 
-  if (SCM_STRINGP(value))
+  if (scm_is_string(value))
   {
-    const gchar *string = SCM_STRING_CHARS(value);
-    gtk_text_buffer_set_text (buffer, string, strlen (string));
+    const gchar *string = scm_to_locale_string(value);
+    gtk_text_buffer_set_text (buffer, string, scm_i_string_length(value));
     return FALSE;
   }
   else
@@ -2293,7 +2293,7 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
 
   date_option_type = gnc_option_date_option_get_subtype(option);
 
-  if (SCM_CONSP(value))
+  if (scm_is_pair(value))
   {
     symbol_str = gnc_date_option_value_get_type (value);
     if (symbol_str)
@@ -2432,7 +2432,7 @@ gnc_option_set_ui_value_list (GNCOption *option, gboolean use_default,
   selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
   gtk_tree_selection_unselect_all(selection);
 
-  while (SCM_LISTP(value) && !SCM_NULLP(value))
+  while (scm_is_list(value) && !scm_is_null(value))
   {
     SCM item;
 
@@ -2450,7 +2450,7 @@ gnc_option_set_ui_value_list (GNCOption *option, gboolean use_default,
     gtk_tree_path_free(path);
   }
 
-  if (!SCM_LISTP(value) || !SCM_NULLP(value))
+  if (!scm_is_list(value) || !scm_is_null(value))
     return TRUE;
 
   return FALSE;
@@ -2465,7 +2465,7 @@ gnc_option_set_ui_value_number_range (GNCOption *option, gboolean use_default,
 
   spinner = GTK_SPIN_BUTTON(widget);
 
-  if (SCM_NUMBERP(value))
+  if (scm_is_number(value))
   {
     d_value = scm_num2dbl(value, G_STRFUNC);
     gtk_spin_button_set_value(spinner, d_value);
@@ -2506,9 +2506,9 @@ static gboolean
 gnc_option_set_ui_value_font (GNCOption *option, gboolean use_default,
 				 GtkWidget *widget, SCM value)
 {
-  if (SCM_STRINGP(value))
+  if (scm_is_string(value))
   {
-    const gchar *string = SCM_STRING_CHARS(value);
+    const gchar *string = scm_to_locale_string(value);
     if ((string != NULL) && (*string != '\0'))
     {
       GtkFontButton *font_button = GTK_FONT_BUTTON(widget);
@@ -2525,9 +2525,9 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
 				 GtkWidget *widget, SCM value)
 {
   ENTER("option %p(%s)", option, gnc_option_name(option));
-  if (SCM_STRINGP(value))
+  if (scm_is_string(value))
   {
-    const gchar *string = SCM_STRING_CHARS(value);
+    const gchar *string = scm_to_locale_string(value);
 
     if (string && *string)
     {
@@ -2556,7 +2556,7 @@ static gboolean gnc_option_set_ui_value_budget(
     GtkTreeModel *tm;
     GtkTreeIter iter;
 
-//    if (!SCM_NULLP(value)) {
+//    if (!scm_is_null(value)) {
     if (value != SCM_BOOL_F) {
         if (!SWIG_IsPointer(value))
             scm_misc_error("gnc_option_set_ui_value_budget",

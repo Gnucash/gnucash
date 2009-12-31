@@ -154,12 +154,12 @@ gnc_guile_call1_to_string(SCM func, SCM arg)
 {
     SCM value;
 
-    if (SCM_PROCEDUREP(func))
+    if (scm_is_procedure(func))
     {
         value = scm_call_1(func, arg);
 
-        if (SCM_STRINGP(value))
-            return g_strdup(SCM_STRING_CHARS(value));
+        if (scm_is_string(value))
+            return g_strdup(scm_to_locale_string(value));
         else
         {
             PERR("bad value\n");
@@ -189,11 +189,11 @@ gnc_guile_call1_symbol_to_string(SCM func, SCM arg)
 {
     SCM value;
 
-    if (SCM_PROCEDUREP(func))
+    if (scm_is_procedure(func))
     {
         value = scm_call_1(func, arg);
 
-        if (SCM_SYMBOLP(value))
+        if (scm_is_symbol(value))
             return g_strdup(SCM_SYMBOL_CHARS(value));
         else
         {
@@ -223,11 +223,11 @@ gnc_guile_call1_to_procedure(SCM func, SCM arg)
 {
     SCM value;
 
-    if (SCM_PROCEDUREP(func))
+    if (scm_is_procedure(func))
     {
         value = scm_call_1(func, arg);
 
-        if (SCM_PROCEDUREP(value))
+        if (scm_is_procedure(value))
             return value;
         else
         {
@@ -257,11 +257,11 @@ gnc_guile_call1_to_list(SCM func, SCM arg)
 {
     SCM value;
 
-    if (SCM_PROCEDUREP(func))
+    if (scm_is_procedure(func))
     {
         value = scm_call_1(func, arg);
 
-        if (SCM_LISTP(value))
+        if (scm_is_list(value))
             return value;
         else
         {
@@ -291,11 +291,11 @@ gnc_guile_call1_to_vector(SCM func, SCM arg)
 {
     SCM value;
 
-    if (SCM_PROCEDUREP(func))
+    if (scm_is_procedure(func))
     {
         value = scm_call_1(func, arg);
 
-        if (SCM_VECTORP(value))
+        if (scm_is_vector(value))
             return value;
         else
         {
@@ -393,7 +393,7 @@ gnc_copy_split(Split *split, gboolean use_cut_semantics)
         return SCM_UNDEFINED;
 
     func = scm_c_eval_string("gnc:split->split-scm");
-    if (!SCM_PROCEDUREP(func))
+    if (!scm_is_procedure(func))
         return SCM_UNDEFINED;
 
     if (!split_type)
@@ -431,15 +431,15 @@ gnc_copy_split_scm_onto_split(SCM split_scm, Split *split,
     g_return_if_fail (book);
 
     func = scm_c_eval_string("gnc:split-scm?");
-    if (!SCM_PROCEDUREP(func))
+    if (!scm_is_procedure(func))
         return;
 
     result = scm_call_1(func, split_scm);
-    if (!SCM_NFALSEP(result))
+    if (!scm_is_true(result))
         return;
 
     func = scm_c_eval_string("gnc:split-scm-onto-split");
-    if (!SCM_PROCEDUREP(func))
+    if (!scm_is_procedure(func))
         return;
 
     if (!split_type)
@@ -463,7 +463,7 @@ gnc_is_split_scm(SCM scm)
 {
     initialize_scm_functions();
 
-    return SCM_NFALSEP(scm_call_1(predicates.is_split_scm, scm));
+    return scm_is_true(scm_call_1(predicates.is_split_scm, scm));
 }
 
 
@@ -479,7 +479,7 @@ gnc_is_trans_scm(SCM scm)
 {
     initialize_scm_functions();
 
-    return SCM_NFALSEP(scm_call_1(predicates.is_trans_scm, scm));
+    return scm_is_true(scm_call_1(predicates.is_trans_scm, scm));
 }
 
 
@@ -654,10 +654,10 @@ gnc_split_scm_get_memo(SCM split_scm)
         return NULL;
 
     result = scm_call_1(getters.split_scm_memo, split_scm);
-    if (!SCM_STRINGP(result))
+    if (!scm_is_string(result))
         return NULL;
 
-    return g_strdup(SCM_STRING_CHARS(result));
+    return g_strdup(scm_to_locale_string(result));
 }
 
 
@@ -679,10 +679,10 @@ gnc_split_scm_get_action(SCM split_scm)
         return NULL;
 
     result = scm_call_1(getters.split_scm_action, split_scm);
-    if (!SCM_STRINGP(result))
+    if (!scm_is_string(result))
         return NULL;
 
-    return g_strdup(SCM_STRING_CHARS(result));
+    return g_strdup(scm_to_locale_string(result));
 }
 
 
@@ -756,7 +756,7 @@ gnc_copy_trans(Transaction *trans, gboolean use_cut_semantics)
         return SCM_UNDEFINED;
 
     func = scm_c_eval_string("gnc:transaction->transaction-scm");
-    if (!SCM_PROCEDUREP(func))
+    if (!scm_is_procedure(func))
         return SCM_UNDEFINED;
 
     if (!trans_type)
@@ -821,15 +821,15 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
     g_return_if_fail (book);
 
     func = scm_c_eval_string("gnc:transaction-scm?");
-    if (!SCM_PROCEDUREP(func))
+    if (!scm_is_procedure(func))
         return;
 
     result = scm_call_1(func, trans_scm);
-    if (!SCM_NFALSEP(result))
+    if (!scm_is_true(result))
         return;
 
     func = scm_c_eval_string("gnc:transaction-scm-onto-transaction");
-    if (!SCM_PROCEDUREP(func))
+    if (!scm_is_procedure(func))
         return;
 
     if (!trans_type)
@@ -1077,7 +1077,7 @@ gnc_trans_scm_get_num_splits(SCM trans_scm)
 
     result = scm_call_1(getters.trans_scm_split_scms, trans_scm);
 
-    if (!SCM_LISTP(result))
+    if (!scm_is_list(result))
         return 0;
 
     return SCM_LENGTH(result);
@@ -1109,10 +1109,10 @@ gnc_get_debit_string(GNCAccountType account_type)
     arg = scm_long2num(account_type);
 
     result = scm_call_1(getters.debit_string, arg);
-    if (!SCM_STRINGP(result))
+    if (!scm_is_string(result))
         return NULL;
 
-    string = SCM_STRING_CHARS(result);
+    string = scm_to_locale_string(result);
     if (string)
         return g_strdup(string);
     return NULL;
@@ -1144,10 +1144,10 @@ gnc_get_credit_string(GNCAccountType account_type)
     arg = scm_long2num(account_type);
 
     result = scm_call_1(getters.credit_string, arg);
-    if (!SCM_STRINGP(result))
+    if (!scm_is_string(result))
         return NULL;
 
-    string = SCM_STRING_CHARS(result);
+    string = scm_to_locale_string(result);
     if (string)
         return g_strdup(string);
     return NULL;

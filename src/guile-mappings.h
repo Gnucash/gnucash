@@ -19,7 +19,7 @@
 
 /* Convenience macros */
 
-#define SCM_EQUALP(obj1,obj2)	SCM_NFALSEP(scm_equal_p(obj1,obj2))
-#define SCM_EXACTP(obj)		SCM_NFALSEP(scm_exact_p(obj))
-#define SCM_LISTP(obj)		SCM_NFALSEP(scm_list_p(obj))
-#define SCM_PROCEDUREP(obj)	SCM_NFALSEP(scm_procedure_p(obj))
+#define scm_is_equal(obj1,obj2)	scm_is_true(scm_equal_p(obj1,obj2))
+#define scm_is_exact(obj)	scm_is_true(scm_exact_p(obj))
+#define scm_is_list(obj)	scm_is_true(scm_list_p(obj))
+#define scm_is_procedure(obj)	scm_is_true(scm_procedure_p(obj))
