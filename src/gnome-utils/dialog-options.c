@@ -826,6 +826,20 @@ gnc_option_account_clear_all_cb(GtkWidget *widget, gpointer data)
   gnc_option_changed_widget_cb(widget, option);
 }
 
+static void
+gnc_option_account_select_children_cb(GtkWidget *widget, gpointer data)
+{
+  GNCOption *option = data;
+  GncTreeViewAccount *tree_view;
+  Account *account;
+  
+  tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_widget (option));
+  account = gnc_tree_view_account_get_cursor_account(tree_view);
+  if (!account)
+    return;
+  
+  gnc_tree_view_account_select_subaccounts(tree_view, account);
+}
 
 static GtkWidget *
 gnc_option_create_account_widget(GNCOption *option, char *name, GtkTooltips *tooltips)
@@ -914,6 +928,13 @@ gnc_option_create_account_widget(GNCOption *option, char *name, GtkTooltips *too
 
     g_signal_connect(G_OBJECT(button), "clicked",
 		     G_CALLBACK(gnc_option_account_clear_all_cb), option);
+    
+    button = gtk_button_new_with_label(_("Select Children"));
+    gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+    gtk_tooltips_set_tip(tooltips, button, _("Select all descendents of selected account."), NULL);
+    
+    g_signal_connect(G_OBJECT(button), "clicked",
+		     G_CALLBACK(gnc_option_account_select_children_cb), option);
   }
 
   button = gtk_button_new_with_label(_("Select Default"));
@@ -923,9 +944,18 @@ gnc_option_create_account_widget(GNCOption *option, char *name, GtkTooltips *too
   g_signal_connect(G_OBJECT(button), "clicked",
 		   G_CALLBACK(gnc_option_default_cb), option);
 
-  button = gtk_check_button_new_with_label(_("Show Hidden"));
+  if (multiple_selection)
+  {
+    /* Put the "Show hidden" checkbox on a separate line since the 4 buttons make
+       the dialog too wide. */
+    bbox = gtk_hbutton_box_new();
+    gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_CENTER);
+    gtk_box_pack_start(GTK_BOX(vbox), bbox, FALSE, FALSE, 0);
+  }
+    
+  button = gtk_check_button_new_with_label(_("Show Hidden Accounts"));
   gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip(tooltips, button, _("Show hidden accounts."), NULL);
+  gtk_tooltips_set_tip(tooltips, button, _("Show accounts that have been marked hidden."), NULL);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), FALSE);
   g_signal_connect(G_OBJECT(button), "toggled",
 		   G_CALLBACK(gnc_option_show_hidden_toggled_cb), option);
