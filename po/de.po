@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-29 22:06+0100\n"
-"PO-Revision-Date: 2009-12-29 22:17+0100\n"
+"POT-Creation-Date: 2010-01-04 22:12+0100\n"
+"PO-Revision-Date: 2010-01-04 22:21+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -389,7 +389,6 @@ msgstr "Daten laden..."
 #: ../src/business/business-core/gncInvoice.c:665
 #: ../src/business/business-gnome/business-gnome-utils.c:225
 #: ../src/business/business-gnome/dialog-invoice.c:2519
-#: ../src/business/business-gnome/dialog-invoice.c:2601
 #: ../src/business/business-gnome/glade/invoice.glade.h:12
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:317
 #: ../src/register/ledger-core/split-register.c:2251
@@ -1184,17 +1183,18 @@ msgstr "Betrag"
 msgid "Due"
 msgstr "Fällig"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2621
+#. Translators: %d is the number of bills due. This is a
+#. ngettext(3) message.
+#: ../src/business/business-gnome/dialog-invoice.c:2627
+#, c-format
+msgid "The following %d bill is due:"
+msgid_plural "The following %d bills are due:"
+msgstr[0] "Die folgende %d Rechnung ist fällig:"
+msgstr[1] "Die folgenden %d Rechnungen sind fällig:"
+
+#: ../src/business/business-gnome/dialog-invoice.c:2633
 msgid "Due Bills Reminder"
 msgstr "Erinnerung an fällige Rechnungen"
-
-#: ../src/business/business-gnome/dialog-invoice.c:2623
-msgid "The following bills are due"
-msgstr "Die folgenden Rechnungen sind fällig"
-
-#: ../src/business/business-gnome/dialog-invoice.c:2624
-msgid "The following bill is due"
-msgstr "Die folgende Rechnung ist fällig"
 
 #: ../src/business/business-gnome/dialog-job.c:130
 msgid "The Job must be given a name."
@@ -1904,7 +1904,7 @@ msgid "Billing"
 msgstr "Rechnung ausstellen"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:6
-#: ../src/gnome-utils/dialog-transfer.c:1707
+#: ../src/gnome-utils/dialog-transfer.c:1724
 msgid "Credit Account"
 msgstr "Habenkonto"
 
@@ -2832,7 +2832,7 @@ msgid "is not"
 msgstr "ist nicht"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:81
-#: ../src/gnome-utils/dialog-transfer.c:1290
+#: ../src/gnome-utils/dialog-transfer.c:1307
 #: ../src/register/ledger-core/split-register.c:1674
 #, c-format
 msgid "The account %s does not allow transactions."
@@ -3801,7 +3801,7 @@ msgid "You must select a currency."
 msgstr "Sie müssen eine Währung auswählen."
 
 #: ../src/gnome/dialog-price-editor.c:213
-#: ../src/gnome-utils/dialog-transfer.c:1316
+#: ../src/gnome-utils/dialog-transfer.c:1333
 msgid "You must enter a valid amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
@@ -4338,7 +4338,7 @@ msgid "Original data : %s\n"
 msgstr "Originaldaten : %s\n"
 
 #: ../src/gnome/druid-stock-split.c:274
-#: ../src/gnome-utils/dialog-transfer.c:548
+#: ../src/gnome-utils/dialog-transfer.c:565
 msgid "Error"
 msgstr "Fehler"
 
@@ -4795,7 +4795,9 @@ msgstr ""
 msgid ""
 "Use Edit->Income Tax Options to set the tax-related flag and assign a tax "
 "code to this account."
-msgstr "Benutzen Sie den Menüpunkt »Bearbeiten -> Steuerrelevante Informationen«, um diese Häkchen zu setzen und diesem Konto einen Steuer-Code zuzuweisen."
+msgstr ""
+"Benutzen Sie den Menüpunkt »Bearbeiten -> Steuerrelevante Informationen«, um "
+"diese Häkchen zu setzen und diesem Konto einen Steuer-Code zuzuweisen."
 
 #: ../src/gnome/glade/account.glade.h:78
 msgid "_Account code:"
@@ -6616,8 +6618,8 @@ msgid "Scheduled Transaction"
 msgstr "Terminierte Buchung"
 
 #: ../src/gnome/glade/sched-xact.glade.h:158
-#: ../src/gnome-utils/dialog-options.c:904
-#: ../src/gnome-utils/dialog-options.c:1031
+#: ../src/gnome-utils/dialog-options.c:918
+#: ../src/gnome-utils/dialog-options.c:1061
 msgid "Select All"
 msgstr "Alle auswählen"
 
@@ -6991,9 +6993,8 @@ msgid "Click to change Tax Name and/or Tax Type"
 msgstr ""
 
 #: ../src/gnome/glade/tax.glade.h:11
-#, fuzzy
 msgid "Income Tax Information"
-msgstr "Steuerrelevante Information"
+msgstr "Einkommenssteuerinformation"
 
 #: ../src/gnome/glade/tax.glade.h:13
 msgid "Tax _Related"
@@ -9843,70 +9844,78 @@ msgstr "Öffnen..."
 msgid "Save As..."
 msgstr "Speichern unter..."
 
-#: ../src/gnome-utils/dialog-options.c:906
+#: ../src/gnome-utils/dialog-options.c:920
 msgid "Select all accounts."
 msgstr "Alle Konten auswählen."
 
-#: ../src/gnome-utils/dialog-options.c:911
-#: ../src/gnome-utils/dialog-options.c:1038
+#: ../src/gnome-utils/dialog-options.c:925
+#: ../src/gnome-utils/dialog-options.c:1068
 msgid "Clear All"
 msgstr "Keine auswählen"
 
-#: ../src/gnome-utils/dialog-options.c:913
+#: ../src/gnome-utils/dialog-options.c:927
 msgid "Clear the selection and unselect all accounts."
 msgstr "Auswahl löschen und gar keine Konten auswählen."
 
-#: ../src/gnome-utils/dialog-options.c:919
-#: ../src/gnome-utils/dialog-options.c:1045
+#: ../src/gnome-utils/dialog-options.c:932
+msgid "Select Children"
+msgstr "Unterkonten auswählen"
+
+#: ../src/gnome-utils/dialog-options.c:934
+msgid "Select all descendents of selected account."
+msgstr "Alle Unterkonten des gewählten Kontos auswählen."
+
+#: ../src/gnome-utils/dialog-options.c:940
+#: ../src/gnome-utils/dialog-options.c:1075
 msgid "Select Default"
 msgstr "Voreinstellung"
 
-#: ../src/gnome-utils/dialog-options.c:921
+#: ../src/gnome-utils/dialog-options.c:942
 msgid "Select the default account selection."
 msgstr "Die voreingestellte Kontenauswahl auswählen."
 
-#: ../src/gnome-utils/dialog-options.c:926
-msgid "Show Hidden"
-msgstr "Versteckte anzeigen"
+#: ../src/gnome-utils/dialog-options.c:956
+msgid "Show Hidden Accounts"
+msgstr "Versteckte Konten anzeigen"
 
-#: ../src/gnome-utils/dialog-options.c:928
-msgid "Show hidden accounts."
-msgstr "Versteckte Konten anzeigen."
+#: ../src/gnome-utils/dialog-options.c:958
+msgid "Show accounts that have been marked hidden."
+msgstr "Konten anzeigen, die als »Versteckt« markiert sind."
 
-#: ../src/gnome-utils/dialog-options.c:1033
+#: ../src/gnome-utils/dialog-options.c:1063
 msgid "Select all entries."
 msgstr "Alle Einträge auswählen."
 
-#: ../src/gnome-utils/dialog-options.c:1040
+#: ../src/gnome-utils/dialog-options.c:1070
 msgid "Clear the selection and unselect all entries."
 msgstr "Auswahl löschen und gar keine Einträge auswählen."
 
-#: ../src/gnome-utils/dialog-options.c:1047
+#: ../src/gnome-utils/dialog-options.c:1077
 msgid "Select the default selection."
 msgstr "Die voreingestellte Auswahl auswählen."
 
 #. The reset button on each option page
-#: ../src/gnome-utils/dialog-options.c:1200
+#: ../src/gnome-utils/dialog-options.c:1230
 msgid "Defaults"
 msgstr "Voreinstellung"
 
-#: ../src/gnome-utils/dialog-options.c:1202
+#: ../src/gnome-utils/dialog-options.c:1232
 msgid "Reset all values to their defaults."
 msgstr "Alle Werte auf ihre Voreinstellung zurücksetzen."
 
-#: ../src/gnome-utils/dialog-options.c:2066
+#: ../src/gnome-utils/dialog-options.c:2096
 msgid "Clear"
 msgstr "Zurücksetzen"
 
-#: ../src/gnome-utils/dialog-options.c:2067
+#: ../src/gnome-utils/dialog-options.c:2097
 msgid "Clear any selected image file."
 msgstr "Auswahl der Bilddatei wieder löschen."
 
-#: ../src/gnome-utils/dialog-options.c:2069
+#: ../src/gnome-utils/dialog-options.c:2099
 msgid "Select image"
 msgstr "Bild auswählen"
 
-#: ../src/gnome-utils/dialog-options.c:2071
+#: ../src/gnome-utils/dialog-options.c:2101
 msgid "Select an image file."
 msgstr "Bilddatei auswählen."
 
@@ -9921,11 +9930,11 @@ msgstr "Bilddatei auswählen."
 msgid "Income%sSalary%sTaxable"
 msgstr "Erträge%sEinkommen%szu versteuern"
 
-#: ../src/gnome-utils/dialog-transfer.c:461
+#: ../src/gnome-utils/dialog-transfer.c:474
 msgid "Show the income and expense accounts"
 msgstr "Anzeige der Ertrags- und Aufwand-Konten"
 
-#: ../src/gnome-utils/dialog-transfer.c:1269
+#: ../src/gnome-utils/dialog-transfer.c:1286
 msgid ""
 "You must specify an account to transfer from, or to, or both, for this "
 "transaction. Otherwise, it will not be recorded."
@@ -9933,11 +9942,11 @@ msgstr ""
 "Sie müssen ein Konto angeben, zu dem oder von dem umgebucht werden soll. "
 "Andernfalls wird kein Buchungssatz gespeichert."
 
-#: ../src/gnome-utils/dialog-transfer.c:1279
+#: ../src/gnome-utils/dialog-transfer.c:1296
 msgid "You can't transfer from and to the same account!"
 msgstr "Herkunfts- und Zielkonto können nicht identisch sein."
 
-#: ../src/gnome-utils/dialog-transfer.c:1305
+#: ../src/gnome-utils/dialog-transfer.c:1322
 msgid ""
 "You can't transfer from a non-currency account.  Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
@@ -9946,35 +9955,35 @@ msgstr ""
 "normaler Währung. Sie sollten Sie die Von/Nach-Konten vertauschen und den "
 "Betrag negativ eingeben."
 
-#: ../src/gnome-utils/dialog-transfer.c:1330
+#: ../src/gnome-utils/dialog-transfer.c:1347
 msgid "You must enter an amount to transfer."
 msgstr "Sie müssen einen Betrag angeben."
 
-#: ../src/gnome-utils/dialog-transfer.c:1345
+#: ../src/gnome-utils/dialog-transfer.c:1362
 msgid "You must enter a valid price."
 msgstr "Sie müssen einen gültigen Preis angeben."
 
-#: ../src/gnome-utils/dialog-transfer.c:1357
+#: ../src/gnome-utils/dialog-transfer.c:1374
 msgid "You must enter a valid `to' amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
-#: ../src/gnome-utils/dialog-transfer.c:1711
+#: ../src/gnome-utils/dialog-transfer.c:1728
 msgid "Debit Account"
 msgstr "Sollkonto"
 
-#: ../src/gnome-utils/dialog-transfer.c:1728
+#: ../src/gnome-utils/dialog-transfer.c:1745
 msgid "Transfer From"
 msgstr "Herkunftskonto"
 
-#: ../src/gnome-utils/dialog-transfer.c:1732
+#: ../src/gnome-utils/dialog-transfer.c:1749
 msgid "Transfer To"
 msgstr "Buchen nach"
 
-#: ../src/gnome-utils/dialog-transfer.c:1792
+#: ../src/gnome-utils/dialog-transfer.c:1809
 msgid "Debit Amount:"
 msgstr "Soll Betrag:"
 
-#: ../src/gnome-utils/dialog-transfer.c:1796
+#: ../src/gnome-utils/dialog-transfer.c:1813
 #: ../src/gnome-utils/glade/transfer.glade.h:13
 msgid "To Amount:"
 msgstr "zum Betrag:"
@@ -22727,9 +22736,8 @@ msgstr ""
 
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4834
-#, fuzzy
 msgid "Range start"
-msgstr "Bereich: "
+msgstr "Bereichsanfang"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4836
@@ -22738,9 +22746,8 @@ msgstr ""
 
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4838
-#, fuzzy
 msgid "Range end"
-msgstr "Bereich: "
+msgstr "Bereichsende"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4840
@@ -25027,7 +25034,11 @@ msgid ""
 "first letter(s) of a common transaction description, then press the Tab key, "
 "GnuCash will automatically complete the remainder of the transaction as it "
 "was last entered."
-msgstr "GnuCash spart Ihnen Tipparbeit durch die Quick-Fill Funktion. Wenn Sie die ersten Buchstaben der Beschreibung einer früheren Buchung eingeben und die Tabulator-Taste drücken, kann GnuCash den Rest mit dem bekannten Text vervollständigen."
+msgstr ""
+"GnuCash spart Ihnen Tipparbeit durch die Quick-Fill Funktion. Wenn Sie die "
+"ersten Buchstaben der Beschreibung einer früheren Buchung eingeben und die "
+"Tabulator-Taste drücken, kann GnuCash den Rest mit dem bekannten Text "
+"vervollständigen."
 
 #: ../doc/tip_of_the_day.list.in:46
 msgid ""
