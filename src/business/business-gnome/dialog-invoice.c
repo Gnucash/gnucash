@@ -2620,13 +2620,23 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
   if (!res || len <= 0)
     return NULL;
 
-  return gnc_dialog_query_list_create(param_list, q,
-				      _("Due Bills Reminder"),
-				      (len > 1) ?
-				      _("The following bills are due") :
-				      _("The following bill is due"),
-				      TRUE, FALSE,
-				      buttons, NULL);
+  {
+    gchar *message = g_strdup_printf
+      (/* Translators: %d is the number of bills due. This is a
+	  ngettext(3) message. */
+       ngettext("The following %d bill is due:",
+		"The following %d bills are due:",
+		len),
+       len);
+    DialogQueryList *dialog =
+      gnc_dialog_query_list_create(param_list, q,
+				   _("Due Bills Reminder"),
+				   message,
+				   TRUE, FALSE,
+				   buttons, NULL);
+    g_free(message);
+    return dialog;
+  }
 }
 
 void
