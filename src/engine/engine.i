@@ -5,6 +5,7 @@
 #include <glib.h>
 #include <qof.h>
 #include <Query.h>
+#include <guile-mappings.h>
 #include <gnc-budget.h>
 #include <gnc-commodity.h>
 #include <gnc-engine.h>

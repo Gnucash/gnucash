@@ -3,6 +3,7 @@
 /* Includes the header in the wrapper code */
 #include <config.h>
 #include <option-util.h>
+#include <guile-mappings.h>
 #include <gnc-euro.h>
 #include <gnc-exp-parser.h>
 #include <gnc-ui-util.h>

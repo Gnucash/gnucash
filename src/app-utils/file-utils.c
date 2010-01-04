@@ -34,6 +34,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "guile-mappings.h"
 #include "file-utils.h"
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"

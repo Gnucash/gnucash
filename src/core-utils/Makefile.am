@@ -35,7 +35,9 @@ AM_CPPFLAGS = \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \
-  ${GTK_CFLAGS}
+  ${GTK_CFLAGS} \
+  -I${top_srcdir}/src
+
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = core-utils.scm

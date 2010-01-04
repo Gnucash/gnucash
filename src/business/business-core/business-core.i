@@ -2,6 +2,7 @@
 %{
 /* Includes the header in the wrapper code */
 #include <config.h>
+#include <guile-mappings.h>
 #include <gncAddress.h>
 #include <gncBillTerm.h>
 #include <gncCustomer.h>

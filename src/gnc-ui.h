@@ -36,6 +36,7 @@
 #include "gnc-ui-common.h"
 #include "Account.h"
 #include "gnc-pricedb.h"
+#include "guile-mappings.h"
 
 
 /** Help Files ******************************************************/

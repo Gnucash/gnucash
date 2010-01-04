@@ -1,5 +1,6 @@
 %module sw_core_utils
 %{
+#include <guile-mappings.h>
 #include <gnc-glib-utils.h>
 #include <gnc-main.h>
 #include <glib.h>

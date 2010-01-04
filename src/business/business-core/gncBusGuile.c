@@ -26,6 +26,7 @@
 #include "gncBusGuile.h"
 #include "engine-helpers.h"
 #include "swig-runtime.h"
+#include "guile-mappings.h"
 #define FUNC_NAME G_STRFUNC
 
 static swig_type_info *
