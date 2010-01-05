@@ -837,11 +837,11 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
 
     /* Inform the user. */
     gnc_progress_dialog_append_log(wind->load_progress,
-                     _( "A bug was detected while reading the QIF file."));
+                     _( "An error occurred while loading the QIF file."));
     gnc_progress_dialog_set_sub(wind->load_progress, _("Failed"));
     gnc_progress_dialog_reset_value(wind->load_progress);
     gnc_error_dialog(wind->window, "%s",
-                     _( "A bug was detected while reading the QIF file."));
+                     _( "An error occurred while loading the QIF file."));
     /* FIXME: How should we request that the user report this problem? */
 
     wind->busy = FALSE;

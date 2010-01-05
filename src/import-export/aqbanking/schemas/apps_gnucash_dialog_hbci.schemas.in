@@ -11,7 +11,7 @@
       <locale name="C">
         <short>Window position</short>
         <long>
-	  The X,Y coordinates of the top left corner of the dialog
+	  The X,Y coordinates of the top left corner of the window
 	  when it was last closed.
 	</long>
       </locale>
@@ -26,7 +26,7 @@
       <locale name="C">
         <short>Window geometry</short>
         <long>
-	  The width and size of the dialog when it was last closed.
+	  The width and size of the window when it was last closed.
 	</long>
       </locale>
     </schema>
@@ -38,7 +38,7 @@
       <type>bool</type>
       <default>True</default>
       <locale name="C">
-        <short>Close dialog when finished</short>
+        <short>Close window when finished</short>
         <long>
 	  If active, the window will be closed automatically when you
 	  finish the HBCI/AqBanking import process. Otherwise it will

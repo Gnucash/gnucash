@@ -183,7 +183,7 @@ gncs_validate (GNCSearchCoreType *fe)
 				     GTK_MESSAGE_ERROR,
 				     GTK_BUTTONS_OK,
 				     "%s",
-				     _("You need to enter a string value"));
+				     _("You need to enter some search text."));
     gtk_dialog_run (GTK_DIALOG (dialog));
     gtk_widget_destroy(dialog);
     return FALSE;
