@@ -4,19 +4,20 @@
 #
 # Nigel Titley <nigel@titley.com>, 2002, 2003, 2004, 2006, 2007.
 # Neil Williams <linux@codehelp.co.uk>, 2006.
+# Mike Evans <mikee@saxicola.idps.co.uk>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: en_GB\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-20 22:18+0200\n"
-"PO-Revision-Date: 2007-07-22 18:25+0100\n"
-"Last-Translator: Nigel Titley <nigel@titley.com>\n"
-"Language-Team: English (British) <en_gb@li.org>\n"
+"PO-Revision-Date: 2010-01-05 12:39+0000\n"
+"Last-Translator: Mike Evans <mikee@saxicola.idps.co.uk>\n"
+"Language-Team: American English <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 1.0\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:633
 msgid "Illegal variable in expression."
@@ -2364,7 +2365,7 @@ msgstr "Reload receivable report scheme file"
 #: ../src/business/business-gnome/gnc-plugin-business.c:254
 #: ../src/business/business-gnome/gnc-plugin-business.c:255
 msgid "Initialize Test Data"
-msgstr "Initialize Test Data"
+msgstr "Initialise Test Data"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:724
 msgid "Export Invoices to XML"
@@ -3285,7 +3286,7 @@ msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
 msgstr ""
-"Realized Gains or Losses from Commodity or Trading Accounts that haven't "
+"Realised Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
 
 #: ../src/engine/gnc-budget.c:91 ../src/gnome/gnc-plugin-page-budget.c:844
@@ -5937,7 +5938,7 @@ msgstr " days"
 
 #: ../src/gnome/glade/sched-xact.glade.h:4
 msgid "... utilize an escrow account for payments?"
-msgstr "... utilize an trust account for payments?"
+msgstr "... utilise an trust account for payments?"
 
 #: ../src/gnome/glade/sched-xact.glade.h:5
 msgid ""
@@ -7894,7 +7895,7 @@ msgstr ""
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:11
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:11
 msgid "The width and size of the dialog when it was last closed."
-msgstr "The width and size of the dialogue when it was last closed."
+msgstr "The width and size of the window when it was last closed."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:12
 msgid ""
@@ -8044,7 +8045,7 @@ msgstr "Position of cheque amount in words"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:9
 msgid "Position of check on page"
-msgstr "Position of check on page"
+msgstr "Position of cheque on page"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:10
 msgid "Position of date line"
@@ -8059,6 +8060,7 @@ msgid "Position of payee name"
 msgstr "Position of payee name"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:13
+#, fuzzy
 msgid "Print '***' before and after strings."
 msgstr "Print '***' before and after strings."
 
@@ -9100,11 +9102,11 @@ msgstr "Select"
 
 #: ../src/gnome-search/dialog-search.c:832
 msgid "all criteria are met"
-msgstr "all criteria are met"
+msgstr "match all"
 
 #: ../src/gnome-search/dialog-search.c:833
 msgid "any criteria are met"
-msgstr "any criteria are met"
+msgstr "match any"
 
 #. Translators: %s is either "item" or the name of some other
 #. * item, e.g. "Customer" or "Invoice".
@@ -9334,7 +9336,7 @@ msgstr "Voided"
 
 #: ../src/gnome-search/search-string.c:186
 msgid "You need to enter a string value"
-msgstr "You need to enter a string value"
+msgstr "You need to enter some search text."
 
 #: ../src/gnome-search/search-string.c:213
 #, c-format
@@ -9471,7 +9473,7 @@ msgid ""
 "code field of each child account with a newly generated code."
 msgstr ""
 "Renumber the immediate sub-accounts of %s?  This will replace the account "
-"code field of each child account with a newly generated code."
+"code field of each sub-account with a newly generated code."
 
 #: ../src/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
@@ -10250,6 +10252,7 @@ msgstr ""
 "be found in the default system locations.  Without this data GnuCash will "
 "still operate properly, but it may require some extra time to set up."
 
+# Strictly speaking data are plural so "data have" already is correct.
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:14
 msgid "The data has _already been installed in another window"
 msgstr "The data has _already been installed in another window"
@@ -12255,11 +12258,11 @@ msgstr "Start of previous year"
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:75
 msgid "Start of this fiscal year"
-msgstr "Start of this fiscal year"
+msgstr "Start of this financial year"
 
 #: ../src/gnome-utils/gnc-period-select.c:76
 msgid "Start of previous fiscal year"
-msgstr "Start of previous fiscal year"
+msgstr "Start of previous financial year"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:82 ../intl-scm/guile-strings.c:192
@@ -12291,11 +12294,11 @@ msgstr "End of previous year"
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:90
 msgid "End of this fiscal year"
-msgstr "End of this fiscal year"
+msgstr "End of this financial year"
 
 #: ../src/gnome-utils/gnc-period-select.c:91
 msgid "End of previous fiscal year"
-msgstr "End of previous fiscal year"
+msgstr "End of previous financial year"
 
 #. Development version
 #: ../src/gnome-utils/gnc-splash.c:98
@@ -12576,7 +12579,7 @@ msgstr "Most recently opened file"
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:2
 msgid "Next most recently opened file"
-msgstr "Next most recently openeed file"
+msgstr "Next most recently opened file"
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:3
 msgid "Number of files in history"
@@ -13888,9 +13891,8 @@ msgid "Withdrawal"
 msgstr "Withdrawal"
 
 #: ../src/import-export/csv/gnc-csv-model.c:434
-#, fuzzy
 msgid "File opening failed."
-msgstr "QIF file parse failed: %s"
+msgstr "Failed to read QIF file: %s"
 
 #: ../src/import-export/csv/gnc-csv-model.c:448
 #: ../src/import-export/csv/gnc-csv-model.c:457
@@ -14632,7 +14634,7 @@ msgid ""
 "recognized."
 msgstr ""
 "The log file you selected cannot be read.  The file header was not "
-"recognized."
+"recognised."
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:45
 msgid "_Replay GnuCash .log file..."
@@ -14774,9 +14776,8 @@ msgstr "remaining"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:917
 #: ../src/import-export/qif-import/druid-qif-import.c:921
-#, fuzzy
 msgid "A bug was detected while parsing the QIF file."
-msgstr "An error occurred while parsing the QIF file."
+msgstr "An error occurred while reading the QIF file."
 
 #. The file was loaded successfully.
 #: ../src/import-export/qif-import/druid-qif-import.c:977
@@ -15013,7 +15014,7 @@ msgstr ""
 "that you do not like by double-clicking on the line containing the category "
 "name.\n"
 "\n"
-"If you change your mind later, you can reorganize the account structure "
+"If you change your mind later, you can reorganise the account structure "
 "safely within GnuCash."
 
 #: ../src/import-export/qif-import/qif.glade.h:25
@@ -19710,7 +19711,7 @@ msgstr "Retained Losses"
 #: ../intl-scm/guile-strings.c:3702 ../intl-scm/guile-strings.c:4096
 #: ../intl-scm/guile-strings.c:5044 ../intl-scm/guile-strings.c:5438
 msgid "Unrealized Gains"
-msgstr "Unrealized Gains"
+msgstr "Unrealised Gains"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -21011,7 +21012,7 @@ msgstr "Balance Sheet Date"
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3684 ../intl-scm/guile-strings.c:5026
 msgid "Compute unrealized gains and losses"
-msgstr "Compute unrealized gains and losses"
+msgstr "Compute unrealised gains and losses"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -21020,7 +21021,7 @@ msgid ""
 "Include unrealized gains and losses in the computation.  Will produce "
 "incorrect results if the current file uses commodity trading accounts"
 msgstr ""
-"Include unrealized gains and losses in the computation.  Will produce "
+"Include unrealised gains and losses in the computation.  Will produce "
 "incorrect results if the current file uses commodity trading accounts"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
@@ -21305,13 +21306,13 @@ msgstr "Basis"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:4010 ../intl-scm/guile-strings.c:5352
 msgid "Realized Gain"
-msgstr "Realized Gain"
+msgstr "Realised Gain"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:4012 ../intl-scm/guile-strings.c:5354
 msgid "Unrealized Gain"
-msgstr "Unrealized Gain"
+msgstr "Unrealised Gain"
 
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -23574,9 +23575,9 @@ msgstr ""
 #. src/import-export/qif-import/qif-import/qif-parse.scm
 #. src/import-export/qif-import/qif-parse.scm
 #: ../intl-scm/guile-strings.c:7104 ../intl-scm/guile-strings.c:7194
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized action '%s'."
-msgstr "Unrealized Gains"
+msgstr "Unrecognised action '%s'."
 
 #. src/import-export/qif-import/qif-import/qif-parse.scm
 #. src/import-export/qif-import/qif-parse.scm
