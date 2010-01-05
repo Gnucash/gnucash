@@ -253,7 +253,7 @@ static void ok_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
   for(i = 0; i < ncols; i++)
   {
     int type; /* The column type contained in this column. */
-    gchar* contents; /* The column type string in this column. */
+    gchar* contents = NULL; /* The column type string in this column. */
     /* Get the type string first. (store is arranged so that every two
      * columns is a pair of the model used for the combobox and the
      * string that appears, so that store looks like:
@@ -264,7 +264,7 @@ static void ok_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
     for(type = 0; type < GNC_CSV_NUM_COL_TYPES; type++)
     {
       /* ... we find one that matches with what's in the column. */
-      if(!strcmp(contents, _(gnc_csv_column_type_strs[type])))
+      if(!safe_strcmp(contents, _(gnc_csv_column_type_strs[type])))
       {
         /* Set the column_types array appropriately and quit. */
         column_types->data[i] = type;
@@ -358,14 +358,14 @@ static void column_type_edited(GtkCellRenderer* renderer, gchar* path,
     if(col_renderer != renderer)
     {
       /* The string that appears in the column */
-      gchar* contents;
+      gchar* contents = NULL;
       /* Get the type string. (store is arranged so that every two
        * columns is a pair of the model used for the combobox and the
        * string that appears, so that store looks like:
        * model 0, string 0, model 1, string 1, ..., model ncols, string ncols. */
       gtk_tree_model_get(store, &iter, 2*i+1, &contents, -1);
       /* If this column has the same string that the user selected ... */
-      if(!strcmp(contents, new_text))
+      if(!safe_strcmp(contents, new_text))
       {
         /* ... set this column to the "None" type. (We can't allow duplicate types.) */
         gtk_list_store_set(GTK_LIST_STORE(store), &iter, 2*i+1,
