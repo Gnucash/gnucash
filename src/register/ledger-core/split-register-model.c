@@ -65,7 +65,7 @@ gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data, gboo
   SplitRegister *reg = user_data;
   Split *split;
   SRInfo *info = gnc_split_register_get_info (reg);
-  gnc_numeric value = gnc_numeric_zero(), balance = gnc_numeric_zero();
+  gnc_numeric balance = gnc_numeric_zero();
   Account *account = NULL;
   Transaction *trans;
   GList *node, *child;
@@ -85,12 +85,16 @@ gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data, gboo
       return gnc_numeric_zero();
 
     /* Get a list of accounts for matching */
+    account = gnc_split_register_get_default_account(reg);
+    if (!account)
+      /* Register has no account (perhaps general ledger) so it has no 
+         well defined balance, return zero. */
+      return balance;
+  
     if (subaccounts) {
-      children = gnc_account_get_descendants(gnc_split_register_get_default_account(reg));
-      children = g_list_append(children, gnc_split_register_get_default_account(reg));
-    } else
-      account = gnc_split_register_get_default_account(reg);
-      
+      children = gnc_account_get_descendants(account);
+      children = g_list_append(children, account);
+    }      
 
     /* Get the row number we're on, then start with the first row. */
     row = virt_loc.vcell_loc.virt_row;
@@ -125,6 +129,9 @@ gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data, gboo
       virt_loc.vcell_loc.virt_row+=i;
     }
 
+  if (subaccounts)
+    g_list_free(children);
+  
   return balance;
 }
 
@@ -1437,16 +1444,25 @@ static gnc_numeric
 get_trans_total_amount_subaccounts (SplitRegister *reg, Transaction *trans)
 {
   GList *children, *child;
+  Account *parent;
   gnc_numeric total = gnc_numeric_zero();
 
   /* Get a list of all subaccounts for matching */
-  children = gnc_account_get_descendants(gnc_split_register_get_default_account(reg));
-  children = g_list_append(children, gnc_split_register_get_default_account(reg));
+  parent = gnc_split_register_get_default_account(reg);
+  if (!parent)
+    /* Register has no account, perhaps it's the general ledger.  If it
+       has no account then we have no way of picking out the desired splits,
+       return zero. */
+    return total;
+  children = gnc_account_get_descendants(parent);
+  children = g_list_append(children, parent);
 
   for (child = children; child; child = child->next) {
     total = gnc_numeric_add_fixed(total, xaccTransGetAccountAmount(trans, child->data));
   }
 
+  g_list_free(children);
+  
   return total;
 }
 
