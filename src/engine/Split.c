@@ -1686,8 +1686,6 @@ xaccSplitGetOtherSplit (const Split *split)
   int count, num_splits;
   Split *other = NULL;
   KvpValue *sva;
-  Account *trading_account = NULL;
-  Account *root_account = NULL;
   gboolean trading_accts;
 
   if (!split) return NULL;
