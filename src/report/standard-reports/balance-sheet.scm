@@ -292,6 +292,7 @@
                       (gnc:date-option-absolute-time
                        (get-option gnc:pagename-general
                                    optname-date))))
+         (date-secs (gnc:timepair->secs date-tp))
          (report-form? (get-option gnc:pagename-general
                                optname-report-form))
          (compute-unrealized-gains? (not (qof-book-use-trading-accounts 
@@ -410,6 +411,17 @@
        table
        (+ (* 2 tree-depth)
 	  (if (equal? tabbing 'canonically-tabbed) 1 0))))
+    
+    ;; Return a commodity collector containing the sum of the balance of all of 
+    ;; the accounts on acct-list as of the time given in date-secs 
+    (define (account-list-balance acct-list date-secs)
+      (let ((balance-collector (gnc:make-commodity-collector)))
+        (for-each
+          (lambda (x)
+            (balance-collector 'add (xaccAccountGetCommodity x)
+                                    (xaccAccountGetBalanceAsOfDate x date-secs)))
+          acct-list)
+      balance-collector))
 
     ;;(gnc:warn "account names" liability-account-names)
     (gnc:html-document-set-title! 
@@ -467,14 +479,10 @@
 	  ;; to report earnings....  See discussion on bugzilla.
 	  (gnc:report-percent-done 4)
 	  ;; sum assets
-	  (set! asset-balance 
-                (gnc:accounts-get-comm-total-assets 
-                 asset-accounts get-total-balance-fn))
+	  (set! asset-balance (account-list-balance asset-accounts date-secs))
 	  (gnc:report-percent-done 6)
 	  ;; sum liabilities
-	  (set! neg-liability-balance
-                (gnc:accounts-get-comm-total-assets 
-                 liability-accounts get-total-balance-fn))
+	  (set! neg-liability-balance (account-list-balance liability-accounts date-secs))
 	  (set! liability-balance
                 (gnc:make-commodity-collector))
           (liability-balance 'minusmerge
@@ -482,30 +490,19 @@
 			     #f)
 	  (gnc:report-percent-done 8)
 	  ;; sum equities
-	  (set! neg-equity-balance
-                (gnc:accounts-get-comm-total-assets 
-                 equity-accounts get-total-balance-fn))
+	  (set! neg-equity-balance (account-list-balance equity-accounts date-secs))
 	  (set! equity-balance (gnc:make-commodity-collector))
 	  (equity-balance 'minusmerge
 			  neg-equity-balance
 			  #f)
 	  (gnc:report-percent-done 12)
 	  ;; sum any retained earnings
-	  (set! neg-retained-earnings
-		(gnc:accountlist-get-comm-balance-at-date
-		 income-expense-accounts date-tp))
+	  (set! neg-retained-earnings (account-list-balance income-expense-accounts date-secs))
 	  (set! retained-earnings (gnc:make-commodity-collector))
 	  (retained-earnings 'minusmerge
 			  neg-retained-earnings
 			  #f)
-	  (set! neg-trading-balance
-	        ;; If you pass a null account list to gnc:accountlist-get-comm-balance-at-date
-	        ;; it calculates a balance for all accounts, instead of no accounts.  This is 
-	        ;; probably a bug, but for now we'll work around it.
-	        (if (null? trading-accounts)
-	            (gnc:make-commodity-collector)
-	            (gnc:accountlist-get-comm-balance-at-date
-	             trading-accounts date-tp)))
+	  (set! neg-trading-balance (account-list-balance trading-accounts date-secs))
 	  (set! trading-balance (gnc:make-commodity-collector))
 	  (trading-balance 'minusmerge
 	                   neg-trading-balance
