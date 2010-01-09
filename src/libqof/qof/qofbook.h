@@ -40,6 +40,9 @@
 #ifndef QOF_BOOK_H
 #define QOF_BOOK_H
 
+/* We only want a few things exported to Guile */
+#ifndef SWIG
+
 typedef struct _QofBookClass  QofBookClass;
 
 #include "qofid.h"
@@ -213,6 +216,8 @@ void qof_book_set_data_fin (QofBook *book, const gchar *key, gpointer data,
 /** Retrieves arbitrary pointers to structs stored by qof_book_set_data. */
 gpointer qof_book_get_data (const QofBook *book, const gchar *key);
 
+#endif /* SWIG */
+
 /** Returns flag indicating whether this book uses trading accounts */
 gboolean qof_book_use_trading_accounts (const QofBook *book);
 
@@ -228,6 +233,9 @@ gboolean qof_book_shutting_down (const QofBook *book);
  *    flag, when it actually does save the data.)
  */
 gboolean qof_book_not_saved (const QofBook *book);
+
+/* The following functions are not useful in scripting languages */
+#ifndef SWIG
 
 /** The qof_book_mark_saved() routine marks the book as having been
  *    saved (to a file, to a database). Used by backends to mark the
@@ -272,6 +280,8 @@ gint64 qof_book_get_counter (const QofBook *book, const char *counter_name);
 
 /** deprecated */
 #define qof_book_get_guid(X) qof_entity_get_guid (QOF_INSTANCE(X))
+
+#endif /* SWIG */
 
 #endif /* QOF_BOOK_H */
 /** @} */

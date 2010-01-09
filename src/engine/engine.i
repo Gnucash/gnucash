@@ -116,6 +116,7 @@ SplitList * qof_query_run (QofQuery *q);
 %include <qofquery.h>
 %include <qofquerycore.h>
 %include <qofbookslots.h>
+%include <qofbook.h>
 
 gnc_numeric gnc_numeric_create(gint64 num, gint64 denom);
 gnc_numeric gnc_numeric_zero(void);

@@ -139,9 +139,6 @@
   (N_ "Display any foreign currency amount in an account"))
 (define optname-show-rates (N_ "Show Exchange Rates"))
 (define opthelp-show-rates (N_ "Show the exchange rates used"))
-(define optname-unrealized-gains (N_ "Compute unrealized gains and losses"))
-(define opthelp-unrealized-gains
-  (N_ "Include unrealized gains and losses in the computation.  Will produce incorrect results if the current file uses commodity trading accounts"))
 
 
 ;; options generator
@@ -172,11 +169,6 @@
       gnc:pagename-general optname-report-form
       "d" opthelp-report-form #t))
 
-    (add-option
-     (gnc:make-simple-boolean-option
-      gnc:pagename-general optname-unrealized-gains
-      "e" opthelp-unrealized-gains #t))
-    
     ;; accounts to work on
     (add-option
      (gnc:make-account-list-option
@@ -302,8 +294,8 @@
                                    optname-date))))
          (report-form? (get-option gnc:pagename-general
                                optname-report-form))
-         (compute-unrealized-gains? (get-option gnc:pagename-general
-                                                optname-unrealized-gains))
+         (compute-unrealized-gains? (not (qof-book-use-trading-accounts 
+                                           (gnc-get-current-book))))
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))	 
 	 (depth-limit (get-option gnc:pagename-accounts 
