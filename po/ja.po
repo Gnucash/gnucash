@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.3.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-08 16:51-0500\n"
-"PO-Revision-Date: 2009-12-27 22:42+0900\n"
+"PO-Revision-Date: 2010-01-09 23:14+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -63,12 +63,12 @@ msgstr "税金関連となっていますが税金コードがありません"
 
 #: ../src/app-utils/gnc-ui-util.c:491
 msgid "Tax entity type not specified"
-msgstr ""
+msgstr "税金の種類が指定されていません"
 
 #: ../src/app-utils/gnc-ui-util.c:553
 #, c-format
 msgid "Tax type %s: invalid code %s for account type"
-msgstr ""
+msgstr "税金の種類 %s: この勘定科目タイプには無効なコード %s"
 
 #: ../src/app-utils/gnc-ui-util.c:556
 #, c-format
@@ -461,7 +461,7 @@ msgstr "繰上げ返済"
 
 #: ../src/business/business-core/gncInvoice.c:1676
 msgid " (posted)"
-msgstr ""
+msgstr " (記帳済) "
 
 #: ../src/business/business-core/gncOrder.c:417
 msgid " (closed)"
@@ -545,7 +545,7 @@ msgstr "所有者の実体がありません: %s"
 #: ../src/business/business-gnome/business-urls.c:274
 #, c-format
 msgid "Entity type does not match %s: %s"
-msgstr "実体のタイプが %s にマッチしません: %s"
+msgstr "実体のタイプが %s に一致しません: %s"
 
 #: ../src/business/business-gnome/business-urls.c:284
 #, c-format
@@ -565,18 +565,18 @@ msgstr "マイナスの金額は許されません。"
 #: ../src/business/business-gnome/dialog-billterms.c:267
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:136
 msgid "Percentage amount must be between 0 and 100."
-msgstr "パーセントの値は0から100まででなければなりません。"
+msgstr "パーセントの値は0から100までで入力してください。"
 
 #: ../src/business/business-gnome/dialog-billterms.c:290
 msgid "You must provide a name for this Billing Term."
-msgstr "この支払条件の名前を入力しなければなりません。"
+msgstr "この支払条件の名前を入力してください。"
 
 #: ../src/business/business-gnome/dialog-billterms.c:296
 #, c-format
 msgid "You must provide a unique name for this Billing Term. Your choice \"%s\" is already in use."
 msgstr "この支払条件の名前は他と重複してはいけません。選択した \"%s\" は既に使われています。"
 
-# Assigned to : Yasuaki Taniguchi
+# FIXME:
 # ここは、予定取引では曜日とするべきだが、ほかの部分では違うかもしれない。再確認が必要
 #. src/report/standard-reports/price-scatter.scm
 #: ../src/business/business-gnome/dialog-billterms.c:465
@@ -610,7 +610,7 @@ msgstr "支払条件 \"%s\" は使われています。削除できません。"
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:542
 #, c-format
 msgid "Are you sure you want to delete \"%s\"?"
-msgstr "\"%s\" を本当に削除してもよろしいですか？"
+msgstr "\"%s\" を本当に削除してもよろしいですか?"
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:72
 msgid "This transaction needs to be assigned to a Customer.  Please choose the Customer below."
@@ -622,7 +622,7 @@ msgstr "この取引は仕入先に割り当てる必要があります。以下
 
 #: ../src/business/business-gnome/dialog-customer.c:268
 msgid "You must enter a company name. If this customer is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
-msgstr "会社名を入力しなければなりません。この得意先が（会社ではなく）個人の場合は、\"会社名\"と\"連絡先\"を同じにするべきです。"
+msgstr "会社名を入力してください。この得意先が（会社ではなく）個人の場合は、\"会社名\"と\"連絡先\"を同じにするべきです。"
 
 #: ../src/business/business-gnome/dialog-customer.c:279
 msgid "You must enter a billing address."
@@ -738,15 +738,15 @@ msgstr "プレースホルダ勘定科目が選択されています。もう一
 
 #: ../src/business/business-gnome/dialog-employee.c:216
 msgid "You must enter a username."
-msgstr "ユーザ名を入力しなければなりません。"
+msgstr "ユーザ名を入力してください。"
 
 #: ../src/business/business-gnome/dialog-employee.c:221
 msgid "You must enter the employee's name."
-msgstr "従業員名を入力しなければなりません。"
+msgstr "従業員名を入力してください。"
 
 #: ../src/business/business-gnome/dialog-employee.c:229
 msgid "You must enter an address."
-msgstr "住所を入力しなければなりません。"
+msgstr "住所を入力してください。"
 
 #: ../src/business/business-gnome/dialog-employee.c:308
 msgid "Edit Employee"
@@ -813,7 +813,7 @@ msgstr "請求情報を入力する必要があります。"
 
 #: ../src/business/business-gnome/dialog-invoice.c:512
 msgid "Are you sure you want to delete the selected entry?"
-msgstr "選択された項目を本当に削除してもよろしいですか？"
+msgstr "選択された項目を本当に削除してもよろしいですか?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:514
 msgid "This entry is attached to an order and will be deleted from that as well!"
@@ -864,7 +864,7 @@ msgstr "発送日"
 
 #: ../src/business/business-gnome/dialog-invoice.c:657
 msgid "Post to Account"
-msgstr "勘定科目に記帳"
+msgstr "記帳先勘定科目"
 
 #: ../src/business/business-gnome/dialog-invoice.c:658
 msgid "Accumulate Splits?"
@@ -1161,19 +1161,19 @@ msgstr "金額"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2579
 msgid "Due"
-msgstr ""
+msgstr "期限"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2621
 msgid "Due Bills Reminder"
-msgstr ""
+msgstr "請求期限の通知"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2623
 msgid "The following bills are due"
-msgstr ""
+msgstr "以下の請求は期限が来ています"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2624
 msgid "The following bill is due"
-msgstr ""
+msgstr "以下の請求は期限が来ています"
 
 #: ../src/business/business-gnome/dialog-job.c:130
 msgid "The Job must be given a name."
@@ -1181,7 +1181,7 @@ msgstr "請求のまとめには名前が必要です。"
 
 #: ../src/business/business-gnome/dialog-job.c:139
 msgid "You must choose an owner for this job."
-msgstr "この請求のまとめの所有者を選択しなければなりません。"
+msgstr "この請求のまとめの所有者を選択してください。"
 
 #: ../src/business/business-gnome/dialog-job.c:237
 msgid "Edit Job"
@@ -1251,9 +1251,8 @@ msgid "View/Edit Order"
 msgstr "注文を表示/編集"
 
 #: ../src/business/business-gnome/dialog-order.c:808
-#, fuzzy
 msgid "Order Notes"
-msgstr "Order備考"
+msgstr "注文の備考"
 
 #: ../src/business/business-gnome/dialog-order.c:810
 #: ../src/business/business-gnome/glade/order.glade.h:5
@@ -1294,11 +1293,11 @@ msgstr "支払処理する会社を選択してください。"
 
 #: ../src/business/business-gnome/dialog-payment.c:271
 msgid "You must select a transfer account from the account tree."
-msgstr "資金移動を行う勘定科目を選択しなければなりません。"
+msgstr "資金移動を行う勘定科目を選択してください。"
 
 #: ../src/business/business-gnome/dialog-payment.c:279
 msgid "You must enter an account name for posting."
-msgstr "記帳勘定科目名を入力しなければなりません。"
+msgstr "記帳する勘定科目名を入力してください。"
 
 #: ../src/business/business-gnome/dialog-payment.c:288
 #, c-format
@@ -1318,12 +1317,11 @@ msgstr "有効な「記帳先」勘定科目がありません。この支払を
 
 #: ../src/business/business-gnome/dialog-vendor.c:205
 msgid "You must enter a company name. If this vendor is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
-msgstr "会社名を入力しなければなりません。この仕入先が（会社ではなく）個人の場合は、\"会社名\"と\"連絡先\"を同じにするべきです。"
+msgstr "会社名を入力してください。この仕入先が（会社ではなく）個人の場合は、\"会社名\"と\"連絡先\"を同じにするべきです。"
 
 #: ../src/business/business-gnome/dialog-vendor.c:216
-#, fuzzy
 msgid "You must enter a payment address."
-msgstr "勘定科目名を入力しなければなりません。"
+msgstr "支払の住所を入力してください。"
 
 #: ../src/business/business-gnome/dialog-vendor.c:294
 msgid "Edit Vendor"
@@ -1348,9 +1346,8 @@ msgid "Vendor's Bills"
 msgstr "仕入先の請求書"
 
 #: ../src/business/business-gnome/dialog-vendor.c:650
-#, fuzzy
 msgid "Pay Bill"
-msgstr "仕入先請求書"
+msgstr "支払処理"
 
 #: ../src/business/business-gnome/dialog-vendor.c:661
 msgid "Vendor ID"
@@ -1516,7 +1513,7 @@ msgstr "請求書支払期限の何日前に警告するか"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:5
 msgid "If checked, each invoice will be opened in its own top level window.  If clear, the invoice will be opened in the current window."
-msgstr "チェックされた場合、各得意先請求書は最上位ウィンドウに開かれます。チェックされない場合、得意先請求書は現在のウィンドウに開かれます"
+msgstr "選択した場合、得意先請求書を新規ウィンドウに開きます。選択しない場合、得意先請求書を現在のウィンドウに開きます。"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
 #: ../src/gnome-utils/glade/preferences.glade.h:96
@@ -1553,7 +1550,7 @@ msgstr "開始時に請求書支払期限の一覧を表示するかどうか。
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:13
 msgid "_Accumulate splits on post"
-msgstr "記帳時にスプリット取引を累積する(_A)"
+msgstr "記帳時にスプリットを累積する(_A)"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:14
 msgid "_Days in advance:"
@@ -1565,7 +1562,7 @@ msgstr "期日に通知(_N)"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:16
 msgid "_Open in new window"
-msgstr "新しいウィンドウで開く(_O)"
+msgstr "新規ウィンドウで開く(_O)"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:17
 msgid "_Tax included"
@@ -1658,7 +1655,7 @@ msgstr "会社名: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:6
 msgid "Credit Limit: "
-msgstr "信用取引枠: "
+msgstr "与信限度額: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:7
 #: ../src/business/business-gnome/glade/employee.glade.h:7
@@ -1770,9 +1767,8 @@ msgid "What Tax Table should be applied to this customer?"
 msgstr "この得意先にはどの税額表を適用しますか?"
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:2
-#, fuzzy
 msgid "Question"
-msgstr "テスト中"
+msgstr "質問"
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:3
 msgid "acct"
@@ -1868,9 +1864,8 @@ msgid "Customer: "
 msgstr "得意先: "
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:10
-#, fuzzy
 msgid "Default Chargeback Project"
-msgstr "デフォルトの通貨"
+msgstr "入金相殺を行うデフォルトのプロジェクト"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:11
 #, fuzzy
@@ -1900,7 +1895,7 @@ msgstr "請求のまとめ: "
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:19
 msgid "No, keep them as they are"
-msgstr ""
+msgstr "いいえ、そのままにしておきます"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:21
 msgid "Posted Account"
@@ -2074,7 +2069,7 @@ msgstr "記帳先"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:7
 msgid "Transfer Account"
-msgstr "資金移動勘定科目"
+msgstr "資金移動先勘定科目"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:15
 msgid "Tax Included:"
@@ -2180,7 +2175,7 @@ msgstr "請求のまとめを検索(_B)..."
 #: ../src/business/business-gnome/gnc-plugin-business.c:168
 #: ../src/business/business-gnome/gnc-plugin-business.c:192
 msgid "Open the Find Job dialog"
-msgstr "Jobの検索ダイアログを開く"
+msgstr "請求のまとめの検索ダイアログを開く"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:170
 #: ../src/business/business-gnome/gnc-plugin-business.c:194
@@ -2348,15 +2343,15 @@ msgstr "所有者帳票を再読込"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:249
 msgid "Reload owner report scheme file"
-msgstr ""
+msgstr "所有者帳票のschemeファイルを再読込"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:251
 msgid "Reload receivable report"
-msgstr ""
+msgstr "売掛金帳票を再読込"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:252
 msgid "Reload receivable report scheme file"
-msgstr ""
+msgstr "売掛金帳票のschemeファイルを再読込"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:254
 #: ../src/business/business-gnome/gnc-plugin-business.c:255
@@ -2409,7 +2404,7 @@ msgstr "得意先請求書を印刷"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:106
 msgid "Make a printable invoice"
-msgstr "印刷可能な得意先請求書を作成する"
+msgstr "得意先請求書を印刷可能な状態にする"
 
 #. Edit menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:110
@@ -2437,7 +2432,7 @@ msgstr "この得意先請求書を編集する"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:122
 msgid "_Post Invoice"
-msgstr "得意先請求書を転記(_P)"
+msgstr "得意先請求書を記帳(_P)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:123
 msgid "Post this Invoice to your Chart of Accounts"
@@ -2598,7 +2593,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:3
 msgid "If active, each new invoice will be opened in a new window. Otherwise a new invoice will be opened as a tab in the main window."
-msgstr ""
+msgstr "有効な場合、新規得意先請求書を新規ウィンドウに開きます。無効な場合、新規得意先請求書を現在のウィンドウに開きます。"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:4
 msgid "If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched."
@@ -2681,7 +2676,7 @@ msgstr "勘定科目 %s では取引できません。"
 #: ../src/register/ledger-core/split-register.c:1675
 #, c-format
 msgid "The account %s does not exist. Would you like to create it?"
-msgstr "勘定科目 %s は存在しません。作成しますか？"
+msgstr "勘定科目 %s は存在しません。作成しますか?"
 
 #. XXX: change this based on the ledger type
 #: ../src/business/business-ledger/gncEntryLedger.c:228
@@ -2703,7 +2698,7 @@ msgstr "現在の項目を保存しますか?"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:807
 msgid "The current transaction has been changed. Would you like to record the changes before duplicating this entry, or cancel the duplication?"
-msgstr "この取引の情報は変更されました。複製する前に記録しますか？あるいは複製を取り消しますか？"
+msgstr "この取引の情報は変更されました。複製する前に記録しますか?あるいは複製を取り消しますか?"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:822
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:506
@@ -2725,23 +2720,19 @@ msgstr "勘定科目"
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:376
 #, c-format
 msgid "The tax table %s does not exist. Would you like to create it?"
-msgstr "税額表 %s は存在しません。作成しますか？"
+msgstr "税額表 %s は存在しません。作成しますか?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:489
-#, fuzzy
 msgid "The current entry has been changed.  However, this entry is part of an existing order. Would you like to record the change and effectively change your order?"
-msgstr ""
-"この取引の情報は変更されました。\n"
-"記録しますか？"
+msgstr "現在の項目は変更されています。しかしながら、この項目は既存の注文の一部です。この変更を記録し、注文に反映しますか?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:504
 msgid "_Don't Record"
-msgstr "記帳しない(_D)"
+msgstr "記録しない(_D)"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:591
-#, fuzzy
 msgid "The current entry has been changed. Would you like to save it?"
-msgstr "この取引の情報は変更されました。保存しますか？"
+msgstr "現在の項目は変更されています。保存しますか?"
 
 #. Translators: The 'sample:' items are strings which are not
 #. displayed, but only used to estimate widths. Please only
@@ -2819,7 +2810,7 @@ msgstr "sample:支払"
 
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:49
 msgid "$"
-msgstr ""
+msgstr "$"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -2996,9 +2987,8 @@ msgid "Billable?"
 msgstr "請求可能?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:528
-#, fuzzy
 msgid "Enter the income/expense account for the Entry, or choose one from the list"
-msgstr "移動元の勘定科目を入力するか、リストから選択する"
+msgstr "項目に対し収益・費用勘定科目を入力するか、リストから選択する"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:541
 msgid "Enter the type of Entry"
@@ -3077,9 +3067,8 @@ msgid "Include this entry on this invoice?"
 msgstr "この項目を得意先請求書に含めますか?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:725
-#, fuzzy
 msgid "Unknown EntryLedger Type"
-msgstr "ファイルタイプを特定できません"
+msgstr "不明な元帳項目のタイプ"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:738
 msgid "The subtotal value of this entry "
@@ -3099,7 +3088,7 @@ msgstr "この商品をどのように支払いましたか?"
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:112
 msgid "You must provide a name for this Tax Table."
-msgstr "この税額表の名前を入力しなければなりません。"
+msgstr "この税額表の名前を入力してください。"
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:118
 #, c-format
@@ -3121,7 +3110,7 @@ msgstr "税額表から最後の項目を削除することはできません。
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:587
 msgid "Are you sure you want to delete this entry?"
-msgstr "この項目を本当に削除してもよろしいですか？"
+msgstr "この項目を本当に削除してもよろしいですか?"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:1
 msgid "<b>Tax Table Entries</b>"
@@ -3240,20 +3229,17 @@ msgid "A/Payable"
 msgstr "買掛金"
 
 #: ../src/engine/Account.c:3783
-#, fuzzy
 msgid "Root"
-msgstr "帳票"
+msgstr "ルート(/)"
 
 #: ../src/engine/Account.c:3784 ../src/engine/Scrub.c:445
 #: ../src/engine/Scrub.c:507
-#, fuzzy
 msgid "Trading"
-msgstr "見出しをつける"
+msgstr "投機"
 
 #: ../src/engine/cap-gains.c:236
-#, fuzzy
 msgid "Orphaned Gains"
-msgstr "内部留保"
+msgstr "不明な利得"
 
 #: ../src/engine/cap-gains.c:250 ../src/engine/cap-gains.c:956
 #: ../src/engine/cap-gains.c:961 ../src/engine/cap-gains.c:962
@@ -3262,7 +3248,7 @@ msgstr "実現損益"
 
 #: ../src/engine/cap-gains.c:252
 msgid "Realized Gains or Losses from Commodity or Trading Accounts that haven't been recorded elsewhere."
-msgstr ""
+msgstr "どこにも記録されていない商品勘定科目または投機勘定科目からの実現損益。"
 
 #: ../src/engine/gnc-budget.c:91 ../src/gnome/gnc-plugin-page-budget.c:844
 msgid "Unnamed Budget"
@@ -3417,6 +3403,10 @@ msgstr "貸借不一致"
 msgid "-- Split Transaction --"
 msgstr "-- スプリット取引 --"
 
+# Japanese Translation Notice:
+# 取引の場合は「スプリット」で良いですが、株式分割の場合は「株式分割」
+# と訳すべきところです。スプリット内のアクション欄に「スプリット」と表
+# 示されて混乱を招いてしまう可能性がありますが、翻訳の都合上回避できません。
 #. src/report/standard-reports/transaction.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -3430,15 +3420,13 @@ msgid "Split"
 msgstr "スプリット"
 
 #: ../src/engine/Transaction.c:1803
-#, fuzzy
 msgid "Voided transaction"
-msgstr "取引を検索"
+msgstr "無効化した取引"
 
 #. Dirtying taken care of by SetReadOnly
 #: ../src/engine/Transaction.c:1814
-#, fuzzy
 msgid "Transaction Voided"
-msgstr "取引出納帳"
+msgstr "無効化した取引"
 
 #: ../src/gnome/dialog-chart-export.c:233
 msgid "Export Chart of Accounts to QSF XML"
@@ -3462,7 +3450,7 @@ msgstr "商品を削除しますか?"
 
 #: ../src/gnome/dialog-fincalc.c:308
 msgid "This program can only calculate one value at a time. You must enter values for all but one quantity."
-msgstr "このプログラムは1回に一つの値しか計算できません。すべてに対する値を入力しなければなりませんが、1個だけです。"
+msgstr "このプログラムは1回に一つの値しか計算できません。1つを除きすべての値を入力してください。"
 
 #: ../src/gnome/dialog-fincalc.c:310
 msgid "GnuCash cannot determine the value in one of the fields. You must enter a valid expression."
@@ -3519,9 +3507,8 @@ msgstr "勘定科目"
 
 #: ../src/gnome/dialog-find-transactions.c:106
 #: ../src/import-export/import-match-picker.c:340
-#, fuzzy
 msgid "Balanced"
-msgstr "貸借/残高"
+msgstr "釣り合い"
 
 #: ../src/gnome/dialog-find-transactions.c:109
 #: ../src/gnome/gnc-plugin-page-register.c:342
@@ -3573,10 +3560,10 @@ msgstr "取引を検索"
 #. Translators: %d is the number of prices. This
 #. is a ngettext(3) message.
 #: ../src/gnome/dialog-price-edit-db.c:172
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete the %d selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "本当にこの価格を削除してもよろしいですか?"
+msgstr[0] "本当に選択した%d個の価格を削除してよろしいですか?"
 
 #: ../src/gnome/dialog-price-edit-db.c:180
 msgid "Delete prices?"
@@ -3670,18 +3657,18 @@ msgid "This SX has changed; are you sure you want to cancel?"
 msgstr "この予定取引は変更されています。本当に取り消してよろしいですか?"
 
 #: ../src/gnome/dialog-sx-editor.c:635
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't parse credit formula for split \"%s\"."
-msgstr "取引の注釈を入力する"
+msgstr "スプリット \"%s\" の貸方の数式を解析できませんでした。"
 
 #: ../src/gnome/dialog-sx-editor.c:661
 #, c-format
 msgid "Couldn't parse debit formula for split \"%s\"."
-msgstr ""
+msgstr "スプリット \"%s\" の借方の数式を解析できませんでした。"
 
 #: ../src/gnome/dialog-sx-editor.c:695 ../src/gnome/dialog-sx-from-trans.c:270
 msgid "The Scheduled Transaction Editor cannot automatically balance this transaction. Should it still be entered?"
-msgstr ""
+msgstr "予定取引エディタはこの取引に対して自動的に釣り合いをとることはできません。それでも入力しますか?"
 
 #: ../src/gnome/dialog-sx-editor.c:714
 msgid "Please name the Scheduled Transaction."
@@ -3702,7 +3689,7 @@ msgstr "テンプレート取引のない予定取引は自動作成できませ
 
 #: ../src/gnome/dialog-sx-editor.c:792
 msgid "Please provide a valid end selection."
-msgstr ""
+msgstr "有効な終了日を選択してください。"
 
 #: ../src/gnome/dialog-sx-editor.c:808
 msgid "There must be some number of occurrences."
@@ -3736,7 +3723,7 @@ msgstr "予定取引の貸借が一致しません。この状況を訂正する
 
 #: ../src/gnome/dialog-sx-from-trans.c:773
 msgid "Cannot create a Scheduled Transaction from a Transaction currently being edited. Please Enter the Transaction before Scheduling."
-msgstr ""
+msgstr "作成完了前の取引から予定取引を作成することはできません。予定取引を作成する前に取引を入力してください。"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:379
 msgid "Ignored"
@@ -3773,7 +3760,7 @@ msgstr "(未入力)"
 #, c-format
 msgid "There are no Scheduled Transactions to be entered at this time. (%d transaction automatically created)"
 msgid_plural "There are no Scheduled Transactions to be entered at this time. (%d transactions automatically created)"
-msgstr[0] ""
+msgstr[0] "現在のところ入力が必要な予定取引はありません(%d個の取引は自動作成されました)。"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:931
 #: ../src/register/ledger-core/split-register-model.c:192
@@ -3802,7 +3789,7 @@ msgstr "書式:"
 #: ../src/gnome/dialog-tax-info.c:323
 #, fuzzy
 msgid "now"
-msgstr "未知"
+msgstr "現在"
 
 #: ../src/gnome/dialog-tax-info.c:1074
 #, fuzzy
@@ -3841,11 +3828,11 @@ msgstr "期間 %s 〜 %s"
 
 #: ../src/gnome/druid-acct-period.c:361
 msgid "You must select closing date that is greater than the closing date of the previous book."
-msgstr "前期帳簿の決算日以降の決算日を選択しなければなりません。"
+msgstr "前期の帳簿の決算日以降の決算日を選択してください。"
 
 #: ../src/gnome/druid-acct-period.c:372
 msgid "You must select closing date that is not in the future."
-msgstr "未来でない決算日を選択しなければなりません。"
+msgstr "未来でない決算日を選択してください。"
 
 #. Translation FIXME: Can this %s-containing message please be
 #. replaced by one single message? Either this closing went
@@ -4060,35 +4047,35 @@ msgstr "エラー"
 
 #: ../src/gnome/druid-stock-split.c:299
 msgid "You must enter a valid distribution amount."
-msgstr "適正な分配額を入力してください"
+msgstr "有効な株式数を入力してください。"
 
 #: ../src/gnome/druid-stock-split.c:308
 msgid "You must enter a distribution amount."
-msgstr "分配額を入力してください"
+msgstr "株式数を入力してください。"
 
 #: ../src/gnome/druid-stock-split.c:316
 msgid "You must either enter a valid price or leave it blank."
-msgstr "有効な価格を入力するか、空白のままにしてください。"
+msgstr "有効な株価を入力するか、空白のままにしてください。"
 
 #: ../src/gnome/druid-stock-split.c:325
 msgid "The price must be positive."
-msgstr "価格は正の値でなければなりません。"
+msgstr "株価を正の値にしてください。"
 
 #: ../src/gnome/druid-stock-split.c:363
 msgid "You must either enter a valid cash amount or leave it blank."
-msgstr "有効な現金金額を入力するか、空白のままにしてください。"
+msgstr "有効な分配金額を入力するか、空白のままにしてください。"
 
 #: ../src/gnome/druid-stock-split.c:372
 msgid "The cash distribution must be positive."
-msgstr "分配額は正の値でなければなりません。"
+msgstr "分配金額は正の値にしてください。"
 
 #: ../src/gnome/druid-stock-split.c:384
 msgid "You must select an income account for the cash distribution."
-msgstr "分配のための収益勘定科目を選択しなければなりません"
+msgstr "分配のための収益勘定科目を選択してください。"
 
 #: ../src/gnome/druid-stock-split.c:393
 msgid "You must select an asset account for the cash distribution."
-msgstr "分配のための資産勘定科目を選択しなければなりません"
+msgstr "分配のための資産勘定科目を選択してください。"
 
 #: ../src/gnome/druid-stock-split.c:485
 msgid "Error adding price."
@@ -4351,7 +4338,7 @@ msgstr "勘定科目を選択"
 
 #: ../src/gnome/glade/account.glade.h:53
 msgid "Select categories that correspond to the ways that you will use GnuCash.  Each category you select will cause several accounts to be created.  Select the categories that are relevant to you.  You can always create additional accounts by hand later."
-msgstr "GnuCashを使おうとする方法に対応したカテゴリを選択してください。各カテゴリを選ぶといくつかの勘定科目が作成されます。あなたに関連したカテゴリを選択してください。勘定科目はあとからいつでも手動作成することができます。"
+msgstr "GnuCashを使おうとする方法に対応したカテゴリを選択してください。各カテゴリを選ぶといくつかの勘定科目が作成されます。あなたに関連したカテゴリを選択してください。勘定科目は後でいつでも手動作成することができます。"
 
 #: ../src/gnome/glade/account.glade.h:54
 msgid "Select or add a GnuCash account"
@@ -4399,7 +4386,7 @@ msgstr "この勘定科目は取引を含んでいます。これらの取引を
 
 #: ../src/gnome/glade/account.glade.h:65
 msgid "This account is present solely as a placeholder in the hierarchy.  Transactions may not be posted to this account, only to sub-accounts of this account."
-msgstr "この勘定科目は階層中のプレースホルダーとしてのみ存在しています。取引はこの勘定科目ではなく、その子勘定科目にしか転記できません。"
+msgstr "この勘定科目は階層中のプレースホルダーとしてのみ存在しています。取引はこの勘定科目ではなく、その子勘定科目にしか記帳できません。"
 
 #: ../src/gnome/glade/account.glade.h:66
 msgid ""
@@ -4608,7 +4595,7 @@ msgstr "オプション"
 
 #: ../src/gnome/glade/budget.glade.h:18
 msgid "Significant Digits:"
-msgstr ""
+msgstr "有効数字:"
 
 #: ../src/gnome/glade/budget.glade.h:19
 #: ../src/gnome/glade/sched-xact.glade.h:167
@@ -4617,7 +4604,7 @@ msgstr "開始日:"
 
 #: ../src/gnome/glade/budget.glade.h:20
 msgid "The number of leading digits to keep when rounding"
-msgstr ""
+msgstr "数値の丸めを行う時に維持する上位の桁数"
 
 #: ../src/gnome/glade/budget.glade.h:21
 msgid "This is Sample2."
@@ -4836,7 +4823,7 @@ msgstr ""
 #: ../src/gnome/glade/register.glade.h:41
 #: ../src/gnome/gnc-plugin-page-register.c:340
 msgid "Schedule"
-msgstr "スケジュール"
+msgstr "予定取引"
 
 #: ../src/gnome/glade/fincalc.glade.h:41
 msgid "Semi-annual"
@@ -4968,13 +4955,12 @@ msgid "Add the import as a new object, leave original in place"
 msgstr ""
 
 #: ../src/gnome/glade/merge.glade.h:5
-#, fuzzy
 msgid "Commit QSF Import Data to data file"
-msgstr "勘定科目の階層を新しいファイルに書き出す"
+msgstr "QSFからインポートしたデータをデータファイルに書き出すことを確定する"
 
 #: ../src/gnome/glade/merge.glade.h:6
 msgid "Please resolve any conflicts in the merge"
-msgstr ""
+msgstr "併合時の競合を解決してください"
 
 #: ../src/gnome/glade/merge.glade.h:7
 #, fuzzy
@@ -5291,9 +5277,8 @@ msgid "_Ending Balance:"
 msgstr "期末残高(_E):"
 
 #: ../src/gnome/glade/register.glade.h:1
-#, fuzzy
 msgid "<b>New Transaction Information</b>"
-msgstr "取引情報"
+msgstr "<b>新規取引情報</b>"
 
 #: ../src/gnome/glade/register.glade.h:2
 msgid "Amo_unt"
@@ -5387,7 +5372,7 @@ msgstr "普通の勘定科目の順番を維持する"
 #: ../src/gnome/glade/register.glade.h:31
 #: ../src/gnome/gnc-plugin-page-register.c:206
 msgid "Make a copy of the current transaction"
-msgstr "現在の取引のコピーを作成する"
+msgstr "現在の取引の複製を作成する"
 
 #: ../src/gnome/glade/register.glade.h:32
 #: ../src/gnome/gnc-plugin-page-register.c:251
@@ -5449,28 +5434,28 @@ msgstr "すべて表示(_A)"
 #: ../src/gnome/glade/register.glade.h:46
 #: ../src/gnome/gnc-plugin-page-register.c:284
 msgid "Show all splits in the current transaction"
-msgstr "現在の取引のスプリットをすべて表示する"
+msgstr "現在の取引のスプリットをすべて表示します"
 
 #: ../src/gnome/glade/register.glade.h:47
 #: ../src/gnome/gnc-plugin-page-register.c:299
 msgid "Show expanded transactions with all splits"
-msgstr "すべてのスプリットを含めて拡張した取引を表示"
+msgstr "すべてのスプリットを含めて展開した取引を表示します"
 
 #: ../src/gnome/glade/register.glade.h:48
 #: ../src/gnome/gnc-plugin-page-register.c:293
 msgid "Show transactions on one or two lines"
-msgstr "取引を1行あるいは2行で表示する"
+msgstr "取引を1行あるいは2行で表示します"
 
 #: ../src/gnome/glade/register.glade.h:49
 #: ../src/gnome/gnc-plugin-page-register.c:296
 msgid "Show transactions on one or two lines and expand the current transaction"
-msgstr "取引を1行あるいは2行で表示し、編集中の取引を拡張する"
+msgstr "取引を1行あるいは2行で表示し、編集中の取引を展開します"
 
 #: ../src/gnome/glade/register.glade.h:50
 #: ../src/gnome/gnc-plugin-page-register.c:280
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:51
 msgid "Show two lines of information for each transaction"
-msgstr "各取引の情報を2行で表示する"
+msgstr "各取引の情報を2行で表示します"
 
 #: ../src/gnome/glade/register.glade.h:52
 msgid "Sort by Amount"
@@ -5550,12 +5535,11 @@ msgstr "本日(_Y)"
 
 #: ../src/gnome/glade/register.glade.h:72
 msgid "Void Transaction"
-msgstr ""
+msgstr "取引の無効化"
 
 #: ../src/gnome/glade/register.glade.h:73
-#, fuzzy
 msgid "_Action"
-msgstr "取引内容"
+msgstr "アクション(_A)"
 
 #: ../src/gnome/glade/register.glade.h:75
 msgid "_Amount"
@@ -5637,7 +5621,6 @@ msgid "_Unreconciled"
 msgstr "未照合(_U)"
 
 #: ../src/gnome/glade/register.glade.h:102
-#, fuzzy
 msgid "_Voided"
 msgstr "無効化(_V)"
 
@@ -5818,7 +5801,7 @@ msgstr "取引の作成中..."
 
 #: ../src/gnome/glade/sched-xact.glade.h:66
 msgid "Creation State"
-msgstr ""
+msgstr "作成状態"
 
 #: ../src/gnome/glade/sched-xact.glade.h:67
 msgid ""
@@ -6071,13 +6054,12 @@ msgid "Postpone"
 msgstr "延期"
 
 #: ../src/gnome/glade/sched-xact.glade.h:145
-#, fuzzy
 msgid "Press Apply to create these transactions."
-msgstr "取引の貼付け"
+msgstr "これらの取引を作成する場合は適用をクリックしてください。"
 
 #: ../src/gnome/glade/sched-xact.glade.h:146
 msgid "Press apply to commit these changes."
-msgstr ""
+msgstr "これらの変更を確定する場合は適用をクリックしてください"
 
 #: ../src/gnome/glade/sched-xact.glade.h:147
 msgid "Principal To:"
@@ -6139,18 +6121,16 @@ msgid "Semi-Monthly"
 msgstr "月2回"
 
 #: ../src/gnome/glade/sched-xact.glade.h:161
-#, fuzzy
 msgid "Set the 'auto-create' flag on newly created scheduled transactions."
-msgstr "取引全体を削除する"
+msgstr "新規予定取引に対して'取引を自動で新規作成'を有効にします。"
 
 #: ../src/gnome/glade/sched-xact.glade.h:162
-#, fuzzy
 msgid "Set the 'notify' flag on newly created scheduled transactions."
-msgstr "取引全体を削除する"
+msgstr "新規予定取引に対して'取引が作成される前に通知'を有効にします。"
 
 #: ../src/gnome/glade/sched-xact.glade.h:163
 msgid "Show the \"since last run\" window when a file is opened."
-msgstr ""
+msgstr "ファイルを開いたときに\"前回起動時以降\"ダイアログを表示します。"
 
 #: ../src/gnome/glade/sched-xact.glade.h:164
 msgid "Since Last Run"
@@ -6188,15 +6168,15 @@ msgstr "テンプレート取引（読出し専用）"
 
 #: ../src/gnome/glade/sched-xact.glade.h:173
 msgid "The following Scheduled Transactions reference the deleted account, and must now be corrected.  Press OK to edit them."
-msgstr ""
+msgstr "以下の予定取引は削除された勘定科目を参照しているため修正しなければなりません。編集するにはOKをクリックしてください。"
 
 #: ../src/gnome/glade/sched-xact.glade.h:174
 msgid "The following scheduled transactions have expired.  Select those you wish to delete."
-msgstr ""
+msgstr "以下の予定取引は期間が終了しています。削除したい予定取引を選択してください。"
 
 #: ../src/gnome/glade/sched-xact.glade.h:175
 msgid "The listed Scheduled Transactions are to-be created soon.  Select any which you would like to create now, and click \"Forward\" to create them."
-msgstr ""
+msgstr "一覧にある予定取引はまもなく作成されます。今すぐに作成したい取引がある場合はそれらを選択して\"進む\"をクリックしてください。"
 
 #: ../src/gnome/glade/sched-xact.glade.h:176
 msgid "This druid will walk you through any scheduled transactions that should be created."
@@ -6215,14 +6195,12 @@ msgid "Thursday"
 msgstr "木曜日"
 
 #: ../src/gnome/glade/sched-xact.glade.h:181
-#, fuzzy
 msgid "To-Create Transaction Preparation"
-msgstr "取引情報"
+msgstr "作成される取引の準備"
 
 #: ../src/gnome/glade/sched-xact.glade.h:182
-#, fuzzy
 msgid "Transaction Reminders"
-msgstr "取引出納帳"
+msgstr "取引の通知"
 
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:183 ../intl-scm/guile-strings.c:4416
@@ -6332,7 +6310,7 @@ msgstr "<b>収益勘定科目(_I)</b>"
 
 #: ../src/gnome/glade/stocks.glade.h:3
 msgid "Cash In Lieu"
-msgstr "代替現金"
+msgstr "現金の分配"
 
 #: ../src/gnome/glade/stocks.glade.h:4
 msgid "Currenc_y:"
@@ -6343,39 +6321,28 @@ msgid "Desc_ription:"
 msgstr "説明(_R):"
 
 #: ../src/gnome/glade/stocks.glade.h:6
-#, fuzzy
 msgid "Enter the date and the number of shares you gained or lost from the stock split or merger. For stock mergers (negative splits) use a negative value for the share distribution. You can also enter a description of the transaction, or accept the default one."
-msgstr ""
-"株式の分割/統合で利益または損失があった株式の日付と株数を入力してください\n"
-"株式統合の場合(分割の反対)株数の値に負の値を使用してください。\n"
-"取引の説明に関しては入力することもできますし、デフォルトのものをそのまま使用することもできます"
+msgstr "株式の分割・併合が行われた日付および割当・減少が発生した株式数を入力してください。株式併合(負の分割)の場合は負の値を使用してください。説明欄では取引の説明を入力することもできますし、デフォルトを受け入れることもできます。"
 
 #: ../src/gnome/glade/stocks.glade.h:7
-#, fuzzy
 msgid "If you are finished creating the stock split or merger, press `Apply'. You may also press `Back' to review your choices, or `Cancel' to quit without making any changes."
-msgstr ""
-"株の分割または合併の記帳が終了したら、'終了'をクリックしてください。\n"
-"'戻る'をクリックすると、今までの選択項目を確認できます。'キャンセル'を\n"
-"クリックするとすべての変更を破棄して中止します。"
+msgstr "株式分割・併合の作成が終了したら、`適用'をクリックしてください。'戻る'をクリックすると、今までの選択項目を確認できます。'キャンセル'をクリックするとすべての変更を破棄して終了します。"
 
 #: ../src/gnome/glade/stocks.glade.h:8
 msgid "If you received a cash disbursement as a result of the stock split, enter the details of that payment here. Otherwise, just click `Forward'."
-msgstr "もし株式分割の結果として現金支払を受け取った場合は、ここにその支払の詳細を入力してください。そうでなければ '次へ' をクリックしてください。"
+msgstr "株式分割・併合の結果、現金の分配を受けた場合は、ここに分配の詳細を入力してください。そうでなければ `進む' をクリックしてください。"
 
 #: ../src/gnome/glade/stocks.glade.h:9
-#, fuzzy
 msgid "If you want to record a stock price for the split, enter it below. You may safely leave it blank."
-msgstr ""
-"株式分割に対する株価を記帳したい場合には下に入力してください。\n"
-"空白のままでも大丈夫です。"
+msgstr "株式分割時の株価を記録したい場合には下の欄に入力してください。空白のままにすることもできます。"
 
 #: ../src/gnome/glade/stocks.glade.h:10
 msgid "New _Price:"
-msgstr "新規価格(_P):"
+msgstr "新規株価(_P):"
 
 #: ../src/gnome/glade/stocks.glade.h:11
 msgid "Select the account for which you want to record a stock split or merger."
-msgstr "分割または合併に関して記帳したい株の勘定科目を選択してください。"
+msgstr "株式の分割・併合を記録する勘定科目を選択してください。"
 
 #: ../src/gnome/glade/stocks.glade.h:12
 msgid "Stock Account"
@@ -6391,12 +6358,12 @@ msgstr "株式分割の詳細"
 
 #: ../src/gnome/glade/stocks.glade.h:15
 msgid "This druid will help you record a stock split or stock merger."
-msgstr "このウィザードは株の分割または株の合併の記帳に関してお手伝いします。"
+msgstr "このウィザードは株式分割または株式併合を記録するためのお手伝いをします。"
 
 #: ../src/gnome/glade/stocks.glade.h:16
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:4
 msgid "_Amount:"
-msgstr "金額(_A)"
+msgstr "分配金額(_A)"
 
 #: ../src/gnome/glade/stocks.glade.h:18
 msgid "_Memo:"
@@ -6404,16 +6371,15 @@ msgstr "摘要(_M):"
 
 #: ../src/gnome/glade/stocks.glade.h:19
 msgid "_Shares:"
-msgstr "株式(_S):"
+msgstr "株式数(_S):"
 
 #: ../src/gnome/glade/tax.glade.h:1
 msgid "0"
 msgstr "0"
 
 #: ../src/gnome/glade/tax.glade.h:2
-#, fuzzy
 msgid "<b>Account Tax Information</b>"
-msgstr "<b>税金情報</b>"
+msgstr "<b>勘定科目の税金情報</b>"
 
 #: ../src/gnome/glade/tax.glade.h:3
 #, fuzzy
@@ -6705,7 +6671,7 @@ msgstr "勘定科目の階層を新規作成(_H)..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:153
 msgid "Extend the current book by merging with new account type categories"
-msgstr ""
+msgstr "新規勘定科目タイプのカテゴリを加えて現在の帳簿を拡張する"
 
 #. File menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:155
@@ -6795,7 +6761,7 @@ msgstr "株式の分割(_K)..."
 #: ../src/gnome/gnc-plugin-page-account-tree.c:185
 #: ../src/gnome/gnc-plugin-page-register.c:245
 msgid "Record a stock split or a stock merger"
-msgstr "株式の分割または合併を記帳する"
+msgstr "株式の分割または併合を記録する"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:187
 #: ../src/gnome/gnc-plugin-page-register.c:247
@@ -6814,7 +6780,7 @@ msgstr "勘定科目を検査・修復(_C)"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:191
 #: ../src/gnome/window-reconcile.c:2117
 msgid "Check for and repair unbalanced transactions and orphan splits in this account"
-msgstr "この勘定科目でバランスしていない取引や、どこにも所属してないスプリットをチェックし、修復する"
+msgstr "この勘定科目で釣り合いのとれていない取引およびどの取引にも属さないスプリットを検査・修復する"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:193
 msgid "Check & Repair Su_baccounts"
@@ -6822,7 +6788,7 @@ msgstr "子勘定科目を検査・修復(_B)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:194
 msgid "Check for and repair unbalanced transactions and orphan splits in this account and its subaccounts"
-msgstr "この勘定科目とその子勘定科目でバランスしていない取引や、どこにも所属してないスプリットをチェックし、修復する"
+msgstr "この勘定科目とその子勘定科目で釣り合いのとれていない取引およびどの取引にも属さないスプリットを検査・修復する"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:197
 msgid "Check & Repair A_ll"
@@ -6905,7 +6871,7 @@ msgstr "子勘定科目の取引がすべて削除されます。"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1078
 msgid "Are you sure you want to do this?"
-msgstr "本当に実行してもよろしいですか？"
+msgstr "本当に実行してもよろしいですか?"
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-budget.c:135
@@ -7046,7 +7012,7 @@ msgstr "取引を無効化(_V)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:222
 msgid "_Unvoid Transaction"
-msgstr "取引を無効化解除(_U)"
+msgstr "取引無効化を解除(_U)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:224
 msgid "Add _Reversing Transaction"
@@ -7203,7 +7169,7 @@ msgstr "照合済あるいは精算済の取引を無効にすることはでき
 #: ../src/gnome/gnc-plugin-page-register.c:2136
 #: ../src/gnome/gnc-split-reg.c:871
 msgid "A reversing entry has already been created for this transaction."
-msgstr ""
+msgstr "この取引に対する逆方向の取引はすでに作成済みです。"
 
 #. Translations: The %s is the name of the plugin page
 #: ../src/gnome/gnc-plugin-page-register.c:2213
@@ -7404,7 +7370,7 @@ msgstr "フルネーム列を表示"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:4
 msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
-msgstr ""
+msgstr "ISIN/証券コード(交換のためのデータ)列を表示する"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:5
 msgid "Show the Namespace column"
@@ -7412,7 +7378,7 @@ msgstr "ネームスペース列を表示"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:6
 msgid "Show the Print Name column"
-msgstr "印刷名の列を表示"
+msgstr "表示名の列を表示"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:7
 msgid "Show the Quote Flag column"
@@ -7428,11 +7394,11 @@ msgstr "相場表タイムゾーンの列を表示"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:10
 msgid "Show the Unique Name column"
-msgstr "ユニーク名の列を表示"
+msgstr "一意名の列を表示"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:11
 msgid "Show the fraction column"
-msgstr ""
+msgstr "小数部の列を表示"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:12
 msgid "Show the name column"
@@ -7695,7 +7661,7 @@ msgstr ""
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
 #: ../src/gnome-utils/glade/preferences.glade.h:105
 msgid "Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment. Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts."
-msgstr ""
+msgstr "手数料や利子の支払いが行われる勘定科目を照合する前に、ユーザーに利子や手数料の入力を促します。現在は銀行、クレジットカード、投資信託、資産、売掛金および買掛金勘定科目のみで有効です。"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:7
 msgid "Prompt for credit card payment"
@@ -7756,7 +7722,7 @@ msgstr "\"Enter\" キーで記録簿の一番下に移動する"
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:2
 #, fuzzy
 msgid "Accounts to reverse the balance"
-msgstr "印刷される残高に子勘定科目の残高を含めますか？"
+msgstr "印刷される残高に子勘定科目の残高を含めますか?"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:3
 msgid "Allow file incompatibility with older versions."
@@ -7837,7 +7803,7 @@ msgstr "ヨーロッパ連合のユーロ通貨を使用可能にする"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:22
 msgid "Enables file compression when writing the data file."
-msgstr ""
+msgstr "データファイルを書き込む際に圧縮を有効にする。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:23
 msgid "If active all lines that make up a single transaction will use the same color for their background. Otherwise the background colors are alternated on each line."
@@ -7849,32 +7815,31 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:25
 msgid "If active, GnuCash shows an explanation of the auto-save feature the first time that feature is started. Otherwise no extra explanation is shown."
-msgstr ""
+msgstr "選択した場合、GnuCashは最初に自動保存が実行される際に自動保存機能について説明するダイアログを表示します。選択しない場合、説明のダイアログは表示されません。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:26
-#, fuzzy
 msgid "If active, GnuCash will automatically insert a decimal point into values that are entered without one. Otherwise GnuCash will not modify entered numbers."
-msgstr "入力された数字に自動的に小数点を挿入する"
+msgstr "選択した場合、は入力した数値に小数部がなければGnuCashが自動的に追加します。選択しない場合、入力した数値は変更されません。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:27
 msgid "If active, a \"close\" button will be displayed on any notebook tab that may be closed. Otherwise, no such button will be shown on the tab. Regardless of this setting, pages can always be closed via the \"close\" menu item or the \"close\" button on toolbar."
-msgstr ""
+msgstr "選択した場合、\"閉じる\"ボタンがウィンドウのすべてのタブに表示され、そのタブを閉じることができます。選択しない場合、\"閉じる\"ボタンはタブに表示されません。この設定にかかわらずメニュー項目またはツールバーの\"閉じる\"を選択することでタブを閉じることができます。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:28
 msgid "If active, a splash screen will be shown at startup. Otherwise no splash screen will be shown."
-msgstr ""
+msgstr "選択した場合、起動時にスプラッシュスクリーンが表示されます。選択しない場合、起動時にスプラッシュスクリーンが表示されません。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:29
 msgid "If active, closing a tab moves to the most recently visited tab. Otherwise closing a tab moves one tab to the left."
-msgstr ""
+msgstr "選択した場合、タブを閉じたときに最後に表示していたタブに移動します。選択しない場合、タブを閉じたときに左側のタブに移動します。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:30
 msgid "If active, each new register will be opened in a new window. Otherwise each new register will be opened as a tab in the main window."
-msgstr ""
+msgstr "選択した場合、新規記録簿を新規ウィンドウに開きます。選択しない場合、新規記録簿をメインウィンドウのタブに開きます。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:31
 msgid "If active, each new report will be opened in its own window. Otherwise new reports will be opened as tabs in the main window."
-msgstr ""
+msgstr "選択した場合、新規帳票を新規ウィンドウに開きます。選択しない場合、新規帳票をメインウィンドウのタブに開きます。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:32
 msgid "If active, formal accounting labels \"Credit\" and \"Debit\" will be used when designating fields on screen. Otherwise, informal labels such as Increase/Decrease, \"Funds In\"/\"Funds Out\", etc. will be used."
@@ -7882,20 +7847,19 @@ msgstr "選択した場合、スクリーン上のフィールドを指定する
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:33
 msgid "If active, gnucash will be allowed to intentionally break file compatibility with older versions, so that a data file saved in this version cannot be read by an older version again. Otherwise gnucash will write data files only in formats that can be read by older versions as well."
-msgstr ""
+msgstr "選択した場合、GnuCashは古いバージョンのファイルと互換性を保ちません。そのため、このバージョンで保存したデータファイルは古いバージョンで開くことができなくなります。選択しない場合、GnuCashは古いバージョンでも読み込むことができる形式でファイルを保存します。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:34
-#, fuzzy
 msgid "If active, pressing the enter key will move to the bottom of the register. Otherwise pressing the enter key will move to the next transaction line."
-msgstr "選択した場合、'Enter'を押した際に空白の取引行へ移動します。選択しない場合、一行下へ移動します。"
+msgstr "選択した場合、'Enter'を押した際に記録簿の最下行に移動します。選択しない場合、'Enter'を押した際に一つ下の取引行に移動します。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:35
 msgid "If active, the register will be colored as specified by the system theme. This can be overridden to provide custom colors by editing the gtkrc file in the users home directory. Otherwise the standard register colors will be used that GnuCash has always used."
-msgstr ""
+msgstr "選択した場合、記録簿はシステムテーマで指定された色で表示されます。これは、ユーザのホームディレクトリにあるgtkrcファイルを編集することで指定されたカスタム色より優先されます。選択しない場合GnuCashで使われる記録簿の標準色が利用されます。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:36
 msgid "If active, the size and location of each dialog window will be saved when it is closed. The sizes and locations of content windows will be remembered when you quit GnuCash. Otherwise the sizes will not be saved."
-msgstr ""
+msgstr "選択した場合、各ダイアログウィンドウを閉じたときのサイズと位置が保存されます。サイズと位置はGnuCashを終了した時にも記憶されます。選択しない場合、サイズと位置は保存されません。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:37
 msgid "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
@@ -7907,12 +7871,11 @@ msgstr "ツールバーボタンのラベル"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:39
 msgid "Move to Transfer field when memorised transaction auto filled"
-msgstr ""
+msgstr "記憶された取引が自動入力されたときに資金移動欄に移動します。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:40
-#, fuzzy
 msgid "Number of automatic decimal places"
-msgstr "自動小数点付加"
+msgstr "小数点以下に自動付加される桁数"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:41
 msgid "Only display leaf account names."
@@ -7923,9 +7886,8 @@ msgid "Position of the notebook tabs"
 msgstr "タブの位置"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:43
-#, fuzzy
 msgid "Position of the summary bar"
-msgstr "ページ内の小切手の位置"
+msgstr "サマリーバーの位置"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:44
 msgid "Save window sizes and locations"
@@ -7941,7 +7903,7 @@ msgstr "各タブに「閉じる」ボタンを表示する"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:47
 msgid "Show horizontal borders between rows in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked."
-msgstr ""
+msgstr "記録簿の行間横罫線表示を調整します。選択した場合、行間が太線で強調されます。選択しない場合、行間は強調されません。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:48
 msgid "Show horizontal borders in a register"
@@ -7961,7 +7923,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:53
 msgid "Show vertical borders between columns in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked."
-msgstr ""
+msgstr "記録簿の列間縦罫線表示を調整します。選択した場合、列間が太線で強調されます。選択しない場合、列間は強調されません。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:54
 msgid "Show vertical borders in a register"
@@ -7980,7 +7942,7 @@ msgstr "デフォルトの帳票通貨の情報源"
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:57
 #: ../src/gnome-utils/glade/preferences.glade.h:130
 msgid "The number of minutes until saving of the data file to harddisk will be started automatically. If zero, no saving will be started automatically."
-msgstr ""
+msgstr "ハードディスクにデータファイルを自動保存する分単位の値です。0に設定した場合、自動保存は行われません。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:59
 msgid "This field sets the number of rows to show in a register. It does not actually affect the display of the contents of the window. It is only used to set the size of the window when first opened."
@@ -8060,14 +8022,12 @@ msgid "Change contents of reconciled split"
 msgstr "照合済スプリットの内容を変更する"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:2
-#, fuzzy
 msgid "Commit changes to a invoice_entry"
-msgstr "選択された取引をコピーする"
+msgstr "変更を得意先請求書項目に対して確定する"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:3
-#, fuzzy
 msgid "Commit changes to a transaction"
-msgstr "選択された取引をコピーする"
+msgstr "取引に対する変更を確定する"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:4
 msgid "Delete a commodity"
@@ -8084,7 +8044,7 @@ msgstr "取引を削除する"
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:7
 #, fuzzy
 msgid "Delete multiple price quotes"
-msgstr "その他のすべてのスプリットを削除"
+msgstr "複数の相場表価格を削除する"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:8
 #, fuzzy
@@ -8104,12 +8064,10 @@ msgid "Read only register"
 msgstr "読出し専用記録簿"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:12
-#, fuzzy
 msgid "Remove a reconciled split from a transaction"
-msgstr "取引からスプリットを除去する"
+msgstr "取引から照合済スプリットを除去する"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:13
-#, fuzzy
 msgid "Remove a split from a transaction"
 msgstr "取引からスプリットを除去する"
 
@@ -8384,9 +8342,8 @@ msgid "()"
 msgstr ""
 
 #: ../src/gnome-search/search.glade.h:3
-#, fuzzy
 msgid "<b>Match all entries</b>"
-msgstr "<b>税額表項目</b>"
+msgstr "<b>すべての項目に一致</b>"
 
 #: ../src/gnome-search/search.glade.h:4
 msgid "Add results to current search"
@@ -8485,7 +8442,7 @@ msgstr "凍結済"
 
 #: ../src/gnome-search/search-reconciled.c:234
 msgid "Voided"
-msgstr ""
+msgstr "無効化済"
 
 #: ../src/gnome-search/search-string.c:186
 msgid "You need to enter a string value"
@@ -8506,11 +8463,11 @@ msgstr "が右の文字列を含む"
 
 #: ../src/gnome-search/search-string.c:258
 msgid "matches regex"
-msgstr "が右の正規表現にマッチする"
+msgstr "が右の正規表現に一致する"
 
 #: ../src/gnome-search/search-string.c:260
 msgid "does not match regex"
-msgstr "が右の正規表現にマッチしない"
+msgstr "が右の正規表現に一致しない"
 
 #. Build and connect the toggle button
 #: ../src/gnome-search/search-string.c:322
@@ -8550,15 +8507,14 @@ msgstr "開始残高を作成できませんでした"
 
 #. primary label
 #: ../src/gnome-utils/dialog-account.c:610
-#, fuzzy
 msgid "Give the children the same type?"
-msgstr "この取引をキャンセルする"
+msgstr "子勘定科目のタイプを同じにしますか?"
 
 #. secondary label
 #: ../src/gnome-utils/dialog-account.c:628
 #, c-format
 msgid "The children of the edited account have to be changed to type \"%s\" to make them compatible."
-msgstr ""
+msgstr "編集した勘定科目の子勘定科目のタイプを、互換性を保つために\"%s\"に変更しなければなりません。"
 
 #. children
 #: ../src/gnome-utils/dialog-account.c:639
@@ -8579,11 +8535,11 @@ msgstr "適正な親勘定科目を選択して下さい。"
 
 #: ../src/gnome-utils/dialog-account.c:749
 msgid "You must select an account type."
-msgstr "勘定科目の種類を選択して下さい。"
+msgstr "勘定科目のタイプを選択して下さい。"
 
 #: ../src/gnome-utils/dialog-account.c:757
 msgid "The selected account type is incompatible with the one of the selected parent."
-msgstr ""
+msgstr "選択した勘定科目のタイプは親勘定科目のタイプと互換性がありません。"
 
 #: ../src/gnome-utils/dialog-account.c:768
 msgid "You must choose a commodity."
@@ -8625,7 +8581,7 @@ msgid ""
 "Please select a commodity to match:"
 msgstr ""
 "\n"
-"マッチさせる商品を選択して下さい:"
+"一致させる商品を選択して下さい:"
 
 #: ../src/gnome-utils/dialog-commodity.c:173
 msgid ""
@@ -8667,7 +8623,7 @@ msgstr "通貨を選択"
 
 #: ../src/gnome-utils/dialog-commodity.c:515
 msgid "You must select a commodity. To create a new one, click \"New\""
-msgstr "商品を選択しなければなりません。新規に作成する場合は、\"新規\"をクリックしてください。"
+msgstr "商品を選択してください。新規に作成する場合は、\"新規\"をクリックしてください。"
 
 #: ../src/gnome-utils/dialog-commodity.c:846
 msgid "Use local time"
@@ -8703,9 +8659,7 @@ msgstr "その商品はすでに存在します。"
 
 #: ../src/gnome-utils/dialog-commodity.c:1266
 msgid "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type\" for the commodity."
-msgstr ""
-"商品科目の場合、空ではない\"フルネーム\"、\"記号/略号\"、\n"
-"および\"タイプ\"を入力しなければなりません。"
+msgstr "商品に対しては、空白ではない\"フルネーム\"、\"記号/略号\"、および\"タイプ\"を入力しなければなりません。"
 
 #: ../src/gnome-utils/dialog-options.c:906
 msgid "Select all accounts."
@@ -9065,7 +9019,7 @@ msgstr "取引単位の小数部(_R):"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:8
 msgid "ISIN, CUSI_P or other code:"
-msgstr "ISIN、CUSIPまたはその他のコード(_P):"
+msgstr "ISIN、証券コードまたはその他のコード(_P):"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:9
 msgid "Select security/currency "
@@ -9129,14 +9083,12 @@ msgid "Description:"
 msgstr "説明:"
 
 #: ../src/gnome-utils/glade/dialog-book-close.glade.h:4
-#, fuzzy
 msgid "Expense Total:"
-msgstr "費用帳票"
+msgstr "費用合計:"
 
 #: ../src/gnome-utils/glade/dialog-book-close.glade.h:5
-#, fuzzy
 msgid "Income Total:"
-msgstr "収益勘定科目"
+msgstr "収益合計:"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:1
 msgid "<b>Database Connection</b>"
@@ -9639,7 +9591,7 @@ msgstr "第一の色と第二の色を、行毎ではなく取引ごとに替え
 
 #: ../src/gnome-utils/glade/preferences.glade.h:39
 msgid "Always open the reconcile dialog using today's date for the statement date, regardless of previous reconciliations."
-msgstr ""
+msgstr "以前に行った照合の計算書発行日にかかわらず照合ダイアログ開始時の日付をいつも今日にします。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:40
 msgid "Always reconcile to t_oday"
@@ -9751,15 +9703,15 @@ msgstr "タブをウィンドウの右側に表示する。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:68
 msgid "Display the notebook tabs at the top of the window."
-msgstr "タブをウィンドウの上に表示する。"
+msgstr "タブをウィンドウの上部に表示する。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:69
 msgid "Display the summary bar at the bottom of the page."
-msgstr "サマリーバーをページの下に表示する。"
+msgstr "サマリーバーをページの下部に表示する。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:70
 msgid "Display the summary bar at the top of the page."
-msgstr "サマリーバーをページの上に表示する。"
+msgstr "サマリーバーをページの上部に表示する。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:71
 msgid "Display this many rows when a register is created."
@@ -9815,19 +9767,19 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:85
 msgid "If checked, each register will be opened in its own top level window.  If clear, the register will be opened in the current window."
-msgstr ""
+msgstr "選択した場合、記録簿を新規ウィンドウに開きます。選択しない場合、記録簿を現在のウィンドウに開きます。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:86
 msgid "If checked, each report will be opened in its own top level window.  If clear, the report will be opened in the current window."
-msgstr ""
+msgstr "選択した場合、帳票を新規ウィンドウに開きます。選択しない場合、帳票を現在のウィンドウに開きます。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:87
 msgid "If checked, non-currency commodities will be shown in the summary bar.  If clear, only currencies will be shown."
-msgstr ""
+msgstr "選択した場合、非通貨商品がサマリーバーに表示されます。選択しない場合、通貨のみが表示されます。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:88
 msgid "If checked, only the names of the leaf accounts are displayed in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Cecking this option implies that you use unique leaf names."
-msgstr ""
+msgstr "選択した場合、記録簿および勘定科目を選択するポップアップでは末端の勘定科目名のみ表示されます。デフォルトの設定は勘定科目ツリーのパスを含むフルネームを表示します。このオプションを選択する場合は末端の勘定科目名を一意にしてください。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:89
 msgid "If checked, pressing the 'Enter' key will move to the blank transaction at the bottom of the register.  If clear, pressing the 'Enter' key will move down one row."
@@ -9835,7 +9787,7 @@ msgstr "選択した場合、'Enter'を押すと空白の取引行へ移動し�
 
 #: ../src/gnome-utils/glade/preferences.glade.h:90
 msgid "If checked, the system color theme will be applied to register windows.  If clear, the original GnuCash register colors will be used."
-msgstr ""
+msgstr "選択した場合、記録簿ウィンドウにシステムのテーマカラーが適用されます。選択しない場合、GnuCashオリジナルの記録簿カラーが使用されます。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:91
 msgid "Include _grand total"
@@ -9851,7 +9803,7 @@ msgstr "ロケール(_A):"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:94
 msgid "Move to Transfer field when memorised transaction auto filled."
-msgstr ""
+msgstr "記憶された取引が自動入力されたときに資金移動欄に移動します。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:95
 msgid "New search _limit:"
@@ -9867,7 +9819,7 @@ msgstr "ファイルの新規作成時に勘定科目リスト設定を実行す
 
 #: ../src/gnome-utils/glade/preferences.glade.h:99
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
-msgstr ""
+msgstr "照合ダイアログを表示する前に精算済み取引を確認する"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:100
 msgid "Present the new account list dialog when you choose \"New File\" from the \"File\" menu"
@@ -9903,11 +9855,11 @@ msgstr "記録簿デフォルト"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:110
 msgid "Register opens in a new _window"
-msgstr "記録簿を新しいウィンドウに開く(_W)"
+msgstr "記録簿を新規ウィンドウに開く(_W)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:111
 msgid "Report opens in a new _window"
-msgstr "帳票を新しいウィンドウに開く(_W)"
+msgstr "帳票を新規ウィンドウに開く(_W)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:112
 msgid "Reports"
@@ -10708,7 +10660,7 @@ msgstr "ページの設定(_g)"
 
 #: ../src/gnome-utils/gnc-main-window.c:256
 msgid "Specify the page size and orientation for printing"
-msgstr ""
+msgstr "印刷する用紙のサイズと向きを指定する"
 
 #: ../src/gnome-utils/gnc-main-window.c:259
 msgid "Proper_ties"
@@ -11039,22 +10991,21 @@ msgid "New top level account"
 msgstr "新規最上位勘定科目"
 
 #: ../src/gnome-utils/gnc-tree-model-account-drag.c:687
-#, fuzzy
 msgid "You cannot move an account into itself."
-msgstr "資金移動する金額を入力してください。"
+msgstr "同じ勘定科目自身に移動することはできません。"
 
 #: ../src/gnome-utils/gnc-tree-model-account-drag.c:689
 msgid "The destination account is a child of the dragged account."
-msgstr ""
+msgstr "移動先の勘定科目は自身の子勘定科目です。"
 
 #: ../src/gnome-utils/gnc-tree-model-account-drag.c:707
 msgid "The account cannot be moved because the account types are incompatible."
-msgstr ""
+msgstr "勘定科目タイプに互換性がないため移動することができません。"
 
 #: ../src/gnome-utils/gnc-tree-model-account-drag.c:709
 #, c-format
 msgid "The destination account type, %s, is not compatible with the new parent's type, %s."
-msgstr ""
+msgstr "%s勘定科目タイプは親勘定科目タイプ %s と互換性がないため移動することができません。"
 
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/general-ledger.scm
@@ -11085,52 +11036,44 @@ msgid "Account Code"
 msgstr "勘定科目コード"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:547
-#, fuzzy
 msgid "Last Num"
-msgstr "最後"
+msgstr "最終番号"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:552
-#, fuzzy
 msgid "Present"
-msgstr "現在:"
+msgstr "現在の残高"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:559
-#, fuzzy
 msgid "Present (Report)"
-msgstr "帳票"
+msgstr "現在の残高(帳票)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:572
-#, fuzzy
 msgid "Balance (Report)"
-msgstr "貸借対照表"
+msgstr "貸借残高(帳票)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:579
-#, fuzzy
 msgid "Balance (Period)"
-msgstr "貸借対照表"
+msgstr "貸借残高(期間)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:592
-#, fuzzy
 msgid "Cleared (Report)"
-msgstr "清算済(c)"
+msgstr "清算済(帳票)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:605
 msgid "Reconciled (Report)"
-msgstr "照合済 (Report)"
+msgstr "照合済 (帳票)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:611
-#, fuzzy
 msgid "Last Reconcile Date"
-msgstr "照合日"
+msgstr "最終照合日"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:616
-#, fuzzy
 msgid "Future Minimum"
-msgstr "最小"
+msgstr "将来の最少残高"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:623
 msgid "Future Minimum (Report)"
-msgstr ""
+msgstr "将来の最少残高(帳票)"
 
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -11162,7 +11105,6 @@ msgid "Total"
 msgstr "合計"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:636
-#, fuzzy
 msgid "Total (Report)"
 msgstr "合計 (帳票)"
 
@@ -11182,15 +11124,15 @@ msgstr "プ"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1461
-#, fuzzy, c-format
+#, c-format
 msgid "Present (%s)"
-msgstr "現在 (%s):"
+msgstr "現在の残高 (%s)"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1464
 #, c-format
 msgid "Balance (%s)"
-msgstr "残高 (%s)"
+msgstr "貸借残高 (%s)"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1467
@@ -11206,9 +11148,9 @@ msgstr "照合済 (%s)"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1473
-#, fuzzy, c-format
+#, c-format
 msgid "Future Minimum (%s)"
-msgstr "最小"
+msgstr "将来の最少 (%s)"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1476
@@ -11221,9 +11163,8 @@ msgid "Namespace"
 msgstr "名前空間"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:410
-#, fuzzy
 msgid "Print Name"
-msgstr "得意先名"
+msgstr "表示名"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:416
 msgid "Unique Name"
@@ -11237,7 +11178,7 @@ msgstr "ISIN/証券コード"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:429
 msgid "Fraction"
-msgstr "端株"
+msgstr "小数部"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:436
 msgid "Get Quotes"
@@ -11488,25 +11429,23 @@ msgstr "この記録簿の主勘定科目を編集する"
 
 #: ../src/gnome/window-reconcile.c:2124
 msgid "Add a new transaction to the account"
-msgstr "勘定科目に取引を新規追加"
+msgstr "勘定科目に取引を新規追加する"
 
 #: ../src/gnome/window-reconcile.c:2126
 msgid "_Balance"
 msgstr "残高調整(_B)"
 
 #: ../src/gnome/window-reconcile.c:2127
-#, fuzzy
 msgid "Add a new balancing entry to the account"
-msgstr "勘定科目に取引を新規追加"
+msgstr "勘定科目に釣り合いをとるための取引を新規追加する"
 
 #: ../src/gnome/window-reconcile.c:2130
 msgid "Edit the current transaction"
 msgstr "現在の取引を編集する"
 
 #: ../src/gnome/window-reconcile.c:2133
-#, fuzzy
 msgid "Delete the selected transaction"
-msgstr "選択されている取引を切り取る"
+msgstr "選択された取引を削除する"
 
 #: ../src/gnome/window-reconcile.c:2139
 msgid "Open the GnuCash help window"
@@ -11676,7 +11615,7 @@ msgstr "インターネットバンキング初期設定"
 #: ../src/import-export/aqbanking/aqbanking.glade.h:29
 #: ../src/import-export/hbci/glade/hbci.glade.h:26
 msgid "Match Online Banking accounts with GnuCash accounts"
-msgstr "インターネットバンキングの口座をGnuCashの勘定科目にマッチさせる"
+msgstr "インターネットバンキングの口座をGnuCashの勘定科目に一致させる"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:30
 #: ../src/import-export/hbci/glade/hbci.glade.h:27
@@ -11833,18 +11772,16 @@ msgstr "取引テンプレートを使用"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:70
 #: ../src/import-export/hbci/glade/hbci.glade.h:68
-#, fuzzy
 msgid "_Earliest possible date"
-msgstr "可能性のある複製を選択"
+msgstr "可能性のある最初の日付(_E)"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:71
 #: ../src/import-export/hbci/glade/hbci.glade.h:69
 msgid "_Last retrieval date"
-msgstr ""
+msgstr "最後に取得した日付(_L)"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:72
 #: ../src/import-export/hbci/glade/hbci.glade.h:70
-#, fuzzy
 msgid "_Now"
 msgstr "現在(_N)"
 
@@ -11856,7 +11793,7 @@ msgstr "AqBanking ウィザードを起動(S)"
 #: ../src/import-export/aqbanking/aqbanking.glade.h:74
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:6
 msgid "_Verbose debug messages"
-msgstr "デバッグメッセージ(_V)"
+msgstr "冗長なデバッグメッセージを表示(_V)"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:75
 #: ../src/import-export/hbci/glade/hbci.glade.h:72
@@ -11877,9 +11814,8 @@ msgstr ""
 #: ../src/import-export/hbci/dialog-hbcitrans.c:895
 #: ../src/import-export/hbci/dialog-hbcitrans.c:899
 #: ../src/import-export/hbci/dialog-hbcitrans.c:909
-#, fuzzy
 msgid "(unknown)"
-msgstr "未知"
+msgstr "(不明)"
 
 #. Translators: Strings from this file are
 #. * needed only in countries that have one of
@@ -11973,9 +11909,9 @@ msgid "A template with the given name already exists.  Please enter another name
 msgstr ""
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:992
-#, fuzzy, c-format
+#, c-format
 msgid "Do you really want to delete the template with the name \"%s\"?"
-msgstr "本当にこの予定取引を削除してもよろしいですか?"
+msgstr "本当に\"%s\"という名前のテンプレートを削除してもよろしいですか?"
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:297
 #: ../src/import-export/hbci/druid-hbci-initial.c:689
@@ -12148,19 +12084,20 @@ msgstr "インポートするファイルを選択する"
 
 #: ../src/import-export/aqbanking/gnc-file-aqb-import.c:126
 msgid "Import module for DTAUS import not found."
-msgstr ""
+msgstr "DTAUSのインポートモジュールが見つかりません。"
 
 #: ../src/import-export/aqbanking/gnc-gwen-gui.c:867
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
 "long. Do you want to try again?"
-msgstr "暗証番号は%d文字以上の長さが必要です。もう一度試しますか?"
+msgstr ""
+"PIN(暗証番号)は%d文字以上の長さが必要です。\n"
+"もう一度試しますか?"
 
 #: ../src/import-export/aqbanking/gnc-gwen-gui.c:1320
-#, fuzzy
 msgid "The Online Banking job is still running; are you sure you want to cancel?"
-msgstr "この予定取引は変更されています。本当に取り消してよろしいですか?"
+msgstr "インターネットバンキングのジョブは実行中です。本当に取り消してよろしいですか?"
 
 #: ../src/import-export/aqbanking/gncmod-aqbanking.c:75
 #: ../src/import-export/gncmod-generic-import.c:61
@@ -12318,7 +12255,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:7
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:7
 msgid "Remember the PIN in memory"
-msgstr "暗証番号をメモリ内に記憶する"
+msgstr "PIN(暗証番号)をメモリ内に記憶する"
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:8
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:8
@@ -12357,35 +12294,32 @@ msgstr ""
 
 #. If it fails, change back to the old encoding.
 #: ../src/import-export/csv/gnc-csv-import.c:211
-#, fuzzy
 msgid "Invalid encoding selected"
-msgstr "有効な得意先請求書が選択されていません"
+msgstr "無効なエンコーディングが選択されました"
 
 #: ../src/import-export/csv/gnc-csv-import.c:554
 msgid "Merge with column on _left"
-msgstr ""
+msgstr "左側の列を併合する(_L)"
 
 #: ../src/import-export/csv/gnc-csv-import.c:556
 msgid "Merge with column on _right"
-msgstr ""
+msgstr "右側の列を併合する(_R)"
 
 #: ../src/import-export/csv/gnc-csv-import.c:559
-#, fuzzy
 msgid "_Split this column"
-msgstr "価格の列を表示"
+msgstr "この列を分割する(_S)"
 
 #: ../src/import-export/csv/gnc-csv-import.c:562
 msgid "_Widen this column"
-msgstr ""
+msgstr "この列の幅をを広げる(_W)"
 
 #: ../src/import-export/csv/gnc-csv-import.c:564
-#, fuzzy
 msgid "_Narrow this column"
-msgstr "価格の列を表示"
+msgstr "この列の幅を狭める(_N)"
 
 #: ../src/import-export/csv/gnc-csv-import.c:1041
 msgid "The rows displayed below had errors. You can attempt to correct these errors by changing the configuration."
-msgstr ""
+msgstr "表示された行にエラーがあります。設定を変更してこれらのエラーを修正してください。"
 
 #: ../src/import-export/csv/gnc-csv-import.c:1055
 msgid "Errors"
@@ -12393,9 +12327,8 @@ msgstr "エラー"
 
 #. Let the user select a file.
 #: ../src/import-export/csv/gnc-csv-import.c:1076
-#, fuzzy
 msgid "Select an CSV/Fixed-Width file to import"
-msgstr "インポートするファイルを選択する"
+msgstr "インポートするCSV/固定幅ファイルを選択する"
 
 #: ../src/import-export/csv/gnc-csv-model.c:33
 #: ../src/import-export/gnc-import-format-gnome.c:111
@@ -12545,11 +12478,11 @@ msgstr "<b>汎用インポート</b>"
 
 #: ../src/import-export/generic-import.glade.h:8
 msgid "A transaction whose best match's score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default."
-msgstr "最善のマッチスコアが緑色ゾーン（自動クリア閾値以上）の取引はデフォルトでクリアされます。"
+msgstr "最善の一致スコアが緑色ゾーン（自動精算閾値以上）の取引はデフォルトで精算済みになります。"
 
 #: ../src/import-export/generic-import.glade.h:9
 msgid "A transaction whose best match's score is in the red zone (above the display threshold but below or equal to the Auto-ADD threshold) will be ADDed by default."
-msgstr "最善のマッチスコアが赤色ゾーン（表示閾値より上で自動追加閾値以下）の取引はデフォルトで追加されます。"
+msgstr "最善の一致スコアが赤色ゾーン（表示閾値より上で自動追加閾値以下）の取引はデフォルトで追加されます。"
 
 #: ../src/import-export/generic-import.glade.h:11
 msgid "Auto-_add threshold"
@@ -12557,7 +12490,7 @@ msgstr "自動追加の閾値"
 
 #: ../src/import-export/generic-import.glade.h:12
 msgid "Auto-c_lear threshold"
-msgstr "自動クリアの閾値"
+msgstr "自動精算の閾値"
 
 #: ../src/import-export/generic-import.glade.h:13
 msgid "Choose a format"
@@ -12569,11 +12502,11 @@ msgstr "提携ATM利用料金の閾値(_F)"
 
 #: ../src/import-export/generic-import.glade.h:18
 msgid "Enable edit match action"
-msgstr "マッチ編集アクションを有効にする"
+msgstr "一致アクションの編集を有効にする"
 
 #: ../src/import-export/generic-import.glade.h:19
 msgid "Enable skip transaction action"
-msgstr "取引スキップアクションを有効にする"
+msgstr "取引アクションのスキップを有効にする"
 
 #: ../src/import-export/generic-import.glade.h:20
 msgid "Enable the EDIT action in the transaction matcher.  NOT YET SUPPORTED"
@@ -12606,9 +12539,8 @@ msgid "Imported transaction's first split:"
 msgstr "インポートされた取引の最初のスプリット:"
 
 #: ../src/import-export/generic-import.glade.h:32
-#, fuzzy
 msgid "In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores.  These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw $100, and you are charged $101,50 plus Interac fees.  If you manually entered that $100, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
-msgstr "地域によっては、（金融期間に属さない）商用ATMがコンビニエンスストアのような場所に設置されています。これらのATMは利用料金を別の取引として表示したり毎月の銀行利用料金としたりせず、金額に直接加算します。例えば、10,000円を引き出すと、10,105円+Interac料金が口座から引かれます。もしこれを手動で10,000円として入力したとすると、金額がマッチしません。このような取引をマッチできるようにするため、この値をあなたの地域での最大限の利用料金に（あなたの地域の通貨で）設定してください。"
+msgstr "地域によっては、(金融期間に属さない)商用ATMがコンビニエンスストアのような場所に設置されています。これらのATMは利用手数料を別の取引として表示したり毎月の銀行利用手数料としたりするかわりに、金額に直接加算します。例えば、10,000円を引き出すと、10,105円+相互利用手数料が口座から引かれます。もしこれを手動で10,000円として入力したとすると、金額が一致しません。このような取引を一致していると認識できるようにするため、この値をあなたの地域での最大の利用手数料に(あなたの地域の通貨で)設定してください。"
 
 #: ../src/import-export/generic-import.glade.h:33
 msgid "List of downloaded transactions (source split shown):"
@@ -12616,7 +12548,7 @@ msgstr "ダウンロードされた取引一覧 (ソースのスプリット表�
 
 #: ../src/import-export/generic-import.glade.h:34
 msgid "Match _display threshold"
-msgstr "マッチ表示の閾値"
+msgstr "一致表示の閾値"
 
 #: ../src/import-export/generic-import.glade.h:36
 msgid "Online account ID here..."
@@ -12632,7 +12564,7 @@ msgstr "次の口座用の適切なGnuCash勘定科目を選択するか作成�
 
 #: ../src/import-export/generic-import.glade.h:39
 msgid "Potential splits matching the selected transaction: "
-msgstr "選択した取引にマッチする可能性のあるスプリット: "
+msgstr "選択した取引に一致する可能性のあるスプリット: "
 
 #: ../src/import-export/generic-import.glade.h:41
 msgid "Red"
@@ -12644,11 +12576,11 @@ msgstr "取引を新規として追加するには \"A\" を選択してくだ�
 
 #: ../src/import-export/generic-import.glade.h:43
 msgid "Select \"R\" to reconcile a matching transaction."
-msgstr "マッチした取引を照合するには \"R\" を選択してください"
+msgstr "一致した取引を照合するには \"R\" を選択してください"
 
 #: ../src/import-export/generic-import.glade.h:45
 msgid "Select matching existing transaction"
-msgstr "既存のマッチする取引を選択する"
+msgstr "既存の一致する取引を選択する"
 
 #: ../src/import-export/generic-import.glade.h:46
 msgid "Select neither to skip the transaction (it won't be imported at all)."
@@ -12656,7 +12588,7 @@ msgstr "取引を（インポートせず）スキップするにはどちらも
 
 #: ../src/import-export/generic-import.glade.h:47
 msgid "The minimum score a potential match must have to be displayed in the match list."
-msgstr "マッチリストに表示する候補の最小限のスコア。"
+msgstr "一致リストに表示する候補の最小限のスコア。"
 
 #: ../src/import-export/generic-import.glade.h:48
 msgid "This transaction probably requires your intervention or it will be imported unbalanced."
@@ -12671,9 +12603,8 @@ msgid "This transaction will be imported balanced (you may still want to double 
 msgstr "この取引は貸借一致の状態でインポートされます（それでもマッチや相手勘定科目の再確認をしたくなるかもしれません）。"
 
 #: ../src/import-export/generic-import.glade.h:51
-#, fuzzy
 msgid "Transaction List Help"
-msgstr "取引"
+msgstr "取引リストのヘルプ"
 
 #: ../src/import-export/generic-import.glade.h:52
 msgid "Use _bayesian matching"
@@ -12698,7 +12629,7 @@ msgstr "小数点=カンマ (1.000,00)"
 
 #: ../src/import-export/gnc-import-format-gnome.c:112
 msgid "y-d-m"
-msgstr "y-d-m"
+msgstr "年-日-月"
 
 #: ../src/import-export/hbci/dialog-hbcitrans.c:806
 msgid ""
@@ -12726,7 +12657,7 @@ msgstr "設定(_N)"
 #: ../src/import-export/hbci/druid-hbci-utils.c:152
 #, c-format
 msgid "The file %s does not exist. Would you like to create it now?"
-msgstr "ファイル %s が存在しません。作成しますか？"
+msgstr "ファイル %s が存在しません。作成しますか?"
 
 #: ../src/import-export/hbci/druid-hbci-utils.c:165
 #, c-format
@@ -12743,7 +12674,7 @@ msgstr "インターネットバンキングのバージョン"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:44
 msgid "Start AqBanking Setup Wizard"
-msgstr ""
+msgstr "AqBanking設定ウィザードを開始"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:67
 msgid "Version"
@@ -12763,13 +12694,15 @@ msgstr "インターネットバンキング用のデバッグメッセージを
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:5
 msgid "Remember the Online Banking PIN in memory during a session."
-msgstr "セッション中、インターネットバンキングの暗証番号をメモリ内に記憶する"
+msgstr "セッション中、インターネットバンキングのPIN(暗証番号)をメモリ内に記憶する"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:357
 msgid ""
 "The PIN you entered was wrong.\n"
 "Do you want to try again?"
 msgstr ""
+"入力したPIN(暗証番号)が間違っています。\n"
+"もう一度試しますか?"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:363
 msgid ""
@@ -12777,17 +12710,17 @@ msgid ""
 "ATTENTION: You have zero further wrong retries left!\n"
 "Do you want to try again?"
 msgstr ""
-"入力した暗証番号が間違っています。\n"
+"入力したPIN(暗証番号)が間違っています。\n"
 "注意: これ以上間違えられません!\n"
 "もう一度試しますか?"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:370
 msgid "Unfortunately you entered a wrong PIN for too many times. Your chip card is therefore destroyed. Aborting."
-msgstr "あいにく、暗証番号の間違いが多すぎました。そのため、あなたのチップカードは破壊されました。中止します。"
+msgstr "あいにく、PIN(暗証番号)の間違い回数が多すぎました。そのため、あなたのICカードは破壊されました。中止します。"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:379
 msgid "No chip card has been found in the chip card reader. Do you want to try again?"
-msgstr "チップカードリーダにチップカードがありません。もう一度試しますか?"
+msgstr "ICカードリーダにICカードが挿入されていません。もう一度試しますか?"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:385
 msgid "Unfortunately this Online Banking job is not supported by your bank or for your account. Aborting."
@@ -12837,12 +12770,12 @@ msgstr "CSVファイルをGnuCashにインポートし、インターネット�
 #: ../src/import-export/hbci/hbci-interaction.c:401
 #, c-format
 msgid "The PIN needs to be at least %d characters long. Do you want to try again?"
-msgstr "暗証番号は%d文字以上の長さが必要です。もう一度試しますか?"
+msgstr "PIN(暗証番号)は%d文字以上の長さが必要です。もう一度試しますか?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:414
 #, c-format
 msgid "You entered %ld characters, but the PIN must be no longer than %d characters. Do you want to try again?"
-msgstr "%ld文字入力しましたが、暗証番号の長さは%d文字以下です。もう一度試しますか?"
+msgstr "%ld文字入力しましたが、PIN(暗証番号)の長さは%d文字以下にしなければなりません。もう一度試しますか?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:482
 #, c-format
@@ -12852,7 +12785,7 @@ msgstr "取引番号は%d文字以上の長さが必要です。もう一度試�
 #: ../src/import-export/hbci/hbci-interaction.c:495
 #, c-format
 msgid "You entered %ld characters, but the TAN must be no longer than %d characters. Do you want to try again?"
-msgstr "%ld文字入力しましたが、取引番号の長さは%d文字以下です。もう一度試しますか?"
+msgstr "%ld文字入力しましたが、取引番号の長さは%d文字以下にしなければなりません。もう一度試しますか?"
 
 #: ../src/import-export/import-account-matcher.c:82
 msgid "Account ID"
@@ -12865,7 +12798,7 @@ msgstr "(フル口座ID: "
 #: ../src/import-export/import-account-matcher.c:241
 #, c-format
 msgid "The account %s is a placeholder account and does not allow transactions. Please choose a different account."
-msgstr "勘定科目 %s はプレースホルダー勘定科目であり取引が許されません。別の勘定科目を選んでください。"
+msgstr "勘定科目 %s はプレースホルダー勘定科目であり取引が許されません。別の勘定科目を選択してください。"
 
 #: ../src/import-export/import-commodity-matcher.c:114
 msgid "Please select a commodity to match the following exchange specific code. Please note that the exchange code of the commodity you select will be overwritten."
@@ -12881,19 +12814,19 @@ msgstr "カンマ: 123,456.78"
 
 #: ../src/import-export/import-format-dialog.c:75
 msgid "m/d/y"
-msgstr "m/d/y"
+msgstr "月/日/年"
 
 #: ../src/import-export/import-format-dialog.c:83
 msgid "d/m/y"
-msgstr "d/m/y"
+msgstr "日/月/年"
 
 #: ../src/import-export/import-format-dialog.c:91
 msgid "y/m/d"
-msgstr "y/m/d"
+msgstr "年/月/日"
 
 #: ../src/import-export/import-format-dialog.c:99
 msgid "y/d/m"
-msgstr "y/d/m"
+msgstr "年/日/月"
 
 #: ../src/import-export/import-main-matcher.c:222
 msgid "Destination account for the auto-balance split."
@@ -12975,21 +12908,14 @@ msgstr "このQIFファイルの日付書式を設定する"
 
 #: ../src/import-export/import-provider-format.glade.h:5
 #: ../src/import-export/qif-import/qif.glade.h:64
-#, fuzzy
 msgid ""
 "The QIF file format does not specify which order the day, month, and year components of a date are printed.  In most cases, it is possible to automatically determine which format is in use in a particular file. However, in the file you have just imported there exist more than one possible format that fits the data.  \n"
 "\n"
 "Please select a date format for the file.  QIF files created by European software are likely  to be in \"d-m-y\" or day-month-year format, where US QIF files are likely to be \"m-d-y\" or month-day-year.    \n"
 msgstr ""
-"QIF ファイルではどの順番で日付を構成する日、月、年のコンポーネントが \n"
-"印刷されるかを指定しません。ほとんどの場合、特定のファイルでどの形式が\n"
-"使用されているかを自動的に決めることができます。\n"
-"しかしながら、今読み込んだファイルには可能性のある日付書式が１つ以上\n"
-"存在します。\n"
+"QIFファイル形式では日付を記録する日、月、年の順番が規定されていません。ほとんどの場合はある特定のファイルでどの形式が利用されているかを自動的に判別することができます。しかしながら、あなたが今インポートしたファイルでは可能性がある日付の形式が2種類以上あります。\n"
 "\n"
-"日付の書式を選択してください。ヨーロッパ製のソフトで作成された QIF\n"
-"ファイルは \"d-m-y\"または日-月-年の書式になっていることが多く、米国の\n"
-"場合には \"m-d-y\"または月-日-年の書式になっていることが多いです。\n"
+"ファイルの日付形式を指定してください。ヨーロッパ製のソフトウェアで作成されたQIFファイルでは\"日-月-年\"の形式が使用されていることが多いです。一方、アメリカ製のソフトウェアで作成されたQIFファイルは\"月-日-年\"が使用されていることが多いです。\n"
 
 #: ../src/import-export/log-replay/gnc-log-replay.c:522
 msgid "Select a .log file to replay"
@@ -13033,7 +12959,7 @@ msgstr "クラッシュ後にGnuCashのログファイルをリプレイする (
 #: ../src/import-export/ofx/gnc-ofx-import.c:362
 #, c-format
 msgid "Stock account for security \"%s\""
-msgstr "証券 \"%s\" の株式口座"
+msgstr "証券 \"%s\" の株式勘定科目"
 
 #. This string is a default account
 #. name. It MUST NOT contain the
@@ -13042,40 +12968,39 @@ msgstr "証券 \"%s\" の株式口座"
 #: ../src/import-export/ofx/gnc-ofx-import.c:432
 #, c-format
 msgid "Income account for security \"%s\""
-msgstr "証券 \"%s\" の収益口座"
+msgstr "証券 \"%s\" の収益勘定科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:565
-#, fuzzy
 msgid "Unknown OFX account"
-msgstr "不明なOFX普通預金口座"
+msgstr "不明なOFX勘定科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:585
 msgid "Unknown OFX checking account"
-msgstr "不明なOFX当座預金口座"
+msgstr "不明なOFX当座預金勘定科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:589
 msgid "Unknown OFX savings account"
-msgstr "不明なOFX普通預金口座"
+msgstr "不明なOFX普通預金勘定科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:593
 msgid "Unknown OFX money market account"
-msgstr ""
+msgstr "不明なOFX金融市場勘定科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:597
 msgid "Unknown OFX credit line account"
-msgstr ""
+msgstr "不明なOFX信用取引勘定科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:601
 msgid "Unknown OFX CMA account"
-msgstr ""
+msgstr "不明なOFX CMA勘定科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:605
 msgid "Unknown OFX credit card account"
-msgstr "不明なOFXクレジットカード口座"
+msgstr "不明なOFXクレジットカード勘定科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:609
 msgid "Unknown OFX investment account"
-msgstr "不明なOFX投資口座"
+msgstr "不明なOFX投資勘定科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:679
 msgid "Select an OFX/QFX file to process"
@@ -13136,6 +13061,8 @@ msgstr "QIFファイルの読込み中にバグが検出されました。"
 msgid "Failed"
 msgstr "失敗しました"
 
+# 訳注: Windowsでも「ディスクのクリーンアップ」という使われ方をしている
+# ためクリーンアップを採用しました。
 #. Unload the file.
 #. Remove any converted data.
 #. An error occurred during duplicate checking.
@@ -13147,7 +13074,7 @@ msgstr "失敗しました"
 #: ../src/import-export/qif-import/druid-qif-import.c:2654
 #: ../src/import-export/qif-import/druid-qif-import.c:2701
 msgid "Cleaning up"
-msgstr ""
+msgstr "クリーンアップ"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:917
 #: ../src/import-export/qif-import/druid-qif-import.c:921
@@ -13164,13 +13091,12 @@ msgstr "読み込みが完了しました。"
 #: ../src/import-export/qif-import/druid-qif-import.c:1028
 #: ../src/import-export/qif-import/druid-qif-import.c:2764
 #: ../src/import-export/qif-import/druid-qif-import.c:2768
-#, fuzzy
 msgid "_Resume"
-msgstr "リナンバー(_R)"
+msgstr "再開(_R)"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1390
 msgid "You must enter an account name."
-msgstr "勘定科目名を入力しなければなりません。"
+msgstr "勘定科目名を入力してください。"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1469
 msgid "GnuCash account name"
@@ -13184,7 +13110,7 @@ msgstr "商品の名前または短い説明を入力してください。例え
 #: ../src/import-export/qif-import/druid-qif-import.c:2077
 #: ../src/import-export/qif-import/druid-qif-import.c:2146
 msgid "Enter the ticker symbol or other well known abbreviation, such as \"RHT\". If there isn't one, or you don't know it, create your own."
-msgstr ""
+msgstr "銘柄記号またはほかのよく知られた略号を入力してください。たとえば\"RHT\"です。もしよく知らなければ自分で適切なものを作成し、入力してください。"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2084
 #: ../src/import-export/qif-import/druid-qif-import.c:2149
@@ -13225,25 +13151,24 @@ msgstr ""
 #: ../src/import-export/qif-import/druid-qif-import.c:2636
 #: ../src/import-export/qif-import/druid-qif-import.c:2640
 msgid "A bug was detected while converting the QIF data."
-msgstr ""
+msgstr "QIFデータの変換中にバグが検出されました。"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2692
-#, fuzzy
 msgid "Canceling"
-msgstr "キャンセル"
+msgstr "キャンセルしています"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2706
 #: ../src/import-export/qif-import/druid-qif-import.c:2710
 msgid "A bug was detected while detecting duplicates."
-msgstr ""
+msgstr "重複を検出中にバグが検出されました。"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2721
 msgid "Conversion completed"
-msgstr ""
+msgstr "変換が完了しました"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:3031
 msgid "GnuCash was unable to save your mapping preferences."
-msgstr ""
+msgstr "GnuCashはマッピングの設定を保存することができませんでした。"
 
 #. Set up the QIF account to GnuCash account matcher.
 #: ../src/import-export/qif-import/druid-qif-import.c:3549
@@ -13296,13 +13221,9 @@ msgid ""
 "\n"
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
-"一時作業エリアからデータをインポートし、GnuCash の勘定科目を更新するには\"適用\"をクリック\n"
-"してください。ここで入力された勘定科目とカテゴリの適合の情報はデフォルト\n"
-"として、次回の QIF ファイルのインポートに使用されます。\n"
+"一時作業エリアからデータをインポートし、GnuCash の勘定科目を更新するには\"適用\"をクリックしてください。ここで入力された勘定科目とカテゴリを一致させる情報はデフォルトとして、次回の QIF ファイルのインポートに使用されます。\n"
 "\n"
-"勘定科目とカテゴリの適合情報の見直し、新規勘定科目に対する通貨や証券の設定変更、\n"
-"一時作業エリアへのファイルの追加などを行うには、\"戻る\"をクリック\n"
-"してください。\n"
+"勘定科目とカテゴリの適合情報の見直し、新規勘定科目に対する通貨や証券の設定変更、一時作業エリアへのファイルの追加などを行うには、\"戻る\"をクリックしてください。\n"
 "\n"
 "QIF ファイルのインポートを中止するには、\"キャンセル\"をクリックしてください。"
 
@@ -13312,15 +13233,13 @@ msgid ""
 "\n"
 "Click \"Forward\" to finish loading files and move to the next step of the QIF import process. "
 msgstr ""
-"インポートするデータがまだある場合には、\"別のファイルをロード\"\n"
-"をクリックしてください。複数の QIF ファイルに勘定科目を保存した場合も同様です。\n"
+"インポートするデータがまだある場合には、\"別のファイルをロード\"をクリックしてください。複数の QIF ファイルに勘定科目を保存した場合も同様です。\n"
 "\n"
 "\"進む\" をクリックすると、ファイルのロードを終了し、QIFインポート処理の次のステップに進むことができます。"
 
 #: ../src/import-export/qif-import/qif.glade.h:14
-#, fuzzy
 msgid "Enter the QIF file currency"
-msgstr "値引きパーセントを入力"
+msgstr "QIFファイルの通貨を入力してください。"
 
 #: ../src/import-export/qif-import/qif.glade.h:15
 msgid ""
@@ -13330,15 +13249,11 @@ msgid ""
 "\n"
 "Click \"Forward\" to start loading your QIF data, or \"Cancel\" to abort the process. "
 msgstr ""
-"GnuCash は財務データを Qicken/Quickbooks、MS Money、\n"
-"Moneydance およびその他のプログラムで書き込まれた QIF\n"
-"(Quicken Interchange Format) からインポートすることができます。\n"
+"GnuCash は財務データを Qicken/Quickbooks、MS Money、Moneydance およびその他のプログラムで書き込まれた QIF(Quicken Interchange Format) からインポートすることができます。\n"
 "\n"
-"インポート処理はいくつかのステップからなります。GnuCash の\n"
-"勘定科目は最後のステップで\"完了\"をクリックするまで変更されません。\n"
+"インポート処理はいくつかのステップからなります。GnuCash の勘定科目は最後のステップで\"完了\"をクリックするまで変更されません。\n"
 "\n"
-"QIF データをインポートするには\"進む\"を、中止するには\"キャンセル\"を\n"
-"クリックしてください。"
+"QIF データをインポートするには\"進む\"を、中止するには\"キャンセル\"をクリックしてください。"
 
 #: ../src/import-export/qif-import/qif.glade.h:20
 msgid ""
@@ -13385,9 +13300,8 @@ msgid "Income and Expense categories"
 msgstr "収益と費用の区分"
 
 #: ../src/import-export/qif-import/qif.glade.h:37
-#, fuzzy
 msgid "Load QIF files"
-msgstr "QIFファイルをロード中..."
+msgstr "QIFファイルをロード"
 
 #: ../src/import-export/qif-import/qif.glade.h:38
 msgid "Match QIF accounts with GnuCash accounts"
@@ -13398,9 +13312,8 @@ msgid "Match QIF categories with GnuCash accounts"
 msgstr "QIFのカテゴリとGnuCashの勘定科目との一致"
 
 #: ../src/import-export/qif-import/qif.glade.h:40
-#, fuzzy
 msgid "Match existing transactions"
-msgstr "既存のマッチする取引を選択する"
+msgstr "既存の取引に一致させる"
 
 #: ../src/import-export/qif-import/qif.glade.h:41
 msgid "Match payees/memos to GnuCash accounts"
@@ -13449,7 +13362,6 @@ msgid "QIF Import"
 msgstr "QIFインポート"
 
 #: ../src/import-export/qif-import/qif.glade.h:54
-#, fuzzy
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not have information about Accounts and Categories which would allow them to be correctly assigned to GnuCash accounts.  \n"
 "\n"
@@ -13498,12 +13410,8 @@ msgstr ""
 "使用するべきです。\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:72
-#, fuzzy
 msgid "The QIF importer cannot currently handle multi-currency QIF files. All the accounts you are importing must be denominated in the same currency.\n"
-msgstr ""
-"QIF のインポート機能は、現時点では複数通貨のQIFファイルを処理することは\n"
-"できません。インポートをする QIF ファイルのすべての勘定科目は同じ通貨建て\n"
-"でなければなりません。\n"
+msgstr "QIF のインポート機能は、現時点では複数通貨のQIFファイルを処理することはできません。インポートをする QIF ファイルのすべての勘定科目は同じ通貨建てでなければなりません。\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:74
 msgid "Tradable commodities"
@@ -13543,9 +13451,8 @@ msgid "_Show documentation"
 msgstr "ドキュメントを表示する(_S)"
 
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:1
-#, fuzzy
 msgid "Show documentation"
-msgstr "ドキュメントを表示する(_S)"
+msgstr "ドキュメントを表示する"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:1
 msgid "Add matching transactions below this score"
@@ -13606,15 +13513,15 @@ msgstr "ベイジアンマッチングを用いる"
 
 #: ../src/libqof/backend/file/qsf-backend.c:107
 msgid "Level of compression to use: 0 for none, 9 for highest."
-msgstr ""
+msgstr "利用する圧縮レベルの指定: 0は無圧縮、9は最高圧縮。"
 
 #: ../src/libqof/backend/file/qsf-backend.c:108
 msgid "QOF can compress QSF XML files using gzip. Note that compression is not used when outputting to STDOUT."
-msgstr ""
+msgstr "QOFはQSF XMFファイルをgzipを利用して圧縮することができます。標準出力に出力する場合は圧縮されないことに注意してください。"
 
 #: ../src/libqof/backend/file/qsf-backend.c:116
 msgid "List of QSF map files to use for this session."
-msgstr ""
+msgstr "このセッションで使用されるQSFマップファイルの一覧"
 
 #: ../src/libqof/backend/file/qsf-backend.c:117
 msgid "QOF can convert objects within QSF XML files using a map of the changes required."
@@ -13630,15 +13537,15 @@ msgstr "QSFのデフォルトはUTF-8です。このオプションで文字列�
 
 #: ../src/libqof/qof/gnc-date.c:75
 msgid "%B %#d, %Y"
-msgstr ""
+msgstr "%B %#d, %Y"
 
 #: ../src/libqof/qof/gnc-date.c:77
 msgid "%B %e, %Y"
-msgstr ""
+msgstr "%B %e, %Y"
 
 #: ../src/register/ledger-core/split-register.c:173
 msgid "This transaction is already being edited in another register. Please finish editing it there first."
-msgstr ""
+msgstr "この取引は、現在、他の記録簿で編集中です。先に他の記録簿での編集を終了させてください。"
 
 #: ../src/register/ledger-core/split-register.c:439
 msgid "Save transaction before duplicating?"
@@ -13650,11 +13557,11 @@ msgstr "現在の取引の情報は変更されています。取引を複製す
 
 #: ../src/register/ledger-core/split-register.c:799
 msgid "You are about to overwrite an existing split. Are you sure you want to do that?"
-msgstr "既存のスプリットを上書きしようとしています。本当に上書きしますか？"
+msgstr "既存のスプリットを上書きしようとしています。本当に上書きしますか?"
 
 #: ../src/register/ledger-core/split-register.c:831
 msgid "You are about to overwrite an existing transaction. Are you sure you want to do that?"
-msgstr "既存の取引を上書きしようとしています。本当に上書きしますか？"
+msgstr "既存の取引を上書きしようとしています。本当に上書きしますか?"
 
 #: ../src/register/ledger-core/split-register.c:1894
 msgid "Recalculate Transaction"
@@ -13688,7 +13595,7 @@ msgstr "再計算(_R)"
 #. must only contain the part after the | character.
 #: ../src/register/ledger-core/split-register.c:2198
 msgid "Action Column|Deposit"
-msgstr ""
+msgstr "Action Column|入金"
 
 #: ../src/register/ledger-core/split-register.c:2199
 msgid "Withdraw"
@@ -13708,14 +13615,13 @@ msgstr ""
 
 #: ../src/register/ledger-core/split-register.c:2202
 #: ../src/register/ledger-core/split-register.c:2233
-#, fuzzy
 msgid "ATM Deposit"
-msgstr "入金"
+msgstr "ATM入金"
 
 #: ../src/register/ledger-core/split-register.c:2203
 #: ../src/register/ledger-core/split-register.c:2234
 msgid "ATM Draw"
-msgstr ""
+msgstr "ATM出金"
 
 #: ../src/register/ledger-core/split-register.c:2204
 msgid "Teller"
@@ -13822,7 +13728,7 @@ msgstr "小切手"
 #. Action: Dividend
 #: ../src/register/ledger-core/split-register.c:2288
 msgid "Div"
-msgstr ""
+msgstr "配当"
 
 #. Action: Long Term Capital Gains
 #: ../src/register/ledger-core/split-register.c:2291
@@ -13837,7 +13743,7 @@ msgstr "短期資本利得"
 #. Action: Distribution
 #: ../src/register/ledger-core/split-register.c:2296
 msgid "Dist"
-msgstr ""
+msgstr "分配"
 
 #: ../src/register/ledger-core/split-register-control.c:57
 msgid "Rebalance Transaction"
@@ -13870,17 +13776,16 @@ msgstr ""
 #: ../src/register/ledger-core/split-register-control.c:1268
 #: ../src/register/ledger-core/split-register-control.c:1281
 msgid "This register does not support editing exchange rates."
-msgstr ""
+msgstr "この記録簿は為替レートの編集をサポートしていません。"
 
 #: ../src/register/ledger-core/split-register-control.c:1305
-#, fuzzy
 msgid "You need to select a split in order to modify its exchange rate."
-msgstr "為替レートを変更するには取引を拡張する必要があります。"
+msgstr "為替レートを変更するにはスプリットを選択する必要がありません。"
 
 #: ../src/register/ledger-core/split-register-control.c:1319
 #: ../src/register/ledger-core/split-register-control.c:1392
 msgid "You need to expand the transaction in order to modify its exchange rates."
-msgstr "為替レートを変更するには取引を拡張する必要があります。"
+msgstr "為替レートを変更するには取引を展開する必要があります。"
 
 #: ../src/register/ledger-core/split-register-control.c:1331
 msgid "The entered account could not be found."
@@ -13889,11 +13794,11 @@ msgstr "入力された勘定科目が見つかりませんでした。"
 #: ../src/register/ledger-core/split-register-control.c:1365
 #: ../src/register/ledger-core/split-register-control.c:1378
 msgid "The two currencies involved equal each other."
-msgstr ""
+msgstr "含まれている2つの通貨は同一です。"
 
 #: ../src/register/ledger-core/split-register-control.c:1427
 msgid "The split's amount is zero, so no exchange rate is needed."
-msgstr ""
+msgstr "スプリットの合計が0です。そのため為替レートは必要ありません。"
 
 #: ../src/register/ledger-core/split-register-control.c:1477
 msgid "Save the changed transaction?"
@@ -13909,7 +13814,7 @@ msgstr "変更を破棄(_D)"
 
 #: ../src/register/ledger-core/split-register-control.c:1494
 msgid "_Record Changes"
-msgstr "変更を記帳(_R)"
+msgstr "変更を記録(_R)"
 
 #: ../src/register/ledger-core/split-register-control.c:1767
 msgid "Mark split as unreconciled?"
@@ -13973,11 +13878,11 @@ msgstr "sample:(x + 0.33 * y + (x+y) )"
 
 #: ../src/register/ledger-core/split-register-load.c:328
 msgid "Could not determine the account currency.  Using the default currency provided by your system."
-msgstr ""
+msgstr "勘定科目の通貨を決定することができません。システムデフォルトの通貨を使用します。"
 
 #: ../src/register/ledger-core/split-register-model.c:204
 msgid "Ref"
-msgstr ""
+msgstr "参照情報"
 
 #: ../src/register/ledger-core/split-register-model.c:340
 #: ../src/register/ledger-core/split-register-model.c:364
@@ -13987,11 +13892,11 @@ msgstr "合計 %s"
 
 #: ../src/register/ledger-core/split-register-model.c:346
 msgid "Tot Credit"
-msgstr "貸方合計"
+msgstr "合計 貸方"
 
 #: ../src/register/ledger-core/split-register-model.c:370
 msgid "Tot Debit"
-msgstr "借方合計"
+msgstr "合計 借方"
 
 #: ../src/register/ledger-core/split-register-model.c:379
 msgid "Tot Shares"
@@ -14017,9 +13922,8 @@ msgid "Scheduled"
 msgstr "予定済"
 
 #: ../src/register/ledger-core/split-register-model.c:963
-#, fuzzy
 msgid "Enter the transaction reference, such as the invoice or check number"
-msgstr "取引番号を入力する（小切手の番号など）"
+msgstr "取引の参照情報を入力する(得意先請求書番号や小切手番号など)"
 
 #: ../src/register/ledger-core/split-register-model.c:967
 msgid "Enter the transaction number, such as the check number"
@@ -14042,9 +13946,8 @@ msgid "Enter notes for the transaction"
 msgstr "取引の備考を入力する"
 
 #: ../src/register/ledger-core/split-register-model.c:1067
-#, fuzzy
 msgid "Reason the transaction was voided"
-msgstr "日付を表示しますか?"
+msgstr "取引を無効化した理由"
 
 #: ../src/register/ledger-core/split-register-model.c:1159
 msgid "Enter the type of transaction, or choose one from the list"
@@ -14412,7 +14315,7 @@ msgstr "帳票のスタイルシートを編集する"
 #: ../intl-scm/guile-strings.c:2 ../intl-scm/guile-strings.c:26
 #: ../intl-scm/guile-strings.c:158
 msgid "Dividends"
-msgstr ""
+msgstr "配当"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
@@ -14420,7 +14323,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6 ../intl-scm/guile-strings.c:34
 #: ../intl-scm/guile-strings.c:166
 msgid "Cap Return"
-msgstr ""
+msgstr "投資利益"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
@@ -14428,7 +14331,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:8 ../intl-scm/guile-strings.c:38
 #: ../intl-scm/guile-strings.c:170
 msgid "Cap. gain (long)"
-msgstr "キャピタルゲイン(長期)"
+msgstr "資本利得(長期)"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
@@ -14436,7 +14339,7 @@ msgstr "キャピタルゲイン(長期)"
 #: ../intl-scm/guile-strings.c:10 ../intl-scm/guile-strings.c:42
 #: ../intl-scm/guile-strings.c:174
 msgid "Cap. gain (mid)"
-msgstr "キャピタルゲイン(中期)"
+msgstr "資本利得(中期)"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
@@ -14694,7 +14597,7 @@ msgstr "予算勘定科目の金額"
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:140 ../intl-scm/guile-strings.c:272
 msgid "Credit limit"
-msgstr "信用取引枠"
+msgstr "与信限度額"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
@@ -14865,7 +14768,7 @@ msgstr "装飾的な日付印刷に用いるデフォルトの日付の書式"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:344
 msgid "True if trading accounts should be used for transactions involving more than one commodity"
-msgstr ""
+msgstr "2種類以上の商品を含む取引のためには投機勘定科目を使用する必要があります。その場合には選択してください。"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/job-report.scm
@@ -15353,7 +15256,7 @@ msgstr "昇順"
 #. src/business/business-reports/gnucash/report/aging.scm
 #: ../intl-scm/guile-strings.c:498 ../intl-scm/guile-strings.c:970
 msgid "0 -> $999,999.99, A->Z"
-msgstr ""
+msgstr "0 -> $999,999.99, A->Z"
 
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/gnucash/report/aging.scm
@@ -15365,7 +15268,7 @@ msgstr "降順"
 #. src/business/business-reports/gnucash/report/aging.scm
 #: ../intl-scm/guile-strings.c:502 ../intl-scm/guile-strings.c:974
 msgid "$999,999.99 -> $0, Z->A"
-msgstr ""
+msgstr "$999,999.99 -> $0, Z->A"
 
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/gnucash/report/aging.scm
@@ -15401,7 +15304,7 @@ msgstr "得意先請求書番号"
 #: ../intl-scm/guile-strings.c:1314 ../intl-scm/guile-strings.c:1484
 #: ../intl-scm/guile-strings.c:1686 ../intl-scm/guile-strings.c:1856
 msgid "Charge Type"
-msgstr ""
+msgstr "請求の種類"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -15416,7 +15319,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1694 ../intl-scm/guile-strings.c:1746
 #: ../intl-scm/guile-strings.c:1864 ../intl-scm/guile-strings.c:1916
 msgid "Taxable"
-msgstr ""
+msgstr "税区分"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -15443,7 +15346,7 @@ msgstr "税額"
 #: ../intl-scm/guile-strings.c:1330 ../intl-scm/guile-strings.c:1500
 #: ../intl-scm/guile-strings.c:1702 ../intl-scm/guile-strings.c:1872
 msgid "T"
-msgstr ""
+msgstr "課税対象"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -15454,9 +15357,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:548 ../intl-scm/guile-strings.c:1020
 #: ../intl-scm/guile-strings.c:1332 ../intl-scm/guile-strings.c:1502
 #: ../intl-scm/guile-strings.c:1704 ../intl-scm/guile-strings.c:1874
-#, fuzzy
 msgid "Custom Title"
-msgstr "得意先"
+msgstr "表題の変更"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -15468,7 +15370,7 @@ msgstr "得意先"
 #: ../intl-scm/guile-strings.c:1334 ../intl-scm/guile-strings.c:1504
 #: ../intl-scm/guile-strings.c:1706 ../intl-scm/guile-strings.c:1876
 msgid "A custom string to replace Invoice, Bill or Expense Voucher"
-msgstr ""
+msgstr "Invoice、BillまたはExpence Voucherの代わりに表題に表示する文字列"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -15900,7 +15802,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1452 ../intl-scm/guile-strings.c:1652
 #: ../intl-scm/guile-strings.c:1824 ../intl-scm/guile-strings.c:2024
 msgid "Amount Due"
-msgstr ""
+msgstr "合計"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -15938,9 +15840,8 @@ msgstr "URL:"
 #. src/business/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:714 ../intl-scm/guile-strings.c:1186
 #: ../intl-scm/guile-strings.c:1468 ../intl-scm/guile-strings.c:1840
-#, fuzzy
 msgid "Invoice in progress..."
-msgstr "得意先請求書 進行中...."
+msgstr "得意先請求書は作成中です..."
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -16009,7 +15910,7 @@ msgstr "毎度ありがとうございます"
 #: ../intl-scm/guile-strings.c:1834 ../intl-scm/guile-strings.c:2034
 #, c-format
 msgid "%s #%d"
-msgstr "%s #%d"
+msgstr "%s番号: %d"
 
 #. src/business/business-reports/gnucash/report/invoice.scm
 #. src/business/business-reports/invoice.scm
@@ -16082,7 +15983,7 @@ msgstr "得意先請求書に記す特記事項（単純なHTMLも可）"
 #. src/business/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:1664 ../intl-scm/guile-strings.c:2036
 msgid "INVOICE NOT POSTED"
-msgstr ""
+msgstr "記帳されていない得意先請求書です。"
 
 #. src/business/business-reports/gnucash/report/easy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -16772,7 +16673,7 @@ msgstr "合計残高がゼロの勘定科目を含める"
 #: ../intl-scm/guile-strings.c:3996 ../intl-scm/guile-strings.c:4492
 #, fuzzy
 msgid "Include accounts with zero total (recursive) balances in this report"
-msgstr "印刷される残高に子勘定科目の残高を含めますか？"
+msgstr "印刷される残高に子勘定科目の残高を含めますか?"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -17523,15 +17424,13 @@ msgstr "欠損金"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2902
-#, fuzzy
 msgid "Trading Gains"
-msgstr "内部留保"
+msgstr "交易利得"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2904
-#, fuzzy
 msgid "Trading Losses"
-msgstr "欠損金"
+msgstr "交易損失"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/equity-statement.scm
@@ -18203,7 +18102,7 @@ msgstr "フィルタする勘定科目のみに関連する取引を含めない
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3378
 msgid "How to handle void transactions"
-msgstr "無効取引をどのように扱うか"
+msgstr "無効化した取引をどのように扱うか"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3380
@@ -18213,7 +18112,7 @@ msgstr "無効以外"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3382
 msgid "Show only non-voided transactions"
-msgstr "無効化されていない取引のみを表示する"
+msgstr "無効化していない取引のみを表示する"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3384
@@ -18223,7 +18122,7 @@ msgstr "無効のみ"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3386
 msgid "Show only voided transactions"
-msgstr "無効化された取引のみを表示する"
+msgstr "無効化した取引のみを表示する"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3388
@@ -18813,12 +18712,12 @@ msgstr "予算棒グラフ"
 #. src/report/standard-reports/budget-barchart.scm
 #: ../intl-scm/guile-strings.c:3868
 msgid "Running Sum"
-msgstr ""
+msgstr "現在の合計"
 
 #. src/report/standard-reports/budget-barchart.scm
 #: ../intl-scm/guile-strings.c:3872
 msgid "Calculate as running sum?"
-msgstr ""
+msgstr "現在の合計を計算しますか?"
 
 #. src/report/standard-reports/budget-barchart.scm
 #: ../intl-scm/guile-strings.c:3878
@@ -19380,9 +19279,8 @@ msgstr "予算帳票"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4576
-#, fuzzy
 msgid "Select Columns"
-msgstr "勘定科目を選択"
+msgstr "列を選択"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4578
@@ -19416,9 +19314,8 @@ msgstr "差額(予算-実績)を表示"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4590
-#, fuzzy
 msgid "Show Column with Totals"
-msgstr "小計を表示する"
+msgstr "合計列を表示する"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4592
@@ -19447,7 +19344,7 @@ msgstr "合計残高がゼロの勘定科目を含める"
 #: ../intl-scm/guile-strings.c:4600
 #, fuzzy
 msgid "Include accounts with zero total (recursive) balances and budget values in this report"
-msgstr "印刷される残高に子勘定科目の残高を含めますか？"
+msgstr "印刷される残高に子勘定科目の残高を含めますか?"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4602
@@ -19529,13 +19426,12 @@ msgstr "買掛金"
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:4656
 msgid "Credit Lines"
-msgstr "融資枠口座"
+msgstr "与信限度額"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:4658
-#, fuzzy
 msgid "Trading Accounts"
-msgstr "既存の勘定科目"
+msgstr "投機勘定科目"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:4660
@@ -19670,7 +19566,7 @@ msgstr "勘定科目選択をオーバライドして、すべての選択され
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4726
 msgid "Include sub-account balances in printed balance?"
-msgstr "印刷される残高に子勘定科目の残高を含めますか？"
+msgstr "印刷される残高に子勘定科目の残高を含めますか?"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4728
@@ -19930,7 +19826,7 @@ msgstr "為替レート"
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:4884
 msgid "No budgets exist.  You must create at least one budget."
-msgstr ""
+msgstr "予算が存在していません。最低1個の予算を作成する必要があります。"
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:4886
@@ -20010,7 +19906,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4918 ../intl-scm/guile-strings.c:5006
 #: ../intl-scm/guile-strings.c:5292 ../intl-scm/guile-strings.c:5380
 msgid "Jan 1 - Mar 31"
-msgstr ""
+msgstr "1月1日から3月31日まで"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20028,7 +19924,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4922 ../intl-scm/guile-strings.c:5010
 #: ../intl-scm/guile-strings.c:5296 ../intl-scm/guile-strings.c:5384
 msgid "Apr 1 - May 31"
-msgstr ""
+msgstr "4月1日から5月31日まで"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20046,7 +19942,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4926 ../intl-scm/guile-strings.c:5014
 #: ../intl-scm/guile-strings.c:5300 ../intl-scm/guile-strings.c:5388
 msgid "Jun 1 - Aug 31"
-msgstr ""
+msgstr "6月1日から8月31日まで"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20064,7 +19960,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4930 ../intl-scm/guile-strings.c:5018
 #: ../intl-scm/guile-strings.c:5304 ../intl-scm/guile-strings.c:5392
 msgid "Sep 1 - Dec 31"
-msgstr ""
+msgstr "9月1日から12月31日まで"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20093,7 +19989,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4938 ../intl-scm/guile-strings.c:5026
 #: ../intl-scm/guile-strings.c:5312 ../intl-scm/guile-strings.c:5400
 msgid "Jan 1 - Mar 31, Last year"
-msgstr ""
+msgstr "前年の1月1日から3月31日まで"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20111,7 +20007,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4942 ../intl-scm/guile-strings.c:5030
 #: ../intl-scm/guile-strings.c:5316 ../intl-scm/guile-strings.c:5404
 msgid "Apr 1 - May 31, Last year"
-msgstr ""
+msgstr "前年の4月1日から5月31日まで"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20129,7 +20025,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4946 ../intl-scm/guile-strings.c:5034
 #: ../intl-scm/guile-strings.c:5320 ../intl-scm/guile-strings.c:5408
 msgid "Jun 1 - Aug 31, Last year"
-msgstr ""
+msgstr "前年の6月1日から8月31日まで"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20147,7 +20043,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4950 ../intl-scm/guile-strings.c:5038
 #: ../intl-scm/guile-strings.c:5324 ../intl-scm/guile-strings.c:5412
 msgid "Sep 1 - Dec 31, Last year"
-msgstr ""
+msgstr "前年の9月1日から12月31日まで"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20309,14 +20205,13 @@ msgstr ""
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5060 ../intl-scm/guile-strings.c:5434
 msgid "Do not print Action:Memo data"
-msgstr ""
+msgstr "アクション:摘要データを印刷しない"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5062 ../intl-scm/guile-strings.c:5436
-#, fuzzy
 msgid "Do not print Action:Memo data for transactions"
-msgstr "取引を検索する勘定科目"
+msgstr "取引に関するアクション:摘要データを印刷しません。"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -20334,7 +20229,7 @@ msgstr "この勘定科目では取引の詳細を印刷しない"
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5068 ../intl-scm/guile-strings.c:5442
 msgid "Do not use special date processing"
-msgstr ""
+msgstr "特別な日付処理を行わない"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -20396,14 +20291,13 @@ msgstr "帳票の日付にもっとも近いものを使用"
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5096 ../intl-scm/guile-strings.c:5470
 msgid "Notes/Action:Memo"
-msgstr ""
+msgstr "備考/アクション:摘要"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:5098 ../intl-scm/guile-strings.c:5472
-#, fuzzy
 msgid "Transfer To/From Account(s)"
-msgstr "転送勘定科目"
+msgstr "資金移動先/資金移動元勘定科目"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -21078,9 +20972,8 @@ msgstr "表の枠の奥行き"
 #: ../intl-scm/guile-strings.c:6078 ../intl-scm/guile-strings.c:6084
 #: ../intl-scm/guile-strings.c:6090 ../intl-scm/guile-strings.c:6096
 #: ../intl-scm/guile-strings.c:6102 ../intl-scm/guile-strings.c:6108
-#, fuzzy
 msgid "Fonts"
-msgstr "月"
+msgstr "フォント"
 
 #. src/report/stylesheets/stylesheet-css.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-css.scm
@@ -21916,240 +21809,3 @@ msgstr "GnuCashの開発者には簡単に連絡ができます。メーリン�
 #: ../doc/tip_of_the_day.list.in:88
 msgid "There is a theory that if ever anyone discovers what the Universe is for and why it is here, it will instantly disappear and be replaced with something even more bizarre and inexplicable. There is another theory that this has already happened. Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr "この宇宙の目的がなんであり、なぜ宇宙が存在するのか---その答えをあやまちなく見いだした者あらば、宇宙はたちまち消え去ってはるかに奇怪で不可解なものにとってかわられるだろう---そういう理論がある。それはすでに起こってしまった---という理論もある。ダグラス・アダムス著「宇宙の果てのレストラン」より。"
-
-#~ msgid "ATM"
-#~ msgstr "ATM"
-
-#~ msgid "Template file "
-#~ msgstr "テンプレートファイル "
-
-#~ msgid " can not be read"
-#~ msgstr " を読みこめません"
-
-#~ msgid "Future dates are not supported"
-#~ msgstr "未来の日付はサポートしていません"
-
-#, fuzzy
-#~ msgid "&nbsp;Date"
-#~ msgstr "支払期限&nbsp;日付"
-
-#~ msgid "Due&nbsp;Date"
-#~ msgstr "支払期限&nbsp;日付"
-
-#~ msgid "<br>Invoice&nbsp;in&nbsp;progress...."
-#~ msgstr "<br>得意先請求書&nbsp;進行中...."
-
-#, fuzzy
-#~ msgid " Date"
-#~ msgstr "日付"
-
-#~ msgid "Save transaction before closing?"
-#~ msgstr "閉じる前に取引を保存しますか?"
-
-#~ msgid "The current transaction has been changed.  Would you like to record the changes before closing this page, close the page without recording the changes, or cancel the close?"
-#~ msgstr "現在の取引は変更されています。このページを閉じる前に記帳しますか、変更を記帳せずにページを閉じますか、あるいはキャンセルしますか?"
-
-#~ msgid "Your report \"%s\" has been saved into the configuration file \"%s\".  The report will be available in the menu Reports -> Custom at the next startup of GnuCash."
-#~ msgstr "帳票 \"%s\" は、設定ファイル \"%s\" に保存されました。この帳票は、次回のGnuCash起動時以降、帳票 -> サンプル・カスタム メニューから利用可能です。"
-
-#~ msgid "Blue items are exportable to a .TXF file."
-#~ msgstr "青色の項目は.TXFファイルに出力することができます。"
-
-#~ msgid "TXF"
-#~ msgstr "TXF"
-
-#~ msgid "Invoice #%d"
-#~ msgstr "得意先請求書 #%d"
-
-#~ msgid "Invoice&nbsp;#&nbsp;%d"
-#~ msgstr "得意先請求書&nbsp;#&nbsp;%d"
-
-#~ msgid "Invoice&nbsp;Date"
-#~ msgstr "得意先請求書&nbsp;日付"
-
-#~ msgid "Invoice Date"
-#~ msgstr "得意先請求書 日付"
-
-#~ msgid "GnuCash Finance Management"
-#~ msgstr "GnuCash財務管理"
-
-#~ msgid "Manage your finances, accounts, and investments"
-#~ msgstr "あなたの財務・口座・投資を管理"
-
-#~ msgid "CUSIP code"
-#~ msgstr "CUSIPコード"
-
-#~ msgid "QIF file load warning: %s"
-#~ msgstr "QIFファイルのロードに関する警告: %s"
-
-#~ msgid "QIF file load failed: %s"
-#~ msgstr "QIFファイルのロード失敗: %s"
-
-#~ msgid "QIF file parse failed: %s"
-#~ msgstr "QIFファイルの解析失敗: %s"
-
-#~ msgid "An error occurred while importing QIF transactions into GnuCash. Your accounts are unchanged."
-#~ msgstr "QIFファイルの取引を GnuCashに読込中にエラーが発生しました。勘定科目は変更されません。"
-
-#~ msgid "You must enter a Type for the commodity."
-#~ msgstr "商品のタイプを入力しなければなりません。"
-
-#~ msgid "You must enter a name for the commodity."
-#~ msgstr "商品の名前を入力しなければなりません。"
-
-#~ msgid "You must enter an abbreviation for the commodity."
-#~ msgstr "商品の略号を入力しなければなりません。"
-
-#~ msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-#~ msgstr "商品取引所あるいは上場市場(NASDAQ, NYSE など)を指定してください。"
-
-#~ msgid "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for the name."
-#~ msgstr "銘柄記号 (例えば、\"RHAT\") あるいはその他の一意の略号を 入力してください。"
-
-#, fuzzy
-#~ msgid "Click \"Forward\" to accept the information and move on."
-#~ msgstr "情報を受け入れて次に進むには \"次へ\" をクリックしてください。"
-
-#~ msgid "Dup?"
-#~ msgstr "複製?"
-
-#~ msgid "Click \"Forward\" to check matchings for QIF categories. "
-#~ msgstr "QIFのカテゴリとの適合をチェックするには \"次へ\" をクリックしてください。"
-
-#~ msgid "Click \"Forward\" to enter information about stocks and mutual funds in the imported data."
-#~ msgstr "\"次へ\" をクリックすると、インポートしたデータに株式と投資信託の情報を入力できます。"
-
-#~ msgid "Click \"Forward\" to enter information about the currency used in your QIF files."
-#~ msgstr "\"次へ\" をクリックすると、QIFファイルで使用されている通貨の情報を入力できます。"
-
-#~ msgid "Enter the currency used for new accounts"
-#~ msgstr "新規勘定科目に使う通貨単位を入力"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you are importing a QIF file downloaded from a bank or other financial institution, some of the information in the QIF file may duplicate information already in your GnuCash accounts.  GnuCash will try to detect duplicates of existing transactions.  \n"
-#~ "\n"
-#~ "On the next page, you will be asked to confirm that an existing transaction matches an imported transaction.  Imported transactions are shown on the left side of the page, and possible matches for the selected left-hand transaction are shown to the right.  There may be several old transactions that could match an imported transaction; you will be able to select the correct one by double-clicking in the \"Dup?\" column of the correct transaction.\n"
-#~ "\n"
-#~ "You can control the rules used by GnuCash to find duplicate transactions in the \"QIF Import\" section of the GnuCash Preferences dialog.\n"
-#~ "\n"
-#~ "Click \"Forward\" to find duplicate transactions. "
-#~ msgstr ""
-#~ "銀行やその他の財務関連企業からダウンロードしたQIFファイルをインポート\n"
-#~ "しているのであれば、QIFファイル内のいくつかの情報はGnuCash内にすでにある\n"
-#~ "勘定科目情報を複数にしてしまうかもしれません。\n"
-#~ "\n"
-#~ "つづくページにおいて、すでに存在する取引がインポートされる取引と一致するか\n"
-#~ "の確認を求められます。インポートされる取引が左側に表示され、一致する\n"
-#~ "可能性のある取引が右側に表示されます。複数の古い取引が一致する可能性があります。\n"
-#~ "\"複製?\"という列をクリックして、正しいものを選択することができます。\n"
-#~ "\n"
-#~ "設定ダイアログの\"QIFインポート\"セクションで、複製取引を検索する\n"
-#~ "GnuCashで使われるルールをコントロールすることができます。\n"
-#~ "\n"
-#~ "重複取引を検索するには\"次\"をクリックしてください。"
-
-#~ msgid "Imported transactions with duplicates"
-#~ msgstr "複製とともに読み込まれた取引"
-
-#, fuzzy
-#~ msgid ""
-#~ "In the next pages, you will be asked to provide information about stocks, mutual funds, and other tradable commodities that appear in the QIF file(s) you are importing. GnuCash requires more information about tradable commodities than the QIF format can represent. \n"
-#~ "\n"
-#~ "Each stock, mutual fund, or other commodity must have a type, which is the exchange or listing that it is found on (NASDAQ, NYSE, US Mutual Funds, etc), a full name, and an abbreviation.\n"
-#~ "\n"
-#~ "Check to see if there is an existing Type that is appropriate; if not, you can enter a new Type name by hand in the box. Make sure that the abbreviation you enter matches the ticker symbol used for the commodity on the exchange or listing for its type."
-#~ msgstr ""
-#~ "次のページでは、現在読み込み中の QIF ファイルに現れる株式、投資信託、その他\n"
-#~ "売買可能な商品に関する情報の入力をする必要があります。\n"
-#~ "GnuCash は売買可能な商品に対して、QIF より多くの情報を必要とします。\n"
-#~ "\n"
-#~ "どの株式、投資信託、その他商品も一つのタイプに所属しなければなりません。\n"
-#~ "タイプとは、NASDAQ, NYSE, US Mutual Funds などの取引所、商品の正式名、略号を\n"
-#~ "意味しています。\n"
-#~ "\n"
-#~ "既存のタイプが適当なものであるかどうかをチェックしてください。適当でない場合、新しいタイプを入力してください。また、略号については、取引所で使用されている\n"
-#~ "ティッカーと同じであることを確認してください。"
-
-#~ msgid "Match duplicate transactions"
-#~ msgstr "複製取引一致"
-
-#~ msgid "Importing transactions..."
-#~ msgstr "取引をインポート中..."
-
-#~ msgid "last day"
-#~ msgstr "最終日"
-
-#~ msgid "Once: %s"
-#~ msgstr "1回: %s"
-
-#, fuzzy
-#~ msgid "Daily (x%u)"
-#~ msgstr "毎日(360)"
-
-#~ msgid "Weekdays: (x%u)"
-#~ msgstr "平日: (x%u)"
-
-#, fuzzy
-#~ msgid "Weekdays"
-#~ msgstr "週"
-
-#~ msgid "Weekly (x%d): %s"
-#~ msgstr "毎週 (x%d): %s"
-
-#, fuzzy
-#~ msgid "Weekly: %s"
-#~ msgstr "毎週"
-
-#, fuzzy
-#~ msgid "Bi-Weekly, %ss"
-#~ msgstr "隔週"
-
-#~ msgid "Semi-monthly (x%u): %s, %s"
-#~ msgstr "月2回 (x%u): %s, %s"
-
-#~ msgid "Semi-monthly: %s, %s"
-#~ msgstr "月2回: %s, %s"
-
-#~ msgid "Monthly (x%u): %u"
-#~ msgstr "毎月 (x%u): %u"
-
-#~ msgid "Monthly: %u"
-#~ msgstr "毎月: %u"
-
-#~ msgid "Quarterly (x%u): %u"
-#~ msgstr "毎四半期 (x%u): %u"
-
-#~ msgid "Quarterly: %u"
-#~ msgstr "毎四半期: %u"
-
-#~ msgid "Tri-Yearly (x%u): %u"
-#~ msgstr "年3回 (x%u): %u"
-
-#~ msgid "Tri-Yearly: %u"
-#~ msgstr "年3回: %u"
-
-#~ msgid "Semi-Yearly (x%u): %u"
-#~ msgstr "年2回 (x%u): %u"
-
-#~ msgid "Semi-Yearly: %u"
-#~ msgstr "年2回: %u"
-
-#~ msgid "Yearly (x%u): %s/%u"
-#~ msgstr "毎年 (x%u): %s/%u"
-
-#~ msgid "Yearly: %s/%u"
-#~ msgstr "毎年: %s/%u"
-
-#, fuzzy
-#~ msgid "account"
-#~ msgstr "勘定科目"
-
-#~ msgid "The Date format is ambiguous.  Please choose the correct format."
-#~ msgstr "日付の書式がわかりません。正しい書式を選択してください。"
-
-#~ msgid " Stylesheet"
-#~ msgstr " スタイルシート"
-
-#~ msgid "Include gains and losses"
-#~ msgstr "利益と損失を含む"
