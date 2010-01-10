@@ -9102,11 +9102,11 @@ msgstr "Select"
 
 #: ../src/gnome-search/dialog-search.c:832
 msgid "all criteria are met"
-msgstr "match all"
+msgstr "all criteria are met"
 
 #: ../src/gnome-search/dialog-search.c:833
 msgid "any criteria are met"
-msgstr "match any"
+msgstr "any criteria are met"
 
 #. Translators: %s is either "item" or the name of some other
 #. * item, e.g. "Customer" or "Invoice".
