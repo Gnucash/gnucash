@@ -32,7 +32,7 @@
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
 	  <property name="title" translatable="yes"></property>
-	  <property name="text" translatable="yes">This druid will help you record a stock split or stock merger.</property>
+	  <property name="text" translatable="yes">This assistant will help you record a stock split or stock merger.</property>
 	  <property name="title_color">#ffffffffffff</property>
 	  <property name="text_color">#000000000000</property>
 	  <property name="background_color">#666666669999</property>

@@ -2845,7 +2845,7 @@ Yearly</property>
 	<widget class="GnomeDruidPageEdge" id="start_pg">
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
-	  <property name="text" translatable="yes">This druid will walk you through any scheduled transactions that should be created.</property>
+	  <property name="text" translatable="yes">This assistant will walk you through any scheduled transactions that should be created.</property>
 	  <property name="background_color">#666666669998</property>
 	  <property name="logo_background_color">#666666669998</property>
 	</widget>
@@ -3705,7 +3705,7 @@ Yearly</property>
 
 <widget class="GtkWindow" id="loan_druid_win">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Mortgage/Loan Druid</property>
+  <property name="title" translatable="yes">Mortgage/Loan Assistant</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -3729,7 +3729,7 @@ Yearly</property>
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
 	  <property name="title" translatable="yes">Mortgage/Loan Repayment Setup</property>
-	  <property name="text" translatable="yes">This is a step-by-step method of creating a loan repayment setup within GnuCash.  In this Druid, you can input the parameters of your loan and its repayment and give the details of its payback. Using that information, the appropriate Scheduled Transactions will be created.
+	  <property name="text" translatable="yes">This is a step-by-step method of creating a loan repayment setup within GnuCash.  In this assistant, you can input the parameters of your loan and its repayment and give the details of its payback. Using that information, the appropriate Scheduled Transactions will be created.
 
 If you make a mistake or want to make changes later, you can edit the created Scheduled Transactions directly.</property>
 	  <property name="title_color">#ffffffffffff</property>

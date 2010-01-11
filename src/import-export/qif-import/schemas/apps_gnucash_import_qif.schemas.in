@@ -11,7 +11,7 @@
       <locale name="C">
         <short>Show documentation</short>
         <long>
-          Show some documentation-only pages in QIF Import druid.
+          Show some documentation-only pages in QIF Import assistant.
 	</long>
       </locale>
     </schema>

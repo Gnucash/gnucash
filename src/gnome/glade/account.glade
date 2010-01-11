@@ -1243,7 +1243,7 @@
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
 	  <property name="title" translatable="yes">New Account Hierarchy Setup</property>
-	  <property name="text" translatable="yes">This druid will help you create a set of GnuCash accounts for your assets (such as investments, checking or savings accounts), liabilities (such as loans) and different kinds of income and expenses you might have. 
+	  <property name="text" translatable="yes">This assistant will help you create a set of GnuCash accounts for your assets (such as investments, checking or savings accounts), liabilities (such as loans) and different kinds of income and expenses you might have. 
 
 Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 	</widget>
@@ -2014,7 +2014,7 @@ Press `Cancel' to close this dialog without creating any new accounts.</property
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
 	  <property name="title" translatable="yes">New Account Hierarchy Setup</property>
-	  <property name="text" translatable="yes">This druid will help you create a set of GnuCash accounts for your assets (such as investments, checking or savings accounts), liabilities (such as loans) and different kinds of income and expenses you might have. 
+	  <property name="text" translatable="yes">This assistant will help you create a set of GnuCash accounts for your assets (such as investments, checking or savings accounts), liabilities (such as loans) and different kinds of income and expenses you might have. 
 
 Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 	</widget>

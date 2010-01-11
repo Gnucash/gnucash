@@ -30,7 +30,7 @@
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
 	  <property name="title" translatable="yes">Setup Accounting Periods</property>
-	  <property name="text" translatable="yes">This druid will help you setup and use accouting periods. 
+	  <property name="text" translatable="yes">This assistant will help you setup and use accouting periods. 
  
 Danger: this feature does not work correctly at this time; it is still under development.  It will probably damage your data in such a way that it cannot be repaired!</property>
 	  <property name="title_color">#ffffffffffff</property>

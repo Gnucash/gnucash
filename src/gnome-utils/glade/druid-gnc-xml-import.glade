@@ -5,7 +5,7 @@
 <requires lib="gnome"/>
 
 <widget class="GtkDialog" id="GnuCash XML Import Dialog">
-  <property name="title" translatable="yes">GnuCash Datafile Import Druid</property>
+  <property name="title" translatable="yes">GnuCash Datafile Import Assistant</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
   <property name="modal">False</property>

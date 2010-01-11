@@ -33,7 +33,7 @@
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
 	  <property name="title" translatable="yes">Initial Online Banking Setup</property>
-	  <property name="text" translatable="yes">This druid helps you setting up your Online Banking connection with your bank.
+	  <property name="text" translatable="yes">This assistant helps you setting up your Online Banking connection with your bank.
 
 You first need to apply for Online Banking access at your bank. If your bank  decides to grant you electronic access, they will send you a letter containing 
 
@@ -271,7 +271,7 @@ Press &quot;Cancel&quot; if you do not wish to setup any Online Banking connecti
 	  <property name="title" translatable="yes">Online Banking Setup Finished</property>
 	  <property name="text" translatable="yes">The setup for matching Online Banking accounts to GnuCash accounts is now finished.  You can now invoke Online Banking actions on those accounts.
 
-If you want to add another bank, user, or account, you can start this druid again anytime.
+If you want to add another bank, user, or account, you can start this assistant again anytime.
 
 Press &quot;Apply&quot; now.</property>
 	  <property name="title_color">#ffffffffffff</property>

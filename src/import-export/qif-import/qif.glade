@@ -1990,7 +1990,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</property>
       <child>
 	<widget class="GtkCheckButton" id="gconf/dialogs/import/qif/show_doc">
 	  <property name="visible">True</property>
-	  <property name="tooltip" translatable="yes">Show some documentation-only pages in QIF Import druid.</property>
+	  <property name="tooltip" translatable="yes">Show some documentation-only pages in QIF Import assistant.</property>
 	  <property name="can_focus">True</property>
 	  <property name="label" translatable="yes">_Show documentation</property>
 	  <property name="use_underline">True</property>

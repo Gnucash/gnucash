@@ -31,7 +31,7 @@
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
 	  <property name="title" translatable="yes">QSF Data Import Setup</property>
-	  <property name="text" translatable="yes">This druid will merge your QSF data into the currently open GnuCash file.
+	  <property name="text" translatable="yes">This assistant will merge your QSF data into the currently open GnuCash file.
 
 You will be asked how to proceed if some QSF data clashes with the your existing GnuCash data file.
 
