@@ -271,6 +271,7 @@ function inst_autotools() {
             make install
         qpopd
         quiet autoconf --help && quiet automake --help || die "autoconf/automake not installed correctly"
+        rm -rf ${TMP_UDIR}/autoconf-* ${TMP_UDIR}/automake-*
     fi
     if quiet libtoolize --help
     then
@@ -285,6 +286,7 @@ function inst_autotools() {
             make install
         qpopd
         quiet libtoolize --help || die "libtool/libtoolize not installed correctly"
+        rm -rf ${TMP_UDIR}/libtool-*
     fi
     [ ! -d $_AUTOTOOLS_UDIR/share/aclocal ] || add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
@@ -311,6 +313,7 @@ function inst_gmp() {
             make install
         qpopd
         quiet ${LD} $GMP_LDFLAGS -lgmp -o $TMP_UDIR/ofile || die "Gmp not installed correctly"
+        rm -rf ${TMP_UDIR}/gmp-*
     fi
 }
 
@@ -378,6 +381,7 @@ function inst_guile() {
         qpopd
         guile -c '(use-modules (srfi srfi-39))' &&
         guile -c "(use-modules (ice-9 slib)) (require 'printf)" || die "guile not installed correctly"
+        rm -rf ${TMP_UDIR}/guile-*
     fi
     if [ "$CROSS_COMPILE" = "yes" ]; then
         mkdir -p $_GUILE_UDIR/bin
@@ -446,6 +450,7 @@ function inst_openssl() {
             cp -a include/openssl $_OPENSSL_UDIR/include
         qpopd
         quiet ${LD} -L$_OPENSSL_UDIR/lib -leay32 -lssl32 -o $TMP_UDIR/ofile || die "openssl not installed correctly"
+        rm -rf ${TMP_UDIR}/openssl-*
     fi
     _eay32dll=$(echo $(which libeay32.dll))  # which sucks
     if [ -z "$_eay32dll" ] ; then
@@ -687,6 +692,7 @@ function inst_libgsf() {
             make install
         qpopd
         ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 || die "libgsf not installed correctly"
+        rm -rf ${TMP_UDIR}/libgsf-*
     fi
 }
 
@@ -699,7 +705,6 @@ function inst_goffice() {
     then
         echo "goffice already installed.  skipping."
     else
-        rm -rf $TMP_UDIR/goffice-*
         wget_unpacked $GOFFICE_URL $DOWNLOAD_DIR $TMP_DIR
         mydir=`pwd`
         assert_one_dir $TMP_UDIR/goffice-*
@@ -719,6 +724,7 @@ function inst_goffice() {
             make install
         qpopd
         ${PKG_CONFIG} --exists libgoffice-0.8 || die "goffice not installed correctly"
+        rm -rf ${TMP_UDIR}/goffice-*
     fi
 }
 
@@ -739,6 +745,7 @@ function inst_glade() {
             make install
         qpopd
         quiet glade-3 --version || die "glade not installed correctly"
+        rm -rf ${TMP_UDIR}/glade3-*
     fi
 }
 
@@ -851,6 +858,7 @@ function inst_libofx() {
             make install
         qpopd
         quiet ${PKG_CONFIG} --exists libofx || die "Libofx not installed correctly"
+        rm -rf ${TMP_UDIR}/libofx-*
     fi
 }
 
@@ -914,6 +922,7 @@ function inst_gwenhywfar() {
             make install
         qpopd
         ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
+        rm -rf ${TMP_UDIR}/gwenhywfar-*
     fi
     [ ! -d $_GWENHYWFAR_UDIR/share/aclocal ] || add_to_env "-I $_GWENHYWFAR_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
@@ -941,6 +950,7 @@ function inst_ktoblzcheck() {
             make install
         qpopd
         ${PKG_CONFIG} --exists ktoblzcheck || die "Ktoblzcheck not installed correctly"
+        rm -rf ${TMP_UDIR}/ktoblzcheck-*
     fi
 }
 
@@ -1045,6 +1055,7 @@ function inst_aqbanking() {
             fi
         qpopd
         ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
+        rm -rf ${TMP_UDIR}/aqbanking-*
     fi
     [ ! -d $_AQBANKING_UDIR/share/aclocal ] || add_to_env "-I $_AQBANKING_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
@@ -1071,6 +1082,7 @@ function inst_libdbi() {
             make install
         qpopd
         test -f ${_SQLITE3_UDIR}/bin/libsqlite3-0.dll || die "SQLite3 not installed correctly"
+        rm -rf ${TMP_UDIR}/sqlite-*
     fi
     if test -f ${_MYSQL_LIB_UDIR}/lib/libmysql.dll -a \
 	        -f ${_MYSQL_LIB_UDIR}/lib/libmysqlclient.a
@@ -1086,6 +1098,7 @@ function inst_libdbi() {
 		dlltool --input-def $LIBMYSQL_DEF --dllname libmysql.dll --output-lib libmysqlclient.a -k
         test -f ${_MYSQL_LIB_UDIR}/lib/libmysql.dll || die "mysql not installed correctly - libmysql.dll"
         test -f ${_MYSQL_LIB_UDIR}/lib/libmysqlclient.a || die "mysql not installed correctly - libmysqlclient.a"
+        rm -rf ${TMP_UDIR}/mysql*
     fi
     if test -f ${_PGSQL_UDIR}/lib/libpq.dll
     then
@@ -1116,6 +1129,7 @@ function inst_libdbi() {
             make install
         qpopd
         test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll || die "libdbi not installed correctly"
+        rm -rf ${TMP_UDIR}/libdbi-0*
     fi
     if test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdsqlite3.dll -a \
             -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdmysql.dll -a \
@@ -1151,6 +1165,7 @@ function inst_libdbi() {
         test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdsqlite3.dll || die "libdbi sqlite3 driver not installed correctly"
         test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdmysql.dll || die "libdbi mysql driver not installed correctly"
         test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdpgsql.dll || die "libdbi pgsql driver not installed correctly"
+        rm -rf ${TMP_UDIR}/libdbi-drivers-*
     fi
 }
 
