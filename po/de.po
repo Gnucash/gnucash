@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-04 22:12+0100\n"
-"PO-Revision-Date: 2010-01-04 22:21+0100\n"
+"POT-Creation-Date: 2010-01-11 22:31+0100\n"
+"PO-Revision-Date: 2010-01-11 22:37+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -4235,7 +4235,7 @@ msgid "Loan"
 msgstr "Darlehen"
 
 #: ../src/gnome/druid-loan.c:1044
-msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
+msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
 msgstr "Wollen Sie den Darlehen-Assistent wirklich abbrechen?"
 
 #: ../src/gnome/druid-loan.c:1163
@@ -4759,9 +4759,9 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:66
 msgid ""
-"This druid will help you create a set of GnuCash accounts for your assets "
-"(such as investments, checking or savings accounts), liabilities (such as "
-"loans) and different kinds of income and expenses you might have. \n"
+"This assistant will help you create a set of GnuCash accounts for your "
+"assets (such as investments, checking or savings accounts), liabilities "
+"(such as loans) and different kinds of income and expenses you might have. \n"
 "\n"
 "Click 'Cancel'  if you do not wish to create any new accounts now."
 msgstr ""
@@ -4888,7 +4888,7 @@ msgstr "Buchführungsperioden einrichten"
 
 #: ../src/gnome/glade/acctperiod.glade.h:9
 msgid ""
-"This druid will help you setup and use accouting periods. \n"
+"This assistant will help you setup and use accouting periods. \n"
 " \n"
 "Danger: this feature does not work correctly at this time; it is still under "
 "development.  It will probably damage your data in such a way that it cannot "
@@ -5410,7 +5410,8 @@ msgstr "Zeigt die Konflikte zwischen QSF Daten und den existierenden Daten."
 
 #: ../src/gnome/glade/merge.glade.h:16
 msgid ""
-"This druid will merge your QSF data into the currently open GnuCash file.\n"
+"This assistant will merge your QSF data into the currently open GnuCash "
+"file.\n"
 "\n"
 "You will be asked how to proceed if some QSF data clashes with the your "
 "existing GnuCash data file.\n"
@@ -6469,7 +6470,7 @@ msgid "Months Remaining:"
 msgstr "Restliche Monate:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:113
-msgid "Mortgage/Loan Druid"
+msgid "Mortgage/Loan Assistant"
 msgstr "Hypothek/Darlehen Assistent"
 
 #: ../src/gnome/glade/sched-xact.glade.h:114
@@ -6710,8 +6711,8 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:176
 msgid ""
-"This druid will walk you through any scheduled transactions that should be "
-"created."
+"This assistant will walk you through any scheduled transactions that should "
+"be created."
 msgstr ""
 "Dieser Assistent führt Sie schrittweise durch die Erstellung neuer "
 "terminierter Buchungen."
@@ -6719,9 +6720,9 @@ msgstr ""
 #: ../src/gnome/glade/sched-xact.glade.h:177
 msgid ""
 "This is a step-by-step method of creating a loan repayment setup within "
-"GnuCash.  In this Druid, you can input the parameters of your loan and its "
-"repayment and give the details of its payback. Using that information, the "
-"appropriate Scheduled Transactions will be created.\n"
+"GnuCash.  In this assistant, you can input the parameters of your loan and "
+"its repayment and give the details of its payback. Using that information, "
+"the appropriate Scheduled Transactions will be created.\n"
 "\n"
 "If you make a mistake or want to make changes later, you can edit the "
 "created Scheduled Transactions directly."
@@ -6932,7 +6933,7 @@ msgid "Stock Split Details"
 msgstr "Aktienteilung Details"
 
 #: ../src/gnome/glade/stocks.glade.h:15
-msgid "This druid will help you record a stock split or stock merger."
+msgid "This assistant will help you record a stock split or stock merger."
 msgstr ""
 "Dieser Assistent hilft Ihnen, eine Aktienteilung oder einen "
 "Aktienzusammenschluß einzugeben."
@@ -10686,7 +10687,7 @@ msgid "Finish GnuCash Datafile Import"
 msgstr "GnuCash-Datei Import abschließen"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:13
-msgid "GnuCash Datafile Import Druid"
+msgid "GnuCash Datafile Import Assistant"
 msgstr "GnuCash-Datei Import-Assistent"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:14
@@ -13447,25 +13448,21 @@ msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
 "finished.  You can now invoke Online Banking actions on those accounts.\n"
 "\n"
-"If you want to add another bank, user, or account, you can start this druid "
-"again anytime.\n"
+"If you want to add another bank, user, or account, you can start this "
+"assistant again anytime.\n"
 "\n"
 "Press \"Apply\" now."
 msgstr ""
-"Die Einrichtung des Onlinebanking-Zugangs und die Zuordnung zu den passenden "
-"GnuCash Konten ist fertig gestellt. Sie können nun Onlinebanking-Aktionen in "
-"diesen Konten aufrufen (Menü Aktionen: Online Aktionen).\n"
+"Die Einrichtung des Onlinebanking-Zugangs und die Zuordnung zu den passenden GnuCash Konten ist fertig gestellt. Sie können nun Onlinebanking-Aktionen in diesen Konten aufrufen (Menü Aktionen: Online Aktionen).\n"
 "\n"
-"Wenn Sie eine neue Bank, einen neuen Benutzer oder ein neues Konto "
-"hinzufügen möchten, können Sie diesen Assistenten (Druiden) jederzeit wieder "
-"aufrufen.\n"
+"Wenn Sie eine neue Bank, einen neuen Benutzer oder ein neues Konto hinzufügen möchten, können Sie diesen Assistenten jederzeit wieder aufrufen.\n"
 "\n"
 "Klicken Sie jetzt »Anwenden«."
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:55
 #: ../src/import-export/hbci/glade/hbci.glade.h:52
 msgid ""
-"This druid helps you setting up your Online Banking connection with your "
+"This assistant helps you setting up your Online Banking connection with your "
 "bank.\n"
 "\n"
 "You first need to apply for Online Banking access at your bank. If your "
@@ -15590,7 +15587,7 @@ msgstr "Den Namen des Standard QIF Konto setzen"
 
 #: ../src/import-export/qif-import/qif.glade.h:63
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:2
-msgid "Show some documentation-only pages in QIF Import druid."
+msgid "Show some documentation-only pages in QIF Import assistant."
 msgstr ""
 "Seiten im QIF-Import anzeigen, die ausschließlich Dokumentation enthalten."
 
@@ -22283,9 +22280,8 @@ msgstr "Konto anzeigen?"
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:4368 ../intl-scm/guile-strings.c:5742
-#, fuzzy
 msgid "Display the name of lot the shares are in?"
-msgstr "Anzahl von Anteilen anzeigen?"
+msgstr ""
 
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
@@ -22762,15 +22758,15 @@ msgstr ""
 
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4916
-#, fuzzy, c-format
+#, c-format
 msgid "for Budget %s Period %u"
-msgstr "Budget Perioden:"
+msgstr "für Budget %s Periode %u"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4918
-#, fuzzy, c-format
+#, c-format
 msgid "for Budget %s Periods %u - %u"
-msgstr "Budget Perioden:"
+msgstr "für Budget %s Perioden %u - %u"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4920
