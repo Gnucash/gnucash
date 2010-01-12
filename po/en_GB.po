@@ -12,7 +12,7 @@ msgstr ""
 "POT-Creation-Date: 2009-09-20 22:18+0200\n"
 "PO-Revision-Date: 2010-01-05 12:39+0000\n"
 "Last-Translator: Mike Evans <mikee@saxicola.idps.co.uk>\n"
-"Language-Team: American English <>\n"
+"Language-Team: British English <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -4059,8 +4059,8 @@ msgid "Loan"
 msgstr "Loan"
 
 #: ../src/gnome/druid-loan.c:1044
-msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
-msgstr "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
+msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
+msgstr "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
 
 #: ../src/gnome/druid-loan.c:1163
 msgid "Please select a valid loan account."
@@ -4572,16 +4572,16 @@ msgstr ""
 "This account is present solely as a placeholder in the hierarchy.  "
 "Transactions may not be posted to this account, only to sub-accounts of this "
 "account."
-
+ 
 #: ../src/gnome/glade/account.glade.h:66
 msgid ""
-"This druid will help you create a set of GnuCash accounts for your assets "
+"This assistant will help you create a set of GnuCash accounts for your assets "
 "(such as investments, checking or savings accounts), liabilities (such as "
 "loans) and different kinds of income and expenses you might have. \n"
 "\n"
 "Click 'Cancel'  if you do not wish to create any new accounts now."
 msgstr ""
-"This druid will help you create a set of GnuCash accounts for your assets "
+"This assistant will help you create a set of GnuCash accounts for your assets "
 "(such as investments, checking or savings accounts), liabilities (such as "
 "loans) and different kinds of income and expenses you might have. \n"
 "\n"
@@ -4702,13 +4702,13 @@ msgstr "Setup Accounting Periods"
 
 #: ../src/gnome/glade/acctperiod.glade.h:9
 msgid ""
-"This druid will help you setup and use accouting periods. \n"
+"This assistant will help you setup and use accouting periods. \n"
 " \n"
 "Danger: this feature does not work correctly at this time; it is still under "
 "development.  It will probably damage your data in such a way that it cannot "
 "be repaired!"
 msgstr ""
-"This druid will help you setup and use accounting periods. \n"
+"This assistant will help you setup and use accounting periods. \n"
 " \n"
 "Danger: this feature does not work correctly at this time; it is still under "
 "development.  It will probably damage your data in such a way that it cannot "
@@ -5219,7 +5219,7 @@ msgstr "Shows how your QSF data conflicts with existing data in your file."
 
 #: ../src/gnome/glade/merge.glade.h:16
 msgid ""
-"This druid will merge your QSF data into the currently open GnuCash file.\n"
+"This assistant will merge your QSF data into the currently open GnuCash file.\n"
 "\n"
 "You will be asked how to proceed if some QSF data clashes with the your "
 "existing GnuCash data file.\n"
@@ -5237,7 +5237,7 @@ msgid ""
 "\n"
 "Click 'Cancel'  if you do not wish to merge your QSF data now."
 msgstr ""
-"This druid will merge your QSF data into the currently open GnuCash file.\n"
+"This assistant will merge your QSF data into the currently open GnuCash file.\n"
 "\n"
 "You will be asked how to proceed if some QSF data clashes with the your "
 "existing GnuCash data file.\n"
@@ -6270,8 +6270,8 @@ msgid "Months Remaining:"
 msgstr "Months Remaining:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:113
-msgid "Mortgage/Loan Druid"
-msgstr "Mortgage/Loan Druid"
+msgid "Mortgage/Loan Assistant"
+msgstr "Mortgage/Loan Assistant"
 
 #: ../src/gnome/glade/sched-xact.glade.h:114
 msgid "Mortgage/Loan Repayment Setup"
@@ -6502,16 +6502,16 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:176
 msgid ""
-"This druid will walk you through any scheduled transactions that should be "
+"This assistant will walk you through any scheduled transactions that should be "
 "created."
 msgstr ""
-"This druid will walk you through any scheduled transactions that should be "
+"This assistant will walk you through any scheduled transactions that should be "
 "created."
 
 #: ../src/gnome/glade/sched-xact.glade.h:177
 msgid ""
 "This is a step-by-step method of creating a loan repayment setup within "
-"GnuCash.  In this Druid, you can input the parameters of your loan and its "
+"GnuCash.  In this assistant, you can input the parameters of your loan and its "
 "repayment and give the details of its payback. Using that information, the "
 "appropriate Scheduled Transactions will be created.\n"
 "\n"
@@ -6519,7 +6519,7 @@ msgid ""
 "created Scheduled Transactions directly."
 msgstr ""
 "This is a step-by-step method of creating a loan repayment setup within "
-"GnuCash.  In this Druid, you can input the parameters of your loan and its "
+"GnuCash.  Using this assistant, you can input the parameters of your loan and its "
 "repayment and give the details of its payback. Using that information, the "
 "appropriate Scheduled Transactions will be created.\n"
 "\n"
@@ -6705,7 +6705,7 @@ msgstr "New _Price:"
 #: ../src/gnome/glade/stocks.glade.h:11
 msgid ""
 "Select the account for which you want to record a stock split or merger."
-msgstr ""
+msgstr "" 
 "Select the account for which you want to record a stock split or merger."
 
 #: ../src/gnome/glade/stocks.glade.h:12
@@ -6721,8 +6721,8 @@ msgid "Stock Split Details"
 msgstr "Stock Split Details"
 
 #: ../src/gnome/glade/stocks.glade.h:15
-msgid "This druid will help you record a stock split or stock merger."
-msgstr "This druid will help you record a stock split or stock merger."
+msgid "This assistant will help you record a stock split or stock merger."
+msgstr "This assistant will help you record a stock split or stock merger."
 
 #: ../src/gnome/glade/stocks.glade.h:16
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:4
@@ -10400,8 +10400,8 @@ msgid "Finish GnuCash Datafile Import"
 msgstr "Finish GnuCash Datafile Import"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:13
-msgid "GnuCash Datafile Import Druid"
-msgstr "GnuCash Datafile Import Druid"
+msgid "GnuCash Datafile Import Assistant"
+msgstr "GnuCash Datafile Import Assistant"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:14
 msgid "GnuCash data files you have loaded"
@@ -13061,19 +13061,19 @@ msgstr "Sort the list of transaction templates alphabetically"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:48
 #: ../src/import-export/hbci/glade/hbci.glade.h:45
-msgid "Start Online Banking Wizard"
-msgstr "Start Online Banking Wizard"
+msgid "Start Online Banking Assistant"
+msgstr "Start Online Banking Assistant"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:49
 #: ../src/import-export/hbci/glade/hbci.glade.h:46
 #, fuzzy
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
-"program \"AqBanking Setup Wizard\". Please press the button below to start "
+"program \"AqBanking Setup\". Please press the button below to start "
 "this program."
 msgstr ""
 "The Setup of your Online Banking connection is handled by the external "
-"program \"AqBanking Setup Wizard\". Please press the button below to start "
+"program \"AqBanking Setup\". Please press the button below to start "
 "this program.\t"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:50
@@ -13082,7 +13082,7 @@ msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
 "finished.  You can now invoke Online Banking actions on those accounts.\n"
 "\n"
-"If you want to add another bank, user, or account, you can start this druid "
+"If you want to add another bank, user, or account, you can start this assistant "
 "again anytime.\n"
 "\n"
 "Press \"Apply\" now."
@@ -13090,7 +13090,7 @@ msgstr ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
 "finished.  You can now invoke Online Banking actions on those accounts.\n"
 "\n"
-"If you want to add another bank, user, or account, you can start this druid "
+"If you want to add another bank, user, or account, you can start this assistant "
 "again anytime.\n"
 "\n"
 "Press \"Apply\" now."
@@ -13098,7 +13098,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/aqbanking.glade.h:55
 #: ../src/import-export/hbci/glade/hbci.glade.h:52
 msgid ""
-"This druid helps you setting up your Online Banking connection with your "
+"This assistant helps you setting up your Online Banking connection with your "
 "bank.\n"
 "\n"
 "You first need to apply for Online Banking access at your bank. If your "
@@ -13121,7 +13121,7 @@ msgid ""
 "Press \"Cancel\" if you do not wish to setup any Online Banking connection "
 "now."
 msgstr ""
-"This druid helps you setting up your Online Banking connection with your "
+"This assistant helps you setting up your Online Banking connection with your "
 "bank.\n"
 "\n"
 "You first need to apply for Online Banking access at your bank. If your "
@@ -13167,8 +13167,8 @@ msgstr "_Now"
 #: ../src/import-export/aqbanking/aqbanking.glade.h:73
 #: ../src/import-export/hbci/glade/hbci.glade.h:71
 #, fuzzy
-msgid "_Start AqBanking Wizard"
-msgstr "Start AqBanking Wizard"
+msgid "_Start AqBanking Assistant"
+msgstr "Start AqBanking Assistant"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:74
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:6
@@ -14289,8 +14289,8 @@ msgid "Online Banking Version"
 msgstr "Online Banking Version"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:44
-msgid "Start AqBanking Setup Wizard"
-msgstr "Start AqBanking Setup Wizard"
+msgid "Start AqBanking Setup Assistant"
+msgstr "Start AqBanking Setup Assistant"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:67
 msgid "Version"
@@ -15131,7 +15131,7 @@ msgid ""
 "worry if your data is in multiple files. \n"
 msgstr ""
 "Please select a file to load. When you click \"Forward\", the file will be "
-"loaded and analyzed. You may need to answer some questions about the account"
+"loaded and analysed. You may need to answer some questions about the account"
 "(s) in the file.\n"
 "\n"
 "You will have the opportunity to load as many files as you wish, so don't  "
@@ -15179,8 +15179,8 @@ msgstr "Set the default QIF account name"
 
 #: ../src/import-export/qif-import/qif.glade.h:63
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:2
-msgid "Show some documentation-only pages in QIF Import druid."
-msgstr "Show some documentation-only pages in QIF Import druid."
+msgid "Show some documentation-only pages in QIF Import assistant."
+msgstr "Show some documentation-only pages in QIF Import assistant."
 
 #: ../src/import-export/qif-import/qif.glade.h:68
 msgid ""
