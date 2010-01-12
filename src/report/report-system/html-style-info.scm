@@ -284,15 +284,9 @@
   (xaccPrintAmount datum (gnc-default-print-info #f)))
 
 (define (gnc:default-html-gnc-monetary-renderer datum params)
-  (let* ((result (xaccPrintAmount
-		  (gnc:gnc-monetary-amount datum) 
-		  (gnc-commodity-print-info
-		   (gnc:gnc-monetary-commodity datum) #t)))
-	 (ind (string-index result (integer->char 164))))
-    (if ind
-	(string-append (substring result 0 ind) "&euro;" 
-		       (substring result (+ 1 ind) (string-length result)))
-	result)))
+  (xaccPrintAmount                                                 
+   (gnc:gnc-monetary-amount datum)                                    
+   (gnc-commodity-print-info (gnc:gnc-monetary-commodity datum) #t)))
 
 (define (gnc:default-html-number-renderer datum params)  
   (xaccPrintAmount
