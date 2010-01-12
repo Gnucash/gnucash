@@ -8,13 +8,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-08 16:51-0500\n"
-"PO-Revision-Date: 2010-01-08 15:38+0330\n"
+"PO-Revision-Date: 2010-01-12 14:34+0330\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Poedit-KeywordsList: Customer\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:635
 msgid "Illegal variable in expression."
@@ -801,7 +802,7 @@ msgstr "مشاهده / ویرایش کارمند"
 
 #: ../src/business/business-gnome/dialog-employee.c:683
 msgid "Expense Vouchers"
-msgstr ""
+msgstr "سند هزینه"
 
 #: ../src/business/business-gnome/dialog-employee.c:692
 msgid "Employee ID"
@@ -861,22 +862,22 @@ msgstr "این عنوان به یک سفارش پیوست شده است و از 
 
 #: ../src/business/business-gnome/dialog-invoice.c:631
 msgid "The Invoice must have at least one Entry."
-msgstr ""
+msgstr "فاکتور "
 
 #: ../src/business/business-gnome/dialog-invoice.c:640
 msgid "You may not post an invoice with a negative total value."
-msgstr ""
+msgstr "شما نمی توانید یک فاکتور با مجموع منفی ثبت کنید"
 
 #: ../src/business/business-gnome/dialog-invoice.c:647
 msgid "You may not post an expense voucher with a negative total cash value."
-msgstr ""
+msgstr "شما نمی توانید سند هزینه با مقدار منفی نقدی کل ارسال کنید."
 
 #. Ok, we can post this invoice.  Ask for verification, set the due date,
 #. * post date, and posted account
 #.
 #: ../src/business/business-gnome/dialog-invoice.c:654
 msgid "Do you really want to post the invoice?"
-msgstr ""
+msgstr "آیا مطمئنید می خواهید این فاکتور را ثبت کنید."
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -905,11 +906,11 @@ msgstr "تا تاریخ "
 
 #: ../src/business/business-gnome/dialog-invoice.c:656
 msgid "Post Date"
-msgstr ""
+msgstr "زمان ثبت"
 
 #: ../src/business/business-gnome/dialog-invoice.c:657
 msgid "Post to Account"
-msgstr ""
+msgstr "ثبت در حساب"
 
 #: ../src/business/business-gnome/dialog-invoice.c:658
 msgid "Accumulate Splits?"
@@ -918,7 +919,7 @@ msgstr ""
 #. Fill in the conversion prices with feedback from the user
 #: ../src/business/business-gnome/dialog-invoice.c:694
 msgid "One or more of the entries are for accounts different from the invoice/bill currency.  You will be asked a conversion rate for each."
-msgstr ""
+msgstr "یک یا بیشتر ورودیهای برای حسابهایی با واحد پولی متفاوت می باشند.از شما برای هزینه تبدیل هر کدام پرسش می شود."
 
 #: ../src/business/business-gnome/dialog-invoice.c:1027
 #: ../src/gnome/window-reconcile.c:1065
@@ -939,7 +940,7 @@ msgstr "جمع نقدی :"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1038
 msgid "Total Charge:"
-msgstr ""
+msgstr "جمع هزینه ها:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1654
 #: ../src/business/business-gnome/glade/invoice.glade.h:18
@@ -956,15 +957,15 @@ msgstr "مشاهده فاکتور"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1669
 msgid "New Bill"
-msgstr "فاکتور هزینه جدید"
+msgstr "صورتحساب جدید"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1673
 msgid "Edit Bill"
-msgstr "ویریش فاکتور هزینه:"
+msgstr "ویریش صورتحساب :"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1676
 msgid "View Bill"
-msgstr "مشاهده فاکتور هزینه :"
+msgstr "مشاهده صورتحساب :"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1684
 msgid "New Expense Voucher"
@@ -972,11 +973,11 @@ msgstr "کوپن جدید هزینه"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1688
 msgid "Edit Expense Voucher"
-msgstr ""
+msgstr "ویرایش سند هزینه"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1691
 msgid "View Expense Voucher"
-msgstr ""
+msgstr "مشاهده سند هزینه"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2310
 msgid "View/Edit Invoice"
@@ -985,13 +986,13 @@ msgstr "مشاهده / ویرایش فاکتور"
 #: ../src/business/business-gnome/dialog-invoice.c:2315
 #: ../src/business/business-gnome/dialog-invoice.c:2568
 msgid "View/Edit Bill"
-msgstr "مشاهده / ویرایش فاکتور هزینه"
+msgstr "مشاهده / ویرایش صورتحساب "
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
 #: ../src/business/business-gnome/dialog-invoice.c:2322
 msgid "View/Edit Voucher"
-msgstr ""
+msgstr "ویرایش / مشاهده سند هزینه"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2332
 msgid "Invoice Owner"
@@ -1051,13 +1052,13 @@ msgstr "پرداخت شده ؟"
 #: ../src/business/business-gnome/glade/invoice.glade.h:9
 #: ../src/gnome/dialog-find-transactions.c:117
 msgid "Date Posted"
-msgstr ""
+msgstr "زمان ثبت"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2347
 #: ../src/business/business-gnome/dialog-invoice.c:2377
 #: ../src/business/business-gnome/dialog-invoice.c:2407
 msgid "Is Posted?"
-msgstr ""
+msgstr "ثبت شده ؟"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2350
 #: ../src/business/business-gnome/dialog-invoice.c:2380
@@ -1066,7 +1067,7 @@ msgstr ""
 #: ../src/business/business-gnome/glade/invoice.glade.h:8
 #: ../src/business/business-gnome/glade/order.glade.h:6
 msgid "Date Opened"
-msgstr ""
+msgstr "زمان بازگشایی"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2353
 #: ../src/business/business-gnome/dialog-invoice.c:2383
@@ -1076,31 +1077,31 @@ msgstr "نام شرکت"
 #: ../src/business/business-gnome/dialog-invoice.c:2357
 #: ../src/business/business-gnome/glade/invoice.glade.h:14
 msgid "Invoice ID"
-msgstr ""
+msgstr "شماره فاکتور"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2362
 msgid "Bill Owner"
-msgstr ""
+msgstr "صادرکننده صورتجساب"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2365
 msgid "Bill Notes"
-msgstr ""
+msgstr "یادداشت صورتحساب"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2387
 msgid "Bill ID"
-msgstr ""
+msgstr "شماره صورتحساب"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2392
 msgid "Voucher Owner"
-msgstr ""
+msgstr "صادر کننده سند"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2395
 msgid "Voucher Notes"
-msgstr ""
+msgstr "یادداشت سند"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2417
 msgid "Voucher ID"
-msgstr ""
+msgstr "شماره سند"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/job-report.scm
@@ -1118,22 +1119,22 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1214
 #: ../intl-scm/guile-strings.c:2520
 msgid "Type"
-msgstr ""
+msgstr "نوع"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2427
 #: ../src/register/ledger-core/split-register-model.c:235
 msgid "Paid"
-msgstr ""
+msgstr "پرداخت شده"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2430
 msgid "Posted"
-msgstr ""
+msgstr "ثبت شده"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2435
 #: ../src/business/business-gnome/dialog-order.c:831
 #: ../src/gnome/lot-viewer.c:618
 msgid "Opened"
-msgstr ""
+msgstr "گشوده شده"
 
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/register.scm
@@ -1158,15 +1159,15 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5090
 #: ../intl-scm/guile-strings.c:5464
 msgid "Num"
-msgstr ""
+msgstr "شماره"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2506
 msgid "Find Bill"
-msgstr ""
+msgstr "یافتن صورتحساب"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2512
 msgid "Find Expense Voucher"
-msgstr ""
+msgstr "یافتن سند هزینه"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -1182,7 +1183,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1832
 #: ../intl-scm/guile-strings.c:2032
 msgid "Expense Voucher"
-msgstr ""
+msgstr "سند هزینه"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2518
 msgid "Find Invoice"
@@ -1235,142 +1236,142 @@ msgstr "تا "
 
 #: ../src/business/business-gnome/dialog-invoice.c:2621
 msgid "Due Bills Reminder"
-msgstr ""
+msgstr "یادآوری صورتحساب های سررسیدشده "
 
 #: ../src/business/business-gnome/dialog-invoice.c:2623
 msgid "The following bills are due"
-msgstr ""
+msgstr "صورتحساب های زیر سررسید شده اند"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2624
 msgid "The following bill is due"
-msgstr ""
+msgstr "صورتحساب های زیر سررسید شده اند"
 
 #: ../src/business/business-gnome/dialog-job.c:130
 msgid "The Job must be given a name."
-msgstr ""
+msgstr "نامی برای فعالیت ثبت کنید."
 
 #: ../src/business/business-gnome/dialog-job.c:139
 msgid "You must choose an owner for this job."
-msgstr ""
+msgstr "شما لازم است دارنده این فعالیت را مشخص کنید"
 
 #: ../src/business/business-gnome/dialog-job.c:237
 msgid "Edit Job"
-msgstr ""
+msgstr "ویرایش فعالیت"
 
 #: ../src/business/business-gnome/dialog-job.c:239
 msgid "New Job"
-msgstr ""
+msgstr "فعالیت جدید"
 
 #: ../src/business/business-gnome/dialog-job.c:514
 msgid "View/Edit Job"
-msgstr ""
+msgstr "مشاهده / ویرایش فعالیت"
 
 #: ../src/business/business-gnome/dialog-job.c:515
 msgid "View Invoices"
-msgstr ""
+msgstr "مشاهده فاکتورها"
 
 #: ../src/business/business-gnome/dialog-job.c:524
 msgid "Owner's Name"
-msgstr ""
+msgstr "نام دارنده"
 
 #: ../src/business/business-gnome/dialog-job.c:526
 msgid "Only Active?"
-msgstr ""
+msgstr "فقط فعال؟"
 
 #: ../src/business/business-gnome/dialog-job.c:530
 #: ../src/business/business-gnome/glade/job.glade.h:7
 msgid "Job Number"
-msgstr ""
+msgstr "شماره فعالیت"
 
 #: ../src/business/business-gnome/dialog-job.c:532
 #: ../src/business/business-gnome/dialog-job.c:542
 #: ../src/business/business-gnome/glade/job.glade.h:6
 msgid "Job Name"
-msgstr ""
+msgstr "نام فعالیت"
 
 #: ../src/business/business-gnome/dialog-job.c:590
 msgid "Find Job"
-msgstr ""
+msgstr "یافتن فعالیت"
 
 #: ../src/business/business-gnome/dialog-order.c:165
 msgid "The Order must be given an ID."
-msgstr ""
+msgstr "سفارش باید دارای شماره باشد."
 
 #: ../src/business/business-gnome/dialog-order.c:268
 msgid "The Order must have at least one Entry."
-msgstr ""
+msgstr "سفارش باید حداقل یک آیتم داشته باشد."
 
 #. Damn; yes.  Well, ask the user to make sure they REALLY want to
 #. * close this order!
 #.
 #: ../src/business/business-gnome/dialog-order.c:287
 msgid "This order contains entries that have not been invoiced. Are you sure you want to close it out before you invoice all the entries?"
-msgstr ""
+msgstr "این سفارش شامل ورودیهایی است که فاکتور نشده اند. آیا شما مطمئنید پیش از صدور فاکتور آنرا ببندید؟"
 
 #. Ok, we can close this.  Ask for verification and set the closed date
 #: ../src/business/business-gnome/dialog-order.c:296
 msgid "Do you really want to close the order?"
-msgstr ""
+msgstr "آیا از بستن این سفارش مطمئنید؟"
 
 #: ../src/business/business-gnome/dialog-order.c:297
 msgid "Close Date"
-msgstr ""
+msgstr "تاریخ بستن"
 
 #: ../src/business/business-gnome/dialog-order.c:800
 msgid "View/Edit Order"
-msgstr ""
+msgstr "مشاهده / ویرایش سفارش"
 
 #: ../src/business/business-gnome/dialog-order.c:808
 msgid "Order Notes"
-msgstr ""
+msgstr "یادداشت سفارش"
 
 #: ../src/business/business-gnome/dialog-order.c:810
 #: ../src/business/business-gnome/glade/order.glade.h:5
 msgid "Date Closed"
-msgstr ""
+msgstr "تاریخ بستن"
 
 #: ../src/business/business-gnome/dialog-order.c:812
 msgid "Is Closed?"
-msgstr ""
+msgstr "آیا بسته است؟"
 
 #: ../src/business/business-gnome/dialog-order.c:816
 msgid "Owner Name "
-msgstr ""
+msgstr "نام دارنده"
 
 #: ../src/business/business-gnome/dialog-order.c:818
 #: ../src/business/business-gnome/glade/order.glade.h:12
 msgid "Order ID"
-msgstr ""
+msgstr "شماره سفارش"
 
 #: ../src/business/business-gnome/dialog-order.c:829
 #: ../src/gnome/lot-viewer.c:623
 msgid "Closed"
-msgstr ""
+msgstr "بسته"
 
 #: ../src/business/business-gnome/dialog-order.c:884
 msgid "Find Order"
-msgstr ""
+msgstr "یافتن سفارش"
 
 #: ../src/business/business-gnome/dialog-payment.c:254
 msgid "You must enter the amount of the payment.  The payment amount must be greater than zero."
-msgstr ""
+msgstr "شما باید مقدار پرداخت را درج کنید. مقدار پرداخت باید بیشتر از 0 باشد."
 
 #: ../src/business/business-gnome/dialog-payment.c:263
 msgid "You must select a company for payment processing."
-msgstr ""
+msgstr "شما باید یک شرکت برای ثبت پرداخت انتخاب کنید."
 
 #: ../src/business/business-gnome/dialog-payment.c:271
 msgid "You must select a transfer account from the account tree."
-msgstr ""
+msgstr "شما لازم است حسابی برای انتقال از درخت حسابها انتخاب کنید"
 
 #: ../src/business/business-gnome/dialog-payment.c:279
 msgid "You must enter an account name for posting."
-msgstr ""
+msgstr "شما باید نام حساب برای ثبت را درج کنید"
 
 #: ../src/business/business-gnome/dialog-payment.c:288
 #, c-format
 msgid "Your selected post account, %s, does not exist"
-msgstr ""
+msgstr "حساب %S که انتخاب کرده اید وجود ندارد."
 
 #: ../src/business/business-gnome/dialog-payment.c:313
 msgid "The transfer and post accounts are associated with different currencies.  Please specify the conversion rate."
@@ -1391,65 +1392,65 @@ msgstr ""
 
 #: ../src/business/business-gnome/dialog-vendor.c:294
 msgid "Edit Vendor"
-msgstr ""
+msgstr "ویرایش فروشنده"
 
 #: ../src/business/business-gnome/dialog-vendor.c:296
 #: ../src/business/business-gnome/glade/vendor.glade.h:9
 msgid "New Vendor"
-msgstr ""
+msgstr "فروشنده جدید"
 
 #: ../src/business/business-gnome/dialog-vendor.c:646
 msgid "View/Edit Vendor"
-msgstr ""
+msgstr "مشاهده / ویرایش فروشنده"
 
 #: ../src/business/business-gnome/dialog-vendor.c:647
 msgid "Vendor's Jobs"
-msgstr ""
+msgstr "فعالیت های فروشنده"
 
 #. { N_("Vendor Orders"), order_vendor_cb},
 #: ../src/business/business-gnome/dialog-vendor.c:649
 msgid "Vendor's Bills"
-msgstr ""
+msgstr "صورتحساب های فروشنده"
 
 #: ../src/business/business-gnome/dialog-vendor.c:650
 msgid "Pay Bill"
-msgstr ""
+msgstr "پرداخت صورتحساب"
 
 #: ../src/business/business-gnome/dialog-vendor.c:661
 msgid "Vendor ID"
-msgstr ""
+msgstr "شماره فروشنده"
 
 #: ../src/business/business-gnome/dialog-vendor.c:694
 msgid "Find Vendor"
-msgstr ""
+msgstr "یافتن فروشنده"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:1
 msgid "<b>New Billing Term</b>"
-msgstr ""
+msgstr "<b>شرایط مالی جدید</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:2
 msgid "<b>Term Definition</b>"
-msgstr ""
+msgstr "<b>تعریف شرایط</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:3
 msgid "<b>Terms</b>"
-msgstr ""
+msgstr "<b>شرایط</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:4
 msgid "Cancel your changes"
-msgstr ""
+msgstr "لغو تغییرات شما"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:5
 msgid "Close this window"
-msgstr ""
+msgstr "این پنجره بسته شود"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:6
 msgid "Commit this Billing Term"
-msgstr ""
+msgstr "این شرایط پرداخت نهایی شود"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:7
 msgid "Create a new Billing Term"
-msgstr ""
+msgstr "ایحاد یک شرایط پرداخت"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:8
 msgid "Cutoff Day: "
@@ -1472,23 +1473,23 @@ msgstr ""
 #: ../src/business/business-gnome/glade/billterms.glade.h:15
 #, no-c-format
 msgid "Discount %: "
-msgstr ""
+msgstr "تخفیف % :"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:16
 msgid "Discount Day: "
-msgstr ""
+msgstr "روز تخفیف:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:17
 msgid "Discount Days: "
-msgstr ""
+msgstr "روزهای تخفیف :"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:18
 msgid "Due Day: "
-msgstr ""
+msgstr "روز سررسید:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:19
 msgid "Due Days: "
-msgstr ""
+msgstr "روزهای سررسید:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:20
 msgid "Edit the current Billing Term"
@@ -1593,11 +1594,11 @@ msgstr ""
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:3
 #: ../src/import-export/qif-import/qif.glade.h:52
 msgid "Preferences"
-msgstr ""
+msgstr "تنظمیات"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:8
 msgid "Ta_x included"
-msgstr ""
+msgstr "مشمول مالیا_ت"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:9
 msgid "Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog."
@@ -1703,7 +1704,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5466
 #: ../intl-scm/guile-strings.c:5580
 msgid "Description"
-msgstr ""
+msgstr "توصیف"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:1
 #: ../src/business/business-gnome/glade/employee.glade.h:3
@@ -1712,38 +1713,38 @@ msgstr ""
 #: ../src/business/business-gnome/glade/order.glade.h:2
 #: ../src/business/business-gnome/glade/vendor.glade.h:1
 msgid "Active"
-msgstr ""
+msgstr "فعال"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:2
 #: ../src/business/business-gnome/glade/employee.glade.h:4
 #: ../src/business/business-gnome/glade/vendor.glade.h:2
 msgid "Address: "
-msgstr ""
+msgstr "نشانی :"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:3
 msgid "Billing Address"
-msgstr ""
+msgstr "نشانی مالی"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:4
 #: ../src/business/business-gnome/glade/invoice.glade.h:5
 #: ../src/business/business-gnome/glade/order.glade.h:3
 msgid "Billing Information"
-msgstr ""
+msgstr "اطلاعات مالی"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:5
 #: ../src/business/business-gnome/glade/vendor.glade.h:3
 msgid "Company Name: "
-msgstr ""
+msgstr "نام شرکت :"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:6
 msgid "Credit Limit: "
-msgstr ""
+msgstr "حد اعتبار:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:7
 #: ../src/business/business-gnome/glade/employee.glade.h:7
 #: ../src/business/business-gnome/glade/vendor.glade.h:4
 msgid "Currency: "
-msgstr ""
+msgstr "ارز:"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/job-report.scm
@@ -1758,27 +1759,27 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:910
 #: ../intl-scm/guile-strings.c:1284
 msgid "Customer"
-msgstr ""
+msgstr "مشتری"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:9
 msgid "Customer Number: "
-msgstr ""
+msgstr "شماره مشتری :"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:10
 msgid "Discount: "
-msgstr ""
+msgstr "تخفیف :"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:11
 #: ../src/business/business-gnome/glade/employee.glade.h:10
 #: ../src/business/business-gnome/glade/vendor.glade.h:5
 msgid "Email: "
-msgstr ""
+msgstr "رایانامه:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:12
 #: ../src/business/business-gnome/glade/employee.glade.h:13
 #: ../src/business/business-gnome/glade/vendor.glade.h:6
 msgid "Fax: "
-msgstr ""
+msgstr "نمابر:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:13
 #: ../src/business/business-gnome/glade/employee.glade.h:14
@@ -1790,7 +1791,7 @@ msgstr ""
 #: ../src/business/business-gnome/glade/employee.glade.h:17
 #: ../src/business/business-gnome/glade/vendor.glade.h:8
 msgid "Name: "
-msgstr ""
+msgstr "نام:"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/transaction.scm
@@ -1811,7 +1812,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5094
 #: ../intl-scm/guile-strings.c:5468
 msgid "Notes"
-msgstr ""
+msgstr "یادداشت"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:17
 #: ../src/business/business-gnome/glade/vendor.glade.h:11
@@ -1822,32 +1823,32 @@ msgstr ""
 #: ../src/business/business-gnome/glade/employee.glade.h:20
 #: ../src/business/business-gnome/glade/vendor.glade.h:14
 msgid "Phone: "
-msgstr ""
+msgstr "تلفن:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:19
 msgid "Shipping Address"
-msgstr ""
+msgstr "نشانی ارسال:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:20
 msgid "Shipping Information"
-msgstr ""
+msgstr "اطلاعات ارسال"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:21
 msgid "Tax Included: "
-msgstr ""
+msgstr "شامل مالیات"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:22
 msgid "Tax Table: "
-msgstr ""
+msgstr "جدول مالیات:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:23
 #: ../src/business/business-gnome/glade/vendor.glade.h:17
 msgid "Terms: "
-msgstr ""
+msgstr "شرایط:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:24
 msgid "The customer ID number.  If left blank a reasonable number will be chosen for you"
-msgstr ""
+msgstr "شماره مشتری ؛ اگر خالی رها شود یک شماره منطقی برای شما انتخاب می شود"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:25
 msgid "What Tax Table should be applied to this customer?"
@@ -1855,7 +1856,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:2
 msgid "Question"
-msgstr ""
+msgstr "پرسش"
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:3
 msgid "acct"
@@ -1871,24 +1872,24 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:6
 msgid "question"
-msgstr ""
+msgstr "پرسش"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:1
 msgid "Access Control"
-msgstr ""
+msgstr "کنترل دسترسی"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:2
 msgid "Access Control List"
-msgstr ""
+msgstr "فهرست کنترل دسترسی"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:5
 msgid "Billing"
-msgstr ""
+msgstr "مالی"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:6
 #: ../src/gnome-utils/dialog-transfer.c:1707
 msgid "Credit Account"
-msgstr ""
+msgstr "حساب اعتباری"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:8
 msgid "Default Hours per Day: "
@@ -1896,7 +1897,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/employee.glade.h:9
 msgid "Default Rate: "
-msgstr ""
+msgstr "نرخ پیش فرض"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/job-report.scm
@@ -1909,24 +1910,24 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:914
 #: ../intl-scm/guile-strings.c:1290
 msgid "Employee"
-msgstr ""
+msgstr "کارمند"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:12
 msgid "Employee Number: "
-msgstr ""
+msgstr "شماره کارمند"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:15
 msgid "Interface"
-msgstr ""
+msgstr "واسط"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:16
 msgid "Language: "
-msgstr ""
+msgstr "زبان :"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:19
 #: ../src/business/business-gnome/glade/vendor.glade.h:12
 msgid "Payment Address"
-msgstr ""
+msgstr "نشانی پرداخت"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:21
 msgid "The employee ID number.  If left blank a reasonable number will be chosen for you"
@@ -1934,7 +1935,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/employee.glade.h:22
 msgid "Username: "
-msgstr ""
+msgstr "نام کاربری:"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:1
 #: ../src/business/business-gnome/glade/order.glade.h:1
@@ -1947,7 +1948,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:7
 msgid "Customer: "
-msgstr ""
+msgstr "مشتری :"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:10
 msgid "Default Chargeback Project"
@@ -1955,15 +1956,15 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:11
 msgid "Extra Payments"
-msgstr ""
+msgstr "پرداخت اضافه"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:13
 msgid "Invoice Entries"
-msgstr ""
+msgstr "عناوین فاکتور "
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:15
 msgid "Invoice Information"
-msgstr ""
+msgstr "اطلاعات فاکتور"
 
 #. src/business/business-reports/job-report.scm
 #. src/business/business-reports/gnucash/report/job-report.scm
@@ -1974,19 +1975,19 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1206
 #: ../intl-scm/guile-strings.c:1286
 msgid "Job"
-msgstr ""
+msgstr "فعالیت"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:17
 msgid "Job: "
-msgstr ""
+msgstr "فعالیت :"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:19
 msgid "No, keep them as they are"
-msgstr ""
+msgstr "نه، آنها را همانظور نگه دار"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:21
 msgid "Posted Account"
-msgstr ""
+msgstr "حساب ارسال شده"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:22
 msgid "Reset Tax Tables to present Values?"
@@ -2008,19 +2009,19 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/job.glade.h:3
 msgid "Job Active"
-msgstr ""
+msgstr "کار فعال"
 
 #: ../src/business/business-gnome/glade/job.glade.h:4
 msgid "Job Dialog"
-msgstr ""
+msgstr "پنجره کار"
 
 #: ../src/business/business-gnome/glade/job.glade.h:5
 msgid "Job Information"
-msgstr ""
+msgstr "اطلاعات کار"
 
 #: ../src/business/business-gnome/glade/job.glade.h:8
 msgid "Owner Information"
-msgstr ""
+msgstr "اطلاعات دارنده"
 
 #: ../src/business/business-gnome/glade/job.glade.h:9
 msgid "The job ID number.  If left blank a reasonable number will be chosen for you"
@@ -2028,15 +2029,15 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/order.glade.h:4
 msgid "Close Order"
-msgstr ""
+msgstr "بستن سفارش"
 
 #: ../src/business/business-gnome/glade/order.glade.h:7
 msgid "Invoices"
-msgstr ""
+msgstr "فاکتورها"
 
 #: ../src/business/business-gnome/glade/order.glade.h:8
 msgid "New Order"
-msgstr ""
+msgstr "سفارش جدید"
 
 #: ../src/business/business-gnome/glade/order.glade.h:10
 msgid "Order Entries"
@@ -2235,16 +2236,16 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:730
 #: ../intl-scm/guile-strings.c:1202
 msgid "_Business"
-msgstr ""
+msgstr "_تجارت"
 
 #. Customer submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:151
 msgid "_Customer"
-msgstr ""
+msgstr "_مشتری"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:152
 msgid "_New Customer..."
-msgstr ""
+msgstr "مشتری _جدید"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:153
 msgid "Open the New Customer dialog"
@@ -2252,7 +2253,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:155
 msgid "_Find Customer..."
-msgstr ""
+msgstr "_یافتن مشتری"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:156
 msgid "Open the Find Customer dialog"
@@ -2260,7 +2261,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:158
 msgid "New _Invoice..."
-msgstr ""
+msgstr "_فاکتور جدید"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:159
 msgid "Open the New Invoice dialog"
@@ -2268,7 +2269,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:161
 msgid "Find In_voice..."
-msgstr ""
+msgstr "یافتن فا_کتور"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:162
 msgid "Open the Find Invoice dialog"
@@ -2277,7 +2278,7 @@ msgstr ""
 #: ../src/business/business-gnome/gnc-plugin-business.c:164
 #: ../src/business/business-gnome/gnc-plugin-business.c:188
 msgid "New _Job..."
-msgstr ""
+msgstr "کار جدید"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:165
 #: ../src/business/business-gnome/gnc-plugin-business.c:189
@@ -2287,7 +2288,7 @@ msgstr ""
 #: ../src/business/business-gnome/gnc-plugin-business.c:167
 #: ../src/business/business-gnome/gnc-plugin-business.c:191
 msgid "Find Jo_b..."
-msgstr ""
+msgstr "یافتن کار"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:168
 #: ../src/business/business-gnome/gnc-plugin-business.c:192
@@ -2298,7 +2299,7 @@ msgstr ""
 #: ../src/business/business-gnome/gnc-plugin-business.c:194
 #: ../src/business/business-gnome/gnc-plugin-business.c:212
 msgid "_Process Payment..."
-msgstr ""
+msgstr "پردازش پرداخت"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:171
 #: ../src/business/business-gnome/gnc-plugin-business.c:195
@@ -2309,11 +2310,11 @@ msgstr ""
 #. Vendor submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:175
 msgid "_Vendor"
-msgstr ""
+msgstr "_فروشنده"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:176
 msgid "_New Vendor..."
-msgstr ""
+msgstr "فروشنده جدید"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:177
 msgid "Open the New Vendor dialog"
@@ -2321,7 +2322,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:179
 msgid "_Find Vendor..."
-msgstr ""
+msgstr "یافتن فروشنده"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:180
 msgid "Open the Find Vendor dialog"
@@ -2329,7 +2330,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:182
 msgid "New _Bill..."
-msgstr ""
+msgstr "_صورتحساب جدید"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:183
 msgid "Open the New Bill dialog"
@@ -2337,7 +2338,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:185
 msgid "Find Bi_ll..."
-msgstr ""
+msgstr "یافتن صورتحساب"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:186
 msgid "Open the Find Bill dialog"
@@ -2346,11 +2347,11 @@ msgstr ""
 #. Employee submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:199
 msgid "_Employee"
-msgstr ""
+msgstr "کارمند"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:200
 msgid "_New Employee..."
-msgstr ""
+msgstr "کارمند جدید"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:201
 msgid "Open the New Employee dialog"
@@ -2366,7 +2367,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:206
 msgid "New _Expense Voucher..."
-msgstr ""
+msgstr "سند هزینه جدید"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:207
 msgid "Open the New Expense Voucher dialog"
@@ -2374,7 +2375,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:209
 msgid "Find Expense _Voucher..."
-msgstr ""
+msgstr "یافتن سند هزینه"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:210
 msgid "Open the Find Expense Voucher dialog"
@@ -2387,11 +2388,11 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:218
 msgid "View and edit the list of Tax Tables"
-msgstr ""
+msgstr "مشاهده و ویرایش فهرست جدول مالیانی"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:220
 msgid "_Billing Terms Editor"
-msgstr ""
+msgstr "ویرایشگر شرایط مالی"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:221
 msgid "View and edit the list of Billing Terms"
@@ -2399,7 +2400,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:223
 msgid "Bills _Due Reminder"
-msgstr ""
+msgstr "یاداوری سررسید صورتحساب"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:224
 msgid "Open the Bills Due Reminder dialog"
@@ -2407,7 +2408,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:226
 msgid "E_xport"
-msgstr ""
+msgstr "انتقال"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:227
 msgid "QSF _Invoice..."
@@ -2663,13 +2664,13 @@ msgstr ""
 #: ../src/gnome/glade/register.glade.h:25
 #: ../src/gnome/gnc-plugin-page-register.c:335
 msgid "Enter"
-msgstr ""
+msgstr "درج"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:195
 #: ../src/gnome/glade/register.glade.h:6
 #: ../src/gnome/gnc-plugin-page-register.c:336
 msgid "Cancel"
-msgstr ""
+msgstr "لغو"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:196
 #: ../src/gnome/glade/register.glade.h:16
@@ -2677,27 +2678,27 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-budget.c:164
 #: ../src/gnome/gnc-plugin-page-register.c:337
 msgid "Delete"
-msgstr ""
+msgstr "حذف"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:197
 #: ../src/gnome/glade/register.glade.h:20
 #: ../src/gnome/gnc-plugin-page-register.c:338
 msgid "Duplicate"
-msgstr ""
+msgstr "تکرار"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:198
 #: ../src/gnome/glade/register.glade.h:3
 #: ../src/gnome/gnc-plugin-page-register.c:341
 msgid "Blank"
-msgstr ""
+msgstr "خالی"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:199
 msgid "Post"
-msgstr ""
+msgstr "ثبت"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:200
 msgid "Unpost"
-msgstr ""
+msgstr "برگشت از ثبت"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:1
 msgid "Accumulate multiple splits into one"
@@ -2831,7 +2832,7 @@ msgstr ""
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:164
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:170
 msgid "an Account"
-msgstr ""
+msgstr "یک حساب"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:376
 #, c-format
@@ -2965,7 +2966,7 @@ msgstr ""
 #: ../src/engine/Account.c:3771
 #: ../intl-scm/guile-strings.c:4626
 msgid "Cash"
-msgstr ""
+msgstr "نقدی"
 
 #. src/report/standard-reports/register.scm
 #. src/app-utils/prefs.scm
@@ -2977,15 +2978,15 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6894
 #: ../intl-scm/guile-strings.c:6912
 msgid "Charge"
-msgstr ""
+msgstr "هزینه"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:55
 msgid "Income Account"
-msgstr ""
+msgstr "حساب درامد"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:60
 msgid "Expense Account"
-msgstr ""
+msgstr "حساب هزینه"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -3003,7 +3004,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1722
 #: ../intl-scm/guile-strings.c:1892
 msgid "Action"
-msgstr ""
+msgstr "فعالیت"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -3025,15 +3026,15 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1862
 #: ../intl-scm/guile-strings.c:1910
 msgid "Discount"
-msgstr ""
+msgstr "تخفیف"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:85
 msgid "Discount Type"
-msgstr ""
+msgstr "نوع تخفیف"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:90
 msgid "Discount How"
-msgstr ""
+msgstr "چگونگی تخفیف"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -3049,7 +3050,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1690
 #: ../intl-scm/guile-strings.c:1860
 msgid "Unit Price"
-msgstr ""
+msgstr "قیمت واحد"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -3071,19 +3072,19 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1858
 #: ../intl-scm/guile-strings.c:1898
 msgid "Quantity"
-msgstr ""
+msgstr "تعداد"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:105
 msgid "Tax Table"
-msgstr ""
+msgstr "جدول مالیات"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:110
 msgid "Taxable?"
-msgstr ""
+msgstr "مشمول مالیات"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:115
 msgid "Tax Included?"
-msgstr ""
+msgstr "شامل مالیات"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:120
 msgid "Invoiced?"
@@ -3107,7 +3108,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2020
 #: ../intl-scm/guile-strings.c:4802
 msgid "Subtotal"
-msgstr ""
+msgstr "جمع جزء"
 
 #. src/tax/us/de_DE.scm
 #. src/tax/us/gnucash/tax/de_DE.scm
@@ -3127,7 +3128,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1822
 #: ../intl-scm/guile-strings.c:2022
 msgid "Tax"
-msgstr ""
+msgstr "مالیات"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:135
 msgid "Billable?"
@@ -3318,23 +3319,23 @@ msgstr ""
 #: ../src/import-export/hbci/gnc-hbci-utils.c:900
 #: ../intl-scm/guile-strings.c:4624
 msgid "Bank"
-msgstr ""
+msgstr "بانک"
 
 #: ../src/engine/Account.c:3772
 msgid "Asset"
-msgstr ""
+msgstr "دارایی"
 
 #: ../src/engine/Account.c:3773
 msgid "Credit Card"
-msgstr ""
+msgstr "کارت اعتباری"
 
 #: ../src/engine/Account.c:3774
 msgid "Liability"
-msgstr ""
+msgstr "بدهی"
 
 #: ../src/engine/Account.c:3775
 msgid "Stock"
-msgstr ""
+msgstr "انبار"
 
 #: ../src/engine/Account.c:3776
 msgid "Mutual Fund"
@@ -3344,7 +3345,7 @@ msgstr ""
 #: ../src/gnome-utils/dialog-commodity.c:761
 #: ../src/gnome-utils/gnc-tree-view-price.c:438
 msgid "Currency"
-msgstr ""
+msgstr "ارز"
 
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
@@ -3373,19 +3374,19 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4640
 #: ../intl-scm/guile-strings.c:6924
 msgid "Income"
-msgstr ""
+msgstr "درآمد"
 
 #: ../src/engine/Account.c:3781
 msgid "A/Receivable"
-msgstr ""
+msgstr "حساب دریافتنی"
 
 #: ../src/engine/Account.c:3782
 msgid "A/Payable"
-msgstr ""
+msgstr "حساب پرداختنی"
 
 #: ../src/engine/Account.c:3783
 msgid "Root"
-msgstr ""
+msgstr "ریشه"
 
 #: ../src/engine/Account.c:3784
 #: ../src/engine/Scrub.c:445
@@ -3476,7 +3477,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3456
 #: ../intl-scm/guile-strings.c:3458
 msgid "Weekly"
-msgstr ""
+msgstr "هفتگی"
 
 #. translators: %u is the recurrence multipler, i.e. this
 #. event should occur every %u'th week.
@@ -3500,7 +3501,7 @@ msgstr ""
 #: ../src/engine/Recurrence.c:608
 #: ../src/gnome/glade/fincalc.glade.h:42
 msgid "Semi-monthly"
-msgstr ""
+msgstr "دو هفته ای"
 
 #. translators: %d is the number of Recurrences in the list.
 #: ../src/engine/Recurrence.c:623
@@ -3511,12 +3512,12 @@ msgstr ""
 #: ../src/engine/Recurrence.c:634
 #: ../src/gnome/glade/sched-xact.glade.h:133
 msgid "Once"
-msgstr ""
+msgstr "یکبار"
 
 #: ../src/engine/Recurrence.c:637
 #: ../src/gnome/glade/sched-xact.glade.h:71
 msgid "Daily"
-msgstr ""
+msgstr "روزانه"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/engine/Recurrence.c:650
@@ -3525,14 +3526,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3460
 #: ../intl-scm/guile-strings.c:3462
 msgid "Monthly"
-msgstr ""
+msgstr "ماهانه"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/engine/Recurrence.c:664
 #: ../intl-scm/guile-strings.c:3468
 #: ../intl-scm/guile-strings.c:3470
 msgid "Yearly"
-msgstr ""
+msgstr "سالانه"
 
 #: ../src/engine/Scrub.c:89
 msgid "Orphan"
@@ -3616,7 +3617,7 @@ msgstr ""
 
 #: ../src/gnome/dialog-find-transactions.c:99
 msgid "All Accounts"
-msgstr ""
+msgstr "همه حساب ها"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/job-report.scm
@@ -3657,12 +3658,12 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5198
 #: ../intl-scm/guile-strings.c:5572
 msgid "Account"
-msgstr ""
+msgstr "حساب"
 
 #: ../src/gnome/dialog-find-transactions.c:106
 #: ../src/import-export/import-match-picker.c:340
 msgid "Balanced"
-msgstr ""
+msgstr "تراز"
 
 #: ../src/gnome/dialog-find-transactions.c:109
 #: ../src/gnome/gnc-plugin-page-register.c:342
@@ -3702,14 +3703,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3720
 #: ../intl-scm/guile-strings.c:4210
 msgid "Value"
-msgstr ""
+msgstr "ارزش"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/dialog-find-transactions.c:124
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:10
 #: ../intl-scm/guile-strings.c:3436
 msgid "Number"
-msgstr ""
+msgstr "شماره"
 
 #: ../src/gnome/dialog-find-transactions.c:169
 #: ../src/gnome-search/dialog-search.c:1113
@@ -3798,7 +3799,7 @@ msgstr ""
 #: ../src/gnome/window-reconcile.c:2129
 #: ../src/report/report-gnome/report.glade.h:17
 msgid "_Edit"
-msgstr ""
+msgstr "_ویرایش"
 
 #: ../src/gnome/dialog-sx-editor.c:186
 #: ../src/gnome/window-reconcile.c:2086
@@ -3809,13 +3810,13 @@ msgstr ""
 #: ../src/gnome/glade/register.glade.h:101
 #: ../src/gnome-utils/gnc-main-window.c:234
 msgid "_View"
-msgstr ""
+msgstr "_مشاهده"
 
 #: ../src/gnome/dialog-sx-editor.c:188
 #: ../src/gnome/glade/register.glade.h:74
 #: ../src/gnome-utils/gnc-main-window.c:235
 msgid "_Actions"
-msgstr ""
+msgstr "_فعالیت"
 
 #: ../src/gnome/dialog-sx-editor.c:218
 msgid "This SX has changed; are you sure you want to cancel?"
@@ -4066,7 +4067,7 @@ msgstr ""
 
 #: ../src/gnome/druid-loan.c:162
 msgid "Insurance"
-msgstr ""
+msgstr "بیمه"
 
 #: ../src/gnome/druid-loan.c:162
 msgid "Insurance Payment"
@@ -4882,7 +4883,7 @@ msgstr ""
 
 #: ../src/gnome/glade/fincalc.glade.h:6
 msgid "Annual"
-msgstr ""
+msgstr "سالانه"
 
 #: ../src/gnome/glade/fincalc.glade.h:7
 msgid ""
@@ -4897,27 +4898,27 @@ msgid ""
 "Weekly\n"
 "Daily (360)\n"
 "Daily (365)"
-msgstr ""
+msgstr "سالانه/nشش ماهانه/nچهار ماهانه/nسه ماهانه/nدوماهانه/nماهانه/nنیمه - ماهانه/nدوهفتگی/nهفتگی/nروزانه (360)/nروزانه (365)"
 
 #: ../src/gnome/glade/fincalc.glade.h:18
 msgid "Beginning"
-msgstr ""
+msgstr "شروع"
 
 #: ../src/gnome/glade/fincalc.glade.h:19
 msgid "Bi-monthly"
-msgstr ""
+msgstr "دوماهانه"
 
 #: ../src/gnome/glade/fincalc.glade.h:20
 msgid "Bi-weekly"
-msgstr ""
+msgstr "دو هفتگی"
 
 #: ../src/gnome/glade/fincalc.glade.h:21
 msgid "Calculate"
-msgstr ""
+msgstr "محاسبه"
 
 #: ../src/gnome/glade/fincalc.glade.h:22
 msgid "Clear the entry"
-msgstr ""
+msgstr "حذف ورودی"
 
 #: ../src/gnome/glade/fincalc.glade.h:23
 msgid "Co_mpounding:"
@@ -6568,11 +6569,11 @@ msgstr ""
 #. File menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:101
 msgid "New _File"
-msgstr ""
+msgstr "_فایل جدید"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:102
 msgid "Create a new file"
-msgstr ""
+msgstr "ایجاد یک فایل جدید"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:104
 msgid "_Open..."
@@ -6741,19 +6742,19 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-budget.c:59
 msgid "Open Budget"
-msgstr ""
+msgstr "گشودن بودجه"
 
 #: ../src/gnome/gnc-plugin-budget.c:60
 msgid "Open an existing Budget"
-msgstr ""
+msgstr "گشودن یک بودجه موجود"
 
 #: ../src/gnome/gnc-plugin-budget.c:226
 msgid "Select a Budget"
-msgstr ""
+msgstr "انتخاب بودجه"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:150
 msgid "Create a new Account"
-msgstr ""
+msgstr "ایجاد یک حساب جدید"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:152
 msgid "New Account _Hierarchy..."
@@ -6767,17 +6768,17 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-account-tree.c:155
 #: ../src/gnome/gnc-plugin-page-budget.c:126
 msgid "Open _Account"
-msgstr ""
+msgstr "گشودن حساب"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:156
 #: ../src/gnome/gnc-plugin-page-budget.c:127
 msgid "Open the selected account"
-msgstr ""
+msgstr "گشودن حساب انتخابی"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:158
 #: ../src/gnome/gnc-plugin-page-budget.c:130
 msgid "Open _Subaccounts"
-msgstr ""
+msgstr "گشودن حسابهای معین"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:159
 #: ../src/gnome/gnc-plugin-page-budget.c:131
@@ -6788,24 +6789,24 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-account-tree.c:163
 #: ../src/gnome/gnc-plugin-page-register.c:187
 msgid "Edit _Account"
-msgstr ""
+msgstr "ویرایش حساب"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:164
 #: ../src/gnome/gnc-plugin-page-register.c:188
 msgid "Edit the selected account"
-msgstr ""
+msgstr "ویرایش حساب انتخابی"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:166
 msgid "_Delete Account..."
-msgstr ""
+msgstr "حذف حساب ...."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:167
 msgid "Delete selected account"
-msgstr ""
+msgstr "حذف حساب انتخابی"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:169
 msgid "_Renumber Subaccounts..."
-msgstr ""
+msgstr "بازسازی شماره های حسابهای معین"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:170
 msgid "Renumber the children of the selected account"
@@ -6817,7 +6818,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register.c:233
 #: ../src/gnome-utils/gnc-main-window.c:288
 msgid "_Filter By..."
-msgstr ""
+msgstr "_فیلتر با"
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:178
@@ -6836,13 +6837,13 @@ msgstr ""
 #: ../src/gnome-utils/gnc-icons.c:21
 #: ../src/gnome/window-reconcile.c:2113
 msgid "_Transfer..."
-msgstr ""
+msgstr "_انتقال"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:182
 #: ../src/gnome/gnc-plugin-page-register.c:239
 #: ../src/gnome/window-reconcile.c:2114
 msgid "Transfer funds from one account to another"
-msgstr ""
+msgstr "انتقال موجودی از یک حساب به دیگری"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:184
 #: ../src/gnome/gnc-plugin-page-register.c:244
@@ -6896,11 +6897,11 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:853
 #: ../src/gnome/window-reconcile.c:1622
 msgid "Open"
-msgstr ""
+msgstr "گشودن"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:222
 msgid "New"
-msgstr ""
+msgstr "جدید"
 
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -6924,21 +6925,21 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4386
 #: ../intl-scm/guile-strings.c:4844
 msgid "Accounts"
-msgstr ""
+msgstr "حسابها"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:927
 msgid "(no name)"
-msgstr ""
+msgstr "( بی نام )"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:948
 #, c-format
 msgid "Deleting account %s"
-msgstr ""
+msgstr "حذف حساب   %s"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1040
 #, c-format
 msgid "The account %s will be deleted."
-msgstr ""
+msgstr "حساب %s حذف خواهد شد."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1050
 #, c-format
@@ -6986,15 +6987,15 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-budget.c:141
 msgid "Estimate Budget"
-msgstr ""
+msgstr "برآورد بودجه"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:143
 msgid "Estimate a budget value for the selected accounts from past transactions"
-msgstr ""
+msgstr "برآورد مقدار بودجه برای حسابهای انتخابی از تراکنشهای قبلی"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:166
 msgid "Estimate"
-msgstr ""
+msgstr "برآورد"
 
 #. src/report/standard-reports/budget-flow.scm
 #. src/report/standard-reports/budget-income-statement.scm
@@ -7012,7 +7013,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4610
 #: ../intl-scm/guile-strings.c:4612
 msgid "Budget"
-msgstr ""
+msgstr "بودجه"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:768
 msgid "Set the budget options using this dialog."
@@ -7025,31 +7026,31 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-budget.c:911
 msgid "You must select at least one account to estimate."
-msgstr ""
+msgstr "شما حداقل یک حساب برای برآورد باید انتخاب کنید "
 
 #. File menu
 #: ../src/gnome/gnc-plugin-page-register.c:173
 msgid "_Print Check..."
-msgstr ""
+msgstr "_چاپ چک"
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-register.c:178
 #: ../src/gnome-utils/gnc-main-window.c:271
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:965
 msgid "Cu_t"
-msgstr ""
+msgstr "Cu_t"
 
 #: ../src/gnome/gnc-plugin-page-register.c:179
 #: ../src/gnome-utils/gnc-main-window.c:272
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:966
 msgid "Cut the current selection and copy it to clipboard"
-msgstr ""
+msgstr "Cut the current selection and copy it to clipboard"
 
 #: ../src/gnome/gnc-plugin-page-register.c:181
 #: ../src/gnome-utils/gnc-main-window.c:274
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:968
 msgid "_Copy"
-msgstr ""
+msgstr "_کپی"
 
 #: ../src/gnome/gnc-plugin-page-register.c:182
 #: ../src/gnome-utils/gnc-main-window.c:275
@@ -7231,11 +7232,11 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register.c:1175
 #: ../src/gnome/gnc-plugin-page-register.c:1775
 msgid "Search Results"
-msgstr ""
+msgstr "نتایح جستجو"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1765
 msgid "General Ledger Report"
-msgstr ""
+msgstr "گزارش دفتر کل"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1771
 msgid "Portfolio Report"
@@ -7262,7 +7263,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register.c:1799
 msgid "and subaccounts"
-msgstr ""
+msgstr "و حسابهای معین"
 
 #: ../src/gnome/gnc-plugin-page-register.c:2068
 msgid "You cannot void a transaction with reconciled or cleared splits."
@@ -7296,7 +7297,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-main-window.c:245
 #: ../src/gnome/window-reconcile.c:2123
 msgid "_New"
-msgstr ""
+msgstr "_جدید"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:121
 msgid "Create a new scheduled transaction"
@@ -7320,7 +7321,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-register.c:48
 msgid "_General Ledger"
-msgstr ""
+msgstr "_دفتر کل"
 
 #: ../src/gnome/gnc-plugin-register.c:49
 msgid "Open a general ledger window"
@@ -7394,11 +7395,11 @@ msgstr ""
 
 #: ../src/gnome/gnc-split-reg.c:1843
 msgid "Present:"
-msgstr ""
+msgstr "حال:"
 
 #: ../src/gnome/gnc-split-reg.c:1844
 msgid "Future:"
-msgstr ""
+msgstr "آینده:"
 
 #: ../src/gnome/gnc-split-reg.c:1845
 msgid "Cleared:"
@@ -7418,7 +7419,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-split-reg.c:1852
 msgid "Current Value:"
-msgstr ""
+msgstr "مقدار جاری:"
 
 #: ../src/gnome/gnc-split-reg.c:1924
 msgid "This account register is read-only."
@@ -7442,7 +7443,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5716
 #: ../intl-scm/guile-strings.c:6062
 msgid "Title"
-msgstr ""
+msgstr "عنوان"
 
 #: ../src/gnome/lot-viewer.c:638
 msgid "Gains"
@@ -8310,7 +8311,7 @@ msgstr ""
 
 #: ../src/gnome-search/dialog-search.c:274
 msgid "Select"
-msgstr ""
+msgstr "انتخاب"
 
 #: ../src/gnome-search/dialog-search.c:832
 msgid "all criteria are met"
@@ -8329,11 +8330,11 @@ msgstr ""
 
 #: ../src/gnome-search/dialog-search.c:872
 msgid "item"
-msgstr ""
+msgstr "آبتم"
 
 #: ../src/gnome-search/search-account.c:170
 msgid "You have not selected any accounts"
-msgstr ""
+msgstr "شما هیچ حسابی انتخاب نکرده اید"
 
 #: ../src/gnome-search/search-account.c:190
 msgid "matches all accounts"
@@ -8351,16 +8352,16 @@ msgstr ""
 #: ../src/gnome-search/search-account.c:211
 #: ../intl-scm/guile-strings.c:2640
 msgid "Selected Accounts"
-msgstr ""
+msgstr "حسابهای انتخابی"
 
 #: ../src/gnome-search/search-account.c:212
 msgid "Choose Accounts"
-msgstr ""
+msgstr "انتخاب حساب"
 
 #. Create the label
 #: ../src/gnome-search/search-account.c:246
 msgid "Select Accounts to Match"
-msgstr ""
+msgstr "حسابها برای مقایسه را انتخاب کنید"
 
 #: ../src/gnome-search/search-account.c:250
 msgid "Select the Accounts to Compare"
@@ -8457,7 +8458,7 @@ msgstr ""
 
 #: ../src/gnome-search/search.glade.h:7
 msgid "New search"
-msgstr ""
+msgstr "جستجوی جدید"
 
 #: ../src/gnome-search/search.glade.h:8
 msgid "Refine current search"
@@ -8493,31 +8494,31 @@ msgstr ""
 
 #: ../src/gnome-search/search-numeric.c:223
 msgid "equal to"
-msgstr ""
+msgstr "برابر با"
 
 #: ../src/gnome-search/search-numeric.c:226
 msgid "not equal to"
-msgstr ""
+msgstr "مخالف با"
 
 #: ../src/gnome-search/search-numeric.c:229
 msgid "greater than"
-msgstr ""
+msgstr "بزرگتر از"
 
 #: ../src/gnome-search/search-numeric.c:232
 msgid "greater than or equal to"
-msgstr ""
+msgstr "بزرگتر یا مساوی با"
 
 #: ../src/gnome-search/search-numeric.c:249
 msgid "has credits or debits"
-msgstr ""
+msgstr "دارای بستانکاری یا بدهکاری"
 
 #: ../src/gnome-search/search-numeric.c:250
 msgid "has debits"
-msgstr ""
+msgstr "دارای بدهکاری"
 
 #: ../src/gnome-search/search-numeric.c:251
 msgid "has credits"
-msgstr ""
+msgstr "دارای بستانکاری"
 
 #. Build and connect the toggles
 #: ../src/gnome-search/search-reconciled.c:222
@@ -8619,15 +8620,15 @@ msgstr ""
 
 #: ../src/gnome-utils/dialog-account.c:711
 msgid "The account must be given a name."
-msgstr ""
+msgstr "حساب باید داری نام باشد"
 
 #: ../src/gnome-utils/dialog-account.c:733
 msgid "There is already an account with that name."
-msgstr ""
+msgstr "هم اکنون حسابی با این نام وجود دارد"
 
 #: ../src/gnome-utils/dialog-account.c:741
 msgid "You must choose a valid parent account."
-msgstr ""
+msgstr "شما باید حساب اصلی معتبری انتخاب نمایید"
 
 #: ../src/gnome-utils/dialog-account.c:749
 msgid "You must select an account type."
@@ -8651,12 +8652,12 @@ msgstr ""
 
 #: ../src/gnome-utils/dialog-account.c:1328
 msgid "Edit Account"
-msgstr ""
+msgstr "ویرایش حساب"
 
 #: ../src/gnome-utils/dialog-account.c:1331
 #, c-format
 msgid "(%d) New Accounts"
-msgstr ""
+msgstr "(%d) حسابهای جدید"
 
 #: ../src/gnome-utils/dialog-account.c:1841
 #, c-format
@@ -8717,15 +8718,15 @@ msgstr ""
 
 #: ../src/gnome-utils/dialog-commodity.c:846
 msgid "Use local time"
-msgstr ""
+msgstr "استفاده از زمان محلی"
 
 #: ../src/gnome-utils/dialog-commodity.c:960
 msgid "Edit currency"
-msgstr ""
+msgstr "ویرایش ارز"
 
 #: ../src/gnome-utils/dialog-commodity.c:961
 msgid "Currency Information"
-msgstr ""
+msgstr "اطلاعات ارز"
 
 #: ../src/gnome-utils/dialog-commodity.c:964
 msgid "Edit security"
@@ -8758,7 +8759,7 @@ msgstr ""
 #: ../src/gnome-utils/dialog-options.c:911
 #: ../src/gnome-utils/dialog-options.c:1038
 msgid "Clear All"
-msgstr ""
+msgstr "پاک کردن همه"
 
 #: ../src/gnome-utils/dialog-options.c:913
 msgid "Clear the selection and unselect all accounts."
@@ -8859,19 +8860,19 @@ msgstr ""
 
 #: ../src/gnome-utils/dialog-transfer.c:1711
 msgid "Debit Account"
-msgstr ""
+msgstr "حساب بدهکار"
 
 #: ../src/gnome-utils/dialog-transfer.c:1728
 msgid "Transfer From"
-msgstr ""
+msgstr "انتقال از"
 
 #: ../src/gnome-utils/dialog-transfer.c:1732
 msgid "Transfer To"
-msgstr ""
+msgstr "انتقال به"
 
 #: ../src/gnome-utils/dialog-transfer.c:1792
 msgid "Debit Amount:"
-msgstr ""
+msgstr "مقدار بدهکار"
 
 #: ../src/gnome-utils/dialog-transfer.c:1796
 #: ../src/gnome-utils/glade/transfer.glade.h:13
@@ -8938,90 +8939,90 @@ msgstr ""
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:234
 msgid "Unicode"
-msgstr ""
+msgstr "یونیکد"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:236
 msgid "European"
-msgstr ""
+msgstr "اروپایی"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:237
 msgid "ISO-8859-1 (West European)"
-msgstr ""
+msgstr "ISO-8859-1 (West European)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:238
 msgid "ISO-8859-2 (East European)"
-msgstr ""
+msgstr "ISO-8859-2 (East European)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:239
 msgid "ISO-8859-3 (South European)"
-msgstr ""
+msgstr "ISO-8859-3 (South European)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:240
 msgid "ISO-8859-4 (North European)"
-msgstr ""
+msgstr "ISO-8859-4 (North European)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:241
 msgid "ISO-8859-5 (Cyrillic)"
-msgstr ""
+msgstr "ISO-8859-5 (Cyrillic)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:242
 msgid "ISO-8859-6 (Arabic)"
-msgstr ""
+msgstr "ISO-8859-6 (Arabic)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:243
 msgid "ISO-8859-7 (Greek)"
-msgstr ""
+msgstr "ISO-8859-7 (Greek)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:244
 msgid "ISO-8859-8 (Hebrew)"
-msgstr ""
+msgstr "ISO-8859-8 (Hebrew)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:245
 msgid "ISO-8859-9 (Turkish)"
-msgstr ""
+msgstr "ISO-8859-9 (Turkish)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:246
 msgid "ISO-8859-10 (Nordic)"
-msgstr ""
+msgstr "ISO-8859-10 (Nordic)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:247
 msgid "ISO-8859-11 (Thai)"
-msgstr ""
+msgstr "ISO-8859-11 (Thai)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:248
 msgid "ISO-8859-13 (Baltic)"
-msgstr ""
+msgstr "ISO-8859-13 (Baltic)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:249
 msgid "ISO-8859-14 (Celtic)"
-msgstr ""
+msgstr "ISO-8859-14 (Celtic)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:250
 msgid "ISO-8859-15 (West European, Euro sign)"
-msgstr ""
+msgstr "ISO-8859-15 (West European, Euro sign)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:251
 msgid "ISO-8859-16 (South-East European)"
-msgstr ""
+msgstr "ISO-8859-16 (South-East European)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:252
 msgid "Cyrillic"
-msgstr ""
+msgstr "Cyrillic"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:253
 msgid "KOI8-R (Russian)"
-msgstr ""
+msgstr "KOI8-R (Russian)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:254
 msgid "KOI8-U (Ukrainian)"
-msgstr ""
+msgstr "KOI8-U (Ukrainian)"
 
 #. Translators: Please insert encodings here that are typically used in your
 #. * locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
 #. * for assistance with spelling.
 #: ../src/gnome-utils/druid-gnc-xml-import.c:577
 msgid "ISO-8859-1 KOI8-U"
-msgstr ""
+msgstr "ISO-8859-1 KOI8-U"
 
 #. another error, cannot handle this here
 #: ../src/gnome-utils/druid-gnc-xml-import.c:698
@@ -9199,7 +9200,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:5
 msgid "Password"
-msgstr ""
+msgstr "رمز"
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:1
 msgid "No warnings to reset."
@@ -9461,16 +9462,16 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:4
 msgid "Date format:"
-msgstr ""
+msgstr "فرمت تاریخ:"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:5
 msgid "December 31, 2000"
-msgstr ""
+msgstr "December 31, 2000"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:6
 #: ../src/import-export/generic-import.glade.h:28
 msgid "Format:"
-msgstr ""
+msgstr "فرمت:"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:7
 msgid "Include Century"
@@ -9478,12 +9479,12 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:8
 msgid "Months:"
-msgstr ""
+msgstr "ماهها"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:11
 #: ../src/gnome-utils/glade/preferences.glade.h:113
 msgid "Sample:"
-msgstr ""
+msgstr "مثال:"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:12
 msgid ""
@@ -9495,10 +9496,17 @@ msgid ""
 "Locale\n"
 "Custom\n"
 msgstr ""
+"US (12/31/2001)\n"
+"UK (31/12/2001)\n"
+"Europe (31.12.2001)\n"
+"ISO (2001-12-31)\n"
+"UTC\n"
+"Locale\n"
+"Custom\n"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:20
 msgid "Years:"
-msgstr ""
+msgstr "سالها"
 
 #: ../src/gnome-utils/glade/gnc-gui-query.glade.h:1
 msgid "Don't tell me again this session."
@@ -9522,19 +9530,19 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:2
 msgid "07/31/2005"
-msgstr ""
+msgstr "07/31/2005"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:3
 msgid "2005-07-31"
-msgstr ""
+msgstr "2005-07-31"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:4
 msgid "31.07.2005"
-msgstr ""
+msgstr "31.07.2005"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:5
 msgid "31/07/2005"
-msgstr ""
+msgstr "31/07/2005"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:6
 #: ../src/import-export/generic-import.glade.h:5
@@ -10698,7 +10706,7 @@ msgstr ""
 #. Toplevel
 #: ../src/gnome-utils/gnc-main-window.c:232
 msgid "_File"
-msgstr ""
+msgstr "_فایل"
 
 #: ../src/gnome-utils/gnc-main-window.c:236
 msgid "Tra_nsaction"
@@ -10718,30 +10726,30 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:240
 msgid "_Windows"
-msgstr ""
+msgstr "_پنجره"
 
 #. Help menu
 #: ../src/gnome-utils/gnc-main-window.c:241
 #: ../src/gnome/window-reconcile.c:2087
 #: ../src/gnome/window-reconcile.c:2138
 msgid "_Help"
-msgstr ""
+msgstr "_راهنما"
 
 #: ../src/gnome-utils/gnc-main-window.c:246
 msgid "_Open"
-msgstr ""
+msgstr "_گشودن"
 
 #: ../src/gnome-utils/gnc-main-window.c:249
 msgid "_Print..."
-msgstr ""
+msgstr "_چاپ ..."
 
 #: ../src/gnome-utils/gnc-main-window.c:250
 msgid "Print the currently active page"
-msgstr ""
+msgstr "چاپ صفحه فعال جاری"
 
 #: ../src/gnome-utils/gnc-main-window.c:255
 msgid "Pa_ge Setup..."
-msgstr ""
+msgstr "تنظمیان ص_فحه"
 
 #: ../src/gnome-utils/gnc-main-window.c:256
 msgid "Specify the page size and orientation for printing"
@@ -10749,7 +10757,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:259
 msgid "Proper_ties"
-msgstr ""
+msgstr "مشخصات"
 
 #: ../src/gnome-utils/gnc-main-window.c:260
 msgid "Edit the properties of the current file"
@@ -10757,11 +10765,11 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:262
 msgid "_Close"
-msgstr ""
+msgstr "_بستن"
 
 #: ../src/gnome-utils/gnc-main-window.c:263
 msgid "Close the currently active page"
-msgstr ""
+msgstr "بستن صفحه فعال جاری"
 
 #: ../src/gnome-utils/gnc-main-window.c:265
 msgid "_Quit"
@@ -10773,7 +10781,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:280
 msgid "Pr_eferences"
-msgstr ""
+msgstr "ترجیحات"
 
 #: ../src/gnome-utils/gnc-main-window.c:281
 msgid "Edit the global preferences of GnuCash"
@@ -10790,12 +10798,12 @@ msgstr ""
 #: ../src/gnome-utils/gnc-main-window.c:290
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:974
 msgid "_Refresh"
-msgstr ""
+msgstr "_بازخوانی"
 
 #: ../src/gnome-utils/gnc-main-window.c:291
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:975
 msgid "Refresh this window"
-msgstr ""
+msgstr "بازخوانی این پنجره"
 
 #. Actions menu
 #: ../src/gnome-utils/gnc-main-window.c:296
@@ -10822,7 +10830,7 @@ msgstr ""
 #. Windows menu
 #: ../src/gnome-utils/gnc-main-window.c:306
 msgid "_New Window"
-msgstr ""
+msgstr "پنجره جدید"
 
 #: ../src/gnome-utils/gnc-main-window.c:307
 msgid "Open a new top-level GnuCash window."
@@ -10847,7 +10855,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:318
 msgid "_Contents"
-msgstr ""
+msgstr "محتویات"
 
 #: ../src/gnome-utils/gnc-main-window.c:319
 msgid "Open the GnuCash Help"
@@ -10855,16 +10863,16 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:321
 msgid "_About"
-msgstr ""
+msgstr "درباره"
 
 #: ../src/gnome-utils/gnc-main-window.c:322
 #: ../src/gnome-utils/gnc-main-window.c:3077
 msgid "About GnuCash"
-msgstr ""
+msgstr "درباره گنوکش"
 
 #: ../src/gnome-utils/gnc-main-window.c:332
 msgid "_Toolbar"
-msgstr ""
+msgstr "_نوار ابزار"
 
 #: ../src/gnome-utils/gnc-main-window.c:333
 msgid "Show/hide the toolbar on this window"
@@ -11413,23 +11421,23 @@ msgstr ""
 
 #: ../src/gnome-utils/window-main-summarybar.c:433
 msgid "Assets:"
-msgstr ""
+msgstr "دارایی ها:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:435
 msgid "Profits:"
-msgstr ""
+msgstr "سودها"
 
 #: ../src/gnome/window-reconcile.c:444
 msgid "Interest Payment"
-msgstr ""
+msgstr "پرداخت سود"
 
 #: ../src/gnome/window-reconcile.c:447
 msgid "Interest Charge"
-msgstr ""
+msgstr "هزینه بهره"
 
 #: ../src/gnome/window-reconcile.c:465
 msgid "Payment From"
-msgstr ""
+msgstr "پرداخت از"
 
 #: ../src/gnome/window-reconcile.c:471
 #: ../src/gnome/window-reconcile.c:481
@@ -11438,7 +11446,7 @@ msgstr ""
 
 #: ../src/gnome/window-reconcile.c:486
 msgid "Payment To"
-msgstr ""
+msgstr "پرداخت به"
 
 #: ../src/gnome/window-reconcile.c:499
 msgid "No Auto Interest Payments for this Account"
@@ -11454,13 +11462,13 @@ msgstr ""
 
 #: ../src/gnome/window-reconcile.c:995
 msgid "Debits"
-msgstr ""
+msgstr "بدهکارها"
 
 #. src/report/report-system/report-utilities.scm
 #: ../src/gnome/window-reconcile.c:1005
 #: ../intl-scm/guile-strings.c:4628
 msgid "Credits"
-msgstr ""
+msgstr "بستانکارها"
 
 #: ../src/gnome/window-reconcile.c:1173
 msgid "Are you sure you want to delete the selected transaction?"
@@ -11505,7 +11513,7 @@ msgstr ""
 
 #: ../src/gnome/window-reconcile.c:2085
 msgid "_Account"
-msgstr ""
+msgstr "_حساب"
 
 #. Reconcile menu
 #: ../src/gnome/window-reconcile.c:2091
@@ -11518,7 +11526,7 @@ msgstr ""
 
 #: ../src/gnome/window-reconcile.c:2095
 msgid "_Finish"
-msgstr ""
+msgstr "پایان"
 
 #: ../src/gnome/window-reconcile.c:2096
 msgid "Finish the reconciliation of this account"
@@ -11538,7 +11546,7 @@ msgstr ""
 
 #: ../src/gnome/window-reconcile.c:2108
 msgid "Open the account"
-msgstr ""
+msgstr "گشودن یک حساب"
 
 #: ../src/gnome/window-reconcile.c:2111
 msgid "Edit the main account for this register"
@@ -11550,7 +11558,7 @@ msgstr ""
 
 #: ../src/gnome/window-reconcile.c:2126
 msgid "_Balance"
-msgstr ""
+msgstr "_تراز"
 
 #: ../src/gnome/window-reconcile.c:2127
 msgid "Add a new balancing entry to the account"
@@ -11572,7 +11580,7 @@ msgstr ""
 #: ../src/html/gnc-html-gtkhtml.c:87
 #: ../src/html/gnc-html-webkit.c:79
 msgid "Not found"
-msgstr ""
+msgstr "یافت نشد"
 
 #: ../src/html/gnc-html.c:72
 #: ../src/html/gnc-html-gtkhtml.c:88
@@ -11644,7 +11652,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/aqbanking.glade.h:10
 #: ../src/import-export/hbci/glade/hbci.glade.h:9
 msgid "Bank Code"
-msgstr ""
+msgstr "کد بانک"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:11
 #: ../src/import-export/hbci/glade/hbci.glade.h:11
@@ -11654,22 +11662,22 @@ msgstr ""
 #: ../src/import-export/aqbanking/aqbanking.glade.h:12
 #: ../src/import-export/hbci/glade/hbci.glade.h:12
 msgid "Close when finished"
-msgstr ""
+msgstr "بستن به هنگام پایان"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:13
 #: ../src/import-export/hbci/glade/hbcipass.glade.h:1
 msgid "Confirm Password:"
-msgstr ""
+msgstr "تایید رمز:"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:14
 #: ../src/import-export/hbci/glade/hbci.glade.h:13
 msgid "Current Action"
-msgstr ""
+msgstr "فعالیت جاری"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:15
 #: ../src/import-export/hbci/glade/hbci.glade.h:14
 msgid "Current Job"
-msgstr ""
+msgstr "کار جاری"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:16
 #: ../src/import-export/hbci/glade/hbci.glade.h:15
@@ -11694,7 +11702,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/aqbanking.glade.h:20
 #: ../src/import-export/hbci/glade/hbcipass.glade.h:2
 msgid "Enter Password"
-msgstr ""
+msgstr "رمز را ثبت کنید"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:21
 #: ../src/import-export/hbci/glade/hbci.glade.h:19
@@ -11784,7 +11792,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/aqbanking.glade.h:38
 #: ../src/import-export/hbci/glade/hbcipass.glade.h:6
 msgid "Password:"
-msgstr ""
+msgstr "رمز:"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:39
 #: ../src/import-export/hbci/glade/hbci.glade.h:36
@@ -11824,7 +11832,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/aqbanking.glade.h:46
 #: ../src/import-export/hbci/glade/hbci.glade.h:42
 msgid "Sort"
-msgstr ""
+msgstr "مرتب سازی"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:47
 #: ../src/import-export/hbci/glade/hbci.glade.h:43
@@ -11888,7 +11896,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/aqbanking.glade.h:72
 #: ../src/import-export/hbci/glade/hbci.glade.h:70
 msgid "_Now"
-msgstr ""
+msgstr "_اکنون"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:73
 #: ../src/import-export/hbci/glade/hbci.glade.h:71
@@ -11903,7 +11911,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/aqbanking.glade.h:75
 #: ../src/import-export/hbci/glade/hbci.glade.h:72
 msgid "at Bank"
-msgstr ""
+msgstr "در بانک"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:76
 #: ../src/import-export/hbci/glade/hbci.glade.h:73
@@ -11947,27 +11955,27 @@ msgstr ""
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:306
 #: ../src/import-export/hbci/dialog-hbcitrans.c:371
 msgid "Debited Account Owner"
-msgstr ""
+msgstr "دارنده حساب بدهکار"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:308
 #: ../src/import-export/hbci/dialog-hbcitrans.c:373
 msgid "Debited Account Number"
-msgstr ""
+msgstr "شماره حساب بدهکار"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:310
 #: ../src/import-export/hbci/dialog-hbcitrans.c:375
 msgid "Debited Account Bank Code"
-msgstr ""
+msgstr "کد بانک حساب بدهکار"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:313
 #: ../src/import-export/hbci/dialog-hbcitrans.c:378
 msgid "Credited Account Owner"
-msgstr ""
+msgstr "دارنده حساب بستانکار"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:315
 #: ../src/import-export/hbci/dialog-hbcitrans.c:380
 msgid "Credited Account Number"
-msgstr ""
+msgstr "شماره حساب بستانکار"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:317
 #: ../src/import-export/hbci/dialog-hbcitrans.c:382
@@ -12070,7 +12078,7 @@ msgstr ""
 #: ../src/import-export/qif-import/dialog-account-picker.c:349
 #: ../src/import-export/qif-import/druid-qif-import.c:1482
 msgid "New?"
-msgstr ""
+msgstr "جدید؟"
 
 #: ../src/import-export/aqbanking/gnc-ab-gettrans.c:178
 #: ../src/import-export/hbci/gnc-hbci-gettrans.c:208
@@ -12208,13 +12216,13 @@ msgstr ""
 #: ../src/import-export/hbci/gncmod-hbci.c:68
 #: ../src/import-export/qif-import/gnc-plugin-qif-import.c:175
 msgid "Online Banking"
-msgstr ""
+msgstr "بانکداری الکترونیک"
 
 #. Menus
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:82
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:89
 msgid "_Online Actions"
-msgstr ""
+msgstr "فعالیت های آنلاین"
 
 #. Menu Items
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:85
@@ -12230,7 +12238,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:88
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:95
 msgid "Get _Balance"
-msgstr ""
+msgstr "دریافت موجودی"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:89
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:96
@@ -12270,7 +12278,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:100
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:107
 msgid "_Direct Debit..."
-msgstr ""
+msgstr "برداشت مستقیم"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:101
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:108
@@ -12636,7 +12644,7 @@ msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:30
 msgid "Green"
-msgstr ""
+msgstr "سبز"
 
 #: ../src/import-export/generic-import.glade.h:31
 msgid "Imported transaction's first split:"
@@ -12660,7 +12668,7 @@ msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:37
 msgid "Other Account"
-msgstr ""
+msgstr "حساب دیگر"
 
 #: ../src/import-export/generic-import.glade.h:38
 msgid "Please select or create an appropriate GnuCash account for:"
@@ -12672,7 +12680,7 @@ msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:41
 msgid "Red"
-msgstr ""
+msgstr "قرمز"
 
 #: ../src/import-export/generic-import.glade.h:42
 msgid "Select \"A\" to add the transaction as new."
@@ -12720,7 +12728,7 @@ msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:54
 msgid "Yellow"
-msgstr ""
+msgstr "زرد"
 
 #. Numeric formats
 #: ../src/import-export/gnc-import-format-gnome.c:105
@@ -13639,11 +13647,11 @@ msgstr ""
 
 #: ../src/register/ledger-core/split-register.c:2199
 msgid "Withdraw"
-msgstr ""
+msgstr "برداشت وجه"
 
 #: ../src/register/ledger-core/split-register.c:2200
 msgid "Check"
-msgstr ""
+msgstr "چک"
 
 #: ../src/register/ledger-core/split-register.c:2201
 #: ../src/register/ledger-core/split-register.c:2238
@@ -13656,20 +13664,20 @@ msgstr ""
 #: ../src/register/ledger-core/split-register.c:2202
 #: ../src/register/ledger-core/split-register.c:2233
 msgid "ATM Deposit"
-msgstr ""
+msgstr "پرداخت از خودپرداز"
 
 #: ../src/register/ledger-core/split-register.c:2203
 #: ../src/register/ledger-core/split-register.c:2234
 msgid "ATM Draw"
-msgstr ""
+msgstr "برداشت از خودپرداز"
 
 #: ../src/register/ledger-core/split-register.c:2204
 msgid "Teller"
-msgstr ""
+msgstr "فروشنده"
 
 #: ../src/register/ledger-core/split-register.c:2207
 msgid "Receipt"
-msgstr ""
+msgstr "رسید"
 
 #. src/app-utils/prefs.scm
 #: ../src/register/ledger-core/split-register.c:2208
@@ -13682,7 +13690,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6932
 #: ../intl-scm/guile-strings.c:6934
 msgid "Increase"
-msgstr ""
+msgstr "افزایش"
 
 #. src/app-utils/prefs.scm
 #: ../src/register/ledger-core/split-register.c:2209
@@ -13695,21 +13703,21 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6904
 #: ../intl-scm/guile-strings.c:6914
 msgid "Decrease"
-msgstr ""
+msgstr "کاهش"
 
 #. Action: Point Of Sale
 #: ../src/register/ledger-core/split-register.c:2211
 msgid "POS"
-msgstr ""
+msgstr "POS"
 
 #: ../src/register/ledger-core/split-register.c:2212
 msgid "Phone"
-msgstr ""
+msgstr "تلفن"
 
 #: ../src/register/ledger-core/split-register.c:2213
 #: ../src/register/ledger-core/split-register.c:2239
 msgid "Online"
-msgstr ""
+msgstr "آنلاین"
 
 #. Action: Automatic Deposit ?!?
 #: ../src/register/ledger-core/split-register.c:2215
@@ -13718,11 +13726,11 @@ msgstr ""
 
 #: ../src/register/ledger-core/split-register.c:2216
 msgid "Wire"
-msgstr ""
+msgstr "حواله بانکی"
 
 #: ../src/register/ledger-core/split-register.c:2218
 msgid "Direct Debit"
-msgstr ""
+msgstr "پرداخت مستقیم"
 
 #. src/app-utils/prefs.scm
 #: ../src/register/ledger-core/split-register.c:2224
@@ -13737,7 +13745,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6890
 #: ../intl-scm/guile-strings.c:6892
 msgid "Buy"
-msgstr ""
+msgstr "خرید"
 
 #. src/app-utils/prefs.scm
 #: ../src/register/ledger-core/split-register.c:2225
@@ -13752,13 +13760,13 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6920
 #: ../intl-scm/guile-strings.c:6922
 msgid "Sell"
-msgstr ""
+msgstr "فروش"
 
 #: ../src/register/ledger-core/split-register.c:2230
 #: ../src/register/ledger-core/split-register.c:2237
 #: ../src/register/ledger-core/split-register.c:2286
 msgid "Fee"
-msgstr ""
+msgstr "فی"
 
 #. src/app-utils/prefs.scm
 #: ../src/register/ledger-core/split-register.c:2264
@@ -13792,7 +13800,7 @@ msgstr ""
 
 #: ../src/register/ledger-core/split-register-control.c:57
 msgid "Rebalance Transaction"
-msgstr ""
+msgstr "تراکنش "
 
 #: ../src/register/ledger-core/split-register-control.c:58
 msgid "The current transaction is not balanced."
@@ -13936,15 +13944,15 @@ msgstr ""
 
 #: ../src/register/ledger-core/split-register-model.c:346
 msgid "Tot Credit"
-msgstr ""
+msgstr "جمع بستانکاری"
 
 #: ../src/register/ledger-core/split-register-model.c:370
 msgid "Tot Debit"
-msgstr ""
+msgstr "جمع بدهکاری"
 
 #: ../src/register/ledger-core/split-register-model.c:379
 msgid "Tot Shares"
-msgstr ""
+msgstr "جمع سهام:"
 
 #: ../src/register/ledger-core/split-register-model.c:400
 msgid "Debit Formula"
@@ -14051,7 +14059,7 @@ msgstr ""
 
 #: ../src/register/register-gnome/gnucash-item-list.c:480
 msgid "List"
-msgstr ""
+msgstr "فهرست"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:1
 msgid "Delete the currently selected report"
@@ -14067,11 +14075,11 @@ msgstr ""
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:4
 msgid "_Run"
-msgstr ""
+msgstr "اجرا"
 
 #: ../src/report/report-gnome/dialog-column-view.c:336
 msgid "Contents"
-msgstr ""
+msgstr "محتوا"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/job-report.scm
@@ -14087,15 +14095,15 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5652
 #: ../intl-scm/guile-strings.c:5666
 msgid "Report"
-msgstr ""
+msgstr "گزارش"
 
 #: ../src/report/report-gnome/dialog-column-view.c:372
 msgid "Rows"
-msgstr ""
+msgstr "سطرها"
 
 #: ../src/report/report-gnome/dialog-column-view.c:378
 msgid "Cols"
-msgstr ""
+msgstr "ستونها"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:302
 msgid "You must select a report to delete."
@@ -14189,12 +14197,12 @@ msgstr ""
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1007
 msgid "Print"
-msgstr ""
+msgstr "چاپ"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1286
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1323
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1289
 msgid "Choose export format"
@@ -14618,14 +14626,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:122
 #: ../intl-scm/guile-strings.c:254
 msgid "Share price"
-msgstr ""
+msgstr "قیمت سهام"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:124
 #: ../intl-scm/guile-strings.c:256
 msgid "Share quantity"
-msgstr ""
+msgstr "تعداد سهام"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
@@ -15581,7 +15589,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1864
 #: ../intl-scm/guile-strings.c:1916
 msgid "Taxable"
-msgstr ""
+msgstr "مشمول مالیات"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
