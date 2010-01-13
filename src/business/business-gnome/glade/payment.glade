@@ -115,6 +115,7 @@
 			  <property name="width_chars">-1</property>
 			  <property name="single_line_mode">False</property>
 			  <property name="angle">0</property>
+			  <property name="tooltip" translatable="yes">The company associated with this payment.</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -140,6 +141,9 @@
 			  <property name="width_chars">-1</property>
 			  <property name="single_line_mode">False</property>
 			  <property name="angle">0</property>
+			  <property name="tooltip" translatable="yes">The invoice being paid.
+
+Note that is field is optional. If you leave it blank, GnuCash will automatically assign the payment to the first unpaid invoice for this company.</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -190,6 +194,11 @@
 			  <property name="width_chars">-1</property>
 			  <property name="single_line_mode">False</property>
 			  <property name="angle">0</property>
+			  <property name="tooltip" translatable="yes">The amount to pay for this invoice.
+
+If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
+
+In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -267,6 +276,7 @@
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
+			  <property name="tooltip" translatable="yes">The company associated with this payment.</property>
 
 			  <child>
 			    <placeholder/>
@@ -284,6 +294,9 @@
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
+			  <property name="tooltip" translatable="yes">The invoice to be paid.
+
+Note that is field is optional. If you leave it blank, GnuCash will automatically assign the payment to the first unpaid invoice for this company.</property>
 
 			  <child>
 			    <placeholder/>
@@ -318,6 +331,11 @@
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
+			  <property name="tooltip" translatable="yes">The amount to pay for this invoice.
+
+If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
+
+In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
 
 			  <child>
 			    <placeholder/>
