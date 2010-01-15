@@ -881,7 +881,7 @@ increment_sx_state(GncSxInstance *inst, GDate **last_occur_date, int *instance_c
         *last_occur_date = &inst->date;
     }
 
-    *instance_count = gnc_sx_get_instance_count(inst->parent->sx, inst->temporal_state);
+    *instance_count = gnc_sx_get_instance_count(inst->parent->sx, inst->temporal_state) + 1;
 
     if (*remain_occur_count > 0)
     {
