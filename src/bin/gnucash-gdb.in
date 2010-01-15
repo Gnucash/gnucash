@@ -1,5 +1,5 @@
 #!/bin/sh
 
-. @-BIN_DIR-@/gnucash-setup-env
+. @-BIN_DIR-@/@-GNUCASH_SETUP_ENV_INSTALL_NAME-@
 
-exec gdb gnucash-bin "$@"
+exec gdb @-GNUCASH_BIN_INSTALL_NAME-@ "$@"

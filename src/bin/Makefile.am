@@ -32,17 +32,24 @@ gnucash_bin_LDADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la
 
+GNUCASH_BIN_INSTALL_NAME=`echo gnucash-bin | sed -e '$(transform)'`
+GNUCASH_SETUP_ENV_INSTALL_NAME=`echo gnucash-setup-env | sed -e '$(transform)'`
+
 gnucash: gnucash.in gnucash-setup-env ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's#@-BIN_DIR-@#${bindir}#g'
+	    -e 's#@-BIN_DIR-@#${bindir}#g' \
+	    -e "s#@-GNUCASH_SETUP_ENV_INSTALL_NAME-@#${GNUCASH_SETUP_ENV_INSTALL_NAME}#g" \
+	    -e "s#@-GNUCASH_BIN_INSTALL_NAME-@#${GNUCASH_BIN_INSTALL_NAME}#g"
 	mv $@.tmp $@
 	chmod u+x $@
 
 gnucash-gdb: gnucash-gdb.in gnucash-setup-env ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's#@-BIN_DIR-@#${bindir}#g'
+	    -e 's#@-BIN_DIR-@#${bindir}#g' \
+	    -e "s#@-GNUCASH_SETUP_ENV_INSTALL_NAME-@#${GNUCASH_SETUP_ENV_INSTALL_NAME}#g" \
+	    -e "s#@-GNUCASH_BIN_INSTALL_NAME-@#${GNUCASH_BIN_INSTALL_NAME}#g"
 	mv $@.tmp $@
 	chmod u+x $@
 
@@ -50,7 +57,9 @@ gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's#@-BIN_DIR-@#${bindir}#g' \
-	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g"
+	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g" \
+	    -e "s#@-GNUCASH_SETUP_ENV_INSTALL_NAME-@#${GNUCASH_SETUP_ENV_INSTALL_NAME}#g" \
+	    -e "s#@-GNUCASH_BIN_INSTALL_NAME-@#${GNUCASH_BIN_INSTALL_NAME}#g"
 	mv $@.tmp $@
 	chmod u+x $@
 
