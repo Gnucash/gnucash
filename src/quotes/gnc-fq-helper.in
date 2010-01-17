@@ -219,6 +219,12 @@ sub get_quote_time {
   $parsestr = ParseDateString($parsestr);
 
   my $result = UnixDate($parsestr, "\"%Y-%m-%d %H:%M:%S\"");
+  if(!$result) {
+    # Fix date handling for quotes with no date: assume local date
+    (my $second,my $minute,my $hour,my $dayofmonth,my $month,my $year,my $dayofweek,my $dayofyear,my $daylightsaving) = localtime();
+#    $result = "\"".sprintf("%04d-%02d-%02d%02d:%02d:%02d",($year+1900),++$month,$dayOfMonth,$hour,$minute,$second)."\"";
+    $result = "\"" . sprintf("%04d-%02d-%02d", ($year+1900), ++$month, $dayofmonth) . " 12:00:00\"";
+  }
   if($result !~ /^\"\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d\"$/) {
     $result = "failed-conversion";
   }
