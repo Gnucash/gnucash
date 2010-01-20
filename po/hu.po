@@ -17303,12 +17303,12 @@ msgstr ""
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:1422
 msgid "_Assets & Liabilities"
-msgstr "Eszközök és források"
+msgstr "_Eszközök és források"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:1424
 msgid "_Income & Expense"
-msgstr "Bevétel és költség"
+msgstr "_Bevétel és költség"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:1426
