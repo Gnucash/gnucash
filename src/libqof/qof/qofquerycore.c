@@ -207,8 +207,8 @@ qof_string_number_compare_func (gpointer a, gpointer b, gint options,
     if (s1 && !s2) return 1;
 
     // Convert to integers and test
-    i1 = strtol(s1, &sr1, 0);
-    i2 = strtol(s2, &sr2, 0);
+    i1 = strtol(s1, &sr1, 10);
+    i2 = strtol(s2, &sr2, 10);
     if (i1 < i2)  return -1;
     if (i1 > i2)  return 1;
 
