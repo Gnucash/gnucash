@@ -10412,7 +10412,7 @@ msgstr "Erträge gesamt:"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:1
 msgid "<b>Data Format:</b>"
-msgstr "<b>Datumsformat:</b>"
+msgstr "<b>Dateiformat:</b>"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:2
 msgid "<b>Database Connection</b>"
