@@ -61,6 +61,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_DISCHOW_LEN 2048
 
 static void entry_set_invoice( gpointer pObject, gpointer val );
+static void entry_set_bill( gpointer pObject, gpointer val );
 
 static GncSqlColumnTableEntry col_table[] =
 {
@@ -86,7 +87,7 @@ static GncSqlColumnTableEntry col_table[] =
 	{ "b_acct",        CT_ACCOUNTREF,  0,                   0,        			NULL, ENTRY_BACCT },
 	{ "b_price",       CT_NUMERIC,     0,                   0,        			NULL, ENTRY_BPRICE },
 	{ "bill",          CT_INVOICEREF,  0,                   0,        			NULL, NULL,
-			(QofAccessFunc)gncEntryGetBill, (QofSetterFunc)gncEntrySetBill },
+			(QofAccessFunc)gncEntryGetBill, (QofSetterFunc)entry_set_bill },
 	{ "b_taxable",     CT_BOOLEAN,     0,                   0,        			NULL, ENTRY_BILL_TAXABLE },
 	{ "b_taxincluded", CT_BOOLEAN,     0,                   0,        			NULL, ENTRY_BILL_TAX_INC },
 	{ "b_taxtable",    CT_TAXTABLEREF, 0,                   0,        			NULL, NULL,
@@ -115,6 +116,23 @@ entry_set_invoice( gpointer pObject, gpointer val )
 	invoice = GNC_INVOICE(val);
 
 	gncInvoiceAddEntry( invoice, entry );
+}
+
+static void
+entry_set_bill( gpointer pObject, gpointer val )
+{
+	GncEntry* entry;
+	GncInvoice* bill;
+
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( GNC_IS_ENTRY(pObject) );
+	g_return_if_fail( val != NULL );
+	g_return_if_fail( GNC_IS_INVOICE(val) );
+
+	entry = GNC_ENTRY(pObject);
+	bill = GNC_INVOICE(val);
+
+	gncBillAddEntry( bill, entry );
 }
 
 static GncEntry*
