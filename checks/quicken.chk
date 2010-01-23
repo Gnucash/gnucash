@@ -18,6 +18,7 @@ Type_2 = AMOUNT_WORDS
 Coords_2 = 90.0;132.0
 
 Type_3 = AMOUNT_NUMBER
+Blocking_3 = true
 Coords_3 = 500.0;102.0
 
 Type_4 = DATE
@@ -25,3 +26,6 @@ Coords_4 = 500.0;67.0
 
 Type_5 = NOTES
 Coords_5 = 50.0;212.0
+
+Type_6 = ADDRESS
+Coords_6 = 90.0;192.0

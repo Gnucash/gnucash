@@ -63,6 +63,7 @@
 #define KEY_CUSTOM_DATE        "custom_date"
 #define KEY_CUSTOM_WORDS       "custom_amount_words"
 #define KEY_CUSTOM_NUMBER      "custom_amount_number"
+#define KEY_CUSTOM_ADDRESS     "custom_address"
 #define KEY_CUSTOM_NOTES       "custom_memo" /* historically misnamed */
 #define KEY_CUSTOM_TRANSLATION "custom_translation"
 #define KEY_CUSTOM_ROTATION    "custom_rotation"
@@ -77,6 +78,9 @@
 #define CHECK_NAME_EXTENSION    ".chk"
 #define DEGREES_TO_RADIANS      (G_PI / 180.0)
 
+#define BLOCKING_CHAR_OFF	0
+#define BLOCKING_CHAR_ON	1
+
 #define KF_GROUP_TOP       "Top"
 #define KF_GROUP_POS       "Check Positions"
 #define KF_GROUP_ITEMS     "Check Items"
@@ -86,6 +90,7 @@
 #define KF_KEY_TRANSLATION "Translation"
 #define KF_KEY_FONT        "Font"
 #define KF_KEY_ALIGN       "Align"
+#define KF_KEY_BLOCKING    "Blocking"
 #define KF_KEY_SHOW_GRID   "Show_Grid"
 #define KF_KEY_SHOW_BOXES  "Show_Boxes"
 #define KF_KEY_NAMES       "Names"
@@ -124,6 +129,8 @@ void gnc_print_check_save_button_clicked(GtkButton *button, PrintCheckDialog *pc
 void gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button);
 
 static void initialize_format_combobox (PrintCheckDialog * pcd);
+gchar* get_check_address(PrintCheckDialog *pcd);
+gboolean check_format_has_address(PrintCheckDialog *pcd);
 
 /** This enum defines the types of items that gnucash knows how to
  *  print on checks.  Most refer to specific fields from a gnucash
@@ -142,6 +149,7 @@ static void initialize_format_combobox (PrintCheckDialog * pcd);
         _(AMOUNT_WORDS,) \
                          \
         _(TEXT,) \
+        _(ADDRESS,) \
         _(PICTURE,)
 
 DEFINE_ENUM(CheckItemType, ENUM_CHECK_ITEM_TYPE)
@@ -176,6 +184,10 @@ typedef struct _check_item {
                                  *   overrides any font in the check format.
                                  *   Unused for non-text items. */
 
+    gboolean blocking;          /**< Optional.  Override blocking in the check format.
+                                 *   Default is no blocking characters are written.
+                                 *   Unused for non-text items. */
+
     PangoAlignment align;       /**< The alignment of a text based item. Only
                                  *   used for text based items when a width is
                                  *   specified.  */
@@ -196,6 +208,9 @@ typedef struct _check_format {
 
     gchar *title;               /**< Title of this check format. Displayed to
                                  *   user in the dialog box. */
+
+    gboolean blocking;          /**< Default for printing blocking characters for 
+                                 *   this page of checks.  */
 
     gboolean show_grid;         /**< Print a grid pattern on the page */
 
@@ -239,6 +254,7 @@ struct _print_check_dialog {
   GtkSpinButton * date_x,   * date_y;
   GtkSpinButton * words_x,  * words_y;
   GtkSpinButton * number_x, * number_y;
+  GtkSpinButton * address_x, * address_y;
   GtkSpinButton * notes_x,   * notes_y;
   GtkSpinButton * translation_x, * translation_y;
   GtkSpinButton * check_rotation;
@@ -247,6 +263,12 @@ struct _print_check_dialog {
   GtkWidget * units_combobox;
 
   GtkWidget * date_format;
+
+  GtkWidget * check_address_name;
+  GtkWidget * check_address_1;
+  GtkWidget * check_address_2;
+  GtkWidget * check_address_3;
+  GtkWidget * check_address_4;
 
   gchar *default_font;
 
@@ -316,6 +338,48 @@ get_float_pair (const char *section, const char *key, double *a, double *b)
   g_slist_free(coord_list);
 }
 
+gchar *
+get_check_address( PrintCheckDialog *pcd)
+{
+  /* return an address in five lines
+   * the string needs to be freed with g_free */
+  gchar *address;
+  address = g_strconcat(gtk_entry_get_text(GTK_ENTRY(pcd->check_address_name)),"\n",   \
+                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_1)),"\n",   \
+                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_2)),"\n",   \
+                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_3)),"\n",   \
+                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_4)),   \
+                        NULL);
+  return address;
+}
+
+gboolean
+check_format_has_address ( PrintCheckDialog *pcd )
+{
+  /* check format for an ADDRESS item */
+  check_item_t *item = NULL;
+  GSList *elem;
+  check_format_t *format = NULL;
+
+  if ( !pcd ) return FALSE;
+  /* if format is NULL, then the custom format is being used 
+   * which has an ADDRESS item by definition */
+  format = pcd->selected_format;
+  if ( !format ) return TRUE;
+
+  for (elem = pcd->selected_format->items; elem; elem = g_slist_next(elem)) {
+    item = elem->data;
+    switch (item->type) {
+        case ADDRESS:
+          return TRUE;
+          break;
+        default:
+          break;
+    }
+  }
+  return FALSE;
+}
+
 static void
 gnc_ui_print_save_dialog(PrintCheckDialog * pcd)
 {
@@ -360,6 +424,9 @@ gnc_ui_print_save_dialog(PrintCheckDialog * pcd)
   save_float_pair(GCONF_SECTION, KEY_CUSTOM_NOTES,
 		  gtk_spin_button_get_value(pcd->notes_x),
 		  gtk_spin_button_get_value(pcd->notes_y));
+  save_float_pair(GCONF_SECTION, KEY_CUSTOM_ADDRESS,
+		  gtk_spin_button_get_value(pcd->address_x),
+		  gtk_spin_button_get_value(pcd->address_y));
   save_float_pair(GCONF_SECTION, KEY_CUSTOM_TRANSLATION,
 		  gtk_spin_button_get_value(pcd->translation_x),
 		  gtk_spin_button_get_value(pcd->translation_y));
@@ -421,6 +488,9 @@ gnc_ui_print_restore_dialog(PrintCheckDialog * pcd)
   get_float_pair(GCONF_SECTION, KEY_CUSTOM_NUMBER, &x, &y);
   gtk_spin_button_set_value(pcd->number_x, x);
   gtk_spin_button_set_value(pcd->number_y, y);
+  get_float_pair(GCONF_SECTION, KEY_CUSTOM_ADDRESS, &x, &y);
+  gtk_spin_button_set_value(pcd->address_x, x);
+  gtk_spin_button_set_value(pcd->address_y, y);
   get_float_pair(GCONF_SECTION, KEY_CUSTOM_NOTES, &x, &y);
   gtk_spin_button_set_value(pcd->notes_x, x);
   gtk_spin_button_set_value(pcd->notes_y, y);
@@ -528,6 +598,8 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
                               pcd->words_x, pcd->words_y);
     pcd_key_file_save_item_xy(key_file, i++, AMOUNT_NUMBER, multip,
                               pcd->number_x, pcd->number_y);
+    pcd_key_file_save_item_xy(key_file, i++, ADDRESS, multip,
+                              pcd->address_x, pcd->address_y);
     pcd_key_file_save_item_xy(key_file, i++, NOTES, multip,
                               pcd->notes_x, pcd->notes_y);
 
@@ -637,6 +709,7 @@ format_read_item_placement(const gchar * file,
     GSList *list = NULL;
     gchar *key, *value, *name;
     int item_num;
+    gboolean bval;
     gdouble *dd;
     gsize dd_len;
 
@@ -700,9 +773,12 @@ format_read_item_placement(const gchar * file,
         g_free(dd);
         g_free(key);
 
-        /* Any text item can specify a font, and can also an alignment if a
-         * width was provided for the item. These values are optional and do
-         * not cause a failure if they are missing. */
+        /* Any text item can specify:
+         *   a font  FONT_n
+         *   an alignment if a width was provided for the item  ALIGN_n
+         *   blocking chars flag  BLOCKING_n
+         * These values are optional and do not cause a failure if they are missing. */
+
         if (data->type != PICTURE) {
             key = g_strdup_printf("%s_%d", KF_KEY_FONT, item_num);
             data->font =
@@ -740,6 +816,23 @@ format_read_item_placement(const gchar * file,
                     g_warning("Check file %s, group %s, key %s, error: %s",
                               file, KF_GROUP_ITEMS, key, error->message);
                 data->align = PANGO_ALIGN_LEFT;
+                g_clear_error(&error);
+            }
+            g_free(key);
+
+            key = g_strdup_printf("%s_%d", KF_KEY_BLOCKING, item_num);
+            bval =
+                g_key_file_get_boolean(key_file, KF_GROUP_ITEMS, key, &error);
+            if (!error) {
+                g_debug("Check file %s, group %s, key %s, value: %d",
+                        file, KF_GROUP_ITEMS, key, bval);
+		data->blocking = bval;
+            } else {
+                if (!((error->domain == G_KEY_FILE_ERROR)
+                      && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+                    g_warning("Check file %s, group %s, key %s, error: %s",
+                              file, KF_GROUP_ITEMS, key, error->message);
+		data->blocking = format->blocking;
                 g_clear_error(&error);
             }
             g_free(key);
@@ -904,6 +997,25 @@ format_read_general_info(const gchar * file,
         g_warning("Check file %s, group %s, key %s, error: %s",
                   file, KF_GROUP_TOP, KF_KEY_TITLE, error->message);
         return FALSE;
+    }
+
+    format->blocking =
+        g_key_file_get_boolean(key_file, KF_GROUP_TOP, KF_KEY_BLOCKING,
+                               &error);
+    if (!error) {
+        g_debug("Check file %s, group %s, key %s, value: %d",
+                file, KF_GROUP_TOP, KF_KEY_BLOCKING, format->blocking);
+    } else {
+        if (!((error->domain == G_KEY_FILE_ERROR)
+              && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+            g_warning("Check file %s, group %s, key %s, error: %s",
+                      file, KF_GROUP_TOP, KF_KEY_BLOCKING, error->message);
+           if( gnc_gconf_get_bool(GCONF_SECTION, KEY_BLOCKING_CHARS, NULL) ) {
+		format->blocking = TRUE;
+           } else {
+                format->blocking = FALSE;
+           }
+        g_clear_error(&error);
     }
 
     format->show_grid =
@@ -1178,6 +1290,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
   GtkWidget *table;
   GtkWindow *window;
   gchar *font;
+  Transaction *trans;
 
   pcd = g_new0(PrintCheckDialog, 1);
   pcd->plugin_page = plugin_page;
@@ -1208,6 +1321,8 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
     GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "amount_numbers_y_entry"));
   pcd->notes_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "notes_x_entry"));
   pcd->notes_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "notes_y_entry"));
+  pcd->address_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "address_x_entry"));
+  pcd->address_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "address_y_entry"));
   pcd->translation_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "translation_x_entry"));
   pcd->translation_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "translation_y_entry"));
   pcd->translation_label = glade_xml_get_widget (xml, "translation_label");
@@ -1230,6 +1345,22 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
 
   /* Update the combo boxes bases on the available check formats */
   initialize_format_combobox(pcd);
+
+  /* address */
+  pcd->check_address_name = glade_xml_get_widget( xml, "check_address_name");
+  pcd->check_address_1 = glade_xml_get_widget( xml, "check_address_1");
+  pcd->check_address_2 = glade_xml_get_widget( xml, "check_address_2");
+  pcd->check_address_3 = glade_xml_get_widget( xml, "check_address_3");
+  pcd->check_address_4 = glade_xml_get_widget( xml, "check_address_4");
+  /* fill in any available address data */
+  /* Can't access business objects e.g. Customer,Vendor,Employee because
+   * it would create build problems */
+  trans = xaccSplitGetParent(pcd->split);
+  if ( trans ) {
+    gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name),xaccTransGetDescription(trans));
+  } else {
+    /* nothing to do - defaults to blank */
+  }
 
 #if USE_GTKPRINT
   gtk_widget_destroy(glade_xml_get_widget (xml, "lower_left"));
@@ -1346,6 +1477,7 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
     gint layout_height, layout_width;
     gdouble width, height;
     gchar *new_text;
+    CheckItemType ct;
 
     if ((NULL == text) || (strlen(text) == 0))
       return 0.0;
@@ -1363,7 +1495,7 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
                                data->w ? data->align : PANGO_ALIGN_LEFT);
     pango_layout_set_width(layout, data->w ? data->w * PANGO_SCALE : -1);
     pango_layout_set_ellipsize(layout, PANGO_ELLIPSIZE_END);
-    if (gnc_gconf_get_bool(GCONF_SECTION, KEY_BLOCKING_CHARS, NULL)) {
+    if ( data->blocking ) {
         new_text = g_strdup_printf("***%s***", text);
         pango_layout_set_text(layout, new_text, -1);
         g_free(new_text);
@@ -1423,7 +1555,7 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
     g_debug("Text move to %f,%f, print '%s'", data->x, data->y,
             text ? text : "(null)");
     gnome_print_moveto(context, data->x, data->y);
-    if (gnc_gconf_get_bool(GCONF_SECTION, KEY_BLOCKING_CHARS, NULL)) {
+    if ( data->blocking ) {
         new_text = g_strdup_printf("***%s***", text);
         gnome_print_show(context, new_text);
         g_free(new_text);
@@ -1643,6 +1775,7 @@ draw_page_items(GncPrintContext * context,
     check_item_t *item;
     gdouble width;
     GDate *date;
+    gchar *address = NULL;
 
     trans = xaccSplitGetParent(pcd->split);
     /* This was valid when the check printing dialog was instantiated. */
@@ -1707,6 +1840,12 @@ draw_page_items(GncPrintContext * context,
                 draw_text(context, item->text, item, default_desc);
                 break;
 
+            case ADDRESS:
+                address = get_check_address(pcd);
+                draw_text(context, address, item, default_desc);
+		g_free(address);
+                break;
+
 #if USE_GTKPRINT
             case PICTURE:
                 draw_picture(context, item);
@@ -1751,11 +1890,7 @@ draw_page_boxes(GncPrintContext * context,
 
 /** Print an entire page based upon the layout in a check description file.
  *  This function takes care of translating/rotating the page, calling the function to print the grid
- *  pattern (if requested), an
-
-each of the items that in the description of a single check.  This
- *  function uses helper functions to print text based and picture based
- *  items. */
+ *  pattern (if requested), and calls a helper function to print all check items */
 static void
 draw_page_format(GncPrintContext * context,
                  gint page_nr, check_format_t * format, gpointer user_data)
@@ -1874,6 +2009,7 @@ draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
     check_item_t item = { 0 };
     gdouble x, y, multip, degrees;
     GDate *date;
+    gchar *address;
 
     trans = xaccSplitGetParent(pcd->split);
     /* This was valid when the check printing dialog was instantiated. */
@@ -1924,6 +2060,12 @@ draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
     text = numeric_to_words(amount);
     draw_text(context, text, &item, desc);
     g_free(text);
+
+    item.x = multip * gtk_spin_button_get_value(pcd->address_x);
+    item.y = multip * gtk_spin_button_get_value(pcd->address_y);
+    address = get_check_address(pcd);
+    draw_text(context, address, &item, desc);
+    g_free(address);
 
     item.x = multip * gtk_spin_button_get_value(pcd->notes_x);
     item.y = multip * gtk_spin_button_get_value(pcd->notes_y);
@@ -2030,7 +2172,6 @@ gnc_print_check_set_sensitive (GtkWidget *widget, gpointer data)
   gtk_widget_set_sensitive(widget, sensitive);
 }
 
-
 void
 gnc_print_check_format_changed (GtkComboBox *widget,
                                 PrintCheckDialog * pcd)
@@ -2079,6 +2220,14 @@ gnc_print_check_format_changed (GtkComboBox *widget,
   gtk_container_foreach(GTK_CONTAINER(pcd->custom_table),
 			gnc_print_check_set_sensitive,
 			GINT_TO_POINTER(sensitive));
+
+  /* Update address fields */
+  sensitive = check_format_has_address(pcd);
+  gtk_widget_set_sensitive(pcd->check_address_name,sensitive);
+  gtk_widget_set_sensitive(pcd->check_address_1,sensitive);
+  gtk_widget_set_sensitive(pcd->check_address_2,sensitive);
+  gtk_widget_set_sensitive(pcd->check_address_3,sensitive);
+  gtk_widget_set_sensitive(pcd->check_address_4,sensitive);
 }
 
 void

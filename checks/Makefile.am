@@ -6,6 +6,7 @@ checks_DATA = \
 	deluxe.chk \
 	liberty.chk \
 	quicken.chk \
+	voucher.chk \
 	quicken_wallet.chk
 else
 checks_DATA = \

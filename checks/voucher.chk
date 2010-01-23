@@ -1,0 +1,74 @@
+[Top]
+Guid = 0a0a1498-5f06-45ff-abc2-b2d32ad61bc9
+Title = Voucher Check 3-Part US-Letter
+Font = sans 10
+Rotation = 0.0
+# override character blocking from global preferences
+Blocking = false
+Translation = 0.0;0.0
+Show_Grid = false
+Show_Boxes = false
+
+[Check Items]
+Type_1 = PAYEE
+Coords_1 = 90.0;107.0;400.0;20.0
+
+Type_2 = DATE
+Coords_2 = 480.0;67.0
+
+Type_3 = AMOUNT_WORDS
+Blocking_3 = true
+Coords_3 = 70.0;132.0;380.0;12.0
+
+Type_4 = AMOUNT_NUMBER
+Blocking_4 = true
+Coords_4 = 510.0;107.0
+
+Type_5 = ADDRESS
+Font_5 = sans 9
+Coords_5 = 70.0;192.0
+
+Type_6 = NOTES
+Font_6 = sans 8
+Coords_6 = 60.0;220.0;250.0;10.0
+
+# stub 1
+
+Type_7 = PAYEE
+Coords_7 = 50.0;300.0
+
+Type_8 = DATE
+Coords_8 = 480.0;300.0
+
+Type_9 = NOTES
+Coords_9 = 50.0;330.0
+
+Type_10 = MEMO
+Coords_10 = 50.0;342.0
+
+Type_11 = ACTION
+Coords_11 = 50.0;475.0
+
+Type_12 = AMOUNT_NUMBER
+Coords_12 = 500.0;475.0
+
+# stub 2
+
+Type_13 = PAYEE
+Coords_13 = 50.0;550.0
+
+Type_14 = DATE
+Coords_14 = 480.0;550.0
+
+Type_15 = NOTES
+Coords_15 = 50.0;580.0
+
+Type_16 = MEMO
+Coords_16 = 50.0;592.0
+
+Type_17 = ACTION
+Coords_17 = 50.0;725.0
+
+Type_18 = AMOUNT_NUMBER
+Coords_18 = 500.0;725.0
+

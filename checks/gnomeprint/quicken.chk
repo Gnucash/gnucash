@@ -25,3 +25,6 @@ Coords_4 = 500.0;185.0
 
 Type_5 = NOTES
 Coords_5 = 50.0;40.0
+
+Type_6 = ADDRESS
+Coords_6 = 90.0;52.0

@@ -19,10 +19,10 @@
               <widget class="GtkTable" id="options_table">
                 <property name="visible">True</property>
                 <property name="border_width">5</property>
-                <property name="n_rows">8</property>
+                <property name="n_rows">14</property>
                 <property name="n_columns">3</property>
                 <property name="column_spacing">12</property>
-                <property name="row_spacing">6</property>
+                <property name="row_spacing">1</property>
                 <child>
                   <widget class="GtkLabel" id="label847677">
                     <property name="visible">True</property>
@@ -65,7 +65,7 @@
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options">GTK_FILL</property>
                   </packing>
                 </child>
                 <child>
@@ -99,6 +99,125 @@ Custom</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options">GTK_FILL</property>
                   </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="check_address_name">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="truncate_multiline">True</property>
+                    <property name="caps_lock_warning">False</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="check_address_1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="truncate_multiline">True</property>
+                    <property name="caps_lock_warning">False</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">10</property>
+                    <property name="bottom_attach">11</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="check_address_2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="truncate_multiline">True</property>
+                    <property name="caps_lock_warning">False</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">11</property>
+                    <property name="bottom_attach">12</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="check_address_3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="truncate_multiline">True</property>
+                    <property name="caps_lock_warning">False</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">12</property>
+                    <property name="bottom_attach">13</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="check_address_4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="truncate_multiline">True</property>
+                    <property name="caps_lock_warning">False</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">13</property>
+                    <property name="bottom_attach">14</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="check_print_address_label">
+                    <property name="visible">True</property>
+                    <property name="tooltip" translatable="yes">Check format must have an
+ADDRESS item defined in order
+to print an address on the check.</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">_Address</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">check_address_name</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkHSeparator" id="hseparator1">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">8</property>
+                    <property name="bottom_attach">9</property>
+                    <property name="y_options">GTK_FILL</property>
+                    <property name="y_padding">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -156,6 +275,7 @@ Custom</property>
             <child>
               <widget class="GtkLabel" id="label847675">
                 <property name="visible">True</property>
+                <property name="xpad">5</property>
                 <property name="label" translatable="yes">Options</property>
                 <property name="justify">center</property>
               </widget>
@@ -167,7 +287,8 @@ Custom</property>
             <child>
               <widget class="GtkTable" id="custom_table">
                 <property name="visible">True</property>
-                <property name="n_rows">13</property>
+                <property name="border_width">5</property>
+                <property name="n_rows">14</property>
                 <property name="n_columns">3</property>
                 <child>
                   <widget class="GtkLabel" id="label703">
@@ -269,8 +390,8 @@ Custom</property>
                     <property name="mnemonic_widget">notes_x_entry</property>
                   </widget>
                   <packing>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
+                    <property name="top_attach">6</property>
+                    <property name="bottom_attach">7</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -359,8 +480,8 @@ Custom</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
+                    <property name="top_attach">6</property>
+                    <property name="bottom_attach">7</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -449,8 +570,8 @@ Custom</property>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
+                    <property name="top_attach">6</property>
+                    <property name="bottom_attach">7</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -466,8 +587,8 @@ Points</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">8</property>
-                    <property name="bottom_attach">9</property>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options">GTK_FILL</property>
                   </packing>
@@ -482,8 +603,8 @@ Points</property>
                     <property name="mnemonic_widget">units_combobox</property>
                   </widget>
                   <packing>
-                    <property name="top_attach">8</property>
-                    <property name="bottom_attach">9</property>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -500,8 +621,8 @@ Points</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">6</property>
-                    <property name="bottom_attach">7</property>
+                    <property name="top_attach">7</property>
+                    <property name="bottom_attach">8</property>
                     <property name="y_options"></property>
                   </packing>
                 </child>
@@ -515,8 +636,8 @@ Points</property>
                     <property name="mnemonic_widget">translation_x_entry</property>
                   </widget>
                   <packing>
-                    <property name="top_attach">6</property>
-                    <property name="bottom_attach">7</property>
+                    <property name="top_attach">7</property>
+                    <property name="bottom_attach">8</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -530,8 +651,8 @@ Points</property>
                     <property name="mnemonic_widget">check_rotation_entry</property>
                   </widget>
                   <packing>
-                    <property name="top_attach">7</property>
-                    <property name="bottom_attach">8</property>
+                    <property name="top_attach">8</property>
+                    <property name="bottom_attach">9</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -549,8 +670,8 @@ Points</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">7</property>
-                    <property name="bottom_attach">8</property>
+                    <property name="top_attach">8</property>
+                    <property name="bottom_attach">9</property>
                     <property name="y_options"></property>
                   </packing>
                 </child>
@@ -566,8 +687,8 @@ Points</property>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">6</property>
-                    <property name="bottom_attach">7</property>
+                    <property name="top_attach">7</property>
+                    <property name="bottom_attach">8</property>
                     <property name="y_options"></property>
                   </packing>
                 </child>
@@ -579,10 +700,11 @@ Points</property>
                   </widget>
                   <packing>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">9</property>
-                    <property name="bottom_attach">10</property>
+                    <property name="top_attach">10</property>
+                    <property name="bottom_attach">11</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
+                    <property name="y_padding">5</property>
                   </packing>
                 </child>
                 <child>
@@ -593,10 +715,11 @@ Points</property>
                   </widget>
                   <packing>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">10</property>
-                    <property name="bottom_attach">11</property>
+                    <property name="top_attach">11</property>
+                    <property name="bottom_attach">12</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
+                    <property name="y_padding">5</property>
                   </packing>
                 </child>
                 <child>
@@ -608,8 +731,8 @@ Points</property>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">7</property>
-                    <property name="bottom_attach">8</property>
+                    <property name="top_attach">8</property>
+                    <property name="bottom_attach">9</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                     <property name="x_padding">6</property>
@@ -622,8 +745,8 @@ Points</property>
                     <property name="label"> </property>
                   </widget>
                   <packing>
-                    <property name="top_attach">11</property>
-                    <property name="bottom_attach">12</property>
+                    <property name="top_attach">12</property>
+                    <property name="bottom_attach">13</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -674,8 +797,60 @@ Points</property>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">12</property>
-                    <property name="bottom_attach">13</property>
+                    <property name="top_attach">13</property>
+                    <property name="bottom_attach">14</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label1">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">_Address:</property>
+                    <property name="use_underline">True</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSpinButton" id="address_x_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="climb_rate">1</property>
+                    <property name="digits">3</property>
+                    <property name="numeric">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSpinButton" id="address_y_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="climb_rate">1</property>
+                    <property name="digits">3</property>
+                    <property name="numeric">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -706,6 +881,7 @@ Points</property>
             <child>
               <widget class="GtkLabel" id="label847676">
                 <property name="visible">True</property>
+                <property name="xpad">5</property>
                 <property name="label" translatable="yes">Custom format</property>
                 <property name="justify">center</property>
               </widget>
