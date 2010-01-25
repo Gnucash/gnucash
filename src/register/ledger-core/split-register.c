@@ -2294,7 +2294,8 @@ gnc_split_register_config_action (SplitRegister *reg)
       gnc_combo_cell_add_menu_item (cell, _("Income"));
       /* Action: Distribution */
       gnc_combo_cell_add_menu_item (cell, _("Dist"));
-      gnc_combo_cell_add_menu_item (cell, _("Split"));
+      /* Translators: This string has a disambiguation prefix */
+      gnc_combo_cell_add_menu_item (cell, Q_("Action Column|Split"));
       break;
 
     default:

@@ -451,7 +451,8 @@ gnc_stock_split_druid_finish (GnomeDruidPage *druidpage,
 
   xaccSplitSetAmount (split, amount);
   xaccSplitMakeStockSplit (split);
-  xaccSplitSetAction (split, _("Split"));
+  /* Translators: This string has a disambiguation prefix */
+  xaccSplitSetAction (split, Q_("Action Column|Split"));
 
   amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (info->price_edit));
   if (gnc_numeric_positive_p (amount))
