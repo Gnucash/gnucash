@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-2.3.x\n"
+"Project-Id-Version: Gnucash 2.2.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-08 16:51-0500\n"
-"PO-Revision-Date: 2010-01-16 23:54+0330\n"
+"PO-Revision-Date: 2010-01-29 20:15+0330\n"
 "Last-Translator: \n"
 "Language-Team: Perisan <mehdi@ashian.ir>\n"
 "MIME-Version: 1.0\n"
@@ -134,7 +134,7 @@ msgstr ""
 #. Translators: Please only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:656
 msgid "reconciled:y"
-msgstr ""
+msgstr "تطبیق داده شده :y"
 
 #. Translators: Please only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:658
@@ -242,15 +242,15 @@ msgstr ""
 
 #: ../src/bin/gnucash-bin.c:87
 msgid "The last stable version was "
-msgstr ""
+msgstr "آخرین نسخه پایدار این نسخه بوده است:"
 
 #: ../src/bin/gnucash-bin.c:88
 msgid "The next stable version will be "
-msgstr ""
+msgstr "نسخه پایدار بعدی این نسخه خواهد بود:"
 
 #: ../src/bin/gnucash-bin.c:218
 msgid "Show GnuCash version"
-msgstr ""
+msgstr "نمایش نگارش گنو کش"
 
 #: ../src/bin/gnucash-bin.c:221
 msgid "Enable debugging mode: increasing logging to provide deep detail."
@@ -775,7 +775,7 @@ msgstr "حسابی انتخاب نشده است. لطفا مجددا تلاش ک
 
 #: ../src/business/business-gnome/dialog-date-close.c:79
 msgid "Placeholder account selected.  Please try again."
-msgstr ""
+msgstr "حساب صرفا نمایشی انتخاب شده است، لطفا مجددا تلاش کنید"
 
 #: ../src/business/business-gnome/dialog-employee.c:216
 msgid "You must enter a username."
@@ -1373,7 +1373,7 @@ msgstr "شما باید نام حساب برای ثبت را درج کنید"
 #: ../src/business/business-gnome/dialog-payment.c:288
 #, c-format
 msgid "Your selected post account, %s, does not exist"
-msgstr "حساب %S که انتخاب کرده اید وجود ندارد."
+msgstr "حساب %s که انتخاب کرده اید وجود ندارد."
 
 #: ../src/business/business-gnome/dialog-payment.c:313
 msgid "The transfer and post accounts are associated with different currencies.  Please specify the conversion rate."
@@ -1787,7 +1787,7 @@ msgstr "نمابر:"
 #: ../src/business/business-gnome/glade/employee.glade.h:14
 #: ../src/business/business-gnome/glade/vendor.glade.h:7
 msgid "Identification"
-msgstr ""
+msgstr "تعریف"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:14
 #: ../src/business/business-gnome/glade/employee.glade.h:17
@@ -2451,27 +2451,27 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:245
 msgid "Reload invoice report"
-msgstr ""
+msgstr "بازخوانی گزارش فاکتور"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:246
 msgid "Reload invoice report scheme file"
-msgstr ""
+msgstr "بازخوانی فایل ساختار گزارش فاکتور"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:248
 msgid "Reload owner report"
-msgstr ""
+msgstr "بازخوانی دارنده گزارش"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:249
 msgid "Reload owner report scheme file"
-msgstr ""
+msgstr "بازخوانی فایل ساختار دارنده"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:251
 msgid "Reload receivable report"
-msgstr ""
+msgstr "بازخوانی گزارش دریافتنی ها"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:252
 msgid "Reload receivable report scheme file"
-msgstr ""
+msgstr "بازخوانی فایل ساختار گزارش دریافتنی ها"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:254
 #: ../src/business/business-gnome/gnc-plugin-business.c:255
@@ -2702,69 +2702,69 @@ msgstr "ثبت"
 msgid "Unpost"
 msgstr "برگشت از ثبت"
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:1
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:1
 msgid "Accumulate multiple splits into one"
 msgstr ""
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:2
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:2
 msgid "If active, at startup GnuCash will check to see whether any bills will become due soon. If so, it will present the user with a reminder dialog. The definition of \"soon\" is controlled by the \"Days in Advance\" setting. Otherwise GnuCash does not check for due bills."
 msgstr ""
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:3
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:3
 msgid "If active, each new invoice will be opened in a new window. Otherwise a new invoice will be opened as a tab in the main window."
 msgstr ""
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:4
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:4
 msgid "If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched."
 msgstr ""
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:5
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:5
 msgid "If set to active then tax is included by default in entries of this type. This setting is inherited by new customers and vendors."
 msgstr ""
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:6
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:6
 msgid "If this field is active then multiple entries in an invoice that transfer to the same account will be accumulated into a single split. This field can be overridden per invoice in the Posting dialog."
 msgstr ""
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:7
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:7
 msgid "Is tax included in this type of business entry?"
 msgstr ""
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:8
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:8
 msgid "Open new invoice in new window"
 msgstr "گشودن فاکتور جدید در پنجره چدید"
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:9
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:9
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:7
 msgid "Search only in active items"
 msgstr ""
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:10
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:10
 msgid "Show bills due reminder at startup"
 msgstr ""
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:11
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:11
 msgid "Show bills due within this many days"
 msgstr ""
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:12
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:12
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:58
 msgid "The number of rows in an invoice"
 msgstr ""
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:13
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:13
 msgid "This field defines the number of days in advance that GnuCash will check for due bills. Its value is only used if the \"Notify when due\" setting is active."
 msgstr ""
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:14
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:14
 msgid "This field sets the number of rows to show in an invoice. It does not actually affect the display of the contents of the window. It is only used to set the size of the window when first opened."
 msgstr ""
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:15
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:15
 msgid "This setting contains the coordinates describing the last location of the window. The numbers are the X and Y coordinates of the top left corner of the window, and the width and height of the window."
 msgstr ""
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:16
+#: ./src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:16
 msgid "Window position and size"
 msgstr ""
 
@@ -3595,7 +3595,7 @@ msgstr ""
 
 #: ../src/gnome/dialog-commodities.c:183
 msgid "Delete commodity?"
-msgstr ""
+msgstr "حذف کالا؟"
 
 #: ../src/gnome/dialog-fincalc.c:308
 msgid "This program can only calculate one value at a time. You must enter values for all but one quantity."
@@ -3671,7 +3671,7 @@ msgstr "تراز"
 #: ../src/gnome/gnc-plugin-page-register.c:342
 #: ../src/gnome/window-reconcile.c:1217
 msgid "Reconcile"
-msgstr ""
+msgstr "مطابقت دادن"
 
 #: ../src/gnome/dialog-find-transactions.c:111
 msgid "Share Price"
@@ -3884,7 +3884,7 @@ msgstr ""
 #: ../src/gnome/dialog-sx-editor.c:1725
 #: ../src/gnome/gnc-plugin-page-sx-list.c:197
 msgid "Scheduled Transactions"
-msgstr ""
+msgstr "تراکنش های برنامه ریزی شده"
 
 #: ../src/gnome/dialog-sx-from-trans.c:554
 msgid "The Scheduled Transaction is unbalanced. You are strongly encouraged to correct this situation."
@@ -3935,7 +3935,7 @@ msgstr[1] ""
 #: ../src/gnome/dialog-sx-since-last-run.c:931
 #: ../src/register/ledger-core/split-register-model.c:192
 msgid "Transaction"
-msgstr ""
+msgstr "تراکنش"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:947
 #: ../src/gnome/glade/register.glade.h:70
@@ -3944,11 +3944,11 @@ msgstr "وضعیت"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:1011
 msgid "Created Transactions"
-msgstr ""
+msgstr "تراکنش های ایجاد شده"
 
 #: ../src/gnome/dialog-tax-info.c:279
 msgid "Last Valid Year: "
-msgstr ""
+msgstr "سال معتبر قبلی:"
 
 #: ../src/gnome/dialog-tax-info.c:280
 msgid "Form Line Data: "
@@ -4061,7 +4061,7 @@ msgstr ""
 #. { name, default txn memo, throughEscrowP, specSrcAcctP }
 #: ../src/gnome/druid-loan.c:161
 msgid "Taxes"
-msgstr ""
+msgstr "مالیات ها"
 
 #: ../src/gnome/druid-loan.c:161
 msgid "Tax Payment"
@@ -4209,7 +4209,7 @@ msgstr ""
 #: ../src/gnome/druid-merge.c:359
 #, c-format
 msgid "Import data : %s "
-msgstr ""
+msgstr "دریافت داده ها : %s"
 
 #: ../src/gnome/druid-merge.c:362
 #, c-format
@@ -4272,11 +4272,11 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:1
 msgid "<b>Acco_unt Type</b>"
-msgstr ""
+msgstr "<b>نوع حسابها</b>"
 
 #: ../src/gnome/glade/account.glade.h:2
 msgid "<b>Balance Information</b>"
-msgstr ""
+msgstr "<b>اطلاعات موجودی ها</b>"
 
 #: ../src/gnome/glade/account.glade.h:3
 msgid "<b>Categories</b>"
@@ -4327,11 +4327,11 @@ msgstr ""
 #: ../src/gnome/glade/account.glade.h:14
 #: ../intl-scm/guile-strings.c:2480
 msgid "Account Type"
-msgstr ""
+msgstr "نوع حساب"
 
 #: ../src/gnome/glade/account.glade.h:15
 msgid "Account _name:"
-msgstr ""
+msgstr "نام حساب:"
 
 #: ../src/gnome/glade/account.glade.h:16
 msgid "C_lear All"
@@ -4339,7 +4339,7 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:17
 msgid "Choose Currency"
-msgstr ""
+msgstr "انتخاب ارز"
 
 #: ../src/gnome/glade/account.glade.h:18
 msgid "Choose accounts to create"
@@ -4347,27 +4347,27 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:19
 msgid "Delete Account"
-msgstr ""
+msgstr "حذف حساب"
 
 #: ../src/gnome/glade/account.glade.h:20
 msgid "Delete all _subaccounts"
-msgstr ""
+msgstr "حذف تمام حساب های زیر مجموعه"
 
 #: ../src/gnome/glade/account.glade.h:21
 msgid "Delete all _transactions"
-msgstr ""
+msgstr "حذف تمام _تراکنش ها"
 
 #: ../src/gnome/glade/account.glade.h:22
 msgid "Examples:"
-msgstr ""
+msgstr "نمونه ها :"
 
 #: ../src/gnome/glade/account.glade.h:23
 msgid "Filter By..."
-msgstr ""
+msgstr "فیلتر با ..."
 
 #: ../src/gnome/glade/account.glade.h:24
 msgid "Finish Account Setup"
-msgstr ""
+msgstr "پایان برپایی حساب ها"
 
 #. src/report/utility-reports/view-column.scm
 #. src/report/utility-reports/gnucash/report/view-column.scm
@@ -4440,11 +4440,11 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6716
 #: ../intl-scm/guile-strings.c:6720
 msgid "General"
-msgstr ""
+msgstr "عمومی"
 
 #: ../src/gnome/glade/account.glade.h:26
 msgid "H_idden"
-msgstr ""
+msgstr "مخفی"
 
 #: ../src/gnome/glade/account.glade.h:27
 msgid "Hide accounts which have a zero total value."
@@ -4452,7 +4452,7 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:28
 msgid "If you would like an account to have an opening balance, click on the account and enter the starting balance in the box on the right. All accounts except Equity and placeholder accounts may have an opening balance."
-msgstr ""
+msgstr "اگر شما مایلید حساب دارای موجودی اولیه باشد ، بر روی حساب کلیک کنید و در باکس سمت راست آنرا ثبت کنید. تمام حساب ها بجز حقوق صاخبان سهام و حسابهای صرفا نمایشی می توانندموجودی افتتاحیه داشته باشند."
 
 #: ../src/gnome/glade/account.glade.h:29
 msgid ""
@@ -4472,7 +4472,7 @@ msgstr ""
 #: ../src/gnome/glade/account.glade.h:35
 #: ../src/gnome-utils/dialog-account.c:1341
 msgid "New Account"
-msgstr ""
+msgstr "حساب جدید"
 
 #: ../src/gnome/glade/account.glade.h:36
 msgid "New Account (not implemented)"
@@ -4501,11 +4501,11 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3112
 #: ../intl-scm/guile-strings.c:4170
 msgid "Other"
-msgstr ""
+msgstr "دیگر"
 
 #: ../src/gnome/glade/account.glade.h:43
 msgid "Placeholde_r"
-msgstr ""
+msgstr "صرفا نمایشی"
 
 #: ../src/gnome/glade/account.glade.h:44
 msgid "Please choose the currency to use for new accounts."
@@ -4532,7 +4532,7 @@ msgstr ""
 #: ../src/import-export/generic-import.glade.h:44
 #: ../src/import-export/qif-import/qif.glade.h:58
 msgid "Select Account"
-msgstr ""
+msgstr "انتخاب حساب"
 
 #: ../src/gnome/glade/account.glade.h:53
 msgid "Select categories that correspond to the ways that you will use GnuCash.  Each category you select will cause several accounts to be created.  Select the categories that are relevant to you.  You can always create additional accounts by hand later."
@@ -4544,31 +4544,31 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:55
 msgid "Setup new accounts"
-msgstr ""
+msgstr "برپایی حسابهای جدید"
 
 #: ../src/gnome/glade/account.glade.h:56
 msgid "Show _hidden accounts"
-msgstr ""
+msgstr "نمایش حسابهای مخفی"
 
 #: ../src/gnome/glade/account.glade.h:57
 msgid "Show _zero total accounts"
-msgstr ""
+msgstr "نمایش حسابها با مجموع صفر"
 
 #: ../src/gnome/glade/account.glade.h:58
 msgid "Smallest _fraction:"
-msgstr ""
+msgstr "کوچکترین کسر مجاز:"
 
 #: ../src/gnome/glade/account.glade.h:59
 msgid "Smallest fraction of this commodity that can be referenced."
-msgstr ""
+msgstr "کوچکترین کسری از این کالا که می توان ثبت کرد"
 
 #: ../src/gnome/glade/account.glade.h:60
 msgid "Ta_x related"
-msgstr ""
+msgstr "مشمول مالیات"
 
 #: ../src/gnome/glade/account.glade.h:61
 msgid "This account (and any sub-accounts) will be hidden in the account tree and will not appear in the popup account list in the register.  To reset this option, you will first need to open the \"Filter By...\" dialog for the account tree and check the \"show hidden accounts\" option.  Doing so will allow you to select the account and reopen this dialog."
-msgstr ""
+msgstr "این حساب ( وحساب های زیر مجموعه ) در درخت حسابها مخفی می شود.و در فهرست نمایش داده شده از حسابها دیده نمی شود. برای تغییر این گزینه ، شما می بایست ابتدا پنجره فیلتر با ... را برای درخت حساب ها باز کنید و انتخاب \"حسابهای مخفی را نمایش بده \" را علامت بزنید. اجرا اینکار به شما اجازه می دهد تا حساب را انتخاب و این پنجره را مجدد باز نمایید "
 
 #: ../src/gnome/glade/account.glade.h:62
 msgid "This account contains read-only transactions which may not be deleted."
@@ -4576,15 +4576,15 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:63
 msgid "This account contains sub-accounts.  What would you like to do with these sub-accounts?"
-msgstr ""
+msgstr "این حساب دارای حساب های زیر مجموعه می باشد. شما با این حساب های چه می کنید؟"
 
 #: ../src/gnome/glade/account.glade.h:64
 msgid "This account contains transactions. What would you like to do with these transactions?"
-msgstr ""
+msgstr "این حساب دارای تراکنش است. شما می خواهید با یان تراکنش ها چه کنید؟"
 
 #: ../src/gnome/glade/account.glade.h:65
 msgid "This account is present solely as a placeholder in the hierarchy.  Transactions may not be posted to this account, only to sub-accounts of this account."
-msgstr ""
+msgstr "این حساب صرفا به عنوان نمایشی در درخت حساب ها ثبت شده است،تراکنش ها نمی تواند در این حساب ثبت شود. زیر حسابها را بررسی کنید."
 
 #: ../src/gnome/glade/account.glade.h:66
 msgid ""
@@ -4715,42 +4715,42 @@ msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:2
 msgid "Budget List"
-msgstr ""
+msgstr "فهرست بودجه"
 
 #: ../src/gnome/glade/budget.glade.h:3
 msgid "Budget Name:"
-msgstr ""
+msgstr "نام بودجه:"
 
 #: ../src/gnome/glade/budget.glade.h:4
 #: ../src/gnome/gnc-plugin-page-budget.c:138
 #: ../src/gnome/gnc-plugin-page-budget.c:823
 msgid "Budget Options"
-msgstr ""
+msgstr "گزینه های بودجه"
 
 #: ../src/gnome/glade/budget.glade.h:5
 msgid "Budget Period:"
-msgstr ""
+msgstr "دوره بودجه:"
 
 #: ../src/gnome/glade/budget.glade.h:6
 msgid "Close the Budget List"
-msgstr ""
+msgstr "بستن فهرست بودجه"
 
 #: ../src/gnome/glade/budget.glade.h:7
 msgid "Create a New Budget"
-msgstr ""
+msgstr "ایجاد بودجه جدید"
 
 #: ../src/gnome/glade/budget.glade.h:8
 msgid "Delete the Selected Budget"
-msgstr ""
+msgstr "حذف بودجه انتخابی"
 
 #: ../src/gnome/glade/budget.glade.h:9
 msgid "Estimate Budget Values"
-msgstr ""
+msgstr "برآورد ارزش بودجه"
 
 #: ../src/gnome/glade/budget.glade.h:10
 #: ../src/gnome/glade/sched-xact.glade.h:89
 msgid "Every "
-msgstr ""
+msgstr "هر"
 
 #: ../src/gnome/glade/budget.glade.h:11
 msgid "GnuCash will estimate budget values for the selected accounts from past transactions."
@@ -4799,7 +4799,7 @@ msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:22
 msgid "beginning on: "
-msgstr ""
+msgstr "شروع از:"
 
 #: ../src/gnome/glade/budget.glade.h:23
 msgid ""
@@ -4811,7 +4811,7 @@ msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:27
 msgid "last of month"
-msgstr ""
+msgstr "ماه قبل"
 
 #: ../src/gnome/glade/budget.glade.h:28
 msgid "same week & day"
@@ -4823,7 +4823,7 @@ msgstr ""
 
 #: ../src/gnome/glade/chart-export.glade.h:2
 msgid "Export Chart of Accounts"
-msgstr ""
+msgstr "ارسال چارت حسابها"
 
 #: ../src/gnome/glade/chart-export.glade.h:3
 msgid "Select the date to use and click Export to choose the filename and location. Future dates are not supported."
@@ -4843,7 +4843,7 @@ msgstr ""
 
 #: ../src/gnome/glade/commodities.glade.h:2
 msgid "Add a new commodity."
-msgstr ""
+msgstr "اضافه کردن کالاهای جدید"
 
 #: ../src/gnome/glade/commodities.glade.h:3
 #: ../src/gnome/gnc-plugin-page-account-tree.c:221
@@ -4853,11 +4853,11 @@ msgstr "ویرایش"
 
 #: ../src/gnome/glade/commodities.glade.h:4
 msgid "Remove the current commodity."
-msgstr ""
+msgstr "حذف کالای فعلی"
 
 #: ../src/gnome/glade/commodities.glade.h:5
 msgid "Securities"
-msgstr ""
+msgstr "اوراق بهادار"
 
 #: ../src/gnome/glade/commodities.glade.h:6
 msgid "Show National Currencies"
@@ -4865,11 +4865,11 @@ msgstr ""
 
 #: ../src/gnome/glade/fincalc.glade.h:1
 msgid "<b>Calculations</b>"
-msgstr ""
+msgstr "<b>محاسبات</b>"
 
 #: ../src/gnome/glade/fincalc.glade.h:2
 msgid "<b>Compounding:</b>"
-msgstr ""
+msgstr "<b>ترکیبات:</b>"
 
 #: ../src/gnome/glade/fincalc.glade.h:3
 msgid "<b>Payment Options</b>"
@@ -4924,19 +4924,19 @@ msgstr "حذف ورودی"
 
 #: ../src/gnome/glade/fincalc.glade.h:23
 msgid "Co_mpounding:"
-msgstr ""
+msgstr "ترکیبات:"
 
 #: ../src/gnome/glade/fincalc.glade.h:24
 msgid "Continuous"
-msgstr ""
+msgstr "ادامه دار"
 
 #: ../src/gnome/glade/fincalc.glade.h:25
 msgid "Daily (360)"
-msgstr ""
+msgstr "روزانه (360)"
 
 #: ../src/gnome/glade/fincalc.glade.h:26
 msgid "Daily (365)"
-msgstr ""
+msgstr "روزانه ( 365)"
 
 #: ../src/gnome/glade/fincalc.glade.h:27
 msgid "Discrete"
@@ -4957,7 +4957,7 @@ msgstr "تکرار:"
 
 #: ../src/gnome/glade/fincalc.glade.h:31
 msgid "Future value"
-msgstr ""
+msgstr "ارزش آینده"
 
 #: ../src/gnome/glade/fincalc.glade.h:32
 msgid "Interest rate"
@@ -4977,7 +4977,7 @@ msgstr "پرداخت دوره ای"
 
 #: ../src/gnome/glade/fincalc.glade.h:37
 msgid "Present value"
-msgstr ""
+msgstr "ارزش فعلی"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/glade/fincalc.glade.h:38
@@ -5012,11 +5012,11 @@ msgstr "نوع"
 
 #: ../src/gnome/glade/fincalc.glade.h:46
 msgid "When paid:"
-msgstr ""
+msgstr "زمان پرداخت:"
 
 #: ../src/gnome/glade/fincalc.glade.h:47
 msgid "_Effective Date:"
-msgstr ""
+msgstr "تاریخ موثر :"
 
 #: ../src/gnome/glade/fincalc.glade.h:48
 msgid "_Initial Payment:"
@@ -5028,7 +5028,7 @@ msgstr "_پرداخت ها"
 
 #: ../src/gnome/glade/fincalc.glade.h:50
 msgid "total"
-msgstr ""
+msgstr "مجموع"
 
 #: ../src/gnome/glade/lots.glade.h:1
 msgid "<b>_Lots in This Account</b>"
@@ -5040,7 +5040,7 @@ msgstr ""
 
 #: ../src/gnome/glade/lots.glade.h:3
 msgid "<b>_Notes</b>"
-msgstr ""
+msgstr "<b>یادداشت</b>"
 
 #: ../src/gnome/glade/lots.glade.h:4
 msgid "<b>_Title</b>"
@@ -5073,7 +5073,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3332
 #: ../intl-scm/guile-strings.c:4878
 msgid "Balance"
-msgstr ""
+msgstr "موجودی"
 
 #: ../src/gnome/glade/lots.glade.h:9
 msgid "Delete the highlighted lot"
@@ -5217,7 +5217,7 @@ msgstr ""
 
 #: ../src/gnome/glade/price.glade.h:1
 msgid "Add a new price."
-msgstr ""
+msgstr "افزودن قیمت جدید."
 
 #: ../src/gnome/glade/price.glade.h:2
 msgid ""
@@ -5231,7 +5231,7 @@ msgstr ""
 #: ../src/gnome/glade/price.glade.h:7
 #: ../src/gnome-utils/dialog-commodity.c:284
 msgid "Cu_rrency:"
-msgstr ""
+msgstr "ار_ز:"
 
 #: ../src/gnome/glade/price.glade.h:8
 msgid "Delete _last price for a stock"
@@ -5267,11 +5267,11 @@ msgstr ""
 
 #: ../src/gnome/glade/price.glade.h:16
 msgid "Price Editor"
-msgstr ""
+msgstr "ویرایشگر قیمت ها"
 
 #: ../src/gnome/glade/price.glade.h:17
 msgid "Remove _Old"
-msgstr ""
+msgstr "حذف قدیمیها"
 
 #: ../src/gnome/glade/price.glade.h:18
 msgid "Remove prices older than a user-entered date"
@@ -5287,36 +5287,36 @@ msgstr ""
 
 #: ../src/gnome/glade/price.glade.h:23
 msgid "_Price:"
-msgstr ""
+msgstr "قیمت :"
 
 #: ../src/gnome/glade/price.glade.h:24
 #: ../src/gnome-utils/dialog-commodity.c:279
 msgid "_Security:"
-msgstr ""
+msgstr "ضمانت"
 
 #: ../src/gnome/glade/print.glade.h:1
 msgid "Amount (_numbers):"
-msgstr ""
+msgstr "مقدار ( عددی)"
 
 #: ../src/gnome/glade/print.glade.h:2
 msgid "Amount (_words):"
-msgstr ""
+msgstr "مقدار ( حروفی )"
 
 #: ../src/gnome/glade/print.glade.h:3
 msgid "Check _format:"
-msgstr ""
+msgstr "فرمت چک:"
 
 #: ../src/gnome/glade/print.glade.h:4
 msgid "Check po_sition:"
-msgstr ""
+msgstr "موقعیت چک:"
 
 #: ../src/gnome/glade/print.glade.h:5
 msgid "Custom format"
-msgstr ""
+msgstr "فرمت سفارشی"
 
 #: ../src/gnome/glade/print.glade.h:6
 msgid "Degrees"
-msgstr ""
+msgstr "درجه"
 
 #: ../src/gnome/glade/print.glade.h:7
 msgid "Enter a title for this custom format.  This title will appear in the \"Check format\" selector of the Print Check dialog.  Using the title of an existing custom format will cause that format to be overwritten."
@@ -5332,11 +5332,11 @@ msgstr ""
 
 #: ../src/gnome/glade/print.glade.h:13
 msgid "Pa_yee:"
-msgstr ""
+msgstr "پرداخت :"
 
 #: ../src/gnome/glade/print.glade.h:14
 msgid "Print Check"
-msgstr ""
+msgstr "چاپ چک"
 
 #: ../src/gnome/glade/print.glade.h:15
 msgid ""
@@ -5368,43 +5368,43 @@ msgstr ""
 
 #: ../src/gnome/glade/print.glade.h:26
 msgid "_Date format:"
-msgstr ""
+msgstr "فرمت تاریخ :"
 
 #: ../src/gnome/glade/print.glade.h:28
 msgid "_Notes:"
-msgstr ""
+msgstr "_یادداشت ها:"
 
 #: ../src/gnome/glade/print.glade.h:29
 msgid "_Rotation"
-msgstr ""
+msgstr "_چرخش"
 
 #: ../src/gnome/glade/print.glade.h:30
 msgid "_Save format"
-msgstr ""
+msgstr "ذخیره سازی فرمت"
 
 #: ../src/gnome/glade/print.glade.h:31
 msgid "_Translation:"
-msgstr ""
+msgstr "تراکنشها"
 
 #: ../src/gnome/glade/print.glade.h:32
 msgid "_Units:"
-msgstr ""
+msgstr "واحد:"
 
 #: ../src/gnome/glade/print.glade.h:33
 msgid "x"
-msgstr ""
+msgstr "x"
 
 #: ../src/gnome/glade/print.glade.h:34
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #: ../src/gnome/glade/progress.glade.h:1
 msgid "Working..."
-msgstr ""
+msgstr "درحال فعالیت ..."
 
 #: ../src/gnome/glade/reconcile.glade.h:1
 msgid "<b>Reconcile Information</b>"
-msgstr ""
+msgstr "<b>اطلاعات  تطبیق حساب</b>"
 
 #: ../src/gnome/glade/reconcile.glade.h:2
 #: ../src/gnome/window-reconcile.c:738
@@ -5413,33 +5413,33 @@ msgstr "ثبت پرداخت سود"
 
 #: ../src/gnome/glade/reconcile.glade.h:3
 msgid "Include _subaccounts"
-msgstr ""
+msgstr "شامل حساب های زیر مجموعه"
 
 #. starting balance title/value
 #: ../src/gnome/glade/reconcile.glade.h:4
 #: ../src/gnome/window-reconcile.c:1736
 msgid "Starting Balance:"
-msgstr ""
+msgstr "موجودی اولیه:"
 
 #: ../src/gnome/glade/reconcile.glade.h:5
 msgid "Statement _Date:"
-msgstr ""
+msgstr "تاریخ اظهاریه:"
 
 #: ../src/gnome/glade/reconcile.glade.h:6
 msgid "_Ending Balance:"
-msgstr ""
+msgstr "موجودی پایانی :"
 
 #: ../src/gnome/glade/register.glade.h:1
 msgid "<b>New Transaction Information</b>"
-msgstr ""
+msgstr "<b>اطلاعات تراکنش جدید</b>"
 
 #: ../src/gnome/glade/register.glade.h:2
 msgid "Amo_unt"
-msgstr ""
+msgstr "مقدار"
 
 #: ../src/gnome/glade/register.glade.h:4
 msgid "C_hoose Date:"
-msgstr ""
+msgstr "انتخاب تاریخ:"
 
 #: ../src/gnome/glade/register.glade.h:5
 msgid "C_leared"
@@ -5448,19 +5448,19 @@ msgstr ""
 #: ../src/gnome/glade/register.glade.h:7
 #: ../src/gnome/gnc-plugin-page-register.c:218
 msgid "Cancel the current transaction"
-msgstr ""
+msgstr "لغو تراکنش جاری"
 
 #: ../src/gnome/glade/register.glade.h:8
 msgid "Choo_se Date:"
-msgstr ""
+msgstr "انتخاب تاریخ:"
 
 #: ../src/gnome/glade/register.glade.h:9
 msgid "Copy Transaction"
-msgstr ""
+msgstr "کپی تراکنش"
 
 #: ../src/gnome/glade/register.glade.h:10
 msgid "Copy the selected transaction"
-msgstr ""
+msgstr "کپی تراکنش انتخاب شده"
 
 #: ../src/gnome/glade/register.glade.h:11
 #: ../src/gnome/gnc-plugin-page-register.c:260
@@ -5469,29 +5469,29 @@ msgstr ""
 
 #: ../src/gnome/glade/register.glade.h:12
 msgid "Cut Transaction"
-msgstr ""
+msgstr "برش تراکنش"
 
 #: ../src/gnome/glade/register.glade.h:13
 msgid "Cut the selected transaction"
-msgstr ""
+msgstr "برش تراکنش انتخاب شده"
 
 #: ../src/gnome/glade/register.glade.h:17
 #: ../src/gnome/gnc-plugin-page-register.c:209
 msgid "Delete the current transaction"
-msgstr ""
+msgstr "حذف تراکنش جاری"
 
 #: ../src/gnome/glade/register.glade.h:19
 msgid "Dup_licate Transaction..."
-msgstr ""
+msgstr "تکرار تراکنش..."
 
 #: ../src/gnome/glade/register.glade.h:21
 #: ../src/import-export/generic-import.glade.h:17
 msgid "Duplicate Transaction"
-msgstr ""
+msgstr "تکرار تراکنش"
 
 #: ../src/gnome/glade/register.glade.h:22
 msgid "Edit Exchange Rate"
-msgstr ""
+msgstr "ویرایش نرخ تبدیل ارز"
 
 #: ../src/gnome/glade/register.glade.h:23
 msgid "Edit the exchange rate for the current split"
@@ -5499,7 +5499,7 @@ msgstr ""
 
 #: ../src/gnome/glade/register.glade.h:24
 msgid "End:"
-msgstr ""
+msgstr "پایان:"
 
 #: ../src/gnome/glade/register.glade.h:26
 msgid "Erase all splits except the one for this account."
@@ -5511,12 +5511,12 @@ msgstr ""
 
 #: ../src/gnome/glade/register.glade.h:28
 msgid "Jump"
-msgstr ""
+msgstr "پرش"
 
 #: ../src/gnome/glade/register.glade.h:29
 #: ../src/gnome/gnc-plugin-page-register.c:257
 msgid "Jump to the corresponding transaction in the other account"
-msgstr ""
+msgstr "پرش به تراکنش مربوطه در حساب دیگر"
 
 #: ../src/gnome/glade/register.glade.h:30
 msgid "Keep normal account order"
@@ -5534,16 +5534,16 @@ msgstr ""
 
 #: ../src/gnome/glade/register.glade.h:33
 msgid "Num_ber"
-msgstr ""
+msgstr "عدد"
 
 #: ../src/gnome/glade/register.glade.h:34
 msgid "Paste Transaction"
-msgstr ""
+msgstr "چسپاندن تراکنش"
 
 #: ../src/gnome/glade/register.glade.h:35
 #: ../src/gnome/gnc-plugin-page-register.c:203
 msgid "Paste the transaction from the clipboard"
-msgstr ""
+msgstr "چسپاندن تراکنش از کلپ برد"
 
 #: ../src/gnome/glade/register.glade.h:36
 msgid "Reason for voiding transaction:"
@@ -5562,15 +5562,15 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register.c:283
 #: ../src/gnome-utils/gnc-icons.c:22
 msgid "S_plit Transaction"
-msgstr ""
+msgstr "تقسیم تراکنش"
 
 #: ../src/gnome/glade/register.glade.h:40
 msgid "S_tatement Date"
-msgstr ""
+msgstr "تاریخ اطلاعیه"
 
 #: ../src/gnome/glade/register.glade.h:42
 msgid "Schedule..."
-msgstr ""
+msgstr "زمانبندی"
 
 #: ../src/gnome/glade/register.glade.h:43
 msgid "Select Range:"
@@ -5578,11 +5578,11 @@ msgstr ""
 
 #: ../src/gnome/glade/register.glade.h:44
 msgid "Select _All"
-msgstr ""
+msgstr "انتخاب همه"
 
 #: ../src/gnome/glade/register.glade.h:45
 msgid "Show _All"
-msgstr ""
+msgstr "نمایش همه"
 
 #: ../src/gnome/glade/register.glade.h:46
 #: ../src/gnome/gnc-plugin-page-register.c:284
@@ -5612,23 +5612,23 @@ msgstr ""
 
 #: ../src/gnome/glade/register.glade.h:52
 msgid "Sort by Amount"
-msgstr ""
+msgstr "مرتب سازی با مقدار"
 
 #: ../src/gnome/glade/register.glade.h:53
 msgid "Sort by Date"
-msgstr ""
+msgstr "مرتب سازی با تاریخ"
 
 #: ../src/gnome/glade/register.glade.h:54
 msgid "Sort by Description"
-msgstr ""
+msgstr "مرتب سازی با توصیف"
 
 #: ../src/gnome/glade/register.glade.h:55
 msgid "Sort by Memo"
-msgstr ""
+msgstr "مرتب سازی با یادداشت"
 
 #: ../src/gnome/glade/register.glade.h:56
 msgid "Sort by Number"
-msgstr ""
+msgstr "مرتب سازی با شماره"
 
 #: ../src/gnome/glade/register.glade.h:57
 msgid "Sort by action field"
@@ -5638,25 +5638,25 @@ msgstr ""
 #: ../src/gnome/glade/register.glade.h:58
 #: ../intl-scm/guile-strings.c:3430
 msgid "Sort by amount"
-msgstr ""
+msgstr "مرتب سازی با مقدار"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/glade/register.glade.h:59
 #: ../intl-scm/guile-strings.c:3406
 msgid "Sort by date"
-msgstr ""
+msgstr "مرتب سازی با تاریخ"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/glade/register.glade.h:60
 #: ../intl-scm/guile-strings.c:3434
 msgid "Sort by description"
-msgstr ""
+msgstr "مرتب سازی با توصیف"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/glade/register.glade.h:61
 #: ../intl-scm/guile-strings.c:3442
 msgid "Sort by memo"
-msgstr ""
+msgstr "مرتب سازی با یادداشت"
 
 #: ../src/gnome/glade/register.glade.h:62
 msgid "Sort by notes field"
@@ -5664,7 +5664,7 @@ msgstr ""
 
 #: ../src/gnome/glade/register.glade.h:63
 msgid "Sort by number"
-msgstr ""
+msgstr "مرتب سازی با شماره"
 
 #: ../src/gnome/glade/register.glade.h:64
 msgid "Sort by the date of entry"
@@ -5684,23 +5684,23 @@ msgstr ""
 
 #: ../src/gnome/glade/register.glade.h:69
 msgid "Start:"
-msgstr ""
+msgstr "شروع"
 
 #: ../src/gnome/glade/register.glade.h:71
 msgid "Toda_y"
-msgstr ""
+msgstr "امروز"
 
 #: ../src/gnome/glade/register.glade.h:72
 msgid "Void Transaction"
-msgstr ""
+msgstr "تراکنش های باطل"
 
 #: ../src/gnome/glade/register.glade.h:73
 msgid "_Action"
-msgstr ""
+msgstr "فعالیت"
 
 #: ../src/gnome/glade/register.glade.h:75
 msgid "_Amount"
-msgstr ""
+msgstr "مقدار"
 
 #. Translators: This is a menu item in the View menu
 #: ../src/gnome/glade/register.glade.h:76
@@ -5712,78 +5712,78 @@ msgstr ""
 #: ../src/gnome/glade/register.glade.h:77
 #: ../src/gnome/gnc-plugin-page-register.c:292
 msgid "_Basic Ledger"
-msgstr ""
+msgstr "دفتر کل ساده"
 
 #: ../src/gnome/glade/register.glade.h:83
 #: ../src/gnome/gnc-plugin-page-register.c:279
 msgid "_Double Line"
-msgstr ""
+msgstr "دابل"
 
 #: ../src/gnome/glade/register.glade.h:84
 msgid "_Earliest"
-msgstr ""
+msgstr "قدیمیترین"
 
 #: ../src/gnome/glade/register.glade.h:87
 msgid "_Frozen"
-msgstr ""
+msgstr "غیر قابل پرداخت"
 
 #: ../src/gnome/glade/register.glade.h:88
 #: ../src/gnome/gnc-plugin-page-register.c:256
 #: ../src/gnome-utils/gnc-icons.c:23
 msgid "_Jump"
-msgstr ""
+msgstr "انت_قال"
 
 #: ../src/gnome/glade/register.glade.h:89
 msgid "_Latest"
-msgstr ""
+msgstr "آخرین"
 
 #: ../src/gnome/glade/register.glade.h:90
 msgid "_Memo"
-msgstr ""
+msgstr "یادداشت"
 
 #: ../src/gnome/glade/register.glade.h:91
 msgid "_Notes"
-msgstr ""
+msgstr "_یادداشت ها:"
 
 #: ../src/gnome/glade/register.glade.h:92
 msgid "_Number"
-msgstr ""
+msgstr "شماره"
 
 #: ../src/gnome/glade/register.glade.h:93
 msgid "_Number:"
-msgstr ""
+msgstr "شماره:"
 
 #: ../src/gnome/glade/register.glade.h:94
 msgid "_Reconciled"
-msgstr ""
+msgstr "_تطبیق حساب"
 
 #: ../src/gnome/glade/register.glade.h:96
 msgid "_Standard Order"
-msgstr ""
+msgstr "ترتیب _اصلی"
 
 #: ../src/gnome/glade/register.glade.h:97
 msgid "_Statement Date"
-msgstr ""
+msgstr "تاریخ اظهاریه"
 
 #: ../src/gnome/glade/register.glade.h:98
 msgid "_Today"
-msgstr ""
+msgstr "امروز"
 
 #: ../src/gnome/glade/register.glade.h:99
 msgid "_Transaction Journal"
-msgstr ""
+msgstr "دفتر روزنامه"
 
 #: ../src/gnome/glade/register.glade.h:100
 msgid "_Unreconciled"
-msgstr ""
+msgstr "تطبیق نیافته"
 
 #: ../src/gnome/glade/register.glade.h:102
 msgid "_Voided"
-msgstr ""
+msgstr "_باطل شده"
 
 #: ../src/gnome/glade/sched-xact.glade.h:1
 msgid " days"
-msgstr ""
+msgstr "روزها"
 
 #: ../src/gnome/glade/sched-xact.glade.h:4
 msgid "... utilize an escrow account for payments?"
@@ -5834,19 +5834,19 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:44
 msgid "<b>End</b>"
-msgstr ""
+msgstr "<b>پایان</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:45
 msgid "<b>Name</b>"
-msgstr ""
+msgstr "<b>نام</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:46
 msgid "<b>Occurrences</b>"
-msgstr ""
+msgstr "<b>رویداد ها</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:47
 msgid "<b>Options</b>"
-msgstr ""
+msgstr "<b>گزینه ها</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:48
 msgid "<b>Since Last Run Dialog</b>"
@@ -5862,16 +5862,16 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:52
 msgid "Account Deletion"
-msgstr ""
+msgstr "حذف حساب"
 
 #: ../src/gnome/glade/sched-xact.glade.h:53
 msgid "Advanced..."
-msgstr ""
+msgstr "پیشرفته ..."
 
 #: ../src/gnome/glade/sched-xact.glade.h:54
 #: ../src/gnome-utils/glade/transfer.glade.h:5
 msgid "Amount:"
-msgstr ""
+msgstr "مقدار:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:55
 msgid "Auto-Created Transactions Notification"
@@ -5891,7 +5891,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:59
 msgid "Create"
-msgstr ""
+msgstr "ایجاد"
 
 #: ../src/gnome/glade/sched-xact.glade.h:60
 msgid "Create as scheduled"
@@ -5949,7 +5949,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:926
 #: ../intl-scm/guile-strings.c:1302
 msgid "Date Range"
-msgstr ""
+msgstr "بازه تاریخ"
 
 #: ../src/gnome/glade/sched-xact.glade.h:80
 msgid "Days Away"
@@ -5970,15 +5970,15 @@ msgstr ""
 #: ../src/gnome/glade/sched-xact.glade.h:84
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:172
 msgid "Enabled"
-msgstr ""
+msgstr "فعال"
 
 #: ../src/gnome/glade/sched-xact.glade.h:85
 msgid "End Date:"
-msgstr ""
+msgstr "تاریخ پایان"
 
 #: ../src/gnome/glade/sched-xact.glade.h:86
 msgid "Ended On"
-msgstr ""
+msgstr "پایان یافته در"
 
 #: ../src/gnome/glade/sched-xact.glade.h:87
 msgid "Escrow Account:"
@@ -6013,13 +6013,13 @@ msgstr ""
 #: ../src/gnome-utils/gnc-dense-cal.c:335
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:181
 msgid "Frequency"
-msgstr ""
+msgstr "مکرر"
 
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:100
 #: ../intl-scm/guile-strings.c:4422
 msgid "Friday"
-msgstr ""
+msgstr "جمعه"
 
 #: ../src/gnome/glade/sched-xact.glade.h:101
 msgid "Ignore"
@@ -6047,11 +6047,11 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:107
 msgid "Loan Account:"
-msgstr ""
+msgstr "حساب وام:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:108
 msgid "Loan Information"
-msgstr ""
+msgstr "اطلاعات وام"
 
 #: ../src/gnome/glade/sched-xact.glade.h:109
 msgid "Make Scheduled Transaction"
@@ -6061,11 +6061,11 @@ msgstr ""
 #: ../src/gnome/glade/sched-xact.glade.h:110
 #: ../intl-scm/guile-strings.c:4414
 msgid "Monday"
-msgstr ""
+msgstr "دوشنبه"
 
 #: ../src/gnome/glade/sched-xact.glade.h:112
 msgid "Months Remaining:"
-msgstr ""
+msgstr "ماه های باقیمانده"
 
 #: ../src/gnome/glade/sched-xact.glade.h:113
 msgid "Mortgage/Loan Druid"
@@ -6078,7 +6078,7 @@ msgstr ""
 #: ../src/gnome/glade/sched-xact.glade.h:116
 #: ../src/gnome/glade/tax.glade.h:12
 msgid "Name:"
-msgstr ""
+msgstr "نام"
 
 #: ../src/gnome/glade/sched-xact.glade.h:117
 msgid "Never End"
@@ -6273,7 +6273,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:174
 msgid "The following scheduled transactions have expired.  Select those you wish to delete."
-msgstr ""
+msgstr "تراکنش های برنامه ریزی شده زیر سررسید شده اند. آنهایی را که می خواهید حذف کنید انتخاب نمایید"
 
 #: ../src/gnome/glade/sched-xact.glade.h:175
 msgid "The listed Scheduled Transactions are to-be created soon.  Select any which you would like to create now, and click \"Forward\" to create them."
@@ -6462,15 +6462,15 @@ msgstr ""
 #: ../src/gnome/glade/stocks.glade.h:16
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:4
 msgid "_Amount:"
-msgstr ""
+msgstr "مقدار:"
 
 #: ../src/gnome/glade/stocks.glade.h:18
 msgid "_Memo:"
-msgstr ""
+msgstr "یادداشت:"
 
 #: ../src/gnome/glade/stocks.glade.h:19
 msgid "_Shares:"
-msgstr ""
+msgstr "_سهام:"
 
 #: ../src/gnome/glade/tax.glade.h:1
 msgid "0"
@@ -6494,7 +6494,7 @@ msgstr ""
 
 #: ../src/gnome/glade/tax.glade.h:6
 msgid "<b>_Accounts</b>"
-msgstr ""
+msgstr "<b>حسابها</b>"
 
 #: ../src/gnome/glade/tax.glade.h:7
 msgid "<b>_TXF Categories</b>"
@@ -6502,11 +6502,11 @@ msgstr ""
 
 #: ../src/gnome/glade/tax.glade.h:8
 msgid "Accounts Selected:"
-msgstr ""
+msgstr "حساب های انتخابی"
 
 #: ../src/gnome/glade/tax.glade.h:9
 msgid "C_urrent Account"
-msgstr ""
+msgstr "حساب جاری"
 
 #: ../src/gnome/glade/tax.glade.h:10
 msgid "Click to change Tax Name and/or Tax Type"
@@ -6514,43 +6514,43 @@ msgstr ""
 
 #: ../src/gnome/glade/tax.glade.h:11
 msgid "Income Tax Information"
-msgstr ""
+msgstr "اطلاعات مالیات بر درآمد"
 
 #: ../src/gnome/glade/tax.glade.h:13
 msgid "Tax _Related"
-msgstr ""
+msgstr "مشمول مالیات"
 
 #: ../src/gnome/glade/tax.glade.h:15
 msgid "_Asset"
-msgstr ""
+msgstr "دارایی"
 
 #: ../src/gnome/glade/tax.glade.h:16
 msgid "_Expense"
-msgstr ""
+msgstr "هزینه"
 
 #: ../src/gnome/glade/tax.glade.h:17
 msgid "_Income"
-msgstr ""
+msgstr "درآمد"
 
 #: ../src/gnome/glade/tax.glade.h:18
 msgid "_Liability/Equity"
-msgstr ""
+msgstr "مسئولیت / سهام"
 
 #: ../src/gnome/glade/tax.glade.h:19
 msgid "_Parent Account"
-msgstr ""
+msgstr "حساب مرجع"
 
 #: ../src/gnome/glade/tax.glade.h:20
 msgid "_Select Subaccounts"
-msgstr ""
+msgstr "انتخاب حساب معین"
 
 #: ../src/gnome/glade/userpass.glade.h:1
 msgid "Enter your username and password"
-msgstr ""
+msgstr "نام کاربری و رمز خود را وارد کنید"
 
 #: ../src/gnome/glade/userpass.glade.h:2
 msgid "Username and Password"
-msgstr ""
+msgstr "نام کاربری و رمز"
 
 #: ../src/gnome/glade/userpass.glade.h:3
 msgid "_Password:"
@@ -6562,7 +6562,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-account-tree.c:57
 msgid "New Accounts _Page"
-msgstr ""
+msgstr "صفحه حساب جدید"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:58
 msgid "Open a new Account Tree page"
@@ -6607,7 +6607,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:120
 msgid "Export _Accounts"
-msgstr ""
+msgstr "ارسال حسابها"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:121
 msgid "Export the account hierarchy to a new GnuCash datafile"
@@ -6736,11 +6736,11 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-budget.c:55
 msgid "New Budget"
-msgstr ""
+msgstr "بدوجه جدید"
 
 #: ../src/gnome/gnc-plugin-budget.c:56
 msgid "Create a new Budget"
-msgstr ""
+msgstr "ایجاد بودجه جدید"
 
 #: ../src/gnome/gnc-plugin-budget.c:59
 msgid "Open Budget"
@@ -6826,12 +6826,12 @@ msgstr "_فیلتر با"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:178
 #: ../src/gnome/gnc-plugin-page-register.c:241
 msgid "_Reconcile..."
-msgstr ""
+msgstr "تطبیق ..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:179
 #: ../src/gnome/gnc-plugin-page-register.c:242
 msgid "Reconcile the selected account"
-msgstr ""
+msgstr "تطبیق حساب انتخاب شده"
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:181
@@ -7195,7 +7195,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register.c:1763
 #: ../intl-scm/guile-strings.c:4214
 msgid "General Ledger"
-msgstr ""
+msgstr "دفتر معین"
 
 #. Translators: %s is the name
 #. of the tab page
@@ -7417,7 +7417,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-split-reg.c:1851
 msgid "Shares:"
-msgstr ""
+msgstr "سهام:"
 
 #: ../src/gnome/gnc-split-reg.c:1852
 msgid "Current Value:"
@@ -7553,16 +7553,16 @@ msgid "Sort column ascending or descending"
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:10
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:10
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:10
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:10
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:10
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:10
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:10
 msgid "The X,Y coordinates of the top left corner of the dialog when it was last closed."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:11
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:11
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:11
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:11
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:11
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:11
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:11
 msgid "The width and size of the dialog when it was last closed."
 msgstr ""
 
@@ -7583,16 +7583,16 @@ msgid "This setting indicates which column in the tree is used for sorting. Poss
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:16
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:17
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:17
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:17
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:17
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:17
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:17
 msgid "Window geometry"
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:17
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:18
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:18
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:18
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:18
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:18
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:18
 msgid "Window position"
 msgstr ""
 
@@ -7777,35 +7777,35 @@ msgstr ""
 msgid "Prompt for interest charges"
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:1
+#: ./src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:1
 msgid "How many days in advance to notify the user."
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:2
+#: ./src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:2
 msgid "How many days in advance to remind the user."
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:3
+#: ./src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:3
 msgid "If active, any newly created scheduled transaction will have its 'auto create' flag set active by default. The user can change this flag during transaction creation, or at any later time by editing the scheduled transaction."
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:4
+#: ./src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:4
 msgid "If active, any newly created scheduled transaction will have its 'notify' flag set by default. The user can change this flag during transaction creation, or at any later time by editing the scheduled transaction. This setting only has meaning if the create_auto setting is active."
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:5
+#: ./src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:5
 msgid "Set the \"auto create\" flag by default"
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:6
+#: ./src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:6
 msgid "Set the \"notify\" flag by default"
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:7
+#: ./src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:7
 msgid "Show \"since last run\" dialog when a file is opened."
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:8
+#: ./src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:8
 msgid "This setting controls whether the scheduled transactions \"since last run\" dialog is shown automatically when a data file is opened. This includes the initial opening of the data file when GnuCash starts. If this setting is active, show the dialog, otherwise it is not shown."
 msgstr ""
 
@@ -8239,63 +8239,63 @@ msgstr ""
 msgid "This dialog is presented when you attempt to move out of a modified transaction. The changed data must be either saved or discarded."
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:1
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:1
 msgid "Ending date (in seconds from Jan 1, 1970)"
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:2
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:2
 msgid "Ending time period identifier"
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:3
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:3
 msgid "If active, non currency commodities (stocks) will be shown. Otherwise they will be hidden."
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:4
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:4
 msgid "Profit/loss ending date type"
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:5
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:5
 msgid "Profit/loss starting date type"
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:6
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:6
 msgid "Show a grand total of all accounts converted to the default report currency"
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:7
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:7
 msgid "Show non currency commodities"
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:8
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:8
 msgid "Starting date (in seconds from Jan 1, 1970)"
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:9
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:9
 msgid "Starting time period identifier"
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:10
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:10
 msgid "This setting controls the ending date set in profit/loss calculations if the end_choice setting is set to \"absolute\". This field should contain a date as represented in seconds from January 1st, 1970."
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:11
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:11
 msgid "This setting controls the ending date set in profit/loss calculations if the end_choice setting is set to anything other than \"absolute\". This field should contain a value between 0 and 8."
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:12
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:12
 msgid "This setting controls the starting date set in profit/loss calculations if the start_choice setting is set to \"absolute\". This field should contain a date as represented in seconds from January 1st, 1970."
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:13
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:13
 msgid "This setting controls the starting date set in profit/loss calculations if the start_choice setting is set to anything other than \"absolute\". This field should contain a value between 0 and 8."
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:14
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:14
 msgid "This setting controls the type of ending date used in profit/loss calculations. If set to \"absolute\" then GnuCash will retrieve the ending date specified by the end_date key. If set to anything else, GnuCash will retrieve the ending date specified by the end_period key."
 msgstr ""
 
-#: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:15
+#: ./src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:15
 msgid "This setting controls the type of starting date used in profit/loss calculations. If set to \"absolute\" then GnuCash will retrieve the starting date specified by the start_date key. If set to anything else, GnuCash will retrieve the starting date specified by the start_period key."
 msgstr ""
 
@@ -8328,7 +8328,7 @@ msgstr ""
 #: ../src/gnome-search/dialog-search.c:872
 #, c-format
 msgid "New %s"
-msgstr ""
+msgstr "%s جدید"
 
 #: ../src/gnome-search/dialog-search.c:872
 msgid "item"
@@ -8376,15 +8376,15 @@ msgstr ""
 
 #: ../src/gnome-search/search-date.c:191
 msgid "is before"
-msgstr ""
+msgstr "قبل از "
 
 #: ../src/gnome-search/search-date.c:192
 msgid "is before or on"
-msgstr ""
+msgstr "قبل از یا در "
 
 #: ../src/gnome-search/search-date.c:193
 msgid "is on"
-msgstr ""
+msgstr "در"
 
 #: ../src/gnome-search/search-date.c:194
 msgid "is not on"
@@ -8535,7 +8535,7 @@ msgstr ""
 #: ../src/gnome-search/search-reconciled.c:228
 #: ../src/gnome-utils/gnc-tree-view-account.c:598
 msgid "Reconciled"
-msgstr ""
+msgstr "تطبیق داده شده"
 
 #: ../src/gnome-search/search-reconciled.c:231
 msgid "Frozen"
@@ -8543,7 +8543,7 @@ msgstr ""
 
 #: ../src/gnome-search/search-reconciled.c:234
 msgid "Voided"
-msgstr ""
+msgstr "ابطال شده"
 
 #: ../src/gnome-search/search-string.c:186
 msgid "You need to enter a string value"
@@ -10314,60 +10314,60 @@ msgstr ""
 #: ../src/gnome-utils/gnc-date-delta.c:216
 #: ../intl-scm/guile-strings.c:4334
 msgid "Weeks"
-msgstr ""
+msgstr "هفته ها"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../src/gnome-utils/gnc-date-delta.c:218
 #: ../intl-scm/guile-strings.c:4338
 msgid "Months"
-msgstr ""
+msgstr "ماه ها"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../src/gnome-utils/gnc-date-delta.c:220
 #: ../intl-scm/guile-strings.c:4340
 msgid "Years"
-msgstr ""
+msgstr "سالها"
 
 #: ../src/gnome-utils/gnc-date-delta.c:244
 msgid "Ago"
-msgstr ""
+msgstr "قبل"
 
 #: ../src/gnome-utils/gnc-date-delta.c:246
 msgid "From Now"
-msgstr ""
+msgstr "از اکنون"
 
 #. Calendar label, only shown if the date editor has a time field
 #: ../src/gnome-utils/gnc-date-edit.c:828
 msgid "Calendar"
-msgstr ""
+msgstr "تقویم"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:247
 msgid "12 months"
-msgstr ""
+msgstr "12 ماه"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:248
 msgid "6 months"
-msgstr ""
+msgstr "6 ماه"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:249
 msgid "4 months"
-msgstr ""
+msgstr "4 ماه"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:250
 msgid "3 months"
-msgstr ""
+msgstr "3 ماه"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:251
 msgid "2 months"
-msgstr ""
+msgstr "2 ماه"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:252
 msgid "1 month"
-msgstr ""
+msgstr "1 ماه"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:285
 msgid "View:"
-msgstr ""
+msgstr "مشاهده:"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -10379,11 +10379,11 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6576
 #: ../intl-scm/guile-strings.c:6788
 msgid "Date: "
-msgstr ""
+msgstr "تاریخ :"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:1175
 msgid "(unnamed)"
-msgstr ""
+msgstr "(بی نام )"
 
 #: ../src/gnome-utils/gnc-druid-provider-file-gnome.c:99
 #, c-format
@@ -10398,39 +10398,39 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:100
 #: ../src/gnome-utils/gnc-main-window.c:247
 msgid "_Import"
-msgstr ""
+msgstr "دریافت"
 
 #: ../src/gnome-utils/gnc-file.c:102
 #: ../src/gnome-utils/gnc-file.c:254
 msgid "Import"
-msgstr ""
+msgstr "دریافت"
 
 #: ../src/gnome-utils/gnc-file.c:108
 #: ../src/gnome-utils/gnc-file.c:1032
 msgid "Save"
-msgstr ""
+msgstr "ذخیره"
 
 #: ../src/gnome-utils/gnc-file.c:112
 #: ../src/gnome-utils/gnc-main-window.c:248
 msgid "_Export"
-msgstr ""
+msgstr "ار_سال"
 
 #: ../src/gnome-utils/gnc-file.c:115
 #: ../src/gnome-utils/gnc-file.c:270
 #: ../src/gnome-utils/gnc-file.c:890
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1008
 msgid "Export"
-msgstr ""
+msgstr "ارسال"
 
 #: ../src/gnome-utils/gnc-file.c:153
 msgid "All files"
-msgstr ""
+msgstr "تمام فایلها"
 
 #: ../src/gnome-utils/gnc-file.c:194
 #: ../src/import-export/hbci/druid-hbci-utils.c:153
 #: ../src/import-export/hbci/druid-hbci-utils.c:167
 msgid "(null)"
-msgstr ""
+msgstr "(هیچ)"
 
 #: ../src/gnome-utils/gnc-file.c:203
 #, c-format
@@ -10720,7 +10720,7 @@ msgstr "_گزارشها"
 
 #: ../src/gnome-utils/gnc-main-window.c:238
 msgid "_Tools"
-msgstr ""
+msgstr "ابزارها"
 
 #: ../src/gnome-utils/gnc-main-window.c:239
 msgid "E_xtensions"
@@ -10775,11 +10775,11 @@ msgstr "بستن صفحه فعال جاری"
 
 #: ../src/gnome-utils/gnc-main-window.c:265
 msgid "_Quit"
-msgstr ""
+msgstr "خروج"
 
 #: ../src/gnome-utils/gnc-main-window.c:266
 msgid "Quit this application"
-msgstr ""
+msgstr "خروج از این برنامه"
 
 #: ../src/gnome-utils/gnc-main-window.c:280
 msgid "Pr_eferences"
@@ -11123,7 +11123,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4966
 #: ../intl-scm/guile-strings.c:5340
 msgid "Account Name"
-msgstr ""
+msgstr "نام حساب"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:530
 msgid "Commodity"
@@ -12072,7 +12072,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/druid-ab-initial.c:784
 #: ../src/import-export/hbci/druid-hbci-initial.c:762
 msgid "GnuCash Account Name"
-msgstr ""
+msgstr "نام جساب گنوکش"
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:790
 #: ../src/import-export/generic-import.glade.h:35
@@ -12196,7 +12196,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/gnc-file-aqb-import.c:77
 #: ../src/import-export/hbci/gnc-file-aqb-import.c:76
 msgid "Select a file to import"
-msgstr ""
+msgstr "یک فایل برای دریافت اطلاعات انتخاب کنید"
 
 #: ../src/import-export/aqbanking/gnc-file-aqb-import.c:126
 msgid "Import module for DTAUS import not found."
@@ -12336,73 +12336,73 @@ msgstr ""
 msgid "Import a DTAUS file into GnuCash and send the transfers online through Online Banking"
 msgstr ""
 
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
 msgid "CSV import data format"
 msgstr ""
 
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:2
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:2
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:2
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:2
 msgid "Close dialog when finished"
 msgstr ""
 
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:3
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:3
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:3
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:3
 msgid "DTAUS import data format"
 msgstr ""
 
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:4
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:4
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:4
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:4
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
 msgstr ""
 
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:5
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:5
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:5
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:5
 msgid "If active, the PIN for HBCI/AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed."
 msgstr ""
 
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:6
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:6
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:6
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:6
 msgid "If active, the window will be closed automatically when you finish the HBCI/AqBanking import process. Otherwise it will stay open."
 msgstr ""
 
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:7
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:7
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:7
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:7
 msgid "Remember the PIN in memory"
 msgstr ""
 
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:8
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:8
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:8
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:8
 msgid "SWIFT MT940 import data format"
 msgstr ""
 
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:9
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:9
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:9
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:9
 msgid "SWIFT MT942 import data format"
 msgstr ""
 
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:12
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:12
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:12
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:12
 msgid "This setting specifies the data format when importing CSV files. The AqBanking library offers various import formats (called \"profiles\") of which you can choose one here."
 msgstr ""
 
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:13
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:13
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:13
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:13
 msgid "This setting specifies the data format when importing DTAUS files. The AqBanking library offers various import formats (called \"profiles\") of which you can choose one here."
 msgstr ""
 
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:14
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:14
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:14
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:14
 msgid "This setting specifies the data format when importing SWIFT MT940 files. The AqBanking library offers various import formats (called \"profiles\") of which you can choose one here."
 msgstr ""
 
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:15
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:15
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:15
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:15
 msgid "This setting specifies the data format when importing SWIFT MT942 files. The AqBanking library offers various import formats (called \"profiles\") of which you can choose one here."
 msgstr ""
 
-#: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:16
-#: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:16
+#: ./src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:16
+#: ./src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:16
 msgid "Verbose HBCI debug messages"
 msgstr ""
 
@@ -13149,7 +13149,7 @@ msgstr ""
 #: ../src/import-export/qif-import/druid-qif-import.c:899
 #: ../src/import-export/qif-import/druid-qif-import.c:2617
 msgid "Canceled"
-msgstr ""
+msgstr "لغو شد"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:840
 #: ../src/import-export/qif-import/druid-qif-import.c:844
@@ -13200,7 +13200,7 @@ msgstr ""
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1390
 msgid "You must enter an account name."
-msgstr ""
+msgstr "شما باید یک نام حساب ثبت کنید."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1469
 msgid "GnuCash account name"
@@ -13450,7 +13450,7 @@ msgid "Set the default QIF account name"
 msgstr ""
 
 #: ../src/import-export/qif-import/qif.glade.h:63
-#: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:2
+#: ./src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:2
 msgid "Show some documentation-only pages in QIF Import druid."
 msgstr ""
 
@@ -13501,63 +13501,63 @@ msgstr ""
 msgid "_Show documentation"
 msgstr ""
 
-#: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:1
+#: ./src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:1
 msgid "Show documentation"
 msgstr ""
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:1
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:1
 msgid "Add matching transactions below this score"
 msgstr ""
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:2
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:2
 msgid "Clear matching transactions above this score"
 msgstr ""
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:3
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:3
 msgid "Enable EDIT transaction action"
 msgstr ""
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:4
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:4
 msgid "Enable SKIP transaction action"
 msgstr ""
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:5
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:5
 msgid "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED."
 msgstr ""
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:6
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:6
 msgid "Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default."
 msgstr ""
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:7
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:7
 msgid "Enables bayesian matching when matching imported transaction against existing transactions. Otherwise a less sophisticated rule-based matching mechanism will be used."
 msgstr ""
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:8
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:8
 msgid "Maximum ATM fee amount in your area"
 msgstr ""
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:9
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:9
 msgid "Minimum score to be displayed"
 msgstr ""
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:12
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:12
 msgid "This field specifies the extra fee that is taken into account when matching imported transactions. In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won't match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
 msgstr ""
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:13
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:13
 msgid "This field specifies the minimum matching score a potential matching transaction must have to be displayed in the match list."
 msgstr ""
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:14
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:14
 msgid "This field specifies the threshold above which a matching transaction will be cleared by default. A transaction whose best match's score is in the green zone (above or equal to this Clear threshold) will be cleared by default."
 msgstr ""
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:15
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:15
 msgid "This field specifies the threshold below which a matching transaction will be added automatically. A transaction whose best match's score is in the red zone (above the display minimum score but below or equal to the Add match score) will be added to the GnuCash file by default."
 msgstr ""
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:16
+#: ./src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:16
 msgid "Use bayesian matching"
 msgstr ""
 
@@ -13624,7 +13624,7 @@ msgstr ""
 #: ../src/register/ledger-core/split-register.c:1902
 #: ../src/register/ledger-core/split-register.c:1904
 msgid "_Shares"
-msgstr ""
+msgstr "_سهام"
 
 #: ../src/register/ledger-core/split-register.c:1902
 #: ../src/register/ledger-core/split-register.c:1909
@@ -14167,7 +14167,7 @@ msgstr "ویرایش گزینه های گزارش"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:990
 msgid "Back"
-msgstr ""
+msgstr "برگشت"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:991
 msgid "Move back one step in the history"
@@ -14175,7 +14175,7 @@ msgstr ""
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:993
 msgid "Forward"
-msgstr ""
+msgstr "ادامه"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:994
 msgid "Move forward one step in the history"
@@ -14183,7 +14183,7 @@ msgstr ""
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:996
 msgid "Reload"
-msgstr ""
+msgstr "بازخوانی"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:997
 msgid "Reload the current page"
@@ -14191,7 +14191,7 @@ msgstr ""
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:999
 msgid "Stop"
-msgstr ""
+msgstr "ایست"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1000
 msgid "Cancel outstanding HTML requests"
@@ -17388,7 +17388,7 @@ msgstr ""
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:2488
 msgid "Account Notes"
-msgstr ""
+msgstr "یادداشت حساب"
 
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:2490
@@ -18079,14 +18079,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4056
 #: ../intl-scm/guile-strings.c:4630
 msgid "Assets"
-msgstr ""
+msgstr "دارایی ها"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2890
 #: ../intl-scm/guile-strings.c:4064
 msgid "Total Assets"
-msgstr ""
+msgstr "مجموع دارایی"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -18100,14 +18100,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4066
 #: ../intl-scm/guile-strings.c:4632
 msgid "Liabilities"
-msgstr ""
+msgstr "بدهی ها"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2894
 #: ../intl-scm/guile-strings.c:4072
 msgid "Total Liabilities"
-msgstr ""
+msgstr "مجموع بدهی ها"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2900
@@ -18445,12 +18445,12 @@ msgstr ""
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:3058
 msgid "Asset Piechart"
-msgstr ""
+msgstr "نمودار Pie دارایی "
 
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:3060
 msgid "Liability Piechart"
-msgstr ""
+msgstr "نمودار Pie بدهی"
 
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:3062
@@ -19601,22 +19601,22 @@ msgstr ""
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:3938
 msgid "Income Chart"
-msgstr ""
+msgstr "نمودار درآمد"
 
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:3940
 msgid "Asset Chart"
-msgstr ""
+msgstr "نمودار دارایی"
 
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:3942
 msgid "Expense Chart"
-msgstr ""
+msgstr "نمودار هزینه"
 
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:3944
 msgid "Liability Chart"
-msgstr ""
+msgstr "نمودار بدهی"
 
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:3960
@@ -19626,7 +19626,7 @@ msgstr ""
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:3962
 msgid "Income & Expense Chart"
-msgstr ""
+msgstr "نمودار درآمد و هزینه"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3964
@@ -19646,12 +19646,12 @@ msgstr ""
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:4058
 msgid "Existing Assets"
-msgstr ""
+msgstr "دارایی های موجود"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:4060
 msgid "Allocated Assets"
-msgstr ""
+msgstr "دارایی های اختصاص یافته"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:4062
@@ -19666,7 +19666,7 @@ msgstr ""
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:4070
 msgid "New Liabilities"
-msgstr ""
+msgstr "بدهی های جدید"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:4076
@@ -19802,7 +19802,7 @@ msgstr ""
 #. src/report/standard-reports/portfolio.scm
 #: ../intl-scm/guile-strings.c:4206
 msgid "Units"
-msgstr ""
+msgstr "واحد"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:4288
@@ -19856,7 +19856,7 @@ msgstr ""
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:4322
 msgid "Price Database"
-msgstr ""
+msgstr "پایگاه داده قیمت ها"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:4324
@@ -20302,83 +20302,83 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4676
 #: ../intl-scm/guile-strings.c:4678
 msgid "Day"
-msgstr ""
+msgstr "روز"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4680
 #: ../intl-scm/guile-strings.c:4682
 msgid "Week"
-msgstr ""
+msgstr "هفته"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4684
 msgid "2Week"
-msgstr ""
+msgstr "دو هفته"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4686
 msgid "Two Weeks"
-msgstr ""
+msgstr "دو هفته"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4688
 #: ../intl-scm/guile-strings.c:4690
 msgid "Month"
-msgstr ""
+msgstr "ماه"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4692
 #: ../intl-scm/guile-strings.c:4694
 msgid "Quarter"
-msgstr ""
+msgstr "سه ماهه"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4696
 #: ../intl-scm/guile-strings.c:4698
 msgid "Half Year"
-msgstr ""
+msgstr "نیم سال"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4700
 #: ../intl-scm/guile-strings.c:4702
 msgid "Year"
-msgstr ""
+msgstr "سال "
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4704
 msgid "All"
-msgstr ""
+msgstr "همه"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4706
 msgid "All accounts"
-msgstr ""
+msgstr "همه حساب ها"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4708
 msgid "Top-level"
-msgstr ""
+msgstr "سطح اول"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4710
 msgid "Second-level"
-msgstr ""
+msgstr "سطح دوم"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4712
 msgid "Third-level"
-msgstr ""
+msgstr "سطح سوم"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4714
 #: ../intl-scm/guile-strings.c:4716
 msgid "Fourth-level"
-msgstr ""
+msgstr "سطح چهارم"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4718
 msgid "Sixth-level"
-msgstr ""
+msgstr "سطح پنجم"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4720
@@ -20413,7 +20413,7 @@ msgstr ""
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4736
 msgid "Average Cost"
-msgstr ""
+msgstr "هزینه میانگین"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4738
@@ -20487,22 +20487,22 @@ msgstr ""
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4786
 msgid "Alphabetical by account code"
-msgstr ""
+msgstr "الفبایی با کد حساب"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4788
 msgid "Alphabetical"
-msgstr ""
+msgstr "الفیایی"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4790
 msgid "Alphabetical by account name"
-msgstr ""
+msgstr "الفبایی با نام حساب"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4794
 msgid "By amount, largest to smallest"
-msgstr ""
+msgstr "با مقدار ، بزرگترین به کوچکترین"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4796
@@ -20523,7 +20523,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4806
 #: ../intl-scm/guile-strings.c:4816
 msgid "Do not show"
-msgstr ""
+msgstr "نمایش نده"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4808
@@ -20538,7 +20538,7 @@ msgstr ""
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4812
 msgid "Show subtotals"
-msgstr ""
+msgstr "نمایش زیر مجموع ها"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:4814
@@ -20563,43 +20563,43 @@ msgstr ""
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4830
 msgid "_Assets & Liabilities"
-msgstr ""
+msgstr "دارایی و بدهی ها"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4832
 msgid "_Income & Expense"
-msgstr ""
+msgstr "درآمد و هزینه"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4834
 msgid "B_udget"
-msgstr ""
+msgstr "بودجه"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4836
 msgid "_Taxes"
-msgstr ""
+msgstr "مالیات"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4838
 msgid "_Sample & Custom"
-msgstr ""
+msgstr "سفارشی و مثال"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4840
 msgid "_Custom"
-msgstr ""
+msgstr "سفارشی"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4848
 msgid "Report name"
-msgstr ""
+msgstr "نام گزارش"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4850
 #: ../intl-scm/guile-strings.c:4862
 msgid "Stylesheet"
-msgstr ""
+msgstr "Stylesheet"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4852
@@ -20630,7 +20630,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5810
 #: ../intl-scm/guile-strings.c:6156
 msgid "Default"
-msgstr ""
+msgstr "پیش فرض"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4864
@@ -20646,17 +20646,17 @@ msgstr ""
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:4876
 msgid "Account name"
-msgstr ""
+msgstr "نام حساب"
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:4880
 msgid "Exchange rate"
-msgstr ""
+msgstr "نرخ تبدیل ارز"
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:4882
 msgid "Exchange rates"
-msgstr ""
+msgstr "نرخهای تبدیل ارز"
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:4884
@@ -20671,7 +20671,7 @@ msgstr ""
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:4890
 msgid "No accounts selected"
-msgstr ""
+msgstr "حسابی انتخاب نشده"
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:4892
@@ -22983,7 +22983,7 @@ msgid "Type the first letter(s) of an existing account name in the Transfer regi
 msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:52
-msgid "Want to see all your subaccount transactions in one register? From the main menu, highlight the parent account and select Accounts -> Open Subaccounts from the menu."
+msgid "Want to see all your subaccount transactions in one register? >From the main menu, highlight the parent account and select Accounts -> Open Subaccounts from the menu."
 msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:56
