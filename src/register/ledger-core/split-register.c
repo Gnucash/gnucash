@@ -2198,7 +2198,7 @@ gnc_split_register_config_action (SplitRegister *reg)
       gnc_combo_cell_add_menu_item (cell, Q_("Action Column|Deposit"));
       gnc_combo_cell_add_menu_item (cell, _("Withdraw"));
       gnc_combo_cell_add_menu_item (cell, _("Check"));
-      gnc_combo_cell_add_menu_item (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("Interest"));
       gnc_combo_cell_add_menu_item (cell, _("ATM Deposit"));
       gnc_combo_cell_add_menu_item (cell, _("ATM Draw"));
       gnc_combo_cell_add_menu_item (cell, _("Teller"));
@@ -2235,7 +2235,7 @@ gnc_split_register_config_action (SplitRegister *reg)
       gnc_combo_cell_add_menu_item (cell, _("Buy"));
       gnc_combo_cell_add_menu_item (cell, _("Credit"));
       gnc_combo_cell_add_menu_item (cell, _("Fee"));
-      gnc_combo_cell_add_menu_item (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("Interest"));
       gnc_combo_cell_add_menu_item (cell, _("Online"));
       gnc_combo_cell_add_menu_item (cell, _("Sell"));
       break;
@@ -2243,7 +2243,7 @@ gnc_split_register_config_action (SplitRegister *reg)
       gnc_combo_cell_add_menu_item (cell, _("Buy"));
       gnc_combo_cell_add_menu_item (cell, _("Sell"));
       gnc_combo_cell_add_menu_item (cell, _("Loan"));
-      gnc_combo_cell_add_menu_item (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("Interest"));
       gnc_combo_cell_add_menu_item (cell, _("Payment"));
       break;
     case RECEIVABLE_REGISTER:
@@ -2259,7 +2259,7 @@ gnc_split_register_config_action (SplitRegister *reg)
       gnc_combo_cell_add_menu_item (cell, _("Decrease"));
       gnc_combo_cell_add_menu_item (cell, _("Buy"));
       gnc_combo_cell_add_menu_item (cell, _("Sell"));
-      gnc_combo_cell_add_menu_item (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("Interest"));
       gnc_combo_cell_add_menu_item (cell, _("Payment"));
       gnc_combo_cell_add_menu_item (cell, _("Rebate"));
       gnc_combo_cell_add_menu_item (cell, _("Paycheck"));
@@ -2285,8 +2285,8 @@ gnc_split_register_config_action (SplitRegister *reg)
       gnc_combo_cell_add_menu_item (cell, _("Price"));
       gnc_combo_cell_add_menu_item (cell, _("Fee"));
       /* Action: Dividend */
-      gnc_combo_cell_add_menu_item (cell, _("Div")); 
-      gnc_combo_cell_add_menu_item (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("Dividend")); 
+      gnc_combo_cell_add_menu_item (cell, _("Interest"));
       /* Action: Long Term Capital Gains */
       gnc_combo_cell_add_menu_item (cell, _("LTCG"));
       /* Action: Short Term Capital Gains */
