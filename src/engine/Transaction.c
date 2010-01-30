@@ -334,11 +334,6 @@ xaccTransSortSplits (Transaction *trans)
   GList *node, *new_list = NULL;
   Split *split;
 
-  /* Don't bother if shutting down */
-  if (qof_book_shutting_down(qof_instance_get_book(trans))) {
-      return;
-  }
-
   /* first debits */
   for (node = trans->splits; node; node = node->next) {
     split = node->data;
@@ -456,8 +451,6 @@ xaccFreeTransaction (Transaction *trans)
 {
   GList *node;
 
-  if (qof_book_shutting_down(qof_instance_get_book(trans)))
-      PINFO("xaccFreeTransaction(%p)\n", trans);
   if (!trans) return;
 
   ENTER ("(addr=%p)", trans);
@@ -964,14 +957,10 @@ xaccTransDestroy (Transaction *trans)
 {
   if (!trans) return;
 
-  if (qof_book_shutting_down(qof_instance_get_book(trans)))
-      PINFO("xaccTransDestroy(%p)\n", trans);
   if (!xaccTransGetReadOnly (trans) || 
       qof_book_shutting_down(qof_instance_get_book(trans))) {
       xaccTransBeginEdit(trans);
       qof_instance_set_destroying(trans, TRUE);
-      if (qof_book_shutting_down(qof_instance_get_book(trans)))
-          PINFO("xaccTransDestroy(%p): set destroying\n", trans);
       xaccTransCommitEdit(trans);
   }
 }
@@ -1002,9 +991,6 @@ do_destroy (Transaction *trans)
   SplitList *node;
   gboolean shutting_down = qof_book_shutting_down(qof_instance_get_book(trans));
 
-  if (shutting_down)
-      PINFO("do_destroy(%p)\n", trans);
-
   /* If there are capital-gains transactions associated with this, 
    * they need to be destroyed too.  */
   destroy_gains (trans);
@@ -1016,24 +1002,13 @@ do_destroy (Transaction *trans)
   qof_event_gen (&trans->inst, QOF_EVENT_DESTROY, NULL);
 
   /* We only own the splits that still think they belong to us. */
-  if (shutting_down) {
-      while (trans->splits != NULL) {
-	    Split* s;
-        node = g_list_first(trans->splits);
-	    s = node->data;
-	    trans->splits = g_list_remove_link(trans->splits, node);
-	    xaccSplitDestroy(s);
-	    xaccSplitCommitEdit(s);
+  trans->splits = g_list_copy(trans->splits);
+  for (node = trans->splits; node; node = node->next) {
+      Split *s = node->data;
+      if (s->parent == trans) {
+          xaccSplitDestroy(s);
+          xaccSplitCommitEdit(s);
       }
-  } else {
-  //  trans->splits = g_list_copy(trans->splits);
-    for (node = trans->splits; node; node = node->next) {
-        Split *s = node->data;
-        if (s->parent == trans) {
-            xaccSplitDestroy(s);
-            xaccSplitCommitEdit(s);
-	    }
-    }
   }
   g_list_free (trans->splits);
   trans->splits = NULL;
@@ -1043,7 +1018,7 @@ do_destroy (Transaction *trans)
 /********************************************************************\
 \********************************************************************/
 
-/* Temporary hack for data consistency */
+/* Temporary hack for data consitency */
 static int scrub_data = 1;
 void xaccEnableDataScrubbing(void) { scrub_data = 1; }
 void xaccDisableDataScrubbing(void) { scrub_data = 0; }
@@ -1151,7 +1126,7 @@ xaccTransCommitEdit (Transaction *trans)
     * change the number of splits in this transaction, and the 
     * transaction itself might be deleted.  This is also why
     * we can't really enforce these constraints elsewhere: they
-    * can cause pointers to splits and transactions to disappear out
+    * can cause pointers to splits and transactions to disapear out
     * from under the holder.
     */
    if (!qof_instance_get_destroying(trans) && scrub_data && 
@@ -2038,42 +2013,6 @@ xaccTransFindSplitByAccount(const Transaction *trans, const Account *acc)
     return NULL;
 }
 
-static void
-trans_destroy(Transaction* trans)
-{
-	ENTER("trans=%p", trans);
-    xaccTransDestroy(trans);
-	LEAVE("trans=%p", trans);
-}
-
-static void
-trans_xy(Transaction* trans)
-{
-    xaccTransDestroy(trans);
-}
-
-static void
-trans_book_end(QofBook* book)
-{
-	guint old_count = 0;
-	guint count;
-
-    QofCollection *col;
-    col = qof_book_get_collection (book, GNC_ID_TRANS);
-	count = qof_collection_count(col);
-	if( count == 0 ) return;
-
-	printf( "Transactions left: %d\n", count);
-	qof_collection_foreach(col, (QofInstanceForeachCB)trans_destroy, NULL);
-	printf( "Transactions left: %d\n", count);
-	while( old_count != count ) {
-	    old_count = count;
-	    qof_collection_foreach(col, (QofInstanceForeachCB)trans_destroy, NULL);
-	    count = qof_collection_count(col);
-	    printf( "Transactions left: %d\n", count);
-    }
-}
-
 /********************************************************************\
 \********************************************************************/
 /* QofObject function implementation */
@@ -2085,7 +2024,7 @@ static QofObject trans_object_def = {
   .type_label        = "Transaction",
   .create            = (gpointer)xaccMallocTransaction,
   .book_begin        = NULL,
-  .book_end          = trans_book_end,
+  .book_end          = NULL,
   .is_dirty          = qof_collection_is_dirty,
   .mark_clean        = qof_collection_mark_clean,
   .foreach           = qof_collection_foreach,
