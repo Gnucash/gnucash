@@ -203,8 +203,12 @@ gnc_get_current_book (void)
 void
 gnc_set_current_book_tax_name (const gchar *tax_name)
 {
-    kvp_frame_set_string (qof_book_get_slots (gnc_get_current_book()),
+	QofBook* current_book = gnc_get_current_book();
+
+    qof_book_begin_edit(current_book);
+    kvp_frame_set_string (qof_book_get_slots (current_book),
                           "book/tax_US/name", tax_name);
+    qof_book_commit_edit(current_book);
 }
 
 const gchar *

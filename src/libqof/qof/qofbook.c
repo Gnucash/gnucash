@@ -461,6 +461,36 @@ gboolean qof_book_use_trading_accounts (const QofBook *book)
     return FALSE;
 }
 
+void
+qof_book_begin_edit (QofBook *book)
+{
+  qof_begin_edit(&book->inst);
+}
+
+static void commit_err (QofInstance *inst, QofBackendError errcode)
+{
+  PERR ("Failed to commit: %d", errcode);
+//  gnc_engine_signal_commit_error( errcode );
+}
+
+#if 0
+static void lot_free(QofInstance* inst)
+{
+	GNCLot* lot = GNC_LOT(inst);
+
+	gnc_lot_free(lot);
+}
+#endif
+
+static void noop (QofInstance *inst) {}
+
+void
+qof_book_commit_edit(QofBook *book)
+{
+  if (!qof_commit_edit (QOF_INSTANCE(book))) return;
+  qof_commit_edit_part2 (&book->inst, commit_err, noop, noop/*lot_free*/);
+}
+
 /* QofObject function implementation and registration */
 gboolean qof_book_register (void)
 {

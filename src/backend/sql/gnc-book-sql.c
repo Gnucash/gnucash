@@ -149,8 +149,10 @@ load_single_book( GncSqlBackend* be, GncSqlRow* row )
 	    pBook = gnc_book_new();
 	}
 
+	qof_book_begin_edit( pBook );
     gnc_sql_load_object( be, row, GNC_ID_BOOK, pBook, col_table );
     gnc_sql_slots_load( be, QOF_INSTANCE(pBook) );
+	qof_book_commit_edit( pBook );
 
     qof_instance_mark_clean( QOF_INSTANCE(pBook) );
 }

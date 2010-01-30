@@ -278,6 +278,9 @@ gboolean qof_book_equal (const QofBook *book_1, const QofBook *book_2);
  */
 gint64 qof_book_get_counter (const QofBook *book, const char *counter_name);
 
+void qof_book_begin_edit(QofBook *book);
+void qof_book_commit_edit(QofBook *book);
+
 /** deprecated */
 #define qof_book_get_guid(X) qof_entity_get_guid (QOF_INSTANCE(X))
 
