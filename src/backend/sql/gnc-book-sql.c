@@ -203,11 +203,17 @@ create_book_tables( GncSqlBackend* be )
 gboolean
 gnc_sql_save_book( GncSqlBackend* be, QofInstance* inst)
 {
+	gboolean status;
+
 	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( inst != NULL, FALSE );
 	g_return_val_if_fail( QOF_IS_BOOK(inst), FALSE );
 
-	return gnc_sql_commit_standard_item( be, inst, BOOK_TABLE, GNC_ID_BOOK, col_table );
+	status = gnc_sql_commit_standard_item( be, inst, BOOK_TABLE, GNC_ID_BOOK, col_table );
+
+	qof_book_mark_saved( QOF_BOOK(inst) );
+
+	return status;
 }
 
 /* ================================================================= */

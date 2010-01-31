@@ -200,36 +200,31 @@ gnc_get_current_book (void)
     return qof_session_get_book (gnc_get_current_session ());
 }
 
+#define OPTION_TAXUS_NAME "book/tax_US/name"
+#define OPTION_TAXUS_TYPE "book/tax_US/type"
+
 void
 gnc_set_current_book_tax_name (const gchar *tax_name)
 {
-	QofBook* current_book = gnc_get_current_book();
-
-    qof_book_begin_edit(current_book);
-    kvp_frame_set_string (qof_book_get_slots (current_book),
-                          "book/tax_US/name", tax_name);
-    qof_book_commit_edit(current_book);
+	qof_book_set_string_option(gnc_get_current_book(), OPTION_TAXUS_NAME, tax_name);
 }
 
 const gchar *
 gnc_get_current_book_tax_name (void)
 {
-    return kvp_frame_get_string (qof_book_get_slots (gnc_get_current_book()),
-                                 "book/tax_US/name");
+    return qof_book_get_string_option(gnc_get_current_book(), OPTION_TAXUS_NAME);
 }
 
 void
 gnc_set_current_book_tax_type (const gchar *tax_type)
 {
-    kvp_frame_set_string(qof_book_get_slots(gnc_get_current_book()),
-                         "book/tax_US/type", tax_type);
+    qof_book_set_string_option(gnc_get_current_book(), OPTION_TAXUS_TYPE, tax_type);
 }
 
 const gchar *
 gnc_get_current_book_tax_type (void)
 {
-    return kvp_frame_get_string(qof_book_get_slots(gnc_get_current_book()),
-                                "book/tax_US/type");
+    return qof_book_get_string_option(gnc_get_current_book(), OPTION_TAXUS_TYPE);
 }
 
 Account *

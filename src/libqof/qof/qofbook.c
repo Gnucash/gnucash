@@ -262,7 +262,9 @@ qof_book_set_backend (QofBook *book, QofBackend *be)
 
 void qof_book_kvp_changed (QofBook *book)
 {
+	qof_book_begin_edit(book);
     qof_book_mark_dirty(book);
+	qof_book_commit_edit(book);
 }
 
 /* ====================================================================== */
@@ -441,7 +443,8 @@ qof_book_get_counter (const QofBook *book, const char *counter_name)
 }
 
 /* Determine whether this book uses trading accounts */
-gboolean qof_book_use_trading_accounts (const QofBook *book)
+gboolean
+qof_book_use_trading_accounts (const QofBook *book)
 {
     const char *opt;
     kvp_value *kvp_val;
@@ -459,6 +462,21 @@ gboolean qof_book_use_trading_accounts (const QofBook *book)
     if (opt && opt[0] == 't' && opt[1] == 0)
         return TRUE;
     return FALSE;
+}
+
+const char*
+qof_book_get_string_option(const QofBook* book, const char* opt_name)
+{
+    return kvp_frame_get_string(qof_book_get_slots(book), opt_name);
+}
+
+void
+qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val)
+{
+    qof_book_begin_edit(book);
+    kvp_frame_set_string(qof_book_get_slots(book), opt_name, opt_val);
+	qof_book_mark_dirty(book);
+    qof_book_commit_edit(book);
 }
 
 void

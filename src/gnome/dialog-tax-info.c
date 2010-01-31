@@ -1012,7 +1012,6 @@ identity_edit_response_cb (GtkDialog *dialog, gint response, gpointer data)
            {
               ti_dialog->tax_type_changed = TRUE;
               gnc_set_current_book_tax_type (entry_type);
-              qof_book_kvp_changed(ti_dialog->this_book);
               ti_dialog->tax_type = g_strdup (entry_type);
               if (entry_type != NULL)
               {
@@ -1041,7 +1040,6 @@ identity_edit_response_cb (GtkDialog *dialog, gint response, gpointer data)
      if (!(safe_strcmp (ti_dialog->tax_name, entry_name) == 0))
      {
         gnc_set_current_book_tax_name (entry_name);
-        qof_book_kvp_changed(ti_dialog->this_book);
         ti_dialog->tax_name = g_strdup (entry_name);
         gtk_label_set_text (GTK_LABEL (ti_dialog->entity_name_display),
                                                                     entry_name);
