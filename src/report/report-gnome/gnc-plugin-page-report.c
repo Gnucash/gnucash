@@ -976,7 +976,7 @@ static GtkActionEntry report_actions[] =
 	  G_CALLBACK (gnc_plugin_page_report_reload_cb) },
         { "ReportSaveAction", GTK_STOCK_SAVE, N_("Add _Report"), "", 
 	  N_("Add the current report to the `Custom' menu for later use. "
-	     "The report will be saved in the file ~/.gnucash/saved-reports-2.0. "
+	     "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "
 	     "It will be accessible as menu entry in the report menu at the "
 	     "next startup of GnuCash."),
           G_CALLBACK(gnc_plugin_page_report_save_cb) },
