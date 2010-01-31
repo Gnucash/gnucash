@@ -181,7 +181,7 @@
 (define (gnc:transaction-scm-get-other-split-scm trans-scm split-scm)
   (let ((split-scms (gnc:transaction-scm-get-split-scms trans-scm)))
   (cond ((not (= (length split-scms) 2)) #f)
-        ((= split-scm (car split-scms)) (cadr split-scms))
+        ((eq? split-scm (car split-scms)) (cadr split-scms))
         (else (car split-scms)))))
 
 ;; modifiers
