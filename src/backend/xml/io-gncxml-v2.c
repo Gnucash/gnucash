@@ -803,16 +803,17 @@ qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book)
 
 /***********************************************************************/
 
-static void
+static gboolean
 write_counts(FILE* out, ...)
 {
     va_list ap;
     char *type;
+    gboolean success = TRUE;
 
     va_start(ap, out);
     type = va_arg(ap, char *);
 
-    while (type)
+    while (success && type)
     {
         int amount = va_arg(ap, int);
 
@@ -832,15 +833,23 @@ write_counts(FILE* out, ...)
              * 'type' at some point. */
             xmlSetProp(node, BAD_CAST "cd:type", BAD_CAST type);
             xmlNodeAddContent(node, BAD_CAST val);
+            g_free(val);
 
             xmlElemDump(out, NULL, node);
-            fprintf(out, "\n");
-
-            g_free(val);
             xmlFreeNode(node);
+
+            if (ferror(out) || fprintf(out, "\n") < 0)
+            {
+                success = FALSE;
+                break;
+            }
 #else
-            fprintf(out, "<%s %s=\"%s\">%d</%s>\n",
-                    COUNT_DATA_TAG, "cd:type", type, amount, COUNT_DATA_TAG);
+            if (fprintf(out, "<%s %s=\"%s\">%d</%s>\n",
+                        COUNT_DATA_TAG, "cd:type", type, amount, COUNT_DATA_TAG) < 0)
+            {
+                success = FALSE;
+                break;
+            }
 #endif
 
         }
@@ -849,6 +858,7 @@ write_counts(FILE* out, ...)
     }
 
     va_end(ap);
+    return success;
 }
 
 static gint
@@ -868,10 +878,10 @@ compare_commodity_ids(gconstpointer a, gconstpointer b)
                        gnc_commodity_get_mnemonic(cb)));
 }
 
-static void write_pricedb (FILE *out, QofBook *book, sixtp_gdv2 *gd);
-static void write_transactions (FILE *out, QofBook *book, sixtp_gdv2 *gd);
-static void write_template_transaction_data (FILE *out, QofBook *book, sixtp_gdv2 *gd);
-static void write_schedXactions(FILE *out, QofBook *book, sixtp_gdv2 *gd);
+static gboolean write_pricedb (FILE *out, QofBook *book, sixtp_gdv2 *gd);
+static gboolean write_transactions (FILE *out, QofBook *book, sixtp_gdv2 *gd);
+static gboolean write_template_transaction_data (FILE *out, QofBook *book, sixtp_gdv2 *gd);
+static gboolean write_schedXactions(FILE *out, QofBook *book, sixtp_gdv2 *gd);
 static void write_budget (QofInstance *ent, gpointer data);
 
 static void
@@ -898,11 +908,11 @@ write_data_cb (const char *type, gpointer data_p, gpointer be_data_p)
     g_return_if_fail (type && data && be_data);
     g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
 
-    if (data->write)
+    if (data->write && !ferror(be_data->out))
         (data->write)(be_data->out, be_data->book);
 }
 
-static void
+static gboolean
 write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 {
     struct file_backend be_data;
@@ -919,72 +929,79 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 
     if (!node)
     {
-        return;
+        return FALSE;
     }
 
     xmlElemDump(out, NULL, node);
-    if (fprintf(out, "\n") < 0)
+    xmlFreeNode(node);
+
+    if (ferror(out) || fprintf(out, "\n") < 0)
     {
-        qof_backend_set_error(qof_book_get_backend(book), ERR_FILEIO_WRITE_ERROR);
-        return;
+        return FALSE;
     }
 
-    xmlFreeNode(node);
 #endif
 
     be_data.out = out;
     be_data.book = book;
     be_data.gd = gd;
     if (fprintf( out, "<%s version=\"%s\">\n", BOOK_TAG, gnc_v2_book_version_string) < 0)
-    {
-        qof_backend_set_error(qof_book_get_backend(book), ERR_FILEIO_WRITE_ERROR);
-        return;
-    }
-    write_book_parts (out, book);
+        return FALSE;
+    if (!write_book_parts (out, book))
+        return FALSE;
 
     /* gd->counter.{foo}_total fields should have all these totals
        already collected.  I don't know why we're re-calling all these
        functions.  */
-    write_counts(out,
-                 "commodity",
-                 gnc_commodity_table_get_size(
-                     gnc_book_get_commodity_table(book)),
-                 "account",
-                 1 + gnc_account_n_descendants(gnc_book_get_root_account(book)),
-                 "transaction",
-                 gnc_book_count_transactions(book),
-                 "schedxaction",
-                 g_list_length(gnc_book_get_schedxactions(book)->sx_list),
-                 "budget", qof_collection_count(
-                     qof_book_get_collection(book, GNC_ID_BUDGET)),
-                 NULL);
+    if (!write_counts(out,
+                      "commodity",
+                      gnc_commodity_table_get_size(
+                          gnc_book_get_commodity_table(book)),
+                      "account",
+                      1 + gnc_account_n_descendants(gnc_book_get_root_account(book)),
+                      "transaction",
+                      gnc_book_count_transactions(book),
+                      "schedxaction",
+                      g_list_length(gnc_book_get_schedxactions(book)->sx_list),
+                      "budget", qof_collection_count(
+                          qof_book_get_collection(book, GNC_ID_BUDGET)),
+                      NULL))
+        return FALSE;
 
     qof_object_foreach_backend (GNC_FILE_BACKEND, write_counts_cb, &be_data);
 
-    write_commodities(out, book, gd);
-    write_pricedb(out, book, gd);
-    write_accounts(out, book, gd);
-    write_transactions(out, book, gd);
-    write_template_transaction_data(out, book, gd);
-    write_schedXactions(out, book, gd);
+    if (ferror(out)
+        || !write_commodities(out, book, gd)
+        || !write_pricedb(out, book, gd)
+        || !write_accounts(out, book, gd)
+        || !write_transactions(out, book, gd)
+        || !write_template_transaction_data(out, book, gd)
+        || !write_schedXactions(out, book, gd))
+
+        return FALSE;
 
     qof_collection_foreach(qof_book_get_collection(book, GNC_ID_BUDGET),
                            write_budget, &be_data);
+    if (ferror(out))
+        return FALSE;
 
     qof_object_foreach_backend (GNC_FILE_BACKEND, write_data_cb, &be_data);
+    if (ferror(out))
+        return FALSE;
 
     if (fprintf( out, "</%s>\n", BOOK_TAG ) < 0)
-    {
-        qof_backend_set_error(qof_book_get_backend(book), ERR_FILEIO_WRITE_ERROR);
-    }
+        return FALSE;
+
+    return TRUE;
 }
 
-void
+gboolean
 write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 {
     gnc_commodity_table *tbl;
     GList *namespaces;
     GList *lp;
+    gboolean success = TRUE;
 
     tbl = gnc_book_get_commodity_table(book);
 
@@ -994,7 +1011,7 @@ write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd)
         namespaces = g_list_sort(namespaces, compare_namespaces);
     }
 
-    for (lp = namespaces; lp; lp = lp->next)
+    for (lp = namespaces; success && lp; lp = lp->next)
     {
         GList *comms, *lp2;
         xmlNodePtr comnode;
@@ -1009,7 +1026,11 @@ write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd)
                 continue;
 
             xmlElemDump(out, NULL, comnode);
-            fprintf(out, "\n");
+            if (ferror(out) || fprintf(out, "\n") < 0)
+            {
+                success = FALSE;
+                break;
+            }
 
             xmlFreeNode(comnode);
             gd->counter.commodities_loaded++;
@@ -1020,9 +1041,11 @@ write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd)
     }
 
     if (namespaces) g_list_free (namespaces);
+
+    return success;
 }
 
-static void
+static gboolean
 write_pricedb(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 {
     xmlNodePtr node;
@@ -1031,13 +1054,16 @@ write_pricedb(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 
     if (!node)
     {
-        return;
+        return TRUE;
     }
 
     xmlElemDump(out, NULL, node);
-    fprintf(out, "\n");
-
     xmlFreeNode(node);
+
+    if (ferror(out) || fprintf(out, "\n") < 0)
+        return FALSE;
+
+    return TRUE;
 }
 
 static int
@@ -1049,27 +1075,30 @@ xml_add_trn_data(Transaction *t, gpointer data)
     node = gnc_transaction_dom_tree_create(t);
 
     xmlElemDump(be_data->out, NULL, node);
-    fprintf(be_data->out, "\n");
-
     xmlFreeNode(node);
+
+    if (ferror(be_data->out) || fprintf(be_data->out, "\n") < 0)
+        return -1;
+
     be_data->gd->counter.transactions_loaded++;
     run_callback(be_data->gd, "transaction");
     return 0;
 }
 
-static void
+static gboolean
 write_transactions(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 {
     struct file_backend be_data;
 
     be_data.out = out;
     be_data.gd = gd;
-    xaccAccountTreeForEachTransaction(gnc_book_get_root_account(book),
-                                      xml_add_trn_data,
-                                      (gpointer) &be_data);
+    return 0 ==
+        xaccAccountTreeForEachTransaction(gnc_book_get_root_account(book),
+                                          xml_add_trn_data,
+                                          (gpointer) &be_data);
 }
 
-static void
+static gboolean
 write_template_transaction_data( FILE *out, QofBook *book, sixtp_gdv2 *gd )
 {
     Account *ra;
@@ -1081,14 +1110,18 @@ write_template_transaction_data( FILE *out, QofBook *book, sixtp_gdv2 *gd )
     ra = gnc_book_get_template_root(book);
     if ( gnc_account_n_descendants(ra) > 0 )
     {
-        fprintf( out, "<%s>\n", TEMPLATE_TRANSACTION_TAG );
-        write_account_tree( out, ra, gd );
-        xaccAccountTreeForEachTransaction( ra, xml_add_trn_data, (gpointer)&be_data );
-        fprintf( out, "</%s>\n", TEMPLATE_TRANSACTION_TAG );
+        if (fprintf(out, "<%s>\n", TEMPLATE_TRANSACTION_TAG) < 0
+            || !write_account_tree(out, ra, gd)
+            || xaccAccountTreeForEachTransaction(ra, xml_add_trn_data, (gpointer)&be_data)
+            || fprintf(out, "</%s>\n", TEMPLATE_TRANSACTION_TAG) < 0)
+
+            return FALSE;
     }
+
+    return TRUE;
 }
 
-static void
+static gboolean
 write_schedXactions( FILE *out, QofBook *book, sixtp_gdv2 *gd)
 {
     GList *schedXactions;
@@ -1097,20 +1130,23 @@ write_schedXactions( FILE *out, QofBook *book, sixtp_gdv2 *gd)
 
     schedXactions = gnc_book_get_schedxactions(book)->sx_list;
 
-    if ( schedXactions == NULL )
-        return;
+    if (schedXactions == NULL)
+        return TRUE;
 
     do
     {
         tmpSX = schedXactions->data;
         node = gnc_schedXaction_dom_tree_create( tmpSX );
         xmlElemDump( out, NULL, node );
-        fprintf( out, "\n" );
-        xmlFreeNode( node );
+        xmlFreeNode(node);
+        if (ferror(out) || fprintf(out, "\n") < 0)
+            return FALSE;
         gd->counter.schedXactions_loaded++;
         run_callback(gd, "schedXactions");
     }
     while ( (schedXactions = schedXactions->next) );
+
+    return TRUE;
 }
 
 static void
@@ -1120,21 +1156,26 @@ write_budget (QofInstance *ent, gpointer data)
     struct file_backend* be = data;
 
     GncBudget *bgt = GNC_BUDGET(ent);
+
+    if (ferror(be->out))
+        return;
+
     node = gnc_budget_dom_tree_create(bgt);
     xmlElemDump( be->out, NULL, node );
-    fprintf( be->out, "\n" );
-    xmlFreeNode( node );
+    xmlFreeNode(node);
+    if (ferror(be->out) || fprintf(be->out, "\n") < 0)
+        return;
 
     be->gd->counter.budgets_loaded++;
     run_callback(be->gd, "budgets");
 }
 
-void
+gboolean
 gnc_xml2_write_namespace_decl (FILE *out, const char *namespace)
 {
-    g_return_if_fail (namespace);
-    fprintf(out, "\n     xmlns:%s=\"http://www.gnucash.org/XML/%s\"",
-            namespace, namespace);
+    g_return_val_if_fail(namespace, FALSE);
+    return fprintf(out, "\n     xmlns:%s=\"http://www.gnucash.org/XML/%s\"",
+                   namespace, namespace) >= 0;
 }
 
 static void
@@ -1146,36 +1187,41 @@ do_write_namespace_cb (const char *type, gpointer data_p, gpointer file_p)
     g_return_if_fail (type && data && out);
     g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
 
-    if (data->ns)
+    if (data->ns && !ferror(out))
         (data->ns)(out);
 }
 
-static void
+static gboolean
 write_v2_header (FILE *out)
 {
-    fprintf(out, "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n");
-    fprintf(out, "<" GNC_V2_STRING);
+    if (fprintf(out, "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n") < 0
+        || fprintf(out, "<" GNC_V2_STRING) < 0
 
-    gnc_xml2_write_namespace_decl (out, "gnc");
-    gnc_xml2_write_namespace_decl (out, "act");
-    gnc_xml2_write_namespace_decl (out, "book");
-    gnc_xml2_write_namespace_decl (out, "cd");
-    gnc_xml2_write_namespace_decl (out, "cmdty");
-    gnc_xml2_write_namespace_decl (out, "price");
-    gnc_xml2_write_namespace_decl (out, "slot");
-    gnc_xml2_write_namespace_decl (out, "split");
-    gnc_xml2_write_namespace_decl (out, "sx");
-    gnc_xml2_write_namespace_decl (out, "trn");
-    gnc_xml2_write_namespace_decl (out, "ts");
-    gnc_xml2_write_namespace_decl (out, "fs");
-    gnc_xml2_write_namespace_decl (out, "bgt");
-    gnc_xml2_write_namespace_decl (out, "recurrence");
-    gnc_xml2_write_namespace_decl (out, "lot");
+        || !gnc_xml2_write_namespace_decl (out, "gnc")
+        || !gnc_xml2_write_namespace_decl (out, "act")
+        || !gnc_xml2_write_namespace_decl (out, "book")
+        || !gnc_xml2_write_namespace_decl (out, "cd")
+        || !gnc_xml2_write_namespace_decl (out, "cmdty")
+        || !gnc_xml2_write_namespace_decl (out, "price")
+        || !gnc_xml2_write_namespace_decl (out, "slot")
+        || !gnc_xml2_write_namespace_decl (out, "split")
+        || !gnc_xml2_write_namespace_decl (out, "sx")
+        || !gnc_xml2_write_namespace_decl (out, "trn")
+        || !gnc_xml2_write_namespace_decl (out, "ts")
+        || !gnc_xml2_write_namespace_decl (out, "fs")
+        || !gnc_xml2_write_namespace_decl (out, "bgt")
+        || !gnc_xml2_write_namespace_decl (out, "recurrence")
+        || !gnc_xml2_write_namespace_decl (out, "lot"))
+
+        return FALSE;
 
     /* now cope with the plugins */
     qof_object_foreach_backend (GNC_FILE_BACKEND, do_write_namespace_cb, out);
 
-    fprintf(out, ">\n");
+    if (ferror(out) || fprintf(out, ">\n") < 0)
+        return FALSE;
+
+    return TRUE;
 }
 
 gboolean
@@ -1183,14 +1229,13 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
 {
     QofBackend *be;
     sixtp_gdv2 *gd;
+    gboolean success = TRUE;
 
     if (!out) return FALSE;
 
-    write_v2_header (out);
-
-    write_counts(out,
-                 "book", 1,
-                 NULL);
+    if (!write_v2_header(out)
+        || !write_counts(out, "book", 1, NULL))
+        return FALSE;
 
     be = qof_book_get_backend(book);
     gd = gnc_sixtp_gdv2_new(book, FALSE, file_rw_feedback, be->percentage);
@@ -1204,12 +1249,12 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
     gd->counter.budgets_total = qof_collection_count(
                                     qof_book_get_collection(book, GNC_ID_BUDGET));
 
-    write_book(out, book, gd);
-
-    fprintf(out, "</" GNC_V2_STRING ">\n\n");
+    if (!write_book(out, book, gd)
+        || fprintf(out, "</" GNC_V2_STRING ">\n\n") < 0)
+        success = FALSE;
 
     g_free(gd);
-    return TRUE;
+    return success;
 }
 
 /*
@@ -1222,6 +1267,7 @@ gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE
     Account *root;
     int ncom, nacc;
     sixtp_gdv2 *gd;
+    gboolean success = TRUE;
 
     if (!out) return FALSE;
 
@@ -1231,25 +1277,21 @@ gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE
     table = gnc_book_get_commodity_table(book);
     ncom = gnc_commodity_table_get_size(table);
 
-    write_v2_header (out);
-
-    write_counts(out,
-                 "commodity", ncom,
-                 "account", nacc,
-                 NULL);
+    if (!write_v2_header(out)
+        || !write_counts(out, "commodity", ncom, "account", nacc, NULL))
+        return FALSE;
 
     gd = gnc_sixtp_gdv2_new(book, TRUE, file_rw_feedback, be->percentage);
     gd->counter.commodities_total = ncom;
     gd->counter.accounts_total = nacc;
 
-    write_commodities(out, book, gd);
-
-    write_accounts(out, book, gd);
-
-    fprintf(out, "</" GNC_V2_STRING ">\n\n");
+    if (!write_commodities(out, book, gd)
+        || !write_accounts(out, book, gd)
+        || fprintf(out, "</" GNC_V2_STRING ">\n\n") < 0)
+        success = FALSE;
 
     g_free(gd);
-    return TRUE;
+    return success;
 }
 
 #define BUFLEN 4096
@@ -1407,26 +1449,26 @@ gnc_book_write_to_xml_file_v2(
     gboolean compress)
 {
     FILE *out;
+    gboolean success = TRUE;
 
     out = try_gz_open(filename, "w", compress, TRUE);
-    if (out == NULL)
-    {
-        return FALSE;
-    }
 
-    gnc_book_write_to_xml_filehandle_v2 (book, out);
+    /* Try to write as much as possible */
+    if (!out
+        || !gnc_book_write_to_xml_filehandle_v2(book, out)
+        || !write_emacs_trailer(out))
+        success = FALSE;
 
-    write_emacs_trailer(out);
+    /* Close the output stream */
+    if (out && fclose(out))
+        success = FALSE;
 
-    if (fclose(out) != 0)
-    {
-        return FALSE;
-    }
+    /* Optionally wait for parallel compression threads */
+    if (out && compress)
+        if (!wait_for_gzip(out))
+            success = FALSE;
 
-    if (compress)
-        return wait_for_gzip(out);
-
-    return TRUE;
+    return success;
 }
 
 /*
@@ -1441,23 +1483,28 @@ gnc_book_write_accounts_to_xml_file_v2(
     const char *filename)
 {
     FILE *out;
+    gboolean success = TRUE;
 
     out = g_fopen(filename, "w");
-    if (out == NULL)
-    {
-        return FALSE;
+
+    /* Try to write as much as possible */
+    if (!out
+        || !gnc_book_write_accounts_to_xml_filehandle_v2 (be, book, out)
+        || !write_emacs_trailer(out))
+        success = FALSE;
+
+    /* Close the output stream */
+    if (out && fclose(out))
+        success = FALSE;
+
+    if (!success
+        && qof_backend_get_error(be) == ERR_BACKEND_NO_ERR) {
+
+        /* Use a generic write error code */
+        qof_backend_set_error(be, ERR_FILEIO_WRITE_ERROR);
     }
 
-    gnc_book_write_accounts_to_xml_filehandle_v2 (be, book, out);
-
-    write_emacs_trailer(out);
-
-    if (fclose(out) != 0)
-    {
-        return FALSE;
-    }
-
-    return TRUE;
+    return success;
 }
 
 /***********************************************************************/

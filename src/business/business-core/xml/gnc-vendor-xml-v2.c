@@ -436,26 +436,30 @@ xml_add_vendor (QofInstance * vendor_p, gpointer out_p)
   GncVendor *vendor = (GncVendor *) vendor_p;
   FILE *out = out_p;
 
+  if (ferror(out))
+    return;
   if (!vendor_should_be_saved (vendor))
     return;
 
   node = vendor_dom_tree_create (vendor);
   xmlElemDump(out, NULL, node);
-  fprintf(out, "\n");
   xmlFreeNode (node);
+  if (ferror(out) || fprintf(out, "\n") < 0)
+    return;
 }
 
-static void
+static gboolean
 vendor_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_vendor, (gpointer) out);
+  return ferror(out) == 0;
 }
 
-static void
+static gboolean
 vendor_ns(FILE *out)
 {
-  g_return_if_fail(out);
-  gnc_xml2_write_namespace_decl(out, "vendor");
+  g_return_val_if_fail(out, FALSE);
+  return gnc_xml2_write_namespace_decl(out, "vendor");
 }
 
 void

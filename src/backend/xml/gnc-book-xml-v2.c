@@ -150,21 +150,17 @@ gnc_book_dom_tree_create(QofBook *book)
 /* same as above, but we write out directly.  Only handle the guid
  * and slots, everything else is handled elsewhere */
 
-void
+gboolean
 write_book_parts(FILE *out, QofBook *book)
 {
     xmlNodePtr domnode;
 
     domnode = guid_to_dom_tree(book_id_string, qof_book_get_guid(book));
     xmlElemDump(out, NULL, domnode);
-    if (fprintf(out, "\n") < 0)
-    {
-        qof_backend_set_error(qof_book_get_backend(book),
-                              ERR_FILEIO_WRITE_ERROR);
-        xmlFreeNode(domnode);
-        return;
-    }
     xmlFreeNode (domnode);
+
+    if (ferror(out) || fprintf(out, "\n") < 0)
+         return FALSE;
 
     if (qof_book_get_slots(book))
     {
@@ -173,10 +169,14 @@ write_book_parts(FILE *out, QofBook *book)
         if (kvpnode)
         {
             xmlElemDump(out, NULL, kvpnode);
-            fprintf(out, "\n");
             xmlFreeNode(kvpnode);
+
+            if (ferror(out) || fprintf(out, "\n") < 0)
+                 return FALSE;
         }
     }
+
+    return TRUE;
 }
 
 

@@ -208,11 +208,11 @@ gnc_dom_tree_to_owner (xmlNodePtr node, GncOwner *owner, QofBook *book)
     return successful;
 }
 
-static void
+static gboolean
 owner_ns(FILE *out)
 {
-  g_return_if_fail(out);
-  gnc_xml2_write_namespace_decl(out, "owner");
+  g_return_val_if_fail(out, FALSE);
+  return gnc_xml2_write_namespace_decl(out, "owner");
 }
 
 void

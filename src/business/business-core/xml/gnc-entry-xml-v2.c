@@ -802,6 +802,9 @@ xml_add_entry (QofInstance * entry_p, gpointer out_p)
   GncEntry *entry = (GncEntry *) entry_p;
   FILE *out = out_p;
 
+  if (ferror(out))
+    return;
+
   /* Don't save non-attached entries! */
   if (!(gncEntryGetOrder (entry) || gncEntryGetInvoice (entry) ||
 	gncEntryGetBill (entry)))
@@ -809,21 +812,23 @@ xml_add_entry (QofInstance * entry_p, gpointer out_p)
 
   node = entry_dom_tree_create (entry);
   xmlElemDump(out, NULL, node);
-  fprintf(out, "\n");
   xmlFreeNode (node);
+  if (ferror(out) || fprintf(out, "\n") < 0)
+    return;
 }
 
-static void
+static gboolean
 entry_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_entry, (gpointer) out);
+  return ferror(out) == 0;
 }
 
-static void
+static gboolean
 entry_ns(FILE *out)
 {
-  g_return_if_fail(out);
-  gnc_xml2_write_namespace_decl(out, "entry");
+  g_return_val_if_fail(out, FALSE);
+  return gnc_xml2_write_namespace_decl(out, "entry");
 }
 
 void

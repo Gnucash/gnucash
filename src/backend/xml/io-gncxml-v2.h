@@ -106,9 +106,9 @@ typedef struct
     sixtp *	(*create_parser) (void);
     gboolean	(*add_item)(sixtp_gdv2 *, gpointer obj);
     int	      (*get_count) (QofBook *);
-    void		(*write) (FILE*, QofBook*);
+    gboolean	(*write) (FILE*, QofBook*);
     void		(*scrub) (QofBook *);
-    void		(*ns) (FILE*);
+    gboolean	(*ns) (FILE*);
 } GncXmlDataType_t;
 
 /**
@@ -147,7 +147,7 @@ gboolean gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding);
 /** Write a name-space declaration for the provided namespace data type
  * within the GNC XML namespace at http://www.gnucash.org/XML.
  */
-void gnc_xml2_write_namespace_decl (FILE *out, const char *namespace);
+gboolean gnc_xml2_write_namespace_decl (FILE *out, const char *namespace);
 
 
 typedef struct

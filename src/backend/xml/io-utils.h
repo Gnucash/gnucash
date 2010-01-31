@@ -30,12 +30,12 @@
 #include "io-gncxml-v2.h"
 #include "qof.h"
 
-void write_account_tree(FILE *out, Account *root, sixtp_gdv2 *gd);
-void write_accounts(FILE *out, QofBook *book, sixtp_gdv2 *gd);
-void write_book_parts(FILE *out, QofBook *book);
-void write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd);
+gboolean write_account_tree(FILE *out, Account *root, sixtp_gdv2 *gd);
+gboolean write_accounts(FILE *out, QofBook *book, sixtp_gdv2 *gd);
+gboolean write_book_parts(FILE *out, QofBook *book);
+gboolean write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd);
 
-void write_emacs_trailer(FILE *out);
+gboolean write_emacs_trailer(FILE *out);
 
 
 #endif /* IO_UTILS_H */

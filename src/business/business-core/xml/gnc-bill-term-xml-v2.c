@@ -503,16 +503,21 @@ xml_add_billterm (QofInstance *term_p, gpointer out_p)
   GncBillTerm *term = (GncBillTerm *) term_p;
   FILE *out = out_p;
 
+  if (ferror(out))
+    return;
+
   node = billterm_dom_tree_create (term);
   xmlElemDump(out, NULL, node);
-  fprintf(out, "\n");
   xmlFreeNode (node);
+  if (ferror(out) || fprintf(out, "\n") < 0)
+    return;
 }
 
-static void
+static gboolean
 billterm_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_billterm, (gpointer) out);
+  return ferror(out) == 0;
 }
 
 static gboolean
@@ -707,13 +712,14 @@ billterm_scrub (QofBook *book)
   g_hash_table_destroy(ht);
 }
 
-static void
+static gboolean
 billterm_ns(FILE *out)
 {
-  g_return_if_fail(out);
-  gnc_xml2_write_namespace_decl(out, "billterm");
-  gnc_xml2_write_namespace_decl(out, "bt-days");
-  gnc_xml2_write_namespace_decl(out, "bt-prox");
+  g_return_val_if_fail(out, FALSE);
+  return
+    gnc_xml2_write_namespace_decl(out, "billterm")
+    && gnc_xml2_write_namespace_decl(out, "bt-days")
+    && gnc_xml2_write_namespace_decl(out, "bt-prox");
 }
 
 void

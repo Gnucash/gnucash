@@ -210,11 +210,11 @@ gnc_dom_tree_to_address (xmlNodePtr node, GncAddress *address)
     return successful;
 }
 
-static void
+static gboolean
 address_ns(FILE *out)
 {
-  g_return_if_fail(out);
-  gnc_xml2_write_namespace_decl(out, "addr");
+    g_return_val_if_fail(out, FALSE);
+    return gnc_xml2_write_namespace_decl(out, "addr");
 }
 
 void

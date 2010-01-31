@@ -310,26 +310,30 @@ xml_add_job (QofInstance * job_p, gpointer out_p)
   GncJob *job = (GncJob *) job_p;
   FILE *out = out_p;
 
+  if (ferror(out))
+    return;
   if (!job_should_be_saved (job))
     return;
 
   node = job_dom_tree_create (job);
   xmlElemDump(out, NULL, node);
-  fprintf(out, "\n");
   xmlFreeNode (node);
+  if (ferror(out) || fprintf(out, "\n") < 0)
+    return;
 }
 
-static void
+static gboolean
 job_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_job, (gpointer) out);
+  return ferror(out) == 0;
 }
 
-static void
+static gboolean
 job_ns(FILE *out)
 {
-  g_return_if_fail(out);
-  gnc_xml2_write_namespace_decl(out, "job");
+  g_return_val_if_fail(out, FALSE);
+  return gnc_xml2_write_namespace_decl(out, "job");
 }
 
 void

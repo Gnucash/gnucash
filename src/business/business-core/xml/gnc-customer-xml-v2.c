@@ -492,26 +492,30 @@ xml_add_customer (QofInstance * cust_p, gpointer out_p)
   GncCustomer *cust = (GncCustomer *) cust_p;
   FILE *out = out_p;
 
+  if (ferror(out))
+    return;
   if (!customer_should_be_saved (cust))
     return;
 
   node = customer_dom_tree_create (cust);
   xmlElemDump(out, NULL, node);
-  fprintf(out, "\n");
   xmlFreeNode (node);
+  if (ferror(out) || fprintf(out, "\n") < 0)
+    return;
 }
 
-static void
+static gboolean
 customer_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_customer, (gpointer) out);
+  return ferror(out) == 0;
 }
 
-static void
+static gboolean
 customer_ns(FILE *out)
 {
-  g_return_if_fail(out);
-  gnc_xml2_write_namespace_decl(out, "cust");
+  g_return_val_if_fail(out, FALSE);
+  return gnc_xml2_write_namespace_decl(out, "cust");
 }
 
 void

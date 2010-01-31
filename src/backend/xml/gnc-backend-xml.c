@@ -715,6 +715,9 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
                   tmp_name ? tmp_name : "(null)",
                   strerror(errno) ? strerror(errno) : "");
             /* already in an error just flow on through */
+        } else {
+             /* Use a generic write error code */
+             qof_backend_set_error(be, ERR_FILEIO_WRITE_ERROR);
         }
         g_free(tmp_name);
         LEAVE("");

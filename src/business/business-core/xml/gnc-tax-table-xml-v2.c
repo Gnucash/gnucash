@@ -466,16 +466,21 @@ xml_add_taxtable (QofInstance * table_p, gpointer out_p)
   GncTaxTable *table = (GncTaxTable *) table_p;
   FILE *out = out_p;
 
+  if (ferror(out))
+    return;
+
   node = taxtable_dom_tree_create (table);
   xmlElemDump(out, NULL, node);
-  fprintf(out, "\n");
   xmlFreeNode (node);
+  if (ferror(out) || fprintf(out, "\n") < 0)
+    return;
 }
 
-static void
+static gboolean
 taxtable_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_taxtable, (gpointer) out);
+  return ferror(out) == 0;
 }
 
 
@@ -659,12 +664,13 @@ taxtable_scrub (QofBook *book)
   g_hash_table_destroy(ht);
 }
 
-static void
+static gboolean
 taxtable_ns(FILE *out)
 {
-  g_return_if_fail(out);
-  gnc_xml2_write_namespace_decl(out, "taxtable");
-  gnc_xml2_write_namespace_decl(out, "tte");
+  g_return_val_if_fail(out, FALSE);
+  return
+    gnc_xml2_write_namespace_decl(out, "taxtable")
+    && gnc_xml2_write_namespace_decl(out, "tte");
 }
 
 void
