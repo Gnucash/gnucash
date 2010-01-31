@@ -567,35 +567,46 @@
 (define gnc:current-saved-reports
   (gnc-build-dotgnucash-path "saved-reports-2.4"))
 
+(define (gnc:open-saved-reports mode)
+  (let ((conf-file-name gnc:current-saved-reports))
+    (catch #t
+           (lambda () (open-file conf-file-name mode))
+           (lambda (key . args)
+             (gnc-error-dialog
+              '()
+              (string-append (_ "Could not open the file: ") conf-file-name (_ ". The error is: ") (symbol->string key) " - " (car (caddr args)) "."))
+             #f))))
+
 (define (gnc:report-save-to-savefile report)
-  (let* ((conf-file-name gnc:current-saved-reports)
-         (saved-form (gnc:report-generate-saved-forms report))
+  (let* ((saved-form (gnc:report-generate-saved-forms report))
          ;; Immediate evaluate the saved form to both load it into the
          ;; runtime, but also so we can check if it's "allowed" to actually
          ;; be written to the saved reports file by inspecting the result.
          ;; #Bug#342206.
          (save-result (eval-string saved-form)))
     (if (record? save-result)
-        (let ((report-port (open-file conf-file-name "a")))
-          (display saved-form report-port)
-          (close report-port)
-	      (let ((report-name (gnc:report-name report)))
-		(gnc-info-dialog
-		 '()
-		 (sprintf 
-		  #f (_ "Your report \"%s\" has been saved into the configuration file \"%s\".")
-		  (if (and report-name (not (string-null? report-name)))
-		      (gnc:gettext report-name)
-		      (gnc:gettext "Untitled"))
-		  conf-file-name)))
-	  ))))
+        (let ((report-port (gnc:open-saved-reports "a")))
+          (if report-port
+              (begin
+                (display saved-form report-port)
+                (close report-port)
+                (let ((report-name (gnc:report-name report)))
+                  (gnc-info-dialog
+                   '()
+                   (sprintf
+                    #f (_ "Your report \"%s\" has been saved into the configuration file \"%s\".")
+                    (if (and report-name (not (string-null? report-name)))
+                        (gnc:gettext report-name)
+                        (gnc:gettext "Untitled"))
+                    gnc:current-saved-reports)))
+                ))))))
 
 (define (gnc:report-template-save-to-savefile report-template)
-  (let* ((conf-file-name gnc:current-saved-reports)
-	(saved-form (gnc:report-template-generate-saved-forms report-template))
-	(report-port (open-file conf-file-name "a")))
-    (display saved-form report-port)
-    (close report-port)))
+  (let* ((report-port (gnc:open-saved-reports "a")))
+    (if report-port
+        (let ((saved-form (gnc:report-template-generate-saved-forms report-template)))
+          (display saved-form report-port)
+          (close report-port)))))
 
 ;; save all custom reports, moving the old version of the
 ;; saved-reports file aside as a backup
