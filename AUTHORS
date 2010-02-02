@@ -173,8 +173,10 @@ Ori Hoch <ori@uumpa.com> Hebrew translation
 Péter Hosszú <hosszu@web.de> Hungarian translation
 Edward J. Huff <ejhuff@huff20may77.us> Date handling in reports, quarterly option
 Tomokazu Iwashita <iwashita@center.nitech.ac.jp> Japanese translation of xea
+Geert Janssens <janssens-geert@telenet.be> GUI fixes for Lots, autocompletion in gnc-general-search, several small fixes
 David Jafferian <david.jafferian@east.sun.com> Delete account query code.
 Mark Jenkins <mark@parit.ca> Python bindings, with grant funding from Assiniboine Credit Union (http://assiniboine.mb.ca/) and Legal Aid Manitoba (http://www.legalaid.mb.ca/)
+Rich Johnson <rich@dogstar-interactive.com> Mac OS X patch
 Miquel Jordana Vilamitjana <jjvmjv@mundomail.net> Spanish translation of manual
 Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Alexey Kakunin <small@arcadia.spb.ru> quickfill patch for Cyrillic
@@ -187,8 +189,6 @@ Fabrice Kurz <kurzf@voila.fr> French translation
 Eneko Lacunza <enlar@enlar.net> Spanish Translation
 Bryan Larsen <blarsen@ada-works.com> guile budget report
 Chris J (Oakton) Leach <LeachCJ@az1.bp.com> autoconf patch
-Geert Jan Janssens <janssens.geert@advalvas.be> GUI fixes for Lots
-Rich Johnson <rich@dogstar-interactive.com> Mac OS X patch
 Nicholas Lee <nj.lee@plumtree.co.nz> scheme bug fix
 Graham Leggett <minfrin@sharp.fm> for fixing a hang
 Rolf Leggewie <foss@rolf.leggewie.biz> SKR04 and gnucash for german business
