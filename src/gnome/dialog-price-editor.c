@@ -379,7 +379,7 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
   pedit_dialog->namespace_cbe = w;
   gtk_combo_box_remove_text(GTK_COMBO_BOX(pedit_dialog->namespace_cbe), 0);
   gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(pedit_dialog->namespace_cbe));
-  gnc_ui_update_namespace_picker(w, NULL, DIAG_COMM_NON_CURRENCY);
+  gnc_ui_update_namespace_picker(w, NULL, DIAG_COMM_ALL);
 
   w = glade_xml_get_widget (xml, "commodity_cbe");
   pedit_dialog->commodity_cbe = w;
