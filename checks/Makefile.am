@@ -20,6 +20,7 @@ EXTRA_DIST = \
 	liberty.chk \
 	quicken.chk \
 	quicken_wallet.chk \
+	voucher.chk \
 	gnomeprint/deluxe.chk \
 	gnomeprint/quicken.chk \
 	gnomeprint/quicken_wallet.chk
