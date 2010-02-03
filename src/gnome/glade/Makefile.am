@@ -2,6 +2,7 @@ gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
 	account.glade \
 	acctperiod.glade \
+	autoclear.glade \
 	budget.glade \
 	chart-export.glade \
 	commodities.glade \

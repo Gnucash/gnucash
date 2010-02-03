@@ -62,6 +62,7 @@
 #include "gnc-ui-util.h"
 #include "lot-viewer.h"
 #include "window-reconcile.h"
+#include "window-autoclear.h"
 #include "window-main-summarybar.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -130,6 +131,7 @@ static void gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, 
 static void gnc_plugin_page_account_tree_cmd_renumber_accounts (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_view_filter_by (GtkAction *action, GncPluginPageAccountTree *plugin_page);
 static void gnc_plugin_page_account_tree_cmd_reconcile (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_autoclear (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_transfer (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_stock_split (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_lots (GtkAction *action, GncPluginPageAccountTree *page);
@@ -178,6 +180,9 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "ActionsReconcileAction", NULL, N_("_Reconcile..."), NULL,
 	  N_("Reconcile the selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_reconcile) },
+	{ "ActionsAutoClearAction", NULL, N_("_Auto-clear..."), NULL,
+	  N_("Automatically clear individual transactions, given a cleared amount"),
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_autoclear) },
 	{ "ActionsTransferAction", NULL, N_("_Transfer..."), "<control>t",
 	  N_("Transfer funds from one account to another"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_transfer) },
@@ -210,6 +215,7 @@ static const gchar *actions_requiring_account[] = {
 	"EditEditAccountAction",
 	"EditDeleteAccountAction",
 	"ActionsReconcileAction",
+	"ActionsAutoClearAction",
 	"ActionsLotsAction",
 	NULL
 };
@@ -1155,6 +1161,22 @@ gnc_plugin_page_account_tree_cmd_reconcile (GtkAction *action,
 	window = GNC_PLUGIN_PAGE (page)->window;
 	recnData = recnWindow (window, account);
 	gnc_ui_reconcile_window_raise (recnData);
+}
+
+static void
+gnc_plugin_page_account_tree_cmd_autoclear (GtkAction *action,
+					    GncPluginPageAccountTree *page)
+{
+	GtkWidget *window;
+	Account *account;
+	AutoClearWindow *autoClearData;
+
+	account = gnc_plugin_page_account_tree_get_current_account (page);
+	g_return_if_fail (account != NULL);
+
+	window = GNC_PLUGIN_PAGE (page)->window;
+	autoClearData = autoClearWindow (window, account);
+	gnc_ui_autoclear_window_raise (autoClearData);
 }
 
 static void

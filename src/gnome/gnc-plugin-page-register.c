@@ -73,6 +73,7 @@
 #include "Scrub.h"
 #include "QueryNew.h"
 #include "window-reconcile.h"
+#include "window-autoclear.h"
 #include "window-report.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -133,6 +134,7 @@ static void gnc_plugin_page_register_cmd_style_changed (GtkAction *action, GtkRa
 static void gnc_plugin_page_register_cmd_style_double_line (GtkToggleAction *action, GncPluginPageRegister *plugin_page);
 
 static void gnc_plugin_page_register_cmd_reconcile (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_autoclear (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_transfer (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_stock_split (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_lots (GtkAction *action, GncPluginPageRegister *plugin_page);
@@ -241,6 +243,9 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "ActionsReconcileAction", GTK_STOCK_INDEX, N_("_Reconcile..."), NULL,
 	  N_("Reconcile the selected account"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_reconcile) },
+	{ "ActionsAutoClearAction", GTK_STOCK_INDEX, N_("_Auto-clear..."), NULL,
+	  N_("Automatically clear individual transactions, so as to reach a certain cleared amount"),
+	  G_CALLBACK (gnc_plugin_page_register_cmd_autoclear) },
 	{ "ActionsStockSplitAction", NULL, N_("Stoc_k Split..."), NULL,
 	  N_("Record a stock split or a stock merger"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_stock_split) },
@@ -315,6 +320,7 @@ static const gchar *important_actions[] = {
 static const gchar *actions_requiring_account[] = {
 	"EditEditAccountAction",
 	"ActionsReconcileAction",
+	"ActionsAutoClearAction",
 	"ActionsLotsAction",
 	NULL
 };
@@ -340,6 +346,7 @@ static action_toolbar_labels toolbar_labels[] = {
   { "ScheduleTransactionAction",  N_("Schedule") },
   { "BlankTransactionAction",     N_("Blank") },
   { "ActionsReconcileAction",     N_("Reconcile") },
+  { "ActionsAutoClearAction",     N_("Auto-clear") },
   { NULL, NULL },
 };
 
@@ -2432,6 +2439,26 @@ gnc_plugin_page_register_cmd_reconcile (GtkAction *action,
   window = gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window));
   recnData = recnWindow (GTK_WIDGET(window), account);
   gnc_ui_reconcile_window_raise (recnData);
+  LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_register_cmd_autoclear (GtkAction *action,
+					GncPluginPageRegister *page)
+{
+  Account *account;
+  GtkWindow *window;
+  AutoClearWindow * autoClearData;
+
+  ENTER("(action %p, plugin_page %p)", action, page);
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+  account = gnc_plugin_page_register_get_account (page);
+
+  window = gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window));
+  autoClearData = autoClearWindow (GTK_WIDGET(window), account);
+  gnc_ui_autoclear_window_raise (autoClearData);
   LEAVE(" ");
 }
 
