@@ -4,6 +4,9 @@ gncscmmod_DATA = \
    business-reports.scm \
    easy-invoice.scm \
    fancy-invoice.scm \
+   taxinvoice.scm \
+   taxinvoice.eguile.scm \
+   taxinvoice.css \
    invoice.scm \
    job-report.scm \
    owner-report.scm \

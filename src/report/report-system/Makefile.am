@@ -54,7 +54,9 @@ gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report-system
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA = \
     report-system.scm \
-	eguile-gnc.scm
+	eguile-gnc.scm \
+	eguile-utilities.scm \
+	eguile-html-utilities.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
