@@ -528,7 +528,7 @@
   <act:parent type="guid">99b6260a8d4a093d96a6364781e4b19a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Emoulements</act:name>
+  <act:name>Emoluments</act:name>
   <act:id type="guid">0a7d53c61b7e4f033de30fa466a659c9</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
