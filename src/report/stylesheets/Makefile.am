@@ -38,6 +38,7 @@ gncscmmod_DATA = \
   stylesheet-plain.scm \
   stylesheet-css.scm \
   stylesheet-fancy.scm \
+  stylesheet-footer.scm \
   stylesheet-easy.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
