@@ -1857,7 +1857,7 @@ number_to_words(gdouble val, gint64 denom)
     /* Inside of the gettext macro _(...) we must not use any macros but
        only plain string literals. For this reason, convert the strings
        separately. */
-    nomin_string = g_strdup_printf("%" G_GINT64_FORMAT, frac_part);
+    nomin_string = g_strdup_printf("%02" G_GINT64_FORMAT, frac_part);
     denom_string = g_strdup_printf("%" G_GINT64_FORMAT, denom);
     full_string =
         /* Translators: This is for the "amount, in words" field in check
