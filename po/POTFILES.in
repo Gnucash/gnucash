@@ -207,6 +207,7 @@ src/gnome/druid-merge.c
 src/gnome/druid-stock-split.c
 src/gnome/glade/account.glade
 src/gnome/glade/acctperiod.glade
+src/gnome/glade/autoclear.glade
 src/gnome/glade/budget.glade
 src/gnome/glade/chart-export.glade
 src/gnome/glade/commodities.glade
@@ -345,6 +346,7 @@ src/gnome-utils/QuickFill.c
 src/gnome-utils/schemas/apps_gnucash_history.schemas.in
 src/gnome-utils/search-param.c
 src/gnome-utils/window-main-summarybar.c
+src/gnome/window-autoclear.c
 src/gnome/window-reconcile.c
 src/html/gnc-html.c
 src/html/gnc-html-factory.c
