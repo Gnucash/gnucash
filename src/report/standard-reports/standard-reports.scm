@@ -66,6 +66,7 @@
 	    (begin (gnc:debug "get-non-split...") (get-non-split type-info)))
 	#f)))
 
+
 ;; Returns a list of files in a directory
 ;;
 ;; Param:
@@ -73,6 +74,7 @@
 ;;
 ;; Return value:
 ;;   list of files in the directory
+
 (define (directory-files dir)
     (let ((dir-stream (opendir dir)))
         (let loop ((new (readdir dir-stream))

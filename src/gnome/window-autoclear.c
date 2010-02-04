@@ -104,7 +104,7 @@ ght_gnc_numeric_hash(gconstpointer v1)
 {
   gnc_numeric n1 = *(gnc_numeric *)v1;
   gdouble d1 = gnc_numeric_to_double(n1);
-  return g_double_hash(&d1);
+  return g_str_hash(&d1);
 }
 
 static void
@@ -160,14 +160,15 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
     gnc_numeric split_value = xaccSplitGetAmount(split);
 
     GHashTableIter iter;
-    gnc_numeric *key;
+    gnc_numeric *key = NULL;
+	gpointer pkey = (gpointer)key; 
     GList *reachable_list = 0, *node;
 
     printf("  Split value: %s\n", gnc_numeric_to_string(split_value));
 
     /* For each value in the sack */
     g_hash_table_iter_init (&iter, sack);
-    while (g_hash_table_iter_next (&iter, (gpointer *)&key, NULL))
+    while (g_hash_table_iter_next (&iter, &pkey, NULL))
     {
       /* Compute a new reachable value */
       gnc_numeric reachable_value = gnc_numeric_add_fixed(*key, split_value);
@@ -203,10 +204,11 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
   printf("Rebuilding solution ...\n");
   while (!gnc_numeric_zero_p(toclear_value))
   {
-    Split *split;
+    Split *split = NULL;
+	gpointer psplit = (gpointer)split;
 
     printf("  Left to clear: %s\n", gnc_numeric_to_string(toclear_value));
-    if (g_hash_table_lookup_extended(sack, &toclear_value, NULL, (gpointer *)&split))
+    if (g_hash_table_lookup_extended(sack, &toclear_value, NULL, &psplit))
     {
       if (split != NULL)
       {
