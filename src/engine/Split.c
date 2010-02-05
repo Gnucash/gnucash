@@ -1289,7 +1289,8 @@ xaccSplitGetCorrAccountCode(const Split *sa)
   if (!get_corr_account_split(sa, &other_split))
   {
     if (!split_const)
-      split_const = _("Split");
+      /* Translators: This string has a disambiguation prefix */
+      split_const = Q_("Displayed account code of the other account in a multi-split transaction|Split");
 
     return split_const;
   }
