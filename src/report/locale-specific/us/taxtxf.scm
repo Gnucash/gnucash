@@ -1120,7 +1120,7 @@
                   (other-account (xaccSplitGetAccount
                                  (xaccSplitGetOtherSplit split)))
                   (other-account-name (if (null? other-account)
-                                          (_ "Split")
+                                          (_ "Split Transaction")
                                           (if full-names?
                                               (gnc-account-get-full-name
                                                                   other-account)
