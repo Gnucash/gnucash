@@ -283,6 +283,7 @@ cleanup_extension_info(gpointer extension_info, gpointer not_used)
   if (ext_info->extension)
     scm_gc_unprotect_object(ext_info->extension);
 
+  g_free(ext_info->sort_key);
   g_free((gchar *)ext_info->ae.name);
   g_free((gchar *)ext_info->ae.label);
   g_free((gchar *)ext_info->ae.tooltip);
