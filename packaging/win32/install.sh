@@ -701,7 +701,7 @@ function inst_goffice() {
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     add_to_env $_GOFFICE_UDIR/bin PATH
     add_to_env $_GOFFICE_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists libgoffice-0.8
+    if quiet ${PKG_CONFIG} --exists libgoffice-0.8 && [ -f $_GOFFICE_UDIR/bin/libgoffice*.dll ]
     then
         echo "goffice already installed.  skipping."
     else
@@ -723,7 +723,7 @@ function inst_goffice() {
             make
             make install
         qpopd
-        ${PKG_CONFIG} --exists libgoffice-0.8 || die "goffice not installed correctly"
+        ${PKG_CONFIG} --exists libgoffice-0.8 && [ -f $_GOFFICE_UDIR/bin/libgoffice*.dll ] || die "goffice not installed correctly"
         rm -rf ${TMP_UDIR}/goffice-*
     fi
 }
