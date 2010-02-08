@@ -7,6 +7,7 @@ EXTRA_DIST = \
   README \
   backup.txt \
   budget.txt \
+  callgrind.txt \
   constderv.html \
   finderv.html \
   finutil.html \
@@ -26,7 +27,6 @@ EXTRA_DIST = \
   netlogin.txt \
   guid.txt \
   qif.txt \
-  valgrind.txt \
   generic-druid-framework.txt \
   user-prefs-howto.txt
 

@@ -57,7 +57,7 @@ gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's#@-BIN_DIR-@#${bindir}#g' \
-	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g" \
+	    -e "s#@-TOP_SRC_DIR-@#${abs_top_srcdir}#g" \
 	    -e "s#@-GNUCASH_SETUP_ENV_INSTALL_NAME-@#${GNUCASH_SETUP_ENV_INSTALL_NAME}#g" \
 	    -e "s#@-GNUCASH_BIN_INSTALL_NAME-@#${GNUCASH_BIN_INSTALL_NAME}#g"
 	mv $@.tmp $@

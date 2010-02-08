@@ -10,13 +10,13 @@ TOP_SRC_DIR="@-TOP_SRC_DIR-@"
 export G_SLICE=always-malloc
 export G_DEBUG=gc-friendly
 exec valgrind -v \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-gnucash.supp \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-glib.supp \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-libfontconfig.supp \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-libgda.supp \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-libguile.supp \
-	--num-callers=25 \
+    --suppressions=${TOP_SRC_DIR}/src/debug/valgrind/valgrind-gnucash.supp \
+    --suppressions=${TOP_SRC_DIR}/src/debug/valgrind/valgrind-glib.supp \
+    --suppressions=${TOP_SRC_DIR}/src/debug/valgrind/valgrind-libfontconfig.supp \
+    --suppressions=${TOP_SRC_DIR}/src/debug/valgrind/valgrind-libgda.supp \
+    --suppressions=${TOP_SRC_DIR}/src/debug/valgrind/valgrind-libguile.supp \
+    --num-callers=25 \
     --error-limit=no \
     --tool=memcheck \
-	--leak-check=full \
+    --leak-check=full \
     @-GNUCASH_BIN_INSTALL_NAME-@ "$@"

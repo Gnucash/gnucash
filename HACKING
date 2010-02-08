@@ -139,8 +139,11 @@ However, I did not find valgrind to be useful.  It reported a bunch of
 guile bugs, some g_hash_table bugs, and then the program exited prematurely 
 for no apparent reason. :-( 
 
-For the moment, use the suppressions in src/valgrind-gnucash.supp
+For the moment, gnucash-valgrind uses the suppressions in 
+src/debug/valgrind/valgrind-*.supp
 
+For valgrind-gnucash.supp, this comment was made (but is perhaps outdated 
+by now ?):
 This file needs to be cleaned up in two ways:
 
 1/ There are a bunch of duplicate suppressions in the file.
