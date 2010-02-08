@@ -57,7 +57,7 @@ The backend query API is broken into three pieces:
 	search type CANNOT change between a compile and the execute,
 	but the query infrastructure maintains that invariant.
 
-In this manner, a Backend (e.g. the Postgres backend) can compile the
+In this manner, a Backend (e.g. the dbi backend) can compile the
 Query into its own format (e.g. a SQL expression) and then use the
 pre-compiled expression every run instead of rebuilding the
 expression.

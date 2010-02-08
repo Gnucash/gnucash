@@ -513,11 +513,6 @@ implemented in the 'Scrub' routines).
    a 'big picture' view of how its done. (September 2003)
 - A basic lot-viewing GUI is in src/gnome/lot-viewer.c
    This GUI cannot 'edit' lots. (August 2003)
-- The Postgres backend does not yet support lots.
-   XXX In particular, the programming API for Lots is currently
-   non-transactional. There's no dirty flag, and the backend is not 
-   signalled that the lots have changed.  This is the case both for
-   Scrub2.c and for src/gnome/lot-viewer.c (which changes KVP's).
 - Need to write extensive test cases to verify the rather complex
    constraints between the gains and lots and splits.
 - Need to write a cap-gains report!

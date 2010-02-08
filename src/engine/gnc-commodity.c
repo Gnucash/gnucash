@@ -73,7 +73,6 @@ typedef struct CommodityPrivate
   char    * cusip;          /* CUSIP or other identifying code */
   int       fraction;
   char    * unique_name;  
-  gint16    mark;           /* user-defined mark, handy for traversals */
 
   gboolean  quote_flag;	    /* user wants price quotes */
   gnc_quote_source * quote_source;   /* current/old source of quotes */
@@ -584,7 +583,6 @@ gnc_commodity_init(gnc_commodity* com)
   priv->mnemonic = CACHE_INSERT("");
   priv->cusip = CACHE_INSERT("");
   priv->fraction = 10000;
-  priv->mark = 0;
   priv->quote_flag = 0;
   priv->quote_source = NULL;
   priv->quote_tz = CACHE_INSERT("");
@@ -857,8 +855,6 @@ commodity_free(gnc_commodity * cm)
   g_free(priv->unique_name);
   priv->unique_name = NULL;
 
-  priv->mark = 0;
-
 #ifdef ACCOUNTS_CLEANED_UP
   /* Account objects are not actually cleaned up when a book is closed (in fact
    * a memory leak), but commodities are, so in currently this warning gets hit
@@ -920,7 +916,6 @@ gnc_commodity_clone(const gnc_commodity *src, QofBook *dest_book)
 
   dest_priv->namespace = src_priv->namespace;
 
-  dest_priv->mark = 0;
   dest_priv->fraction = src_priv->fraction;
   dest_priv->quote_flag = src_priv->quote_flag;
 
@@ -1035,17 +1030,6 @@ gnc_commodity_get_fraction(const gnc_commodity * cm)
 {
   if(!cm) return 0;
   return GET_PRIVATE(cm)->fraction;
-}
-
-/********************************************************************
- * gnc_commodity_get_mark
- ********************************************************************/
-
-gint16
-gnc_commodity_get_mark(const gnc_commodity * cm) 
-{
-  if(!cm) return 0;
-  return GET_PRIVATE(cm)->mark;
 }
 
 /********************************************************************
@@ -1219,17 +1203,6 @@ gnc_commodity_set_fraction(gnc_commodity * cm, int fraction)
   GET_PRIVATE(cm)->fraction = fraction;
   mark_commodity_dirty(cm);
   gnc_commodity_commit_edit(cm);
-}
-
-/********************************************************************
- * gnc_commodity_set_mark
- ********************************************************************/
-
-void
-gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark) 
-{
-  if(!cm) return;
-  GET_PRIVATE(cm)->mark = mark;
 }
 
 /********************************************************************

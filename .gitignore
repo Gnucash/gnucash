@@ -59,17 +59,6 @@ po/gnucash.pot
 po/stamp-it
 py-compile
 src/app-utils/gnucash
-src/backend/postgres/base-autogen.c
-src/backend/postgres/base-autogen.h
-src/backend/postgres/check-autogen.c
-src/backend/postgres/check-autogen.h
-src/backend/postgres/functions.c
-src/backend/postgres/kvp-autogen.c
-src/backend/postgres/kvp-autogen.h
-src/backend/postgres/table-audit.c
-src/backend/postgres/table-create.c
-src/backend/postgres/table-drop.c
-src/backend/postgres/table-version.c
 src/bin/gnucash
 src/bin/gnucash-bin
 src/bin/gnucash-env
