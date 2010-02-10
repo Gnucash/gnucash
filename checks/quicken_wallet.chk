@@ -18,7 +18,7 @@ Type_2 = AMOUNT_WORDS
 Coords_2 = 195.0;79.0
 
 Type_3 = AMOUNT_NUMBER
-Blocking_3 = true
+Blocking_Chars_3 = true
 Coords_3 = 518.0;67.0
 
 Type_4 = DATE

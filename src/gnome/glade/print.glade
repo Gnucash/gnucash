@@ -10,6 +10,7 @@
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox6">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">8</property>
         <child>
           <widget class="GtkNotebook" id="notebook4">
@@ -104,8 +105,6 @@ Custom</property>
                   <widget class="GtkEntry" id="check_address_name">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">&#x25CF;</property>
-                    <property name="truncate_multiline">True</property>
                     <property name="caps_lock_warning">False</property>
                   </widget>
                   <packing>
@@ -113,14 +112,13 @@ Custom</property>
                     <property name="right_attach">3</property>
                     <property name="top_attach">9</property>
                     <property name="bottom_attach">10</property>
+                    <property name="y_options">GTK_FILL</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkEntry" id="check_address_1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">&#x25CF;</property>
-                    <property name="truncate_multiline">True</property>
                     <property name="caps_lock_warning">False</property>
                   </widget>
                   <packing>
@@ -128,14 +126,13 @@ Custom</property>
                     <property name="right_attach">3</property>
                     <property name="top_attach">10</property>
                     <property name="bottom_attach">11</property>
+                    <property name="y_options">GTK_FILL</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkEntry" id="check_address_2">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">&#x25CF;</property>
-                    <property name="truncate_multiline">True</property>
                     <property name="caps_lock_warning">False</property>
                   </widget>
                   <packing>
@@ -143,14 +140,13 @@ Custom</property>
                     <property name="right_attach">3</property>
                     <property name="top_attach">11</property>
                     <property name="bottom_attach">12</property>
+                    <property name="y_options">GTK_FILL</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkEntry" id="check_address_3">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">&#x25CF;</property>
-                    <property name="truncate_multiline">True</property>
                     <property name="caps_lock_warning">False</property>
                   </widget>
                   <packing>
@@ -158,14 +154,13 @@ Custom</property>
                     <property name="right_attach">3</property>
                     <property name="top_attach">12</property>
                     <property name="bottom_attach">13</property>
+                    <property name="y_options">GTK_FILL</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkEntry" id="check_address_4">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">&#x25CF;</property>
-                    <property name="truncate_multiline">True</property>
                     <property name="caps_lock_warning">False</property>
                   </widget>
                   <packing>
@@ -173,6 +168,7 @@ Custom</property>
                     <property name="right_attach">3</property>
                     <property name="top_attach">13</property>
                     <property name="bottom_attach">14</property>
+                    <property name="y_options">GTK_FILL</property>
                   </packing>
                 </child>
                 <child>
@@ -189,6 +185,7 @@ to print an address on the check.</property>
                   <packing>
                     <property name="top_attach">9</property>
                     <property name="bottom_attach">10</property>
+                    <property name="y_options">GTK_FILL</property>
                   </packing>
                 </child>
                 <child>
@@ -200,21 +197,48 @@ to print an address on the check.</property>
                     <property name="right_attach">3</property>
                     <property name="top_attach">8</property>
                     <property name="bottom_attach">9</property>
-                    <property name="y_options">GTK_FILL</property>
                     <property name="y_padding">5</property>
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <widget class="GtkLabel" id="label8">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">10</property>
+                    <property name="bottom_attach">11</property>
+                    <property name="y_options"></property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <widget class="GtkLabel" id="label9">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">11</property>
+                    <property name="bottom_attach">12</property>
+                    <property name="y_options"></property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <widget class="GtkLabel" id="label10">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">12</property>
+                    <property name="bottom_attach">13</property>
+                    <property name="y_options"></property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <widget class="GtkLabel" id="label11">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">13</property>
+                    <property name="bottom_attach">14</property>
+                    <property name="y_options"></property>
+                  </packing>
                 </child>
                 <child>
                   <placeholder/>
@@ -288,7 +312,7 @@ to print an address on the check.</property>
               <widget class="GtkTable" id="custom_table">
                 <property name="visible">True</property>
                 <property name="border_width">5</property>
-                <property name="n_rows">14</property>
+                <property name="n_rows">19</property>
                 <property name="n_columns">3</property>
                 <child>
                   <widget class="GtkLabel" id="label703">
@@ -400,7 +424,7 @@ to print an address on the check.</property>
                   <widget class="GtkSpinButton" id="payee_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -418,7 +442,7 @@ to print an address on the check.</property>
                   <widget class="GtkSpinButton" id="date_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -436,7 +460,7 @@ to print an address on the check.</property>
                   <widget class="GtkSpinButton" id="amount_words_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -454,7 +478,7 @@ to print an address on the check.</property>
                   <widget class="GtkSpinButton" id="amount_numbers_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -472,7 +496,7 @@ to print an address on the check.</property>
                   <widget class="GtkSpinButton" id="notes_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -490,7 +514,7 @@ to print an address on the check.</property>
                   <widget class="GtkSpinButton" id="payee_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -508,7 +532,7 @@ to print an address on the check.</property>
                   <widget class="GtkSpinButton" id="date_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -526,7 +550,7 @@ to print an address on the check.</property>
                   <widget class="GtkSpinButton" id="amount_words_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -544,7 +568,7 @@ to print an address on the check.</property>
                   <widget class="GtkSpinButton" id="amount_numbers_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -562,7 +586,7 @@ to print an address on the check.</property>
                   <widget class="GtkSpinButton" id="notes_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -579,6 +603,7 @@ to print an address on the check.</property>
                 <child>
                   <widget class="GtkComboBox" id="units_combobox">
                     <property name="visible">True</property>
+                    <property name="button_sensitivity">on</property>
                     <property name="items" translatable="yes">Inches
 Centimeters
 Millimeters
@@ -587,10 +612,10 @@ Points</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">9</property>
-                    <property name="bottom_attach">10</property>
+                    <property name="top_attach">14</property>
+                    <property name="bottom_attach">15</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options">GTK_FILL</property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -603,8 +628,8 @@ Points</property>
                     <property name="mnemonic_widget">units_combobox</property>
                   </widget>
                   <packing>
-                    <property name="top_attach">9</property>
-                    <property name="bottom_attach">10</property>
+                    <property name="top_attach">14</property>
+                    <property name="bottom_attach">15</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -613,7 +638,7 @@ Points</property>
                   <widget class="GtkSpinButton" id="translation_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -621,8 +646,8 @@ Points</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">7</property>
-                    <property name="bottom_attach">8</property>
+                    <property name="top_attach">12</property>
+                    <property name="bottom_attach">13</property>
                     <property name="y_options"></property>
                   </packing>
                 </child>
@@ -636,8 +661,8 @@ Points</property>
                     <property name="mnemonic_widget">translation_x_entry</property>
                   </widget>
                   <packing>
-                    <property name="top_attach">7</property>
-                    <property name="bottom_attach">8</property>
+                    <property name="top_attach">12</property>
+                    <property name="bottom_attach">13</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -651,8 +676,8 @@ Points</property>
                     <property name="mnemonic_widget">check_rotation_entry</property>
                   </widget>
                   <packing>
-                    <property name="top_attach">8</property>
-                    <property name="bottom_attach">9</property>
+                    <property name="top_attach">13</property>
+                    <property name="bottom_attach">14</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -661,7 +686,7 @@ Points</property>
                   <widget class="GtkSpinButton" id="check_rotation_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">-160 -180 180 0.0099999997764800008 10 10</property>
+                    <property name="adjustment">0 -180 180 0.0099999997764800008 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -670,8 +695,8 @@ Points</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">8</property>
-                    <property name="bottom_attach">9</property>
+                    <property name="top_attach">13</property>
+                    <property name="bottom_attach">14</property>
                     <property name="y_options"></property>
                   </packing>
                 </child>
@@ -679,7 +704,7 @@ Points</property>
                   <widget class="GtkSpinButton" id="translation_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -687,8 +712,8 @@ Points</property>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">7</property>
-                    <property name="bottom_attach">8</property>
+                    <property name="top_attach">12</property>
+                    <property name="bottom_attach">13</property>
                     <property name="y_options"></property>
                   </packing>
                 </child>
@@ -700,8 +725,8 @@ Points</property>
                   </widget>
                   <packing>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">10</property>
-                    <property name="bottom_attach">11</property>
+                    <property name="top_attach">15</property>
+                    <property name="bottom_attach">16</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                     <property name="y_padding">5</property>
@@ -715,8 +740,8 @@ Points</property>
                   </widget>
                   <packing>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">11</property>
-                    <property name="bottom_attach">12</property>
+                    <property name="top_attach">16</property>
+                    <property name="bottom_attach">17</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                     <property name="y_padding">5</property>
@@ -731,8 +756,8 @@ Points</property>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">8</property>
-                    <property name="bottom_attach">9</property>
+                    <property name="top_attach">13</property>
+                    <property name="bottom_attach">14</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                     <property name="x_padding">6</property>
@@ -745,8 +770,8 @@ Points</property>
                     <property name="label"> </property>
                   </widget>
                   <packing>
-                    <property name="top_attach">12</property>
-                    <property name="bottom_attach">13</property>
+                    <property name="top_attach">17</property>
+                    <property name="bottom_attach">18</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -797,8 +822,8 @@ Points</property>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">13</property>
-                    <property name="bottom_attach">14</property>
+                    <property name="top_attach">18</property>
+                    <property name="bottom_attach">19</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -821,8 +846,7 @@ Points</property>
                   <widget class="GtkSpinButton" id="address_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">&#x25CF;</property>
-                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -840,8 +864,7 @@ Points</property>
                   <widget class="GtkSpinButton" id="address_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">&#x25CF;</property>
-                    <property name="adjustment">0 0 100000 0.10000000149 10 10</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
                     <property name="numeric">True</property>
@@ -856,10 +879,249 @@ Points</property>
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <widget class="GtkLabel" id="label2">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">_Memo:</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">center</property>
+                    <property name="mnemonic_widget">memo_x_entry</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">7</property>
+                    <property name="bottom_attach">8</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <widget class="GtkSpinButton" id="memo_y_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
+                    <property name="climb_rate">1</property>
+                    <property name="digits">3</property>
+                    <property name="numeric">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">7</property>
+                    <property name="bottom_attach">8</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSpinButton" id="memo_x_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
+                    <property name="climb_rate">1</property>
+                    <property name="digits">3</property>
+                    <property name="numeric">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">7</property>
+                    <property name="bottom_attach">8</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label3">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Splits Memo</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">center</property>
+                    <property name="mnemonic_widget">splits_memo_x_entry</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label4">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Splits Amount</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">center</property>
+                    <property name="mnemonic_widget">splits_amount_x_entry</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">8</property>
+                    <property name="bottom_attach">9</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Splits Account</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">center</property>
+                    <property name="mnemonic_widget">splits_account_x_entry</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">10</property>
+                    <property name="bottom_attach">11</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSpinButton" id="splits_amount_y_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
+                    <property name="climb_rate">1</property>
+                    <property name="digits">3</property>
+                    <property name="numeric">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">8</property>
+                    <property name="bottom_attach">9</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSpinButton" id="splits_amount_x_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
+                    <property name="climb_rate">1</property>
+                    <property name="digits">3</property>
+                    <property name="numeric">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">8</property>
+                    <property name="bottom_attach">9</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSpinButton" id="splits_memo_x_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
+                    <property name="climb_rate">1</property>
+                    <property name="digits">3</property>
+                    <property name="numeric">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSpinButton" id="splits_memo_y_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
+                    <property name="climb_rate">1</property>
+                    <property name="digits">3</property>
+                    <property name="numeric">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSpinButton" id="splits_account_y_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
+                    <property name="climb_rate">1</property>
+                    <property name="digits">3</property>
+                    <property name="numeric">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">10</property>
+                    <property name="bottom_attach">11</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSpinButton" id="splits_account_x_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="adjustment">0 0 100000 0.10000000149 10 0</property>
+                    <property name="climb_rate">1</property>
+                    <property name="digits">3</property>
+                    <property name="numeric">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">10</property>
+                    <property name="bottom_attach">11</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkHSeparator" id="hseparator2">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">11</property>
+                    <property name="bottom_attach">12</property>
+                    <property name="y_padding">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label6">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">14</property>
+                    <property name="bottom_attach">15</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label7">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="y_options"></property>
+                  </packing>
                 </child>
                 <child>
                   <placeholder/>
