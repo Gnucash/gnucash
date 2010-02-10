@@ -304,25 +304,13 @@ Plan A has been implemented in the engine.  To quickly summarize:
       Uses FreqSpec.[ch] and the widget in gnc-frequency.[ch] to allow
       the user to specify the frequency of book closings.
 
-- The Postgres backend has been modified to support multiple books.
-   All books are stored in the same database; there is no performance
-   penalty for storing all books together in the same SQL database,
-   because they can be easily picked apart by an appropriate SQL query.
-   (Not tested, probably borken).
-
-   Period-closing does not delete anything from the SQL database.  That's
-   the design.  The core assumption is that having lots of old data in the
-   SQL DB wouldn't slow it down, and thus, nothing needed to be actually
-   deleted. So it doesn't delete anything.
-                                                                                
-   However, an SQL admin, if they were desperate to trim the DB size, 
-   could DELETE FROM * WHERE bookguid='asdfasdfasdf';
-
 - The XML-file backend can store multiple books in one file.  There 
    is currently minimal support for writing out multiple books, 
    one per file (this enables faster load, by not loading old books).  
    There is currently no support for loading multiple books from multiple
    files.
+   
+- (Details about the dbi backend are missing.)
 
 \section periodsannounce ANNOUNCE: Book Closing Beta 2
 

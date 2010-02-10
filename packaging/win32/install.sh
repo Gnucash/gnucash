@@ -692,7 +692,6 @@ function inst_libgsf() {
             make install
         qpopd
         ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 || die "libgsf not installed correctly"
-        rm -rf ${TMP_UDIR}/libgsf-*
     fi
 }
 
@@ -723,8 +722,9 @@ function inst_goffice() {
             make
             make install
         qpopd
-        ${PKG_CONFIG} --exists libgoffice-0.8 || die "goffice not installed correctly"
+        ${PKG_CONFIG} --exists libgoffice-0.8 && [ -f $_GOFFICE_UDIR/bin/libgoffice*.dll ] || die "goffice not installed correctly"
         rm -rf ${TMP_UDIR}/goffice-*
+        rm -rf ${TMP_UDIR}/libgsf-*
     fi
 }
 

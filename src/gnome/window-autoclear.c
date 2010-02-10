@@ -160,8 +160,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
     gnc_numeric split_value = xaccSplitGetAmount(split);
 
     GHashTableIter iter;
-    gnc_numeric *key = NULL;
-	gpointer pkey = (gpointer)key; 
+	gpointer pkey = NULL;
     GList *reachable_list = 0, *node;
 
     printf("  Split value: %s\n", gnc_numeric_to_string(split_value));
@@ -170,6 +169,8 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
     g_hash_table_iter_init (&iter, sack);
     while (g_hash_table_iter_next (&iter, &pkey, NULL))
     {
+	  /* Cast the gpointer to the kind of pointer we actually need. */
+	  gnc_numeric *key = (gnc_numeric *)pkey;
       /* Compute a new reachable value */
       gnc_numeric reachable_value = gnc_numeric_add_fixed(*key, split_value);
       reachable_list = g_list_append(reachable_list, g_memdup(&reachable_value, sizeof(gnc_numeric)));
@@ -204,24 +205,28 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
   printf("Rebuilding solution ...\n");
   while (!gnc_numeric_zero_p(toclear_value))
   {
-    Split *split = NULL;
-	gpointer psplit = (gpointer)split;
+	gpointer psplit = NULL;
 
     printf("  Left to clear: %s\n", gnc_numeric_to_string(toclear_value));
     if (g_hash_table_lookup_extended(sack, &toclear_value, NULL, &psplit))
     {
-      if (split != NULL)
+      if (psplit != NULL)
       {
+		/* Cast the gpointer to the kind of pointer we actually need */
+		Split *split = (Split *)psplit;
         toclear_list = g_list_prepend(toclear_list, split);
-	toclear_value = gnc_numeric_sub_fixed(toclear_value, xaccSplitGetAmount(split));
-        printf("    Cleared: %s -> %s\n", gnc_numeric_to_string(xaccSplitGetAmount(split)), gnc_numeric_to_string(toclear_value));
+		toclear_value = gnc_numeric_sub_fixed(toclear_value, 
+											  xaccSplitGetAmount(split));
+        printf("    Cleared: %s -> %s\n", 
+			   gnc_numeric_to_string(xaccSplitGetAmount(split)), 
+			   gnc_numeric_to_string(toclear_value));
       }
       else
       {
         /* We couldn't reconstruct the solution */
         printf("    Solution not unique.\n");
         gtk_label_set_text(data->status_label, "Cannot uniquely clear splits. Found multiple possibilities.");
-	return;
+		return;
       }
     }
     else

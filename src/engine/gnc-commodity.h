@@ -432,16 +432,6 @@ const char * gnc_commodity_get_unique_name(const gnc_commodity * cm);
  */
 int     gnc_commodity_get_fraction(const gnc_commodity * cm);
 
-/** Retrieve the 'mark' field for the specified commodity.
- *
- *  @note This is a private field used by the Postgres back end.
- *
- *  @param cm A pointer to a commodity data structure.
- *
- *  @return The value of the mark field.
- */
-gint16  gnc_commodity_get_mark(const gnc_commodity * cm);
-
 /** Retrieve the automatic price quote flag for the specified
  *  commodity.  This flag indicates whether stock quotes should be
  *  retrieved for the specified stock.
@@ -937,16 +927,6 @@ gboolean gnc_commodity_table_foreach_commodity(const gnc_commodity_table * table
 /** @name Commodity Table Private/Internal-Use Only Routines
  @{
 */
-
-/** Set the 'mark' field for the specified commodity.
- *
- *  @note This is a private field used by the Postgres back end.
- *
- *  @param cm A pointer to a commodity data structure.
- *
- *  @param mark The new value of the mark field.
- */
-void  gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark);
 
 /** You proably shouldn't be using gnc_commodity_table_new() directly,
  * its for internal use only. You should probably be using

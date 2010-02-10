@@ -1,7 +1,7 @@
 #!/bin/sh
 #
-# Remove entries that are for post-gtk2.6 attributes.  Glade on a
-# gtk2.6 system will complain when unknown attributes are present on a
+# Remove entries that are for post-gtk2.8 attributes.  Glade on a
+# gtk2.8 system will complain when unknown attributes are present on a
 # widget.
 #
 # This script should be run from the top-level source directory before
@@ -15,9 +15,8 @@ else
 fi
 
 find ${SEARCHDIRS} -name \*.glade | xargs \
-  sed -i -e '/name="urgency_hint"/d' \
-         -e '/name="pack_direction"/d' \
-         -e '/name="child_pack_direction"/d'
+  sed -i -e '/name="image_position"/d' \
+         -e '/name="inner_border"/d'
 
 # GTK 2.6 (now allowed)
 #	add_tearoffs
@@ -29,11 +28,11 @@ find ${SEARCHDIRS} -name \*.glade | xargs \
 #	single_line_mode
 #	width_chars
 #
-# GTK 2.8
+# GTK 2.8 (now allowed)
 #	child_pack_direction
 #	pack_direction
 #	urgency_hint
 #
 # GTK 2.10
-#	(none)
-#
+#	image_position
+#   inner_border

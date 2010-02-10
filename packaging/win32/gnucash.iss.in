@@ -224,11 +224,12 @@ end;
 
 
 [Languages]
+Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-de.win32-bin.txt"
 Name: "el"; MessagesFile: "@prefix@\share\@PACKAGE@\Greek-4-5.1.11.isl"
-Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "fr"; MessagesFile: "compiler:Languages\French.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-fr.win32-bin.txt"
 Name: "it"; MessagesFile: "compiler:Languages\Italian.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-it.win32-bin.txt"
+Name: "ja"; MessagesFile: "@prefix@\share\@PACKAGE@\Japanese-5-5.1.11.isl"
 Name: "pt_BR"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
 
 ;; The following language files are available as well, in alphabetical
@@ -272,6 +273,7 @@ de.LanguageCodePage=1252
 el.LanguageCodePage=1253
 fr.LanguageCodePage=1252
 it.LanguageCodePage=1252
+ja.LanguageCodePage=932
 pt_BR.LanguageCodePage=1252
 
 
