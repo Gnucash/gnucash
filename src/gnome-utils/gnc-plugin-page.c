@@ -69,6 +69,7 @@ enum {
 enum {
   PROP_0,
   PROP_PAGE_NAME,
+  PROP_PAGE_COLOR,
   PROP_PAGE_URI,
   PROP_BOOK,
   PROP_STATUSBAR_TEXT,
@@ -96,6 +97,7 @@ typedef struct _GncPluginPagePrivate
 
 	gchar *page_name;
 	gchar *page_long_name;
+	gchar *page_color;
 	gchar *uri;
 	gchar *statusbar_text;
 } GncPluginPagePrivate;
@@ -402,6 +404,17 @@ gnc_plugin_page_class_init (GncPluginPageClass *klass)
 
         g_object_class_install_property
 	  (gobject_class,
+	   PROP_PAGE_COLOR,
+	   g_param_spec_string ("page-color",
+				"Page Color",
+				"The color of this page.  This value is "
+				"used to generate the notebook tab color "
+				"when this page is visible.",
+				NULL,
+				G_PARAM_READWRITE));
+
+        g_object_class_install_property
+	  (gobject_class,
 	   PROP_PAGE_URI,
 	   g_param_spec_string ("page-uri",
 				"Page URI",
@@ -514,6 +527,7 @@ gnc_plugin_page_init (GncPluginPage *page, GncPluginPageClass *klass)
 
 	priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
 	priv->page_name   = NULL;
+	priv->page_color  = NULL;
 	priv->uri         = NULL;
 
 	page->window      = NULL;
@@ -541,6 +555,8 @@ gnc_plugin_page_finalize (GObject *object)
   priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
   if (priv->page_name)
 	g_free(priv->page_name);
+  if (priv->page_color)
+	g_free(priv->page_color);
   if (priv->uri)
 	g_free(priv->uri);
   if (priv->statusbar_text)
@@ -595,6 +611,9 @@ gnc_plugin_page_get_property (GObject     *object,
     {
     case PROP_PAGE_NAME:
       g_value_set_string (value, priv->page_name);
+      break;
+    case PROP_PAGE_COLOR:
+      g_value_set_string (value, priv->page_color);
       break;
     case PROP_PAGE_URI:
       g_value_set_string (value, priv->uri);
@@ -653,6 +672,9 @@ gnc_plugin_page_set_property (GObject      *object,
     {
     case PROP_PAGE_NAME:
       gnc_plugin_page_set_page_name(page, g_value_get_string(value));
+      break;
+    case PROP_PAGE_COLOR:
+      gnc_plugin_page_set_page_color(page, g_value_get_string(value));
       break;
     case PROP_PAGE_URI:
       gnc_plugin_page_set_uri(page, g_value_get_string(value));
@@ -787,7 +809,7 @@ gnc_plugin_page_get_page_long_name (GncPluginPage *page)
 
 
 /*  Set the long name of this page.  This is the string used in the
- *  tooltip that is attached to the pate name in the notebook tab. */
+ *  tooltip that is attached to the page name in the notebook tab. */
 void
 gnc_plugin_page_set_page_long_name (GncPluginPage *page, const gchar *name)
 {
@@ -799,6 +821,34 @@ gnc_plugin_page_set_page_long_name (GncPluginPage *page, const gchar *name)
   if (priv->page_long_name)
     g_free(priv->page_long_name);
   priv->page_long_name = g_strdup(name);
+}
+
+
+/*  Get the color of this page.  This is the string used in the notebook tab. */
+const gchar *
+gnc_plugin_page_get_page_color (GncPluginPage *page)
+{
+  GncPluginPagePrivate *priv;
+
+  g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
+
+  priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+  return priv->page_color;
+}
+
+
+/*  Set the color of this page.  This is the string used in the notebook tab. */
+void
+gnc_plugin_page_set_page_color (GncPluginPage *page, const gchar *color)
+{
+  GncPluginPagePrivate *priv;
+
+  g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+
+  priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+  if (priv->page_color)
+    g_free(priv->page_color);
+  priv->page_color = g_strdup(color);
 }
 
 

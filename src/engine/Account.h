@@ -263,6 +263,8 @@ void xaccAccountSetName (Account *account, const char *name);
 void xaccAccountSetCode (Account *account, const char *code);
 /** Set the account's description */
 void xaccAccountSetDescription (Account *account, const char *desc);
+/** Set the account's Color */
+void xaccAccountSetColor (Account *account, const char *color);
 /** Set the account's notes */
 void xaccAccountSetNotes (Account *account, const char *notes);
 /** Set the last num field of an Account */
@@ -354,6 +356,8 @@ const char * xaccAccountGetName (const Account *account);
 const char * xaccAccountGetCode (const Account *account);
 /** Get the account's description */
 const char * xaccAccountGetDescription (const Account *account);
+/** Get the account's color */
+const char * xaccAccountGetColor (const Account *account);
 /** Get the account's notes */
 const char * xaccAccountGetNotes (const Account *account);
 /** Get the last num field of an Account */
@@ -1408,10 +1412,11 @@ const char * dxaccAccountGetQuoteTZ (const Account *account);
 /** @name Account parameter names 
  @{
 */
-#define ACCOUNT_KVP			"kvp"
+#define ACCOUNT_KVP		"kvp"
 #define ACCOUNT_NAME_		"name"
 #define ACCOUNT_CODE_		"code"
 #define ACCOUNT_DESCRIPTION_	"desc"
+#define ACCOUNT_COLOR_		"color"
 #define ACCOUNT_NOTES_		"notes"
 #define ACCOUNT_BALANCE_	"balance"
 #define ACCOUNT_CLEARED_	"cleared"
@@ -1420,7 +1425,7 @@ const char * dxaccAccountGetQuoteTZ (const Account *account);
 #define ACCOUNT_FUTURE_MINIMUM_ "future-minimum"
 #define ACCOUNT_TAX_RELATED	"tax-related-p"
 #define ACCOUNT_TYPE_		"account-type"
-#define ACCOUNT_SCU			"smallest-commodity-unit"
+#define ACCOUNT_SCU		"smallest-commodity-unit"
 #define ACCOUNT_NSCU		"non-standard-scu"
 #define ACCOUNT_PARENT		"parent-account"
 

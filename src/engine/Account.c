@@ -58,6 +58,7 @@ enum {
   PROP_FULL_NAME,
   PROP_CODE,
   PROP_DESCRIPTION,
+  PROP_COLOR,
   PROP_NOTES,
   PROP_TYPE,
 
@@ -294,6 +295,9 @@ gnc_account_get_property (GObject         *object,
 	case PROP_DESCRIPTION:
 	    g_value_set_string(value, priv->description);
 	    break;
+	case PROP_COLOR:
+	    g_value_set_string(value, xaccAccountGetColor(account));
+	    break;
 	case PROP_NOTES:
 	    g_value_set_string(value, xaccAccountGetNotes(account));
 	    break;
@@ -389,6 +393,9 @@ gnc_account_set_property (GObject         *object,
 	    break;
 	case PROP_DESCRIPTION:
 	    xaccAccountSetDescription(account, g_value_get_string(value));
+	    break;
+	case PROP_COLOR:
+	    xaccAccountSetColor(account, g_value_get_string(value));
 	    break;
 	case PROP_NOTES:
 	    xaccAccountSetNotes(account, g_value_get_string(value));
@@ -516,6 +523,17 @@ gnc_account_class_init (AccountClass *klass)
 			      "string assigned by the user. It is intended "
 			      "to be a longer, 1-5 sentence description of "
 			      "what this account is all about.",
+			      NULL,
+			      G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_COLOR,
+	 g_param_spec_string ("color",
+			      "Account Color",
+			      "The account color is a color string assigned "
+			      "by the user. It is intended to highlight the "
+			      "account based on the users wishes.",
 			      NULL,
 			      G_PARAM_READWRITE));
 
@@ -2076,6 +2094,24 @@ xaccAccountSetDescription (Account *acc, const char *str)
     xaccAccountCommitEdit(acc);
 }
 
+void
+xaccAccountSetColor (Account *acc, const char *str) 
+{
+  g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
+  xaccAccountBeginEdit(acc);
+  if (str) {
+    gchar *tmp = g_strstrip(g_strdup(str));
+    kvp_frame_set_slot_nc(acc->inst.kvp_data, "color", 
+			  strlen(tmp) ? kvp_value_new_string(tmp) : NULL);
+    g_free(tmp);
+  } else {
+    kvp_frame_set_slot_nc(acc->inst.kvp_data, "color", NULL);
+  }
+    mark_account (acc);
+    xaccAccountCommitEdit(acc);
+}
+
 static void
 qofAccountSetParent (Account *acc, QofInstance *parent) 
 {
@@ -2826,6 +2862,13 @@ xaccAccountGetDescription (const Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
     return GET_PRIVATE(acc)->description;
+}
+
+const char * 
+xaccAccountGetColor (const Account *acc)
+{
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
+    return acc ? kvp_frame_get_string(acc->inst.kvp_data, "color") : NULL;
 }
 
 const char * 
@@ -4395,6 +4438,9 @@ gnc_account_merge_children (Account *parent)
 	continue;
       if (0 != null_strcmp(priv_a->description, priv_b->description))
 	continue;
+      if (0 != null_strcmp(xaccAccountGetColor(acc_a),
+			   xaccAccountGetColor(acc_b)))
+	continue;
       if (!gnc_commodity_equiv(priv_a->commodity, priv_b->commodity))
 	continue;
       if (0 != null_strcmp(xaccAccountGetNotes(acc_a),
@@ -4637,6 +4683,9 @@ gboolean xaccAccountRegister (void)
     { ACCOUNT_DESCRIPTION_, QOF_TYPE_STRING, 
       (QofAccessFunc) xaccAccountGetDescription,
       (QofSetterFunc) xaccAccountSetDescription },
+    { ACCOUNT_COLOR_, QOF_TYPE_STRING, 
+      (QofAccessFunc) xaccAccountGetColor,
+      (QofSetterFunc) xaccAccountSetColor },
     { ACCOUNT_NOTES_, QOF_TYPE_STRING, 
       (QofAccessFunc) xaccAccountGetNotes,
       (QofSetterFunc) xaccAccountSetNotes },
