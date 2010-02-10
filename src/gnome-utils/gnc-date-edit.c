@@ -1198,7 +1198,7 @@ gnc_date_edit_get_flags (GNCDateEdit *gde)
 
 /**
  * gnc_date_set_activates_default:
- * @gde: The date editor to modity
+ * @gde: The date editor to modify
  * @state: The new state for this widget.
  * 
  * Extracts the editable field from a GNCDateEdit widget, and sets it
@@ -1214,7 +1214,21 @@ gnc_date_activates_default (GNCDateEdit *gde, gboolean state)
     gtk_entry_set_activates_default(GTK_ENTRY(gde->date_entry), state);
 }
 
+/**
+ * gnc_date_grab_focus:
+ * @gde: The date editor to modify
+ * @state: The new state for this widget.
+ * 
+ * Sets the focus to the Editable field.
+ **/
+void
+gnc_date_grab_focus (GNCDateEdit *gde)
+{
+	if (!gde)
+		return;
 
+	gtk_widget_grab_focus (gde->date_entry);
+}
 /** Sets the editable field from a GNCDateEdit widget as the target
  *  for the specified label's access key.
  *

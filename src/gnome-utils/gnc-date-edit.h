@@ -134,6 +134,7 @@ void      gnc_date_edit_set_flags       (GNCDateEdit *gde,
 int       gnc_date_edit_get_flags       (GNCDateEdit *gde);
 
 void      gnc_date_activates_default    (GNCDateEdit *gde, gboolean state);
+void      gnc_date_grab_focus           (GNCDateEdit *gde);
 
 void      gnc_date_make_mnemonic_target (GNCDateEdit *gde, GtkWidget *label);
 #endif
