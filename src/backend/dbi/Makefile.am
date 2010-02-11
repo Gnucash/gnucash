@@ -4,11 +4,13 @@ SUBDIRS = . test
 pkglib_LTLIBRARIES = libgncmod-backend-dbi.la
 
 
+# "${top_srcdir}/src/debug" below is for the splint header
 AM_CFLAGS = \
   -I.. -I../.. \
   -DLOCALE_DIR=\""$(datadir)/locale"\" \
   -I${top_srcdir}/src/backend \
   -I${top_srcdir}/src/backend/sql \
+  -I${top_srcdir}/src/debug \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/lib/libc \
