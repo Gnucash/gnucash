@@ -156,9 +156,27 @@ void gnc_main_window_foreach_page (GncMainWindowPageFunc fn,
 GncPluginPage *gnc_main_window_get_current_page (GncMainWindow *window);
 
 
+/** Update the name of the page in the main window.
+ *
+ *  @parm page The page to be updated.
+ *
+ *  @parm name_in The new name for the page.
+*/
 void
 main_window_update_page_name (GncPluginPage *page,
 			      const gchar *name_in);
+
+
+/** Update the color on the page tabs in the main window.
+ *
+ *  @parm page The page to be updated.
+ *
+ *  @parm color_in The new color string for the page tab.
+*/
+void
+main_window_update_page_color (GncPluginPage *page,
+			      const gchar *color_in);
+
 
 /** Manually add a set of actions to the specified window.  Plugins
  *  whose user interface is not hard coded (e.g. the menu-additions *

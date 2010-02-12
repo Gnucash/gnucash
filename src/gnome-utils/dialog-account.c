@@ -53,6 +53,7 @@
 #define DIALOG_NEW_ACCOUNT_CM_CLASS "dialog-new-account"
 #define DIALOG_EDIT_ACCOUNT_CM_CLASS "dialog-edit-account"
 #define GCONF_SECTION "dialogs/account"
+#define DEFAULT_COLOR "#ededececebeb"
 
 enum account_cols {
   ACCOUNT_COL_FULLNAME = 0,
@@ -88,6 +89,8 @@ typedef struct _AccountWindow
 
   GtkWidget * name_entry;
   GtkWidget * description_entry;
+  GtkWidget * color_entry_button;
+  GtkWidget * color_default_button;
   GtkWidget * code_entry;
   GtkTextBuffer * notes_text_buffer;
 
@@ -191,6 +194,7 @@ gnc_account_to_ui(AccountWindow *aw)
   Account *account;
   gnc_commodity * commodity;
   const char *string;
+  GdkColor color;
   gboolean flag, nonstd_scu;
   gint index;
 
@@ -208,6 +212,12 @@ gnc_account_to_ui(AccountWindow *aw)
   string = xaccAccountGetDescription (account);
   if (string == NULL) string = "";
   gtk_entry_set_text(GTK_ENTRY(aw->description_entry), string);
+
+  string = xaccAccountGetColor (account);
+  if (string == NULL) string = "";
+  if (gdk_color_parse(string, &color)) {
+    gtk_color_button_set_color(GTK_COLOR_BUTTON(aw->color_entry_button), &color);
+  }
 
   commodity = xaccAccountGetCommodity (account);
   gnc_general_select_set_selected (GNC_GENERAL_SELECT (aw->commodity_edit),
@@ -308,6 +318,7 @@ gnc_ui_to_account(AccountWindow *aw)
   Account *parent_account;
   const char *old_string;
   const char *string;
+  GdkColor color;
   gboolean flag;
   gnc_numeric balance;
   gboolean use_equity, nonstd;
@@ -343,6 +354,12 @@ gnc_ui_to_account(AccountWindow *aw)
   old_string = xaccAccountGetDescription (account);
   if (safe_strcmp (string, old_string) != 0)
     xaccAccountSetDescription (account, string);
+
+  gtk_color_button_get_color(GTK_COLOR_BUTTON(aw->color_entry_button), &color );
+  string = gdk_color_to_string(&color);
+  old_string = xaccAccountGetColor (account);
+  if (safe_strcmp (string, old_string) != 0)
+    xaccAccountSetColor (account, string);
 
   commodity = (gnc_commodity *)
     gnc_general_select_get_selected (GNC_GENERAL_SELECT (aw->commodity_edit));
@@ -1103,6 +1120,17 @@ gnc_account_name_changed_cb(GtkWidget *widget, gpointer data)
 }
 
 static void
+gnc_account_color_default_cb(GtkWidget *widget, gpointer data)
+{
+  GdkColor color;
+  AccountWindow *aw = data;
+
+  gdk_color_parse( DEFAULT_COLOR, &color);
+  gtk_color_button_set_color(GTK_COLOR_BUTTON(aw->color_entry_button), &color);
+
+}
+
+static void
 commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
 {
   AccountWindow *aw = data;
@@ -1205,6 +1233,13 @@ gnc_account_window_create(AccountWindow *aw)
 		    G_CALLBACK (gnc_account_name_changed_cb), aw);
 
   aw->description_entry = glade_xml_get_widget (xml, "description_entry");
+
+  aw->color_entry_button = glade_xml_get_widget (xml, "color_entry_button");
+
+  aw->color_default_button = glade_xml_get_widget (xml, "color_default_button");
+  g_signal_connect (G_OBJECT (aw->color_default_button), "clicked",
+		    G_CALLBACK (gnc_account_color_default_cb), aw);
+
   aw->code_entry =        glade_xml_get_widget (xml, "code_entry");
   aw->notes_text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (glade_xml_get_widget (xml, "notes_text")));
 

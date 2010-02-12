@@ -4,7 +4,7 @@ Title = Voucher Check 3-Part US-Letter
 Font = sans 10
 Rotation = 0.0
 # override character blocking from global preferences
-Blocking = false
+Blocking_Chars = false
 Translation = 0.0;0.0
 Show_Grid = false
 Show_Boxes = false
@@ -17,11 +17,11 @@ Type_2 = DATE
 Coords_2 = 480.0;67.0
 
 Type_3 = AMOUNT_WORDS
-Blocking_3 = true
+Blocking_Chars_3 = true
 Coords_3 = 70.0;132.0;380.0;12.0
 
 Type_4 = AMOUNT_NUMBER
-Blocking_4 = true
+Blocking_Chars_4 = true
 Coords_4 = 510.0;107.0
 
 Type_5 = ADDRESS

@@ -82,14 +82,14 @@ GType gnc_pricedb_get_type(void);
     now in the hope that we get a real DB implementation before
     they're really needed.
 
-    Every QofBook contains a GNCPriceDB, accessable via
+    Every QofBook contains a GNCPriceDB, accessible via
     gnc_book_get_pricedb.
 
     \warning The PriceDB does not currently use the object
     system used elsewhere in the GnuCash Engine, i.e. it does
-    not use GUISD's, Entities and Collections.  Its should.
+    not use GUISD's, Entities and Collections.  It should.
     In particular, this means that currently prices cannot
-    be queried with the same emchanism as everything else.
+    be queried with the same mechanism as everything else.
 */
 
 /** @addtogroup Price  Prices
@@ -97,51 +97,47 @@ GType gnc_pricedb_get_type(void);
     Each price in the database represents an "instantaneous" quote for
     a given commodity with respect to another commodity.  For example,
     a given price might represent the value of LNUX in USD on
-    2001-02-03.  
+    2001-02-03.
 
-    Fields:
+    \par Fields:
+    
+    - commodity: the item being priced.
+    - currency: the denomination of the value of the item being priced.
+    - value: the value of the item being priced.
+    - time: the time the price was valid.
+    - source: a string describing the source of the quote.  These
+      strings will be something like this: "Finance::Quote",
+      "user:misc", "user:foo", etc.  If the quote came from a user,
+      as a matter of policy, you *must* prefix the string you give
+      with "user:".  For now, the only other reserved values are
+      "Finance::Quote" and "old-file-import".  Any string used must
+      be added to the source_list array in dialog-price-edit-db.c so
+      that it can be properly translated. (There are unfortunately
+      many strings in users' databases, so this string must be
+      translated on output instead of always being used in untranslated
+      form).
+    - type: the type of quote - types possible right now are bid, ask,
+      last, nav, and unknown.
 
-      commodity: the item being priced.
+    \par Implementation Details:
 
-      currency: the denomination of the value of the item being priced.    
+    \note
+    For source and type, NULL and the empty string are
+    considered the same, so if one of these is "", then after a file
+    save/restore, it might be NULL.  Behave accordingly.
 
-      value: the value of the item being priced.
-
-      time: the time the price was valid.
-
-      source: a string describing the source of the quote.  These
-        strings will be something like this: "Finance::Quote",
-        "user:misc", "user:foo", etc.  If the quote came from a user,
-        as a matter of policy, you *must* prefix the string you give
-        with "user:".  For now, the only other reserved values are
-        "Finance::Quote" and "old-file-import".  Any string used must
-        be added to the source_list array in dialog-price-edit-db.c so
-        that it can be properly translated. (There are unfortunately
-        many strings in users databased, so this string must be
-        translated on output instead of always being used intranslated
-        form.)
-
-      type: the type of quote - types possible right now are bid, ask,
-        last, nav, and unknown.
-
-    Implementation Details:
-
-      NOTE: for source and type, NULL and the empty string are
-      considered the same, so if one of these is "", then after a file
-      save/restore, it might be NULL.  Behave accordingly.
-
-      GNCPrices are reference counted.  When you gnc_price_create one
-      or clone it, the new price's count is set to 1.  When you are
-      finished with a price, call gnc_price_unref.  If you hand the
-      price pointer to some other code that needs to keep it, make
-      sure it calls gnc_price_ref to indicate its interest in that
-      price, and calls gnc_price_unref when it's finished with the
-      price.  For those unfamiliar with reference counting, basically
-      each price stores an integer count which starts at 1 and is
-      incremented every time someone calls gnc_price_ref.  Conversely,
-      the count is decremented every time someone calls
-      gnc_price_unref.  If the count ever reaches 0, the price is
-      destroyed.
+    GNCPrices are reference counted.  When you gnc_price_create one
+    or clone it, the new price's count is set to 1.  When you are
+    finished with a price, call gnc_price_unref.  If you hand the
+    price pointer to some other code that needs to keep it, make
+    sure it calls gnc_price_ref to indicate its interest in that
+    price, and calls gnc_price_unref when it's finished with the
+    price.  For those unfamiliar with reference counting, basically
+    each price stores an integer count which starts at 1 and is
+    incremented every time someone calls gnc_price_ref.  Conversely,
+    the count is decremented every time someone calls
+    gnc_price_unref.  If the count ever reaches 0, the price is
+    destroyed.
 
       All of the getters return data that's internal to the GNCPrice,
       not copies, so don't free these values.
@@ -161,7 +157,7 @@ typedef struct gnc_price_lookup_s GNCPriceLookup;
 typedef GList PriceList;
 
 /* ------------------ */
-/** @name Constructors 
+/** @name Constructors
     @{ */
 
 /** gnc_price_create - returns a newly allocated and initialized price
@@ -185,13 +181,11 @@ void      gnc_price_ref(GNCPrice *p);
 /** gnc_price_unref - indicate you're finished with a price
    (i.e. decrease its reference count by 1). */
 void      gnc_price_unref(GNCPrice *p);
-/**  @} */
+/** @} */
 
 /* ------------------ */
 /** @name  Setters
-    @{ */
-
-/* As mentioned above, all of the setters store copies of the data
+ * All of the setters store copies of the data
  * given, with the exception of the commodity field which just stores
  * the pointer given.  It is assumed that commodities are a global
  * resource and are pointer unique. 
@@ -200,7 +194,7 @@ void      gnc_price_unref(GNCPrice *p);
  * gnc_price_begin_edit() and commit_edit().  The begin/commit
  * calls help ensure that the local price db is synchronized with 
  * the backend.
- */
+   @{ */
 void gnc_price_begin_edit (GNCPrice *p);
 void gnc_price_commit_edit (GNCPrice *p);
 
@@ -210,14 +204,14 @@ void gnc_price_set_time(GNCPrice *p, Timespec t);
 void gnc_price_set_source(GNCPrice *p, const char *source);
 void gnc_price_set_typestr(GNCPrice *p, const char* type);
 void gnc_price_set_value(GNCPrice *p, gnc_numeric value);
-/**  @} */
+/** @} */
 
 /* ------------------ */
 /** @name  Getters
+    All of the getters return data that's internal
+    to the GNCPrice, not copies, so don't free these values.
     @{ */
 
-/** As mentioned above all of the getters return data that's internal
-   to the GNCPrice, not copies, so don't free these values. */
 GNCPrice *      gnc_price_lookup (const GUID *guid, QofBook *book);
 /*@ dependent @*/ gnc_commodity * gnc_price_get_commodity(const GNCPrice *p);
 /*@ dependent @*/ gnc_commodity * gnc_price_get_currency(const GNCPrice *p);
@@ -231,6 +225,12 @@ gboolean        gnc_price_equal(const GNCPrice *p1, const GNCPrice *p2);
 #define gnc_price_return_guid(X) (*(qof_entity_get_guid(QOF_INSTANCE(X))))
 #define gnc_price_get_book(X)    qof_instance_get_book(QOF_INSTANCE(X))
 /**  @} */
+
+/** @name Internal/Debugging
+    @{ */
+/** This simple function can be useful for debugging the price code */
+void gnc_price_print(GNCPrice *db, FILE *f, int indent);
+/** @} */
 
 /* ================================================================ */
 /** @name GNCPrice lists
@@ -439,10 +439,11 @@ guint gnc_pricedb_get_num_prices(GNCPriceDB *db);
 
 gboolean gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2);
 
-/** semi-lame debugging code */
-void gnc_price_print(GNCPrice *db, FILE *f, int indent);
+/** @name Internal/Debugging
+    @{ */
+/** This simple function can be useful for debugging the pricedb code */
 void gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f);
-
+/** @} */
 
 /** @name Price Parameter Names
  *  For use with QofQuery

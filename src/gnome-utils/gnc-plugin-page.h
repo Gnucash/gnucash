@@ -374,6 +374,28 @@ const gchar *gnc_plugin_page_get_page_long_name (GncPluginPage *page);
 void gnc_plugin_page_set_page_long_name (GncPluginPage *page, const char *name);
 
 
+/** Retrieve the color of this page. This is the color string used
+ *  in the notebook tab.
+ *
+ *  @param page The page whose name should be retrieved.
+ *
+ *  @return The color for this page.  This string is owned by the page and
+ *  should not be freed by the caller.
+ */
+const gchar *gnc_plugin_page_get_page_color (GncPluginPage *page);
+
+
+/** Set the color of this page. This is the color string used
+ *  in the notebook tab.
+ *
+ *  @param page The page whose name should be retrieved.
+ *
+ *  @return The color for this page.  This string is owned by the page and
+ *  should not be freed by the caller.
+ */
+void gnc_plugin_page_set_page_color (GncPluginPage *page, const char *color);
+
+
 /** Retrieve the Uniform Resource Identifier for this page.
  *
  *  @param page The page whose URI should be retrieved.

@@ -98,6 +98,7 @@ static void gnc_plugin_page_register_update_edit_menu (GncPluginPage *page, gboo
 static gboolean gnc_plugin_page_register_finish_pending (GncPluginPage *page);
 
 static gchar *gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page);
+static gchar *gnc_plugin_page_register_get_tab_color (GncPluginPage *plugin_page);
 static gchar *gnc_plugin_page_register_get_long_name (GncPluginPage *plugin_page);
 
 static void gnc_plugin_page_register_summarybar_position_changed(GConfEntry *entry, gpointer user_data);
@@ -448,6 +449,7 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	const GList *item;
 	GList *book_list;
 	gchar *label;
+	gchar *label_color;
 	QofQuery *q;
 
 	/* Is there an existing page? */
@@ -471,6 +473,10 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	label = gnc_plugin_page_register_get_tab_name(plugin_page);
 	gnc_plugin_page_set_page_name(plugin_page, label);
 	g_free(label);
+
+	label_color = gnc_plugin_page_register_get_tab_color(plugin_page);
+	gnc_plugin_page_set_page_color(plugin_page, label_color);
+	g_free(label_color);
 
 	label = gnc_plugin_page_register_get_long_name(plugin_page);
         gnc_plugin_page_set_page_long_name(plugin_page, label);
@@ -1189,6 +1195,37 @@ gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
 	}
 
 	return g_strdup(_("unknown"));
+}
+
+static gchar *
+gnc_plugin_page_register_get_tab_color (GncPluginPage *plugin_page)
+{
+	GncPluginPageRegisterPrivate *priv;
+	GNCLedgerDisplayType ledger_type;
+  	GNCLedgerDisplay *ld;
+	SplitRegister *reg;
+	Account *leader;
+
+	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), _("unknown"));
+
+	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
+	ld = priv->ledger;
+	reg = gnc_ledger_display_get_split_register (ld);
+	ledger_type = gnc_ledger_display_type (ld);
+	leader = gnc_ledger_display_leader (ld);
+
+	switch (ledger_type) {
+	 case LD_SINGLE:
+	  return g_strdup(xaccAccountGetColor (leader));
+
+	 case LD_SUBACCOUNT:
+	  return g_strdup_printf("%s+", xaccAccountGetColor (leader));
+
+	 default:
+	  break;
+	}
+
+	return g_strdup("Not Set");
 }
 
 static gchar *
@@ -3015,7 +3052,7 @@ gnc_plugin_page_register_event_handler (QofInstance *entity,
   QofBook *book;
   GncPluginPage *visible_page;
   GtkWidget *window;
-  gchar *label;
+  gchar *label, *color;
 
   g_return_if_fail(page);	/* Required */
   if (!GNC_IS_TRANS(entity) && !GNC_IS_ACCOUNT(entity))
@@ -3030,6 +3067,9 @@ gnc_plugin_page_register_event_handler (QofInstance *entity,
     if (GNC_IS_MAIN_WINDOW(window)) {
       label = gnc_plugin_page_register_get_tab_name(GNC_PLUGIN_PAGE(page));
       main_window_update_page_name(GNC_PLUGIN_PAGE(page), label);
+      color = gnc_plugin_page_register_get_tab_color(GNC_PLUGIN_PAGE(page));
+      main_window_update_page_color(GNC_PLUGIN_PAGE(page), color);
+      g_free(color);
       g_free(label);
     }
     LEAVE("tab name updated");

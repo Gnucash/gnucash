@@ -323,6 +323,9 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 
   gtk_widget_show_all (ddc->dialog);
 
+  /* Set the focus on the date widget */
+  gnc_date_grab_focus (GNC_DATE_EDIT (ddc->post_date));
+
   ddc->retval = FALSE;
   while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK) {
     /* If reponse is OK but flag is not set, try again */

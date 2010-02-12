@@ -39,7 +39,6 @@ dist_doc_DATA = \
 # CVS dirs.
 
 EXTRA_DIST = \
-  gnucash.lsm \
   make-gnucash-potfiles.in \
   macros/aqbanking.m4 \
   macros/as-scrub-include.m4 \

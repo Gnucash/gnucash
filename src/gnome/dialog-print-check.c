@@ -46,6 +46,8 @@
 #include "gnc-path.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gkeyfile-utils.h"
+
+#include "gnc-engine.h"
 #include "Split.h"
 #include "Transaction.h"
 
@@ -65,12 +67,16 @@
 #define KEY_CUSTOM_NUMBER      "custom_amount_number"
 #define KEY_CUSTOM_ADDRESS     "custom_address"
 #define KEY_CUSTOM_NOTES       "custom_memo" /* historically misnamed */
+#define KEY_CUSTOM_MEMO        "custom_memo2"
 #define KEY_CUSTOM_TRANSLATION "custom_translation"
 #define KEY_CUSTOM_ROTATION    "custom_rotation"
 #define KEY_CUSTOM_UNITS       "custom_units"
 #define KEY_PRINT_DATE_FMT     "print_date_format"
 #define KEY_DEFAULT_FONT       "default_font"
 #define KEY_BLOCKING_CHARS     "blocking_chars"
+#define KEY_SPLITS_AMOUNT      "splits_amount"
+#define KEY_SPLITS_MEMO        "splits_memo"
+#define KEY_SPLITS_ACCOUNT     "splits_account"
 
 
 #define DEFAULT_FONT            "sans 12"
@@ -90,7 +96,7 @@
 #define KF_KEY_TRANSLATION "Translation"
 #define KF_KEY_FONT        "Font"
 #define KF_KEY_ALIGN       "Align"
-#define KF_KEY_BLOCKING    "Blocking"
+#define KF_KEY_BLOCKING    "Blocking_Chars"
 #define KF_KEY_SHOW_GRID   "Show_Grid"
 #define KF_KEY_SHOW_BOXES  "Show_Boxes"
 #define KF_KEY_NAMES       "Names"
@@ -99,6 +105,10 @@
 #define KF_KEY_COORDS      "Coords"
 #define KF_KEY_TEXT        "Text"
 #define KF_KEY_FILENAME    "Filename"
+#define KF_KEY_DATE_FORMAT "DateFormat"
+#define KF_KEY_SPLITS_AMOUNT  "SplitsAmount"
+#define KF_KEY_SPLITS_MEMO    "SplitsMemo"
+#define KF_KEY_SPLITS_ACCOUNT "SplitsAccount"
 
 /**< This enum specifies the columns used in the check format combobox. */
 typedef enum format_combo_col_t {
@@ -131,6 +141,9 @@ void gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button
 static void initialize_format_combobox (PrintCheckDialog * pcd);
 gchar* get_check_address(PrintCheckDialog *pcd);
 gboolean check_format_has_address(PrintCheckDialog *pcd);
+gchar* get_check_splits_amount(PrintCheckDialog *pcd);
+gchar* get_check_splits_memo(PrintCheckDialog *pcd);
+gchar* get_check_splits_account(PrintCheckDialog *pcd);
 
 /** This enum defines the types of items that gnucash knows how to
  *  print on checks.  Most refer to specific fields from a gnucash
@@ -150,6 +163,10 @@ gboolean check_format_has_address(PrintCheckDialog *pcd);
                          \
         _(TEXT,) \
         _(ADDRESS,) \
+        _(DATE_FORMAT,) \
+        _(SPLITS_AMOUNT,) \
+        _(SPLITS_MEMO,) \
+        _(SPLITS_ACCOUNT,) \
         _(PICTURE,)
 
 DEFINE_ENUM(CheckItemType, ENUM_CHECK_ITEM_TYPE)
@@ -188,6 +205,9 @@ typedef struct _check_item {
                                  *   Default is no blocking characters are written.
                                  *   Unused for non-text items. */
 
+    gboolean print_date_format; /**< Optional.  Print date format.  Only applies to DATE items.
+                                 *   Default is no format is written. */
+
     PangoAlignment align;       /**< The alignment of a text based item. Only
                                  *   used for text based items when a width is
                                  *   specified.  */
@@ -210,6 +230,9 @@ typedef struct _check_format {
                                  *   user in the dialog box. */
 
     gboolean blocking;          /**< Default for printing blocking characters for 
+                                 *   this page of checks.  */
+
+    gboolean print_date_format; /**< Default for printing date format characters for 
                                  *   this page of checks.  */
 
     gboolean show_grid;         /**< Print a grid pattern on the page */
@@ -256,6 +279,10 @@ struct _print_check_dialog {
   GtkSpinButton * number_x, * number_y;
   GtkSpinButton * address_x, * address_y;
   GtkSpinButton * notes_x,   * notes_y;
+  GtkSpinButton * memo_x,   * memo_y;
+  GtkSpinButton * splits_amount_x,   * splits_amount_y;
+  GtkSpinButton * splits_memo_x,   * splits_memo_y;
+  GtkSpinButton * splits_account_x,   * splits_account_y;
   GtkSpinButton * translation_x, * translation_y;
   GtkSpinButton * check_rotation;
   GtkWidget * translation_label;
@@ -344,13 +371,114 @@ get_check_address( PrintCheckDialog *pcd)
   /* return an address in five lines
    * the string needs to be freed with g_free */
   gchar *address;
-  address = g_strconcat(gtk_entry_get_text(GTK_ENTRY(pcd->check_address_name)),"\n",   \
-                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_1)),"\n",   \
-                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_2)),"\n",   \
-                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_3)),"\n",   \
-                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_4)),   \
+  address = g_strconcat(gtk_entry_get_text(GTK_ENTRY(pcd->check_address_name)),"\n",
+                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_1)),"\n",
+                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_2)),"\n",
+                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_3)),"\n",
+                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_4)),
                         NULL);
   return address;
+}
+
+gchar *
+get_check_splits_amount(PrintCheckDialog *pcd)
+{
+   gchar* amount = NULL;
+   gchar* amt_temp;
+   int cnt;
+   const gchar* split_amount;
+   int nSplits;
+   Transaction *trans;
+   Split *split;
+   GList *node;
+   SplitList* s_list;
+
+   trans = xaccSplitGetParent(pcd->split);
+   nSplits = xaccTransCountSplits(trans);
+   s_list = xaccTransGetSplitList(trans);
+   if ( !s_list ) return NULL;
+
+   amount = g_strconcat("",NULL); 
+   node = s_list;
+   cnt = 1;
+   while ( cnt < nSplits ) {
+      cnt++;
+      split = node->data;
+      split_amount = xaccPrintAmount(xaccSplitGetAmount(split),gnc_split_amount_print_info(split,TRUE));
+      amt_temp = amount;
+      amount = g_strconcat(amt_temp,"\n",split_amount,NULL);
+      g_free(amt_temp);
+      node = node->next;
+   }
+   return amount;
+}
+
+gchar *
+get_check_splits_memo(PrintCheckDialog *pcd)
+{
+   gchar* memo = NULL;
+   gchar* memo_temp;
+   int cnt;
+   const gchar* split_memo;
+   int nSplits;
+   Transaction *trans;
+   Split *split;
+   GList *node;
+   SplitList* s_list;
+
+   trans = xaccSplitGetParent(pcd->split);
+   nSplits = xaccTransCountSplits(trans);
+   s_list = xaccTransGetSplitList(trans);
+   if ( !s_list ) return NULL;
+
+   memo = g_strconcat("",NULL); 
+   node = s_list;
+   cnt = 1;
+   while ( cnt < nSplits ) {
+      cnt++;
+      split = node->data;
+      split_memo = xaccSplitGetMemo(split);
+      memo_temp = memo;
+      memo = g_strconcat(memo_temp,"\n",split_memo,NULL);
+      g_free(memo_temp);
+      node = node->next;
+   }
+   return memo;
+}
+
+gchar *
+get_check_splits_account(PrintCheckDialog *pcd)
+{
+   gchar* account = NULL;
+   gchar* account_temp;
+   int cnt;
+   const gchar* aName = NULL;
+   int nSplits;
+   Account *pAccount;
+   Transaction *trans;
+   Split *split;
+   GList *node;
+   SplitList* s_list;
+
+   trans = xaccSplitGetParent(pcd->split);
+   nSplits = xaccTransCountSplits(trans);
+   s_list = xaccTransGetSplitList(trans);
+   if ( !s_list ) return NULL;
+
+   account = g_strconcat("",NULL); 
+   node = s_list;
+   cnt = 1;
+   while ( cnt < nSplits ) {
+      cnt++;
+      split = node->data;
+      pAccount = xaccSplitGetAccount(split);
+      aName = gnc_get_account_name_for_register(pAccount);
+      account_temp = account;
+      account = g_strconcat(account_temp,"\n",aName,NULL);
+      g_free(account_temp);
+      node = node->next;
+   }
+   return account;
 }
 
 gboolean
@@ -369,14 +497,8 @@ check_format_has_address ( PrintCheckDialog *pcd )
 
   for (elem = pcd->selected_format->items; elem; elem = g_slist_next(elem)) {
     item = elem->data;
-    switch (item->type) {
-        case ADDRESS:
-          return TRUE;
-          break;
-        default:
-          break;
+    if ( item->type == ADDRESS ) return TRUE;
     }
-  }
   return FALSE;
 }
 
@@ -424,9 +546,21 @@ gnc_ui_print_save_dialog(PrintCheckDialog * pcd)
   save_float_pair(GCONF_SECTION, KEY_CUSTOM_NOTES,
 		  gtk_spin_button_get_value(pcd->notes_x),
 		  gtk_spin_button_get_value(pcd->notes_y));
+  save_float_pair(GCONF_SECTION, KEY_CUSTOM_MEMO,
+		  gtk_spin_button_get_value(pcd->memo_x),
+		  gtk_spin_button_get_value(pcd->memo_y));
   save_float_pair(GCONF_SECTION, KEY_CUSTOM_ADDRESS,
 		  gtk_spin_button_get_value(pcd->address_x),
 		  gtk_spin_button_get_value(pcd->address_y));
+  save_float_pair(GCONF_SECTION, KEY_SPLITS_AMOUNT,
+		  gtk_spin_button_get_value(pcd->splits_amount_x),
+		  gtk_spin_button_get_value(pcd->splits_amount_y));
+  save_float_pair(GCONF_SECTION, KEY_SPLITS_MEMO,
+		  gtk_spin_button_get_value(pcd->splits_memo_x),
+		  gtk_spin_button_get_value(pcd->splits_memo_y));
+  save_float_pair(GCONF_SECTION, KEY_SPLITS_ACCOUNT,
+		  gtk_spin_button_get_value(pcd->splits_account_x),
+		  gtk_spin_button_get_value(pcd->splits_account_y));
   save_float_pair(GCONF_SECTION, KEY_CUSTOM_TRANSLATION,
 		  gtk_spin_button_get_value(pcd->translation_x),
 		  gtk_spin_button_get_value(pcd->translation_y));
@@ -494,6 +628,18 @@ gnc_ui_print_restore_dialog(PrintCheckDialog * pcd)
   get_float_pair(GCONF_SECTION, KEY_CUSTOM_NOTES, &x, &y);
   gtk_spin_button_set_value(pcd->notes_x, x);
   gtk_spin_button_set_value(pcd->notes_y, y);
+  get_float_pair(GCONF_SECTION, KEY_CUSTOM_MEMO, &x, &y);
+  gtk_spin_button_set_value(pcd->memo_x, x);
+  gtk_spin_button_set_value(pcd->memo_y, y);
+  get_float_pair(GCONF_SECTION, KEY_SPLITS_AMOUNT, &x, &y);
+  gtk_spin_button_set_value(pcd->splits_amount_x, x);
+  gtk_spin_button_set_value(pcd->splits_amount_y, y);
+  get_float_pair(GCONF_SECTION, KEY_SPLITS_MEMO, &x, &y);
+  gtk_spin_button_set_value(pcd->splits_memo_x, x);
+  gtk_spin_button_set_value(pcd->splits_memo_y, y);
+  get_float_pair(GCONF_SECTION, KEY_SPLITS_ACCOUNT, &x, &y);
+  gtk_spin_button_set_value(pcd->splits_account_x, x);
+  gtk_spin_button_set_value(pcd->splits_account_y, y);
   get_float_pair(GCONF_SECTION, KEY_CUSTOM_TRANSLATION, &x, &y);
   gtk_spin_button_set_value(pcd->translation_x, x);
   gtk_spin_button_set_value(pcd->translation_y, y);
@@ -602,12 +748,21 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
                               pcd->address_x, pcd->address_y);
     pcd_key_file_save_item_xy(key_file, i++, NOTES, multip,
                               pcd->notes_x, pcd->notes_y);
+    pcd_key_file_save_item_xy(key_file, i++, MEMO, multip,
+                              pcd->memo_x, pcd->memo_y);
+    pcd_key_file_save_item_xy(key_file, i++, SPLITS_AMOUNT, multip,
+                              pcd->splits_amount_x, pcd->splits_amount_y);
+    pcd_key_file_save_item_xy(key_file, i++, SPLITS_MEMO, multip,
+                              pcd->splits_memo_x, pcd->splits_memo_y);
+    pcd_key_file_save_item_xy(key_file, i++, SPLITS_ACCOUNT, multip,
+                              pcd->splits_account_x, pcd->splits_account_y);
 
     filename = g_strconcat(title, CHECK_NAME_EXTENSION, NULL);
     pathname = g_build_filename(gnc_dotgnucash_dir(), CHECK_FMT_DIR, 
                                 filename, NULL);
 
     if (gnc_key_file_save_to_file(pathname, key_file, &error)) {
+                if (!gnc_gconf_get_bool(GCONF_SECTION, KEY_PRINT_DATE_FMT, NULL))
         /* Reload the format combo box and reselect the "custom" entry */
         initialize_format_combobox(pcd);
         model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
@@ -627,28 +782,28 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
     }
     g_free(pathname);
     g_free(filename);
-}
+	}
 
 
-/* Make the OK button sensitive iff a title has been entered. */
-void
-gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button)
-{
+	/* Make the OK button sensitive iff a title has been entered. */
+	void
+	gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button)
+	{
   const gchar *text;
   gboolean sensitive;
 
   text = gtk_entry_get_text(GTK_ENTRY(editable));
   sensitive = text && *text;
   gtk_widget_set_sensitive(ok_button, sensitive);
-}
+	}
 
 
-/** This function is called when the user clicks the "save format" button in
+	/** This function is called when the user clicks the "save format" button in
  *  the check printing dialog.  It presents another dialog to the user to get
  *  the filename for saving the data. */
-void
-gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
-{
+	void
+	gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
+	{
     GtkWidget *dialog, *entry, *button;
     GladeXML *xml;
     gchar *title;
@@ -674,14 +829,14 @@ gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
 
     pcd_save_custom_data(pcd, title);
     g_free(title);
-}
+	}
 
 
-/** This is an auxiliary debugging function for converting an array of doubles
+	/** This is an auxiliary debugging function for converting an array of doubles
  *  into a printable string. */
-static gchar *
-doubles_to_string(gdouble * dd, gint len)
-{
+	static gchar *
+	doubles_to_string(gdouble * dd, gint len)
+	{
     GString *str;
     gint i;
 
@@ -689,10 +844,10 @@ doubles_to_string(gdouble * dd, gint len)
     for (i = 0; i < len; i++)
         g_string_append_printf(str, "%f ", dd[i]);
     return g_string_free(str, FALSE);
-}
+	}
 
 
-/** Read the information describing the placement for each item to be printed
+	/** Read the information describing the placement for each item to be printed
  *  on the check.  This information is all relative to the upper left hand
  *  corner of a "check".  See the format_read_multicheck_info() function for
  *  determining if there are multiple checks on a single page of paper. This
@@ -700,10 +855,10 @@ doubles_to_string(gdouble * dd, gint len)
  *  information.  These items will be printed in the same order they are read,
  *  meaning that items listed later in the date file can be printed over top
  *  of items that appear earlier in the file. */
-static GSList *
-format_read_item_placement(const gchar * file,
+	static GSList *
+	format_read_item_placement(const gchar * file,
                            GKeyFile * key_file, check_format_t * format)
-{
+	{
     check_item_t *data = NULL;
     GError *error = NULL;
     GSList *list = NULL;
@@ -776,7 +931,7 @@ format_read_item_placement(const gchar * file,
         /* Any text item can specify:
          *   a font  FONT_n
          *   an alignment if a width was provided for the item  ALIGN_n
-         *   blocking chars flag  BLOCKING_n
+		 *   blocking chars flag  BLOCKING_CHARS_n
          * These values are optional and do not cause a failure if they are missing. */
 
         if (data->type != PICTURE) {
@@ -860,6 +1015,24 @@ format_read_item_placement(const gchar * file,
                 g_debug("Check file %s, group %s, key %s, value: %s",
                         file, KF_GROUP_ITEMS, key, data->text);
                 g_free(key);
+                    case DATE:
+                      /* no error if the date_format is not present */
+			key = g_strdup_printf("%s_%d", KF_KEY_DATE_FORMAT, item_num);
+                        bval = g_key_file_get_boolean(key_file, KF_GROUP_ITEMS, key, &error);
+   		    	if (!error) {
+			   g_debug("Check file %s, group %s, key %s, value: %d",
+				file, KF_GROUP_ITEMS, key, bval);
+			   data->print_date_format = bval;
+			} else {
+			   if (!((error->domain == G_KEY_FILE_ERROR)
+			      && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+			      g_warning("Check file %s, group %s, key %s, error: %s",
+			         file, KF_GROUP_ITEMS, key, error->message);
+			   //data->print_date_format = gnc_gconf_get_bool(GCONF_SECTION, KEY_PRINT_DATE_FMT, NULL);
+			   data->print_date_format = format->print_date_format;
+			   g_clear_error(&error);
+			}
+			g_free(key);
                 break;
             default:
                 break;
@@ -1014,6 +1187,25 @@ format_read_general_info(const gchar * file,
 		format->blocking = TRUE;
            } else {
                 format->blocking = FALSE;
+           }
+        g_clear_error(&error);
+    }
+
+    format->print_date_format =
+        g_key_file_get_boolean(key_file, KF_GROUP_TOP, KF_KEY_DATE_FORMAT,
+                               &error);
+    if (!error) {
+        g_debug("Check file %s, group %s, key %s, value: %d",
+                file, KF_GROUP_TOP, KF_KEY_DATE_FORMAT, format->print_date_format);
+    } else {
+        if (!((error->domain == G_KEY_FILE_ERROR)
+              && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+            g_warning("Check file %s, group %s, key %s, error: %s",
+                      file, KF_GROUP_TOP, KF_KEY_DATE_FORMAT, error->message);
+           if( gnc_gconf_get_bool(GCONF_SECTION, KEY_PRINT_DATE_FMT, NULL) ) {
+		format->print_date_format = TRUE;
+           } else {
+                format->print_date_format = FALSE;
            }
         g_clear_error(&error);
     }
@@ -1321,8 +1513,16 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
     GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "amount_numbers_y_entry"));
   pcd->notes_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "notes_x_entry"));
   pcd->notes_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "notes_y_entry"));
+  pcd->memo_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "memo_x_entry"));
+  pcd->memo_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "memo_y_entry"));
   pcd->address_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "address_x_entry"));
   pcd->address_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "address_y_entry"));
+  pcd->splits_amount_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_amount_x_entry"));
+  pcd->splits_amount_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_amount_y_entry"));
+  pcd->splits_memo_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_memo_x_entry"));
+  pcd->splits_memo_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_memo_y_entry"));
+  pcd->splits_account_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_account_x_entry"));
+  pcd->splits_account_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_account_y_entry"));
   pcd->translation_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "translation_x_entry"));
   pcd->translation_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "translation_y_entry"));
   pcd->translation_label = glade_xml_get_widget (xml, "translation_label");
@@ -1700,8 +1900,7 @@ draw_date_format(GncPrintContext * context, const gchar *date_format,
     GString *cdn_fmt;
 
     thislocale = setlocale(LC_ALL, NULL);
-    if (!gnc_gconf_get_bool(GCONF_SECTION, KEY_PRINT_DATE_FMT, NULL))
-        return;
+    if ( !data->print_date_format ) return;
 
     date_desc = pango_font_description_copy_static(default_desc);
     pango_font_description_set_size(date_desc, DATE_FMT_HEIGHT * PANGO_SCALE);
@@ -1844,6 +2043,24 @@ draw_page_items(GncPrintContext * context,
                 address = get_check_address(pcd);
                 draw_text(context, address, item, default_desc);
 		g_free(address);
+                break;
+
+            case SPLITS_AMOUNT:
+                text = get_check_splits_amount(pcd);
+                draw_text(context, text, item, default_desc);
+		g_free(text);
+                break;
+
+            case SPLITS_MEMO:
+                text = get_check_splits_memo(pcd);
+                draw_text(context, text, item, default_desc);
+		g_free(text);
+                break;
+
+            case SPLITS_ACCOUNT:
+                text = get_check_splits_account(pcd);
+                draw_text(context, text, item, default_desc);
+		g_free(text);
                 break;
 
 #if USE_GTKPRINT
@@ -2067,9 +2284,31 @@ draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
     draw_text(context, address, &item, desc);
     g_free(address);
 
+    item.x = multip * gtk_spin_button_get_value(pcd->splits_amount_x);
+    item.y = multip * gtk_spin_button_get_value(pcd->splits_amount_y);
+    text = get_check_splits_amount(pcd);
+    draw_text(context, text, &item, desc);
+    g_free(text);
+
+    item.x = multip * gtk_spin_button_get_value(pcd->splits_memo_x);
+    item.y = multip * gtk_spin_button_get_value(pcd->splits_memo_y);
+    text = get_check_splits_memo(pcd);
+    draw_text(context, text, &item, desc);
+    g_free(text);
+
+    item.x = multip * gtk_spin_button_get_value(pcd->splits_account_x);
+    item.y = multip * gtk_spin_button_get_value(pcd->splits_account_y);
+    text = get_check_splits_account(pcd);
+    draw_text(context, text, &item, desc);
+    g_free(text);
+
     item.x = multip * gtk_spin_button_get_value(pcd->notes_x);
     item.y = multip * gtk_spin_button_get_value(pcd->notes_y);
     draw_text(context, xaccTransGetNotes(trans), &item, desc);
+
+    item.x = multip * gtk_spin_button_get_value(pcd->memo_x);
+    item.y = multip * gtk_spin_button_get_value(pcd->memo_y);
+    draw_text(context, xaccSplitGetMemo(pcd->split), &item, desc);
 
     pango_font_description_free(desc);
 }
