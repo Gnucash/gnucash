@@ -28,25 +28,13 @@
     @ingroup SQLBE
 */
 
-/**
-  @}
-*/
-
 /** @addtogroup SQLBE
-    @{
-*/
-/** @addtogroup SQLBE
-
- * The SQL backend core is a library which can form the core for a QOF
- * backend based on an SQL library.
-
-*/
-
-/** @file gnc-backend-sql.h
+ *  The SQL backend core is a library which can form the core for a QOF
+ *  backend based on an SQL library.
+ *  
+ *  @file gnc-backend-sql.h
  *  @brief load and save data to SQL
  *  @author Copyright (c) 2006-2008 Phil Longstaff <plongstaff@rogers.com>
- *
-   @}
  */ 
 
 #ifndef GNC_BACKEND_SQL_H_
@@ -724,3 +712,7 @@ typedef struct {
 } write_objects_t;
 
 #endif /* GNC_BACKEND_SQL_H_ */
+
+/**
+  @}  end of the SQL Backend Core doxygen group */
+*/
