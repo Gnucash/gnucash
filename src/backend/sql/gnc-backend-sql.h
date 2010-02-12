@@ -714,5 +714,5 @@ typedef struct {
 #endif /* GNC_BACKEND_SQL_H_ */
 
 /**
-  @}  end of the SQL Backend Core doxygen group */
+  @}  end of the SQL Backend Core doxygen group
 */
