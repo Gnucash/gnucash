@@ -668,10 +668,11 @@ gnc_pricedb_set_bulk_update(GNCPriceDB *db, gboolean bulk_update)
 */
 /** \todo Collections of prices are not destroyed fully.
 
-gnc_pricedb_destroy does not clean up properly because
-gnc_pricedb_create reports an existing PriceDB after
-running gnc_pricedb_destroy. To change the pricedb, we need to
-destroy and recreate the book. Yuk.
+    \par
+    gnc_pricedb_destroy does not clean up properly because
+    gnc_pricedb_create reports an existing PriceDB after
+    running gnc_pricedb_destroy. To change the pricedb, we need to
+    destroy and recreate the book. Yuk.
  */
 
 GNCPriceDB *
