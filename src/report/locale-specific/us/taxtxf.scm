@@ -1497,16 +1497,18 @@
                                (string=? tax-entity-type "")
                                (string=? tax-entity-type "Other")))
                     (if tax-related
-                      (set! txf-invalid-alist (assoc-set!
+                      (begin
+                        (set! txf-invalid-alist (assoc-set!
                                txf-invalid-alist
                                (_ "None")
                                (list (_ "Set as tax-related, no tax code assigned")
                                      account-name form account)))
-                      (begin;; not tax related - skip for report
-                      )
+                         selected-accounts-sorted-by-form-line-acct) 
+                      (begin ;; not tax related - skip for report
+                      selected-accounts-sorted-by-form-line-acct)
                     )
-                    (begin;; 'Other' tax entity type selected - message on report
-                    )
+                    (begin ;; 'Other' tax entity type selected - message on report
+                    selected-accounts-sorted-by-form-line-acct)
                   )
                   selected-accounts-sorted-by-form-line-acct)
                );; end of if
@@ -1984,6 +1986,7 @@
                                        (cons (current-time) 0))))))
           (tax-year   (strftime "%Y" (localtime (car from-value))))
           (tax-entity-type (gnc-get-current-book-tax-type))
+          (tax-entity-type-valid? #f)
           (prior-form-schedule "")
           (prior-form-sched-line "")
           (prior-tax-code "")
@@ -2457,18 +2460,25 @@
       ;; Now, the main body
       (set! selected-accounts-sorted-by-form-line-acct '())
       (set! txf-invalid-alist '())
-      (make-form-line-acct-list selected-accounts tax-year)
-      (set! selected-accounts-sorted-by-form-line-acct
-         (sort-list
-             selected-accounts-sorted-by-form-line-acct
-             form-line-acct-less
-         ))
-      (set! work-to-do (length selected-accounts-sorted-by-form-line-acct))
-      (set! txf-l-count 0)
+      (if (gnc:txf-get-tax-entity-type (string->symbol tax-entity-type))
+          (set! tax-entity-type-valid? #t)
+          (set! tax-entity-type-valid? #f))
+      (if tax-entity-type-valid?
+          (begin
+            (make-form-line-acct-list selected-accounts tax-year)
+            (set! selected-accounts-sorted-by-form-line-acct
+               (sort-list
+                   selected-accounts-sorted-by-form-line-acct
+                   form-line-acct-less
+               ))
+            (set! work-to-do (length selected-accounts-sorted-by-form-line-acct))
+            (set! txf-l-count 0)
+          ))
 
       (if (not tax-mode?) ; Do Txf mode
-          (if file-name		; cancel TXF if no file selected
-              (let ((port (catch #t ;;e.g., system-error
+          (if tax-entity-type-valid? 
+              (if file-name		; cancel TXF if no file selected
+                  (let ((port (catch #t ;;e.g., system-error
                                  (lambda () (open-output-file file-name))
                                  (lambda (key . args)
                                     (gnc-error-dialog
@@ -2483,23 +2493,23 @@
                                               "."
                                           ))
                                      #f)))
-                   )
-                   (if port ;; port opened successfully
-                       (let* ((output (map (lambda (form-line-acct)
-                                            (handle-tax-code form-line-acct))
+                       )
+                       (if port ;; port opened successfully
+                           (let* ((output (map (lambda (form-line-acct)
+                                               (handle-tax-code form-line-acct))
                                     selected-accounts-sorted-by-form-line-acct))
-                              (output-txf
-                                (list
-                                  "V041" crlf
-                                  "AGnuCash " gnc:version crlf
-                                  today-date crlf
-                                  "^" crlf
-                                  output
-                                  (if (or 
-                                         (gnc-numeric-zero-p tax-code-USD-total)
-                                         (not prior-account))
-                                      '()
-                                      (render-txf-account prior-account
+                                  (output-txf
+                                    (list
+                                      "V041" crlf
+                                      "AGnuCash " gnc:version crlf
+                                      today-date crlf
+                                      "^" crlf
+                                      output
+                                      (if (or 
+                                             (gnc-numeric-zero-p tax-code-USD-total)
+                                             (not prior-account))
+                                          '()
+                                          (render-txf-account prior-account
                                               tax-code-USD-total-as-dr
                                               #f #f #f #f
                                               (xaccAccountGetType prior-account)
@@ -2507,26 +2517,27 @@
                                                                 prior-account)
                                               prior-account-copy
                                               tax-entity-type))
-                                ))
-                             )
-                             ;; prior-account can be #f if selected accounts are
-                             ;; marked as 'tax-related' in the account edit
-                             ;; dialog but not actually assigned to a tax code
-                             ;; using the 'Tax Options' dialog (UI bug?).
-                             ;; An empty file is unfortunately put out with
-                             ;; no user warning other than message on report.
-                             (if prior-account
-                                 (gnc:display-report-list-item output-txf port
+                                    ))
+                                 )
+                                 ;; prior-account can be #f if selected accounts are
+                                 ;; marked as 'tax-related' in the account edit
+                                 ;; dialog but not actually assigned to a tax code
+                                 ;; using the 'Tax Options' dialog (UI bug?).
+                                 ;; An empty file is unfortunately put out with
+                                 ;; no user warning other than message on report.
+                                 (if prior-account
+                                     (gnc:display-report-list-item output-txf port
                                                            "taxschedule.scm - ")
-                                 #f) 
-                             (close-output-port port)
-                             #t
-                       ) ; end of let
-                       ;; Could not open port successfully
-                       #t ;; to prevent 2nd error dialog in
-                          ;; gnc_plugin_page_report_export_cb
-                   ) ;; end of if
-              ) ;; end of let*
+                                     #f) 
+                                 (close-output-port port)
+                                 #t
+                           ) ; end of let
+                           ;; Could not open port successfully
+                           #t ;; to prevent 2nd error dialog in
+                              ;; gnc_plugin_page_report_export_cb
+                       ) ;; end of if
+                  ) ;; end of let*
+              #f) ;;end of if
           #f) ;;end of if
           (begin  ; else do tax report
              (gnc:html-document-set-style!
@@ -2670,8 +2681,9 @@
 
              (gnc:html-document-add-object! doc table)
 
-             (map (lambda (form-line-acct) (handle-tax-code form-line-acct))
-                  selected-accounts-sorted-by-form-line-acct)
+             (if tax-entity-type-valid? 
+                 (map (lambda (form-line-acct) (handle-tax-code form-line-acct))
+                      selected-accounts-sorted-by-form-line-acct))
 
              ;; if tax-code allows multiple lines, print subline
              (if (or (and suppress-0? (gnc-numeric-zero-p
