@@ -121,7 +121,6 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
 
         copy_cursor_row (layout, curs, curs_last, 0);
 
-        gnc_table_layout_set_cell (layout, curs, DTRANS_CELL,  1, 0);
         gnc_table_layout_set_cell (layout, curs, ACTN_CELL,  1, 1);
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
@@ -143,7 +142,6 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
 
         copy_cursor_row (layout, curs, curs_last, 0);
 
-        gnc_table_layout_set_cell (layout, curs, DTRANS_CELL,  1, 0);
         gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 2);
         gnc_table_layout_set_cell (layout, curs, VNOTES_CELL, 1, 3);
 
@@ -529,14 +527,6 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
 
   gnc_register_add_cell (layout,
                          DDUE_CELL,
-                         DATE_CELL_TYPE_NAME,
-                         N_("sample:12/12/2000") + 7,
-                         CELL_ALIGN_RIGHT,
-                         FALSE,
-                         FALSE);
-
-  gnc_register_add_cell (layout,
-                         DTRANS_CELL,
                          DATE_CELL_TYPE_NAME,
                          N_("sample:12/12/2000") + 7,
                          CELL_ALIGN_RIGHT,

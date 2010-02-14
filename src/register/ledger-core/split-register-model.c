@@ -193,13 +193,6 @@ gnc_split_register_get_due_date_label (VirtualLocation virt_loc,
 }
 
 static const char *
-gnc_split_register_get_trans_date_label (VirtualLocation virt_loc,
-				       gpointer user_data)
-{
-  return _("Transaction");
-}
-
-static const char *
 gnc_split_register_get_num_label (VirtualLocation virt_loc,
                                   gpointer user_data)
 {
@@ -837,50 +830,9 @@ gnc_split_register_get_due_date_entry (VirtualLocation virt_loc,
 
   xaccTransGetDateDueTS (trans, &ts);
   //PWARN ("returning valid due_date entry");
-
+    
   return gnc_print_date (ts);
 }
-
-
-static const char *
-gnc_split_register_get_trans_date_entry (VirtualLocation virt_loc,
-                                   gboolean translate,
-                                   gboolean *conditionally_changed,
-                                   gpointer user_data)
-{
-  SplitRegister *reg = user_data;
-  Transaction *trans;
-  Split *split;
-  Timespec ts;
-
-  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
-  trans = xaccSplitGetParent (split);
-  if (!trans) {
-   //PWARN ("No transaction in transaction_date entry");
-    return NULL;
-  }
-
-  xaccTransGetDateEnteredTS (trans, &ts);
-  //PWARN ("returning valid transaction_date entry");
-
-  return gnc_print_date (ts);
-}
-
-
-static char *
-gnc_split_register_get_trans_date_help (VirtualLocation virt_loc,
-                                   gpointer user_data)
-{
-  SplitRegister *reg = user_data;
-  const char *help;
-
-  help = gnc_table_get_entry (reg->table, virt_loc);
-  if (!help || *help == '\0')
-    help = _("Enter the transaction date");
-
-  return g_strdup (help);
-}
-
 
 static const char *
 gnc_split_register_get_date_entry (VirtualLocation virt_loc,
@@ -2207,10 +2159,6 @@ gnc_split_register_model_new (void)
                                      DATE_CELL);
 
   gnc_table_model_set_entry_handler (model,
-                                     gnc_split_register_get_trans_date_entry,
-                                     DTRANS_CELL);
-
-  gnc_table_model_set_entry_handler (model,
                                      gnc_split_register_get_due_date_entry,
                                      DDUE_CELL);
 
@@ -2302,10 +2250,6 @@ gnc_split_register_model_new (void)
   gnc_table_model_set_label_handler (model,
                                      gnc_split_register_get_date_label,
                                      DATE_CELL);
-
-  gnc_table_model_set_label_handler (model,
-                                     gnc_split_register_get_trans_date_label,
-                                     DTRANS_CELL);
 
   gnc_table_model_set_label_handler (model,
                                      gnc_split_register_get_due_date_label,
@@ -2404,10 +2348,6 @@ gnc_split_register_model_new (void)
                                     DATE_CELL);
 
   gnc_table_model_set_help_handler (model,
-                                    gnc_split_register_get_trans_date_help,
-                                    DTRANS_CELL);
-
-  gnc_table_model_set_help_handler (model,
                                     gnc_split_register_get_date_help,
                                     DDUE_CELL);
 
@@ -2462,10 +2402,6 @@ gnc_split_register_model_new (void)
 
   gnc_table_model_set_io_flags_handler(
       model, gnc_split_register_get_standard_io_flags, DATE_CELL);
-
-  gnc_table_model_set_io_flags_handler(
-      model, gnc_split_register_get_standard_io_flags, DTRANS_CELL);
-
 
   /* FIXME: We really only need a due date for 'invoices', not for
    * 'payments' or 'receipts'.  This implies we really only need the
@@ -2589,16 +2525,10 @@ gnc_template_register_model_new (void)
       model, gnc_split_register_get_inactive_date_entry, DATE_CELL );
 
   gnc_table_model_set_entry_handler(
-      model, gnc_split_register_get_inactive_date_entry, DTRANS_CELL );
-
-  gnc_table_model_set_entry_handler(
       model, gnc_split_register_get_inactive_date_entry, DDUE_CELL );
 
   gnc_table_model_set_io_flags_handler(
       model, gnc_split_register_get_inactive_io_flags, DATE_CELL );
-
-  gnc_table_model_set_io_flags_handler(
-      model, gnc_split_register_get_inactive_io_flags, DTRANS_CELL );
 
   gnc_table_model_set_io_flags_handler(
       model, gnc_split_register_get_inactive_io_flags, DDUE_CELL );
