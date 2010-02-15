@@ -1793,7 +1793,7 @@ main_window_update_page_name (GncPluginPage *page,
   /* Update Tooltip on notebook Tab */
   main_window_find_tab_event(window, page, &event_box);
 
-  if (strstr(old_page_long_name,old_page_name) != NULL) {
+  if (old_page_long_name != NULL && strstr(old_page_long_name,old_page_name) != NULL) {
     gchar *new_page_long_name;
     gint string_position;
 
