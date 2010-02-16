@@ -300,7 +300,7 @@ dist_gwenhywfar
 dist_ktoblzcheck
 dist_aqbanking
 dist_libdbi
-#dist_webkit
+dist_webkit
 dist_gnucash
 finish
 qpopd

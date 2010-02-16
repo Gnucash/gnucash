@@ -355,7 +355,7 @@ add_step inst_gwenhywfar
 add_step inst_ktoblzcheck
 add_step inst_aqbanking
 add_step inst_libdbi
-#add_step inst_webkit
+add_step inst_webkit
 ##
 if [ "$UPDATE_SOURCES" = "yes" ]; then
  add_step svn_up
