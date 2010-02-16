@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-07 21:00+0100\n"
-"PO-Revision-Date: 2010-02-07 21:47+0100\n"
+"PO-Revision-Date: 2010-02-16 22:20+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -15205,9 +15205,8 @@ msgstr "Abgebrochen"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:840
 #: ../src/import-export/qif-import/druid-qif-import.c:844
-#, fuzzy
 msgid "An error occurred while loading the QIF file."
-msgstr "Beim Erstellen des Berichts ist ein Fehler aufgetreten."
+msgstr "Beim Laden der QIF-Datei ist ein Fehler aufgetreten."
 
 #. Inform the user.
 #: ../src/import-export/qif-import/druid-qif-import.c:841
@@ -20824,7 +20823,7 @@ msgstr "Angepasste Rohbilanz"
 #: ../intl-scm/guile-strings.c:2686 ../intl-scm/guile-strings.c:2884
 #: ../intl-scm/guile-strings.c:3358 ../intl-scm/guile-strings.c:3556
 msgid "Income Statement"
-msgstr "Gewinn- und Verlustrechnung"
+msgstr "Ergebnisrechnung"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
@@ -22479,9 +22478,8 @@ msgstr ""
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:4616 ../intl-scm/guile-strings.c:5986
-#, fuzzy
 msgid "Display the value in transaction currency?"
-msgstr "Anzeigen der Buchungsreferenz?"
+msgstr "Werte in Buchungswährung anzeigen?"
 
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
@@ -22498,16 +22496,14 @@ msgstr "Gesamt Haben"
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:4634 ../intl-scm/guile-strings.c:6004
-#, fuzzy
 msgid "Total Value Debits"
-msgstr "Gesamt Soll"
+msgstr "Gesamtwert Soll"
 
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:4636 ../intl-scm/guile-strings.c:6006
-#, fuzzy
 msgid "Total Value Credits"
-msgstr "Gesamt Haben"
+msgstr "Gesamtwert Haben"
 
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
@@ -22518,9 +22514,8 @@ msgstr "Gesamt Änderung"
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:4640 ../intl-scm/guile-strings.c:6010
-#, fuzzy
 msgid "Value Change"
-msgstr "Gesamt Änderung"
+msgstr "Gesamtwert Änderung"
 
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
