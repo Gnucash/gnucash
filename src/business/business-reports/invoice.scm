@@ -388,15 +388,31 @@
     (define (add-payment-row table used-columns split total-collector)
       (let* ((t (xaccSplitGetParent split))
 	     (currency (xaccTransGetCurrency t))
-	     ;; XXX Need to know when to reverse the value
+	     (invoice (opt-val invoice-page invoice-name))
+	     (owner '())
 	     (amt (gnc:make-gnc-monetary currency (xaccSplitGetValue split)))
 	     (payment-style "grand-total")
 	     (row '()))
-	
-	(total-collector 'add 
-			 (gnc:gnc-monetary-commodity amt)
-			 (gnc:gnc-monetary-amount amt))
 
+	; Update to fix bug 564380, payment on bill doubles bill Mike Evans <mikee@saxicola.co.uk>
+	;; Reverse the value when needed
+	(if (not (null? invoice))
+	    (begin
+		 (set! owner (gncInvoiceGetOwner invoice))
+		 (let ((type (gncOwnerGetType
+				(gncOwnerGetEndOwner owner))))
+		      (cond
+			((eqv? type GNC-OWNER-CUSTOMER)
+			 (total-collector 'add 
+			    (gnc:gnc-monetary-commodity amt)
+			    (gnc:gnc-monetary-amount amt)))
+			((eqv? type GNC-OWNER-VENDOR)
+			 (total-collector 'add 
+			    (gnc:gnc-monetary-commodity amt)
+			    (gnc:gnc-monetary-amount (gnc:monetary-neg amt))))
+	))))
+	       
+	
 	(if (date-col used-columns)
 	    (addto! row
 		    (gnc-print-date (gnc-transaction-get-date-posted t))))
