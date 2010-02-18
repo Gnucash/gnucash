@@ -474,8 +474,8 @@ numeric_match_predicate (gpointer object, QofParam *getter,
         compare =
             (gnc_numeric_compare (gnc_numeric_abs
                                   (gnc_numeric_sub (gnc_numeric_abs (obj_val),
-                                                    gnc_numeric_abs (pdata->amount),
-                                                    100000, GNC_HOW_RND_ROUND)),
+                                          gnc_numeric_abs (pdata->amount),
+                                          100000, GNC_HOW_RND_ROUND)),
                                   cmp_val) < 0);
     }
     else
@@ -1738,43 +1738,69 @@ static void init_tables (void)
         QueryPredicateEqual    pred_equal;
     } knownTypes[] =
     {
-        { QOF_TYPE_STRING, string_match_predicate, string_compare_func,
+        {
+            QOF_TYPE_STRING, string_match_predicate, string_compare_func,
             string_copy_predicate, string_free_pdata, string_to_string,
-            string_predicate_equal },
-        { QOF_TYPE_DATE, date_match_predicate, date_compare_func,
-          date_copy_predicate, date_free_pdata, date_to_string,
-          date_predicate_equal },
-        { QOF_TYPE_DEBCRED, numeric_match_predicate, numeric_compare_func,
-          numeric_copy_predicate, numeric_free_pdata, debcred_to_string,
-          numeric_predicate_equal },
-        { QOF_TYPE_NUMERIC, numeric_match_predicate, numeric_compare_func,
-          numeric_copy_predicate, numeric_free_pdata, numeric_to_string,
-          numeric_predicate_equal },
-        { QOF_TYPE_GUID, guid_match_predicate, NULL,
-          guid_copy_predicate, guid_free_pdata, NULL,
-          guid_predicate_equal },
-        { QOF_TYPE_INT32, int32_match_predicate, int32_compare_func,
-          int32_copy_predicate, int32_free_pdata, int32_to_string,
-          int32_predicate_equal },
-        { QOF_TYPE_INT64, int64_match_predicate, int64_compare_func,
-          int64_copy_predicate, int64_free_pdata, int64_to_string,
-          int64_predicate_equal },
-        { QOF_TYPE_DOUBLE, double_match_predicate, double_compare_func,
-          double_copy_predicate, double_free_pdata, double_to_string,
-          double_predicate_equal },
-        { QOF_TYPE_BOOLEAN, boolean_match_predicate, boolean_compare_func,
-          boolean_copy_predicate, boolean_free_pdata, boolean_to_string,
-          boolean_predicate_equal },
-        { QOF_TYPE_CHAR, char_match_predicate, char_compare_func,
-          char_copy_predicate, char_free_pdata, char_to_string,
-          char_predicate_equal },
-        { QOF_TYPE_KVP, kvp_match_predicate, NULL, kvp_copy_predicate,
-          kvp_free_pdata, NULL, kvp_predicate_equal },
-        { QOF_TYPE_COLLECT, collect_match_predicate, collect_compare_func,
-          collect_copy_predicate, collect_free_pdata, NULL,
-          collect_predicate_equal },
-        { QOF_TYPE_CHOICE, choice_match_predicate, NULL,
-          choice_copy_predicate, choice_free_pdata, NULL, choice_predicate_equal },
+            string_predicate_equal
+        },
+        {
+            QOF_TYPE_DATE, date_match_predicate, date_compare_func,
+            date_copy_predicate, date_free_pdata, date_to_string,
+            date_predicate_equal
+        },
+        {
+            QOF_TYPE_DEBCRED, numeric_match_predicate, numeric_compare_func,
+            numeric_copy_predicate, numeric_free_pdata, debcred_to_string,
+            numeric_predicate_equal
+        },
+        {
+            QOF_TYPE_NUMERIC, numeric_match_predicate, numeric_compare_func,
+            numeric_copy_predicate, numeric_free_pdata, numeric_to_string,
+            numeric_predicate_equal
+        },
+        {
+            QOF_TYPE_GUID, guid_match_predicate, NULL,
+            guid_copy_predicate, guid_free_pdata, NULL,
+            guid_predicate_equal
+        },
+        {
+            QOF_TYPE_INT32, int32_match_predicate, int32_compare_func,
+            int32_copy_predicate, int32_free_pdata, int32_to_string,
+            int32_predicate_equal
+        },
+        {
+            QOF_TYPE_INT64, int64_match_predicate, int64_compare_func,
+            int64_copy_predicate, int64_free_pdata, int64_to_string,
+            int64_predicate_equal
+        },
+        {
+            QOF_TYPE_DOUBLE, double_match_predicate, double_compare_func,
+            double_copy_predicate, double_free_pdata, double_to_string,
+            double_predicate_equal
+        },
+        {
+            QOF_TYPE_BOOLEAN, boolean_match_predicate, boolean_compare_func,
+            boolean_copy_predicate, boolean_free_pdata, boolean_to_string,
+            boolean_predicate_equal
+        },
+        {
+            QOF_TYPE_CHAR, char_match_predicate, char_compare_func,
+            char_copy_predicate, char_free_pdata, char_to_string,
+            char_predicate_equal
+        },
+        {
+            QOF_TYPE_KVP, kvp_match_predicate, NULL, kvp_copy_predicate,
+            kvp_free_pdata, NULL, kvp_predicate_equal
+        },
+        {
+            QOF_TYPE_COLLECT, collect_match_predicate, collect_compare_func,
+            collect_copy_predicate, collect_free_pdata, NULL,
+            collect_predicate_equal
+        },
+        {
+            QOF_TYPE_CHOICE, choice_match_predicate, NULL,
+            choice_copy_predicate, choice_free_pdata, NULL, choice_predicate_equal
+        },
     };
 
     /* Register the known data types */

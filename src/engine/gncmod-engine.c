@@ -26,13 +26,13 @@ int libgncmod_engine_gnc_module_age      = 0;
 char *
 libgncmod_engine_gnc_module_path(void)
 {
-  return g_strdup("gnucash/engine");
+    return g_strdup("gnucash/engine");
 }
 
 char *
 libgncmod_engine_gnc_module_description(void)
 {
-  return g_strdup("The GnuCash accounting engine");
+    return g_strdup("The GnuCash accounting engine");
 }
 
 extern SCM scm_init_sw_engine_module(void);
@@ -40,20 +40,21 @@ extern SCM scm_init_sw_engine_module(void);
 int
 libgncmod_engine_gnc_module_init(int refcount)
 {
-  if(refcount == 0)
-  {
-    /* initialize the engine on the first load */
-    gnc_engine_init(0, NULL);
-  }
+    if (refcount == 0)
+    {
+        /* initialize the engine on the first load */
+        gnc_engine_init(0, NULL);
+    }
 
-  scm_init_sw_engine_module();
-  scm_c_eval_string("(use-modules (sw_engine))");
-  scm_c_eval_string("(use-modules (gnucash engine))");
+    scm_init_sw_engine_module();
+    scm_c_eval_string("(use-modules (sw_engine))");
+    scm_c_eval_string("(use-modules (gnucash engine))");
 
-  return TRUE;
+    return TRUE;
 }
 
 int
-libgncmod_engine_gnc_module_end(int refcount) {
-  return TRUE;
+libgncmod_engine_gnc_module_end(int refcount)
+{
+    return TRUE;
 }

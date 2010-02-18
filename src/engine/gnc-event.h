@@ -26,7 +26,8 @@
 #include <glib.h>
 #include <qof.h>
 
-typedef struct {
+typedef struct
+{
     gpointer node;
     gint idx;
 } GncEventData;

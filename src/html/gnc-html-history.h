@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-html-history.h -- keep a HTML history                        * 
+ * gnc-html-history.h -- keep a HTML history                        *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -28,35 +28,36 @@ typedef struct _gnc_html_history gnc_html_history;
 
 #include "gnc-html.h"
 
-struct _gnc_html_history_node {
-  URLType type;
-  gchar   * location;
-  gchar   * label;  
+struct _gnc_html_history_node
+{
+    URLType type;
+    gchar   * location;
+    gchar   * label;
 };
 
 typedef void (* gnc_html_history_destroy_cb)(gnc_html_history_node * n,
-                                             gpointer user_data);
+        gpointer user_data);
 
 gnc_html_history      * gnc_html_history_new(void);
 void                    gnc_html_history_destroy(gnc_html_history * hist);
 
 void                    gnc_html_history_append(gnc_html_history * h,
-                                                gnc_html_history_node * n);
+        gnc_html_history_node * n);
 gnc_html_history_node * gnc_html_history_get_current(gnc_html_history * h);
 gnc_html_history_node * gnc_html_history_forward(gnc_html_history * h);
 gnc_html_history_node * gnc_html_history_back(gnc_html_history * h);
 int                     gnc_html_history_forward_p(gnc_html_history * h);
 int                     gnc_html_history_back_p(gnc_html_history * h);
 void  gnc_html_history_set_node_destroy_cb(gnc_html_history * h,
-                                           gnc_html_history_destroy_cb cb,
-                                           gpointer cb_data);
+        gnc_html_history_destroy_cb cb,
+        gpointer cb_data);
 
 gnc_html_history_node * gnc_html_history_node_new(URLType type,
-                                                  const gchar * location, 
-                                                  const gchar * label);
+        const gchar * location,
+        const gchar * label);
 
-void                    gnc_html_history_node_destroy(gnc_html_history_node * 
-                                                      node);
+void                    gnc_html_history_node_destroy(gnc_html_history_node *
+        node);
 
 
 #endif

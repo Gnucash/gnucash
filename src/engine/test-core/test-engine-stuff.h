@@ -47,21 +47,21 @@ Account* get_random_account(QofBook * book);
 Split* get_random_split(QofBook *book, Account *account, Transaction *trn);
 Transaction* get_random_transaction(QofBook *book);
 Transaction* get_random_transaction_with_currency(QofBook *book,
-                                                  gnc_commodity *currency,
-                                                  GList *account_list);
+        gnc_commodity *currency,
+        GList *account_list);
 gnc_commodity* get_random_commodity(QofBook *book);
 const char *get_random_commodity_namespace(void);
 
 typedef enum
 {
-  RANDOM_QT      = 0,
-  SIMPLE_QT      = 1 << 0,
-  ACCOUNT_QT     = 1 << 1,
-  SPLIT_KVP_QT   = 1 << 2,
-  TRANS_KVP_QT   = 1 << 3,
-  ACCOUNT_KVP_QT = 1 << 4,
-  GUID_QT        = 1 << 5,
-  ALL_QT         = (1 << 8) - 1
+    RANDOM_QT      = 0,
+    SIMPLE_QT      = 1 << 0,
+    ACCOUNT_QT     = 1 << 1,
+    SPLIT_KVP_QT   = 1 << 2,
+    TRANS_KVP_QT   = 1 << 3,
+    ACCOUNT_KVP_QT = 1 << 4,
+    GUID_QT        = 1 << 5,
+    ALL_QT         = (1 << 8) - 1
 } TestQueryTypes;
 
 Query * get_random_query(void);
@@ -80,10 +80,10 @@ void make_random_changes_to_price (QofBook *book, GNCPrice *price);
 void make_random_changes_to_pricedb (QofBook *book, GNCPriceDB *pdb);
 void make_random_changes_to_split (Split *split);
 void make_random_changes_to_transaction (QofBook *book,
-                                         Transaction *trans);
+        Transaction *trans);
 void make_random_changes_to_transaction_and_splits (QofBook *book,
-                                                    Transaction *trans,
-                                                    GList *accounts);
+        Transaction *trans,
+        GList *accounts);
 void make_random_changes_to_account (QofBook *book, Account *account);
 void make_random_changes_to_level (QofBook *book, Account *parent);
 void make_random_changes_to_book (QofBook *book);

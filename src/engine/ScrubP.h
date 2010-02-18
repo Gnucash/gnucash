@@ -22,7 +22,7 @@
  * This is the *private* header for the scrub routines.
  * No one outside of the engine should ever include this file.
  *
- * Copyright (C) 2003, Linas Vepstas <linas@linas.org> 
+ * Copyright (C) 2003, Linas Vepstas <linas@linas.org>
  */
 
 #ifndef XACC_SCRUB_P_H
@@ -33,9 +33,9 @@
 #include "gnc-engine.h"
 
 /* Utility to make account by name.  Not for public use. */
-Account * xaccScrubUtilityGetOrMakeAccount (Account *root, 
-       gnc_commodity * currency, const char *accname,
-       GNCAccountType acctype, gboolean placeholder);
+Account * xaccScrubUtilityGetOrMakeAccount (Account *root,
+        gnc_commodity * currency, const char *accname,
+        GNCAccountType acctype, gboolean placeholder);
 
 
 #endif /* XACC_SCRUB_P_H */

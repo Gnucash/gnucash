@@ -108,7 +108,7 @@ qof_book_merge_compare(QofBookMergeData *mergeData )
     QofType    mergeType;
     GSList    *paramList;
     gboolean  absolute, mergeError, knowntype, mergeMatch, booleanImport, booleanTarget,
-    (*boolean_getter) (QofInstance*, QofParam*);
+           (*boolean_getter) (QofInstance*, QofParam*);
     Timespec      tsImport, tsTarget,            (*date_getter)    (QofInstance*, QofParam*);
     gnc_numeric   numericImport, numericTarget,  (*numeric_getter) (QofInstance*, QofParam*);
     double        doubleImport, doubleTarget,    (*double_getter)  (QofInstance*, QofParam*);

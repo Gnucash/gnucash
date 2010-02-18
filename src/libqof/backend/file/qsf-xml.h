@@ -73,196 +73,196 @@ Make sure the same version of QOF is in use in both applications.
 #define QSF_DEFAULT_NS	"http://qof.sourceforge.net/" /**< Default namespace for QSF root tag
 
 The map namespace is not included as maps are not currently written out by QOF.
-            */
+        */
 #define QSF_DATE_LENGTH MAX_DATE_LENGTH /**< Max length of QSF_XSD_TIME.
 
-            MAX_DATE_LENGTH itself is defined in gnc-date.h */
+        MAX_DATE_LENGTH itself is defined in gnc-date.h */
 #define QSF_BOOK_TAG	"book"      /**< First level child: book tag - the ::QofBook. */
 #define QSF_BOOK_GUID	"book-guid" /**< QOF GUID tag for the QofBook
-            described by this QSF object file */
+        described by this QSF object file */
 #define QSF_BOOK_COUNT	"count"     /**< Sequential counter of each book in this file */
 #define QSF_OBJECT_TAG	"object"    /**< Second level child: object tag */
 #define QSF_OBJECT_TYPE	"type"      /**< QSF parameter name for object type specifiers */
 #define QSF_OBJECT_COUNT "count"    /**< Sequential counter for each QSF object
-            in this file */
+        in this file */
 #define QSF_XML_VERSION  "1.0"      /**< The current XML version. */
 
-            /** @} */
-            /** @name Representing KVP as XML
+/** @} */
+/** @name Representing KVP as XML
 
-            &lt;kvp type="kvp" path="/from-sched-xaction" value="guid"&gt;c858b9a3235723b55bc1179f0e8c1322&lt;/kvp&gt;
-            A kvp type KVP parameter located at $path containing a GUID $value.
+&lt;kvp type="kvp" path="/from-sched-xaction" value="guid"&gt;c858b9a3235723b55bc1179f0e8c1322&lt;/kvp&gt;
+A kvp type KVP parameter located at $path containing a GUID $value.
 
-            The relevance of type="kvp" won't be evident in GnuCash, they all use "kvp".
+The relevance of type="kvp" won't be evident in GnuCash, they all use "kvp".
 
-            A non-GnuCash example helps:
-            &lt;kvp type="pilot_addr_kvp" path="/user/name" value="guid"&gt;c858b9a3235723b55bc1179f0e8c1322&lt;/kvp&gt;
-            A pilot_addr_kvp type KVP parameter located at /user/name containing a guid value.
-            @{ */
+A non-GnuCash example helps:
+&lt;kvp type="pilot_addr_kvp" path="/user/name" value="guid"&gt;c858b9a3235723b55bc1179f0e8c1322&lt;/kvp&gt;
+A pilot_addr_kvp type KVP parameter located at /user/name containing a guid value.
+@{ */
 
 #define QSF_OBJECT_KVP   "path" /**< The path to this KVP value in the entity frame. */
 #define QSF_OBJECT_VALUE "value" /**< The KVP Value. */
-            /** @} */
-            /** @name QSF Map XML
+/** @} */
+/** @name QSF Map XML
 
-            @{ */
+@{ */
 #define MAP_ROOT_TAG     "qsf-map" /**< Top level root tag for QSF Maps */
 #define MAP_DEFINITION_TAG "definition" /**< Second level container for defined objects 
 
-            Attributes: qof_version - Taken from the QOF_OBJECT_VERSION macro in QOF,
-            At the time of QSF development, QOF_OBJECT_VERSION is defined as 3. All
-            QSF maps and QSF objects must use the same qof_version which in turn must
-            match the QOF_OBJECT_VERSION for the QOF library in use by the calling process.
+        Attributes: qof_version - Taken from the QOF_OBJECT_VERSION macro in QOF,
+        At the time of QSF development, QOF_OBJECT_VERSION is defined as 3. All
+        QSF maps and QSF objects must use the same qof_version which in turn must
+        match the QOF_OBJECT_VERSION for the QOF library in use by the calling process.
 
-            No text content allowed.
-            */
+        No text content allowed.
+        */
 #define MAP_DEFINE_TAG	"define" /**< defines each object supported by this QSF map 
 
-            Attributes: e_type Copied directly from the QofObject definition.
-            Content: The full QofObject description for the defined QOF object.
-                */
+        Attributes: e_type Copied directly from the QofObject definition.
+        Content: The full QofObject description for the defined QOF object.
+            */
 #define MAP_ITERATE_ATTR "foreach" /**< Dictate which object type is the basis
-                for iteration in a hierarchical object set. */
+            for iteration in a hierarchical object set. */
 #define MAP_DEFAULT_TAG	"default"  /**< User editable defaults for data not
-                    available within the available QSF objects.
+                available within the available QSF objects.
 
-                    Some defaults will relate to how to format descriptive dates, whether discount
-                    should be considered, which account to use for certain QSF data from applications
-                        that do not use accounts.
+                Some defaults will relate to how to format descriptive dates, whether discount
+                should be considered, which account to use for certain QSF data from applications
+                    that do not use accounts.
 
-                            Some defaults are pre-defined and cannot be over-written:
-                            - qsf_time_now
-                            - qsf_time_string
+                        Some defaults are pre-defined and cannot be over-written:
+                        - qsf_time_now
+                        - qsf_time_string
 
-                            Attributes (All are mandatory):
+                        Attributes (All are mandatory):
 
-                                \a name The text name for this default. Certain pre-defined defaults exist but
-                                user- or map-defined defaults can have any unique text name. Spaces are \b NOT allowed,
-                                use undersccores instead. The value of name must not duplicate any existing default,
-                                define, object or parameter unless the special type, enum, is used.
+                            \a name The text name for this default. Certain pre-defined defaults exist but
+                            user- or map-defined defaults can have any unique text name. Spaces are \b NOT allowed,
+                            use undersccores instead. The value of name must not duplicate any existing default,
+                            define, object or parameter unless the special type, enum, is used.
 
-                                \a type QOF_TYPE - must be one of the recognised QOF data types for the
-                                    qof_version in use or the special type, enum.
+                            \a type QOF_TYPE - must be one of the recognised QOF data types for the
+                                qof_version in use or the special type, enum.
 
-                                    \a value Text representation of the required value. For numeric, use the format
-                                    [0-9]?/[0-9]?
+                                \a value Text representation of the required value. For numeric, use the format
+                                [0-9]?/[0-9]?
 
-                                        \attention Using boolean defaults
+                                    \attention Using boolean defaults
 
-                                    A boolean default is not output in the QSF directly, instead the value is
-                                        used in the calculations to modify certain values. If the boolean default
-                                                is set to true, the if statement containing the boolean name will be evaluated.
-                                            If the boolean default is set to false, the corresponding else will be evaluted.
-                                                        Make sure your calculations contain an appropriate else statement so that the
-                                                            boolean value can be adjusted without invalidating the map!
+                                A boolean default is not output in the QSF directly, instead the value is
+                                    used in the calculations to modify certain values. If the boolean default
+                                            is set to true, the if statement containing the boolean name will be evaluated.
+                                        If the boolean default is set to false, the corresponding else will be evaluted.
+                                                    Make sure your calculations contain an appropriate else statement so that the
+                                                        boolean value can be adjusted without invalidating the map!
 
-                                                            QSF deals with partial QofBooks - each object is fully described but the
-                                                            book does not have to contain any specific object types or have any
-                                                            particular structure. To merge partial books into usual QofBook data
-                                                            sources, the map must deal with entities that need to be referenced in
-                                                            the target QofBook but which simply do not exist in the QofBook used to generate
-                                                                the QSF. e.g. pilot-link knows nothing of Accounts yet when QSF creates
-                                                                a gncInvoice from qof-datebook, gncInvoice needs to know the GUID of
-                                                                certain accounts in the target QofBook. This is handled in the map
-                                                            by specifying the name of the account as a default for that map. When imported,
-                                                                        the QSF QofBackend looks up the object required using the name of
-                                                                        the parameter to obtain the parameter type. This is the only situation
-                                                                        where QSF converts between QOF data types. A string description of the
-                                                                        required object is converted to the GUID for that specific entity. The
-                                                                            map cannot contain the GUID as it is generic and used by multiple users.
+                                                        QSF deals with partial QofBooks - each object is fully described but the
+                                                        book does not have to contain any specific object types or have any
+                                                        particular structure. To merge partial books into usual QofBook data
+                                                        sources, the map must deal with entities that need to be referenced in
+                                                        the target QofBook but which simply do not exist in the QofBook used to generate
+                                                            the QSF. e.g. pilot-link knows nothing of Accounts yet when QSF creates
+                                                            a gncInvoice from qof-datebook, gncInvoice needs to know the GUID of
+                                                            certain accounts in the target QofBook. This is handled in the map
+                                                        by specifying the name of the account as a default for that map. When imported,
+                                                                    the QSF QofBackend looks up the object required using the name of
+                                                                    the parameter to obtain the parameter type. This is the only situation
+                                                                    where QSF converts between QOF data types. A string description of the
+                                                                    required object is converted to the GUID for that specific entity. The
+                                                                        map cannot contain the GUID as it is generic and used by multiple users.
 
-                                                                            \attention Using enumerators
-                                                                            - enum types are the only defaults that are allowed to use the same name value
-                                                                            more than once.
-                                                                            - enum types are used to increase the readability of a QSF map.
-                                                                            - The enum name acts to group the enum values together - in a similar fashion to
-                                                                            radio buttons in HTML forms.
-                                                                            - enum types are used only where the QOF object itself uses an enum type.
+                                                                        \attention Using enumerators
+                                                                        - enum types are the only defaults that are allowed to use the same name value
+                                                                        more than once.
+                                                                        - enum types are used to increase the readability of a QSF map.
+                                                                        - The enum name acts to group the enum values together - in a similar fashion to
+                                                                        radio buttons in HTML forms.
+                                                                        - enum types are used only where the QOF object itself uses an enum type.
 
-                                                                            e.g. the tax_included enum type allows maps to use the full name of the enum
-                                                                            value GNC_TAXINCLUDED_YES, instead of the cryptic digit value, 1.
+                                                                        e.g. the tax_included enum type allows maps to use the full name of the enum
+                                                                        value GNC_TAXINCLUDED_YES, instead of the cryptic digit value, 1.
 
-                                                                            */
+                                                                        */
 #define MAP_OBJECT_TAG	"object" /**< Contains all the calculations to make one
-                                                                            object from others.
+                                                                        object from others.
 
-                                                                            Note that creating an object for the import application can involve using data
-                                                                                from more than one QSF object, as well as defaults and lookups in the import
-                                                                                application itself. Conditionals, simple arithmetic and date/time formatting
-                                                                                options are also available.
-                                                                                */
+                                                                        Note that creating an object for the import application can involve using data
+                                                                            from more than one QSF object, as well as defaults and lookups in the import
+                                                                            application itself. Conditionals, simple arithmetic and date/time formatting
+                                                                            options are also available.
+                                                                            */
 #define MAP_CALCULATE_TAG	"calculate" /**< One calculation for every parameter
-                                                                                that needs to be set.
+                                                                            that needs to be set.
 
-                                                                                QSF follows the same rule as qof_book_merge. Only if a getter and a setter
-                                                                                    function are defined for a parameter is it available to QSF. If a ::QofAccessFunc
-                                                                                        and ::QofSetterFunc are both defined for any QofObject parameter, that parameter
-                                                                                            \b MUST be calculated in any map that defines that object.
-                                                                                            */
+                                                                            QSF follows the same rule as qof_book_merge. Only if a getter and a setter
+                                                                                function are defined for a parameter is it available to QSF. If a ::QofAccessFunc
+                                                                                    and ::QofSetterFunc are both defined for any QofObject parameter, that parameter
+                                                                                        \b MUST be calculated in any map that defines that object.
+                                                                                        */
 #define MAP_QOF_VERSION	"qof_version" /**< This is the QOF_OBJECT_VERSION from QOF.
 
-                                                                                            QSF maps may need to be updated if QOF itself is upgraded. This setting is coded
-                                                                                                into QOF and maps for one version cannot necessarily be used by other versions.
-                                                                                                    At the first release of QSF, QOF_OBJECT_VERSION = 3.
-                                                                                                            */
+                                                                                        QSF maps may need to be updated if QOF itself is upgraded. This setting is coded
+                                                                                            into QOF and maps for one version cannot necessarily be used by other versions.
+                                                                                                At the first release of QSF, QOF_OBJECT_VERSION = 3.
+                                                                                                        */
 #define MAP_NAME_ATTR	"name" /**< The name of the default setting.
 
-                                                                                                        Use this name to refer to the value of this default in the map calculations.
+                                                                                                    Use this name to refer to the value of this default in the map calculations.
 
-                                                                                                            Make sure that the type of this default matches the type of the parameter being
-                                                                                                                    set by the parent calculation!
-                                                                                                                    */
+                                                                                                        Make sure that the type of this default matches the type of the parameter being
+                                                                                                                set by the parent calculation!
+                                                                                                                */
 #define MAP_TYPE_ATTR	"type" /**< QSF will NOT convert between QOF types.
 
-                                                                                                                    QSF will allow a conditional to use a parameter of one type to determine the
-                                                                                                                    value from a parameter of another type, but the final value assigned \b MUST be
-                                                                                                                    of the same type as the parent calculation.
-                                                                                                                    */
+                                                                                                                QSF will allow a conditional to use a parameter of one type to determine the
+                                                                                                                value from a parameter of another type, but the final value assigned \b MUST be
+                                                                                                                of the same type as the parent calculation.
+                                                                                                                */
 #define MAP_VALUE_ATTR	"value" /**< The value of the tag, used in defaults and
-                                                                                                                    calculations.
+                                                                                                                calculations.
 
-                                                                                                                The value of a default is a string representation of the value to be inserted into
-                                                                                                                    the calculation where the default is used.
+                                                                                                            The value of a default is a string representation of the value to be inserted into
+                                                                                                                the calculation where the default is used.
 
-                                                                                                                            The value of a calculation is the name of the parameter that will be set by that
-                                                                                                                            calculation.
-                                                                                                                            */
+                                                                                                                        The value of a calculation is the name of the parameter that will be set by that
+                                                                                                                        calculation.
+                                                                                                                        */
 #define MAP_OBJECT_ATTR "object" /**< The object to use to provide the data
-                                                                                                                            being set using the map.*/
+                                                                                                                        being set using the map.*/
 #define MAP_E_TYPE	"e_type" /**< Validates the objects defined in the map 
 
-                                                                                                                            The e_type will be used to match incoming QSF objects with the relevant QSF map.
-                                                                                                                            The value of the e_type must be the value of the e_type for that object in the
-                                                                                                                                originating QOF application. The define tag must contain the value of the description
-                                                                                                                                of the same object in the same originating QOF application.
-                                                                                                                                */
-                                                                                                                                /** \todo enum is an attempt to make enumerator values descriptive in the maps
-                                                                                                                                and QSF (possibly). Not working yet. */
+                                                                                                                        The e_type will be used to match incoming QSF objects with the relevant QSF map.
+                                                                                                                        The value of the e_type must be the value of the e_type for that object in the
+                                                                                                                            originating QOF application. The define tag must contain the value of the description
+                                                                                                                            of the same object in the same originating QOF application.
+                                                                                                                            */
+                                                                                                                    /** \todo enum is an attempt to make enumerator values descriptive in the maps
+                                                                                                                    and QSF (possibly). Not working yet. */
 #define MAP_ENUM_TYPE "enum"
 
-                                                                                                                                /** \brief A specific boolean default for this map.
-                                                                                                                                */
+                                                                                                                    /** \brief A specific boolean default for this map.
+                                                                                                                    */
 #define QSF_BOOLEAN_DEFAULT "boolean"
 
 #define QSF_CONDITIONAL "if"  /**< child of calculate.
 
-                                                                                                                                Conditionals can reference objects as if within the original application. In operation,
-                                                                                                                                    the map is overlaid across both sets of defined objects, an import object in the source
-                                                                                                                                    application and an output object for the destination object. The current import and output
-                                                                                                                                        QSF objects are therefore always available to the map.
-                                                                                                                                        Conditionals can reference parameter as well as object values.
-                                                                                                                                        */
+                                                                                                                            Conditionals can reference objects as if within the original application. In operation,
+                                                                                                                                the map is overlaid across both sets of defined objects, an import object in the source
+                                                                                                                                application and an output object for the destination object. The current import and output
+                                                                                                                                    QSF objects are therefore always available to the map.
+                                                                                                                                    Conditionals can reference parameter as well as object values.
+                                                                                                                                    */
 #define QSF_CONDITIONAL_SET "set" /**< Assignment statement
 
-                                                                                                                                        Map assignments can use the native values within the output object. The output object
-                                                                                                                                        must support setting the relevant parameter using the value exactly as given in the map
-                                                                                                                                        because the relevant set() function will be called using this value. This may reduce the
-                                                                                                                                            readability of the map but the relevant application could also be modified to support
-                                                                                                                                            a more readable set function.
-                                                                                                                                            */
+                                                                                                                                    Map assignments can use the native values within the output object. The output object
+                                                                                                                                    must support setting the relevant parameter using the value exactly as given in the map
+                                                                                                                                    because the relevant set() function will be called using this value. This may reduce the
+                                                                                                                                        readability of the map but the relevant application could also be modified to support
+                                                                                                                                        a more readable set function.
+                                                                                                                                        */
 #define QSF_CONDITIONAL_ELSE "else" /**< Alternative
 
-                                                                                                                                    if(){} else{} is also supported. Nesting of conditionals causes problems for
+                                                                                                                                        if(){} else{} is also supported. Nesting of conditionals causes problems for
 validating the final map against any sensible XML Schema and a map that does not
 validate will be rejected. When editing conditionals in a QSF map, ALWAYS
 validate the map using xmllint. If necessary, define a variable at the foot of

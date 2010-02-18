@@ -38,62 +38,63 @@
 
 static void test_null_guid(void)
 {
-  GUID g;
-  GUID *gp;
+    GUID g;
+    GUID *gp;
 
-  g = guid_new_return();
-  gp = guid_malloc();
-  guid_new(gp);
+    g = guid_new_return();
+    gp = guid_malloc();
+    guid_new(gp);
 
-  do_test(guid_equal(guid_null(), guid_null()), "null guids equal");
-  do_test(!guid_equal(&g, gp), "two guids equal");
+    do_test(guid_equal(guid_null(), guid_null()), "null guids equal");
+    do_test(!guid_equal(&g, gp), "two guids equal");
 }
 
 static void
 run_test (void)
 {
-  int i;
-  QofSession *sess;
-  QofBook *book;
-  QofInstance *ent, *eblk[NENT];
-  QofCollection *col;
-  QofIdType type;
-  GUID guid;
+    int i;
+    QofSession *sess;
+    QofBook *book;
+    QofInstance *ent, *eblk[NENT];
+    QofCollection *col;
+    QofIdType type;
+    GUID guid;
 
-  sess = get_random_session ();
-  book = qof_session_get_book (sess);
-  do_test ((NULL != book), "book not created");
+    sess = get_random_session ();
+    book = qof_session_get_book (sess);
+    do_test ((NULL != book), "book not created");
 
-  col = qof_book_get_collection (book, "asdf");
-  type = qof_collection_get_type (col);
-  
-  for (i=0; i<NENT; i++)
-  {
-    ent = g_object_new(QOF_TYPE_INSTANCE, NULL);
-    eblk[i] = ent;
-    guid_new(&guid);
-    ent = g_object_new(QOF_TYPE_INSTANCE, "guid", &guid, NULL);
-    do_test ((NULL == qof_collection_lookup_entity (col, &guid)),
-						  "duplicate guid");
-	 ent->e_type = type;
-	 qof_collection_insert_entity (col, ent);
-         do_test ((NULL != qof_collection_lookup_entity (col, &guid)),
-                  "guid not found");
-  }
+    col = qof_book_get_collection (book, "asdf");
+    type = qof_collection_get_type (col);
 
-  /* Make valgrind happy -- destroy the session. */
-  qof_session_destroy(sess);
+    for (i = 0; i < NENT; i++)
+    {
+        ent = g_object_new(QOF_TYPE_INSTANCE, NULL);
+        eblk[i] = ent;
+        guid_new(&guid);
+        ent = g_object_new(QOF_TYPE_INSTANCE, "guid", &guid, NULL);
+        do_test ((NULL == qof_collection_lookup_entity (col, &guid)),
+                 "duplicate guid");
+        ent->e_type = type;
+        qof_collection_insert_entity (col, ent);
+        do_test ((NULL != qof_collection_lookup_entity (col, &guid)),
+                 "guid not found");
+    }
+
+    /* Make valgrind happy -- destroy the session. */
+    qof_session_destroy(sess);
 }
 
 int
 main (int argc, char **argv)
 {
-	qof_init();
-	if(cashobjects_register()) {
-		test_null_guid();
-		run_test ();
-		print_test_results();
-	}
-	qof_close();
-  return get_rv();
+    qof_init();
+    if (cashobjects_register())
+    {
+        test_null_guid();
+        run_test ();
+        print_test_results();
+    }
+    qof_close();
+    return get_rv();
 }

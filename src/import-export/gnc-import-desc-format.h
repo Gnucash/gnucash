@@ -26,30 +26,30 @@ typedef struct _GNCImportDescFormatClass GNCImportDescFormatClass;
 
 struct _GNCImportDescFormat
 {
-  GNCDruidProviderDesc parent;
+    GNCDruidProviderDesc parent;
 
-  gchar* text;
-  GncImportFormat (*get_formats)(GNCImportFormatCB*);
-  const gchar* (*get_sample)(GNCImportFormatCB*);
+    gchar* text;
+    GncImportFormat (*get_formats)(GNCImportFormatCB*);
+    const gchar* (*get_sample)(GNCImportFormatCB*);
 
 };
 
 struct _GNCImportDescFormatClass
 {
-  GNCDruidProviderDescClass parent;
+    GNCDruidProviderDescClass parent;
 };
 
 GType	gnc_import_desc_format_get_type(void);
 GNCImportDescFormat* gnc_import_desc_format_new(void);
 GNCImportDescFormat*
 gnc_import_desc_format_new_with_data(const gchar* title,
-				     const gchar* text,
-				     gboolean (*next_cb)(GNCDruidCB*),
-				     GncImportFormat (*get_formats)(GNCImportFormatCB*),
-				     const gchar* (*get_sample)(GNCImportFormatCB*));
+                                     const gchar* text,
+                                     gboolean (*next_cb)(GNCDruidCB*),
+                                     GncImportFormat (*get_formats)(GNCImportFormatCB*),
+                                     const gchar* (*get_sample)(GNCImportFormatCB*));
 
 void	gnc_import_desc_format_set_text(GNCImportDescFormat*,
-					       const gchar* text);
+                                        const gchar* text);
 
 /* methods */
 

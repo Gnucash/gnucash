@@ -21,7 +21,7 @@
 /** @addtogroup Engine
     @{ */
 /** @addtogroup TransLog  Transaction Logging
-    The transaction logging mechanism provides a very simple, 
+    The transaction logging mechanism provides a very simple,
     low-level logging of user input to a file.   The goal of
     the transaction logger is to provide mechanism of last resort
     for recovering lost user data in the event of a crash.
@@ -33,7 +33,7 @@
     that can be used to recover user input.
     There are some simple command-line tools that will read a log
     and replay it.
-    
+
     @{ */
 /** @file TransLog.h
     @brief API for the transaction logger

@@ -45,21 +45,23 @@ enum GncCsvColumnType {GNC_CSV_NONE,
                        GNC_CSV_DEPOSIT,
                        GNC_CSV_WITHDRAWAL,
                        GNC_CSV_NUM,
-                       GNC_CSV_NUM_COL_TYPES};
+                       GNC_CSV_NUM_COL_TYPES
+                      };
 
 /** Enumeration for error types. These are the different types of
  * errors that various functions used for the CSV/Fixed-Width importer
  * can have. */
 enum GncCsvErrorType {GNC_CSV_FILE_OPEN_ERR,
-                      GNC_CSV_ENCODING_ERR};
+                      GNC_CSV_ENCODING_ERR
+                     };
 
 /** Struct for containing a string. This struct simply contains
  * pointers to the beginning and end of a string. We need this because
  * the STF code that gnc_csv_parse calls requires these pointers. */
 typedef struct
 {
-  char* begin;
-  char* end;
+    char* begin;
+    char* end;
 } GncCsvStr;
 
 /* TODO We now sort transactions by date, not line number, so we
@@ -74,10 +76,10 @@ typedef struct
  * corrected rows into the right places. */
 typedef struct
 {
-  int line_no;
-  Transaction* trans;
-  gnc_numeric balance; /**< The (supposed) balance after this transaction takes place */
-  gboolean balance_set; /**< TRUE if balance has been set from user data, FALSE otherwise */
+    int line_no;
+    Transaction* trans;
+    gnc_numeric balance; /**< The (supposed) balance after this transaction takes place */
+    gboolean balance_set; /**< TRUE if balance has been set from user data, FALSE otherwise */
 } GncCsvTransLine;
 
 extern const int num_date_formats;
@@ -90,20 +92,20 @@ extern gchar* gnc_csv_column_type_strs[];
 /** Struct containing data for parsing a CSV/Fixed-Width file. */
 typedef struct
 {
-  gchar* encoding;
-  GMappedFile* raw_mapping; /**< The mapping containing raw_str */
-  GncCsvStr raw_str; /**< Untouched data from the file as a string */
-  GncCsvStr file_str; /**< raw_str translated into UTF-8 */
-  GPtrArray* orig_lines; /**< file_str parsed into a two-dimensional array of strings */
-  GArray* orig_row_lengths; /**< The lengths of rows in orig_lines
+    gchar* encoding;
+    GMappedFile* raw_mapping; /**< The mapping containing raw_str */
+    GncCsvStr raw_str; /**< Untouched data from the file as a string */
+    GncCsvStr file_str; /**< raw_str translated into UTF-8 */
+    GPtrArray* orig_lines; /**< file_str parsed into a two-dimensional array of strings */
+    GArray* orig_row_lengths; /**< The lengths of rows in orig_lines
                              * before error messages are appended */
-  int orig_max_row; /**< Holds the maximum value in orig_row_lengths */
-  GStringChunk* chunk; /**< A chunk of memory in which the contents of orig_lines is stored */
-  StfParseOptions_t* options; /**< Options controlling how file_str should be parsed */
-  GArray* column_types; /**< Array of values from the GncCsvColumnType enumeration */
-  GList* error_lines; /**< List of row numbers in orig_lines that have errors */
-  GList* transactions; /**< List of GncCsvTransLine*s created using orig_lines and column_types */
-  int date_format; /**< The format of the text in the date columns from date_format_internal. */
+    int orig_max_row; /**< Holds the maximum value in orig_row_lengths */
+    GStringChunk* chunk; /**< A chunk of memory in which the contents of orig_lines is stored */
+    StfParseOptions_t* options; /**< Options controlling how file_str should be parsed */
+    GArray* column_types; /**< Array of values from the GncCsvColumnType enumeration */
+    GList* error_lines; /**< List of row numbers in orig_lines that have errors */
+    GList* transactions; /**< List of GncCsvTransLine*s created using orig_lines and column_types */
+    int date_format; /**< The format of the text in the date columns from date_format_internal. */
 } GncCsvParseData;
 
 GncCsvParseData* gnc_csv_new_parse_data(void);

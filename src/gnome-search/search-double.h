@@ -32,19 +32,21 @@
 typedef struct _GNCSearchDouble	GNCSearchDouble;
 typedef struct _GNCSearchDoubleClass	GNCSearchDoubleClass;
 
-struct _GNCSearchDouble {
-  GNCSearchCoreType parent;
+struct _GNCSearchDouble
+{
+    GNCSearchCoreType parent;
 
-  query_compare_t	how;
-  double		value;
+    query_compare_t	how;
+    double		value;
 };
 
-struct _GNCSearchDoubleClass {
-  GNCSearchCoreTypeClass parent_class;
+struct _GNCSearchDoubleClass
+{
+    GNCSearchCoreTypeClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  /* signals */
+    /* signals */
 };
 
 GType		gnc_search_double_get_type	(void);

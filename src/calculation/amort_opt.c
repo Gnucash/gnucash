@@ -40,7 +40,7 @@ amort_sched_ptr  amort_opt(
     var_store       value;
     numeric_ptr     nval;
     struct tm      *times_E,
-                *times_I;
+            *times_I;
 
     /* print amortization options */
     times_E = (struct tm *)calloc(1, sizeof(struct tm));

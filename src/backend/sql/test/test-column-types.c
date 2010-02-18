@@ -23,7 +23,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
- 
+
 #include "config.h"
 #include "qof.h"
 #include "cashobjects.h"
@@ -35,11 +35,11 @@ int main( int argc, char ** argv )
 {
     qof_init();
     cashobjects_register();
-	gnc_sql_init( NULL );
-/*    do_test(
-        qof_load_backend_library ("../.libs/", GNC_LIB_NAME),
-        " loading gnc-backend-gda GModule failed");
-*/
+    gnc_sql_init( NULL );
+    /*    do_test(
+            qof_load_backend_library ("../.libs/", GNC_LIB_NAME),
+            " loading gnc-backend-gda GModule failed");
+    */
     print_test_results();
     qof_close();
     exit( get_rv() );

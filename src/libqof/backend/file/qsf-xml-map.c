@@ -556,7 +556,7 @@ qsf_calculate_else(xmlNodePtr param_node, xmlNodePtr child, qsf_param *params)
                 object_data = BAD_CAST qsf_else_set_value(param_node, params->qsf_default_hash,
                               (gchar*)output_content, params->map_ns);
                 output_content = BAD_CAST xmlGetProp( (xmlNodePtr) g_hash_table_lookup(
-                                                          params->qsf_default_hash, object_data), BAD_CAST MAP_VALUE_ATTR);
+                        params->qsf_default_hash, object_data), BAD_CAST MAP_VALUE_ATTR);
             }
             if (object_data != NULL)
             {
@@ -677,7 +677,7 @@ qsf_calculate_conditional(xmlNodePtr param_node, xmlNodePtr child, qsf_param *pa
                 {
                     output_content = xmlGetProp( (xmlNodePtr) g_hash_table_lookup(
                                                      params->qsf_default_hash, xmlGetProp(param_node,
-                                                                                          BAD_CAST QSF_BOOLEAN_DEFAULT) ), BAD_CAST MAP_VALUE_ATTR);
+                                                             BAD_CAST QSF_BOOLEAN_DEFAULT) ), BAD_CAST MAP_VALUE_ATTR);
                 }
                 /* Is the default set to true? */
                 if ( 0 == qsf_compare_tag_strings(output_content, QSF_XML_BOOLEAN_TEST))

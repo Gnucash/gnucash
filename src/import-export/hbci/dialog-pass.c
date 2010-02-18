@@ -32,122 +32,124 @@
 
 gboolean
 gnc_hbci_get_password (GtkWidget *parent,
-		       const char *windowtitle,
-		       const char *heading,
-		       const char *initial_password,
-		       char **password,
-		       gboolean hide_input)
+                       const char *windowtitle,
+                       const char *heading,
+                       const char *initial_password,
+                       char **password,
+                       gboolean hide_input)
 {
-  GtkWidget *dialog;
-  GtkWidget *heading_label;
-  GtkWidget *password_entry;
-  GladeXML *xml;
-  gint result;
+    GtkWidget *dialog;
+    GtkWidget *heading_label;
+    GtkWidget *password_entry;
+    GladeXML *xml;
+    gint result;
 
-  g_return_val_if_fail (password != NULL, FALSE);
+    g_return_val_if_fail (password != NULL, FALSE);
 
-  xml = gnc_glade_xml_new ("hbcipass.glade", "Password Dialog");
+    xml = gnc_glade_xml_new ("hbcipass.glade", "Password Dialog");
 
-  dialog = glade_xml_get_widget (xml, "Password Dialog");
+    dialog = glade_xml_get_widget (xml, "Password Dialog");
 
-  if (parent)
-    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+    if (parent)
+        gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
-  heading_label  = glade_xml_get_widget (xml, "heading_label");
-  password_entry = glade_xml_get_widget (xml, "password_entry");
-  g_assert(heading_label && password_entry);
+    heading_label  = glade_xml_get_widget (xml, "heading_label");
+    password_entry = glade_xml_get_widget (xml, "password_entry");
+    g_assert(heading_label && password_entry);
 
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), 1);
+    gtk_dialog_set_default_response (GTK_DIALOG (dialog), 1);
 
-  gtk_entry_set_activates_default (GTK_ENTRY (password_entry), TRUE);
+    gtk_entry_set_activates_default (GTK_ENTRY (password_entry), TRUE);
 
-  if (windowtitle)
-    gtk_window_set_title (GTK_WINDOW (dialog), windowtitle);
+    if (windowtitle)
+        gtk_window_set_title (GTK_WINDOW (dialog), windowtitle);
 
-  if (heading)
-    gtk_label_set_text (GTK_LABEL (heading_label), heading);
+    if (heading)
+        gtk_label_set_text (GTK_LABEL (heading_label), heading);
 
-  if (initial_password)
-    gtk_entry_set_text (GTK_ENTRY (password_entry), initial_password);
-  gtk_entry_set_visibility (GTK_ENTRY (password_entry), !hide_input);
+    if (initial_password)
+        gtk_entry_set_text (GTK_ENTRY (password_entry), initial_password);
+    gtk_entry_set_visibility (GTK_ENTRY (password_entry), !hide_input);
 
-  result = gtk_dialog_run (GTK_DIALOG (dialog));
+    result = gtk_dialog_run (GTK_DIALOG (dialog));
 
-  if (result == 1) /* the hand-assigned response value */
-  {
-    *password = g_strdup (gtk_entry_get_text (GTK_ENTRY (password_entry)) );
+    if (result == 1) /* the hand-assigned response value */
+    {
+        *password = g_strdup (gtk_entry_get_text (GTK_ENTRY (password_entry)) );
+        gtk_widget_destroy(dialog);
+        return TRUE;
+    }
     gtk_widget_destroy(dialog);
-    return TRUE;
-  }
-  gtk_widget_destroy(dialog);
 
-  *password = NULL;
-  return FALSE;
+    *password = NULL;
+    return FALSE;
 }
 
 
 gboolean
 gnc_hbci_get_initial_password (GtkWidget *parent,
-			       const char *windowtitle,
-			       const char *heading,
-			       char **password)
+                               const char *windowtitle,
+                               const char *heading,
+                               char **password)
 {
-  GtkWidget *dialog;
-  GtkWidget *heading_label;
-  GtkWidget *password_entry;
-  GtkWidget *confirm_entry;
-  GladeXML *xml;
-  gint result;
+    GtkWidget *dialog;
+    GtkWidget *heading_label;
+    GtkWidget *password_entry;
+    GtkWidget *confirm_entry;
+    GladeXML *xml;
+    gint result;
 
-  g_return_val_if_fail (password != NULL, FALSE);
+    g_return_val_if_fail (password != NULL, FALSE);
 
-  xml = gnc_glade_xml_new ("hbcipass.glade", "Initial Password Dialog");
+    xml = gnc_glade_xml_new ("hbcipass.glade", "Initial Password Dialog");
 
-  dialog = glade_xml_get_widget (xml, "Initial Password Dialog");
+    dialog = glade_xml_get_widget (xml, "Initial Password Dialog");
 
-  if (parent)
-    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+    if (parent)
+        gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
-  heading_label  = glade_xml_get_widget (xml, "heading_label");
-  password_entry = glade_xml_get_widget (xml, "password_entry");
-  confirm_entry = glade_xml_get_widget (xml, "confirm_entry");
-  g_assert(heading_label && password_entry && confirm_entry);
+    heading_label  = glade_xml_get_widget (xml, "heading_label");
+    password_entry = glade_xml_get_widget (xml, "password_entry");
+    confirm_entry = glade_xml_get_widget (xml, "confirm_entry");
+    g_assert(heading_label && password_entry && confirm_entry);
 
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), 1);
+    gtk_dialog_set_default_response (GTK_DIALOG (dialog), 1);
 
-  gtk_entry_set_activates_default (GTK_ENTRY (password_entry), FALSE);
-  gtk_entry_set_activates_default (GTK_ENTRY (confirm_entry), TRUE);
+    gtk_entry_set_activates_default (GTK_ENTRY (password_entry), FALSE);
+    gtk_entry_set_activates_default (GTK_ENTRY (confirm_entry), TRUE);
 
-  if (windowtitle)
-    gtk_window_set_title (GTK_WINDOW (dialog), windowtitle);
+    if (windowtitle)
+        gtk_window_set_title (GTK_WINDOW (dialog), windowtitle);
 
-  if (heading)
-    gtk_label_set_text (GTK_LABEL (heading_label), heading);
+    if (heading)
+        gtk_label_set_text (GTK_LABEL (heading_label), heading);
 
-  while (TRUE) {
-    result = gtk_dialog_run (GTK_DIALOG (dialog));
-    
-    if (result == 1) /* the hand-assigned response value */
-      {
-	const char *pw = gtk_entry_get_text (GTK_ENTRY (password_entry));
-	const char *confirm = gtk_entry_get_text (GTK_ENTRY (confirm_entry));
-	if (strcmp (pw, confirm) == 0) {
-	  *password = g_strdup(pw);
-	  gtk_widget_destroy (GTK_WIDGET (dialog));
-	  return TRUE;
-	}
-      }
-    else
-      break;
+    while (TRUE)
+    {
+        result = gtk_dialog_run (GTK_DIALOG (dialog));
 
-    /* strings didn't match */
-    if (gnc_ok_cancel_dialog (parent, GTK_RESPONSE_OK,
-			      _("The two passwords didn't match. "
-				"Please try again."))
-	!= GTK_RESPONSE_OK)
-      break;
-  }
-  *password = NULL;
-  gtk_widget_destroy (GTK_WIDGET (dialog));
-  return FALSE;
+        if (result == 1) /* the hand-assigned response value */
+        {
+            const char *pw = gtk_entry_get_text (GTK_ENTRY (password_entry));
+            const char *confirm = gtk_entry_get_text (GTK_ENTRY (confirm_entry));
+            if (strcmp (pw, confirm) == 0)
+            {
+                *password = g_strdup(pw);
+                gtk_widget_destroy (GTK_WIDGET (dialog));
+                return TRUE;
+            }
+        }
+        else
+            break;
+
+        /* strings didn't match */
+        if (gnc_ok_cancel_dialog (parent, GTK_RESPONSE_OK,
+                                  _("The two passwords didn't match. "
+                                    "Please try again."))
+                != GTK_RESPONSE_OK)
+            break;
+    }
+    *password = NULL;
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+    return FALSE;
 }

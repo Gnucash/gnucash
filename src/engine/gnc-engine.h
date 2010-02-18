@@ -22,10 +22,10 @@
 /** @addtogroup Engine GnuCash Engine: Core, Non-GUI Accounting Functions
     The GnuCash Engine provides a set of objects and classes that
     encapsulate typical financial accounting concepts.  The GnuCash
-    GUI is expected to manipulate these objects through the provided 
+    GUI is expected to manipulate these objects through the provided
     engine API.
     @{ */
-/** @file gnc-engine.h 
+/** @file gnc-engine.h
     @brief All type declarations for the whole Gnucash engine
     @author Copyright (C) 1997 Robin D. Clark
     @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>
@@ -68,7 +68,7 @@
 //@}
 
 /** @brief IDENTIFIERS
- *  GUID Identifiers can be used to reference Accounts, Transactions, 
+ *  GUID Identifiers can be used to reference Accounts, Transactions,
  *  Splits and other objects. These Gnucash types are referred to as Gnucash
  *  entities. GUID Identifiers are globally-unique and permanent, i.e., once
  *  an entity has been assigned an identifier, it retains that same
@@ -81,7 +81,7 @@
  *  to any entity. An identifier with any other type may refer to an
  *  actual entity, but that is not guaranteed. If an id does refer to
  *  an entity, the type of the entity will match the type of the
- *  identifier. 
+ *  identifier.
  */
 
 #define GNC_ID_NONE           QOF_ID_NONE
@@ -124,14 +124,14 @@
 */
 
 
-/** @brief Account in Gnucash. 
+/** @brief Account in Gnucash.
  * This is the typename for an account. The actual structure is
  * defined in the private header AccountP.h, but no one outside the
  * engine should include that file. Instead, access that data only
  * through the functions in Account.h .*/
 typedef struct account_s             Account;
 
-/** @brief Split in Gnucash. 
+/** @brief Split in Gnucash.
  * A "split" is more commonly refered to as a "entry" in a
  * "transaction". Each split belongs to one Account and one
  * Transaction. The split is one out of several parts a Transaction is
@@ -143,7 +143,7 @@ typedef struct account_s             Account;
  * the functions in Transaction.h .*/
 typedef struct split_s               Split;
 
-/** @brief Transaction in Gnucash.  
+/** @brief Transaction in Gnucash.
  * A Transaction is a piece of business done; the transfer of money
  * from one account to one or more other accounts. Each Transaction is
  * divided into one or more Splits (usually two).
@@ -154,7 +154,7 @@ typedef struct split_s               Split;
  * through the functions in Transaction.h .*/
 typedef struct transaction_s         Transaction;
 
-/** @brief An article that is bought and sold. 
+/** @brief An article that is bought and sold.
  * A Commodity is the most general term of what an account keeps track
  * of. Usually this is a monetary currency, but it can also be a stock
  * share or even a precious metal. Every account keeps track of
@@ -177,8 +177,8 @@ typedef struct gnc_commodity_namespace_s gnc_commodity_namespace;
 typedef struct gnc_commodity_table_s gnc_commodity_table;
 
 /** @brief Identifies that something sold at one time was bought at another.
- * A GNCLot provides a way of tracking physical items as they are 
- * bought and sold in different transactions.  By identifying 
+ * A GNCLot provides a way of tracking physical items as they are
+ * bought and sold in different transactions.  By identifying
  * the individual, underlying physical objects, it provides the
  * needed framework for implementing depreciation, capital gains,
  * inventory control and invoices.
@@ -189,7 +189,7 @@ typedef struct gnc_lot_struct        GNCLot;
 
 /** @brief Price of commodity on a given date.
  * A GNCPrice encapsulates price information: the cost of a commodity
- * expressed as a currency, on a given date.  It also holds info about 
+ * expressed as a currency, on a given date.  It also holds info about
  * the provenance of the price: where it came from, its general validity.
  */
 typedef struct gnc_price_s           GNCPrice;
@@ -241,7 +241,7 @@ gboolean gnc_engine_is_initialized(void);
 /** enable default log modules */
 void gnc_log_default(void);
 
-/** Pass a function pointer to gnc_engine_add_init_hook and 
+/** Pass a function pointer to gnc_engine_add_init_hook and
  * it will be called during the evaluation of gnc_engine_init */
 void gnc_engine_add_init_hook(gnc_engine_init_hook_t hook);
 

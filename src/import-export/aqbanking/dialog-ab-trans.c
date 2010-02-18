@@ -72,13 +72,15 @@ void dat_movedown_templ_cb(GtkButton *button, gpointer user_data);
 void dat_sort_templ_cb(GtkButton *button, gpointer user_data);
 void dat_del_templ_cb(GtkButton *button, gpointer user_data);
 
-enum {
+enum
+{
     TEMPLATE_NAME,
     TEMPLATE_POINTER,
     TEMPLATE_NUM_COLUMNS
 };
 
-struct _GncABTransDialog {
+struct _GncABTransDialog
+{
     /* The dialog itself */
     GtkWidget *dialog;
     GtkWidget *parent;
@@ -180,7 +182,8 @@ ab_trans_fill_values(GncABTransDialog *td)
 
     /* If this is a direct debit, a textkey/ "Textschluessel"/transactionCode
      * different from the default has to be set. */
-    switch (td->trans_type) {
+    switch (td->trans_type)
+    {
     case SINGLE_DEBITNOTE:
         /* AB_Transaction_SetTransactionCode (trans, 05); */
         AB_Transaction_SetTextKey(trans, 05);
@@ -283,7 +286,8 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
 
     /* Check for what kind of transaction this should be, and change the
      * labels accordingly */
-    switch (trans_type) {
+    switch (trans_type)
+    {
     case SINGLE_TRANSFER:
     case SINGLE_INTERNAL_TRANSFER:
         /* all labels are already set */
@@ -300,7 +304,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
                              * country, you may safely ignore strings
                              * from the import-export/hbci
                              * subdirectory. */
-                            _("Enter an Online Direct Debit Note"));
+                           _("Enter an Online Direct Debit Note"));
 
         gtk_label_set_text(GTK_LABEL(recp_name_heading),
                            _("Debited Account Owner"));
@@ -329,7 +333,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
 
     /* Fill list for choosing a transaction template */
     td->template_list_store = gtk_list_store_new(TEMPLATE_NUM_COLUMNS,
-                                                 G_TYPE_STRING, G_TYPE_POINTER);
+                              G_TYPE_STRING, G_TYPE_POINTER);
     g_list_foreach(templates, fill_templ_helper, td->template_list_store);
     gtk_tree_view_set_model(td->template_gtktreeview,
                             GTK_TREE_MODEL(td->template_list_store));
@@ -339,7 +343,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     /* Show this list */
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(
-        "Template Name", renderer, "text", TEMPLATE_NAME, NULL);
+                 "Template Name", renderer, "text", TEMPLATE_NAME, NULL);
     gtk_tree_view_append_column(td->template_gtktreeview, column);
 
     return td;
@@ -359,20 +363,21 @@ check_ktoblzcheck(GtkWidget *parent, const GncABTransDialog *td,
     ENTER(" ");
 
     blzresult = AccountNumberCheck_check(
-        td->blzcheck,
-        AB_Transaction_GetRemoteBankCode(trans),
-        AB_Transaction_GetRemoteAccountNumber(trans));
-    switch (blzresult) {
+                    td->blzcheck,
+                    AB_Transaction_GetRemoteBankCode(trans),
+                    AB_Transaction_GetRemoteAccountNumber(trans));
+    switch (blzresult)
+    {
     case 2:
         gtk_widget_show(parent);
         values_ok = gnc_verify_dialog(
-            parent, TRUE,
-            _("The internal check of the destination account number '%s' "
-              "at the specified bank with bank code '%s' failed. This means "
-              "the account number might contain an error. Should the online "
-              "transfer job be sent with this account number anyway?"),
-            AB_Transaction_GetRemoteAccountNumber(trans),
-            AB_Transaction_GetRemoteBankCode(trans));
+                        parent, TRUE,
+                        _("The internal check of the destination account number '%s' "
+                          "at the specified bank with bank code '%s' failed. This means "
+                          "the account number might contain an error. Should the online "
+                          "transfer job be sent with this account number anyway?"),
+                        AB_Transaction_GetRemoteAccountNumber(trans),
+                        AB_Transaction_GetRemoteBankCode(trans));
         blztext = "Kontonummer wahrscheinlich falsch";
         break;
     case 0:
@@ -407,7 +412,8 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
 
     /* Check whether the account supports this job */
     job = get_available_empty_job(td->ab_acc, td->trans_type);
-    if (!job) {
+    if (!job)
+    {
         g_warning("gnc_ab_trans_dialog_run_until_ok: Oops, job not available");
         return GTK_RESPONSE_CANCEL;
     }
@@ -415,7 +421,7 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     /* Activate as many purpose entries as available for the job */
     joblimits = AB_JobSingleTransfer_GetFieldLimits(job);
     max_purpose_lines = joblimits ?
-        AB_TransactionLimits_GetMaxLinesPurpose(joblimits) : 2;
+                        AB_TransactionLimits_GetMaxLinesPurpose(joblimits) : 2;
     gtk_widget_set_sensitive(td->purpose_cont_entry, max_purpose_lines > 1);
     gtk_widget_set_sensitive(td->purpose_cont2_entry, max_purpose_lines > 2);
     gtk_widget_set_sensitive(td->purpose_cont3_entry, max_purpose_lines > 3);
@@ -424,7 +430,8 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     gtk_widget_show(td->dialog);
 
     /* Repeat until entered values make sense */
-    do {
+    do
+    {
         /* Now run the dialog until it gets closed by a button press */
         result = gtk_dialog_run (GTK_DIALOG (td->dialog));
 
@@ -433,7 +440,8 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
          *  GNC_RESPONSE_LATER == scheduled for later execution (unimplemented)
          *  GTK_RESPONSE_CANCEL == cancel
          *  GTK_RESPONSE_DELETE_EVENT == window destroyed */
-        if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER) {
+        if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
+        {
             gtk_widget_destroy(td->dialog);
             td->dialog = NULL;
             break;
@@ -448,18 +456,22 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
         values_ok =
             AB_Value_GetValueAsDouble(AB_Transaction_GetValue(td->ab_trans))
             != 0.0;
-        if (!values_ok) {
+        if (!values_ok)
+        {
             gtk_widget_show(td->dialog);
             if (gnc_verify_dialog(
-                    td->dialog, TRUE, "%s",
-                    _("The amount is zero or the amount field could not be "
-                      "interpreted correctly. You might have mixed up decimal "
-                      "point and comma, compared to your locale settings. "
-                      "This does not result in a valid online transfer job. \n"
-                      "\n"
-                      "Do you want to enter the job again?"))) {
+                        td->dialog, TRUE, "%s",
+                        _("The amount is zero or the amount field could not be "
+                          "interpreted correctly. You might have mixed up decimal "
+                          "point and comma, compared to your locale settings. "
+                          "This does not result in a valid online transfer job. \n"
+                          "\n"
+                          "Do you want to enter the job again?")))
+            {
                 continue;
-            } else {
+            }
+            else
+            {
                 AB_Transaction_free(td->ab_trans);
                 td->ab_trans = NULL;
                 result = GTK_RESPONSE_CANCEL;
@@ -471,16 +483,20 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
         purpose = gnc_ab_get_purpose(td->ab_trans);
         values_ok = *purpose;
         g_free(purpose);
-        if (!values_ok) {
+        if (!values_ok)
+        {
             gtk_widget_show(td->dialog);
             if (gnc_verify_dialog(
-                    td->dialog, TRUE, "%s",
-                    _("You did not enter any transaction purpose. A purpose is "
-                      "required for an online transfer.\n"
-                      "\n"
-                      "Do you want to enter the job again?"))) {
+                        td->dialog, TRUE, "%s",
+                        _("You did not enter any transaction purpose. A purpose is "
+                          "required for an online transfer.\n"
+                          "\n"
+                          "Do you want to enter the job again?")))
+            {
                 continue;
-            } else {
+            }
+            else
+            {
                 AB_Transaction_free(td->ab_trans);
                 td->ab_trans = NULL;
                 result = GTK_RESPONSE_CANCEL;
@@ -492,16 +508,20 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
         othername = gnc_ab_get_remote_name(td->ab_trans);
         values_ok = othername && *othername;
         g_free(othername);
-        if (!values_ok) {
+        if (!values_ok)
+        {
             gtk_widget_show(td->dialog);
             if (gnc_verify_dialog(
-                    td->dialog, TRUE, "%s",
-                    _("You did not enter a recipient name.  A recipient name is "
-                      "required for an online transfer.\n"
-                      "\n"
-                      "Do you want to enter the job again?"))) {
+                        td->dialog, TRUE, "%s",
+                        _("You did not enter a recipient name.  A recipient name is "
+                          "required for an online transfer.\n"
+                          "\n"
+                          "Do you want to enter the job again?")))
+            {
                 continue;
-            } else {
+            }
+            else
+            {
                 AB_Transaction_free(td->ab_trans);
                 td->ab_trans = NULL;
                 result = GTK_RESPONSE_CANCEL;
@@ -517,7 +537,8 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
         /* And finally check the account code, if ktoblzcheck is available */
         values_ok = check_ktoblzcheck(td->dialog, td, td->ab_trans);
 
-    } while (!values_ok);
+    }
+    while (!values_ok);
 
     /* Hide the dialog */
     if (td->dialog)
@@ -528,7 +549,8 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
 
 static gboolean
 clear_templ_helper(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
-                   gpointer user_data) {
+                   gpointer user_data)
+{
     GncABTransTempl *templ;
 
     g_return_val_if_fail(model && iter, TRUE);
@@ -546,7 +568,8 @@ gnc_ab_trans_dialog_free(GncABTransDialog *td)
         AB_Transaction_free(td->ab_trans);
     if (td->dialog)
         gtk_widget_destroy(td->dialog);
-    if (td->template_list_store) {
+    if (td->template_list_store)
+    {
         gtk_tree_model_foreach(GTK_TREE_MODEL(td->template_list_store),
                                clear_templ_helper, NULL);
         g_object_unref(td->template_list_store);
@@ -578,7 +601,8 @@ gnc_ab_trans_dialog_get_templ(const GncABTransDialog *td, gboolean *changed)
 
     g_return_val_if_fail(td, NULL);
 
-    if (changed) {
+    if (changed)
+    {
         *changed = td->templ_changed;
         if (!*changed)
             return NULL;
@@ -609,7 +633,8 @@ get_available_empty_job(AB_ACCOUNT *ab_acc, GncABTransType trans_type)
 {
     AB_JOB *job;
 
-    switch (trans_type) {
+    switch (trans_type)
+    {
     case SINGLE_DEBITNOTE:
         job = AB_JobSingleDebitNote_new(ab_acc);
         break;
@@ -621,7 +646,8 @@ get_available_empty_job(AB_ACCOUNT *ab_acc, GncABTransType trans_type)
         job = AB_JobSingleTransfer_new(ab_acc);
     };
 
-    if (!job || AB_Job_CheckAvailability(job, 0)) {
+    if (!job || AB_Job_CheckAvailability(job, 0))
+    {
         if (job) AB_Job_free(job);
         return NULL;
     }
@@ -644,8 +670,10 @@ gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
     g_return_val_if_fail(ab_acc && ab_trans, NULL);
 
     job = get_available_empty_job(ab_acc, trans_type);
-    if (job) {
-        switch (trans_type) {
+    if (job)
+    {
+        switch (trans_type)
+        {
         case SINGLE_DEBITNOTE:
             AB_JobSingleDebitNote_SetTransaction(job, ab_trans);
             break;
@@ -681,7 +709,8 @@ templ_list_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
 
     ENTER("td=%p", td);
     if (!gtk_tree_model_get_iter(GTK_TREE_MODEL(td->template_list_store), &iter,
-                                 path)) {
+                                 path))
+    {
         LEAVE("Could not get iter");
         return;
     }
@@ -713,16 +742,18 @@ templ_list_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
 
     /* Check for differences to avoid overwriting entered text */
     if ((*old_name && strcmp(old_name, new_name))
-        || (*old_account && strcmp(old_account, new_account))
-        || (*old_bankcode && strcmp(old_bankcode, new_bankcode))
-        || (*old_purpose && strcmp(old_purpose, new_purpose))
-        || (*old_purpose_cont && strcmp(old_purpose_cont, new_purpose_cont))
-        || (*old_amount_text && !gnc_numeric_equal(old_amount, new_amount))) {
+            || (*old_account && strcmp(old_account, new_account))
+            || (*old_bankcode && strcmp(old_bankcode, new_bankcode))
+            || (*old_purpose && strcmp(old_purpose, new_purpose))
+            || (*old_purpose_cont && strcmp(old_purpose_cont, new_purpose_cont))
+            || (*old_amount_text && !gnc_numeric_equal(old_amount, new_amount)))
+    {
         if (!gnc_verify_dialog(
-                td->parent, FALSE,
-                _("Do you really want to overwrite your changes with the "
-                  "contents of the template \"%s\"?"),
-                gnc_ab_trans_templ_get_name(templ))) {
+                    td->parent, FALSE,
+                    _("Do you really want to overwrite your changes with the "
+                      "contents of the template \"%s\"?"),
+                    gnc_ab_trans_templ_get_name(templ)))
+        {
 
             LEAVE("aborted");
             return;
@@ -752,7 +783,8 @@ dat_bankcode_changed_cb(GtkEditable *editable, gpointer user_data)
     ENTER("td=%p, input=%s", td, input);
     record = AccountNumberCheck_findBank(td->blzcheck, input);
 
-    if (record) {
+    if (record)
+    {
         const char *bankname = AccountNumberCheck_Record_bankName(record);
         GError *error = NULL;
         const char *ktoblzcheck_encoding =
@@ -771,7 +803,8 @@ dat_bankcode_changed_cb(GtkEditable *editable, gpointer user_data)
                                          ktoblzcheck_encoding, NULL, NULL,
                                          &error);
 
-        if (error) {
+        if (error)
+        {
             g_critical("Error converting bankname \"%s\" to UTF-8", bankname);
             g_error_free (error);
             /* Conversion was erroneous, so don't use the string */
@@ -781,14 +814,17 @@ dat_bankcode_changed_cb(GtkEditable *editable, gpointer user_data)
                            *utf8_bankname ? utf8_bankname : _("(unknown)"));
         DEBUG("Found: %s", utf8_bankname);
         g_free(utf8_bankname);
-    } else {
+    }
+    else
+    {
         gtk_label_set_text(GTK_LABEL(td->recp_bankname_label), _("(unknown)"));
     }
     LEAVE(" ");
 #endif
 }
 
-struct _FindTemplData {
+struct _FindTemplData
+{
     const gchar *name;
     const GncABTransTempl *pointer;
 };
@@ -807,12 +843,15 @@ find_templ_helper(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
                        TEMPLATE_NAME, &name,
                        TEMPLATE_POINTER, &templ,
                        -1);
-    if (data->name) {
+    if (data->name)
+    {
         /* Search for the template by name */
         g_return_val_if_fail(!data->pointer, TRUE);
         match = strcmp(name, data->name) == 0;
         if (match) data->pointer = templ;
-    } else {
+    }
+    else
+    {
         /* Search for the template by template pointer */
         g_return_val_if_fail(!data->name, TRUE);
         match = templ == data->pointer;
@@ -849,7 +888,8 @@ dat_add_templ_cb(GtkButton *button, gpointer user_data)
     gtk_entry_set_text(GTK_ENTRY(entry),
                        gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
 
-    do {
+    do
+    {
         retval = gtk_dialog_run(GTK_DIALOG(dialog));
         if (retval != GTK_RESPONSE_OK)
             break;
@@ -862,7 +902,8 @@ dat_add_templ_cb(GtkButton *button, gpointer user_data)
         data.pointer = NULL;
         gtk_tree_model_foreach(GTK_TREE_MODEL(td->template_list_store),
                                find_templ_helper, &data);
-        if (data.pointer) {
+        if (data.pointer)
+        {
             gnc_error_dialog(dialog, "%s",
                              _("A template with the given name already exists.  "
                                "Please enter another name."));
@@ -871,20 +912,23 @@ dat_add_templ_cb(GtkButton *button, gpointer user_data)
 
         /* Create a new template */
         templ = gnc_ab_trans_templ_new_full(
-            name,
-            gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)),
-            gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)),
-            gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)),
-            gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(td->amount_edit)),
-            gtk_entry_get_text(GTK_ENTRY(td->purpose_entry)),
-            gtk_entry_get_text (GTK_ENTRY(td->purpose_cont_entry)));
+                    name,
+                    gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)),
+                    gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)),
+                    gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)),
+                    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(td->amount_edit)),
+                    gtk_entry_get_text(GTK_ENTRY(td->purpose_entry)),
+                    gtk_entry_get_text (GTK_ENTRY(td->purpose_cont_entry)));
 
         /* Insert it, either after the selected one or at the end */
         selection = gtk_tree_view_get_selection(td->template_gtktreeview);
-        if (gtk_tree_selection_get_selected(selection, NULL, &cur_iter)) {
+        if (gtk_tree_selection_get_selected(selection, NULL, &cur_iter))
+        {
             gtk_list_store_insert_after(td->template_list_store,
                                         &new_iter, &cur_iter);
-        } else {
+        }
+        else
+        {
             gtk_list_store_append(td->template_list_store, &new_iter);
         }
         gtk_list_store_set(td->template_list_store, &new_iter,
@@ -894,7 +938,8 @@ dat_add_templ_cb(GtkButton *button, gpointer user_data)
         td->templ_changed = TRUE;
         DEBUG("Added template with name %s", name);
         break;
-    } while (TRUE);
+    }
+    while (TRUE);
 
     gtk_widget_destroy(dialog);
 
@@ -918,8 +963,10 @@ dat_moveup_templ_cb(GtkButton *button, gpointer user_data)
         return;
 
     prev_path = gtk_tree_model_get_path(model, &iter);
-    if (gtk_tree_path_prev(prev_path)) {
-        if (gtk_tree_model_get_iter(model, &prev_iter, prev_path)) {
+    if (gtk_tree_path_prev(prev_path))
+    {
+        if (gtk_tree_model_get_iter(model, &prev_iter, prev_path))
+        {
             gtk_list_store_move_before(GTK_LIST_STORE(model), &iter, &prev_iter);
             td->templ_changed = TRUE;
         }
@@ -943,7 +990,8 @@ dat_movedown_templ_cb(GtkButton *button, gpointer user_data)
         return;
 
     next_iter = iter;
-    if (gtk_tree_model_iter_next(model, &next_iter)) {
+    if (gtk_tree_model_iter_next(model, &next_iter))
+    {
         gtk_list_store_move_after(GTK_LIST_STORE(model), &iter, &next_iter);
         td->templ_changed = TRUE;
     }
@@ -981,16 +1029,18 @@ dat_del_templ_cb(GtkButton *button, gpointer user_data)
 
     ENTER("td=%p", td);
     selection = gtk_tree_view_get_selection(td->template_gtktreeview);
-    if (!gtk_tree_selection_get_selected (selection, &model, &iter)) {
+    if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+    {
         LEAVE("None selected");
         return;
     }
 
     gtk_tree_model_get(model, &iter, TEMPLATE_NAME, &name, -1);
     if (gnc_verify_dialog(
-            td->parent, FALSE,
-            _("Do you really want to delete the template with the name \"%s\"?"),
-            name)) {
+                td->parent, FALSE,
+                _("Do you really want to delete the template with the name \"%s\"?"),
+                name))
+    {
         gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
         td->templ_changed = TRUE;
         DEBUG("Deleted template with name %s", name);

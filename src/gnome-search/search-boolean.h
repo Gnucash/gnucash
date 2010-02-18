@@ -32,19 +32,21 @@
 typedef struct _GNCSearchBoolean	GNCSearchBoolean;
 typedef struct _GNCSearchBooleanClass	GNCSearchBooleanClass;
 
-struct _GNCSearchBoolean {
-  GNCSearchCoreType parent;
+struct _GNCSearchBoolean
+{
+    GNCSearchCoreType parent;
 
-  query_compare_t	how;
-  gboolean		value;
+    query_compare_t	how;
+    gboolean		value;
 };
 
-struct _GNCSearchBooleanClass {
-  GNCSearchCoreTypeClass parent_class;
+struct _GNCSearchBooleanClass
+{
+    GNCSearchCoreTypeClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  /* signals */
+    /* signals */
 };
 
 GType		gnc_search_boolean_get_type	(void);

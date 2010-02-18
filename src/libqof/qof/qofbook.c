@@ -262,9 +262,9 @@ qof_book_set_backend (QofBook *book, QofBackend *be)
 
 void qof_book_kvp_changed (QofBook *book)
 {
-	qof_book_begin_edit(book);
+    qof_book_begin_edit(book);
     qof_book_mark_dirty(book);
-	qof_book_commit_edit(book);
+    qof_book_commit_edit(book);
 }
 
 /* ====================================================================== */
@@ -475,28 +475,28 @@ qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_
 {
     qof_book_begin_edit(book);
     kvp_frame_set_string(qof_book_get_slots(book), opt_name, opt_val);
-	qof_book_mark_dirty(book);
+    qof_book_mark_dirty(book);
     qof_book_commit_edit(book);
 }
 
 void
 qof_book_begin_edit (QofBook *book)
 {
-  qof_begin_edit(&book->inst);
+    qof_begin_edit(&book->inst);
 }
 
 static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
-  PERR ("Failed to commit: %d", errcode);
+    PERR ("Failed to commit: %d", errcode);
 //  gnc_engine_signal_commit_error( errcode );
 }
 
 #if 0
 static void lot_free(QofInstance* inst)
 {
-	GNCLot* lot = GNC_LOT(inst);
+    GNCLot* lot = GNC_LOT(inst);
 
-	gnc_lot_free(lot);
+    gnc_lot_free(lot);
 }
 #endif
 
@@ -505,8 +505,8 @@ static void noop (QofInstance *inst) {}
 void
 qof_book_commit_edit(QofBook *book)
 {
-  if (!qof_commit_edit (QOF_INSTANCE(book))) return;
-  qof_commit_edit_part2 (&book->inst, commit_err, noop, noop/*lot_free*/);
+    if (!qof_commit_edit (QOF_INSTANCE(book))) return;
+    qof_commit_edit_part2 (&book->inst, commit_err, noop, noop/*lot_free*/);
 }
 
 /* QofObject function implementation and registration */

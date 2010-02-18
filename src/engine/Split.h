@@ -20,12 +20,12 @@
 /** @addtogroup Engine
     @{ */
 /** @addtogroup Transaction Financial Transactions
-    A good overview of transactions, splits and accounts can be 
+    A good overview of transactions, splits and accounts can be
     found in the texinfo documentation, together with an overview of
     how to use this API.
 
     @{ */
-/** @file Split.h 
+/** @file Split.h
     @brief API for Transactions and Splits (journal entries)
     @author Copyright (C) 1997 Robin D. Clark
     @author Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>
@@ -134,7 +134,7 @@ GNCLot *      xaccSplitGetLot (const Split *split);
 void xaccSplitSetLot(Split* split, GNCLot* lot);
 
 
-/** Returns the KvpFrame slots of this split for direct editing. 
+/** Returns the KvpFrame slots of this split for direct editing.
  *
  * Split slots are used to store arbitrary strings, numbers, and
  * structures which aren't members of the transaction struct.  See
@@ -156,7 +156,7 @@ void          xaccSplitSetMemo (Split *split, const char *memo);
 /** Returns the memo string. */
 const char *  xaccSplitGetMemo (const Split *split);
 
-/** The Action is an arbitrary user-assigned string. 
+/** The Action is an arbitrary user-assigned string.
  * The action field is an arbitrary user-assigned value.
  * It is meant to be a very short (one to ten character) string that
  * signifies the "type" of this split, such as e.g. Buy, Sell, Div,
@@ -186,15 +186,15 @@ void          xaccSplitSetDateReconciledSecs (Split *split, time_t time);
 void          xaccSplitSetDateReconciledTS (Split *split, Timespec *ts);
 /** Get the date on which this split was reconciled by having it
  * written into the Timespec that 'ts' is pointing to. */
-void          xaccSplitGetDateReconciledTS (const Split *split, 
-					    Timespec *ts);
+void          xaccSplitGetDateReconciledTS (const Split *split,
+        Timespec *ts);
 /** Returns the date (as Timespec) on which this split was reconciled. */
 Timespec      xaccSplitRetDateReconciledTS (const Split *split);
 
 /** @} */
 
 
-/** @name Split amount getters/setters 
+/** @name Split amount getters/setters
  *
  * 'value' vs. 'amount' of a Split: The 'value' is the amount of the
  * _transaction_ balancing commodity (i.e. currency) involved,
@@ -202,7 +202,7 @@ Timespec      xaccSplitRetDateReconciledTS (const Split *split);
 @{
 */
 
-/** The xaccSplitSetAmount() method sets the amount in the account's 
+/** The xaccSplitSetAmount() method sets the amount in the account's
  * commodity that the split should have.
  *
  * The following four setter functions set the prices and amounts.
@@ -213,30 +213,30 @@ Timespec      xaccSplitRetDateReconciledTS (const Split *split);
  * IMPORTANT: The split should be parented by an account before
  * any of these routines are invoked!  This is because the actual
  * setting of amounts/values requires SCU settings from the account.
- * If these are not available, then amounts/values will be set to 
+ * If these are not available, then amounts/values will be set to
  * -1/0, which is an invalid value.  I believe this order dependency
- * is a bug, but I'm too lazy to find, fix & test at the moment ... 
+ * is a bug, but I'm too lazy to find, fix & test at the moment ...
  *
  * @note If you use this on a newly created transaction, make sure
  * that the 'value' is also set so that it doesn't remain zero.
  */
 void         xaccSplitSetAmount (Split *split, gnc_numeric amount);
 
-/** Returns the amount of the split in the account's commodity. 
+/** Returns the amount of the split in the account's commodity.
  *   Note that for cap-gains splits, this is slaved to the transaction
  *   that is causing the gains to occur.
  */
 gnc_numeric   xaccSplitGetAmount (const Split * split);
 
 /** The xaccSplitSetValue() method sets the value of this split in the
- * transaction's commodity. 
+ * transaction's commodity.
  *
  * @note If you use this on a newly created transaction, make sure
  * that the 'amount' is also set so that it doesn't remain zero.
  */
 void         xaccSplitSetValue (Split *split, gnc_numeric value);
 
-/** Returns the value of this split in the transaction's commodity. 
+/** Returns the value of this split in the transaction's commodity.
  *   Note that for cap-gains splits, this is slaved to the transaction
  *   that is causing the gains to occur.
 */
@@ -247,9 +247,9 @@ gnc_numeric   xaccSplitGetValue (const Split * split);
  * routine that is equivalent to a xaccSplitSetSharePrice() followed
  * by and xaccSplitSetAmount(), except that it incurs the processing
  * overhead of balancing only once, instead of twice. */
-void         xaccSplitSetSharePriceAndAmount (Split *split, 
-					      gnc_numeric price,
-					      gnc_numeric amount);
+void         xaccSplitSetSharePriceAndAmount (Split *split,
+        gnc_numeric price,
+        gnc_numeric amount);
 
 /** Returns the price of the split, that is, the value divided by the
  * amount. If the amount is zero, returns a gnc_numeric of value
@@ -259,7 +259,7 @@ gnc_numeric   xaccSplitGetSharePrice (const Split * split);
 /** Depending on the base_currency, set either the value or the amount
  * of this split or both: If the base_currency is the transaction's
  * commodity, set the value.  If it is the account's commodity, set the
- * amount. If both, set both. 
+ * amount. If both, set both.
  *
  * @note <b>WATCH OUT:</b> When using this function and the
  * transaction's and account's commodities are different, the amount
@@ -278,24 +278,24 @@ void         xaccSplitSetBaseValue (Split *split, gnc_numeric value,
  * return the amount. If it is neither print a warning message and
  * return gnc_numeric_zero().
  */
-gnc_numeric xaccSplitGetBaseValue (const Split *split, 
+gnc_numeric xaccSplitGetBaseValue (const Split *split,
                                    const gnc_commodity * base_currency);
 
-/** Returns the running balance up to and including the indicated split. 
+/** Returns the running balance up to and including the indicated split.
  * The balance is the currency-denominated balance.  For accounts
  * with non-unit share prices, it is correctly adjusted for
  * share prices.
  *
- * Returns the running balance up to & including the indicated split. 
+ * Returns the running balance up to & including the indicated split.
  */
 gnc_numeric xaccSplitGetBalance (const Split *split);
 
 /**
- * The cleared-balance is the currency-denominated balance 
+ * The cleared-balance is the currency-denominated balance
  * of all transactions that have been marked as cleared or reconciled.
  * It is correctly adjusted for price fluctuations.
  *
- * Returns the running balance up to & including the indicated split. 
+ * Returns the running balance up to & including the indicated split.
  */
 gnc_numeric xaccSplitGetClearedBalance (const Split *split);
 
@@ -304,13 +304,13 @@ gnc_numeric xaccSplitGetClearedBalance (const Split *split);
  * reconciled-balance is the currency-denominated balance of all
  * transactions that have been marked as reconciled.
  *
- * Returns the running balance up to & including the indicated split. 
+ * Returns the running balance up to & including the indicated split.
  */
 gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
 
 /** @} */
 
-/** @name Split utility functions 
+/** @name Split utility functions
 @{
 */
 
@@ -336,7 +336,7 @@ GList *xaccSplitListGetUniqueTransactions(const GList *splits);
  */
 gboolean xaccSplitEqual(const Split *sa, const Split *sb,
                         gboolean check_guids,
-                	gboolean check_balances,
+                        gboolean check_balances,
                         gboolean check_txn_splits);
 
 /** The xaccSplitLookup() subroutine will return the
@@ -346,9 +346,9 @@ Split      * xaccSplitLookup (const GUID *guid, QofBook *book);
 #define      xaccSplitLookupDirect(g,b) xaccSplitLookup(&(g),b)
 
 
-/** 
+/**
  * The xaccSplitGetOtherSplit() is a convenience routine that returns
- *    the other of a pair of splits.  If there are more than two 
+ *    the other of a pair of splits.  If there are more than two
  *    splits, it returns NULL.
  */
 Split * xaccSplitGetOtherSplit (const Split *split);
@@ -372,8 +372,8 @@ void xaccSplitMakeStockSplit(Split *s);
  *    if sa and sb have different transactions, return their xaccTransOrder
  *    return a negative value if split sa has a smaller currency-value than sb,
  *    return a positive value if split sa has a larger currency-value than sb,
- *    return a negative value if split sa has a smaller share-price than sb,  
- *    return a positive value if split sa has a larger share-price than sb,  
+ *    return a negative value if split sa has a smaller share-price than sb,
+ *    return a positive value if split sa has a larger share-price than sb,
  *    then compares memo and action using the strcmp()
  *    c-library routine, returning  what strcmp would return.
  *    Then it compares the reconciled flags, then the reconciled dates,
@@ -384,9 +384,9 @@ gint xaccSplitOrderDateOnly (const Split *sa, const Split *sb);
 
 
 /*
- * These functions compare two splits by different criteria.   
+ * These functions compare two splits by different criteria.
  *
- * These functions were added because converting strings to guile 
+ * These functions were added because converting strings to guile
  * for comparisons in the transaction report is terribly inefficient.
  * More may be added here in future if it turns out that other types
  * of comparisons also induces guile slowdowns.
@@ -411,11 +411,11 @@ int xaccSplitCompareOtherAccountCodes(const Split *sa, const Split *sb);
 /**
  * These functions take a split, get the corresponding split on the
  * "other side" of the transaction, and extract either the name or code
- * of that split, reverting to returning a constant "Split" if the 
+ * of that split, reverting to returning a constant "Split" if the
  * transaction has more than one split on the "other side".  These
  * were added for the transaction report, and is in C because the code
- * was already written in C for the above functions and duplication 
- * is silly. 
+ * was already written in C for the above functions and duplication
+ * is silly.
  */
 
 char * xaccSplitGetCorrAccountFullName(const Split *sa);
@@ -432,7 +432,7 @@ void xaccSplitDump (const Split *split, const char *tag);
 
 
 
-/** @name Split deprecated functions 
+/** @name Split deprecated functions
 @{
 */
 

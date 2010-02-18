@@ -1532,7 +1532,7 @@ fip (unsigned per, double eint, double pv, double pmt, double fv, unsigned bep)
     double CC = _C (eint, pmt, bep);
     double D = (AA + 1.0) / (1.0 + eint);
     g_return_val_if_fail(CC != 0.0, 0.0);
-    return (double) per *(pv + CC) * D - (AA * CC) / eint;
+    return (double) per * (pv + CC) * D - (AA * CC) / eint;
 }				/* fip */
 
 void
@@ -1621,13 +1621,13 @@ Amortization_init (amort_sched_ptr amortsched)
     unsigned new_n;
     unsigned prec = amortsched->prec;
     unsigned long s,
-    d,
-    days_to_yr_end,
-    Eff_Date_jdn =
-        julian_day_number (amortsched->year_E, amortsched->month_E,
-                           amortsched->day_E), Init_Date_jdn =
-            julian_day_number (amortsched->year_I, amortsched->month_I,
-                               amortsched->day_I);
+             d,
+             days_to_yr_end,
+             Eff_Date_jdn =
+                 julian_day_number (amortsched->year_E, amortsched->month_E,
+                                    amortsched->day_E), Init_Date_jdn =
+                     julian_day_number (amortsched->year_I, amortsched->month_I,
+                                        amortsched->day_I);
 
     amortsched->Eff_Date_jdn = Eff_Date_jdn;
     amortsched->Init_Date_jdn = Init_Date_jdn;

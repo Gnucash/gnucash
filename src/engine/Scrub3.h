@@ -35,15 +35,15 @@
 #include "gnc-engine.h"
 
 /** @name High-Level Lot Constraint
- * Provides the high-level API for checking and repairing ('scrubbing 
- * clean') the usage of Lots and Cap Gains transactions in stock and 
- * commodity accounts.  
+ * Provides the high-level API for checking and repairing ('scrubbing
+ * clean') the usage of Lots and Cap Gains transactions in stock and
+ * commodity accounts.
  @{ */
 
 /** The xaccScrubLot() routine makes sure that the indicated lot is
  *    self-consistent and properly balanced, and fixes it if its not.
  *    This is an important routine to call if the amount of any split
- *    in the lot is changed.  That's because (obviously) changing 
+ *    in the lot is changed.  That's because (obviously) changing
  *    split values is gaurenteed to throw off lot balances.
  *    This routine may end up closing the lot, or at least trying
  *    to. It will also cause cap gains to be recomputed.
@@ -58,12 +58,12 @@ gboolean xaccScrubLot (GNCLot *lot);
  *    in the account is assigned to a lot, and that then, every
  *    lot is self-consistent (by calling xaccScrubLot() on each lot).
  *
- *    This routine is the primary routine for ensuring that the 
- *    lot structure, and the cap-gains for an account are in good 
+ *    This routine is the primary routine for ensuring that the
+ *    lot structure, and the cap-gains for an account are in good
  *    order.
  *
  * Most GUI routines will want to use one of these xacc[*]ScrubLots()
- * routines, instead of the various component routines, since it will 
+ * routines, instead of the various component routines, since it will
  * usually makes sense to work only with these high-level routines.
  */
 void xaccAccountScrubLots (Account *acc);

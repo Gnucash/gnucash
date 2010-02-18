@@ -37,10 +37,10 @@ typedef gchar* URLType;
 #define URL_TYPE_REGISTER	"register"   /* for gnucash register popups */
 #define URL_TYPE_ACCTTREE	"accttree"   /* for account tree windows */
 #define URL_TYPE_REPORT	"report"     /* for gnucash report popups */
-#define URL_TYPE_OPTIONS	"options"    /* for editing report options */ 
+#define URL_TYPE_OPTIONS	"options"    /* for editing report options */
 #define URL_TYPE_SCHEME	"scheme"     /* for scheme code evaluation */
 #define URL_TYPE_HELP	"help"       /* for a gnucash help window */
-#define URL_TYPE_XMLDATA	"xmldata"    /* links to gnucash XML data files */ 
+#define URL_TYPE_XMLDATA	"xmldata"    /* links to gnucash XML data files */
 #define URL_TYPE_PRICE	"price"      /* for price editor popups */
 #define URL_TYPE_OTHER	"other"
 #define URL_TYPE_BUDGET "budget"

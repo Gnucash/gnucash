@@ -21,7 +21,7 @@
 /**@file import-main-matcher.h
    @brief Transaction matcher main window
    @author Copyright (C) 2002 Benoit Grégoire
-   @author Christian Stimming    
+   @author Christian Stimming
 */
 
 #ifndef GNC_IMPORT_MAIN_MATCHER_H
@@ -31,7 +31,7 @@
 
 typedef struct _main_matcher_info GNCImportMainMatcher;
 
-/** Create a new generic transaction dialog window and return it. 
+/** Create a new generic transaction dialog window and return it.
  *
  * @param parent The parent GtkWidget. May be NULL.
  *
@@ -49,12 +49,12 @@ typedef struct _main_matcher_info GNCImportMainMatcher;
  * ignored altogether. For use cases without paper checks (e.g. HBCI),
  * values like 14 (days) might be appropriate, whereas for use cases
  * with paper checks (e.g. OFX, QIF), values like 42 (days) seem more
- * appropriate. 
+ * appropriate.
 */
-GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent, 
-					   const gchar* heading,
-					   gboolean all_from_same_account,
-					      gint match_date_hardlimit);
+GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
+        const gchar* heading,
+        gboolean all_from_same_account,
+        gint match_date_hardlimit);
 
 /** Deletes the given object. */
 void gnc_gen_trans_list_delete (GNCImportMainMatcher *info);

@@ -26,19 +26,19 @@
     A commodity is something of value that is easily tradeable or
     sellable; for example, currencies, stocks, bonds, grain,
     copper, and oil are all commodities.  This file provides
-    an API for defining a commodities, and for working with 
+    an API for defining a commodities, and for working with
     collections of commodities.  All GnuCash financial transactions
     must identify the commodity that is being traded.
 
     @warning The system used here does not follow the object
     handling and identification system (GUID's, Entities, etc.)
     that the other parts of GnuCash use.  The API really should be
-    ported over.  This would allow us to get rid of the 
-    commodity table routines defined below. 
+    ported over.  This would allow us to get rid of the
+    commodity table routines defined below.
 
     @{ */
 /** @file gnc-commodity.h
- *  @brief Commodity handling public routines   
+ *  @brief Commodity handling public routines
  *  @author Copyright (C) 2000 Bill Gribble
  *  @author Copyright (C) 2001 Linas Vepstas <linas@linas.org>
  */
@@ -85,7 +85,7 @@ GType gnc_commodity_namespace_get_type(void);
 
 /** The commodity namespace definitions are used to tag a commodity by
  *  its type, or a stocks by the exchange where it is traded.
- *  
+ *
  *  The LEGACY name is only used by the file i/o routines, and is
  *  converted to another commodity namespace before it is seen by the
  *  rest of the system.  The ISO namespace represents currencies.
@@ -107,7 +107,7 @@ GType gnc_commodity_namespace_get_type(void);
 
 typedef GList CommodityList;
 
-/** @name Commodity Quote Source functions 
+/** @name Commodity Quote Source functions
  @{
 */
 
@@ -117,19 +117,19 @@ typedef GList CommodityList;
  */
 typedef enum
 {
-  SOURCE_SINGLE = 0,	/**< This quote source pulls from a single
+    SOURCE_SINGLE = 0,	/**< This quote source pulls from a single
 			 *   specific web site.  For example, the
 			 *   yahoo_australia source only pulls from
 			 *   the yahoo web site. */
-  SOURCE_MULTI,		/**< This quote source may pull from multiple
+    SOURCE_MULTI,		/**< This quote source may pull from multiple
 			 *   web sites.  For example, the australia
 			 *   source may pull from ASX, yahoo, etc. */
-  SOURCE_UNKNOWN,	/**< This is a locally installed quote source
+    SOURCE_UNKNOWN,	/**< This is a locally installed quote source
 			 *   that gnucash knows nothing about. May
 			 *   pull from single or multiple
 			 *   locations. */
-  SOURCE_MAX,
-  SOURCE_CURRENCY = SOURCE_MAX, /**< The special currency quote source. */
+    SOURCE_MAX,
+    SOURCE_CURRENCY = SOURCE_MAX, /**< The special currency quote source. */
 } QuoteSourceType;
 
 /** This function indicates whether or not the Finance::Quote module
@@ -180,7 +180,8 @@ gnc_quote_source *gnc_quote_source_add_new(const char * name, gboolean supported
  *  @return A pointer to the price quote source that has the specified
  *  internal name.
  */
-/*@ dependent @*/ gnc_quote_source *gnc_quote_source_lookup_by_internal(const char * internal_name);
+/*@ dependent @*/
+gnc_quote_source *gnc_quote_source_lookup_by_internal(const char * internal_name);
 
 /** Given the type/index of a quote source, find the data structure
  *  identified by this pair.
@@ -230,7 +231,8 @@ gint gnc_quote_source_get_index (const gnc_quote_source *source);
  *
  *  @return The user friendly name.
  */
-/*@ dependent @*/ const char *gnc_quote_source_get_user_name (const gnc_quote_source *source);
+/*@ dependent @*/
+const char *gnc_quote_source_get_user_name (const gnc_quote_source *source);
 
 /** Given a gnc_quote_source data structure, return the internal name
  *  of this quote source.  This is the name used by both gnucash and
@@ -240,7 +242,8 @@ gint gnc_quote_source_get_index (const gnc_quote_source *source);
  *
  *  @return The internal name.
  */
-/*@ dependent @*/ const char *gnc_quote_source_get_internal_name (const gnc_quote_source *source);
+/*@ dependent @*/
+const char *gnc_quote_source_get_internal_name (const gnc_quote_source *source);
 
 /** Given a gnc_quote_source data structure, return the internal name
  *  of this quote source.  This is the name used by both gnucash and
@@ -258,8 +261,8 @@ const char *gnc_quote_source_get_old_internal_name (const gnc_quote_source *sour
 /** @} */
 
 
-/** @name Commodity Creation 
- @{ 
+/** @name Commodity Creation
+ @{
 */
 
 /** Create a new commodity. This function allocates a new commodity
@@ -294,8 +297,9 @@ const char *gnc_quote_source_get_old_internal_name (const gnc_quote_source *sour
  *
  *  @return A pointer to the new commodity.
  */
-/*@ dependent @*/ gnc_commodity * gnc_commodity_new(QofBook *book,
-				  /*@ null @*/ const char * fullname, 
+/*@ dependent @*/
+gnc_commodity * gnc_commodity_new(QofBook *book,
+                                  /*@ null @*/ const char * fullname,
                                   /*@ null @*/ const char * namespace,
                                   /*@ null @*/ const char * mnemonic,
                                   /*@ null @*/ const char * cusip,
@@ -451,8 +455,10 @@ gboolean    gnc_commodity_get_quote_flag(const gnc_commodity *cm);
  *
  *  @return A pointer to the price quote source for this commodity.
  */
-/*@ dependent @*/ gnc_quote_source* gnc_commodity_get_quote_source(const gnc_commodity *cm);
-/*@ dependent @*/ gnc_quote_source* gnc_commodity_get_default_quote_source(const gnc_commodity *cm);
+/*@ dependent @*/
+gnc_quote_source* gnc_commodity_get_quote_source(const gnc_commodity *cm);
+/*@ dependent @*/
+gnc_quote_source* gnc_commodity_get_default_quote_source(const gnc_commodity *cm);
 
 /** Retrieve the automatic price quote timezone for the specified
  *  commodity.  This will be a pointer to a null terminated string of
@@ -615,7 +621,7 @@ gnc_commodity_decrement_usage_count(gnc_commodity *cm);
 /** @} */
 
 
-/** @name Commodity Comparison 
+/** @name Commodity Comparison
  @{
 */
 
@@ -650,7 +656,7 @@ int gnc_commodity_compare_void(const void * a, const void * b);
 /** @} */
 
 
-/** @name Currency Checks 
+/** @name Currency Checks
  @{
 */
 
@@ -681,13 +687,14 @@ gboolean gnc_commodity_is_currency(const gnc_commodity *cm);
 
 
 /* =============================================================== */
-/** @name Commodity Table 
+/** @name Commodity Table
 @{
 */
 
 /** Returns the commodity table assoicated with a book.
  */
-/*@ dependent @*/ gnc_commodity_table * gnc_commodity_table_get_table(QofBook *book);
+/*@ dependent @*/
+gnc_commodity_table * gnc_commodity_table_get_table(QofBook *book);
 
 /* XXX backwards compat function; remove me someday */
 #define gnc_book_get_commodity_table gnc_commodity_table_get_table
@@ -705,17 +712,18 @@ void gnc_commodity_table_copy(gnc_commodity_table *dest,
 /** @name Commodity Table Lookup functions
 @{
 */
-gnc_commodity * gnc_commodity_table_lookup(const gnc_commodity_table * table, 
-                                           const char * namespace, 
-                                           const char * mnemonic);
+gnc_commodity * gnc_commodity_table_lookup(const gnc_commodity_table * table,
+        const char * namespace,
+        const char * mnemonic);
 gnc_commodity *
 gnc_commodity_table_lookup_unique(const gnc_commodity_table *table,
                                   const char * unique_name);
 gnc_commodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
-                                              const char * namespace,
-                                              const char * fullname);
+        const char * namespace,
+        const char * fullname);
 
-/*@ dependent @*/ gnc_commodity * gnc_commodity_find_commodity_by_guid(const GUID *guid, QofBook *book);
+/*@ dependent @*/
+gnc_commodity * gnc_commodity_find_commodity_by_guid(const GUID *guid, QofBook *book);
 gnc_commodity_namespace * gnc_commodity_find_namespace_by_guid(const GUID *guid, QofBook *book);
 
 /** @} */
@@ -730,7 +738,7 @@ gnc_commodity_namespace * gnc_commodity_find_namespace_by_guid(const GUID *guid,
  *  nothing), or another entries has the same namespace and mnemonic
  *  (updates the existing entry).
  *
- *  @param table A pointer to the commodity table 
+ *  @param table A pointer to the commodity table
  *
  *  @param comm A pointer to the commodity to add.
  *
@@ -739,17 +747,18 @@ gnc_commodity_namespace * gnc_commodity_find_namespace_by_guid(const GUID *guid,
  *  @note The commodity pointer passed to this function should not be
  *  used after its return, as it may have been destroyed.  Use the
  *  return value which is guaranteed to be valid. */
-/*@ dependent @*/ gnc_commodity * gnc_commodity_table_insert(gnc_commodity_table * table,
-                                           gnc_commodity * comm);
+/*@ dependent @*/
+gnc_commodity * gnc_commodity_table_insert(gnc_commodity_table * table,
+        gnc_commodity * comm);
 
 /** Remove a commodity from the commodity table. If the commodity to
  *  remove doesn't exist, nothing happens.
  *
- *  @param table A pointer to the commodity table 
+ *  @param table A pointer to the commodity table
  *
  *  @param comm A pointer to the commodity to remove. */
 void gnc_commodity_table_remove(gnc_commodity_table * table,
-				gnc_commodity * comm);
+                                gnc_commodity * comm);
 
 /** Add all the standard namespaces and currencies to the commodity
  *  table.  This routine creates the namespaces for the NYSE, NASDAQ,
@@ -794,14 +803,14 @@ guint gnc_commodity_table_get_number_of_namespaces(const gnc_commodity_table* tb
 
 /** Test to see if the indicated namespace exits in the commodity table.
  *
- *  @param table A pointer to the commodity table 
+ *  @param table A pointer to the commodity table
  *
  *  @param namespace The new namespace to check.
  *
  *  @return 1 if the namespace exists. 0 if it doesn't exist, or the
  *  routine was passed a bad argument. */
 int gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
-				      const char * namespace);
+                                      const char * namespace);
 
 /** Return a list of all namespaces in the commodity table.  This
  *  returns both system and user defined namespaces.
@@ -824,7 +833,7 @@ GList * gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * t);
 /** This function adds a new string to the list of commodity namespaces.
  *  If the new namespace already exists, nothing happens.
  *
- *  @param table A pointer to the commodity table 
+ *  @param table A pointer to the commodity table
  *
  *  @param namespace The new namespace to be added.
  *
@@ -832,31 +841,31 @@ GList * gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * t);
  *
  *  @return A pointer to the newly created namespace. */
 gnc_commodity_namespace * gnc_commodity_table_add_namespace(gnc_commodity_table * table,
-							    const char * namespace,
-							    QofBook *book);
+        const char * namespace,
+        QofBook *book);
 
 /** This function finds a commodity namespace in the set of existing commodity namespaces.
  *
- *  @param table A pointer to the commodity table 
+ *  @param table A pointer to the commodity table
  *
  *  @param namespace The new namespace to be added.
  *
  *  @return The a pointer to the namespace found, or NULL if the
  *  namespace doesn't exist. */
 gnc_commodity_namespace * gnc_commodity_table_find_namespace(const gnc_commodity_table * table,
-							     const char * namespace);
+        const char * namespace);
 
 /** This function deletes a string from the list of commodity namespaces.
  *  If the namespace does not exist, nothing happens.
  *
- *  @param table A pointer to the commodity table 
+ *  @param table A pointer to the commodity table
  *
  *  @param namespace The namespace to be deleted.
  *
  *  @note This routine will destroy any commodities that exist as part
  *  of this namespace.  Use it carefully. */
 void      gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
-                                               const char * namespace);
+        const char * namespace);
 /** @} */
 /* ---------------------------------------------------------- */
 /** @name Commodity Table Accessor functions
@@ -865,7 +874,7 @@ void      gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
 
 /** Returns the number of commodities in the commodity table.
  *
- *  @param tbl A pointer to the commodity table 
+ *  @param tbl A pointer to the commodity table
  *
  *  @return The number of commodities in the table. 0 if there are no
  *  commodities, or the routine was passed a bad argument. */
@@ -874,7 +883,7 @@ guint gnc_commodity_table_get_size(const gnc_commodity_table* tbl);
 /** Return a list of all commodities in the commodity table that are
  *  in the given namespace.
  *
- *  @param table A pointer to the commodity table 
+ *  @param table A pointer to the commodity table
  *
  *  @param namespace A string indicating which commodities should be
  *  returned. It is a required argument.
@@ -896,7 +905,7 @@ CommodityList * gnc_commodity_table_get_commodities(
  *  regular expression are checked.  If none was given, all
  *  commodities are checked.
  *
- *  @param table A pointer to the commodity table 
+ *  @param table A pointer to the commodity table
  *
  *  @return A pointer to a list of commodities.  NULL if invalid
  *  arguments were supplied or if there no commodities are flagged for
@@ -910,16 +919,16 @@ CommodityList * gnc_commodity_table_get_quotable_commodities(
  *  This table walk returns whenever the end of the table is reached,
  *  or the function returns FALSE.
  *
- *  @param table A pointer to the commodity table 
+ *  @param table A pointer to the commodity table
  *
  *  @param f The function to call for each commodity.
  *
  *  @param user_data A pointer that is passed into the function
  *  unchanged by the table walk routine. */
 gboolean gnc_commodity_table_foreach_commodity(const gnc_commodity_table * table,
-                                       gboolean (*f)(gnc_commodity *cm,
-                                                     gpointer user_data),
-                                       gpointer user_data);
+        gboolean (*f)(gnc_commodity *cm,
+                      gpointer user_data),
+        gpointer user_data);
 /** @} */
 
 
@@ -936,7 +945,7 @@ gnc_commodity_table * gnc_commodity_table_new(void);
 void          gnc_commodity_table_destroy(gnc_commodity_table * table);
 
 /** Given the commodity 'from', this routine will find and return the
- *   equivalent commodity (commodity with the same 'unique name') in 
+ *   equivalent commodity (commodity with the same 'unique name') in
  *   the indicated book.  This routine is primarily useful for setting
  *   up clones of things across multiple books.
  */
@@ -950,7 +959,7 @@ gboolean gnc_commodity_table_register (void);
 
 void gnc_commodity_begin_edit (gnc_commodity *cm);
 void gnc_commodity_commit_edit (gnc_commodity *cm);
-		  
+
 /** @} */
 
 /** @name Monetary value, commodity identity and numeric value
@@ -958,55 +967,62 @@ void gnc_commodity_commit_edit (gnc_commodity *cm);
   */
 struct _gnc_monetary
 {
-  gnc_commodity *commodity;
-  gnc_numeric value;
+    gnc_commodity *commodity;
+    gnc_numeric value;
 };
 
 typedef struct _gnc_monetary gnc_monetary;
 
 /* A list of monetary values.  This could be a hash table, but as currently
-* used it rarely contains more than one or two different commodities so 
-* it doesn't seem worth the trouble. 
+* used it rarely contains more than one or two different commodities so
+* it doesn't seem worth the trouble.
 */
 typedef GList MonetaryList;
 
 /** @name Constructors
 @{
   Make a gnc_monetary from a gnc_commodity and gnc_numeric */
-  static inline
-  gnc_monetary gnc_monetary_create(gnc_commodity *commod, gnc_numeric val) {
+static inline
+gnc_monetary gnc_monetary_create(gnc_commodity *commod, gnc_numeric val)
+{
     gnc_monetary out;
     out.commodity = commod;
     out.value = val;
     return out;
-  }
-  /** @} */
-  
-  /** @name Accessors
-  @{
-    */
-  static inline
-  gnc_commodity * gnc_monetary_commodity(gnc_monetary a) { return a.commodity; }
-  
-  static inline
-  gnc_numeric gnc_monetary_value(gnc_monetary a) { return a.value; }
-  /** @} */
-  
-  /** @name Manipulate MonetaryList lists
+}
+/** @} */
+
+/** @name Accessors
 @{
   */
+static inline
+gnc_commodity * gnc_monetary_commodity(gnc_monetary a)
+{
+    return a.commodity;
+}
+
+static inline
+gnc_numeric gnc_monetary_value(gnc_monetary a)
+{
+    return a.value;
+}
+/** @} */
+
+/** @name Manipulate MonetaryList lists
+@{
+*/
 
 /** Add a gnc_monetary to the list */
 MonetaryList *gnc_monetary_list_add_monetary(MonetaryList *list, gnc_monetary mon);
 
 /** Add something to the list given a commodity and value */
 static inline
-MonetaryList *gnc_monetary_list_add_value(MonetaryList *list, 
-                                          gnc_commodity *commod, 
-                                          gnc_numeric value)
+MonetaryList *gnc_monetary_list_add_value(MonetaryList *list,
+        gnc_commodity *commod,
+        gnc_numeric value)
 {
-  return gnc_monetary_list_add_monetary(list,
-                                        gnc_monetary_create(commod, value));
+    return gnc_monetary_list_add_monetary(list,
+                                          gnc_monetary_create(commod, value));
 }
 
 /** Delete all the zero-value entries from a list */

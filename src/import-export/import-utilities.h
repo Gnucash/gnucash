@@ -28,34 +28,34 @@
 #include "Account.h"
 
 /** @name Setter-getters
-    Setter and getter functions for the online_id kvp_frame for 
+    Setter and getter functions for the online_id kvp_frame for
     Accounts.
 	@{
-*/ 
+*/
 const gchar * gnc_import_get_acc_online_id(Account * account);
-void gnc_import_set_acc_online_id(Account * account, 
-				  const gchar * string_value);
+void gnc_import_set_acc_online_id(Account * account,
+                                  const gchar * string_value);
 /** @} */
 /** @name Setter-getters
-    Setter and getter functions for the online_id kvp_frame for 
+    Setter and getter functions for the online_id kvp_frame for
     Transactions.
 	@{
-*/ 
+*/
 const gchar * gnc_import_get_trans_online_id(Transaction * transaction);
-void gnc_import_set_trans_online_id(Transaction * transaction, 
-				    const gchar * string_value);
+void gnc_import_set_trans_online_id(Transaction * transaction,
+                                    const gchar * string_value);
 /** @} */
 
 gboolean gnc_import_trans_has_online_id(Transaction * transaction);
 
 /** @name Setter-getters
-    Setter and getter functions for the online_id kvp_frame for 
+    Setter and getter functions for the online_id kvp_frame for
     Splits.
 	@{
-*/ 
+*/
 const gchar * gnc_import_get_split_online_id(Split * split);
 void gnc_import_set_split_online_id(Split * split,
-				    const gchar * string_value);
+                                    const gchar * string_value);
 /** @} */
 
 gboolean gnc_import_split_has_online_id(Split * split);

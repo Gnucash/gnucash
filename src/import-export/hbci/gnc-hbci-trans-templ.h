@@ -30,13 +30,13 @@ typedef struct _trans_data GNCTransTempl;
 /** @name Constructor */
 /*@{*/
 GNCTransTempl *gnc_trans_templ_new(void);
-GNCTransTempl *gnc_trans_templ_new_full(const char *name, 
-					const char *recp_name,
-					const char *recp_account, 
-					const char *recp_bankcode, 
-					gnc_numeric amount, 
-					const char *purpose, 
-					const char *purpose_cont);
+GNCTransTempl *gnc_trans_templ_new_full(const char *name,
+                                        const char *recp_name,
+                                        const char *recp_account,
+                                        const char *recp_bankcode,
+                                        gnc_numeric amount,
+                                        const char *purpose,
+                                        const char *purpose_cont);
 
 void gnc_trans_templ_delete(GNCTransTempl *t);
 void gnc_trans_templ_delete_glist(GList *l);

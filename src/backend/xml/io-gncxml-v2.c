@@ -971,12 +971,12 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
     qof_object_foreach_backend (GNC_FILE_BACKEND, write_counts_cb, &be_data);
 
     if (ferror(out)
-        || !write_commodities(out, book, gd)
-        || !write_pricedb(out, book, gd)
-        || !write_accounts(out, book, gd)
-        || !write_transactions(out, book, gd)
-        || !write_template_transaction_data(out, book, gd)
-        || !write_schedXactions(out, book, gd))
+            || !write_commodities(out, book, gd)
+            || !write_pricedb(out, book, gd)
+            || !write_accounts(out, book, gd)
+            || !write_transactions(out, book, gd)
+            || !write_template_transaction_data(out, book, gd)
+            || !write_schedXactions(out, book, gd))
 
         return FALSE;
 
@@ -1093,9 +1093,9 @@ write_transactions(FILE *out, QofBook *book, sixtp_gdv2 *gd)
     be_data.out = out;
     be_data.gd = gd;
     return 0 ==
-        xaccAccountTreeForEachTransaction(gnc_book_get_root_account(book),
-                                          xml_add_trn_data,
-                                          (gpointer) &be_data);
+           xaccAccountTreeForEachTransaction(gnc_book_get_root_account(book),
+                   xml_add_trn_data,
+                   (gpointer) &be_data);
 }
 
 static gboolean
@@ -1111,9 +1111,9 @@ write_template_transaction_data( FILE *out, QofBook *book, sixtp_gdv2 *gd )
     if ( gnc_account_n_descendants(ra) > 0 )
     {
         if (fprintf(out, "<%s>\n", TEMPLATE_TRANSACTION_TAG) < 0
-            || !write_account_tree(out, ra, gd)
-            || xaccAccountTreeForEachTransaction(ra, xml_add_trn_data, (gpointer)&be_data)
-            || fprintf(out, "</%s>\n", TEMPLATE_TRANSACTION_TAG) < 0)
+                || !write_account_tree(out, ra, gd)
+                || xaccAccountTreeForEachTransaction(ra, xml_add_trn_data, (gpointer)&be_data)
+                || fprintf(out, "</%s>\n", TEMPLATE_TRANSACTION_TAG) < 0)
 
             return FALSE;
     }
@@ -1195,23 +1195,23 @@ static gboolean
 write_v2_header (FILE *out)
 {
     if (fprintf(out, "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n") < 0
-        || fprintf(out, "<" GNC_V2_STRING) < 0
+            || fprintf(out, "<" GNC_V2_STRING) < 0
 
-        || !gnc_xml2_write_namespace_decl (out, "gnc")
-        || !gnc_xml2_write_namespace_decl (out, "act")
-        || !gnc_xml2_write_namespace_decl (out, "book")
-        || !gnc_xml2_write_namespace_decl (out, "cd")
-        || !gnc_xml2_write_namespace_decl (out, "cmdty")
-        || !gnc_xml2_write_namespace_decl (out, "price")
-        || !gnc_xml2_write_namespace_decl (out, "slot")
-        || !gnc_xml2_write_namespace_decl (out, "split")
-        || !gnc_xml2_write_namespace_decl (out, "sx")
-        || !gnc_xml2_write_namespace_decl (out, "trn")
-        || !gnc_xml2_write_namespace_decl (out, "ts")
-        || !gnc_xml2_write_namespace_decl (out, "fs")
-        || !gnc_xml2_write_namespace_decl (out, "bgt")
-        || !gnc_xml2_write_namespace_decl (out, "recurrence")
-        || !gnc_xml2_write_namespace_decl (out, "lot"))
+            || !gnc_xml2_write_namespace_decl (out, "gnc")
+            || !gnc_xml2_write_namespace_decl (out, "act")
+            || !gnc_xml2_write_namespace_decl (out, "book")
+            || !gnc_xml2_write_namespace_decl (out, "cd")
+            || !gnc_xml2_write_namespace_decl (out, "cmdty")
+            || !gnc_xml2_write_namespace_decl (out, "price")
+            || !gnc_xml2_write_namespace_decl (out, "slot")
+            || !gnc_xml2_write_namespace_decl (out, "split")
+            || !gnc_xml2_write_namespace_decl (out, "sx")
+            || !gnc_xml2_write_namespace_decl (out, "trn")
+            || !gnc_xml2_write_namespace_decl (out, "ts")
+            || !gnc_xml2_write_namespace_decl (out, "fs")
+            || !gnc_xml2_write_namespace_decl (out, "bgt")
+            || !gnc_xml2_write_namespace_decl (out, "recurrence")
+            || !gnc_xml2_write_namespace_decl (out, "lot"))
 
         return FALSE;
 
@@ -1234,7 +1234,7 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
     if (!out) return FALSE;
 
     if (!write_v2_header(out)
-        || !write_counts(out, "book", 1, NULL))
+            || !write_counts(out, "book", 1, NULL))
         return FALSE;
 
     be = qof_book_get_backend(book);
@@ -1250,7 +1250,7 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
                                     qof_book_get_collection(book, GNC_ID_BUDGET));
 
     if (!write_book(out, book, gd)
-        || fprintf(out, "</" GNC_V2_STRING ">\n\n") < 0)
+            || fprintf(out, "</" GNC_V2_STRING ">\n\n") < 0)
         success = FALSE;
 
     g_free(gd);
@@ -1278,7 +1278,7 @@ gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE
     ncom = gnc_commodity_table_get_size(table);
 
     if (!write_v2_header(out)
-        || !write_counts(out, "commodity", ncom, "account", nacc, NULL))
+            || !write_counts(out, "commodity", ncom, "account", nacc, NULL))
         return FALSE;
 
     gd = gnc_sixtp_gdv2_new(book, TRUE, file_rw_feedback, be->percentage);
@@ -1286,8 +1286,8 @@ gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE
     gd->counter.accounts_total = nacc;
 
     if (!write_commodities(out, book, gd)
-        || !write_accounts(out, book, gd)
-        || fprintf(out, "</" GNC_V2_STRING ">\n\n") < 0)
+            || !write_accounts(out, book, gd)
+            || fprintf(out, "</" GNC_V2_STRING ">\n\n") < 0)
         success = FALSE;
 
     g_free(gd);
@@ -1511,8 +1511,8 @@ gnc_book_write_to_xml_file_v2(
 
     /* Try to write as much as possible */
     if (!out
-        || !gnc_book_write_to_xml_filehandle_v2(book, out)
-        || !write_emacs_trailer(out))
+            || !gnc_book_write_to_xml_filehandle_v2(book, out)
+            || !write_emacs_trailer(out))
         success = FALSE;
 
     /* Close the output stream */
@@ -1545,8 +1545,8 @@ gnc_book_write_accounts_to_xml_file_v2(
 
     /* Try to write as much as possible */
     if (!out
-        || !gnc_book_write_accounts_to_xml_filehandle_v2 (be, book, out)
-        || !write_emacs_trailer(out))
+            || !gnc_book_write_accounts_to_xml_filehandle_v2 (be, book, out)
+            || !write_emacs_trailer(out))
         success = FALSE;
 
     /* Close the output stream */
@@ -1554,7 +1554,8 @@ gnc_book_write_accounts_to_xml_file_v2(
         success = FALSE;
 
     if (!success
-        && qof_backend_get_error(be) == ERR_BACKEND_NO_ERR) {
+            && qof_backend_get_error(be) == ERR_BACKEND_NO_ERR)
+    {
 
         /* Use a generic write error code */
         qof_backend_set_error(be, ERR_FILEIO_WRITE_ERROR);

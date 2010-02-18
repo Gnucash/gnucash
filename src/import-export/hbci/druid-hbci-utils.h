@@ -38,8 +38,8 @@ void accounts_save_kvp (GHashTable *hash);
  * AB_BANKING. Straightforward, if we have only one bank and one user
  * with one customer. All other cases are not currently
  * implemented. */
-void update_accounts (GtkWidget *parent, AB_BANKING *api, 
-		      GNCInteractor *inter);
+void update_accounts (GtkWidget *parent, AB_BANKING *api,
+                      GNCInteractor *inter);
 
 /** Builds a new hash table mapping all HBCI accounts to Gnucash
  * accounts, where the Gnucash accounts already have the reference
@@ -47,7 +47,7 @@ void update_accounts (GtkWidget *parent, AB_BANKING *api,
 GHashTable *
 gnc_hbci_new_hash_from_kvp (AB_BANKING *api);
 
-gboolean 
+gboolean
 gnc_verify_exist_or_new_file (GtkWidget *parent, const char *filename);
 
 gboolean

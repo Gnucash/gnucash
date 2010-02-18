@@ -35,30 +35,30 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc);
 /** Finalizes all the things that have to be done with a GetTrans
  * job.  Returns true if everything has been finished succesfully. */
 gboolean
-gnc_hbci_gettrans_final(GtkWidget *parent, 
-			Account *gnc_acc, 
-			const AB_JOB *trans_job,
-			gboolean run_until_done);
+gnc_hbci_gettrans_final(GtkWidget *parent,
+                        Account *gnc_acc,
+                        const AB_JOB *trans_job,
+                        gboolean run_until_done);
 
 /** Finalize the final importing part of a GetTrans job.  Returns true
  * if everything has been finished succesfully. */
 gboolean
-gnc_hbci_import_final(GtkWidget *parent, 
-		      Account *gnc_acc,
-		      AB_TRANSACTION_LIST2 *trans_list, 
-		      gboolean run_until_done);
+gnc_hbci_import_final(GtkWidget *parent,
+                      Account *gnc_acc,
+                      AB_TRANSACTION_LIST2 *trans_list,
+                      gboolean run_until_done);
 
 /** user_data struct for the gnc_hbci_trans_list_cb() structure */
-struct trans_list_data 
+struct trans_list_data
 {
-  Account *gnc_acc;
-  GNCImportMainMatcher *importer_generic;
+    Account *gnc_acc;
+    GNCImportMainMatcher *importer_generic;
 };
 
 /** AB_TRANSACTION_LIST2_foreach callback. The Conversion from HBCI to
    GNC transaction is done here, once for each AB_TRANSACTION.  */
-AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *imported_trans, 
-				       void *user_data);
+AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *imported_trans,
+                                       void *user_data);
 
 
 #endif /* GNC_HBCI_GETTRANS_H */

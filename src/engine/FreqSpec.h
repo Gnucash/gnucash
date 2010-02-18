@@ -43,8 +43,8 @@
 DEFINE_ENUM(FreqType, ENUM_LIST_TYPE) /**< \enum FreqType
 Frequency specification.
 
-For BI_WEEKLY, use weekly[2] 
- SEMI_MONTHLY, use composite 
+For BI_WEEKLY, use weekly[2]
+ SEMI_MONTHLY, use composite
  YEARLY, monthly[12] */
 
 AS_STRING_DEC(FreqType, ENUM_LIST_TYPE)
@@ -63,14 +63,14 @@ FROM_STRING_DEC(FreqType, ENUM_LIST_TYPE)
         _(UIFREQ_TRI_ANUALLY,) /**< Repeat three times a year. */ \
         _(UIFREQ_SEMI_YEARLY,) /**< Repeat twice a year. */ \
         _(UIFREQ_YEARLY,) /**< Repeat once a year. */ \
-        _(UIFREQ_NUM_UI_FREQSPECS,) 
+        _(UIFREQ_NUM_UI_FREQSPECS,)
 
 DEFINE_ENUM( UIFreqType, ENUM_LIST_UI) /**< \enum UIFreqType
 
  * The user's conception of the frequency.  It is expected that this
  * list will grow, while the former ::FreqType will not. */
 
-AS_STRING_DEC(UIFreqType, ENUM_LIST_UI) 
+AS_STRING_DEC(UIFreqType, ENUM_LIST_UI)
 FROM_STRING_DEC(UIFreqType, ENUM_LIST_UI)
 
 /** @} */

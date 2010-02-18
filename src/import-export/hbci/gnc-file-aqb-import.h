@@ -16,12 +16,12 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
- /** @file
-     @brief dtaus import module interface
-     *
-     gnc-dtaus-import.h
-     @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
- */
+/** @file
+    @brief dtaus import module interface
+    *
+    gnc-dtaus-import.h
+    @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
+*/
 #ifndef DTAUS_IMPORT_H
 #define DTAUS_IMPORT_H
 
@@ -38,8 +38,8 @@
  * @param aqbanking_formatname In aqbanking, each importer has one or
  * more data formats available which define the actual data
  * fields that should be used. In aqbanking, such a different format
- * is called a "profile". 
- * Possible values for swift: "swift-mt940" or "swift-mt942", 
+ * is called a "profile".
+ * Possible values for swift: "swift-mt940" or "swift-mt942",
  * but for all others: "default", or more precisely: Look into
  * $datadir/aqbanking/imexporters and look into the "name" field of
  * the foo.conf files.
@@ -49,8 +49,8 @@
  * just import the transactions and that's it.
  */
 void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
-				const gchar *aqbanking_formatname,
-				gboolean exec_as_aqbanking_jobs);
+                                const gchar *aqbanking_formatname,
+                                gboolean exec_as_aqbanking_jobs);
 
 
 #endif

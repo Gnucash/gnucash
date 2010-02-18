@@ -44,7 +44,8 @@
 #include "Account.h"
 #include "gnc-numeric.h"
 
-typedef enum {
+typedef enum
+{
     PERIOD_ONCE,         /* Not a true period at all, but convenient here. */
     PERIOD_DAY,
     PERIOD_WEEK,
@@ -57,7 +58,8 @@ typedef enum {
     PERIOD_INVALID = -1,
 } PeriodType;
 
-typedef enum {
+typedef enum
+{
     WEEKEND_ADJ_NONE,
     WEEKEND_ADJ_BACK,    /* Previous weekday */
     WEEKEND_ADJ_FORWARD, /* Next weekday */
@@ -67,16 +69,17 @@ typedef enum {
 
 /* Recurrences represent both the phase and period of a recurring event. */
 
-typedef struct {
+typedef struct
+{
     GDate start;         /* First date in the recurrence; specifies phase. */
     PeriodType ptype;    /* see PeriodType enum */
     guint16 mult;        /* a period multiplier */
-	WeekendAdjust wadj;  /* see WeekendAdjust enum */
+    WeekendAdjust wadj;  /* see WeekendAdjust enum */
 } Recurrence;
 
 
 /* recurrenceSet() will enforce internal consistency by overriding
-   inconsistent inputs so that 'r' will _always_ end up being a valid 
+   inconsistent inputs so that 'r' will _always_ end up being a valid
    recurrence.
 
      - if the period type is invalid, PERIOD_MONTH is used.
@@ -138,8 +141,8 @@ time_t recurrenceGetPeriodTime(const Recurrence *r, guint n, gboolean end);
  * @return the amount that an Account's value changed between the beginning
  * and end of the nth instance of the Recurrence.
  **/
-gnc_numeric recurrenceGetAccountPeriodValue(const Recurrence *r, 
-                                            Account *acct, guint n);
+gnc_numeric recurrenceGetAccountPeriodValue(const Recurrence *r,
+        Account *acct, guint n);
 
 /** @return the earliest of the next occurances -- a "composite" recurrence **/
 void recurrenceListNextInstance(const GList *r, const GDate *refDate,

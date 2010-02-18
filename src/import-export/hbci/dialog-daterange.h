@@ -27,12 +27,12 @@
 
 gboolean
 gnc_hbci_enter_daterange (GtkWidget *parent,
-			  const char *heading,
-			  Timespec *from_date, 
-			  gboolean *last_retv_date,
-			  gboolean *first_possible_date,
-			  Timespec *to_date,
-			  gboolean *to_now);
+                          const char *heading,
+                          Timespec *from_date,
+                          gboolean *last_retv_date,
+                          gboolean *first_possible_date,
+                          Timespec *to_date,
+                          gboolean *to_now);
 
 
 

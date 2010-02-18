@@ -47,15 +47,16 @@
 /* Signal codes */
 enum
 {
-	SELECTION_CHANGED,
-	LAST_SIGNAL
+    SELECTION_CHANGED,
+    LAST_SIGNAL
 };
 
 /* Columns used in GtkEntryCompletion's model */
-enum {
-  GSL_COLUMN_TEXT,
-  GSL_COLUMN_QOFOBJECT,
-  GSL_N_COLUMNS
+enum
+{
+    GSL_COLUMN_TEXT,
+    GSL_COLUMN_QOFOBJECT,
+    GSL_N_COLUMNS
 };
 
 static void gnc_general_search_init         (GNCGeneralSearch      *gsl);
@@ -64,14 +65,15 @@ static void gnc_general_search_destroy      (GtkObject             *object);
 
 typedef struct _GNCGeneralSearchPrivate GNCGeneralSearchPrivate;
 
-struct _GNCGeneralSearchPrivate {
-	GUID			guid;
-	GNCIdTypeConst		type;
-	GNCSearchCB		search_cb;
-	gpointer		user_data;
-	GNCSearchWindow *	sw;
-	const QofParam * get_guid;
-	gint			component_id;
+struct _GNCGeneralSearchPrivate
+{
+    GUID			guid;
+    GNCIdTypeConst		type;
+    GNCSearchCB		search_cb;
+    gpointer		user_data;
+    GNCSearchWindow *	sw;
+    const QofParam * get_guid;
+    gint			component_id;
 };
 
 #define _PRIVATE(o) \
@@ -89,176 +91,183 @@ static guint general_search_signals[LAST_SIGNAL];
 GType
 gnc_general_search_get_type (void)
 {
-	static GType general_search_type = 0;
+    static GType general_search_type = 0;
 
-	if (!general_search_type){
-		static const GTypeInfo our_info = {
-			sizeof (GNCGeneralSearchClass),    /* class_size */
-			NULL,   			   /* base_init */
-			NULL,				   /* base_finalize */
-			(GClassInitFunc) gnc_general_search_class_init,
-			NULL,				   /* class_finalize */
-			NULL,				   /* class_data */
-			sizeof (GNCGeneralSearch),	   /* */
-			0,				   /* n_preallocs */
-			(GInstanceInitFunc) gnc_general_search_init,
-		};
+    if (!general_search_type)
+    {
+        static const GTypeInfo our_info =
+        {
+            sizeof (GNCGeneralSearchClass),    /* class_size */
+            NULL,   			   /* base_init */
+            NULL,				   /* base_finalize */
+            (GClassInitFunc) gnc_general_search_class_init,
+            NULL,				   /* class_finalize */
+            NULL,				   /* class_data */
+            sizeof (GNCGeneralSearch),	   /* */
+            0,				   /* n_preallocs */
+            (GInstanceInitFunc) gnc_general_search_init,
+        };
 
-		general_search_type = g_type_register_static (GTK_TYPE_HBOX,
-							      "GNCGeneralSearch",
-							      &our_info, 0);
-	}
+        general_search_type = g_type_register_static (GTK_TYPE_HBOX,
+                              "GNCGeneralSearch",
+                              &our_info, 0);
+    }
 
-	return general_search_type;
+    return general_search_type;
 }
 
 static void
 gnc_general_search_class_init (GNCGeneralSearchClass *klass)
 {
-	GtkObjectClass *object_class = (GtkObjectClass *) klass;
+    GtkObjectClass *object_class = (GtkObjectClass *) klass;
 
-	object_class = (GtkObjectClass*) klass;
+    object_class = (GtkObjectClass*) klass;
 
-	parent_class = gtk_type_class (gtk_hbox_get_type ());
+    parent_class = gtk_type_class (gtk_hbox_get_type ());
 
-	general_search_signals[SELECTION_CHANGED] =
-		g_signal_new("changed",
-			     G_TYPE_FROM_CLASS(object_class),
-			     G_SIGNAL_RUN_FIRST,
-			     G_STRUCT_OFFSET(GNCGeneralSearchClass, changed),
-			     NULL, NULL,
-			     g_cclosure_marshal_VOID__VOID,
-			     G_TYPE_NONE, 0);
+    general_search_signals[SELECTION_CHANGED] =
+        g_signal_new("changed",
+                     G_TYPE_FROM_CLASS(object_class),
+                     G_SIGNAL_RUN_FIRST,
+                     G_STRUCT_OFFSET(GNCGeneralSearchClass, changed),
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__VOID,
+                     G_TYPE_NONE, 0);
 
-	object_class->destroy = gnc_general_search_destroy;
+    object_class->destroy = gnc_general_search_destroy;
 
-	klass->changed = NULL;
+    klass->changed = NULL;
 
-	g_type_class_add_private(klass, sizeof(GNCGeneralSearchPrivate));
+    g_type_class_add_private(klass, sizeof(GNCGeneralSearchPrivate));
 }
 
 static void
 gnc_general_search_init (GNCGeneralSearch *gsl)
 {
-	gsl->selected_item = NULL;
+    gsl->selected_item = NULL;
 }
 
 static void
 gnc_general_search_destroy (GtkObject *object)
 {
-	GNCGeneralSearch *gsl;
-	GNCGeneralSearchPrivate *priv;
+    GNCGeneralSearch *gsl;
+    GNCGeneralSearchPrivate *priv;
 
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (GNC_IS_GENERAL_SEARCH (object));
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_GENERAL_SEARCH (object));
 
-	gsl = GNC_GENERAL_SEARCH (object);
+    gsl = GNC_GENERAL_SEARCH (object);
 
-	gsl->entry = NULL;
-	gsl->button = NULL;
+    gsl->entry = NULL;
+    gsl->button = NULL;
 
-	priv = _PRIVATE(gsl);
-	/* Clear the callbacks */
-	if (priv->sw) {
-		gnc_search_dialog_set_select_cb (priv->sw, NULL, NULL, FALSE);
-		gnc_search_dialog_disconnect (priv->sw, gsl);
-		priv->sw = NULL;
-	}
-	if (priv->component_id) {
-		/* Unregister ourselves */
-		gnc_unregister_gui_component (priv->component_id);
-		priv->component_id = 0;
-	}
+    priv = _PRIVATE(gsl);
+    /* Clear the callbacks */
+    if (priv->sw)
+    {
+        gnc_search_dialog_set_select_cb (priv->sw, NULL, NULL, FALSE);
+        gnc_search_dialog_disconnect (priv->sw, gsl);
+        priv->sw = NULL;
+    }
+    if (priv->component_id)
+    {
+        /* Unregister ourselves */
+        gnc_unregister_gui_component (priv->component_id);
+        priv->component_id = 0;
+    }
 
-	if (GTK_OBJECT_CLASS (parent_class)->destroy)
-		GTK_OBJECT_CLASS (parent_class)->destroy (object);
+    if (GTK_OBJECT_CLASS (parent_class)->destroy)
+        GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 /* The "selection" contents have changed.  Change the text. */
 static void
 reset_selection_text (GNCGeneralSearch *gsl)
 {
-	GNCGeneralSearchPrivate *priv;
-	const char *text;
+    GNCGeneralSearchPrivate *priv;
+    const char *text;
 
-	priv = _PRIVATE(gsl);
-	if (gsl->selected_item == NULL)
-		text = "";
-	else
-		text = gncObjectPrintable (priv->type, gsl->selected_item);
+    priv = _PRIVATE(gsl);
+    if (gsl->selected_item == NULL)
+        text = "";
+    else
+        text = gncObjectPrintable (priv->type, gsl->selected_item);
 
-	gtk_entry_set_text(GTK_ENTRY(gsl->entry), text);
+    gtk_entry_set_text(GTK_ENTRY(gsl->entry), text);
 }
 
 /* We've got a refresh event */
 static void
 refresh_handler (GHashTable *changes, gpointer data)
 {
-	GNCGeneralSearch *gsl = data;
-	GNCGeneralSearchPrivate *priv;
-	const EventInfo *info;
+    GNCGeneralSearch *gsl = data;
+    GNCGeneralSearchPrivate *priv;
+    const EventInfo *info;
 
-	priv = _PRIVATE(gsl);
-	if (changes) {
-		info = gnc_gui_get_entity_events (changes, &priv->guid);
-		if (info) {
-			if (info->event_mask & QOF_EVENT_DESTROY)
-				gsl->selected_item = NULL;
-			reset_selection_text (gsl);
-		}
-	}
+    priv = _PRIVATE(gsl);
+    if (changes)
+    {
+        info = gnc_gui_get_entity_events (changes, &priv->guid);
+        if (info)
+        {
+            if (info->event_mask & QOF_EVENT_DESTROY)
+                gsl->selected_item = NULL;
+            reset_selection_text (gsl);
+        }
+    }
 }
 
 /* The user has selected from the search dialog */
 static void
 new_item_selected_cb (gpointer item, gpointer user_data)
 {
-	GNCGeneralSearch *gsl = user_data;
-	gnc_general_search_set_selected (gsl, item);
+    GNCGeneralSearch *gsl = user_data;
+    gnc_general_search_set_selected (gsl, item);
 }
 
 /* The search dialog has closed; let's forget about her */
 static int
 on_close_cb (GtkDialog *dialog, gpointer user_data)
 {
-	GNCGeneralSearch *gsl = user_data;
-	GNCGeneralSearchPrivate *priv;
+    GNCGeneralSearch *gsl = user_data;
+    GNCGeneralSearchPrivate *priv;
 
-	priv = _PRIVATE(gsl);
-	priv->sw = NULL;
-	return FALSE;
+    priv = _PRIVATE(gsl);
+    priv->sw = NULL;
+    return FALSE;
 }
 
 /* The user clicked on the button.  Pop up the selection window */
 static void
 search_cb(GtkButton * button, gpointer user_data)
 {
-	GNCGeneralSearch *gsl = user_data;
-	GNCGeneralSearchPrivate *priv;
-	GNCSearchWindow *sw;
+    GNCGeneralSearch *gsl = user_data;
+    GNCGeneralSearchPrivate *priv;
+    GNCSearchWindow *sw;
 
-	priv = _PRIVATE(gsl);
-	if (priv->sw) {
-		gnc_search_dialog_raise (priv->sw);
-		return;
-	}
+    priv = _PRIVATE(gsl);
+    if (priv->sw)
+    {
+        gnc_search_dialog_raise (priv->sw);
+        return;
+    }
 
-	sw = (priv->search_cb)(gsl->selected_item, priv->user_data);
+    sw = (priv->search_cb)(gsl->selected_item, priv->user_data);
 
-	/* NULL means nothing to 'select' */
-	if (sw == NULL)
-		return;
+    /* NULL means nothing to 'select' */
+    if (sw == NULL)
+        return;
 
-	/* Ok, save this search window and setup callbacks */
-	priv->sw = sw;
+    /* Ok, save this search window and setup callbacks */
+    priv->sw = sw;
 
-	/* Catch when the search dialog closes */
-	gnc_search_dialog_connect_on_close (sw, G_CALLBACK (on_close_cb),
-					    gsl);
+    /* Catch when the search dialog closes */
+    gnc_search_dialog_connect_on_close (sw, G_CALLBACK (on_close_cb),
+                                        gsl);
 
-	/* Catch the selection */
-	gnc_search_dialog_set_select_cb (sw, new_item_selected_cb,
-					 gsl, gsl->allow_clear);
+    /* Catch the selection */
+    gnc_search_dialog_set_select_cb (sw, new_item_selected_cb,
+                                     gsl, gsl->allow_clear);
 
 }
 
@@ -280,15 +289,15 @@ search_cb(GtkButton * button, gpointer user_data)
  *   @param cbe A pointer to a currency entry widget. */
 static gboolean
 gnc_gsl_match_selected_cb (GtkEntryCompletion *completion,
-			   GtkTreeModel       *comp_model,
-			   GtkTreeIter        *comp_iter,
-			   GNCGeneralSearch   *gsl)
+                           GtkTreeModel       *comp_model,
+                           GtkTreeIter        *comp_iter,
+                           GNCGeneralSearch   *gsl)
 {
-	QofObject * qofobject;
+    QofObject * qofobject;
 
-	gtk_tree_model_get(comp_model, comp_iter, GSL_COLUMN_QOFOBJECT, &qofobject, -1);
-	gnc_general_search_set_selected (gsl, qofobject);
-	return FALSE;
+    gtk_tree_model_get(comp_model, comp_iter, GSL_COLUMN_QOFOBJECT, &qofobject, -1);
+    gnc_general_search_set_selected (gsl, qofobject);
+    return FALSE;
 }
 
 /**  The focus left the general search edit widget, so reset the widget to
@@ -305,141 +314,142 @@ gnc_gsl_match_selected_cb (GtkEntryCompletion *completion,
  *   @param gsl A pointer to a general search widget. */
 static gboolean
 gnc_gsl_focus_out_cb (GtkEntry         *entry,
-		      GdkEventFocus    *event,
-		      GNCGeneralSearch *gsl)
+                      GdkEventFocus    *event,
+                      GNCGeneralSearch *gsl)
 {
-	const gchar	*text;
-	GtkEntryCompletion *completion;
-	GtkTreeModel *model;
-	GtkTreeIter iter;
-	gchar *lc_text, *tree_string, *lc_tree_string;
-	gboolean match, valid_iter;
-	QofObject *qofobject;
-	gpointer selected_item=NULL;
+    const gchar	*text;
+    GtkEntryCompletion *completion;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    gchar *lc_text, *tree_string, *lc_tree_string;
+    gboolean match, valid_iter;
+    QofObject *qofobject;
+    gpointer selected_item = NULL;
 
-	/* Attempt to match the current text to a qofobject. */
-	completion = gtk_entry_get_completion(entry);
-	model = gtk_entry_completion_get_model(completion);
+    /* Attempt to match the current text to a qofobject. */
+    completion = gtk_entry_get_completion(entry);
+    model = gtk_entry_completion_get_model(completion);
 
-	/* Return if completion tree is empty */
-	valid_iter = gtk_tree_model_get_iter_first(model, &iter);
-	if (!valid_iter)
-		return FALSE;
+    /* Return if completion tree is empty */
+    valid_iter = gtk_tree_model_get_iter_first(model, &iter);
+    if (!valid_iter)
+        return FALSE;
 
-	text = gtk_entry_get_text(entry);
-	lc_text = g_utf8_strdown(text, -1);
+    text = gtk_entry_get_text(entry);
+    lc_text = g_utf8_strdown(text, -1);
 
-	/* The last, valid selected entry can match the entered text
-	 * No need to search further in that case */
-	if (gsl->selected_item)
-	{
-		GNCGeneralSearchPrivate *	priv;
+    /* The last, valid selected entry can match the entered text
+     * No need to search further in that case */
+    if (gsl->selected_item)
+    {
+        GNCGeneralSearchPrivate *	priv;
 
-		priv=_PRIVATE(gsl);
-		tree_string = g_strdup(qof_object_printable(priv->type, gsl->selected_item));
-		lc_tree_string = g_utf8_strdown(tree_string, -1);
-		match = g_utf8_collate(lc_text, lc_tree_string) == 0;
-		g_free(tree_string);
-		g_free(lc_tree_string);
-		if (match)
-			selected_item = gsl->selected_item;
-	}
+        priv = _PRIVATE(gsl);
+        tree_string = g_strdup(qof_object_printable(priv->type, gsl->selected_item));
+        lc_tree_string = g_utf8_strdown(tree_string, -1);
+        match = g_utf8_collate(lc_text, lc_tree_string) == 0;
+        g_free(tree_string);
+        g_free(lc_tree_string);
+        if (match)
+            selected_item = gsl->selected_item;
+    }
 
-	/* Otherwise, find a match in the completion list */
-	while (valid_iter && !selected_item)
-	{
-		gtk_tree_model_get(model, &iter, GSL_COLUMN_TEXT, &tree_string, -1);
-		lc_tree_string = g_utf8_strdown(tree_string, -1);
-		match = g_utf8_collate(lc_text, lc_tree_string) == 0;
-		g_free(tree_string);
-		g_free(lc_tree_string);
-		if (match)
-		{
-			gtk_tree_model_get(model, &iter, GSL_COLUMN_QOFOBJECT, &qofobject, -1);
-			selected_item = qofobject;
-		} else
-			valid_iter = gtk_tree_model_iter_next(model, &iter);
-	}
+    /* Otherwise, find a match in the completion list */
+    while (valid_iter && !selected_item)
+    {
+        gtk_tree_model_get(model, &iter, GSL_COLUMN_TEXT, &tree_string, -1);
+        lc_tree_string = g_utf8_strdown(tree_string, -1);
+        match = g_utf8_collate(lc_text, lc_tree_string) == 0;
+        g_free(tree_string);
+        g_free(lc_tree_string);
+        if (match)
+        {
+            gtk_tree_model_get(model, &iter, GSL_COLUMN_QOFOBJECT, &qofobject, -1);
+            selected_item = qofobject;
+        }
+        else
+            valid_iter = gtk_tree_model_iter_next(model, &iter);
+    }
 
-	g_free(lc_text);
-	gnc_general_search_set_selected (gsl, selected_item);
-	return FALSE;
+    g_free(lc_text);
+    gnc_general_search_set_selected (gsl, selected_item);
+    return FALSE;
 }
 
 static void
 create_children (GNCGeneralSearch *gsl,
-		 const char       *label,
-		 gboolean          text_editable,
-		 GNCIdTypeConst    type,
-		 QofBook          *book)
+                 const char       *label,
+                 gboolean          text_editable,
+                 GNCIdTypeConst    type,
+                 QofBook          *book)
 {
-	GtkListStore *	list_store;
-	QueryNew *	q;
-	GtkTreeIter iter;
-	GList * list, * it;
-	GtkEntryCompletion *completion;
+    GtkListStore *	list_store;
+    QueryNew *	q;
+    GtkTreeIter iter;
+    GList * list, * it;
+    GtkEntryCompletion *completion;
 
-	/* Add a text entry box */
-	gsl->entry = gtk_entry_new ();
-	if (!text_editable)
-		gtk_editable_set_editable (GTK_EDITABLE (gsl->entry), FALSE);
-	gtk_box_pack_start (GTK_BOX (gsl), gsl->entry, TRUE, TRUE, 0);
+    /* Add a text entry box */
+    gsl->entry = gtk_entry_new ();
+    if (!text_editable)
+        gtk_editable_set_editable (GTK_EDITABLE (gsl->entry), FALSE);
+    gtk_box_pack_start (GTK_BOX (gsl), gsl->entry, TRUE, TRUE, 0);
 
 
-	/* Setup a GtkEntryCompletion auxiliary widget for our Entry box
-	 * This requires an internal table ("model") with the possible
-	 * auto-completion text entries */
+    /* Setup a GtkEntryCompletion auxiliary widget for our Entry box
+     * This requires an internal table ("model") with the possible
+     * auto-completion text entries */
 
-	/* Query for the requested object type */
-	q = qof_query_create_for (type);
-	qof_query_add_boolean_match(q, g_slist_prepend
-			(NULL, QOF_PARAM_ACTIVE), TRUE, QOF_QUERY_AND);
-	qof_query_set_book (q, book);
-	list = qof_query_run(q);
+    /* Query for the requested object type */
+    q = qof_query_create_for (type);
+    qof_query_add_boolean_match(q, g_slist_prepend
+                                (NULL, QOF_PARAM_ACTIVE), TRUE, QOF_QUERY_AND);
+    qof_query_set_book (q, book);
+    list = qof_query_run(q);
 
-	/* Setup the internal model */
-	list_store = gtk_list_store_new (GSL_N_COLUMNS, G_TYPE_STRING, G_TYPE_OBJECT);
-	for (it = list; it != NULL ; it = it->next)
-	{
-		char * name;
+    /* Setup the internal model */
+    list_store = gtk_list_store_new (GSL_N_COLUMNS, G_TYPE_STRING, G_TYPE_OBJECT);
+    for (it = list; it != NULL ; it = it->next)
+    {
+        char * name;
 
-		name = g_strdup(qof_object_printable(type, it->data));
-		/* Add a new row to the model */
-		if (name)
-		{
-		gtk_list_store_append (list_store, &iter);
-		gtk_list_store_set (list_store, &iter,
-				GSL_COLUMN_TEXT, name,
-				GSL_COLUMN_QOFOBJECT, G_OBJECT(it->data),
-				-1);
-			g_free(name);
-		}
+        name = g_strdup(qof_object_printable(type, it->data));
+        /* Add a new row to the model */
+        if (name)
+        {
+            gtk_list_store_append (list_store, &iter);
+            gtk_list_store_set (list_store, &iter,
+                                GSL_COLUMN_TEXT, name,
+                                GSL_COLUMN_QOFOBJECT, G_OBJECT(it->data),
+                                -1);
+            g_free(name);
+        }
 
-	}
+    }
 
-	gncQueryDestroy(q);
+    gncQueryDestroy(q);
 
-	/* Add the GtkEntryCompletion widget */
-	completion = gtk_entry_completion_new();
-	gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(list_store));
-	gtk_entry_completion_set_text_column(completion, 0);
-	gtk_entry_completion_set_inline_completion(completion, TRUE);
-	gtk_entry_set_completion(GTK_ENTRY(gsl->entry), completion);
+    /* Add the GtkEntryCompletion widget */
+    completion = gtk_entry_completion_new();
+    gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(list_store));
+    gtk_entry_completion_set_text_column(completion, 0);
+    gtk_entry_completion_set_inline_completion(completion, TRUE);
+    gtk_entry_set_completion(GTK_ENTRY(gsl->entry), completion);
 
-	g_signal_connect (G_OBJECT (completion), "match_selected",
-			  G_CALLBACK (gnc_gsl_match_selected_cb), gsl);
-	g_signal_connect (G_OBJECT (gsl->entry), "focus-out-event",
-			  G_CALLBACK (gnc_gsl_focus_out_cb), gsl);
+    g_signal_connect (G_OBJECT (completion), "match_selected",
+                      G_CALLBACK (gnc_gsl_match_selected_cb), gsl);
+    g_signal_connect (G_OBJECT (gsl->entry), "focus-out-event",
+                      G_CALLBACK (gnc_gsl_focus_out_cb), gsl);
 
-	g_object_unref(completion);
-	gtk_widget_show (gsl->entry);
+    g_object_unref(completion);
+    gtk_widget_show (gsl->entry);
 
-	/* Add the search button */
-	gsl->button = gtk_button_new_with_label (label);
-	gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
-	g_signal_connect (G_OBJECT (gsl->button), "clicked",
-			  G_CALLBACK (search_cb), gsl);
-	gtk_widget_show (gsl->button);
+    /* Add the search button */
+    gsl->button = gtk_button_new_with_label (label);
+    gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
+    g_signal_connect (G_OBJECT (gsl->button), "clicked",
+                      G_CALLBACK (search_cb), gsl);
+    gtk_widget_show (gsl->button);
 }
 
 /**
@@ -465,35 +475,35 @@ create_children (GNCGeneralSearch *gsl,
  */
 GtkWidget *
 gnc_general_search_new (GNCIdTypeConst type,
-			const char    *label,
-			gboolean       text_editable,
-			GNCSearchCB    search_cb,
-			gpointer       user_data,
-			QofBook       *book)
+                        const char    *label,
+                        gboolean       text_editable,
+                        GNCSearchCB    search_cb,
+                        gpointer       user_data,
+                        QofBook       *book)
 {
-	GNCGeneralSearch *gsl;
-	GNCGeneralSearchPrivate *priv;
-	const QofParam *get_guid;
+    GNCGeneralSearch *gsl;
+    GNCGeneralSearchPrivate *priv;
+    const QofParam *get_guid;
 
-	g_return_val_if_fail (type && label && search_cb, NULL);
+    g_return_val_if_fail (type && label && search_cb, NULL);
 
-	get_guid = qof_class_get_parameter (type, QOF_PARAM_GUID);
-	g_return_val_if_fail (get_guid, NULL);
+    get_guid = qof_class_get_parameter (type, QOF_PARAM_GUID);
+    g_return_val_if_fail (get_guid, NULL);
 
-	gsl = g_object_new (GNC_TYPE_GENERAL_SEARCH, NULL);
+    gsl = g_object_new (GNC_TYPE_GENERAL_SEARCH, NULL);
 
-	create_children (gsl, label, text_editable, type, book);
+    create_children (gsl, label, text_editable, type, book);
 
-	priv = _PRIVATE(gsl);
-	priv->type = type;
-	priv->search_cb = search_cb;
-	priv->user_data = user_data;
-	priv->get_guid = get_guid;
-	priv->component_id =
-		gnc_register_gui_component (GNCGENERALSEARCH_CLASS,
-					    refresh_handler, NULL, gsl);
+    priv = _PRIVATE(gsl);
+    priv->type = type;
+    priv->search_cb = search_cb;
+    priv->user_data = user_data;
+    priv->get_guid = get_guid;
+    priv->component_id =
+        gnc_register_gui_component (GNCGENERALSEARCH_CLASS,
+                                    refresh_handler, NULL, gsl);
 
-	return GTK_WIDGET (gsl);
+    return GTK_WIDGET (gsl);
 }
 
 /**
@@ -508,30 +518,33 @@ gnc_general_search_new (GNCIdTypeConst type,
 void
 gnc_general_search_set_selected (GNCGeneralSearch *gsl, gpointer selection)
 {
-	GNCGeneralSearchPrivate *priv;
+    GNCGeneralSearchPrivate *priv;
 
-	g_return_if_fail(gsl != NULL);
-	g_return_if_fail(GNC_IS_GENERAL_SEARCH(gsl));
+    g_return_if_fail(gsl != NULL);
+    g_return_if_fail(GNC_IS_GENERAL_SEARCH(gsl));
 
-	priv = _PRIVATE(gsl);
-	if (selection != gsl->selected_item) {
-		gsl->selected_item = selection;
-		g_signal_emit(gsl,
-			      general_search_signals[SELECTION_CHANGED], 0);
-	}
-	reset_selection_text (gsl);
+    priv = _PRIVATE(gsl);
+    if (selection != gsl->selected_item)
+    {
+        gsl->selected_item = selection;
+        g_signal_emit(gsl,
+                      general_search_signals[SELECTION_CHANGED], 0);
+    }
+    reset_selection_text (gsl);
 
-	gnc_gui_component_clear_watches (priv->component_id);
+    gnc_gui_component_clear_watches (priv->component_id);
 
-	if (selection) {
-		const QofParam *get_guid = priv->get_guid;
-		priv->guid = * ((GUID *)(get_guid->param_getfcn
-					      (gsl->selected_item, get_guid)));
-		gnc_gui_component_watch_entity
-			(priv->component_id, &(priv->guid),
-			 QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
-	} else
-		priv->guid = *xaccGUIDNULL ();
+    if (selection)
+    {
+        const QofParam *get_guid = priv->get_guid;
+        priv->guid = * ((GUID *)(get_guid->param_getfcn
+                                 (gsl->selected_item, get_guid)));
+        gnc_gui_component_watch_entity
+        (priv->component_id, &(priv->guid),
+         QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+    }
+    else
+        priv->guid = *xaccGUIDNULL ();
 }
 
 /**
@@ -543,17 +556,17 @@ gnc_general_search_set_selected (GNCGeneralSearch *gsl, gpointer selection)
 gpointer
 gnc_general_search_get_selected (GNCGeneralSearch *gsl)
 {
-	g_return_val_if_fail(gsl != NULL, NULL);
-	g_return_val_if_fail(GNC_IS_GENERAL_SEARCH(gsl), NULL);
+    g_return_val_if_fail(gsl != NULL, NULL);
+    g_return_val_if_fail(GNC_IS_GENERAL_SEARCH(gsl), NULL);
 
-	return gsl->selected_item;
+    return gsl->selected_item;
 }
 
 void
 gnc_general_search_allow_clear (GNCGeneralSearch *gsl, gboolean allow_clear)
 {
-	g_return_if_fail (GNC_IS_GENERAL_SEARCH (gsl));
-	gsl->allow_clear = allow_clear;
+    g_return_if_fail (GNC_IS_GENERAL_SEARCH (gsl));
+    gsl->allow_clear = allow_clear;
 }
 
 /*

@@ -57,10 +57,11 @@ save_templates(GtkWidget *parent, Account *gnc_acc, GList *templates,
 {
     g_return_if_fail(gnc_acc);
     if (dont_ask || gnc_verify_dialog(
-            parent, FALSE, "%s",
-            _("You have changed the list of online transfer templates, "
-              "but you cancelled the transfer dialog. "
-              "Do you nevertheless want to store the changes?"))) {
+                parent, FALSE, "%s",
+                _("You have changed the list of online transfer templates, "
+                  "but you cancelled the transfer dialog. "
+                  "Do you nevertheless want to store the changes?")))
+    {
         GList *kvp_list = gnc_ab_trans_templ_list_to_kvp_list(templates);
         gnc_ab_set_book_template_list(gnc_account_get_book(gnc_acc), kvp_list);
     }
@@ -93,15 +94,17 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
 
     /* Get the API */
     api = gnc_AB_BANKING_new();
-    if (!api) {
+    if (!api)
+    {
         g_warning("gnc_ab_maketrans: Couldn't get AqBanking API");
         return;
     }
     if (AB_Banking_OnlineInit(api
 #ifdef AQBANKING_VERSION_4_PLUS
-			      , 0
+                              , 0
 #endif
-			      ) != 0) {
+                             ) != 0)
+    {
         g_warning("gnc_ab_maketrans: Couldn't initialize AqBanking API");
         goto cleanup;
     }
@@ -109,14 +112,15 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
 
     /* Get the AqBanking Account */
     ab_acc = gnc_ab_get_ab_account(api, gnc_acc);
-    if (!ab_acc) {
+    if (!ab_acc)
+    {
         g_warning("gnc_ab_gettrans: No AqBanking account found");
         goto cleanup;
     }
 
     /* Get list of template transactions */
     templates = gnc_ab_trans_templ_list_new_from_kvp_list(
-        gnc_ab_get_book_template_list(gnc_account_get_book(gnc_acc)));
+                    gnc_ab_get_book_template_list(gnc_account_get_book(gnc_acc)));
 
     /* Create new ABTransDialog */
     td = gnc_ab_trans_dialog_new(parent, ab_acc,
@@ -125,7 +129,8 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
     templates = NULL;
 
     /* Repeat until AqBanking action was successful or user pressed cancel */
-    do {
+    do
+    {
         GncGWENGui *gui = NULL;
         gint result;
         gboolean changed;
@@ -143,7 +148,8 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
 
         /* Get a GUI object */
         gui = gnc_GWEN_Gui_get(parent);
-        if (!gui) {
+        if (!gui)
+        {
             g_warning("gnc_ab_maketrans: Couldn't initialize Gwenhywfar GUI");
             aborted = TRUE;
             goto repeat;
@@ -152,7 +158,8 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         /* Let the user enter the values */
         result = gnc_ab_trans_dialog_run_until_ok(td);
 
-        if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER) {
+        if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
+        {
             aborted = TRUE;
             goto repeat;
         }
@@ -168,18 +175,19 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         /* Get a job and enqueue it */
         ab_trans = gnc_ab_trans_dialog_get_ab_trans(td);
         job = gnc_ab_trans_dialog_get_job(td);
-        if (!job || AB_Job_CheckAvailability(job, 0)) {
+        if (!job || AB_Job_CheckAvailability(job, 0))
+        {
             if (!gnc_verify_dialog(
-                    parent, FALSE, "%s",
-                    _("The backend found an error during the preparation "
-                      "of the job. It is not possible to execute this job. \n"
-                      "\n"
-                      "Most probable the bank does not support your chosen "
-                      "job or your Online Banking account does not have the permission "
-                      "to execute this job. More error messages might be "
-                      "visible on your console log.\n"
-                      "\n"
-                      "Do you want to enter the job again?")))
+                        parent, FALSE, "%s",
+                        _("The backend found an error during the preparation "
+                          "of the job. It is not possible to execute this job. \n"
+                          "\n"
+                          "Most probable the bank does not support your chosen "
+                          "job or your Online Banking account does not have the permission "
+                          "to execute this job. More error messages might be "
+                          "visible on your console log.\n"
+                          "\n"
+                          "Do you want to enter the job again?")))
                 aborted = TRUE;
             goto repeat;
         }
@@ -189,7 +197,8 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         /* Setup a Transfer Dialog for the GnuCash transaction */
         xfer_dialog = gnc_xfer_dialog(gnc_ab_trans_dialog_get_parent(td),
                                       gnc_acc);
-        switch (trans_type) {
+        switch (trans_type)
+        {
         case SINGLE_DEBITNOTE:
             gnc_xfer_dialog_set_title(
                 xfer_dialog, _("Online Banking Direct Debit Note"));
@@ -208,9 +217,9 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         }
 
         amount = double_to_gnc_numeric(
-            AB_Value_GetValueAsDouble(AB_Transaction_GetValue(ab_trans)),
-            xaccAccountGetCommoditySCU(gnc_acc),
-            GNC_RND_ROUND);
+                     AB_Value_GetValueAsDouble(AB_Transaction_GetValue(ab_trans)),
+                     xaccAccountGetCommoditySCU(gnc_acc),
+                     GNC_RND_ROUND);
         gnc_xfer_dialog_set_amount(xfer_dialog, amount);
 
         description = gnc_ab_description_to_gnc(ab_trans);
@@ -227,17 +236,20 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         successful = gnc_xfer_dialog_run_until_done(xfer_dialog);
 
         /* On cancel, go back to the AB transaction dialog */
-        if (!successful || !gnc_trans) {
+        if (!successful || !gnc_trans)
+        {
             successful = FALSE;
             goto repeat;
         }
 
-        if (result == GNC_RESPONSE_NOW) {
+        if (result == GNC_RESPONSE_NOW)
+        {
             /* Create a context to store possible results */
             context = AB_ImExporterContext_new();
 
             gui = gnc_GWEN_Gui_get(parent);
-            if (!gui) {
+            if (!gui)
+            {
                 g_warning("gnc_ab_maketrans: Couldn't initialize Gwenhywfar GUI");
                 aborted = TRUE;
                 goto repeat;
@@ -253,30 +265,36 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
              */
             job_status = AB_Job_GetStatus(job);
             if (job_status != AB_Job_StatusFinished
-                && job_status != AB_Job_StatusPending) {
+                    && job_status != AB_Job_StatusPending)
+            {
                 successful = FALSE;
                 if (!gnc_verify_dialog(
-                        parent, FALSE, "%s",
-                        _("An error occurred while executing the job.  Please check "
-                          "the log window for the exact error message.\n"
-                          "\n"
-                          "Do you want to enter the job again?"))) {
+                            parent, FALSE, "%s",
+                            _("An error occurred while executing the job.  Please check "
+                              "the log window for the exact error message.\n"
+                              "\n"
+                              "Do you want to enter the job again?")))
+                {
                     aborted = TRUE;
                 }
-            } else {
+            }
+            else
+            {
                 successful = TRUE;
             }
 
-            if (successful) {
+            if (successful)
+            {
                 /* Import the results, awaiting nothing */
                 ieci = gnc_ab_import_context(context, 0, FALSE, NULL, parent);
             }
         }
         /* Simply ignore any other case */
 
-    repeat:
+repeat:
         /* Clean up */
-        if (gnc_trans && !successful) {
+        if (gnc_trans && !successful)
+        {
             xaccTransBeginEdit(gnc_trans);
             xaccTransDestroy(gnc_trans);
             xaccTransCommitEdit(gnc_trans);
@@ -286,29 +304,33 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
             g_free(ieci);
         if (context)
             AB_ImExporterContext_free(context);
-        if (job_list) {
+        if (job_list)
+        {
             AB_Job_List2_free(job_list);
             job_list = NULL;
         }
-        if (job) {
+        if (job)
+        {
             AB_Job_free(job);
             job = NULL;
         }
-        if (gui) {
+        if (gui)
+        {
             gnc_GWEN_Gui_release(gui);
             gui = NULL;
         }
 
-    } while (!successful && !aborted);
+    }
+    while (!successful && !aborted);
 
 cleanup:
     if (td)
         gnc_ab_trans_dialog_free(td);
     if (online)
 #ifdef AQBANKING_VERSION_4_PLUS
-	AB_Banking_OnlineFini(api, 0);
+        AB_Banking_OnlineFini(api, 0);
 #else
-	AB_Banking_OnlineFini(api);
+        AB_Banking_OnlineFini(api);
 #endif
     gnc_AB_BANKING_fini(api);
 }

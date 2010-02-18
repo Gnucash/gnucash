@@ -42,10 +42,10 @@ void ddr_toggled_cb(GtkToggleButton *button, gpointer user_data);
 
 struct _DaterangeInfo
 {
-  GtkWidget *enter_from_button;
-  GtkWidget *enter_to_button;
-  GtkWidget *from_dateedit;
-  GtkWidget *to_dateedit;
+    GtkWidget *enter_from_button;
+    GtkWidget *enter_to_button;
+    GtkWidget *from_dateedit;
+    GtkWidget *to_dateedit;
 };
 
 gboolean
@@ -93,10 +93,13 @@ gnc_ab_enter_daterange(GtkWidget *parent,
                       info.to_dateedit);
     gtk_widget_show(info.to_dateedit);
 
-    if (*last_retv_date) {
+    if (*last_retv_date)
+    {
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(last_retrieval_button),
                                      TRUE);
-    } else {
+    }
+    else
+    {
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(first_button), TRUE);
         gtk_widget_set_sensitive(last_retrieval_button, FALSE);
     }
@@ -114,17 +117,18 @@ gnc_ab_enter_daterange(GtkWidget *parent,
     result = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_hide(dialog);
 
-    if (result == GTK_RESPONSE_OK) {
+    if (result == GTK_RESPONSE_OK)
+    {
         *from_date = gnc_date_edit_get_date_ts(
-            GNC_DATE_EDIT(info.from_dateedit));
+                         GNC_DATE_EDIT(info.from_dateedit));
         *last_retv_date = gtk_toggle_button_get_active(
-            GTK_TOGGLE_BUTTON(last_retrieval_button));
+                              GTK_TOGGLE_BUTTON(last_retrieval_button));
         *first_possible_date = gtk_toggle_button_get_active(
-            GTK_TOGGLE_BUTTON(first_button));
+                                   GTK_TOGGLE_BUTTON(first_button));
         *to_date = gnc_date_edit_get_date_ts(
-            GNC_DATE_EDIT(info.to_dateedit));
+                       GNC_DATE_EDIT(info.to_dateedit));
         *to_now = gtk_toggle_button_get_active(
-            GTK_TOGGLE_BUTTON(now_button));
+                      GTK_TOGGLE_BUTTON(now_button));
     }
 
     gtk_widget_destroy(dialog);

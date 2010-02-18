@@ -24,10 +24,11 @@
 /* Functions for creating the common two column GtkComboBox used by
  * all the search widgets. */
 
-enum gnc_combo_search_cols {
-  GNC_COMBO_SEARCH_COL_TEXT = 0,
-  GNC_COMBO_SEARCH_COL_VALUE,
-  NUM_GNC_COMBO_SEARCH_COLS,
+enum gnc_combo_search_cols
+{
+    GNC_COMBO_SEARCH_COL_TEXT = 0,
+    GNC_COMBO_SEARCH_COL_VALUE,
+    NUM_GNC_COMBO_SEARCH_COLS,
 };
 
 GtkWidget *gnc_combo_box_new_search (void);

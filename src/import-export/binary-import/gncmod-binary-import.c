@@ -26,39 +26,47 @@ int libgncmod_binary_import_gnc_module_age      = 0;
 
 
 char *
-libgncmod_binary_import_gnc_module_path(void) {
-  return g_strdup("gnucash/import-export/binary-import");
+libgncmod_binary_import_gnc_module_path(void)
+{
+    return g_strdup("gnucash/import-export/binary-import");
 }
 
 char *
-libgncmod_binary_import_gnc_module_description(void) {
-  return g_strdup("Utilities importing GnuCash binary files");
+libgncmod_binary_import_gnc_module_description(void)
+{
+    return g_strdup("Utilities importing GnuCash binary files");
 }
 
 int
-libgncmod_binary_import_gnc_module_init(int refcount) {
-  /* load the engine (we depend on it) */
-  if(!gnc_module_load("gnucash/engine", 0)) {
-    return FALSE;
-  }
+libgncmod_binary_import_gnc_module_init(int refcount)
+{
+    /* load the engine (we depend on it) */
+    if (!gnc_module_load("gnucash/engine", 0))
+    {
+        return FALSE;
+    }
 
-  /* load the calculation module (we depend on it) */
-  if(!gnc_module_load("gnucash/app-utils", 0)) {
-    return FALSE;
-  }
+    /* load the calculation module (we depend on it) */
+    if (!gnc_module_load("gnucash/app-utils", 0))
+    {
+        return FALSE;
+    }
 
-  /* load the calculation module (we depend on it) */
-  if(!gnc_module_load("gnucash/gnome-utils", 0)) {
-    return FALSE;
-  }
+    /* load the calculation module (we depend on it) */
+    if (!gnc_module_load("gnucash/gnome-utils", 0))
+    {
+        return FALSE;
+    }
 
-  if (refcount == 0) {
-    gnc_hook_add_dangler(HOOK_BOOK_OPENED, (GFunc)gnc_import_commodities, NULL);
-  }
-  return TRUE;
+    if (refcount == 0)
+    {
+        gnc_hook_add_dangler(HOOK_BOOK_OPENED, (GFunc)gnc_import_commodities, NULL);
+    }
+    return TRUE;
 }
 
 int
-libgncmod_binary_import_gnc_module_end(int refcount) {
-  return TRUE;
+libgncmod_binary_import_gnc_module_end(int refcount)
+{
+    return TRUE;
 }

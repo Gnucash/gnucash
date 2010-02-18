@@ -56,7 +56,8 @@ static GncGWENGui *full_gui = NULL;
 static GWEN_GUI *log_gwen_gui = NULL;
 
 /* A mapping from gwenhywfar log levels to glib ones */
-static GLogLevelFlags log_levels[] = {
+static GLogLevelFlags log_levels[] =
+{
     G_LOG_LEVEL_ERROR,     /* GWEN_LoggerLevel_Emergency */
     G_LOG_LEVEL_ERROR,     /* GWEN_LoggerLevel_Alert */
     G_LOG_LEVEL_CRITICAL,  /* GWEN_LoggerLevel_Critical */
@@ -107,7 +108,7 @@ static void get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
                       const gchar *text, gchar **input, gint min_len,
                       gint max_len);
 static gint messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
-                          const gchar *text, const gchar *b1,const gchar *b2,
+                          const gchar *text, const gchar *b1, const gchar *b2,
                           const gchar *b3, guint32 guiid);
 static gint inputbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
                         const gchar *text, gchar *buffer, gint min_len,
@@ -139,15 +140,17 @@ gboolean ggg_delete_event_cb(GtkWidget *widget, GdkEvent *event,
 void ggg_abort_clicked_cb(GtkButton *button, gpointer user_data);
 void ggg_close_clicked_cb(GtkButton *button, gpointer user_data);
 
-enum _GuiState {
-  INIT,
-  RUNNING,
-  FINISHED,
-  ABORTED,
-  HIDDEN
+enum _GuiState
+{
+    INIT,
+    RUNNING,
+    FINISHED,
+    ABORTED,
+    HIDDEN
 };
 
-struct _GncGWENGui {
+struct _GncGWENGui
+{
     GWEN_GUI *gwen_gui;
     GtkWidget *parent;
     GtkWidget *dialog;
@@ -196,7 +199,8 @@ struct _GncGWENGui {
     GWEN_LOGGER_LEVEL min_loglevel;
 };
 
-struct _Progress {
+struct _Progress
+{
     GncGWENGui *gui;
 
     /* Title of the process */
@@ -209,7 +213,8 @@ struct _Progress {
 void
 gnc_GWEN_Gui_log_init(void)
 {
-    if (!log_gwen_gui) {
+    if (!log_gwen_gui)
+    {
         log_gwen_gui = GWEN_Gui_new();
 
         /* Always use our own logging */
@@ -228,8 +233,10 @@ gnc_GWEN_Gui_get(GtkWidget *parent)
 
     ENTER("parent=%p", parent);
 
-    if (full_gui) {
-        if (full_gui->state == INIT || full_gui->state == RUNNING) {
+    if (full_gui)
+    {
+        if (full_gui->state == INIT || full_gui->state == RUNNING)
+        {
             LEAVE("full_gui in use, state=%d", full_gui->state);
             return NULL;
         }
@@ -271,7 +278,8 @@ gnc_GWEN_Gui_shutdown(void)
 
     ENTER(" ");
 
-    if (log_gwen_gui) {
+    if (log_gwen_gui)
+    {
         GWEN_Gui_free(log_gwen_gui);
         log_gwen_gui = NULL;
     }
@@ -335,7 +343,8 @@ unregister_callbacks(GncGWENGui *gui)
 
     ENTER("gui=%p", gui);
 
-    if (!gui->gwen_gui) {
+    if (!gui->gwen_gui)
+    {
         LEAVE("already unregistered");
         return;
     }
@@ -383,7 +392,7 @@ setup_dialog(GncGWENGui *gui)
         gnc_gconf_get_bool(GCONF_SECTION_AQBANKING, KEY_CLOSE_ON_FINISH, NULL));
 
     component_id = gnc_register_gui_component(GWEN_GUI_CM_CLASS, NULL,
-                                              cm_close_handler, gui);
+                   cm_close_handler, gui);
     gnc_gui_component_set_session(component_id, gnc_get_current_session());
 
     reset_dialog(gui);
@@ -396,12 +405,15 @@ enable_password_cache(GncGWENGui *gui, gboolean enabled)
 {
     g_return_if_fail(gui);
 
-    if (enabled && !gui->passwords) {
+    if (enabled && !gui->passwords)
+    {
         /* Remember passwords in memory, mapping tokens to passwords */
         gui->passwords = g_hash_table_new_full(
-            g_str_hash, g_str_equal, (GDestroyNotify) g_free,
-            (GDestroyNotify) erase_password);
-    } else if (!enabled && gui->passwords) {
+                             g_str_hash, g_str_equal, (GDestroyNotify) g_free,
+                             (GDestroyNotify) erase_password);
+    }
+    else if (!enabled && gui->passwords)
+    {
         /* Erase and free remembered passwords from memory */
         g_hash_table_destroy(gui->passwords);
         gui->passwords = NULL;
@@ -424,7 +436,8 @@ reset_dialog(GncGWENGui *gui)
     g_list_free(gui->progresses);
     gui->progresses = NULL;
 
-    if (gui->other_entries_box) {
+    if (gui->other_entries_box)
+    {
         gtk_table_resize(GTK_TABLE(gui->entries_table),
                          OTHER_ENTRIES_ROW_OFFSET, 2);
         gtk_widget_destroy(gui->other_entries_box);
@@ -434,7 +447,7 @@ reset_dialog(GncGWENGui *gui)
         g_hash_table_destroy(gui->showbox_hash);
     gui->showbox_last = NULL;
     gui->showbox_hash = g_hash_table_new_full(
-        NULL, NULL, NULL, (GDestroyNotify) gtk_widget_destroy);
+                            NULL, NULL, NULL, (GDestroyNotify) gtk_widget_destroy);
 
     if (gui->parent)
         gtk_window_set_transient_for(GTK_WINDOW(gui->dialog),
@@ -451,7 +464,7 @@ reset_dialog(GncGWENGui *gui)
 
     if (!gui->accepted_certs)
         gui->accepted_certs = g_hash_table_new_full(
-            g_str_hash, g_str_equal, (GDestroyNotify) g_free, NULL);
+                                  g_str_hash, g_str_equal, (GDestroyNotify) g_free, NULL);
     if (!gui->permanently_accepted_certs)
         gui->permanently_accepted_certs = gnc_ab_get_permanent_certs();
 
@@ -522,7 +535,8 @@ show_dialog(GncGWENGui *gui, gboolean clear_log)
     gtk_widget_show(gui->dialog);
 
     /* Clear the log window */
-    if (clear_log) {
+    if (clear_log)
+    {
         gtk_text_buffer_set_text(
             gtk_text_view_get_buffer(GTK_TEXT_VIEW(gui->log_text)), "", 0);
     }
@@ -586,23 +600,29 @@ show_progress(GncGWENGui *gui, Progress *progress)
 
     ENTER("gui=%p, progress=%p", gui, progress);
 
-    for (item = g_list_last(gui->progresses); item; item = item->prev) {
+    for (item = g_list_last(gui->progresses); item; item = item->prev)
+    {
         current = (Progress*) item->data;
 
         if (!current->source
-            && current != progress)
+                && current != progress)
             /* Already showed */
             continue;
 
         /* Show it */
-        if (!item->next) {
+        if (!item->next)
+        {
             /* Top-level progress */
             show_dialog(gui, TRUE);
             gtk_entry_set_text(GTK_ENTRY(gui->top_entry), current->title);
-        } else if (!item->next->next) {
+        }
+        else if (!item->next->next)
+        {
             /* Second-level progress */
             gtk_entry_set_text(GTK_ENTRY(gui->second_entry), current->title);
-        } else {
+        }
+        else
+        {
             /* Other progress */
             GtkWidget *entry = gtk_entry_new();
             GtkWidget *box = gui->other_entries_box;
@@ -613,7 +633,8 @@ show_progress(GncGWENGui *gui, Progress *progress)
                 gui->other_entries_box = box = gtk_vbox_new(TRUE, 6);
             gtk_box_pack_start_defaults(GTK_BOX(box), entry);
             gtk_widget_show(entry);
-            if (new_box) {
+            if (new_box)
+            {
                 gtk_table_resize(GTK_TABLE(gui->entries_table),
                                  OTHER_ENTRIES_ROW_OFFSET + 1, 2);
                 gtk_table_attach_defaults(
@@ -623,7 +644,8 @@ show_progress(GncGWENGui *gui, Progress *progress)
             }
         }
 
-        if (current->source) {
+        if (current->source)
+        {
             /* Stop delayed call */
             g_source_remove(current->source);
             current->source = 0;
@@ -649,10 +671,12 @@ hide_progress(GncGWENGui *gui, Progress *progress)
 
     ENTER("gui=%p, progress=%p", gui, progress);
 
-    for (item = gui->progresses; item; item = item->next) {
+    for (item = gui->progresses; item; item = item->next)
+    {
         current = (Progress*) item->data;
 
-        if (current->source) {
+        if (current->source)
+        {
             /* Not yet showed */
             g_source_remove(current->source);
             current->source = 0;
@@ -663,13 +687,18 @@ hide_progress(GncGWENGui *gui, Progress *progress)
         }
 
         /* Hide it */
-        if (!item->next) {
+        if (!item->next)
+        {
             /* Top-level progress */
             gtk_entry_set_text(GTK_ENTRY(gui->second_entry), "");
-        } else if (!item->next->next) {
+        }
+        else if (!item->next->next)
+        {
             /* Second-level progress */
             gtk_entry_set_text(GTK_ENTRY(gui->second_entry), "");
-        } else {
+        }
+        else
+        {
             /* Other progress */
             GtkWidget *box = gui->other_entries_box;
             GList *entries;
@@ -677,10 +706,13 @@ hide_progress(GncGWENGui *gui, Progress *progress)
             g_return_if_fail(box);
             entries = gtk_container_get_children(GTK_CONTAINER(box));
             g_return_if_fail(entries);
-            if (entries->next) {
+            if (entries->next)
+            {
                 /* Another progress is still to be showed */
                 gtk_widget_destroy(GTK_WIDGET(g_list_last(entries)->data));
-            } else {
+            }
+            else
+            {
                 /* Last other progress to be hided */
                 gtk_table_resize(GTK_TABLE(gui->entries_table),
                                  OTHER_ENTRIES_ROW_OFFSET, 2);
@@ -760,12 +792,14 @@ strip_html(gchar *text)
         return NULL;
 
     p = text;
-    while (strchr(p, '<')) {
+    while (strchr(p, '<'))
+    {
         q = p + 1;
         if (*q && toupper(*q++) == 'H'
-            && *q && toupper(*q++) == 'T'
-            && *q && toupper(*q++) == 'M'
-            && *q && toupper(*q) == 'L') {
+                && *q && toupper(*q++) == 'T'
+                && *q && toupper(*q++) == 'M'
+                && *q && toupper(*q) == 'L')
+        {
             *p = '\0';
             return text;
         }
@@ -806,9 +840,12 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
     confirm_entry = glade_xml_get_widget(xml, "confirm_entry");
     confirm_label = glade_xml_get_widget(xml, "confirm_label");
     remember_pin_checkbutton = glade_xml_get_widget(xml, "remember_pin");
-    if (is_tan) {
+    if (is_tan)
+    {
         gtk_widget_hide(remember_pin_checkbutton);
-    } else {
+    }
+    else
+    {
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(remember_pin_checkbutton),
                                      gui->cache_passwords);
     }
@@ -819,24 +856,29 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
     if (title)
         gtk_window_set_title(GTK_WINDOW(dialog), title);
 
-    if (text) {
+    if (text)
+    {
         gchar *raw_text = strip_html(g_strdup(text));
         gtk_label_set_text(GTK_LABEL(heading_label), raw_text);
         g_free(raw_text);
     }
 
-    if (*input) {
+    if (*input)
+    {
         gtk_entry_set_text(GTK_ENTRY(input_entry), *input);
         erase_password(*input);
         *input = NULL;
     }
 
-    if (confirm) {
+    if (confirm)
+    {
         gtk_entry_set_activates_default(GTK_ENTRY(input_entry), FALSE);
         gtk_entry_set_activates_default(GTK_ENTRY(confirm_entry), TRUE);
         gtk_entry_set_max_length(GTK_ENTRY(input_entry), max_len);
         gtk_entry_set_max_length(GTK_ENTRY(confirm_entry), max_len);
-    } else {
+    }
+    else
+    {
         gtk_entry_set_activates_default(GTK_ENTRY(input_entry), TRUE);
         gtk_entry_set_max_length(GTK_ENTRY(input_entry), max_len);
         gtk_widget_hide(confirm_entry);
@@ -845,27 +887,30 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
     gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
 
     /* Ask the user until he enters a valid input or cancels */
-    while (TRUE) {
+    while (TRUE)
+    {
         gboolean remember_pin;
 
         if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
             break;
 
-        if (!is_tan) {
+        if (!is_tan)
+        {
             /* Enable or disable the password cache */
             remember_pin = gtk_toggle_button_get_active(
-                GTK_TOGGLE_BUTTON(remember_pin_checkbutton));
+                               GTK_TOGGLE_BUTTON(remember_pin_checkbutton));
             enable_password_cache(gui, remember_pin);
             gnc_gconf_set_bool(GCONF_SECTION_AQBANKING, KEY_REMEMBER_PIN,
                                remember_pin, NULL);
         }
 
         internal_input = gtk_entry_get_text(GTK_ENTRY(input_entry));
-        if (strlen(internal_input) < min_len) {
+        if (strlen(internal_input) < min_len)
+        {
             gboolean retval;
             gchar *msg = g_strdup_printf(
-                _("The PIN needs to be at least %d characters \n"
-                  "long. Do you want to try again?"), min_len);
+                             _("The PIN needs to be at least %d characters \n"
+                               "long. Do you want to try again?"), min_len);
             retval = gnc_verify_dialog(gui->parent, TRUE, "%s", msg);
             g_free(msg);
             if (!retval)
@@ -873,13 +918,15 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
             continue;
         }
 
-        if (!confirm) {
+        if (!confirm)
+        {
             *input = g_strdup(internal_input);
             break;
         }
 
         internal_confirmed = gtk_entry_get_text(GTK_ENTRY(confirm_entry));
-        if (strcmp(internal_input, internal_confirmed) == 0) {
+        if (strcmp(internal_input, internal_confirmed) == 0)
+        {
             *input = g_strdup(internal_input);
             break;
         }
@@ -893,7 +940,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
 
 static gint
 messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
-              const gchar *text, const gchar *b1,const gchar *b2,
+              const gchar *text, const gchar *b1, const gchar *b2,
               const gchar *b3, guint32 guiid)
 {
     GncGWENGui *gui = GETDATA_GUI(gwen_gui);
@@ -908,9 +955,9 @@ messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
           b3 ? b3 : "(null)");
 
     dialog = gtk_dialog_new_with_buttons(
-        title, gui->parent ? GTK_WINDOW(gui->parent) : NULL,
-        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-        b1, 1, b2, 2, b3, 3, (gchar*) NULL);
+                 title, gui->parent ? GTK_WINDOW(gui->parent) : NULL,
+                 GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                 b1, 1, b2, 2, b3, 3, (gchar*) NULL);
 
     raw_text = strip_html(g_strdup(text));
     label = gtk_label_new(raw_text);
@@ -926,7 +973,8 @@ messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     result = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
 
-    if (result<1 || result>3) {
+    if (result < 1 || result > 3)
+    {
         g_warning("messagebox_cb: Bad result %d", result);
         result = 0;
     }
@@ -949,7 +997,8 @@ inputbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
 
     get_input(gui, flags, title, text, &input, min_len, max_len);
 
-    if (input) {
+    if (input)
+    {
         /* Copy the input to the result buffer */
         strncpy(buffer, input, max_len);
         buffer[max_len-1] = '\0';
@@ -972,8 +1021,8 @@ showbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     ENTER("gui=%p, flags=%d, title=%s", gui, flags, title ? title : "(null)");
 
     dialog = gtk_message_dialog_new(
-        gui->parent ? GTK_WINDOW(gui->parent) : NULL, 0, GTK_MESSAGE_INFO,
-        GTK_BUTTONS_OK, "%s", text);
+                 gui->parent ? GTK_WINDOW(gui->parent) : NULL, 0, GTK_MESSAGE_INFO,
+                 GTK_BUTTONS_OK, "%s", text);
 
     if (title)
         gtk_window_set_title(GTK_WINDOW(dialog), title);
@@ -1004,22 +1053,31 @@ hidebox_cb(GWEN_GUI *gwen_gui, guint32 id)
 
     ENTER("gui=%p, id=%d", gui, id);
 
-    if (id == 0) {
-        if (gui->showbox_last) {
+    if (id == 0)
+    {
+        if (gui->showbox_last)
+        {
             g_hash_table_remove(gui->showbox_hash,
                                 GUINT_TO_POINTER(gui->showbox_id));
             gui->showbox_last = NULL;
-        } else {
+        }
+        else
+        {
             g_warning("hidebox_cb: Last showed message box already destroyed");
         }
-    } else {
+    }
+    else
+    {
         gpointer p_var;
         p_var = g_hash_table_lookup(gui->showbox_hash, GUINT_TO_POINTER(id));
-        if (p_var) {
+        if (p_var)
+        {
             g_hash_table_remove(gui->showbox_hash, GUINT_TO_POINTER(id));
             if (p_var == gui->showbox_last)
                 gui->showbox_last = NULL;
-        } else {
+        }
+        else
+        {
             g_warning("hidebox_cb: Message box %d could not been found", id);
         }
     }
@@ -1039,14 +1097,18 @@ progress_start_cb(GWEN_GUI *gwen_gui, uint32_t progressFlags, const char *title,
     ENTER("gui=%p, flags=%d, title=%s, total=%" G_GUINT64_FORMAT, gui,
           progressFlags, title ? title : "(null)", (guint64)total);
 
-    if (!gui->progresses) {
+    if (!gui->progresses)
+    {
         /* Top-level progress */
-        if (progressFlags & GWEN_GUI_PROGRESS_SHOW_PROGRESS) {
+        if (progressFlags & GWEN_GUI_PROGRESS_SHOW_PROGRESS)
+        {
             gtk_widget_set_sensitive(gui->top_progress, TRUE);
             gtk_progress_bar_set_fraction(
                 GTK_PROGRESS_BAR(gui->top_progress), 0.0);
             gui->max_actions = total;
-        } else {
+        }
+        else
+        {
             gtk_widget_set_sensitive(gui->top_progress, FALSE);
             gui->max_actions = -1;
         }
@@ -1059,12 +1121,15 @@ progress_start_cb(GWEN_GUI *gwen_gui, uint32_t progressFlags, const char *title,
     progress->title = title ? g_strdup(title) : "";
     gui->progresses = g_list_prepend(gui->progresses, progress);
 
-    if (progressFlags & GWEN_GUI_PROGRESS_DELAY) {
+    if (progressFlags & GWEN_GUI_PROGRESS_DELAY)
+    {
         /* Show progress later */
         progress->source = g_timeout_add(GWEN_GUI_DELAY_SECS * 1000,
                                          (GSourceFunc) show_progress_cb,
                                          progress);
-    } else {
+    }
+    else
+    {
         /* Show it now */
         progress->source = 0;
         show_progress(gui, progress);
@@ -1084,8 +1149,9 @@ progress_advance_cb(GWEN_GUI *gwen_gui, uint32_t id, uint64_t progress)
     ENTER("gui=%p, progress=%" G_GUINT64_FORMAT, gui, (guint64)progress);
 
     if (id == 1                                  /* top-level progress */
-        && gui->max_actions > 0                  /* progressbar active */
-        && progress != GWEN_GUI_PROGRESS_NONE) { /* progressbar update needed */
+            && gui->max_actions > 0                  /* progressbar active */
+            && progress != GWEN_GUI_PROGRESS_NONE)   /* progressbar update needed */
+    {
         if (progress == GWEN_GUI_PROGRESS_ONE)
             gui->current_action++;
         else
@@ -1140,7 +1206,8 @@ progress_end_cb(GWEN_GUI *gwen_gui, guint32 id)
 
     ENTER("gui=%p, id=%d", gui, id);
 
-    if (gui->state != RUNNING) {
+    if (gui->state != RUNNING)
+    {
         /* Ignore finishes of progresses we do not track */
         LEAVE("not running anymore");
         return 0;
@@ -1154,7 +1221,8 @@ progress_end_cb(GWEN_GUI *gwen_gui, guint32 id)
     gui->progresses = g_list_delete_link(gui->progresses, gui->progresses);
     free_progress(progress, NULL);
 
-    if (!gui->progresses) {
+    if (!gui->progresses)
+    {
         /* top-level progress finished */
         set_finished(gui);
     }
@@ -1177,14 +1245,19 @@ getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
     ENTER("gui=%p, flags=%d, token=%s", gui, flags, token ? token : "(null");
 
     /* Check remembered passwords, excluding TANs */
-    if (!is_tan && gui->cache_passwords && gui->passwords && token) {
-        if (flags & GWEN_GUI_INPUT_FLAGS_RETRY) {
+    if (!is_tan && gui->cache_passwords && gui->passwords && token)
+    {
+        if (flags & GWEN_GUI_INPUT_FLAGS_RETRY)
+        {
             /* If remembered, remove password from memory */
             g_hash_table_remove(gui->passwords, token);
-        } else {
+        }
+        else
+        {
             gpointer p_var;
             if (g_hash_table_lookup_extended(gui->passwords, token, NULL,
-                                             &p_var)) {
+                                             &p_var))
+            {
                 /* Copy the password to the result buffer */
                 password = p_var;
                 strncpy(buffer, password, max_len);
@@ -1198,17 +1271,22 @@ getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
 
     get_input(gui, flags, title, text, &password, min_len, max_len);
 
-    if (password) {
+    if (password)
+    {
         /* Copy the password to the result buffer */
         strncpy(buffer, password, max_len);
         buffer[max_len-1] = '\0';
 
-        if (!is_tan && token) {
-            if (gui->cache_passwords && gui->passwords) {
+        if (!is_tan && token)
+        {
+            if (gui->cache_passwords && gui->passwords)
+            {
                 /* Remember password */
                 DEBUG("Remember password, token=%s", token);
                 g_hash_table_insert(gui->passwords, g_strdup(token), password);
-            } else {
+            }
+            else
+            {
                 /* Remove the password from memory */
                 DEBUG("Forget password, token=%s", token);
                 erase_password(password);
@@ -1230,7 +1308,8 @@ setpasswordstatus_cb(GWEN_GUI *gwen_gui, const gchar *token, const gchar *pin,
 
     ENTER("gui=%p, token=%s, status=%d", gui, token ? token : "(null)", status);
 
-    if (gui->passwords && status != GWEN_Gui_PasswordStatus_Ok) {
+    if (gui->passwords && status != GWEN_Gui_PasswordStatus_Ok)
+    {
         /* If remembered, remove password from memory */
         g_hash_table_remove(gui->passwords, token);
     }
@@ -1274,31 +1353,37 @@ checkcert_cb(GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
     md5_finish_ctx(&md5_context, cert_hash);
 
     /* Did we get the permanently accepted certs from AqBanking? */
-    if (gui->permanently_accepted_certs) {
+    if (gui->permanently_accepted_certs)
+    {
         /* Generate a hex string of the cert_hash for usage by AqBanking cert store */
         cert_hash_hex = g_new0(gchar, 33);
         for (i = 0; i < 16; i++)
-            g_snprintf(cert_hash_hex+2*i, 3, "%02X", (unsigned char)cert_hash[i]);
-    
-        retval=GWEN_DB_GetIntValue(gui->permanently_accepted_certs, cert_hash_hex, 0, -1);
+            g_snprintf(cert_hash_hex + 2 * i, 3, "%02X", (unsigned char)cert_hash[i]);
+
+        retval = GWEN_DB_GetIntValue(gui->permanently_accepted_certs, cert_hash_hex, 0, -1);
         g_free(cert_hash_hex);
-        if (retval == 0) {
+        if (retval == 0)
+        {
             /* Certificate is marked as accepted in AqBanking's cert store */
             LEAVE("Certificate accepted by AqBanking's permanent cert store");
             return 0;
         }
-    } else {
+    }
+    else
+    {
         g_warning("Can't check permanently accepted certs from invalid AqBanking cert store.");
     }
 
-    if (g_hash_table_lookup(gui->accepted_certs, cert_hash)) {
+    if (g_hash_table_lookup(gui->accepted_certs, cert_hash))
+    {
         /* Certificate has been accepted by Gnucash before */
         LEAVE("Automatically accepting certificate");
         return 0;
     }
 
     retval = gui->builtin_checkcert(gwen_gui, cert, io, guiid);
-    if (retval == 0) {
+    if (retval == 0)
+    {
         /* Certificate has been accepted */
         g_hash_table_insert(gui->accepted_certs, g_strdup(cert_hash), cert_hash);
     }
@@ -1308,14 +1393,16 @@ checkcert_cb(GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
 }
 
 gboolean
-ggg_delete_event_cb(GtkWidget *widget, GdkEvent *event, gpointer user_data){
+ggg_delete_event_cb(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+{
     GncGWENGui *gui = user_data;
 
     g_return_val_if_fail(gui, FALSE);
 
     ENTER("gui=%p, state=%d", gui, gui->state);
 
-    if (gui->state == RUNNING) {
+    if (gui->state == RUNNING)
+    {
         const char *still_running_msg =
             _("The Online Banking job is still running; are you "
               "sure you want to cancel?");

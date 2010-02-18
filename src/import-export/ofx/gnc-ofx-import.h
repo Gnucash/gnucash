@@ -16,12 +16,12 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
- /** @file
-     @brief Ofx import module interface
-     *
-     gnc-ofx-import.h
-     @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
- */
+/** @file
+    @brief Ofx import module interface
+    *
+    gnc-ofx-import.h
+    @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
+*/
 #ifndef OFX_IMPORT_H
 #define OFX_IMPORT_H
 

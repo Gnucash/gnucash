@@ -24,7 +24,7 @@
  */
 #ifndef ACCOUNT_MATCHER_H
 #define ACCOUNT_MATCHER_H
- 
+
 #include "Account.h"
 #include "gnc-ui-common.h"
 
@@ -44,11 +44,11 @@
     normal mode of operation. Can be NULL.
 
     If account_online_id_value==NULL, you basically end up with an account
-    selector that allows you to select an account whose GUID will be 
+    selector that allows you to select an account whose GUID will be
     remembered elsewhere.  You would fill account_human_description to tell
     the user what he is looking for.  In this mode, the  online_id
     kvp_frame of the found account will not be touched.  To use this mode,
-    auto_create must NOT be set to 0.  
+    auto_create must NOT be set to 0.
 
     @param account_human_description
 	 A human-readable description of
@@ -70,7 +70,7 @@
     ACCT_TYPE_NONE, the function will also warn the user if the found
     or created account's commodity doesn't match.
 
-    @param auto_create 
+    @param auto_create
          Only active if no account with the
     account_online_id_value could be found in gnucash, or if online-id
     was NULL. In that case, if auto_create is TRUE (nonzero), the user
@@ -78,26 +78,26 @@
     (zero), this function will simply return NULL but will neither
     select nor create any account.
 
-    @param default_selection If not NULL, that account will be 
+    @param default_selection If not NULL, that account will be
     pre-selected by default.
 
     @param ok_pressed A pointer to gboolean.  If non-NULL, whether or
     not the picker dialog was closed by the user pressing ok will be
-    stored in the parameter.  If no dialog was created by the  
+    stored in the parameter.  If no dialog was created by the
     gnc_import_select_account() call, TRUE is always returned.
 
   @return A pointer to the found or created Account, or NULL if no
   account was found or created.
 */
 Account * gnc_import_select_account(gncUIWidget parent,
-				    const gchar * account_online_id_value,
-				    gboolean auto_create,
-				    const gchar * account_human_description,
-				    gnc_commodity * new_account_default_commodity,
-				    GNCAccountType new_account_default_type,
-				    Account * default_selection,
-				    gboolean * ok_pressed
-				    );
+                                    const gchar * account_online_id_value,
+                                    gboolean auto_create,
+                                    const gchar * account_human_description,
+                                    gnc_commodity * new_account_default_commodity,
+                                    GNCAccountType new_account_default_type,
+                                    Account * default_selection,
+                                    gboolean * ok_pressed
+                                   );
 
 #endif
 /**@}*/

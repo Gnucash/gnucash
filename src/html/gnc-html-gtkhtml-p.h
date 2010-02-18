@@ -25,10 +25,11 @@
 
 #include "gnc-html-p.h"
 
-struct _GncHtmlGtkhtmlPrivate {
-	struct _GncHtmlPrivate base;
+struct _GncHtmlGtkhtmlPrivate
+{
+    struct _GncHtmlPrivate base;
 
-	GtkWidget* html;				/* gtkhtml widget itself */
+    GtkWidget* html;				/* gtkhtml widget itself */
 };
 
 #endif

@@ -78,12 +78,16 @@ libgncmod_business_backend_sql_gnc_module_description(void)
 int
 libgncmod_business_backend_sql_gnc_module_init(int refcount)
 {
-    if(!gnc_engine_is_initialized()) { return FALSE; }
+    if (!gnc_engine_is_initialized())
+    {
+        return FALSE;
+    }
 
     bus_core = gnc_module_load( "gnucash/business-core", 0 );
-    if( !bus_core ) return FALSE;
+    if ( !bus_core ) return FALSE;
 
-    if( refcount == 0 ) {
+    if ( refcount == 0 )
+    {
         /* Initialize our pointers into the backend subsystem */
         gnc_address_sql_initialize();
         gnc_billterm_sql_initialize();
@@ -93,8 +97,8 @@ libgncmod_business_backend_sql_gnc_module_init(int refcount)
         gnc_invoice_sql_initialize();
         gnc_job_sql_initialize();
         gnc_order_sql_initialize();
-	    gnc_owner_sql_initialize();
-	    gnc_taxtable_sql_initialize();
+        gnc_owner_sql_initialize();
+        gnc_taxtable_sql_initialize();
         gnc_vendor_sql_initialize();
     }
 
@@ -106,11 +110,13 @@ libgncmod_business_backend_sql_gnc_module_end(int refcount)
 {
     int unload = TRUE;
 
-    if( bus_core ) {
+    if ( bus_core )
+    {
         unload = gnc_module_unload( bus_core );
-	}
+    }
 
-    if( refcount == 0 ) {
+    if ( refcount == 0 )
+    {
         bus_core = NULL;
     }
 

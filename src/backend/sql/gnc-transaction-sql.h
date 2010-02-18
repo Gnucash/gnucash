@@ -66,11 +66,12 @@ void gnc_sql_transaction_load_tx_for_account( GncSqlBackend* be, Account* accoun
  */
 void gnc_sql_transaction_load_all_tx( GncSqlBackend* be );
 
-typedef struct {
-	Account* acct;
-	gnc_numeric balance;
-	gnc_numeric cleared_balance;
-	gnc_numeric reconciled_balance;
+typedef struct
+{
+    Account* acct;
+    gnc_numeric balance;
+    gnc_numeric cleared_balance;
+    gnc_numeric reconciled_balance;
 } acct_balances_t;
 
 /**
@@ -80,6 +81,7 @@ typedef struct {
  * @param be SQL backend
  * @return GSList of acct_balances_t structures
  */
-/*@ null @*/ GSList* gnc_sql_get_account_balances_slist( GncSqlBackend* be );
+/*@ null @*/
+GSList* gnc_sql_get_account_balances_slist( GncSqlBackend* be );
 
 #endif /* GNC_TRANSACTION_SQL_H_ */

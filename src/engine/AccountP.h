@@ -32,7 +32,7 @@
  * in an inconsistent state.  If they are not used in the proper
  * setting, they can leave the account structures in an inconsistent
  * state.  Thus, these methods should never be used outside of
- * the engine, which is why they are "hidden" here. 
+ * the engine, which is why they are "hidden" here.
  *
  */
 
@@ -43,7 +43,7 @@
 
 /** STRUCTS *********************************************************/
 
-/** This is the data that describes an account. 
+/** This is the data that describes an account.
  *
  * This is the *private* header for the account structure.
  * No one outside of the engine should ever include this file.
@@ -52,7 +52,7 @@
 /** \struct Account */
 struct account_s
 {
-  QofInstance inst;
+    QofInstance inst;
 };
 
 /* Set the account's GUID. This should only be done when reading

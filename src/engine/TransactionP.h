@@ -28,7 +28,7 @@
  * TransactionP.h
  *
  * FUNCTION:
- * The is the *private* transaction header file.  Code outside of 
+ * The is the *private* transaction header file.  Code outside of
  * engine should *not* include this file.  This is because code
  * outside of the engine should *never* access any of the structure
  * members directly.
@@ -54,7 +54,7 @@
 
 
 /** STRUCTS *********************************************************/
-/* 
+/*
  * Double-entry is forced by having at least two splits in every
  * transaction.  By convention, (and only by convention, not by
  * any innate requirement), the first split is considered to be
@@ -73,48 +73,48 @@
 
 struct transaction_s
 {
-  QofInstance inst;     /* glbally unique id */
+    QofInstance inst;     /* glbally unique id */
 
-  Timespec date_entered;     /* date register entry was made              */
-  Timespec date_posted;      /* date transaction was posted at bank       */
+    Timespec date_entered;     /* date register entry was made              */
+    Timespec date_posted;      /* date transaction was posted at bank       */
 
-  /* The num field is a arbitrary user-assigned field.  
-   * It is intended to store a short id number, typically the check number,
-   * deposit number, invoice number or other tracking number.
-   */
-  char * num;  
+    /* The num field is a arbitrary user-assigned field.
+     * It is intended to store a short id number, typically the check number,
+     * deposit number, invoice number or other tracking number.
+     */
+    char * num;
 
-  /* The description field is an arbitrary user-assigned value. 
-   * It is meant to be a short descriptive phrase.
-   */
-  char * description;        
+    /* The description field is an arbitrary user-assigned value.
+     * It is meant to be a short descriptive phrase.
+     */
+    char * description;
 
-  /* The common_currency field is the balancing common currency for
-   * all the splits in the transaction.  Alternate, better(?) name: 
-   * "valuation currency": it is the currency in which all of the 
-   * splits can be valued.  */
-  gnc_commodity *common_currency;
+    /* The common_currency field is the balancing common currency for
+     * all the splits in the transaction.  Alternate, better(?) name:
+     * "valuation currency": it is the currency in which all of the
+     * splits can be valued.  */
+    gnc_commodity *common_currency;
 
-  GList * splits; /* list of splits */
+    GList * splits; /* list of splits */
 
-  /* marker is used to track the progress of transaction traversals. 
-   * 0 is never a legitimate marker value, so we can tell is we hit
-   * a new transaction in the middle of a traversal. All each new
-   * traversal cares about is whether or not the marker stored in
-   * a transaction is the same as or different than the one
-   * corresponding to the current traversal. */
-  unsigned char  marker;      
+    /* marker is used to track the progress of transaction traversals.
+     * 0 is never a legitimate marker value, so we can tell is we hit
+     * a new transaction in the middle of a traversal. All each new
+     * traversal cares about is whether or not the marker stored in
+     * a transaction is the same as or different than the one
+     * corresponding to the current traversal. */
+    unsigned char  marker;
 
-  /* The orig pointer points at a copy of the original transaction,
-   * before editing was started.  This orig copy is used to rollback 
-   * any changes made if/when the edit is abandoned.
-   */
-  Transaction *orig;
+    /* The orig pointer points at a copy of the original transaction,
+     * before editing was started.  This orig copy is used to rollback
+     * any changes made if/when the edit is abandoned.
+     */
+    Transaction *orig;
 };
 
 struct _TransactionClass
 {
-  QofInstanceClass parent_class;
+    QofInstanceClass parent_class;
 };
 
 /* Set the transaction's GUID. This should only be done when reading
@@ -126,10 +126,10 @@ struct _TransactionClass
  * This routine cannot be exposed publically since the duplicate
  * is wrong in many ways: it is not issued a unique guid, and thus
  * not a properly registered Entity.  The splits are copied, but
- * these are also funny: they aren't inserted into the accounts 
+ * these are also funny: they aren't inserted into the accounts
  * they claim to be in.  The splits also have bogus GUID's.
  * Another 'feature': the splits point at the old transaction
- * as the parent, not the new transaction.  
+ * as the parent, not the new transaction.
  */
 Transaction * xaccDupeTransaction (const Transaction *t);
 
@@ -145,14 +145,14 @@ gint32 xaccTransGetVersion (const Transaction*);
 gboolean xaccTransRegister (void);
 
 /* The xaccTransactionGetBackend() subroutine will find the
- *    persistent-data storage backend associated with this 
+ *    persistent-data storage backend associated with this
  *    transaction.
  */
 QofBackend * xaccTransactionGetBackend (Transaction *trans);
 
 /* The xaccEnable/DisableDataScrubbing() routines affect what
  *   happens during transaction commit.  When scrubbing is enabled,
- *   then transactions are fixed up during transaction commit, 
+ *   then transactions are fixed up during transaction commit,
  *   so that only consistent transactions are commited to the engine.
  *   However, when data is being loaded from a backend (in particular,
  *   from the file backend), the data might not be consistent until

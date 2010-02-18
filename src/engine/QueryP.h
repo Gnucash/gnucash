@@ -24,123 +24,136 @@
 #ifndef GNUCASH_QUERY_P_H
 #define GNUCASH_QUERY_P_H
 
-#include "Query.h" 
+#include "Query.h"
 
 #if 0
 
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
+typedef struct
+{
+    pd_type_t       type;
+    pr_type_t       term_type;
+    int             sense;
 } BasePredicateData;
 
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  acct_match_t    how;
-  AccountList     *accounts;
-  AccountGUIDList *account_guids;
+typedef struct
+{
+    pd_type_t       type;
+    pr_type_t       term_type;
+    int             sense;
+    acct_match_t    how;
+    AccountList     *accounts;
+    AccountGUIDList *account_guids;
 } AccountPredicateData;
 
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  amt_match_t     how;
-  amt_match_sgn_t amt_sgn;
-  double          amount;
+typedef struct
+{
+    pd_type_t       type;
+    pr_type_t       term_type;
+    int             sense;
+    amt_match_t     how;
+    amt_match_sgn_t amt_sgn;
+    double          amount;
 } AmountPredicateData;
 
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  balance_match_t how;
+typedef struct
+{
+    pd_type_t       type;
+    pr_type_t       term_type;
+    int             sense;
+    balance_match_t how;
 } BalancePredicateData;
 
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  book_match_t    how;
-  BookList        *books;
-  BookGUIDList    *book_guids;
+typedef struct
+{
+    pd_type_t       type;
+    pr_type_t       term_type;
+    int             sense;
+    book_match_t    how;
+    BookList        *books;
+    BookGUIDList    *book_guids;
 } BookPredicateData;
 
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  cleared_match_t how;
+typedef struct
+{
+    pd_type_t       type;
+    pr_type_t       term_type;
+    int             sense;
+    cleared_match_t how;
 } ClearedPredicateData;
 
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  GUID            guid;
-  QofIdType       id_type;
+typedef struct
+{
+    pd_type_t       type;
+    pr_type_t       term_type;
+    int             sense;
+    GUID            guid;
+    QofIdType       id_type;
 } GUIDPredicateData;
 
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  int             use_start;
-  Timespec        start;
-  int             use_end;
-  Timespec        end;
+typedef struct
+{
+    pd_type_t       type;
+    pr_type_t       term_type;
+    int             sense;
+    int             use_start;
+    Timespec        start;
+    int             use_end;
+    Timespec        end;
 } DatePredicateData;
 
-typedef struct {
-  pd_type_t         type;
-  pr_type_t         term_type;
-  int               sense;
-  kvp_match_t       how;
-  kvp_match_where_t where;
-  GSList           *path;
-  KvpValue        *value;
+typedef struct
+{
+    pd_type_t         type;
+    pr_type_t         term_type;
+    int               sense;
+    kvp_match_t       how;
+    kvp_match_where_t where;
+    GSList           *path;
+    KvpValue        *value;
 } KVPPredicateData;
 
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  int             how;
-  int             data;
+typedef struct
+{
+    pd_type_t       type;
+    pr_type_t       term_type;
+    int             sense;
+    int             how;
+    int             data;
 } MiscPredicateData;
 
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  int             case_sens;
-  int             use_regexp;
-  char           *matchstring;
-  regex_t         compiled;
+typedef struct
+{
+    pd_type_t       type;
+    pr_type_t       term_type;
+    int             sense;
+    int             case_sens;
+    int             use_regexp;
+    char           *matchstring;
+    regex_t         compiled;
 } StringPredicateData;
 
-typedef union { 
-  pd_type_t            type;
-  BasePredicateData    base;
-  AccountPredicateData acct;
-  AmountPredicateData  amount;
-  BalancePredicateData balance;
-  BookPredicateData    book;
-  ClearedPredicateData cleared;
-  DatePredicateData    date;
-  GUIDPredicateData    guid;
-  KVPPredicateData     kvp;
-  StringPredicateData  str;
-  MiscPredicateData    misc;
+typedef union
+{
+    pd_type_t            type;
+    BasePredicateData    base;
+    AccountPredicateData acct;
+    AmountPredicateData  amount;
+    BalancePredicateData balance;
+    BookPredicateData    book;
+    ClearedPredicateData cleared;
+    DatePredicateData    date;
+    GUIDPredicateData    guid;
+    KVPPredicateData     kvp;
+    StringPredicateData  str;
+    MiscPredicateData    misc;
 } PredicateData;
 
 typedef int (* Predicate)(Split * to_test, PredicateData * test_data);
 
-typedef struct {
-  PredicateData data;
-  Predicate     p;
+typedef struct
+{
+    PredicateData data;
+    Predicate     p;
 } QueryTerm;
 
 void xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,

@@ -45,21 +45,21 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 struct _GncABTransTempl
 {
-  /* Name of this Template */
-  gchar *name;
-  gchar *name_key; /* Collation key */
+    /* Name of this Template */
+    gchar *name;
+    gchar *name_key; /* Collation key */
 
-  /* Recipient */
-  gchar *recp_name;
-  gchar *recp_account;
-  gchar *recp_bankcode;
+    /* Recipient */
+    gchar *recp_name;
+    gchar *recp_account;
+    gchar *recp_bankcode;
 
-  /* Amount */
-  gnc_numeric amount;
+    /* Amount */
+    gnc_numeric amount;
 
-  /* Purpose, description */
-  gchar *purpose;
-  gchar *purpose_cont;
+    /* Purpose, description */
+    gchar *purpose;
+    gchar *purpose_cont;
 };
 
 
@@ -95,13 +95,13 @@ gnc_ab_trans_templ_new_from_kvp(const kvp_frame *k)
     g_return_val_if_fail(k, NULL);
 
     return gnc_ab_trans_templ_new_full(
-        kvp_value_get_string(kvp_frame_get_slot(k, TT_NAME)),
-        kvp_value_get_string(kvp_frame_get_slot(k, TT_RNAME)),
-        kvp_value_get_string(kvp_frame_get_slot(k, TT_RACC)),
-        kvp_value_get_string(kvp_frame_get_slot(k, TT_RBCODE)),
-        kvp_value_get_numeric(kvp_frame_get_slot(k, TT_AMOUNT)),
-        kvp_value_get_string(kvp_frame_get_slot(k, TT_PURPOS)),
-        kvp_value_get_string(kvp_frame_get_slot(k, TT_PURPOSCT)));
+               kvp_value_get_string(kvp_frame_get_slot(k, TT_NAME)),
+               kvp_value_get_string(kvp_frame_get_slot(k, TT_RNAME)),
+               kvp_value_get_string(kvp_frame_get_slot(k, TT_RACC)),
+               kvp_value_get_string(kvp_frame_get_slot(k, TT_RBCODE)),
+               kvp_value_get_numeric(kvp_frame_get_slot(k, TT_AMOUNT)),
+               kvp_value_get_string(kvp_frame_get_slot(k, TT_PURPOS)),
+               kvp_value_get_string(kvp_frame_get_slot(k, TT_PURPOSCT)));
 }
 
 GList *
@@ -110,7 +110,8 @@ gnc_ab_trans_templ_list_new_from_kvp_list(GList *v)
     GList *res = NULL;
     GList *iter;
 
-    for (iter = v; iter; iter = iter->next) {
+    for (iter = v; iter; iter = iter->next)
+    {
         kvp_frame *frame = kvp_value_get_frame((kvp_value*) iter->data);
         res = g_list_prepend(res, gnc_ab_trans_templ_new_from_kvp(frame));
     }
@@ -167,7 +168,8 @@ gnc_ab_trans_templ_list_to_kvp_list(GList *k)
     GList *res = NULL;
     GList *iter;
 
-    for (iter = k; iter; iter = iter->next) {
+    for (iter = k; iter; iter = iter->next)
+    {
         GncABTransTempl *t = (GncABTransTempl*) iter->data;
         kvp_value *value = kvp_value_new_frame_nc(gnc_ab_trans_templ_to_kvp(t));
         res = g_list_prepend(res, value);

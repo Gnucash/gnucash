@@ -91,16 +91,16 @@ void           *trans_numeric(
 {
     double         dblval = 0.0;
     int            exp = 0,
-                         dchr,
-                         err = 0,
-                               base = 10;
+                   dchr,
+                   err = 0,
+                   base = 10;
     long int       inum = 0;
     unsigned long  msdec = 0,
-                           lsdec = 0,
-                                   msscale = 1;
+                   lsdec = 0,
+                   msscale = 1;
     unsigned       radix = 0,
-                           sign = 0,
-                                  digit_cnt = 0;
+                   sign = 0,
+                   digit_cnt = 0;
     const char    *strinit = str;
     numeric_ptr    rslt = NULL;
 
@@ -306,8 +306,8 @@ void          *numeric_ops(
     void *r_value)
 {
     numeric_ptr lval = (numeric_ptr)l_value,
-                       rval = (numeric_ptr)r_value,
-                              rslt = (op_symbol == ASN_OP) ? lval : (numeric_ptr)calloc(1, sizeof(numeric));
+                rval = (numeric_ptr)r_value,
+                rslt = (op_symbol == ASN_OP) ? lval : (numeric_ptr)calloc(1, sizeof(numeric));
 
     switch ( op_symbol )
     {

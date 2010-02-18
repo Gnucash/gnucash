@@ -925,7 +925,7 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
         case GNC_HOW_RND_ROUND_HALF_DOWN:
             if (denom_neg)
             {
-                if ((2 * remainder) > in.denom*denom)
+                if ((2 * remainder) > in.denom * denom)
                 {
                     out.num = out.num + 1;
                 }
@@ -945,7 +945,7 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
         case GNC_HOW_RND_ROUND_HALF_UP:
             if (denom_neg)
             {
-                if ((2 * remainder) >= in.denom*denom)
+                if ((2 * remainder) >= in.denom * denom)
                 {
                     out.num = out.num + 1;
                 }
@@ -965,11 +965,11 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
         case GNC_HOW_RND_ROUND:
             if (denom_neg)
             {
-                if ((2 * remainder) > in.denom*denom)
+                if ((2 * remainder) > in.denom * denom)
                 {
                     out.num = out.num + 1;
                 }
-                else if ((2 * remainder) == in.denom*denom)
+                else if ((2 * remainder) == in.denom * denom)
                 {
                     if (out.num % 2)
                     {

@@ -39,9 +39,9 @@ static QofLogModule log_module = GNC_MOD_HTML;
 GncHtml* gnc_html_factory_create_html( void )
 {
 #ifdef WANT_WEBKIT
-	return gnc_html_webkit_new();
+    return gnc_html_webkit_new();
 #else
-	return gnc_html_gtkhtml_new();
+    return gnc_html_gtkhtml_new();
 #endif
 }
 
@@ -49,8 +49,8 @@ gboolean
 gnc_html_engine_supports_css( void )
 {
 #ifdef WANT_WEBKIT
-	return TRUE;
+    return TRUE;
 #else
-	return FALSE;
+    return FALSE;
 #endif
 }

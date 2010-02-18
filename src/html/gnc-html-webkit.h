@@ -39,15 +39,17 @@ typedef struct _GncHtmlWebkit GncHtmlWebkit;
 typedef struct _GncHtmlWebkitClass GncHtmlWebkitClass;
 typedef struct _GncHtmlWebkitPrivate GncHtmlWebkitPrivate;
 
-struct _GncHtmlWebkit {
-	GncHtml parent_instance;
+struct _GncHtmlWebkit
+{
+    GncHtml parent_instance;
 
-	/*< private >*/
-	GncHtmlWebkitPrivate* priv;
+    /*< private >*/
+    GncHtmlWebkitPrivate* priv;
 };
 
-struct _GncHtmlWebkitClass {
-	GncHtmlClass parent_class;
+struct _GncHtmlWebkitClass
+{
+    GncHtmlClass parent_class;
 };
 
 GType gnc_html_webkit_get_type( void );

@@ -27,9 +27,9 @@
 #include "Account.h"
 #include "dialog-hbcitrans.h"
 
-void 
+void
 gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
-		    GNC_HBCI_Transtype trans_type);
+                    GNC_HBCI_Transtype trans_type);
 
 /** Open a gnucash transfer dialog for gnucash Account gnc_acc and
  * fill in all the values from the AB_TRANSACTION inside the
@@ -37,7 +37,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
  * successfully created, FALSE if e.g. the user pressed cancel. */
 gboolean
 gnc_hbci_maketrans_final(HBCITransDialog *td, Account *gnc_acc,
-			 GNC_HBCI_Transtype trans_type);
+                         GNC_HBCI_Transtype trans_type);
 
 
 #endif /* GNC_HBCI_TRANSFER_H */

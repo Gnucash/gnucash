@@ -25,16 +25,16 @@
 
 gboolean
 gnc_hbci_get_password (GtkWidget *parent,
-		       const char *windowtitle,
-		       const char *heading,
-		       const char *initial_password,
-		       char **password,
-		       gboolean hide_input);
+                       const char *windowtitle,
+                       const char *heading,
+                       const char *initial_password,
+                       char **password,
+                       gboolean hide_input);
 gboolean
 gnc_hbci_get_initial_password (GtkWidget *parent,
-			       const char *windowtitle,
-			       const char *heading,
-			       char **password);
+                               const char *windowtitle,
+                               const char *heading,
+                               char **password);
 
 
 #endif

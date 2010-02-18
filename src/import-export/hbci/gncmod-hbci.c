@@ -31,54 +31,61 @@ int libgncmod_hbci_gnc_module_age      = 0;
 
 
 char *
-libgncmod_hbci_gnc_module_path(void) {
-  return g_strdup("gnucash/import-export/hbci");
+libgncmod_hbci_gnc_module_path(void)
+{
+    return g_strdup("gnucash/import-export/hbci");
 }
 
 char *
-libgncmod_hbci_gnc_module_description(void) {
-  return g_strdup("Support for Online Banking protocols");
+libgncmod_hbci_gnc_module_description(void)
+{
+    return g_strdup("Support for Online Banking protocols");
 }
 
 
 int
 libgncmod_hbci_gnc_module_init(int refcount)
 {
-  /* load the engine (we depend on it) */
-  if(!gnc_module_load("gnucash/engine", 0)) {
-    return FALSE;
-  }
+    /* load the engine (we depend on it) */
+    if (!gnc_module_load("gnucash/engine", 0))
+    {
+        return FALSE;
+    }
 
-  /* load the app-utils (we depend on it) */
-  if(!gnc_module_load("gnucash/app-utils", 0)) {
-    return FALSE;
-  }
-  if(!gnc_module_load("gnucash/gnome-utils", 0)) {
-    return FALSE;
-  }
+    /* load the app-utils (we depend on it) */
+    if (!gnc_module_load("gnucash/app-utils", 0))
+    {
+        return FALSE;
+    }
+    if (!gnc_module_load("gnucash/gnome-utils", 0))
+    {
+        return FALSE;
+    }
 
-  if(!gnc_module_load("gnucash/import-export", 0)) {
-    return FALSE;
-  }
+    if (!gnc_module_load("gnucash/import-export", 0))
+    {
+        return FALSE;
+    }
 
-  /* Add menu items with C callbacks */
-  gnc_plugin_hbci_create_plugin();
+    /* Add menu items with C callbacks */
+    gnc_plugin_hbci_create_plugin();
 
-  gnc_preferences_add_to_page("hbciprefs.glade", "hbci_prefs",
-			      _("Online Banking"));
+    gnc_preferences_add_to_page("hbciprefs.glade", "hbci_prefs",
+                                _("Online Banking"));
 
-  /* Initialize gwen library */
-  GWEN_Init();
+    /* Initialize gwen library */
+    GWEN_Init();
 
-  return TRUE;
+    return TRUE;
 }
 
 int
-libgncmod_hbci_gnc_module_end(int refcount) {
-  gnc_AB_BANKING_delete(0);
+libgncmod_hbci_gnc_module_end(int refcount)
+{
+    gnc_AB_BANKING_delete(0);
 
-  /* Finalize gwen library */
-  GWEN_Fini();
+    /* Finalize gwen library */
+    GWEN_Fini();
 
-  return TRUE;
+    return TRUE;
 }

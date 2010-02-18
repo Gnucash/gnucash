@@ -1,7 +1,7 @@
 /********************************************************************\
  * glib-helpers.h -- gnucash glib helper functions                  *
  * Copyright (C) 2000 Linas Vepstas                                 *
- * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>         * 
+ * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

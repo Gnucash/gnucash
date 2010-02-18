@@ -22,7 +22,7 @@
    @brief The transaction match picker dialog interface
    @author Copyright (C) 2002 Benoit Grégoire
 */
- 
+
 #ifndef GNC_GEN_MATCH_PICKER_H
 #define GNC_GEN_MATCH_PICKER_H
 
@@ -31,10 +31,10 @@
 typedef struct _transpickerdialog GNCImportMatchPicker;
 
 /************************************************************************
- * GUI Functions 
+ * GUI Functions
  ************************************************************************/
 
-/** 
+/**
  * Run a match_picker dialog where the user should pick the best match for 'one' given
  * transaction, so that the selected-MatchInfo in the
  * given trans_info is updated accordingly. This functions will only
@@ -49,7 +49,7 @@ typedef struct _transpickerdialog GNCImportMatchPicker;
  *
  * @param transaction_info The TransInfo for which the user is supposed to
  * pick a matching transaction. */
-void 
+void
 gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info);
 /**@}*/
 

@@ -64,7 +64,8 @@ static AB_IMEXPORTER_ACCOUNTINFO *txn_accountinfo_cb(
 static AB_IMEXPORTER_ACCOUNTINFO *bal_accountinfo_cb(
     AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data);
 
-struct _GncABImExContextImport {
+struct _GncABImExContextImport
+{
     guint awaiting;
     gboolean txn_found;
     Account *gnc_acc;
@@ -85,14 +86,17 @@ gnc_GWEN_Init(void)
     GWEN_Init();
 
     /* Initialize gwen logging */
-    if (gnc_gconf_get_bool(GCONF_SECTION_AQBANKING, KEY_VERBOSE_DEBUG, NULL)) {
-      GWEN_Logger_SetLevel(NULL, GWEN_LoggerLevel_Info);
-      GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevel_Info);
-      GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevel_Debug);
-    } else {
-      GWEN_Logger_SetLevel(NULL, GWEN_LoggerLevel_Error);
-      GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevel_Error);
-      GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevel_Warning);
+    if (gnc_gconf_get_bool(GCONF_SECTION_AQBANKING, KEY_VERBOSE_DEBUG, NULL))
+    {
+        GWEN_Logger_SetLevel(NULL, GWEN_LoggerLevel_Info);
+        GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevel_Info);
+        GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevel_Debug);
+    }
+    else
+    {
+        GWEN_Logger_SetLevel(NULL, GWEN_LoggerLevel_Error);
+        GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevel_Error);
+        GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevel_Warning);
     }
     gnc_GWEN_Gui_log_init();
 }
@@ -115,7 +119,8 @@ gnc_AB_BANKING_new(void)
 {
     AB_BANKING *api;
 
-    if (gnc_AB_BANKING) {
+    if (gnc_AB_BANKING)
+    {
         /* API cached. */
         api = gnc_AB_BANKING;
 
@@ -123,7 +128,9 @@ gnc_AB_BANKING_new(void)
         if (gnc_AB_BANKING_refcount == 0)
             g_return_val_if_fail(AB_Banking_Init(api) == 0, NULL);
 
-    } else {
+    }
+    else
+    {
         api = AB_Banking_new("gnucash", NULL, 0);
         g_return_val_if_fail(api, NULL);
 
@@ -146,8 +153,10 @@ gnc_AB_BANKING_delete(AB_BANKING *api)
     if (!api)
         api = gnc_AB_BANKING;
 
-    if (api) {
-        if (api == gnc_AB_BANKING) {
+    if (api)
+    {
+        if (api == gnc_AB_BANKING)
+        {
             gnc_AB_BANKING = NULL;
             if (gnc_AB_BANKING_refcount > 0)
                 AB_Banking_Fini(api);
@@ -161,10 +170,13 @@ gnc_AB_BANKING_delete(AB_BANKING *api)
 gint
 gnc_AB_BANKING_fini(AB_BANKING *api)
 {
-    if (api == gnc_AB_BANKING) {
+    if (api == gnc_AB_BANKING)
+    {
         if (--gnc_AB_BANKING_refcount == 0)
             return AB_Banking_Fini(api);
-    } else {
+    }
+    else
+    {
         return AB_Banking_Fini(api);
     }
     return 0;
@@ -182,20 +194,24 @@ gnc_ab_get_ab_account(const AB_BANKING *api, Account *gnc_acc)
     accountid = gnc_ab_get_account_accountid(gnc_acc);
     account_uid = gnc_ab_get_account_uid (gnc_acc);
 
-    if (account_uid > 0) {
+    if (account_uid > 0)
+    {
         ab_account = AB_Banking_GetAccount(api, account_uid);
 
-        if (!ab_account && bankcode && *bankcode && accountid && *accountid) {
+        if (!ab_account && bankcode && *bankcode && accountid && *accountid)
+        {
             g_message("gnc_ab_get_ab_account: No AB_ACCOUNT found for UID %d, "
                       "trying bank code\n", account_uid);
             ab_account = AB_Banking_GetAccountByCodeAndNumber(api, bankcode,
-                                                              accountid);
+                         accountid);
         }
         return ab_account;
 
-    } else if (bankcode && *bankcode && accountid && *accountid) {
+    }
+    else if (bankcode && *bankcode && accountid && *accountid)
+    {
         ab_account = AB_Banking_GetAccountByCodeAndNumber(api, bankcode,
-                                                          accountid);
+                     accountid);
         return ab_account;
     }
 
@@ -230,12 +246,15 @@ join_ab_strings_cb(const gchar *str, gpointer user_data)
     g_strstrip(tmp);
     gnc_utf8_strip_invalid(tmp);
 
-    if (*acc) {
+    if (*acc)
+    {
         gchar *join = g_strjoin(" ", *acc, tmp, (gchar*) NULL);
         g_free(*acc);
         g_free(tmp);
         *acc = join;
-    } else {
+    }
+    else
+    {
         *acc = tmp;
     }
     return NULL;
@@ -254,7 +273,8 @@ gnc_ab_get_remote_name(const AB_TRANSACTION *ab_trans)
         GWEN_StringList_ForEach(ab_remote_name, join_ab_strings_cb,
                                 &gnc_other_name);
 
-    if (!gnc_other_name || !*gnc_other_name) {
+    if (!gnc_other_name || !*gnc_other_name)
+    {
         g_free(gnc_other_name);
         gnc_other_name = NULL;
     }
@@ -284,21 +304,30 @@ gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans)
 gchar *
 gnc_ab_description_to_gnc(const AB_TRANSACTION *ab_trans)
 {
-  /* Description */
+    /* Description */
     gchar *description = gnc_ab_get_purpose(ab_trans);
     gchar *other_name = gnc_ab_get_remote_name(ab_trans);
     gchar *retval;
 
-    if (other_name) {
-        if (description && *description) {
+    if (other_name)
+    {
+        if (description && *description)
+        {
             retval = g_strdup_printf("%s; %s", description, other_name);
-        } else {
+        }
+        else
+        {
             retval = g_strdup(other_name);
         }
-    } else {
-        if (description && *description) {
+    }
+    else
+    {
+        if (description && *description)
+        {
             retval = g_strdup(description);
-        } else {
+        }
+        else
+        {
             retval = g_strdup(_("Unspecified"));
         }
     }
@@ -329,11 +358,14 @@ gnc_ab_memo_to_gnc(const AB_TRANSACTION *ab_trans)
     gnc_utf8_strip_invalid(ab_other_accountid);
     gnc_utf8_strip_invalid(ab_other_bankcode);
 
-    if (ab_other_accountid && *ab_other_accountid) {
+    if (ab_other_accountid && *ab_other_accountid)
+    {
         retval = g_strdup_printf("%s %s %s %s",
                                  _("Account"), ab_other_accountid,
                                  _("Bank"), ab_other_bankcode);
-    } else {
+    }
+    else
+    {
         retval = g_strdup("");
     }
     g_free(ab_other_accountid);
@@ -364,7 +396,8 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
 
     /* Date / Time */
     valuta_date = AB_Transaction_GetValutaDate(ab_trans);
-    if (!valuta_date) {
+    if (!valuta_date)
+    {
         const GWEN_TIME *normal_date = AB_Transaction_GetDate(ab_trans);
         if (normal_date)
             valuta_date = normal_date;
@@ -383,7 +416,7 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     /* Number.  We use the "customer reference", if there is one. */
     custref = AB_Transaction_GetCustomerReference(ab_trans);
     if (custref && *custref
-        && g_ascii_strncasecmp(custref, "NONREF", 6) != 0)
+            && g_ascii_strncasecmp(custref, "NONREF", 6) != 0)
         xaccTransSetNum(gnc_trans, custref);
 
     /* Description */
@@ -406,26 +439,26 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
         gnc_import_set_split_online_id(split, fitid);
 
     {
-    /* Amount into the split */
-    const AB_VALUE *ab_value = AB_Transaction_GetValue(ab_trans);
-    double d_value = ab_value ? AB_Value_GetValueAsDouble (ab_value) : 0.0;
-    AB_TRANSACTION_TYPE ab_type = AB_Transaction_GetType (ab_trans);
-    gnc_numeric gnc_amount;
+        /* Amount into the split */
+        const AB_VALUE *ab_value = AB_Transaction_GetValue(ab_trans);
+        double d_value = ab_value ? AB_Value_GetValueAsDouble (ab_value) : 0.0;
+        AB_TRANSACTION_TYPE ab_type = AB_Transaction_GetType (ab_trans);
+        gnc_numeric gnc_amount;
 
-    /*printf("Transaction with value %f has type %d\n", d_value, ab_type);*/
-    /* If the value is positive, but the transaction type says the
-       money is transferred away from our account (Transfer instead of
-       DebitNote), we switch the value to negative. */
-    if (d_value > 0.0 && ab_type == AB_Transaction_TypeTransfer)
-      d_value = -d_value;
+        /*printf("Transaction with value %f has type %d\n", d_value, ab_type);*/
+        /* If the value is positive, but the transaction type says the
+           money is transferred away from our account (Transfer instead of
+           DebitNote), we switch the value to negative. */
+        if (d_value > 0.0 && ab_type == AB_Transaction_TypeTransfer)
+            d_value = -d_value;
 
-    gnc_amount = double_to_gnc_numeric(
-	d_value,
-        xaccAccountGetCommoditySCU(gnc_acc),
-        GNC_RND_ROUND);
-    if (!ab_value)
-        g_warning("transaction_cb: Oops, value was NULL.  Using 0");
-    xaccSplitSetBaseValue(split, gnc_amount, xaccAccountGetCommodity(gnc_acc));
+        gnc_amount = double_to_gnc_numeric(
+                         d_value,
+                         xaccAccountGetCommoditySCU(gnc_acc),
+                         GNC_RND_ROUND);
+        if (!ab_value)
+            g_warning("transaction_cb: Oops, value was NULL.  Using 0");
+        xaccSplitSetBaseValue(split, gnc_amount, xaccAccountGetCommodity(gnc_acc));
     }
 
     /* Memo in the Split. */
@@ -458,9 +491,10 @@ gnc_ab_accinfo_to_gnc_acc(AB_IMEXPORTER_ACCOUNTINFO *acc_info)
                             accountnumber ? accountnumber : "",
                             (gchar*)NULL);
     gnc_acc = gnc_import_select_account(
-        NULL, online_id, 1, AB_ImExporterAccountInfo_GetAccountName(acc_info),
-        NULL, ACCT_TYPE_NONE, NULL, NULL);
-    if (!gnc_acc) {
+                  NULL, online_id, 1, AB_ImExporterAccountInfo_GetAccountName(acc_info),
+                  NULL, ACCT_TYPE_NONE, NULL, NULL);
+    if (!gnc_acc)
+    {
         g_warning("gnc_ab_accinfo_to_gnc_acc: Could not determine source account"
                   " for online_id %s", online_id);
     }
@@ -483,7 +517,8 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
     /* Instead of xaccTransCommitEdit(gnc_trans)  */
     gnc_gen_trans_list_add_trans(data->generic_importer, gnc_trans);
 
-    if (data->execute_txns && data->ab_acc) {
+    if (data->execute_txns && data->ab_acc)
+    {
         AB_TRANSACTION *ab_trans = AB_Transaction_dup(element);
         AB_JOB *job;
 
@@ -498,19 +533,21 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
         job = gnc_ab_get_trans_job(data->ab_acc, ab_trans, SINGLE_DEBITNOTE);
 
         /* Check whether we really got a job */
-        if (!job) {
+        if (!job)
+        {
             /* Oops, no job, probably not supported by bank */
             if (gnc_verify_dialog(
-                    NULL, FALSE, "%s",
-                    _("The backend found an error during the preparation "
-                      "of the job. It is not possible to execute this job. \n"
-                      "\n"
-                      "Most probable the bank does not support your chosen "
-                      "job or your Online Banking account does not have the permission "
-                      "to execute this job. More error messages might be "
-                      "visible on your console log.\n"
-                      "\n"
-                      "Do you want to enter the job again?"))) {
+                        NULL, FALSE, "%s",
+                        _("The backend found an error during the preparation "
+                          "of the job. It is not possible to execute this job. \n"
+                          "\n"
+                          "Most probable the bank does not support your chosen "
+                          "job or your Online Banking account does not have the permission "
+                          "to execute this job. More error messages might be "
+                          "visible on your console log.\n"
+                          "\n"
+                          "Do you want to enter the job again?")))
+            {
                 gnc_error_dialog(NULL, "Sorry, not implemented yet.");
             }
             /* else */
@@ -541,14 +578,18 @@ txn_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     else
         data->awaiting |= FOUND_TRANSACTIONS;
 
-    if (!(data->awaiting & AWAIT_TRANSACTIONS)) {
+    if (!(data->awaiting & AWAIT_TRANSACTIONS))
+    {
         if (gnc_verify_dialog(data->parent, TRUE, "%s",
                               _("The bank has sent transaction information "
                                 "in its response."
                                 "\n"
-                                "Do you want to import it?"))) {
+                                "Do you want to import it?")))
+        {
             data->awaiting |= AWAIT_TRANSACTIONS;
-        } else {
+        }
+        else
+        {
             data->awaiting |= IGNORE_TRANSACTIONS;
             return NULL;
         }
@@ -559,27 +600,31 @@ txn_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     if (!gnc_acc) return NULL;
     data->gnc_acc = gnc_acc;
 
-    if (data->execute_txns) {
+    if (data->execute_txns)
+    {
         /* Retrieve the aqbanking account that belongs to this gnucash
          * account */
         data->ab_acc = gnc_ab_get_ab_account(data->api, gnc_acc);
-        if (!data->ab_acc) {
+        if (!data->ab_acc)
+        {
             gnc_error_dialog(NULL, "%s",
                              _("No Online Banking account found for this "
                                "gnucash account. These transactions will "
                                "not be executed by Online Banking."));
         }
-    } else {
+    }
+    else
+    {
         data->ab_acc = NULL;
     }
 
     if (!data->generic_importer)
         data->generic_importer = gnc_gen_trans_list_new(data->parent, NULL,
-                                                        TRUE, 14);
+                                 TRUE, 14);
 
     /* Iterate through all transactions */
     AB_ImExporterAccountInfo_TransactionsForEach(element, txn_transaction_cb,
-                                                 data);
+            data);
 
     return NULL;
 }
@@ -613,9 +658,11 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
 
     /* Lookup the most recent ACCOUNT_STATUS available */
     item = AB_ImExporterAccountInfo_GetFirstAccountStatus(element);
-    while (item) {
+    while (item)
+    {
         const GWEN_TIME *item_time = AB_AccountStatus_GetTime(item);
-        if (!best || GWEN_Time_Diff(best_time, item_time) < 0.0) {
+        if (!best || GWEN_Time_Diff(best_time, item_time) < 0.0)
+        {
             best = item;
             best_time = item_time;
         }
@@ -623,7 +670,8 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     }
 
     booked_bal = AB_AccountStatus_GetBookedBalance(best);
-    if (!(data->awaiting & AWAIT_BALANCES)) {
+    if (!(data->awaiting & AWAIT_BALANCES))
+    {
         /* Ignore zero balances if we don't await a balance */
         if (!booked_bal || AB_Value_IsZero(AB_Balance_GetValue(booked_bal)))
             return NULL;
@@ -633,9 +681,12 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
                               _("The bank has sent balance information "
                                 "in its response."
                                 "\n"
-                                "Do you want to import it?"))) {
+                                "Do you want to import it?")))
+        {
             data->awaiting |= AWAIT_BALANCES;
-        } else {
+        }
+        else
+        {
             data->awaiting |= IGNORE_BALANCES;
             return NULL;
         }
@@ -647,23 +698,32 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     data->gnc_acc = gnc_acc;
 
     /* Lookup booked balance and time */
-    if (booked_bal) {
+    if (booked_bal)
+    {
         const GWEN_TIME *ti = AB_Balance_GetTime(booked_bal);
-        if (ti) {
+        if (ti)
+        {
             booked_tt =  GWEN_Time_toTime_t(ti);
-        } else {
+        }
+        else
+        {
             /* No time found? Use today because the HBCI query asked for today's
              * balance. */
             booked_tt = gnc_timet_get_day_start(time(NULL));
         }
         booked_val = AB_Balance_GetValue(booked_bal);
-        if (booked_val) {
+        if (booked_val)
+        {
             booked_value = AB_Value_GetValueAsDouble(booked_val);
-        } else {
+        }
+        else
+        {
             g_warning("bal_accountinfo_cb: booked_val == NULL.  Assuming 0");
             booked_value = 0.0;
         }
-    } else {
+    }
+    else
+    {
         g_warning("bal_accountinfo_cb: booked_bal == NULL.  Assuming 0");
         booked_tt = 0;
         booked_value = 0.0;
@@ -671,15 +731,19 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
 
     /* Lookup noted balance */
     noted_bal = AB_AccountStatus_GetNotedBalance(best);
-    if (noted_bal) {
+    if (noted_bal)
+    {
         noted_val = AB_Balance_GetValue(noted_bal);
         if (noted_val)
             noted_value = AB_Value_GetValueAsDouble(noted_val);
-        else {
+        else
+        {
             g_warning("bal_accountinfo_cb: noted_val == NULL.  Assuming 0");
             noted_value = 0.0;
         }
-    } else {
+    }
+    else
+    {
         g_warning("bal_accountinfo_cb: noted_bal == NULL.  Assuming 0");
         noted_value = 0.0;
     }
@@ -687,38 +751,41 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     value = double_to_gnc_numeric(booked_value,
                                   xaccAccountGetCommoditySCU(gnc_acc),
                                   GNC_RND_ROUND);
-    if (noted_value == 0.0 && booked_value == 0.0) {
+    if (noted_value == 0.0 && booked_value == 0.0)
+    {
         dialog = gtk_message_dialog_new(
-            GTK_WINDOW(data->parent),
-            GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-            GTK_MESSAGE_INFO,
-            GTK_BUTTONS_OK,
-            "%s",
-            /* Translators: Strings from this file are needed only in
-             * countries that have one of aqbanking's Online Banking
-             * techniques available. This is 'OFX DirectConnect'
-             * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
-             * (Switzerland). If none of these techniques are available
-             * in your country, you may safely ignore strings from the
-             * import-export/hbci subdirectory. */
-            _("The downloaded Online Banking Balance was zero.\n\n"
-              "Either this is the correct balance, or your bank does not "
-              "support Balance download in this Online Banking version. "
-              "In the latter case you should choose a different "
-              "Online Banking version number in the Online Banking "
-              "(AqBanking or HBCI) Setup. After that, try again to "
-              "download the Online Banking Balance."));
+                     GTK_WINDOW(data->parent),
+                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                     GTK_MESSAGE_INFO,
+                     GTK_BUTTONS_OK,
+                     "%s",
+                     /* Translators: Strings from this file are needed only in
+                      * countries that have one of aqbanking's Online Banking
+                      * techniques available. This is 'OFX DirectConnect'
+                      * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
+                      * (Switzerland). If none of these techniques are available
+                      * in your country, you may safely ignore strings from the
+                      * import-export/hbci subdirectory. */
+                     _("The downloaded Online Banking Balance was zero.\n\n"
+                       "Either this is the correct balance, or your bank does not "
+                       "support Balance download in this Online Banking version. "
+                       "In the latter case you should choose a different "
+                       "Online Banking version number in the Online Banking "
+                       "(AqBanking or HBCI) Setup. After that, try again to "
+                       "download the Online Banking Balance."));
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
 
-    } else {
+    }
+    else
+    {
         gnc_numeric reconc_balance = xaccAccountGetReconciledBalance(gnc_acc);
 
         gchar *booked_str = gnc_AB_VALUE_to_readable_string(booked_val);
         gchar *message1 = g_strdup_printf(
-            _("Result of Online Banking job: \n"
-              "Account booked balance is %s"),
-            booked_str);
+                              _("Result of Online Banking job: \n"
+                                "Account booked balance is %s"),
+                              booked_str);
         gchar *message2 =
             (noted_value == 0.0) ?
             g_strdup("") :
@@ -726,24 +793,27 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
                               "has a noted balance of %s\n"),
                             gnc_AB_VALUE_to_readable_string(noted_val));
 
-        if (gnc_numeric_equal(value, reconc_balance)) {
+        if (gnc_numeric_equal(value, reconc_balance))
+        {
             const gchar *message3 =
                 _("The booked balance is identical to the current "
                   "reconciled balance of the account.");
             dialog = gtk_message_dialog_new(
-                GTK_WINDOW(data->parent),
-                GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                GTK_MESSAGE_INFO,
-                GTK_BUTTONS_OK,
-                "%s\n%s\n%s",
-                message1, message2, message3);
+                         GTK_WINDOW(data->parent),
+                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                         GTK_MESSAGE_INFO,
+                         GTK_BUTTONS_OK,
+                         "%s\n%s\n%s",
+                         message1, message2, message3);
             gtk_dialog_run(GTK_DIALOG(dialog));
             gtk_widget_destroy(GTK_WIDGET(dialog));
 
-        } else {
+        }
+        else
+        {
             const char *message3 = _("Reconcile account now?");
 
-            show_recn_window = gnc_verify_dialog(data->parent,TRUE, "%s\n%s\n%s",
+            show_recn_window = gnc_verify_dialog(data->parent, TRUE, "%s\n%s\n%s",
                                                  message1, message2, message3);
         }
         g_free(booked_str);

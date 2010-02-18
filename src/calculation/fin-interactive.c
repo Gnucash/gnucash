@@ -254,15 +254,15 @@ int             main(int argc, char **argv, char **env)
     var_store_ptr   value_list;
     numeric_ptr     nval;
     unsigned        compute,
-    jj,
-    yrE,
-    monthE,
-    dayE,
-    yrI,
-    monthI,
-    dayI;
+           jj,
+           yrE,
+           monthE,
+           dayE,
+           yrI,
+           monthI,
+           dayI;
     struct tm      *times_E,
-                *times_I;
+            *times_I;
     void           *parse_env;
     amort_sched     amortsched;
     financial_info  fininfo;

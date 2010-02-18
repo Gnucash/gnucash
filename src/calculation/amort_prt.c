@@ -37,16 +37,16 @@ void             prt_amortization_schedule(
     FILE            *ofile)      /* output file                               */
 {
     unsigned            j,
-    jj,
-    prec = amortsched->prec,
+           jj,
+           prec = amortsched->prec,
            option = amortsched->option,
-                    fv_case = amortsched->fv_case;
+           fv_case = amortsched->fv_case;
     unsigned char       datel[100],
-    summary = amortsched->summary;
+             summary = amortsched->summary;
     struct tm          *times_E,
-                *times_I;
+            *times_I;
     amort_sched_yr_ptr  amortyr,
-    prst_yr;
+                     prst_yr;
     sched_pmt_ptr       pmtsched = NULL;
     yearly_summary_ptr  annual_summary;
 

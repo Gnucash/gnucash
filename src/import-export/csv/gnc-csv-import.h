@@ -16,12 +16,12 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
- /** @file
-     @brief CSV import GUI
-     *
-     gnc-csv-import.h
-     @author Copyright (c) 2007 Benny Sperisen <lasindi@gmail.com>
- */
+/** @file
+    @brief CSV import GUI
+    *
+    gnc-csv-import.h
+    @author Copyright (c) 2007 Benny Sperisen <lasindi@gmail.com>
+*/
 #ifndef CSV_IMPORT_H
 #define CSV_IMPORT_H
 

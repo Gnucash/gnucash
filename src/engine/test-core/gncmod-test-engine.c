@@ -23,21 +23,25 @@ int libgncmod_test_engine_gnc_module_age      = 0;
 
 
 char *
-libgncmod_test_engine_gnc_module_path(void) {
-  return g_strdup("gnucash/engine/test");
+libgncmod_test_engine_gnc_module_path(void)
+{
+    return g_strdup("gnucash/engine/test");
 }
 
 char *
-libgncmod_test_engine_gnc_module_description(void) {
-  return g_strdup("GnuCash Engine test infrastructure.");
+libgncmod_test_engine_gnc_module_description(void)
+{
+    return g_strdup("GnuCash Engine test infrastructure.");
 }
 
 int
-libgncmod_test_engine_gnc_module_init(int refcount) {
-  return TRUE;
+libgncmod_test_engine_gnc_module_init(int refcount)
+{
+    return TRUE;
 }
 
 int
-libgncmod_test_engine_gnc_module_end(int refcount) {
-  return TRUE;
+libgncmod_test_engine_gnc_module_end(int refcount)
+{
+    return TRUE;
 }

@@ -24,29 +24,31 @@ int libgncmod_register_core_gnc_module_age      = 0;
 
 
 char *
-libgncmod_register_core_gnc_module_path(void) {
-  return g_strdup("gnucash/register/register-core");
+libgncmod_register_core_gnc_module_path(void)
+{
+    return g_strdup("gnucash/register/register-core");
 }
 
 char *
-libgncmod_register_core_gnc_module_description(void) {
-  return g_strdup("Toolkit-independent GUI for ledger-like table displays");
+libgncmod_register_core_gnc_module_description(void)
+{
+    return g_strdup("Toolkit-independent GUI for ledger-like table displays");
 }
 
 int
 libgncmod_register_core_gnc_module_init(int refcount)
 {
-  if(!gnc_module_load("gnucash/engine", 0))
-  {
-    return FALSE;
-  }
+    if (!gnc_module_load("gnucash/engine", 0))
+    {
+        return FALSE;
+    }
 
-  /* FIXME. We need this for the wide-character functions.
-   * When fixing, get rid of gnome-utils includes, too. */
-  if(!gnc_module_load("gnucash/gnome-utils", 0))
-  {
-    return FALSE;
-  }
+    /* FIXME. We need this for the wide-character functions.
+     * When fixing, get rid of gnome-utils includes, too. */
+    if (!gnc_module_load("gnucash/gnome-utils", 0))
+    {
+        return FALSE;
+    }
 
-  return TRUE;
+    return TRUE;
 }

@@ -49,8 +49,9 @@ static void gnc_search_date_finalize	(GObject *obj);
 
 typedef struct _GNCSearchDatePrivate GNCSearchDatePrivate;
 
-struct _GNCSearchDatePrivate {
-  GtkWidget *entry;
+struct _GNCSearchDatePrivate
+{
+    GtkWidget *entry;
 };
 
 #define _PRIVATE(o) \
@@ -61,227 +62,229 @@ static GNCSearchCoreTypeClass *parent_class;
 GType
 gnc_search_date_get_type (void)
 {
-  static GType type = 0;
-	
-  if (!type) {
-    GTypeInfo type_info = {
-      sizeof(GNCSearchDateClass),       /* class_size */
-      NULL,   				/* base_init */
-      NULL,				/* base_finalize */
-      (GClassInitFunc)gnc_search_date_class_init,
-      NULL,				/* class_finalize */
-      NULL,				/* class_data */
-      sizeof(GNCSearchDate),		/* */
-      0,				/* n_preallocs */
-      (GInstanceInitFunc)gnc_search_date_init,
-    };
-		
-    type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
-				   "GNCSearchDate",
-				   &type_info, 0);
-  }
-	
-  return type;
+    static GType type = 0;
+
+    if (!type)
+    {
+        GTypeInfo type_info =
+        {
+            sizeof(GNCSearchDateClass),       /* class_size */
+            NULL,   				/* base_init */
+            NULL,				/* base_finalize */
+            (GClassInitFunc)gnc_search_date_class_init,
+            NULL,				/* class_finalize */
+            NULL,				/* class_data */
+            sizeof(GNCSearchDate),		/* */
+            0,				/* n_preallocs */
+            (GInstanceInitFunc)gnc_search_date_init,
+        };
+
+        type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
+                                       "GNCSearchDate",
+                                       &type_info, 0);
+    }
+
+    return type;
 }
 
 static void
 gnc_search_date_class_init (GNCSearchDateClass *class)
 {
-  GObjectClass *object_class;
-  GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
+    GObjectClass *object_class;
+    GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
-  object_class = G_OBJECT_CLASS (class);
-  parent_class = g_type_class_peek_parent (class);
+    object_class = G_OBJECT_CLASS (class);
+    parent_class = g_type_class_peek_parent (class);
 
-  object_class->finalize = gnc_search_date_finalize;
+    object_class->finalize = gnc_search_date_finalize;
 
-  /* override methods */
-  gnc_search_core_type->editable_enters = editable_enters;
-  gnc_search_core_type->grab_focus = grab_focus;
-  gnc_search_core_type->validate = gncs_validate;
-  gnc_search_core_type->get_widget = gncs_get_widget;
-  gnc_search_core_type->get_predicate = gncs_get_predicate;
-  gnc_search_core_type->clone = gncs_clone;
+    /* override methods */
+    gnc_search_core_type->editable_enters = editable_enters;
+    gnc_search_core_type->grab_focus = grab_focus;
+    gnc_search_core_type->validate = gncs_validate;
+    gnc_search_core_type->get_widget = gncs_get_widget;
+    gnc_search_core_type->get_predicate = gncs_get_predicate;
+    gnc_search_core_type->clone = gncs_clone;
 
-  g_type_class_add_private(class, sizeof(GNCSearchDatePrivate));
+    g_type_class_add_private(class, sizeof(GNCSearchDatePrivate));
 }
 
 static void
 gnc_search_date_init (GNCSearchDate *o)
 {
-  o->ts.tv_sec = time(NULL);
-  o->how = COMPARE_LT;
+    o->ts.tv_sec = time(NULL);
+    o->how = COMPARE_LT;
 }
 
 static void
 gnc_search_date_finalize (GObject *obj)
 {
-  GNCSearchDate *o;
-  GNCSearchDatePrivate *priv;
+    GNCSearchDate *o;
+    GNCSearchDatePrivate *priv;
 
-  g_assert (IS_GNCSEARCH_DATE (obj));
+    g_assert (IS_GNCSEARCH_DATE (obj));
 
-  o = GNCSEARCH_DATE(obj);
-  priv = _PRIVATE(o);
-  if (priv->entry)
-    gtk_widget_destroy (priv->entry);
+    o = GNCSEARCH_DATE(obj);
+    priv = _PRIVATE(o);
+    if (priv->entry)
+        gtk_widget_destroy (priv->entry);
 
-  G_OBJECT_CLASS (parent_class)->finalize(obj);
+    G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
 /**
  * gnc_search_date_new:
  *
  * Create a new GNCSearchDate object.
- * 
+ *
  * Return value: A new #GNCSearchDate object.
  **/
 GNCSearchDate *
 gnc_search_date_new (void)
 {
-  GNCSearchDate *o = g_object_new(GNC_TYPE_SEARCH_DATE, NULL);
-  return o;
+    GNCSearchDate *o = g_object_new(GNC_TYPE_SEARCH_DATE, NULL);
+    return o;
 }
 
 void
 gnc_search_date_set_date (GNCSearchDate *fi, Timespec ts)
 {
-  g_return_if_fail (fi);
-  g_return_if_fail (IS_GNCSEARCH_DATE (fi));
-	
-  fi->ts = ts;
+    g_return_if_fail (fi);
+    g_return_if_fail (IS_GNCSEARCH_DATE (fi));
+
+    fi->ts = ts;
 }
 
 void
 gnc_search_date_set_how (GNCSearchDate *fi, query_compare_t how)
 {
-  g_return_if_fail (fi);
-  g_return_if_fail (IS_GNCSEARCH_DATE (fi));
-  fi->how = how;
+    g_return_if_fail (fi);
+    g_return_if_fail (IS_GNCSEARCH_DATE (fi));
+    fi->how = how;
 }
 
 static gboolean
 gncs_validate (GNCSearchCoreType *fe)
 {
-  GNCSearchDate *fi = (GNCSearchDate *)fe;
-  gboolean valid = TRUE;
+    GNCSearchDate *fi = (GNCSearchDate *)fe;
+    gboolean valid = TRUE;
 
-  g_return_val_if_fail (fi, FALSE);
-  g_return_val_if_fail (IS_GNCSEARCH_DATE (fi), FALSE);
-	
-  /* XXX */
+    g_return_val_if_fail (fi, FALSE);
+    g_return_val_if_fail (IS_GNCSEARCH_DATE (fi), FALSE);
 
-  return valid;
+    /* XXX */
+
+    return valid;
 }
 
 static void
 date_changed (GNCDateEdit *date_edit, GNCSearchDate *fe)
 {
-  fe->ts = gnc_date_edit_get_date_ts (date_edit);
+    fe->ts = gnc_date_edit_get_date_ts (date_edit);
 }
 
 static GtkWidget *
 make_menu (GNCSearchCoreType *fe)
 {
-  GNCSearchDate *fi = (GNCSearchDate *)fe;
-  GtkComboBox *combo;
+    GNCSearchDate *fi = (GNCSearchDate *)fe;
+    GtkComboBox *combo;
 
-  combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
+    combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
 
-  gnc_combo_box_search_add(combo, _("is before"), COMPARE_LT);
-  gnc_combo_box_search_add(combo, _("is before or on"), COMPARE_LTE);
-  gnc_combo_box_search_add(combo, _("is on"), COMPARE_EQUAL);
-  gnc_combo_box_search_add(combo, _("is not on"), COMPARE_NEQ);
-  gnc_combo_box_search_add(combo, _("is after"), COMPARE_GT);
-  gnc_combo_box_search_add(combo, _("is on or after"), COMPARE_GTE);
-  gnc_combo_box_search_changed(combo, &fi->how);
-  gnc_combo_box_search_set_active(combo, fi->how ? fi->how : COMPARE_LT);
+    gnc_combo_box_search_add(combo, _("is before"), COMPARE_LT);
+    gnc_combo_box_search_add(combo, _("is before or on"), COMPARE_LTE);
+    gnc_combo_box_search_add(combo, _("is on"), COMPARE_EQUAL);
+    gnc_combo_box_search_add(combo, _("is not on"), COMPARE_NEQ);
+    gnc_combo_box_search_add(combo, _("is after"), COMPARE_GT);
+    gnc_combo_box_search_add(combo, _("is on or after"), COMPARE_GTE);
+    gnc_combo_box_search_changed(combo, &fi->how);
+    gnc_combo_box_search_set_active(combo, fi->how ? fi->how : COMPARE_LT);
 
-  return GTK_WIDGET(combo);
+    return GTK_WIDGET(combo);
 }
 
 static void
 grab_focus (GNCSearchCoreType *fe)
 {
-  GNCSearchDate *fi = (GNCSearchDate *)fe;
-  GNCSearchDatePrivate *priv;
+    GNCSearchDate *fi = (GNCSearchDate *)fe;
+    GNCSearchDatePrivate *priv;
 
-  g_return_if_fail (fi);
-  g_return_if_fail (IS_GNCSEARCH_DATE (fi));
+    g_return_if_fail (fi);
+    g_return_if_fail (IS_GNCSEARCH_DATE (fi));
 
-  priv = _PRIVATE(fi);
-  if (priv->entry)
-    gtk_widget_grab_focus (GNC_DATE_EDIT(priv->entry)->date_entry);
+    priv = _PRIVATE(fi);
+    if (priv->entry)
+        gtk_widget_grab_focus (GNC_DATE_EDIT(priv->entry)->date_entry);
 }
 
 static void
 editable_enters (GNCSearchCoreType *fe)
 {
-  GNCSearchDate *fi = (GNCSearchDate *)fe;
-  GNCSearchDatePrivate *priv;
+    GNCSearchDate *fi = (GNCSearchDate *)fe;
+    GNCSearchDatePrivate *priv;
 
-  g_return_if_fail (fi);
-  g_return_if_fail (IS_GNCSEARCH_DATE (fi));
+    g_return_if_fail (fi);
+    g_return_if_fail (IS_GNCSEARCH_DATE (fi));
 
-  priv = _PRIVATE(fi);
-  if (priv->entry)
-    gnc_date_activates_default (GNC_DATE_EDIT (priv->entry), TRUE);
+    priv = _PRIVATE(fi);
+    if (priv->entry)
+        gnc_date_activates_default (GNC_DATE_EDIT (priv->entry), TRUE);
 }
 
 static GtkWidget *
 gncs_get_widget (GNCSearchCoreType *fe)
 {
-  GtkWidget *entry, *menu, *box;
-  GNCSearchDate *fi = (GNCSearchDate *)fe;
-  GNCSearchDatePrivate *priv;
-	
-  g_return_val_if_fail (fi, NULL);
-  g_return_val_if_fail (IS_GNCSEARCH_DATE (fi), NULL);
+    GtkWidget *entry, *menu, *box;
+    GNCSearchDate *fi = (GNCSearchDate *)fe;
+    GNCSearchDatePrivate *priv;
 
-  priv = _PRIVATE(fi);
-  box = gtk_hbox_new (FALSE, 3);
+    g_return_val_if_fail (fi, NULL);
+    g_return_val_if_fail (IS_GNCSEARCH_DATE (fi), NULL);
 
-  /* Build and connect the option menu */
-  menu = make_menu (fe);
-  gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+    priv = _PRIVATE(fi);
+    box = gtk_hbox_new (FALSE, 3);
 
-  /* Build and connect the date entry window */
-  entry = gnc_date_edit_new_ts (fi->ts, FALSE, FALSE);
-  g_signal_connect (G_OBJECT (entry), "date_changed", G_CALLBACK (date_changed), fe);
-  gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
-  g_object_ref (entry);
-  priv->entry = entry;
+    /* Build and connect the option menu */
+    menu = make_menu (fe);
+    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
 
-  /* And return the box */
-  return box;
+    /* Build and connect the date entry window */
+    entry = gnc_date_edit_new_ts (fi->ts, FALSE, FALSE);
+    g_signal_connect (G_OBJECT (entry), "date_changed", G_CALLBACK (date_changed), fe);
+    gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
+    g_object_ref (entry);
+    priv->entry = entry;
+
+    /* And return the box */
+    return box;
 }
 
 static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 {
-  GNCSearchDate *fi = (GNCSearchDate *)fe;
-  GNCSearchDatePrivate *priv;
+    GNCSearchDate *fi = (GNCSearchDate *)fe;
+    GNCSearchDatePrivate *priv;
 
-  g_return_val_if_fail (fi, NULL);
-  g_return_val_if_fail (IS_GNCSEARCH_DATE (fi), NULL);
+    g_return_val_if_fail (fi, NULL);
+    g_return_val_if_fail (IS_GNCSEARCH_DATE (fi), NULL);
 
-  /* Make sure we actually use the currently-entered date */
-  priv = _PRIVATE(fi);
-  if (priv->entry)
-    fi->ts = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (priv->entry));
+    /* Make sure we actually use the currently-entered date */
+    priv = _PRIVATE(fi);
+    if (priv->entry)
+        fi->ts = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (priv->entry));
 
-  return gncQueryDatePredicate (fi->how, DATE_MATCH_NORMAL, fi->ts);
+    return gncQueryDatePredicate (fi->how, DATE_MATCH_NORMAL, fi->ts);
 }
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
 {
-  GNCSearchDate *se, *fse = (GNCSearchDate *)fe;
+    GNCSearchDate *se, *fse = (GNCSearchDate *)fe;
 
-  g_return_val_if_fail (fse, NULL);
-  g_return_val_if_fail (IS_GNCSEARCH_DATE (fse), NULL);
+    g_return_val_if_fail (fse, NULL);
+    g_return_val_if_fail (IS_GNCSEARCH_DATE (fse), NULL);
 
-  se = gnc_search_date_new ();
-  gnc_search_date_set_date (se, fse->ts);
-  gnc_search_date_set_how (se, fse->how);
+    se = gnc_search_date_new ();
+    gnc_search_date_set_date (se, fse->ts);
+    gnc_search_date_set_how (se, fse->how);
 
-  return (GNCSearchCoreType *)se;
+    return (GNCSearchCoreType *)se;
 }

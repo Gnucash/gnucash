@@ -52,27 +52,27 @@ typedef struct _GncHtmlPrivate GncHtmlPrivate;
  * by the handler and will be freed by gnc_html. */
 typedef struct
 {
-	/* The following members are used if the handler succeeds (returns TRUE). */
+    /* The following members are used if the handler succeeds (returns TRUE). */
 
-	gboolean load_to_stream; /* If TRUE, the url should be loaded from
+    gboolean load_to_stream; /* If TRUE, the url should be loaded from
                             * a stream using the rest of the data in
                             * the struct into the original gnc_html
                             * object. If FALSE, the handler will
                             * perform all needed actions itself. */
 
-	URLType url_type;        /* Defaults to original */
-	gchar* location;         /* If NULL, use original (NULL is default) */
-	gchar* label;            /* If NULL, use original (NULL is default) */
+    URLType url_type;        /* Defaults to original */
+    gchar* location;         /* If NULL, use original (NULL is default) */
+    gchar* label;            /* If NULL, use original (NULL is default) */
 
-	URLType base_type;
-	gchar* base_location;
+    URLType base_type;
+    gchar* base_location;
 
-	/* The following members are used if the handler fails (returns FALSE). */
-	gchar* error_message;
+    /* The following members are used if the handler fails (returns FALSE). */
+    gchar* error_message;
 } GNCURLResult;
 
 typedef gboolean (* GncHTMLObjectCB)(GncHtml* html, gpointer eb,
-                                 gpointer data); 
+                                     gpointer data);
 typedef gboolean (* GncHTMLStreamCB)(const gchar* location, gchar** data, int* datalen);
 typedef gboolean (* GncHTMLUrlCB)(const gchar* location, const gchar* label,
                                   gboolean new_window, GNCURLResult* result);
@@ -115,7 +115,7 @@ void gnc_html_unregister_url_handler( URLType url_type );
 typedef int  (* GncHTMLUrltypeCB)(URLType ut);
 typedef void (* GncHTMLFlyoverCB)(GncHtml* html, const gchar* url,
                                   gpointer data);
-typedef void (* GncHTMLLoadCB)(GncHtml* html, URLType type, 
+typedef void (* GncHTMLLoadCB)(GncHtml* html, URLType type,
                                const gchar* location, const gchar* label,
                                gpointer data);
 typedef int  (* GncHTMLButtonCB)(GncHtml* html, GdkEventButton* event,
@@ -123,31 +123,31 @@ typedef int  (* GncHTMLButtonCB)(GncHtml* html, GdkEventButton* event,
 
 struct _GncHtmlClass
 {
-	GtkBinClass parent_class;
+    GtkBinClass parent_class;
 
-	/* Methods */
-	void (*show_url)( GncHtml* html, 
+    /* Methods */
+    void (*show_url)( GncHtml* html,
                       URLType type,
-                      const gchar* location, 
+                      const gchar* location,
                       const gchar* label,
                       gboolean new_window_hint );
-	void (*show_data)( GncHtml* html, const gchar* data, int datalen );
-	void (*reload)( GncHtml* html );
-	void (*copy_to_clipboard)( GncHtml* html );
-	gboolean (*export_to_file)( GncHtml* html, const gchar* file );
-	void (*print)( GncHtml* html );
-	void (*cancel)( GncHtml* html );
-	URLType (*parse_url)( GncHtml* html, const gchar* url, 
+    void (*show_data)( GncHtml* html, const gchar* data, int datalen );
+    void (*reload)( GncHtml* html );
+    void (*copy_to_clipboard)( GncHtml* html );
+    gboolean (*export_to_file)( GncHtml* html, const gchar* file );
+    void (*print)( GncHtml* html );
+    void (*cancel)( GncHtml* html );
+    URLType (*parse_url)( GncHtml* html, const gchar* url,
                           gchar** url_location, gchar** url_label );
-	void (*set_parent)( GncHtml* html, GtkWindow* parent );
+    void (*set_parent)( GncHtml* html, GtkWindow* parent );
 };
 
 struct _GncHtml
 {
-	GtkBin parent_instance;
+    GtkBin parent_instance;
 
-	/*< private >*/
-	GncHtmlPrivate* priv;
+    /*< private >*/
+    GncHtmlPrivate* priv;
 };
 
 /**
@@ -162,8 +162,8 @@ void gnc_html_destroy( GncHtml* html );
  *
  * @param html GncHtml object
  */
-void gnc_html_show_url( GncHtml* html, URLType type, const gchar* location, 
-						const gchar* label, gboolean new_window_hint );
+void gnc_html_show_url( GncHtml* html, URLType type, const gchar* location,
+                        const gchar* label, gboolean new_window_hint );
 
 /**
  * Displays an HTML string in a GncHtml object.
@@ -217,8 +217,8 @@ void gnc_html_cancel( GncHtml* html );
  * @param url_location Pointer where to store address of string containing main URI
  * @param url_label Pointer where to store address of string containing label
  */
-URLType gnc_html_parse_url( GncHtml* html, const gchar* url, 
-							gchar** url_location, gchar** url_label );
+URLType gnc_html_parse_url( GncHtml* html, const gchar* url,
+                            gchar** url_location, gchar** url_label );
 
 /**
  * Returns the history for this html engine

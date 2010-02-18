@@ -42,7 +42,7 @@
  * @return TRUE if successful, FALSE if error
  */
 gboolean gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid,
-					gboolean is_infant, KvpFrame* pFrame );
+                             gboolean is_infant, KvpFrame* pFrame );
 
 /**
  * gnc_sql_slots_delete - Deletes slots for an object from the db.
@@ -83,7 +83,7 @@ void gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list );
 typedef QofInstance* (*BookLookupFn)( const GUID* guid, const QofBook* book );
 
 void gnc_sql_slots_load_for_sql_subquery( GncSqlBackend* be, const gchar* subquery,
-						BookLookupFn lookup_fn );
+        BookLookupFn lookup_fn );
 
 void gnc_sql_init_slots_handler( void );
 

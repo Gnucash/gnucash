@@ -42,27 +42,27 @@
 
 struct gnc_lot_struct
 {
-  QofInstance inst;
+    QofInstance inst;
 
-  /* Account to which this lot applies.  All splits in the lot must
-   * belong to this account.
-   */
-  Account * account;
+    /* Account to which this lot applies.  All splits in the lot must
+     * belong to this account.
+     */
+    Account * account;
 
-  /* List of splits that belong to this lot. */
-  SplitList *splits;
+    /* List of splits that belong to this lot. */
+    SplitList *splits;
 
-  /* Handy cached value to indicate if lot is closed. */
-  /* If value is negative, then the cache is invalid. */
-  signed char is_closed;
+    /* Handy cached value to indicate if lot is closed. */
+    /* If value is negative, then the cache is invalid. */
+    signed char is_closed;
 
-  /* traversal marker, handy for preventing recursion */
-  unsigned char marker;
+    /* traversal marker, handy for preventing recursion */
+    unsigned char marker;
 };
 
 struct _GncLotClass
 {
-  QofInstanceClass parent_class;
+    QofInstanceClass parent_class;
 };
 
 #define gnc_lot_set_guid(L,G)  qof_instance_set_guid(QOF_INSTANCE(L),&(G))

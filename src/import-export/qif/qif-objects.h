@@ -28,11 +28,12 @@
 typedef struct _QifObject *QifObject;
 typedef struct _QifData *QifData;
 
-struct _QifObject {
-  const char*	type;
-  void		(*destroy)(QifObject);
+struct _QifObject
+{
+    const char*	type;
+    void		(*destroy)(QifObject);
 
-  /* QIF Objects contain data beyond this point.. */
+    /* QIF Objects contain data beyond this point.. */
 };
 
 #define QIF_O_ACCOUNT	"qif-acct"

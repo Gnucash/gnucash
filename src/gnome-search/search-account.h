@@ -32,18 +32,20 @@
 typedef struct _GNCSearchAccount	GNCSearchAccount;
 typedef struct _GNCSearchAccountClass	GNCSearchAccountClass;
 
-struct _GNCSearchAccount {
-  GNCSearchCoreType parent;
+struct _GNCSearchAccount
+{
+    GNCSearchCoreType parent;
 
-  guid_match_t	how;
+    guid_match_t	how;
 };
 
-struct _GNCSearchAccountClass {
-  GNCSearchCoreTypeClass parent_class;
+struct _GNCSearchAccountClass
+{
+    GNCSearchCoreTypeClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  /* signals */
+    /* signals */
 };
 
 GType		gnc_search_account_get_type	(void);

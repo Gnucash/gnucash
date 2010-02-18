@@ -1,8 +1,8 @@
- /**@internal
- @file
- \brief module definition/initialization for the generic import infrastructure
- \author Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
- */
+/**@internal
+@file
+\brief module definition/initialization for the generic import infrastructure
+\author Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
+*/
 
 #include "config.h"
 #include <gmodule.h>
@@ -30,43 +30,44 @@ int libgncmod_generic_import_gnc_module_age      = 0;
 char *
 libgncmod_generic_import_gnc_module_path(void)
 {
-  return g_strdup("gnucash/import-export");
+    return g_strdup("gnucash/import-export");
 }
 
 char *
 libgncmod_generic_import_gnc_module_description(void)
 {
-  return g_strdup("Gnome GUI and C code for the generic import functions");
+    return g_strdup("Gnome GUI and C code for the generic import functions");
 }
 
 int
 libgncmod_generic_import_gnc_module_init(int refcount)
 {
-  if(!gnc_module_load("gnucash/engine", 0))
-  {
-    return FALSE;
-  }
-  if(!gnc_module_load("gnucash/app-utils", 0))
-  {
-    return FALSE;
-  }
-  if(!gnc_module_load("gnucash/gnome-utils", 0))
-  {
-    return FALSE;
-  }
+    if (!gnc_module_load("gnucash/engine", 0))
+    {
+        return FALSE;
+    }
+    if (!gnc_module_load("gnucash/app-utils", 0))
+    {
+        return FALSE;
+    }
+    if (!gnc_module_load("gnucash/gnome-utils", 0))
+    {
+        return FALSE;
+    }
 
-  if (!refcount) {
-    gnc_import_format_gnome_register();
-    gnc_preferences_add_to_page("generic-import.glade", "matcher_prefs",
-				_("Online Banking"));
+    if (!refcount)
+    {
+        gnc_import_format_gnome_register();
+        gnc_preferences_add_to_page("generic-import.glade", "matcher_prefs",
+                                    _("Online Banking"));
 
-  }
+    }
 
-  return TRUE;
+    return TRUE;
 }
 
 int
 libgncmod_generic_import_gnc_module_end(int refcount)
 {
-  return TRUE;
+    return TRUE;
 }

@@ -33,21 +33,23 @@
 typedef struct _GNCSearchNumeric	GNCSearchNumeric;
 typedef struct _GNCSearchNumericClass	GNCSearchNumericClass;
 
-struct _GNCSearchNumeric {
-  GNCSearchCoreType parent;
-  struct _GNCSearchNumericPrivate *priv;
+struct _GNCSearchNumeric
+{
+    GNCSearchCoreType parent;
+    struct _GNCSearchNumericPrivate *priv;
 
-  query_compare_t	how;
-  gnc_numeric		value;
-  numeric_match_t	option;
+    query_compare_t	how;
+    gnc_numeric		value;
+    numeric_match_t	option;
 };
 
-struct _GNCSearchNumericClass {
-  GNCSearchCoreTypeClass parent_class;
+struct _GNCSearchNumericClass
+{
+    GNCSearchCoreTypeClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  /* signals */
+    /* signals */
 };
 
 GType		gnc_search_numeric_get_type	(void);

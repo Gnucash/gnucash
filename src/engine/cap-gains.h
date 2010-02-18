@@ -24,19 +24,19 @@
 
 /** @addtogroup CapGains Cap Gains
  *  This file implements the various routines to automatically
- *  compute and handle Cap Gains/Losses resulting from trading 
- *  activities.  Some of these routines might have broader 
- *  applicability, for handling depreciation & etc. 
+ *  compute and handle Cap Gains/Losses resulting from trading
+ *  activities.  Some of these routines might have broader
+ *  applicability, for handling depreciation & etc.
  *
  *  This code is under development, and is 'beta': we think we're
  *  mostly done, and we've tested and "things work for us", but there
- *  may still be something missing, and there might still be some 
+ *  may still be something missing, and there might still be some
  *  bugs.
  *
  *  This code does not currently handle tax distinctions, e.g
- *  the different tax treatment that short-term and long-term 
- *  cap gains have. 
- * 
+ *  the different tax treatment that short-term and long-term
+ *  cap gains have.
+ *
  * The computation of (Realized) Gains/Losses is performed automatically by
  * the lot "scrub" routines, using a "double-balance" algorithm. Every
  * split has two numbers associated with it: an "amount", which is the
@@ -46,8 +46,8 @@
  * sold; thus the amount-balance is zero. But since the purchase/sale of
  * the items in the lot typically happen at different prices, there will
  * typically be a gain/loss. This gain/loss is the grand-total value of all
- * the items in the lot (total costs minus total income). 
- * 
+ * the items in the lot (total costs minus total income).
+ *
  * In order to properly account for the gains/losses, an "adjusting split"
  * is added that brings the total gains/losses back to exactly zero (this
  * is the second "balance" of "double balance"). This adjusting split will
@@ -58,17 +58,17 @@
  * and then the sale of some item, the "gains transaction" will record $300
  * in income in an income account. Thus, the change in the bank balance is
  * always reflected by an equal change in income, assuring that the books
- * are balanced. 
+ * are balanced.
  *
- * Notes about auto-recompute:  If the amount in a split is changed, 
+ * Notes about auto-recompute:  If the amount in a split is changed,
  * then the lot has to be recomputed.
- * This has a potential trickle-through effect on all later lots. 
- * Ideally, later lots are dissolved, and recomputed.  However, some 
+ * This has a potential trickle-through effect on all later lots.
+ * Ideally, later lots are dissolved, and recomputed.  However, some
  * lots may have been user-hand-built. These should be left alone.
  *
 ToDo:
  o XXX Need to create a data-integrity scrubber, tht makes sure that
-   the various flags, and pointers & etc. match. 
+   the various flags, and pointers & etc. match.
  *     @{ */
 
 /** @file cap-gains.h
@@ -82,9 +82,9 @@ ToDo:
 
 #include "gnc-engine.h"
 
-/** The xaccSplitGetCapGains() method returns the value of 
- *    capital gains (if any) associated with the indicated 
- *    split. In order for there to be any capital gains, 
+/** The xaccSplitGetCapGains() method returns the value of
+ *    capital gains (if any) associated with the indicated
+ *    split. In order for there to be any capital gains,
  *    several things must hold true about this split:
  *    (1) It must have been involved in trading (for aexample,
  *        by belonging to a stock or trading account)
@@ -95,9 +95,9 @@ ToDo:
  */
 gnc_numeric xaccSplitGetCapGains(Split *);
 
-/** The xaccAccountHasTrades() method checks to see if the 
+/** The xaccAccountHasTrades() method checks to see if the
  *    indicated account is used in the trading of commodities.
- *    A 'trading' account will contain transactions whose 
+ *    A 'trading' account will contain transactions whose
  *    transaction currency is not the same as the account
  *    commodity.  The existance of such transactions is
  *    the very definition of a 'trade'.   This routine returns
@@ -108,24 +108,24 @@ gboolean xaccAccountHasTrades (const Account *);
 
 /** The xaccAccountFindEarliestOpenLot() method is a handy
  *   utility routine for finding the earliest open lot in
- *   an account whose lot balance is *opposite* to the 
+ *   an account whose lot balance is *opposite* to the
  *   passed argument 'sign'.   By 'earliest lot', we mean
  *   the lot that has a split with the earliest 'date_posted'.
- *   The sign comparison helps identify a lot that can be 
+ *   The sign comparison helps identify a lot that can be
  *   added to: usually, one wants to add splits to a lot so
  *   that the balance only decreases.
  *   If 'currency' is non-null, then this attempts to find
  *   a lot whose opening transaction has the same currency.
  */
-GNCLot * xaccAccountFindEarliestOpenLot (Account *acc, 
-                                         gnc_numeric sign,
-                                         gnc_commodity *currency);
-GNCLot * xaccAccountFindLatestOpenLot (Account *acc, 
+GNCLot * xaccAccountFindEarliestOpenLot (Account *acc,
+        gnc_numeric sign,
+        gnc_commodity *currency);
+GNCLot * xaccAccountFindLatestOpenLot (Account *acc,
                                        gnc_numeric sign,
                                        gnc_commodity *currency);
 
 /** The xaccAccountGetDefaultGainAccount() routine will return
- *   the account to which realized gains/losses may be posted.  
+ *   the account to which realized gains/losses may be posted.
  *   Because gains may be in different currencies, one must
  *   specify the currency type in which the gains will be posted.
  *   This routine does nothing more than return the value of
@@ -135,10 +135,10 @@ GNCLot * xaccAccountFindLatestOpenLot (Account *acc,
  */
 Account * xaccAccountGetDefaultGainAccount (const Account *acc, const gnc_commodity * currency);
 
-/** The xaccAccountSetDefaultGainAccount() routine can be used 
- *   to set the account to which realized gains/losses will be 
- *   posted by default. This routine does nothing more than set 
- *   value of the "/lot-mgmt/gains-act/XXX" key, where XXX is the 
+/** The xaccAccountSetDefaultGainAccount() routine can be used
+ *   to set the account to which realized gains/losses will be
+ *   posted by default. This routine does nothing more than set
+ *   value of the "/lot-mgmt/gains-act/XXX" key, where XXX is the
  *   unique currency name of the currency of gains account.
  */
 void xaccAccountSetDefaultGainAccount (Account *acc, const Account *gains_acct);
@@ -147,25 +147,25 @@ void xaccAccountSetDefaultGainAccount (Account *acc, const Account *gains_acct);
  *  that records the cap gains for this split.  It returns NULL
  *  if not found.  This routine does nothing more than search for
  *  the split recorded in the KVP key "/gains-split"
- */                                       
+ */
 Split * xaccSplitGetCapGainsSplit (const Split *);
 
 /** The xaccSplitGetGainsSourceSplit() routine returns the split
  *  that is the source of the cap gains in this split.  It returns
- *  NULL if not found.  This routine does nothing more than search 
+ *  NULL if not found.  This routine does nothing more than search
  *  for the split recorded in the KVP key "/gains-source"
- */                                       
+ */
 Split * xaccSplitGetGainsSourceSplit (const Split *);
 
 /** The`xaccSplitAssign() routine will take the indicated
- *  split and, if it doesn't already belong to a lot, it will attempt 
+ *  split and, if it doesn't already belong to a lot, it will attempt
  *  to assign it to an appropriate lot.
  *  If the split already belongs to a Lot, this routine does nothing.
  *  If there are no open Lots, this routine will create a new lot
  *  and place the split into it.  If there's an open lot, and its
  *  big enough to accept the split in it's entirety, then the split
  *  will be placed into that lot.  If the split is too big to fit
- *  into the currently open lot, it will be busted up into two 
+ *  into the currently open lot, it will be busted up into two
  *  (or more) pieces, and each placed into a lot accordingly.
  *  If the split needed to be broken up into several pieces, this
  *  routine will return TRUE, else it returns FALSE.
@@ -174,7 +174,7 @@ Split * xaccSplitGetGainsSourceSplit (const Split *);
  *  directory is used to identify the peers. 'gemini'-style kvp's
  *  are used.
  *
- *  This routine uses the "FIFOPolicy" callback, and thus 
+ *  This routine uses the "FIFOPolicy" callback, and thus
  *  implements a "FIFO" First-In First-Out accounting policy.
  *  This is currently the only implemented policy; adding new
  *  policies should be 'easy'; read the source luke.
@@ -208,7 +208,7 @@ Split * xaccSplitAssignToLot (Split *split, GNCLot *lot);
  *  default account is used (and created, if needed).
  *
  *  To compute the gains, the split must belong to a lot. If the
- *  split is the 'opening split', i.e. the earliest split in the 
+ *  split is the 'opening split', i.e. the earliest split in the
  *  lot, then nothing is done, as there are no gains/losses (something
  *  must be bought *and* sold for there to be a gain/loss).
  *

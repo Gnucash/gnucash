@@ -23,27 +23,28 @@
 #ifndef GNC_HTML_P_H
 #define GNC_HTML_P_H
 
-struct _GncHtmlPrivate {
-	GtkWidget* parent;				/* window this html goes into */
-	GtkWidget* container;			/* parent of the gtkhtml widget */
-	gchar* current_link;			/* link under mouse pointer */
+struct _GncHtmlPrivate
+{
+    GtkWidget* parent;				/* window this html goes into */
+    GtkWidget* container;			/* parent of the gtkhtml widget */
+    gchar* current_link;			/* link under mouse pointer */
 
-	URLType base_type;				/* base of URL (path - filename) */
-	gchar* base_location;
+    URLType base_type;				/* base of URL (path - filename) */
+    gchar* base_location;
 
-	GHashTable* request_info;		/* hash uri to GList of GtkHTMLStream * */
+    GHashTable* request_info;		/* hash uri to GList of GtkHTMLStream * */
 
-	/* callbacks */
-	GncHTMLUrltypeCB urltype_cb;	/* is this type OK for this instance? */
-	GncHTMLLoadCB load_cb;
-	GncHTMLFlyoverCB flyover_cb;
-	GncHTMLButtonCB button_cb;
+    /* callbacks */
+    GncHTMLUrltypeCB urltype_cb;	/* is this type OK for this instance? */
+    GncHTMLLoadCB load_cb;
+    GncHTMLFlyoverCB flyover_cb;
+    GncHTMLButtonCB button_cb;
 
-	gpointer flyover_cb_data;
-	gpointer load_cb_data;
-	gpointer button_cb_data;
+    gpointer flyover_cb_data;
+    gpointer load_cb_data;
+    gpointer button_cb_data;
 
-	gnc_html_history * history;
+    gnc_html_history * history;
 };
 
 #endif

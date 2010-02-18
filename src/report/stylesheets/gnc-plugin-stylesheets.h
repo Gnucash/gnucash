@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-stylesheets.h -- 
+/*
+ * gnc-plugin-stylesheets.h --
  * Copyright (C) 2003 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
@@ -40,12 +40,14 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_STYLESHEETS_NAME "gnc-plugin-stylesheets"
 
 /* typedefs & structures */
-typedef struct {
-	GncPlugin gnc_plugin;
+typedef struct
+{
+    GncPlugin gnc_plugin;
 } GncPluginStylesheets;
 
-typedef struct {
-	GncPluginClass gnc_plugin;
+typedef struct
+{
+    GncPluginClass gnc_plugin;
 } GncPluginStylesheetsClass;
 
 /* function prototypes */

@@ -32,19 +32,21 @@
 typedef struct _GNCSearchInt64	GNCSearchInt64;
 typedef struct _GNCSearchInt64Class	GNCSearchInt64Class;
 
-struct _GNCSearchInt64 {
-  GNCSearchCoreType parent;
+struct _GNCSearchInt64
+{
+    GNCSearchCoreType parent;
 
-  query_compare_t	how;
-  gint64		value;
+    query_compare_t	how;
+    gint64		value;
 };
 
-struct _GNCSearchInt64Class {
-  GNCSearchCoreTypeClass parent_class;
+struct _GNCSearchInt64Class
+{
+    GNCSearchCoreTypeClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  /* signals */
+    /* signals */
 };
 
 GType		gnc_search_int64_get_type	(void);

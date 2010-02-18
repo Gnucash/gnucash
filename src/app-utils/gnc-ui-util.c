@@ -206,7 +206,7 @@ gnc_get_current_book (void)
 void
 gnc_set_current_book_tax_name (const gchar *tax_name)
 {
-	qof_book_set_string_option(gnc_get_current_book(), OPTION_TAXUS_NAME, tax_name);
+    qof_book_set_string_option(gnc_get_current_book(), OPTION_TAXUS_NAME, tax_name);
 }
 
 const gchar *

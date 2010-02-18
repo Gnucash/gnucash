@@ -20,18 +20,18 @@
     @{ */
 /**@file import-settings.h
    \brief Import preference handling.
-   *User preference interface for 
+   *User preference interface for
    transaction matching (for both the gui and the backend)
    \author Copyright (C) 2002 Benoit Grégoire
 */
- 
+
 #ifndef GNC_GEN_SETTINGS_H
 #define GNC_GEN_SETTINGS_H
 
 typedef struct _genimportsettings GNCImportSettings;
 
 /************************************************************************
- *   Getter/Setter Functions for the Data Types. 
+ *   Getter/Setter Functions for the Data Types.
  ************************************************************************/
 
 
@@ -39,7 +39,7 @@ typedef struct _genimportsettings GNCImportSettings;
 /** Allocates a new GNCImportSettings object, and initialize it with
  *    the appropriate user prefs.
  */
-GNCImportSettings * 
+GNCImportSettings *
 gnc_import_Settings_new (void);
 
 /** Destructor */
@@ -50,10 +50,10 @@ void gnc_import_Settings_delete (GNCImportSettings *settings);
 /*@{*/
 
 /** Return the allowed amount range for fuzzy amount matching.
-    @return The allowed amount range for fuzzy amount matching, 
+    @return The allowed amount range for fuzzy amount matching,
     in the users default commodity.
 */
-double 
+double
 gnc_import_Settings_get_fuzzy_amount (GNCImportSettings *settings);
 
 /** Return the selected action is enable state.
@@ -91,7 +91,7 @@ gint gnc_import_Settings_get_display_threshold (GNCImportSettings *settings);
  * ignored altogether. For use cases without paper checks (e.g. HBCI),
  * values like 14 (days) might be appropriate, whereas for use cases
  * with paper checks (e.g. OFX, QIF), values like 42 (days) seem more
- * appropriate. 
+ * appropriate.
  */
 void gnc_import_Settings_set_match_date_hardlimit (GNCImportSettings *settings, gint match_date_hardlimit);
 /** Returns the hard-limiting number of days that a matching split may differ. */

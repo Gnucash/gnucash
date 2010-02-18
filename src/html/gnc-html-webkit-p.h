@@ -25,11 +25,12 @@
 
 #include "gnc-html-p.h"
 
-struct _GncHtmlWebkitPrivate {
-	struct _GncHtmlPrivate base;
+struct _GncHtmlWebkitPrivate
+{
+    struct _GncHtmlPrivate base;
 
-	WebKitWebView* web_view;				/* webkit widget itself */
-	gchar* html_string;						/* html string being displayed */
+    WebKitWebView* web_view;				/* webkit widget itself */
+    gchar* html_string;						/* html string being displayed */
 };
 
 #endif

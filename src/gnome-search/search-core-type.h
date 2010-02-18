@@ -31,24 +31,26 @@
 #define GNC_IS_SEARCH_CORE_TYPE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_CORE_TYPE))
 #define GNC_SEARCH_CORE_TYPE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypeClass))
 
-typedef struct {
-  GtkObject parent;
+typedef struct
+{
+    GtkObject parent;
 
-  GNCSearchParam *	param;
+    GNCSearchParam *	param;
 } GNCSearchCoreType;
 
-typedef struct {
-  GObjectClass parent_class;
+typedef struct
+{
+    GObjectClass parent_class;
 
-  /* virtual methods */
-  void			(*grab_focus) (GNCSearchCoreType *fe);
-  void			(*editable_enters) (GNCSearchCoreType *fe);
-  gboolean		(*validate) (GNCSearchCoreType *fe);
-  GNCSearchCoreType *	(*clone) (GNCSearchCoreType *fe);
-  GtkWidget *		(*get_widget) (GNCSearchCoreType *);
-  QueryPredData_t	(*get_predicate) (GNCSearchCoreType *);
+    /* virtual methods */
+    void			(*grab_focus) (GNCSearchCoreType *fe);
+    void			(*editable_enters) (GNCSearchCoreType *fe);
+    gboolean		(*validate) (GNCSearchCoreType *fe);
+    GNCSearchCoreType *	(*clone) (GNCSearchCoreType *fe);
+    GtkWidget *		(*get_widget) (GNCSearchCoreType *);
+    QueryPredData_t	(*get_predicate) (GNCSearchCoreType *);
 
-  /* signals */
+    /* signals */
 } GNCSearchCoreTypeClass;
 
 /* These are internal functions */
@@ -69,7 +71,7 @@ QueryPredData_t		gnc_search_core_type_get_predicate (GNCSearchCoreType *fe);
 /* Register a new type in the Core Type Database */
 typedef GNCSearchCoreType * (*GNCSearchCoreNew) (void);
 void gnc_search_core_register_type (const char *type_name,
-				    GNCSearchCoreNew fcn);
+                                    GNCSearchCoreNew fcn);
 
 
 /* Initialize and Finalize the Core Type Database */

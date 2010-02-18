@@ -180,7 +180,7 @@ void gnc_ab_trans_templ_set_recp_name(GncABTransTempl *t,
  * @param recp_account Account Number of the recipient
  */
 void gnc_ab_trans_templ_set_recp_account(GncABTransTempl *t,
-                                         const gchar *recp_account);
+        const gchar *recp_account);
 
 /**
  * Replace the Bank Code of the recipient stored in a template.
@@ -189,7 +189,7 @@ void gnc_ab_trans_templ_set_recp_account(GncABTransTempl *t,
  * @param recp_bankcode Bank Code of the recipient
  */
 void gnc_ab_trans_templ_set_recp_bankcode(GncABTransTempl *t,
-                                          const gchar *recp_bankcode);
+        const gchar *recp_bankcode);
 
 /**
  * Replace the amount stored in a template.
@@ -214,7 +214,7 @@ void gnc_ab_trans_templ_set_purpose(GncABTransTempl *t, const gchar *purpose);
  * @param purpose_cont Second purpose line
  */
 void gnc_ab_trans_templ_set_purpose_cont(GncABTransTempl *t,
-                                         const gchar *purpose_cont);
+        const gchar *purpose_cont);
 
 G_END_DECLS
 

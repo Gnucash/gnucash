@@ -20,7 +20,7 @@
     @{ */
 /** @file import-commodity-matcher.h
   @brief A Generic commodity matcher/picker
-  @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>    
+  @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
 #ifndef IMPORT_COMMODITY_MATCHER_H
 #define IMPORT_COMMODITY_MATCHER_H
@@ -32,7 +32,7 @@
   commodity.  If an commodity with a matching cusip is
   found, the function immediately returns with a pointer to that
   commodity.  Otherwise, the user may be prompted to select a GnuCash
-  account or create a new one (in both cases, the cusip is 
+  account or create a new one (in both cases, the cusip is
   written to the commodity's cusip field, overwriting anything that
   was there before.
 
@@ -41,7 +41,7 @@
     The stock ticker is NOT appropriate, unless you have no other option.
 
     @param auto_create If 0, if the cusip value in unknown,
-    the function returns NULL, otherwise, the user will be asked to 
+    the function returns NULL, otherwise, the user will be asked to
     create a new account.
 
     @param default_fullname A human-readable description of the commodity, such
@@ -59,9 +59,9 @@
 
 */
 gnc_commodity * gnc_import_select_commodity(char * cusip,
-				    char auto_create,
-				    char * default_fullname,
-				    char * default_mnemonic);
+        char auto_create,
+        char * default_fullname,
+        char * default_mnemonic);
 
 #endif
 /**@}*/

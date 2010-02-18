@@ -21,7 +21,7 @@
 /**@internal
  @file import-commodity-matcher.c
   @brief  A Generic commodity matcher/picker
-  @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>    
+  @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
 #include "config.h"
 
@@ -52,94 +52,94 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 
 
 gnc_commodity * gnc_import_select_commodity(char * cusip,
-				    char auto_create,
-				    char * default_fullname,
-				    char * default_mnemonic)
+        char auto_create,
+        char * default_fullname,
+        char * default_mnemonic)
 {
-  gnc_commodity_table * commodity_table = gnc_get_current_commodities ();
-  gnc_commodity * retval = NULL;
-  gnc_commodity * tmp_commodity = NULL;
-  char * tmp_namespace = NULL;
-  GList * commodity_list=NULL;
-  GList * namespace_list=NULL;
-  DEBUG("Default fullname received: %s",
-        default_fullname ? default_fullname : "(null)");
-  DEBUG("Default mnemonic received: %s",
-        default_mnemonic ? default_mnemonic : "(null)");
-  
-  DEBUG("Looking for commodity with exchange_code: %s", cusip);
+    gnc_commodity_table * commodity_table = gnc_get_current_commodities ();
+    gnc_commodity * retval = NULL;
+    gnc_commodity * tmp_commodity = NULL;
+    char * tmp_namespace = NULL;
+    GList * commodity_list = NULL;
+    GList * namespace_list = NULL;
+    DEBUG("Default fullname received: %s",
+          default_fullname ? default_fullname : "(null)");
+    DEBUG("Default mnemonic received: %s",
+          default_mnemonic ? default_mnemonic : "(null)");
 
-  namespace_list = gnc_commodity_table_get_namespaces(commodity_table);
+    DEBUG("Looking for commodity with exchange_code: %s", cusip);
+
+    namespace_list = gnc_commodity_table_get_namespaces(commodity_table);
 
 
-  namespace_list = g_list_first(namespace_list);
-  while( namespace_list!=NULL&&retval==NULL)
+    namespace_list = g_list_first(namespace_list);
+    while ( namespace_list != NULL && retval == NULL)
     {
-      tmp_namespace=namespace_list->data;
-      DEBUG("Looking at namespace %s",tmp_namespace);
-      
-
-      /*Nested loop*/
-      commodity_list = gnc_commodity_table_get_commodities(commodity_table,
-							   tmp_namespace);
-      commodity_list  = g_list_first(commodity_list);
-      while( commodity_list!=NULL&&retval==NULL)
-	{
-	  tmp_commodity=commodity_list->data;
-	  DEBUG("Looking at commodity %s",gnc_commodity_get_fullname(tmp_commodity));
-	  
-	  if(gnc_commodity_get_cusip(tmp_commodity)!=NULL &&
-	     cusip != NULL &&
-	     strncmp(gnc_commodity_get_cusip(tmp_commodity),cusip,strlen(cusip))==0)
-	    {
-	      retval = tmp_commodity;
-	      DEBUG("Commodity %s%s",gnc_commodity_get_fullname(retval)," matches.");
-	    }    
-	  commodity_list=g_list_next(commodity_list);
-	}  
-      /*End nested loop*/
-
-      namespace_list=g_list_next(namespace_list);
-    }  
-  
+        tmp_namespace = namespace_list->data;
+        DEBUG("Looking at namespace %s", tmp_namespace);
 
 
-  
-  g_list_free(commodity_list);
-  g_list_free(namespace_list);
+        /*Nested loop*/
+        commodity_list = gnc_commodity_table_get_commodities(commodity_table,
+                         tmp_namespace);
+        commodity_list  = g_list_first(commodity_list);
+        while ( commodity_list != NULL && retval == NULL)
+        {
+            tmp_commodity = commodity_list->data;
+            DEBUG("Looking at commodity %s", gnc_commodity_get_fullname(tmp_commodity));
 
-  if(retval==NULL && auto_create != 0)
-    {
-      const gchar *message = 
-        _("Please select a commodity to match the following exchange "
-	  "specific code. Please note that the exchange code of the "
-	  "commodity you select will be overwritten.");
-      retval=gnc_ui_select_commodity_modal_full(NULL,
-						NULL,
-						DIAG_COMM_ALL,
-						message,
-						cusip,
-						default_fullname,
-						default_mnemonic);
-      
+            if (gnc_commodity_get_cusip(tmp_commodity) != NULL &&
+                    cusip != NULL &&
+                    strncmp(gnc_commodity_get_cusip(tmp_commodity), cusip, strlen(cusip)) == 0)
+            {
+                retval = tmp_commodity;
+                DEBUG("Commodity %s%s", gnc_commodity_get_fullname(retval), " matches.");
+            }
+            commodity_list = g_list_next(commodity_list);
+        }
+        /*End nested loop*/
+
+        namespace_list = g_list_next(namespace_list);
     }
-  /* There seems to be a problem here - if the matched commodity does not
-     have a cusip defined (gnc_commodity_get_cusip returns NULL) then
-     it does not get overwritten - which is not consistent with the
-     message - so Im adding it to do this.  Looks like this is all
-     that was needed to fix the cash value used as stock units problem
-     for pre-defined commodities which didnt have the cusip defined! */
-  if (retval != NULL&&
-      gnc_commodity_get_cusip(retval)!=NULL &&
-      cusip != NULL &&
-      (strncmp(gnc_commodity_get_cusip(retval),cusip,strlen(cusip))!=0))
+
+
+
+
+    g_list_free(commodity_list);
+    g_list_free(namespace_list);
+
+    if (retval == NULL && auto_create != 0)
     {
-      gnc_commodity_set_cusip(retval, cusip);
+        const gchar *message =
+            _("Please select a commodity to match the following exchange "
+              "specific code. Please note that the exchange code of the "
+              "commodity you select will be overwritten.");
+        retval = gnc_ui_select_commodity_modal_full(NULL,
+                 NULL,
+                 DIAG_COMM_ALL,
+                 message,
+                 cusip,
+                 default_fullname,
+                 default_mnemonic);
+
     }
-  else if (gnc_commodity_get_cusip(retval)==NULL && cusip != NULL)
+    /* There seems to be a problem here - if the matched commodity does not
+       have a cusip defined (gnc_commodity_get_cusip returns NULL) then
+       it does not get overwritten - which is not consistent with the
+       message - so Im adding it to do this.  Looks like this is all
+       that was needed to fix the cash value used as stock units problem
+       for pre-defined commodities which didnt have the cusip defined! */
+    if (retval != NULL &&
+            gnc_commodity_get_cusip(retval) != NULL &&
+            cusip != NULL &&
+            (strncmp(gnc_commodity_get_cusip(retval), cusip, strlen(cusip)) != 0))
     {
-      gnc_commodity_set_cusip(retval, cusip);
+        gnc_commodity_set_cusip(retval, cusip);
     }
-  return retval;
+    else if (gnc_commodity_get_cusip(retval) == NULL && cusip != NULL)
+    {
+        gnc_commodity_set_cusip(retval, cusip);
+    }
+    return retval;
 };
 /**@}*/

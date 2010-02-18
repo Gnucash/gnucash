@@ -25,66 +25,70 @@
 #ifndef GNC_HTML_GRAPH_GOG_H
 #define GNC_HTML_GRAPH_GOG_H 1
 
-typedef struct {
+typedef struct
+{
     gint width;
-	gint height;
-	const gchar* title;
-	const gchar* subtitle;
-	gint datasize;
-	gdouble* data;
-	gchar** labels;
-	gchar** colors;
+    gint height;
+    const gchar* title;
+    const gchar* subtitle;
+    gint datasize;
+    gdouble* data;
+    gchar** labels;
+    gchar** colors;
 } GncHtmlPieChartInfo;
 
-typedef struct {
+typedef struct
+{
     gint width;
-	gint height;
-	const gchar* title;
-	const gchar* subtitle;
-	gint data_rows;
-	gint data_cols;
-	gdouble* data;
-	gchar** col_labels;
-	gchar** row_labels;
-	gchar** col_colors;
-	const gchar* x_axis_label;
-	const gchar* y_axis_label;
-	gboolean rotate_row_labels;
-	gboolean stacked;
+    gint height;
+    const gchar* title;
+    const gchar* subtitle;
+    gint data_rows;
+    gint data_cols;
+    gdouble* data;
+    gchar** col_labels;
+    gchar** row_labels;
+    gchar** col_colors;
+    const gchar* x_axis_label;
+    const gchar* y_axis_label;
+    gboolean rotate_row_labels;
+    gboolean stacked;
 } GncHtmlBarChartInfo;
 
-typedef struct {
+typedef struct
+{
     gint width;
-	gint height;
-	const gchar* title;
-	const gchar* subtitle;
-	gint data_rows;
-	gint data_cols;
-	gdouble* data;
-	gchar** col_labels;
-	gchar** row_labels;
-	gchar** col_colors;
-	gboolean rotate_row_labels;
-	gboolean stacked;
-	gboolean markers;
-	gboolean major_grid;
-	gboolean minor_grid;
-	const gchar* x_axis_label;
-	const gchar* y_axis_label;
+    gint height;
+    const gchar* title;
+    const gchar* subtitle;
+    gint data_rows;
+    gint data_cols;
+    gdouble* data;
+    gchar** col_labels;
+    gchar** row_labels;
+    gchar** col_colors;
+    gboolean rotate_row_labels;
+    gboolean stacked;
+    gboolean markers;
+    gboolean major_grid;
+    gboolean minor_grid;
+    const gchar* x_axis_label;
+    const gchar* y_axis_label;
 } GncHtmlLineChartInfo;
 
-typedef struct {
+typedef struct
+{
     gint width;
-	gint height;
-	const gchar* title;
-	const gchar* subtitle;
-	const gchar* x_axis_label;
-	const gchar* y_axis_label;
-	gint datasize;
-	gdouble* xData;
-	gdouble* yData;
-	const gchar* marker_str;
-	const gchar* color_str;
+    gint height;
+    const gchar* title;
+    const gchar* subtitle;
+    const gchar* x_axis_label;
+    const gchar* y_axis_label;
+    gint datasize;
+    gdouble* xData;
+    gdouble* yData;
+    const gchar* marker_str;
+    const gchar* color_str;
 } GncHtmlScatterPlotInfo;
 
 void gnc_html_graph_gog_init( void );

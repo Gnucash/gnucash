@@ -368,17 +368,18 @@ guid_init(void)
     /* files */
     {
         const char * files[] =
-            { "/etc/passwd",
-              "/proc/loadavg",
-              "/proc/meminfo",
-              "/proc/net/dev",
-              "/proc/rtc",
-              "/proc/self/environ",
-              "/proc/self/stat",
-              "/proc/stat",
-              "/proc/uptime",
-              NULL
-            };
+        {
+            "/etc/passwd",
+            "/proc/loadavg",
+            "/proc/meminfo",
+            "/proc/net/dev",
+            "/proc/rtc",
+            "/proc/self/environ",
+            "/proc/self/stat",
+            "/proc/stat",
+            "/proc/uptime",
+            NULL
+        };
         int i;
 
         for (i = 0; files[i] != NULL; i++)
@@ -546,7 +547,7 @@ guid_new(GUID *guid)
     * Something must be broken somewhere, and merely adding more salt
     * is just hiding the problem, not fixing it.
     */
-    init_from_int (433781*counter);
+    init_from_int (433781 * counter);
     init_from_buff (guid->data, GUID_DATA_SIZE);
 
     if (counter == 0)

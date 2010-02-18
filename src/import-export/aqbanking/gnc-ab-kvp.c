@@ -156,7 +156,8 @@ gnc_ab_get_account_kvp(const Account *a, gboolean create)
 {
     kvp_frame *toplevel = xaccAccountGetSlots(a);
     kvp_frame *result = kvp_frame_get_frame(toplevel, AB_KEY);
-    if (!result && create) {
+    if (!result && create)
+    {
         result = kvp_frame_new();
         kvp_frame_add_frame_nc(toplevel, AB_KEY, result);
     }
@@ -168,7 +169,8 @@ gnc_ab_get_book_kvp(QofBook *b, gboolean create)
 {
     kvp_frame *toplevel = qof_book_get_slots(b);
     kvp_frame *result = kvp_frame_get_frame(toplevel, AB_KEY);
-    if (!result && create) {
+    if (!result && create)
+    {
         result = kvp_frame_new();
         kvp_frame_add_frame_nc(toplevel, AB_KEY, result);
     }

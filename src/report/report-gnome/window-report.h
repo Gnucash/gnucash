@@ -27,7 +27,7 @@
 
 //#include "gnc-html.h"
 #include "qof.h"
-  
+
 typedef struct gnc_report_window_s gnc_report_window;
 
 /** PROTOTYPES ******************************************************/

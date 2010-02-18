@@ -681,8 +681,8 @@ gboolean kvp_value_binary_append(KvpValue *v, void *data, guint64 size);
    recursive call if desired. */
 void kvp_frame_for_each_slot(KvpFrame *f,
                              void (*proc)(const gchar *key,
-                                          KvpValue *value,
-                                          gpointer data),
+                                     KvpValue *value,
+                                     gpointer data),
                              gpointer data);
 
 /** @} */

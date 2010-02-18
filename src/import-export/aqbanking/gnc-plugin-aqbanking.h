@@ -50,11 +50,13 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_AQBANKING_NAME "gnc-plugin-aqbanking"
 
 /* typedefs & structures */
-typedef struct {
+typedef struct
+{
     GncPlugin gnc_plugin;
 } GncPluginAqBanking;
 
-typedef struct {
+typedef struct
+{
     GncPluginClass gnc_plugin;
 } GncPluginAqBankingClass;
 

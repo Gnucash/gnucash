@@ -54,14 +54,14 @@
 
 
 /** Create a new AB_BANKING and let it load its environment from its
- * default configuration. 
+ * default configuration.
  *
  * @param parent When displaying dialogs, use this GtkWidget as parent.
- * @param inter Reference to a GNCInteractor-pointer in order to use this later. 
+ * @param inter Reference to a GNCInteractor-pointer in order to use this later.
  * May be NULL.
- */ 
+ */
 AB_BANKING * gnc_AB_BANKING_new_currentbook (GtkWidget *parent,
-					     GNCInteractor **inter);
+        GNCInteractor **inter);
 
 /** Delete the given AB_BANKING. If this is also the one that was cached
     by gnc_AB_BANKING_new_currentbook, then that reference is deleted, too. */
@@ -95,8 +95,8 @@ gnc_hbci_cleanup_job(AB_BANKING *api, AB_JOB *job);
  * other hand, returns false if the user can't do anything about this
  * error right now. */
 gboolean
-gnc_hbci_Error_retry (GtkWidget *parent, int error, 
-		      GNCInteractor *inter);
+gnc_hbci_Error_retry (GtkWidget *parent, int error,
+                      GNCInteractor *inter);
 
 /* Calls AB_BANKING_executeQueue with some supplementary stuff around
  * it: set the debugLevel, show the GNCInteractor, and do some error
@@ -106,7 +106,7 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
  * must not be NULL.  */
 gboolean
 gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
-			AB_JOB *job, GNCInteractor *inter);
+                        AB_JOB *job, GNCInteractor *inter);
 
 /* Calls AB_Banking_executeQueue() with some supplementary stuff
  * around it: set the debugLevel, show the GNCInteractor, and do some
@@ -115,14 +115,14 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
  * should abort. parent may be NULL, job_list (a GList of AB_JOBs) may
  * be NULL (although in this case no HBCI result codes can be
  * checked!), inter may be NULL; api must not be NULL.  */
-gboolean 
-gnc_hbci_multijob_execute(GtkWidget *parent, AB_BANKING *api, 
-			  GList *job_list, GNCInteractor *inter);
+gboolean
+gnc_hbci_multijob_execute(GtkWidget *parent, AB_BANKING *api,
+                          GList *job_list, GNCInteractor *inter);
 
 /**
  * Imports the account/transaction/balance data of an aqbanking
  * "imexporter-context" into the matching gnucash accounts, using the
- * given importer_generic_gui. 
+ * given importer_generic_gui.
  *
  * If exec_as_jobs is TRUE, additionally queue each transaction as a
  * new aqbanking online banking job.
@@ -144,8 +144,8 @@ gnc_hbci_multijob_execute(GtkWidget *parent, AB_BANKING *api,
  */
 GList *
 gnc_hbci_import_ctx(AB_BANKING *ab, AB_IMEXPORTER_CONTEXT *ctx,
-		    GNCImportMainMatcher *importer_generic_gui,
-		    gboolean exec_as_aqbanking_jobs);
+                    GNCImportMainMatcher *importer_generic_gui,
+                    gboolean exec_as_aqbanking_jobs);
 
 /** Clear all the AB_JOBs of the ab_job_list from aqbanking's
  * queue. */
@@ -183,30 +183,30 @@ char *gnc_hbci_getremotename (const AB_TRANSACTION *h_trans);
  * bankName is available. */
 /* const char *bank_to_str (const HBCI_Bank *bank); */
 
-/** Chooses one bank out of the given list. 
+/** Chooses one bank out of the given list.
  *
  * If the list has more than one bank, this displays a multichoice
  * dialog so that the user can choose one bank. If the list has only
  * one bank, it returns it. If the list has zero banks, it returns
- * NULL. */ 
+ * NULL. */
 /* const HBCI_Bank * */
 /* choose_one_bank (gncUIWidget parent, const list_HBCI_Bank *banklist); */
 
-/** Chooses one customer out of the given list. 
+/** Chooses one customer out of the given list.
  *
  * If the list has more than one customer, this displays a multichoice
  * dialog so that the user can choose one customer. If the list has only
  * one customer, it returns it. If the list has zero customers, it returns
- * NULL. */ 
+ * NULL. */
 /* const HBCI_Customer * */
 /* choose_one_customer (gncUIWidget parent, const list_HBCI_Customer *custlist); */
 
-/** Chooses one user out of the given list. 
+/** Chooses one user out of the given list.
  *
  * If the list has more than one user, this displays a multichoice
  * dialog so that the user can choose one user. If the list has only
  * one user, it returns it. If the list has zero users, it returns
- * NULL. */ 
+ * NULL. */
 /* const HBCI_User * */
 /* choose_one_user (gncUIWidget parent, const list_HBCI_User *userlist); */
 

@@ -34,9 +34,9 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc);
 /** Finalizes all the things that have to be done with a GetBalance
  * job.  Returns true if everything has been finished succesfully. */
 gboolean
-gnc_hbci_getbalance_finish (GtkWidget *parent, 
-			    Account *gnc_acc,
-			    const AB_JOB *job);
+gnc_hbci_getbalance_finish (GtkWidget *parent,
+                            Account *gnc_acc,
+                            const AB_JOB *job);
 
 
 #endif /* GNC_HBCI_GETBALANCE_H */

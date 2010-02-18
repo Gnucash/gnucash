@@ -31,48 +31,50 @@
 
 #include <stdio.h>
 
-struct _QifHandler {
-  void		(*init)(QifContext ctx);
-  QifError	(*parse_record)(QifContext ctx, GList *record);
-  QifError	(*end)(QifContext ctx);
+struct _QifHandler
+{
+    void		(*init)(QifContext ctx);
+    QifError	(*parse_record)(QifContext ctx, GList *record);
+    QifError	(*end)(QifContext ctx);
 };
 
-struct _QifContext {
-  /* The parent context */
-  QifContext	parent;
+struct _QifContext
+{
+    /* The parent context */
+    QifContext	parent;
 
-  /* file information */
-  char *	filename;
-  FILE *	fp;
-  gint		lineno;
+    /* file information */
+    char *	filename;
+    FILE *	fp;
+    gint		lineno;
 
-  /* This describes what we are parsing right now */
-  QifType	parse_type;
-  QifHandler	handler;
-  gpointer	parse_state;
+    /* This describes what we are parsing right now */
+    QifType	parse_type;
+    QifHandler	handler;
+    gpointer	parse_state;
 
-  /* A bunch of flags for the current handler */
-  gint		parse_flags;
-  gboolean	parsed;
+    /* A bunch of flags for the current handler */
+    gint		parse_flags;
+    gboolean	parsed;
 
-  /* The current and "opening balance" account */
-  QifAccount	current_acct;
-  QifAccount	opening_bal_acct;
+    /* The current and "opening balance" account */
+    QifAccount	current_acct;
+    QifAccount	opening_bal_acct;
 
-  /* HashTable of Maps of data objects */
-  GHashTable *	object_maps;
+    /* HashTable of Maps of data objects */
+    GHashTable *	object_maps;
 
-  /* HashTable of Lists of data objects */
-  GHashTable *	object_lists;
+    /* HashTable of Lists of data objects */
+    GHashTable *	object_lists;
 
-  /* List of files */
-  GList *files;
+    /* List of files */
+    GList *files;
 };
 
 /* Object Maps */
 gint qif_object_map_count(QifContext ctx, const char *type);
 void qif_object_map_foreach(QifContext ctx, const char *type,
-			    GHFunc func, gpointer arg);
+                            GHFunc func, gpointer arg);
 void qif_object_map_insert(QifContext ctx, const char *key, QifObject obj);
 void qif_object_map_remove(QifContext ctx, const char *type, const char *key);
 QifObject qif_object_map_lookup(QifContext ctx, const char *type, const char *key);
@@ -84,7 +86,7 @@ GList * qif_object_map_get(QifContext ctx, const char *type);
 void qif_object_list_reverse(QifContext ctx, const char *type);
 gint qif_object_list_count(QifContext ctx, const char *type);
 void qif_object_list_foreach(QifContext ctx, const char *type,
-			     GFunc func, gpointer arg);
+                             GFunc func, gpointer arg);
 void qif_object_list_insert(QifContext ctx, QifObject obj);
 void qif_object_list_remove(QifContext ctx, QifObject obj);
 void qif_object_list_destroy(QifContext ctx);

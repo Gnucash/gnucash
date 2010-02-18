@@ -86,7 +86,8 @@ static void clear_kvp_acc_cb(Account *gnc_acc, gpointer user_data);
 static void save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data);
 static void cm_close_handler(gpointer user_data);
 
-struct _ABInitialInfo {
+struct _ABInitialInfo
+{
     GtkWidget *window;
     GtkWidget *druid;
 
@@ -104,23 +105,27 @@ struct _ABInitialInfo {
     GHashTable *gnc_hash;
 };
 
-struct _DeferredInfo {
+struct _DeferredInfo
+{
     ABInitialInfo *initial_info;
     gchar *wizard_path;
     gboolean qt_probably_unavailable;
 };
 
-struct _AccCbData {
+struct _AccCbData
+{
     AB_BANKING *api;
     GHashTable *hash;
 };
 
-struct _RevLookupData {
+struct _RevLookupData
+{
     Account *gnc_acc;
     AB_ACCOUNT *ab_acc;
 };
 
-enum account_list_cols {
+enum account_list_cols
+{
     ACCOUNT_LIST_COL_INDEX = 0,
     ACCOUNT_LIST_COL_AB_NAME,
     ACCOUNT_LIST_COL_AB_ACCT,
@@ -132,10 +137,13 @@ enum account_list_cols {
 gboolean
 dai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-    if (event->keyval == GDK_Escape) {
+    if (event->keyval == GDK_Escape)
+    {
         gtk_widget_destroy(widget);
         return TRUE;
-    } else {
+    }
+    else
+    {
         return FALSE;
     }
 }
@@ -155,7 +163,8 @@ dai_destroy_cb(GtkObject *object, gpointer user_data)
 
     gnc_unregister_gui_component_by_data(DRUID_AB_INITIAL_CM_CLASS, info);
 
-    if (info->deferred_info) {
+    if (info->deferred_info)
+    {
         g_message("Online Banking druid is being closed but the wizard is still "
                   "running.  Inoring.");
 
@@ -163,7 +172,8 @@ dai_destroy_cb(GtkObject *object, gpointer user_data)
         info->deferred_info->initial_info = NULL;
     }
 
-    if (info->gnc_hash) {
+    if (info->gnc_hash)
+    {
 #ifdef AQBANKING_VERSION_4_PLUS
         AB_Banking_OnlineFini(info->api, 0);
 #else
@@ -173,7 +183,8 @@ dai_destroy_cb(GtkObject *object, gpointer user_data)
         info->gnc_hash = NULL;
     }
 
-    if (info->api) {
+    if (info->api)
+    {
         gnc_AB_BANKING_delete(info->api);
         info->api = NULL;
     }
@@ -212,7 +223,8 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
 
     ENTER("user_data: %p", user_data);
 
-    if (info->deferred_info) {
+    if (info->deferred_info)
+    {
         LEAVE("Wizard is still running");
         return;
     }
@@ -231,7 +243,8 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
     wizard_exists = *GWEN_Buffer_GetStart(buf) != 0;
     wizard_path = GWEN_Buffer_GetStart(buf);
 
-    if (wizard_exists) {
+    if (wizard_exists)
+    {
         /* Really check whether the file exists */
         gint fd = g_open(wizard_path, O_RDONLY, 0);
         if (fd == -1)
@@ -244,10 +257,13 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
     {
         const char *check_file = "qtdemo.exe";
         gchar *found_program = g_find_program_in_path(check_file);
-        if (found_program) {
+        if (found_program)
+        {
             g_debug("Yes, we found the Qt demo program in %s\n", found_program);
             g_free(found_program);
-        } else {
+        }
+        else
+        {
             g_warning("Ouch, no Qt demo program was found. Qt not installed?\n");
             qt_probably_unavailable = TRUE;
         }
@@ -256,7 +272,8 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
 
     druid_disable_next_button(info);
 
-    if (wizard_exists) {
+    if (wizard_exists)
+    {
         /* Call the qt wizard. See the note above about why this
          * approach is chosen. */
 
@@ -276,11 +293,14 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
                 "Error on starting AqBanking setup wizard: Code %d: %s",
                 error->code, error->message ? error->message : "(null)");
 
-        if (!spawned) {
+        if (!spawned)
+        {
             g_critical("Could not start AqBanking setup wizard: %s",
                        error->message ? error->message : "(null)");
             g_error_free (error);
-        } else {
+        }
+        else
+        {
             /* Keep a reference to info that can survive info */
             info->deferred_info = g_new0(DeferredInfo, 1);
             info->deferred_info->initial_info = info;
@@ -290,17 +310,19 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
 
             g_child_watch_add (pid, child_exit_cb, info->deferred_info);
         }
-    } else {
+    }
+    else
+    {
         g_warning("on_aqhbci_button: Oops, no aqhbci setup wizard found.");
         gnc_error_dialog
-            (info->window,
-             _("The external program \"AqBanking Setup Wizard\" has not "
-               "been found. \n\n"
-               "The %s package should include the "
-               "program \"qt3-wizard\".  Please check your installation to "
-               "ensure this program is present.  On some distributions this "
-               "may require installing additional packages."),
-             QT3_WIZARD_PACKAGE);
+        (info->window,
+         _("The external program \"AqBanking Setup Wizard\" has not "
+           "been found. \n\n"
+           "The %s package should include the "
+           "program \"qt3-wizard\".  Please check your installation to "
+           "ensure this program is present.  On some distributions this "
+           "may require installing additional packages."),
+         QT3_WIZARD_PACKAGE);
         druid_disable_next_button(info);
     }
 
@@ -439,44 +461,51 @@ child_exit_cb(GPid pid, gint status, gpointer data)
 
     g_spawn_close_pid(pid);
 
-    if (!info) {
+    if (!info)
+    {
         g_message("Online Banking wizard exited, but the druid has been "
                   "destroyed already");
         goto cleanup_child_exit_cb;
     }
 
-    if (exit_status == 0) {
+    if (exit_status == 0)
+    {
         druid_enable_next_button(info);
-    } else {
-        if (deferred_info->qt_probably_unavailable) {
+    }
+    else
+    {
+        if (deferred_info->qt_probably_unavailable)
+        {
             g_warning("on_aqhbci_button: Oops, aqhbci wizard return nonzero "
                       "value: %d. The called program was \"%s\".\n",
                       exit_status, deferred_info->wizard_path);
             gnc_error_dialog
-                (info->window, "%s",
-                 _("The external program \"AqBanking Setup Wizard\" failed "
-                   "to run successfully because the "
-                   "additional software \"Qt\" was not found.  "
-                   "Please install the \"Qt/Windows Open Source Edition\" "
-                   "from Trolltech by downloading it from www.trolltech.com"
-                   "\n\n"
-                   "If you have installed Qt already, you will have to adapt "
-                   "the PATH variable of your system appropriately.  "
-                   "Contact the GnuCash developers if you need further "
-                   "assistance on how to install Qt correctly."
-                   "\n\n"
-                   "Online Banking cannot be setup without Qt.  Press \"Close\" "
-                   "now, then \"Cancel\" to cancel the Online Banking setup."));
-        } else {
+            (info->window, "%s",
+             _("The external program \"AqBanking Setup Wizard\" failed "
+               "to run successfully because the "
+               "additional software \"Qt\" was not found.  "
+               "Please install the \"Qt/Windows Open Source Edition\" "
+               "from Trolltech by downloading it from www.trolltech.com"
+               "\n\n"
+               "If you have installed Qt already, you will have to adapt "
+               "the PATH variable of your system appropriately.  "
+               "Contact the GnuCash developers if you need further "
+               "assistance on how to install Qt correctly."
+               "\n\n"
+               "Online Banking cannot be setup without Qt.  Press \"Close\" "
+               "now, then \"Cancel\" to cancel the Online Banking setup."));
+        }
+        else
+        {
             g_warning("on_aqhbci_button: Oops, aqhbci wizard return nonzero "
                       "value: %d. The called program was \"%s\".\n",
                       exit_status, deferred_info->wizard_path);
             gnc_error_dialog
-                (info->window, "%s",
-                 _("The external program \"AqBanking Setup Wizard\" failed "
-                   "to run successfully.  Online Banking can only be setup "
-                   "if this wizard has run successfully.  "
-                   "Please try running the \"AqBanking Setup Wizard\" again."));
+            (info->window, "%s",
+             _("The external program \"AqBanking Setup Wizard\" failed "
+               "to run successfully.  Online Banking can only be setup "
+               "if this wizard has run successfully.  "
+               "Please try running the \"AqBanking Setup Wizard\" again."));
         }
         druid_disable_next_button(info);
     }
@@ -585,7 +614,8 @@ find_gnc_acc_cb(gpointer key, gpointer value, gpointer user_data)
 
     g_return_val_if_fail(data, TRUE);
 
-    if (value == data->gnc_acc) {
+    if (value == data->gnc_acc)
+    {
         data->ab_acc = (AB_ACCOUNT*) key;
         return TRUE;
     }
@@ -604,7 +634,8 @@ clear_line_cb(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
 
     gtk_tree_model_get(model, iter, ACCOUNT_LIST_COL_AB_ACCT, &ab_acc, -1);
 
-    if (ab_acc == data->ab_acc) {
+    if (ab_acc == data->ab_acc)
+    {
         gtk_list_store_set(store, iter, ACCOUNT_LIST_COL_GNC_NAME, "",
                            ACCOUNT_LIST_COL_CHECKED, TRUE, -1);
         return TRUE;
@@ -636,16 +667,18 @@ account_list_changed_cb(GtkTreeSelection *selection, gpointer user_data)
     gtk_tree_selection_unselect_iter(selection, &iter);
     g_signal_handlers_unblock_by_func(selection, account_list_changed_cb, info);
 
-    if (ab_acc) {
+    if (ab_acc)
+    {
         old_value = g_hash_table_lookup(info->gnc_hash, ab_acc);
 
         longname = ab_account_longname(ab_acc);
         currency = AB_Account_GetCurrency(ab_acc);
-        if (currency && *currency) {
+        if (currency && *currency)
+        {
             commodity = gnc_commodity_table_lookup(
-                gnc_commodity_table_get_table(gnc_get_current_book()),
-                GNC_COMMODITY_NS_CURRENCY,
-                currency);
+                            gnc_commodity_table_get_table(gnc_get_current_book()),
+                            GNC_COMMODITY_NS_CURRENCY,
+                            currency);
         }
 
         gnc_acc = gnc_import_select_account(info->window, NULL, TRUE,
@@ -653,8 +686,10 @@ account_list_changed_cb(GtkTreeSelection *selection, gpointer user_data)
                                             old_value, &ok_pressed);
         g_free(longname);
 
-        if (ok_pressed && old_value != gnc_acc) {
-            if (gnc_acc) {
+        if (ok_pressed && old_value != gnc_acc)
+        {
+            if (gnc_acc)
+            {
                 RevLookupData data;
 
                 /* Lookup and clear other mappings to gnc_acc */
@@ -662,7 +697,8 @@ account_list_changed_cb(GtkTreeSelection *selection, gpointer user_data)
                 data.ab_acc = NULL;
                 g_hash_table_find(info->gnc_hash, (GHRFunc) find_gnc_acc_cb,
                                   &data);
-                if (data.ab_acc) {
+                if (data.ab_acc)
+                {
                     g_hash_table_remove(info->gnc_hash, data.ab_acc);
                     gtk_tree_model_foreach(
                         GTK_TREE_MODEL(info->account_store),
@@ -679,7 +715,9 @@ account_list_changed_cb(GtkTreeSelection *selection, gpointer user_data)
                                    -1);
                 g_free(gnc_name);
 
-            } else {
+            }
+            else
+            {
                 g_hash_table_remove(info->gnc_hash, ab_acc);
                 gtk_list_store_set(info->account_store, &iter,
                                    ACCOUNT_LIST_COL_GNC_NAME, "",
@@ -719,15 +757,15 @@ save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data)
     ab_accountid = AB_Account_GetAccountNumber(ab_acc);
     gnc_accountid = gnc_ab_get_account_accountid(gnc_acc);
     if (ab_accountid
-        && (!gnc_accountid
-            || (strcmp(ab_accountid, gnc_accountid) != 0)))
+            && (!gnc_accountid
+                || (strcmp(ab_accountid, gnc_accountid) != 0)))
         gnc_ab_set_account_accountid(gnc_acc, ab_accountid);
 
     ab_bankcode = AB_Account_GetBankCode(ab_acc);
     gnc_bankcode = gnc_ab_get_account_bankcode(gnc_acc);
     if (ab_bankcode
-        && (!gnc_bankcode
-            || (strcmp(gnc_bankcode, ab_bankcode) != 0)))
+            && (!gnc_bankcode
+                || (strcmp(gnc_bankcode, ab_bankcode) != 0)))
         gnc_ab_set_account_bankcode(gnc_acc, ab_bankcode);
 }
 
@@ -768,27 +806,27 @@ gnc_ab_initial_druid(void)
     info->account_view =
         GTK_TREE_VIEW(glade_xml_get_widget(xml, "account_page_view"));
     info->account_store = gtk_list_store_new(NUM_ACCOUNT_LIST_COLS,
-                                             G_TYPE_INT, G_TYPE_STRING,
-                                             G_TYPE_POINTER, G_TYPE_STRING,
-                                             G_TYPE_BOOLEAN);
+                          G_TYPE_INT, G_TYPE_STRING,
+                          G_TYPE_POINTER, G_TYPE_STRING,
+                          G_TYPE_BOOLEAN);
     gtk_tree_view_set_model(info->account_view,
                             GTK_TREE_MODEL(info->account_store));
     g_object_unref(info->account_store);
 
     column = gtk_tree_view_column_new_with_attributes(
-        _("Online Banking Account Name"), gtk_cell_renderer_text_new(),
-        "text", ACCOUNT_LIST_COL_AB_NAME, (gchar*) NULL);
+                 _("Online Banking Account Name"), gtk_cell_renderer_text_new(),
+                 "text", ACCOUNT_LIST_COL_AB_NAME, (gchar*) NULL);
     gtk_tree_view_append_column(info->account_view, column);
 
     column = gtk_tree_view_column_new_with_attributes(
-        _("GnuCash Account Name"), gtk_cell_renderer_text_new(),
-        "text", ACCOUNT_LIST_COL_GNC_NAME, (gchar*) NULL);
+                 _("GnuCash Account Name"), gtk_cell_renderer_text_new(),
+                 "text", ACCOUNT_LIST_COL_GNC_NAME, (gchar*) NULL);
     gtk_tree_view_column_set_expand(column, TRUE);
     gtk_tree_view_append_column(info->account_view, column);
 
     column = gtk_tree_view_column_new_with_attributes(
-        _("New?"), gtk_cell_renderer_toggle_new(),
-        "active", ACCOUNT_LIST_COL_CHECKED, (gchar*) NULL);
+                 _("New?"), gtk_cell_renderer_toggle_new(),
+                 "active", ACCOUNT_LIST_COL_CHECKED, (gchar*) NULL);
     gtk_tree_view_append_column(info->account_view, column);
 
     selection = gtk_tree_view_get_selection(info->account_view);
@@ -796,7 +834,7 @@ gnc_ab_initial_druid(void)
                      G_CALLBACK(account_list_changed_cb), info);
 
     component_id = gnc_register_gui_component(DRUID_AB_INITIAL_CM_CLASS,
-                                              NULL, cm_close_handler, info);
+                   NULL, cm_close_handler, info);
     gnc_gui_component_set_session(component_id, gnc_get_current_session());
 
     gtk_widget_show(info->window);

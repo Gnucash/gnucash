@@ -34,80 +34,81 @@
 static int
 test_trans_query (Transaction *trans, gpointer data)
 {
-  QofBook *book = data;
-  GList *list;
-  Query *q;
+    QofBook *book = data;
+    GList *list;
+    Query *q;
 
-  q = make_trans_query (trans, ALL_QT);
-  xaccQuerySetBook (q, book);
+    q = make_trans_query (trans, ALL_QT);
+    xaccQuerySetBook (q, book);
 
-  list = xaccQueryGetTransactions (q, QUERY_TXN_MATCH_ANY);
-  if (g_list_length (list) != 1)
-  {
-    failure_args ("test number returned", __FILE__, __LINE__,
-                  "number of matching transactions %d not 1",
-                  g_list_length (list));
+    list = xaccQueryGetTransactions (q, QUERY_TXN_MATCH_ANY);
+    if (g_list_length (list) != 1)
+    {
+        failure_args ("test number returned", __FILE__, __LINE__,
+                      "number of matching transactions %d not 1",
+                      g_list_length (list));
+        g_list_free (list);
+        return 13;
+    }
+
+    if (list->data != trans)
+    {
+        failure ("matching transaction is wrong");
+        g_list_free (list);
+        return 13;
+    }
+
+    success ("found right transaction");
+    xaccFreeQuery (q);
     g_list_free (list);
-    return 13;
-  }
 
-  if (list->data != trans)
-  {
-    failure ("matching transaction is wrong");
-    g_list_free (list);
-    return 13;
-  }
-
-  success ("found right transaction");
-  xaccFreeQuery (q);
-  g_list_free (list);
-
-  return 0;
+    return 0;
 }
 
 static void
 run_test (void)
 {
-  QofSession *session;
-  Account *root;
-  QofBook *book;
+    QofSession *session;
+    Account *root;
+    QofBook *book;
 
-  session = get_random_session ();
-  book = qof_session_get_book (session);
-  root = gnc_book_get_root_account (book);
+    session = get_random_session ();
+    book = qof_session_get_book (session);
+    root = gnc_book_get_root_account (book);
 
-  add_random_transactions_to_book (book, 20);
+    add_random_transactions_to_book (book, 20);
 
-  xaccAccountTreeForEachTransaction (root, test_trans_query, book);
+    xaccAccountTreeForEachTransaction (root, test_trans_query, book);
 
-  qof_session_end (session);
+    qof_session_end (session);
 }
 
 int
 main (int argc, char **argv)
 {
-  int i;
+    int i;
 
-  qof_init();
-  g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
+    qof_init();
+    g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
 
-  xaccLogDisable ();
+    xaccLogDisable ();
 
-  /* Always start from the same random seed so we fail consistently */
-  srand(0);
-  if(!cashobjects_register()) {
-    failure("can't register cashbojects");
-    goto cleanup;
-  }
+    /* Always start from the same random seed so we fail consistently */
+    srand(0);
+    if (!cashobjects_register())
+    {
+        failure("can't register cashbojects");
+        goto cleanup;
+    }
 
-  /* Loop the test. */
-  for (i=0; i < 10; i++)
-  {
-    run_test ();
-  }
-  success("queries seem to work");
+    /* Loop the test. */
+    for (i = 0; i < 10; i++)
+    {
+        run_test ();
+    }
+    success("queries seem to work");
 
- cleanup:
-  qof_close();
-  return get_rv();
+cleanup:
+    qof_close();
+    return get_rv();
 }

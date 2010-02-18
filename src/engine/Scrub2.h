@@ -35,13 +35,13 @@
 #include "gnc-engine.h"
 
 /** @name Lot Management Routines
- * Provides the low-level API for checking and repairing ('scrubbing 
- * clean') the usage of Lots and lot balances in stock and commodity 
- * accounts.  Broken lots are repaired using a first-in, first-out 
+ * Provides the low-level API for checking and repairing ('scrubbing
+ * clean') the usage of Lots and lot balances in stock and commodity
+ * accounts.  Broken lots are repaired using a first-in, first-out
  * (FIFO) accounting schedule.
- * 
- * This is a 'low-level' API in the sense that each routine accomplishes 
- * only one particular task needed to clean up a Lot.  To clean up a 
+ *
+ * This is a 'low-level' API in the sense that each routine accomplishes
+ * only one particular task needed to clean up a Lot.  To clean up a
  * Lot as a whole, you almost certainly want to use one of the
  * high-level API routines from the Scrub3.h file.
  @{ */
@@ -49,11 +49,11 @@
 /** The xaccAccountAssignLots() routine will walk over all of
  *   the splits in an account, and make sure that each belongs
  *   to a lot.  Currently, the default (and only implemented)
- *   assignment policy is a FIFO policy: Any splits that are 
+ *   assignment policy is a FIFO policy: Any splits that are
  *   not in a lot will be used to close the oldest open lot(s).
- *   If there are no open lots, a new lot will be started.  
+ *   If there are no open lots, a new lot will be started.
  *   By trying to close the oldest lots, this effectively
- *   implements a FIFO acounting policy.  
+ *   implements a FIFO acounting policy.
  */
 void xaccAccountAssignLots (Account *acc);
 
@@ -61,20 +61,20 @@ void xaccAccountAssignLots (Account *acc);
  *  indicated lot until the lot balance goes to zero, or until
  *  there are no suitable (i.e. unassigned) splits left in the
  *  account.  It uses the default accounting policy to choose
- *  the splits to fill out the lot. 
+ *  the splits to fill out the lot.
  */
 void xaccLotFill (GNCLot *lot);
 
 /** The xaccLotScrubDoubleBalance() routine examines the indicated
  *   lot.  If it is open, it does nothing. If it is closed,
- *   it then verifies that the lot is 'double balanced'.  
- *   By 'double balance', we mean that both the sum of the 
- *   split amounts is zero, and that the sum of the split 
+ *   it then verifies that the lot is 'double balanced'.
+ *   By 'double balance', we mean that both the sum of the
+ *   split amounts is zero, and that the sum of the split
  *   values is zero.  If the lot is closed and the sum of the
- *   values is not zero, the lot is considered to have a 
- *   'realized gain or loss' that hadn't been correctly handled.  
+ *   values is not zero, the lot is considered to have a
+ *   'realized gain or loss' that hadn't been correctly handled.
  *   This routine then creates a balancing transaction to so
- *   as to record the realized gain/loss, adds it to the lot, 
+ *   as to record the realized gain/loss, adds it to the lot,
  *   and adds it to a gain/loss account.  If there is no default
  *   gain/loss account, it creates one.
  */
@@ -88,7 +88,7 @@ void xaccLotScrubDoubleBalance (GNCLot *lot);
  * of each so that they all have the same price.
  *
  * There is a bit of a problem with the interpretation of 'rounding
- * errors' because there are pathological corner cases of small 
+ * errors' because there are pathological corner cases of small
  * amounts.  So this routine is loose, hopefully loose enough so
  * that the user can manually fine tune without having this routine
  * clobber thier work.
@@ -96,7 +96,7 @@ void xaccLotScrubDoubleBalance (GNCLot *lot);
  * This routine ignores price differences smaller than 1/maxmult.
  * This routine ignores price differences when the split with a crazy
  * price involes only a small amount: specifically, an amount that
- * is less than maxamtscu/amount.denom. 
+ * is less than maxamtscu/amount.denom.
  *
  * Reasonable/recommended values might be maxmult=3, maxamtscu = 2.
  */
@@ -107,16 +107,16 @@ void xaccScrubSubSplitPrice (Split *split, int maxmult, int maxamtscu);
  *    split, but are no longer needed to be kept separate.  Splits
  *    might be split up if they need to be divided over multiple
  *    lots; they can be merged back together if the lots change.
- *    In particular, two sub-splits may be merged if they are in 
+ *    In particular, two sub-splits may be merged if they are in
  *    the same lot, or in no lot.  Note that, by definition, all
  *    subsplits belong to the same transaction.
- * 
- *    The routine returns TRUE if a merger was performed, else 
- *    it returns FALSE. 
  *
- *  The xaccScrubMergeTransSubSplits() routine does the same, except 
+ *    The routine returns TRUE if a merger was performed, else
+ *    it returns FALSE.
+ *
+ *  The xaccScrubMergeTransSubSplits() routine does the same, except
  *    that it does it for all of the splits in the transaction.
- *  The xaccScrubMergeLotSubSplits() routine does the same, except 
+ *  The xaccScrubMergeLotSubSplits() routine does the same, except
  *    that it does it for all of the splits in the lot.
  */
 gboolean xaccScrubMergeSubSplits (Split *split);

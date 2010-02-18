@@ -39,15 +39,24 @@ struct test_strings_struct
 
 typedef struct test_strings_struct test_strings;
 
-test_strings strs[] = {
-    { G_DIR_SEPARATOR_S ".gnucash" G_DIR_SEPARATOR_S "test-account-name",
-      G_DIR_SEPARATOR_S ".gnucash" G_DIR_SEPARATOR_S "test-account-name", 1 },
-    { G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name2",
-      G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name2", 0 },
-    { "postgres://localhost/foo/bar",
-      G_DIR_SEPARATOR_S ".gnucash" G_DIR_SEPARATOR_S "data" G_DIR_SEPARATOR_S "postgres___localhost_foo_bar", 2 },
-    { "file:" G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3",
-      G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3", 0 },
+test_strings strs[] =
+{
+    {
+        G_DIR_SEPARATOR_S ".gnucash" G_DIR_SEPARATOR_S "test-account-name",
+        G_DIR_SEPARATOR_S ".gnucash" G_DIR_SEPARATOR_S "test-account-name", 1
+    },
+    {
+        G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name2",
+        G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name2", 0
+    },
+    {
+        "postgres://localhost/foo/bar",
+        G_DIR_SEPARATOR_S ".gnucash" G_DIR_SEPARATOR_S "data" G_DIR_SEPARATOR_S "postgres___localhost_foo_bar", 2
+    },
+    {
+        "file:" G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3",
+        G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3", 0
+    },
     { NULL, NULL, 0 },
 };
 
@@ -58,26 +67,26 @@ main(int argc, char **argv)
 
     qof_init();
 
-    for(i = 0; strs[i].input != NULL; i++)
+    for (i = 0; strs[i].input != NULL; i++)
     {
         char *daout;
         char *dain;
         char *wantout;
-        
-        if(strs[i].prefix_home == 1) 
+
+        if (strs[i].prefix_home == 1)
         {
             dain = g_build_filename(g_get_home_dir(), strs[i].input,
-				    (gchar *)NULL);
+                                    (gchar *)NULL);
             wantout = g_build_filename(g_get_home_dir(), strs[i].output,
-				       (gchar *)NULL);
+                                       (gchar *)NULL);
         }
-        else if(strs[i].prefix_home == 2)
+        else if (strs[i].prefix_home == 2)
         {
             dain = g_strdup(strs[i].input);
             wantout = g_build_filename(g_get_home_dir(), strs[i].output,
-				       (gchar *)NULL);
+                                       (gchar *)NULL);
         }
-         else
+        else
         {
             dain = g_strdup(strs[i].input);
             wantout = g_strdup(strs[i].output);

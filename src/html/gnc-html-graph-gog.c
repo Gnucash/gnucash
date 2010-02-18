@@ -92,62 +92,63 @@ static void set_chart_axis_labels(GogObject *chart, const char *x_axis_label, co
 void
 gnc_html_graph_gog_init( void )
 {
-	static gboolean initialized = FALSE;
+    static gboolean initialized = FALSE;
 
-	if( !initialized ) {
-		g_debug( "init gog graphing" );
+    if ( !initialized )
+    {
+        g_debug( "init gog graphing" );
 
-		libgoffice_init();
-  
-		/* Initialize plugins manager */
-		go_plugins_init( NULL, NULL, NULL, NULL, TRUE, GO_TYPE_PLUGIN_LOADER_MODULE );
+        libgoffice_init();
 
-		initialized = TRUE;
-	}
+        /* Initialize plugins manager */
+        go_plugins_init( NULL, NULL, NULL, NULL, TRUE, GO_TYPE_PLUGIN_LOADER_MODULE );
+
+        initialized = TRUE;
+    }
 }
 
 static GdkPixbuf*
 create_graph_pixbuf( GogObject *graph, int width, int height )
 {
 #if defined(HAVE_GOFFICE_0_5)
-	GogRenderer *renderer;
+    GogRenderer *renderer;
 #elif defined(GOFFICE_WITH_CAIRO)
-	GogRendererCairo *cairo_renderer;
+    GogRendererCairo *cairo_renderer;
 #else
-	GogRendererPixbuf *pixbuf_renderer;
+    GogRendererPixbuf *pixbuf_renderer;
 #endif
-	GdkPixbuf *buf;
-	gboolean update_status;
+    GdkPixbuf *buf;
+    gboolean update_status;
 
-	// Note that this shouldn't be necessary as per discussion with Jody...
-	// ... but it is because we don't embed in a control which passes the
-	// update requests back to the graph widget, a-la the foo-canvas that
-	// gnumeric uses.  We probably _should_ do something like that, though.
-	gog_object_update (GOG_OBJECT (graph));
+    // Note that this shouldn't be necessary as per discussion with Jody...
+    // ... but it is because we don't embed in a control which passes the
+    // update requests back to the graph widget, a-la the foo-canvas that
+    // gnumeric uses.  We probably _should_ do something like that, though.
+    gog_object_update (GOG_OBJECT (graph));
 
 #if defined(HAVE_GOFFICE_0_5)
-	renderer = GOG_RENDERER(g_object_new( GOG_TYPE_RENDERER, "model", graph, NULL ));
-	update_status = gog_renderer_update( renderer, width, height );
-	buf = gog_renderer_get_pixbuf( renderer );
-	g_object_set_data_full( G_OBJECT(buf), "renderer", renderer, g_object_unref );
+    renderer = GOG_RENDERER(g_object_new( GOG_TYPE_RENDERER, "model", graph, NULL ));
+    update_status = gog_renderer_update( renderer, width, height );
+    buf = gog_renderer_get_pixbuf( renderer );
+    g_object_set_data_full( G_OBJECT(buf), "renderer", renderer, g_object_unref );
 #elif defined(GOFFICE_WITH_CAIRO)
-	cairo_renderer = GOG_RENDERER_CAIRO(g_object_new( GOG_RENDERER_CAIRO_TYPE,
-													"model", graph,
-													NULL ));
-	update_status = gog_renderer_cairo_update( cairo_renderer, width, height, 1.0 );
-	buf = gog_renderer_cairo_get_pixbuf( cairo_renderer );
-	g_object_set_data_full( G_OBJECT(buf), "renderer", cairo_renderer, g_object_unref );
+    cairo_renderer = GOG_RENDERER_CAIRO(g_object_new( GOG_RENDERER_CAIRO_TYPE,
+                                        "model", graph,
+                                        NULL ));
+    update_status = gog_renderer_cairo_update( cairo_renderer, width, height, 1.0 );
+    buf = gog_renderer_cairo_get_pixbuf( cairo_renderer );
+    g_object_set_data_full( G_OBJECT(buf), "renderer", cairo_renderer, g_object_unref );
 #else
-	pixbuf_renderer = GOG_RENDERER_PIXBUF(g_object_new( GOG_RENDERER_PIXBUF_TYPE,
-														"model", graph,
-														NULL));
-	update_status = gog_renderer_pixbuf_update( pixbuf_renderer, width, height, 1.0 );
-	buf = gog_renderer_pixbuf_get( pixbuf_renderer );
-	g_object_set_data_full( G_OBJECT(buf), "renderer", pixbuf_renderer, g_object_unref );
+    pixbuf_renderer = GOG_RENDERER_PIXBUF(g_object_new( GOG_RENDERER_PIXBUF_TYPE,
+                                          "model", graph,
+                                          NULL));
+    update_status = gog_renderer_pixbuf_update( pixbuf_renderer, width, height, 1.0 );
+    buf = gog_renderer_pixbuf_get( pixbuf_renderer );
+    g_object_set_data_full( G_OBJECT(buf), "renderer", pixbuf_renderer, g_object_unref );
 #endif
 
-	g_object_set_data_full( G_OBJECT(buf), "graph", graph, g_object_unref );
-	return buf;
+    g_object_set_data_full( G_OBJECT(buf), "graph", graph, g_object_unref );
+    return buf;
 }
 
 static gboolean
@@ -156,62 +157,62 @@ create_basic_plot_elements(const char *plot_type_name,
                            GogObject **out_chart,
                            GogPlot **out_plot)
 {
-  *out_graph = g_object_new(GOG_TYPE_GRAPH, NULL);
-  *out_chart = gog_object_add_by_name(*out_graph, "Chart", NULL);
-  *out_plot = gog_plot_new_by_name(plot_type_name);
-  if (!*out_plot)
-  {
-    // FIXME - log betterer; should probably use GError?
-    g_warning("gog: unable to load %s plugin", plot_type_name);
-    return FALSE;
-  }
-  gog_object_add_by_name(*out_chart, "Plot", GOG_OBJECT(*out_plot) );
-  return TRUE;
+    *out_graph = g_object_new(GOG_TYPE_GRAPH, NULL);
+    *out_chart = gog_object_add_by_name(*out_graph, "Chart", NULL);
+    *out_plot = gog_plot_new_by_name(plot_type_name);
+    if (!*out_plot)
+    {
+        // FIXME - log betterer; should probably use GError?
+        g_warning("gog: unable to load %s plugin", plot_type_name);
+        return FALSE;
+    }
+    gog_object_add_by_name(*out_chart, "Plot", GOG_OBJECT(*out_plot) );
+    return TRUE;
 }
 
 static void
 set_chart_titles(GogObject *chart, const char *title, const char* sub_title)
 {
-  gchar *my_sub_title, *total_title;
-  GOData *title_scalar;
-  GogObject *tmp;
+    gchar *my_sub_title, *total_title;
+    GOData *title_scalar;
+    GogObject *tmp;
 
-  if (sub_title)
-    my_sub_title = g_strdup_printf("%s(%s)", title ? " " : "", sub_title);
-  else
-    my_sub_title = g_strdup("");
+    if (sub_title)
+        my_sub_title = g_strdup_printf("%s(%s)", title ? " " : "", sub_title);
+    else
+        my_sub_title = g_strdup("");
 
-  total_title = g_strdup_printf("%s%s", title ? title : "", my_sub_title);
+    total_title = g_strdup_printf("%s%s", title ? title : "", my_sub_title);
 
-  tmp = gog_object_add_by_name(chart, "Title", NULL);
-  title_scalar = go_data_scalar_str_new(total_title, TRUE);
-  gog_dataset_set_dim(GOG_DATASET(tmp), 0, title_scalar, NULL);
+    tmp = gog_object_add_by_name(chart, "Title", NULL);
+    title_scalar = go_data_scalar_str_new(total_title, TRUE);
+    gog_dataset_set_dim(GOG_DATASET(tmp), 0, title_scalar, NULL);
 
-  g_free(my_sub_title);
+    g_free(my_sub_title);
 }
 
 static void
 set_chart_axis_labels(GogObject *chart, const char *x_axis_label, const char* y_axis_label)
 {
-  if (x_axis_label != NULL)
-  {
-    GogObject *xaxis, *label;
-    GOData *data;
-    xaxis = gog_object_get_child_by_role(chart, gog_object_find_role_by_name(chart, "X-Axis"));
-    label = gog_object_add_by_name(xaxis, "Label", NULL);
-    data = go_data_scalar_str_new(x_axis_label, FALSE);
-    gog_dataset_set_dim(GOG_DATASET(label), 0, data, NULL);
-  }
+    if (x_axis_label != NULL)
+    {
+        GogObject *xaxis, *label;
+        GOData *data;
+        xaxis = gog_object_get_child_by_role(chart, gog_object_find_role_by_name(chart, "X-Axis"));
+        label = gog_object_add_by_name(xaxis, "Label", NULL);
+        data = go_data_scalar_str_new(x_axis_label, FALSE);
+        gog_dataset_set_dim(GOG_DATASET(label), 0, data, NULL);
+    }
 
-  if (y_axis_label != NULL)
-  {
-    GogObject *yaxis, *label;
-    GOData *data;
-    yaxis = gog_object_get_child_by_role(chart, gog_object_find_role_by_name(chart, "Y-Axis"));
-    label = gog_object_add_by_name(yaxis, "Label", NULL);
-    data = go_data_scalar_str_new(y_axis_label, FALSE);
-    gog_dataset_set_dim(GOG_DATASET(label), 0, data, NULL);
-  }
+    if (y_axis_label != NULL)
+    {
+        GogObject *yaxis, *label;
+        GOData *data;
+        yaxis = gog_object_get_child_by_role(chart, gog_object_find_role_by_name(chart, "Y-Axis"));
+        label = gog_object_add_by_name(yaxis, "Label", NULL);
+        data = go_data_scalar_str_new(y_axis_label, FALSE);
+        gog_dataset_set_dim(GOG_DATASET(label), 0, data, NULL);
+    }
 }
 
 /*
@@ -228,40 +229,41 @@ set_chart_axis_labels(GogObject *chart, const char *x_axis_label, const char* y_
 GdkPixbuf*
 gnc_html_graph_gog_create_piechart( GncHtmlPieChartInfo* info )
 {
-	GogObject *graph, *chart;
-	GogPlot *plot;
-	GogSeries *series;
-	GOData *labelData, *sliceData;
-	GdkPixbuf* pixbuf;
+    GogObject *graph, *chart;
+    GogPlot *plot;
+    GogSeries *series;
+    GOData *labelData, *sliceData;
+    GdkPixbuf* pixbuf;
 
-	if( !create_basic_plot_elements( "GogPiePlot", &graph, &chart, &plot ) ) {
-		return NULL;
-	}
-	gog_object_add_by_name( chart, "Legend", NULL );
+    if ( !create_basic_plot_elements( "GogPiePlot", &graph, &chart, &plot ) )
+    {
+        return NULL;
+    }
+    gog_object_add_by_name( chart, "Legend", NULL );
 
 #ifdef GO_COLOR_BLACK
-	GOG_STYLED_OBJECT(graph)->style->line.width = 5;
-	GOG_STYLED_OBJECT(graph)->style->line.color = GO_COLOR_BLACK;
+    GOG_STYLED_OBJECT(graph)->style->line.width = 5;
+    GOG_STYLED_OBJECT(graph)->style->line.color = GO_COLOR_BLACK;
 #else
-	GOG_STYLED_OBJECT(graph)->style->outline.width = 5;
-	GOG_STYLED_OBJECT(graph)->style->outline.color = RGBA_BLACK;
+    GOG_STYLED_OBJECT(graph)->style->outline.width = 5;
+    GOG_STYLED_OBJECT(graph)->style->outline.color = RGBA_BLACK;
 #endif
 
-	series = gog_plot_new_series( plot );
-	labelData = go_data_vector_str_new( (gchar const * const *)info->labels, info->datasize, NULL );
-	gog_series_set_dim( series, 0, labelData, NULL );
-	go_data_emit_changed( GO_DATA(labelData) );
+    series = gog_plot_new_series( plot );
+    labelData = go_data_vector_str_new( (gchar const * const *)info->labels, info->datasize, NULL );
+    gog_series_set_dim( series, 0, labelData, NULL );
+    go_data_emit_changed( GO_DATA(labelData) );
 
-	sliceData = go_data_vector_val_new( info->data, info->datasize, NULL );
-	gog_series_set_dim( series, 1, sliceData, NULL );
-	go_data_emit_changed( GO_DATA(sliceData) );
+    sliceData = go_data_vector_val_new( info->data, info->datasize, NULL );
+    gog_series_set_dim( series, 1, sliceData, NULL );
+    go_data_emit_changed( GO_DATA(sliceData) );
 
-	// fixme: colors
-	set_chart_titles( chart, info->title, info->subtitle );
+    // fixme: colors
+    set_chart_titles( chart, info->title, info->subtitle );
 
-	pixbuf = create_graph_pixbuf( graph, info->width, info->height );
+    pixbuf = create_graph_pixbuf( graph, info->width, info->height );
 
-	return pixbuf;
+    return pixbuf;
 }
 
 /**
@@ -279,83 +281,91 @@ gnc_html_graph_gog_create_piechart( GncHtmlPieChartInfo* info )
 GdkPixbuf*
 gnc_html_graph_gog_create_barchart( GncHtmlBarChartInfo* info )
 {
-	GogObject *graph, *chart;
-	GogPlot *plot;
-	GogSeries *series;
-	GOStyle *style;
-	GOData *label_data, *slice_data;
-	char *bar_type = "normal";
-	int bar_overlap = 0 /*percent*/; // seperate bars; no overlap.
-	GdkPixbuf* pixbuf;
+    GogObject *graph, *chart;
+    GogPlot *plot;
+    GogSeries *series;
+    GOStyle *style;
+    GOData *label_data, *slice_data;
+    char *bar_type = "normal";
+    int bar_overlap = 0 /*percent*/; // seperate bars; no overlap.
+    GdkPixbuf* pixbuf;
 
-	if( !create_basic_plot_elements( "GogBarColPlot", &graph, &chart, &plot ) ) {
-		return FALSE;
-	}
-	gog_object_add_by_name( chart, "Legend", NULL );
+    if ( !create_basic_plot_elements( "GogBarColPlot", &graph, &chart, &plot ) )
+    {
+        return FALSE;
+    }
+    gog_object_add_by_name( chart, "Legend", NULL );
 
-	if( info->stacked ) {
-		// when stacked, we want the bars on _top_ of eachother.
-		bar_type = "stacked";
-		bar_overlap = 100 /*percent*/;
-	}
+    if ( info->stacked )
+    {
+        // when stacked, we want the bars on _top_ of eachother.
+        bar_type = "stacked";
+        bar_overlap = 100 /*percent*/;
+    }
 
-	g_object_set( G_OBJECT(plot),
-					//"vary_style_by_element",	TRUE,
-					"type",                     bar_type,
-					"overlap_percentage",       bar_overlap, 
-					NULL);
-	label_data = go_data_vector_str_new( (gchar const * const *)info->row_labels, info->data_rows, NULL );
-	{
-		// foreach row:
-		//   series = row
-		GdkColor color;
-		int i;
-		for( i = 0; i < info->data_cols; i++ ) {
-			GError *err = NULL;
+    g_object_set( G_OBJECT(plot),
+                  //"vary_style_by_element",	TRUE,
+                  "type",                     bar_type,
+                  "overlap_percentage",       bar_overlap,
+                  NULL);
+    label_data = go_data_vector_str_new( (gchar const * const *)info->row_labels, info->data_rows, NULL );
+    {
+        // foreach row:
+        //   series = row
+        GdkColor color;
+        int i;
+        for ( i = 0; i < info->data_cols; i++ )
+        {
+            GError *err = NULL;
 
-			series = gog_plot_new_series( plot );
-			gog_object_set_name( GOG_OBJECT(series), info->col_labels[i], &err );
-			if( err != NULL ) {
-				g_warning( "error setting name [%s] on series [%d]: [%s]",
-							info->col_labels[i], i, err->message);
-			}
+            series = gog_plot_new_series( plot );
+            gog_object_set_name( GOG_OBJECT(series), info->col_labels[i], &err );
+            if ( err != NULL )
+            {
+                g_warning( "error setting name [%s] on series [%d]: [%s]",
+                           info->col_labels[i], i, err->message);
+            }
 
-			g_object_ref( label_data );
-			gog_series_set_dim( series, 0, label_data, NULL );
-			go_data_emit_changed( GO_DATA(label_data) );
+            g_object_ref( label_data );
+            gog_series_set_dim( series, 0, label_data, NULL );
+            go_data_emit_changed( GO_DATA(label_data) );
 
-			slice_data = go_data_vector_val_new( info->data + (i*info->data_rows), info->data_rows, NULL );
-			gog_series_set_dim( series, 1, slice_data, NULL );
-			go_data_emit_changed( GO_DATA(slice_data) );
+            slice_data = go_data_vector_val_new( info->data + (i * info->data_rows), info->data_rows, NULL );
+            gog_series_set_dim( series, 1, slice_data, NULL );
+            go_data_emit_changed( GO_DATA(slice_data) );
 
-			style = go_styled_object_get_style( GO_STYLED_OBJECT(series) );
-			style->fill.type = GO_STYLE_FILL_PATTERN;
-			if( gdk_color_parse( info->col_colors[i], &color ) ) {
-				style->fill.auto_back = FALSE;
-				go_pattern_set_solid( &style->fill.pattern, GO_COLOR_FROM_GDK(color) );
-			} else {
-				g_warning( "cannot parse color [%s]", info->col_colors[i] );
-			}
-		}
-	}
+            style = go_styled_object_get_style( GO_STYLED_OBJECT(series) );
+            style->fill.type = GO_STYLE_FILL_PATTERN;
+            if ( gdk_color_parse( info->col_colors[i], &color ) )
+            {
+                style->fill.auto_back = FALSE;
+                go_pattern_set_solid( &style->fill.pattern, GO_COLOR_FROM_GDK(color) );
+            }
+            else
+            {
+                g_warning( "cannot parse color [%s]", info->col_colors[i] );
+            }
+        }
+    }
 
-	if( info->rotate_row_labels ) {
-		GogObject *object = gog_object_get_child_by_role(
-									chart, gog_object_find_role_by_name( chart, "X-Axis" ) );
-		style = go_styled_object_get_style( GO_STYLED_OBJECT(object) );
-		go_style_set_text_angle( style, 90.0 );
-	}
+    if ( info->rotate_row_labels )
+    {
+        GogObject *object = gog_object_get_child_by_role(
+                                chart, gog_object_find_role_by_name( chart, "X-Axis" ) );
+        style = go_styled_object_get_style( GO_STYLED_OBJECT(object) );
+        go_style_set_text_angle( style, 90.0 );
+    }
 
-	set_chart_titles( chart, info->title, info->subtitle );
-	set_chart_axis_labels( chart, info->x_axis_label, info->y_axis_label );
+    set_chart_titles( chart, info->title, info->subtitle );
+    set_chart_axis_labels( chart, info->x_axis_label, info->y_axis_label );
 
-	// we need to do this twice for the barchart... :p
-	gog_object_update( GOG_OBJECT(graph) );
+    // we need to do this twice for the barchart... :p
+    gog_object_update( GOG_OBJECT(graph) );
 
-	pixbuf = create_graph_pixbuf( graph, info->width, info->height );
-	g_debug( "barchart rendered." );
+    pixbuf = create_graph_pixbuf( graph, info->width, info->height );
+    g_debug( "barchart rendered." );
 
-	return pixbuf;
+    return pixbuf;
 }
 
 
@@ -377,178 +387,207 @@ gnc_html_graph_gog_create_barchart( GncHtmlBarChartInfo* info )
 GdkPixbuf*
 gnc_html_graph_gog_create_linechart( GncHtmlLineChartInfo* info )
 {
-	GogObject *graph, *chart;
-	GogPlot *plot;
-	GogSeries *series;
-	GOStyle *style;
-	GOData *label_data, *slice_data;
-	gchar* line_type = "normal";
-	GdkPixbuf* pixbuf;
+    GogObject *graph, *chart;
+    GogPlot *plot;
+    GogSeries *series;
+    GOStyle *style;
+    GOData *label_data, *slice_data;
+    gchar* line_type = "normal";
+    GdkPixbuf* pixbuf;
 
-	if( !create_basic_plot_elements( "GogLinePlot", &graph, &chart, &plot ) ) {
-		return NULL;
-	}
-	gog_object_add_by_name( chart, "Legend", NULL );
+    if ( !create_basic_plot_elements( "GogLinePlot", &graph, &chart, &plot ) )
+    {
+        return NULL;
+    }
+    gog_object_add_by_name( chart, "Legend", NULL );
 
-	if( info->stacked ) {
-		// when stacked, we want the lines on _top_ of eachother.
-		line_type = "stacked";
-	}
+    if ( info->stacked )
+    {
+        // when stacked, we want the lines on _top_ of eachother.
+        line_type = "stacked";
+    }
 
-	g_object_set( G_OBJECT(plot),
-					//"vary_style_by_element",   TRUE,
-					"type",                      line_type,
-					"default-style-has-markers", info->markers,
-					NULL);
-	label_data = go_data_vector_str_new( (gchar const * const *)info->row_labels, info->data_rows, NULL );
-	{
-		// foreach row:
-		//   series = row
-		GdkColor color;
-		int i;
-		for( i = 0; i < info->data_cols; i++ ) {
-			GError *err = NULL;
+    g_object_set( G_OBJECT(plot),
+                  //"vary_style_by_element",   TRUE,
+                  "type",                      line_type,
+                  "default-style-has-markers", info->markers,
+                  NULL);
+    label_data = go_data_vector_str_new( (gchar const * const *)info->row_labels, info->data_rows, NULL );
+    {
+        // foreach row:
+        //   series = row
+        GdkColor color;
+        int i;
+        for ( i = 0; i < info->data_cols; i++ )
+        {
+            GError *err = NULL;
 
-			series = gog_plot_new_series( plot );
-			gog_object_set_name( GOG_OBJECT(series), info->col_labels[i], &err );
-			if( err != NULL ) {
-				g_warning( "error setting name [%s] on series [%d]: [%s]",
-							info->col_labels[i], i, err->message );
-			}
+            series = gog_plot_new_series( plot );
+            gog_object_set_name( GOG_OBJECT(series), info->col_labels[i], &err );
+            if ( err != NULL )
+            {
+                g_warning( "error setting name [%s] on series [%d]: [%s]",
+                           info->col_labels[i], i, err->message );
+            }
 
-			g_object_ref( label_data );
-			gog_series_set_dim( series, 0, label_data, NULL );
-			go_data_emit_changed( GO_DATA(label_data) );
+            g_object_ref( label_data );
+            gog_series_set_dim( series, 0, label_data, NULL );
+            go_data_emit_changed( GO_DATA(label_data) );
 
-			slice_data = go_data_vector_val_new( info->data + (i* info->data_rows),  info->data_rows, NULL );
-			gog_series_set_dim( series, 1, slice_data, NULL );
-			go_data_emit_changed( GO_DATA(slice_data) );
+            slice_data = go_data_vector_val_new( info->data + (i * info->data_rows),  info->data_rows, NULL );
+            gog_series_set_dim( series, 1, slice_data, NULL );
+            go_data_emit_changed( GO_DATA(slice_data) );
 
-			style = go_styled_object_get_style( GO_STYLED_OBJECT(series) );
-			style->fill.type = GO_STYLE_FILL_PATTERN;
-			if( gdk_color_parse( info->col_colors[i], &color ) ) {
-				style->fill.auto_back = FALSE;
-				go_pattern_set_solid( &style->fill.pattern, GO_COLOR_FROM_GDK(color) );
-			} else {
-				g_warning( "cannot parse color [%s]", info->col_colors[i] );
-			}
-		}
-	}
+            style = go_styled_object_get_style( GO_STYLED_OBJECT(series) );
+            style->fill.type = GO_STYLE_FILL_PATTERN;
+            if ( gdk_color_parse( info->col_colors[i], &color ) )
+            {
+                style->fill.auto_back = FALSE;
+                go_pattern_set_solid( &style->fill.pattern, GO_COLOR_FROM_GDK(color) );
+            }
+            else
+            {
+                g_warning( "cannot parse color [%s]", info->col_colors[i] );
+            }
+        }
+    }
 
-	if( info->rotate_row_labels ) {
-		GogObject *object = gog_object_get_child_by_role(
-								chart, gog_object_find_role_by_name( chart, "X-Axis" ) );
-		style = go_styled_object_get_style( GO_STYLED_OBJECT(object) );
-		go_style_set_text_angle( style, 90.0 );
-	}
+    if ( info->rotate_row_labels )
+    {
+        GogObject *object = gog_object_get_child_by_role(
+                                chart, gog_object_find_role_by_name( chart, "X-Axis" ) );
+        style = go_styled_object_get_style( GO_STYLED_OBJECT(object) );
+        go_style_set_text_angle( style, 90.0 );
+    }
 
-	if( info->major_grid ||  info->minor_grid ) {
-		GogObject *object;
-		gog_object_add_by_name( chart,"Grid", NULL );
-		object = gog_object_get_child_by_role( chart,
-										gog_object_find_role_by_name( chart, "Y-Axis" ) );
-		if( info->major_grid ) {
-			gog_object_add_by_name( GOG_OBJECT(object), "MajorGrid", NULL );
-		}
-		if( info->minor_grid ) {
-			gog_object_add_by_name( GOG_OBJECT (object), "MinorGrid", NULL );
-		}
-	}
+    if ( info->major_grid ||  info->minor_grid )
+    {
+        GogObject *object;
+        gog_object_add_by_name( chart, "Grid", NULL );
+        object = gog_object_get_child_by_role( chart,
+                                               gog_object_find_role_by_name( chart, "Y-Axis" ) );
+        if ( info->major_grid )
+        {
+            gog_object_add_by_name( GOG_OBJECT(object), "MajorGrid", NULL );
+        }
+        if ( info->minor_grid )
+        {
+            gog_object_add_by_name( GOG_OBJECT (object), "MinorGrid", NULL );
+        }
+    }
 
-	set_chart_titles( chart, info->title, info->subtitle );
-	set_chart_axis_labels( chart, info->x_axis_label, info->y_axis_label );
+    set_chart_titles( chart, info->title, info->subtitle );
+    set_chart_axis_labels( chart, info->x_axis_label, info->y_axis_label );
 
-	// we need to do this twice for the linechart... :p
-	gog_object_update( GOG_OBJECT(graph) );
+    // we need to do this twice for the linechart... :p
+    gog_object_update( GOG_OBJECT(graph) );
 
-	pixbuf = create_graph_pixbuf( graph, info->width, info->height );
-	g_debug( "linechart rendered." );
+    pixbuf = create_graph_pixbuf( graph, info->width, info->height );
+    g_debug( "linechart rendered." );
 
-	return pixbuf;
+    return pixbuf;
 }
 
 GdkPixbuf*
 gnc_html_graph_gog_create_scatterplot( GncHtmlScatterPlotInfo* info )
 {
-	GogObject *graph, *chart;
-	GogPlot *plot;
-	GogSeries *series;
-	GOData *sliceData;
-	GOStyle *style;
-	gboolean fill = FALSE;
+    GogObject *graph, *chart;
+    GogPlot *plot;
+    GogSeries *series;
+    GOData *sliceData;
+    GOStyle *style;
+    gboolean fill = FALSE;
 
-	if( !create_basic_plot_elements( "GogXYPlot", &graph, &chart, &plot ) ) {
-		return NULL;
-	}
+    if ( !create_basic_plot_elements( "GogXYPlot", &graph, &chart, &plot ) )
+    {
+        return NULL;
+    }
 
-	series = gog_plot_new_series( plot );
-	style = go_styled_object_get_style( GO_STYLED_OBJECT(series) );
+    series = gog_plot_new_series( plot );
+    style = go_styled_object_get_style( GO_STYLED_OBJECT(series) );
 
-	sliceData = go_data_vector_val_new( info->xData, info->datasize, NULL );
-	gog_series_set_dim( series, 0, sliceData, NULL );
-	go_data_emit_changed( GO_DATA(sliceData) );
+    sliceData = go_data_vector_val_new( info->xData, info->datasize, NULL );
+    gog_series_set_dim( series, 0, sliceData, NULL );
+    go_data_emit_changed( GO_DATA(sliceData) );
 
-	sliceData = go_data_vector_val_new( info->yData, info->datasize, NULL );
-	gog_series_set_dim( series, 1, sliceData, NULL );
-	go_data_emit_changed( GO_DATA(sliceData) );
+    sliceData = go_data_vector_val_new( info->yData, info->datasize, NULL );
+    gog_series_set_dim( series, 1, sliceData, NULL );
+    go_data_emit_changed( GO_DATA(sliceData) );
 
-	/* set marker shape */
-	if( info->marker_str != NULL ) {
-		GOMarkerShape shape;
+    /* set marker shape */
+    if ( info->marker_str != NULL )
+    {
+        GOMarkerShape shape;
 
-		if( g_str_has_prefix( info->marker_str, "filled ") ) {
-			fill = TRUE;
-			info->marker_str += 7;
-		}
-		shape = go_marker_shape_from_str( info->marker_str );
-		if( shape != GO_MARKER_NONE ) {
-			style->marker.auto_shape = FALSE;
-			go_marker_set_shape( style->marker.mark, shape );
-		} else {
-			g_warning( "cannot parse marker shape [%s]", info->marker_str );
-		}
-	}
+        if ( g_str_has_prefix( info->marker_str, "filled ") )
+        {
+            fill = TRUE;
+            info->marker_str += 7;
+        }
+        shape = go_marker_shape_from_str( info->marker_str );
+        if ( shape != GO_MARKER_NONE )
+        {
+            style->marker.auto_shape = FALSE;
+            go_marker_set_shape( style->marker.mark, shape );
+        }
+        else
+        {
+            g_warning( "cannot parse marker shape [%s]", info->marker_str );
+        }
+    }
 
-	/* set marker and line colors */
-	if( info->color_str != NULL ) {
-		GdkColor color;
-		if( gdk_color_parse( info->color_str, &color ) ) {
-			style->marker.auto_outline_color = FALSE;
-			go_marker_set_outline_color( style->marker.mark, GO_COLOR_FROM_GDK(color) );
-			style->line.auto_color = FALSE;
-			style->line.color = GO_COLOR_FROM_GDK(color);
-		} else {
-			g_warning( "cannot parse color [%s]", info->color_str );
-		}
-	}
+    /* set marker and line colors */
+    if ( info->color_str != NULL )
+    {
+        GdkColor color;
+        if ( gdk_color_parse( info->color_str, &color ) )
+        {
+            style->marker.auto_outline_color = FALSE;
+            go_marker_set_outline_color( style->marker.mark, GO_COLOR_FROM_GDK(color) );
+            style->line.auto_color = FALSE;
+            style->line.color = GO_COLOR_FROM_GDK(color);
+        }
+        else
+        {
+            g_warning( "cannot parse color [%s]", info->color_str );
+        }
+    }
 
-	/* set marker fill colors */
-	if( fill ) {
-		style->marker.auto_fill_color = style->marker.auto_outline_color;
-		go_marker_set_fill_color( style->marker.mark,
-								go_marker_get_outline_color( style->marker.mark ) );
-	} else {
-		GOStyle *chart_style = go_styled_object_get_style( GO_STYLED_OBJECT(chart) );
+    /* set marker fill colors */
+    if ( fill )
+    {
+        style->marker.auto_fill_color = style->marker.auto_outline_color;
+        go_marker_set_fill_color( style->marker.mark,
+                                  go_marker_get_outline_color( style->marker.mark ) );
+    }
+    else
+    {
+        GOStyle *chart_style = go_styled_object_get_style( GO_STYLED_OBJECT(chart) );
 
-		if( chart_style->fill.type == GO_STYLE_FILL_PATTERN
-				&& chart_style->fill.pattern.pattern == GO_PATTERN_SOLID ) {
-			style->marker.auto_fill_color = FALSE;
-			go_marker_set_fill_color( style->marker.mark, chart_style->fill.pattern.back );
-		} else if( chart_style->fill.type == GO_STYLE_FILL_PATTERN
-				&& chart_style->fill.pattern.pattern == GO_PATTERN_FOREGROUND_SOLID ) {
-			style->marker.auto_fill_color = FALSE;
-			go_marker_set_fill_color( style->marker.mark, chart_style->fill.pattern.fore );
-		} else {
-			g_warning( "fill color of markers can only be set like a solid fill "
-						"pattern of the chart" );
-		}
-	}
+        if ( chart_style->fill.type == GO_STYLE_FILL_PATTERN
+                && chart_style->fill.pattern.pattern == GO_PATTERN_SOLID )
+        {
+            style->marker.auto_fill_color = FALSE;
+            go_marker_set_fill_color( style->marker.mark, chart_style->fill.pattern.back );
+        }
+        else if ( chart_style->fill.type == GO_STYLE_FILL_PATTERN
+                  && chart_style->fill.pattern.pattern == GO_PATTERN_FOREGROUND_SOLID )
+        {
+            style->marker.auto_fill_color = FALSE;
+            go_marker_set_fill_color( style->marker.mark, chart_style->fill.pattern.fore );
+        }
+        else
+        {
+            g_warning( "fill color of markers can only be set like a solid fill "
+                       "pattern of the chart" );
+        }
+    }
 
-	set_chart_titles( chart, info->title, info->subtitle );
-	set_chart_axis_labels( chart, info->x_axis_label, info->y_axis_label );
+    set_chart_titles( chart, info->title, info->subtitle );
+    set_chart_axis_labels( chart, info->x_axis_label, info->y_axis_label );
 
-	// And twice for the scatter, too... :p
-	gog_object_update( GOG_OBJECT(graph) );
+    // And twice for the scatter, too... :p
+    gog_object_update( GOG_OBJECT(graph) );
 
-	return create_graph_pixbuf( graph, info->width, info->height );
+    return create_graph_pixbuf( graph, info->width, info->height );
 }

@@ -20,7 +20,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
- 
+
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,17 +31,18 @@
 static void
 run_test(void)
 {
-	do_test(TRUE, "test engine loaded OK");
+    do_test(TRUE, "test engine loaded OK");
 }
 
 int
 main (int argc, char ** argv)
 {
-	qof_init();
-	if(cashobjects_register()) {
-		run_test ();
-		print_test_results();
-	}
-	qof_close();
-  return get_rv();
+    qof_init();
+    if (cashobjects_register())
+    {
+        run_test ();
+        print_test_results();
+    }
+    qof_close();
+    return get_rv();
 }

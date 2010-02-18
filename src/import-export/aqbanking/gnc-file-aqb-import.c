@@ -89,22 +89,25 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     g_free(default_dir);
 
     dtaus_fd = g_open(selected_filename, O_RDONLY, 0);
-    if (dtaus_fd == -1) {
-      DEBUG("Could not open file %s", selected_filename);
-      goto cleanup;
+    if (dtaus_fd == -1)
+    {
+        DEBUG("Could not open file %s", selected_filename);
+        goto cleanup;
     }
 
     /* Get the API */
     api = gnc_AB_BANKING_new();
-    if (!api) {
+    if (!api)
+    {
         g_warning("gnc_file_aqbanking_import: Couldn't get AqBanking API");
         goto cleanup;
     }
     if (AB_Banking_OnlineInit(api
 #ifdef AQBANKING_VERSION_4_PLUS
-			      , 0
+                              , 0
 #endif
-			      ) != 0) {
+                             ) != 0)
+    {
         g_warning("gnc_file_aqbanking_import: "
                   "Couldn't initialize AqBanking API");
         goto cleanup;
@@ -113,14 +116,16 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
 
     /* Get a GUI object */
     gui = gnc_GWEN_Gui_get(NULL);
-    if (!gui) {
+    if (!gui)
+    {
         g_warning("gnc_ab_getbalance: Couldn't initialize Gwenhywfar GUI");
         goto cleanup;
     }
 
     /* Get import module */
     importer = AB_Banking_GetImExporter(api, aqbanking_importername);
-    if (!importer) {
+    if (!importer)
+    {
         g_warning("Import module %s not found", aqbanking_importername);
         gnc_error_dialog(NULL, "%s",
                          _("Import module for DTAUS import not found."));
@@ -132,21 +137,24 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
 
     /* Select profile */
     db_profile = GWEN_DB_GetFirstGroup(db_profiles);
-    while (db_profile) {
+    while (db_profile)
+    {
         const gchar *name;
 
         name = GWEN_DB_GetCharValue(db_profile, "name", 0, 0);
         g_return_if_fail(name);
-        if (g_ascii_strcasecmp(name, aqbanking_profilename)==0)
+        if (g_ascii_strcasecmp(name, aqbanking_profilename) == 0)
             break;
         db_profile = GWEN_DB_GetNextGroup(db_profile);
     }
-    if (!db_profile) {
+    if (!db_profile)
+    {
         g_warning("Profile \"%s\" for importer \"%s\" not found",
                   aqbanking_profilename, aqbanking_importername);
         /* For debugging: Print those available names that have been found */
         db_profile = GWEN_DB_GetFirstGroup(db_profiles);
-        while (db_profile) {
+        while (db_profile)
+        {
             const char *name = GWEN_DB_GetCharValue(db_profile, "name", 0, 0);
             g_warning("Only found profile \"%s\"\n", name ? name : "(null)");
             db_profile = GWEN_DB_GetNextGroup(db_profile);
@@ -160,13 +168,15 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     /* Wrap file in buffered gwen io */
     io = GWEN_Io_LayerFile_new(dtaus_fd, -1);
     dtaus_fd = -1;
-    if (GWEN_Io_Manager_RegisterLayer(io)) {
-	g_warning("gnc_file_aqbanking_import: Failed to wrap file");
-	goto cleanup;
+    if (GWEN_Io_Manager_RegisterLayer(io))
+    {
+        g_warning("gnc_file_aqbanking_import: Failed to wrap file");
+        goto cleanup;
     }
 
     /* Run the import */
-    if (AB_ImExporter_Import(importer, context, io, db_profile, 0)) {
+    if (AB_ImExporter_Import(importer, context, io, db_profile, 0))
+    {
         g_warning("gnc_file_aqbanking_import: Error on import");
         goto cleanup;
     }
@@ -183,8 +193,10 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     /* Extract the list of jobs */
     job_list = gnc_ab_ieci_get_job_list(ieci);
 
-    if (execute_transactions) {
-        if (gnc_ab_ieci_run_matcher(ieci)) {
+    if (execute_transactions)
+    {
+        if (gnc_ab_ieci_run_matcher(ieci))
+        {
             /* FIXME */
             /* gnc_hbci_multijob_execute(NULL, api, job_list, gui); */
         }

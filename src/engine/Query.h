@@ -63,23 +63,24 @@ typedef QofQuery Query;
 
 #define xaccQueryEqual		qof_query_equal
 
-typedef enum {
-  QUERY_TXN_MATCH_ALL=1,   /* match all accounts */
-  QUERY_TXN_MATCH_ANY=2    /* match any account */
+typedef enum
+{
+    QUERY_TXN_MATCH_ALL = 1, /* match all accounts */
+    QUERY_TXN_MATCH_ANY = 2  /* match any account */
 } query_txn_match_t;
 
-/* After the query has been set up, call one of these to run the query. 
+/* After the query has been set up, call one of these to run the query.
  *    XXX The routines below should be replaced by a query
  *    that explicitly asks for a list of the desired item.
  *
- * The xaccQueryGetSplits() routine returns all splits matching the 
+ * The xaccQueryGetSplits() routine returns all splits matching the
  *    query.  Any given split will appear at most once in the result;
  *    however, several splits from one transaction may appear in the list.
  *    The caller MUST NOT change the GList.
  *
  * The xaccQueryGetSplitsUniqueTrans() routine returns splits matching
- *    the query, but only one matching split per transaction will be 
- *    returned.  In other words, any given transaction will be 
+ *    the query, but only one matching split per transaction will be
+ *    returned.  In other words, any given transaction will be
  *    represented at most once in the returned list.  The caller must
  *    free the GList.
  *
@@ -91,17 +92,17 @@ typedef enum {
  * The xaccQueryGetLots() routine is just like GetTransactions() except
  *    it returns a list of Lots.
  *
- *    query_txn_match_t describes how to match accounts when querying 
+ *    query_txn_match_t describes how to match accounts when querying
  *    for transactions with xaccQueryGetTransactions().
- *    What is the difference between 'ANY' and 'ALL', you 
+ *    What is the difference between 'ANY' and 'ALL', you
  *    may ask?  First, let us recall that a transaction consists
  *    of splits, and each split belongs to exactly one account.
- *    Specifying "MATCH_ALL"  means that *every* account that 
- *    shows up in the query must also show up in some split in 
- *    the transaction (in order for that transaction to be 
+ *    Specifying "MATCH_ALL"  means that *every* account that
+ *    shows up in the query must also show up in some split in
+ *    the transaction (in order for that transaction to be
  *    selected).  By contrast, specifying 'ANY' means that
  *    any account in the query must show up in some split
- *    in the transaction (in order for the transaction to 
+ *    in the transaction (in order for the transaction to
  *    be selected).  Thus, 'ANY' acts as a boolean-OR when
  *    matching accounts, whereas 'AND' acts as a boolean-AND
  *    for matching accounts.  Whew. Got that?
@@ -112,7 +113,7 @@ TransList   * xaccQueryGetTransactions(Query * q, query_txn_match_t type);
 LotList     * xaccQueryGetLots(Query * q, query_txn_match_t type);
 
 /*******************************************************************
- *  match-adding API 
+ *  match-adding API
  *******************************************************************/
 
 void xaccQueryAddAccountMatch(Query *, AccountList *,
@@ -124,9 +125,9 @@ void xaccQueryAddAccountGUIDMatch(Query *, AccountGUIDList *,
 void xaccQueryAddSingleAccountMatch(Query *, Account *, QofQueryOp);
 
 void xaccQueryAddStringMatch (Query* q, const char *matchstring,
-			      gboolean case_sens, gboolean use_regexp,
+                              gboolean case_sens, gboolean use_regexp,
                               QofQueryOp op,
-			      const char * path, ...);
+                              const char * path, ...);
 void
 xaccQueryAddDescriptionMatch(Query *q, const char *m, gboolean c, gboolean r,
                              QofQueryOp o);
@@ -152,15 +153,15 @@ void
 xaccQueryAddBalanceMatch(Query *q, QofQueryCompare bal, QofQueryOp op);
 
 void xaccQueryAddNumericMatch (Query *q, gnc_numeric amount,
-			       QofNumericMatch sign, QofQueryCompare how,
-			       QofQueryOp op, const char * path, ...);
+                               QofNumericMatch sign, QofQueryCompare how,
+                               QofQueryOp op, const char * path, ...);
 
 /** The DateMatch queries match transactions whose posted date
  *    is in a date range.  If use_start is TRUE, then a matching
- *    posted date will be greater than the start date.   If 
- *    use_end is TRUE, then a match occurs for posted dates earlier 
- *    than the end date.  If both flags are set, then *both* 
- *    conditions must hold ('and').  If neither flag is set, then 
+ *    posted date will be greater than the start date.   If
+ *    use_end is TRUE, then a match occurs for posted dates earlier
+ *    than the end date.  If both flags are set, then *both*
+ *    conditions must hold ('and').  If neither flag is set, then
  *    all transactions are matched.
  */
 
@@ -168,29 +169,30 @@ void xaccQueryAddDateMatch(Query * q, gboolean use_start,
                            int sday, int smonth, int syear,
                            gboolean use_end, int eday, int emonth, int eyear,
                            QofQueryOp op);
-void xaccQueryAddDateMatchTS(Query * q, 
+void xaccQueryAddDateMatchTS(Query * q,
                              gboolean use_start, Timespec sts,
                              gboolean use_end, Timespec ets,
                              QofQueryOp op);
-void xaccQueryAddDateMatchTT(Query * q, 
+void xaccQueryAddDateMatchTT(Query * q,
                              gboolean use_start, time_t stt,
                              gboolean use_end, time_t ett,
                              QofQueryOp op);
-void xaccQueryGetDateMatchTS (Query * q, 
-			      Timespec * sts,
-			      Timespec * ets);
-void xaccQueryGetDateMatchTT (Query * q, 
-			      time_t * stt,
-			      time_t * ett);
+void xaccQueryGetDateMatchTS (Query * q,
+                              Timespec * sts,
+                              Timespec * ets);
+void xaccQueryGetDateMatchTT (Query * q,
+                              time_t * stt,
+                              time_t * ett);
 
-typedef enum {
-  CLEARED_NONE       = 0x0000,
-  CLEARED_NO         = 0x0001,
-  CLEARED_CLEARED    = 0x0002,
-  CLEARED_RECONCILED = 0x0004, 
-  CLEARED_FROZEN     = 0x0008,
-  CLEARED_VOIDED     = 0x0010,
-  CLEARED_ALL        = 0x001F
+typedef enum
+{
+    CLEARED_NONE       = 0x0000,
+    CLEARED_NO         = 0x0001,
+    CLEARED_CLEARED    = 0x0002,
+    CLEARED_RECONCILED = 0x0004,
+    CLEARED_FROZEN     = 0x0008,
+    CLEARED_VOIDED     = 0x0010,
+    CLEARED_ALL        = 0x001F
 } cleared_match_t;
 
 void xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QofQueryOp op);
@@ -203,7 +205,7 @@ void xaccQueryAddKVPMatch(Query *q, GSList *path, const KvpValue *value,
                           QofQueryOp op);
 
 /*******************************************************************
- *  compatibility interface with old Query API 
+ *  compatibility interface with old Query API
  *******************************************************************/
 time_t xaccQueryGetEarliestDateFound(Query * q);
 time_t xaccQueryGetLatestDateFound(Query * q);

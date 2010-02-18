@@ -160,7 +160,7 @@ write_book_parts(FILE *out, QofBook *book)
     xmlFreeNode (domnode);
 
     if (ferror(out) || fprintf(out, "\n") < 0)
-         return FALSE;
+        return FALSE;
 
     if (qof_book_get_slots(book))
     {
@@ -172,7 +172,7 @@ write_book_parts(FILE *out, QofBook *book)
             xmlFreeNode(kvpnode);
 
             if (ferror(out) || fprintf(out, "\n") < 0)
-                 return FALSE;
+                return FALSE;
         }
     }
 

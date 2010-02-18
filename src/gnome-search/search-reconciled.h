@@ -32,19 +32,21 @@
 typedef struct _GNCSearchReconciled	GNCSearchReconciled;
 typedef struct _GNCSearchReconciledClass	GNCSearchReconciledClass;
 
-struct _GNCSearchReconciled {
-  GNCSearchCoreType parent;
+struct _GNCSearchReconciled
+{
+    GNCSearchCoreType parent;
 
-  char_match_t		how;
-  cleared_match_t	value;
+    char_match_t		how;
+    cleared_match_t	value;
 };
 
-struct _GNCSearchReconciledClass {
-  GNCSearchCoreTypeClass parent_class;
+struct _GNCSearchReconciledClass
+{
+    GNCSearchCoreTypeClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  /* signals */
+    /* signals */
 };
 
 GType		gnc_search_reconciled_get_type	(void);

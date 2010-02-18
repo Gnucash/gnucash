@@ -50,8 +50,9 @@ static void gnc_search_core_type_finalize	(GObject *obj);
 
 typedef struct _GNCSearchCoreTypePrivate GNCSearchCoreTypePrivate;
 
-struct _GNCSearchCoreTypePrivate {
-  gpointer dummy;
+struct _GNCSearchCoreTypePrivate
+{
+    gpointer dummy;
 };
 
 #define _PRIVATE(o) \
@@ -64,43 +65,45 @@ static GHashTable *typeTable = NULL;
 GType
 gnc_search_core_type_get_type (void)
 {
-  static GType type = 0;
+    static GType type = 0;
 
-  if (type == 0) {
-    GTypeInfo type_info = {
-      sizeof (GNCSearchCoreTypeClass),
-      NULL,
-      NULL,
-      (GClassInitFunc)gnc_search_core_type_class_init,
-      NULL,
-      NULL,
-      sizeof (GNCSearchCoreType),
-      0,
-      (GInstanceInitFunc)gnc_search_core_type_init
-    };
-		
-    type = g_type_register_static (G_TYPE_OBJECT, "GNCSearchCoreType", &type_info, 0);
-  }
-  
-  return type;
+    if (type == 0)
+    {
+        GTypeInfo type_info =
+        {
+            sizeof (GNCSearchCoreTypeClass),
+            NULL,
+            NULL,
+            (GClassInitFunc)gnc_search_core_type_class_init,
+            NULL,
+            NULL,
+            sizeof (GNCSearchCoreType),
+            0,
+            (GInstanceInitFunc)gnc_search_core_type_init
+        };
+
+        type = g_type_register_static (G_TYPE_OBJECT, "GNCSearchCoreType", &type_info, 0);
+    }
+
+    return type;
 }
 
 static void
 gnc_search_core_type_class_init (GNCSearchCoreTypeClass *klass)
 {
-  GObjectClass *object_class;
-	
-  object_class = G_OBJECT_CLASS (klass);
-  parent_class = g_type_class_peek_parent (klass);
+    GObjectClass *object_class;
 
-  object_class->finalize = gnc_search_core_type_finalize;
+    object_class = G_OBJECT_CLASS (klass);
+    parent_class = g_type_class_peek_parent (klass);
 
-  /* override methods */
-  klass->validate = validate;
-  klass->grab_focus = grab_focus;
-  klass->editable_enters = editable_enters;
+    object_class->finalize = gnc_search_core_type_finalize;
 
-  g_type_class_add_private(klass, sizeof(GNCSearchCoreTypePrivate));
+    /* override methods */
+    klass->validate = validate;
+    klass->grab_focus = grab_focus;
+    klass->editable_enters = editable_enters;
+
+    g_type_class_add_private(klass, sizeof(GNCSearchCoreTypePrivate));
 }
 
 static void
@@ -111,186 +114,189 @@ gnc_search_core_type_init (GNCSearchCoreType *o)
 static void
 gnc_search_core_type_finalize (GObject *obj)
 {
-  GNCSearchCoreType *o = (GNCSearchCoreType *)obj;
-  g_assert (GNC_IS_SEARCH_CORE_TYPE (o));
+    GNCSearchCoreType *o = (GNCSearchCoreType *)obj;
+    g_assert (GNC_IS_SEARCH_CORE_TYPE (o));
 
-  G_OBJECT_CLASS (parent_class)->finalize(obj);
+    G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
 /**
  * gnc_search_core_type_new:
  *
  * Create a new GNCSearchCoreType object.
- * 
+ *
  * Return value: A new #GNCSearchCoreType object.
  **/
 GNCSearchCoreType *
 gnc_search_core_type_new (void)
 {
-  GNCSearchCoreType *o;
+    GNCSearchCoreType *o;
 
-  o = g_object_new (GNC_TYPE_SEARCH_CORE_TYPE, NULL);
+    o = g_object_new (GNC_TYPE_SEARCH_CORE_TYPE, NULL);
 
-  return o;
+    return o;
 }
 
 void
 gnc_search_core_type_editable_enters (GNCSearchCoreType *fe)
 {
-  GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->editable_enters (fe);
+    GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->editable_enters (fe);
 }
 
 void
 gnc_search_core_type_grab_focus (GNCSearchCoreType *fe)
 {
-  GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->grab_focus (fe);
+    GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->grab_focus (fe);
 }
 
 gboolean
 gnc_search_core_type_validate (GNCSearchCoreType *fe)
 {
-  return GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->validate (fe);
+    return GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->validate (fe);
 }
 
 /**
  * gnc_search_core_type_clone:
  * @fe: search core_type
- * 
+ *
  * Clones the GNCSearchCoreType @fe.
- * 
- * Return value: 
+ *
+ * Return value:
  **/
 GNCSearchCoreType *
 gnc_search_core_type_clone (GNCSearchCoreType *fe)
 {
-  return GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->clone(fe);
+    return GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->clone(fe);
 }
 
 /**
  * gnc_search_core_type_get_widget:
  * @fe: search core_type
  * @node: xml node
- * 
+ *
  * Create a widget to represent this core_type.
- * 
- * Return value: 
+ *
+ * Return value:
  **/
 GtkWidget *
 gnc_search_core_type_get_widget (GNCSearchCoreType *fe)
 {
-  return GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->get_widget(fe);
+    return GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->get_widget(fe);
 }
 
 /**
  * gnc_search_core_type_get_predicate:
  * @fe: search core_type
- * 
+ *
  * Create a Predicate Data that matches this core_type
- * 
- * Return value: 
+ *
+ * Return value:
  **/
 QueryPredData_t
 gnc_search_core_type_get_predicate (GNCSearchCoreType *fe)
 {
-  return GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->get_predicate(fe);
+    return GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->get_predicate(fe);
 }
 
 /**
  * gnc_search_core_type_new_type_name:
  * @type: search core_type type
- * 
+ *
  * Create a new search core_type based on its type name.
- * 
- * Return value: 
+ *
+ * Return value:
  **/
 GNCSearchCoreType *
 gnc_search_core_type_new_type_name (const char *type)
 {
-  GNCSearchCoreNew fcn;
+    GNCSearchCoreNew fcn;
 
-  g_return_val_if_fail (typeTable != NULL, NULL);
+    g_return_val_if_fail (typeTable != NULL, NULL);
 
-  if (type == NULL)
-    return NULL;
+    if (type == NULL)
+        return NULL;
 
-  fcn = g_hash_table_lookup (typeTable, type);
-  if (fcn) {
-    return ((fcn)());
-  } else {
-    g_warning("Unknown search type '%s'", type);
-    return NULL;
-  }
+    fcn = g_hash_table_lookup (typeTable, type);
+    if (fcn)
+    {
+        return ((fcn)());
+    }
+    else
+    {
+        g_warning("Unknown search type '%s'", type);
+        return NULL;
+    }
 }
 
 /* default implementations */
 static gboolean
 validate (GNCSearchCoreType *fe)
 {
-  return TRUE;
+    return TRUE;
 }
 
 static void
 grab_focus (GNCSearchCoreType *fe)
 {
-  return;
+    return;
 }
 
 static void
 editable_enters (GNCSearchCoreType *fe)
 {
-  return;
+    return;
 }
 
 void
 gnc_search_core_register_type (const char *type_name, GNCSearchCoreNew fcn)
 {
-  g_return_if_fail (type_name || *type_name || fcn);
-  g_return_if_fail (typeTable);
+    g_return_if_fail (type_name || *type_name || fcn);
+    g_return_if_fail (typeTable);
 
-  g_hash_table_insert (typeTable, (char *) type_name, (gpointer) fcn);
+    g_hash_table_insert (typeTable, (char *) type_name, (gpointer) fcn);
 }
 
 static void
 init_table (void)
 {
-  gnc_search_core_register_type (QUERYCORE_STRING,
-				 (GNCSearchCoreNew) gnc_search_string_new);
-  gnc_search_core_register_type (QUERYCORE_DATE,
-				 (GNCSearchCoreNew) gnc_search_date_new);
-  gnc_search_core_register_type (QUERYCORE_INT64,
-				 (GNCSearchCoreNew) gnc_search_int64_new);
-  gnc_search_core_register_type (QUERYCORE_DOUBLE,
-				 (GNCSearchCoreNew) gnc_search_double_new);
-  gnc_search_core_register_type (QUERYCORE_NUMERIC,
-				 (GNCSearchCoreNew) gnc_search_numeric_new);
-  gnc_search_core_register_type (QUERYCORE_DEBCRED,
-				 (GNCSearchCoreNew)
-				 gnc_search_numeric_debcred_new);
-  gnc_search_core_register_type (QUERYCORE_BOOLEAN,
-				 (GNCSearchCoreNew) gnc_search_boolean_new);
-  gnc_search_core_register_type (GNC_ID_ACCOUNT,
-				 (GNCSearchCoreNew) gnc_search_account_new);
-  gnc_search_core_register_type (ACCOUNT_MATCH_ALL_TYPE,
-				 (GNCSearchCoreNew)
-				 gnc_search_account_matchall_new);
-  gnc_search_core_register_type (RECONCILED_MATCH_TYPE,
-				 (GNCSearchCoreNew) gnc_search_reconciled_new);
+    gnc_search_core_register_type (QUERYCORE_STRING,
+                                   (GNCSearchCoreNew) gnc_search_string_new);
+    gnc_search_core_register_type (QUERYCORE_DATE,
+                                   (GNCSearchCoreNew) gnc_search_date_new);
+    gnc_search_core_register_type (QUERYCORE_INT64,
+                                   (GNCSearchCoreNew) gnc_search_int64_new);
+    gnc_search_core_register_type (QUERYCORE_DOUBLE,
+                                   (GNCSearchCoreNew) gnc_search_double_new);
+    gnc_search_core_register_type (QUERYCORE_NUMERIC,
+                                   (GNCSearchCoreNew) gnc_search_numeric_new);
+    gnc_search_core_register_type (QUERYCORE_DEBCRED,
+                                   (GNCSearchCoreNew)
+                                   gnc_search_numeric_debcred_new);
+    gnc_search_core_register_type (QUERYCORE_BOOLEAN,
+                                   (GNCSearchCoreNew) gnc_search_boolean_new);
+    gnc_search_core_register_type (GNC_ID_ACCOUNT,
+                                   (GNCSearchCoreNew) gnc_search_account_new);
+    gnc_search_core_register_type (ACCOUNT_MATCH_ALL_TYPE,
+                                   (GNCSearchCoreNew)
+                                   gnc_search_account_matchall_new);
+    gnc_search_core_register_type (RECONCILED_MATCH_TYPE,
+                                   (GNCSearchCoreNew) gnc_search_reconciled_new);
 }
 
 void
 gnc_search_core_initialize (void)
 {
-  g_return_if_fail (typeTable == NULL);
+    g_return_if_fail (typeTable == NULL);
 
-  typeTable = g_hash_table_new (g_str_hash, g_str_equal);
-  init_table ();
+    typeTable = g_hash_table_new (g_str_hash, g_str_equal);
+    init_table ();
 }
 
 void
 gnc_search_core_finalize (void)
 {
-  g_return_if_fail (typeTable != NULL);
+    g_return_if_fail (typeTable != NULL);
 
-  g_hash_table_destroy (typeTable);
-  typeTable = NULL;
+    g_hash_table_destroy (typeTable);
+    typeTable = NULL;
 }

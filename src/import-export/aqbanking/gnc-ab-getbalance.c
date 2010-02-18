@@ -58,15 +58,17 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
 
     /* Get the API */
     api = gnc_AB_BANKING_new();
-    if (!api) {
+    if (!api)
+    {
         g_warning("gnc_ab_gettrans: Couldn't get AqBanking API");
         return;
     }
     if (AB_Banking_OnlineInit(api
 #ifdef AQBANKING_VERSION_4_PLUS
-			      , 0
+                              , 0
 #endif
-			      ) != 0) {
+                             ) != 0)
+    {
         g_warning("gnc_ab_gettrans: Couldn't initialize AqBanking API");
         goto cleanup;
     }
@@ -74,14 +76,16 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
 
     /* Get the AqBanking Account */
     ab_acc = gnc_ab_get_ab_account(api, gnc_acc);
-    if (!ab_acc) {
+    if (!ab_acc)
+    {
         g_warning("gnc_ab_getbalance: No AqBanking account found");
         goto cleanup;
     }
 
     /* Get a GetBalance job and enqueue it */
     job = AB_JobGetBalance_new(ab_acc);
-    if (!job || AB_Job_CheckAvailability(job, 0)) {
+    if (!job || AB_Job_CheckAvailability(job, 0))
+    {
         g_warning("gnc_ab_getbalance: JobGetBalance not available for this "
                   "account");
         goto cleanup;
@@ -91,7 +95,8 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
 
     /* Get a GUI object */
     gui = gnc_GWEN_Gui_get(parent);
-    if (!gui) {
+    if (!gui)
+    {
         g_warning("gnc_ab_getbalance: Couldn't initialize Gwenhywfar GUI");
         goto cleanup;
     }
@@ -100,7 +105,8 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
     context = AB_ImExporterContext_new();
 
     /* Execute the job */
-    if (AB_Banking_ExecuteJobs(api, job_list, context, 0)) {
+    if (AB_Banking_ExecuteJobs(api, job_list, context, 0))
+    {
         g_warning("gnc_ab_getbalance: Error on executing job");
         goto cleanup;
     }
@@ -121,9 +127,9 @@ cleanup:
         AB_Job_free(job);
     if (online)
 #ifdef AQBANKING_VERSION_4_PLUS
-	AB_Banking_OnlineFini(api, 0);
+        AB_Banking_OnlineFini(api, 0);
 #else
-	AB_Banking_OnlineFini(api);
+        AB_Banking_OnlineFini(api);
 #endif
     gnc_AB_BANKING_fini(api);
 }

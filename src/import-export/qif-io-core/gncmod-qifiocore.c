@@ -23,37 +23,44 @@ int libgncmod_qifiocore_gnc_module_age      = 0;
 
 
 char *
-libgncmod_qifiocore_gnc_module_path(void) {
-  return g_strdup("gnucash/qif-io/core");
+libgncmod_qifiocore_gnc_module_path(void)
+{
+    return g_strdup("gnucash/qif-io/core");
 }
 
 char *
-libgncmod_qifiocore_gnc_module_description(void) {
-  return g_strdup("Core components of QIF import/export (non-GUI)");
+libgncmod_qifiocore_gnc_module_description(void)
+{
+    return g_strdup("Core components of QIF import/export (non-GUI)");
 }
 
 int
-libgncmod_qifiocore_gnc_module_init(int refcount) {
-  /* load the engine (we depend on it) */
-  if(!gnc_module_load("gnucash/engine", 0)) {
-    return FALSE;
-  }
+libgncmod_qifiocore_gnc_module_init(int refcount)
+{
+    /* load the engine (we depend on it) */
+    if (!gnc_module_load("gnucash/engine", 0))
+    {
+        return FALSE;
+    }
 
-  /* load the engine (we depend on it) */
-  if(!gnc_module_load("gnucash/app-utils", 0)) {
-    return FALSE;
-  }
+    /* load the engine (we depend on it) */
+    if (!gnc_module_load("gnucash/app-utils", 0))
+    {
+        return FALSE;
+    }
 
-  /* load the QIF Scheme code */
-  if(scm_c_eval_string("(use-modules (gnucash import-export qif-io-core))") ==
-     SCM_BOOL_F) {
-    return FALSE;
-  }
+    /* load the QIF Scheme code */
+    if (scm_c_eval_string("(use-modules (gnucash import-export qif-io-core))") ==
+            SCM_BOOL_F)
+    {
+        return FALSE;
+    }
 
-  return TRUE;
+    return TRUE;
 }
 
 int
-libgncmod_qifiocore_gnc_module_end(int refcount) {
-  return TRUE;
+libgncmod_qifiocore_gnc_module_end(int refcount)
+{
+    return TRUE;
 }

@@ -73,7 +73,7 @@ GNCDruidProvider* gnc_druid_provider_new(GNCDruid* druid,
 
 typedef GNCDruidProvider* (*GNCDruidProviderNew)(GNCDruid*, GNCDruidProviderDesc*);
 void	gnc_druid_provider_register(const gchar* ui_type, const gchar* name,
-                                 GNCDruidProviderNew new_provider);
+                                    GNCDruidProviderNew new_provider);
 
 /* methods */
 

@@ -39,15 +39,17 @@ typedef struct _GncHtmlGtkhtml GncHtmlGtkhtml;
 typedef struct _GncHtmlGtkhtmlClass GncHtmlGtkhtmlClass;
 typedef struct _GncHtmlGtkhtmlPrivate GncHtmlGtkhtmlPrivate;
 
-struct _GncHtmlGtkhtml {
-	GncHtml parent_instance;
+struct _GncHtmlGtkhtml
+{
+    GncHtml parent_instance;
 
-	/*< private >*/
-	GncHtmlGtkhtmlPrivate* priv;
+    /*< private >*/
+    GncHtmlGtkhtmlPrivate* priv;
 };
 
-struct _GncHtmlGtkhtmlClass {
-	GncHtmlClass parent_class;
+struct _GncHtmlGtkhtmlClass
+{
+    GncHtmlClass parent_class;
 };
 
 GType gnc_html_gtkhtml_get_type( void );

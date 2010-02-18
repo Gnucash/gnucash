@@ -332,7 +332,8 @@ config_foreach_cb (const char *key, KvpValue *value, gpointer data)
         return;
     }
     switch (option.type)
-    { /* set the KvpFrame value into the option */
+    {
+        /* set the KvpFrame value into the option */
     case KVP_TYPE_GINT64   :
     {
         int64 = kvp_value_get_gint64(value);
@@ -389,7 +390,8 @@ config_foreach_cb (const char *key, KvpValue *value, gpointer data)
     /* manipulate the option */
     helper->fcn (&option, helper->data);
     switch (option.type)
-    { /* set the option value into the KvpFrame */
+    {
+        /* set the option value into the KvpFrame */
     case KVP_TYPE_GINT64   :
     {
         kvp_frame_set_gint64(helper->recursive, key,

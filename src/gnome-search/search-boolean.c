@@ -45,8 +45,9 @@ static void gnc_search_boolean_finalize	(GObject *obj);
 
 typedef struct _GNCSearchBooleanPrivate GNCSearchBooleanPrivate;
 
-struct _GNCSearchBooleanPrivate {
-  gpointer dummy;
+struct _GNCSearchBooleanPrivate
+{
+    gpointer dummy;
 };
 
 #define _PRIVATE(o) \
@@ -57,176 +58,178 @@ static GNCSearchCoreTypeClass *parent_class;
 GType
 gnc_search_boolean_get_type (void)
 {
-  static GType type = 0;
-	
-  if (!type) {
-    GTypeInfo type_info = {
-      sizeof(GNCSearchBooleanClass),    /* class_size */
-      NULL,   				/* base_init */
-      NULL,				/* base_finalize */
-      (GClassInitFunc)gnc_search_boolean_class_init,
-      NULL,				/* class_finalize */
-      NULL,				/* class_data */
-      sizeof(GNCSearchBoolean),		/* */
-      0,				/* n_preallocs */
-      (GInstanceInitFunc)gnc_search_boolean_init,
-    };
-		
-    type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
-				   "GNCSearchBoolean",
-				   &type_info, 0);
-  }
-	
-  return type;
+    static GType type = 0;
+
+    if (!type)
+    {
+        GTypeInfo type_info =
+        {
+            sizeof(GNCSearchBooleanClass),    /* class_size */
+            NULL,   				/* base_init */
+            NULL,				/* base_finalize */
+            (GClassInitFunc)gnc_search_boolean_class_init,
+            NULL,				/* class_finalize */
+            NULL,				/* class_data */
+            sizeof(GNCSearchBoolean),		/* */
+            0,				/* n_preallocs */
+            (GInstanceInitFunc)gnc_search_boolean_init,
+        };
+
+        type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
+                                       "GNCSearchBoolean",
+                                       &type_info, 0);
+    }
+
+    return type;
 }
 
 static void
 gnc_search_boolean_class_init (GNCSearchBooleanClass *class)
 {
-  GObjectClass *object_class;
-  GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
+    GObjectClass *object_class;
+    GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
-  object_class = G_OBJECT_CLASS (class);
-  parent_class = g_type_class_peek_parent (class);
+    object_class = G_OBJECT_CLASS (class);
+    parent_class = g_type_class_peek_parent (class);
 
-  object_class->finalize = gnc_search_boolean_finalize;
+    object_class->finalize = gnc_search_boolean_finalize;
 
-  /* override methods */
-  gnc_search_core_type->validate = gncs_validate;
-  gnc_search_core_type->get_widget = gncs_get_widget;
-  gnc_search_core_type->get_predicate = gncs_get_predicate;
-  gnc_search_core_type->clone = gncs_clone;
+    /* override methods */
+    gnc_search_core_type->validate = gncs_validate;
+    gnc_search_core_type->get_widget = gncs_get_widget;
+    gnc_search_core_type->get_predicate = gncs_get_predicate;
+    gnc_search_core_type->clone = gncs_clone;
 
-  g_type_class_add_private(class, sizeof(GNCSearchBooleanPrivate));
+    g_type_class_add_private(class, sizeof(GNCSearchBooleanPrivate));
 }
 
 static void
 gnc_search_boolean_init (GNCSearchBoolean *o)
 {
-  o->how = COMPARE_EQUAL;
-  o->value = TRUE;
+    o->how = COMPARE_EQUAL;
+    o->value = TRUE;
 }
 
 static void
 gnc_search_boolean_finalize (GObject *obj)
 {
-  GNCSearchBoolean *o = (GNCSearchBoolean *)obj;
-  g_assert (IS_GNCSEARCH_BOOLEAN (o));
+    GNCSearchBoolean *o = (GNCSearchBoolean *)obj;
+    g_assert (IS_GNCSEARCH_BOOLEAN (o));
 
-  G_OBJECT_CLASS (parent_class)->finalize(obj);
+    G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
 /**
  * gnc_search_boolean_new:
  *
  * Create a new GNCSearchBoolean object.
- * 
+ *
  * Return value: A new #GNCSearchBoolean object.
  **/
 GNCSearchBoolean *
 gnc_search_boolean_new (void)
 {
-  GNCSearchBoolean *o = g_object_new(GNC_TYPE_SEARCH_BOOLEAN, NULL);
-  return o;
+    GNCSearchBoolean *o = g_object_new(GNC_TYPE_SEARCH_BOOLEAN, NULL);
+    return o;
 }
 
 void
 gnc_search_boolean_set_value (GNCSearchBoolean *fi, gboolean value)
 {
-  g_return_if_fail (fi);
-  g_return_if_fail (IS_GNCSEARCH_BOOLEAN (fi));
-	
-  fi->value = value;
+    g_return_if_fail (fi);
+    g_return_if_fail (IS_GNCSEARCH_BOOLEAN (fi));
+
+    fi->value = value;
 }
 
 void
 gnc_search_boolean_set_how (GNCSearchBoolean *fi, query_compare_t how)
 {
-  g_return_if_fail (fi);
-  g_return_if_fail (IS_GNCSEARCH_BOOLEAN (fi));
-  fi->how = how;
+    g_return_if_fail (fi);
+    g_return_if_fail (IS_GNCSEARCH_BOOLEAN (fi));
+    fi->how = how;
 }
 
 static gboolean
 gncs_validate (GNCSearchCoreType *fe)
 {
-  GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
-  gboolean valid = TRUE;
+    GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
+    gboolean valid = TRUE;
 
-  g_return_val_if_fail (fi, FALSE);
-  g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fi), FALSE);
-	
-  /* XXX */
+    g_return_val_if_fail (fi, FALSE);
+    g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fi), FALSE);
 
-  return valid;
+    /* XXX */
+
+    return valid;
 }
 
 static void
 toggle_changed (GtkToggleButton *button, GNCSearchBoolean *fe)
 {
-  fe->value = gtk_toggle_button_get_active (button);
+    fe->value = gtk_toggle_button_get_active (button);
 }
 
 static GtkWidget *
 make_menu (GNCSearchCoreType *fe)
 {
-  GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
-  GtkComboBox *combo;
+    GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
+    GtkComboBox *combo;
 
-  combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
-  gnc_combo_box_search_add(combo, _("is"), COMPARE_EQUAL);
-  gnc_combo_box_search_add(combo, _("is not"), COMPARE_NEQ);
-  gnc_combo_box_search_changed(combo, &fi->how);
-  gnc_combo_box_search_set_active(combo, fi->how ? fi->how : COMPARE_EQUAL);
+    combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
+    gnc_combo_box_search_add(combo, _("is"), COMPARE_EQUAL);
+    gnc_combo_box_search_add(combo, _("is not"), COMPARE_NEQ);
+    gnc_combo_box_search_changed(combo, &fi->how);
+    gnc_combo_box_search_set_active(combo, fi->how ? fi->how : COMPARE_EQUAL);
 
-  return GTK_WIDGET(combo);
+    return GTK_WIDGET(combo);
 }
 
 static GtkWidget *
 gncs_get_widget (GNCSearchCoreType *fe)
 {
-  GtkWidget *toggle, *menu, *box;
-  GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
-	
-  g_return_val_if_fail (fi, NULL);
-  g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fi), NULL);
+    GtkWidget *toggle, *menu, *box;
+    GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
 
-  box = gtk_hbox_new (FALSE, 3);
+    g_return_val_if_fail (fi, NULL);
+    g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fi), NULL);
 
-  /* Build and connect the option menu */
-  menu = make_menu (fe);
-  gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+    box = gtk_hbox_new (FALSE, 3);
 
-  /* Build and connect the toggle */
-  toggle = gtk_toggle_button_new_with_label (_("set true"));
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), fi->value);
-  g_signal_connect (G_OBJECT (toggle), "toggled", G_CALLBACK (toggle_changed), fe);
-  gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+    /* Build and connect the option menu */
+    menu = make_menu (fe);
+    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
 
-  /* And return the box */
-  return box;
+    /* Build and connect the toggle */
+    toggle = gtk_toggle_button_new_with_label (_("set true"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), fi->value);
+    g_signal_connect (G_OBJECT (toggle), "toggled", G_CALLBACK (toggle_changed), fe);
+    gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+
+    /* And return the box */
+    return box;
 }
 
 static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 {
-  GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
+    GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
 
-  g_return_val_if_fail (fi, NULL);
-  g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fi), NULL);
+    g_return_val_if_fail (fi, NULL);
+    g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fi), NULL);
 
-  return gncQueryBooleanPredicate (fi->how, fi->value);
+    return gncQueryBooleanPredicate (fi->how, fi->value);
 }
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
 {
-  GNCSearchBoolean *se, *fse = (GNCSearchBoolean *)fe;
+    GNCSearchBoolean *se, *fse = (GNCSearchBoolean *)fe;
 
-  g_return_val_if_fail (fse, NULL);
-  g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fse), NULL);
+    g_return_val_if_fail (fse, NULL);
+    g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fse), NULL);
 
-  se = gnc_search_boolean_new ();
-  gnc_search_boolean_set_value (se, fse->value);
-  gnc_search_boolean_set_how (se, fse->how);
+    se = gnc_search_boolean_new ();
+    gnc_search_boolean_set_value (se, fse->value);
+    gnc_search_boolean_set_how (se, fse->how);
 
-  return (GNCSearchCoreType *)se;
+    return (GNCSearchCoreType *)se;
 }

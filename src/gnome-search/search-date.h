@@ -33,19 +33,21 @@
 typedef struct _GNCSearchDate	GNCSearchDate;
 typedef struct _GNCSearchDateClass	GNCSearchDateClass;
 
-struct _GNCSearchDate {
-  GNCSearchCoreType parent;
+struct _GNCSearchDate
+{
+    GNCSearchCoreType parent;
 
-  query_compare_t	how;
-  Timespec		ts;
+    query_compare_t	how;
+    Timespec		ts;
 };
 
-struct _GNCSearchDateClass {
-  GNCSearchCoreTypeClass parent_class;
+struct _GNCSearchDateClass
+{
+    GNCSearchCoreTypeClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  /* signals */
+    /* signals */
 };
 
 GType		gnc_search_date_get_type	(void);

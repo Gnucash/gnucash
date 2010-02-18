@@ -339,7 +339,8 @@ void qof_date_format_set(QofDateFormat df)
         dateFormat = df;
     }
     else
-    {    /* hack alert - Use a neutral default. */
+    {
+        /* hack alert - Use a neutral default. */
         PERR("non-existent date format set attempted. Setting ISO default");
         prevQofDateFormat = dateFormat;
         dateFormat = QOF_DATE_FORMAT_ISO;
@@ -859,7 +860,8 @@ char dateSeparator (void)
         if (locale_separator != '\0')
             return locale_separator;
         else
-        { /* Make a guess */
+        {
+            /* Make a guess */
             gchar string[256];
             struct tm tm;
             time_t secs;

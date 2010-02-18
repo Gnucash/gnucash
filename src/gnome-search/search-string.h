@@ -31,27 +31,30 @@
 typedef struct _GNCSearchString	GNCSearchString;
 typedef struct _GNCSearchStringClass	GNCSearchStringClass;
 
-typedef enum _search_string_how {
-  SEARCH_STRING_CONTAINS,
-  SEARCH_STRING_NOT_CONTAINS,
-  SEARCH_STRING_MATCHES_REGEX,
-  SEARCH_STRING_NOT_MATCHES_REGEX
+typedef enum _search_string_how
+{
+    SEARCH_STRING_CONTAINS,
+    SEARCH_STRING_NOT_CONTAINS,
+    SEARCH_STRING_MATCHES_REGEX,
+    SEARCH_STRING_NOT_MATCHES_REGEX
 } GNCSearchString_Type;
 
-struct _GNCSearchString {
-  GNCSearchCoreType parent;
+struct _GNCSearchString
+{
+    GNCSearchCoreType parent;
 
-  GNCSearchString_Type	how;
-  gboolean		ign_case;
-  char *		value;
+    GNCSearchString_Type	how;
+    gboolean		ign_case;
+    char *		value;
 };
 
-struct _GNCSearchStringClass {
-  GNCSearchCoreTypeClass parent_class;
+struct _GNCSearchStringClass
+{
+    GNCSearchCoreTypeClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  /* signals */
+    /* signals */
 };
 
 GType		gnc_search_string_get_type	(void);

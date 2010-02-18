@@ -100,7 +100,7 @@ GType gnc_pricedb_get_type(void);
     2001-02-03.
 
     \par Fields:
-    
+
     - commodity: the item being priced.
     - currency: the denomination of the value of the item being priced.
     - value: the value of the item being priced.
@@ -162,7 +162,8 @@ typedef GList PriceList;
 
 /** gnc_price_create - returns a newly allocated and initialized price
    with a reference count of 1. */
-/*@ dependent @*/ GNCPrice *gnc_price_create(QofBook *book);
+/*@ dependent @*/
+GNCPrice *gnc_price_create(QofBook *book);
 
 /** gnc_price_clone - returns a newly allocated price that's a
    content-wise duplicate of the given price, p.  The returned clone
@@ -188,11 +189,11 @@ void      gnc_price_unref(GNCPrice *p);
  * All of the setters store copies of the data
  * given, with the exception of the commodity field which just stores
  * the pointer given.  It is assumed that commodities are a global
- * resource and are pointer unique. 
+ * resource and are pointer unique.
  *
  * Invocations of the setters should be wrapped with calls to
  * gnc_price_begin_edit() and commit_edit().  The begin/commit
- * calls help ensure that the local price db is synchronized with 
+ * calls help ensure that the local price db is synchronized with
  * the backend.
    @{ */
 void gnc_price_begin_edit (GNCPrice *p);
@@ -213,8 +214,10 @@ void gnc_price_set_value(GNCPrice *p, gnc_numeric value);
     @{ */
 
 GNCPrice *      gnc_price_lookup (const GUID *guid, QofBook *book);
-/*@ dependent @*/ gnc_commodity * gnc_price_get_commodity(const GNCPrice *p);
-/*@ dependent @*/ gnc_commodity * gnc_price_get_currency(const GNCPrice *p);
+/*@ dependent @*/
+gnc_commodity * gnc_price_get_commodity(const GNCPrice *p);
+/*@ dependent @*/
+gnc_commodity * gnc_price_get_currency(const GNCPrice *p);
 Timespec        gnc_price_get_time(const GNCPrice *p);
 const char *    gnc_price_get_source(const GNCPrice *p);
 const char *    gnc_price_get_typestr(const GNCPrice *p);
@@ -308,7 +311,7 @@ gboolean     gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p);
 gboolean     gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p);
 
 gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff,
-					   const gboolean delete_user, gboolean delete_last);
+        const gboolean delete_user, gboolean delete_last);
 
 /** gnc_pricedb_lookup_latest - find the most recent price for the
      given commodity in the given currency.  Returns NULL on
@@ -321,7 +324,7 @@ GNCPrice   * gnc_pricedb_lookup_latest(GNCPriceDB *db,
      for the given commodity in any available currency. Prices will be
      returned as a GNCPrice list (see above). */
 PriceList * gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
-                                                 const gnc_commodity *commodity);
+        const gnc_commodity *commodity);
 
 /** gnc_pricedb_has_prices - return an indication of whether or not
     there are any prices for a given commodity in the given currency.
@@ -334,92 +337,92 @@ gboolean     gnc_pricedb_has_prices(GNCPriceDB *db,
      commodity in the given currency.  Returns NULL on failure.  The
      result is a GNCPrice list (see above).  */
 PriceList * gnc_pricedb_get_prices(GNCPriceDB *db,
-                                 const gnc_commodity *commodity,
-                                 const gnc_commodity *currency);
+                                   const gnc_commodity *commodity,
+                                   const gnc_commodity *currency);
 
 /** gnc_pricedb_lookup_at_time - return all prices that match the given
      commodity, currency, and timespec.  Prices will be returned as a
      GNCPrice list (see above). */
 PriceList * gnc_pricedb_lookup_at_time(GNCPriceDB *db,
-                                     const gnc_commodity *commodity,
-                                     const gnc_commodity *currency,
-                                     Timespec t);
+                                       const gnc_commodity *commodity,
+                                       const gnc_commodity *currency,
+                                       Timespec t);
 
 /** gnc_pricedb_lookup_at_time_any_currency - return all prices that match the
      given commodity and timespec in any available currency.  Prices will be
      returned as a GNCPrice list (see above). */
 PriceList * gnc_pricedb_lookup_at_time_any_currency(GNCPriceDB *db,
-                                                  const gnc_commodity *c,
-                                                  Timespec t);
+        const gnc_commodity *c,
+        Timespec t);
 
 /** gnc_pricedb_lookup_day - return all prices that match the given
      commodity, currency, and timespec.  Prices will be returned as a
      GNCPrice list (see above). */
 PriceList * gnc_pricedb_lookup_day(GNCPriceDB *db,
-                                 const gnc_commodity *commodity,
-                                 const gnc_commodity *currency,
-                                 Timespec t);
+                                   const gnc_commodity *commodity,
+                                   const gnc_commodity *currency,
+                                   Timespec t);
 
 /** gnc_pricedb_lookup_day_any_currency - return all prices that match the
      given commodity and timespec in any available currency.  Prices will be
      returned as a GNCPrice list (see above). */
 PriceList * gnc_pricedb_lookup_day_any_currency(GNCPriceDB *db,
-                                              const gnc_commodity *c,
-                                              Timespec t);
+        const gnc_commodity *c,
+        Timespec t);
 
 /** gnc_pricedb_lookup_nearest_in_time - return the price for the given
      commodity in the given currency nearest to the given time t. */
 GNCPrice   * gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
-                                                const gnc_commodity *c,
-                                                const gnc_commodity *currency,
-                                                Timespec t);
+        const gnc_commodity *c,
+        const gnc_commodity *currency,
+        Timespec t);
 
 /** gnc_pricedb_lookup_nearest_in_time_any_currency - return all prices that
      match the given commodity and timespec in any available currency. Prices
      will be returned as a GNCPrice list (see above). */
 PriceList * gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
-                                                          const gnc_commodity *c,
-                                                          Timespec t);
+        const gnc_commodity *c,
+        Timespec t);
 /** gnc_pricedb_lookup_latest_before - return the latest price for the given commodity
     in the given currency up to and including time t. */
 GNCPrice * gnc_pricedb_lookup_latest_before(GNCPriceDB *db,
-					    gnc_commodity *c,
-					    gnc_commodity *currency,
-					    Timespec t);
+        gnc_commodity *c,
+        gnc_commodity *currency,
+        Timespec t);
 
 /** gnc_pricedb_lookup_latest_before_any_currency - return recent prices that
      match the given commodity up to and including time t in any available currency. Prices
      will be returned as a GNCPrice list (see above). */
 PriceList * gnc_pricedb_lookup_latest_before_any_currency(GNCPriceDB *db,
-                                                        gnc_commodity *c,
-                                                        Timespec t);
+        gnc_commodity *c,
+        Timespec t);
 
 
 /** gnc_pricedb_convert_balance_latest_price - Convert a balance
     from one currency to another. */
 gnc_numeric
 gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
-				         gnc_numeric balance,
-				         const gnc_commodity *balance_currency,
-				         const gnc_commodity *new_currency);
+        gnc_numeric balance,
+        const gnc_commodity *balance_currency,
+        const gnc_commodity *new_currency);
 
 /** gnc_pricedb_convert_balance_nearest_price - Convert a balance
     from one currency to another. */
 gnc_numeric
 gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
-				          gnc_numeric balance,
-				          const gnc_commodity *balance_currency,
-				          const gnc_commodity *new_currency,
-					  Timespec t);
+        gnc_numeric balance,
+        const gnc_commodity *balance_currency,
+        const gnc_commodity *new_currency,
+        Timespec t);
 
 /** gnc_pricedb_convert_balance_latest_before - Convert a balance from one currency
     to another using the lastest price prior to Timespec t. */
 gnc_numeric
 gnc_pricedb_convert_balance_latest_before(GNCPriceDB *pdb,
-                                          gnc_numeric balance,
-                                          gnc_commodity *balance_currency,
-                                          gnc_commodity *new_currency,
-                                          Timespec t);
+        gnc_numeric balance,
+        gnc_commodity *balance_currency,
+        gnc_commodity *new_currency,
+        Timespec t);
 
 
 /** gnc_pricedb_foreach_price - call f once for each price in db, until
@@ -429,7 +432,7 @@ gnc_pricedb_convert_balance_latest_before(GNCPriceDB *pdb,
      less efficient).  */
 gboolean     gnc_pricedb_foreach_price(GNCPriceDB *db,
                                        gboolean (*f)(GNCPrice *p,
-                                                     gpointer user_data),
+                                               gpointer user_data),
                                        gpointer user_data,
                                        gboolean stable_order);
 

@@ -39,14 +39,15 @@ static gint report_next_serial_id = 0;
 static void
 gnc_report_init_table(void)
 {
-    if (!reports) {
+    if (!reports)
+    {
         reports = g_hash_table_new_full(
-            g_int_hash, g_int_equal, 
-            g_free, (GDestroyNotify) scm_gc_unprotect_object);
+                      g_int_hash, g_int_equal,
+                      g_free, (GDestroyNotify) scm_gc_unprotect_object);
     }
 }
 
-void 
+void
 gnc_report_remove_by_id(gint id)
 {
     if (reports)
@@ -57,7 +58,8 @@ SCM gnc_report_find(gint id)
 {
     gpointer report = NULL;
 
-    if (reports) {
+    if (reports)
+    {
         report = g_hash_table_lookup(reports, &id);
     }
 
@@ -76,29 +78,33 @@ gint gnc_report_add(SCM report)
     gnc_report_init_table();
 
     value = scm_call_1(get_id, report);
-    if (scm_is_number(value)) {
-      id = scm_num2int(value, SCM_ARG1, G_STRFUNC);
-      if (!g_hash_table_lookup(reports, &id)) {
-	key = g_new(gint, 1);
-	*key = id;
-	g_hash_table_insert(reports, key, (gpointer)report);
-	scm_gc_protect_object(report);
-	return id;
-      }
-      g_warning("Report specified id of %d is already is use. "
-		"Using generated id.", id);
+    if (scm_is_number(value))
+    {
+        id = scm_num2int(value, SCM_ARG1, G_STRFUNC);
+        if (!g_hash_table_lookup(reports, &id))
+        {
+            key = g_new(gint, 1);
+            *key = id;
+            g_hash_table_insert(reports, key, (gpointer)report);
+            scm_gc_protect_object(report);
+            return id;
+        }
+        g_warning("Report specified id of %d is already is use. "
+                  "Using generated id.", id);
     }
 
     id = report_next_serial_id++;
-    while (id < G_MAXINT) {
-      if (!g_hash_table_lookup(reports, &id)) {
-	key = g_new(gint, 1);
-	*key = id;
-	g_hash_table_insert(reports, key, (gpointer)report);
-	scm_gc_protect_object(report);
-	return id;
-      }
-      id = report_next_serial_id++;
+    while (id < G_MAXINT)
+    {
+        if (!g_hash_table_lookup(reports, &id))
+        {
+            key = g_new(gint, 1);
+            *key = id;
+            g_hash_table_insert(reports, key, (gpointer)report);
+            scm_gc_protect_object(report);
+            return id;
+        }
+        id = report_next_serial_id++;
     }
 
     g_warning("Unable to add report to table. %d reports in use.", G_MAXINT);
@@ -106,7 +112,7 @@ gint gnc_report_add(SCM report)
     return G_MAXINT;
 }
 
-static gboolean 
+static gboolean
 yes_remove(gpointer key, gpointer val, gpointer data)
 {
     return TRUE;
@@ -135,57 +141,57 @@ error_handler(const char *str)
 gboolean
 gnc_run_report (gint report_id, char ** data)
 {
-  const gchar *free_data;
-  SCM scm_text;
-  gchar *str;
+    const gchar *free_data;
+    SCM scm_text;
+    gchar *str;
 
-  g_return_val_if_fail (data != NULL, FALSE);
-  *data = NULL;
+    g_return_val_if_fail (data != NULL, FALSE);
+    *data = NULL;
 
-  str = g_strdup_printf("(gnc:report-run %d)", report_id);
-  scm_text = gfec_eval_string(str, error_handler);
-  g_free(str);
+    str = g_strdup_printf("(gnc:report-run %d)", report_id);
+    scm_text = gfec_eval_string(str, error_handler);
+    g_free(str);
 
-  if (scm_text == SCM_UNDEFINED || !scm_is_string (scm_text))
-    return FALSE;
+    if (scm_text == SCM_UNDEFINED || !scm_is_string (scm_text))
+        return FALSE;
 
-  free_data = scm_to_locale_string (scm_text);
-  *data = g_strdup (free_data);
+    free_data = scm_to_locale_string (scm_text);
+    *data = g_strdup (free_data);
 
-  return TRUE;
+    return TRUE;
 }
 
 gboolean
 gnc_run_report_id_string (const char * id_string, char **data)
 {
-  gint report_id;
+    gint report_id;
 
-  g_return_val_if_fail (id_string != NULL, FALSE);
-  g_return_val_if_fail (data != NULL, FALSE);
-  *data = NULL;
+    g_return_val_if_fail (id_string != NULL, FALSE);
+    g_return_val_if_fail (data != NULL, FALSE);
+    *data = NULL;
 
-  if (strncmp ("id=", id_string, 3) != 0)
-    return FALSE;
+    if (strncmp ("id=", id_string, 3) != 0)
+        return FALSE;
 
-  if (sscanf (id_string + 3, "%d", &report_id) != 1)
-    return FALSE;
+    if (sscanf (id_string + 3, "%d", &report_id) != 1)
+        return FALSE;
 
-  return gnc_run_report (report_id, data);
+    return gnc_run_report (report_id, data);
 }
 
 gchar*
 gnc_report_name( SCM report )
 {
-  SCM    get_name = scm_c_eval_string("gnc:report-name");
-  SCM    value;
-  
-  if (report == SCM_BOOL_F)
-    return NULL;
+    SCM    get_name = scm_c_eval_string("gnc:report-name");
+    SCM    value;
 
-  value = scm_call_1(get_name, report);
-  if (!scm_is_string(value))
-    return NULL;
+    if (report == SCM_BOOL_F)
+        return NULL;
 
-  return g_strdup(scm_to_locale_string(value));
+    value = scm_call_1(get_name, report);
+    if (!scm_is_string(value))
+        return NULL;
+
+    return g_strdup(scm_to_locale_string(value));
 }
 

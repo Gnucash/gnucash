@@ -63,164 +63,174 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 \********************************************************************/
 
 void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
-				const gchar *aqbanking_profilename,
-				gboolean execute_transactions)
+                                const gchar *aqbanking_profilename,
+                                gboolean execute_transactions)
 {
-  char *selected_filename;
-  char *default_dir;
-  int dtaus_fd;
+    char *selected_filename;
+    char *default_dir;
+    int dtaus_fd;
 
-  DEBUG("gnc_file_dtaus_import(): Begin...\n");
+    DEBUG("gnc_file_dtaus_import(): Begin...\n");
 
-  default_dir = gnc_get_default_directory(GCONF_SECTION);
-  selected_filename = gnc_file_dialog(_("Select a file to import"),
-				      NULL,
-				      default_dir,
-				      GNC_FILE_DIALOG_IMPORT);
-  g_free(default_dir);
-
-  if(selected_filename!=NULL) {
-    /* Remember the directory as the default. */
-    default_dir = g_path_get_dirname(selected_filename);
-    gnc_set_default_directory(GCONF_SECTION, default_dir);
+    default_dir = gnc_get_default_directory(GCONF_SECTION);
+    selected_filename = gnc_file_dialog(_("Select a file to import"),
+                                        NULL,
+                                        default_dir,
+                                        GNC_FILE_DIALOG_IMPORT);
     g_free(default_dir);
 
-    /*strncpy(file,selected_filename, 255);*/
-    DEBUG("Filename found: %s",selected_filename);
-
-    DEBUG("Opening selected file");
-    dtaus_fd = g_open(selected_filename, O_RDONLY, 0);
-    if (dtaus_fd == -1) {
-      DEBUG("Could not open file %s", selected_filename);
-      return;
-    }
-    g_free(selected_filename);
-
+    if (selected_filename != NULL)
     {
-      int result;
-      AB_BANKING *ab;
-      AB_IMEXPORTER *importer;
-      AB_IMEXPORTER_CONTEXT *ctx=0;
-      GWEN_BUFFEREDIO *buffio;
-      GWEN_DB_NODE *dbProfiles;
-      GWEN_DB_NODE *dbProfile;
-      GNCInteractor *interactor = NULL;
-      const char *importerName = aqbanking_importername;
-      const char *profileName = aqbanking_profilename;
+        /* Remember the directory as the default. */
+        default_dir = g_path_get_dirname(selected_filename);
+        gnc_set_default_directory(GCONF_SECTION, default_dir);
+        g_free(default_dir);
 
-      /* Get API */
-      ab = gnc_AB_BANKING_new_currentbook (NULL, &interactor);
-      if (ab == NULL) {
-	g_message("gnc_file_dtaus_import: Couldn't get HBCI API. Nothing will happen.\n");
-	return;
-      }
-      g_assert (interactor);
+        /*strncpy(file,selected_filename, 255);*/
+        DEBUG("Filename found: %s", selected_filename);
 
-      /* get import module */
-      importer=AB_Banking_GetImExporter(ab, importerName);
-      if (!importer) {
-	DEBUG("Import module %s not found", importerName);
-	gnc_error_dialog(NULL, "%s",("Import module for DTAUS import not found."));
-	return;
-      }
-      g_assert(importer);
+        DEBUG("Opening selected file");
+        dtaus_fd = g_open(selected_filename, O_RDONLY, 0);
+        if (dtaus_fd == -1)
+        {
+            DEBUG("Could not open file %s", selected_filename);
+            return;
+        }
+        g_free(selected_filename);
 
-      /* load the import profile */
-      dbProfiles=AB_Banking_GetImExporterProfiles(ab, importerName);
+        {
+            int result;
+            AB_BANKING *ab;
+            AB_IMEXPORTER *importer;
+            AB_IMEXPORTER_CONTEXT *ctx = 0;
+            GWEN_BUFFEREDIO *buffio;
+            GWEN_DB_NODE *dbProfiles;
+            GWEN_DB_NODE *dbProfile;
+            GNCInteractor *interactor = NULL;
+            const char *importerName = aqbanking_importername;
+            const char *profileName = aqbanking_profilename;
 
-      /* select profile */
-      dbProfile=GWEN_DB_GetFirstGroup(dbProfiles);
-      while(dbProfile) {
-	const char *name;
+            /* Get API */
+            ab = gnc_AB_BANKING_new_currentbook (NULL, &interactor);
+            if (ab == NULL)
+            {
+                g_message("gnc_file_dtaus_import: Couldn't get HBCI API. Nothing will happen.\n");
+                return;
+            }
+            g_assert (interactor);
 
-	name=GWEN_DB_GetCharValue(dbProfile, "name", 0, 0);
-	g_assert(name);
-	if (strcasecmp(name, profileName)==0)
-	  break;
-	dbProfile=GWEN_DB_GetNextGroup(dbProfile);
-      }
-      if (!dbProfile) {
-	g_warning("Profile \"%s\" for importer \"%s\" not found\n",
-	      profileName, importerName);
-	/* For debugging: Print those available names that have been found. */
-	dbProfile=GWEN_DB_GetFirstGroup(dbProfiles);
-	while(dbProfile) {
-	  const char *name;
-	  name=GWEN_DB_GetCharValue(dbProfile, "name", 0, 0);
-	  g_assert(name);
-	  g_warning("Only found profile \"%s\"\n", name);
-	  dbProfile=GWEN_DB_GetNextGroup(dbProfile);
-	}
-	return;
-      }
-      g_assert(dbProfile);
+            /* get import module */
+            importer = AB_Banking_GetImExporter(ab, importerName);
+            if (!importer)
+            {
+                DEBUG("Import module %s not found", importerName);
+                gnc_error_dialog(NULL, "%s", ("Import module for DTAUS import not found."));
+                return;
+            }
+            g_assert(importer);
 
-      /* import new context */
-      ctx=AB_ImExporterContext_new();
-      g_assert(ctx);
+            /* load the import profile */
+            dbProfiles = AB_Banking_GetImExporterProfiles(ab, importerName);
 
-      /* Wrap file in gwen_bufferedio */
-      buffio = GWEN_BufferedIO_File_new(dtaus_fd);
-      g_assert(buffio);
-      GWEN_BufferedIO_SetReadBuffer(buffio, 0, 1024);
+            /* select profile */
+            dbProfile = GWEN_DB_GetFirstGroup(dbProfiles);
+            while (dbProfile)
+            {
+                const char *name;
 
-      result = AB_ImExporter_Import(importer,
-				  ctx,
-				  buffio,
-				  dbProfile);
+                name = GWEN_DB_GetCharValue(dbProfile, "name", 0, 0);
+                g_assert(name);
+                if (strcasecmp(name, profileName) == 0)
+                    break;
+                dbProfile = GWEN_DB_GetNextGroup(dbProfile);
+            }
+            if (!dbProfile)
+            {
+                g_warning("Profile \"%s\" for importer \"%s\" not found\n",
+                          profileName, importerName);
+                /* For debugging: Print those available names that have been found. */
+                dbProfile = GWEN_DB_GetFirstGroup(dbProfiles);
+                while (dbProfile)
+                {
+                    const char *name;
+                    name = GWEN_DB_GetCharValue(dbProfile, "name", 0, 0);
+                    g_assert(name);
+                    g_warning("Only found profile \"%s\"\n", name);
+                    dbProfile = GWEN_DB_GetNextGroup(dbProfile);
+                }
+                return;
+            }
+            g_assert(dbProfile);
 
-      DEBUG("Parsing result: %d\n", result);
+            /* import new context */
+            ctx = AB_ImExporterContext_new();
+            g_assert(ctx);
 
-      GWEN_BufferedIO_Close(buffio);
-      GWEN_BufferedIO_free(buffio);
-      GWEN_DB_Group_free(dbProfiles);
+            /* Wrap file in gwen_bufferedio */
+            buffio = GWEN_BufferedIO_File_new(dtaus_fd);
+            g_assert(buffio);
+            GWEN_BufferedIO_SetReadBuffer(buffio, 0, 1024);
 
-      {
-	/* Now get all accountinfos */
-	GNCImportMainMatcher *importer_generic_gui;
-	GtkWidget *parent = NULL;
-	gboolean successful = FALSE;
-	GList *ab_job_list;
+            result = AB_ImExporter_Import(importer,
+                                          ctx,
+                                          buffio,
+                                          dbProfile);
 
-	/* Create importer GUI */
-	importer_generic_gui = gnc_gen_trans_list_new(parent, NULL, TRUE, 14);
+            DEBUG("Parsing result: %d\n", result);
 
-	/* Import the transactions from the ctx into gnucash. */
-	ab_job_list = gnc_hbci_import_ctx(ab, ctx, importer_generic_gui,
-					  execute_transactions);
-	/* Finished importing. */
+            GWEN_BufferedIO_Close(buffio);
+            GWEN_BufferedIO_free(buffio);
+            GWEN_DB_Group_free(dbProfiles);
 
-	/* We clean up here. */
-	AB_ImExporterContext_free(ctx);
+            {
+                /* Now get all accountinfos */
+                GNCImportMainMatcher *importer_generic_gui;
+                GtkWidget *parent = NULL;
+                gboolean successful = FALSE;
+                GList *ab_job_list;
 
-	if (execute_transactions) {
-	  /* Wait for the gnucash importer to be finished (it is being
-	     run anyway). */
-	  result = gnc_gen_trans_list_run (importer_generic_gui);
+                /* Create importer GUI */
+                importer_generic_gui = gnc_gen_trans_list_new(parent, NULL, TRUE, 14);
 
-	  if (result)
-	    /* Execute these jobs now. This function already delete()s the
-	       job. */
-	    /* no parent so far; otherwise add this: GNCInteractor_reparent (interactor, parent); */
-	    successful = gnc_hbci_multijob_execute (parent, ab, ab_job_list, interactor);
-	  /* else */
-	  
-	  /* Delete all jobs from queue in any case. */
-	  gnc_hbci_clearqueue (ab, ab_job_list);
-	}
-	else {
-	  successful = TRUE;
-	}
+                /* Import the transactions from the ctx into gnucash. */
+                ab_job_list = gnc_hbci_import_ctx(ab, ctx, importer_generic_gui,
+                                                  execute_transactions);
+                /* Finished importing. */
 
-	if (successful) {
-	  /* If execution was not successful, leave the log window
-	     still intact and open. */
-	  gnc_AB_BANKING_fini (ab);
-	  gnc_AB_BANKING_delete (ab);
-	}
-      }
+                /* We clean up here. */
+                AB_ImExporterContext_free(ctx);
+
+                if (execute_transactions)
+                {
+                    /* Wait for the gnucash importer to be finished (it is being
+                       run anyway). */
+                    result = gnc_gen_trans_list_run (importer_generic_gui);
+
+                    if (result)
+                        /* Execute these jobs now. This function already delete()s the
+                           job. */
+                        /* no parent so far; otherwise add this: GNCInteractor_reparent (interactor, parent); */
+                        successful = gnc_hbci_multijob_execute (parent, ab, ab_job_list, interactor);
+                    /* else */
+
+                    /* Delete all jobs from queue in any case. */
+                    gnc_hbci_clearqueue (ab, ab_job_list);
+                }
+                else
+                {
+                    successful = TRUE;
+                }
+
+                if (successful)
+                {
+                    /* If execution was not successful, leave the log window
+                       still intact and open. */
+                    gnc_AB_BANKING_fini (ab);
+                    gnc_AB_BANKING_delete (ab);
+                }
+            }
+        }
     }
-  }
 }
 
 
