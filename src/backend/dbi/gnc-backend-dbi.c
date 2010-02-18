@@ -1377,6 +1377,14 @@ conn_begin_transaction( /*@ unused @*/ GncSqlConnection* conn )
 
 	DEBUG( "BEGIN\n" );
 	result = dbi_conn_queryf( dbi_conn->conn, "BEGIN" );
+
+	/* Handle MySQL connection timeouts with reconnect */
+	if (result == NULL && dbi_conn_error( dbi_conn->conn, NULL ) == 2006 ) {
+		DEBUG( "MySQL server has gone away, reconnecting and retrying...\n" );
+		(void)dbi_conn_connect( dbi_conn->conn );
+		result = dbi_conn_queryf( dbi_conn->conn, "BEGIN" );
+	}
+
 	status = dbi_result_free( result );
 	if( status < 0 ) {
 		PERR( "Error in dbi_result_free() result\n" );
