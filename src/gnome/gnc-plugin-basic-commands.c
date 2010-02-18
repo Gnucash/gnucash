@@ -130,8 +130,13 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<control>f",
     N_("Find transactions with a search"),
     G_CALLBACK (gnc_main_window_cmd_tools_find_transactions) },
-  { "EditTaxOptionsAction", NULL, N_("Income Ta_x Options"), NULL,
-    N_("Setup income tax information for relevant accounts"),
+  { "EditTaxOptionsAction", NULL, 
+    N_("Ta_x Report Options"), NULL,
+   /* Translators: currently implemented are *
+    * US: income tax and                     *
+    * DE: VAT                                *
+    * So adjust this string                  */
+    N_("Setup relevant accounts for tax reports, e.g. US income tax"),
     G_CALLBACK (gnc_main_window_cmd_edit_tax_options) },
 
   /* Actions menu */

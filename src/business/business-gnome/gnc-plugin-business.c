@@ -214,8 +214,8 @@ static GtkActionEntry gnc_plugin_actions [] =
 	  G_CALLBACK (gnc_plugin_business_cmd_employee_process_payment) },
 
 	/* Other menu items */
-	{ "TaxTablesOpenAction", NULL, N_("_Tax Table Editor"), NULL,
-	  N_("View and edit the list of Tax Tables"),
+	{ "TaxTablesOpenAction", NULL, N_("Sales _Tax Table"), NULL,
+	  N_("View and edit the list of Sales Tax Tables (GST/VAT)"),
 	  G_CALLBACK (gnc_plugin_business_cmd_tax_tables) },
 	{ "BillingTermsOpenAction", NULL, N_("_Billing Terms Editor"), NULL,
 	  N_("View and edit the list of Billing Terms"),
