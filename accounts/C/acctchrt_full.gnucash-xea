@@ -16,10 +16,10 @@
   <act:name>Assets</act:name>
   <act:id type="new">c942789c77cfdd65bc6e4c12900f0805</act:id>
   <act:type>ASSET</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Assets</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
@@ -33,10 +33,10 @@
   <act:name>Current Assets</act:name>
   <act:id type="new">f23dcf070835b376a95a7a06dbb62e59</act:id>
   <act:type>ASSET</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Current Assets</act:description>
   <act:parent type="new">c942789c77cfdd65bc6e4c12900f0805</act:parent>
   <act:slots>
@@ -50,10 +50,10 @@
   <act:name>Bank CD</act:name>
   <act:id type="new">e2f05a66ad8fb10a4f4d2d1ecdc6a13d</act:id>
   <act:type>BANK</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Bank CD</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
 </gnc:account>
@@ -61,10 +61,10 @@
   <act:name>Checking Account</act:name>
   <act:id type="new">a58419050d3b82f7f156658a98929df2</act:id>
   <act:type>BANK</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Checking Account</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
 </gnc:account>
@@ -72,10 +72,10 @@
   <act:name>Money Market</act:name>
   <act:id type="new">fc68a65077344e22b08d805ddcbf4dc8</act:id>
   <act:type>BANK</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Money Market</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
 </gnc:account>
@@ -83,10 +83,10 @@
   <act:name>Savings Account</act:name>
   <act:id type="new">bd6088ea984f27470c8ef4b8fc0826c1</act:id>
   <act:type>BANK</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Savings Account</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
 </gnc:account>
@@ -94,10 +94,10 @@
   <act:name>Cash in Wallet</act:name>
   <act:id type="new">d8232291d80c3d558e51d1e08cc3e85d</act:id>
   <act:type>CASH</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Cash in Wallet</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
 </gnc:account>
@@ -105,10 +105,10 @@
   <act:name>Fixed Assets</act:name>
   <act:id type="new">c188686b29b9104da292aed8c2ca8541</act:id>
   <act:type>ASSET</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Fixed Assets</act:description>
   <act:parent type="new">c942789c77cfdd65bc6e4c12900f0805</act:parent>
   <act:slots>
@@ -122,10 +122,10 @@
   <act:name>House</act:name>
   <act:id type="new">1d81c657af6cce36422ce3d7eb782bfc</act:id>
   <act:type>ASSET</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>House</act:description>
   <act:parent type="new">c188686b29b9104da292aed8c2ca8541</act:parent>
 </gnc:account>
@@ -133,10 +133,10 @@
   <act:name>Other Asset</act:name>
   <act:id type="new">b7ac61cf72bc19c6b3917db1063908c6</act:id>
   <act:type>ASSET</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Other Asset</act:description>
   <act:parent type="new">c188686b29b9104da292aed8c2ca8541</act:parent>
 </gnc:account>
@@ -144,10 +144,10 @@
   <act:name>Vehicle</act:name>
   <act:id type="new">71b413a7042e74974115333fd3d6f496</act:id>
   <act:type>ASSET</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Vehicle</act:description>
   <act:parent type="new">c188686b29b9104da292aed8c2ca8541</act:parent>
 </gnc:account>
@@ -155,10 +155,10 @@
   <act:name>Investments</act:name>
   <act:id type="new">0efa7e60042a8d5e4f07a2e6f76bb66d</act:id>
   <act:type>ASSET</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Investments</act:description>
   <act:parent type="new">c942789c77cfdd65bc6e4c12900f0805</act:parent>
   <act:slots>
@@ -172,10 +172,10 @@
   <act:name>Brokerage Account</act:name>
   <act:id type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:id>
   <act:type>BANK</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Brokerage Account</act:description>
   <act:parent type="new">0efa7e60042a8d5e4f07a2e6f76bb66d</act:parent>
 </gnc:account>
@@ -183,10 +183,10 @@
   <act:name>Bond</act:name>
   <act:id type="new">7e0a0149682cc309278987426b5f9b82</act:id>
   <act:type>STOCK</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Bond</act:description>
   <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
 </gnc:account>
@@ -194,10 +194,10 @@
   <act:name>Stock</act:name>
   <act:id type="new">4599087f4755245fbc052ec425c0094b</act:id>
   <act:type>STOCK</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Stock</act:description>
   <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
 </gnc:account>
@@ -205,10 +205,10 @@
   <act:name>Market Index</act:name>
   <act:id type="new">00710d6bd400e580c7e4f3d0795ef2ab</act:id>
   <act:type>MUTUAL</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Market Index</act:description>
   <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
 </gnc:account>
@@ -216,10 +216,10 @@
   <act:name>Mutual Fund</act:name>
   <act:id type="new">d8e24554e11c296b79b33953cba093de</act:id>
   <act:type>MUTUAL</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Mutual Fund</act:description>
   <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
 </gnc:account>
@@ -227,10 +227,10 @@
   <act:name>Retirement</act:name>
   <act:id type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:id>
   <act:type>BANK</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Retirement</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
@@ -249,10 +249,10 @@
   <act:name>Bond</act:name>
   <act:id type="new">4c272ebf68c058a45dde6be718ad9321</act:id>
   <act:type>STOCK</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Bond</act:description>
   <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
 </gnc:account>
@@ -260,10 +260,10 @@
   <act:name>Stock</act:name>
   <act:id type="new">8aa76ecd4acf6b32280711f198787e4f</act:id>
   <act:type>STOCK</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Stock</act:description>
   <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
 </gnc:account>
@@ -271,10 +271,10 @@
   <act:name>Market Index</act:name>
   <act:id type="new">00c1dd188a5a3ffe26baf4afbe358adc</act:id>
   <act:type>MUTUAL</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Market Index</act:description>
   <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
 </gnc:account>
@@ -282,10 +282,10 @@
   <act:name>Mutual Fund</act:name>
   <act:id type="new">f3e62c6cf53adb5637b765b45b8df6c3</act:id>
   <act:type>MUTUAL</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Mutual Fund</act:description>
   <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
 </gnc:account>
@@ -293,10 +293,10 @@
   <act:name>Spouse Retirement</act:name>
   <act:id type="new">eacb6de7f8896665d150d7dcb0a0b521</act:id>
   <act:type>BANK</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Spouse Retirement</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
@@ -315,10 +315,10 @@
   <act:name>Bond</act:name>
   <act:id type="new">aefb6c2cb4fe8ef354f4aaa2d8a6aac6</act:id>
   <act:type>STOCK</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Bond</act:description>
   <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
 </gnc:account>
@@ -326,10 +326,10 @@
   <act:name>Stock</act:name>
   <act:id type="new">bebd94871a7e14592cae393381e6f733</act:id>
   <act:type>STOCK</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Stock</act:description>
   <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
 </gnc:account>
@@ -337,10 +337,10 @@
   <act:name>Market Index</act:name>
   <act:id type="new">255ac00eae374e6893a934f5094d4d90</act:id>
   <act:type>MUTUAL</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Market Index</act:description>
   <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
 </gnc:account>
@@ -348,10 +348,10 @@
   <act:name>Mutual Fund</act:name>
   <act:id type="new">217ffae020de3df2671b4c247035d9df</act:id>
   <act:type>MUTUAL</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Mutual Fund</act:description>
   <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
 </gnc:account>
@@ -359,10 +359,10 @@
   <act:name>Currency Trading</act:name>
   <act:id type="new">66641bfe13094125067d5cb9e0bbddf0</act:id>
   <act:type>CURRENCY</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DEM</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Currency Trading</act:description>
   <act:parent type="new">0efa7e60042a8d5e4f07a2e6f76bb66d</act:parent>
 </gnc:account>
@@ -370,10 +370,10 @@
   <act:name>Liabilities</act:name>
   <act:id type="new">eeb68231aa8330bb6e3a747ffd94c07f</act:id>
   <act:type>LIABILITY</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Liabilities</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
@@ -387,10 +387,10 @@
   <act:name>Credit Card</act:name>
   <act:id type="new">ae4c4552746eed9927cee195e7965dd8</act:id>
   <act:type>CREDIT</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Credit Card</act:description>
   <act:parent type="new">eeb68231aa8330bb6e3a747ffd94c07f</act:parent>
   <act:slots>
@@ -404,10 +404,10 @@
   <act:name>Line of Credit</act:name>
   <act:id type="new">4c95c4842d41f421c3e715f60eca8cce</act:id>
   <act:type>CREDIT</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Line of Credit</act:description>
   <act:parent type="new">eeb68231aa8330bb6e3a747ffd94c07f</act:parent>
 </gnc:account>
@@ -415,10 +415,10 @@
   <act:name>Loans</act:name>
   <act:id type="new">c24e85723783d9ec27d9042c61b1673e</act:id>
   <act:type>LIABILITY</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Loans</act:description>
   <act:parent type="new">eeb68231aa8330bb6e3a747ffd94c07f</act:parent>
   <act:slots>
@@ -432,10 +432,10 @@
   <act:name>Education Loan</act:name>
   <act:id type="new">44b1db96fbb3582be7df3cb69b280d98</act:id>
   <act:type>LIABILITY</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Education Loan</act:description>
   <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
 </gnc:account>
@@ -443,10 +443,10 @@
   <act:name>Mortgage Loan</act:name>
   <act:id type="new">f8d2f4753875905bf13f40495f51d382</act:id>
   <act:type>LIABILITY</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Mortgage Loan</act:description>
   <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
 </gnc:account>
@@ -454,10 +454,10 @@
   <act:name>Other Loan</act:name>
   <act:id type="new">f1f25c96e2e452924c1707d1368e235b</act:id>
   <act:type>LIABILITY</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Other Loan</act:description>
   <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
 </gnc:account>
@@ -465,10 +465,10 @@
   <act:name>Vehicle Loan</act:name>
   <act:id type="new">8e5190568ac6f8d96b0162e80d649dea</act:id>
   <act:type>LIABILITY</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Vehicle Loan</act:description>
   <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
 </gnc:account>
@@ -476,10 +476,10 @@
   <act:name>Income</act:name>
   <act:id type="new">dcf25b179583108b12c1c36f044f2bf7</act:id>
   <act:type>INCOME</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Income</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
@@ -493,10 +493,10 @@
   <act:name>Bonus</act:name>
   <act:id type="new">db19175a8749bb90e5d4a535db7aa509</act:id>
   <act:type>INCOME</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Bonus</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
 </gnc:account>
@@ -504,10 +504,10 @@
   <act:name>Dividend Income</act:name>
   <act:id type="new">f230ee8a41e285ff4b9a02c7a7d1255c</act:id>
   <act:type>INCOME</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Dividend Income</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
 </gnc:account>
@@ -515,10 +515,10 @@
   <act:name>Gifts Received</act:name>
   <act:id type="new">9bb39b906c8797a8a9302087c80a75a3</act:id>
   <act:type>INCOME</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Gifts Received</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
 </gnc:account>
@@ -526,10 +526,10 @@
   <act:name>Interest Income</act:name>
   <act:id type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:id>
   <act:type>INCOME</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Interest Income</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
 </gnc:account>
@@ -537,10 +537,10 @@
   <act:name>Bond Interest</act:name>
   <act:id type="new">26528cbd37abdfa623eb237a78eaeb28</act:id>
   <act:type>INCOME</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Bond Interest</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
 </gnc:account>
@@ -548,10 +548,10 @@
   <act:name>CD Interest</act:name>
   <act:id type="new">87d975472429aa388923d5674db26e10</act:id>
   <act:type>INCOME</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>CD Interest</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
 </gnc:account>
@@ -559,10 +559,10 @@
   <act:name>Checking Interest</act:name>
   <act:id type="new">8e12304ec75b0562e8e7e5f1d3ef3f87</act:id>
   <act:type>INCOME</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Checking Interest</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
 </gnc:account>
@@ -570,10 +570,10 @@
   <act:name>Money Market Interest</act:name>
   <act:id type="new">170912c87f795e4715d22dff03ee68b7</act:id>
   <act:type>INCOME</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Money Market Interest</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
 </gnc:account>
@@ -581,10 +581,10 @@
   <act:name>Other Interest</act:name>
   <act:id type="new">e52426c9cd9b0366a900e617b430d743</act:id>
   <act:type>INCOME</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Other Interest</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
 </gnc:account>
@@ -592,10 +592,10 @@
   <act:name>Savings Interest</act:name>
   <act:id type="new">236e074cb18481c1c29018ddde5611f2</act:id>
   <act:type>INCOME</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Savings Interest</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
 </gnc:account>
@@ -603,10 +603,10 @@
   <act:name>Other Income</act:name>
   <act:id type="new">ba7f00e1972eead75456d0cb492cc7f0</act:id>
   <act:type>INCOME</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Other Income</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
 </gnc:account>
@@ -614,10 +614,10 @@
   <act:name>Salary</act:name>
   <act:id type="new">512c7af596fe774137b66e3533c8f055</act:id>
   <act:type>INCOME</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Salary</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
 </gnc:account>
@@ -625,10 +625,10 @@
   <act:name>Salary (Spouse)</act:name>
   <act:id type="new">ba57742bca4aa6d9d5978e191601a3eb</act:id>
   <act:type>INCOME</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Salary (Spouse)</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
 </gnc:account>
@@ -636,10 +636,10 @@
   <act:name>Expenses</act:name>
   <act:id type="new">d971e6172c344b6ce569f1af76b5dce1</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Expenses</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
@@ -653,10 +653,10 @@
   <act:name>Adjustment</act:name>
   <act:id type="new">ab7be937a05748c1be3d9ef1785f4519</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Adjustment</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -664,10 +664,10 @@
   <act:name>Auto</act:name>
   <act:id type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Auto</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -675,10 +675,10 @@
   <act:name>Fees</act:name>
   <act:id type="new">f812e775ecd98d235dffb3ebd83c4b3b</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Fees</act:description>
   <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
 </gnc:account>
@@ -686,10 +686,10 @@
   <act:name>Gas</act:name>
   <act:id type="new">a4d661a2ba6410a74e4c70128bb275ba</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Gas</act:description>
   <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
 </gnc:account>
@@ -697,10 +697,10 @@
   <act:name>Parking</act:name>
   <act:id type="new">a4538c6a7aa7f6020b98e733b7d5dc40</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Parking</act:description>
   <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
 </gnc:account>
@@ -708,10 +708,10 @@
   <act:name>Repair and Maintenance</act:name>
   <act:id type="new">f70be35deecc0a3984cbd7ce2e4c77c5</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Repair and Maintenance</act:description>
   <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
 </gnc:account>
@@ -719,10 +719,10 @@
   <act:name>Bank Service Charge</act:name>
   <act:id type="new">feab2e317232f98a5ebc859a8b4ee906</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Bank Service Charge</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -730,10 +730,10 @@
   <act:name>Books</act:name>
   <act:id type="new">f93635e6a5f1ef83d9d54dc8edea3de7</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Books</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -741,10 +741,10 @@
   <act:name>Cable</act:name>
   <act:id type="new">509b8795a9e5e0cbd634e5247b4188a9</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Cable</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -752,10 +752,10 @@
   <act:name>Charity</act:name>
   <act:id type="new">5c0c0e895a39b6a0d953d28f701fc8e6</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Charity</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -763,10 +763,10 @@
   <act:name>Childcare</act:name>
   <act:id type="new">f9b8ecd89294fba3e3a6af75722568b3</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Childcare</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -774,10 +774,10 @@
   <act:name>Clothes</act:name>
   <act:id type="new">245f0820b7733c540cbef67a891e270c</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Clothes</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -785,10 +785,10 @@
   <act:name>Commissions</act:name>
   <act:id type="new">0bd7305ca93854747f81a62b39725947</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Commissions</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -796,10 +796,10 @@
   <act:name>Computer</act:name>
   <act:id type="new">58bef76d9de74e726019590a8b666fd8</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Computer</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -807,10 +807,10 @@
   <act:name>Dining</act:name>
   <act:id type="new">36a0ecee5cdf0147988e75b440b4fc22</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Dining</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -818,10 +818,10 @@
   <act:name>Education</act:name>
   <act:id type="new">bd907e7b878af870e05595df89a7ed70</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Education</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -829,10 +829,10 @@
   <act:name>Entertainment</act:name>
   <act:id type="new">f8194ec13425c8d3adb62a87e48dbe42</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Entertainment</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -840,10 +840,10 @@
   <act:name>Music/Movies</act:name>
   <act:id type="new">d96f97bf73335793d3746e8d049d9403</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Music/Movies</act:description>
   <act:parent type="new">f8194ec13425c8d3adb62a87e48dbe42</act:parent>
 </gnc:account>
@@ -851,10 +851,10 @@
   <act:name>Recreation</act:name>
   <act:id type="new">b4b6cfe725a71b5aa8878679e4487ecb</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Recreation</act:description>
   <act:parent type="new">f8194ec13425c8d3adb62a87e48dbe42</act:parent>
 </gnc:account>
@@ -862,10 +862,10 @@
   <act:name>Travel</act:name>
   <act:id type="new">a6713e6f8776c9450256e144d95dc111</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Travel</act:description>
   <act:parent type="new">f8194ec13425c8d3adb62a87e48dbe42</act:parent>
 </gnc:account>
@@ -873,10 +873,10 @@
   <act:name>Gifts</act:name>
   <act:id type="new">acebcd1a292f0686f390aaaa9264a850</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Gifts</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -884,10 +884,10 @@
   <act:name>Groceries</act:name>
   <act:id type="new">c1c9fdbb40055c8942653c92b6d09676</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Groceries</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -895,10 +895,10 @@
   <act:name>Hobbies</act:name>
   <act:id type="new">58b0de20ba38fad88958e31cf59e3f68</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Hobbies</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -906,10 +906,10 @@
   <act:name>Home Repair</act:name>
   <act:id type="new">0e10decd3e859abaaa133be5ba907c08</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Home Repair</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -917,10 +917,10 @@
   <act:name>Insurance</act:name>
   <act:id type="new">165046096e7e0979a0470bfe28de4cf3</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Insurance</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -928,10 +928,10 @@
   <act:name>Auto Insurance</act:name>
   <act:id type="new">ecfb7eba411756d5562027255f948362</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Auto Insurance</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
 </gnc:account>
@@ -939,10 +939,10 @@
   <act:name>Health Insurance</act:name>
   <act:id type="new">4879a1e9f1046516fc9c96ab9e7d135b</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Health Insurance</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
 </gnc:account>
@@ -950,10 +950,10 @@
   <act:name>Home Insurance</act:name>
   <act:id type="new">af0037a765c4c400161a19900e791969</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Home Insurance</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
 </gnc:account>
@@ -961,10 +961,10 @@
   <act:name>Life Insurance</act:name>
   <act:id type="new">f849aa8e2df7241dd4bb30e9ff79b982</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Life Insurance</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
 </gnc:account>
@@ -972,10 +972,10 @@
   <act:name>Rental Insurance</act:name>
   <act:id type="new">3e2212f779cf5feb6ecdf210a1f27c50</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Rental Insurance</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
 </gnc:account>
@@ -983,10 +983,10 @@
   <act:name>Interest</act:name>
   <act:id type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Interest</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -994,10 +994,10 @@
   <act:name>Education Loan Interest</act:name>
   <act:id type="new">3b54390a95a8fb5ad0830765f0db7bbf</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Education Loan Interest</act:description>
   <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
 </gnc:account>
@@ -1005,10 +1005,10 @@
   <act:name>Mortgage Interest</act:name>
   <act:id type="new">5314f613166cf952aa83086ceb31858b</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Mortgage Interest</act:description>
   <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
 </gnc:account>
@@ -1016,10 +1016,10 @@
   <act:name>Other Interest</act:name>
   <act:id type="new">a026778e8671ff552fc1db361c827bd3</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Other Interest</act:description>
   <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
 </gnc:account>
@@ -1027,10 +1027,10 @@
   <act:name>Vehicle Loan Interest</act:name>
   <act:id type="new">c410f2c057c1b219b4ea9ebf90f34492</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Vehicle Loan Interest</act:description>
   <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
 </gnc:account>
@@ -1038,10 +1038,10 @@
   <act:name>Laundry/Dry Cleaning</act:name>
   <act:id type="new">db0be14af195878c6ee87346344c7aac</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Laundry/Dry Cleaning</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -1049,10 +1049,10 @@
   <act:name>Medical Expenses</act:name>
   <act:id type="new">cf091aca54380ecbf2d4bc3d88f37a00</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Medical Expenses</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -1060,10 +1060,10 @@
   <act:name>Miscellaneous</act:name>
   <act:id type="new">31f399cfc9289ce07105dbf0ebfd725b</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Miscellaneous</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -1071,10 +1071,10 @@
   <act:name>Online Services</act:name>
   <act:id type="new">7dd178de8586033654a06b98bee7eb7b</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Online Services</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -1082,10 +1082,10 @@
   <act:name>Phone</act:name>
   <act:id type="new">a2657d9df178ff47fb608128838c3562</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Phone</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -1093,10 +1093,10 @@
   <act:name>Public Transportation</act:name>
   <act:id type="new">e8fd2b3d711c9b8eff7b119cedf5bf04</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Public Transportation</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -1104,10 +1104,10 @@
   <act:name>Rent</act:name>
   <act:id type="new">d52369b08c150d14c894c32ebf758e97</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Rent</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -1115,10 +1115,10 @@
   <act:name>Subscriptions</act:name>
   <act:id type="new">ea59a2f59d6049cc7cb4d0becef15a13</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Subscriptions</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -1126,10 +1126,10 @@
   <act:name>Supplies</act:name>
   <act:id type="new">690ddda611710f6e4afefcfb9b83d5f5</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Supplies</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -1137,10 +1137,10 @@
   <act:name>Taxes</act:name>
   <act:id type="new">c0ad45e7b335ee715b26ee11457da5cc</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Taxes</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -1148,10 +1148,10 @@
   <act:name>Federal</act:name>
   <act:id type="new">fb15d987b277d68e960989397b82c903</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Federal</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
 </gnc:account>
@@ -1159,10 +1159,10 @@
   <act:name>Medicare</act:name>
   <act:id type="new">0517c53d7390b4a6fd3d4590fb9e5a37</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Medicare</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
 </gnc:account>
@@ -1170,10 +1170,10 @@
   <act:name>Other Tax</act:name>
   <act:id type="new">e0cfe3e8b1d1578bdfa87b6ab93a65d8</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Other Tax</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
 </gnc:account>
@@ -1181,10 +1181,10 @@
   <act:name>Property Tax</act:name>
   <act:id type="new">c51f0cacdcacf37a9f089fc5712e06e5</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Property Tax</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
 </gnc:account>
@@ -1192,10 +1192,10 @@
   <act:name>Social Security</act:name>
   <act:id type="new">6143875cd54c1d42b0eb5d8165424320</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Social Security</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
 </gnc:account>
@@ -1203,10 +1203,10 @@
   <act:name>State/Province</act:name>
   <act:id type="new">4d77f8743da33d910b119ab71d1d3de0</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>State/Province</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
 </gnc:account>
@@ -1214,10 +1214,10 @@
   <act:name>Taxes (Spouse)</act:name>
   <act:id type="new">63427014f39c577ee7aaeac3603d3d1f</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Taxes (Spouse)</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -1225,10 +1225,10 @@
   <act:name>Federal</act:name>
   <act:id type="new">bed90f2f5a34174b1411af26d5a3be66</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Federal</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
 </gnc:account>
@@ -1236,10 +1236,10 @@
   <act:name>Medicare</act:name>
   <act:id type="new">d875462cb5d15112c2e803b03b8d1ab7</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Medicare</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
 </gnc:account>
@@ -1247,10 +1247,10 @@
   <act:name>Other Tax</act:name>
   <act:id type="new">1d9c9ea015bd54e5950c408c43d26814</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Other Tax</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
 </gnc:account>
@@ -1258,10 +1258,10 @@
   <act:name>Social Security</act:name>
   <act:id type="new">92c0ce430b98ed01dbdff9c6f6ecbb74</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Social Security</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
 </gnc:account>
@@ -1269,10 +1269,10 @@
   <act:name>State/Province</act:name>
   <act:id type="new">6d729d9b8356d9ee9af50b6dae4bcce9</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>State/Province</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
 </gnc:account>
@@ -1280,10 +1280,10 @@
   <act:name>Utilities</act:name>
   <act:id type="new">7eecc2df800a0b8854343703d9cfae00</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Utilities</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
 </gnc:account>
@@ -1291,10 +1291,10 @@
   <act:name>Electric</act:name>
   <act:id type="new">141513d42098eb6692cf9473a8af1dc8</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Electric</act:description>
   <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
 </gnc:account>
@@ -1302,10 +1302,10 @@
   <act:name>Garbage collection</act:name>
   <act:id type="new">32e63639b9c11290ea1992ef495886d5</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Garbage collection</act:description>
   <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
 </gnc:account>
@@ -1313,10 +1313,10 @@
   <act:name>Gas</act:name>
   <act:id type="new">82576b22dca07135a0d0dc6b8c75bcae</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Gas</act:description>
   <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
 </gnc:account>
@@ -1324,10 +1324,10 @@
   <act:name>Water</act:name>
   <act:id type="new">5fe26045f26b9054b5edf944d7e66f94</act:id>
   <act:type>EXPENSE</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Water</act:description>
   <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
 </gnc:account>
@@ -1335,10 +1335,10 @@
   <act:name>Equity</act:name>
   <act:id type="new">68d4074f91295062c0b773b4ae8de6bd</act:id>
   <act:type>EQUITY</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Equity</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
@@ -1352,10 +1352,10 @@
   <act:name>Opening Balances</act:name>
   <act:id type="new">934f33a49a656d1813398f0e73bc3cd7</act:id>
   <act:type>EQUITY</act:type>
-  <act:commodity
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:commodity
+  </act:commodity>
   <act:description>Opening Balances</act:description>
   <act:parent type="new">68d4074f91295062c0b773b4ae8de6bd</act:parent>
 </gnc:account>
