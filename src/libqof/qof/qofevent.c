@@ -202,7 +202,7 @@ qof_event_generate_internal (QofInstance *entity, QofEventId event_id,
     }
     handler_run_level--;
 
-    /* If we're the outtermost event runner and we have pending deletes
+    /* If we're the outermost event runner and we have pending deletes
      * then go delete the handlers now.
      */
     if (handler_run_level == 0 && pending_deletes)
