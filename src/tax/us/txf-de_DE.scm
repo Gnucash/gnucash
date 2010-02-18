@@ -3,8 +3,14 @@
 ;; This file was copied from the file txf.scm by  Richard -Gilligan- Uschold
 ;;
 ;; Originally, these were meant to hold the codes for the US tax TXF
-;; format. I modified this heavily so that it might become useful for
+;; format. Christian Stimming modified this heavily so that it might become useful for
 ;; the German Umsatzsteuer-Voranmeldung. 
+;; Further modifications by:
+;;   Jannick Asmus
+;;   J. Alex Aycinena
+;;   Frank H. Ellenberger
+;;   Andreas Köhler
+;;   Rolf Leggewie
 ;; 
 ;; This file holds all the Kennzahlen for the
 ;; Umsatzsteuer-Voranmeldung and their explanations, which can be
@@ -19,7 +25,7 @@
 (define txf-tax-entity-types
   (list
    (cons 'Ind #("Individual, Joint, etc." "Files Individual German Tax Return"))
-   (cons 'Other #("None" "No Income Tax Options Provided"))))
+   (cons 'Other #("None" "Keine Steuerberichtsoptionen vorgesehen"))))
 
 (define (gnc:tax-type-txf-get-code-info tax-entity-types type-code index)
   (let ((tax-entity-type (assv type-code tax-entity-types)))
@@ -66,7 +72,7 @@
   (let ((pair (assv code txf-help-strings)))
     (if pair
         (cdr pair)
-        "No help available.")))
+        (_ "No help available.") )))
 
 (define (gnc:txf-get-codes categories tax-entity-type)
   (let* ((tax-entity-code-list-pair (assv (if (eqv? tax-entity-type "")
@@ -94,9 +100,9 @@
 
 (define txf-help-categories
   (list
-   (cons 'H000 #(current "help" "Name of Current account is exported." 0 #f ""))
-   (cons 'H002 #(parent "help" "Name of Parent account is exported." 0 #f ""))
-   (cons 'H003 #(not-impl "help" "Not implemented yet, Do NOT Use!" 0 #f ""))))
+   (cons 'H000 #(current "help" "Name des aktuellen Kontos wird exportiert." 0 #f ""))
+   (cons 'H002 #(parent "help" "Name des übergeordneten Kontos wird exportiert." 0 #f ""))
+   (cons 'H003 #(not-impl "help" "Noch nicht implementiert, NICHT benutzen!" 0 #f ""))))
 
 ;; We use several formats; nr. 1 means Euro+Cent, nr. 2 means only full Euro
 

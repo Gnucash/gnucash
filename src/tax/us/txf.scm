@@ -70,7 +70,7 @@
   (let ((pair (assv code txf-help-strings)))
     (if pair
         (cdr pair)
-        "No help available.")))
+        (_ "No help available.") )))
 
 (define (gnc:txf-get-codes categories tax-entity-type)
   (let ((tax-entity-codes (cdr (assv (string->symbol tax-entity-type)

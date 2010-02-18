@@ -3,19 +3,22 @@
 ;; This file was copied from the file txf.scm by  Richard -Gilligan- Uschold
 ;;
 ;; Originally, these were meant to hold the codes for the US tax TXF
-;; format. I modified this heavily so that it might become useful for
+;; format. Christian Stimming modified this heavily so that it might become useful for
 ;; the German Umsatzsteuer-Voranmeldung. 
+;; Further modifications by:
+;;   Jannick Asmus
+;;   Frank H. Ellenberger
+;;   Rolf Leggewie
 ;;
 ;; This file holds the explanations to the categories from txf-de_DE.scm.
 ;;
 
 (define txf-help-strings
   '(
-    (H001 . "Categories marked with a \"&lt;\" or a \"^\", require a Payer identification to be exported.  \"&lt;\" indicates that the name of this account is exported as this Payer ID.  Typically, this is a bank, stock, or mutual fund name.")
-    (H002 . "Categories marked with a \"&lt;\" or a \"^\", require a Payer identification to be exported.  \"^\" indicates that the name of the PARENT of this account is exported as this Payer ID.  Typically, this is a bank, stock, or mutual fund name.")
-    (H003 . "Categories marked with a \"#\" are not fully implemented yet!  Do not use these codes!")
-    (N000 . "This is a dummy category and only shows up on the tax report, but is not exported.")
-
+    (H001 . "Bei mit \"&lt;\" oder \"^\" markierten Kategorien wird neben dem Betrag eine Beschreibung exportiert.  \"&lt;\" indiziert, daß der Name von diesem Konto als Beschreibung exportiert wird.  Genaueres kann dem jeweiligen Formular entnommen werden.")
+    (H002 . "Bei mit \"&lt;\" oder \"^\" markierten Kategorien wird neben dem Betrag eine Beschreibung exportiert.  \"^\" indiziert, daß der Name des übergeordneten Kontos als Beschreibung exportiert wird.  Genaueres kann dem jeweiligen Formular entnommen werden.")
+    (H003 . "Mit \"#\" markierte Kategorien sind noch nicht vollständig implementiert!  Bitte diese Codes nicht verwenden!")
+    (N000 . "Dies ist eine Pseudokategorie, welche zwar im Bericht angezeigt, aber nicht exportiert wird.")
 
     (K41 . "Innergemeinschaftliche Lieferungen (§ 4 Nr. 1 Buchst. b UStG) an Abnehmer mit USt-IdNr.  (Bemessungsgrundlage)")
     (K44 . "Innergemeinschaftliche Lieferungen neuer Fahrzeuge an Abnehmer ohne USt-IdNr (Bemessungsgrundlage)")
