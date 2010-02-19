@@ -612,6 +612,7 @@ EOF
             chmod +x bin/pkg-config{.exe,-msys.sh}
             sed '/Requires/s,\(.*\) enchant\(.*\) iso-codes\(.*\),\1\2\3,' lib/pkgconfig/libgtkhtml-3.14.pc > tmp
             mv tmp lib/pkgconfig/libgtkhtml-3.14.pc
+            rm -rf $TMP_UDIR/gtk-doc-*
         qpopd
         wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/pixman-*
@@ -622,6 +623,7 @@ EOF
             make
             make install
         qpopd
+        rm -rf $TMP_UDIR/pixman-*
         ${PKG_CONFIG} --exists pixman-1 || die "pixman not installed correctly"
         quiet gconftool-2 --version &&
         quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgtkhtml-3.14 &&

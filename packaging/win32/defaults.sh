@@ -176,7 +176,7 @@ set_default PKG_CONFIG_URL "$GNOME_WIN32_DEPS_URL/pkg-config_0.23-3_win32.zip"
 set_default PKG_CONFIG_DEV_URL "$GNOME_WIN32_DEPS_URL/pkg-config-dev_0.23-3_win32.zip"
 set_default CAIRO_URL "$GNOME_WIN32_DEPS_URL/cairo_1.8.8-4_win32.zip"
 set_default CAIRO_DEV_URL "$GNOME_WIN32_DEPS_URL/cairo-dev_1.8.8-4_win32.zip"
-set_default PIXMAN_URL "http://cairographics.org/releases/pixman-0.14.0.tar.gz"
+set_default PIXMAN_URL "http://cairographics.org/releases/pixman-0.17.6.tar.gz"
 set_default EXPAT_URL "$GNOME_WIN32_DEPS_URL/expat_2.0.1-1_win32.zip"
 set_default EXPAT_DEV_URL "$GNOME_WIN32_DEPS_URL/expat-dev_2.0.1-1_win32.zip"
 set_default FONTCONFIG_URL "$GNOME_WIN32_DEPS_URL/fontconfig_2.8.0-2_win32.zip"
@@ -219,7 +219,7 @@ set_default LIBGLADE_URL "$GNOME_WIN32_URL/libglade/2.6/libglade_2.6.4-1_win32.z
 set_default LIBGLADE_DEV_URL "$GNOME_WIN32_URL/libglade/2.6/libglade-dev_2.6.4-1_win32.zip"
 set_default GTKHTML_URL "$GNOME_WIN32_URL/gtkhtml/3.24/gtkhtml_3.24.2-1_win32.zip"
 set_default GTKHTML_DEV_URL "$GNOME_WIN32_URL/gtkhtml/3.24/gtkhtml-dev_3.24.2-1_win32.zip"
-set_default GTK_DOC_URL "$GNOME_MIRROR/sources/gtk-doc/1.11/gtk-doc-1.11.tar.bz2"
+set_default GTK_DOC_URL "$GNOME_MIRROR/sources/gtk-doc/1.13/gtk-doc-1.13.tar.bz2"
 set_default GNOME_DIR $GLOBAL_DIR\\gnome
 
 set_default SWIG_URL "$SF_MIRROR/swig/swigwin-1.3.36.zip"
