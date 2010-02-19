@@ -499,8 +499,12 @@ function inst_libxslt() {
     else
         [ "$CROSS_COMPILE" = "yes" ] && die "xsltproc unavailable"
         wget_unpacked $LIBXSLT_URL $DOWNLOAD_DIR $LIBXSLT_DIR
+        wget_unpacked $LIBXSLT_LIBXML2_URL $DOWNLOAD_DIR $LIBXSLT_DIR
         qpushd $_LIBXSLT_UDIR
             mv libxslt-* mydir
+            cp -r mydir/* .
+            rm -rf mydir
+            mv libxml2-* mydir
             cp -r mydir/* .
             rm -rf mydir
         qpopd

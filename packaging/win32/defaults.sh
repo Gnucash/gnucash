@@ -153,7 +153,8 @@ set_default MINGW_UTILS_DIR $TOOLS_DIR
 set_default EXETYPE_SCRIPT `pwd`/exetype.pl
 set_default EXETYPE_DIR $TOOLS_DIR
 
-set_default LIBXSLT_URL "http://xmlsoft.org/sources/win32/oldreleases/libxslt-1.1.23+.win32.zip"
+set_default LIBXSLT_URL "http://xmlsoft.org/sources/win32/libxslt-1.1.26.win32.zip"
+set_default LIBXSLT_LIBXML2_URL "http://xmlsoft.org/sources/win32/libxml2-2.7.6.win32.zip"
 set_default LIBXSLT_DIR $GLOBAL_DIR\\libxslt
 
 set_default LIBXML2_URL "$GNOME_WIN32_DEPS_URL/libxml2_2.7.4-1_win32.zip"
