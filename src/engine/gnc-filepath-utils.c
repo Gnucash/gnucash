@@ -46,132 +46,12 @@
 #include <errno.h>
 
 #include "gnc-engine.h"
+#include "gnc-path.h"
 #include "gnc-filepath-utils.h"
+
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
-
-/* ====================================================================== */
-/* 
- * If $HOME/.gnucash/data directory doesn't exist, then create it.
- */
-
-static void 
-MakeHomeDir (void) 
-{
-  const gchar *home;
-  char *path;
-  char *data;
-
-  /* Punt. Can't figure out where home is. */
-  home = g_get_home_dir();
-  if (!home) return;
-
-  path = g_build_filename(home, ".gnucash", (gchar *)NULL);
-
-  if (!g_file_test(path, G_FILE_TEST_EXISTS))
-  {
-    /* Go ahead and make it. Don't bother much with checking mkdir 
-     * for errors; seems pointless. */
-    g_mkdir (path, S_IRWXU);   /* perms = S_IRWXU = 0700 */
-  }
-
-  data = g_build_filename (path, "data", (gchar *)NULL);
-  if (!g_file_test(data, G_FILE_TEST_EXISTS))
-    g_mkdir (data, S_IRWXU);
-
-  g_free (path);
-  g_free (data);
-}
-
-/* ====================================================================== */
-
-/* XXX hack alert -- we should be yanking this out of some config file */
-/* These are obviously meant to be hard-coded paths to the gnucash
-   data file. That is insane. These should be thrown out
-   altogether. On non-Unix systems (Windows) these paths would not
-   only have different directory separator characters but these
-   would certainly be completely different paths. I'd vote to
-   throw this out completely. -- cstim, 2006-07-19 */
-static char * searchpaths[] =
-{
-   "/usr/share/gnucash/data",
-   "/usr/local/share/gnucash/data",
-   "/usr/share/gnucash/accounts",
-   "/usr/local/share/gnucash/accounts",
-   NULL,
-};
-
-typedef gboolean (*pathGenerator)(char *pathbuf, int which);
-
-static gboolean
-xaccCwdPathGenerator(char *pathbuf, int which)
-{
-    if(which != 0)
-    {
-        return FALSE;
-    }
-    else
-    {
-        /* try to find a file by this name in the cwd ... */
-        if (getcwd (pathbuf, PATH_MAX) == NULL)
-            return FALSE;
-
-        return TRUE;
-    }
-}
-
-static gboolean
-xaccDataPathGenerator(char *pathbuf, int which)
-{
-    if(which != 0)
-    {
-        return FALSE;
-    }
-    else
-    {
-        const gchar *home;
-	gchar *tmppath;
-    
-        home = g_get_home_dir ();
-        if (!home)
-            return FALSE;
-
-	tmppath = g_build_filename (home, ".gnucash", "data", (gchar *)NULL);
-        if (strlen(tmppath) >= PATH_MAX)
-	{
-	    g_free (tmppath);
-	    return FALSE;
-	}
-
-        g_strlcpy (pathbuf, tmppath, PATH_MAX);
-	g_free (tmppath);
-        return TRUE;
-    }
-}
-
-static gboolean
-xaccUserPathPathGenerator(char *pathbuf, int which)
-{
-    char *path = NULL;
-    
-    if(searchpaths[which] == NULL)
-    {
-        return FALSE;
-    }
-    else
-    {
-        path = searchpaths[which];
-        
-        if (PATH_MAX <= strlen(path))
-            return FALSE;
-
-        g_strlcpy (pathbuf, path, PATH_MAX);
-        return TRUE;
-    }
-}
-
-/* ====================================================================== */
 
 /**
  * Scrubs a filename by changing "strange" chars (e.g. those that are not
@@ -192,14 +72,36 @@ scrub_filename(char* filename)
     }
 }
 
-char * 
+/** \fn gchar * check_file_return_if_true (path)
+ *  \brief Check if the path exists and is a regular file
+ *
+ * \param path -- freed if the path doesn't exist or isn't a regular file
+ *
+ *  \return NULL or the path
+ */
+
+static gchar *
+check_path_return_if_valid(gchar *path)
+{
+    ENTER("Path: %s", path);
+    if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
+    {
+	LEAVE("found %s", path);
+	return path;
+    }
+    g_free (path);
+    return NULL;
+}
+
+char *
 xaccResolveFilePath (const char * filefrag)
 {
   char pathbuf[PATH_MAX];
-  pathGenerator gens[4];
+/*  pathGenerator gens[4];*/
   char *filefrag_dup;
   int namelen;
   int i;
+  gchar *fullpath = NULL, *tmp_path = NULL;
 
   /* seriously invalid */
   if (!filefrag)
@@ -235,73 +137,61 @@ xaccResolveFilePath (const char * filefrag)
 	    return g_strdup( filefrag + 4);
   }
 
+
   /* get conservative on the length so that sprintf(getpid()) works ... */
   /* strlen ("/.LCK") + sprintf (%x%d) */
-  namelen = strlen (filefrag) + 25; 
+  namelen = strlen (filefrag) + 25;
 
-  gens[0] = xaccCwdPathGenerator;
-  gens[1] = xaccDataPathGenerator;
-  gens[2] = xaccUserPathPathGenerator;
-  gens[3] = NULL;
-
-  for (i = 0; gens[i] != NULL; i++) 
+  /* Look in the current working directory */
+  tmp_path = g_get_current_dir();
+  fullpath = g_build_filename(tmp_path, filefrag, (gchar *)NULL);
+  g_free(tmp_path);
+  fullpath = check_path_return_if_valid(fullpath);
+  if (fullpath != NULL)
   {
-      int j;
-      for(j = 0; gens[i](pathbuf, j) ; j++)
-      {
-	  gchar *fullpath = g_build_filename(pathbuf, filefrag, (gchar *)NULL);
-
-	  if (g_file_test(fullpath, G_FILE_TEST_IS_REGULAR))
-	  {
-	      LEAVE("found %s", fullpath);
-	      return fullpath;
-          }
-	  g_free (fullpath);
-      }
-  }
-  /* OK, we didn't find the file. */
-
-  /* make sure that the gnucash home dir exists. */
-  MakeHomeDir();
-
-  filefrag_dup = g_strdup (filefrag);
-
-  /* Replace "strange" chars with "_" for non-file backends. */
-  if (strstr (filefrag, "://"))
-  {
-	scrub_filename(filefrag_dup);
+      LEAVE("found %s", fullpath);
+      return fullpath;
   }
 
-  /* Lets try creating a new file in $HOME/.gnucash/data */
-  if (xaccDataPathGenerator(pathbuf, 0))
-  {
-      gchar *result;
-      result = g_build_filename(pathbuf, filefrag_dup, (gchar *)NULL);
-      g_free (filefrag_dup);
-      LEAVE("create new file %s", result);
-      return result;
-  } 
-
-  /* OK, we still didn't find the file */
-  /* Lets try creating a new file in the cwd */
-  if (xaccCwdPathGenerator(pathbuf, 0))
-  {
-      gchar *result;
-      result = g_build_filename(pathbuf, filefrag_dup, (gchar *)NULL);
-      g_free (filefrag_dup);
-      LEAVE("create new file %s", result);
-      return result;
+  /* Look in the data dir (e.g. $PREFIX/share/gnucash) */
+  tmp_path = gnc_path_get_pkgdatadir();
+  fullpath = g_build_filename(tmp_path, filefrag, (gchar *)NULL);
+  g_free(tmp_path);
+  fullpath = check_path_return_if_valid(fullpath);
+  if (fullpath != NULL)
+   {
+      LEAVE("found %s", fullpath);
+      return fullpath;
   }
 
-  g_free (filefrag_dup);
+  /* Look in the config dir (e.g. $PREFIX/etc/gnucash) */
+  tmp_path = gnc_path_get_accountsdir();
+  fullpath = g_build_filename(tmp_path, filefrag, (gchar *)NULL);
+  g_free(tmp_path);
+  fullpath = check_path_return_if_valid(fullpath);
+  if (fullpath != NULL)
+  {
+      LEAVE("found %s", fullpath);
+      return fullpath;
+  }
 
-  LEAVE("%s not found", filefrag);
-  return NULL;
+  /* Look in the users config dir (e.g. $HOME/.gnucash/data) */
+  fullpath = gnc_build_data_path(filefrag);
+  if (g_file_test(fullpath, G_FILE_TEST_IS_REGULAR))
+  {
+      LEAVE("found %s", fullpath);
+      return fullpath;
+  }
+  /* OK, it's not there. Note that it needs to be created and pass it
+   * back anyway */
+  LEAVE("create new file %s", fullpath);
+  return fullpath;
+
 }
 
 /* ====================================================================== */
 
-char * 
+char *
 xaccResolveURL (const char * pathfrag)
 {
   GList* list;
@@ -317,7 +207,7 @@ xaccResolveURL (const char * pathfrag)
    * to make sure the uri is in good form.
    */
 
-  if (!g_ascii_strncasecmp (pathfrag, "http://", 7)      ||
+  if (!g_ascii_strncasecmp (pathfrag, "http://", 7) ||
       !g_ascii_strncasecmp (pathfrag, "https://", 8))
   {
     return g_strdup(pathfrag);
@@ -338,15 +228,6 @@ xaccResolveURL (const char * pathfrag)
 	}
   }
   g_list_free(list);
-
-  /* "file:" and "xml:" are handled specially */
-  if (!g_ascii_strncasecmp (pathfrag, "file:", 5)) {
-    return (xaccResolveFilePath (pathfrag));
-  }
-  if (!g_ascii_strncasecmp (pathfrag, "xml:", 4)) {
-    return (g_strdup_printf( "xml:%s", xaccResolveFilePath (pathfrag)) );
-  }
-
   return (xaccResolveFilePath (pathfrag));
 }
 
@@ -393,7 +274,7 @@ gnc_validate_directory (const gchar *dirname)
 		  "the file and start GnuCash again.\n"),
 		dirname);
       exit(1);
-      
+
     default:
       g_fprintf(stderr,
 		_("An unknown error occurred when validating that the\n"
@@ -428,16 +309,19 @@ gnc_validate_directory (const gchar *dirname)
 const gchar *
 gnc_dotgnucash_dir (void)
 {
-  static gchar *dotgnucash = NULL, *tmp_dir;
-  const gchar *home;
+    static gchar *dotgnucash = NULL;
+    gchar *tmp_dir;
 
   if (dotgnucash)
     return dotgnucash;
 
   dotgnucash = g_strdup(g_getenv("GNC_DOT_DIR"));
-  if (!dotgnucash) {
-    home = g_get_home_dir();
-    if (!home) {
+
+  if (!dotgnucash)
+  {
+    const gchar *home = g_get_home_dir();
+    if (!home)
+    {
       g_warning("Cannot find home directory. Using tmp directory instead.");
       home = g_get_tmp_dir();
     }
@@ -467,11 +351,24 @@ gnc_build_dotgnucash_path (const gchar *filename)
 gchar *
 gnc_build_book_path (const gchar *filename)
 {
-  char* filename_dup = g_strdup(filename);
-  char* result;
+  gchar* filename_dup = g_strdup(filename);
+  gchar* result = NULL;
 
   scrub_filename(filename_dup);
-  result = g_build_filename(gnc_dotgnucash_dir(), "books", filename_dup, (gchar *)NULL);
+  result = g_build_filename(gnc_dotgnucash_dir(), "books",
+			    filename_dup, (gchar *)NULL);
+  g_free(filename_dup);
+  return result;
+}
+
+gchar *
+gnc_build_data_path (const gchar *filename)
+{
+  gchar* filename_dup = g_strdup(filename);
+  gchar* result;
+
+  scrub_filename(filename_dup);
+  result = g_build_filename(gnc_dotgnucash_dir(), "data", filename_dup, (gchar *)NULL);
   g_free(filename_dup);
   return result;
 }
