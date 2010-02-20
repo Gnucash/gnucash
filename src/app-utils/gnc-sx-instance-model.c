@@ -337,11 +337,17 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
     return rtn;
 }
 
+static gint
+_compare_GncSxVariables(gconstpointer a, gconstpointer b)
+{
+  return strcmp(((const GncSxVariable*)a)->name, ((const GncSxVariable*)b)->name);
+}
+
 static void
 _build_list_from_hash_elts(gpointer key, gpointer value, gpointer user_data)
 {
     GList **list = (GList**)user_data;
-    *list = g_list_append(*list, value);
+    *list = g_list_insert_sorted(*list, value, _compare_GncSxVariables);
 }
 
 GList *
