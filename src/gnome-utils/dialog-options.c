@@ -87,7 +87,7 @@ struct gnc_option_win
 
   GNCOptionWinCallback apply_cb;
   gpointer             apply_cb_data;
-  
+
   GNCOptionWinCallback help_cb;
   gpointer             help_cb_data;
 
@@ -150,7 +150,7 @@ gnc_options_dialog_changed (GNCOptionWin *win)
   gnc_options_dialog_changed_internal (win->dialog, TRUE);
 }
 
-void 
+void
 gnc_option_changed_widget_cb(GtkWidget *widget, GNCOption *option)
 {
   gnc_option_set_changed (option, TRUE);
@@ -158,7 +158,7 @@ gnc_option_changed_widget_cb(GtkWidget *widget, GNCOption *option)
   gnc_options_dialog_changed_internal (widget, TRUE);
 }
 
-void 
+void
 gnc_option_changed_option_cb(GtkWidget *dummy, GNCOption *option)
 {
   GtkWidget *widget;
@@ -204,7 +204,7 @@ gnc_date_option_set_select_method(GNCOption *option, gboolean use_absolute,
   }
 }
 
-static void 
+static void
 gnc_rd_option_ab_set_cb(GtkWidget *widget, gpointer *raw_option)
 {
   GNCOption *option = (GNCOption *) raw_option;
@@ -381,7 +381,7 @@ gnc_option_set_selectable_internal (GNCOption *option, gboolean selectable)
   gtk_widget_set_sensitive (widget, selectable);
 }
 
-static void 
+static void
 gnc_option_default_cb(GtkWidget *widget, GNCOption *option)
 {
   gnc_option_set_ui_value (option, TRUE);
@@ -509,14 +509,14 @@ gnc_option_create_date_widget (GNCOption *option)
 		       G_CALLBACK(gnc_option_changed_option_cb), option);
     }
   }
-    
+
   if (safe_strcmp(type, "absolute") != 0)
-  { 
+  {
     int i;
     num_values = gnc_option_num_permissible_values(option);
-    
+
     g_return_val_if_fail(num_values >= 0, NULL);
-    
+
 #ifdef GTKCOMBOBOX_TOOLTIPS_WORK
     {
       /* New code for GtkComboBox. Is not used because it is missing
@@ -543,16 +543,16 @@ gnc_option_create_date_widget (GNCOption *option)
       GNCOptionInfo *info;
       char **raw_strings;
       char **raw;
-      
+
       info = g_new0(GNCOptionInfo, num_values);
       raw_strings = g_new0(char *, num_values * 2);
       raw = raw_strings;
-    
+
       for (i = 0; i < num_values; i++)
       {
 	*raw = gnc_option_permissible_value_name(option, i);
 	info[i].name = *raw; /* (*raw && **raw) ? _(*raw) : ""; */
-      
+
 	raw++;
 
 	*raw = gnc_option_permissible_value_description(option, i);
@@ -562,7 +562,7 @@ gnc_option_create_date_widget (GNCOption *option)
 	{
 	  info[i].callback = gnc_option_multichoice_cb; /* gnc_option_rd_combo_cb */
 	}
-	else 
+	else
         {
 	  info[i].callback = gnc_option_multichoice_cb;
 	}
@@ -575,7 +575,7 @@ gnc_option_create_date_widget (GNCOption *option)
       for (i = 0; i < num_values * 2; i++)
 	if (raw_strings[i])
 	  free(raw_strings[i]);
-  
+
       g_free(raw_strings);
       g_free(info);
     }
@@ -670,7 +670,7 @@ gnc_option_create_multichoice_widget(GNCOption *option, GtkTooltips *tooltips)
     {
       *raw = gnc_option_permissible_value_name(option, i);
       info[i].name = (*raw && **raw) ? _(*raw) : "";
-      
+
       raw++;
 
       *raw = gnc_option_permissible_value_description(option, i);
@@ -686,13 +686,13 @@ gnc_option_create_multichoice_widget(GNCOption *option, GtkTooltips *tooltips)
     for (i = 0; i < num_values * 2; i++)
       if (raw_strings[i])
 	free(raw_strings[i]);
-  
+
     g_free(raw_strings);
     g_free(info);
   }
 #else
   {
-    
+
     /* New code for GtkComboBox. Is still unused because it is missing
        the feature of per-item tooltips. Not yet implemented in gtk,
        see http://bugzilla.gnome.org/show_bug.cgi?id=303717 */
@@ -832,12 +832,12 @@ gnc_option_account_select_children_cb(GtkWidget *widget, gpointer data)
   GNCOption *option = data;
   GncTreeViewAccount *tree_view;
   Account *account;
-  
+
   tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_widget (option));
   account = gnc_tree_view_account_get_cursor_account(tree_view);
   if (!account)
     return;
-  
+
   gnc_tree_view_account_select_subaccounts(tree_view, account);
 }
 
@@ -887,7 +887,7 @@ gnc_option_create_account_widget(GNCOption *option, char *name, GtkTooltips *too
     }
 
     gnc_tree_view_account_set_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
-    g_list_free (acct_type_list);    
+    g_list_free (acct_type_list);
   } else {
     AccountViewInfo avi;
     int i;
@@ -902,7 +902,7 @@ gnc_option_create_account_widget(GNCOption *option, char *name, GtkTooltips *too
 
   scroll_win = gtk_scrolled_window_new(NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_win),
-                                 GTK_POLICY_AUTOMATIC, 
+                                 GTK_POLICY_AUTOMATIC,
                                  GTK_POLICY_AUTOMATIC);
 
   gtk_box_pack_start(GTK_BOX(vbox), scroll_win, TRUE, TRUE, 0);
@@ -928,11 +928,11 @@ gnc_option_create_account_widget(GNCOption *option, char *name, GtkTooltips *too
 
     g_signal_connect(G_OBJECT(button), "clicked",
 		     G_CALLBACK(gnc_option_account_clear_all_cb), option);
-    
+
     button = gtk_button_new_with_label(_("Select Children"));
     gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
     gtk_tooltips_set_tip(tooltips, button, _("Select all descendents of selected account."), NULL);
-    
+
     g_signal_connect(G_OBJECT(button), "clicked",
 		     G_CALLBACK(gnc_option_account_select_children_cb), option);
   }
@@ -949,10 +949,10 @@ gnc_option_create_account_widget(GNCOption *option, char *name, GtkTooltips *too
     /* Put the "Show hidden" checkbox on a separate line since the 4 buttons make
        the dialog too wide. */
     bbox = gtk_hbutton_box_new();
-    gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_CENTER);
+    gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_START);
     gtk_box_pack_start(GTK_BOX(vbox), bbox, FALSE, FALSE, 0);
   }
-    
+
   button = gtk_check_button_new_with_label(_("Show Hidden Accounts"));
   gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
   gtk_tooltips_set_tip(tooltips, button, _("Show accounts that have been marked hidden."), NULL);
@@ -1228,7 +1228,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
 
   /* The reset button on each option page */
   reset_button = gtk_button_new_with_label (_("Defaults"));
-  gtk_tooltips_set_tip(tooltips, reset_button, 
+  gtk_tooltips_set_tip(tooltips, reset_button,
 		       _("Reset all values to their defaults."), NULL);
 
   g_signal_connect(G_OBJECT(reset_button), "clicked",
@@ -1236,7 +1236,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
   g_object_set_data(G_OBJECT(reset_button), "section", section);
   gtk_box_pack_end(GTK_BOX(buttonbox), reset_button, FALSE, FALSE, 0);
   gtk_widget_show_all(page_content_box);
-  gtk_notebook_append_page(GTK_NOTEBOOK(propertybox->notebook), 
+  gtk_notebook_append_page(GTK_NOTEBOOK(propertybox->notebook),
                            page_content_box, page_label);
 
   /* Switch to selection from a list if the page count threshhold is reached */
@@ -1434,7 +1434,7 @@ gnc_options_register_stocks (void)
 {
 #if 0
 	static gboolean done = FALSE;
-	
+
 	GtkStockItem items[] = {
 		{ GTK_STOCK_APPLY		,"gnc_option_apply_button",	0, 0, NULL },
 		{ GTK_STOCK_HELP		,"gnc_options_dialog_help",	0, 0, NULL },
@@ -1442,7 +1442,7 @@ gnc_options_register_stocks (void)
 		{ GTK_STOCK_CANCEL		,"gnc_options_dialog_cancel",	0, 0, NULL },
 	};
 
-	if (done) 
+	if (done)
 	{
 		return;
 	}
@@ -1513,7 +1513,7 @@ gnc_options_dialog_new_w_dialog(gchar *title, GtkWidget *dialog)
   return retval;
 }
 
-void 
+void
 gnc_options_dialog_set_apply_cb(GNCOptionWin * win, GNCOptionWinCallback cb,
                                 gpointer data)
 {
@@ -1521,7 +1521,7 @@ gnc_options_dialog_set_apply_cb(GNCOptionWin * win, GNCOptionWinCallback cb,
   win->apply_cb_data = data;
 }
 
-void 
+void
 gnc_options_dialog_set_help_cb(GNCOptionWin * win, GNCOptionWinCallback cb,
                                gpointer data)
 {
@@ -1529,7 +1529,7 @@ gnc_options_dialog_set_help_cb(GNCOptionWin * win, GNCOptionWinCallback cb,
   win->help_cb_data = data;
 }
 
-void 
+void
 gnc_options_dialog_set_close_cb(GNCOptionWin * win, GNCOptionWinCallback cb,
                                 gpointer data)
 {
@@ -1677,7 +1677,7 @@ gnc_option_set_ui_widget_text (GNCOption *option, GtkBox *page_box,
 
   scroll = gtk_scrolled_window_new(NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
-				 GTK_POLICY_NEVER, 
+				 GTK_POLICY_NEVER,
 				 GTK_POLICY_AUTOMATIC);
   gtk_container_set_border_width(GTK_CONTAINER(scroll), 2);
 
@@ -1829,7 +1829,7 @@ gnc_option_set_ui_widget_date (GNCOption *option, GtkBox *page_box,
   eventbox = gtk_event_box_new();
   gtk_container_add (GTK_CONTAINER (eventbox), *enclosing);
   gtk_box_pack_start(page_box, eventbox, FALSE, FALSE, 5);
-  *packed = TRUE;  
+  *packed = TRUE;
 
   gtk_tooltips_set_tip (tooltips, eventbox, documentation, NULL);
 
@@ -1992,7 +1992,7 @@ gnc_option_set_ui_widget_number_range (GNCOption *option, GtkBox *page_box,
 
   g_signal_connect(G_OBJECT(value), "changed",
 		   G_CALLBACK(gnc_option_changed_widget_cb), option);
-  
+
   gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
   gtk_widget_show_all(*enclosing);
@@ -2307,7 +2307,7 @@ gnc_option_set_ui_value_multichoice (GNCOption *option, gboolean use_default,
     gtk_option_menu_set_history(GTK_OPTION_MENU(widget), index);
     g_object_set_data(G_OBJECT(widget), "gnc_multichoice_index",
                       GINT_TO_POINTER(index));
-#endif 	 
+#endif
     return FALSE;
   }
 }
@@ -2370,7 +2370,7 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
 	}
       }
       else if (safe_strcmp(symbol_str, "absolute") == 0)
-      { 
+      {
 	Timespec ts;
 
 	ts = gnc_date_option_value_get_absolute (value);
@@ -2441,10 +2441,10 @@ gnc_option_set_ui_value_account_sel (GNCOption *option, gboolean use_default,
     if (!SWIG_IsPointer(value))
         scm_misc_error("gnc_option_set_ui_value_account_sel",
                        "Option Value not a wcp.", value);
-      
+
     acc = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_Account"), 4, 0);
   }
-	
+
   //doesn't default because this function is called to set a specific account
   gnc_account_sel_set_account (GNC_ACCOUNT_SEL(widget), acc, FALSE);
 
@@ -2747,7 +2747,7 @@ gnc_option_get_ui_value_multichoice (GNCOption *option, GtkWidget *widget)
     gpointer _index = g_object_get_data(G_OBJECT(widget), "gnc_multichoice_index");
     index = GPOINTER_TO_INT(_index);
   }
-#endif 	 
+#endif
   return (gnc_option_permissible_value(option, index));
 }
 
@@ -2771,7 +2771,7 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
     result = scm_cons(type, val);
   }
   else if (safe_strcmp(subtype, "absolute") == 0)
-  { 		      
+  {
     Timespec ts;
 
     ts.tv_sec  = gnc_date_edit_get_date(GNC_DATE_EDIT(widget));
@@ -2800,7 +2800,7 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
       ts.tv_nsec = 0;
       result = scm_cons(scm_str2symbol("absolute"), gnc_timespec2timepair(ts));
     }
-    else 
+    else
     {
 #ifdef GTKCOMBOBOX_TOOLTIPS_WORK
       index = gtk_combo_box_get_active(GTK_COMBO_BOX(rel_widget));
