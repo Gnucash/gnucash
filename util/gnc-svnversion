@@ -54,7 +54,18 @@ then
   fi
 fi
 
-if test $OSTYPE == "msys"
+if test -d "${real_srcdir}"/.bzr ;
+then
+    bzrhead=`bzr version-info "${real_srcdir}"` 
+    if test $? = 0 ; then
+	echo "$bzrhead" | awk -F ':' '/revision-id/{print $5}'
+	exit 0
+    else
+	exit 1
+    fi
+fi
+
+if test $OSTYPE -a $OSTYPE = "msys";
 then
   svk_name="svk.bat"
   svk_cmd="cmd \/c svk"
