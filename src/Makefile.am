@@ -52,5 +52,4 @@ EXTRA_DIST = \
   base-typemaps.i \
   README.modules \
   gnc-test-env \
-  guile-mappings.h \
-  glib-compat.h
+  guile-mappings.h

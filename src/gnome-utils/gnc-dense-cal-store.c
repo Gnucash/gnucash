@@ -33,7 +33,6 @@
 #include "config.h"
 #include <glib.h>
 #include <glib-object.h>
-#include "glib-compat.h"
 #include "gnc-dense-cal.h"
 #include "gnc-dense-cal-model.h"
 #include "gnc-dense-cal-store.h"
@@ -42,7 +41,7 @@
 struct _GncDenseCalStore
 {
     GObject parent;
-     
+
     GDate start_date;
     gdcs_end_type end_type;
     GDate end_date;
@@ -50,7 +49,7 @@ struct _GncDenseCalStore
     gchar *name;
     gchar *info;
     int num_marks;
-    int num_real_marks; 
+    int num_real_marks;
     GDate **cal_marks;
 };
 
@@ -76,7 +75,7 @@ gnc_dense_cal_store_class_init(GncDenseCalStoreClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
     parent_class = g_type_class_peek_parent(klass);
-     
+
     object_class->finalize = gnc_dense_cal_store_finalize;
 }
 
@@ -90,7 +89,7 @@ gnc_dense_cal_store_iface_init(gpointer g_iface, gpointer iface_data)
     iface->get_instance_count = gdcs_get_instance_count;
     iface->get_instance = gdcs_get_instance;
 }
- 
+
 GType
 gnc_dense_cal_store_get_type(void)
 {

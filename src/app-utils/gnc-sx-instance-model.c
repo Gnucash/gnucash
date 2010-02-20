@@ -34,7 +34,6 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <stdlib.h>
-#include "glib-compat.h"
 
 #include "Account.h"
 #include "SX-book.h"

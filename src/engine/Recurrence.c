@@ -22,7 +22,6 @@
 #include <time.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-#include "glib-compat.h"
 #include <string.h>
 #include "Recurrence.h"
 #include "gnc-date.h"
@@ -477,7 +476,7 @@ recurrenceListIsSemiMonthly(GList *recurrences)
         PeriodType first_period, second_period;
         first_period = recurrenceGetPeriodType(first);
         second_period = recurrenceGetPeriodType(second);
-             
+
         if (!((first_period == PERIOD_MONTH
                || first_period == PERIOD_END_OF_MONTH
                || first_period == PERIOD_LAST_WEEKDAY)
@@ -497,7 +496,7 @@ gboolean
 recurrenceListIsWeeklyMultiple(GList *recurrences)
 {
     GList *r_iter;
-   
+
     for (r_iter = recurrences; r_iter != NULL; r_iter = r_iter->next)
     {
         Recurrence *r = (Recurrence*)r_iter->data;

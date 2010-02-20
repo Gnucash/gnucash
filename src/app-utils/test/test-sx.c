@@ -1,7 +1,6 @@
 #include "config.h"
 #include <stdlib.h>
 #include <glib.h>
-#include "glib-compat.h"
 #include "SX-book.h"
 #include "gnc-sx-instance-model.h"
 #include "gnc-ui-util.h"

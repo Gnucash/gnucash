@@ -20,7 +20,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 # Autoconf initialization
 AC_PREREQ(2.59)
-AC_INIT([gnucash], [2.3.10], [gnucash-devel@gnucash.org])
+AC_INIT([GnuCash], [2.3.10], [gnucash-devel@gnucash.org])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 
@@ -233,8 +233,8 @@ fi
 ### --------------------------------------------------------------------------
 ### Glib checks..
 
-AM_PATH_GLIB_2_0(2.6.0,,AC_MSG_ERROR([
-*** GLIB >= 2.6 is required to build Gnucash; please make sure you have the
+AM_PATH_GLIB_2_0(2.12.0,,AC_MSG_ERROR([
+*** GLIB >= 2.12 is required to build Gnucash; please make sure you have the
 *** development headers installed. The latest version of GLIB is
 *** always available at ftp://ftp.gnome.org/pub/gnome/sources/glib/.]),
 	gthread gobject gmodule)
@@ -242,35 +242,6 @@ AM_PATH_GLIB_2_0(2.6.0,,AC_MSG_ERROR([
 if test ${no_glib}x = yesx
 then
   AC_MSG_ERROR([Cannot find glib. Check config.log])
-fi
-
-AC_MSG_CHECKING(for GLIB - version >= 2.8.0)
-if $PKG_CONFIG 'glib-2.0 >= 2.8.0'
-then
-  AC_MSG_RESULT(yes)
-  AC_DEFINE(HAVE_GLIB_2_8,1,[System has glib 2.8.0 or better])
-  HAVE_GLIB_2_8=yes
-else
-  AC_MSG_RESULT(no)
-  if test "x${native_win32}" = "xyes"; then
-    AC_MSG_ERROR([*** GLIB >= 2.8 is required to build Gnucash on Windows.])
-  else
-    GLIB26_LIBS="$GLIB_LIBS"
-    GLIB_LIBS="\${top_builddir}/lib/glib28/libgnc-glib.la $GLIB_LIBS"
-    GLIB_CFLAGS="-I\${top_srcdir}/lib/glib28 $GLIB_CFLAGS"
-    AC_SUBST(GLIB26_LIBS)
-  fi
-fi
-AM_CONDITIONAL(HAVE_GLIB_2_8, test "x$HAVE_GLIB_2_8" = "xyes")
-
-AC_MSG_CHECKING(for GLIB - version >= 2.9.0)
-if $PKG_CONFIG 'glib-2.0 >= 2.9.0'
-then
-  AC_MSG_RESULT(yes)
-  AC_DEFINE(HAVE_GLIB29,1,[System has glib 2.9.0 or better])
-  HAVE_GLIB29=yes
-else
-  AC_MSG_RESULT(no)
 fi
 
 AC_MSG_CHECKING(for GLIB - version >= 2.12.0)
@@ -1524,7 +1495,6 @@ AC_CONFIG_FILES(po/Makefile.in
           doc/examples/Makefile
           intl-scm/Makefile
           lib/Makefile
-          lib/glib28/Makefile
           lib/guile-www/Makefile
           lib/srfi/Makefile
           lib/libc/Makefile

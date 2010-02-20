@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include "glib-compat.h"
 #include "gnc-dense-cal.h"
 #include "gnc-dense-cal-model.h"
 #include "gnc-engine.h"
@@ -265,7 +264,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     {
         GtkTreeModel *options;
         GtkCellRenderer *text_rend;
-        
+
         options = GTK_TREE_MODEL(_gdc_get_view_options());
         dcal->view_options = GTK_COMBO_BOX(gtk_combo_box_new_with_model(options));
         gtk_combo_box_set_active(GTK_COMBO_BOX(dcal->view_options), 0);
@@ -287,7 +286,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         gtk_container_add(GTK_CONTAINER(label_align), GTK_WIDGET(label));
         gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(label_align), TRUE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(dcal->view_options), FALSE, FALSE, 0);
-        
+
         gtk_box_pack_start(GTK_BOX(dcal), GTK_WIDGET(hbox), FALSE, FALSE, 0);
     }
     dcal->cal_drawing_area = GTK_DRAWING_AREA(gtk_drawing_area_new());
@@ -309,7 +308,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     dcal->lastMarkTag = 0;
 
     dcal->showPopup = FALSE;
-  
+
     dcal->transPopup = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
     {
         GtkWidget *vbox, *hbox;
@@ -373,7 +372,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         pango_font_description_set_size(font_desc, font_size);
         gtk_widget_modify_font(GTK_WIDGET(dcal), font_desc);
         pango_font_description_free(font_desc);
-          
+
         maxWidth = maxHeight = 0;
         for (i=0; i<12; i++)
         {
@@ -387,7 +386,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         // these two were reversed, before...
         dcal->label_width    = maxWidth;
         dcal->label_height   = maxHeight;
-          
+
         g_object_unref(layout);
     }
 
@@ -427,7 +426,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
 
         dcal->min_x_scale = dcal->x_scale = width_88 + 2;
         dcal->min_y_scale = dcal->y_scale = MAX(floor((float)width_XXX / 3.), height_88 + 2);
-               
+
         dcal->dayLabelHeight = height_88;
 
         g_object_unref(layout);
@@ -572,7 +571,7 @@ gnc_dense_cal_set_num_months(GncDenseCal *dcal, guint num_months)
             g_critical("no view options?");
             return;
         }
-        
+
         do
         {
             gint months_val, delta_months;
@@ -718,7 +717,7 @@ gdc_reconfig(GncDenseCal *dcal)
     gnc_dense_cal_draw_to_buffer(dcal);
 }
 
-static void 
+static void
 _gdc_compute_min_size(GncDenseCal *dcal, guint *min_width, guint *min_height)
 {
     if (min_width != NULL)
@@ -1000,7 +999,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     {
         gint x, y, w, h;
         gint j;
-          
+
         pango_layout_set_text(layout, "S", -1);
         pango_layout_get_pixel_size(layout, NULL, &dcal->dayLabelHeight);
 
@@ -1038,7 +1037,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         /* draw the day labels */
         pango_layout_set_text(layout, "88", -1);
         pango_layout_get_pixel_size(layout, &maxWidth, NULL);
-          
+
         if (dcal->x_scale > maxWidth)
         {
             for (j=0; j<7; j++)
@@ -1124,7 +1123,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     }
     LOG_AND_RESET(timer, "dates");
 
-    gtk_widget_queue_draw_area(GTK_WIDGET(dcal), 
+    gtk_widget_queue_draw_area(GTK_WIDGET(dcal),
                                widget->allocation.x,
                                widget->allocation.y,
                                widget->allocation.width,
@@ -1252,7 +1251,7 @@ _gdc_view_option_changed(GtkComboBox *widget, gpointer user_data)
     GtkTreeIter iter;
     GtkTreeModel *model;
     gint months_val;
-    
+
     model = GTK_TREE_MODEL(gtk_combo_box_get_model(widget));
     if (!gtk_combo_box_get_active_iter(widget, &iter))
         return;
@@ -1503,7 +1502,7 @@ month_coords(GncDenseCal *dcal, int monthOfCal, GList **outList)
             rect = NULL;
         }
     }
-        
+
     /* Get the last week. */
     {
         gint end_week_of_year = g_date_get_sunday_week_of_year(endD);
@@ -1629,10 +1628,10 @@ wheres_this(GncDenseCal *dcal, int x, int y)
     {
         return -1;
     }
-        
+
     /* coords -> year-relative-values */
     colNum = floor(x / (col_width(dcal)+COL_BORDER_SIZE));
-     
+
     x %= (col_width(dcal)+COL_BORDER_SIZE);
     x -= dcal->label_width;
     if (x < 0)
@@ -1783,7 +1782,7 @@ gdc_model_added_cb(GncDenseCalModel *model, guint added_tag, gpointer user_data)
     GncDenseCal *cal = GNC_DENSE_CAL(user_data);
     g_debug("gdc_model_added_cb update\n");
     gdc_add_tag_markings(cal, added_tag);
-} 
+}
 
 static void
 gdc_model_update_cb(GncDenseCalModel *model, guint update_tag, gpointer user_data)
@@ -1792,7 +1791,7 @@ gdc_model_update_cb(GncDenseCalModel *model, guint update_tag, gpointer user_dat
     g_debug("gdc_model_update_cb update for tag [%d]\n", update_tag);
     gdc_mark_remove(cal, update_tag, FALSE);
     gdc_add_tag_markings(cal, update_tag);
-    
+
 }
 
 static void

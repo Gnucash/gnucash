@@ -29,8 +29,6 @@
 #include <time.h>
 #include "qof.h"
 
-#include "glib-compat.h"
-
 #include "Account.h"
 
 #include "gnc-budget.h"
@@ -272,7 +270,7 @@ void
 gnc_budget_commit_edit(GncBudget *bgt)
 {
     if (!qof_commit_edit(QOF_INSTANCE(bgt))) return;
-    qof_commit_edit_part2(QOF_INSTANCE(bgt), commit_err, 
+    qof_commit_edit_part2(QOF_INSTANCE(bgt), commit_err,
                           noop, gnc_budget_free);
 }
 
@@ -560,7 +558,7 @@ gnc_budget_get_account_period_actual_value(
 {
     // FIXME: maybe zero is not best error return val.
     g_return_val_if_fail(GNC_IS_BUDGET(budget) && acc, gnc_numeric_zero());
-    return recurrenceGetAccountPeriodValue(&GET_PRIVATE(budget)->recurrence, 
+    return recurrenceGetAccountPeriodValue(&GET_PRIVATE(budget)->recurrence,
                                            acc, period_num);
 }
 
@@ -620,11 +618,11 @@ static QofObject budget_object_def =
 
 
 /* Static wrapper getters for the recurrence params */
-static PeriodType gnc_budget_get_rec_pt(const GncBudget *bgt) 
+static PeriodType gnc_budget_get_rec_pt(const GncBudget *bgt)
 { return recurrenceGetPeriodType(&(GET_PRIVATE(bgt)->recurrence)); }
-static guint gnc_budget_get_rec_mult(const GncBudget *bgt) 
+static guint gnc_budget_get_rec_mult(const GncBudget *bgt)
 { return recurrenceGetMultiplier(&(GET_PRIVATE(bgt)->recurrence)); }
-static GDate gnc_budget_get_rec_date(const GncBudget *bgt) 
+static GDate gnc_budget_get_rec_date(const GncBudget *bgt)
 { return recurrenceGetDate(&(GET_PRIVATE(bgt)->recurrence)); }
 
 /* Register ourselves with the engine. */
@@ -634,8 +632,8 @@ gboolean gnc_budget_register (void)
         { "name", QOF_TYPE_STRING,
           (QofAccessFunc) gnc_budget_get_name,
           (QofSetterFunc) gnc_budget_set_name },
-        { "description", QOF_TYPE_STRING, 
-          (QofAccessFunc) gnc_budget_get_description, 
+        { "description", QOF_TYPE_STRING,
+          (QofAccessFunc) gnc_budget_get_description,
           (QofSetterFunc) gnc_budget_set_description },
         { "recurrence_period_type", QOF_TYPE_INT32,
           (QofAccessFunc) gnc_budget_get_rec_pt, NULL },
@@ -648,12 +646,12 @@ gboolean gnc_budget_register (void)
         { "recurrence_date", QOF_TYPE_DATE,
           (QofAccessFunc) gnc_budget_get_rec_date, NULL },
         /* Signedness problem: Should be unsigned. */
-        { "num_periods", QOF_TYPE_INT32, 
+        { "num_periods", QOF_TYPE_INT32,
           (QofAccessFunc) gnc_budget_get_num_periods,
-          (QofSetterFunc) gnc_budget_set_num_periods },        
-        { QOF_PARAM_BOOK, QOF_ID_BOOK, 
+          (QofSetterFunc) gnc_budget_set_num_periods },
+        { QOF_PARAM_BOOK, QOF_ID_BOOK,
           (QofAccessFunc) qof_instance_get_book, NULL },
-        { QOF_PARAM_GUID, QOF_TYPE_GUID, 
+        { QOF_PARAM_GUID, QOF_TYPE_GUID,
           (QofAccessFunc) qof_instance_get_guid, NULL },
         { NULL },
     };

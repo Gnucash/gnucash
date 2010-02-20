@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-plugin-page-sx-list.c
  *
  * Copyright (C) 2006 Josh Sled <jsled@asynchronous.org>
@@ -43,7 +43,6 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-#include "glib-compat.h"
 #include <glade/glade-xml.h>
 #include "SX-book.h"
 #include "Split.h"
@@ -144,7 +143,7 @@ gnc_plugin_page_sx_list_get_type (void)
             0,
             (GInstanceInitFunc) gnc_plugin_page_sx_list_init
         };
-		
+
         gnc_plugin_page_sx_list_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
                                                                GNC_PLUGIN_PAGE_SX_LIST_NAME,
                                                                &our_info, 0);
@@ -223,12 +222,12 @@ gnc_plugin_page_sx_list_dispose(GObject *object)
 
     g_return_if_fail(!priv->disposed);
     priv->disposed = TRUE;
-     
+
     g_object_unref(G_OBJECT(priv->dense_cal_model));
     priv->dense_cal_model = NULL;
     gtk_widget_unref(GTK_WIDGET(priv->gdcal));
     priv->gdcal = NULL;
-    g_object_unref(G_OBJECT(priv->instances)); 
+    g_object_unref(G_OBJECT(priv->instances));
     priv->instances = NULL;
 
     G_OBJECT_CLASS (parent_class)->dispose(object);
@@ -373,7 +372,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
                                                         gnc_plugin_page_sx_list_refresh_cb,
                                                         gnc_plugin_page_sx_list_close_cb,
                                                         page);
-     
+
     return priv->widget;
 }
 
@@ -486,7 +485,7 @@ gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
         GDate now;
         Recurrence *r = g_new0(Recurrence, 1);
         GList *schedule;
-        
+
         g_date_clear(&now, 1);
         g_date_set_time_t(&now, time(NULL));
         recurrenceSet(r, 1, PERIOD_MONTH, &now, WEEKEND_ADJ_NONE);

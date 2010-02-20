@@ -27,9 +27,6 @@
 #include <gnome.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
-#ifndef HAVE_GLIB_2_8
-#include <gstdio-2.8.h>
-#endif
 #include <libguile.h>
 #include <sys/time.h>
 #include <unistd.h>

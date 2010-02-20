@@ -33,9 +33,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
-#ifndef HAVE_GLIB_2_8
-#include <gstdio-2.8.h>
-#endif
 #include <libintl.h>
 #include <locale.h>
 #include <fcntl.h>

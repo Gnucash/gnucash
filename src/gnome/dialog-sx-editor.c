@@ -34,7 +34,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include "glib-compat.h"
 #include <locale.h>
 #include <time.h>
 
@@ -249,7 +248,7 @@ editor_ok_button_clicked( GtkButton *b, GncSxEditorDialog *sxed )
     QofBook *book;
     SchedXactions *sxes;
 
-    if ( !gnc_sxed_check_consistent( sxed ) ) 
+    if ( !gnc_sxed_check_consistent( sxed ) )
         return;
 
     gnc_sxed_save_sx( sxed );
@@ -287,7 +286,7 @@ gnc_sxed_check_changed( GncSxEditorDialog *sxed )
         name = gtk_editable_get_chars( GTK_EDITABLE(sxed->nameEntry), 0, -1 );
         if ( strlen(name) == 0 ) {
             return TRUE;
-                        
+
         }
         if ( (xaccSchedXactionGetName(sxed->sx) == NULL)
              || (strcmp( xaccSchedXactionGetName(sxed->sx),
@@ -350,10 +349,10 @@ gnc_sxed_check_changed( GncSxEditorDialog *sxed )
     /* SX options [autocreate, notify, reminder, advance] */
     {
         gboolean dlgEnabled,
-            dlgAutoCreate, 
-            dlgNotify, 
+            dlgAutoCreate,
+            dlgNotify,
             sxEnabled,
-            sxAutoCreate, 
+            sxAutoCreate,
             sxNotify;
         gint dlgAdvance, sxAdvance;
         gint dlgRemind, sxRemind;
@@ -566,7 +565,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
             /* balance with random variable bindings some number
              * of times in an attempt to ferret out
              * un-balanceable transactions.
-             * 
+             *
              * NOTE: The Real Way to do this is with some
              * symbolic math to eliminate the variables.  This is
              * hard, and we don't do it.  This solution will
@@ -619,7 +618,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                     base_cmdty = split_cmdty;
                 }
                 multi_commodity |= !gnc_commodity_equal(split_cmdty, base_cmdty);
-                                        
+
                 v = kvp_frame_get_slot_path( f,
                                              GNC_SX_ID,
                                              GNC_SX_CREDIT_FORMULA,
@@ -715,7 +714,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
             gnc_error_dialog( sxed->dialog, "%s", sx_has_no_name_msg );
             g_free( name );
             return FALSE;
-                        
+
         }
 
         nameExists = FALSE;
@@ -765,7 +764,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                 GTK_TOGGLE_BUTTON(sxed->notifyOpt) );
 
         if (((ttVarCount > 0) || multi_commodity) && autocreateState) {
-            gnc_warning_dialog(sxed->dialog, "%s", 
+            gnc_warning_dialog(sxed->dialog, "%s",
                                _("Scheduled Transactions with variables "
                                  "cannot be automatically created."));
             return FALSE;
@@ -774,7 +773,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         /* Fix for part of Bug#121740 -- auto-create transactions are
          * only valid if there's actually a transaction to create. */
         if ( autocreateState && splitCount == 0 ) {
-            gnc_warning_dialog(sxed->dialog, "%s", 
+            gnc_warning_dialog(sxed->dialog, "%s",
                                 _("Scheduled Transactions without a template "
                                   "transaction cannot be automatically created.") );
             return FALSE;
@@ -973,7 +972,7 @@ static void
 enabled_toggled( GtkObject *o, GncSxEditorDialog *sxed )
 {
     return;
-} 
+}
 
 static void
 autocreate_toggled( GtkObject *o, GncSxEditorDialog *sxed )
@@ -1205,7 +1204,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
 
     gtk_editable_set_editable( GTK_EDITABLE(sxed->advanceSpin), TRUE );
     gtk_editable_set_editable( GTK_EDITABLE(sxed->remindSpin), TRUE );
-        
+
     /* Allow resize */
     gtk_window_set_resizable (GTK_WINDOW(sxed->dialog), TRUE);
 
@@ -1423,7 +1422,7 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
     }
 
     /* populate the ledger */
-    { 
+    {
         /* create the split list */
         GList        *splitList;
 
@@ -1492,7 +1491,7 @@ gnc_sxed_reg_check_close(GncSxEditorDialog *sxed)
         _("The current template transaction "
           "has been changed. "
           "Would you like to record the changes?");
-        
+
     reg = gnc_ledger_display_get_split_register (sxed->ledger);
     pending_changes = gnc_split_register_changed (reg);
     if (!pending_changes) {
@@ -1504,7 +1503,7 @@ gnc_sxed_reg_check_close(GncSxEditorDialog *sxed)
         trans = gnc_split_register_get_current_trans( reg );
         if ( !gnc_split_register_save( reg, TRUE ) )
             return;
-                
+
         gnc_split_register_redraw( reg );
     } else {
         gnc_split_register_cancel_cursor_trans_changes (reg);

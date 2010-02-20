@@ -25,7 +25,6 @@
 #include "config.h"
 
 #include <gnome.h>
-#include "glib-compat.h"
 #include <glade/glade.h>
 
 #include "dialog-utils.h"

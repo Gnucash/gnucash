@@ -35,7 +35,7 @@
 
 #include "config.h"
 
-#include <gnome.h> 
+#include <gnome.h>
 #include <glib/gi18n.h>
 #include <string.h>
 #include <stdlib.h> /* atoi */
@@ -50,7 +50,6 @@
 #include "gnc-engine.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
-#include "glib-compat.h"
 
 enum {
 	DATE_CHANGED,
@@ -106,7 +105,7 @@ gnc_date_edit_get_type (void)
 							"GNCDateEdit",
 							 &date_edit_info, 0);
 	}
-	
+
 	return date_edit_type;
 }
 
@@ -469,7 +468,7 @@ fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
 	time (&current_time);
 	tm_returned = localtime_r (&current_time, &mtm);
 	g_return_if_fail(tm_returned != NULL);
-	
+
 	for (i = gde->lower_hour; i <= gde->upper_hour; i++){
 		GtkWidget *item, *submenu;
 		hour_info_t *hit;
@@ -531,7 +530,7 @@ gnc_date_edit_class_init (GNCDateEditClass *klass)
 	GObjectClass *object_class = (GObjectClass *) klass;
 
 	object_class = (GObjectClass*) klass;
-	
+
 	parent_class = g_type_class_ref(GTK_TYPE_HBOX);
 
 	date_edit_signals [TIME_CHANGED] =
@@ -642,7 +641,7 @@ gnc_date_edit_forall (GtkContainer *container, gboolean include_internals,
 }
 
 static void
-gnc_date_edit_set_time_tm (GNCDateEdit *gde, struct tm *mytm) 
+gnc_date_edit_set_time_tm (GNCDateEdit *gde, struct tm *mytm)
 {
         char buffer [40];
 
@@ -709,8 +708,8 @@ gnc_date_edit_set_gdate (GNCDateEdit *gde, const GDate *date)
 {
         struct tm mytm;
         time_t t;
-        
-        g_return_if_fail(gde && GNC_IS_DATE_EDIT(gde) && 
+
+        g_return_if_fail(gde && GNC_IS_DATE_EDIT(gde) &&
                          date && g_date_valid(date));
         g_date_to_struct_tm(date, &mytm);
         t = mktime(&mytm);
@@ -914,7 +913,7 @@ create_children (GNCDateEdit *gde)
  *
  * Creates a new GNCDateEdit widget which can be used to provide
  * an easy to use way for entering dates and times.
- * 
+ *
  * Returns a GNCDateEdit widget.
  */
 GtkWidget *
@@ -957,9 +956,9 @@ gnc_date_edit_new_glade (gchar *widget_name,
  * gnc_date_edit_new_flags:
  * @the_time: The initial time for the date editor.
  * @flags: A bitmask of GNCDateEditFlags values.
- * 
+ *
  * Creates a new GNCDateEdit widget with the specified flags.
- * 
+ *
  * Return value: the newly-created date editor widget.
  **/
 GtkWidget *
@@ -1133,20 +1132,20 @@ gnc_date_edit_get_date_end_ts (GNCDateEdit *gde)
  * gnc_date_edit_set_flags:
  * @gde: The date editor widget whose flags should be changed.
  * @flags: The new bitmask of GNCDateEditFlags values.
- * 
+ *
  * Changes the display flags on an existing date editor widget.
  **/
 void
 gnc_date_edit_set_flags (GNCDateEdit *gde, GNCDateEditFlags flags)
 {
         GNCDateEditFlags old_flags;
-        
+
 	g_return_if_fail (gde != NULL);
 	g_return_if_fail (GNC_IS_DATE_EDIT (gde));
 
         old_flags = gde->flags;
         gde->flags = flags;
-        
+
 	if ((flags & GNC_DATE_EDIT_SHOW_TIME) !=
             (old_flags & GNC_DATE_EDIT_SHOW_TIME)) {
 		if (flags & GNC_DATE_EDIT_SHOW_TIME) {
@@ -1182,9 +1181,9 @@ gnc_date_edit_set_flags (GNCDateEdit *gde, GNCDateEditFlags flags)
 /**
  * gnc_date_edit_get_flags:
  * @gde: The date editor whose flags should be queried.
- * 
+ *
  * Queries the display flags on a date editor widget.
- * 
+ *
  * Return value: The current display flags for the given date editor widget.
  **/
 int
@@ -1200,7 +1199,7 @@ gnc_date_edit_get_flags (GNCDateEdit *gde)
  * gnc_date_set_activates_default:
  * @gde: The date editor to modify
  * @state: The new state for this widget.
- * 
+ *
  * Extracts the editable field from a GNCDateEdit widget, and sets it
  * up so that pressing the Enter key in this field as the same as
  * clicking the button that has the default.
@@ -1218,7 +1217,7 @@ gnc_date_activates_default (GNCDateEdit *gde, gboolean state)
  * gnc_date_grab_focus:
  * @gde: The date editor to modify
  * @state: The new state for this widget.
- * 
+ *
  * Sets the focus to the Editable field.
  **/
 void

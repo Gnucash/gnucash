@@ -26,7 +26,6 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
-#include "glib-compat.h"
 
 #include "Recurrence.h"
 #include "Period.h"
@@ -121,8 +120,8 @@ get_earliest_in_book (QofBook *book)
 }
 
 /* =============================================================== */
-/* Find the number of transactions occuring before the indicated date.  
- * Do this by making a query and counting the results. 
+/* Find the number of transactions occuring before the indicated date.
+ * Do this by making a query and counting the results.
  */
 
 static int
@@ -236,10 +235,10 @@ prepare_remarks (AcctPeriodInfo *info)
                       g_date_get_year(&period_end));
     period_begin = period_end;
     recurrenceListNextInstance(info->period, &period_begin, &period_end);
-  } 
+  }
 
   /* Display the results */
-  remarks_text = 
+  remarks_text =
     _("The earliest transaction date found in this book is %s. "
       "Based on the selection made above, this book will be split "
       "into %d books.  Click on 'Forward' to start closing the "
@@ -274,7 +273,7 @@ show_book_details (AcctPeriodInfo *info)
   recurrenceListFree(&info->period);
   gnc_frequency_save_to_recurrence(info->period_menu, &info->period, &info->closing_date);
 
-  qof_print_date_dmy_buff (close_date_str, MAX_DATE_LENGTH, 
+  qof_print_date_dmy_buff (close_date_str, MAX_DATE_LENGTH,
                            g_date_get_day(&info->closing_date),
                            g_date_get_month(&info->closing_date),
                            g_date_get_year(&info->closing_date));
@@ -286,7 +285,7 @@ show_book_details (AcctPeriodInfo *info)
   nacc = gnc_account_n_descendants (gnc_book_get_root_account (currbook));
 
   /* Display the book info */
-  period_text = 
+  period_text =
     _("You have asked for a book to be created.  This book "
       "will contain all transactions up to midnight %s "
       "(for a total of %d transactions spread over %d accounts). "
@@ -300,7 +299,7 @@ show_book_details (AcctPeriodInfo *info)
   gtk_widget_show (GTK_WIDGET (info->book_details));
 
   /* Create default settings for the title, notes fields */
-  qof_print_date_dmy_buff (prev_close_date_str, MAX_DATE_LENGTH, 
+  qof_print_date_dmy_buff (prev_close_date_str, MAX_DATE_LENGTH,
                            g_date_get_day(&info->prev_closing_date),
                            g_date_get_month(&info->prev_closing_date),
                            g_date_get_year(&info->prev_closing_date));
@@ -333,10 +332,10 @@ ap_show_menu (GnomeDruidPage *druidpage,
   ENTER("info=%p", info);
 
   /* Find the date of the earliest transaction in the current book.
-   * Note that this could have changed since last time, since 
+   * Note that this could have changed since last time, since
    * we may have closed books since last time. */
   info->earliest = get_earliest_in_book (gnc_get_current_book());
-  info->earliest_str = qof_print_date(info->earliest); 
+  info->earliest_str = qof_print_date(info->earliest);
   PINFO ("date of earliest is %ld %s", info->earliest, ctime (&info->earliest));
 
   prepare_remarks (info);
@@ -450,7 +449,7 @@ ap_close_period (GnomeDruidPage *druidpage,
 
     /* We must save now; if we don't, and the user bails without saving,
      * then opening account balances will be incorrect, and this can only
-     * lead to unhappiness. 
+     * lead to unhappiness.
      */
     gnc_file_save ();
     gnc_resume_gui_refresh ();
@@ -517,13 +516,13 @@ ap_druid_create (AcctPeriodInfo *info)
   info->druid = GNOME_DRUID (glade_xml_get_widget (xml, "acct_period_druid"));
   gnc_druid_set_colors (info->druid);
 
-  info->start_page = 
+  info->start_page =
         GNOME_DRUID_PAGE(glade_xml_get_widget (xml, "start page"));
-  info->menu_page = 
+  info->menu_page =
         GNOME_DRUID_PAGE(glade_xml_get_widget (xml, "menu page"));
-  info->book_page = 
+  info->book_page =
         GNOME_DRUID_PAGE(glade_xml_get_widget (xml, "book page"));
-  info->finish_page = 
+  info->finish_page =
         GNOME_DRUID_PAGE(glade_xml_get_widget (xml, "finish page"));
 
   info->close_status = -1;
@@ -532,8 +531,8 @@ ap_druid_create (AcctPeriodInfo *info)
    * Add a year minus a day as the first guess for book closing,
    * and use that to set up the freq spec widget. */
   info->earliest = get_earliest_in_book (gnc_get_current_book());
-  info->earliest_str = qof_print_date(info->earliest); 
-  PINFO ("date of earliest transaction is %ld %s", 
+  info->earliest_str = qof_print_date(info->earliest);
+  PINFO ("date of earliest transaction is %ld %s",
                   info->earliest, ctime (&info->earliest));
 
   g_date_clear (&info->closing_date, 1);
@@ -562,19 +561,19 @@ ap_druid_create (AcctPeriodInfo *info)
          TRUE, TRUE, 0);
 
   /* Get handles to all of the other widgets we'll need */
-  info->period_remarks = 
+  info->period_remarks =
         GTK_LABEL (glade_xml_get_widget (xml, "remarks label"));
 
-  info->close_results = 
+  info->close_results =
         GTK_LABEL (glade_xml_get_widget (xml, "results label"));
 
-  info->book_details = 
+  info->book_details =
         GTK_LABEL (glade_xml_get_widget (xml, "book label"));
 
-  info->book_title = 
+  info->book_title =
         GTK_ENTRY (glade_xml_get_widget (xml, "book title entry"));
 
-  info->book_notes = 
+  info->book_notes =
         GTK_TEXT_VIEW (glade_xml_get_widget (xml, "book notes text"));
 
   /* generic finished/close/abort signals */
@@ -619,7 +618,7 @@ ap_close_handler (gpointer user_data)
 /********************************************************************\
  * gnc_acct_period_dialog                                           *
  *   opens up a druid to configure accounting periods               *
- *                                                                  * 
+ *                                                                  *
  * Args:   none                                                     *
  * Return: nothing                                                  *
 \********************************************************************/

@@ -28,7 +28,6 @@
 #include "dialog-sx-editor.h"
 #include "dialog-sx-from-trans.h"
 #include "dialog-utils.h"
-#include "glib-compat.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-dense-cal-store.h"
@@ -85,7 +84,7 @@ typedef enum { FREQ_DAILY = 0,  /* I know the =0 is redundant, but I'm using
                                  * the numeric equivalences explicitly here */
                FREQ_WEEKLY,
                FREQ_BIWEEKLY,
-               FREQ_MONTHLY, 
+               FREQ_MONTHLY,
                FREQ_QUARTERLY,
                FREQ_ANNUALLY
 } SxftiFreqType;
@@ -138,24 +137,24 @@ sxfti_attach_callbacks(SXFromTransInfo *sxfti)
       { SXFTD_N_OCCURRENCES_ENTRY,  "changed",      sxftd_update_excal_adapt },
       { NULL,                  NULL,      NULL }
     };
-  
+
   int i;
 
   GtkWidget *w;
   for(i = 0; callbacks[i].name != NULL; i++)
   {
     w = glade_xml_get_widget(sxfti->gxml, callbacks[i].name);
-    
-    g_signal_connect (GTK_OBJECT(w), callbacks[i].signal, 
+
+    g_signal_connect (GTK_OBJECT(w), callbacks[i].signal,
 		      G_CALLBACK(callbacks[i].handlerFn),
 		      sxfti );
   }
 
   g_signal_connect (G_OBJECT(sxfti->dialog), "response",
-                    G_CALLBACK (gnc_sx_trans_window_response_cb), 
+                    G_CALLBACK (gnc_sx_trans_window_response_cb),
                     sxfti);
 }
-  
+
 
 static getEndTuple
 sxftd_get_end_info(SXFromTransInfo *sxfti)
@@ -172,7 +171,7 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
     retval.type = NEVER_END;
     return retval;
   }
-  
+
   w = glade_xml_get_widget(sxfti->gxml, SXFTD_END_ON_DATE_BUTTON);
   if(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w))) {
     time_t end_tt;
@@ -182,7 +181,7 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
     g_date_set_time_t( &(retval.end_date), end_tt);
     return retval;
   }
-    
+
   w = glade_xml_get_widget(sxfti->gxml, SXFTD_N_OCCURRENCES_BUTTON);
   if(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w) )) {
     gchar *text, *endptr;
@@ -214,12 +213,12 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
 
   return retval;
 }
- 
+
 
 static guint
 sxftd_add_template_trans(SXFromTransInfo *sxfti)
 {
-  
+
   Transaction *tr = sxfti->trans;
   GList *tt_list = NULL;
   GList *splits, *template_splits = NULL;
@@ -353,7 +352,7 @@ sxftd_init( SXFromTransInfo *sxfti )
   if ( xaccTransIsOpen( sxfti->trans ) ) {
           return SXFTD_ERRNO_OPEN_XACTION;
   }
-          
+
   sxfti_attach_callbacks(sxfti);
 
   /* Setup the example calendar and related data structures. */
@@ -441,7 +440,7 @@ sxftd_init( SXFromTransInfo *sxfti )
                     sxfti );
 
   sxftd_update_example_cal( sxfti );
-  
+
   return 0;
 }
 
@@ -464,7 +463,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   g_free(name);
 
   g_date_set_time_t( &date, gnc_date_edit_get_date( sxfti->startDateGDE ) );
- 
+
   sxftd_update_schedule(sxfti, &date, &schedule);
   if (sxftd_errno == 0) {
       gnc_sx_set_schedule(sx, schedule);
@@ -485,7 +484,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   case END_AFTER_N_OCCS:
     xaccSchedXactionSetNumOccur(sx, end_info.n_occurrences);
     break;
-    
+
   default:
     sxftd_errno = 2;
     break;
@@ -495,8 +494,8 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
 
   /* Set the autocreate, days-in-advance and remind-in-advance values from
    * options. */
-  { 
-    gboolean autoCreateState, notifyState; 
+  {
+    gboolean autoCreateState, notifyState;
     gint daysInAdvance;
 
     autoCreateState =
@@ -506,7 +505,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
     xaccSchedXactionSetAutoCreate( sx,
                                    autoCreateState,
                                    (autoCreateState & notifyState) );
-    
+
     daysInAdvance =
       gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_CREATE_DAYS, NULL );
     xaccSchedXactionSetAdvanceCreation( sx, daysInAdvance );
@@ -550,7 +549,7 @@ sxftd_ok_clicked(SXFromTransInfo *sxfti)
   else
   {
     if ( sx_error == SXFTD_ERRNO_UNBALANCED_XACTION ) {
-            gnc_error_dialog( gnc_ui_get_toplevel(), "%s",  
+            gnc_error_dialog( gnc_ui_get_toplevel(), "%s",
                               _( "The Scheduled Transaction is unbalanced. "
                                  "You are strongly encouraged to correct this situation." ) );
     }
@@ -562,7 +561,7 @@ sxftd_ok_clicked(SXFromTransInfo *sxfti)
   sxftd_close(sxfti, FALSE);
   return;
 }
-  
+
 /**
  * Update start date... right now we always base this off the transaction
  * start date, but ideally we want to respect what the user has in the field,
@@ -736,7 +735,7 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
 
   gnc_dense_cal_set_month( sxfti->example_cal, g_date_get_month( &startDate ) );
   gnc_dense_cal_set_year( sxfti->example_cal, g_date_get_year( &startDate ) );
-  
+
   recurrenceListFree(&schedule);
 }
 
@@ -758,18 +757,18 @@ gnc_sx_create_from_trans( Transaction *trans )
 
   sxfti->gxml = gnc_glade_xml_new(SX_GLADE_FILE,
 				  SXFTD_DIALOG_GLADE_NAME);
-  
+
   sxfti->dialog = glade_xml_get_widget(sxfti->gxml,
 				       SXFTD_DIALOG_GLADE_NAME);
 
   sxfti->trans = trans;
-  
+
   sxfti->sx = xaccSchedXactionMalloc(gnc_get_current_book ());
 
   if ( (errno = sxftd_init( sxfti )) < 0 ) {
           if ( errno == SXFTD_ERRNO_OPEN_XACTION )
           {
-                  gnc_error_dialog( gnc_ui_get_toplevel(), "%s", 
+                  gnc_error_dialog( gnc_ui_get_toplevel(), "%s",
                                     _( "Cannot create a Scheduled Transaction "
                                        "from a Transaction currently "
                                        "being edited. Please Enter the "

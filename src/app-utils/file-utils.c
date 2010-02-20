@@ -23,9 +23,6 @@
 
 #include <glib.h>
 #include <glib/gstdio.h>
-#ifndef HAVE_GLIB_2_8
-#include <gfileutils-2.8.h>
-#endif
 #include <libguile.h>
 #include <errno.h>
 #include <fcntl.h>

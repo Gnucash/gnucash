@@ -33,7 +33,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include "glib-compat.h"
 
 #include "gnc-date.h"
 #include "gnc-gconf-utils.h"
@@ -101,7 +100,7 @@ struct _GncPeriodSelectPrivate
 
   gboolean start;
   GDate *fy_end;
- 
+
   GDate     *date_base;
   GtkWidget *date_label;
   GtkWidget *date_align;
@@ -373,7 +372,7 @@ gnc_period_select_get_property (GObject     *object,
 			       GParamSpec  *pspec)
 {
   GncPeriodSelect *period = GNC_PERIOD_SELECT(object);
-  
+
   switch (prop_id)
     {
     case PROP_FY_END:
@@ -407,7 +406,7 @@ gnc_period_select_set_property (GObject      *object,
 			       GParamSpec   *pspec)
 {
   GncPeriodSelect *period = GNC_PERIOD_SELECT(object);
-  
+
   switch (prop_id)
     {
     case PROP_FY_END:
@@ -455,7 +454,7 @@ gnc_period_select_get_type (void)
       NULL
     };
 
-    period_select_type = g_type_register_static(GTK_TYPE_HBOX, 
+    period_select_type = g_type_register_static(GTK_TYPE_HBOX,
 					       "GncPeriodSelect",
 					       &period_select_info, 0);
   }
@@ -581,7 +580,7 @@ gnc_period_select_finalize (GObject *object)
 
 /*  Create a new GncPeriodSelect widget which is used to select a
  *  accounting period like "previous month" or "this year".
- * 
+ *
  *  @param starting_labels If set to TRUE then all the labels will
  *  refer to the "Start of...".  If FALSE, labels will refer to "End
  *  of...".

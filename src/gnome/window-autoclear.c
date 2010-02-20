@@ -24,7 +24,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include "glib-compat.h"
 
 #include "Scrub.h"
 #include "Scrub3.h"
@@ -62,9 +61,9 @@ struct _AutoClearWindow
 
 /********************************************************************\
  * gnc_ui_autoclear_window_raise                                    *
- *   shows and raises an auto-clear window                          * 
- *                                                                  * 
- * Args:   autoClearData - the auto-clear window structure          * 
+ *   shows and raises an auto-clear window                          *
+ *                                                                  *
+ * Args:   autoClearData - the auto-clear window structure          *
 \********************************************************************/
 void
 gnc_ui_autoclear_window_raise(AutoClearWindow * autoClearData)
@@ -114,9 +113,9 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
   GList *node, *nc_list = 0, *toclear_list = 0;
   gnc_numeric toclear_value;
   GHashTable *sack;
-    
+
   gtk_label_set_text(data->status_label, "Searching for splits to clear ...");
- 
+
   /* Value we have to reach */
   toclear_value = gnc_amount_edit_get_amount(data->end_value);
   toclear_value = gnc_numeric_convert(toclear_value, xaccAccountGetCommoditySCU(data->account), GNC_RND_NEVER);
@@ -136,7 +135,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
     else
       toclear_value = gnc_numeric_sub_fixed(toclear_value, value);
   }
- 
+
   /* Pretty print information */
   printf("Amount to clear: %s\n", gnc_numeric_to_string(toclear_value));
   printf("Available splits:\n");
@@ -215,10 +214,10 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
 		/* Cast the gpointer to the kind of pointer we actually need */
 		Split *split = (Split *)psplit;
         toclear_list = g_list_prepend(toclear_list, split);
-		toclear_value = gnc_numeric_sub_fixed(toclear_value, 
+		toclear_value = gnc_numeric_sub_fixed(toclear_value,
 											  xaccSplitGetAmount(split));
-        printf("    Cleared: %s -> %s\n", 
-			   gnc_numeric_to_string(xaccSplitGetAmount(split)), 
+        printf("    Cleared: %s -> %s\n",
+			   gnc_numeric_to_string(xaccSplitGetAmount(split)),
 			   gnc_numeric_to_string(toclear_value));
       }
       else
@@ -233,7 +232,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
     {
       printf("    No solution found.\n");
       gtk_label_set_text(data->status_label, "The selected amount cannot be cleared.");
-      return; 
+      return;
     }
   }
   g_hash_table_destroy (sack);
@@ -245,7 +244,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
     Split *split = node->data;
     char recn;
 	gnc_numeric value;
-    
+
 	recn = xaccSplitGetReconcile (split);
 	value = xaccSplitGetAmount (split);
 
@@ -290,7 +289,7 @@ autoClearWindow (GtkWidget *parent, Account *account)
   AutoClearWindow *data;
   char *title;
 
-  data = g_new0 (AutoClearWindow, 1); 
+  data = g_new0 (AutoClearWindow, 1);
   data->account = account;
 
   /* Create the dialog box */
@@ -316,7 +315,7 @@ autoClearWindow (GtkWidget *parent, Account *account)
   data->ok_button = glade_xml_get_widget(xml, "ok_button");
   data->cancel_button = glade_xml_get_widget(xml, "cancel_button");
   data->status_label = GTK_LABEL(glade_xml_get_widget(xml, "status_label"));
-  
+
   g_signal_connect(data->ok_button, "clicked",
       G_CALLBACK(gnc_autoclear_window_ok_cb), data);
   g_signal_connect(data->end_value, "activate",

@@ -30,8 +30,6 @@
 #include <locale.h>
 #include <math.h>
 
-#include "glib-compat.h"
-
 #include "qof.h"
 #include "gnc-date.h"
 #include "gnc-gconf-utils.h"
@@ -229,10 +227,10 @@ typedef struct _check_format {
     gchar *title;               /**< Title of this check format. Displayed to
                                  *   user in the dialog box. */
 
-    gboolean blocking;          /**< Default for printing blocking characters for 
+    gboolean blocking;          /**< Default for printing blocking characters for
                                  *   this page of checks.  */
 
-    gboolean print_date_format; /**< Default for printing date format characters for 
+    gboolean print_date_format; /**< Default for printing date format characters for
                                  *   this page of checks.  */
 
     gboolean show_grid;         /**< Print a grid pattern on the page */
@@ -352,7 +350,7 @@ static void
 get_float_pair (const char *section, const char *key, double *a, double *b)
 {
   GSList *coord_list;
-  
+
   coord_list = gnc_gconf_get_list (section, key, GCONF_VALUE_FLOAT, NULL);
   if (NULL == coord_list) {
     *a = 0;
@@ -398,7 +396,7 @@ get_check_splits_amount(PrintCheckDialog *pcd)
    s_list = xaccTransGetSplitList(trans);
    if ( !s_list ) return NULL;
 
-   amount = g_strconcat("",NULL); 
+   amount = g_strconcat("",NULL);
    node = s_list;
    cnt = 1;
    while ( cnt < nSplits ) {
@@ -431,7 +429,7 @@ get_check_splits_memo(PrintCheckDialog *pcd)
    s_list = xaccTransGetSplitList(trans);
    if ( !s_list ) return NULL;
 
-   memo = g_strconcat("",NULL); 
+   memo = g_strconcat("",NULL);
    node = s_list;
    cnt = 1;
    while ( cnt < nSplits ) {
@@ -465,7 +463,7 @@ get_check_splits_account(PrintCheckDialog *pcd)
    s_list = xaccTransGetSplitList(trans);
    if ( !s_list ) return NULL;
 
-   account = g_strconcat("",NULL); 
+   account = g_strconcat("",NULL);
    node = s_list;
    cnt = 1;
    while ( cnt < nSplits ) {
@@ -490,7 +488,7 @@ check_format_has_address ( PrintCheckDialog *pcd )
   check_format_t *format = NULL;
 
   if ( !pcd ) return FALSE;
-  /* if format is NULL, then the custom format is being used 
+  /* if format is NULL, then the custom format is being used
    * which has an ADDRESS item by definition */
   format = pcd->selected_format;
   if ( !format ) return TRUE;
@@ -758,7 +756,7 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
                               pcd->splits_account_x, pcd->splits_account_y);
 
     filename = g_strconcat(title, CHECK_NAME_EXTENSION, NULL);
-    pathname = g_build_filename(gnc_dotgnucash_dir(), CHECK_FMT_DIR, 
+    pathname = g_build_filename(gnc_dotgnucash_dir(), CHECK_FMT_DIR,
                                 filename, NULL);
 
     if (gnc_key_file_save_to_file(pathname, key_file, &error)) {
@@ -772,7 +770,7 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
         dialog = gtk_message_dialog_new(GTK_WINDOW(pcd->dialog),
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_ERROR,
-                                        GTK_BUTTONS_CLOSE, "%s", 
+                                        GTK_BUTTONS_CLOSE, "%s",
                                         _("Cannot save check format file."));
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                                                  "%s", error->message);
@@ -1382,7 +1380,7 @@ read_one_check_directory(PrintCheckDialog * pcd, GtkListStore *store,
             dialog = gtk_message_dialog_new
                 (GTK_WINDOW(pcd->dialog),
                  GTK_DIALOG_DESTROY_WITH_PARENT,
-                 GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s", 
+                 GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s",
                  _("There is a duplicate check format file."));
             gtk_message_dialog_format_secondary_text
                 (GTK_MESSAGE_DIALOG(dialog),
@@ -1948,7 +1946,7 @@ draw_date_format(GncPrintContext * context, const gchar *date_format,
 
     text = g_string_free(cdn_fmt, FALSE);
     draw_text(context, text, &date_item, date_desc);
-    g_free(text);     
+    g_free(text);
     if (expanded)
         g_free(expanded);
     pango_font_description_free(date_desc);
@@ -2335,7 +2333,7 @@ draw_page(GtkPrintOperation * operation,
 
 
 /* Compute the number of pages required to complete this print operation.
- * Today, check printing only prints one check at a time.  When its extended to 
+ * Today, check printing only prints one check at a time.  When its extended to
  * print multiple checks, this will need to take into account the number of
  * checks to print, the number of checks on a page, and the starting check
  * position on the page. This function is called once by the GtkPrint code to
@@ -2453,7 +2451,7 @@ gnc_print_check_format_changed (GtkComboBox *widget,
   /* If there's only one thing in the position combobox, make it insensitive */
   sensitive = (pcd->position_max > 0);
   gtk_widget_set_sensitive(GTK_WIDGET(pcd->position_combobox), sensitive);
-  
+
   /* Update the custom page */
   sensitive = (!separator && !format);
   gtk_container_foreach(GTK_CONTAINER(pcd->custom_table),

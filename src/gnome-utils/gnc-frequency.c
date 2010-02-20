@@ -27,7 +27,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gtypes.h>
-#include "glib-compat.h"
 #include <math.h>
 #include <time.h>
 
@@ -117,7 +116,7 @@ gnc_frequency_get_type()
             0,
             (GInstanceInitFunc)gnc_frequency_init
         };
-                
+
         gncfreq_type = g_type_register_static (GTK_TYPE_VBOX,
                                                "GncFrequency",
                                                &gncfreq_info, 0);
@@ -130,7 +129,7 @@ static void
 gnc_frequency_class_init( GncFrequencyClass *klass )
 {
     GObjectClass *object_class;
-        
+
     object_class = G_OBJECT_CLASS (klass);
 
     gnc_frequency_signals[GNCFREQ_CHANGED] =
@@ -210,7 +209,7 @@ gnc_frequency_init(GncFrequency *gf)
     /* initialize the spin buttons */
     for (i=0; spinVals[i].name != NULL; i++)
     {
-        if (spinVals[i].fn != NULL) 
+        if (spinVals[i].fn != NULL)
         {
             o = glade_xml_get_widget(gf->gxml, spinVals[i].name);
             adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(o));
@@ -287,7 +286,7 @@ start_date_changed( GNCDateEdit *gde, gpointer d )
 /* ================================================================= */
 /* Relabel some of the labels */
 
-void 
+void
 gnc_frequency_set_frequency_label_text(GncFrequency *gf, const gchar *txt)
 {
     GtkLabel *lbl;
@@ -296,7 +295,7 @@ gnc_frequency_set_frequency_label_text(GncFrequency *gf, const gchar *txt)
     gtk_label_set_text (lbl, txt);
 }
 
-void 
+void
 gnc_frequency_set_date_label_text(GncFrequency *gf, const gchar *txt)
 {
     GtkLabel *lbl;
@@ -469,7 +468,7 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, GDate *start_date)
          case PERIOD_LAST_WEEKDAY: {
              guint multiplier;
              GtkWidget *multipler_spin, *day_of_month, *weekend_mode;
-             
+
              multipler_spin = glade_xml_get_widget(gf->gxml, "monthly_spin");
              multiplier = recurrenceGetMultiplier(r);
              if (recurrenceGetPeriodType(r) == PERIOD_YEAR)
@@ -483,7 +482,7 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, GDate *start_date)
 
              gtk_notebook_set_current_page(gf->nb, PAGE_MONTHLY);
              gtk_combo_box_set_active(gf->freqComboBox, PAGE_MONTHLY);
-         } break; 
+         } break;
          case PERIOD_NTH_WEEKDAY:
              g_critical("unhandled period type [%d]", recurrenceGetPeriodType(r));
              break;
@@ -515,7 +514,7 @@ _get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier
     int day_of_month_index = gtk_combo_box_get_active(GTK_COMBO_BOX(day_of_month_combo));
     GtkWidget *weekend_adjust_combo = glade_xml_get_widget(gf->gxml, combo_weekend_name);
     int weekend_adjust = gtk_combo_box_get_active(GTK_COMBO_BOX(weekend_adjust_combo));
-        
+
     r = g_new0(Recurrence, 1);
     if (day_of_month_index > LAST_DAY_OF_MONTH_OPTION_INDEX)
     {
@@ -596,7 +595,7 @@ gnc_frequency_save_to_recurrence(GncFrequency *gf, GList **recurrences, GDate *o
 
             r = g_new0(Recurrence, 1);
             recurrenceSet(r, multiplier, PERIOD_WEEK, day_of_week_aligned_date, WEEKEND_ADJ_NONE);
-            
+
             *recurrences = g_list_append(*recurrences, r);
         }
     } break;

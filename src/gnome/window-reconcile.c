@@ -32,7 +32,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include "glib-compat.h"
 
 #include "Scrub.h"
 #include "Scrub3.h"
@@ -606,7 +605,7 @@ gnc_save_reconcile_interval(Account *account, time_t statement_date)
 	      (12 * prev.tm_year + prev.tm_mon));
     days = 0;
   }
-  
+
   /*
    * Remember for next time.
    */
@@ -758,7 +757,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
   /* Allow the user to enter an interest payment
    * or charge prior to reconciling */
-  if( account_type_has_auto_interest_xfer( data.account_type ) 
+  if( account_type_has_auto_interest_xfer( data.account_type )
       && auto_interest_xfer_option )
   {
     gnc_reconcile_interest_xfer_run( &data );
@@ -1136,12 +1135,12 @@ gnc_ui_reconcile_window_balance_cb(GtkButton *button, gpointer data)
   Account *account;
   gnc_numeric balancing_amount;
   time_t statement_date;
-  
-  
+
+
   gsr = gnc_reconcile_window_open_register(recnData);
   if (gsr == NULL)
     return;
-  
+
   account = recn_get_account(recnData);
   if (account == NULL)
     return;
@@ -1153,7 +1152,7 @@ gnc_ui_reconcile_window_balance_cb(GtkButton *button, gpointer data)
   statement_date = recnData->statement_date;
   if (statement_date == 0)
     statement_date = time(NULL); // default to 'now'
-  
+
   gnc_split_reg_balancing_entry(gsr, account, statement_date, balancing_amount);
 }
 
@@ -1233,7 +1232,7 @@ gnc_recn_set_window_name(RecnWindow *recnData)
   g_free (title);
 }
 
-static void 
+static void
 gnc_recn_edit_account_cb(GtkAction *action, gpointer data)
 {
   RecnWindow *recnData = data;
@@ -1245,7 +1244,7 @@ gnc_recn_edit_account_cb(GtkAction *action, gpointer data)
   gnc_ui_edit_account_window (account);
 }
 
-static void 
+static void
 gnc_recn_xfer_cb(GtkAction *action, gpointer data)
 {
   RecnWindow *recnData = data;
@@ -1353,7 +1352,7 @@ gnc_get_reconcile_info (Account *account,
 
       g_date_add_months(&date, months);
 
-      /* Track last day of the month, i.e. 1/31 -> 2/28 -> 3/31 */ 
+      /* Track last day of the month, i.e. 1/31 -> 2/28 -> 3/31 */
       if (was_last_day_of_month)
       {
         g_date_set_day(&date, g_date_get_days_in_month(g_date_get_month(&date),
@@ -1383,7 +1382,7 @@ gnc_get_reconcile_info (Account *account,
      */
     *new_ending =
       gnc_ui_account_get_balance_as_of_date
-      (account, *statement_date, 
+      (account, *statement_date,
        xaccAccountGetReconcileChildrenStatus(account));
   }
 }
@@ -1419,7 +1418,7 @@ recn_set_watches_one_account (gpointer data, gpointer user_data)
       case NREC:
       case CREC:
         trans = xaccSplitGetParent (split);
-        
+
         gnc_gui_component_watch_entity (recnData->component_id,
                                         xaccTransGetGUID (trans),
                                         QOF_EVENT_MODIFY
@@ -1545,19 +1544,19 @@ recnWindow_add_widget (GtkUIManager *merge,
 }
 
 /********************************************************************\
- * recnWindowWithBalance                                            
+ * recnWindowWithBalance
  *
  *   Opens up the window to reconcile an account, but with ending
  *   balance and statement date already given.
- *                                                                  
+ *
  * Args:   parent         - The parent widget of the new window
- *         account        - The account to reconcile           
- *         new_ending     - The amount for ending balance      
- *         statement_date - The date of the statement          
- * Return: recnData - the instance of this RecnWindow          
+ *         account        - The account to reconcile
+ *         new_ending     - The amount for ending balance
+ *         statement_date - The date of the statement
+ * Return: recnData - the instance of this RecnWindow
 \********************************************************************/
 RecnWindow *
-recnWindowWithBalance (GtkWidget *parent, Account *account, 
+recnWindowWithBalance (GtkWidget *parent, Account *account,
 		       gnc_numeric new_ending, time_t statement_date)
 {
   RecnWindow *recnData;
@@ -1820,9 +1819,9 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
 
 /********************************************************************\
  * gnc_ui_reconile_window_raise                                     *
- *   shows and raises an account editing window                     * 
- *                                                                  * 
- * Args:   editAccData - the edit window structure                  * 
+ *   shows and raises an account editing window                     *
+ *                                                                  *
+ * Args:   editAccData - the edit window structure                  *
 \********************************************************************/
 void
 gnc_ui_reconcile_window_raise(RecnWindow * recnData)
@@ -1846,7 +1845,7 @@ gnc_ui_reconcile_window_raise(RecnWindow * recnData)
  *         data - the data struct for this window                   *
  * Return: none                                                     *
 \********************************************************************/
-static void 
+static void
 recn_destroy_cb (GtkWidget *w, gpointer data)
 {
   RecnWindow *recnData = data;
@@ -1979,7 +1978,7 @@ find_payment_account(Account *account)
  *         data - the data struct for this window                   *
  * Return: none                                                     *
 \********************************************************************/
-static void 
+static void
 recnFinishCB (GtkAction *action, RecnWindow *recnData)
 {
   gboolean auto_payment;
@@ -2038,7 +2037,7 @@ recnFinishCB (GtkAction *action, RecnWindow *recnData)
  *         data - the data struct for this window                   *
  * Return: none                                                     *
 \********************************************************************/
-static void 
+static void
 recnPostponeCB (GtkAction *action, gpointer data)
 {
   RecnWindow *recnData = data;
@@ -2066,7 +2065,7 @@ recnPostponeCB (GtkAction *action, gpointer data)
   gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
 }
 
-static void 
+static void
 recnCancelCB (GtkAction *action, gpointer data)
 {
   RecnWindow *recnData = data;
@@ -2087,7 +2086,7 @@ static GtkActionEntry recnWindow_actions [] =
 	{ "HelpMenuAction",        NULL, N_("_Help"), NULL, NULL, NULL, },
 
 	/* Reconcile menu */
-	
+
 	{ "RecnChangeInfoAction", NULL, N_("_Reconcile Information..."),  NULL,
 	  N_("Change the reconcile information "
 	     "including statement date and ending balance."),

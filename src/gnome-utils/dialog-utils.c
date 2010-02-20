@@ -27,7 +27,6 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-#include "glib-compat.h"
 #include <glib/gi18n.h>
 #include <glade/glade.h>
 #include <gmodule.h>
@@ -249,7 +248,7 @@ gnc_restore_window_size(const char *section, GtkWindow *window)
 
   if (!gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
     return;
-  
+
   coord_list = gnc_gconf_get_list(section, WINDOW_POSITION,
 				  GCONF_VALUE_INT, NULL);
   if (coord_list) {
@@ -326,7 +325,7 @@ gnc_option_menu_init(GtkWidget * w)
   {
     gtk_option_menu_set_history(GTK_OPTION_MENU(w), i);
     active = gtk_menu_get_active(GTK_MENU(menu));
-    g_object_set_data(G_OBJECT(active), 
+    g_object_set_data(G_OBJECT(active),
 		      "option_index",
 		      GINT_TO_POINTER(i));
   }
@@ -345,7 +344,7 @@ gnc_option_menu_set_one_item (gpointer loop_data, gpointer user_data)
 {
   GObject *item = G_OBJECT(loop_data);
   menu_init_data *args = (menu_init_data *) user_data;
-  
+
   g_object_set_data(item, "option_index", GINT_TO_POINTER(args->i++));
   g_signal_connect(item, "activate", args->f, args->cb_data);
 }
@@ -438,12 +437,12 @@ gnc_handle_date_accelerator (GdkEventKey *event,
   if ((tm->tm_mday <= 0) || (tm->tm_mon == -1) || (tm->tm_year == -1))
     return FALSE;
 
-  g_date_set_dmy (&gdate, 
+  g_date_set_dmy (&gdate,
                   tm->tm_mday,
                   tm->tm_mon + 1,
                   tm->tm_year + 1900);
 
-  /* 
+  /*
    * Check those keys where the code does different things depending
    * upon the modifiers.
    */
@@ -479,7 +478,7 @@ gnc_handle_date_accelerator (GdkEventKey *event,
           uc = g_utf8_get_char (c);
           if (uc == '-')
             count++;
-          c = g_utf8_next_char (c);          
+          c = g_utf8_next_char (c);
         }
 
         if (count < 2)
@@ -667,7 +666,7 @@ check_realize (GtkWidget *widget, gpointer user_data)
   gdk_draw_line (check_info->on_pixmap, gc,
                  1, check_size / 2 + 1,
                  check_size / 3, check_size - 4);
-        
+
   gdk_draw_line (check_info->on_pixmap, gc,
                  check_size / 3, check_size - 5,
                  check_size - 3, 2);
@@ -845,7 +844,7 @@ gnc_glade_lookup_widget (GtkWidget *widget, const char *name)
 
   xml = glade_get_widget_tree (widget);
   if (!xml) return NULL;
-  
+
   wid = glade_xml_get_widget (xml, name);
   if (!wid)
       PWARN("I know nothing of this '%s' whom you seek.", name);
