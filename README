@@ -423,9 +423,7 @@ Developing GnuCash
 ------------------
 Before you start developing GnuCash, you should do the following:
 
-1. Read the file src/doc/coding-style.txt to learn about the coding-styles
-   used in the GnuCash source code. Also read
-   http://wiki.gnucash.org/wiki/Development
+1. Read http://wiki.gnucash.org/wiki/Development
 
 2. Several of the directories under src contain files called design.txt
    which explain many aspects of GnuCash's design. Read those.
