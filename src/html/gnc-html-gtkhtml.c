@@ -116,6 +116,7 @@ gnc_html_gtkhtml_init( GncHtmlGtkhtml* self )
 
     new_priv = g_realloc( GNC_HTML(self)->priv, sizeof(GncHtmlGtkhtmlPrivate) );
     priv = self->priv = new_priv;
+    GNC_HTML(self)->priv = (GncHtmlPrivate*)priv;
 
     priv->html = gtk_html_new();
     gtk_container_add( GTK_CONTAINER(priv->base.container),
