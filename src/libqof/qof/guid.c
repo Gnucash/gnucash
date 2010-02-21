@@ -56,9 +56,6 @@
 /* Static global variables *****************************************/
 static gboolean guid_initialized = FALSE;
 static struct md5_ctx guid_context;
-#ifndef HAVE_GLIB29
-static GMemChunk *guid_memchunk = NULL;
-#endif
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = QOF_MOD_ENGINE;
@@ -85,7 +82,6 @@ gnc_value_get_guid (const GValue *value)
 
 
 /* Memory management routines ***************************************/
-#ifdef HAVE_GLIB29
 GUID *
 guid_malloc (void)
 {
@@ -100,41 +96,6 @@ guid_free (GUID *guid)
 
     g_slice_free(GUID, guid);
 }
-#else /* !HAVE_GLIB29 */
-
-static void
-guid_memchunk_init (void)
-{
-    if (!guid_memchunk)
-        guid_memchunk = g_mem_chunk_create (GUID, 512, G_ALLOC_AND_FREE);
-}
-
-static void
-guid_memchunk_shutdown (void)
-{
-    if (guid_memchunk)
-    {
-        g_mem_chunk_destroy (guid_memchunk);
-        guid_memchunk = NULL;
-    }
-}
-
-GUID *
-guid_malloc (void)
-{
-    if (!guid_memchunk) guid_memchunk_init();
-    return g_chunk_new (GUID, guid_memchunk);
-}
-
-void
-guid_free (GUID *guid)
-{
-    if (!guid)
-        return;
-
-    g_chunk_free (guid, guid_memchunk);
-}
-#endif
 
 
 GUID *
@@ -510,9 +471,6 @@ guid_init_only_salt(const void *salt, size_t salt_len)
 void
 guid_shutdown (void)
 {
-#ifndef HAVE_GLIB29
-    guid_memchunk_shutdown();
-#endif
 }
 
 #define GUID_PERIOD 5000

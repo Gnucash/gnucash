@@ -27,11 +27,6 @@
 //CAS:#include "gtkalias.h"
 #include <string.h>
 
-#ifndef HAVE_GLIB29
-static GMemChunk *tree_chunk = NULL;
-#define TREE_CHUNK_PREALLOCS 64
-#endif
-
 /* node allocation
  */
 GtkTreeDataList *
@@ -39,18 +34,7 @@ _gtk_tree_data_list_alloc (void)
 {
   GtkTreeDataList *list;
 
-#ifdef HAVE_GLIB29
   list = g_slice_new0 (GtkTreeDataList);
-#else /* !HAVE_GLIB29 */
-  if (tree_chunk == NULL)
-    tree_chunk = g_mem_chunk_new ("treedatalist mem chunk",
-				  sizeof (GtkTreeDataList),
-				  sizeof (GtkTreeDataList) * TREE_CHUNK_PREALLOCS,
-				  G_ALLOC_AND_FREE);
-
-  list = g_chunk_new (GtkTreeDataList, tree_chunk);
-  memset (list, 0, sizeof (GtkTreeDataList));
-#endif
 
   return list;
 }
@@ -74,11 +58,7 @@ _gtk_tree_data_list_free (GtkTreeDataList *list,
       else if (g_type_is_a (column_headers [i], G_TYPE_BOXED) && tmp->data.v_pointer != NULL)
 	g_boxed_free (column_headers [i], (gpointer) tmp->data.v_pointer);
 
-#ifdef HAVE_GLIB29
       g_slice_free (GtkTreeDataList, tmp);
-#else /* !HAVE_GLIB29 */
-      g_mem_chunk_free (tree_chunk, tmp);
-#endif
       i++;
       tmp = next;
     }
