@@ -149,7 +149,37 @@ typedef struct
     dbi_conn conn;
     /*@ observer @*/
     provider_functions_t* provider;
+    gint last_error;        // Code of the last error that occurred. This is set in the error callback function
+    gint error_repeat;      // Used in case of transient errors. After such error, another attempt at the
+                            // original call is allowed. error_repeat tracks the number of attempts and can
+                            // be used to prevent infinite loops.
+    gboolean retry;         // Signals the calling function that it should retry (the error handler detected
+                            // transient error and managed to resolve it, but it can't run the original query)
 } GncDbiSqlConnection;
+
+#define DBI_MAX_CONN_ATTEMPTS 5
+
+/* ================================================================= */
+
+static void
+gnc_dbi_set_error( GncDbiSqlConnection* dbi_conn, gint last_error,
+                   gint error_repeat, gboolean retry )
+{
+    g_return_if_fail( dbi_conn != NULL );
+
+    dbi_conn->last_error = last_error;
+    if ( error_repeat > 0 )
+        dbi_conn->error_repeat = dbi_conn->error_repeat + error_repeat;
+    else
+        dbi_conn->error_repeat = 0;
+    dbi_conn->retry = retry;
+}
+
+static void
+gnc_dbi_init_error( GncDbiSqlConnection* dbi_conn )
+{
+    gnc_dbi_set_error( dbi_conn, ERR_BACKEND_NO_ERR, 0, FALSE );
+}
 
 /* ================================================================= */
 
@@ -171,11 +201,13 @@ create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
 static void
 sqlite3_error_fn( dbi_conn conn, /*@ unused @*/ void* user_data )
 {
-    //GncDbiBackend *be = (GncDbiBackend*)user_data;
+    GncDbiBackend *be = (GncDbiBackend*)user_data;
+    GncDbiSqlConnection *dbi_conn = (GncDbiSqlConnection*)be->sql_be.conn;
     const gchar* msg;
 
     (void)dbi_conn_error( conn, &msg );
     PERR( "DBI error: %s\n", msg );
+    gnc_dbi_set_error( dbi_conn, ERR_BACKEND_MISC, 0, FALSE );
 }
 
 static void
@@ -278,17 +310,35 @@ static void
 mysql_error_fn( dbi_conn conn, void* user_data )
 {
     GncDbiBackend *be = (GncDbiBackend*)user_data;
+    GncDbiSqlConnection *dbi_conn = (GncDbiSqlConnection*)be->sql_be.conn;
     const gchar* msg;
+    gint err_num;
 
-    (void)dbi_conn_error( conn, &msg );
-    if ( g_str_has_prefix( msg, "1049: Unknown database" ) )
+    err_num = dbi_conn_error( conn, &msg );
+    if ( err_num == 1049 )          // Database doesn't exist
     {
         PINFO( "DBI error: %s\n", msg );
         be->exists = FALSE;
+        gnc_dbi_set_error( dbi_conn, ERR_BACKEND_NO_SUCH_DB, 0, FALSE );
     }
-    else
+    else if ( err_num == 2006 )     // Server has gone away
+    {
+        if (dbi_conn->error_repeat > DBI_MAX_CONN_ATTEMPTS )
+        {
+            PERR( "DBI error: %s - Failed to reconnect after %d attempts.\n", msg, DBI_MAX_CONN_ATTEMPTS );
+            gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 0, FALSE );
+        } else
+        {
+            PINFO( "DBI error: %s - Reconnecting...\n", msg );
+            gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CONN_LOST, 1, TRUE );
+
+            (void)dbi_conn_connect( conn );
+        }
+    }
+    else                            // Any other error
     {
         PERR( "DBI error: %s\n", msg );
+        gnc_dbi_set_error( dbi_conn, ERR_BACKEND_MISC, 0, FALSE );
     }
 }
 
@@ -511,6 +561,7 @@ static void
 pgsql_error_fn( dbi_conn conn, void* user_data )
 {
     GncDbiBackend *be = (GncDbiBackend*)user_data;
+    GncDbiSqlConnection *dbi_conn = (GncDbiSqlConnection*)be->sql_be.conn;
     const gchar* msg;
 
     (void)dbi_conn_error( conn, &msg );
@@ -519,10 +570,12 @@ pgsql_error_fn( dbi_conn conn, void* user_data )
     {
         PINFO( "DBI error: %s\n", msg );
         be->exists = FALSE;
+        gnc_dbi_set_error( dbi_conn, ERR_BACKEND_NO_SUCH_DB, 0, FALSE );
     }
     else
     {
         PERR( "DBI error: %s\n", msg );
+        gnc_dbi_set_error( dbi_conn, ERR_BACKEND_MISC, 0, FALSE );
     }
 }
 
@@ -802,7 +855,10 @@ gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
             const gchar* table_name = (const gchar*)node->data;
             dbi_result result;
 
-            result = dbi_conn_queryf( be->conn, "DROP TABLE %s", table_name );
+            do {
+                gnc_dbi_init_error( ((GncDbiSqlConnection*)(be->sql_be.conn)) );
+                result = dbi_conn_queryf( be->conn, "DROP TABLE %s", table_name );
+            } while ( ((GncDbiSqlConnection*)(be->sql_be.conn))->retry );
             if ( result != NULL )
             {
                 status = dbi_result_free( result );
@@ -1416,7 +1472,10 @@ conn_execute_select_statement( GncSqlConnection* conn, GncSqlStatement* stmt )
     dbi_result result;
 
     DEBUG( "SQL: %s\n", dbi_stmt->sql->str );
-    result = dbi_conn_query( dbi_conn->conn, dbi_stmt->sql->str );
+    do {
+        gnc_dbi_init_error( dbi_conn );
+        result = dbi_conn_query( dbi_conn->conn, dbi_stmt->sql->str );
+    } while ( dbi_conn->retry );
     if ( result == NULL )
     {
         PERR( "Error executing SQL %s\n", dbi_stmt->sql->str );
@@ -1435,7 +1494,10 @@ conn_execute_nonselect_statement( GncSqlConnection* conn, GncSqlStatement* stmt 
     gint status;
 
     DEBUG( "SQL: %s\n", dbi_stmt->sql->str );
-    result = dbi_conn_query( dbi_conn->conn, dbi_stmt->sql->str );
+    do {
+        gnc_dbi_init_error( dbi_conn );
+        result = dbi_conn_query( dbi_conn->conn, dbi_stmt->sql->str );
+    } while( dbi_conn->retry );
     if ( result == NULL )
     {
         PERR( "Error executing SQL %s\n", dbi_stmt->sql->str );
@@ -1513,15 +1575,11 @@ conn_begin_transaction( /*@ unused @*/ GncSqlConnection* conn )
     gint status;
 
     DEBUG( "BEGIN\n" );
-    result = dbi_conn_queryf( dbi_conn->conn, "BEGIN" );
 
-    /* Handle MySQL connection timeouts with reconnect */
-    if (result == NULL && dbi_conn_error( dbi_conn->conn, NULL ) == 2006 )
-    {
-        DEBUG( "MySQL server has gone away, reconnecting and retrying...\n" );
-        (void)dbi_conn_connect( dbi_conn->conn );
+    do {
+        gnc_dbi_init_error( dbi_conn );
         result = dbi_conn_queryf( dbi_conn->conn, "BEGIN" );
-    }
+    } while( dbi_conn->retry );
 
     status = dbi_result_free( result );
     if ( status < 0 )
@@ -2016,6 +2074,8 @@ create_dbi_connection( /*@ observer @*/ provider_functions_t* provider,
     dbi_conn->qbe = qbe;
     dbi_conn->conn = conn;
     dbi_conn->provider = provider;
+
+    gnc_dbi_init_error(dbi_conn);
 
     return (GncSqlConnection*)dbi_conn;
 }
