@@ -239,22 +239,6 @@ AM_PATH_GLIB_2_0(2.12.0,,AC_MSG_ERROR([
 *** always available at ftp://ftp.gnome.org/pub/gnome/sources/glib/.]),
 	gthread gobject gmodule)
 
-if test ${no_glib}x = yesx
-then
-  AC_MSG_ERROR([Cannot find glib. Check config.log])
-fi
-
-AC_MSG_CHECKING(for GLIB - version >= 2.12.0)
-if $PKG_CONFIG 'glib-2.0 >= 2.12.0'
-then
-  AC_MSG_RESULT(yes)
-  AC_DEFINE(HAVE_GLIB_2_12,1,[System has glib 2.12.0 or better])
-  HAVE_GLIB_2_12=yes
-else
-  AC_MSG_RESULT(no)
-fi
-AM_CONDITIONAL(HAVE_GLIB_2_12, test "x$HAVE_GLIB_2_12" = "xyes")
-
 AC_MSG_CHECKING([for untested GLIB versions (glib >= 2.13.0)])
 if $PKG_CONFIG 'glib-2.0 >= 2.13.0'
 then
