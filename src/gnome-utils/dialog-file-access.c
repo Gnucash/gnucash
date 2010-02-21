@@ -78,10 +78,13 @@ geturl( FileAccessWindow* faw )
 	file = gtk_file_chooser_get_filename( faw->fileChooser );
 
 	type = gtk_combo_box_get_active_text( faw->cb_uri_type );
+	if ( (( strcmp( type, "xml" ) == 0 ) ||
+	      ( strcmp( type, "sqlite3" ) == 0 ) ||
+	      ( strcmp( type, "file" ) == 0 )) &&
+	        ( file == NULL ) )
+	    return NULL;
+
 	if( strcmp( type, "xml" ) == 0 ) {
-	    if( file == NULL ) {
-		    return NULL;
-		}
 		url = g_strdup_printf( "xml://%s", file );
 	} else if( strcmp( type, "sqlite3" ) == 0 ) {
 		url = g_strdup_printf( "sqlite3://%s", file );
@@ -115,7 +118,7 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
     case GTK_RESPONSE_HELP:
         gnc_gnome_help( HF_HELP, HL_GLOBPREFS );
         break;
-  
+
 	case GTK_RESPONSE_OK:
 		url = geturl( faw );
 		if( url == NULL ) {
@@ -276,7 +279,7 @@ gnc_ui_file_access( int type )
 	uri_type_container = glade_xml_get_widget( xml, "vb_uri_type_container" );
 	faw->cb_uri_type = GTK_COMBO_BOX(gtk_combo_box_new_text());
 	gtk_container_add( GTK_CONTAINER(uri_type_container), GTK_WIDGET(faw->cb_uri_type) );
-	gtk_box_set_child_packing( GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type), 
+	gtk_box_set_child_packing( GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type),
 								/*expand*/TRUE, /*fill*/FALSE, /*padding*/0, GTK_PACK_START );
 	g_object_connect( G_OBJECT(faw->cb_uri_type),
 					"signal::changed", cb_uri_type_changed_cb, NULL,
@@ -336,7 +339,7 @@ gnc_ui_file_access( int type )
 	if( need_access_method_xml ) {
 		gtk_combo_box_append_text( faw->cb_uri_type, "xml" );
 		++access_method_index;
-		
+
 		// Set XML as default if it is offered (which mean we are in
 		// the "Save As" dialog)
 		active_access_method_index = access_method_index;
@@ -349,8 +352,8 @@ gnc_ui_file_access( int type )
 
     /* Run the dialog */
     gtk_widget_show_all( faw->dialog );
-    
-    /* Hide the frame that's not required for the active access method so either only 
+
+    /* Hide the frame that's not required for the active access method so either only
      * the File or only the Database frame are presented. */
     gtk_combo_box_set_active( faw->cb_uri_type, active_access_method_index );
     set_widget_sensitivity_for_uri_type( faw, gtk_combo_box_get_active_text( faw->cb_uri_type ) );
