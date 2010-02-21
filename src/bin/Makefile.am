@@ -53,6 +53,15 @@ gnucash-gdb: gnucash-gdb.in gnucash-setup-env ${top_builddir}/config.status Make
 	mv $@.tmp $@
 	chmod u+x $@
 
+gnucash-ddd: gnucash-ddd.in gnucash-setup-env ${top_builddir}/config.status Makefile
+	rm -f $@.tmp
+	sed < $< > $@.tmp \
+	    -e 's#@-BIN_DIR-@#${bindir}#g' \
+	    -e "s#@-GNUCASH_SETUP_ENV_INSTALL_NAME-@#${GNUCASH_SETUP_ENV_INSTALL_NAME}#g" \
+	    -e "s#@-GNUCASH_BIN_INSTALL_NAME-@#${GNUCASH_BIN_INSTALL_NAME}#g"
+	mv $@.tmp $@
+	chmod u+x $@
+
 gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
@@ -79,7 +88,7 @@ gnucash-setup-env: ${GNUCASH_SETUP_ENV}.in ${top_builddir}/config.status Makefil
 	mv $@.tmp $@
 	chmod u+x $@
 
-CLEANFILES = $(BUILT_SOURCES) gnucash gnucash-valgrind gnucash-gdb gnucash-setup-env
+CLEANFILES = $(BUILT_SOURCES) gnucash gnucash-valgrind gnucash-gdb gnucash-ddd gnucash-setup-env
 
 # We handle gnucash scripts in a somewhat unexpected way, but we do
 # this so that a user who doesn't necessarily have the right
@@ -104,6 +113,7 @@ bin_SCRIPTS = \
 	gnucash \
 	gnucash-valgrind \
 	gnucash-gdb \
+	gnucash-ddd \
 	gnucash-setup-env
 
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
@@ -115,6 +125,7 @@ EXTRA_DIST = \
 	gnucash.in \
 	gnucash-valgrind.in \
 	gnucash-gdb.in \
+	gnucash-ddd.in \
 	gnucash-setup-env.in\
 	gnucash-setup-env-osx.in
 

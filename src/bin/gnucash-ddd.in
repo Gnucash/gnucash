@@ -1,0 +1,5 @@
+#!/bin/sh
+
+. @-BIN_DIR-@/@-GNUCASH_SETUP_ENV_INSTALL_NAME-@
+
+exec ddd @-GNUCASH_BIN_INSTALL_NAME-@ "$@"
