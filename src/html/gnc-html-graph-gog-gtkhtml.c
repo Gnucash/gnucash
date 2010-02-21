@@ -38,16 +38,7 @@
 #include <goffice/graph/gog-chart.h>
 #include <goffice/graph/gog-graph.h>
 #include <goffice/graph/gog-object.h>
-#if defined(HAVE_GOFFICE_0_5)
-#    include <goffice/graph/gog-renderer.h>
-#elif defined(GOFFICE_WITH_CAIRO)
-#    include <goffice/graph/gog-renderer-cairo.h>
-#else
-#    include <goffice/graph/gog-renderer-pixbuf.h>
-#endif
-#ifndef GTKHTML_USES_GTKPRINT
-#    include <goffice/graph/gog-renderer-gnome-print.h>
-#endif
+#include <goffice/graph/gog-renderer.h>
 /* everything inside the following #ifndef can be safely removed when gnucash
 requires libgoffice >= 0.7.5. */
 #ifndef GOG_TYPE_GRAPH
@@ -81,11 +72,7 @@ static int handle_barchart( GncHtml* html, gpointer eb, gpointer d );
 static int handle_linechart( GncHtml* html, gpointer eb, gpointer d );
 static int handle_scatter( GncHtml* html, gpointer eb, gpointer d );
 
-#ifdef GTKHTML_USES_GTKPRINT
 static void draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer graph);
-#else
-static void draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer graph);
-#endif
 
 static double * read_doubles(const char * string, int nvalues);
 
@@ -400,41 +387,17 @@ handle_scatter( GncHtml* html, gpointer eb, gpointer unused )
     return TRUE;
 }
 
-#ifdef GTKHTML_USES_GTKPRINT
 static void
 draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer unused)
 {
     GogGraph *graph = GOG_GRAPH(g_object_get_data(G_OBJECT(eb), "graph"));
-#    ifdef HAVE_GOFFICE_0_5
     GogRenderer *rend = g_object_new(GOG_TYPE_RENDERER, "model", graph, NULL);
-#    else
-    GogRendererCairo *rend = g_object_new(GOG_RENDERER_CAIRO_TYPE, "model", graph,
-                                          "cairo", cr, "is-vector", TRUE, NULL);
-#    endif
 
     /* assuming pixel size is 0.5, cf. gtkhtml/src/htmlprinter.c */
     cairo_scale(cr, 0.5, 0.5);
 
     cairo_translate(cr, 0, -eb->height);
 
-#    ifdef HAVE_GOFFICE_0_5
     gog_renderer_render_to_cairo(rend, cr, eb->width, eb->height);
-#    else
-    gog_renderer_cairo_update(rend, eb->width, eb->height, 1.0);
-#    endif
     g_object_unref(rend);
 }
-
-#else /* !GTKHTML_USES_GTKPRINT */
-static void
-draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer unused)
-{
-    GogGraph *graph = GOG_GRAPH (g_object_get_data (G_OBJECT (eb), "graph"));
-
-    /* assuming pixel size is 0.5, cf. gtkhtml/src/htmlprinter.c */
-    gnome_print_scale (context, 0.5, 0.5);
-
-    gnome_print_translate (context, 0, eb->height);
-    gog_graph_print_to_gnome_print (graph, context, eb->width, eb->height);
-}
-#endif /* GTKHTML_USES_GTKPRINT */

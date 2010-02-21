@@ -100,8 +100,8 @@ gnc_combo_cell_set_autopop (GConfEntry *entry, gpointer user_data)
 static gpointer
 gnc_combo_cell_autopop_init (gpointer unused)
 {
-        auto_pop_combos = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, 
-                                              KEY_AUTO_RAISE_LISTS, 
+        auto_pop_combos = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
+                                              KEY_AUTO_RAISE_LISTS,
                                               NULL);
 
         gnc_gconf_general_register_cb(KEY_AUTO_RAISE_LISTS,
@@ -338,9 +338,9 @@ gnc_combo_cell_destroy (BasicCell *bcell)
 	cell->cell.gui_realize = NULL;
 }
 
-void 
+void
 gnc_combo_cell_set_sort_enabled (ComboCell *cell, gboolean enabled)
-{ 
+{
 	PopBox *box;
 
 	if (cell == NULL)
@@ -410,9 +410,9 @@ gnc_combo_cell_use_list_store_cache (ComboCell * cell, gpointer data)
 	cell->shared_store = data;
 }
 
-void 
+void
 gnc_combo_cell_add_menu_item (ComboCell *cell, const char * menustr)
-{ 
+{
 	PopBox *box;
 
 	if (cell == NULL)
@@ -439,7 +439,7 @@ gnc_combo_cell_add_menu_item (ComboCell *cell, const char * menustr)
 		gtk_list_store_set(box->tmp_store, &iter, 0, menustr, -1);
 	}
 
-        /* If we're going to be using a pre-fab quickfill, 
+        /* If we're going to be using a pre-fab quickfill,
          * then don't fill it in here */
         if (FALSE == box->use_quickfill_cache)
         {
@@ -447,9 +447,9 @@ gnc_combo_cell_add_menu_item (ComboCell *cell, const char * menustr)
         }
 }
 
-void 
+void
 gnc_combo_cell_add_account_menu_item (ComboCell *cell, char * menustr)
-{ 
+{
 	PopBox *box;
 	gchar *menu_copy, *value_copy;
 
@@ -479,7 +479,7 @@ gnc_combo_cell_add_account_menu_item (ComboCell *cell, char * menustr)
                 unblock_list_signals (cell);
         }
 
-        /* If we're going to be using a pre-fab quickfill, 
+        /* If we're going to be using a pre-fab quickfill,
          * then don't fill it in here */
         if (FALSE == box->use_quickfill_cache)
         {
@@ -510,7 +510,7 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
         gboolean pop_list;
         glong newval_chars;
         glong change_chars;
-    
+
         newval_chars = g_utf8_strlen (newval, newval_len);
         change_chars = g_utf8_strlen (change, change_len);
 
@@ -630,7 +630,7 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
 
                         if ((match_str != NULL) &&
                             (strncmp (match_str, bcell->value,
-                                      strlen (bcell->value)) == 0) && 
+                                      strlen (bcell->value)) == 0) &&
                             (strcmp (match_str, bcell->value) != 0))
                         {
                                 gnc_basic_cell_set_value_internal (bcell,
@@ -674,7 +674,7 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
                 int i = *start_selection;
                 const char *c;
                 gunichar uc;
-              
+
                 c = g_utf8_offset_to_pointer (bcell->value, i);
                 while (*c)
                 {
@@ -720,7 +720,7 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
         match_str = gnc_quickfill_string (match);
 
         if ((match_str != NULL) &&
-            (strncmp (match_str, bcell->value, strlen (bcell->value)) == 0) && 
+            (strncmp (match_str, bcell->value, strlen (bcell->value)) == 0) &&
             (strcmp (match_str, bcell->value) != 0))
         {
                 gnc_basic_cell_set_value_internal (bcell, match_str);
@@ -753,12 +753,7 @@ gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer data)
 		box->item_list = gnc_item_edit_new_list(box->item_edit, cell->shared_store);
 	else
 		box->item_list = gnc_item_edit_new_list(box->item_edit, box->tmp_store);
-#ifdef HAVE_GTK_2_10
         g_object_ref_sink(box->item_list);
-#else
-	g_object_ref (box->item_list);
-	gtk_object_sink (GTK_OBJECT(box->item_list));
-#endif
 
 	/* to mark cell as realized, remove the realize method */
 	cell->cell.gui_realize = NULL;

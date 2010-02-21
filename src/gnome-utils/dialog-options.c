@@ -751,12 +751,7 @@ gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
 
   /* Create the tooltips */
   tooltips = gtk_tooltips_new ();
-#ifdef HAVE_GTK_2_10
   g_object_ref_sink(tooltips);
-#else
-  g_object_ref (tooltips);
-  gtk_object_sink (GTK_OBJECT (tooltips));
-#endif
 
   /* Iterate over the options and create a radio button for each one */
   for (i = 0; i < num_values; i++)
@@ -1303,12 +1298,7 @@ gnc_options_dialog_build_contents(GNCOptionWin *propertybox,
   propertybox->tips = gtk_tooltips_new();
   propertybox->option_db = odb;
 
-#ifdef HAVE_GTK_2_10
   g_object_ref_sink(propertybox->tips);
-#else
-  g_object_ref (propertybox->tips);
-  gtk_object_sink (GTK_OBJECT (propertybox->tips));
-#endif
 
   num_sections = gnc_option_db_num_sections(odb);
   default_section_name = gnc_option_db_get_default_section(odb);

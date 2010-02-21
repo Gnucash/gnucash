@@ -1,5 +1,5 @@
 /********************************************************************\
- * print-session.h -- data structures for printing via gnome print  *  
+ * print-session.h -- data structures for printing via gnome print  *
  *                       (GnuCash)                                  *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
@@ -34,8 +34,6 @@
 /** @addtogroup Basic Session Functions
     @{ */
 
-#ifdef HAVE_GTK_2_10
-
 #include <gtk/gtkprintoperation.h>
 
 /**
@@ -63,61 +61,6 @@ void gnc_print_operation_init(GtkPrintOperation *op);
  */
 void gnc_ui_page_setup(GtkWindow *parent);
 
-#endif  /* HAVE_GTK_2_10 */
-
-
-#if !WANT_WEBKIT && !defined(GTKHTML_USES_GTKPRINT)
-
-#include <libgnomeprint/gnome-print.h>
-#include <libgnomeprint/gnome-print-job.h>
-#include <libgnomeprintui/gnome-print-dialog.h>
-#include <libgnomeprintui/gnome-print-preview.h>
-
-typedef struct {
-  gboolean             hand_built_pages;
-  gint                 print_type;
-
-  GnomePrintJob      * job;
-  GnomePrintContext  * context;		/* Convenience only. Owned by the job */
-  GnomeFont          * default_font;
-  guchar             * pango_font_string;
-} PrintSession;
-
-
-/** Create a new print 'session'.  Once created, a series of commands
- *  can be issued on the session to create the output page.  The
- *  output will be printed when the session is done.  This function
- *  will present the standard print/preview selection box to the user
- *  and wait for the result.
- *
- *  If the hand_built_pages argument is set to TRUE, this function
- *  will perform a couple of extra setup steps.  Specifically it will
- *  call the gnome begin page, set color and set font functions.  The
- *  code will also call close page when the #gnc_print_session_done
- *  function is called.
- *
- *  @param hand_built_pages If TRUE, this funciton will perform extra setup.
- *
- *  @return A pointer to the data structure describing this print session.
- */
-PrintSession * gnc_print_session_create(gboolean hand_built_pages);
-
-
-/** Destroy a print 'session' without producing any output.
- *
- *  @param ps A pointer to the session to be destroyed.
- */
-void gnc_print_session_destroy(PrintSession * ps);
-
-
-/** Finish a print 'session'.  The output from this session will be
- *  printed to the device selected when the session was created.
- *
- *  @param ps A pointer to the session to be closed.
- */
-void gnc_print_session_done(PrintSession * ps);
-
-#endif  /* !GTKHTML_USES_GTKPRINT */
 
 /** @} */
 /** @} */

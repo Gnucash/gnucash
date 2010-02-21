@@ -98,12 +98,7 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
 
   tooltips = gtk_tooltips_new();
 
-#ifdef HAVE_GTK_2_10
   g_object_ref_sink(tooltips);
-#else
-  g_object_ref (tooltips);
-  gtk_object_sink (GTK_OBJECT (tooltips));
-#endif
 
   for (i = 0; i < num_options; i++)
   {

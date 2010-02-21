@@ -77,11 +77,6 @@ libgncmod_html_la_SOURCES += \
 libgncmod_html_la_LIBADD += \
   ${GTKHTML_LIBS}
 
-if !GTKHTML_USES_GTKPRINT
-  AM_CPPFLAGS += ${GNOME_PRINT_CFLAGS}
-  libgncmod_html_la_LIBADD += ${GNOME_PRINT_LIBS}
-endif
-
 endif
 
 if BUILDING_FROM_SVN
@@ -93,11 +88,6 @@ endif
 
 EXTRA_DIST = \
   gnc-html.i
-
-if !GTKHTML_USES_GTKPRINT
-  AM_CPPFLAGS += ${GNOME_PRINT_CFLAGS}
-  libgncmod_html_la_LIBADD += ${GNOME_PRINT_LIBS}
-endif
 
 CLEANFILES = $(BUILT_SOURCES) gnucash
 MAINTAINERCLEANFILES = swig-html.c

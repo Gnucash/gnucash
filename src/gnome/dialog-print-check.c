@@ -49,8 +49,6 @@
 #include "Split.h"
 #include "Transaction.h"
 
-#define USE_GTKPRINT HAVE_GTK_2_10
-
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.printing.checks"
 
@@ -122,12 +120,7 @@ typedef enum format_combo_col_t {
                                  *   this enry specifies a separator line. */
 } format_combo_col;
 
-#if USE_GTKPRINT
-#    define GncPrintContext GtkPrintContext
-#else
-#    define GncPrintContext GnomePrintContext
-#    define GNOMEPRINT_CLIP_EXTRA 2
-#endif
+#define GncPrintContext GtkPrintContext
 
 
 /* Used by glade_xml_signal_autoconnect_full */
@@ -1560,11 +1553,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
     /* nothing to do - defaults to blank */
   }
 
-#if USE_GTKPRINT
   gtk_widget_destroy(glade_xml_get_widget (xml, "lower_left"));
-#else
-  gtk_widget_destroy(glade_xml_get_widget (xml, "upper_left"));
-#endif
 
   gnc_ui_print_restore_dialog(pcd);
   gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(pcd->dialog));
@@ -1582,15 +1571,12 @@ static void
 draw_grid(GncPrintContext * context, gint width, gint height, const gchar *font)
 {
     const double dash_pattern[2] = { 1.0, 5.0 };
-#if USE_GTKPRINT
     PangoFontDescription *desc;
     PangoLayout *layout;
     cairo_t *cr;
-#endif
     gchar *text;
     gint i;
 
-#if USE_GTKPRINT
     /* Initialize for printing text */
     layout = gtk_print_context_create_pango_layout(context);
     desc = pango_font_description_from_string(font);
@@ -1598,65 +1584,41 @@ draw_grid(GncPrintContext * context, gint width, gint height, const gchar *font)
     pango_font_description_free(desc);
     pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
     pango_layout_set_width(layout, -1);
-#endif
 
     /* Set up the line to draw with. */
-#if USE_GTKPRINT
     cr = gtk_print_context_get_cairo_context(context);
     cairo_save(cr);
     cairo_set_line_width(cr, 1.0);
     cairo_set_line_cap(cr, CAIRO_LINE_JOIN_ROUND);
     cairo_set_dash(cr, dash_pattern, 2, 0);
-#else
-    gnome_print_gsave(context);
-    gnome_print_setlinewidth(context, 1.0);
-    gnome_print_setlinecap(context, 2);
-    gnome_print_setdash(context, 2, dash_pattern, 0);
-#endif
 
     /* Draw horizontal lines */
     for (i = -200; i < (height + 200); i += 50) {
         text = g_strdup_printf("%d", (int)i);
-#if USE_GTKPRINT
         cairo_move_to(cr, -200, i);
         cairo_line_to(cr, width + 200, i);
         cairo_stroke(cr);
         pango_layout_set_text(layout, text, -1);
         cairo_move_to(cr, 0, i);
         pango_cairo_show_layout(cr, layout);
-#else
-        gnome_print_line_stroked(context, -200, i, width + 200, i);
-        gnome_print_moveto(context, 0, i);
-        gnome_print_show(context, text);
-#endif
         g_free(text);
     }
 
     /* Draw vertical lines */
     for (i = -200; i < (width + 200); i += 50) {
         text = g_strdup_printf("%d", (int)i);
-#if USE_GTKPRINT
         cairo_move_to(cr, i, -200);
         cairo_line_to(cr, i, height + 200);
         cairo_stroke(cr);
         pango_layout_set_text(layout, text, -1);
         cairo_move_to(cr, i, 0);
         pango_cairo_show_layout(cr, layout);
-#else
-        gnome_print_line_stroked(context, i, -200, i, height + 200);
-        gnome_print_moveto(context, i, 0);
-        gnome_print_show(context, text);
-#endif
         g_free(text);
     }
 
     /* Clean up after ourselves */
-#if USE_GTKPRINT
     cairo_restore(cr);
     g_object_unref(layout);
-#else
-    gnome_print_grestore(context);
-#endif
 }
 
 
@@ -1668,7 +1630,6 @@ static gdouble
 draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
           PangoFontDescription *default_desc)
 {
-#if USE_GTKPRINT
     PangoFontDescription *desc;
     PangoLayout *layout;
     cairo_t *cr;
@@ -1725,48 +1686,10 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
     cairo_restore(cr);
     g_object_unref(layout);
     return width;
-#else
-    gdouble x0, x1, y0, y1;
-    gchar *new_text;
 
-    if ((NULL == text) || (strlen(text) == 0))
-      return 0.0;
-
-    /* Clip text to the enclosing rectangle */
-    gnome_print_gsave(context);
-    if (data->w && data->h) {
-        g_debug("Text clip rectangle, coords %f,%f, size %f,%f",
-                data->x, data->y - data->h, data->w, data->h);
-        x0 = data->x - GNOMEPRINT_CLIP_EXTRA;
-        x1 = data->x + data->w + GNOMEPRINT_CLIP_EXTRA;
-        y0 = data->y - GNOMEPRINT_CLIP_EXTRA;
-        y1 = data->y + data->h + GNOMEPRINT_CLIP_EXTRA;
-        gnome_print_moveto(context, x0, y0);
-        gnome_print_lineto(context, x0, y1);
-        gnome_print_lineto(context, x1, y1);
-        gnome_print_lineto(context, x1, y0);
-        gnome_print_lineto(context, x0, y0);
-        gnome_print_clip(context);
-    }
-
-    /* Draw the text */
-    g_debug("Text move to %f,%f, print '%s'", data->x, data->y,
-            text ? text : "(null)");
-    gnome_print_moveto(context, data->x, data->y);
-    if ( data->blocking ) {
-        new_text = g_strdup_printf("***%s***", text);
-        gnome_print_show(context, new_text);
-        g_free(new_text);
-    } else {
-        gnome_print_show(context, text);
-    }
-    gnome_print_grestore(context);
-    return 0.0;
-#endif
 }
 
 
-#if USE_GTKPRINT
 /** Find and load the specified image.  If the specified filename isn't an
  *  absolute path name, this code will also look in the gnucash system check
  *  format directory, and then in the user's private check format
@@ -1867,7 +1790,6 @@ draw_picture(GtkPrintContext * context, check_item_t * data)
     cairo_restore(cr);
     gtk_widget_destroy(GTK_WIDGET(image));
 }
-#endif
 
 
 #define DATE_FMT_HEIGHT 8
@@ -1890,7 +1812,6 @@ draw_date_format(GncPrintContext * context, const gchar *date_format,
                  check_item_t * data, PangoFontDescription *default_desc,
                  gdouble width)
 {
-#if USE_GTKPRINT
     PangoFontDescription *date_desc;
     check_item_t date_item;
     gchar *text = NULL, *expanded = NULL;
@@ -1950,7 +1871,6 @@ draw_date_format(GncPrintContext * context, const gchar *date_format,
     if (expanded)
         g_free(expanded);
     pango_font_description_free(date_desc);
-#endif
 }
 
 
@@ -2061,11 +1981,9 @@ draw_page_items(GncPrintContext * context,
 		g_free(text);
                 break;
 
-#if USE_GTKPRINT
             case PICTURE:
                 draw_picture(context, item);
                 break;
-#endif
 
             default:
                 text = g_strdup_printf("(unknown check field, type %d)", item->type);
@@ -2078,7 +1996,6 @@ draw_page_items(GncPrintContext * context,
 }
 
 
-#if USE_GTKPRINT
 /** Print each of the items that in the description of a single check.  This
  *  function uses helper functions to print text based and picture based
  *  items. */
@@ -2152,61 +2069,6 @@ draw_page_format(GncPrintContext * context,
     draw_page_items(context, page_nr, format, user_data);
 }
 
-#else
-
-static void
-draw_page_format(PrintSession * ps, check_format_t * format, gpointer user_data)
-{
-    PrintCheckDialog *pcd = (PrintCheckDialog *) user_data;
-    GnomePrintConfig *config;
-    gint i;
-    GSList *elem;
-    check_item_t *item;
-    gdouble width, height, x, y, multip;
-
-    config = gnome_print_job_get_config(ps->job);
-    gnome_print_job_get_page_size_from_config(config, &width, &height);
-
-    gnome_print_gsave(ps->context);
-    gnome_print_translate(ps->context, format->trans_x, format->trans_y);
-    g_debug("Page translated by %f,%f", format->trans_x, format->trans_y);
-    gnome_print_rotate(ps->context, format->rotation);
-    g_debug("Page rotated by %f degrees", format->rotation);
-
-    /* The grid is useful when determining check layouts */
-    if (format->show_grid) {
-        draw_grid(ps->context, width, height, pcd->default_font);
-    }
-
-    /* Translate all subsequent check items if requested. */
-    i = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
-    if ((i >= 0) && (i < pcd->position_max)) {
-        y = height - (format->height * (i + 1));
-        gnome_print_translate(ps->context, 0, y);
-        g_debug("Check translated by %f (pre-defined)", y);
-    } else {
-        multip = pcd_get_custom_multip(pcd);
-        x = multip * gtk_spin_button_get_value(pcd->translation_x);
-        y = multip * gtk_spin_button_get_value(pcd->translation_y);
-        gnome_print_translate(ps->context, x, y);
-        g_debug("Check translated by %f (custom)", y);
-    }
-
-    /* Draw layout boxes if requested. Also useful when determining check
-     * layouts. */
-    if (format->show_boxes) {
-        for (elem = format->items; elem; elem = g_slist_next(elem)) {
-            item = elem->data;
-            if (!item->w || !item->h)
-                continue;
-            gnome_print_rect_stroked(ps->context, item->x, item->y, item->w,
-                                     item->h);
-        }
-    }
-
-    draw_page_items(ps->context, 1, format, user_data);
-}
-#endif
 
 static void
 draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
@@ -2216,9 +2078,7 @@ draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
     PangoFontDescription *desc;
     Transaction *trans;
     gnc_numeric amount;
-#if USE_GTKPRINT
     cairo_t *cr;
-#endif
     const gchar *date_format;
     gchar *text = NULL, buf[100];
     check_item_t item = { 0 };
@@ -2234,21 +2094,13 @@ draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
 
     multip = pcd_get_custom_multip(pcd);
     degrees = gtk_spin_button_get_value(pcd->check_rotation);
-#if USE_GTKPRINT
     cr = gtk_print_context_get_cairo_context(context);
     cairo_rotate(cr, degrees * DEGREES_TO_RADIANS);
-#else
-    gnome_print_rotate(context, degrees);
-#endif
     g_debug("Page rotated by %f degrees", degrees);
 
     x = multip * gtk_spin_button_get_value(pcd->translation_x);
     y = multip * gtk_spin_button_get_value(pcd->translation_y);
-#if USE_GTKPRINT
     cairo_translate(cr, x, y);
-#else
-    gnome_print_translate(context, x, y);
-#endif
     g_debug("Page translated by %f,%f", x, y);
 
     item.x = multip * gtk_spin_button_get_value(pcd->payee_x);
@@ -2311,7 +2163,6 @@ draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
     pango_font_description_free(desc);
 }
 
-#if USE_GTKPRINT
 /* Print a page of checks. Today, check printing only prints one check at a
  * time.  When its extended to print multiple checks, this will need to take
  * into account the number of checks to print, the number of checks on a page,
@@ -2372,34 +2223,6 @@ gnc_ui_print_check_dialog_ok_cb(PrintCheckDialog * pcd)
 
     g_object_unref(print);
 }
-
-#else
-
-static void
-gnc_ui_print_check_dialog_ok_cb(PrintCheckDialog * pcd)
-{
-  PrintSession *ps;
-  GnomeFont *oldfont;
-  check_format_t *format;
-
-  ps = gnc_print_session_create(TRUE);
-  oldfont = ps->default_font;
-  ps->default_font = gnome_font_find_closest_from_full_name(pcd->default_font);
-  gnome_print_setfont(ps->context, ps->default_font);
-  g_object_unref(oldfont);
-
-  format = pcd->selected_format;
-  if (format) {
-    draw_page_format(ps, format, pcd);
-  } else {
-    draw_page_custom(ps->context, 1, pcd);
-  }
-
-  gnc_print_session_done(ps);
-  gnc_print_session_destroy(ps);
-}
-#endif
-
 
 
 static void

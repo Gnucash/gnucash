@@ -33,16 +33,8 @@
 #include <goffice/graph/gog-chart.h>
 #include <goffice/graph/gog-graph.h>
 #include <goffice/graph/gog-object.h>
-#if defined(HAVE_GOFFICE_0_5)
-#    include <goffice/graph/gog-renderer.h>
-#elif defined(GOFFICE_WITH_CAIRO)
-#    include <goffice/graph/gog-renderer-cairo.h>
-#else
-#    include <goffice/graph/gog-renderer-pixbuf.h>
-#endif
-#if !WANT_WEBKIT && !defined(GTKHTML_USES_GTKPRINT)
-#    include <goffice/graph/gog-renderer-gnome-print.h>
-#endif
+#include <goffice/graph/gog-renderer.h>
+
 /* everything inside the following #ifndef can be safely removed when gnucash
 requires libgoffice >= 0.7.5, the contents of the #else block must stay. */
 #ifndef GOG_TYPE_GRAPH
@@ -110,13 +102,8 @@ gnc_html_graph_gog_init( void )
 static GdkPixbuf*
 create_graph_pixbuf( GogObject *graph, int width, int height )
 {
-#if defined(HAVE_GOFFICE_0_5)
     GogRenderer *renderer;
-#elif defined(GOFFICE_WITH_CAIRO)
-    GogRendererCairo *cairo_renderer;
-#else
-    GogRendererPixbuf *pixbuf_renderer;
-#endif
+
     GdkPixbuf *buf;
     gboolean update_status;
 
@@ -126,26 +113,10 @@ create_graph_pixbuf( GogObject *graph, int width, int height )
     // gnumeric uses.  We probably _should_ do something like that, though.
     gog_object_update (GOG_OBJECT (graph));
 
-#if defined(HAVE_GOFFICE_0_5)
     renderer = GOG_RENDERER(g_object_new( GOG_TYPE_RENDERER, "model", graph, NULL ));
     update_status = gog_renderer_update( renderer, width, height );
     buf = gog_renderer_get_pixbuf( renderer );
     g_object_set_data_full( G_OBJECT(buf), "renderer", renderer, g_object_unref );
-#elif defined(GOFFICE_WITH_CAIRO)
-    cairo_renderer = GOG_RENDERER_CAIRO(g_object_new( GOG_RENDERER_CAIRO_TYPE,
-                                        "model", graph,
-                                        NULL ));
-    update_status = gog_renderer_cairo_update( cairo_renderer, width, height, 1.0 );
-    buf = gog_renderer_cairo_get_pixbuf( cairo_renderer );
-    g_object_set_data_full( G_OBJECT(buf), "renderer", cairo_renderer, g_object_unref );
-#else
-    pixbuf_renderer = GOG_RENDERER_PIXBUF(g_object_new( GOG_RENDERER_PIXBUF_TYPE,
-                                          "model", graph,
-                                          NULL));
-    update_status = gog_renderer_pixbuf_update( pixbuf_renderer, width, height, 1.0 );
-    buf = gog_renderer_pixbuf_get( pixbuf_renderer );
-    g_object_set_data_full( G_OBJECT(buf), "renderer", pixbuf_renderer, g_object_unref );
-#endif
 
     g_object_set_data_full( G_OBJECT(buf), "graph", graph, g_object_unref );
     return buf;

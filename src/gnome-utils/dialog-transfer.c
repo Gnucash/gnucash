@@ -84,7 +84,7 @@ struct _xferDialog
   GtkTreeView * to_tree_view;
   gnc_commodity *	to_commodity;
 
-  QuickFill * qf;     /* Quickfill on transfer descriptions, 
+  QuickFill * qf;     /* Quickfill on transfer descriptions,
                          defaults to matching on the "From" account. */
 
   XferDirection quickfill;	/* direction match on the account instead. */
@@ -298,10 +298,10 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
   Account *from_account;
   gboolean curr_active;
 
-  from_account = 
+  from_account =
     gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_FROM);
 
-  to_account = 
+  to_account =
     gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_TO);
 
   curr_active = (xferData->exch_rate ||
@@ -313,7 +313,7 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
   gtk_widget_set_sensitive(xferData->price_edit,
 			   curr_active && gtk_toggle_button_get_active
 			   (GTK_TOGGLE_BUTTON(xferData->price_radio)));
-  gtk_widget_set_sensitive(xferData->to_amount_edit, 
+  gtk_widget_set_sensitive(xferData->to_amount_edit,
 			   curr_active && gtk_toggle_button_get_active
 			   (GTK_TOGGLE_BUTTON(xferData->amount_radio)));
   gtk_widget_set_sensitive(xferData->price_radio, curr_active);
@@ -395,7 +395,7 @@ gnc_xfer_dialog_from_tree_selection_changed_cb (GtkTreeSelection *selection,
     return;
 
   commodity = xaccAccountGetCommodity(account);
-  gtk_label_set_text(GTK_LABEL(xferData->from_currency_label), 
+  gtk_label_set_text(GTK_LABEL(xferData->from_currency_label),
 		     gnc_commodity_get_printname(commodity));
 
   xferData->from_commodity = commodity;
@@ -463,7 +463,7 @@ gnc_xfer_dialog_show_inc_exp_visible_cb (Account *account,
   }
 
   type = xaccAccountGetType(account);
-  return ((type != ACCT_TYPE_INCOME) && (type != ACCT_TYPE_EXPENSE)); 
+  return ((type != ACCT_TYPE_INCOME) && (type != ACCT_TYPE_EXPENSE));
 }
 
 static void
@@ -1107,7 +1107,7 @@ gnc_xfer_dialog_hide_to_account_tree(XferDialog *xferData)
  * Return: none                                                     *
 \********************************************************************/
 void
-gnc_xfer_dialog_is_exchange_dialog (XferDialog *xferData, 
+gnc_xfer_dialog_is_exchange_dialog (XferDialog *xferData,
                                     gnc_numeric *exch_rate)
 {
   GNCAmountEdit *gae;
@@ -1148,10 +1148,10 @@ gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount)
   if (xferData == NULL)
     return;
 
-  account = gnc_transfer_dialog_get_selected_account (xferData, 
+  account = gnc_transfer_dialog_get_selected_account (xferData,
                                                       XFER_DIALOG_FROM);
   if (account == NULL)
-    account = gnc_transfer_dialog_get_selected_account (xferData, 
+    account = gnc_transfer_dialog_get_selected_account (xferData,
                                                         XFER_DIALOG_TO);
 
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->amount_edit), amount);
@@ -1240,7 +1240,7 @@ gnc_xfer_dialog_set_exchange_rate(XferDialog *xferData, gnc_numeric exchange_rat
 
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->price_edit),
 			      exchange_rate);
-  
+
   gnc_xfer_update_to_amount (xferData);
 }
 
@@ -1416,11 +1416,11 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 
     /* create from split */
     from_split = xaccMallocSplit(xferData->book);
-    xaccTransAppendSplit(trans, from_split); 
+    xaccTransAppendSplit(trans, from_split);
 
     /* create to split */
     to_split = xaccMallocSplit(xferData->book);
-    xaccTransAppendSplit(trans, to_split); 
+    xaccTransAppendSplit(trans, to_split);
 
     xaccAccountBeginEdit(from_account);
     xaccAccountInsertSplit(from_account, from_split);
@@ -1454,7 +1454,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     gnc_commodity *to = xferData->to_commodity;
 
     /* only continue if the currencies are DIFFERENT and are
-     * not both euroland currencies 
+     * not both euroland currencies
      */
     if (!gnc_commodity_equal (from, to) &&
 	!(gnc_is_euro_currency (from) && gnc_is_euro_currency (to)))
@@ -1610,7 +1610,7 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
 
   prc = gnc_pricedb_lookup_latest(xferData->pricedb, from, to);
   rate = gnc_price_get_value (prc);
-  gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), rate); 
+  gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), rate);
 
   LEAVE("quote retrieved");
 
@@ -1641,12 +1641,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
   xferData->tips = gtk_tooltips_new();
 
-#ifdef HAVE_GTK_2_10
   g_object_ref_sink(xferData->tips);
-#else
-  g_object_ref (xferData->tips);
-  gtk_object_sink (GTK_OBJECT (xferData->tips));
-#endif
 
   /* default to quickfilling off of the "From" account. */
   xferData->quickfill = XFER_DIALOG_FROM;
@@ -1836,7 +1831,7 @@ close_handler (gpointer user_data)
 /********************************************************************\
  * gnc_xfer_dialog                                                  *
  *   opens up a window to do an automatic transfer between accounts *
- *                                                                  * 
+ *                                                                  *
  * Args:   parent  - the parent of the window to be created         *
  *         initial - the initial account in the from/to fields      *
  * Return: XferDialog structure                                     *
@@ -1987,7 +1982,7 @@ void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
   }
 }
 
-void gnc_xfer_dialog_toggle_currency_table( XferDialog *xferData, 
+void gnc_xfer_dialog_toggle_currency_table( XferDialog *xferData,
                                             gboolean show_table )
 {
   if (xferData && xferData->curr_xfer_table)
@@ -2058,7 +2053,7 @@ gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
 	LEAVE("ok");
 	return TRUE;
       }
-    
+
     /* else run the dialog again */
   }
 
@@ -2143,7 +2138,7 @@ gnc_transfer_dialog_set_selected_account (XferDialog *dialog,
 
 
 void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
-				gnc_xfer_dialog_cb handler, 
+				gnc_xfer_dialog_cb handler,
 				gpointer user_data)
 {
   g_assert(xferData);
@@ -2154,7 +2149,7 @@ void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
 
 
 gboolean gnc_xfer_dialog_run_exchange_dialog(
-    XferDialog *xfer, gnc_numeric *exch_rate, gnc_numeric amount, 
+    XferDialog *xfer, gnc_numeric *exch_rate, gnc_numeric amount,
     Account *reg_acc, Transaction *txn, gnc_commodity *xfer_com)
 {
     gboolean swap_amounts = FALSE;
@@ -2175,38 +2170,38 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
         return FALSE;
       }
       swap_amounts = TRUE;
-    
+
     /* We know that "amount" is always in the reg_com currency.
      * Unfortunately it is possible that neither xfer_com or txn_cur are
      * the same as reg_com, in which case we need to convert to the txn
      * currency...  Or, if the register commodity is the xfer_com, then we
      * need to flip-flop the commodities and the exchange rates.
      */
-    
+
     } else if (gnc_commodity_equal(reg_com, txn_cur)) {
         /* we're working in the txn currency.  Great.  Nothing to do! */
         swap_amounts = FALSE;
-        
+
     } else if (gnc_commodity_equal(reg_com, xfer_com)) {
         /* We're working in the xfer commodity.  Great.  Just swap the
            amounts. */
         swap_amounts = TRUE;
-        
+
         /* XXX: Do we need to check for expanded v. non-expanded
            accounts here? */
-        
+
     } else {
         /* UGGH -- we're not in either.  That means we need to convert
          * 'amount' from the register commodity to the txn currency.
          */
         gnc_numeric rate = xaccTransGetAccountConvRate(txn, reg_acc);
-        
+
         /* XXX: should we tell the user we've done the conversion? */
         amount = gnc_numeric_div(
-            amount, rate, 
+            amount, rate,
             gnc_commodity_get_fraction(txn_cur), GNC_DENOM_REDUCE);
     }
-    
+
     /* enter the accounts */
     if (swap_amounts) {
         gnc_xfer_dialog_select_to_currency(xfer, txn_cur);
@@ -2221,21 +2216,21 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
     }
     gnc_xfer_dialog_hide_to_account_tree(xfer);
     gnc_xfer_dialog_hide_from_account_tree(xfer);
-    
+
     gnc_xfer_dialog_set_amount(xfer, amount);
-    
+
     /*
      * When we flip, we should tell the dialog so it can deal with the
      * pricedb properly.
      */
-    
+
     /* Set the exchange rate */
     gnc_xfer_dialog_set_exchange_rate(xfer, *exch_rate);
-    
+
     /* and run it... */
     if (gnc_xfer_dialog_run_until_done(xfer) == FALSE)
         return TRUE;
-    
+
     /* If we swapped the amounts for the dialog, then make sure we swap
      * it back now...
      */

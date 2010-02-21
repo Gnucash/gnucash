@@ -122,12 +122,7 @@ gnc_html_gtkhtml_init( GncHtmlGtkhtml* self )
     gtk_container_add( GTK_CONTAINER(priv->base.container),
                        GTK_WIDGET(priv->html) );
 
-#ifdef HAVE_GTK_2_10
     g_object_ref_sink( priv->base.container );
-#else
-    g_object_ref( priv->base.container );
-    gtk_object_sink( GTK_OBJECT(priv->base.container) );
-#endif
 
     /* signals */
     g_signal_connect( priv->html, "url_requested",
@@ -930,7 +925,6 @@ impl_gtkhtml_export_to_file( GncHtml* self, const char *filepath )
     return TRUE;
 }
 
-#ifdef GTKHTML_USES_GTKPRINT
 static void
 draw_page_cb(GtkPrintOperation *operation, GtkPrintContext *context,
              gint page_nr, gpointer user_data)
@@ -968,26 +962,6 @@ impl_gtkhtml_print( GncHtml* self )
 
     g_object_unref(print);
 }
-
-#else /* !GTKHTML_USES_GTKPRINT */
-static void
-impl_gtkhtml_print( GncHtml* self )
-{
-    PrintSession *ps;
-    GncHtmlGtkhtmlPrivate* priv;
-
-    priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
-    ps = gnc_print_session_create( FALSE );
-    if ( ps == NULL )
-    {
-        /* user cancelled */
-        return;
-    }
-
-    gtk_html_print( GTK_HTML(priv->html), ps->context );
-    gnc_print_session_done( ps );
-}
-#endif /* GTKHTML_USES_GTKPRINT */
 
 static void
 impl_gtkhtml_set_parent( GncHtml* self, GtkWindow* parent )

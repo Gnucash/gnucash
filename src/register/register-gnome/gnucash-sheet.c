@@ -652,7 +652,7 @@ gnucash_sheet_finalize (GObject *object)
         gnucash_sheet_clear_styles (sheet);
 
         g_hash_table_destroy (sheet->cursor_styles);
-        g_hash_table_destroy (sheet->dimensions_hash_table);        
+        g_hash_table_destroy (sheet->dimensions_hash_table);
 
         if (G_OBJECT_CLASS (sheet_parent_class)->finalize)
                 (*G_OBJECT_CLASS (sheet_parent_class)->finalize)(object);
@@ -786,9 +786,9 @@ gnucash_sheet_modify_current_cell (GnucashSheet *sheet, const gchar *new_text)
                                         sheet->insert_signal);
                 g_signal_handler_block (G_OBJECT (sheet->entry),
                                         sheet->delete_signal);
-                
+
                 gtk_entry_set_text (GTK_ENTRY (sheet->entry), retval);
-                
+
                 g_signal_handler_unblock (G_OBJECT (sheet->entry),
                                           sheet->delete_signal);
                 g_signal_handler_unblock (G_OBJECT (sheet->entry),
@@ -879,13 +879,13 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
         if (old_text == NULL)
                 old_text = "";
         old_text_len = strlen (old_text);
- 
+
         old_position = *position;
 
         /* we set new_text_gs to what the entry contents would be if
            the insert was processed */
         new_text_gs = g_string_new ("");
-        
+
         i = 0;
         c = old_text;
         //Copy old text up to insert position
@@ -894,7 +894,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
           uc = g_utf8_get_char (c);
           g_string_append_unichar (new_text_gs, uc);
           c = g_utf8_next_char (c);
-          i++;            
+          i++;
         }
 
         //Copy inserted text
@@ -905,15 +905,15 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
         {
           uc = g_utf8_get_char (c);
           g_string_append_unichar (new_text_gs, uc);
-          c = g_utf8_next_char (c);            
+          c = g_utf8_next_char (c);
         }
-        
+
         new_text = new_text_gs->str;
         new_text_len = new_text_gs->len;
-        
+
         change_text = change_text_gs->str;
         change_text_len = change_text_gs->len;
-        
+
         editable = GTK_EDITABLE (sheet->entry);
 
 	gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
@@ -932,9 +932,9 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
                                         sheet->insert_signal);
                 g_signal_handler_block (G_OBJECT (sheet->entry),
                                         sheet->delete_signal);
-                
+
                 gtk_entry_set_text (GTK_ENTRY (sheet->entry), retval);
-                
+
                 g_signal_handler_unblock (G_OBJECT (sheet->entry),
                                           sheet->delete_signal);
                 g_signal_handler_unblock (G_OBJECT (sheet->entry),
@@ -1016,7 +1016,7 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
         new_text_gs = g_string_new ("");
         i = 0;
         c = old_text;
-        while (*c && (i < start_pos)) 
+        while (*c && (i < start_pos))
         {
           uc = g_utf8_get_char (c);
           g_string_append_unichar (new_text_gs, uc);
@@ -1024,17 +1024,17 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
           i++;
         }
 
-        c = g_utf8_offset_to_pointer (old_text, end_pos);     
+        c = g_utf8_offset_to_pointer (old_text, end_pos);
         while (*c)
         {
           uc = g_utf8_get_char (c);
           g_string_append_unichar (new_text_gs, uc);
           c = g_utf8_next_char (c);
-        }            
+        }
 
         new_text = new_text_gs->str;
         new_text_len = new_text_gs->len;
-        
+
         editable = GTK_EDITABLE (sheet->entry);
 
 	gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
@@ -1052,14 +1052,14 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
                                         sheet->insert_signal);
                 g_signal_handler_block (G_OBJECT (sheet->entry),
                                         sheet->delete_signal);
-                
+
                 gtk_entry_set_text (GTK_ENTRY (sheet->entry), retval);
-                
+
                 g_signal_handler_unblock (G_OBJECT (sheet->entry),
                                           sheet->delete_signal);
                 g_signal_handler_unblock (G_OBJECT (sheet->entry),
                                           sheet->insert_signal);
-                
+
                 g_signal_stop_emission_by_name (G_OBJECT(sheet->entry),
                                                 "delete_text");
         }
@@ -1385,7 +1385,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         {
                 gtk_grab_add(widget);
                 sheet->grabbed = TRUE;
-                gnc_item_edit_set_has_selection 
+                gnc_item_edit_set_has_selection
                         (GNC_ITEM_EDIT(sheet->item_editor), TRUE);
         }
 
@@ -1615,9 +1615,9 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
                                         sheet->insert_signal);
                 g_signal_handler_block (G_OBJECT (sheet->entry),
                                         sheet->delete_signal);
-                
+
                 gtk_entry_set_text (GTK_ENTRY (sheet->entry), new_text);
-                
+
                 g_signal_handler_unblock (G_OBJECT (sheet->entry),
                                           sheet->delete_signal);
                 g_signal_handler_unblock (G_OBJECT (sheet->entry),
@@ -1992,7 +1992,7 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
                 if (!style)
                         continue;
 
-                if (cell_col < style->ncols) 
+                if (cell_col < style->ncols)
                         for (cell_row = 0; cell_row < style->nrows; cell_row++)
                         {
                                 VirtualLocation virt_loc;
@@ -2046,7 +2046,7 @@ gnucash_sheet_set_scroll_region (GnucashSheet *sheet)
         height = MAX (sheet->height, widget->allocation.height);
         width  = MAX (sheet->width, widget->allocation.width);
 
-        if (width != (int)x || height != (int)y) 
+        if (width != (int)x || height != (int)y)
                 gnome_canvas_set_scroll_region (GNOME_CANVAS(sheet),
                                                 0, 0, width, height);
 }
@@ -2282,7 +2282,7 @@ get_gtkrc_color (GnucashSheet *sheet,
 		break;
 
 	  case COLOR_SPLIT:
-	  case COLOR_SPLIT_ACTIVE:	
+	  case COLOR_SPLIT_ACTIVE:
 		widget = sheet->split_color;
 		break;
 	}
@@ -2304,7 +2304,7 @@ get_gtkrc_color (GnucashSheet *sheet,
 
 	  case COLOR_PRIMARY_ACTIVE:
 	  case COLOR_SECONDARY_ACTIVE:
-	  case COLOR_SPLIT_ACTIVE:	
+	  case COLOR_SPLIT_ACTIVE:
 		color = &style->base[GTK_STATE_SELECTED];
 		break;
 	}
@@ -2479,13 +2479,9 @@ gnucash_sheet_new (Table *table)
 
         /* The entry widget */
         sheet->entry = gtk_entry_new ();
-#ifdef HAVE_GTK_2_10
         g_object_ref_sink(sheet->entry);
-#else
-        g_object_ref(sheet->entry);
-        gtk_object_sink(GTK_OBJECT(sheet->entry));
-#endif
-	/*gtk_layout_put (GTK_LAYOUT (sheet), sheet->entry, 0, 0);*/
+
+        /*gtk_layout_put (GTK_LAYOUT (sheet), sheet->entry, 0, 0);*/
 
         /* set up the editor */
         sheet->item_editor = gnc_item_edit_new(sheet_group, sheet, sheet->entry);
@@ -2637,7 +2633,7 @@ gnucash_register_new (Table *table)
                           GTK_FILL,
                           0, 0);
         gtk_widget_show(header_canvas);
-        
+
         gtk_table_attach (GTK_TABLE(widget), sheet,
                           0, 1, 1, 2,
                           GTK_FILL | GTK_EXPAND | GTK_SHRINK,
@@ -2661,7 +2657,7 @@ gnucash_register_new (Table *table)
                           0, 0);
         reg->vscrollbar = scrollbar;
         gtk_widget_show(scrollbar);
-        
+
         scrollbar = gtk_hscrollbar_new(GNUCASH_SHEET(sheet)->hadj);
         gtk_table_attach (GTK_TABLE(widget), GTK_WIDGET(scrollbar),
                           0, 1, 3, 4,

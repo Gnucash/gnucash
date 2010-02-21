@@ -362,12 +362,7 @@ sxftd_init( SXFromTransInfo *sxfti )
     w = GTK_WIDGET(glade_xml_get_widget( sxfti->gxml, SXFTD_EX_CAL_FRAME ));
     sxfti->dense_cal_model = gnc_dense_cal_store_new(num_marks);
     sxfti->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(sxfti->dense_cal_model)));
-#ifdef HAVE_GTK_2_10
     g_object_ref_sink(sxfti->example_cal);
-#else
-    g_object_ref(G_OBJECT(sxfti->example_cal));
-    gtk_object_sink(GTK_OBJECT(sxfti->example_cal));
-#endif
 
     g_assert(sxfti->example_cal);
     gnc_dense_cal_set_num_months( sxfti->example_cal, SXFTD_EXCAL_NUM_MONTHS );

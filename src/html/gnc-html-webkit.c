@@ -122,12 +122,7 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
     gtk_container_add( GTK_CONTAINER(priv->base.container),
                        GTK_WIDGET(priv->web_view) );
 
-#ifdef HAVE_GTK_2_10
     g_object_ref_sink( priv->base.container );
-#else
-    g_object_ref( priv->base.container );
-    gtk_object_sink( GTK_OBJECT(priv->base.container) );
-#endif
 
     /* signals */
     g_signal_connect( priv->web_view, "navigation-requested",

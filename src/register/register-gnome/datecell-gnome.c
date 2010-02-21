@@ -1,6 +1,6 @@
 /********************************************************************\
  * datecell-gnome.c -- implement date cell handler in gnome         *
- *                                                                  *  
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -324,7 +324,7 @@ gnc_date_cell_destroy (BasicCell *bcell)
   cell->cell.gui_realize = NULL;
 }
 
-void 
+void
 gnc_date_cell_set_value (DateCell *cell, int day, int mon, int year)
 {
   PopBox *box = cell->cell.gui_private;
@@ -354,7 +354,7 @@ gnc_date_cell_set_value (DateCell *cell, int day, int mon, int year)
   unblock_picker_signals (cell);
 }
 
-void 
+void
 gnc_date_cell_set_value_secs (DateCell *cell, time_t secs)
 {
   PopBox *box = cell->cell.gui_private;
@@ -365,8 +365,8 @@ gnc_date_cell_set_value_secs (DateCell *cell, time_t secs)
   box->date = *stm;
 
   qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
-             box->date.tm_mday, 
-             box->date.tm_mon + 1, 
+             box->date.tm_mday,
+             box->date.tm_mon + 1,
              box->date.tm_year + 1900);
 
   gnc_basic_cell_set_value_internal (&cell->cell, buff);
@@ -394,7 +394,7 @@ gnc_date_cell_commit (DateCell *cell)
   gnc_parse_date (&(box->date), cell->cell.value);
 
   qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
-             box->date.tm_mday, 
+             box->date.tm_mday,
              box->date.tm_mon + 1,
              box->date.tm_year + 1900);
 
@@ -481,35 +481,35 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
     gboolean ok = TRUE;
     const gchar *c;
     gunichar uc;
-    
+
     /* accept only numbers or a date separator. Note that the
      * separator of '-' (for DATE_FORMAT_ISO) takes precedence
-     * over the accelerator below! */      
+     * over the accelerator below! */
     c = change;
     while (*c)
     {
       uc = g_utf8_get_char (c);
-        
+
       if (!g_unichar_isdigit (uc) && (separator != uc))
         ok = FALSE;
 
       if (separator == uc)
         count++;
-      
+
       c = g_utf8_next_char (c);
-    }      
-    
+    }
+
     c = _cell->value;
     while (*c)
     {
       uc = g_utf8_get_char (c);
-        
+
       if (separator == uc)
         count++;
 
       c = g_utf8_next_char (c);
     }
-     
+
     if (2 < count)
       ok = FALSE;
 
@@ -549,12 +549,7 @@ gnc_date_cell_realize (BasicCell *bcell, gpointer data)
   box->sheet = sheet;
   box->item_edit = item_edit;
   box->date_picker = gnc_item_edit_new_date_picker (box->item_edit);
-#ifdef HAVE_GTK_2_10
   g_object_ref_sink(box->date_picker);
-#else
-  g_object_ref (box->date_picker);
-  gtk_object_sink (GTK_OBJECT(box->date_picker));
-#endif
 
   /* to mark cell as realized, remove the realize method */
   cell->cell.gui_realize = NULL;
@@ -660,7 +655,7 @@ gnc_date_cell_get_date (DateCell *cell, Timespec *ts)
   ts->tv_nsec = 0;
 }
 
-static void 
+static void
 gnc_date_cell_set_value_internal (BasicCell *_cell, const char *str)
 {
   DateCell *cell = (DateCell *) _cell;
@@ -670,8 +665,8 @@ gnc_date_cell_set_value_internal (BasicCell *_cell, const char *str)
   gnc_parse_date (&(box->date), str);
 
   qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
-             box->date.tm_mday, 
-             box->date.tm_mon + 1, 
+             box->date.tm_mday,
+             box->date.tm_mon + 1,
              box->date.tm_year + 1900);
 
   gnc_basic_cell_set_value_internal (_cell, buff);

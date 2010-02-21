@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-main-window.c -- GtkWindow which represents the
  *	GnuCash main window.
  *
@@ -66,9 +66,7 @@
 // +JSLED
 //#include "gnc-html.h"
 #include "gnc-autosave.h"
-#ifdef HAVE_GTK_2_10
-#    include "print-session.h"
-#endif
+#include "print-session.h"
 #ifdef MAC_INTEGRATION
 #include <igemacintegration/ige-mac-menu.h>
 #endif
@@ -120,17 +118,13 @@ static void gnc_main_window_update_all_menu_items (void);
 /* Callbacks */
 static void gnc_main_window_add_widget (GtkUIManager *merge, GtkWidget *widget, GncMainWindow *window);
 static void gnc_main_window_switch_page (GtkNotebook *notebook, GtkNotebookPage *notebook_page, gint pos, GncMainWindow *window);
-#ifdef HAVE_GTK_2_10
 static void gnc_main_window_page_reordered (GtkNotebook *notebook, GtkWidget *child, guint pos, GncMainWindow *window);
-#endif
 static void gnc_main_window_plugin_added (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 static void gnc_main_window_plugin_removed (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 static void gnc_main_window_engine_commit_error_callback( gpointer data, QofBackendError errcode );
 
 /* Command callbacks */
-#ifdef HAVE_GTK_2_10
 static void gnc_main_window_cmd_page_setup (GtkAction *action, GncMainWindow *window);
-#endif
 static void gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window);
@@ -247,16 +241,14 @@ static GtkActionEntry gnc_menu_actions [] =
 	{ "FileOpenMenuAction", GTK_STOCK_OPEN, N_("_Open"), "", NULL, NULL },
 	{ "FileImportAction", NULL, N_("_Import"), NULL, NULL, NULL },
 	{ "FileExportAction", NULL, N_("_Export"), NULL, NULL, NULL },
-	{ "FilePrintAction", GTK_STOCK_PRINT, N_("_Print..."), "<control>p", 
+	{ "FilePrintAction", GTK_STOCK_PRINT, N_("_Print..."), "<control>p",
 	  N_("Print the currently active page"), NULL },
-#ifdef HAVE_GTK_2_10
-#    ifndef GTK_STOCK_PAGE_SETUP
-#        define GTK_STOCK_PAGE_SETUP NULL
-#    endif
+#ifndef GTK_STOCK_PAGE_SETUP
+#    define GTK_STOCK_PAGE_SETUP NULL
+#endif
 	{ "FilePageSetupAction", GTK_STOCK_PAGE_SETUP, N_("Pa_ge Setup..."), "<control><shift>p",
 	  N_("Specify the page size and orientation for printing"),
 	  G_CALLBACK (gnc_main_window_cmd_page_setup) },
-#endif
 	{ "FilePropertiesAction", GTK_STOCK_PROPERTIES, N_("Proper_ties"), "<Alt>Return",
 	  N_("Edit the properties of the current file"),
 	  G_CALLBACK (gnc_main_window_cmd_file_properties) },
@@ -269,10 +261,10 @@ static GtkActionEntry gnc_menu_actions [] =
 
 	/* Edit menu */
 
-	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL, 
+	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
 	  N_("Cut the current selection and copy it to clipboard"),
 	  G_CALLBACK (gnc_main_window_cmd_edit_cut) },
-	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL, 
+	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL,
 	  N_("Copy the current selection to clipboard"),
 	  G_CALLBACK (gnc_main_window_cmd_edit_copy) },
 	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
@@ -284,9 +276,9 @@ static GtkActionEntry gnc_menu_actions [] =
 
 	/* View menu */
 
-	{ "ViewSortByAction", NULL, N_("_Sort By..."), NULL, 
+	{ "ViewSortByAction", NULL, N_("_Sort By..."), NULL,
 	  N_("Select sorting criteria for this page view"), NULL },
-	{ "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, 
+	{ "ViewFilterByAction", NULL, N_("_Filter By..."), NULL,
 	  N_("Select the account types that should be displayed."), NULL },
 	{ "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
 	  N_("Refresh this window"),
@@ -484,7 +476,7 @@ gnc_main_window_foreach_page (GncMainWindowPageFunc fn, gpointer user_data)
  *  @param data A data structure containing state about the
  *  window/page restoration process. */
 static void
-gnc_main_window_restore_page (GncMainWindow *window, 
+gnc_main_window_restore_page (GncMainWindow *window,
                               GncMainWindowSaveData *data)
 {
   GncMainWindowPrivate *priv;
@@ -494,11 +486,11 @@ gnc_main_window_restore_page (GncMainWindow *window,
   GError *error = NULL;
 
   ENTER("window %p, data %p (key file %p, window %d, page start %d, page num %d)",
-	window, data, data->key_file, data->window_num, data->page_offset, 
+	window, data, data->key_file, data->window_num, data->page_offset,
         data->page_num);
 
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-  page_group = g_strdup_printf(PAGE_STRING, 
+  page_group = g_strdup_printf(PAGE_STRING,
                                data->page_offset + data->page_num);
   page_type = g_key_file_get_string(data->key_file, page_group,
 				    PAGE_TYPE, &error);
@@ -767,7 +759,7 @@ gnc_main_window_restore_all_windows(const GKeyFile *keyfile)
   /* We use the same struct for reading and for writing, so we cast
      away the const. */
   data.key_file = (GKeyFile *) keyfile;
-  window_count = g_key_file_get_integer(data.key_file, STATE_FILE_TOP, 
+  window_count = g_key_file_get_integer(data.key_file, STATE_FILE_TOP,
                                         WINDOW_COUNT, &error);
   if (error) {
     g_warning("error reading group %s key %s: %s",
@@ -793,7 +785,7 @@ gnc_main_window_restore_default_state(void)
 {
     GtkAction *action;
     GncMainWindow *window;
-    
+
     /* The default state should be to have an Account Tree page open
      * in the window. */
     DEBUG("no saved state file");
@@ -1129,9 +1121,9 @@ gnc_main_window_quit(GncMainWindow *window)
     gboolean needs_save, do_shutdown;
 
     session = gnc_get_current_session();
-    needs_save = qof_book_not_saved(qof_session_get_book(session)) && 
+    needs_save = qof_book_not_saved(qof_session_get_book(session)) &&
         !gnc_file_save_in_progress();
-    do_shutdown = !needs_save || 
+    do_shutdown = !needs_save ||
         (needs_save && !gnc_main_window_prompt_for_save(GTK_WIDGET(window)));
 
     if (do_shutdown) {
@@ -1308,7 +1300,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
   page = priv->current_page;
   if (page) {
-    /* The Gnome HIG 2.0 recommends the application name not be used. (p16) 
+    /* The Gnome HIG 2.0 recommends the application name not be used. (p16)
      * but several developers prefer to use it anyway. */
     title = g_strdup_printf("%s%s - %s - GnuCash", dirty, filename,
 			    gnc_plugin_page_get_page_name(page));
@@ -1316,7 +1308,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
     title = g_strdup_printf("%s%s - GnuCash", dirty, filename);
   }
   g_free(filename);
-  
+
   return title;
 }
 
@@ -1810,7 +1802,7 @@ main_window_update_page_name (GncPluginPage *page,
   label = gtk_notebook_get_menu_label (GTK_NOTEBOOK(priv->notebook),
 				       page->notebook_page);
   gtk_label_set_text(GTK_LABEL(label), name);
-  
+
   /* Force an update of the window title */
   gnc_main_window_update_title(window);
   g_free(old_page_long_name);
@@ -2252,9 +2244,7 @@ gnc_main_window_connect (GncMainWindow *window,
 	priv->usage_order = g_list_prepend (priv->usage_order, page);
 	gtk_notebook_append_page_menu (notebook, page->notebook_page,
 				       tab_hbox, menu_label);
-#ifdef HAVE_GTK_2_10
 	gtk_notebook_set_tab_reorderable (notebook, page->notebook_page, TRUE);
-#endif
 	gnc_plugin_page_inserted (page);
 	gtk_notebook_set_current_page (notebook, -1);
 	if (GNC_PLUGIN_PAGE_GET_CLASS(page)->window_changed)
@@ -2476,7 +2466,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 	if (!g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE)) {
 	  GtkWidget *close_image, *close_button;
 	  GtkRequisition requisition;
-	  
+
 	  close_button = gtk_button_new();
 	  gtk_button_set_relief(GTK_BUTTON(close_button), GTK_RELIEF_NONE);
 	  close_image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
@@ -2490,7 +2480,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 	    gtk_widget_show (close_button);
 	  else
 	    gtk_widget_hide (close_button);
-     
+
 	  g_signal_connect_swapped (G_OBJECT (close_button), "clicked",
                       G_CALLBACK(gnc_main_window_close_page), page);
 
@@ -2805,7 +2795,7 @@ gnc_main_window_update_edit_actions_sensitivity (GncMainWindow *window, gboolean
 	  (GNC_PLUGIN_PAGE_GET_CLASS(page)->update_edit_menu_actions)(page, hide);
 	  return;
 	}
-	
+
 	if (GTK_IS_EDITABLE (widget))
 	{
 		gboolean has_selection;
@@ -2928,7 +2918,7 @@ gnc_main_window_gconf_changed (GConfClient *client,
 /* CS: This callback functions will set the statusbar text to the
  * "tooltip" property of the currently selected GtkAction.
  *
- * This code is directly copied from gtk+/test/testmerge.c. 
+ * This code is directly copied from gtk+/test/testmerge.c.
  * Thanks to (L)GPL! */
 typedef struct _ActionStatus ActionStatus;
 struct _ActionStatus {
@@ -2952,16 +2942,16 @@ set_tip (GtkWidget *widget)
 {
   ActionStatus *data;
   gchar *tooltip;
-  
+
   data = g_object_get_data (G_OBJECT (widget), "action-status");
-  
-  if (data) 
+
+  if (data)
     {
       g_object_get (data->action, "tooltip", &tooltip, NULL);
-      
-      gtk_statusbar_push (GTK_STATUSBAR (data->statusbar), 0, 
+
+      gtk_statusbar_push (GTK_STATUSBAR (data->statusbar), 0,
 			  tooltip ? tooltip : "");
-      
+
       g_free (tooltip);
     }
 }
@@ -2976,14 +2966,14 @@ unset_tip (GtkWidget *widget)
   if (data)
     gtk_statusbar_pop (GTK_STATUSBAR (data->statusbar), 0);
 }
-		    
+
 static void
 connect_proxy (GtkUIManager *merge,
 	       GtkAction    *action,
 	       GtkWidget    *proxy,
 	       GtkWidget    *statusbar)
 {
-  if (GTK_IS_MENU_ITEM (proxy)) 
+  if (GTK_IS_MENU_ITEM (proxy))
     {
       ActionStatus *data;
 
@@ -3003,9 +2993,9 @@ connect_proxy (GtkUIManager *merge,
 	  data->action = g_object_ref (action);
 	  data->statusbar = g_object_ref (statusbar);
 
-	  g_object_set_data_full (G_OBJECT (proxy), "action-status", 
+	  g_object_set_data_full (G_OBJECT (proxy), "action-status",
 				  data, action_status_destroy);
-	  
+
 	  g_signal_connect (proxy, "select",  G_CALLBACK (set_tip), NULL);
 	  g_signal_connect (proxy, "deselect", G_CALLBACK (unset_tip), NULL);
 	}
@@ -3049,10 +3039,8 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gtk_widget_show (priv->notebook);
 	g_signal_connect (G_OBJECT (priv->notebook), "switch-page",
 			  G_CALLBACK (gnc_main_window_switch_page), window);
-#ifdef HAVE_GTK_2_10
 	g_signal_connect (G_OBJECT (priv->notebook), "page-reordered",
 			  G_CALLBACK (gnc_main_window_page_reordered), window);
-#endif
 	gtk_box_pack_start (GTK_BOX (main_vbox), priv->notebook,
 			    TRUE, TRUE, 0);
 
@@ -3077,8 +3065,8 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gnc_gtk_action_group_set_translation_domain (priv->action_group, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (priv->action_group, gnc_menu_actions,
                                   gnc_menu_n_actions, window);
-	gtk_action_group_add_toggle_actions (priv->action_group, 
-                                         toggle_actions, n_toggle_actions, 
+	gtk_action_group_add_toggle_actions (priv->action_group,
+                                         toggle_actions, n_toggle_actions,
                                          window);
 	gtk_action_group_add_radio_actions (priv->action_group,
                                         radio_entries, n_radio_entries,
@@ -3141,7 +3129,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	if (!gnc_is_extra_enabled()) {
 	  GtkAction*  action;
 
-	  action = gtk_action_group_get_action(priv->action_group, 
+	  action = gtk_action_group_get_action(priv->action_group,
                                            "ExtensionsAction");
 	  gtk_action_set_visible(action, FALSE);
 	}
@@ -3173,7 +3161,7 @@ gtk_quartz_set_menu(GncMainWindow* window) {
     gtk_widget_hide(menu);
     ige_mac_menu_set_menu_bar (GTK_MENU_SHELL (menu));
 
-    item = gtk_ui_manager_get_widget (window->ui_merge, 
+    item = gtk_ui_manager_get_widget (window->ui_merge,
 				      "/menubar/File/FileQuit");
     if (GTK_IS_MENU_ITEM (item))
 	ige_mac_menu_set_quit_menu_item (GTK_MENU_ITEM (item));
@@ -3181,7 +3169,7 @@ gtk_quartz_set_menu(GncMainWindow* window) {
     /*  the about group  */
     group = ige_mac_menu_add_app_menu_group ();
 
-    item = gtk_ui_manager_get_widget (window->ui_merge, 
+    item = gtk_ui_manager_get_widget (window->ui_merge,
 				      "/menubar/Help/HelpAbout");
     if (GTK_IS_MENU_ITEM (item))
 	ige_mac_menu_add_app_menu_item (group, GTK_MENU_ITEM (item), _("About GnuCash"));
@@ -3189,7 +3177,7 @@ gtk_quartz_set_menu(GncMainWindow* window) {
     /*  the preferences group  */
     group = ige_mac_menu_add_app_menu_group ();
 
-    item = gtk_ui_manager_get_widget (window->ui_merge, 
+    item = gtk_ui_manager_get_widget (window->ui_merge,
 				      "/menubar/Edit/EditPreferences");
     if (GTK_IS_MENU_ITEM (item))
 	ige_mac_menu_add_app_menu_item (group, GTK_MENU_ITEM (item), NULL);
@@ -3313,7 +3301,6 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 	LEAVE(" ");
 }
 
-#ifdef HAVE_GTK_2_10
 /** This function is invoked when a GtkNotebook tab gets reordered by
  *  drag and drop. It adjusts the list installed_pages to reflect the new
  *  ordering so that GnuCash saves and restores the tabs correctly.
@@ -3351,7 +3338,6 @@ gnc_main_window_page_reordered (GtkNotebook *notebook,
 
 	LEAVE(" ");
 }
-#endif
 
 static void
 gnc_main_window_plugin_added (GncPlugin *manager,
@@ -3377,7 +3363,6 @@ gnc_main_window_plugin_removed (GncPlugin *manager,
 
 
 /* Command callbacks */
-#ifdef HAVE_GTK_2_10
 static void
 gnc_main_window_cmd_page_setup (GtkAction *action,
                                          GncMainWindow *window)
@@ -3389,7 +3374,6 @@ gnc_main_window_cmd_page_setup (GtkAction *action,
   gtk_window = gnc_window_get_gtk_window(GNC_WINDOW(window));
   gnc_ui_page_setup(gtk_window);
 }
-#endif
 
 static void
 gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window)
@@ -3633,7 +3617,7 @@ gnc_main_window_cmd_window_raise (GtkAction *action,
 	g_return_if_fail(GTK_IS_ACTION(action));
 	g_return_if_fail(GTK_IS_RADIO_ACTION(current));
 	g_return_if_fail(GNC_IS_MAIN_WINDOW(old_window));
-	
+
 	ENTER("action %p, current %p, window %p", action, current, old_window);
 	value = gtk_radio_action_get_current_value(current);
 	new_window = g_list_nth_data(active_windows, value);
@@ -3993,7 +3977,7 @@ gnc_main_window_button_press_cb (GtkWidget *whatever,
 
 /* CS: Code copied from gtk/gtkactiongroup.c */
 static gchar *
-dgettext_swapped (const gchar *msgid, 
+dgettext_swapped (const gchar *msgid,
 		  const gchar *domainname)
 {
   /* CS: Pass this through dgettext if and only if msgid is
@@ -4003,24 +3987,24 @@ dgettext_swapped (const gchar *msgid,
 
 /*
  * This is copied into GnuCash from Gtk in order to fix problems when
- * empty msgids were passed through gettext(). 
+ * empty msgids were passed through gettext().
  *
  * See http://bugzilla.gnome.org/show_bug.cgi?id=326200 . If that bug
  * is fixed in the gtk that we can rely open, then
  * gnc_gtk_action_group_set_translation_domain can be replaced by
  * gtk_action_group_set_translation_domain again.
  */
-void 
+void
 gnc_gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
 					 const gchar    *domain)
 {
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
-  gtk_action_group_set_translate_func (action_group, 
+  gtk_action_group_set_translate_func (action_group,
 				       (GtkTranslateFunc)dgettext_swapped,
 				       g_strdup (domain),
 				       g_free);
-} 
+}
 /* CS: End of code copied from gtk/gtkactiongroup.c */
 
 void

@@ -27,7 +27,7 @@
 /** @file dialog-preferences.c
     @brief Dialog for handling user preferences.
     @author Copyright (c) 2005 David Hampton <hampton@employees.org>
-    
+
     These functions are the external API available for the new user
     preference dialog.  Preferences are now stored in GConf.  This
     code ends up being nothing more than a pretty interface to set
@@ -121,7 +121,7 @@ GSList *add_ins = NULL;
  *  @internal
  *
  *  @param unused A pointer to the changed gconf entry.
- *  
+ *
  *  @param dialog A pointer to the preferences dialog.
  */
 static void
@@ -152,9 +152,9 @@ gnc_account_separator_prefs_cb (GConfEntry *unused, GtkWidget *dialog)
  *  @internal
  *
  *  @param a A pointer to the first add-in.
- *  
+ *
  *  @param b A pointer to the second add-in.
- *  
+ *
  *  @return Zero if the tab name is the same in both add-ins. Non-zero otherwise.
  */
 static gint
@@ -175,9 +175,9 @@ gnc_prefs_compare_addins (addition *a,
  *  @internal
  *
  *  @param filename The name of a glade file.
- *  
+ *
  *  @param widgetname The name of the widget to extract from the glade file.
- *  
+ *
  *  @param tabname The name this page of preferences should have in
  *  the dialog notebook.
  *
@@ -221,7 +221,7 @@ gnc_preferences_add_page_internal (const gchar *filename,
   if (ptr) {
     /* problem? */
     preexisting = ptr->data;
-    
+
     if (preexisting->full_page) {
       g_warning("New tab %s(%s/%s/%s) conflicts with existing tab %s(%s/%s/full)",
 		add_in->tabname, add_in->filename, add_in->widgetname,
@@ -293,7 +293,7 @@ gnc_preferences_add_to_page (const gchar *filename,
  *
  *  @param xml A pointer to glade xml file currently being added to
  *  the dialog.
- *  
+ *
  *  @param dialog A pointer to the dialog.  The hash table is stored
  *  as a pointer off the dialog so that it can be found in the
  *  callback from gconf. */
@@ -371,7 +371,7 @@ gnc_prefs_find_page (GtkNotebook *notebook, const gchar *name)
  *  @internal
  *
  *  @param widget A pointer to the widget to move.
- *  
+ *
  *  @param data A pointer to a data structure passed in by the caller.
  *  This data structure contains pointers to the old and new tables,
  *  plus the row offset into the new table.
@@ -414,7 +414,7 @@ gnc_prefs_move_table_entry (GtkWidget *child,
  *  @internal
  *
  *  @param data A pointer to an addition data structure.
- *  
+ *
  *  @param user_data A pointer to the dialog.
  */
 static void
@@ -515,11 +515,7 @@ gnc_preferences_build_page (gpointer data,
   gtk_container_foreach(GTK_CONTAINER(new_content), gnc_prefs_move_table_entry,
 			&copydata);
 
-#ifdef HAVE_GTK_2_10
   g_object_ref_sink(new_content);
-#else
-  gtk_object_sink(GTK_OBJECT(new_content));
-#endif
   LEAVE("added content to page");
 }
 
@@ -565,7 +561,7 @@ gnc_prefs_sort_pages (GtkNotebook *notebook)
  *  @internal
  *
  *  @param gde A pointer to the GtkFontButton that was changed.
- *  
+ *
  *  @param user_data Unused.
  */
 static void
@@ -654,7 +650,7 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
  *  @internal
  *
  *  @param button A pointer to the radio button that was clicked.
- *  
+ *
  *  @param user_data Unused.
  */
 static void
@@ -756,7 +752,7 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
  *  @internal
  *
  *  @param button A pointer to the check button that was clicked.
- *  
+ *
  *  @param user_data Unused.
  */
 static void
@@ -830,7 +826,7 @@ gnc_prefs_connect_check_button (GtkCheckButton *button)
  *  @internal
  *
  *  @param button A pointer to the spin button that was clicked.
- *  
+ *
  *  @param user_data Unused.
  */
 static void
@@ -906,7 +902,7 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
  *  @internal
  *
  *  @param box A pointer to the combo box that was changed.
- *  
+ *
  *  @param user_data Unused.
  */
 static void
@@ -981,7 +977,7 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
  *  @internal
  *
  *  @param gce A pointer to the currency_edit that was changed.
- *  
+ *
  *  @param user_data Unused.
  */
 static void
@@ -1089,7 +1085,7 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce)
  *  @internal
  *
  *  @param entry A pointer to the entry that was changed.
- *  
+ *
  *  @param user_data Unused.
  */
 static void
@@ -1163,7 +1159,7 @@ gnc_prefs_connect_entry (GtkEntry *entry)
  *  @internal
  *
  *  @param period A pointer to the GncPeriodSelect that was changed.
- *  
+ *
  *  @param user_data Unused.
  */
 static void
@@ -1252,7 +1248,7 @@ gnc_prefs_connect_period_select (GncPeriodSelect *period)
  *  @internal
  *
  *  @param gde A pointer to the date_edit that was changed.
- *  
+ *
  *  @param user_data Unused.
  */
 static void
