@@ -1,5 +1,5 @@
 /********************************************************************\
- * FileDialog.c -- file-handling utility dialogs for gnucash.       * 
+ * FileDialog.c -- file-handling utility dialogs for gnucash.       *
  *                                                                  *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
@@ -57,12 +57,12 @@ static gint save_in_progress = 0;
 
 
 /********************************************************************\
- * gnc_file_dialog                                                  * 
- *   Pops up a file selection dialog (either a "Save As" or an      * 
+ * gnc_file_dialog                                                  *
+ *   Pops up a file selection dialog (either a "Save As" or an      *
  *   "Open"), and returns the name of the file the user selected.   *
- *   (This function does not return until the user selects a file   * 
- *   or presses "Cancel" or the window manager destroy button)      * 
- *                                                                  * 
+ *   (This function does not return until the user selects a file   *
+ *   or presses "Cancel" or the window manager destroy button)      *
+ *                                                                  *
  * Args:   title        - the title of the window                   *
  *         filters      - list of GtkFileFilters to use, will be    *
                           freed automatically                       *
@@ -83,7 +83,7 @@ gnc_file_dialog (const char * title,
   char *file_name = NULL;
   gchar * okbutton = GTK_STOCK_OPEN;
   const gchar *ok_icon = NULL;
-  GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN; 
+  GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
   gint response;
 
   ENTER(" ");
@@ -114,7 +114,7 @@ gnc_file_dialog (const char * title,
 		  if (title == NULL)
 			  title = _("Export");
 		  break;
-	
+
   }
 
   file_box = gtk_file_chooser_dialog_new(
@@ -154,9 +154,9 @@ gnc_file_dialog (const char * title,
     gtk_file_filter_add_pattern (all_filter, "*");
     gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_box), all_filter);
 
-    /* Note: You cannot set a file filter and pre-select a file name.
-     * The latter wins, and the filter ends up diabled.  Since we are
-     * only settin the starting directory for the chooser dialog,
+    /* Note: You cannot set a file filter and preselect a file name.
+     * The latter wins, and the filter ends up disabled.  Since we are
+     * only setting the starting directory for the chooser dialog,
      * everything works as expected. */
     gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (file_box),
 				 GTK_FILE_FILTER (filters->data));
@@ -346,7 +346,7 @@ show_session_error (QofBackendError io_error,
 	      "This is usually because not all the required parameters for "
 	      "the defined objects have calculations described in the map.");
       gnc_error_dialog(parent, fmt, newfile);
-      break; 
+      break;
 
     case ERR_QSF_BAD_OBJ_GUID:
       fmt = _("The selected QSF object file %s contains one or more invalid "
@@ -359,7 +359,7 @@ show_session_error (QofBackendError io_error,
       fmt = _("The selected QSF Object file %s requires a map but it was "
 	      "not provided.");
       gnc_error_dialog(parent, fmt, newfile);
-      break; 
+      break;
 
     case ERR_QSF_WRONG_MAP:
       fmt = _("Wrong QSF map selected. The selected map %s validates but was "
@@ -367,13 +367,13 @@ show_session_error (QofBackendError io_error,
 	      "in this map does not include all the objects described in "
 	      "the current QSF object file.");
       gnc_error_dialog(parent, fmt, newfile);
-      break; 
+      break;
 
     case ERR_QSF_MAP_NOT_OBJ:
       fmt = _("The selected file %s is a QSF map and cannot be "
 	      "opened as a QSF object.");
       gnc_error_dialog(parent, fmt, newfile);
-      break; 
+      break;
 
     case ERR_QSF_OVERFLOW:
       fmt = _("When converting XML strings into numbers, an overflow "
@@ -427,7 +427,7 @@ show_session_error (QofBackendError io_error,
       fmt = _("The file type of file %s is unknown.");
       gnc_error_dialog(parent, fmt, newfile);
       break;
-      
+
     case ERR_FILEIO_BACKUP_ERROR:
       fmt = _("Could not make a backup of the file %s");
       gnc_error_dialog(parent, fmt, newfile);
@@ -515,10 +515,10 @@ gnc_file_new (void)
       /* close any ongoing file sessions, and free the accounts.
        * disable events so we don't get spammed by redraws. */
       qof_event_suspend ();
-  
+
       qof_session_call_close_hooks(session);
       gnc_hook_run(HOOK_BOOK_CLOSED, session);
-      
+
       gnc_close_gui_component_by_session (session);
       gnc_clear_current_session();
       qof_event_resume ();
@@ -526,9 +526,9 @@ gnc_file_new (void)
 
   /* start a new book */
   gnc_get_current_session ();
-  
+
   gnc_hook_run(HOOK_NEW_BOOK, NULL);
-  
+
   gnc_gui_refresh_all ();
 
   /* Call this after re-enabling events. */
@@ -549,9 +549,9 @@ gnc_file_query_save (gboolean can_cancel)
   gnc_autosave_remove_timer(current_book);
 
   /* If user wants to mess around before finishing business with
-   * the old file, give em a chance to figure out what's up.  
+   * the old file, give him a chance to figure out what's up.
    * Pose the question as a "while" loop, so that if user screws
-   * up the file-selection dialog, we don't blow em out of the water;
+   * up the file-selection dialog, we don't blow him out of the water;
    * instead, give them another chance to say "no" to the verify box.
    */
   while (qof_book_not_saved(current_book))
@@ -596,7 +596,7 @@ gnc_file_query_save (gboolean can_cancel)
 	if (can_cancel)
 	  return FALSE;
 	/* No cancel function available.  Fall through. */
-	  
+
       case GTK_RESPONSE_OK:
 	return TRUE;
     }
@@ -621,7 +621,7 @@ gnc_post_file_open (const char * filename)
 
   if (!filename) return FALSE;
 
-  newfile = xaccResolveURL (filename); 
+  newfile = xaccResolveURL (filename);
   if (!newfile)
   {
     show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename,
@@ -629,8 +629,8 @@ gnc_post_file_open (const char * filename)
     return FALSE;
   }
 
-  /* disable events while moving over to the new set of accounts; 
-   * the mass deletetion of accounts and transactions during
+  /* disable events while moving over to the new set of accounts;
+   * the mass deletion of accounts and transactions during
    * switchover would otherwise cause excessive redraws. */
   qof_event_suspend ();
 
@@ -666,12 +666,12 @@ gnc_post_file_open (const char * filename)
                    "What would you like to do?")
                  );
     int rc;
-    
+
     // Bug#467521: on Mac (and maybe Win?), the dialog will appear below the
     // splash, but is modal, so we can't get rid of the splash...  So, get
     // rid of it now.
     gnc_destroy_splash_screen();
-    
+
     dialog = gtk_message_dialog_new(NULL,
 				    0,
 				    GTK_MESSAGE_WARNING,
@@ -685,7 +685,7 @@ gnc_post_file_open (const char * filename)
     gnc_gtk_dialog_add_button(dialog, _("_Create New File"),
 			      GTK_STOCK_NEW, RESPONSE_NEW);
     if (shutdown_cb)
-      gtk_dialog_add_button(GTK_DIALOG(dialog), 
+      gtk_dialog_add_button(GTK_DIALOG(dialog),
 			    GTK_STOCK_QUIT, RESPONSE_QUIT);
     rc = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
@@ -754,7 +754,7 @@ gnc_post_file_open (const char * filename)
     xaccLogSetBaseName (logpath);
     xaccLogDisable();
 
-    gnc_window_show_progress(_("Reading file..."), 0.0);
+    gnc_window_show_progress(_("Loading user data..."), 0.0);
     qof_session_load (new_session, gnc_window_show_progress);
     gnc_window_show_progress(NULL, -1.0);
     xaccLogEnable();
@@ -766,7 +766,7 @@ gnc_post_file_open (const char * filename)
       qof_session_pop_error (new_session);
       if (gnc_xml_convert_single_file (newfile)) {
         /* try to load once again */
-        gnc_window_show_progress(_("Reading file..."), 0.0);
+        gnc_window_show_progress(_("Loading user data..."), 0.0);
         qof_session_load (new_session, gnc_window_show_progress);
         gnc_window_show_progress(NULL, -1.0);
         xaccLogEnable();
@@ -782,9 +782,9 @@ gnc_post_file_open (const char * filename)
     new_root = gnc_book_get_root_account (qof_session_get_book (new_session));
     if (uh_oh) new_root = NULL;
 
-    /* Umm, came up empty-handed, but no error: 
+    /* Umm, came up empty-handed, but no error:
      * The backend forgot to set an error. So make one up. */
-    if (!uh_oh && !new_root) 
+    if (!uh_oh && !new_root)
     {
       uh_oh = show_session_error (ERR_BACKEND_MISC, newfile,
 				  GNC_FILE_DIALOG_OPEN);
@@ -794,7 +794,7 @@ gnc_post_file_open (const char * filename)
   gnc_unset_busy_cursor (NULL);
 
   /* going down -- abandon ship */
-  if (uh_oh) 
+  if (uh_oh)
   {
     xaccLogDisable();
     qof_session_destroy (new_session);
@@ -897,7 +897,7 @@ gnc_file_export_file(const char * newfile)
   default_dir = g_path_get_dirname(newfile);
   gnc_set_default_directory (GCONF_SECTION, default_dir);
   g_free(default_dir);
-  
+
   qof_event_suspend();
 
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
@@ -908,7 +908,7 @@ gnc_file_export_file(const char * newfile)
   io_err = qof_session_get_error (new_session);
 
   /* if file appears to be locked, ask the user ... */
-  if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err) 
+  if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
   {
     if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_EXPORT))
     {
@@ -1029,7 +1029,7 @@ gnc_file_save_as (void)
   } else {
     default_dir = gnc_get_default_directory(GCONF_SECTION);
   }
-  filename = gnc_file_dialog (_("Save"), NULL, default_dir, 
+  filename = gnc_file_dialog (_("Save"), NULL, default_dir,
 			      GNC_FILE_DIALOG_SAVE);
   g_free(default_dir);
   if (!filename) return;
@@ -1085,7 +1085,7 @@ gnc_file_do_save_as (const char* filename)
   io_err = qof_session_get_error (new_session);
 
   /* if file appears to be locked, ask the user ... */
-  if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err) 
+  if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
   {
     if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE))
     {
@@ -1106,12 +1106,12 @@ gnc_file_do_save_as (const char* filename)
     }
   }
 
-  /* check again for session errors (since above dialog may have 
-   * cleared a file lock & moved things forward some more) 
+  /* check again for session errors (since above dialog may have
+   * cleared a file lock & moved things forward some more)
    * This time, errors will be fatal.
    */
   io_err = qof_session_get_error (new_session);
-  if (ERR_BACKEND_NO_ERR != io_err) 
+  if (ERR_BACKEND_NO_ERR != io_err)
   {
     show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE);
     xaccLogDisable();
