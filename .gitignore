@@ -51,6 +51,7 @@ make-gnucash-potfiles
 missing
 mkinstalldirs
 packaging/gnucash.spec
+packaging/win32/custom.sh
 packaging/win32/gnucash.iss
 po/Makefile.in.in
 po/POTFILES
@@ -61,8 +62,11 @@ py-compile
 src/app-utils/gnucash
 src/bin/gnucash
 src/bin/gnucash-bin
+src/bin/gnucash-ddd
 src/bin/gnucash-env
+src/bin/gnucash-gdb
 src/bin/gnucash-make-guids
+src/bin/gnucash-setup-env
 src/bin/gnucash-valgrind
 src/bin/overrides/gnucash-build-env
 src/bin/overrides/gnucash-env
@@ -90,6 +94,8 @@ src/gnome/gnucash.desktop
 src/gnome/gnucash.desktop.in
 src/import-export/qif-import/gnucash
 src/import-export/qif-import/qif-import
+src/libqof/backend/file/qsf-dir.h
+src/libqof/qof/qofla-dir.h
 src/pixmaps/16x16
 src/pixmaps/22x22
 src/pixmaps/24x24
@@ -119,4 +125,3 @@ po/.intltool-merge-cache
 src/bin/gnucash-bin.o
 gnucash-*.*.*/
 gnucash-*.*.*.tar.*
-packaging/win32/custom.sh
