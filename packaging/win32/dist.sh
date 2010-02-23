@@ -28,6 +28,7 @@ function prepare() {
     _EXETYPE_UDIR=`unix_path $EXETYPE_DIR`
     _GNOME_UDIR=`unix_path $GNOME_DIR`
     _PCRE_UDIR=`unix_path $PCRE_DIR`
+    _LIBBONOBOUI_UDIR=`unix_path $LIBBONOBOUI_DIR`
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     _OPENSP_UDIR=`unix_path $OPENSP_DIR`
@@ -124,6 +125,12 @@ function dist_pcre() {
     setup pcre
     mkdir -p $DIST_UDIR/bin
     cp -a $_PCRE_UDIR/bin/pcre3.dll $DIST_UDIR/bin
+}
+
+function dist_libbonoboui() {
+    setup libbonoboui
+    mkdir -p $DIST_UDIR/bin
+    cp -a $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll $DIST_UDIR/bin
 }
 
 function dist_libgsf() {
@@ -287,6 +294,7 @@ dist_autotools
 dist_guile
 dist_gnome
 dist_pcre
+dist_libbonoboui
 dist_libgsf
 dist_goffice
 dist_libofx

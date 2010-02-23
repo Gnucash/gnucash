@@ -209,8 +209,6 @@ set_default LIBGNOME_URL "$GNOME_WIN32_URL/libgnome/2.24/libgnome_2.24.1-1_win32
 set_default LIBGNOME_DEV_URL "$GNOME_WIN32_URL/libgnome/2.24/libgnome-dev_2.24.1-1_win32.zip"
 set_default LIBGNOMECANVAS_URL "$GNOME_WIN32_URL/libgnomecanvas/2.20/libgnomecanvas-2.20.1.zip"
 set_default LIBGNOMECANVAS_DEV_URL "$GNOME_WIN32_URL/libgnomecanvas/2.20/libgnomecanvas-dev-2.20.1.zip"
-set_default LIBBONOBOUI_URL "$GNOME_WIN32_URL/libbonoboui/2.24/libbonoboui_2.24.0-1_win32.zip"
-set_default LIBBONOBOUI_DEV_URL "$GNOME_WIN32_URL/libbonoboui/2.24/libbonoboui-dev_2.24.0-1_win32.zip"
 set_default LIBGNOMEUI_URL "$GNOME_WIN32_URL/libgnomeui/2.22/libgnomeui-2.22.1.zip"
 set_default LIBGNOMEUI_DEV_URL "$GNOME_WIN32_URL/libgnomeui/2.22/libgnomeui-dev-2.22.1.zip"
 set_default LIBGLADE_URL "$GNOME_WIN32_URL/libglade/2.6/libglade_2.6.4-1_win32.zip"
@@ -219,6 +217,12 @@ set_default GTKHTML_URL "$GNOME_WIN32_URL/gtkhtml/3.24/gtkhtml_3.24.2-1_win32.zi
 set_default GTKHTML_DEV_URL "$GNOME_WIN32_URL/gtkhtml/3.24/gtkhtml-dev_3.24.2-1_win32.zip"
 set_default GTK_DOC_URL "$GNOME_MIRROR/sources/gtk-doc/1.13/gtk-doc-1.13.tar.bz2"
 set_default GNOME_DIR $GLOBAL_DIR\\gnome
+
+set_default LIBBONOBOUI_URL "$GNOME_WIN32_URL/libbonoboui/2.24/libbonoboui_2.24.0-1_win32.zip"
+set_default LIBBONOBOUI_DEV_URL "$GNOME_WIN32_URL/libbonoboui/2.24/libbonoboui-dev_2.24.0-1_win32.zip"
+set_default LIBBONOBOUI_SRC_URL "$GNOME_MIRROR/sources/libbonoboui/2.24/libbonoboui-2.24.2.tar.bz2"
+set_default LIBBONOBOUI_PATCH `pwd`/libbonoboui-2.24.2.patch
+set_default LIBBONOBOUI_DIR $GLOBAL_DIR\\libbonoboui
 
 set_default SWIG_URL "$SF_MIRROR/swig/swigwin-1.3.36.zip"
 set_default SWIG_DIR $GLOBAL_DIR\\swig
@@ -343,6 +347,7 @@ if [ "$AQBANKING3" = "yes" ]; then
 fi
 add_step inst_swig
 add_step inst_pcre
+add_step inst_libbonoboui
 add_step inst_libgsf
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_hh

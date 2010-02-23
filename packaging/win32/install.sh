@@ -679,6 +679,43 @@ function inst_pcre() {
     quiet ${LD} $PCRE_LDFLAGS -lpcre -o $TMP_UDIR/ofile || die "pcre not installed correctly"
 }
 
+function inst_libbonoboui() {
+    setup libbonoboui
+    _LIBBONOBOUI_UDIR=`unix_path $LIBBONOBOUI_DIR`
+    add_to_env $_LIBBONOBOUI_UDIR/bin PATH
+    add_to_env $_LIBBONOBOUI_UDIR/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --exists --atleast-version=2.24.2 libbonoboui-2.0 && [ -f $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll ]
+    then
+        echo "libbonoboui already installed.  skipping."
+    else
+        wget_unpacked $LIBBONOBOUI_SRC_URL $DOWNLOAD_DIR $TMP_DIR
+        mydir=`pwd`
+        assert_one_dir $TMP_UDIR/libbonoboui-*
+        qpushd $TMP_UDIR/libbonoboui-*
+            [ -n "$LIBBONOBOUI_PATCH" -a -f "$LIBBONOBOUI_PATCH" ] && \
+                patch -p1 < $LIBBONOBOUI_PATCH
+            #libtoolize --force
+            #aclocal ${ACLOCAL_FLAGS} -I .
+            #automake
+            #autoconf
+            ./configure ${HOST_XCOMPILE} --prefix=$_LIBBONOBOUI_UDIR \
+                POPT_LIBS="-lpopt" \
+                CPPFLAGS="${GNOME_CPPFLAGS}" \
+                LDFLAGS="${GNOME_LDFLAGS}" \
+                --enable-static=no
+            make
+            make install
+
+            # We override the $GNOME_DIR libbonoboui files because
+            # those erroneously depend on the obsolete libxml2.dll
+            cp -a $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll $_GNOME_UDIR/bin
+            cp -a $_LIBBONOBOUI_UDIR/lib/libbonoboui*.dll $_GNOME_UDIR/lib
+        qpopd
+        ${PKG_CONFIG} --exists --atleast-version=2.24.2 libbonoboui-2.0 && [ -f $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll ] || die "libbonoboui not installed correctly"
+        rm -rf ${TMP_UDIR}/libbonoboui-*
+    fi
+}
+
 function inst_libgsf() {
     setup libGSF
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
