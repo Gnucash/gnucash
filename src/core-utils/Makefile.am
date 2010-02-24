@@ -6,24 +6,19 @@ libgnc_core_utils_la_SOURCES = \
   gnc-gdate-utils.c \
   gnc-gkeyfile-utils.c \
   gnc-glib-utils.c \
-  gnc-gobject-utils.c \
-  swig-core-utils.c \
-  gnc-gtk-utils.c
+  swig-core-utils.c
 
 libgnc_core_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
-  ${GCONF_LIBS} \
-  ${GTK_LIBS}
+  ${GCONF_LIBS}
 
 noinst_HEADERS = \
   gnc-main.h \
   gnc-gconf-utils.h \
   gnc-gdate-utils.h \
   gnc-gkeyfile-utils.h \
-  gnc-glib-utils.h \
-  gnc-gobject-utils.h \
-  gnc-gtk-utils.h
+  gnc-glib-utils.h
 
 if BUILDING_FROM_SVN
 swig-core-utils.c: core-utils.i ${top_srcdir}/src/base-typemaps.i
@@ -35,7 +30,6 @@ AM_CPPFLAGS = \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \
-  ${GTK_CFLAGS} \
   -I${top_srcdir}/src
 
 

@@ -65,6 +65,8 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-recurrence.c \
   gnc-general-select.c \
   gnc-gnome-utils.c \
+  gnc-gobject-utils.c \
+  gnc-gtk-utils.c \
   gnc-gui-query.c \
   gnc-icons.c \
   gnc-main-window.c \
@@ -170,6 +172,8 @@ noinst_HEADERS = \
   gnc-druid-provider-edge-gnome.h \
   gnc-druid-provider-file-gnome.h \
   gnc-druid-provider-multifile-gnome.h \
+  gnc-gobject-utils.h \
+  gnc-gtk-utils.h \
   search-param.h
 
 libgncmod_gnome_utils_la_LDFLAGS = -avoid-version
