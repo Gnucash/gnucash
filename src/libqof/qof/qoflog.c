@@ -30,14 +30,25 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #ifdef HAVE_UNISTD_H
-#include <unistd.h>
+# include <unistd.h>
 #else
-#warning unistd required.
+# ifdef __GNUC__
+#  warning "<unistd.h> required."
+# endif
 #endif
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/time.h>
+#ifdef HAVE_SYS_TIME_H
+# include <sys/time.h>
+#else
+/* We simply define the struct timeval on our own here. */
+struct timeval {
+        long    tv_sec;         /* seconds */
+        long    tv_usec;        /* and microseconds */
+};
+/* include <Winsock2.h> */
+#endif
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "qof.log"

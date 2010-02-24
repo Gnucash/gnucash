@@ -105,7 +105,7 @@ AC_PROG_MAKE_SET
 AC_PROG_LN_S
 AC_HEADER_STDC
 
-AC_CHECK_HEADERS(limits.h sys/times.h sys/wait.h)
+AC_CHECK_HEADERS(limits.h sys/time.h sys/times.h sys/wait.h)
 AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
 AC_CHECK_FUNCS(setenv,,[
   AC_CHECK_FUNCS(putenv,,[
@@ -248,7 +248,7 @@ else
   AC_MSG_RESULT(no)
 fi
 
-AC_CHECK_HEADERS(dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
+AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
 # Gnucash replaced dlopen/dlsym by the g_module functions; dlsym
 # is needed optionally in one place for BSD linkers, though.

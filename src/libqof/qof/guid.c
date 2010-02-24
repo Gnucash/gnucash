@@ -29,7 +29,9 @@
 # include <sys/types.h>
 #endif
 #include <ctype.h>
-#include <dirent.h>
+#ifdef HAVE_DIRENT_H
+# include <dirent.h>
+#endif
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <stdlib.h>
@@ -39,7 +41,9 @@
 # include <sys/times.h>
 #endif
 #include <time.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 #include "qof.h"
 #include "md5.h"
 
@@ -373,7 +377,8 @@ guid_init(void)
 
     /* process and parent ids */
     {
-        pid_t pid;
+#ifdef HAVE_UNISTD_H
+		pid_t pid;
 
         pid = getpid();
         md5_process_bytes(&pid, sizeof(pid), &guid_context);
@@ -384,7 +389,8 @@ guid_init(void)
         md5_process_bytes(&pid, sizeof(pid), &guid_context);
         bytes += sizeof(pid);
 #endif
-    }
+#endif
+	}
 
     /* user info */
     {
