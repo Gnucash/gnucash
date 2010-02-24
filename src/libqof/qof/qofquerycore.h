@@ -116,7 +116,7 @@ typedef enum
 } QofGuidMatch;
 
 /** A CHAR type is for a RECNCell, Comparisons for QOF_TYPE_CHAR
- *  'ANY' will match any charagter in the string.
+ *  'ANY' will match any character in the string.
  *
  * Match 'ANY' is a convenience/performance-enhanced predicate
  * for the compound statement (value==char1) || (value==char2) || etc.

@@ -113,7 +113,7 @@ typedef enum
 /** \name Query Subsystem Initialization and Shudown  */
 // @{
 /** Subsystem initialization and shutdown. Call init() once
- *  to initalize the query subsytem; call shutdown() to free
+ *  to initalize the query subsystem; call shutdown() to free
  *  up any resources associated with the query subsystem.
  *  Typically called during application startup, shutdown.
  */
