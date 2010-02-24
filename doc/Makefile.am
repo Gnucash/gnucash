@@ -7,6 +7,7 @@ doc_DATA = \
   README-de.win32-bin.txt \
   README-fr.win32-bin.txt \
   README-it.win32-bin.txt \
+  README-nl.win32-bin.txt \
   README.win32-bin.txt \
   guile-hackers.txt \
   projects.html 
@@ -27,6 +28,7 @@ EXTRA_DIST = \
   README-de.win32-bin.txt \
   README-fr.win32-bin.txt \
   README-it.win32-bin.txt \
+  README-nl.win32-bin.txt \
   README.win32-bin.txt \
   README.HBCI \
   README.OFX \
