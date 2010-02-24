@@ -6,11 +6,14 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
 PROJECT (gnucash)
 
+# ############################################################
+
 # Find pkg-config
 FIND_PACKAGE (PkgConfig REQUIRED)
 
 # glib
 PKG_CHECK_MODULES (GLIB2 glib-2.0>=2.12.0)
+PKG_CHECK_MODULES (GCONF2 gconf-2.0>=2.0)
 
 IF (NOT GLIB2_FOUND)
    MESSAGE (SEND_ERROR "Gtk not found, but is required")
@@ -21,15 +24,27 @@ FIND_PATH (LIBINTL_INCLUDE_PATH NAMES libintl.h
 FIND_PATH (REGEX_INCLUDE_PATH NAMES regex.h
 		  PATHS /usr/include /opt/gnome/include)
 
+FIND_PACKAGE (SWIG REQUIRED)
+INCLUDE (${SWIG_USE_FILE})
+
+#FIND_PACKAGE (GUILE REQUIRED)
+
+# Workaround to create a dummy swig-runtime.h file
+FILE (WRITE ${CMAKE_CURRENT_BINARY_DIR}/swig-runtime.h "")
+
+# ############################################################
+
 #SET (QT_MIN_VERSION "4.5.0") # We need at least 4.5.0 (because only this is LGPL)
 #FIND_PACKAGE (Qt4 REQUIRED) # find and setup Qt4 for this project
 #INCLUDE_DIRECTORIES (${QT_INCLUDES})
 
-ADD_DEFINITIONS (-DHAVE_CONFIG_H)
-
 IF (UNIX)
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -D_FORTIFY_SOURCE=2 -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused")
 ENDIF (UNIX)
+
+# ############################################################
+
+ADD_DEFINITIONS (-DHAVE_CONFIG_H)
 
 # Create config.h
 SET (CONFIG_H ${CMAKE_CURRENT_BINARY_DIR}/config.h)
@@ -136,8 +151,22 @@ IF (UNIX)
 ")
 ENDIF (UNIX)
 
+
+FILE (APPEND ${CONFIG_H} "
+/* GnuCash Major version number */
+#define GNUCASH_MAJOR_VERSION 2
+
+/* GnuCash Micro version number */
+#define GNUCASH_MICRO_VERSION 10
+
+/* GnuCash Minor version number */
+#define GNUCASH_MINOR_VERSION 3
+")
+
 # ############################################################
 
 # The subdirectories
 ADD_SUBDIRECTORY (libqof)
+ADD_SUBDIRECTORY (core-utils)
+ADD_SUBDIRECTORY (engine)
 
