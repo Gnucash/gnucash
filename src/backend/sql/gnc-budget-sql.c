@@ -331,7 +331,7 @@ load_all_budgets( GncSqlBackend* be )
         	while( row != NULL ) {
             	b = load_single_budget( be, row );
 				if( b != NULL ) {
-					list = g_list_append( list, b );
+					list = g_list_prepend( list, b );
 				}
 				row = gnc_sql_result_get_next_row( result );
         	}

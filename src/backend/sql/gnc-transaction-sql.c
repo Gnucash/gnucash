@@ -235,7 +235,7 @@ load_splits_for_tx_list( GncSqlBackend* be, GList* list )
 			Split* s;
             s = load_single_split( be, row );
 			if( s != NULL ) {
-				split_list = g_list_append( split_list, s );
+				split_list = g_list_prepend( split_list, s );
 			}
 			row = gnc_sql_result_get_next_row( result );
         }
@@ -382,7 +382,7 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
         while( row != NULL ) {
             tx = load_single_tx( be, row );
 			if( tx != NULL ) {
-				tx_list = g_list_append( tx_list, tx );
+				tx_list = g_list_prepend( tx_list, tx );
 			}
 			row = gnc_sql_result_get_next_row( result );
         }

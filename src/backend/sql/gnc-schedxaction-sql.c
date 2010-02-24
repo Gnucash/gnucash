@@ -245,7 +245,7 @@ load_all_sxes( GncSqlBackend* be )
 			sx = load_single_sx( be, row );
 			if( sx != NULL ) {
 		    	gnc_sxes_add_sx( sxes, sx );
-				list = g_list_append( list, sx );
+				list = g_list_prepend( list, sx );
 			}
 			row = gnc_sql_result_get_next_row( result );
         }
