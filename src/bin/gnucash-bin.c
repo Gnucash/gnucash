@@ -25,7 +25,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <popt.h>
 #include <libguile.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -197,21 +196,7 @@ load_user_config(void)
     try_load_config_array(stylesheet_files);
 }
 
-/* Note: Command-line argument parsing for Gtk+ applications has
- * evolved.  Gtk+-2.4 and before use the "popt" method.  We use that
- * here for compatibility.  Gnome-2.4 has a way of wrapping the "popt"
- * method (using GNOME_PARAM_POPT_CONTEXT).  Its advantages are that
- * it adds help messages for sound and the crash-dialog.  Its
- * disadvantages are that it prints a rather messy usage message
- * with lots of '?v's and it doesn't allow us to describe the
- * [DATAFILE] argument in the usage.  Weighing those factors, we're
- * just going to use popt directly.
- *
- * Glib-2.6 introduced GOptionContext and GOptionGroup, which are
- * meant to replace popt usage.  In Gnome-2.14, the popt usage is
- * offically deprecated, and the GNOME_PARAM_GOPTION_CONTEXT can be
- * used.
- */
+/* Parse command line options, using GOption interface */
 
 static void
 gnucash_command_line(int *argc, char **argv)
@@ -249,17 +234,6 @@ gnucash_command_line(int *argc, char **argv)
             _("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."),
             NULL
         },
-
-#if 0
-        {
-            "loglevel", '\0', 0, G_OPTION_ARG_INT, &loglevel,
-            /* Translators: This is the command line option autohelp text; see popt(3) */
-            _("Set the logging level from 0 (least) to 6 (most)"),
-            /* Translators: Argument description for autohelp; see
-               http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
-            _("LOGLEVEL")
-        },
-#endif // 0
 
         {
             "nofile", '\0', 0, G_OPTION_ARG_NONE, &nofile,
