@@ -167,6 +167,61 @@ void qof_log_set_default(QofLogLevel log_level);
 
 #define PRETTY_FUNC_NAME qof_log_prettify(G_STRFUNC)
 
+#ifdef _MSC_VER
+/* Microsoft Visual Studio */
+
+/** Log a fatal error */
+#define FATAL(format, ...) do { \
+    g_log (log_module, G_LOG_LEVEL_FATAL, \
+      "[%s()] " format, PRETTY_FUNC_NAME , __VA_ARGS__); \
+} while (0)
+
+/** Log a serious error */
+#define PERR(format, ...) do { \
+    g_log (log_module, G_LOG_LEVEL_CRITICAL, \
+      "[%s()] " format, PRETTY_FUNC_NAME , __VA_ARGS__); \
+} while (0)
+
+/** Log a warning */
+#define PWARN(format, ...) do { \
+    g_log (log_module, G_LOG_LEVEL_WARNING, \
+      "[%s()] " format, PRETTY_FUNC_NAME , __VA_ARGS__); \
+} while (0)
+
+/** Print an informational note */
+#define PINFO(format, ...) do { \
+    g_log (log_module, G_LOG_LEVEL_INFO, \
+      "[%s] " format, PRETTY_FUNC_NAME , __VA_ARGS__); \
+} while (0)
+
+/** Print a debugging message */
+#define DEBUG(format, ...) do { \
+    g_log (log_module, G_LOG_LEVEL_DEBUG, \
+      "[%s] " format, PRETTY_FUNC_NAME , __VA_ARGS__); \
+} while (0)
+
+/** Print a function entry debugging message */
+#define ENTER(format, ...) do { \
+    if (qof_log_check(log_module, (QofLogLevel)G_LOG_LEVEL_DEBUG)) { \
+      g_log (log_module, G_LOG_LEVEL_DEBUG, \
+        "[enter %s:%s()] " format, __FILE__, \
+        PRETTY_FUNC_NAME , __VA_ARGS__); \
+      qof_log_indent(); \
+    } \
+} while (0)
+
+/** Print a function exit debugging message. **/
+#define LEAVE(format, ...) do { \
+    if (qof_log_check(log_module, (QofLogLevel)G_LOG_LEVEL_DEBUG)) { \
+      qof_log_dedent(); \
+      g_log (log_module, G_LOG_LEVEL_DEBUG, \
+        "[leave %s()] " format, \
+        PRETTY_FUNC_NAME , __VA_ARGS__); \
+    } \
+} while (0)
+
+#else /* _MSC_VER */
+
 /** Log a fatal error */
 #define FATAL(format, args...) do { \
     g_log (log_module, G_LOG_LEVEL_FATAL, \
@@ -207,6 +262,18 @@ void qof_log_set_default(QofLogLevel log_level);
     } \
 } while (0)
 
+/** Print a function exit debugging message. **/
+#define LEAVE(format, args...) do { \
+    if (qof_log_check(log_module, (QofLogLevel)G_LOG_LEVEL_DEBUG)) { \
+      qof_log_dedent(); \
+      g_log (log_module, G_LOG_LEVEL_DEBUG, \
+        "[leave %s()] " format, \
+        PRETTY_FUNC_NAME , ## args); \
+    } \
+} while (0)
+
+#endif /* _MSC_VER */
+
 /** Replacement for @c g_return_val_if_fail, but calls LEAVE if the test fails. **/
 #define gnc_leave_return_val_if_fail(test, val) do { \
   if (! (test)) { LEAVE(""); } \
@@ -218,16 +285,6 @@ void qof_log_set_default(QofLogLevel log_level);
   if (! (test)) { LEAVE(""); } \
   g_return_if_fail(test); \
 } while (0);
-
-/** Print a function exit debugging message. **/
-#define LEAVE(format, args...) do { \
-    if (qof_log_check(log_module, (QofLogLevel)G_LOG_LEVEL_DEBUG)) { \
-      qof_log_dedent(); \
-      g_log (log_module, G_LOG_LEVEL_DEBUG, \
-        "[leave %s()] " format, \
-        PRETTY_FUNC_NAME , ## args); \
-    } \
-} while (0)
 
 /* -------------------------------------------------------- */
 
@@ -250,6 +307,33 @@ void qof_report_clock_total (gint clockno,
                              const gchar *function_name,
                              const gchar *format, ...);
 
+#ifdef _MSC_VER
+/* Microsoft Visual Studio */
+
+/** start a particular timer */
+#define START_CLOCK(clockno,format, ...) do {        \
+  if (qof_log_check (log_module, QOF_LOG_INFO))          \
+    qof_start_clock (clockno, log_module, QOF_LOG_INFO,  \
+             G_STRFUNC, format , __VA_ARGS__);               \
+} while (0)
+
+/** report elapsed time since last report on a particular timer */
+#define REPORT_CLOCK(clockno,format, ...) do {       \
+  if (qof_log_check (log_module, QOF_LOG_INFO))          \
+    qof_report_clock (clockno, log_module, QOF_LOG_INFO, \
+             G_STRFUNC, format , __VA_ARGS__);               \
+} while (0)
+
+/** report total elapsed time since timer started */
+#define REPORT_CLOCK_TOTAL(clockno,format, ...) do {       \
+  if (qof_log_check (log_module, QOF_LOG_INFO))                \
+    qof_report_clock_total (clockno, log_module, QOF_LOG_INFO, \
+             G_STRFUNC, format , __VA_ARGS__);               \
+} while (0)
+
+
+#else /* _MSC_VER */
+
 /** start a particular timer */
 #define START_CLOCK(clockno,format, args...) do {        \
   if (qof_log_check (log_module, QOF_LOG_INFO))          \
@@ -270,6 +354,8 @@ void qof_report_clock_total (gint clockno,
     qof_report_clock_total (clockno, log_module, QOF_LOG_INFO, \
              G_STRFUNC, format , ## args);               \
 } while (0)
+
+#endif /* _MSC_VER */
 
 
 #endif /* _QOF_LOG_H */
