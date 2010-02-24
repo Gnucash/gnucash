@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-html_webkit.c -- display HTML with some special gnucash tags.*
+ * gnc-html-webkit.c -- gnucash report renderer using webkit        *
  *                                                                  *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  * Copyright (C) 2001 Linas Vepstas <linas@linas.org>               *
@@ -986,30 +986,45 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
     }
 }
 
+#define PRINT_WITH_OP 1
+
 static void
 impl_webkit_print( GncHtml* self )
 {
-    GncHtmlWebkitPrivate* priv;
-//	static void (*webkit_web_frame_print)( WebKitWebFrame* frame ) = NULL;
-    WebKitWebFrame* frame;
-    extern void webkit_web_frame_print( WebKitWebFrame * frame );
+    extern void webkit_web_frame_print( WebKitWebFrame* frame );
+    extern GtkPrintOperationResult webkit_web_frame_print_full( WebKitWebFrame* frame,
+               GtkPrintOperation* op, GtkPrintOperationAction action, GError** error );
 
-    /*  HACK ALERT
-     *
-     * The api to print isn't exported, but exists and works, so let's dig for it.
-     */
-#if 0
-    if ( webkit_web_frame_print == NULL )
-    {
-        void* handle = dlopen( "/usr/lib/libwebkit-1.0.so", RTLD_LAZY );
-        webkit_web_frame_print = dlsym( handle, "webkit_web_frame_print" );
-        dlclose( handle );
-    }
+    GncHtmlWebkitPrivate* priv;
+    WebKitWebFrame* frame;
+#if PRINT_WITH_OP
+    GtkPrintOperation* op = gtk_print_operation_new();
+    GError* error = NULL;
 #endif
 
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
     frame = webkit_web_view_get_main_frame( priv->web_view );
+
+#if PRINT_WITH_OP
+	gtk_print_operation_set_unit( op, GTK_UNIT_POINTS );
+    webkit_web_frame_print_full( frame, op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, &error );
+    g_object_unref( op );
+
+    if( error != NULL ) {
+        GtkWidget* window = gtk_widget_get_toplevel( GTK_WIDGET(priv->web_view) );
+        GtkWidget* dialog = gtk_message_dialog_new( GTK_WIDGET_TOPLEVEL(window) ? GTK_WINDOW(window) : NULL,
+                                      GTK_DIALOG_DESTROY_WITH_PARENT,
+                                      GTK_MESSAGE_ERROR,
+                                      GTK_BUTTONS_CLOSE,
+                                      "%s", error->message );
+        g_error_free( error );
+
+        g_signal_connect( dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
+        gtk_widget_show( dialog );
+    }
+#else
     webkit_web_frame_print( frame );
+#endif
 }
 
 static void
