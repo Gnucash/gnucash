@@ -126,7 +126,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GNOME_CFLAGS} \
-  ${GNOME_PRINT_CFLAGS} \
   ${GLADE_CFLAGS} \
   $(GLIB_CFLAGS)
 
