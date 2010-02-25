@@ -256,7 +256,7 @@ quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
 
   if (qf == NULL)
     return;
-  
+
   if ((text == NULL) || (g_utf8_strlen (text, -1) <= depth))
     return;
 
