@@ -29,7 +29,6 @@
 
 #include "QuickFill.h"
 #include "gnc-engine.h"
-#include "gnc-engine.h"
 #include "gnc-ui-util.h"
 
 
