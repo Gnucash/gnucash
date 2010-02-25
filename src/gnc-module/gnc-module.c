@@ -10,7 +10,9 @@
 #include <string.h>
 #include <gmodule.h>
 #include <sys/types.h>
-#include <dirent.h>
+#ifdef HAVE_DIRENT_H
+# include <dirent.h>
+#endif
 
 #include "gnc-module.h"
 

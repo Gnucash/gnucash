@@ -30,9 +30,13 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/time.h>
+#ifdef HAVE_SYS_TIME_H
+# include <sys/time.h>
+#endif
 #include <time.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 
 #include "qof.h"
 #include "Split.h"
