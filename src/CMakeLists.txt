@@ -6,6 +6,12 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
 PROJECT (gnucash)
 
+# Extra cmake macros
+SET (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake_modules;${CMAKE_MODULE_PATH}")
+INCLUDE (MacroAppendForeach)
+INCLUDE (MacroAddSourceFileCompileFlags)
+INCLUDE (GncAddSwigCommand)
+
 # ############################################################
 
 # Find pkg-config
@@ -24,13 +30,23 @@ FIND_PATH (LIBINTL_INCLUDE_PATH NAMES libintl.h
 FIND_PATH (REGEX_INCLUDE_PATH NAMES regex.h
 		  PATHS /usr/include /opt/gnome/include)
 
+# ############################################################
+
 FIND_PACKAGE (SWIG REQUIRED)
 INCLUDE (${SWIG_USE_FILE})
 
 #FIND_PACKAGE (GUILE REQUIRED)
 
-# Workaround to create a dummy swig-runtime.h file
-FILE (WRITE ${CMAKE_CURRENT_BINARY_DIR}/swig-runtime.h "")
+# Command to generate the swig-runtime.h header
+SET (SWIG_RUNTIME_H ${CMAKE_BINARY_DIR}/swig-runtime.h)
+ADD_CUSTOM_COMMAND (
+  OUTPUT ${SWIG_RUNTIME_H}
+  DEPENDS ${CMAKE_SOURCE_DIR}/CMakeLists.txt
+  COMMAND ${SWIG_EXECUTABLE} -guile -external-runtime ${SWIG_RUNTIME_H}
+)
+
+# Add a custom target to drive the custom command.
+ADD_CUSTOM_TARGET (swig-runtime-h ALL DEPENDS ${SWIG_RUNTIME_H})
 
 # ############################################################
 
@@ -166,7 +182,8 @@ FILE (APPEND ${CONFIG_H} "
 # ############################################################
 
 # The subdirectories
-ADD_SUBDIRECTORY (libqof)
+#ADD_SUBDIRECTORY (libqof)
 ADD_SUBDIRECTORY (core-utils)
+ADD_SUBDIRECTORY (gnc-module)
 ADD_SUBDIRECTORY (engine)
 

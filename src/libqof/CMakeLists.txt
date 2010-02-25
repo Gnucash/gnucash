@@ -12,8 +12,10 @@ INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR} ) # for config.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/../lib/libc) # for strptime.h
 
 
-# Workaround to create a qofla-dir.h file
-FILE (WRITE ${CMAKE_CURRENT_BINARY_DIR}/qofla-dir.h "#define QOF_LIB_DIR \"foobar\"\n")
+# Workaround to create a very simple gncla-dir.h file
+FILE (WRITE ${CMAKE_CURRENT_BINARY_DIR}/qofla-dir.h "
+#define QOF_LIB_DIR \"${CMAKE_INSTALL_PREFIX}/lib/gnucash\"
+")
 INCLUDE_DIRECTORIES (${CMAKE_CURRENT_BINARY_DIR}) # for qofla-dir.h
 
 SET (libgnc_qof_SOURCES

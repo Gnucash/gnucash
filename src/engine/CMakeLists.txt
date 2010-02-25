@@ -15,47 +15,6 @@ INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/gnc-module) # for gnc-glib-utils.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/core-utils) # for gnc-glib-utils.h
 INCLUDE_DIRECTORIES (${CMAKE_CURRENT_SOURCE_DIR}) # for <Account.h>
 INCLUDE_DIRECTORIES (${CMAKE_CURRENT_BINARY_DIR}) # for gncla-dir.h
-MESSAGE(STATUS "SWIG_DIR=${SWIG_DIR}")
-# FIXME: I still need to look up SWIG wrapper generation in cmake...
-#SWIG_ADD_MODULE (engine guile swig-engine.i swig-engine.c)
-
-# Workaround to create a dummy gncla-dir.h file
-FILE (WRITE ${CMAKE_CURRENT_BINARY_DIR}/gncla-dir.h "")
-
-SET (libgncmod_engine_SOURCES
-  Account.c 
-  Recurrence.c 
-  Period.c 
-  Query.c 
-  SchedXaction.c 
-  SX-book.c 
-  SX-ttinfo.c 
-  Scrub.c 
-  Scrub2.c 
-  Scrub3.c 
-  Split.c 
-  TransLog.c 
-  Transaction.c 
-  binreloc.c 
-  cap-gains.c 
-  cashobjects.c 
-  gnc-associate-account.c 
-  gnc-budget.c 
-#  gnc-commodity.c 
-  gnc-engine.c 
-  gnc-filepath-utils.c 
-  gnc-hooks.c 
-  gnc-lot.c 
-  gnc-path.c 
-  gnc-pricedb.c 
-  gnc-session.c 
-  gnc-session-scm.c 
-  gncmod-engine.c 
-  kvp-scm.c 
-  engine-helpers.c 
-  glib-helpers.c  
-  policy.c
-)
 
 SET (libgncmod_engine_HEADERS
   Account.h 
@@ -98,8 +57,59 @@ SET (libgncmod_engine_HEADERS
   policy.h
 )
 
+# Command to generate the swig-engine.c wrapper file
+SET (SWIG_ENGINE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-engine.c)
+GNC_ADD_SWIG_COMMAND (${SWIG_ENGINE_C} ${CMAKE_CURRENT_SOURCE_DIR}/engine.i)
+
+# Workaround to create a very simple gncla-dir.h file
+FILE (WRITE ${CMAKE_CURRENT_BINARY_DIR}/gncla-dir.h "
+#define PREFIX \"${CMAKE_INSTALL_PREFIX}\"
+#define DATADIR \"${CMAKE_INSTALL_PREFIX}/share\"
+#define SYSCONFDIR \"${CMAKE_INSTALL_PREFIX}/etc\"
+#define LIBDIR \"${CMAKE_INSTALL_PREFIX}/lib\"
+#define LOCALE_DATADIRNAME \"share\"
+")
+
+SET (libgncmod_engine_SOURCES
+  Account.c 
+  Recurrence.c 
+  Period.c 
+  Query.c 
+  SchedXaction.c 
+  SX-book.c 
+  SX-ttinfo.c 
+  Scrub.c 
+  Scrub2.c 
+  Scrub3.c 
+  Split.c 
+  TransLog.c 
+  Transaction.c 
+  binreloc.c 
+  cap-gains.c 
+  cashobjects.c 
+  gnc-associate-account.c 
+  gnc-budget.c 
+#  gnc-commodity.c 
+  gnc-engine.c 
+  gnc-filepath-utils.c 
+  gnc-hooks.c 
+  gnc-lot.c 
+  gnc-path.c 
+  gnc-pricedb.c 
+  gnc-session.c 
+  gnc-session-scm.c 
+  gncmod-engine.c 
+  kvp-scm.c 
+  engine-helpers.c 
+  glib-helpers.c  
+  policy.c
+  ${SWIG_ENGINE_C}
+)
+
 ADD_LIBRARY	(engine
   ${libgncmod_engine_SOURCES}
   ${libgncmod_engine_HEADERS}
   )
 
+# We depend on the swig-runtime-h target
+ADD_DEPENDENCIES (engine swig-runtime-h)
