@@ -19,18 +19,18 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup QuickFill auto-complete typed user input.
+/** @addtogroup QuickFill Auto-complete typed user input.
    @{
 */
 /** @addtogroup Account_QuickFill Account Names
 
-    For systems with a large number of accounts (>500), the creation 
-    of the account name quickfill can take a significant amount of 
-    time (tens of seconds in bad cases).  This routine will build 
-    a cache of account names that can be shared by all registers, 
-    thus dramatically improving the performance of opening a new 
+    For systems with a large number of accounts (>500), the creation
+    of the account name quickfill can take a significant amount of
+    time (tens of seconds in bad cases).  This routine will build
+    a cache of account names that can be shared by all registers,
+    thus dramatically improving the performance of opening a new
     register.
-    @{ 
+    @{
 
     @file account-quickfill.h
     @brief Create an account-name quick-fill
@@ -47,9 +47,9 @@
 
 typedef gboolean (*AccountBoolCB) (Account *, gpointer);
 
-/** Create/fetch a quickfill of account names.  
+/** Create/fetch a quickfill of account names.
  *
- *  The quickfill is created out of all of the subaccounts 
+ *  The quickfill is created out of all of the subaccounts
  *  the the account group, filtered by the 'skip_cb' callback.
  *  If 'skip_cb' is not NULL, and if it returns TRUE when passed
  *  a particular account, then that account won't be included in
@@ -59,8 +59,8 @@ typedef gboolean (*AccountBoolCB) (Account *, gpointer);
  *  the QofBook that is the parent of the root account.  It is
  *  automatically destroyed when the QofBook is destroyed.
  *
- *  Multiple, distinct quickfills, for different uses, are allowed. 
- *  Each is identified with the 'key'.  Be sure to use distinct, 
+ *  Multiple, distinct quickfills, for different uses, are allowed.
+ *  Each is identified with the 'key'.  Be sure to use distinct,
  *  unique keys that don't conflict with other users of QofBook.
  *
  *  This code listens to account creation events, and automatically
@@ -70,11 +70,11 @@ typedef gboolean (*AccountBoolCB) (Account *, gpointer);
  */
 QuickFill * gnc_get_shared_account_name_quickfill (Account *root,
                                                    const char * key,
-                                                   AccountBoolCB skip_cb, 
+                                                   AccountBoolCB skip_cb,
                                                    gpointer cb_data);
 GtkListStore *
 gnc_get_shared_account_name_list_store (Account *root,
-					const char * key, 
+					const char * key,
 					AccountBoolCB cb, gpointer cb_data);
 
 #endif
