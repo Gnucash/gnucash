@@ -1,5 +1,5 @@
 /********************************************************************\
- * print-session.h -- data structures for printing via gnome print  *
+ * print-session.h -- data structures for printing via gtkprint     *
  *                       (GnuCash)                                  *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
