@@ -22,7 +22,6 @@ RDEPEND=">=dev-libs/glib-2.6.3
 	>=dev-scheme/guile-1.8
 	=dev-scheme/slib-3.1.1*
 	>=sys-libs/zlib-1.1.4
-	>=dev-libs/popt-1.5
 	>=x11-libs/gtk+-2.6
 	>=gnome-base/libgnomeui-2.4
 	>=gnome-base/libgnomeprint-2.10

@@ -158,14 +158,6 @@
    fun:re_compile_internal
 }
 {
-   poptGetContext Leak
-   Memcheck:Leak
-   fun:*
-   fun:poptGetContext
-   fun:gnome_program_preinit
-   obj:/usr/lib/libgnome-2.so.0.800.0
-}
-{
    IceAddConnectionWatch Leak
    Memcheck:Leak
    fun:malloc
