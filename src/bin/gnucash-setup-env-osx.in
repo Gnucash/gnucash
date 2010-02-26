@@ -33,7 +33,6 @@ export GUILE_LOAD_PATH
 export LD_LIBRARY_PATH
 export DYLD_LIBRARY_PATH
 export GNC_STANDARD_REPORTS_DIR
-export GNC_DOT_DIR="$HOME/Library/Application Support/Gnucash"
 
 if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
     eval `dbus-launch --sh-syntax --exit-with-session --config-file=@-PREFIX-@/etc/dbus-1/session.conf`
