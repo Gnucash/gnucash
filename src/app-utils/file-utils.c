@@ -65,42 +65,42 @@ gncFindFile (const char * filename)
 }
 
 /********************************************************************\
- * htmlRead                                                         *
+ * gncReadFile                                                      *
  *                                                                  *
- * Args:   file - the name of the html file to read                 *
+ * Args:   filename - the name of the html file to read             *
  *         data - pointer to set to the buffer of data read in      *
  * Return: size of data read                                        *
  * Global: helpPath - the path to the help files                    *
 \********************************************************************/
 int
-gncReadFile (const char * file, char ** data)
+gncReadFile (const char * filename, char ** data)
 {
     char *buf = NULL;
-    char  *filename;
+    char  *fullname;
     int   size = 0;
     int   fd;
 
     /* construct absolute path -- twiddle the relative path we received */
-    if (!file || file[0] == '\0') return 0;
+    if (!filename || filename[0] == '\0') return 0;
 
     /* take absolute paths without searching */
-    if (!g_path_is_absolute (file))
-        filename = gncFindFile (file);
+    if (!g_path_is_absolute (filename))
+        fullname = gncFindFile (filename);
     else
-        filename = g_strdup (file);
+        fullname = g_strdup (filename);
 
-    if (!filename) return 0;
+    if (!fullname) return 0;
 
     /* Open file: */
-    fd = g_open( filename, O_RDONLY, 0 );
+    fd = g_open( fullname, O_RDONLY, 0 );
 
-    g_free(filename);
-    filename = NULL;
+    g_free(fullname);
+    fullname = NULL;
 
     if ( fd == -1 )
     {
         int norr = errno;
-        PERR ("file %s: (%d) %s \n", file, norr, strerror(norr));
+        PERR ("file %s: (%d) %s \n", filename, norr, strerror(norr));
         return 0;
     }
 
@@ -128,7 +128,7 @@ gncReadFile (const char * file, char ** data)
     return size;
 }
 
-/**
+/***********************************************************************
  * gnc_getline -- read a line from the input file, up to and including
  *                the newline.
  *
