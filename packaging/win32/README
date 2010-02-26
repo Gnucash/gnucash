@@ -8,16 +8,28 @@ Before you start with the automated build, you have to complete these
 steps manually. The directory variables are set in `defaults.sh' and optionally
 `custom.sh'.
 
-* Download MSYS (but *only* msys; no mingw and no msysdtk)
-from http://www.mingw.org/download.shtml -> Current -> MSYS -> (bin, *.exe)
-to $DOWNLOAD_DIR
+Note: The mingw homepage is http://www.mingw.org. You can read more
+      about mingw over there. The packages to download are all
+      on sourceforge however, so the direct links are given here.
 
-* Install MSYS (no postinstall)
-to $MSYS_DIR
+* Download MSYS from
+  https://sourceforge.net/projects/mingw/files/MSYS%20Base%20System/msys-1.0.11/MSYS-1.0.11.exe/download
+  to $DOWNLOAD_DIR
+  Note: there may be a more recent version available when you read this, use
+        whatever verion that is available. BUT: be sure to use MSYS-xyz.exe
+        (ie the MSYS installer) and not the *bin.tar.lzma. I got confused
+        the first time I tried, because directory msys-1.0.12 existed on
+        sourceforge, but it didn't have the windows installer. You should
+        use the installer, not try to unpack the -bin.tar.lzma files. So
+        choose whatever version that has got an installer.
 
-* Download wget
-from http://www.mingw.org/download.shtml -> Current -> mingwPORT -> (bin, wget-*)
-to $DOWNLOAD_DIR
+* Install MSYS into $MSYS_DIR.
+
+* Download minwPORT's wget from
+  https://sourceforge.net/projects/mingw/files/mingwPORT/Current%20Releases/wget-1.9.1-mingwPORT.tar.bz2/download
+  to $DOWNLOAD_DIR
+  Note: the version number may have changed when you try this. Use whatever version
+        that is available
 
 * Look at defaults.sh and create a file named custom.sh to specify adapted directory
   variables.  If you want verbose output of any script
