@@ -48,15 +48,15 @@
 /** STRUCTS *********************************************************/
 struct _AutoClearWindow
 {
-  Account *account;        /* The account that we are auto-clearing */
+    Account *account;        /* The account that we are auto-clearing */
 
-  gint component_id;       /* id of component                       */
+    gint component_id;       /* id of component                       */
 
-  GtkWidget *window;       /* The auto-clear window                 */
-  GNCAmountEdit *end_value;/* The ending value                      */
-  GtkWidget *ok_button;
-  GtkWidget *cancel_button;
-  GtkLabel *status_label;
+    GtkWidget *window;       /* The auto-clear window                 */
+    GNCAmountEdit *end_value;/* The ending value                      */
+    GtkWidget *ok_button;
+    GtkWidget *cancel_button;
+    GtkLabel *status_label;
 };
 
 /********************************************************************\
@@ -68,209 +68,209 @@ struct _AutoClearWindow
 void
 gnc_ui_autoclear_window_raise(AutoClearWindow * autoClearData)
 {
-  if (autoClearData == NULL)
-    return;
+    if (autoClearData == NULL)
+        return;
 
-  if (autoClearData->window == NULL)
-    return;
+    if (autoClearData->window == NULL)
+        return;
 
-  gtk_window_present(GTK_WINDOW(autoClearData->window));
+    gtk_window_present(GTK_WINDOW(autoClearData->window));
 }
 
 static char *
 gnc_autoclear_make_window_name(Account *account)
 {
-  char *fullname;
-  char *title;
+    char *fullname;
+    char *title;
 
-  fullname = gnc_account_get_full_name(account);
-  title = g_strconcat(fullname, " - ", _("Auto-clear"), NULL);
+    fullname = gnc_account_get_full_name(account);
+    title = g_strconcat(fullname, " - ", _("Auto-clear"), NULL);
 
-  g_free(fullname);
+    g_free(fullname);
 
-  return title;
+    return title;
 }
 
 static gboolean
 ght_gnc_numeric_equal(gconstpointer v1, gconstpointer v2)
 {
-  gnc_numeric n1 = *(gnc_numeric *)v1, n2 = *(gnc_numeric *)v2;
-  return gnc_numeric_equal(n1, n2);
+    gnc_numeric n1 = *(gnc_numeric *)v1, n2 = *(gnc_numeric *)v2;
+    return gnc_numeric_equal(n1, n2);
 }
 
 static guint
 ght_gnc_numeric_hash(gconstpointer v1)
 {
-  gnc_numeric n1 = *(gnc_numeric *)v1;
-  gdouble d1 = gnc_numeric_to_double(n1);
-  return g_str_hash(&d1);
+    gnc_numeric n1 = *(gnc_numeric *)v1;
+    gdouble d1 = gnc_numeric_to_double(n1);
+    return g_str_hash(&d1);
 }
 
 static void
 gnc_autoclear_window_ok_cb (GtkWidget *widget,
-				    AutoClearWindow *data)
+                            AutoClearWindow *data)
 {
-  GList *node, *nc_list = 0, *toclear_list = 0;
-  gnc_numeric toclear_value;
-  GHashTable *sack;
+    GList *node, *nc_list = 0, *toclear_list = 0;
+    gnc_numeric toclear_value;
+    GHashTable *sack;
 
-  gtk_label_set_text(data->status_label, "Searching for splits to clear ...");
+    gtk_label_set_text(data->status_label, "Searching for splits to clear ...");
 
-  /* Value we have to reach */
-  toclear_value = gnc_amount_edit_get_amount(data->end_value);
-  toclear_value = gnc_numeric_convert(toclear_value, xaccAccountGetCommoditySCU(data->account), GNC_RND_NEVER);
+    /* Value we have to reach */
+    toclear_value = gnc_amount_edit_get_amount(data->end_value);
+    toclear_value = gnc_numeric_convert(toclear_value, xaccAccountGetCommoditySCU(data->account), GNC_RND_NEVER);
 
-  /* Extract which splits are not cleared and compute the amount we have to clear */
-  for (node = xaccAccountGetSplitList(data->account); node; node = node->next)
-  {
-    Split *split = (Split *)node->data;
-    char recn;
-    gnc_numeric value;
-
-    recn = xaccSplitGetReconcile (split);
-    value = xaccSplitGetAmount (split);
-
-    if (recn == NREC)
-      nc_list = g_list_append(nc_list, split);
-    else
-      toclear_value = gnc_numeric_sub_fixed(toclear_value, value);
-  }
-
-  /* Pretty print information */
-  printf("Amount to clear: %s\n", gnc_numeric_to_string(toclear_value));
-  printf("Available splits:\n");
-  for (node = nc_list; node; node = node->next)
-  {
-    Split *split = (Split *)node->data;
-    gnc_numeric value = xaccSplitGetAmount (split);
-    printf("  %s\n", gnc_numeric_to_string(value));
-  }
-
-  /* Run knapsack */
-  /* Entries in the hash table are:
-   *  - key   = amount to which we know how to clear (freed by GHashTable)
-   *  - value = last split we used to clear this amount (not managed by GHashTable)
-   */
-  printf("Knapsacking ...\n");
-  sack = g_hash_table_new_full (ght_gnc_numeric_hash, ght_gnc_numeric_equal, g_free, NULL);
-  for (node = nc_list; node; node = node->next)
-  {
-    Split *split = (Split *)node->data;
-    gnc_numeric split_value = xaccSplitGetAmount(split);
-
-    GHashTableIter iter;
-	gpointer pkey = NULL;
-    GList *reachable_list = 0, *node;
-
-    printf("  Split value: %s\n", gnc_numeric_to_string(split_value));
-
-    /* For each value in the sack */
-    g_hash_table_iter_init (&iter, sack);
-    while (g_hash_table_iter_next (&iter, &pkey, NULL))
+    /* Extract which splits are not cleared and compute the amount we have to clear */
+    for (node = xaccAccountGetSplitList(data->account); node; node = node->next)
     {
-	  /* Cast the gpointer to the kind of pointer we actually need. */
-	  gnc_numeric *key = (gnc_numeric *)pkey;
-      /* Compute a new reachable value */
-      gnc_numeric reachable_value = gnc_numeric_add_fixed(*key, split_value);
-      reachable_list = g_list_append(reachable_list, g_memdup(&reachable_value, sizeof(gnc_numeric)));
-      printf("    Sack: found %s, added %s\n", gnc_numeric_to_string(*key), gnc_numeric_to_string(reachable_value));
+        Split *split = (Split *)node->data;
+        char recn;
+        gnc_numeric value;
+
+        recn = xaccSplitGetReconcile (split);
+        value = xaccSplitGetAmount (split);
+
+        if (recn == NREC)
+            nc_list = g_list_append(nc_list, split);
+        else
+            toclear_value = gnc_numeric_sub_fixed(toclear_value, value);
     }
 
-    /* Add the value of the split itself to the reachable_list */
-    reachable_list = g_list_append(reachable_list, g_memdup(&split_value, sizeof(gnc_numeric)));
-
-    /* Add everything to the sack, looking out for duplicates */
-    for (node = reachable_list; node; node = node->next)
+    /* Pretty print information */
+    printf("Amount to clear: %s\n", gnc_numeric_to_string(toclear_value));
+    printf("Available splits:\n");
+    for (node = nc_list; node; node = node->next)
     {
-      gnc_numeric *reachable_value = node->data;
-      Split *toinsert_split = split;
-
-      printf("    Reachable value: %s ", gnc_numeric_to_string(*reachable_value));
-
-      /* Check if it already exists */
-      if (g_hash_table_lookup_extended(sack, reachable_value, NULL, NULL))
-      {
-        /* If yes, we are in trouble, we reached an amount using two solutions */
-        toinsert_split = NULL;
-	printf("dup");
-      }
-      g_hash_table_insert (sack, reachable_value, toinsert_split);
-      printf("\n");
+        Split *split = (Split *)node->data;
+        gnc_numeric value = xaccSplitGetAmount (split);
+        printf("  %s\n", gnc_numeric_to_string(value));
     }
-    g_list_free(reachable_list);
-  }
 
-  /* Check solution */
-  printf("Rebuilding solution ...\n");
-  while (!gnc_numeric_zero_p(toclear_value))
-  {
-	gpointer psplit = NULL;
-
-    printf("  Left to clear: %s\n", gnc_numeric_to_string(toclear_value));
-    if (g_hash_table_lookup_extended(sack, &toclear_value, NULL, &psplit))
+    /* Run knapsack */
+    /* Entries in the hash table are:
+     *  - key   = amount to which we know how to clear (freed by GHashTable)
+     *  - value = last split we used to clear this amount (not managed by GHashTable)
+     */
+    printf("Knapsacking ...\n");
+    sack = g_hash_table_new_full (ght_gnc_numeric_hash, ght_gnc_numeric_equal, g_free, NULL);
+    for (node = nc_list; node; node = node->next)
     {
-      if (psplit != NULL)
-      {
-		/* Cast the gpointer to the kind of pointer we actually need */
-		Split *split = (Split *)psplit;
-        toclear_list = g_list_prepend(toclear_list, split);
-		toclear_value = gnc_numeric_sub_fixed(toclear_value,
-											  xaccSplitGetAmount(split));
-        printf("    Cleared: %s -> %s\n",
-			   gnc_numeric_to_string(xaccSplitGetAmount(split)),
-			   gnc_numeric_to_string(toclear_value));
-      }
-      else
-      {
-        /* We couldn't reconstruct the solution */
-        printf("    Solution not unique.\n");
-        gtk_label_set_text(data->status_label, "Cannot uniquely clear splits. Found multiple possibilities.");
-		return;
-      }
+        Split *split = (Split *)node->data;
+        gnc_numeric split_value = xaccSplitGetAmount(split);
+
+        GHashTableIter iter;
+        gpointer pkey = NULL;
+        GList *reachable_list = 0, *node;
+
+        printf("  Split value: %s\n", gnc_numeric_to_string(split_value));
+
+        /* For each value in the sack */
+        g_hash_table_iter_init (&iter, sack);
+        while (g_hash_table_iter_next (&iter, &pkey, NULL))
+        {
+            /* Cast the gpointer to the kind of pointer we actually need. */
+            gnc_numeric *key = (gnc_numeric *)pkey;
+            /* Compute a new reachable value */
+            gnc_numeric reachable_value = gnc_numeric_add_fixed(*key, split_value);
+            reachable_list = g_list_append(reachable_list, g_memdup(&reachable_value, sizeof(gnc_numeric)));
+            printf("    Sack: found %s, added %s\n", gnc_numeric_to_string(*key), gnc_numeric_to_string(reachable_value));
+        }
+
+        /* Add the value of the split itself to the reachable_list */
+        reachable_list = g_list_append(reachable_list, g_memdup(&split_value, sizeof(gnc_numeric)));
+
+        /* Add everything to the sack, looking out for duplicates */
+        for (node = reachable_list; node; node = node->next)
+        {
+            gnc_numeric *reachable_value = node->data;
+            Split *toinsert_split = split;
+
+            printf("    Reachable value: %s ", gnc_numeric_to_string(*reachable_value));
+
+            /* Check if it already exists */
+            if (g_hash_table_lookup_extended(sack, reachable_value, NULL, NULL))
+            {
+                /* If yes, we are in trouble, we reached an amount using two solutions */
+                toinsert_split = NULL;
+                printf("dup");
+            }
+            g_hash_table_insert (sack, reachable_value, toinsert_split);
+            printf("\n");
+        }
+        g_list_free(reachable_list);
     }
-    else
+
+    /* Check solution */
+    printf("Rebuilding solution ...\n");
+    while (!gnc_numeric_zero_p(toclear_value))
     {
-      printf("    No solution found.\n");
-      gtk_label_set_text(data->status_label, "The selected amount cannot be cleared.");
-      return;
+        gpointer psplit = NULL;
+
+        printf("  Left to clear: %s\n", gnc_numeric_to_string(toclear_value));
+        if (g_hash_table_lookup_extended(sack, &toclear_value, NULL, &psplit))
+        {
+            if (psplit != NULL)
+            {
+                /* Cast the gpointer to the kind of pointer we actually need */
+                Split *split = (Split *)psplit;
+                toclear_list = g_list_prepend(toclear_list, split);
+                toclear_value = gnc_numeric_sub_fixed(toclear_value,
+                                                      xaccSplitGetAmount(split));
+                printf("    Cleared: %s -> %s\n",
+                       gnc_numeric_to_string(xaccSplitGetAmount(split)),
+                       gnc_numeric_to_string(toclear_value));
+            }
+            else
+            {
+                /* We couldn't reconstruct the solution */
+                printf("    Solution not unique.\n");
+                gtk_label_set_text(data->status_label, "Cannot uniquely clear splits. Found multiple possibilities.");
+                return;
+            }
+        }
+        else
+        {
+            printf("    No solution found.\n");
+            gtk_label_set_text(data->status_label, "The selected amount cannot be cleared.");
+            return;
+        }
     }
-  }
-  g_hash_table_destroy (sack);
+    g_hash_table_destroy (sack);
 
-  /* Show solution */
-  printf("Clearing splits:\n");
-  for (node = toclear_list; node; node = node->next)
-  {
-    Split *split = node->data;
-    char recn;
-	gnc_numeric value;
+    /* Show solution */
+    printf("Clearing splits:\n");
+    for (node = toclear_list; node; node = node->next)
+    {
+        Split *split = node->data;
+        char recn;
+        gnc_numeric value;
 
-	recn = xaccSplitGetReconcile (split);
-	value = xaccSplitGetAmount (split);
+        recn = xaccSplitGetReconcile (split);
+        value = xaccSplitGetAmount (split);
 
-	printf("  %c %s\n", recn, gnc_numeric_to_string(value));
+        printf("  %c %s\n", recn, gnc_numeric_to_string(value));
 
         xaccSplitSetReconcile (split, CREC);
-  }
-  if (toclear_list == 0)
-    printf("  None\n");
+    }
+    if (toclear_list == 0)
+        printf("  None\n");
 
-  /* Free lists */
-  g_list_free(nc_list);
-  g_list_free(toclear_list);
+    /* Free lists */
+    g_list_free(nc_list);
+    g_list_free(toclear_list);
 
-  /* Close window */
-  gtk_widget_destroy(data->window);
-  g_free(data);
+    /* Close window */
+    gtk_widget_destroy(data->window);
+    g_free(data);
 }
 
 static void
 gnc_autoclear_window_cancel_cb (GtkWidget *widget,
-				    AutoClearWindow *data)
+                                AutoClearWindow *data)
 {
-  /* Close window */
-  gtk_widget_destroy(data->window);
-  g_free(data);
+    /* Close window */
+    gtk_widget_destroy(data->window);
+    g_free(data);
 }
 
 /********************************************************************\
@@ -284,45 +284,45 @@ gnc_autoclear_window_cancel_cb (GtkWidget *widget,
 AutoClearWindow *
 autoClearWindow (GtkWidget *parent, Account *account)
 {
-  GtkWidget *dialog, *box, *label, *end_value;
-  GladeXML *xml;
-  AutoClearWindow *data;
-  char *title;
+    GtkWidget *dialog, *box, *label, *end_value;
+    GladeXML *xml;
+    AutoClearWindow *data;
+    char *title;
 
-  data = g_new0 (AutoClearWindow, 1);
-  data->account = account;
+    data = g_new0 (AutoClearWindow, 1);
+    data->account = account;
 
-  /* Create the dialog box */
-  xml = gnc_glade_xml_new ("autoclear.glade", "Auto-clear Start Dialog");
-  dialog = glade_xml_get_widget (xml, "Auto-clear Start Dialog");
-  title = gnc_autoclear_make_window_name (account);
-  gtk_window_set_title(GTK_WINDOW(dialog), title);
-  g_free (title);
+    /* Create the dialog box */
+    xml = gnc_glade_xml_new ("autoclear.glade", "Auto-clear Start Dialog");
+    dialog = glade_xml_get_widget (xml, "Auto-clear Start Dialog");
+    title = gnc_autoclear_make_window_name (account);
+    gtk_window_set_title(GTK_WINDOW(dialog), title);
+    g_free (title);
 
-  /* Add amount edit box */
-  end_value = gnc_amount_edit_new();
-  data->end_value = GNC_AMOUNT_EDIT(end_value);
-  box = glade_xml_get_widget(xml, "end_value_box");
-  gtk_box_pack_start(GTK_BOX(box), end_value, TRUE, TRUE, 0);
-  label = glade_xml_get_widget(xml, "end_label");
-  gtk_label_set_mnemonic_widget(GTK_LABEL(label), end_value);
-  gtk_widget_grab_focus(GTK_WIDGET(end_value));
+    /* Add amount edit box */
+    end_value = gnc_amount_edit_new();
+    data->end_value = GNC_AMOUNT_EDIT(end_value);
+    box = glade_xml_get_widget(xml, "end_value_box");
+    gtk_box_pack_start(GTK_BOX(box), end_value, TRUE, TRUE, 0);
+    label = glade_xml_get_widget(xml, "end_label");
+    gtk_label_set_mnemonic_widget(GTK_LABEL(label), end_value);
+    gtk_widget_grab_focus(GTK_WIDGET(end_value));
 
-  data->window = GTK_WIDGET(dialog);
+    data->window = GTK_WIDGET(dialog);
 
-  if (parent != NULL)
-    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
-  data->ok_button = glade_xml_get_widget(xml, "ok_button");
-  data->cancel_button = glade_xml_get_widget(xml, "cancel_button");
-  data->status_label = GTK_LABEL(glade_xml_get_widget(xml, "status_label"));
+    if (parent != NULL)
+        gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+    data->ok_button = glade_xml_get_widget(xml, "ok_button");
+    data->cancel_button = glade_xml_get_widget(xml, "cancel_button");
+    data->status_label = GTK_LABEL(glade_xml_get_widget(xml, "status_label"));
 
-  g_signal_connect(data->ok_button, "clicked",
-      G_CALLBACK(gnc_autoclear_window_ok_cb), data);
-  g_signal_connect(data->end_value, "activate",
-      G_CALLBACK(gnc_autoclear_window_ok_cb), data);
-  g_signal_connect(data->cancel_button, "clicked",
-      G_CALLBACK(gnc_autoclear_window_cancel_cb), data);
+    g_signal_connect(data->ok_button, "clicked",
+                     G_CALLBACK(gnc_autoclear_window_ok_cb), data);
+    g_signal_connect(data->end_value, "activate",
+                     G_CALLBACK(gnc_autoclear_window_ok_cb), data);
+    g_signal_connect(data->cancel_button, "clicked",
+                     G_CALLBACK(gnc_autoclear_window_cancel_cb), data);
 
-  return data;
+    return data;
 }
 

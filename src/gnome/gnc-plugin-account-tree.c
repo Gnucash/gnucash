@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-account-tree.c -- 
+/*
+ * gnc-plugin-account-tree.c --
  *
  * Copyright (C) 2003 Jan Arne Petersen
  * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
@@ -53,10 +53,13 @@ static void gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action, Gnc
 
 /** An array of all of the actions provided by the account tree
  *  plugin. */
-static GtkActionEntry gnc_plugin_actions [] = {
-	{ "ViewAccountTreeAction", NULL, N_("New Accounts _Page"), NULL,
-	  N_("Open a new Account Tree page"),
-	  G_CALLBACK (gnc_plugin_account_tree_cmd_new_account_tree) },
+static GtkActionEntry gnc_plugin_actions [] =
+{
+    {
+        "ViewAccountTreeAction", NULL, N_("New Accounts _Page"), NULL,
+        N_("Open a new Account Tree page"),
+        G_CALLBACK (gnc_plugin_account_tree_cmd_new_account_tree)
+    },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
@@ -65,7 +68,7 @@ static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 /** The instance private data structure for an account tree plugin. */
 typedef struct GncPluginAccountTreePrivate
 {
-	gpointer dummy;
+    gpointer dummy;
 } GncPluginAccountTreePrivate;
 
 #define GNC_PLUGIN_ACCOUNT_TREE_GET_PRIVATE(o)  \
@@ -79,27 +82,29 @@ static GObjectClass *parent_class = NULL;
 GType
 gnc_plugin_account_tree_get_type (void)
 {
-	static GType gnc_plugin_account_tree_type = 0;
+    static GType gnc_plugin_account_tree_type = 0;
 
-	if (gnc_plugin_account_tree_type == 0) {
-		static const GTypeInfo our_info = {
-			sizeof (GncPluginAccountTreeClass),
-			NULL,		/* base_init */
-			NULL,		/* base_finalize */
-			(GClassInitFunc) gnc_plugin_account_tree_class_init,
-			NULL,		/* class_finalize */
-			NULL,		/* class_data */
-			sizeof (GncPluginAccountTree),
-			0,		/* n_preallocs */
-			(GInstanceInitFunc) gnc_plugin_account_tree_init
-		};
-		
-		gnc_plugin_account_tree_type = g_type_register_static (GNC_TYPE_PLUGIN,
-								       "GncPluginAccountTree",
-								       &our_info, 0);
-	}
+    if (gnc_plugin_account_tree_type == 0)
+    {
+        static const GTypeInfo our_info =
+        {
+            sizeof (GncPluginAccountTreeClass),
+            NULL,		/* base_init */
+            NULL,		/* base_finalize */
+            (GClassInitFunc) gnc_plugin_account_tree_class_init,
+            NULL,		/* class_finalize */
+            NULL,		/* class_data */
+            sizeof (GncPluginAccountTree),
+            0,		/* n_preallocs */
+            (GInstanceInitFunc) gnc_plugin_account_tree_init
+        };
 
-	return gnc_plugin_account_tree_type;
+        gnc_plugin_account_tree_type = g_type_register_static (GNC_TYPE_PLUGIN,
+                                       "GncPluginAccountTree",
+                                       &our_info, 0);
+    }
+
+    return gnc_plugin_account_tree_type;
 }
 
 
@@ -107,16 +112,16 @@ gnc_plugin_account_tree_get_type (void)
 GncPlugin *
 gnc_plugin_account_tree_new (void)
 {
-	GncPluginAccountTree *plugin;
+    GncPluginAccountTree *plugin;
 
-	/* Reference the account tree page plugin to ensure it exists
-	 * in the gtk type system. */
-	GNC_TYPE_PLUGIN_PAGE_ACCOUNT_TREE;
+    /* Reference the account tree page plugin to ensure it exists
+     * in the gtk type system. */
+    GNC_TYPE_PLUGIN_PAGE_ACCOUNT_TREE;
 
-	plugin = g_object_new (GNC_TYPE_PLUGIN_ACCOUNT_TREE,
-			      NULL);
+    plugin = g_object_new (GNC_TYPE_PLUGIN_ACCOUNT_TREE,
+                           NULL);
 
-	return GNC_PLUGIN (plugin);
+    return GNC_PLUGIN (plugin);
 }
 
 
@@ -130,23 +135,23 @@ gnc_plugin_account_tree_new (void)
 static void
 gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
+    parent_class = g_type_class_peek_parent (klass);
 
-	object_class->finalize = gnc_plugin_account_tree_finalize;
+    object_class->finalize = gnc_plugin_account_tree_finalize;
 
-	/* plugin info */
-	plugin_class->plugin_name  = GNC_PLUGIN_ACCOUNT_TREE_NAME;
+    /* plugin info */
+    plugin_class->plugin_name  = GNC_PLUGIN_ACCOUNT_TREE_NAME;
 
-	/* widget addition/removal */
-	plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
-	plugin_class->actions      = gnc_plugin_actions;
-	plugin_class->n_actions    = gnc_plugin_n_actions;
-	plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+    /* widget addition/removal */
+    plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions      = gnc_plugin_actions;
+    plugin_class->n_actions    = gnc_plugin_n_actions;
+    plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
 
-	g_type_class_add_private(klass, sizeof(GncPluginAccountTreePrivate));
+    g_type_class_add_private(klass, sizeof(GncPluginAccountTreePrivate));
 }
 
 
@@ -172,15 +177,15 @@ gnc_plugin_account_tree_init (GncPluginAccountTree *plugin)
 static void
 gnc_plugin_account_tree_finalize (GObject *object)
 {
-	GncPluginAccountTree *plugin;
-	GncPluginAccountTreePrivate *priv;
+    GncPluginAccountTree *plugin;
+    GncPluginAccountTreePrivate *priv;
 
-	g_return_if_fail (GNC_IS_PLUGIN_ACCOUNT_TREE (object));
+    g_return_if_fail (GNC_IS_PLUGIN_ACCOUNT_TREE (object));
 
-	plugin = GNC_PLUGIN_ACCOUNT_TREE (object);
-	priv = GNC_PLUGIN_ACCOUNT_TREE_GET_PRIVATE (object);
+    plugin = GNC_PLUGIN_ACCOUNT_TREE (object);
+    priv = GNC_PLUGIN_ACCOUNT_TREE_GET_PRIVATE (object);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /************************************************************
@@ -189,14 +194,14 @@ gnc_plugin_account_tree_finalize (GObject *object)
 
 static void
 gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action,
-					      GncMainWindowActionData *data)
+        GncMainWindowActionData *data)
 {
-	GncPluginPage *page;
+    GncPluginPage *page;
 
-	g_return_if_fail (data != NULL);
+    g_return_if_fail (data != NULL);
 
-	page = gnc_plugin_page_account_tree_new ();
-	gnc_main_window_open_page (data->window, page);
+    page = gnc_plugin_page_account_tree_new ();
+    gnc_main_window_open_page (data->window, page);
 }
 
 /** @} */

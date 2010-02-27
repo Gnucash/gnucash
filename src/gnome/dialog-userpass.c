@@ -37,52 +37,52 @@ gnc_get_username_password (GtkWidget *parent,
                            char **username,
                            char **password)
 {
-  GtkWidget *dialog;
-  GtkWidget *heading_label;
-  GtkWidget *username_entry;
-  GtkWidget *password_entry;
-  GladeXML *xml;
-  gint result;
+    GtkWidget *dialog;
+    GtkWidget *heading_label;
+    GtkWidget *username_entry;
+    GtkWidget *password_entry;
+    GladeXML *xml;
+    gint result;
 
-  g_return_val_if_fail (username != NULL, FALSE);
-  g_return_val_if_fail (password != NULL, FALSE);
+    g_return_val_if_fail (username != NULL, FALSE);
+    g_return_val_if_fail (password != NULL, FALSE);
 
-  xml = gnc_glade_xml_new ("userpass.glade", "Username Password Dialog");
+    xml = gnc_glade_xml_new ("userpass.glade", "Username Password Dialog");
 
-  dialog = glade_xml_get_widget (xml, "Username Password Dialog");
+    dialog = glade_xml_get_widget (xml, "Username Password Dialog");
 
-  if (parent)
-    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+    if (parent)
+        gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
-  heading_label  = glade_xml_get_widget (xml, "heading_label");
-  username_entry = glade_xml_get_widget (xml, "username_entry");
-  password_entry = glade_xml_get_widget (xml, "password_entry");
+    heading_label  = glade_xml_get_widget (xml, "heading_label");
+    username_entry = glade_xml_get_widget (xml, "username_entry");
+    password_entry = glade_xml_get_widget (xml, "password_entry");
 
-  if (heading)
-    gtk_label_set_text (GTK_LABEL (heading_label), heading);
+    if (heading)
+        gtk_label_set_text (GTK_LABEL (heading_label), heading);
 
-  if (initial_username)
-    gtk_entry_set_text (GTK_ENTRY (username_entry), initial_username);
-  gtk_editable_select_region (GTK_EDITABLE (username_entry), 0, -1);
+    if (initial_username)
+        gtk_entry_set_text (GTK_ENTRY (username_entry), initial_username);
+    gtk_editable_select_region (GTK_EDITABLE (username_entry), 0, -1);
 
-  if (initial_password)
-    gtk_entry_set_text (GTK_ENTRY (password_entry), initial_password);
+    if (initial_password)
+        gtk_entry_set_text (GTK_ENTRY (password_entry), initial_password);
 
-  result = gtk_dialog_run(GTK_DIALOG (dialog));
-  gtk_widget_hide(dialog);
+    result = gtk_dialog_run(GTK_DIALOG (dialog));
+    gtk_widget_hide(dialog);
 
-  if (result == GTK_RESPONSE_OK)
-  {
-    *username = gtk_editable_get_chars (GTK_EDITABLE (username_entry), 0, -1);
-    *password = gtk_editable_get_chars (GTK_EDITABLE (password_entry), 0, -1);
+    if (result == GTK_RESPONSE_OK)
+    {
+        *username = gtk_editable_get_chars (GTK_EDITABLE (username_entry), 0, -1);
+        *password = gtk_editable_get_chars (GTK_EDITABLE (password_entry), 0, -1);
+
+        gtk_widget_destroy(dialog);
+        return TRUE;
+    }
+
+    *username = NULL;
+    *password = NULL;
 
     gtk_widget_destroy(dialog);
-    return TRUE;
-  }
-
-  *username = NULL;
-  *password = NULL;
-
-  gtk_widget_destroy(dialog);
-  return FALSE;
+    return FALSE;
 }

@@ -48,11 +48,13 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_BUDGET_NAME "GncPluginPageBudget"
 
 /* typedefs & structures */
-typedef struct {
-	GncPluginPage gnc_plugin_page;
+typedef struct
+{
+    GncPluginPage gnc_plugin_page;
 } GncPluginPageBudget;
 
-typedef struct {
+typedef struct
+{
     GncPluginPageClass gnc_plugin_page;
 } GncPluginPageBudgetClass;
 

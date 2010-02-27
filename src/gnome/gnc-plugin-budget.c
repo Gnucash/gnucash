@@ -47,22 +47,28 @@ static void gnc_plugin_budget_finalize (GObject *object);
 
 /* Command Callbacks */
 static void gnc_plugin_budget_cmd_new_budget (GtkAction *action,
-					      GncMainWindowActionData *data);
+        GncMainWindowActionData *data);
 static void gnc_plugin_budget_cmd_open_budget (GtkAction *action,
-					      GncMainWindowActionData *data);
+        GncMainWindowActionData *data);
 
-static GtkActionEntry gnc_plugin_actions [] = {
-    { "NewBudgetAction", NULL, N_("New Budget"), NULL,
-      N_("Create a new Budget"),
-      G_CALLBACK (gnc_plugin_budget_cmd_new_budget) },
+static GtkActionEntry gnc_plugin_actions [] =
+{
+    {
+        "NewBudgetAction", NULL, N_("New Budget"), NULL,
+        N_("Create a new Budget"),
+        G_CALLBACK (gnc_plugin_budget_cmd_new_budget)
+    },
 
-    { "OpenBudgetAction", NULL, N_("Open Budget"), NULL,
-      N_("Open an existing Budget"),
-      G_CALLBACK (gnc_plugin_budget_cmd_open_budget) },
+    {
+        "OpenBudgetAction", NULL, N_("Open Budget"), NULL,
+        N_("Open an existing Budget"),
+        G_CALLBACK (gnc_plugin_budget_cmd_open_budget)
+    },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
-typedef struct GncPluginBudgetPrivate {
+typedef struct GncPluginBudgetPrivate
+{
     gpointer dummy;
 } GncPluginBudgetPrivate;
 
@@ -76,8 +82,10 @@ gnc_plugin_budget_get_type (void)
 {
     static GType gnc_plugin_budget_type = 0;
 
-    if (!gnc_plugin_budget_type) {
-        static const GTypeInfo our_info = {
+    if (!gnc_plugin_budget_type)
+    {
+        static const GTypeInfo our_info =
+        {
             sizeof (GncPluginBudgetClass),
             NULL,		/* base_init */
             NULL,		/* base_finalize */
@@ -90,7 +98,7 @@ gnc_plugin_budget_get_type (void)
         };
 
         gnc_plugin_budget_type = g_type_register_static(
-            GNC_TYPE_PLUGIN, "GncPluginBudget", &our_info, 0);
+                                     GNC_TYPE_PLUGIN, "GncPluginBudget", &our_info, 0);
     }
 
     return gnc_plugin_budget_type;
@@ -159,7 +167,7 @@ gnc_plugin_budget_finalize(GObject *object)
 /* Make a new budget; put it in a page; open the page. */
 static void
 gnc_plugin_budget_cmd_new_budget (GtkAction *action,
-				  GncMainWindowActionData *data)
+                                  GncMainWindowActionData *data)
 {
     GncBudget *budget;
     GncPluginPage *page;
@@ -185,16 +193,22 @@ gnc_plugin_budget_cmd_open_budget (GtkAction *action,
     book = gnc_get_current_book();
     col = qof_book_get_collection(book, GNC_ID_BUDGET);
     count = qof_collection_count(col);
-    if (count > 0) {
-        if (count == 1) {
+    if (count > 0)
+    {
+        if (count == 1)
+        {
             bgt = gnc_budget_get_default(book);
-        } else {
+        }
+        else
+        {
             bgt = gnc_budget_gui_select_budget(book);
         }
 
         if (bgt) gnc_main_window_open_page(
-            data->window, gnc_plugin_page_budget_new(bgt));
-    } else { /* if no budgets exist yet, just open a new budget */
+                data->window, gnc_plugin_page_budget_new(bgt));
+    }
+    else     /* if no budgets exist yet, just open a new budget */
+    {
         gnc_plugin_budget_cmd_new_budget(action, data);
     }
 }
@@ -239,10 +253,12 @@ gnc_budget_gui_select_budget(QofBook *book)
 
     bgt = NULL;
     response = gtk_dialog_run(dlg);
-    switch (response) {
+    switch (response)
+    {
     case GTK_RESPONSE_OK:
         ok = gtk_tree_selection_get_selected(sel, &tm, &iter);
-        if (ok) {
+        if (ok)
+        {
             bgt = gnc_tree_model_budget_get_budget(tm, &iter);
         }
         break;

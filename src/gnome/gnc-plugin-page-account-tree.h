@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin_page-account-tree.h -- 
+/*
+ * gnc-plugin_page-account-tree.h --
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
  * Copyright (C) 2003 David Hampton <hampton@employees.org>
@@ -26,7 +26,7 @@
     @{ */
 /** @addtogroup GncPluginPageAccountTree An Account Tree Plugin
     @{ */
-/** @file gnc-plugin-page-account-tree.h 
+/** @file gnc-plugin-page-account-tree.h
     @brief Functions providing a chart of account page.
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
     @author Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
@@ -53,16 +53,18 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME "GncPluginPageAccountTree"
 
 /* typedefs & structures */
-typedef struct {
-	GncPluginPage gnc_plugin_page;
+typedef struct
+{
+    GncPluginPage gnc_plugin_page;
 } GncPluginPageAccountTree;
 
-typedef struct {
-	GncPluginPageClass gnc_plugin_page;
+typedef struct
+{
+    GncPluginPageClass gnc_plugin_page;
 
-	/* callbacks */
-	void (*account_selected) (GncPluginPage	 *page,
-				  Account	 *account);
+    /* callbacks */
+    void (*account_selected) (GncPluginPage	 *page,
+                              Account	 *account);
 
 } GncPluginPageAccountTreeClass;
 

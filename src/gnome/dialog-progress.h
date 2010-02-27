@@ -63,17 +63,17 @@ typedef gboolean (*GNCProgressCancelFunc) (gpointer user_data);
  *  additional visual elements such as a Cancel button, text
  *  log, and additional labels can be activated by following
  *  with calls to some of the other API functions.
- *  
+ *
  *  @param parent The parent window for which the progress dialog
  *  becomes modal.
- *  
+ *
  *  @param use_ok_button If @c TRUE, an OK button is shown and must be
  *  clicked when progress is completed.
  *
  *  @return A ::GNCProgressDialog that identifies the dialog and
  *  is needed when making subsequent API calls. */
 GNCProgressDialog * gnc_progress_dialog_new(GtkWidget *parent,
-                                            gboolean use_ok_button);
+        gboolean use_ok_button);
 
 /** Creates a dialog for displaying the progress of an activity using
  *  existing widgets. This allows long-running operations to update the
@@ -95,10 +95,10 @@ GNCProgressDialog * gnc_progress_dialog_new(GtkWidget *parent,
  *  @return A ::GNCProgressDialog that identifies the dialog and
  *  is needed when making subsequent API calls. */
 GNCProgressDialog * gnc_progress_dialog_custom(GtkLabel       *primary,
-                                               GtkLabel       *secondary,
-                                               GtkProgressBar *bar,
-                                               GtkLabel       *suboperation,
-                                               GtkTextView    *log);
+        GtkLabel       *secondary,
+        GtkProgressBar *bar,
+        GtkLabel       *suboperation,
+        GtkTextView    *log);
 
 /** Set the title of a pop-up progress dialog. This function has no effect
  *  on dialogs registered using gnc_progress_dialog_custom().
@@ -190,8 +190,8 @@ void gnc_progress_dialog_resume(GNCProgressDialog *progress);
  *
  *  @param user_data user data to be passed to @a cancel_func */
 void gnc_progress_dialog_set_cancel_func(GNCProgressDialog *progress,
-                                         GNCProgressCancelFunc cancel_func,
-                                         gpointer user_data);
+        GNCProgressCancelFunc cancel_func,
+        gpointer user_data);
 
 /** Show a Cancel button and set the Guile procedure that will be called
  *  when it is pressed by the user. It will be called after any C function
@@ -203,7 +203,7 @@ void gnc_progress_dialog_set_cancel_func(GNCProgressDialog *progress,
  *
  *  @param cancel_scm_func the Guile callback procedure */
 void gnc_progress_dialog_set_cancel_scm_func(GNCProgressDialog *progress,
-                                             SCM cancel_scm_func);
+        SCM cancel_scm_func);
 
 /** Set the fraction of the progress bar to fill, where 0 is empty and
  *  1 is full. If @a value is over 1, the bar will pulse instead of fill.
@@ -214,7 +214,7 @@ void gnc_progress_dialog_set_cancel_scm_func(GNCProgressDialog *progress,
 void gnc_progress_dialog_set_value(GNCProgressDialog *progress, gdouble value);
 
 /** Create a new "virtual" progress bar that, as it becomes full, will fill
- *  the current bar by the fraction specified by @a weight. All calls to 
+ *  the current bar by the fraction specified by @a weight. All calls to
  *  gnc_progress_dialog_set_value() will operate on the new bar until
  *  gnc_progress_dialog_pop() is called.
  *
@@ -232,7 +232,7 @@ void gnc_progress_dialog_set_value(GNCProgressDialog *progress, gdouble value);
  *
  *  @param weight the requested fraction of the current bar that the new bar
  *  will represent (The fraction actually assigned will be the lesser of the
- *  requested amount and the amount of the bar that is unfilled.) 
+ *  requested amount and the amount of the bar that is unfilled.)
  *
  *  @return the number of times that gnc_progress_dialog_pop() would have to
  *  be called to return to the top level. */

@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-page-register.h -- 
+/*
+ * gnc-plugin-page-register.h --
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
  * Copyright (C) 2003 David Hampton <hampton@employees.org>
@@ -26,7 +26,7 @@
     @{ */
 /** @addtogroup RegisterPlugin Register Page
     @{ */
-/** @file gnc-plugin-page-register.h 
+/** @file gnc-plugin-page-register.h
     @brief  Functions providing a register page for the GnuCash UI
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
     @author Copyright (C) 2003 David Hampton <hampton@employees.org>
@@ -54,12 +54,14 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_REGISTER_NAME "GncPluginPageRegister"
 
 /* typedefs & structures */
-typedef struct {
-	GncPluginPage gnc_plugin_page;
+typedef struct
+{
+    GncPluginPage gnc_plugin_page;
 } GncPluginPageRegister;
 
-typedef struct {
-	GncPluginPageClass gnc_plugin_page;
+typedef struct
+{
+    GncPluginPageClass gnc_plugin_page;
 } GncPluginPageRegisterClass;
 
 /* function prototypes */
@@ -125,9 +127,9 @@ gnc_plugin_page_register_new_gl (void);
  */
 void
 gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
-				      const char *lines_opt_page,
-				      const char *lines_opt_name,
-				      gint lines_default,
+                                      const char *lines_opt_page,
+                                      const char *lines_opt_name,
+                                      gint lines_default,
                                       gboolean read_only);
 
 

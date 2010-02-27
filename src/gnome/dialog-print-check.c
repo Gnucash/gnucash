@@ -107,7 +107,8 @@
 #define KF_KEY_SPLITS_ACCOUNT "SplitsAccount"
 
 /**< This enum specifies the columns used in the check format combobox. */
-typedef enum format_combo_col_t {
+typedef enum format_combo_col_t
+{
     COL_NAME = 0,               /**< This column holds a copy of the check
                                  *   format name and is what is displayed to
                                  *   the user in the combobox. It is NULL for
@@ -168,7 +169,8 @@ AS_STRING_FUNC(CheckItemType, ENUM_CHECK_ITEM_TYPE)
 
 /** This data structure describes a single item printed on a check.
  *  It is build from a description in a text file. */
-typedef struct _check_item {
+typedef struct _check_item
+{
 
     CheckItemType type;         /**< What type of item is this?  */
 
@@ -208,7 +210,8 @@ typedef struct _check_item {
  *  upon the check format, the page may contain multiple checks or
  *  only a single check.  The data structure is build from a
  *  description in a text file. */
-typedef struct _check_format {
+typedef struct _check_format
+{
 
     gchar *guid;                /**< Unique identifier for this format. */
 
@@ -251,46 +254,47 @@ typedef struct _check_format {
  *  of the widgets in the dialog, pointers to the check descriptions
  *  that have been read, and also contains the data from the gnucash
  *  transaction/split that is to be printed.  */
-struct _print_check_dialog {
-  GladeXML * xml;
-  GtkWidget * dialog;
-  GtkWindow * caller_window;
+struct _print_check_dialog
+{
+    GladeXML * xml;
+    GtkWidget * dialog;
+    GtkWindow * caller_window;
 
-  GncPluginPageRegister *plugin_page;
-  Split *split;
+    GncPluginPageRegister *plugin_page;
+    Split *split;
 
-  GtkWidget * format_combobox;
-  gint format_max;
-  GtkWidget * position_combobox;
-  gint position_max;
-  GtkWidget * custom_table;
-  GtkSpinButton * payee_x,  * payee_y;
-  GtkSpinButton * date_x,   * date_y;
-  GtkSpinButton * words_x,  * words_y;
-  GtkSpinButton * number_x, * number_y;
-  GtkSpinButton * address_x, * address_y;
-  GtkSpinButton * notes_x,   * notes_y;
-  GtkSpinButton * memo_x,   * memo_y;
-  GtkSpinButton * splits_amount_x,   * splits_amount_y;
-  GtkSpinButton * splits_memo_x,   * splits_memo_y;
-  GtkSpinButton * splits_account_x,   * splits_account_y;
-  GtkSpinButton * translation_x, * translation_y;
-  GtkSpinButton * check_rotation;
-  GtkWidget * translation_label;
+    GtkWidget * format_combobox;
+    gint format_max;
+    GtkWidget * position_combobox;
+    gint position_max;
+    GtkWidget * custom_table;
+    GtkSpinButton * payee_x,  * payee_y;
+    GtkSpinButton * date_x,   * date_y;
+    GtkSpinButton * words_x,  * words_y;
+    GtkSpinButton * number_x, * number_y;
+    GtkSpinButton * address_x, * address_y;
+    GtkSpinButton * notes_x,   * notes_y;
+    GtkSpinButton * memo_x,   * memo_y;
+    GtkSpinButton * splits_amount_x,   * splits_amount_y;
+    GtkSpinButton * splits_memo_x,   * splits_memo_y;
+    GtkSpinButton * splits_account_x,   * splits_account_y;
+    GtkSpinButton * translation_x, * translation_y;
+    GtkSpinButton * check_rotation;
+    GtkWidget * translation_label;
 
-  GtkWidget * units_combobox;
+    GtkWidget * units_combobox;
 
-  GtkWidget * date_format;
+    GtkWidget * date_format;
 
-  GtkWidget * check_address_name;
-  GtkWidget * check_address_1;
-  GtkWidget * check_address_2;
-  GtkWidget * check_address_3;
-  GtkWidget * check_address_4;
+    GtkWidget * check_address_name;
+    GtkWidget * check_address_1;
+    GtkWidget * check_address_2;
+    GtkWidget * check_address_3;
+    GtkWidget * check_address_4;
 
-  gchar *default_font;
+    gchar *default_font;
 
-  check_format_t *selected_format;
+    check_format_t *selected_format;
 };
 
 
@@ -311,7 +315,8 @@ find_existing_format (GtkListStore *store, gchar *guid, GtkTreeIter *iter_out)
     if (!gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter))
         return NULL;
 
-    do {
+    do
+    {
         gtk_tree_model_get(GTK_TREE_MODEL(store), &iter,
                            COL_DATA, &format, -1);
         if (format == NULL)
@@ -320,9 +325,10 @@ find_existing_format (GtkListStore *store, gchar *guid, GtkTreeIter *iter_out)
             continue;
 
         if (iter_out)
-          *iter_out = iter;
+            *iter_out = iter;
         return format;
-    } while (gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter));
+    }
+    while (gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter));
 
     return NULL;
 }
@@ -331,313 +337,332 @@ find_existing_format (GtkListStore *store, gchar *guid, GtkTreeIter *iter_out)
 static void
 save_float_pair (const char *section, const char *key, double a, double b)
 {
-  GSList *coord_list = NULL;
+    GSList *coord_list = NULL;
 
-  coord_list = g_slist_append(coord_list, &a);
-  coord_list = g_slist_append(coord_list, &b);
-  gnc_gconf_set_list(section, key, GCONF_VALUE_FLOAT, coord_list, NULL);
-  g_slist_free(coord_list);
+    coord_list = g_slist_append(coord_list, &a);
+    coord_list = g_slist_append(coord_list, &b);
+    gnc_gconf_set_list(section, key, GCONF_VALUE_FLOAT, coord_list, NULL);
+    g_slist_free(coord_list);
 }
 
 static void
 get_float_pair (const char *section, const char *key, double *a, double *b)
 {
-  GSList *coord_list;
+    GSList *coord_list;
 
-  coord_list = gnc_gconf_get_list (section, key, GCONF_VALUE_FLOAT, NULL);
-  if (NULL == coord_list) {
-    *a = 0;
-    *b = 0;
-    return;
-  }
+    coord_list = gnc_gconf_get_list (section, key, GCONF_VALUE_FLOAT, NULL);
+    if (NULL == coord_list)
+    {
+        *a = 0;
+        *b = 0;
+        return;
+    }
 
-  *a = *(gdouble*)g_slist_nth_data(coord_list, 0);
-  *b = *(gdouble*)g_slist_nth_data(coord_list, 1);
-  g_slist_free(coord_list);
+    *a = *(gdouble*)g_slist_nth_data(coord_list, 0);
+    *b = *(gdouble*)g_slist_nth_data(coord_list, 1);
+    g_slist_free(coord_list);
 }
 
 gchar *
 get_check_address( PrintCheckDialog *pcd)
 {
-  /* return an address in five lines
-   * the string needs to be freed with g_free */
-  gchar *address;
-  address = g_strconcat(gtk_entry_get_text(GTK_ENTRY(pcd->check_address_name)),"\n",
-                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_1)),"\n",
-                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_2)),"\n",
-                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_3)),"\n",
-                        gtk_entry_get_text(GTK_ENTRY(pcd->check_address_4)),
-                        NULL);
-  return address;
+    /* return an address in five lines
+     * the string needs to be freed with g_free */
+    gchar *address;
+    address = g_strconcat(gtk_entry_get_text(GTK_ENTRY(pcd->check_address_name)), "\n",
+                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_1)), "\n",
+                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_2)), "\n",
+                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_3)), "\n",
+                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_4)),
+                          NULL);
+    return address;
 }
 
 gchar *
 get_check_splits_amount(PrintCheckDialog *pcd)
 {
-   gchar* amount = NULL;
-   gchar* amt_temp;
-   int cnt;
-   const gchar* split_amount;
-   int nSplits;
-   Transaction *trans;
-   Split *split;
-   GList *node;
-   SplitList* s_list;
+    gchar* amount = NULL;
+    gchar* amt_temp;
+    int cnt;
+    const gchar* split_amount;
+    int nSplits;
+    Transaction *trans;
+    Split *split;
+    GList *node;
+    SplitList* s_list;
 
-   trans = xaccSplitGetParent(pcd->split);
-   nSplits = xaccTransCountSplits(trans);
-   s_list = xaccTransGetSplitList(trans);
-   if ( !s_list ) return NULL;
+    trans = xaccSplitGetParent(pcd->split);
+    nSplits = xaccTransCountSplits(trans);
+    s_list = xaccTransGetSplitList(trans);
+    if ( !s_list ) return NULL;
 
-   amount = g_strconcat("",NULL);
-   node = s_list;
-   cnt = 1;
-   while ( cnt < nSplits ) {
-      cnt++;
-      split = node->data;
-      split_amount = xaccPrintAmount(xaccSplitGetAmount(split),gnc_split_amount_print_info(split,TRUE));
-      amt_temp = amount;
-      amount = g_strconcat(amt_temp,"\n",split_amount,NULL);
-      g_free(amt_temp);
-      node = node->next;
-   }
-   return amount;
+    amount = g_strconcat("", NULL);
+    node = s_list;
+    cnt = 1;
+    while ( cnt < nSplits )
+    {
+        cnt++;
+        split = node->data;
+        split_amount = xaccPrintAmount(xaccSplitGetAmount(split), gnc_split_amount_print_info(split, TRUE));
+        amt_temp = amount;
+        amount = g_strconcat(amt_temp, "\n", split_amount, NULL);
+        g_free(amt_temp);
+        node = node->next;
+    }
+    return amount;
 }
 
 gchar *
 get_check_splits_memo(PrintCheckDialog *pcd)
 {
-   gchar* memo = NULL;
-   gchar* memo_temp;
-   int cnt;
-   const gchar* split_memo;
-   int nSplits;
-   Transaction *trans;
-   Split *split;
-   GList *node;
-   SplitList* s_list;
+    gchar* memo = NULL;
+    gchar* memo_temp;
+    int cnt;
+    const gchar* split_memo;
+    int nSplits;
+    Transaction *trans;
+    Split *split;
+    GList *node;
+    SplitList* s_list;
 
-   trans = xaccSplitGetParent(pcd->split);
-   nSplits = xaccTransCountSplits(trans);
-   s_list = xaccTransGetSplitList(trans);
-   if ( !s_list ) return NULL;
+    trans = xaccSplitGetParent(pcd->split);
+    nSplits = xaccTransCountSplits(trans);
+    s_list = xaccTransGetSplitList(trans);
+    if ( !s_list ) return NULL;
 
-   memo = g_strconcat("",NULL);
-   node = s_list;
-   cnt = 1;
-   while ( cnt < nSplits ) {
-      cnt++;
-      split = node->data;
-      split_memo = xaccSplitGetMemo(split);
-      memo_temp = memo;
-      memo = g_strconcat(memo_temp,"\n",split_memo,NULL);
-      g_free(memo_temp);
-      node = node->next;
-   }
-   return memo;
+    memo = g_strconcat("", NULL);
+    node = s_list;
+    cnt = 1;
+    while ( cnt < nSplits )
+    {
+        cnt++;
+        split = node->data;
+        split_memo = xaccSplitGetMemo(split);
+        memo_temp = memo;
+        memo = g_strconcat(memo_temp, "\n", split_memo, NULL);
+        g_free(memo_temp);
+        node = node->next;
+    }
+    return memo;
 }
 
 gchar *
 get_check_splits_account(PrintCheckDialog *pcd)
 {
-   gchar* account = NULL;
-   gchar* account_temp;
-   int cnt;
-   const gchar* aName = NULL;
-   int nSplits;
-   Account *pAccount;
-   Transaction *trans;
-   Split *split;
-   GList *node;
-   SplitList* s_list;
+    gchar* account = NULL;
+    gchar* account_temp;
+    int cnt;
+    const gchar* aName = NULL;
+    int nSplits;
+    Account *pAccount;
+    Transaction *trans;
+    Split *split;
+    GList *node;
+    SplitList* s_list;
 
-   trans = xaccSplitGetParent(pcd->split);
-   nSplits = xaccTransCountSplits(trans);
-   s_list = xaccTransGetSplitList(trans);
-   if ( !s_list ) return NULL;
+    trans = xaccSplitGetParent(pcd->split);
+    nSplits = xaccTransCountSplits(trans);
+    s_list = xaccTransGetSplitList(trans);
+    if ( !s_list ) return NULL;
 
-   account = g_strconcat("",NULL);
-   node = s_list;
-   cnt = 1;
-   while ( cnt < nSplits ) {
-      cnt++;
-      split = node->data;
-      pAccount = xaccSplitGetAccount(split);
-      aName = gnc_get_account_name_for_register(pAccount);
-      account_temp = account;
-      account = g_strconcat(account_temp,"\n",aName,NULL);
-      g_free(account_temp);
-      node = node->next;
-   }
-   return account;
+    account = g_strconcat("", NULL);
+    node = s_list;
+    cnt = 1;
+    while ( cnt < nSplits )
+    {
+        cnt++;
+        split = node->data;
+        pAccount = xaccSplitGetAccount(split);
+        aName = gnc_get_account_name_for_register(pAccount);
+        account_temp = account;
+        account = g_strconcat(account_temp, "\n", aName, NULL);
+        g_free(account_temp);
+        node = node->next;
+    }
+    return account;
 }
 
 gboolean
 check_format_has_address ( PrintCheckDialog *pcd )
 {
-  /* check format for an ADDRESS item */
-  check_item_t *item = NULL;
-  GSList *elem;
-  check_format_t *format = NULL;
+    /* check format for an ADDRESS item */
+    check_item_t *item = NULL;
+    GSList *elem;
+    check_format_t *format = NULL;
 
-  if ( !pcd ) return FALSE;
-  /* if format is NULL, then the custom format is being used
-   * which has an ADDRESS item by definition */
-  format = pcd->selected_format;
-  if ( !format ) return TRUE;
+    if ( !pcd ) return FALSE;
+    /* if format is NULL, then the custom format is being used
+     * which has an ADDRESS item by definition */
+    format = pcd->selected_format;
+    if ( !format ) return TRUE;
 
-  for (elem = pcd->selected_format->items; elem; elem = g_slist_next(elem)) {
-    item = elem->data;
-    if ( item->type == ADDRESS ) return TRUE;
+    for (elem = pcd->selected_format->items; elem; elem = g_slist_next(elem))
+    {
+        item = elem->data;
+        if ( item->type == ADDRESS ) return TRUE;
     }
-  return FALSE;
+    return FALSE;
 }
 
 static void
 gnc_ui_print_save_dialog(PrintCheckDialog * pcd)
 {
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  check_format_t *check;
-  const gchar *format;
-  gint active;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    check_format_t *check;
+    const gchar *format;
+    gint active;
 
-  /* Options page */
-  if (gtk_combo_box_get_active_iter(GTK_COMBO_BOX(pcd->format_combobox),
-                                    &iter)) {
-      model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
-      gtk_tree_model_get(model, &iter, COL_DATA, &check, -1);
-      gnc_gconf_set_string(GCONF_SECTION, KEY_CHECK_FORMAT_GUID,
-                           check ? check->guid : "custom", NULL);
-  }
-  active = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
-  gnc_gconf_set_int(GCONF_SECTION, KEY_CHECK_POSITION, active, NULL);
-  active = gnc_date_format_get_format (GNC_DATE_FORMAT(pcd->date_format));
-  gnc_gconf_set_int(GCONF_SECTION, KEY_DATE_FORMAT, active, NULL);
-  if (active == QOF_DATE_FORMAT_CUSTOM) {
-    format = gnc_date_format_get_custom (GNC_DATE_FORMAT(pcd->date_format));
-    gnc_gconf_set_string(GCONF_SECTION, KEY_DATE_FORMAT_USER, format, NULL);
-  } else {
-    gnc_gconf_unset (GCONF_SECTION, KEY_DATE_FORMAT_USER, NULL);
-  }
+    /* Options page */
+    if (gtk_combo_box_get_active_iter(GTK_COMBO_BOX(pcd->format_combobox),
+                                      &iter))
+    {
+        model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
+        gtk_tree_model_get(model, &iter, COL_DATA, &check, -1);
+        gnc_gconf_set_string(GCONF_SECTION, KEY_CHECK_FORMAT_GUID,
+                             check ? check->guid : "custom", NULL);
+    }
+    active = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
+    gnc_gconf_set_int(GCONF_SECTION, KEY_CHECK_POSITION, active, NULL);
+    active = gnc_date_format_get_format (GNC_DATE_FORMAT(pcd->date_format));
+    gnc_gconf_set_int(GCONF_SECTION, KEY_DATE_FORMAT, active, NULL);
+    if (active == QOF_DATE_FORMAT_CUSTOM)
+    {
+        format = gnc_date_format_get_custom (GNC_DATE_FORMAT(pcd->date_format));
+        gnc_gconf_set_string(GCONF_SECTION, KEY_DATE_FORMAT_USER, format, NULL);
+    }
+    else
+    {
+        gnc_gconf_unset (GCONF_SECTION, KEY_DATE_FORMAT_USER, NULL);
+    }
 
-  /* Custom format page */
-  save_float_pair(GCONF_SECTION, KEY_CUSTOM_PAYEE,
-		  gtk_spin_button_get_value(pcd->payee_x),
-		  gtk_spin_button_get_value(pcd->payee_y));
-  save_float_pair(GCONF_SECTION, KEY_CUSTOM_DATE,
-		  gtk_spin_button_get_value(pcd->date_x),
-		  gtk_spin_button_get_value(pcd->date_y));
-  save_float_pair(GCONF_SECTION, KEY_CUSTOM_WORDS,
-		  gtk_spin_button_get_value(pcd->words_x),
-		  gtk_spin_button_get_value(pcd->words_y));
-  save_float_pair(GCONF_SECTION, KEY_CUSTOM_NUMBER,
-		  gtk_spin_button_get_value(pcd->number_x),
-		  gtk_spin_button_get_value(pcd->number_y));
-  save_float_pair(GCONF_SECTION, KEY_CUSTOM_NOTES,
-		  gtk_spin_button_get_value(pcd->notes_x),
-		  gtk_spin_button_get_value(pcd->notes_y));
-  save_float_pair(GCONF_SECTION, KEY_CUSTOM_MEMO,
-		  gtk_spin_button_get_value(pcd->memo_x),
-		  gtk_spin_button_get_value(pcd->memo_y));
-  save_float_pair(GCONF_SECTION, KEY_CUSTOM_ADDRESS,
-		  gtk_spin_button_get_value(pcd->address_x),
-		  gtk_spin_button_get_value(pcd->address_y));
-  save_float_pair(GCONF_SECTION, KEY_SPLITS_AMOUNT,
-		  gtk_spin_button_get_value(pcd->splits_amount_x),
-		  gtk_spin_button_get_value(pcd->splits_amount_y));
-  save_float_pair(GCONF_SECTION, KEY_SPLITS_MEMO,
-		  gtk_spin_button_get_value(pcd->splits_memo_x),
-		  gtk_spin_button_get_value(pcd->splits_memo_y));
-  save_float_pair(GCONF_SECTION, KEY_SPLITS_ACCOUNT,
-		  gtk_spin_button_get_value(pcd->splits_account_x),
-		  gtk_spin_button_get_value(pcd->splits_account_y));
-  save_float_pair(GCONF_SECTION, KEY_CUSTOM_TRANSLATION,
-		  gtk_spin_button_get_value(pcd->translation_x),
-		  gtk_spin_button_get_value(pcd->translation_y));
-  gnc_gconf_set_float(GCONF_SECTION, KEY_CUSTOM_ROTATION,
-		      gtk_spin_button_get_value(pcd->check_rotation),
-		      NULL);
-  active = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->units_combobox));
-  gnc_gconf_set_int(GCONF_SECTION, KEY_CUSTOM_UNITS, active, NULL);
+    /* Custom format page */
+    save_float_pair(GCONF_SECTION, KEY_CUSTOM_PAYEE,
+                    gtk_spin_button_get_value(pcd->payee_x),
+                    gtk_spin_button_get_value(pcd->payee_y));
+    save_float_pair(GCONF_SECTION, KEY_CUSTOM_DATE,
+                    gtk_spin_button_get_value(pcd->date_x),
+                    gtk_spin_button_get_value(pcd->date_y));
+    save_float_pair(GCONF_SECTION, KEY_CUSTOM_WORDS,
+                    gtk_spin_button_get_value(pcd->words_x),
+                    gtk_spin_button_get_value(pcd->words_y));
+    save_float_pair(GCONF_SECTION, KEY_CUSTOM_NUMBER,
+                    gtk_spin_button_get_value(pcd->number_x),
+                    gtk_spin_button_get_value(pcd->number_y));
+    save_float_pair(GCONF_SECTION, KEY_CUSTOM_NOTES,
+                    gtk_spin_button_get_value(pcd->notes_x),
+                    gtk_spin_button_get_value(pcd->notes_y));
+    save_float_pair(GCONF_SECTION, KEY_CUSTOM_MEMO,
+                    gtk_spin_button_get_value(pcd->memo_x),
+                    gtk_spin_button_get_value(pcd->memo_y));
+    save_float_pair(GCONF_SECTION, KEY_CUSTOM_ADDRESS,
+                    gtk_spin_button_get_value(pcd->address_x),
+                    gtk_spin_button_get_value(pcd->address_y));
+    save_float_pair(GCONF_SECTION, KEY_SPLITS_AMOUNT,
+                    gtk_spin_button_get_value(pcd->splits_amount_x),
+                    gtk_spin_button_get_value(pcd->splits_amount_y));
+    save_float_pair(GCONF_SECTION, KEY_SPLITS_MEMO,
+                    gtk_spin_button_get_value(pcd->splits_memo_x),
+                    gtk_spin_button_get_value(pcd->splits_memo_y));
+    save_float_pair(GCONF_SECTION, KEY_SPLITS_ACCOUNT,
+                    gtk_spin_button_get_value(pcd->splits_account_x),
+                    gtk_spin_button_get_value(pcd->splits_account_y));
+    save_float_pair(GCONF_SECTION, KEY_CUSTOM_TRANSLATION,
+                    gtk_spin_button_get_value(pcd->translation_x),
+                    gtk_spin_button_get_value(pcd->translation_y));
+    gnc_gconf_set_float(GCONF_SECTION, KEY_CUSTOM_ROTATION,
+                        gtk_spin_button_get_value(pcd->check_rotation),
+                        NULL);
+    active = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->units_combobox));
+    gnc_gconf_set_int(GCONF_SECTION, KEY_CUSTOM_UNITS, active, NULL);
 }
 
 static void
 gnc_ui_print_restore_dialog(PrintCheckDialog * pcd)
 {
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  gchar *format, *guid;
-  gdouble x, y;
-  gint active;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    gchar *format, *guid;
+    gdouble x, y;
+    gint active;
 
-  /* Options page */
-  guid = gnc_gconf_get_string(GCONF_SECTION, KEY_CHECK_FORMAT_GUID, NULL);
-  if (guid == NULL) {
-      active = gnc_gconf_get_int(GCONF_SECTION, KEY_CHECK_FORMAT, NULL);
-      gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), active);
-  } else if (strcmp(guid, "custom") == 0) {
-      gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox),
-                               pcd->format_max - 1);
-  } else {
-      model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
-      if (find_existing_format(GTK_LIST_STORE(model), guid, &iter)) {
-          gtk_combo_box_set_active_iter(GTK_COMBO_BOX(pcd->format_combobox), &iter);
-      } else {
-          gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), 0);
-      }
-  }
-  active = gnc_gconf_get_int(GCONF_SECTION, KEY_CHECK_POSITION, NULL);
-  gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->position_combobox), active);
-  active = gnc_gconf_get_int(GCONF_SECTION, KEY_DATE_FORMAT, NULL);
-  gnc_date_format_set_format(GNC_DATE_FORMAT(pcd->date_format), active);
-  if (active == QOF_DATE_FORMAT_CUSTOM) {
-    format = gnc_gconf_get_string(GCONF_SECTION, KEY_DATE_FORMAT_USER, NULL);
-    if (format) {
-      gnc_date_format_set_custom(GNC_DATE_FORMAT(pcd->date_format), format);
-      g_free(format);
+    /* Options page */
+    guid = gnc_gconf_get_string(GCONF_SECTION, KEY_CHECK_FORMAT_GUID, NULL);
+    if (guid == NULL)
+    {
+        active = gnc_gconf_get_int(GCONF_SECTION, KEY_CHECK_FORMAT, NULL);
+        gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), active);
     }
-  }
+    else if (strcmp(guid, "custom") == 0)
+    {
+        gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox),
+                                 pcd->format_max - 1);
+    }
+    else
+    {
+        model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
+        if (find_existing_format(GTK_LIST_STORE(model), guid, &iter))
+        {
+            gtk_combo_box_set_active_iter(GTK_COMBO_BOX(pcd->format_combobox), &iter);
+        }
+        else
+        {
+            gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), 0);
+        }
+    }
+    active = gnc_gconf_get_int(GCONF_SECTION, KEY_CHECK_POSITION, NULL);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->position_combobox), active);
+    active = gnc_gconf_get_int(GCONF_SECTION, KEY_DATE_FORMAT, NULL);
+    gnc_date_format_set_format(GNC_DATE_FORMAT(pcd->date_format), active);
+    if (active == QOF_DATE_FORMAT_CUSTOM)
+    {
+        format = gnc_gconf_get_string(GCONF_SECTION, KEY_DATE_FORMAT_USER, NULL);
+        if (format)
+        {
+            gnc_date_format_set_custom(GNC_DATE_FORMAT(pcd->date_format), format);
+            g_free(format);
+        }
+    }
 
-  /* Custom format page */
-  get_float_pair(GCONF_SECTION, KEY_CUSTOM_PAYEE, &x, &y);
-  gtk_spin_button_set_value(pcd->payee_x, x);
-  gtk_spin_button_set_value(pcd->payee_y, y);
+    /* Custom format page */
+    get_float_pair(GCONF_SECTION, KEY_CUSTOM_PAYEE, &x, &y);
+    gtk_spin_button_set_value(pcd->payee_x, x);
+    gtk_spin_button_set_value(pcd->payee_y, y);
 
-  get_float_pair(GCONF_SECTION, KEY_CUSTOM_DATE, &x, &y);
-  gtk_spin_button_set_value(pcd->date_x, x);
-  gtk_spin_button_set_value(pcd->date_y, y);
-  get_float_pair(GCONF_SECTION, KEY_CUSTOM_WORDS, &x, &y);
-  gtk_spin_button_set_value(pcd->words_x, x);
-  gtk_spin_button_set_value(pcd->words_y, y);
-  get_float_pair(GCONF_SECTION, KEY_CUSTOM_NUMBER, &x, &y);
-  gtk_spin_button_set_value(pcd->number_x, x);
-  gtk_spin_button_set_value(pcd->number_y, y);
-  get_float_pair(GCONF_SECTION, KEY_CUSTOM_ADDRESS, &x, &y);
-  gtk_spin_button_set_value(pcd->address_x, x);
-  gtk_spin_button_set_value(pcd->address_y, y);
-  get_float_pair(GCONF_SECTION, KEY_CUSTOM_NOTES, &x, &y);
-  gtk_spin_button_set_value(pcd->notes_x, x);
-  gtk_spin_button_set_value(pcd->notes_y, y);
-  get_float_pair(GCONF_SECTION, KEY_CUSTOM_MEMO, &x, &y);
-  gtk_spin_button_set_value(pcd->memo_x, x);
-  gtk_spin_button_set_value(pcd->memo_y, y);
-  get_float_pair(GCONF_SECTION, KEY_SPLITS_AMOUNT, &x, &y);
-  gtk_spin_button_set_value(pcd->splits_amount_x, x);
-  gtk_spin_button_set_value(pcd->splits_amount_y, y);
-  get_float_pair(GCONF_SECTION, KEY_SPLITS_MEMO, &x, &y);
-  gtk_spin_button_set_value(pcd->splits_memo_x, x);
-  gtk_spin_button_set_value(pcd->splits_memo_y, y);
-  get_float_pair(GCONF_SECTION, KEY_SPLITS_ACCOUNT, &x, &y);
-  gtk_spin_button_set_value(pcd->splits_account_x, x);
-  gtk_spin_button_set_value(pcd->splits_account_y, y);
-  get_float_pair(GCONF_SECTION, KEY_CUSTOM_TRANSLATION, &x, &y);
-  gtk_spin_button_set_value(pcd->translation_x, x);
-  gtk_spin_button_set_value(pcd->translation_y, y);
-  x = gnc_gconf_get_float(GCONF_SECTION, KEY_CUSTOM_ROTATION, NULL);
-  gtk_spin_button_set_value(pcd->check_rotation, x);
-  active = gnc_gconf_get_int(GCONF_SECTION, KEY_CUSTOM_UNITS, NULL);
-  gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->units_combobox), active);
+    get_float_pair(GCONF_SECTION, KEY_CUSTOM_DATE, &x, &y);
+    gtk_spin_button_set_value(pcd->date_x, x);
+    gtk_spin_button_set_value(pcd->date_y, y);
+    get_float_pair(GCONF_SECTION, KEY_CUSTOM_WORDS, &x, &y);
+    gtk_spin_button_set_value(pcd->words_x, x);
+    gtk_spin_button_set_value(pcd->words_y, y);
+    get_float_pair(GCONF_SECTION, KEY_CUSTOM_NUMBER, &x, &y);
+    gtk_spin_button_set_value(pcd->number_x, x);
+    gtk_spin_button_set_value(pcd->number_y, y);
+    get_float_pair(GCONF_SECTION, KEY_CUSTOM_ADDRESS, &x, &y);
+    gtk_spin_button_set_value(pcd->address_x, x);
+    gtk_spin_button_set_value(pcd->address_y, y);
+    get_float_pair(GCONF_SECTION, KEY_CUSTOM_NOTES, &x, &y);
+    gtk_spin_button_set_value(pcd->notes_x, x);
+    gtk_spin_button_set_value(pcd->notes_y, y);
+    get_float_pair(GCONF_SECTION, KEY_CUSTOM_MEMO, &x, &y);
+    gtk_spin_button_set_value(pcd->memo_x, x);
+    gtk_spin_button_set_value(pcd->memo_y, y);
+    get_float_pair(GCONF_SECTION, KEY_SPLITS_AMOUNT, &x, &y);
+    gtk_spin_button_set_value(pcd->splits_amount_x, x);
+    gtk_spin_button_set_value(pcd->splits_amount_y, y);
+    get_float_pair(GCONF_SECTION, KEY_SPLITS_MEMO, &x, &y);
+    gtk_spin_button_set_value(pcd->splits_memo_x, x);
+    gtk_spin_button_set_value(pcd->splits_memo_y, y);
+    get_float_pair(GCONF_SECTION, KEY_SPLITS_ACCOUNT, &x, &y);
+    gtk_spin_button_set_value(pcd->splits_account_x, x);
+    gtk_spin_button_set_value(pcd->splits_account_y, y);
+    get_float_pair(GCONF_SECTION, KEY_CUSTOM_TRANSLATION, &x, &y);
+    gtk_spin_button_set_value(pcd->translation_x, x);
+    gtk_spin_button_set_value(pcd->translation_y, y);
+    x = gnc_gconf_get_float(GCONF_SECTION, KEY_CUSTOM_ROTATION, NULL);
+    gtk_spin_button_set_value(pcd->check_rotation, x);
+    active = gnc_gconf_get_int(GCONF_SECTION, KEY_CUSTOM_UNITS, NULL);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->units_combobox), active);
 }
 
 
@@ -647,15 +672,16 @@ pcd_get_custom_multip(PrintCheckDialog * pcd)
     gint selected;
 
     selected = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->units_combobox));
-    switch (selected) {
-        default:
-            return 72.0;        /* inches */
-        case 1:
-            return 28.346;      /* cm */
-        case 2:
-            return 2.8346;      /* mm */
-        case 3:
-            return 1.0;         /* points */
+    switch (selected)
+    {
+    default:
+        return 72.0;        /* inches */
+    case 1:
+        return 28.346;      /* cm */
+    case 2:
+        return 2.8346;      /* mm */
+    case 3:
+        return 1.0;         /* points */
     }
 }
 
@@ -752,49 +778,52 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
     pathname = g_build_filename(gnc_dotgnucash_dir(), CHECK_FMT_DIR,
                                 filename, NULL);
 
-    if (gnc_key_file_save_to_file(pathname, key_file, &error)) {
-                if (!gnc_gconf_get_bool(GCONF_SECTION, KEY_PRINT_DATE_FMT, NULL))
-        /* Reload the format combo box and reselect the "custom" entry */
-        initialize_format_combobox(pcd);
+    if (gnc_key_file_save_to_file(pathname, key_file, &error))
+    {
+        if (!gnc_gconf_get_bool(GCONF_SECTION, KEY_PRINT_DATE_FMT, NULL))
+            /* Reload the format combo box and reselect the "custom" entry */
+            initialize_format_combobox(pcd);
         model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
         gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox),
                                  pcd->format_max - 1);
-    } else {
+    }
+    else
+    {
         dialog = gtk_message_dialog_new(GTK_WINDOW(pcd->dialog),
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_CLOSE, "%s",
                                         _("Cannot save check format file."));
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-                                                 "%s", error->message);
+                "%s", error->message);
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         g_error_free(error);
     }
     g_free(pathname);
     g_free(filename);
-	}
+}
 
 
-	/* Make the OK button sensitive iff a title has been entered. */
-	void
-	gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button)
-	{
-  const gchar *text;
-  gboolean sensitive;
+/* Make the OK button sensitive iff a title has been entered. */
+void
+gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button)
+{
+    const gchar *text;
+    gboolean sensitive;
 
-  text = gtk_entry_get_text(GTK_ENTRY(editable));
-  sensitive = text && *text;
-  gtk_widget_set_sensitive(ok_button, sensitive);
-	}
+    text = gtk_entry_get_text(GTK_ENTRY(editable));
+    sensitive = text && *text;
+    gtk_widget_set_sensitive(ok_button, sensitive);
+}
 
 
-	/** This function is called when the user clicks the "save format" button in
+/** This function is called when the user clicks the "save format" button in
  *  the check printing dialog.  It presents another dialog to the user to get
  *  the filename for saving the data. */
-	void
-	gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
-	{
+void
+gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
+{
     GtkWidget *dialog, *entry, *button;
     GladeXML *xml;
     gchar *title;
@@ -808,7 +837,8 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
     glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, pcd);
 
     gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(pcd->dialog));
-    if (gtk_dialog_run (GTK_DIALOG (dialog)) != GTK_RESPONSE_OK) {
+    if (gtk_dialog_run (GTK_DIALOG (dialog)) != GTK_RESPONSE_OK)
+    {
         gtk_widget_destroy(dialog);
         g_object_unref(xml);
         return;
@@ -820,14 +850,14 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
 
     pcd_save_custom_data(pcd, title);
     g_free(title);
-	}
+}
 
 
-	/** This is an auxiliary debugging function for converting an array of doubles
+/** This is an auxiliary debugging function for converting an array of doubles
  *  into a printable string. */
-	static gchar *
-	doubles_to_string(gdouble * dd, gint len)
-	{
+static gchar *
+doubles_to_string(gdouble * dd, gint len)
+{
     GString *str;
     gint i;
 
@@ -835,10 +865,10 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
     for (i = 0; i < len; i++)
         g_string_append_printf(str, "%f ", dd[i]);
     return g_string_free(str, FALSE);
-	}
+}
 
 
-	/** Read the information describing the placement for each item to be printed
+/** Read the information describing the placement for each item to be printed
  *  on the check.  This information is all relative to the upper left hand
  *  corner of a "check".  See the format_read_multicheck_info() function for
  *  determining if there are multiple checks on a single page of paper. This
@@ -846,10 +876,10 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
  *  information.  These items will be printed in the same order they are read,
  *  meaning that items listed later in the date file can be printed over top
  *  of items that appear earlier in the file. */
-	static GSList *
-	format_read_item_placement(const gchar * file,
+static GSList *
+format_read_item_placement(const gchar * file,
                            GKeyFile * key_file, check_format_t * format)
-	{
+{
     check_item_t *data = NULL;
     GError *error = NULL;
     GSList *list = NULL;
@@ -860,7 +890,8 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
     gsize dd_len;
 
     /* Read until failure. */
-    for (item_num = 1;; item_num++) {
+    for (item_num = 1;; item_num++)
+    {
 
         /* Create the per-item data structure */
         data = g_new0(check_item_t, 1);
@@ -870,9 +901,11 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
         /* Get the item type */
         key = g_strdup_printf("%s_%d", KF_KEY_TYPE, item_num);
         value = g_key_file_get_string(key_file, KF_GROUP_ITEMS, key, &error);
-        if (error) {
+        if (error)
+        {
             if ((error->domain == G_KEY_FILE_ERROR)
-                && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)) {
+                    && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+            {
                 /* This is the expected exit from this function. */
                 goto cleanup;
             }
@@ -901,20 +934,21 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
         g_free(value);
 
         /* Must have "x;y" or "x;y;w;h". */
-        switch (dd_len) {
-            case 4:
-                data->w = dd[2];
-                data->h = dd[3];
-                /* fall through */
-            case 2:
-                data->x = dd[0];
-                data->y = dd[1];
-                break;
-            default:
-                g_warning
-                    ("Check file %s, group %s, key %s, error: 2 or 4 values only",
-                     file, KF_GROUP_ITEMS, key);
-                goto cleanup;
+        switch (dd_len)
+        {
+        case 4:
+            data->w = dd[2];
+            data->h = dd[3];
+            /* fall through */
+        case 2:
+            data->x = dd[0];
+            data->y = dd[1];
+            break;
+        default:
+            g_warning
+            ("Check file %s, group %s, key %s, error: 2 or 4 values only",
+             file, KF_GROUP_ITEMS, key);
+            goto cleanup;
         }
         g_free(dd);
         g_free(key);
@@ -922,19 +956,23 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
         /* Any text item can specify:
          *   a font  FONT_n
          *   an alignment if a width was provided for the item  ALIGN_n
-		 *   blocking chars flag  BLOCKING_CHARS_n
+         *   blocking chars flag  BLOCKING_CHARS_n
          * These values are optional and do not cause a failure if they are missing. */
 
-        if (data->type != PICTURE) {
+        if (data->type != PICTURE)
+        {
             key = g_strdup_printf("%s_%d", KF_KEY_FONT, item_num);
             data->font =
                 g_key_file_get_string(key_file, KF_GROUP_ITEMS, key, &error);
-            if (!error) {
+            if (!error)
+            {
                 g_debug("Check file %s, group %s, key %s, value: %s",
                         file, KF_GROUP_ITEMS, key, data->font);
-            } else {
+            }
+            else
+            {
                 if (!((error->domain == G_KEY_FILE_ERROR)
-                      && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+                        && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
                     g_warning("Check file %s, group %s, key %s, error: %s",
                               file, KF_GROUP_ITEMS, key, error->message);
                 g_clear_error(&error);
@@ -944,7 +982,8 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
             key = g_strdup_printf("%s_%d", KF_KEY_ALIGN, item_num);
             value =
                 g_key_file_get_string(key_file, KF_GROUP_ITEMS, key, &error);
-            if (!error) {
+            if (!error)
+            {
                 g_debug("Check file %s, group %s, key %s, value: %s",
                         file, KF_GROUP_ITEMS, key, value);
                 name = g_utf8_strdown(value, -1);
@@ -956,9 +995,11 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
                     data->align = PANGO_ALIGN_LEFT;
                 g_free(name);
                 g_free(value);
-            } else {
+            }
+            else
+            {
                 if (!((error->domain == G_KEY_FILE_ERROR)
-                      && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+                        && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
                     g_warning("Check file %s, group %s, key %s, error: %s",
                               file, KF_GROUP_ITEMS, key, error->message);
                 data->align = PANGO_ALIGN_LEFT;
@@ -969,64 +1010,71 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
             key = g_strdup_printf("%s_%d", KF_KEY_BLOCKING, item_num);
             bval =
                 g_key_file_get_boolean(key_file, KF_GROUP_ITEMS, key, &error);
-            if (!error) {
+            if (!error)
+            {
                 g_debug("Check file %s, group %s, key %s, value: %d",
                         file, KF_GROUP_ITEMS, key, bval);
-		data->blocking = bval;
-            } else {
+                data->blocking = bval;
+            }
+            else
+            {
                 if (!((error->domain == G_KEY_FILE_ERROR)
-                      && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+                        && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
                     g_warning("Check file %s, group %s, key %s, error: %s",
                               file, KF_GROUP_ITEMS, key, error->message);
-		data->blocking = format->blocking;
+                data->blocking = format->blocking;
                 g_clear_error(&error);
             }
             g_free(key);
         }
         /* Get any extra data for specific items. */
-        switch (data->type) {
-            case PICTURE:
-                key = g_strdup_printf("%s_%d", KF_KEY_FILENAME, item_num);
-                data->filename =
-                    g_key_file_get_string(key_file, KF_GROUP_ITEMS, key,
-                                          &error);
-                if (error)
-                    goto failed;
-                g_debug("Check file %s, group %s, key %s, value: %s",
-                        file, KF_GROUP_ITEMS, key, data->filename);
-                g_free(key);
-                break;
-            case TEXT:
-                key = g_strdup_printf("%s_%d", KF_KEY_TEXT, item_num);
-                data->text =
-                    g_key_file_get_string(key_file, KF_GROUP_ITEMS, key,
-                                          &error);
-                if (error)
-                    goto failed;
-                g_debug("Check file %s, group %s, key %s, value: %s",
-                        file, KF_GROUP_ITEMS, key, data->text);
-                g_free(key);
-                    case DATE:
-                      /* no error if the date_format is not present */
-			key = g_strdup_printf("%s_%d", KF_KEY_DATE_FORMAT, item_num);
-                        bval = g_key_file_get_boolean(key_file, KF_GROUP_ITEMS, key, &error);
-   		    	if (!error) {
-			   g_debug("Check file %s, group %s, key %s, value: %d",
-				file, KF_GROUP_ITEMS, key, bval);
-			   data->print_date_format = bval;
-			} else {
-			   if (!((error->domain == G_KEY_FILE_ERROR)
-			      && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
-			      g_warning("Check file %s, group %s, key %s, error: %s",
-			         file, KF_GROUP_ITEMS, key, error->message);
-			   //data->print_date_format = gnc_gconf_get_bool(GCONF_SECTION, KEY_PRINT_DATE_FMT, NULL);
-			   data->print_date_format = format->print_date_format;
-			   g_clear_error(&error);
-			}
-			g_free(key);
-                break;
-            default:
-                break;
+        switch (data->type)
+        {
+        case PICTURE:
+            key = g_strdup_printf("%s_%d", KF_KEY_FILENAME, item_num);
+            data->filename =
+                g_key_file_get_string(key_file, KF_GROUP_ITEMS, key,
+                                      &error);
+            if (error)
+                goto failed;
+            g_debug("Check file %s, group %s, key %s, value: %s",
+                    file, KF_GROUP_ITEMS, key, data->filename);
+            g_free(key);
+            break;
+        case TEXT:
+            key = g_strdup_printf("%s_%d", KF_KEY_TEXT, item_num);
+            data->text =
+                g_key_file_get_string(key_file, KF_GROUP_ITEMS, key,
+                                      &error);
+            if (error)
+                goto failed;
+            g_debug("Check file %s, group %s, key %s, value: %s",
+                    file, KF_GROUP_ITEMS, key, data->text);
+            g_free(key);
+        case DATE:
+            /* no error if the date_format is not present */
+            key = g_strdup_printf("%s_%d", KF_KEY_DATE_FORMAT, item_num);
+            bval = g_key_file_get_boolean(key_file, KF_GROUP_ITEMS, key, &error);
+            if (!error)
+            {
+                g_debug("Check file %s, group %s, key %s, value: %d",
+                        file, KF_GROUP_ITEMS, key, bval);
+                data->print_date_format = bval;
+            }
+            else
+            {
+                if (!((error->domain == G_KEY_FILE_ERROR)
+                        && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+                    g_warning("Check file %s, group %s, key %s, error: %s",
+                              file, KF_GROUP_ITEMS, key, error->message);
+                //data->print_date_format = gnc_gconf_get_bool(GCONF_SECTION, KEY_PRINT_DATE_FMT, NULL);
+                data->print_date_format = format->print_date_format;
+                g_clear_error(&error);
+            }
+            g_free(key);
+            break;
+        default:
+            break;
         }
 
         list = g_slist_append(list, data);
@@ -1036,10 +1084,10 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
     /* Should never be reached. */
     return list;
 
-  failed:
+failed:
     g_warning("Check file %s, group %s, key %s, error: %s",
               file, KF_GROUP_ITEMS, key, error->message);
-  cleanup:
+cleanup:
     if (error)
         g_error_free(error);
     if (data)
@@ -1080,13 +1128,17 @@ format_read_multicheck_info(const gchar * file,
 
     key = g_strdup_printf("%s", KF_KEY_HEIGHT);
     format->height = g_key_file_get_double(key_file, KF_GROUP_POS, key, &error);
-    if (error) {
+    if (error)
+    {
         if ((error->domain == G_KEY_FILE_ERROR)
-            && ((error->code == G_KEY_FILE_ERROR_GROUP_NOT_FOUND)
-                || (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND))) {
+                && ((error->code == G_KEY_FILE_ERROR_GROUP_NOT_FOUND)
+                    || (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+        {
             g_clear_error(&error);
             format->height = 0.0;
-        } else {
+        }
+        else
+        {
             g_warning("Check file %s, error reading group %s, key %s: %s",
                       file, KF_GROUP_POS, key, error->message);
             g_free(key);
@@ -1096,13 +1148,15 @@ format_read_multicheck_info(const gchar * file,
 
     names = g_key_file_get_string_list(key_file, KF_GROUP_POS, KF_KEY_NAMES,
                                        &length, &error);
-    if (error) {
+    if (error)
+    {
         if ((error->domain == G_KEY_FILE_ERROR)
-            && ((error->code == G_KEY_FILE_ERROR_GROUP_NOT_FOUND)
-                || (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND))) {
-          /* This is the expected exit from this function. */
-          g_free(key);
-          return NULL;
+                && ((error->code == G_KEY_FILE_ERROR_GROUP_NOT_FOUND)
+                    || (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+        {
+            /* This is the expected exit from this function. */
+            g_free(key);
+            return NULL;
         }
         g_warning("Check file %s, error reading group %s, key %s: %s",
                   file, KF_GROUP_POS, key, error->message);
@@ -1111,7 +1165,7 @@ format_read_multicheck_info(const gchar * file,
     }
 
     for (i = 0; i < length; i++)
-      list = g_slist_append(list, g_strdup(names[i]));
+        list = g_slist_append(list, g_strdup(names[i]));
 
     g_strfreev(names);
     return list;
@@ -1140,7 +1194,8 @@ format_read_general_info(const gchar * file,
     gsize dd_len;
 
     value = g_key_file_get_string(key_file, KF_GROUP_TOP, KF_KEY_GUID, &error);
-    if (error) {
+    if (error)
+    {
         g_warning("Check file %s, group %s, key %s, error: %s",
                   file, KF_GROUP_TOP, KF_KEY_GUID, error->message);
         g_error_free(error);
@@ -1154,10 +1209,13 @@ format_read_general_info(const gchar * file,
 
     format->title =
         g_key_file_get_string(key_file, KF_GROUP_TOP, KF_KEY_TITLE, &error);
-    if (!error) {
+    if (!error)
+    {
         g_debug("Check file %s, group %s, key %s, value: %s",
                 file, KF_GROUP_TOP, KF_KEY_TITLE, format->title);
-    } else {
+    }
+    else
+    {
         g_warning("Check file %s, group %s, key %s, error: %s",
                   file, KF_GROUP_TOP, KF_KEY_TITLE, error->message);
         return FALSE;
@@ -1166,50 +1224,65 @@ format_read_general_info(const gchar * file,
     format->blocking =
         g_key_file_get_boolean(key_file, KF_GROUP_TOP, KF_KEY_BLOCKING,
                                &error);
-    if (!error) {
+    if (!error)
+    {
         g_debug("Check file %s, group %s, key %s, value: %d",
                 file, KF_GROUP_TOP, KF_KEY_BLOCKING, format->blocking);
-    } else {
+    }
+    else
+    {
         if (!((error->domain == G_KEY_FILE_ERROR)
-              && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+                && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
             g_warning("Check file %s, group %s, key %s, error: %s",
                       file, KF_GROUP_TOP, KF_KEY_BLOCKING, error->message);
-           if( gnc_gconf_get_bool(GCONF_SECTION, KEY_BLOCKING_CHARS, NULL) ) {
-		format->blocking = TRUE;
-           } else {
-                format->blocking = FALSE;
-           }
+        if ( gnc_gconf_get_bool(GCONF_SECTION, KEY_BLOCKING_CHARS, NULL) )
+        {
+            format->blocking = TRUE;
+        }
+        else
+        {
+            format->blocking = FALSE;
+        }
         g_clear_error(&error);
     }
 
     format->print_date_format =
         g_key_file_get_boolean(key_file, KF_GROUP_TOP, KF_KEY_DATE_FORMAT,
                                &error);
-    if (!error) {
+    if (!error)
+    {
         g_debug("Check file %s, group %s, key %s, value: %d",
                 file, KF_GROUP_TOP, KF_KEY_DATE_FORMAT, format->print_date_format);
-    } else {
+    }
+    else
+    {
         if (!((error->domain == G_KEY_FILE_ERROR)
-              && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+                && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
             g_warning("Check file %s, group %s, key %s, error: %s",
                       file, KF_GROUP_TOP, KF_KEY_DATE_FORMAT, error->message);
-           if( gnc_gconf_get_bool(GCONF_SECTION, KEY_PRINT_DATE_FMT, NULL) ) {
-		format->print_date_format = TRUE;
-           } else {
-                format->print_date_format = FALSE;
-           }
+        if ( gnc_gconf_get_bool(GCONF_SECTION, KEY_PRINT_DATE_FMT, NULL) )
+        {
+            format->print_date_format = TRUE;
+        }
+        else
+        {
+            format->print_date_format = FALSE;
+        }
         g_clear_error(&error);
     }
 
     format->show_grid =
         g_key_file_get_boolean(key_file, KF_GROUP_TOP, KF_KEY_SHOW_GRID,
                                &error);
-    if (!error) {
+    if (!error)
+    {
         g_debug("Check file %s, group %s, key %s, value: %d",
                 file, KF_GROUP_TOP, KF_KEY_SHOW_GRID, format->show_grid);
-    } else {
+    }
+    else
+    {
         if (!((error->domain == G_KEY_FILE_ERROR)
-              && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+                && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
             g_warning("Check file %s, group %s, key %s, error: %s",
                       file, KF_GROUP_TOP, KF_KEY_SHOW_GRID, error->message);
         format->show_grid = FALSE;
@@ -1219,12 +1292,15 @@ format_read_general_info(const gchar * file,
     format->show_boxes =
         g_key_file_get_boolean(key_file, KF_GROUP_TOP, KF_KEY_SHOW_BOXES,
                                &error);
-    if (!error) {
+    if (!error)
+    {
         g_debug("Check file %s, group %s, key %s, value: %d",
                 file, KF_GROUP_TOP, KF_KEY_SHOW_BOXES, format->show_boxes);
-    } else {
+    }
+    else
+    {
         if (!((error->domain == G_KEY_FILE_ERROR)
-              && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+                && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
             g_warning("Check file %s, group %s, key %s, error: %s",
                       file, KF_GROUP_TOP, KF_KEY_SHOW_BOXES, error->message);
         format->show_boxes = FALSE;
@@ -1233,12 +1309,15 @@ format_read_general_info(const gchar * file,
 
     format->font =
         g_key_file_get_string(key_file, KF_GROUP_TOP, KF_KEY_FONT, &error);
-    if (!error) {
+    if (!error)
+    {
         g_debug("Check file %s, group %s, key %s, value: %s",
                 file, KF_GROUP_TOP, KF_KEY_FONT, format->font);
-    } else {
+    }
+    else
+    {
         if (!((error->domain == G_KEY_FILE_ERROR)
-              && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+                && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
             g_warning("Check file %s, group %s, key %s, error: %s",
                       file, KF_GROUP_TOP, KF_KEY_FONT, error->message);
         g_clear_error(&error);
@@ -1246,12 +1325,15 @@ format_read_general_info(const gchar * file,
 
     format->rotation =
         g_key_file_get_double(key_file, KF_GROUP_TOP, KF_KEY_ROTATION, &error);
-    if (!error) {
+    if (!error)
+    {
         g_debug("Check file %s, group %s, key %s, value: %f",
                 file, KF_GROUP_TOP, KF_KEY_ROTATION, format->rotation);
-    } else {
+    }
+    else
+    {
         if (!((error->domain == G_KEY_FILE_ERROR)
-              && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+                && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
             g_warning("Check file %s, group %s, key %s, error: %s",
                       file, KF_GROUP_TOP, KF_KEY_ROTATION, error->message);
         format->rotation = 0.0;
@@ -1260,23 +1342,29 @@ format_read_general_info(const gchar * file,
 
     dd = g_key_file_get_double_list(key_file, KF_GROUP_TOP, KF_KEY_TRANSLATION,
                                     &dd_len, &error);
-    if (!error) {
+    if (!error)
+    {
         value = doubles_to_string(dd, dd_len);
         g_debug("Check file %s, group %s, key %s, length %zd; values: %s",
                 file, KF_GROUP_TOP, KF_KEY_TRANSLATION, dd_len, value);
         g_free(value);
 
-        if (dd_len == 2) {
+        if (dd_len == 2)
+        {
             format->trans_x = dd[0];
             format->trans_y = dd[1];
-        } else {
+        }
+        else
+        {
             g_warning("Check file %s, error top %s, key %s: 2 values only",
                       file, KF_GROUP_TOP, KF_KEY_TRANSLATION);
         }
         g_free(dd);
-    } else {
+    }
+    else
+    {
         if (!((error->domain == G_KEY_FILE_ERROR)
-              && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
+                && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
             g_warning("Check file %s, group top %s, key %s: %s",
                       file, KF_GROUP_ITEMS, KF_KEY_TRANSLATION, error->message);
         g_clear_error(&error);
@@ -1316,7 +1404,8 @@ read_one_check_format(PrintCheckDialog * pcd, const gchar *groupname,
     pathname = g_build_filename(dirname, file, (char *)NULL);
     key_file = gnc_key_file_load_from_file(pathname, FALSE, FALSE, NULL);
     g_free(pathname);
-    if (!key_file) {
+    if (!key_file)
+    {
         g_warning("Check file %s, cannot load file", file);
         return NULL;
     }
@@ -1324,13 +1413,15 @@ read_one_check_format(PrintCheckDialog * pcd, const gchar *groupname,
     format = g_new0(check_format_t, 1);
     format->group = groupname;
     format->filename = g_strdup(file);
-    if (format_read_general_info(file, key_file, format)) {
+    if (format_read_general_info(file, key_file, format))
+    {
         format->positions = format_read_multicheck_info(file, key_file, format);
         format->items = format_read_item_placement(file, key_file, format);
     }
 
     g_key_file_free(key_file);
-    if ((NULL == format->title) || (NULL == format->items)) {
+    if ((NULL == format->title) || (NULL == format->items))
+    {
         g_warning("Check file %s, no items read. Dropping file.", file);
         free_check_format(format);
         return NULL;
@@ -1358,7 +1449,8 @@ read_one_check_directory(PrintCheckDialog * pcd, GtkListStore *store,
     if (dir == NULL)
         return;
 
-    while ((filename = g_dir_read_name(dir)) != NULL) {
+    while ((filename = g_dir_read_name(dir)) != NULL)
+    {
         if (g_str_has_prefix(filename, "#"))
             continue;
         if (!g_str_has_suffix(filename, ".chk"))
@@ -1369,26 +1461,29 @@ read_one_check_directory(PrintCheckDialog * pcd, GtkListStore *store,
             continue;
 
         existing = find_existing_format(store, format->guid, NULL);
-        if (existing) {
+        if (existing)
+        {
             dialog = gtk_message_dialog_new
-                (GTK_WINDOW(pcd->dialog),
-                 GTK_DIALOG_DESTROY_WITH_PARENT,
-                 GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s",
-                 _("There is a duplicate check format file."));
+                     (GTK_WINDOW(pcd->dialog),
+                      GTK_DIALOG_DESTROY_WITH_PARENT,
+                      GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s",
+                      _("There is a duplicate check format file."));
             gtk_message_dialog_format_secondary_text
-                (GTK_MESSAGE_DIALOG(dialog),
-		 /* Translators: %1$s is the type of the first check
-		  * format (user defined or application defined); %2$s
-		  * is the filename of that format; %3$s the type of
-		  * the other check format; and %4$s the filename of
-		  * that other format. */
-                 _("The GUIDs in the %s check format file '%s' and "
-                   "the %s check format file '%s' match."),
-                 existing->group, existing->filename,
-                 format->group, format->filename);
+            (GTK_MESSAGE_DIALOG(dialog),
+             /* Translators: %1$s is the type of the first check
+              * format (user defined or application defined); %2$s
+              * is the filename of that format; %3$s the type of
+              * the other check format; and %4$s the filename of
+              * that other format. */
+             _("The GUIDs in the %s check format file '%s' and "
+               "the %s check format file '%s' match."),
+             existing->group, existing->filename,
+             format->group, format->filename);
             gtk_dialog_run(GTK_DIALOG(dialog));
             gtk_widget_destroy(dialog);
-        } else {
+        }
+        else
+        {
             gtk_list_store_append(store, &iter);
             gtk_list_store_set(store, &iter, COL_NAME, format->title,
                                COL_DATA, format, -1);
@@ -1399,7 +1494,8 @@ read_one_check_directory(PrintCheckDialog * pcd, GtkListStore *store,
 
     /* If any files were added to the list, add a separator between
      *  this group and the next. */
-    if (found) {
+    if (found)
+    {
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, COL_SEP, TRUE, -1);
     }
@@ -1444,18 +1540,18 @@ format_is_a_separator (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 static void
 initialize_format_combobox (PrintCheckDialog * pcd)
 {
-  GtkListStore *store;
-  GtkTreeIter iter;
+    GtkListStore *store;
+    GtkTreeIter iter;
 
-  store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
-  read_formats(pcd, store);
-  gtk_list_store_append(store, &iter);
-  gtk_list_store_set(store, &iter, COL_NAME, _("Custom"), -1);
-  pcd->format_max = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(store),NULL);
-  gtk_combo_box_set_model(GTK_COMBO_BOX(pcd->format_combobox),
-                          GTK_TREE_MODEL(store));
-  gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(pcd->format_combobox),
-                                       format_is_a_separator, NULL, NULL);
+    store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
+    read_formats(pcd, store);
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set(store, &iter, COL_NAME, _("Custom"), -1);
+    pcd->format_max = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(store), NULL);
+    gtk_combo_box_set_model(GTK_COMBO_BOX(pcd->format_combobox),
+                            GTK_TREE_MODEL(store));
+    gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(pcd->format_combobox),
+                                         format_is_a_separator, NULL, NULL);
 }
 
 
@@ -1468,96 +1564,99 @@ void
 gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
                                  Split *split)
 {
-  PrintCheckDialog * pcd;
-  GladeXML *xml;
-  GtkWidget *table;
-  GtkWindow *window;
-  gchar *font;
-  Transaction *trans;
+    PrintCheckDialog * pcd;
+    GladeXML *xml;
+    GtkWidget *table;
+    GtkWindow *window;
+    gchar *font;
+    Transaction *trans;
 
-  pcd = g_new0(PrintCheckDialog, 1);
-  pcd->plugin_page = plugin_page;
-  pcd->split = split;
+    pcd = g_new0(PrintCheckDialog, 1);
+    pcd->plugin_page = plugin_page;
+    pcd->split = split;
 
-  xml = gnc_glade_xml_new ("print.glade", "Print Check Dialog");
-  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, pcd);
+    xml = gnc_glade_xml_new ("print.glade", "Print Check Dialog");
+    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, pcd);
 
-  pcd->xml = xml;
-  pcd->dialog = glade_xml_get_widget (xml, "Print Check Dialog");
+    pcd->xml = xml;
+    pcd->dialog = glade_xml_get_widget (xml, "Print Check Dialog");
 
-  /* now pick out the relevant child widgets */
-  pcd->format_combobox = glade_xml_get_widget (xml, "check_format_combobox");
-  pcd->position_combobox = glade_xml_get_widget (xml, "check_position_combobox");
+    /* now pick out the relevant child widgets */
+    pcd->format_combobox = glade_xml_get_widget (xml, "check_format_combobox");
+    pcd->position_combobox = glade_xml_get_widget (xml, "check_position_combobox");
 
-  pcd->custom_table = glade_xml_get_widget (xml, "custom_table");
-  pcd->payee_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "payee_x_entry"));
-  pcd->payee_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "payee_y_entry"));
-  pcd->date_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "date_x_entry"));
-  pcd->date_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "date_y_entry"));
-  pcd->words_x =
-    GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "amount_words_x_entry"));
-  pcd->words_y =
-    GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "amount_words_y_entry"));
-  pcd->number_x =
-    GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "amount_numbers_x_entry"));
-  pcd->number_y =
-    GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "amount_numbers_y_entry"));
-  pcd->notes_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "notes_x_entry"));
-  pcd->notes_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "notes_y_entry"));
-  pcd->memo_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "memo_x_entry"));
-  pcd->memo_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "memo_y_entry"));
-  pcd->address_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "address_x_entry"));
-  pcd->address_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "address_y_entry"));
-  pcd->splits_amount_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_amount_x_entry"));
-  pcd->splits_amount_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_amount_y_entry"));
-  pcd->splits_memo_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_memo_x_entry"));
-  pcd->splits_memo_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_memo_y_entry"));
-  pcd->splits_account_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_account_x_entry"));
-  pcd->splits_account_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_account_y_entry"));
-  pcd->translation_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "translation_x_entry"));
-  pcd->translation_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "translation_y_entry"));
-  pcd->translation_label = glade_xml_get_widget (xml, "translation_label");
-  pcd->check_rotation =
-    GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "check_rotation_entry"));
-  pcd->units_combobox = glade_xml_get_widget (xml, "units_combobox");
+    pcd->custom_table = glade_xml_get_widget (xml, "custom_table");
+    pcd->payee_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "payee_x_entry"));
+    pcd->payee_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "payee_y_entry"));
+    pcd->date_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "date_x_entry"));
+    pcd->date_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "date_y_entry"));
+    pcd->words_x =
+        GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "amount_words_x_entry"));
+    pcd->words_y =
+        GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "amount_words_y_entry"));
+    pcd->number_x =
+        GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "amount_numbers_x_entry"));
+    pcd->number_y =
+        GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "amount_numbers_y_entry"));
+    pcd->notes_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "notes_x_entry"));
+    pcd->notes_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "notes_y_entry"));
+    pcd->memo_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "memo_x_entry"));
+    pcd->memo_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "memo_y_entry"));
+    pcd->address_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "address_x_entry"));
+    pcd->address_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "address_y_entry"));
+    pcd->splits_amount_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_amount_x_entry"));
+    pcd->splits_amount_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_amount_y_entry"));
+    pcd->splits_memo_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_memo_x_entry"));
+    pcd->splits_memo_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_memo_y_entry"));
+    pcd->splits_account_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_account_x_entry"));
+    pcd->splits_account_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "splits_account_y_entry"));
+    pcd->translation_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "translation_x_entry"));
+    pcd->translation_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "translation_y_entry"));
+    pcd->translation_label = glade_xml_get_widget (xml, "translation_label");
+    pcd->check_rotation =
+        GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "check_rotation_entry"));
+    pcd->units_combobox = glade_xml_get_widget (xml, "units_combobox");
 
-  window = GTK_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
-  gtk_window_set_transient_for(GTK_WINDOW(pcd->dialog), window);
-  pcd->caller_window = GTK_WINDOW(window);
+    window = GTK_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
+    gtk_window_set_transient_for(GTK_WINDOW(pcd->dialog), window);
+    pcd->caller_window = GTK_WINDOW(window);
 
-  /* Create and attach the date-format chooser */
-  table = glade_xml_get_widget (xml, "options_table");
-  pcd->date_format = gnc_date_format_new_without_label();
-  gtk_table_attach_defaults(GTK_TABLE(table), pcd->date_format, 1, 3, 2, 7);
+    /* Create and attach the date-format chooser */
+    table = glade_xml_get_widget (xml, "options_table");
+    pcd->date_format = gnc_date_format_new_without_label();
+    gtk_table_attach_defaults(GTK_TABLE(table), pcd->date_format, 1, 3, 2, 7);
 
-  /* Default font (set in preferences) */
-  font = gnc_gconf_get_string(GCONF_SECTION, KEY_DEFAULT_FONT, NULL);
-  pcd->default_font = font ? font : g_strdup(DEFAULT_FONT);
+    /* Default font (set in preferences) */
+    font = gnc_gconf_get_string(GCONF_SECTION, KEY_DEFAULT_FONT, NULL);
+    pcd->default_font = font ? font : g_strdup(DEFAULT_FONT);
 
-  /* Update the combo boxes bases on the available check formats */
-  initialize_format_combobox(pcd);
+    /* Update the combo boxes bases on the available check formats */
+    initialize_format_combobox(pcd);
 
-  /* address */
-  pcd->check_address_name = glade_xml_get_widget( xml, "check_address_name");
-  pcd->check_address_1 = glade_xml_get_widget( xml, "check_address_1");
-  pcd->check_address_2 = glade_xml_get_widget( xml, "check_address_2");
-  pcd->check_address_3 = glade_xml_get_widget( xml, "check_address_3");
-  pcd->check_address_4 = glade_xml_get_widget( xml, "check_address_4");
-  /* fill in any available address data */
-  /* Can't access business objects e.g. Customer,Vendor,Employee because
-   * it would create build problems */
-  trans = xaccSplitGetParent(pcd->split);
-  if ( trans ) {
-    gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name),xaccTransGetDescription(trans));
-  } else {
-    /* nothing to do - defaults to blank */
-  }
+    /* address */
+    pcd->check_address_name = glade_xml_get_widget( xml, "check_address_name");
+    pcd->check_address_1 = glade_xml_get_widget( xml, "check_address_1");
+    pcd->check_address_2 = glade_xml_get_widget( xml, "check_address_2");
+    pcd->check_address_3 = glade_xml_get_widget( xml, "check_address_3");
+    pcd->check_address_4 = glade_xml_get_widget( xml, "check_address_4");
+    /* fill in any available address data */
+    /* Can't access business objects e.g. Customer,Vendor,Employee because
+     * it would create build problems */
+    trans = xaccSplitGetParent(pcd->split);
+    if ( trans )
+    {
+        gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name), xaccTransGetDescription(trans));
+    }
+    else
+    {
+        /* nothing to do - defaults to blank */
+    }
 
-  gtk_widget_destroy(glade_xml_get_widget (xml, "lower_left"));
+    gtk_widget_destroy(glade_xml_get_widget (xml, "lower_left"));
 
-  gnc_ui_print_restore_dialog(pcd);
-  gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(pcd->dialog));
-  gtk_widget_show_all(pcd->dialog);
+    gnc_ui_print_restore_dialog(pcd);
+    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(pcd->dialog));
+    gtk_widget_show_all(pcd->dialog);
 }
 
 /********************************************************************\
@@ -1593,7 +1692,8 @@ draw_grid(GncPrintContext * context, gint width, gint height, const gchar *font)
     cairo_set_dash(cr, dash_pattern, 2, 0);
 
     /* Draw horizontal lines */
-    for (i = -200; i < (height + 200); i += 50) {
+    for (i = -200; i < (height + 200); i += 50)
+    {
         text = g_strdup_printf("%d", (int)i);
         cairo_move_to(cr, -200, i);
         cairo_line_to(cr, width + 200, i);
@@ -1605,7 +1705,8 @@ draw_grid(GncPrintContext * context, gint width, gint height, const gchar *font)
     }
 
     /* Draw vertical lines */
-    for (i = -200; i < (width + 200); i += 50) {
+    for (i = -200; i < (width + 200); i += 50)
+    {
         text = g_strdup_printf("%d", (int)i);
         cairo_move_to(cr, i, -200);
         cairo_line_to(cr, i, height + 200);
@@ -1639,26 +1740,32 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
     CheckItemType ct;
 
     if ((NULL == text) || (strlen(text) == 0))
-      return 0.0;
+        return 0.0;
 
     /* Initialize for printing text */
     layout = gtk_print_context_create_pango_layout(context);
-    if (data->font) {
-      desc = pango_font_description_from_string(data->font);
-      pango_layout_set_font_description(layout, desc);
-      pango_font_description_free(desc);
-    } else {
-      pango_layout_set_font_description(layout, default_desc);
+    if (data->font)
+    {
+        desc = pango_font_description_from_string(data->font);
+        pango_layout_set_font_description(layout, desc);
+        pango_font_description_free(desc);
+    }
+    else
+    {
+        pango_layout_set_font_description(layout, default_desc);
     }
     pango_layout_set_alignment(layout,
                                data->w ? data->align : PANGO_ALIGN_LEFT);
     pango_layout_set_width(layout, data->w ? data->w * PANGO_SCALE : -1);
     pango_layout_set_ellipsize(layout, PANGO_ELLIPSIZE_END);
-    if ( data->blocking ) {
+    if ( data->blocking )
+    {
         new_text = g_strdup_printf("***%s***", text);
         pango_layout_set_text(layout, new_text, -1);
         g_free(new_text);
-    } else {
+    }
+    else
+    {
         pango_layout_set_text(layout, text, -1);
     }
     pango_layout_get_size(layout, &layout_width, &layout_height);
@@ -1669,7 +1776,8 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
     cairo_save(cr);
 
     /* Clip text to the enclosing rectangle */
-    if (data->w && data->h) {
+    if (data->w && data->h)
+    {
         g_debug("Text clip rectangle, coords %f,%f, size %f,%f",
                 data->x, data->y - data->h, data->w, data->h);
         cairo_rectangle(cr, data->x, data->y - data->h, data->w, data->h);
@@ -1710,11 +1818,12 @@ read_image (const gchar *filename)
 
     pkgdatadir = gnc_path_get_pkgdatadir();
     tmp_name = g_build_filename(pkgdatadir, CHECK_FMT_DIR, filename, (char *)NULL);
-    if (!g_file_test(tmp_name, G_FILE_TEST_EXISTS)) {
+    if (!g_file_test(tmp_name, G_FILE_TEST_EXISTS))
+    {
         g_free(tmp_name);
-	dirname = gnc_build_dotgnucash_path(CHECK_FMT_DIR);
-	tmp_name = g_build_filename(dirname, filename, (char *)NULL);
-	g_free(dirname);
+        dirname = gnc_build_dotgnucash_path(CHECK_FMT_DIR);
+        tmp_name = g_build_filename(dirname, filename, (char *)NULL);
+        g_free(dirname);
     }
     image = gtk_image_new_from_file(tmp_name);
     g_free(tmp_name);
@@ -1740,9 +1849,12 @@ draw_picture(GtkPrintContext * context, check_item_t * data)
     /* Get the picture. */
     image = GTK_IMAGE(read_image(data->filename));
     pixbuf = gtk_image_get_pixbuf(image);
-    if (pixbuf) {
+    if (pixbuf)
+    {
         g_object_ref(pixbuf);
-    } else {
+    }
+    else
+    {
         g_warning("Filename '%s' cannot be read or understood.",
                   data->filename);
         pixbuf = gtk_widget_render_icon(GTK_WIDGET(image),
@@ -1753,11 +1865,14 @@ draw_picture(GtkPrintContext * context, check_item_t * data)
     pix_h = gdk_pixbuf_get_height(pixbuf);
 
     /* Draw the enclosing rectangle */
-    if (data->w && data->h) {
+    if (data->w && data->h)
+    {
         cairo_rectangle(cr, data->x, data->y - data->h, data->w, data->h);
         g_debug("Picture clip rectangle, user coords %f,%f, user size %f,%f",
                 data->x, data->y - data->h, data->w, data->h);
-    } else {
+    }
+    else
+    {
         cairo_rectangle(cr, data->x, data->y - pix_h, pix_w, pix_h);
         g_debug("Picture clip rectangle, user coords %f,%f, pic size %d,%d",
                 data->x, data->y - data->h, pix_w, pix_h);
@@ -1772,7 +1887,8 @@ draw_picture(GtkPrintContext * context, check_item_t * data)
         scale_h = data->h / pix_h;
     scale = MIN(scale_w, scale_h);
 
-    if (scale != 1) {
+    if (scale != 1)
+    {
         scaled_pixbuf = gdk_pixbuf_scale_simple(pixbuf, pix_w * scale,
                                                 pix_h * scale,
                                                 GDK_INTERP_BILINEAR);
@@ -1780,7 +1896,9 @@ draw_picture(GtkPrintContext * context, check_item_t * data)
         gdk_cairo_set_source_pixbuf(cr, scaled_pixbuf, data->x,
                                     data->y - pix_h);
         g_object_unref(scaled_pixbuf);
-    } else {
+    }
+    else
+    {
         gdk_cairo_set_source_pixbuf(cr, pixbuf, data->x, data->y - pix_h);
     }
     g_object_unref(pixbuf);
@@ -1831,36 +1949,39 @@ draw_date_format(GncPrintContext * context, const gchar *date_format,
 
     /* This is a date format string. It should only contain ascii. */
     cdn_fmt = g_string_new_len(NULL, 50);
-    for (c = date_format; c && *c; ) {
-        if ((c[0] != '%') || (c[1] == '\0')) {
+    for (c = date_format; c && *c; )
+    {
+        if ((c[0] != '%') || (c[1] == '\0'))
+        {
             c += 1;
             continue;
         }
-        switch (c[1]) {
-            case 'F':
-                cdn_fmt = g_string_append(cdn_fmt, "YYYYMMDD");
-                break;
-            case 'Y':
-                cdn_fmt = g_string_append(cdn_fmt, "YYYY");
-                break;
-            case 'y':
-                cdn_fmt = g_string_append(cdn_fmt, "YY");
-                break;
-            case 'm':
-                cdn_fmt = g_string_append(cdn_fmt, "MM");
-                break;
-            case 'd':
-            case 'e':
-                cdn_fmt = g_string_append(cdn_fmt, "DD");
-                break;
-            case 'x':
-                expanded = g_strdup_printf("%s%s",
-                                           qof_date_format_get_string(QOF_DATE_FORMAT_LOCALE),
-                                           c + 2);
-                c = expanded;
-                continue;
-            default:
-                break;
+        switch (c[1])
+        {
+        case 'F':
+            cdn_fmt = g_string_append(cdn_fmt, "YYYYMMDD");
+            break;
+        case 'Y':
+            cdn_fmt = g_string_append(cdn_fmt, "YYYY");
+            break;
+        case 'y':
+            cdn_fmt = g_string_append(cdn_fmt, "YY");
+            break;
+        case 'm':
+            cdn_fmt = g_string_append(cdn_fmt, "MM");
+            break;
+        case 'd':
+        case 'e':
+            cdn_fmt = g_string_append(cdn_fmt, "DD");
+            break;
+        case 'x':
+            expanded = g_strdup_printf("%s%s",
+                                       qof_date_format_get_string(QOF_DATE_FORMAT_LOCALE),
+                                       c + 2);
+            c = expanded;
+            continue;
+        default:
+            break;
         }
         c += 2;
     }
@@ -1905,90 +2026,92 @@ draw_page_items(GncPrintContext * context,
         default_desc = pango_font_description_from_string(pcd->default_font);
 
     /* Now put the actual data onto the page. */
-    for (elem = format->items; elem; elem = g_slist_next(elem)) {
+    for (elem = format->items; elem; elem = g_slist_next(elem))
+    {
         item = elem->data;
 
-        switch (item->type) {
-            case DATE:
-                date = g_date_new();
-                g_date_set_time_t(date, xaccTransGetDate(trans));
-                date_format =
-                    gnc_date_format_get_custom(GNC_DATE_FORMAT
-                                               (pcd->date_format));
-                g_date_strftime(buf, 100, date_format, date);
-                width = draw_text(context, buf, item, default_desc);
-		draw_date_format(context, date_format, item, default_desc, width);
-                g_date_free(date);
-                break;
+        switch (item->type)
+        {
+        case DATE:
+            date = g_date_new();
+            g_date_set_time_t(date, xaccTransGetDate(trans));
+            date_format =
+                gnc_date_format_get_custom(GNC_DATE_FORMAT
+                                           (pcd->date_format));
+            g_date_strftime(buf, 100, date_format, date);
+            width = draw_text(context, buf, item, default_desc);
+            draw_date_format(context, date_format, item, default_desc, width);
+            g_date_free(date);
+            break;
 
-            case PAYEE:
-                draw_text(context, xaccTransGetDescription(trans), item, default_desc);
-                break;
+        case PAYEE:
+            draw_text(context, xaccTransGetDescription(trans), item, default_desc);
+            break;
 
-            case NOTES:
-                draw_text(context, xaccTransGetNotes(trans), item, default_desc);
-                break;
+        case NOTES:
+            draw_text(context, xaccTransGetNotes(trans), item, default_desc);
+            break;
 
-            case MEMO:
-                draw_text(context, xaccSplitGetMemo(pcd->split), item, default_desc);
-                break;
+        case MEMO:
+            draw_text(context, xaccSplitGetMemo(pcd->split), item, default_desc);
+            break;
 
-            case ACTION:
-                draw_text(context, xaccSplitGetAction(pcd->split), item, default_desc);
-                break;
+        case ACTION:
+            draw_text(context, xaccSplitGetAction(pcd->split), item, default_desc);
+            break;
 
-            case CHECK_NUMBER:
-                draw_text(context, xaccTransGetNum(trans), item, default_desc);
-                break;
+        case CHECK_NUMBER:
+            draw_text(context, xaccTransGetNum(trans), item, default_desc);
+            break;
 
-            case AMOUNT_NUMBER:
-                info = gnc_default_print_info(FALSE);
-                draw_text(context, xaccPrintAmount(amount, info),
-                          item, default_desc);
-                break;
+        case AMOUNT_NUMBER:
+            info = gnc_default_print_info(FALSE);
+            draw_text(context, xaccPrintAmount(amount, info),
+                      item, default_desc);
+            break;
 
-            case AMOUNT_WORDS:
-                text = numeric_to_words(amount);
-                draw_text(context, text, item, default_desc);
-                g_free(text);
-                break;
+        case AMOUNT_WORDS:
+            text = numeric_to_words(amount);
+            draw_text(context, text, item, default_desc);
+            g_free(text);
+            break;
 
-            case TEXT:
-                draw_text(context, item->text, item, default_desc);
-                break;
+        case TEXT:
+            draw_text(context, item->text, item, default_desc);
+            break;
 
-            case ADDRESS:
-                address = get_check_address(pcd);
-                draw_text(context, address, item, default_desc);
-		g_free(address);
-                break;
+        case ADDRESS:
+            address = get_check_address(pcd);
+            draw_text(context, address, item, default_desc);
+            g_free(address);
+            break;
 
-            case SPLITS_AMOUNT:
-                text = get_check_splits_amount(pcd);
-                draw_text(context, text, item, default_desc);
-		g_free(text);
-                break;
+        case SPLITS_AMOUNT:
+            text = get_check_splits_amount(pcd);
+            draw_text(context, text, item, default_desc);
+            g_free(text);
+            break;
 
-            case SPLITS_MEMO:
-                text = get_check_splits_memo(pcd);
-                draw_text(context, text, item, default_desc);
-		g_free(text);
-                break;
+        case SPLITS_MEMO:
+            text = get_check_splits_memo(pcd);
+            draw_text(context, text, item, default_desc);
+            g_free(text);
+            break;
 
-            case SPLITS_ACCOUNT:
-                text = get_check_splits_account(pcd);
-                draw_text(context, text, item, default_desc);
-		g_free(text);
-                break;
+        case SPLITS_ACCOUNT:
+            text = get_check_splits_account(pcd);
+            draw_text(context, text, item, default_desc);
+            g_free(text);
+            break;
 
-            case PICTURE:
-                draw_picture(context, item);
-                break;
+        case PICTURE:
+            draw_picture(context, item);
+            break;
 
-            default:
-                text = g_strdup_printf("(unknown check field, type %d)", item->type);
-                draw_text(context, text, item, default_desc);
-                g_free(text);
+        default:
+            text = g_strdup_printf("(unknown check field, type %d)", item->type);
+            draw_text(context, text, item, default_desc);
+            g_free(text);
         }
     }
 
@@ -2010,7 +2133,8 @@ draw_page_boxes(GncPrintContext * context,
     cr = gtk_print_context_get_cairo_context(context);
 
     /* Now put the actual data onto the page. */
-    for (elem = format->items; elem; elem = g_slist_next(elem)) {
+    for (elem = format->items; elem; elem = g_slist_next(elem))
+    {
         item = elem->data;
         if (!item->w || !item->h)
             continue;
@@ -2039,7 +2163,8 @@ draw_page_format(GncPrintContext * context,
     g_debug("Page rotated by %f degrees", format->rotation);
 
     /* The grid is useful when determining check layouts */
-    if (format->show_grid) {
+    if (format->show_grid)
+    {
         draw_grid(context,
                   gtk_print_context_get_width(context),
                   gtk_print_context_get_height(context),
@@ -2048,11 +2173,14 @@ draw_page_format(GncPrintContext * context,
 
     /* Translate all subsequent check items if requested. */
     i = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
-    if ((i >= 0) && (i < pcd->position_max)) {
+    if ((i >= 0) && (i < pcd->position_max))
+    {
         y = format->height * i;
         cairo_translate(cr, 0, y);
         g_debug("Position translated by %f (pre-defined)", y);
-    } else {
+    }
+    else
+    {
         multip = pcd_get_custom_multip(pcd);
         x = multip * gtk_spin_button_get_value(pcd->translation_x);
         y = multip * gtk_spin_button_get_value(pcd->translation_y);
@@ -2063,7 +2191,7 @@ draw_page_format(GncPrintContext * context,
     /* Draw layout boxes if requested. Also useful when determining check
      * layouts. */
     if (format->show_boxes)
-      draw_page_boxes(context, page_nr, format, user_data);
+        draw_page_boxes(context, page_nr, format, user_data);
 
     /* Draw the actual check data. */
     draw_page_items(context, page_nr, format, user_data);
@@ -2228,91 +2356,96 @@ gnc_ui_print_check_dialog_ok_cb(PrintCheckDialog * pcd)
 static void
 gnc_print_check_set_sensitive (GtkWidget *widget, gpointer data)
 {
-  gboolean sensitive = GPOINTER_TO_INT(data);
-  gtk_widget_set_sensitive(widget, sensitive);
+    gboolean sensitive = GPOINTER_TO_INT(data);
+    gtk_widget_set_sensitive(widget, sensitive);
 }
 
 void
 gnc_print_check_format_changed (GtkComboBox *widget,
                                 PrintCheckDialog * pcd)
 {
-  GtkListStore *p_store;
-  GtkTreeModel *f_model;
-  GtkTreeIter f_iter;
-  gboolean sensitive;
-  gint pnum;
-  check_format_t *format;
-  gboolean separator;
-  GSList *elem;
+    GtkListStore *p_store;
+    GtkTreeModel *f_model;
+    GtkTreeIter f_iter;
+    gboolean sensitive;
+    gint pnum;
+    check_format_t *format;
+    gboolean separator;
+    GSList *elem;
 
-  if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(pcd->format_combobox), &f_iter))
-    return;
-  f_model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
-  gtk_tree_model_get(f_model, &f_iter, COL_DATA, &format, COL_SEP, &separator, -1);
-  if (separator)
-    return;
+    if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(pcd->format_combobox), &f_iter))
+        return;
+    f_model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
+    gtk_tree_model_get(f_model, &f_iter, COL_DATA, &format, COL_SEP, &separator, -1);
+    if (separator)
+        return;
 
-  pnum = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
+    pnum = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
 
-  /* Update the positions combobox */
-  pcd->selected_format = format;
-  p_store = gtk_list_store_new (1, G_TYPE_STRING);
-  gtk_combo_box_set_model(GTK_COMBO_BOX(pcd->position_combobox),
-                          GTK_TREE_MODEL(p_store));
-  if (format) {
-    pcd->position_max = g_slist_length(format->positions); /* -1 for 0 base, +1 for custom entry */
-    for (elem = format->positions; elem; elem = g_slist_next(elem)) {
-      gtk_combo_box_append_text(GTK_COMBO_BOX(pcd->position_combobox), elem->data);
+    /* Update the positions combobox */
+    pcd->selected_format = format;
+    p_store = gtk_list_store_new (1, G_TYPE_STRING);
+    gtk_combo_box_set_model(GTK_COMBO_BOX(pcd->position_combobox),
+                            GTK_TREE_MODEL(p_store));
+    if (format)
+    {
+        pcd->position_max = g_slist_length(format->positions); /* -1 for 0 base, +1 for custom entry */
+        for (elem = format->positions; elem; elem = g_slist_next(elem))
+        {
+            gtk_combo_box_append_text(GTK_COMBO_BOX(pcd->position_combobox), elem->data);
+        }
     }
-  } else {
-    pcd->position_max = 0;
-  }
-  gtk_combo_box_append_text(GTK_COMBO_BOX(pcd->position_combobox), _("Custom"));
-  pnum = MIN(pnum, pcd->position_max);
-  gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->position_combobox), pnum);
+    else
+    {
+        pcd->position_max = 0;
+    }
+    gtk_combo_box_append_text(GTK_COMBO_BOX(pcd->position_combobox), _("Custom"));
+    pnum = MIN(pnum, pcd->position_max);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->position_combobox), pnum);
 
-  /* If there's only one thing in the position combobox, make it insensitive */
-  sensitive = (pcd->position_max > 0);
-  gtk_widget_set_sensitive(GTK_WIDGET(pcd->position_combobox), sensitive);
+    /* If there's only one thing in the position combobox, make it insensitive */
+    sensitive = (pcd->position_max > 0);
+    gtk_widget_set_sensitive(GTK_WIDGET(pcd->position_combobox), sensitive);
 
-  /* Update the custom page */
-  sensitive = (!separator && !format);
-  gtk_container_foreach(GTK_CONTAINER(pcd->custom_table),
-			gnc_print_check_set_sensitive,
-			GINT_TO_POINTER(sensitive));
+    /* Update the custom page */
+    sensitive = (!separator && !format);
+    gtk_container_foreach(GTK_CONTAINER(pcd->custom_table),
+                          gnc_print_check_set_sensitive,
+                          GINT_TO_POINTER(sensitive));
 
-  /* Update address fields */
-  sensitive = check_format_has_address(pcd);
-  gtk_widget_set_sensitive(pcd->check_address_name,sensitive);
-  gtk_widget_set_sensitive(pcd->check_address_1,sensitive);
-  gtk_widget_set_sensitive(pcd->check_address_2,sensitive);
-  gtk_widget_set_sensitive(pcd->check_address_3,sensitive);
-  gtk_widget_set_sensitive(pcd->check_address_4,sensitive);
+    /* Update address fields */
+    sensitive = check_format_has_address(pcd);
+    gtk_widget_set_sensitive(pcd->check_address_name, sensitive);
+    gtk_widget_set_sensitive(pcd->check_address_1, sensitive);
+    gtk_widget_set_sensitive(pcd->check_address_2, sensitive);
+    gtk_widget_set_sensitive(pcd->check_address_3, sensitive);
+    gtk_widget_set_sensitive(pcd->check_address_4, sensitive);
 }
 
 void
 gnc_ui_print_check_response_cb(GtkDialog * dialog,
-			       gint response,
-			       PrintCheckDialog *pcd)
+                               gint response,
+                               PrintCheckDialog *pcd)
 {
-  switch (response) {
+    switch (response)
+    {
     case GTK_RESPONSE_HELP:
-      gnc_gnome_help(HF_HELP, HL_PRINTCHECK);
-      return;
+        gnc_gnome_help(HF_HELP, HL_PRINTCHECK);
+        return;
 
     case GTK_RESPONSE_OK:
-      gnc_ui_print_check_dialog_ok_cb(pcd);
-      gnc_ui_print_save_dialog(pcd);
-      gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
-      break;
+        gnc_ui_print_check_dialog_ok_cb(pcd);
+        gnc_ui_print_save_dialog(pcd);
+        gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+        break;
 
     case GTK_RESPONSE_CANCEL:
-      gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
-      break;
-  }
+        gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+        break;
+    }
 
-  gtk_widget_destroy(pcd->dialog);
-  g_object_unref(pcd->xml);
-  g_free(pcd->default_font);
-  g_free(pcd);
+    gtk_widget_destroy(pcd->dialog);
+    g_object_unref(pcd->xml);
+    g_free(pcd->default_font);
+    g_free(pcd);
 }

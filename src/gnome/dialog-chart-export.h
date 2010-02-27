@@ -22,7 +22,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
- 
+
 #ifndef _DIALOG_CHART_EXPORT_H
 #define _DIALOG_CHART_EXPORT_H
 
@@ -33,7 +33,7 @@
 
 Remember to use qof_instance_copy routines
 like ::qof_instance_copy_to_session so that the QofBook is marked
-as \a partial. 
+as \a partial.
 
 \par guidelines Guidelines for partial book export
 -# When exporting GnuCash accounts into QSF, remember that there is no
@@ -45,7 +45,7 @@ as \a partial.
 -# Remember that just because the function does not use books or AccountGroup
    itself, it does \b not follow that other functions called by the routine
    are also suitable. You may have to reimplement the body of certain functions.
--# Commodities are \b not supported. Most Account functions will use the 
+-# Commodities are \b not supported. Most Account functions will use the
    commodity of the account, so be sure to set at least the ::gnc_default_currency().
 
 	@{
@@ -60,7 +60,7 @@ as \a partial.
 Write out the Chart of Accounts \b with balances as of a
 specific date, as QSF.
 
-The function iterates over each account in the current book and 
+The function iterates over each account in the current book and
 gets the balance as of the specified date. The account is copied to
 the export session, setting the export session book as partial.
 The function then looks up the new entity in the export session

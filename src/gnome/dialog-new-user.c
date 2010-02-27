@@ -51,104 +51,110 @@ static void gnc_ui_new_user_cancel_dialog (void);
 void
 gnc_new_user_dialog_register_qif_druid (void (*cb_fcn)(void))
 {
-  g_return_if_fail (qifImportDruidFcn == NULL);
-  qifImportDruidFcn = cb_fcn;
+    g_return_if_fail (qifImportDruidFcn == NULL);
+    qifImportDruidFcn = cb_fcn;
 }
 
 void
 gnc_set_first_startup (gboolean first_startup)
 {
-  gnc_gconf_set_bool(GCONF_SECTION, FIRST_STARTUP, first_startup, NULL);
+    gnc_gconf_set_bool(GCONF_SECTION, FIRST_STARTUP, first_startup, NULL);
 }
 
 static void
 after_hierarchy_druid(void)
 {
-  GncPluginPage *page;
+    GncPluginPage *page;
 
-  gncp_new_user_finish ();
-  gnc_set_first_startup (FALSE);
-  
-  page = gnc_plugin_page_account_tree_new();
-  gnc_main_window_open_page(NULL, page);
+    gncp_new_user_finish ();
+    gnc_set_first_startup (FALSE);
+
+    page = gnc_plugin_page_account_tree_new();
+    gnc_main_window_open_page(NULL, page);
 }
 
 void
 gnc_ui_new_user_dialog (void)
 {
-  GtkWidget *dialog;
-  GtkWidget *new_accounts_button;
-  GtkWidget *import_qif_button;
-  GtkWidget *tutorial_button;
-  GladeXML  *xml;
-  gint result;
+    GtkWidget *dialog;
+    GtkWidget *new_accounts_button;
+    GtkWidget *import_qif_button;
+    GtkWidget *tutorial_button;
+    GladeXML  *xml;
+    gint result;
 
-  ENTER(" ");
-  xml = gnc_glade_xml_new ("newuser.glade", "New User Dialog");
+    ENTER(" ");
+    xml = gnc_glade_xml_new ("newuser.glade", "New User Dialog");
 
-  dialog = glade_xml_get_widget (xml, "New User Dialog");
+    dialog = glade_xml_get_widget (xml, "New User Dialog");
 
-  new_accounts_button = glade_xml_get_widget (xml, "new_accounts_button");
-  import_qif_button = glade_xml_get_widget (xml, "import_qif_button");
-  tutorial_button = glade_xml_get_widget (xml, "tutorial_button");
+    new_accounts_button = glade_xml_get_widget (xml, "new_accounts_button");
+    import_qif_button = glade_xml_get_widget (xml, "import_qif_button");
+    tutorial_button = glade_xml_get_widget (xml, "tutorial_button");
 
-  /* Set the sensitivity of the qif-import button based on the availability
-   * of the qif-import druid.
-   */
-  gtk_widget_set_sensitive (import_qif_button, (qifImportDruidFcn != NULL));
+    /* Set the sensitivity of the qif-import button based on the availability
+     * of the qif-import druid.
+     */
+    gtk_widget_set_sensitive (import_qif_button, (qifImportDruidFcn != NULL));
 
-  result = gtk_dialog_run (GTK_DIALOG (dialog));
-  switch (result) {
-	  case GTK_RESPONSE_CANCEL:
-	  case GTK_RESPONSE_DELETE_EVENT:
-		gnc_ui_new_user_cancel_dialog ();
-		break;
-	  case GTK_RESPONSE_OK:
-		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_accounts_button))) {
-			gnc_ui_hierarchy_druid_with_callback(TRUE, after_hierarchy_druid);
-			break;
-		} else if ((qifImportDruidFcn != NULL)
-                           && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (import_qif_button))) {
-			qifImportDruidFcn();
-			gncp_new_user_finish ();
-			break;
-		} else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tutorial_button))) {
-			gnc_gnome_help (HF_GUIDE, NULL);
-			gncp_new_user_finish ();
-			break;
-		}
-	  default:
-		g_print ("DEBUG: Response: %d", result);
-		g_assert_not_reached ();
-  }
+    result = gtk_dialog_run (GTK_DIALOG (dialog));
+    switch (result)
+    {
+    case GTK_RESPONSE_CANCEL:
+    case GTK_RESPONSE_DELETE_EVENT:
+        gnc_ui_new_user_cancel_dialog ();
+        break;
+    case GTK_RESPONSE_OK:
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_accounts_button)))
+        {
+            gnc_ui_hierarchy_druid_with_callback(TRUE, after_hierarchy_druid);
+            break;
+        }
+        else if ((qifImportDruidFcn != NULL)
+                 && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (import_qif_button)))
+        {
+            qifImportDruidFcn();
+            gncp_new_user_finish ();
+            break;
+        }
+        else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tutorial_button)))
+        {
+            gnc_gnome_help (HF_GUIDE, NULL);
+            gncp_new_user_finish ();
+            break;
+        }
+    default:
+        g_print ("DEBUG: Response: %d", result);
+        g_assert_not_reached ();
+    }
 
-  gtk_widget_destroy (dialog);
-  LEAVE(" ");
+    gtk_widget_destroy (dialog);
+    LEAVE(" ");
 }
 
 static void
 gnc_ui_new_user_cancel_dialog (void)
 {
-  GtkWidget *dialog;
-  GladeXML  *xml;
-  gint result;
-  gboolean keepshowing;
+    GtkWidget *dialog;
+    GladeXML  *xml;
+    gint result;
+    gboolean keepshowing;
 
-  xml = gnc_glade_xml_new ("newuser.glade", "New User Cancel Dialog");
+    xml = gnc_glade_xml_new ("newuser.glade", "New User Cancel Dialog");
 
-  dialog = glade_xml_get_widget (xml, "New User Cancel Dialog");
+    dialog = glade_xml_get_widget (xml, "New User Cancel Dialog");
 
-  result = gtk_dialog_run (GTK_DIALOG (dialog));
-  keepshowing = (result == GTK_RESPONSE_YES);
+    result = gtk_dialog_run (GTK_DIALOG (dialog));
+    keepshowing = (result == GTK_RESPONSE_YES);
 
-  gnc_set_first_startup (keepshowing);
-  gncp_new_user_finish ();
+    gnc_set_first_startup (keepshowing);
+    gncp_new_user_finish ();
 
-  gtk_widget_destroy(dialog);
+    gtk_widget_destroy(dialog);
 }
 
 void
 gncp_new_user_finish (void)
 {
-  gnc_hook_run(HOOK_BOOK_OPENED, gnc_get_current_session());
+    gnc_hook_run(HOOK_BOOK_OPENED, gnc_get_current_session());
 }

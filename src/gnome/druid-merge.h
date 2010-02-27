@@ -33,7 +33,7 @@
 \n
 This druid builds a second ::QofBook in memory using ::QofSession and
 populates the book with accounts created using the usual New Account Tree
-code. The druid then uses ::qof_book_merge_init to begin the merge 
+code. The druid then uses ::qof_book_merge_init to begin the merge
 of the new book (created with QofSession) with the existing QofBook
 (loaded by the user), with user intervention and collision handling.
 
@@ -45,28 +45,28 @@ of the new book (created with QofSession) with the existing QofBook
 	be ::MERGE_NEW - parameter values must be checked.
 
 - If a GUID match exists, set QofBookMergeRule::mergeAbsolute to \a TRUE.
-	-# If ALL parameters in the import object match the target object with the same \a GUID, 
+	-# If ALL parameters in the import object match the target object with the same \a GUID,
 	set ::QofBookMergeResult to \a MERGE_ABSOLUTE.
 	-# If any parameters differ, set ::MERGE_UPDATE.
 - If the import object \a GUID does not match an existing object,
 mergeAbsolute is unchanged from the default \a FALSE
 The parameter values of the object are compared to other objects of the same
 type in the target book.
-	-# If the same data exists in the target book with a different GUID, the object 
+	-# If the same data exists in the target book with a different GUID, the object
 	is tagged as DUPLICATE.
-	-# If the data has changed, the object is tagged as REPORT. 
+	-# If the data has changed, the object is tagged as REPORT.
 	-# If the data does not match, the object is tagged as NEW
 
 More information is at http://code.neil.williamsleesmill.me.uk/
 
 Each foreach function uses g_return_if_fail checks to protect the target book. If
 any essential data is missing, the loop returns without changing the target book.
-Note that this will not set or return an error value. However, g_return is only 
-used for critical errors that arise from programming errors, not for invalid import data 
+Note that this will not set or return an error value. However, g_return is only
+used for critical errors that arise from programming errors, not for invalid import data
 which should be cleaned up before creating the import QofBook.
 
-Only ::qof_book_merge_init, ::qof_book_merge_update_result and ::qof_book_merge_commit return 
-any error values to the calling process. 
+Only ::qof_book_merge_init, ::qof_book_merge_update_result and ::qof_book_merge_commit return
+any error values to the calling process.
 
 	@{ */
 /** @file  druid-merge.h

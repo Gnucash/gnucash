@@ -114,14 +114,21 @@ static void gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxL
 static void gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page);
 
 /* Command callbacks */
-static GtkActionEntry gnc_plugin_page_sx_list_actions [] = {
+static GtkActionEntry gnc_plugin_page_sx_list_actions [] =
+{
     { "SxListAction", NULL, N_("_Scheduled"), NULL, NULL, NULL },
-    { "SxListNewAction", GNC_STOCK_NEW_ACCOUNT, N_("_New"), NULL,
-      N_("Create a new scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new) },
-    { "SxListEditAction", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit"), NULL,
-      N_("Edit the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit) },
-    { "SxListDeleteAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete"), NULL,
-      N_("Delete the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_delete) },
+    {
+        "SxListNewAction", GNC_STOCK_NEW_ACCOUNT, N_("_New"), NULL,
+        N_("Create a new scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new)
+    },
+    {
+        "SxListEditAction", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit"), NULL,
+        N_("Edit the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit)
+    },
+    {
+        "SxListDeleteAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete"), NULL,
+        N_("Delete the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_delete)
+    },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_sx_list_n_actions = G_N_ELEMENTS (gnc_plugin_page_sx_list_actions);
@@ -131,8 +138,10 @@ gnc_plugin_page_sx_list_get_type (void)
 {
     static GType gnc_plugin_page_sx_list_type = 0;
 
-    if (gnc_plugin_page_sx_list_type == 0) {
-        static const GTypeInfo our_info = {
+    if (gnc_plugin_page_sx_list_type == 0)
+    {
+        static const GTypeInfo our_info =
+        {
             sizeof (GncPluginPageSxListClass),
             NULL,
             NULL,
@@ -145,8 +154,8 @@ gnc_plugin_page_sx_list_get_type (void)
         };
 
         gnc_plugin_page_sx_list_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
-                                                               GNC_PLUGIN_PAGE_SX_LIST_NAME,
-                                                               &our_info, 0);
+                                       GNC_PLUGIN_PAGE_SX_LIST_NAME,
+                                       &our_info, 0);
     }
 
     return gnc_plugin_page_sx_list_type;
@@ -286,9 +295,9 @@ gppsl_selection_changed_cb(GtkTreeSelection *selection, gpointer user_data)
     edit_action = gnc_plugin_page_get_action(page, "SxListEditAction");
     delete_action = gnc_plugin_page_get_action(page, "SxListDeleteAction");
     selection_state
-        = gtk_tree_selection_count_selected_rows(selection) == 0
-        ? FALSE
-        : TRUE;
+    = gtk_tree_selection_count_selected_rows(selection) == 0
+      ? FALSE
+      : TRUE;
     gtk_action_set_sensitive(edit_action, selection_state);
     gtk_action_set_sensitive(delete_action, selection_state);
 }
@@ -364,9 +373,9 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     }
 
     priv->gnc_component_id = gnc_register_gui_component("plugin-page-sx-list",
-                                                        gnc_plugin_page_sx_list_refresh_cb,
-                                                        gnc_plugin_page_sx_list_close_cb,
-                                                        page);
+                             gnc_plugin_page_sx_list_refresh_cb,
+                             gnc_plugin_page_sx_list_close_cb,
+                             page);
 
     return priv->widget;
 }
@@ -380,12 +389,14 @@ gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page)
     page = GNC_PLUGIN_PAGE_SX_LIST (plugin_page);
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
 
-    if (priv->widget) {
+    if (priv->widget)
+    {
         g_object_unref(G_OBJECT(priv->widget));
         priv->widget = NULL;
     }
 
-    if (priv->gnc_component_id) {
+    if (priv->gnc_component_id)
+    {
         gnc_unregister_gui_component(priv->gnc_component_id);
         priv->gnc_component_id = 0;
     }
@@ -459,7 +470,7 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
     {
         GError *err = NULL;
         gint paned_position = g_key_file_get_integer(key_file, group_name,
-                                                     "paned_position", &err);
+                              "paned_position", &err);
         if (err == NULL)
             gtk_paned_set_position(GTK_PANED(priv->widget), paned_position);
         else
@@ -551,7 +562,7 @@ _destroy_sx(gpointer data, gpointer user_data)
     book = gnc_get_current_book();
     sxes = gnc_book_get_schedxactions(book);
     gnc_sxes_del_sx(sxes, sx);
-	gnc_sx_begin_edit(sx);
+    gnc_sx_begin_edit(sx);
     xaccSchedXactionDestroy(sx);
 }
 

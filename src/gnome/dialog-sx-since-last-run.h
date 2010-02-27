@@ -43,6 +43,6 @@ void gnc_sx_sxsincelast_book_opened(void);
  * Create the since-last-run dialog.
  **/
 GncSxSinceLastRunDialog*  gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances,
-                                                          GList *auto_created_txn_guids);
+        GList *auto_created_txn_guids);
 
 #endif

@@ -106,7 +106,8 @@ static gint _sx_engine_event_handler_id = -1;
 
 /** Datatypes ***********************************************************/
 
-typedef enum _EndTypeEnum {
+typedef enum _EndTypeEnum
+{
     END_NEVER,
     END_DATE,
     END_OCCUR,
@@ -177,7 +178,7 @@ static gboolean sxed_delete_event( GtkWidget *widget, GdkEvent *event, gpointer 
 static gboolean sxed_confirmed_cancel( GncSxEditorDialog *sxed );
 
 static gboolean editor_component_sx_equality( gpointer find_data,
-                                              gpointer user_data );
+        gpointer user_data );
 
 static GtkActionEntry gnc_sxed_menu_entries [] =
 {
@@ -212,11 +213,13 @@ sxed_confirmed_cancel(GncSxEditorDialog *sxed)
 
     reg = gnc_ledger_display_get_split_register( sxed->ledger );
     /* check for changes */
-    if ( gnc_sxed_check_changed( sxed ) ) {
+    if ( gnc_sxed_check_changed( sxed ) )
+    {
         const char *sx_changed_msg =
             _( "This SX has changed; are you "
                "sure you want to cancel?" );
-        if (!gnc_verify_dialog(sxed->dialog, FALSE, "%s", sx_changed_msg)) {
+        if (!gnc_verify_dialog(sxed->dialog, FALSE, "%s", sx_changed_msg))
+        {
             return FALSE;
         }
     }
@@ -255,7 +258,8 @@ editor_ok_button_clicked( GtkButton *b, GncSxEditorDialog *sxed )
 
     /* add to list */
     // @@fixme -- forget 'new'-flag: check for existance of the SX [?]
-    if ( sxed->newsxP ) {
+    if ( sxed->newsxP )
+    {
         book = gnc_get_current_book ();
         sxes = gnc_book_get_schedxactions(book);
         gnc_sxes_add_sx(sxes, sxed->sx);
@@ -284,13 +288,15 @@ gnc_sxed_check_changed( GncSxEditorDialog *sxed )
         char *name;
 
         name = gtk_editable_get_chars( GTK_EDITABLE(sxed->nameEntry), 0, -1 );
-        if ( strlen(name) == 0 ) {
+        if ( strlen(name) == 0 )
+        {
             return TRUE;
 
         }
         if ( (xaccSchedXactionGetName(sxed->sx) == NULL)
-             || (strcmp( xaccSchedXactionGetName(sxed->sx),
-                         name ) != 0) ) {
+                || (strcmp( xaccSchedXactionGetName(sxed->sx),
+                            name ) != 0) )
+        {
             return TRUE;
         }
     }
@@ -298,35 +304,42 @@ gnc_sxed_check_changed( GncSxEditorDialog *sxed )
     /* end options */
     {
         /* dialog says... no end */
-        if ( gtk_toggle_button_get_active( sxed->optEndNone ) ) {
+        if ( gtk_toggle_button_get_active( sxed->optEndNone ) )
+        {
             if ( xaccSchedXactionHasEndDate(sxed->sx)
-                 || xaccSchedXactionHasOccurDef(sxed->sx) ) {
+                    || xaccSchedXactionHasOccurDef(sxed->sx) )
+            {
                 return TRUE;
             }
         }
 
         /* dialog says... end date */
-        if ( gtk_toggle_button_get_active( sxed->optEndDate ) ) {
+        if ( gtk_toggle_button_get_active( sxed->optEndDate ) )
+        {
             GDate sxEndDate, dlgEndDate;
 
-            if ( ! xaccSchedXactionHasEndDate( sxed->sx ) ) {
+            if ( ! xaccSchedXactionHasEndDate( sxed->sx ) )
+            {
                 return TRUE;
             }
             sxEndDate = *xaccSchedXactionGetEndDate( sxed->sx );
             g_date_set_time_t( &dlgEndDate,
                                gnc_date_edit_get_date( sxed->
-                                                       endDateEntry ) );
+                                       endDateEntry ) );
 
-            if ( g_date_compare( &sxEndDate, &dlgEndDate ) != 0 ) {
+            if ( g_date_compare( &sxEndDate, &dlgEndDate ) != 0 )
+            {
                 return TRUE;
             }
         }
 
         /* dialog says... num occur */
-        if ( gtk_toggle_button_get_active( sxed->optEndCount ) ) {
+        if ( gtk_toggle_button_get_active( sxed->optEndCount ) )
+        {
             gint sxNumOccur, sxNumRem, dlgNumOccur, dlgNumRem;
 
-            if ( ! xaccSchedXactionGetNumOccur( sxed->sx ) ) {
+            if ( ! xaccSchedXactionGetNumOccur( sxed->sx ) )
+            {
                 return TRUE;
             }
 
@@ -340,7 +353,8 @@ gnc_sxed_check_changed( GncSxEditorDialog *sxed )
             sxNumRem = xaccSchedXactionGetRemOccur( sxed->sx );
 
             if ( (dlgNumOccur != sxNumOccur)
-                 || (dlgNumRem != sxNumRem) ) {
+                    || (dlgNumRem != sxNumRem) )
+            {
                 return TRUE;
             }
         }
@@ -349,53 +363,59 @@ gnc_sxed_check_changed( GncSxEditorDialog *sxed )
     /* SX options [autocreate, notify, reminder, advance] */
     {
         gboolean dlgEnabled,
-            dlgAutoCreate,
-            dlgNotify,
-            sxEnabled,
-            sxAutoCreate,
-            sxNotify;
+                 dlgAutoCreate,
+                 dlgNotify,
+                 sxEnabled,
+                 sxAutoCreate,
+                 sxNotify;
         gint dlgAdvance, sxAdvance;
         gint dlgRemind, sxRemind;
 
         dlgEnabled =
             gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxed->
-                                                            enabledOpt) );
+                                          enabledOpt) );
         dlgAutoCreate =
             gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxed->
-                                                            autocreateOpt) );
+                                          autocreateOpt) );
         dlgNotify =
             gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxed->
-                                                            notifyOpt) );
+                                          notifyOpt) );
 
         sxEnabled = xaccSchedXactionGetEnabled( sxed->sx );
-        if ( ! ((dlgEnabled == sxEnabled)) ) {
+        if ( ! ((dlgEnabled == sxEnabled)) )
+        {
             return TRUE;
         }
 
         xaccSchedXactionGetAutoCreate( sxed->sx, &sxAutoCreate, &sxNotify );
         if ( ! ((dlgAutoCreate == sxAutoCreate)
-                && (dlgNotify == sxNotify)) ) {
+                && (dlgNotify == sxNotify)) )
+        {
             return TRUE;
         }
 
         dlgAdvance = 0;
-        if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxed->advanceOpt) ) ) {
+        if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxed->advanceOpt) ) )
+        {
             dlgAdvance =
                 gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(sxed->
-                                                                  advanceSpin) );
+                                                  advanceSpin) );
         }
         sxAdvance = xaccSchedXactionGetAdvanceCreation( sxed->sx );
-        if ( dlgAdvance != sxAdvance ) {
+        if ( dlgAdvance != sxAdvance )
+        {
             return TRUE;
         }
 
         dlgRemind = 0;
-        if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxed->remindOpt) ) ) {
+        if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxed->remindOpt) ) )
+        {
             dlgRemind =
                 gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(sxed->remindSpin) );
         }
         sxRemind = xaccSchedXactionGetAdvanceReminder( sxed->sx );
-        if ( dlgRemind != sxRemind ) {
+        if ( dlgRemind != sxRemind )
+        {
             return TRUE;
         }
     }
@@ -432,7 +452,8 @@ gnc_sxed_check_changed( GncSxEditorDialog *sxed )
         SplitRegister *sr =
             gnc_ledger_display_get_split_register( sxed->ledger );
 
-        if ( gnc_split_register_changed( sr ) ) {
+        if ( gnc_split_register_changed( sr ) )
+        {
             return TRUE;
         }
     }
@@ -444,7 +465,8 @@ gnc_sxed_check_changed( GncSxEditorDialog *sxed )
  * Holds the credit- and debit-sum for a given Transaction, as used in
  * gnc_sxed_check_consistent.
  **/
-typedef struct _txnCreditDebitSums {
+typedef struct _txnCreditDebitSums
+{
     gnc_numeric creditSum;
     gnc_numeric debitSum;
 } txnCreditDebitSums;
@@ -469,25 +491,28 @@ check_credit_debit_balance( gpointer key,
     gboolean *unbalanced = (gboolean*)ud;
     *unbalanced |= !(gnc_numeric_zero_p(
                          gnc_numeric_sub_fixed( tcds->debitSum,
-                                                tcds->creditSum ) ));
+                                 tcds->creditSum ) ));
 
     if (qof_log_check(G_LOG_DOMAIN, QOF_LOG_DEBUG))
     {
         if ( gnc_numeric_zero_p( gnc_numeric_sub_fixed( tcds->debitSum,
-                                                        tcds->creditSum ) ) ) {
+                                 tcds->creditSum ) ) )
+        {
             g_debug( "%p | true [%s - %s = %s]",
                      key,
                      gnc_numeric_to_string( tcds->debitSum ),
                      gnc_numeric_to_string( tcds->creditSum ),
                      gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
-                                                                  tcds->creditSum )) );
-        } else {
+                                           tcds->creditSum )) );
+        }
+        else
+        {
             g_debug( "%p | false [%s - %s = %s]",
                      key,
                      gnc_numeric_to_string( tcds->debitSum ),
                      gnc_numeric_to_string( tcds->creditSum ),
                      gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
-                                                                  tcds->creditSum )) );
+                                           tcds->creditSum )) );
         }
     }
 }
@@ -561,7 +586,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         gnc_sx_get_variables( sxed->sx, vars );
 
         ttVarCount = g_hash_table_size( vars );
-        if ( ttVarCount != 0 ) {
+        if ( ttVarCount != 0 )
+        {
             /* balance with random variable bindings some number
              * of times in an attempt to ferret out
              * un-balanceable transactions.
@@ -575,7 +601,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         }
 
         srand(time(NULL));
-        for ( i=0; i < numIters && !unbalanceable; i++ ) {
+        for ( i = 0; i < numIters && !unbalanceable; i++ )
+        {
             gnc_sx_randomize_variables(vars);
             g_hash_table_foreach( txns, set_sums_to_zero, NULL );
             tmp = gnc_numeric_zero();
@@ -594,8 +621,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                 t = xaccSplitGetParent( s );
 
                 if ( !(tcds =
-                       (txnCreditDebitSums*)g_hash_table_lookup( txns,
-                                                                 (gpointer)t )) )
+                            (txnCreditDebitSums*)g_hash_table_lookup( txns,
+                                    (gpointer)t )) )
                 {
                     tcds = g_new0( txnCreditDebitSums, 1 );
                     tcds->creditSum = gnc_numeric_zero();
@@ -624,9 +651,11 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                                              GNC_SX_CREDIT_FORMULA,
                                              NULL );
                 if ( v
-                     && (str = kvp_value_get_string(v))
-                     && strlen( str ) != 0 ) {
-                    if ( gnc_sx_parse_vars_from_formula( str, vars, &tmp ) < 0 ) {
+                        && (str = kvp_value_get_string(v))
+                        && strlen( str ) != 0 )
+                {
+                    if ( gnc_sx_parse_vars_from_formula( str, vars, &tmp ) < 0 )
+                    {
                         GString *errStr;
 
                         errStr = g_string_sized_new( 32 );
@@ -650,9 +679,11 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                                              GNC_SX_DEBIT_FORMULA,
                                              NULL );
                 if ( v
-                     && (str = kvp_value_get_string(v))
-                     && strlen(str) != 0 ) {
-                    if ( gnc_sx_parse_vars_from_formula( str, vars, &tmp ) < 0 ) {
+                        && (str = kvp_value_get_string(v))
+                        && strlen(str) != 0 )
+                {
+                    if ( gnc_sx_parse_vars_from_formula( str, vars, &tmp ) < 0 )
+                    {
                         GString *errStr;
 
                         errStr = g_string_sized_new( 32 );
@@ -689,13 +720,14 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         g_hash_table_destroy(txns);
 
         if ( unbalanceable
-             && !gnc_verify_dialog( sxed->dialog, FALSE,
-                                    "%s",
-                                    _("The Scheduled Transaction Editor "
-                                      "cannot automatically balance "
-                                      "this transaction. "
-                                      "Should it still be "
-                                      "entered?") ) ) {
+                && !gnc_verify_dialog( sxed->dialog, FALSE,
+                                       "%s",
+                                       _("The Scheduled Transaction Editor "
+                                         "cannot automatically balance "
+                                         "this transaction. "
+                                         "Should it still be "
+                                         "entered?") ) )
+        {
             return FALSE;
         }
     }
@@ -708,7 +740,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         GList *sxList;
 
         name = gtk_editable_get_chars( GTK_EDITABLE(sxed->nameEntry), 0, -1 );
-        if ( strlen(name) == 0 ) {
+        if ( strlen(name) == 0 )
+        {
             const char *sx_has_no_name_msg =
                 _( "Please name the Scheduled Transaction." );
             gnc_error_dialog( sxed->dialog, "%s", sx_has_no_name_msg );
@@ -723,9 +756,10 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
             (xaccSchedXactionGetName(sxed->sx) == NULL)
             || (strcmp( xaccSchedXactionGetName(sxed->sx), name ) != 0);
         for ( sxList =
-                  gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
-              nameHasChanged && !nameExists && sxList;
-              sxList = sxList->next ) {
+                    gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
+                nameHasChanged && !nameExists && sxList;
+                sxList = sxList->next )
+        {
             char *existingName, *existingNameKey;
             existingName =
                 xaccSchedXactionGetName( (SchedXaction*)sxList->
@@ -734,7 +768,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
             nameExists |= ( strcmp(nameKey, existingNameKey) == 0 );
             g_free( existingNameKey );
         }
-        if ( nameHasChanged && nameExists ) {
+        if ( nameHasChanged && nameExists )
+        {
             const char *sx_has_existing_name_msg =
                 _( "A Scheduled Transaction with the "
                    "name \"%s\" already exists. "
@@ -742,7 +777,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                    "this one the same?" );
             if ( ! gnc_verify_dialog( sxed->dialog, FALSE,
                                       sx_has_existing_name_msg,
-                                      name) ) {
+                                      name) )
+            {
                 g_free( nameKey );
                 g_free( name );
                 return FALSE;
@@ -763,7 +799,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
             gtk_toggle_button_get_active(
                 GTK_TOGGLE_BUTTON(sxed->notifyOpt) );
 
-        if (((ttVarCount > 0) || multi_commodity) && autocreateState) {
+        if (((ttVarCount > 0) || multi_commodity) && autocreateState)
+        {
             gnc_warning_dialog(sxed->dialog, "%s",
                                _("Scheduled Transactions with variables "
                                  "cannot be automatically created."));
@@ -772,10 +809,11 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 
         /* Fix for part of Bug#121740 -- auto-create transactions are
          * only valid if there's actually a transaction to create. */
-        if ( autocreateState && splitCount == 0 ) {
+        if ( autocreateState && splitCount == 0 )
+        {
             gnc_warning_dialog(sxed->dialog, "%s",
-                                _("Scheduled Transactions without a template "
-                                  "transaction cannot be automatically created.") );
+                               _("Scheduled Transactions without a template "
+                                 "transaction cannot be automatically created.") );
             return FALSE;
         }
     }
@@ -785,15 +823,17 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         GDate startDate, endDate, nextDate;
 
         if ( !gtk_toggle_button_get_active(sxed->optEndDate)
-             && !gtk_toggle_button_get_active(sxed->optEndCount)
-             && !gtk_toggle_button_get_active(sxed->optEndNone) ) {
+                && !gtk_toggle_button_get_active(sxed->optEndCount)
+                && !gtk_toggle_button_get_active(sxed->optEndNone) )
+        {
             const char *sx_end_spec_msg =
                 _( "Please provide a valid end selection." );
             gnc_error_dialog( sxed->dialog, "%s", sx_end_spec_msg );
             return FALSE;
         }
 
-        if ( gtk_toggle_button_get_active(sxed->optEndCount)) {
+        if ( gtk_toggle_button_get_active(sxed->optEndCount))
+        {
             gint occur, rem;
 
             occur  =
@@ -802,7 +842,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
             rem =
                 gtk_spin_button_get_value_as_int ( GTK_SPIN_BUTTON(sxed->endRemainSpin) );
 
-            if ( occur == 0 ) {
+            if ( occur == 0 )
+            {
                 const char *sx_occur_count_zero_msg =
                     _( "There must be some number of occurrences." );
                 gnc_error_dialog( sxed->dialog, "%s",
@@ -810,7 +851,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                 return FALSE;
             }
 
-            if ( rem > occur ) {
+            if ( rem > occur )
+            {
                 const char *sx_occur_counts_wrong_msg =
                     _( "The number of remaining occurrences "
                        "(%d) is greater than the number of "
@@ -824,10 +866,11 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         }
 
         g_date_clear( &endDate, 1 );
-        if ( gtk_toggle_button_get_active(sxed->optEndDate) ) {
+        if ( gtk_toggle_button_get_active(sxed->optEndDate) )
+        {
             g_date_set_time_t( &endDate,
                                gnc_date_edit_get_date( sxed->
-                                                       endDateEntry ) );
+                                       endDateEntry ) );
         }
 
         g_date_clear(&nextDate, 1);
@@ -840,7 +883,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         recurrenceListFree(&schedule);
 
         if (!g_date_valid(&nextDate)
-            || (g_date_valid(&endDate) && (g_date_compare(&nextDate, &endDate) > 0)))
+                || (g_date_valid(&endDate) && (g_date_compare(&nextDate, &endDate) > 0)))
         {
             const char *invalid_sx_check_msg =
                 _("You have attempted to create a Scheduled "
@@ -861,7 +904,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 static void
 gnc_sxed_save_sx( GncSxEditorDialog *sxed )
 {
-	gnc_sx_begin_edit( sxed->sx );
+    gnc_sx_begin_edit( sxed->sx );
 
     /* name */
     {
@@ -876,7 +919,8 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
     {
         GDate gdate;
 
-        if ( gtk_toggle_button_get_active(sxed->optEndDate) ) {
+        if ( gtk_toggle_button_get_active(sxed->optEndDate) )
+        {
             /* get the end date data */
             g_date_set_time_t( &gdate,
                                gnc_date_edit_get_date(
@@ -884,7 +928,9 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
             xaccSchedXactionSetEndDate( sxed->sx, &gdate );
             /* set the num occurances data */
             xaccSchedXactionSetNumOccur( sxed->sx, 0 );
-        } else if ( gtk_toggle_button_get_active(sxed->optEndCount) ) {
+        }
+        else if ( gtk_toggle_button_get_active(sxed->optEndCount) )
+        {
             gint num;
 
             /* get the occurances data */
@@ -898,11 +944,15 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
 
             g_date_clear( &gdate, 1 );
             xaccSchedXactionSetEndDate( sxed->sx, &gdate );
-        } else if ( gtk_toggle_button_get_active( sxed->optEndNone ) ) {
+        }
+        else if ( gtk_toggle_button_get_active( sxed->optEndNone ) )
+        {
             xaccSchedXactionSetNumOccur( sxed->sx, 0 );
             g_date_clear( &gdate, 1 );
             xaccSchedXactionSetEndDate( sxed->sx, &gdate );
-        } else {
+        }
+        else
+        {
             g_critical("no valid end specified\n");
         }
     }
@@ -933,14 +983,16 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
         int daysInAdvance;
 
         daysInAdvance = 0;
-        if ( gtk_toggle_button_get_active( sxed->advanceOpt ) ) {
+        if ( gtk_toggle_button_get_active( sxed->advanceOpt ) )
+        {
             daysInAdvance =
                 gtk_spin_button_get_value_as_int( sxed->advanceSpin );
         }
         xaccSchedXactionSetAdvanceCreation( sxed->sx, daysInAdvance );
 
         daysInAdvance = 0;
-        if ( gtk_toggle_button_get_active( sxed->remindOpt ) ) {
+        if ( gtk_toggle_button_get_active( sxed->remindOpt ) )
+        {
             daysInAdvance =
                 gtk_spin_button_get_value_as_int( sxed->remindSpin );
         }
@@ -965,7 +1017,7 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
         xaccSchedXactionSetStartDate( sxed->sx, &gdate );
     }
 
-	gnc_sx_commit_edit( sxed->sx );
+    gnc_sx_commit_edit( sxed->sx );
 }
 
 static void
@@ -977,7 +1029,8 @@ enabled_toggled( GtkObject *o, GncSxEditorDialog *sxed )
 static void
 autocreate_toggled( GtkObject *o, GncSxEditorDialog *sxed )
 {
-    if ( !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(o)) ) {
+    if ( !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(o)) )
+    {
         gtk_toggle_button_set_active( sxed->notifyOpt, FALSE );
     }
     gtk_widget_set_sensitive( GTK_WIDGET(sxed->notifyOpt),
@@ -992,7 +1045,8 @@ advance_toggle( GtkButton *o, GncSxEditorDialog *sxed )
 
     spinName = (gchar*)g_object_get_data( G_OBJECT(o), "whichOneAmI" );
     spin = glade_xml_get_widget( sxed->gxml, spinName );
-    if ( !spin ) {
+    if ( !spin )
+    {
         g_critical("Error getting widget with name \"%s\"", spinName);
         return;
     }
@@ -1012,7 +1066,7 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
         return;
 
     gnc_unregister_gui_component_by_data
-        (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
+    (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
 
     gnc_embedded_window_close_page(sxed->embed_window, sxed->plugin_page);
     gtk_widget_destroy(GTK_WIDGET(sxed->embed_window));
@@ -1023,7 +1077,8 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
     g_free (sxed->sxGUIDstr);
     sxed->sxGUIDstr = NULL;
 
-    if ( sxed->newsxP ) {
+    if ( sxed->newsxP )
+    {
         /* FIXME: WTF???
          *
          * "WTF" explaination: in the "new" click from the caller, we
@@ -1032,7 +1087,7 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
          * "Cancel" is clicked, the flag will still be true, and this
          * SX will be cleaned, here. -- jsled
          */
-		gnc_sx_begin_edit( sxed->sx );
+        gnc_sx_begin_edit( sxed->sx );
         xaccSchedXactionDestroy( sxed->sx );
     }
     sxed->sx = NULL;
@@ -1048,11 +1103,13 @@ sxed_delete_event( GtkWidget *widget, GdkEvent *event, gpointer ud )
 
     /* We've already processed the SX, likely because of "ok" being
      * clicked. */
-    if ( sxed->sx == NULL ) {
+    if ( sxed->sx == NULL )
+    {
         return FALSE;
     }
 
-    if ( ! sxed_confirmed_cancel( sxed ) ) {
+    if ( ! sxed_confirmed_cancel( sxed ) )
+    {
         return TRUE;
     }
     return FALSE;
@@ -1102,19 +1159,21 @@ gnc_sxed_get_widgets( GncSxEditorDialog *sxed )
 
 GncSxEditorDialog *
 gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
-                                              gboolean newSX)
+        gboolean newSX)
 {
     GncSxEditorDialog *sxed;
     GtkWidget *button;
     int i;
     GList *dlgExists = NULL;
 
-    static struct widgetSignalCallback {
+    static struct widgetSignalCallback
+    {
         char     *name;
         char     *signal;
         void     (*fn)();
         gpointer objectData;
-    } widgets[] = {
+    } widgets[] =
+    {
         { "ok_button",      "clicked", editor_ok_button_clicked,     NULL },
         { "cancel_button",  "clicked", editor_cancel_button_clicked, NULL },
         { "help_button",    "clicked", editor_help_button_clicked,   NULL },
@@ -1136,7 +1195,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
     dlgExists = gnc_find_gui_components( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
                                          editor_component_sx_equality,
                                          sx );
-    if ( dlgExists != NULL ) {
+    if ( dlgExists != NULL )
+    {
         g_debug( "dialog already exists; using that one." );
         sxed = (GncSxEditorDialog*)dlgExists->data;
         gtk_window_present( GTK_WINDOW(sxed->dialog) );
@@ -1184,9 +1244,11 @@ gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
                       G_CALLBACK(scheduledxaction_editor_dialog_destroy),
                       sxed );
 
-    for ( i=0; widgets[i].name != NULL; i++ ) {
+    for ( i = 0; widgets[i].name != NULL; i++ )
+    {
         button = glade_xml_get_widget( sxed->gxml, widgets[i].name );
-        if ( widgets[i].objectData != NULL ) {
+        if ( widgets[i].objectData != NULL )
+        {
             g_object_set_data( G_OBJECT(button), "whichOneAmI",
                                widgets[i].objectData );
         }
@@ -1250,7 +1312,7 @@ schedXact_editor_create_freq_sel( GncSxEditorDialog *sxed )
     b = GTK_BOX(glade_xml_get_widget( sxed->gxml, "gncfreq_hbox" ));
     sxed->gncfreq =
         GNC_FREQUENCY(gnc_frequency_new_from_recurrence(gnc_sx_get_schedule(sxed->sx),
-                                                        xaccSchedXactionGetStartDate(sxed->sx)));
+                      xaccSchedXactionGetStartDate(sxed->sx)));
     g_assert(sxed->gncfreq);
     g_signal_connect( sxed->gncfreq, "changed",
                       G_CALLBACK(gnc_sxed_freq_changed),
@@ -1258,7 +1320,7 @@ schedXact_editor_create_freq_sel( GncSxEditorDialog *sxed )
     gtk_container_add( GTK_CONTAINER(b), GTK_WIDGET(sxed->gncfreq) );
 
     b = GTK_BOX(glade_xml_get_widget( sxed->gxml, "example_cal_hbox" ));
-    sxed->dense_cal_model = gnc_dense_cal_store_new(EX_CAL_NUM_MONTHS*31);
+    sxed->dense_cal_model = gnc_dense_cal_store_new(EX_CAL_NUM_MONTHS * 31);
     sxed->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(sxed->dense_cal_model)));
     g_assert(sxed->example_cal);
     gnc_dense_cal_set_num_months( sxed->example_cal, EX_CAL_NUM_MONTHS );
@@ -1327,23 +1389,28 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
     gboolean enabledState, autoCreateState, notifyState;
 
     name = xaccSchedXactionGetName(sxed->sx);
-    if ( name != NULL ) {
+    if ( name != NULL )
+    {
         gtk_entry_set_text( GTK_ENTRY(sxed->nameEntry), name  );
     }
     {
         gd = xaccSchedXactionGetLastOccurDate( sxed->sx );
-        if ( g_date_valid( gd ) ) {
+        if ( g_date_valid( gd ) )
+        {
             gchar dateBuf[ MAX_DATE_LENGTH+1 ];
-            qof_print_gdate( dateBuf,MAX_DATE_LENGTH, gd );
+            qof_print_gdate( dateBuf, MAX_DATE_LENGTH, gd );
             gtk_label_set_text( sxed->lastOccurLabel, dateBuf );
-        } else {
+        }
+        else
+        {
             gtk_label_set_text( sxed->lastOccurLabel, _( "(never)" ) );
         }
         gd = NULL;
     }
 
     gd = xaccSchedXactionGetEndDate( sxed->sx );
-    if ( g_date_valid( gd ) ) {
+    if ( g_date_valid( gd ) )
+    {
         gtk_toggle_button_set_active( sxed->optEndDate, TRUE );
         /* fill in date data. */
         tmpTm = g_new0( struct tm, 1 );
@@ -1353,7 +1420,9 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
         gnc_date_edit_set_time( sxed->endDateEntry, tmpDate );
 
         set_endgroup_toggle_states( sxed, END_DATE );
-    } else if ( xaccSchedXactionHasOccurDef( sxed->sx ) ) {
+    }
+    else if ( xaccSchedXactionHasOccurDef( sxed->sx ) )
+    {
         gint numOccur = xaccSchedXactionGetNumOccur( sxed->sx );
         gint numRemain = xaccSchedXactionGetRemOccur( sxed->sx );
 
@@ -1363,7 +1432,9 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
         gtk_spin_button_set_value ( GTK_SPIN_BUTTON(sxed->endRemainSpin), numRemain );
 
         set_endgroup_toggle_states( sxed, END_OCCUR );
-    } else {
+    }
+    else
+    {
         gtk_toggle_button_set_active( sxed->optEndNone, TRUE );
         set_endgroup_toggle_states( sxed, END_NEVER );
     }
@@ -1372,52 +1443,65 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
     gtk_toggle_button_set_active( sxed->enabledOpt, enabledState );
 
     /* Do auto-create/notify setup */
-    if ( sxed->newsxP ) {
+    if ( sxed->newsxP )
+    {
         autoCreateState =
             gnc_gconf_get_bool( SXED_GCONF_SECTION, KEY_CREATE_AUTO, NULL );
         notifyState =
             gnc_gconf_get_bool( SXED_GCONF_SECTION, KEY_NOTIFY, NULL );
-    } else {
+    }
+    else
+    {
         xaccSchedXactionGetAutoCreate( sxed->sx,
                                        &autoCreateState,
                                        &notifyState );
     }
     gtk_toggle_button_set_active( sxed->autocreateOpt, autoCreateState );
-    if ( ! autoCreateState ) {
+    if ( ! autoCreateState )
+    {
         notifyState = FALSE;
     }
     gtk_toggle_button_set_active( sxed->notifyOpt, notifyState );
 
 
     /* Do days-in-advance-to-create widget[s] setup. */
-    if ( sxed->newsxP ) {
+    if ( sxed->newsxP )
+    {
         daysInAdvance =
             gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_CREATE_DAYS, NULL );
-    } else {
+    }
+    else
+    {
         daysInAdvance =
             xaccSchedXactionGetAdvanceCreation( sxed->sx );
     }
-    if ( daysInAdvance != 0 ) {
+    if ( daysInAdvance != 0 )
+    {
         gtk_toggle_button_set_active( sxed->advanceOpt, TRUE );
         gtk_spin_button_set_value( sxed->advanceSpin,
                                    (gfloat)daysInAdvance );
     }
 
     /* Do days-in-advance-to-remind widget[s] setup. */
-    if ( sxed->newsxP ) {
+    if ( sxed->newsxP )
+    {
         daysInAdvance =
             gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_REMIND_DAYS, NULL );
-    } else {
+    }
+    else
+    {
         daysInAdvance =
             xaccSchedXactionGetAdvanceReminder( sxed->sx );
     }
-    if ( daysInAdvance != 0 ) {
+    if ( daysInAdvance != 0 )
+    {
         gtk_toggle_button_set_active( sxed->remindOpt, TRUE );
         gtk_spin_button_set_value( sxed->remindSpin,
                                    (gfloat)daysInAdvance );
     }
 
-    if ( sxed->newsxP ) {
+    if ( sxed->newsxP )
+    {
         gnc_sx_set_instance_count( sxed->sx, 1 );
     }
 
@@ -1427,9 +1511,10 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
         GList        *splitList;
 
         splitList = xaccSchedXactionGetSplits( sxed->sx );
-        if ( splitList != NULL ) {
+        if ( splitList != NULL )
+        {
             splitReg = gnc_ledger_display_get_split_register
-                ( sxed->ledger );
+                       ( sxed->ledger );
             gnc_split_register_load(splitReg, splitList, NULL );
         } /* otherwise, use the existing stuff. */
     }
@@ -1458,7 +1543,8 @@ endgroup_rb_toggled( GtkButton *b, gpointer d )
     sxed = (GncSxEditorDialog*)d;
     id = GPOINTER_TO_INT(g_object_get_data( G_OBJECT(b), "whichOneAmI" ));
 
-    switch (id) {
+    switch (id)
+    {
     case END_NEVER_OPTION:
         set_endgroup_toggle_states( sxed, END_NEVER );
         break;
@@ -1494,18 +1580,22 @@ gnc_sxed_reg_check_close(GncSxEditorDialog *sxed)
 
     reg = gnc_ledger_display_get_split_register (sxed->ledger);
     pending_changes = gnc_split_register_changed (reg);
-    if (!pending_changes) {
+    if (!pending_changes)
+    {
         return;
     }
 
-    if (gnc_verify_dialog(sxed->dialog, TRUE, "%s", message)) {
+    if (gnc_verify_dialog(sxed->dialog, TRUE, "%s", message))
+    {
         Transaction *trans;
         trans = gnc_split_register_get_current_trans( reg );
         if ( !gnc_split_register_save( reg, TRUE ) )
             return;
 
         gnc_split_register_redraw( reg );
-    } else {
+    }
+    else
+    {
         gnc_split_register_cancel_cursor_trans_changes (reg);
     }
 }
@@ -1539,8 +1629,8 @@ gnc_sxed_update_cal(GncSxEditorDialog *sxed)
 
         last_sx_inst = xaccSchedXactionGetLastOccurDate(sxed->sx);
         if (g_date_valid(last_sx_inst)
-            && g_date_valid(&first_date)
-            && g_date_compare(last_sx_inst, &first_date) != 0)
+                && g_date_valid(&first_date)
+                && g_date_compare(last_sx_inst, &first_date) != 0)
         {
             start_date = *last_sx_inst;
             recurrenceListNextInstance(recurrences, &start_date, &first_date);
@@ -1578,7 +1668,7 @@ gnc_sxed_update_cal(GncSxEditorDialog *sxed)
     else if (gtk_toggle_button_get_active(sxed->optEndCount))
     {
         gint num_remain
-            = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sxed->endRemainSpin));
+        = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sxed->endRemainSpin));
         gnc_dense_cal_store_update_recurrences_count_end(sxed->dense_cal_model, &first_date, recurrences, num_remain);
     }
     else
@@ -1641,7 +1731,7 @@ _open_editors(GtkDialog *dialog, gint response_code, gpointer data)
         for (sx_iter = adhd->affected_sxes; sx_iter; sx_iter = sx_iter->next)
         {
             gnc_ui_scheduled_xaction_editor_dialog_create((SchedXaction*)sx_iter->data,
-                                                          FALSE);
+                    FALSE);
         }
     }
     g_list_free(adhd->affected_sxes);
@@ -1701,8 +1791,8 @@ _sx_engine_event_handler(QofInstance *ent, QofEventId event_type, gpointer user_
 
         renderer = gtk_cell_renderer_text_new();
         name_column = gtk_tree_view_column_new_with_attributes(_("Name"),
-                                                               renderer,
-                                                               "text", 0, NULL);
+                      renderer,
+                      "text", 0, NULL);
         gtk_tree_view_append_column(list, name_column);
 
         g_signal_connect(G_OBJECT(dialog), "response",

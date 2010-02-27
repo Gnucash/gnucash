@@ -97,152 +97,155 @@ static QofLogModule log_module = GNC_MOD_GUI;
                                                location);                   \
       return FALSE;                                                         \
     }                                                                       \
-
+ 
 
 static gboolean
 gnc_html_register_url_cb (const char *location, const char *label,
                           gboolean new_window, GNCURLResult *result)
 {
-  GncPluginPage *page = NULL;
-  GNCSplitReg * gsr   = NULL;
-  Split       * split = NULL;
-  Account     * account = NULL;
-  Transaction * trans;
-  GList       * node;
-  QofBook     * book = gnc_get_current_book();
+    GncPluginPage *page = NULL;
+    GNCSplitReg * gsr   = NULL;
+    Split       * split = NULL;
+    Account     * account = NULL;
+    Transaction * trans;
+    GList       * node;
+    QofBook     * book = gnc_get_current_book();
 
-  g_return_val_if_fail (location != NULL, FALSE);
-  g_return_val_if_fail (result != NULL, FALSE);
+    g_return_val_if_fail (location != NULL, FALSE);
+    g_return_val_if_fail (result != NULL, FALSE);
 
-  result->load_to_stream = FALSE;
+    result->load_to_stream = FALSE;
 
-  /* href="gnc-register:account=My Bank Account" */
-  if (strncmp("account=", location, 8) == 0)
-  {
-    account = gnc_account_lookup_by_full_name (gnc_get_current_root_account (),
-					       location + 8);
-  }
+    /* href="gnc-register:account=My Bank Account" */
+    if (strncmp("account=", location, 8) == 0)
+    {
+        account = gnc_account_lookup_by_full_name (gnc_get_current_root_account (),
+                  location + 8);
+    }
 
-  /* href="gnc-register:guid=12345678901234567890123456789012" */
-  else IF_TYPE ("acct-guid=", GNC_ID_ACCOUNT)
-    account = GNC_ACCOUNT(entity);
-  }
+    /* href="gnc-register:guid=12345678901234567890123456789012" */
+    else IF_TYPE ("acct-guid=", GNC_ID_ACCOUNT)
+        account = GNC_ACCOUNT(entity);
+}
 
-  else IF_TYPE ("trans-guid=", GNC_ID_TRANS)
+else IF_TYPE ("trans-guid=", GNC_ID_TRANS)
     trans = (Transaction *) entity;
 
-    for (node = xaccTransGetSplitList (trans); node; node = node->next)
-    {
-      split = node->data;
-      account = xaccSplitGetAccount(split);
-      if (account) break;
-    }
-
-    if (!account)
-    {
-      result->error_message =
-        g_strdup_printf (_("Transaction with no Accounts: %s"), location);
-      return FALSE;
-    }
-  }
-  else IF_TYPE ("split-guid=", GNC_ID_SPLIT)
-    split = (Split *) entity;
+for (node = xaccTransGetSplitList (trans); node; node = node->next)
+{
+    split = node->data;
     account = xaccSplitGetAccount(split);
-  }
-  else
-  {
-    result->error_message =
-          g_strdup_printf (_("Unsupported entity type: %s"), location);
-    return FALSE;
-  }
-
-  page = gnc_plugin_page_register_new (account, FALSE);
-  gnc_main_window_open_page (NULL, page);
-  if (split) {
-      gsr = gnc_plugin_page_register_get_gsr(page);
-      gnc_split_reg_jump_to_split( gsr, split );
-  }
-
-  return TRUE;
+    if (account) break;
 }
 
-/* ============================================================== */
-
-static gboolean
-gnc_html_price_url_cb (const char *location, const char *label,
-                       gboolean new_window, GNCURLResult *result)
+if (!account)
 {
-  QofBook * book = gnc_get_current_book();
-  g_return_val_if_fail (location != NULL, FALSE);
-  g_return_val_if_fail (result != NULL, FALSE);
+    result->error_message =
+        g_strdup_printf (_("Transaction with no Accounts: %s"), location);
+    return FALSE;
+}
+}
+else IF_TYPE ("split-guid=", GNC_ID_SPLIT)
+    split = (Split *) entity;
+        account = xaccSplitGetAccount(split);
+                  }
+                  else
+{
+    result->error_message =
+        g_strdup_printf (_("Unsupported entity type: %s"), location);
+    return FALSE;
+}
 
-  result->load_to_stream = FALSE;
+page = gnc_plugin_page_register_new (account, FALSE);
+       gnc_main_window_open_page (NULL, page);
+       if (split)
+{
+    gsr = gnc_plugin_page_register_get_gsr(page);
+    gnc_split_reg_jump_to_split( gsr, split );
+}
 
-  /* href="gnc-register:guid=12345678901234567890123456789012" */
-  IF_TYPE ("price-guid=", GNC_ID_PRICE)
-    if (!gnc_price_edit_by_guid (NULL, &guid)) 
+return TRUE;
+       }
+
+       /* ============================================================== */
+
+       static gboolean
+       gnc_html_price_url_cb (const char *location, const char *label,
+                              gboolean new_window, GNCURLResult *result)
+{
+    QofBook * book = gnc_get_current_book();
+    g_return_val_if_fail (location != NULL, FALSE);
+    g_return_val_if_fail (result != NULL, FALSE);
+
+    result->load_to_stream = FALSE;
+
+    /* href="gnc-register:guid=12345678901234567890123456789012" */
+    IF_TYPE ("price-guid=", GNC_ID_PRICE)
+    if (!gnc_price_edit_by_guid (NULL, &guid))
     {
         result->error_message = g_strdup_printf (_("No such price: %s"),
-                                                 location);
+                                location);
         return FALSE;
     }
-  }
-  else
-  {
-      result->error_message = g_strdup_printf (_("Badly formed URL %s"),
-                                               location);
-      return FALSE;
-  }
-
-  return TRUE;
+}
+else
+{
+    result->error_message = g_strdup_printf (_("Badly formed URL %s"),
+                            location);
+    return FALSE;
 }
 
-/** Restore all persistent program state.  This function finds the
- *  "new" state file associated with a specific book guid.  It then
- *  iterates through this state information, calling a helper function
- *  to recreate each open window.
- *
- *  @note The name of the state file is based on the name of the data
- *  file, not the path name of the data file.  If there are multiple
- *  data files with the same name, the state files will be suffixed
- *  with a number.  E.G. test_account, test_account_2, test_account_3,
- *  etc.
- *
- *  @param session A pointer to the current session.
- *
- *  @param unused An unused pointer. */
-static void
-gnc_restore_all_state (gpointer session, gpointer unused)
+return TRUE;
+       }
+
+       /** Restore all persistent program state.  This function finds the
+        *  "new" state file associated with a specific book guid.  It then
+        *  iterates through this state information, calling a helper function
+        *  to recreate each open window.
+        *
+        *  @note The name of the state file is based on the name of the data
+        *  file, not the path name of the data file.  If there are multiple
+        *  data files with the same name, the state files will be suffixed
+        *  with a number.  E.G. test_account, test_account_2, test_account_3,
+        *  etc.
+        *
+        *  @param session A pointer to the current session.
+        *
+        *  @param unused An unused pointer. */
+       static void
+       gnc_restore_all_state (gpointer session, gpointer unused)
 {
     GKeyFile *keyfile = NULL;
     QofBook *book;
     const GUID *guid;
-    const gchar *url, *guid_string;    
+    const gchar *url, *guid_string;
     gchar *file_guid, *filename = NULL;
     GError *error = NULL;
-    
+
     url = qof_session_get_url(session);
     ENTER("session %p (%s)", session, url ? url : "(null)");
-    if (!url) {
+    if (!url)
+    {
         LEAVE("no url, nothing to do");
         return;
     }
-    
+
     /* Get the book GUID */
     book = qof_session_get_book(session);
     guid = qof_entity_get_guid(QOF_INSTANCE(book));
     guid_string = guid_to_string(guid);
-    
+
     keyfile = gnc_find_state_file(url, guid_string, &filename);
     if (filename)
         g_free(filename);
 
-    if (!keyfile) {
+    if (!keyfile)
+    {
         gnc_main_window_restore_default_state();
         LEAVE("no state file");
         return;
     }
-    
+
 #ifdef DEBUG
     /*  Debugging: dump a copy to stdout and the trace log */
     {
@@ -253,28 +256,30 @@ gnc_restore_all_state (gpointer session, gpointer unused)
         g_free(file_data);
     }
 #endif
-    
+
     /* validate top level info */
-    file_guid = g_key_file_get_string(keyfile, STATE_FILE_TOP, 
+    file_guid = g_key_file_get_string(keyfile, STATE_FILE_TOP,
                                       STATE_FILE_BOOK_GUID, &error);
-    if (error) {
+    if (error)
+    {
         g_warning("error reading group %s key %s: %s",
                   STATE_FILE_TOP, STATE_FILE_BOOK_GUID, error->message);
         LEAVE("can't read guid");
         goto cleanup;
     }
-    if (!file_guid || strcmp(guid_string, file_guid)) {
+    if (!file_guid || strcmp(guid_string, file_guid))
+    {
         g_warning("guid mismatch: book guid %s, state file guid %s",
                   guid_string, file_guid);
         LEAVE("guid values do not match");
         goto cleanup;
     }
-    
+
     gnc_main_window_restore_all_windows(keyfile);
-    
+
     /* Clean up */
     LEAVE("ok");
- cleanup:
+cleanup:
     if (error)
         g_error_free(error);
     if (file_guid)
@@ -306,11 +311,12 @@ gnc_save_all_state (gpointer session, gpointer unused)
     const GUID *guid;
     GError *error = NULL;
     GKeyFile *keyfile = NULL;
-    
-    
+
+
     url = qof_session_get_url(session);
     ENTER("session %p (%s)", session, url ? url : "(null)");
-    if (!url) {
+    if (!url)
+    {
         LEAVE("no url, nothing to do");
         return;
     }
@@ -335,7 +341,7 @@ gnc_save_all_state (gpointer session, gpointer unused)
                           guid_string);
 
     gnc_main_window_save_all_windows(keyfile);
-    
+
 #ifdef DEBUG
     /*  Debugging: dump a copy to the trace log */
     {
@@ -349,13 +355,14 @@ gnc_save_all_state (gpointer session, gpointer unused)
 
     /* Write it all out to disk */
     gnc_key_file_save_to_file(filename, keyfile, &error);
-    if (error) {
-        g_critical(_("Error: Failure saving state file.\n  %s"), 
+    if (error)
+    {
+        g_critical(_("Error: Failure saving state file.\n  %s"),
                    error->message);
         g_error_free(error);
     }
     g_free(filename);
-    
+
     /* Clean up */
     g_key_file_free(keyfile);
     LEAVE("");
@@ -367,7 +374,7 @@ gnc_main_gui_init (void)
     ENTER(" ");
 
     if (!gnucash_style_init())
-      gnc_shutdown(1);
+        gnc_shutdown(1);
     gnucash_color_init();
 
     gnc_html_register_url_handler (URL_TYPE_REGISTER,

@@ -30,7 +30,7 @@
 /********************************************************************\
  * gnc_stock_split_dialog                                           *
  *   opens up a window to record a stock split                      *
- *                                                                  * 
+ *                                                                  *
  * Args:   parent  - the parent ofthis window                       *
  *         initial - the initial account to use                     *
  * Return: nothing                                                  *

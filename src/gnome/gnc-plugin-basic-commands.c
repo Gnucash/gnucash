@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-basic-commands.c -- 
+/*
+ * gnc-plugin-basic-commands.c --
  *
  * Copyright (C) 2005 David Hampton <hampton@employees.org>
  *
@@ -94,89 +94,126 @@ static void gnc_main_window_cmd_help_totd (GtkAction *action, GncMainWindowActio
 
 /** An array of all of the actions provided by the basic commands
  *  plugin. */
-static GtkActionEntry gnc_plugin_actions [] = {
+static GtkActionEntry gnc_plugin_actions [] =
+{
 
-  /* File menu */
+    /* File menu */
 
-  { "FileNewAction", GTK_STOCK_NEW, N_("New _File"), NULL,
-    N_("Create a new file"),
-    G_CALLBACK (gnc_main_window_cmd_file_new) },
-  { "FileOpenAction", GTK_STOCK_OPEN, N_("_Open..."), NULL,
-    N_("Open an existing GnuCash file"),
-    G_CALLBACK (gnc_main_window_cmd_file_open) },
-  { "FileSaveAction", GTK_STOCK_SAVE, N_("_Save"), "<control>s",
-    N_("Save the current file"),
-    G_CALLBACK (gnc_main_window_cmd_file_save) },
-  { "FileSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><control>s",
-    NULL,
-    G_CALLBACK (gnc_main_window_cmd_file_save_as) },
+    {
+        "FileNewAction", GTK_STOCK_NEW, N_("New _File"), NULL,
+        N_("Create a new file"),
+        G_CALLBACK (gnc_main_window_cmd_file_new)
+    },
+    {
+        "FileOpenAction", GTK_STOCK_OPEN, N_("_Open..."), NULL,
+        N_("Open an existing GnuCash file"),
+        G_CALLBACK (gnc_main_window_cmd_file_open)
+    },
+    {
+        "FileSaveAction", GTK_STOCK_SAVE, N_("_Save"), "<control>s",
+        N_("Save the current file"),
+        G_CALLBACK (gnc_main_window_cmd_file_save)
+    },
+    {
+        "FileSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><control>s",
+        NULL,
+        G_CALLBACK (gnc_main_window_cmd_file_save_as)
+    },
 #ifdef QSF_IMPORT_WORKS
-  { "FileImportQSFAction", GTK_STOCK_CONVERT,
-    N_("_QSF Import"), NULL,
-    N_("Import a QSF object file"),
-    G_CALLBACK (gnc_main_window_cmd_file_qsf_import) },
+    {
+        "FileImportQSFAction", GTK_STOCK_CONVERT,
+        N_("_QSF Import"), NULL,
+        N_("Import a QSF object file"),
+        G_CALLBACK (gnc_main_window_cmd_file_qsf_import)
+    },
 #endif // QSF_IMPORT_WORKS
-  { "FileExportAccountsAction", GTK_STOCK_CONVERT,
-    N_("Export _Accounts"), NULL,
-    N_("Export the account hierarchy to a new GnuCash datafile"),
-    G_CALLBACK (gnc_main_window_cmd_file_export_accounts) },
-  { "FileExportChartAction", GTK_STOCK_CONVERT,
-    N_("Export _Chart of Accounts to QSF"), NULL,
-    N_("Export the chart of accounts for a date with balances as QSF"),
-    G_CALLBACK (gnc_main_window_cmd_file_chart_export) },
+    {
+        "FileExportAccountsAction", GTK_STOCK_CONVERT,
+        N_("Export _Accounts"), NULL,
+        N_("Export the account hierarchy to a new GnuCash datafile"),
+        G_CALLBACK (gnc_main_window_cmd_file_export_accounts)
+    },
+    {
+        "FileExportChartAction", GTK_STOCK_CONVERT,
+        N_("Export _Chart of Accounts to QSF"), NULL,
+        N_("Export the chart of accounts for a date with balances as QSF"),
+        G_CALLBACK (gnc_main_window_cmd_file_chart_export)
+    },
 
-  /* Edit menu */
+    /* Edit menu */
 
-  { "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<control>f",
-    N_("Find transactions with a search"),
-    G_CALLBACK (gnc_main_window_cmd_tools_find_transactions) },
-  { "EditTaxOptionsAction", NULL, 
-    N_("Ta_x Report Options"), NULL,
-   /* Translators: currently implemented are *
-    * US: income tax and                     *
-    * DE: VAT                                *
-    * So adjust this string                  */
-    N_("Setup relevant accounts for tax reports, e.g. US income tax"),
-    G_CALLBACK (gnc_main_window_cmd_edit_tax_options) },
+    {
+        "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<control>f",
+        N_("Find transactions with a search"),
+        G_CALLBACK (gnc_main_window_cmd_tools_find_transactions)
+    },
+    {
+        "EditTaxOptionsAction", NULL,
+        N_("Ta_x Report Options"), NULL,
+        /* Translators: currently implemented are *
+         * US: income tax and                     *
+         * DE: VAT                                *
+         * So adjust this string                  */
+        N_("Setup relevant accounts for tax reports, e.g. US income tax"),
+        G_CALLBACK (gnc_main_window_cmd_edit_tax_options)
+    },
 
-  /* Actions menu */
+    /* Actions menu */
 
-  { "ActionsScheduledTransactionsAction", NULL, N_("_Scheduled Transactions"), NULL, NULL, NULL },
-  { "ActionsScheduledTransactionEditorAction", NULL, N_("_Scheduled Transaction Editor"), NULL,
-    N_("The list of Scheduled Transactions"),
-    G_CALLBACK (gnc_main_window_cmd_actions_scheduled_transaction_editor) },
-  { "ActionsSinceLastRunAction", NULL, N_("Since _Last Run..."), NULL,
-    N_("Create Scheduled Transactions since the last time run"),
-    G_CALLBACK (gnc_main_window_cmd_actions_since_last_run) },
-  { "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment..."), NULL,
-    N_("Setup scheduled transactions for repayment of a loan"),
-    G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan) },
+    { "ActionsScheduledTransactionsAction", NULL, N_("_Scheduled Transactions"), NULL, NULL, NULL },
+    {
+        "ActionsScheduledTransactionEditorAction", NULL, N_("_Scheduled Transaction Editor"), NULL,
+        N_("The list of Scheduled Transactions"),
+        G_CALLBACK (gnc_main_window_cmd_actions_scheduled_transaction_editor)
+    },
+    {
+        "ActionsSinceLastRunAction", NULL, N_("Since _Last Run..."), NULL,
+        N_("Create Scheduled Transactions since the last time run"),
+        G_CALLBACK (gnc_main_window_cmd_actions_since_last_run)
+    },
+    {
+        "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment..."), NULL,
+        N_("Setup scheduled transactions for repayment of a loan"),
+        G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan)
+    },
 #ifdef CLOSE_BOOKS_ACTUALLY_WORKS
-  { "ActionsCloseBooksAction", NULL, N_("Close _Books"), NULL,
-    N_("Archive old data using accounting periods"),
-    G_CALLBACK (gnc_main_window_cmd_actions_close_books) },
+    {
+        "ActionsCloseBooksAction", NULL, N_("Close _Books"), NULL,
+        N_("Archive old data using accounting periods"),
+        G_CALLBACK (gnc_main_window_cmd_actions_close_books)
+    },
 #endif // CLOSE_BOOKS_ACTUALLY_WORKS
 
-  /* Tools menu */
+    /* Tools menu */
 
-  { "ToolsPriceEditorAction", NULL, N_("_Price Editor"), NULL,
-    N_("View and edit the prices for stocks and mutual funds"),
-    G_CALLBACK (gnc_main_window_cmd_tools_price_editor) },
-  { "ToolsCommodityEditorAction", NULL, N_("_Security Editor"), NULL,
-    N_("View and edit the commodities for stocks and mutual funds"),
-    G_CALLBACK (gnc_main_window_cmd_tools_commodity_editor) },
-  { "ToolsFinancialCalculatorAction", NULL, N_("_Financial Calculator"), NULL,
-    N_("Use the financial calculator"),
-    G_CALLBACK (gnc_main_window_cmd_tools_financial_calculator) },
-  { "ToolsBookCloseAction", NULL, N_("_Close Book"), NULL,
-    N_("Close the Book at the end of the Period"),
-    G_CALLBACK (gnc_main_window_cmd_tools_close_book) },
+    {
+        "ToolsPriceEditorAction", NULL, N_("_Price Editor"), NULL,
+        N_("View and edit the prices for stocks and mutual funds"),
+        G_CALLBACK (gnc_main_window_cmd_tools_price_editor)
+    },
+    {
+        "ToolsCommodityEditorAction", NULL, N_("_Security Editor"), NULL,
+        N_("View and edit the commodities for stocks and mutual funds"),
+        G_CALLBACK (gnc_main_window_cmd_tools_commodity_editor)
+    },
+    {
+        "ToolsFinancialCalculatorAction", NULL, N_("_Financial Calculator"), NULL,
+        N_("Use the financial calculator"),
+        G_CALLBACK (gnc_main_window_cmd_tools_financial_calculator)
+    },
+    {
+        "ToolsBookCloseAction", NULL, N_("_Close Book"), NULL,
+        N_("Close the Book at the end of the Period"),
+        G_CALLBACK (gnc_main_window_cmd_tools_close_book)
+    },
 
-  /* Help menu */
+    /* Help menu */
 
-  { "HelpTipsOfTheDayAction", NULL, N_("_Tips Of The Day"), NULL,
-    N_("View the Tips of the Day"),
-    G_CALLBACK (gnc_main_window_cmd_help_totd) },
+    {
+        "HelpTipsOfTheDayAction", NULL, N_("_Tips Of The Day"), NULL,
+        N_("View the Tips of the Day"),
+        G_CALLBACK (gnc_main_window_cmd_help_totd)
+    },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
@@ -185,9 +222,10 @@ static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 /** These are the "important" actions provided by the basic commands
  *  plugin.  Their labels will appear when the toolbar is set to
  *  "Icons and important text" (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode. */
-static const gchar *gnc_plugin_important_actions[] = {
-  "FileSaveAction",
-  NULL,
+static const gchar *gnc_plugin_important_actions[] =
+{
+    "FileSaveAction",
+    NULL,
 };
 
 
@@ -195,7 +233,7 @@ static const gchar *gnc_plugin_important_actions[] = {
  *  plugin. */
 typedef struct GncPluginBasicCommandsPrivate
 {
-  gpointer dummy;
+    gpointer dummy;
 } GncPluginBasicCommandsPrivate;
 
 #define GNC_PLUGIN_BASIC_COMMANDS_GET_PRIVATE(o)  \
@@ -209,27 +247,29 @@ static GObjectClass *parent_class = NULL;
 GType
 gnc_plugin_basic_commands_get_type (void)
 {
-  static GType gnc_plugin_basic_commands_type = 0;
+    static GType gnc_plugin_basic_commands_type = 0;
 
-  if (gnc_plugin_basic_commands_type == 0) {
-    static const GTypeInfo our_info = {
-      sizeof (GncPluginBasicCommandsClass),
-      NULL,		/* base_init */
-      NULL,		/* base_finalize */
-      (GClassInitFunc) gnc_plugin_basic_commands_class_init,
-      NULL,		/* class_finalize */
-      NULL,		/* class_data */
-      sizeof (GncPluginBasicCommands),
-      0,		/* n_preallocs */
-      (GInstanceInitFunc) gnc_plugin_basic_commands_init
-    };
- 
-    gnc_plugin_basic_commands_type = g_type_register_static (GNC_TYPE_PLUGIN,
-							     "GncPluginBasicCommands",
-							     &our_info, 0);
-  }
+    if (gnc_plugin_basic_commands_type == 0)
+    {
+        static const GTypeInfo our_info =
+        {
+            sizeof (GncPluginBasicCommandsClass),
+            NULL,		/* base_init */
+            NULL,		/* base_finalize */
+            (GClassInitFunc) gnc_plugin_basic_commands_class_init,
+            NULL,		/* class_finalize */
+            NULL,		/* class_data */
+            sizeof (GncPluginBasicCommands),
+            0,		/* n_preallocs */
+            (GInstanceInitFunc) gnc_plugin_basic_commands_init
+        };
 
-  return gnc_plugin_basic_commands_type;
+        gnc_plugin_basic_commands_type = g_type_register_static (GNC_TYPE_PLUGIN,
+                                         "GncPluginBasicCommands",
+                                         &our_info, 0);
+    }
+
+    return gnc_plugin_basic_commands_type;
 }
 
 
@@ -237,15 +277,15 @@ gnc_plugin_basic_commands_get_type (void)
 GncPlugin *
 gnc_plugin_basic_commands_new (void)
 {
-  GncPluginBasicCommands *plugin;
+    GncPluginBasicCommands *plugin;
 
-  /* We just need to mention it, so the GType is registered and will be
-   * reflected during plugin-page restore. */
-  GNC_TYPE_PLUGIN_PAGE_SX_LIST;
+    /* We just need to mention it, so the GType is registered and will be
+     * reflected during plugin-page restore. */
+    GNC_TYPE_PLUGIN_PAGE_SX_LIST;
 
-  plugin = g_object_new (GNC_TYPE_PLUGIN_BASIC_COMMANDS, NULL);
+    plugin = g_object_new (GNC_TYPE_PLUGIN_BASIC_COMMANDS, NULL);
 
-  return GNC_PLUGIN (plugin);
+    return GNC_PLUGIN (plugin);
 }
 
 /** Initialize the basic commands menu for a window.  This function is
@@ -264,8 +304,8 @@ gnc_plugin_basic_commands_new (void)
  */
 static void
 gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin,
-				       GncMainWindow *window,
-				       GQuark type)
+        GncMainWindow *window,
+        GQuark type)
 {
 }
 
@@ -279,27 +319,27 @@ gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin,
 static void
 gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
+    parent_class = g_type_class_peek_parent (klass);
 
-  object_class->finalize = gnc_plugin_basic_commands_finalize;
+    object_class->finalize = gnc_plugin_basic_commands_finalize;
 
-  /* plugin info */
-  plugin_class->plugin_name  = GNC_PLUGIN_BASIC_COMMANDS_NAME;
+    /* plugin info */
+    plugin_class->plugin_name  = GNC_PLUGIN_BASIC_COMMANDS_NAME;
 
-  /* function overrides */
-  plugin_class->add_to_window = gnc_plugin_basic_commands_add_to_window;
+    /* function overrides */
+    plugin_class->add_to_window = gnc_plugin_basic_commands_add_to_window;
 
-  /* widget addition/removal */
-  plugin_class->actions_name 	  = PLUGIN_ACTIONS_NAME;
-  plugin_class->actions      	  = gnc_plugin_actions;
-  plugin_class->n_actions    	  = gnc_plugin_n_actions;
-  plugin_class->important_actions = gnc_plugin_important_actions;
-  plugin_class->ui_filename       = PLUGIN_UI_FILENAME;
+    /* widget addition/removal */
+    plugin_class->actions_name 	  = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions      	  = gnc_plugin_actions;
+    plugin_class->n_actions    	  = gnc_plugin_n_actions;
+    plugin_class->important_actions = gnc_plugin_important_actions;
+    plugin_class->ui_filename       = PLUGIN_UI_FILENAME;
 
-  g_type_class_add_private(klass, sizeof(GncPluginBasicCommandsPrivate));
+    g_type_class_add_private(klass, sizeof(GncPluginBasicCommandsPrivate));
 }
 
 
@@ -325,15 +365,15 @@ gnc_plugin_basic_commands_init (GncPluginBasicCommands *plugin)
 static void
 gnc_plugin_basic_commands_finalize (GObject *object)
 {
-  GncPluginBasicCommands *plugin;
-  GncPluginBasicCommandsPrivate *priv;
+    GncPluginBasicCommands *plugin;
+    GncPluginBasicCommandsPrivate *priv;
 
-  g_return_if_fail (GNC_IS_PLUGIN_BASIC_COMMANDS (object));
+    g_return_if_fail (GNC_IS_PLUGIN_BASIC_COMMANDS (object));
 
-  plugin = GNC_PLUGIN_BASIC_COMMANDS (object);
-  priv= GNC_PLUGIN_BASIC_COMMANDS_GET_PRIVATE (plugin);
+    plugin = GNC_PLUGIN_BASIC_COMMANDS (object);
+    priv = GNC_PLUGIN_BASIC_COMMANDS_GET_PRIVATE (plugin);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /************************************************************
@@ -343,253 +383,254 @@ gnc_plugin_basic_commands_finalize (GObject *object)
 static void
 gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindowActionData *data)
 {
-  if (!gnc_main_window_all_finish_pending())
-    return;
+    if (!gnc_main_window_all_finish_pending())
+        return;
 
-  gnc_file_new ();
-  /* FIXME GNOME 2 Port (update the title etc.) */
+    gnc_file_new ();
+    /* FIXME GNOME 2 Port (update the title etc.) */
 }
 
 static void
 gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data)
 {
-  g_return_if_fail (data != NULL);
+    g_return_if_fail (data != NULL);
 
-  if (!gnc_main_window_all_finish_pending())
-    return;
+    if (!gnc_main_window_all_finish_pending())
+        return;
 
-  gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
 #ifdef HAVE_DBI_DBI_H
-  gnc_ui_file_access_for_open();
+    gnc_ui_file_access_for_open();
 #else
-  gnc_file_open ();
+    gnc_file_open ();
 #endif
-  gnc_window_set_progressbar_window (NULL);
+    gnc_window_set_progressbar_window (NULL);
 }
 
 static void
 gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindowActionData *data)
 {
-  g_return_if_fail (data != NULL);
+    g_return_if_fail (data != NULL);
 
-  if (!gnc_main_window_all_finish_pending())
-    return;
+    if (!gnc_main_window_all_finish_pending())
+        return;
 
-  gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-  gnc_file_save ();
-  gnc_window_set_progressbar_window (NULL);
-  /* FIXME GNOME 2 Port (update the title etc.) */
+    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+    gnc_file_save ();
+    gnc_window_set_progressbar_window (NULL);
+    /* FIXME GNOME 2 Port (update the title etc.) */
 }
 
 static void
 gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *data)
 {
-  g_return_if_fail (data != NULL);
+    g_return_if_fail (data != NULL);
 
-  if (!gnc_main_window_all_finish_pending())
-    return;
+    if (!gnc_main_window_all_finish_pending())
+        return;
 
-  gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
 #ifdef HAVE_DBI_DBI_H
-  gnc_ui_file_access_for_save_as();
+    gnc_ui_file_access_for_save_as();
 #else
-  gnc_file_save_as ();
+    gnc_file_save_as ();
 #endif
-  gnc_window_set_progressbar_window (NULL);
-  /* FIXME GNOME 2 Port (update the title etc.) */
+    gnc_window_set_progressbar_window (NULL);
+    /* FIXME GNOME 2 Port (update the title etc.) */
 }
 
 static void
 qsf_file_select_ok(GtkWidget *w, GtkFileSelection *fs )
 {
-  QofSession *qsf_session, *first_session;
-  const gchar *filename, *message, *error_message;
-  QofBook *original;
-  QofBackendError err;
+    QofSession *qsf_session, *first_session;
+    const gchar *filename, *message, *error_message;
+    QofBook *original;
+    QofBackendError err;
 
-  ENTER (" ");
-  qof_event_suspend();
-  filename = gtk_file_selection_get_filename(GTK_FILE_SELECTION (fs));
-  gtk_widget_destroy((GtkWidget*) fs);
-  first_session = gnc_get_current_session();
-  original = qof_session_get_book(first_session);
-  qsf_session = qof_session_new();
-  qof_session_begin(qsf_session, filename, TRUE, FALSE);
-  qof_session_load(qsf_session, NULL);
-  err = qof_session_get_error(qsf_session);
-  if (err != ERR_BACKEND_NO_ERR) {
-    error_message = qof_session_get_error_message(qsf_session);
-    if (!error_message)
-	error_message = "";
-    /* Translators: %d is the error number; %s is the error message as
-       text. */
-    message = g_strdup_printf(_("Error: Loading failed, error code %d - %s."), err, error_message);
-    PERR("%s", message);
-    qof_session_destroy(qsf_session);
+    ENTER (" ");
+    qof_event_suspend();
+    filename = gtk_file_selection_get_filename(GTK_FILE_SELECTION (fs));
+    gtk_widget_destroy((GtkWidget*) fs);
+    first_session = gnc_get_current_session();
+    original = qof_session_get_book(first_session);
+    qsf_session = qof_session_new();
+    qof_session_begin(qsf_session, filename, TRUE, FALSE);
+    qof_session_load(qsf_session, NULL);
+    err = qof_session_get_error(qsf_session);
+    if (err != ERR_BACKEND_NO_ERR)
+    {
+        error_message = qof_session_get_error_message(qsf_session);
+        if (!error_message)
+            error_message = "";
+        /* Translators: %d is the error number; %s is the error message as
+           text. */
+        message = g_strdup_printf(_("Error: Loading failed, error code %d - %s."), err, error_message);
+        PERR("%s", message);
+        qof_session_destroy(qsf_session);
+        qof_event_resume();
+        gnc_error_dialog(gnc_ui_get_toplevel(), "%s", message);
+        LEAVE (" ");
+        return;
+    }
+
     qof_event_resume();
-    gnc_error_dialog(gnc_ui_get_toplevel(), "%s", message);
+    gnc_ui_qsf_import_merge_druid(first_session, qsf_session);
     LEAVE (" ");
-    return;
-  }
-
-  qof_event_resume();
-  gnc_ui_qsf_import_merge_druid(first_session, qsf_session);
-  LEAVE (" ");
 }
 
 static void
 gnc_main_window_cmd_file_qsf_import (GtkAction *action, GncMainWindowActionData *data)
 {
-  GtkWidget *file_select;
+    GtkWidget *file_select;
 
-  g_return_if_fail (data != NULL);
+    g_return_if_fail (data != NULL);
 
-  gnc_window_set_progressbar_window(GNC_WINDOW(data->window));
-  file_select = gtk_file_selection_new(_("Select the QSF file to import into GnuCash"));
-  g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (file_select)->ok_button),
-		    "clicked", G_CALLBACK (qsf_file_select_ok), (gpointer) file_select);
-  g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (file_select)->cancel_button),
-			    "clicked", G_CALLBACK (gtk_widget_destroy), G_OBJECT (file_select));
-  gtk_widget_show (file_select);
-  gnc_window_set_progressbar_window(NULL);
+    gnc_window_set_progressbar_window(GNC_WINDOW(data->window));
+    file_select = gtk_file_selection_new(_("Select the QSF file to import into GnuCash"));
+    g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (file_select)->ok_button),
+                      "clicked", G_CALLBACK (qsf_file_select_ok), (gpointer) file_select);
+    g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (file_select)->cancel_button),
+                              "clicked", G_CALLBACK (gtk_widget_destroy), G_OBJECT (file_select));
+    gtk_widget_show (file_select);
+    gnc_window_set_progressbar_window(NULL);
 }
 
 static void
 gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowActionData *data)
 {
-  g_return_if_fail (data != NULL);
+    g_return_if_fail (data != NULL);
 
-  gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-  gnc_file_export_file (NULL);
-  gnc_window_set_progressbar_window (NULL);
-  /* FIXME GNOME 2 Port (update the title etc.) */
-  /* gnc_refresh_main_window_info (); */
+    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+    gnc_file_export_file (NULL);
+    gnc_window_set_progressbar_window (NULL);
+    /* FIXME GNOME 2 Port (update the title etc.) */
+    /* gnc_refresh_main_window_info (); */
 }
 
 static void
 gnc_main_window_cmd_file_chart_export (GtkAction *action, GncMainWindowActionData *data)
 {
-  g_return_if_fail (data != NULL);
+    g_return_if_fail (data != NULL);
 
-  gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-  gnc_main_window_chart_export();
-  gnc_window_set_progressbar_window (NULL);
-  /* FIXME GNOME 2 Port (update the title etc.) */
-  /* gnc_refresh_main_window_info (); */
+    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+    gnc_main_window_chart_export();
+    gnc_window_set_progressbar_window (NULL);
+    /* FIXME GNOME 2 Port (update the title etc.) */
+    /* gnc_refresh_main_window_info (); */
 }
 
 static void
 gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindowActionData *data)
 {
-	g_return_if_fail (data != NULL);
+    g_return_if_fail (data != NULL);
 
-	gnc_tax_info_dialog (GTK_WIDGET (data->window));
+    gnc_tax_info_dialog (GTK_WIDGET (data->window));
 }
 
 static void
 gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, GncMainWindowActionData *data)
 {
-        GncPluginPage *page = gnc_plugin_page_sx_list_new();
-        gnc_main_window_open_page(NULL, page);
+    GncPluginPage *page = gnc_plugin_page_sx_list_new();
+    gnc_main_window_open_page(NULL, page);
 }
 
 static void
 gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActionData *data)
 {
-  GncMainWindow *window;
-  GncSxInstanceModel *sx_instances;
-  GncSxSummary summary;
-  GList *auto_created_txns = NULL;
-  const char *nothing_to_do_msg =
-    _( "There are no Scheduled Transactions to be entered at this time." );
-	
-  g_return_if_fail (data != NULL);
+    GncMainWindow *window;
+    GncSxInstanceModel *sx_instances;
+    GncSxSummary summary;
+    GList *auto_created_txns = NULL;
+    const char *nothing_to_do_msg =
+        _( "There are no Scheduled Transactions to be entered at this time." );
 
-  window = data->window;
+    g_return_if_fail (data != NULL);
 
-  sx_instances = gnc_sx_get_current_instances();
-  gnc_sx_instance_model_summarize(sx_instances, &summary);
-  gnc_sx_instance_model_effect_change(sx_instances, TRUE, &auto_created_txns, NULL);
-  if (summary.need_dialog)
-  {
-    gnc_ui_sx_since_last_run_dialog(sx_instances, auto_created_txns);
-    auto_created_txns = NULL;
-  }
-  else
-  {
-    if (summary.num_auto_create_no_notify_instances == 0)
+    window = data->window;
+
+    sx_instances = gnc_sx_get_current_instances();
+    gnc_sx_instance_model_summarize(sx_instances, &summary);
+    gnc_sx_instance_model_effect_change(sx_instances, TRUE, &auto_created_txns, NULL);
+    if (summary.need_dialog)
     {
-      gnc_info_dialog(GTK_WIDGET(&window->gtk_window), "%s", nothing_to_do_msg);
+        gnc_ui_sx_since_last_run_dialog(sx_instances, auto_created_txns);
+        auto_created_txns = NULL;
     }
     else
     {
-      gnc_info_dialog(GTK_WIDGET(&window->gtk_window), ngettext
-                      /* Translators: %d is the number of transactions. This is a
-                         ngettext(3) message. */
-                      ("There are no Scheduled Transactions to be entered at this time. "
-                       "(%d transaction automatically created)",
-                       "There are no Scheduled Transactions to be entered at this time. "
-                       "(%d transactions automatically created)",
-                       summary.num_auto_create_no_notify_instances),
-                      summary.num_auto_create_no_notify_instances);
+        if (summary.num_auto_create_no_notify_instances == 0)
+        {
+            gnc_info_dialog(GTK_WIDGET(&window->gtk_window), "%s", nothing_to_do_msg);
+        }
+        else
+        {
+            gnc_info_dialog(GTK_WIDGET(&window->gtk_window), ngettext
+                            /* Translators: %d is the number of transactions. This is a
+                               ngettext(3) message. */
+                            ("There are no Scheduled Transactions to be entered at this time. "
+                             "(%d transaction automatically created)",
+                             "There are no Scheduled Transactions to be entered at this time. "
+                             "(%d transactions automatically created)",
+                             summary.num_auto_create_no_notify_instances),
+                            summary.num_auto_create_no_notify_instances);
+        }
     }
-  }
-  g_list_free(auto_created_txns);
-  g_object_unref(G_OBJECT(sx_instances));
+    g_list_free(auto_created_txns);
+    g_object_unref(G_OBJECT(sx_instances));
 }
 
 static void
 gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActionData *data)
 {
-  gnc_ui_sx_loan_druid_create ();
+    gnc_ui_sx_loan_druid_create ();
 }
 
 static void
 gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindowActionData *data)
 {
-  gnc_acct_period_dialog();
+    gnc_acct_period_dialog();
 }
 
 static void
 gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data)
 {
-	gnc_set_busy_cursor(NULL, TRUE);
-	gnc_prices_dialog (NULL);
-	gnc_unset_busy_cursor(NULL);
+    gnc_set_busy_cursor(NULL, TRUE);
+    gnc_prices_dialog (NULL);
+    gnc_unset_busy_cursor(NULL);
 }
 
 static void
 gnc_main_window_cmd_tools_commodity_editor (GtkAction *action, GncMainWindowActionData *data)
 {
-	gnc_set_busy_cursor(NULL, TRUE);
-	gnc_commodities_dialog (NULL);
-	gnc_unset_busy_cursor(NULL);
+    gnc_set_busy_cursor(NULL, TRUE);
+    gnc_commodities_dialog (NULL);
+    gnc_unset_busy_cursor(NULL);
 }
 
 static void
 gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, GncMainWindowActionData *data)
 {
-  gnc_ui_fincalc_dialog_create();
+    gnc_ui_fincalc_dialog_create();
 }
 
 static void
 gnc_main_window_cmd_tools_close_book (GtkAction *action, GncMainWindowActionData *data)
 {
-  gnc_ui_close_book(gnc_get_current_book());
+    gnc_ui_close_book(gnc_get_current_book());
 }
 
 static void
 gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindowActionData *data)
 {
-  gnc_ui_find_transactions_dialog_create (NULL);
+    gnc_ui_find_transactions_dialog_create (NULL);
 }
 
 static void
 gnc_main_window_cmd_help_totd (GtkAction *action, GncMainWindowActionData *data)
 {
-  g_return_if_fail (data != NULL);
+    g_return_if_fail (data != NULL);
 
-  gnc_totd_dialog(GTK_WINDOW(data->window), FALSE);
+    gnc_totd_dialog(GTK_WINDOW(data->window), FALSE);
 }
 
 /** @} */

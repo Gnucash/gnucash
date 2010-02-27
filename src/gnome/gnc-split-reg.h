@@ -41,100 +41,103 @@
 typedef struct _GNCSplitReg GNCSplitReg;
 typedef struct _GNCSplitRegClass GNCSplitRegClass;
 
-struct _GNCSplitReg {
-  /* The "parent" widget. */
-  GtkVBox vbox;
+struct _GNCSplitReg
+{
+    /* The "parent" widget. */
+    GtkVBox vbox;
 
-  /* The containing window. */
-  GtkWidget *window;
-  gint width;
-  gint height;
+    /* The containing window. */
+    GtkWidget *window;
+    gint width;
+    gint height;
 
-  GtkWidget *toolbar;
-  GtkWidget *summarybar; 
+    GtkWidget *toolbar;
+    GtkWidget *summarybar;
 
-  GtkWidget *popup_menu;
+    GtkWidget *popup_menu;
 
-  GtkWidget *edit_menu;
-  GtkWidget *view_menu;
-  GtkWidget *style_submenu;
-  GtkWidget *sort_submenu;
-  GtkWidget *action_menu;
+    GtkWidget *edit_menu;
+    GtkWidget *view_menu;
+    GtkWidget *style_submenu;
+    GtkWidget *sort_submenu;
+    GtkWidget *action_menu;
 
-  GtkWidget * double_line_check;
+    GtkWidget * double_line_check;
 
-  GtkWidget *split_button;
-  GtkWidget *split_menu_check;
-  GtkWidget *split_popup_check;
+    GtkWidget *split_button;
+    GtkWidget *split_menu_check;
+    GtkWidget *split_popup_check;
 
-  /* Summary Bar Labels */
-  GtkWidget *balance_label;
-  GtkWidget *cleared_label;
-  GtkWidget *reconciled_label;
-  GtkWidget *future_label;
-  GtkWidget *projectedminimum_label;
-  GtkWidget *shares_label;
-  GtkWidget *value_label;
+    /* Summary Bar Labels */
+    GtkWidget *balance_label;
+    GtkWidget *cleared_label;
+    GtkWidget *reconciled_label;
+    GtkWidget *future_label;
+    GtkWidget *projectedminimum_label;
+    GtkWidget *shares_label;
+    GtkWidget *value_label;
 
-  /** The current ledger display. **/
-  GNCLedgerDisplay *ledger;
-  /** The actual sheet widget. **/
-  GnucashRegister *reg;
+    /** The current ledger display. **/
+    GNCLedgerDisplay *ledger;
+    /** The actual sheet widget. **/
+    GnucashRegister *reg;
 
-  gint numRows;
+    gint numRows;
 
-  guint sort_type;
+    guint sort_type;
 
-  gboolean read_only;
+    gboolean read_only;
 };
 
-struct _GNCSplitRegClass {
-  GtkVBoxClass parent_class;
+struct _GNCSplitRegClass
+{
+    GtkVBoxClass parent_class;
 
-  /* Signal defaults */
-  void (*enter_ent_cb)    ( GNCSplitReg *w, gpointer user_data );
-  void (*cancel_ent_cb)   ( GNCSplitReg *w, gpointer user_data );
-  void (*delete_ent_cb)   ( GNCSplitReg *w, gpointer user_data );
-  void (*reinit_ent_cb)   ( GNCSplitReg *w, gpointer user_data );
-  void (*dup_ent_cb)      ( GNCSplitReg *w, gpointer user_data );
-  void (*schedule_ent_cb) ( GNCSplitReg *w, gpointer user_data );
-  void (*expand_ent_cb)   ( GNCSplitReg *w, gpointer user_data );
-  void (*blank_cb)        ( GNCSplitReg *w, gpointer user_data );
-  void (*jump_cb)         ( GNCSplitReg *w, gpointer user_data );
-  void (*cut_cb)          ( GNCSplitReg *w, gpointer user_data );
-  void (*cut_txn_cb)      ( GNCSplitReg *w, gpointer user_data );
-  void (*copy_cb)         ( GNCSplitReg *w, gpointer user_data );
-  void (*copy_txn_cb)     ( GNCSplitReg *w, gpointer user_data );
-  void (*paste_cb)        ( GNCSplitReg *w, gpointer user_data );
-  void (*paste_txn_cb)    ( GNCSplitReg *w, gpointer user_data );
-  void (*void_txn_cb)     ( GNCSplitReg *w, gpointer user_data );
-  void (*unvoid_txn_cb)   ( GNCSplitReg *w, gpointer user_data );
-  void (*reverse_txn_cb)  ( GNCSplitReg *w, gpointer user_data );
-  void (*help_changed_cb) ( GNCSplitReg *w, gpointer user_data );
-  void (*include_date_cb) ( GNCSplitReg *w, time_t date, gpointer user_data );
+    /* Signal defaults */
+    void (*enter_ent_cb)    ( GNCSplitReg *w, gpointer user_data );
+    void (*cancel_ent_cb)   ( GNCSplitReg *w, gpointer user_data );
+    void (*delete_ent_cb)   ( GNCSplitReg *w, gpointer user_data );
+    void (*reinit_ent_cb)   ( GNCSplitReg *w, gpointer user_data );
+    void (*dup_ent_cb)      ( GNCSplitReg *w, gpointer user_data );
+    void (*schedule_ent_cb) ( GNCSplitReg *w, gpointer user_data );
+    void (*expand_ent_cb)   ( GNCSplitReg *w, gpointer user_data );
+    void (*blank_cb)        ( GNCSplitReg *w, gpointer user_data );
+    void (*jump_cb)         ( GNCSplitReg *w, gpointer user_data );
+    void (*cut_cb)          ( GNCSplitReg *w, gpointer user_data );
+    void (*cut_txn_cb)      ( GNCSplitReg *w, gpointer user_data );
+    void (*copy_cb)         ( GNCSplitReg *w, gpointer user_data );
+    void (*copy_txn_cb)     ( GNCSplitReg *w, gpointer user_data );
+    void (*paste_cb)        ( GNCSplitReg *w, gpointer user_data );
+    void (*paste_txn_cb)    ( GNCSplitReg *w, gpointer user_data );
+    void (*void_txn_cb)     ( GNCSplitReg *w, gpointer user_data );
+    void (*unvoid_txn_cb)   ( GNCSplitReg *w, gpointer user_data );
+    void (*reverse_txn_cb)  ( GNCSplitReg *w, gpointer user_data );
+    void (*help_changed_cb) ( GNCSplitReg *w, gpointer user_data );
+    void (*include_date_cb) ( GNCSplitReg *w, time_t date, gpointer user_data );
 };
 
-typedef enum {
-  ENTER,
-  CANCEL,
-  DELETE,
-  REINIT,
-  DUPLICATE,
-  SCHEDULE,
-  SPLIT,
-  BLANK,
-  JUMP,
-  CUT,
-  CUT_TXN,
-  COPY,
-  COPY_TXN,
-  PASTE,
-  PASTE_TXN,
-  SORT_ORDER_SUBMENU,
-  STYLE_SUBMENU,
+typedef enum
+{
+    ENTER,
+    CANCEL,
+    DELETE,
+    REINIT,
+    DUPLICATE,
+    SCHEDULE,
+    SPLIT,
+    BLANK,
+    JUMP,
+    CUT,
+    CUT_TXN,
+    COPY,
+    COPY_TXN,
+    PASTE,
+    PASTE_TXN,
+    SORT_ORDER_SUBMENU,
+    STYLE_SUBMENU,
 } GNC_SPLIT_REG_ITEM;
 
-/* Easy way to pass the sort-type 
+/* Easy way to pass the sort-type
  * Note that this is STUPID -- we should be using parameter lists,
  * but this provides a simple case statement internally.  This should
  * probably not actually be exposed in the external interface....
@@ -223,14 +226,14 @@ void gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split);
 void gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split);
 
 /*
- * Create a transaction entry with given amount and date. One account is 
- * specified, the other is undefined i.e. it defaults to orphan account.  
+ * Create a transaction entry with given amount and date. One account is
+ * specified, the other is undefined i.e. it defaults to orphan account.
  * Jump to the transaction entry in the register.
  * The purpose of this function to create an adjustment entry from the reconcile
- * window. 
+ * window.
  */
-void gnc_split_reg_balancing_entry (GNCSplitReg *gsr, Account *account, 
-    time_t statement_date, gnc_numeric balancing_amount);
+void gnc_split_reg_balancing_entry (GNCSplitReg *gsr, Account *account,
+                                    time_t statement_date, gnc_numeric balancing_amount);
 
 void gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data );
 void gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction );

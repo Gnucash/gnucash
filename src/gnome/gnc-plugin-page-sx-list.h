@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-plugin-page-sx-list.h
  *
  * Copyright (C) 2006 Josh Sled <jsled@asynchronous.org>
