@@ -37,34 +37,6 @@
 #ifndef GNC_LOT_P_H
 #define GNC_LOT_P_H
 
-#include "gnc-lot.h"
-#include "Account.h"
-
-struct gnc_lot_struct
-{
-    QofInstance inst;
-
-    /* Account to which this lot applies.  All splits in the lot must
-     * belong to this account.
-     */
-    Account * account;
-
-    /* List of splits that belong to this lot. */
-    SplitList *splits;
-
-    /* Handy cached value to indicate if lot is closed. */
-    /* If value is negative, then the cache is invalid. */
-    signed char is_closed;
-
-    /* traversal marker, handy for preventing recursion */
-    unsigned char marker;
-};
-
-struct _GncLotClass
-{
-    QofInstanceClass parent_class;
-};
-
 #define gnc_lot_set_guid(L,G)  qof_instance_set_guid(QOF_INSTANCE(L),&(G))
 
 /* Register with the Query engine */

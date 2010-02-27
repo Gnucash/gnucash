@@ -309,7 +309,7 @@ void mark_split (Split *s)
   }
 
   /* set dirty flag on lot too. */
-  if (s->lot) s->lot->is_closed = -1;
+  if (s->lot) gnc_lot_set_closed_unknown(s->lot);
 }
 
 /*
@@ -527,7 +527,7 @@ xaccSplitCommitEdit(Split *s)
     acc = s->acc;
     /* Remove from lot (but only if it hasn't been moved to
        new lot already) */
-    if (s->lot && (s->lot->account != acc || qof_instance_get_destroying(s)))
+    if (s->lot && (gnc_lot_get_account(s->lot) != acc || qof_instance_get_destroying(s)))
         gnc_lot_remove_split (s->lot, s);
 
     /* Possibly remove the split from the original account... */
@@ -542,7 +542,7 @@ xaccSplitCommitEdit(Split *s)
         if (gnc_account_insert_split(acc, s)) {
             /* If the split's lot belonged to some other account, we
                leave it so. */
-            if (s->lot && (NULL == s->lot->account))
+            if (s->lot && (NULL == gnc_lot_get_account(s->lot)))
                 xaccAccountInsertLot (acc, s->lot);
         } else {
             PERR("Account grabbed split prematurely.");
@@ -558,7 +558,7 @@ xaccSplitCommitEdit(Split *s)
     }
     if (s->lot) {
         /* A change of value/amnt affects gains display, etc. */
-        qof_event_gen (&s->lot->inst, QOF_EVENT_MODIFY, NULL);
+        qof_event_gen (QOF_INSTANCE(s->lot), QOF_EVENT_MODIFY, NULL);
     }
 
     /* Important: we save off the original parent transaction and account

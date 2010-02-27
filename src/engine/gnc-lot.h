@@ -59,10 +59,16 @@
 #ifndef GNC_LOT_H
 #define GNC_LOT_H
 
-typedef struct _GncLotClass GNCLotClass;
+//typedef struct _GncLotClass GNCLotClass;
 
 #include "qof.h"
-#include "gnc-lot-p.h"
+#include "gnc-engine.h"
+/*#include "gnc-lot-p.h"*/
+
+typedef struct {
+    QofInstanceClass parent_class;
+} GncLotClass;
+#define GNCLotClass GncLotClass
 
 /* --- type macros --- */
 #define GNC_TYPE_LOT            (gnc_lot_get_type ())
@@ -114,6 +120,7 @@ gint gnc_lot_count_splits (const GNCLot *);
  *    this lot is associated. */
 /*@ dependent @*/
 Account * gnc_lot_get_account (const GNCLot *);
+void gnc_lot_set_account(GNCLot*, Account*);
 
 /** The gnc_lot_get_balance() routine returns the balance of the lot.
  *    The commodity in which this balance is expressed is the commodity
@@ -147,6 +154,11 @@ Split * gnc_lot_get_earliest_split (GNCLot *lot);
  *    with the latest split->transaction->date_posted.
  */
 Split * gnc_lot_get_latest_split (GNCLot *lot);
+
+unsigned char gnc_lot_get_marker(const GNCLot*);
+void gnc_lot_set_marker(GNCLot*, unsigned char);
+
+void gnc_lot_set_closed_unknown(GNCLot*);
 
 /** Get and set the account title, or the account notes. */
 const char * gnc_lot_get_title (const GNCLot *);

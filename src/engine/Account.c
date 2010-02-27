@@ -1730,7 +1730,7 @@ xaccAccountRemoveLot (Account *acc, GNCLot *lot)
 
     ENTER ("(acc=%p, lot=%p)", acc, lot);
     priv->lots = g_list_remove(priv->lots, lot);
-    qof_event_gen (&lot->inst, QOF_EVENT_REMOVE, NULL);
+    qof_event_gen (QOF_INSTANCE(lot), QOF_EVENT_REMOVE, NULL);
     qof_event_gen (&acc->inst, QOF_EVENT_MODIFY, NULL);
     LEAVE ("(acc=%p, lot=%p)", acc, lot);
 }
@@ -1739,35 +1739,37 @@ void
 xaccAccountInsertLot (Account *acc, GNCLot *lot)
 {
     AccountPrivate *priv, *opriv;
-   Account * old_acc = NULL;
+    Account * old_acc = NULL;
+	Account* lot_account;
 
    /* errors */
    g_return_if_fail(GNC_IS_ACCOUNT(acc));
    g_return_if_fail(GNC_IS_LOT(lot));
 
    /* optimizations */
-   if (lot->account == acc)
+   lot_account = gnc_lot_get_account(lot);
+   if (lot_account == acc)
        return;
 
    ENTER ("(acc=%p, lot=%p)", acc, lot);
 
    /* pull it out of the old account */
-   if (lot->account) {
-      old_acc = lot->account;
+   if (lot_account) {
+      old_acc = lot_account;
       opriv = GET_PRIVATE(old_acc);
       opriv->lots = g_list_remove(opriv->lots, lot);
    }
 
    priv = GET_PRIVATE(acc);
    priv->lots = g_list_prepend(priv->lots, lot);
-   lot->account = acc;
+   gnc_lot_set_account(lot, acc);
 
    /* Don't move the splits to the new account.  The caller will do this
     * if appropriate, and doing it here will not work if we are being 
     * called from gnc_book_close_period since xaccAccountInsertSplit
     * will try to balance capital gains and things aren't ready for that. */
 
-   qof_event_gen (&lot->inst, QOF_EVENT_ADD, NULL);
+   qof_event_gen (QOF_INSTANCE(lot), QOF_EVENT_ADD, NULL);
    qof_event_gen (&acc->inst, QOF_EVENT_MODIFY, NULL);
 
    LEAVE ("(acc=%p, lot=%p)", acc, lot);

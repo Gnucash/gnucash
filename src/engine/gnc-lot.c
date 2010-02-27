@@ -39,10 +39,11 @@
  * Copyright (c) 2002,2003 Linas Vepstas <linas@linas.org>
  */
 
+#include "config.h"
+
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include "config.h"
 #include "Account.h"
 #include "AccountP.h"
 #include "gnc-lot.h"
@@ -54,37 +55,143 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_LOT;
 
+struct gnc_lot_s
+{
+    QofInstance inst;
+};
+
+enum {
+    PROP_0,
+	PROP_IS_CLOSED,
+	PROP_MARKER
+};
+
+typedef struct LotPrivate
+{
+  /* Account to which this lot applies.  All splits in the lot must
+   * belong to this account.
+   */
+  Account * account;
+
+  /* List of splits that belong to this lot. */
+  SplitList *splits;
+
+  /* Handy cached value to indicate if lot is closed. */
+  /* If value is negative, then the cache is invalid. */
+  signed char is_closed;
+#define LOT_CLOSED_UNKNOWN (-1)
+
+  /* traversal marker, handy for preventing recursion */
+  unsigned char marker;
+} LotPrivate;
+
+#define GET_PRIVATE(o) \
+    (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_LOT, LotPrivate))
+
+#define gnc_lot_set_guid(L,G)  qof_instance_set_guid(QOF_INSTANCE(L),&(G))
+
 /* ============================================================= */
 
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_lot, GNCLot, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GNCLot, gnc_lot, QOF_TYPE_INSTANCE)
 
 static void
 gnc_lot_init(GNCLot* lot)
 {
+    LotPrivate* priv;
+
+	priv = GET_PRIVATE(lot);
+    priv->account = NULL;
+    priv->splits = NULL;
+    priv->is_closed = LOT_CLOSED_UNKNOWN;
+    priv->marker = 0;
 }
 
 static void
-gnc_lot_dispose_real (GObject *lotp)
+gnc_lot_dispose(GObject *lotp)
 {
+    G_OBJECT_CLASS(gnc_lot_parent_class)->dispose(lotp);
 }
 
 static void
-gnc_lot_finalize_real(GObject* lotp)
+gnc_lot_finalize(GObject* lotp)
 {
+    G_OBJECT_CLASS(gnc_lot_parent_class)->finalize(lotp);
 }
 
 static void
-gnc_lot_init_data (GNCLot *lot, QofBook *book)
+gnc_lot_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec* pspec)
 {
-   ENTER ("(lot=%p, book=%p)", lot, book);
-   lot->account = NULL;
-   lot->splits = NULL;
-   lot->is_closed = -1;
-   lot->marker = 0;
-  
-   qof_instance_init_data(&lot->inst, GNC_ID_LOT, book);
-   LEAVE ("(lot=%p, book=%p)", lot, book);
+    GNCLot* lot;
+	LotPrivate* priv;
+
+	g_return_if_fail(GNC_IS_LOT(object));
+
+	lot = GNC_LOT(object);
+	priv = GET_PRIVATE(lot);
+	switch(prop_id) {
+    case PROP_IS_CLOSED:
+		g_value_set_int(value, priv->is_closed);
+	    break;
+	case PROP_MARKER:
+		g_value_set_int(value, priv->marker);
+	    break;
+	}
+}
+
+static void
+gnc_lot_set_property(GObject* object, guint prop_id, const GValue* value, GParamSpec* pspec)
+{
+    GNCLot* lot;
+	LotPrivate* priv;
+
+	g_return_if_fail(GNC_IS_LOT(object));
+
+	lot = GNC_LOT(object);
+	priv = GET_PRIVATE(lot);
+	switch(prop_id) {
+    case PROP_IS_CLOSED:
+		priv->is_closed = g_value_get_int(value);
+	    break;
+	case PROP_MARKER:
+		priv->marker = g_value_get_int(value);
+	    break;
+	}
+}
+
+static void
+gnc_lot_class_init(GNCLotClass* klass)
+{
+    GObjectClass* gobject_class = G_OBJECT_CLASS(klass);
+
+	gobject_class->dispose = gnc_lot_dispose;
+	gobject_class->finalize = gnc_lot_finalize;
+	gobject_class->get_property = gnc_lot_get_property;
+	gobject_class->set_property = gnc_lot_set_property;
+
+	g_type_class_add_private(klass, sizeof(LotPrivate));
+
+    g_object_class_install_property(
+			gobject_class,
+			PROP_IS_CLOSED,
+			g_param_spec_int("is-closed",
+			                 "Is Lot Closed",
+							 "Indication of whether this lot is open "
+							 "or closed to further changes.",
+							 -1, 1, 0,
+							 G_PARAM_READWRITE));
+
+    g_object_class_install_property(
+			gobject_class,
+			PROP_MARKER,
+			g_param_spec_int("marker",
+			                 "Lot marker",
+							 "Ipsum Lorem",
+							 0, G_MAXINT8, 0,
+							 G_PARAM_READWRITE));
+
+
+
 }
 
 GNCLot *
@@ -94,32 +201,33 @@ gnc_lot_new (QofBook *book)
    g_return_val_if_fail (book, NULL);
 
    lot = g_object_new (GNC_TYPE_LOT, NULL);
-   gnc_lot_init_data (lot, book);
-   qof_event_gen (&lot->inst, QOF_EVENT_CREATE, NULL);
+   qof_instance_init_data(QOF_INSTANCE(lot), GNC_ID_LOT, book);
+   qof_event_gen (QOF_INSTANCE(lot), QOF_EVENT_CREATE, NULL);
    return lot;
 }
 
 static void
 gnc_lot_free(GNCLot* lot)
 {
-   GList *node;
-   if (!lot) return;
+    GList *node;
+	LotPrivate* priv;
+    if (!lot) return;
    
-   ENTER ("(lot=%p)", lot);
-   qof_event_gen (&lot->inst, QOF_EVENT_DESTROY, NULL);
+    ENTER ("(lot=%p)", lot);
+    qof_event_gen (QOF_INSTANCE(lot), QOF_EVENT_DESTROY, NULL);
 
+	priv = GET_PRIVATE(lot);
+    for (node=priv->splits; node; node=node->next)
+    {
+       Split *s = node->data;
+       s->lot = NULL;
+    }
+    g_list_free (priv->splits);
    
-   for (node=lot->splits; node; node=node->next)
-   {
-      Split *s = node->data;
-      s->lot = NULL;
-   }
-   g_list_free (lot->splits);
-   
-   lot->account = NULL;
-   lot->is_closed = TRUE;
-   /* qof_instance_release (&lot->inst); */
-   g_object_unref (lot);
+    priv->account = NULL;
+    priv->is_closed = TRUE;
+    /* qof_instance_release (&lot->inst); */
+    g_object_unref (lot);
 }
 
 void 
@@ -137,7 +245,7 @@ gnc_lot_destroy (GNCLot *lot)
 void
 gnc_lot_begin_edit (GNCLot *lot)
 {
-  qof_begin_edit(&lot->inst);
+  qof_begin_edit(QOF_INSTANCE(lot));
 }
 
 static void commit_err (QofInstance *inst, QofBackendError errcode)
@@ -159,7 +267,7 @@ void
 gnc_lot_commit_edit (GNCLot *lot)
 {
   if (!qof_commit_edit (QOF_INSTANCE(lot))) return;
-  qof_commit_edit_part2 (&lot->inst, commit_err, noop, lot_free);
+  qof_commit_edit_part2 (QOF_INSTANCE(lot), commit_err, noop, lot_free);
 }
 
 /* ============================================================= */
@@ -184,16 +292,62 @@ gnc_lot_get_book (GNCLot *lot)
 gboolean 
 gnc_lot_is_closed (GNCLot *lot)
 {
-   if (!lot) return TRUE;
-   if (0 > lot->is_closed) gnc_lot_get_balance (lot);
-   return lot->is_closed;
+	LotPrivate* priv;
+    if (!lot) return TRUE;
+	priv = GET_PRIVATE(lot);
+    if (0 > priv->is_closed) gnc_lot_get_balance (lot);
+    return priv->is_closed;
 }
 
 Account *
 gnc_lot_get_account (const GNCLot *lot)
 {
-   if (!lot) return NULL;
-   return lot->account;
+	LotPrivate* priv;
+    if (!lot) return NULL;
+	priv = GET_PRIVATE(lot);
+    return priv->account;
+}
+
+void
+gnc_lot_set_account(GNCLot* lot, Account* account)
+{
+    if (lot != NULL)
+	{
+	    LotPrivate* priv;
+	    priv = GET_PRIVATE(lot);
+	    priv->account = account;
+	}
+}
+
+unsigned char
+gnc_lot_get_marker(const GNCLot* lot)
+{
+	LotPrivate* priv;
+    if (lot == NULL) return 0;
+	priv = GET_PRIVATE(lot);
+	return priv->marker;
+}
+
+void
+gnc_lot_set_marker(GNCLot* lot, unsigned char m)
+{
+	LotPrivate* priv;
+    if (lot != NULL)
+	{
+	    priv = GET_PRIVATE(lot);
+	    priv->marker = m;
+    }
+}
+
+void
+gnc_lot_set_closed_unknown(GNCLot* lot)
+{
+	LotPrivate* priv;
+    if (lot != NULL)
+	{
+	    priv = GET_PRIVATE(lot);
+	    priv->is_closed = LOT_CLOSED_UNKNOWN;
+    }
 }
 
 KvpFrame *
@@ -205,14 +359,18 @@ gnc_lot_get_slots (const GNCLot *lot)
 SplitList *
 gnc_lot_get_split_list (const GNCLot *lot)
 {
-   if (!lot) return NULL;
-   return lot->splits;
+	LotPrivate* priv;
+    if (!lot) return NULL;
+	priv = GET_PRIVATE(lot);
+    return priv->splits;
 }
 
 gint gnc_lot_count_splits (const GNCLot *lot)
 {
-   if (!lot) return 0;
-   return g_list_length (lot->splits);
+	LotPrivate* priv;
+    if (!lot) return 0;
+	priv = GET_PRIVATE(lot);
+    return g_list_length (priv->splits);
 }
 
 /* ============================================================== */
@@ -221,15 +379,15 @@ gint gnc_lot_count_splits (const GNCLot *lot)
 const char * 
 gnc_lot_get_title (const GNCLot *lot)
 {
-   if (!lot) return NULL;
-   return kvp_frame_get_string (lot->inst.kvp_data, "/title");
+    if (!lot) return NULL;
+    return kvp_frame_get_string (gnc_lot_get_slots(lot), "/title");
 }
 
 const char * 
 gnc_lot_get_notes (const GNCLot *lot)
 {
    if (!lot) return NULL;
-   return kvp_frame_get_string (lot->inst.kvp_data, "/notes");
+   return kvp_frame_get_string (gnc_lot_get_slots(lot), "/notes");
 }
 
 void
@@ -238,7 +396,7 @@ gnc_lot_set_title (GNCLot *lot, const char *str)
    if (!lot) return;
    qof_begin_edit(QOF_INSTANCE(lot));
    qof_instance_set_dirty(QOF_INSTANCE(lot));
-   kvp_frame_set_str (lot->inst.kvp_data, "/title", str);
+   kvp_frame_set_str (gnc_lot_get_slots(lot), "/title", str);
    gnc_lot_commit_edit(lot);
 }
 
@@ -248,7 +406,7 @@ gnc_lot_set_notes (GNCLot *lot, const char *str)
    if (!lot) return;
    gnc_lot_begin_edit(lot);
    qof_instance_set_dirty(QOF_INSTANCE(lot));
-   kvp_frame_set_str (lot->inst.kvp_data, "/notes", str);
+   kvp_frame_set_str (gnc_lot_get_slots(lot), "/notes", str);
    gnc_lot_commit_edit(lot);
 }
 
@@ -257,38 +415,40 @@ gnc_lot_set_notes (GNCLot *lot, const char *str)
 gnc_numeric
 gnc_lot_get_balance (GNCLot *lot)
 {
-   GList *node;
-   gnc_numeric zero = gnc_numeric_zero();
-   gnc_numeric baln = zero;
-   if (!lot) return zero;
+	LotPrivate* priv;
+    GList *node;
+    gnc_numeric zero = gnc_numeric_zero();
+    gnc_numeric baln = zero;
+    if (!lot) return zero;
 
-   if (!lot->splits) 
-   {
-      lot->is_closed = FALSE;
-      return zero;
-   }
+	priv = GET_PRIVATE(lot);
+    if (!priv->splits) 
+    {
+       priv->is_closed = FALSE;
+       return zero;
+    }
 
-   /* Sum over splits; because they all belong to same account
-    * they will have same denominator. 
-    */
-   for (node=lot->splits; node; node=node->next)
-   {
-      Split *s = node->data;
-      gnc_numeric amt = xaccSplitGetAmount (s);
-      baln = gnc_numeric_add_fixed (baln, amt);
-   }
+    /* Sum over splits; because they all belong to same account
+     * they will have same denominator. 
+     */
+    for (node=priv->splits; node; node=node->next)
+    {
+       Split *s = node->data;
+       gnc_numeric amt = xaccSplitGetAmount (s);
+       baln = gnc_numeric_add_fixed (baln, amt);
+    }
 
-   /* cache a zero balance as a closed lot */
-   if (gnc_numeric_equal (baln, zero))
-   {
-      lot->is_closed = TRUE;
-   }
-   else
-   {
-      lot->is_closed = FALSE;
-   }
+    /* cache a zero balance as a closed lot */
+    if (gnc_numeric_equal (baln, zero))
+    {
+       priv->is_closed = TRUE;
+    }
+    else
+    {
+       priv->is_closed = FALSE;
+    }
    
-   return baln;
+    return baln;
 }
 
 /* ============================================================= */
@@ -297,42 +457,48 @@ void
 gnc_lot_get_balance_before (const GNCLot *lot, const Split *split,
                             gnc_numeric *amount, gnc_numeric *value)
 {
-   GList *node;
-   gnc_numeric zero = gnc_numeric_zero();
-   gnc_numeric amt = zero;
-   gnc_numeric val = zero;
+	LotPrivate* priv;
+    GList *node;
+    gnc_numeric zero = gnc_numeric_zero();
+    gnc_numeric amt = zero;
+    gnc_numeric val = zero;
    
-   if (lot && lot->splits)
-   {
-      Transaction *ta, *tb;
-      const Split *target;
-      /* If this is a gains split, find the source of the gains and use
-         its transaction for the comparison.  Gains splits are in separate
-         transactions that may sort after non-gains transactions.  */
-      target = xaccSplitGetGainsSourceSplit (split);
-      if (target == NULL)
-         target = split;
-      tb = xaccSplitGetParent (target);
-      for (node = lot->splits; node; node = node->next)
-      {
-         Split *s = node->data;
-         Split *source = xaccSplitGetGainsSourceSplit (s);
-         if (source == NULL)
-            source = s;
-         ta = xaccSplitGetParent (source);
-         if ((ta == tb && source != target) ||
-             xaccTransOrder (ta, tb) < 0)
-         {
-            gnc_numeric tmpval = xaccSplitGetAmount (s);
-            amt = gnc_numeric_add_fixed (amt, tmpval);
-            tmpval = xaccSplitGetValue (s);
-            val = gnc_numeric_add_fixed (val, tmpval);
-         }
-      }
-   }
+	*amount = amt;
+	*value = val;
+    if (lot == NULL) return;
 
-   *amount = amt;
-   *value = val;
+	priv = GET_PRIVATE(lot);
+    if (priv->splits)
+    {
+        Transaction *ta, *tb;
+        const Split *target;
+        /* If this is a gains split, find the source of the gains and use
+           its transaction for the comparison.  Gains splits are in separate
+           transactions that may sort after non-gains transactions.  */
+        target = xaccSplitGetGainsSourceSplit (split);
+        if (target == NULL)
+			target = split;
+       tb = xaccSplitGetParent (target);
+       for (node = priv->splits; node; node = node->next)
+       {
+          Split *s = node->data;
+          Split *source = xaccSplitGetGainsSourceSplit (s);
+          if (source == NULL)
+             source = s;
+          ta = xaccSplitGetParent (source);
+          if ((ta == tb && source != target) ||
+              xaccTransOrder (ta, tb) < 0)
+          {
+             gnc_numeric tmpval = xaccSplitGetAmount (s);
+             amt = gnc_numeric_add_fixed (amt, tmpval);
+             tmpval = xaccSplitGetValue (s);
+             val = gnc_numeric_add_fixed (val, tmpval);
+          }
+       }
+    }
+
+    *amount = amt;
+    *value = val;
 }
                
 /* ============================================================= */
@@ -340,71 +506,75 @@ gnc_lot_get_balance_before (const GNCLot *lot, const Split *split,
 void
 gnc_lot_add_split (GNCLot *lot, Split *split)
 {
-   Account * acc;
-   if (!lot || !split) return;
+	LotPrivate* priv;
+    Account * acc;
+    if (!lot || !split) return;
+	priv = GET_PRIVATE(lot);
 
-   ENTER ("(lot=%p, split=%p) %s amt=%s val=%s", lot, split,
+    ENTER ("(lot=%p, split=%p) %s amt=%s val=%s", lot, split,
         gnc_lot_get_title (lot), 
         gnc_num_dbg_to_string (split->amount),
         gnc_num_dbg_to_string (split->value));
-   gnc_lot_begin_edit(lot);
-   acc = xaccSplitGetAccount (split);
-   qof_instance_set_dirty(QOF_INSTANCE(lot));
-   if (NULL == lot->account)
-   {
-      xaccAccountInsertLot (acc, lot);
-   }
-   else if (lot->account != acc)
-   {
-      PERR ("splits from different accounts cannot "
-            "be added to this lot!\n"
-            "\tlot account=\'%s\', split account=\'%s\'\n",
-            xaccAccountGetName(lot->account), xaccAccountGetName (acc));
-      gnc_lot_commit_edit(lot);
-      LEAVE("different accounts");
-      return;
-   }
+    gnc_lot_begin_edit(lot);
+    acc = xaccSplitGetAccount (split);
+    qof_instance_set_dirty(QOF_INSTANCE(lot));
+    if (NULL == priv->account)
+    {
+        xaccAccountInsertLot (acc, lot);
+    }
+    else if (priv->account != acc)
+    {
+        PERR ("splits from different accounts cannot "
+              "be added to this lot!\n"
+              "\tlot account=\'%s\', split account=\'%s\'\n",
+              xaccAccountGetName(priv->account), xaccAccountGetName (acc));
+        gnc_lot_commit_edit(lot);
+        LEAVE("different accounts");
+        return;
+    }
 
-   if (lot == split->lot) {
+    if (lot == split->lot) {
         gnc_lot_commit_edit(lot);
         LEAVE("already in lot");
-	return; /* handle not-uncommon no-op */
-   }
-   if (split->lot)
-   {
-      gnc_lot_remove_split (split->lot, split);
-   }
-   xaccSplitSetLot(split, lot);
+    	return; /* handle not-uncommon no-op */
+    }
+    if (split->lot)
+    {
+        gnc_lot_remove_split (split->lot, split);
+    }
+    xaccSplitSetLot(split, lot);
 
-   lot->splits = g_list_append (lot->splits, split);
+    priv->splits = g_list_append (priv->splits, split);
 
     /* for recomputation of is-closed */
-   lot->is_closed = -1;
-   gnc_lot_commit_edit(lot);
+    priv->is_closed = LOT_CLOSED_UNKNOWN;
+    gnc_lot_commit_edit(lot);
 
-   qof_event_gen (&lot->inst, QOF_EVENT_MODIFY, NULL);
-   LEAVE("added to lot");
+    qof_event_gen (QOF_INSTANCE(lot), QOF_EVENT_MODIFY, NULL);
+    LEAVE("added to lot");
 }
 
 void
 gnc_lot_remove_split (GNCLot *lot, Split *split)
 {
-   if (!lot || !split) return;
+	LotPrivate* priv;
+    if (!lot || !split) return;
+	priv = GET_PRIVATE(lot);
 
-   ENTER ("(lot=%p, split=%p)", lot, split);
-   gnc_lot_begin_edit(lot);
-   qof_instance_set_dirty(QOF_INSTANCE(lot));
-   lot->splits = g_list_remove (lot->splits, split);
-   xaccSplitSetLot(split, NULL);
-   lot->is_closed = -1;   /* force an is-closed computation */
+    ENTER ("(lot=%p, split=%p)", lot, split);
+    gnc_lot_begin_edit(lot);
+    qof_instance_set_dirty(QOF_INSTANCE(lot));
+    priv->splits = g_list_remove (priv->splits, split);
+    xaccSplitSetLot(split, NULL);
+    priv->is_closed = LOT_CLOSED_UNKNOWN;   /* force an is-closed computation */
 
-   if (NULL == lot->splits)
-   {
-      xaccAccountRemoveLot (lot->account, lot);
-      lot->account = NULL;
-   }
-   gnc_lot_commit_edit(lot);
-   qof_event_gen (&lot->inst, QOF_EVENT_MODIFY, NULL);
+    if (NULL == priv->splits)
+    {
+        xaccAccountRemoveLot (priv->account, lot);
+        priv->account = NULL;
+    }
+    gnc_lot_commit_edit(lot);
+    qof_event_gen (QOF_INSTANCE(lot), QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
@@ -413,25 +583,29 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
 Split *
 gnc_lot_get_earliest_split (GNCLot *lot)
 {
-  if (! lot->splits)
-    return NULL;
-  lot->splits = g_list_sort (lot->splits, (GCompareFunc) xaccSplitOrderDateOnly);
-  return lot->splits->data;
+	LotPrivate* priv;
+	if (!lot) return NULL;
+	priv = GET_PRIVATE(lot);
+    if (! priv->splits) return NULL;
+    priv->splits = g_list_sort (priv->splits, (GCompareFunc) xaccSplitOrderDateOnly);
+    return priv->splits->data;
 }
 
 Split *
 gnc_lot_get_latest_split (GNCLot *lot)
 {
-  SplitList *node;
+	LotPrivate* priv;
+    SplitList *node;
 
-  if (! lot->splits)
-    return NULL;
-  lot->splits = g_list_sort (lot->splits, (GCompareFunc) xaccSplitOrderDateOnly);
+	if (!lot) return NULL;
+	priv = GET_PRIVATE(lot);
+    if (! priv->splits) return NULL;
+    priv->splits = g_list_sort (priv->splits, (GCompareFunc) xaccSplitOrderDateOnly);
 
-  for (node = lot->splits; node->next; node = node->next)
+    for (node = priv->splits; node->next; node = node->next)
     ;
 
-  return node->data;
+    return node->data;
 }
 
 /* ============================================================= */

@@ -101,7 +101,7 @@ xaccLotFill (GNCLot *lot)
    GNCPolicy *pcy;
 
    if (!lot) return;
-   acc = lot->account;
+   acc = gnc_lot_get_account(lot);
    pcy = gnc_account_get_policy(acc);
 
    ENTER ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), xaccAccountGetName(acc));
@@ -160,7 +160,7 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
 
    ENTER ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 
-   for (snode = lot->splits; snode; snode=snode->next)
+   for (snode = gnc_lot_get_split_list(lot); snode; snode=snode->next)
    {
       Split *s = snode->data;
       xaccSplitComputeCapGains (s, NULL);
@@ -169,7 +169,7 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
    /* We double-check only closed lots */
    if (FALSE == gnc_lot_is_closed (lot)) return;
 
-   for (snode = lot->splits; snode; snode=snode->next)
+   for (snode = gnc_lot_get_split_list(lot); snode; snode=snode->next)
    {
       Split *s = snode->data;
       Transaction *trans = s->parent;
@@ -208,7 +208,7 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
        */
       PERR ("Closed lot fails to double-balance !! lot value=%s",
             gnc_num_dbg_to_string (value));
-      for (node=lot->splits; node; node=node->next)
+      for (node = gnc_lot_get_split_list(lot); node; node=node->next)
       {
         Split *s = node->data;
         PERR ("s=%p amt=%s val=%s", s, 

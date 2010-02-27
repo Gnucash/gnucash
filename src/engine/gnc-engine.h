@@ -185,7 +185,7 @@ typedef struct gnc_commodity_table_s gnc_commodity_table;
  *
  * See the file src/doc/lots.txt for implmentation overview.
  */
-typedef struct gnc_lot_struct        GNCLot;
+typedef struct gnc_lot_s             GNCLot;
 
 /** @brief Price of commodity on a given date.
  * A GNCPrice encapsulates price information: the cost of a commodity

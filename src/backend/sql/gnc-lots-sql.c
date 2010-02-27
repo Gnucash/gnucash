@@ -31,6 +31,7 @@
 #include <glib.h>
 
 #include "qof.h"
+#include "Account.h"
 #include "gnc-lot.h"
 
 #include "gnc-backend-sql.h"
@@ -49,7 +50,6 @@
 
 static /*@ dependent @*//*@ null @*/ gpointer get_lot_account( gpointer pObject );
 static void set_lot_account( gpointer pObject, /*@ null @*/ gpointer pValue );
-static void set_lot_is_closed( gpointer pObject, gboolean value );
 
 static const GncSqlColumnTableEntry col_table[] =
 {
@@ -57,8 +57,7 @@ static const GncSqlColumnTableEntry col_table[] =
     { "guid",         CT_GUID,    0, COL_NNUL|COL_PKEY, "guid" },
     { "account_guid", CT_GUID,    0, 0,                 NULL, NULL,
 		(QofAccessFunc)get_lot_account,   set_lot_account },
-    { "is_closed",    CT_BOOLEAN, 0, COL_NNUL,          NULL, NULL,
-		(QofAccessFunc)gnc_lot_is_closed, (QofSetterFunc)set_lot_is_closed },
+    { "is_closed",    CT_BOOLEAN, 0, COL_NNUL,          "is-closed" },
     { NULL }
 	/*@ +full_init_block @*/
 };
@@ -96,18 +95,6 @@ set_lot_account( gpointer pObject, /*@ null @*/ gpointer pValue )
 	if( pAccount != NULL ) {
     	xaccAccountInsertLot( pAccount, lot );
 	}
-}
-
-static void
-set_lot_is_closed( gpointer pObject, gboolean closed )
-{
-    GNCLot* lot;
-
-	g_return_if_fail( pObject != NULL );
-	g_return_if_fail( GNC_IS_LOT(pObject) );
-
-    lot = GNC_LOT(pObject);
-    lot->is_closed = (char)closed;
 }
 
 static /*@ dependent @*//*@ null @*/ GNCLot*

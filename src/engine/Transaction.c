@@ -235,7 +235,7 @@ void gen_event_trans (Transaction *trans)
     if (lot)
     {
       /* A change of transaction date might affect opening date of lot */
-      qof_event_gen (&lot->inst, QOF_EVENT_MODIFY, NULL);
+      qof_event_gen (QOF_INSTANCE(lot), QOF_EVENT_MODIFY, NULL);
     }
   }
 #endif

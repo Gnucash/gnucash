@@ -56,8 +56,11 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
    Split *osplit;
    Transaction *otrans;
    Timespec open_ts;
+   Account* lot_account;
 
-   if (!pcy || !lot || !lot->account || !lot->splits) return NULL;
+   if (!pcy || !lot || !gnc_lot_get_split_list(lot)) return NULL;
+   lot_account = gnc_lot_get_account(lot);
+   if (!lot_account) return NULL;
 
    /* Recomputing the balance re-evaluates the lot closure */
    baln = gnc_lot_get_balance (lot);
@@ -66,7 +69,7 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
    want_positive = gnc_numeric_negative_p (baln);
 
    /* All splits in lot must share a common transaction currency. */
-   split = lot->splits->data;
+   split = gnc_lot_get_split_list(lot)->data;
    common_currency = split->parent->common_currency;
    
    /* Don't add a split to the lot unless it will be the new last
@@ -80,7 +83,7 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
     * hasn't been assigned to a lot.  Return that split.
     * Make use of the fact that the splits in an account are 
     * already in date order; so we don't have to sort. */
-   node = xaccAccountGetSplitList (lot->account);
+   node = xaccAccountGetSplitList (lot_account);
    if (reverse)
    {
        node = g_list_last (node);

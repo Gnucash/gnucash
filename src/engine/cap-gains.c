@@ -690,7 +690,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    if (!split) return;
    lot = split->lot;
    if (!lot) return;
-   pcy = gnc_account_get_policy(lot->account);
+   pcy = gnc_account_get_policy(gnc_lot_get_account(lot));
    currency = split->parent->common_currency;
 
    ENTER ("(split=%p gains=%p status=0x%x lot=%s)", split, 
@@ -770,7 +770,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    /* Note: if the value of the 'opening' split(s) has changed,
     * then the cap gains are changed. So we need to check not
     * only if this split is dirty, but also the lot-opening splits. */
-   for (node=lot->splits; node; node=node->next)
+   for (node=gnc_lot_get_split_list(lot); node; node=node->next)
    {
       Split *s = node->data;
       if (pcy->PolicyIsOpeningSplit(pcy,lot,s))
@@ -830,7 +830,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
                                 gnc_numeric_abs(split->amount)))
    {
       GList *n;
-      for (n = lot->splits; n; n = n->next) 
+      for (n = gnc_lot_get_split_list(lot); n; n = n->next) 
       {
          Split *s = n->data;
          PINFO ("split amt=%s", gnc_num_dbg_to_string(s->amount));
@@ -849,7 +849,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
          gnc_numeric_negative_p(split->amount)))
    {
       GList *n;
-      for (n = lot->splits; n; n = n->next) 
+      for (n = gnc_lot_get_split_list(lot); n; n = n->next) 
       {
          Split *s = n->data;
          PINFO ("split amt=%s", gnc_num_dbg_to_string(s->amount));
@@ -925,7 +925,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 
       if (NULL == lot_split)
       {
-         Account *lot_acc = lot->account;
+         Account *lot_acc = gnc_lot_get_account(lot);
          QofBook *book = qof_instance_get_book(lot_acc);
 
          new_gain_split = TRUE;
@@ -1081,8 +1081,8 @@ xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc)
     * to mark all splits dirty if the opening splits are dirty. */
 
    ENTER("(lot=%p)", lot);
-   pcy = gnc_account_get_policy(lot->account);
-   for (node = lot->splits; node; node = node->next)
+   pcy = gnc_account_get_policy(gnc_lot_get_account(lot));
+   for (node = gnc_lot_get_split_list(lot); node; node = node->next)
    {
       Split *s = node->data;
       if (pcy->PolicyIsOpeningSplit(pcy,lot,s))
@@ -1099,14 +1099,14 @@ xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc)
 
    if (is_dirty)
    {
-      for (node = lot->splits; node; node = node->next)
+      for (node = gnc_lot_get_split_list(lot); node; node = node->next)
       {
          Split *s = node->data;
          s->gains |= GAINS_STATUS_VDIRTY;
       }
    }
 
-   for (node = lot->splits; node; node = node->next)
+   for (node = gnc_lot_get_split_list(lot); node; node = node->next)
    {
       Split *s = node->data;
       xaccSplitComputeCapGains (s, gain_acc);

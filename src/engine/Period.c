@@ -228,11 +228,11 @@ gnc_book_insert_lot (QofBook *book, GNCLot *lot)
 
    col = qof_book_get_collection (book, GNC_ID_LOT);
    qof_instance_set_book(lot, book);
-   qof_collection_insert_entity (col, &lot->inst);
+   qof_collection_insert_entity (col, QOF_INSTANCE(lot));
 
    /* Move the splits over (only if they haven't already been moved). */
    col = qof_book_get_collection (book, GNC_ID_SPLIT);
-   for (snode = lot->splits; snode; snode=snode->next)
+   for (snode = gnc_lot_get_split_list(lot); snode; snode=snode->next)
    {
       Split *s = snode->data;
       if (qof_instance_get_book(s) != book)
@@ -242,7 +242,7 @@ gnc_book_insert_lot (QofBook *book, GNCLot *lot)
       }
    }
 
-   twin = xaccAccountLookupTwin (lot->account, book);
+   twin = xaccAccountLookupTwin (gnc_lot_get_account(lot), book);
    if (!twin)
    {
       PERR ("near-fatal: twin account not found");
@@ -358,13 +358,13 @@ lot_has_open_trans_tree (GNCLot *lot)
 {
    SplitList *split_list, *snode;
 
-   if (1 == lot->marker) return FALSE;
-   if (2 == lot->marker) return TRUE;
-   lot->marker = 1;
+   if (1 == gnc_lot_get_marker(lot)) return FALSE;
+   if (2 == gnc_lot_get_marker(lot)) return TRUE;
+   gnc_lot_set_marker(lot, 1);
 
    if (FALSE == gnc_lot_is_closed(lot))
    {
-      lot->marker = 2;
+      gnc_lot_set_marker(lot, 2);
       return TRUE;
    }
 
@@ -375,7 +375,7 @@ lot_has_open_trans_tree (GNCLot *lot)
       Transaction *trans = s->parent;
       if (trans_has_open_lot_tree (trans)) 
       {
-         lot->marker = 2;
+         gnc_lot_set_marker(lot, 2);
          return TRUE;
       }
    }
@@ -445,7 +445,7 @@ clear_markers (Account *account, gpointer dummy)
     Transaction *trans = s->parent;
     GNCLot *lot = s->lot;
     trans->marker = 0;
-    if (lot) lot->marker = 0;
+    if (lot) gnc_lot_set_marker(lot, 0);
   }
 }
 
