@@ -720,7 +720,7 @@ kvp_frame_binary_end_handler(gpointer data_for_children,
                              gpointer parent_data, gpointer global_data,
                              gpointer *result, const gchar *tag)
 {
-    void *data;
+    char *data;
     guint64 total_size;
     guint64 pos;
     kvp_value *kvpv;
