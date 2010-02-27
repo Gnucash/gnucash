@@ -214,7 +214,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 
     /* Look to see if its the special KVP value holder.
      * If it is, look up the value. */
-    if (0 == strncasecmp (qvalue_name, "kvp://", 6))
+    if (0 == g_ascii_strncasecmp (qvalue_name, "kvp://", 6))
     {
         if (NULL == query->kvp_join)
         {

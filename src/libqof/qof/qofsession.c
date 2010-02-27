@@ -1095,7 +1095,7 @@ qof_session_load_backend(QofSession * session, const char * access_method)
     {
         prov = p->data;
         /* Does this provider handle the desired access method? */
-        if (0 == strcasecmp (access_method, prov->access_method))
+        if (0 == g_ascii_strcasecmp (access_method, prov->access_method))
         {
             /* More than one backend could provide this
             access method, check file type compatibility. */
@@ -1453,7 +1453,7 @@ qof_session_save (QofSession *session,
             {
                 /** \todo check the access_method too, not in scope here, yet. */
                 /*	if((TRUE == prov->partial_book_supported) &&
-                (0 == strcasecmp (access_method, prov->access_method)))
+                (0 == g_ascii_strcasecmp (access_method, prov->access_method)))
                 {*/
                 if (NULL == prov->backend_new) continue;
                 /* Use the providers creation callback */

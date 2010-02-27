@@ -257,7 +257,7 @@ init_from_dir(const char *dirname, unsigned int max_files)
         md5_process_bytes(de, strlen(de), &guid_context);
         total += strlen(de);
 
-        result = snprintf(filename, sizeof(filename),
+        result = g_snprintf(filename, sizeof(filename),
                           "%s/%s", dirname, de);
         if ((result < 0) || (result >= (int)sizeof(filename)))
             continue;

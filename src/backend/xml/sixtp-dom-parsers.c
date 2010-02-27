@@ -144,12 +144,12 @@ dom_tree_to_boolean(xmlNodePtr node, gboolean* b)
     gchar* text;
 
     text = dom_tree_to_text(node);
-    if (strcasecmp(text, "true") == 0)
+    if (g_strcasecmp(text, "true") == 0)
     {
         *b = TRUE;
         return TRUE;
     }
-    else if (strcasecmp(text, "false") == 0)
+    else if (g_strcasecmp(text, "false") == 0)
     {
         *b = FALSE;
         return TRUE;

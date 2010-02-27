@@ -2470,7 +2470,7 @@ price_printable(gpointer obj)
   commodity = gnc_price_get_commodity(pr);
   currency = gnc_price_get_currency(pr);
 
-  snprintf (buff, 2048, "%s %s / %s on %s", val,
+  g_snprintf (buff, 2048, "%s %s / %s on %s", val,
         gnc_commodity_get_unique_name(commodity),
         gnc_commodity_get_unique_name(currency),
         da);

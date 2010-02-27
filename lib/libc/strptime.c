@@ -219,13 +219,13 @@ translate_win32_picture (const char *picture)
 #if defined __GNUC__ && __GNUC__ >= 2
 # define match_string(cs1, s2) \
   ({ size_t len = strlen (cs1);						      \
-     int result = strncasecmp ((cs1), (s2), len) == 0;			      \
+     int result = g_strncasecmp ((cs1), (s2), len) == 0;			      \
      if (result) (s2) += len;						      \
      result; })
 #else
 /* Oh come on.  Get a reasonable compiler.  */
 # define match_string(cs1, s2) \
-  (strncasecmp ((cs1), (s2), strlen (cs1)) ? 0 : ((s2) += strlen (cs1), 1))
+  (g_strncasecmp ((cs1), (s2), strlen (cs1)) ? 0 : ((s2) += strlen (cs1), 1))
 #endif
 /* We intentionally do not use isdigit() for testing because this will
    lead to problems with the wide character version.  */
@@ -261,7 +261,7 @@ translate_win32_picture (const char *picture)
 	  while (*alts != '\0')						      \
 	    {								      \
 	      size_t len = strlen (alts);				      \
-	      if (strncasecmp (alts, rp, len) == 0)			      \
+	      if (g_strncasecmp (alts, rp, len) == 0)			      \
 	        break;							      \
 	      alts += len + 1;						      \
 	      ++val;							      \

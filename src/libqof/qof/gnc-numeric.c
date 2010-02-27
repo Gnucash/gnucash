@@ -1386,11 +1386,11 @@ string_to_gnc_numeric(const gchar* str, gnc_numeric *n)
         return FALSE;
     }
 #else
-    tmpnum = strtoll (str, NULL, 0);
+    tmpnum = g_ascii_strtoll (str, NULL, 0);
     str = strchr (str, '/');
     if (!str) return FALSE;
     str ++;
-    tmpdenom = strtoll (str, NULL, 0);
+    tmpdenom = g_ascii_strtoll (str, NULL, 0);
     num_read = strspn (str, "0123456789");
 #endif
     n->num = tmpnum;
