@@ -3311,7 +3311,15 @@ xaccAccountGetXxxBalanceInCurrencyRecursive (const Account *acc,
   /* If needed, sum up the children converting to the *requested*
      commodity. */
   if (include_children) {
+#ifdef _MSC_VER
+    /* MSVC compiler: Somehow, the struct initialization containing a
+       gnc_numeric doesn't work. As an exception, we hand-initialize
+       that member afterwards. */
+    CurrencyBalance cb = { report_commodity, { 0 }, fn, NULL, 0 };
+    cb.balance = balance;
+#else
     CurrencyBalance cb = { report_commodity, balance, fn, NULL, 0 };
+#endif
 
     gnc_account_foreach_descendant (acc, xaccAccountBalanceHelper, &cb);
     balance = cb.balance;
@@ -3339,7 +3347,15 @@ xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
   /* If needed, sum up the children converting to the *requested*
      commodity. */
   if (include_children) {
+#ifdef _MSC_VER
+    /* MSVC compiler: Somehow, the struct initialization containing a
+       gnc_numeric doesn't work. As an exception, we hand-initialize
+       that member afterwards. */
+    CurrencyBalance cb = { report_commodity, 0, NULL, fn, date };
+    cb.balance = balance;
+#else
     CurrencyBalance cb = { report_commodity, balance, NULL, fn, date };
+#endif
 
     gnc_account_foreach_descendant (acc, xaccAccountBalanceAsOfDateHelper, &cb);
     balance = cb.balance;
