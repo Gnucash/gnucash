@@ -555,13 +555,14 @@ _weekly_list_to_compact_string(GList *rs, GString *buf)
     }
 }
 
+/* A constant is needed for the array size */
+#define abbrev_day_name_bufsize 10
 static void
 _monthly_append_when(Recurrence *r, GString *buf)
 {
     GDate date = recurrenceGetDate(r);
     if (recurrenceGetPeriodType(r) == PERIOD_LAST_WEEKDAY)
     {
-        gint abbrev_day_name_bufsize = 10;
         gchar day_name_buf[abbrev_day_name_bufsize];
 
         gnc_dow_abbrev(day_name_buf, abbrev_day_name_bufsize, g_date_get_weekday(&date) % 7);

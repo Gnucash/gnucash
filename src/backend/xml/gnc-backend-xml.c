@@ -363,10 +363,12 @@ xml_destroy_backend(QofBackend *be)
    "file.YYYYMMDDHHMMSS.xac" where YYYYMMDDHHMMSS is replaced with the
    current year/month/day/hour/minute/second. */
 
+/* The variable buf_size must be a compile-time constant */
+#define buf_size 1024
+
 static gboolean
 copy_file(const char *orig, const char *bkup)
 {
-    static int buf_size = 1024;
     char buf[buf_size];
     int orig_fd;
     int bkup_fd;
