@@ -21,12 +21,20 @@ IF (NOT PKG_CONFIG_FOUND)
    MESSAGE (SEND_ERROR "pkg-config not found, but is required")
 ENDIF (NOT PKG_CONFIG_FOUND)
 
-# glib
+# glib et al.
 PKG_CHECK_MODULES (GLIB2 glib-2.0>=2.20.0)
 PKG_CHECK_MODULES (GCONF2 gconf-2.0>=2.0)
 PKG_CHECK_MODULES (GOBJECT gobject-2.0>=2.20.0)
 PKG_CHECK_MODULES (GMODULE gmodule-2.0>=2.20.0)
 PKG_CHECK_MODULES (GTHREAD gthread-2.0>=2.20.0)
+
+IF (MSVC)
+  MESSAGE (STATUS "To create the import libraries for the gnome DLLs (e.g. gconf-2.lib), use the dlltool as follows: dlltool -D libgconf-2-4.dll -l ../lib/gconf-2.lib")
+ENDIF (MSVC)
+
+# Libxml2
+FIND_PACKAGE (LibXml2 REQUIRED)
+FIND_PACKAGE (ZLIB REQUIRED)
 
 IF (NOT GLIB2_FOUND)
    MESSAGE (SEND_ERROR "Glib2 not found, but is required")
@@ -200,5 +208,6 @@ ADD_SUBDIRECTORY (libqof)
 ADD_SUBDIRECTORY (core-utils)
 ADD_SUBDIRECTORY (gnc-module)
 ADD_SUBDIRECTORY (engine)
+ADD_SUBDIRECTORY (backend/xml)
 
 ADD_SUBDIRECTORY (test-core)

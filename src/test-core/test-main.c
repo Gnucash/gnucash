@@ -41,6 +41,8 @@
 #include "engine-helpers.h"
 #include "swig-runtime.h"
 
+#include "gnc-backend-xml.h"
+
 #ifdef HAVE_GETTEXT
 #  include <libintl.h>
 #  include <locale.h>
@@ -158,6 +160,8 @@ main(int argc, char ** argv)
     gnc_log_init();
 
     gnc_module_system_init();
+
+	qof_backend_module_init();
 
 /*     gnc_gnome_init (argc, argv, VERSION); */
 /*     gnc_gui_init(); */

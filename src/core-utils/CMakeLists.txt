@@ -24,6 +24,9 @@ SET (libgnc_core_utils_SOURCES
   ${SWIG_CORE_UTILS_C}
 )
 
+# Add dependency on config.h
+SET_SOURCE_FILES_PROPERTIES (${libgnc_core_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+
 SET (libgnc_core_utils_HEADERS
   gnc-main.h
   gnc-gconf-utils.h

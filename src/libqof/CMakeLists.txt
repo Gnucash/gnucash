@@ -50,6 +50,9 @@ IF (WIN32)
   )
 ENDIF (WIN32)
 
+# Add dependency on config.h
+SET_SOURCE_FILES_PROPERTIES (${libgnc_qof_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+
 SET (libgnc_qof_HEADERS
    qof/gnc-date.h
    qof/gnc-date-p.h

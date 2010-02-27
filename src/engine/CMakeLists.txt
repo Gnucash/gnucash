@@ -129,6 +129,9 @@ SET (libgncmod_engine_SOURCES
   ${SWIG_ENGINE_C}
 )
 
+# Add dependency on config.h
+SET_SOURCE_FILES_PROPERTIES (${libgncmod_engine_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+
 ADD_LIBRARY	(engine
   ${libgncmod_engine_SOURCES}
   ${libgncmod_engine_HEADERS}

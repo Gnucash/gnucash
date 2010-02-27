@@ -19,6 +19,9 @@ SET (libgnc_module_SOURCES
   ${SWIG_GNC_MODULE_C}
 )
 
+# Add dependency on config.h
+SET_SOURCE_FILES_PROPERTIES (${libgnc_module_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+
 SET (libgnc_module_HEADERS
   gnc-module.h
   gnc-module-api.h
