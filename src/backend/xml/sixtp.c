@@ -29,6 +29,9 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <sys/types.h>
+#ifdef _MSC_VER
+typedef int ssize_t;
+#endif
 
 #include "sixtp.h"
 #include "sixtp-parsers.h"

@@ -1512,6 +1512,9 @@ kvp_frame_for_each_slot(KvpFrame *f,
     g_hash_table_foreach(f->hash, (GHFunc) proc, data);
 }
 
+#ifdef _MSC_VER
+# define isnan _isnan
+#endif
 gint
 double_compare(double d1, double d2)
 {

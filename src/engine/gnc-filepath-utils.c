@@ -50,6 +50,11 @@
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
 
+#ifdef _MSC_VER
+#include <glib/gwin32.h>
+#define PATH_MAX MAXPATHLEN
+#endif
+
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
 

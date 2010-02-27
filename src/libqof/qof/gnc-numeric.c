@@ -1147,6 +1147,10 @@ gnc_numeric_to_decimal(gnc_numeric *a, guint8 *max_decimal_places)
  *  double_to_gnc_numeric
  ********************************************************************/
 
+#ifdef _MSC_VER
+# define rint /* */
+#endif
+
 gnc_numeric
 double_to_gnc_numeric(double in, gint64 denom, gint how)
 {
