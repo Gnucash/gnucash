@@ -127,14 +127,9 @@ fspd_init( fsParseData *fspd )
     g_date_clear( &fspd->once_day, 1 );
 }
 
-static struct dom_tree_handler fs_dom_handlers[];
-
 static
 gboolean
-gnc_fs_handler( xmlNodePtr node, gpointer d )
-{
-    return dom_tree_generic_parse( node, fs_dom_handlers, d );
-}
+gnc_fs_handler( xmlNodePtr node, gpointer d );
 
 static
 gboolean
@@ -446,6 +441,13 @@ static struct dom_tree_handler fs_dom_handlers[] =
     { "fs:composite",      fs_composite_handler,      0, 0 },
     { NULL, NULL, 0, 0 }
 };
+
+static
+gboolean
+gnc_fs_handler( xmlNodePtr node, gpointer d )
+{
+    return dom_tree_generic_parse( node, fs_dom_handlers, d );
+}
 
 static
 gboolean
