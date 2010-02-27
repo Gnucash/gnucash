@@ -610,19 +610,26 @@ gnc_lot_get_latest_split (GNCLot *lot)
 
 /* ============================================================= */
 
+#ifdef _MSC_VER
+/* MSVC compiler doesn't have C99 "designated initializers"
+ * so we wrap them in a macro that is empty on MSVC. */
+# define DI(x) /* */
+#else
+# define DI(x) x
+#endif
 static QofObject gncLotDesc =
 {
-    .interface_version = QOF_OBJECT_VERSION,
-    .e_type            = GNC_ID_LOT,
-    .type_label        = "Lot",
-    .create            = (gpointer)gnc_lot_new,
-    .book_begin        = NULL,
-    .book_end          = NULL,
-    .is_dirty          = qof_collection_is_dirty,
-    .mark_clean        = qof_collection_mark_clean,
-    .foreach           = qof_collection_foreach,
-    .printable         = NULL,
-    .version_cmp       = (int (*)(gpointer,gpointer))qof_instance_version_cmp,
+    DI(.interface_version =) QOF_OBJECT_VERSION,
+    DI(.e_type            =) GNC_ID_LOT,
+    DI(.type_label        =) "Lot",
+    DI(.create            =) (gpointer)gnc_lot_new,
+    DI(.book_begin        =) NULL,
+    DI(.book_end          =) NULL,
+    DI(.is_dirty          =) qof_collection_is_dirty,
+    DI(.mark_clean        =) qof_collection_mark_clean,
+    DI(.foreach           =) qof_collection_foreach,
+    DI(.printable         =) NULL,
+    DI(.version_cmp       =) (int (*)(gpointer,gpointer))qof_instance_version_cmp,
 };
 
 

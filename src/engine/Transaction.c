@@ -2028,19 +2028,27 @@ xaccTransFindSplitByAccount(const Transaction *trans, const Account *acc)
 \********************************************************************/
 /* QofObject function implementation */
 
+#ifdef _MSC_VER
+/* MSVC compiler doesn't have C99 "designated initializers"
+ * so we wrap them in a macro that is empty on MSVC. */
+# define DI(x) /* */
+#else
+# define DI(x) x
+#endif
+
 /* Hook into the QofObject registry */
 static QofObject trans_object_def = {
-  .interface_version = QOF_OBJECT_VERSION,
-  .e_type            = GNC_ID_TRANS,
-  .type_label        = "Transaction",
-  .create            = (gpointer)xaccMallocTransaction,
-  .book_begin        = NULL,
-  .book_end          = NULL,
-  .is_dirty          = qof_collection_is_dirty,
-  .mark_clean        = qof_collection_mark_clean,
-  .foreach           = qof_collection_foreach,
-  .printable         = (const char* (*)(gpointer)) xaccTransGetDescription,
-  .version_cmp       = (int (*)(gpointer,gpointer)) qof_instance_version_cmp,
+  DI(.interface_version =) QOF_OBJECT_VERSION,
+  DI(.e_type            =) GNC_ID_TRANS,
+  DI(.type_label        =) "Transaction",
+  DI(.create            =) (gpointer)xaccMallocTransaction,
+  DI(.book_begin        =) NULL,
+  DI(.book_end          =) NULL,
+  DI(.is_dirty          =) qof_collection_is_dirty,
+  DI(.mark_clean        =) qof_collection_mark_clean,
+  DI(.foreach           =) qof_collection_foreach,
+  DI(.printable         =) (const char* (*)(gpointer)) xaccTransGetDescription,
+  DI(.version_cmp       =) (int (*)(gpointer,gpointer)) qof_instance_version_cmp,
 };
 
 static gboolean

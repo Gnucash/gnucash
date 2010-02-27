@@ -859,19 +859,26 @@ gnc_sx_get_defer_instances( SchedXaction *sx )
    return sx->deferredList;
 }
 
+#ifdef _MSC_VER
+/* MSVC compiler doesn't have C99 "designated initializers"
+ * so we wrap them in a macro that is empty on MSVC. */
+# define DI(x) /* */
+#else
+# define DI(x) x
+#endif
 static QofObject SXDesc = 
 {
-	.interface_version = QOF_OBJECT_VERSION,
-	.e_type            = GNC_SX_ID,
-	.type_label        = "Scheduled Transaction",
-	.create            = (gpointer)xaccSchedXactionMalloc,
-	.book_begin        = NULL,
-	.book_end          = NULL,
-	.is_dirty          = qof_collection_is_dirty,
-	.mark_clean        = qof_collection_mark_clean,
-	.foreach           = qof_collection_foreach,
-	.printable         = NULL,
-	.version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+	DI(.interface_version =) QOF_OBJECT_VERSION,
+	DI(.e_type            =) GNC_SX_ID,
+	DI(.type_label        =) "Scheduled Transaction",
+	DI(.create            =) (gpointer)xaccSchedXactionMalloc,
+	DI(.book_begin        =) NULL,
+	DI(.book_end          =) NULL,
+	DI(.is_dirty          =) qof_collection_is_dirty,
+	DI(.mark_clean        =) qof_collection_mark_clean,
+	DI(.foreach           =) qof_collection_foreach,
+	DI(.printable         =) NULL,
+	DI(.version_cmp       =) (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean

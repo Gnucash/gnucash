@@ -600,20 +600,28 @@ gnc_budget_get_default (QofBook *book)
     return bgt;
 }
 
+#ifdef _MSC_VER
+/* MSVC compiler doesn't have C99 "designated initializers"
+ * so we wrap them in a macro that is empty on MSVC. */
+# define DI(x) /* */
+#else
+# define DI(x) x
+#endif
+
 /* Define the QofObject. */
 static QofObject budget_object_def =
 {
-    .interface_version = QOF_OBJECT_VERSION,
-    .e_type            = GNC_ID_BUDGET,
-    .type_label        = "Budget",
-    .create            = (gpointer)gnc_budget_new,
-    .book_begin        = NULL,
-    .book_end          = NULL,
-    .is_dirty          = qof_collection_is_dirty,
-    .mark_clean        = qof_collection_mark_clean,
-    .foreach           = qof_collection_foreach,
-    .printable         = (const char* (*)(gpointer)) gnc_budget_get_name,
-    .version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+    DI(.interface_version =) QOF_OBJECT_VERSION,
+    DI(.e_type            =) GNC_ID_BUDGET,
+    DI(.type_label        =) "Budget",
+    DI(.create            =) (gpointer)gnc_budget_new,
+    DI(.book_begin        =) NULL,
+    DI(.book_end          =) NULL,
+    DI(.is_dirty          =) qof_collection_is_dirty,
+    DI(.mark_clean        =) qof_collection_mark_clean,
+    DI(.foreach           =) qof_collection_foreach,
+    DI(.printable         =) (const char* (*)(gpointer)) gnc_budget_get_name,
+    DI(.version_cmp       =) (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 

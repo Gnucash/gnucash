@@ -2479,34 +2479,41 @@ price_printable(gpointer obj)
   return buff;
 }
 
+#ifdef _MSC_VER
+/* MSVC compiler doesn't have C99 "designated initializers"
+ * so we wrap them in a macro that is empty on MSVC. */
+# define DI(x) /* */
+#else
+# define DI(x) x
+#endif
 static QofObject price_object_def =
 {
-  .interface_version = QOF_OBJECT_VERSION,
-  .e_type            = GNC_ID_PRICE,
-  .type_label        = "Price",
-  .create            = price_create,
-  .book_begin        = NULL,
-  .book_end          = NULL,
-  .is_dirty          = qof_collection_is_dirty,
-  .mark_clean        = qof_collection_mark_clean,
-  .foreach           = price_foreach,
-  .printable         = price_printable,
-  .version_cmp       = NULL,
+  DI(.interface_version =) QOF_OBJECT_VERSION,
+  DI(.e_type            =) GNC_ID_PRICE,
+  DI(.type_label        =) "Price",
+  DI(.create            =) price_create,
+  DI(.book_begin        =) NULL,
+  DI(.book_end          =) NULL,
+  DI(.is_dirty          =) qof_collection_is_dirty,
+  DI(.mark_clean        =) qof_collection_mark_clean,
+  DI(.foreach           =) price_foreach,
+  DI(.printable         =) price_printable,
+  DI(.version_cmp       =) NULL,
 };
 
 static QofObject pricedb_object_def =
 {
-  .interface_version = QOF_OBJECT_VERSION,
-  .e_type            = GNC_ID_PRICEDB,
-  .type_label        = "PriceDB",
-  .create            = NULL,
-  .book_begin        = pricedb_book_begin,
-  .book_end          = pricedb_book_end,
-  .is_dirty          = qof_collection_is_dirty,
-  .mark_clean        = qof_collection_mark_clean,
-  .foreach           = NULL,
-  .printable         = NULL,
-  .version_cmp       = NULL,
+  DI(.interface_version =) QOF_OBJECT_VERSION,
+  DI(.e_type            =) GNC_ID_PRICEDB,
+  DI(.type_label        =) "PriceDB",
+  DI(.create            =) NULL,
+  DI(.book_begin        =) pricedb_book_begin,
+  DI(.book_end          =) pricedb_book_end,
+  DI(.is_dirty          =) qof_collection_is_dirty,
+  DI(.mark_clean        =) qof_collection_mark_clean,
+  DI(.foreach           =) NULL,
+  DI(.printable         =) NULL,
+  DI(.version_cmp       =) NULL,
 };
 
 gboolean

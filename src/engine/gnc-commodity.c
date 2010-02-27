@@ -2312,30 +2312,37 @@ gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBook *book)
  ********************************************************************/
 /* QofObject function implementation and registration */
 
+#ifdef _MSC_VER
+/* MSVC compiler doesn't have C99 "designated initializers"
+ * so we wrap them in a macro that is empty on MSVC. */
+# define DI(x) /* */
+#else
+# define DI(x) x
+#endif
 static QofObject commodity_object_def = 
 {
-  .interface_version = QOF_OBJECT_VERSION,
-  .e_type            = GNC_ID_COMMODITY,
-  .type_label        = "Commodity",
-  .book_begin        = NULL,
-  .book_end          = NULL,
-  .is_dirty          = qof_collection_is_dirty,
-  .mark_clean        = qof_collection_mark_clean,
-  .foreach           = qof_collection_foreach,
-  .printable         = (const char* (*)(gpointer)) gnc_commodity_get_fullname,
+  DI(.interface_version =) QOF_OBJECT_VERSION,
+  DI(.e_type            =) GNC_ID_COMMODITY,
+  DI(.type_label        =) "Commodity",
+  DI(.book_begin        =) NULL,
+  DI(.book_end          =) NULL,
+  DI(.is_dirty          =) qof_collection_is_dirty,
+  DI(.mark_clean        =) qof_collection_mark_clean,
+  DI(.foreach           =) qof_collection_foreach,
+  DI(.printable         =) (const char* (*)(gpointer)) gnc_commodity_get_fullname,
 };
 
 static QofObject namespace_object_def = 
 {
-  .interface_version = QOF_OBJECT_VERSION,
-  .e_type            = GNC_ID_COMMODITY_NAMESPACE,
-  .type_label        = "Namespace",
-  .book_begin        = NULL,
-  .book_end          = NULL,
-  .is_dirty          = NULL,
-  .mark_clean        = NULL,
-  .foreach           = NULL,
-  .printable         = NULL,
+  DI(.interface_version =) QOF_OBJECT_VERSION,
+  DI(.e_type            =) GNC_ID_COMMODITY_NAMESPACE,
+  DI(.type_label        =) "Namespace",
+  DI(.book_begin        =) NULL,
+  DI(.book_end          =) NULL,
+  DI(.is_dirty          =) NULL,
+  DI(.mark_clean        =) NULL,
+  DI(.foreach           =) NULL,
+  DI(.printable         =) NULL,
 };
 
 static void 
@@ -2370,17 +2377,17 @@ commodity_table_book_end (QofBook *book)
 
 static QofObject commodity_table_object_def = 
 {
-  .interface_version = QOF_OBJECT_VERSION,
-  .e_type            = GNC_ID_COMMODITY_TABLE,
-  .type_label        = "CommodityTable",
-  .create            = NULL,
-  .book_begin        = commodity_table_book_begin,
-  .book_end          = commodity_table_book_end,
-  .is_dirty          = qof_collection_is_dirty,
-  .mark_clean        = qof_collection_mark_clean,
-  .foreach           = NULL,
-  .printable         = NULL,
-  .version_cmp       = NULL,
+  DI(.interface_version =) QOF_OBJECT_VERSION,
+  DI(.e_type            =) GNC_ID_COMMODITY_TABLE,
+  DI(.type_label        =) "CommodityTable",
+  DI(.create            =) NULL,
+  DI(.book_begin        =) commodity_table_book_begin,
+  DI(.book_end          =) commodity_table_book_end,
+  DI(.is_dirty          =) qof_collection_is_dirty,
+  DI(.mark_clean        =) qof_collection_mark_clean,
+  DI(.foreach           =) NULL,
+  DI(.printable         =) NULL,
+  DI(.version_cmp       =) NULL,
 };
 
 gboolean 

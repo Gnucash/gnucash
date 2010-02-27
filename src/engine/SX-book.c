@@ -161,17 +161,24 @@ sxtg_mark_clean(QofCollection *col)
   g_list_free(descendants);
 }
 
+#ifdef _MSC_VER
+/* MSVC compiler doesn't have C99 "designated initializers"
+ * so we wrap them in a macro that is empty on MSVC. */
+# define DI(x) /* */
+#else
+# define DI(x) x
+#endif
 static QofObject sxtg_object_def = 
 {
-  .interface_version = QOF_OBJECT_VERSION,
-  .e_type            = GNC_ID_SXTG,
-  .type_label        = "Scheduled Transaction Templates",
-  .book_begin        = sxtg_book_begin,
-  .book_end          = sxtg_book_end,
-  .is_dirty          = sxtg_is_dirty,
-  .mark_clean        = sxtg_mark_clean,
-  .foreach           = NULL,
-  .printable         = NULL,
+  DI(.interface_version =) QOF_OBJECT_VERSION,
+  DI(.e_type            =) GNC_ID_SXTG,
+  DI(.type_label        =) "Scheduled Transaction Templates",
+  DI(.book_begin        =) sxtg_book_begin,
+  DI(.book_end          =) sxtg_book_end,
+  DI(.is_dirty          =) sxtg_is_dirty,
+  DI(.mark_clean        =) sxtg_mark_clean,
+  DI(.foreach           =) NULL,
+  DI(.printable         =) NULL,
 };
 
 /* ====================================================================== */
@@ -307,32 +314,32 @@ book_sxlist_notsaved(const QofCollection *col)
 
 static QofObject sxes_object_def =
 {
-  .interface_version = QOF_OBJECT_VERSION,
-  .e_type            = GNC_ID_SXES,
-  .type_label        = "Scheduled Transactions List",
-  .create            = NULL,
-  .book_begin        = book_sxes_setup,
-  .book_end          = book_sxes_end,
-  .is_dirty          = book_sxlist_notsaved,
-  .mark_clean        = book_sxns_mark_saved,
-  .foreach           = NULL,
-  .printable         = NULL,
-  .version_cmp       = NULL
+  DI(.interface_version =) QOF_OBJECT_VERSION,
+  DI(.e_type            =) GNC_ID_SXES,
+  DI(.type_label        =) "Scheduled Transactions List",
+  DI(.create            =) NULL,
+  DI(.book_begin        =) book_sxes_setup,
+  DI(.book_end          =) book_sxes_end,
+  DI(.is_dirty          =) book_sxlist_notsaved,
+  DI(.mark_clean        =) book_sxns_mark_saved,
+  DI(.foreach           =) NULL,
+  DI(.printable         =) NULL,
+  DI(.version_cmp       =) NULL
 };
   
 static QofObject sxtt_object_def = 
 {
-  .interface_version = QOF_OBJECT_VERSION,
-  .e_type            = GNC_ID_SXTT,
-  .type_label        = "Scheduled Transaction Templates",
-  .create            = NULL,
-  .book_begin        = NULL,
-  .book_end          = NULL,
-  .is_dirty          = NULL,
-  .mark_clean        = NULL,
-  .foreach           = NULL,
-  .printable         = NULL,
-  .version_cmp       = NULL,
+  DI(.interface_version =) QOF_OBJECT_VERSION,
+  DI(.e_type            =) GNC_ID_SXTT,
+  DI(.type_label        =) "Scheduled Transaction Templates",
+  DI(.create            =) NULL,
+  DI(.book_begin        =) NULL,
+  DI(.book_end          =) NULL,
+  DI(.is_dirty          =) NULL,
+  DI(.mark_clean        =) NULL,
+  DI(.foreach           =) NULL,
+  DI(.printable         =) NULL,
+  DI(.version_cmp       =) NULL,
 };
 
 gboolean 
