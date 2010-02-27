@@ -184,8 +184,10 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         const gchar *text;
 	PangoRectangle strong_pos;
 	PangoAttribute *attr;
-	PangoAttrList *attr_list;
+        PangoAttrList *attr_list;
+        GnucashSheet *sheet;
 
+        sheet = GNUCASH_SHEET (item_edit->sheet);
         style = item_edit->style;
         table = item_edit->sheet->table;
 
@@ -232,6 +234,17 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         }
 
 	info->layout = gtk_widget_create_pango_layout (GTK_WIDGET (item_edit->sheet), text);
+
+	/* IMContext attributes*/
+	if (sheet->preedit_length && sheet->preedit_attrs != NULL) {
+		PangoAttrList *tmp_attrs = pango_attr_list_new ();
+		pango_attr_list_splice (tmp_attrs, sheet->preedit_attrs,
+					g_utf8_offset_to_pointer (text, sheet->preedit_start_position) - text  ,
+					g_utf8_offset_to_pointer (text, sheet->preedit_start_position + sheet->preedit_char_length) - text);
+		pango_layout_set_attributes (info->layout, tmp_attrs);
+		pango_attr_list_unref (tmp_attrs);
+	}
+
 
 	/* Selection */
         if (start_pos != end_pos)
@@ -298,6 +311,18 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         }
 
         gnc_item_edit_update_offset (item_edit, info);
+
+	/* Calcurate IMContext aux window position */
+	{
+		gint xoff, yoff;
+		GdkRectangle rect;
+		rect = info->cursor_rect;
+		gnome_canvas_get_scroll_offsets(GNOME_CANVAS(sheet), &xoff, &yoff);
+		rect.x += (x - xoff + item_edit->x_offset);
+		rect.y += (y - yoff);
+		gtk_im_context_set_cursor_location (sheet->im_context, &rect);
+	}
+
 }
 
 static void
