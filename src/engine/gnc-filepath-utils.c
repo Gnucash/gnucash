@@ -369,7 +369,13 @@ gnc_validate_directory (const gchar *dirname)
   if (rc) {
     switch (errno) {
     case ENOENT:
-      rc = g_mkdir (dirname, S_IRWXU);   /* perms = S_IRWXU = 0700 */
+      rc = g_mkdir (dirname,
+#ifdef G_OS_WIN32
+		  0          /* The mode argument is ignored on windows */
+#else
+		  S_IRWXU    /* perms = S_IRWXU = 0700 */
+#endif
+		  );
       if (rc) {
 	g_fprintf(stderr,
 		  _("An error occurred while creating the directory:\n"
@@ -422,6 +428,8 @@ gnc_validate_directory (const gchar *dirname)
 	      dirname);
     exit(1);
   }
+#ifndef G_OS_WIN32
+  /* The mode argument is ignored on windows anyway */
   if ((statbuf.st_mode & S_IRWXU) != S_IRWXU) {
     g_fprintf(stderr,
 	      _("The permissions are wrong on the directory\n"
@@ -430,6 +438,7 @@ gnc_validate_directory (const gchar *dirname)
 	      dirname);
     exit(1);
   }
+#endif
 }
 
 const gchar *
