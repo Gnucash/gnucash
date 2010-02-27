@@ -149,8 +149,6 @@ src/core-utils/gnc-gconf-utils.c
 src/core-utils/gnc-gdate-utils.c
 src/core-utils/gnc-gkeyfile-utils.c
 src/core-utils/gnc-glib-utils.c
-src/core-utils/gnc-gobject-utils.c
-src/core-utils/gnc-gtk-utils.c
 src/core-utils/gnc-main.c
 src/doc/doxygen_main_page.c
 src/engine/Account.c
@@ -312,6 +310,8 @@ src/gnome-utils/gnc-file.c
 src/gnome-utils/gnc-frequency.c
 src/gnome-utils/gnc-general-select.c
 src/gnome-utils/gnc-gnome-utils.c
+src/gnome-utils/gnc-gobject-utils.c
+src/gnome-utils/gnc-gtk-utils.c
 src/gnome-utils/gnc-gui-query.c
 src/gnome-utils/gnc-icons.c
 src/gnome-utils/gnc-main-window.c
