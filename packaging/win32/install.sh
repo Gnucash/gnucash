@@ -709,7 +709,7 @@ function inst_libbonoboui() {
             # We override the $GNOME_DIR libbonoboui files because
             # those erroneously depend on the obsolete libxml2.dll
             cp -a $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll $_GNOME_UDIR/bin
-            cp -a $_LIBBONOBOUI_UDIR/lib/libbonoboui*.dll $_GNOME_UDIR/lib
+            cp -a $_LIBBONOBOUI_UDIR/lib/libbonoboui* $_GNOME_UDIR/lib
         qpopd
         ${PKG_CONFIG} --exists --atleast-version=2.24.2 libbonoboui-2.0 && [ -f $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll ] || die "libbonoboui not installed correctly"
         rm -rf ${TMP_UDIR}/libbonoboui-*
