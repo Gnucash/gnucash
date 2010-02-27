@@ -125,3 +125,4 @@ po/.intltool-merge-cache
 src/bin/gnucash-bin.o
 gnucash-*.*.*/
 gnucash-*.*.*.tar.*
+build*

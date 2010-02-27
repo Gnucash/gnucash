@@ -39,10 +39,18 @@
 #include <limits.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#else
+# ifdef _MSC_VER
+typedef int ssize_t;
+# endif
+#endif
 #include <errno.h>
 #include <string.h>
-#include <dirent.h>
+#ifdef HAVE_DIRENT_H
+# include <dirent.h>
+#endif
 #include <time.h>
 
 #include "qof.h"
