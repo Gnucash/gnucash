@@ -80,8 +80,14 @@ void mark_order (GncOrder *order)
 }
 
 /* =============================================================== */
+
+enum {
+    PROP_0,
+	PROP_NOTES
+};
+
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_order, GncOrder, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncOrder, gnc_order, QOF_TYPE_INSTANCE);
 
 static void
 gnc_order_init(GncOrder* order)
@@ -89,13 +95,79 @@ gnc_order_init(GncOrder* order)
 }
 
 static void
-gnc_order_dispose_real (GObject *orderp)
+gnc_order_dispose(GObject *orderp)
 {
+    G_OBJECT_CLASS(gnc_order_parent_class)->dispose(orderp);
 }
 
 static void
-gnc_order_finalize_real(GObject* orderp)
+gnc_order_finalize(GObject* orderp)
 {
+    G_OBJECT_CLASS(gnc_order_parent_class)->dispose(orderp);
+}
+
+static void
+gnc_order_get_property (GObject         *object,
+			  guint            prop_id,
+			  GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncOrder *order;
+
+    g_return_if_fail(GNC_IS_ORDER(object));
+
+    order = GNC_ORDER(object);
+    switch (prop_id) {
+	case PROP_NOTES:
+	    g_value_set_string(value, order->notes);
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_order_set_property (GObject         *object,
+			  guint            prop_id,
+			  const GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncOrder *order;
+
+    g_return_if_fail(GNC_IS_ORDER(object));
+
+    order = GNC_ORDER(object);
+    switch (prop_id) {
+	case PROP_NOTES:
+	    gncOrderSetNotes(order, g_value_get_string(value));
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_order_class_init (GncOrderClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	
+    gobject_class->dispose = gnc_order_dispose;
+    gobject_class->finalize = gnc_order_finalize;
+    gobject_class->set_property = gnc_order_set_property;
+    gobject_class->get_property = gnc_order_get_property;
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_NOTES,
+	 g_param_spec_string ("name",
+			      "Order Notes",
+			      "The order notes is an arbitrary string "
+			      "assigned by the user to provide notes about "
+			      "this order.",
+			      NULL,
+			      G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */

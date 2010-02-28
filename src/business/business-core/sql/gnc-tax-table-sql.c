@@ -66,7 +66,7 @@ static void set_parent( gpointer pObject, gpointer pValue );
 static GncSqlColumnTableEntry tt_col_table[] =
 {
 	{ "guid",      CT_GUID,        0,            COL_NNUL|COL_PKEY, "guid" },
-	{ "name",      CT_STRING,      MAX_NAME_LEN, COL_NNUL,          NULL, GNC_TT_NAME },
+	{ "name",      CT_STRING,      MAX_NAME_LEN, COL_NNUL,          "name" },
 	{ "refcount",  CT_INT64,       0,            COL_NNUL,          NULL, GNC_TT_REFCOUNT },
 	{ "invisible", CT_BOOLEAN,     0,            COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)gncTaxTableGetInvisible, (QofSetterFunc)set_invisible },

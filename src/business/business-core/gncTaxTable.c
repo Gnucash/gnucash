@@ -205,8 +205,14 @@ gncTaxTableRemoveChild (GncTaxTable *table, const GncTaxTable *child)
 }
 
 /* =============================================================== */
+
+enum {
+    PROP_0,
+	PROP_NAME
+};
+
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_taxtable, GncTaxTable, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncTaxTable, gnc_taxtable, QOF_TYPE_INSTANCE);
 
 static void
 gnc_taxtable_init(GncTaxTable* tt)
@@ -214,13 +220,81 @@ gnc_taxtable_init(GncTaxTable* tt)
 }
 
 static void
-gnc_taxtable_dispose_real (GObject *ttp)
+gnc_taxtable_dispose(GObject *ttp)
 {
+    G_OBJECT_CLASS(gnc_taxtable_parent_class)->dispose(ttp);
 }
 
 static void
-gnc_taxtable_finalize_real(GObject* ttp)
+gnc_taxtable_finalize(GObject* ttp)
 {
+    G_OBJECT_CLASS(gnc_taxtable_parent_class)->dispose(ttp);
+}
+
+static void
+gnc_taxtable_get_property (GObject         *object,
+			  guint            prop_id,
+			  GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncTaxTable *tt;
+
+    g_return_if_fail(GNC_IS_TAXTABLE(object));
+
+    tt = GNC_TAXTABLE(object);
+    switch (prop_id) {
+	case PROP_NAME:
+	    g_value_set_string(value, tt->name);
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_taxtable_set_property (GObject         *object,
+			  guint            prop_id,
+			  const GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncTaxTable *tt;
+
+    g_return_if_fail(GNC_IS_TAXTABLE(object));
+
+    tt = GNC_TAXTABLE(object);
+    switch (prop_id) {
+	case PROP_NAME:
+	    gncTaxTableSetName(tt, g_value_get_string(value));
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_taxtable_class_init (GncTaxTableClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	
+    gobject_class->dispose = gnc_taxtable_dispose;
+    gobject_class->finalize = gnc_taxtable_finalize;
+    gobject_class->set_property = gnc_taxtable_set_property;
+    gobject_class->get_property = gnc_taxtable_get_property;
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_NAME,
+	 g_param_spec_string ("name",
+			      "TaxTable Name",
+			      "The accountName is an arbitrary string "
+			      "assigned by the user.  It is intended to "
+			      "a short, 10 to 30 character long string "
+			      "that is displayed by the GUI as the "
+			      "tax table mnemonic.",
+			      NULL,
+			      G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */

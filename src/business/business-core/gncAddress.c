@@ -68,8 +68,13 @@ void mark_address (GncAddress *address)
   qof_event_gen (address->parent, QOF_EVENT_MODIFY, NULL);
 }
 
+enum {
+    PROP_0,
+	PROP_NAME
+};
+
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_address, GncAddress, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncAddress, gnc_address, QOF_TYPE_INSTANCE);
 
 static void
 gnc_address_init(GncAddress* addr)
@@ -77,13 +82,79 @@ gnc_address_init(GncAddress* addr)
 }
 
 static void
-gnc_address_dispose_real (GObject *addrp)
+gnc_address_dispose(GObject *addrp)
 {
+    G_OBJECT_CLASS(gnc_address_parent_class)->dispose(addrp);
 }
 
 static void
-gnc_address_finalize_real(GObject* addrp)
+gnc_address_finalize(GObject* addrp)
 {
+    G_OBJECT_CLASS(gnc_address_parent_class)->finalize(addrp);
+}
+
+static void
+gnc_address_get_property (GObject         *object,
+			  guint            prop_id,
+			  GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncAddress *address;
+
+    g_return_if_fail(GNC_IS_ADDRESS(object));
+
+    address = GNC_ADDRESS(object);
+    switch (prop_id) {
+	case PROP_NAME:
+	    g_value_set_string(value, address->name);
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_address_set_property (GObject         *object,
+			  guint            prop_id,
+			  const GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncAddress *address;
+
+    g_return_if_fail(GNC_IS_ADDRESS(object));
+
+    address = GNC_ADDRESS(object);
+    switch (prop_id) {
+	case PROP_NAME:
+	    gncAddressSetName(address, g_value_get_string(value));
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_address_class_init (GncAddressClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	
+    gobject_class->dispose = gnc_address_dispose;
+    gobject_class->finalize = gnc_address_finalize;
+    gobject_class->set_property = gnc_address_set_property;
+    gobject_class->get_property = gnc_address_get_property;
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_NAME,
+	 g_param_spec_string ("name",
+			      "Address Name",
+			      "The address name is an arbitrary string "
+			      "assigned by the user.  It is intended to "
+			      "a short string to identify the address.",
+			      NULL,
+			      G_PARAM_READWRITE));
 }
 
 /* Create/Destroy functions */

@@ -58,7 +58,7 @@ static void set_invisible( gpointer data, gboolean value );
 static GncSqlColumnTableEntry col_table[] =
 {
 	{ "guid",         CT_GUID,        0,                   COL_NNUL|COL_PKEY, "guid" },
-	{ "name",         CT_STRING,      MAX_NAME_LEN,        COL_NNUL,          NULL, GNC_BILLTERM_NAME },
+	{ "name",         CT_STRING,      MAX_NAME_LEN,        COL_NNUL,          "name" },
 	{ "description",  CT_STRING,      MAX_DESCRIPTION_LEN, COL_NNUL,          NULL, GNC_BILLTERM_DESC },
 	{ "refcount",     CT_INT,         0,                   COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)gncBillTermGetRefcount,  (QofSetterFunc)gncBillTermSetRefcount },

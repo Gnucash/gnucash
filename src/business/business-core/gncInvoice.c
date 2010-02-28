@@ -106,8 +106,14 @@ QofBook * gncInvoiceGetBook(GncInvoice *x)
 }
 
 /* ================================================================== */
+
+enum {
+    PROP_0,
+	PROP_NOTES
+};
+
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_invoice, GncInvoice, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncInvoice, gnc_invoice, QOF_TYPE_INSTANCE);
 
 static void
 gnc_invoice_init(GncInvoice* inv)
@@ -115,13 +121,79 @@ gnc_invoice_init(GncInvoice* inv)
 }
 
 static void
-gnc_invoice_dispose_real (GObject *invp)
+gnc_invoice_dispose(GObject *invp)
 {
+    G_OBJECT_CLASS(gnc_invoice_parent_class)->dispose(invp);
 }
 
 static void
-gnc_invoice_finalize_real(GObject* invp)
+gnc_invoice_finalize(GObject* invp)
 {
+    G_OBJECT_CLASS(gnc_invoice_parent_class)->finalize(invp);
+}
+
+static void
+gnc_invoice_get_property (GObject         *object,
+			  guint            prop_id,
+			  GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncInvoice *inv;
+
+    g_return_if_fail(GNC_IS_INVOICE(object));
+
+    inv = GNC_INVOICE(object);
+    switch (prop_id) {
+	case PROP_NOTES:
+	    g_value_set_string(value, inv->notes);
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_invoice_set_property (GObject         *object,
+			  guint            prop_id,
+			  const GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncInvoice *inv;
+
+    g_return_if_fail(GNC_IS_INVOICE(object));
+
+    inv = GNC_INVOICE(object);
+    switch (prop_id) {
+	case PROP_NOTES:
+	    gncInvoiceSetNotes(inv, g_value_get_string(value));
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_invoice_class_init (GncInvoiceClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	
+    gobject_class->dispose = gnc_invoice_dispose;
+    gobject_class->finalize = gnc_invoice_finalize;
+    gobject_class->set_property = gnc_invoice_set_property;
+    gobject_class->get_property = gnc_invoice_get_property;
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_NOTES,
+	 g_param_spec_string ("notes",
+			      "Invoice Notes",
+			      "The invoice notes is an arbitrary string "
+			      "assigned by the user to provide notes regarding "
+			      "this invoice.",
+			      NULL,
+			      G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */

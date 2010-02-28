@@ -66,8 +66,14 @@ void mark_job (GncJob *job)
 }
 
 /* ================================================================== */
+
+enum {
+    PROP_0,
+	PROP_NAME
+};
+
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_job, GncJob, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncJob, gnc_job, QOF_TYPE_INSTANCE);
 
 static void
 gnc_job_init(GncJob* job)
@@ -75,13 +81,80 @@ gnc_job_init(GncJob* job)
 }
 
 static void
-gnc_job_dispose_real (GObject *jobp)
+gnc_job_dispose(GObject *jobp)
 {
+    G_OBJECT_CLASS(gnc_job_parent_class)->dispose(jobp);
 }
 
 static void
-gnc_job_finalize_real(GObject* jobp)
+gnc_job_finalize(GObject* jobp)
 {
+    G_OBJECT_CLASS(gnc_job_parent_class)->finalize(jobp);
+}
+
+static void
+gnc_job_get_property (GObject         *object,
+			  guint            prop_id,
+			  GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncJob *job; 
+
+    g_return_if_fail(GNC_IS_JOB(object));
+
+    job = GNC_JOB(object);
+    switch (prop_id) {
+	case PROP_NAME:
+	    g_value_set_string(value, job->name);
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_job_set_property (GObject         *object,
+			  guint            prop_id,
+			  const GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncJob *job;
+
+    g_return_if_fail(GNC_IS_JOB(object));
+
+    job = GNC_JOB(object);
+    switch (prop_id) {
+	case PROP_NAME:
+	    gncJobSetName(job, g_value_get_string(value));
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_job_class_init (GncJobClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	
+    gobject_class->dispose = gnc_job_dispose;
+    gobject_class->finalize = gnc_job_finalize;
+    gobject_class->set_property = gnc_job_set_property;
+    gobject_class->get_property = gnc_job_get_property;
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_NAME,
+	 g_param_spec_string ("name",
+			      "Job Name",
+			      "The job name is an arbitrary string "
+			      "assigned by the user.  It is intended to "
+			      "a short character string that is displayed "
+				  "by the GUI as the job mnemonic.",
+			      NULL,
+			      G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */

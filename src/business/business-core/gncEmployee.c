@@ -75,8 +75,14 @@ void mark_employee (GncEmployee *employee)
 }
 
 /* ============================================================== */
+
+enum {
+    PROP_0,
+	PROP_USERNAME
+};
+
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_employee, GncEmployee, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncEmployee, gnc_employee, QOF_TYPE_INSTANCE);
 
 static void
 gnc_employee_init(GncEmployee* emp)
@@ -84,13 +90,79 @@ gnc_employee_init(GncEmployee* emp)
 }
 
 static void
-gnc_employee_dispose_real (GObject *empp)
+gnc_employee_dispose(GObject *empp)
 {
+    G_OBJECT_CLASS(gnc_employee_parent_class)->dispose(empp);
 }
 
 static void
-gnc_employee_finalize_real(GObject* empp)
+gnc_employee_finalize(GObject* empp)
 {
+    G_OBJECT_CLASS(gnc_employee_parent_class)->finalize(empp);
+}
+
+static void
+gnc_employee_get_property (GObject         *object,
+			  guint            prop_id,
+			  GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncEmployee *emp;
+
+    g_return_if_fail(GNC_IS_EMPLOYEE(object));
+
+    emp = GNC_EMPLOYEE(object);
+    switch (prop_id) {
+	case PROP_USERNAME:
+	    g_value_set_string(value, emp->username);
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_employee_set_property (GObject         *object,
+			  guint            prop_id,
+			  const GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncEmployee *emp;
+
+    g_return_if_fail(GNC_IS_EMPLOYEE(object));
+
+    emp = GNC_EMPLOYEE(object);
+    switch (prop_id) {
+	case PROP_USERNAME:
+	    gncEmployeeSetUsername(emp, g_value_get_string(value));
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_employee_class_init (GncEmployeeClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	
+    gobject_class->dispose = gnc_employee_dispose;
+    gobject_class->finalize = gnc_employee_finalize;
+    gobject_class->set_property = gnc_employee_set_property;
+    gobject_class->get_property = gnc_employee_get_property;
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_USERNAME,
+	 g_param_spec_string ("name",
+			      "Employee Name",
+			      "The employee name is an arbitrary string "
+			      "assigned by the user which provides the employee "
+				  "name.",
+			      NULL,
+			      G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */

@@ -93,8 +93,13 @@ void mark_customer (GncCustomer *customer)
 
 /* ============================================================== */
 
+enum {
+    PROP_0,
+	PROP_NAME
+};
+
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_customer, GncCustomer, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncCustomer, gnc_customer, QOF_TYPE_INSTANCE);
 
 static void
 gnc_customer_init(GncCustomer* cust)
@@ -102,13 +107,79 @@ gnc_customer_init(GncCustomer* cust)
 }
 
 static void
-gnc_customer_dispose_real (GObject *custp)
+gnc_customer_dispose(GObject *custp)
 {
+    G_OBJECT_CLASS(gnc_customer_parent_class)->dispose(custp);
 }
 
 static void
-gnc_customer_finalize_real(GObject* custp)
+gnc_customer_finalize(GObject* custp)
 {
+    G_OBJECT_CLASS(gnc_customer_parent_class)->finalize(custp);
+}
+
+static void
+gnc_customer_get_property (GObject         *object,
+			  guint            prop_id,
+			  GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncCustomer *cust;
+
+    g_return_if_fail(GNC_IS_CUSTOMER(object));
+
+    cust = GNC_CUSTOMER(object);
+    switch (prop_id) {
+	case PROP_NAME:
+	    g_value_set_string(value, cust->name);
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_customer_set_property (GObject         *object,
+			  guint            prop_id,
+			  const GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncCustomer *cust;
+
+    g_return_if_fail(GNC_IS_CUSTOMER(object));
+
+    cust = GNC_CUSTOMER(object);
+    switch (prop_id) {
+	case PROP_NAME:
+	    gncCustomerSetName(cust, g_value_get_string(value));
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_customer_class_init (GncCustomerClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	
+    gobject_class->dispose = gnc_customer_dispose;
+    gobject_class->finalize = gnc_customer_finalize;
+    gobject_class->set_property = gnc_customer_set_property;
+    gobject_class->get_property = gnc_customer_get_property;
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_NAME,
+	 g_param_spec_string ("name",
+			      "Customer Name",
+			      "The customer is an arbitrary string "
+			      "assigned by the user which provides the "
+				  "customer name.",
+			      NULL,
+			      G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */

@@ -68,7 +68,7 @@ static GncSqlColumnTableEntry col_table[] =
 	{ "guid",          CT_GUID,        0,                   COL_NNUL|COL_PKEY, "guid" },
 	{ "date",          CT_TIMESPEC,    0,                   COL_NNUL,          NULL, ENTRY_DATE },
 	{ "date_entered",  CT_TIMESPEC,    0,                   0,                 NULL, ENTRY_DATE_ENTERED },
-	{ "description",   CT_STRING,      MAX_DESCRIPTION_LEN, 0,                 NULL, ENTRY_DESC },
+	{ "description",   CT_STRING,      MAX_DESCRIPTION_LEN, 0,                 "description" },
 	{ "action",        CT_STRING,      MAX_ACTION_LEN,      0,                 NULL, ENTRY_ACTION },
 	{ "notes",         CT_STRING,      MAX_NOTES_LEN,       0,                 NULL, ENTRY_NOTES },
 	{ "quantity",      CT_NUMERIC,     0,                   0,                 NULL, ENTRY_QTY },

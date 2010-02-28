@@ -81,8 +81,14 @@ void mark_vendor (GncVendor *vendor)
 }
 
 /* ============================================================== */
+
+enum {
+    PROP_0,
+	PROP_NAME
+};
+
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_vendor, GncVendor, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncVendor, gnc_vendor, QOF_TYPE_INSTANCE);
 
 static void
 gnc_vendor_init(GncVendor* vendor)
@@ -90,13 +96,78 @@ gnc_vendor_init(GncVendor* vendor)
 }
 
 static void
-gnc_vendor_dispose_real (GObject *vendorp)
+gnc_vendor_dispose(GObject *vendorp)
 {
+    G_OBJECT_CLASS(gnc_vendor_parent_class)->dispose(vendorp);
 }
 
 static void
-gnc_vendor_finalize_real(GObject* vendorp)
+gnc_vendor_finalize(GObject* vendorp)
 {
+    G_OBJECT_CLASS(gnc_vendor_parent_class)->finalize(vendorp);
+}
+
+static void
+gnc_vendor_get_property (GObject         *object,
+			  guint            prop_id,
+			  GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncVendor *vendor;
+
+    g_return_if_fail(GNC_IS_VENDOR(object));
+
+    vendor = GNC_VENDOR(object);
+    switch (prop_id) {
+	case PROP_NAME:
+	    g_value_set_string(value, vendor->name);
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_vendor_set_property (GObject         *object,
+			  guint            prop_id,
+			  const GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncVendor *vendor;
+
+    g_return_if_fail(GNC_IS_VENDOR(object));
+
+    vendor = GNC_VENDOR(object);
+    switch (prop_id) {
+	case PROP_NAME:
+	    gncVendorSetName(vendor, g_value_get_string(value));
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_vendor_class_init (GncVendorClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	
+    gobject_class->dispose = gnc_vendor_dispose;
+    gobject_class->finalize = gnc_vendor_finalize;
+    gobject_class->set_property = gnc_vendor_set_property;
+    gobject_class->get_property = gnc_vendor_get_property;
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_NAME,
+	 g_param_spec_string ("name",
+			      "Vendor Name",
+			      "The vendor name is an arbitrary string "
+			      "assigned by the user to provide the vendor name.",
+			      NULL,
+			      G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */

@@ -178,8 +178,14 @@ void mark_entry (GncEntry *entry)
 }
 
 /* ================================================================ */
+
+enum {
+    PROP_0,
+	PROP_DESCRIPTION
+};
+
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_entry, GncEntry, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncEntry, gnc_entry, QOF_TYPE_INSTANCE);
 
 static void
 gnc_entry_init(GncEntry* entry)
@@ -187,13 +193,79 @@ gnc_entry_init(GncEntry* entry)
 }
 
 static void
-gnc_entry_dispose_real (GObject *entryp)
+gnc_entry_dispose(GObject *entryp)
 {
+    G_OBJECT_CLASS(gnc_entry_parent_class)->dispose(entryp);
 }
 
 static void
-gnc_entry_finalize_real(GObject* entryp)
+gnc_entry_finalize(GObject* entryp)
 {
+    G_OBJECT_CLASS(gnc_entry_parent_class)->finalize(entryp);
+}
+
+static void
+gnc_entry_get_property (GObject         *object,
+			  guint            prop_id,
+			  GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncEntry *entry;
+
+    g_return_if_fail(GNC_IS_ENTRY(object));
+
+    entry = GNC_ENTRY(object);
+    switch (prop_id) {
+	case PROP_DESCRIPTION:
+	    g_value_set_string(value, entry->desc);
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_entry_set_property (GObject         *object,
+			  guint            prop_id,
+			  const GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncEntry *entry;
+
+    g_return_if_fail(GNC_IS_ENTRY(object));
+
+    entry = GNC_ENTRY(object);
+    switch (prop_id) {
+	case PROP_DESCRIPTION:
+	    gncEntrySetDescription(entry, g_value_get_string(value));
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_entry_class_init (GncEntryClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	
+    gobject_class->dispose = gnc_entry_dispose;
+    gobject_class->finalize = gnc_entry_finalize;
+    gobject_class->set_property = gnc_entry_set_property;
+    gobject_class->get_property = gnc_entry_get_property;
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_DESCRIPTION,
+	 g_param_spec_string ("description",
+			      "Entry Description",
+			      "The description is an arbitrary string "
+			      "assigned by the user.  It provides identification "
+			      "for this entry.",
+			      NULL,
+			      G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */

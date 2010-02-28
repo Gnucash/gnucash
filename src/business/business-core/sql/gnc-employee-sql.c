@@ -59,7 +59,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 static GncSqlColumnTableEntry col_table[] =
 {
 	{ "guid",       CT_GUID,          0,                COL_NNUL|COL_PKEY, "guid" },
-	{ "username",   CT_STRING,        MAX_USERNAME_LEN, COL_NNUL,          NULL, EMPLOYEE_USERNAME },
+	{ "username",   CT_STRING,        MAX_USERNAME_LEN, COL_NNUL,          "username" },
 	{ "id",         CT_STRING,        MAX_ID_LEN,       COL_NNUL,          NULL, EMPLOYEE_ID },
 	{ "language",   CT_STRING,        MAX_LANGUAGE_LEN, COL_NNUL,          NULL, EMPLOYEE_LANGUAGE },
 	{ "acl",        CT_STRING,        MAX_ACL_LEN,      COL_NNUL,          NULL, EMPLOYEE_ACL },

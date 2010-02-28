@@ -133,8 +133,13 @@ gncBillTermRemoveChild (GncBillTerm *table, GncBillTerm *child)
 
 /* ============================================================== */
 
+enum {
+    PROP_0,
+	PROP_NAME
+};
+
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_billterm, GncBillTerm, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncBillTerm, gnc_billterm, QOF_TYPE_INSTANCE);
 
 static void
 gnc_billterm_init(GncBillTerm* bt)
@@ -142,13 +147,81 @@ gnc_billterm_init(GncBillTerm* bt)
 }
 
 static void
-gnc_billterm_dispose_real (GObject *btp)
+gnc_billterm_dispose(GObject *btp)
 {
+    G_OBJECT_CLASS(gnc_billterm_parent_class)->dispose(btp);
 }
 
 static void
-gnc_billterm_finalize_real(GObject* btp)
+gnc_billterm_finalize(GObject* btp)
 {
+    G_OBJECT_CLASS(gnc_billterm_parent_class)->finalize(btp);
+}
+
+static void
+gnc_billterm_get_property (GObject         *object,
+			  guint            prop_id,
+			  GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncBillTerm *bt;
+
+    g_return_if_fail(GNC_IS_BILLTERM(object));
+
+    bt = GNC_BILLTERM(object);
+    switch (prop_id) {
+	case PROP_NAME:
+	    g_value_set_string(value, bt->name);
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_billterm_set_property (GObject         *object,
+			  guint            prop_id,
+			  const GValue          *value,
+			  GParamSpec      *pspec)
+{
+    GncBillTerm *bt;
+
+    g_return_if_fail(GNC_IS_BILLTERM(object));
+
+    bt = GNC_BILLTERM(object);
+    switch (prop_id) {
+	case PROP_NAME:
+	    gncBillTermSetName(bt, g_value_get_string(value));
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_billterm_class_init (GncBillTermClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	
+    gobject_class->dispose = gnc_billterm_dispose;
+    gobject_class->finalize = gnc_billterm_finalize;
+    gobject_class->set_property = gnc_billterm_set_property;
+    gobject_class->get_property = gnc_billterm_get_property;
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_NAME,
+	 g_param_spec_string ("name",
+			      "BillTerm Name",
+			      "The bill term name is an arbitrary string "
+			      "assigned by the user.  It is intended to "
+			      "a short, 10 to 30 character long string "
+			      "that is displayed by the GUI as the "
+			      "billterm mnemonic.",
+			      NULL,
+			      G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */
