@@ -186,6 +186,12 @@ const char *void_former_notes_str = "void-former-notes";
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
+enum {
+  PROP_0,
+  PROP_NUM,
+  PROP_DESCRIPTION
+};
+
 void check_open (const Transaction *trans)
 {
   if (trans && 0 >= qof_instance_get_editlevel(trans))
@@ -241,31 +247,10 @@ void gen_event_trans (Transaction *trans)
 }
 
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_transaction, Transaction, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(Transaction, gnc_transaction, QOF_TYPE_INSTANCE)
 
 static void
-gnc_transaction_init(Transaction* txn)
-{
-}
-
-static void
-gnc_transaction_dispose_real (GObject *txnp)
-{
-}
-
-static void
-gnc_transaction_finalize_real(GObject* txnp)
-{
-}
-
-
-/********************************************************************\
- * xaccInitTransaction
- * Initialize a transaction structure
-\********************************************************************/
-
-static void
-xaccInitTransaction (Transaction * trans, QofBook *book)
+gnc_transaction_init(Transaction* trans)
 {
   ENTER ("trans=%p", trans);
   /* Fill in some sane defaults */
@@ -283,7 +268,113 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
 
   trans->marker = 0;
   trans->orig = NULL;
+  LEAVE (" ");
+}
 
+static void
+gnc_transaction_dispose(GObject *txnp)
+{
+    G_OBJECT_CLASS(gnc_transaction_parent_class)->dispose(txnp);
+}
+
+static void
+gnc_transaction_finalize(GObject* txnp)
+{
+    G_OBJECT_CLASS(gnc_transaction_parent_class)->finalize(txnp);
+}
+
+static void
+gnc_transaction_get_property(GObject* object,
+                            guint prop_id,
+							GValue* value,
+							GParamSpec* pspec)
+{
+    Transaction* tx;
+
+	g_return_if_fail(GNC_IS_TRANSACTION(object));
+
+	tx = GNC_TRANSACTION(object);
+	switch(prop_id) {
+	case PROP_NUM:
+        g_value_set_string(value, tx->num);
+		break;
+	case PROP_DESCRIPTION:
+        g_value_set_string(value, tx->description);
+		break;
+    default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	}
+}
+
+static void
+gnc_transaction_set_property(GObject* object,
+							guint prop_id,
+							const GValue* value,
+							GParamSpec* pspec)
+{
+    Transaction* tx;
+
+	g_return_if_fail(GNC_IS_TRANSACTION(object));
+
+	tx = GNC_TRANSACTION(object);
+	switch(prop_id) {
+	case PROP_NUM:
+        xaccTransSetNum( tx, g_value_get_string(value));
+		break;
+	case PROP_DESCRIPTION:
+        xaccTransSetDescription(tx, g_value_get_string(value));
+		break;
+    default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	}
+}
+
+static void
+gnc_transaction_class_init(TransactionClass* klass)
+{
+    GObjectClass* gobject_class = G_OBJECT_CLASS(klass);
+
+	gobject_class->dispose = gnc_transaction_dispose;
+	gobject_class->finalize = gnc_transaction_finalize;
+	gobject_class->set_property = gnc_transaction_set_property;
+	gobject_class->get_property = gnc_transaction_get_property;
+
+	g_object_class_install_property
+	 (gobject_class,
+	 PROP_NUM,
+	 g_param_spec_string("num",
+	                     "Transaction Number",
+						 "The transactionNumber is an arbitrary string "
+						 "assigned by the user.  It is intended to be "
+						 "a short 1-6 character string that is displayed "
+						 "by the register.  For checks, it is usually the "
+						 "check number.  For other types of transactions, "
+						 "it can be any string.",
+						 NULL,
+						 G_PARAM_READWRITE));
+
+	g_object_class_install_property
+	 (gobject_class,
+	 PROP_DESCRIPTION,
+	 g_param_spec_string("description",
+	                     "Transaction Description",
+						 "The transaction description is an arbitrary string "
+						 "assigned by the user.  It is usually the customer, "
+						 "vendor or other organization associated with the "
+						 "transaction.",
+						 NULL,
+						 G_PARAM_READWRITE));
+}
+
+/********************************************************************\
+ * xaccInitTransaction
+ * Initialize a transaction structure
+\********************************************************************/
+
+static void
+xaccInitTransaction (Transaction * trans, QofBook *book)
+{
+  ENTER ("trans=%p", trans);
   qof_instance_init_data (&trans->inst, GNC_ID_TRANS, book);
   LEAVE (" ");
 }

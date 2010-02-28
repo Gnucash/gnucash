@@ -59,31 +59,17 @@ const char *void_former_val_str = "void-former-value";
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
+enum {
+    PROP_0,
+	PROP_ACTION,
+	PROP_MEMO
+};
+
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_split, Split, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(Split, gnc_split, QOF_TYPE_INSTANCE)
 
 static void
 gnc_split_init(Split* split)
-{
-}
-
-static void
-gnc_split_dispose_real (GObject *splitp)
-{
-}
-
-static void
-gnc_split_finalize_real(GObject* splitp)
-{
-}
-
-/********************************************************************\
- * xaccInitSplit
- * Initialize a Split structure
-\********************************************************************/
-
-static void
-xaccInitSplit(Split * split, QofBook *book)
 {
   /* fill in some sane defaults */
   split->acc         = NULL;
@@ -106,7 +92,111 @@ xaccInitSplit(Split * split, QofBook *book)
 
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
+}
 
+static void
+gnc_split_dispose(GObject *splitp)
+{
+    G_OBJECT_CLASS(gnc_split_parent_class)->dispose(splitp);
+}
+
+static void
+gnc_split_finalize(GObject* splitp)
+{
+    G_OBJECT_CLASS(gnc_split_parent_class)->finalize(splitp);
+}
+
+static void
+gnc_split_get_property(GObject         *object,
+			  guint            prop_id,
+			  GValue          *value,
+			  GParamSpec      *pspec)
+{
+    Split *split;
+
+    g_return_if_fail(GNC_IS_SPLIT(object));
+
+    split = GNC_SPLIT(object);
+    switch (prop_id) {
+	case PROP_ACTION:
+	    g_value_set_string(value, split->action);
+		break;
+	case PROP_MEMO:
+	    g_value_set_string(value, split->memo);
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+	}
+}
+
+static void
+gnc_split_set_property(GObject         *object,
+			  guint            prop_id,
+			  const GValue     *value,
+			  GParamSpec      *pspec)
+{
+    Split *split;
+
+    g_return_if_fail(GNC_IS_SPLIT(object));
+
+    split = GNC_SPLIT(object);
+    switch (prop_id) {
+	case PROP_ACTION:
+	    xaccSplitSetAction(split, g_value_get_string(value));
+		break;
+	case PROP_MEMO:
+	    xaccSplitSetMemo(split, g_value_get_string(value));
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+	}
+}
+
+static void
+gnc_split_class_init(SplitClass* klass)
+{
+    GObjectClass* gobject_class = G_OBJECT_CLASS(klass);
+
+    gobject_class->dispose = gnc_split_dispose;
+    gobject_class->finalize = gnc_split_finalize;
+    gobject_class->set_property = gnc_split_set_property;
+    gobject_class->get_property = gnc_split_get_property;
+
+	g_object_class_install_property
+	(gobject_class,
+	 PROP_ACTION,
+	 g_param_spec_string("action",
+	                     "Action",
+						 "The action is an arbitrary string assigned "
+						 "by the user.  It is intended to be a short "
+						 "string that contains extra information about "
+						 "this split.",
+						 NULL,
+						 G_PARAM_READWRITE));
+
+	g_object_class_install_property
+	(gobject_class,
+	 PROP_MEMO,
+	 g_param_spec_string("memo",
+	                     "Memo",
+						 "The action is an arbitrary string assigned "
+						 "by the user.  It is intended to be a short "
+						 "string that describes the purpose of "
+						 "this split.",
+						 NULL,
+						 G_PARAM_READWRITE));
+}
+
+/********************************************************************\
+ * xaccInitSplit
+ * Initialize a Split structure
+\********************************************************************/
+
+static void
+xaccInitSplit(Split * split, QofBook *book)
+{
   qof_instance_init_data(&split->inst, GNC_ID_SPLIT, book);
 }
 

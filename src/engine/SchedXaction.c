@@ -44,32 +44,17 @@
 
 void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
+enum {
+    PROP_0,
+	PROP_NAME
+};
+
 /* GObject initialization */
-QOF_GOBJECT_IMPL(gnc_schedxaction, SchedXaction, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(SchedXaction, gnc_schedxaction, QOF_TYPE_INSTANCE);
 
 static void
 gnc_schedxaction_init(SchedXaction* sx)
 {
-}
-
-static void
-gnc_schedxaction_dispose_real (GObject *sxp)
-{
-}
-
-static void
-gnc_schedxaction_finalize_real(GObject* sxp)
-{
-}
-
-static void
-xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
-{
-   Account        *ra;
-   const GUID *guid;
-
-   qof_instance_init_data (&sx->inst, GNC_ID_SCHEDXACTION, book);
-
    sx->schedule = NULL;
 
    g_date_clear( &sx->last_date, 1 );
@@ -84,6 +69,92 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
    sx->advanceRemindDays = 0;
    sx->instance_num = 0;
    sx->deferredList = NULL;
+}
+
+static void
+gnc_schedxaction_dispose(GObject *sxp)
+{
+    G_OBJECT_CLASS(gnc_schedxaction_parent_class)->dispose(sxp);
+}
+
+static void
+gnc_schedxaction_finalize(GObject* sxp)
+{
+    G_OBJECT_CLASS(gnc_schedxaction_parent_class)->finalize(sxp);
+}
+
+static void
+gnc_schedxaction_get_property (GObject         *object,
+			  guint            prop_id,
+			  GValue          *value,
+			  GParamSpec      *pspec)
+{
+    SchedXaction *sx;
+
+    g_return_if_fail(GNC_IS_SCHEDXACTION(object));
+
+    sx = GNC_SCHEDXACTION(object);
+	switch(prop_id) {
+	case PROP_NAME:
+	    g_value_set_string(value, sx->name);
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_schedxaction_set_property (GObject         *object,
+			  guint            prop_id,
+			  const GValue     *value,
+			  GParamSpec      *pspec)
+{
+    SchedXaction *sx;
+
+    g_return_if_fail(GNC_IS_SCHEDXACTION(object));
+
+    sx = GNC_SCHEDXACTION(object);
+	switch(prop_id) {
+	case PROP_NAME:
+	    xaccSchedXactionSetName(sx, g_value_get_string(value));
+		break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_schedxaction_class_init (SchedXactionClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	
+    gobject_class->dispose = gnc_schedxaction_dispose;
+    gobject_class->finalize = gnc_schedxaction_finalize;
+    gobject_class->set_property = gnc_schedxaction_set_property;
+    gobject_class->get_property = gnc_schedxaction_get_property;
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_NAME,
+	 g_param_spec_string ("name",
+			      "Scheduled Transaction Name",
+			      "The name is an arbitrary string "
+			      "assigned by the user.  It is intended to "
+			      "a short, 5 to 30 character long string "
+			      "that is displayed by the GUI.",
+			      NULL,
+			      G_PARAM_READWRITE));
+}
+
+static void
+xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
+{
+   Account        *ra;
+   const GUID *guid;
+
+   qof_instance_init_data (&sx->inst, GNC_ID_SCHEDXACTION, book);
 
    /* create a new template account for our splits */
    sx->template_acct = xaccMallocAccount(book);

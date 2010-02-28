@@ -35,22 +35,110 @@ static QofLogModule log_module = GNC_MOD_PRICE;
 static gboolean add_price(GNCPriceDB *db, GNCPrice *p);
 static gboolean remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup);
 
+enum {
+    PROP_0,
+	PROP_SOURCE,
+	PROP_TYPE
+};
+
 /* GObject Initialization */
-QOF_GOBJECT_IMPL(gnc_price, GNCPrice, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GNCPrice, gnc_price, QOF_TYPE_INSTANCE);
 
 static void
 gnc_price_init(GNCPrice* price)
 {
+  price->refcount = 1;
+  price->value = gnc_numeric_zero();
+  price->type = NULL;
+  price->source = NULL;
 }
 
 static void
-gnc_price_dispose_real (GObject *pricep)
+gnc_price_dispose(GObject *pricep)
 {
+    G_OBJECT_CLASS(gnc_price_parent_class)->dispose(pricep);
 }
 
 static void
-gnc_price_finalize_real(GObject* pricep)
+gnc_price_finalize(GObject* pricep)
 {
+    G_OBJECT_CLASS(gnc_price_parent_class)->finalize(pricep);
+}
+
+static void
+gnc_price_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec* pspec)
+{
+    GNCPrice* price;
+
+	g_return_if_fail(GNC_IS_PRICE(object));
+
+	price = GNC_PRICE(object);
+	switch (prop_id) {
+	case PROP_SOURCE:
+	    g_value_set_string(value, price->source);
+        break;
+	case PROP_TYPE:
+	    g_value_set_string(value, price->type);
+        break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_price_set_property(GObject* object, guint prop_id, const GValue* value, GParamSpec* pspec)
+{
+    GNCPrice* price;
+
+	g_return_if_fail(GNC_IS_PRICE(object));
+
+	price = GNC_PRICE(object);
+	switch (prop_id) {
+	case PROP_SOURCE:
+	    gnc_price_set_source(price, g_value_get_string(value));
+        break;
+	case PROP_TYPE:
+	    gnc_price_set_typestr(price, g_value_get_string(value));
+        break;
+	default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	    break;
+    }
+}
+
+static void
+gnc_price_class_init(GNCPriceClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	
+    gobject_class->dispose = gnc_price_dispose;
+    gobject_class->finalize = gnc_price_finalize;
+    gobject_class->set_property = gnc_price_set_property;
+    gobject_class->get_property = gnc_price_get_property;
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_SOURCE,
+	 g_param_spec_string ("source",
+			      "Price source",
+			      "The price source is a string describing the "
+				  "source of a price quote.  It will be something "
+				  "like this: 'Finance::Quote', 'user:misc', "
+				  "'user:foo', etc.",
+			      NULL,
+			      G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_TYPE,
+	 g_param_spec_string ("type",
+			      "Quote type",
+			      "The quote type is a string describing the "
+				  "type of a price quote.  Types possible now "
+				  "are 'bid', 'ask', 'last', 'nav' and 'unknown'.",
+			      NULL,
+				  G_PARAM_READWRITE));
 }
 
 /* ==================================================================== */
@@ -66,11 +154,6 @@ gnc_price_create (QofBook *book)
   g_return_val_if_fail (book, NULL);
 
   p = g_object_new(GNC_TYPE_PRICE, NULL);
-
-  p->refcount = 1;
-  p->value = gnc_numeric_zero();
-  p->type = NULL;
-  p->source = NULL;
 
   qof_instance_init_data (&p->inst, GNC_ID_PRICE, book);
   qof_event_gen (&p->inst, QOF_EVENT_CREATE, NULL);
