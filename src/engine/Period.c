@@ -37,7 +37,6 @@
 #include "AccountP.h"
 #include "qof.h"
 #include "gnc-lot.h"
-#include "gnc-lot-p.h"
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
 #include "Period.h"

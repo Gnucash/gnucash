@@ -39,7 +39,6 @@
 #include "cap-gains.h"
 #include "gnc-engine.h"
 #include "gnc-lot.h"
-#include "gnc-lot-p.h"
 #include "policy.h"
 #include "policy-p.h"
 

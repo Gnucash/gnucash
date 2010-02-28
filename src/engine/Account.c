@@ -37,7 +37,6 @@
 #include "gnc-event.h"
 #include "gnc-glib-utils.h"
 #include "gnc-lot.h"
-#include "gnc-lot-p.h"
 #include "gnc-pricedb.h"
 
 #define GNC_ID_ROOT_ACCOUNT        "RootAccount"
