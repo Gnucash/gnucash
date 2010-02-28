@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.3.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-15 10:27-0500\n"
-"PO-Revision-Date: 2010-02-23 17:40+0900\n"
+"PO-Revision-Date: 2010-02-28 20:56+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -72,42 +72,42 @@ msgstr "税金の種類 %s: この勘定科目タイプには無効なコード 
 #: ../src/app-utils/gnc-ui-util.c:555
 #, c-format
 msgid "Not tax-related; tax type %s: invalid code %s for account type"
-msgstr ""
+msgstr "税金関連ではありません。税金の種類 %s: この勘定科目タイプには無効なコード %s"
 
 #: ../src/app-utils/gnc-ui-util.c:565
 #, c-format
 msgid "Invalid code %s for tax type %s"
-msgstr ""
+msgstr "税金の種類 %2$s には無効なコード %1$s"
 
 #: ../src/app-utils/gnc-ui-util.c:568
 #, c-format
 msgid "Not tax-related; invalid code %s for tax type %s"
-msgstr ""
+msgstr "税金関連ではありません。税金の種類 %2$s には無効なコード %1$s"
 
 #: ../src/app-utils/gnc-ui-util.c:576
 #, c-format
 msgid "No form: code %s, tax type %s"
-msgstr ""
+msgstr "フォームがありません: コード %s、税金の種類 %s"
 
 #: ../src/app-utils/gnc-ui-util.c:579
 #, c-format
 msgid "Not tax-related; no form: code %s, tax type %s"
-msgstr ""
+msgstr "税金関連ではありません。フォームがありません: コード %s、税金の種類 %s"
 
 #: ../src/app-utils/gnc-ui-util.c:587 ../src/app-utils/gnc-ui-util.c:600
 #, c-format
 msgid "No description: form %s, code %s, tax type %s"
-msgstr ""
+msgstr "説明がありません: フォーム %s、コード %s、税金の種類 %s"
 
 #: ../src/app-utils/gnc-ui-util.c:591 ../src/app-utils/gnc-ui-util.c:604
 #, c-format
 msgid "Not tax-related; no description: form %s, code %s, tax type %s"
-msgstr ""
+msgstr "税金関連ではありません。説明がありません: フォーム %s、コード %s、税金の種類 %s"
 
 #: ../src/app-utils/gnc-ui-util.c:616
 #, c-format
 msgid "Not tax-related; %s%s %s (code %s, tax type %s)"
-msgstr ""
+msgstr "税金関連ではありません。 %s%s %s (コード %s、税金の種類 %s)"
 
 #: ../src/app-utils/gnc-ui-util.c:652
 msgid "not cleared:n"
@@ -321,7 +321,7 @@ msgstr "FILE"
 
 #: ../src/bin/gnucash-bin.c:273
 msgid "Regular expression determining which namespace commodities will be retrieved"
-msgstr ""
+msgstr "どの名前空間の商品を取得するかを決定するための正規表現"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -4143,9 +4143,8 @@ msgid "Interest"
 msgstr "利子"
 
 #: ../src/gnome/druid-loan.c:2276
-#, fuzzy
 msgid "Escrow Payment"
-msgstr "超過支払"
+msgstr "エスクロー支払"
 
 #: ../src/gnome/druid-merge.c:101 ../src/gnome/druid-merge.c:129
 #: ../src/gnome/druid-merge.c:154 ../src/gnome/druid-merge.c:259
@@ -5066,7 +5065,6 @@ msgid "_Initial Payment:"
 msgstr "初期支払額(_I):"
 
 #: ../src/gnome/glade/fincalc.glade.h:49
-#, fuzzy
 msgid "_Payments:"
 msgstr "支払額(_P):"
 
@@ -5183,7 +5181,6 @@ msgid "Please resolve any conflicts in the merge"
 msgstr "併合時の競合を解決してください"
 
 #: ../src/gnome/glade/merge.glade.h:7
-#, fuzzy
 msgid ""
 "Press `Apply' to merge your QSF data into the current GnuCash file.\n"
 "\n"
@@ -5207,7 +5204,7 @@ msgstr "QSF データインポート設定"
 
 #: ../src/gnome/glade/merge.glade.h:15
 msgid "Shows how your QSF data conflicts with existing data in your file."
-msgstr ""
+msgstr "QSFデータと既存のファイルに存在するデータがどのように競合しているかを表示します。"
 
 #: ../src/gnome/glade/merge.glade.h:16
 msgid ""
@@ -8780,9 +8777,8 @@ msgid "Voided"
 msgstr "無効化済"
 
 #: ../src/gnome-search/search-string.c:186
-#, fuzzy
 msgid "You need to enter some search text."
-msgstr "文字列値を入力する必要があります"
+msgstr "検索する文字列を入力する必要があります。"
 
 #: ../src/gnome-search/search-string.c:213
 #, c-format
@@ -8998,14 +8994,12 @@ msgid "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"
 msgstr "商品に対しては、空白ではない\"フルネーム\"、\"記号/略号\"、および\"タイプ\"を入力しなければなりません。"
 
 #: ../src/gnome-utils/dialog-file-access.c:253
-#, fuzzy
 msgid "Open..."
-msgstr "開く(_O)..."
+msgstr "開く..."
 
 #: ../src/gnome-utils/dialog-file-access.c:259
-#, fuzzy
 msgid "Save As..."
-msgstr "名前を付けて保存(_A)..."
+msgstr "名前を付けて保存..."
 
 #: ../src/gnome-utils/dialog-options.c:920
 msgid "Select all accounts."
@@ -9040,14 +9034,12 @@ msgid "Select the default account selection."
 msgstr "デフォルトの勘定科目選択を選択する。"
 
 #: ../src/gnome-utils/dialog-options.c:956
-#, fuzzy
 msgid "Show Hidden Accounts"
-msgstr "隠し勘定科目を表示する(_H)"
+msgstr "隠し勘定科目を表示"
 
 #: ../src/gnome-utils/dialog-options.c:958
-#, fuzzy
 msgid "Show accounts that have been marked hidden."
-msgstr "残高ゼロの株式の科目も含める。"
+msgstr "隠し勘定科目を表示する"
 
 #: ../src/gnome-utils/dialog-options.c:1063
 msgid "Select all entries."
@@ -14109,7 +14101,6 @@ msgstr "小切手"
 
 #. Action: Dividend
 #: ../src/register/ledger-core/split-register.c:2288
-#, fuzzy
 msgid "Dividend"
 msgstr "配当"
 
@@ -22431,9 +22422,8 @@ msgstr ""
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7702 ../intl-scm/guile-strings.c:8076
-#, fuzzy
 msgid "None specified"
-msgstr "不特定"
+msgstr "未指定"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -22444,9 +22434,8 @@ msgstr ""
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7708 ../intl-scm/guile-strings.c:8082
-#, fuzzy
 msgid "Error Description"
-msgstr "説明"
+msgstr "エラーの説明"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -22459,14 +22448,13 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7728 ../intl-scm/guile-strings.c:8102
 #, fuzzy
 msgid "No Tax Related accounts were found with your account selection. Change your selection or go to the Edit->Income Tax Options dialog to set up tax-related accounts."
-msgstr "税金に関連する勘定科目が見つかりませんでした。税金関連勘定科目を設定するには、編集->税金オプションダイアログに行ってください。"
+msgstr "選択した勘定科目に税金関連の勘定科目が見つかりませんでした。税金関連勘定科目を設定するには、編集->税金収益オプションダイアログに行ってください。"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7730 ../intl-scm/guile-strings.c:8104
-#, fuzzy
 msgid "Selected Report Options:<BR>"
-msgstr "<b>選択された帳票(_S)</b>"
+msgstr "<b>選択された帳票オプション:</b>"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -22499,56 +22487,50 @@ msgstr "金額0の項目を印刷しない"
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7740 ../intl-scm/guile-strings.c:8114
-#, fuzzy
 msgid "Display full account names"
-msgstr "勘定科目のフルネームを表示する"
+msgstr "勘定科目名をフルネームで表示する"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7742 ../intl-scm/guile-strings.c:8116
-#, fuzzy
 msgid "Do not display full account names"
-msgstr "勘定科目のフルネームを表示する"
+msgstr "勘定科目名をフルネームでは表示しない"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7744 ../intl-scm/guile-strings.c:8118
-#, fuzzy
 msgid "Display all Transfer To/From Accounts"
-msgstr "転送勘定科目"
+msgstr "資金移動元/資金移動先勘定科目をすべて表示する"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7746 ../intl-scm/guile-strings.c:8120
-#, fuzzy
 msgid "Do not display all Transfer To/From Accounts"
-msgstr "親勘定科目の残高を表示しない"
+msgstr "資金移動元/資金移動先勘定科目をすべては表示しない"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7750 ../intl-scm/guile-strings.c:8124
 msgid "Do not Print TXF export parameters"
-msgstr ""
+msgstr "TXF エクスポートパラメーターを印刷しない"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7752 ../intl-scm/guile-strings.c:8126
 msgid "Do not display Action:Memo data"
-msgstr ""
+msgstr "アクション:摘要データを表示しない"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7754 ../intl-scm/guile-strings.c:8128
-#, fuzzy
 msgid "Display Action:Memo data"
-msgstr "日付を表示しますか?"
+msgstr "アクション:摘要データを表示する"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7756 ../intl-scm/guile-strings.c:8130
-#, fuzzy
 msgid "Display transactions for selected accounts"
-msgstr "勘定科目に取引を新規追加"
+msgstr "選択した勘定科目の取引を表示する"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -22581,15 +22563,14 @@ msgstr "2行モードのとき取引ごとに色を交換する(_M)"
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7768 ../intl-scm/guile-strings.c:8142
-#, fuzzy
 msgid "PriceDB lookups nearest to transaction date"
-msgstr "取引の日付を表示しますか?"
+msgstr "取引日付に最も近い価格データーベースを検索する"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7770 ../intl-scm/guile-strings.c:8144
 msgid "PriceDB lookups nearest to report end date"
-msgstr ""
+msgstr "帳票終了日に最も近い価格データーベースを検索する"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -23515,15 +23496,14 @@ msgstr "鮮明な色彩"
 #: ../intl-scm/guile-strings.c:9096 ../intl-scm/guile-strings.c:9098
 #: ../intl-scm/guile-strings.c:9338 ../intl-scm/guile-strings.c:9462
 #: ../intl-scm/guile-strings.c:9530 ../intl-scm/guile-strings.c:9532
-#, fuzzy
 msgid "Footer"
-msgstr "無期限"
+msgstr "フッター"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-footer.scm
 #. src/report/stylesheets/stylesheet-footer.scm
 #: ../intl-scm/guile-strings.c:8906 ../intl-scm/guile-strings.c:9340
 msgid "String to placed as a footer"
-msgstr ""
+msgstr "フッターとして配置される文字列"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -23580,7 +23560,7 @@ msgstr "会計期間の始期"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:9766
 msgid "Start of the accounting period, as set in the global preferences"
-msgstr ""
+msgstr "グローバル設定で設定されている会計期間の始期"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:9768
@@ -23590,7 +23570,7 @@ msgstr "会計期間の終期"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:9770
 msgid "End of the accounting period, as set in the global preferences"
-msgstr ""
+msgstr "グローバル設定で設定されている会計期間の終期"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:9774
@@ -23780,7 +23760,7 @@ msgstr "残りの良い見積を追加します"
 #. src/scm/command-line.scm
 #: ../intl-scm/guile-strings.c:9934
 msgid "A list of directories (strings) indicating where to look for html and parsed-html files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
-msgstr ""
+msgstr "html および構文解析済み html ファイルを検索するディレクトリ (文字列) の一覧です。各要素はディレクトリを表す文字列またはシンボルでなければいけません。'default シンボルはデフォルトのパスに展開されます。 'current は現在のパスに展開されます。"
 
 #: ../doc/tip_of_the_day.list.in:1
 msgid "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots of bugs and unstable features! If you are looking for a stable personal finance application, you should use the latest release of GnuCash 2.2."
