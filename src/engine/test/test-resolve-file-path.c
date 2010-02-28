@@ -54,7 +54,19 @@ test_strings strs[] =
         G_DIR_SEPARATOR_S ".gnucash" G_DIR_SEPARATOR_S "data" G_DIR_SEPARATOR_S "postgres___localhost_foo_bar", 2
     },
     {
-        "file:" G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3",
+        "file:/tmp/test-account-name3",
+        G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3", 0
+    },
+    {
+        "file:///tmp/test-account-name3",
+        G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3", 0
+    },
+    {
+        "xml:/tmp/test-account-name3",
+        G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3", 0
+    },
+    {
+        "xml:///tmp/test-account-name3",
         G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3", 0
     },
     { NULL, NULL, 0 },

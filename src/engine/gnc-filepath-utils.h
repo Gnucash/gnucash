@@ -21,7 +21,7 @@
 
 /**
  * @file gnc-filepath-utils.h
- * @brief file path resolutionutilities
+ * @brief File path resolution utility functions
  * @author Copyright (c) 1998-2004 Linas Vepstas <linas@linas.org>
  * @author Copyright (c) 2000 Dave Peticolas
  *
@@ -49,5 +49,6 @@ char * xaccResolveURL (const char * pathfrag);
 const gchar *gnc_dotgnucash_dir (void);
 gchar *gnc_build_dotgnucash_path (const gchar *filename);
 gchar *gnc_build_book_path (const gchar *filename);
+gchar *gnc_build_data_path (const gchar *filename);
 
 #endif /* GNC_FILEPATH_UTILS_H */

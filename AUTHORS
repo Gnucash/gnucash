@@ -240,6 +240,7 @@ Peter Pointner <peter@wuzel.m.isar.de> QIF import fixes, Qt patches
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Tomas Pospisek <tpo@spin.ch> Debian patches
 Paul Poulain <famille.p.poulain@free.fr> French translations
+John Ralls <jralls@ceridwen.fremont.ca.us> MacOSX integration
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
 Keith Refson <Keith.Refson@earth.ox.ac.uk> Solaris fixes
 Jerry Quinn <jlquinn@optonline.net> Bugfixes

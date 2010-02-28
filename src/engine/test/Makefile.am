@@ -39,6 +39,7 @@ TESTS = \
   test-query \
   test-recursive \
   test-resolve-file-path \
+  test-resolve-url \
   test-split-vs-account  \
   test-transaction-reversal \
   test-transaction-voiding \
@@ -77,6 +78,7 @@ check_PROGRAMS = \
   test-querynew \
   test-recursive \
   test-resolve-file-path \
+  test-resolve-url \
   test-scm-query \
   test-split-vs-account \
   test-transaction-reversal \
