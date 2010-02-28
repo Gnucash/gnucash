@@ -78,14 +78,12 @@ static const GncSqlColumnTableEntry tx_col_table[] =
     { "guid",          CT_GUID,           0,                      COL_NNUL|COL_PKEY, "guid" },
     { "currency_guid", CT_COMMODITYREF,   0,                      COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)xaccTransGetCurrency, (QofSetterFunc)xaccTransSetCurrency },
-    { "num",           CT_STRING,         TX_MAX_NUM_LEN,         COL_NNUL,          NULL, NULL,
-			(QofAccessFunc)xaccTransGetNum, (QofSetterFunc)xaccTransSetNum },
+    { "num",           CT_STRING,         TX_MAX_NUM_LEN,         COL_NNUL,          "num" },
     { "post_date",     CT_TIMESPEC,       0,                      0,                 NULL, NULL,
 			(QofAccessFunc)xaccTransRetDatePostedTS, (QofSetterFunc)gnc_transaction_set_date_posted },
     { "enter_date",    CT_TIMESPEC,       0,                      0,                 NULL, NULL,
 			(QofAccessFunc)xaccTransRetDateEnteredTS, (QofSetterFunc)gnc_transaction_set_date_entered },
-    { "description",   CT_STRING,         TX_MAX_DESCRIPTION_LEN, 0,                 NULL, NULL,
-            (QofAccessFunc)xaccTransGetDescription, (QofSetterFunc)xaccTransSetDescription },
+    { "description",   CT_STRING,         TX_MAX_DESCRIPTION_LEN, 0,                 "description" },
     { NULL }
 	/*@ +full_init_block @*/
 };
@@ -104,8 +102,8 @@ static const GncSqlColumnTableEntry split_col_table[] =
     { "guid",            CT_GUID,         0,                    COL_NNUL|COL_PKEY, "guid" },
     { "tx_guid",         CT_TXREF,        0,                    COL_NNUL,          NULL, SPLIT_TRANS },
     { "account_guid",    CT_ACCOUNTREF,   0,                    COL_NNUL,          NULL, SPLIT_ACCOUNT },
-    { "memo",            CT_STRING,       SPLIT_MAX_MEMO_LEN,   COL_NNUL,          NULL, SPLIT_MEMO },
-    { "action",          CT_STRING,       SPLIT_MAX_ACTION_LEN, COL_NNUL,          NULL, SPLIT_ACTION },
+    { "memo",            CT_STRING,       SPLIT_MAX_MEMO_LEN,   COL_NNUL,          "memo" },
+    { "action",          CT_STRING,       SPLIT_MAX_ACTION_LEN, COL_NNUL,          "action" },
     { "reconcile_state", CT_STRING,       1,                    COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)get_split_reconcile_state, set_split_reconcile_state },
     { "reconcile_date",  CT_TIMESPEC,     0,                    0,                 NULL, NULL,

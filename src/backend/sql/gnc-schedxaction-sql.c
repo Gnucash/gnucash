@@ -67,7 +67,7 @@ static const GncSqlColumnTableEntry col_table[] =
 {
 	/*@ -full_init_block @*/
     { "guid",              CT_GUID,    0,               COL_NNUL|COL_PKEY, "guid" },
-    { "name",              CT_STRING,  SX_MAX_NAME_LEN, 0,                 NULL, GNC_SX_NAME },
+    { "name",              CT_STRING,  SX_MAX_NAME_LEN, 0,                 "name" },
 	{ "enabled",           CT_BOOLEAN, 0,               COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)xaccSchedXactionGetEnabled, (QofSetterFunc)xaccSchedXactionSetEnabled },
     { "start_date",        CT_GDATE,   0,               0,                 NULL, GNC_SX_START_DATE },
