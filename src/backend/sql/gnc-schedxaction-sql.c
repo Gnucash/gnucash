@@ -55,10 +55,6 @@
 
 #define SX_MAX_NAME_LEN 2048
 
-static gboolean get_autocreate( gpointer pObject );
-static void set_autocreate( gpointer pObject, gboolean value );
-static gboolean get_autonotify( gpointer pObject );
-static void set_autonotify( gpointer pObject, gboolean value );
 static gint get_instance_count( gpointer pObject );
 static /*@ null @*/ gpointer get_template_act_guid( gpointer pObject );
 static void set_template_act_guid( gpointer pObject, /*@ null @*/ gpointer pValue );
@@ -74,18 +70,12 @@ static const GncSqlColumnTableEntry col_table[] =
     { "end_date",          CT_GDATE,   0,               0,                 NULL, NULL,
 			(QofAccessFunc)xaccSchedXactionGetEndDate, (QofSetterFunc)xaccSchedXactionSetEndDate },
     { "last_occur",        CT_GDATE,   0,               0,                 NULL, GNC_SX_LAST_DATE },
-    { "num_occur",         CT_INT,     0,               COL_NNUL,          NULL, GNC_SX_NUM_OCCUR },
-    { "rem_occur",         CT_INT,     0,               COL_NNUL,          NULL, GNC_SX_REM_OCCUR },
-    { "auto_create",       CT_BOOLEAN, 0,               COL_NNUL,          NULL, NULL,
-			(QofAccessFunc)get_autocreate,        (QofSetterFunc)set_autocreate },
-    { "auto_notify",       CT_BOOLEAN, 0,               COL_NNUL,          NULL, NULL,
-			(QofAccessFunc)get_autonotify,        (QofSetterFunc)set_autonotify },
-    { "adv_creation",      CT_INT,     0,               COL_NNUL,          NULL, NULL,
-            (QofAccessFunc)xaccSchedXactionGetAdvanceCreation,
-            (QofSetterFunc)xaccSchedXactionSetAdvanceCreation },
-    { "adv_notify",        CT_INT,     0,               COL_NNUL,          NULL, NULL,
-            (QofAccessFunc)xaccSchedXactionGetAdvanceReminder,
-            (QofSetterFunc)xaccSchedXactionSetAdvanceReminder },
+    { "num_occur",         CT_INT,     0,               COL_NNUL,          "num-occurance" },
+    { "rem_occur",         CT_INT,     0,               COL_NNUL,          "rem-occurance" },
+    { "auto_create",       CT_BOOLEAN, 0,               COL_NNUL,          "auto-create" },
+    { "auto_notify",       CT_BOOLEAN, 0,               COL_NNUL,          "auto-create-notify" },
+    { "adv_creation",      CT_INT,     0,               COL_NNUL,          "advance-creation-days" },
+    { "adv_notify",        CT_INT,     0,               COL_NNUL,          "advance-reminder-days" },
 	{ "instance_count",    CT_INT,     0,               COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)get_instance_count, (QofSetterFunc)gnc_sx_set_instance_count },
     { "template_act_guid", CT_GUID,    0,               COL_NNUL,          NULL, NULL,
@@ -95,66 +85,6 @@ static const GncSqlColumnTableEntry col_table[] =
 };
 
 /* ================================================================= */
-
-static gboolean
-get_autocreate( gpointer pObject )
-{
-    const SchedXaction* pSx;
-    gboolean autoCreate;
-    gboolean autoNotify;
-
-	g_return_val_if_fail( pObject != NULL, FALSE );
-	g_return_val_if_fail( GNC_IS_SX(pObject), FALSE );
-
-    pSx = GNC_SX(pObject);
-    xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
-    return autoCreate;
-}
-
-static void 
-set_autocreate( gpointer pObject, gboolean value )
-{
-    SchedXaction* pSx;
-    gboolean autoNotify;
-	gboolean dummy;
-
-	g_return_if_fail( pObject != NULL );
-	g_return_if_fail( GNC_IS_SX(pObject) );
-
-    pSx = GNC_SX(pObject);
-    xaccSchedXactionGetAutoCreate( pSx, &dummy, &autoNotify );
-    xaccSchedXactionSetAutoCreate( pSx, value, autoNotify );
-}
-
-static gboolean
-get_autonotify( gpointer pObject )
-{
-    const SchedXaction* pSx;
-    gboolean autoCreate;
-    gboolean autoNotify;
-
-	g_return_val_if_fail( pObject != NULL, FALSE );
-	g_return_val_if_fail( GNC_IS_SX(pObject), FALSE );
-
-    pSx = GNC_SX(pObject);
-    xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
-    return autoNotify;
-}
-
-static void 
-set_autonotify( gpointer pObject, gboolean value )
-{
-    SchedXaction* pSx;
-    gboolean autoCreate;
-    gboolean dummy;
-
-	g_return_if_fail( pObject != NULL );
-	g_return_if_fail( GNC_IS_SX(pObject) );
-
-    pSx = GNC_SX(pObject);
-    xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &dummy );
-    xaccSchedXactionSetAutoCreate( pSx, autoCreate, value );
-}
 
 static gint
 get_instance_count( gpointer pObject )

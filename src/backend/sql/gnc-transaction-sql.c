@@ -108,8 +108,8 @@ static const GncSqlColumnTableEntry split_col_table[] =
 			(QofAccessFunc)get_split_reconcile_state, set_split_reconcile_state },
     { "reconcile_date",  CT_TIMESPEC,     0,                    0,                 NULL, NULL,
 			(QofAccessFunc)xaccSplitRetDateReconciledTS, (QofSetterFunc)set_split_reconcile_date },
-    { "value",           CT_NUMERIC,      0,                    COL_NNUL,          NULL, SPLIT_VALUE },
-    { "quantity",        CT_NUMERIC,      0,                    COL_NNUL,          NULL, SPLIT_AMOUNT },
+    { "value",           CT_NUMERIC,      0,                    COL_NNUL,          "value" },
+    { "quantity",        CT_NUMERIC,      0,                    COL_NNUL,          "amount" },
 	{ "lot_guid",        CT_LOTREF,       0,                    0,                 NULL, NULL,
 			(QofAccessFunc)xaccSplitGetLot, set_split_lot },
     { NULL }

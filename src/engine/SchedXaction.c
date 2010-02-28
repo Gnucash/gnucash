@@ -46,7 +46,13 @@ void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
 enum {
     PROP_0,
-	PROP_NAME
+	PROP_NAME,
+	PROP_NUM_OCCURANCE,
+	PROP_REM_OCCURANCE,
+	PROP_AUTO_CREATE,
+	PROP_AUTO_CREATE_NOTIFY,
+	PROP_ADVANCE_CREATION_DAYS,
+	PROP_ADVANCE_REMINDER_DAYS
 };
 
 /* GObject initialization */
@@ -98,6 +104,24 @@ gnc_schedxaction_get_property (GObject         *object,
 	case PROP_NAME:
 	    g_value_set_string(value, sx->name);
 		break;
+    case PROP_NUM_OCCURANCE:
+	    g_value_set_int(value, sx->num_occurances_total);
+		break;
+    case PROP_REM_OCCURANCE:
+	    g_value_set_int(value, sx->num_occurances_remain);
+		break;
+	case PROP_AUTO_CREATE:
+	    g_value_set_boolean(value, sx->autoCreateOption);
+		break;
+    case PROP_AUTO_CREATE_NOTIFY:
+	    g_value_set_boolean(value, sx->autoCreateNotify);
+		break;
+	case PROP_ADVANCE_CREATION_DAYS:
+	    g_value_set_int(value, sx->advanceCreateDays);
+		break;
+	case PROP_ADVANCE_REMINDER_DAYS:
+	    g_value_set_int(value, sx->advanceRemindDays);
+		break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	    break;
@@ -118,6 +142,24 @@ gnc_schedxaction_set_property (GObject         *object,
 	switch(prop_id) {
 	case PROP_NAME:
 	    xaccSchedXactionSetName(sx, g_value_get_string(value));
+		break;
+    case PROP_NUM_OCCURANCE:
+	    xaccSchedXactionSetNumOccur(sx, g_value_get_int(value));
+		break;
+    case PROP_REM_OCCURANCE:
+	    xaccSchedXactionSetRemOccur(sx, g_value_get_int(value));
+		break;
+    case PROP_AUTO_CREATE:
+	    xaccSchedXactionSetAutoCreate(sx, g_value_get_boolean(value), sx->autoCreateNotify);
+		break;
+    case PROP_AUTO_CREATE_NOTIFY:
+	    xaccSchedXactionSetAutoCreate(sx, sx->autoCreateOption, g_value_get_boolean(value));
+		break;
+	case PROP_ADVANCE_CREATION_DAYS:
+	    xaccSchedXactionSetAdvanceCreation(sx, g_value_get_int(value));
+		break;
+	case PROP_ADVANCE_REMINDER_DAYS:
+	    xaccSchedXactionSetAdvanceReminder(sx, g_value_get_int(value));
 		break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -146,6 +188,70 @@ gnc_schedxaction_class_init (SchedXactionClass *klass)
 			      "that is displayed by the GUI.",
 			      NULL,
 			      G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_NUM_OCCURANCE,
+	 g_param_spec_int ("num-occurance",
+			   "Number of occurances",
+			   "Total number of occurances for this scheduled transaction.",
+			   0,
+			   G_MAXINT16,
+			   1,
+			   G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_REM_OCCURANCE,
+	 g_param_spec_int ("rem-occurance",
+			   "Number of occurances remaining",
+			   "Remaining number of occurances for this scheduled transaction.",
+			   0,
+			   G_MAXINT16,
+			   1,
+			   G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_AUTO_CREATE,
+         g_param_spec_boolean ("auto-create",
+                               "Auto-create",
+                               "TRUE if the transaction will be automatically "
+							   "created when its time comes.",
+                               FALSE,
+                               G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_AUTO_CREATE_NOTIFY,
+         g_param_spec_boolean ("auto-create-notify",
+                               "Auto-create-notify",
+                               "TRUE if the the user will be notified when the transaction "
+							   "is automatically created.",
+                               FALSE,
+                               G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_ADVANCE_CREATION_DAYS,
+	 g_param_spec_int ("advance-creation-days",
+			   "Days in advance to create",
+			   "Number of days in advance to create this scheduled transaction.",
+			   0,
+			   G_MAXINT16,
+			   0,
+			   G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_ADVANCE_REMINDER_DAYS,
+	 g_param_spec_int ("advance-reminder-days",
+			   "Days in advance to remind",
+			   "Number of days in advance to remind about this scheduled transaction.",
+			   0,
+			   G_MAXINT16,
+			   0,
+			   G_PARAM_READWRITE));
 }
 
 static void

@@ -1805,11 +1805,9 @@ load_numeric( const GncSqlBackend* be, GncSqlRow* row,
     gint64 num, denom;
     gnc_numeric n;
     gboolean isNull = FALSE;
-	NumericSetterFunc n_setter = (NumericSetterFunc)setter;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( row != NULL );
-	g_return_if_fail( setter != NULL );
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
 
@@ -1833,7 +1831,12 @@ load_numeric( const GncSqlBackend* be, GncSqlRow* row,
     }
     n = gnc_numeric_create( num, denom );
     if( !isNull ) {
-        (*n_setter)( pObject, n );
+        if( table_row->gobj_param_name != NULL ) {
+            g_object_set( pObject, table_row->gobj_param_name, &n, NULL );
+		} else {
+	        NumericSetterFunc n_setter = (NumericSetterFunc)setter;
+            (*n_setter)( pObject, n );
+		}
     }
 }
 
@@ -1882,16 +1885,18 @@ add_gvalue_numeric_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
 
-//	if( table_row->gobj_param_name != NULL ) {
-//		g_object_get( pObject, table_row->gobj_param_name, &s, NULL );
-//	} else {
+	if( table_row->gobj_param_name != NULL ) {
+		gnc_numeric *s;
+		g_object_get( pObject, table_row->gobj_param_name, &s, NULL );
+		n = *s;
+	} else {
     	getter = (NumericGetterFunc)gnc_sql_get_getter( obj_name, table_row );
 		if( getter != NULL ) {
     		n = (*getter)( pObject );
 		} else {
 			n = gnc_numeric_zero();
 		}
-//	}
+	}
 
     num_value = g_new0( GValue, 1 );
 	g_assert( num_value != NULL );

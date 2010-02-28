@@ -38,7 +38,8 @@ static gboolean remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup);
 enum {
     PROP_0,
 	PROP_SOURCE,
-	PROP_TYPE
+	PROP_TYPE,
+	PROP_VALUE
 };
 
 /* GObject Initialization */
@@ -80,6 +81,9 @@ gnc_price_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec
 	case PROP_TYPE:
 	    g_value_set_string(value, price->type);
         break;
+	case PROP_VALUE:
+	    g_value_set_boxed(value, &price->value);
+		break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	    break;
@@ -90,6 +94,7 @@ static void
 gnc_price_set_property(GObject* object, guint prop_id, const GValue* value, GParamSpec* pspec)
 {
     GNCPrice* price;
+	gnc_numeric* number;
 
 	g_return_if_fail(GNC_IS_PRICE(object));
 
@@ -101,6 +106,10 @@ gnc_price_set_property(GObject* object, guint prop_id, const GValue* value, GPar
 	case PROP_TYPE:
 	    gnc_price_set_typestr(price, g_value_get_string(value));
         break;
+	case PROP_VALUE:
+	    number = g_value_get_boxed(value);
+	    gnc_price_set_value(price, *number);
+	    break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	    break;
@@ -139,6 +148,15 @@ gnc_price_class_init(GNCPriceClass *klass)
 				  "are 'bid', 'ask', 'last', 'nav' and 'unknown'.",
 			      NULL,
 				  G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_VALUE,
+	 g_param_spec_boxed("value",
+                            "Value",
+                            "The value of the price quote.",
+                            GNC_TYPE_NUMERIC,
+                            G_PARAM_READWRITE));
 }
 
 /* ==================================================================== */

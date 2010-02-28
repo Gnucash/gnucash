@@ -62,7 +62,9 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 enum {
     PROP_0,
 	PROP_ACTION,
-	PROP_MEMO
+	PROP_MEMO,
+	PROP_VALUE,
+	PROP_AMOUNT
 };
 
 /* GObject Initialization */
@@ -124,6 +126,12 @@ gnc_split_get_property(GObject         *object,
 	case PROP_MEMO:
 	    g_value_set_string(value, split->memo);
 		break;
+	case PROP_VALUE:
+	    g_value_set_boxed(value, &split->value);
+	    break;
+	case PROP_AMOUNT:
+	    g_value_set_boxed(value, &split->amount);
+	    break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	    break;
@@ -137,6 +145,7 @@ gnc_split_set_property(GObject         *object,
 			  GParamSpec      *pspec)
 {
     Split *split;
+	gnc_numeric* number;
 
     g_return_if_fail(GNC_IS_SPLIT(object));
 
@@ -148,6 +157,14 @@ gnc_split_set_property(GObject         *object,
 	case PROP_MEMO:
 	    xaccSplitSetMemo(split, g_value_get_string(value));
 		break;
+	case PROP_VALUE:
+	    number = g_value_get_boxed(value);
+	    xaccSplitSetValue(split, *number);
+	    break;
+	case PROP_AMOUNT:
+	    number = g_value_get_boxed(value);
+	    xaccSplitSetAmount(split, *number);
+	    break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	    break;
@@ -187,6 +204,28 @@ gnc_split_class_init(SplitClass* klass)
 						 "this split.",
 						 NULL,
 						 G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_VALUE,
+	 g_param_spec_boxed("value",
+                            "Split Value",
+                            "The value for this split in the common currency. "
+                            "The value and the amount provide enough information to "
+							"calculate a conversion rate.",
+                            GNC_TYPE_NUMERIC,
+                            G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_AMOUNT,
+	 g_param_spec_boxed("amount",
+                            "Split Amount",
+                            "The value for this split in the currency of its account. "
+                            "The value and the amount provide enough information to "
+							"calculate a conversion rate.",
+                            GNC_TYPE_NUMERIC,
+                            G_PARAM_READWRITE));
 }
 
 /********************************************************************\

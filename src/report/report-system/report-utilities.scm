@@ -1048,11 +1048,11 @@
       account-balances)
     total))
 
-;; Adds "file://" to the beginning of a URL if it doesn't already exist
+;; Adds "file:///" to the beginning of a URL if it doesn't already exist
 ;;
 ;; @param url URL
-;; @return URL with "file://" as the URL type if it isn't already there
+;; @return URL with "file:///" as the URL type if it isn't already there
 (define (make-file-url url)
-  (if (string-prefix? "file://" url)
+  (if (string-prefix? "file:///" url)
      url
-     (string-append "file://" url)))
+     (string-append "file:///" url)))

@@ -60,7 +60,7 @@ static const GncSqlColumnTableEntry col_table[] =
     { "date",           CT_TIMESPEC,       0,                    COL_NNUL,          NULL, PRICE_DATE },
     { "source",         CT_STRING,         PRICE_MAX_SOURCE_LEN, 0,                 "source" },
     { "type",           CT_STRING,         PRICE_MAX_TYPE_LEN,   0,                 "type" },
-    { "value",          CT_NUMERIC,        0,                    COL_NNUL,          NULL, PRICE_VALUE },
+    { "value",          CT_NUMERIC,        0,                    COL_NNUL,          "value" },
     { NULL }
 	/*@ +full_init_block @*/
 };

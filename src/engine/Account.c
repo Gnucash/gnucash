@@ -461,8 +461,6 @@ gnc_account_set_property (GObject         *object,
     }    
 }
 
-
-
 static void
 gnc_account_class_init (AccountClass *klass)
 {
