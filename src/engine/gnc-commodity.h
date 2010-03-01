@@ -300,7 +300,7 @@ const char *gnc_quote_source_get_old_internal_name (const gnc_quote_source *sour
 /*@ dependent @*/
 gnc_commodity * gnc_commodity_new(QofBook *book,
                                   /*@ null @*/ const char * fullname,
-                                  /*@ null @*/ const char * namespace,
+                                  /*@ null @*/ const char * commodity_namespace,
                                   /*@ null @*/ const char * mnemonic,
                                   /*@ null @*/ const char * cusip,
                                   int fraction);
@@ -501,7 +501,7 @@ void  gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic);
  *  This string belongs to the caller and will be duplicated by the
  *  engine.
  */
-void  gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace);
+void  gnc_commodity_set_namespace(gnc_commodity * cm, const char * new_namespace);
 
 /** Set the full name for the specified commodity.  This should be
  *  a pointer to a null terminated string of the form "Acme Systems,
@@ -666,7 +666,7 @@ int gnc_commodity_compare_void(const void * a, const void * b);
  *  @param namespace The string to check.
  *
  *  @return TRUE if the string indicates an ISO currency, FALSE otherwise. */
-gboolean gnc_commodity_namespace_is_iso(const char *namespace);
+gboolean gnc_commodity_namespace_is_iso(const char *commodity_namespace);
 
 /** Checks to see if the specified commodity is an ISO 4217 recognized currency.
  *
@@ -713,13 +713,13 @@ void gnc_commodity_table_copy(gnc_commodity_table *dest,
 @{
 */
 gnc_commodity * gnc_commodity_table_lookup(const gnc_commodity_table * table,
-        const char * namespace,
+        const char * commodity_namespace,
         const char * mnemonic);
 gnc_commodity *
 gnc_commodity_table_lookup_unique(const gnc_commodity_table *table,
                                   const char * unique_name);
 gnc_commodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
-        const char * namespace,
+        const char * commodity_namespace,
         const char * fullname);
 
 /*@ dependent @*/
@@ -810,7 +810,7 @@ guint gnc_commodity_table_get_number_of_namespaces(const gnc_commodity_table* tb
  *  @return 1 if the namespace exists. 0 if it doesn't exist, or the
  *  routine was passed a bad argument. */
 int gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
-                                      const char * namespace);
+                                      const char * commodity_namespace);
 
 /** Return a list of all namespaces in the commodity table.  This
  *  returns both system and user defined namespaces.
@@ -841,7 +841,7 @@ GList * gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * t);
  *
  *  @return A pointer to the newly created namespace. */
 gnc_commodity_namespace * gnc_commodity_table_add_namespace(gnc_commodity_table * table,
-        const char * namespace,
+        const char * commodity_namespace,
         QofBook *book);
 
 /** This function finds a commodity namespace in the set of existing commodity namespaces.
@@ -853,7 +853,7 @@ gnc_commodity_namespace * gnc_commodity_table_add_namespace(gnc_commodity_table 
  *  @return The a pointer to the namespace found, or NULL if the
  *  namespace doesn't exist. */
 gnc_commodity_namespace * gnc_commodity_table_find_namespace(const gnc_commodity_table * table,
-        const char * namespace);
+        const char * commodity_namespace);
 
 /** This function deletes a string from the list of commodity namespaces.
  *  If the namespace does not exist, nothing happens.
@@ -865,7 +865,7 @@ gnc_commodity_namespace * gnc_commodity_table_find_namespace(const gnc_commodity
  *  @note This routine will destroy any commodities that exist as part
  *  of this namespace.  Use it carefully. */
 void      gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
-        const char * namespace);
+        const char * commodity_namespace);
 /** @} */
 /* ---------------------------------------------------------- */
 /** @name Commodity Table Accessor functions
@@ -893,7 +893,7 @@ guint gnc_commodity_table_get_size(const gnc_commodity_table* tbl);
  *
  *  @note It is the callers responsibility to free the list. */
 CommodityList * gnc_commodity_table_get_commodities(
-    const gnc_commodity_table * table, const char * namespace);
+    const gnc_commodity_table * table, const char * commodity_namespace);
 
 /** This function returns a list of commodities for which price quotes
  *  should be retrieved.  It will scan the entire commodity table (or
