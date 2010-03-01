@@ -49,6 +49,11 @@
 
 #include <windows.h>
 
+#ifdef _MSC_VER
+/* In MSVC, the strncasecmp function is available as _strnicmp */
+# define strncasecmp _strnicmp
+#endif /* _MSC_VER */
+
 char *
 get_win32_locale_string (int lctype)
 {
