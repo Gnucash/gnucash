@@ -37,6 +37,9 @@ static gboolean remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup);
 
 enum {
     PROP_0,
+	PROP_COMMODITY,
+	PROP_CURRENCY,
+	PROP_DATE,
 	PROP_SOURCE,
 	PROP_TYPE,
 	PROP_VALUE
@@ -84,6 +87,15 @@ gnc_price_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec
 	case PROP_VALUE:
 	    g_value_set_boxed(value, &price->value);
 		break;
+	case PROP_COMMODITY:
+	    g_value_set_object(value, price->commodity);
+	    break;
+	case PROP_CURRENCY:
+	    g_value_set_object(value, price->currency);
+	    break;
+	case PROP_DATE:
+	    g_value_set_boxed(value, &price->tmspec);
+		break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	    break;
@@ -95,6 +107,7 @@ gnc_price_set_property(GObject* object, guint prop_id, const GValue* value, GPar
 {
     GNCPrice* price;
 	gnc_numeric* number;
+	Timespec* ts;
 
 	g_return_if_fail(GNC_IS_PRICE(object));
 
@@ -110,6 +123,16 @@ gnc_price_set_property(GObject* object, guint prop_id, const GValue* value, GPar
 	    number = g_value_get_boxed(value);
 	    gnc_price_set_value(price, *number);
 	    break;
+	case PROP_COMMODITY:
+	    gnc_price_set_commodity(price, g_value_get_object(value));
+	    break;
+	case PROP_CURRENCY:
+	    gnc_price_set_currency(price, g_value_get_object(value));
+	    break;
+    case PROP_DATE:
+	    ts = g_value_get_boxed(value);
+		gnc_price_set_time(price, *ts);
+		break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	    break;
@@ -125,6 +148,28 @@ gnc_price_class_init(GNCPriceClass *klass)
     gobject_class->finalize = gnc_price_finalize;
     gobject_class->set_property = gnc_price_set_property;
     gobject_class->get_property = gnc_price_get_property;
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_COMMODITY,
+         g_param_spec_object ("commodity",
+                              "Commodity",
+                              "The commodity field denotes the base kind of "
+                              "'stuff' for the units of this quote, whether "
+                              "it is USD, gold, stock, etc.",
+                              GNC_TYPE_COMMODITY,
+                              G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_CURRENCY,
+         g_param_spec_object ("currency",
+                              "Currency",
+                              "The currency field denotes the external kind "
+                              "'stuff' for the units of this quote, whether "
+                              "it is USD, gold, stock, etc.",
+                              GNC_TYPE_COMMODITY,
+                              G_PARAM_READWRITE));
 
     g_object_class_install_property
 	(gobject_class,
@@ -148,6 +193,15 @@ gnc_price_class_init(GNCPriceClass *klass)
 				  "are 'bid', 'ask', 'last', 'nav' and 'unknown'.",
 			      NULL,
 				  G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_DATE,
+	 g_param_spec_boxed("date",
+                            "Date",
+                            "The date of the price quote.",
+                            GNC_TYPE_NUMERIC,
+                            G_PARAM_READWRITE));
 
     g_object_class_install_property
 	(gobject_class,

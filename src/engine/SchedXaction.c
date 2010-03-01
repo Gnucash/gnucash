@@ -47,12 +47,17 @@ void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 enum {
     PROP_0,
 	PROP_NAME,
+	PROP_ENABLED,
 	PROP_NUM_OCCURANCE,
 	PROP_REM_OCCURANCE,
 	PROP_AUTO_CREATE,
 	PROP_AUTO_CREATE_NOTIFY,
 	PROP_ADVANCE_CREATION_DAYS,
-	PROP_ADVANCE_REMINDER_DAYS
+	PROP_ADVANCE_REMINDER_DAYS,
+	PROP_START_DATE,
+	PROP_END_DATE,
+	PROP_LAST_OCCURANCE_DATE,
+	PROP_INSTANCE_COUNT
 };
 
 /* GObject initialization */
@@ -104,6 +109,9 @@ gnc_schedxaction_get_property (GObject         *object,
 	case PROP_NAME:
 	    g_value_set_string(value, sx->name);
 		break;
+	case PROP_ENABLED:
+	    g_value_set_boolean(value, sx->enabled);
+		break;
     case PROP_NUM_OCCURANCE:
 	    g_value_set_int(value, sx->num_occurances_total);
 		break;
@@ -122,6 +130,18 @@ gnc_schedxaction_get_property (GObject         *object,
 	case PROP_ADVANCE_REMINDER_DAYS:
 	    g_value_set_int(value, sx->advanceRemindDays);
 		break;
+    case PROP_START_DATE:
+	    g_value_set_boxed(value, &sx->start_date);
+		break;
+    case PROP_END_DATE:
+	    g_value_set_boxed(value, &sx->end_date);
+		break;
+    case PROP_LAST_OCCURANCE_DATE:
+	    g_value_set_boxed(value, &sx->last_date);
+		break;
+    case PROP_INSTANCE_COUNT:
+	    g_value_set_int(value, sx->instance_num);
+		break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	    break;
@@ -135,6 +155,7 @@ gnc_schedxaction_set_property (GObject         *object,
 			  GParamSpec      *pspec)
 {
     SchedXaction *sx;
+	GDate* date;
 
     g_return_if_fail(GNC_IS_SCHEDXACTION(object));
 
@@ -142,6 +163,9 @@ gnc_schedxaction_set_property (GObject         *object,
 	switch(prop_id) {
 	case PROP_NAME:
 	    xaccSchedXactionSetName(sx, g_value_get_string(value));
+		break;
+	case PROP_ENABLED:
+	    xaccSchedXactionSetEnabled(sx, g_value_get_boolean(value));
 		break;
     case PROP_NUM_OCCURANCE:
 	    xaccSchedXactionSetNumOccur(sx, g_value_get_int(value));
@@ -160,6 +184,27 @@ gnc_schedxaction_set_property (GObject         *object,
 		break;
 	case PROP_ADVANCE_REMINDER_DAYS:
 	    xaccSchedXactionSetAdvanceReminder(sx, g_value_get_int(value));
+		break;
+    case PROP_START_DATE:
+		/* Note: when passed through a boxed gvalue, the julian value of the date is copied.
+		   The date may appear invalid until a function requiring for dmy calculation is
+		   called. */
+	    xaccSchedXactionSetStartDate(sx, g_value_get_boxed(value));
+		break;
+    case PROP_END_DATE:
+		/* Note: when passed through a boxed gvalue, the julian value of the date is copied.
+		   The date may appear invalid until a function requiring for dmy calculation is
+		   called. */
+	    xaccSchedXactionSetEndDate(sx, g_value_get_boxed(value));
+		break;
+    case PROP_LAST_OCCURANCE_DATE:
+		/* Note: when passed through a boxed gvalue, the julian value of the date is copied.
+		   The date may appear invalid until a function requiring for dmy calculation is
+		   called. */
+	    xaccSchedXactionSetLastOccurDate(sx, g_value_get_boxed(value));
+		break;
+    case PROP_INSTANCE_COUNT:
+	    gnc_sx_set_instance_count(sx, g_value_get_int(value));
 		break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -188,6 +233,15 @@ gnc_schedxaction_class_init (SchedXactionClass *klass)
 			      "that is displayed by the GUI.",
 			      NULL,
 			      G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_ENABLED,
+         g_param_spec_boolean ("enabled",
+                               "Enabled",
+                               "TRUE if the scheduled transaction is enabled.",
+                               TRUE,
+                               G_PARAM_READWRITE));
 
     g_object_class_install_property
 	(gobject_class,
@@ -248,6 +302,44 @@ gnc_schedxaction_class_init (SchedXactionClass *klass)
 	 g_param_spec_int ("advance-reminder-days",
 			   "Days in advance to remind",
 			   "Number of days in advance to remind about this scheduled transaction.",
+			   0,
+			   G_MAXINT16,
+			   0,
+			   G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_START_DATE,
+	 g_param_spec_boxed("start-date",
+                            "Start Date",
+                            "Date for the first occurence for the scheduled transaction.",
+                            G_TYPE_DATE,
+                            G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_END_DATE,
+	 g_param_spec_boxed("end-date",
+                            "End Date",
+                            "Date for the scheduled transaction to end.",
+                            G_TYPE_DATE,
+                            G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_LAST_OCCURANCE_DATE,
+	 g_param_spec_boxed("last-occurance-date",
+                            "Last Occurance Date",
+                            "Date for the last occurance of the scheduled transaction.",
+                            G_TYPE_DATE,
+                            G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_INSTANCE_COUNT,
+	 g_param_spec_int ("instance-count",
+			   "Instance count",
+			   "Number of instances of this scheduled transaction.",
 			   0,
 			   G_MAXINT16,
 			   0,

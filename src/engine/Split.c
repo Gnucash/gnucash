@@ -64,7 +64,11 @@ enum {
 	PROP_ACTION,
 	PROP_MEMO,
 	PROP_VALUE,
-	PROP_AMOUNT
+	PROP_AMOUNT,
+	PROP_RECONCILE_DATE,
+	PROP_TX,
+	PROP_ACCOUNT,
+	PROP_LOT
 };
 
 /* GObject Initialization */
@@ -132,6 +136,18 @@ gnc_split_get_property(GObject         *object,
 	case PROP_AMOUNT:
 	    g_value_set_boxed(value, &split->amount);
 	    break;
+	case PROP_RECONCILE_DATE:
+	    g_value_set_boxed(value, &split->date_reconciled);
+		break;
+	case PROP_TX:
+	    g_value_set_object(value, split->parent);
+		break;
+	case PROP_ACCOUNT:
+	    g_value_set_object(value, split->acc);
+		break;
+	case PROP_LOT:
+	    g_value_set_object(value, split->lot);
+		break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	    break;
@@ -165,6 +181,18 @@ gnc_split_set_property(GObject         *object,
 	    number = g_value_get_boxed(value);
 	    xaccSplitSetAmount(split, *number);
 	    break;
+	case PROP_RECONCILE_DATE:
+	    xaccSplitSetDateReconciledTS(split, g_value_get_boxed(value));
+		break;
+	case PROP_TX:
+	    xaccSplitSetParent(split, g_value_get_object(value));
+		break;
+	case PROP_ACCOUNT:
+	    xaccSplitSetAccount(split, g_value_get_object(value));
+		break;
+	case PROP_LOT:
+	    xaccSplitSetLot(split, g_value_get_object(value));
+		break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	    break;
@@ -226,6 +254,42 @@ gnc_split_class_init(SplitClass* klass)
 							"calculate a conversion rate.",
                             GNC_TYPE_NUMERIC,
                             G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_RECONCILE_DATE,
+	 g_param_spec_boxed("reconcile-date",
+                            "Reconcile Date",
+                            "The date this split was reconciled.",
+                            GNC_TYPE_TIMESPEC,
+                            G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_TX,
+         g_param_spec_object ("transaction",
+                              "Transaction",
+                              "The transaction that this split belongs to.",
+                              GNC_TYPE_TRANSACTION,
+                              G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_ACCOUNT,
+         g_param_spec_object ("account",
+                              "Account",
+                              "The account that this split belongs to.",
+                              GNC_TYPE_ACCOUNT,
+                              G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_LOT,
+         g_param_spec_object ("lot",
+                              "Lot",
+                              "The lot that this split belongs to.",
+                              GNC_TYPE_LOT,
+                              G_PARAM_READWRITE));
 }
 
 /********************************************************************\

@@ -189,7 +189,10 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 enum {
   PROP_0,
   PROP_NUM,
-  PROP_DESCRIPTION
+  PROP_DESCRIPTION,
+  PROP_CURRENCY,
+  PROP_POST_DATE,
+  PROP_ENTER_DATE
 };
 
 void check_open (const Transaction *trans)
@@ -301,6 +304,15 @@ gnc_transaction_get_property(GObject* object,
 	case PROP_DESCRIPTION:
         g_value_set_string(value, tx->description);
 		break;
+    case PROP_CURRENCY:
+	    g_value_set_object(value, tx->common_currency);
+		break;
+    case PROP_POST_DATE:
+	    g_value_set_boxed(value, &tx->date_posted);
+		break;
+    case PROP_ENTER_DATE:
+	    g_value_set_boxed(value, &tx->date_entered);
+		break;
     default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	}
@@ -313,6 +325,7 @@ gnc_transaction_set_property(GObject* object,
 							GParamSpec* pspec)
 {
     Transaction* tx;
+	Timespec* ts;
 
 	g_return_if_fail(GNC_IS_TRANSACTION(object));
 
@@ -323,6 +336,15 @@ gnc_transaction_set_property(GObject* object,
 		break;
 	case PROP_DESCRIPTION:
         xaccTransSetDescription(tx, g_value_get_string(value));
+		break;
+    case PROP_CURRENCY:
+	    xaccTransSetCurrency(tx, g_value_get_object(value));
+		break;
+    case PROP_POST_DATE:
+		xaccTransSetDatePostedTS(tx, g_value_get_boxed(value));
+		break;
+    case PROP_ENTER_DATE:
+		xaccTransSetDateEnteredTS(tx, g_value_get_boxed(value));
 		break;
     default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -364,6 +386,33 @@ gnc_transaction_class_init(TransactionClass* klass)
 						 "transaction.",
 						 NULL,
 						 G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_CURRENCY,
+         g_param_spec_object ("currency",
+                              "Currency",
+                              "The base currency for this transaction.",
+                              GNC_TYPE_COMMODITY,
+                              G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_POST_DATE,
+	 g_param_spec_boxed("post-date",
+                            "Post Date",
+                            "The date the transaction occurred.",
+                            GNC_TYPE_NUMERIC,
+                            G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_ENTER_DATE,
+	 g_param_spec_boxed("enter-date",
+                            "Enter Date",
+                            "The date the transaction was entered.",
+                            GNC_TYPE_NUMERIC,
+                            G_PARAM_READWRITE));
 }
 
 /********************************************************************\
