@@ -55,7 +55,6 @@
 
 #define SX_MAX_NAME_LEN 2048
 
-static gint get_instance_count( gpointer pObject );
 static /*@ null @*/ gpointer get_template_act_guid( gpointer pObject );
 static void set_template_act_guid( gpointer pObject, /*@ null @*/ gpointer pValue );
 
@@ -64,20 +63,17 @@ static const GncSqlColumnTableEntry col_table[] =
 	/*@ -full_init_block @*/
     { "guid",              CT_GUID,    0,               COL_NNUL|COL_PKEY, "guid" },
     { "name",              CT_STRING,  SX_MAX_NAME_LEN, 0,                 "name" },
-	{ "enabled",           CT_BOOLEAN, 0,               COL_NNUL,          NULL, NULL,
-			(QofAccessFunc)xaccSchedXactionGetEnabled, (QofSetterFunc)xaccSchedXactionSetEnabled },
-    { "start_date",        CT_GDATE,   0,               0,                 NULL, GNC_SX_START_DATE },
-    { "end_date",          CT_GDATE,   0,               0,                 NULL, NULL,
-			(QofAccessFunc)xaccSchedXactionGetEndDate, (QofSetterFunc)xaccSchedXactionSetEndDate },
-    { "last_occur",        CT_GDATE,   0,               0,                 NULL, GNC_SX_LAST_DATE },
+	{ "enabled",           CT_BOOLEAN, 0,               COL_NNUL,          "enabled" },
+    { "start_date",        CT_GDATE,   0,               0,                 "start-date" },
+    { "end_date",          CT_GDATE,   0,               0,                 "end-date" },
+    { "last_occur",        CT_GDATE,   0,               0,                 "last-occurance-date" },
     { "num_occur",         CT_INT,     0,               COL_NNUL,          "num-occurance" },
     { "rem_occur",         CT_INT,     0,               COL_NNUL,          "rem-occurance" },
     { "auto_create",       CT_BOOLEAN, 0,               COL_NNUL,          "auto-create" },
     { "auto_notify",       CT_BOOLEAN, 0,               COL_NNUL,          "auto-create-notify" },
     { "adv_creation",      CT_INT,     0,               COL_NNUL,          "advance-creation-days" },
     { "adv_notify",        CT_INT,     0,               COL_NNUL,          "advance-reminder-days" },
-	{ "instance_count",    CT_INT,     0,               COL_NNUL,          NULL, NULL,
-			(QofAccessFunc)get_instance_count, (QofSetterFunc)gnc_sx_set_instance_count },
+	{ "instance_count",    CT_INT,     0,               COL_NNUL,          "instance-count" },
     { "template_act_guid", CT_GUID,    0,               COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)get_template_act_guid, set_template_act_guid },
     { NULL }
@@ -85,15 +81,6 @@ static const GncSqlColumnTableEntry col_table[] =
 };
 
 /* ================================================================= */
-
-static gint
-get_instance_count( gpointer pObject )
-{
-	g_return_val_if_fail( pObject != NULL, FALSE );
-	g_return_val_if_fail( GNC_IS_SX(pObject), FALSE );
-
-    return gnc_sx_get_instance_count( GNC_SX(pObject), NULL );
-}
 
 static gpointer
 get_template_act_guid( gpointer pObject )
@@ -132,6 +119,7 @@ load_single_sx( GncSqlBackend* be, GncSqlRow* row )
     const GUID* guid;
 	SchedXaction* pSx;
 	GList* schedule;
+	GDate start_date;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( row != NULL, NULL );
@@ -146,6 +134,8 @@ load_single_sx( GncSqlBackend* be, GncSqlRow* row )
 	gnc_sx_set_schedule( pSx, schedule );
 	gnc_sx_commit_edit( pSx );
 	gnc_sql_transaction_load_tx_for_account( be, pSx->template_acct );
+
+    g_object_get(pSx, "start-date", &start_date, NULL);
 
     return pSx;
 }

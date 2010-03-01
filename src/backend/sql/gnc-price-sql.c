@@ -55,9 +55,9 @@ static const GncSqlColumnTableEntry col_table[] =
 {
 	/*@ -full_init_block @*/
     { "guid",           CT_GUID,           0,                    COL_NNUL|COL_PKEY, "guid" },
-    { "commodity_guid", CT_COMMODITYREF,   0,                    COL_NNUL,          NULL, PRICE_COMMODITY },
-    { "currency_guid",  CT_COMMODITYREF,   0,                    COL_NNUL,          NULL, PRICE_CURRENCY },
-    { "date",           CT_TIMESPEC,       0,                    COL_NNUL,          NULL, PRICE_DATE },
+    { "commodity_guid", CT_COMMODITYREF,   0,                    COL_NNUL,          "commodity" },
+    { "currency_guid",  CT_COMMODITYREF,   0,                    COL_NNUL,          "currency" },
+    { "date",           CT_TIMESPEC,       0,                    COL_NNUL,          "date" },
     { "source",         CT_STRING,         PRICE_MAX_SOURCE_LEN, 0,                 "source" },
     { "type",           CT_STRING,         PRICE_MAX_TYPE_LEN,   0,                 "type" },
     { "value",          CT_NUMERIC,        0,                    COL_NNUL,          "value" },

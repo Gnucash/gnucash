@@ -1032,6 +1032,7 @@ load_string( const GncSqlBackend* be, GncSqlRow* row,
 	g_return_if_fail( row != NULL );
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( table_row->gobj_param_name != NULL || setter != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
 	g_return_if_fail( val != NULL );
@@ -1117,6 +1118,7 @@ load_int( const GncSqlBackend* be, GncSqlRow* row,
 	g_return_if_fail( row != NULL );
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( table_row->gobj_param_name != NULL || setter != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
     if( val == NULL ) {
@@ -1201,6 +1203,7 @@ load_boolean( const GncSqlBackend* be, GncSqlRow* row,
 	g_return_if_fail( row != NULL );
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( table_row->gobj_param_name != NULL || setter != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
     if( val == NULL ) {
@@ -1284,14 +1287,18 @@ load_int64( const GncSqlBackend* be, GncSqlRow* row,
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( row != NULL );
 	g_return_if_fail( setter != NULL );
-	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( table_row->gobj_param_name != NULL || setter != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
     if( val != NULL ) {
         i64_value = gnc_sql_get_integer_value( val );
     }
-    (*i64_setter)( pObject, i64_value );
+	if( table_row->gobj_param_name != NULL ) {
+		g_object_set( pObject, table_row->gobj_param_name, i64_value, NULL );
+	} else {
+        (*i64_setter)( pObject, i64_value );
+	}
 }
 
 static void
@@ -1356,9 +1363,9 @@ load_double( const GncSqlBackend* be, GncSqlRow* row,
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( row != NULL );
-	g_return_if_fail( setter != NULL );
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( table_row->gobj_param_name != NULL || setter != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
     if( val == NULL ) {
@@ -1374,7 +1381,11 @@ load_double( const GncSqlBackend* be, GncSqlRow* row,
 		    PWARN( "Unknown float value type: %s\n", g_type_name( G_VALUE_TYPE(val) ) );
 			d_value = 0;
 		}
-        (*setter)( pObject, (gpointer)&d_value );
+	    if( table_row->gobj_param_name != NULL ) {
+		    g_object_set( pObject, table_row->gobj_param_name, d_value, NULL );
+	    } else {
+            (*setter)( pObject, (gpointer)&d_value );
+		}
     }
 }
 
@@ -1445,6 +1456,7 @@ load_guid( const GncSqlBackend* be, GncSqlRow* row,
 	g_return_if_fail( row != NULL );
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( table_row->gobj_param_name != NULL || setter != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
     if( val == NULL ) {
@@ -1600,9 +1612,9 @@ load_timespec( const GncSqlBackend* be, GncSqlRow* row,
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( row != NULL );
-	g_return_if_fail( setter != NULL );
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( table_row->gobj_param_name != NULL || setter != NULL );
 
 	ts_setter = (TimespecSetterFunc)setter;
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
@@ -1621,7 +1633,11 @@ load_timespec( const GncSqlBackend* be, GncSqlRow* row,
 									    s[10], s[11],
 									    s[12], s[13] );
 		        ts = gnc_iso8601_to_timespec_gmt( buf );
-			    (*ts_setter)( pObject, ts );
+				if (table_row->gobj_param_name != NULL) {
+			        g_object_set( pObject, table_row->gobj_param_name, &ts, NULL );
+				} else {
+			        (*ts_setter)( pObject, ts );
+				}
 			    g_free( buf );
 		    }
 
@@ -1661,9 +1677,15 @@ add_gvalue_timespec_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 	g_return_if_fail( table_row != NULL );
 	g_return_if_fail( pList != NULL );
 
-    ts_getter = (TimespecAccessFunc)gnc_sql_get_getter( obj_name, table_row );
-	g_return_if_fail( ts_getter != NULL );
-    ts = (*ts_getter)( pObject );
+	if( table_row->gobj_param_name != NULL ) {
+	    Timespec* pts;
+		g_object_get( pObject, table_row->gobj_param_name, &pts, NULL );
+		ts = *pts;
+	} else {
+        ts_getter = (TimespecAccessFunc)gnc_sql_get_getter( obj_name, table_row );
+	    g_return_if_fail( ts_getter != NULL );
+        ts = (*ts_getter)( pObject );
+	}
 
     value = g_new0( GValue, 1 );
 	g_assert( value != NULL );
@@ -1694,9 +1716,9 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( row != NULL );
-	g_return_if_fail( setter != NULL );
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( table_row->gobj_param_name != NULL || setter != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
     if( val != NULL ) {
@@ -1721,7 +1743,11 @@ load_date( const GncSqlBackend* be, GncSqlRow* row,
 
 			    if( year != 0 || month != 0 || day != (GDateDay)0 ) {
 				    date = g_date_new_dmy( day, month, year );
-				    (*setter)( pObject, date );
+					if( table_row->gobj_param_name != NULL ) {
+			            g_object_set( pObject, table_row->gobj_param_name, date, NULL );
+					} else {
+				        (*setter)( pObject, date );
+				    }
 				    g_date_free( date );
 			    }
 		    }
@@ -1810,6 +1836,7 @@ load_numeric( const GncSqlBackend* be, GncSqlRow* row,
 	g_return_if_fail( row != NULL );
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( table_row->gobj_param_name != NULL || setter != NULL );
 
     buf = g_strdup_printf( "%s_num", table_row->col_name );
     val = gnc_sql_row_get_value_at_col_name( row, buf );
