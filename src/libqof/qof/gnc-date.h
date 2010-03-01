@@ -67,8 +67,16 @@
 #ifndef GNC_DATE_H
 #define GNC_DATE_H
 
+#include <glib-object.h>
 #include <time.h>
 
+/** @name GValue
+  @{
+*/
+GType timespec_get_type( void );
+#define GNC_TYPE_TIMESPEC (timespec_get_type ())
+
+/** @} */
 /** The default date format for use with strftime. */
 extern const char *gnc_default_strftime_date_format;
 

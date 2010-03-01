@@ -1520,3 +1520,38 @@ gnc_dow_abbrev(gchar *buf, int buf_len, int dow)
     i = qof_strftime(buf, buf_len, "%a", &my_tm);
     buf[i] = 0;
 }
+
+/* *******************************************************************
+ *  GValue handling
+ ********************************************************************/
+static gpointer
+timespec_boxed_copy_func( gpointer in_timespec )
+{
+    Timespec* newvalue;
+
+    newvalue = g_malloc( sizeof( Timespec ) );
+    memcpy( newvalue, in_timespec, sizeof( Timespec ) );
+
+    return newvalue;
+}
+
+static void
+timespec_boxed_free_func( gpointer in_timespec )
+{
+    g_free( in_timespec );
+}
+
+GType
+timespec_get_type( void )
+{
+    static GType type = 0;
+
+    if ( type == 0 )
+    {
+        type = g_boxed_type_register_static( "timespec",
+                                             timespec_boxed_copy_func,
+                                             timespec_boxed_free_func );
+    }
+
+    return type;
+}
