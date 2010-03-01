@@ -22,6 +22,8 @@
  */
 #include "config.h"
 
+extern "C"
+{
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -31,7 +33,7 @@
 #include "gnc-module/gnc-module.h"
 #include "engine/gnc-path.h"
 #include "engine/binreloc.h"
-/* #include "gnc-version.h" */
+    /* #include "gnc-version.h" */
 #include "engine/gnc-engine.h"
 #include "engine/gnc-filepath-utils.h"
 #include "engine/gnc-hooks.h"
@@ -47,6 +49,13 @@
 #  include <libintl.h>
 #  include <locale.h>
 #endif
+} // END extern C
+
+#include <QApplication>
+#include "mainwindow.hpp"
+
+namespace gnc
+{
 
 #define APP_GNUCASH "/apps/gnucash"
 
@@ -120,6 +129,7 @@ gnc_log_init()
     }
 }
 
+} // END namespace gnc
 
 int
 main(int argc, char ** argv)
@@ -139,7 +149,7 @@ main(int argc, char ** argv)
         }
     }
 #else
-    g_message("main: binreloc relocation support was disabled at configure time.\n");
+    //g_message("main: binreloc relocation support was disabled at configure time.\n");
 #endif
 
 #ifdef HAVE_GETTEXT
@@ -157,14 +167,16 @@ main(int argc, char ** argv)
     qof_log_init();
     qof_log_set_default(QOF_LOG_INFO);
 
-    gnc_log_init();
+    gnc::gnc_log_init();
 
     gnc_module_system_init();
 
-	qof_backend_module_init();
+    qof_backend_module_init();
 
-/*     gnc_gnome_init (argc, argv, VERSION); */
-/*     gnc_gui_init(); */
-/*     scm_boot_guile(argc, argv, inner_main, 0); */
-    exit(0); /* never reached */
+    // From here on the new C++ code
+    QApplication app(argc, argv);
+    gnc::MainWindow mainWin;
+    mainWin.show();
+    return app.exec();
+
 }

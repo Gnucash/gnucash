@@ -61,10 +61,11 @@ FIND_PROGRAM (GUILE_EXECUTABLE guile)
 
 # ############################################################
 
-#SET (QT_MIN_VERSION "4.5.0") # We need at least 4.5.0 (because only this is LGPL)
-#FIND_PACKAGE (Qt4 REQUIRED) # find and setup Qt4 for this project
-#INCLUDE_DIRECTORIES (${QT_INCLUDES})
+# Qt
+SET (QT_MIN_VERSION "4.5.0")
+FIND_PACKAGE (Qt4 REQUIRED) # find and setup Qt4 for this project
 
+# Compiler flags
 IF (UNIX)
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -D_FORTIFY_SOURCE=2 -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused")
 ENDIF (UNIX)
@@ -209,5 +210,7 @@ ADD_SUBDIRECTORY (core-utils)
 ADD_SUBDIRECTORY (gnc-module)
 ADD_SUBDIRECTORY (engine)
 ADD_SUBDIRECTORY (backend/xml)
+
+ADD_SUBDIRECTORY (gnc)
 
 ADD_SUBDIRECTORY (test-core)

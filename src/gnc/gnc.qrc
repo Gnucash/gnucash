@@ -1,0 +1,23 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+<qresource>
+	<file>../pixmaps/gnc-account-delete.png</file>
+	<file>../pixmaps/gnc-account-edit.png</file>
+	<file>../pixmaps/gnc-account-new.png</file>
+	<file>../pixmaps/gnc-account-open.png</file>
+	<file>../pixmaps/gnc-account.png</file>
+	<file>../pixmaps/gnc-invoice-edit.png</file>
+	<file>../pixmaps/gnc-invoice.png</file>
+	<file>../pixmaps/gnc-invoice-post.png</file>
+	<file>../pixmaps/gnc-invoice-unpost.png</file>
+	<file>../pixmaps/gnc-jumpto.png</file>
+	<file>../pixmaps/gnc-split-trans.png</file>
+	<file>../pixmaps/gnc-sx-new.png</file>
+	<file>../pixmaps/gnc-transfer.png</file>
+	<file>../pixmaps/gnucash-icon-16x16.png</file>
+	<file>../pixmaps/gnucash-icon-32x32.png</file>
+	<file>../pixmaps/gnucash-icon-48x48.png</file>
+	<file>../pixmaps/gnucash_splash.png</file>
+	<file>bla.html</file>
+</qresource>
+</RCC>
