@@ -142,7 +142,7 @@ qof_backend_init(QofBackend *be)
 
     /* to be removed */
     be->price_lookup = NULL;
-    be->export = NULL;
+    be->export_fn = NULL;
 }
 
 void

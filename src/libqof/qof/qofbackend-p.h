@@ -364,7 +364,7 @@ struct QofBackend_s
      * removed ASAP.   This is a temporary hack-around until period-closing
      * is fully implemented.
      */
-    void (*export) (QofBackend *, QofBook *);
+    void (*export_fn) (QofBackend *, QofBook *);
 
 };
 

@@ -1694,11 +1694,11 @@ qof_session_export (QofSession *tmp_session,
         return FALSE;
 
     be->percentage = percentage_func;
-    if (be->export)
+    if (be->export_fn)
     {
         int err;
 
-        (be->export)(be, book);
+        (be->export_fn)(be, book);
         err = qof_backend_get_error(be);
 
         if (ERR_BACKEND_NO_ERR != err)

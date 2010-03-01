@@ -1129,7 +1129,7 @@ gnc_backend_new(void)
     be->load_config = NULL;
     be->get_config = NULL;
 
-    be->export = gnc_xml_be_write_accounts_to_file;
+    be->export_fn = gnc_xml_be_write_accounts_to_file;
 
     gnc_be->dirname = NULL;
     gnc_be->fullpath = NULL;
