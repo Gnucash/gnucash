@@ -51,7 +51,7 @@
 
 /** The type used to store guids */
 #define GUID_DATA_SIZE	16
-typedef union _GUID
+typedef union GNC_INTERNAL_GUID
 {
     guchar data[GUID_DATA_SIZE];
 
