@@ -20,7 +20,9 @@ GNC_TEST_DEPS = @GNC_TEST_SRFI_LOAD_CMD@ \
 TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-LDADD = ../libgncmod-report-gnome.la
+LDADD = \
+    ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
+	${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la
 
 check_PROGRAMS = test-link-module
 
