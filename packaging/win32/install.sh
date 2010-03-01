@@ -381,6 +381,17 @@ function inst_guile() {
         qpopd
         guile -c '(use-modules (srfi srfi-39))' &&
         guile -c "(use-modules (ice-9 slib)) (require 'printf)" || die "guile not installed correctly"
+
+        # If this libguile is used from MSVC compiler, we must
+        # deactivate some macros of scmconfig.h again.
+        SCMCONFIG_H=$_GUILE_UDIR/include/libguile/scmconfig.h
+        cat >> ${SCMCONFIG_H} <<EOF
+
+#ifdef _MSC_VER
+# undef HAVE_STDINT_H
+# undef HAVE_INTTYPES_H
+#endif
+EOF
         rm -rf ${TMP_UDIR}/guile-*
     fi
     if [ "$CROSS_COMPILE" = "yes" ]; then
