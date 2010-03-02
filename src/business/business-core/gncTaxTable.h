@@ -35,18 +35,18 @@
 
 modtime is the internal date of the last modtime\n
 See src/doc/business.txt for an explanation of the following\n
-Code that handles refcount, parent, child, invisible and children 
+Code that handles refcount, parent, child, invisible and children
 is *identical* to that in ::GncBillTerm
 
 @param	QofInstance     inst;
 @param 	char *          name;
 @param 	GncTaxTableEntryList*  entries;
-@param 	Timespec        modtime;	
+@param 	Timespec        modtime;
 @param 	gint64          refcount;
-@param 	GncTaxTable *   parent; if non-null, we are an immutable child 
-@param 	GncTaxTable *   child;  if non-null, we have not changed 
+@param 	GncTaxTable *   parent; if non-null, we are an immutable child
+@param 	GncTaxTable *   child;  if non-null, we have not changed
 @param 	gboolean        invisible;
-@param 	GList *         children; list of children for disconnection 
+@param 	GList *         children; list of children for disconnection
 */
 typedef struct _gncTaxTable GncTaxTable;
 typedef struct _gncTaxTableClass GncTaxTableClass;
@@ -90,16 +90,18 @@ GType gnc_taxtable_get_type(void);
  * How to interpret the amount.
  * You can interpret it as a VALUE or a PERCENT.
  */
-typedef enum {
-  GNC_AMT_TYPE_VALUE = 1, 	/**< tax is a number */
-  GNC_AMT_TYPE_PERCENT		/**< tax is a percentage */
+typedef enum
+{
+    GNC_AMT_TYPE_VALUE = 1, 	/**< tax is a number */
+    GNC_AMT_TYPE_PERCENT		/**< tax is a percentage */
 } GncAmountType;
 
 /** How to interpret the TaxIncluded */
-typedef enum {
-  GNC_TAXINCLUDED_YES = 1,  /**< tax is included */
-  GNC_TAXINCLUDED_NO,		/**< tax is not included */
-  GNC_TAXINCLUDED_USEGLOBAL, /**< use the global setting */
+typedef enum
+{
+    GNC_TAXINCLUDED_YES = 1,  /**< tax is included */
+    GNC_TAXINCLUDED_NO,		/**< tax is not included */
+    GNC_TAXINCLUDED_USEGLOBAL, /**< use the global setting */
 } GncTaxIncluded;
 
 const char * gncAmountTypeToString (GncAmountType type);
@@ -108,14 +110,14 @@ gboolean gncAmountStringToType (const char *str, GncAmountType *type);
 const char * gncTaxIncludedTypeToString (GncTaxIncluded type);
 gboolean gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type);
 
-/** @name Create/Destroy Functions 
+/** @name Create/Destroy Functions
  @{ */
 GncTaxTable * gncTaxTableCreate (QofBook *book);
 void gncTaxTableDestroy (GncTaxTable *table);
 GncTaxTableEntry * gncTaxTableEntryCreate (void);
 void gncTaxTableEntryDestroy (GncTaxTableEntry *entry);
 /** @} */
-/** \name Set Functions 
+/** \name Set Functions
 @{
 */
 void gncTaxTableSetName (GncTaxTable *table, const char *name);
@@ -133,11 +135,11 @@ void gncTaxTableChanged (GncTaxTable *table);
 void gncTaxTableBeginEdit (GncTaxTable *table);
 void gncTaxTableCommitEdit (GncTaxTable *table);
 
-/** @name Get Functions 
+/** @name Get Functions
  @{ */
 
 /** Return a pointer to the instance gncTaxTable that is identified
- *  by the guid, and is residing in the book. Returns NULL if the 
+ *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
  *  Equivalent function prototype is
  *  GncTaxTable * gncTaxTableLookup (QofBook *book, const GUID *guid);
@@ -168,9 +170,10 @@ int gncTaxTableEntryCompare (const GncTaxTableEntry *a, const GncTaxTableEntry *
 
 /************************************************/
 
-struct _gncAccountValue {
-  Account *	account;
-  gnc_numeric	value;
+struct _gncAccountValue
+{
+    Account *	account;
+    gnc_numeric	value;
 };
 
 /**

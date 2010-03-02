@@ -53,7 +53,7 @@ typedef struct _gncEmployeeClass GncEmployeeClass;
      (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_EMPLOYEE, GncEmployeeClass))
 GType gnc_employee_get_type(void);
 
-/** @name Create/Destroy Functions 
+/** @name Create/Destroy Functions
  @{ */
 GncEmployee *gncEmployeeCreate (QofBook *book);
 void gncEmployeeDestroy (GncEmployee *employee);
@@ -62,7 +62,7 @@ void gncEmployeeCommitEdit (GncEmployee *employee);
 int gncEmployeeCompare (const GncEmployee *a, const GncEmployee *b);
 /** @} */
 
-/** @name Set Functions 
+/** @name Set Functions
  @{ */
 void gncEmployeeSetID (GncEmployee *employee, const char *id);
 void gncEmployeeSetUsername (GncEmployee *employee, const char *username);
@@ -77,7 +77,7 @@ void qofEmployeeSetAddr (GncEmployee *employee, QofInstance *addr_ent);
 
 /** @} */
 
-/** @name Get Functions 
+/** @name Get Functions
  @{ */
 QofBook * gncEmployeeGetBook (GncEmployee *employee);
 const char * gncEmployeeGetID (const GncEmployee *employee);

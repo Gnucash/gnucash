@@ -37,25 +37,25 @@
 #include "gncOwner.h"
 #include "gncOwnerP.h"
 
-struct _gncOrder 
+struct _gncOrder
 {
-  QofInstance inst;
+    QofInstance inst;
 
-  char *	id;
-  char *	notes;
-  gboolean 	active;
+    char *	id;
+    char *	notes;
+    gboolean 	active;
 
-  char *	reference;
-  char *	printname;
-  GncOwner	owner;
-  GList *	entries;
-  Timespec 	opened;
-  Timespec 	closed;
+    char *	reference;
+    char *	printname;
+    GncOwner	owner;
+    GList *	entries;
+    Timespec 	opened;
+    Timespec 	closed;
 };
 
 struct _gncOrderClass
 {
-  QofInstanceClass parent_class;
+    QofInstanceClass parent_class;
 };
 
 static QofLogModule log_module = GNC_MOD_BUSINESS;
@@ -75,15 +75,16 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 G_INLINE_FUNC void mark_order (GncOrder *order);
 void mark_order (GncOrder *order)
 {
-  qof_instance_set_dirty(&order->inst);
-  qof_event_gen (&order->inst, QOF_EVENT_MODIFY, NULL);
+    qof_instance_set_dirty(&order->inst);
+    qof_event_gen (&order->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 /* =============================================================== */
 
-enum {
+enum
+{
     PROP_0,
-	PROP_NOTES
+    PROP_NOTES
 };
 
 /* GObject Initialization */
@@ -108,43 +109,45 @@ gnc_order_finalize(GObject* orderp)
 
 static void
 gnc_order_get_property (GObject         *object,
-			  guint            prop_id,
-			  GValue          *value,
-			  GParamSpec      *pspec)
+                        guint            prop_id,
+                        GValue          *value,
+                        GParamSpec      *pspec)
 {
     GncOrder *order;
 
     g_return_if_fail(GNC_IS_ORDER(object));
 
     order = GNC_ORDER(object);
-    switch (prop_id) {
-	case PROP_NOTES:
-	    g_value_set_string(value, order->notes);
-		break;
-	default:
-	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-	    break;
+    switch (prop_id)
+    {
+    case PROP_NOTES:
+        g_value_set_string(value, order->notes);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+        break;
     }
 }
 
 static void
 gnc_order_set_property (GObject         *object,
-			  guint            prop_id,
-			  const GValue          *value,
-			  GParamSpec      *pspec)
+                        guint            prop_id,
+                        const GValue          *value,
+                        GParamSpec      *pspec)
 {
     GncOrder *order;
 
     g_return_if_fail(GNC_IS_ORDER(object));
 
     order = GNC_ORDER(object);
-    switch (prop_id) {
-	case PROP_NOTES:
-	    gncOrderSetNotes(order, g_value_get_string(value));
-		break;
-	default:
-	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-	    break;
+    switch (prop_id)
+    {
+    case PROP_NOTES:
+        gncOrderSetNotes(order, g_value_get_string(value));
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+        break;
     }
 }
 
@@ -152,118 +155,118 @@ static void
 gnc_order_class_init (GncOrderClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-	
+
     gobject_class->dispose = gnc_order_dispose;
     gobject_class->finalize = gnc_order_finalize;
     gobject_class->set_property = gnc_order_set_property;
     gobject_class->get_property = gnc_order_get_property;
 
     g_object_class_install_property
-	(gobject_class,
-	 PROP_NOTES,
-	 g_param_spec_string ("name",
-			      "Order Notes",
-			      "The order notes is an arbitrary string "
-			      "assigned by the user to provide notes about "
-			      "this order.",
-			      NULL,
-			      G_PARAM_READWRITE));
+    (gobject_class,
+     PROP_NOTES,
+     g_param_spec_string ("name",
+                          "Order Notes",
+                          "The order notes is an arbitrary string "
+                          "assigned by the user to provide notes about "
+                          "this order.",
+                          NULL,
+                          G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */
 GncOrder *gncOrderCreate (QofBook *book)
 {
-  GncOrder *order;
+    GncOrder *order;
 
-  if (!book) return NULL;
+    if (!book) return NULL;
 
-  order = g_object_new (GNC_TYPE_ORDER, NULL);
-  qof_instance_init_data (&order->inst, _GNC_MOD_NAME, book);
+    order = g_object_new (GNC_TYPE_ORDER, NULL);
+    qof_instance_init_data (&order->inst, _GNC_MOD_NAME, book);
 
-  order->id = CACHE_INSERT ("");
-  order->notes = CACHE_INSERT ("");
-  order->reference = CACHE_INSERT ("");
+    order->id = CACHE_INSERT ("");
+    order->notes = CACHE_INSERT ("");
+    order->reference = CACHE_INSERT ("");
 
-  order->active = TRUE;
+    order->active = TRUE;
 
-  qof_event_gen (&order->inst, QOF_EVENT_CREATE, NULL);
+    qof_event_gen (&order->inst, QOF_EVENT_CREATE, NULL);
 
-  return order;
+    return order;
 }
 
 void gncOrderDestroy (GncOrder *order)
 {
-  if (!order) return;
-  qof_instance_set_destroying(order, TRUE);
-  gncOrderCommitEdit (order);
+    if (!order) return;
+    qof_instance_set_destroying(order, TRUE);
+    gncOrderCommitEdit (order);
 }
 
 static void gncOrderFree (GncOrder *order)
 {
-  if (!order) return;
+    if (!order) return;
 
-  qof_event_gen (&order->inst, QOF_EVENT_DESTROY, NULL);
+    qof_event_gen (&order->inst, QOF_EVENT_DESTROY, NULL);
 
-  g_list_free (order->entries);
-  CACHE_REMOVE (order->id);
-  CACHE_REMOVE (order->notes);
-  CACHE_REMOVE (order->reference);
+    g_list_free (order->entries);
+    CACHE_REMOVE (order->id);
+    CACHE_REMOVE (order->notes);
+    CACHE_REMOVE (order->reference);
 
-  if (order->printname) g_free (order->printname);
+    if (order->printname) g_free (order->printname);
 
-  /* qof_instance_release (&order->inst); */
-  g_object_unref (order);
+    /* qof_instance_release (&order->inst); */
+    g_object_unref (order);
 }
 
 GncOrder *
 gncCloneOrder (GncOrder *from, QofBook *book)
 {
-  GList *node;
-  GncOrder *order;
+    GList *node;
+    GncOrder *order;
 
-  if (!book) return NULL;
+    if (!book) return NULL;
 
-  order = g_object_new (GNC_TYPE_ORDER, NULL);
-  qof_instance_init_data (&order->inst, _GNC_MOD_NAME, book);
-  qof_instance_gemini (&order->inst, &from->inst);
+    order = g_object_new (GNC_TYPE_ORDER, NULL);
+    qof_instance_init_data (&order->inst, _GNC_MOD_NAME, book);
+    qof_instance_gemini (&order->inst, &from->inst);
 
-  order->id = CACHE_INSERT (from->id);
-  order->notes = CACHE_INSERT (from->notes);
-  order->reference = CACHE_INSERT (from->reference);
+    order->id = CACHE_INSERT (from->id);
+    order->notes = CACHE_INSERT (from->notes);
+    order->reference = CACHE_INSERT (from->reference);
 
-  order->active = from->active;
-  order->printname = NULL; /* yes, null, that's right */
-  order->opened = from->opened;
-  order->closed = from->closed;
+    order->active = from->active;
+    order->printname = NULL; /* yes, null, that's right */
+    order->opened = from->opened;
+    order->closed = from->closed;
 
-  order->owner = gncCloneOwner (&from->owner, book);
+    order->owner = gncCloneOwner (&from->owner, book);
 
-  order->entries = NULL;
-  for (node = g_list_last(from->entries); node; node=node->prev)
-  {
-    GncEntry *entry = node->data;
-    entry = gncEntryObtainTwin (entry, book);
-    order->entries = g_list_prepend (order->entries, entry);
-  }
+    order->entries = NULL;
+    for (node = g_list_last(from->entries); node; node = node->prev)
+    {
+        GncEntry *entry = node->data;
+        entry = gncEntryObtainTwin (entry, book);
+        order->entries = g_list_prepend (order->entries, entry);
+    }
 
-  qof_event_gen (&order->inst, QOF_EVENT_CREATE, NULL);
+    qof_event_gen (&order->inst, QOF_EVENT_CREATE, NULL);
 
-  return order;
+    return order;
 }
 
 GncOrder *
 gncOrderObtainTwin (GncOrder *from, QofBook *book)
 {
-  GncOrder *order;
-  if (!book) return NULL;
+    GncOrder *order;
+    if (!book) return NULL;
 
-  order = (GncOrder *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
-  if (!order)
-  {
-    order = gncCloneOrder (from, book);
-  }
+    order = (GncOrder *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+    if (!order)
+    {
+        order = gncCloneOrder (from, book);
+    }
 
-  return order;
+    return order;
 }
 
 /* =============================================================== */
@@ -271,264 +274,270 @@ gncOrderObtainTwin (GncOrder *from, QofBook *book)
 
 void gncOrderSetID (GncOrder *order, const char *id)
 {
-  if (!order || !id) return;
-  SET_STR (order, order->id, id);
-  mark_order (order);
-  gncOrderCommitEdit (order);
+    if (!order || !id) return;
+    SET_STR (order, order->id, id);
+    mark_order (order);
+    gncOrderCommitEdit (order);
 }
 
 void gncOrderSetOwner (GncOrder *order, GncOwner *owner)
 {
-  if (!order || !owner) return;
-  if (gncOwnerEqual (&order->owner, owner)) return;
+    if (!order || !owner) return;
+    if (gncOwnerEqual (&order->owner, owner)) return;
 
-  gncOrderBeginEdit (order);
-  gncOwnerCopy (owner, &order->owner);
-  mark_order (order);
-  gncOrderCommitEdit (order);
+    gncOrderBeginEdit (order);
+    gncOwnerCopy (owner, &order->owner);
+    mark_order (order);
+    gncOrderCommitEdit (order);
 }
 
 void gncOrderSetDateOpened (GncOrder *order, Timespec date)
 {
-  if (!order) return;
-  if (timespec_equal (&order->opened, &date)) return;
-  gncOrderBeginEdit (order);
-  order->opened = date;
-  mark_order (order);
-  gncOrderCommitEdit (order);
+    if (!order) return;
+    if (timespec_equal (&order->opened, &date)) return;
+    gncOrderBeginEdit (order);
+    order->opened = date;
+    mark_order (order);
+    gncOrderCommitEdit (order);
 }
 
 void gncOrderSetDateClosed (GncOrder *order, Timespec date)
 {
-  if (!order) return;
-  if (timespec_equal (&order->closed, &date)) return;
-  gncOrderBeginEdit (order);
-  order->closed = date;
-  mark_order (order);
-  gncOrderCommitEdit (order);
+    if (!order) return;
+    if (timespec_equal (&order->closed, &date)) return;
+    gncOrderBeginEdit (order);
+    order->closed = date;
+    mark_order (order);
+    gncOrderCommitEdit (order);
 }
 
 void gncOrderSetNotes (GncOrder *order, const char *notes)
 {
-  if (!order || !notes) return;
-  SET_STR (order, order->notes, notes);
-  mark_order (order);
-  gncOrderCommitEdit (order);
+    if (!order || !notes) return;
+    SET_STR (order, order->notes, notes);
+    mark_order (order);
+    gncOrderCommitEdit (order);
 }
 
 void gncOrderSetReference (GncOrder *order, const char *reference)
 {
-  if (!order || !reference) return;
-  SET_STR (order, order->reference, reference);
-  mark_order (order);
-  gncOrderCommitEdit (order);
+    if (!order || !reference) return;
+    SET_STR (order, order->reference, reference);
+    mark_order (order);
+    gncOrderCommitEdit (order);
 }
 
 void gncOrderSetActive (GncOrder *order, gboolean active)
 {
-  if (!order) return;
-  if (order->active == active) return;
-  gncOrderBeginEdit (order);
-  order->active = active;
-  mark_order (order);
-  gncOrderCommitEdit (order);
+    if (!order) return;
+    if (order->active == active) return;
+    gncOrderBeginEdit (order);
+    order->active = active;
+    mark_order (order);
+    gncOrderCommitEdit (order);
 }
 
 /* =============================================================== */
 /* Add an Entry to the Order */
 void gncOrderAddEntry (GncOrder *order, GncEntry *entry)
 {
-  GncOrder *old;
+    GncOrder *old;
 
-  if (!order || !entry) return;
+    if (!order || !entry) return;
 
-  old = gncEntryGetOrder (entry);
-  if (old == order) return;			/* I already own it */
-  if (old) gncOrderRemoveEntry (old, entry);
+    old = gncEntryGetOrder (entry);
+    if (old == order) return;			/* I already own it */
+    if (old) gncOrderRemoveEntry (old, entry);
 
-  order->entries = g_list_insert_sorted (order->entries, entry,
-					 (GCompareFunc)gncEntryCompare);
+    order->entries = g_list_insert_sorted (order->entries, entry,
+                                           (GCompareFunc)gncEntryCompare);
 
-  /* This will send out an event -- make sure we're attached */
-  gncEntrySetOrder (entry, order);
-  mark_order (order);
+    /* This will send out an event -- make sure we're attached */
+    gncEntrySetOrder (entry, order);
+    mark_order (order);
 }
 
 void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry)
 {
-  if (!order || !entry) return;
+    if (!order || !entry) return;
 
-  gncEntrySetOrder (entry, NULL);
-  order->entries = g_list_remove (order->entries, entry);
-  mark_order (order);
+    gncEntrySetOrder (entry, NULL);
+    order->entries = g_list_remove (order->entries, entry);
+    mark_order (order);
 }
 
 /* Get Functions */
 
 const char * gncOrderGetID (const GncOrder *order)
 {
-  if (!order) return NULL;
-  return order->id;
+    if (!order) return NULL;
+    return order->id;
 }
 
 GncOwner * gncOrderGetOwner (GncOrder *order)
 {
-  if (!order) return NULL;
-  return &order->owner;
+    if (!order) return NULL;
+    return &order->owner;
 }
 
 Timespec gncOrderGetDateOpened (const GncOrder *order)
 {
-  Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
-  if (!order) return ts;
-  return order->opened;
+    Timespec ts;
+    ts.tv_sec = 0;
+    ts.tv_nsec = 0;
+    if (!order) return ts;
+    return order->opened;
 }
 
 Timespec gncOrderGetDateClosed (const GncOrder *order)
 {
-  Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
-  if (!order) return ts;
-  return order->closed;
+    Timespec ts;
+    ts.tv_sec = 0;
+    ts.tv_nsec = 0;
+    if (!order) return ts;
+    return order->closed;
 }
 
 const char * gncOrderGetNotes (const GncOrder *order)
 {
-  if (!order) return NULL;
-  return order->notes;
+    if (!order) return NULL;
+    return order->notes;
 }
 
 const char * gncOrderGetReference (const GncOrder *order)
 {
-  if (!order) return NULL;
-  return order->reference;
+    if (!order) return NULL;
+    return order->reference;
 }
 
 gboolean gncOrderGetActive (const GncOrder *order)
 {
-  if (!order) return FALSE;
-  return order->active;
+    if (!order) return FALSE;
+    return order->active;
 }
 
 /* Get the list Entries */
 GList * gncOrderGetEntries (GncOrder *order)
 {
-  if (!order) return NULL;
-  return order->entries;
+    if (!order) return NULL;
+    return order->entries;
 }
 
 gboolean gncOrderIsClosed (const GncOrder *order)
 {
-  if (!order) return FALSE;
-  if (order->closed.tv_sec || order->closed.tv_nsec) return TRUE;
-  return FALSE;
+    if (!order) return FALSE;
+    if (order->closed.tv_sec || order->closed.tv_nsec) return TRUE;
+    return FALSE;
 }
 
 /* =============================================================== */
 
 void gncOrderBeginEdit (GncOrder *order)
 {
-  qof_begin_edit(&order->inst);
+    qof_begin_edit(&order->inst);
 }
 
 static void gncOrderOnError (QofInstance *order, QofBackendError errcode)
 {
-  PERR("Order QofBackend Failure: %d", errcode);
-  gnc_engine_signal_commit_error( errcode );
+    PERR("Order QofBackend Failure: %d", errcode);
+    gnc_engine_signal_commit_error( errcode );
 }
 
 static void gncOrderOnDone (QofInstance *order) {}
 
 static void order_free (QofInstance *inst)
 {
-  GncOrder *order = (GncOrder *) inst;
-  gncOrderFree (order);
+    GncOrder *order = (GncOrder *) inst;
+    gncOrderFree (order);
 }
 
 void gncOrderCommitEdit (GncOrder *order)
 {
-  if (!qof_commit_edit (QOF_INSTANCE(order))) return;
-  qof_commit_edit_part2 (&order->inst, gncOrderOnError,
-			 gncOrderOnDone, order_free);
+    if (!qof_commit_edit (QOF_INSTANCE(order))) return;
+    qof_commit_edit_part2 (&order->inst, gncOrderOnError,
+                           gncOrderOnDone, order_free);
 }
 
 int gncOrderCompare (const GncOrder *a, const GncOrder *b)
 {
-  int compare;
+    int compare;
 
-  if (a == b) return 0;
-  if (!a && b) return -1;
-  if (a && !b) return 1;
+    if (a == b) return 0;
+    if (!a && b) return -1;
+    if (a && !b) return 1;
 
-  compare = safe_strcmp (a->id, b->id);
-  if (compare) return compare;
+    compare = safe_strcmp (a->id, b->id);
+    if (compare) return compare;
 
-  compare = timespec_cmp (&(a->opened), &(b->opened));
-  if (compare) return compare;
+    compare = timespec_cmp (&(a->opened), &(b->opened));
+    if (compare) return compare;
 
-  compare = timespec_cmp (&(a->closed), &(b->closed));
-  if (compare) return compare;
+    compare = timespec_cmp (&(a->closed), &(b->closed));
+    if (compare) return compare;
 
-  return qof_instance_guid_compare(a, b);
+    return qof_instance_guid_compare(a, b);
 }
 
 /* =========================================================== */
 /* Package-Private functions */
 
-static const char * 
+static const char *
 _gncOrderPrintable (gpointer obj)
 {
-  GncOrder *order = obj;
+    GncOrder *order = obj;
 
-  g_return_val_if_fail (order, NULL);
+    g_return_val_if_fail (order, NULL);
 
-  if (qof_instance_get_dirty_flag(order) || order->printname == NULL) {
-    if (order->printname) g_free (order->printname);
+    if (qof_instance_get_dirty_flag(order) || order->printname == NULL)
+    {
+        if (order->printname) g_free (order->printname);
 
-    order->printname =
-      g_strdup_printf ("%s%s", order->id,
-		       gncOrderIsClosed (order) ? _(" (closed)") : "");
-  }
+        order->printname =
+            g_strdup_printf ("%s%s", order->id,
+                             gncOrderIsClosed (order) ? _(" (closed)") : "");
+    }
 
-  return order->printname;
+    return order->printname;
 }
 
 static QofObject gncOrderDesc =
 {
-  .interface_version = QOF_OBJECT_VERSION,
-  .e_type            = _GNC_MOD_NAME,
-  .type_label        = "Order",
-  .create            = (gpointer)gncOrderCreate,
-  .book_begin        = NULL,
-  .book_end          = NULL,
-  .is_dirty          = qof_collection_is_dirty,
-  .mark_clean        = qof_collection_mark_clean,
-  .foreach           = qof_collection_foreach,
-  .printable         = _gncOrderPrintable,
-  .version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+    .interface_version = QOF_OBJECT_VERSION,
+    .e_type            = _GNC_MOD_NAME,
+    .type_label        = "Order",
+    .create            = (gpointer)gncOrderCreate,
+    .book_begin        = NULL,
+    .book_end          = NULL,
+    .is_dirty          = qof_collection_is_dirty,
+    .mark_clean        = qof_collection_mark_clean,
+    .foreach           = qof_collection_foreach,
+    .printable         = _gncOrderPrintable,
+    .version_cmp       = (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncOrderRegister (void)
 {
-  static QofParam params[] = {
-    { ORDER_ID, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetID, (QofSetterFunc)gncOrderSetID },
-    { ORDER_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetReference, (QofSetterFunc)gncOrderSetReference },
-    { ORDER_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncOrderGetOwner, (QofSetterFunc)gncOrderSetOwner },
-    { ORDER_OPENED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateOpened, (QofSetterFunc)gncOrderSetDateOpened },
-    { ORDER_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderIsClosed, NULL },
-    { ORDER_CLOSED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateClosed, (QofSetterFunc)gncOrderSetDateClosed },
-    { ORDER_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetNotes, (QofSetterFunc)gncOrderSetNotes },
-    { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderGetActive, (QofSetterFunc)gncOrderSetActive },
-    { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
-    { NULL },
-  };
+    static QofParam params[] =
+    {
+        { ORDER_ID, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetID, (QofSetterFunc)gncOrderSetID },
+        { ORDER_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetReference, (QofSetterFunc)gncOrderSetReference },
+        { ORDER_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncOrderGetOwner, (QofSetterFunc)gncOrderSetOwner },
+        { ORDER_OPENED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateOpened, (QofSetterFunc)gncOrderSetDateOpened },
+        { ORDER_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderIsClosed, NULL },
+        { ORDER_CLOSED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateClosed, (QofSetterFunc)gncOrderSetDateClosed },
+        { ORDER_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetNotes, (QofSetterFunc)gncOrderSetNotes },
+        { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderGetActive, (QofSetterFunc)gncOrderSetActive },
+        { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+        { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+        { NULL },
+    };
 
-  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncOrderCompare, params);
+    qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncOrderCompare, params);
 
-  return qof_object_register (&gncOrderDesc);
+    return qof_object_register (&gncOrderDesc);
 }
 
 gint64 gncOrderNextID (QofBook *book)
 {
-  return qof_book_get_counter (book, _GNC_MOD_NAME);
+    return qof_book_get_counter (book, _GNC_MOD_NAME);
 }

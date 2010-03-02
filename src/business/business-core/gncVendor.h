@@ -24,7 +24,7 @@
 /** @addtogroup Vendor
     @{ */
 /** @file gncVendor.h
-    @brief  Vendor Interface 
+    @brief  Vendor Interface
     @author Copyright (C) 2001,2002 Derek Atkins <warlord@MIT.EDU>
 */
 
@@ -100,14 +100,14 @@ GncTaxTable* gncVendorGetTaxTable (const GncVendor *vendor);
 
 /** @} */
 /** XXX should be renamed to RetJobList to be consistent with
- * other usage, since caller must free the copied list 
+ * other usage, since caller must free the copied list
  */
 GList * gncVendorGetJoblist (const GncVendor *vendor, gboolean show_all);
 gboolean gncVendorIsDirty (const GncVendor *vendor);
 int gncVendorCompare (const GncVendor *a, const GncVendor *b);
 
 /** Return a pointer to the instance gncVendor that is identified
- *  by the guid, and is residing in the book. Returns NULL if the 
+ *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
  *  Equivalent function prototype is
  *  GncVendor * gncVendorLookup (QofBook *book, const GUID *guid);

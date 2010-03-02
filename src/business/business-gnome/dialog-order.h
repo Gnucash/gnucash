@@ -37,7 +37,7 @@ OrderWindow * gnc_ui_order_new (GncOwner *owner, QofBook *book);
 
 /* Search for orders */
 GNCSearchWindow * gnc_order_search (GncOrder *start, GncOwner *owner,
-				    QofBook *book);
+                                    QofBook *book);
 
 /*
  * These callbacks are for use with the gnc_general_search widget

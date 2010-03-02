@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-page-invoice.h -- 
+/*
+ * gnc-plugin-page-invoice.h --
  *
  * Copyright (C) 2005,2006 David Hampton <hampton@employees.org>
  *
@@ -25,7 +25,7 @@
     @{ */
 /** @addtogroup InvoicePlugin Business Invoice Page
     @{ */
-/** @file gnc-plugin-page-invoice.h 
+/** @file gnc-plugin-page-invoice.h
     @brief  utility functions for the GnuCash UI
     @author Copyright (C) 2005,2006 David Hampton <hampton@employees.org>
 */
@@ -52,12 +52,14 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_INVOICE_NAME "GncPluginPageInvoice"
 
 /* typedefs & structures */
-typedef struct {
-	GncPluginPage gnc_plugin_page;
+typedef struct
+{
+    GncPluginPage gnc_plugin_page;
 } GncPluginPageInvoice;
 
-typedef struct {
-	GncPluginPageClass gnc_plugin_page;
+typedef struct
+{
+    GncPluginPageClass gnc_plugin_page;
 } GncPluginPageInvoiceClass;
 
 /* function prototypes */

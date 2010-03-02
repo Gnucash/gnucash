@@ -54,7 +54,7 @@ GncEntry * gncCloneEntry (GncEntry *from, QofBook *);
  *  gncCloneEntry()) and placed into the book.
  *
  * We called this routine 'Obtain' instead of "Get" to distinguish
- * it from the other Get routines, which work in fundamentally  
+ * it from the other Get routines, which work in fundamentally
  * different ways.
  */
 GncEntry * gncEntryObtainTwin (GncEntry *from, QofBook *book);

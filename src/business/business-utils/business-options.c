@@ -52,40 +52,40 @@
 
 GncTaxTable*
 gnc_option_db_lookup_taxtable_option(GNCOptionDB *odb,
-				     const char *section,
-				     const char *name,
-				     GncTaxTable * default_value)
+                                     const char *section,
+                                     const char *name,
+                                     GncTaxTable * default_value)
 {
-  LOOKUP_OPTION("gnc_option_db_lookup_taxtable_option");
-  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncTaxTable"), 1, 0);
+    LOOKUP_OPTION("gnc_option_db_lookup_taxtable_option");
+    return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncTaxTable"), 1, 0);
 }
 
 GncInvoice*
 gnc_option_db_lookup_invoice_option(GNCOptionDB *odb,
-				    const char *section,
-				    const char *name,
-				    GncInvoice * default_value)
+                                    const char *section,
+                                    const char *name,
+                                    GncInvoice * default_value)
 {
-  LOOKUP_OPTION("gnc_option_db_lookup_invoice_option");
-  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncInvoice"), 1, 0);
+    LOOKUP_OPTION("gnc_option_db_lookup_invoice_option");
+    return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncInvoice"), 1, 0);
 }
 
 GncCustomer*
 gnc_option_db_lookup_customer_option(GNCOptionDB *odb,
-				     const char *section,
-				     const char *name,
-				     GncCustomer * default_value)
+                                     const char *section,
+                                     const char *name,
+                                     GncCustomer * default_value)
 {
-  LOOKUP_OPTION("gnc_option_db_lookup_customer_option");
-  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncCustomer"), 1, 0);
+    LOOKUP_OPTION("gnc_option_db_lookup_customer_option");
+    return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncCustomer"), 1, 0);
 }
 
 GncVendor*
 gnc_option_db_lookup_vendor_option(GNCOptionDB *odb,
-				   const char *section,
-				   const char *name,
-				   GncVendor * default_value)
+                                   const char *section,
+                                   const char *name,
+                                   GncVendor * default_value)
 {
-  LOOKUP_OPTION("gnc_option_db_lookup_vendor_option");
-  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncVendor"), 1, 0);
+    LOOKUP_OPTION("gnc_option_db_lookup_vendor_option");
+    return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncVendor"), 1, 0);
 }

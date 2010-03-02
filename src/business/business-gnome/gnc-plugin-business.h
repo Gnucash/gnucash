@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-business.h -- 
+/*
+ * gnc-plugin-business.h --
  *
  * Copyright (C) 2003 Jan Arne Petersen
  * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
@@ -42,12 +42,14 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_BUSINESS_NAME "gnc-plugin-business"
 
 /* typedefs & structures */
-typedef struct {
-	GncPlugin gnc_plugin;
+typedef struct
+{
+    GncPlugin gnc_plugin;
 } GncPluginBusiness;
 
-typedef struct {
-	GncPluginClass gnc_plugin;
+typedef struct
+{
+    GncPluginClass gnc_plugin;
 } GncPluginBusinessClass;
 
 /* function prototypes */

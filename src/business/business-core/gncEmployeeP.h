@@ -38,7 +38,7 @@ gint64 gncEmployeeNextID (QofBook *book);
  *  employee, placing it in the indicated book.  It copies
  *  the username, address, currency, ccard account, etc.
  *  It also copies (as needed) both parents and children, so that
- *  the parent-child relationship is correctly mirrored in the 
+ *  the parent-child relationship is correctly mirrored in the
  *  clone.
  *  It then adds a pair of 'gemini' kvp pointers so that each copy
  *  can be found from the other.
@@ -52,7 +52,7 @@ GncEmployee * gncCloneEmployee (GncEmployee *from, QofBook *);
  *  gncCloneEmployee()) and placed into the book.
  *
  * We called this routine 'Obtain' instead of "Get" to distinguish
- * it from the other Get routines, which work in fundamentally  
+ * it from the other Get routines, which work in fundamentally
  * different ways.
  */
 GncEmployee * gncEmployeeObtainTwin (GncEmployee *from, QofBook *book);

@@ -61,8 +61,8 @@ const gchar *address_version_string = "2.0.0";
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
 {
-  if (str && strlen(str) > 0)
-    xmlAddChild (ptr, text_to_dom_tree (tag, str));
+    if (str && strlen(str) > 0)
+        xmlAddChild (ptr, text_to_dom_tree (tag, str));
 }
 
 xmlNodePtr
@@ -74,7 +74,7 @@ gnc_address_to_dom_tree (const char *tag, GncAddress *addr)
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST address_version_string);
 
     maybe_add_string (ret, addr_name_string, gncAddressGetName (addr));
-    
+
     maybe_add_string (ret, addr_addr1_string, gncAddressGetAddr1 (addr));
     maybe_add_string (ret, addr_addr2_string, gncAddressGetAddr2 (addr));
     maybe_add_string (ret, addr_addr3_string, gncAddressGetAddr3 (addr));
@@ -91,7 +91,7 @@ gnc_address_to_dom_tree (const char *tag, GncAddress *addr)
 
 struct address_pdata
 {
-  GncAddress *address;
+    GncAddress *address;
 };
 
 static gboolean
@@ -100,11 +100,11 @@ set_string(xmlNodePtr node, GncAddress* addr,
 {
     gchar* txt = dom_tree_to_text(node);
     g_return_val_if_fail(txt, FALSE);
-    
+
     func(addr, txt);
 
     g_free(txt);
-    
+
     return TRUE;
 }
 
@@ -175,10 +175,11 @@ address_email_handler (xmlNodePtr node, gpointer addr_pdata)
 static gboolean
 address_slots_handler (xmlNodePtr node, gpointer addr_pdata)
 {
-  return TRUE;
+    return TRUE;
 }
 
-static struct dom_tree_handler address_handlers_v2[] = {
+static struct dom_tree_handler address_handlers_v2[] =
+{
     { addr_name_string, address_name_handler, 0, 0 },
     { addr_addr1_string, address_addr1_handler, 0, 0 },
     { addr_addr2_string, address_addr2_handler, 0, 0 },
@@ -220,18 +221,19 @@ address_ns(FILE *out)
 void
 gnc_address_xml_initialize (void)
 {
-  static GncXmlDataType_t be_data = {
-    GNC_FILE_BACKEND_VERS,
-    "gnc:Address",
-    NULL,			/* parser_create */
-    NULL,			/* add_item */
-    NULL,			/* get_count */
-    NULL,			/* write */
-    NULL,			/* scrub */
-    address_ns,
-  };
+    static GncXmlDataType_t be_data =
+    {
+        GNC_FILE_BACKEND_VERS,
+        "gnc:Address",
+        NULL,			/* parser_create */
+        NULL,			/* add_item */
+        NULL,			/* get_count */
+        NULL,			/* write */
+        NULL,			/* scrub */
+        address_ns,
+    };
 
-  qof_object_register_backend ("gnc:Address",
-			    GNC_FILE_BACKEND,
-			    &be_data);
+    qof_object_register_backend ("gnc:Address",
+                                 GNC_FILE_BACKEND,
+                                 &be_data);
 }

@@ -33,8 +33,8 @@ typedef struct _payment_window PaymentWindow;
 /* Create a payment window */
 PaymentWindow * gnc_ui_payment_new (GncOwner *owner, QofBook *book);
 PaymentWindow * gnc_ui_payment_new_with_invoice (GncOwner *owner,
-						 QofBook *book,
-						 GncInvoice *invoice);
+        QofBook *book,
+        GncInvoice *invoice);
 
 /* Destroy a payment window */
 void gnc_ui_payment_window_destroy (PaymentWindow *pw);

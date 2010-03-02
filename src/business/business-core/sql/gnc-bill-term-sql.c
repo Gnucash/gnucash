@@ -57,55 +57,65 @@ static void set_invisible( gpointer data, gboolean value );
 
 static GncSqlColumnTableEntry col_table[] =
 {
-	{ "guid",         CT_GUID,        0,                   COL_NNUL|COL_PKEY, "guid" },
-	{ "name",         CT_STRING,      MAX_NAME_LEN,        COL_NNUL,          "name" },
-	{ "description",  CT_STRING,      MAX_DESCRIPTION_LEN, COL_NNUL,          NULL, GNC_BILLTERM_DESC },
-	{ "refcount",     CT_INT,         0,                   COL_NNUL,          NULL, NULL,
-			(QofAccessFunc)gncBillTermGetRefcount,  (QofSetterFunc)gncBillTermSetRefcount },
-	{ "invisible",    CT_BOOLEAN,     0,                   COL_NNUL,          NULL, NULL,
-			(QofAccessFunc)gncBillTermGetInvisible, (QofSetterFunc)set_invisible },
-	{ "parent",       CT_BILLTERMREF, 0,                   0,                 NULL, NULL,
-			(QofAccessFunc)gncBillTermGetParent,    (QofSetterFunc)gncBillTermSetParent },
-	{ "child",        CT_BILLTERMREF, 0,                   0,                 NULL, NULL,
-			(QofAccessFunc)gncBillTermReturnChild,  (QofSetterFunc)gncBillTermSetChild },
-	{ "type",         CT_STRING,      MAX_TYPE_LEN,        COL_NNUL,          NULL, GNC_BILLTERM_TYPE },
-	{ "duedays",      CT_INT,         0,                   0,                 0,    GNC_BILLTERM_DUEDAYS },
-	{ "discountdays", CT_INT,         0,                   0,                 0,    GNC_BILLTERM_DISCDAYS },
-	{ "discount",     CT_NUMERIC,     0,                   0,                 0,    GNC_BILLTERM_DISCOUNT },
-	{ "cutoff",       CT_INT,         0,                   0,                 0,    GNC_BILLTERM_CUTOFF },
-	{ NULL }
+    { "guid",         CT_GUID,        0,                   COL_NNUL | COL_PKEY, "guid" },
+    { "name",         CT_STRING,      MAX_NAME_LEN,        COL_NNUL,          "name" },
+    { "description",  CT_STRING,      MAX_DESCRIPTION_LEN, COL_NNUL,          NULL, GNC_BILLTERM_DESC },
+    {
+        "refcount",     CT_INT,         0,                   COL_NNUL,          NULL, NULL,
+        (QofAccessFunc)gncBillTermGetRefcount,  (QofSetterFunc)gncBillTermSetRefcount
+    },
+    {
+        "invisible",    CT_BOOLEAN,     0,                   COL_NNUL,          NULL, NULL,
+        (QofAccessFunc)gncBillTermGetInvisible, (QofSetterFunc)set_invisible
+    },
+    {
+        "parent",       CT_BILLTERMREF, 0,                   0,                 NULL, NULL,
+        (QofAccessFunc)gncBillTermGetParent,    (QofSetterFunc)gncBillTermSetParent
+    },
+    {
+        "child",        CT_BILLTERMREF, 0,                   0,                 NULL, NULL,
+        (QofAccessFunc)gncBillTermReturnChild,  (QofSetterFunc)gncBillTermSetChild
+    },
+    { "type",         CT_STRING,      MAX_TYPE_LEN,        COL_NNUL,          NULL, GNC_BILLTERM_TYPE },
+    { "duedays",      CT_INT,         0,                   0,                 0,    GNC_BILLTERM_DUEDAYS },
+    { "discountdays", CT_INT,         0,                   0,                 0,    GNC_BILLTERM_DISCDAYS },
+    { "discount",     CT_NUMERIC,     0,                   0,                 0,    GNC_BILLTERM_DISCOUNT },
+    { "cutoff",       CT_INT,         0,                   0,                 0,    GNC_BILLTERM_CUTOFF },
+    { NULL }
 };
 
 static void
 set_invisible( gpointer data, gboolean value )
 {
-	GncBillTerm* term = GNC_BILLTERM(data);
+    GncBillTerm* term = GNC_BILLTERM(data);
 
-	g_return_if_fail( term != NULL );
+    g_return_if_fail( term != NULL );
 
-	if( value ) {
-		gncBillTermMakeInvisible( term );
-	}
+    if ( value )
+    {
+        gncBillTermMakeInvisible( term );
+    }
 }
 
 static GncBillTerm*
 load_single_billterm( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
-	GncBillTerm* pBillTerm;
+    GncBillTerm* pBillTerm;
 
-	g_return_val_if_fail( be != NULL, NULL );
-	g_return_val_if_fail( row != NULL, NULL );
+    g_return_val_if_fail( be != NULL, NULL );
+    g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
     pBillTerm = gncBillTermLookup( be->primary_book, guid );
-    if( pBillTerm == NULL ) {
+    if ( pBillTerm == NULL )
+    {
         pBillTerm = gncBillTermCreate( be->primary_book );
     }
     gnc_sql_load_object( be, row, GNC_ID_BILLTERM, pBillTerm, col_table );
     qof_instance_mark_clean( QOF_INSTANCE(pBillTerm) );
 
-	return pBillTerm;
+    return pBillTerm;
 }
 
 static void
@@ -115,87 +125,96 @@ load_all_billterms( GncSqlBackend* be )
     GncSqlResult* result;
     QofBook* pBook;
 
-	g_return_if_fail( be != NULL );
+    g_return_if_fail( be != NULL );
 
     pBook = be->primary_book;
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
     result = gnc_sql_execute_select_statement( be, stmt );
-	gnc_sql_statement_dispose( stmt );
-    if( result != NULL ) {
-		GncSqlRow* row;
-		GList* list = NULL;
+    gnc_sql_statement_dispose( stmt );
+    if ( result != NULL )
+    {
+        GncSqlRow* row;
+        GList* list = NULL;
 
-		row = gnc_sql_result_get_first_row( result );
-        while( row != NULL ) {
+        row = gnc_sql_result_get_first_row( result );
+        while ( row != NULL )
+        {
             GncBillTerm* pBillTerm = load_single_billterm( be, row );
-			if( pBillTerm != NULL ) {
-				list = g_list_append( list, pBillTerm );
-			}
-			row = gnc_sql_result_get_next_row( result );
-		}
-		gnc_sql_result_dispose( result );
+            if ( pBillTerm != NULL )
+            {
+                list = g_list_append( list, pBillTerm );
+            }
+            row = gnc_sql_result_get_next_row( result );
+        }
+        gnc_sql_result_dispose( result );
 
-		if( list != NULL ) {
-			gnc_sql_slots_load_for_list( be, list );
-		}
+        if ( list != NULL )
+        {
+            gnc_sql_slots_load_for_list( be, list );
+        }
     }
 }
 
 /* ================================================================= */
-typedef struct {
-	GncSqlBackend* be;
-	gboolean is_ok;
+typedef struct
+{
+    GncSqlBackend* be;
+    gboolean is_ok;
 } write_billterms_t;
 
 static void
 do_save_billterm( QofInstance* inst, gpointer p2 )
 {
-	write_billterms_t* data = (write_billterms_t*)p2;
+    write_billterms_t* data = (write_billterms_t*)p2;
 
-	if( data->is_ok ) {
-		data->is_ok = gnc_sql_save_billterm( data->be, inst );
-	}
+    if ( data->is_ok )
+    {
+        data->is_ok = gnc_sql_save_billterm( data->be, inst );
+    }
 }
 
 static gboolean
 write_billterms( GncSqlBackend* be )
 {
-	write_billterms_t data;
+    write_billterms_t data;
 
-	g_return_val_if_fail( be != NULL, FALSE );
+    g_return_val_if_fail( be != NULL, FALSE );
 
-	data.be = be;
-	data.is_ok = TRUE;
+    data.be = be;
+    data.is_ok = TRUE;
     qof_object_foreach( GNC_ID_BILLTERM, be->primary_book, do_save_billterm, &data );
-	return data.is_ok;
+    return data.is_ok;
 }
 
 /* ================================================================= */
 static void
 create_billterm_tables( GncSqlBackend* be )
 {
-	gint version;
+    gint version;
 
-	g_return_if_fail( be != NULL );
+    g_return_if_fail( be != NULL );
 
-	version = gnc_sql_get_table_version( be, TABLE_NAME );
-    if( version == 0 ) {
+    version = gnc_sql_get_table_version( be, TABLE_NAME );
+    if ( version == 0 )
+    {
         gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
-    } else if( version == 1 ) {
-		/* Upgrade 64 bit int handling */
-		gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
-		gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
-	}
+    }
+    else if ( version == 1 )
+    {
+        /* Upgrade 64 bit int handling */
+        gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
+        gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
+    }
 }
 
 /* ================================================================= */
 gboolean
 gnc_sql_save_billterm( GncSqlBackend* be, QofInstance* inst )
 {
-	g_return_val_if_fail( inst != NULL, FALSE );
-	g_return_val_if_fail( GNC_IS_BILLTERM(inst), FALSE );
-	g_return_val_if_fail( be != NULL, FALSE );
+    g_return_val_if_fail( inst != NULL, FALSE );
+    g_return_val_if_fail( GNC_IS_BILLTERM(inst), FALSE );
+    g_return_val_if_fail( be != NULL, FALSE );
 
     return gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_BILLTERM, col_table );
 }
@@ -203,39 +222,47 @@ gnc_sql_save_billterm( GncSqlBackend* be, QofInstance* inst )
 /* ================================================================= */
 static void
 load_billterm_guid( const GncSqlBackend* be, GncSqlRow* row,
-            QofSetterFunc setter, gpointer pObject,
-            const GncSqlColumnTableEntry* table_row )
+                    QofSetterFunc setter, gpointer pObject,
+                    const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     GUID guid;
-	GncBillTerm* term = NULL;
+    GncBillTerm* term = NULL;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( row != NULL );
-	g_return_if_fail( pObject != NULL );
-	g_return_if_fail( table_row != NULL );
+    g_return_if_fail( be != NULL );
+    g_return_if_fail( row != NULL );
+    g_return_if_fail( pObject != NULL );
+    g_return_if_fail( table_row != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
-    if( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL ) {
+    if ( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL )
+    {
         string_to_guid( g_value_get_string( val ), &guid );
-		term = gncBillTermLookup( be->primary_book, &guid );
-		if( term != NULL ) {
-        	if( table_row->gobj_param_name != NULL ) {
-		    	g_object_set( pObject, table_row->gobj_param_name, term, NULL );
-        	} else {
-		    	(*setter)( pObject, (const gpointer)term );
-        	}
-		} else {
-	    	PWARN( "Billterm ref '%s' not found", g_value_get_string( val ) );
-		}
-	}
+        term = gncBillTermLookup( be->primary_book, &guid );
+        if ( term != NULL )
+        {
+            if ( table_row->gobj_param_name != NULL )
+            {
+                g_object_set( pObject, table_row->gobj_param_name, term, NULL );
+            }
+            else
+            {
+                (*setter)( pObject, (const gpointer)term );
+            }
+        }
+        else
+        {
+            PWARN( "Billterm ref '%s' not found", g_value_get_string( val ) );
+        }
+    }
 }
 
 static GncSqlColumnTypeHandler billterm_guid_handler
-	= { load_billterm_guid,
-		gnc_sql_add_objectref_guid_col_info_to_list,
-		gnc_sql_add_colname_to_list,
-		gnc_sql_add_gvalue_objectref_guid_to_slist };
+= { load_billterm_guid,
+    gnc_sql_add_objectref_guid_col_info_to_list,
+    gnc_sql_add_colname_to_list,
+    gnc_sql_add_gvalue_objectref_guid_to_slist
+  };
 /* ================================================================= */
 void
 gnc_billterm_sql_initialize( void )
@@ -247,12 +274,12 @@ gnc_billterm_sql_initialize( void )
         gnc_sql_save_billterm,				/* commit */
         load_all_billterms,					/* initial_load */
         create_billterm_tables,				/* create_tables */
-		NULL, NULL, NULL,
-		write_billterms						/* write */
+        NULL, NULL, NULL,
+        write_billterms						/* write */
     };
 
     qof_object_register_backend( GNC_ID_BILLTERM, GNC_SQL_BACKEND, &be_data );
 
-	gnc_sql_register_col_type_handler( CT_BILLTERMREF, &billterm_guid_handler );
+    gnc_sql_register_col_type_handler( CT_BILLTERMREF, &billterm_guid_handler );
 }
 /* ========================== END OF FILE ===================== */

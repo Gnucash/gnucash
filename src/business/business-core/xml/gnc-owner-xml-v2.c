@@ -61,22 +61,23 @@ gnc_owner_to_dom_tree (const char *tag, GncOwner *owner)
     xmlNodePtr ret;
     const char *type_str;
 
-    switch (gncOwnerGetType (owner)) {
+    switch (gncOwnerGetType (owner))
+    {
     case GNC_OWNER_CUSTOMER:
-      type_str = GNC_ID_CUSTOMER;
-      break;
+        type_str = GNC_ID_CUSTOMER;
+        break;
     case GNC_OWNER_JOB:
-      type_str = GNC_ID_JOB;
-      break;
+        type_str = GNC_ID_JOB;
+        break;
     case GNC_OWNER_VENDOR:
-      type_str = GNC_ID_VENDOR;
-      break;
+        type_str = GNC_ID_VENDOR;
+        break;
     case GNC_OWNER_EMPLOYEE:
-      type_str = GNC_ID_EMPLOYEE;
-      break;
+        type_str = GNC_ID_EMPLOYEE;
+        break;
     default:
-      PWARN ("Invalid owner type: %d", gncOwnerGetType (owner));
-      return NULL;
+        PWARN ("Invalid owner type: %d", gncOwnerGetType (owner));
+        return NULL;
     }
 
     ret = xmlNewNode(NULL, BAD_CAST tag);
@@ -84,7 +85,7 @@ gnc_owner_to_dom_tree (const char *tag, GncOwner *owner)
 
     xmlAddChild (ret, text_to_dom_tree (owner_type_string, type_str));
     xmlAddChild (ret, guid_to_dom_tree (owner_id_string,
-					gncOwnerGetGUID (owner)));
+                                        gncOwnerGetGUID (owner)));
 
     return ret;
 }
@@ -93,96 +94,103 @@ gnc_owner_to_dom_tree (const char *tag, GncOwner *owner)
 
 struct owner_pdata
 {
-  GncOwner *owner;
-  QofBook *book;
+    GncOwner *owner;
+    QofBook *book;
 };
 
 static gboolean
 owner_type_handler (xmlNodePtr node, gpointer owner_pdata)
 {
-  struct owner_pdata *pdata = owner_pdata;
-  char* txt = dom_tree_to_text(node);
-  g_return_val_if_fail(txt, FALSE);
+    struct owner_pdata *pdata = owner_pdata;
+    char* txt = dom_tree_to_text(node);
+    g_return_val_if_fail(txt, FALSE);
 
-  if (!safe_strcmp (txt, GNC_ID_CUSTOMER))
-    gncOwnerInitCustomer (pdata->owner, NULL);
-  else if (!safe_strcmp (txt, GNC_ID_JOB))
-    gncOwnerInitJob (pdata->owner, NULL);
-  else if (!safe_strcmp (txt, GNC_ID_VENDOR))
-    gncOwnerInitVendor (pdata->owner, NULL);
-  else if (!safe_strcmp (txt, GNC_ID_EMPLOYEE))
-    gncOwnerInitEmployee (pdata->owner, NULL);
-  else {
-    PWARN ("Unknown owner type: %s", txt);
+    if (!safe_strcmp (txt, GNC_ID_CUSTOMER))
+        gncOwnerInitCustomer (pdata->owner, NULL);
+    else if (!safe_strcmp (txt, GNC_ID_JOB))
+        gncOwnerInitJob (pdata->owner, NULL);
+    else if (!safe_strcmp (txt, GNC_ID_VENDOR))
+        gncOwnerInitVendor (pdata->owner, NULL);
+    else if (!safe_strcmp (txt, GNC_ID_EMPLOYEE))
+        gncOwnerInitEmployee (pdata->owner, NULL);
+    else
+    {
+        PWARN ("Unknown owner type: %s", txt);
+        g_free(txt);
+        return FALSE;
+    }
+
     g_free(txt);
-    return FALSE;
-  }
-
-  g_free(txt);
-  return TRUE;
+    return TRUE;
 }
 
 static gboolean
 owner_id_handler (xmlNodePtr node, gpointer owner_pdata)
 {
-  struct owner_pdata *pdata = owner_pdata;
-  GUID *guid;
+    struct owner_pdata *pdata = owner_pdata;
+    GUID *guid;
 
-  guid = dom_tree_to_guid(node);
-  g_return_val_if_fail (guid, FALSE);
+    guid = dom_tree_to_guid(node);
+    g_return_val_if_fail (guid, FALSE);
 
-  switch (gncOwnerGetType (pdata->owner)) {
-  case GNC_OWNER_CUSTOMER:
-  {
-    GncCustomer *cust = gncCustomerLookup (pdata->book, guid);
-    if (!cust) {
-      cust = gncCustomerCreate (pdata->book);
-      gncCustomerSetGUID (cust, guid);
+    switch (gncOwnerGetType (pdata->owner))
+    {
+    case GNC_OWNER_CUSTOMER:
+    {
+        GncCustomer *cust = gncCustomerLookup (pdata->book, guid);
+        if (!cust)
+        {
+            cust = gncCustomerCreate (pdata->book);
+            gncCustomerSetGUID (cust, guid);
+        }
+        gncOwnerInitCustomer (pdata->owner, cust);
+        break;
     }
-    gncOwnerInitCustomer (pdata->owner, cust);
-    break; 
-  }
-  case GNC_OWNER_JOB:
-  {
-    GncJob *job = gncJobLookup (pdata->book, guid);
-    if (!job) {
-      job = gncJobCreate (pdata->book);
-      gncJobSetGUID (job, guid);
+    case GNC_OWNER_JOB:
+    {
+        GncJob *job = gncJobLookup (pdata->book, guid);
+        if (!job)
+        {
+            job = gncJobCreate (pdata->book);
+            gncJobSetGUID (job, guid);
+        }
+        gncOwnerInitJob (pdata->owner, job);
+        break;
     }
-    gncOwnerInitJob (pdata->owner, job);
-    break; 
-  }
-  case GNC_OWNER_VENDOR:
-  {
-    GncVendor *vendor = gncVendorLookup (pdata->book, guid);
-    if (!vendor) {
-      vendor = gncVendorCreate (pdata->book);
-      gncVendorSetGUID (vendor, guid);
+    case GNC_OWNER_VENDOR:
+    {
+        GncVendor *vendor = gncVendorLookup (pdata->book, guid);
+        if (!vendor)
+        {
+            vendor = gncVendorCreate (pdata->book);
+            gncVendorSetGUID (vendor, guid);
+        }
+        gncOwnerInitVendor (pdata->owner, vendor);
+        break;
     }
-    gncOwnerInitVendor (pdata->owner, vendor);
-    break; 
-  }
-  case GNC_OWNER_EMPLOYEE:
-  {
-    GncEmployee *employee = gncEmployeeLookup (pdata->book, guid);
-    if (!employee) {
-      employee = gncEmployeeCreate (pdata->book);
-      gncEmployeeSetGUID (employee, guid);
+    case GNC_OWNER_EMPLOYEE:
+    {
+        GncEmployee *employee = gncEmployeeLookup (pdata->book, guid);
+        if (!employee)
+        {
+            employee = gncEmployeeCreate (pdata->book);
+            gncEmployeeSetGUID (employee, guid);
+        }
+        gncOwnerInitEmployee (pdata->owner, employee);
+        break;
     }
-    gncOwnerInitEmployee (pdata->owner, employee);
-    break; 
-  }
-  default:
-    PWARN ("Invalid owner type: %d\n", gncOwnerGetType (pdata->owner));
+    default:
+        PWARN ("Invalid owner type: %d\n", gncOwnerGetType (pdata->owner));
+        g_free (guid);
+        return FALSE;
+    }
+
     g_free (guid);
-    return FALSE;
-  }
-
-  g_free (guid);
-  return TRUE;
+    return TRUE;
 }
 
-static struct dom_tree_handler owner_handlers_v2[] = {
+static struct dom_tree_handler owner_handlers_v2[] =
+{
     { owner_type_string, owner_type_handler, 1, 0 },
     { owner_id_string, owner_id_handler, 1, 0 },
     { NULL, 0, 0, 0 }
@@ -211,25 +219,26 @@ gnc_dom_tree_to_owner (xmlNodePtr node, GncOwner *owner, QofBook *book)
 static gboolean
 owner_ns(FILE *out)
 {
-  g_return_val_if_fail(out, FALSE);
-  return gnc_xml2_write_namespace_decl(out, "owner");
+    g_return_val_if_fail(out, FALSE);
+    return gnc_xml2_write_namespace_decl(out, "owner");
 }
 
 void
 gnc_owner_xml_initialize (void)
 {
-  static GncXmlDataType_t be_data = {
-    GNC_FILE_BACKEND_VERS,
-    "gnc:Owner",
-    NULL,			/* parser_create */
-    NULL,			/* add_item */
-    NULL,			/* get_count */
-    NULL,			/* write */
-    NULL,			/* scrub */
-    owner_ns,
-  };
+    static GncXmlDataType_t be_data =
+    {
+        GNC_FILE_BACKEND_VERS,
+        "gnc:Owner",
+        NULL,			/* parser_create */
+        NULL,			/* add_item */
+        NULL,			/* get_count */
+        NULL,			/* write */
+        NULL,			/* scrub */
+        owner_ns,
+    };
 
-  qof_object_register_backend ("gnc:Owner",
-			    GNC_FILE_BACKEND,
-			    &be_data);
+    qof_object_register_backend ("gnc:Owner",
+                                 GNC_FILE_BACKEND,
+                                 &be_data);
 }

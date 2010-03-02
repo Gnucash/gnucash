@@ -49,7 +49,7 @@ GncOrder * gncCloneOrder (GncOrder *from, QofBook *);
  *  gncCloneOrder()) and placed into the book.
  *
  * We called this routine 'Obtain' instead of "Get" to distinguish
- * it from the other Get routines, which work in fundamentally  
+ * it from the other Get routines, which work in fundamentally
  * different ways.
  */
 GncOrder * gncOrderObtainTwin (GncOrder *from, QofBook *book);

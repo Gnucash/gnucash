@@ -48,7 +48,7 @@ GncVendor * gncCloneVendor (GncVendor *from, QofBook *);
  *  gncCloneVendor()) and placed into the book.
  *
  * We called this routine 'Obtain' instead of "Get" to distinguish
- * it from the other Get routines, which work in fundamentally  
+ * it from the other Get routines, which work in fundamentally
  * different ways.
  */
 GncVendor * gncVendorObtainTwin (GncVendor *from, QofBook *book);

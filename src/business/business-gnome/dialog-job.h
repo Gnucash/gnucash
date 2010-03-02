@@ -38,7 +38,7 @@ JobWindow * gnc_ui_job_new (GncOwner *owner, QofBook *book);
 
 /* Search for Jobs */
 GNCSearchWindow * gnc_job_search (GncJob *start, GncOwner *owner,
-				  QofBook *book);
+                                  QofBook *book);
 
 /*
  * These callbacks are for use with the gnc_general_search widget

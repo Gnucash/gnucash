@@ -93,7 +93,7 @@ typedef struct _gncAddressClass GncAddressClass;
      (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_ADDRESS, GncAddressClass))
 GType gnc_address_get_type(void);
 
-/** @name Create/Destroy functions 
+/** @name Create/Destroy functions
  @{ */
 GncAddress *gncAddressCreate (QofBook *book, QofInstance *parent);
 void gncAddressDestroy (GncAddress *addr);
@@ -102,7 +102,7 @@ void gncAddressCommitEdit (GncAddress *addr);
 
 /** @} */
 
-/** @name Set functions 
+/** @name Set functions
  @{ */
 
 void gncAddressSetName (GncAddress *addr, const char *name);
@@ -116,7 +116,7 @@ void gncAddressSetEmail (GncAddress *addr, const char *email);
 void gncAddressClearDirty (GncAddress *address);
 /** @} */
 
-/** @name Get Functions 
+/** @name Get Functions
  @{ */
 
 const char * gncAddressGetName (const GncAddress *addr);
@@ -131,10 +131,10 @@ const char * gncAddressGetEmail (const GncAddress *addr);
 
 gboolean gncAddressIsDirty (const GncAddress *addr);
 
-/** \brief compare two addresses 
+/** \brief compare two addresses
 
-\return 0 if identical, -1 if a is empty or less than b 
-and +1 if a is more than b or if b is empty. 
+\return 0 if identical, -1 if a is empty or less than b
+and +1 if a is more than b or if b is empty.
 */
 int gncAddressCompare (const GncAddress *a, const GncAddress *b);
 

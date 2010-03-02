@@ -75,15 +75,15 @@ const gchar *invoice_version_string = "2.0.0";
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
 {
-  if (str && strlen(str) > 0)
-    xmlAddChild (ptr, text_to_dom_tree (tag, str));
+    if (str && strlen(str) > 0)
+        xmlAddChild (ptr, text_to_dom_tree (tag, str));
 }
 
 static void
 maybe_add_timespec (xmlNodePtr ptr, const char *tag, Timespec ts)
 {
-  if (ts.tv_sec || ts.tv_nsec)
-    xmlAddChild (ptr, timespec_to_dom_tree (tag, &ts));
+    if (ts.tv_sec || ts.tv_nsec)
+        xmlAddChild (ptr, timespec_to_dom_tree (tag, &ts));
 }
 
 static xmlNodePtr
@@ -102,59 +102,59 @@ invoice_dom_tree_create (GncInvoice *invoice)
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST invoice_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(invoice_guid_string,
-				      qof_instance_get_guid(QOF_INSTANCE(invoice))));
+                                      qof_instance_get_guid(QOF_INSTANCE(invoice))));
 
     xmlAddChild(ret, text_to_dom_tree(invoice_id_string,
                                       gncInvoiceGetID (invoice)));
 
     xmlAddChild(ret, gnc_owner_to_dom_tree (invoice_owner_string,
-					    gncInvoiceGetOwner (invoice)));
+                                            gncInvoiceGetOwner (invoice)));
 
     ts = gncInvoiceGetDateOpened (invoice);
     xmlAddChild(ret, timespec_to_dom_tree (invoice_opened_string, &ts));
 
     maybe_add_timespec (ret, invoice_posted_string,
-			gncInvoiceGetDatePosted (invoice));
-    
+                        gncInvoiceGetDatePosted (invoice));
+
     term = gncInvoiceGetTerms (invoice);
     if (term)
-      xmlAddChild(ret, guid_to_dom_tree(invoice_terms_string,
-					qof_instance_get_guid (QOF_INSTANCE(term))));
-      
+        xmlAddChild(ret, guid_to_dom_tree(invoice_terms_string,
+                                          qof_instance_get_guid (QOF_INSTANCE(term))));
+
     maybe_add_string (ret, invoice_billing_id_string,
-		      gncInvoiceGetBillingID (invoice));
+                      gncInvoiceGetBillingID (invoice));
     maybe_add_string (ret, invoice_notes_string, gncInvoiceGetNotes (invoice));
 
     xmlAddChild(ret, int_to_dom_tree(invoice_active_string,
-				     gncInvoiceGetActive (invoice)));
+                                     gncInvoiceGetActive (invoice)));
 
     txn = gncInvoiceGetPostedTxn (invoice);
     if (txn)
-      xmlAddChild (ret, guid_to_dom_tree (invoice_posttxn_string,
-					  xaccTransGetGUID (txn)));
+        xmlAddChild (ret, guid_to_dom_tree (invoice_posttxn_string,
+                                            xaccTransGetGUID (txn)));
 
     lot = gncInvoiceGetPostedLot (invoice);
     if (lot)
-      xmlAddChild (ret, guid_to_dom_tree (invoice_postlot_string,
-					  gnc_lot_get_guid (lot)));
+        xmlAddChild (ret, guid_to_dom_tree (invoice_postlot_string,
+                                            gnc_lot_get_guid (lot)));
 
     acc = gncInvoiceGetPostedAcc (invoice);
     if (acc)
-      xmlAddChild (ret, guid_to_dom_tree (invoice_postacc_string,
-					  qof_instance_get_guid(QOF_INSTANCE(acc))));
+        xmlAddChild (ret, guid_to_dom_tree (invoice_postacc_string,
+                                            qof_instance_get_guid(QOF_INSTANCE(acc))));
 
     xmlAddChild
-      (ret,
-       commodity_ref_to_dom_tree(invoice_currency_string,
-				 gncInvoiceGetCurrency (invoice)));
+    (ret,
+     commodity_ref_to_dom_tree(invoice_currency_string,
+                               gncInvoiceGetCurrency (invoice)));
 
     billto = gncInvoiceGetBillTo (invoice);
     if (billto && billto->owner.undefined != NULL)
-      xmlAddChild (ret, gnc_owner_to_dom_tree (invoice_billto_string, billto));
+        xmlAddChild (ret, gnc_owner_to_dom_tree (invoice_billto_string, billto));
 
     amt = gncInvoiceGetToChargeAmount (invoice);
     if (! gnc_numeric_zero_p (amt))
-      xmlAddChild (ret, gnc_numeric_to_dom_tree (invoice_tochargeamt_string, &amt));
+        xmlAddChild (ret, gnc_numeric_to_dom_tree (invoice_tochargeamt_string, &amt));
 
     return ret;
 }
@@ -163,32 +163,32 @@ invoice_dom_tree_create (GncInvoice *invoice)
 
 struct invoice_pdata
 {
-  GncInvoice *invoice;
-  QofBook *book;
+    GncInvoice *invoice;
+    QofBook *book;
 };
 
 static inline gboolean
 set_string(xmlNodePtr node, GncInvoice* invoice,
            void (*func)(GncInvoice *invoice, const char *txt))
 {
-  char* txt = dom_tree_to_text(node);
-  g_return_val_if_fail(txt, FALSE);
-    
-  func(invoice, txt);
-  
-  g_free(txt);
-  return TRUE;
+    char* txt = dom_tree_to_text(node);
+    g_return_val_if_fail(txt, FALSE);
+
+    func(invoice, txt);
+
+    g_free(txt);
+    return TRUE;
 }
 
 static inline gboolean
 set_timespec(xmlNodePtr node, GncInvoice* invoice,
-           void (*func)(GncInvoice *invoice, Timespec ts))
+             void (*func)(GncInvoice *invoice, Timespec ts))
 {
-  Timespec ts = dom_tree_to_timespec(node);
-  if (!dom_tree_valid_timespec(&ts, node->name)) return FALSE;
-    
-  func(invoice, ts);
-  return TRUE;
+    Timespec ts = dom_tree_to_timespec(node);
+    if (!dom_tree_valid_timespec(&ts, node->name)) return FALSE;
+
+    func(invoice, ts);
+    return TRUE;
 }
 
 static gboolean
@@ -201,16 +201,19 @@ invoice_guid_handler (xmlNodePtr node, gpointer invoice_pdata)
     guid = dom_tree_to_guid(node);
     g_return_val_if_fail (guid, FALSE);
     invoice = gncInvoiceLookup (pdata->book, guid);
-    if (invoice) {
-      gncInvoiceDestroy (pdata->invoice);
-      pdata->invoice = invoice;
-      gncInvoiceBeginEdit (invoice);
-    } else {
-      gncInvoiceSetGUID(pdata->invoice, guid);
+    if (invoice)
+    {
+        gncInvoiceDestroy (pdata->invoice);
+        pdata->invoice = invoice;
+        gncInvoiceBeginEdit (invoice);
+    }
+    else
+    {
+        gncInvoiceSetGUID(pdata->invoice, guid);
     }
 
     g_free(guid);
-    
+
     return TRUE;
 }
 
@@ -225,15 +228,15 @@ invoice_id_handler (xmlNodePtr node, gpointer invoice_pdata)
 static gboolean
 invoice_owner_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
-  struct invoice_pdata *pdata = invoice_pdata;
-  GncOwner owner;
-  gboolean ret;
+    struct invoice_pdata *pdata = invoice_pdata;
+    GncOwner owner;
+    gboolean ret;
 
-  ret = gnc_dom_tree_to_owner (node, &owner, pdata->book);
-  if (ret)
-    gncInvoiceSetOwner (pdata->invoice, &owner);
+    ret = gnc_dom_tree_to_owner (node, &owner, pdata->book);
+    if (ret)
+        gncInvoiceSetOwner (pdata->invoice, &owner);
 
-  return ret;
+    return ret;
 }
 
 static gboolean
@@ -277,7 +280,7 @@ invoice_active_handler (xmlNodePtr node, gpointer invoice_pdata)
 
     ret = dom_tree_to_integer(node, &val);
     if (ret)
-      gncInvoiceSetActive(pdata->invoice, (gboolean)val);
+        gncInvoiceSetActive(pdata->invoice, (gboolean)val);
 
     return ret;
 }
@@ -295,7 +298,7 @@ invoice_terms_handler (xmlNodePtr node, gpointer invoice_pdata)
     g_assert(term);
     g_free (guid);
     gncInvoiceSetTerms (pdata->invoice, term);
-    
+
     return TRUE;
 }
 
@@ -367,36 +370,37 @@ invoice_currency_handler (xmlNodePtr node, gpointer invoice_pdata)
 static gboolean
 invoice_billto_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
-  struct invoice_pdata *pdata = invoice_pdata;
-  GncOwner owner;
-  gboolean ret;
+    struct invoice_pdata *pdata = invoice_pdata;
+    GncOwner owner;
+    gboolean ret;
 
-  ret = gnc_dom_tree_to_owner (node, &owner, pdata->book);
-  if (ret)
-    gncInvoiceSetBillTo (pdata->invoice, &owner);
+    ret = gnc_dom_tree_to_owner (node, &owner, pdata->book);
+    if (ret)
+        gncInvoiceSetBillTo (pdata->invoice, &owner);
 
-  return ret;
+    return ret;
 }
 
 static gboolean
 invoice_tochargeamt_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
-  struct invoice_pdata *pdata = invoice_pdata;
-  gnc_numeric* num = dom_tree_to_gnc_numeric(node);
-  g_return_val_if_fail(num, FALSE);
-    
-  gncInvoiceSetToChargeAmount (pdata->invoice, *num);
-  g_free(num);
-  return TRUE;
+    struct invoice_pdata *pdata = invoice_pdata;
+    gnc_numeric* num = dom_tree_to_gnc_numeric(node);
+    g_return_val_if_fail(num, FALSE);
+
+    gncInvoiceSetToChargeAmount (pdata->invoice, *num);
+    g_free(num);
+    return TRUE;
 }
 
 static gboolean
 invoice_slots_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
-  return TRUE;
+    return TRUE;
 }
 
-static struct dom_tree_handler invoice_handlers_v2[] = {
+static struct dom_tree_handler invoice_handlers_v2[] =
+{
     { invoice_guid_string, invoice_guid_handler, 1, 0 },
     { invoice_id_string, invoice_id_handler, 1, 0 },
     { invoice_owner_string, invoice_owner_handler, 1, 0 },
@@ -431,7 +435,7 @@ dom_tree_to_invoice (xmlNodePtr node, QofBook *book)
                                          &invoice_pdata);
 
     if (successful)
-      gncInvoiceCommitEdit (invoice_pdata.invoice);
+        gncInvoiceCommitEdit (invoice_pdata.invoice);
     else
     {
         PERR ("failed to parse invoice tree");
@@ -444,9 +448,9 @@ dom_tree_to_invoice (xmlNodePtr node, QofBook *book)
 
 static gboolean
 gnc_invoice_end_handler(gpointer data_for_children,
-			 GSList* data_from_children, GSList* sibling_data,
-			 gpointer parent_data, gpointer global_data,
-			 gpointer *result, const gchar *tag)
+                        GSList* data_from_children, GSList* sibling_data,
+                        gpointer parent_data, gpointer global_data,
+                        gpointer *result, const gchar *tag)
 {
     int successful;
     GncInvoice *invoice;
@@ -456,14 +460,14 @@ gnc_invoice_end_handler(gpointer data_for_children,
 
     successful = TRUE;
 
-    if(parent_data)
+    if (parent_data)
     {
         return TRUE;
     }
 
     /* OK.  For some messed up reason this is getting called again with a
        NULL tag.  So we ignore those cases */
-    if(!tag)
+    if (!tag)
     {
         return TRUE;
     }
@@ -471,7 +475,7 @@ gnc_invoice_end_handler(gpointer data_for_children,
     g_return_val_if_fail(tree, FALSE);
 
     invoice = dom_tree_to_invoice(tree, book);
-    if(invoice != NULL)
+    if (invoice != NULL)
     {
         gdata->cb(tag, gdata->parsedata, invoice);
     }
@@ -484,86 +488,87 @@ gnc_invoice_end_handler(gpointer data_for_children,
 static sixtp *
 invoice_sixtp_parser_create(void)
 {
-  return sixtp_dom_parser_new(gnc_invoice_end_handler, NULL, NULL);
+    return sixtp_dom_parser_new(gnc_invoice_end_handler, NULL, NULL);
 }
 
 static gboolean
 invoice_should_be_saved (GncInvoice *invoice)
 {
-  const char *id;
+    const char *id;
 
-  /* make sure this is a valid invoice before we save it -- should have an ID */
-  id = gncInvoiceGetID (invoice);
-  if (id == NULL || *id == '\0')
-    return FALSE;
+    /* make sure this is a valid invoice before we save it -- should have an ID */
+    id = gncInvoiceGetID (invoice);
+    if (id == NULL || *id == '\0')
+        return FALSE;
 
-  return TRUE;
+    return TRUE;
 }
 
 static void
 do_count (QofInstance * invoice_p, gpointer count_p)
 {
-  int *count = count_p;
-  if (invoice_should_be_saved ((GncInvoice *)invoice_p))
-    (*count)++;
+    int *count = count_p;
+    if (invoice_should_be_saved ((GncInvoice *)invoice_p))
+        (*count)++;
 }
 
 static int
 invoice_get_count (QofBook *book)
 {
-  int count = 0;
-  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
-  return count;
+    int count = 0;
+    qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+    return count;
 }
 
 static void
 xml_add_invoice (QofInstance * invoice_p, gpointer out_p)
 {
-  xmlNodePtr node;
-  GncInvoice *invoice = (GncInvoice *) invoice_p;
-  FILE *out = out_p;
+    xmlNodePtr node;
+    GncInvoice *invoice = (GncInvoice *) invoice_p;
+    FILE *out = out_p;
 
-  if (ferror(out))
-    return;
-  if (!invoice_should_be_saved (invoice))
-    return;
+    if (ferror(out))
+        return;
+    if (!invoice_should_be_saved (invoice))
+        return;
 
-  node = invoice_dom_tree_create (invoice);
-  xmlElemDump(out, NULL, node);
-  xmlFreeNode (node);
-  if (ferror(out) || fprintf(out, "\n") < 0)
-    return;
+    node = invoice_dom_tree_create (invoice);
+    xmlElemDump(out, NULL, node);
+    xmlFreeNode (node);
+    if (ferror(out) || fprintf(out, "\n") < 0)
+        return;
 }
 
 static gboolean
 invoice_write (FILE *out, QofBook *book)
 {
-  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_invoice, (gpointer) out);
-  return ferror(out) == 0;
+    qof_object_foreach (_GNC_MOD_NAME, book, xml_add_invoice, (gpointer) out);
+    return ferror(out) == 0;
 }
 
 static gboolean
 invoice_ns(FILE *out)
 {
-  g_return_val_if_fail(out, FALSE);
-  return gnc_xml2_write_namespace_decl(out, "invoice");
+    g_return_val_if_fail(out, FALSE);
+    return gnc_xml2_write_namespace_decl(out, "invoice");
 }
 
 void
 gnc_invoice_xml_initialize (void)
 {
-  static GncXmlDataType_t be_data = {
-    GNC_FILE_BACKEND_VERS,
-    gnc_invoice_string,
-    invoice_sixtp_parser_create,
-    NULL,			/* add_item */
-    invoice_get_count,
-    invoice_write,
-    NULL,			/* scrub */
-    invoice_ns,
-  };
+    static GncXmlDataType_t be_data =
+    {
+        GNC_FILE_BACKEND_VERS,
+        gnc_invoice_string,
+        invoice_sixtp_parser_create,
+        NULL,			/* add_item */
+        invoice_get_count,
+        invoice_write,
+        NULL,			/* scrub */
+        invoice_ns,
+    };
 
-  qof_object_register_backend (_GNC_MOD_NAME,
-			    GNC_FILE_BACKEND,
-			    &be_data);
+    qof_object_register_backend (_GNC_MOD_NAME,
+                                 GNC_FILE_BACKEND,
+                                 &be_data);
 }

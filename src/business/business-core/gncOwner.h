@@ -42,16 +42,17 @@ typedef struct _gncOwner GncOwner;
 #include "gncJob.h"
 #include "gncVendor.h"
 #include "gncEmployee.h"
-#include "gnc-lot.h" 
+#include "gnc-lot.h"
 
-typedef enum { 
-	GNC_OWNER_NONE , 
-	GNC_OWNER_UNDEFINED , 
-	GNC_OWNER_CUSTOMER , 
-	GNC_OWNER_JOB , 
-	GNC_OWNER_VENDOR , 
-	GNC_OWNER_EMPLOYEE , 
-}GncOwnerType;
+typedef enum
+{
+    GNC_OWNER_NONE ,
+    GNC_OWNER_UNDEFINED ,
+    GNC_OWNER_CUSTOMER ,
+    GNC_OWNER_JOB ,
+    GNC_OWNER_VENDOR ,
+    GNC_OWNER_EMPLOYEE ,
+} GncOwnerType;
 
 /** \name QOF handling
 
@@ -75,16 +76,18 @@ gncOwnerRegister(void);
 #ifndef SWIG
 
 /** \struct GncOwner */
-struct _gncOwner {
-  GncOwnerType     type;      /**< Customer, Job, Vendor, Employee or Undefined. */
-  union {
-    gpointer       undefined;
-    GncCustomer *  customer;
-    GncJob *       job;
-    GncVendor *    vendor;
-    GncEmployee *  employee;
-  } owner;                   /**< holds the pointer to the owner object. */
-  gpointer         qof_temp; /**< Set type independently of the owner. */
+struct _gncOwner
+{
+    GncOwnerType     type;      /**< Customer, Job, Vendor, Employee or Undefined. */
+    union
+    {
+        gpointer       undefined;
+        GncCustomer *  customer;
+        GncJob *       job;
+        GncVendor *    vendor;
+        GncEmployee *  employee;
+    } owner;                   /**< holds the pointer to the owner object. */
+    gpointer         qof_temp; /**< Set type independently of the owner. */
 };
 
 #endif /* SWIG */

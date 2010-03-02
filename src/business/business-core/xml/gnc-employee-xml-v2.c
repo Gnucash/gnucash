@@ -69,8 +69,8 @@ const gchar *employee_version_string = "2.0.0";
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
 {
-  if (str && strlen(str) > 0)
-    xmlAddChild (ptr, text_to_dom_tree (tag, str));
+    if (str && strlen(str) > 0)
+        xmlAddChild (ptr, text_to_dom_tree (tag, str));
 }
 
 static xmlNodePtr
@@ -84,23 +84,23 @@ employee_dom_tree_create (GncEmployee *employee)
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST employee_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(employee_guid_string,
-				      qof_instance_get_guid(QOF_INSTANCE (employee))));
+                                      qof_instance_get_guid(QOF_INSTANCE (employee))));
 
     xmlAddChild(ret, text_to_dom_tree(employee_username_string,
                                       gncEmployeeGetUsername (employee)));
-    
+
     xmlAddChild(ret, text_to_dom_tree(employee_id_string,
                                       gncEmployeeGetID (employee)));
 
     xmlAddChild(ret, gnc_address_to_dom_tree(employee_addr_string,
-					     gncEmployeeGetAddr (employee)));
-    
+                gncEmployeeGetAddr (employee)));
+
     maybe_add_string (ret, employee_language_string,
-		      gncEmployeeGetLanguage (employee));
+                      gncEmployeeGetLanguage (employee));
     maybe_add_string (ret, employee_acl_string, gncEmployeeGetAcl (employee));
 
     xmlAddChild(ret, int_to_dom_tree(employee_active_string,
-				     gncEmployeeGetActive (employee)));
+                                     gncEmployeeGetActive (employee)));
 
     num = gncEmployeeGetWorkday (employee);
     xmlAddChild(ret, gnc_numeric_to_dom_tree (employee_workday_string, &num));
@@ -109,17 +109,17 @@ employee_dom_tree_create (GncEmployee *employee)
     xmlAddChild(ret, gnc_numeric_to_dom_tree (employee_rate_string, &num));
 
     xmlAddChild
-      (ret,
-       commodity_ref_to_dom_tree(employee_currency_string,
-				 gncEmployeeGetCurrency (employee)));
+    (ret,
+     commodity_ref_to_dom_tree(employee_currency_string,
+                               gncEmployeeGetCurrency (employee)));
 
     ccard_acc = gncEmployeeGetCCard (employee);
     if (ccard_acc)
-      xmlAddChild(ret, guid_to_dom_tree(employee_ccard_string,
-					qof_instance_get_guid(QOF_INSTANCE(ccard_acc))));
+        xmlAddChild(ret, guid_to_dom_tree(employee_ccard_string,
+                                          qof_instance_get_guid(QOF_INSTANCE(ccard_acc))));
 
     kvpnode = kvp_frame_to_dom_tree (employee_slots_string,
-				     qof_instance_get_slots (QOF_INSTANCE(employee)));
+                                     qof_instance_get_slots (QOF_INSTANCE(employee)));
     if (kvpnode) xmlAddChild (ret, kvpnode);
 
     return ret;
@@ -129,22 +129,22 @@ employee_dom_tree_create (GncEmployee *employee)
 
 struct employee_pdata
 {
-  GncEmployee *employee;
-  QofBook *book;
+    GncEmployee *employee;
+    QofBook *book;
 };
 
 static gboolean
 set_string(xmlNodePtr node, GncEmployee* employee,
            void (*func)(GncEmployee *employee, const char *txt))
 {
-  char* txt = dom_tree_to_text(node);
-  g_return_val_if_fail(txt, FALSE);
-    
-  func(employee, txt);
-  
-  g_free(txt);
-    
-  return TRUE;
+    char* txt = dom_tree_to_text(node);
+    g_return_val_if_fail(txt, FALSE);
+
+    func(employee, txt);
+
+    g_free(txt);
+
+    return TRUE;
 }
 
 static gboolean
@@ -167,16 +167,19 @@ employee_guid_handler (xmlNodePtr node, gpointer employee_pdata)
 
     /* See if we've already created this one */
     employee = gncEmployeeLookup (pdata->book, guid);
-    if (employee) {
-      gncEmployeeDestroy (pdata->employee);
-      pdata->employee = employee;
-      gncEmployeeBeginEdit (employee);
-    } else {
-      gncEmployeeSetGUID(pdata->employee, guid);
+    if (employee)
+    {
+        gncEmployeeDestroy (pdata->employee);
+        pdata->employee = employee;
+        gncEmployeeBeginEdit (employee);
+    }
+    else
+    {
+        gncEmployeeSetGUID(pdata->employee, guid);
     }
 
     g_free(guid);
-    
+
     return TRUE;
 }
 
@@ -221,7 +224,7 @@ employee_active_handler (xmlNodePtr node, gpointer employee_pdata)
 
     ret = dom_tree_to_integer(node, &val);
     if (ret)
-      gncEmployeeSetActive(pdata->employee, (gboolean)val);
+        gncEmployeeSetActive(pdata->employee, (gboolean)val);
 
     return ret;
 }
@@ -292,10 +295,11 @@ employee_slots_handler (xmlNodePtr node, gpointer employee_pdata)
 {
     struct employee_pdata *pdata = employee_pdata;
     return dom_tree_to_kvp_frame_given (
-	node, qof_instance_get_slots (QOF_INSTANCE(pdata->employee)));
+               node, qof_instance_get_slots (QOF_INSTANCE(pdata->employee)));
 }
 
-static struct dom_tree_handler employee_handlers_v2[] = {
+static struct dom_tree_handler employee_handlers_v2[] =
+{
     { employee_username_string, employee_username_handler, 1, 0 },
     { employee_guid_string, employee_guid_handler, 1, 0 },
     { employee_id_string, employee_id_handler, 1, 0 },
@@ -325,7 +329,7 @@ dom_tree_to_employee (xmlNodePtr node, QofBook *book)
     successful = dom_tree_generic_parse (node, employee_handlers_v2,
                                          &employee_pdata);
     if (successful)
-      gncEmployeeCommitEdit (employee_pdata.employee);
+        gncEmployeeCommitEdit (employee_pdata.employee);
     else
     {
         PERR ("failed to parse employee tree");
@@ -338,9 +342,9 @@ dom_tree_to_employee (xmlNodePtr node, QofBook *book)
 
 static gboolean
 gnc_employee_end_handler(gpointer data_for_children,
-			 GSList* data_from_children, GSList* sibling_data,
-			 gpointer parent_data, gpointer global_data,
-			 gpointer *result, const gchar *tag)
+                         GSList* data_from_children, GSList* sibling_data,
+                         gpointer parent_data, gpointer global_data,
+                         gpointer *result, const gchar *tag)
 {
     int successful;
     GncEmployee *employee;
@@ -350,14 +354,14 @@ gnc_employee_end_handler(gpointer data_for_children,
 
     successful = TRUE;
 
-    if(parent_data)
+    if (parent_data)
     {
         return TRUE;
     }
 
     /* OK.  For some messed up reason this is getting called again with a
        NULL tag.  So we ignore those cases */
-    if(!tag)
+    if (!tag)
     {
         return TRUE;
     }
@@ -365,7 +369,7 @@ gnc_employee_end_handler(gpointer data_for_children,
     g_return_val_if_fail(tree, FALSE);
 
     employee = dom_tree_to_employee(tree, book);
-    if(employee != NULL)
+    if (employee != NULL)
     {
         gdata->cb(tag, gdata->parsedata, employee);
     }
@@ -378,86 +382,87 @@ gnc_employee_end_handler(gpointer data_for_children,
 static sixtp *
 employee_sixtp_parser_create(void)
 {
-  return sixtp_dom_parser_new(gnc_employee_end_handler, NULL, NULL);
+    return sixtp_dom_parser_new(gnc_employee_end_handler, NULL, NULL);
 }
 
 static gboolean
 employee_should_be_saved (GncEmployee *employee)
 {
-  const char *id;
+    const char *id;
 
-  /* make sure this is a valid employee before we save it -- should have an ID */
-  id = gncEmployeeGetID (employee);
-  if (id == NULL || *id == '\0')
-    return FALSE;
+    /* make sure this is a valid employee before we save it -- should have an ID */
+    id = gncEmployeeGetID (employee);
+    if (id == NULL || *id == '\0')
+        return FALSE;
 
-  return TRUE;
+    return TRUE;
 }
 
 static void
 do_count (QofInstance * employee_p, gpointer count_p)
 {
-  int *count = count_p;
-  if (employee_should_be_saved ((GncEmployee *) employee_p))
-    (*count)++;
+    int *count = count_p;
+    if (employee_should_be_saved ((GncEmployee *) employee_p))
+        (*count)++;
 }
 
 static int
 employee_get_count (QofBook *book)
 {
-  int count = 0;
-  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
-  return count;
+    int count = 0;
+    qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+    return count;
 }
 
 static void
 xml_add_employee (QofInstance * employee_p, gpointer out_p)
 {
-  xmlNodePtr node;
-  GncEmployee *employee = (GncEmployee *) employee_p;
-  FILE *out = out_p;
+    xmlNodePtr node;
+    GncEmployee *employee = (GncEmployee *) employee_p;
+    FILE *out = out_p;
 
-  if (ferror(out))
-    return;
-  if (!employee_should_be_saved (employee))
-    return;
+    if (ferror(out))
+        return;
+    if (!employee_should_be_saved (employee))
+        return;
 
-  node = employee_dom_tree_create (employee);
-  xmlElemDump(out, NULL, node);
-  xmlFreeNode (node);
-  if (ferror(out) || fprintf(out, "\n") < 0)
-    return;
+    node = employee_dom_tree_create (employee);
+    xmlElemDump(out, NULL, node);
+    xmlFreeNode (node);
+    if (ferror(out) || fprintf(out, "\n") < 0)
+        return;
 }
 
 static gboolean
 employee_write (FILE *out, QofBook *book)
 {
-  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_employee, (gpointer) out);
-  return ferror(out) == 0;
+    qof_object_foreach (_GNC_MOD_NAME, book, xml_add_employee, (gpointer) out);
+    return ferror(out) == 0;
 }
 
 static gboolean
 employee_ns(FILE *out)
 {
-  g_return_val_if_fail(out, FALSE);
-  return gnc_xml2_write_namespace_decl(out, "employee");
+    g_return_val_if_fail(out, FALSE);
+    return gnc_xml2_write_namespace_decl(out, "employee");
 }
 
 void
 gnc_employee_xml_initialize (void)
 {
-  static GncXmlDataType_t be_data = {
-    GNC_FILE_BACKEND_VERS,
-    gnc_employee_string,
-    employee_sixtp_parser_create,
-    NULL,			/* add_item */
-    employee_get_count,
-    employee_write,
-    NULL,			/* scrub */
-    employee_ns,
-  };
+    static GncXmlDataType_t be_data =
+    {
+        GNC_FILE_BACKEND_VERS,
+        gnc_employee_string,
+        employee_sixtp_parser_create,
+        NULL,			/* add_item */
+        employee_get_count,
+        employee_write,
+        NULL,			/* scrub */
+        employee_ns,
+    };
 
-  qof_object_register_backend (_GNC_MOD_NAME,
-			    GNC_FILE_BACKEND,
-			    &be_data);
+    qof_object_register_backend (_GNC_MOD_NAME,
+                                 GNC_FILE_BACKEND,
+                                 &be_data);
 }

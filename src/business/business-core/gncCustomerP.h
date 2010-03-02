@@ -37,7 +37,7 @@ gint64 gncCustomerNextID (QofBook *book);
 /** The gncCloneCustomer() routine makes a copy of the indicated
  *  customer, placing it in the indicated book.  It copies
  *  the addresses, credits, currency, billing terms and jobs.
- *  It then adds a pair of 'gemini' kvp pointers so that each copy 
+ *  It then adds a pair of 'gemini' kvp pointers so that each copy
  *  can be found from the other.
  */
 GncCustomer * gncCloneCustomer (GncCustomer *from,  QofBook *book);

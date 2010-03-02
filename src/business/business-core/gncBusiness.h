@@ -20,7 +20,7 @@
 /** @addtogroup Engine
     @{ */
 /** @addtogroup Business
-    The Business Engine provides a set of structures for 
+    The Business Engine provides a set of structures for
     that provide small-business accounting features.
     @{ */
 

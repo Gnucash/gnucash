@@ -38,22 +38,22 @@
 #define GCONF_SECTION_EMPLOYEE "dialogs/business/employee"
 
 GtkWidget * gnc_owner_select_create (GtkWidget *label, GtkWidget *hbox,
-				     QofBook *book, GncOwner *owner);
+                                     QofBook *book, GncOwner *owner);
 
 GtkWidget * gnc_owner_edit_create (GtkWidget *label, GtkWidget *hbox,
-				   QofBook *book, GncOwner *owner);
+                                   QofBook *book, GncOwner *owner);
 
 void gnc_owner_get_owner (GtkWidget *widget, GncOwner *owner);
 void gnc_owner_set_owner (GtkWidget *widget, GncOwner *owner);
 
 
-/* An invoice select widget.. 
+/* An invoice select widget..
  * the owner, invoice, and label parameters are optional
  */
 GtkWidget * gnc_invoice_select_create (GtkWidget *hbox, QofBook *book,
-				       const GncOwner *owner,
-				       GncInvoice *invoice,
-				       GtkWidget *label);
+                                       const GncOwner *owner,
+                                       GncInvoice *invoice,
+                                       GtkWidget *label);
 
 GncInvoice * gnc_invoice_get_invoice (GtkWidget *widget);
 void gnc_invoice_set_invoice (GtkWidget *widget, GncInvoice *invoice);
@@ -67,8 +67,8 @@ GList * gnc_business_commodities (GncOwner *owner);
 
 /* Fill in a combo box with the appropriate list of accounts */
 void gnc_fill_account_select_combo (GtkWidget *combo, QofBook *book,
-				    GList *acct_types, 
-				    GList *acct_commodities);
+                                    GList *acct_types,
+                                    GList *acct_commodities);
 
 
 /* Create an optionmenu of available billing terms and attach it to
@@ -79,12 +79,12 @@ void gnc_fill_account_select_combo (GtkWidget *combo, QofBook *book,
  * created.
  */
 void gnc_ui_billterms_optionmenu (GtkWidget *omenu, QofBook *book,
-				  gboolean none_ok, GncBillTerm **choice);
+                                  gboolean none_ok, GncBillTerm **choice);
 
 /* Same thing except for the tax tables */
 void
 gnc_ui_taxtables_optionmenu (GtkWidget *omenu, QofBook *book,
-			     gboolean none_ok, GncTaxTable **choice);
+                             gboolean none_ok, GncTaxTable **choice);
 
 /* Build an option menu for choosing a GncTaxIncluded */
 void gnc_ui_taxincluded_optionmenu (GtkWidget *omenu, GncTaxIncluded *choice);
@@ -97,8 +97,8 @@ void gnc_ui_taxincluded_optionmenu (GtkWidget *omenu, GncTaxIncluded *choice);
  */
 
 void gnc_ui_optionmenu_set_changed_callback (GtkWidget *omenu,
-					     void (*changed_cb)(GtkWidget*,gpointer),
-					     gpointer cb_arg);
+        void (*changed_cb)(GtkWidget*, gpointer),
+        gpointer cb_arg);
 gpointer gnc_ui_optionmenu_get_value (GtkWidget *omenu);
 void gnc_ui_optionmenu_set_value (GtkWidget *omenu, gpointer data);
 

@@ -30,27 +30,28 @@
 #include "gnc-book.h"
 #include "table-allgui.h"
 
-typedef enum {
-  GNCENTRY_ORDER_ENTRY,
-  GNCENTRY_ORDER_VIEWER,
-  GNCENTRY_INVOICE_ENTRY,
-  GNCENTRY_INVOICE_VIEWER,
-  GNCENTRY_BILL_ENTRY,
-  GNCENTRY_BILL_VIEWER,
-  GNCENTRY_EXPVOUCHER_ENTRY,
-  GNCENTRY_EXPVOUCHER_VIEWER,
-  GNCENTRY_NUM_REGISTER_TYPES
+typedef enum
+{
+    GNCENTRY_ORDER_ENTRY,
+    GNCENTRY_ORDER_VIEWER,
+    GNCENTRY_INVOICE_ENTRY,
+    GNCENTRY_INVOICE_VIEWER,
+    GNCENTRY_BILL_ENTRY,
+    GNCENTRY_BILL_VIEWER,
+    GNCENTRY_EXPVOUCHER_ENTRY,
+    GNCENTRY_EXPVOUCHER_VIEWER,
+    GNCENTRY_NUM_REGISTER_TYPES
 } GncEntryLedgerType;
 
 typedef struct entry_ledger_colors
 {
-  guint32 header_bg_color;
+    guint32 header_bg_color;
 
-  guint32 primary_bg_color;
-  guint32 secondary_bg_color;
+    guint32 primary_bg_color;
+    guint32 secondary_bg_color;
 
-  guint32 primary_active_bg_color;
-  guint32 secondary_active_bg_color;
+    guint32 primary_active_bg_color;
+    guint32 secondary_active_bg_color;
 } GncEntryLedgerColors;
 
 #define ENTRY_IACCT_CELL	"inv-account"
@@ -83,11 +84,11 @@ GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type);
 
 /* Set the default order for this ledger */
 void gnc_entry_ledger_set_default_order (GncEntryLedger *ledger,
-					 GncOrder *order);
+        GncOrder *order);
 
 /* Set the default invoice for this ledger */
 void gnc_entry_ledger_set_default_invoice (GncEntryLedger *ledger,
-					   GncInvoice *invoice);
+        GncInvoice *invoice);
 
 /* Destroy the GncEntry Ledger */
 void gnc_entry_ledger_destroy (GncEntryLedger *ledger);
@@ -122,8 +123,8 @@ void gnc_entry_ledger_reset_query (GncEntryLedger *ledger);
 GncEntry * gnc_entry_ledger_get_blank_entry (GncEntryLedger *ledger);
 
 gboolean gnc_entry_ledger_get_entry_virt_loc (GncEntryLedger *ledger,
-					      GncEntry *entry,
-					      VirtualCellLocation *vcell_loc);
+        GncEntry *entry,
+        VirtualCellLocation *vcell_loc);
 
 void gnc_entry_ledger_delete_current_entry (GncEntryLedger *ledger);
 void gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger);

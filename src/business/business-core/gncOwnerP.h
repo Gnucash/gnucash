@@ -1,5 +1,5 @@
 /********************************************************************\
- * gncOwnerP.h -- Business Interface:  Object OWNERs private file   * 
+ * gncOwnerP.h -- Business Interface:  Object OWNERs private file   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

@@ -61,43 +61,45 @@ void gnc_order_window_destroy_cb (GtkWidget *widget, gpointer data);
 
 typedef enum
 {
-  NEW_ORDER,
-  EDIT_ORDER,
-  VIEW_ORDER
+    NEW_ORDER,
+    EDIT_ORDER,
+    VIEW_ORDER
 } OrderDialogType;
 
-struct _order_select_window {
-  QofBook *	book;
-  GncOwner *	owner;
-  QueryNew *	q;
-  GncOwner	owner_def;
+struct _order_select_window
+{
+    QofBook *	book;
+    GncOwner *	owner;
+    QueryNew *	q;
+    GncOwner	owner_def;
 };
 
-struct _order_window {
-  GladeXML *	xml;
+struct _order_window
+{
+    GladeXML *	xml;
 
-  GtkWidget *	dialog;
+    GtkWidget *	dialog;
 
-  GtkWidget *	id_entry;
-  GtkWidget *	ref_entry;
-  GtkWidget *	notes_text;
-  GtkWidget *	opened_date;
-  GtkWidget *	closed_date;
-  GtkWidget *	active_check;
+    GtkWidget *	id_entry;
+    GtkWidget *	ref_entry;
+    GtkWidget *	notes_text;
+    GtkWidget *	opened_date;
+    GtkWidget *	closed_date;
+    GtkWidget *	active_check;
 
-  GtkWidget *	owner_box;
-  GtkWidget *	owner_label;
-  GtkWidget *	owner_choice;
+    GtkWidget *	owner_box;
+    GtkWidget *	owner_label;
+    GtkWidget *	owner_choice;
 
-  GnucashRegister *	reg;
-  GncEntryLedger *	ledger;
+    GnucashRegister *	reg;
+    GncEntryLedger *	ledger;
 
-  OrderDialogType	dialog_type;
-  GUID		order_guid;
-  gint		component_id;
-  QofBook *	book;
-  GncOrder *	created_order;
-  GncOwner	owner;
+    OrderDialogType	dialog_type;
+    GUID		order_guid;
+    gint		component_id;
+    QofBook *	book;
+    GncOrder *	created_order;
+    GncOwner	owner;
 
 };
 
@@ -106,646 +108,675 @@ static void gnc_order_update_window (OrderWindow *ow);
 static GncOrder *
 ow_get_order (OrderWindow *ow)
 {
-  if (!ow)
-    return NULL;
+    if (!ow)
+        return NULL;
 
-  return gncOrderLookup (ow->book, &ow->order_guid);
+    return gncOrderLookup (ow->book, &ow->order_guid);
 }
 
 static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
 {
-  GtkTextBuffer* text_buffer;
-  GtkTextIter start, end;
-  gchar *text;
-  Timespec ts;
-  time_t tt;
+    GtkTextBuffer* text_buffer;
+    GtkTextIter start, end;
+    gchar *text;
+    Timespec ts;
+    time_t tt;
 
-  /* Do nothing if this is view only */
-  if (ow->dialog_type == VIEW_ORDER)
-    return;
+    /* Do nothing if this is view only */
+    if (ow->dialog_type == VIEW_ORDER)
+        return;
 
-  gnc_suspend_gui_refresh ();
-  gncOrderBeginEdit (order);
-  
-  gncOrderSetID (order, gtk_editable_get_chars
-		 (GTK_EDITABLE (ow->id_entry), 0, -1));
+    gnc_suspend_gui_refresh ();
+    gncOrderBeginEdit (order);
 
-  text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
-  gtk_text_buffer_get_bounds (text_buffer, &start, &end);
-  text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
-  gncOrderSetNotes (order, text);
+    gncOrderSetID (order, gtk_editable_get_chars
+                   (GTK_EDITABLE (ow->id_entry), 0, -1));
 
-  gncOrderSetReference (order, gtk_editable_get_chars
-			(GTK_EDITABLE (ow->ref_entry), 0, -1));
+    text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
+    gtk_text_buffer_get_bounds (text_buffer, &start, &end);
+    text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
+    gncOrderSetNotes (order, text);
 
-  tt = gnome_date_edit_get_time (GNOME_DATE_EDIT (ow->opened_date));
-  timespecFromTime_t (&ts, tt);
-  gncOrderSetDateOpened (order, ts);
+    gncOrderSetReference (order, gtk_editable_get_chars
+                          (GTK_EDITABLE (ow->ref_entry), 0, -1));
 
-  if (ow->active_check)
-    gncOrderSetActive (order, gtk_toggle_button_get_active
-		       (GTK_TOGGLE_BUTTON (ow->active_check)));
+    tt = gnome_date_edit_get_time (GNOME_DATE_EDIT (ow->opened_date));
+    timespecFromTime_t (&ts, tt);
+    gncOrderSetDateOpened (order, ts);
 
-  gnc_owner_get_owner (ow->owner_choice, &(ow->owner));
-  gncOrderSetOwner (order, &(ow->owner));
+    if (ow->active_check)
+        gncOrderSetActive (order, gtk_toggle_button_get_active
+                           (GTK_TOGGLE_BUTTON (ow->active_check)));
 
-  gncOrderCommitEdit (order);
-  gnc_resume_gui_refresh ();
+    gnc_owner_get_owner (ow->owner_choice, &(ow->owner));
+    gncOrderSetOwner (order, &(ow->owner));
+
+    gncOrderCommitEdit (order);
+    gnc_resume_gui_refresh ();
 }
 
 static gboolean
 gnc_order_window_verify_ok (OrderWindow *ow)
 {
-  const char *res;
+    const char *res;
 
-  /* Check the ID */
-  res = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
-  if (safe_strcmp (res, "") == 0) {
-    gnc_error_dialog (ow->dialog, "%s",
-		      _("The Order must be given an ID."));
-    return FALSE;
-  }
+    /* Check the ID */
+    res = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
+    if (safe_strcmp (res, "") == 0)
+    {
+        gnc_error_dialog (ow->dialog, "%s",
+                          _("The Order must be given an ID."));
+        return FALSE;
+    }
 
-  /* Check the Owner */
-  gnc_owner_get_owner (ow->owner_choice, &(ow->owner));
-  res = gncOwnerGetName (&(ow->owner));
-  if (res == NULL || safe_strcmp (res, "") == 0) {
-    gnc_error_dialog (ow->dialog, "%s",
-		      _("You need to supply Billing Information."));
-    return FALSE;
-  }
+    /* Check the Owner */
+    gnc_owner_get_owner (ow->owner_choice, &(ow->owner));
+    res = gncOwnerGetName (&(ow->owner));
+    if (res == NULL || safe_strcmp (res, "") == 0)
+    {
+        gnc_error_dialog (ow->dialog, "%s",
+                          _("You need to supply Billing Information."));
+        return FALSE;
+    }
 
-  return TRUE;
+    return TRUE;
 }
 
 static gboolean
 gnc_order_window_ok_save (OrderWindow *ow)
 {
-  if (!gnc_entry_ledger_check_close (ow->dialog, ow->ledger))
-    return FALSE;
+    if (!gnc_entry_ledger_check_close (ow->dialog, ow->ledger))
+        return FALSE;
 
-  if (!gnc_order_window_verify_ok (ow))
-    return FALSE;
-  
-  /* Now save it off */
-  {
-    GncOrder *order = ow_get_order (ow);
-    if (order) {
-      gnc_ui_to_order (ow, order);
+    if (!gnc_order_window_verify_ok (ow))
+        return FALSE;
 
+    /* Now save it off */
+    {
+        GncOrder *order = ow_get_order (ow);
+        if (order)
+        {
+            gnc_ui_to_order (ow, order);
+
+        }
+        ow->created_order = order;
     }
-    ow->created_order = order;
-  }
-  return TRUE;
+    return TRUE;
 }
 
 void
 gnc_order_window_ok_cb (GtkWidget *widget, gpointer data)
 {
-  OrderWindow *ow = data;
+    OrderWindow *ow = data;
 
-  if (!gnc_order_window_ok_save (ow))
-    return;
+    if (!gnc_order_window_ok_save (ow))
+        return;
 
-  /* Ok, we don't need this anymore */
-  ow->order_guid = *xaccGUIDNULL ();
+    /* Ok, we don't need this anymore */
+    ow->order_guid = *xaccGUIDNULL ();
 
-  gnc_close_gui_component (ow->component_id);
+    gnc_close_gui_component (ow->component_id);
 }
 
 void
 gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data)
 {
-  OrderWindow *ow = data;
+    OrderWindow *ow = data;
 
-  gnc_close_gui_component (ow->component_id);
+    gnc_close_gui_component (ow->component_id);
 }
 
 void
 gnc_order_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  gnc_gnome_help(HF_HELP, HL_USAGE);
+    gnc_gnome_help(HF_HELP, HL_USAGE);
 }
 
 void
 gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data)
 {
-  OrderWindow *ow = data;
+    OrderWindow *ow = data;
 
-  /* make sure we're ok */
-  if (!gnc_order_window_verify_ok (ow))
-      return;
+    /* make sure we're ok */
+    if (!gnc_order_window_verify_ok (ow))
+        return;
 
-  /* Ok, go make an invoice */
-  gnc_invoice_search (NULL, &(ow->owner), ow->book); 
+    /* Ok, go make an invoice */
+    gnc_invoice_search (NULL, &(ow->owner), ow->book);
 
-  /* refresh the window */
-  gnc_order_update_window (ow);
+    /* refresh the window */
+    gnc_order_update_window (ow);
 }
 
 void
 gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
 {
-  OrderWindow *ow = data;
-  GncOrder *order;
-  GList *entries;
-  char *message, *label;
-  gboolean non_inv = FALSE;
-  Timespec ts;
+    OrderWindow *ow = data;
+    GncOrder *order;
+    GList *entries;
+    char *message, *label;
+    gboolean non_inv = FALSE;
+    Timespec ts;
 
-  /* Make sure the order is ok */
-  if (!gnc_order_window_verify_ok (ow))
-    return;
+    /* Make sure the order is ok */
+    if (!gnc_order_window_verify_ok (ow))
+        return;
 
-  /* Make sure the order exists */
-  order = ow_get_order (ow);
-  if (!order)
-    return;
+    /* Make sure the order exists */
+    order = ow_get_order (ow);
+    if (!order)
+        return;
 
-  /* Check that there is at least one Entry */
-  if (gncOrderGetEntries (order) == NULL) {
-    gnc_error_dialog (ow->dialog, "%s",
-		      _("The Order must have at least one Entry."));
-    return;
-  }
-
-  /* Make sure we can close the order. Are there any uninvoiced entries? */
-  entries = gncOrderGetEntries (order);
-  for ( ; entries ; entries = entries->next) {
-    GncEntry *entry = entries->data;
-    if (gncEntryGetInvoice (entry) == NULL) {
-      non_inv = TRUE;
-      break;
+    /* Check that there is at least one Entry */
+    if (gncOrderGetEntries (order) == NULL)
+    {
+        gnc_error_dialog (ow->dialog, "%s",
+                          _("The Order must have at least one Entry."));
+        return;
     }
-  }
 
-  if (non_inv) {
-    /* Damn; yes.  Well, ask the user to make sure they REALLY want to
-     * close this order!
-     */
+    /* Make sure we can close the order. Are there any uninvoiced entries? */
+    entries = gncOrderGetEntries (order);
+    for ( ; entries ; entries = entries->next)
+    {
+        GncEntry *entry = entries->data;
+        if (gncEntryGetInvoice (entry) == NULL)
+        {
+            non_inv = TRUE;
+            break;
+        }
+    }
 
-    message = _("This order contains entries that have not been invoiced. "
-		"Are you sure you want to close it out before "
-		"you invoice all the entries?");
+    if (non_inv)
+    {
+        /* Damn; yes.  Well, ask the user to make sure they REALLY want to
+         * close this order!
+         */
 
-    if (gnc_verify_dialog (ow->dialog, FALSE, "%s", message) == FALSE)
-      return;
-  }
+        message = _("This order contains entries that have not been invoiced. "
+                    "Are you sure you want to close it out before "
+                    "you invoice all the entries?");
 
-  /* Ok, we can close this.  Ask for verification and set the closed date */
-  message = _("Do you really want to close the order?");
-  label = _("Close Date");
+        if (gnc_verify_dialog (ow->dialog, FALSE, "%s", message) == FALSE)
+            return;
+    }
 
-  timespecFromTime_t (&ts, time(NULL));
-  if (!gnc_dialog_date_close_parented (ow->dialog, message, label, TRUE, &ts))
-    return;
+    /* Ok, we can close this.  Ask for verification and set the closed date */
+    message = _("Do you really want to close the order?");
+    label = _("Close Date");
 
-  gncOrderSetDateClosed (order, ts);
+    timespecFromTime_t (&ts, time(NULL));
+    if (!gnc_dialog_date_close_parented (ow->dialog, message, label, TRUE, &ts))
+        return;
 
-  /* save it off */
-  gnc_order_window_ok_save (ow);
+    gncOrderSetDateClosed (order, ts);
 
-  /* Reset the type; change to read-only */
-  ow->dialog_type = VIEW_ORDER;
-  gnc_entry_ledger_set_readonly (ow->ledger, TRUE);
+    /* save it off */
+    gnc_order_window_ok_save (ow);
 
-  /* And redisplay the window */
-  gnc_order_update_window (ow);
+    /* Reset the type; change to read-only */
+    ow->dialog_type = VIEW_ORDER;
+    gnc_entry_ledger_set_readonly (ow->ledger, TRUE);
+
+    /* And redisplay the window */
+    gnc_order_update_window (ow);
 }
 
 void
 gnc_order_window_destroy_cb (GtkWidget *widget, gpointer data)
 {
-  OrderWindow *ow = data;
-  GncOrder *order = ow_get_order (ow);
+    OrderWindow *ow = data;
+    GncOrder *order = ow_get_order (ow);
 
-  gnc_suspend_gui_refresh ();
+    gnc_suspend_gui_refresh ();
 
-  if (ow->dialog_type == NEW_ORDER && order != NULL) {
-    gncOrderBeginEdit (order);
-    gncOrderDestroy (order);
-    ow->order_guid = *xaccGUIDNULL ();
-  }
+    if (ow->dialog_type == NEW_ORDER && order != NULL)
+    {
+        gncOrderBeginEdit (order);
+        gncOrderDestroy (order);
+        ow->order_guid = *xaccGUIDNULL ();
+    }
 
-  if (ow->ledger)
-    gnc_entry_ledger_destroy (ow->ledger);
-  gnc_unregister_gui_component (ow->component_id);
-  gnc_resume_gui_refresh ();
+    if (ow->ledger)
+        gnc_entry_ledger_destroy (ow->ledger);
+    gnc_unregister_gui_component (ow->component_id);
+    gnc_resume_gui_refresh ();
 
-  g_free (ow);
+    g_free (ow);
 }
 
 static int
 gnc_order_owner_changed_cb (GtkWidget *widget, gpointer data)
 {
-  OrderWindow *ow = data;
-  GncOrder *order;
+    OrderWindow *ow = data;
+    GncOrder *order;
 
-  if (!ow)
+    if (!ow)
+        return FALSE;
+
+    if (ow->dialog_type == VIEW_ORDER)
+        return FALSE;
+
+    gnc_owner_get_owner (ow->owner_choice, &(ow->owner));
+
+    /* Set the Order's owner now! */
+    order = ow_get_order (ow);
+    gncOrderSetOwner (order, &(ow->owner));
+
+    if (ow->dialog_type == EDIT_ORDER)
+        return FALSE;
+
+    /* Only set the reference during the New Job dialog */
+    switch (gncOwnerGetType (&(ow->owner)))
+    {
+    case GNC_OWNER_JOB:
+    {
+        char const *msg = gncJobGetReference (gncOwnerGetJob (&(ow->owner)));
+        gtk_entry_set_text (GTK_ENTRY (ow->ref_entry), msg ? msg : "");
+        break;
+    }
+    default:
+        gtk_entry_set_text (GTK_ENTRY (ow->ref_entry), "");
+        break;
+    }
+
     return FALSE;
-
-  if (ow->dialog_type == VIEW_ORDER)
-    return FALSE;
-
-  gnc_owner_get_owner (ow->owner_choice, &(ow->owner));
-
-  /* Set the Order's owner now! */
-  order = ow_get_order (ow);
-  gncOrderSetOwner (order, &(ow->owner));
-
-  if (ow->dialog_type == EDIT_ORDER)
-    return FALSE;
-
-  /* Only set the reference during the New Job dialog */
-  switch (gncOwnerGetType (&(ow->owner))) {
-  case GNC_OWNER_JOB:
-  {
-    char const *msg = gncJobGetReference (gncOwnerGetJob (&(ow->owner)));
-    gtk_entry_set_text (GTK_ENTRY (ow->ref_entry), msg ? msg : "");
-    break;
-  }
-  default:
-    gtk_entry_set_text (GTK_ENTRY (ow->ref_entry), "");
-    break;    
-  }
-
-  return FALSE;
 }
 
 static void
 gnc_order_window_close_handler (gpointer user_data)
 {
-  OrderWindow *ow = user_data;
+    OrderWindow *ow = user_data;
 
-  gtk_widget_destroy (ow->dialog);
+    gtk_widget_destroy (ow->dialog);
 }
 
 static void
 gnc_order_window_refresh_handler (GHashTable *changes, gpointer user_data)
 {
-  OrderWindow *ow = user_data;
-  const EventInfo *info;
-  GncOrder *order = ow_get_order (ow);
+    OrderWindow *ow = user_data;
+    const EventInfo *info;
+    GncOrder *order = ow_get_order (ow);
 
-  /* If there isn't a order behind us, close down */
-  if (!order) {
-    gnc_close_gui_component (ow->component_id);
-    return;
-  }
-
-  /* Next, close if this is a destroy event */
-  if (changes) {
-    info = gnc_gui_get_entity_events (changes, &ow->order_guid);
-    if (info && (info->event_mask & QOF_EVENT_DESTROY)) {
-      gnc_close_gui_component (ow->component_id);
-      return;
+    /* If there isn't a order behind us, close down */
+    if (!order)
+    {
+        gnc_close_gui_component (ow->component_id);
+        return;
     }
-  }
+
+    /* Next, close if this is a destroy event */
+    if (changes)
+    {
+        info = gnc_gui_get_entity_events (changes, &ow->order_guid);
+        if (info && (info->event_mask & QOF_EVENT_DESTROY))
+        {
+            gnc_close_gui_component (ow->component_id);
+            return;
+        }
+    }
 }
 
 static void
 gnc_order_update_window (OrderWindow *ow)
 {
-  GncOrder *order;
-  GncOwner *owner;
-  gboolean hide_cd = FALSE;
+    GncOrder *order;
+    GncOwner *owner;
+    gboolean hide_cd = FALSE;
 
-  order = ow_get_order (ow);
-  owner = gncOrderGetOwner (order);
+    order = ow_get_order (ow);
+    owner = gncOrderGetOwner (order);
 
-  if (ow->owner_choice) {
-    gtk_container_remove (GTK_CONTAINER (ow->owner_box), ow->owner_choice);
-    gtk_object_destroy (GTK_OBJECT (ow->owner_choice));
-  }
+    if (ow->owner_choice)
+    {
+        gtk_container_remove (GTK_CONTAINER (ow->owner_box), ow->owner_choice);
+        gtk_object_destroy (GTK_OBJECT (ow->owner_choice));
+    }
 
-  switch (ow->dialog_type) {
+    switch (ow->dialog_type)
+    {
     case VIEW_ORDER:
     case EDIT_ORDER:
-      ow->owner_choice =
-	gnc_owner_edit_create (ow->owner_label, ow->owner_box, ow->book,
-			       owner);
-      break;
+        ow->owner_choice =
+            gnc_owner_edit_create (ow->owner_label, ow->owner_box, ow->book,
+                                   owner);
+        break;
     case NEW_ORDER:
-      ow->owner_choice =
-	gnc_owner_select_create (ow->owner_label, ow->owner_box, ow->book,
-				 owner);
-      break;
+        ow->owner_choice =
+            gnc_owner_select_create (ow->owner_label, ow->owner_box, ow->book,
+                                     owner);
+        break;
     }
 
-  g_signal_connect (ow->owner_choice, "changed",
-		    G_CALLBACK (gnc_order_owner_changed_cb),
-		    ow);
+    g_signal_connect (ow->owner_choice, "changed",
+                      G_CALLBACK (gnc_order_owner_changed_cb),
+                      ow);
 
-  gtk_widget_show_all (ow->dialog);
+    gtk_widget_show_all (ow->dialog);
 
-  {
-    GtkTextBuffer* text_buffer;
-    const char *string;
-    Timespec ts, ts_zero = {0,0};
-    time_t tt;
+    {
+        GtkTextBuffer* text_buffer;
+        const char *string;
+        Timespec ts, ts_zero = {0, 0};
+        time_t tt;
 
-    gtk_entry_set_text (GTK_ENTRY (ow->ref_entry),
-			gncOrderGetReference (order));
+        gtk_entry_set_text (GTK_ENTRY (ow->ref_entry),
+                            gncOrderGetReference (order));
 
-    string = gncOrderGetNotes (order);
-    text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
-    gtk_text_buffer_set_text (text_buffer, string, -1);
+        string = gncOrderGetNotes (order);
+        text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
+        gtk_text_buffer_set_text (text_buffer, string, -1);
 
-    ts = gncOrderGetDateOpened (order);
-    if (timespec_equal (&ts, &ts_zero)) {
-      tt = time(NULL);
-    } else {
-      tt = ts.tv_sec;		/* XXX */
+        ts = gncOrderGetDateOpened (order);
+        if (timespec_equal (&ts, &ts_zero))
+        {
+            tt = time(NULL);
+        }
+        else
+        {
+            tt = ts.tv_sec;		/* XXX */
+        }
+        gnome_date_edit_set_time (GNOME_DATE_EDIT (ow->opened_date), tt);
+
+
+        /* If this is a "New Order Window" we can stop here! */
+        if (ow->dialog_type == NEW_ORDER)
+            return;
+
+        ts = gncOrderGetDateClosed (order);
+        if (timespec_equal (&ts, &ts_zero))
+        {
+            tt = time(NULL);
+            hide_cd = TRUE;
+        }
+        else
+        {
+            tt = ts.tv_sec;		/* XXX */
+        }
+        gnome_date_edit_set_time (GNOME_DATE_EDIT (ow->closed_date), tt);
+
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ow->active_check),
+                                      gncOrderGetActive (order));
+
     }
-    gnome_date_edit_set_time (GNOME_DATE_EDIT (ow->opened_date), tt);
 
+    gnc_gui_component_watch_entity_type (ow->component_id,
+                                         GNC_ORDER_MODULE_NAME,
+                                         QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    /* If this is a "New Order Window" we can stop here! */
-    if (ow->dialog_type == NEW_ORDER)
-      return;
+    gnc_table_refresh_gui (gnc_entry_ledger_get_table (ow->ledger), TRUE);
 
-    ts = gncOrderGetDateClosed (order);
-    if (timespec_equal (&ts, &ts_zero)) {
-      tt = time(NULL);
-      hide_cd = TRUE;
-    } else {
-      tt = ts.tv_sec;		/* XXX */
+    if (hide_cd)
+    {
+        GtkWidget *hide;
+
+        gtk_widget_hide_all (ow->closed_date);
+        hide = glade_xml_get_widget (ow->xml, "cd_label");
+        gtk_widget_hide_all (hide);
+
+        hide = glade_xml_get_widget (ow->xml, "hide1");
+        gtk_widget_hide_all (hide);
+        hide = glade_xml_get_widget (ow->xml, "hide2");
+        gtk_widget_hide_all (hide);
     }
-    gnome_date_edit_set_time (GNOME_DATE_EDIT (ow->closed_date), tt);
 
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ow->active_check),
-				  gncOrderGetActive (order));
+    if (ow->dialog_type == VIEW_ORDER)
+    {
+        GtkWidget *hide;
 
-  }
+        /* Setup viewer for read-only access */
+        gtk_widget_set_sensitive (ow->id_entry, FALSE);
+        gtk_widget_set_sensitive (ow->opened_date, FALSE);
+        gtk_widget_set_sensitive (ow->closed_date, FALSE);
+        gtk_widget_set_sensitive (ow->notes_text, FALSE); /* XXX: Should notes remain writable? */
 
-  gnc_gui_component_watch_entity_type (ow->component_id,
-				       GNC_ORDER_MODULE_NAME,
-				       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
-
-  gnc_table_refresh_gui (gnc_entry_ledger_get_table (ow->ledger), TRUE);
-
-  if (hide_cd) {
-    GtkWidget *hide;
-
-    gtk_widget_hide_all (ow->closed_date);
-    hide = glade_xml_get_widget (ow->xml, "cd_label");
-    gtk_widget_hide_all (hide);
-
-    hide = glade_xml_get_widget (ow->xml, "hide1");
-    gtk_widget_hide_all (hide);
-    hide = glade_xml_get_widget (ow->xml, "hide2");
-    gtk_widget_hide_all (hide);
-  }
-
-  if (ow->dialog_type == VIEW_ORDER) {
-    GtkWidget *hide;
-
-    /* Setup viewer for read-only access */
-    gtk_widget_set_sensitive (ow->id_entry, FALSE);
-    gtk_widget_set_sensitive (ow->opened_date, FALSE);
-    gtk_widget_set_sensitive (ow->closed_date, FALSE);
-    gtk_widget_set_sensitive (ow->notes_text, FALSE); /* XXX: Should notes remain writable? */
-
-    /* Hide the 'close order' button */
-    hide = glade_xml_get_widget (ow->xml, "close_order_button");
-    gtk_widget_hide_all (hide);
-  }
+        /* Hide the 'close order' button */
+        hide = glade_xml_get_widget (ow->xml, "close_order_button");
+        gtk_widget_hide_all (hide);
+    }
 }
 
 static gboolean
 find_handler (gpointer find_data, gpointer user_data)
 {
-  const GUID *order_guid = find_data;
-  OrderWindow *ow = user_data;
+    const GUID *order_guid = find_data;
+    OrderWindow *ow = user_data;
 
-  return(ow && guid_equal(&ow->order_guid, order_guid));
+    return(ow && guid_equal(&ow->order_guid, order_guid));
 }
 
 static OrderWindow *
 gnc_order_new_window (QofBook *bookp, OrderDialogType type,
-		      GncOrder *order, GncOwner *owner)
+                      GncOrder *order, GncOwner *owner)
 {
-  OrderWindow *ow;
-  GladeXML *xml;
-  GtkWidget *vbox, *regWidget;
-  GncEntryLedger *entry_ledger = NULL;
-  const char * class_name;
+    OrderWindow *ow;
+    GladeXML *xml;
+    GtkWidget *vbox, *regWidget;
+    GncEntryLedger *entry_ledger = NULL;
+    const char * class_name;
 
-  switch (type) {
-   case EDIT_ORDER:
-    class_name = DIALOG_EDIT_ORDER_CM_CLASS;
-    break;
-   case VIEW_ORDER:
-   default:
-    class_name = DIALOG_VIEW_ORDER_CM_CLASS;
-    break;
-  }
-
-  /*
-   * Find an existing window for this order.  If found, bring it to
-   * the front.
-   */
-  if (order) {
-    GUID order_guid;
-
-    order_guid = *gncOrderGetGUID(order);
-    ow = gnc_find_first_gui_component (class_name, find_handler,
-				       &order_guid);
-    if (ow) {
-      gtk_window_present (GTK_WINDOW(ow->dialog));
-      return(ow);
+    switch (type)
+    {
+    case EDIT_ORDER:
+        class_name = DIALOG_EDIT_ORDER_CM_CLASS;
+        break;
+    case VIEW_ORDER:
+    default:
+        class_name = DIALOG_VIEW_ORDER_CM_CLASS;
+        break;
     }
-  }
-  
-  /*
-   * No existing order window found.  Build a new one.
-   */
-  ow = g_new0 (OrderWindow, 1);
-  ow->book = bookp;
-  ow->dialog_type = type;
 
-  /* Save this for later */
-  gncOwnerCopy (owner, &(ow->owner));
+    /*
+     * Find an existing window for this order.  If found, bring it to
+     * the front.
+     */
+    if (order)
+    {
+        GUID order_guid;
 
-  /* Find the dialog */
-  ow->xml = xml = gnc_glade_xml_new ("order.glade", "Order Entry Dialog");
-  ow->dialog = glade_xml_get_widget (xml, "Order Entry Dialog");
+        order_guid = *gncOrderGetGUID(order);
+        ow = gnc_find_first_gui_component (class_name, find_handler,
+                                           &order_guid);
+        if (ow)
+        {
+            gtk_window_present (GTK_WINDOW(ow->dialog));
+            return(ow);
+        }
+    }
 
-  /* Grab the widgets */
-  ow->id_entry = glade_xml_get_widget (xml, "id_entry");
-  ow->ref_entry = glade_xml_get_widget (xml, "ref_entry");
-  ow->notes_text = glade_xml_get_widget (xml, "notes_text");
-  ow->opened_date = glade_xml_get_widget (xml, "opened_date");
-  ow->closed_date = glade_xml_get_widget (xml, "closed_date");
-  ow->active_check = glade_xml_get_widget (xml, "active_check");
-  ow->owner_box = glade_xml_get_widget (xml, "owner_hbox");
-  ow->owner_label = glade_xml_get_widget (xml, "owner_label");
+    /*
+     * No existing order window found.  Build a new one.
+     */
+    ow = g_new0 (OrderWindow, 1);
+    ow->book = bookp;
+    ow->dialog_type = type;
 
-  /* Build the ledger */
-  switch (type) {
-  case EDIT_ORDER:
-    entry_ledger = gnc_entry_ledger_new (ow->book, GNCENTRY_ORDER_ENTRY);
-    break;
-  case VIEW_ORDER:
-  default:
-    entry_ledger = gnc_entry_ledger_new (ow->book, GNCENTRY_ORDER_VIEWER);
-    break;
-  }
+    /* Save this for later */
+    gncOwnerCopy (owner, &(ow->owner));
 
-  /* Save the entry ledger for later */
-  ow->ledger = entry_ledger;
+    /* Find the dialog */
+    ow->xml = xml = gnc_glade_xml_new ("order.glade", "Order Entry Dialog");
+    ow->dialog = glade_xml_get_widget (xml, "Order Entry Dialog");
 
-  /* Set the order for the entry_ledger */
-  gnc_entry_ledger_set_default_order (entry_ledger, order);
+    /* Grab the widgets */
+    ow->id_entry = glade_xml_get_widget (xml, "id_entry");
+    ow->ref_entry = glade_xml_get_widget (xml, "ref_entry");
+    ow->notes_text = glade_xml_get_widget (xml, "notes_text");
+    ow->opened_date = glade_xml_get_widget (xml, "opened_date");
+    ow->closed_date = glade_xml_get_widget (xml, "closed_date");
+    ow->active_check = glade_xml_get_widget (xml, "active_check");
+    ow->owner_box = glade_xml_get_widget (xml, "owner_hbox");
+    ow->owner_label = glade_xml_get_widget (xml, "owner_label");
 
-  /* Set watches on entries */
-  //  entries = gncOrderGetEntries (order);
-  //  gnc_entry_ledger_load (entry_ledger, entries);
+    /* Build the ledger */
+    switch (type)
+    {
+    case EDIT_ORDER:
+        entry_ledger = gnc_entry_ledger_new (ow->book, GNCENTRY_ORDER_ENTRY);
+        break;
+    case VIEW_ORDER:
+    default:
+        entry_ledger = gnc_entry_ledger_new (ow->book, GNCENTRY_ORDER_VIEWER);
+        break;
+    }
 
-  /* Watch the order of operations, here... */
-  gnucash_register_set_initial_rows( 10 );
-  regWidget = gnucash_register_new (gnc_entry_ledger_get_table (entry_ledger));
-  gnc_table_init_gui( regWidget, entry_ledger );
-  ow->reg = GNUCASH_REGISTER (regWidget);
-  GNUCASH_SHEET (ow->reg->sheet)->window = GTK_WIDGET(ow->dialog);
-  gnc_entry_ledger_set_parent (entry_ledger, ow->dialog);
+    /* Save the entry ledger for later */
+    ow->ledger = entry_ledger;
 
-  vbox = glade_xml_get_widget (xml, "ledger_vbox");
-  // gtk_box_pack_start (GTK_BOX(vbox), toolbar, FALSE, FALSE, 2);
-  gtk_box_pack_start (GTK_BOX(vbox), regWidget, TRUE, TRUE, 2);
+    /* Set the order for the entry_ledger */
+    gnc_entry_ledger_set_default_order (entry_ledger, order);
 
-  /* Setup signals */
-  glade_xml_signal_autoconnect_full( xml,
-                                     gnc_glade_autoconnect_full_func,
-                                     ow);
-  /* Setup initial values */
-  ow->order_guid = *gncOrderGetGUID (order);
+    /* Set watches on entries */
+    //  entries = gncOrderGetEntries (order);
+    //  gnc_entry_ledger_load (entry_ledger, entries);
 
-  gtk_entry_set_text (GTK_ENTRY (ow->id_entry), gncOrderGetID (order));
+    /* Watch the order of operations, here... */
+    gnucash_register_set_initial_rows( 10 );
+    regWidget = gnucash_register_new (gnc_entry_ledger_get_table (entry_ledger));
+    gnc_table_init_gui( regWidget, entry_ledger );
+    ow->reg = GNUCASH_REGISTER (regWidget);
+    GNUCASH_SHEET (ow->reg->sheet)->window = GTK_WIDGET(ow->dialog);
+    gnc_entry_ledger_set_parent (entry_ledger, ow->dialog);
 
-  ow->component_id =
-    gnc_register_gui_component (class_name,
-				gnc_order_window_refresh_handler,
-				gnc_order_window_close_handler,
-				ow);
+    vbox = glade_xml_get_widget (xml, "ledger_vbox");
+    // gtk_box_pack_start (GTK_BOX(vbox), toolbar, FALSE, FALSE, 2);
+    gtk_box_pack_start (GTK_BOX(vbox), regWidget, TRUE, TRUE, 2);
 
-  gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
+    /* Setup signals */
+    glade_xml_signal_autoconnect_full( xml,
+                                       gnc_glade_autoconnect_full_func,
+                                       ow);
+    /* Setup initial values */
+    ow->order_guid = *gncOrderGetGUID (order);
 
-  /* Now fill in a lot of the pieces and display properly */
-  gnc_order_update_window (ow);
+    gtk_entry_set_text (GTK_ENTRY (ow->id_entry), gncOrderGetID (order));
 
-  /* Maybe set the reference */
-  gnc_order_owner_changed_cb (ow->owner_choice, ow);
+    ow->component_id =
+        gnc_register_gui_component (class_name,
+                                    gnc_order_window_refresh_handler,
+                                    gnc_order_window_close_handler,
+                                    ow);
 
-  return ow;
+    gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
+
+    /* Now fill in a lot of the pieces and display properly */
+    gnc_order_update_window (ow);
+
+    /* Maybe set the reference */
+    gnc_order_owner_changed_cb (ow->owner_choice, ow);
+
+    return ow;
 }
 
 static OrderWindow *
 gnc_order_window_new_order (QofBook *bookp, GncOwner *owner)
 {
-  OrderWindow *ow;
-  GladeXML *xml;
-  GncOrder *order;
-  gchar *string;
+    OrderWindow *ow;
+    GladeXML *xml;
+    GncOrder *order;
+    gchar *string;
 
-  ow = g_new0 (OrderWindow, 1);
-  ow->book = bookp;
-  ow->dialog_type = NEW_ORDER;
+    ow = g_new0 (OrderWindow, 1);
+    ow->book = bookp;
+    ow->dialog_type = NEW_ORDER;
 
-  order = gncOrderCreate (bookp);
-  gncOrderSetOwner (order, owner);
+    order = gncOrderCreate (bookp);
+    gncOrderSetOwner (order, owner);
 
-  /* Save this for later */
-  gncOwnerCopy (owner, &(ow->owner));
+    /* Save this for later */
+    gncOwnerCopy (owner, &(ow->owner));
 
-  /* Find the dialog */
-  xml = gnc_glade_xml_new ("order.glade", "New Order Dialog");
-  ow->dialog = glade_xml_get_widget (xml, "New Order Dialog");
+    /* Find the dialog */
+    xml = gnc_glade_xml_new ("order.glade", "New Order Dialog");
+    ow->dialog = glade_xml_get_widget (xml, "New Order Dialog");
 
-  g_object_set_data (G_OBJECT (ow->dialog), "dialog_info", ow);
+    g_object_set_data (G_OBJECT (ow->dialog), "dialog_info", ow);
 
-  /* Grab the widgets */
-  ow->id_entry = glade_xml_get_widget (xml, "id_entry");
-  ow->ref_entry = glade_xml_get_widget (xml, "ref_entry");
-  ow->notes_text = glade_xml_get_widget (xml, "notes_text");
-  ow->opened_date = glade_xml_get_widget (xml, "opened_date");
-  ow->owner_box = glade_xml_get_widget (xml, "owner_hbox");
-  ow->owner_label = glade_xml_get_widget (xml, "owner_label");
+    /* Grab the widgets */
+    ow->id_entry = glade_xml_get_widget (xml, "id_entry");
+    ow->ref_entry = glade_xml_get_widget (xml, "ref_entry");
+    ow->notes_text = glade_xml_get_widget (xml, "notes_text");
+    ow->opened_date = glade_xml_get_widget (xml, "opened_date");
+    ow->owner_box = glade_xml_get_widget (xml, "owner_hbox");
+    ow->owner_label = glade_xml_get_widget (xml, "owner_label");
 
-  /* Setup signals */
-  glade_xml_signal_autoconnect_full( xml,
-                                     gnc_glade_autoconnect_full_func,
-                                     ow);
-  /* Setup initial values */
-  ow->order_guid = *gncOrderGetGUID (order);
-  string = g_strdup_printf ("%.6" G_GINT64_FORMAT,
-			    gncOrderNextID(bookp));
-  gtk_entry_set_text (GTK_ENTRY (ow->id_entry), string);
-  g_free(string);
-      
-  ow->component_id =
-    gnc_register_gui_component (DIALOG_NEW_ORDER_CM_CLASS,
-				gnc_order_window_refresh_handler,
-				gnc_order_window_close_handler,
-				ow);
+    /* Setup signals */
+    glade_xml_signal_autoconnect_full( xml,
+                                       gnc_glade_autoconnect_full_func,
+                                       ow);
+    /* Setup initial values */
+    ow->order_guid = *gncOrderGetGUID (order);
+    string = g_strdup_printf ("%.6" G_GINT64_FORMAT,
+                              gncOrderNextID(bookp));
+    gtk_entry_set_text (GTK_ENTRY (ow->id_entry), string);
+    g_free(string);
 
-  /* Now fill in a lot of the pieces and display properly */
-  gnc_order_update_window (ow);
+    ow->component_id =
+        gnc_register_gui_component (DIALOG_NEW_ORDER_CM_CLASS,
+                                    gnc_order_window_refresh_handler,
+                                    gnc_order_window_close_handler,
+                                    ow);
 
-  /* Maybe set the reference */
-  gnc_order_owner_changed_cb (ow->owner_choice, ow);
+    /* Now fill in a lot of the pieces and display properly */
+    gnc_order_update_window (ow);
 
-  return ow;
+    /* Maybe set the reference */
+    gnc_order_owner_changed_cb (ow->owner_choice, ow);
+
+    return ow;
 }
 
 OrderWindow *
 gnc_ui_order_edit (GncOrder *order)
 {
-  OrderWindow *ow;
-  OrderDialogType type;
+    OrderWindow *ow;
+    OrderDialogType type;
 
-  if (!order) return NULL;
+    if (!order) return NULL;
 
-  type = EDIT_ORDER;
-  {
-    Timespec ts = gncOrderGetDateClosed (order);
-    if (ts.tv_sec || ts.tv_nsec)
-      type = VIEW_ORDER;
-  }
+    type = EDIT_ORDER;
+    {
+        Timespec ts = gncOrderGetDateClosed (order);
+        if (ts.tv_sec || ts.tv_nsec)
+            type = VIEW_ORDER;
+    }
 
-  ow = gnc_order_new_window (gncOrderGetBook(order), type, order, 
-			     gncOrderGetOwner (order));
+    ow = gnc_order_new_window (gncOrderGetBook(order), type, order,
+                               gncOrderGetOwner (order));
 
-  return ow;
+    return ow;
 }
 
 OrderWindow *
 gnc_ui_order_new (GncOwner *ownerp, QofBook *bookp)
 {
-  OrderWindow *ow;
-  GncOwner owner;
+    OrderWindow *ow;
+    GncOwner owner;
 
-  if (ownerp) {
-    switch (gncOwnerGetType (ownerp)) {
-    case GNC_OWNER_CUSTOMER:
-    case GNC_OWNER_VENDOR:
-    case GNC_OWNER_JOB:
-      gncOwnerCopy (ownerp, &owner);
-      break;
-    default:
-      g_warning ("Cannot deal with unknown Owner types");
-      /* XXX: popup a warning? */
-      return NULL;
+    if (ownerp)
+    {
+        switch (gncOwnerGetType (ownerp))
+        {
+        case GNC_OWNER_CUSTOMER:
+        case GNC_OWNER_VENDOR:
+        case GNC_OWNER_JOB:
+            gncOwnerCopy (ownerp, &owner);
+            break;
+        default:
+            g_warning ("Cannot deal with unknown Owner types");
+            /* XXX: popup a warning? */
+            return NULL;
+        }
     }
-  } else
-    gncOwnerInitJob (&owner, NULL); /* XXX: pass in the owner type? */
+    else
+        gncOwnerInitJob (&owner, NULL); /* XXX: pass in the owner type? */
 
-  /* Make sure required options exist */
-  if (!bookp) return NULL;
+    /* Make sure required options exist */
+    if (!bookp) return NULL;
 
-  ow = gnc_order_window_new_order (bookp, &owner);
+    ow = gnc_order_window_new_order (bookp, &owner);
 
-  return ow;
+    return ow;
 }
 
 /* Functions for order selection widgets */
@@ -753,163 +784,171 @@ gnc_ui_order_new (GncOwner *ownerp, QofBook *bookp)
 static void
 edit_order_cb (gpointer *order_p, gpointer user_data)
 {
-  GncOrder *order;
+    GncOrder *order;
 
-  g_return_if_fail (order_p && user_data);
+    g_return_if_fail (order_p && user_data);
 
-  order = *order_p;
+    order = *order_p;
 
-  if (order)
-    gnc_ui_order_edit (order);
+    if (order)
+        gnc_ui_order_edit (order);
 
-  return;
+    return;
 }
 
 static gpointer
 new_order_cb (gpointer user_data)
 {
-  struct _order_select_window *sw = user_data;
-  OrderWindow *ow;
-  
-  g_return_val_if_fail (user_data, NULL);
+    struct _order_select_window *sw = user_data;
+    OrderWindow *ow;
 
-  ow = gnc_ui_order_new (sw->owner, sw->book);
-  return ow_get_order (ow);
+    g_return_val_if_fail (user_data, NULL);
+
+    ow = gnc_ui_order_new (sw->owner, sw->book);
+    return ow_get_order (ow);
 }
 
 static void
 free_order_cb (gpointer user_data)
 {
-  struct _order_select_window *sw = user_data;
+    struct _order_select_window *sw = user_data;
 
-  g_return_if_fail (sw);
+    g_return_if_fail (sw);
 
-  gncQueryDestroy (sw->q);
-  g_free (sw);
+    gncQueryDestroy (sw->q);
+    g_free (sw);
 }
 
 GNCSearchWindow *
 gnc_order_search (GncOrder *start, GncOwner *owner, QofBook *book)
 {
-  GNCIdType type = GNC_ORDER_MODULE_NAME;
-  struct _order_select_window *sw;
-  QueryNew *q, *q2 = NULL;
-  static GList *params = NULL;
-  static GList *columns = NULL;
-  static GNCSearchCallbackButton buttons[] = { 
-    { N_("View/Edit Order"), edit_order_cb},
-    { NULL },
-  };
+    GNCIdType type = GNC_ORDER_MODULE_NAME;
+    struct _order_select_window *sw;
+    QueryNew *q, *q2 = NULL;
+    static GList *params = NULL;
+    static GList *columns = NULL;
+    static GNCSearchCallbackButton buttons[] =
+    {
+        { N_("View/Edit Order"), edit_order_cb},
+        { NULL },
+    };
 
-  g_return_val_if_fail (book, NULL);
+    g_return_val_if_fail (book, NULL);
 
-  /* Build parameter list in reverse order*/
-  if (params == NULL) {
-    params = gnc_search_param_prepend (params, _("Order Notes"), NULL, type,
-				       ORDER_NOTES, NULL);
-    params = gnc_search_param_prepend (params, _("Date Closed"), NULL, type,
-				       ORDER_CLOSED, NULL);
-    params = gnc_search_param_prepend (params, _("Is Closed?"), NULL, type,
-				       ORDER_IS_CLOSED, NULL);
-    params = gnc_search_param_prepend (params, _("Date Opened"), NULL, type,
-				       ORDER_OPENED, NULL);
-    params = gnc_search_param_prepend (params, _("Owner Name "), NULL, type,
-				       ORDER_OWNER, OWNER_NAME, NULL);
-    params = gnc_search_param_prepend (params, _("Order ID"), NULL, type,
-				       ORDER_ID, NULL);
-  }
+    /* Build parameter list in reverse order*/
+    if (params == NULL)
+    {
+        params = gnc_search_param_prepend (params, _("Order Notes"), NULL, type,
+                                           ORDER_NOTES, NULL);
+        params = gnc_search_param_prepend (params, _("Date Closed"), NULL, type,
+                                           ORDER_CLOSED, NULL);
+        params = gnc_search_param_prepend (params, _("Is Closed?"), NULL, type,
+                                           ORDER_IS_CLOSED, NULL);
+        params = gnc_search_param_prepend (params, _("Date Opened"), NULL, type,
+                                           ORDER_OPENED, NULL);
+        params = gnc_search_param_prepend (params, _("Owner Name "), NULL, type,
+                                           ORDER_OWNER, OWNER_NAME, NULL);
+        params = gnc_search_param_prepend (params, _("Order ID"), NULL, type,
+                                           ORDER_ID, NULL);
+    }
 
-  /* Build the column list in reverse order */
-  if (columns == NULL) {
-    columns = gnc_search_param_prepend (columns, _("Billing ID"), NULL, type,
-					ORDER_REFERENCE, NULL);
-    columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
-					ORDER_OWNER, OWNER_PARENT,
-					OWNER_NAME, NULL);
-    columns = gnc_search_param_prepend (columns, _("Closed"), NULL, type,
-					ORDER_CLOSED, NULL);
-    columns = gnc_search_param_prepend (columns, _("Opened"), NULL, type,
-					ORDER_OPENED, NULL);
-    columns = gnc_search_param_prepend (columns, _("Num"), NULL, type,
-					ORDER_ID, NULL);
-  }
+    /* Build the column list in reverse order */
+    if (columns == NULL)
+    {
+        columns = gnc_search_param_prepend (columns, _("Billing ID"), NULL, type,
+                                            ORDER_REFERENCE, NULL);
+        columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
+                                            ORDER_OWNER, OWNER_PARENT,
+                                            OWNER_NAME, NULL);
+        columns = gnc_search_param_prepend (columns, _("Closed"), NULL, type,
+                                            ORDER_CLOSED, NULL);
+        columns = gnc_search_param_prepend (columns, _("Opened"), NULL, type,
+                                            ORDER_OPENED, NULL);
+        columns = gnc_search_param_prepend (columns, _("Num"), NULL, type,
+                                            ORDER_ID, NULL);
+    }
 
-  /* Build the queries */
-  q = gncQueryCreateFor (type);
-  gncQuerySetBook (q, book);
+    /* Build the queries */
+    q = gncQueryCreateFor (type);
+    gncQuerySetBook (q, book);
 
-  /* If owner is supplied, limit all searches to orders who's owner
-   * (or parent) is the supplied owner!
-   */
-  if (owner && gncOwnerGetGUID (owner)) {
-    QueryNew *tmp, *q3;
+    /* If owner is supplied, limit all searches to orders who's owner
+     * (or parent) is the supplied owner!
+     */
+    if (owner && gncOwnerGetGUID (owner))
+    {
+        QueryNew *tmp, *q3;
 
-    q3 = gncQueryCreateFor (type);
-    gncQueryAddGUIDMatch (q3, g_slist_prepend
-			  (g_slist_prepend (NULL, QUERY_PARAM_GUID),
-			   ORDER_OWNER),
-			  gncOwnerGetGUID (owner), QUERY_OR);
-    gncQueryAddGUIDMatch (q3, g_slist_prepend
-			  (g_slist_prepend (NULL, OWNER_PARENTG),
-			   ORDER_OWNER),
-			  gncOwnerGetGUID (owner), QUERY_OR);
+        q3 = gncQueryCreateFor (type);
+        gncQueryAddGUIDMatch (q3, g_slist_prepend
+                              (g_slist_prepend (NULL, QUERY_PARAM_GUID),
+                               ORDER_OWNER),
+                              gncOwnerGetGUID (owner), QUERY_OR);
+        gncQueryAddGUIDMatch (q3, g_slist_prepend
+                              (g_slist_prepend (NULL, OWNER_PARENTG),
+                               ORDER_OWNER),
+                              gncOwnerGetGUID (owner), QUERY_OR);
 
-    tmp = gncQueryMerge (q, q3, QUERY_AND);
-    gncQueryDestroy (q);
-    gncQueryDestroy (q3);
-    q = tmp;
-    q2 = gncQueryCopy (q);
-  }
+        tmp = gncQueryMerge (q, q3, QUERY_AND);
+        gncQueryDestroy (q);
+        gncQueryDestroy (q3);
+        q = tmp;
+        q2 = gncQueryCopy (q);
+    }
 
 #if 0
-  if (start) {
-    if (q2 == NULL)
-      q2 = gncQueryCopy (q);
+    if (start)
+    {
+        if (q2 == NULL)
+            q2 = gncQueryCopy (q);
 
-    gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
-			  gncOrderGetGUID (start), QUERY_AND);
-  }
+        gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
+                              gncOrderGetGUID (start), QUERY_AND);
+    }
 #endif
 
-  /* launch select dialog and return the result */
-  sw = g_new0 (struct _order_select_window, 1);
+    /* launch select dialog and return the result */
+    sw = g_new0 (struct _order_select_window, 1);
 
-  if (owner) {
-    gncOwnerCopy (owner, &(sw->owner_def));
-    sw->owner = &(sw->owner_def);
-  }
-  sw->book = book;
-  sw->q = q;
+    if (owner)
+    {
+        gncOwnerCopy (owner, &(sw->owner_def));
+        sw->owner = &(sw->owner_def);
+    }
+    sw->book = book;
+    sw->q = q;
 
-  return gnc_search_dialog_create (type, _("Find Order"),
-				   params, columns, q, q2,
-				   buttons, NULL, new_order_cb,
-				   sw, free_order_cb, GCONF_SECTION_SEARCH,
-				   NULL);
+    return gnc_search_dialog_create (type, _("Find Order"),
+                                     params, columns, q, q2,
+                                     buttons, NULL, new_order_cb,
+                                     sw, free_order_cb, GCONF_SECTION_SEARCH,
+                                     NULL);
 }
 
 GNCSearchWindow *
 gnc_order_search_select (gpointer start, gpointer book)
 {
-  GncOrder *o = start;
-  GncOwner owner, *ownerp;
+    GncOrder *o = start;
+    GncOwner owner, *ownerp;
 
-  if (!book) return NULL;
+    if (!book) return NULL;
 
-  if (o) {
-    ownerp = gncOrderGetOwner (o);
-    gncOwnerCopy (ownerp, &owner);
-  } else
-    gncOwnerInitCustomer (&owner, NULL); /* XXX */
+    if (o)
+    {
+        ownerp = gncOrderGetOwner (o);
+        gncOwnerCopy (ownerp, &owner);
+    }
+    else
+        gncOwnerInitCustomer (&owner, NULL); /* XXX */
 
-  return gnc_order_search (start, NULL, book);
+    return gnc_order_search (start, NULL, book);
 }
 
 GNCSearchWindow *
 gnc_order_search_edit (gpointer start, gpointer book)
 {
-  if (start)
-    gnc_ui_order_edit (start);
+    if (start)
+        gnc_ui_order_edit (start);
 
-  return NULL;
+    return NULL;
 }

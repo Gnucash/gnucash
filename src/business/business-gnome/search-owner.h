@@ -32,18 +32,20 @@
 typedef struct _GNCSearchOwner	GNCSearchOwner;
 typedef struct _GNCSearchOwnerClass	GNCSearchOwnerClass;
 
-struct _GNCSearchOwner {
-  GNCSearchCoreType parent;
+struct _GNCSearchOwner
+{
+    GNCSearchCoreType parent;
 
-  guid_match_t	how;
+    guid_match_t	how;
 };
 
-struct _GNCSearchOwnerClass {
-  GNCSearchCoreTypeClass parent_class;
+struct _GNCSearchOwnerClass
+{
+    GNCSearchCoreTypeClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  /* signals */
+    /* signals */
 };
 
 GType		gnc_search_owner_get_type	(void);

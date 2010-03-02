@@ -54,35 +54,40 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 static GncSqlColumnTableEntry col_table[] =
 {
-	{ "guid",      CT_GUID,     0,                 COL_NNUL|COL_PKEY, "guid" },
-	{ "id",        CT_STRING,   MAX_ID_LEN,        COL_NNUL,          NULL, JOB_ID },
-	{ "name",      CT_STRING,   MAX_NAME_LEN,      COL_NNUL,          "name" },
-	{ "reference", CT_STRING,   MAX_REFERENCE_LEN, COL_NNUL,          NULL, JOB_REFERENCE },
-	{ "active",    CT_BOOLEAN,  0,                 COL_NNUL,          NULL, NULL,
-		(QofAccessFunc)gncJobGetActive, (QofSetterFunc)gncJobSetActive },
-	{ "owner",     CT_OWNERREF, 0,                 0,                 NULL, NULL,
-		(QofAccessFunc)gncJobGetOwner, (QofSetterFunc)gncJobSetOwner },
-	{ NULL }
+    { "guid",      CT_GUID,     0,                 COL_NNUL | COL_PKEY, "guid" },
+    { "id",        CT_STRING,   MAX_ID_LEN,        COL_NNUL,          NULL, JOB_ID },
+    { "name",      CT_STRING,   MAX_NAME_LEN,      COL_NNUL,          "name" },
+    { "reference", CT_STRING,   MAX_REFERENCE_LEN, COL_NNUL,          NULL, JOB_REFERENCE },
+    {
+        "active",    CT_BOOLEAN,  0,                 COL_NNUL,          NULL, NULL,
+        (QofAccessFunc)gncJobGetActive, (QofSetterFunc)gncJobSetActive
+    },
+    {
+        "owner",     CT_OWNERREF, 0,                 0,                 NULL, NULL,
+        (QofAccessFunc)gncJobGetOwner, (QofSetterFunc)gncJobSetOwner
+    },
+    { NULL }
 };
 
 static GncJob*
 load_single_job( GncSqlBackend* be, GncSqlRow* row )
 {
     const GUID* guid;
-	GncJob* pJob;
+    GncJob* pJob;
 
-	g_return_val_if_fail( be != NULL, NULL );
-	g_return_val_if_fail( row != NULL, NULL );
+    g_return_val_if_fail( be != NULL, NULL );
+    g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
     pJob = gncJobLookup( be->primary_book, guid );
-    if( pJob == NULL ) {
+    if ( pJob == NULL )
+    {
         pJob = gncJobCreate( be->primary_book );
     }
     gnc_sql_load_object( be, row, GNC_ID_JOB, pJob, col_table );
     qof_instance_mark_clean( QOF_INSTANCE(pJob) );
 
-	return pJob;
+    return pJob;
 }
 
 static void
@@ -92,30 +97,34 @@ load_all_jobs( GncSqlBackend* be )
     GncSqlResult* result;
     QofBook* pBook;
 
-	g_return_if_fail( be != NULL );
+    g_return_if_fail( be != NULL );
 
     pBook = be->primary_book;
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
     result = gnc_sql_execute_select_statement( be, stmt );
-	gnc_sql_statement_dispose( stmt );
-    if( result != NULL ) {
+    gnc_sql_statement_dispose( stmt );
+    if ( result != NULL )
+    {
         GncSqlRow* row;
-		GList* list = NULL;
+        GList* list = NULL;
 
-		row = gnc_sql_result_get_first_row( result );
-        while( row != NULL ) {
+        row = gnc_sql_result_get_first_row( result );
+        while ( row != NULL )
+        {
             GncJob* pJob = load_single_job( be, row );
-			if( pJob != NULL ) {
-				list = g_list_append( list, pJob );
-			}
-			row = gnc_sql_result_get_next_row( result );
-		}
-		gnc_sql_result_dispose( result );
+            if ( pJob != NULL )
+            {
+                list = g_list_append( list, pJob );
+            }
+            row = gnc_sql_result_get_next_row( result );
+        }
+        gnc_sql_result_dispose( result );
 
-		if( list != NULL ) {
-			gnc_sql_slots_load_for_list( be, list );
-		}
+        if ( list != NULL )
+        {
+            gnc_sql_slots_load_for_list( be, list );
+        }
     }
 }
 
@@ -123,12 +132,13 @@ load_all_jobs( GncSqlBackend* be )
 static void
 create_job_tables( GncSqlBackend* be )
 {
-	gint version;
+    gint version;
 
-	g_return_if_fail( be != NULL );
+    g_return_if_fail( be != NULL );
 
-	version = gnc_sql_get_table_version( be, TABLE_NAME );
-    if( version == 0 ) {
+    version = gnc_sql_get_table_version( be, TABLE_NAME );
+    if ( version == 0 )
+    {
         gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
     }
 }
@@ -137,9 +147,9 @@ create_job_tables( GncSqlBackend* be )
 static gboolean
 save_job( GncSqlBackend* be, QofInstance* inst )
 {
-	g_return_val_if_fail( inst != NULL, FALSE );
-	g_return_val_if_fail( GNC_IS_JOB(inst), FALSE );
-	g_return_val_if_fail( be != NULL, FALSE );
+    g_return_val_if_fail( inst != NULL, FALSE );
+    g_return_val_if_fail( GNC_IS_JOB(inst), FALSE );
+    g_return_val_if_fail( be != NULL, FALSE );
 
     return gnc_sql_commit_standard_item( be, inst, TABLE_NAME, GNC_ID_JOB, col_table );
 }
@@ -150,13 +160,14 @@ job_should_be_saved( GncJob *job )
 {
     const char *id;
 
-	g_return_val_if_fail( job != NULL, FALSE );
+    g_return_val_if_fail( job != NULL, FALSE );
 
     /* make sure this is a valid job before we save it -- should have an ID */
     id = gncJobGetID( job );
-    if( id == NULL || *id == '\0' ) {
+    if ( id == NULL || *id == '\0' )
+    {
         return FALSE;
-	}
+    }
 
     return TRUE;
 }
@@ -164,29 +175,30 @@ job_should_be_saved( GncJob *job )
 static void
 write_single_job( QofInstance *term_p, gpointer data_p )
 {
-	write_objects_t* s = (write_objects_t*)data_p;
+    write_objects_t* s = (write_objects_t*)data_p;
 
-	g_return_if_fail( term_p != NULL );
-	g_return_if_fail( GNC_IS_JOB(term_p) );
-	g_return_if_fail( data_p != NULL );
+    g_return_if_fail( term_p != NULL );
+    g_return_if_fail( GNC_IS_JOB(term_p) );
+    g_return_if_fail( data_p != NULL );
 
-	if( s->is_ok && job_should_be_saved( GNC_JOB(term_p) ) ) {
-    	s->is_ok = save_job( s->be, term_p );
-	}
+    if ( s->is_ok && job_should_be_saved( GNC_JOB(term_p) ) )
+    {
+        s->is_ok = save_job( s->be, term_p );
+    }
 }
 
 static gboolean
 write_jobs( GncSqlBackend* be )
 {
-	write_objects_t data;
+    write_objects_t data;
 
-	g_return_val_if_fail( be != NULL, FALSE );
+    g_return_val_if_fail( be != NULL, FALSE );
 
-	data.be = be;
-	data.is_ok = TRUE;
+    data.be = be;
+    data.is_ok = TRUE;
     qof_object_foreach( GNC_ID_JOB, be->primary_book, write_single_job, &data );
 
-	return data.is_ok;
+    return data.is_ok;
 }
 
 /* ================================================================= */
@@ -200,8 +212,8 @@ gnc_job_sql_initialize( void )
         save_job,						/* commit */
         load_all_jobs,					/* initial_load */
         create_job_tables,				/* create_tables */
-		NULL, NULL, NULL,
-		write_jobs						/* write */
+        NULL, NULL, NULL,
+        write_jobs						/* write */
     };
 
     qof_object_register_backend( GNC_ID_JOB, GNC_SQL_BACKEND, &be_data );
