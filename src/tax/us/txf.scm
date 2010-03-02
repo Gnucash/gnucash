@@ -17,6 +17,8 @@
 ;; Added 'None' type for no income tax options
 ;;
 
+(use-modules (gnucash app-utils))
+
 (define txf-tax-entity-types
   (list
    (cons 'F1040 #("Individual, Joint, etc." "Files US Form 1040 Tax Return"))
