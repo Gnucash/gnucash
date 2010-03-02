@@ -1394,9 +1394,10 @@ function make_install() {
 function make_chm() {
     _CHM_TYPE=$1
     _CHM_LANG=$2
+    _XSLTPROC_OPTS=$3
     echo "Processing $_CHM_TYPE ($_CHM_LANG) ..."
     qpushd $_CHM_TYPE/$_CHM_LANG
-        xsltproc $XSLTPROCFLAGS ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
+        xsltproc $XSLTPROCFLAGS $_XSLTPROC_OPTS ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
         count=0
         echo >> htmlhelp.hhp
         echo "[ALIAS]" >> htmlhelp.hhp
@@ -1441,10 +1442,11 @@ function inst_docs() {
         fi
         setup docs
         _DOCS_INST_UDIR=`unix_path $INSTALL_DIR`/share/gnucash/help
-        mkdir -p $_DOCS_INST_UDIR/{C,de_DE,it_IT}
+        mkdir -p $_DOCS_INST_UDIR/{C,de_DE,it_IT,ja_JP}
         make_chm guide C
         make_chm guide de_DE
         make_chm guide it_IT
+        make_chm guide ja_JP "--stringparam chunker.output.encoding Shift_JIS --stringparam htmlhelp.encoding Shift_JIS"
         make_chm help C
         make_chm help de_DE
 #        make_chm help it_IT
