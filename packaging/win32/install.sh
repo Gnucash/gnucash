@@ -392,6 +392,9 @@ function inst_guile() {
 # undef HAVE_INTTYPES_H
 #endif
 EOF
+        # Also, for MSVC compiler we need to create an import library
+        pexports $_GUILE_UDIR/bin/libguile.dll > $_GUILE_UDIR/lib/libguile.def
+        ${DLLTOOL} -d $_GUILE_UDIR/lib/libguile.def -D $_GUILE_UDIR/bin/libguile.dll -l $_GUILE_UDIR/lib/libguile.lib
         rm -rf ${TMP_UDIR}/guile-*
     fi
     if [ "$CROSS_COMPILE" = "yes" ]; then
