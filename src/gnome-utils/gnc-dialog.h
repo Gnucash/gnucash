@@ -126,7 +126,7 @@ gpointer gnc_dialog_get(GncDialog *d, const char* name);
 
 /* Type-specific getter/setters */
 gboolean     gnc_dialog_set_string(GncDialog *d, const char* name,
-                               const gchar* val);
+                                   const gchar* val);
 gchar* gnc_dialog_get_string(GncDialog *d, const char* name);
 
 gboolean gnc_dialog_set_double(GncDialog *d, const char* name, gdouble val);

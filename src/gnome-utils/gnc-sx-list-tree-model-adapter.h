@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-sx-list-tree-model-adapter.h
  *
  * Copyright (C) 2006 Josh Sled <jsled@asynchronous.org>
@@ -42,7 +42,8 @@ typedef struct _GncSxListTreeModelAdapter GncSxListTreeModelAdapter;
 typedef struct _GncSxListTreeModelAdapterClass GncSxListTreeModelAdapterClass;
 
 // model columns
-enum {
+enum
+{
     SXLTMA_COL_NAME = 0,
     SXLTMA_COL_ENABLED,
     SXLTMA_COL_FREQUENCY,

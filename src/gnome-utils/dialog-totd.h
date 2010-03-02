@@ -19,11 +19,11 @@
  * Free Software Foundation           Voice:  +1-617-542-5942
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
- */ 
+ */
 
 #ifndef DIALOG_TOTD_H
 #define DIALOG_TOTD_H
 
 void gnc_totd_dialog (GtkWindow *parent, gboolean startup);
 
-#endif 
+#endif

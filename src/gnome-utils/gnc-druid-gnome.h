@@ -25,15 +25,15 @@ typedef struct _GNCDruidGnomeClass GNCDruidGnomeClass;
 
 struct _GNCDruidGnome
 {
-  GNCDruid parent;
+    GNCDruid parent;
 
-  GnomeDruid*	druid;
-  GtkWidget*	window;
+    GnomeDruid*	druid;
+    GtkWidget*	window;
 };
 
 struct _GNCDruidGnomeClass
 {
-  GNCDruidClass parent_class;
+    GNCDruidClass parent_class;
 };
 
 GType	gnc_druid_gnome_get_type(void);

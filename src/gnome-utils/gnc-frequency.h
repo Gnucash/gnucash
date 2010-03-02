@@ -40,7 +40,7 @@
  * transaction or budgeting category, for instance], manipulating a FreqSpec
  * object in the process.
  **/
-typedef struct _GncFrequency 
+typedef struct _GncFrequency
 {
     GtkVBox	        widget;
     GtkVBox         *vb;
@@ -57,7 +57,7 @@ typedef struct _GncFrequencyClass
     void (*changed) (GncFrequency *gf);
 } GncFrequencyClass;
 
-struct pageDataTuple 
+struct pageDataTuple
 {
     int idx;
     UIFreqType uiFTVal;

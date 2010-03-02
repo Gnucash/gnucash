@@ -96,7 +96,8 @@ gnc_dense_cal_store_get_type(void)
     static GType type = 0;
     if (type == 0)
     {
-        static const GTypeInfo info = {
+        static const GTypeInfo info =
+        {
             sizeof (GncDenseCalStoreClass),
             NULL,   /* base_init */
             NULL,   /* base_finalize */
@@ -107,7 +108,8 @@ gnc_dense_cal_store_get_type(void)
             0,      /* n_preallocs */
             NULL    /* instance_init */
         };
-        static const GInterfaceInfo iDenseCalModelInfo = {
+        static const GInterfaceInfo iDenseCalModelInfo =
+        {
             (GInterfaceInitFunc)gnc_dense_cal_store_iface_init,
             NULL, /* interface finalize */
             NULL, /* interface data */
@@ -186,19 +188,19 @@ gdcs_generic_update_recurrences(GncDenseCalStore *trans, GDate *start, GList *re
 
     i = 0;
     while ((i < trans->num_marks)
-           && g_date_valid(&next)
-           /* Do checking against end restriction. */
-           && ((trans->end_type == NEVER_END)
-               || (trans->end_type == END_ON_DATE
-                   && g_date_compare(&next, &trans->end_date) <= 0)
-               || (trans->end_type == END_AFTER_N_OCCS
-                   && i < trans->n_occurrences)))
+            && g_date_valid(&next)
+            /* Do checking against end restriction. */
+            && ((trans->end_type == NEVER_END)
+                || (trans->end_type == END_ON_DATE
+                    && g_date_compare(&next, &trans->end_date) <= 0)
+                || (trans->end_type == END_AFTER_N_OCCS
+                    && i < trans->n_occurrences)))
     {
         *trans->cal_marks[i++] = next;
         date = next;
         recurrenceListNextInstance(recurrences, &date, &next);
     }
-    trans->num_real_marks = (i == 0 ? 0 : (i-1));
+    trans->num_real_marks = (i == 0 ? 0 : (i - 1));
     g_signal_emit_by_name(trans, "update", GUINT_TO_POINTER(1));
 }
 

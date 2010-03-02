@@ -38,40 +38,40 @@
 
 typedef enum
 {
-  GNC_CURSOR_NORMAL = -1,
-  GNC_CURSOR_BUSY   = GDK_WATCH
+    GNC_CURSOR_NORMAL = -1,
+    GNC_CURSOR_BUSY   = GDK_WATCH
 } GNCCursorType;
 
 
 /********************************************************************\
- * gnc_ui_set_cursor                                                * 
- *   sets the cursor to the specified type                          * 
- *                                                                  * 
+ * gnc_ui_set_cursor                                                *
+ *   sets the cursor to the specified type                          *
+ *                                                                  *
  * Args: w    - the widget over which to change the cursor          *
  *       type - the type of cursor to make                          *
- * Return: none                                                     * 
+ * Return: none                                                     *
 \********************************************************************/
 static void
 gnc_ui_set_cursor (GdkWindow *win, GNCCursorType type, gboolean update_now)
 {
-  GdkCursor *cursor = NULL;
+    GdkCursor *cursor = NULL;
 
-  if (win == NULL)
-    return;
+    if (win == NULL)
+        return;
 
-  if (type != GNC_CURSOR_NORMAL)
-    cursor = gdk_cursor_new (type);
+    if (type != GNC_CURSOR_NORMAL)
+        cursor = gdk_cursor_new (type);
 
-  gdk_window_set_cursor (win, cursor);
+    gdk_window_set_cursor (win, cursor);
 
-  if (update_now && type != GNC_CURSOR_NORMAL)
-  {
-    while (gtk_events_pending ())
-      gtk_main_iteration ();
-  }
+    if (update_now && type != GNC_CURSOR_NORMAL)
+    {
+        while (gtk_events_pending ())
+            gtk_main_iteration ();
+    }
 
-  if (type != GNC_CURSOR_NORMAL)
-    gdk_cursor_unref (cursor);
+    if (type != GNC_CURSOR_NORMAL)
+        gdk_cursor_unref (cursor);
 }
 
 
@@ -85,56 +85,56 @@ gnc_ui_set_cursor (GdkWindow *win, GNCCursorType type, gboolean update_now)
  *                    call returns.                                 *
  * Return: none                                                     *
 \********************************************************************/
-void 
+void
 gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
 {
-  if (w != NULL)
-    gnc_ui_set_cursor (w->window, GNC_CURSOR_BUSY, update_now);
-  else
-  {
-    GList *containerstop, *node;
-
-    for (containerstop = node = gtk_window_list_toplevels (); node; node = node->next)
+    if (w != NULL)
+        gnc_ui_set_cursor (w->window, GNC_CURSOR_BUSY, update_now);
+    else
     {
-      w = node->data;
+        GList *containerstop, *node;
 
-      if (!w || !GTK_IS_WIDGET (w) || !w->window)
-        continue;
+        for (containerstop = node = gtk_window_list_toplevels (); node; node = node->next)
+        {
+            w = node->data;
 
-      gnc_ui_set_cursor (w->window, GNC_CURSOR_BUSY, update_now);
+            if (!w || !GTK_IS_WIDGET (w) || !w->window)
+                continue;
+
+            gnc_ui_set_cursor (w->window, GNC_CURSOR_BUSY, update_now);
+        }
+        g_list_free (containerstop);
     }
-    g_list_free (containerstop);
-  }
 }
 
 
 /********************************************************************\
- * gnc_unset_busy_cursor                                            * 
- *   sets the cursor to the default cursor for the given window.    * 
+ * gnc_unset_busy_cursor                                            *
+ *   sets the cursor to the default cursor for the given window.    *
  *   if the window is null, sets the cursor for all toplevel windows*
- *                                                                  * 
- * Args:   w - the widget over which to make cursor normal          * 
- * Return: none                                                     * 
+ *                                                                  *
+ * Args:   w - the widget over which to make cursor normal          *
+ * Return: none                                                     *
 \********************************************************************/
-void 
+void
 gnc_unset_busy_cursor (GtkWidget *w)
 {
-  if (w != NULL)
-    gnc_ui_set_cursor (w->window, GNC_CURSOR_NORMAL, FALSE);
-  else
-  {
-    GList *containerstop, *node;
-
-    for (containerstop = node = gtk_window_list_toplevels (); node; node = node->next)
+    if (w != NULL)
+        gnc_ui_set_cursor (w->window, GNC_CURSOR_NORMAL, FALSE);
+    else
     {
-      w = GTK_WIDGET (node->data);
+        GList *containerstop, *node;
 
-      if (!w || !GTK_IS_WIDGET (w) || GTK_WIDGET_NO_WINDOW(w))
-        continue;
+        for (containerstop = node = gtk_window_list_toplevels (); node; node = node->next)
+        {
+            w = GTK_WIDGET (node->data);
 
-      gnc_ui_set_cursor (w->window, GNC_CURSOR_NORMAL, FALSE);
+            if (!w || !GTK_IS_WIDGET (w) || GTK_WIDGET_NO_WINDOW(w))
+                continue;
+
+            gnc_ui_set_cursor (w->window, GNC_CURSOR_NORMAL, FALSE);
+        }
+        g_list_free (containerstop);
     }
-    g_list_free (containerstop);
-  }
 }
 

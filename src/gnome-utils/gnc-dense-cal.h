@@ -31,7 +31,7 @@
 
 G_BEGIN_DECLS
 
-#define GNC_TYPE_DENSE_CAL          (gnc_dense_cal_get_type ()) 
+#define GNC_TYPE_DENSE_CAL          (gnc_dense_cal_get_type ())
 #define GNC_DENSE_CAL(obj)          GTK_CHECK_CAST (obj, gnc_dense_cal_get_type (), GncDenseCal)
 #define GNC_DENSE_CAL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_dense_cal_get_type (), GncDenseCalClass)
 #define GNC_IS_DENSE_CAL(obj)       GTK_CHECK_TYPE (obj, gnc_dense_cal_get_type ())
@@ -46,9 +46,9 @@ typedef struct _gdc_month_coords
 
 enum GDC_COLORS
 {
-     MONTH_THIS = 0,
-     MONTH_THAT,
-     MAX_COLORS
+    MONTH_THIS = 0,
+    MONTH_THAT,
+    MAX_COLORS
 };
 
 struct _GncDenseCal
@@ -59,7 +59,7 @@ struct _GncDenseCal
     GtkDrawingArea *cal_drawing_area;
 
     GdkPixmap *drawbuf;
-    
+
     gboolean initialized;
 
     gboolean showPopup;

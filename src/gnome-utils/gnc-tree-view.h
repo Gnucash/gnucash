@@ -25,7 +25,7 @@
 /** @addtogroup GUI
     @{ */
 /** @file gnc-tree-view.h
-    @brief common utilities for manipulating a GtkTreeView within gnucash  
+    @brief common utilities for manipulating a GtkTreeView within gnucash
     @author David Hampton <hampton@employees.org>
 */
 
@@ -48,12 +48,14 @@ G_BEGIN_DECLS
 
 
 /* typedefs & structures */
-typedef struct {
-	GtkTreeView gtk_tree_view;
+typedef struct
+{
+    GtkTreeView gtk_tree_view;
 } GncTreeView;
 
-typedef struct {
-	GtkTreeViewClass gtk_tree_view;
+typedef struct
+{
+    GtkTreeViewClass gtk_tree_view;
 } GncTreeViewClass;
 
 /* Standard g_object type */
@@ -81,8 +83,8 @@ GType gnc_tree_view_get_type (void);
 
 
 typedef void (* renderer_toggled) (GtkCellRendererToggle *cell_renderer_toggle,
-				   const gchar           *path,
-				   gpointer               user_data);
+                                   const gchar           *path,
+                                   gpointer               user_data);
 
 
 /** @name Tree View Creation */
@@ -131,13 +133,13 @@ typedef void (* renderer_toggled) (GtkCellRendererToggle *cell_renderer_toggle,
  */
 GtkTreeViewColumn *
 gnc_tree_view_add_toggle_column (GncTreeView *view,
-				 const gchar *column_title,
-				 const gchar *column_short_title,
-				 const gchar *pref_name,
-				 gint model_data_column,
-				 gint model_visibility_column,
-				 GtkTreeIterCompareFunc column_sort_fn,
-				 renderer_toggled toggle_edited_cb);
+                                 const gchar *column_title,
+                                 const gchar *column_short_title,
+                                 const gchar *pref_name,
+                                 gint model_data_column,
+                                 gint model_visibility_column,
+                                 GtkTreeIterCompareFunc column_sort_fn,
+                                 renderer_toggled toggle_edited_cb);
 
 /** This function adds a new text column to a GncTreeView base view.
  *  It takes all the parameters necessary to hook a GtkTreeModel
@@ -181,13 +183,13 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
  */
 GtkTreeViewColumn *
 gnc_tree_view_add_text_column (GncTreeView *view,
-			       const gchar *column_title,
-			       const gchar *pref_name,
-			       const gchar *stock_icon_name,
-			       const gchar *sizing_text,
-			       gint model_data_column,
-			       gint model_visibility_column,
-			       GtkTreeIterCompareFunc column_sort_fn);
+                               const gchar *column_title,
+                               const gchar *pref_name,
+                               const gchar *stock_icon_name,
+                               const gchar *sizing_text,
+                               gint model_data_column,
+                               gint model_visibility_column,
+                               GtkTreeIterCompareFunc column_sort_fn);
 
 /** This function adds a new combobox column to a GncTreeView base
  *  view.  The parameters it takes in common with
@@ -251,13 +253,13 @@ gnc_tree_view_add_combo_column (GncTreeView *view,
  */
 GtkTreeViewColumn *
 gnc_tree_view_add_numeric_column (GncTreeView *view,
-				  const gchar *column_title,
-				  const gchar *pref_name,
-				  const gchar *sizing_text,
-				  gint model_data_column,
-				  gint model_color_column,
-				  gint model_visibility_column,
-				  GtkTreeIterCompareFunc column_sort_fn);
+                                  const gchar *column_title,
+                                  const gchar *pref_name,
+                                  const gchar *sizing_text,
+                                  gint model_data_column,
+                                  gint model_color_column,
+                                  gint model_visibility_column,
+                                  GtkTreeIterCompareFunc column_sort_fn);
 
 /** Add a column to a view based upon a GncTreeView.  This function
  *  knows about the two special columns on the right side of this type
@@ -272,7 +274,7 @@ gnc_tree_view_add_numeric_column (GncTreeView *view,
  *  @return The index of the newly added column.
  */
 gint gnc_tree_view_append_column (GncTreeView *view,
-				  GtkTreeViewColumn *column);
+                                  GtkTreeViewColumn *column);
 
 /** @} */
 
@@ -335,7 +337,7 @@ gnc_tree_view_find_column_by_name (GncTreeView *view,
  *  Use NULL to disconnect a gconf association.
  */
 void gnc_tree_view_set_gconf_section (GncTreeView *view,
-				      const gchar *section);
+                                      const gchar *section);
 
 /** This function is called to get the current association between a
  *  gconf section and the display of a view.  It returns the same
@@ -350,8 +352,8 @@ void gnc_tree_view_set_gconf_section (GncTreeView *view,
 const gchar *gnc_tree_view_get_gconf_section (GncTreeView *view);
 
 void gnc_tree_view_expand_columns (GncTreeView *view,
-				   gchar *first_column_name,
-				   ...);
+                                   gchar *first_column_name,
+                                   ...);
 
 /** This function is called to set the "show-column-menu" property on
  *  this view.  This function has no visible effect if the
@@ -363,7 +365,7 @@ void gnc_tree_view_expand_columns (GncTreeView *view,
  */
 void
 gnc_tree_view_set_show_column_menu (GncTreeView *view,
-				    gboolean visible);
+                                    gboolean visible);
 
 /** This function is called to get the current value of the
  *  "show-column-menu" property.  It returns the same value passed to
@@ -392,7 +394,7 @@ gnc_tree_view_column_get_renderer(GtkTreeViewColumn *column);
  * cursor.  Returns the new column and the possibly changed (if
  * navigation wrapped a row) path. */
 void
-gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col, 
+gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col,
                      GtkTreePath *path, GdkEventKey *event);
 
 /* Returns TRUE if path is a vaid path for the treeview */

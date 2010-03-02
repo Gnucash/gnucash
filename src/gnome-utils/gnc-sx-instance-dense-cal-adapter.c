@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-sx-instance-dense-cal-adapter.c
  *
  * Copyright (C) 2006 Josh Sled <jsled@asynchronous.org>
@@ -54,7 +54,7 @@ struct _GncSxInstanceDenseCalAdapterClass
     GObjectClass parent;
 };
 
-struct _GncSxInstanceDenseCalAdapter 
+struct _GncSxInstanceDenseCalAdapter
 {
     GObject parent;
     gboolean disposed;
@@ -95,7 +95,7 @@ gsidca_instances_added_cb(GncSxInstanceModel *model, SchedXaction *sx_added, gpo
 {
     GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(user_data);
     g_debug("instance added\n");
-    if (xaccSchedXactionGetEnabled(sx_added)) 
+    if (xaccSchedXactionGetEnabled(sx_added))
     {
         g_signal_emit_by_name(adapter, "added", GPOINTER_TO_UINT(sx_added));
     }
@@ -107,7 +107,7 @@ gsidca_instances_updated_cb(GncSxInstanceModel *model, SchedXaction *sx_updated,
     GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(user_data);
     gnc_sx_instance_model_update_sx_instances(model, sx_updated);
     g_debug("instances updated\n");
-    if (xaccSchedXactionGetEnabled(sx_updated)) 
+    if (xaccSchedXactionGetEnabled(sx_updated))
     {
         g_signal_emit_by_name(adapter, "update", GPOINTER_TO_UINT((gpointer)sx_updated));
     }
@@ -145,7 +145,8 @@ gnc_sx_instance_dense_cal_adapter_get_type(void)
     static GType type = 0;
     if (type == 0)
     {
-        static const GTypeInfo info = {
+        static const GTypeInfo info =
+        {
             sizeof (GncSxInstanceDenseCalAdapterClass),
             NULL, /* base init */
             NULL, /* base finalize */
@@ -156,7 +157,8 @@ gnc_sx_instance_dense_cal_adapter_get_type(void)
             0, /* n_preallocs */
             (GInstanceInitFunc)gnc_sx_instance_dense_cal_adapter_init
         };
-        static const GInterfaceInfo iDenseCalModelInfo = {
+        static const GInterfaceInfo iDenseCalModelInfo =
+        {
             (GInterfaceInitFunc)gnc_sx_instance_dense_cal_adapter_interface_init,
             NULL, /* interface finalize */
             NULL, /* interface data */
@@ -189,7 +191,7 @@ gsidca_get_contained(GncDenseCalModel *model)
     for (sxes = adapter->instances->sx_instance_list; sxes != NULL; sxes = sxes->next)
     {
         GncSxInstances *sx_instances = (GncSxInstances*)sxes->data;
-        if (xaccSchedXactionGetEnabled(sx_instances->sx)) 
+        if (xaccSchedXactionGetEnabled(sx_instances->sx))
         {
             list = g_list_append(list, GUINT_TO_POINTER(GPOINTER_TO_UINT(sx_instances->sx)));
         }
@@ -202,7 +204,7 @@ gsidca_get_name(GncDenseCalModel *model, guint tag)
 {
     GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(model);
     GncSxInstances *insts
-        = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
+    = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
     if (insts == NULL)
         return NULL;
     return xaccSchedXactionGetName(insts->sx);
@@ -216,7 +218,7 @@ gsidca_get_info(GncDenseCalModel *model, guint tag)
     GList *schedule;
     gchar *schedule_str;
     GncSxInstances *insts
-        = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
+    = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
     if (insts == NULL)
         return NULL;
     schedule = gnc_sx_get_schedule(insts->sx);
@@ -230,7 +232,7 @@ gsidca_get_instance_count(GncDenseCalModel *model, guint tag)
     GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(model);
     // g_list_find(instances->sxes, {sx_to_tag, tag}).length();
     GncSxInstances *insts
-        = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
+    = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
     if (insts == NULL)
         return 0;
     return g_list_length(insts->instance_list);
@@ -242,7 +244,7 @@ gsidca_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDa
     GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(model);
     GncSxInstance *inst;
     GncSxInstances *insts
-        = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
+    = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
     if (insts == NULL)
         return;
     inst = (GncSxInstance*)g_list_nth_data(insts->instance_list, instance_index);

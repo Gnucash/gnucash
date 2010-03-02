@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-tree-model-account.h -- GtkTreeModel implementation to
  *	display accounts in a GtkTreeView.
  *
@@ -53,60 +53,63 @@ G_BEGIN_DECLS
 #define GNC_TREE_MODEL_ACCOUNT_NAME            "GncTreeModelAccount"
 
 
-typedef enum {
-	GNC_TREE_MODEL_ACCOUNT_COL_NAME,
-	GNC_TREE_MODEL_ACCOUNT_COL_TYPE,
-	GNC_TREE_MODEL_ACCOUNT_COL_COMMODITY,	
-	GNC_TREE_MODEL_ACCOUNT_COL_CODE,
-	GNC_TREE_MODEL_ACCOUNT_COL_DESCRIPTION,
-	GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM,
-	GNC_TREE_MODEL_ACCOUNT_COL_PRESENT,
-	GNC_TREE_MODEL_ACCOUNT_COL_PRESENT_REPORT,
-	GNC_TREE_MODEL_ACCOUNT_COL_BALANCE,
-	GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_REPORT,
-	GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_PERIOD,
-	GNC_TREE_MODEL_ACCOUNT_COL_CLEARED,
-	GNC_TREE_MODEL_ACCOUNT_COL_CLEARED_REPORT,
-	GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED,
-	GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_REPORT,
-	GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_DATE,
-	GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN,
-	GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN_REPORT,
-	GNC_TREE_MODEL_ACCOUNT_COL_TOTAL,
-	GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_REPORT,
-	GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_PERIOD,
-	GNC_TREE_MODEL_ACCOUNT_COL_NOTES,
-	GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,
-	GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
+typedef enum
+{
+    GNC_TREE_MODEL_ACCOUNT_COL_NAME,
+    GNC_TREE_MODEL_ACCOUNT_COL_TYPE,
+    GNC_TREE_MODEL_ACCOUNT_COL_COMMODITY,
+    GNC_TREE_MODEL_ACCOUNT_COL_CODE,
+    GNC_TREE_MODEL_ACCOUNT_COL_DESCRIPTION,
+    GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM,
+    GNC_TREE_MODEL_ACCOUNT_COL_PRESENT,
+    GNC_TREE_MODEL_ACCOUNT_COL_PRESENT_REPORT,
+    GNC_TREE_MODEL_ACCOUNT_COL_BALANCE,
+    GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_REPORT,
+    GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_PERIOD,
+    GNC_TREE_MODEL_ACCOUNT_COL_CLEARED,
+    GNC_TREE_MODEL_ACCOUNT_COL_CLEARED_REPORT,
+    GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED,
+    GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_REPORT,
+    GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_DATE,
+    GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN,
+    GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN_REPORT,
+    GNC_TREE_MODEL_ACCOUNT_COL_TOTAL,
+    GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_REPORT,
+    GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_PERIOD,
+    GNC_TREE_MODEL_ACCOUNT_COL_NOTES,
+    GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,
+    GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
 
-	GNC_TREE_MODEL_ACCOUNT_COL_LAST_VISIBLE = GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
+    GNC_TREE_MODEL_ACCOUNT_COL_LAST_VISIBLE = GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
 
-	/* internal hidden columns */
-	GNC_TREE_MODEL_ACCOUNT_COL_COLOR_PRESENT,
-	GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE,
-	GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE_PERIOD,
-	GNC_TREE_MODEL_ACCOUNT_COL_COLOR_CLEARED,
-	GNC_TREE_MODEL_ACCOUNT_COL_COLOR_RECONCILED,
-	GNC_TREE_MODEL_ACCOUNT_COL_COLOR_FUTURE_MIN,
-	GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL,
-	GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL_PERIOD,
+    /* internal hidden columns */
+    GNC_TREE_MODEL_ACCOUNT_COL_COLOR_PRESENT,
+    GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE,
+    GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE_PERIOD,
+    GNC_TREE_MODEL_ACCOUNT_COL_COLOR_CLEARED,
+    GNC_TREE_MODEL_ACCOUNT_COL_COLOR_RECONCILED,
+    GNC_TREE_MODEL_ACCOUNT_COL_COLOR_FUTURE_MIN,
+    GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL,
+    GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL_PERIOD,
 
-	GNC_TREE_MODEL_ACCOUNT_NUM_COLUMNS
+    GNC_TREE_MODEL_ACCOUNT_NUM_COLUMNS
 } GncTreeModelAccountColumn;
 
 /* typedefs & structures */
 
 /** The instance data structure for an account tree model. */
-typedef struct {
-	GncTreeModel gnc_tree_model;	/**< The parent object data. */
-	int stamp;			/**< The state of the model. Any state
+typedef struct
+{
+    GncTreeModel gnc_tree_model;	/**< The parent object data. */
+    int stamp;			/**< The state of the model. Any state
 					 *   change increments this number. */
 } GncTreeModelAccount;
 
 
 /** The class data structure for an account tree model. */
-typedef struct {
-	GncTreeModelClass gnc_tree_model;/**< The parent object data. */
+typedef struct
+{
+    GncTreeModelClass gnc_tree_model;/**< The parent object data. */
 } GncTreeModelAccountClass;
 
 
@@ -118,7 +121,7 @@ typedef struct {
 GType gnc_tree_model_account_get_type (void);
 
 
-/** @name Account Tree Model Constructors 
+/** @name Account Tree Model Constructors
  @{ */
 
 /** Create a new GtkTreeModel for manipulating gnucash accounts.
@@ -129,7 +132,7 @@ GtkTreeModel *gnc_tree_model_account_new (Account *root);
 /** @} */
 
 
-/** @name Account Tree Model Get/Set Functions 
+/** @name Account Tree Model Get/Set Functions
   @{ */
 
 /** Convert a model/iter pair to a gnucash account.  This routine should
@@ -145,7 +148,7 @@ GtkTreeModel *gnc_tree_model_account_new (Account *root);
  *  @return A pointer to the corresponding account.
  */
 Account *gnc_tree_model_account_get_account (GncTreeModelAccount *model,
-					     GtkTreeIter *iter);
+        GtkTreeIter *iter);
 
 
 /** Convert a model/account pair into a gtk_tree_model_iter.  This
@@ -165,8 +168,8 @@ Account *gnc_tree_model_account_get_account (GncTreeModelAccount *model,
  *  in. FALSE otherwise.
  */
 gboolean gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
-						       Account *account,
-						       GtkTreeIter *iter);
+        Account *account,
+        GtkTreeIter *iter);
 
 
 /** Convert a model/account pair into a gtk_tree_model_path.  This
@@ -183,7 +186,7 @@ gboolean gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *mode
  *  responsibility of the caller to free this path when done.
  */
 GtkTreePath *gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
-							   Account *account);
+        Account *account);
 /** @} */
 
 G_END_DECLS

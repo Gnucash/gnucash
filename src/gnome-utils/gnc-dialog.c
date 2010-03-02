@@ -33,16 +33,19 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #define GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
   GNC_TYPE_DIALOG, GncDialogPrivate))
 
-struct _GncDialog {
+struct _GncDialog
+{
     GtkDialog parent;
 };
 
-struct _GncDialogClass {
+struct _GncDialogClass
+{
     GtkDialogClass parent;
     void (*changed) (GncDialog *d);
 };
 
-enum {
+enum
+{
     GNC_DIALOG_CHANGED,
     LAST_SIGNAL
 };
@@ -50,7 +53,8 @@ enum {
 static gint gnc_dialog_signals [LAST_SIGNAL] = { GNC_DIALOG_CHANGED };
 static GtkDialogClass *parent_class = NULL;
 
-typedef struct {
+typedef struct
+{
     GladeXML *xml;
     GncDialogCallback apply_cb;
     GncDialogCallback close_cb;
@@ -85,14 +89,14 @@ gnc_dialog_class_init (GncDialogClass *klass)
 
     gnc_dialog_signals [GNC_DIALOG_CHANGED] =
         g_signal_new ("changed",
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (struct _GncDialogClass, changed),
-		  NULL,
-		  NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE,
-		  0);
+                      G_OBJECT_CLASS_TYPE (gobject_class),
+                      G_SIGNAL_RUN_FIRST,
+                      G_STRUCT_OFFSET (struct _GncDialogClass, changed),
+                      NULL,
+                      NULL,
+                      g_cclosure_marshal_VOID__VOID,
+                      G_TYPE_NONE,
+                      0);
 
     /* GObject signals */
     gobject_class->finalize = gnc_dialog_finalize;
@@ -101,27 +105,29 @@ gnc_dialog_class_init (GncDialogClass *klass)
 static void
 gnc_dialog_init (GncDialog *d, GncDialogClass *klass)
 {
-  gnc_gobject_tracking_remember(G_OBJECT(d), G_OBJECT_CLASS(klass));
+    gnc_gobject_tracking_remember(G_OBJECT(d), G_OBJECT_CLASS(klass));
 }
 
 GType gnc_dialog_get_type (void)
 {
     static GType t = 0;
 
-    if (!t) {
-	static const GTypeInfo info = {
-	    sizeof (struct _GncDialogClass),
-	    NULL, /* base_init */
-	    NULL, /* base_final */
-	    (GClassInitFunc) gnc_dialog_class_init,
-	    NULL, /* class final */
-	    NULL, /* class data */
-	    sizeof (struct _GncDialog),
-	    0, /* n_preallocs */
-	    (GInstanceInitFunc) gnc_dialog_init,
-	    NULL,
-	};
-	t = g_type_register_static (GTK_TYPE_DIALOG,
+    if (!t)
+    {
+        static const GTypeInfo info =
+        {
+            sizeof (struct _GncDialogClass),
+            NULL, /* base_init */
+            NULL, /* base_final */
+            (GClassInitFunc) gnc_dialog_class_init,
+            NULL, /* class final */
+            NULL, /* class data */
+            sizeof (struct _GncDialog),
+            0, /* n_preallocs */
+            (GInstanceInitFunc) gnc_dialog_init,
+            NULL,
+        };
+        t = g_type_register_static (GTK_TYPE_DIALOG,
                                     "GncDialog", &info, 0);
     }
     return t;
@@ -142,34 +148,36 @@ static void gnc_dialog_set_changed(GncDialog *_d, gboolean changed)
 }
 
 static void gnc_dialog_response_cb(GtkDialog *dlg,
-                                              gint response, GncDialog *d)
+                                   gint response, GncDialog *d)
 {
     gboolean success = TRUE;
     GncDialogPrivate *priv = GET_PRIVATE(d);
 
-    switch (response) {
+    switch (response)
+    {
     case GTK_RESPONSE_HELP:
-	if (priv->help_cb)
+        if (priv->help_cb)
             priv->help_cb(d, priv->user_data);
-	break;
+        break;
     case GTK_RESPONSE_OK:
         //case GTK_RESPONSE_APPLY:
-	if (priv->apply_cb) {
-	    success = priv->apply_cb(d, priv->user_data);
+        if (priv->apply_cb)
+        {
+            success = priv->apply_cb(d, priv->user_data);
             if (success)
                 gnc_dialog_set_changed(d, FALSE);
         }
 
-	if (!success)
-	    break;
+        if (!success)
+            break;
         // fall through
     default:
-	if (priv->close_cb)
-	    success = priv->close_cb(d, priv->user_data);
+        if (priv->close_cb)
+            success = priv->close_cb(d, priv->user_data);
         else
             success = TRUE;
 
-	if (success)
+        if (success)
             gtk_widget_destroy(GTK_WIDGET(dlg));
     }
 }
@@ -188,27 +196,30 @@ gnc_dialog_watch_for_changes(GtkWidget *wid, gpointer d)
     if (GTK_IS_EDITABLE(wid) || GTK_IS_COMBO_BOX(wid))
         g_signal_connect(G_OBJECT(wid), "changed", G_CALLBACK(changed_cb), d);
 
-    if (GTK_IS_TREE_VIEW(wid)) {
+    if (GTK_IS_TREE_VIEW(wid))
+    {
         GtkTreeSelection *sel =
             gtk_tree_view_get_selection(GTK_TREE_VIEW(wid));
         g_signal_connect(G_OBJECT(sel), "changed", G_CALLBACK(changed_cb), d);
     }
 
-    if (GTK_IS_TEXT_VIEW(wid)) {
+    if (GTK_IS_TEXT_VIEW(wid))
+    {
         GtkTextBuffer *buf = gtk_text_view_get_buffer(GTK_TEXT_VIEW(wid));
         g_signal_connect(G_OBJECT(buf), "changed", G_CALLBACK(changed_cb), d);
     }
     //Possibly TODO: GtkCalendar?
 
     /* Recurse over all "contained" widgets */
-    if (GTK_IS_CONTAINER(wid)) {
+    if (GTK_IS_CONTAINER(wid))
+    {
         gtk_container_foreach(GTK_CONTAINER(wid),
                               gnc_dialog_watch_for_changes, d);
     }
 }
 
 GncDialog *gnc_dialog_new(const char* filename,
-				      const char* root)
+                          const char* root)
 {
     GncDialog *d;
     GncDialogPrivate *priv;
@@ -222,7 +233,8 @@ GncDialog *gnc_dialog_new(const char* filename,
     /* Load in the glade portion and plug it in. */
     priv->xml = gnc_glade_xml_new(filename, root);
     child = glade_xml_get_widget(priv->xml, root);
-    if (GTK_WIDGET_TOPLEVEL(child)) {
+    if (GTK_WIDGET_TOPLEVEL(child))
+    {
         PERR("GncDialog root widget must not be a toplevel widget");
         return NULL;
     }
@@ -233,7 +245,7 @@ GncDialog *gnc_dialog_new(const char* filename,
     priv->help_btn = gtk_dialog_add_button(dlg, GTK_STOCK_HELP,
                                            GTK_RESPONSE_HELP);
     priv->cancel_btn = gtk_dialog_add_button(dlg, GTK_STOCK_CANCEL,
-                                             GTK_RESPONSE_CANCEL);
+                       GTK_RESPONSE_CANCEL);
     priv->ok_btn = gtk_dialog_add_button(dlg, GTK_STOCK_OK,
                                          GTK_RESPONSE_OK);
 
@@ -271,9 +283,11 @@ void gnc_dialog_block_until_close(GncDialog *d)
     gint result;
     g_return_if_fail(d);
 
-    do {
+    do
+    {
         result = gtk_dialog_run(GTK_DIALOG(d));
-    } while (result != GTK_RESPONSE_DELETE_EVENT);
+    }
+    while (result != GTK_RESPONSE_DELETE_EVENT);
 }
 
 /* There are certain containers that the type-specific functions don't
@@ -288,9 +302,11 @@ static GtkWidget *gnc_dialog_get_widget_smart(GtkWidget *w)
 {
     g_return_val_if_fail(w, NULL);
 
-    if (GTK_IS_BOX(w)) {
+    if (GTK_IS_BOX(w))
+    {
         GList *children = gtk_container_get_children(GTK_CONTAINER(w));
-        if (g_list_length(children) == 1) {
+        if (g_list_length(children) == 1)
+        {
             GtkWidget *child = GTK_WIDGET(children->data);
             g_list_free(children);
             return gnc_dialog_get_widget_smart(child);
@@ -342,16 +358,18 @@ gboolean gnc_dialog_set_string(GncDialog *d, const gchar* name,
     SPECIFIC_INIT(d, name, wid, FALSE);
 
     if (IS_A(wid, "GtkEntry"))
-	gtk_entry_set_text(GTK_ENTRY(wid), val);
+        gtk_entry_set_text(GTK_ENTRY(wid), val);
     else if (IS_A(wid, "GtkLabel"))
         gtk_label_set_text(GTK_LABEL(wid), val);
     else if (IS_A(wid, "GtkCombo")) //deprecated
         gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(wid)->entry), val);
-    else if (IS_A(wid, "GtkTextView")) {
+    else if (IS_A(wid, "GtkTextView"))
+    {
         GtkTextBuffer *buf;
         buf = gtk_text_view_get_buffer(GTK_TEXT_VIEW(wid));
         gtk_text_buffer_set_text(buf, val, -1);
-    } else TYPE_ERROR(wid, "GtkEntry or GtkLabel or GtkTextView", FALSE);
+    }
+    else TYPE_ERROR(wid, "GtkEntry or GtkLabel or GtkTextView", FALSE);
     //TODO: font support?
 
     return TRUE;
@@ -367,13 +385,16 @@ gchar * gnc_dialog_get_string(GncDialog *d, const gchar* name)
         return g_strdup(gtk_label_get_text(GTK_LABEL(wid)));
     else if (IS_A(wid, "GtkCombo")) //deprecated
         return g_strdup(gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(wid)->entry)));
-    else if (IS_A(wid, "GtkTextView")) {
+    else if (IS_A(wid, "GtkTextView"))
+    {
         GtkTextBuffer *buf;
         GtkTextIter start, end;
         buf = gtk_text_view_get_buffer(GTK_TEXT_VIEW(wid));
         gtk_text_buffer_get_bounds(buf, &start, &end);
         return gtk_text_buffer_get_text(buf, &start, &end, TRUE);
-    } else if (IS_A(wid, "GtkComboBoxEntry")) {
+    }
+    else if (IS_A(wid, "GtkComboBoxEntry"))
+    {
         gint col;
         GtkTreeModel *tm;
         GtkTreeIter iter;
@@ -383,12 +404,15 @@ gchar * gnc_dialog_get_string(GncDialog *d, const gchar* name)
         type = gtk_tree_model_get_column_type(tm, col);
         if (type != G_TYPE_STRING)
             return NULL;
-        if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(wid), &iter)) {
+        if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(wid), &iter))
+        {
             gchar *str;
             gtk_tree_model_get(tm, &iter, col, &str);
             return str;
-        } else return NULL;
-    } else TYPE_ERROR(wid, "GtkEntry or GtkLabel or GtkTextView", NULL);
+        }
+        else return NULL;
+    }
+    else TYPE_ERROR(wid, "GtkEntry or GtkLabel or GtkTextView", NULL);
 }
 
 gboolean gnc_dialog_set_double(GncDialog *d, const gchar* name, gdouble val)
@@ -396,7 +420,7 @@ gboolean gnc_dialog_set_double(GncDialog *d, const gchar* name, gdouble val)
     SPECIFIC_INIT(d, name, wid, FALSE);
 
     if (IS_A(wid, "GtkSpinButton"))
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(wid), val);
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(wid), val);
     else TYPE_ERROR(wid, "GtkSpinButton", FALSE);
     return TRUE;
     //TODO: string conversion?
@@ -407,7 +431,7 @@ gdouble gnc_dialog_get_double(GncDialog *d, const gchar* name)
     SPECIFIC_INIT(d, name, wid, 0.0);
 
     if (IS_A(wid, "GtkSpinButton"))
-	return gtk_spin_button_get_value(GTK_SPIN_BUTTON(wid));
+        return gtk_spin_button_get_value(GTK_SPIN_BUTTON(wid));
     else TYPE_ERROR(wid, "GtkSpinButton", 0.0);
 }
 gboolean gnc_dialog_set_int(GncDialog *d, const gchar* name, gint val)
@@ -415,7 +439,7 @@ gboolean gnc_dialog_set_int(GncDialog *d, const gchar* name, gint val)
     SPECIFIC_INIT(d, name, wid, FALSE);
 
     if (IS_A(wid, "GtkSpinButton"))
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(wid), (gdouble)val);
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(wid), (gdouble)val);
     else TYPE_ERROR(wid, "GtkSpinButton", FALSE);
     return TRUE;
 }
@@ -425,7 +449,7 @@ gint gnc_dialog_get_int(GncDialog *d, const gchar* name)
     SPECIFIC_INIT(d, name, wid, 0);
 
     if (IS_A(wid, "GtkSpinButton"))
-	return gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(wid));
+        return gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(wid));
     else TYPE_ERROR(wid, "GtkSpinButton", 0);
 }
 
@@ -434,7 +458,7 @@ gboolean gnc_dialog_set_date(GncDialog *d, const gchar* name, time_t val)
     SPECIFIC_INIT(d, name, wid, FALSE);
 
     if (IS_A(wid, "GnomeDateEdit"))
-	gnome_date_edit_set_time((GnomeDateEdit *)wid, val);
+        gnome_date_edit_set_time((GnomeDateEdit *)wid, val);
     else TYPE_ERROR(wid, "GnomeDateEdit", FALSE);
     return TRUE;
 }
@@ -444,7 +468,7 @@ time_t gnc_dialog_get_date(GncDialog *d, const gchar* name)
     SPECIFIC_INIT(d, name, wid, ((time_t)(-1)));
 
     if (IS_A(wid, "GnomeDateEdit"))
-	return gnome_date_edit_get_time((GnomeDateEdit *)wid);
+        return gnome_date_edit_get_time((GnomeDateEdit *)wid);
     else TYPE_ERROR(wid, "GnomeDateEdit", ((time_t)(-1)));
 }
 
@@ -467,7 +491,7 @@ gint gnc_dialog_get_index(GncDialog *d, const gchar* name)
     SPECIFIC_INIT(d, name, wid, -1);
 
     if (IS_A(wid, "GtkComboBox"))
-	return gtk_combo_box_get_active(GTK_COMBO_BOX(wid));
+        return gtk_combo_box_get_active(GTK_COMBO_BOX(wid));
     else if (IS_A(wid, "GtkOptionMenu"))
         return gtk_option_menu_get_history(GTK_OPTION_MENU(wid));
     else TYPE_ERROR(wid, "GtkComboBox", -1); // GtkOptionMenu is deprecated.
@@ -489,7 +513,7 @@ gboolean gnc_dialog_get_boolean(GncDialog *d, const gchar* name)
     SPECIFIC_INIT(d, name, wid, FALSE);
 
     if (IS_A(wid, "GtkToggleButton"))
-	return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wid));
+        return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wid));
     else TYPE_ERROR(wid, "GtkToggleButton", FALSE);
 }
 
@@ -560,19 +584,29 @@ static void gd_gnome_date_edit_set_time(GtkWidget *w, gpointer t)
 }
 
 /* Order is important. Children before parents. */
-static struct prop_type {
+static struct prop_type
+{
     gchar *widget_type;
     GD_Getter_Func getter;
     GD_Setter_Func setter;
-} prop_types[] = {
-    {"GnomeDateEdit", gd_gnome_date_edit_get_time,
-     gd_gnome_date_edit_set_time },
-    {"GtkLabel", (GD_Getter_Func) gtk_label_get_label,
-     (GD_Setter_Func) gtk_label_set_label},
-    {"GtkToggleButton", gd_gtk_toggle_button_get_active,
-     gd_gtk_toggle_button_set_active},
-    {"GtkComboBox", gd_gtk_combo_box_get_active,
-     gd_gtk_combo_box_set_active},
+} prop_types[] =
+{
+    {
+        "GnomeDateEdit", gd_gnome_date_edit_get_time,
+        gd_gnome_date_edit_set_time
+    },
+    {
+        "GtkLabel", (GD_Getter_Func) gtk_label_get_label,
+        (GD_Setter_Func) gtk_label_set_label
+    },
+    {
+        "GtkToggleButton", gd_gtk_toggle_button_get_active,
+        gd_gtk_toggle_button_set_active
+    },
+    {
+        "GtkComboBox", gd_gtk_combo_box_get_active,
+        gd_gtk_combo_box_set_active
+    },
 };
 
 #define NUM_PROP_TYPES \
@@ -584,10 +618,11 @@ find_prop_type(GncDialog *d, GtkWidget *wid)
     gint i;
     struct prop_type pt;
 
-    for(i = 0; i < NUM_PROP_TYPES; i++) {
-	pt = prop_types[i];
-	if (IS_A(wid, pt.widget_type))
-	    return i;
+    for (i = 0; i < NUM_PROP_TYPES; i++)
+    {
+        pt = prop_types[i];
+        if (IS_A(wid, pt.widget_type))
+            return i;
     }
     return -1;
 }
@@ -596,7 +631,8 @@ find_prop_type(GncDialog *d, GtkWidget *wid)
 typedef gpointer (*GD_Getter_Func)(GtkWidget *w);
 typedef void (*GD_Setter_Func)(GtkWidget *w, gpointer val);
 
-typedef struct {
+typedef struct
+{
     GncDialogGetter getter;
     GncDialogSetter setter;
     GncDialogSetter filler;
@@ -626,11 +662,12 @@ gboolean gnc_dialog_set_custom(GncDialog *d, const gchar* name,
     g_return_val_if_fail(custom_types, FALSE);
     i = G_TYPE_FROM_INSTANCE(wid);
     custom_spec = g_hash_table_lookup(
-        custom_types, &i);
+                      custom_types, &i);
 
     g_return_val_if_fail(custom_spec, FALSE);
 
-    if (custom_spec->setter(wid, val)) {
+    if (custom_spec->setter(wid, val))
+    {
         gnc_dialog_set_changed(d, TRUE);
         return TRUE;
     }
@@ -646,7 +683,7 @@ gpointer gnc_dialog_get_custom(GncDialog *d, const gchar* name)
     g_return_val_if_fail(custom_types, NULL);
     i = G_TYPE_FROM_INSTANCE(wid);
     custom_spec = g_hash_table_lookup(
-        custom_types, &i);
+                      custom_types, &i);
     g_return_val_if_fail(custom_spec, NULL);
 
     return custom_spec->getter(wid);
@@ -662,9 +699,10 @@ void gnc_dialog_register_custom(GType widgetType, GncDialogGetter getter,
     custom_type *ct = g_new0(custom_type, 1);
     GType *key = g_new0(GType, 1);
 
-    if (custom_types == NULL) {
+    if (custom_types == NULL)
+    {
         custom_types = g_hash_table_new_full(
-            g_int_hash, g_int_equal, g_free, g_free);
+                           g_int_hash, g_int_equal, g_free, g_free);
     }
     ct->getter = getter;
     ct->setter = setter;

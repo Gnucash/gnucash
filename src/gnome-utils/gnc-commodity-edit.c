@@ -42,19 +42,19 @@
 
 const char * gnc_commodity_edit_get_string (gpointer ptr)
 {
-  gnc_commodity * comm = (gnc_commodity *)ptr;
-  return gnc_commodity_get_printname(comm);
+    gnc_commodity * comm = (gnc_commodity *)ptr;
+    return gnc_commodity_get_printname(comm);
 }
 
 gpointer gnc_commodity_edit_new_select (gpointer arg, gpointer ptr,
-					GtkWidget *toplevel)
+                                        GtkWidget *toplevel)
 {
-  gnc_commodity * comm = (gnc_commodity *)ptr;
-  dialog_commodity_mode *mode_ptr = arg;
-  dialog_commodity_mode mode;
+    gnc_commodity * comm = (gnc_commodity *)ptr;
+    dialog_commodity_mode *mode_ptr = arg;
+    dialog_commodity_mode mode;
 
-  mode = mode_ptr ? *mode_ptr : DIAG_COMM_ALL;
-  return gnc_ui_select_commodity_modal(comm, toplevel, mode);
+    mode = mode_ptr ? *mode_ptr : DIAG_COMM_ALL;
+    return gnc_ui_select_commodity_modal(comm, toplevel, mode);
 }
 
 /*

@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-gui-query.h -- functions for creating dialogs for GnuCash    * 
+ * gnc-gui-query.h -- functions for creating dialogs for GnuCash    *
  * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -25,11 +25,11 @@
 
 extern void
 gnc_info_dialog(GtkWidget *parent,
-		const char *format, ...) G_GNUC_PRINTF (2, 3);
+                const char *format, ...) G_GNUC_PRINTF (2, 3);
 
 
 extern void
 gnc_error_dialog(GtkWidget *parent,
-		 const char *format, ...) G_GNUC_PRINTF (2, 3);
+                 const char *format, ...) G_GNUC_PRINTF (2, 3);
 
 #endif

@@ -52,13 +52,15 @@ G_BEGIN_DECLS
 #define GNC_TREE_VIEW_PRICE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_VIEW_PRICE, GncTreeViewPriceClass))
 
 /* typedefs & structures */
-typedef struct {
-	GncTreeView gnc_tree_view;
-	int stamp;
+typedef struct
+{
+    GncTreeView gnc_tree_view;
+    int stamp;
 } GncTreeViewPrice;
 
-typedef struct {
-	GncTreeViewClass gnc_tree_view;
+typedef struct
+{
+    GncTreeViewClass gnc_tree_view;
 } GncTreeViewPriceClass;
 
 
@@ -85,8 +87,8 @@ GType         gnc_tree_view_price_get_type              (void);
  *  @return A pointer to a new price tree view.
  */
 GtkTreeView *gnc_tree_view_price_new (QofBook *book,
-				      const gchar *first_property_name,
-				      ...);
+                                      const gchar *first_property_name,
+                                      ...);
 /** @} */
 
 
@@ -103,7 +105,7 @@ GtkTreeView *gnc_tree_view_price_new (QofBook *book,
  *  @param column_names A list of column names to make visible.
  */
 void gnc_tree_view_price_configure_columns (GncTreeViewPrice *price_view,
-					    GSList *column_names);
+        GSList *column_names);
 
 #ifdef OLD
 /** Add a new column to the set of columns in an price tree view.
@@ -118,8 +120,8 @@ void gnc_tree_view_price_configure_columns (GncTreeViewPrice *price_view,
  *  will be displayed in the column.
  */
 void gnc_tree_view_price_add_kvp_column (GncTreeViewPrice *view,
-					 const gchar *column_title,
-					 const gchar *kvp_key);
+        const gchar *column_title,
+        const gchar *kvp_key);
 #endif
 /** @} */
 
@@ -150,11 +152,11 @@ typedef gboolean (*gnc_tree_view_price_ns_filter_func)(gnc_commodity_namespace*,
 typedef gboolean (*gnc_tree_view_price_cm_filter_func)(gnc_commodity *, gpointer data);
 typedef gboolean (*gnc_tree_view_price_pc_filter_func)(GNCPrice *, gpointer data);
 void gnc_tree_view_price_set_filter (GncTreeViewPrice *view,
-				     gnc_tree_view_price_ns_filter_func ns_func,
-				     gnc_tree_view_price_cm_filter_func cm_func,
-				     gnc_tree_view_price_pc_filter_func pc_func,
-				     gpointer data,
-				     GtkDestroyNotify destroy);
+                                     gnc_tree_view_price_ns_filter_func ns_func,
+                                     gnc_tree_view_price_cm_filter_func cm_func,
+                                     gnc_tree_view_price_pc_filter_func pc_func,
+                                     gpointer data,
+                                     GtkDestroyNotify destroy);
 
 /** This function forces the price tree filter to be evaluated.  It
  *  may be necessary to call this function if the initial state of the
@@ -170,7 +172,7 @@ void gnc_tree_view_price_refilter (GncTreeViewPrice *view);
 /** @} */
 
 
-/** @name Price Tree View Get/Set Functions 
+/** @name Price Tree View Get/Set Functions
  @{ */
 
 /** This function determines if an price in the price tree view
@@ -184,13 +186,13 @@ void gnc_tree_view_price_refilter (GncTreeViewPrice *view);
  *  on error.
  */
 gint gnc_tree_view_price_count_children (GncTreeViewPrice *view,
-					 GNCPrice *price);
+        GNCPrice *price);
 
 
 
 GNCPrice * gnc_tree_view_price_get_price_from_column (GtkTreeViewColumn *column,
-						      GtkTreeModel *f_model,
-						      GtkTreeIter  *f_iter);
+        GtkTreeModel *f_model,
+        GtkTreeIter  *f_iter);
 
 
 
@@ -205,7 +207,7 @@ GNCPrice * gnc_tree_view_price_get_price_from_column (GtkTreeViewColumn *column,
  *  @return The price associated with this path.
  */
 GNCPrice * gnc_tree_view_price_get_price_from_path (GncTreeViewPrice *view,
-						    GtkTreePath *path);
+        GtkTreePath *path);
 
 
 /** This function returns the price in the price tree view at the
@@ -249,7 +251,7 @@ GNCPrice * gnc_tree_view_price_get_selected_price (GncTreeViewPrice *view);
  *  @param price A pointer to the price to select.
  */
 void gnc_tree_view_price_set_selected_price (GncTreeViewPrice *view,
-					     GNCPrice *price);
+        GNCPrice *price);
 
 
 /** This function returns a list of the prices associated with the
@@ -288,8 +290,8 @@ GList * gnc_tree_view_price_get_selected_prices (GncTreeViewPrice *view);
  *  selected.
  */
 void gnc_tree_view_price_set_selected_prices (GncTreeViewPrice *view,
-					      GList *price_list,
-					      gboolean show_last);
+        GList *price_list,
+        gboolean show_last);
 /** @} */
 
 G_END_DECLS

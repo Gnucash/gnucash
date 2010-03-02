@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-plugin.h -- A module or plugin which can add more
  *	functionality to GnuCash.
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
@@ -98,93 +98,95 @@ G_BEGIN_DECLS
 /* typedefs & structures */
 
 /** The instance data structure for a menu-only plugin. */
-typedef struct {
-	/** The parent object for this widget */
-	GObject gobject;
+typedef struct
+{
+    /** The parent object for this widget */
+    GObject gobject;
 } GncPlugin;
 
 /** The class data structure for a menu-only plugin. */
-typedef struct {
-	/** The parent class for this widget. */
-	GObjectClass gobject;
-	/** The textual name of this plugin. */
-	const gchar *plugin_name;
+typedef struct
+{
+    /** The parent class for this widget. */
+    GObjectClass gobject;
+    /** The textual name of this plugin. */
+    const gchar *plugin_name;
 
-	/*  Actions section */
+    /*  Actions section */
 
-	/** A name for the set of actions that will be added by this
-	 *  plugin.  The actual name is irrelevant, as long as it is
-	 *  unique within GnuCash. */
-	const gchar *actions_name;
-	/** An array of actions that should automatically be added to
-	 *  any GnuCash "main" content window that is opened. */
-	GtkActionEntry *actions;
-	/** The number of actions in the actions array. */
-	guint n_actions; 
-	/** A NULL terminated list of actions that should be considered
-	 *  important.  In the toolbar, these actions will display the
-	 *  action name when the toolbar is in "text beside icons"
-	 *  mode. */ 
-	const gchar **important_actions;
-	/** The relative name of the XML file describing the
-	 *  menu/toolbar action items. */
-	const gchar *ui_filename;
+    /** A name for the set of actions that will be added by this
+     *  plugin.  The actual name is irrelevant, as long as it is
+     *  unique within GnuCash. */
+    const gchar *actions_name;
+    /** An array of actions that should automatically be added to
+     *  any GnuCash "main" content window that is opened. */
+    GtkActionEntry *actions;
+    /** The number of actions in the actions array. */
+    guint n_actions;
+    /** A NULL terminated list of actions that should be considered
+     *  important.  In the toolbar, these actions will display the
+     *  action name when the toolbar is in "text beside icons"
+     *  mode. */
+    const gchar **important_actions;
+    /** The relative name of the XML file describing the
+     *  menu/toolbar action items. */
+    const gchar *ui_filename;
 
-	/*  GConf section */
+    /*  GConf section */
 
-	/** The partial section name that will be used in GConf for
-	 *  any preferences that are automatically stored for this
-	 *  page.  This will be converted to a full section name by
-	 *  prefixing the string "/apps/gnucash/" to whatever is
-	 *  here. */
-	const gchar* gconf_section;
-	/** A callback that will be invoked when any key in the
-	 *  specified GConf section is changed.
-	 *
-	 *  @param client A pointer to the gconf client instance.
-	 *
-	 *  @param cnxn_id The id number for this callback function.
-	 *
-	 *  @param entry A pointer to the changed data.
-	 *
-	 *  @param user_data A pointer to the GncWindow where the
-	 *  plugin is installed. */
-	void (* gconf_notifications)
-	  (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data);
+    /** The partial section name that will be used in GConf for
+     *  any preferences that are automatically stored for this
+     *  page.  This will be converted to a full section name by
+     *  prefixing the string "/apps/gnucash/" to whatever is
+     *  here. */
+    const gchar* gconf_section;
+    /** A callback that will be invoked when any key in the
+     *  specified GConf section is changed.
+     *
+     *  @param client A pointer to the gconf client instance.
+     *
+     *  @param cnxn_id The id number for this callback function.
+     *
+     *  @param entry A pointer to the changed data.
+     *
+     *  @param user_data A pointer to the GncWindow where the
+     *  plugin is installed. */
+    void (* gconf_notifications)
+    (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data);
 
-	/*  Virtual Table */
+    /*  Virtual Table */
 
-	/** A callback that will be invoked when this plugin is added
-	 *  to a window.  This allows the plugin to perform any
-	 *  special actions at insertion time.
-	 *
-	 *  @param user_data A pointer to the this GncPlugin data
-	 *  structure.
-	 *
-	 *  @param window A pointer to the window in which this plugin
-	 *  has just been installed.
-	 *
-	 *  @param type An identifier for the type of window
-	 *  specified.  Currently the only type is a "main" content
-	 *  window. */
-	void (* add_to_window)
-         (GncPlugin *plugin, GncMainWindow *window, GQuark type);
+    /** A callback that will be invoked when this plugin is added
+     *  to a window.  This allows the plugin to perform any
+     *  special actions at insertion time.
+     *
+     *  @param user_data A pointer to the this GncPlugin data
+     *  structure.
+     *
+     *  @param window A pointer to the window in which this plugin
+     *  has just been installed.
+     *
+     *  @param type An identifier for the type of window
+     *  specified.  Currently the only type is a "main" content
+     *  window. */
+    void (* add_to_window)
+    (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 
-	/** A callback that will be invoked when this plugin is
-	 *  removed from a window.  This allows the plugin to perform
-	 *  any special actions at removal time.
-	 *
-	 *  @param user_data A pointer to the this GncPlugin data
-	 *  structure.
-	 *
-	 *  @param window A pointer to the window from which this
-	 *  plugin is about to be removed.
-	 *
-	 *  @param type An identifier for the type of window
-	 *  specified.  Currently the only type is a "main" content
-	 *  window. */
-	void (* remove_from_window)
-         (GncPlugin *plugin, GncMainWindow *window, GQuark type);
+    /** A callback that will be invoked when this plugin is
+     *  removed from a window.  This allows the plugin to perform
+     *  any special actions at removal time.
+     *
+     *  @param user_data A pointer to the this GncPlugin data
+     *  structure.
+     *
+     *  @param window A pointer to the window from which this
+     *  plugin is about to be removed.
+     *
+     *  @param type An identifier for the type of window
+     *  specified.  Currently the only type is a "main" content
+     *  window. */
+    void (* remove_from_window)
+    (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 } GncPluginClass;
 
 /* function prototypes */
@@ -208,8 +210,8 @@ GType gnc_plugin_get_type (void);
  *  @param type An identifier for the type of window specified.
  */
 void gnc_plugin_add_to_window (GncPlugin *plugin,
-			       GncMainWindow *window,
-			       GQuark type);
+                               GncMainWindow *window,
+                               GQuark type);
 
 
 /** Remove the specified plugin from the specified window.  This
@@ -224,8 +226,8 @@ void gnc_plugin_add_to_window (GncPlugin *plugin,
  *  @param type An identifier for the type of window specified.
  */
 void gnc_plugin_remove_from_window (GncPlugin *plugin,
-				    GncMainWindow *window,
-				    GQuark type);
+                                    GncMainWindow *window,
+                                    GQuark type);
 
 
 /** Retrieve the textual name of a plugin.
@@ -243,11 +245,12 @@ const gchar *gnc_plugin_get_name (GncPlugin *plugin);
  *  used if an action name is more than one word.  This way the menu
  *  can have the label "Whizzy Feature", while the toolbar button only
  *  has the label "Whizzy". */
-typedef struct {
-  /** The name of the action. */
-  const char *action_name;
-  /** The alternate toolbar label to use */
-  const char *label;
+typedef struct
+{
+    /** The name of the action. */
+    const char *action_name;
+    /** The alternate toolbar label to use */
+    const char *label;
 } action_toolbar_labels;
 
 
@@ -267,7 +270,7 @@ typedef struct {
  *  action_toolbar_labels items.
  */
 void gnc_plugin_init_short_names (GtkActionGroup *action_group,
-				  action_toolbar_labels *toolbar_labels);
+                                  action_toolbar_labels *toolbar_labels);
 
 
 /** Mark certain actions as "important".  This means that their labels
@@ -282,7 +285,7 @@ void gnc_plugin_init_short_names (GtkActionGroup *action_group,
  *  list must be NULL terminated.
  */
 void gnc_plugin_set_important_actions (GtkActionGroup *action_group,
-				       const gchar **names);
+                                       const gchar **names);
 
 
 /** Update a property on a set of existing GtkActions.  This function
@@ -304,9 +307,9 @@ void gnc_plugin_set_important_actions (GtkActionGroup *action_group,
  *  property.
  */
 void gnc_plugin_update_actions (GtkActionGroup *action_group,
-				const gchar **action_names,
-				const gchar *property_name,
-				gboolean value);
+                                const gchar **action_names,
+                                const gchar *property_name,
+                                gboolean value);
 
 
 /** Load a new set of actions into an existing UI.  The actions from
@@ -314,7 +317,7 @@ void gnc_plugin_update_actions (GtkActionGroup *action_group,
  *  directed by the specified file.
  *
  *  @param ui_merge A pointer to the UI manager data structure for a
- *  window.  
+ *  window.
  *
  *  @param action_group The set of actions provided by a given plugin.
  *
@@ -325,8 +328,8 @@ void gnc_plugin_update_actions (GtkActionGroup *action_group,
  *  occurred, the return value is 0.
  */
 gint gnc_plugin_add_actions (GtkUIManager *ui_merge,
-			     GtkActionGroup *action_group,
-			     const gchar *filename);
+                             GtkActionGroup *action_group,
+                             const gchar *filename);
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_H */

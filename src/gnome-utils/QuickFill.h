@@ -55,8 +55,8 @@
 
 typedef enum
 {
-  QUICKFILL_LIFO,
-  QUICKFILL_ALPHA
+    QUICKFILL_LIFO,
+    QUICKFILL_ALPHA
 } QuickFillSort;
 
 typedef struct _QuickFill QuickFill;
@@ -96,13 +96,13 @@ QuickFill *  gnc_quickfill_get_char_match (QuickFill *qf, gunichar c);
  *  use the gnc_mbstowcs() routine.
  */
 QuickFill *  gnc_quickfill_get_string_match (QuickFill *qf,
-                                             const char *str);
+        const char *str);
 
 /** Same as gnc_quickfill_get_string_match(), except that the
  *  string length is explicitly specified.
  */
 QuickFill *  gnc_quickfill_get_string_len_match (QuickFill *qf,
-                                                 const char *str, int len);
+        const char *str, int len);
 
 /** Walk a 'unique' part of the QuickFill tree.  This routine is
  *  typically used to assist in the tab-completion of strings.

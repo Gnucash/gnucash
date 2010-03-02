@@ -27,7 +27,7 @@
 /** @file dialog-preferences.h
     @brief Dialog for handling user preferences.
     @author Copyright (c) 2005 David Hampton <hampton@employees.org>
-    
+
     These functions are the external API available for the new user
     preference dialog.  Preferences are now stored in GConf.  This
     code ends up being nothing more than a pretty interface to set
@@ -68,16 +68,16 @@
  *  dialog with the specified tab name.  The tab name may not be
  *  duplicated.  For example, the Business code might have a full page
  *  of its own preferences.
- *  
+ *
  *  @param filename The name of a glade file.
- *  
+ *
  *  @param widgetname The name of the widget to extract from the glade file.
- *  
+ *
  *  @param tabname The (translated!) name this page of preferences should have in
  *  the dialog notebook. */
 void gnc_preferences_add_page (const gchar *filename,
-			       const gchar *widgetname,
-			       const gchar *tabname);
+                               const gchar *widgetname,
+                               const gchar *tabname);
 
 
 /** This function adds a partial page of preferences to the
@@ -86,16 +86,16 @@ void gnc_preferences_add_page (const gchar *filename,
  *  the preferences dialog with the specified tab name.  The tab name
  *  may be duplicated.  For example, the HBCI preferences may share a
  *  "Data Import" page with QIF and other methods.
- *  
+ *
  *  @param filename The name of a glade file.
- *  
+ *
  *  @param widgetname The name of the widget to extract from the glade file.
- *  
+ *
  *  @param tabname The (translated!) name this page of preferences should have in
  *  the dialog notebook. */
 void gnc_preferences_add_to_page (const gchar *filename,
-				  const gchar *widgetname,
-				  const gchar *tabname);
+                                  const gchar *widgetname,
+                                  const gchar *tabname);
 
 
 /** This function creates the preferences dialog and presents it to

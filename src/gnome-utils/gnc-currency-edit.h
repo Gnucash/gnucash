@@ -65,12 +65,14 @@
 #define GNC_CURRENCY_EDIT_CLASS(k)  (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_CURRENCY_EDIT, GNCCurrencyEditClass))
 #define GNC_IS_CURRENCY_EDIT(o)	    (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_CURRENCY_EDIT))
 
-typedef struct {
-        GtkComboBoxEntry combobox;
+typedef struct
+{
+    GtkComboBoxEntry combobox;
 } GNCCurrencyEdit;
 
-typedef struct {
-        GtkComboBoxEntryClass combobox;
+typedef struct
+{
+    GtkComboBoxEntryClass combobox;
 } GNCCurrencyEditClass;
 
 /** Return the GType for the GNCCurrencyEdit currency selection widget.
@@ -82,7 +84,7 @@ GType gnc_currency_edit_get_type (void);
 
 /** Create a new GNCCurrencyEdit widget which can be used to provide
  *  an easy way to enter ISO currency codes.
- * 
+ *
  *  @return A GNCCurrencyEdit widget.
  */
 GtkWidget *gnc_currency_edit_new (void);

@@ -35,7 +35,8 @@
 #include "gnc-budget.h"
 
 /* The budget list columns. */
-enum {
+enum
+{
     BUDGET_GUID_COLUMN,
     BUDGET_NAME_COLUMN,
     BUDGET_DESCRIPTION_COLUMN,
@@ -47,10 +48,10 @@ GtkTreeModel * gnc_tree_model_budget_new(QofBook *book);
 void gnc_tree_view_budget_set_model(GtkTreeView *tv, GtkTreeModel *tm);
 
 GncBudget *gnc_tree_model_budget_get_budget(GtkTreeModel *tm,
-                                            GtkTreeIter *iter);
+        GtkTreeIter *iter);
 
 gboolean gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm,
-						   GtkTreeIter *iter,
-						   GncBudget *bgt);
+        GtkTreeIter *iter,
+        GncBudget *bgt);
 /** @} */
 #endif // __GNC_TREE_MODEL_BUDGET_H__

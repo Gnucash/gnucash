@@ -166,7 +166,7 @@ month_name(int mon)
     g_date_set_year(&date, arbitrary_year);
     g_date_set_day(&date, 1);
     // g_date API is 1..12 (not 0..11)
-    g_date_set_month(&date, mon+1);
+    g_date_set_month(&date, mon + 1);
     g_date_strftime(buf, MONTH_NAME_BUFSIZE, "%b", &date);
 
     return buf;
@@ -179,7 +179,8 @@ day_label(gchar *buf, int buf_len, int dow)
 {
     gnc_dow_abbrev(buf, buf_len, dow);
     /* Use only the first two characters */
-    if (g_utf8_strlen(buf, -1) > 2) {
+    if (g_utf8_strlen(buf, -1) > 2)
+    {
         gchar *pointer = g_utf8_offset_to_pointer(buf, 2);
         *pointer = '\0';
     }
@@ -190,8 +191,10 @@ gnc_dense_cal_get_type()
 {
     static GType dense_cal_type = 0;
 
-    if (dense_cal_type == 0) {
-        static const GTypeInfo dense_cal_info = {
+    if (dense_cal_type == 0)
+    {
+        static const GTypeInfo dense_cal_info =
+        {
             sizeof (GncDenseCalClass),
             NULL,
             NULL,
@@ -291,10 +294,10 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     }
     dcal->cal_drawing_area = GTK_DRAWING_AREA(gtk_drawing_area_new());
     gtk_widget_add_events(GTK_WIDGET(dcal->cal_drawing_area), (GDK_EXPOSURE_MASK
-                                                               | GDK_BUTTON_PRESS_MASK
-                                                               | GDK_BUTTON_RELEASE_MASK
-                                                               | GDK_POINTER_MOTION_MASK
-                                                               | GDK_POINTER_MOTION_HINT_MASK));
+                          | GDK_BUTTON_PRESS_MASK
+                          | GDK_BUTTON_RELEASE_MASK
+                          | GDK_POINTER_MOTION_MASK
+                          | GDK_POINTER_MOTION_HINT_MASK));
     gtk_box_pack_start(GTK_BOX(dcal), GTK_WIDGET(dcal->cal_drawing_area), TRUE, TRUE, 0);
     g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "expose_event", G_CALLBACK(gnc_dense_cal_expose), (gpointer)dcal);
     g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "realize", G_CALLBACK(gnc_dense_cal_realize), (gpointer)dcal);
@@ -374,7 +377,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         pango_font_description_free(font_desc);
 
         maxWidth = maxHeight = 0;
-        for (i=0; i<12; i++)
+        for (i = 0; i < 12; i++)
         {
             gint w, h;
             pango_layout_set_text(layout, month_name(i), -1);
@@ -438,21 +441,21 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     dcal->week_starts_monday = 0;
     {
         gchar **parts;
-	const char *week_start_str;
+        const char *week_start_str;
 
-	/* Use this renaming macro to avoid extraction of the message
-	   string into the gnucash.pot file when calling xgettext. */
+        /* Use this renaming macro to avoid extraction of the message
+           string into the gnucash.pot file when calling xgettext. */
 #define dgettext_noextract dgettext
-	/* Translators: This string must not show up in gnucash.pot as
-	   it is looked up in the "gtk20" translation domain
-	   instead. */
-	week_start_str = dgettext_noextract("gtk20", "calendar:week_start:0");
+        /* Translators: This string must not show up in gnucash.pot as
+           it is looked up in the "gtk20" translation domain
+           instead. */
+        week_start_str = dgettext_noextract("gtk20", "calendar:week_start:0");
 #undef dgettext_noextract
 
         parts = g_strsplit(week_start_str, ":", 3);
         if (parts[0] != NULL
-            && parts[1] != NULL
-            && parts[2] != NULL)
+                && parts[1] != NULL
+                && parts[2] != NULL)
         {
             if (strcmp("1", parts[2]) == 0)
                 dcal->week_starts_monday = 1;
@@ -583,8 +586,9 @@ gnc_dense_cal_set_num_months(GncDenseCal *dcal, guint num_months)
                 iter_closest_to_req = view_opts_iter;
                 closest_index_distance = delta_months;
             }
-        } while (closest_index_distance != 0
-                 && (gtk_tree_model_iter_next(GTK_TREE_MODEL(options), &view_opts_iter)));
+        }
+        while (closest_index_distance != 0
+                && (gtk_tree_model_iter_next(GTK_TREE_MODEL(options), &view_opts_iter)));
 
         // set iter on view
         g_signal_handlers_block_by_func(dcal->view_options, _gdc_view_option_changed, dcal);
@@ -724,14 +728,14 @@ _gdc_compute_min_size(GncDenseCal *dcal, guint *min_width, guint *min_height)
     {
         *min_width =
             (dcal->leftPadding * 2)
-            + (num_cols(dcal)* (col_width_at(dcal, dcal->min_x_scale)
-                                + dcal->label_width))
-            + ((num_cols(dcal)-1) * COL_BORDER_SIZE);
+            + (num_cols(dcal) * (col_width_at(dcal, dcal->min_x_scale)
+                                 + dcal->label_width))
+            + ((num_cols(dcal) - 1) * COL_BORDER_SIZE);
     }
 
     if (min_height != NULL)
     {
-        *min_height=
+        *min_height =
             (dcal->topPadding * 2)
             + MINOR_BORDER_SIZE
             + dcal->dayLabelHeight
@@ -764,8 +768,8 @@ recompute_x_y_scales(GncDenseCal *dcal)
     dcal->x_scale = ((gint)(width
                             - (dcal->leftPadding * 2)
                             - (num_cols(dcal) * ((8 * MINOR_BORDER_SIZE)
-                                                 + dcal->label_width))
-                            - ((num_cols(dcal)-1) * COL_BORDER_SIZE))
+                                    + dcal->label_width))
+                            - ((num_cols(dcal) - 1) * COL_BORDER_SIZE))
                      / denom);
     dcal->x_scale = MAX(dcal->x_scale, dcal->min_x_scale);
 
@@ -775,7 +779,7 @@ recompute_x_y_scales(GncDenseCal *dcal)
                             - (dcal->topPadding * 2)
                             - MINOR_BORDER_SIZE
                             - dcal->dayLabelHeight
-                            - (num_weeks_per_col(dcal)-1
+                            - (num_weeks_per_col(dcal) - 1
                                * MINOR_BORDER_SIZE))
                      / denom);
     dcal->y_scale = MAX(dcal->y_scale, dcal->min_y_scale);
@@ -788,7 +792,7 @@ gdc_free_all_mark_data(GncDenseCal *dcal)
 {
     int i;
     GList *l;
-    for (i=0; i < dcal->numMarks; i++)
+    for (i = 0; i < dcal->numMarks; i++)
     {
         /* Each of these just contains an elt of dcal->markData,
          * which we're about to free, below... */
@@ -914,21 +918,21 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         gdk_gc_copy(gc, widget->style->fg_gc[GTK_WIDGET_STATE(widget)]);
 
         /* reset all of the month position offsets. */
-        for (i=0; i<12; i++)
+        for (i = 0; i < 12; i++)
         {
             dcal->monthPositions[i].x = dcal->monthPositions[i].y = -1;
         }
 
         /* Paint the weeks for the upcoming N months. */
-        for (i=0; i < dcal->numMonths; i++)
+        for (i = 0; i < dcal->numMonths; i++)
         {
             gdk_gc_set_foreground(gc, &dcal->weekColors[ i % 2 ]);
 
             mcList = NULL;
             month_coords(dcal, i, &mcList);
             dcal->monthPositions[i].x
-                = floor(i/dcal->monthsPerCol)
-                * (col_width(dcal) + COL_BORDER_SIZE);
+            = floor(i / dcal->monthsPerCol)
+              * (col_width(dcal) + COL_BORDER_SIZE);
             dcal->monthPositions[i].y = ((GdkRectangle*)mcList->next->next->data)->y;
             for (mcListIter = mcList; mcListIter != NULL; mcListIter = mcListIter->next)
             {
@@ -958,11 +962,11 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         gdk_colormap_alloc_color(gdk_colormap_get_system(), &markColor, TRUE, TRUE);
 
         gdk_gc_set_foreground(widget->style->fg_gc[widget->state], &markColor);
-        for (i=0; i<dcal->numMarks; i++)
+        for (i = 0; i < dcal->numMarks; i++)
         {
             if (dcal->marks[i] != NULL)
             {
-                int w,h, x_offset, y_offset, circle_delta;
+                int w, h, x_offset, y_offset, circle_delta;
 
                 doc_coords(dcal, i, &x1, &y1, &x2, &y2);
                 w = x2 - x1;
@@ -971,7 +975,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                 x_offset = x1;
                 y_offset = y1;
 
-                circle_delta = ABS(w-h) / 2;
+                circle_delta = ABS(w - h) / 2;
                 if (w < h)
                 {
                     y_offset += circle_delta;
@@ -984,7 +988,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                 gdk_draw_arc(dcal->drawbuf,
                              widget->style->fg_gc[widget->state],
                              TRUE,
-                             x_offset, y_offset, MIN(w,h), MIN(w,h),
+                             x_offset, y_offset, MIN(w, h), MIN(w, h),
                              0 * 64,
                              360 * 64);
             }
@@ -995,7 +999,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     }
     LOG_AND_RESET(timer, "marked days");
 
-    for (i=0; i < num_cols(dcal); i++)
+    for (i = 0; i < num_cols(dcal); i++)
     {
         gint x, y, w, h;
         gint j;
@@ -1004,7 +1008,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         pango_layout_get_pixel_size(layout, NULL, &dcal->dayLabelHeight);
 
         x = dcal->leftPadding
-            + (i * (col_width(dcal)+COL_BORDER_SIZE))
+            + (i * (col_width(dcal) + COL_BORDER_SIZE))
             + dcal->label_width;
         y = dcal->topPadding + dcal->dayLabelHeight;
         w = col_width(dcal) - COL_BORDER_SIZE - dcal->label_width;
@@ -1015,7 +1019,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                            widget->style->fg_gc[widget->state],
                            FALSE, x, y, w, h);
         /* draw the week seperations */
-        for (j=0; j < num_weeks_per_col(dcal); j++)
+        for (j = 0; j < num_weeks_per_col(dcal); j++)
         {
             gint wy = y + (j * week_height(dcal));
             gdk_draw_line(dcal->drawbuf,
@@ -1025,7 +1029,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         }
 
         /* draw the day seperations */
-        for (j=1; j<7; j++)
+        for (j = 1; j < 7; j++)
         {
             gint dx = x + (j * day_width(dcal));
             gdk_draw_line(dcal->drawbuf,
@@ -1040,7 +1044,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
 
         if (dcal->x_scale > maxWidth)
         {
-            for (j=0; j<7; j++)
+            for (j = 0; j < 7; j++)
             {
                 int day_label_width;
                 gint label_x_offset, label_y_offset;
@@ -1051,9 +1055,9 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                 pango_layout_set_text(layout, day_label_str, -1);
                 pango_layout_get_pixel_size(layout, &day_label_width, NULL);
                 label_x_offset = x
-                    + (j * day_width(dcal))
-                    + (day_width(dcal)/2)
-                    - (day_label_width / 2);
+                                 + (j * day_width(dcal))
+                                 + (day_width(dcal) / 2)
+                                 - (day_label_width / 2);
                 label_y_offset = y - dcal->dayLabelHeight;
                 pango_layout_set_text(layout, day_label_str, -1);
                 gdk_draw_layout(GDK_DRAWABLE(dcal->drawbuf), widget->style->fg_gc[widget->state],
@@ -1073,7 +1077,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         pango_matrix_rotate(&matrix, 90.);
         pango_context_set_matrix(gtk_widget_get_pango_context(GTK_WIDGET(dcal)), &matrix);
 
-        for (i=0; i<12; i++)
+        for (i = 0; i < 12; i++)
         {
             guint idx;
 
@@ -1112,12 +1116,12 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
             snprintf(dayNumBuf, 3, "%d", g_date_get_day(&d));
             pango_layout_set_text(layout, dayNumBuf, -1);
             pango_layout_get_pixel_size(layout, &numW, &numH);
-            w = (x2 - x1)+1;
-            h = (y2 - y1)+1;
+            w = (x2 - x1) + 1;
+            h = (y2 - y1) + 1;
             gdk_draw_layout(GDK_DRAWABLE(dcal->drawbuf),
                             widget->style->fg_gc[widget->state],
-                            x1 + (w/2) - (numW/2),
-                            y1 + (h/2) - (numH/2),
+                            x1 + (w / 2) - (numW / 2),
+                            y1 + (h / 2) - (numH / 2),
                             layout);
         }
     }
@@ -1158,7 +1162,7 @@ populate_hover_window(GncDenseCal *dcal, gint doc)
          * locales will want to use a very different date
          * format. Please leave the specification of the date
          * format up to the locale and use %x here.  */
-        g_date_strftime(strftimeBuf, MAX_STRFTIME_BUF_LEN-1, "%x", date);
+        g_date_strftime(strftimeBuf, MAX_STRFTIME_BUF_LEN - 1, "%x", date);
         gtk_label_set_text(GTK_LABEL(w), strftimeBuf);
 
         o = G_OBJECT(dcal->transPopup);
@@ -1195,11 +1199,11 @@ gnc_dense_cal_button_press(GtkWidget *widget,
         // strategy, but hopefully it'll listen to us.  Certainly the
         // second move after show_all'ing the window should do the
         // trick with a bit of flicker.
-        gtk_window_move(GTK_WINDOW(dcal->transPopup), evt->x_root+5, evt->y_root+5);
+        gtk_window_move(GTK_WINDOW(dcal->transPopup), evt->x_root + 5, evt->y_root + 5);
         populate_hover_window(dcal, doc);
         gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
         gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
-        gtk_window_move(GTK_WINDOW(dcal->transPopup), evt->x_root+5, evt->y_root+5);
+        gtk_window_move(GTK_WINDOW(dcal->transPopup), evt->x_root + 5, evt->y_root + 5);
     }
     else
     {
@@ -1229,7 +1233,7 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
     if (event->is_hint)
         gdk_window_get_pointer(event->window, &unused, &unused, &unused2);
     gdk_window_move(GTK_WIDGET(dcal->transPopup)->window,
-                    x_root_offset+5, y_root_offset+5);
+                    x_root_offset + 5, y_root_offset + 5);
     doc = wheres_this(dcal, event->x, event->y);
     if (doc >= 0)
     {
@@ -1344,7 +1348,7 @@ static
 int num_weeks_per_col(GncDenseCal *dcal)
 {
     int num_weeks_toRet, numCols, i;
-    GDate *start,*end;
+    GDate *start, *end;
     int startWeek, endWeek;
 
     start = g_date_new();
@@ -1353,14 +1357,14 @@ int num_weeks_per_col(GncDenseCal *dcal)
     num_weeks_toRet = 0;
     numCols = num_cols(dcal);
 
-    for (i=0; i<numCols; i++)
+    for (i = 0; i < numCols; i++)
     {
         g_date_set_dmy(start, 1,
                        ((dcal->month - 1
                          + (i * dcal->monthsPerCol)) % 12)
                        + 1,
                        dcal->year + floor((dcal->month - 1
-                                           + (i*dcal->monthsPerCol))
+                                           + (i * dcal->monthsPerCol))
                                           / 12));
         *end = *start;
         /* Add the smaller of (the number of months in the
@@ -1369,7 +1373,7 @@ int num_weeks_per_col(GncDenseCal *dcal)
         g_date_add_months(end, MIN(dcal->numMonths,
                                    MIN(dcal->monthsPerCol,
                                        dcal->numMonths
-                                       - ((i-1)
+                                       - ((i - 1)
                                           * dcal->monthsPerCol))));
         g_date_subtract_days(end, 1);
         startWeek = (dcal->week_starts_monday
@@ -1384,10 +1388,10 @@ int num_weeks_per_col(GncDenseCal *dcal)
                         ? g_date_get_monday_weeks_in_year(g_date_get_year(start))
                         : g_date_get_sunday_weeks_in_year(g_date_get_year(start)));
         }
-        num_weeks_toRet = MAX(num_weeks_toRet, (endWeek - startWeek)+1);
+        num_weeks_toRet = MAX(num_weeks_toRet, (endWeek - startWeek) + 1);
     }
-	g_date_free(start);
-	g_date_free(end);
+    g_date_free(start);
+    g_date_free(end);
     return num_weeks_toRet;
 }
 
@@ -1423,7 +1427,7 @@ month_coords(GncDenseCal *dcal, int monthOfCal, GList **outList)
     {
         g_date_set_dmy(startD, 1,
                        ((dcal->month - 1 + monthOffset) % 12) + 1,
-                       dcal->year + floor((dcal->month-1+monthOffset)/12));
+                       dcal->year + floor((dcal->month - 1 + monthOffset) / 12));
         /* get the week of the top of the column */
         startWk = (dcal->week_starts_monday
                    ? g_date_get_monday_week_of_year(startD)
@@ -1452,7 +1456,7 @@ month_coords(GncDenseCal *dcal, int monthOfCal, GList **outList)
 
     g_date_set_dmy(startD, 1,
                    ((dcal->month - 1 + monthOfCal) % 12) + 1,
-                   dcal->year + floor((dcal->month-1+monthOfCal)/12));
+                   dcal->year + floor((dcal->month - 1 + monthOfCal) / 12));
     *endD = *startD;
     g_date_add_months(endD, 1);
     g_date_subtract_days(endD, 1);
@@ -1461,14 +1465,14 @@ month_coords(GncDenseCal *dcal, int monthOfCal, GList **outList)
         start = (g_date_get_weekday(startD) - dcal->week_starts_monday) % 7;
         rect = g_new0(GdkRectangle, 1);
         rect->x = dcal->leftPadding
-            + MINOR_BORDER_SIZE
-            + (colNum * (col_width(dcal) + COL_BORDER_SIZE))
-            + dcal->label_width
-            + (start * day_width(dcal));
+                  + MINOR_BORDER_SIZE
+                  + (colNum * (col_width(dcal) + COL_BORDER_SIZE))
+                  + dcal->label_width
+                  + (start * day_width(dcal));
         rect->y = dcal->topPadding
-            + dcal->dayLabelHeight
-            + MINOR_BORDER_SIZE
-            + (weekRow * week_height(dcal));
+                  + dcal->dayLabelHeight
+                  + MINOR_BORDER_SIZE
+                  + (weekRow * week_height(dcal));
         rect->width = (7 - start) * day_width(dcal);
         rect->height = week_height(dcal);
         *outList = g_list_append(*outList, (gpointer)rect);
@@ -1481,20 +1485,21 @@ month_coords(GncDenseCal *dcal, int monthOfCal, GList **outList)
 
         weekStart = (dcal->week_starts_monday
                      ? g_date_get_monday_week_of_year(startD)
-                     : g_date_get_sunday_week_of_year(startD))+1;
+                     : g_date_get_sunday_week_of_year(startD)) + 1;
         weekEnd = (dcal->week_starts_monday
                    ? g_date_get_monday_week_of_year(endD)
                    : g_date_get_sunday_week_of_year(endD));
-        for (i=weekStart; i<weekEnd; i++) {
+        for (i = weekStart; i < weekEnd; i++)
+        {
             rect = g_new0(GdkRectangle, 1);
             rect->x = dcal->leftPadding
-                + MINOR_BORDER_SIZE
-                + dcal->label_width
-                + (colNum * (col_width(dcal) + COL_BORDER_SIZE));
+                      + MINOR_BORDER_SIZE
+                      + dcal->label_width
+                      + (colNum * (col_width(dcal) + COL_BORDER_SIZE));
             rect->y = dcal->topPadding
-                + dcal->dayLabelHeight
-                + MINOR_BORDER_SIZE
-                + ((weekRow + (i-weekStart) + 1) * week_height(dcal));
+                      + dcal->dayLabelHeight
+                      + MINOR_BORDER_SIZE
+                      + ((weekRow + (i - weekStart) + 1) * week_height(dcal));
             rect->width  = week_width(dcal);
             rect->height = week_height(dcal);
 
@@ -1515,16 +1520,16 @@ month_coords(GncDenseCal *dcal, int monthOfCal, GList **outList)
 
         rect = g_new0(GdkRectangle, 1);
         rect->x = dcal->leftPadding
-            + MINOR_BORDER_SIZE
-            + dcal->label_width
-            + (colNum * (col_width(dcal) + COL_BORDER_SIZE));
+                  + MINOR_BORDER_SIZE
+                  + dcal->label_width
+                  + (colNum * (col_width(dcal) + COL_BORDER_SIZE));
         rect->y = dcal->topPadding
-            + MINOR_BORDER_SIZE
-            + dcal->dayLabelHeight
-            + ((weekRow
-                + (end_week_of_year - start_week_of_year))
-               * week_height(dcal));
-        rect->width = (((g_date_get_weekday(endD) - dcal->week_starts_monday) % 7)+1) * day_width(dcal);
+                  + MINOR_BORDER_SIZE
+                  + dcal->dayLabelHeight
+                  + ((weekRow
+                      + (end_week_of_year - start_week_of_year))
+                     * week_height(dcal));
+        rect->width = (((g_date_get_weekday(endD) - dcal->week_starts_monday) % 7) + 1) * day_width(dcal);
         rect->height = week_height(dcal);
 
         *outList = g_list_append(*outList, (gpointer)rect);
@@ -1581,19 +1586,19 @@ doc_coords(GncDenseCal *dcal, int dayOfCal,
     /* FIXME: this has the math to make the mark-cells come out right,
      * which it shouldn't. */
     *x1 = dcal->leftPadding
-        + MINOR_BORDER_SIZE
-        + dcal->label_width
-        + (colNum * (col_width(dcal) + COL_BORDER_SIZE))
-        + (dayCol * day_width(dcal))
-        + (day_width(dcal)/4);
+          + MINOR_BORDER_SIZE
+          + dcal->label_width
+          + (colNum * (col_width(dcal) + COL_BORDER_SIZE))
+          + (dayCol * day_width(dcal))
+          + (day_width(dcal) / 4);
     *y1 = dcal->topPadding
-        + MINOR_BORDER_SIZE
-        + dcal->dayLabelHeight
-        + (weekRow * week_height(dcal))
-        + (day_height(dcal)/4);
+          + MINOR_BORDER_SIZE
+          + dcal->dayLabelHeight
+          + (weekRow * week_height(dcal))
+          + (day_height(dcal) / 4);
 
-    *x2 = *x1 + (day_width(dcal)/2);
-    *y2 = *y1 + (day_height(dcal)/2);
+    *x2 = *x1 + (day_width(dcal) / 2);
+    *y2 = *y1 + (day_height(dcal) / 2);
 }
 
 /**
@@ -1614,7 +1619,7 @@ wheres_this(GncDenseCal *dcal, int x, int y)
         return -1;
     }
     if ((x >= GTK_WIDGET(dcal)->allocation.width)
-        || (y >= GTK_WIDGET(dcal)->allocation.height))
+            || (y >= GTK_WIDGET(dcal)->allocation.height))
     {
         return -1;
     }
@@ -1630,9 +1635,9 @@ wheres_this(GncDenseCal *dcal, int x, int y)
     }
 
     /* coords -> year-relative-values */
-    colNum = floor(x / (col_width(dcal)+COL_BORDER_SIZE));
+    colNum = floor(x / (col_width(dcal) + COL_BORDER_SIZE));
 
-    x %= (col_width(dcal)+COL_BORDER_SIZE);
+    x %= (col_width(dcal) + COL_BORDER_SIZE);
     x -= dcal->label_width;
     if (x < 0)
     {
@@ -1669,7 +1674,7 @@ wheres_this(GncDenseCal *dcal, int x, int y)
     {
         GDate ccd;
         g_date_set_dmy(&ccd, 1, dcal->month, dcal->year);
-        g_date_add_months(&ccd, (colNum+1) * dcal->monthsPerCol);
+        g_date_add_months(&ccd, (colNum + 1) * dcal->monthsPerCol);
         if (g_date_get_julian(&d) >= g_date_get_julian(&ccd))
         {
             return -1;
@@ -1853,7 +1858,7 @@ gdc_mark_add(GncDenseCal *dcal,
     newMark->ourMarks = NULL;
     g_debug("saving mark with tag [%d]\n", newMark->tag);
 
-    for (i=0; i<size; i++)
+    for (i = 0; i < size; i++)
     {
         d = dateArray[i];
         doc = gdc_get_doc_offset(dcal, d);

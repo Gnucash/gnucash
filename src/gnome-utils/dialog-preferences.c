@@ -92,20 +92,21 @@ void gnc_reset_warnings_response_cb (GtkDialog *dialog, gint arg1, gpointer user
 
 /** This data structure holds the information for a single addition to
  *  the preferences dialog. */
-typedef struct addition_t {
-  /** The relative name of the file where the glade data for this
-   *  addition can be found. */
-  gchar *filename;
-  /** The name of the widget within the glade data file that should be
-   *  added to the preferences dialog.  This should point to a
-   *  GtkTable widget that has four columns. */
-  gchar *widgetname;
-  /** The name of the tab within the preferences dialog where these
-   *  widgets should be placed. */
-  gchar *tabname;
-  /** TRUE if this addition represents a full page in the preferences
-   *  dialog.  FALSE if this page may be combined with other pages. */
-  gboolean full_page;
+typedef struct addition_t
+{
+    /** The relative name of the file where the glade data for this
+     *  addition can be found. */
+    gchar *filename;
+    /** The name of the widget within the glade data file that should be
+     *  added to the preferences dialog.  This should point to a
+     *  GtkTable widget that has four columns. */
+    gchar *widgetname;
+    /** The name of the tab within the preferences dialog where these
+     *  widgets should be placed. */
+    gchar *tabname;
+    /** TRUE if this addition represents a full page in the preferences
+     *  dialog.  FALSE if this page may be combined with other pages. */
+    gboolean full_page;
 } addition;
 
 /** A list of all additions that have been made to the preferences
@@ -127,22 +128,22 @@ GSList *add_ins = NULL;
 static void
 gnc_account_separator_prefs_cb (GConfEntry *unused, GtkWidget *dialog)
 {
-  GtkWidget *label;
-  gchar *sample;
+    GtkWidget *label;
+    gchar *sample;
 
-  label = gnc_glade_lookup_widget(dialog, "sample_account");
-  /* Translators: Both %s will be the account separator character; the
-     resulting string is a demonstration how the account separator
-     character will look like. You can replace these three account
-     names with other account names that are more suitable for your
-     language - just keep in mind to have exactly two %s in your
-     translation. */
-  sample = g_strdup_printf(_("Income%sSalary%sTaxable"),
-			   gnc_get_account_separator_string(),
-			   gnc_get_account_separator_string());
-  DEBUG(" Label set to '%s'", sample);
-  gtk_label_set_text(GTK_LABEL(label), sample);
-  g_free(sample);
+    label = gnc_glade_lookup_widget(dialog, "sample_account");
+    /* Translators: Both %s will be the account separator character; the
+       resulting string is a demonstration how the account separator
+       character will look like. You can replace these three account
+       names with other account names that are more suitable for your
+       language - just keep in mind to have exactly two %s in your
+       translation. */
+    sample = g_strdup_printf(_("Income%sSalary%sTaxable"),
+                             gnc_get_account_separator_string(),
+                             gnc_get_account_separator_string());
+    DEBUG(" Label set to '%s'", sample);
+    gtk_label_set_text(GTK_LABEL(label), sample);
+    g_free(sample);
 }
 
 
@@ -159,9 +160,9 @@ gnc_account_separator_prefs_cb (GConfEntry *unused, GtkWidget *dialog)
  */
 static gint
 gnc_prefs_compare_addins (addition *a,
-			  addition *b)
+                          addition *b)
 {
-  return g_utf8_collate(a->tabname, b->tabname);
+    return g_utf8_collate(a->tabname, b->tabname);
 }
 
 
@@ -185,69 +186,78 @@ gnc_prefs_compare_addins (addition *a,
  */
 static void
 gnc_preferences_add_page_internal (const gchar *filename,
-				   const gchar *widgetname,
-				   const gchar *tabname,
-				   gboolean full_page)
+                                   const gchar *widgetname,
+                                   const gchar *tabname,
+                                   gboolean full_page)
 {
-  addition *add_in, *preexisting;
-  gboolean error = FALSE;
-  GSList *ptr;
+    addition *add_in, *preexisting;
+    gboolean error = FALSE;
+    GSList *ptr;
 
-  ENTER("file %s, widget %s, tab %s full page %d",
-	filename, widgetname, tabname, full_page);
+    ENTER("file %s, widget %s, tab %s full page %d",
+          filename, widgetname, tabname, full_page);
 
-  add_in = g_malloc(sizeof(addition));
-  if (add_in == NULL) {
-    g_critical("Unable to allocate memory.\n");
-    LEAVE("no memory");
-    return;
-  }
-
-  add_in->filename   = g_strdup(filename);
-  add_in->widgetname = g_strdup(widgetname);
-  add_in->tabname    = g_strdup(tabname);
-  add_in->full_page  = full_page;
-  if (!add_in->filename || !add_in->widgetname || !add_in->tabname) {
-    g_critical("Unable to allocate memory.\n");
-    g_free(add_in->filename);
-    g_free(add_in->widgetname);
-    g_free(add_in->tabname);
-    g_free(add_in);
-    LEAVE("no memory");
-    return;
-  }
-
-  ptr = g_slist_find_custom(add_ins, add_in, (GCompareFunc)gnc_prefs_compare_addins);
-  if (ptr) {
-    /* problem? */
-    preexisting = ptr->data;
-
-    if (preexisting->full_page) {
-      g_warning("New tab %s(%s/%s/%s) conflicts with existing tab %s(%s/%s/full)",
-		add_in->tabname, add_in->filename, add_in->widgetname,
-		add_in->full_page ? "full" : "partial",
-		preexisting->tabname, preexisting->filename, preexisting->widgetname);
-      error = TRUE;
-    } else if (add_in->full_page) {
-      g_warning("New tab %s(%s/%s/%s) conflicts with existing tab %s(%s/%s/partial)",
-		add_in->tabname, add_in->filename, add_in->widgetname,
-		add_in->full_page ? "full" : "partial",
-		preexisting->tabname, preexisting->filename, preexisting->widgetname);
-      error = TRUE;
+    add_in = g_malloc(sizeof(addition));
+    if (add_in == NULL)
+    {
+        g_critical("Unable to allocate memory.\n");
+        LEAVE("no memory");
+        return;
     }
-  }
 
-  if (error) {
-    g_free(add_in->filename);
-    g_free(add_in->widgetname);
-    g_free(add_in->tabname);
-    g_free(add_in);
-    LEAVE("err");
-    return;
-  } else {
-    add_ins = g_slist_append(add_ins, add_in);
-  }
-  LEAVE("");
+    add_in->filename   = g_strdup(filename);
+    add_in->widgetname = g_strdup(widgetname);
+    add_in->tabname    = g_strdup(tabname);
+    add_in->full_page  = full_page;
+    if (!add_in->filename || !add_in->widgetname || !add_in->tabname)
+    {
+        g_critical("Unable to allocate memory.\n");
+        g_free(add_in->filename);
+        g_free(add_in->widgetname);
+        g_free(add_in->tabname);
+        g_free(add_in);
+        LEAVE("no memory");
+        return;
+    }
+
+    ptr = g_slist_find_custom(add_ins, add_in, (GCompareFunc)gnc_prefs_compare_addins);
+    if (ptr)
+    {
+        /* problem? */
+        preexisting = ptr->data;
+
+        if (preexisting->full_page)
+        {
+            g_warning("New tab %s(%s/%s/%s) conflicts with existing tab %s(%s/%s/full)",
+                      add_in->tabname, add_in->filename, add_in->widgetname,
+                      add_in->full_page ? "full" : "partial",
+                      preexisting->tabname, preexisting->filename, preexisting->widgetname);
+            error = TRUE;
+        }
+        else if (add_in->full_page)
+        {
+            g_warning("New tab %s(%s/%s/%s) conflicts with existing tab %s(%s/%s/partial)",
+                      add_in->tabname, add_in->filename, add_in->widgetname,
+                      add_in->full_page ? "full" : "partial",
+                      preexisting->tabname, preexisting->filename, preexisting->widgetname);
+            error = TRUE;
+        }
+    }
+
+    if (error)
+    {
+        g_free(add_in->filename);
+        g_free(add_in->widgetname);
+        g_free(add_in->tabname);
+        g_free(add_in);
+        LEAVE("err");
+        return;
+    }
+    else
+    {
+        add_ins = g_slist_append(add_ins, add_in);
+    }
+    LEAVE("");
 }
 
 
@@ -259,10 +269,10 @@ gnc_preferences_add_page_internal (const gchar *filename,
  *  of its own preferences. */
 void
 gnc_preferences_add_page (const gchar *filename,
-			  const gchar *widgetname,
-			  const gchar *tabname)
+                          const gchar *widgetname,
+                          const gchar *tabname)
 {
-  gnc_preferences_add_page_internal(filename, widgetname, tabname, TRUE);
+    gnc_preferences_add_page_internal(filename, widgetname, tabname, TRUE);
 }
 
 
@@ -274,10 +284,10 @@ gnc_preferences_add_page (const gchar *filename,
  *  "Data Import" page with QIF and other methods. */
 void
 gnc_preferences_add_to_page (const gchar *filename,
-			     const gchar *widgetname,
-			     const gchar *tabname)
+                             const gchar *widgetname,
+                             const gchar *tabname)
 {
-  gnc_preferences_add_page_internal(filename, widgetname, tabname, FALSE);
+    gnc_preferences_add_page_internal(filename, widgetname, tabname, FALSE);
 }
 
 /****************************************/
@@ -299,21 +309,22 @@ gnc_preferences_add_to_page (const gchar *filename,
  *  callback from gconf. */
 static void
 gnc_prefs_build_widget_table (GladeXML *xml,
-			      GtkWidget *dialog)
+                              GtkWidget *dialog)
 {
-  GHashTable *table;
-  GList *interesting, *runner;
-  const gchar *name;
-  GtkWidget *widget;
+    GHashTable *table;
+    GList *interesting, *runner;
+    const gchar *name;
+    GtkWidget *widget;
 
-  table = g_object_get_data(G_OBJECT(dialog), WIDGET_HASH);
-  interesting = glade_xml_get_widget_prefix(xml, "gconf");
-  for (runner = interesting; runner; runner = g_list_next(runner)) {
-    widget = runner->data;
-    name = gtk_widget_get_name(widget);
-    g_hash_table_insert(table, (gchar *)name, widget);
-  }
-  g_list_free(interesting);
+    table = g_object_get_data(G_OBJECT(dialog), WIDGET_HASH);
+    interesting = glade_xml_get_widget_prefix(xml, "gconf");
+    for (runner = interesting; runner; runner = g_list_next(runner))
+    {
+        widget = runner->data;
+        name = gtk_widget_get_name(widget);
+        g_hash_table_insert(table, (gchar *)name, widget);
+    }
+    g_list_free(interesting);
 }
 
 /** This data structure is used while building the preferences dialog
@@ -321,46 +332,49 @@ gnc_prefs_build_widget_table (GladeXML *xml,
  *  construction.  It maintains state information between invocations
  *  of the function gnc_prefs_move_table_entry which is called via a
  *  foreach loop over each item in the table. */
-struct copy_data {
-  /** The table being copied from. */
-  GtkTable *table_from;
-  /** The table being copied to. */
-  GtkTable *table_to;
-  /** The number of lines offset from the old table to the new
-   *  table. */
-  gint row_offset;
+struct copy_data
+{
+    /** The table being copied from. */
+    GtkTable *table_from;
+    /** The table being copied to. */
+    GtkTable *table_to;
+    /** The number of lines offset from the old table to the new
+     *  table. */
+    gint row_offset;
 };
 
 
 static GtkWidget *
 gnc_prefs_find_page (GtkNotebook *notebook, const gchar *name)
 {
-  int n_pages, i;
-  GtkWidget *child;
-  const gchar *child_name;
+    int n_pages, i;
+    GtkWidget *child;
+    const gchar *child_name;
 
-  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
-  g_return_val_if_fail (name, NULL);
+    g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
+    g_return_val_if_fail (name, NULL);
 
-  ENTER("");
+    ENTER("");
 
-  n_pages = gtk_notebook_get_n_pages (notebook);
+    n_pages = gtk_notebook_get_n_pages (notebook);
 
-  for (i=0; i<n_pages; i++) {
-    child = gtk_notebook_get_nth_page (notebook, i);
-    g_return_val_if_fail (child, NULL);
+    for (i = 0; i < n_pages; i++)
+    {
+        child = gtk_notebook_get_nth_page (notebook, i);
+        g_return_val_if_fail (child, NULL);
 
-    child_name = gtk_notebook_get_tab_label_text (notebook, child);
-    g_return_val_if_fail (child_name, NULL);
+        child_name = gtk_notebook_get_tab_label_text (notebook, child);
+        g_return_val_if_fail (child_name, NULL);
 
-    if (g_utf8_collate (name, child_name) == 0) {
-      LEAVE("found at index: %d", i);
-      return child;
+        if (g_utf8_collate (name, child_name) == 0)
+        {
+            LEAVE("found at index: %d", i);
+            return child;
+        }
     }
-  }
 
-  LEAVE("not found");
-  return NULL;
+    LEAVE("not found");
+    return NULL;
 }
 
 
@@ -378,31 +392,31 @@ gnc_prefs_find_page (GtkNotebook *notebook, const gchar *name)
  */
 static void
 gnc_prefs_move_table_entry (GtkWidget *child,
-			    gpointer data)
+                            gpointer data)
 {
-  struct copy_data *copydata = data;
-  GtkAttachOptions x_opts, y_opts;
-  gint bottom, top, left, right, x_pad, y_pad;
+    struct copy_data *copydata = data;
+    GtkAttachOptions x_opts, y_opts;
+    gint bottom, top, left, right, x_pad, y_pad;
 
-  ENTER("child %p, copy data %p", child, data);
-  gtk_container_child_get(GTK_CONTAINER(copydata->table_from), child,
-			  "bottom-attach", &bottom,
-			  "left-attach", &left,
-			  "right-attach", &right,
-			  "top-attach", &top,
-			  "x-options", &x_opts,
-			  "x-padding", &x_pad,
-			  "y-options", &y_opts,
-			  "y-padding", &y_pad,
-			  NULL);
+    ENTER("child %p, copy data %p", child, data);
+    gtk_container_child_get(GTK_CONTAINER(copydata->table_from), child,
+                            "bottom-attach", &bottom,
+                            "left-attach", &left,
+                            "right-attach", &right,
+                            "top-attach", &top,
+                            "x-options", &x_opts,
+                            "x-padding", &x_pad,
+                            "y-options", &y_opts,
+                            "y-padding", &y_pad,
+                            NULL);
 
-  gtk_widget_ref(child);
-  gtk_container_remove(GTK_CONTAINER(copydata->table_from), child);
-  gtk_table_attach(copydata->table_to, child, left, right,
-		   top + copydata->row_offset, bottom + copydata->row_offset,
-		   x_opts, y_opts, x_pad, y_pad);
-  gtk_widget_unref(child);
-  LEAVE(" ");
+    gtk_widget_ref(child);
+    gtk_container_remove(GTK_CONTAINER(copydata->table_from), child);
+    gtk_table_attach(copydata->table_to, child, left, right,
+                     top + copydata->row_offset, bottom + copydata->row_offset,
+                     x_opts, y_opts, x_pad, y_pad);
+    gtk_widget_unref(child);
+    LEAVE(" ");
 }
 
 
@@ -419,134 +433,141 @@ gnc_prefs_move_table_entry (GtkWidget *child,
  */
 static void
 gnc_preferences_build_page (gpointer data,
-			    gpointer user_data)
+                            gpointer user_data)
 {
-  GladeXML *xml;
-  GtkWidget *dialog, *existing_content, *new_content, *label;
-  GtkNotebook *notebook;
-  addition *add_in;
-  struct copy_data copydata;
-  gint rows, cols;
+    GladeXML *xml;
+    GtkWidget *dialog, *existing_content, *new_content, *label;
+    GtkNotebook *notebook;
+    addition *add_in;
+    struct copy_data copydata;
+    gint rows, cols;
 
-  ENTER("add_in %p, dialog %p", data, user_data);
-  add_in = (addition *)data;
-  dialog = user_data;
+    ENTER("add_in %p, dialog %p", data, user_data);
+    add_in = (addition *)data;
+    dialog = user_data;
 
-  DEBUG("Opening %s to get %s:", add_in->filename, add_in->widgetname);
-  xml = gnc_glade_xml_new(add_in->filename, add_in->widgetname);
-  new_content = glade_xml_get_widget(xml, add_in->widgetname);
-  DEBUG("done");
+    DEBUG("Opening %s to get %s:", add_in->filename, add_in->widgetname);
+    xml = gnc_glade_xml_new(add_in->filename, add_in->widgetname);
+    new_content = glade_xml_get_widget(xml, add_in->widgetname);
+    DEBUG("done");
 
-  /* Add to the list of interesting widgets */
-  gnc_prefs_build_widget_table(xml, dialog);
+    /* Add to the list of interesting widgets */
+    gnc_prefs_build_widget_table(xml, dialog);
 
-  /* Clean up the xml data structure when the dialog is destroyed */
-  g_object_set_data_full(G_OBJECT(dialog), add_in->filename,
-			 xml, g_object_unref);
+    /* Clean up the xml data structure when the dialog is destroyed */
+    g_object_set_data_full(G_OBJECT(dialog), add_in->filename,
+                           xml, g_object_unref);
 
-  /* Connect the signals in this glade file. The dialog is passed in
-   * so the the callback can find "interesting" widgets from other
-   * glade files if necessary (via the WIDGET_HASH hash
-   * table). Widgets from the same glade file can be found with the
-   * usual gnc_glade_lookup_widget() function. */
-  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
-				    dialog);
+    /* Connect the signals in this glade file. The dialog is passed in
+     * so the the callback can find "interesting" widgets from other
+     * glade files if necessary (via the WIDGET_HASH hash
+     * table). Widgets from the same glade file can be found with the
+     * usual gnc_glade_lookup_widget() function. */
+    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
+                                      dialog);
 
-  /* Prepare for recursion */
-  notebook = g_object_get_data(G_OBJECT(dialog), NOTEBOOK);
+    /* Prepare for recursion */
+    notebook = g_object_get_data(G_OBJECT(dialog), NOTEBOOK);
 
-  if (add_in->full_page) {
-    label = gtk_label_new(add_in->tabname);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_notebook_append_page(notebook, new_content, label);
-    LEAVE("appended page");
-    return;
-  }
+    if (add_in->full_page)
+    {
+        label = gtk_label_new(add_in->tabname);
+        gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+        gtk_notebook_append_page(notebook, new_content, label);
+        LEAVE("appended page");
+        return;
+    }
 
-  /* Copied tables must match the size of the main table */
-  if (!GTK_IS_TABLE(new_content)) {
-    g_critical("The object name %s in file %s is not a GtkTable.  It cannot "
-	       "be added to the preferences dialog.",
-	       add_in->widgetname, add_in->filename);
-    LEAVE("");
-    return;
-  }
-  g_object_get(G_OBJECT(new_content), "n-columns", &cols, NULL);
-  if (cols != 4) {
-    g_critical("The table %s in file %s does not have four columns.  It cannot "
-	       "be added to the preferences dialog.",
-	       add_in->widgetname, add_in->filename);
-    LEAVE("");
-    return;
-  }
+    /* Copied tables must match the size of the main table */
+    if (!GTK_IS_TABLE(new_content))
+    {
+        g_critical("The object name %s in file %s is not a GtkTable.  It cannot "
+                   "be added to the preferences dialog.",
+                   add_in->widgetname, add_in->filename);
+        LEAVE("");
+        return;
+    }
+    g_object_get(G_OBJECT(new_content), "n-columns", &cols, NULL);
+    if (cols != 4)
+    {
+        g_critical("The table %s in file %s does not have four columns.  It cannot "
+                   "be added to the preferences dialog.",
+                   add_in->widgetname, add_in->filename);
+        LEAVE("");
+        return;
+    }
 
-  /* Does the page exist or must we create it */
-  existing_content = gnc_prefs_find_page(notebook, add_in->tabname);
+    /* Does the page exist or must we create it */
+    existing_content = gnc_prefs_find_page(notebook, add_in->tabname);
 
-  if (!existing_content) {
-    /* No existing content with this name.  Create a blank page */
-    rows = 0;
-    existing_content = gtk_table_new(0, 4, FALSE);
-    gtk_container_set_border_width(GTK_CONTAINER(existing_content), 6);
-    label = gtk_label_new(add_in->tabname);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_notebook_append_page(notebook, existing_content, label);
-    gtk_widget_show_all(existing_content);
-    DEBUG("created new page %s, appended it", add_in->tabname);
-  } else {
-    g_object_get(G_OBJECT(existing_content), "n-rows", &rows, NULL);
-    DEBUG("found existing page %s", add_in->tabname);
-  }
+    if (!existing_content)
+    {
+        /* No existing content with this name.  Create a blank page */
+        rows = 0;
+        existing_content = gtk_table_new(0, 4, FALSE);
+        gtk_container_set_border_width(GTK_CONTAINER(existing_content), 6);
+        label = gtk_label_new(add_in->tabname);
+        gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+        gtk_notebook_append_page(notebook, existing_content, label);
+        gtk_widget_show_all(existing_content);
+        DEBUG("created new page %s, appended it", add_in->tabname);
+    }
+    else
+    {
+        g_object_get(G_OBJECT(existing_content), "n-rows", &rows, NULL);
+        DEBUG("found existing page %s", add_in->tabname);
+    }
 
-  /* Maybe add a spacer row */
-  DEBUG("rows is %d", rows);
-  if (rows > 0) {
-    label = gtk_label_new("");
-    gtk_widget_show(label);
-    gtk_table_attach(GTK_TABLE(existing_content), label, 0, 1, rows, rows+1,
-		     GTK_FILL, GTK_FILL, 0, 0);
-    rows++;
-  }
+    /* Maybe add a spacer row */
+    DEBUG("rows is %d", rows);
+    if (rows > 0)
+    {
+        label = gtk_label_new("");
+        gtk_widget_show(label);
+        gtk_table_attach(GTK_TABLE(existing_content), label, 0, 1, rows, rows + 1,
+                         GTK_FILL, GTK_FILL, 0, 0);
+        rows++;
+    }
 
-  /* Now copy all the entries in the table */
-  copydata.table_from = GTK_TABLE(new_content);
-  copydata.table_to = GTK_TABLE(existing_content);
-  copydata.row_offset = rows;
-  gtk_container_foreach(GTK_CONTAINER(new_content), gnc_prefs_move_table_entry,
-			&copydata);
+    /* Now copy all the entries in the table */
+    copydata.table_from = GTK_TABLE(new_content);
+    copydata.table_to = GTK_TABLE(existing_content);
+    copydata.row_offset = rows;
+    gtk_container_foreach(GTK_CONTAINER(new_content), gnc_prefs_move_table_entry,
+                          &copydata);
 
-  g_object_ref_sink(new_content);
-  LEAVE("added content to page");
+    g_object_ref_sink(new_content);
+    LEAVE("added content to page");
 }
 
 static gint
 tab_cmp (GtkWidget *page_a, GtkWidget *page_b, GtkNotebook *notebook)
 {
-  return g_utf8_collate (gtk_notebook_get_tab_label_text (notebook, page_a),
-			 gtk_notebook_get_tab_label_text (notebook, page_b));
+    return g_utf8_collate (gtk_notebook_get_tab_label_text (notebook, page_a),
+                           gtk_notebook_get_tab_label_text (notebook, page_b));
 }
 
 static void
 gnc_prefs_sort_pages (GtkNotebook *notebook)
 {
-  gint n_pages, i;
-  GList *tabs=NULL, *iter=NULL;
+    gint n_pages, i;
+    GList *tabs = NULL, *iter = NULL;
 
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
+    g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
-  /* gather tabs */
-  n_pages = gtk_notebook_get_n_pages (notebook);
-  for (i=n_pages-1; i>=0; i--)
-    tabs = g_list_prepend (tabs, gtk_notebook_get_nth_page (notebook, i));
+    /* gather tabs */
+    n_pages = gtk_notebook_get_n_pages (notebook);
+    for (i = n_pages - 1; i >= 0; i--)
+        tabs = g_list_prepend (tabs, gtk_notebook_get_nth_page (notebook, i));
 
-  /* sort in local copy */
-  tabs = g_list_sort_with_data (tabs, (GCompareDataFunc) tab_cmp, notebook);
+    /* sort in local copy */
+    tabs = g_list_sort_with_data (tabs, (GCompareDataFunc) tab_cmp, notebook);
 
-  /* reorder tabs */
-  for (i=0, iter=tabs; iter; i++, iter=iter->next)
-    gtk_notebook_reorder_child (notebook, GTK_WIDGET (iter->data), i);
+    /* reorder tabs */
+    for (i = 0, iter = tabs; iter; i++, iter = iter->next)
+        gtk_notebook_reorder_child (notebook, GTK_WIDGET (iter->data), i);
 
-  g_list_free (tabs);
+    g_list_free (tabs);
 }
 
 
@@ -568,14 +589,14 @@ static void
 gnc_prefs_font_button_user_cb (GtkFontButton *fb,
                                gpointer user_data)
 {
-  const gchar *key, *font;
+    const gchar *key, *font;
 
-  g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
-  key = gtk_widget_get_name(GTK_WIDGET(fb)) + PREFIX_LEN;
-  font = gtk_font_button_get_font_name(fb);
+    g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
+    key = gtk_widget_get_name(GTK_WIDGET(fb)) + PREFIX_LEN;
+    font = gtk_font_button_get_font_name(fb);
 
-  DEBUG("font_button %s set", key);
-  gnc_gconf_set_string(key, NULL, font, NULL);
+    DEBUG("font_button %s set", key);
+    gnc_gconf_set_string(key, NULL, font, NULL);
 }
 
 
@@ -592,20 +613,20 @@ static void
 gnc_prefs_font_button_gconf_cb (GtkFontButton *fb,
                                 GConfEntry *entry)
 {
-  const gchar *font;
+    const gchar *font;
 
-  g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
-  ENTER("fb %p, entry %p", fb, entry);
+    g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
+    ENTER("fb %p, entry %p", fb, entry);
 
-  font = gconf_value_get_string(entry->value);
+    font = gconf_value_get_string(entry->value);
 
-  g_signal_handlers_block_by_func(G_OBJECT(fb),
-				  G_CALLBACK(gnc_prefs_font_button_user_cb),
-				  NULL);
-  gtk_font_button_set_font_name(fb, font);
-  g_signal_handlers_unblock_by_func(G_OBJECT(fb),
-				    G_CALLBACK(gnc_prefs_font_button_user_cb), NULL);
-  LEAVE(" ");
+    g_signal_handlers_block_by_func(G_OBJECT(fb),
+                                    G_CALLBACK(gnc_prefs_font_button_user_cb),
+                                    NULL);
+    gtk_font_button_set_font_name(fb, font);
+    g_signal_handlers_unblock_by_func(G_OBJECT(fb),
+                                      G_CALLBACK(gnc_prefs_font_button_user_cb), NULL);
+    LEAVE(" ");
 }
 
 
@@ -619,23 +640,23 @@ gnc_prefs_font_button_gconf_cb (GtkFontButton *fb,
 static void
 gnc_prefs_connect_font_button (GtkFontButton *fb)
 {
-  const gchar *name;
-  gchar *font;
+    const gchar *name;
+    gchar *font;
 
-  g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
+    g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
 
-  /* Lookup font name based upon gconf setting */
-  name = gtk_widget_get_name(GTK_WIDGET(fb)) + PREFIX_LEN;
-  font = gnc_gconf_get_string(name, NULL, NULL);
+    /* Lookup font name based upon gconf setting */
+    name = gtk_widget_get_name(GTK_WIDGET(fb)) + PREFIX_LEN;
+    font = gnc_gconf_get_string(name, NULL, NULL);
 
-  gtk_font_button_set_font_name(fb, font);
-  DEBUG(" font_button %s set", name);
-  g_free(font);
+    gtk_font_button_set_font_name(fb, font);
+    DEBUG(" font_button %s set", name);
+    g_free(font);
 
-  g_signal_connect(G_OBJECT(fb), "font_set",
-		   G_CALLBACK(gnc_prefs_font_button_user_cb), NULL);
+    g_signal_connect(G_OBJECT(fb), "font_set",
+                     G_CALLBACK(gnc_prefs_font_button_user_cb), NULL);
 
-  gtk_widget_show_all(GTK_WIDGET(fb));
+    gtk_widget_show_all(GTK_WIDGET(fb));
 }
 
 
@@ -655,24 +676,24 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
  */
 static void
 gnc_prefs_radio_button_user_cb (GtkRadioButton *button,
-				gpointer user_data)
+                                gpointer user_data)
 {
-  gchar *key, *button_name;
-  gboolean active;
+    gchar *key, *button_name;
+    gboolean active;
 
-  g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
-  active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
-  if (!active)
-    return;
+    g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
+    active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
+    if (!active)
+        return;
 
-  /* Copy the widget name and split into gconf key and button value parts */
-  key = g_strdup(gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN);
-  button_name = strrchr(key, '/');
-  *button_name++ = '\0';
+    /* Copy the widget name and split into gconf key and button value parts */
+    key = g_strdup(gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN);
+    button_name = strrchr(key, '/');
+    *button_name++ = '\0';
 
-  DEBUG("Radio button group %s now set to %s", key, button_name);
-  gnc_gconf_set_string(key, NULL, button_name, NULL);
-  g_free(key);
+    DEBUG("Radio button group %s now set to %s", key, button_name);
+    gnc_gconf_set_string(key, NULL, button_name, NULL);
+    g_free(key);
 }
 
 
@@ -687,15 +708,15 @@ gnc_prefs_radio_button_user_cb (GtkRadioButton *button,
 static void
 gnc_prefs_radio_button_gconf_cb (GtkRadioButton *button)
 {
-  g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
-  ENTER("button %p", button);
-  g_signal_handlers_block_by_func(G_OBJECT(button),
-				 G_CALLBACK(gnc_prefs_radio_button_user_cb),
-				 NULL);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-  g_signal_handlers_unblock_by_func(G_OBJECT(button),
-			   G_CALLBACK(gnc_prefs_radio_button_user_cb), NULL);
-  LEAVE(" ");
+    g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
+    ENTER("button %p", button);
+    g_signal_handlers_block_by_func(G_OBJECT(button),
+                                    G_CALLBACK(gnc_prefs_radio_button_user_cb),
+                                    NULL);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
+    g_signal_handlers_unblock_by_func(G_OBJECT(button),
+                                      G_CALLBACK(gnc_prefs_radio_button_user_cb), NULL);
+    LEAVE(" ");
 }
 
 
@@ -711,36 +732,39 @@ gnc_prefs_radio_button_gconf_cb (GtkRadioButton *button)
 static void
 gnc_prefs_connect_radio_button (GtkRadioButton *button)
 {
-  gchar *key, *button_name, *value;
-  gboolean active;
-  GSList *group;
+    gchar *key, *button_name, *value;
+    gboolean active;
+    GSList *group;
 
-  g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
+    g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
 
-  /* Copy the widget name and split into gconf key and button name parts */
-  key = g_strdup(gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN);
-  button_name = strrchr(key, '/');
-  *button_name++ = '\0';
+    /* Copy the widget name and split into gconf key and button name parts */
+    key = g_strdup(gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN);
+    button_name = strrchr(key, '/');
+    *button_name++ = '\0';
 
-  /* Get the current value. */
-  value = gnc_gconf_get_string(key, NULL, NULL);
-  if (value) {
-    active = (g_utf8_collate(value, button_name) == 0);
-  } else {
-    /* Sigh. There's no gconf default for this key. Use the first
-     * button in the dialog, which is the last button in the list. */
-    group =  gtk_radio_button_get_group(button);
-    active = (button != g_slist_nth_data(group, g_slist_length(group)));
-  }
-  DEBUG(" Radio set %s, button %s initially set to %d",
-	key, button_name, active);
+    /* Get the current value. */
+    value = gnc_gconf_get_string(key, NULL, NULL);
+    if (value)
+    {
+        active = (g_utf8_collate(value, button_name) == 0);
+    }
+    else
+    {
+        /* Sigh. There's no gconf default for this key. Use the first
+         * button in the dialog, which is the last button in the list. */
+        group =  gtk_radio_button_get_group(button);
+        active = (button != g_slist_nth_data(group, g_slist_length(group)));
+    }
+    DEBUG(" Radio set %s, button %s initially set to %d",
+          key, button_name, active);
 
-  /* Wire up the button */
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
-  g_signal_connect(G_OBJECT(button), "toggled",
-		   G_CALLBACK(gnc_prefs_radio_button_user_cb), NULL);
-  g_free(value);
-  g_free(key);
+    /* Wire up the button */
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
+    g_signal_connect(G_OBJECT(button), "toggled",
+                     G_CALLBACK(gnc_prefs_radio_button_user_cb), NULL);
+    g_free(value);
+    g_free(key);
 }
 
 /**********/
@@ -757,16 +781,16 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
  */
 static void
 gnc_prefs_check_button_user_cb (GtkCheckButton *button,
-				gpointer user_data)
+                                gpointer user_data)
 {
-  const gchar *name;
-  gboolean active;
+    const gchar *name;
+    gboolean active;
 
-  g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
-  name = gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN;
-  active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
-  DEBUG("Checkbox %s now %sactive", name, active ? "" : "in");
-  gnc_gconf_set_bool(name, NULL, active, NULL);
+    g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
+    name = gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN;
+    active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
+    DEBUG("Checkbox %s now %sactive", name, active ? "" : "in");
+    gnc_gconf_set_bool(name, NULL, active, NULL);
 }
 
 
@@ -781,17 +805,17 @@ gnc_prefs_check_button_user_cb (GtkCheckButton *button,
  */
 static void
 gnc_prefs_check_button_gconf_cb (GtkCheckButton *button,
-				 gboolean active)
+                                 gboolean active)
 {
-  g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
-  ENTER("button %p, active %d", button, active);
-  g_signal_handlers_block_by_func(G_OBJECT(button),
-				 G_CALLBACK(gnc_prefs_check_button_user_cb),
-				 NULL);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
-  g_signal_handlers_unblock_by_func(G_OBJECT(button),
-			   G_CALLBACK(gnc_prefs_check_button_user_cb), NULL);
-  LEAVE(" ");
+    g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
+    ENTER("button %p, active %d", button, active);
+    g_signal_handlers_block_by_func(G_OBJECT(button),
+                                    G_CALLBACK(gnc_prefs_check_button_user_cb),
+                                    NULL);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
+    g_signal_handlers_unblock_by_func(G_OBJECT(button),
+                                      G_CALLBACK(gnc_prefs_check_button_user_cb), NULL);
+    LEAVE(" ");
 }
 
 
@@ -806,15 +830,15 @@ gnc_prefs_check_button_gconf_cb (GtkCheckButton *button,
 static void
 gnc_prefs_connect_check_button (GtkCheckButton *button)
 {
-  const gchar *name;
-  gboolean active;
+    const gchar *name;
+    gboolean active;
 
-  name = gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN;
-  active = gnc_gconf_get_bool(name, NULL, NULL);
-  DEBUG(" Checkbox %s initially %sactive", name, active ? "" : "in");
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
-  g_signal_connect(G_OBJECT(button), "toggled",
-		   G_CALLBACK(gnc_prefs_check_button_user_cb), NULL);
+    name = gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN;
+    active = gnc_gconf_get_bool(name, NULL, NULL);
+    DEBUG(" Checkbox %s initially %sactive", name, active ? "" : "in");
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
+    g_signal_connect(G_OBJECT(button), "toggled",
+                     G_CALLBACK(gnc_prefs_check_button_user_cb), NULL);
 }
 
 /**********/
@@ -831,16 +855,16 @@ gnc_prefs_connect_check_button (GtkCheckButton *button)
  */
 static void
 gnc_prefs_spin_button_user_cb (GtkSpinButton *spin,
-			       gpointer user_data)
+                               gpointer user_data)
 {
-  const gchar *name;
-  gdouble value;
+    const gchar *name;
+    gdouble value;
 
-  g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
-  name = gtk_widget_get_name(GTK_WIDGET(spin)) + PREFIX_LEN;
-  value = gtk_spin_button_get_value(spin);
-  DEBUG(" Spin button %s has value %f", name, value);
-  gnc_gconf_set_float(name, NULL, value, NULL);
+    g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
+    name = gtk_widget_get_name(GTK_WIDGET(spin)) + PREFIX_LEN;
+    value = gtk_spin_button_get_value(spin);
+    DEBUG(" Spin button %s has value %f", name, value);
+    gnc_gconf_set_float(name, NULL, value, NULL);
 }
 
 
@@ -855,17 +879,17 @@ gnc_prefs_spin_button_user_cb (GtkSpinButton *spin,
  */
 static void
 gnc_prefs_spin_button_gconf_cb (GtkSpinButton *spin,
-				gdouble value)
+                                gdouble value)
 {
-  g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
-  ENTER("button %p, value %f", spin, value);
-  g_signal_handlers_block_by_func(G_OBJECT(spin),
-				 G_CALLBACK(gnc_prefs_spin_button_user_cb),
-				 NULL);
-  gtk_spin_button_set_value(spin, value);
-  g_signal_handlers_unblock_by_func(G_OBJECT(spin),
-			   G_CALLBACK(gnc_prefs_spin_button_user_cb), NULL);
-  LEAVE(" ");
+    g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
+    ENTER("button %p, value %f", spin, value);
+    g_signal_handlers_block_by_func(G_OBJECT(spin),
+                                    G_CALLBACK(gnc_prefs_spin_button_user_cb),
+                                    NULL);
+    gtk_spin_button_set_value(spin, value);
+    g_signal_handlers_unblock_by_func(G_OBJECT(spin),
+                                      G_CALLBACK(gnc_prefs_spin_button_user_cb), NULL);
+    LEAVE(" ");
 }
 
 
@@ -880,16 +904,16 @@ gnc_prefs_spin_button_gconf_cb (GtkSpinButton *spin,
 static void
 gnc_prefs_connect_spin_button (GtkSpinButton *spin)
 {
-  const gchar *name;
-  gdouble value;
+    const gchar *name;
+    gdouble value;
 
-  g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
-  name = gtk_widget_get_name(GTK_WIDGET(spin)) + PREFIX_LEN;
-  value = gnc_gconf_get_float(name, NULL, NULL);
-  gtk_spin_button_set_value(spin, value);
-  DEBUG(" Spin button %s has initial value %f", name, value);
-  g_signal_connect(G_OBJECT(spin), "value-changed",
-		   G_CALLBACK(gnc_prefs_spin_button_user_cb), NULL);
+    g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
+    name = gtk_widget_get_name(GTK_WIDGET(spin)) + PREFIX_LEN;
+    value = gnc_gconf_get_float(name, NULL, NULL);
+    gtk_spin_button_set_value(spin, value);
+    DEBUG(" Spin button %s has initial value %f", name, value);
+    g_signal_connect(G_OBJECT(spin), "value-changed",
+                     G_CALLBACK(gnc_prefs_spin_button_user_cb), NULL);
 }
 
 
@@ -907,16 +931,16 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
  */
 static void
 gnc_prefs_combo_box_user_cb (GtkComboBox *box,
-			     gpointer user_data)
+                             gpointer user_data)
 {
-  const gchar *name;
-  gint active;
+    const gchar *name;
+    gint active;
 
-  g_return_if_fail(GTK_IS_COMBO_BOX(box));
-  name = gtk_widget_get_name(GTK_WIDGET(box)) + PREFIX_LEN;
-  active = gtk_combo_box_get_active(box);
-  DEBUG("Combo box %s set to item %d", name, active);
-  gnc_gconf_set_int(name, NULL, active, NULL);
+    g_return_if_fail(GTK_IS_COMBO_BOX(box));
+    name = gtk_widget_get_name(GTK_WIDGET(box)) + PREFIX_LEN;
+    active = gtk_combo_box_get_active(box);
+    DEBUG("Combo box %s set to item %d", name, active);
+    gnc_gconf_set_int(name, NULL, active, NULL);
 }
 
 
@@ -931,17 +955,17 @@ gnc_prefs_combo_box_user_cb (GtkComboBox *box,
  */
 static void
 gnc_prefs_combo_box_gconf_cb (GtkComboBox *box,
-			      gint value)
+                              gint value)
 {
-  g_return_if_fail(GTK_IS_COMBO_BOX(box));
-  ENTER("box %p, value %d", box, value);
-  g_signal_handlers_block_by_func(G_OBJECT(box),
-				 G_CALLBACK(gnc_prefs_combo_box_user_cb),
-				 NULL);
-  gtk_combo_box_set_active(box, value);
-  g_signal_handlers_unblock_by_func(G_OBJECT(box),
-			   G_CALLBACK(gnc_prefs_combo_box_user_cb), NULL);
-  LEAVE(" ");
+    g_return_if_fail(GTK_IS_COMBO_BOX(box));
+    ENTER("box %p, value %d", box, value);
+    g_signal_handlers_block_by_func(G_OBJECT(box),
+                                    G_CALLBACK(gnc_prefs_combo_box_user_cb),
+                                    NULL);
+    gtk_combo_box_set_active(box, value);
+    g_signal_handlers_unblock_by_func(G_OBJECT(box),
+                                      G_CALLBACK(gnc_prefs_combo_box_user_cb), NULL);
+    LEAVE(" ");
 }
 
 
@@ -955,16 +979,16 @@ gnc_prefs_combo_box_gconf_cb (GtkComboBox *box,
 static void
 gnc_prefs_connect_combo_box (GtkComboBox *box)
 {
-  const gchar *name;
-  gint active;
+    const gchar *name;
+    gint active;
 
-  g_return_if_fail(GTK_IS_COMBO_BOX(box));
-  name = gtk_widget_get_name(GTK_WIDGET(box)) + PREFIX_LEN;
-  active = gnc_gconf_get_int(name, NULL, NULL);
-  gtk_combo_box_set_active(GTK_COMBO_BOX(box), active);
-  DEBUG(" Combo box %s set to item %d", name, active);
-  g_signal_connect(G_OBJECT(box), "changed",
-		   G_CALLBACK(gnc_prefs_combo_box_user_cb), NULL);
+    g_return_if_fail(GTK_IS_COMBO_BOX(box));
+    name = gtk_widget_get_name(GTK_WIDGET(box)) + PREFIX_LEN;
+    active = gnc_gconf_get_int(name, NULL, NULL);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(box), active);
+    DEBUG(" Combo box %s set to item %d", name, active);
+    g_signal_connect(G_OBJECT(box), "changed",
+                     G_CALLBACK(gnc_prefs_combo_box_user_cb), NULL);
 }
 
 
@@ -982,18 +1006,18 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
  */
 static void
 gnc_prefs_currency_edit_user_cb (GNCCurrencyEdit *gce,
-				 gpointer user_data)
+                                 gpointer user_data)
 {
-  const gchar *name, *mnemonic;
-  gnc_commodity *currency;
+    const gchar *name, *mnemonic;
+    gnc_commodity *currency;
 
-  g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
-  name = gtk_widget_get_name(GTK_WIDGET(gce)) + PREFIX_LEN;
-  currency = gnc_currency_edit_get_currency(gce);
-  mnemonic = gnc_commodity_get_mnemonic(currency);
+    g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
+    name = gtk_widget_get_name(GTK_WIDGET(gce)) + PREFIX_LEN;
+    currency = gnc_currency_edit_get_currency(gce);
+    mnemonic = gnc_commodity_get_mnemonic(currency);
 
-  DEBUG("currency_edit %s set to %s", name, mnemonic);
-  gnc_gconf_set_string(name, NULL, mnemonic, NULL);
+    DEBUG("currency_edit %s set to %s", name, mnemonic);
+    gnc_gconf_set_string(name, NULL, mnemonic, NULL);
 }
 
 
@@ -1008,33 +1032,34 @@ gnc_prefs_currency_edit_user_cb (GNCCurrencyEdit *gce,
  */
 static void
 gnc_prefs_currency_edit_gconf_cb (GNCCurrencyEdit *gce,
-				  GConfEntry *entry)
+                                  GConfEntry *entry)
 {
-  const gchar *mnemonic;
-  gnc_commodity *currency;
+    const gchar *mnemonic;
+    gnc_commodity *currency;
 
-  g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
-  ENTER("gce %p, entry %p", gce, entry);
+    g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
+    ENTER("gce %p, entry %p", gce, entry);
 
-  mnemonic = gconf_value_get_string(entry->value);
-  DEBUG("gce %p, mnemonic %s", gce, mnemonic);
-  currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-					GNC_COMMODITY_NS_CURRENCY, mnemonic);
+    mnemonic = gconf_value_get_string(entry->value);
+    DEBUG("gce %p, mnemonic %s", gce, mnemonic);
+    currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
+                                          GNC_COMMODITY_NS_CURRENCY, mnemonic);
 
-  /* If there isn't any such commodity, get the default */
-  if (!currency) {
-    currency = gnc_locale_default_currency();
-    DEBUG("gce %p, default currency mnemonic %s",
-	  gce, gnc_commodity_get_mnemonic(currency));
-  }
+    /* If there isn't any such commodity, get the default */
+    if (!currency)
+    {
+        currency = gnc_locale_default_currency();
+        DEBUG("gce %p, default currency mnemonic %s",
+              gce, gnc_commodity_get_mnemonic(currency));
+    }
 
-  g_signal_handlers_block_by_func(G_OBJECT(gce),
-				 G_CALLBACK(gnc_prefs_currency_edit_user_cb),
-				 NULL);
-  gnc_currency_edit_set_currency(GNC_CURRENCY_EDIT(gce), currency);
-  g_signal_handlers_unblock_by_func(G_OBJECT(gce),
-			   G_CALLBACK(gnc_prefs_currency_edit_user_cb), NULL);
-  LEAVE(" ");
+    g_signal_handlers_block_by_func(G_OBJECT(gce),
+                                    G_CALLBACK(gnc_prefs_currency_edit_user_cb),
+                                    NULL);
+    gnc_currency_edit_set_currency(GNC_CURRENCY_EDIT(gce), currency);
+    g_signal_handlers_unblock_by_func(G_OBJECT(gce),
+                                      G_CALLBACK(gnc_prefs_currency_edit_user_cb), NULL);
+    LEAVE(" ");
 }
 
 
@@ -1048,32 +1073,32 @@ gnc_prefs_currency_edit_gconf_cb (GNCCurrencyEdit *gce,
 static void
 gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce)
 {
-  gnc_commodity *currency;
-  const gchar *name;
-  gchar *mnemonic;
+    gnc_commodity *currency;
+    const gchar *name;
+    gchar *mnemonic;
 
-  g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
+    g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
 
-  /* Lookup commodity based upon gconf setting */
-  name = gtk_widget_get_name(GTK_WIDGET(gce)) + PREFIX_LEN;
-  mnemonic = gnc_gconf_get_string(name, NULL, NULL);
-  currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-					GNC_COMMODITY_NS_CURRENCY, mnemonic);
-  if (mnemonic)
-    g_free(mnemonic);
+    /* Lookup commodity based upon gconf setting */
+    name = gtk_widget_get_name(GTK_WIDGET(gce)) + PREFIX_LEN;
+    mnemonic = gnc_gconf_get_string(name, NULL, NULL);
+    currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
+                                          GNC_COMMODITY_NS_CURRENCY, mnemonic);
+    if (mnemonic)
+        g_free(mnemonic);
 
-  /* If there isn't any such commodity, get the default */
-  if (!currency)
-    currency = gnc_locale_default_currency();
+    /* If there isn't any such commodity, get the default */
+    if (!currency)
+        currency = gnc_locale_default_currency();
 
-  gnc_currency_edit_set_currency(GNC_CURRENCY_EDIT(gce), currency);
-  DEBUG(" currency_edit %s set to %s", name,
-	gnc_commodity_get_mnemonic(currency));
+    gnc_currency_edit_set_currency(GNC_CURRENCY_EDIT(gce), currency);
+    DEBUG(" currency_edit %s set to %s", name,
+          gnc_commodity_get_mnemonic(currency));
 
-  g_signal_connect(G_OBJECT(gce), "changed",
-		   G_CALLBACK(gnc_prefs_currency_edit_user_cb), NULL);
+    g_signal_connect(G_OBJECT(gce), "changed",
+                     G_CALLBACK(gnc_prefs_currency_edit_user_cb), NULL);
 
-  gtk_widget_show_all(GTK_WIDGET(gce));
+    gtk_widget_show_all(GTK_WIDGET(gce));
 }
 
 
@@ -1090,15 +1115,15 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce)
  */
 static void
 gnc_prefs_entry_user_cb (GtkEntry *entry,
-			 gpointer user_data)
+                         gpointer user_data)
 {
-  const gchar *name, *text;
+    const gchar *name, *text;
 
-  g_return_if_fail(GTK_IS_ENTRY(entry));
-  name = gtk_widget_get_name(GTK_WIDGET(entry)) + PREFIX_LEN;
-  text = gtk_entry_get_text(entry);
-  DEBUG("Entry %s set to '%s'", name, text);
-  gnc_gconf_set_string(name, NULL, text, NULL);
+    g_return_if_fail(GTK_IS_ENTRY(entry));
+    name = gtk_widget_get_name(GTK_WIDGET(entry)) + PREFIX_LEN;
+    text = gtk_entry_get_text(entry);
+    DEBUG("Entry %s set to '%s'", name, text);
+    gnc_gconf_set_string(name, NULL, text, NULL);
 }
 
 
@@ -1112,17 +1137,17 @@ gnc_prefs_entry_user_cb (GtkEntry *entry,
  */
 static void
 gnc_prefs_entry_gconf_cb (GtkEntry *entry,
-			  const gchar *value)
+                          const gchar *value)
 {
-  g_return_if_fail(GTK_IS_ENTRY(entry));
-  ENTER("entry %p, value '%s'", entry, value);
-  g_signal_handlers_block_by_func(G_OBJECT(entry),
-				 G_CALLBACK(gnc_prefs_entry_user_cb),
-				 NULL);
-  gtk_entry_set_text(entry, value);
-  g_signal_handlers_unblock_by_func(G_OBJECT(entry),
-			   G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
-  LEAVE(" ");
+    g_return_if_fail(GTK_IS_ENTRY(entry));
+    ENTER("entry %p, value '%s'", entry, value);
+    g_signal_handlers_block_by_func(G_OBJECT(entry),
+                                    G_CALLBACK(gnc_prefs_entry_user_cb),
+                                    NULL);
+    gtk_entry_set_text(entry, value);
+    g_signal_handlers_unblock_by_func(G_OBJECT(entry),
+                                      G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
+    LEAVE(" ");
 }
 
 
@@ -1136,17 +1161,17 @@ gnc_prefs_entry_gconf_cb (GtkEntry *entry,
 static void
 gnc_prefs_connect_entry (GtkEntry *entry)
 {
-  const gchar *name;
-  gchar *text;
+    const gchar *name;
+    gchar *text;
 
-  g_return_if_fail(GTK_IS_ENTRY(entry));
-  name = gtk_widget_get_name(GTK_WIDGET(entry)) + PREFIX_LEN;
-  text = gnc_gconf_get_string(name, NULL, NULL);
-  gtk_entry_set_text(GTK_ENTRY(entry), text ? text : "");
-  DEBUG(" Entry %s set to '%s'", name?name:"(null)", text?text:"(null)");
-  g_free(text);
-  g_signal_connect(G_OBJECT(entry), "changed",
-		   G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
+    g_return_if_fail(GTK_IS_ENTRY(entry));
+    name = gtk_widget_get_name(GTK_WIDGET(entry)) + PREFIX_LEN;
+    text = gnc_gconf_get_string(name, NULL, NULL);
+    gtk_entry_set_text(GTK_ENTRY(entry), text ? text : "");
+    DEBUG(" Entry %s set to '%s'", name ? name : "(null)", text ? text : "(null)");
+    g_free(text);
+    g_signal_connect(G_OBJECT(entry), "changed",
+                     G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
 }
 
 
@@ -1164,16 +1189,16 @@ gnc_prefs_connect_entry (GtkEntry *entry)
  */
 static void
 gnc_prefs_period_select_user_cb (GncPeriodSelect *period,
-				 gpointer user_data)
+                                 gpointer user_data)
 {
-  const gchar *name;
-  gint active;
+    const gchar *name;
+    gint active;
 
-  g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
-  name = gtk_widget_get_name(GTK_WIDGET(period)) + PREFIX_LEN;
-  active = gnc_period_select_get_active(period);
-  DEBUG("Period select %s set to item %d", name, active);
-  gnc_gconf_set_int(name, NULL, active, NULL);
+    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+    name = gtk_widget_get_name(GTK_WIDGET(period)) + PREFIX_LEN;
+    active = gnc_period_select_get_active(period);
+    DEBUG("Period select %s set to item %d", name, active);
+    gnc_gconf_set_int(name, NULL, active, NULL);
 }
 
 
@@ -1188,17 +1213,17 @@ gnc_prefs_period_select_user_cb (GncPeriodSelect *period,
  */
 static void
 gnc_prefs_period_select_gconf_cb (GncPeriodSelect *period,
-				  gint value)
+                                  gint value)
 {
-  g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
-  ENTER("period %p, value %d", period, value);
-  g_signal_handlers_block_by_func(G_OBJECT(period),
-				 G_CALLBACK(gnc_prefs_period_select_user_cb),
-				 NULL);
-  gnc_period_select_set_active(period, value);
-  g_signal_handlers_unblock_by_func(G_OBJECT(period),
-			   G_CALLBACK(gnc_prefs_period_select_user_cb), NULL);
-  LEAVE(" ");
+    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+    ENTER("period %p, value %d", period, value);
+    g_signal_handlers_block_by_func(G_OBJECT(period),
+                                    G_CALLBACK(gnc_prefs_period_select_user_cb),
+                                    NULL);
+    gnc_period_select_set_active(period, value);
+    g_signal_handlers_unblock_by_func(G_OBJECT(period),
+                                      G_CALLBACK(gnc_prefs_period_select_user_cb), NULL);
+    LEAVE(" ");
 }
 
 
@@ -1212,30 +1237,31 @@ gnc_prefs_period_select_gconf_cb (GncPeriodSelect *period,
 static void
 gnc_prefs_connect_period_select (GncPeriodSelect *period)
 {
-  const gchar *name;
-  gint active;
-  QofBook *book;
-  KvpFrame *book_frame;
-  gint64 month, day;
-  GDate fy_end;
+    const gchar *name;
+    gint active;
+    QofBook *book;
+    KvpFrame *book_frame;
+    gint64 month, day;
+    GDate fy_end;
 
-  g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
-  book = gnc_get_current_book();
-  book_frame = qof_book_get_slots(book);
-  month = kvp_frame_get_gint64(book_frame, "/book/fyear_end/month");
-  day = kvp_frame_get_gint64(book_frame, "/book/fyear_end/day");
-  if (g_date_valid_dmy(day, month, 2005 /* not leap year */)) {
-    g_date_clear(&fy_end, 1);
-    g_date_set_dmy(&fy_end, day, month, G_DATE_BAD_YEAR);
-    gnc_period_select_set_fy_end(period, &fy_end);
-  }
+    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+    book = gnc_get_current_book();
+    book_frame = qof_book_get_slots(book);
+    month = kvp_frame_get_gint64(book_frame, "/book/fyear_end/month");
+    day = kvp_frame_get_gint64(book_frame, "/book/fyear_end/day");
+    if (g_date_valid_dmy(day, month, 2005 /* not leap year */))
+    {
+        g_date_clear(&fy_end, 1);
+        g_date_set_dmy(&fy_end, day, month, G_DATE_BAD_YEAR);
+        gnc_period_select_set_fy_end(period, &fy_end);
+    }
 
-  name = gtk_widget_get_name(GTK_WIDGET(period)) + PREFIX_LEN;
-  active = gnc_gconf_get_int(name, NULL, NULL);
-  gnc_period_select_set_active(period, active);
-  DEBUG(" Period select %s set to item %d", name, active);
-  g_signal_connect(G_OBJECT(period), "changed",
-		   G_CALLBACK(gnc_prefs_period_select_user_cb), NULL);
+    name = gtk_widget_get_name(GTK_WIDGET(period)) + PREFIX_LEN;
+    active = gnc_gconf_get_int(name, NULL, NULL);
+    gnc_period_select_set_active(period, active);
+    DEBUG(" Period select %s set to item %d", name, active);
+    g_signal_connect(G_OBJECT(period), "changed",
+                     G_CALLBACK(gnc_prefs_period_select_user_cb), NULL);
 }
 
 
@@ -1253,17 +1279,17 @@ gnc_prefs_connect_period_select (GncPeriodSelect *period)
  */
 static void
 gnc_prefs_date_edit_user_cb (GNCDateEdit *gde,
-			     gpointer user_data)
+                             gpointer user_data)
 {
-  const gchar *name;
-  time_t time;
+    const gchar *name;
+    time_t time;
 
-  g_return_if_fail(GNC_IS_DATE_EDIT(gde));
-  name = gtk_widget_get_name(GTK_WIDGET(gde)) + PREFIX_LEN;
-  time = gnc_date_edit_get_date(gde);
+    g_return_if_fail(GNC_IS_DATE_EDIT(gde));
+    name = gtk_widget_get_name(GTK_WIDGET(gde)) + PREFIX_LEN;
+    time = gnc_date_edit_get_date(gde);
 
-  DEBUG("date_edit %s set", name);
-  gnc_gconf_set_int(name, NULL, time, NULL);
+    DEBUG("date_edit %s set", name);
+    gnc_gconf_set_int(name, NULL, time, NULL);
 }
 
 
@@ -1278,22 +1304,22 @@ gnc_prefs_date_edit_user_cb (GNCDateEdit *gde,
  */
 static void
 gnc_prefs_date_edit_gconf_cb (GNCDateEdit *gde,
-			      GConfEntry *entry)
+                              GConfEntry *entry)
 {
-  time_t time;
+    time_t time;
 
-  g_return_if_fail(GNC_IS_DATE_EDIT(gde));
-  ENTER("gde %p, entry %p", gde, entry);
+    g_return_if_fail(GNC_IS_DATE_EDIT(gde));
+    ENTER("gde %p, entry %p", gde, entry);
 
-  time = gconf_value_get_int(entry->value);
+    time = gconf_value_get_int(entry->value);
 
-  g_signal_handlers_block_by_func(G_OBJECT(gde),
-				  G_CALLBACK(gnc_prefs_date_edit_user_cb),
-				  NULL);
-  gnc_date_edit_set_time(GNC_DATE_EDIT(gde), time);
-  g_signal_handlers_unblock_by_func(G_OBJECT(gde),
-				    G_CALLBACK(gnc_prefs_date_edit_user_cb), NULL);
-  LEAVE(" ");
+    g_signal_handlers_block_by_func(G_OBJECT(gde),
+                                    G_CALLBACK(gnc_prefs_date_edit_user_cb),
+                                    NULL);
+    gnc_date_edit_set_time(GNC_DATE_EDIT(gde), time);
+    g_signal_handlers_unblock_by_func(G_OBJECT(gde),
+                                      G_CALLBACK(gnc_prefs_date_edit_user_cb), NULL);
+    LEAVE(" ");
 }
 
 
@@ -1307,22 +1333,22 @@ gnc_prefs_date_edit_gconf_cb (GNCDateEdit *gde,
 static void
 gnc_prefs_connect_date_edit (GNCDateEdit *gde)
 {
-  const gchar *name;
-  time_t time;
+    const gchar *name;
+    time_t time;
 
-  g_return_if_fail(GNC_IS_DATE_EDIT(gde));
+    g_return_if_fail(GNC_IS_DATE_EDIT(gde));
 
-  /* Lookup commodity based upon gconf setting */
-  name = gtk_widget_get_name(GTK_WIDGET(gde)) + PREFIX_LEN;
-  time = gnc_gconf_get_int(name, NULL, NULL);
+    /* Lookup commodity based upon gconf setting */
+    name = gtk_widget_get_name(GTK_WIDGET(gde)) + PREFIX_LEN;
+    time = gnc_gconf_get_int(name, NULL, NULL);
 
-  gnc_date_edit_set_time(GNC_DATE_EDIT(gde), time);
-  DEBUG(" date_edit %s set", name);
+    gnc_date_edit_set_time(GNC_DATE_EDIT(gde), time);
+    DEBUG(" date_edit %s set", name);
 
-  g_signal_connect(G_OBJECT(gde), "date_changed",
-		   G_CALLBACK(gnc_prefs_date_edit_user_cb), NULL);
+    g_signal_connect(G_OBJECT(gde), "date_changed",
+                     G_CALLBACK(gnc_prefs_date_edit_user_cb), NULL);
 
-  gtk_widget_show_all(GTK_WIDGET(gde));
+    gtk_widget_show_all(GTK_WIDGET(gde));
 }
 
 
@@ -1346,24 +1372,25 @@ gnc_prefs_connect_date_edit (GNCDateEdit *gde)
 void
 gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
 {
-  switch (response) {
-   case GTK_RESPONSE_HELP:
-     gnc_gnome_help(HF_HELP, HL_GLOBPREFS);
-     break;
+    switch (response)
+    {
+    case GTK_RESPONSE_HELP:
+        gnc_gnome_help(HF_HELP, HL_GLOBPREFS);
+        break;
 
-   default:
-     gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
-     gnc_unregister_gui_component_by_data(DIALOG_PREFERENCES_CM_CLASS,
-					  dialog);
-     gnc_gconf_general_remove_cb(
-       KEY_ACCOUNT_SEPARATOR,
-       (GncGconfGeneralCb)gnc_account_separator_prefs_cb,
-       dialog);
-     gnc_gconf_remove_notification(G_OBJECT(dialog), NULL,
-				   DIALOG_PREFERENCES_CM_CLASS);
-     gtk_widget_destroy(GTK_WIDGET(dialog));
-     break;
-  }
+    default:
+        gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+        gnc_unregister_gui_component_by_data(DIALOG_PREFERENCES_CM_CLASS,
+                                             dialog);
+        gnc_gconf_general_remove_cb(
+            KEY_ACCOUNT_SEPARATOR,
+            (GncGconfGeneralCb)gnc_account_separator_prefs_cb,
+            dialog);
+        gnc_gconf_remove_notification(G_OBJECT(dialog), NULL,
+                                      DIALOG_PREFERENCES_CM_CLASS);
+        gtk_widget_destroy(GTK_WIDGET(dialog));
+        break;
+    }
 }
 
 /********************/
@@ -1384,42 +1411,61 @@ gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
  */
 static void
 gnc_prefs_connect_one (const gchar *name,
-		       GtkWidget *widget,
-		       gpointer user_data)
+                       GtkWidget *widget,
+                       gpointer user_data)
 {
-  /* These tests must be ordered from more specific widget to less
-   * specific widget.  Test custom widgets first */
-  if (GNC_IS_CURRENCY_EDIT(widget)) { /* must be tested before combo_box */
-    DEBUG("  %s - currency_edit", name);
-    gnc_prefs_connect_currency_edit(GNC_CURRENCY_EDIT(widget));
-  } else if (GNC_IS_PERIOD_SELECT(widget)) {
-    DEBUG("  %s - period_Select", name);
-    gnc_prefs_connect_period_select(GNC_PERIOD_SELECT(widget));
-  } else if (GNC_IS_DATE_EDIT(widget)) {
-    DEBUG("  %s - date_edit", name);
-    gnc_prefs_connect_date_edit(GNC_DATE_EDIT(widget));
-  } else if (GTK_IS_FONT_BUTTON(widget)) {
-    DEBUG("  %s - entry", name);
-    gnc_prefs_connect_font_button(GTK_FONT_BUTTON(widget));
-  } else if (GTK_IS_RADIO_BUTTON(widget)) {
-    DEBUG("  %s - radio button", name);
-    gnc_prefs_connect_radio_button(GTK_RADIO_BUTTON(widget));
-  } else if (GTK_IS_CHECK_BUTTON(widget)) {
-    DEBUG("  %s - check button", name);
-    gnc_prefs_connect_check_button(GTK_CHECK_BUTTON(widget));
-  } else if (GTK_IS_SPIN_BUTTON(widget)) {
-    DEBUG("  %s - spin button", name);
-    gnc_prefs_connect_spin_button(GTK_SPIN_BUTTON(widget));
-  } else if (GTK_IS_COMBO_BOX(widget)) {
-    DEBUG("  %s - combo box", name);
-    gnc_prefs_connect_combo_box(GTK_COMBO_BOX(widget));
-  } else if (GTK_IS_ENTRY(widget)) {
-    DEBUG("  %s - entry", name);
-    gnc_prefs_connect_entry(GTK_ENTRY(widget));
-  } else {
-    DEBUG("  %s - unsupported %s", name,
-	  G_OBJECT_TYPE_NAME(G_OBJECT(widget)));
-  }
+    /* These tests must be ordered from more specific widget to less
+     * specific widget.  Test custom widgets first */
+    if (GNC_IS_CURRENCY_EDIT(widget))   /* must be tested before combo_box */
+    {
+        DEBUG("  %s - currency_edit", name);
+        gnc_prefs_connect_currency_edit(GNC_CURRENCY_EDIT(widget));
+    }
+    else if (GNC_IS_PERIOD_SELECT(widget))
+    {
+        DEBUG("  %s - period_Select", name);
+        gnc_prefs_connect_period_select(GNC_PERIOD_SELECT(widget));
+    }
+    else if (GNC_IS_DATE_EDIT(widget))
+    {
+        DEBUG("  %s - date_edit", name);
+        gnc_prefs_connect_date_edit(GNC_DATE_EDIT(widget));
+    }
+    else if (GTK_IS_FONT_BUTTON(widget))
+    {
+        DEBUG("  %s - entry", name);
+        gnc_prefs_connect_font_button(GTK_FONT_BUTTON(widget));
+    }
+    else if (GTK_IS_RADIO_BUTTON(widget))
+    {
+        DEBUG("  %s - radio button", name);
+        gnc_prefs_connect_radio_button(GTK_RADIO_BUTTON(widget));
+    }
+    else if (GTK_IS_CHECK_BUTTON(widget))
+    {
+        DEBUG("  %s - check button", name);
+        gnc_prefs_connect_check_button(GTK_CHECK_BUTTON(widget));
+    }
+    else if (GTK_IS_SPIN_BUTTON(widget))
+    {
+        DEBUG("  %s - spin button", name);
+        gnc_prefs_connect_spin_button(GTK_SPIN_BUTTON(widget));
+    }
+    else if (GTK_IS_COMBO_BOX(widget))
+    {
+        DEBUG("  %s - combo box", name);
+        gnc_prefs_connect_combo_box(GTK_COMBO_BOX(widget));
+    }
+    else if (GTK_IS_ENTRY(widget))
+    {
+        DEBUG("  %s - entry", name);
+        gnc_prefs_connect_entry(GTK_ENTRY(widget));
+    }
+    else
+    {
+        DEBUG("  %s - unsupported %s", name,
+              G_OBJECT_TYPE_NAME(G_OBJECT(widget)));
+    }
 }
 
 
@@ -1437,64 +1483,64 @@ gnc_prefs_connect_one (const gchar *name,
 static GtkWidget *
 gnc_preferences_dialog_create(void)
 {
-  GladeXML *xml;
-  GtkWidget *dialog, *notebook, *label;
-  GHashTable *table;
-  GDate* gdate;
-  gchar buf[128];
-  gnc_commodity *locale_currency;
-  const gchar *currency_name;
+    GladeXML *xml;
+    GtkWidget *dialog, *notebook, *label;
+    GHashTable *table;
+    GDate* gdate;
+    gchar buf[128];
+    gnc_commodity *locale_currency;
+    const gchar *currency_name;
 
-  ENTER("");
-  DEBUG("Opening preferences.glade:");
-  xml = gnc_glade_xml_new(GLADE_FILENAME, "GnuCash Preferences");
-  dialog = glade_xml_get_widget(xml, "GnuCash Preferences");
-  DEBUG("autoconnect");
-  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
-				    dialog);
+    ENTER("");
+    DEBUG("Opening preferences.glade:");
+    xml = gnc_glade_xml_new(GLADE_FILENAME, "GnuCash Preferences");
+    dialog = glade_xml_get_widget(xml, "GnuCash Preferences");
+    DEBUG("autoconnect");
+    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
+                                      dialog);
 
-  /* Clean up the xml data structure when the dialog is destroyed */
-  g_object_set_data_full(G_OBJECT(dialog), GLADE_FILENAME,
-			 xml, g_object_unref);
-  DEBUG("done");
+    /* Clean up the xml data structure when the dialog is destroyed */
+    g_object_set_data_full(G_OBJECT(dialog), GLADE_FILENAME,
+                           xml, g_object_unref);
+    DEBUG("done");
 
-  notebook = glade_xml_get_widget(xml, "notebook1");
-  table = g_hash_table_new(g_str_hash, g_str_equal);
-  g_object_set_data(G_OBJECT(dialog), NOTEBOOK, notebook);
-  g_object_set_data_full(G_OBJECT(dialog), WIDGET_HASH,
-			 table, (GDestroyNotify)g_hash_table_destroy);
+    notebook = glade_xml_get_widget(xml, "notebook1");
+    table = g_hash_table_new(g_str_hash, g_str_equal);
+    g_object_set_data(G_OBJECT(dialog), NOTEBOOK, notebook);
+    g_object_set_data_full(G_OBJECT(dialog), WIDGET_HASH,
+                           table, (GDestroyNotify)g_hash_table_destroy);
 
-  /* Add to the list of interesting widgets */
-  gnc_prefs_build_widget_table(xml, dialog);
+    /* Add to the list of interesting widgets */
+    gnc_prefs_build_widget_table(xml, dialog);
 
-  g_slist_foreach(add_ins, gnc_preferences_build_page, dialog);
+    g_slist_foreach(add_ins, gnc_preferences_build_page, dialog);
 
-  /* Sort tabs alphabetically */
-  gnc_prefs_sort_pages(GTK_NOTEBOOK(notebook));
-  gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
+    /* Sort tabs alphabetically */
+    gnc_prefs_sort_pages(GTK_NOTEBOOK(notebook));
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
 
-  DEBUG("We have the following interesting widgets:");
-  g_hash_table_foreach(table, (GHFunc)gnc_prefs_connect_one, dialog);
-  DEBUG("Done with interesting widgets.");
+    DEBUG("We have the following interesting widgets:");
+    g_hash_table_foreach(table, (GHFunc)gnc_prefs_connect_one, dialog);
+    DEBUG("Done with interesting widgets.");
 
-  /* Other stuff */
-  gdate = g_date_new_dmy(31, G_DATE_JULY, 2005);
-  g_date_strftime(buf, sizeof(buf), "%x", gdate);
-  label = glade_xml_get_widget(xml, "locale_date_sample");
-  gtk_label_set_text(GTK_LABEL(label), buf);
-  g_date_free(gdate);
+    /* Other stuff */
+    gdate = g_date_new_dmy(31, G_DATE_JULY, 2005);
+    g_date_strftime(buf, sizeof(buf), "%x", gdate);
+    label = glade_xml_get_widget(xml, "locale_date_sample");
+    gtk_label_set_text(GTK_LABEL(label), buf);
+    g_date_free(gdate);
 
-  locale_currency = gnc_locale_default_currency ();
-  currency_name = gnc_commodity_get_printname(locale_currency);
-  label = glade_xml_get_widget(xml, "locale_currency");
-  gtk_label_set_label(GTK_LABEL(label), currency_name);
-  label = glade_xml_get_widget(xml, "locale_currency2");
-  gtk_label_set_label(GTK_LABEL(label), currency_name);
+    locale_currency = gnc_locale_default_currency ();
+    currency_name = gnc_commodity_get_printname(locale_currency);
+    label = glade_xml_get_widget(xml, "locale_currency");
+    gtk_label_set_label(GTK_LABEL(label), currency_name);
+    label = glade_xml_get_widget(xml, "locale_currency2");
+    gtk_label_set_label(GTK_LABEL(label), currency_name);
 
-  gnc_account_separator_prefs_cb(NULL, dialog);
+    gnc_account_separator_prefs_cb(NULL, dialog);
 
-  LEAVE("dialog %p", dialog);
-  return dialog;
+    LEAVE("dialog %p", dialog);
+    return dialog;
 }
 
 
@@ -1525,13 +1571,13 @@ gnc_preferences_dialog_create(void)
  */
 static gboolean
 gnc_prefs_nearest_match (gpointer key,
-			 gpointer value,
-			 gpointer user_data)
+                         gpointer value,
+                         gpointer user_data)
 {
-  const gchar *widget_name = key;
-  const gchar *gconf_name = user_data;
+    const gchar *widget_name = key;
+    const gchar *gconf_name = user_data;
 
-  return (strncmp(widget_name, gconf_name, strlen(gconf_name)) == 0);
+    return (strncmp(widget_name, gconf_name, strlen(gconf_name)) == 0);
 }
 
 
@@ -1548,102 +1594,126 @@ gnc_prefs_nearest_match (gpointer key,
  */
 static void
 gnc_preferences_gconf_changed (GConfClient *client,
-			       guint cnxn_id,
-			       GConfEntry *entry,
-			       gpointer dialog)
+                               guint cnxn_id,
+                               GConfEntry *entry,
+                               gpointer dialog)
 {
-  GConfValue *value;
-  const gchar *key, *string_value;
-  gchar  **parts, *name, *group_name = NULL;
-  GtkWidget *widget;
-  GHashTable *table;
+    GConfValue *value;
+    const gchar *key, *string_value;
+    gchar  **parts, *name, *group_name = NULL;
+    GtkWidget *widget;
+    GHashTable *table;
 
-  ENTER("key %s, value %p", entry->key, entry->value);
-  key = gconf_entry_get_key(entry);
-  value = gconf_entry_get_value(entry);
-  if (!value) {
-    /* Values can be unset */
-    LEAVE("Unset valued for %s", key);
-    return;
-  }
+    ENTER("key %s, value %p", entry->key, entry->value);
+    key = gconf_entry_get_key(entry);
+    value = gconf_entry_get_value(entry);
+    if (!value)
+    {
+        /* Values can be unset */
+        LEAVE("Unset valued for %s", key);
+        return;
+    }
 
-  parts = g_strsplit(entry->key, "/", 4);
-  name = g_strconcat("gconf/", parts[3], NULL);
-  g_strfreev(parts);
-  DEBUG("proposed widget name %s", name);
-
-  /* Can't just do a glade lookup here because not all of the widgets
-   * came from the same xml file. That's why the extra hash table. */
-  table = g_object_get_data(G_OBJECT(dialog), WIDGET_HASH);
-  widget = g_hash_table_lookup(table, name);
-  if ((widget == NULL) && (entry->value->type == GCONF_VALUE_STRING)) {
-    string_value = gconf_value_get_string(entry->value);
-    group_name = name;
-    name = g_strjoin("/", group_name, string_value, NULL);
+    parts = g_strsplit(entry->key, "/", 4);
+    name = g_strconcat("gconf/", parts[3], NULL);
+    g_strfreev(parts);
     DEBUG("proposed widget name %s", name);
-    widget = g_hash_table_lookup(table, name);
-    if (widget == NULL) {
-      /* Mutter, mutter. Someone must have typed a bad string into
-       * gconf.  Force the value to a legal string.  Do this by
-       * directly setting the first widget in the group. This will
-       * ensure synchronization of Gnucash, Gconf, and the Prefs
-       * Dialog. */
-      DEBUG("bad value");
-      widget = g_hash_table_find(table, gnc_prefs_nearest_match, group_name);
-      if (widget) {
-           DEBUG("forcing %s", gtk_widget_get_name(widget));
-           gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
-      }
-      g_free(group_name);
-      g_free(name);
-      LEAVE("no exact match");
-      return;
-    }
-    g_free(group_name);
-  }
-  if (widget != NULL) {
-    /* These tests must be ordered from more specific widget to less
-     * specific widget.  Test custom widgets first */
-    if (GNC_IS_CURRENCY_EDIT(widget)) { /* must come before combo box */
-      DEBUG("widget %p - currency_edit", widget);
-      gnc_prefs_currency_edit_gconf_cb(GNC_CURRENCY_EDIT(widget), entry);
-    } else if (GNC_IS_PERIOD_SELECT(widget)) {
-      DEBUG("widget %p - period_select", widget);
-      gnc_prefs_period_select_gconf_cb(GNC_PERIOD_SELECT(widget),
-				      gconf_value_get_int(entry->value));
-    } else if (GNC_IS_DATE_EDIT(widget)) {
-      DEBUG("widget %p - date_edit", widget);
-      gnc_prefs_date_edit_gconf_cb(GNC_DATE_EDIT(widget), entry);
-    } else if (GTK_IS_FONT_BUTTON(widget)) {
-      DEBUG("widget %p - font button", widget);
-      gnc_prefs_font_button_gconf_cb(GTK_FONT_BUTTON(widget), entry);
-    } else if (GTK_IS_RADIO_BUTTON(widget)) {
-      DEBUG("widget %p - radio button", widget);
-      gnc_prefs_radio_button_gconf_cb(GTK_RADIO_BUTTON(widget));
-    } else if (GTK_IS_CHECK_BUTTON(widget)) {
-      DEBUG("widget %p - check button", widget);
-      gnc_prefs_check_button_gconf_cb(GTK_CHECK_BUTTON(widget),
-				      gconf_value_get_bool(entry->value));
-    } else if (GTK_IS_SPIN_BUTTON(widget)) {
-      DEBUG("widget %p - spin button", widget);
-      gnc_prefs_spin_button_gconf_cb(GTK_SPIN_BUTTON(widget),
-				     gconf_value_get_float(entry->value));
-    } else if (GTK_IS_COMBO_BOX(widget)) {
-      DEBUG("widget %p - combo_box", widget);
-      gnc_prefs_combo_box_gconf_cb(GTK_COMBO_BOX(widget),
-				   gconf_value_get_int(entry->value));
-    } else if (GTK_IS_ENTRY(widget)) {
-      DEBUG("widget %p - entry", widget);
-      gnc_prefs_entry_gconf_cb(GTK_ENTRY(widget),
-			       gconf_value_get_string(entry->value));
-    } else {
-      DEBUG("widget %p - unsupported %s", widget,
-	    G_OBJECT_TYPE_NAME(G_OBJECT(widget)));
-    }
-  }
 
-  g_free(name);
-  LEAVE(" ");
+    /* Can't just do a glade lookup here because not all of the widgets
+     * came from the same xml file. That's why the extra hash table. */
+    table = g_object_get_data(G_OBJECT(dialog), WIDGET_HASH);
+    widget = g_hash_table_lookup(table, name);
+    if ((widget == NULL) && (entry->value->type == GCONF_VALUE_STRING))
+    {
+        string_value = gconf_value_get_string(entry->value);
+        group_name = name;
+        name = g_strjoin("/", group_name, string_value, NULL);
+        DEBUG("proposed widget name %s", name);
+        widget = g_hash_table_lookup(table, name);
+        if (widget == NULL)
+        {
+            /* Mutter, mutter. Someone must have typed a bad string into
+             * gconf.  Force the value to a legal string.  Do this by
+             * directly setting the first widget in the group. This will
+             * ensure synchronization of Gnucash, Gconf, and the Prefs
+             * Dialog. */
+            DEBUG("bad value");
+            widget = g_hash_table_find(table, gnc_prefs_nearest_match, group_name);
+            if (widget)
+            {
+                DEBUG("forcing %s", gtk_widget_get_name(widget));
+                gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
+            }
+            g_free(group_name);
+            g_free(name);
+            LEAVE("no exact match");
+            return;
+        }
+        g_free(group_name);
+    }
+    if (widget != NULL)
+    {
+        /* These tests must be ordered from more specific widget to less
+         * specific widget.  Test custom widgets first */
+        if (GNC_IS_CURRENCY_EDIT(widget))   /* must come before combo box */
+        {
+            DEBUG("widget %p - currency_edit", widget);
+            gnc_prefs_currency_edit_gconf_cb(GNC_CURRENCY_EDIT(widget), entry);
+        }
+        else if (GNC_IS_PERIOD_SELECT(widget))
+        {
+            DEBUG("widget %p - period_select", widget);
+            gnc_prefs_period_select_gconf_cb(GNC_PERIOD_SELECT(widget),
+                                             gconf_value_get_int(entry->value));
+        }
+        else if (GNC_IS_DATE_EDIT(widget))
+        {
+            DEBUG("widget %p - date_edit", widget);
+            gnc_prefs_date_edit_gconf_cb(GNC_DATE_EDIT(widget), entry);
+        }
+        else if (GTK_IS_FONT_BUTTON(widget))
+        {
+            DEBUG("widget %p - font button", widget);
+            gnc_prefs_font_button_gconf_cb(GTK_FONT_BUTTON(widget), entry);
+        }
+        else if (GTK_IS_RADIO_BUTTON(widget))
+        {
+            DEBUG("widget %p - radio button", widget);
+            gnc_prefs_radio_button_gconf_cb(GTK_RADIO_BUTTON(widget));
+        }
+        else if (GTK_IS_CHECK_BUTTON(widget))
+        {
+            DEBUG("widget %p - check button", widget);
+            gnc_prefs_check_button_gconf_cb(GTK_CHECK_BUTTON(widget),
+                                            gconf_value_get_bool(entry->value));
+        }
+        else if (GTK_IS_SPIN_BUTTON(widget))
+        {
+            DEBUG("widget %p - spin button", widget);
+            gnc_prefs_spin_button_gconf_cb(GTK_SPIN_BUTTON(widget),
+                                           gconf_value_get_float(entry->value));
+        }
+        else if (GTK_IS_COMBO_BOX(widget))
+        {
+            DEBUG("widget %p - combo_box", widget);
+            gnc_prefs_combo_box_gconf_cb(GTK_COMBO_BOX(widget),
+                                         gconf_value_get_int(entry->value));
+        }
+        else if (GTK_IS_ENTRY(widget))
+        {
+            DEBUG("widget %p - entry", widget);
+            gnc_prefs_entry_gconf_cb(GTK_ENTRY(widget),
+                                     gconf_value_get_string(entry->value));
+        }
+        else
+        {
+            DEBUG("widget %p - unsupported %s", widget,
+                  G_OBJECT_TYPE_NAME(G_OBJECT(widget)));
+        }
+    }
+
+    g_free(name);
+    LEAVE(" ");
 }
 
 
@@ -1663,15 +1733,15 @@ gnc_preferences_gconf_changed (GConfClient *client,
  */
 static gboolean
 show_handler (const char *class, gint component_id,
-	      gpointer user_data, gpointer iter_data)
+              gpointer user_data, gpointer iter_data)
 {
-  GtkWidget *dialog;
+    GtkWidget *dialog;
 
-  ENTER(" ");
-  dialog = GTK_WIDGET(user_data);
-  gtk_window_present(GTK_WINDOW(dialog));
-  LEAVE(" ");
-  return(TRUE);
+    ENTER(" ");
+    dialog = GTK_WIDGET(user_data);
+    gtk_window_present(GTK_WINDOW(dialog));
+    LEAVE(" ");
+    return(TRUE);
 }
 
 
@@ -1684,13 +1754,13 @@ show_handler (const char *class, gint component_id,
 static void
 close_handler (gpointer user_data)
 {
-  GtkWidget *dialog;
+    GtkWidget *dialog;
 
-  ENTER(" ");
-  dialog = GTK_WIDGET(user_data);
-  gnc_unregister_gui_component_by_data(DIALOG_PREFERENCES_CM_CLASS, dialog);
-  gtk_widget_destroy(dialog);
-  LEAVE(" ");
+    ENTER(" ");
+    dialog = GTK_WIDGET(user_data);
+    gnc_unregister_gui_component_by_data(DIALOG_PREFERENCES_CM_CLASS, dialog);
+    gtk_widget_destroy(dialog);
+    LEAVE(" ");
 }
 
 
@@ -1701,30 +1771,31 @@ close_handler (gpointer user_data)
 void
 gnc_preferences_dialog (void)
 {
-  GtkWidget *dialog;
+    GtkWidget *dialog;
 
-  ENTER("");
-  if (gnc_forall_gui_components(DIALOG_PREFERENCES_CM_CLASS,
-				show_handler, NULL)) {
-    LEAVE("existing window");
-    return;
-  }
+    ENTER("");
+    if (gnc_forall_gui_components(DIALOG_PREFERENCES_CM_CLASS,
+                                  show_handler, NULL))
+    {
+        LEAVE("existing window");
+        return;
+    }
 
-  dialog = gnc_preferences_dialog_create();
+    dialog = gnc_preferences_dialog_create();
 
-  gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
-  gtk_widget_show(dialog);
+    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+    gtk_widget_show(dialog);
 
-  gnc_gconf_add_notification(G_OBJECT(dialog), NULL,
-			     gnc_preferences_gconf_changed,
-			     DIALOG_PREFERENCES_CM_CLASS);
-  gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
-				(GncGconfGeneralCb)gnc_account_separator_prefs_cb,
-				dialog);
-  gnc_register_gui_component(DIALOG_PREFERENCES_CM_CLASS,
-			     NULL, close_handler, dialog);
+    gnc_gconf_add_notification(G_OBJECT(dialog), NULL,
+                               gnc_preferences_gconf_changed,
+                               DIALOG_PREFERENCES_CM_CLASS);
+    gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
+                                  (GncGconfGeneralCb)gnc_account_separator_prefs_cb,
+                                  dialog);
+    gnc_register_gui_component(DIALOG_PREFERENCES_CM_CLASS,
+                               NULL, close_handler, dialog);
 
-  LEAVE(" ");
+    LEAVE(" ");
 }
 
 /** @} */

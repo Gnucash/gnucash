@@ -47,67 +47,67 @@ G_LOCK_DEFINE_STATIC(page_setup);
 void
 gnc_print_operation_save_print_settings(GtkPrintOperation *op)
 {
-  g_return_if_fail(op);
+    g_return_if_fail(op);
 
-  G_LOCK(print_settings);
-  if (print_settings)
-    g_object_unref(print_settings);
-  print_settings = g_object_ref(gtk_print_operation_get_print_settings(op));
-  G_UNLOCK(print_settings);
+    G_LOCK(print_settings);
+    if (print_settings)
+        g_object_unref(print_settings);
+    print_settings = g_object_ref(gtk_print_operation_get_print_settings(op));
+    G_UNLOCK(print_settings);
 }
 
 void
 gnc_print_operation_init(GtkPrintOperation *op)
 {
-  g_return_if_fail(op);
+    g_return_if_fail(op);
 
-  /* Restore print settings */
-  G_LOCK(print_settings);
-  if (print_settings)
-    gtk_print_operation_set_print_settings(op, print_settings);
-  G_UNLOCK(print_settings);
+    /* Restore print settings */
+    G_LOCK(print_settings);
+    if (print_settings)
+        gtk_print_operation_set_print_settings(op, print_settings);
+    G_UNLOCK(print_settings);
 
-  /* Restore page setup */
-  G_LOCK(page_setup);
-  if (page_setup)
-    gtk_print_operation_set_default_page_setup(op, page_setup);
-  G_UNLOCK(page_setup);
+    /* Restore page setup */
+    G_LOCK(page_setup);
+    if (page_setup)
+        gtk_print_operation_set_default_page_setup(op, page_setup);
+    G_UNLOCK(page_setup);
 }
 
 void
 gnc_ui_page_setup(GtkWindow *parent)
 {
-  GtkPrintSettings *settings = NULL;
-  GtkPageSetup *old_page_setup, *new_page_setup;
+    GtkPrintSettings *settings = NULL;
+    GtkPageSetup *old_page_setup, *new_page_setup;
 
-  /* Get a reference to the current print settings */
-  G_LOCK(print_settings);
-  settings = print_settings;
-  if (settings)
-    g_object_ref(settings);
-  G_UNLOCK(print_settings);
+    /* Get a reference to the current print settings */
+    G_LOCK(print_settings);
+    settings = print_settings;
+    if (settings)
+        g_object_ref(settings);
+    G_UNLOCK(print_settings);
 
-  /* Get a reference to the current page setup */
-  G_LOCK(page_setup);
-  old_page_setup = page_setup;
-  if (old_page_setup)
-    g_object_ref(old_page_setup);
-  G_UNLOCK(page_setup);
+    /* Get a reference to the current page setup */
+    G_LOCK(page_setup);
+    old_page_setup = page_setup;
+    if (old_page_setup)
+        g_object_ref(old_page_setup);
+    G_UNLOCK(page_setup);
 
-  /* Run dialog */
-  new_page_setup = gtk_print_run_page_setup_dialog(parent, old_page_setup,
-                                                   settings);
+    /* Run dialog */
+    new_page_setup = gtk_print_run_page_setup_dialog(parent, old_page_setup,
+                     settings);
 
-  /* Save new page setup */
-  G_LOCK(page_setup);
-  if (page_setup)
-    g_object_unref(page_setup);
-  page_setup = new_page_setup;
-  G_UNLOCK(page_setup);
+    /* Save new page setup */
+    G_LOCK(page_setup);
+    if (page_setup)
+        g_object_unref(page_setup);
+    page_setup = new_page_setup;
+    G_UNLOCK(page_setup);
 
-  /* Release references */
-  if (settings)
-    g_object_unref(settings);
-  if (old_page_setup)
-    g_object_unref(old_page_setup);
+    /* Release references */
+    if (settings)
+        g_object_unref(settings);
+    if (old_page_setup)
+        g_object_unref(old_page_setup);
 }

@@ -30,54 +30,55 @@
 typedef struct _GtkTreeDataList GtkTreeDataList;
 struct _GtkTreeDataList
 {
-  GtkTreeDataList *next;
+    GtkTreeDataList *next;
 
-  union {
-    gint	   v_int;
-    gint8          v_char;
-    guint8         v_uchar;
-    guint	   v_uint;
-    glong	   v_long;
-    gulong	   v_ulong;
-    gint64	   v_int64;
-    guint64        v_uint64;
-    gfloat	   v_float;
-    gdouble        v_double;
-    gpointer	   v_pointer;
-  } data;
+    union
+    {
+        gint	   v_int;
+        gint8          v_char;
+        guint8         v_uchar;
+        guint	   v_uint;
+        glong	   v_long;
+        gulong	   v_ulong;
+        gint64	   v_int64;
+        guint64        v_uint64;
+        gfloat	   v_float;
+        gdouble        v_double;
+        gpointer	   v_pointer;
+    } data;
 };
 
 typedef struct _GtkTreeDataSortHeader
 {
-  gint sort_column_id;
-  GtkTreeIterCompareFunc func;
-  gpointer data;
-  GtkDestroyNotify destroy;
+    gint sort_column_id;
+    GtkTreeIterCompareFunc func;
+    gpointer data;
+    GtkDestroyNotify destroy;
 } GtkTreeDataSortHeader;
 
 GtkTreeDataList *_gtk_tree_data_list_alloc          (void);
 void             _gtk_tree_data_list_free           (GtkTreeDataList *list,
-						     GType           *column_headers);
+        GType           *column_headers);
 gboolean         _gtk_tree_data_list_check_type     (GType            type);
 void             _gtk_tree_data_list_node_to_value  (GtkTreeDataList *list,
-						     GType            type,
-						     GValue          *value);
+        GType            type,
+        GValue          *value);
 void             _gtk_tree_data_list_value_to_node  (GtkTreeDataList *list,
-						     GValue          *value);
+        GValue          *value);
 
 GtkTreeDataList *_gtk_tree_data_list_node_copy      (GtkTreeDataList *list,
-                                                     GType            type);
+        GType            type);
 
 /* Header code */
 gint                   _gtk_tree_data_list_compare_func (GtkTreeModel *model,
-							 GtkTreeIter  *a,
-							 GtkTreeIter  *b,
-							 gpointer      user_data);
+        GtkTreeIter  *a,
+        GtkTreeIter  *b,
+        gpointer      user_data);
 GList *                _gtk_tree_data_list_header_new  (gint          n_columns,
-							GType        *types);
+        GType        *types);
 void                   _gtk_tree_data_list_header_free (GList        *header_list);
 GtkTreeDataSortHeader *_gtk_tree_data_list_get_header  (GList        *header_list,
-							gint          sort_column_id);
+        gint          sort_column_id);
 
 
 #endif /* __GTK_TREE_DATA_LIST_H__ */

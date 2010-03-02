@@ -27,8 +27,8 @@
 #include <libgnomeui/gnome-druid.h>
 
 void gnc_druid_set_watermark_images (GnomeDruid *druid,
-				     const char *top_path,
-				     const char *side_path);
+                                     const char *top_path,
+                                     const char *side_path);
 void gnc_druid_set_logo_image (GnomeDruid *druid, char *image_path);
 void gnc_druid_set_colors (GnomeDruid *druid);
 

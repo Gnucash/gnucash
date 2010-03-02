@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-file-history.c -- 
+/*
+ * gnc-plugin-file-history.c --
  * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
@@ -76,17 +76,18 @@ static void gnc_plugin_file_history_cmd_open_file (GtkAction *action, GncMainWin
  *  will be updated to reflect the users recent choices.  This list is
  *  limited to ten actions, although there may be a smaller limit set
  *  by the user.  The typical limit is four. */
-static GtkActionEntry gnc_plugin_actions [] = {
-	{ "RecentFile0Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-	{ "RecentFile1Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-	{ "RecentFile2Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-	{ "RecentFile3Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-	{ "RecentFile4Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-	{ "RecentFile5Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-	{ "RecentFile6Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-	{ "RecentFile7Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-	{ "RecentFile8Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
-	{ "RecentFile9Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+static GtkActionEntry gnc_plugin_actions [] =
+{
+    { "RecentFile0Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+    { "RecentFile1Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+    { "RecentFile2Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+    { "RecentFile3Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+    { "RecentFile4Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+    { "RecentFile5Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+    { "RecentFile6Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+    { "RecentFile7Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+    { "RecentFile8Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+    { "RecentFile9Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
@@ -96,7 +97,7 @@ static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
  *  structure is unused. */
 typedef struct GncPluginFileHistoryPrivate
 {
-	gpointer dummy;
+    gpointer dummy;
 } GncPluginFileHistoryPrivate;
 
 
@@ -118,7 +119,7 @@ typedef struct GncPluginFileHistoryPrivate
 static gchar *
 gnc_history_gconf_index_to_key (guint index)
 {
-  return g_strdup_printf(HISTORY_STRING_FILE_N, index);
+    return g_strdup_printf(HISTORY_STRING_FILE_N, index);
 }
 
 
@@ -133,14 +134,14 @@ gnc_history_gconf_index_to_key (guint index)
 static gint
 gnc_history_gconf_key_to_index (const gchar *key)
 {
-  gint index, result;
+    gint index, result;
 
-  result = sscanf(key, HISTORY_STRING_FILE_N, &index);
-  if (result != 1)
-    return -1;
-  if ((index < 0) || (index >= gnc_plugin_n_actions))
-      return -1;
-  return index;
+    result = sscanf(key, HISTORY_STRING_FILE_N, &index);
+    if (result != 1)
+        return -1;
+    if ((index < 0) || (index >= gnc_plugin_n_actions))
+        return -1;
+    return index;
 }
 
 
@@ -152,57 +153,64 @@ gnc_history_gconf_key_to_index (const gchar *key)
 void
 gnc_history_add_file (const char *newfile)
 {
-  gchar *filename, *from, *to;
-  gint i, last;
+    gchar *filename, *from, *to;
+    gint i, last;
 
-  if (newfile == NULL)
-    return;
-  if (!g_utf8_validate(newfile, -1, NULL))
-    return;
+    if (newfile == NULL)
+        return;
+    if (!g_utf8_validate(newfile, -1, NULL))
+        return;
 
-  /*
-   * Look for the filename in gconf.
-   */
-  last = MAX_HISTORY_FILES - 1;
-  for (i = 0; i < MAX_HISTORY_FILES; i++) {
-    from = gnc_history_gconf_index_to_key(i);
-    filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, from, NULL);
-    g_free(from);
+    /*
+     * Look for the filename in gconf.
+     */
+    last = MAX_HISTORY_FILES - 1;
+    for (i = 0; i < MAX_HISTORY_FILES; i++)
+    {
+        from = gnc_history_gconf_index_to_key(i);
+        filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, from, NULL);
+        g_free(from);
 
-    if (!filename) {
-      last = i;
-      break;
+        if (!filename)
+        {
+            last = i;
+            break;
+        }
+        if (g_utf8_collate(newfile, filename) == 0)
+        {
+            g_free(filename);
+            last = i;
+            break;
+        }
+        g_free(filename);
     }
-    if (g_utf8_collate(newfile, filename) == 0) {
-      g_free(filename);
-      last = i;
-      break;
-    }
-    g_free(filename);
-  }
 
-  /*
-   * Shuffle filenames upward through gconf.
-   */
-  to = gnc_history_gconf_index_to_key(last);
-  for (i = last - 1; i >= 0; i--) {
-    from = gnc_history_gconf_index_to_key(i);
-    filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, from, NULL);
-    if (filename) {
-      gnc_gconf_set_string(HISTORY_STRING_SECTION, to, filename, NULL);
-      g_free(filename);
-    } else {
-      gnc_gconf_unset(HISTORY_STRING_SECTION, to, NULL);
+    /*
+     * Shuffle filenames upward through gconf.
+     */
+    to = gnc_history_gconf_index_to_key(last);
+    for (i = last - 1; i >= 0; i--)
+    {
+        from = gnc_history_gconf_index_to_key(i);
+        filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, from, NULL);
+        if (filename)
+        {
+            gnc_gconf_set_string(HISTORY_STRING_SECTION, to, filename, NULL);
+            g_free(filename);
+        }
+        else
+        {
+            gnc_gconf_unset(HISTORY_STRING_SECTION, to, NULL);
+        }
+        g_free(to);
+        to = from;
     }
+
+    /*
+     * Store the new zero entry.
+     */
+    gnc_gconf_set_string(HISTORY_STRING_SECTION, to, newfile, NULL);
     g_free(to);
-    to = from;
-  }
-
-  /*
-   * Store the new zero entry.
-   */
-  gnc_gconf_set_string(HISTORY_STRING_SECTION, to, newfile, NULL);
-  g_free(to);
 }
 
 
@@ -214,33 +222,39 @@ gnc_history_add_file (const char *newfile)
 void
 gnc_history_remove_file (const char *oldfile)
 {
-  gchar *filename, *from, *to;
-  gint i, j;
+    gchar *filename, *from, *to;
+    gint i, j;
 
-  if (!oldfile)
-    return;
-  if (!g_utf8_validate(oldfile, -1, NULL))
-    return;
+    if (!oldfile)
+        return;
+    if (!g_utf8_validate(oldfile, -1, NULL))
+        return;
 
-  for (i=0, j=0; i<MAX_HISTORY_FILES; i++) {
-    from = gnc_history_gconf_index_to_key(i);
-    filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, from, NULL);
+    for (i = 0, j = 0; i < MAX_HISTORY_FILES; i++)
+    {
+        from = gnc_history_gconf_index_to_key(i);
+        filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, from, NULL);
 
-    if (filename) {
-      if (g_utf8_collate(oldfile, filename) == 0) {
-        gnc_gconf_unset(HISTORY_STRING_SECTION, from, NULL);
-      } else {
-        if (i != j) {
-          to = gnc_history_gconf_index_to_key(j);
-          gnc_gconf_set_string(HISTORY_STRING_SECTION, to, filename, NULL);
-          gnc_gconf_unset(HISTORY_STRING_SECTION, from, NULL);
-          g_free(to);
+        if (filename)
+        {
+            if (g_utf8_collate(oldfile, filename) == 0)
+            {
+                gnc_gconf_unset(HISTORY_STRING_SECTION, from, NULL);
+            }
+            else
+            {
+                if (i != j)
+                {
+                    to = gnc_history_gconf_index_to_key(j);
+                    gnc_gconf_set_string(HISTORY_STRING_SECTION, to, filename, NULL);
+                    gnc_gconf_unset(HISTORY_STRING_SECTION, from, NULL);
+                    g_free(to);
+                }
+                j++;
+            }
         }
-        j++;
-      }
+        g_free(from);
     }
-    g_free(from);
-  }
 }
 
 /*  Retrieve the name of the file most recently accessed.  This is the
@@ -250,13 +264,13 @@ gnc_history_remove_file (const char *oldfile)
 char *
 gnc_history_get_last (void)
 {
-  char *filename, *key;
+    char *filename, *key;
 
-  key = gnc_history_gconf_index_to_key(0);
-  filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, key, NULL);
-  g_free(key);
+    key = gnc_history_gconf_index_to_key(0);
+    filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, key, NULL);
+    g_free(key);
 
-  return filename;
+    return filename;
 }
 
 
@@ -276,72 +290,85 @@ gnc_history_get_last (void)
 static gchar *
 gnc_history_generate_label (int index, const gchar *filename)
 {
-	const gchar *src;
-	gchar *result, *dst;
-	gunichar  unichar;
+    const gchar *src;
+    gchar *result, *dst;
+    gunichar  unichar;
 
-	/* raw byte length, not num characters */
-	result = g_malloc(strlen(filename) * 2);
+    /* raw byte length, not num characters */
+    result = g_malloc(strlen(filename) * 2);
 
-	dst = result;
-	if (index < 10)
-	  dst += g_sprintf(result, "_%d ", (index + 1) % 10);
+    dst = result;
+    if (index < 10)
+        dst += g_sprintf(result, "_%d ", (index + 1) % 10);
 
-	/* If the filename begins with "mysql://" or "postgres://", hide the
-	user name and password.  Otherwise, it is a filename - hide everything
-	except the file name. */
+    /* If the filename begins with "mysql://" or "postgres://", hide the
+    user name and password.  Otherwise, it is a filename - hide everything
+    except the file name. */
 
-	if (g_ascii_strncasecmp(filename, "mysql://", 8) == 0 ||
-		g_ascii_strncasecmp(filename, "postgres://", 11) == 0 ) {
-	  gint num_colons = 0;
-	  gboolean has_explicit_port;
+    if (g_ascii_strncasecmp(filename, "mysql://", 8) == 0 ||
+            g_ascii_strncasecmp(filename, "postgres://", 11) == 0 )
+    {
+        gint num_colons = 0;
+        gboolean has_explicit_port;
 
-	  /* Count the number of colons to see if there is an explicit port number or not */
-	  for (src = filename; *src; src = g_utf8_next_char(src)) {
-	    gunichar c = g_utf8_get_char(src);
-	    if (c == ':') num_colons++;
-	  }
-	  has_explicit_port = (num_colons == 5);
-	  num_colons = 0;
+        /* Count the number of colons to see if there is an explicit port number or not */
+        for (src = filename; *src; src = g_utf8_next_char(src))
+        {
+            gunichar c = g_utf8_get_char(src);
+            if (c == ':') num_colons++;
+        }
+        has_explicit_port = (num_colons == 5);
+        num_colons = 0;
 
-	  /* Loop for all chars and copy from 'src' to 'dst'.  While doing this,
-	     convert username and password (after 2nd ':', 3rd if explicit port) to asterisks. */
-	  src = filename;
-	  for( ; *src; src = g_utf8_next_char(src)) {
-		if (*src == ':' ||
-			(!has_explicit_port && num_colons < 3) ||
-			(has_explicit_port && num_colons < 4)) {
-	      unichar = g_utf8_get_char(src);
-		} else {
-		  unichar = '*';
-		}
-		dst += g_unichar_to_utf8 (unichar, dst);
-	    if (unichar == '_') {
-	      dst += g_unichar_to_utf8 ('_', dst);
-		} else if (unichar == ':') {
-		  num_colons++;
-		}
-	  }
-	} else {
-	  /* Find the filename portion of the path */
-	  src = g_utf8_strrchr(filename, -1, G_DIR_SEPARATOR);
-	  if (src) {
-	    src = g_utf8_next_char(src);
+        /* Loop for all chars and copy from 'src' to 'dst'.  While doing this,
+           convert username and password (after 2nd ':', 3rd if explicit port) to asterisks. */
+        src = filename;
+        for ( ; *src; src = g_utf8_next_char(src))
+        {
+            if (*src == ':' ||
+                    (!has_explicit_port && num_colons < 3) ||
+                    (has_explicit_port && num_colons < 4))
+            {
+                unichar = g_utf8_get_char(src);
+            }
+            else
+            {
+                unichar = '*';
+            }
+            dst += g_unichar_to_utf8 (unichar, dst);
+            if (unichar == '_')
+            {
+                dst += g_unichar_to_utf8 ('_', dst);
+            }
+            else if (unichar == ':')
+            {
+                num_colons++;
+            }
+        }
+    }
+    else
+    {
+        /* Find the filename portion of the path */
+        src = g_utf8_strrchr(filename, -1, G_DIR_SEPARATOR);
+        if (src)
+        {
+            src = g_utf8_next_char(src);
 
-	    /* Fix up any underline characters so they aren't mistaken as
-	     * command accelerator keys. */
-	    for ( ; *src; src = g_utf8_next_char(src)) {
-	      unichar = g_utf8_get_char(src);
-	      dst += g_unichar_to_utf8 (unichar, dst);
+            /* Fix up any underline characters so they aren't mistaken as
+             * command accelerator keys. */
+            for ( ; *src; src = g_utf8_next_char(src))
+            {
+                unichar = g_utf8_get_char(src);
+                dst += g_unichar_to_utf8 (unichar, dst);
 
-	      if (unichar == '_')
-	        dst += g_unichar_to_utf8 ('_', dst);
-	    }
-	  }
-	}
+                if (unichar == '_')
+                    dst += g_unichar_to_utf8 ('_', dst);
+            }
+        }
+    }
 
-	*dst = '\0';
-	return result;
+    *dst = '\0';
+    return result;
 }
 
 
@@ -364,43 +391,46 @@ gnc_history_generate_label (int index, const gchar *filename)
  */
 static void
 gnc_history_update_action (GncMainWindow *window,
-			   gint index,
-			   const gchar *filename)
+                           gint index,
+                           const gchar *filename)
 {
-	GtkActionGroup *action_group;
-	GtkAction *action;
-	gchar *action_name, *label_name, *old_filename;
-	gint limit;
+    GtkActionGroup *action_group;
+    GtkAction *action;
+    gchar *action_name, *label_name, *old_filename;
+    gint limit;
 
-	ENTER("window %p, index %d, filename %s", window, index,
-	      filename ? filename : "(null)");
-	/* Get the action group */
-	action_group =
-	  gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
+    ENTER("window %p, index %d, filename %s", window, index,
+          filename ? filename : "(null)");
+    /* Get the action group */
+    action_group =
+        gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
 
-	action_name = g_strdup_printf("RecentFile%dAction", index);
-	action = gtk_action_group_get_action (action_group, action_name);
+    action_name = g_strdup_printf("RecentFile%dAction", index);
+    action = gtk_action_group_get_action (action_group, action_name);
 
-	limit = gnc_gconf_get_int (HISTORY_STRING_SECTION,
-				   HISTORY_STRING_MAXFILES,
-				   NULL);
+    limit = gnc_gconf_get_int (HISTORY_STRING_SECTION,
+                               HISTORY_STRING_MAXFILES,
+                               NULL);
 
-	if (filename && (strlen(filename) > 0) && (index < limit)) {
-	  /* set the menu label (w/accelerator) */
-	  label_name = gnc_history_generate_label(index, filename);
-	  g_object_set(G_OBJECT(action), "label", label_name, "visible", TRUE, NULL);
-	  g_free(label_name);
+    if (filename && (strlen(filename) > 0) && (index < limit))
+    {
+        /* set the menu label (w/accelerator) */
+        label_name = gnc_history_generate_label(index, filename);
+        g_object_set(G_OBJECT(action), "label", label_name, "visible", TRUE, NULL);
+        g_free(label_name);
 
-	  /* set the filename for the callback function */
-	  old_filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);
-	  if (old_filename)
-	    g_free(old_filename);
-	  g_object_set_data(G_OBJECT(action), FILENAME_STRING, g_strdup(filename));
-	} else {
-	  gtk_action_set_visible(action, FALSE);
-	}
-	g_free(action_name);
-	LEAVE("");
+        /* set the filename for the callback function */
+        old_filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);
+        if (old_filename)
+            g_free(old_filename);
+        g_object_set_data(G_OBJECT(action), FILENAME_STRING, g_strdup(filename));
+    }
+    else
+    {
+        gtk_action_set_visible(action, FALSE);
+    }
+    g_free(action_name);
+    LEAVE("");
 }
 
 
@@ -415,18 +445,19 @@ gnc_history_update_action (GncMainWindow *window,
 static void
 gnc_history_update_menus (GncMainWindow *window)
 {
-	gchar *filename, *key;
-	guint i;
+    gchar *filename, *key;
+    guint i;
 
-	ENTER("");
-	for (i = 0; i < MAX_HISTORY_FILES; i++) {
-	  key = gnc_history_gconf_index_to_key(i);
-	  filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, key, NULL);
-	  gnc_history_update_action(window, i, filename);
-	  g_free(filename);
-	  g_free(key);
-	}
-	LEAVE("");
+    ENTER("");
+    for (i = 0; i < MAX_HISTORY_FILES; i++)
+    {
+        key = gnc_history_gconf_index_to_key(i);
+        filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, key, NULL);
+        gnc_history_update_action(window, i, filename);
+        g_free(filename);
+        g_free(key);
+    }
+    LEAVE("");
 }
 
 
@@ -447,41 +478,44 @@ gnc_history_update_menus (GncMainWindow *window)
  */
 static void
 gnc_plugin_history_list_changed (GConfClient *client,
-				 guint cnxn_id,
-				 GConfEntry *entry,
-				 gpointer user_data)
+                                 guint cnxn_id,
+                                 GConfEntry *entry,
+                                 gpointer user_data)
 {
-	GncMainWindow *window;
-	GConfValue *value;
-	const gchar *fullkey, *key, *filename;
-	gint index;
+    GncMainWindow *window;
+    GConfValue *value;
+    const gchar *fullkey, *key, *filename;
+    gint index;
 
-	ENTER("");
-	window = GNC_MAIN_WINDOW(user_data);
+    ENTER("");
+    window = GNC_MAIN_WINDOW(user_data);
 
-	fullkey = gconf_entry_get_key(entry);
-	key = strrchr(fullkey, '/') + 1;
-	if (strcmp(key, HISTORY_STRING_MAXFILES) == 0) {
-	  gnc_history_update_menus (window);
-	  LEAVE("updated maxfiles");
-	  return;
-	}
-	index = gnc_history_gconf_key_to_index(key);
-	if (index < 0) {
-	  LEAVE("bad index");
-	  return;
-	}
+    fullkey = gconf_entry_get_key(entry);
+    key = strrchr(fullkey, '/') + 1;
+    if (strcmp(key, HISTORY_STRING_MAXFILES) == 0)
+    {
+        gnc_history_update_menus (window);
+        LEAVE("updated maxfiles");
+        return;
+    }
+    index = gnc_history_gconf_key_to_index(key);
+    if (index < 0)
+    {
+        LEAVE("bad index");
+        return;
+    }
 
-	value = gconf_entry_get_value(entry);
-	if (!value) {
-	  LEAVE("No gconf value");
-	  return;
-	}
-	filename = gconf_value_get_string(value);
-	gnc_history_update_action (window, index, filename);
+    value = gconf_entry_get_value(entry);
+    if (!value)
+    {
+        LEAVE("No gconf value");
+        return;
+    }
+    filename = gconf_value_get_string(value);
+    gnc_history_update_action (window, index, filename);
 
-	gnc_main_window_actions_updated (window);
-	LEAVE("");
+    gnc_main_window_actions_updated (window);
+    LEAVE("");
 }
 
 
@@ -490,61 +524,67 @@ gnc_plugin_history_list_changed (GConfClient *client,
 static void
 gnc_plugin_history_list_from_gnucash1 (void)
 {
-  GKeyFile *keyfile;
-  const gchar *home;
-  gchar *mdi_file, *value;
-  gchar **keys, **key, *new_key;
-  gint file_id, max;
+    GKeyFile *keyfile;
+    const gchar *home;
+    gchar *mdi_file, *value;
+    gchar **keys, **key, *new_key;
+    gint file_id, max;
 
-  /* First test if there are already files in the gconf file history.
-   * If so, then bail out now. */
-  value = gnc_gconf_get_string(HISTORY_STRING_SECTION, "file0", NULL);
-  if (value) {
-    g_free(value);
-    return;
-  }
-
-  home = g_get_home_dir();
-  if (!home)
-    return;
-
-  /* Copy the old values from the gnucash 1.x/gnome1 settings file to
-   * the gnucash 2.x/gconf settings area.  */
-  mdi_file = g_build_filename(home, ".gnome", "GnuCash", (gchar *)NULL);
-  keyfile = gnc_key_file_load_from_file (mdi_file, FALSE, FALSE, NULL);
-  if (keyfile) {
-    keys = g_key_file_get_keys(keyfile, GNOME1_HISTORY, NULL, NULL);
-    if (keys) {
-      for (key = keys; *key; key++) {
-	if (!strcmp(*key, GNOME1_MAXFILES)) {
-	  max = g_key_file_get_integer(keyfile, GNOME1_HISTORY,
-				       GNOME1_MAXFILES, NULL);
-	  printf("Found old maxfiles: %d\n", max);
-	  if ((max > 0) && (max < MAX_HISTORY_FILES))
-	    printf("Setting maxfiles: %d\n\n", max);
-	    gnc_gconf_set_int(HISTORY_STRING_SECTION, HISTORY_STRING_MAXFILES,
-			      max, NULL);
-	  continue;
-	}
-
-	if (sscanf(*key, "File%d", &file_id) == 1) {
-	  value = g_key_file_get_string(keyfile, GNOME1_HISTORY, *key, NULL);
-	  if (!value)
-	    continue;
-	  printf("Found old file %d: %s\n", file_id, value);
-	  new_key = g_strdup_printf(HISTORY_STRING_FILE_N, file_id);
-	  gnc_gconf_set_string (HISTORY_STRING_SECTION, new_key, value, NULL);
-	  printf("Setting %s: %s\n\n", new_key, value);
-	  g_free(new_key);
-	  g_free(value);
-	}
-      }
-      g_strfreev(keys);
+    /* First test if there are already files in the gconf file history.
+     * If so, then bail out now. */
+    value = gnc_gconf_get_string(HISTORY_STRING_SECTION, "file0", NULL);
+    if (value)
+    {
+        g_free(value);
+        return;
     }
-    g_key_file_free(keyfile);
-  }
 
-  g_free(mdi_file);
+    home = g_get_home_dir();
+    if (!home)
+        return;
+
+    /* Copy the old values from the gnucash 1.x/gnome1 settings file to
+     * the gnucash 2.x/gconf settings area.  */
+    mdi_file = g_build_filename(home, ".gnome", "GnuCash", (gchar *)NULL);
+    keyfile = gnc_key_file_load_from_file (mdi_file, FALSE, FALSE, NULL);
+    if (keyfile)
+    {
+        keys = g_key_file_get_keys(keyfile, GNOME1_HISTORY, NULL, NULL);
+        if (keys)
+        {
+            for (key = keys; *key; key++)
+            {
+                if (!strcmp(*key, GNOME1_MAXFILES))
+                {
+                    max = g_key_file_get_integer(keyfile, GNOME1_HISTORY,
+                                                 GNOME1_MAXFILES, NULL);
+                    printf("Found old maxfiles: %d\n", max);
+                    if ((max > 0) && (max < MAX_HISTORY_FILES))
+                        printf("Setting maxfiles: %d\n\n", max);
+                    gnc_gconf_set_int(HISTORY_STRING_SECTION, HISTORY_STRING_MAXFILES,
+                                      max, NULL);
+                    continue;
+                }
+
+                if (sscanf(*key, "File%d", &file_id) == 1)
+                {
+                    value = g_key_file_get_string(keyfile, GNOME1_HISTORY, *key, NULL);
+                    if (!value)
+                        continue;
+                    printf("Found old file %d: %s\n", file_id, value);
+                    new_key = g_strdup_printf(HISTORY_STRING_FILE_N, file_id);
+                    gnc_gconf_set_string (HISTORY_STRING_SECTION, new_key, value, NULL);
+                    printf("Setting %s: %s\n\n", new_key, value);
+                    g_free(new_key);
+                    g_free(value);
+                }
+            }
+            g_strfreev(keys);
+        }
+        g_key_file_free(keyfile);
+    }
+
+    g_free(mdi_file);
 }
 
 /************************************************************
@@ -555,28 +595,30 @@ gnc_plugin_history_list_from_gnucash1 (void)
 GType
 gnc_plugin_file_history_get_type (void)
 {
-	static GType gnc_plugin_file_history_type = 0;
+    static GType gnc_plugin_file_history_type = 0;
 
-	if (gnc_plugin_file_history_type == 0) {
-		static const GTypeInfo our_info = {
-			sizeof (GncPluginFileHistoryClass),
-			NULL,		/* base_init */
-			NULL,		/* base_finalize */
-			(GClassInitFunc) gnc_plugin_file_history_class_init,
-			NULL,		/* class_finalize */
-			NULL,		/* class_data */
-			sizeof (GncPluginFileHistory),
-			0,
-			(GInstanceInitFunc) gnc_plugin_file_history_init
-		};
+    if (gnc_plugin_file_history_type == 0)
+    {
+        static const GTypeInfo our_info =
+        {
+            sizeof (GncPluginFileHistoryClass),
+            NULL,		/* base_init */
+            NULL,		/* base_finalize */
+            (GClassInitFunc) gnc_plugin_file_history_class_init,
+            NULL,		/* class_finalize */
+            NULL,		/* class_data */
+            sizeof (GncPluginFileHistory),
+            0,
+            (GInstanceInitFunc) gnc_plugin_file_history_init
+        };
 
-		gnc_plugin_file_history_type =
-		  g_type_register_static (GNC_TYPE_PLUGIN,
-					  "GncPluginFileHistory",
-					  &our_info, 0);
-	}
+        gnc_plugin_file_history_type =
+            g_type_register_static (GNC_TYPE_PLUGIN,
+                                    "GncPluginFileHistory",
+                                    &our_info, 0);
+    }
 
-	return gnc_plugin_file_history_type;
+    return gnc_plugin_file_history_type;
 }
 
 
@@ -584,33 +626,33 @@ gnc_plugin_file_history_get_type (void)
 static void
 gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
+    parent_class = g_type_class_peek_parent (klass);
 
-	object_class->finalize = gnc_plugin_file_history_finalize;
+    object_class->finalize = gnc_plugin_file_history_finalize;
 
-	/* plugin info */
-	plugin_class->plugin_name   = GNC_PLUGIN_FILE_HISTORY_NAME;
+    /* plugin info */
+    plugin_class->plugin_name   = GNC_PLUGIN_FILE_HISTORY_NAME;
 
-	/* function overrides */
-	plugin_class->add_to_window = gnc_plugin_file_history_add_to_window;
-	plugin_class->remove_from_window =
-	  gnc_plugin_file_history_remove_from_window;
+    /* function overrides */
+    plugin_class->add_to_window = gnc_plugin_file_history_add_to_window;
+    plugin_class->remove_from_window =
+        gnc_plugin_file_history_remove_from_window;
 
-	/* widget addition/removal */
-	plugin_class->actions_name  = PLUGIN_ACTIONS_NAME;
-	plugin_class->actions       = gnc_plugin_actions;
-	plugin_class->n_actions     = gnc_plugin_n_actions;
-	plugin_class->ui_filename   = PLUGIN_UI_FILENAME;
+    /* widget addition/removal */
+    plugin_class->actions_name  = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions       = gnc_plugin_actions;
+    plugin_class->n_actions     = gnc_plugin_n_actions;
+    plugin_class->ui_filename   = PLUGIN_UI_FILENAME;
 
-	plugin_class->gconf_section = HISTORY_STRING_SECTION;
-	plugin_class->gconf_notifications = gnc_plugin_history_list_changed;
+    plugin_class->gconf_section = HISTORY_STRING_SECTION;
+    plugin_class->gconf_notifications = gnc_plugin_history_list_changed;
 
-	g_type_class_add_private(klass, sizeof(GncPluginFileHistoryPrivate));
+    g_type_class_add_private(klass, sizeof(GncPluginFileHistoryPrivate));
 
-	gnc_plugin_history_list_from_gnucash1();
+    gnc_plugin_history_list_from_gnucash1();
 }
 
 
@@ -618,8 +660,8 @@ gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
 static void
 gnc_plugin_file_history_init (GncPluginFileHistory *plugin)
 {
-	ENTER("plugin %p", plugin);
-	LEAVE("");
+    ENTER("plugin %p", plugin);
+    LEAVE("");
 }
 
 
@@ -627,17 +669,17 @@ gnc_plugin_file_history_init (GncPluginFileHistory *plugin)
 static void
 gnc_plugin_file_history_finalize (GObject *object)
 {
-	GncPluginFileHistory *plugin;
-	GncPluginFileHistoryPrivate *priv;
+    GncPluginFileHistory *plugin;
+    GncPluginFileHistoryPrivate *priv;
 
-	g_return_if_fail (GNC_IS_PLUGIN_FILE_HISTORY (object));
+    g_return_if_fail (GNC_IS_PLUGIN_FILE_HISTORY (object));
 
-	ENTER("plugin %p", object);
-	plugin = GNC_PLUGIN_FILE_HISTORY (object);
-	priv = GNC_PLUGIN_FILE_HISTORY_GET_PRIVATE (plugin);
+    ENTER("plugin %p", object);
+    plugin = GNC_PLUGIN_FILE_HISTORY (object);
+    priv = GNC_PLUGIN_FILE_HISTORY_GET_PRIVATE (plugin);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
-	LEAVE("");
+    G_OBJECT_CLASS (parent_class)->finalize (object);
+    LEAVE("");
 }
 
 
@@ -647,12 +689,12 @@ gnc_plugin_file_history_finalize (GObject *object)
 GncPlugin *
 gnc_plugin_file_history_new (void)
 {
-	GncPlugin *plugin_page = NULL;
+    GncPlugin *plugin_page = NULL;
 
-	ENTER("");
-	plugin_page = GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_FILE_HISTORY, NULL));
-	LEAVE("plugin %p", plugin_page);
-	return plugin_page;
+    ENTER("");
+    plugin_page = GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_FILE_HISTORY, NULL));
+    LEAVE("plugin %p", plugin_page);
+    return plugin_page;
 }
 
 /************************************************************
@@ -677,10 +719,10 @@ gnc_plugin_file_history_new (void)
  */
 static void
 gnc_plugin_file_history_add_to_window (GncPlugin *plugin,
-				       GncMainWindow *window,
-				       GQuark type)
+                                       GncMainWindow *window,
+                                       GQuark type)
 {
-	gnc_history_update_menus(window);
+    gnc_history_update_menus(window);
 }
 
 
@@ -698,8 +740,8 @@ gnc_plugin_file_history_add_to_window (GncPlugin *plugin,
  */
 static void
 gnc_plugin_file_history_remove_from_window (GncPlugin *plugin,
-					    GncMainWindow *window,
-					    GQuark type)
+        GncMainWindow *window,
+        GQuark type)
 {
 }
 
@@ -721,23 +763,23 @@ gnc_plugin_file_history_remove_from_window (GncPlugin *plugin,
  */
 static void
 gnc_plugin_file_history_cmd_open_file (GtkAction *action,
-				       GncMainWindowActionData *data)
+                                       GncMainWindowActionData *data)
 {
-	gchar *filename;
+    gchar *filename;
 
-	g_return_if_fail(GTK_IS_ACTION(action));
-	g_return_if_fail(data != NULL);
+    g_return_if_fail(GTK_IS_ACTION(action));
+    g_return_if_fail(data != NULL);
 
-	/* DRH - Do we need to close all open windows but the first?
-	 * Which progress bar should we be using? One in a window, or
-	 * in a new "file loading" dialog???
-	 */
-	filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);
-	gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-	/* also opens new account page */
-	if (!gnc_file_open_file (filename))
-	  gnc_history_remove_file (filename);
-	gnc_window_set_progressbar_window (NULL);
+    /* DRH - Do we need to close all open windows but the first?
+     * Which progress bar should we be using? One in a window, or
+     * in a new "file loading" dialog???
+     */
+    filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);
+    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+    /* also opens new account page */
+    if (!gnc_file_open_file (filename))
+        gnc_history_remove_file (filename);
+    gnc_window_set_progressbar_window (NULL);
 }
 
 /** @} */

@@ -1,4 +1,4 @@
-/* Note: This file was copied from gtk-2.8.12 gtktreemodelsort.h with the 
+/* Note: This file was copied from gtk-2.8.12 gtktreemodelsort.h with the
 following changes:
 
 s/GTK_TREE_MODEL_SORT/GNC_TREE_MODEL_SORT/g
@@ -48,42 +48,42 @@ typedef struct _GncTreeModelSortClass  GncTreeModelSortClass;
 
 struct _GncTreeModelSort
 {
-  GObject parent;
+    GObject parent;
 
-  /* < private > */
-  gpointer root;
-  gint stamp;
-  guint child_flags;
-  GtkTreeModel *child_model;
-  gint zero_ref_count;
+    /* < private > */
+    gpointer root;
+    gint stamp;
+    guint child_flags;
+    GtkTreeModel *child_model;
+    gint zero_ref_count;
 
-  /* sort information */
-  GList *sort_list;
-  gint sort_column_id;
-  GtkSortType order;
+    /* sort information */
+    GList *sort_list;
+    gint sort_column_id;
+    GtkSortType order;
 
-  /* default sort */
-  GtkTreeIterCompareFunc default_sort_func;
-  gpointer default_sort_data;
-  GtkDestroyNotify default_sort_destroy;
+    /* default sort */
+    GtkTreeIterCompareFunc default_sort_func;
+    gpointer default_sort_data;
+    GtkDestroyNotify default_sort_destroy;
 
-  /* signal ids */
-  guint changed_id;
-  guint inserted_id;
-  guint has_child_toggled_id;
-  guint deleted_id;
-  guint reordered_id;
+    /* signal ids */
+    guint changed_id;
+    guint inserted_id;
+    guint has_child_toggled_id;
+    guint deleted_id;
+    guint reordered_id;
 };
 
 struct _GncTreeModelSortClass
 {
-  GObjectClass parent_class;
+    GObjectClass parent_class;
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
+    /* Padding for future expansion */
+    void (*_gtk_reserved1) (void);
+    void (*_gtk_reserved2) (void);
+    void (*_gtk_reserved3) (void);
+    void (*_gtk_reserved4) (void);
 };
 
 
@@ -92,19 +92,19 @@ GtkTreeModel *gnc_tree_model_sort_new_with_model             (GtkTreeModel     *
 
 GtkTreeModel *gnc_tree_model_sort_get_model                  (GncTreeModelSort *tree_model);
 GtkTreePath  *gnc_tree_model_sort_convert_child_path_to_path (GncTreeModelSort *tree_model_sort,
-							      GtkTreePath      *child_path);
+        GtkTreePath      *child_path);
 void          gnc_tree_model_sort_convert_child_iter_to_iter (GncTreeModelSort *tree_model_sort,
-							      GtkTreeIter      *sort_iter,
-							      GtkTreeIter      *child_iter);
+        GtkTreeIter      *sort_iter,
+        GtkTreeIter      *child_iter);
 GtkTreePath  *gnc_tree_model_sort_convert_path_to_child_path (GncTreeModelSort *tree_model_sort,
-							      GtkTreePath      *sorted_path);
+        GtkTreePath      *sorted_path);
 void          gnc_tree_model_sort_convert_iter_to_child_iter (GncTreeModelSort *tree_model_sort,
-							      GtkTreeIter      *child_iter,
-							      GtkTreeIter      *sorted_iter);
+        GtkTreeIter      *child_iter,
+        GtkTreeIter      *sorted_iter);
 void          gnc_tree_model_sort_reset_default_sort_func    (GncTreeModelSort *tree_model_sort);
 void          gnc_tree_model_sort_clear_cache                (GncTreeModelSort *tree_model_sort);
 gboolean      gnc_tree_model_sort_iter_is_valid              (GncTreeModelSort *tree_model_sort,
-                                                              GtkTreeIter      *iter);
+        GtkTreeIter      *iter);
 
 
 G_END_DECLS

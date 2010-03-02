@@ -1,5 +1,5 @@
 /*
- * search-param.h -- a container for a Search Parameter 
+ * search-param.h -- a container for a Search Parameter
  * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
  *
  * This program is free software; you can redistribute it and/or
@@ -33,21 +33,23 @@
 typedef struct _GNCSearchParam	GNCSearchParam;
 typedef struct _GNCSearchParamClass	GNCSearchParamClass;
 
-struct _GNCSearchParam {
-  GObject gobject;
+struct _GNCSearchParam
+{
+    GObject gobject;
 
-  const char *		title;
-  GtkJustification	justify;
-  gboolean		passive;
-  gboolean		non_resizeable;
+    const char *		title;
+    GtkJustification	justify;
+    gboolean		passive;
+    gboolean		non_resizeable;
 };
 
-struct _GNCSearchParamClass {
-  GObjectClass gobject_class;
+struct _GNCSearchParamClass
+{
+    GObjectClass gobject_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  /* signals */
+    /* signals */
 };
 
 /* These are internal functions */
@@ -61,22 +63,22 @@ GNCSearchParam *	gnc_search_param_clone (GNCSearchParam *param);
  * compute the parameter type and the converter functions.
  */
 void			gnc_search_param_set_param_path (GNCSearchParam *param,
-						 GNCIdTypeConst search_type,
-						 GSList *param_path);
+        GNCIdTypeConst search_type,
+        GSList *param_path);
 
 /* List is property of the caller */
 GSList *		gnc_search_param_get_param_path (GNCSearchParam *param);
 GNCIdTypeConst		gnc_search_param_get_param_type (GNCSearchParam *param);
 void			gnc_search_param_set_title (GNCSearchParam *param,
-						    const char *title);
+        const char *title);
 void			gnc_search_param_set_justify (GNCSearchParam *param,
-						      GtkJustification justify);
+        GtkJustification justify);
 void			gnc_search_param_set_passive (GNCSearchParam *param,
-						      gboolean value);
+        gboolean value);
 void			gnc_search_param_set_non_resizeable (GNCSearchParam *param,
-							     gboolean value);
+        gboolean value);
 gboolean		gnc_search_param_type_match (GNCSearchParam *a,
-						     GNCSearchParam *b);
+        GNCSearchParam *b);
 
 /* Return the list of QueryAccess functions for this parameter.  This list
  * is owned by the param object -- users should not change it */
@@ -89,7 +91,7 @@ GSList *		gnc_search_param_get_converters (GNCSearchParam *param);
  * don't match types properly.
  */
 void			gnc_search_param_override_param_type (GNCSearchParam *param,
-					      GNCIdTypeConst param_type);
+        GNCIdTypeConst param_type);
 
 
 /*************************************************************
@@ -98,17 +100,17 @@ void			gnc_search_param_override_param_type (GNCSearchParam *param,
 
 /* Create a paramter and prepend it to a GSList */
 GList *			gnc_search_param_prepend (GList *list, char const *title,
-					  GNCIdTypeConst type_override,
-					  GNCIdTypeConst search_type,
-					  const char *param, ...);
-					  
+        GNCIdTypeConst type_override,
+        GNCIdTypeConst search_type,
+        const char *param, ...);
+
 
 GList *			gnc_search_param_prepend_with_justify (GList *list, char const *title,
-					       GtkJustification justify,
-					       GNCIdTypeConst type_override,
-					       GNCIdTypeConst search_type,
-					       const char *param, ...);
-					  
+        GtkJustification justify,
+        GNCIdTypeConst type_override,
+        GNCIdTypeConst search_type,
+        const char *param, ...);
+
 /* set a lookup function for this parameter (in lieu of setting the
  * param path) if you want to specify a direct lookup function when
  * using the compute_value interface.  Note that this wont work with
@@ -117,9 +119,9 @@ GList *			gnc_search_param_prepend_with_justify (GList *list, char const *title,
  */
 typedef gpointer (*GNCSearchParamFcn)(gpointer object, gpointer arg);
 void		gnc_search_param_set_param_fcn (GNCSearchParam *param,
-						GNCIdTypeConst param_type,
-						GNCSearchParamFcn fcn,
-						gpointer arg);
+        GNCIdTypeConst param_type,
+        GNCSearchParamFcn fcn,
+        gpointer arg);
 
 /* Compute the value of this parameter for this object */
 gpointer gnc_search_param_compute_value (GNCSearchParam *param, gpointer object);

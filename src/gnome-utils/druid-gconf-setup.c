@@ -110,66 +110,72 @@ void     druid_gconf_finish_page_finish (GnomeDruidPage *druidpage, GnomeDruid *
 static gboolean
 druid_gconf_update_path (GError **error)
 {
-  gchar *path_filename, *data_filename;
-  gchar *contents, **lines, *line;
-  gboolean found_user_dir = FALSE;
-  FILE *output;
-  gchar *gconfdir;
+    gchar *path_filename, *data_filename;
+    gchar *contents, **lines, *line;
+    gboolean found_user_dir = FALSE;
+    FILE *output;
+    gchar *gconfdir;
 
-  data_filename = g_build_filename(g_get_home_dir(), ".gconf", (char *)NULL);
-  path_filename = g_build_filename(g_get_home_dir(), ".gconf.path", (char *)NULL);
-  if (g_file_test(path_filename, G_FILE_TEST_EXISTS)) {
-    if (!g_file_get_contents(path_filename, &contents, NULL, error)) {
-      g_free(path_filename);
-      g_free(data_filename);
-      return FALSE;
-    }
-    
-    lines = g_strsplit_set(contents, "\r\n", -1);
-    for (line = *lines; line; line++) {
-      if (line[0] == '#')
-	continue;
-      if ((strstr(line, "$(HOME)/.gconf") == 0) ||
-	  (strstr(line, "~/.gconf") == 0) ||
-	  (strstr(line, data_filename))) {
-	found_user_dir = TRUE;
-	break;
-      }
-    }
-    g_strfreev(lines);
-  }
+    data_filename = g_build_filename(g_get_home_dir(), ".gconf", (char *)NULL);
+    path_filename = g_build_filename(g_get_home_dir(), ".gconf.path", (char *)NULL);
+    if (g_file_test(path_filename, G_FILE_TEST_EXISTS))
+    {
+        if (!g_file_get_contents(path_filename, &contents, NULL, error))
+        {
+            g_free(path_filename);
+            g_free(data_filename);
+            return FALSE;
+        }
 
-  output = g_fopen(path_filename, "a");
-  if (output == NULL) {
-    *error = g_error_new (G_FILE_ERROR,
-			  g_file_error_from_errno(errno),
-			  "Error opening file %s for writing.",
-			  path_filename);
+        lines = g_strsplit_set(contents, "\r\n", -1);
+        for (line = *lines; line; line++)
+        {
+            if (line[0] == '#')
+                continue;
+            if ((strstr(line, "$(HOME)/.gconf") == 0) ||
+                    (strstr(line, "~/.gconf") == 0) ||
+                    (strstr(line, data_filename)))
+            {
+                found_user_dir = TRUE;
+                break;
+            }
+        }
+        g_strfreev(lines);
+    }
+
+    output = g_fopen(path_filename, "a");
+    if (output == NULL)
+    {
+        *error = g_error_new (G_FILE_ERROR,
+                              g_file_error_from_errno(errno),
+                              "Error opening file %s for writing.",
+                              path_filename);
+        g_free(path_filename);
+        g_free(data_filename);
+        return FALSE;
+    }
+
+    fprintf(output, "\n######## The following lines were added by GnuCash. ########\n");
+    if (!found_user_dir)
+        fprintf(output, PATH_STRING1);
+    gconfdir = gnc_path_get_gconfdir (TRUE);
+    fprintf(output, PATH_STRING2, gconfdir);
+    g_free (gconfdir);
+    fprintf(output,   "############## End of lines added by GnuCash. ##############\n");
+    if (fclose(output) != 0)
+    {
+        *error = g_error_new (G_FILE_ERROR,
+                              g_file_error_from_errno(errno),
+                              "Error closing file %s.",
+                              path_filename);
+        g_free(path_filename);
+        g_free(data_filename);
+        return  FALSE;
+    }
+
     g_free(path_filename);
     g_free(data_filename);
-    return FALSE;
-  }
-
-  fprintf(output, "\n######## The following lines were added by GnuCash. ########\n");
-  if (!found_user_dir)
-    fprintf(output, PATH_STRING1);
-  gconfdir = gnc_path_get_gconfdir (TRUE);
-  fprintf(output, PATH_STRING2, gconfdir);
-  g_free (gconfdir);
-  fprintf(output,   "############## End of lines added by GnuCash. ##############\n");
-  if (fclose(output) != 0)  {
-    *error = g_error_new (G_FILE_ERROR,
-			  g_file_error_from_errno(errno),
-			  "Error closing file %s.",
-			  path_filename);
-    g_free(path_filename);
-    g_free(data_filename);
-    return  FALSE;
-  }
-
-  g_free(path_filename);
-  g_free(data_filename);
-  return TRUE;
+    return TRUE;
 }
 
 
@@ -190,7 +196,7 @@ druid_gconf_update_path (GError **error)
 static gboolean
 druid_gconf_install_keys (GError **error)
 {
-  return g_spawn_command_line_sync(SCRIPT_NAME, NULL, NULL, NULL, error);
+    return g_spawn_command_line_sync(SCRIPT_NAME, NULL, NULL, NULL, error);
 }
 
 /********************
@@ -204,11 +210,11 @@ druid_gconf_install_keys (GError **error)
  */
 gboolean
 druid_gconf_delete_event (GtkWidget *window,
-			   GdkEvent *event,
-			   gpointer user_data)
+                          GdkEvent *event,
+                          gpointer user_data)
 {
-  gtk_widget_destroy(GTK_WIDGET(window));
-  exit(40);
+    gtk_widget_destroy(GTK_WIDGET(window));
+    exit(40);
 }
 
 
@@ -217,13 +223,13 @@ druid_gconf_delete_event (GtkWidget *window,
  */
 void
 druid_gconf_cancel (GnomeDruid *druid,
-		    gpointer user_data)
+                    gpointer user_data)
 {
-  GtkWidget *window;
+    GtkWidget *window;
 
-  window = gnc_glade_lookup_widget(GTK_WIDGET(druid), "GConf Install Druid");
-  gtk_widget_destroy(GTK_WIDGET(window));
-  exit(41);
+    window = gnc_glade_lookup_widget(GTK_WIDGET(druid), "GConf Install Druid");
+    gtk_widget_destroy(GTK_WIDGET(window));
+    exit(41);
 }
 
 
@@ -238,8 +244,8 @@ druid_gconf_cancel (GnomeDruid *druid,
  */
 void
 druid_gconf_choose_page_prepare (GnomeDruidPage *druidpage,
-				 GnomeDruid *druid,
-				 gpointer user_data)
+                                 GnomeDruid *druid,
+                                 gpointer user_data)
 {
 }
 
@@ -251,22 +257,25 @@ druid_gconf_choose_page_prepare (GnomeDruidPage *druidpage,
  */
 gboolean
 druid_gconf_choose_page_next (GnomeDruidPage *druidpage,
-			      GnomeDruid *druid,
-			      gpointer user_data)
+                              GnomeDruid *druid,
+                              gpointer user_data)
 {
-  GtkWidget *page, *button;
+    GtkWidget *page, *button;
 
-  button = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "update_path");
-  if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button))) {
-    page = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "update_page");
-    g_object_set_data(G_OBJECT(druid), HOW, GINT_TO_POINTER(HOW_UPDATE));
-  } else {
-    page = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "install_page");
-    g_object_set_data(G_OBJECT(druid), HOW, GINT_TO_POINTER(HOW_INSTALL));
-  }
+    button = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "update_path");
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)))
+    {
+        page = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "update_page");
+        g_object_set_data(G_OBJECT(druid), HOW, GINT_TO_POINTER(HOW_UPDATE));
+    }
+    else
+    {
+        page = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "install_page");
+        g_object_set_data(G_OBJECT(druid), HOW, GINT_TO_POINTER(HOW_INSTALL));
+    }
 
-  gnome_druid_set_page(druid, GNOME_DRUID_PAGE(page));
-  return TRUE;
+    gnome_druid_set_page(druid, GNOME_DRUID_PAGE(page));
+    return TRUE;
 }
 
 
@@ -282,19 +291,19 @@ druid_gconf_choose_page_next (GnomeDruidPage *druidpage,
  */
 void
 druid_gconf_update_page_prepare (GnomeDruidPage *druidpage,
-				 GnomeDruid *druid,
-				 gpointer user_data)
+                                 GnomeDruid *druid,
+                                 gpointer user_data)
 {
-  GtkTextBuffer *textbuffer;
-  GtkWidget *textview;
-  gchar *msg;
-  gchar *gconfdir = gnc_path_get_gconfdir (TRUE);
+    GtkTextBuffer *textbuffer;
+    GtkWidget *textview;
+    gchar *msg;
+    gchar *gconfdir = gnc_path_get_gconfdir (TRUE);
 
-  textview = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "update_text");
-  textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
-  msg = g_strdup_printf(PATH_STRING1 PATH_STRING2, gconfdir);
-  gtk_text_buffer_set_text(textbuffer, msg, -1);
-  g_free (gconfdir);
+    textview = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "update_text");
+    textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
+    msg = g_strdup_printf(PATH_STRING1 PATH_STRING2, gconfdir);
+    gtk_text_buffer_set_text(textbuffer, msg, -1);
+    g_free (gconfdir);
 }
 
 
@@ -304,24 +313,29 @@ druid_gconf_update_page_prepare (GnomeDruidPage *druidpage,
  */
 gboolean
 druid_gconf_update_page_next (GnomeDruidPage *druidpage,
-			      GnomeDruid *druid,
-			      gpointer user_data)
+                              GnomeDruid *druid,
+                              gpointer user_data)
 {
-  GtkWidget *page, *button1, *button2;
+    GtkWidget *page, *button1, *button2;
 
-  button1 = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "program1");
-  button2 = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "user1");
-  if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button1))) {
-    g_object_set_data(G_OBJECT(druid), WHO_DOES, GINT_TO_POINTER(WHO_GNUCASH));
-  } else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button2))) {
-    g_object_set_data(G_OBJECT(druid), WHO_DOES, GINT_TO_POINTER(WHO_USER));
-  } else {
-    g_object_set_data(G_OBJECT(druid), WHO_DOES, GINT_TO_POINTER(WHO_ALREADY_DONE));
-  }
+    button1 = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "program1");
+    button2 = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "user1");
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button1)))
+    {
+        g_object_set_data(G_OBJECT(druid), WHO_DOES, GINT_TO_POINTER(WHO_GNUCASH));
+    }
+    else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button2)))
+    {
+        g_object_set_data(G_OBJECT(druid), WHO_DOES, GINT_TO_POINTER(WHO_USER));
+    }
+    else
+    {
+        g_object_set_data(G_OBJECT(druid), WHO_DOES, GINT_TO_POINTER(WHO_ALREADY_DONE));
+    }
 
-  page = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "finish_page");
-  gnome_druid_set_page(druid, GNOME_DRUID_PAGE(page));
-  return TRUE;
+    page = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "finish_page");
+    gnome_druid_set_page(druid, GNOME_DRUID_PAGE(page));
+    return TRUE;
 }
 
 /********************
@@ -334,15 +348,15 @@ druid_gconf_update_page_next (GnomeDruidPage *druidpage,
  */
 void
 druid_gconf_install_page_prepare (GnomeDruidPage *druidpage,
-				  GnomeDruid *druid,
-				  gpointer user_data)
+                                  GnomeDruid *druid,
+                                  gpointer user_data)
 {
-  GtkTextBuffer *textbuffer;
-  GtkWidget *textview;
+    GtkTextBuffer *textbuffer;
+    GtkWidget *textview;
 
-  textview = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "install_text");
-  textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
-  gtk_text_buffer_set_text(textbuffer, SCRIPT_NAME, -1);
+    textview = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "install_text");
+    textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
+    gtk_text_buffer_set_text(textbuffer, SCRIPT_NAME, -1);
 }
 
 
@@ -352,24 +366,29 @@ druid_gconf_install_page_prepare (GnomeDruidPage *druidpage,
  */
 gboolean
 druid_gconf_install_page_next (GnomeDruidPage *druidpage,
-			       GnomeDruid *druid,
-			       gpointer user_data)
+                               GnomeDruid *druid,
+                               gpointer user_data)
 {
-  GtkWidget *page, *button1, *button2;
+    GtkWidget *page, *button1, *button2;
 
-  button1 = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "program2");
-  button2 = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "user2");
-  if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button1))) {
-    g_object_set_data(G_OBJECT(druid), WHO_DOES, GINT_TO_POINTER(WHO_GNUCASH));
-  } else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button2))) {
-    g_object_set_data(G_OBJECT(druid), WHO_DOES, GINT_TO_POINTER(WHO_USER));
-  } else {
-    g_object_set_data(G_OBJECT(druid), WHO_DOES, GINT_TO_POINTER(WHO_ALREADY_DONE));
-  }
+    button1 = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "program2");
+    button2 = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "user2");
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button1)))
+    {
+        g_object_set_data(G_OBJECT(druid), WHO_DOES, GINT_TO_POINTER(WHO_GNUCASH));
+    }
+    else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button2)))
+    {
+        g_object_set_data(G_OBJECT(druid), WHO_DOES, GINT_TO_POINTER(WHO_USER));
+    }
+    else
+    {
+        g_object_set_data(G_OBJECT(druid), WHO_DOES, GINT_TO_POINTER(WHO_ALREADY_DONE));
+    }
 
-  page = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "finish_page");
-  gnome_druid_set_page(druid, GNOME_DRUID_PAGE(page));
-  return TRUE;
+    page = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "finish_page");
+    gnome_druid_set_page(druid, GNOME_DRUID_PAGE(page));
+    return TRUE;
 }
 
 
@@ -378,14 +397,14 @@ druid_gconf_install_page_next (GnomeDruidPage *druidpage,
  */
 gboolean
 druid_gconf_install_page_back (GnomeDruidPage *druidpage,
-			       GnomeDruid *druid,
-			       gpointer user_data)
+                               GnomeDruid *druid,
+                               gpointer user_data)
 {
-  GtkWidget *page;
+    GtkWidget *page;
 
-  page = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "choose_page");
-  gnome_druid_set_page(druid, GNOME_DRUID_PAGE(page));
-  return TRUE;
+    page = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "choose_page");
+    gnome_druid_set_page(druid, GNOME_DRUID_PAGE(page));
+    return TRUE;
 }
 
 
@@ -400,64 +419,71 @@ druid_gconf_install_page_back (GnomeDruidPage *druidpage,
  */
 void
 druid_gconf_finish_page_prepare (GnomeDruidPage *druidpage,
-				 GnomeDruid *druid,
-				 gpointer user_data)
+                                 GnomeDruid *druid,
+                                 gpointer user_data)
 {
-  gint who, how;
-  gchar *text;
-  const gchar *pgm_path =
-    _("When you click Apply, GnuCash will modify your ~/.gconf.path file "
-      "and restart the gconf backend.");
-  const gchar *pgm_install =
-    _("When you click Apply, GnuCash will install the gconf data into your "
-      "local ~/.gconf file and restart the gconf backend.  The %s script "
-      "must be found in your search path for this to work correctly.");
-  const gchar *user_path =
-    _("You have chosen to correct the problem by yourself.  When you click "
-      "Apply, GnuCash will exit.  Please correct the problem and restart "
-      "the gconf backend with the command 'gconftool-2 --shutdown' before "
-      "restarting GnuCash.  If you have not already done so, you can click "
-      "the Back button and copy the necessary text from the dialog.");
-  const gchar *user_install =
-    _("You have chosen to correct the problem by yourself.  When you "
-      "click Apply, GnuCash will exit.  Please run the %s script which "
-      "will install the configuration data and restart the gconf backend.");
-  const gchar *user_did =
-    _("You have already corrected the problem and restarted the gconf "
-      "backend with the command 'gconftool-2 --shutdown'.  When you click "
-      "Apply, GnuCash will continue loading.");
+    gint who, how;
+    gchar *text;
+    const gchar *pgm_path =
+        _("When you click Apply, GnuCash will modify your ~/.gconf.path file "
+          "and restart the gconf backend.");
+    const gchar *pgm_install =
+        _("When you click Apply, GnuCash will install the gconf data into your "
+          "local ~/.gconf file and restart the gconf backend.  The %s script "
+          "must be found in your search path for this to work correctly.");
+    const gchar *user_path =
+        _("You have chosen to correct the problem by yourself.  When you click "
+          "Apply, GnuCash will exit.  Please correct the problem and restart "
+          "the gconf backend with the command 'gconftool-2 --shutdown' before "
+          "restarting GnuCash.  If you have not already done so, you can click "
+          "the Back button and copy the necessary text from the dialog.");
+    const gchar *user_install =
+        _("You have chosen to correct the problem by yourself.  When you "
+          "click Apply, GnuCash will exit.  Please run the %s script which "
+          "will install the configuration data and restart the gconf backend.");
+    const gchar *user_did =
+        _("You have already corrected the problem and restarted the gconf "
+          "backend with the command 'gconftool-2 --shutdown'.  When you click "
+          "Apply, GnuCash will continue loading.");
 
-  who = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(druid), WHO_DOES));
-  switch (who) {
+    who = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(druid), WHO_DOES));
+    switch (who)
+    {
     case WHO_ALREADY_DONE:
-      gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage),
-				     user_did);
-      break;
+        gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage),
+                                       user_did);
+        break;
 
     case WHO_USER:
-      how = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(druid), HOW));
-      if (how == HOW_INSTALL) {
-	text = g_strdup_printf(user_install, SCRIPT_NAME);
-	gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage), text);
-	g_free(text);
-      } else {
-	gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage),
-				       user_path);
-      }
-      break;
+        how = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(druid), HOW));
+        if (how == HOW_INSTALL)
+        {
+            text = g_strdup_printf(user_install, SCRIPT_NAME);
+            gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage), text);
+            g_free(text);
+        }
+        else
+        {
+            gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage),
+                                           user_path);
+        }
+        break;
 
     default:
-      how = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(druid), HOW));
-      if (how == HOW_INSTALL) {
-	text = g_strdup_printf(pgm_install, SCRIPT_NAME);
-	gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage), text);
-	g_free(text);
-      } else {
-	gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage),
-				       pgm_path);
-      }
-      break;
-  }
+        how = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(druid), HOW));
+        if (how == HOW_INSTALL)
+        {
+            text = g_strdup_printf(pgm_install, SCRIPT_NAME);
+            gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage), text);
+            g_free(text);
+        }
+        else
+        {
+            gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage),
+                                           pgm_path);
+        }
+        break;
+    }
 }
 
 
@@ -467,10 +493,10 @@ druid_gconf_finish_page_prepare (GnomeDruidPage *druidpage,
  */
 gboolean
 druid_gconf_finish_page_back (GnomeDruidPage *druidpage,
-			      GnomeDruid *druid,
-			      gpointer user_data)
+                              GnomeDruid *druid,
+                              gpointer user_data)
 {
-  return druid_gconf_choose_page_next(druidpage, druid, user_data);
+    return druid_gconf_choose_page_next(druidpage, druid, user_data);
 }
 
 
@@ -481,53 +507,60 @@ druid_gconf_finish_page_back (GnomeDruidPage *druidpage,
  */
 void
 druid_gconf_finish_page_finish (GnomeDruidPage *druidpage,
-				GnomeDruid *druid,
-				gpointer user_data)
+                                GnomeDruid *druid,
+                                gpointer user_data)
 {
-  GtkWidget *window;
-  gint value, value2;
-  GError *error = NULL;
-  gboolean keep_going = TRUE;
+    GtkWidget *window;
+    gint value, value2;
+    GError *error = NULL;
+    gboolean keep_going = TRUE;
 
-  /* What to do... what to do... */
-  value = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(druid), WHO_DOES));
-  switch (value) {
+    /* What to do... what to do... */
+    value = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(druid), WHO_DOES));
+    switch (value)
+    {
     case WHO_ALREADY_DONE:
-      break;
+        break;
 
     case WHO_USER:
-      keep_going = FALSE;
-      break;
+        keep_going = FALSE;
+        break;
 
     default:
-      value2 = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(druid), HOW));
-      switch(value2) {
-      case HOW_INSTALL:
-	if (!druid_gconf_install_keys(&error)) {
-	  keep_going = FALSE;
-	  gnc_error_dialog(NULL, "%s", error->message);
-	  g_error_free(error);
-	}
-	break;
+        value2 = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(druid), HOW));
+        switch (value2)
+        {
+        case HOW_INSTALL:
+            if (!druid_gconf_install_keys(&error))
+            {
+                keep_going = FALSE;
+                gnc_error_dialog(NULL, "%s", error->message);
+                g_error_free(error);
+            }
+            break;
 
-      default:
-	if (!druid_gconf_update_path(&error)) {
-	  keep_going = FALSE;
-	  gnc_error_dialog(NULL, "%s", error->message);
-	  g_error_free(error);
-	}
-	break;
-      }
-      break;
-  }
+        default:
+            if (!druid_gconf_update_path(&error))
+            {
+                keep_going = FALSE;
+                gnc_error_dialog(NULL, "%s", error->message);
+                g_error_free(error);
+            }
+            break;
+        }
+        break;
+    }
 
-  window = gnc_glade_lookup_widget(GTK_WIDGET(druid), "GConf Install Druid");
-  gtk_widget_destroy(GTK_WIDGET(window));
-  if (keep_going) {
-    gtk_main_quit();
-  } else {
-    exit(42);
-  }
+    window = gnc_glade_lookup_widget(GTK_WIDGET(druid), "GConf Install Druid");
+    gtk_widget_destroy(GTK_WIDGET(window));
+    if (keep_going)
+    {
+        gtk_main_quit();
+    }
+    else
+    {
+        exit(42);
+    }
 }
 
 
@@ -538,26 +571,28 @@ druid_gconf_finish_page_finish (GnomeDruidPage *druidpage,
 static void
 druid_gconf_fix_textview_color (GtkWidget *window)
 {
-  GdkColor *color;
-  GtkWidget *widget;
-  gint i;
-  const gchar *names[] = {
-    "textview1",
-    "textview2",
-    "textview3",
-    "textview4",
-    "textview5",
-    "textview6",
-    NULL
-  };
+    GdkColor *color;
+    GtkWidget *widget;
+    gint i;
+    const gchar *names[] =
+    {
+        "textview1",
+        "textview2",
+        "textview3",
+        "textview4",
+        "textview5",
+        "textview6",
+        NULL
+    };
 
-  widget = gnc_glade_lookup_widget(window, "choose_page");
-  color = &GNOME_DRUID_PAGE_STANDARD(widget)->contents_background;
+    widget = gnc_glade_lookup_widget(window, "choose_page");
+    color = &GNOME_DRUID_PAGE_STANDARD(widget)->contents_background;
 
-  for (i = 0; names[i]; i++) {
-    widget = gnc_glade_lookup_widget(widget, names[i]);
-    gtk_widget_modify_base(widget, GTK_STATE_INSENSITIVE, color);
-  }
+    for (i = 0; names[i]; i++)
+    {
+        widget = gnc_glade_lookup_widget(widget, names[i]);
+        gtk_widget_modify_base(widget, GTK_STATE_INSENSITIVE, color);
+    }
 }
 
 /** This function build and presents the druid that presents the user
@@ -571,25 +606,26 @@ druid_gconf_fix_textview_color (GtkWidget *window)
 static void
 gnc_gnome_install_gconf_schemas (void)
 {
-  GladeXML *xml;
-  GtkWidget *window;
-  GError *error = NULL;
+    GladeXML *xml;
+    GtkWidget *window;
+    GError *error = NULL;
 
-  xml = gnc_glade_xml_new ("druid-gconf-setup.glade", "GConf Install Druid");
-  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, NULL);
-  window = glade_xml_get_widget (xml, "GConf Install Druid");
-  druid_gconf_fix_textview_color(window);
-  gtk_widget_show_all(window);
+    xml = gnc_glade_xml_new ("druid-gconf-setup.glade", "GConf Install Druid");
+    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, NULL);
+    window = glade_xml_get_widget (xml, "GConf Install Druid");
+    druid_gconf_fix_textview_color(window);
+    gtk_widget_show_all(window);
 
-  /* This won't return until the dialog is finished */
-  gtk_main();
+    /* This won't return until the dialog is finished */
+    gtk_main();
 
-  /* Kill the backend daemon. When it restarts it will find our changes */
-  if (!g_spawn_command_line_sync("gconftool-2 --shutdown", NULL, NULL,
-				 NULL, &error)) {
-    gnc_warning_dialog(NULL, "%s", error->message);
-    g_error_free(error);
-  }
+    /* Kill the backend daemon. When it restarts it will find our changes */
+    if (!g_spawn_command_line_sync("gconftool-2 --shutdown", NULL, NULL,
+                                   NULL, &error))
+    {
+        gnc_warning_dialog(NULL, "%s", error->message);
+        g_error_free(error);
+    }
 }
 
 
@@ -605,64 +641,72 @@ gnc_gnome_install_gconf_schemas (void)
 void
 druid_gconf_install_check_schemas (void)
 {
-  GladeXML *xml;
-  GtkWidget *dialog;
-  gboolean done = FALSE;
-  gint response;
+    GladeXML *xml;
+    GtkWidget *dialog;
+    gboolean done = FALSE;
+    gint response;
 
-  if (gnc_gconf_schemas_found()) {
-    gnc_gconf_unset_dir(GCONF_WARNINGS_TEMP, NULL);
-    return;
-  }
+    if (gnc_gconf_schemas_found())
+    {
+        gnc_gconf_unset_dir(GCONF_WARNINGS_TEMP, NULL);
+        return;
+    }
 
 #ifdef G_OS_WIN32
-  {
-    /* automatically update the search path on windows */
-    GError *error = NULL;
-    if (!druid_gconf_update_path (&error)) {
-      gnc_error_dialog (NULL, error->message);
-      g_error_free (error);
-      exit(42);
-    } else {
-      if (!g_spawn_command_line_sync("gconftool-2 --shutdown", NULL, NULL,
-				     NULL, &error)) {
-	gnc_warning_dialog(NULL, error->message);
-	g_error_free(error);
-      }
-      return;
+    {
+        /* automatically update the search path on windows */
+        GError *error = NULL;
+        if (!druid_gconf_update_path (&error))
+        {
+            gnc_error_dialog (NULL, error->message);
+            g_error_free (error);
+            exit(42);
+        }
+        else
+        {
+            if (!g_spawn_command_line_sync("gconftool-2 --shutdown", NULL, NULL,
+                                           NULL, &error))
+            {
+                gnc_warning_dialog(NULL, error->message);
+                g_error_free(error);
+            }
+            return;
+        }
     }
-  }
 #endif /* G_OS_WIN32 */
 
-  xml = gnc_glade_xml_new ("druid-gconf-setup.glade", "GConf Query");
-  dialog = glade_xml_get_widget (xml, "GConf Query");
-  do {
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
+    xml = gnc_glade_xml_new ("druid-gconf-setup.glade", "GConf Query");
+    dialog = glade_xml_get_widget (xml, "GConf Query");
+    do
+    {
+        response = gtk_dialog_run(GTK_DIALOG(dialog));
 
-    switch (response) {
-    case GTK_RESPONSE_CANCEL:
-    default:
-      gnc_shutdown(42);
-      /* never returns */
+        switch (response)
+        {
+        case GTK_RESPONSE_CANCEL:
+        default:
+            gnc_shutdown(42);
+            /* never returns */
 
-    case GTK_RESPONSE_NO:
-      /* User wants to run without setting up gconf */
-      done = TRUE;
-      break;
+        case GTK_RESPONSE_NO:
+            /* User wants to run without setting up gconf */
+            done = TRUE;
+            break;
 
-    case GTK_RESPONSE_ACCEPT:
-      gtk_widget_hide(dialog);
-      gnc_gnome_install_gconf_schemas();
-      done = TRUE;
-      break;
+        case GTK_RESPONSE_ACCEPT:
+            gtk_widget_hide(dialog);
+            gnc_gnome_install_gconf_schemas();
+            done = TRUE;
+            break;
 
-    case GTK_RESPONSE_HELP:
-      gnc_gnome_help(HF_HELP, HL_GCONF);
-      break;
+        case GTK_RESPONSE_HELP:
+            gnc_gnome_help(HF_HELP, HL_GCONF);
+            break;
+        }
     }
-  } while (!done);
+    while (!done);
 
-  gtk_widget_destroy(dialog);
+    gtk_widget_destroy(dialog);
 }
 
 /** @} */

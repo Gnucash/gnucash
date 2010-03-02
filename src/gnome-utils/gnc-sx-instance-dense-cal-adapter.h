@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-sx-instance-dense-cal-adapter.h
  *
  * Copyright (C) 2006 Josh Sled <jsled@asynchronous.org>

@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-tree-model.h -- base implementation for a tree model in
  *                     Gnucash.  This only implements the object, not
  *                     the model interface.
@@ -51,14 +51,16 @@ G_BEGIN_DECLS
 /* typedefs & structures */
 
 /** The instance data structure for a generic tree model. */
-typedef struct {
-	GObject g_object;		/**< The parent object data. */
+typedef struct
+{
+    GObject g_object;		/**< The parent object data. */
 } GncTreeModel;
 
 
 /** The class data structure for a generic tree model. */
-typedef struct {
-	GObjectClass g_object;	/**< The parent object data. */
+typedef struct
+{
+    GObjectClass g_object;	/**< The parent object data. */
 } GncTreeModelClass;
 
 

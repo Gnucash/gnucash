@@ -44,47 +44,47 @@ static void
 gnc_dense_cal_model_base_init(gpointer g_class)
 {
     static gboolean initialized = FALSE;
-     
+
     if (!initialized)
     {
         gnc_dense_cal_model_signals[GDCM_ADDED]
-            = g_signal_new("added",
-                           G_TYPE_FROM_CLASS(g_class),
-                           G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-                           0 /* default offset */,
-                           NULL /* accumulator */,
-                           NULL /* accum. data */,
-                           g_cclosure_marshal_VOID__UINT,
-                           G_TYPE_NONE /* return */,
-                           1 /* n_params */,
-                           G_TYPE_UINT /* param types */
-                );
+        = g_signal_new("added",
+                       G_TYPE_FROM_CLASS(g_class),
+                       G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                       0 /* default offset */,
+                       NULL /* accumulator */,
+                       NULL /* accum. data */,
+                       g_cclosure_marshal_VOID__UINT,
+                       G_TYPE_NONE /* return */,
+                       1 /* n_params */,
+                       G_TYPE_UINT /* param types */
+                      );
 
         gnc_dense_cal_model_signals[GDCM_UPDATE]
-            = g_signal_new("update",
-                           G_TYPE_FROM_CLASS(g_class),
-                           G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-                           0 /* default offset */,
-                           NULL /* accumulator */,
-                           NULL /* accum. data */,
-                           g_cclosure_marshal_VOID__UINT,
-                           G_TYPE_NONE /* return */,
-                           1 /* n_params */,
-                           G_TYPE_UINT /* param types */
-                );
+        = g_signal_new("update",
+                       G_TYPE_FROM_CLASS(g_class),
+                       G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                       0 /* default offset */,
+                       NULL /* accumulator */,
+                       NULL /* accum. data */,
+                       g_cclosure_marshal_VOID__UINT,
+                       G_TYPE_NONE /* return */,
+                       1 /* n_params */,
+                       G_TYPE_UINT /* param types */
+                      );
 
         gnc_dense_cal_model_signals[GDCM_REMOVE]
-            = g_signal_new("removing",
-                           G_TYPE_FROM_CLASS(g_class),
-                           G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-                           0 /* default offset */,
-                           NULL /* accumulator */,
-                           NULL /* accum. data */,
-                           g_cclosure_marshal_VOID__UINT,
-                           G_TYPE_NONE /* return */,
-                           1 /* n_params */,
-                           G_TYPE_UINT /* param types */
-                );
+        = g_signal_new("removing",
+                       G_TYPE_FROM_CLASS(g_class),
+                       G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                       0 /* default offset */,
+                       NULL /* accumulator */,
+                       NULL /* accum. data */,
+                       g_cclosure_marshal_VOID__UINT,
+                       G_TYPE_NONE /* return */,
+                       1 /* n_params */,
+                       G_TYPE_UINT /* param types */
+                      );
 
         initialized = TRUE;
     }
@@ -94,8 +94,10 @@ GType
 gnc_dense_cal_model_get_type(void)
 {
     static GType type = 0;
-    if (type == 0) {
-        static const GTypeInfo info = {
+    if (type == 0)
+    {
+        static const GTypeInfo info =
+        {
             sizeof(GncDenseCalModelIface),
             gnc_dense_cal_model_base_init,   /* base_init */
             NULL,   /* base_finalize */

@@ -27,7 +27,7 @@
 
 
 #ifndef GNC_DATE_FORMAT_H
-#define GNC_DATE_FORMAT_H 
+#define GNC_DATE_FORMAT_H
 
 #include "qof.h"
 
@@ -38,13 +38,15 @@
 
 /**
  **/
-typedef struct {
-	GtkHBox hbox;
+typedef struct
+{
+    GtkHBox hbox;
 } GNCDateFormat;
 
-typedef struct {
-	GtkHBoxClass hbox_class;
-	void (*format_changed) (GNCDateFormat *gdf);
+typedef struct
+{
+    GtkHBoxClass hbox_class;
+    void (*format_changed) (GNCDateFormat *gdf);
 } GNCDateFormatClass;
 
 GType     gnc_date_format_get_type        (void);
@@ -57,11 +59,11 @@ void      gnc_date_format_set_format      (GNCDateFormat *gdf, QofDateFormat for
 QofDateFormat gnc_date_format_get_format     (GNCDateFormat *gdf);
 
 void      gnc_date_format_set_months      (GNCDateFormat *gdf,
-					   GNCDateMonthFormat months);
+        GNCDateMonthFormat months);
 GNCDateMonthFormat gnc_date_format_get_months (GNCDateFormat *gdf);
 
 void      gnc_date_format_set_years       (GNCDateFormat *gdf,
-					   gboolean include_century);
+        gboolean include_century);
 gboolean  gnc_date_format_get_years       (GNCDateFormat *gdf);
 
 void      gnc_date_format_set_custom      (GNCDateFormat *gdf, const char *format);

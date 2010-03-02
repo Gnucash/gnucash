@@ -26,8 +26,8 @@
  * pulldown menu, for the "New", "Open", "Save", "SaveAs", etc. menu entries.
  * In particular, they will verify that old files don't get clobbered,
  * they'll put up dialogue boxes to ask the user to confirm their actions,
- * etc. 
- * 
+ * etc.
+ *
  * These utilities are written in a GUI-independent fashion, and should
  * work just fine with the Motif, gnome/gtk and Qt interfaces.
  * These utilities are appropriate for direct invocation from guile.
@@ -42,21 +42,21 @@
  *
  * The gnc_file_save() routine will check for an existing edit session,
  *    and if one exists, it will save the account info to a file.
- *    If an error occurs, a popup dialogue will inform the user of 
+ *    If an error occurs, a popup dialogue will inform the user of
  *    the error.  If there is no existing filename open, then the
  *    user will be prompted for a file to save to (using the
- *    gnc_file_save_as() routine).  The existing session will remain 
+ *    gnc_file_save_as() routine).  The existing session will remain
  *    open for further editing.
  *
  * The gnc_file_save_as() routine will prompt the user for a filename
  *    to save the account data to (using the standard GUI file dialogue
  *    box).  If the user specifies a filename, the account data will be
- *    saved. If an error occurs, a popup dialogue will inform the user 
- *    of the error.  One possible error is that another user has 
+ *    saved. If an error occurs, a popup dialogue will inform the user
+ *    of the error.  One possible error is that another user has
  *    the indicated file already locked up in a different session
  *    (in which case it is up to the user to try again, or to pick
- *    a different filename).  If it is possible to save without 
- *    an error, then a new session is started for the indicated 
+ *    a different filename).  If it is possible to save without
+ *    an error, then a new session is started for the indicated
  *    filename, locking out other users.  This new session remains
  *    open for further editing.
  *
@@ -71,24 +71,24 @@
  *    will return TRUE.
  *
  * The gnc_file_new() routine will check for an existing edit session.
- *    If one exists, it will ask the user if they want to save it, 
- *    (using the gnc_file_query_save_as() dialogue).  Then the current 
- *    session will be destroyed, file locks will be removed, and 
+ *    If one exists, it will ask the user if they want to save it,
+ *    (using the gnc_file_query_save_as() dialogue).  Then the current
+ *    session will be destroyed, file locks will be removed, and
  *    account group structures will be set up for a new session.
  *
  * The gnc_file_open() routine check for an existing edit session.
  *    If one exists, it will ask the user if they want to save it.
  *    (using the gnc_file_query_save() dialogue).  Next, the user will
- *    be prompted with a GUI standard file-selection dialogue to 
+ *    be prompted with a GUI standard file-selection dialogue to
  *    to pick a new file.  If no file is picked, this routine returns.
- *    If a new file was picked, then the current session will be 
+ *    If a new file was picked, then the current session will be
  *    destroyed and file locks on it will be removed.  The new
  *    file will then be opened for editing, establishing locks, etc.
  *    If an error occurs, the user will be informed with a pop-up
  *    dialogue.  If the file cannot be found, or if a read
  *    error occurs, a popup describing the error will pop up.
- *    One possible error is that another user has the indicated 
- *    file already locked up in a different session (in which 
+ *    One possible error is that another user has the indicated
+ *    file already locked up in a different session (in which
  *    case it is up to the user to try again, or to pick
  *    a different filename).
  *
@@ -117,10 +117,10 @@
 
 typedef enum
 {
-  GNC_FILE_DIALOG_OPEN,
-  GNC_FILE_DIALOG_IMPORT,
-  GNC_FILE_DIALOG_SAVE,
-  GNC_FILE_DIALOG_EXPORT
+    GNC_FILE_DIALOG_OPEN,
+    GNC_FILE_DIALOG_IMPORT,
+    GNC_FILE_DIALOG_SAVE,
+    GNC_FILE_DIALOG_EXPORT
 } GNCFileDialogType;
 
 void gnc_file_new (void);
@@ -133,13 +133,13 @@ void gnc_file_do_save_as(const char* filename);
 
 */
 gboolean show_session_error (QofBackendError io_error,
-			     const char *newfile,
-			     GNCFileDialogType type);
+                             const char *newfile,
+                             GNCFileDialogType type);
 
 char * gnc_file_dialog (const char * title,
-			GList * filters,
-			const char * starting_dir,
-			GNCFileDialogType type);
+                        GList * filters,
+                        const char * starting_dir,
+                        GNCFileDialogType type);
 
 gboolean gnc_file_open_file (const char *filename);
 void gnc_file_export_file(const char * filename);

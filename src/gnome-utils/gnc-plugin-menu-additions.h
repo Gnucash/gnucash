@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-menu-additions.h -- 
+/*
+ * gnc-plugin-menu-additions.h --
  * Copyright (C) 2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
@@ -53,12 +53,14 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_MENU_ADDITIONS_NAME "gnc-plugin-menu-additions"
 
 /* typedefs & structures */
-typedef struct {
-	GncPlugin gnc_plugin;
+typedef struct
+{
+    GncPlugin gnc_plugin;
 } GncPluginMenuAdditions;
 
-typedef struct {
-	GncPluginClass gnc_plugin;
+typedef struct
+{
+    GncPluginClass gnc_plugin;
 } GncPluginMenuAdditionsClass;
 
 /* function prototypes */

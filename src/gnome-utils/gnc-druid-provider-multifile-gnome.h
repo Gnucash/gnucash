@@ -14,9 +14,9 @@
 #  include <stddef.h> /* for size_t */
 typedef struct
 {
-  size_t gl_pathc;    /* Count of paths matched so far  */
-  char **gl_pathv;    /* List of matched pathnames.  */
-  size_t gl_offs;     /* Slots to reserve in `gl_pathv'.  */
+    size_t gl_pathc;    /* Count of paths matched so far  */
+    char **gl_pathv;    /* List of matched pathnames.  */
+    size_t gl_offs;     /* Slots to reserve in `gl_pathv'.  */
 } glob_t;
 # endif
 #endif
@@ -38,18 +38,18 @@ typedef struct _GNCDruidProviderMultifileGnomeClass GNCDruidProviderMultifileGno
 
 struct _GNCDruidProviderMultifileGnome
 {
-  GNCDruidProvider parent;
+    GNCDruidProvider parent;
 
-  GnomeDruidPage*	page;
-  GtkWidget*		file_view;
+    GnomeDruidPage*	page;
+    GtkWidget*		file_view;
 
-  GNCDruidCB*		cb;
-  gpointer		selected_file;
+    GNCDruidCB*		cb;
+    gpointer		selected_file;
 };
 
 struct _GNCDruidProviderMultifileGnomeClass
 {
-  GNCDruidProviderClass parent_class;
+    GNCDruidProviderClass parent_class;
 };
 
 GType	gnc_druid_provider_multifile_gnome_get_type(void);

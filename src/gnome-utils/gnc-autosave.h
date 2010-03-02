@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-autosave.h -- Functions related to the auto-save feature.
  *
  * Copyright (C) 2007 Christian Stimming <stimming@tuhh.de>

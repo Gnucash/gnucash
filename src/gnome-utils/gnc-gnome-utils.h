@@ -29,7 +29,7 @@
 /** @file gnc-gnome-utils.h
     @brief Gnome specific utility functions.
     @author Copyright (C) 2001 Linux Developers Group
-    @author Copyright (C) 2003 David Hampton <hampton@employees.org>    
+    @author Copyright (C) 2003 David Hampton <hampton@employees.org>
 */
 
 #ifndef GNC_GNOME_UTILS_H
@@ -109,7 +109,7 @@ char *gnc_gnome_locate_file (GnomeFileDomain domain, const char *name);
  *  be found.
  */
 void gnc_gnome_help (const char *file_name,
-		     const char *anchor);
+                     const char *anchor);
 
 
 /** Given a file name, find and load the requested pixmap.  This

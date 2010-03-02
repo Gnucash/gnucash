@@ -20,7 +20,7 @@
  * Free Software Foundation           Voice:  +1-617-542-5942
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
- */ 
+ */
 
 #include "config.h"
 
@@ -77,23 +77,23 @@ static QofLogModule log_module = GNC_MOD_GUI;
  */
 static void
 gnc_new_tip_number (GtkWidget *widget,
-		    gint offset)
+                    gint offset)
 {
-  GtkWidget *textview;
+    GtkWidget *textview;
 
-  ENTER("widget %p, offset %d", widget, offset);
-  current_tip_number += offset;
-  DEBUG("clamp %d to '0 <= x < %d'", current_tip_number, tip_count);
-  if (current_tip_number < 0)
-    current_tip_number = tip_count - 1;
-  if (current_tip_number >= tip_count)
-    current_tip_number = 0;
-  gnc_gconf_set_int(GCONF_SECTION, KEY_CURRENT_TIP, current_tip_number, NULL);
+    ENTER("widget %p, offset %d", widget, offset);
+    current_tip_number += offset;
+    DEBUG("clamp %d to '0 <= x < %d'", current_tip_number, tip_count);
+    if (current_tip_number < 0)
+        current_tip_number = tip_count - 1;
+    if (current_tip_number >= tip_count)
+        current_tip_number = 0;
+    gnc_gconf_set_int(GCONF_SECTION, KEY_CURRENT_TIP, current_tip_number, NULL);
 
-  textview = gnc_glade_lookup_widget(widget, "tip_textview");
-  gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)),
-			   _(tip_list[current_tip_number]), -1);
-  LEAVE("");
+    textview = gnc_glade_lookup_widget(widget, "tip_textview");
+    gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)),
+                             _(tip_list[current_tip_number]), -1);
+    LEAVE("");
 }
 
 
@@ -102,39 +102,40 @@ gnc_new_tip_number (GtkWidget *widget,
 /********************/
 
 void gnc_totd_dialog_response (GtkDialog *dialog,
-			       gint       response,
-			       gpointer   user_data)
+                               gint       response,
+                               gpointer   user_data)
 {
-  ENTER("dialog %p, response %d, user_data %p", dialog, response, user_data);
-  switch (response) {
+    ENTER("dialog %p, response %d, user_data %p", dialog, response, user_data);
+    switch (response)
+    {
     case GNC_RESPONSE_FORWARD:
-      gnc_new_tip_number(GTK_WIDGET(dialog), 1);
-      break;
+        gnc_new_tip_number(GTK_WIDGET(dialog), 1);
+        break;
 
     case GNC_RESPONSE_BACK:
-      gnc_new_tip_number(GTK_WIDGET(dialog), -1);
-      break;
+        gnc_new_tip_number(GTK_WIDGET(dialog), -1);
+        break;
 
     case GTK_RESPONSE_CLOSE:
-      gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
-      /* fall through */
+        gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+        /* fall through */
 
     default:
-      gnc_unregister_gui_component_by_data(DIALOG_TOTD_CM_CLASS, dialog);
-      gtk_widget_destroy(GTK_WIDGET(dialog));
-      break;
-  }
-  LEAVE("");
+        gnc_unregister_gui_component_by_data(DIALOG_TOTD_CM_CLASS, dialog);
+        gtk_widget_destroy(GTK_WIDGET(dialog));
+        break;
+    }
+    LEAVE("");
 }
 
 void
 gnc_totd_dialog_startup_toggled (GtkToggleButton *button,
-				 gpointer user_data)
+                                 gpointer user_data)
 {
-  gboolean active;
+    gboolean active;
 
-  active = gtk_toggle_button_get_active(button);
-  gnc_gconf_set_bool(GCONF_SECTION, KEY_SHOW_TIPS, active, NULL);
+    active = gtk_toggle_button_get_active(button);
+    gnc_gconf_set_bool(GCONF_SECTION, KEY_SHOW_TIPS, active, NULL);
 }
 
 /********************/
@@ -144,56 +145,62 @@ gnc_totd_dialog_startup_toggled (GtkToggleButton *button,
 static gboolean
 gnc_totd_initialize (void)
 {
-  gchar *filename, *contents, *new, *found;
-  gsize length;
-  GError *error;
+    gchar *filename, *contents, *new, *found;
+    gsize length;
+    GError *error;
 
-  /* Find the file */
-  filename = gnc_gnome_locate_data_file("tip_of_the_day.list");
-  if (!filename)
-    return FALSE;
+    /* Find the file */
+    filename = gnc_gnome_locate_data_file("tip_of_the_day.list");
+    if (!filename)
+        return FALSE;
 
-  /* Read it */
-  if (!g_file_get_contents(filename, &contents, &length, &error)) {
-    printf("Unable to read file: %s\n", error->message);
-    g_error_free(error);
-    g_free(filename);
-    return FALSE;
-  }
-
-  /* Replace maximal substrings of more than two newlines by \n\n,
-   * remove leading and trailing \n\n */
-  while ((found = strstr(contents, "\n\n\n")) != NULL) {
-    *found++ = '\0';
-    while (*found == '\n') found++;
-    if (*contents && *found) {
-      /* put \n\n between the two nonempty parts */
-      new = g_strdup_printf("%s\n\n%s", contents, found);
-      g_free(contents);
-      contents = new;
-    } else if (*found) {
-      /* remove leading newlines */
-      new = g_strdup(found);
-      g_free(contents);
-      contents = new;
+    /* Read it */
+    if (!g_file_get_contents(filename, &contents, &length, &error))
+    {
+        printf("Unable to read file: %s\n", error->message);
+        g_error_free(error);
+        g_free(filename);
+        return FALSE;
     }
-  }
 
-  /* Split into multiple strings */
-  tip_list = g_strsplit(contents, "\n\n", 0);
+    /* Replace maximal substrings of more than two newlines by \n\n,
+     * remove leading and trailing \n\n */
+    while ((found = strstr(contents, "\n\n\n")) != NULL)
+    {
+        *found++ = '\0';
+        while (*found == '\n') found++;
+        if (*contents && *found)
+        {
+            /* put \n\n between the two nonempty parts */
+            new = g_strdup_printf("%s\n\n%s", contents, found);
+            g_free(contents);
+            contents = new;
+        }
+        else if (*found)
+        {
+            /* remove leading newlines */
+            new = g_strdup(found);
+            g_free(contents);
+            contents = new;
+        }
+    }
 
-  /* Convert any escaped characters while counting the strings */
-  for (tip_count = 0; tip_list[tip_count] != NULL; tip_count++) {
+    /* Split into multiple strings */
+    tip_list = g_strsplit(contents, "\n\n", 0);
 
-    g_strstrip(tip_list[tip_count]);
-    new = g_strcompress(g_strdelimit(tip_list[tip_count], "\n", ' '));
-    g_free(tip_list[tip_count]);
-    tip_list[tip_count] = new;
-  }
+    /* Convert any escaped characters while counting the strings */
+    for (tip_count = 0; tip_list[tip_count] != NULL; tip_count++)
+    {
 
-  g_free(contents);
-  g_free(filename);
-  return TRUE;
+        g_strstrip(tip_list[tip_count]);
+        new = g_strcompress(g_strdelimit(tip_list[tip_count], "\n", ' '));
+        g_free(tip_list[tip_count]);
+        tip_list[tip_count] = new;
+    }
+
+    g_free(contents);
+    g_free(filename);
+    return TRUE;
 }
 
 /** Raise the totd dialog to the top of the window stack.  This
@@ -212,15 +219,15 @@ gnc_totd_initialize (void)
  */
 static gboolean
 show_handler (const char *class, gint component_id,
-	      gpointer user_data, gpointer iter_data)
+              gpointer user_data, gpointer iter_data)
 {
-  GtkWidget *dialog;
+    GtkWidget *dialog;
 
-  ENTER(" ");
-  dialog = GTK_WIDGET(user_data);
-  gtk_window_present(GTK_WINDOW(dialog));
-  LEAVE(" ");
-  return(TRUE);
+    ENTER(" ");
+    dialog = GTK_WIDGET(user_data);
+    gtk_window_present(GTK_WINDOW(dialog));
+    LEAVE(" ");
+    return(TRUE);
 }
 
 /** Close the totd dialog.
@@ -232,13 +239,13 @@ show_handler (const char *class, gint component_id,
 static void
 close_handler (gpointer user_data)
 {
-  GtkWidget *dialog;
+    GtkWidget *dialog;
 
-  ENTER(" ");
-  dialog = GTK_WIDGET(user_data);
-  gnc_unregister_gui_component_by_data(DIALOG_TOTD_CM_CLASS, dialog);
-  gtk_widget_destroy(dialog);
-  LEAVE(" ");
+    ENTER(" ");
+    dialog = GTK_WIDGET(user_data);
+    gnc_unregister_gui_component_by_data(DIALOG_TOTD_CM_CLASS, dialog);
+    gtk_widget_destroy(dialog);
+    LEAVE(" ");
 }
 
 
@@ -249,38 +256,40 @@ close_handler (gpointer user_data)
 void
 gnc_totd_dialog (GtkWindow *parent, gboolean startup)
 {
-  GladeXML *xml;
-  GtkWidget *dialog, *button;
-  gboolean show_tips;
+    GladeXML *xml;
+    GtkWidget *dialog, *button;
+    gboolean show_tips;
 
-  show_tips = gnc_gconf_get_bool(GCONF_SECTION, KEY_SHOW_TIPS, NULL);
-  if (startup && !show_tips)
-    return;
+    show_tips = gnc_gconf_get_bool(GCONF_SECTION, KEY_SHOW_TIPS, NULL);
+    if (startup && !show_tips)
+        return;
 
-  if (tip_count == -1) {
-    if (!gnc_totd_initialize())
-      return;
-    current_tip_number =  gnc_gconf_get_int(GCONF_SECTION, KEY_CURRENT_TIP, NULL);
-  }
+    if (tip_count == -1)
+    {
+        if (!gnc_totd_initialize())
+            return;
+        current_tip_number =  gnc_gconf_get_int(GCONF_SECTION, KEY_CURRENT_TIP, NULL);
+    }
 
-  if (gnc_forall_gui_components(DIALOG_TOTD_CM_CLASS, show_handler, NULL)) {
-    return;
-  }
+    if (gnc_forall_gui_components(DIALOG_TOTD_CM_CLASS, show_handler, NULL))
+    {
+        return;
+    }
 
-  xml = gnc_glade_xml_new ("totd.glade", "totd_dialog");
-  dialog  = glade_xml_get_widget (xml, "totd_dialog");
-  gtk_window_set_transient_for(GTK_WINDOW (dialog), parent);
-  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
-				    dialog);
+    xml = gnc_glade_xml_new ("totd.glade", "totd_dialog");
+    dialog  = glade_xml_get_widget (xml, "totd_dialog");
+    gtk_window_set_transient_for(GTK_WINDOW (dialog), parent);
+    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
+                                      dialog);
 
-  gnc_new_tip_number(dialog, 1);
+    gnc_new_tip_number(dialog, 1);
 
-  button = glade_xml_get_widget(xml, "show_checkbutton");
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (button), show_tips);
+    button = glade_xml_get_widget(xml, "show_checkbutton");
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (button), show_tips);
 
-  gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
-  gtk_widget_show(GTK_WIDGET (dialog));
+    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+    gtk_widget_show(GTK_WIDGET (dialog));
 
-  gnc_register_gui_component(DIALOG_TOTD_CM_CLASS,
-			     NULL, close_handler, dialog);
+    gnc_register_gui_component(DIALOG_TOTD_CM_CLASS,
+                               NULL, close_handler, dialog);
 }

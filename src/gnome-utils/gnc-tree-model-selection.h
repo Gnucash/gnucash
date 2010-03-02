@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-tree-model-selection.h -- GtkTreeModel which supports a
  *	selectable column.
  *
@@ -51,13 +51,15 @@ G_BEGIN_DECLS
 #define GNC_TREE_MODEL_SELECTION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_MODEL_SELECTION, GncTreeModelSelectionClass))
 
 /* typedefs & structures */
-typedef struct {
-	GObject gobject;
-	int stamp;
+typedef struct
+{
+    GObject gobject;
+    int stamp;
 } GncTreeModelSelection;
 
-typedef struct {
-	GObjectClass gobject;
+typedef struct
+{
+    GObjectClass gobject;
 } GncTreeModelSelectionClass;
 
 /* function prototypes */
@@ -67,21 +69,21 @@ GtkTreeModel      *gnc_tree_model_selection_new                        (GtkTreeM
 
 GtkTreeModel      *gnc_tree_model_selection_get_model                  (GncTreeModelSelection *model);
 void               gnc_tree_model_selection_convert_child_iter_to_iter (GncTreeModelSelection *model,
-                                                                        GtkTreeIter *selection_iter,
-									GtkTreeIter *child_iter);
+        GtkTreeIter *selection_iter,
+        GtkTreeIter *child_iter);
 void               gnc_tree_model_selection_convert_iter_to_child_iter (GncTreeModelSelection *model,
-                                                                        GtkTreeIter *child_iter,
- 									GtkTreeIter *selection_iter);
+        GtkTreeIter *child_iter,
+        GtkTreeIter *selection_iter);
 
 gint               gnc_tree_model_selection_get_selection_column       (GncTreeModelSelection *model);
 GtkTreeViewColumn *gnc_tree_model_selection_create_tree_view_column    (GncTreeModelSelection *model,
-									const gchar *title);
+        const gchar *title);
 
 gboolean           gnc_tree_model_selection_is_selected                (GncTreeModelSelection *model,
-                                                                        GtkTreeIter *iter);
+        GtkTreeIter *iter);
 void               gnc_tree_model_selection_set_selected               (GncTreeModelSelection *model,
-                                                                        GtkTreeIter *iter,
-									gboolean selected);
+        GtkTreeIter *iter,
+        gboolean selected);
 
 G_END_DECLS
 

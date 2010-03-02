@@ -48,11 +48,11 @@
 
 enum
 {
-  VALUE_CHANGED,
-  UNITS_CHANGED,
-  POLARITY_CHANGED,
-  DELTA_CHANGED,
-  LAST_SIGNAL
+    VALUE_CHANGED,
+    UNITS_CHANGED,
+    POLARITY_CHANGED,
+    DELTA_CHANGED,
+    LAST_SIGNAL
 };
 
 static guint date_delta_signals [LAST_SIGNAL] = { 0 };
@@ -75,206 +75,208 @@ static GtkHBoxClass *parent_class;
 GType
 gnc_date_delta_get_type (void)
 {
-  static GType date_delta_type = 0;
-	
-  if (date_delta_type == 0) {
-    GTypeInfo date_delta_info = {
-      sizeof (GNCDateDeltaClass),
-      NULL,
-      NULL,
-      (GClassInitFunc) gnc_date_delta_class_init,
-      NULL,
-      NULL,
-      sizeof (GNCDateDelta),
-      0,
-      (GInstanceInitFunc) gnc_date_delta_init
-    };
-    
-    date_delta_type = g_type_register_static (gtk_hbox_get_type (),
-					      "GNCDateDelta",
-					      &date_delta_info,
-					      0);
-  }
-	
-  return date_delta_type;
+    static GType date_delta_type = 0;
+
+    if (date_delta_type == 0)
+    {
+        GTypeInfo date_delta_info =
+        {
+            sizeof (GNCDateDeltaClass),
+            NULL,
+            NULL,
+            (GClassInitFunc) gnc_date_delta_class_init,
+            NULL,
+            NULL,
+            sizeof (GNCDateDelta),
+            0,
+            (GInstanceInitFunc) gnc_date_delta_init
+        };
+
+        date_delta_type = g_type_register_static (gtk_hbox_get_type (),
+                          "GNCDateDelta",
+                          &date_delta_info,
+                          0);
+    }
+
+    return date_delta_type;
 }
 
 static void
 gnc_date_delta_class_init (GNCDateDeltaClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
+    parent_class = g_type_class_peek_parent (klass);
 
-  date_delta_signals [VALUE_CHANGED] =
-    g_signal_new ("value_changed",
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GNCDateDeltaClass, value_changed),
-		  NULL,
-		  NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE,
-		  0);
+    date_delta_signals [VALUE_CHANGED] =
+        g_signal_new ("value_changed",
+                      G_OBJECT_CLASS_TYPE (object_class),
+                      G_SIGNAL_RUN_FIRST,
+                      G_STRUCT_OFFSET (GNCDateDeltaClass, value_changed),
+                      NULL,
+                      NULL,
+                      g_cclosure_marshal_VOID__VOID,
+                      G_TYPE_NONE,
+                      0);
 
-  date_delta_signals [UNITS_CHANGED] =
-    g_signal_new ("units_changed",
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GNCDateDeltaClass, units_changed),
-		  NULL,
-		  NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE,
-		  0);
+    date_delta_signals [UNITS_CHANGED] =
+        g_signal_new ("units_changed",
+                      G_OBJECT_CLASS_TYPE (object_class),
+                      G_SIGNAL_RUN_FIRST,
+                      G_STRUCT_OFFSET (GNCDateDeltaClass, units_changed),
+                      NULL,
+                      NULL,
+                      g_cclosure_marshal_VOID__VOID,
+                      G_TYPE_NONE,
+                      0);
 
-  date_delta_signals [POLARITY_CHANGED] =
-    g_signal_new ("polarity_changed",
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GNCDateDeltaClass, polarity_changed),
-		  NULL,
-		  NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE,
-		  0);
-               
-  date_delta_signals [DELTA_CHANGED] =
-    g_signal_new ("delta_changed",
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GNCDateDeltaClass, delta_changed),
-		  NULL,
-		  NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE,
-		  0);
+    date_delta_signals [POLARITY_CHANGED] =
+        g_signal_new ("polarity_changed",
+                      G_OBJECT_CLASS_TYPE (object_class),
+                      G_SIGNAL_RUN_FIRST,
+                      G_STRUCT_OFFSET (GNCDateDeltaClass, polarity_changed),
+                      NULL,
+                      NULL,
+                      g_cclosure_marshal_VOID__VOID,
+                      G_TYPE_NONE,
+                      0);
 
-  container_class->forall = gnc_date_delta_forall;
+    date_delta_signals [DELTA_CHANGED] =
+        g_signal_new ("delta_changed",
+                      G_OBJECT_CLASS_TYPE (object_class),
+                      G_SIGNAL_RUN_FIRST,
+                      G_STRUCT_OFFSET (GNCDateDeltaClass, delta_changed),
+                      NULL,
+                      NULL,
+                      g_cclosure_marshal_VOID__VOID,
+                      G_TYPE_NONE,
+                      0);
+
+    container_class->forall = gnc_date_delta_forall;
 }
 
 static void
 gnc_date_delta_init (GNCDateDelta *gdd)
 {
-  gdd->value_spin = NULL;
-  gdd->units_combo = NULL;
-  gdd->polarity_combo = NULL;
+    gdd->value_spin = NULL;
+    gdd->units_combo = NULL;
+    gdd->polarity_combo = NULL;
 
-  gdd->units = 0;
-  gdd->polarity = 0;
+    gdd->units = 0;
+    gdd->polarity = 0;
 
-  gdd->show_polarity = FALSE;
+    gdd->show_polarity = FALSE;
 }
 
 static void
 gnc_date_delta_forall (GtkContainer *container, gboolean include_internals,
                        GtkCallback callback, gpointer callback_data)
 {
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GNC_IS_DATE_DELTA (container));
-  g_return_if_fail (callback != NULL);
+    g_return_if_fail (container != NULL);
+    g_return_if_fail (GNC_IS_DATE_DELTA (container));
+    g_return_if_fail (callback != NULL);
 
-  /* Let GtkBox handle things only if the internal widgets need to be
-   * poked.
-   */
-  if (include_internals)
-    if (GTK_CONTAINER_CLASS (parent_class)->forall)
-      (* GTK_CONTAINER_CLASS (parent_class)->forall)
-        (container, include_internals, callback, callback_data);
+    /* Let GtkBox handle things only if the internal widgets need to be
+     * poked.
+     */
+    if (include_internals)
+        if (GTK_CONTAINER_CLASS (parent_class)->forall)
+            (* GTK_CONTAINER_CLASS (parent_class)->forall)
+            (container, include_internals, callback, callback_data);
 }
 
 static void
 value_changed(GtkEditable *editable, gpointer data)
 {
-  GNCDateDelta *gdd = GNC_DATE_DELTA(data);
+    GNCDateDelta *gdd = GNC_DATE_DELTA(data);
 
-  g_signal_emit(gdd, date_delta_signals [VALUE_CHANGED], 0);
-  g_signal_emit(gdd, date_delta_signals [DELTA_CHANGED], 0);
+    g_signal_emit(gdd, date_delta_signals [VALUE_CHANGED], 0);
+    g_signal_emit(gdd, date_delta_signals [DELTA_CHANGED], 0);
 }
 
 static void
 set_units (GtkComboBox *combo, GNCDateDelta *gdd)
 {
-  gint active;
+    gint active;
 
-  active = gtk_combo_box_get_active(GTK_COMBO_BOX(gdd->units_combo));
-  if ((active < GNC_DATE_DELTA_DAYS) || (active > GNC_DATE_DELTA_YEARS))
-    active = GNC_DATE_DELTA_DAYS;
-  gdd->units = active;
+    active = gtk_combo_box_get_active(GTK_COMBO_BOX(gdd->units_combo));
+    if ((active < GNC_DATE_DELTA_DAYS) || (active > GNC_DATE_DELTA_YEARS))
+        active = GNC_DATE_DELTA_DAYS;
+    gdd->units = active;
 
-  g_signal_emit (gdd, date_delta_signals [UNITS_CHANGED], 0);
-  g_signal_emit (gdd, date_delta_signals [DELTA_CHANGED], 0);
+    g_signal_emit (gdd, date_delta_signals [UNITS_CHANGED], 0);
+    g_signal_emit (gdd, date_delta_signals [DELTA_CHANGED], 0);
 }
 
 static void
 fill_units_combo(GNCDateDelta *gdd)
 {
-  gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
-			    _("Days"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
-			    _("Weeks"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
-			    _("Months"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
-			    _("Years"));
+    gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
+                              _("Days"));
+    gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
+                              _("Weeks"));
+    gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
+                              _("Months"));
+    gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
+                              _("Years"));
 
-  g_signal_connect (gdd->units_combo, "changed",
-		    G_CALLBACK (set_units), gdd);
+    g_signal_connect (gdd->units_combo, "changed",
+                      G_CALLBACK (set_units), gdd);
 }
 
 static void
 set_polarity (GtkComboBox *combo, GNCDateDelta *gdd)
 {
-  gint active;
+    gint active;
 
-  active = gtk_combo_box_get_active(GTK_COMBO_BOX(gdd->units_combo));
-  if ((active < GNC_DATE_DELTA_PAST) || (active > GNC_DATE_DELTA_FUTURE))
-    active = GNC_DATE_DELTA_PAST;
-  gdd->polarity = active;
+    active = gtk_combo_box_get_active(GTK_COMBO_BOX(gdd->units_combo));
+    if ((active < GNC_DATE_DELTA_PAST) || (active > GNC_DATE_DELTA_FUTURE))
+        active = GNC_DATE_DELTA_PAST;
+    gdd->polarity = active;
 
-  g_signal_emit (gdd, date_delta_signals [POLARITY_CHANGED], 0);
-  g_signal_emit (gdd, date_delta_signals [DELTA_CHANGED], 0);
+    g_signal_emit (gdd, date_delta_signals [POLARITY_CHANGED], 0);
+    g_signal_emit (gdd, date_delta_signals [DELTA_CHANGED], 0);
 }
 
 static void
 fill_polarity_combo(GNCDateDelta *gdd)
 {
-  gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->polarity_combo),
-			    _("Ago"));
-  gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->polarity_combo),
-			    _("From Now"));
+    gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->polarity_combo),
+                              _("Ago"));
+    gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->polarity_combo),
+                              _("From Now"));
 
-  g_signal_connect (gdd->polarity_combo, "changed",
-		    G_CALLBACK(set_polarity), gdd);
+    g_signal_connect (gdd->polarity_combo, "changed",
+                      G_CALLBACK(set_polarity), gdd);
 }
 
 static void
 create_children (GNCDateDelta *gdd)
 {
-  GtkObject *adj;
+    GtkObject *adj;
 
-  adj = gtk_adjustment_new(1.0, 1.0, 1000.0, 1.0, 5.0, 5.0);
-  gdd->value_spin = gtk_spin_button_new(GTK_ADJUSTMENT(adj), 1.0, 0);
-  gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(gdd->value_spin), TRUE);
-  gtk_box_pack_start(GTK_BOX(gdd), gdd->value_spin, FALSE, FALSE, 0);
-  gtk_widget_show(gdd->value_spin);
+    adj = gtk_adjustment_new(1.0, 1.0, 1000.0, 1.0, 5.0, 5.0);
+    gdd->value_spin = gtk_spin_button_new(GTK_ADJUSTMENT(adj), 1.0, 0);
+    gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(gdd->value_spin), TRUE);
+    gtk_box_pack_start(GTK_BOX(gdd), gdd->value_spin, FALSE, FALSE, 0);
+    gtk_widget_show(gdd->value_spin);
 
-  g_signal_connect(gdd->value_spin, "changed",
-		   G_CALLBACK(value_changed), gdd);
+    g_signal_connect(gdd->value_spin, "changed",
+                     G_CALLBACK(value_changed), gdd);
 
-  gdd->units_combo = gtk_combo_box_new_text();
-  fill_units_combo(gdd);
-  gtk_combo_box_set_active(GTK_COMBO_BOX(gdd->units_combo), 0);
-  gtk_box_pack_start(GTK_BOX(gdd), gdd->units_combo, FALSE, FALSE, 0);
-  gtk_widget_show(gdd->units_combo);
+    gdd->units_combo = gtk_combo_box_new_text();
+    fill_units_combo(gdd);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gdd->units_combo), 0);
+    gtk_box_pack_start(GTK_BOX(gdd), gdd->units_combo, FALSE, FALSE, 0);
+    gtk_widget_show(gdd->units_combo);
 
-  gdd->polarity_combo = gtk_combo_box_new_text();
-  fill_polarity_combo(gdd);
-  gtk_combo_box_set_active(GTK_COMBO_BOX(gdd->polarity_combo), 0);
-  gtk_box_pack_start(GTK_BOX(gdd), gdd->polarity_combo, FALSE, FALSE, 0);
-  if (gdd->show_polarity)
-    gtk_widget_show(gdd->polarity_combo);
+    gdd->polarity_combo = gtk_combo_box_new_text();
+    fill_polarity_combo(gdd);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gdd->polarity_combo), 0);
+    gtk_box_pack_start(GTK_BOX(gdd), gdd->polarity_combo, FALSE, FALSE, 0);
+    if (gdd->show_polarity)
+        gtk_widget_show(gdd->polarity_combo);
 }
 
 /**
@@ -284,21 +286,21 @@ create_children (GNCDateDelta *gdd)
  * Creates a new GNCDateDelta widget which can be used to provide
  * an easy to use way for entering time deltas in terms of 7 days,
  * 5 weeks, 2 months, etc.
- * 
+ *
  * Returns a GNCDateDelta widget.
  */
 GtkWidget *
 gnc_date_delta_new (gboolean show_polarity)
 {
-  GNCDateDelta *gdd;
+    GNCDateDelta *gdd;
 
-  gdd = g_object_new (gnc_date_delta_get_type (), NULL);
+    gdd = g_object_new (gnc_date_delta_get_type (), NULL);
 
-  gdd->show_polarity = show_polarity;
+    gdd->show_polarity = show_polarity;
 
-  create_children (gdd);
+    create_children (gdd);
 
-  return GTK_WIDGET (gdd);
+    return GTK_WIDGET (gdd);
 }
 
 /**
@@ -311,10 +313,10 @@ gnc_date_delta_new (gboolean show_polarity)
 void
 gnc_date_delta_set_value (GNCDateDelta *gdd, int value)
 {
-  g_return_if_fail(gdd != NULL);
-  g_return_if_fail(GNC_IS_DATE_DELTA(gdd));
+    g_return_if_fail(gdd != NULL);
+    g_return_if_fail(GNC_IS_DATE_DELTA(gdd));
 
-  gtk_spin_button_set_value(GTK_SPIN_BUTTON(gdd->value_spin), value);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(gdd->value_spin), value);
 }
 
 /**
@@ -326,10 +328,10 @@ gnc_date_delta_set_value (GNCDateDelta *gdd, int value)
 int
 gnc_date_delta_get_value (GNCDateDelta *gdd)
 {
-  g_return_val_if_fail(gdd != NULL, 0);
-  g_return_val_if_fail(GNC_IS_DATE_DELTA(gdd), 0);
+    g_return_val_if_fail(gdd != NULL, 0);
+    g_return_val_if_fail(GNC_IS_DATE_DELTA(gdd), 0);
 
-  return gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(gdd->value_spin));
+    return gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(gdd->value_spin));
 }
 
 /**
@@ -342,13 +344,13 @@ gnc_date_delta_get_value (GNCDateDelta *gdd)
 void
 gnc_date_delta_set_units (GNCDateDelta *gdd, GNCDateDeltaUnits units)
 {
-  g_return_if_fail(gdd != NULL);
-  g_return_if_fail(GNC_IS_DATE_DELTA(gdd));
-  g_return_if_fail((units >= 0) && (units < GNC_DATE_DELTA_NUM_UNITS));
+    g_return_if_fail(gdd != NULL);
+    g_return_if_fail(GNC_IS_DATE_DELTA(gdd));
+    g_return_if_fail((units >= 0) && (units < GNC_DATE_DELTA_NUM_UNITS));
 
-  gdd->units = units;
+    gdd->units = units;
 
-  gtk_combo_box_set_active(GTK_COMBO_BOX(gdd->units_combo), units);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gdd->units_combo), units);
 }
 
 /**
@@ -360,10 +362,10 @@ gnc_date_delta_set_units (GNCDateDelta *gdd, GNCDateDeltaUnits units)
 GNCDateDeltaUnits
 gnc_date_delta_get_units (GNCDateDelta *gdd)
 {
-  g_return_val_if_fail(gdd != NULL, GNC_DATE_DELTA_DAYS);
-  g_return_val_if_fail(GNC_IS_DATE_DELTA(gdd), GNC_DATE_DELTA_DAYS);
+    g_return_val_if_fail(gdd != NULL, GNC_DATE_DELTA_DAYS);
+    g_return_val_if_fail(GNC_IS_DATE_DELTA(gdd), GNC_DATE_DELTA_DAYS);
 
-  return gdd->units;
+    return gdd->units;
 }
 
 /**
@@ -376,14 +378,14 @@ gnc_date_delta_get_units (GNCDateDelta *gdd)
 void
 gnc_date_delta_set_polarity (GNCDateDelta *gdd, GNCDateDeltaPolarity polarity)
 {
-  g_return_if_fail(gdd != NULL);
-  g_return_if_fail(GNC_IS_DATE_DELTA(gdd));
-  g_return_if_fail((polarity >= 0) &&
-                   (polarity < GNC_DATE_DELTA_NUM_POLARITY));
+    g_return_if_fail(gdd != NULL);
+    g_return_if_fail(GNC_IS_DATE_DELTA(gdd));
+    g_return_if_fail((polarity >= 0) &&
+                     (polarity < GNC_DATE_DELTA_NUM_POLARITY));
 
-  gdd->polarity = polarity;
+    gdd->polarity = polarity;
 
-  gtk_combo_box_set_active(GTK_COMBO_BOX(gdd->polarity_combo), polarity);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gdd->polarity_combo), polarity);
 }
 
 /**
@@ -395,10 +397,10 @@ gnc_date_delta_set_polarity (GNCDateDelta *gdd, GNCDateDeltaPolarity polarity)
 GNCDateDeltaPolarity
 gnc_date_delta_get_polarity (GNCDateDelta *gdd)
 {
-  g_return_val_if_fail(gdd != NULL, GNC_DATE_DELTA_PAST);
-  g_return_val_if_fail(GNC_IS_DATE_DELTA(gdd), GNC_DATE_DELTA_PAST);
+    g_return_val_if_fail(gdd != NULL, GNC_DATE_DELTA_PAST);
+    g_return_val_if_fail(GNC_IS_DATE_DELTA(gdd), GNC_DATE_DELTA_PAST);
 
-  return gdd->polarity;
+    return gdd->polarity;
 }
 
 /**
@@ -411,13 +413,13 @@ gnc_date_delta_get_polarity (GNCDateDelta *gdd)
 void
 gnc_date_delta_show_polarity (GNCDateDelta *gdd, gboolean show_polarity)
 {
-  g_return_if_fail(gdd != NULL);
-  g_return_if_fail(GNC_IS_DATE_DELTA(gdd));
+    g_return_if_fail(gdd != NULL);
+    g_return_if_fail(GNC_IS_DATE_DELTA(gdd));
 
-  gdd->show_polarity = show_polarity;
+    gdd->show_polarity = show_polarity;
 
-  if (show_polarity)
-    gtk_widget_show(gdd->polarity_combo);
-  else
-    gtk_widget_hide(gdd->polarity_combo);
+    if (show_polarity)
+        gtk_widget_show(gdd->polarity_combo);
+    else
+        gtk_widget_hide(gdd->polarity_combo);
 }

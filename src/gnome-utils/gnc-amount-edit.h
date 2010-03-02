@@ -27,7 +27,7 @@
  */
 
 #ifndef GNC_AMOUNT_EDIT_H
-#define GNC_AMOUNT_EDIT_H 
+#define GNC_AMOUNT_EDIT_H
 
 #include "qof.h"
 #include "gnc-ui-util.h"
@@ -39,26 +39,26 @@
 
 typedef struct
 {
-  GtkEntry entry;
+    GtkEntry entry;
 
-  gboolean need_to_parse;
+    gboolean need_to_parse;
 
-  GNCPrintAmountInfo print_info;
+    GNCPrintAmountInfo print_info;
 
-  gnc_numeric amount;
+    gnc_numeric amount;
 
-  int fraction;
+    int fraction;
 
-  gboolean evaluate_on_enter;
+    gboolean evaluate_on_enter;
 
 } GNCAmountEdit;
 
 typedef struct
 {
-  GtkEntryClass parent_class;
+    GtkEntryClass parent_class;
 
-  /* Signals for notification/filtering of changes */
-  void (*amount_changed) (GNCAmountEdit *gae);
+    /* Signals for notification/filtering of changes */
+    void (*amount_changed) (GNCAmountEdit *gae);
 } GNCAmountEditClass;
 
 GType     gnc_amount_edit_get_type        (void);
@@ -68,9 +68,9 @@ GtkWidget *gnc_amount_edit_new            (void);
 GtkWidget *gnc_amount_edit_gtk_entry      (GNCAmountEdit *gae);
 
 void      gnc_amount_edit_set_amount      (GNCAmountEdit *gae,
-                                           gnc_numeric amount);
+        gnc_numeric amount);
 void      gnc_amount_edit_set_damount     (GNCAmountEdit *gae,
-                                           double amount);
+        double amount);
 
 gnc_numeric gnc_amount_edit_get_amount    (GNCAmountEdit *gae);
 double      gnc_amount_edit_get_damount   (GNCAmountEdit *gae);
@@ -78,10 +78,10 @@ double      gnc_amount_edit_get_damount   (GNCAmountEdit *gae);
 gboolean  gnc_amount_edit_evaluate        (GNCAmountEdit *gae);
 
 void      gnc_amount_edit_set_print_info  (GNCAmountEdit *gae,
-                                           GNCPrintAmountInfo print_info);
+        GNCPrintAmountInfo print_info);
 
 void      gnc_amount_edit_set_fraction    (GNCAmountEdit *gae, int fraction);
 
 void      gnc_amount_edit_set_evaluate_on_enter (GNCAmountEdit *gae,
-                                                 gboolean evaluate_on_enter);
+        gboolean evaluate_on_enter);
 #endif

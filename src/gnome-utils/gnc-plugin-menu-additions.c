@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-menu-additions.c -- 
+/*
+ * gnc-plugin-menu-additions.c --
  * Copyright (C) 2005 David Hampton hampton@employees.org>
  *
  * From:
@@ -67,7 +67,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 /** Private data for this plugin.  This data structure is unused. */
 typedef struct GncPluginMenuAdditionsPrivate
 {
-  gpointer dummy;
+    gpointer dummy;
 } GncPluginMenuAdditionsPrivate;
 
 #define GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(o)  \
@@ -78,13 +78,13 @@ typedef struct GncPluginMenuAdditionsPrivate
  *  that it manages its own menu items. */
 typedef struct _GncPluginMenuAdditionsPerWindow
 {
-  /** The menu/toolbar action information associated with a specific
-      window.  This plugin must maintain its own data because of the
-      way the menus are currently built. */
-  GncMainWindow  *window;
-  GtkUIManager   *ui_manager;
-  GtkActionGroup *group;
-  gint merge_id;
+    /** The menu/toolbar action information associated with a specific
+        window.  This plugin must maintain its own data because of the
+        way the menus are currently built. */
+    GncMainWindow  *window;
+    GtkUIManager   *ui_manager;
+    GtkActionGroup *group;
+    gint merge_id;
 } GncPluginMenuAdditionsPerWindow;
 
 /************************************************************
@@ -94,70 +94,72 @@ typedef struct _GncPluginMenuAdditionsPerWindow
 GType
 gnc_plugin_menu_additions_get_type (void)
 {
-  static GType gnc_plugin_menu_additions_type = 0;
+    static GType gnc_plugin_menu_additions_type = 0;
 
-  if (gnc_plugin_menu_additions_type == 0) {
-    static const GTypeInfo our_info = {
-      sizeof (GncPluginMenuAdditionsClass),
-      NULL,		/* base_init */
-      NULL,		/* base_finalize */
-      (GClassInitFunc) gnc_plugin_menu_additions_class_init,
-      NULL,		/* class_finalize */
-      NULL,		/* class_data */
-      sizeof (GncPluginMenuAdditions),
-      0,
-      (GInstanceInitFunc) gnc_plugin_menu_additions_init
-    };
+    if (gnc_plugin_menu_additions_type == 0)
+    {
+        static const GTypeInfo our_info =
+        {
+            sizeof (GncPluginMenuAdditionsClass),
+            NULL,		/* base_init */
+            NULL,		/* base_finalize */
+            (GClassInitFunc) gnc_plugin_menu_additions_class_init,
+            NULL,		/* class_finalize */
+            NULL,		/* class_data */
+            sizeof (GncPluginMenuAdditions),
+            0,
+            (GInstanceInitFunc) gnc_plugin_menu_additions_init
+        };
 
-    gnc_plugin_menu_additions_type = g_type_register_static (GNC_TYPE_PLUGIN,
-							 "GncPluginMenuAdditions",
-							 &our_info, 0);
-  }
+        gnc_plugin_menu_additions_type = g_type_register_static (GNC_TYPE_PLUGIN,
+                                         "GncPluginMenuAdditions",
+                                         &our_info, 0);
+    }
 
-  return gnc_plugin_menu_additions_type;
+    return gnc_plugin_menu_additions_type;
 }
 
 static void
 gnc_plugin_menu_additions_class_init (GncPluginMenuAdditionsClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
+    parent_class = g_type_class_peek_parent (klass);
 
-  object_class->finalize = gnc_plugin_menu_additions_finalize;
+    object_class->finalize = gnc_plugin_menu_additions_finalize;
 
-  /* plugin info */
-  plugin_class->plugin_name   = GNC_PLUGIN_MENU_ADDITIONS_NAME;
+    /* plugin info */
+    plugin_class->plugin_name   = GNC_PLUGIN_MENU_ADDITIONS_NAME;
 
-  /* function overrides */
-  plugin_class->add_to_window = gnc_plugin_menu_additions_add_to_window;
-  plugin_class->remove_from_window = gnc_plugin_menu_additions_remove_from_window;
+    /* function overrides */
+    plugin_class->add_to_window = gnc_plugin_menu_additions_add_to_window;
+    plugin_class->remove_from_window = gnc_plugin_menu_additions_remove_from_window;
 
-  g_type_class_add_private(klass, sizeof(GncPluginMenuAdditionsPrivate));
+    g_type_class_add_private(klass, sizeof(GncPluginMenuAdditionsPrivate));
 }
 
 static void
 gnc_plugin_menu_additions_init (GncPluginMenuAdditions *plugin)
 {
-  ENTER("plugin %p", plugin);
-  LEAVE("");
+    ENTER("plugin %p", plugin);
+    LEAVE("");
 }
 
 static void
 gnc_plugin_menu_additions_finalize (GObject *object)
 {
-  GncPluginMenuAdditions *plugin;
-  GncPluginMenuAdditionsPrivate *priv;
+    GncPluginMenuAdditions *plugin;
+    GncPluginMenuAdditionsPrivate *priv;
 
-  g_return_if_fail (GNC_IS_PLUGIN_MENU_ADDITIONS (object));
+    g_return_if_fail (GNC_IS_PLUGIN_MENU_ADDITIONS (object));
 
-  ENTER("plugin %p", object);
-  plugin = GNC_PLUGIN_MENU_ADDITIONS (object);
-  priv = GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE (plugin);
+    ENTER("plugin %p", object);
+    plugin = GNC_PLUGIN_MENU_ADDITIONS (object);
+    priv = GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE (plugin);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
-  LEAVE("");
+    G_OBJECT_CLASS (parent_class)->finalize (object);
+    LEAVE("");
 }
 
 
@@ -169,12 +171,12 @@ gnc_plugin_menu_additions_finalize (GObject *object)
 GncPlugin *
 gnc_plugin_menu_additions_new (void)
 {
-  GncPlugin *plugin_page = NULL;
+    GncPlugin *plugin_page = NULL;
 
-  ENTER("");
-  plugin_page = GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_MENU_ADDITIONS, NULL));
-  LEAVE("plugin %p", plugin_page);
-  return plugin_page;
+    ENTER("");
+    plugin_page = GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_MENU_ADDITIONS, NULL));
+    LEAVE("plugin %p", plugin_page);
+    return plugin_page;
 }
 
 /************************************************************
@@ -184,15 +186,15 @@ gnc_plugin_menu_additions_new (void)
 static SCM
 gnc_main_window_to_scm (GncMainWindow *window)
 {
-  static swig_type_info * main_window_type = NULL;
+    static swig_type_info * main_window_type = NULL;
 
-  if (!window)
-    return SCM_BOOL_F;
+    if (!window)
+        return SCM_BOOL_F;
 
-  if (!main_window_type)
-    main_window_type = SWIG_TypeQuery("_p_GncMainWindow");
+    if (!main_window_type)
+        main_window_type = SWIG_TypeQuery("_p_GncMainWindow");
 
-  return SWIG_NewPointerObj(window, main_window_type, 0);
+    return SWIG_NewPointerObj(window, main_window_type, 0);
 }
 
 
@@ -209,13 +211,13 @@ gnc_main_window_to_scm (GncMainWindow *window)
  */
 static void
 gnc_plugin_menu_additions_action_cb (GtkAction *action,
-				     GncMainWindowActionData *data)
+                                     GncMainWindowActionData *data)
 {
 
-  g_return_if_fail(GTK_IS_ACTION(action));
-  g_return_if_fail(data != NULL);
+    g_return_if_fail(GTK_IS_ACTION(action));
+    g_return_if_fail(data != NULL);
 
-  gnc_extension_invoke_cb(data->data, gnc_main_window_to_scm(data->window));
+    gnc_extension_invoke_cb(data->data, gnc_main_window_to_scm(data->window));
 }
 
 
@@ -233,14 +235,14 @@ gnc_plugin_menu_additions_action_cb (GtkAction *action,
 static gint
 gnc_menu_additions_sort (ExtensionInfo *a, ExtensionInfo *b)
 {
-  if (a->type == b->type)
-    return strcmp(a->sort_key, b->sort_key);
-  else if (a->type == GTK_UI_MANAGER_MENU)
-    return -1;
-  else if (b->type == GTK_UI_MANAGER_MENU)
-    return 1;
-  else
-    return 0;
+    if (a->type == b->type)
+        return strcmp(a->sort_key, b->sort_key);
+    else if (a->type == GTK_UI_MANAGER_MENU)
+        return -1;
+    else if (b->type == GTK_UI_MANAGER_MENU)
+        return 1;
+    else
+        return 0;
 }
 
 
@@ -252,7 +254,7 @@ gnc_menu_additions_sort (ExtensionInfo *a, ExtensionInfo *b)
 static gpointer
 gnc_menu_additions_init_accel_table (gpointer unused)
 {
-  return g_hash_table_new_full(g_str_hash, g_str_equal, NULL, g_free);
+    return g_hash_table_new_full(g_str_hash, g_str_equal, NULL, g_free);
 }
 
 
@@ -269,43 +271,46 @@ gnc_menu_additions_init_accel_table (gpointer unused)
 static void
 gnc_menu_additions_do_preassigned_accel (ExtensionInfo *info, GHashTable *table)
 {
-  gchar *map, *new_map, *accel_key;
-  const gchar *ptr;
+    gchar *map, *new_map, *accel_key;
+    const gchar *ptr;
 
-  ENTER("Checking %s/%s [%s]", info->path, info->ae.label, info->ae.name);
-  if (info->accel_assigned) {
-    LEAVE("Already processed");
-    return;
-  }
+    ENTER("Checking %s/%s [%s]", info->path, info->ae.label, info->ae.name);
+    if (info->accel_assigned)
+    {
+        LEAVE("Already processed");
+        return;
+    }
 
-  if (!g_utf8_validate(info->ae.label, -1, NULL)) {
-    g_warning("Extension menu label '%s' is not valid utf8.", info->ae.label);
+    if (!g_utf8_validate(info->ae.label, -1, NULL))
+    {
+        g_warning("Extension menu label '%s' is not valid utf8.", info->ae.label);
+        info->accel_assigned = TRUE;
+        LEAVE("Label is invalid utf8");
+        return;
+    }
+
+    /* Was an accelerator pre-assigned in the source? */
+    ptr = g_utf8_strchr(info->ae.label, -1, '_');
+    if (ptr == NULL)
+    {
+        LEAVE("not preassigned");
+        return;
+    }
+
+    accel_key = g_utf8_strdown(g_utf8_next_char(ptr), 1);
+    DEBUG("Accelerator preassigned: '%s'", accel_key);
+
+    /* Now build a new map. Old one freed automatically. */
+    map = g_hash_table_lookup(table, info->path);
+    if (map == NULL)
+        map = "";
+    new_map = g_strconcat(map, accel_key, (gchar *)NULL);
+    DEBUG("path '%s', map '%s' -> '%s'", info->path, map, new_map);
+    g_hash_table_replace(table, info->path, new_map);
+
     info->accel_assigned = TRUE;
-    LEAVE("Label is invalid utf8");
-    return;
-  }
-
-  /* Was an accelerator pre-assigned in the source? */
-  ptr = g_utf8_strchr(info->ae.label, -1, '_');
-  if (ptr == NULL) {
-    LEAVE("not preassigned");
-    return;
-  }
-
-  accel_key = g_utf8_strdown(g_utf8_next_char(ptr), 1);
-  DEBUG("Accelerator preassigned: '%s'", accel_key);
-
-  /* Now build a new map. Old one freed automatically. */
-  map = g_hash_table_lookup(table, info->path);
-  if (map == NULL)
-    map = "";
-  new_map = g_strconcat(map, accel_key, (gchar *)NULL);
-  DEBUG("path '%s', map '%s' -> '%s'", info->path, map, new_map);
-  g_hash_table_replace(table, info->path, new_map);
-
-  info->accel_assigned = TRUE;
-  g_free(accel_key);
-  LEAVE("preassigned");
+    g_free(accel_key);
+    LEAVE("preassigned");
 }
 
 
@@ -323,58 +328,61 @@ gnc_menu_additions_do_preassigned_accel (ExtensionInfo *info, GHashTable *table)
 static void
 gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
 {
-  gchar *map, *new_map, *new_label, *start, buf[16];
-  const gchar *ptr;
-  gunichar uni;
-  gint len;
+    gchar *map, *new_map, *new_label, *start, buf[16];
+    const gchar *ptr;
+    gunichar uni;
+    gint len;
 
-  ENTER("Checking %s/%s [%s]", info->path, info->ae.label, info->ae.name);
-  if (info->accel_assigned) {
-    LEAVE("Already processed");
-    return;
-  }
+    ENTER("Checking %s/%s [%s]", info->path, info->ae.label, info->ae.name);
+    if (info->accel_assigned)
+    {
+        LEAVE("Already processed");
+        return;
+    }
 
-  /* Get map of used keys */
-  map = g_hash_table_lookup(table, info->path);
-  if (map == NULL)
-    map = g_strdup("");
-  DEBUG("map '%s', path %s", map, info->path);
+    /* Get map of used keys */
+    map = g_hash_table_lookup(table, info->path);
+    if (map == NULL)
+        map = g_strdup("");
+    DEBUG("map '%s', path %s", map, info->path);
 
-  for (ptr = info->ae.label; *ptr; ptr = g_utf8_next_char(ptr)) {
-    uni = g_utf8_get_char(ptr);
-    if (!g_unichar_isalpha(uni))
-      continue;
-    uni = g_unichar_tolower(uni);
-    len = g_unichar_to_utf8(uni, buf);
-    buf[len] = '\0';
-    DEBUG("Testing character '%s'", buf);
-    if (!g_utf8_strchr(map, -1, uni))
-      break;
-  }
+    for (ptr = info->ae.label; *ptr; ptr = g_utf8_next_char(ptr))
+    {
+        uni = g_utf8_get_char(ptr);
+        if (!g_unichar_isalpha(uni))
+            continue;
+        uni = g_unichar_tolower(uni);
+        len = g_unichar_to_utf8(uni, buf);
+        buf[len] = '\0';
+        DEBUG("Testing character '%s'", buf);
+        if (!g_utf8_strchr(map, -1, uni))
+            break;
+    }
 
-  if (ptr == NULL) {
-    /* Ran out of characters. Nothing to do. */
+    if (ptr == NULL)
+    {
+        /* Ran out of characters. Nothing to do. */
+        info->accel_assigned = TRUE;
+        LEAVE("All characters already assigned");
+        return;
+    }
+
+    /* Now build a new string in the form "<start>_<end>". */
+    start = g_strndup(info->ae.label, ptr - info->ae.label);
+    DEBUG("start %p, len %ld, text '%s'", start, g_utf8_strlen(start, -1), start);
+    new_label = g_strconcat(start, "_", ptr, (gchar *)NULL);
+    g_free(start);
+    DEBUG("label '%s' -> '%s'", info->ae.label, new_label);
+    g_free((gchar *)info->ae.label);
+    info->ae.label = new_label;
+
+    /* Now build a new map. Old one freed automatically. */
+    new_map = g_strconcat(map, buf, (gchar *)NULL);
+    DEBUG("map '%s' -> '%s'", map, new_map);
+    g_hash_table_replace(table, info->path, new_map);
+
     info->accel_assigned = TRUE;
-    LEAVE("All characters already assigned");
-    return;
-  }
-
-  /* Now build a new string in the form "<start>_<end>". */
-  start = g_strndup(info->ae.label, ptr - info->ae.label);
-  DEBUG("start %p, len %ld, text '%s'", start, g_utf8_strlen(start, -1), start);
-  new_label = g_strconcat(start, "_", ptr, (gchar *)NULL);
-  g_free(start);
-  DEBUG("label '%s' -> '%s'", info->ae.label, new_label);
-  g_free((gchar *)info->ae.label);
-  info->ae.label = new_label;
-
-  /* Now build a new map. Old one freed automatically. */
-  new_map = g_strconcat(map, buf, (gchar *)NULL);
-  DEBUG("map '%s' -> '%s'", map, new_map);
-  g_hash_table_replace(table, info->path, new_map);
-
-  info->accel_assigned = TRUE;
-  LEAVE("assigned");
+    LEAVE("assigned");
 }
 
 
@@ -389,26 +397,26 @@ gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
  *  plugin. */
 static void
 gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
-				   GncPluginMenuAdditionsPerWindow *per_window)
+                                   GncPluginMenuAdditionsPerWindow *per_window)
 {
-  GncMainWindowActionData *cb_data;
+    GncMainWindowActionData *cb_data;
 
-  DEBUG( "Adding %s/%s [%s] as [%s]", ext_info->path, ext_info->ae.label,
-	 ext_info->ae.name, ext_info->typeStr );
+    DEBUG( "Adding %s/%s [%s] as [%s]", ext_info->path, ext_info->ae.label,
+           ext_info->ae.name, ext_info->typeStr );
 
-  cb_data = g_new0 (GncMainWindowActionData, 1);
-  cb_data->window = per_window->window;
-  cb_data->data = ext_info->extension;
+    cb_data = g_new0 (GncMainWindowActionData, 1);
+    cb_data->window = per_window->window;
+    cb_data->data = ext_info->extension;
 
-  if (ext_info->type == GTK_UI_MANAGER_MENUITEM)
-    ext_info->ae.callback = (GCallback)gnc_plugin_menu_additions_action_cb;
+    if (ext_info->type == GTK_UI_MANAGER_MENUITEM)
+        ext_info->ae.callback = (GCallback)gnc_plugin_menu_additions_action_cb;
 
-  gtk_action_group_add_actions_full(per_window->group, &ext_info->ae, 1,
-				    cb_data, g_free);
-  gtk_ui_manager_add_ui(per_window->ui_manager, per_window->merge_id,
-			ext_info->path, ext_info->ae.label, ext_info->ae.name,
-			ext_info->type, FALSE);
-  gtk_ui_manager_ensure_update(per_window->ui_manager);
+    gtk_action_group_add_actions_full(per_window->group, &ext_info->ae, 1,
+                                      cb_data, g_free);
+    gtk_ui_manager_add_ui(per_window->ui_manager, per_window->merge_id,
+                          ext_info->path, ext_info->ae.label, ext_info->ae.name,
+                          ext_info->type, FALSE);
+    gtk_ui_manager_ensure_update(per_window->ui_manager);
 }
 
 
@@ -426,42 +434,42 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
  */
 static void
 gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
-					 GncMainWindow *window,
-					 GQuark type)
+        GncMainWindow *window,
+        GQuark type)
 {
-  GncPluginMenuAdditionsPerWindow per_window;
-  static GOnce accel_table_init = G_ONCE_INIT;
-  static GHashTable *table;
-  GSList *menu_list;
+    GncPluginMenuAdditionsPerWindow per_window;
+    static GOnce accel_table_init = G_ONCE_INIT;
+    static GHashTable *table;
+    GSList *menu_list;
 
-  ENTER(" ");
+    ENTER(" ");
 
-  per_window.window = window;
-  per_window.ui_manager = window->ui_merge;
-  per_window.group = gtk_action_group_new ("MenuAdditions" );
-  gnc_gtk_action_group_set_translation_domain (per_window.group, GETTEXT_PACKAGE);
-  per_window.merge_id = gtk_ui_manager_new_merge_id(window->ui_merge);
-  gtk_ui_manager_insert_action_group(window->ui_merge, per_window.group, 0);
+    per_window.window = window;
+    per_window.ui_manager = window->ui_merge;
+    per_window.group = gtk_action_group_new ("MenuAdditions" );
+    gnc_gtk_action_group_set_translation_domain (per_window.group, GETTEXT_PACKAGE);
+    per_window.merge_id = gtk_ui_manager_new_merge_id(window->ui_merge);
+    gtk_ui_manager_insert_action_group(window->ui_merge, per_window.group, 0);
 
-  menu_list = g_slist_sort(gnc_extensions_get_menu_list(),
-			   (GCompareFunc)gnc_menu_additions_sort);
+    menu_list = g_slist_sort(gnc_extensions_get_menu_list(),
+                             (GCompareFunc)gnc_menu_additions_sort);
 
-  /* Assign accelerators */
-  table = g_once(&accel_table_init, gnc_menu_additions_init_accel_table, NULL);
-  g_slist_foreach(menu_list,
-		  (GFunc)gnc_menu_additions_do_preassigned_accel, table);
-  g_slist_foreach(menu_list, (GFunc)gnc_menu_additions_assign_accel, table);
+    /* Assign accelerators */
+    table = g_once(&accel_table_init, gnc_menu_additions_init_accel_table, NULL);
+    g_slist_foreach(menu_list,
+                    (GFunc)gnc_menu_additions_do_preassigned_accel, table);
+    g_slist_foreach(menu_list, (GFunc)gnc_menu_additions_assign_accel, table);
 
-  /* Add to window. */
-  g_slist_foreach(menu_list, (GFunc)gnc_menu_additions_menu_setup_one,
-		  &per_window);
+    /* Add to window. */
+    g_slist_foreach(menu_list, (GFunc)gnc_menu_additions_menu_setup_one,
+                    &per_window);
 
-  /* Tell the window code about the actions that were just added
-   * behind its back (so to speak) */
-  gnc_main_window_manual_merge_actions (window, PLUGIN_ACTIONS_NAME,
-					per_window.group, per_window.merge_id);
+    /* Tell the window code about the actions that were just added
+     * behind its back (so to speak) */
+    gnc_main_window_manual_merge_actions (window, PLUGIN_ACTIONS_NAME,
+                                          per_window.group, per_window.merge_id);
 
-  LEAVE(" ");
+    LEAVE(" ");
 }
 
 
@@ -478,24 +486,24 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
  */
 static void
 gnc_plugin_menu_additions_remove_from_window (GncPlugin *plugin,
-					      GncMainWindow *window,
-					      GQuark type)
+        GncMainWindow *window,
+        GQuark type)
 {
-  GtkActionGroup *group;
+    GtkActionGroup *group;
 
-  ENTER(" ");
+    ENTER(" ");
 
-  /* Have to remove our actions manually. Its only automatic if the
-   * actions name is installed into the plugin class. */
-  group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
-  if (group)
-    gtk_ui_manager_remove_action_group(window->ui_merge, group);
+    /* Have to remove our actions manually. Its only automatic if the
+     * actions name is installed into the plugin class. */
+    group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
+    if (group)
+        gtk_ui_manager_remove_action_group(window->ui_merge, group);
 
-  /* Note: This code does not clean up the per-callback data structures
-   * that are created by the gnc_menu_additions_menu_setup_one()
-   * function. Its not much memory and shouldn't be a problem. */
+    /* Note: This code does not clean up the per-callback data structures
+     * that are created by the gnc_menu_additions_menu_setup_one()
+     * function. Its not much memory and shouldn't be a problem. */
 
-  LEAVE(" ");
+    LEAVE(" ");
 }
 
 /** @} */

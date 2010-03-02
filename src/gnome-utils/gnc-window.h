@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-window.h -- structure which represents a GnuCash window.
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
@@ -55,14 +55,15 @@ G_BEGIN_DECLS
 /* typedefs & structures */
 typedef struct GncWindow GncWindow; /* dummy typedef */
 
-typedef struct {
-	GTypeInterface parent;
+typedef struct
+{
+    GTypeInterface parent;
 
-	/* Virtual Table */
-	GtkWindow * (* get_gtk_window) (GncWindow *window);
-	GtkWidget * (* get_statusbar) (GncWindow *window);
-	GtkWidget * (* get_progressbar) (GncWindow *window);
-	void (* ui_set_sensitive) (GncWindow *window, gboolean sensitive);
+    /* Virtual Table */
+    GtkWindow * (* get_gtk_window) (GncWindow *window);
+    GtkWidget * (* get_statusbar) (GncWindow *window);
+    GtkWidget * (* get_progressbar) (GncWindow *window);
+    void (* ui_set_sensitive) (GncWindow *window, gboolean sensitive);
 } GncWindowIface;
 
 /* function prototypes */

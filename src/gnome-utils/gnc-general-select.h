@@ -39,43 +39,46 @@
 typedef const char *	(*GNCGeneralSelectGetStringCB) (gpointer);
 typedef gpointer 	(*GNCGeneralSelectNewSelectCB) (gpointer cbarg, gpointer default_selection, GtkWidget *parent);
 
-typedef enum {
-  GNC_GENERAL_SELECT_TYPE_SELECT = 1,
-  GNC_GENERAL_SELECT_TYPE_EDIT = 2,
-  GNC_GENERAL_SELECT_TYPE_VIEW = 3
+typedef enum
+{
+    GNC_GENERAL_SELECT_TYPE_SELECT = 1,
+    GNC_GENERAL_SELECT_TYPE_EDIT = 2,
+    GNC_GENERAL_SELECT_TYPE_VIEW = 3
 } GNCGeneralSelectType;
 
-typedef struct {
-  GtkHBox hbox;
+typedef struct
+{
+    GtkHBox hbox;
 
-  GtkWidget *entry;  /* display of selection name */
-  GtkWidget *button; /* button for popping up selection window */
+    GtkWidget *entry;  /* display of selection name */
+    GtkWidget *button; /* button for popping up selection window */
 
-  gpointer selected_item;
+    gpointer selected_item;
 
-  GNCGeneralSelectGetStringCB	get_string;
-  GNCGeneralSelectNewSelectCB	new_select;
-  gpointer			cb_arg;
+    GNCGeneralSelectGetStringCB	get_string;
+    GNCGeneralSelectNewSelectCB	new_select;
+    gpointer			cb_arg;
 
-  int disposed; /* private */
+    int disposed; /* private */
 } GNCGeneralSelect;
 
-typedef struct {
-  GtkHBoxClass parent_class;
+typedef struct
+{
+    GtkHBoxClass parent_class;
 
-  void 		(*changed) (GNCGeneralSelect *edit);
+    void 		(*changed) (GNCGeneralSelect *edit);
 } GNCGeneralSelectClass;
 
 
 GtkWidget *gnc_general_select_new            (GNCGeneralSelectType type,
-					      GNCGeneralSelectGetStringCB get_string,
-					      GNCGeneralSelectNewSelectCB new_select,
-					      gpointer cb_arg);
+        GNCGeneralSelectGetStringCB get_string,
+        GNCGeneralSelectNewSelectCB new_select,
+        gpointer cb_arg);
 void       gnc_general_select_set_selected   (GNCGeneralSelect *gsl,
-					      gpointer selected);
+        gpointer selected);
 gpointer   gnc_general_select_get_selected   (GNCGeneralSelect *gsl);
 const char *gnc_general_select_get_printname (GNCGeneralSelect *gsl,
-					      gpointer selection);
+        gpointer selection);
 GType      gnc_general_select_get_type       (void);
 
 void       gnc_general_select_make_mnemonic_target (GNCGeneralSelect *gsl, GtkWidget *label);

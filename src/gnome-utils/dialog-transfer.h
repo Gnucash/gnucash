@@ -30,10 +30,10 @@
 typedef struct _xferDialog XferDialog;
 
 /** Opens up a window to do an automatic transfer between accounts
- *                                                                   
- * Args:   parent  - the parent of the window to be created         
- *         initial - the initial account in the from/to fields      
- * Return: XferDialog structure                                     
+ *
+ * Args:   parent  - the parent of the window to be created
+ *         initial - the initial account in the from/to fields
+ * Return: XferDialog structure
  */
 XferDialog * gnc_xfer_dialog(GtkWidget * parent, Account *initial);
 
@@ -50,21 +50,21 @@ void gnc_xfer_dialog_set_title( XferDialog *, const gchar * );
 
 /** Set the label of the topmost table */
 void gnc_xfer_dialog_set_information_label( XferDialog *,
-					    const gchar * );
+        const gchar * );
 
 /** Add a button with a user-specified label and "clicked" callback.
  * For now this doesn't offer a lot of flexibility, but it doesn't have to.
  */
 void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
-                                                const gchar *label,
-                                                GCallback callback,
-                                                gpointer user_data );
+        const gchar *label,
+        GCallback callback,
+        gpointer user_data );
 
 void gnc_xfer_dialog_toggle_currency_table ( XferDialog *xferData,
-					     gboolean show_table );
+        gboolean show_table );
 
 void gnc_xfer_dialog_set_from_account_label( XferDialog *,
-					     const gchar * );
+        const gchar * );
 void gnc_xfer_dialog_set_to_account_label( XferDialog *, const gchar * );
 
 /** Set the buttons for "Show Income/Expense" */
@@ -73,7 +73,7 @@ void gnc_xfer_dialog_set_to_show_button_active( XferDialog *, gboolean );
 
 /**   select the from account in a xfer dialog                       */
 void gnc_xfer_dialog_select_from_account(XferDialog *xferData,
-                                         Account *account);
+        Account *account);
 /**   select the to account in a xfer dialog                         */
 void gnc_xfer_dialog_select_to_account(XferDialog *xferData,
                                        Account *account);
@@ -92,64 +92,64 @@ void gnc_xfer_dialog_hide_to_account_tree(XferDialog *xferData );
 
 
 /**
- *   set the amount in the given xfer dialog                        
- *                                                                  
- * Args:   xferData - xfer dialog structure                         
- *         amount   - the amount to set                             
- * Return: none                                                     
+ *   set the amount in the given xfer dialog
+ *
+ * Args:   xferData - xfer dialog structure
+ *         amount   - the amount to set
+ * Return: none
  */
 void gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount);
 
 /**
- *   set the description in the given xfer dialog                   
- *                                                                  
- * Args:   xferData    - xfer dialog structure                      
- *         description - the description to set                     
- * Return: none                                                     
+ *   set the description in the given xfer dialog
+ *
+ * Args:   xferData    - xfer dialog structure
+ *         description - the description to set
+ * Return: none
  */
 void gnc_xfer_dialog_set_description(XferDialog *xferData,
                                      const char *description);
 
-/**   set the memo in the given xfer dialog                          
- *                                                                  
- * Args:   xferData    - xfer dialog structure                      
- *         memo        - the memo to set                            
- * Return: none                                                     
+/**   set the memo in the given xfer dialog
+ *
+ * Args:   xferData    - xfer dialog structure
+ *         memo        - the memo to set
+ * Return: none
  */
 void gnc_xfer_dialog_set_memo(XferDialog *xferData, const char *memo);
 
 /**
- *   set the num in the given xfer dialog                           
- *                                                                  
- * Args:   xferData    - xfer dialog structure                      
- *         num        - the num to set                              
- * Return: none                                                     
+ *   set the num in the given xfer dialog
+ *
+ * Args:   xferData    - xfer dialog structure
+ *         num        - the num to set
+ * Return: none
  */
 void gnc_xfer_dialog_set_num(XferDialog *xferData, const char *num);
 
 /**
- *   Set the date in the given xfer dialog                          
- *                                                                  
- * Args:   xferData    - xfer dialog structure                      
- *         set_date    - the date to set                            
- * Return: none                                                     
+ *   Set the date in the given xfer dialog
+ *
+ * Args:   xferData    - xfer dialog structure
+ *         set_date    - the date to set
+ * Return: none
  */
 void gnc_xfer_dialog_set_date(XferDialog *xferData, time_t set_time);
 
 /** Set the exchange rate.  If exchange-rate is 0, then do nothing */
 void gnc_xfer_dialog_set_exchange_rate(XferDialog *xferData,
-				       gnc_numeric exchange_rate);
+                                       gnc_numeric exchange_rate);
 
 /** Indicate whether the dialog should quickfill based on the "To" account,
  * rather than the default which is the "From" account.
  */
 void gnc_xfer_dialog_quickfill_to_account(XferDialog *xferData,
-                                          gboolean qf_to_account );
+        gboolean qf_to_account );
 
 /**
- *   Set the dialog as an "exchange-dialog", which means that the   
- *   Transfer Information table read-only (and the dialog        
- *   will NOT create a transaction when it is closed).               
+ *   Set the dialog as an "exchange-dialog", which means that the
+ *   Transfer Information table read-only (and the dialog
+ *   will NOT create a transaction when it is closed).
  *
  * In other words: Indicate that this is just trying to obtain the
  * to_amount, so make the Transfer Information read-only and the
@@ -158,12 +158,12 @@ void gnc_xfer_dialog_quickfill_to_account(XferDialog *xferData,
  * caller should call the dialog 'run' function to make sure exch_rate
  * pointer remains valid.
  *
- * Args:   xferData - xfer dialog structure                         
- *         exch_rate - place to store the exchange rate at exit     
- * Return: none                                                     
+ * Args:   xferData - xfer dialog structure
+ *         exch_rate - place to store the exchange rate at exit
+ * Return: none
  */
 void gnc_xfer_dialog_is_exchange_dialog(XferDialog *xferData,
-					gnc_numeric * exch_rate);
+                                        gnc_numeric * exch_rate);
 
 
 /** Callback function type for gnc_xfer_dialog_set_txn_cb().
@@ -173,10 +173,10 @@ void gnc_xfer_dialog_is_exchange_dialog(XferDialog *xferData,
  *
  * @param user_data User-supplied pointer to some data */
 typedef void (*gnc_xfer_dialog_cb)(Transaction *new_trans,
-				   gpointer user_data);
+                                   gpointer user_data);
 
 /** Register a callback function to be called with the created
- * Transaction as soon as it is created. 
+ * Transaction as soon as it is created.
  *
  * Note: The caller is responsible to unregister this function in case
  * it becomes invalid. In other words, you have to reset the handler
@@ -187,16 +187,16 @@ typedef void (*gnc_xfer_dialog_cb)(Transaction *new_trans,
  * transaction==NULL to notify the callback of destruction of the
  * XferData structure.
  *
- * @param xferData Dialog data structure 
+ * @param xferData Dialog data structure
  *
  * @param handler Callback function that should be notified of the
- * newly created Transaction 
+ * newly created Transaction
  *
  * @param user_data User-supplied pointer that will be passed to
  * handler. */
 void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
-				gnc_xfer_dialog_cb handler, 
-				gpointer user_data);
+                                gnc_xfer_dialog_cb handler,
+                                gpointer user_data);
 
 /* Uses the XferDialog to obtain from the user an explicit exchange
    rate.  This exchange rate will then be uses to converting 'amount',
@@ -210,7 +210,7 @@ void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
    TRUE is returned and the 'exch_rate' argument is undefined.
 */
 gboolean gnc_xfer_dialog_run_exchange_dialog(
-    XferDialog *xfer, gnc_numeric *exch_rate, gnc_numeric amount, 
+    XferDialog *xfer, gnc_numeric *exch_rate, gnc_numeric amount,
     Account *reg_acc, Transaction *txn, gnc_commodity *xfer_com);
 
 #endif

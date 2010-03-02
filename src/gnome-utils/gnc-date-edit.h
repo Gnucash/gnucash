@@ -29,16 +29,17 @@
  */
 
 #ifndef GNC_DATE_EDIT_H
-#define GNC_DATE_EDIT_H 
+#define GNC_DATE_EDIT_H
 
 #include <glib.h>
 #include <time.h>
 #include "gnc-date.h"
 
-typedef enum {
-	GNC_DATE_EDIT_SHOW_TIME             = 1 << 0,
-	GNC_DATE_EDIT_24_HR                 = 1 << 1,
-	GNC_DATE_EDIT_WEEK_STARTS_ON_MONDAY = 1 << 2,
+typedef enum
+{
+    GNC_DATE_EDIT_SHOW_TIME             = 1 << 0,
+    GNC_DATE_EDIT_24_HR                 = 1 << 1,
+    GNC_DATE_EDIT_WEEK_STARTS_ON_MONDAY = 1 << 2,
 } GNCDateEditFlags;
 
 #define GNC_TYPE_DATE_EDIT          (gnc_date_edit_get_type ())
@@ -55,43 +56,45 @@ typedef enum {
  *          added the register date hotkeys.
  *  \endverbatim
  **/
-typedef struct {
-	GtkHBox hbox;
+typedef struct
+{
+    GtkHBox hbox;
 
-	GtkWidget *date_entry;
-	GtkWidget *date_button;
+    GtkWidget *date_entry;
+    GtkWidget *date_button;
 
-	GtkWidget *time_entry;
-	GtkWidget *time_popup;
+    GtkWidget *time_entry;
+    GtkWidget *time_popup;
 
-	GtkWidget *cal_label;
-	GtkWidget *cal_popup;
-	GtkWidget *calendar;
+    GtkWidget *cal_label;
+    GtkWidget *cal_popup;
+    GtkWidget *calendar;
 
-	time_t    initial_time;
+    time_t    initial_time;
 
-	int       lower_hour;
-	int       upper_hour;
-	
-	int       flags;
+    int       lower_hour;
+    int       upper_hour;
 
-	int       disposed;
+    int       flags;
 
-        gboolean  popup_in_progress;
+    int       disposed;
+
+    gboolean  popup_in_progress;
 } GNCDateEdit;
 
-typedef struct {
-	GtkHBoxClass parent_class;
-	void (*date_changed) (GNCDateEdit *gde);
-	void (*time_changed) (GNCDateEdit *gde);
+typedef struct
+{
+    GtkHBoxClass parent_class;
+    void (*date_changed) (GNCDateEdit *gde);
+    void (*time_changed) (GNCDateEdit *gde);
 } GNCDateEditClass;
 
 GType     gnc_date_edit_get_type        (void);
 
 GtkWidget *gnc_date_edit_new            (time_t the_time,
-                                         int show_time, int use_24_format);
+        int show_time, int use_24_format);
 GtkWidget *gnc_date_edit_new_ts         (Timespec the_time,
-                                         int show_time, int use_24_format);
+        int show_time, int use_24_format);
 
 /**
  * Create a new GncDateEdit widget from a glade file.  The widget
@@ -110,18 +113,18 @@ GtkWidget *gnc_date_edit_new_ts         (Timespec the_time,
  * @return A pointer to the newly created GncDateEdit widget.
  */
 GtkWidget *gnc_date_edit_new_glade (gchar *widget_name,
-				    gchar *string1, gchar *string2,
-				    gint int1, gint int2);
+                                    gchar *string1, gchar *string2,
+                                    gint int1, gint int2);
 
 GtkWidget *gnc_date_edit_new_flags      (time_t the_time,
-                                         GNCDateEditFlags flags);
+        GNCDateEditFlags flags);
 
 void      gnc_date_edit_set_gdate       (GNCDateEdit *gde, const GDate *date);
 void      gnc_date_edit_set_time        (GNCDateEdit *gde, time_t the_time);
 void      gnc_date_edit_set_time_ts     (GNCDateEdit *gde, Timespec the_time);
 
 void      gnc_date_edit_set_popup_range (GNCDateEdit *gde,
-                                         int low_hour, int up_hour);
+        int low_hour, int up_hour);
 
 void      gnc_date_edit_get_gdate       (GNCDateEdit *gde, GDate *date);
 time_t    gnc_date_edit_get_date        (GNCDateEdit *gde);
@@ -130,7 +133,7 @@ time_t    gnc_date_edit_get_date_end    (GNCDateEdit *gde);
 Timespec  gnc_date_edit_get_date_end_ts (GNCDateEdit *gde);
 
 void      gnc_date_edit_set_flags       (GNCDateEdit *gde,
-                                         GNCDateEditFlags flags);
+        GNCDateEditFlags flags);
 int       gnc_date_edit_get_flags       (GNCDateEdit *gde);
 
 void      gnc_date_activates_default    (GNCDateEdit *gde, gboolean state);

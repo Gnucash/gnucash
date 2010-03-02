@@ -38,16 +38,18 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-period-select.h"
 
-enum {
-  PROP_0,
-  PROP_FY_END,
-  PROP_SHOW_DATE,
-  PROP_DATE_BASE,
+enum
+{
+    PROP_0,
+    PROP_FY_END,
+    PROP_SHOW_DATE,
+    PROP_DATE_BASE,
 };
 
-enum {
-  CHANGED,
-  LAST_SIGNAL
+enum
+{
+    CHANGED,
+    LAST_SIGNAL
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -60,34 +62,36 @@ static void gnc_period_select_finalize     (GObject *object);
 static GtkComboBoxClass *parent_class;
 
 
-const gchar *start_strings[GNC_ACCOUNTING_PERIOD_LAST] = {
-  /* CY Strings */
-  N_("Today"),
-  N_("Start of this month"),
-  N_("Start of previous month"),
-  N_("Start of this quarter"),
-  N_("Start of previous quarter"),
-  N_("Start of this year"),
-  N_("Start of previous year"),
+const gchar *start_strings[GNC_ACCOUNTING_PERIOD_LAST] =
+{
+    /* CY Strings */
+    N_("Today"),
+    N_("Start of this month"),
+    N_("Start of previous month"),
+    N_("Start of this quarter"),
+    N_("Start of previous quarter"),
+    N_("Start of this year"),
+    N_("Start of previous year"),
 
-  /* FY Strings */
-  N_("Start of this fiscal year"),
-  N_("Start of previous fiscal year"),
+    /* FY Strings */
+    N_("Start of this fiscal year"),
+    N_("Start of previous fiscal year"),
 };
 
-const gchar *end_strings[GNC_ACCOUNTING_PERIOD_LAST] = {
-  /* CY Strings */
-  N_("Today"),
-  N_("End of this month"),
-  N_("End of previous month"),
-  N_("End of this quarter"),
-  N_("End of previous quarter"),
-  N_("End of this year"),
-  N_("End of previous year"),
+const gchar *end_strings[GNC_ACCOUNTING_PERIOD_LAST] =
+{
+    /* CY Strings */
+    N_("Today"),
+    N_("End of this month"),
+    N_("End of previous month"),
+    N_("End of this quarter"),
+    N_("End of previous quarter"),
+    N_("End of this year"),
+    N_("End of previous year"),
 
-  /* FY Strings */
-  N_("End of this fiscal year"),
-  N_("End of previous fiscal year"),
+    /* FY Strings */
+    N_("End of this fiscal year"),
+    N_("End of previous fiscal year"),
 };
 
 
@@ -96,14 +100,14 @@ const gchar *end_strings[GNC_ACCOUNTING_PERIOD_LAST] = {
 typedef struct _GncPeriodSelectPrivate GncPeriodSelectPrivate;
 struct _GncPeriodSelectPrivate
 {
-  GtkWidget *selector;
+    GtkWidget *selector;
 
-  gboolean start;
-  GDate *fy_end;
+    gboolean start;
+    GDate *fy_end;
 
-  GDate     *date_base;
-  GtkWidget *date_label;
-  GtkWidget *date_align;
+    GDate     *date_base;
+    GtkWidget *date_label;
+    GtkWidget *date_align;
 };
 
 #define GNC_PERIOD_SELECT_GET_PRIVATE(o)  \
@@ -119,9 +123,9 @@ struct _GncPeriodSelectPrivate
 void
 gnc_period_select_changed (GncPeriodSelect *period)
 {
-  g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
 
-  g_signal_emit(G_OBJECT(period), signals[CHANGED], 0);
+    g_signal_emit(G_OBJECT(period), signals[CHANGED], 0);
 }
 
 
@@ -133,18 +137,18 @@ gnc_period_select_changed (GncPeriodSelect *period)
 static void
 gnc_period_sample_update_date_label (GncPeriodSelect *period)
 {
-  GncPeriodSelectPrivate *priv;
-  gchar *time_string;
-  time_t secs;
+    GncPeriodSelectPrivate *priv;
+    gchar *time_string;
+    time_t secs;
 
-  g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
-  priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
-  if (!priv->date_label)
-    return;
-  secs = gnc_period_select_get_time(GNC_PERIOD_SELECT(period));
-  time_string = qof_print_date(secs);
-  gtk_label_set_label(GTK_LABEL(priv->date_label), time_string);
-  g_free(time_string);
+    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
+    if (!priv->date_label)
+        return;
+    secs = gnc_period_select_get_time(GNC_PERIOD_SELECT(period));
+    time_string = qof_print_date(secs);
+    gtk_label_set_label(GTK_LABEL(priv->date_label), time_string);
+    g_free(time_string);
 }
 
 
@@ -161,13 +165,13 @@ gnc_period_sample_update_date_label (GncPeriodSelect *period)
 static void
 gnc_period_sample_combobox_changed (GtkComboBox *box, GncPeriodSelect *period)
 {
-  g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
 
-  /* Update this widget */
-  gnc_period_sample_update_date_label(period);
+    /* Update this widget */
+    gnc_period_sample_update_date_label(period);
 
-  /* Pass it on... */
-  gnc_period_select_changed(period);
+    /* Pass it on... */
+    gnc_period_select_changed(period);
 }
 
 
@@ -183,9 +187,9 @@ gnc_period_sample_combobox_changed (GtkComboBox *box, GncPeriodSelect *period)
  */
 static void
 gnc_period_sample_new_date_format (GConfEntry *unused,
-				   GncPeriodSelect *period)
+                                   GncPeriodSelect *period)
 {
-  gnc_period_sample_update_date_label(period);
+    gnc_period_sample_update_date_label(period);
 }
 
 
@@ -203,18 +207,18 @@ gnc_period_sample_new_date_format (GConfEntry *unused,
 GDate *
 gnc_period_select_get_fy_end (GncPeriodSelect *period)
 {
-  GncPeriodSelectPrivate *priv;
-  priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
+    GncPeriodSelectPrivate *priv;
+    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
 
-  g_return_val_if_fail(period != NULL, NULL);
-  g_return_val_if_fail(GNC_IS_PERIOD_SELECT(period), NULL);
+    g_return_val_if_fail(period != NULL, NULL);
+    g_return_val_if_fail(GNC_IS_PERIOD_SELECT(period), NULL);
 
-  priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
-  if (!priv->fy_end)
-    return NULL;
-  return g_date_new_dmy(g_date_get_day(priv->fy_end),
-			g_date_get_month(priv->fy_end),
-			G_DATE_BAD_YEAR);
+    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
+    if (!priv->fy_end)
+        return NULL;
+    return g_date_new_dmy(g_date_get_day(priv->fy_end),
+                          g_date_get_month(priv->fy_end),
+                          G_DATE_BAD_YEAR);
 }
 
 
@@ -225,69 +229,80 @@ gnc_period_select_get_fy_end (GncPeriodSelect *period)
 void
 gnc_period_select_set_fy_end (GncPeriodSelect *period, const GDate *fy_end)
 {
-  GncPeriodSelectPrivate *priv;
-  const gchar *label;
-  gint i;
+    GncPeriodSelectPrivate *priv;
+    const gchar *label;
+    gint i;
 
-  g_return_if_fail(period != NULL);
-  g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+    g_return_if_fail(period != NULL);
+    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
 
-  priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
-  if (priv->fy_end)
-    g_date_free(priv->fy_end);
+    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
+    if (priv->fy_end)
+        g_date_free(priv->fy_end);
 
-  if (fy_end) {
-    priv->fy_end = g_date_new_dmy(g_date_get_day(fy_end),
-				  g_date_get_month(fy_end),
-				  G_DATE_BAD_YEAR);
-  } else {
-    priv->fy_end = NULL;
-  }
-
-  if (fy_end) {
-    for (i = GNC_ACCOUNTING_PERIOD_CYEAR_LAST; i < GNC_ACCOUNTING_PERIOD_FYEAR_LAST; i++) {
-      label = priv->start ? _(start_strings[i]) : _(end_strings[i]);
-      gtk_combo_box_append_text(GTK_COMBO_BOX(priv->selector), label);
+    if (fy_end)
+    {
+        priv->fy_end = g_date_new_dmy(g_date_get_day(fy_end),
+                                      g_date_get_month(fy_end),
+                                      G_DATE_BAD_YEAR);
     }
-  } else {
-    for (i = GNC_ACCOUNTING_PERIOD_FYEAR_LAST - 1; i >= GNC_ACCOUNTING_PERIOD_FYEAR_LAST; i--) {
-      gtk_combo_box_remove_text(GTK_COMBO_BOX(priv->selector), i);
+    else
+    {
+        priv->fy_end = NULL;
     }
-  }
+
+    if (fy_end)
+    {
+        for (i = GNC_ACCOUNTING_PERIOD_CYEAR_LAST; i < GNC_ACCOUNTING_PERIOD_FYEAR_LAST; i++)
+        {
+            label = priv->start ? _(start_strings[i]) : _(end_strings[i]);
+            gtk_combo_box_append_text(GTK_COMBO_BOX(priv->selector), label);
+        }
+    }
+    else
+    {
+        for (i = GNC_ACCOUNTING_PERIOD_FYEAR_LAST - 1; i >= GNC_ACCOUNTING_PERIOD_FYEAR_LAST; i--)
+        {
+            gtk_combo_box_remove_text(GTK_COMBO_BOX(priv->selector), i);
+        }
+    }
 }
 
 
 static void
 gnc_period_select_set_date_common (GncPeriodSelect *period, const GDate *date)
 {
-  GncPeriodSelectPrivate *priv;
+    GncPeriodSelectPrivate *priv;
 
-  priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
-  if (date) {
-    if (priv->date_base)
-      g_date_free(priv->date_base);
-    priv->date_base = g_date_new_dmy(g_date_get_day(date),
-				     g_date_get_month(date),
-				     g_date_get_year(date));
-    if (priv->date_label == NULL) {
-      priv->date_align = gtk_alignment_new(0.5, 0.5, 0, 0);
-      gtk_alignment_set_padding(GTK_ALIGNMENT(priv->date_align), 0, 0, 6, 0);
-      gtk_box_pack_start_defaults(GTK_BOX(period), priv->date_align);
-      priv->date_label = gtk_label_new("");
-      gtk_container_add(GTK_CONTAINER(priv->date_align), priv->date_label);
-      gtk_widget_show_all(priv->date_align);
+    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
+    if (date)
+    {
+        if (priv->date_base)
+            g_date_free(priv->date_base);
+        priv->date_base = g_date_new_dmy(g_date_get_day(date),
+                                         g_date_get_month(date),
+                                         g_date_get_year(date));
+        if (priv->date_label == NULL)
+        {
+            priv->date_align = gtk_alignment_new(0.5, 0.5, 0, 0);
+            gtk_alignment_set_padding(GTK_ALIGNMENT(priv->date_align), 0, 0, 6, 0);
+            gtk_box_pack_start_defaults(GTK_BOX(period), priv->date_align);
+            priv->date_label = gtk_label_new("");
+            gtk_container_add(GTK_CONTAINER(priv->date_align), priv->date_label);
+            gtk_widget_show_all(priv->date_align);
+        }
+        gnc_period_sample_update_date_label(period);
+        return;
     }
-    gnc_period_sample_update_date_label(period);
-    return;
-  }
 
-  if (priv->date_base) {
-    g_date_free(priv->date_base);
-    priv->date_base = NULL;
-    gtk_widget_destroy(priv->date_align);
-    priv->date_align = NULL;
-    priv->date_label = NULL;
-  }
+    if (priv->date_base)
+    {
+        g_date_free(priv->date_base);
+        priv->date_base = NULL;
+        gtk_widget_destroy(priv->date_align);
+        priv->date_align = NULL;
+        priv->date_label = NULL;
+    }
 }
 
 
@@ -297,13 +312,13 @@ gnc_period_select_set_date_common (GncPeriodSelect *period, const GDate *date)
 gboolean
 gnc_period_select_get_show_date (GncPeriodSelect *period)
 {
-  GncPeriodSelectPrivate *priv;
+    GncPeriodSelectPrivate *priv;
 
-  g_return_val_if_fail(period != NULL, FALSE);
-  g_return_val_if_fail(GNC_IS_PERIOD_SELECT(period), FALSE);
+    g_return_val_if_fail(period != NULL, FALSE);
+    g_return_val_if_fail(GNC_IS_PERIOD_SELECT(period), FALSE);
 
-  priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
-  return (priv->date_base != NULL);
+    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
+    return (priv->date_base != NULL);
 }
 
 /*  Set the "show date" setting on a GncPeriodSelect widget.  If set
@@ -313,35 +328,38 @@ gnc_period_select_get_show_date (GncPeriodSelect *period)
 void
 gnc_period_select_set_show_date (GncPeriodSelect *period, const gboolean show_date)
 {
-  GDate date;
+    GDate date;
 
-  g_return_if_fail(period != NULL);
-  g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+    g_return_if_fail(period != NULL);
+    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
 
-  if (show_date) {
-    g_date_clear(&date, 1);
-    g_date_set_time_t(&date, time (NULL));
-    gnc_period_select_set_date_common(period, &date);
-  } else {
-    gnc_period_select_set_date_common(period, NULL);
-  }
+    if (show_date)
+    {
+        g_date_clear(&date, 1);
+        g_date_set_time_t(&date, time (NULL));
+        gnc_period_select_set_date_common(period, &date);
+    }
+    else
+    {
+        gnc_period_select_set_date_common(period, NULL);
+    }
 }
 
 
 GDate *
 gnc_period_select_get_date_base (GncPeriodSelect *period)
 {
-  GncPeriodSelectPrivate *priv;
+    GncPeriodSelectPrivate *priv;
 
-  g_return_val_if_fail(period != NULL, NULL);
-  g_return_val_if_fail(GNC_IS_PERIOD_SELECT(period), NULL);
+    g_return_val_if_fail(period != NULL, NULL);
+    g_return_val_if_fail(GNC_IS_PERIOD_SELECT(period), NULL);
 
-  priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
-  if (!priv->date_base)
-    return NULL;
-  return g_date_new_dmy(g_date_get_day(priv->date_base),
-			g_date_get_month(priv->date_base),
-			g_date_get_year(priv->date_base));
+    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
+    if (!priv->date_base)
+        return NULL;
+    return g_date_new_dmy(g_date_get_day(priv->date_base),
+                          g_date_get_month(priv->date_base),
+                          g_date_get_year(priv->date_base));
 }
 
 
@@ -351,10 +369,10 @@ gnc_period_select_get_date_base (GncPeriodSelect *period)
 void
 gnc_period_select_set_date_base (GncPeriodSelect *period, const GDate *date_base)
 {
-  g_return_if_fail(period != NULL);
-  g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+    g_return_if_fail(period != NULL);
+    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
 
-  gnc_period_select_set_date_common(period, date_base);
+    gnc_period_select_set_date_common(period, date_base);
 }
 
 
@@ -367,26 +385,26 @@ gnc_period_select_set_date_base (GncPeriodSelect *period, const GDate *date_base
  */
 static void
 gnc_period_select_get_property (GObject     *object,
-			       guint        prop_id,
-			       GValue      *value,
-			       GParamSpec  *pspec)
+                                guint        prop_id,
+                                GValue      *value,
+                                GParamSpec  *pspec)
 {
-  GncPeriodSelect *period = GNC_PERIOD_SELECT(object);
+    GncPeriodSelect *period = GNC_PERIOD_SELECT(object);
 
-  switch (prop_id)
+    switch (prop_id)
     {
     case PROP_FY_END:
-      g_value_set_pointer(value, gnc_period_select_get_fy_end(period));
-      break;
+        g_value_set_pointer(value, gnc_period_select_get_fy_end(period));
+        break;
     case PROP_SHOW_DATE:
-      g_value_set_boolean(value, gnc_period_select_get_show_date(period));
-      break;
+        g_value_set_boolean(value, gnc_period_select_get_show_date(period));
+        break;
     case PROP_DATE_BASE:
-      g_value_set_pointer(value, gnc_period_select_get_date_base(period));
-      break;
+        g_value_set_pointer(value, gnc_period_select_get_date_base(period));
+        break;
     default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-      break;
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+        break;
     }
 }
 
@@ -401,26 +419,26 @@ gnc_period_select_get_property (GObject     *object,
  */
 static void
 gnc_period_select_set_property (GObject      *object,
-			       guint         prop_id,
-			       const GValue *value,
-			       GParamSpec   *pspec)
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
 {
-  GncPeriodSelect *period = GNC_PERIOD_SELECT(object);
+    GncPeriodSelect *period = GNC_PERIOD_SELECT(object);
 
-  switch (prop_id)
+    switch (prop_id)
     {
     case PROP_FY_END:
-      gnc_period_select_set_fy_end(period, g_value_get_pointer(value));
-      break;
+        gnc_period_select_set_fy_end(period, g_value_get_pointer(value));
+        break;
     case PROP_SHOW_DATE:
-      gnc_period_select_set_show_date(period, g_value_get_boolean(value));
-      break;
+        gnc_period_select_set_show_date(period, g_value_get_boolean(value));
+        break;
     case PROP_DATE_BASE:
-      gnc_period_select_set_date_base(period, g_value_get_pointer(value));
-      break;
+        gnc_period_select_set_date_base(period, g_value_get_pointer(value));
+        break;
     default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-      break;
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+        break;
     }
 }
 
@@ -438,28 +456,30 @@ gnc_period_select_set_property (GObject      *object,
 GType
 gnc_period_select_get_type (void)
 {
-  static GType period_select_type = 0;
+    static GType period_select_type = 0;
 
-  if (period_select_type == 0) {
-    static const GTypeInfo period_select_info = {
-      sizeof (GncPeriodSelectClass),
-      NULL,
-      NULL,
-      (GClassInitFunc) gnc_period_select_class_init,
-      NULL,
-      NULL,
-      sizeof (GncPeriodSelect),
-      0, /* n_preallocs */
-      (GInstanceInitFunc) gnc_period_select_init,
-      NULL
-    };
+    if (period_select_type == 0)
+    {
+        static const GTypeInfo period_select_info =
+        {
+            sizeof (GncPeriodSelectClass),
+            NULL,
+            NULL,
+            (GClassInitFunc) gnc_period_select_class_init,
+            NULL,
+            NULL,
+            sizeof (GncPeriodSelect),
+            0, /* n_preallocs */
+            (GInstanceInitFunc) gnc_period_select_init,
+            NULL
+        };
 
-    period_select_type = g_type_register_static(GTK_TYPE_HBOX,
-					       "GncPeriodSelect",
-					       &period_select_info, 0);
-  }
+        period_select_type = g_type_register_static(GTK_TYPE_HBOX,
+                             "GncPeriodSelect",
+                             &period_select_info, 0);
+    }
 
-  return period_select_type;
+    return period_select_type;
 }
 
 
@@ -475,47 +495,47 @@ gnc_period_select_get_type (void)
 static void
 gnc_period_select_class_init (GncPeriodSelectClass *klass)
 {
-  GObjectClass *gobject_class;
+    GObjectClass *gobject_class;
 
-  parent_class = g_type_class_peek_parent(klass);
+    parent_class = g_type_class_peek_parent(klass);
 
-  gobject_class = G_OBJECT_CLASS(klass);
-  gobject_class->set_property = gnc_period_select_set_property;
-  gobject_class->get_property = gnc_period_select_get_property;
-  gobject_class->finalize = gnc_period_select_finalize;
-
-
-  signals[CHANGED] = g_signal_new("changed",
-				  G_OBJECT_CLASS_TYPE (klass),
-				  G_SIGNAL_RUN_FIRST,
-				  G_STRUCT_OFFSET(GncPeriodSelectClass, changed),
-				  NULL, NULL,
-				  g_cclosure_marshal_VOID__VOID,
-				  G_TYPE_NONE,
-				  0);
+    gobject_class = G_OBJECT_CLASS(klass);
+    gobject_class->set_property = gnc_period_select_set_property;
+    gobject_class->get_property = gnc_period_select_get_property;
+    gobject_class->finalize = gnc_period_select_finalize;
 
 
-  g_object_class_install_property(gobject_class,
-				  PROP_FY_END,
-				  g_param_spec_pointer("fy-end",
-						       "Fiscal Year End",
-						       "The fiscal year to use for this widget",
-						       G_PARAM_READWRITE));
-  g_object_class_install_property(gobject_class,
-				  PROP_SHOW_DATE,
-				  g_param_spec_boolean("show-date",
-						       "Show Date",
-						       "Show the start/end date of the accouting period in this widget",
-						       FALSE,
-						       G_PARAM_READWRITE));
-  g_object_class_install_property(gobject_class,
-				  PROP_DATE_BASE,
-				  g_param_spec_pointer("date-base",
-						       "Date Base",
-						       "The starting date to use for display calculations",
-						       G_PARAM_READWRITE));
+    signals[CHANGED] = g_signal_new("changed",
+                                    G_OBJECT_CLASS_TYPE (klass),
+                                    G_SIGNAL_RUN_FIRST,
+                                    G_STRUCT_OFFSET(GncPeriodSelectClass, changed),
+                                    NULL, NULL,
+                                    g_cclosure_marshal_VOID__VOID,
+                                    G_TYPE_NONE,
+                                    0);
 
-  g_type_class_add_private(klass, sizeof(GncPeriodSelectPrivate));
+
+    g_object_class_install_property(gobject_class,
+                                    PROP_FY_END,
+                                    g_param_spec_pointer("fy-end",
+                                            "Fiscal Year End",
+                                            "The fiscal year to use for this widget",
+                                            G_PARAM_READWRITE));
+    g_object_class_install_property(gobject_class,
+                                    PROP_SHOW_DATE,
+                                    g_param_spec_boolean("show-date",
+                                            "Show Date",
+                                            "Show the start/end date of the accouting period in this widget",
+                                            FALSE,
+                                            G_PARAM_READWRITE));
+    g_object_class_install_property(gobject_class,
+                                    PROP_DATE_BASE,
+                                    g_param_spec_pointer("date-base",
+                                            "Date Base",
+                                            "The starting date to use for display calculations",
+                                            G_PARAM_READWRITE));
+
+    g_type_class_add_private(klass, sizeof(GncPeriodSelectPrivate));
 }
 
 
@@ -530,10 +550,10 @@ gnc_period_select_class_init (GncPeriodSelectClass *klass)
 static void
 gnc_period_select_init (GncPeriodSelect *period)
 {
-  GncPeriodSelectPrivate *priv;
+    GncPeriodSelectPrivate *priv;
 
-  priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
-  priv->start = TRUE;
+    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
+    priv->start = TRUE;
 }
 
 
@@ -550,31 +570,31 @@ gnc_period_select_init (GncPeriodSelect *period)
 static void
 gnc_period_select_finalize (GObject *object)
 {
-  GncPeriodSelectPrivate *priv;
-  GncPeriodSelect *period;
+    GncPeriodSelectPrivate *priv;
+    GncPeriodSelect *period;
 
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GNC_IS_PERIOD_SELECT (object));
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_PERIOD_SELECT (object));
 
-  period = GNC_PERIOD_SELECT(object);
-  priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
+    period = GNC_PERIOD_SELECT(object);
+    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
 
-  /* Stop tracking changes to date formatting */
-  gnc_gconf_general_remove_cb(KEY_DATE_FORMAT,
-			      (GncGconfGeneralCb)gnc_period_sample_new_date_format, period);
+    /* Stop tracking changes to date formatting */
+    gnc_gconf_general_remove_cb(KEY_DATE_FORMAT,
+                                (GncGconfGeneralCb)gnc_period_sample_new_date_format, period);
 
-  /* The selector and date_label were added to the hbox.  They will be
-   * freed automatically. */
-  if (priv->fy_end)
-    g_date_free(priv->fy_end);
-  if (priv->date_base)
-    g_date_free(priv->date_base);
+    /* The selector and date_label were added to the hbox.  They will be
+     * freed automatically. */
+    if (priv->fy_end)
+        g_date_free(priv->fy_end);
+    if (priv->date_base)
+        g_date_free(priv->date_base);
 
-  /* Do not free the private data structure. It is part of a larger
-   * memory block allocated by the type system. */
+    /* Do not free the private data structure. It is part of a larger
+     * memory block allocated by the type system. */
 
-  if (G_OBJECT_CLASS(parent_class)->finalize)
-    (* G_OBJECT_CLASS(parent_class)->finalize) (object);
+    if (G_OBJECT_CLASS(parent_class)->finalize)
+        (* G_OBJECT_CLASS(parent_class)->finalize) (object);
 }
 
 
@@ -590,37 +610,38 @@ gnc_period_select_finalize (GObject *object)
 GtkWidget *
 gnc_period_select_new (gboolean starting_labels)
 {
-  GncPeriodSelectPrivate *priv;
-  GncPeriodSelect *period;
-  const gchar *label;
-  gint i;
+    GncPeriodSelectPrivate *priv;
+    GncPeriodSelect *period;
+    const gchar *label;
+    gint i;
 
-  period = g_object_new(GNC_TYPE_PERIOD_SELECT, NULL);
+    period = g_object_new(GNC_TYPE_PERIOD_SELECT, NULL);
 
-  /* Set up private data structures */
-  priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
-  priv->selector   = gtk_combo_box_new_text();
-  priv->start      = starting_labels;
+    /* Set up private data structures */
+    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
+    priv->selector   = gtk_combo_box_new_text();
+    priv->start      = starting_labels;
 
-  /* Add the internal widgets to the hbox */
-  gtk_box_pack_start_defaults(GTK_BOX(period), priv->selector);
-  gtk_widget_show(priv->selector);
+    /* Add the internal widgets to the hbox */
+    gtk_box_pack_start_defaults(GTK_BOX(period), priv->selector);
+    gtk_widget_show(priv->selector);
 
-  /* Find out when the combo box changes */
-  g_signal_connect(G_OBJECT(priv->selector), "changed",
-		   G_CALLBACK(gnc_period_sample_combobox_changed), period);
+    /* Find out when the combo box changes */
+    g_signal_connect(G_OBJECT(priv->selector), "changed",
+                     G_CALLBACK(gnc_period_sample_combobox_changed), period);
 
-  /* Build all the labels except the fiscal year labels */
-  for (i = 0; i < GNC_ACCOUNTING_PERIOD_CYEAR_LAST; i++) {
-    label = starting_labels ? _(start_strings[i]) : _(end_strings[i]);
-    gtk_combo_box_append_text(GTK_COMBO_BOX(priv->selector), label);
-  }
+    /* Build all the labels except the fiscal year labels */
+    for (i = 0; i < GNC_ACCOUNTING_PERIOD_CYEAR_LAST; i++)
+    {
+        label = starting_labels ? _(start_strings[i]) : _(end_strings[i]);
+        gtk_combo_box_append_text(GTK_COMBO_BOX(priv->selector), label);
+    }
 
-  /* Track changes to date formatting */
-  gnc_gconf_general_register_cb(KEY_DATE_FORMAT,
-				(GncGconfGeneralCb)gnc_period_sample_new_date_format, period);
+    /* Track changes to date formatting */
+    gnc_gconf_general_register_cb(KEY_DATE_FORMAT,
+                                  (GncGconfGeneralCb)gnc_period_sample_new_date_format, period);
 
-  return GTK_WIDGET (period);
+    return GTK_WIDGET (period);
 }
 
 
@@ -631,15 +652,15 @@ gnc_period_select_new (gboolean starting_labels)
  */
 GtkWidget *
 gnc_period_select_new_glade (gchar *widget_name,
-			    gchar *string1, gchar *string2,
-			    gint int1, gint int2)
+                             gchar *string1, gchar *string2,
+                             gint int1, gint int2)
 {
-  GtkWidget *widget;
-  widget = gnc_period_select_new(int1 != 0);
-  if (int2)
-    gnc_period_select_set_show_date(GNC_PERIOD_SELECT(widget), TRUE);
-  gtk_widget_show(widget);
-  return widget;
+    GtkWidget *widget;
+    widget = gnc_period_select_new(int1 != 0);
+    if (int2)
+        gnc_period_select_set_show_date(GNC_PERIOD_SELECT(widget), TRUE);
+    gtk_widget_show(widget);
+    return widget;
 }
 
 /** @} */
@@ -655,17 +676,17 @@ gnc_period_select_new_glade (gchar *widget_name,
  */
 void
 gnc_period_select_set_active (GncPeriodSelect *period,
-			      GncAccountingPeriod which)
+                              GncAccountingPeriod which)
 {
-  GncPeriodSelectPrivate *priv;
+    GncPeriodSelectPrivate *priv;
 
-  g_return_if_fail(period != NULL);
-  g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
-  g_return_if_fail(which >= 0);
-  g_return_if_fail(which <  GNC_ACCOUNTING_PERIOD_LAST);
+    g_return_if_fail(period != NULL);
+    g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+    g_return_if_fail(which >= 0);
+    g_return_if_fail(which <  GNC_ACCOUNTING_PERIOD_LAST);
 
-  priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
-  gtk_combo_box_set_active(GTK_COMBO_BOX(priv->selector), which);
+    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(priv->selector), which);
 }
 
 
@@ -676,13 +697,13 @@ gnc_period_select_set_active (GncPeriodSelect *period,
 GncAccountingPeriod
 gnc_period_select_get_active (GncPeriodSelect *period)
 {
-  GncPeriodSelectPrivate *priv;
+    GncPeriodSelectPrivate *priv;
 
-  g_return_val_if_fail(period != NULL, -1);
-  g_return_val_if_fail(GNC_IS_PERIOD_SELECT(period), -1);
+    g_return_val_if_fail(period != NULL, -1);
+    g_return_val_if_fail(GNC_IS_PERIOD_SELECT(period), -1);
 
-  priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
-  return gtk_combo_box_get_active(GTK_COMBO_BOX(priv->selector));
+    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
+    return gtk_combo_box_get_active(GTK_COMBO_BOX(priv->selector));
 }
 
 
@@ -693,22 +714,22 @@ gnc_period_select_get_active (GncPeriodSelect *period)
 GDate *
 gnc_period_select_get_date (GncPeriodSelect *period)
 {
-  GncPeriodSelectPrivate *priv;
-  GncAccountingPeriod which;
+    GncPeriodSelectPrivate *priv;
+    GncAccountingPeriod which;
 
-  g_return_val_if_fail(period != NULL, 0);
-  g_return_val_if_fail(GNC_IS_PERIOD_SELECT(period), 0);
+    g_return_val_if_fail(period != NULL, 0);
+    g_return_val_if_fail(GNC_IS_PERIOD_SELECT(period), 0);
 
-  priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
-  which = gtk_combo_box_get_active(GTK_COMBO_BOX(priv->selector));
-  if (which == -1)
-    return NULL;
+    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
+    which = gtk_combo_box_get_active(GTK_COMBO_BOX(priv->selector));
+    if (which == -1)
+        return NULL;
 
-  if (priv->start)
-    return gnc_accounting_period_start_gdate(which, priv->fy_end,
-					     priv->date_base);
-  return gnc_accounting_period_end_gdate(which, priv->fy_end,
-					 priv->date_base);
+    if (priv->start)
+        return gnc_accounting_period_start_gdate(which, priv->fy_end,
+                priv->date_base);
+    return gnc_accounting_period_end_gdate(which, priv->fy_end,
+                                           priv->date_base);
 }
 
 
@@ -719,22 +740,22 @@ gnc_period_select_get_date (GncPeriodSelect *period)
 time_t
 gnc_period_select_get_time (GncPeriodSelect *period)
 {
-  GncPeriodSelectPrivate *priv;
-  GncAccountingPeriod which;
+    GncPeriodSelectPrivate *priv;
+    GncAccountingPeriod which;
 
-  g_return_val_if_fail(period != NULL, 0);
-  g_return_val_if_fail(GNC_IS_PERIOD_SELECT(period), 0);
+    g_return_val_if_fail(period != NULL, 0);
+    g_return_val_if_fail(GNC_IS_PERIOD_SELECT(period), 0);
 
-  priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
-  which = gtk_combo_box_get_active(GTK_COMBO_BOX(priv->selector));
-  if (which == -1)
-    return 0;
+    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
+    which = gtk_combo_box_get_active(GTK_COMBO_BOX(priv->selector));
+    if (which == -1)
+        return 0;
 
-  if (priv->start)
-    return gnc_accounting_period_start_timet(which, priv->fy_end,
-					     priv->date_base);
-  return gnc_accounting_period_end_timet(which, priv->fy_end,
-					 priv->date_base);
+    if (priv->start)
+        return gnc_accounting_period_start_timet(which, priv->fy_end,
+                priv->date_base);
+    return gnc_accounting_period_end_timet(which, priv->fy_end,
+                                           priv->date_base);
 }
 
 /** @} */
