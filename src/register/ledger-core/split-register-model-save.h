@@ -33,8 +33,8 @@ void gnc_template_register_model_add_save_handlers (TableModel *model);
 typedef struct sr_save_data SRSaveData;
 
 SRSaveData * gnc_split_register_save_data_new (Transaction *trans,
-                                               Split *split,
-					       gboolean expanded);
+        Split *split,
+        gboolean expanded);
 
 void gnc_split_register_save_data_destroy (SRSaveData *sd);
 

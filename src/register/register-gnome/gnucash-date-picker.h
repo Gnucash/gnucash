@@ -30,11 +30,11 @@
 #define IS_GNC_DATE_PICKER(o) (GTK_CHECK_TYPE((o), gnc_date_picker_get_type ()))
 
 
-typedef struct 
+typedef struct
 {
-  GnomeCanvasWidget canvas_widget;
+    GnomeCanvasWidget canvas_widget;
 
-  GtkCalendar *calendar;
+    GtkCalendar *calendar;
 } GNCDatePicker;
 
 
@@ -51,14 +51,14 @@ void gnc_date_picker_get_date (GNCDatePicker *date_picker,
 
 typedef struct
 {
-  GnomeCanvasWidgetClass parent_class;
+    GnomeCanvasWidgetClass parent_class;
 
-  void (*date_selected) (GNCDatePicker *date_picker);
+    void (*date_selected) (GNCDatePicker *date_picker);
 
-  void (*date_picked) (GNCDatePicker *date_picker);
+    void (*date_picked) (GNCDatePicker *date_picker);
 
-  void (*key_press_event) (GNCDatePicker *date_picker,
-                           GdkEventKey *event);
+    void (*key_press_event) (GNCDatePicker *date_picker,
+                             GdkEventKey *event);
 
 } GNCDatePickerClass;
 

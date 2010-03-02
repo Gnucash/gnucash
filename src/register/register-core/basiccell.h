@@ -25,19 +25,19 @@
  * basiccell.h
  *
  * FUNCTION:
- * The BasicCell class provides an abstract base class  
+ * The BasicCell class provides an abstract base class
  * defining the handling of the editing of a cell of a table.
  * Classes that provide the actual handling for different
  * cell types should inherit from this class.
  *
  * The BasicCell class encapsulates a single string value
- * which can be set & read by the programmer, and edited 
- * by the "user".  In the text below, the "user" is the 
- * person controlling the mouse and keyboard.  Thus, when 
- * the user makes a move, it means that they have somehow 
- * interacted with the cell, by clicking with mouse or by 
- * typing at the keyboard.  This class provides three 
- * callbacks which allow the programmer to understand what 
+ * which can be set & read by the programmer, and edited
+ * by the "user".  In the text below, the "user" is the
+ * person controlling the mouse and keyboard.  Thus, when
+ * the user makes a move, it means that they have somehow
+ * interacted with the cell, by clicking with mouse or by
+ * typing at the keyboard.  This class provides three
+ * callbacks which allow the programmer to understand what
  * the user is doing.
  *
  * The programmer can create a custom GUI for editing the
@@ -45,23 +45,23 @@
  * a custom GUI to be created, destroyed and moved about.
  *
  * Since this class is implemented in C not C++, there is
- * a "minor" problem with inheritance.  To emulate the 
- * overloading of a virtual "SetValues" method, there is 
+ * a "minor" problem with inheritance.  To emulate the
+ * overloading of a virtual "SetValues" method, there is
  * a set_value() callback, which will be called whenever
  * the xaccSetBasicCellValue() subroutine is called.
  *
  * VIRTUAL/OVERLOADED METHODS:
  * The set_value() callback will be called whenever the
- * xaccSetBasicCellValue() method is called.  Derived 
+ * xaccSetBasicCellValue() method is called.  Derived
  * classes should provide a callback here if they need
  * to understand special cell formats.
  *
  * USER CALLBACKS:
  * The enter_cell() callback is called when the user first
  *    makes a move to enter a cell.  This might be by clicking
- *    on the cell with the mouse, by tabbing to it, using the 
+ *    on the cell with the mouse, by tabbing to it, using the
  *    arrow keys, or otherwise "selecting" it as the current
- *    cell to edit.  
+ *    cell to edit.
  *
  *    The callback may change the value of the cell. The callback
  *    should return true if the cell should allow direct editing
@@ -73,16 +73,16 @@
  *    update appropriately.
  *
  * The leave_cell() callback is called when the user exits
- *    a cell.  This can be by tabbing or arrow-keying away 
- *    from it, or by using the mouse to specify a different 
+ *    a cell.  This can be by tabbing or arrow-keying away
+ *    from it, or by using the mouse to specify a different
  *    cell, etc. The callback may change the value of the cell.
  *
  * The modify_verify() callback is called when a user makes a
  *    change to a cell.  It is called after every keystroke,
  *    (actually, after every X11 "input-method" type input,
- *    so that ctrl-alt-etc modifier keys are pre-processed in 
+ *    so that ctrl-alt-etc modifier keys are pre-processed in
  *    the usual X11 fashion).
- *    
+ *
  *    The arguments passed in are :
  *    "add", the string the user is attempting to add
  *           (will be null if text is being deleted).
@@ -116,7 +116,7 @@
  * callbacks that allow the programmer to perform GUI-specific
  * initialization & changes.
  *
- * The gui_realize() callback will be called when GUI-specific 
+ * The gui_realize() callback will be called when GUI-specific
  *    initialization needs to be done. For Gnome, the second
  *    argument will be cast to the parent widget.
  *
@@ -128,7 +128,7 @@
  *    The second argument is the virtual location the GUI
  *    element should be moved to.
  *
- * The gui_private member may be used by the derived class to 
+ * The gui_private member may be used by the derived class to
  *    store any additional GUI-specific data.
  *
  * HISTORY:
@@ -167,10 +167,10 @@ typedef void (*CellModifyVerifyFunc) (BasicCell *cell,
                                       int *end_selection);
 
 typedef gboolean (*CellDirectUpdateFunc) (BasicCell *cell,
-                                          int *cursor_position,
-                                          int *start_selection,
-                                          int *end_selection,
-                                          gpointer gui_data);
+        int *cursor_position,
+        int *start_selection,
+        int *end_selection,
+        gpointer gui_data);
 
 typedef void (*CellLeaveFunc) (BasicCell *cell);
 
@@ -182,45 +182,45 @@ typedef void (*CellDestroyFunc) (BasicCell *cell);
 
 typedef enum
 {
-  CELL_ALIGN_RIGHT,
-  CELL_ALIGN_CENTER,
-  CELL_ALIGN_LEFT
+    CELL_ALIGN_RIGHT,
+    CELL_ALIGN_CENTER,
+    CELL_ALIGN_LEFT
 } CellAlignment;
 
 struct basic_cell
 {
-  char * cell_name;
+    char * cell_name;
 
-  char * value;                  /* current value */
-  guint value_chars;           /* number of characters in value */
+    char * value;                  /* current value */
+    guint value_chars;           /* number of characters in value */
 
-  gboolean changed;               /* true if value modified */
-  gboolean conditionally_changed; /* true if value modified conditionally */
+    gboolean changed;               /* true if value modified */
+    gboolean conditionally_changed; /* true if value modified conditionally */
 
-  /* "virtual", overloaded methods */
-  CellSetValueFunc set_value;
-  CellDestroyFunc  destroy;
+    /* "virtual", overloaded methods */
+    CellSetValueFunc set_value;
+    CellDestroyFunc  destroy;
 
-  /* cell-editing callbacks */
-  CellEnterFunc        enter_cell;
-  CellModifyVerifyFunc modify_verify;
-  CellDirectUpdateFunc direct_update;
-  CellLeaveFunc        leave_cell;
+    /* cell-editing callbacks */
+    CellEnterFunc        enter_cell;
+    CellModifyVerifyFunc modify_verify;
+    CellDirectUpdateFunc direct_update;
+    CellLeaveFunc        leave_cell;
 
-  /* private, GUI-specific callbacks */
-  CellRealizeFunc gui_realize;
-  CellMoveFunc    gui_move;
-  CellDestroyFunc gui_destroy;
+    /* private, GUI-specific callbacks */
+    CellRealizeFunc gui_realize;
+    CellMoveFunc    gui_move;
+    CellDestroyFunc gui_destroy;
 
-  /* GUI information */
-  char *sample_text;       /* sample text for sizing purposes */
-  CellAlignment alignment; /* horizontal alignment in column */
-  gboolean expandable;     /* can fill with extra space */
-  gboolean span;           /* can span multiple columns */
-  gboolean is_popup;       /* is a popup widget */
+    /* GUI information */
+    char *sample_text;       /* sample text for sizing purposes */
+    CellAlignment alignment; /* horizontal alignment in column */
+    gboolean expandable;     /* can fill with extra space */
+    gboolean span;           /* can span multiple columns */
+    gboolean is_popup;       /* is a popup widget */
 
-  /* general hook for gui-private data */
-  gpointer gui_private;
+    /* general hook for gui-private data */
+    gpointer gui_private;
 };
 
 
@@ -235,11 +235,11 @@ void         gnc_basic_cell_set_name (BasicCell *cell, const char *name);
 gboolean     gnc_basic_cell_has_name (BasicCell *cell, const char *name);
 
 void         gnc_basic_cell_set_sample_text (BasicCell *cell,
-                                             const char *sample_text);
+        const char *sample_text);
 void         gnc_basic_cell_set_alignment (BasicCell *cell,
-                                           CellAlignment alignment);
+        CellAlignment alignment);
 void         gnc_basic_cell_set_expandable (BasicCell *cell,
-                                            gboolean expandable);
+        gboolean expandable);
 void         gnc_basic_cell_set_span (BasicCell *cell,
                                       gboolean span);
 
@@ -251,10 +251,10 @@ gboolean     gnc_basic_cell_get_conditionally_changed (BasicCell *cell);
 
 void         gnc_basic_cell_set_changed (BasicCell *cell, gboolean changed);
 void         gnc_basic_cell_set_conditionally_changed (BasicCell *cell,
-                                                       gboolean changed);
+        gboolean changed);
 
 /* for sub-class use only */
 void         gnc_basic_cell_set_value_internal (BasicCell *bcell,
-                                                const char *value);
+        const char *value);
 
 #endif /* BASIC_CELL_H */

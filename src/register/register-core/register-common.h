@@ -29,7 +29,7 @@
 /** @addtogroup RegisterCore Register Core
  *  @brief An infrastructure for building a modular matrix of cells like a
  *  spreadsheet or checkbook register.
- * 
+ *
  *  @details Each cell may be specialized to perform a particular function,
  *  e.g. to read dates, numerical amounts, or text. The register core has been
  *  designed to be easy to extend, modular, easy to maintain, and memory
@@ -83,9 +83,10 @@ BasicCell * gnc_register_make_cell (const char *cell_type_name);
  * location of a virtual cell.
  */
 typedef struct _VirtualCellLocation VirtualCellLocation;
-struct _VirtualCellLocation {
-  int virt_row;
-  int virt_col;
+struct _VirtualCellLocation
+{
+    int virt_row;
+    int virt_col;
 };
 
 
@@ -105,10 +106,11 @@ gboolean virt_cell_loc_equal (VirtualCellLocation vcl1,
  * the cell block.
  */
 typedef struct _VirtualLocation VirtualLocation;
-struct _VirtualLocation {
-  VirtualCellLocation vcell_loc;
-  int phys_row_offset;
-  int phys_col_offset;
+struct _VirtualLocation
+{
+    VirtualCellLocation vcell_loc;
+    int phys_row_offset;
+    int phys_col_offset;
 };
 
 

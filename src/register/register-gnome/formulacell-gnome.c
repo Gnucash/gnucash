@@ -69,28 +69,28 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
      */
     switch (event->keyval)
     {
-        case GDK_Return:
-            if (!(event->state &
-                  (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK)))
-                is_return = TRUE;
-            /* FALL THROUGH TO NEXT CASE */
+    case GDK_Return:
+        if (!(event->state &
+                (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK)))
+            is_return = TRUE;
+        /* FALL THROUGH TO NEXT CASE */
 
-        case GDK_KP_Enter:
-            {
-                gnc_formula_cell_set_value( cell, cell->cell.value );
+    case GDK_KP_Enter:
+    {
+        gnc_formula_cell_set_value( cell, cell->cell.value );
 
-                /* If it's not a plain return, stay put. This
-                 * allows a 'calculator' style operation using
-                 * keypad enter where you can keep entering more
-                 * items to add, say. */
-                return !is_return;
-            }
+        /* If it's not a plain return, stay put. This
+         * allows a 'calculator' style operation using
+         * keypad enter where you can keep entering more
+         * items to add, say. */
+        return !is_return;
+    }
 
-        case GDK_KP_Decimal:
-            break;
+    case GDK_KP_Decimal:
+        break;
 
-        default:
-            return FALSE;
+    default:
+        return FALSE;
     }
 
     gnc_basic_cell_insert_decimal(bcell,
@@ -107,9 +107,9 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
 BasicCell *
 gnc_formula_cell_gnome_new (void)
 {
-  BasicCell *cell;
+    BasicCell *cell;
 
-  cell = gnc_formula_cell_new ();
-  cell->direct_update = gnc_formula_cell_direct_update;
-  return cell;
+    cell = gnc_formula_cell_new ();
+    cell->direct_update = gnc_formula_cell_direct_update;
+    return cell;
 }

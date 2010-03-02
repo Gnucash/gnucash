@@ -1,6 +1,6 @@
 /********************************************************************\
  * quickfillcell.c -- autocompletion based on memorized history     *
- *                                                                  *   
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -46,15 +46,15 @@
 
 
 static void gnc_quickfill_cell_set_original (QuickFillCell *cell,
-                                             const char *original);
+        const char *original);
 
 
 static void
 gnc_quickfill_cell_set_value_internal (BasicCell *_cell,
                                        const char *val)
 {
-   QuickFillCell *cell = (QuickFillCell *) _cell;
-   gnc_quickfill_cell_set_value (cell, val);
+    QuickFillCell *cell = (QuickFillCell *) _cell;
+    gnc_quickfill_cell_set_value (cell, val);
 }
 
 /* when entering new cell, put cursor at end and select everything */
@@ -64,93 +64,93 @@ gnc_quickfill_cell_enter (BasicCell *_cell,
                           int *start_selection,
                           int *end_selection)
 {
-   QuickFillCell *cell = (QuickFillCell *) _cell;
+    QuickFillCell *cell = (QuickFillCell *) _cell;
 
-   *cursor_position = -1;
-   *start_selection = 0;
-   *end_selection = -1;
+    *cursor_position = -1;
+    *start_selection = 0;
+    *end_selection = -1;
 
-   gnc_quickfill_cell_set_original (cell, NULL);
+    gnc_quickfill_cell_set_original (cell, NULL);
 
-   return TRUE;
+    return TRUE;
 }
 
 static gboolean
 utf8_caseequal (const char *s1, const char *s2)
 {
-   char *s1new;
-   char *s2new;
-   gboolean equal = FALSE;
-    
-   if (s1 == s2)
-      return TRUE;
-   
-   if (!s1 || !s2)
-      return FALSE;
+    char *s1new;
+    char *s2new;
+    gboolean equal = FALSE;
 
-   s1new = g_utf8_casefold(s1, -1);
-   s2new = g_utf8_casefold(s2, -1);
+    if (s1 == s2)
+        return TRUE;
 
-   if (g_utf8_collate(s1new, s2new) == 0)
-      equal = TRUE;
+    if (!s1 || !s2)
+        return FALSE;
 
-   g_free (s1new);
-   g_free (s2new);
-   
-   return equal;
+    s1new = g_utf8_casefold(s1, -1);
+    s2new = g_utf8_casefold(s2, -1);
+
+    if (g_utf8_collate(s1new, s2new) == 0)
+        equal = TRUE;
+
+    g_free (s1new);
+    g_free (s2new);
+
+    return equal;
 }
 
 static gboolean
 utf8_caseequal_len (const char *s1, const char *s2, guint len)
-{   
-   gchar *s1new;
-   gchar *s2new;
-   const gchar *s1_offset;
-   const gchar *s2_offset;
-   glong s1chars;
-   glong s2chars;
-   glong s1_bytes_len;
-   glong s2_bytes_len;
-   gboolean equal = FALSE;
-    
-   if (len == 0)
-      return TRUE;       
-   
-   if (s1 == s2)
-      return TRUE;
-   
-   if (!s1 || !s2)
-      return FALSE;
+{
+    gchar *s1new;
+    gchar *s2new;
+    const gchar *s1_offset;
+    const gchar *s2_offset;
+    glong s1chars;
+    glong s2chars;
+    glong s1_bytes_len;
+    glong s2_bytes_len;
+    gboolean equal = FALSE;
 
-   /* Obtain the number of bytes for the given number of characters */
-   s1_offset = g_utf8_offset_to_pointer (s1, len);
-   s2_offset = g_utf8_offset_to_pointer (s2, len);
-   s1_bytes_len = s1_offset - s1;
-   s2_bytes_len = s2_offset - s2;
+    if (len == 0)
+        return TRUE;
 
-   /* Test whether the number of characters might be too small anyway
-      (dont need to examine more than bytes_len bytes to check that) */
-   s1chars = g_utf8_strlen (s1, s1_bytes_len);
-   s2chars = g_utf8_strlen (s2, s2_bytes_len);
-   if ( (s1chars < len) || (s2chars < len) )
-       return FALSE;
+    if (s1 == s2)
+        return TRUE;
 
-   /* Allocate new strings that are case-independent. */
-   s1new = g_utf8_casefold (s1, s1_bytes_len);
-   s2new = g_utf8_casefold (s2, s2_bytes_len);
+    if (!s1 || !s2)
+        return FALSE;
 
-   /* equal = utf8_caseequal (s1new, s2new); */
-   /* ^^ don't call this to save one string allocation; we used
-      g_utf8_casefold here already. */
+    /* Obtain the number of bytes for the given number of characters */
+    s1_offset = g_utf8_offset_to_pointer (s1, len);
+    s2_offset = g_utf8_offset_to_pointer (s2, len);
+    s1_bytes_len = s1_offset - s1;
+    s2_bytes_len = s2_offset - s2;
 
-   /* Now really compare the two strings */
-   if (g_utf8_collate(s1new, s2new) == 0)
-      equal = TRUE;
-   
-   g_free (s1new);
-   g_free (s2new);
-    
-   return equal;
+    /* Test whether the number of characters might be too small anyway
+       (dont need to examine more than bytes_len bytes to check that) */
+    s1chars = g_utf8_strlen (s1, s1_bytes_len);
+    s2chars = g_utf8_strlen (s2, s2_bytes_len);
+    if ( (s1chars < len) || (s2chars < len) )
+        return FALSE;
+
+    /* Allocate new strings that are case-independent. */
+    s1new = g_utf8_casefold (s1, s1_bytes_len);
+    s2new = g_utf8_casefold (s2, s2_bytes_len);
+
+    /* equal = utf8_caseequal (s1new, s2new); */
+    /* ^^ don't call this to save one string allocation; we used
+       g_utf8_casefold here already. */
+
+    /* Now really compare the two strings */
+    if (g_utf8_collate(s1new, s2new) == 0)
+        equal = TRUE;
+
+    g_free (s1new);
+    g_free (s2new);
+
+    return equal;
 }
 
 static void
@@ -163,181 +163,181 @@ gnc_quickfill_cell_modify_verify (BasicCell *_cell,
                                   int *start_selection,
                                   int *end_selection)
 {
-   QuickFillCell *cell = (QuickFillCell *) _cell;
-   const char *match_str;
-   QuickFill *match;
+    QuickFillCell *cell = (QuickFillCell *) _cell;
+    const char *match_str;
+    QuickFill *match;
 
-   glong newval_chars;
-   glong change_chars;
+    glong newval_chars;
+    glong change_chars;
 
-   newval_chars = g_utf8_strlen(newval, newval_len);
-   change_chars = g_utf8_strlen(change, change_len);
-   
-   /* If deleting, just accept */
-   if (change == NULL)
-   {
-     /* if the new value is a prefix of the original modulo case,
-      * just truncate the end of the original. Otherwise, set it
-      * to NULL */
-     if ((*cursor_position >= newval_chars) &&
-         (cell->original != NULL) &&
-         (g_utf8_strlen (cell->original, -1) >= newval_chars) &&
-         utf8_caseequal_len (cell->original, newval, newval_chars))
-     {
-         gchar *temp = g_strndup (cell->original, newval_len);
-         gnc_quickfill_cell_set_original (cell, temp);
-         g_free (temp);
-     }
-     else
-       gnc_quickfill_cell_set_original (cell, NULL);
+    newval_chars = g_utf8_strlen(newval, newval_len);
+    change_chars = g_utf8_strlen(change, change_len);
 
-     gnc_basic_cell_set_value_internal (&cell->cell, newval);
-     return;
-   }
+    /* If deleting, just accept */
+    if (change == NULL)
+    {
+        /* if the new value is a prefix of the original modulo case,
+         * just truncate the end of the original. Otherwise, set it
+         * to NULL */
+        if ((*cursor_position >= newval_chars) &&
+                (cell->original != NULL) &&
+                (g_utf8_strlen (cell->original, -1) >= newval_chars) &&
+                utf8_caseequal_len (cell->original, newval, newval_chars))
+        {
+            gchar *temp = g_strndup (cell->original, newval_len);
+            gnc_quickfill_cell_set_original (cell, temp);
+            g_free (temp);
+        }
+        else
+            gnc_quickfill_cell_set_original (cell, NULL);
 
-   /* If we are inserting in the middle, just accept */
-   if (*cursor_position < _cell->value_chars)
-   {
-     gnc_basic_cell_set_value_internal (&cell->cell, newval);
-     gnc_quickfill_cell_set_original (cell, NULL);
-     return;
-   }
+        gnc_basic_cell_set_value_internal (&cell->cell, newval);
+        return;
+    }
 
-   if (cell->original == NULL)
-     cell->original = g_strdup (newval);
-   else if (utf8_caseequal (cell->original, _cell->value))
-   {
-     GString *original;
+    /* If we are inserting in the middle, just accept */
+    if (*cursor_position < _cell->value_chars)
+    {
+        gnc_basic_cell_set_value_internal (&cell->cell, newval);
+        gnc_quickfill_cell_set_original (cell, NULL);
+        return;
+    }
 
-     original = g_string_new (cell->original);
-     g_string_append (original, change);
+    if (cell->original == NULL)
+        cell->original = g_strdup (newval);
+    else if (utf8_caseequal (cell->original, _cell->value))
+    {
+        GString *original;
 
-     g_free (cell->original);
-     cell->original = g_strdup (original->str);
-     g_string_free (original, TRUE);
-   }
-   else
-   {
-     g_free (cell->original);
-     cell->original = NULL;
-   }
+        original = g_string_new (cell->original);
+        g_string_append (original, change);
 
-   match = gnc_quickfill_get_string_match (cell->qf, newval);
+        g_free (cell->original);
+        cell->original = g_strdup (original->str);
+        g_string_free (original, TRUE);
+    }
+    else
+    {
+        g_free (cell->original);
+        cell->original = NULL;
+    }
 
-   match_str = gnc_quickfill_string (match);
+    match = gnc_quickfill_get_string_match (cell->qf, newval);
 
-   if (match_str == NULL)
-   {
-     if (cell->original != NULL)
-       newval = cell->original;
+    match_str = gnc_quickfill_string (match);
 
-     *cursor_position = -1;
+    if (match_str == NULL)
+    {
+        if (cell->original != NULL)
+            newval = cell->original;
 
-     gnc_basic_cell_set_value_internal (&cell->cell, newval);
-     return;
-   }
+        *cursor_position = -1;
 
-   *start_selection = newval_chars;
-   *end_selection = -1;
-   *cursor_position += change_chars;
+        gnc_basic_cell_set_value_internal (&cell->cell, newval);
+        return;
+    }
 
-   gnc_basic_cell_set_value_internal (&cell->cell, match_str);
+    *start_selection = newval_chars;
+    *end_selection = -1;
+    *cursor_position += change_chars;
+
+    gnc_basic_cell_set_value_internal (&cell->cell, match_str);
 }
 
 /* when leaving cell, make sure that text was put into the qf */
 
 static void
-gnc_quickfill_cell_leave (BasicCell * _cell) 
+gnc_quickfill_cell_leave (BasicCell * _cell)
 {
-   QuickFillCell *cell = (QuickFillCell *) _cell;
+    QuickFillCell *cell = (QuickFillCell *) _cell;
 
-   gnc_quickfill_insert (cell->qf, _cell->value, cell->sort);
+    gnc_quickfill_insert (cell->qf, _cell->value, cell->sort);
 }
 
 static void
 gnc_quickfill_cell_destroy (BasicCell *bcell)
 {
-  QuickFillCell *cell = (QuickFillCell *) bcell;
+    QuickFillCell *cell = (QuickFillCell *) bcell;
 
-  gnc_quickfill_destroy (cell->qf);
-  cell->qf = NULL;
+    gnc_quickfill_destroy (cell->qf);
+    cell->qf = NULL;
 
-  g_free (cell->original);
-  cell->original = NULL;
+    g_free (cell->original);
+    cell->original = NULL;
 
-  cell->cell.enter_cell    = NULL;
-  cell->cell.modify_verify = NULL;
-  cell->cell.leave_cell    = NULL;
-  cell->cell.set_value     = NULL;
+    cell->cell.enter_cell    = NULL;
+    cell->cell.modify_verify = NULL;
+    cell->cell.leave_cell    = NULL;
+    cell->cell.set_value     = NULL;
 }
 
 static void
 gnc_quickfill_cell_init (QuickFillCell *cell)
 {
-  gnc_basic_cell_init (&(cell->cell));
+    gnc_basic_cell_init (&(cell->cell));
 
-  cell->qf = gnc_quickfill_new ();
-  cell->sort = QUICKFILL_LIFO;
-  cell->original = NULL;
+    cell->qf = gnc_quickfill_new ();
+    cell->sort = QUICKFILL_LIFO;
+    cell->original = NULL;
 
-  cell->cell.destroy = gnc_quickfill_cell_destroy;
+    cell->cell.destroy = gnc_quickfill_cell_destroy;
 
-  cell->cell.enter_cell    = gnc_quickfill_cell_enter;
-  cell->cell.modify_verify = gnc_quickfill_cell_modify_verify;
-  cell->cell.leave_cell    = gnc_quickfill_cell_leave;
-  cell->cell.set_value     = gnc_quickfill_cell_set_value_internal;
+    cell->cell.enter_cell    = gnc_quickfill_cell_enter;
+    cell->cell.modify_verify = gnc_quickfill_cell_modify_verify;
+    cell->cell.leave_cell    = gnc_quickfill_cell_leave;
+    cell->cell.set_value     = gnc_quickfill_cell_set_value_internal;
 }
 
 BasicCell *
 gnc_quickfill_cell_new (void)
 {
-  QuickFillCell *cell;
+    QuickFillCell *cell;
 
-  cell = g_new0 (QuickFillCell, 1);
+    cell = g_new0 (QuickFillCell, 1);
 
-  gnc_quickfill_cell_init (cell);
+    gnc_quickfill_cell_init (cell);
 
-  return &cell->cell;
+    return &cell->cell;
 }
 
 void
 gnc_quickfill_cell_set_value (QuickFillCell *cell, const char * value)
 {
-  if (cell == NULL)
-    return;
+    if (cell == NULL)
+        return;
 
-  gnc_basic_cell_set_value_internal (&cell->cell, value);
-  gnc_quickfill_insert (cell->qf, value, cell->sort);
+    gnc_basic_cell_set_value_internal (&cell->cell, value);
+    gnc_quickfill_insert (cell->qf, value, cell->sort);
 }
 
 void
 gnc_quickfill_cell_set_sort (QuickFillCell *cell, QuickFillSort sort)
 {
-  if (cell == NULL)
-    return;
+    if (cell == NULL)
+        return;
 
-  cell->sort = sort;
+    cell->sort = sort;
 }
 
 static void
 gnc_quickfill_cell_set_original (QuickFillCell *cell, const char *original)
 {
-  if (cell == NULL)
-    return;
+    if (cell == NULL)
+        return;
 
-  g_free (cell->original);
+    g_free (cell->original);
 
-  if ((original != NULL) && (*original != 0))
-    cell->original = strdup (original);
-  else
-    cell->original = NULL;
+    if ((original != NULL) && (*original != 0))
+        cell->original = strdup (original);
+    else
+        cell->original = NULL;
 }
 
 void
 gnc_quickfill_cell_add_completion (QuickFillCell *cell, const char *completion)
 {
-  if (cell == NULL)
-    return;
+    if (cell == NULL)
+        return;
 
-  gnc_quickfill_insert (cell->qf, completion, cell->sort);
+    gnc_quickfill_insert (cell->qf, completion, cell->sort);
 }

@@ -29,30 +29,30 @@
 #define GNC_ITEM_LIST_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_ITEM_LIST, GncItemListClass))
 #define IS_GNC_ITEM_LIST(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o), GNC_TYPE_ITEM_LIST))
 
-typedef struct 
+typedef struct
 {
-        GnomeCanvasWidget canvas_widget;
+    GnomeCanvasWidget canvas_widget;
 
-        GtkTreeView *tree_view;
-	GtkListStore *list_store; /* Contains the list items */
-        GtkWidget *frame;         /* frame around everything */
+    GtkTreeView *tree_view;
+    GtkListStore *list_store; /* Contains the list items */
+    GtkWidget *frame;         /* frame around everything */
 } GncItemList;
 
 typedef struct
 {
-        GnomeCanvasWidgetClass parent_class;
+    GnomeCanvasWidgetClass parent_class;
 
-	void (*select_item) (GncItemList *item_list,
-			     char        *item_string);
+    void (*select_item) (GncItemList *item_list,
+                         char        *item_string);
 
-        void (*change_item) (GncItemList *item_list,
-                             char        *item_string);
+    void (*change_item) (GncItemList *item_list,
+                         char        *item_string);
 
-        void (*activate_item) (GncItemList *item_list,
-                               char        *item_string);
+    void (*activate_item) (GncItemList *item_list,
+                           char        *item_string);
 
-	void (*key_press_event) (GncItemList *item_list,
-				 GdkEventKey *event);
+    void (*key_press_event) (GncItemList *item_list,
+                             GdkEventKey *event);
 
 } GncItemListClass;
 

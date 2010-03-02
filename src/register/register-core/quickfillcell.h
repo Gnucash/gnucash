@@ -25,17 +25,17 @@
  * quickfillcell.h
  *
  * FUNCTION:
- * The QuickFillCell implements a text cell with quick-fill 
- * capabilities.  By "quick fill" we mean a cell that will 
- * automatically sentance-complete the entry after the user 
- * typed a sufficient number of letters to identify a unique 
- * entry. 
+ * The QuickFillCell implements a text cell with quick-fill
+ * capabilities.  By "quick fill" we mean a cell that will
+ * automatically sentance-complete the entry after the user
+ * typed a sufficient number of letters to identify a unique
+ * entry.
  *
  * On the output side, this is just a plain text cell.
  *
  * METHODS:
  * The xaccSetQuickFillCellValue() method sets the
- * current cell value to the indicated string, 
+ * current cell value to the indicated string,
  * simultaneously adding the string to the quick-fill
  * tree.
  *
@@ -52,24 +52,24 @@
 
 typedef struct
 {
-  BasicCell cell;
-  QuickFill *qf;       /* quickfill-tree handled by this cell */
+    BasicCell cell;
+    QuickFill *qf;       /* quickfill-tree handled by this cell */
 
-  QuickFillSort sort;  /* determines order of strings matched.
+    QuickFillSort sort;  /* determines order of strings matched.
                         * default is QUICKFILL_LIFO. */
 
-  char *original;  /* original string entered in original case */
+    char *original;  /* original string entered in original case */
 } QuickFillCell;
 
 BasicCell *      gnc_quickfill_cell_new (void);
 
 void             gnc_quickfill_cell_set_value (QuickFillCell *cell,
-                                               const char *value);
+        const char *value);
 
 void             gnc_quickfill_cell_set_sort (QuickFillCell *cell,
-                                              QuickFillSort sort);
+        QuickFillSort sort);
 
 void             gnc_quickfill_cell_add_completion (QuickFillCell *cell,
-                                                    const char *completion);
+        const char *completion);
 
 #endif

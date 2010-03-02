@@ -45,118 +45,118 @@
 
 typedef struct _SheetBlockStyle SheetBlockStyle;
 
-typedef struct  
+typedef struct
 {
-        /* The style for this block */
-        SheetBlockStyle *style;
+    /* The style for this block */
+    SheetBlockStyle *style;
 
-        gint origin_x; /* x origin of block */
-        gint origin_y; /* y origin of block */
+    gint origin_x; /* x origin of block */
+    gint origin_y; /* y origin of block */
 
-        gboolean visible; /* is block visible */
+    gboolean visible; /* is block visible */
 } SheetBlock;
 
 
 typedef struct
 {
-        GnomeCanvas canvas;
+    GnomeCanvas canvas;
 
-        GtkWidget *window;
+    GtkWidget *window;
 
-        GtkWidget *popup;
-        gpointer popup_data;
+    GtkWidget *popup;
+    gpointer popup_data;
 
-        Table *table;
+    Table *table;
 
-        GtkWidget *reg;
+    GtkWidget *reg;
 
-        gint num_virt_rows;
-        gint num_virt_cols;
+    gint num_virt_rows;
+    gint num_virt_cols;
 
-        GnomeCanvasItem *header_item;
-        GnomeCanvasItem *cursor;
-        GnomeCanvasItem *grid;
+    GnomeCanvasItem *header_item;
+    GnomeCanvasItem *cursor;
+    GnomeCanvasItem *grid;
 
-        GHashTable *cursor_styles;
+    GHashTable *cursor_styles;
 
-        /* some style information associated to a sheet */
-        GHashTable *dimensions_hash_table;
+    /* some style information associated to a sheet */
+    GHashTable *dimensions_hash_table;
 
-        GTable *blocks;
+    GTable *blocks;
 
-        GnomeCanvasItem *item_editor;
-        GtkWidget *entry;   
+    GnomeCanvasItem *item_editor;
+    GtkWidget *entry;
 
-        gboolean   use_theme_colors;
-        gboolean   use_horizontal_lines;
-        gboolean   use_vertical_lines;
-        GtkWidget *header_color;   
-        GtkWidget *primary_color;   
-        GtkWidget *secondary_color;   
-        GtkWidget *split_color;   
+    gboolean   use_theme_colors;
+    gboolean   use_horizontal_lines;
+    gboolean   use_vertical_lines;
+    GtkWidget *header_color;
+    GtkWidget *primary_color;
+    GtkWidget *secondary_color;
+    GtkWidget *split_color;
 
-        gboolean input_cancelled;
+    gboolean input_cancelled;
 
-        gint top_block;  /* maybe not fully visible */
-        gint bottom_block;
-        gint left_block;
-        gint right_block;
+    gint top_block;  /* maybe not fully visible */
+    gint bottom_block;
+    gint left_block;
+    gint right_block;
 
-        gint num_visible_blocks;
-        gint num_visible_phys_rows;
+    gint num_visible_blocks;
+    gint num_visible_phys_rows;
 
-        gint width;  /* the width in pixels of the sheet */
-        gint height;
+    gint width;  /* the width in pixels of the sheet */
+    gint height;
 
-        gint window_height;
-        gint window_width;
+    gint window_height;
+    gint window_width;
 
-        gint cell_borders;
+    gint cell_borders;
 
-        gint editing;
+    gint editing;
 
-        guint button; /* mouse button being held down */
-        gboolean grabbed; /* has the grab */
+    guint button; /* mouse button being held down */
+    gboolean grabbed; /* has the grab */
 
-        guint insert_signal;
-        guint delete_signal;
-        guint changed_signal;
+    guint insert_signal;
+    guint delete_signal;
+    guint changed_signal;
 
-        GtkAdjustment *hadj, *vadj;
+    GtkAdjustment *hadj, *vadj;
 
-	GFunc moved_cb;
-	gpointer moved_cb_data;
+    GFunc moved_cb;
+    gpointer moved_cb_data;
 
-        /* IMContext */
-        GtkIMContext *im_context;
-        gint preedit_length; /* num of bytes */
-        gint preedit_char_length; /* num of chars in UTF-8 */
-        gint preedit_start_position; /* save preedit start position   *
+    /* IMContext */
+    GtkIMContext *im_context;
+    gint preedit_length; /* num of bytes */
+    gint preedit_char_length; /* num of chars in UTF-8 */
+    gint preedit_start_position; /* save preedit start position   *
                                       * combined with selection start */
-        gint preedit_cursor_position; /* save preedit cursor position */
-        gint preedit_selection_length;
-        PangoAttrList *preedit_attrs;
-        gboolean need_im_reset;
-        gboolean direct_update_cell;
-        guint commit_signal;
-        guint preedit_changed_signal;
-        guint retrieve_surrounding_signal;
-        guint delete_surrounding_signal;
+    gint preedit_cursor_position; /* save preedit cursor position */
+    gint preedit_selection_length;
+    PangoAttrList *preedit_attrs;
+    gboolean need_im_reset;
+    gboolean direct_update_cell;
+    guint commit_signal;
+    guint preedit_changed_signal;
+    guint retrieve_surrounding_signal;
+    guint delete_surrounding_signal;
 
-        guint shift_state;
+    guint shift_state;
 
 } GnucashSheet;
 
 
 typedef struct
 {
-        GtkTable table;
+    GtkTable table;
 
-        GtkWidget *vscrollbar;
-        GtkWidget *hscrollbar;
-        GtkWidget *sheet;
-        GtkWidget *header_canvas;
-        gboolean  hscrollbar_visible;
+    GtkWidget *vscrollbar;
+    GtkWidget *hscrollbar;
+    GtkWidget *sheet;
+    GtkWidget *header_canvas;
+    gboolean  hscrollbar_visible;
 } GnucashRegister;
 
 
@@ -187,15 +187,15 @@ void gnucash_sheet_redraw_block (GnucashSheet *sheet,
 void gnucash_sheet_cursor_set (GnucashSheet *gsheet, VirtualLocation virt_loc);
 
 const char * gnucash_sheet_modify_current_cell(GnucashSheet *sheet,
-					       const gchar *new_text);
+        const gchar *new_text);
 
 gboolean gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
-                                             VirtualCellLocation vcell_loc);
+        VirtualCellLocation vcell_loc);
 
 void gnucash_sheet_set_scroll_region (GnucashSheet *sheet);
 
 void gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet,
-                                          gboolean do_scroll);
+        gboolean do_scroll);
 
 void gnucash_sheet_compute_visible_range (GnucashSheet *sheet);
 
@@ -217,11 +217,11 @@ void gnucash_register_goto_virt_loc (GnucashRegister *reg,
 void gnucash_register_goto_next_virt_row (GnucashRegister *reg);
 
 typedef gboolean (*VirtualLocationMatchFunc) (VirtualLocation virt_loc,
-                                              gpointer user_data);
+        gpointer user_data);
 
 void gnucash_register_goto_next_matching_row (GnucashRegister *reg,
-                                              VirtualLocationMatchFunc match,
-                                              gpointer user_data);
+        VirtualLocationMatchFunc match,
+        gpointer user_data);
 
 void gnucash_register_attach_popup(GnucashRegister *reg, GtkWidget *popup,
                                    gpointer data);
@@ -234,21 +234,21 @@ void gnucash_register_copy_clipboard (GnucashRegister *reg);
 void gnucash_register_paste_clipboard (GnucashRegister *reg);
 void gnucash_register_refresh_from_gconf (GnucashRegister *reg);
 void gnucash_register_set_moved_cb (GnucashRegister *reg,
-				    GFunc cb, gpointer cb_data);
+                                    GFunc cb, gpointer cb_data);
 
 typedef struct
 {
-        GnomeCanvasClass parent_class;
+    GnomeCanvasClass parent_class;
 } GnucashSheetClass;
 
 
 typedef struct
 {
-        GtkTableClass parent_class;
+    GtkTableClass parent_class;
 
-        void (*activate_cursor) (GnucashRegister *reg);
-        void (*redraw_all)      (GnucashRegister *reg);
-        void (*redraw_help)     (GnucashRegister *reg);
+    void (*activate_cursor) (GnucashRegister *reg);
+    void (*redraw_all)      (GnucashRegister *reg);
+    void (*redraw_help)     (GnucashRegister *reg);
 } GnucashRegisterClass;
 
 GdkColor *get_gtkrc_color (GnucashSheet *sheet, RegisterColor field_type);

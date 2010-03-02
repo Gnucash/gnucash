@@ -22,16 +22,16 @@
 
 /**
  * @file combocell.h
- * @brief The ComboCell object implements a cell handler with a 
- *        "combination-box" pull-down menu in it.  
- * 
+ * @brief The ComboCell object implements a cell handler with a
+ *        "combination-box" pull-down menu in it.
+ *
  * On output, the currently selected menu item is displayed.
  * On input, the user can select from a list in the pull-down menu,
  * or use the keyboard to slect a menu entry by typing the first
  * few menu characters.
  *
- * @author Created Jan 1998 Linas Vepstas  
- * @author Copyright (c) 1998 Linas Vepstas <linas@linas.org> 
+ * @author Created Jan 1998 Linas Vepstas
+ * @author Copyright (c) 1998 Linas Vepstas <linas@linas.org>
  * @author Copyright (c) 2000 Dave Peticolas
  */
 
@@ -45,8 +45,8 @@
 
 typedef struct
 {
-  BasicCell cell;
-  gpointer shared_store;
+    BasicCell cell;
+    gpointer shared_store;
 } ComboCell;
 
 
@@ -75,19 +75,19 @@ void         gnc_combo_cell_set_strict (ComboCell *cell, gboolean strict);
 
 /** Sets a character used for special completion processing. */
 void         gnc_combo_cell_set_complete_char (ComboCell *cell,
-                                               gunichar complete_char);
+        gunichar complete_char);
 
 /** Add a string to a list of strings which, if the cell has that value,
  * will cause the cell to be uneditable on 'enter'. */
 void         gnc_combo_cell_add_ignore_string (ComboCell *cell,
-                                               const char *ignore_string);
+        const char *ignore_string);
 
 /** Determines whether the popup list autosizes itself or uses
  * all available space. FALSE by default. */
 void         gnc_combo_cell_set_autosize (ComboCell *cell, gboolean autosize);
 
 /** Tell the combocell to use a shared QuickFill object.  Using this routine
- *  can dramatically improve performance when creating combocells with a 
+ *  can dramatically improve performance when creating combocells with a
  *  large number of entries.  For example, users with thousands of accounts
  *  are complaining about 10-second register startup times, of which 98%
  *  of the cpu is spent building the multi-thousand entry quickfill.

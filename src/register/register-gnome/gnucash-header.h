@@ -31,34 +31,36 @@
 
 GType    gnc_header_get_type (void);
 
-typedef struct {
-        GnomeCanvasItem canvas_item;
+typedef struct
+{
+    GnomeCanvasItem canvas_item;
 
-        GnucashSheet *sheet;
-        SheetBlockStyle *style;
+    GnucashSheet *sheet;
+    SheetBlockStyle *style;
 
-        char *cursor_name;
+    char *cursor_name;
 
-        int num_phys_rows;
+    int num_phys_rows;
 
-        int in_resize;
-        int resize_col_width;
-        int resize_x;
-        int resize_col;
+    int in_resize;
+    int resize_col_width;
+    int resize_x;
+    int resize_col;
 
-        gboolean needs_ungrab;
+    gboolean needs_ungrab;
 
-        int height;
-        int width;
+    int height;
+    int width;
 
-        GdkGC *gc;
-        GdkCursor *normal_cursor;
-        GdkCursor *resize_cursor;
+    GdkGC *gc;
+    GdkCursor *normal_cursor;
+    GdkCursor *resize_cursor;
 } GncHeader;
 
 
-typedef struct {
-        GnomeCanvasItemClass parent_class;
+typedef struct
+{
+    GnomeCanvasItemClass parent_class;
 } GncHeaderClass;
 
 
@@ -66,7 +68,7 @@ GtkWidget *gnc_header_new (GnucashSheet *sheet);
 void gnc_header_reconfigure (GncHeader *header);
 
 void gnc_header_set_header_rows (GncHeader *header,
-                                     int num_phys_rows);
+                                 int num_phys_rows);
 
 #endif /* GNUCASH_HEADER_H */
 

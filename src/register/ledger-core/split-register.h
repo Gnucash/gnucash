@@ -151,35 +151,35 @@
  * "ledgers" are multiple-account display windows */
 typedef enum
 {
-  BANK_REGISTER,
-  CASH_REGISTER,
-  ASSET_REGISTER,
-  CREDIT_REGISTER,
-  LIABILITY_REGISTER,
-  INCOME_REGISTER,
-  EXPENSE_REGISTER,
-  EQUITY_REGISTER,
-  STOCK_REGISTER,
-  CURRENCY_REGISTER,
-  RECEIVABLE_REGISTER,
-  PAYABLE_REGISTER,
-  TRADING_REGISTER,
-  NUM_SINGLE_REGISTER_TYPES,
+    BANK_REGISTER,
+    CASH_REGISTER,
+    ASSET_REGISTER,
+    CREDIT_REGISTER,
+    LIABILITY_REGISTER,
+    INCOME_REGISTER,
+    EXPENSE_REGISTER,
+    EQUITY_REGISTER,
+    STOCK_REGISTER,
+    CURRENCY_REGISTER,
+    RECEIVABLE_REGISTER,
+    PAYABLE_REGISTER,
+    TRADING_REGISTER,
+    NUM_SINGLE_REGISTER_TYPES,
 
-  GENERAL_LEDGER = NUM_SINGLE_REGISTER_TYPES,
-  INCOME_LEDGER,
-  PORTFOLIO_LEDGER,
-  SEARCH_LEDGER,
+    GENERAL_LEDGER = NUM_SINGLE_REGISTER_TYPES,
+    INCOME_LEDGER,
+    PORTFOLIO_LEDGER,
+    SEARCH_LEDGER,
 
-  NUM_REGISTER_TYPES
+    NUM_REGISTER_TYPES
 } SplitRegisterType;
 
 /** Register styles */
 typedef enum
 {
-  REG_STYLE_LEDGER,
-  REG_STYLE_AUTO_LEDGER,
-  REG_STYLE_JOURNAL
+    REG_STYLE_LEDGER,
+    REG_STYLE_AUTO_LEDGER,
+    REG_STYLE_JOURNAL
 } SplitRegisterStyle;
 
 /** @name Cell Names
@@ -227,24 +227,24 @@ typedef enum
 /** Types of cursors */
 typedef enum
 {
-  CURSOR_CLASS_NONE = -1,
-  CURSOR_CLASS_SPLIT,
-  CURSOR_CLASS_TRANS,
-  NUM_CURSOR_CLASSES
+    CURSOR_CLASS_NONE = -1,
+    CURSOR_CLASS_SPLIT,
+    CURSOR_CLASS_TRANS,
+    NUM_CURSOR_CLASSES
 } CursorClass;
 
 typedef struct split_register_colors
 {
-  guint32 header_bg_color;
+    guint32 header_bg_color;
 
-  guint32 primary_bg_color;
-  guint32 secondary_bg_color;
+    guint32 primary_bg_color;
+    guint32 secondary_bg_color;
 
-  guint32 primary_active_bg_color;
-  guint32 secondary_active_bg_color;
+    guint32 primary_active_bg_color;
+    guint32 secondary_active_bg_color;
 
-  guint32 split_bg_color;
-  guint32 split_active_bg_color;
+    guint32 split_bg_color;
+    guint32 split_active_bg_color;
 } SplitRegisterColors;
 
 
@@ -255,16 +255,16 @@ typedef struct sr_info SRInfo;
 /** @brief The type, style and table for the register. */
 struct split_register
 {
-  Table * table;   /**< The table itself that implements the underlying GUI. */
+    Table * table;   /**< The table itself that implements the underlying GUI. */
 
-  SplitRegisterType type;
-  SplitRegisterStyle style;
+    SplitRegisterType type;
+    SplitRegisterStyle style;
 
-  gboolean use_double_line;  /**< whether to use two lines per transaction */
-  gboolean is_template;
-  gboolean do_auto_complete; /**< whether to use auto-competion */
+    gboolean use_double_line;  /**< whether to use two lines per transaction */
+    gboolean is_template;
+    gboolean do_auto_complete; /**< whether to use auto-competion */
 
-  SRInfo * sr_info;   /**< private data; outsiders should not access this */
+    SRInfo * sr_info;   /**< private data; outsiders should not access this */
 };
 
 /** Callback function type */
@@ -320,7 +320,7 @@ void gnc_split_register_config (SplitRegister *reg,
  *  @param do_auto_complete @c TRUE to use auto-completion, @c FALSE otherwise
  */
 void gnc_split_register_set_auto_complete(SplitRegister *reg,
-                                          gboolean do_auto_complete);
+        gboolean do_auto_complete);
 
 /** Sets whether a register window is "read only".
  *
@@ -338,7 +338,7 @@ void gnc_split_register_set_read_only (SplitRegister *reg, gboolean read_only);
  *  @param template_account the account to use for the template
  */
 void gnc_split_register_set_template_account (SplitRegister *reg,
-                                              Account *template_account);
+        Account *template_account);
 
 /** Sets the user data and callback hooks for the register. */
 void gnc_split_register_set_data (SplitRegister *reg, gpointer user_data,
@@ -361,8 +361,8 @@ CursorClass gnc_split_register_get_current_cursor_class (SplitRegister *reg);
  *  @return the ::CursorClass of the cursor at @a vcell_loc
  */
 CursorClass gnc_split_register_get_cursor_class
-                                              (SplitRegister *reg,
-                                               VirtualCellLocation vcell_loc);
+(SplitRegister *reg,
+ VirtualCellLocation vcell_loc);
 
 /** Gets the transaction at the current cursor location, which may be on
  *  the transaction itself or on any of its splits.
@@ -385,7 +385,7 @@ Transaction * gnc_split_register_get_current_trans (SplitRegister *reg);
  */
 Split *
 gnc_split_register_get_current_trans_split (SplitRegister *reg,
-                                            VirtualCellLocation *vcell_loc);
+        VirtualCellLocation *vcell_loc);
 
 /** Returns the split at which the cursor is currently located.
  *
@@ -437,7 +437,7 @@ gnc_split_register_get_split_virt_loc (SplitRegister *reg, Split *split,
  */
 gboolean
 gnc_split_register_get_split_amount_virt_loc (SplitRegister *reg, Split *split,
-                                              VirtualLocation *virt_loc);
+        VirtualLocation *virt_loc);
 
 /** Duplicates either the current transaction or the current split
  *    depending on the register mode and cursor position. Returns the
@@ -468,7 +468,7 @@ void gnc_split_register_delete_current_trans (SplitRegister *reg);
 /** Voids the transaction associated with the current cursor, if
  *    non-NULL. */
 void gnc_split_register_void_current_trans (SplitRegister *reg,
-					    const char *reason);
+        const char *reason);
 
 /** Unvoids the transaction associated with the current cursor, if
  *    non-NULL. */
@@ -528,11 +528,11 @@ gboolean gnc_split_register_changed (SplitRegister *reg);
  * dates prior to the present, and after. This will only make sense if
  * the splits are ordered primarily by post date. */
 void gnc_split_register_show_present_divider (SplitRegister *reg,
-                                              gboolean show_present);
+        gboolean show_present);
 
 /** Expand the current transaction if it is collapsed. */
 void gnc_split_register_expand_current_trans (SplitRegister *reg,
-                                              gboolean expand);
+        gboolean expand);
 
 /** Mark the current transaction as collapsed, and do callbacks. */
 void gnc_split_register_collapse_current_trans (SplitRegister *reg);

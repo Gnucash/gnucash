@@ -35,12 +35,14 @@ G_BEGIN_DECLS
 #define GNC_IS_SCROLLED_WINDOW_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_SCROLLED_WINDOW))
 
 
-typedef struct {
-  GtkScrolledWindow scrollwin;
+typedef struct
+{
+    GtkScrolledWindow scrollwin;
 } GncScrolledWindow;
 
-typedef struct {
-  GtkScrolledWindowClass parent_class;
+typedef struct
+{
+    GtkScrolledWindowClass parent_class;
 } GncScrolledWindowClass;
 
 

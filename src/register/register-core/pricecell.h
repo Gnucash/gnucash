@@ -26,8 +26,8 @@
  *
  * FUNCTION:
  * The PriceCell object implements a cell handler that stores
- * a single double-precision value, and has the smarts to 
- * display it as a price/amount as well as accepting monetary 
+ * a single double-precision value, and has the smarts to
+ * display it as a price/amount as well as accepting monetary
  * or general numeric input.
  *
  * By default, the PriceCell is an input/output cell.
@@ -50,17 +50,17 @@
 
 typedef struct
 {
-  BasicCell cell;
+    BasicCell cell;
 
-  gnc_numeric amount;    /* the amount associated with this cell */
+    gnc_numeric amount;    /* the amount associated with this cell */
 
-  int fraction;          /* fraction used for rounding, if 0 no rounding */
+    int fraction;          /* fraction used for rounding, if 0 no rounding */
 
-  gboolean blank_zero;   /* controls printing of zero values */
+    gboolean blank_zero;   /* controls printing of zero values */
 
-  GNCPrintAmountInfo print_info; /* amount printing context */
+    GNCPrintAmountInfo print_info; /* amount printing context */
 
-  gboolean need_to_parse; /* internal */
+    gboolean need_to_parse; /* internal */
 } PriceCell;
 
 /* installs a callback to handle price recording */
@@ -82,16 +82,16 @@ void         gnc_price_cell_blank (PriceCell *cell);
 /* determines whether 0 values are left blank or printed.
  * defaults to true. */
 void         gnc_price_cell_set_blank_zero (PriceCell *cell,
-                                            gboolean blank_zero);
+        gboolean blank_zero);
 
 /* set the printing context of the price cell */
 void         gnc_price_cell_set_print_info (PriceCell *cell,
-                                            GNCPrintAmountInfo print_info);
+        GNCPrintAmountInfo print_info);
 
 /* updates two cells; the deb cell if amt is negative, the credit cell
  * if amount is positive, and makes the other cell blank. */
 void         gnc_price_cell_set_debt_credit_value (PriceCell *debit,
-                                                   PriceCell *credit,
-                                                   gnc_numeric amount);
+        PriceCell *credit,
+        gnc_numeric amount);
 
 #endif

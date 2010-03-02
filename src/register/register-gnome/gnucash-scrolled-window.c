@@ -40,48 +40,50 @@ static void gnc_scrolled_window_init (GncScrolledWindow *scrollwin);
 GType
 gnc_scrolled_window_get_type (void)
 {
-  static GType gnc_scrolled_window_type = 0;
+    static GType gnc_scrolled_window_type = 0;
 
-  if (!gnc_scrolled_window_type) {
-    static const GTypeInfo gnc_scrolled_window_info = {
-      sizeof (GncScrolledWindowClass),
-      NULL,
-      NULL,
-      (GClassInitFunc) gnc_scrolled_window_class_init,
-      NULL,
-      NULL,
-      sizeof (GncScrolledWindow),
-      0,
-      (GInstanceInitFunc) gnc_scrolled_window_init
-    };
-		
-    gnc_scrolled_window_type = g_type_register_static (GTK_TYPE_SCROLLED_WINDOW,
-						       "GncScrolledWindow",
-						       &gnc_scrolled_window_info, 0);
-  }
+    if (!gnc_scrolled_window_type)
+    {
+        static const GTypeInfo gnc_scrolled_window_info =
+        {
+            sizeof (GncScrolledWindowClass),
+            NULL,
+            NULL,
+            (GClassInitFunc) gnc_scrolled_window_class_init,
+            NULL,
+            NULL,
+            sizeof (GncScrolledWindow),
+            0,
+            (GInstanceInitFunc) gnc_scrolled_window_init
+        };
 
-  return gnc_scrolled_window_type;
+        gnc_scrolled_window_type = g_type_register_static (GTK_TYPE_SCROLLED_WINDOW,
+                                   "GncScrolledWindow",
+                                   &gnc_scrolled_window_info, 0);
+    }
+
+    return gnc_scrolled_window_type;
 }
 
 
 GtkWidget *
 gnc_scrolled_window_new (void)
 {
-  return gtk_widget_new (GNC_TYPE_SCROLLED_WINDOW,
-                         "hadjustment", NULL,
-                         "vadjustment", NULL,
-                         NULL);
+    return gtk_widget_new (GNC_TYPE_SCROLLED_WINDOW,
+                           "hadjustment", NULL,
+                           "vadjustment", NULL,
+                           NULL);
 }
 
 
 static void
 gnc_scrolled_window_class_init (GncScrolledWindowClass *class)
 {
-  GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS (class);
+    GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS (class);
 
-  parent_class = g_type_class_peek_parent (class);
+    parent_class = g_type_class_peek_parent (class);
 
-  scroll_class->scrollbar_spacing = 0;
+    scroll_class->scrollbar_spacing = 0;
 }
 
 static void

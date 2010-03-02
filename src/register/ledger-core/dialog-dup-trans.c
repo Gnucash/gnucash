@@ -39,12 +39,12 @@
 
 typedef struct
 {
-  GtkWidget * dialog;
+    GtkWidget * dialog;
 
-  gboolean focus_out;
+    gboolean focus_out;
 
-  GtkWidget * date_edit;
-  GtkWidget * num_edit;
+    GtkWidget * date_edit;
+    GtkWidget * num_edit;
 } DupTransDialog;
 
 
@@ -54,95 +54,95 @@ typedef struct
 static gboolean
 parse_num (const char *string, long int *num)
 {
-  long int number;
+    long int number;
 
-  if (string == NULL)
-    return FALSE;
+    if (string == NULL)
+        return FALSE;
 
-  if (!gnc_strisnum(string))
-    return FALSE;
+    if (!gnc_strisnum(string))
+        return FALSE;
 
-  number = strtol(string, NULL, 10);
+    number = strtol(string, NULL, 10);
 
-  if ((number == LONG_MIN) || (number == LONG_MAX))
-    return FALSE;
+    if ((number == LONG_MIN) || (number == LONG_MAX))
+        return FALSE;
 
-  if (num != NULL)
-    *num = number;
+    if (num != NULL)
+        *num = number;
 
-  return TRUE;
+    return TRUE;
 }
 
 static gboolean
 gnc_dup_trans_output_cb(GtkSpinButton *spinbutton,
                         gpointer user_data)
 {
-  gboolean is_number;
-  long int num;
-  gchar *txt = gtk_editable_get_chars(GTK_EDITABLE(spinbutton), 0, -1);
-  is_number = parse_num(txt, &num);
-  g_free(txt);
-  if (!is_number)
-    gtk_entry_set_text(GTK_ENTRY(spinbutton), "");
-  return !is_number;
+    gboolean is_number;
+    long int num;
+    gchar *txt = gtk_editable_get_chars(GTK_EDITABLE(spinbutton), 0, -1);
+    is_number = parse_num(txt, &num);
+    g_free(txt);
+    if (!is_number)
+        gtk_entry_set_text(GTK_ENTRY(spinbutton), "");
+    return !is_number;
 }
 
 static void
 gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
                              time_t date, const char *num_str)
 {
-  GtkWidget *dialog;
-  GladeXML  *xml;
+    GtkWidget *dialog;
+    GladeXML  *xml;
 
-  xml = gnc_glade_xml_new ("register.glade", "Duplicate Transaction Dialog");
+    xml = gnc_glade_xml_new ("register.glade", "Duplicate Transaction Dialog");
 
-  dialog = glade_xml_get_widget (xml, "Duplicate Transaction Dialog");
-  dt_dialog->dialog = dialog;
+    dialog = glade_xml_get_widget (xml, "Duplicate Transaction Dialog");
+    dt_dialog->dialog = dialog;
 
-  /* parent */
-  if (parent != NULL)
-    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+    /* parent */
+    if (parent != NULL)
+        gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
-  /* date widget */
-  {
-    GtkWidget *date_edit;
-    GtkWidget *hbox;
-    GtkWidget *label;
+    /* date widget */
+    {
+        GtkWidget *date_edit;
+        GtkWidget *hbox;
+        GtkWidget *label;
 
-    date_edit = gnc_date_edit_new (date, FALSE, FALSE);
-    gnc_date_activates_default(GNC_DATE_EDIT(date_edit), TRUE);
-    hbox = glade_xml_get_widget (xml, "date_hbox");
-    gtk_widget_show (date_edit);
+        date_edit = gnc_date_edit_new (date, FALSE, FALSE);
+        gnc_date_activates_default(GNC_DATE_EDIT(date_edit), TRUE);
+        hbox = glade_xml_get_widget (xml, "date_hbox");
+        gtk_widget_show (date_edit);
 
-    label = glade_xml_get_widget (xml, "date_label");
-    gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date_edit), label);
+        label = glade_xml_get_widget (xml, "date_label");
+        gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date_edit), label);
 
-    gtk_box_pack_end (GTK_BOX (hbox), date_edit, TRUE, TRUE, 0);
-    dt_dialog->date_edit = date_edit;
-  }
+        gtk_box_pack_end (GTK_BOX (hbox), date_edit, TRUE, TRUE, 0);
+        dt_dialog->date_edit = date_edit;
+    }
 
-  {
-    GtkWidget *num_spin;
-    long int num;
+    {
+        GtkWidget *num_spin;
+        long int num;
 
-    num_spin = glade_xml_get_widget (xml, "num_spin");
-    dt_dialog->num_edit = num_spin;
+        num_spin = glade_xml_get_widget (xml, "num_spin");
+        dt_dialog->num_edit = num_spin;
 
-    gtk_entry_set_activates_default(GTK_ENTRY(num_spin), TRUE);
-    g_signal_connect(num_spin, "output",
-		     G_CALLBACK(gnc_dup_trans_output_cb), dt_dialog);
+        gtk_entry_set_activates_default(GTK_ENTRY(num_spin), TRUE);
+        g_signal_connect(num_spin, "output",
+                         G_CALLBACK(gnc_dup_trans_output_cb), dt_dialog);
 
-    if (num_str && parse_num (num_str, &num))
-      gtk_spin_button_set_value (GTK_SPIN_BUTTON (num_spin), num + 1);
-    else
-      gtk_entry_set_text (GTK_ENTRY (num_spin), "");
-  }
+        if (num_str && parse_num (num_str, &num))
+            gtk_spin_button_set_value (GTK_SPIN_BUTTON (num_spin), num + 1);
+        else
+            gtk_entry_set_text (GTK_ENTRY (num_spin), "");
+    }
 }
 
 /********************************************************************\
  * gnc_dup_trans_dialog                                             *
  *   opens up a window to do an automatic transfer between accounts *
- *                                                                  * 
+ *                                                                  *
  * Args:   parent  - the parent of the window to be created         *
  *         date    - the initial date to use, and the output        *
  *                   parameter for the new date                     *
@@ -154,37 +154,37 @@ gboolean
 gnc_dup_trans_dialog (GtkWidget * parent, time_t *date_p,
                       const char *num, char **out_num)
 {
-  DupTransDialog *dt_dialog;
-  GNCDateEdit *gde;
-  GtkWidget *entry;
-  gboolean ok;
-  gint result;
+    DupTransDialog *dt_dialog;
+    GNCDateEdit *gde;
+    GtkWidget *entry;
+    gboolean ok;
+    gint result;
 
-  if (!date_p || !out_num)
-    return FALSE;
+    if (!date_p || !out_num)
+        return FALSE;
 
-  dt_dialog = g_new0 (DupTransDialog, 1);
+    dt_dialog = g_new0 (DupTransDialog, 1);
 
-  gnc_dup_trans_dialog_create (parent, dt_dialog, *date_p, num);
+    gnc_dup_trans_dialog_create (parent, dt_dialog, *date_p, num);
 
-  gde = GNC_DATE_EDIT (dt_dialog->date_edit);
-  entry = gde->date_entry;
+    gde = GNC_DATE_EDIT (dt_dialog->date_edit);
+    entry = gde->date_entry;
 
-  gtk_widget_grab_focus (entry);
+    gtk_widget_grab_focus (entry);
 
-  result = gtk_dialog_run (GTK_DIALOG (dt_dialog->dialog));
+    result = gtk_dialog_run (GTK_DIALOG (dt_dialog->dialog));
 
-  if (result == GTK_RESPONSE_OK)
-  {
-    *date_p = gnc_date_edit_get_date (GNC_DATE_EDIT (dt_dialog->date_edit));
-    *out_num = g_strdup (gtk_entry_get_text (GTK_ENTRY (dt_dialog->num_edit)));
-    ok = TRUE;
-  }
-  else
-    ok = FALSE;
+    if (result == GTK_RESPONSE_OK)
+    {
+        *date_p = gnc_date_edit_get_date (GNC_DATE_EDIT (dt_dialog->date_edit));
+        *out_num = g_strdup (gtk_entry_get_text (GTK_ENTRY (dt_dialog->num_edit)));
+        ok = TRUE;
+    }
+    else
+        ok = FALSE;
 
-  gtk_widget_destroy(GTK_WIDGET(dt_dialog->dialog));
-  g_free (dt_dialog);
+    gtk_widget_destroy(GTK_WIDGET(dt_dialog->dialog));
+    g_free (dt_dialog);
 
-  return ok;
+    return ok;
 }

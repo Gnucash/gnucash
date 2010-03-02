@@ -35,7 +35,7 @@
  *
  *  @details
  *  The Table object defines the structure and the GUI required
- *  to display a two-dimensional grid. It provides several 
+ *  to display a two-dimensional grid. It provides several
  *  important functions:
  *  - An array of virtual cells. These cells contain:
  *     - the cellblock handler for that virtual cell.
@@ -45,7 +45,7 @@
  *
  *  Please see src/doc/design/gnucash-design.info for additional information.
  *
- *  This implements the gui-independent parts of the table 
+ *  This implements the gui-independent parts of the table
  *  infrastructure. Additional, GUI-dependent parts are implemented
  *  in table-gnome.c.
  *
@@ -54,9 +54,9 @@
  *  - there is only one cursor for a given virt row.
  *  - there is no overlap; a phys row can only belong to one virt row.
  *
- *  Lets say there are three cursors T(rans), S(plit), and B(lank).  
+ *  Lets say there are three cursors T(rans), S(plit), and B(lank).
  *  Lets say that these are used to 'print' the following table layout:
- * 
+ *
 @verbatim
 virtual row 1   T
 virtual row 2   S
@@ -72,7 +72,7 @@ virtual row 9   B
  *  You can see there is only one cursor per virtual row. There is no overlap
  *  between cursors and virtual rows; the correspondence is one to one. Note
  *  that the three cursors T, S and B may consist of one, or more physical rows,
- *  e.g. B and S may be one line each, but T may be two lines. Thus, we 
+ *  e.g. B and S may be one line each, but T may be two lines. Thus, we
  *  have the following physical layout:
  *
 @verbatim
@@ -89,7 +89,7 @@ physical row 10   virtual row 8   S
 physical row 11   virtual row 9   B
 @endverbatim
  *
- *  This layout remains static until the next time that the table is 
+ *  This layout remains static until the next time that the table is
  *  re-'printed'.
  */
 
@@ -109,12 +109,12 @@ physical row 11   virtual row 9   B
 /* The VirtualCell structure holds information about each virtual cell. */
 typedef struct
 {
-  CellBlock *cellblock;  /* Array of physical cells */
-  gpointer   vcell_data; /* Used by higher-level code */
+    CellBlock *cellblock;  /* Array of physical cells */
+    gpointer   vcell_data; /* Used by higher-level code */
 
-  /* flags */
-  unsigned int visible : 1;             /* visible in the GUI */
-  unsigned int start_primary_color : 1; /* color usage flag */
+    /* flags */
+    unsigned int visible : 1;             /* visible in the GUI */
+    unsigned int start_primary_color : 1; /* color usage flag */
 } VirtualCell;
 
 typedef struct table Table;
@@ -128,32 +128,32 @@ typedef void (*TableDestroyCB) (Table *table);
 
 typedef struct
 {
-  TableCursorRefreshCB cursor_refresh;
+    TableCursorRefreshCB cursor_refresh;
 
-  TableRedrawHelpCB redraw_help;
-  TableDestroyCB destroy;
+    TableRedrawHelpCB redraw_help;
+    TableDestroyCB destroy;
 } TableGUIHandlers;
 
 struct table
 {
-  TableLayout  *layout;
-  TableModel   *model;
-  TableControl *control;
+    TableLayout  *layout;
+    TableModel   *model;
+    TableControl *control;
 
-  int num_virt_rows;
-  int num_virt_cols;
+    int num_virt_rows;
+    int num_virt_cols;
 
-  CellBlock *current_cursor;
+    CellBlock *current_cursor;
 
-  VirtualLocation current_cursor_loc;
+    VirtualLocation current_cursor_loc;
 
-  /* private data */
+    /* private data */
 
-  /* The virtual cell table */
-  GTable *virt_cells;
+    /* The virtual cell table */
+    GTable *virt_cells;
 
-  TableGUIHandlers gui_handlers;
-  gpointer ui_data;
+    TableGUIHandlers gui_handlers;
+    gpointer ui_data;
 };
 
 
@@ -172,35 +172,35 @@ void        gnc_table_destroy (Table *table);
 
 /* Functions to work with current cursor */
 int         gnc_table_current_cursor_changed (Table *table,
-                                              gboolean include_conditional);
+        gboolean include_conditional);
 
 void        gnc_table_clear_current_cursor_changes (Table *table);
 
 void        gnc_table_save_current_cursor (Table *table, CursorBuffer *buffer);
 void        gnc_table_restore_current_cursor (Table *table,
-                                              CursorBuffer *buffer);
+        CursorBuffer *buffer);
 
 const char * gnc_table_get_current_cell_name (Table *table);
 
 gboolean    gnc_table_get_current_cell_location (Table *table,
-                                                 const char *cell_name,
-                                                 VirtualLocation *virt_loc);
+        const char *cell_name,
+        VirtualLocation *virt_loc);
 
 
 /* This function checks the given location and returns true
  * if it is out of bounds of the table. */
 gboolean gnc_table_virtual_cell_out_of_bounds (Table *table,
-                                               VirtualCellLocation vcell_loc);
+        VirtualCellLocation vcell_loc);
 
 gboolean gnc_table_virtual_location_in_header (Table *table,
-                                               VirtualLocation virt_loc);
+        VirtualLocation virt_loc);
 
 
 /* This function returns the virtual cell associated with a particular
  *   virtual location. If the location is out of bounds, NULL is *
  *   returned. */
 VirtualCell *  gnc_table_get_virtual_cell (Table *table,
-                                           VirtualCellLocation vcell_loc);
+        VirtualCellLocation vcell_loc);
 
 const char *   gnc_table_get_entry (Table *table, VirtualLocation virt_loc);
 
@@ -213,7 +213,7 @@ guint32        gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc);
 guint32        gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
                                        gboolean *hatching);
 guint32        gnc_table_get_gtkrc_bg_color (Table *table, VirtualLocation virt_loc,
-					     gboolean *hatching);
+        gboolean *hatching);
 
 void           gnc_table_get_borders (Table *table, VirtualLocation virt_loc,
                                       PhysicalCellBorders *borders);
@@ -230,9 +230,9 @@ const char *   gnc_table_get_cell_name (Table *table,
                                         VirtualLocation virt_loc);
 
 gboolean       gnc_table_get_cell_location (Table *table,
-                                            const char * cell_name,
-                                            VirtualCellLocation vcell_loc,
-                                            VirtualLocation *virt_loc);
+        const char * cell_name,
+        VirtualCellLocation vcell_loc,
+        VirtualLocation *virt_loc);
 
 void           gnc_table_save_cells (Table *table, gpointer save_data);
 
@@ -253,18 +253,18 @@ void        gnc_table_set_vcell (Table *table, CellBlock *cursor,
 
 /* Set the virtual cell data for a particular location. */
 void        gnc_table_set_virt_cell_data (Table *table,
-                                          VirtualCellLocation vcell_loc,
-                                          gconstpointer vcell_data);
+        VirtualCellLocation vcell_loc,
+        gconstpointer vcell_data);
 
 /* Set the visibility flag for a particular location. */
 void        gnc_table_set_virt_cell_visible (Table *table,
-                                             VirtualCellLocation vcell_loc,
-                                             gboolean visible);
+        VirtualCellLocation vcell_loc,
+        gboolean visible);
 
 /* Set the cellblock handler for a virtual cell. */
 void        gnc_table_set_virt_cell_cursor (Table *table,
-                                            VirtualCellLocation vcell_loc,
-                                            CellBlock *cursor);
+        VirtualCellLocation vcell_loc,
+        CellBlock *cursor);
 
 /* The gnc_table_move_cursor() method will move the cursor (but not
  *   the cursor GUI) to the indicated location. This function is
@@ -284,7 +284,7 @@ void        gnc_table_move_cursor_gui (Table *table, VirtualLocation virt_loc);
  *   cursor and gui to the new position. Returns true if the cell
  *   cursor was repositioned. */
 gboolean    gnc_table_verify_cursor_position (Table *table,
-                                              VirtualLocation virt_loc);
+        VirtualLocation virt_loc);
 
 /* The gnc_table_get_vcell_data() method returns the virtual cell data
  *   associated with a cursor located at the given virtual coords, or
@@ -296,8 +296,8 @@ gpointer    gnc_table_get_vcell_data (Table *table,
  *   be explicitly selected by the user (as opposed to just tabbing
  *   into), are considered valid cells. */
 gboolean    gnc_table_find_close_valid_cell (Table *table,
-                                             VirtualLocation *virt_loc,
-                                             gboolean exact_cell);
+        VirtualLocation *virt_loc,
+        gboolean exact_cell);
 
 /** UI-specific functions *******************************/
 
@@ -308,7 +308,7 @@ void        gnc_table_realize_gui (Table *table);
 
 /* Refresh the current cursor gui */
 void        gnc_table_refresh_current_cursor_gui (Table * table,
-                                                  gboolean do_scroll);
+        gboolean do_scroll);
 
 /* Refresh the whole GUI from the table. */
 void        gnc_table_refresh_gui (Table *table, gboolean do_scroll);
@@ -321,17 +321,17 @@ void        gnc_table_show_range (Table *table,
 /* Refresh the cursor in the given location. If do_scroll is TRUE,
  * scroll the register so the location is in view. */
 void        gnc_table_refresh_cursor_gui (Table * table,
-                                          VirtualCellLocation vcell_loc,
-                                          gboolean do_scroll);
+        VirtualCellLocation vcell_loc,
+        gboolean do_scroll);
 
 /* ==================================================== */
 
 void         gnc_table_wrap_verify_cursor_position (Table *table,
-                                                    VirtualLocation virt_loc);
+        VirtualLocation virt_loc);
 
 gboolean     gnc_table_virtual_loc_valid(Table *table,
-                                         VirtualLocation virt_loc,
-                                         gboolean exact_pointer);
+        VirtualLocation virt_loc,
+        gboolean exact_pointer);
 
 gboolean     gnc_table_move_tab (Table *table,
                                  VirtualLocation *virt_loc,
@@ -351,8 +351,8 @@ gboolean     gnc_table_move_tab (Table *table,
  *  @return TRUE if the location changed, FALSE otherwise
  */
 gboolean     gnc_table_move_vertical_position (Table *table,
-                                               VirtualLocation *virt_loc,
-                                               int phys_row_offset);
+        VirtualLocation *virt_loc,
+        int phys_row_offset);
 
 gboolean     gnc_table_enter_update(Table *table,
                                     VirtualLocation virt_loc,

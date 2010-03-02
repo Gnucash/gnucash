@@ -31,16 +31,16 @@
 /** @file split-register-layout.h
  *  @brief Create the actual register visual layout
  *  @author Copyright (C) 1998, 2004 Linas Vepstas <linas@linas.org>
- *  Pick specific cell types to sit in specific columns, and add 
- *  connections so that user can tab from one field to the next.  
+ *  Pick specific cell types to sit in specific columns, and add
+ *  connections so that user can tab from one field to the next.
  *
  *  The actual layout depends on the register type, but, typically,
  *  all of the registers have the date cell on the left, description
  *  in the middle, and monetary totals on the right.
- * 
+ *
  *  This implementation hard-codes the layout in C, although the
- *  original intent was that the layout would be fetched from a 
- *  config file that could be tweaked for a specific, non-GnuCash 
+ *  original intent was that the layout would be fetched from a
+ *  config file that could be tweaked for a specific, non-GnuCash
  *  application.
  */
 
