@@ -21,6 +21,13 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+/**
+ * @file dialog-print-check.c
+ * @brief Print Checks Dialog
+ * @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>
+ * @author Copyright (C) 2006,2007 David Hampton <hampton@employees.org>
+ */
+
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -106,7 +113,7 @@
 #define KF_KEY_SPLITS_MEMO    "SplitsMemo"
 #define KF_KEY_SPLITS_ACCOUNT "SplitsAccount"
 
-/**< This enum specifies the columns used in the check format combobox. */
+/** This enum specifies the columns used in the check format combobox. */
 typedef enum format_combo_col_t
 {
     COL_NAME = 0,               /**< This column holds a copy of the check
@@ -168,21 +175,21 @@ AS_STRING_DEC(CheckItemType, ENUM_CHECK_ITEM_TYPE)
 AS_STRING_FUNC(CheckItemType, ENUM_CHECK_ITEM_TYPE)
 
 /** This data structure describes a single item printed on a check.
- *  It is build from a description in a text file. */
+ *  It is built from a description in a text file. */
 typedef struct _check_item
 {
 
     CheckItemType type;         /**< What type of item is this?  */
 
-    gdouble x, y;               /**< The x/y coordinates where this item
-                                 *   should be printed.  The origin for this
-                                 *   coordinate is determined by the print
+    gdouble x, y;               /**< The x/y coordinates where this item should
+                                 *   be printed.  The origin for these
+                                 *   coordinates is determined by the print
                                  *   system used.  */
 
     gdouble w, h;               /**< Optional. The width and height of this
                                  *   item.  Text will be clipped to this
-                                 *   size. Pictures will be shrunk if
-                                 *   necessary to fit.  */
+                                 *   size. Pictures will be shrunk to fit if
+                                 *   necessary.  */
 
     gchar *filename;            /**< The filename for picture items. Otherwise
                                  *   unused. */
@@ -190,16 +197,18 @@ typedef struct _check_item
     gchar *text;                /**< The text to be displayed (for text based
                                  *   items.) Otherwise unused.  */
 
-    gchar *font;                /**< The font to use for text based item. This
+    gchar *font;                /**< The font to use for text based items. This
                                  *   overrides any font in the check format.
                                  *   Unused for non-text items. */
 
-    gboolean blocking;          /**< Optional.  Override blocking in the check format.
-                                 *   Default is no blocking characters are written.
-                                 *   Unused for non-text items. */
+    gboolean blocking;          /**< Optional. Overrides blocking in the check
+                                 *   format. Default is no blocking characters
+                                 *   are written.  Unused for non-text
+                                 *   items. */
 
-    gboolean print_date_format; /**< Optional.  Print date format.  Only applies to DATE items.
-                                 *   Default is no format is written. */
+    gboolean print_date_format; /**< Optional.  Print date format.  Only
+                                 *   applies to DATE items.  Default is no
+                                 *   format is written. */
 
     PangoAlignment align;       /**< The alignment of a text based item. Only
                                  *   used for text based items when a width is
@@ -208,7 +217,7 @@ typedef struct _check_item
 
 /** This data structure describes an entire page of checks.  Depending
  *  upon the check format, the page may contain multiple checks or
- *  only a single check.  The data structure is build from a
+ *  only a single check.  The data structure is built from a
  *  description in a text file. */
 typedef struct _check_format
 {
@@ -220,8 +229,8 @@ typedef struct _check_format
     gchar *filename;            /**< The name of the file from which this data
                                  *   was read.  */
 
-    gchar *title;               /**< Title of this check format. Displayed to
-                                 *   user in the dialog box. */
+    gchar *title;               /**< Title of this check format. Displayed in
+                                 *   the dialog box. */
 
     gboolean blocking;          /**< Default for printing blocking characters for
                                  *   this page of checks.  */
@@ -234,19 +243,19 @@ typedef struct _check_format
     gboolean show_boxes;        /**< Print boxes when width and height are
                                  *   known. */
 
-    gdouble rotation;           /**< Rotate entire page by this amount  */
+    gdouble rotation;           /**< Rotate the entire page by this amount. */
 
-    gdouble trans_x;            /**< Move entire page by this X amount  */
+    gdouble trans_x;            /**< Move entire page left by this amount. */
 
-    gdouble trans_y;            /**< Move entire page by this Y amount  */
+    gdouble trans_y;            /**< Move entire page down by this amount. */
 
-    gchar *font;                /**< Default font for this page of checks */
+    gchar *font;                /**< Default font for this page of checks. */
 
-    gdouble height;             /**< Height of one check on a page */
+    gdouble height;             /**< Height of one check on a page. */
 
     GSList *positions;          /**< Names of the checks on the page. */
 
-    GSList *items;              /**< List of items printed on each check  */
+    GSList *items;              /**< List of items printed on each check. */
 } check_format_t;
 
 /** This data structure is used to manage the print check dialog, and
@@ -298,11 +307,10 @@ struct _print_check_dialog
 };
 
 
-/**< This function walks ths list of available check formats looking for a
- * specific format as specified by guid number.  If found, a pointer to the
- * check format is returned to the caller.  Additionally, if the caller passed
- * a pointer to a GtkTreeIter, then the iter for that entry will also be
- * returned. */
+/** This function walks ths list of available check formats looking for a
+ *  specific format as specified by guid number.  If found, a pointer to it is
+ *  returned to the caller.  Additionally, if the caller passed a pointer to a
+ *  GtkTreeIter, then the iter for that entry will also be returned. */
 static check_format_t *
 find_existing_format (GtkListStore *store, gchar *guid, GtkTreeIter *iter_out)
 {
@@ -332,8 +340,8 @@ find_existing_format (GtkListStore *store, gchar *guid, GtkTreeIter *iter_out)
 
     return NULL;
 }
-
-
+/** This function is used by the custom format dialog to save position values
+ * to the GConf database. */
 static void
 save_float_pair (const char *section, const char *key, double a, double b)
 {
@@ -345,6 +353,8 @@ save_float_pair (const char *section, const char *key, double a, double b)
     g_slist_free(coord_list);
 }
 
+/** This function is used by the custom format dialog to restore position
+ * values from the GConf database. */
 static void
 get_float_pair (const char *section, const char *key, double *a, double *b)
 {
@@ -363,11 +373,14 @@ get_float_pair (const char *section, const char *key, double *a, double *b)
     g_slist_free(coord_list);
 }
 
+
+/** This function returns a string containing the check address in a five-line
+ *  format.
+ *
+ *  Note that the string needs to be freed with g_free. */
 gchar *
 get_check_address( PrintCheckDialog *pcd)
 {
-    /* return an address in five lines
-     * the string needs to be freed with g_free */
     gchar *address;
     address = g_strconcat(gtk_entry_get_text(GTK_ENTRY(pcd->check_address_name)), "\n",
                           gtk_entry_get_text(GTK_ENTRY(pcd->check_address_1)), "\n",
@@ -378,6 +391,10 @@ get_check_address( PrintCheckDialog *pcd)
     return address;
 }
 
+//@{
+/** @name Split printing functions */
+
+/** This function formats the splits amounts for printing. */
 gchar *
 get_check_splits_amount(PrintCheckDialog *pcd)
 {
@@ -412,6 +429,7 @@ get_check_splits_amount(PrintCheckDialog *pcd)
     return amount;
 }
 
+/** This function formats the splits memo fields for printing. */
 gchar *
 get_check_splits_memo(PrintCheckDialog *pcd)
 {
@@ -446,6 +464,7 @@ get_check_splits_memo(PrintCheckDialog *pcd)
     return memo;
 }
 
+/** This function formats the splits accounts for printing. */
 gchar *
 get_check_splits_account(PrintCheckDialog *pcd)
 {
@@ -481,7 +500,9 @@ get_check_splits_account(PrintCheckDialog *pcd)
     }
     return account;
 }
+//@}
 
+/** This function determines if an address item is present in the check format.*/
 gboolean
 check_format_has_address ( PrintCheckDialog *pcd )
 {
@@ -686,9 +707,9 @@ pcd_get_custom_multip(PrintCheckDialog * pcd)
 }
 
 
-/** Save a coordinate pair into a check description file.  This function
- *  extracts the values from the spin buttons, adjusts them for the units
- *  multiplies (inch, pixel, etc), and then adds them to the gKeyFile. */
+/** This function saves a coordinate pair into a check description file.  It
+ *  extracts the values from the spin buttons, adjusts them according to the
+ *  unit multiplier (inches, pixels, etc), then adds them to the gKeyFile. */
 static void
 pcd_key_file_save_xy (GKeyFile *key_file, const gchar *group_name,
                       const gchar *key_name, gdouble multip,
@@ -705,9 +726,9 @@ pcd_key_file_save_xy (GKeyFile *key_file, const gchar *group_name,
 }
 
 
-/** Save the information about a single printed item into a check description
- *  file.  This function uses a helper function to extracts and save the item
- *  coordinates. */
+/** This function saves the information about a single printed item into a
+ *  check description file.  It uses a helper function to extracts and save the
+ *  item coordinates. */
 static void
 pcd_key_file_save_item_xy (GKeyFile *key_file, int index,
                            CheckItemType type, gdouble multip,
@@ -724,8 +745,8 @@ pcd_key_file_save_item_xy (GKeyFile *key_file, int index,
 }
 
 
-/** Save all of the information from the custom check dialog into a check
- *  description file. */
+/** This function saves all of the information from the custom check dialog
+ *  into a check description file. */
 static void
 pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
 {
@@ -805,7 +826,7 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
 }
 
 
-/* Make the OK button sensitive iff a title has been entered. */
+/** This function makes the OK button active iff a title has been entered. */
 void
 gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button)
 {
@@ -853,8 +874,8 @@ gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
 }
 
 
-/** This is an auxiliary debugging function for converting an array of doubles
- *  into a printable string. */
+/** This function is an auxiliary debugging function for converting an array of
+ *  doubles into a printable string. */
 static gchar *
 doubles_to_string(gdouble * dd, gint len)
 {
@@ -868,14 +889,15 @@ doubles_to_string(gdouble * dd, gint len)
 }
 
 
-/** Read the information describing the placement for each item to be printed
- *  on the check.  This information is all relative to the upper left hand
- *  corner of a "check".  See the format_read_multicheck_info() function for
- *  determining if there are multiple checks on a single page of paper. This
- *  data is build into a linked list and saved as part of the check format
- *  information.  These items will be printed in the same order they are read,
- *  meaning that items listed later in the date file can be printed over top
- *  of items that appear earlier in the file. */
+
+/** This function reads in the information describing the placement for each
+ *  item to be printed on a check.  This information is all relative to the
+ *  upper left hand corner of a "check".  See the format_read_multicheck_info()
+ *  function for determining if there are multiple checks on a single page of
+ *  paper. This data is build into a linked list and saved as part of the check
+ *  format information.  These items will be printed in the same order they are
+ *  read, meaning that items listed later in the date file can be printed over
+ *  top of items that appear earlier in the file. */
 static GSList *
 format_read_item_placement(const gchar * file,
                            GKeyFile * key_file, check_format_t * format)
