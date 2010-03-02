@@ -50,23 +50,24 @@ static SCM gnc_session_scm_gui_cb = SCM_BOOL_F;
 static void
 gnc_session_scm_gui_cb_helper (const char *message, double percent)
 {
-  if (gnc_session_scm_gui_cb != SCM_BOOL_F) {
-    SCM string = scm_makfrom0str(message);
-    SCM scm_percent = scm_make_real(percent);
-    scm_call_2 (gnc_session_scm_gui_cb, string, scm_percent);
-  }
+    if (gnc_session_scm_gui_cb != SCM_BOOL_F)
+    {
+        SCM string = scm_makfrom0str(message);
+        SCM scm_percent = scm_make_real(percent);
+        scm_call_2 (gnc_session_scm_gui_cb, string, scm_percent);
+    }
 }
 
 void
 gnc_session_scm_load (QofSession *session)
 {
-  qof_session_load (session, gnc_session_scm_gui_cb_helper);
+    qof_session_load (session, gnc_session_scm_gui_cb_helper);
 }
 
 void
 gnc_session_scm_save (QofSession *session)
 {
-  qof_session_save (session, gnc_session_scm_gui_cb_helper);
+    qof_session_save (session, gnc_session_scm_gui_cb_helper);
 }
 
 /*
@@ -76,11 +77,11 @@ gnc_session_scm_save (QofSession *session)
 void
 gnc_session_scm_set_callback (SCM percentage_cb)
 {
-  if (gnc_session_scm_gui_cb != SCM_BOOL_F)
-    scm_gc_unprotect_object(gnc_session_scm_gui_cb);
+    if (gnc_session_scm_gui_cb != SCM_BOOL_F)
+        scm_gc_unprotect_object(gnc_session_scm_gui_cb);
 
-  gnc_session_scm_gui_cb = percentage_cb;
-  if (gnc_session_scm_gui_cb != SCM_BOOL_F)
-    scm_gc_protect_object(gnc_session_scm_gui_cb);
+    gnc_session_scm_gui_cb = percentage_cb;
+    if (gnc_session_scm_gui_cb != SCM_BOOL_F)
+        scm_gc_protect_object(gnc_session_scm_gui_cb);
 }
 

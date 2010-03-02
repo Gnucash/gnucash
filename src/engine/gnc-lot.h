@@ -65,7 +65,8 @@
 #include "gnc-engine.h"
 /*#include "gnc-lot-p.h"*/
 
-typedef struct {
+typedef struct
+{
     QofInstanceClass parent_class;
 } GncLotClass;
 #define GNCLotClass GncLotClass

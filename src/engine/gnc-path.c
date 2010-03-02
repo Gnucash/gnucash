@@ -27,8 +27,8 @@
 
 gchar *gnc_path_get_prefix()
 {
-  //printf("Returning prefix %s\n", gbr_find_prefix (PREFIX));
-  return gbr_find_prefix (PREFIX);
+    //printf("Returning prefix %s\n", gbr_find_prefix (PREFIX));
+    return gbr_find_prefix (PREFIX);
 }
 
 /** Returns the libdir path, usually
@@ -37,8 +37,8 @@ gchar *gnc_path_get_prefix()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_libdir()
 {
-  //printf("Returning libdir %s\n", gbr_find_lib_dir (LIBDIR));
-  return gbr_find_lib_dir (LIBDIR);
+    //printf("Returning libdir %s\n", gbr_find_lib_dir (LIBDIR));
+    return gbr_find_lib_dir (LIBDIR);
 }
 
 /** Returns the datadir path, usually
@@ -47,11 +47,11 @@ gchar *gnc_path_get_libdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_pkgdatadir()
 {
-  gchar *datadir = gbr_find_data_dir (DATADIR);
-  gchar *result = g_build_filename (datadir, "gnucash", (char*)NULL);
-  g_free (datadir);
-  //printf("Returning pkgdatadir %s\n", result);
-  return result;
+    gchar *datadir = gbr_find_data_dir (DATADIR);
+    gchar *result = g_build_filename (datadir, "gnucash", (char*)NULL);
+    g_free (datadir);
+    //printf("Returning pkgdatadir %s\n", result);
+    return result;
 }
 
 /** Returns the sysconfdir path, usually
@@ -60,11 +60,11 @@ gchar *gnc_path_get_pkgdatadir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_pkgsysconfdir()
 {
-  gchar *sysconfdir = gbr_find_etc_dir (SYSCONFDIR);
-  gchar *result = g_build_filename (sysconfdir, "gnucash", (char*)NULL);
-  g_free (sysconfdir);
-  //printf("Returning pkgsysconfdir %s\n", result);
-  return result;
+    gchar *sysconfdir = gbr_find_etc_dir (SYSCONFDIR);
+    gchar *result = g_build_filename (sysconfdir, "gnucash", (char*)NULL);
+    g_free (sysconfdir);
+    //printf("Returning pkgsysconfdir %s\n", result);
+    return result;
 }
 
 
@@ -74,11 +74,11 @@ gchar *gnc_path_get_pkgsysconfdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_pkglibdir()
 {
-  gchar *libdir = gnc_path_get_libdir ();
-  gchar *result = g_build_filename (libdir, "gnucash", (char*)NULL);
-  g_free (libdir);
-  //printf("Returning pkglibdir %s\n", result);
-  return result;
+    gchar *libdir = gnc_path_get_libdir ();
+    gchar *result = g_build_filename (libdir, "gnucash", (char*)NULL);
+    g_free (libdir);
+    //printf("Returning pkglibdir %s\n", result);
+    return result;
 }
 
 /** Returns the glade file path, usually
@@ -87,11 +87,11 @@ gchar *gnc_path_get_pkglibdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_gladedir()
 {
-  gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
-  gchar *result = g_build_filename (pkgdatadir, "glade", (char*)NULL);
-  g_free (pkgdatadir);
-  //printf("Returning gladedir %s\n", result);
-  return result;
+    gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
+    gchar *result = g_build_filename (pkgdatadir, "glade", (char*)NULL);
+    g_free (pkgdatadir);
+    //printf("Returning gladedir %s\n", result);
+    return result;
 }
 
 /** Returns the localedir path, usually
@@ -100,11 +100,11 @@ gchar *gnc_path_get_gladedir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_localedir()
 {
-  gchar *prefix = gnc_path_get_prefix();
-  gchar *result = g_build_filename (prefix, LOCALE_DATADIRNAME, "locale", (char*)NULL);
-  g_free (prefix);
-  //printf("Returning localedir %s\n", result);
-  return result;
+    gchar *prefix = gnc_path_get_prefix();
+    gchar *result = g_build_filename (prefix, LOCALE_DATADIRNAME, "locale", (char*)NULL);
+    g_free (prefix);
+    //printf("Returning localedir %s\n", result);
+    return result;
 }
 
 /** Returns the glade file path, usually
@@ -113,11 +113,11 @@ gchar *gnc_path_get_localedir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_accountsdir()
 {
-  gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
-  gchar *result = g_build_filename (pkgdatadir, "accounts", (char*)NULL);
-  g_free (pkgdatadir);
-  //printf("Returning accountsdir %s\n", result);
-  return result;
+    gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
+    gchar *result = g_build_filename (pkgdatadir, "accounts", (char*)NULL);
+    g_free (pkgdatadir);
+    //printf("Returning accountsdir %s\n", result);
+    return result;
 }
 
 /** Returns the gconf schema config source path, usually
@@ -126,23 +126,24 @@ gchar *gnc_path_get_accountsdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_gconfdir(gboolean force_slashes)
 {
-  gchar *sysconfdir = gbr_find_etc_dir (SYSCONFDIR);
-  gchar *separator = G_DIR_SEPARATOR_S;
-  gchar *result;
+    gchar *sysconfdir = gbr_find_etc_dir (SYSCONFDIR);
+    gchar *separator = G_DIR_SEPARATOR_S;
+    gchar *result;
 
-  if (force_slashes) {
-    gchar **splitted;
-    splitted = g_strsplit (sysconfdir, "\\", -1);
+    if (force_slashes)
+    {
+        gchar **splitted;
+        splitted = g_strsplit (sysconfdir, "\\", -1);
+        g_free (sysconfdir);
+        sysconfdir = g_strjoinv ("/", splitted);
+        g_strfreev (splitted);
+        separator = "/";
+    }
+
+    result = g_build_path (separator, sysconfdir, "gconf", "gconf.xml.defaults",
+                           (gchar*)NULL);
     g_free (sysconfdir);
-    sysconfdir = g_strjoinv ("/", splitted);
-    g_strfreev (splitted);
-    separator = "/";
-  }
-
-  result = g_build_path (separator, sysconfdir, "gconf", "gconf.xml.defaults",
-			 (gchar*)NULL);
-  g_free (sysconfdir);
-  //printf("Returning gconfdir %s\n", result);
-  return result;
+    //printf("Returning gconfdir %s\n", result);
+    return result;
 }
 
