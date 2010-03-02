@@ -761,9 +761,10 @@ static void split_find_match (GNCImportTransInfo * trans_info,
         match_info->trans = xaccSplitGetParent(split);
 
 
-        /* Append that to the list. */
+        /* Append that to the list. Do not use g_list_append because
+	   it is slow. The list is sorted afterwards anyway. */
         trans_info->match_list =
-            g_list_append(trans_info->match_list,
+            g_list_prepend(trans_info->match_list,
                           match_info);
     }
 }/* end split_find_match */
