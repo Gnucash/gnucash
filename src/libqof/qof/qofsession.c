@@ -53,9 +53,6 @@
 #include "qofobject-p.h"
 #include "qofla-dir.h" /* for QOF_LIB_DIR */
 
-/** \deprecated should not be static */
-static QofSession * current_session = NULL;
-
 static GHookList * session_closed_hooks = NULL;
 static QofLogModule log_module = QOF_MOD_SESSION;
 static GSList *provider_list = NULL;
@@ -232,29 +229,6 @@ qof_session_new (void)
     QofSession *session = g_new0(QofSession, 1);
     qof_session_init(session);
     return session;
-}
-
-/** \deprecated Each application should keep
-their \b own session context. */
-QofSession *
-qof_session_get_current_session (void)
-{
-    if (!current_session)
-    {
-        qof_event_suspend ();
-        current_session = qof_session_new ();
-        qof_event_resume ();
-    }
-
-    return current_session;
-}
-
-/** \deprecated Each application should keep
-their \b own session context. */
-void
-qof_session_set_current_session (QofSession *session)
-{
-    current_session = session;
 }
 
 QofBook *
@@ -1602,8 +1576,6 @@ qof_session_destroy (QofSession *session)
     }
 
     session->books  = NULL;
-    if (session == current_session)
-        current_session = NULL;
 
     g_free (session);
 

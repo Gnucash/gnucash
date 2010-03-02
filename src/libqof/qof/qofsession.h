@@ -111,8 +111,6 @@ typedef struct _QofSession    QofSession;
 
 QofSession * qof_session_new (void);
 void         qof_session_destroy (QofSession *session);
-QofSession * qof_session_get_current_session (void);
-void	       qof_session_set_current_session (QofSession *session);
 
 /** The qof_session_swap_data () method swaps the book of
  *    the two given sessions. It is useful
