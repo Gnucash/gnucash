@@ -43,9 +43,10 @@
 # include <sys/time.h>
 #else
 /* We simply define the struct timeval on our own here. */
-struct timeval {
-        long    tv_sec;         /* seconds */
-        long    tv_usec;        /* and microseconds */
+struct timeval
+{
+    long    tv_sec;         /* seconds */
+    long    tv_usec;        /* and microseconds */
 };
 /* include <Winsock2.h> */
 #endif

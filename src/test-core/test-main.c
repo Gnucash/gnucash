@@ -161,10 +161,10 @@ main(int argc, char ** argv)
 
     gnc_module_system_init();
 
-	qof_backend_module_init();
+    qof_backend_module_init();
 
-/*     gnc_gnome_init (argc, argv, VERSION); */
-/*     gnc_gui_init(); */
-/*     scm_boot_guile(argc, argv, inner_main, 0); */
+    /*     gnc_gnome_init (argc, argv, VERSION); */
+    /*     gnc_gui_init(); */
+    /*     scm_boot_guile(argc, argv, inner_main, 0); */
     exit(0); /* never reached */
 }

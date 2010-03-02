@@ -70,36 +70,36 @@
 
 extern gboolean
 gnc_verify_dialog(gncUIWidget parent,
-		  gboolean yes_is_default,
-		  const char *format, ...) G_GNUC_PRINTF (3, 4);
+                  gboolean yes_is_default,
+                  const char *format, ...) G_GNUC_PRINTF (3, 4);
 
 extern gint
 gnc_ok_cancel_dialog(gncUIWidget parent,
-		     gint default_result,
-		     const char *format, ...) G_GNUC_PRINTF (3,4);
+                     gint default_result,
+                     const char *format, ...) G_GNUC_PRINTF (3, 4);
 
 
 
 extern void
 gnc_warning_dialog(gncUIWidget parent,
-		   const char *format, ...) G_GNUC_PRINTF (2, 3);
+                   const char *format, ...) G_GNUC_PRINTF (2, 3);
 
 
 
 extern void
 gnc_error_dialog(GtkWidget *parent,
-		 const char *format, ...) G_GNUC_PRINTF (2, 3);
+                 const char *format, ...) G_GNUC_PRINTF (2, 3);
 
 
 extern void
 gnc_gnome_help (const char *file_name, const char *target_link);
 
 int      gnc_choose_radio_option_dialog (gncUIWidget parent,
-					 const char *title,
-					 const char *msg,
-					 const char *button_name,
-					 int default_value,
-					 GList *radio_list);
+        const char *title,
+        const char *msg,
+        const char *button_name,
+        int default_value,
+        GList *radio_list);
 
 gboolean gnc_dup_trans_dialog (gncUIWidget parent, time_t *date_p,
                                const char *num, char **out_num);
@@ -108,12 +108,12 @@ void     gnc_stock_split_dialog (gncUIWidget parent, Account * initial);
 
 typedef enum
 {
-  GNC_PRICE_EDIT,
-  GNC_PRICE_NEW,
+    GNC_PRICE_EDIT,
+    GNC_PRICE_NEW,
 } GNCPriceEditType;
 
 void gnc_price_edit_dialog (gncUIWidget parent, QofSession *session,
-				 GNCPrice *price, GNCPriceEditType type);
+                            GNCPrice *price, GNCPriceEditType type);
 GNCPrice* gnc_price_edit_by_guid (GtkWidget * parent, const GUID * guid);
 void     gnc_prices_dialog (gncUIWidget parent);
 void     gnc_commodities_dialog (gncUIWidget parent);

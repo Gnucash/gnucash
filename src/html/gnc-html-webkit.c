@@ -991,9 +991,9 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
 static void
 impl_webkit_print( GncHtml* self )
 {
-    extern void webkit_web_frame_print( WebKitWebFrame* frame );
-    extern GtkPrintOperationResult webkit_web_frame_print_full( WebKitWebFrame* frame,
-               GtkPrintOperation* op, GtkPrintOperationAction action, GError** error );
+    extern void webkit_web_frame_print( WebKitWebFrame * frame );
+    extern GtkPrintOperationResult webkit_web_frame_print_full( WebKitWebFrame * frame,
+            GtkPrintOperation * op, GtkPrintOperationAction action, GError** error );
 
     GncHtmlWebkitPrivate* priv;
     WebKitWebFrame* frame;
@@ -1006,17 +1006,18 @@ impl_webkit_print( GncHtml* self )
     frame = webkit_web_view_get_main_frame( priv->web_view );
 
 #if PRINT_WITH_OP
-	gtk_print_operation_set_unit( op, GTK_UNIT_POINTS );
+    gtk_print_operation_set_unit( op, GTK_UNIT_POINTS );
     webkit_web_frame_print_full( frame, op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, &error );
     g_object_unref( op );
 
-    if( error != NULL ) {
+    if ( error != NULL )
+    {
         GtkWidget* window = gtk_widget_get_toplevel( GTK_WIDGET(priv->web_view) );
         GtkWidget* dialog = gtk_message_dialog_new( GTK_WIDGET_TOPLEVEL(window) ? GTK_WINDOW(window) : NULL,
-                                      GTK_DIALOG_DESTROY_WITH_PARENT,
-                                      GTK_MESSAGE_ERROR,
-                                      GTK_BUTTONS_CLOSE,
-                                      "%s", error->message );
+                            GTK_DIALOG_DESTROY_WITH_PARENT,
+                            GTK_MESSAGE_ERROR,
+                            GTK_BUTTONS_CLOSE,
+                            "%s", error->message );
         g_error_free( error );
 
         g_signal_connect( dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);

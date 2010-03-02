@@ -258,7 +258,7 @@ init_from_dir(const char *dirname, unsigned int max_files)
         total += strlen(de);
 
         result = g_snprintf(filename, sizeof(filename),
-                          "%s/%s", dirname, de);
+                            "%s/%s", dirname, de);
         if ((result < 0) || (result >= (int)sizeof(filename)))
             continue;
 
@@ -378,7 +378,7 @@ guid_init(void)
     /* process and parent ids */
     {
 #ifdef HAVE_UNISTD_H
-		pid_t pid;
+        pid_t pid;
 
         pid = getpid();
         md5_process_bytes(&pid, sizeof(pid), &guid_context);
@@ -390,7 +390,7 @@ guid_init(void)
         bytes += sizeof(pid);
 #endif
 #endif
-	}
+    }
 
     /* user info */
     {

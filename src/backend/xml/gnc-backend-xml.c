@@ -243,9 +243,9 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
         rc = g_stat (be->dirname, &statbuf);
         if (rc != 0
 #ifndef _MSC_VER
-			|| !S_ISDIR(statbuf.st_mode)
+                || !S_ISDIR(statbuf.st_mode)
 #endif
-			)
+           )
         {
             /* Error on stat or if it isn't a directory means we
                cannot find this filename */
@@ -273,9 +273,9 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
         }
         if (rc == 0
 #ifndef _MSC_VER
-			&& S_ISDIR(statbuf.st_mode)
+                && S_ISDIR(statbuf.st_mode)
 #endif
-			)
+           )
         {
             /* FIXME: What is actually checked here? Whether the
                fullpath erroneously points to a directory or what?

@@ -339,7 +339,7 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
 static gint
 _compare_GncSxVariables(gconstpointer a, gconstpointer b)
 {
-  return strcmp(((const GncSxVariable*)a)->name, ((const GncSxVariable*)b)->name);
+    return strcmp(((const GncSxVariable*)a)->name, ((const GncSxVariable*)b)->name);
 }
 
 static void
