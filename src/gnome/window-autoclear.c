@@ -106,6 +106,22 @@ ght_gnc_numeric_hash(gconstpointer v1)
     return g_str_hash(&d1);
 }
 
+typedef struct _sack_foreach_data_t
+{
+  gnc_numeric split_value;
+  GList *reachable_list;
+} *sack_foreach_data_t;
+
+static void sack_foreach_func(gpointer key, gpointer value, gpointer user_data)
+{
+  sack_foreach_data_t data = (sack_foreach_data_t)user_data;
+  gnc_numeric thisvalue = *(gnc_numeric *)key;
+
+  gnc_numeric reachable_value = gnc_numeric_add_fixed(thisvalue, data->split_value);
+  data->reachable_list = g_list_append(data->reachable_list, g_memdup(&reachable_value, sizeof(gnc_numeric)));
+  printf("    Sack: found %s, added %s\n", gnc_numeric_to_string(thisvalue), gnc_numeric_to_string(reachable_value));
+}
+
 static void
 gnc_autoclear_window_ok_cb (GtkWidget *widget,
                             AutoClearWindow *data)
@@ -158,29 +174,21 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
         Split *split = (Split *)node->data;
         gnc_numeric split_value = xaccSplitGetAmount(split);
 
-        GHashTableIter iter;
-        gpointer pkey = NULL;
-        GList *reachable_list = 0, *node;
+        GList *node;
+        struct _sack_foreach_data_t data[1];
+        data->split_value = split_value;
+        data->reachable_list = 0;
 
         printf("  Split value: %s\n", gnc_numeric_to_string(split_value));
 
-        /* For each value in the sack */
-        g_hash_table_iter_init (&iter, sack);
-        while (g_hash_table_iter_next (&iter, &pkey, NULL))
-        {
-            /* Cast the gpointer to the kind of pointer we actually need. */
-            gnc_numeric *key = (gnc_numeric *)pkey;
-            /* Compute a new reachable value */
-            gnc_numeric reachable_value = gnc_numeric_add_fixed(*key, split_value);
-            reachable_list = g_list_append(reachable_list, g_memdup(&reachable_value, sizeof(gnc_numeric)));
-            printf("    Sack: found %s, added %s\n", gnc_numeric_to_string(*key), gnc_numeric_to_string(reachable_value));
-        }
+        /* For each value in the sack, compute a new reachable value */
+        g_hash_table_foreach (sack, sack_foreach_func, data);
 
         /* Add the value of the split itself to the reachable_list */
-        reachable_list = g_list_append(reachable_list, g_memdup(&split_value, sizeof(gnc_numeric)));
+        data->reachable_list = g_list_append(data->reachable_list, g_memdup(&split_value, sizeof(gnc_numeric)));
 
         /* Add everything to the sack, looking out for duplicates */
-        for (node = reachable_list; node; node = node->next)
+        for (node = data->reachable_list; node; node = node->next)
         {
             gnc_numeric *reachable_value = node->data;
             Split *toinsert_split = split;
@@ -197,7 +205,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
             g_hash_table_insert (sack, reachable_value, toinsert_split);
             printf("\n");
         }
-        g_list_free(reachable_list);
+        g_list_free(data->reachable_list);
     }
 
     /* Check solution */
