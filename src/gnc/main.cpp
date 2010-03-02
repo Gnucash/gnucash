@@ -41,6 +41,7 @@ extern "C"
 #include "core-utils/gnc-main.h"
 #include "engine/gnc-session.h"
 #include "engine/engine-helpers.h"
+#include "engine/cashobjects.h"
 #include "swig-runtime.h"
 
 #include "gnc-backend-xml.h"
@@ -169,14 +170,20 @@ main(int argc, char ** argv)
 
     gnc::gnc_log_init();
 
+    qof_init();
     gnc_module_system_init();
+    cashobjects_register();
 
+    // For the XML file backend
     qof_backend_module_init();
 
     // From here on the new C++ code
     QApplication app(argc, argv);
     gnc::MainWindow mainWin;
     mainWin.show();
-    return app.exec();
+
+    int r = app.exec();
+    qof_close();
+    return r;
 
 }
