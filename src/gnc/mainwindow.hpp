@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSharedPointer>
+#include "gnc/Session.hpp"
 
 class QAction;
 class QMenu;
@@ -55,6 +56,8 @@ private:
 
     QToolBar *fileToolBar;
     QToolBar *editToolBar;
+
+    Session m_session;
 };
 
 } // END namespace gnc

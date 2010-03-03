@@ -1,22 +1,37 @@
-#include <QtGui>
+#include <QtGui/QToolBar>
+#include <QtGui/QMessageBox>
+#include <QtGui/QFileDialog>
+#include <QtCore/QSettings>
 
+#include "config.h"
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 
 // gnucash includes
-#include "config.h"
-extern "C" {
+extern "C"
+{
 #include <glib/gi18n.h>
 #include "qof.h"
-#include "engine/gnc-session.h"
 #include "engine/gnc-hooks.h"
 #include "engine/gnc-filepath-utils.h"
 #include "engine/Account.h"
 #include "engine/TransLog.h"
 }
 
+#include "gnc/Account.hpp"
+#include "gnc/Book.hpp"
+
 namespace gnc
 {
+
+inline QString errorToString(QofBackendError err)
+{
+    return QString::fromStdString(errorToStringPair(err).first);
+}
+inline QString errorToDescription(QofBackendError err)
+{
+    return QString::fromStdString(errorToStringPair(err).second);
+}
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -37,39 +52,12 @@ MainWindow::MainWindow()
 
     setWindowIcon(QIcon(":/pixmaps/gnucash-icon-32x32.png"));
 
-    setCurrentFile("");
+    newFile();
     setUnifiedTitleAndToolBarOnMac(true);
 }
 
 MainWindow::~MainWindow()
 {
-}
-
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    if (maybeSave())
-    {
-        writeSettings();
-        event->accept();
-
-	QofSession *session = gnc_get_current_session ();
-
-	/* disable events; otherwise the mass deletion of accounts and
-	 * transactions during shutdown would cause massive redraws */
-	qof_event_suspend ();
-
-	qof_session_call_close_hooks(session);
-	gnc_hook_run(HOOK_BOOK_CLOSED, session);
-	gnc_clear_current_session();
-
-	gnc_get_current_session ();
-
-	qof_event_resume ();
-    }
-    else
-    {
-        event->ignore();
-    }
 }
 
 void MainWindow::open()
@@ -196,12 +184,56 @@ bool MainWindow::maybeSave()
     return true;
 }
 
+void MainWindow::setCurrentFile(const QString &fileName)
+{
+    curFile = fileName;
+    ui->textEdit->document()->setModified(false);
+    setWindowModified(false);
+
+    QString shownName;
+    if (curFile.isEmpty())
+        shownName = "untitled.txt";
+    else
+        shownName = strippedName(curFile);
+
+    setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("Application")));
+}
+
+QString MainWindow::strippedName(const QString &fullFileName)
+{
+    return QFileInfo(fullFileName).fileName();
+}
+
 // ////////////////////////////////////////////////////////////
 
-static void
-gnc_book_opened (void)
+void MainWindow::closeEvent(QCloseEvent *event)
 {
-    gnc_hook_run(HOOK_BOOK_OPENED, gnc_get_current_session());
+    if (maybeSave())
+    {
+        writeSettings();
+        event->accept();
+
+        /* disable events; otherwise the mass deletion of accounts and
+         * transactions during shutdown would cause massive redraws */
+        qof_event_suspend ();
+
+        qof_session_call_close_hooks(m_session.get());
+        gnc_hook_run(HOOK_BOOK_CLOSED, m_session.get());
+
+        m_session.reset();
+
+        qof_event_resume ();
+    }
+    else
+    {
+        event->ignore();
+    }
+}
+
+static void
+gnc_book_opened (Session& sess)
+{
+    gnc_hook_run(HOOK_BOOK_OPENED, sess.get());
 }
 
 void MainWindow::newFile()
@@ -209,29 +241,28 @@ void MainWindow::newFile()
     if (maybeSave())
     {
 
-	if (gnc_current_session_exist()) {
-	    QofSession *session = gnc_get_current_session ();
+        if (m_session.get())
+        {
+            /* close any ongoing file sessions, and free the accounts.
+             * disable events so we don't get spammed by redraws. */
+            qof_event_suspend ();
 
-	    /* close any ongoing file sessions, and free the accounts.
-	     * disable events so we don't get spammed by redraws. */
-	    qof_event_suspend ();
+            m_session.call_close_hooks();
+            gnc_hook_run(HOOK_BOOK_CLOSED, m_session.get());
 
-	    qof_session_call_close_hooks(session);
-	    gnc_hook_run(HOOK_BOOK_CLOSED, session);
+            m_session.reset();
+            qof_event_resume ();
+        }
 
-	    gnc_clear_current_session();
-	    qof_event_resume ();
-	}
+        /* start a new book */
+        m_session.reset(Session::newInstance());
 
-	/* start a new book */
-	gnc_get_current_session ();
+        gnc_hook_run(HOOK_NEW_BOOK, NULL);
 
-	gnc_hook_run(HOOK_NEW_BOOK, NULL);
+        //gnc_gui_refresh_all ();
 
-	//gnc_gui_refresh_all ();
-
-	/* Call this after re-enabling events. */
-	gnc_book_opened ();
+        /* Call this after re-enabling events. */
+        gnc_book_opened (m_session);
 
         setCurrentFile("");
     }
@@ -240,7 +271,7 @@ void MainWindow::newFile()
 void MainWindow::loadFile(const QString &fileName)
 {
     if (fileName.isEmpty())
-	return;
+        return;
 
     // copied from gnc_post_file_open, gnome-utils/gnc-file.c
 
@@ -254,58 +285,57 @@ void MainWindow::loadFile(const QString &fileName)
 
     /* -------------- BEGIN CORE SESSION CODE ------------- */
     /* -- this code is almost identical in FileOpen and FileSaveAs -- */
-    QofSession *current_session = gnc_get_current_session();
-    qof_session_call_close_hooks(current_session);
-    gnc_hook_run(HOOK_BOOK_CLOSED, current_session);
-    gnc_clear_current_session();
+    m_session.call_close_hooks();
+    gnc_hook_run(HOOK_BOOK_CLOSED, m_session.get());
+    m_session.reset();
 
     /* load the accounts from the users datafile */
     /* but first, check to make sure we've got a session going. */
     QofSession *new_session = qof_session_new ();
 
-    bool uh_oh = false;
+    bool we_are_in_error = false;
     QByteArray newfile = fileName.toUtf8();
     qof_session_begin (new_session, newfile, FALSE, FALSE);
     QofBackendError io_err = qof_session_get_error (new_session);
     /* if file appears to be locked, ask the user ... */
     if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
     {
-	QString fmt1 = tr("GnuCash could not obtain the lock for %1.").arg(fileName);
-	QString fmt2 = 
-	    ((ERR_BACKEND_LOCKED == io_err)
-	     ? tr("That database may be in use by another user, "
-		  "in which case you should not open the database. "
-		  "What would you like to do? Open anyway? FIXME")
-	     : tr("That database may be on a read-only file system, "
-		  "or you may not have write permission for the directory. "
-		  "If you proceed you may not be able to save any changes. "
-		  "What would you like to do? Open anyway? FIXME"));
+        QString fmt1 = tr("GnuCash could not obtain the lock for %1.").arg(fileName);
+        QString fmt2 =
+            ((ERR_BACKEND_LOCKED == io_err)
+             ? tr("That database may be in use by another user, "
+                  "in which case you should not open the database. "
+                  "What would you like to do? Open anyway? FIXME")
+             : tr("That database may be on a read-only file system, "
+                  "or you may not have write permission for the directory. "
+                  "If you proceed you may not be able to save any changes. "
+                  "What would you like to do? Open anyway? FIXME"));
         if (QMessageBox::question(this, fmt1, fmt2)
-	    == QMessageBox::Ok)
-	{
-	    /* user told us to ignore locks. So ignore them. */
-	    qof_session_begin (new_session, newfile, TRUE, FALSE);
-	}
-	else
-	{
-	    /* Can't use the given file, so just create a new
-	     * database so that the user will get a window that
-	     * they can click "Exit" on.
-	     */
-	    newFile();
-	}
+                == QMessageBox::Ok)
+        {
+            /* user told us to ignore locks. So ignore them. */
+            qof_session_begin (new_session, newfile, TRUE, FALSE);
+        }
+        else
+        {
+            /* Can't use the given file, so just create a new
+             * database so that the user will get a window that
+             * they can click "Exit" on.
+             */
+            newFile();
+        }
     }
     /* if the database doesn't exist, ask the user ... */
     else if ((ERR_BACKEND_NO_SUCH_DB == io_err) ||
-	     (ERR_SQL_DB_TOO_OLD == io_err))
+             (ERR_SQL_DB_TOO_OLD == io_err))
     {
         if (QMessageBox::question(this, tr("Create New File?"),
-				  tr("The file %1 does not exist. Do you want to create it?").arg(fileName))
-	    == QMessageBox::Ok)
-	{
-	    /* user told us to create a new database. Do it. */
-	    qof_session_begin (new_session, newfile, FALSE, TRUE);
-	}
+                                  tr("The file %1 does not exist. Do you want to create it?").arg(fileName))
+                == QMessageBox::Ok)
+        {
+            /* user told us to create a new database. Do it. */
+            qof_session_begin (new_session, newfile, FALSE, TRUE);
+        }
     }
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -314,52 +344,63 @@ void MainWindow::loadFile(const QString &fileName)
      * don't bother with the message, just die. */
     io_err = qof_session_get_error (new_session);
     if ((ERR_BACKEND_LOCKED == io_err) ||
-	(ERR_BACKEND_READONLY == io_err) ||
-	(ERR_BACKEND_NO_SUCH_DB == io_err) ||
-	(ERR_SQL_DB_TOO_OLD == io_err))
+            (ERR_BACKEND_READONLY == io_err) ||
+            (ERR_BACKEND_NO_SUCH_DB == io_err) ||
+            (ERR_SQL_DB_TOO_OLD == io_err))
     {
-	uh_oh = true;
+        we_are_in_error = true;
     }
     else
     {
-        uh_oh = !(QMessageBox::question(this, tr("Open anyway?"),
-					tr("The file %1 has some errors (FIXME). Open anyway?").arg(fileName))
-		  == QMessageBox::Ok);
+        if (io_err != ERR_BACKEND_NO_ERR)
+        {
+            we_are_in_error = !(QMessageBox::question(this, tr("Open anyway?"),
+                                tr("The file %1 has some errors: %2: %3. Open anyway?")
+                                .arg(fileName)
+                                .arg(errorToString(io_err))
+                                .arg(errorToDescription(io_err)))
+                                == QMessageBox::Ok);
+        }
     }
 
-    if (!uh_oh)
+    if (!we_are_in_error)
     {
-	::Account *new_root;
+        char * logpath = xaccResolveFilePath(newfile);
+        PINFO ("logpath=%s", logpath ? logpath : "(null)");
+        xaccLogSetBaseName (logpath);
+        xaccLogDisable();
 
-	char * logpath = xaccResolveFilePath(newfile);
-	PINFO ("logpath=%s", logpath ? logpath : "(null)");
-	xaccLogSetBaseName (logpath);
-	xaccLogDisable();
+        statusBar()->showMessage(tr("Loading user data..."), 2000);
+        qof_session_load (new_session, NULL);
+        xaccLogEnable();
 
-	statusBar()->showMessage(tr("Loading user data..."), 2000);
-	qof_session_load (new_session, NULL);
-	xaccLogEnable();
+        /* check for i/o error, put up appropriate error dialog */
+        io_err = qof_session_get_error (new_session);
 
-	/* check for i/o error, put up appropriate error dialog */
-	io_err = qof_session_get_error (new_session);
-
-        uh_oh = !(QMessageBox::question(this, tr("Error on Open"),
-					tr("There was an error opening the file %1. FIXME").arg(fileName))
-		  == QMessageBox::Ok);
-
-	new_root = gnc_book_get_root_account (qof_session_get_book (new_session));
-	if (uh_oh) new_root = NULL;
+        if (io_err != ERR_BACKEND_NO_ERR)
+        {
+            we_are_in_error = !(QMessageBox::question(this, tr("Error on Open"),
+                                tr("There was an error opening the file %1: %2: %3. FIXME")
+                                .arg(fileName)
+                                .arg(errorToString(io_err))
+                                .arg(errorToDescription(io_err)))
+                                == QMessageBox::Ok);
+        }
     }
 
 
     /* if we got to here, then we've successfully gotten a new session */
     /* close up the old file session (if any) */
-    gnc_set_current_session(new_session);
+    m_session.reset(new_session);
+
+    ::Account * new_root = m_session.get_book().get_root_account().get();
+    if (we_are_in_error)
+        new_root = NULL;
 
     qof_event_resume ();
 
     /* Call this after re-enabling events. */
-    gnc_book_opened ();
+    gnc_book_opened (m_session);
 
     QApplication::restoreOverrideCursor();
 
@@ -381,7 +422,7 @@ bool MainWindow::saveFile(const QString &fileName)
     file.close();
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    QofSession *session = gnc_get_current_session ();
+    QofSession *session = m_session.get();
     /* Make sure all of the data from the old file is loaded */
     qof_session_ensure_all_data_loaded(session);
 
@@ -398,25 +439,25 @@ bool MainWindow::saveFile(const QString &fileName)
     if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
     {
         if (QMessageBox::question(this, tr("Ignore Lock?"),
-				  tr("The file %1 is locked. Should we ignore the lock?").arg(fileName))
-	    == QMessageBox::Ok)
-	{
-	    /* user told us to ignore locks. So ignore them. */
-	    qof_session_begin (new_session, newfile, TRUE, FALSE);
-	}
+                                  tr("The file %1 is locked. Should we ignore the lock?").arg(fileName))
+                == QMessageBox::Ok)
+        {
+            /* user told us to ignore locks. So ignore them. */
+            qof_session_begin (new_session, newfile, TRUE, FALSE);
+        }
     }
 
     /* if the database doesn't exist, ask the user ... */
     else if ((ERR_FILEIO_FILE_NOT_FOUND == io_err) ||
-	     (ERR_BACKEND_NO_SUCH_DB == io_err) ||
-	     (ERR_SQL_DB_TOO_OLD == io_err))
+             (ERR_BACKEND_NO_SUCH_DB == io_err) ||
+             (ERR_SQL_DB_TOO_OLD == io_err))
     {
-	if (QMessageBox::question(this, tr("Create New File?"),
-				  tr("The file %1 does not exist. Should it be created?").arg(fileName)))
-	{
-	    /* user told us to create a new database. Do it. */
-	    qof_session_begin (new_session, newfile, FALSE, TRUE);
-	}
+        if (QMessageBox::question(this, tr("Create New File?"),
+                                  tr("The file %1 does not exist. Should it be created?").arg(fileName)))
+        {
+            /* user told us to create a new database. Do it. */
+            qof_session_begin (new_session, newfile, FALSE, TRUE);
+        }
     }
 
     /* check again for session errors (since above dialog may have
@@ -426,12 +467,15 @@ bool MainWindow::saveFile(const QString &fileName)
     io_err = qof_session_get_error (new_session);
     if (ERR_BACKEND_NO_ERR != io_err)
     {
-	QMessageBox::critical(this, tr("Still in Error"),
-			      tr("The file %1 still cannot be written. FIXME").arg(fileName));
-	xaccLogDisable();
-	qof_session_destroy (new_session);
-	xaccLogEnable();
-	return false;
+        QMessageBox::critical(this, tr("Still in Error"),
+                              tr("The file %1 still cannot be written: %2: %3. FIXME")
+                              .arg(fileName)
+                              .arg(errorToString(io_err))
+                              .arg(errorToDescription(io_err)));
+        xaccLogDisable();
+        qof_session_destroy (new_session);
+        xaccLogEnable();
+        return false;
     }
 
     /* Prevent race condition between swapping the contents of the two
@@ -443,14 +487,14 @@ bool MainWindow::saveFile(const QString &fileName)
     /* if we got to here, then we've successfully gotten a new session */
     /* close up the old file session (if any) */
     qof_session_swap_data (session, new_session);
-    gnc_clear_current_session();
+    m_session.reset();
     session = NULL;
 
     /* XXX At this point, we should really mark the data in the new session
      * as being 'dirty', since we haven't saved it at all under the new
      * session. But I'm lazy...
      */
-    gnc_set_current_session(new_session);
+    m_session.reset(new_session);
 
     qof_event_resume();
 
@@ -462,26 +506,6 @@ bool MainWindow::saveFile(const QString &fileName)
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File saved"), 2000);
     return true;
-}
-
-void MainWindow::setCurrentFile(const QString &fileName)
-{
-    curFile = fileName;
-    ui->textEdit->document()->setModified(false);
-    setWindowModified(false);
-
-    QString shownName;
-    if (curFile.isEmpty())
-        shownName = "untitled.txt";
-    else
-        shownName = strippedName(curFile);
-
-    setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("Application")));
-}
-
-QString MainWindow::strippedName(const QString &fullFileName)
-{
-    return QFileInfo(fullFileName).fileName();
 }
 
 } // END namespace gnc

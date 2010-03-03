@@ -10,6 +10,8 @@ LINK_DIRECTORIES (${GLIB2_LIBRARY_DIRS}
 )
 
 SET (gnc_SOURCES
+  Book.cpp
+  Session.cpp
   main.cpp
   mainwindow.cpp
 )
@@ -18,6 +20,11 @@ SET (gnc_QOBJECT_HEADERS
   mainwindow.hpp
 )
 SET (gnc_HEADERS ${gnc_QOBJECT_HEADERS}
+  Account.hpp
+  Book.hpp
+  ScopedPointer.hpp
+  Session.hpp
+  WeakPointer.hpp
 )
 
 SET (gnc_FORMS

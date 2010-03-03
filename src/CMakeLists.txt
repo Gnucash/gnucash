@@ -65,6 +65,22 @@ FIND_PROGRAM (GUILE_EXECUTABLE guile)
 SET (QT_MIN_VERSION "4.5.0")
 FIND_PACKAGE (Qt4 REQUIRED) # find and setup Qt4 for this project
 
+# ############################################################
+
+# Check for boost
+FIND_PACKAGE (Boost QUIET)
+INCLUDE_DIRECTORIES (${Boost_INCLUDE_DIRS})
+
+# MSVC should not link against boost-regex and boost-date_time.
+IF (MSVC)
+  ADD_DEFINITIONS( -DBOOST_ALL_NO_LIB )
+ENDIF (MSVC)
+IF (WIN32)
+  ADD_DEFINITIONS (-DWIN32_LEAN_AND_MEAN)
+ENDIF (WIN32)
+
+# ############################################################
+
 # Compiler flags
 IF (UNIX)
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -D_FORTIFY_SOURCE=2 -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused")
