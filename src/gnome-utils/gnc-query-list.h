@@ -23,7 +23,7 @@
 #ifndef GNC_QUERY_LIST_H
 #define GNC_QUERY_LIST_H
 
-#include <gtk/gtkclist.h>
+#include <gtk/gtk.h>
 
 #include "Query.h"
 
