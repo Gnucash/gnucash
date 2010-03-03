@@ -31,7 +31,6 @@
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "gnc-amount-edit.h"
-#include "gnc-book.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"

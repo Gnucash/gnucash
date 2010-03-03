@@ -45,7 +45,6 @@
 #include "gnc-ofx-import.h"
 #include "gnc-file.h"
 #include "gnc-engine.h"
-#include "gnc-book.h"
 #include "gnc-ui-util.h"
 #include "gnc-glib-utils.h"
 

@@ -25,7 +25,6 @@
 #ifndef GNC_BUSINESS_GNOME_UTILS_H_
 #define GNC_BUSINESS_GNOME_UTILS_H_
 
-#include "gnc-book.h"
 #include "gncOwner.h"
 #include "gncBillTerm.h"
 #include "gncTaxTable.h"

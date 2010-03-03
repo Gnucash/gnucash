@@ -205,7 +205,7 @@ typedef GList                  SplitList;
 typedef GList                  TransList;
 /** GList of GUIDs of a Account */
 typedef GList                  AccountGUIDList;
-/** GList of GUIDs of a GNCBook */
+/** GList of GUIDs of a QofBook */
 typedef GList                  BookGUIDList;
 
 typedef void (*EngineCommitErrorCallback)( gpointer data, QofBackendError errcode );

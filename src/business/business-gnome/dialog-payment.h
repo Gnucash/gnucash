@@ -26,7 +26,6 @@
 
 typedef struct _payment_window PaymentWindow;
 
-#include "gnc-book.h"
 #include "gncOwner.h"
 #include "gncInvoice.h"
 

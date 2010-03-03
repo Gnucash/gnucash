@@ -90,7 +90,7 @@ GncImportMatchMap * gnc_imap_create_from_book (QofBook *book)
     kvp_frame * frame;
 
     if (!book) return NULL;
-    frame = gnc_book_get_slots (book);
+    frame = qof_book_get_slots (book);
     g_return_val_if_fail (frame != NULL, NULL);
 
     return gnc_imap_create_from_frame (frame, NULL, book);

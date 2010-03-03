@@ -26,7 +26,6 @@
 #include "config.h"
 #include <gtk/gtk.h>
 
-#include "gnc-book.h"
 #include "QueryNew.h"
 
 #include "dialog-utils.h"
@@ -72,9 +71,9 @@ dql_build_booklist (DialogQueryList *dql, Query *q)
 
     for (node = gncQueryGetBooks(q); node; node = node->next)
     {
-        GNCBook *book = node->data;
+        QofBook *book = node->data;
         GUID *guid = xaccGUIDMalloc();
-        *guid = *(gnc_book_get_guid(book));
+        *guid = *(qof_book_get_guid(book));
         dql->books = g_list_prepend(dql->books, guid);
     }
 }

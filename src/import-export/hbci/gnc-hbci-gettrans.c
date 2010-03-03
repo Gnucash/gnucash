@@ -253,7 +253,7 @@ AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
     /* time_t tt1, tt2; */
     /*struct tm tm1, tm2;*/
     Account *gnc_acc;
-    GNCBook *book;
+    QofBook *book;
     Transaction *gnc_trans;
     const GWEN_TIME *valutaDate, *normalDate;
     Split *split;

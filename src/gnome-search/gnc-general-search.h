@@ -33,7 +33,6 @@
 #define GNC_GENERAL_SEARCH_H
 
 #include "dialog-search.h"
-#include "gnc-book.h"
 
 #define GNC_TYPE_GENERAL_SEARCH \
 	(gnc_general_search_get_type ())

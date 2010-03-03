@@ -38,14 +38,12 @@
 #include <time.h>
 
 #include "qof.h"
-#include "gnc-book.h"
 #include "Account.h"
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "dialog-preferences.h"
 #include "dialog-sx-editor.h"
 #include "dialog-utils.h"
-#include "gnc-book.h"
 #include "gnc-component-manager.h"
 #include "gnc-date.h"
 #include "gnc-date-edit.h"

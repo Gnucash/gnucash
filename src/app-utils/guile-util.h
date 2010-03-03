@@ -27,7 +27,6 @@
 #include <glib.h>
 #include <libguile.h>
 
-#include "gnc-book.h"
 #include "qof.h"
 #include "Account.h"
 

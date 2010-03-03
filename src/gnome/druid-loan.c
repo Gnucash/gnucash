@@ -36,7 +36,6 @@
 #include "SX-book.h"
 #include "SX-ttinfo.h"
 #include "druid-utils.h"
-#include "gnc-book.h"
 #include "gnc-amount-edit.h"
 #include "gnc-account-sel.h"
 #include "gnc-date.h"

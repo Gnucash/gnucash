@@ -39,7 +39,6 @@
 #include <string.h>
 
 #include "Account.h"
-#include "gnc-book.h"
 #include "gnc-component-manager.h"
 #include "qof.h"
 #include "gnc-engine.h"

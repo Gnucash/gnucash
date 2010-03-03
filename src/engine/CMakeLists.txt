@@ -39,7 +39,6 @@ SET (libgncmod_engine_HEADERS
   engine-helpers.h
   glib-helpers.h
   gnc-associate-account.h
-  gnc-book.h
   gnc-budget.h
   gnc-commodity.h
   gnc-engine.h

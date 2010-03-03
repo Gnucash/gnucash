@@ -1,6 +1,5 @@
 #include "gnc-csv-model.h"
 
-#include "gnc-book.h"
 
 #include <glib/gi18n.h>
 

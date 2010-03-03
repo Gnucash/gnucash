@@ -49,7 +49,6 @@
 #include "Transaction.h"
 #include "dialog-sx-editor.h"
 #include "dialog-utils.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-dense-cal.h"

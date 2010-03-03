@@ -31,7 +31,6 @@
 #include "import-main-matcher.h"
 
 #include "gnc-file.h"
-#include "gnc-book.h"
 #include "gnc-ui-util.h"
 #include "gnc-glib-utils.h"
 #include "gnc-gui-query.h"

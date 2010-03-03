@@ -26,7 +26,6 @@
 #include <glib.h>
 #include "qof.h"
 #include "Account.h"
-#include "gnc-book.h"
 
 /* Account */
 
@@ -67,35 +66,35 @@ Timespec gnc_hbci_get_account_trans_retrieval (Account *a);
 void gnc_hbci_set_account_trans_retrieval (Account *a, Timespec time);
 
 
-/* GNCBook */
+/* QofBook */
 
 /** Returns a non-copied pointer to the configfile string in the
- * GNCBook b. The char* is still owned by the kvp_frame, so don't free
+ * QofBook b. The char* is still owned by the kvp_frame, so don't free
  * it until you want to delete the whole kvp_frame. */
-char *gnc_hbci_get_book_configfile (GNCBook *b);
-/** Set the configfile string in the GNCBook b. A copy of the string
+char *gnc_hbci_get_book_configfile (QofBook *b);
+/** Set the configfile string in the QofBook b. A copy of the string
  * will be stored. The Book will be marked as "dirty". */
-void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename);
+void gnc_hbci_set_book_configfile (QofBook *b, const char *filename);
 
 /** Returns a non-copied pointer to the GList of kvp_frames which
  * eventually are the template transactions, stored in the given
  * book. */
-GList *gnc_hbci_get_book_template_list (GNCBook *b);
-void gnc_hbci_set_book_template_list (GNCBook *b, GList *template_list);
+GList *gnc_hbci_get_book_template_list (QofBook *b);
+void gnc_hbci_set_book_template_list (QofBook *b, GList *template_list);
 
 #if 0
 /** Returns a non-copied pointer to the GList of kvp_frames which
  * eventually are the available HBCI accounts, stored in the given
  * book. */
-GList *gnc_hbci_get_book_account_list (GNCBook *b);
-void gnc_hbci_set_book_account_list (GNCBook *b, GList *account_list);
+GList *gnc_hbci_get_book_account_list (QofBook *b);
+void gnc_hbci_set_book_account_list (QofBook *b, GList *account_list);
 #endif
 
 /* lowlevel */
 
 /* internal getter for kvp frame in book. The create argument says
  *  to create the frame if it doesn't already exist. */
-kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b, gboolean create);
+kvp_frame *gnc_hbci_get_book_kvp (QofBook *b, gboolean create);
 
 /* internal getter for kvp frame in Account. The create argument says
  *  to create the frame if it doesn't already exist. */

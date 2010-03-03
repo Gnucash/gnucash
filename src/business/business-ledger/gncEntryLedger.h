@@ -27,7 +27,6 @@
 #include "QueryNew.h"
 #include "gncEntry.h"
 #include "gncOrder.h"
-#include "gnc-book.h"
 #include "table-allgui.h"
 
 typedef enum

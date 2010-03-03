@@ -41,7 +41,6 @@
 #include "Scrub.h"
 #include "Split.h"
 #include "Transaction.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-event.h"
 #include "gnc-exp-parser.h"

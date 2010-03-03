@@ -26,7 +26,6 @@
 
 typedef struct _taxtable_window TaxTableWindow;
 
-#include "gnc-book.h"
 #include "gncTaxTable.h"
 
 /* Create a new tax-table by name */

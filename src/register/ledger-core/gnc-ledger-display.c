@@ -32,7 +32,6 @@
 #include "SX-book.h"
 #include "Transaction.h"
 #include "gnc-component-manager.h"
-#include "gnc-book.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-event.h"

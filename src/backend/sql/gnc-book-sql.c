@@ -38,7 +38,6 @@
 #include "gnc-slots-sql.h"
 
 #include "gnc-engine.h"
-#include "gnc-book.h"
 #include "SX-book.h"
 #include "SX-book-p.h"
 
@@ -146,7 +145,7 @@ load_single_book( GncSqlBackend* be, GncSqlRow* row )
 
 	pBook = be->primary_book;
 	if( pBook == NULL ) {
-	    pBook = gnc_book_new();
+	    pBook = qof_book_new();
 	}
 
 	qof_book_begin_edit( pBook );

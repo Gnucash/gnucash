@@ -47,7 +47,6 @@
 #include "gnc-ui.h"
 #include "Account.h"
 #include "Transaction.h"
-#include "gnc-book.h"
 #include "import-main-matcher.h"
 
 #include "hbci-interaction.h"

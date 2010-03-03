@@ -26,7 +26,7 @@
 
 typedef struct _billterms_window BillTermsWindow;
 
-#include "gnc-book.h"
+#include "qof.h"
 
 /* Create a billterms window */
 BillTermsWindow * gnc_ui_billterms_window_new (QofBook *book);

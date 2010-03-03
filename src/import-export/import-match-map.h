@@ -32,7 +32,6 @@
 typedef struct _GncImportMatchMap GncImportMatchMap;
 
 #include "Account.h"
-#include "gnc-book.h"
 
 /** @{
 Obtain an ImportMatchMap object from an Account or a Book */

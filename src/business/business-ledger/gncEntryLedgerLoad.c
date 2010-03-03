@@ -374,7 +374,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
                 /* Compute the proper taxtable */
                 odb = gnc_option_db_new_for_type (GNC_ID_BOOK);
-                gnc_option_db_load_from_kvp (odb, gnc_book_get_slots (ledger->book));
+                gnc_option_db_load_from_kvp (odb, qof_book_get_slots (ledger->book));
 
                 switch (gncOwnerGetType (owner))
                 {

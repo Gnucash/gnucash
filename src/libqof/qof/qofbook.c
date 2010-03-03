@@ -269,6 +269,11 @@ void qof_book_kvp_changed (QofBook *book)
 
 /* ====================================================================== */
 
+KvpFrame *qof_book_get_slots(const QofBook *book)
+{
+    return qof_instance_get_slots(QOF_INSTANCE(book));
+}
+
 /* Store arbitrary pointers in the QofBook for data storage extensibility */
 /* XXX if data is NULL, we should remove the key from the hash table!
  */

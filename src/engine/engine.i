@@ -197,12 +197,6 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
 
 %clear GSList *key_path;
 
-%inline %{
-static KvpFrame * gnc_book_get_slots(QofBook *book) {
-   return qof_instance_get_slots(QOF_INSTANCE(book));
-}
-%}
-
 
 %init {
   {

@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "io-gncxml-v2.h"
@@ -24,7 +23,7 @@ main (int argc, char *argv[])
 {
    int fake_argc =1;
    char * fake_argv[] = {"hello", 0};
-   GNCBook *book;
+   QofBook *book;
    int rc;
    
    /* intitialize the engine */
@@ -38,7 +37,7 @@ main (int argc, char *argv[])
    }
 
    /* contact the database, which is a flat file for this demo */
-   book = gnc_book_new ();
+   book = qof_book_new ();
 
    rc = gnc_book_begin (book, "file:/tmp/demo.gml", FALSE, FALSE);
    if (!rc) {
@@ -69,7 +68,7 @@ main (int argc, char *argv[])
 
 bookerrexit:
    /* close the book */
-   gnc_book_destroy (book);
+   qof_book_destroy (book);
 
    /* shut down the engine */
    gnc_engine_shutdown ();

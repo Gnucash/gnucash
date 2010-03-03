@@ -15,7 +15,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "gnc-book.h"
 #include "gnc-engine.h"
 #include "io-gncxml.h"
  
@@ -211,7 +210,7 @@ main (int argc, char *argv[])
 {
    int err, fake_argc =1;
    char * fake_argv[] = {"hello", 0};
-   GNCBook *book;
+   QofBook *book;
    Account *root;
    char *request_bufp, *reply_bufp;
    int rc, sz;
@@ -221,7 +220,7 @@ main (int argc, char *argv[])
 
    /* contact the database, which is a flat file for this demo */
    /* this should really be an SQL server */
-   book = gnc_book_new ();
+   book = qof_book_new ();
 
    rc = gnc_book_begin (book, "file:/tmp/demo.xac", FALSE);
    if (!rc) goto bookerrexit;
@@ -374,7 +373,7 @@ bookerrexit:
    FCGI_Finish();
 
    /* close the book */
-   gnc_book_destroy (book);
+   qof_book_destroy (book);
 
    /* shut down the engine */
    gnc_engine_shutdown ();

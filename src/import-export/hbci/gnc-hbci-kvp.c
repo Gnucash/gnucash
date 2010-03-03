@@ -122,30 +122,30 @@ void gnc_hbci_set_account_trans_retrieval (Account *a, Timespec time)
 
 
 
-/* GNCBook */
+/* QofBook */
 #define HBCI_CONFIGFILE "config-filename"
 #define HBCI_TEMPLATES "template-list"
 
-char *gnc_hbci_get_book_configfile (GNCBook *b)
+char *gnc_hbci_get_book_configfile (QofBook *b)
 {
     kvp_frame *frame = gnc_hbci_get_book_kvp (b, FALSE);
     kvp_value *value = kvp_frame_get_slot (frame, HBCI_CONFIGFILE);
     return kvp_value_get_string (value);
 }
-void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename)
+void gnc_hbci_set_book_configfile (QofBook *b, const char *filename)
 {
     kvp_frame *frame = gnc_hbci_get_book_kvp (b, TRUE);
     kvp_value *value = kvp_value_new_string (filename);
     kvp_frame_set_slot_nc (frame, HBCI_CONFIGFILE, value);
     qof_book_kvp_changed (b);
 }
-GList *gnc_hbci_get_book_template_list (GNCBook *b)
+GList *gnc_hbci_get_book_template_list (QofBook *b)
 {
     kvp_frame *frame = gnc_hbci_get_book_kvp (b, FALSE);
     kvp_value *value = kvp_frame_get_slot (frame, HBCI_TEMPLATES);
     return kvp_value_get_glist (value);
 }
-void gnc_hbci_set_book_template_list (GNCBook *b, GList *template_list)
+void gnc_hbci_set_book_template_list (QofBook *b, GList *template_list)
 {
     kvp_frame *frame = gnc_hbci_get_book_kvp (b, TRUE);
     kvp_value *value = kvp_value_new_glist_nc (template_list);
@@ -154,13 +154,13 @@ void gnc_hbci_set_book_template_list (GNCBook *b, GList *template_list)
 }
 
 #if 0
-GList *gnc_hbci_get_book_account_list (GNCBook *b)
+GList *gnc_hbci_get_book_account_list (QofBook *b)
 {
     kvp_frame *frame = gnc_hbci_get_book_kvp (b, FALSE);
     kvp_value *value = kvp_frame_get_slot (frame, HBCI_ACCOUNTS);
     return kvp_value_get_glist (value);
 }
-void gnc_hbci_set_book_account_list (GNCBook *b, GList *account_list)
+void gnc_hbci_set_book_account_list (QofBook *b, GList *account_list)
 {
     kvp_frame *frame = gnc_hbci_get_book_kvp (b, TRUE);
     kvp_value *value = kvp_value_new_glist_nc (account_list);
@@ -172,7 +172,7 @@ void gnc_hbci_set_book_account_list (GNCBook *b, GList *account_list)
 
 /* lowlevel */
 /* getters  for kvp frame in book */
-kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b, gboolean create)
+kvp_frame *gnc_hbci_get_book_kvp (QofBook *b, gboolean create)
 {
     kvp_frame *toplevel = qof_book_get_slots (b);
     kvp_frame *result = kvp_frame_get_frame (toplevel, HBCI_KEY);

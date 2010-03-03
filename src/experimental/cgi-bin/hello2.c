@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gnc-book.h"
 #include "gnc-engine.h"
 #include "io-gncxml.h"
 #include "Query.h"
@@ -20,7 +19,7 @@ main (int argc, char *argv[])
 {
    int fake_argc =1;
    char * fake_argv[] = {"hello2", 0};
-   GNCBook *book;
+   QofBook *book;
    Account *root;
    Query *q, *qq;
    GList *split_list, *sl2, *node;
@@ -33,7 +32,7 @@ main (int argc, char *argv[])
    gnc_engine_init (fake_argc, fake_argv);
 
    /* contact the database, which is a flat file for this demo */
-   book = gnc_book_new ();
+   book = qof_book_new ();
 
    rc = gnc_book_begin (book, "file:/tmp/demo.xac", FALSE);
    if (!rc) {
@@ -107,7 +106,7 @@ main (int argc, char *argv[])
 
 bookerrexit:
    /* close the book */
-   gnc_book_destroy (book);
+   qof_book_destroy (book);
 
    /* shut down the engine */
    gnc_engine_shutdown ();

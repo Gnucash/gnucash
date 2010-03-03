@@ -25,7 +25,6 @@
 #define _DIALOG_DATE_CLOSE_H
 
 #include "Account.h"
-#include "gnc-book.h"
 #include "qof.h"
 #include "gncBillTerm.h"
 

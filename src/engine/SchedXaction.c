@@ -30,7 +30,6 @@
 #include "qof.h"
 
 #include "Account.h"
-#include "gnc-book.h"
 #include "SX-book.h"
 #include "SX-ttinfo.h"
 #include "SchedXaction.h"
