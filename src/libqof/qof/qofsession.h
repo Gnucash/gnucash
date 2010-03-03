@@ -219,8 +219,8 @@ const char * qof_session_get_url (const QofSession *session);
  * The qof_session_not_saved() subroutine will return TRUE
  *    if any data in the session hasn't been saved to long-term storage.
  */
-gboolean qof_session_not_saved(QofSession *session);
-gboolean qof_session_save_in_progress(QofSession *session);
+/* gboolean qof_session_not_saved(const QofSession *session); <- unimplemented */
+gboolean qof_session_save_in_progress(const QofSession *session);
 
 /** Allows the backend to warn the user if a dataset already exists. */
 gboolean qof_session_save_may_clobber_data (const QofSession *session);
