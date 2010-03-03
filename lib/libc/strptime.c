@@ -48,6 +48,8 @@
 #define localtime_r(tp,tmp) (localtime(tp)?(*(tmp)=*localtime(tp),(tmp)):0)
 
 #include <windows.h>
+#include <stdlib.h>
+#include <malloc.h>
 
 #ifdef _MSC_VER
 /* In MSVC, the strncasecmp function is available as _strnicmp */

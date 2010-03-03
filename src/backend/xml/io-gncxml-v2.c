@@ -48,6 +48,12 @@
 #include "sixtp-utils.h"
 #include "gnc-xml.h"
 #include "io-utils.h"
+#ifdef G_OS_WIN32
+# include <io.h>
+# define close _close
+# define fdopen _fdopen
+# define read _read
+#endif
 
 /* Do not treat -Wstrict-aliasing warnings as errors because of problems of the
  * G_LOCK* macros as declared by glib.  See

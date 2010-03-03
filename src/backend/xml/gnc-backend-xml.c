@@ -52,6 +52,13 @@ typedef int ssize_t;
 # include <dirent.h>
 #endif
 #include <time.h>
+#ifdef G_OS_WIN32
+# include <io.h>
+# define close _close
+# define mktemp _mktemp
+# define read _read
+# define write _write
+#endif
 
 #include "qof.h"
 #include "TransLog.h"

@@ -26,6 +26,7 @@
 #include "gnc-date-p.h"
 #include "strptime.h"
 #include <windows.h>
+#include <stdlib.h>
 
 static GHashTable *picture_to_format = NULL;
 G_LOCK_DEFINE_STATIC(picture_to_format);
