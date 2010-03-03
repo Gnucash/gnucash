@@ -986,18 +986,31 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
     }
 }
 
-#define PRINT_WITH_OP 1
-
+/**
+ * Prints the current page.
+ *
+ * If printing on WIN32, in order to prevent the font from being tiny, (see bug #591177),
+ * A GtkPrintOperation object needs to be created so that the unit can be set, and then
+ * webkit_web_frame_print_full() needs to be called to use that GtkPrintOperation.  On
+ * other platforms (specifically linux - not sure about MacOSX), the version of webkit may
+ * not contain the function webkit_web_frame_print_full(), so webkit_web_frame_print() is
+ * called instead (the font size problem doesn't show up on linux).
+ *
+ * @param self HTML renderer object
+ */
 static void
 impl_webkit_print( GncHtml* self )
 {
-    extern void webkit_web_frame_print( WebKitWebFrame * frame );
+#ifdef G_OS_WIN32
     extern GtkPrintOperationResult webkit_web_frame_print_full( WebKitWebFrame * frame,
             GtkPrintOperation * op, GtkPrintOperationAction action, GError** error );
+#else
+    extern void webkit_web_frame_print( WebKitWebFrame * frame );
+#endif
 
     GncHtmlWebkitPrivate* priv;
     WebKitWebFrame* frame;
-#if PRINT_WITH_OP
+#ifdef G_OS_WIN32
     GtkPrintOperation* op = gtk_print_operation_new();
     GError* error = NULL;
 #endif
@@ -1005,7 +1018,7 @@ impl_webkit_print( GncHtml* self )
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
     frame = webkit_web_view_get_main_frame( priv->web_view );
 
-#if PRINT_WITH_OP
+#ifdef G_OS_WIN32
     gtk_print_operation_set_unit( op, GTK_UNIT_POINTS );
     webkit_web_frame_print_full( frame, op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, &error );
     g_object_unref( op );
