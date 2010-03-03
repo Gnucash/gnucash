@@ -63,14 +63,14 @@ p, li { white-space: pre-wrap; }
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
-        <string>Example Text Editor</string>
+        <string>Account Name List View</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <property name="margin">
          <number>0</number>
         </property>
         <item>
-         <widget class="QPlainTextEdit" name="textEdit"/>
+         <widget class="QTableView" name="tableView"/>
         </item>
        </layout>
       </widget>

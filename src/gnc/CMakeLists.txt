@@ -17,6 +17,7 @@ SET (gnc_SOURCES
 )
 
 SET (gnc_QOBJECT_HEADERS
+  AccountItemModel.hpp
   mainwindow.hpp
 )
 SET (gnc_HEADERS ${gnc_QOBJECT_HEADERS}

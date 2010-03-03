@@ -1,6 +1,8 @@
 #ifndef GNC_WEAKPOINTER_HPP
 #define GNC_WEAKPOINTER_HPP
 
+#include <string>
+
 namespace gnc
 {
 

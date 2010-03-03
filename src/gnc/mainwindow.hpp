@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSharedPointer>
 #include "gnc/Session.hpp"
+#include "gnc/AccountItemModel.hpp"
 
 class QAction;
 class QMenu;
@@ -58,6 +59,7 @@ private:
     QToolBar *editToolBar;
 
     Session m_session;
+    AccountItemModel *m_accountItemModel;
 };
 
 } // END namespace gnc

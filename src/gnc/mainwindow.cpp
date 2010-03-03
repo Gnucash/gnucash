@@ -1,7 +1,8 @@
-#include <QtGui/QToolBar>
-#include <QtGui/QMessageBox>
-#include <QtGui/QFileDialog>
 #include <QtCore/QSettings>
+#include <QtGui/QCloseEvent>
+#include <QtGui/QFileDialog>
+#include <QtGui/QMessageBox>
+#include <QtGui/QToolBar>
 
 #include "config.h"
 #include "mainwindow.hpp"
@@ -19,6 +20,7 @@ extern "C"
 }
 
 #include "gnc/Account.hpp"
+#include "gnc/AccountItemModel.hpp"
 #include "gnc/Book.hpp"
 
 namespace gnc
@@ -38,6 +40,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 MainWindow::MainWindow()
         : ui(new Ui::MainWindow)
+        , m_accountItemModel(NULL)
 {
     ui->setupUi(this);
 
@@ -47,8 +50,8 @@ MainWindow::MainWindow()
 
     readSettings();
 
-    connect(ui->textEdit->document(), SIGNAL(contentsChanged()),
-            this, SLOT(documentWasModified()));
+//     connect(ui->labelMain, SIGNAL(linkActivated(const QString&)),
+//             this, SLOT(documentWasModified()));
 
     setWindowIcon(QIcon(":/pixmaps/gnucash-icon-32x32.png"));
 
@@ -101,7 +104,7 @@ void MainWindow::about()
 
 void MainWindow::documentWasModified()
 {
-    setWindowModified(ui->textEdit->document()->isModified());
+//     setWindowModified(ui->textEdit->document()->isModified());
 }
 
 void MainWindow::createActions()
@@ -118,19 +121,19 @@ void MainWindow::createActions()
     connect(ui->actionSave_as, SIGNAL(triggered()), this, SLOT(saveAs()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
 
-    connect(ui->actionCut, SIGNAL(triggered()), ui->textEdit, SLOT(cut()));
-    connect(ui->actionCopy, SIGNAL(triggered()), ui->textEdit, SLOT(copy()));
-    connect(ui->actionPaste, SIGNAL(triggered()), ui->textEdit, SLOT(paste()));
+//     connect(ui->actionCut, SIGNAL(triggered()), ui->textEdit, SLOT(cut()));
+//     connect(ui->actionCopy, SIGNAL(triggered()), ui->textEdit, SLOT(copy()));
+//     connect(ui->actionPaste, SIGNAL(triggered()), ui->textEdit, SLOT(paste()));
 
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
     ui->actionCut->setEnabled(false);
     ui->actionCopy->setEnabled(false);
-    connect(ui->textEdit, SIGNAL(copyAvailable(bool)),
-            ui->actionCut, SLOT(setEnabled(bool)));
-    connect(ui->textEdit, SIGNAL(copyAvailable(bool)),
-            ui->actionCopy, SLOT(setEnabled(bool))); // why doesn't this work?!?
+//     connect(ui->textEdit, SIGNAL(copyAvailable(bool)),
+//             ui->actionCut, SLOT(setEnabled(bool)));
+//     connect(ui->textEdit, SIGNAL(copyAvailable(bool)),
+//             ui->actionCopy, SLOT(setEnabled(bool)));
 }
 
 void MainWindow::createToolBars()
@@ -169,7 +172,7 @@ void MainWindow::writeSettings()
 
 bool MainWindow::maybeSave()
 {
-    if (ui->textEdit->document()->isModified())
+    if (false)//ui->textEdit->document()->isModified())
     {
         QMessageBox::StandardButton ret;
         ret = QMessageBox::warning(this, tr("Application"),
@@ -187,7 +190,7 @@ bool MainWindow::maybeSave()
 void MainWindow::setCurrentFile(const QString &fileName)
 {
     curFile = fileName;
-    ui->textEdit->document()->setModified(false);
+//     ui->textEdit->document()->setModified(false);
     setWindowModified(false);
 
     QString shownName;
@@ -393,14 +396,27 @@ void MainWindow::loadFile(const QString &fileName)
     /* close up the old file session (if any) */
     m_session.reset(new_session);
 
-    ::Account * new_root = m_session.get_book().get_root_account().get();
-    if (we_are_in_error)
-        new_root = NULL;
-
     qof_event_resume ();
 
     /* Call this after re-enabling events. */
     gnc_book_opened (m_session);
+
+    // ////////////////////////////////////////////////////////////
+    // Some display about this file
+
+    Account root (m_session.get_book().get_root_account());
+    if (root)
+    {
+        m_accountItemModel = new AccountItemModel(root, this);
+        ui->tableView->setModel(m_accountItemModel);
+        ui->tabWidget->setCurrentIndex(1); //setCurrentWidget(ui->tableView);
+    }
+    else
+    {
+        //ui->labelMain->setText(tr("No root account"));
+    }
+
+    // ////////////////////////////////////////////////////////////
 
     QApplication::restoreOverrideCursor();
 
