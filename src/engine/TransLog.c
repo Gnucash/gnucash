@@ -169,7 +169,7 @@ xaccOpenLog (void)
     {
         int norr = errno;
         printf ("Error: xaccOpenLog(): cannot open journal \n"
-                "\t %d %s\n", norr, strerror (norr));
+		"\t %d %s\n", norr, g_strerror (norr) ? g_strerror (norr) : "");
 
         g_free (filename);
         g_free (timestamp);

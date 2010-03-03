@@ -299,13 +299,13 @@ gnc_quote_source_add_new (const char *source_name, gboolean supported)
 
     /* This name can be changed if/when support for this price source is
      * integrated into gnucash. */
-    new_source->user_name = strdup(source_name);
+    new_source->user_name = g_strdup(source_name);
 
     /* This name is permanent and must be kept the same if/when support
      * for this price source is integrated into gnucash (i.e. for a
      * nice user name). */
-    new_source->old_internal_name = strdup(source_name);
-    new_source->internal_name = strdup(source_name);
+    new_source->old_internal_name = g_strdup(source_name);
+    new_source->internal_name = g_strdup(source_name);
     new_quote_sources = g_list_append(new_quote_sources, new_source);
     return new_source;
 }

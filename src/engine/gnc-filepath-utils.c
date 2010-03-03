@@ -338,7 +338,7 @@ gnc_validate_directory (const gchar *dirname)
                             "  %s\n"
                             "Please correct the problem and restart GnuCash.\n"
                             "The reported error was '%s' (errno %d).\n"),
-                          dirname, strerror(errno), errno);
+                          dirname, g_strerror(errno) ? g_strerror(errno) : "", errno);
                 exit(1);
             }
             g_stat (dirname, &statbuf);
@@ -370,7 +370,7 @@ gnc_validate_directory (const gchar *dirname)
                         "directory exists and is usable. Please correct the\n"
                         "problem and restart GnuCash.  The reported error \n"
                         "was '%s' (errno %d)."),
-                      dirname, strerror(errno), errno);
+                      dirname, g_strerror(errno) ? g_strerror(errno) : "", errno);
             exit(1);
         }
     }

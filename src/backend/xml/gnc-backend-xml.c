@@ -342,7 +342,7 @@ xml_session_end(QofBackend *be_start)
         if (rv)
         {
             PWARN("Error on g_unlink(%s): %d: %s", be->lockfile,
-                  errno, strerror(errno) ? strerror(errno) : "");
+                  errno, g_strerror(errno) ? g_strerror(errno) : "");
         }
     }
 
@@ -472,7 +472,7 @@ gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
         {
             qof_backend_set_error((QofBackend*)be, ERR_FILEIO_BACKUP_ERROR);
             PWARN ("unable to make file backup from %s to %s: %s",
-                   orig, bkup, strerror(errno) ? strerror(errno) : "");
+                   orig, bkup, g_strerror(errno) ? g_strerror(errno) : "");
             return FALSE;
         }
     }
@@ -657,7 +657,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
                    failed. Instead, we simply ignore this. */
                 PWARN("unable to chmod filename %s: %s",
                       tmp_name ? tmp_name : "(null)",
-                      strerror(errno) ? strerror(errno) : "");
+                      g_strerror(errno) ? g_strerror(errno) : "");
 #if VFAT_DOESNT_SUCK  /* chmod always fails on vfat/samba fs */
                 /* g_free(tmp_name); */
                 /* return FALSE; */
@@ -686,7 +686,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
             qof_backend_set_error(be, ERR_BACKEND_READONLY);
             PWARN("unable to unlink filename %s: %s",
                   datafile ? datafile : "(null)",
-                  strerror(errno) ? strerror(errno) : "");
+                  g_strerror(errno) ? g_strerror(errno) : "");
             g_free(tmp_name);
             LEAVE("");
             return FALSE;
@@ -703,7 +703,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
             qof_backend_set_error(be, ERR_BACKEND_PERM);
             PWARN("unable to unlink temp filename %s: %s",
                   tmp_name ? tmp_name : "(null)",
-                  strerror(errno) ? strerror(errno) : "");
+                  g_strerror(errno) ? g_strerror(errno) : "");
             g_free(tmp_name);
             LEAVE("");
             return FALSE;
@@ -735,7 +735,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
             qof_backend_set_error(be, be_err);
             PWARN("unable to unlink temp_filename %s: %s",
                   tmp_name ? tmp_name : "(null)",
-                  strerror(errno) ? strerror(errno) : "");
+                  g_strerror(errno) ? g_strerror(errno) : "");
             /* already in an error just flow on through */
         }
         else

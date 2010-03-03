@@ -1371,7 +1371,7 @@ gz_thread_func(gz_thread_params_t *params)
             else
             {
                 g_warning("Could not read from pipe. The error is '%s' (errno %d)",
-                          strerror(errno), errno);
+                          g_strerror(errno) ? g_strerror(errno) : "", errno);
                 success = 0;
             }
         }
@@ -1386,7 +1386,7 @@ gz_thread_func(gz_thread_params_t *params)
                 if (write(params->fd, buffer, gzval) < 0)
                 {
                     g_warning("Could not write to pipe. The error is '%s' (%d)",
-                              strerror(errno), errno);
+                              g_strerror(errno) ? g_strerror(errno) : "", errno);
                     success = 0;
                 }
             }

@@ -510,7 +510,7 @@ gnc_print_date (Timespec ts)
     static char buff[MAX_DATE_LENGTH];
     time_t t;
 
-    t = ts.tv_sec + (ts.tv_nsec / 1000000000.0);
+    t = ts.tv_sec + (time_t)(ts.tv_nsec / 1000000000.0);
 
     qof_print_date_buff (buff, MAX_DATE_LENGTH, t);
 
