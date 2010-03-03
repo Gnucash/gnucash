@@ -1777,7 +1777,7 @@ add_gvalue_date_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 				const gpointer pObject,
                 const GncSqlColumnTableEntry* table_row, GSList** pList )
 {
-    GDate* date;
+    GDate* date = NULL;
     QofAccessFunc getter;
 	gchar* buf;
 	GValue* value;
@@ -1790,14 +1790,18 @@ add_gvalue_date_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     value = g_new0( GValue, 1 );
 	g_assert( value != NULL );
     (void)g_value_init( value, G_TYPE_STRING );
-    getter = gnc_sql_get_getter( obj_name, table_row );
-	if( getter != NULL ) {
-    	date = (GDate*)(*getter)( pObject, NULL );
-		if( g_date_valid( date ) ) {
-			buf = g_strdup_printf( "%04d%02d%02d",
-					g_date_get_year( date ), g_date_get_month( date ), g_date_get_day( date ) );
-    		g_value_take_string( value, buf );
-		}
+	if( table_row->gobj_param_name != NULL ) {
+		g_object_get( pObject, table_row->gobj_param_name, &date, NULL );
+	} else {
+    	getter = gnc_sql_get_getter( obj_name, table_row );
+	    if( getter != NULL ) {
+    	    date = (GDate*)(*getter)( pObject, NULL );
+        }
+    }
+	if( g_date_valid( date ) ) {
+		buf = g_strdup_printf( "%04d%02d%02d",
+				g_date_get_year( date ), g_date_get_month( date ), g_date_get_day( date ) );
+    	g_value_take_string( value, buf );
 	}
 
 	(*pList) = g_slist_append( (*pList), value );
