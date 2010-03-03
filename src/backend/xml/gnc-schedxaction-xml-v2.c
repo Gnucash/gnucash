@@ -83,7 +83,6 @@ xmlNodePtr
 gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 {
     xmlNodePtr	ret;
-    xmlNodePtr	fsNode;
     GDate	*date;
     gint        instCount;
     const GUID        *templ_acc_guid;

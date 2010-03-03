@@ -157,7 +157,6 @@ gnc_schedxaction_set_property (GObject         *object,
                                GParamSpec      *pspec)
 {
     SchedXaction *sx;
-    GDate* date;
 
     g_return_if_fail(GNC_IS_SCHEDXACTION(object));
 

@@ -42,7 +42,6 @@ qof_utf8_substr_nocase (const gchar *haystack, const gchar *needle)
     gchar *haystack_casefold, *haystack_normalized;
     gchar *needle_casefold, *needle_normalized;
     gchar *p;
-    gint offset;
 
     g_return_val_if_fail (haystack && needle, FALSE);
 

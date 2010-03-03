@@ -127,11 +127,7 @@ check_path_return_if_valid(gchar *path)
 char *
 xaccResolveFilePath (const char * filefrag)
 {
-    char pathbuf[PATH_MAX];
-    /*  pathGenerator gens[4];*/
-    char *filefrag_dup;
     int namelen;
-    int i;
     gchar *fullpath = NULL, *tmp_path = NULL;
 
     /* seriously invalid */

@@ -288,7 +288,6 @@ add_template_transaction_local( sixtp_gdv2 *data,
                                 gnc_template_xaction_data *txd )
 {
     GList *n;
-    Account *tmpAcct;
     Account *acctRoot = NULL;
     QofBook *book;
 

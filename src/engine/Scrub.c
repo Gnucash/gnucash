@@ -703,7 +703,6 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
         {
             gnc_monetary *imbal_mon = imbalance_commod->data;
             gnc_commodity *commodity;
-            gnc_numeric convrate;
             gnc_numeric old_amount, new_amount;
             gnc_numeric old_value, new_value, val_imbalance;
             GList *splits;

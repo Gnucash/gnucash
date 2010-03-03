@@ -684,7 +684,6 @@ gnc_commodity_set_property (GObject         *object,
                             GParamSpec      *pspec)
 {
     gnc_commodity *commodity;
-    gnc_numeric *number;
 
     g_return_if_fail(GNC_IS_COMMODITY(object));
 
@@ -819,7 +818,6 @@ gnc_commodity_new(QofBook *book, const char * fullname,
                   const char * cusip, int fraction)
 {
     gnc_commodity * retval = g_object_new(GNC_TYPE_COMMODITY, NULL);
-    gnc_commodity_table *table;
 
     qof_instance_init_data (&retval->inst, GNC_ID_COMMODITY, book);
     gnc_commodity_begin_edit(retval);
@@ -1360,7 +1358,6 @@ gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz)
 void
 gnc_commodity_increment_usage_count(gnc_commodity *cm)
 {
-    const char *str;
     CommodityPrivate* priv;
 
     ENTER("(cm=%p)", cm);
@@ -1396,7 +1393,6 @@ gnc_commodity_increment_usage_count(gnc_commodity *cm)
 void
 gnc_commodity_decrement_usage_count(gnc_commodity *cm)
 {
-    const char *str;
     CommodityPrivate* priv;
 
     ENTER("(cm=%p)", cm);

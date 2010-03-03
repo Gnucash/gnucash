@@ -223,7 +223,6 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
                   gboolean ignore_lock, gboolean create_if_nonexistent)
 {
     FileBackend *be = (FileBackend*) be_start;
-    gchar* resolved_path;
 
     ENTER (" ");
 

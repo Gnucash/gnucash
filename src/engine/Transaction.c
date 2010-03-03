@@ -328,7 +328,6 @@ gnc_transaction_set_property(GObject* object,
                              GParamSpec* pspec)
 {
     Transaction* tx;
-    Timespec* ts;
 
     g_return_if_fail(GNC_IS_TRANSACTION(object));
 

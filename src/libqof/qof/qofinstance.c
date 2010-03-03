@@ -937,7 +937,6 @@ qof_begin_edit (QofInstance *inst)
 gboolean qof_commit_edit (QofInstance *inst)
 {
     QofInstancePrivate *priv;
-    QofBackend * be;
 
     if (!inst) return FALSE;
 
@@ -948,7 +947,7 @@ gboolean qof_commit_edit (QofInstance *inst)
 #if 0
     if ((0 == priv->editlevel) && priv->dirty)
     {
-        be = qof_book_get_backend(priv->book);
+        QofBackend * be = qof_book_get_backend(priv->book);
         if (be && qof_backend_commit_exists(be))
         {
             qof_backend_run_commit(be, inst);
