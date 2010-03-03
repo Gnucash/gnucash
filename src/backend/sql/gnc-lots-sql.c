@@ -54,10 +54,10 @@ static void set_lot_account( gpointer pObject, /*@ null @*/ gpointer pValue );
 static const GncSqlColumnTableEntry col_table[] =
 {
 	/*@ -full_init_block @*/
-    { "guid",         CT_GUID,    0, COL_NNUL|COL_PKEY, "guid" },
-    { "account_guid", CT_GUID,    0, 0,                 NULL, NULL,
+    { "guid",         CT_GUID,       0, COL_NNUL|COL_PKEY, "guid" },
+    { "account_guid", CT_ACCOUNTREF, 0, 0,                 NULL, NULL,
 		(QofAccessFunc)get_lot_account,   set_lot_account },
-    { "is_closed",    CT_BOOLEAN, 0, COL_NNUL,          "is-closed" },
+    { "is_closed",    CT_BOOLEAN,    0, COL_NNUL,          "is-closed" },
     { NULL }
 	/*@ +full_init_block @*/
 };
@@ -67,31 +67,27 @@ static /*@ dependent @*//*@ null @*/ gpointer
 get_lot_account( gpointer pObject )
 {
     const GNCLot* lot;
-    const Account* pAccount;
+    Account* pAccount;
 
 	g_return_val_if_fail( pObject != NULL, NULL );
 	g_return_val_if_fail( GNC_IS_LOT(pObject), NULL );
 
     lot = GNC_LOT(pObject);
     pAccount = gnc_lot_get_account( lot );
-    return (gpointer)qof_instance_get_guid( QOF_INSTANCE(pAccount) );
+    return pAccount;
 }
 
 static void 
 set_lot_account( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
     GNCLot* lot;
-    QofBook* pBook;
-    GUID* guid = (GUID*)pValue;
     Account* pAccount;
 
-	g_return_if_fail( pObject != NULL );
-	g_return_if_fail( GNC_IS_LOT(pObject) );
-	g_return_if_fail( pValue != NULL );
+	g_return_if_fail( pObject != NULL && GNC_IS_LOT(pObject) );
+	g_return_if_fail( pValue == NULL || GNC_IS_ACCOUNT(pValue) );
 
     lot = GNC_LOT(pObject);
-    pBook = qof_instance_get_book( QOF_INSTANCE(lot) );
-    pAccount = xaccAccountLookup( guid, pBook );
+    pAccount = GNC_ACCOUNT(pValue);
 	if( pAccount != NULL ) {
     	xaccAccountInsertLot( pAccount, lot );
 	}
