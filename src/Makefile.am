@@ -3,9 +3,9 @@ NONGUI_SUBDIRS = \
   debug \
   doc \
   pixmaps \
+  test-core \
   core-utils \
   gnc-module \
-  test-core \
   engine \
   backend \
   scm \
