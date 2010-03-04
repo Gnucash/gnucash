@@ -88,6 +88,7 @@ check_PROGRAMS = \
 
 test_link_SOURCES = test-link.c
 test_link_LDADD = ../libgncmod-engine.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la
 
 EXTRA_DIST = \
