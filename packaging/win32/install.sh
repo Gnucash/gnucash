@@ -395,6 +395,19 @@ EOF
         # Also, for MSVC compiler we need to create an import library
         pexports $_GUILE_UDIR/bin/libguile.dll > $_GUILE_UDIR/lib/libguile.def
         ${DLLTOOL} -d $_GUILE_UDIR/lib/libguile.def -D $_GUILE_UDIR/bin/libguile.dll -l $_GUILE_UDIR/lib/libguile.lib
+        # Also, for MSVC compiler we need to slightly modify the gc.h header
+        GC_H=$_GUILE_UDIR/include/libguile/gc.h
+        grep -v 'extern.*_freelist2;' ${GC_H} > ${GC_H}.tmp
+        mv ${GC_H}.tmp ${GC_H}
+        cat >> ${GC_H} <<EOF
+#ifdef _MSC_VER
+# define LIBGUILEDECL __declspec (dllimport)
+#else
+# define LIBGUILEDECL /* */
+#endif
+extern LIBGUILEDECL SCM scm_freelist2;
+extern LIBGUILEDECL struct scm_t_freelist scm_master_freelist2;
+EOF
         rm -rf ${TMP_UDIR}/guile-*
     fi
     if [ "$CROSS_COMPILE" = "yes" ]; then
@@ -1226,6 +1239,24 @@ function inst_libdbi() {
         test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdmysql.dll || die "libdbi mysql driver not installed correctly"
         test -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdpgsql.dll || die "libdbi pgsql driver not installed correctly"
         rm -rf ${TMP_UDIR}/libdbi-drivers-*
+    fi
+}
+
+function inst_cmake() {
+    setup CMake
+    _CMAKE_UDIR=`unix_path ${CMAKE_DIR}`
+    add_to_env ${_CMAKE_UDIR}/bin PATH
+    if [ -f ${_CMAKE_UDIR}/bin/cmake.exe ]
+    then
+        echo "cmake already installed.  skipping."
+    else
+        wget_unpacked $CMAKE_URL $DOWNLOAD_DIR $CMAKE_DIR
+
+        assert_one_dir ${_CMAKE_UDIR}/cmake-2*
+        mv ${_CMAKE_UDIR}/cmake-2*/* ${_CMAKE_UDIR}
+        rm -rf ${_CMAKE_UDIR}/cmake-2*
+
+        [ -f ${_CMAKE_UDIR}/bin/cmake.exe ] || die "cmake not installed correctly"
     fi
 }
 

@@ -70,6 +70,8 @@ else
     set_default INSTALL_DIR $GNUCASH_DIR\\inst
 fi
 
+set_default WITH_CUTECASH no
+
 
 ####
 set_default LD ld
@@ -305,6 +307,9 @@ set_default LIBDBI_DRIVERS_PATCH2 `pwd`/libdbi-drivers-Makefile.in.patch
 set_default LIBDBI_DRIVERS_PATCH3 `pwd`/libdbi-drivers-dbd_mysql.c.patch
 set_default LIBDBI_DRIVERS_PATCH4 `pwd`/libdbi-drivers-dbd_pgsql.c.patch
 
+set_default CMAKE_URL "http://www.cmake.org/files/v2.8/cmake-2.8.0-win32-x86.zip"
+set_default CMAKE_DIR $GLOBAL_DIR\\cmake
+
 set_default DOCBOOK_XSL_URL "$SF_MIRROR/docbook/docbook-xsl-1.72.0.zip"
 set_default UPDATE_DOCS yes
 set_default DOCS_REV "HEAD"
@@ -365,6 +370,9 @@ add_step inst_webkit
 ##
 if [ "$UPDATE_SOURCES" = "yes" ]; then
  add_step svn_up
+fi
+if [ "$WITH_CUTECASH" = "yes" ]; then
+ add_step inst_cmake
 fi
 add_step inst_gnucash
 add_step inst_docs
