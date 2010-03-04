@@ -12,7 +12,7 @@ INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/libqof/qof) # for qof.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/gnc-module) # for gnc-glib-utils.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/core-utils) # for gnc-glib-utils.h
 INCLUDE_DIRECTORIES (${CMAKE_CURRENT_SOURCE_DIR}) # for <Account.h>
-INCLUDE_DIRECTORIES (${CMAKE_CURRENT_BINARY_DIR}) # for gncla-dir.h
+INCLUDE_DIRECTORIES (${CMAKE_CURRENT_BINARY_DIR}) # for iso-4217-currencies.c
 
 SET (libgncmod_engine_HEADERS
   Account.h
@@ -33,7 +33,6 @@ SET (libgncmod_engine_HEADERS
   Split.h
   TransLog.h
   Transaction.h
-  binreloc.h
   cap-gains.h
   cashobjects.h
   engine-helpers.h
@@ -43,9 +42,7 @@ SET (libgncmod_engine_HEADERS
   gnc-commodity.h
   gnc-engine.h
   gnc-event.h
-  gnc-filepath-utils.h
   gnc-hooks.h
-  gnc-path.h
   gnc-pricedb.h
   gnc-session.h
   gnc-session-scm.h
@@ -57,17 +54,6 @@ SET (libgncmod_engine_HEADERS
 # Command to generate the swig-engine.c wrapper file
 SET (SWIG_ENGINE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-engine.c)
 GNC_ADD_SWIG_COMMAND (${SWIG_ENGINE_C} ${CMAKE_CURRENT_SOURCE_DIR}/engine.i)
-
-# Workaround to create a very simple gncla-dir.h file
-FILE (WRITE ${CMAKE_CURRENT_BINARY_DIR}/gncla-dir.h.tmp "
-#define PREFIX \"${CMAKE_INSTALL_PREFIX}\"
-#define DATADIR \"${CMAKE_INSTALL_PREFIX}/share\"
-#define SYSCONFDIR \"${CMAKE_INSTALL_PREFIX}/etc\"
-#define LIBDIR \"${CMAKE_INSTALL_PREFIX}/lib\"
-#define LOCALE_DATADIRNAME \"share\"
-")
-# Let cmake copy the created file only on changes.
-CONFIGURE_FILE (${CMAKE_CURRENT_BINARY_DIR}/gncla-dir.h.tmp ${CMAKE_CURRENT_BINARY_DIR}/gncla-dir.h COPYONLY)
 
 # Command to generate the iso-4217-currencies.c file
 SET (ISO_4217_C ${CMAKE_CURRENT_BINARY_DIR}/iso-4217-currencies.c)
@@ -106,17 +92,14 @@ SET (libgncmod_engine_SOURCES
   Split.c
   TransLog.c
   Transaction.c
-  binreloc.c
   cap-gains.c
   cashobjects.c
   gnc-associate-account.c
   gnc-budget.c
   gnc-commodity.c
   gnc-engine.c
-  gnc-filepath-utils.c
   gnc-hooks.c
   gnc-lot.c
-  gnc-path.c
   gnc-pricedb.c
   gnc-session.c
   gnc-session-scm.c

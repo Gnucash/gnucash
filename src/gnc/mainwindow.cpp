@@ -14,7 +14,7 @@ extern "C"
 #include <glib/gi18n.h>
 #include "qof.h"
 #include "engine/gnc-hooks.h"
-#include "engine/gnc-filepath-utils.h"
+#include "core-utils/gnc-filepath-utils.h"
 #include "engine/Account.h"
 #include "engine/TransLog.h"
 }

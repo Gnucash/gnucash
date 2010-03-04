@@ -31,11 +31,11 @@ extern "C"
 #include <glib/gi18n.h>
 #include <glib.h>
 #include "gnc-module/gnc-module.h"
-#include "engine/gnc-path.h"
-#include "engine/binreloc.h"
+#include "core-utils/gnc-path.h"
+#include "core-utils/binreloc.h"
     /* #include "gnc-version.h" */
 #include "engine/gnc-engine.h"
-#include "engine/gnc-filepath-utils.h"
+#include "core-utils/gnc-filepath-utils.h"
 #include "engine/gnc-hooks.h"
 #include "engine/gnc-commodity.h"
 #include "core-utils/gnc-main.h"
