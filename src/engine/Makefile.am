@@ -27,17 +27,14 @@ libgncmod_engine_la_SOURCES = \
   Split.c \
   TransLog.c \
   Transaction.c \
-  binreloc.c \
   cap-gains.c \
   cashobjects.c \
   gnc-associate-account.c \
   gnc-budget.c \
   gnc-commodity.c \
   gnc-engine.c \
-  gnc-filepath-utils.c \
   gnc-hooks.c \
   gnc-lot.c \
-  gnc-path.c \
   gnc-pricedb.c \
   gnc-session.c \
   gnc-session-scm.c \
@@ -70,7 +67,6 @@ gncinclude_HEADERS = \
   Split.h \
   TransLog.h \
   Transaction.h \
-  binreloc.h \
   cap-gains.h \
   cashobjects.h \
   engine-helpers.h \
@@ -80,9 +76,7 @@ gncinclude_HEADERS = \
   gnc-commodity.h \
   gnc-engine.h \
   gnc-event.h \
-  gnc-filepath-utils.h \
   gnc-hooks.h \
-  gnc-path.h \
   gnc-pricedb.h \
   gnc-session.h \
   gnc-session-scm.h \
@@ -135,7 +129,6 @@ EXTRA_DIST = \
   extensions.txt \
   iso-4217-currencies.scm \
   iso-currencies-to-c \
-  gncla-dir.h.in \
   kvp_doc.txt \
   SX-book-p.h \
   engine.i \
@@ -178,20 +171,9 @@ iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 	-chmod u+x ${srcdir}/iso-currencies-to-c
 	GUILE_LOAD_PATH=@GNC_SRFI_LOAD_PATH@:${GUILE_LOAD_PATH} srcdir=${srcdir} ${srcdir}/iso-currencies-to-c
 
-gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
-	rm -f $@.tmp
-	sed < $< > $@.tmp \
-		-e 's#@-DATADIRNAME-@#${DATADIRNAME}#g' \
-		-e 's#@-libdir-@#${libdir}#g' \
-		-e 's#@-sysconfdir-@#${sysconfdir}#g' \
-		-e 's#@-datadir-@#${datadir}#g' \
-		-e 's#@-prefix-@#${prefix}#g'
-	mv $@.tmp $@
+BUILT_SOURCES = iso-4217-currencies.c
 
-BUILT_SOURCES = iso-4217-currencies.c \
-  gncla-dir.h
-
-CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links gncla-dir.h \
+CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links \
 	${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-engine.c
 

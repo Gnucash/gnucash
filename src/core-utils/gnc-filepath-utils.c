@@ -47,7 +47,7 @@
 #endif
 #include <errno.h>
 
-#include "gnc-engine.h"
+#include "qof.h"
 #include "gnc-path.h"
 #include "gnc-filepath-utils.h"
 
@@ -55,9 +55,6 @@
 #include <glib/gwin32.h>
 #define PATH_MAX MAXPATHLEN
 #endif
-
-static QofLogModule log_module = GNC_MOD_BACKEND;
-
 
 /**
  * Scrubs a filename by changing "strange" chars (e.g. those that are not
@@ -88,12 +85,8 @@ scrub_filename(char* filename)
 static gchar *
 check_path_return_if_valid(gchar *path)
 {
-    ENTER("Path: %s", path);
     if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
-    {
-        LEAVE("found %s", path);
         return path;
-    }
     g_free (path);
     return NULL;
 }
@@ -131,25 +124,19 @@ xaccResolveFilePath (const char * filefrag)
     /* seriously invalid */
     if (!filefrag)
     {
-        PERR("filefrag is NULL");
+        g_critical("filefrag is NULL");
         return NULL;
     }
-
-    ENTER ("filefrag=%s", filefrag);
 
     /* ---------------------------------------------------- */
     /* OK, now we try to find or build an absolute file path */
 
     /* check for an absolute file path */
     if (g_path_is_absolute(filefrag))
-    {
-        LEAVE("filefrag is absolute path");
         return g_strdup (filefrag);
-    }
 
     if (!g_ascii_strncasecmp(filefrag, "file:", 5))
     {
-        LEAVE("filefrag is file uri");
         if (!g_ascii_strncasecmp(filefrag, "file://", 7))
             return g_strdup(filefrag + 7);
         else
@@ -157,7 +144,6 @@ xaccResolveFilePath (const char * filefrag)
     }
     if ( g_ascii_strncasecmp( filefrag, "xml:", 4 ) == 0 )
     {
-        LEAVE( "filefrag is xml file uri" );
         if ( g_ascii_strncasecmp( filefrag, "xml://", 6 ) == 0 )
             return g_strdup( filefrag + 6);
         else
@@ -175,10 +161,7 @@ xaccResolveFilePath (const char * filefrag)
     g_free(tmp_path);
     fullpath = check_path_return_if_valid(fullpath);
     if (fullpath != NULL)
-    {
-        LEAVE("found %s", fullpath);
         return fullpath;
-    }
 
     /* Look in the data dir (e.g. $PREFIX/share/gnucash) */
     tmp_path = gnc_path_get_pkgdatadir();
@@ -186,10 +169,7 @@ xaccResolveFilePath (const char * filefrag)
     g_free(tmp_path);
     fullpath = check_path_return_if_valid(fullpath);
     if (fullpath != NULL)
-    {
-        LEAVE("found %s", fullpath);
         return fullpath;
-    }
 
     /* Look in the config dir (e.g. $PREFIX/etc/gnucash) */
     tmp_path = gnc_path_get_accountsdir();
@@ -197,21 +177,15 @@ xaccResolveFilePath (const char * filefrag)
     g_free(tmp_path);
     fullpath = check_path_return_if_valid(fullpath);
     if (fullpath != NULL)
-    {
-        LEAVE("found %s", fullpath);
         return fullpath;
-    }
 
     /* Look in the users config dir (e.g. $HOME/.gnucash/data) */
     fullpath = gnc_build_data_path(filefrag);
     if (g_file_test(fullpath, G_FILE_TEST_IS_REGULAR))
-    {
-        LEAVE("found %s", fullpath);
         return fullpath;
-    }
     /* OK, it's not there. Note that it needs to be created and pass it
      * back anyway */
-    LEAVE("create new file %s", fullpath);
+    g_warning("create new file %s", fullpath);
     return fullpath;
 
 }

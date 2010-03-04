@@ -1,11 +1,14 @@
 lib_LTLIBRARIES = libgnc-core-utils.la
 
 libgnc_core_utils_la_SOURCES = \
+  binreloc.c \
   gnc-main.c \
+  gnc-filepath-utils.c \
   gnc-gconf-utils.c \
   gnc-gdate-utils.c \
   gnc-gkeyfile-utils.c \
   gnc-glib-utils.c \
+  gnc-path.c \
   swig-core-utils.c
 
 libgnc_core_utils_la_LIBADD = \
@@ -14,11 +17,14 @@ libgnc_core_utils_la_LIBADD = \
   ${GCONF_LIBS}
 
 noinst_HEADERS = \
+  binreloc.h \
   gnc-main.h \
+  gnc-filepath-utils.h \
   gnc-gconf-utils.h \
   gnc-gdate-utils.h \
   gnc-gkeyfile-utils.h \
-  gnc-glib-utils.h
+  gnc-glib-utils.h \
+  gnc-path.h
 
 if BUILDING_FROM_SVN
 swig-core-utils.c: core-utils.i ${top_srcdir}/src/base-typemaps.i
@@ -30,6 +36,7 @@ AM_CPPFLAGS = \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src
 
 
@@ -57,8 +64,20 @@ if ! OS_WIN32
 endif
 
 noinst_DATA = .scm-links
-EXTRA_DIST = $(gncmod_DATA) core-utils.i
+EXTRA_DIST = $(gncmod_DATA) core-utils.i gncla-dir.h.in
 CLEANFILES = gnucash .scm-links
 MAINTAINERCLEANFILES = swig-core-utils.c
+BUILT_SOURCES = gncla-dir.h
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.core-utils\"
+
+gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
+	rm -f $@.tmp
+	sed < $< > $@.tmp \
+		-e 's#@-DATADIRNAME-@#${DATADIRNAME}#g' \
+		-e 's#@-libdir-@#${libdir}#g' \
+		-e 's#@-sysconfdir-@#${sysconfdir}#g' \
+		-e 's#@-datadir-@#${datadir}#g' \
+		-e 's#@-prefix-@#${prefix}#g'
+	mv $@.tmp $@
+

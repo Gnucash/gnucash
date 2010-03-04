@@ -24,10 +24,6 @@
  * @brief File path resolution utility functions
  * @author Copyright (c) 1998-2004 Linas Vepstas <linas@linas.org>
  * @author Copyright (c) 2000 Dave Peticolas
- *
- * XXX this file does not belong in the gnucash engine; it is here
- * for the moment only because both the file backend and the app-file
- * GUI code make use of it. It should be moved away someday.
  */
 
 #ifndef GNC_FILEPATH_UTILS_H
