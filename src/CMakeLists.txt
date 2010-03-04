@@ -137,7 +137,6 @@ ADD_SUBDIRECTORY (core-utils)
 ADD_SUBDIRECTORY (gnc-module)
 ADD_SUBDIRECTORY (engine)
 ADD_SUBDIRECTORY (backend/xml)
-ADD_SUBDIRECTORY (test-core)
 
 ADD_SUBDIRECTORY (gnc)
 
