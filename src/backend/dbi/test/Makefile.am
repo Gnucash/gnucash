@@ -34,7 +34,7 @@ check_PROGRAMS = \
 
 #noinst_HEADERS = test-file-stuff.h
 
-LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
+LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/gnc-module/libgnc-module.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \

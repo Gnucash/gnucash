@@ -1,15 +1,12 @@
-noinst_LTLIBRARIES=libgncmod-test.la
+noinst_LTLIBRARIES=libtest-core.la
 
-libgncmod_test_la_SOURCES = gncmod-test.c test-stuff.c
-libgncmod_test_la_LDFLAGS = -module
-libgncmod_test_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgnc-module.la \
+libtest_core_la_SOURCES = test-stuff.c
+libtest_core_la_LDFLAGS = -module
+libtest_core_la_LIBADD = \
   ${GLIB_LIBS}
 
 noinst_HEADERS=test-stuff.h
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
-  -I${top_srcdir}/src/gnc-module \
-  ${GLIB_CFLAGS} \
-  ${GUILE_INCS}
+  ${GLIB_CFLAGS}

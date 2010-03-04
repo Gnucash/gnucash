@@ -12,7 +12,7 @@ AM_CPPFLAGS = \
 
 LDADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${top_builddir}/src/test-core/libgncmod-test.la \
+  ${top_builddir}/src/test-core/libtest-core.la \
   ../../libgncmod-generic-import.la \
   ../libgncmod-qif.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \

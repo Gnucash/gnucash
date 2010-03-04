@@ -47,7 +47,7 @@ LDADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
-  ${top_builddir}/src/test-core/libgncmod-test.la
+  ${top_builddir}/src/test-core/libtest-core.la
 
 test_gnc_recurrence_SOURCES=test-gnc-recurrence.c
 
