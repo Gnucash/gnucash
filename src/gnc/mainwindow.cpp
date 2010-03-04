@@ -28,11 +28,11 @@ namespace gnc
 
 inline QString errorToString(QofBackendError err)
 {
-    return QString::fromStdString(errorToStringPair(err).first);
+    return errorToStringPair(err).first;
 }
 inline QString errorToDescription(QofBackendError err)
 {
-    return QString::fromStdString(errorToStringPair(err).second);
+    return errorToStringPair(err).second;
 }
 
 /* This static indicates the debugging module that this .o belongs to.  */

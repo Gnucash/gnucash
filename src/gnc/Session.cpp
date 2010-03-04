@@ -16,9 +16,9 @@ Book Session::get_book () const
 }
 
 
-#define TYPE_TO_STR(tstr, desc) tstr : return std::make_pair<std::string,std::string>(#tstr, desc)
+#define TYPE_TO_STR(tstr, desc) tstr : return std::make_pair<QString,QString>(QString::fromUtf8(#tstr), QString::fromUtf8(desc))
 
-std::pair<std::string, std::string> errorToStringPair(QofBackendError err)
+std::pair<QString, QString> errorToStringPair(QofBackendError err)
 {
     switch (err)
     {

@@ -4,28 +4,24 @@
 #include "gnc/Account.hpp"
 
 #include <QAbstractItemModel>
-#include <QAbstractListModel>
+#include <QAbstractTableModel>
 
 namespace gnc
 {
 
-class AccountItemModel : public QAbstractListModel
+class AccountItemModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
     AccountItemModel(Account rootaccount, QObject *parent = 0)
-            : QAbstractListModel(parent)
+            : QAbstractTableModel(parent)
             , m_root(rootaccount)
+            , m_acclist(Account::fromGList(m_root.get_descendants()))
     {
-        GList* list = m_root.get_descendants();
-        while (list)
-        {
-            m_acclist.append(reinterpret_cast< ::Account*>(list->data));
-            list = g_list_next(list);
-        }
     }
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const { return m_acclist.size(); }
+    int columnCount(const QModelIndex& parent = QModelIndex()) const { return 3; }
     QVariant data(const QModelIndex& index, int role) const
     {
         if (!index.isValid())
@@ -33,7 +29,19 @@ public:
         if (index.row() > rowCount(index))
             return QVariant();
         if (role == Qt::DisplayRole)
-            return QString::fromStdString(Account(m_acclist.at(index.row())).getName());
+        {
+            switch (index.column())
+            {
+            case 0:
+                return Account(m_acclist.at(index.row())).getName();
+            case 1:
+                return Account(m_acclist.at(index.row())).getCode();
+            case 2:
+                return Account(m_acclist.at(index.row())).getDescription();
+            default:
+                return QVariant();
+            }
+        }
         else
             return QVariant();
     }
@@ -42,13 +50,25 @@ public:
         if (role != Qt::DisplayRole)
             return QVariant();
         if (orientation == Qt::Horizontal)
-            return QString("Account Name");
+        {
+            switch (section)
+            {
+            case 0:
+                return QString("Name");
+            case 1:
+                return QString("Code");
+            case 2:
+                return QString("Description");
+            default:
+                return QVariant();
+            }
+        }
         else
-            return QString("#%1").arg(1 + section);
+            return QString("%1").arg(1 + section);
     }
 private:
     Account m_root;
-    QList< ::Account*> m_acclist;
+    Account::AccountQList m_acclist;
 };
 
 } // END namespace gnc

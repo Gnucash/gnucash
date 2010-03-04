@@ -12,7 +12,7 @@ extern "C"
 
 #include "gnc/ScopedPointer.hpp"
 #include <boost/noncopyable.hpp>
-#include <string>
+#include <QString>
 
 namespace gnc
 {
@@ -62,20 +62,20 @@ public:
     {
         return qof_session_pop_error(get());
     }
-    std::string get_error_message() const
+    QString get_error_message() const
     {
-        return qof_session_get_error_message(get());
+        return QString::fromUtf8(qof_session_get_error_message(get()));
     }
     Book get_book () const;
 
-    std::string get_file_path () const
+    QString get_file_path () const
     {
-        return qof_session_get_file_path(get());
+        return QString::fromUtf8(qof_session_get_file_path(get()));
     }
 
-    std::string get_url() const
+    QString get_url() const
     {
-        return qof_session_get_url(get());
+        return QString::fromUtf8(qof_session_get_url(get()));
     }
 
     bool save_in_progress() const
@@ -100,7 +100,7 @@ public:
 
 };
 
-std::pair<std::string, std::string> errorToStringPair(QofBackendError err);
+std::pair<QString, QString> errorToStringPair(QofBackendError err);
 
 } // END namespace gnc
 
