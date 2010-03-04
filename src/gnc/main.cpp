@@ -1,7 +1,8 @@
 /*
- * gnucash-bin.c -- The program entry point for GnuCash
+ * main.cpp -- The program entry point for cutecash
  *
  * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>
+ * Copyright (C) 2010 Christian Stimming
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
