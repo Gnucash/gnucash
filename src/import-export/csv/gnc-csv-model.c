@@ -479,7 +479,7 @@ GError** error)
  * right now.)
  * @param parse_data Data that is being parsed
  * @param guessColTypes TRUE to guess what the types of columns are based on the cell contents
- * @error error Will contain an error if there is a failure
+ * @param error Will contain an error if there is a failure
  * @return 0 on success, 1 on failure
  */
 int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** error)

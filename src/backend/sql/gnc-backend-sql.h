@@ -28,8 +28,7 @@
     @ingroup SQLBE
 */
 
-/** @addtogroup SQLBE
- *  The SQL backend core is a library which can form the core for a QOF
+/** The SQL backend core is a library which can form the core for a QOF
  *  backend based on an SQL library.
  *
  *  @file gnc-backend-sql.h
@@ -101,7 +100,7 @@ void gnc_sql_begin_edit( GncSqlBackend* be, QofInstance *inst );
 /**
  * Object editing has been cancelled.
  *
- * @param be SQL backend
+ * @param qbe SQL backend
  * @param inst Object being edited
  */
 void gnc_sql_rollback_edit( GncSqlBackend* qbe, QofInstance *inst );
@@ -109,7 +108,7 @@ void gnc_sql_rollback_edit( GncSqlBackend* qbe, QofInstance *inst );
 /**
  * Object editting is complete and the object should be saved.
  *
- * @param be SQL backend
+ * @param qbe SQL backend
  * @param inst Object being edited
  */
 void gnc_sql_commit_edit( GncSqlBackend* qbe, QofInstance *inst );
@@ -418,7 +417,7 @@ QofAccessFunc gnc_sql_get_getter( QofIdTypeConst obj_name, const GncSqlColumnTab
  * all of the column names for the pieces are added.
  *
  * @param table_row DB table column
- * @pList List
+ * @param pList List
  */
 void gnc_sql_add_colname_to_list( const GncSqlColumnTableEntry* table_row, GList** pList );
 
@@ -520,17 +519,9 @@ gboolean gnc_sql_object_is_it_in_db( GncSqlBackend* be,
  */
 gint gnc_sql_get_table_version( const GncSqlBackend* be, const gchar* table_name );
 
-/**
- * Sets the version number for a DB table.
- *
- * @param be SQL backend struct
- * @param table_name Table name
- * @param table_version Table version
- * @return TRUE if successful, FALSE if unsuccessful
- */
 gboolean gnc_sql_set_table_version( GncSqlBackend* be,
                                     const gchar* table_name,
-                                    gint table_version );
+                                    gint version );
 
 /**
  * Creates a table in the database

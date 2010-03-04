@@ -79,14 +79,12 @@ scrub_filename(char* filename)
     }
 }
 
-/** \fn gchar * check_file_return_if_true (path)
- *  \brief Check if the path exists and is a regular file
+/** Check if the path exists and is a regular file.
  *
  * \param path -- freed if the path doesn't exist or isn't a regular file
  *
  *  \return NULL or the path
  */
-
 static gchar *
 check_path_return_if_valid(gchar *path)
 {
@@ -225,7 +223,7 @@ xaccResolveFilePath (const char * filefrag)
  *  @brief Return the passed-in string unless it starts with file:,
  *  xml:, or is a raw relative path.
  *
- * Strings starting with "http://, https://, or a "registered scheme"
+ * Strings starting with http://, https://, or a "registered scheme"
  * (see qof_backend_get_registered_access_method_list()) are returned
  * as-is by this function.
  *
