@@ -145,14 +145,16 @@ src/calculation/fin-interactive.c
 src/calculation/fin-main.c
 src/calculation/gncmod-calculation.c
 src/calculation/numeric_ops.c
+src/core-utils/binreloc.c
+src/core-utils/gnc-filepath-utils.c
 src/core-utils/gnc-gconf-utils.c
 src/core-utils/gnc-gdate-utils.c
 src/core-utils/gnc-gkeyfile-utils.c
 src/core-utils/gnc-glib-utils.c
 src/core-utils/gnc-main.c
+src/core-utils/gnc-path.c
 src/doc/doxygen_main_page.c
 src/engine/Account.c
-src/engine/binreloc.c
 src/engine/cap-gains.c
 src/engine/cashobjects.c
 src/engine/engine-helpers.c
@@ -165,7 +167,6 @@ src/engine/gnc-filepath-utils.c
 src/engine/gnc-hooks.c
 src/engine/gnc-lot.c
 src/engine/gncmod-engine.c
-src/engine/gnc-path.c
 src/engine/gnc-pricedb.c
 src/engine/gnc-session.c
 src/engine/gnc-session-scm.c
