@@ -7,6 +7,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
   -I${top_srcdir}/src/libqof/qof \
+  -I${top_srcdir}/src/core-utils \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS}
 
@@ -39,6 +40,7 @@ TESTS = \
   test-query \
   test-recursive \
   test-resolve-file-path \
+  test-resolve-url \
   test-split-vs-account  \
   test-transaction-reversal \
   test-transaction-voiding \
@@ -77,6 +79,7 @@ check_PROGRAMS = \
   test-querynew \
   test-recursive \
   test-resolve-file-path \
+  test-resolve-url \
   test-scm-query \
   test-split-vs-account \
   test-transaction-reversal \
