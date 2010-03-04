@@ -116,10 +116,17 @@ log4glib_handler(const gchar     *log_domain,
         char timestamp_buf[10];
         time_t now;
         struct tm now_tm;
+        const char *format_24hour =
+#ifdef _MSC_VER
+            "%H:%M:%S"
+#else
+            "%T"
+#endif
+            ;
         gchar *level_str = qof_log_level_to_string(log_level);
         now = time(NULL);
         localtime_r(&now, &now_tm);
-        qof_strftime(timestamp_buf, 9, "%T", &now_tm);
+        qof_strftime(timestamp_buf, 9, format_24hour, &now_tm);
 
         fprintf(fout, "* %s %*s <%s> %*s%s%s",
                 timestamp_buf,
@@ -162,7 +169,7 @@ qof_log_init_filename(const gchar* log_filename)
 #ifdef _MSC_VER
             /* MSVC compiler: Somehow the OS thinks file descriptor from above
              * still isn't open. So we open normally with the file name and that's it. */
-            fout = g_fopen(fname, "wb");
+            fout = fopen(fname, "wb");
 #else
             g_rename(fname, log_filename);
             fout = fdopen(fd, "w");
