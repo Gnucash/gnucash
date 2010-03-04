@@ -57,7 +57,8 @@ enum
     PROP_START_DATE,
     PROP_END_DATE,
     PROP_LAST_OCCURANCE_DATE,
-    PROP_INSTANCE_COUNT
+    PROP_INSTANCE_COUNT,
+    PROP_TEMPLATE_ACCOUNT
 };
 
 /* GObject initialization */
@@ -143,6 +144,9 @@ gnc_schedxaction_get_property (GObject         *object,
     case PROP_INSTANCE_COUNT:
         g_value_set_int(value, sx->instance_num);
         break;
+    case PROP_TEMPLATE_ACCOUNT:
+        g_value_set_object(value, sx->template_acct);
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -206,6 +210,9 @@ gnc_schedxaction_set_property (GObject         *object,
         break;
     case PROP_INSTANCE_COUNT:
         gnc_sx_set_instance_count(sx, g_value_get_int(value));
+        break;
+    case PROP_TEMPLATE_ACCOUNT:
+        sx_set_template_account(sx, g_value_get_object(value));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -345,6 +352,15 @@ gnc_schedxaction_class_init (SchedXactionClass *klass)
                        G_MAXINT16,
                        0,
                        G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_TEMPLATE_ACCOUNT,
+     g_param_spec_object("template-account",
+                        "Template account",
+                        "Account which holds the template transactions.",
+                        GNC_TYPE_ACCOUNT,
+                        G_PARAM_READWRITE));
 }
 
 static void
