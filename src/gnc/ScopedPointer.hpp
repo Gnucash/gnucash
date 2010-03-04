@@ -1,6 +1,7 @@
 #ifndef GNC_SCOPEDPOINTER_HPP
 #define GNC_SCOPEDPOINTER_HPP
 
+#error "This file requires the Boost library because the boost::shared_ptr is nice and has non-trivial features. However, in the current build this file isn't used anyway, so it should not be used within this project so far."
 #include <boost/shared_ptr.hpp>
 
 namespace gnc

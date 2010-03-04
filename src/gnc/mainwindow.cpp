@@ -61,6 +61,11 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
+    if (m_session.get())
+    {
+        qof_session_destroy(m_session.get());
+        m_session.reset();
+    }
 }
 
 void MainWindow::open()
@@ -223,6 +228,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         qof_session_call_close_hooks(m_session.get());
         gnc_hook_run(HOOK_BOOK_CLOSED, m_session.get());
 
+        qof_session_destroy(m_session.get());
         m_session.reset();
 
         qof_event_resume ();
@@ -244,7 +250,7 @@ void MainWindow::newFile()
     if (maybeSave())
     {
 
-        if (m_session.get())
+        if (m_session)
         {
             /* close any ongoing file sessions, and free the accounts.
              * disable events so we don't get spammed by redraws. */
@@ -253,12 +259,13 @@ void MainWindow::newFile()
             m_session.call_close_hooks();
             gnc_hook_run(HOOK_BOOK_CLOSED, m_session.get());
 
+            qof_session_destroy(m_session.get());
             m_session.reset();
             qof_event_resume ();
         }
 
         /* start a new book */
-        m_session.reset(Session::newInstance());
+        m_session.reset(qof_session_new());
 
         gnc_hook_run(HOOK_NEW_BOOK, NULL);
 
@@ -290,6 +297,7 @@ void MainWindow::loadFile(const QString &fileName)
     /* -- this code is almost identical in FileOpen and FileSaveAs -- */
     m_session.call_close_hooks();
     gnc_hook_run(HOOK_BOOK_CLOSED, m_session.get());
+    qof_session_destroy(m_session.get());
     m_session.reset();
 
     /* load the accounts from the users datafile */
@@ -394,6 +402,11 @@ void MainWindow::loadFile(const QString &fileName)
 
     /* if we got to here, then we've successfully gotten a new session */
     /* close up the old file session (if any) */
+    if (m_session.get())
+    {
+        qof_session_destroy(m_session.get());
+        m_session.reset();
+    }
     m_session.reset(new_session);
 
     qof_event_resume ();
@@ -503,6 +516,7 @@ bool MainWindow::saveFile(const QString &fileName)
     /* if we got to here, then we've successfully gotten a new session */
     /* close up the old file session (if any) */
     qof_session_swap_data (session, new_session);
+    qof_session_destroy(m_session.get());
     m_session.reset();
     session = NULL;
 

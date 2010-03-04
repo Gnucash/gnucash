@@ -2,6 +2,7 @@
 #define GNC_WEAKPOINTER_HPP
 
 #include <string>
+#include <cassert>
 
 namespace gnc
 {

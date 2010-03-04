@@ -10,8 +10,7 @@ extern "C"
 #include "engine/gnc-hooks.h"
 }
 
-#include "gnc/ScopedPointer.hpp"
-#include <boost/noncopyable.hpp>
+#include "gnc/WeakPointer.hpp"
 #include <QString>
 
 namespace gnc
@@ -22,33 +21,20 @@ class Book;
 /** ScopedPointer object around a QofSession object, which also owns the
  * QofSession object.
  */
-class Session : public ScopedPointer< ::QofSession >
-            , boost::noncopyable
+class Session : public WeakPointer< ::QofSession >
 {
 public:
-    typedef ScopedPointer< ::QofSession > base_class;
+    typedef WeakPointer< ::QofSession > base_class;
 
-    Session()
-            : base_class()
+    Session(element_type *ptr = 0)
+            : base_class(ptr)
     {}
-    Session(element_type *ptr)
-            : base_class(ptr, qof_session_destroy)
-    {}
-    void reset(element_type *ptr)
-    {
-        base_class::reset(ptr, qof_session_destroy);
-    }
-    using base_class::reset;
-    static element_type* newInstance()
-    {
-        return qof_session_new();
-    }
 
     // Now the actual functions on the object
 
-    void begin(const std::string& book_id, bool ignore_lock, bool create_if_nonexistent)
+    void begin(const QString& book_id, bool ignore_lock, bool create_if_nonexistent)
     {
-        qof_session_begin(get(), book_id.c_str(), ignore_lock, create_if_nonexistent);
+        qof_session_begin(get(), book_id.toUtf8(), ignore_lock, create_if_nonexistent);
     }
     void load (QofPercentageFunc percentage_func)
     {

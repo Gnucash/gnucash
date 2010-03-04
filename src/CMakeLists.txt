@@ -1,100 +1,11 @@
 # CMakeLists.txt for src/
 
-# EXPERIMENTAL! This is just a trial of how far we can get for a cmake
-# build system.
-
-CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
-PROJECT (gnucash)
-
-# Extra cmake macros
-SET (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake_modules;${CMAKE_MODULE_PATH}")
-INCLUDE (MacroAppendForeach)
-INCLUDE (MacroAddSourceFileCompileFlags)
-INCLUDE (GncAddSwigCommand)
-
-# ############################################################
-
-# Find pkg-config
-FIND_PACKAGE (PkgConfig REQUIRED)
-
-IF (NOT PKG_CONFIG_FOUND)
-   MESSAGE (SEND_ERROR "pkg-config not found, but is required")
-ENDIF (NOT PKG_CONFIG_FOUND)
-
-# glib et al.
-PKG_CHECK_MODULES (GLIB2 glib-2.0>=2.20.0)
-PKG_CHECK_MODULES (GCONF2 gconf-2.0>=2.0)
-PKG_CHECK_MODULES (GOBJECT gobject-2.0>=2.20.0)
-PKG_CHECK_MODULES (GMODULE gmodule-2.0>=2.20.0)
-PKG_CHECK_MODULES (GTHREAD gthread-2.0>=2.20.0)
-
-IF (MSVC)
-  MESSAGE (STATUS "To create the import libraries for the gnome DLLs (e.g. gconf-2.lib), use the dlltool as follows: dlltool -D libgconf-2-4.dll -l ../lib/gconf-2.lib")
-ENDIF (MSVC)
-
-# Libxml2
-FIND_PACKAGE (LibXml2 REQUIRED)
-FIND_PACKAGE (ZLIB REQUIRED)
-
-IF (NOT GLIB2_FOUND)
-   MESSAGE (SEND_ERROR "Glib2 not found, but is required")
-ENDIF (NOT GLIB2_FOUND)
-
-FIND_PATH (LIBINTL_INCLUDE_PATH NAMES libintl.h
-		  PATHS /usr/include /opt/gnome/include)
-FIND_LIBRARY (LIBINTL_LIBRARY NAMES intl)
-FIND_PATH (REGEX_INCLUDE_PATH NAMES regex.h
-		  PATHS /usr/include /opt/gnome/include)
-FIND_LIBRARY (REGEX_LIBRARY NAMES regex)
-
-# ############################################################
-
-# SWIG
-FIND_PACKAGE (SWIG REQUIRED)
-INCLUDE (${SWIG_USE_FILE})
-
-# guile
-FIND_PATH (LIBGUILE_INCLUDE_PATH NAMES libguile.h
-		  PATHS /usr/include)
-FIND_LIBRARY (LIBGUILE_LIBRARIES NAMES guile)
-FIND_PROGRAM (GUILE_EXECUTABLE guile)
-
-# ############################################################
-
-# Qt
-SET (QT_MIN_VERSION "4.5.0")
-FIND_PACKAGE (Qt4 REQUIRED) # find and setup Qt4 for this project
-
-# ############################################################
-
-# Check for boost
-FIND_PACKAGE (Boost QUIET)
-INCLUDE_DIRECTORIES (${Boost_INCLUDE_DIRS})
-
-# MSVC should not link against boost-regex and boost-date_time.
-IF (MSVC)
-  ADD_DEFINITIONS( -DBOOST_ALL_NO_LIB )
-ENDIF (MSVC)
-IF (WIN32)
-  ADD_DEFINITIONS (-DWIN32_LEAN_AND_MEAN)
-ENDIF (WIN32)
-
-# ############################################################
-
-# Compiler flags
-IF (UNIX)
-  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -D_FORTIFY_SOURCE=2 -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused")
-ENDIF (UNIX)
-IF (MINGW)
-  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused")
-ENDIF (MINGW)
-
 # ############################################################
 
 # Create config.h
 ADD_DEFINITIONS (-DHAVE_CONFIG_H)
 
-SET (CONFIG_H ${CMAKE_CURRENT_BINARY_DIR}/config.h.tmp)
+SET (CONFIG_H ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 FILE (WRITE ${CONFIG_H} "#define PACKAGE \"gnucash\"\n")
 
 FILE (APPEND ${CONFIG_H} "
@@ -216,7 +127,7 @@ IF (UNIX)
 ENDIF (UNIX)
 
 # Let cmake copy the created file only on changes.
-CONFIGURE_FILE (${CONFIG_H} ${CMAKE_CURRENT_BINARY_DIR}/config.h COPYONLY)
+#CONFIGURE_FILE (${CONFIG_H} ${CMAKE_CURRENT_BINARY_DIR}/config.h COPYONLY)
 
 # ############################################################
 
@@ -226,7 +137,7 @@ ADD_SUBDIRECTORY (core-utils)
 ADD_SUBDIRECTORY (gnc-module)
 ADD_SUBDIRECTORY (engine)
 ADD_SUBDIRECTORY (backend/xml)
+ADD_SUBDIRECTORY (test-core)
 
 ADD_SUBDIRECTORY (gnc)
 
-ADD_SUBDIRECTORY (test-core)

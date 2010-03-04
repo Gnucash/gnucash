@@ -16,14 +16,14 @@ INCLUDE_DIRECTORIES (${GLIB2_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES (${LIBINTL_INCLUDE_PATH})
 INCLUDE_DIRECTORIES (${REGEX_INCLUDE_PATH})
 INCLUDE_DIRECTORIES (${LIBGUILE_INCLUDE_PATH})
-INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR} ) # for config.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}) # for gnc-ui.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/libqof/qof) # for qof.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/gnc-module) # for gnc-glib-utils.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/core-utils) # for gnc-glib-utils.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/engine) # for gnc-glib-utils.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/backend/xml)
-INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR}/engine) # for swig-runtime.h
+INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR}/src ) # for config.h
+INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src) # for gnc-ui.h
+INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/libqof/qof) # for qof.h
+INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/gnc-module) # for gnc-glib-utils.h
+INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/core-utils) # for gnc-glib-utils.h
+INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/engine) # for gnc-glib-utils.h
+INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/backend/xml)
+INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR}/src/engine) # for swig-runtime.h
 
 TARGET_LINK_LIBRARIES (test-main gnc-backend-xml engine gnc-module core-utils qof)
 TARGET_LINK_LIBRARIES (test-main ${GCONF2_LIBRARIES})

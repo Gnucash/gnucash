@@ -8,8 +8,8 @@ MACRO (GNC_ADD_SWIG_COMMAND _target _input)
 
 ADD_CUSTOM_COMMAND (
   OUTPUT ${_target}
-  DEPENDS ${_input} ${CMAKE_SOURCE_DIR}/base-typemaps.i ${ARGN}
-  COMMAND ${SWIG_EXECUTABLE} -guile ${SWIG_ARGS} -Linkage module -I${CMAKE_SOURCE_DIR}/libqof/qof -I${CMAKE_SOURCE_DIR}  -o ${_target} ${_input}
+  DEPENDS ${_input} ${CMAKE_SOURCE_DIR}/src/base-typemaps.i ${ARGN}
+  COMMAND ${SWIG_EXECUTABLE} -guile ${SWIG_ARGS} -Linkage module -I${CMAKE_SOURCE_DIR}/src/libqof/qof -I${CMAKE_SOURCE_DIR}/src  -o ${_target} ${_input}
 )
 
 ENDMACRO (GNC_ADD_SWIG_COMMAND)

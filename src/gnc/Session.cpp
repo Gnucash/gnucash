@@ -3,7 +3,6 @@
 #include "gnc/Book.hpp"
 
 // Explicit instantiation to check for compiler errors in the template
-template class gnc::ScopedPointer< QofSession >;
 template class gnc::WeakPointer< QofSession >;
 
 
