@@ -56,9 +56,9 @@ fi
 
 if test -d "${real_srcdir}"/.bzr ;
 then
-    bzrhead=`bzr version-info "${real_srcdir}"` 
+    bzrhead=`(cd "${real_srcdir}"; bzr version-info --custom --template='{revno}\n')`
     if test $? = 0 ; then
-	echo "$bzrhead" | awk -F ':' '/revision-id/{print $5}'
+	echo "$bzrhead";
 	exit 0
     else
 	exit 1
