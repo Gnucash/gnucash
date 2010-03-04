@@ -112,6 +112,13 @@ void MainWindow::documentWasModified()
 //     setWindowModified(ui->textEdit->document()->isModified());
 }
 
+void MainWindow::anchorClicked(const QUrl &url)
+{
+    QMessageBox::information(this, tr("Got you!"),
+                             tr("Obviously you clicked the link with the URL %1.")
+                             .arg(url.toString()));
+}
+
 void MainWindow::createActions()
 {
     ui->actionNew->setShortcuts(QKeySequence::New);
@@ -135,6 +142,9 @@ void MainWindow::createActions()
 
     ui->actionCut->setEnabled(false);
     ui->actionCopy->setEnabled(false);
+
+    connect(ui->textBrowser, SIGNAL(anchorClicked(const QUrl &)),
+            this, SLOT(anchorClicked(const QUrl &)));
 //     connect(ui->textEdit, SIGNAL(copyAvailable(bool)),
 //             ui->actionCut, SLOT(setEnabled(bool)));
 //     connect(ui->textEdit, SIGNAL(copyAvailable(bool)),

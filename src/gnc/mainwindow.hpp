@@ -28,6 +28,9 @@ public:
     MainWindow();
     ~MainWindow();
 
+public slots:
+    void anchorClicked(const QUrl &);
+
 protected:
     void closeEvent(QCloseEvent *event);
 

@@ -18,6 +18,5 @@
 	<file>../pixmaps/gnucash-icon-32x32.png</file>
 	<file>../pixmaps/gnucash-icon-48x48.png</file>
 	<file>../pixmaps/gnucash_splash.png</file>
-	<file>bla.html</file>
 </qresource>
 </RCC>

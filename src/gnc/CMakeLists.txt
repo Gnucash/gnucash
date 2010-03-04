@@ -32,7 +32,8 @@ SET (gnc_FORMS
 )
 
 SET (gnc_RESOURCES
-  gnc.qrc
+  gnucash.qrc
+  gtk-icons.qrc
 )
 # Generation of resource files
 QT4_ADD_RESOURCES (gnc_RESOURCE ${gnc_RESOURCES})
