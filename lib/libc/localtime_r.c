@@ -8,6 +8,12 @@
 
 #if HAVE_PTHREAD_MUTEX_INIT
 #include <pthread.h>
+
+/* New mingw pthread package seems to define localtime_r as a macro */
+#ifdef localtime_r
+#undef localtime_r
+#endif
+
 struct tm *
 localtime_r(const time_t *const timep, struct tm *p_tm)
 {
