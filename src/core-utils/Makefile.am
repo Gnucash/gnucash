@@ -14,6 +14,7 @@ libgnc_core_utils_la_SOURCES = \
 libgnc_core_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
+  ${BINRELOC_LIBS} \
   ${GCONF_LIBS}
 
 noinst_HEADERS = \

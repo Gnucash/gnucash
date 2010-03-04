@@ -109,7 +109,6 @@ libgncmod_engine_la_LIBADD = \
   ${GUILE_LIBS} \
   ${REGEX_LIBS} \
   ${GLIB_LIBS} \
-  ${BINRELOC_LIBS} \
   ${IGE_MAC_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
 
