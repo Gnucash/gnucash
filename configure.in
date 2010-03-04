@@ -1385,6 +1385,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/bin/overrides/Makefile
           src/bin/test/Makefile
           src/core-utils/Makefile
+          src/core-utils/test/Makefile
           src/calculation/Makefile 
           src/calculation/test/Makefile
           src/debug/Makefile

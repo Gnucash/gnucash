@@ -1,3 +1,5 @@
+SUBDIRS = . test
+
 lib_LTLIBRARIES = libgnc-core-utils.la
 
 libgnc_core_utils_la_SOURCES = \

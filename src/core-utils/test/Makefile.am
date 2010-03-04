@@ -2,6 +2,7 @@
 AM_CPPFLAGS = \
   -I${top_srcdir} \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/core-utils \
   ${GUILE_INCS} \
@@ -9,6 +10,7 @@ AM_CPPFLAGS = \
 
 LDADD = \
   ../libgnc-core-utils.la \
+  ${top_builddir}/src/test-core/libtest-core.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS}
 
