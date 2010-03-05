@@ -28,6 +28,7 @@ libgncmod_business_backend_xml_la_SOURCES = \
   gnc-vendor-xml-v2.c
 
 noinst_HEADERS = \
+  gncmod-business-backend-xml.h \
   gnc-address-xml-v2.h \
   gnc-bill-term-xml-v2.h \
   gnc-customer-xml-v2.h \

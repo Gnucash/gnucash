@@ -67,6 +67,23 @@ libgncmod_business_core_gnc_module_description(void)
     return g_strdup("The GnuCash business core");
 }
 
+void
+gnc_module_init_business_core_init(void)
+{
+    /* initialize known types */
+    gncInvoiceRegister ();
+    gncJobRegister ();
+    gncBillTermRegister ();
+    gncCustomerRegister ();
+    gncAddressRegister ();
+    gncEmployeeRegister ();
+    gncEntryRegister ();
+    gncOrderRegister ();
+    gncOwnerRegister ();
+    gncTaxTableRegister ();
+    gncVendorRegister ();
+}
+
 int
 libgncmod_business_core_gnc_module_init(int refcount)
 {
@@ -78,18 +95,7 @@ libgncmod_business_core_gnc_module_init(int refcount)
 
     if (refcount == 0)
     {
-        /* initialize known types */
-        gncInvoiceRegister ();
-        gncJobRegister ();
-        gncBillTermRegister ();
-        gncCustomerRegister ();
-        gncAddressRegister ();
-        gncEmployeeRegister ();
-        gncEntryRegister ();
-        gncOrderRegister ();
-        gncOwnerRegister ();
-        gncTaxTableRegister ();
-        gncVendorRegister ();
+        gnc_module_init_business_core_init();
     }
 
     scm_init_sw_business_core_module();

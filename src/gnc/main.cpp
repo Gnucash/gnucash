@@ -42,10 +42,12 @@ extern "C"
 #include "core-utils/gnc-main.h"
 #include "engine/gnc-session.h"
 #include "engine/engine-helpers.h"
-#include "engine/cashobjects.h"
+#include "engine/gnc-engine.h"
 #include "swig-runtime.h"
 
 #include "backend/xml/gnc-backend-xml.h"
+#include "business/business-core/gncBusiness.h"
+#include "business/business-core/xml/gncmod-business-backend-xml.h"
 
 #ifdef HAVE_GETTEXT
 #  include <libintl.h>
@@ -173,12 +175,14 @@ main(int argc, char ** argv)
 
     qof_init();
     gnc_module_system_init();
-    cashobjects_register();
+    gnc_engine_init(argc, argv);
 
     // Call the statically-linked versions of the backend init
     // functions
     gnc_module_init_backend_xml();
     //gnc_module_init_backend_dbi();
+    gnc_module_init_business_core_init();
+    gnc_module_init_business_core_xml_init();
 
     // From here on the new C++ code
     QApplication app(argc, argv);

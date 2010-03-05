@@ -47,6 +47,9 @@
 #define GNC_TAXTABLE_MODULE_NAME GNC_ID_TAXTABLE
 #define GNC_VENDOR_MODULE_NAME   GNC_ID_VENDOR
 
+void
+gnc_module_init_business_core_init(void);
+
 #ifndef DI
 # ifdef _MSC_VER
 /* MSVC compiler doesn't have C99 "designated initializers"

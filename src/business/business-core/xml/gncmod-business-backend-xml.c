@@ -23,6 +23,8 @@
  *
  *********************************************************************/
 
+#include "gncmod-business-backend-xml.h"
+
 #include "config.h"
 #include <gmodule.h>
 
@@ -69,6 +71,23 @@ libgncmod_business_backend_xml_gnc_module_description(void)
     return g_strdup("The XML (v2) parsers for GnuCash business objects");
 }
 
+void
+gnc_module_init_business_core_xml_init(void)
+{
+    /* Initialize our pointers into the backend subsystem */
+    gnc_address_xml_initialize ();
+    gnc_billterm_xml_initialize ();
+    gnc_customer_xml_initialize ();
+    gnc_employee_xml_initialize ();
+    gnc_entry_xml_initialize ();
+    gnc_invoice_xml_initialize ();
+    gnc_job_xml_initialize ();
+    gnc_order_xml_initialize ();
+    gnc_owner_xml_initialize ();
+    gnc_taxtable_xml_initialize ();
+    gnc_vendor_xml_initialize ();
+}
+
 int
 libgncmod_business_backend_xml_gnc_module_init(int refcount)
 {
@@ -82,18 +101,7 @@ libgncmod_business_backend_xml_gnc_module_init(int refcount)
 
     if (refcount == 0)
     {
-        /* Initialize our pointers into the backend subsystem */
-        gnc_address_xml_initialize ();
-        gnc_billterm_xml_initialize ();
-        gnc_customer_xml_initialize ();
-        gnc_employee_xml_initialize ();
-        gnc_entry_xml_initialize ();
-        gnc_invoice_xml_initialize ();
-        gnc_job_xml_initialize ();
-        gnc_order_xml_initialize ();
-        gnc_owner_xml_initialize ();
-        gnc_taxtable_xml_initialize ();
-        gnc_vendor_xml_initialize ();
+        gnc_module_init_business_core_xml_init();
     }
 
     return TRUE;

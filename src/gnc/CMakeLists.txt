@@ -68,7 +68,9 @@ ADD_EXECUTABLE (cutecash
   ${gnc_SOURCES}
 )
 
-TARGET_LINK_LIBRARIES (cutecash gnc-backend-xml engine gnc-module core-utils qof)
+TARGET_LINK_LIBRARIES (cutecash business-core)
+TARGET_LINK_LIBRARIES (cutecash gnc-backend-xml)
+TARGET_LINK_LIBRARIES (cutecash engine gnc-module core-utils qof)
 TARGET_LINK_LIBRARIES (cutecash ${GCONF2_LIBRARIES})
 TARGET_LINK_LIBRARIES (cutecash ${GTHREAD_LIBRARIES} ${GOBJECT_LIBRARIES} ${GMODULE_LIBRARIES} ${GLIB2_LIBRARIES})
 TARGET_LINK_LIBRARIES (cutecash ${LIBGUILE_LIBRARIES})
