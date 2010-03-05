@@ -23,14 +23,14 @@
  */
 #include "config.h"
 
-extern "C"
-{
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <libguile.h>
 #include <glib/gi18n.h>
 #include <glib.h>
+extern "C"
+{
 #include "gnc-module/gnc-module.h"
 #include "core-utils/gnc-path.h"
 #include "core-utils/binreloc.h"
@@ -48,12 +48,12 @@ extern "C"
 #include "backend/xml/gnc-backend-xml.h"
 #include "business/business-core/gncBusiness.h"
 #include "business/business-core/xml/gncmod-business-backend-xml.h"
+} // END extern C
 
 #ifdef HAVE_GETTEXT
 #  include <libintl.h>
 #  include <locale.h>
 #endif
-} // END extern C
 
 #include <QApplication>
 #include "mainwindow.hpp"

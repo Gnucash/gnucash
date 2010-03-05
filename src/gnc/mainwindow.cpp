@@ -31,9 +31,9 @@
 #include "ui_mainwindow.h"
 
 // gnucash includes
+#include <glib/gi18n.h>
 extern "C"
 {
-#include <glib/gi18n.h>
 #include "qof.h"
 #include "engine/gnc-hooks.h"
 #include "core-utils/gnc-filepath-utils.h"
