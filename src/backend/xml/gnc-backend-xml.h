@@ -56,6 +56,12 @@ typedef struct FileBackend_struct FileBackend;
 // This is now a static inside the module
 //QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
 
+/** Initialization function which can be used when this module is
+ * statically linked into the application. */
+void gnc_module_init_backend_xml(void);
+
+/** This is the standarized initialization function of a qof_backend
+ * GModule. This one simply calls gnc_module_init_backend_file(). */
 G_MODULE_EXPORT void
 qof_backend_module_init(void);
 

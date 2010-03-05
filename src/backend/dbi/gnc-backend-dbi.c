@@ -1044,6 +1044,12 @@ gnc_dbi_check_sqlite3_file( const gchar *path )
 G_MODULE_EXPORT void
 qof_backend_module_init( void )
 {
+    gnc_module_init_backend_dbi();
+}
+
+void
+gnc_module_init_backend_dbi(void)
+{
     QofBackendProvider *prov;
 #define DEFAULT_DBD_DIR "/usr/lib/dbd"
     const gchar* driver_dir;
@@ -1156,6 +1162,12 @@ qof_backend_module_init( void )
 
 G_MODULE_EXPORT void
 qof_backend_module_finalize( void )
+{
+    gnc_module_finalize_backend_dbi();
+}
+
+void
+gnc_module_finalize_backend_dbi( void )
 {
     dbi_shutdown();
 }

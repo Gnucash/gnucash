@@ -45,7 +45,7 @@ extern "C"
 #include "engine/cashobjects.h"
 #include "swig-runtime.h"
 
-#include "gnc-backend-xml.h"
+#include "backend/xml/gnc-backend-xml.h"
 
 #ifdef HAVE_GETTEXT
 #  include <libintl.h>
@@ -175,15 +175,21 @@ main(int argc, char ** argv)
     gnc_module_system_init();
     cashobjects_register();
 
-    // For the XML file backend
-    qof_backend_module_init();
+    // Call the statically-linked versions of the backend init
+    // functions
+    gnc_module_init_backend_xml();
+    //gnc_module_init_backend_dbi();
 
     // From here on the new C++ code
     QApplication app(argc, argv);
     gnc::MainWindow mainWin;
     mainWin.show();
 
+    // Go into the main qt event loop
     int r = app.exec();
+
+    // Shutdown
+    //gnc_module_finalize_backend_dbi();
     qof_close();
     return r;
 

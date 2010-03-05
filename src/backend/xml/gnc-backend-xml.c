@@ -1165,6 +1165,12 @@ gnc_provider_free (QofBackendProvider *prov)
 G_MODULE_EXPORT void
 qof_backend_module_init(void)
 {
+    gnc_module_init_backend_xml();
+}
+
+void
+gnc_module_init_backend_xml(void)
+{
     QofBackendProvider *prov;
     prov = g_new0 (QofBackendProvider, 1);
     prov->provider_name = "GnuCash File Backend Version 2";
