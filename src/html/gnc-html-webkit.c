@@ -1001,10 +1001,7 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
 static void
 impl_webkit_print( GncHtml* self )
 {
-#ifdef G_OS_WIN32
-    extern GtkPrintOperationResult webkit_web_frame_print_full( WebKitWebFrame * frame,
-            GtkPrintOperation * op, GtkPrintOperationAction action, GError** error );
-#else
+#ifndef G_OS_WIN32
     extern void webkit_web_frame_print( WebKitWebFrame * frame );
 #endif
 
