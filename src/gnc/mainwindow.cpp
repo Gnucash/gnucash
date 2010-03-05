@@ -83,6 +83,7 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
+    delete ui;
     if (m_session.get())
     {
         qof_session_destroy(m_session.get());

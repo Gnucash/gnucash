@@ -24,7 +24,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSharedPointer>
 #include "gnc/Session.hpp"
 #include "gnc/AccountItemModel.hpp"
 
@@ -76,7 +75,7 @@ private:
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
 
-    QSharedPointer<Ui::MainWindow> ui;
+    Ui::MainWindow *ui;
 
     QString curFile;
 
