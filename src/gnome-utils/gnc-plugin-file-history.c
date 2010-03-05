@@ -43,6 +43,7 @@
 #include "gnc-window.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-uri-utils.h"
 
 static GObjectClass *parent_class = NULL;
 
@@ -290,85 +291,25 @@ gnc_history_get_last (void)
 static gchar *
 gnc_history_generate_label (int index, const gchar *filename)
 {
-    const gchar *src;
-    gchar *result, *dst;
-    gunichar  unichar;
+    gchar *label, *result;
 
-    /* raw byte length, not num characters */
-    result = g_malloc(strlen(filename) * 2);
-
-    dst = result;
-    if (index < 10)
-        dst += g_sprintf(result, "_%d ", (index + 1) % 10);
-
-    /* If the filename begins with "mysql://" or "postgres://", hide the
-    user name and password.  Otherwise, it is a filename - hide everything
-    except the file name. */
-
-    if (g_ascii_strncasecmp(filename, "mysql://", 8) == 0 ||
-            g_ascii_strncasecmp(filename, "postgres://", 11) == 0 )
+    if ( gnc_uri_is_file_uri ( filename ) )
     {
-        gint num_colons = 0;
-        gboolean has_explicit_port;
-
-        /* Count the number of colons to see if there is an explicit port number or not */
-        for (src = filename; *src; src = g_utf8_next_char(src))
-        {
-            gunichar c = g_utf8_get_char(src);
-            if (c == ':') num_colons++;
-        }
-        has_explicit_port = (num_colons == 5);
-        num_colons = 0;
-
-        /* Loop for all chars and copy from 'src' to 'dst'.  While doing this,
-           convert username and password (after 2nd ':', 3rd if explicit port) to asterisks. */
-        src = filename;
-        for ( ; *src; src = g_utf8_next_char(src))
-        {
-            if (*src == ':' ||
-                    (!has_explicit_port && num_colons < 3) ||
-                    (has_explicit_port && num_colons < 4))
-            {
-                unichar = g_utf8_get_char(src);
-            }
-            else
-            {
-                unichar = '*';
-            }
-            dst += g_unichar_to_utf8 (unichar, dst);
-            if (unichar == '_')
-            {
-                dst += g_unichar_to_utf8 ('_', dst);
-            }
-            else if (unichar == ':')
-            {
-                num_colons++;
-            }
-        }
+        /* for file paths, only display the file name */
+        gchar *filepath = gnc_uri_get_path ( filename );
+        label = g_path_get_basename ( filepath );
+        g_free ( filepath );
     }
     else
     {
-        /* Find the filename portion of the path */
-        src = g_utf8_strrchr(filename, -1, G_DIR_SEPARATOR);
-        if (src)
-        {
-            src = g_utf8_next_char(src);
-
-            /* Fix up any underline characters so they aren't mistaken as
-             * command accelerator keys. */
-            for ( ; *src; src = g_utf8_next_char(src))
-            {
-                unichar = g_utf8_get_char(src);
-                dst += g_unichar_to_utf8 (unichar, dst);
-
-                if (unichar == '_')
-                    dst += g_unichar_to_utf8 ('_', dst);
-            }
-        }
+        /* for databases, display the full uri, except for the password */
+        label = gnc_uri_normalize_uri ( filename, FALSE );
     }
 
-    *dst = '\0';
+    result = g_strdup_printf ( "_%d %s", (index + 1) % 10, label);
+    g_free ( label );
     return result;
+
 }
 
 

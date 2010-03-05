@@ -64,7 +64,7 @@ typedef int ssize_t;
 #include "TransLog.h"
 #include "gnc-engine.h"
 
-#include "gnc-filepath-utils.h"
+#include "gnc-uri-utils.h"
 
 #include "io-gncxml.h"
 #include "io-gncxml-v2.h"
@@ -227,11 +227,8 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
     ENTER (" ");
 
     /* Make sure the directory is there */
-    if (g_str_has_prefix(book_id, XML_URI_PREFIX))
-        book_id += strlen(XML_URI_PREFIX);
-    if (g_str_has_prefix(book_id, FILE_URI_PREFIX))
-        book_id += strlen(FILE_URI_PREFIX);
-    be->fullpath = xaccResolveFilePath(book_id);
+    be->fullpath = gnc_uri_get_path (book_id);
+
     if (NULL == be->fullpath)
     {
         qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
@@ -504,54 +501,61 @@ gnc_xml_be_determine_file_type(const char *path)
 }
 
 static gboolean
-gnc_determine_file_type (const char *path)
+gnc_determine_file_type (const char *uri)
 {
     struct stat sbuf;
     int rc;
     FILE *t;
+    gchar *filename;
+    gboolean result;
 
-    if (!path)
+    if (!uri)
     {
         return FALSE;
     }
 
-    // Since this can be called with "xml:" as a prefix, remove it if it exists
-    if ( g_str_has_prefix( path, "xml:" ) )
+    filename = gnc_uri_get_path ( uri );
+    if (0 == safe_strcmp(filename, QOF_STDOUT))
     {
-        path += 4;
+        result = FALSE;
+        goto det_exit;
     }
-
-    if (0 == safe_strcmp(path, QOF_STDOUT))
-    {
-        return FALSE;
-    }
-    t = g_fopen(path, "r");
+    t = g_fopen( filename, "r" );
     if (!t)
     {
         PINFO (" new file");
-        return TRUE;
+        result = TRUE;
+        goto det_exit;
     }
     fclose(t);
-    rc = g_stat(path, &sbuf);
+    rc = g_stat(filename, &sbuf);
     if (rc < 0)
     {
-        return FALSE;
+        result = FALSE;
+        goto det_exit;
     }
     if (sbuf.st_size == 0)
     {
         PINFO (" empty file");
-        return TRUE;
+        result = TRUE;
+        goto det_exit;
     }
-    if (gnc_is_xml_data_file_v2(path, NULL))
+    if (gnc_is_xml_data_file_v2(filename, NULL))
     {
-        return TRUE;
+        result = TRUE;
+        goto det_exit;
     }
-    else if (gnc_is_xml_data_file(path))
+    else if (gnc_is_xml_data_file(filename))
     {
-        return TRUE;
+        result = TRUE;
+        goto det_exit;
     }
-    PINFO (" %s is not a gnc XML file", path);
-    return FALSE;
+    PINFO (" %s is not a gnc XML file", filename);
+    result = FALSE;
+
+det_exit:
+    g_free ( filename );
+    return result;
 }
 
 static gboolean

@@ -29,6 +29,7 @@
 #include <glade/glade.h>
 
 #include "gnc-ui.h"
+#include "gnc-uri-utils.h"
 #include "dialog-utils.h"
 #include "dialog-file-access.h"
 #include "gnc-file.h"
@@ -63,13 +64,14 @@ typedef struct FileAccessWindow
 static gchar*
 geturl( FileAccessWindow* faw )
 {
-    gchar* url;
+    gchar* url = NULL;
     const gchar* host;
     const gchar* database;
     const gchar* username;
     const gchar* password;
     const gchar* type;
     const gchar* file;
+    const gchar* path;
 
     host = gtk_entry_get_text( faw->tf_host );
     database = gtk_entry_get_text( faw->tf_database );
@@ -78,36 +80,17 @@ geturl( FileAccessWindow* faw )
     file = gtk_file_chooser_get_filename( faw->fileChooser );
 
     type = gtk_combo_box_get_active_text( faw->cb_uri_type );
-    if ( (( strcmp( type, "xml" ) == 0 ) ||
-            ( strcmp( type, "sqlite3" ) == 0 ) ||
-            ( strcmp( type, "file" ) == 0 )) &&
-            ( file == NULL ) )
-        return NULL;
+    if ( gnc_uri_is_file_protocol( type ) )
+    {
+        if ( file == NULL ) /* file protocol was chosen but no filename was set */
+            return NULL;
+        else                /* file protocol was chosen with filename set */
+            path = file;
+    }
+    else                    /* db protocol was chosen */
+        path = database;
 
-    if ( strcmp( type, "xml" ) == 0 )
-    {
-        url = g_strdup_printf( "xml://%s", file );
-    }
-    else if ( strcmp( type, "sqlite3" ) == 0 )
-    {
-        url = g_strdup_printf( "sqlite3://%s", file );
-    }
-    else if ( strcmp( type, "file" ) == 0 )
-    {
-        url = g_strdup_printf( "file://%s", file );
-    }
-    else if ( strcmp( type, "mysql" ) == 0 )
-    {
-        url = g_strdup_printf( "mysql://%s:%s:%s:%s",
-                               host, database, username, password );
-    }
-    else
-    {
-        g_assert( strcmp( type, "postgres" ) == 0 );
-        type = "postgres";
-        url = g_strdup_printf( "postgres://%s:%s:%s:%s",
-                               host, database, username, password );
-    }
+    url = gnc_uri_create_uri (type, host, 0, username, password, path);
 
     return url;
 }

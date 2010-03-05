@@ -31,7 +31,7 @@
 #include "dialog-utils.h"
 #include "druid-utils.h"
 #include "gnc-backend-xml.h"
-#include "gnc-filepath-utils.h"
+#include "gnc-uri-utils.h"
 #include "gnc-module.h"
 #include "gnc-ui.h"
 #include "io-gncxml-v2.h"
@@ -273,7 +273,7 @@ gnc_xml_convert_single_file (const gchar *filename)
 
     data = g_new0 (GncXmlImportData, 1);
     data->import_type = XML_CONVERT_SINGLE_FILE;
-    data->filename = g_strdup (filename);
+    data->filename = gnc_uri_get_path (filename);
 
     /* gather ambiguous info */
     gxi_check_file (data);
@@ -751,7 +751,7 @@ gxi_parse_file (GncXmlImportData *data)
         goto cleanup_parse_file;
     }
 
-    logpath = xaccResolveFilePath (data->filename);
+    logpath = gnc_uri_get_path (data->filename);
     xaccLogSetBaseName (logpath);
     xaccLogDisable ();
     gxi_update_progress_bar (_("Reading file..."), 0.0);

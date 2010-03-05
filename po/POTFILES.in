@@ -153,6 +153,7 @@ src/core-utils/gnc-gkeyfile-utils.c
 src/core-utils/gnc-glib-utils.c
 src/core-utils/gnc-main.c
 src/core-utils/gnc-path.c
+src/core-utils/gnc-uri-utils.c
 src/doc/doxygen_main_page.c
 src/engine/Account.c
 src/engine/cap-gains.c
@@ -163,7 +164,6 @@ src/engine/gnc-associate-account.c
 src/engine/gnc-budget.c
 src/engine/gnc-commodity.c
 src/engine/gnc-engine.c
-src/engine/gnc-filepath-utils.c
 src/engine/gnc-hooks.c
 src/engine/gnc-lot.c
 src/engine/gncmod-engine.c
@@ -315,6 +315,7 @@ src/gnome-utils/gnc-gobject-utils.c
 src/gnome-utils/gnc-gtk-utils.c
 src/gnome-utils/gnc-gui-query.c
 src/gnome-utils/gnc-icons.c
+src/gnome-utils/gnc-keyring.c
 src/gnome-utils/gnc-main-window.c
 src/gnome-utils/gnc-menu-extensions.c
 src/gnome-utils/gncmod-gnome-utils.c

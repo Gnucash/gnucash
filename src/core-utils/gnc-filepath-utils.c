@@ -24,10 +24,6 @@
  * @brief file path resolution utilities
  * @author Copyright (c) 1998-2004 Linas Vepstas <linas@linas.org>
  * @author Copyright (c) 2000 Dave Peticolas
- *
- * XXX this file does not belong in the gnucash engine; it is here
- * for the moment only because both the file backend and the app-file
- * GUI code make use of it.
  */
 
 #include "config.h"
@@ -47,7 +43,6 @@
 #endif
 #include <errno.h>
 
-#include "qof.h"
 #include "gnc-path.h"
 #include "gnc-filepath-utils.h"
 
@@ -55,6 +50,7 @@
 #include <glib/gwin32.h>
 #define PATH_MAX MAXPATHLEN
 #endif
+
 
 /**
  * Scrubs a filename by changing "strange" chars (e.g. those that are not
@@ -86,37 +82,44 @@ static gchar *
 check_path_return_if_valid(gchar *path)
 {
     if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
+    {
         return path;
+    }
     g_free (path);
     return NULL;
 }
 
-/** @fn char * xaccResolveFilePath (const char * filefrag)
+/** @fn char * gnc_resolve_file_path (const char * filefrag)
  *
  *  @brief Create an absolute path when given a relative path;
  *  otherwise return the argument.
  *
- * If passed a string which g_path_is_absolute declares an absolute
- * path, return the argument. If the string begins with file:,
- * file://, xml:, or xml://, remove that and return the rest.
+ *  @warning filefrag should be a simple path fragment. It shouldn't
+ *  contain xml:// or http:// or <whatever>:// other protocol specifiers.
  *
- * Otherwise, assume that filefrag is a well-formed relative path and
- * try to find a file with its path relative to the current working
- * directory, the installed system-wide data directory (e.g.,
- * /usr/local/share/gnucash), the installed system configuration
- * directory (e.g., /usr/local/etc/gnucash), or in the user's
- * configuration directory (e.g., $HOME/.gnucash/data) in that
- * order. If a matching file is found, return the absolute path to
- * it. If one isn't found, return a absolute path relative to the
- * user's configuration directory and note in the trace file that it
- * needs to be created.
+ *  If passed a string which g_path_is_absolute declares an absolute
+ *  path, return the argument.
  *
- * @param filefrag
+ *  Otherwise, assume that filefrag is a well-formed relative path and
+ *  try to find a file with its path relative to
+ *  \li  the current working directory,
+ *  \li the installed system-wide data directory (e.g., /usr/local/share/gnucash),
+ *  \li the installed system configuration directory (e.g., /usr/local/etc/gnucash),
+ *  \li or in the user's configuration directory (e.g., $HOME/.gnucash/data)
  *
- * @return An absolute file path.
+ *  The paths are searched for in that order. If a matching file is
+ *  found, return the absolute path to it.
+
+ *  If one isn't found, return a absolute path relative to the
+ *  user's configuration directory and note in the trace file that it
+ *  needs to be created.
+ *
+ *  @param filefrag The file path to resolve
+ *
+ *  @return An absolute file path.
  */
-char *
-xaccResolveFilePath (const char * filefrag)
+gchar *
+gnc_resolve_file_path (const gchar * filefrag)
 {
     int namelen;
     gchar *fullpath = NULL, *tmp_path = NULL;
@@ -134,22 +137,6 @@ xaccResolveFilePath (const char * filefrag)
     /* check for an absolute file path */
     if (g_path_is_absolute(filefrag))
         return g_strdup (filefrag);
-
-    if (!g_ascii_strncasecmp(filefrag, "file:", 5))
-    {
-        if (!g_ascii_strncasecmp(filefrag, "file://", 7))
-            return g_strdup(filefrag + 7);
-        else
-            return g_strdup(filefrag + 5);
-    }
-    if ( g_ascii_strncasecmp( filefrag, "xml:", 4 ) == 0 )
-    {
-        if ( g_ascii_strncasecmp( filefrag, "xml://", 6 ) == 0 )
-            return g_strdup( filefrag + 6);
-        else
-            return g_strdup( filefrag + 4);
-    }
-
 
     /* get conservative on the length so that sprintf(getpid()) works ... */
     /* strlen ("/.LCK") + sprintf (%x%d) */
@@ -183,94 +170,12 @@ xaccResolveFilePath (const char * filefrag)
     fullpath = gnc_build_data_path(filefrag);
     if (g_file_test(fullpath, G_FILE_TEST_IS_REGULAR))
         return fullpath;
+
     /* OK, it's not there. Note that it needs to be created and pass it
      * back anyway */
     g_warning("create new file %s", fullpath);
     return fullpath;
 
-}
-
-/* ====================================================================== */
-
-/** @fn char * xaccResolveURL (const char * pathfrag)
- *
- *  @brief Return the passed-in string unless it starts with file:,
- *  xml:, or is a raw relative path.
- *
- * Strings starting with http://, https://, or a "registered scheme"
- * (see qof_backend_get_registered_access_method_list()) are returned
- * as-is by this function.
- *
- * Strings which form an absolute path (as determined by
- * g_path_is_absolute()) are passed to xaccResolveFilePath() and
- * immediately returned as-is.
- *
- * Strings which begin with file: or xml: are passed to
- * xaccResolveFilePath, which strips off the "scheme" part (file: or
- * xml: plus // if present) and returns the rest unchanged. This
- * result is passed back to the caller as-is if the original astring
- * started with file:; if it started with xml:, then xml: is prepended
- * before passing it back to the caller. Note that this has the effect
- * of converting a URI of the form xml:///path/to/file into one of the
- * form xml:/path/to/file.
- *
- * Strings which meet none of the above are passed to
- * xaccResolveFilePath and the result returned to the caller.
- *
- * @param pathfrag the string to "resolve"
- *
- *  @return "resolved" string.
- */
-char *
-xaccResolveURL (const char * pathfrag)
-{
-    GList* list;
-    GList* node;
-
-    /* seriously invalid */
-    if (!pathfrag) return NULL;
-
-    /* At this stage of checking, URL's are always, by definition,
-     * resolved.  If there's an error connecting, we'll find out later.
-     */
-
-    if (!g_ascii_strncasecmp (pathfrag, "http://", 7) ||
-            !g_ascii_strncasecmp (pathfrag, "https://", 8))
-    {
-        return g_strdup(pathfrag);
-    }
-
-    /* Check the URL against the list of registered access methods */
-    list = qof_backend_get_registered_access_method_list();
-    for ( node = list; node != NULL; node = node->next )
-    {
-        const gchar* access_method = node->data;
-        if ( strcmp( access_method, "file" ) != 0 &&
-                strcmp( access_method, "xml" ) != 0 )
-        {
-            gchar s[30];
-            sprintf( s, "%s://", access_method );
-            if ( !g_ascii_strncasecmp( pathfrag, s, strlen(s) ) )
-            {
-                g_list_free(list);
-                return g_strdup(pathfrag);
-            }
-        }
-    }
-    g_list_free(list);
-    /*
-     * xml: schemes are a special case, becuase gnc_file_do_save_as()
-     * relies on the phony scheme id being present in the returned path
-     * to distinguish the backend used to save the file. Note that this
-     * has the amusing effect of stripping the // from the phony scheme,
-     * so if it started out as xml:///path/to/data, it gets returned
-     * from here as xml:/path/to/data.
-     */
-    if (!g_ascii_strncasecmp (pathfrag, "xml:", 4))
-    {
-        return (g_strdup_printf( "xml:%s", xaccResolveFilePath (pathfrag)) );
-    }
-    return (xaccResolveFilePath (pathfrag));
 }
 
 /* ====================================================================== */

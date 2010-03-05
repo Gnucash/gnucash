@@ -59,6 +59,7 @@
 #include "gnc-session.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "gnc-uri-utils.h"
 #include "gnc-version.h"
 #include "gnc-window.h"
 #include "gnc-main.h"
@@ -1357,8 +1358,9 @@ gnc_main_window_generate_title (GncMainWindow *window)
     GncPluginPage *page;
     QofBook *book;
     gchar *filename = NULL;
+    const gchar *book_id = NULL;
     const gchar *dirty = "";
-    gchar *title, *ptr;
+    gchar *title;
     GtkAction* action;
 
     /* The save action is sensitive if the book is dirty */
@@ -1369,7 +1371,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
     }
     if (gnc_current_session_exist())
     {
-        filename = (gchar*)gnc_session_get_url (gnc_get_current_session ());
+        book_id = gnc_session_get_url (gnc_get_current_session ());
         book = gnc_get_current_book();
         if (qof_instance_is_dirty(QOF_INSTANCE(book)))
         {
@@ -1381,60 +1383,37 @@ gnc_main_window_generate_title (GncMainWindow *window)
         }
     }
 
-    if (!filename)
+    if (!book_id)
         filename = g_strdup(_("Unsaved Book"));
     else
     {
-        gint num_colons = 0;
-        for (ptr = filename; *ptr; ptr = g_utf8_next_char(ptr))
-        {
-            gunichar c = g_utf8_get_char(ptr);
-            if (c == ':') num_colons++;
-        }
+        gchar *protocol = NULL;
+        gchar *hostname = NULL;
+        gchar *username = NULL;
+        gchar *password = NULL;
+        gchar *path = NULL;
+        guint32 port = 0;
 
-        if (num_colons < 4)
+        gnc_uri_get_components (book_id, &protocol, &hostname,
+                                port, &username, &password, &path);
+
+        if ( gnc_uri_is_file_protocol ( (const gchar*) protocol ) )
         {
-            /* The Gnome HIG 2.0 recommends only the file name (no path) be used. (p15) */
-            ptr = g_utf8_strrchr(filename, -1, G_DIR_SEPARATOR);
-            if (ptr != NULL)
-                filename = g_strdup(g_utf8_next_char(ptr));
+            /* The filename is a true file.
+             * The Gnome HIG 2.0 recommends only the file name (no path) be used. (p15) */
+            filename = g_path_get_basename ( path );
         }
         else
         {
-            const gchar* src = filename;
-            gboolean has_explicit_port = (num_colons == 5);
-
-            filename = g_strdup(filename);
-            ptr = filename;
-            num_colons = 0;
-
-            /* Loop and copy chars, converting username and password (after 3rd ':' (4th if there's
-               an explicit port number) to asterisks. */
-            for ( ; *src; src = g_utf8_next_char(src))
-            {
-                gunichar unichar;
-
-                if (*src == ':' ||
-                        (!has_explicit_port && num_colons < 3) ||
-                        (has_explicit_port && num_colons < 4))
-                {
-                    unichar = g_utf8_get_char(src);
-                }
-                else
-                {
-                    unichar = '*';
-                }
-                ptr += g_unichar_to_utf8 (unichar, ptr);
-                if (unichar == '_')
-                {
-                    ptr += g_unichar_to_utf8 ('_', ptr);
-                }
-                else if (unichar == ':')
-                {
-                    num_colons++;
-                }
-            }
+            /* The filename is composed of database connection parameters.
+             * For this we will show access_method://username@database[:port] */
+            filename = gnc_uri_normalize_uri (book_id, FALSE);
         }
+        g_free(protocol);
+        g_free(hostname);
+        g_free(username);
+        g_free(password);
+        g_free(path);
     }
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
@@ -1450,7 +1429,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
     {
         title = g_strdup_printf("%s%s - GnuCash", dirty, filename);
     }
-    g_free(filename);
+    g_free( filename );
 
     return title;
 }

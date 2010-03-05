@@ -42,7 +42,6 @@
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-file.h"
-#include "gnc-filepath-utils.h"
 #include "gnc-hooks.h"
 #include "gfec.h"
 #include "gnc-main-window.h"
@@ -97,7 +96,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
                                                location);                   \
       return FALSE;                                                         \
     }                                                                       \
- 
+
 
 static gboolean
 gnc_html_register_url_cb (const char *location, const char *label,

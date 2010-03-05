@@ -1142,6 +1142,7 @@ qof_session_begin (QofSession *session, const char * book_id,
 {
     char *p, *access_method, *msg;
     int err;
+    gchar **splituri;
 
     if (!session) return;
 
@@ -1174,36 +1175,16 @@ qof_session_begin (QofSession *session, const char * book_id,
     /* Store the session URL  */
     session->book_id = g_strdup (book_id);
 
-    /* Look for something of the form of "file:/", "http://" or
+    /* Look for something of the form of "file://", "http://" or
      * "postgres://". Everything before the colon is the access
      * method.  Load the first backend found for that access method.
      */
-    p = strchr (book_id, ':');
-    if (p)
-    {
-        access_method = g_strdup (book_id);
-        p = strchr (access_method, ':');
-        *p = '\0';
-        qof_session_load_backend(session, access_method);
-        g_free (access_method);
-#ifdef G_OS_WIN32
-        if (NULL == session->backend)
-        {
-            /* Clear the error condition of previous errors */
-            qof_session_clear_error (session);
-
-            /* On windows, a colon can be part of a normal filename. So if
-            no backend was found (which means the part before the colon
-            wasn't an access method), fall back to the file backend. */
-            qof_session_load_backend(session, "file");
-        }
-#endif
-    }
-    else
-    {
-        /* If no colon found, assume it must be a file-path */
+    splituri = g_strsplit ( book_id, "://", 2 );
+    if ( splituri[1] == NULL ) /* no access method in the uri, use generic "file" backend */
         qof_session_load_backend(session, "file");
-    }
+    else                       /* access method found, load appropriate backend */
+        qof_session_load_backend(session, splituri[0]);
+    g_strfreev ( splituri );
 
     /* No backend was found. That's bad. */
     if (NULL == session->backend)

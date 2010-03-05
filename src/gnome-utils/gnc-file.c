@@ -33,12 +33,12 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-file.h"
-#include "gnc-filepath-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-hooks.h"
 #include "gnc-splash.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "gnc-uri-utils.h"
 #include "gnc-window.h"
 #include "gnc-plugin-file-history.h"
 #include "qof.h"
@@ -497,23 +497,21 @@ show_session_error (QofBackendError io_error,
 static void
 gnc_add_history (QofSession * session)
 {
-    char *url;
+    const gchar *url;
     char *file;
 
     if (!session) return;
 
-    url = xaccResolveURL (qof_session_get_url (session));
-    if (!url)
+    url = qof_session_get_url ( session );
+    if ( !url )
         return;
 
-    if (strncmp (url, "file:", 5) == 0)
-        file = url + 5;
+    if ( gnc_uri_is_file_uri ( url ) )
+        file = gnc_uri_get_path ( url );
     else
-        file = url;
+        file = gnc_uri_normalize_uri ( url, TRUE ); /* FIXME this saves the password visibly in history ! */
 
     gnc_history_add_file (file);
-
-    g_free (url);
 }
 
 static void
@@ -646,7 +644,10 @@ gnc_post_file_open (const char * filename)
 
     if (!filename) return FALSE;
 
-    newfile = xaccResolveURL (filename);
+    /* FIXME Verify if it is ok that a password is stored
+     * in the uri here.
+     */
+    newfile = gnc_uri_normalize_uri ( filename, TRUE );
     if (!newfile)
     {
         show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename,
@@ -773,12 +774,20 @@ gnc_post_file_open (const char * filename)
     if (!uh_oh)
     {
         Account *new_root;
+        gchar *logpath = NULL;
 
-        char * logpath = xaccResolveFilePath(newfile);
+        /* XXX Would logging make sense for databases as well (mysql/postgres) ?
+         * Currently the logpath is relative to the data file path.
+         * Databases don't have a file path, so no logging will be
+         * done for them in the current setup.
+         */
+        if ( gnc_uri_is_file_uri ( newfile ) )
+            logpath = gnc_uri_get_path(newfile);
         PINFO ("logpath=%s", logpath ? logpath : "(null)");
         xaccLogSetBaseName (logpath);
-        xaccLogDisable();
+        g_free ( logpath );
 
+        xaccLogDisable();
         gnc_window_show_progress(_("Loading user data..."), 0.0);
         qof_session_load (new_session, gnc_window_show_progress);
         gnc_window_show_progress(NULL, -1.0);
@@ -864,26 +873,34 @@ gnc_post_file_open (const char * filename)
     return TRUE;
 }
 
+/* Routine that pops up a file chooser dialog
+ * 
+ * Note: this dialog is used when dbi is not enabled
+ *       so the paths used in here are always file
+ *       paths, never db uris.
+ */
 gboolean
 gnc_file_open (void)
 {
     const char * newfile;
-    char *lastfile = NULL;
+    gchar *lastpath = NULL;
+    gchar *lastfile = NULL;
     gchar *last_file_dir = NULL;
     gboolean result;
 
     if (!gnc_file_query_save (TRUE))
         return FALSE;
 
-    lastfile = gnc_history_get_last();
-    if (lastfile)
+    lastpath = gnc_history_get_last();
+    lastfile = gnc_uri_get_path ( lastpath );
+    if ( lastfile )
         last_file_dir = g_path_get_dirname(lastfile);
     newfile = gnc_file_dialog (_("Open"), NULL, last_file_dir, GNC_FILE_DIALOG_OPEN);
-    if (lastfile != NULL)
-        g_free(lastfile);
-    if (last_file_dir != NULL)
-        g_free(last_file_dir);
-    result = gnc_post_file_open (newfile);
+    g_free ( lastpath );
+    g_free ( lastfile );
+    g_free ( last_file_dir );
+
+    result = gnc_post_file_open ( newfile );
 
     /* This dialogue can show up early in the startup process. If the
      * user fails to pick a file (by e.g. hitting the cancel button), we
@@ -1037,6 +1054,10 @@ gnc_file_save (void)
     LEAVE (" ");
 }
 
+/* Note: this dialog will only be used when dbi is not enabled
+ *       paths used in it always refer to files and are
+ *       never db uris
+ */
 void
 gnc_file_save_as (void)
 {
@@ -1052,10 +1073,11 @@ gnc_file_save_as (void)
     ENTER(" ");
 
     last = gnc_history_get_last();
-    if (last)
+    if ( last && gnc_uri_is_file_uri ( last ) )
     {
-        default_dir = g_path_get_dirname(last);
-        g_free(last);
+        gchar *filepath = gnc_uri_get_path ( last );
+        default_dir = g_path_get_dirname( filepath );
+        g_free ( filepath );
     }
     else
     {
@@ -1063,7 +1085,8 @@ gnc_file_save_as (void)
     }
     filename = gnc_file_dialog (_("Save"), NULL, default_dir,
                                 GNC_FILE_DIALOG_SAVE);
-    g_free(default_dir);
+    g_free ( last );
+    g_free ( default_dir );
     if (!filename) return;
 
     gnc_file_do_save_as( filename );
@@ -1080,14 +1103,16 @@ gnc_file_do_save_as (const char* filename)
     char *last;
     char *newfile;
     const char *oldfile;
+    gchar *logpath = NULL;
+
     QofBackendError io_err = ERR_BACKEND_NO_ERR;
 
     ENTER(" ");
 
     /* Check to see if the user specified the same file as the current
-     * file. If so, then just do that, instead of the below, which
-     * assumes a truly new name was given. */
-    newfile = xaccResolveURL (filename);
+     * file. If so, then just do a simple save, instead of a full save as */
+    /* FIXME Check if it is ok to have a password in the uri here */
+    newfile = gnc_uri_normalize_uri ( filename, TRUE );
     if (!newfile)
     {
         show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename,
@@ -1109,7 +1134,6 @@ gnc_file_do_save_as (const char* filename)
 
     /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
-    xaccLogSetBaseName(newfile); //FIXME: This is premature.
     save_in_progress++;
     new_session = qof_session_new ();
     qof_session_begin (new_session, newfile, FALSE, FALSE);
@@ -1153,6 +1177,18 @@ gnc_file_do_save_as (const char* filename)
         save_in_progress--;
         return;
     }
+
+    /* XXX Would logging make sense for databases as well (mysql/postgres) ?
+     * Currently the logpath is relative to the data file path.
+     * Databases don't have a file path, so no logging will be
+     * done for them in the current setup.
+     */
+    if ( gnc_uri_is_file_uri ( newfile ) )
+        logpath = gnc_uri_get_path(newfile);
+    PINFO ("logpath=%s", logpath ? logpath : "(null)");
+    xaccLogSetBaseName (logpath);
+    g_free ( logpath );
+
 
     /* Prevent race condition between swapping the contents of the two
      * sessions, and actually installing the new session as the current

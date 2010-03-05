@@ -11,6 +11,7 @@ libgnc_core_utils_la_SOURCES = \
   gnc-gkeyfile-utils.c \
   gnc-glib-utils.c \
   gnc-path.c \
+  gnc-uri-utils.c \
   swig-core-utils.c
 
 libgnc_core_utils_la_LIBADD = \
@@ -28,7 +29,8 @@ noinst_HEADERS = \
   gnc-gdate-utils.h \
   gnc-gkeyfile-utils.h \
   gnc-glib-utils.h \
-  gnc-path.h
+  gnc-path.h \
+  gnc-uri-utils.h
 
 if BUILDING_FROM_SVN
 swig-core-utils.c: core-utils.i ${top_srcdir}/src/base-typemaps.i

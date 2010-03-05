@@ -18,6 +18,7 @@ AM_CPPFLAGS = \
   ${GLADE_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GNOME_CFLAGS} \
+  ${GNOME_KEYRING_CFLAGS} \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} \
   ${GOFFICE_CFLAGS} \
@@ -68,6 +69,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-gtk-utils.c \
   gnc-gui-query.c \
   gnc-icons.c \
+  gnc-keyring.c \
   gnc-main-window.c \
   gnc-menu-extensions.c \
   gnc-plugin-file-history.c \
@@ -136,6 +138,7 @@ gncinclude_HEADERS = \
   gnc-gnome-utils.h \
   gnc-gui-query.h \
   gnc-icons.h \
+  gnc-keyring.h \
   gnc-main-window.h \
   gnc-menu-extensions.h \
   gnc-plugin-file-history.h \
@@ -186,6 +189,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   $(top_builddir)/lib/libc/libc-missing.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GNOME_LIBS} \
+  ${GNOME_KEYRING_LIBS} \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \

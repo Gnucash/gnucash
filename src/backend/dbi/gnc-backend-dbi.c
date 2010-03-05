@@ -50,6 +50,7 @@
 #include "Recurrence.h"
 
 #include "gnc-gconf-utils.h"
+#include "gnc-uri-utils.h"
 
 #include "gnc-backend-dbi.h"
 
@@ -220,6 +221,7 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     gint result;
     gchar* dirname;
     gchar* basename;
+    gchar *filepath = NULL;
 
     g_return_if_fail( qbe != NULL );
     g_return_if_fail( session != NULL );
@@ -228,17 +230,10 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     ENTER (" ");
 
     /* Remove uri type if present */
-    if ( g_str_has_prefix( book_id, FILE_URI_PREFIX ) )
-    {
-        book_id += strlen( FILE_URI_PREFIX );
-    }
-    if ( g_str_has_prefix( book_id, SQLITE3_URI_PREFIX ) )
-    {
-        book_id += strlen( SQLITE3_URI_PREFIX );
-    }
+    filepath = gnc_uri_get_path ( book_id );
 
     if ( !create_if_nonexistent
-            && !g_file_test( book_id, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS ) )
+            && !g_file_test( filepath, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS ) )
     {
         qof_backend_set_error( qbe, ERR_FILEIO_FILE_NOT_FOUND );
         LEAVE(" ");
@@ -258,8 +253,9 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
         return;
     }
 
-    dirname = g_path_get_dirname( book_id );
-    basename = g_path_get_basename( book_id );
+    dirname = g_path_get_dirname( filepath );
+    basename = g_path_get_basename( filepath );
+    g_free ( filepath );
     dbi_conn_error_handler( be->conn, sqlite3_error_fn, be );
     result = dbi_conn_set_option( be->conn, "host", "localhost" );
     if ( result < 0 )
@@ -406,13 +402,12 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
                              gboolean create_if_nonexistent )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
-    gchar* dsn = NULL;
-    gchar* host;
-    gchar* port = NULL;
-    gchar* dbname;
-    gchar* username;
-    gchar* password;
-    gint portnum;
+    gchar* protocol = NULL;
+    gchar* host = NULL;
+    gchar* dbname = NULL;
+    gchar* username = NULL;
+    gchar* password = NULL;
+    gint portnum = 0;
     gint result;
     gboolean success = FALSE;
 
@@ -422,32 +417,11 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
 
     ENTER (" ");
 
-    /* Split the book-id (format host:dbname:username:password or
-       host:port:dbname:username:password) */
-    dsn = g_strdup( book_id );
-    for ( host = dsn; *host != '/'; host++ ) {}
-    host += 2;
-    for ( dbname = host; *dbname != ':'; dbname++ ) {}
-    *dbname++ = '\0';
-    if ( *dbname >= '0' && *dbname <= '9' )
-    {
-        port = dbname;
-        for ( ; *dbname != ':'; dbname++ ) {}
-        *dbname++ = '\0';
-    }
-    for ( username = dbname; *username != ':'; username++ ) {}
-    *username++ = '\0';
-    for ( password = username; *password != ':'; password++ ) {}
-    *password++ = '\0';
-
-    if ( port != NULL && *port != '\0' )
-    {
-        portnum = atoi( port );
-    }
-    else
-    {
-        portnum = 0;
-    }
+    /* Split the book-id
+     * Format is protocol://username:password@hostname:port/dbname
+       where username, password and port are optional) */
+    gnc_uri_get_components ( book_id, &protocol, &host, portnum,
+                             &username, &password, &dbname );
 
     // Try to connect to the db.  If it doesn't exist and the create_if_nonexistent
     // flag is TRUE, we'll need to connect to the 'mysql' db and execute the
@@ -549,10 +523,11 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
     }
     be->sql_be.timespec_format = MYSQL_TIMESPEC_STR_FORMAT;
 exit:
-    if ( dsn != NULL )
-    {
-        g_free( dsn );
-    }
+    g_free( protocol );
+    g_free( host );
+    g_free( username );
+    g_free( password );
+    g_free( dbname );
 
     LEAVE (" ");
 }
@@ -586,15 +561,14 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
                                 gboolean create_if_nonexistent )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
-    gint result;
-    gchar* dsn;
-    gchar* host;
-    gchar* port = NULL;
-    gchar* dbname;
-    gchar* username;
-    gchar* password;
+    gint result = 0;
+    gchar* protocol = NULL;
+    gchar* host = NULL;
+    gchar* dbname = NULL;
+    gchar* username = NULL;
+    gchar* password = NULL;
     gboolean success = FALSE;
-    gint portnum;
+    gint portnum = 0;
 
     g_return_if_fail( qbe != NULL );
     g_return_if_fail( session != NULL );
@@ -602,32 +576,13 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
 
     ENTER (" ");
 
-    /* Split the book-id (format host:dbname:username:password or
-       host:port:dbname:username:password) */
-    dsn = g_strdup( book_id );
-    for ( host = dsn; *host != '/'; host++ ) {}
-    host += 2;
-    for ( dbname = host; *dbname != ':'; dbname++ ) {}
-    *dbname++ = '\0';
-    if ( *dbname >= '0' && *dbname <= '9' )
-    {
-        port = dbname;
-        for ( ; *dbname != ':'; dbname++ ) {}
-        *dbname++ = '\0';
-    }
-    for ( username = dbname; *username != ':'; username++ ) {}
-    *username++ = '\0';
-    for ( password = username; *password != ':'; password++ ) {}
-    *password++ = '\0';
-
-    if ( port != NULL && *port != '\0' )
-    {
-        portnum = atoi( port );
-    }
-    else
-    {
+    /* Split the book-id
+     * Format is protocol://username:password@hostname:port/dbname
+       where username, password and port are optional) */
+    gnc_uri_get_components ( book_id, &protocol, &host, portnum,
+                             &username, &password, &dbname );
+    if ( portnum == 0 )
         portnum = PGSQL_DEFAULT_PORT;
-    }
 
     // Try to connect to the db.  If it doesn't exist and the create_if_nonexistent
     // flag is TRUE, we'll need to connect to the 'postgres' db and execute the
@@ -729,10 +684,11 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
     }
     be->sql_be.timespec_format = PGSQL_TIMESPEC_STR_FORMAT;
 exit:
-    if ( dsn != NULL )
-    {
-        g_free( dsn );
-    }
+    g_free( protocol );
+    g_free( host );
+    g_free( username );
+    g_free( password );
+    g_free( dbname );
 
     LEAVE (" ");
 }
@@ -1004,17 +960,20 @@ gnc_dbi_provider_free( /*@ only @*/ QofBackendProvider *prov )
  *
  */
 static gboolean
-gnc_dbi_check_sqlite3_file( const gchar *path )
+gnc_dbi_check_sqlite3_file( const gchar *uri )
 {
     FILE* f;
     gchar buf[50];
     size_t chars_read;
     gint status;
+    gchar *filename;
 
     // BAD if the path is null
-    g_return_val_if_fail( path != NULL, FALSE );
+    g_return_val_if_fail( uri != NULL, FALSE );
 
-    f = g_fopen( path, "r" );
+    filename = gnc_uri_get_path ( uri );
+    f = g_fopen( filename, "r" );
+    g_free ( filename );
 
     // OK if the file doesn't exist - new file
     if ( f == NULL )

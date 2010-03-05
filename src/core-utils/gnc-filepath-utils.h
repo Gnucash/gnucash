@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-filepath-utils.h -- file path resolutin utilitie             *
+ * gnc-filepath-utils.h -- file path resolution utilities           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -39,8 +39,7 @@
  *    $HOME is not defined, then the current working directory is
  *    used.
  */
-char * xaccResolveFilePath (const char * filefrag);
-char * xaccResolveURL (const char * pathfrag);
+gchar *gnc_resolve_file_path (const gchar *filefrag);
 
 const gchar *gnc_dotgnucash_dir (void);
 gchar *gnc_build_dotgnucash_path (const gchar *filename);
