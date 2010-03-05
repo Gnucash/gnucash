@@ -36,7 +36,7 @@ extern "C"
 {
 #include "qof.h"
 #include "engine/gnc-hooks.h"
-#include "core-utils/gnc-filepath-utils.h"
+#include "core-utils/gnc-uri-utils.h"
 #include "engine/Account.h"
 #include "engine/TransLog.h"
 }
@@ -408,7 +408,7 @@ void MainWindow::loadFile(const QString &fileName)
 
     if (!we_are_in_error)
     {
-        char * logpath = xaccResolveFilePath(newfile);
+        char * logpath = gnc_uri_get_path(newfile);
         PINFO ("logpath=%s", logpath ? logpath : "(null)");
         xaccLogSetBaseName (logpath);
         xaccLogDisable();

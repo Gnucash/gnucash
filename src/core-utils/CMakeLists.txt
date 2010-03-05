@@ -26,6 +26,7 @@ SET (libgnc_core_utils_SOURCES
   gnc-glib-utils.c
   gnc-main.c
   gnc-path.c
+  gnc-uri-utils.c
   ${SWIG_CORE_UTILS_C}
 )
 
@@ -52,6 +53,7 @@ SET (libgnc_core_utils_HEADERS
   gnc-glib-utils.h
   gnc-main.h
   gnc-path.h
+  gnc-uri-utils.h
 )
 
 ADD_LIBRARY	(core-utils
