@@ -34,10 +34,6 @@ check_PROGRAMS = \
   test-resolve-url
 
 
-test_link_SOURCES = test-link.c
-test_link_LDADD = ../libgnc-core-utils.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la
-
 EXTRA_DIST =
 
 clean-local:
