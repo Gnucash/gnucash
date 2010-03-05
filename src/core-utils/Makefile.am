@@ -17,7 +17,8 @@ libgnc_core_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${BINRELOC_LIBS} \
-  ${GCONF_LIBS}
+  ${GCONF_LIBS} \
+  ${QOF_LIBS}
 
 noinst_HEADERS = \
   binreloc.h \
@@ -39,6 +40,7 @@ AM_CPPFLAGS = \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \
+  ${QOF_CFLAGS} \
   -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src
 
