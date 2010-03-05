@@ -398,7 +398,7 @@ on stdout and can be piped or redirected to other processes.
 Currently, only the QSF backend supports writing to stdout, other
 backends may return a ::QofBackendError.
 */
-#define QOF_STDOUT "file:"
+#define QOF_STDOUT ">"
 
 /** @name Event Handling
 
