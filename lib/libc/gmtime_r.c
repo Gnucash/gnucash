@@ -29,6 +29,10 @@
 
 #if HAVE_PTHREAD_MUTEX_INIT
 #include <pthread.h>
+#ifdef gmtime_r
+#undef gmtime_r
+#endif
+
 struct tm *
 gmtime_r(const time_t *const timep, struct tm *p_tm)
 {
