@@ -22,11 +22,11 @@ IF (NOT PKG_CONFIG_FOUND)
 ENDIF (NOT PKG_CONFIG_FOUND)
 
 # glib et al.
-PKG_CHECK_MODULES (GLIB2 glib-2.0>=2.20.0)
+PKG_CHECK_MODULES (GLIB2 glib-2.0>=2.12.0)
 PKG_CHECK_MODULES (GCONF2 gconf-2.0>=2.0)
-PKG_CHECK_MODULES (GOBJECT gobject-2.0>=2.20.0)
-PKG_CHECK_MODULES (GMODULE gmodule-2.0>=2.20.0)
-PKG_CHECK_MODULES (GTHREAD gthread-2.0>=2.20.0)
+PKG_CHECK_MODULES (GOBJECT gobject-2.0>=2.12.0)
+PKG_CHECK_MODULES (GMODULE gmodule-2.0>=2.12.0)
+PKG_CHECK_MODULES (GTHREAD gthread-2.0>=2.12.0)
 
 IF (MSVC)
   MESSAGE (STATUS "Hint: To create the import libraries for the gnome DLLs (e.g. gconf-2.lib), use the dlltool as follows: pexports bin/libgconf-2-4.dll > lib/libgconf-2.def ; dlltool -d lib/libgconf-2.def -D bin/libgconf-2-4.dll -l lib/gconf-2.lib")
