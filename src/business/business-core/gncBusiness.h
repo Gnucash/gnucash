@@ -47,4 +47,14 @@
 #define GNC_TAXTABLE_MODULE_NAME GNC_ID_TAXTABLE
 #define GNC_VENDOR_MODULE_NAME   GNC_ID_VENDOR
 
+#ifndef DI
+# ifdef _MSC_VER
+/* MSVC compiler doesn't have C99 "designated initializers"
+ * so we wrap them in a macro that is empty on MSVC. */
+#  define DI(x) /* */
+# else
+#  define DI(x) x
+# endif
+#endif
+
 #endif /* GNC_BUSINESS_H_ */
