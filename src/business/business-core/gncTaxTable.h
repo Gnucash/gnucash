@@ -144,8 +144,10 @@ void gncTaxTableCommitEdit (GncTaxTable *table);
  *  Equivalent function prototype is
  *  GncTaxTable * gncTaxTableLookup (QofBook *book, const GUID *guid);
  */
-#define gncTaxTableLookup(book,guid)    \
-       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_TAXTABLE, GncTaxTable)
+static inline GncTaxTable *gncTaxTableLookup (const QofBook* book, const GUID *guid)
+{
+    QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_TAXTABLE, GncTaxTable);
+}
 
 GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name);
 

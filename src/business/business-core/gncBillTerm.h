@@ -119,8 +119,10 @@ void gncBillTermSetCutoff (GncBillTerm *term, gint cutoff);
  *  Equivalent function prototype is
  *  GncBillTerm * gncBillTermLookup (QofBook *book, const GUID *guid);
  */
-#define gncBillTermLookup(book,guid)    \
-       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_BILLTERM, GncBillTerm)
+static inline GncBillTerm * gncBillTermLookup (const QofBook *book, const GUID *guid)
+{
+    QOF_BOOK_RETURN_ENTITY(book, guid,GNC_ID_BILLTERM, GncBillTerm);
+}
 
 GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name);
 GList * gncBillTermGetTerms (QofBook *book);

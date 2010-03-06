@@ -90,8 +90,10 @@ gboolean gncJobGetActive (const GncJob *job);
  *  Equivalent function prototype is
  *  GncJob * gncJobLookup (QofBook *book, const GUID *guid);
  */
-#define gncJobLookup(book,guid)    \
-       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_JOB, GncJob)
+static inline GncJob * gncJobLookup (const QofBook *book, const GUID *guid)
+{
+    QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_JOB, GncJob);
+}
 
 /* Other functions */
 

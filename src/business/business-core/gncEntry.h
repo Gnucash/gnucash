@@ -222,8 +222,10 @@ GncInvoice * gncEntryGetBill (const GncEntry *entry);
  *  Equivalent function prototype is
  *  GncEntry * gncEntryLookup (QofBook *book, const GUID *guid);
  */
-#define gncEntryLookup(book,guid)    \
-       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_ENTRY, GncEntry)
+static inline GncEntry * gncEntryLookup (const QofBook *book, const GUID *guid)
+{
+    QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_ENTRY, GncEntry);
+}
 
 gboolean gncEntryIsOpen (const GncEntry *entry);
 void gncEntryBeginEdit (GncEntry *entry);

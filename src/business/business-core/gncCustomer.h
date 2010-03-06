@@ -115,8 +115,10 @@ void gncCustomerRemoveJob (GncCustomer *customer, GncJob *job);
  *  Equivalent function prototype is
  *  GncCustomer * gncCustomerLookup (QofBook *book, const GUID *guid);
  */
-#define gncCustomerLookup(book,guid)    \
-       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_CUSTOMER, GncCustomer)
+static inline GncCustomer * gncCustomerLookup (const QofBook *book, const GUID *guid)
+{
+    QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_CUSTOMER, GncCustomer);
+}
 
 const char * gncCustomerGetID (const GncCustomer *customer);
 const char * gncCustomerGetName (const GncCustomer *customer);

@@ -131,16 +131,21 @@ GType qof_book_get_type(void);
  * used for anchoring data.
  */
 
-/** Lookup an entity by guid, returning pointer to the entity */
-#define QOF_BOOK_LOOKUP_ENTITY(book,guid,e_type,c_type) ({  \
-  QofInstance *val = NULL;                                    \
-  if ((guid != NULL) && (book != NULL)) {		      \
-    QofCollection *col;                                     \
+/** This macro looks up an entity by GUID and returns a pointer to the
+ * entity by ending with a "return" statement. Hence, this macro can
+ * only be used as the last statement in the definition of a function,
+ * but not somewhere inline in the code. */
+#define QOF_BOOK_RETURN_ENTITY(book,guid,e_type,c_type) {   \
+  QofInstance *val = NULL;                                  \
+  if ((guid != NULL) && (book != NULL)) {		    \
+    const QofCollection *col;                               \
     col = qof_book_get_collection (book, e_type);           \
     val = qof_collection_lookup_entity (col, guid);         \
   }                                                         \
-  (c_type *) val;                                           \
-})
+  return (c_type *) val;                                    \
+}
+
+
 
 /** GList of QofBook */
 typedef GList                 QofBookList;

@@ -185,8 +185,10 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot);
  *  Equivalent function prototype is
  *  GncInvoice * gncInvoiceLookup (QofBook *book, const GUID *guid);
  */
-#define gncInvoiceLookup(book,guid)    \
-       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_INVOICE, GncInvoice)
+static inline GncInvoice * gncInvoiceLookup (const QofBook *book, const GUID *guid)
+{
+    QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_INVOICE, GncInvoice);
+}
 
 void gncInvoiceBeginEdit (GncInvoice *invoice);
 void gncInvoiceCommitEdit (GncInvoice *invoice);

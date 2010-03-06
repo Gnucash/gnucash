@@ -101,8 +101,10 @@ gboolean gncOrderIsClosed (const GncOrder *order);
  *  Equivalent function prototype is
  *  GncOrder * gncOrderLookup (QofBook *book, const GUID *guid);
  */
-#define gncOrderLookup(book,guid)    \
-       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_ORDER, GncOrder)
+static inline GncOrder * gncOrderLookup (const QofBook *book, const GUID *guid)
+{
+    QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_ORDER, GncOrder);
+}
 
 #define ORDER_ID	"id"
 #define ORDER_REFERENCE	"reference"

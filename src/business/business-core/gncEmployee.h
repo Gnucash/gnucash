@@ -99,8 +99,10 @@ Account * gncEmployeeGetCCard (const GncEmployee *employee);
  *  Equivalent function prototype is
  *  GncEmployee * gncEmployeeLookup (QofBook *book, const GUID *guid);
  */
-#define gncEmployeeLookup(book,guid)    \
-       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_EMPLOYEE, GncEmployee)
+static inline GncEmployee * gncEmployeeLookup (const QofBook *book, const GUID *guid)
+{
+    QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_EMPLOYEE, GncEmployee);
+}
 
 gboolean gncEmployeeIsDirty (const GncEmployee *employee);
 

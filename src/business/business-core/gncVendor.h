@@ -112,8 +112,10 @@ int gncVendorCompare (const GncVendor *a, const GncVendor *b);
  *  Equivalent function prototype is
  *  GncVendor * gncVendorLookup (QofBook *book, const GUID *guid);
  */
-#define gncVendorLookup(book,guid)    \
-       QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_VENDOR, GncVendor)
+static inline GncVendor * gncVendorLookup (const QofBook *book, const GUID *guid)
+{
+    QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_VENDOR, GncVendor);
+}
 
 #define VENDOR_ID	"id"
 #define VENDOR_NAME	"name"
