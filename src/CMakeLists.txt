@@ -137,9 +137,7 @@ ADD_SUBDIRECTORY (core-utils)
 ADD_SUBDIRECTORY (gnc-module)
 ADD_SUBDIRECTORY (engine)
 ADD_SUBDIRECTORY (backend/xml)
-IF (NOT MSVC)
-  ADD_SUBDIRECTORY (business/business-core)
-ENDIF (NOT MSVC)
+ADD_SUBDIRECTORY (business/business-core)
 
 ADD_SUBDIRECTORY (gnc)
 
