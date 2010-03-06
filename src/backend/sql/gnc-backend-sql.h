@@ -716,6 +716,15 @@ gchar* gnc_sql_convert_timespec_to_string( const GncSqlBackend* be, Timespec ts 
 void gnc_sql_upgrade_table( GncSqlBackend* be, const gchar* table_name,
                             const GncSqlColumnTableEntry* col_table );
 
+/**
+ * Specifies the load order for a set of objects.  When loading from a database, the
+ * objects will be loaded in this order, so that when later objects have references to
+ * objects, those objects will already have been loaded.
+ *
+ * @param load_order NULL-terminated array of object type ID strings
+ */
+void gnc_sql_set_load_order( const gchar** load_order );
+
 void _retrieve_guid_( gpointer pObject, /*@ null @*/ gpointer pValue );
 
 /*@ null @*/

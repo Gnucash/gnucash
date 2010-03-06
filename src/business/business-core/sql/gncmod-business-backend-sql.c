@@ -75,6 +75,10 @@ libgncmod_business_backend_sql_gnc_module_description(void)
     return g_strdup( "The SQL backend for GnuCash business objects" );
 }
 
+/* Order in which business objects need to be loaded */
+static const gchar* fixed_load_order[] =
+{ GNC_ID_BILLTERM, GNC_ID_TAXTABLE, NULL };
+
 int
 libgncmod_business_backend_sql_gnc_module_init(int refcount)
 {
@@ -100,6 +104,8 @@ libgncmod_business_backend_sql_gnc_module_init(int refcount)
         gnc_owner_sql_initialize();
         gnc_taxtable_sql_initialize();
         gnc_vendor_sql_initialize();
+
+        gnc_sql_set_load_order( fixed_load_order );
     }
 
     return TRUE;

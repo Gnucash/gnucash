@@ -137,9 +137,18 @@ create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
 
 /* ================================================================= */
 
+/* Main object load order */
 static const gchar* fixed_load_order[] =
-{ GNC_ID_BOOK, GNC_ID_COMMODITY, GNC_ID_ACCOUNT, GNC_ID_LOT };
-#define NUM_FIXED_LOAD_ORDER (gint)(sizeof(fixed_load_order)/sizeof(fixed_load_order[0]))
+{ GNC_ID_BOOK, GNC_ID_COMMODITY, GNC_ID_ACCOUNT, GNC_ID_LOT, NULL };
+
+/* Load order for objects from other modules */
+static const gchar** other_load_order = NULL;
+
+void
+gnc_sql_set_load_order( const gchar** load_order )
+{
+    other_load_order = load_order;
+}
 
 static void
 initial_load_cb( const gchar* type, gpointer data_p, gpointer be_p )
@@ -152,8 +161,13 @@ initial_load_cb( const gchar* type, gpointer data_p, gpointer be_p )
     g_return_if_fail( pData->version == GNC_SQL_BACKEND_VERSION );
 
 	// Don't need to load anything if it has already been loaded with the fixed order
-	for( i = 0; i < NUM_FIXED_LOAD_ORDER; i++ ) {
+	for( i = 0; fixed_load_order[i] != NULL; i++ ) {
     	if( g_ascii_strcasecmp( type, fixed_load_order[i] ) == 0 ) return;
+	}
+    if( other_load_order != NULL ) {
+	    for( i = 0; other_load_order[i] != NULL; i++ ) {
+    	    if( g_ascii_strcasecmp( type, other_load_order[i] ) == 0 ) return;
+        }
 	}
 
     if( pData->initial_load != NULL ) {
@@ -180,11 +194,19 @@ gnc_sql_load( GncSqlBackend* be, /*@ dependent @*/ QofBook *book, QofBackendLoad
     	be->primary_book = book;
 
     	/* Load any initial stuff. Some of this needs to happen in a certain order */
-		for( i = 0; i < NUM_FIXED_LOAD_ORDER; i++ ) {
+		for( i = 0; fixed_load_order[i] != NULL; i++ ) {
     		pData = qof_object_lookup_backend( fixed_load_order[i], GNC_SQL_BACKEND );
     		if( pData->initial_load != NULL ) {
         		(pData->initial_load)( be );
 			}
+    	}
+        if( other_load_order != NULL ) {
+		    for( i = 0; other_load_order[i] != NULL; i++ ) {
+    		    pData = qof_object_lookup_backend( other_load_order[i], GNC_SQL_BACKEND );
+    		    if( pData->initial_load != NULL ) {
+        		    (pData->initial_load)( be );
+			    }
+            }
     	}
 
 		root = gnc_book_get_root_account( book );
