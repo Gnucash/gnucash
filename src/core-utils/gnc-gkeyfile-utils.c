@@ -48,6 +48,7 @@
 # ifdef _MSC_VER
 /* MSVC compatibility code */
 #  include <io.h>
+#  define close _close
 #  define write _write
 #  define ssize_t int
 # endif

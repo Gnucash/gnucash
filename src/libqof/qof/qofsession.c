@@ -1140,8 +1140,6 @@ void
 qof_session_begin (QofSession *session, const char * book_id,
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
-    char *p, *access_method, *msg;
-    int err;
     gchar **splituri;
 
     if (!session) return;
@@ -1200,6 +1198,8 @@ qof_session_begin (QofSession *session, const char * book_id,
     /* If there's a begin method, call that. */
     if (session->backend->session_begin)
     {
+        char *msg;
+        int err;
 
         (session->backend->session_begin)(session->backend, session,
                                           session->book_id, ignore_lock,
