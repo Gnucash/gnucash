@@ -1609,6 +1609,7 @@ load_timespec( const GncSqlBackend* be, GncSqlRow* row,
     const GValue* val;
     Timespec ts = {0, 0};
 	TimespecSetterFunc ts_setter;
+    gboolean isOK = FALSE;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( row != NULL );
@@ -1619,7 +1620,7 @@ load_timespec( const GncSqlBackend* be, GncSqlRow* row,
 	ts_setter = (TimespecSetterFunc)setter;
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
     if( val == NULL ) {
-        (*ts_setter)( pObject, ts );
+        isOK = TRUE;
     } else {
 		if( G_VALUE_HOLDS_STRING( val ) ) {
 			const gchar* s = g_value_get_string( val );
@@ -1633,17 +1634,20 @@ load_timespec( const GncSqlBackend* be, GncSqlRow* row,
 									    s[10], s[11],
 									    s[12], s[13] );
 		        ts = gnc_iso8601_to_timespec_gmt( buf );
-				if (table_row->gobj_param_name != NULL) {
-			        g_object_set( pObject, table_row->gobj_param_name, &ts, NULL );
-				} else {
-			        (*ts_setter)( pObject, ts );
-				}
 			    g_free( buf );
+                isOK = TRUE;
 		    }
 
 		} else {
 			PWARN( "Unknown timespec type: %s", G_VALUE_TYPE_NAME( val ) );
         }
+    }
+    if( isOK ) {
+		if (table_row->gobj_param_name != NULL) {
+			g_object_set( pObject, table_row->gobj_param_name, &ts, NULL );
+		} else {
+			(*ts_setter)( pObject, ts );
+		}
     }
 }
 
