@@ -455,7 +455,11 @@ void MainWindow::loadFile(const QString &fileName)
     {
         m_accountItemModel = new AccountItemModel(root, this);
         ui->tableView->setModel(m_accountItemModel);
-        ui->tabWidget->setCurrentIndex(1); //setCurrentWidget(ui->tableView);
+
+        m_accountTreeModel = new AccountTreeModel(root, this);
+        ui->treeView->setModel(m_accountTreeModel);
+
+        ui->tabWidget->setCurrentWidget(ui->treeViewTab);
     }
     else
     {

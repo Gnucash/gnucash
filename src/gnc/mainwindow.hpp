@@ -84,6 +84,7 @@ private:
 
     Session m_session;
     AccountItemModel *m_accountItemModel;
+    AccountTreeModel *m_accountTreeModel;
 };
 
 } // END namespace gnc

@@ -49,13 +49,31 @@ public:
     QString getName() const { return QString::fromUtf8(xaccAccountGetName(get())); }
     QString getCode() const { return QString::fromUtf8(xaccAccountGetCode(get())); }
     QString getDescription() const { return QString::fromUtf8(xaccAccountGetDescription(get())); }
+
     Account get_parent() const { return gnc_account_get_parent(get()); }
     Account get_root() { return gnc_account_get_root(get()); }
     bool is_root() const { return gnc_account_is_root(get()); }
     gint n_children() const { return gnc_account_n_children(get()); }
     GList *get_children() const { return gnc_account_get_children(get()); }
-    GList * get_descendants () const { return gnc_account_get_descendants (get()); }
+    GList *get_descendants () const { return gnc_account_get_descendants (get()); }
     Account nth_child (gint num) const { return gnc_account_nth_child(get(), num); }
+
+
+    /** Return the index of this account in the children's list of its
+     * parent account.
+     */
+    gint child_index () const
+    {
+        Account parent(get_parent());
+        if (parent.get())
+            return gnc_account_child_index(parent.get(), get());
+        else
+            return 0;
+    }
+
+    gint get_current_depth () const { return gnc_account_get_current_depth(get()); }
+    gint get_tree_depth () const { return gnc_account_get_tree_depth(get()); }
+
 
     typedef QList< ::Account*> AccountQList;
     static AccountQList fromGList(GList* glist)

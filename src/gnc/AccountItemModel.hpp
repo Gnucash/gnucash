@@ -93,6 +93,31 @@ private:
     Account::AccountQList m_acclist;
 };
 
+
+
+
+class AccountTreeModel : public QAbstractItemModel
+{
+    Q_OBJECT
+public:
+    AccountTreeModel(Account rootaccount, QObject *parent = 0);
+
+    int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex &index) const;
+    QModelIndex index(int row, int column,
+                      const QModelIndex &parent = QModelIndex()) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    QVariant data(const QModelIndex& index, int role) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
+private:
+    Account m_root;
+    Account::AccountQList m_acclist;
+};
+
+
 } // END namespace gnc
 
 #endif

@@ -10,6 +10,7 @@ LINK_DIRECTORIES (${GLIB2_LIBRARY_DIRS}
 )
 
 SET (gnc_SOURCES
+  AccountItemModel.cpp
   Book.cpp
   Session.cpp
   main.cpp
