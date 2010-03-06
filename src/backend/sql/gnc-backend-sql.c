@@ -1481,7 +1481,7 @@ load_guid( const GncSqlBackend* be, GncSqlRow* row,
 	g_return_if_fail( table_row->gobj_param_name != NULL || setter != NULL );
 
     val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
-    if( val == NULL ) {
+    if( val == NULL || g_value_get_string( val ) == NULL ) {
         pGuid = NULL;
     } else {
         (void)string_to_guid( g_value_get_string( val ), &guid );
