@@ -749,7 +749,7 @@
                                        (cons (current-time) 0))))))
 	  (tax-nr (or 
 		   (kvp-frame-get-slot-path-gslist
-		    (gnc-book-get-slots (gnc-get-current-book))
+		    (qof-book-get-slots (gnc-get-current-book))
 		    (append gnc:*kvp-option-path*
 			    (list gnc:*tax-label* gnc:*tax-nr-label*)))
 		   ""))

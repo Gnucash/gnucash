@@ -30,7 +30,7 @@
 
 (define (gnc:main-window-properties-cb)
   (let* ((book (gnc-get-current-book))
-	 (slots (gnc-book-get-slots book)))
+	 (slots (qof-book-get-slots book)))
 
     (define (changed_cb)
       (qof-book-kvp-changed book))

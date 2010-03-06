@@ -44,7 +44,7 @@
            (currency   (gncInvoiceGetCurrency   opt-invoice))
            (entries    (gncInvoiceGetEntries    opt-invoice))
            (splits     '()) 
-           (slots      (gnc-book-get-slots book))
+           (slots      (qof-book-get-slots book))
            (coyname    (coy-info slots gnc:*company-name*))
            (coycontact (coy-info slots gnc:*company-contact*))
            (coyaddr    (coy-info slots gnc:*company-addy*))

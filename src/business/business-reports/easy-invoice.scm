@@ -644,7 +644,7 @@
 
 (define (make-myname-table book)
   (let* ((table (gnc:make-html-table))
-	 (slots (gnc-book-get-slots book))
+	 (slots (qof-book-get-slots book))
 	 (name (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-name*))))
@@ -749,7 +749,7 @@
 
         (if (opt-val "Display" "My Company ID")
           (let* ((book (gncInvoiceGetBook invoice))
-                 (slots (gnc-book-get-slots book))
+                 (slots (qof-book-get-slots book))
 	         (taxid (kvp-frame-get-slot-path-gslist
 		    slots (append gnc:*kvp-option-path*
 		                  (list gnc:*business-label* gnc:*company-id*)))))

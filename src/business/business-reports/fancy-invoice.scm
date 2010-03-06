@@ -688,7 +688,7 @@
 
 (define (make-myname-table book date-format title)
   (let* ((table (gnc:make-html-table))
-	 (slots (gnc-book-get-slots book))
+	 (slots (qof-book-get-slots book))
 	 (name (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-name*))))
@@ -818,7 +818,7 @@
     
     (if (not (null? invoice))
 	(let* ((book (gncInvoiceGetBook invoice))
-	      (slots (gnc-book-get-slots book))
+	      (slots (qof-book-get-slots book))
 	      (date-object #f)
 	      (helper-table (gnc:make-html-table))
 	      (title (title-string default-title custom-title)))

@@ -118,6 +118,8 @@ SplitList * qof_query_run (QofQuery *q);
 %include <qofbookslots.h>
 %include <qofbook.h>
 
+KvpFrame* qof_book_get_slots(QofBook* book);
+
 gnc_numeric gnc_numeric_create(gint64 num, gint64 denom);
 gnc_numeric gnc_numeric_zero(void);
 gint64 gnc_numeric_num(gnc_numeric a);
