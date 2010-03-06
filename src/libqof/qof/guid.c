@@ -219,8 +219,13 @@ init_from_file(const char *filename, size_t max_size)
 
     file_bytes = init_from_stream(fp, max_size);
 
+#ifdef HAVE_SCANF_LLD
     PINFO ("guid_init got %llu bytes from %s", (unsigned long long int) file_bytes,
            filename);
+#else
+    PINFO ("guid_init got %lu bytes from %s", (unsigned long int) file_bytes,
+           filename);
+#endif
 
     total += file_bytes;
 
@@ -446,12 +451,21 @@ guid_init(void)
     /* time in secs and clock ticks */
     bytes += init_from_time();
 
+#ifdef HAVE_SCANF_LLD
     PINFO ("got %llu bytes", (unsigned long long int) bytes);
 
     if (bytes < THRESHOLD)
         PWARN("only got %llu bytes.\n"
               "The identifiers might not be very random.\n",
               (unsigned long long int)bytes);
+#else
+    PINFO ("got %lu bytes", (unsigned long int) bytes);
+
+    if (bytes < THRESHOLD)
+        PWARN("only got %lu bytes.\n"
+              "The identifiers might not be very random.\n",
+              (unsigned long int)bytes);
+#endif
 
     guid_initialized = TRUE;
 }
