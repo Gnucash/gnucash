@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Gnucash 2.2.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-08 16:51-0500\n"
-"PO-Revision-Date: 2010-03-02 20:12+0330\n"
+"PO-Revision-Date: 2010-03-05 22:25+0330\n"
 "Last-Translator: \n"
 "Language-Team: Perisan <mehdi@ashian.ir>\n"
 "MIME-Version: 1.0\n"
@@ -149,7 +149,7 @@ msgstr ""
 #: ../src/app-utils/gnc-ui-util.c:701
 #: ../src/gnome/dialog-chart-export.c:44
 msgid "Opening Balances"
-msgstr "موجودی اولیه"
+msgstr "مانده  اولیه"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
@@ -188,7 +188,7 @@ msgstr "حقوق صاحبان سهام"
 #: ../src/gnome/glade/account.glade.h:41
 #: ../src/gnome-utils/dialog-account.c:275
 msgid "Opening Balance"
-msgstr "موجودی اولیه"
+msgstr "مانده اولیه"
 
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/register.scm
@@ -3260,23 +3260,23 @@ msgstr ""
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:587
 msgid "Are you sure you want to delete this entry?"
-msgstr ""
+msgstr "آیا شما از حذف این ورودی اطمینان دارید؟"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:1
 msgid "<b>Tax Table Entries</b>"
-msgstr ""
+msgstr "<b>ورودیهای جدول مالیات</b>"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:2
 msgid "<b>Tax Table Entry</b>"
-msgstr ""
+msgstr "<b>ورودی جدول مالیات</b>"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:3
 msgid "<b>Tax Table</b>"
-msgstr ""
+msgstr "<b>جدول مالیات</b>"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:4
 msgid "<b>Tax Tables</b>"
-msgstr ""
+msgstr "<b>جدول های مالیات</b>"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:5
 msgid "Tax Tables"
@@ -3595,7 +3595,7 @@ msgstr ""
 
 #: ../src/gnome/dialog-commodities.c:183
 msgid "Delete commodity?"
-msgstr "حذف کالا؟"
+msgstr "حذف اوراق قرضه؟"
 
 #: ../src/gnome/dialog-fincalc.c:308
 msgid "This program can only calculate one value at a time. You must enter values for all but one quantity."
@@ -3734,7 +3734,7 @@ msgstr "حذف بها؟"
 
 #: ../src/gnome/dialog-price-editor.c:197
 msgid "You must select a commodity."
-msgstr ""
+msgstr "شما باید یک اوراق قرضه انتخاب کنید"
 
 #: ../src/gnome/dialog-price-editor.c:202
 msgid "You must select a currency."
@@ -4276,7 +4276,7 @@ msgstr "<b>نوع حسابها</b>"
 
 #: ../src/gnome/glade/account.glade.h:2
 msgid "<b>Balance Information</b>"
-msgstr "<b>اطلاعات موجودی ها</b>"
+msgstr "<b>اطلاعات مانده حساب ها</b>"
 
 #: ../src/gnome/glade/account.glade.h:3
 msgid "<b>Categories</b>"
@@ -4300,7 +4300,7 @@ msgstr "<b>اطلاعات شناسایی</b>"
 
 #: ../src/gnome/glade/account.glade.h:8
 msgid "<b>Initial Balance Transfer</b>"
-msgstr "<b>انتقال موجودی اولیه</b>"
+msgstr "<b>انتقال مانده اولیه</b>"
 
 #: ../src/gnome/glade/account.glade.h:9
 msgid "<b>New Account Currency</b>"
@@ -4615,7 +4615,7 @@ msgstr "شماره حساب:"
 
 #: ../src/gnome/glade/account.glade.h:79
 msgid "_Balance:"
-msgstr "موجودی:"
+msgstr "مانده حساب:"
 
 #: ../src/gnome/glade/account.glade.h:80
 #: ../src/gnome/glade/price.glade.h:21
@@ -5073,7 +5073,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3332
 #: ../intl-scm/guile-strings.c:4878
 msgid "Balance"
-msgstr "موجودی"
+msgstr "مانده حساب"
 
 #: ../src/gnome/glade/lots.glade.h:9
 msgid "Delete the highlighted lot"
@@ -6211,7 +6211,7 @@ msgstr ""
 #: ../src/gnome-utils/dialog-options.c:904
 #: ../src/gnome-utils/dialog-options.c:1031
 msgid "Select All"
-msgstr ""
+msgstr "انتخاب همه"
 
 #: ../src/gnome/glade/sched-xact.glade.h:159
 msgid "Select occurrence date above."
@@ -6247,7 +6247,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:168
 msgid "Start Date: "
-msgstr ""
+msgstr "تاریخ آغاز"
 
 #: ../src/gnome/glade/sched-xact.glade.h:169
 msgid "State"
@@ -6363,11 +6363,11 @@ msgstr ""
 #: ../src/gnome/glade/sched-xact.glade.h:199
 #: ../src/gnome-utils/glade/preferences.glade.h:179
 msgid "days"
-msgstr ""
+msgstr "روزها"
 
 #: ../src/gnome/glade/sched-xact.glade.h:200
 msgid "days."
-msgstr ""
+msgstr "روزها."
 
 #: ../src/gnome/glade/sched-xact.glade.h:201
 msgid "except on weekends:"
@@ -6397,7 +6397,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:208
 msgid "weeks."
-msgstr ""
+msgstr "هفته ها"
 
 #: ../src/gnome/glade/stocks.glade.h:1
 msgid "<b>A_sset Account</b>"
@@ -7229,7 +7229,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register.c:1173
 #: ../src/gnome/gnc-plugin-page-register.c:1769
 msgid "Portfolio"
-msgstr ""
+msgstr "پرتفوي"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1175
 #: ../src/gnome/gnc-plugin-page-register.c:1775
@@ -7242,7 +7242,7 @@ msgstr "گزارش دفتر کل"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1771
 msgid "Portfolio Report"
-msgstr ""
+msgstr "گزارش پرتفوي"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1777
 msgid "Search Results Report"
@@ -7405,11 +7405,11 @@ msgstr "آینده:"
 
 #: ../src/gnome/gnc-split-reg.c:1845
 msgid "Cleared:"
-msgstr ""
+msgstr "تسوبه :"
 
 #: ../src/gnome/gnc-split-reg.c:1846
 msgid "Reconciled:"
-msgstr ""
+msgstr "مغایرت گیری شده:"
 
 #: ../src/gnome/gnc-split-reg.c:1847
 msgid "Projected Minimum:"
@@ -7449,7 +7449,7 @@ msgstr "عنوان"
 
 #: ../src/gnome/lot-viewer.c:638
 msgid "Gains"
-msgstr ""
+msgstr "سود"
 
 #: ../src/gnome/lot-viewer.c:660
 #, c-format
@@ -7610,7 +7610,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:5
 msgid "Show the commodity column"
-msgstr ""
+msgstr "نمایش ستون اوراق قرضه"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:6
 msgid "Show the currency column"
@@ -8133,7 +8133,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:4
 msgid "Delete a commodity"
-msgstr ""
+msgstr "حذف یک اوراق قرضه"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:5
 msgid "Delete a commodity and prices"
@@ -8770,7 +8770,7 @@ msgstr "بخش انتخاب شده را پاک کرده وتمام حساب ها
 #: ../src/gnome-utils/dialog-options.c:919
 #: ../src/gnome-utils/dialog-options.c:1045
 msgid "Select Default"
-msgstr ""
+msgstr "انتخاب پیش فرض"
 
 #: ../src/gnome-utils/dialog-options.c:921
 msgid "Select the default account selection."
@@ -8778,15 +8778,15 @@ msgstr ""
 
 #: ../src/gnome-utils/dialog-options.c:926
 msgid "Show Hidden"
-msgstr ""
+msgstr "نمایش مخفی ها"
 
 #: ../src/gnome-utils/dialog-options.c:928
 msgid "Show hidden accounts."
-msgstr ""
+msgstr "نمایش حساب های مخفی"
 
 #: ../src/gnome-utils/dialog-options.c:1033
 msgid "Select all entries."
-msgstr ""
+msgstr "انتخاب تمام ورودیها"
 
 #: ../src/gnome-utils/dialog-options.c:1040
 msgid "Clear the selection and unselect all entries."
@@ -8799,7 +8799,7 @@ msgstr ""
 #. The reset button on each option page
 #: ../src/gnome-utils/dialog-options.c:1200
 msgid "Defaults"
-msgstr ""
+msgstr "پیش فرضها"
 
 #: ../src/gnome-utils/dialog-options.c:1202
 msgid "Reset all values to their defaults."
@@ -9447,11 +9447,11 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:7
 msgid "_From:"
-msgstr ""
+msgstr "از:"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:8
 msgid "_To:"
-msgstr ""
+msgstr "تا:"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:2
 #, no-c-format
@@ -10157,7 +10157,7 @@ msgstr "فقط _آیکن"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:166
 msgid "_Income & expense"
-msgstr "_درآمد و هزینه"
+msgstr "_I درآمد و هزینه ها"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:167
 msgid "_Left"
@@ -11127,7 +11127,7 @@ msgstr "نام حساب"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:530
 msgid "Commodity"
-msgstr ""
+msgstr "کالا"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/transaction.scm
@@ -11161,7 +11161,7 @@ msgstr "موجودی ( گزارش )"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:579
 msgid "Balance (Period)"
-msgstr ""
+msgstr "مانده حساب ( دوره )"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:592
 msgid "Cleared (Report)"
@@ -11379,7 +11379,7 @@ msgstr ""
 #. ********************* END OF FILE *********************************   \*******************************************************************
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:1
 msgid "Most recently opened file"
-msgstr ""
+msgstr "فایلهای جدیدا باز شده"
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:2
 msgid "Next most recently opened file"
@@ -13467,7 +13467,7 @@ msgstr ""
 
 #: ../src/import-export/qif-import/qif.glade.h:74
 msgid "Tradable commodities"
-msgstr ""
+msgstr "کالای قابل معامله"
 
 #: ../src/import-export/qif-import/qif.glade.h:75
 msgid "Update your GnuCash accounts"
@@ -14122,7 +14122,7 @@ msgstr ""
 
 #: ../src/report/report-gnome/dialog-style-sheet.c:373
 msgid "Style Sheet Name"
-msgstr ""
+msgstr "نام صفحه نمای ظاهری"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:278
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:279
@@ -14254,15 +14254,15 @@ msgstr ""
 
 #: ../src/report/report-gnome/report.glade.h:3
 msgid "<b>Available style sheets</b>"
-msgstr ""
+msgstr "<b>صفحات نمای ظاهری موجود</b>"
 
 #: ../src/report/report-gnome/report.glade.h:4
 msgid "<b>New style sheet info</b>"
-msgstr ""
+msgstr "<b>اطلاعات صفحه نمای ظاهری جدید</b>"
 
 #: ../src/report/report-gnome/report.glade.h:5
 msgid "<b>Style sheet options</b>"
-msgstr ""
+msgstr "<b>گزینه های نمای ظاهری</b>"
 
 #: ../src/report/report-gnome/report.glade.h:6
 msgid "<b>_Selected Reports</b>"
@@ -14278,7 +14278,7 @@ msgstr ""
 
 #: ../src/report/report-gnome/report.glade.h:9
 msgid "HTML Style Sheets"
-msgstr ""
+msgstr "نمای ظاهری html"
 
 #: ../src/report/report-gnome/report.glade.h:10
 msgid "Move _up"
@@ -14290,7 +14290,7 @@ msgstr ""
 
 #: ../src/report/report-gnome/report.glade.h:12
 msgid "New Style Sheet"
-msgstr ""
+msgstr "نمای ظاهری جدید"
 
 #: ../src/report/report-gnome/report.glade.h:13
 msgid "Report Size"
@@ -14914,7 +14914,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5278
 #: ../intl-scm/guile-strings.c:5366
 msgid "From"
-msgstr ""
+msgstr "از"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/aging.scm
@@ -14955,7 +14955,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5280
 #: ../intl-scm/guile-strings.c:5368
 msgid "To"
-msgstr ""
+msgstr "تا"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/aging.scm
@@ -15427,7 +15427,7 @@ msgstr "ارز گزارش"
 #: ../intl-scm/guile-strings.c:4502
 #: ../intl-scm/guile-strings.c:4570
 msgid "Price Source"
-msgstr ""
+msgstr "مرجع بها:"
 
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/gnucash/report/aging.scm
@@ -16415,7 +16415,7 @@ msgstr "عرض فاکتور"
 #: ../intl-scm/guile-strings.c:1630
 #: ../intl-scm/guile-strings.c:2002
 msgid "The minimum width of the invoice."
-msgstr ""
+msgstr "حداقل عرض فاکتور"
 
 #. src/business/business-reports/gnucash/report/easy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -16526,14 +16526,14 @@ msgstr "گزارش ساده"
 #: ../intl-scm/guile-strings.c:2078
 #: ../intl-scm/guile-strings.c:2266
 msgid "Multicolumn View"
-msgstr ""
+msgstr "نمای چند ستونه"
 
 #. src/report/utility-reports/view-column.scm
 #. src/report/utility-reports/gnucash/report/view-column.scm
 #: ../intl-scm/guile-strings.c:2080
 #: ../intl-scm/guile-strings.c:2268
 msgid "Custom Multicolumn Report"
-msgstr ""
+msgstr "گزارش سفارشی چند ستونه"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -17057,7 +17057,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2236
 #: ../intl-scm/guile-strings.c:2424
 msgid "Sample Report with Examples"
-msgstr ""
+msgstr "گزارش نمونه همراه با مثال"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -17358,12 +17358,12 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2472
 #: ../intl-scm/guile-strings.c:4798
 msgid "Account Balance"
-msgstr ""
+msgstr "مانده حساب"
 
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:2474
 msgid "Show an account's balance"
-msgstr ""
+msgstr "نمایش مانده یک حساب"
 
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:2478
@@ -17410,7 +17410,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4038
 #: ../intl-scm/guile-strings.c:4498
 msgid "Commodities"
-msgstr ""
+msgstr "کالاها"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -17427,7 +17427,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4044
 #: ../intl-scm/guile-strings.c:4504
 msgid "Show Foreign Currencies"
-msgstr ""
+msgstr "نمایش ارزهای خارجی"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -17444,7 +17444,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4046
 #: ../intl-scm/guile-strings.c:4506
 msgid "Display any foreign currency amount in an account"
-msgstr ""
+msgstr "نمایش هر ارز خارجی در یک حساب"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/cash-flow.scm
@@ -17465,7 +17465,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4508
 #: ../intl-scm/guile-strings.c:4572
 msgid "Show Exchange Rates"
-msgstr ""
+msgstr "نمایش نرخ تبدیل"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/cash-flow.scm
@@ -17484,7 +17484,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4050
 #: ../intl-scm/guile-strings.c:4510
 msgid "Show the exchange rates used"
-msgstr ""
+msgstr "نمایش نرخ تبدیل استفاده شده"
 
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:2506
@@ -17523,7 +17523,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5202
 #: ../intl-scm/guile-strings.c:5576
 msgid "Code"
-msgstr ""
+msgstr "کد"
 
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:2524
@@ -17534,7 +17534,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2530
 #: ../intl-scm/guile-strings.c:2568
 msgid "Average Balance"
-msgstr ""
+msgstr "میانگین مانده حساب"
 
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -17601,7 +17601,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2558
 #: ../intl-scm/guile-strings.c:2602
 msgid "Show plot"
-msgstr ""
+msgstr "نمایش قطعه"
 
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2560
@@ -17641,7 +17641,7 @@ msgstr ""
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2576
 msgid "Gain And Loss"
-msgstr ""
+msgstr "سود و زیان"
 
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -17657,7 +17657,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4306
 #: ../intl-scm/guile-strings.c:4398
 msgid "Plot Width"
-msgstr ""
+msgstr "عرض قطعه"
 
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -17673,7 +17673,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4308
 #: ../intl-scm/guile-strings.c:4400
 msgid "Plot Height"
-msgstr ""
+msgstr "ارتفاع قطعه"
 
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2582
@@ -17698,24 +17698,24 @@ msgstr "حداقل"
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2592
 msgid "Gain"
-msgstr ""
+msgstr "سود"
 
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2594
 msgid "Loss"
-msgstr ""
+msgstr "زیان"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:2610
 msgid "Cash Flow"
-msgstr ""
+msgstr "گردش مالی"
 
 #. src/report/standard-reports/cash-flow.scm
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:2616
 #: ../intl-scm/guile-strings.c:4564
 msgid "Account Display Depth"
-msgstr ""
+msgstr "عمق نمایش حسابها"
 
 #. src/report/standard-reports/cash-flow.scm
 #. src/report/standard-reports/budget.scm
@@ -17760,19 +17760,19 @@ msgstr "نمایش نام کامل حسابها ( شامل حسابهای مرج
 #: ../intl-scm/guile-strings.c:6794
 #, c-format
 msgid "%s to %s"
-msgstr ""
+msgstr "%s تا %s"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:2636
 #, c-format
 msgid "%s and subaccounts"
-msgstr ""
+msgstr "%s و زیر حسابها"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:2638
 #, c-format
 msgid "%s and selected subaccounts"
-msgstr ""
+msgstr "%s و زیر حسابهای انتخاب شده"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:2642
@@ -17784,7 +17784,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2644
 #: ../intl-scm/guile-strings.c:3722
 msgid "Money In"
-msgstr ""
+msgstr "پول وارده"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:2646
@@ -17796,7 +17796,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2648
 #: ../intl-scm/guile-strings.c:3724
 msgid "Money Out"
-msgstr ""
+msgstr "پول خارج شده"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:2650
@@ -17926,12 +17926,12 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2798
 #: ../intl-scm/guile-strings.c:4546
 msgid "Balance Sheet"
-msgstr ""
+msgstr "ترازنامه"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2808
 msgid "Balance Sheet Date"
-msgstr ""
+msgstr "تاریخ ترازنامه"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -18151,25 +18151,25 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2910
 #: ../intl-scm/guile-strings.c:4096
 msgid "Total Equity"
-msgstr ""
+msgstr "مجموع سهان"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2912
 #: ../intl-scm/guile-strings.c:4098
 msgid "Total Liabilities & Equity"
-msgstr ""
+msgstr "مجموع بدهی و سهام"
 
 #. src/report/standard-reports/budget-flow.scm
 #: ../intl-scm/guile-strings.c:2914
 msgid "Budget Flow"
-msgstr ""
+msgstr "گردش بودجه"
 
 #. src/report/standard-reports/budget-flow.scm
 #: ../intl-scm/guile-strings.c:2922
 #: ../intl-scm/guile-strings.c:2928
 msgid "Period"
-msgstr ""
+msgstr "دوره"
 
 #. src/report/standard-reports/budget-flow.scm
 #. src/report/standard-reports/transaction.scm
@@ -18193,14 +18193,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2942
 #: ../intl-scm/guile-strings.c:3130
 msgid "Start Date"
-msgstr ""
+msgstr "تاریخ آغاز"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:2944
 #: ../intl-scm/guile-strings.c:3132
 msgid "End Date"
-msgstr ""
+msgstr "تاریخ پایان"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/budget-income-statement.scm
@@ -19298,7 +19298,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3660
 #: ../intl-scm/guile-strings.c:4744
 msgid "Most recent"
-msgstr ""
+msgstr "جدید ترین ها"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/report-system/options-utilities.scm
@@ -19312,7 +19312,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3664
 #: ../intl-scm/guile-strings.c:4748
 msgid "Nearest in time"
-msgstr ""
+msgstr "نزدیک ترین از نظر زمان"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/report-system/options-utilities.scm
@@ -19631,7 +19631,7 @@ msgstr "نمودار درآمد و هزینه"
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3964
 msgid "Budget Balance Sheet"
-msgstr "صفحه تراز بودجه"
+msgstr "صفحه ترازنامه بودجه"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:4034
@@ -19711,22 +19711,22 @@ msgstr ""
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4100
 msgid "Income Barchart"
-msgstr ""
+msgstr "نمودار میله ای درامد"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4102
 msgid "Expense Barchart"
-msgstr ""
+msgstr "نمودار میله ای هزینه"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4104
 msgid "Asset Barchart"
-msgstr ""
+msgstr "نمودار میله ای دارایی ها"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4106
 msgid "Liability Barchart"
-msgstr ""
+msgstr "نمودار میله ای بدهی"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4108
@@ -19751,22 +19751,22 @@ msgstr ""
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4116
 msgid "Income Over Time"
-msgstr ""
+msgstr "درامد بر حسب زمان"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4118
 msgid "Expense Over Time"
-msgstr ""
+msgstr "هزینه بر حسب زمان"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4120
 msgid "Assets Over Time"
-msgstr ""
+msgstr "دارایی بر حسب زمان"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4122
 msgid "Liabilities Over Time"
-msgstr ""
+msgstr "بدهی ها بر حسب زمان"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4140
@@ -19776,7 +19776,7 @@ msgstr ""
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4142
 msgid "Maximum Bars"
-msgstr ""
+msgstr "حداکثر میله ها"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:4156
@@ -19792,7 +19792,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4168
 #, c-format
 msgid "Balances %s to %s"
-msgstr ""
+msgstr "مانده از %s تا %s"
 
 #. src/report/standard-reports/portfolio.scm
 #: ../intl-scm/guile-strings.c:4180
@@ -19834,7 +19834,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4314
 #: ../intl-scm/guile-strings.c:4740
 msgid "Weighted Average"
-msgstr ""
+msgstr "میانگین وزنی"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/report-system/options-utilities.scm
@@ -19971,7 +19971,7 @@ msgstr ""
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:4440
 msgid "Date of Report"
-msgstr ""
+msgstr "تاریخ گزارش"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:4442
@@ -20088,17 +20088,17 @@ msgstr ""
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:4558
 msgid "Net Income"
-msgstr ""
+msgstr "درامد خالص"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:4560
 msgid "Net Loss"
-msgstr ""
+msgstr "زیاد خالص"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4562
 msgid "Budget Report"
-msgstr ""
+msgstr "گزارش بودجه"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4576
@@ -20128,7 +20128,7 @@ msgstr ""
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4586
 msgid "Show Difference"
-msgstr ""
+msgstr "نمایش تفاوت ها"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4588
@@ -20204,7 +20204,7 @@ msgstr ""
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:4636
 msgid "Mutual Funds"
-msgstr ""
+msgstr "سرمایه گذاری متقابل"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:4638
@@ -20234,17 +20234,17 @@ msgstr ""
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:4652
 msgid "Accounts Receivable"
-msgstr ""
+msgstr "حسابهای دریافتنی"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:4654
 msgid "Accounts Payable"
-msgstr ""
+msgstr "حسابهای پرداختنی"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:4656
 msgid "Credit Lines"
-msgstr ""
+msgstr "خط اعتباری"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:4658
@@ -20563,7 +20563,7 @@ msgstr ""
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4830
 msgid "_Assets & Liabilities"
-msgstr "دارایی و بدهی ها"
+msgstr "_A   دارایی و بدهی"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4832
@@ -20573,7 +20573,7 @@ msgstr "درآمد و هزینه"
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4834
 msgid "B_udget"
-msgstr "بودجه"
+msgstr "_U  بودجه"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4836
@@ -20583,7 +20583,7 @@ msgstr "مالیات"
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4838
 msgid "_Sample & Custom"
-msgstr "سفارشی و مثال"
+msgstr "_S سفارشی و مثال"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:4840
@@ -20721,7 +20721,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5286
 #: ../intl-scm/guile-strings.c:5374
 msgid "Use From - To"
-msgstr ""
+msgstr "استفاده از - تا"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20732,7 +20732,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5288
 #: ../intl-scm/guile-strings.c:5376
 msgid "Use From - To period"
-msgstr ""
+msgstr "استفاده از - تا دوره "
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20743,7 +20743,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5290
 #: ../intl-scm/guile-strings.c:5378
 msgid "1st Est Tax Quarter"
-msgstr ""
+msgstr "اولین دوره سه ماهه مالیات"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20754,7 +20754,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5292
 #: ../intl-scm/guile-strings.c:5380
 msgid "Jan 1 - Mar 31"
-msgstr ""
+msgstr "Jan 1 - Mar 31"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20765,7 +20765,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5294
 #: ../intl-scm/guile-strings.c:5382
 msgid "2nd Est Tax Quarter"
-msgstr ""
+msgstr "دومین دوره سه ماهه مالیات"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20776,7 +20776,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5296
 #: ../intl-scm/guile-strings.c:5384
 msgid "Apr 1 - May 31"
-msgstr ""
+msgstr "Apr 1 - May 31"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20787,7 +20787,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5298
 #: ../intl-scm/guile-strings.c:5386
 msgid "3rd Est Tax Quarter"
-msgstr ""
+msgstr "سومین دوره سه ماهه مالیات"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20798,7 +20798,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5300
 #: ../intl-scm/guile-strings.c:5388
 msgid "Jun 1 - Aug 31"
-msgstr ""
+msgstr "Jun 1 - Aug 31"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20809,7 +20809,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5302
 #: ../intl-scm/guile-strings.c:5390
 msgid "4th Est Tax Quarter"
-msgstr ""
+msgstr "چهارمین دوره سه ماهه مالیات"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20820,7 +20820,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5304
 #: ../intl-scm/guile-strings.c:5392
 msgid "Sep 1 - Dec 31"
-msgstr ""
+msgstr "Sep 1 - Dec 31"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -20835,7 +20835,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5394
 #: ../intl-scm/guile-strings.c:5396
 msgid "Last Year"
-msgstr ""
+msgstr "سال قبل"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
