@@ -57,9 +57,9 @@ typedef struct
 static gpointer get_obj_guid( gpointer pObject, const QofParam* param );
 static void set_obj_guid( gpointer pObject, gpointer pValue );
 static gpointer get_child( gpointer pObject, const QofParam* param );
-static gpointer get_parent( gpointer pObject );
-static void set_parent( gpointer pObject, gpointer pValue );
-static void set_parent_guid( gpointer pObject, gpointer pValue );
+static gpointer bt_get_parent( gpointer pObject );
+static void tt_set_parent( gpointer pObject, gpointer pValue );
+static void tt_set_parent_guid( gpointer pObject, gpointer pValue );
 
 #define MAX_NAME_LEN 50
 
@@ -77,14 +77,14 @@ static GncSqlColumnTableEntry tt_col_table[] =
     /*	{ "child",     CT_TAXTABLEREF, 0,			 0,                 NULL, NULL,
     			get_child, (QofSetterFunc)gncTaxTableSetChild }, */
     { "parent",    CT_GUID,        0,			 0,                 NULL, NULL,
-                (QofAccessFunc)get_parent, set_parent
+                (QofAccessFunc)bt_get_parent, tt_set_parent
     },
     { NULL }
 };
 
 static GncSqlColumnTableEntry tt_parent_col_table[] =
 {
-    { "parent", CT_GUID, 0, 0, NULL, NULL, NULL, set_parent_guid },
+    { "parent", CT_GUID, 0, 0, NULL, NULL, NULL, tt_set_parent_guid },
     { NULL }
 };
 
@@ -169,7 +169,7 @@ get_child( gpointer pObject, const QofParam* param )
 }
 
 static /*@ null @*//*@ dependent @*/ gpointer
-get_parent( gpointer pObject )
+bt_get_parent( gpointer pObject )
 {
     const GncTaxTable* tt;
     const GncTaxTable* pParent;
@@ -190,7 +190,7 @@ get_parent( gpointer pObject )
 }
 
 static void
-set_parent( gpointer data, gpointer value )
+tt_set_parent( gpointer data, gpointer value )
 {
     GncTaxTable* tt;
     GncTaxTable* parent;
@@ -213,7 +213,7 @@ set_parent( gpointer data, gpointer value )
 }
 
 static void
-set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
+tt_set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
 	taxtable_parent_guid_struct* s = (taxtable_parent_guid_struct*)pObject;
     GUID* guid = (GUID*)pValue;
@@ -354,7 +354,7 @@ load_all_taxtables( GncSqlBackend* be )
 				progress_made = FALSE;
 				for( elem = tt_needing_parents; elem != NULL; elem = g_list_next( elem ) ) {
 					taxtable_parent_guid_struct* s = (taxtable_parent_guid_struct*)elem->data;
-                    set_parent( s->tt, &s->guid );
+                    tt_set_parent( s->tt, &s->guid );
 					tt_needing_parents = g_list_delete_link( tt_needing_parents, elem );
 					progress_made = TRUE;
 				}

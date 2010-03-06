@@ -51,6 +51,9 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_TYPE_LEN 2048
 
 static void set_invisible( gpointer data, gboolean value );
+static gpointer bt_get_parent( gpointer data );
+static void bt_set_parent( gpointer data, gpointer value );
+static void bt_set_parent_guid( gpointer data, gpointer value );
 
 #define TABLE_NAME "billterms"
 #define TABLE_VERSION 2
@@ -69,13 +72,15 @@ static GncSqlColumnTableEntry col_table[] =
         (QofAccessFunc)gncBillTermGetInvisible, (QofSetterFunc)set_invisible
     },
     {
-        "parent",       CT_BILLTERMREF, 0,                   0,                 NULL, NULL,
-        (QofAccessFunc)gncBillTermGetParent,    (QofSetterFunc)gncBillTermSetParent
+        "parent",       CT_GUID,       0,                   0,                 NULL, NULL,
+        (QofAccessFunc)bt_get_parent,    (QofSetterFunc)bt_set_parent
     },
+#if 0
     {
         "child",        CT_BILLTERMREF, 0,                   0,                 NULL, NULL,
         (QofAccessFunc)gncBillTermReturnChild,  (QofSetterFunc)gncBillTermSetChild
     },
+#endif
     { "type",         CT_STRING,      MAX_TYPE_LEN,        COL_NNUL,          NULL, GNC_BILLTERM_TYPE },
     { "duedays",      CT_INT,         0,                   0,                 0,    GNC_BILLTERM_DUEDAYS },
     { "discountdays", CT_INT,         0,                   0,                 0,    GNC_BILLTERM_DISCDAYS },
@@ -83,6 +88,18 @@ static GncSqlColumnTableEntry col_table[] =
     { "cutoff",       CT_INT,         0,                   0,                 0,    GNC_BILLTERM_CUTOFF },
     { NULL }
 };
+
+static GncSqlColumnTableEntry billterm_parent_col_table[] =
+{
+    { "parent", CT_GUID, 0, 0, NULL, NULL, NULL, (QofSetterFunc)bt_set_parent_guid },
+    { NULL }
+};
+
+typedef struct {
+	/*@ dependent @*/ GncBillTerm* billterm;
+	GUID guid;
+    gboolean have_guid;
+} billterm_parent_guid_struct;
 
 static void
 set_invisible( gpointer data, gboolean value )
@@ -97,8 +114,66 @@ set_invisible( gpointer data, gboolean value )
     }
 }
 
+static /*@ null @*//*@ dependent @*/ gpointer
+bt_get_parent( gpointer pObject )
+{
+    const GncBillTerm* billterm;
+    const GncBillTerm* pParent;
+    const GUID* parent_guid;
+
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( GNC_IS_BILLTERM(pObject), NULL );
+
+    billterm = GNC_BILLTERM(pObject);
+    pParent = gncBillTermGetParent( billterm );
+    if( pParent == NULL ) {
+        parent_guid = NULL;
+    } else {
+        parent_guid = qof_instance_get_guid( QOF_INSTANCE(pParent) );
+    }
+
+    return (gpointer)parent_guid;
+}
+
+static void
+bt_set_parent( gpointer data, gpointer value )
+{
+    GncBillTerm* billterm;
+    GncBillTerm* parent;
+    QofBook* pBook;
+    GUID* guid = (GUID*)value;
+
+    g_return_if_fail( data != NULL );
+    g_return_if_fail( GNC_IS_BILLTERM(data) );
+
+    billterm = GNC_BILLTERM(data);
+    pBook = qof_instance_get_book( QOF_INSTANCE(billterm) );
+    if ( guid != NULL )
+    {
+        parent = gncBillTermLookup( pBook, guid );
+        if( parent != NULL ) {
+            gncBillTermSetParent( billterm, parent );
+            gncBillTermSetChild( parent, billterm );
+        }
+    }
+}
+
+static void
+bt_set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
+{
+	billterm_parent_guid_struct* s = (billterm_parent_guid_struct*)pObject;
+    GUID* guid = (GUID*)pValue;
+
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( pValue != NULL );
+
+	s->guid = *guid;
+    s->have_guid = TRUE;
+}
+
 static GncBillTerm*
-load_single_billterm( GncSqlBackend* be, GncSqlRow* row )
+load_single_billterm( GncSqlBackend* be, GncSqlRow* row,
+					GList** l_billterms_needing_parents )
 {
     const GUID* guid;
     GncBillTerm* pBillTerm;
@@ -113,6 +188,28 @@ load_single_billterm( GncSqlBackend* be, GncSqlRow* row )
         pBillTerm = gncBillTermCreate( be->primary_book );
     }
     gnc_sql_load_object( be, row, GNC_ID_BILLTERM, pBillTerm, col_table );
+
+    /* If the billterm doesn't have a parent, it might be because it hasn't been loaded yet.
+       If so, add this billterm to the list of billterms with no parent, along with the parent
+       GUID so that after they are all loaded, the parents can be fixed up. */
+    if ( gncBillTermGetParent( pBillTerm ) == NULL )
+    {
+		billterm_parent_guid_struct* s = g_malloc( (gsize)sizeof(billterm_parent_guid_struct) );
+		g_assert( s != NULL );
+
+		s->billterm = pBillTerm;
+        s->have_guid = FALSE;
+		gnc_sql_load_object( be, row, GNC_ID_TAXTABLE, s, billterm_parent_col_table );
+        if ( s->have_guid )
+        {
+		    *l_billterms_needing_parents = g_list_prepend( *l_billterms_needing_parents, s );
+        }
+        else
+        {
+            g_free( s );
+        }
+    }
+
     qof_instance_mark_clean( QOF_INSTANCE(pBillTerm) );
 
     return pBillTerm;
@@ -136,11 +233,12 @@ load_all_billterms( GncSqlBackend* be )
     {
         GncSqlRow* row;
         GList* list = NULL;
+        GList* l_billterms_needing_parents = NULL;
 
         row = gnc_sql_result_get_first_row( result );
         while ( row != NULL )
         {
-            GncBillTerm* pBillTerm = load_single_billterm( be, row );
+            GncBillTerm* pBillTerm = load_single_billterm( be, row, &l_billterms_needing_parents );
             if ( pBillTerm != NULL )
             {
                 list = g_list_append( list, pBillTerm );
@@ -152,6 +250,28 @@ load_all_billterms( GncSqlBackend* be )
         if ( list != NULL )
         {
             gnc_sql_slots_load_for_list( be, list );
+        }
+
+		/* While there are items on the list of billterms needing parents,
+		   try to see if the parent has now been loaded.  Theory says that if
+		   items are removed from the front and added to the back if the
+		   parent is still not available, then eventually, the list will
+		   shrink to size 0. */
+		if( l_billterms_needing_parents != NULL ) {
+			gboolean progress_made = TRUE;
+            GncTaxTable* root;	
+			Account* pParent;
+			GList* elem;
+				
+			while( progress_made ) {
+				progress_made = FALSE;
+				for( elem = l_billterms_needing_parents; elem != NULL; elem = g_list_next( elem ) ) {
+					billterm_parent_guid_struct* s = (billterm_parent_guid_struct*)elem->data;
+                    bt_set_parent( s->billterm, &s->guid );
+					l_billterms_needing_parents = g_list_delete_link( l_billterms_needing_parents, elem );
+					progress_made = TRUE;
+				}
+			}
         }
     }
 }
