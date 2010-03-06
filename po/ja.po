@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.3.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-15 10:27-0500\n"
-"PO-Revision-Date: 2010-02-28 20:56+0900\n"
+"PO-Revision-Date: 2010-03-07 01:38+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -437,7 +437,7 @@ msgstr ""
 
 #: ../src/business/business-core/gncInvoice.c:1222
 msgid "Generated from an invoice.  Try unposting the invoice."
-msgstr ""
+msgstr "得意先請求書によって作成されています。得意先請求書の記帳を取り消してください。"
 
 #. Translators: This is the memo of an auto-created split
 #: ../src/business/business-core/gncInvoice.c:1244
@@ -473,7 +473,7 @@ msgstr " (記帳済) "
 
 #: ../src/business/business-core/gncOrder.c:417
 msgid " (closed)"
-msgstr ""
+msgstr "(締切済)"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:71
 #: ../src/business/business-gnome/business-gnome-utils.c:256
@@ -834,7 +834,7 @@ msgstr "選択された項目を本当に削除してもよろしいですか?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:514
 msgid "This entry is attached to an order and will be deleted from that as well!"
-msgstr ""
+msgstr "この項目には注文が関連づけられています。それらも併せて削除されます!"
 
 #: ../src/business/business-gnome/dialog-invoice.c:631
 msgid "The Invoice must have at least one Entry."
@@ -890,7 +890,7 @@ msgstr "スプリットを累積しますか?"
 #. Fill in the conversion prices with feedback from the user
 #: ../src/business/business-gnome/dialog-invoice.c:694
 msgid "One or more of the entries are for accounts different from the invoice/bill currency.  You will be asked a conversion rate for each."
-msgstr ""
+msgstr "この勘定科目に対する1つまたは複数の項目が異なる通貨の得意先請求書/仕入先請求書によるものです。毎回変換レートを尋ねられます。"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1027
 #: ../src/gnome/window-reconcile.c:1065
@@ -1273,7 +1273,7 @@ msgstr ""
 #. Ok, we can close this.  Ask for verification and set the closed date
 #: ../src/business/business-gnome/dialog-order.c:296
 msgid "Do you really want to close the order?"
-msgstr "本当に注文を閉じますか?"
+msgstr "本当に注文を締め切りますか?"
 
 #: ../src/business/business-gnome/dialog-order.c:297
 msgid "Close Date"
@@ -1289,14 +1289,12 @@ msgstr "注文の備考"
 
 #: ../src/business/business-gnome/dialog-order.c:810
 #: ../src/business/business-gnome/glade/order.glade.h:5
-#, fuzzy
 msgid "Date Closed"
-msgstr "閉じる"
+msgstr "締切日"
 
 #: ../src/business/business-gnome/dialog-order.c:812
-#, fuzzy
 msgid "Is Closed?"
-msgstr "閉じる"
+msgstr "締め切っているかどうか?"
 
 #: ../src/business/business-gnome/dialog-order.c:816
 msgid "Owner Name "
@@ -2703,23 +2701,23 @@ msgstr "複数のスプリットを一つに累積する"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:2
 msgid "If active, at startup GnuCash will check to see whether any bills will become due soon. If so, it will present the user with a reminder dialog. The definition of \"soon\" is controlled by the \"Days in Advance\" setting. Otherwise GnuCash does not check for due bills."
-msgstr ""
+msgstr "選択した場合、GnuCashの開始時にもうすぐ期限を迎える請求書があるかどうかを確認し、通知ダイアログを表示します。「もうすぐ」の設定は「前もって通知する日数」で制御されます。選択しない場合、期限を迎える請求書の確認を行いません。"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:3
 msgid "If active, each new invoice will be opened in a new window. Otherwise a new invoice will be opened as a tab in the main window."
-msgstr "有効な場合、新規得意先請求書を新規ウィンドウに開きます。無効な場合、新規得意先請求書を現在のウィンドウに開きます。"
+msgstr "選択した場合、新規得意先請求書を新規ウィンドウに開きます。選択しない場合、新規得意先請求書を現在のウィンドウに開きます。"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:4
 msgid "If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched."
-msgstr ""
+msgstr "選択した場合、現在「アクティブ」な項目のみを検索対象にします。選択しない場合、すべての項目を検索対象にします。"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:5
 msgid "If set to active then tax is included by default in entries of this type. This setting is inherited by new customers and vendors."
-msgstr ""
+msgstr "選択した場合、このタイプの項目ではデフォルトで税金が含まれます。この設定は新規得意先、新規仕入先の作成に継承されます。"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:6
 msgid "If this field is active then multiple entries in an invoice that transfer to the same account will be accumulated into a single split. This field can be overridden per invoice in the Posting dialog."
-msgstr ""
+msgstr "選択した場合、得意先請求書の複数の項目が同一の勘定科目に対する資金移動の場合にスプリットが一つにまとめられます。この設定は記帳ダイアログで得意先請求書毎に上書きすることが可能です。"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:7
 msgid "Is tax included in this type of business entry?"
@@ -2749,7 +2747,7 @@ msgstr "得意先請求書の行数"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:13
 msgid "This field defines the number of days in advance that GnuCash will check for due bills. Its value is only used if the \"Notify when due\" setting is active."
-msgstr ""
+msgstr "この欄には期限を迎える請求書をGnuCashが何日前に確認するかを設定します。この値は「前もって通知」設定が選択されている場合のみ利用されます。"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:14
 msgid "This field sets the number of rows to show in an invoice. It does not actually affect the display of the contents of the window. It is only used to set the size of the window when first opened."
@@ -2757,7 +2755,7 @@ msgstr "このフィールドは得意先請求書に表示する行数を設定
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:15
 msgid "This setting contains the coordinates describing the last location of the window. The numbers are the X and Y coordinates of the top left corner of the window, and the width and height of the window."
-msgstr ""
+msgstr "この設定はウィンドウの最後の位置座標を含みます。数値はウィンドウ左上のX、Y座標およびウィンドウの幅と高さです。"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:16
 msgid "Window position and size"
@@ -3283,7 +3281,7 @@ msgstr "値 '%s' が小数付きの数値として解釈できません。"
 #: ../src/core-utils/gnc-gkeyfile-utils.c:154
 #, c-format
 msgid "Key file contains key '%s' in group '%s' which has a value that cannot be interpreted."
-msgstr ""
+msgstr "グループ '%2$s'、キー '%1$s' を含むキーファイルを解釈することができません。"
 
 #. src/report/report-system/report-utilities.scm
 #: ../src/engine/Account.c:3813
@@ -3492,7 +3490,7 @@ msgstr "月2回"
 #: ../src/engine/Recurrence.c:623
 #, c-format
 msgid "Unknown, %d-size list."
-msgstr ""
+msgstr "不明、 サイズ %d のリストです。"
 
 #: ../src/engine/Recurrence.c:634 ../src/gnome/glade/sched-xact.glade.h:133
 msgid "Once"
@@ -3735,13 +3733,12 @@ msgid "You must enter a valid amount."
 msgstr "適正な金額を入力してください。"
 
 #: ../src/gnome/dialog-print-check.c:776
-#, fuzzy
 msgid "Cannot save check format file."
-msgstr "そのファイルには保存できません"
+msgstr "小切手書式ファイルを保存できません。"
 
 #: ../src/gnome/dialog-print-check.c:1386
 msgid "There is a duplicate check format file."
-msgstr ""
+msgstr "複数の小切手書式ファイルが存在します。"
 
 #. Translators: %1$s is the type of the first check
 #. * format (user defined or application defined); %2$s
@@ -3928,9 +3925,8 @@ msgid "Created Transactions"
 msgstr "作成した取引"
 
 #: ../src/gnome/dialog-tax-info.c:279
-#, fuzzy
 msgid "Last Valid Year: "
-msgstr "前年"
+msgstr "前年: "
 
 #: ../src/gnome/dialog-tax-info.c:280
 #, fuzzy
@@ -3938,14 +3934,12 @@ msgid "Form Line Data: "
 msgstr "書式:"
 
 #: ../src/gnome/dialog-tax-info.c:323
-#, fuzzy
 msgid "now"
 msgstr "現在"
 
 #: ../src/gnome/dialog-tax-info.c:1072
-#, fuzzy
 msgid "Income Tax Identity"
-msgstr "損益計算書"
+msgstr "所得税ID"
 
 #: ../src/gnome/dialog-tax-info.c:1132
 msgid "CAUTION: If you set TXF categories, and later change 'Type', you will need to manually reset those categories one at a time"
@@ -4062,11 +4056,11 @@ msgstr "保険支払"
 #. Translators: PMI stands for Private Mortgage Insurance.
 #: ../src/gnome/druid-loan.c:164
 msgid "PMI"
-msgstr "PMI"
+msgstr "個人ローン保険"
 
 #: ../src/gnome/druid-loan.c:164
 msgid "PMI Payment"
-msgstr "PMI支払"
+msgstr "個人ローン保険支払"
 
 #: ../src/gnome/druid-loan.c:165
 msgid "Other Expense"
@@ -4082,7 +4076,7 @@ msgstr "各種支払"
 #: ../src/gnome/druid-loan.c:632
 #, c-format
 msgid "... pay \"%s\"?"
-msgstr ""
+msgstr "\"%s\" の支払はありますか?"
 
 #: ../src/gnome/druid-loan.c:644
 msgid "via Escrow account?"
@@ -4726,9 +4720,8 @@ msgid "xxx"
 msgstr "xxx"
 
 #: ../src/gnome/glade/autoclear.glade.h:1
-#, fuzzy
 msgid "<b>Auto-Clear Information</b>"
-msgstr "<b>勘定科目の税金情報</b>"
+msgstr "<b>自動清算情報</b>"
 
 #: ../src/gnome/glade/autoclear.glade.h:2
 #: ../src/gnome/glade/reconcile.glade.h:6
@@ -5031,7 +5024,7 @@ msgstr "毎四半期"
 
 #: ../src/gnome/glade/fincalc.glade.h:39
 msgid "Recalculate the (single) blank entry in the above fields."
-msgstr ""
+msgstr "上の欄の (一つ) の空白項目を再計算します。"
 
 #: ../src/gnome/glade/fincalc.glade.h:40
 #: ../src/gnome/glade/register.glade.h:41
@@ -5090,7 +5083,7 @@ msgstr "<b>タイトル(_T)</b>"
 
 #: ../src/gnome/glade/lots.glade.h:5
 msgid "A summary of all of the transactions in the selected lot"
-msgstr ""
+msgstr "選択したロットのすべての取引に関する要約"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/job-report.scm
@@ -5220,6 +5213,17 @@ msgid ""
 "\n"
 "Click 'Cancel'  if you do not wish to merge your QSF data now."
 msgstr ""
+"このウィザードでは QSF データを現在開いている GnuCash ファイルに併合します。\n"
+"\n"
+"QSF データが既存の GnuCash データと衝突する場合はどのように処理するか尋ねられます。\n"
+"\n"
+"この操作をやりなおすことは「できません」! 続ける「前」にファイルのバックアップを取得していることを確認してください! 最後の併合操作より前のすべての段階までは併合をキャンセルすることができます。いったん完了をクリックしたら現在のデータファイルに対する新規 QSF データの併合が確定されます。\n"
+"\n"
+"現在、併合操作では通貨または価格がサポートされていません。新規データはデフォルト通貨の設定が適用されます。併合完了後に通貨設定を変更してください。\n"
+"\n"
+"QSF データのインポート準備ができました。\n"
+"\n"
+"今 QSF データを併合したくない場合は「キャンセル」をクリックしてください。"
 
 #: ../src/gnome/glade/merge.glade.h:27
 msgid ""
@@ -5228,14 +5232,18 @@ msgid ""
 "2. The import object can be ignored - use this if the import is a duplicate of an object in the existing book. \n"
 "3. The import object can be created as a new object in the existing book."
 msgstr ""
+"各競合に対して3種類の選択肢があります。\n"
+"1. インポートするデータで上書きする - 既存の帳簿をアップデートするときに使用してください。\n"
+"2. インポートするデータを無視する - 既存の帳簿とデータが重複しているときに使用してください。\n"
+"3. インポートするデータを既存の帳簿に新規のデータとして作成する。"
 
 #: ../src/gnome/glade/merge.glade.h:31
 msgid "ignore the import, leave the original untouched"
-msgstr ""
+msgstr "インポートデータを無視し、元のデータをそのままにする"
 
 #: ../src/gnome/glade/merge.glade.h:32
 msgid "overwrite the original with the import data"
-msgstr ""
+msgstr "インポートデータで元のデータを上書きする"
 
 #: ../src/gnome/glade/newuser.glade.h:1
 msgid "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
@@ -5359,7 +5367,7 @@ msgstr "合計 (単語(_W)):"
 
 #: ../src/gnome/glade/print.glade.h:3
 msgid "Check _format:"
-msgstr "書式の確認(_F):"
+msgstr "小切手の書式(_F):"
 
 #: ../src/gnome/glade/print.glade.h:4
 msgid ""
@@ -5369,9 +5377,8 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome/glade/print.glade.h:7
-#, fuzzy
 msgid "Check po_sition:"
-msgstr "位置の確認:"
+msgstr "小切手の位置(_S):"
 
 #: ../src/gnome/glade/print.glade.h:8
 msgid "Custom format"
@@ -5383,7 +5390,7 @@ msgstr "度"
 
 #: ../src/gnome/glade/print.glade.h:10
 msgid "Enter a title for this custom format.  This title will appear in the \"Check format\" selector of the Print Check dialog.  Using the title of an existing custom format will cause that format to be overwritten."
-msgstr ""
+msgstr "カスタム書式のタイトルを入力してください。このタイトルは小切手を印刷ダイアログの \"小切手の書式\" 選択肢に表示されます。既存のカスタム書式と同じ名前を使用した場合は上書きされます。"
 
 #: ../src/gnome/glade/print.glade.h:11
 msgid ""
@@ -5403,7 +5410,7 @@ msgstr "受取人(_Y):"
 
 #: ../src/gnome/glade/print.glade.h:17
 msgid "Print Check"
-msgstr "印刷確認"
+msgstr "小切手を印刷"
 
 #: ../src/gnome/glade/print.glade.h:18
 msgid ""
@@ -5412,11 +5419,14 @@ msgid ""
 "Quicken(tm) Wallet Checks w/ side stub\n"
 "Custom"
 msgstr ""
+"Quicken/QuickBooks (tm) USレター\n"
+"Deluxe(tm) Personal Checks USレター\n"
+"Quicken(tm) Wallet Checks w/ side stub\n"
+"カスタム"
 
 #: ../src/gnome/glade/print.glade.h:22
-#, fuzzy
 msgid "Save Custom Check Format"
-msgstr "カスタム書式"
+msgstr "小切手のカスタム書式を保存"
 
 #: ../src/gnome/glade/print.glade.h:23
 msgid "Splits Account"
@@ -5593,11 +5603,11 @@ msgstr "範囲最終日:"
 
 #: ../src/gnome/glade/register.glade.h:26
 msgid "Erase all splits except the one for this account."
-msgstr ""
+msgstr "このスプリットを除いた、この勘定科目内のすべてのスプリットを消去します。"
 
 #: ../src/gnome/glade/register.glade.h:27
 msgid "Filter register by..."
-msgstr ""
+msgstr "記録簿をフィルタ"
 
 #: ../src/gnome/glade/register.glade.h:28
 msgid "Jump"
@@ -5890,7 +5900,7 @@ msgstr "日"
 
 #: ../src/gnome/glade/sched-xact.glade.h:4
 msgid "... utilize an escrow account for payments?"
-msgstr ""
+msgstr "支払にエスクロー勘定科目を使用しますか?"
 
 #: ../src/gnome/glade/sched-xact.glade.h:5
 msgid ""
@@ -6070,6 +6080,10 @@ msgid ""
 "Whole Loan\n"
 "Custom"
 msgstr ""
+"今年\n"
+"来年\n"
+"ローン全体\n"
+"カスタム"
 
 #: ../src/gnome/glade/sched-xact.glade.h:72
 msgid ""
@@ -6109,7 +6123,7 @@ msgstr "入金"
 
 #: ../src/gnome/glade/sched-xact.glade.h:82
 msgid "Do you..."
-msgstr ""
+msgstr "以下の項目を選択してください"
 
 #: ../src/gnome/glade/sched-xact.glade.h:83
 msgid "Edit Scheduled Transaction"
@@ -6148,6 +6162,11 @@ msgid ""
 "7/1 Year ARM\n"
 "10/1 Year ARM"
 msgstr ""
+"固定金利\n"
+"3年固定型変動金利\n"
+"5年固定型変動金利\n"
+"7年固定型変動金利\n"
+"10年固定型変動金利"
 
 #: ../src/gnome/glade/sched-xact.glade.h:96
 msgid "For:"
@@ -6183,9 +6202,8 @@ msgid "Interest Rate:"
 msgstr "利率:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:104
-#, fuzzy
 msgid "Interest To:"
-msgstr "金利"
+msgstr "利子の配賦先:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:105
 msgid "Last Occurred: "
@@ -6193,7 +6211,7 @@ msgstr "前回: "
 
 #: ../src/gnome/glade/sched-xact.glade.h:106
 msgid "Length:"
-msgstr ""
+msgstr "期間:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:107
 msgid "Loan Account:"
@@ -6293,27 +6311,22 @@ msgid "Payment Frequency"
 msgstr "支払頻度"
 
 #: ../src/gnome/glade/sched-xact.glade.h:139
-#, fuzzy
 msgid "Payment From (Escrow):"
-msgstr "支払合計:"
+msgstr "支払元 (エスクロー):"
 
 #: ../src/gnome/glade/sched-xact.glade.h:140
-#, fuzzy
 msgid "Payment From:"
-msgstr "支払合計:"
+msgstr "支払元:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:141
-#, fuzzy
 msgid "Payment To (Escrow):"
-msgstr "支払合計:"
+msgstr "支払先 (エスクロー):"
 
 #: ../src/gnome/glade/sched-xact.glade.h:142
-#, fuzzy
 msgid "Payment To:"
-msgstr "支払合計:"
+msgstr "支払先:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:143
-#, fuzzy
 msgid "Postpone"
 msgstr "延期"
 
@@ -6327,7 +6340,7 @@ msgstr "これらの変更を確定する場合は適用をクリックしてく
 
 #: ../src/gnome/glade/sched-xact.glade.h:147
 msgid "Principal To:"
-msgstr ""
+msgstr "元本の割当先:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:148
 msgid "R_emind in advance, days:"
@@ -6407,9 +6420,8 @@ msgid "Since Last Run..."
 msgstr "前回起動時以降..."
 
 #: ../src/gnome/glade/sched-xact.glade.h:166
-#, fuzzy
 msgid "Specify Source Account"
-msgstr "勘定科目を選択"
+msgstr "支払元の勘定科目を指定する"
 
 #: ../src/gnome/glade/sched-xact.glade.h:168
 msgid "Start Date: "
@@ -6448,7 +6460,7 @@ msgstr "一覧にある予定取引はまもなく作成されます。今すぐ
 
 #: ../src/gnome/glade/sched-xact.glade.h:176
 msgid "This assistant will walk you through any scheduled transactions that should be created."
-msgstr ""
+msgstr "このウィザードでは予定取引に関して一通り実行します。"
 
 #: ../src/gnome/glade/sched-xact.glade.h:177
 msgid ""
@@ -6456,6 +6468,9 @@ msgid ""
 "\n"
 "If you make a mistake or want to make changes later, you can edit the created Scheduled Transactions directly."
 msgstr ""
+"これは GnuCash でローン支払いの設定を一歩一歩作成する方法です。このウィザードではローンと支払のパラメーターを入力し、支払の詳細を決めます。この情報を利用して適切な予定取引が作成されます。\n"
+"\n"
+"間違った入力を行ったり後で変更したくなった場合は、作成された予定取引を直接編集してください。"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/daily-reports.scm
 #. src/report/standard-reports/daily-reports.scm
@@ -6497,12 +6512,10 @@ msgid "Value:"
 msgstr "価値"
 
 #: ../src/gnome/glade/sched-xact.glade.h:190
-#, fuzzy
 msgid "Variable"
 msgstr "変数"
 
 #: ../src/gnome/glade/sched-xact.glade.h:191
-#, fuzzy
 msgid "Variables"
 msgstr "変数"
 
@@ -6631,7 +6644,6 @@ msgid "Stock Split Details"
 msgstr "株式分割の詳細"
 
 #: ../src/gnome/glade/stocks.glade.h:15
-#, fuzzy
 msgid "This assistant will help you record a stock split or stock merger."
 msgstr "このウィザードは株式分割または株式併合を記録するためのお手伝いをします。"
 
@@ -6653,14 +6665,12 @@ msgid "<b>Account Tax Information</b>"
 msgstr "<b>勘定科目の税金情報</b>"
 
 #: ../src/gnome/glade/tax.glade.h:3
-#, fuzzy
 msgid "<b>Copy Number</b>"
-msgstr "<b>数値</b>"
+msgstr "<b>部数</b>"
 
 #: ../src/gnome/glade/tax.glade.h:4
-#, fuzzy
 msgid "<b>Income Tax Identity</b>"
-msgstr "<b>収益勘定科目(_I)</b>"
+msgstr "<b>所得税ID</b>"
 
 #: ../src/gnome/glade/tax.glade.h:5
 msgid "<b>Payer Name Source</b>"
@@ -6684,21 +6694,19 @@ msgstr "現在の勘定科目(_U)"
 
 #: ../src/gnome/glade/tax.glade.h:10
 msgid "Click to change Tax Name and/or Tax Type"
-msgstr ""
+msgstr "税金の名前/税金の種類を変更する場合にクリックしてください"
 
 #: ../src/gnome/glade/tax.glade.h:11
-#, fuzzy
 msgid "Income Tax Information"
-msgstr "税金情報"
+msgstr "所得税情報"
 
 #: ../src/gnome/glade/tax.glade.h:13
 msgid "Tax _Related"
 msgstr "税金関連勘定科目(_R)"
 
 #: ../src/gnome/glade/tax.glade.h:15
-#, fuzzy
 msgid "_Asset"
-msgstr "資産"
+msgstr "資産(_A)"
 
 #: ../src/gnome/glade/tax.glade.h:16
 msgid "_Expense"
@@ -6809,14 +6817,12 @@ msgid "Find transactions with a search"
 msgstr "検索により取引を見つける"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:133
-#, fuzzy
 msgid "Income Ta_x Options"
-msgstr "税金オプション(_X)"
+msgstr "所得税オプション(_X)"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:134
-#, fuzzy
 msgid "Setup income tax information for relevant accounts"
-msgstr "すべての収益・費用勘定科目に税金情報を設定する"
+msgstr "関連する勘定科目に所得税情報を設定する"
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:139
@@ -7013,13 +7019,12 @@ msgstr "選択された勘定科目を照合する"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:183
 #: ../src/gnome/gnc-plugin-page-register.c:247
-#, fuzzy
 msgid "_Auto-clear..."
-msgstr "得意先を新規作成(_N)..."
+msgstr "自動清算(_A)..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:184
 msgid "Automatically clear individual transactions, given a cleared amount"
-msgstr ""
+msgstr "清算金額を入力したときに各取引を自動清算する"
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:186
@@ -7335,7 +7340,7 @@ msgstr "ソート(_S)..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:248
 msgid "Automatically clear individual transactions, so as to reach a certain cleared amount"
-msgstr ""
+msgstr "ある清算金額に達するまで各取引を自動清算する"
 
 #: ../src/gnome/gnc-plugin-page-register.c:256
 msgid "_Blank Transaction"
@@ -7395,9 +7400,8 @@ msgstr "資金移動"
 
 #: ../src/gnome/gnc-plugin-page-register.c:350
 #: ../src/gnome/window-autoclear.c:88
-#, fuzzy
 msgid "Auto-clear"
-msgstr "自動精算の閾値"
+msgstr "自動精算"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/general-ledger.scm
@@ -7752,21 +7756,19 @@ msgstr ""
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:4
 #, fuzzy
 msgid "If active, the new user window will be shown. Otherwise it will not be shown."
-msgstr "アクティブなら非通貨商品(株式)が表示されます。それ以外ならば隠れます。"
+msgstr "選択した場合新規ユーザーウィンドウが表示されます。選択しない場合、表示されません。"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:5
 msgid "Last pathname used"
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:6
-#, fuzzy
 msgid "New hierarchy window on \"New File\""
-msgstr "\"ファイルを新規作成\"の新規階層ダイアログ"
+msgstr "\"ファイルを新規作成\"時に新規勘定目階層作成ダイアログを開く"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:8
-#, fuzzy
 msgid "Show the new user window"
-msgstr "ユーザ新規作成ダイアログを開く"
+msgstr "新規ユーザー作成ダイアログを開く"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:9
 msgid "Sort column ascending or descending"
@@ -7776,17 +7778,15 @@ msgstr "列を昇順または降順にソートする"
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:10
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:10
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:10
-#, fuzzy
 msgid "The X,Y coordinates of the top left corner of the window when it was last closed."
-msgstr "ダイアログを最後に閉じたときの左上のX, Y座標。"
+msgstr "最後に閉じたウィンドウの左上隅X, Y座標。"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:11
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:11
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:11
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:11
-#, fuzzy
 msgid "The width and size of the window when it was last closed."
-msgstr "ダイアログを最後に閉じたときの幅と高さ。"
+msgstr "最後に閉じたウィンドウの幅とサイズ。"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:12
 msgid "This field contains the last pathname used by this window. It will be used as the initial filename/pathname the next time this window is opened."
@@ -7915,7 +7915,6 @@ msgid "Position of payee name"
 msgstr "受取人名の位置"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:13
-#, fuzzy
 msgid "Print '***' before and after text."
 msgstr "文字列の前後に '***' を印刷する。"
 
@@ -8372,14 +8371,12 @@ msgid "Delete a transaction"
 msgstr "取引を削除する"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:7
-#, fuzzy
 msgid "Delete multiple price quotes"
 msgstr "複数の相場表価格を削除する"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:8
-#, fuzzy
 msgid "Duplicating a changed invoice_entry"
-msgstr "取引の複製"
+msgstr "変更した得意先請求書項目の複製"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:9
 msgid "Duplicating a changed transaction"
@@ -9441,13 +9438,12 @@ msgid "Income Total:"
 msgstr "収益合計:"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:1
-#, fuzzy
 msgid "<b>Data Format:</b>"
-msgstr "<b>日付の書式</b>"
+msgstr "<b>データ形式</b>"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:2
 msgid "<b>Database Connection</b>"
-msgstr "<b>データベースの接続</b>"
+msgstr "<b>データベース接続</b>"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:3
 msgid "<b>File</b>"
@@ -9487,7 +9483,7 @@ msgstr "現在、以下の警告ダイアログの表示が抑えられていま
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:7
 msgid "_Unselect All"
-msgstr "選択解除(_U)"
+msgstr "すべて選択解除(_U)"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:1
 msgid ""
@@ -11689,9 +11685,8 @@ msgid "Interest Charge"
 msgstr "利子・手数料"
 
 #: ../src/gnome/window-reconcile.c:465
-#, fuzzy
 msgid "Payment From"
-msgstr "支払期間"
+msgstr "支払元"
 
 #: ../src/gnome/window-reconcile.c:471 ../src/gnome/window-reconcile.c:481
 msgid "Reconcile Account"
@@ -12389,6 +12384,9 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
+"請求のまとめを実行中にエラーが発生しました。ログウィンドウで正確なエラーメッセージを確認してください。\n"
+"\n"
+"ジョブを再入力しますか?"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
@@ -13427,9 +13425,8 @@ msgstr "キャンセルされました"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:840
 #: ../src/import-export/qif-import/druid-qif-import.c:844
-#, fuzzy
 msgid "An error occurred while loading the QIF file."
-msgstr "QIF形式ファイルの解析中にエラーが発生しました"
+msgstr "QIFファイルの読み込み中にエラーが発生しました。"
 
 #. Inform the user.
 #: ../src/import-export/qif-import/druid-qif-import.c:841
@@ -14654,20 +14651,19 @@ msgstr "帳票エラー"
 #. src/report/utility-reports/gnucash/report/view-column.scm
 #: ../src/report/report-gnome/window-report.c:213
 #: ../intl-scm/guile-strings.c:2336 ../intl-scm/guile-strings.c:2524
-#, fuzzy
 msgid "An error occurred while running the report."
-msgstr "QIF形式ファイルの解析中にエラーが発生しました"
+msgstr "帳票作成中にエラーが発生しました。"
 
 #: ../src/report/report-gnome/window-report.c:246
 #: ../src/report/report-gnome/window-report.c:268
-#, fuzzy, c-format
+#, c-format
 msgid "Badly formed options URL: %s"
-msgstr "gnc-optionsのフォームが正しくありません: URL."
+msgstr "オプションのURL書式が正しくありません: %s"
 
 #: ../src/report/report-gnome/window-report.c:256
-#, fuzzy, c-format
+#, c-format
 msgid "Badly-formed report id: %s"
-msgstr "gnc-optionsのフォームが正しくありません: URL."
+msgstr "帳票IDの書式が正しくありません: %s"
 
 #. Menu Items
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:49
@@ -15012,18 +15008,18 @@ msgstr "ファイル形式が曖昧です"
 #: ../intl-scm/guile-strings.c:154 ../intl-scm/guile-strings.c:286
 #, c-format
 msgid "Value '%s' could be %s or %s."
-msgstr ""
+msgstr "値 '%s' は %s または %s のようです。"
 
 #. src/tax/us/txf-de_DE.scm
 #: ../intl-scm/guile-strings.c:288
 msgid "The electronic tax number of your business"
-msgstr ""
+msgstr "ビジネスに関する電子納税番号です"
 
 #. src/tax/us/de_DE.scm
 #. src/tax/us/gnucash/tax/de_DE.scm
 #: ../intl-scm/guile-strings.c:292 ../intl-scm/guile-strings.c:296
 msgid "Tax Number"
-msgstr ""
+msgstr "納税番号"
 
 #. src/business/business-utils/business-utils.scm
 #. src/business/business-utils/gnucash/business-utils.scm
@@ -15289,7 +15285,7 @@ msgstr "91日以上"
 #: ../intl-scm/guile-strings.c:1710 ../intl-scm/guile-strings.c:1910
 #: ../intl-scm/guile-strings.c:2082 ../intl-scm/guile-strings.c:2282
 msgid "Payment, thank you"
-msgstr ""
+msgstr "支払を行いました。ありがとうございます。"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/job-report.scm
@@ -15651,7 +15647,6 @@ msgstr ""
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/gnucash/report/aging.scm
 #: ../intl-scm/guile-strings.c:480 ../intl-scm/guile-strings.c:1084
-#, fuzzy
 msgid "Sort companies by"
 msgstr "会社のソート方法"
 
@@ -15665,13 +15660,13 @@ msgstr "会社名"
 #. src/business/business-reports/gnucash/report/aging.scm
 #: ../intl-scm/guile-strings.c:486 ../intl-scm/guile-strings.c:1090
 msgid "Total Owed"
-msgstr ""
+msgstr "負債総額"
 
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/gnucash/report/aging.scm
 #: ../intl-scm/guile-strings.c:488 ../intl-scm/guile-strings.c:1092
 msgid "Total amount owed to/from Company"
-msgstr ""
+msgstr "会社が借りている/貸している金額の合計"
 
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/gnucash/report/aging.scm
@@ -16350,9 +16345,8 @@ msgstr "得意先請求書は作成中です..."
 #: ../intl-scm/guile-strings.c:720 ../intl-scm/guile-strings.c:1324
 #: ../intl-scm/guile-strings.c:1738 ../intl-scm/guile-strings.c:1934
 #: ../intl-scm/guile-strings.c:2110 ../intl-scm/guile-strings.c:2306
-#, fuzzy
 msgid "No valid invoice selected.  Click on the Options button and select the invoice to use."
-msgstr "有効な勘定科目が選択されていません。オプションボタンをクリックして使用する勘定科目を選択してください。"
+msgstr "有効な得意先請求書が選択されていません。オプションボタンをクリックして使用する得意先請求書を選択してください。"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -16387,71 +16381,62 @@ msgstr ""
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:732 ../intl-scm/guile-strings.c:1336
-#, fuzzy
 msgid "Headings 1"
-msgstr "読み込み中です"
+msgstr "見出し1"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:734 ../intl-scm/guile-strings.c:1338
-#, fuzzy
 msgid "Headings 2"
-msgstr "読み込み中です"
+msgstr "見出し2"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:740 ../intl-scm/guile-strings.c:1344
-#, fuzzy
 msgid "Report title"
 msgstr "帳票タイトル"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:742 ../intl-scm/guile-strings.c:1346
-#, fuzzy
 msgid "Invoice number"
 msgstr "得意先請求書番号"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:744 ../intl-scm/guile-strings.c:1348
-#, fuzzy
 msgid "Template file"
-msgstr "テンプレート(_T):"
+msgstr "テンプレートファイル"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:746 ../intl-scm/guile-strings.c:1350
-#, fuzzy
 msgid "CSS stylesheet file"
-msgstr "スタイルシート"
+msgstr "CSSスタイルシートファイル"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:748 ../intl-scm/guile-strings.c:1352
-#, fuzzy
 msgid "Heading font"
-msgstr "ヘッダのバナー"
+msgstr "見出しのフォント"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:750 ../intl-scm/guile-strings.c:1354
-#, fuzzy
 msgid "Text font"
-msgstr "テキストのみ(_T)"
+msgstr "テキストのフォント"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:752 ../intl-scm/guile-strings.c:1356
 msgid "Logo filename"
-msgstr ""
+msgstr "ロゴのファイル名"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:754 ../intl-scm/guile-strings.c:1358
-#, fuzzy
 msgid "Logo width"
-msgstr "プロット幅"
+msgstr "ロゴの幅"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
@@ -16474,61 +16459,53 @@ msgstr ""
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:762 ../intl-scm/guile-strings.c:802
 #: ../intl-scm/guile-strings.c:1366 ../intl-scm/guile-strings.c:1406
-#, fuzzy
 msgid "Discount Rate"
-msgstr "値引: "
+msgstr "値引率"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:764 ../intl-scm/guile-strings.c:804
 #: ../intl-scm/guile-strings.c:1368 ../intl-scm/guile-strings.c:1408
-#, fuzzy
 msgid "Discount Amount"
-msgstr "値引額を入力"
+msgstr "値引総額"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:766 ../intl-scm/guile-strings.c:806
 #: ../intl-scm/guile-strings.c:1370 ../intl-scm/guile-strings.c:1410
-#, fuzzy
 msgid "Net Price"
-msgstr "新規株価(_P):"
+msgstr "総額"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:768 ../intl-scm/guile-strings.c:808
 #: ../intl-scm/guile-strings.c:1372 ../intl-scm/guile-strings.c:1412
-#, fuzzy
 msgid "Tax Rate"
-msgstr "税金関連勘定科目(_R)"
+msgstr "税率"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:772 ../intl-scm/guile-strings.c:812
 #: ../intl-scm/guile-strings.c:1376 ../intl-scm/guile-strings.c:1416
-#, fuzzy
 msgid "Total Price"
-msgstr "合計 (期間)"
+msgstr "合計金額"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:774 ../intl-scm/guile-strings.c:814
 #: ../intl-scm/guile-strings.c:1378 ../intl-scm/guile-strings.c:1418
-#, fuzzy
 msgid "Sub-total"
 msgstr "小計"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:778 ../intl-scm/guile-strings.c:1382
-#, fuzzy
 msgid "Payment rec'd..."
-msgstr "支払頻度"
+msgstr "支払の受取…"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:780 ../intl-scm/guile-strings.c:1384
-#, fuzzy
 msgid "Extra notes"
 msgstr "特記事項"
 
@@ -16547,61 +16524,58 @@ msgstr ""
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:786 ../intl-scm/guile-strings.c:1390
-#, fuzzy
 msgid "Font to use for the main heading"
-msgstr "取引の備考を入力する"
+msgstr "主見出しに使用するフォント"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:788 ../intl-scm/guile-strings.c:1392
 msgid "Font to use for everything else"
-msgstr ""
+msgstr "それ以外に使用するフォント"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:790 ../intl-scm/guile-strings.c:1394
 msgid "Name of a file containing a logo to be used on the report"
-msgstr ""
+msgstr "帳票で使用されるロゴのファイル名"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:792 ../intl-scm/guile-strings.c:1396
-#, c-format
+#, fuzzy, c-format
 msgid "Width of the logo in CSS format, e.g. 10% or 32px.  Leave blank to display the logo at its natural width.  The height of the logo will be scaled accordingly."
-msgstr ""
+msgstr "CSS形式でのロゴの幅です (例: 10% または 32px)。空白にした場合は通常の大きさで表示されます。ロゴの高さは幅に合わせて拡大縮小されます。"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:818 ../intl-scm/guile-strings.c:1422
 msgid "Payment received, thank you"
-msgstr ""
+msgstr "支払を受け取りました。ありがとうございます。"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:820 ../intl-scm/guile-strings.c:1424
 msgid "Notes added at end of invoice -- may contain HTML markup"
-msgstr ""
+msgstr "得意先請求書の末尾に追加される備考 -- HTMLのマークアップを含めることができます"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:822 ../intl-scm/guile-strings.c:824
 #: ../intl-scm/guile-strings.c:1426 ../intl-scm/guile-strings.c:1428
-#, fuzzy
 msgid "Tax Invoice"
-msgstr "得意先請求書の支払を行う(_P)"
+msgstr "税金付得意先請求書"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:826 ../intl-scm/guile-strings.c:1430
 msgid "Display a customer invoice with tax columns (using eguile template)"
-msgstr ""
+msgstr "税金欄を含めた得意先請求書を表示します (eguileテンプレートを使用)"
 
 #. src/business/business-reports/job-report.scm
 #. src/business/business-reports/gnucash/report/job-report.scm
 #: ../intl-scm/guile-strings.c:864 ../intl-scm/guile-strings.c:1468
-#, fuzzy
 msgid "The job for this report"
-msgstr "この帳票の対象となる会社"
+msgstr "この帳票の対象となる請求のまとめ"
 
 #. src/business/business-reports/job-report.scm
 #. src/business/business-reports/gnucash/report/job-report.scm
@@ -16612,7 +16586,6 @@ msgstr "請求のまとめ帳票"
 #. src/business/business-reports/taxinvoice.eguile.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:942 ../intl-scm/guile-strings.c:1546
-#, fuzzy
 msgid "Email:"
 msgstr "メール: "
 
