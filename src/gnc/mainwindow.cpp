@@ -25,6 +25,8 @@
 #include <QtGui/QFileDialog>
 #include <QtGui/QMessageBox>
 #include <QtGui/QToolBar>
+#include <QtGui/QProgressBar>
+#include <QDebug>
 
 #include "config.h"
 #include "mainwindow.hpp"
@@ -310,6 +312,38 @@ void MainWindow::newFile()
     }
 }
 
+namespace
+{
+/** This is a workaround functor so that we can obtain a
+ * QofPercentageFunc without extra boost::bind usage; obviously due to
+ * the static member variable it will not work if multiple instances
+ * are in use simultaneously */
+class progress_functor
+{
+    public:
+        progress_functor(QProgressBar *progressBar)
+        {
+            m_progressBar = progressBar;
+        }
+        ~progress_functor()
+        {
+            m_progressBar = NULL;
+        }
+        static void static_func(const char *message, double percent)
+        {
+            assert(m_progressBar);
+            m_progressBar->setValue(int(percent));
+            // Give the Qt event loop some time
+            qApp->processEvents();
+        }
+    private:
+        static QProgressBar *m_progressBar;
+};
+QProgressBar *progress_functor::m_progressBar = NULL;
+
+} // END namespace anonymous
+
+
 void MainWindow::loadFile(const QString &fileName)
 {
     if (fileName.isEmpty())
@@ -413,8 +447,28 @@ void MainWindow::loadFile(const QString &fileName)
         xaccLogSetBaseName (logpath);
         xaccLogDisable();
 
-        statusBar()->showMessage(tr("Loading user data..."), 2000);
-        qof_session_load (new_session, NULL);
+        {
+            // Set up a progress bar in the statusBar()
+            QProgressBar progressBar;
+            progressBar.setMinimum(0);
+            progressBar.setMaximum(100);
+            statusBar()->showMessage(tr("Loading user data..."));
+            statusBar()->addWidget(&progressBar);
+            progressBar.show();
+            // This local progress_functor is a workaround on how to
+            // pass the suitable function pointer to session_load -
+            // not very nice because of its static member, but it does
+            // the trick for now.
+            progress_functor functor(&progressBar);
+
+            // Do the loading.
+            qof_session_load (new_session, &progress_functor::static_func);
+
+            // Remove the progress bar again from the status bar. No
+            // explicit delete necessary because it is just a local
+            // variable.
+            statusBar()->removeWidget(&progressBar);
+        }
         xaccLogEnable();
 
         /* check for i/o error, put up appropriate error dialog */
