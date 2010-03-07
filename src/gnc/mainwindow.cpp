@@ -46,6 +46,7 @@ extern "C"
 #include "gnc/Account.hpp"
 #include "gnc/AccountItemModel.hpp"
 #include "gnc/Book.hpp"
+#include "gnc/Numeric.hpp"
 #include "gnc/Split.hpp"
 #include "gnc/SplitListModel.hpp"
 

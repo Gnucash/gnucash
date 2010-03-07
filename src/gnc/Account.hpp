@@ -39,6 +39,9 @@ extern "C"
 namespace gnc
 {
 
+typedef QList< ::Account*> AccountQList;
+
+
 class Account : public WeakPointer< ::Account >
 {
 public:
@@ -81,7 +84,6 @@ public:
     //@}
 
 
-    typedef QList< ::Account*> AccountQList;
     static AccountQList fromGList(GList* glist)
     {
         AccountQList result;

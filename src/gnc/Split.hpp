@@ -34,19 +34,17 @@ extern "C"
 #include <QString>
 #include <QList>
 
-namespace gnc
-{
-class Split;
-typedef QList< ::Split*> SplitQList;
-}
-
 #include "gnc/WeakPointer.hpp"
-#include "gnc/Account.hpp"
-#include "gnc/Book.hpp"
-#include "gnc/Transaction.hpp"
+#include "gnc/Numeric.hpp"
 
 namespace gnc
 {
+class Book;
+class Account;
+class Transaction;
+
+typedef QList< ::Split*> SplitQList;
+
 
 class Split : public WeakPointer< ::Split >
 {
@@ -56,12 +54,12 @@ public:
             : base_class(ptr)
     { }
 
-    Book getBook() const { return xaccSplitGetBook(get()); }
-    Account getAccount() const { return xaccSplitGetAccount(get()); }
-    void setAccount(Account& acc) { xaccSplitSetAccount(get(), acc.get()); }
+    Book getBook() const;
+    Account getAccount() const;
+    void setAccount(Account& acc);
 
-    Transaction getParent() const { return xaccSplitGetParent(get()); }
-    void setParent(Transaction& trans) { xaccSplitSetParent(get(), trans.get()); }
+    Transaction getParent() const;
+    void setParent(Transaction& trans);
 
     QString getMemo() const { return QString::fromUtf8(xaccSplitGetMemo(get())); }
     void setMemo(const QString& v) { xaccSplitSetMemo(get(), v.toUtf8()); }
@@ -76,10 +74,7 @@ public:
 
     QString getCorrAccountFullName() const
     {
-        char * r = xaccSplitGetCorrAccountFullName(get());
-        QString result = QString::fromUtf8(r);
-        g_free (r);
-        return result;
+        return gchar_to_QString(xaccSplitGetCorrAccountFullName(get()));
     }
     QString getCorrAccountName() const { return QString::fromUtf8(xaccSplitGetCorrAccountName(get())); }
     QString getCorrAccountCode() const { return QString::fromUtf8(xaccSplitGetCorrAccountCode(get())); }

@@ -43,6 +43,7 @@ extern "C"
 #include "engine/gnc-session.h"
 #include "engine/engine-helpers.h"
 #include "engine/gnc-engine.h"
+#include "engine/gnc-ui-util.h" // for gnc_ui_util_init()
 #include "swig-runtime.h"
 
 #include "backend/xml/gnc-backend-xml.h"
@@ -183,6 +184,7 @@ main(int argc, char ** argv)
     //gnc_module_init_backend_dbi();
     gnc_module_init_business_core_init();
     gnc_module_init_business_core_xml_init();
+    gnc_ui_util_init();
 
     // From here on the new C++ code
     QApplication app(argc, argv);

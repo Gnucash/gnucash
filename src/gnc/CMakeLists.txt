@@ -12,7 +12,9 @@ LINK_DIRECTORIES (${GLIB2_LIBRARY_DIRS}
 SET (gnc_SOURCES
   AccountItemModel.cpp
   Book.cpp
+  Numeric.cpp
   Session.cpp
+  Split.cpp
   SplitListModel.cpp
   main.cpp
   mainwindow.cpp

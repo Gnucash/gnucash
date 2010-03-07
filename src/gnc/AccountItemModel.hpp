@@ -85,7 +85,7 @@ public:
     QModelIndex parent(const QModelIndex &index) const { return QModelIndex(); }
 
 private:
-    Account::AccountQList m_list;
+    AccountQList m_list;
 };
 
 

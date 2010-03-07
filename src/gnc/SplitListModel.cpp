@@ -1,5 +1,5 @@
 /*
- * SplitListModel.hpp
+ * SplitListModel.cpp
  * Copyright (C) 2010 Christian Stimming
  *
  * This program is free software; you can redistribute it and/or
@@ -21,6 +21,7 @@
  */
 
 #include "SplitListModel.hpp"
+#include "gnc/Transaction.hpp"
 #include <QDebug>
 
 namespace gnc

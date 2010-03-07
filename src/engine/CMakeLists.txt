@@ -3,6 +3,7 @@
 ADD_DEFINITIONS (-DG_LOG_DOMAIN=\"gnc.engine\")
 
 INCLUDE_DIRECTORIES (${GLIB2_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES (${GCONF2_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES (${LIBINTL_INCLUDE_PATH})
 INCLUDE_DIRECTORIES (${REGEX_INCLUDE_PATH})
 INCLUDE_DIRECTORIES (${GUILE_INCLUDE_DIRS})
@@ -41,11 +42,13 @@ SET (libgncmod_engine_HEADERS
   gnc-budget.h
   gnc-commodity.h
   gnc-engine.h
+  gnc-euro.h
   gnc-event.h
   gnc-hooks.h
   gnc-pricedb.h
-  gnc-session.h
   gnc-session-scm.h
+  gnc-session.h
+  gnc-ui-util.h
   gncObject.h
   kvp-scm.h
   policy.h
@@ -98,11 +101,13 @@ SET (libgncmod_engine_SOURCES
   gnc-budget.c
   gnc-commodity.c
   gnc-engine.c
+  gnc-euro.c
   gnc-hooks.c
   gnc-lot.c
   gnc-pricedb.c
-  gnc-session.c
   gnc-session-scm.c
+  gnc-session.c
+  gnc-ui-util.c
   gncmod-engine.c
   kvp-scm.c
   engine-helpers.c
