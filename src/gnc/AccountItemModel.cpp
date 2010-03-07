@@ -27,8 +27,8 @@ namespace gnc
 {
 
 AccountTreeModel::AccountTreeModel(Account rootaccount, QObject *parent)
-    : QAbstractItemModel(parent)
-    , m_root(rootaccount)
+        : QAbstractItemModel(parent)
+        , m_root(rootaccount)
 {
 }
 
@@ -108,14 +108,14 @@ QVariant AccountTreeModel::data(const QModelIndex& index, int role) const
         Account account(static_cast< ::Account*>(index.internalPointer()));
         switch (index.column())
         {
-            case 0:
-                return account.getName();
-            case 1:
-                return account.getCode();
-            case 2:
-                return account.getDescription();
-            default:
-                return QVariant();
+        case 0:
+            return account.getName();
+        case 1:
+            return account.getCode();
+        case 2:
+            return account.getDescription();
+        default:
+            return QVariant();
         }
     }
     else
@@ -141,14 +141,14 @@ QVariant AccountTreeModel::headerData(int section, Qt::Orientation orientation, 
     {
         switch (section)
         {
-            case 0:
-                return QString("Name");
-            case 1:
-                return QString("Code");
-            case 2:
-                return QString("Description");
-            default:
-                return QVariant();
+        case 0:
+            return QString("Name");
+        case 1:
+            return QString("Code");
+        case 2:
+            return QString("Description");
+        default:
+            return QVariant();
         }
     }
     else
@@ -162,11 +162,10 @@ QModelIndex AccountListModel::index(int row, int column,
                                     const QModelIndex &parent) const
 {
     //qDebug() << "index(), " << row << column << parent;
-    if (!hasIndex(row, column, parent)
-        || row >= m_acclist.size())
+    if (!hasIndex(row, column, parent) || row >= m_list.size())
         return QModelIndex();
 
-    Account childItem = m_acclist.at(row);
+    Account childItem = m_list.at(row);
     if (childItem.get())
     {
         //qDebug() << "returning" << childItem.getName();

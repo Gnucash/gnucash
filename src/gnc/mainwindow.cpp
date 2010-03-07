@@ -46,6 +46,8 @@ extern "C"
 #include "gnc/Account.hpp"
 #include "gnc/AccountItemModel.hpp"
 #include "gnc/Book.hpp"
+#include "gnc/Split.hpp"
+#include "gnc/SplitListModel.hpp"
 
 namespace gnc
 {
@@ -173,6 +175,9 @@ void MainWindow::createActions()
 //             ui->actionCut, SLOT(setEnabled(bool)));
 //     connect(ui->textEdit, SIGNAL(copyAvailable(bool)),
 //             ui->actionCopy, SLOT(setEnabled(bool)));
+
+    connect(ui->treeView, SIGNAL(activated(const QModelIndex &)),
+            this, SLOT(activatedAccount(const QModelIndex&)));
 }
 
 void MainWindow::createToolBars()
@@ -244,6 +249,36 @@ void MainWindow::setCurrentFile(const QString &fileName)
 QString MainWindow::strippedName(const QString &fullFileName)
 {
     return QFileInfo(fullFileName).fileName();
+}
+
+void MainWindow::activatedAccount(const QModelIndex & index)
+{
+    if (index.model() != m_accountTreeModel)
+    {
+        qDebug() << "Wrong model";
+        return;
+    }
+    Account account(static_cast< ::Account*>(index.internalPointer()));
+    if (!account)
+    {
+        qDebug() << "Account is null; why?";
+        return;
+    }
+
+    // We have an account, so obtains its list of splits now.
+    ::SplitList* slist = account.getSplitList();
+
+    // We create a new model for this list of splits and also a view
+    // widget for this list.
+    QTableView *tableView = new QTableView(this); // FIXME: Parent object unclear
+    SplitListModel *smodel = new SplitListModel(Split::fromGList(slist), tableView);
+    tableView->setModel(smodel);
+
+    // Insert this as a new tab
+    ui->tabWidget->addTab(tableView, account.getName());
+    ui->tabWidget->setCurrentWidget(tableView);
+
+    // Right now it cannot be deleted - this will be implemented later.
 }
 
 // ////////////////////////////////////////////////////////////
@@ -320,24 +355,24 @@ namespace
  * are in use simultaneously */
 class progress_functor
 {
-    public:
-        progress_functor(QProgressBar *progressBar)
-        {
-            m_progressBar = progressBar;
-        }
-        ~progress_functor()
-        {
-            m_progressBar = NULL;
-        }
-        static void static_func(const char *message, double percent)
-        {
-            assert(m_progressBar);
-            m_progressBar->setValue(int(percent));
-            // Give the Qt event loop some time
-            qApp->processEvents();
-        }
-    private:
-        static QProgressBar *m_progressBar;
+public:
+    progress_functor(QProgressBar *progressBar)
+    {
+        m_progressBar = progressBar;
+    }
+    ~progress_functor()
+    {
+        m_progressBar = NULL;
+    }
+    static void static_func(const char *message, double percent)
+    {
+        assert(m_progressBar);
+        m_progressBar->setValue(int(percent));
+        // Give the Qt event loop some time
+        qApp->processEvents();
+    }
+private:
+    static QProgressBar *m_progressBar;
 };
 QProgressBar *progress_functor::m_progressBar = NULL;
 

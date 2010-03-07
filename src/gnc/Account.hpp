@@ -50,6 +50,11 @@ public:
     QString getCode() const { return QString::fromUtf8(xaccAccountGetCode(get())); }
     QString getDescription() const { return QString::fromUtf8(xaccAccountGetDescription(get())); }
 
+    ::SplitList* getSplitList() const { return xaccAccountGetSplitList(get()); }
+
+    /** @name Account tree traversal */
+    //@{
+
     Account get_parent() const { return gnc_account_get_parent(get()); }
     Account get_root() { return gnc_account_get_root(get()); }
     bool is_root() const { return gnc_account_is_root(get()); }
@@ -73,6 +78,7 @@ public:
 
     gint get_current_depth () const { return gnc_account_get_current_depth(get()); }
     gint get_tree_depth () const { return gnc_account_get_tree_depth(get()); }
+    //@}
 
 
     typedef QList< ::Account*> AccountQList;

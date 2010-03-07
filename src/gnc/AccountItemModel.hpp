@@ -72,12 +72,12 @@ class AccountListModel : public AccountTreeModel
     Q_OBJECT
 public:
     AccountListModel(Account rootaccount, QObject *parent = 0)
-        : AccountTreeModel(rootaccount, parent)
-        , m_acclist(Account::fromGList(rootaccount.get_descendants()))
+            : AccountTreeModel(rootaccount, parent)
+            , m_list(Account::fromGList(rootaccount.get_descendants()))
     {
     }
 
-    int rowCount(const QModelIndex& parent = QModelIndex()) const { return m_acclist.size(); }
+    int rowCount(const QModelIndex& parent = QModelIndex()) const { return m_list.size(); }
 
     QModelIndex index(int row, int column,
                       const QModelIndex &parent = QModelIndex()) const;
@@ -85,7 +85,7 @@ public:
     QModelIndex parent(const QModelIndex &index) const { return QModelIndex(); }
 
 private:
-    Account::AccountQList m_acclist;
+    Account::AccountQList m_list;
 };
 
 

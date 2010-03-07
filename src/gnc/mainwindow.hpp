@@ -51,6 +51,7 @@ public:
 
 public slots:
     void anchorClicked(const QUrl &);
+    void activatedAccount(const QModelIndex & index);
 
 protected:
     void closeEvent(QCloseEvent *event);

@@ -13,18 +13,22 @@ SET (gnc_SOURCES
   AccountItemModel.cpp
   Book.cpp
   Session.cpp
+  SplitListModel.cpp
   main.cpp
   mainwindow.cpp
 )
 
 SET (gnc_QOBJECT_HEADERS
   AccountItemModel.hpp
+  SplitListModel.hpp
   mainwindow.hpp
 )
 SET (gnc_HEADERS ${gnc_QOBJECT_HEADERS}
   Account.hpp
   Book.hpp
   Session.hpp
+  Split.hpp
+  Transaction.hpp
   WeakPointer.hpp
 )
 
