@@ -4,12 +4,13 @@ lib_LTLIBRARIES = libgnc-core-utils.la
 
 libgnc_core_utils_la_SOURCES = \
   binreloc.c \
-  gnc-main.c \
   gnc-filepath-utils.c \
   gnc-gconf-utils.c \
   gnc-gdate-utils.c \
   gnc-gkeyfile-utils.c \
   gnc-glib-utils.c \
+  gnc-jalali.c \
+  gnc-main.c \
   gnc-path.c \
   gnc-uri-utils.c \
   swig-core-utils.c
@@ -29,6 +30,7 @@ noinst_HEADERS = \
   gnc-gdate-utils.h \
   gnc-gkeyfile-utils.h \
   gnc-glib-utils.h \
+  gnc-jalali.h \
   gnc-path.h \
   gnc-uri-utils.h
 
