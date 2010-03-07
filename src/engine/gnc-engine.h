@@ -231,6 +231,13 @@ unsigned int gnucash_micro_version (void);
  * method that does not require Guile. */
 void gnc_engine_init(int argc, char ** argv);
 
+/** This is the statically linked-in version of gnc_engine_init. It is
+ * identically to that function except that it doesn't load the
+ * loadable shared module, which means this function will not load the
+ * "(gnucash engine)" scheme module.
+ */
+void gnc_engine_init_static(int argc, char ** argv);
+
 /** Called to shutdown the engine, see also ::qof_close
  * for use without Guile. */
 void gnc_engine_shutdown (void);

@@ -72,9 +72,23 @@ gnucash_micro_version (void)
  * initialize backend, load any necessary databases, etc.
  ********************************************************************/
 
-void
-gnc_engine_init(int argc, char ** argv)
+static void
+gnc_engine_init_part1()
 {
+    if (1 == engine_is_initialized) return;
+
+    /* initialize QOF */
+    qof_init();
+    qof_set_alt_dirty_mode(TRUE);
+
+    /* Now register our core types */
+    cashobjects_register();
+}
+
+static void
+gnc_engine_init_part2()
+{
+    gchar *pkglibdir = gnc_path_get_pkglibdir ();
     static struct
     {
         const gchar* lib;
@@ -87,20 +101,7 @@ gnc_engine_init(int argc, char ** argv)
         { "gncmod-backend-xml", TRUE },
         { NULL, FALSE }
     }, *lib;
-    gnc_engine_init_hook_t hook;
-    GList * cur;
-    gchar *pkglibdir;
 
-    if (1 == engine_is_initialized) return;
-
-    /* initialize QOF */
-    qof_init();
-    qof_set_alt_dirty_mode(TRUE);
-
-    /* Now register our core types */
-    cashobjects_register();
-
-    pkglibdir = gnc_path_get_pkglibdir ();
     for (lib = libs; lib->lib ; lib++)
     {
         if (qof_load_backend_library(pkglibdir, lib->lib))
@@ -118,16 +119,37 @@ gnc_engine_init(int argc, char ** argv)
         }
     }
     g_free (pkglibdir);
+}
 
+static void
+gnc_engine_init_part3(int argc, char ** argv)
+{
+    GList * cur;
     /* call any engine hooks */
     for (cur = engine_init_hooks; cur; cur = cur->next)
     {
-        hook = (gnc_engine_init_hook_t)cur->data;
+        gnc_engine_init_hook_t hook = (gnc_engine_init_hook_t)cur->data;
 
         if (hook)
             (*hook)(argc, argv);
     }
 }
+
+void
+gnc_engine_init(int argc, char ** argv)
+{
+    gnc_engine_init_part1();
+    gnc_engine_init_part2();
+    gnc_engine_init_part3(argc, argv);
+}
+
+void
+gnc_engine_init_static(int argc, char ** argv)
+{
+    gnc_engine_init_part1();
+    gnc_engine_init_part3(argc, argv);
+}
+
 
 /********************************************************************
  * gnc_engine_shutdown

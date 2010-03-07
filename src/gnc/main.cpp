@@ -175,7 +175,7 @@ main(int argc, char ** argv)
 
     qof_init();
     gnc_module_system_init();
-    gnc_engine_init(argc, argv);
+    gnc_engine_init_static(argc, argv);
 
     // Call the statically-linked versions of the backend init
     // functions
