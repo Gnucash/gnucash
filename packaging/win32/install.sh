@@ -397,8 +397,8 @@ EOF
         ${DLLTOOL} -d $_GUILE_UDIR/lib/libguile.def -D $_GUILE_UDIR/bin/libguile.dll -l $_GUILE_UDIR/lib/libguile.lib
         # Also, for MSVC compiler we need to slightly modify the gc.h header
         GC_H=$_GUILE_UDIR/include/libguile/gc.h
-        grep -v 'extern.*_freelist2;' ${GC_H} > ${GC_H}.tmp
-        mv ${GC_H}.tmp ${GC_H}
+        grep -v 'extern .*_freelist2;' ${GC_H} > ${GC_H}.tmp
+        grep -v 'extern int scm_block_gc;' ${GC_H}.tmp > ${GC_H}
         cat >> ${GC_H} <<EOF
 #ifdef _MSC_VER
 # define LIBGUILEDECL __declspec (dllimport)
@@ -407,6 +407,7 @@ EOF
 #endif
 extern LIBGUILEDECL SCM scm_freelist2;
 extern LIBGUILEDECL struct scm_t_freelist scm_master_freelist2;
+extern LIBGUILEDECL int scm_block_gc;
 EOF
         rm -rf ${TMP_UDIR}/guile-*
     fi

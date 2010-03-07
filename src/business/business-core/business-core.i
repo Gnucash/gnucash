@@ -15,6 +15,9 @@
 #include <gncTaxTable.h>
 #include <gncVendor.h>
 #include <gncBusGuile.h>
+#ifdef _MSC_VER
+# define snprintf _snprintf
+#endif
 #include "engine-helpers.h"
 #include "gncBusGuile.h"
 
