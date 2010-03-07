@@ -149,6 +149,7 @@ src/core-utils/gnc-gconf-utils.c
 src/core-utils/gnc-gdate-utils.c
 src/core-utils/gnc-gkeyfile-utils.c
 src/core-utils/gnc-glib-utils.c
+src/core-utils/gnc-jalali.c
 src/core-utils/gnc-main.c
 src/core-utils/gnc-path.c
 src/core-utils/gnc-uri-utils.c
@@ -198,7 +199,6 @@ src/gnome/dialog-sx-editor.c
 src/gnome/dialog-sx-from-trans.c
 src/gnome/dialog-sx-since-last-run.c
 src/gnome/dialog-tax-info.c
-src/gnome/dialog-userpass.c
 src/gnome/druid-acct-period.c
 src/gnome/druid-hierarchy.c
 src/gnome/druid-loan.c
@@ -272,6 +272,7 @@ src/gnome-utils/dialog-query-list.c
 src/gnome-utils/dialog-reset-warnings.c
 src/gnome-utils/dialog-totd.c
 src/gnome-utils/dialog-transfer.c
+src/gnome-utils/dialog-userpass.c
 src/gnome-utils/dialog-utils.c
 src/gnome-utils/druid-gconf-setup.c
 src/gnome-utils/druid-gnc-xml-import.c
