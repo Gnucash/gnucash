@@ -56,7 +56,7 @@ int SplitListModel::columnCount(const QModelIndex& parent) const
 //     if (!parent.isValid())
 //         return 0;
 //     else
-    return 4; // Fixed number for now
+    return 5; // Fixed number for now
 }
 
 QVariant SplitListModel::data(const QModelIndex& index, int role) const
@@ -78,6 +78,12 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             return split.getCorrAccountFullName();
         case 3:
             return QChar(split.getReconcile());
+        case 4:
+        {
+            Numeric amount = split.getAmount(); // Alternatively: xaccSplitConvertAmount(split.get(), split.getAccount().get());
+            PrintAmountInfo printInfo(split.get(), true);
+            return amount.printAmount(printInfo);
+        }
         default:
             return QVariant();
         }
@@ -113,6 +119,8 @@ QVariant SplitListModel::headerData(int section, Qt::Orientation orientation, in
             return QString("Account");
         case 3:
             return QString("Reconciled?");
+        case 4:
+            return QString("Amount");
         default:
             return QVariant();
         }

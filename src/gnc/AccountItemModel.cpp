@@ -21,6 +21,7 @@
  */
 
 #include "AccountItemModel.hpp"
+#include "gnc/Numeric.hpp"
 #include <QDebug>
 
 namespace gnc
@@ -95,7 +96,7 @@ int AccountTreeModel::columnCount(const QModelIndex& parent) const
 //     if (!parent.isValid())
 //         return 0;
 //     else
-    return 3; // Fixed number for now
+    return 4; // Fixed number for now
 }
 
 QVariant AccountTreeModel::data(const QModelIndex& index, int role) const
@@ -114,6 +115,12 @@ QVariant AccountTreeModel::data(const QModelIndex& index, int role) const
             return account.getCode();
         case 2:
             return account.getDescription();
+        case 3:
+        {
+            Numeric balance = gnc_ui_account_get_balance(account.get(), false);
+            PrintAmountInfo printInfo(account.get(), true);
+            return balance.printAmount(printInfo);
+        }
         default:
             return QVariant();
         }
@@ -147,6 +154,8 @@ QVariant AccountTreeModel::headerData(int section, Qt::Orientation orientation, 
             return QString("Code");
         case 2:
             return QString("Description");
+        case 3:
+            return QString("Balance");
         default:
             return QVariant();
         }

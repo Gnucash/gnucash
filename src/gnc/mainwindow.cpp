@@ -179,6 +179,8 @@ void MainWindow::createActions()
 
     connect(ui->treeView, SIGNAL(activated(const QModelIndex &)),
             this, SLOT(activatedAccount(const QModelIndex&)));
+    connect(ui->tableView, SIGNAL(activated(const QModelIndex &)),
+            this, SLOT(activatedAccount(const QModelIndex&)));
 }
 
 void MainWindow::createToolBars()
@@ -254,7 +256,8 @@ QString MainWindow::strippedName(const QString &fullFileName)
 
 void MainWindow::activatedAccount(const QModelIndex & index)
 {
-    if (index.model() != m_accountTreeModel)
+    if (index.model() != m_accountTreeModel
+            && index.model() != m_accountListModel)
     {
         qDebug() << "Wrong model";
         return;
@@ -274,6 +277,7 @@ void MainWindow::activatedAccount(const QModelIndex & index)
     QTableView *tableView = new QTableView(this); // FIXME: Parent object unclear
     SplitListModel *smodel = new SplitListModel(Split::fromGList(slist), tableView);
     tableView->setModel(smodel);
+    tableView->setAlternatingRowColors(true);
 
     // Insert this as a new tab
     ui->tabWidget->addTab(tableView, account.getName());

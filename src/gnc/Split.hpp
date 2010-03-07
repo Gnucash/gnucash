@@ -79,6 +79,16 @@ public:
     QString getCorrAccountName() const { return QString::fromUtf8(xaccSplitGetCorrAccountName(get())); }
     QString getCorrAccountCode() const { return QString::fromUtf8(xaccSplitGetCorrAccountCode(get())); }
 
+    void setAmount(const Numeric& amount) { xaccSplitSetAmount(get(), amount); }
+    Numeric getAmount() const { return xaccSplitGetAmount(get()); }
+    void setValue(const Numeric& value) { xaccSplitSetValue(get(), value); }
+    Numeric getValue() const { return xaccSplitGetValue(get()); }
+    Numeric getSharePrice() const { return xaccSplitGetSharePrice(get()); }
+    Numeric getBalance() const { return xaccSplitGetBalance(get()); }
+    Numeric getClearedBalance() const { return xaccSplitGetClearedBalance(get()); }
+    Numeric getReconciledBalance() const { return xaccSplitGetReconciledBalance(get()); }
+
+
 
     static SplitQList fromGList(GList* glist)
     {
