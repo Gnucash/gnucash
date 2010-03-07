@@ -155,4 +155,26 @@ QVariant AccountTreeModel::headerData(int section, Qt::Orientation orientation, 
         return QString("%1").arg(1 + section);
 }
 
+// ////////////////////////////////////////////////////////////
+
+
+QModelIndex AccountListModel::index(int row, int column,
+                                    const QModelIndex &parent) const
+{
+    //qDebug() << "index(), " << row << column << parent;
+    if (!hasIndex(row, column, parent)
+        || row >= m_acclist.size())
+        return QModelIndex();
+
+    Account childItem = m_acclist.at(row);
+    if (childItem.get())
+    {
+        //qDebug() << "returning" << childItem.getName();
+        return createIndex(row, column, childItem.get());
+    }
+    else
+        return QModelIndex();
+}
+
+
 } // END namespace gnc

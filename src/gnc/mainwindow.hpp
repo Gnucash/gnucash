@@ -83,7 +83,7 @@ private:
     QToolBar *editToolBar;
 
     Session m_session;
-    AccountItemModel *m_accountItemModel;
+    AccountListModel *m_accountListModel;
     AccountTreeModel *m_accountTreeModel;
 };
 

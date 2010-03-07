@@ -26,76 +26,22 @@
 #include "gnc/Account.hpp"
 
 #include <QAbstractItemModel>
-#include <QAbstractTableModel>
 
 namespace gnc
 {
 
-class AccountItemModel : public QAbstractTableModel
-{
-    Q_OBJECT
-public:
-    AccountItemModel(Account rootaccount, QObject *parent = 0)
-            : QAbstractTableModel(parent)
-            , m_root(rootaccount)
-            , m_acclist(Account::fromGList(m_root.get_descendants()))
-    {
-    }
-
-    int rowCount(const QModelIndex& parent = QModelIndex()) const { return m_acclist.size(); }
-    int columnCount(const QModelIndex& parent = QModelIndex()) const { return 3; }
-    QVariant data(const QModelIndex& index, int role) const
-    {
-        if (!index.isValid())
-            return QVariant();
-        if (index.row() > rowCount(index))
-            return QVariant();
-        if (role == Qt::DisplayRole)
-        {
-            switch (index.column())
-            {
-            case 0:
-                return Account(m_acclist.at(index.row())).getName();
-            case 1:
-                return Account(m_acclist.at(index.row())).getCode();
-            case 2:
-                return Account(m_acclist.at(index.row())).getDescription();
-            default:
-                return QVariant();
-            }
-        }
-        else
-            return QVariant();
-    }
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const
-    {
-        if (role != Qt::DisplayRole)
-            return QVariant();
-        if (orientation == Qt::Horizontal)
-        {
-            switch (section)
-            {
-            case 0:
-                return QString("Name");
-            case 1:
-                return QString("Code");
-            case 2:
-                return QString("Description");
-            default:
-                return QVariant();
-            }
-        }
-        else
-            return QString("%1").arg(1 + section);
-    }
-private:
-    Account m_root;
-    Account::AccountQList m_acclist;
-};
-
-
-
-
+/** This is the data model for an account tree.
+ *
+ * It was written following the "Simple Tree Model Example" in the qt4
+ * documentation. In particular, the trick is that each returned
+ * QModelIndex of our model implementation which is valid will have a
+ * ::Account* pointer in its QModelIndex::internalPointer() member,
+ * which can then be used in the data() method and the other
+ * methods. This trick works quite nice because our C structures
+ * ::Account* already have all the methods to iterate the tree back
+ * and forth, and our C++ wrapper gnc::Account doesn't add any
+ * functionality except for some nicer method names.
+ */
 class AccountTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -112,10 +58,36 @@ public:
     QVariant data(const QModelIndex& index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
-private:
+protected:
     Account m_root;
+};
+
+
+
+/** Specialization of the account tree model for when all accounts
+ * should be viewed as a flat list instead of a tree. Only the index()
+ * and parent() functions had to be overridden - quite easy. */
+class AccountListModel : public AccountTreeModel
+{
+    Q_OBJECT
+public:
+    AccountListModel(Account rootaccount, QObject *parent = 0)
+        : AccountTreeModel(rootaccount, parent)
+        , m_acclist(Account::fromGList(rootaccount.get_descendants()))
+    {
+    }
+
+    int rowCount(const QModelIndex& parent = QModelIndex()) const { return m_acclist.size(); }
+
+    QModelIndex index(int row, int column,
+                      const QModelIndex &parent = QModelIndex()) const;
+
+    QModelIndex parent(const QModelIndex &index) const { return QModelIndex(); }
+
+private:
     Account::AccountQList m_acclist;
 };
+
 
 
 } // END namespace gnc

@@ -62,7 +62,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 MainWindow::MainWindow()
         : ui(new Ui::MainWindow)
-        , m_accountItemModel(NULL)
 {
     ui->setupUi(this);
 
@@ -453,8 +452,8 @@ void MainWindow::loadFile(const QString &fileName)
     Account root (m_session.get_book().get_root_account());
     if (root)
     {
-        m_accountItemModel = new AccountItemModel(root, this);
-        ui->tableView->setModel(m_accountItemModel);
+        m_accountListModel = new AccountListModel(root, this);
+        ui->tableView->setModel(m_accountListModel);
 
         m_accountTreeModel = new AccountTreeModel(root, this);
         ui->treeView->setModel(m_accountTreeModel);
