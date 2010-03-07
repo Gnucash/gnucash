@@ -1261,7 +1261,7 @@ xaccSplitsComputeValue (GList *splits, const Split * skip_me,
 }
 
 gnc_numeric
-xaccSplitConvertAmount (const Split *split, Account * account)
+xaccSplitConvertAmount (const Split *split, const Account * account)
 {
     gnc_commodity *acc_com, *to_commodity;
     Transaction *txn;

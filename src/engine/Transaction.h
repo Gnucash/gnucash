@@ -398,7 +398,7 @@ gnc_numeric xaccTransGetAccountAmount (const Transaction *trans,
  *
  * If 'acc' is NULL, return unity.
  */
-gnc_numeric xaccTransGetAccountConvRate(Transaction *txn, Account *acc);
+gnc_numeric xaccTransGetAccountConvRate(const Transaction *txn, const Account *acc);
 
 /** Get the account balance for the specified account after the last
     split in the specified transaction. */

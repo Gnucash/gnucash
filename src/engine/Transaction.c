@@ -968,7 +968,7 @@ xaccTransGetAccountAmount (const Transaction *trans, const Account *acc)
 }
 
 gnc_numeric
-xaccTransGetAccountConvRate(Transaction *txn, Account *acc)
+xaccTransGetAccountConvRate(const Transaction *txn, const Account *acc)
 {
     gnc_numeric amount, value, convrate;
     GList *splits;
