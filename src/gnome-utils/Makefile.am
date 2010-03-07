@@ -39,6 +39,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-reset-warnings.c \
   dialog-totd.c \
   dialog-transfer.c \
+  dialog-userpass.c \
   dialog-utils.c \
   druid-utils.c \
   druid-gconf-setup.c \

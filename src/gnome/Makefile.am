@@ -37,7 +37,6 @@ libgnc_gnome_la_SOURCES = \
   dialog-sx-from-trans.c \
   dialog-sx-since-last-run.c \
   dialog-tax-info.c \
-  dialog-userpass.c \
   druid-acct-period.c \
   druid-hierarchy.c \
   druid-merge.c \
