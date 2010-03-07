@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include "gnc-ui-util.h"
+
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <libguile.h>
@@ -38,18 +40,17 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "Account.h"
-#include "gnc-component-manager.h"
+
 #include "qof.h"
-#include "gnc-engine.h"
-#include "gnc-euro.h"
-#include "gnc-gconf-utils.h"
-#include "gnc-hooks.h"
-#include "gnc-module.h"
-#include "gnc-ui-util.h"
-#include "Transaction.h"
 #include "guile-mappings.h"
-#include "gnc-session.h"
+#include "core-utils/gnc-gconf-utils.h"
+#include "gnc-module/gnc-module.h"
+#include "engine/Account.h"
+#include "engine/Transaction.h"
+#include "engine/gnc-engine.h"
+#include "engine/gnc-euro.h"
+#include "engine/gnc-hooks.h"
+#include "engine/gnc-session.h"
 
 #define KEY_CURRENCY_CHOICE "currency_choice"
 #define KEY_CURRENCY_OTHER  "currency_other"

@@ -48,13 +48,11 @@ libgncmod_app_utils_la_SOURCES = \
   gnc-druid-provider-desc-file.c \
   gnc-druid-provider-desc-multifile.c \
   gnc-druid-provider-file-cb.c \
-  gnc-euro.c \
   gnc-exp-parser.c \
   gnc-gettext-util.c \
   gnc-helpers.c \
   gnc-sx-instance-model.c \
   gncmod-app-utils.c \
-  gnc-ui-util.c \
   guile-util.c \
   option-util.c
 
@@ -74,14 +72,12 @@ gncinclude_HEADERS = \
   gnc-druid-provider-desc-file.h \
   gnc-druid-provider-desc-multifile.h \
   gnc-druid-provider-file-cb.h \
-  gnc-euro.h \
   gnc-exp-parser.h \
   gnc-gettext-util.h \
   gnc-help-utils.h \
   gnc-helpers.h \
   gnc-sx-instance-model.h \
   gnc-ui-common.h \
-  gnc-ui-util.h \
   guile-util.h \
   option-util.h
 

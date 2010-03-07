@@ -21,13 +21,13 @@
 
 #include "config.h"
 
+#include "gnc-euro.h"
+
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "gnc-commodity.h"
-#include "gnc-euro.h"
-#include "gnc-ui-util.h"
+#include "engine/gnc-ui-util.h"
 
 /* local structs */
 typedef struct
