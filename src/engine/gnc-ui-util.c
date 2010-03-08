@@ -459,8 +459,6 @@ gnc_ui_account_get_tax_info_string (const Account *account)
 
     gboolean tax_related = FALSE;
     const char *code;
-    QofBook *this_book;
-    KvpFrame *book_frame;
     const gchar *tax_type;
     GNCAccountType atype;
     SCM category;
