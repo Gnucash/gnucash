@@ -85,6 +85,7 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
     char *account_name;
     ComboCell *cell = (ComboCell *) bcell;
     Account *account;
+    GList *account_types = NULL;
 
     /* Find the account */
     account = gnc_account_lookup_for_register (gnc_get_current_root_account (), name);
@@ -99,7 +100,16 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
         *new = FALSE;
 
         /* User said yes, they want to create a new account. */
-        account = gnc_ui_new_accounts_from_name_window (name);
+        account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_CREDIT);
+        account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_ASSET);
+        account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_LIABILITY);
+        if ( ledger->is_invoice )
+            account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_INCOME);
+        else
+            account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_EXPENSE);
+
+        account = gnc_ui_new_accounts_from_name_window_with_types (name, account_types);
+        g_list_free ( account_types );
         if (!account)
             return NULL;
         *new = TRUE;
