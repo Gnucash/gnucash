@@ -32,8 +32,8 @@
 #include <limits.h>
 #include <locale.h>
 #include <math.h>
-#ifdef G_OS_WIN32
-#include <pow.h>
+#if defined(G_OS_WIN32) && !defined(_MSC_VER)
+# include <pow.h>
 #endif
 #include <stdarg.h>
 #include <stdlib.h>
@@ -1841,6 +1841,14 @@ integer_to_words(gint64 val)
     return g_string_free(result, FALSE);
 }
 
+#ifdef _MSC_VER
+static double round(double x)
+{
+	// A simple round() implementation because MSVC doesn't seem to have that
+	return floor(x + 0.5);
+}
+#endif
+
 gchar *
 number_to_words(gdouble val, gint64 denom)
 {
@@ -1850,7 +1858,7 @@ number_to_words(gdouble val, gint64 denom)
     if (val < 0) val = -val;
     if (denom < 0) denom = -denom;
 
-    int_part = trunc(val);
+    int_part = floor(val);
     frac_part = round((val - int_part) * denom);
 
     int_string = integer_to_words(int_part);

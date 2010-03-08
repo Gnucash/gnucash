@@ -82,7 +82,7 @@ gnc_euro_rate_compare (const void * key, const void * value)
     if (!key || !value)
         return -1;
 
-    return strcasecmp(gnc_commodity_get_mnemonic(curr), euro->currency);
+    return g_ascii_strcasecmp(gnc_commodity_get_mnemonic(curr), euro->currency);
 }
 
 static int
@@ -94,7 +94,7 @@ gnc_euro_rate_compare_code (const void * key, const void * value)
     if (!key || !value)
         return -1;
 
-    return strcasecmp (code, euro->currency);
+    return g_ascii_strcasecmp (code, euro->currency);
 }
 
 /* ------------------------------------------------------ */

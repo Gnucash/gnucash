@@ -16,6 +16,7 @@ FILE (APPEND ${CONFIG_H} "
 
 /* Definitions for all OS */
 #define HAVE_LIBQOF /**/
+#define HAVE_TOWUPPER 1
 #define QOF_DISABLE_DEPRECATED 1
 ")
 
@@ -57,7 +58,6 @@ IF (UNIX OR MINGW)
 #define HAVE_SYS_STAT_H 1
 #define HAVE_SYS_TIME_H 1
 #define HAVE_SYS_TYPES_H 1
-#define HAVE_TOWUPPER 1
 #define HAVE_UNISTD_H 1
 #define HAVE_WCTYPE_H 1
 
