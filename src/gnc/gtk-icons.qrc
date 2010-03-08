@@ -1,14 +1,15 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-<qresource>
-  <file>gtk-icons/gtk-about.png</file>
-  <file>gtk-icons/gtk-copy.png</file>
-  <file>gtk-icons/gtk-cut.png</file>
-  <file>gtk-icons/gtk-new.png</file>
-  <file>gtk-icons/gtk-open.png</file>
-  <file>gtk-icons/gtk-paste.png</file>
-  <file>gtk-icons/gtk-quit.png</file>
-  <file>gtk-icons/gtk-save-as.png</file>
-  <file>gtk-icons/gtk-save.png</file>
-</qresource>
+<RCC>
+  <qresource>
+    <file>gtk-icons/gtk-about.png</file>
+    <file>gtk-icons/gtk-copy.png</file>
+    <file>gtk-icons/gtk-cut.png</file>
+    <file>gtk-icons/gtk-new.png</file>
+    <file>gtk-icons/gtk-open.png</file>
+    <file>gtk-icons/gtk-paste.png</file>
+    <file>gtk-icons/gtk-quit.png</file>
+    <file>gtk-icons/gtk-redo.png</file>
+    <file>gtk-icons/gtk-save-as.png</file>
+    <file>gtk-icons/gtk-save.png</file>
+    <file>gtk-icons/gtk-undo.png</file>
+  </qresource>
 </RCC>

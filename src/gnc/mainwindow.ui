@@ -36,7 +36,20 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
+      <property name="documentMode">
+       <bool>true</bool>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
       <widget class="QWidget" name="textBrowserTab">
+       <attribute name="icon">
+        <iconset resource="gtk-icons.qrc">
+         <normaloff>:/gtk-icons/gtk-about.png</normaloff>:/gtk-icons/gtk-about.png</iconset>
+       </attribute>
        <attribute name="title">
         <string>Example Welcome Page</string>
        </attribute>
@@ -50,20 +63,20 @@
            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:600;&quot;&gt;Cutecash&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:600;&quot;&gt;Free Finance Software. Easy to develop, easy to use.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt;&quot;&gt;Currently this is more or less a proof-of-concept for developers:&lt;/span&gt;&lt;/p&gt;
-&lt;ol style=&quot;-qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Load an existing gnucash XML file&lt;/li&gt;
-&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;It will show the account tree in a QTreeView&lt;/li&gt;
-&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Additionally the accounts will be shown in a flat list in a QTableView&lt;/li&gt;
-&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Double-click on  any account in either view; it will open the list of splits in that account.&lt;/li&gt;&lt;/ol&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The list of splits in the account is comparable to gnucash's single line view.  The amounts are already there. The dates are still missing, but that can't be hard, too.&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This is all read-only access so far, although &quot;Save&quot; probably works but hasn't been tested.&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt;&quot;&gt;The fun part is how easy it was to add this. Let's see how far we will get...&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:600;&quot;&gt;Images&lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Cutecash&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Free Finance Software. Easy to develop, easy to use.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Currently this is more or less a proof-of-concept for developers:&lt;/span&gt;&lt;/p&gt;
+&lt;ol style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; font-family:'Sans'; font-size:10pt;&quot; style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Load an existing gnucash XML file&lt;/li&gt;
+&lt;li style=&quot; font-family:'Sans'; font-size:10pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;It will show the account tree in a QTreeView&lt;/li&gt;
+&lt;li style=&quot; font-family:'Sans'; font-size:10pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Additionally the accounts will be shown in a flat list in a QTableView&lt;/li&gt;
+&lt;li style=&quot; font-family:'Sans'; font-size:10pt;&quot; style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Double-click on  any account in either view; it will open the list of splits in that account.&lt;/li&gt;&lt;/ol&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans'; font-size:10pt;&quot;&gt;The list of splits in the account is comparable to gnucash's single line view.  The amounts are already there. The dates are still missing, but that can't be hard, too.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans'; font-size:10pt;&quot;&gt;This is all read-only access so far, although &amp;quot;Save&amp;quot; probably works but hasn't been tested.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;The fun part is how easy it was to add this. Let's see how far we will get...&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Images&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/pixmaps/gnucash_splash.png&quot; /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt;&quot;&gt;We can also embed images here in this compiled-in HTML page, as you can see above. Eventually, this page should explain what this software can do for the new user. Maybe a &lt;/span&gt;&lt;a href=&quot;gnc:test&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;hyperlink &lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt;&quot;&gt;here?&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;We can also embed images here in this compiled-in HTML page, as you can see above. Eventually, this page should explain what this software can do for the new user. Maybe a &lt;/span&gt;&lt;a href=&quot;gnc:test&quot;&gt;&lt;span style=&quot; font-family:'Sans'; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;hyperlink &lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;here?&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openLinks">
            <bool>false</bool>
@@ -73,6 +86,10 @@ p, li { white-space: pre-wrap; }
        </layout>
       </widget>
       <widget class="QWidget" name="tableViewTab">
+       <attribute name="icon">
+        <iconset resource="gnucash.qrc">
+         <normaloff>:/pixmaps/gnc-account.png</normaloff>:/pixmaps/gnc-account.png</iconset>
+       </attribute>
        <attribute name="title">
         <string>Account List</string>
        </attribute>
@@ -81,11 +98,22 @@ p, li { white-space: pre-wrap; }
          <number>0</number>
         </property>
         <item>
-         <widget class="QTableView" name="tableView"/>
+         <widget class="QTableView" name="tableView">
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+         </widget>
         </item>
        </layout>
       </widget>
       <widget class="QWidget" name="treeViewTab">
+       <attribute name="icon">
+        <iconset resource="gnucash.qrc">
+         <normaloff>:/pixmaps/gnc-account.png</normaloff>:/pixmaps/gnc-account.png</iconset>
+       </attribute>
        <attribute name="title">
         <string>Account Tree</string>
        </attribute>
@@ -108,7 +136,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>707</width>
-     <height>25</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -117,6 +145,7 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
+    <addaction name="actionRecent"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
     <addaction name="separator"/>
@@ -143,12 +172,25 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>&amp;Edit</string>
     </property>
+    <addaction name="action_Undo"/>
+    <addaction name="action_Redo"/>
+    <addaction name="separator"/>
     <addaction name="actionCut"/>
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
    </widget>
+   <widget class="QMenu" name="menu_View">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="actionViewAccountList"/>
+    <addaction name="actionViewAccountTree"/>
+    <addaction name="separator"/>
+    <addaction name="action_Close_View"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menu_View"/>
    <addaction name="menuAccount"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -189,7 +231,7 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/gtk-icons/gtk-about.png</normaloff>:/gtk-icons/gtk-about.png</iconset>
    </property>
    <property name="text">
-    <string>About</string>
+    <string>&amp;About</string>
    </property>
   </action>
   <action name="actionSave">
@@ -243,7 +285,7 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/pixmaps/gnc-account-new.png</normaloff>:/pixmaps/gnc-account-new.png</iconset>
    </property>
    <property name="text">
-    <string>New</string>
+    <string>&amp;New...</string>
    </property>
   </action>
   <action name="actionOpenAccount">
@@ -255,7 +297,7 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/pixmaps/gnc-account-open.png</normaloff>:/pixmaps/gnc-account-open.png</iconset>
    </property>
    <property name="text">
-    <string>Open</string>
+    <string>&amp;Open</string>
    </property>
   </action>
   <action name="actionAccountProperties">
@@ -267,34 +309,43 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/pixmaps/gnc-account-edit.png</normaloff>:/pixmaps/gnc-account-edit.png</iconset>
    </property>
    <property name="text">
-    <string>Properties...</string>
+    <string>&amp;Properties...</string>
    </property>
   </action>
   <action name="actionCut">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="gtk-icons.qrc">
      <normaloff>:/gtk-icons/gtk-cut.png</normaloff>:/gtk-icons/gtk-cut.png</iconset>
    </property>
    <property name="text">
-    <string>Cut</string>
+    <string>Cu&amp;t</string>
    </property>
   </action>
   <action name="actionCopy">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="gtk-icons.qrc">
      <normaloff>:/gtk-icons/gtk-copy.png</normaloff>:/gtk-icons/gtk-copy.png</iconset>
    </property>
    <property name="text">
-    <string>Copy</string>
+    <string>&amp;Copy</string>
    </property>
   </action>
   <action name="actionPaste">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="gtk-icons.qrc">
      <normaloff>:/gtk-icons/gtk-paste.png</normaloff>:/gtk-icons/gtk-paste.png</iconset>
    </property>
    <property name="text">
-    <string>Paste</string>
+    <string>&amp;Paste</string>
    </property>
   </action>
   <action name="actionDeleteAccount">
@@ -306,7 +357,7 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/pixmaps/gnc-account-delete.png</normaloff>:/pixmaps/gnc-account-delete.png</iconset>
    </property>
    <property name="text">
-    <string>Delete...</string>
+    <string>&amp;Delete...</string>
    </property>
   </action>
   <action name="actionAbout_Qt">
@@ -314,10 +365,118 @@ p, li { white-space: pre-wrap; }
     <string>About Qt</string>
    </property>
   </action>
+  <action name="action_Undo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="gtk-icons.qrc">
+     <normaloff>:/gtk-icons/gtk-undo.png</normaloff>:/gtk-icons/gtk-undo.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Undo</string>
+   </property>
+  </action>
+  <action name="action_Redo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="gtk-icons.qrc">
+     <normaloff>:/gtk-icons/gtk-redo.png</normaloff>:/gtk-icons/gtk-redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Redo</string>
+   </property>
+  </action>
+  <action name="actionRecent">
+   <property name="text">
+    <string>Open &amp;Recent</string>
+   </property>
+   <property name="statusTip">
+    <string>Open an existing file from the list of recently opened files</string>
+   </property>
+  </action>
+  <action name="actionViewAccountList">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Account &amp;List</string>
+   </property>
+  </action>
+  <action name="actionViewAccountTree">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Account &amp;Tree</string>
+   </property>
+  </action>
+  <action name="action_Close_View">
+   <property name="text">
+    <string>&amp;Close View</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="gnucash.qrc"/>
   <include location="gtk-icons.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>textBrowser</sender>
+   <signal>copyAvailable(bool)</signal>
+   <receiver>actionCopy</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>352</x>
+     <y>343</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionViewAccountList</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>tableView</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>352</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionViewAccountTree</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>treeView</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>352</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
