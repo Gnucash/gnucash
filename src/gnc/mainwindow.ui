@@ -113,7 +113,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
@@ -124,14 +124,14 @@ p, li { white-space: pre-wrap; }
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>&amp;Help</string>
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionAbout_Qt"/>
    </widget>
    <widget class="QMenu" name="menuAccount">
     <property name="title">
-     <string>Account</string>
+     <string>&amp;Account</string>
     </property>
     <addaction name="actionOpenAccount"/>
     <addaction name="actionNewAccount"/>
@@ -141,7 +141,7 @@ p, li { white-space: pre-wrap; }
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
-     <string>Edit</string>
+     <string>&amp;Edit</string>
     </property>
     <addaction name="actionCut"/>
     <addaction name="actionCopy"/>
@@ -198,7 +198,7 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/gtk-icons/gtk-save.png</normaloff>:/gtk-icons/gtk-save.png</iconset>
    </property>
    <property name="text">
-    <string>Save</string>
+    <string>&amp;Save</string>
    </property>
    <property name="statusTip">
     <string>Save the document to disk</string>
@@ -213,7 +213,7 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/gtk-icons/gtk-save-as.png</normaloff>:/gtk-icons/gtk-save-as.png</iconset>
    </property>
    <property name="text">
-    <string>Save as...</string>
+    <string>Save &amp;as...</string>
    </property>
    <property name="statusTip">
     <string>Save the document under a new name</string>
@@ -225,7 +225,7 @@ p, li { white-space: pre-wrap; }
      <normaloff>:/gtk-icons/gtk-quit.png</normaloff>:/gtk-icons/gtk-quit.png</iconset>
    </property>
    <property name="text">
-    <string>Exit</string>
+    <string>E&amp;xit</string>
    </property>
    <property name="whatsThis">
     <string>Exit the application</string>

@@ -28,10 +28,12 @@
 extern "C"
 {
 #include "qof.h"
+#include "gnc-date.h"
 #include "engine/gnc-ui-util.h"
 }
 
 #include <QString>
+#include <QDateTime>
 
 namespace gnc
 {
@@ -45,6 +47,22 @@ inline QString gchar_to_QString(gchar* tmp_string)
     g_free(tmp_string);
     return result;
 }
+
+inline QDateTime toQDateTime(const ::Timespec& timespec)
+{
+    QDateTime result = QDateTime::fromTime_t(timespec.tv_sec);
+    result.addMSecs(timespec.tv_nsec / 1000000);
+    result.setTimeSpec(Qt::UTC);
+    return result;
+}
+inline ::Timespec toTimespec(const QDateTime& qdt)
+{
+    ::Timespec result;
+    result.tv_sec = qdt.toTime_t();
+    result.tv_nsec = qdt.time().msec() * 1000000;
+    return result;
+}
+
 
 
 class PrintAmountInfo : public ::GNCPrintAmountInfo

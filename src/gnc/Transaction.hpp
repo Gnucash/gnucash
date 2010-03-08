@@ -34,6 +34,7 @@ extern "C"
 #include "gnc/WeakPointer.hpp"
 #include "gnc/Account.hpp"
 #include "gnc/Book.hpp"
+#include "gnc/Numeric.hpp"
 
 #include <QString>
 #include <QList>
@@ -60,6 +61,10 @@ public:
 
     int countSplits() const { return xaccTransCountSplits(get()); }
 
+    void setDatePosted(const QDateTime& t);
+    void setDateEntered(const QDateTime& t);
+    QDateTime getDatePosted() const { return toQDateTime(xaccTransRetDatePostedTS(get())); }
+    QDateTime getDateEntered() const { return toQDateTime(xaccTransRetDateEnteredTS(get())); }
 
 };
 

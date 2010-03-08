@@ -493,7 +493,7 @@ void MainWindow::loadFile(const QString &fileName)
             progressBar.setMinimum(0);
             progressBar.setMaximum(100);
             statusBar()->showMessage(tr("Loading user data..."));
-            statusBar()->addWidget(&progressBar);
+            statusBar()->addPermanentWidget(&progressBar);
             progressBar.show();
             // This local progress_functor is a workaround on how to
             // pass the suitable function pointer to session_load -
@@ -564,7 +564,7 @@ void MainWindow::loadFile(const QString &fileName)
     QApplication::restoreOverrideCursor();
 
     setCurrentFile(fileName);
-    statusBar()->showMessage(tr("File loaded"), 2000);
+    statusBar()->showMessage(tr("File loaded"), 5000);
 }
 
 bool MainWindow::saveFile(const QString &fileName)

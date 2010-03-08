@@ -56,7 +56,7 @@ int SplitListModel::columnCount(const QModelIndex& parent) const
 //     if (!parent.isValid())
 //         return 0;
 //     else
-    return 5; // Fixed number for now
+    return 6; // Fixed number for now
 }
 
 QVariant SplitListModel::data(const QModelIndex& index, int role) const
@@ -71,14 +71,16 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
         switch (index.column())
         {
         case 0:
-            return trans.getNum();
+            return trans.getDatePosted().date().toString(Qt::ISODate);
         case 1:
-            return trans.getDescription();
+            return trans.getNum();
         case 2:
-            return split.getCorrAccountFullName();
+            return trans.getDescription();
         case 3:
-            return QChar(split.getReconcile());
+            return split.getCorrAccountFullName();
         case 4:
+            return QChar(split.getReconcile());
+        case 5:
         {
             Numeric amount = split.getAmount(); // Alternatively: xaccSplitConvertAmount(split.get(), split.getAccount().get());
             PrintAmountInfo printInfo(split.get(), true);
@@ -112,14 +114,16 @@ QVariant SplitListModel::headerData(int section, Qt::Orientation orientation, in
         switch (section)
         {
         case 0:
-            return QString("Num");
+            return QString("Date");
         case 1:
-            return QString("Description");
+            return QString("Num");
         case 2:
-            return QString("Account");
+            return QString("Description");
         case 3:
-            return QString("Reconciled?");
+            return QString("Account");
         case 4:
+            return QString("Reconciled?");
+        case 5:
             return QString("Amount");
         default:
             return QVariant();
