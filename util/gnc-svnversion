@@ -45,9 +45,15 @@ fi
 # Maybe it's git?
 if test -d "${real_srcdir}"/.git
 then
-  githead=`git --git-dir "${real_srcdir}"/.git rev-parse HEAD 2>/dev/null`
+  githead=`git --git-dir "${real_srcdir}"/.git log -1 --pretty=%h HEAD 2>/dev/null`  # short hash only
   if test $? = 0 ; then
-    echo $githead
+    echo -n $githead
+    # Add a "+" to the hash if there deleted or modified files (not excluded by .gitignore and friends)
+    # "Ignores" untracked files
+    # [ $(git --git-dir "${real_srcdir}"/.git ls-files -dkm 2>/dev/null | wc -l) -gt 0 ] && echo -n "+"  
+    # Includes untracked files
+    [ $(git --git-dir "${real_srcdir}"/.git ls-files -dkmo --exclude-standard 2>/dev/null | wc -l) -gt 0 ] && echo -n "+"  
+    echo
     exit 0
   else
     exit 1
