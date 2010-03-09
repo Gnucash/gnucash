@@ -49,26 +49,8 @@ test_strings strs[] =
         G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name2",
         G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name2", 0
     },
-    {
-        "postgres://localhost/foo/bar",
-        G_DIR_SEPARATOR_S ".gnucash" G_DIR_SEPARATOR_S "data" G_DIR_SEPARATOR_S "postgres___localhost_foo_bar", 2
-    },
-    {
-        "file:/tmp/test-account-name3",
-        G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3", 0
-    },
-    {
-        "file:///tmp/test-account-name3",
-        G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3", 0
-    },
-    {
-        "xml:/tmp/test-account-name3",
-        G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3", 0
-    },
-    {
-        "xml:///tmp/test-account-name3",
-        G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name3", 0
-    },
+    /* TODO Figure out how to write tests that actually verify the relative
+     * pathname resolution. The above tests only test absolut pathnames */
     { NULL, NULL, 0 },
 };
 
@@ -104,9 +86,9 @@ main(int argc, char **argv)
             wantout = g_strdup(strs[i].output);
         }
 
-        daout = xaccResolveFilePath(dain);
+        daout = gnc_resolve_file_path(dain);
         do_test_args(safe_strcmp(daout, wantout) == 0,
-                     "xaccResolveFilePath",
+                     "gnc_resolve_file_path",
                      __FILE__, __LINE__,
                      "%s (%s) vs %s", daout, dain, wantout);
         g_free(dain);

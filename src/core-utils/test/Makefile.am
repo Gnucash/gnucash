@@ -18,8 +18,7 @@ LDADD = \
 # that they should be executed, with more basic tests coming first.
 #
 TESTS = \
-  test-resolve-file-path \
-  test-resolve-url
+  test-resolve-file-path
 
 GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/lib/libqof/qof \
@@ -30,8 +29,7 @@ TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \
-  test-resolve-file-path \
-  test-resolve-url
+  test-resolve-file-path
 
 
 EXTRA_DIST =
