@@ -1825,22 +1825,26 @@ main_window_find_tab_items (GncMainWindow *window,
                             GtkWidget **entry_p)
 {
     GncMainWindowPrivate *priv;
-    GtkWidget *tab_hbox, *widget;
+    GtkWidget *tab_hbox, *widget, *event_box;
     GList *children, *tmp;
 
     ENTER("window %p, page %p, label_p %p, entry_p %p",
           window, page, label_p, entry_p);
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     *label_p = *entry_p = NULL;
-    tab_hbox = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
-                                          page->notebook_page);
+
+    event_box = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
+                                           page->notebook_page);
+
+    tab_hbox = gtk_bin_get_child(GTK_BIN(event_box));
+
     children = gtk_container_get_children(GTK_CONTAINER(tab_hbox));
     for (tmp = children; tmp; tmp = g_list_next(tmp))
     {
         widget = tmp->data;
-        if (GTK_IS_EVENT_BOX(widget))
+        if (GTK_IS_LABEL(widget))
         {
-            *label_p = gtk_bin_get_child(GTK_BIN(widget));
+            *label_p = widget;
         }
         else if (GTK_IS_ENTRY(widget))
         {
@@ -1853,14 +1857,40 @@ main_window_find_tab_items (GncMainWindow *window,
     return (*label_p && *entry_p);
 }
 
+static gboolean
+main_window_find_tab_event (GncMainWindow *window,
+                            GncPluginPage *page,
+                            GtkWidget **event_p)
+{
+    GncMainWindowPrivate *priv;
+    GtkWidget *event_box;
+
+    ENTER("window %p, page %p, event %p",
+          window, page, event_p);
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    *event_p = NULL;
+
+    event_box = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
+                                           page->notebook_page);
+    if (GTK_IS_EVENT_BOX(event_box))
+    {
+        *event_p = event_box;
+        LEAVE("event %p", *event_p);
+        return (TRUE);
+    }
+
+    LEAVE("event %p", *event_p);
+    return (FALSE);
+}
+
 void
 main_window_update_page_name (GncPluginPage *page,
                               const gchar *name_in)
 {
     GncMainWindow *window;
     GncMainWindowPrivate *priv;
-    GtkWidget *label, *entry;
-    gchar *name;
+    GtkWidget *label, *entry, *event_box;
+    gchar *name, *old_page_name, *old_page_long_name;
 
     ENTER(" ");
 
@@ -1870,6 +1900,7 @@ main_window_update_page_name (GncPluginPage *page,
         return;
     }
     name = g_strstrip(g_strdup(name_in));
+
     /* Optimization, if the name hasn't changed, don't update X. */
     if (*name == '\0' || 0 == strcmp(name, gnc_plugin_page_get_page_name(page)))
     {
@@ -1877,6 +1908,9 @@ main_window_update_page_name (GncPluginPage *page,
         LEAVE("empty string or name unchanged");
         return;
     }
+
+    old_page_name = g_strdup( gnc_plugin_page_get_page_name(page));
+    old_page_long_name = g_strdup( gnc_plugin_page_get_page_long_name(page));
 
     /* Update the plugin */
     window = GNC_MAIN_WINDOW(page->window);
@@ -1887,6 +1921,23 @@ main_window_update_page_name (GncPluginPage *page,
     main_window_find_tab_items(window, page, &label, &entry);
     gtk_label_set_text(GTK_LABEL(label), name);
 
+    /* Update Tooltip on notebook Tab */
+    main_window_find_tab_event(window, page, &event_box);
+
+    if (strstr(old_page_long_name,old_page_name) != NULL)
+    {
+        gchar *new_page_long_name;
+        gint string_position;
+
+        string_position = strlen(old_page_long_name) - strlen(old_page_name);
+        new_page_long_name = g_strconcat(g_strndup(old_page_long_name, string_position), name, NULL);
+
+        gnc_plugin_page_set_page_long_name(page, new_page_long_name);
+        gtk_tooltips_set_tip(GTK_TOOLTIPS(tips), event_box, new_page_long_name, NULL);
+
+        g_free(new_page_long_name);
+    }
+
     /* Update the notebook menu */
     label = gtk_notebook_get_menu_label (GTK_NOTEBOOK(priv->notebook),
                                          page->notebook_page);
@@ -1894,6 +1945,8 @@ main_window_update_page_name (GncPluginPage *page,
 
     /* Force an update of the window title */
     gnc_main_window_update_title(window);
+    g_free(old_page_long_name);
+    g_free(old_page_name);
     g_free(name);
     LEAVE("done");
 }
@@ -1933,9 +1986,12 @@ main_window_update_page_color (GncPluginPage *page,
     gnc_plugin_page_set_page_color(page, color_string);
 
     /* Update the notebook tab */
+    main_window_find_tab_event(window, page, &event_box);
 
     if (gdk_color_parse(color_string, &tab_color))
     {
+        gtk_widget_modify_bg(event_box, GTK_STATE_NORMAL, &tab_color);
+        gtk_widget_modify_bg(event_box, GTK_STATE_ACTIVE, &tab_color);
     }
     g_free(color_string);
     LEAVE("done");
@@ -2465,10 +2521,11 @@ gnc_main_window_open_page (GncMainWindow *window,
     GncMainWindowPrivate *priv;
     GtkWidget *tab_hbox;
     GtkWidget *label, *entry, *event_box;
-    const gchar *icon, *text;
+    const gchar *icon, *text, *color_string;
     GtkWidget *image;
     GList *tmp;
     gint width;
+    GdkColor tab_color;
 
     ENTER("window %p, page %p", window, page);
 
@@ -2532,13 +2589,24 @@ gnc_main_window_open_page (GncMainWindow *window,
         image = gtk_image_new_from_stock (icon, GTK_ICON_SIZE_MENU);
         gtk_widget_show (image);
         gtk_box_pack_start (GTK_BOX (tab_hbox), image, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (tab_hbox), label, FALSE, FALSE, 0);
     }
+    else
+        gtk_box_pack_start (GTK_BOX (tab_hbox), label, FALSE, FALSE, 0);
 
     event_box = gtk_event_box_new();
-    gtk_event_box_set_visible_window(GTK_EVENT_BOX(event_box), FALSE);
+    gtk_event_box_set_visible_window(GTK_EVENT_BOX(event_box), TRUE);
     gtk_widget_show(event_box);
-    gtk_container_add(GTK_CONTAINER(event_box), label);
-    gtk_box_pack_start (GTK_BOX (tab_hbox), event_box, TRUE, TRUE, 0);
+
+    gtk_container_add(GTK_CONTAINER(event_box), tab_hbox);
+
+    color_string = gnc_plugin_page_get_page_color(page);
+    if (color_string == NULL) color_string = "";
+    if (gdk_color_parse(color_string, &tab_color))
+    {
+        gtk_widget_modify_bg(event_box, GTK_STATE_NORMAL, &tab_color);
+        gtk_widget_modify_bg(event_box, GTK_STATE_ACTIVE, &tab_color);
+    }
 
     text = gnc_plugin_page_get_page_long_name(page);
     if (text)
@@ -2597,7 +2665,7 @@ gnc_main_window_open_page (GncMainWindow *window,
     /*
      * Now install it all in the window.
      */
-    gnc_main_window_connect(window, page, tab_hbox, label);
+    gnc_main_window_connect(window, page, event_box, label);
 
     LEAVE("");
 }
