@@ -49,6 +49,7 @@ extern "C"
 #include "gnc/Numeric.hpp"
 #include "gnc/Split.hpp"
 #include "gnc/SplitListModel.hpp"
+#include "gnc/RecentFileMenu.hpp"
 
 namespace gnc
 {
@@ -104,6 +105,15 @@ void MainWindow::open()
             loadFile(fileName);
     }
 }
+
+void MainWindow::loadFileQueried(const QString &fileName)
+{
+    if (maybeSave())
+    {
+        loadFile(fileName);
+    }
+}
+
 
 bool MainWindow::save()
 {
@@ -185,6 +195,11 @@ void MainWindow::createActions()
 
 void MainWindow::createToolBars()
 {
+    menuRecentFiles = new RecentFileMenu(tr("Open &Recent"));
+    ui->menuFile->insertMenu(ui->actionSave, menuRecentFiles);
+    connect(menuRecentFiles, SIGNAL(fileSelected(const QString &)),
+            this, SLOT(loadFileQueried(const QString&)));
+
     fileToolBar = addToolBar(tr("File"));
     fileToolBar->addAction(ui->actionNew);
     fileToolBar->addAction(ui->actionOpen);
@@ -206,6 +221,7 @@ void MainWindow::readSettings()
     QSettings settings("Trolltech", "Application Example");
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     QSize size = settings.value("size", QSize(400, 400)).toSize();
+    menuRecentFiles->readSettings(&settings, "RecentFiles");
     resize(size);
     move(pos);
 }
@@ -215,6 +231,7 @@ void MainWindow::writeSettings()
     QSettings settings("Trolltech", "Application Example");
     settings.setValue("pos", pos());
     settings.setValue("size", size());
+    menuRecentFiles->writeSettings(&settings, "RecentFiles");
 }
 
 bool MainWindow::maybeSave()
@@ -236,6 +253,7 @@ bool MainWindow::maybeSave()
 
 void MainWindow::setCurrentFile(const QString &fileName)
 {
+    menuRecentFiles->usingFile(fileName);
     curFile = fileName;
 //     ui->textEdit->document()->setModified(false);
     setWindowModified(false);

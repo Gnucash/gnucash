@@ -41,6 +41,8 @@ class MainWindow;
 namespace gnc
 {
 
+class RecentFileMenu;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -52,6 +54,7 @@ public:
 public slots:
     void anchorClicked(const QUrl &);
     void activatedAccount(const QModelIndex & index);
+    void loadFileQueried(const QString &fileName);
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -82,6 +85,7 @@ private:
 
     QToolBar *fileToolBar;
     QToolBar *editToolBar;
+    RecentFileMenu *menuRecentFiles;
 
     Session m_session;
     AccountListModel *m_accountListModel;

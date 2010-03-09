@@ -145,7 +145,6 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
-    <addaction name="actionRecent"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
     <addaction name="separator"/>
@@ -387,14 +386,6 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string>&amp;Redo</string>
-   </property>
-  </action>
-  <action name="actionRecent">
-   <property name="text">
-    <string>Open &amp;Recent</string>
-   </property>
-   <property name="statusTip">
-    <string>Open an existing file from the list of recently opened files</string>
    </property>
   </action>
   <action name="actionViewAccountList">

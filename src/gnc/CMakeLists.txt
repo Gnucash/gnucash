@@ -13,6 +13,7 @@ SET (gnc_SOURCES
   AccountItemModel.cpp
   Book.cpp
   Numeric.cpp
+  RecentFileMenu.cpp
   Session.cpp
   Split.cpp
   SplitListModel.cpp
@@ -22,6 +23,7 @@ SET (gnc_SOURCES
 
 SET (gnc_QOBJECT_HEADERS
   AccountItemModel.hpp
+  RecentFileMenu.hpp
   SplitListModel.hpp
   mainwindow.hpp
 )
