@@ -1162,6 +1162,36 @@ gnc_account_type_view_create (AccountWindow *aw)
 }
 
 static void
+gnc_account_name_insert_text_cb (GtkWidget   *entry,
+                                 const gchar *text,
+                                 gint         length,
+                                 gint        *position,
+                                 gpointer     data)
+{
+    GtkEditable *editable = GTK_EDITABLE( entry );
+    const gchar *separator = NULL;
+    gchar **strsplit;
+
+    separator = gnc_get_account_separator_string();
+    strsplit = g_strsplit ( text, separator, 0 );
+    if ( strsplit[1] != NULL )
+    {
+        gchar *result = g_strjoinv ( NULL, strsplit );
+        g_signal_handlers_block_by_func ( G_OBJECT ( editable ),
+                                          G_CALLBACK ( gnc_account_name_insert_text_cb ),
+                                          data );
+        gtk_editable_insert_text ( editable, result, g_utf8_strlen ( result, -1 ), position );
+        g_signal_handlers_unblock_by_func ( G_OBJECT ( editable ),
+                                            G_CALLBACK ( gnc_account_name_insert_text_cb ),
+                                            data );
+        g_signal_stop_emission_by_name (G_OBJECT ( editable ), "insert_text");
+        g_free (result);
+    }
+
+    g_strfreev ( strsplit );
+}
+
+static void
 gnc_account_name_changed_cb(GtkWidget *widget, gpointer data)
 {
     AccountWindow *aw = data;
@@ -1281,6 +1311,8 @@ gnc_account_window_create(AccountWindow *aw)
     aw->notebook = glade_xml_get_widget (xml, "account_notebook");
 
     aw->name_entry = glade_xml_get_widget (xml, "name_entry");
+    g_signal_connect (G_OBJECT (aw->name_entry), "insert-text",
+                      G_CALLBACK (gnc_account_name_insert_text_cb), aw);
     g_signal_connect (G_OBJECT (aw->name_entry), "changed",
                       G_CALLBACK (gnc_account_name_changed_cb), aw);
 
