@@ -68,7 +68,7 @@ public:
     void setAction(const QString& v) { xaccSplitSetAction(get(), v.toUtf8()); }
 
     char getReconcile() const { return xaccSplitGetReconcile(get()); }
-    void setReconcile(char v) { xaccSplitSetReconcile(get(), v); }
+    void setReconcile(const char& v) { xaccSplitSetReconcile(get(), v); }
 
     Split getOtherSplit() const { return xaccSplitGetOtherSplit(get()); }
 

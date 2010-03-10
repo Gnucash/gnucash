@@ -57,9 +57,6 @@ extern "C"
 namespace gnc
 {
 
-// Explicit instantiations to check for compiler errors
-template class Cmd<Account, QString>;
-
 inline QString errorToString(QofBackendError err)
 {
     return errorToStringPair(err).first;
@@ -420,7 +417,7 @@ void MainWindow::accountItemActivated(const QModelIndex & index)
     // We create a new model for this list of splits and also a view
     // widget for this list.
     QTableView *tableView = new QTableView(ui->tabWidget); // FIXME: Is this parent correct?
-    SplitListModel *smodel = new SplitListModel(Split::fromGList(slist), tableView);
+    SplitListModel *smodel = new SplitListModel(Split::fromGList(slist), m_undoStack, tableView);
     tableView->setModel(smodel);
     tableView->setAlternatingRowColors(true);
 

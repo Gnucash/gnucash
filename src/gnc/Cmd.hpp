@@ -24,10 +24,15 @@
 #define GNC_CMD_HPP
 
 #include <QUndoCommand>
-#include <gnc/Split.hpp>
+#include <gnc/WeakPointer.hpp>
+#include <gnc/Numeric.hpp>
 
 namespace gnc
 {
+
+class Split;
+class Account;
+class Transaction;
 
 template<class TargetT, class ValueT>
 class Cmd : public QUndoCommand
@@ -38,26 +43,27 @@ public:
     typedef void (TargetT::*setter_func)(const value_type&);
     typedef value_type (TargetT::*getter_func)() const;
 
-    Cmd(const QString& text,
-        TargetT& target, setter_func setter,
-        const value_type& previousValue,
-        const value_type& newValue,
-        QUndoCommand *parent = 0)
-            : QUndoCommand(text, parent)
-            , m_target(target)
-            , m_setter(setter)
-            , m_previousValue(previousValue)
-            , m_newValue(newValue)
-    {
-    }
+//     Cmd(const QString& text,
+//         TargetT& target, setter_func setter,
+//         const value_type& previousValue,
+//         const value_type& newValue,
+//         QUndoCommand *parent = 0)
+//             : QUndoCommand(text, parent)
+//             , m_target(target)
+//             , m_setter(setter)
+//             , m_previousValue(previousValue)
+//             , m_newValue(newValue)
+//     {
+//     }
 
     Cmd(const QString& text,
-        TargetT& target, setter_func setter,
+        WeakPointer<typename TargetT::element_type>& targetPtr,
+        setter_func setter,
         getter_func getter,
         const value_type& newValue,
         QUndoCommand *parent = 0)
             : QUndoCommand(text, parent)
-            , m_target(target)
+            , m_target(targetPtr.get())
             , m_setter(setter)
             , m_previousValue((m_target.*getter)())
             , m_newValue(newValue)
@@ -77,7 +83,7 @@ public:
 
 
 protected:
-    TargetT& m_target;
+    TargetT m_target;
     setter_func m_setter;
     value_type m_previousValue;
     value_type m_newValue;
@@ -86,12 +92,18 @@ protected:
 namespace cmd
 {
 
-QUndoCommand* setSplitMemo(Split& split, const QString& newValue)
-{
-    return new Cmd<Split, QString>(QWidget::tr("Edit Split Memo"),
-                                   split, &Split::setMemo,
-                                   &Split::getMemo, newValue);
-}
+// This is the collection of command objects which are already
+// provided for the different data types and their simple
+// members. Just create one of those, add it to a QUndoStack, and
+// magically the values will change with undo/redo back and
+// forth. Spooky, IMHO.
+QUndoCommand* setSplitMemo(Split& split, const QString& newValue);
+QUndoCommand* setSplitAction(Split& t, const QString& newValue);
+QUndoCommand* setSplitReconcile(Split& t, char newValue);
+QUndoCommand* setTransactionNum(Transaction& t, const QString& newValue);
+QUndoCommand* setTransactionDescription(Transaction& t, const QString& newValue);
+QUndoCommand* setTransactionNotes(Transaction& t, const QString& newValue);
+QUndoCommand* setTransactionDate(Transaction& t, const QDateTime& newValue);
 
 } // END namespace cmd
 

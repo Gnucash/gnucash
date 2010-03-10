@@ -26,6 +26,7 @@
 #include "gnc/Split.hpp"
 
 #include <QAbstractItemModel>
+class QUndoStack;
 
 namespace gnc
 {
@@ -36,7 +37,7 @@ class SplitListModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    SplitListModel(const SplitQList splits, QObject *parent = 0);
+    SplitListModel(const SplitQList splits, QUndoStack* undoStack, QObject *parent = 0);
 
     QModelIndex parent(const QModelIndex &index) const { return QModelIndex(); }
     int rowCount(const QModelIndex& parent = QModelIndex()) const { return m_list.size(); }
@@ -47,9 +48,12 @@ public:
 
     QVariant data(const QModelIndex& index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role);
+
 
 protected:
     SplitQList m_list;
+    QUndoStack* m_undoStack;
 };
 
 } // END namespace gnc

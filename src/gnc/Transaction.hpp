@@ -61,8 +61,8 @@ public:
 
     int countSplits() const { return xaccTransCountSplits(get()); }
 
-    void setDatePosted(const QDateTime& t);
-    void setDateEntered(const QDateTime& t);
+    void setDatePosted(const QDateTime& t) { xaccTransSetDatePostedSecs(get(), t.toTime_t()); }
+    void setDateEntered(const QDateTime& t) { xaccTransSetDateEnteredSecs(get(), t.toTime_t()); }
     QDateTime getDatePosted() const { return toQDateTime(xaccTransRetDatePostedTS(get())); }
     QDateTime getDateEntered() const { return toQDateTime(xaccTransRetDateEnteredTS(get())); }
 

@@ -22,14 +22,17 @@
 
 #include "SplitListModel.hpp"
 #include "gnc/Transaction.hpp"
+#include "gnc/Cmd.hpp"
 #include <QDebug>
+#include <QUndoStack>
 
 namespace gnc
 {
 
-SplitListModel::SplitListModel(const SplitQList splits, QObject *parent)
+SplitListModel::SplitListModel(const SplitQList splits, QUndoStack* undoStack, QObject *parent)
         : QAbstractItemModel(parent)
         , m_list(splits)
+        , m_undoStack(undoStack)
 {
 }
 
@@ -100,8 +103,16 @@ Qt::ItemFlags SplitListModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
 
-    // Ensure read-only access only
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    Qt::ItemFlags result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    switch (index.column())
+    {
+    case 2:
+        // Allow write access as well
+        return result | Qt::ItemIsEditable;
+    default:
+        // Ensure read-only access only
+        return result;
+    }
 }
 
 QVariant SplitListModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -133,5 +144,28 @@ QVariant SplitListModel::headerData(int section, Qt::Orientation orientation, in
         return QString("%1").arg(1 + section);
 }
 
+bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (index.isValid() && role == Qt::EditRole)
+    {
+        Split split(static_cast< ::Split*>(index.internalPointer()));
+        Transaction trans(split.getParent());
+        switch (index.column())
+        {
+        case 2:
+            // We allow to edit column 2. "Editing" is done by
+            // creating a Cmd-object and adding it to the undo
+            // stack. That's in fact all that was needed to create an
+            // *undoable* edit of this data cell. Seems almost spooky,
+            // doesn't it?
+            m_undoStack->push(cmd::setTransactionDescription(trans, value.toString()));
+            emit dataChanged(index, index);
+            return true;
+        default:
+            return false;
+        }
+    }
+    return false;
+}
 
 } // END namespace gnc

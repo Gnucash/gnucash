@@ -12,6 +12,7 @@ LINK_DIRECTORIES (${GLIB2_LIBRARY_DIRS}
 SET (gnc_SOURCES
   AccountItemModel.cpp
   Book.cpp
+  Cmd.cpp
   Numeric.cpp
   RecentFileMenu.cpp
   Session.cpp
@@ -30,6 +31,7 @@ SET (gnc_QOBJECT_HEADERS
 SET (gnc_HEADERS ${gnc_QOBJECT_HEADERS}
   Account.hpp
   Book.hpp
+  Cmd.hpp
   Session.hpp
   Split.hpp
   Transaction.hpp
