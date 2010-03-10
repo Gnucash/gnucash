@@ -96,7 +96,8 @@ MainWindow::~MainWindow()
     }
 }
 
-void MainWindow::open()
+// Auto-connected to ui->actionOpen's signal triggered()
+void MainWindow::on_actionOpen_triggered()
 {
     if (maybeSave())
     {
@@ -106,7 +107,7 @@ void MainWindow::open()
     }
 }
 
-void MainWindow::loadFileQueried(const QString &fileName)
+void MainWindow::loadFileMaybe(const QString &fileName)
 {
     if (maybeSave())
     {
@@ -115,11 +116,12 @@ void MainWindow::loadFileQueried(const QString &fileName)
 }
 
 
-bool MainWindow::save()
+// Auto-connected to ui->actionSave's signal triggered()
+bool MainWindow::on_actionSave_triggered()
 {
     if (curFile.isEmpty())
     {
-        return saveAs();
+        return on_actionSave_as_triggered();
     }
     else
     {
@@ -127,7 +129,8 @@ bool MainWindow::save()
     }
 }
 
-bool MainWindow::saveAs()
+// Auto-connected to ui->actionSave_as's signal triggered()
+bool MainWindow::on_actionSave_as_triggered()
 {
     QString fileName = QFileDialog::getSaveFileName(this);
     if (fileName.isEmpty())
@@ -136,7 +139,8 @@ bool MainWindow::saveAs()
     return saveFile(fileName);
 }
 
-void MainWindow::about()
+// Auto-connected to ui->actionAbout's signal triggered()
+void MainWindow::on_actionAbout_triggered()
 {
     QMessageBox::about(this, tr("About Application"),
                        tr("This is a Gnucash C++ gui example, from the Qt4 Application example. It demonstrates how to "
@@ -149,7 +153,8 @@ void MainWindow::documentWasModified()
 //     setWindowModified(ui->textEdit->document()->isModified());
 }
 
-void MainWindow::anchorClicked(const QUrl &url)
+// Auto-connected to ui->textBrowser's signal anchorClicked()
+void MainWindow::on_textBrowser_anchorClicked(const QUrl &url)
 {
     QMessageBox::information(this, tr("Got you!"),
                              tr("Obviously you clicked the link with the URL %1.")
@@ -162,35 +167,29 @@ void MainWindow::createActions()
     ui->actionOpen->setShortcuts(QKeySequence::Open);
     ui->actionSave->setShortcuts(QKeySequence::Save);
     ui->actionSave_as->setShortcuts(QKeySequence::SaveAs);
+    ui->actionViewClose->setShortcuts(QKeySequence::Close);
 
     connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
-    connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(open()));
-
-    connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(save()));
-    connect(ui->actionSave_as, SIGNAL(triggered()), this, SLOT(saveAs()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
 
 //     connect(ui->actionCut, SIGNAL(triggered()), ui->textEdit, SLOT(cut()));
 //     connect(ui->actionCopy, SIGNAL(triggered()), ui->textEdit, SLOT(copy()));
 //     connect(ui->actionPaste, SIGNAL(triggered()), ui->textEdit, SLOT(paste()));
 
-    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
     ui->actionCut->setEnabled(false);
     ui->actionCopy->setEnabled(false);
 
-    connect(ui->textBrowser, SIGNAL(anchorClicked(const QUrl &)),
-            this, SLOT(anchorClicked(const QUrl &)));
 //     connect(ui->textEdit, SIGNAL(copyAvailable(bool)),
 //             ui->actionCut, SLOT(setEnabled(bool)));
 //     connect(ui->textEdit, SIGNAL(copyAvailable(bool)),
 //             ui->actionCopy, SLOT(setEnabled(bool)));
 
     connect(ui->treeView, SIGNAL(activated(const QModelIndex &)),
-            this, SLOT(activatedAccount(const QModelIndex&)));
+            this, SLOT(accountItemActivated(const QModelIndex&)));
     connect(ui->tableView, SIGNAL(activated(const QModelIndex &)),
-            this, SLOT(activatedAccount(const QModelIndex&)));
+            this, SLOT(accountItemActivated(const QModelIndex&)));
 }
 
 void MainWindow::createToolBars()
@@ -198,7 +197,7 @@ void MainWindow::createToolBars()
     menuRecentFiles = new RecentFileMenu(tr("Open &Recent"));
     ui->menuFile->insertMenu(ui->actionSave, menuRecentFiles);
     connect(menuRecentFiles, SIGNAL(fileSelected(const QString &)),
-            this, SLOT(loadFileQueried(const QString&)));
+            this, SLOT(loadFileMaybe(const QString&)));
 
     fileToolBar = addToolBar(tr("File"));
     fileToolBar->addAction(ui->actionNew);
@@ -221,9 +220,9 @@ void MainWindow::readSettings()
     QSettings settings("Trolltech", "Application Example");
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     QSize size = settings.value("size", QSize(400, 400)).toSize();
-    menuRecentFiles->readSettings(&settings, "RecentFiles");
     resize(size);
     move(pos);
+    menuRecentFiles->readSettings(&settings, "RecentFiles");
 }
 
 void MainWindow::writeSettings()
@@ -244,7 +243,7 @@ bool MainWindow::maybeSave()
                                       "Do you want to save your changes?"),
                                    QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         if (ret == QMessageBox::Save)
-            return save();
+            return on_actionSave_triggered();
         else if (ret == QMessageBox::Cancel)
             return false;
     }
@@ -272,7 +271,97 @@ QString MainWindow::strippedName(const QString &fullFileName)
     return QFileInfo(fullFileName).fileName();
 }
 
-void MainWindow::activatedAccount(const QModelIndex & index)
+
+// ////////////////////////////////////////////////////////////
+
+// Auto-connected to ui->actionViewClose's signal triggered
+void MainWindow::on_actionViewClose_triggered()
+{
+    on_tabWidget_tabCloseRequested(ui->tabWidget->currentIndex());
+}
+
+// Auto-connected to ui->tabWidget's signal tabCloseRequested(int)
+void MainWindow::on_tabWidget_tabCloseRequested(int index)
+{
+    QWidget *widget = ui->tabWidget->widget(index);
+    if (widget == ui->textBrowserTab)
+    {
+        ui->actionViewWelcomepage->setChecked(false);
+        reallyRemoveTab(index);
+    }
+    else if (widget == ui->treeViewTab)
+    {
+        ui->actionViewAccountTree->setChecked(false);
+        reallyRemoveTab(index);
+    }
+    else if (widget == ui->tableViewTab)
+    {
+        ui->actionViewAccountList->setChecked(false);
+        reallyRemoveTab(index);
+    }
+    else
+    {
+        ui->tabWidget->removeTab(index);
+        delete widget;
+    }
+}
+
+// Auto-connected to ui->actionViewAccountTree's signal triggered()
+void MainWindow::on_actionViewAccountTree_triggered(bool checked)
+{
+    viewOrHideTab(checked, ui->treeViewTab);
+}
+
+// Auto-connected to ui->actionViewAccountList's signal triggered()
+void MainWindow::on_actionViewAccountList_triggered(bool checked)
+{
+    viewOrHideTab(checked, ui->tableViewTab);
+}
+
+// Auto-connected to ui->actionViewWelcomepage's signal triggered()
+void MainWindow::on_actionViewWelcomepage_triggered(bool checked)
+{
+    viewOrHideTab(checked, ui->textBrowserTab);
+}
+
+void MainWindow::viewOrHideTab(bool checked, QWidget *widget)
+{
+    if (checked)
+    {
+        QVariant tabLabel = widget->property("tab_label");
+        Q_ASSERT(tabLabel.isValid());
+        QVariant tabPosition = widget->property("tab_position");
+        Q_ASSERT(tabPosition.isValid());
+        QVariant tabIsCurrent = widget->property("tab_iscurrent");
+        Q_ASSERT(tabIsCurrent.isValid());
+        ui->tabWidget->insertTab(tabPosition.toInt(), widget, tabLabel.toString());
+        if (tabIsCurrent.toBool())
+            ui->tabWidget->setCurrentWidget(widget);
+    }
+    else
+    {
+        on_tabWidget_tabCloseRequested(ui->tabWidget->indexOf(widget));
+    }
+}
+
+void MainWindow::reallyRemoveTab(int index)
+{
+    QWidget *widget = ui->tabWidget->widget(index);
+    widget->setProperty("tab_label", ui->tabWidget->tabText(index));
+    widget->setProperty("tab_position", index);
+    widget->setProperty("tab_iscurrent", (index == ui->tabWidget->currentIndex()));
+    ui->tabWidget->removeTab(index);
+}
+
+// Auto-connected to ui->tabWidget's signal currentChanged(int)
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    QWidget *widget = ui->tabWidget->widget(index);
+    bool tabWithAccounts = (widget != ui->textBrowserTab);
+    ui->menuAccount->setEnabled(tabWithAccounts);
+}
+
+void MainWindow::accountItemActivated(const QModelIndex & index)
 {
     if (index.model() != m_accountTreeModel
             && index.model() != m_accountListModel)
@@ -292,7 +381,7 @@ void MainWindow::activatedAccount(const QModelIndex & index)
 
     // We create a new model for this list of splits and also a view
     // widget for this list.
-    QTableView *tableView = new QTableView(this); // FIXME: Parent object unclear
+    QTableView *tableView = new QTableView(ui->tabWidget); // FIXME: Is this parent correct?
     SplitListModel *smodel = new SplitListModel(Split::fromGList(slist), tableView);
     tableView->setModel(smodel);
     tableView->setAlternatingRowColors(true);
@@ -300,8 +389,6 @@ void MainWindow::activatedAccount(const QModelIndex & index)
     // Insert this as a new tab
     ui->tabWidget->addTab(tableView, account.getName());
     ui->tabWidget->setCurrentWidget(tableView);
-
-    // Right now it cannot be deleted - this will be implemented later.
 }
 
 // ////////////////////////////////////////////////////////////
@@ -361,8 +448,6 @@ void MainWindow::newFile()
 
         gnc_hook_run(HOOK_NEW_BOOK, NULL);
 
-        //gnc_gui_refresh_all ();
-
         /* Call this after re-enabling events. */
         gnc_book_opened (m_session);
 
@@ -372,7 +457,7 @@ void MainWindow::newFile()
 
 namespace
 {
-/** This is a workaround functor so that we can obtain a
+/** This is a workaround function object so that we can obtain a
  * QofPercentageFunc without extra boost::bind usage; obviously due to
  * the static member variable it will not work if multiple instances
  * are in use simultaneously */

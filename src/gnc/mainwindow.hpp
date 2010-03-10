@@ -52,19 +52,25 @@ public:
     ~MainWindow();
 
 public slots:
-    void anchorClicked(const QUrl &);
-    void activatedAccount(const QModelIndex & index);
-    void loadFileQueried(const QString &fileName);
+    void accountItemActivated(const QModelIndex & index);
+    void loadFileMaybe(const QString &fileName);
 
 protected:
     void closeEvent(QCloseEvent *event);
 
 private slots:
     void newFile();
-    void open();
-    bool save();
-    bool saveAs();
-    void about();
+    void on_actionOpen_triggered();
+    bool on_actionSave_triggered();
+    void on_actionAbout_triggered();
+    bool on_actionSave_as_triggered();
+    void on_tabWidget_tabCloseRequested(int index);
+    void on_tabWidget_currentChanged(int index);
+    void on_textBrowser_anchorClicked(const QUrl &);
+    void on_actionViewAccountTree_triggered(bool checked);
+    void on_actionViewAccountList_triggered(bool checked);
+    void on_actionViewWelcomepage_triggered(bool checked);
+    void on_actionViewClose_triggered();
     void documentWasModified();
 
 private:
@@ -78,6 +84,8 @@ private:
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
+    void viewOrHideTab(bool checkedView, QWidget *widget);
+    void reallyRemoveTab(int index);
 
     Ui::MainWindow *ui;
 

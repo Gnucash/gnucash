@@ -26,6 +26,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QSettings>
+#include <QFileInfo>
 
 namespace gnc
 {
@@ -73,12 +74,14 @@ void RecentFileMenu::usingFile(const QString& filename)
 
 void RecentFileMenu::updateMenu()
 {
+    setEnabled(!m_fileNames.isEmpty());
     for (int i = 0; i < std::min(int(MaxRecentFiles), m_fileNames.size()); ++i)
     {
         const QString& qs = m_fileNames.at(i);
         QAction *act = m_actionRecentFile[i];
         act->setVisible(true);
-        act->setText(tr("&%1 %2").arg(i+1).arg(qs));
+        act->setText(tr("&%1 %2").arg(i+1).arg(QFileInfo(qs).fileName()));
+        act->setStatusTip(qs);
         act->setData(qs);
     }
     for (int i = m_fileNames.size(); i < MaxRecentFiles; ++i)

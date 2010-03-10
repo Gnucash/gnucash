@@ -161,6 +161,9 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>&amp;Account</string>
     </property>
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <addaction name="actionOpenAccount"/>
     <addaction name="actionNewAccount"/>
     <addaction name="actionDeleteAccount"/>
@@ -182,10 +185,11 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>&amp;View</string>
     </property>
+    <addaction name="actionViewClose"/>
+    <addaction name="separator"/>
+    <addaction name="actionViewWelcomepage"/>
     <addaction name="actionViewAccountList"/>
     <addaction name="actionViewAccountTree"/>
-    <addaction name="separator"/>
-    <addaction name="action_Close_View"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -388,6 +392,17 @@ p, li { white-space: pre-wrap; }
     <string>&amp;Redo</string>
    </property>
   </action>
+  <action name="actionViewWelcomepage">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Welcome Page</string>
+   </property>
+  </action>
   <action name="actionViewAccountList">
    <property name="checkable">
     <bool>true</bool>
@@ -410,9 +425,9 @@ p, li { white-space: pre-wrap; }
     <string>Account &amp;Tree</string>
    </property>
   </action>
-  <action name="action_Close_View">
+  <action name="actionViewClose">
    <property name="text">
-    <string>&amp;Close View</string>
+    <string>&amp;Close Current Tab</string>
    </property>
   </action>
  </widget>
@@ -434,38 +449,6 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>-1</x>
      <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionViewAccountList</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>tableView</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>352</x>
-     <y>343</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionViewAccountTree</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>treeView</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>352</x>
-     <y>343</y>
     </hint>
    </hints>
   </connection>
