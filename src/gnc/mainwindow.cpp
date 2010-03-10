@@ -26,6 +26,7 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QToolBar>
 #include <QtGui/QProgressBar>
+#include <QtGui/QUndoStack>
 #include <QDebug>
 
 #include "config.h"
@@ -51,8 +52,13 @@ extern "C"
 #include "gnc/SplitListModel.hpp"
 #include "gnc/RecentFileMenu.hpp"
 
+#include "gnc/Cmd.hpp"
+
 namespace gnc
 {
+
+// Explicit instantiations to check for compiler errors
+template class Cmd<Account, QString>;
 
 inline QString errorToString(QofBackendError err)
 {
@@ -68,6 +74,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 MainWindow::MainWindow()
         : ui(new Ui::MainWindow)
+        , m_undoStack(new QUndoStack(this))
 {
     ui->setupUi(this);
 
@@ -79,6 +86,8 @@ MainWindow::MainWindow()
 
 //     connect(ui->labelMain, SIGNAL(linkActivated(const QString&)),
 //             this, SLOT(documentWasModified()));
+    connect(m_undoStack, SIGNAL(cleanChanged(bool)),
+            this, SLOT(documentCleanStateChanged(bool)));
 
     setWindowIcon(QIcon(":/pixmaps/gnucash-icon-32x32.png"));
 
@@ -150,7 +159,16 @@ void MainWindow::on_actionAbout_triggered()
 
 void MainWindow::documentWasModified()
 {
-//     setWindowModified(ui->textEdit->document()->isModified());
+    setWindowModified(true);
+}
+
+void MainWindow::documentCleanStateChanged(bool clean)
+{
+    bool unchanged = (clean == isWindowModified());
+
+    setWindowModified(!clean);
+    if (!unchanged)
+        updateWindowTitle();
 }
 
 // Auto-connected to ui->textBrowser's signal anchorClicked()
@@ -167,6 +185,21 @@ void MainWindow::createActions()
     ui->actionOpen->setShortcuts(QKeySequence::Open);
     ui->actionSave->setShortcuts(QKeySequence::Save);
     ui->actionSave_as->setShortcuts(QKeySequence::SaveAs);
+
+    QAction *redo = m_undoStack->createRedoAction(ui->menuEdit, tr("&Redo"));
+    redo->setIcon(QIcon(":/gtk-icons/gtk-redo.png"));
+    redo->setShortcuts(QKeySequence::Redo);
+    QAction *undo = m_undoStack->createUndoAction(ui->menuEdit, tr("&Undo"));
+    undo->setIcon(QIcon(":/gtk-icons/gtk-undo.png"));
+    undo->setShortcuts(QKeySequence::Undo);
+    ui->menuEdit->insertAction(ui->actionCut, undo);
+    ui->menuEdit->insertAction(ui->actionCut, redo);
+    ui->menuEdit->insertSeparator(ui->actionCut);
+
+    ui->actionCut->setShortcuts(QKeySequence::Cut);
+    ui->actionCopy->setShortcuts(QKeySequence::Copy);
+    ui->actionPaste->setShortcuts(QKeySequence::Paste);
+
     ui->actionViewClose->setShortcuts(QKeySequence::Close);
 
     connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
@@ -257,13 +290,18 @@ void MainWindow::setCurrentFile(const QString &fileName)
 //     ui->textEdit->document()->setModified(false);
     setWindowModified(false);
 
+    updateWindowTitle();
+}
+
+void MainWindow::updateWindowTitle()
+{
     QString shownName;
     if (curFile.isEmpty())
         shownName = "untitled.txt";
     else
         shownName = strippedName(curFile);
 
-    setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("Application")));
+    setWindowTitle(tr("%1[*]%2 - %3").arg(shownName).arg(isWindowModified() ? "(*)" : "").arg(tr("Application")));
 }
 
 QString MainWindow::strippedName(const QString &fullFileName)

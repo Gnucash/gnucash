@@ -32,6 +32,7 @@ class QMenu;
 class QPlainTextEdit;
 class QTextEdit;
 class QTabWidget;
+class QUndoStack;
 
 namespace Ui
 {
@@ -54,6 +55,7 @@ public:
 public slots:
     void accountItemActivated(const QModelIndex & index);
     void loadFileMaybe(const QString &fileName);
+    void documentCleanStateChanged(bool clean);
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -86,6 +88,7 @@ private:
     QString strippedName(const QString &fullFileName);
     void viewOrHideTab(bool checkedView, QWidget *widget);
     void reallyRemoveTab(int index);
+    void updateWindowTitle();
 
     Ui::MainWindow *ui;
 
@@ -94,6 +97,7 @@ private:
     QToolBar *fileToolBar;
     QToolBar *editToolBar;
     RecentFileMenu *menuRecentFiles;
+    QUndoStack *m_undoStack;
 
     Session m_session;
     AccountListModel *m_accountListModel;

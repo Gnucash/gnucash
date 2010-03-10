@@ -174,9 +174,6 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>&amp;Edit</string>
     </property>
-    <addaction name="action_Undo"/>
-    <addaction name="action_Redo"/>
-    <addaction name="separator"/>
     <addaction name="actionCut"/>
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
@@ -366,30 +363,6 @@ p, li { white-space: pre-wrap; }
   <action name="actionAbout_Qt">
    <property name="text">
     <string>About Qt</string>
-   </property>
-  </action>
-  <action name="action_Undo">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="gtk-icons.qrc">
-     <normaloff>:/gtk-icons/gtk-undo.png</normaloff>:/gtk-icons/gtk-undo.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Undo</string>
-   </property>
-  </action>
-  <action name="action_Redo">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="gtk-icons.qrc">
-     <normaloff>:/gtk-icons/gtk-redo.png</normaloff>:/gtk-icons/gtk-redo.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Redo</string>
    </property>
   </action>
   <action name="actionViewWelcomepage">
