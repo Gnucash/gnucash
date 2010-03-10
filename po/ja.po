@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.3.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-15 10:27-0500\n"
-"PO-Revision-Date: 2010-03-07 01:38+0900\n"
+"PO-Revision-Date: 2010-03-09 21:27+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -6496,7 +6496,7 @@ msgstr "火曜日"
 
 #: ../src/gnome/glade/sched-xact.glade.h:185
 msgid "Unselect All"
-msgstr "選択解除"
+msgstr "すべて選択解除"
 
 #: ../src/gnome/glade/sched-xact.glade.h:186
 msgid "Until:"
@@ -7754,9 +7754,8 @@ msgid "If active, the \"New Hierarchy\" window will be shown whenever the \"New 
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:4
-#, fuzzy
 msgid "If active, the new user window will be shown. Otherwise it will not be shown."
-msgstr "選択した場合新規ユーザーウィンドウが表示されます。選択しない場合、表示されません。"
+msgstr "選択した場合、新規ユーザーウィンドウが表示されます。選択しない場合、表示されません。"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:5
 msgid "Last pathname used"
@@ -7971,21 +7970,20 @@ msgid "Always reconcile to today"
 msgstr "照合日をいつも今日にする"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:2
-#, fuzzy
 msgid "If active, after reconciling a credit card account, prompt the user to enter a credit card payment. Otherwise do not prompt the user for this."
-msgstr "クレジットカード明細の照合の後で、クレジットカードの支払を入力させる"
+msgstr "選択した場合、クレジットカード勘定科目を照合した後にユーザーにクレジットカード支払を入力するように求めます。選択しない場合、入力は求められません。"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:3
 msgid "If active, all transactions marked as cleared in the register will appear already selected in the reconcile dialog. Otherwise no transactions will be initially selected."
-msgstr ""
+msgstr "選択した場合、記録簿で清算済みとマークされたすべての取引は、選択済みの状態で照合ダイアログに表示されます。選択しない場合、初期状態で選択される取引はありません。"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:4
 msgid "If active, always open the reconcile dialog using today's date for the statement date, regardless of previous reconciliations."
-msgstr ""
+msgstr "選択した場合、照合ダイアログを開いたとき、前回の照合に関係なく計算書の日付を本日に設定します。"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
 msgid "Pre-select cleared transactions"
-msgstr ""
+msgstr "清算済みの取引を事前に選択する"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
 #: ../src/gnome-utils/glade/preferences.glade.h:105
@@ -7994,27 +7992,27 @@ msgstr "手数料や利子の支払いが行われる勘定科目を照合する
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:7
 msgid "Prompt for credit card payment"
-msgstr ""
+msgstr "クレジットカード支払の入力を求める"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:8
 msgid "Prompt for interest charges"
-msgstr ""
+msgstr "利子手数料の入力を求める"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:1
 msgid "How many days in advance to notify the user."
-msgstr ""
+msgstr "何日前にユーザーに通知を行うか。"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:2
 msgid "How many days in advance to remind the user."
-msgstr ""
+msgstr "何日前にユーザーに通知を行うか。"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:3
 msgid "If active, any newly created scheduled transaction will have its 'auto create' flag set active by default. The user can change this flag during transaction creation, or at any later time by editing the scheduled transaction."
-msgstr ""
+msgstr "選択した場合、新規作成された予定取引は「自動作成」フラグがデフォルトで真になります。ユーザーは取引作成時、または後で予定取引のこのフラグを変更することができます。"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:4
 msgid "If active, any newly created scheduled transaction will have its 'notify' flag set by default. The user can change this flag during transaction creation, or at any later time by editing the scheduled transaction. This setting only has meaning if the create_auto setting is active."
-msgstr ""
+msgstr "選択した場合、新規作成された予定取引は「通知」フラグがデフォルトで真になります。ユーザーは取引作成時、または後で予定取引のこのフラグを変更することができます。この設定は自動生成が真の場合のみ意味を持ちます。"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:5
 msgid "Set the \"auto create\" flag by default"
@@ -8030,7 +8028,7 @@ msgstr "ファイルを開くときに「前回起動時以降」ダイアログ
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:8
 msgid "This setting controls whether the scheduled transactions \"since last run\" dialog is shown automatically when a data file is opened. This includes the initial opening of the data file when GnuCash starts. If this setting is active, show the dialog, otherwise it is not shown."
-msgstr ""
+msgstr "この設定は、予定取引の「前回起動時以降」ダイアログを、データファイルを開いた時に自動的に表示するかどうかを制御します。これは GnuCash を開始した時の最初に開くデータファイルも含みます。選択した場合、ダイアログが開かれます。選択しない場合、ダイアログは開かれません。"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:1
 msgid "Enables the \"Tip Of The Day\" when GnuCash starts up. If active, the dialog will be shown. Otherwise it will not be shown."
@@ -8240,7 +8238,7 @@ msgstr "記録簿に横罫線を表示する"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:49
 msgid "Show only the names of the leaf accounts in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Activating this option implies that you use unique leaf names."
-msgstr ""
+msgstr "記録簿と勘定科目選択ポップアップに勘定科目名の末端のみ表示します。デフォルトの動作は勘定科目のパスを含んだ完全名を表示します。このオプションを選択することは一意な末端勘定科目名を使用することを暗黙的に意味します。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:50
 msgid "Show splash screen"
@@ -8248,7 +8246,7 @@ msgstr "スプラッシュスクリーンを表示する"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:52
 msgid "Show two lines of information for each transaction in a register. This is the default setting for when a register is first opened. The setting can be changed at any time via the \"View->Double Line\" menu item."
-msgstr ""
+msgstr "記録簿で各取引の情報を2行で表示します。このでの設定は記録簿を最初に開いたときのデフォルトです。設定はいつでも「表示->2行」メニュー項目を通して変更できます。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:53
 msgid "Show vertical borders between columns in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked."
@@ -8259,12 +8257,10 @@ msgid "Show vertical borders in a register"
 msgstr "記録簿に縦罫線を表示する"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:55
-#, fuzzy
 msgid "Source of default account currency"
 msgstr "デフォルトの勘定科目通貨の情報源"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:56
-#, fuzzy
 msgid "Source of default report currency"
 msgstr "デフォルトの帳票通貨の情報源"
 
@@ -8275,20 +8271,19 @@ msgstr "ハードディスクにデータファイルを自動保存する分単
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:59
 msgid "This field sets the number of rows to show in a register. It does not actually affect the display of the contents of the window. It is only used to set the size of the window when first opened."
-msgstr ""
+msgstr "この欄には記録簿に表示される行の数を設定します。これは実際にウィンドウに表示される内容には影響しません。ウィンドウを最初に開いたときの大きさを設定するのに使用されるだけです。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:60
 msgid "This field specifies the default view style when opening a new register window. Possible values are \"ledger\", \"auto-ledger\" and \"journal\". The \"ledger\" setting says to show each transaction on one or two lines. The \"auto-ledger\" setting does the same, but also expands only the current transaction to show all splits. The \"journal\" setting shows all transactions in expanded form."
-msgstr ""
+msgstr "この欄には新規記録簿ウィンドウを開いたときのデフォルト表示スタイルを指定します。選択肢は「基本元帳」、「自動スプリット元帳」、および「取引仕訳帳」です。「基本元帳」は各取引を1行または2行で表示します。「自動スプリット元帳」は現在選択している取引がスプリット表示されることを除き基本元帳と同じです。「取引仕訳帳」はすべての取引をスプリット表示に展開します。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:61
-#, fuzzy
 msgid "This field specifies the number of automatic decimal places that will be filled in."
-msgstr "小数点以下に自動で挿入される桁数"
+msgstr "この欄は小数点以下に自動で挿入される桁数を指定します。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:62
 msgid "This key specifies the maximum width of notebook tabs. If the text in the tab is longer than this value (the test is approximate) then the tab label will have the middle cut and replaced with an ellipsis."
-msgstr ""
+msgstr "この欄はタブの最大幅を指定します。テキストの (おおよその) 長さがこの値より大きい場合、タブ文字列の中間が削除され省略符号で表示されます。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:63
 msgid "This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting \"income_expense\" is for users who like to see negative expenses and positive income. The setting of \"credit\" is for users who want to see balances reflect the debit/credit status of the account. The setting \"none\" doesn't reverse the sign on any balances."
@@ -8296,7 +8291,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:64
 msgid "This setting chooses the way dates are displayed in GnuCash. Possible values for this setting are \"locale\" to use the system locale setting, \"ce\" for Continental Europe style dates, \"iso\" for ISO 8601 standard dates , \"uk\" for United Kingdom style dates, and \"us\" for United States style dates."
-msgstr ""
+msgstr "この設定では GnuCash でどのように日付を表示するかを選択します。選択肢は、システムのロケール設定形式を使用する「ロケール」、ヨーロッパ形式の「ヨーロッパ」、ISO 8861標準形式の「ISO」、英国形式の「英国」、および米国形式の「米国」です。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:65
 msgid "This setting controls how the labels on toolbar buttons are shown. If set to \"system\" then GnuCash will use the desktop setting for how to draw toolbar buttons. If set to \"icon\" then only icons will be show on toolbar buttons.. If set to \"text\" only the labels will be shown. If set to \"both\" then both icons and labels will be shown. If set to \"both-horiz\" then icons will be shown for all buttons with labels added on important buttons."
@@ -9012,14 +9007,12 @@ msgid "Clear the selection and unselect all accounts."
 msgstr "選択を解除してすべての勘定科目を非選択にする。"
 
 #: ../src/gnome-utils/dialog-options.c:932
-#, fuzzy
 msgid "Select Children"
-msgstr "列を選択"
+msgstr "子勘定科目を選択"
 
 #: ../src/gnome-utils/dialog-options.c:934
-#, fuzzy
 msgid "Select all descendents of selected account."
-msgstr "選択された勘定科目を削除する"
+msgstr "選択した勘定科目のすべての子勘定科目を選択します。"
 
 #: ../src/gnome-utils/dialog-options.c:940
 #: ../src/gnome-utils/dialog-options.c:1075
@@ -11228,9 +11221,8 @@ msgid "Close _Without Saving"
 msgstr "保存せずに閉じる(_W)"
 
 #: ../src/gnome-utils/gnc-main-window.c:1265
-#, fuzzy
 msgid "Unsaved Book"
-msgstr "決算する"
+msgstr "未保存の帳簿"
 
 #: ../src/gnome-utils/gnc-main-window.c:3722
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
@@ -11628,7 +11620,6 @@ msgid "Most recently opened file"
 msgstr "もっとも最近開いたファイル"
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:2
-#, fuzzy
 msgid "Next most recently opened file"
 msgstr "次に最近開いたファイル"
 
@@ -12091,7 +12082,6 @@ msgstr "インターネットバンキングの接続設定は \"AqBanking 設�
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:50
 #: ../src/import-export/hbci/glade/hbci.glade.h:47
-#, fuzzy
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now finished.  You can now invoke Online Banking actions on those accounts.\n"
 "\n"
@@ -12101,13 +12091,12 @@ msgid ""
 msgstr ""
 "インターネットバンキングの口座とGnuCashの勘定科目の対応付けが終了しました。もうインターネットバンキングの処理を実行できます。\n"
 "\n"
-"他の銀行、ユーザー、口座を追加したい場合は、またいつでもこのドルイドを起動できます。\n"
+"他の銀行、ユーザー、口座を追加したい場合は、またいつでもこのウィザードを起動できます。\n"
 "\n"
 "「適用」を押してください。"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:55
 #: ../src/import-export/hbci/glade/hbci.glade.h:52
-#, fuzzy
 msgid ""
 "This assistant helps you setting up your Online Banking connection with your bank.\n"
 "\n"
@@ -12124,7 +12113,7 @@ msgid ""
 "\n"
 "Press \"Cancel\" if you do not wish to setup any Online Banking connection now."
 msgstr ""
-"このドルイドではインターネットバンキングの設定の手助けを行います。\n"
+"このウィザードではインターネットバンキングの設定の手助けを行います。\n"
 "\n"
 "まず最初にあなたがご利用の銀行にインターネットバンキングの利用申込を行う必要があります。銀行がアクセスを許可したら以下のような情報を含んだ手紙を送ってきます。\n"
 "\n"
@@ -12606,9 +12595,8 @@ msgstr "CSVインポートデータ書式"
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:2
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:2
-#, fuzzy
 msgid "Close window when finished"
-msgstr "終了したらダイアログを閉じる"
+msgstr "終了時にウィンドウを閉じる"
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:3
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:3
@@ -13513,9 +13501,8 @@ msgid "_Ticker symbol or other abbreviation:"
 msgstr "銘柄記号またはその他の略号(_T):"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2235
-#, fuzzy
 msgid "_Exchange or abbreviation type:"
-msgstr "為替レート(_E):"
+msgstr "為替/略号の種類(_E):"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2446
 #: ../src/import-export/qif-import/druid-qif-import.c:2893
@@ -13771,9 +13758,8 @@ msgstr "デフォルトのQIF勘定科目名に設定"
 
 #: ../src/import-export/qif-import/qif.glade.h:63
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:2
-#, fuzzy
 msgid "Show some documentation-only pages in QIF Import assistant."
-msgstr "QIFインポートウィザードで解説ドキュメントのみのページを表示する。"
+msgstr "QIFインポートウィザードで解説文書のみのページを表示する。"
 
 #: ../src/import-export/qif-import/qif.glade.h:68
 msgid ""
@@ -13805,9 +13791,8 @@ msgid "_Imported transactions needing review:"
 msgstr "レビューの必要なインポートされた取引(_I):"
 
 #: ../src/import-export/qif-import/qif.glade.h:78
-#, fuzzy
 msgid "_Possible matches for the selected transaction:"
-msgstr "選択された新規取引に対して可能性のある複製"
+msgstr "選択した取引に対して一致している可能性がある取引(_P):"
 
 #: ../src/import-export/qif-import/qif.glade.h:79
 msgid "_Select or add a GnuCash account:"
@@ -13999,9 +13984,8 @@ msgid "Teller"
 msgstr "窓口"
 
 #: ../src/register/ledger-core/split-register.c:2207
-#, fuzzy
 msgid "Receipt"
-msgstr "受取"
+msgstr "レシート"
 
 #. src/app-utils/prefs.scm
 #: ../src/register/ledger-core/split-register.c:2208
@@ -14230,9 +14214,8 @@ msgid "sample:Memo field sample text string"
 msgstr "sample:摘要フィールドのサンプル文字列"
 
 #: ../src/register/ledger-core/split-register-layout.c:682
-#, fuzzy
 msgid "Type:T"
-msgstr "型:"
+msgstr "Type:T"
 
 #: ../src/register/ledger-core/split-register-layout.c:690
 msgid "sample:Notes field sample text string"
@@ -14380,19 +14363,16 @@ msgid "List"
 msgstr "一覧"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:1
-#, fuzzy
 msgid "Delete the currently selected report"
-msgstr "現在選択されている取引テンプレートを削除する"
+msgstr "現在選択している帳票を削除する"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:2
-#, fuzzy
 msgid "Exit the custom report dialog"
-msgstr "得意先の新規作成ダイアログを開く"
+msgstr "カスタム帳票ダイアログを終了する"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:3
-#, fuzzy
 msgid "Run the currently selected report"
-msgstr "現在の帳票を印刷する"
+msgstr "現在選択している帳票を作成する"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:4
 msgid "_Run"
@@ -14424,14 +14404,12 @@ msgid "Cols"
 msgstr "列"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:302
-#, fuzzy
 msgid "You must select a report to delete."
-msgstr "商品の種類を選択して下さい。"
+msgstr "削除する帳票を選択してください。"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:322
-#, fuzzy
 msgid "You must select a report to run."
-msgstr "通貨を指定して下さい。"
+msgstr "作成する帳票を選択してください。"
 
 #: ../src/report/report-gnome/dialog-style-sheet.c:140
 #, c-format
@@ -14554,7 +14532,7 @@ msgid "You cannot save to that file."
 msgstr "そのファイルには保存できません"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1444
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open the file %s. The error is: %s"
 msgstr "ファイル %s を開くことができませんでした。エラー: %s"
 
@@ -16592,58 +16570,51 @@ msgstr "メール: "
 #. src/business/business-reports/taxinvoice.eguile.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:944 ../intl-scm/guile-strings.c:1548
-#, fuzzy
 msgid "Website:"
 msgstr "URL:"
 
 #. src/business/business-reports/taxinvoice.eguile.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:946 ../intl-scm/guile-strings.c:1550
-#, fuzzy
 msgid "Invoice number:"
-msgstr "得意先請求書番号"
+msgstr "得意先請求書番号:"
 
 #. src/business/business-reports/taxinvoice.eguile.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:950 ../intl-scm/guile-strings.c:1554
-#, fuzzy
 msgid "Invoice date:"
-msgstr "得意先請求書備考"
+msgstr "得意先請求書日付:"
 
 #. src/business/business-reports/taxinvoice.eguile.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:952 ../intl-scm/guile-strings.c:1556
-#, fuzzy
 msgid "Due date:"
-msgstr "期日"
+msgstr "期日:"
 
 #. src/business/business-reports/taxinvoice.eguile.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:958 ../intl-scm/guile-strings.c:962
 #: ../intl-scm/guile-strings.c:1562 ../intl-scm/guile-strings.c:1566
-#, fuzzy
 msgid "<h2>Tax Invoice</h2>"
-msgstr "<b>得意先請求書</b>"
+msgstr "<h2>税金請求書</h2>"
 
 #. src/business/business-reports/taxinvoice.eguile.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:960 ../intl-scm/guile-strings.c:1564
-#, fuzzy
 msgid "<p>No invoice has been selected -- please use the Options menu to select one."
-msgstr "有効な %s が選択されていません。オプションボタンをクリックして会社を選択してください。"
+msgstr "<p>得意先請求書が選択されていません -- オプションメニューから一つを選択してください。"
 
 #. src/business/business-reports/taxinvoice.eguile.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:964 ../intl-scm/guile-strings.c:1568
 msgid "<p>This report is designed for customer (sales) invoices only.\n"
-msgstr ""
+msgstr "<p>この帳票は得意先 (売上) 請求書を作成するためにのみ設計されています。\n"
 
 #. src/business/business-reports/taxinvoice.eguile.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:966 ../intl-scm/guile-strings.c:1570
-#, fuzzy
 msgid "<p>Please use the Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher."
-msgstr "Invoice、BillまたはExpence Voucherの代わりに表題に表示する文字列"
+msgstr "<p>オプションメニューから<em>得意先請求書</em>を選択してください。仕入先請求書、費用領収書ではありません。"
 
 #. src/business/business-reports/gnucash/report/invoice.scm
 #. src/business/business-reports/gnucash/report/easy-invoice.scm
@@ -17542,9 +17513,8 @@ msgstr "合計残高がゼロの勘定科目を含める"
 #: ../intl-scm/guile-strings.c:4866 ../intl-scm/guile-strings.c:5078
 #: ../intl-scm/guile-strings.c:5574 ../intl-scm/guile-strings.c:6288
 #: ../intl-scm/guile-strings.c:6500 ../intl-scm/guile-strings.c:6996
-#, fuzzy
 msgid "Include accounts with zero total (recursive) balances in this report"
-msgstr "印刷される残高に子勘定科目の残高を含めますか?"
+msgstr "帳票に (再帰的な) 合計残高0の勘定科目を含める"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -17931,9 +17901,8 @@ msgstr "子勘定科目を含める"
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2808 ../intl-scm/guile-strings.c:3604
-#, fuzzy
 msgid "Exclude transactions between selected accounts?"
-msgstr "選択されたすべての勘定科目の子勘定科目を含む"
+msgstr "選択した勘定科目間の取引を除外しますか?"
 
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/average-balance.scm
@@ -18029,9 +17998,8 @@ msgstr "利益"
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2836 ../intl-scm/guile-strings.c:3632
-#, fuzzy
 msgid "Profit (Gain minus Loss)"
-msgstr "利益(収入-支出)"
+msgstr "利益 (利得 - 損失)"
 
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/average-balance.scm
@@ -18269,16 +18237,14 @@ msgstr "運用中の残高"
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:2964 ../intl-scm/guile-strings.c:3760
-#, fuzzy
 msgid "Debit Value"
-msgstr "現在価値:"
+msgstr "借方金額"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:2966 ../intl-scm/guile-strings.c:3762
-#, fuzzy
 msgid "Credit Value"
-msgstr "現在価値:"
+msgstr "貸方金額"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
@@ -18384,9 +18350,8 @@ msgstr "2列表示"
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3050 ../intl-scm/guile-strings.c:3846
-#, fuzzy
 msgid "Display the value in transaction currency?"
-msgstr "取引の参照を表示しますか?"
+msgstr "取引通貨の値を表示しますか?"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
@@ -18412,23 +18377,20 @@ msgstr "貸方合計"
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3068 ../intl-scm/guile-strings.c:3864
-#, fuzzy
 msgid "Total Value Debits"
-msgstr "借方合計"
+msgstr "借方合計金額"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3070 ../intl-scm/guile-strings.c:3866
-#, fuzzy
 msgid "Total Value Credits"
-msgstr "貸方合計"
+msgstr "貸方合計金額"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3072 ../intl-scm/guile-strings.c:3868
-#, fuzzy
 msgid "Net Change"
-msgstr "変更済"
+msgstr "変更総額"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
@@ -18781,7 +18743,6 @@ msgstr "%s: %s - %s"
 #. src/report/standard-reports/gnucash/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:3228 ../intl-scm/guile-strings.c:3416
 #: ../intl-scm/guile-strings.c:4024 ../intl-scm/guile-strings.c:4212
-#, fuzzy
 msgid "Start Date"
 msgstr "開始日付"
 
@@ -18791,7 +18752,6 @@ msgstr "開始日付"
 #. src/report/standard-reports/gnucash/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:3230 ../intl-scm/guile-strings.c:3418
 #: ../intl-scm/guile-strings.c:4026 ../intl-scm/guile-strings.c:4214
-#, fuzzy
 msgid "End Date"
 msgstr "終了日付"
 
@@ -19398,7 +19358,7 @@ msgstr "日付キーに対する第二の小計"
 #: ../intl-scm/guile-strings.c:4300 ../intl-scm/guile-strings.c:5302
 #: ../intl-scm/guile-strings.c:5722 ../intl-scm/guile-strings.c:6724
 msgid "Void Transactions?"
-msgstr "取引を無効化しますか?"
+msgstr "無効化した取引の扱い?"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19430,9 +19390,8 @@ msgstr "帳票の通貨"
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:4308 ../intl-scm/guile-strings.c:5730
 #: ../intl-scm/guile-strings.c:7646 ../intl-scm/guile-strings.c:8020
-#, fuzzy
 msgid "Split Transaction"
-msgstr "スプリット取引(_P)"
+msgstr "スプリット取引"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -20323,9 +20282,8 @@ msgstr "複数通貨を利用している場合、為替は正確でないかも
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:4834 ../intl-scm/guile-strings.c:5136
 #: ../intl-scm/guile-strings.c:6256 ../intl-scm/guile-strings.c:6558
-#, fuzzy
 msgid "Budget to use."
-msgstr "予算オプション"
+msgstr "使用する予算。"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/budget-income-statement.scm
@@ -20337,61 +20295,58 @@ msgstr ""
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4838 ../intl-scm/guile-strings.c:6260
 msgid "Create report for a budget period range instead of the entire budget."
-msgstr ""
+msgstr "予算全体ではなくある予算期間の帳票を作成します。"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4840 ../intl-scm/guile-strings.c:6262
-#, fuzzy
 msgid "Range start"
-msgstr "範囲: "
+msgstr "期間開始"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4842 ../intl-scm/guile-strings.c:6264
 msgid "Select a budget period that begins the reporting range."
-msgstr ""
+msgstr "帳票を作成するの予算期間の開始を選択してください。"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4844 ../intl-scm/guile-strings.c:6266
-#, fuzzy
 msgid "Range end"
-msgstr "範囲: "
+msgstr "期間終了"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4846 ../intl-scm/guile-strings.c:6268
-#, fuzzy
 msgid "Select a budget period that ends the reporting range."
-msgstr "帳票の対象日を選択してください"
+msgstr "帳票を作成するの予算期間の終了を選択してください。"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4920 ../intl-scm/guile-strings.c:6342
 msgid "Reporting range end period cannot be less than start period."
-msgstr ""
+msgstr "帳票の終了期間を開始期間より前にすることはできません。"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4922 ../intl-scm/guile-strings.c:6344
-#, fuzzy, c-format
+#, c-format
 msgid "for Budget %s Period %u"
-msgstr "予算期間:"
+msgstr "予算 %s 期間 %u"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4924 ../intl-scm/guile-strings.c:6346
-#, fuzzy, c-format
+#, c-format
 msgid "for Budget %s Periods %u - %u"
-msgstr "予算期間:"
+msgstr "予算 %s 期間 %u - %u"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:4926 ../intl-scm/guile-strings.c:6348
-#, fuzzy, c-format
+#, c-format
 msgid "for Budget %s"
-msgstr "予算一覧"
+msgstr "予算 %s"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/budget-income-statement.scm
@@ -20755,9 +20710,8 @@ msgstr "商品の価格"
 #. src/report/standard-reports/gnucash/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:5374 ../intl-scm/guile-strings.c:6796
-#, fuzzy
 msgid "Invert prices"
-msgstr "得意先請求書"
+msgstr "価格を逆数にする"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/price-scatter.scm
@@ -20821,7 +20775,7 @@ msgstr "記帳済の価格"
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:5408 ../intl-scm/guile-strings.c:6830
 msgid "Plot commodity per currency rather than currency per commodity."
-msgstr ""
+msgstr "1商品数あたりの価格ではなく価格あたりの商品数でグラフを表示します。"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/price-scatter.scm
@@ -20833,19 +20787,19 @@ msgstr "マーカの色"
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:5418 ../intl-scm/guile-strings.c:6840
 msgid "Double-Weeks"
-msgstr ""
+msgstr "2週"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:5424 ../intl-scm/guile-strings.c:6846
 msgid "All Prices equal"
-msgstr ""
+msgstr "すべての価格が等しくなっています"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:5426 ../intl-scm/guile-strings.c:6848
 msgid "All the prices found are equal. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
-msgstr ""
+msgstr "すべての価格が等しくなっています。これによりグラフは一本の直線になります。残念なことにグラフツールが正しく扱えません。"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/price-scatter.scm
@@ -20895,7 +20849,7 @@ msgstr "同一の商品"
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:5442 ../intl-scm/guile-strings.c:6864
 msgid "Your selected commodity and the currency of the report are identical. It doesn't make sense to show prices for identical commodities."
-msgstr ""
+msgstr "商品と帳票の通貨が同一です。同一の商品の価格を表示することは意味がありません"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/price-scatter.scm
@@ -21635,9 +21589,8 @@ msgstr "帳票に使用するスタイルシートを選択してください"
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7368 ../intl-scm/guile-strings.c:7694
 #: ../intl-scm/guile-strings.c:8068
-#, fuzzy
 msgid "Could not open the file: "
-msgstr "ファイル %s を開くことができませんでした。エラー: %s"
+msgstr "ファイルを開くことができません: "
 
 #. src/report/report-system/report.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -21645,7 +21598,7 @@ msgstr "ファイル %s を開くことができませんでした。エラー: 
 #: ../intl-scm/guile-strings.c:7370 ../intl-scm/guile-strings.c:7696
 #: ../intl-scm/guile-strings.c:8070
 msgid ". The error is: "
-msgstr ""
+msgstr "。エラー: "
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:7372
@@ -22427,14 +22380,13 @@ msgstr "選択した勘定科目に税金関連の勘定科目が見つかりま
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7730 ../intl-scm/guile-strings.c:8104
 msgid "Selected Report Options:<BR>"
-msgstr "<b>選択された帳票オプション:</b>"
+msgstr "選択された帳票オプション:<BR>"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7732 ../intl-scm/guile-strings.c:8106
-#, fuzzy
 msgid "Subset of accounts"
-msgstr "勘定科目を選択"
+msgstr "勘定科目の部分集合"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -22508,23 +22460,20 @@ msgstr "選択した勘定科目の取引を表示する"
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7758 ../intl-scm/guile-strings.c:8132
-#, fuzzy
 msgid "Do not display transactions for selected accounts"
-msgstr "親勘定科目の小計を表示しない"
+msgstr "選択した勘定科目の取引を表示しない"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7760 ../intl-scm/guile-strings.c:8134
-#, fuzzy
 msgid "Do not include transactions outside of selected dates"
-msgstr "両方を表示する（合計に無効取引を含む）"
+msgstr "選択した日付以外の取引を含めない"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7762 ../intl-scm/guile-strings.c:8136
-#, fuzzy
 msgid "Include some transactions outside of selected dates"
-msgstr "選択されたすべての勘定科目の子勘定科目を含む"
+msgstr "選択した日付以外の取引も一部含む"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -22567,16 +22516,14 @@ msgstr "課税収入/控除費用"
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7778 ../intl-scm/guile-strings.c:8152
-#, fuzzy
 msgid "This report shows transaction detail for your accounts related to Income Taxes."
-msgstr "このレポートは課税収入と控除費用を表示します。"
+msgstr "この帳票は課税収入に関係した勘定科目の取引詳細を表示します。"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7782 ../intl-scm/guile-strings.c:8156
-#, fuzzy
 msgid "This page shows transaction detail for relevant Income Tax accounts."
-msgstr "このレポートは課税収入と控除費用を表示します。"
+msgstr "このページは課税収入の勘定科目に関係した取引詳細を表示します。"
 
 #. src/report/report-gnome/report-gnome.scm
 #. src/report/report-gnome/gnucash/report/report-gnome.scm
