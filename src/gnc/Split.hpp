@@ -46,6 +46,13 @@ class Transaction;
 typedef QList< ::Split*> SplitQList;
 
 
+/** Wrapper around a gnucash ::Split pointer with C++ methods for
+ * easier setter and getter access.
+ *
+ * Unfortunately this object has no information about whether the
+ * underlying gnucash ::Split object is still alive or has been
+ * deleted.
+ */
 class Split : public WeakPointer< ::Split >
 {
 public:
@@ -68,7 +75,7 @@ public:
     void setAction(const QString& v) { xaccSplitSetAction(get(), v.toUtf8()); }
 
     char getReconcile() const { return xaccSplitGetReconcile(get()); }
-    void setReconcile(const char& v) { xaccSplitSetReconcile(get(), v); }
+    void setReconcile(char v) { xaccSplitSetReconcile(get(), v); }
 
     Split getOtherSplit() const { return xaccSplitGetOtherSplit(get()); }
 

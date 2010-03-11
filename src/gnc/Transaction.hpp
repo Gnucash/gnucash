@@ -42,6 +42,13 @@ extern "C"
 namespace gnc
 {
 
+/** Wrapper around a gnucash ::Transaction pointer with C++ methods for
+ * easier setter and getter access.
+ *
+ * Unfortunately this object has no information about whether the
+ * underlying gnucash ::Transaction object is still alive or has been
+ * deleted.
+ */
 class Transaction : public WeakPointer< ::Transaction >
 {
 public:

@@ -31,9 +31,13 @@ namespace gnc
 
 /** A thin wrapper for a C object which is owned by someone else.
  *
- * This copies the interface of the boost::scoped_ptr, but with the
- * boost::shared_ptr possiblity of a custom deleter function because
- * we need that.
+ * This copies the interface of the boost::scoped_ptr, but in contrast
+ * to the boost::scoped_ptr this class does not take on ownership of
+ * the given pointer. Instead, the pointer is owned by someone else,
+ * and we hope nobody accesses this object after the pointer's object
+ * was deleted somewhere else. Unfortunately currently we have no
+ * information about whether the pointed-to object is still alive or
+ * already deleted. Sorry for that.
  */
 template<class T>
 class WeakPointer

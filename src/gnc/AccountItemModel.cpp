@@ -104,9 +104,10 @@ QVariant AccountTreeModel::data(const QModelIndex& index, int role) const
     //qDebug() << "data(), " << index;
     if (!index.isValid())
         return QVariant();
+
+    Account account(static_cast< ::Account*>(index.internalPointer()));
     if (role == Qt::DisplayRole)
     {
-        Account account(static_cast< ::Account*>(index.internalPointer()));
         switch (index.column())
         {
         case 0:

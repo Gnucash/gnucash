@@ -59,7 +59,7 @@ int SplitListModel::columnCount(const QModelIndex& parent) const
 //     if (!parent.isValid())
 //         return 0;
 //     else
-    return 6; // Fixed number for now
+    return 8; // Fixed number for now
 }
 
 QVariant SplitListModel::data(const QModelIndex& index, int role) const
@@ -67,10 +67,13 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
     //qDebug() << "data(), " << index;
     if (!index.isValid())
         return QVariant();
+
+    Split split(static_cast< ::Split*>(index.internalPointer()));
+    Transaction trans(split.getParent());
     if (role == Qt::DisplayRole)
     {
-        Split split(static_cast< ::Split*>(index.internalPointer()));
-        Transaction trans(split.getParent());
+        Numeric amount = split.getAmount(); // Alternatively: xaccSplitConvertAmount(split.get(), split.getAccount().get());
+        PrintAmountInfo printInfo(split.get(), false);
         switch (index.column())
         {
         case 0:
@@ -84,11 +87,17 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
         case 4:
             return QChar(split.getReconcile());
         case 5:
-        {
-            Numeric amount = split.getAmount(); // Alternatively: xaccSplitConvertAmount(split.get(), split.getAccount().get());
-            PrintAmountInfo printInfo(split.get(), true);
-            return amount.printAmount(printInfo);
-        }
+            if (amount.positive_p())
+                return amount.printAmount(printInfo);
+            else
+                return QString();
+        case 6:
+            if (amount.positive_p())
+                return QString();
+            else
+                return amount.neg().printAmount(printInfo);
+        case 7:
+            return split.getBalance().printAmount(printInfo);
         default:
             return QVariant();
         }
@@ -106,7 +115,12 @@ Qt::ItemFlags SplitListModel::flags(const QModelIndex &index) const
     Qt::ItemFlags result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     switch (index.column())
     {
+    case 0:
+    case 1:
     case 2:
+    case 4:
+        //case 5:
+        //case 6:
         // Allow write access as well
         return result | Qt::ItemIsEditable;
     default:
@@ -125,17 +139,21 @@ QVariant SplitListModel::headerData(int section, Qt::Orientation orientation, in
         switch (section)
         {
         case 0:
-            return QString("Date");
+            return tr("Date");
         case 1:
-            return QString("Num");
+            return tr("Num");
         case 2:
-            return QString("Description");
+            return tr("Description");
         case 3:
-            return QString("Account");
+            return tr("Transfer");
         case 4:
-            return QString("Reconciled?");
+            return tr("R?");
         case 5:
-            return QString("Amount");
+            return tr("Increase");
+        case 6:
+            return tr("Decrease");
+        case 7:
+            return tr("Balance");
         default:
             return QVariant();
         }
@@ -146,24 +164,66 @@ QVariant SplitListModel::headerData(int section, Qt::Orientation orientation, in
 
 bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    QUndoCommand* cmd = NULL;
     if (index.isValid() && role == Qt::EditRole)
     {
         Split split(static_cast< ::Split*>(index.internalPointer()));
         Transaction trans(split.getParent());
+
+        // "Editing" is done by creating a Cmd-object and adding it to
+        // the undo stack. That's in fact all that was needed to
+        // create an *undoable* edit of this data cell. Seems almost
+        // spooky, doesn't it?
         switch (index.column())
         {
-        case 2:
-            // We allow to edit column 2. "Editing" is done by
-            // creating a Cmd-object and adding it to the undo
-            // stack. That's in fact all that was needed to create an
-            // *undoable* edit of this data cell. Seems almost spooky,
-            // doesn't it?
-            m_undoStack->push(cmd::setTransactionDescription(trans, value.toString()));
-            emit dataChanged(index, index);
-            return true;
-        default:
-            return false;
+        case 0:
+        {
+            QDateTime date = value.toDateTime();
+            if (date.isValid())
+            {
+                cmd = cmd::setTransactionDate(trans, date);
+            }
+            break;
         }
+        case 1:
+            cmd = cmd::setTransactionNum(trans, value.toString());
+            break;
+        case 2:
+            cmd = cmd::setTransactionDescription(trans, value.toString());
+            break;
+        case 4:
+            cmd = cmd::setSplitReconcile(split, value.toChar().toLatin1());
+            break;
+        case 5:
+        {
+            bool x;
+            double v = value.toDouble(&x);
+            if (!x)
+            {
+                qDebug() << "Cannot convert string to gnc_numeric:" << value.toString();
+            }
+            else
+            {
+                Numeric n(v, 100, GNC_HOW_RND_ROUND);
+                qDebug() << "Does setting numeric work? numeric=" << n.to_string();
+                cmd = cmd::setSplitAmount(split, n);
+            }
+            // Sigh. This doesn't seem to work so far.
+            break;
+        }
+//         case 6:
+//             cmd = cmd::setSplitAmount(split, Numeric(value.toString()).neg());
+//             break;
+
+        default:
+            break;
+        }
+    }
+    if (cmd)
+    {
+        m_undoStack->push(cmd);
+        emit dataChanged(index, index);
+        return true;
     }
     return false;
 }

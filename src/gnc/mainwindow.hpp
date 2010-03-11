@@ -44,6 +44,11 @@ namespace gnc
 
 class RecentFileMenu;
 
+/** The main window of Cutecash.
+ *
+ * Some of the action parts in here should probably be refactored into
+ * separate classes/functions.
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -66,13 +71,13 @@ private slots:
     bool on_actionSave_triggered();
     void on_actionAbout_triggered();
     bool on_actionSave_as_triggered();
+    void on_actionCloseTab_triggered();
     void on_tabWidget_tabCloseRequested(int index);
     void on_tabWidget_currentChanged(int index);
     void on_textBrowser_anchorClicked(const QUrl &);
     void on_actionViewAccountTree_triggered(bool checked);
     void on_actionViewAccountList_triggered(bool checked);
     void on_actionViewWelcomepage_triggered(bool checked);
-    void on_actionViewClose_triggered();
     void documentWasModified();
 
 private:
@@ -92,10 +97,12 @@ private:
 
     Ui::MainWindow *ui;
 
-    QString curFile;
+    QString m_currentFilename;
 
-    QToolBar *fileToolBar;
-    QToolBar *editToolBar;
+    QToolBar *m_fileToolBar;
+    QToolBar *m_editToolBar;
+    QAction *m_actionUndo;
+    QAction *m_actionRedo;
     RecentFileMenu *menuRecentFiles;
     QUndoStack *m_undoStack;
 

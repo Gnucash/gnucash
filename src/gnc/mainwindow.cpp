@@ -69,6 +69,13 @@ inline QString errorToDescription(QofBackendError err)
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
+static const char* PROPERTY_TAB_LABEL = "tab_label";
+static const char* PROPERTY_TAB_POSITION = "tab_position";
+static const char* PROPERTY_TAB_ISCURRENT = "tab_iscurrent";
+static const char* PROPERTY_TAB_PREVIOUSPOS = "tab_previouspos";
+
+// ////////////////////////////////////////////////////////////
+
 MainWindow::MainWindow()
         : ui(new Ui::MainWindow)
         , m_undoStack(new QUndoStack(this))
@@ -125,13 +132,13 @@ void MainWindow::loadFileMaybe(const QString &fileName)
 // Auto-connected to ui->actionSave's signal triggered()
 bool MainWindow::on_actionSave_triggered()
 {
-    if (curFile.isEmpty())
+    if (m_currentFilename.isEmpty())
     {
         return on_actionSave_as_triggered();
     }
     else
     {
-        return saveFile(curFile);
+        return saveFile(m_currentFilename);
     }
 }
 
@@ -183,21 +190,21 @@ void MainWindow::createActions()
     ui->actionSave->setShortcuts(QKeySequence::Save);
     ui->actionSave_as->setShortcuts(QKeySequence::SaveAs);
 
-    QAction *redo = m_undoStack->createRedoAction(ui->menuEdit, tr("&Redo"));
-    redo->setIcon(QIcon(":/gtk-icons/gtk-redo.png"));
-    redo->setShortcuts(QKeySequence::Redo);
-    QAction *undo = m_undoStack->createUndoAction(ui->menuEdit, tr("&Undo"));
-    undo->setIcon(QIcon(":/gtk-icons/gtk-undo.png"));
-    undo->setShortcuts(QKeySequence::Undo);
-    ui->menuEdit->insertAction(ui->actionCut, undo);
-    ui->menuEdit->insertAction(ui->actionCut, redo);
+    m_actionRedo = m_undoStack->createRedoAction(ui->menuEdit, tr("&Redo"));
+    m_actionRedo->setIcon(QIcon(":/gtk-icons/gtk-redo.png"));
+    m_actionRedo->setShortcuts(QKeySequence::Redo);
+    m_actionUndo = m_undoStack->createUndoAction(ui->menuEdit, tr("&Undo"));
+    m_actionUndo->setIcon(QIcon(":/gtk-icons/gtk-undo.png"));
+    m_actionUndo->setShortcuts(QKeySequence::Undo);
+    ui->menuEdit->insertAction(ui->actionCut, m_actionUndo);
+    ui->menuEdit->insertAction(ui->actionCut, m_actionRedo);
     ui->menuEdit->insertSeparator(ui->actionCut);
 
     ui->actionCut->setShortcuts(QKeySequence::Cut);
     ui->actionCopy->setShortcuts(QKeySequence::Copy);
     ui->actionPaste->setShortcuts(QKeySequence::Paste);
 
-    ui->actionViewClose->setShortcuts(QKeySequence::Close);
+    ui->actionCloseTab->setShortcuts(QKeySequence::Close);
 
     connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
@@ -229,15 +236,18 @@ void MainWindow::createToolBars()
     connect(menuRecentFiles, SIGNAL(fileSelected(const QString &)),
             this, SLOT(loadFileMaybe(const QString&)));
 
-    fileToolBar = addToolBar(tr("File"));
-    fileToolBar->addAction(ui->actionNew);
-    fileToolBar->addAction(ui->actionOpen);
-    fileToolBar->addAction(ui->actionSave);
+    m_fileToolBar = addToolBar(tr("File"));
+    m_fileToolBar->addAction(ui->actionNew);
+    m_fileToolBar->addAction(ui->actionOpen);
+    m_fileToolBar->addAction(ui->actionSave);
+    m_fileToolBar->addAction(ui->actionCloseTab);
 
-    editToolBar = addToolBar(tr("Edit"));
-    editToolBar->addAction(ui->actionCut);
-    editToolBar->addAction(ui->actionCopy);
-    editToolBar->addAction(ui->actionPaste);
+    m_editToolBar = addToolBar(tr("Edit"));
+    m_editToolBar->addAction(m_actionUndo);
+    m_editToolBar->addAction(m_actionRedo);
+    m_editToolBar->addAction(ui->actionCut);
+    m_editToolBar->addAction(ui->actionCopy);
+    m_editToolBar->addAction(ui->actionPaste);
 }
 
 void MainWindow::createStatusBar()
@@ -283,7 +293,7 @@ bool MainWindow::maybeSave()
 void MainWindow::setCurrentFile(const QString &fileName)
 {
     menuRecentFiles->usingFile(fileName);
-    curFile = fileName;
+    m_currentFilename = fileName;
 //     ui->textEdit->document()->setModified(false);
     setWindowModified(false);
 
@@ -293,10 +303,10 @@ void MainWindow::setCurrentFile(const QString &fileName)
 void MainWindow::updateWindowTitle()
 {
     QString shownName;
-    if (curFile.isEmpty())
+    if (m_currentFilename.isEmpty())
         shownName = "untitled.txt";
     else
-        shownName = strippedName(curFile);
+        shownName = strippedName(m_currentFilename);
 
     setWindowTitle(tr("%1[*]%2 - %3").arg(shownName).arg(isWindowModified() ? "(*)" : "").arg(tr("Application")));
 }
@@ -309,8 +319,8 @@ QString MainWindow::strippedName(const QString &fullFileName)
 
 // ////////////////////////////////////////////////////////////
 
-// Auto-connected to ui->actionViewClose's signal triggered
-void MainWindow::on_actionViewClose_triggered()
+// Auto-connected to ui->actionCloseTab's signal triggered
+void MainWindow::on_actionCloseTab_triggered()
 {
     on_tabWidget_tabCloseRequested(ui->tabWidget->currentIndex());
 }
@@ -336,6 +346,9 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     }
     else
     {
+        QVariant prevPos = widget->property(PROPERTY_TAB_PREVIOUSPOS);
+        if (prevPos.isValid())
+            ui->tabWidget->setCurrentIndex(prevPos.toInt());
         ui->tabWidget->removeTab(index);
         delete widget;
     }
@@ -363,14 +376,19 @@ void MainWindow::viewOrHideTab(bool checked, QWidget *widget)
 {
     if (checked)
     {
-        QVariant tabLabel = widget->property("tab_label");
+        QVariant tabLabel = widget->property(PROPERTY_TAB_LABEL);
         Q_ASSERT(tabLabel.isValid());
-        QVariant tabPosition = widget->property("tab_position");
+        QVariant tabPosition = widget->property(PROPERTY_TAB_POSITION);
         Q_ASSERT(tabPosition.isValid());
-        QVariant tabIsCurrent = widget->property("tab_iscurrent");
-        Q_ASSERT(tabIsCurrent.isValid());
+        QVariant tabIsCurrentV = widget->property(PROPERTY_TAB_ISCURRENT);
+        Q_ASSERT(tabIsCurrentV.isValid());
+        bool tabIsCurrent = tabIsCurrentV.toBool();
+
+        if (tabIsCurrent)
+            widget->setProperty(PROPERTY_TAB_PREVIOUSPOS, ui->tabWidget->currentIndex());
+
         ui->tabWidget->insertTab(tabPosition.toInt(), widget, tabLabel.toString());
-        if (tabIsCurrent.toBool())
+        if (tabIsCurrent)
             ui->tabWidget->setCurrentWidget(widget);
     }
     else
@@ -382,10 +400,13 @@ void MainWindow::viewOrHideTab(bool checked, QWidget *widget)
 void MainWindow::reallyRemoveTab(int index)
 {
     QWidget *widget = ui->tabWidget->widget(index);
-    widget->setProperty("tab_label", ui->tabWidget->tabText(index));
-    widget->setProperty("tab_position", index);
-    widget->setProperty("tab_iscurrent", (index == ui->tabWidget->currentIndex()));
+    widget->setProperty(PROPERTY_TAB_LABEL, ui->tabWidget->tabText(index));
+    widget->setProperty(PROPERTY_TAB_POSITION, index);
+    widget->setProperty(PROPERTY_TAB_ISCURRENT, (index == ui->tabWidget->currentIndex()));
     ui->tabWidget->removeTab(index);
+    QVariant prevPos = widget->property(PROPERTY_TAB_PREVIOUSPOS);
+    if (prevPos.isValid())
+        ui->tabWidget->setCurrentIndex(prevPos.toInt());
 }
 
 // Auto-connected to ui->tabWidget's signal currentChanged(int)
@@ -422,6 +443,7 @@ void MainWindow::accountItemActivated(const QModelIndex & index)
     tableView->setAlternatingRowColors(true);
 
     // Insert this as a new tab
+    tableView->setProperty(PROPERTY_TAB_PREVIOUSPOS, ui->tabWidget->currentIndex());
     ui->tabWidget->addTab(tableView, account.getName());
     ui->tabWidget->setCurrentWidget(tableView);
 }
@@ -565,7 +587,8 @@ void MainWindow::loadFile(const QString &fileName)
                   "or you may not have write permission for the directory. "
                   "If you proceed you may not be able to save any changes. "
                   "What would you like to do? Open anyway? FIXME"));
-        if (QMessageBox::question(this, fmt1, fmt2)
+        if (QMessageBox::question(this, fmt1, fmt2,
+                                  QMessageBox::Ok | QMessageBox::Cancel)
                 == QMessageBox::Ok)
         {
             /* user told us to ignore locks. So ignore them. */
@@ -585,7 +608,8 @@ void MainWindow::loadFile(const QString &fileName)
              (ERR_SQL_DB_TOO_OLD == io_err))
     {
         if (QMessageBox::question(this, tr("Create New File?"),
-                                  tr("The file %1 does not exist. Do you want to create it?").arg(fileName))
+                                  tr("The file %1 does not exist. Do you want to create it?").arg(fileName),
+                                  QMessageBox::Ok | QMessageBox::Cancel)
                 == QMessageBox::Ok)
         {
             /* user told us to create a new database. Do it. */
@@ -613,7 +637,8 @@ void MainWindow::loadFile(const QString &fileName)
                                 tr("The file %1 has some errors: %2: %3. Open anyway?")
                                 .arg(fileName)
                                 .arg(errorToString(io_err))
-                                .arg(errorToDescription(io_err)))
+                                .arg(errorToDescription(io_err)),
+                                QMessageBox::Ok | QMessageBox::Cancel)
                                 == QMessageBox::Ok);
         }
     }
@@ -655,10 +680,11 @@ void MainWindow::loadFile(const QString &fileName)
         if (io_err != ERR_BACKEND_NO_ERR)
         {
             we_are_in_error = !(QMessageBox::question(this, tr("Error on Open"),
-                                tr("There was an error opening the file %1: %2: %3. FIXME")
+                                tr("There was an error opening the file %1: %2: %3. Continue? FIXME")
                                 .arg(fileName)
                                 .arg(errorToString(io_err))
-                                .arg(errorToDescription(io_err)))
+                                .arg(errorToDescription(io_err)),
+                                QMessageBox::Ok | QMessageBox::Cancel)
                                 == QMessageBox::Ok);
         }
     }
@@ -690,6 +716,7 @@ void MainWindow::loadFile(const QString &fileName)
         m_accountTreeModel = new AccountTreeModel(root, this);
         ui->treeView->setModel(m_accountTreeModel);
 
+        ui->treeViewTab->setProperty(PROPERTY_TAB_PREVIOUSPOS, ui->tabWidget->currentIndex());
         ui->tabWidget->setCurrentWidget(ui->treeViewTab);
     }
     else
@@ -736,7 +763,8 @@ bool MainWindow::saveFile(const QString &fileName)
     if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
     {
         if (QMessageBox::question(this, tr("Ignore Lock?"),
-                                  tr("The file %1 is locked. Should we ignore the lock?").arg(fileName))
+                                  tr("The file %1 is locked. Should we ignore the lock?").arg(fileName),
+                                  QMessageBox::Ok | QMessageBox::Cancel)
                 == QMessageBox::Ok)
         {
             /* user told us to ignore locks. So ignore them. */
@@ -750,7 +778,9 @@ bool MainWindow::saveFile(const QString &fileName)
              (ERR_SQL_DB_TOO_OLD == io_err))
     {
         if (QMessageBox::question(this, tr("Create New File?"),
-                                  tr("The file %1 does not exist. Should it be created?").arg(fileName)))
+                                  tr("The file %1 does not exist. Should it be created?").arg(fileName),
+                                  QMessageBox::Ok | QMessageBox::Cancel)
+                == QMessageBox::Ok)
         {
             /* user told us to create a new database. Do it. */
             qof_session_begin (new_session, newfile, FALSE, TRUE);

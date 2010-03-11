@@ -35,6 +35,8 @@ template class Cmd<Account, QString>;
 namespace cmd
 {
 
+// ////////////////////////////////////////////////////////////
+
 QUndoCommand* setSplitMemo(Split& t, const QString& newValue)
 {
     return new Cmd<Split, QString>(QObject::tr("Edit Split Memo"),
@@ -51,10 +53,29 @@ QUndoCommand* setSplitAction(Split& t, const QString& newValue)
 
 QUndoCommand* setSplitReconcile(Split& t, char newValue)
 {
-    return new Cmd<Split, char>(QObject::tr("Edit Split Reconcile"),
-                                t, &Split::setReconcile,
-                                &Split::getReconcile, newValue);
+    // Special third argument: The setter function takes a value
+    // directly, instead of a const-reference, so the template type
+    // must be given explicitly.
+    return new Cmd<Split, char, void (Split::*)(char)>(QObject::tr("Edit Split Reconcile"),
+            t, &Split::setReconcile,
+            &Split::getReconcile, newValue);
 }
+
+QUndoCommand* setSplitAmount(Split& t, const Numeric& newValue)
+{
+    return new Cmd<Split, Numeric>(QObject::tr("Edit Split Amount"),
+                                   t, &Split::setAmount,
+                                   &Split::getAmount, newValue);
+}
+
+QUndoCommand* setSplitValue(Split& t, const Numeric& newValue)
+{
+    return new Cmd<Split, Numeric>(QObject::tr("Edit Split Value"),
+                                   t, &Split::setValue,
+                                   &Split::getValue, newValue);
+}
+
+// ////////////////////////////////////////////////////////////
 
 QUndoCommand* setTransactionNum(Transaction& t, const QString& newValue)
 {

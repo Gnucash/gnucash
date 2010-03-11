@@ -30,6 +30,10 @@ PKG_CHECK_MODULES (GTHREAD gthread-2.0>=2.12.0)
 
 IF (MSVC)
   MESSAGE (STATUS "Hint: To create the import libraries for the gnome DLLs (e.g. gconf-2.lib), use the dlltool as follows: pexports bin/libgconf-2-4.dll > lib/libgconf-2.def ; dlltool -d lib/libgconf-2.def -D bin/libgconf-2-4.dll -l lib/gconf-2.lib")
+
+  # Disable the obnoxious min/max macros in MSVC - we want to use the
+  # function versions of them.
+  ADD_DEFINITIONS ( -DNOMINMAX )
 ENDIF (MSVC)
 
 # Libxml2

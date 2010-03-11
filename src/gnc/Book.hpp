@@ -37,6 +37,13 @@ namespace gnc
 {
 class Account;
 
+/** Wrapper around a gnucash ::QofBook pointer with C++ methods for
+ * easier setter and getter access.
+ *
+ * Unfortunately this object has no information about whether the
+ * underlying gnucash ::QofBook object is still alive or has been
+ * deleted.
+ */
 class Book : public WeakPointer< ::QofBook >
 {
 public:

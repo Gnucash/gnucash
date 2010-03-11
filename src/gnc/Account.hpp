@@ -42,6 +42,13 @@ namespace gnc
 typedef QList< ::Account*> AccountQList;
 
 
+/** Wrapper around a gnucash ::Account pointer with C++ methods for
+ * easier setter and getter access.
+ *
+ * Unfortunately this object has no information about whether the
+ * underlying gnucash ::Account object is still alive or has been
+ * deleted.
+ */
 class Account : public WeakPointer< ::Account >
 {
 public:

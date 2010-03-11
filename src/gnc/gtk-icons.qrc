@@ -1,6 +1,7 @@
 <RCC>
   <qresource>
     <file>gtk-icons/gtk-about.png</file>
+    <file>gtk-icons/gtk-close.png</file>
     <file>gtk-icons/gtk-copy.png</file>
     <file>gtk-icons/gtk-cut.png</file>
     <file>gtk-icons/gtk-new.png</file>

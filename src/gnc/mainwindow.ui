@@ -148,6 +148,8 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
     <addaction name="separator"/>
+    <addaction name="actionCloseTab"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -182,8 +184,6 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>&amp;View</string>
     </property>
-    <addaction name="actionViewClose"/>
-    <addaction name="separator"/>
     <addaction name="actionViewWelcomepage"/>
     <addaction name="actionViewAccountList"/>
     <addaction name="actionViewAccountTree"/>
@@ -398,7 +398,11 @@ p, li { white-space: pre-wrap; }
     <string>Account &amp;Tree</string>
    </property>
   </action>
-  <action name="actionViewClose">
+  <action name="actionCloseTab">
+   <property name="icon">
+    <iconset resource="gnucash.qrc">
+     <normaloff>:/gtk-icons/gtk-close.png</normaloff>:/gtk-icons/gtk-close.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Close Current Tab</string>
    </property>

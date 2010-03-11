@@ -40,8 +40,12 @@ namespace gnc
 
 class Book;
 
-/** ScopedPointer object around a QofSession object, which also owns the
- * QofSession object.
+/** Wrapper around a gnucash ::QofSession pointer with C++ methods for
+ * easier setter and getter access.
+ *
+ * Unfortunately this object has no information about whether the
+ * underlying gnucash ::QofSession object is still alive or has been
+ * deleted.
  */
 class Session : public WeakPointer< ::QofSession >
 {

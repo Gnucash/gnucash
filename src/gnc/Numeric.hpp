@@ -41,6 +41,12 @@ namespace gnc
 class Account;
 class Split;
 
+/** Conversion of a newly allocated gchar* to QString, which will
+ * correctly g_free() the newly allocated gchar* as well.
+ *
+ * If a gchar* does not have to be freed again, QString::fromUtf8() is
+ * sufficient and we do not need to define an extra function here.
+ */
 inline QString gchar_to_QString(gchar* tmp_string)
 {
     QString result = QString::fromUtf8(tmp_string);
@@ -65,6 +71,13 @@ inline ::Timespec toTimespec(const QDateTime& qdt)
 
 
 
+/** Wrapper around a gnucash ::GNCPrintAmountInfo structure with C++
+ * methods for easier setter and getter access.
+ *
+ * Since this class is a derived class of the original gnucash struct,
+ * it keeps the data by-value and its member variables will always
+ * exist as long as this object exists.
+ */
 class PrintAmountInfo : public ::GNCPrintAmountInfo
 {
 public:
@@ -86,10 +99,23 @@ public:
     static PrintAmountInfo integral() { return gnc_integral_print_info(); }
 };
 
+
+/** Wrapper around a gnucash ::gnc_numeric structure with C++ methods
+ * for easier setter and getter access.
+ *
+ * Since this class is a derived class of the original gnucash struct,
+ * it keeps the data by-value and its member variables will always
+ * exist as long as this object exists.
+ */
 class Numeric : public ::gnc_numeric
 {
 public:
     typedef ::gnc_numeric base_class;
+    Numeric()
+    {
+        base_class::num = 0;
+        base_class::denom = 1;
+    }
     Numeric(gint64 num, gint64 denom)
     {
         base_class::num = num;
@@ -101,6 +127,8 @@ public:
     {
         *this = double_to_gnc_numeric(in, denom, how);
     }
+
+    // Watch out: This conversion never seems to work!
     static bool string_to_numeric(const QString& str, Numeric& n)
     {
         return string_to_gnc_numeric(str.toUtf8(), &n);
@@ -145,6 +173,11 @@ public:
 inline bool operator==(const Numeric& a, const Numeric& b)
 {
     return a.equal(b);
+}
+
+inline bool operator!=(const Numeric& a, const Numeric& b)
+{
+    return !(a == b);
 }
 
 } // END namespace gnc
