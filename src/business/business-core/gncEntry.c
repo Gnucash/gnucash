@@ -249,15 +249,99 @@ gnc_entry_set_property (GObject         *object,
     }
 }
 
+/** Return displayable name */
+static gchar*
+impl_get_display_name(const QofInstance* inst)
+{
+    GncEntry* entry;
+    gchar* display_name;
+    gchar* s;
+
+    g_return_val_if_fail(inst != NULL, FALSE);
+    g_return_val_if_fail(GNC_IS_ENTRY(inst), FALSE);
+
+    entry = GNC_ENTRY(inst);
+    if (entry->order != NULL)
+    {
+        display_name = qof_instance_get_display_name(QOF_INSTANCE(entry->order));
+        s = g_strdup_printf("Entry in %s", display_name);
+        g_free(display_name);
+        return s;
+    }
+    if (entry->invoice != NULL)
+    {
+        display_name = qof_instance_get_display_name(QOF_INSTANCE(entry->invoice));
+        s = g_strdup_printf("Entry in %s", display_name);
+        g_free(display_name);
+        return s;
+    }
+    if (entry->bill != NULL)
+    {
+        display_name = qof_instance_get_display_name(QOF_INSTANCE(entry->bill));
+        s = g_strdup_printf("Entry in %s", display_name);
+        g_free(display_name);
+        return s;
+    }
+
+    return g_strdup_printf("Entry %p", inst);
+}
+
+/** Does this object refer to a specific object */
+static gboolean
+impl_refers_to_object(const QofInstance* inst, const QofInstance* ref)
+{
+    GncEntry* entry;
+
+    g_return_val_if_fail(inst != NULL, FALSE);
+    g_return_val_if_fail(GNC_IS_ENTRY(inst), FALSE);
+
+    entry = GNC_ENTRY(inst);
+
+    if (GNC_IS_ACCOUNT(ref))
+    {
+        Account* acc = GNC_ACCOUNT(ref);
+        return (entry->i_account == acc || entry->b_account == acc);
+    }
+    else if (GNC_IS_TAXTABLE(ref))
+    {
+        GncTaxTable* tt = GNC_TAXTABLE(ref);
+        return (entry->i_tax_table == tt || entry->b_tax_table == tt);
+    }
+
+    return FALSE;
+}
+
+/** Returns a list of my type of object which refers to an object.  For example, when called as
+        qof_instance_get_typed_referring_object_list(taxtable, account);
+    it will return the list of taxtables which refer to a specific account.  The result should be the
+    same regardless of which taxtable object is used.  The list must be freed by the caller but the
+    objects on the list must not.
+ */
+static GList*
+impl_get_typed_referring_object_list(const QofInstance* inst, const QofInstance* ref)
+{
+    if (!GNC_IS_ACCOUNT(ref) && !GNC_IS_TAXTABLE(ref))
+    {
+        return NULL;
+    }
+
+    return qof_instance_get_referring_object_list_from_collection(qof_instance_get_collection(inst), ref);
+}
+
 static void
 gnc_entry_class_init (GncEntryClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+    QofInstanceClass* qof_class = QOF_INSTANCE_CLASS(klass);
 
     gobject_class->dispose = gnc_entry_dispose;
     gobject_class->finalize = gnc_entry_finalize;
     gobject_class->set_property = gnc_entry_set_property;
     gobject_class->get_property = gnc_entry_get_property;
+
+    qof_class->get_display_name = impl_get_display_name;
+    qof_class->refers_to_object = impl_refers_to_object;
+    qof_class->get_typed_referring_object_list = impl_get_typed_referring_object_list;
 
     g_object_class_install_property
     (gobject_class,

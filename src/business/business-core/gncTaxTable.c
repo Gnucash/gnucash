@@ -276,15 +276,79 @@ gnc_taxtable_set_property (GObject         *object,
     }
 }
 
+/** Return displayable name */
+static gchar*
+impl_get_display_name(const QofInstance* inst)
+{
+    GncTaxTable* tt;
+
+    g_return_val_if_fail(inst != NULL, FALSE);
+    g_return_val_if_fail(GNC_IS_TAXTABLE(inst), FALSE);
+
+    tt = GNC_TAXTABLE(inst);
+    return g_strdup_printf("Tax table %s", tt->name);
+}
+
+/** Does this object refer to a specific object */
+static gboolean
+impl_refers_to_object(const QofInstance* inst, const QofInstance* ref)
+{
+    GncTaxTable* tt;
+
+    g_return_val_if_fail(inst != NULL, FALSE);
+    g_return_val_if_fail(GNC_IS_TAXTABLE(inst), FALSE);
+
+    tt = GNC_TAXTABLE(inst);
+
+    if (GNC_IS_ACCOUNT(ref))
+    {
+        GList* node;
+
+        for (node = tt->entries; node != NULL; node = node->next)
+        {
+            GncTaxTableEntry* tte = node->data;
+
+            if (tte->account == GNC_ACCOUNT(ref))
+            {
+                return TRUE;
+            }
+        }
+    }
+
+    return FALSE;
+}
+
+/** Returns a list of my type of object which refers to an object.  For example, when called as
+        qof_instance_get_typed_referring_object_list(taxtable, account);
+    it will return the list of taxtables which refer to a specific account.  The result should be the
+    same regardless of which taxtable object is used.  The list must be freed by the caller but the
+    objects on the list must not.
+ */
+static GList*
+impl_get_typed_referring_object_list(const QofInstance* inst, const QofInstance* ref)
+{
+    if (!GNC_IS_ACCOUNT(ref))
+    {
+        return NULL;
+    }
+
+    return qof_instance_get_referring_object_list_from_collection(qof_instance_get_collection(inst), ref);
+}
+
 static void
 gnc_taxtable_class_init (GncTaxTableClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+    QofInstanceClass* qof_class = QOF_INSTANCE_CLASS(klass);
 
     gobject_class->dispose = gnc_taxtable_dispose;
     gobject_class->finalize = gnc_taxtable_finalize;
     gobject_class->set_property = gnc_taxtable_set_property;
     gobject_class->get_property = gnc_taxtable_get_property;
+
+    qof_class->get_display_name = impl_get_display_name;
+    qof_class->refers_to_object = impl_refers_to_object;
+    qof_class->get_typed_referring_object_list = impl_get_typed_referring_object_list;
 
     g_object_class_install_property
     (gobject_class,
