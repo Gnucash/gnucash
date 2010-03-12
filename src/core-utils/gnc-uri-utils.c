@@ -103,7 +103,7 @@ void gnc_uri_get_components (const gchar *uri,
     g_strfreev ( splituri );
 
     /* Check for "@" sign, but start from the end - the password may contain
-     * this sign as well */
+     * this sign as well
      */
     delimiter = g_strrstr ( url, "@" );
     if ( delimiter != NULL )
