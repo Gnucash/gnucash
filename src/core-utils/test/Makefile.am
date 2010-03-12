@@ -18,6 +18,7 @@ LDADD = \
 # that they should be executed, with more basic tests coming first.
 #
 TESTS = \
+  test-gnc-uri-utils \
   test-resolve-file-path
 
 GNC_TEST_DEPS = \
@@ -29,6 +30,7 @@ TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \
+  test-gnc-uri-utils \
   test-resolve-file-path
 
 

@@ -102,6 +102,9 @@ void gnc_uri_get_components (const gchar *uri,
     url = g_strdup (splituri[1]);
     g_strfreev ( splituri );
 
+    /* Check for "@" sign, but start from the end - the password may contain
+     * this sign as well */
+     */
     delimiter = g_strrstr ( url, "@" );
     if ( delimiter != NULL )
     {
@@ -110,15 +113,17 @@ void gnc_uri_get_components (const gchar *uri,
         tmpusername = url;
         tmphostname = delimiter + 1;
 
-        /* Check if there's a password too */
+        /* Check if there's a password too by looking for a :
+         * Start from the beginning this time to avoid possible :
+         * in the password */
         delimiter = g_strstr_len ( tmpusername, -1, ":" );
         if ( delimiter != NULL )
         {
             /* There is password in the url */
             delimiter[0] = '\0';
-            *username = g_strdup ( (const gchar*)tmpusername );
             *password = g_strdup ( (const gchar*)(delimiter+1) );
         }
+        *username = g_strdup ( (const gchar*)tmpusername );
     }
     else
     {
