@@ -2621,7 +2621,7 @@
                     doc (gnc:make-html-text         
                           (gnc:html-markup-p
                            (gnc:html-markup/format
-                      (_ "The following Account(s) have errors with their Income Tax code assignments (use 'Edit->Income Tax Options' to correct):")))))
+                      (_ "The following Account(s) have errors with their Income Tax code assignments (use 'Edit->Tax Report Options' to correct):")))))
                    (gnc:html-document-add-object! doc error-table)
                     (gnc:html-table-append-row!
                       error-table
@@ -2807,8 +2807,8 @@
                      (if (or (null? (gnc-get-current-book-tax-type))
                              (string=? (gnc-get-current-book-tax-type) "")
                              (string=? (gnc-get-current-book-tax-type) "Other"))
-                       (_ "The Income Tax Report is only available for valid Income Tax Entity Types. Go to the Edit->Income Tax Options dialog to change your Income Tax Entity Type selection and set up tax-related accounts.")
-                       (_ "No Tax Related accounts were found with your account selection. Change your selection or go to the Edit->Income Tax Options dialog to set up tax-related accounts.")))))
+                       (_ "The Income Tax Report is only available for valid Income Tax Entity Types. Go to the Edit->Tax Report Options dialog to change your Income Tax Entity Type selection and set up tax-related accounts.")
+                       (_ "No Tax Related accounts were found with your account selection. Change your selection or go to the Edit->Tax Report Options dialog to set up tax-related accounts.")))))
                  ;; or print selected report options
                  (gnc:html-document-add-object! 
                   doc (gnc:make-html-text         
