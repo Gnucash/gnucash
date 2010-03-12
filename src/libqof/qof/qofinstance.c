@@ -135,6 +135,10 @@ static void qof_instance_class_init(QofInstanceClass *klass)
 
     g_type_class_add_private(klass, sizeof(QofInstancePrivate));
 
+    klass->get_display_name = NULL;
+    klass->refers_to_object = NULL;
+    klass->get_typed_referring_object_list = NULL;
+
     g_object_class_install_property
     (object_class,
      PROP_GUID,
@@ -905,6 +909,136 @@ qof_instance_lookup_twin (const QofInstance *src, QofBook *target_book)
 
     LEAVE (" found twin=%p", twin);
     return twin;
+}
+
+/* Returns a displayable name to represent this object */
+gchar* qof_instance_get_display_name(const QofInstance* inst)
+{
+    g_return_val_if_fail( inst != NULL, NULL );
+
+    if ( QOF_INSTANCE_GET_CLASS(inst)->get_display_name != NULL )
+    {
+        return QOF_INSTANCE_GET_CLASS(inst)->get_display_name(inst);
+    }
+    else
+    {
+        /* Not implemented - return default string */
+        return g_strdup_printf("Object %s %p", 
+                            qof_collection_get_type(qof_instance_get_collection(inst)),
+                            inst);
+    }
+}
+
+typedef struct {
+    const QofInstance* inst;
+    GList* list;
+} GetReferringObjectHelperData;
+
+static void
+get_referring_object_instance_helper(QofInstance* inst, gpointer user_data)
+{
+    QofInstance** pInst = (QofInstance**)user_data;
+
+    if (*pInst == NULL)
+    {
+        *pInst = inst;
+    }
+}
+
+static void
+get_referring_object_helper(QofCollection* coll, gpointer user_data)
+{
+    QofInstance* first_instance = NULL;
+    GetReferringObjectHelperData* data = (GetReferringObjectHelperData*)user_data;
+
+    qof_collection_foreach(coll, get_referring_object_instance_helper, &first_instance);
+
+    if (first_instance != NULL)
+    {
+        GList* new_list = qof_instance_get_typed_referring_object_list(first_instance, data->inst);
+        data->list = g_list_concat(data->list, new_list);
+    }
+}
+
+/* Returns a list of objects referring to this object */
+GList* qof_instance_get_referring_object_list(const QofInstance* inst)
+{
+    GetReferringObjectHelperData data;
+
+    g_return_val_if_fail( inst != NULL, NULL );
+
+    /* scan all collections */
+    data.inst = inst;
+    data.list = NULL;
+
+    qof_book_foreach_collection(qof_instance_get_book(inst),
+                                    get_referring_object_helper,
+                                    &data);
+    return data.list;
+}
+
+static void
+get_typed_referring_object_instance_helper(QofInstance* inst, gpointer user_data)
+{
+    GetReferringObjectHelperData* data = (GetReferringObjectHelperData*)user_data;
+
+    if (qof_instance_refers_to_object(inst, data->inst))
+    {
+        data->list = g_list_prepend(data->list, inst);
+    }
+}
+
+GList*
+qof_instance_get_referring_object_list_from_collection(const QofCollection* coll, const QofInstance* ref)
+{
+    GetReferringObjectHelperData data;
+
+    g_return_val_if_fail( coll != NULL, NULL );
+    g_return_val_if_fail( ref != NULL, NULL );
+
+    data.inst = ref;
+    data.list = NULL;
+
+    qof_collection_foreach(coll, get_typed_referring_object_instance_helper, &data);
+    return data.list;
+}
+
+GList*
+qof_instance_get_typed_referring_object_list(const QofInstance* inst, const QofInstance* ref)
+{
+    g_return_val_if_fail( inst != NULL, NULL );
+    g_return_val_if_fail( ref != NULL, NULL );
+
+    if ( QOF_INSTANCE_GET_CLASS(inst)->get_typed_referring_object_list != NULL )
+    {
+        return QOF_INSTANCE_GET_CLASS(inst)->get_typed_referring_object_list(inst, ref);
+    }
+    else
+    {
+        /* Not implemented - by default, loop through all objects of this object's type and check
+           them individually. */
+        QofCollection* coll;
+
+        coll = qof_instance_get_collection(inst);
+        return qof_instance_get_referring_object_list_from_collection(coll, ref);
+    }
+}
+
+/* Check if this object refers to a specific object */
+gboolean qof_instance_refers_to_object(const QofInstance* inst, const QofInstance* ref)
+{
+    g_return_val_if_fail( inst != NULL, FALSE );
+    g_return_val_if_fail( ref != NULL, FALSE );
+
+    if ( QOF_INSTANCE_GET_CLASS(inst)->refers_to_object != NULL )
+    {
+        return QOF_INSTANCE_GET_CLASS(inst)->refers_to_object(inst, ref);
+    }
+    else
+    {
+        /* Not implemented - default = NO */
+        return FALSE;
+    }
 }
 
 /* =================================================================== */
