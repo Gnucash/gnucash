@@ -382,6 +382,10 @@ add_text_column(GtkTreeView *view, const gchar *title, int col_num)
     GtkTreeViewColumn *column;
 
     renderer = gtk_cell_renderer_text_new();
+    g_object_set(G_OBJECT(renderer),
+                 "foreground", "black",
+                 "foreground-set", TRUE,
+                 NULL);
     column = gtk_tree_view_column_new_with_attributes
              (title, renderer,
               "text", col_num,
@@ -462,6 +466,10 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
              "cell-background", DOWNLOADED_COL_COLOR,
              NULL);
     renderer = gtk_cell_renderer_text_new();
+    g_object_set(G_OBJECT(renderer),
+                 "foreground", "black",
+                 "foreground-set", TRUE,
+                 NULL);
     gtk_tree_view_column_pack_start(column, renderer, TRUE);
     gtk_tree_view_column_set_attributes(column, renderer,
                                         "text", DOWNLOADED_COL_ACTION_INFO,
