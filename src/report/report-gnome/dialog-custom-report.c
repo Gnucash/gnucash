@@ -302,18 +302,19 @@ on_delete_custom_report_clicked(GtkWidget *button,
     sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(crd->reportview));
 
     guid = get_custom_report_selection(crd, _("You must select a report to delete."));
-    report_name = scm_to_locale_string(scm_call_2(template_menu_name, guid, SCM_BOOL_F));
-
-    /* we must confirm the user wants to delete their precious custom report! */
-    if (!scm_is_null(guid)
-            && gnc_verify_dialog(crd->dialog, FALSE, "Are you sure you want to delete %s?", report_name))
+    if (!scm_is_null(guid))
     {
-        SCM del_report = scm_c_eval_string("gnc:delete-report");
-        scm_call_1(del_report, guid);
-        update_report_list(GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(crd->reportview)))
-                           , crd);
-    }
+        report_name = scm_to_locale_string(scm_call_2(template_menu_name, guid, SCM_BOOL_F));
 
+        /* we must confirm the user wants to delete their precious custom report! */
+        if (gnc_verify_dialog(crd->dialog, FALSE, "Are you sure you want to delete %s?", report_name))
+        {
+            SCM del_report = scm_c_eval_string("gnc:delete-report");
+            scm_call_1(del_report, guid);
+            update_report_list(GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(crd->reportview))),
+                               crd);
+        }
+    }
 }
 
 static void
