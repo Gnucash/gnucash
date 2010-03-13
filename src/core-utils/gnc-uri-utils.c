@@ -57,7 +57,7 @@ gboolean gnc_uri_is_file_uri (const gchar *uri)
 void gnc_uri_get_components (const gchar *uri,
                              gchar **protocol,
                              gchar **hostname,
-                             guint32 port,
+                             gint32 *port,
                              gchar **username,
                              gchar **password,
                              gchar **path)
@@ -68,7 +68,7 @@ void gnc_uri_get_components (const gchar *uri,
 
     *protocol = NULL;
     *hostname = NULL;
-    port      = 0;
+    *port      = 0;
     *username = NULL;
     *password = NULL;
     *path     = NULL;
@@ -135,19 +135,19 @@ void gnc_uri_get_components (const gchar *uri,
     delimiter = g_strstr_len ( tmphostname, -1, "/" );
     if ( delimiter != NULL )
     {
-         delimiter[0] = '\0';
-         if ( gnc_uri_is_file_protocol ( *protocol ) ) /* always return absolute file paths */
+        delimiter[0] = '\0';
+        if ( gnc_uri_is_file_protocol ( *protocol ) ) /* always return absolute file paths */
              *path = gnc_resolve_file_path ( (const gchar*)(delimiter+1) );
-         else /* path is no file path, so copy it as is */
-             *path = g_strdup ( (const gchar*)(delimiter+1) );
+        else /* path is no file path, so copy it as is */
+            *path = g_strdup ( (const gchar*)(delimiter+1) );
     }
 
     /* Check for a port specifier */
     delimiter = g_strstr_len ( tmphostname, -1, ":" );
     if ( delimiter != NULL )
     {
-         delimiter[0] = '\0';
-         port = g_ascii_strtoll ( (const gchar*)(delimiter+1), NULL, 0 );
+        delimiter[0] = '\0';
+        *port = g_ascii_strtoll ( delimiter+1, NULL, 0 );
     }
 
     *hostname = g_strdup ( (const gchar*)tmphostname );
@@ -162,12 +162,12 @@ gchar *gnc_uri_get_protocol (const gchar *uri)
 {
     gchar *protocol = NULL;
     gchar *hostname = NULL;
-    guint32 port = 0;
+    gint32 port     = 0;
     gchar *username = NULL;
     gchar *password = NULL;
     gchar *path     = NULL;
 
-    gnc_uri_get_components ( uri, &protocol, &hostname, port,
+    gnc_uri_get_components ( uri, &protocol, &hostname, &port,
                              &username, &password, &path );
 
     g_free (hostname);
@@ -182,12 +182,12 @@ gchar *gnc_uri_get_path (const gchar *uri)
 {
     gchar *protocol = NULL;
     gchar *hostname = NULL;
-    guint32 port = 0;
+    gint32 port = 0;
     gchar *username = NULL;
     gchar *password = NULL;
     gchar *path     = NULL;
 
-    gnc_uri_get_components ( uri, &protocol, &hostname, port,
+    gnc_uri_get_components ( uri, &protocol, &hostname, &port,
                              &username, &password, &path );
 
     g_free (protocol);
@@ -201,12 +201,12 @@ gchar *gnc_uri_get_path (const gchar *uri)
 /* Generates a normalized uri from the separate components */
 gchar *gnc_uri_create_uri (const gchar *protocol,
                            const gchar *hostname,
-                           guint32 port,
+                           gint32 port,
                            const gchar *username,
                            const gchar *password,
                            const gchar *path)
 {
-    gchar *userpass=NULL, *uri=NULL;
+    gchar *userpass=NULL, *portstr=NULL, *uri=NULL;
 
     g_return_val_if_fail( path != 0, NULL );
 
@@ -233,16 +233,24 @@ gchar *gnc_uri_create_uri (const gchar *protocol,
     if ( username != NULL )
     {
         if ( password != NULL )
-            userpass = g_strdup_printf ( "%s:%s@", username, password);
+            userpass = g_strdup_printf ( "%s:%s@", username, password );
         else
-            userpass = g_strdup_printf ( "%s@", username);
+            userpass = g_strdup_printf ( "%s@", username );
     }
+    else
+        userpass = g_strdup ( "" );
+
+    if ( port != 0 )
+        portstr = g_strdup_printf ( ":%d", port );
+    else
+        portstr = g_strdup ( "" );
 
     // XXX Do I have to add the slash always or are there situations
     //     it is in the path already ?
-    uri = g_strconcat ( protocol, "://", userpass, hostname, "/", path, NULL );
+    uri = g_strconcat ( protocol, "://", userpass, hostname, portstr, "/", path, NULL );
 
     g_free ( userpass );
+    g_free ( portstr );
 
     return uri;
 
@@ -252,13 +260,13 @@ gchar *gnc_uri_normalize_uri (const gchar *uri, gboolean allow_password)
 {
     gchar *protocol = NULL;
     gchar *hostname = NULL;
-    guint32 port = 0;
+    gint32 port = 0;
     gchar *username = NULL;
     gchar *password = NULL;
     gchar *path     = NULL;
     gchar *newuri   = NULL;
 
-    gnc_uri_get_components ( uri, &protocol, &hostname, port,
+    gnc_uri_get_components ( uri, &protocol, &hostname, &port,
                              &username, &password, &path );
     if (allow_password)
         newuri = gnc_uri_create_uri ( protocol, hostname, port,

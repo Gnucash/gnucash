@@ -72,7 +72,7 @@
 void gnc_uri_get_components (const gchar *uri,
                              gchar **protocol,
                              gchar **hostname,
-                             guint32 port,
+                             gint32 *port,
                              gchar **username,
                              gchar **password,
                              gchar **path);
@@ -128,7 +128,7 @@ gchar *gnc_uri_get_path (const gchar *uri);
  *  Only the components that are provided will be inserted in the uri. However
  *  if no protocol has been provided, 'file' will be used as default protocol.
  *
- *  The function allocates memory for for the uri. The calling function should
+ *  The function allocates memory for the uri. The calling function should
  *  free this memory with g_free the uri is no longer needed.
  *
 *  @param protocol The protocol for this uri. If NULL,, 'file' will be used
@@ -149,7 +149,7 @@ gchar *gnc_uri_get_path (const gchar *uri);
 
 gchar *gnc_uri_create_uri (const gchar *protocol,
                            const gchar *hostname,
-                           guint32 port,
+                           gint32 port,
                            const gchar *username,
                            const gchar *password,
                            const gchar *path);
@@ -166,10 +166,10 @@ gchar *gnc_uri_create_uri (const gchar *protocol,
  *  returned uri when available.
  *  If no protocol has been provided, 'file' will be used as default protocol.
  *
- *  The function allocates memory for for the uri. The calling function should
+ *  The function allocates memory for the uri. The calling function should
  *  free this memory with g_free the uri is no longer needed.
  *
-*  @param uri The uri that schould be converted into a normalized uri
+ *  @param uri The uri that schould be converted into a normalized uri
  *  @param allow_password If set to TRUE, the normalized uri and the input uri
  *  has a password, this passworld will also be set in the normalized uri.
  *  Otherwise no password will be set in the normalized uri.

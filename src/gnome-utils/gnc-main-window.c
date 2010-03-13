@@ -1387,21 +1387,13 @@ gnc_main_window_generate_title (GncMainWindow *window)
         filename = g_strdup(_("Unsaved Book"));
     else
     {
-        gchar *protocol = NULL;
-        gchar *hostname = NULL;
-        gchar *username = NULL;
-        gchar *password = NULL;
-        gchar *path = NULL;
-        guint32 port = 0;
-
-        gnc_uri_get_components (book_id, &protocol, &hostname,
-                                port, &username, &password, &path);
-
-        if ( gnc_uri_is_file_protocol ( (const gchar*) protocol ) )
+        if ( gnc_uri_is_file_uri ( book_id ) )
         {
             /* The filename is a true file.
              * The Gnome HIG 2.0 recommends only the file name (no path) be used. (p15) */
+            gchar *path = gnc_uri_get_path ( book_id );
             filename = g_path_get_basename ( path );
+            g_free ( path );
         }
         else
         {
@@ -1409,11 +1401,6 @@ gnc_main_window_generate_title (GncMainWindow *window)
              * For this we will show access_method://username@database[:port] */
             filename = gnc_uri_normalize_uri (book_id, FALSE);
         }
-        g_free(protocol);
-        g_free(hostname);
-        g_free(username);
-        g_free(password);
-        g_free(path);
     }
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);

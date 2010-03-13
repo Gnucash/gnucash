@@ -420,7 +420,7 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
     /* Split the book-id
      * Format is protocol://username:password@hostname:port/dbname
        where username, password and port are optional) */
-    gnc_uri_get_components ( book_id, &protocol, &host, portnum,
+    gnc_uri_get_components ( book_id, &protocol, &host, &portnum,
                              &username, &password, &dbname );
 
     // Try to connect to the db.  If it doesn't exist and the create_if_nonexistent
@@ -579,7 +579,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
     /* Split the book-id
      * Format is protocol://username:password@hostname:port/dbname
        where username, password and port are optional) */
-    gnc_uri_get_components ( book_id, &protocol, &host, portnum,
+    gnc_uri_get_components ( book_id, &protocol, &host, &portnum,
                              &username, &password, &dbname );
     if ( portnum == 0 )
         portnum = PGSQL_DEFAULT_PORT;
