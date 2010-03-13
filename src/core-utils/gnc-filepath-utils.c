@@ -89,9 +89,7 @@ check_path_return_if_valid(gchar *path)
     return NULL;
 }
 
-/** @fn char * gnc_resolve_file_path (const char * filefrag)
- *
- *  @brief Create an absolute path when given a relative path;
+/** @brief Create an absolute path when given a relative path;
  *  otherwise return the argument.
  *
  *  @warning filefrag should be a simple path fragment. It shouldn't
@@ -180,8 +178,8 @@ gnc_resolve_file_path (const gchar * filefrag)
 
 /* ====================================================================== */
 
-/** @fn void gnc_validate_directory (const gchar *dirname)
- *  @brief Check that the supplied directory path exists, is a directory, and that the user has adequate permissions to use it.
+/** @brief Check that the supplied directory path exists, is a directory, and 
+ * that the user has adequate permissions to use it.
  *
  * @param dirname The path to check
  */

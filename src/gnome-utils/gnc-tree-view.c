@@ -592,7 +592,7 @@ gnc_tree_view_drop_ok_cb (GtkTreeView *view,
  *  underlying GtkTreeModel.  It propagates these changes to gconf to
  *  keep it in sync with the user's view of the tree.
  *
- *  @param sortable The underlying sortable model.
+ *  @param treesortable The underlying sortable model.
  *
  *  @param view A pointer to the GncTreeView that displays the model
  *  data.
@@ -781,7 +781,7 @@ gtk_tree_view_size_allocate_cb (GtkWidget *widget,
  *  that gconf visibility keys have been seen.  (This handles the
  *  'first run' case where gconf should manage a view but no keys yet
  *  exist in gconf.)  If so, the gconf visibility key is returned.
- *  Otherwise the "'default visible column' list is checked and a
+ *  Otherwise the 'default visible column' list is checked and a
  *  value of TRUE returned if the pref name is found, otherwise FALSE.
  *
  *  @param view A GncTreeView.
@@ -898,7 +898,7 @@ gnc_tree_view_update_visibility (GtkTreeViewColumn *column,
  *  is careful to prevent an infinite loop by blocking the
  *  "sort-column-changed" callback that is attached to the model.
  *
- *  @param widget The tree view.
+ *  @param view The tree view.
  *
  *  @param name The sort order enum (in string form). Either
  *  "ascending" or "descending".
@@ -937,7 +937,7 @@ gnc_tree_view_set_sort_order (GncTreeView *view,
  *  infinite loop by blocking the "sort-column-changed" callback that
  *  is attached to the model.
  *
- *  @param widget The tree view.
+ *  @param view The tree view.
  *
  *  @param name The name of the column that should be made the sort column.
  *
@@ -990,9 +990,9 @@ gnc_tree_view_set_sort_column (GncTreeView *view,
  *  This function is careful to prevent an infinite loop by blocking
  *  the "columns-changed" callback that is attached to the view.
  *
- *  @param widget The tree view.
+ *  @param view The tree view.
  *
- *  @param name A list of pointers to strings.  These strings are the
+ *  @param column_names A list of pointers to strings.  These strings are the
  *  names of the columns in the order they should appear.
  *
  *  @internal
@@ -1044,11 +1044,11 @@ gnc_tree_view_set_column_order (GncTreeView *view,
  *  @param client A pointer to the gconf client object from which
  *  detected a change in gconf.  Unused by this function.
  *
- *  @cnxn_id The identifier for the notification that this callback
+ *  @param cnxn_id The identifier for the notification that this callback
  *  represents.  Unused since this code only has a single notification
  *  request.
  *
- *  @entry A pointer to the key/value pair in gconf that changed.
+ *  @param entry A pointer to the key/value pair in gconf that changed.
  *
  *  @param data The tree view.
  *
@@ -1786,7 +1786,7 @@ gnc_tree_view_configure_columns (GncTreeView *view)
  *  @param resizable Whether to mark the column as user resizable.
  *  This marking is only relevant for fixed width columns.
  *
- *  @param column_sort_function The function that GtkTreeModelSort
+ *  @param column_sort_fn The function that GtkTreeModelSort
  *  will call to compare two rows to determine their displayed order.
  *
  *  @internal

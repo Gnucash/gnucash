@@ -44,7 +44,7 @@
  *  Uri's can take any of the following forms:
  *
  *  @li @c /some/filesystem/path A simple file system path (unix style)
- *  @li @c c:\\some\windows\path A simple file system path (Windows style)
+ *  @li @c c:\\some\\windows\\path A simple file system path (Windows style)
  *  @li @c proto://[[username[:password]@]hostname[:port]]/path (universal uri)
  *
  *  In the last form, anything in square brackets is optional.
@@ -62,9 +62,9 @@
  *  the 'file' protocol, this will be NULL
  *  @param port An optional port to connect to or 0 if the default port is to
  *  be used. For the 'file' protocol this is always 0 as well.
- *  @username Optional user name found in this uri or NULL if none is found.
- *  @password Optional password found in this uri or NULL if none is found.
- *  @path The path found in this uri. Note that if the protocol is a file based
+ *  @param username Optional user name found in this uri or NULL if none is found.
+ *  @param password Optional password found in this uri or NULL if none is found.
+ *  @param path The path found in this uri. Note that if the protocol is a file based
  *  protocol, the path will be converted to an absolute path.
  *
  */
@@ -82,7 +82,7 @@ void gnc_uri_get_components (const gchar *uri,
  *  Uri's can take any of the following forms:
  *
  *  @li @c /some/filesystem/path A simple file system path (unix style)
- *  @li @c c:\\some\windows\path A simple file system path (Windows style)
+ *  @li @c c:\\some\\windows\\path A simple file system path (Windows style)
  *  @li @c proto://[[username[:password]@]hostname[:port]]/path (universal uri)
  *
  *  In the last form, anything in square brackets is optional.
@@ -103,7 +103,7 @@ gchar *gnc_uri_get_protocol (const gchar *uri);
  *  Uri's can take any of the following forms:
  *
  *  @li @c /some/filesystem/path A simple file system path (unix style)
- *  @li @c c:\\some\windows\path A simple file system path (Windows style)
+ *  @li @c c:\\some\\windows\\path A simple file system path (Windows style)
  *  @li @c proto://[[username[:password]@]hostname[:port]]/path (universal uri)
  *
  *  In the last form, anything in square brackets is optional.
@@ -138,11 +138,11 @@ gchar *gnc_uri_get_path (const gchar *uri);
  *  @param port An optional port to set o, the uri, or 0 if no port is to be
  *  set. This will be ignored for the 'file' type protocols ('file', 'xml',
  *  'sqlite').
- *  @username Optional user name to set in the uri or NULL otherwise. This will
+ *  @param username Optional user name to set in the uri or NULL otherwise. This will
  *  be ignored for the 'file' type protocols ('file', 'xml', 'sqlite').
- *  @password Optional password to set in the uri or NULL otherwise. This will
+ *  @param password Optional password to set in the uri or NULL otherwise. This will
  *  be ignored for the 'file' type protocols ('file', 'xml', 'sqlite').
- *  @path The path to set in the uri.
+ *  @param path The path to set in the uri.
  *
  *  @return The normalized uri.
  */

@@ -401,10 +401,9 @@ gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page)
     }
 }
 
-/**
- * Save enough information about this page that it can be recreated next time
+/** Save enough information about this page that it can be recreated next time
  * the user starts gnucash.
- * @param page The page to save.
+ * @param plugin_page The page to save.
  * @param key_file A pointer to the GKeyFile data structure where the
  * page information should be written.
  * @param group_name The group name to use when saving data.

@@ -71,8 +71,8 @@ void        gnc_cellblock_set_cell (CellBlock *cellblock,
 BasicCell * gnc_cellblock_get_cell (CellBlock *cellblock,
                                     int row, int col);
 
-/** Searches by name for a particular cell in a CellBlock. Parameters @row
- *  and/or @col may be @c NULL.
+/** Searches by name for a particular cell in a CellBlock. Parameters @c row
+ *  and/or @c col may be @c NULL.
  *
  *  @param cellblock a ::CellBlock to search
  *

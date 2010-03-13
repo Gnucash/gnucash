@@ -704,7 +704,7 @@ gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
 /** Save enough information about this report page that it can be
  *  recreated next time the user starts gnucash.
  *
- *  @param page The page to save.
+ *  @param plugin_page The page to save.
  *
  *  @param key_file A pointer to the GKeyFile data structure where the
  *  page information should be written.

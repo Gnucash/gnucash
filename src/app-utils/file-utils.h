@@ -107,7 +107,7 @@ gint64 gnc_getline (gchar **line, FILE *file);
  *
  *  @param guid The guid of the book associated with this data file.
  *
- *  @param next_filename Return the next available file name if the
+ *  @param filename Return the next available file name if the
  *  data file cannot be found.
  *
  *  @return The name of the data file that was located.

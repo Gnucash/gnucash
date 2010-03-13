@@ -2201,7 +2201,7 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
  *  initializes the object private storage space.  It also adds the
  *  new object to a list (for memory tracking purposes).
  *
- *  @param view The new object instance created by the object system.
+ *  @param window The new object instance created by the object system.
  *
  *  @param klass A pointer to the class data structure for this
  *  object. */
@@ -3990,7 +3990,7 @@ gnc_ui_get_toplevel (void)
  *  This function is called via a vector off a generic window
  *  interface.
  *
- *  @param window_in A pointer to a generic window. */
+ *  @param window A pointer to a generic window. */
 static GtkWindow *
 gnc_main_window_get_gtk_window (GncWindow *window)
 {

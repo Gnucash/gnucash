@@ -53,11 +53,9 @@ gboolean gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid,
  */
 gboolean gnc_sql_slots_delete( GncSqlBackend* be, const GUID* guid );
 
-/**
- * gnc_sql_slots_load - Loads slots for an object from the db.
+/** Loads slots for an object from the db.
  *
  * @param be SQL backend
- * @param guid Object guid
  */
 void gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst );
 
@@ -71,6 +69,9 @@ void gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst );
  */
 void gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list );
 
+
+typedef QofInstance* (*BookLookupFn)( const GUID* guid, const QofBook* book );
+
 /**
  * gnc_sql_slots_load_for_sql_subquery - Loads slots for all objects whose guid is
  * supplied by a subquery.  The subquery should be of the form "SELECT DISTINCT guid FROM ...".
@@ -80,8 +81,6 @@ void gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list );
  * @param subquery Subquery SQL string
  * @param lookup_fn Lookup function to get the right object from the book
  */
-typedef QofInstance* (*BookLookupFn)( const GUID* guid, const QofBook* book );
-
 void gnc_sql_slots_load_for_sql_subquery( GncSqlBackend* be, const gchar* subquery,
         BookLookupFn lookup_fn );
 

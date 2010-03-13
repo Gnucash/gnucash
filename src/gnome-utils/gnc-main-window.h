@@ -161,9 +161,8 @@ GncPluginPage *gnc_main_window_get_current_page (GncMainWindow *window);
 
 /** Update the name of the page in the main window.
  *
- *  @parm page The page to be updated.
- *
- *  @parm name_in The new name for the page.
+ *  @param page The page to be updated.
+ *  @param name_in The new name for the page.
 */
 void
 main_window_update_page_name (GncPluginPage *page,
@@ -172,9 +171,8 @@ main_window_update_page_name (GncPluginPage *page,
 
 /** Update the color on the page tabs in the main window.
  *
- *  @parm page The page to be updated.
- *
- *  @parm color_in The new color string for the page tab.
+ *  @param page The page to be updated.
+ *  @param color_in The new color string for the page tab.
 */
 void
 main_window_update_page_color (GncPluginPage *page,

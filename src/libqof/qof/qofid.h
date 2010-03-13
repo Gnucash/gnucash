@@ -135,13 +135,14 @@ print error message if its bad  */
 
 */
 
-/** Is QOF operating in "alternate" dirty mode.  In normal mode,
- *  whenever an instance is dirtied, the collection (and therefore the
- *  book) is immediately marked as dirty.  In alternate mode, the
- *  collection is only marked dirty when a dirty instance is
- *  committed.  If a dirty instance is freed instead of committed, the
- *  dirty state of collection (and therefore the book) is never
- *  changed. */
+/** Is QOF operating in "alternate" dirty mode?
+ *
+ * In normal mode, whenever an instance is dirtied, the collection
+ * (and therefore the book) is immediately marked as dirty.  In
+ * alternate mode, the collection is only marked dirty when a dirty
+ * instance is committed.  If a dirty instance is freed instead of
+ * committed, the dirty state of collection (and therefore the book)
+ * is never changed. */
 gboolean qof_get_alt_dirty_mode (void);
 
 /** Set QOF into "alternate" dirty mode.  In normal mode, whenever an

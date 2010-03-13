@@ -980,7 +980,7 @@ static const gchar *style_names[] =
 /** Save enough information about this register page that it can be
  *  recreated next time the user starts gnucash.
  *
- *  @param page The page to save.
+ *  @param plugin_page The page to save.
  *
  *  @param key_file A pointer to the GKeyFile data structure where the
  *  page information should be written.
@@ -3178,7 +3178,7 @@ gnc_plugin_page_register_close_cb (gpointer user_data)
  *  responsible for finding all open registers containing the account
  *  and closing them.
  *
- *  @param accoung A pointer to the account that was changed.
+ *  @param account A pointer to the account that was changed.
  */
 static void
 gppr_account_destroy_cb (Account *account)

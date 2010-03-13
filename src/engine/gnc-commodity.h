@@ -277,7 +277,7 @@ const char *gnc_quote_source_get_old_internal_name (const gnc_quote_source *sour
  *  @param fullname The complete name of this commodity. E.G. "Acme
  *  Systems, Inc."
  *
- *  @param namespace An aggregation of commodities. E.G. ISO4217,
+ *  @param commodity_namespace An aggregation of commodities. E.G. ISO4217,
  *  Nasdaq, Downbelow, etc.
  *
  *  @param mnemonic An abbreviation for this stock.  For publicly
@@ -497,7 +497,7 @@ void  gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic);
  *
  *  @param cm A pointer to a commodity data structure.
  *
- *  @param namespace A pointer to the namespace for this commodity.
+ *  @param new_namespace A pointer to the namespace for this commodity.
  *  This string belongs to the caller and will be duplicated by the
  *  engine.
  */
@@ -663,7 +663,7 @@ int gnc_commodity_compare_void(const void * a, const void * b);
 /** Checks to see if the specified commodity namespace is the
  *  namespace for ISO 4217 currencies.
  *
- *  @param namespace The string to check.
+ *  @param commodity_namespace The string to check.
  *
  *  @return TRUE if the string indicates an ISO currency, FALSE otherwise. */
 gboolean gnc_commodity_namespace_is_iso(const char *commodity_namespace);
@@ -805,7 +805,7 @@ guint gnc_commodity_table_get_number_of_namespaces(const gnc_commodity_table* tb
  *
  *  @param table A pointer to the commodity table
  *
- *  @param namespace The new namespace to check.
+ *  @param commodity_namespace The new namespace to check.
  *
  *  @return 1 if the namespace exists. 0 if it doesn't exist, or the
  *  routine was passed a bad argument. */
@@ -835,7 +835,7 @@ GList * gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * t);
  *
  *  @param table A pointer to the commodity table
  *
- *  @param namespace The new namespace to be added.
+ *  @param commodity_namespace The new namespace to be added.
  *
  *  @param book The book that the new namespace will belong to.
  *
@@ -848,7 +848,7 @@ gnc_commodity_namespace * gnc_commodity_table_add_namespace(gnc_commodity_table 
  *
  *  @param table A pointer to the commodity table
  *
- *  @param namespace The new namespace to be added.
+ *  @param commodity_namespace The new namespace to be added.
  *
  *  @return The a pointer to the namespace found, or NULL if the
  *  namespace doesn't exist. */
@@ -860,7 +860,7 @@ gnc_commodity_namespace * gnc_commodity_table_find_namespace(const gnc_commodity
  *
  *  @param table A pointer to the commodity table
  *
- *  @param namespace The namespace to be deleted.
+ *  @param commodity_namespace The namespace to be deleted.
  *
  *  @note This routine will destroy any commodities that exist as part
  *  of this namespace.  Use it carefully. */
@@ -885,7 +885,7 @@ guint gnc_commodity_table_get_size(const gnc_commodity_table* tbl);
  *
  *  @param table A pointer to the commodity table
  *
- *  @param namespace A string indicating which commodities should be
+ *  @param commodity_namespace A string indicating which commodities should be
  *  returned. It is a required argument.
  *
  *  @return A pointer to the list of commodities.  NULL if an invalid
