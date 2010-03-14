@@ -22,7 +22,9 @@
 
 #include "config.h"
 
-#include <gtk/gtk.h>
+#ifdef GNOME
+# include <gtk/gtk.h>
+#endif
 #include <glib/gi18n.h>
 #include <time.h>
 #include <string.h>
@@ -1709,7 +1711,6 @@ gnc_commit_option(GNCOption *option)
     {
         SCM oops;
         char *section, *name;
-        GtkWidget *dialog;
         const gchar *message;
         const gchar *format = _("There is a problem with option %s:%s.\n%s");
 
@@ -1725,7 +1726,9 @@ gnc_commit_option(GNCOption *option)
         name = gnc_option_name(option);
         section = gnc_option_section(option);
 
-        dialog = gtk_message_dialog_new(NULL,
+#ifdef GNOME
+		{
+			GtkWidget *dialog = gtk_message_dialog_new(NULL,
                                         0,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_OK,
@@ -1733,8 +1736,15 @@ gnc_commit_option(GNCOption *option)
                                         section ? section : "(null)",
                                         name ? name : "(null)",
                                         message ? message : "(null)");
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+			gtk_dialog_run(GTK_DIALOG(dialog));
+			gtk_widget_destroy(dialog);
+		}
+#else
+		printf(format, 
+			   section ? section : "(null)",
+			   name ? name : "(null)",
+			   message ? message : "(null)");
+#endif
 
         if (name != NULL)
             free(name);

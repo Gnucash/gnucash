@@ -27,17 +27,13 @@
 
 #if defined(GNOME)
 #include <gtk/gtk.h>
-#elif defined(MOTIF)
-#include <Xm/Xm.h>
 #else
-**** No GUI selected ***
+/* **** No GUI selected *** */
 #endif
 
 #if defined(GNOME)
 typedef GtkWidget *gncUIWidget;
-#elif defined(MOTIF)
-typedef Widget gncUIWidget;
-#elif defined(KDE)
+#else
 typedef void *gncUIWidget;
 #endif
 
