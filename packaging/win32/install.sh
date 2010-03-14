@@ -390,6 +390,7 @@ function inst_guile() {
 #ifdef _MSC_VER
 # undef HAVE_STDINT_H
 # undef HAVE_INTTYPES_H
+# undef HAVE_UNISTD_H
 #endif
 EOF
         # Also, for MSVC compiler we need to create an import library

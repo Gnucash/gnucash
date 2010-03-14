@@ -50,6 +50,10 @@ FIND_LIBRARY (LIBINTL_LIBRARY NAMES intl)
 FIND_PATH (REGEX_INCLUDE_PATH NAMES regex.h
 		  PATHS /usr/include /opt/gnome/include)
 FIND_LIBRARY (REGEX_LIBRARY NAMES regex)
+IF (WIN32)
+  FIND_PATH (HTMLHELP_INCLUDE_PATH NAMES htmlhelp.h
+             PATHS /usr/include)
+ENDIF (WIN32)
 
 # ############################################################
 
