@@ -1472,7 +1472,7 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 		  <property name="xpad">0</property>
 		  <property name="ypad">0</property>
 		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		  <property name="width_chars">-1</property>
+		  <property name="width_chars">75</property>
 		  <property name="single_line_mode">False</property>
 		  <property name="angle">0</property>
 		</widget>
@@ -1810,7 +1810,7 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
       <child>
 	<widget class="GnomeDruidPageStandard" id="final_account_page">
 	  <property name="visible">True</property>
-	  <property name="title" translatable="yes">Setup new accounts</property>
+	  <property name="title" translatable="yes">Setup selected accounts</property>
 	  <signal name="prepare" handler="on_final_account_prepare"/>
 
 	  <child internal-child="vbox">
@@ -1823,9 +1823,13 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 	      <child>
 		<widget class="GtkLabel" id="finalAccountLabel">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">If you would like an account to have an opening balance, click on the row containing the account, click again in the opening balances column, and then enter the starting balance. All accounts except Equity and placeholder accounts may have an opening balance.
+		  <property name="label" translatable="yes">If you would like to change an account's name, click on the row containing the account, then click on the account name and change it.
 
-If you would like an account to be a placeholder account, just click the checkbox for that account.
+Some accounts are marked as "Placeholder". Placeholder accounts are used to create a hierarchy of accounts and normally do not have transactions or opening balances. If you would like an account to be a placeholder account, click the checkbox for that account.
+
+If you would like an account to have an opening balance, click on the row containing the account, then click on the account name and enter the starting balance.
+
+Note: all accounts except Equity and placeholder accounts may have an opening balance.
 </property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
@@ -1837,7 +1841,7 @@ If you would like an account to be a placeholder account, just click the checkbo
 		  <property name="xpad">1</property>
 		  <property name="ypad">1</property>
 		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		  <property name="width_chars">-1</property>
+		  <property name="width_chars">75</property>
 		  <property name="single_line_mode">False</property>
 		  <property name="angle">0</property>
 		</widget>
