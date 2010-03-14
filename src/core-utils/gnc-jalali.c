@@ -35,8 +35,6 @@
  */
 
 
-/* Copied from http://www.farsiweb.ir/wiki/Iranian_calendar */
-
 #include "gnc-jalali.h"
 
 

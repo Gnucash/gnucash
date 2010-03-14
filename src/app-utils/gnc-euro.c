@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "engine/gnc-ui-util.h"
+#include "app-utils/gnc-ui-util.h"
 
 /* local structs */
 typedef struct

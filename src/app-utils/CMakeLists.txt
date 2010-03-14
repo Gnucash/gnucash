@@ -34,12 +34,14 @@ SET (app_utils_HEADERS
   gnc-druid-provider-desc-file.h
   gnc-druid-provider-desc-multifile.h
   gnc-druid-provider-file-cb.h
+  gnc-euro.h
   gnc-exp-parser.h
   gnc-gettext-util.h
   gnc-help-utils.h
   gnc-helpers.h
   gnc-sx-instance-model.h
   gnc-ui-common.h
+  gnc-ui-util.h
   guile-util.h
   option-util.h
 )
@@ -62,10 +64,12 @@ SET (app_utils_SOURCES
   gnc-druid-provider-desc-file.c
   gnc-druid-provider-desc-multifile.c
   gnc-druid-provider-file-cb.c
+  gnc-euro.c
   gnc-exp-parser.c
   gnc-gettext-util.c
   gnc-helpers.c
   gnc-sx-instance-model.c
+  gnc-ui-util.c
   gncmod-app-utils.c
   guile-util.c
   option-util.c

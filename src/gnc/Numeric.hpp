@@ -29,7 +29,7 @@ extern "C"
 {
 #include "qof.h"
 #include "gnc-date.h"
-#include "engine/gnc-ui-util.h"
+#include "app-utils/gnc-ui-util.h"
 }
 
 #include <QString>

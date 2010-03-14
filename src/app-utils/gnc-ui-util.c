@@ -48,7 +48,7 @@
 #include "engine/Account.h"
 #include "engine/Transaction.h"
 #include "engine/gnc-engine.h"
-#include "engine/gnc-euro.h"
+#include "app-utils/gnc-euro.h"
 #include "engine/gnc-hooks.h"
 #include "engine/gnc-session.h"
 

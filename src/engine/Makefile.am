@@ -10,7 +10,6 @@ AM_CPPFLAGS = \
 	-I${top_srcdir}/src/gnc-module \
 	-I${top_srcdir}/src/libqof/qof \
 	${GLIB_CFLAGS} \
-	${GCONF_CFLAGS} \
 	${IGE_MAC_CFLAGS} \
 	${GUILE_INCS}
 
@@ -34,13 +33,11 @@ libgncmod_engine_la_SOURCES = \
   gnc-budget.c \
   gnc-commodity.c \
   gnc-engine.c \
-  gnc-euro.c \
   gnc-hooks.c \
   gnc-lot.c \
   gnc-pricedb.c \
   gnc-session.c \
   gnc-session-scm.c \
-  gnc-ui-util.c \
   gncmod-engine.c \
   swig-engine.c \
   kvp-scm.c \
@@ -78,13 +75,11 @@ gncinclude_HEADERS = \
   gnc-budget.h \
   gnc-commodity.h \
   gnc-engine.h \
-  gnc-euro.h \
   gnc-event.h \
   gnc-hooks.h \
   gnc-pricedb.h \
   gnc-session.h \
   gnc-session-scm.h \
-  gnc-ui-util.h \
   gncObject.h \
   kvp-scm.h \
   policy.h
