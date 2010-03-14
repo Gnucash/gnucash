@@ -133,6 +133,8 @@
                  new-acct (xaccAccountGetCommodity same-gnc-account))
                 (xaccAccountSetNotes
                  new-acct (xaccAccountGetNotes same-gnc-account))
+                (xaccAccountSetColor
+                 new-acct (xaccAccountGetColor same-gnc-account))
                 (xaccAccountSetCode
                  new-acct (xaccAccountGetCode same-gnc-account))))
 
