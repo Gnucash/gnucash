@@ -29,7 +29,14 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#else
+# include <io.h>
+# define close _close
+# define lseek _lseek
+# define read _read
+#endif
 
 #include "guile-mappings.h"
 #include "file-utils.h"

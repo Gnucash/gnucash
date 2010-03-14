@@ -27,7 +27,10 @@
 #include <libguile.h>
 #include <errno.h>
 #ifdef HAVE_UNISTD_H
-#include <unistd.h>
+# include <unistd.h>
+#else
+# include <io.h>
+# define close _close
 #endif
 #ifndef HAVE_STRPTIME
 #    include "strptime.h"

@@ -1198,7 +1198,7 @@
 #include <stdio.h>
 #include <glib.h>
 #include <math.h>
-#ifdef G_OS_WIN32
+#if defined(G_OS_WIN32) && !defined(_MSC_VER)
 #include <pow.h>
 #endif
 #include <string.h>
