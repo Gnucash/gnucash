@@ -874,7 +874,7 @@ gnc_post_file_open (const char * filename)
 }
 
 /* Routine that pops up a file chooser dialog
- * 
+ *
  * Note: this dialog is used when dbi is not enabled
  *       so the paths used in here are always file
  *       paths, never db uris.
@@ -1178,6 +1178,26 @@ gnc_file_do_save_as (const char* filename)
         return;
     }
 
+    /* oops ... file already exists ... ask user what to do... */
+    if (qof_session_save_may_clobber_data (new_session))
+    {
+        const char *format = _("The file %s already exists. "
+                               "Are you sure you want to overwrite it?");
+
+        /* if user says cancel, we should break out */
+        if (!gnc_verify_dialog (NULL, FALSE, format, newfile))
+        {
+            xaccLogDisable();
+            qof_session_destroy (new_session);
+            xaccLogEnable();
+            g_free (newfile);
+            save_in_progress--;
+            return;
+        }
+
+        /* Whoa-ok. Blow away the previous file. */
+    }
+
     /* XXX Would logging make sense for databases as well (mysql/postgres) ?
      * Currently the logpath is relative to the data file path.
      * Databases don't have a file path, so no logging will be
@@ -1211,23 +1231,6 @@ gnc_file_do_save_as (const char* filename)
     qof_event_resume();
 
     /* --------------- END CORE SESSION CODE -------------- */
-
-    /* oops ... file already exists ... ask user what to do... */
-    if (qof_session_save_may_clobber_data (new_session))
-    {
-        const char *format = _("The file %s already exists. "
-                               "Are you sure you want to overwrite it?");
-
-        /* if user says cancel, we should break out */
-        if (!gnc_verify_dialog (NULL, FALSE, format, newfile))
-        {
-            g_free (newfile);
-            save_in_progress--;
-            return;
-        }
-
-        /* Whoa-ok. Blow away the previous file. */
-    }
 
     gnc_file_save ();
     save_in_progress--;
