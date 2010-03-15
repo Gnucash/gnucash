@@ -39,7 +39,7 @@ struct test_strings_struct
     gchar *username;
     gchar *password;
     gchar *path;
-    guint32 port;
+    gint32 port;
     gchar *created_uri;
     gchar *normalized_uri;
     gboolean is_file_protocol;
@@ -209,7 +209,7 @@ main(int argc, char **argv)
         gchar *tusername = NULL;
         gchar *tpassword = NULL;
         gchar *tpath     = NULL;
-        guint32 tport    = 0;
+        gint32 tport     = 0;
         gboolean testresult;
 
         gnc_uri_get_components( strs[i].uri, &tprotocol, &thostname,
