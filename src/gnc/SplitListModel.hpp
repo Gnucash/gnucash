@@ -24,8 +24,15 @@
 #define GNC_SPLITLISTMODEL_HPP
 
 #include "gnc/Split.hpp"
+#include "gnc/QofEventWrapper.hpp"
+
+extern "C"
+{
+#include "engine/Transaction.h"
+}
 
 #include <QAbstractItemModel>
+#include <QHash>
 class QUndoStack;
 
 namespace gnc
@@ -38,6 +45,7 @@ class SplitListModel : public QAbstractItemModel
     Q_OBJECT
 public:
     SplitListModel(const SplitQList splits, QUndoStack* undoStack, QObject *parent = 0);
+    ~SplitListModel();
 
     QModelIndex parent(const QModelIndex &index) const { return QModelIndex(); }
     int rowCount(const QModelIndex& parent = QModelIndex()) const { return m_list.size(); }
@@ -50,10 +58,17 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
 
+public slots:
+    void transactionModified( ::Transaction* trans);
 
 protected:
     SplitQList m_list;
     QUndoStack* m_undoStack;
+    typedef QHash< ::Transaction*, int> TransactionRowHash;
+    TransactionRowHash m_hash;
+
+    /** The wrapper for receiving events from gnc. */
+    QofEventWrapper<SplitListModel, ::Transaction*> m_eventWrapper;
 };
 
 } // END namespace gnc

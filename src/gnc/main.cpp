@@ -186,15 +186,21 @@ main(int argc, char ** argv)
     gnc_module_init_business_core_xml_init();
     gnc_ui_util_init();
 
-    // From here on the new C++ code
-    QApplication app(argc, argv);
-    gnc::MainWindow mainWin;
-    mainWin.show();
+    int r;
+    {
+        // From here on the new C++ code
+        QApplication app(argc, argv);
+        gnc::MainWindow mainWin;
+        mainWin.show();
 
-    // Go into the main qt event loop
-    int r = app.exec();
+        // Go into the main qt event loop
+        r = app.exec();
 
-    // Shutdown
+        // Destruction of the MainWindow will trigger all the C++
+        // destructors
+    }
+
+    // Shutdown of the C side after all C++ was destructed already.
     //gnc_module_finalize_backend_dbi();
     qof_close();
     return r;

@@ -14,6 +14,7 @@ SET (gnc_SOURCES
   Book.cpp
   Cmd.cpp
   Numeric.cpp
+  QofEventWrapper.cpp
   RecentFileMenu.cpp
   Session.cpp
   Split.cpp
@@ -32,6 +33,7 @@ SET (gnc_HEADERS ${gnc_QOBJECT_HEADERS}
   Account.hpp
   Book.hpp
   Cmd.hpp
+  QofEventWrapper.hpp
   Session.hpp
   Split.hpp
   Transaction.hpp

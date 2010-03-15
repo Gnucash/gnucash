@@ -23,16 +23,30 @@
 #include "SplitListModel.hpp"
 #include "gnc/Transaction.hpp"
 #include "gnc/Cmd.hpp"
+#include "gnc/Session.hpp"
 #include <QDebug>
 #include <QUndoStack>
 
 namespace gnc
 {
 
+
+
 SplitListModel::SplitListModel(const SplitQList splits, QUndoStack* undoStack, QObject *parent)
         : QAbstractItemModel(parent)
         , m_list(splits)
         , m_undoStack(undoStack)
+        , m_eventWrapper(*this, &SplitListModel::transactionModified,
+                         GNC_ID_TRANS, QOF_EVENT_MODIFY)
+{
+    // Cache the mapping of transactions to split in the m_hash
+    for (int k = 0; k < m_list.size(); ++k)
+    {
+        m_hash.insert(Split(m_list[k]).getParent().get(), k);
+    }
+}
+
+SplitListModel::~SplitListModel()
 {
 }
 
@@ -60,6 +74,29 @@ int SplitListModel::columnCount(const QModelIndex& parent) const
 //         return 0;
 //     else
     return 8; // Fixed number for now
+}
+
+Qt::ItemFlags SplitListModel::flags(const QModelIndex &index) const
+{
+    //qDebug() << "flags()" << index;
+    if (!index.isValid())
+        return 0;
+
+    Qt::ItemFlags result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    switch (index.column())
+    {
+    case 0:
+    case 1:
+    case 2:
+    case 4:
+        //case 5:
+        //case 6:
+        // Allow write access as well
+        return result | Qt::ItemIsEditable;
+    default:
+        // Ensure read-only access only
+        return result;
+    }
 }
 
 QVariant SplitListModel::data(const QModelIndex& index, int role) const
@@ -104,29 +141,6 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
     }
     else
         return QVariant();
-}
-
-Qt::ItemFlags SplitListModel::flags(const QModelIndex &index) const
-{
-    //qDebug() << "flags()" << index;
-    if (!index.isValid())
-        return 0;
-
-    Qt::ItemFlags result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-    switch (index.column())
-    {
-    case 0:
-    case 1:
-    case 2:
-    case 4:
-        //case 5:
-        //case 6:
-        // Allow write access as well
-        return result | Qt::ItemIsEditable;
-    default:
-        // Ensure read-only access only
-        return result;
-    }
 }
 
 QVariant SplitListModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -222,10 +236,21 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
     if (cmd)
     {
         m_undoStack->push(cmd);
-        emit dataChanged(index, index);
+        // No dataChanged() signal here because it is emitted from the
+        // transactionChanged slot.
         return true;
     }
     return false;
+}
+
+void SplitListModel::transactionModified( ::Transaction* trans)
+{
+    if (m_hash.contains(trans))
+    {
+        int row = m_hash.value(trans);
+        emit dataChanged(index(row, 0), index(row, columnCount() - 1));
+    }
+
 }
 
 } // END namespace gnc
