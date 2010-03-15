@@ -44,6 +44,7 @@ extern "C"
 #include "engine/engine-helpers.h"
 #include "engine/gnc-engine.h"
 #include "app-utils/gnc-ui-util.h" // for gnc_ui_util_init()
+#include "app-utils/gnc-exp-parser.h" // for gnc_exp_parser_init()
 #include "swig-runtime.h"
 
 #include "backend/xml/gnc-backend-xml.h"
@@ -185,6 +186,7 @@ main(int argc, char ** argv)
     gnc_module_init_business_core_init();
     gnc_module_init_business_core_xml_init();
     gnc_ui_util_init();
+    gnc_exp_parser_init();
 
     int r;
     {
@@ -201,6 +203,7 @@ main(int argc, char ** argv)
     }
 
     // Shutdown of the C side after all C++ was destructed already.
+    gnc_exp_parser_shutdown();
     //gnc_module_finalize_backend_dbi();
     qof_close();
     return r;

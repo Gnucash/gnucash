@@ -24,6 +24,11 @@
 #include "gnc/Account.hpp"
 #include "gnc/Split.hpp"
 
+extern "C"
+{
+#include "app-utils/gnc-exp-parser.h"
+}
+
 namespace gnc
 {
 
@@ -37,12 +42,32 @@ PrintAmountInfo::PrintAmountInfo(const Split& split, bool use_symbol)
         : base_class(gnc_split_amount_print_info(split.get(), use_symbol))
 {}
 
-QString Numeric::printAmount(const PrintAmountInfo& info)
+QString Numeric::printAmount(const PrintAmountInfo& info) const
 {
     char buf[256];
     if (!xaccSPrintAmount (buf, *this, info))
         buf[0] = '\0';
     return QString::fromUtf8(buf);
+}
+
+QString Numeric::parse(const QString& str)
+{
+    QString errorString;
+
+    const char* input = str.toUtf8();
+    char *error_loc;
+    Numeric result;
+    gboolean p = gnc_exp_parser_parse(input, &result, &error_loc);
+    if (p)
+    {
+        *this = result;
+    }
+    else
+    {
+        errorString = QString::fromUtf8(gnc_exp_parser_error_string());
+    }
+
+    return errorString;
 }
 
 

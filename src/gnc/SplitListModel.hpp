@@ -23,6 +23,7 @@
 #ifndef GNC_SPLITLISTMODEL_HPP
 #define GNC_SPLITLISTMODEL_HPP
 
+#include "gnc/Account.hpp"
 #include "gnc/Split.hpp"
 #include "gnc/QofEventWrapper.hpp"
 
@@ -44,7 +45,7 @@ class SplitListModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    SplitListModel(const SplitQList splits, QUndoStack* undoStack, QObject *parent = 0);
+    SplitListModel(const Account& acc, QUndoStack* undoStack, QObject *parent = 0);
     ~SplitListModel();
 
     QModelIndex parent(const QModelIndex &index) const { return QModelIndex(); }
@@ -62,6 +63,7 @@ public slots:
     void transactionModified( ::Transaction* trans);
 
 protected:
+    Account m_account;
     SplitQList m_list;
     QUndoStack* m_undoStack;
     typedef QHash< ::Transaction*, int> TransactionRowHash;

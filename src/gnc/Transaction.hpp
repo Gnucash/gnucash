@@ -31,10 +31,11 @@ extern "C"
 #include "engine/Transaction.h"
 }
 
-#include "gnc/WeakPointer.hpp"
 #include "gnc/Account.hpp"
 #include "gnc/Book.hpp"
+#include "gnc/Commodity.hpp"
 #include "gnc/Numeric.hpp"
+#include "gnc/WeakPointer.hpp"
 
 #include <QString>
 #include <QList>
@@ -68,6 +69,14 @@ public:
 
     int countSplits() const { return xaccTransCountSplits(get()); }
 
+    Commodity getCurrency() const { return xaccTransGetCurrency(get()); }
+    void setCurrency(const Commodity& c) { xaccTransSetCurrency(get(), c.get()); }
+
+    Numeric getImbalanceValue() const { return xaccTransGetImbalanceValue(get()); }
+    bool isBalanced() const { return xaccTransIsBalanced(get()); }
+    Numeric getAccountConvRate(const Account& acc) const { return xaccTransGetAccountConvRate(get(), acc.get()); }
+
+    void setDatePosted(const QDate& t) { xaccTransSetDatePostedSecs(get(), QDateTime(t, QTime(12,0,0)).toTime_t()); }
     void setDatePosted(const QDateTime& t) { xaccTransSetDatePostedSecs(get(), t.toTime_t()); }
     void setDateEntered(const QDateTime& t) { xaccTransSetDateEnteredSecs(get(), t.toTime_t()); }
     QDateTime getDatePosted() const { return toQDateTime(xaccTransRetDatePostedTS(get())); }

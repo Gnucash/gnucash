@@ -160,7 +160,7 @@ QUndoCommand* setSplitValue(Split& t, const Numeric& newValue);
 QUndoCommand* setTransactionNum(Transaction& t, const QString& newValue);
 QUndoCommand* setTransactionDescription(Transaction& t, const QString& newValue);
 QUndoCommand* setTransactionNotes(Transaction& t, const QString& newValue);
-QUndoCommand* setTransactionDate(Transaction& t, const QDateTime& newValue);
+QUndoCommand* setTransactionDate(Transaction& t, const QDate& newValue);
 
 } // END namespace cmd
 

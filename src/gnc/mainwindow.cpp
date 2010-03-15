@@ -88,8 +88,6 @@ MainWindow::MainWindow()
 
     readSettings();
 
-//     connect(ui->labelMain, SIGNAL(linkActivated(const QString&)),
-//             this, SLOT(documentWasModified()));
     connect(m_undoStack, SIGNAL(cleanChanged(bool)),
             this, SLOT(documentCleanStateChanged(bool)));
 
@@ -163,14 +161,14 @@ void MainWindow::on_actionAbout_triggered()
 
 void MainWindow::documentWasModified()
 {
-    setWindowModified(true);
+    documentCleanStateChanged(false);
 }
 
-void MainWindow::documentCleanStateChanged(bool clean)
+void MainWindow::documentCleanStateChanged(bool documentIsClean)
 {
-    bool unchanged = (clean == isWindowModified());
+    bool unchanged = (documentIsClean == isWindowModified());
 
-    setWindowModified(!clean);
+    setWindowModified(!documentIsClean);
     if (!unchanged)
         updateWindowTitle();
 }
@@ -208,20 +206,17 @@ void MainWindow::createActions()
 
     connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
-
-//     connect(ui->actionCut, SIGNAL(triggered()), ui->textEdit, SLOT(cut()));
-//     connect(ui->actionCopy, SIGNAL(triggered()), ui->textEdit, SLOT(copy()));
-//     connect(ui->actionPaste, SIGNAL(triggered()), ui->textEdit, SLOT(paste()));
-
     connect(ui->actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
     ui->actionCut->setEnabled(false);
     ui->actionCopy->setEnabled(false);
 
-//     connect(ui->textEdit, SIGNAL(copyAvailable(bool)),
+//     connect(ui->textBrowser, SIGNAL(copyAvailable(bool)),
 //             ui->actionCut, SLOT(setEnabled(bool)));
-//     connect(ui->textEdit, SIGNAL(copyAvailable(bool)),
-//             ui->actionCopy, SLOT(setEnabled(bool)));
+    connect(ui->textBrowser, SIGNAL(copyAvailable(bool)),
+            ui->actionCopy, SLOT(setEnabled(bool)));
+    connect(ui->actionCopy, SIGNAL(triggered()),
+            ui->textBrowser, SLOT(copy()));
 
     connect(ui->treeView, SIGNAL(activated(const QModelIndex &)),
             this, SLOT(accountItemActivated(const QModelIndex&)));
@@ -257,7 +252,7 @@ void MainWindow::createStatusBar()
 
 void MainWindow::readSettings()
 {
-    QSettings settings("Trolltech", "Application Example");
+    QSettings settings("gnucash.org", "Cutecash");
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     QSize size = settings.value("size", QSize(400, 400)).toSize();
     resize(size);
@@ -267,7 +262,7 @@ void MainWindow::readSettings()
 
 void MainWindow::writeSettings()
 {
-    QSettings settings("Trolltech", "Application Example");
+    QSettings settings("gnucash.org", "Cutecash");
     settings.setValue("pos", pos());
     settings.setValue("size", size());
     menuRecentFiles->writeSettings(&settings, "RecentFiles");
@@ -275,7 +270,7 @@ void MainWindow::writeSettings()
 
 bool MainWindow::maybeSave()
 {
-    if (false)//ui->textEdit->document()->isModified())
+    if (isWindowModified())
     {
         QMessageBox::StandardButton ret;
         ret = QMessageBox::warning(this, tr("Application"),
@@ -294,8 +289,7 @@ void MainWindow::setCurrentFile(const QString &fileName)
 {
     menuRecentFiles->usingFile(fileName);
     m_currentFilename = fileName;
-//     ui->textEdit->document()->setModified(false);
-    setWindowModified(false);
+    documentCleanStateChanged(true);
 
     updateWindowTitle();
 }
@@ -432,15 +426,15 @@ void MainWindow::accountItemActivated(const QModelIndex & index)
         return;
     }
 
-    // We have an account, so obtains its list of splits now.
-    ::SplitList* slist = account.getSplitList();
-
-    // We create a new model for this list of splits and also a view
-    // widget for this list.
+    // We create a new model for this account which will query it for
+    // its splits, and also a view widget for this list.
     QTableView *tableView = new QTableView(ui->tabWidget); // FIXME: Is this parent correct?
-    SplitListModel *smodel = new SplitListModel(Split::fromGList(slist), m_undoStack, tableView);
+    SplitListModel *smodel = new SplitListModel(account, m_undoStack, tableView);
     tableView->setModel(smodel);
     tableView->setAlternatingRowColors(true);
+    tableView->scrollToBottom();
+    if (smodel->rowCount() > 0)
+        tableView->setCurrentIndex(smodel->index(smodel->rowCount() - 1, 0));
 
     // Insert this as a new tab
     tableView->setProperty(PROPERTY_TAB_PREVIOUSPOS, ui->tabWidget->currentIndex());

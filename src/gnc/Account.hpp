@@ -32,6 +32,7 @@ extern "C"
 }
 
 #include "gnc/WeakPointer.hpp"
+#include "gnc/Commodity.hpp"
 
 #include <QString>
 #include <QList>
@@ -59,6 +60,8 @@ public:
     QString getName() const { return QString::fromUtf8(xaccAccountGetName(get())); }
     QString getCode() const { return QString::fromUtf8(xaccAccountGetCode(get())); }
     QString getDescription() const { return QString::fromUtf8(xaccAccountGetDescription(get())); }
+    Commodity getCommodity() const { return xaccAccountGetCommodity(get()); }
+    int getCommoditySCU() const { return xaccAccountGetCommoditySCU(get()); }
 
     ::SplitList* getSplitList() const { return xaccAccountGetSplitList(get()); }
 

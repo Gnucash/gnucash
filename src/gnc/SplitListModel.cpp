@@ -26,15 +26,17 @@
 #include "gnc/Session.hpp"
 #include <QDebug>
 #include <QUndoStack>
+#include <QBrush>
 
 namespace gnc
 {
 
 
 
-SplitListModel::SplitListModel(const SplitQList splits, QUndoStack* undoStack, QObject *parent)
+SplitListModel::SplitListModel(const Account& acc, QUndoStack* undoStack, QObject *parent)
         : QAbstractItemModel(parent)
-        , m_list(splits)
+        , m_account(acc)
+        , m_list(Split::fromGList(acc.getSplitList()))
         , m_undoStack(undoStack)
         , m_eventWrapper(*this, &SplitListModel::transactionModified,
                          GNC_ID_TRANS, QOF_EVENT_MODIFY)
@@ -89,8 +91,8 @@ Qt::ItemFlags SplitListModel::flags(const QModelIndex &index) const
     case 1:
     case 2:
     case 4:
-        //case 5:
-        //case 6:
+    case 5:
+    case 6:
         // Allow write access as well
         return result | Qt::ItemIsEditable;
     default:
@@ -107,40 +109,93 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
 
     Split split(static_cast< ::Split*>(index.internalPointer()));
     Transaction trans(split.getParent());
-    if (role == Qt::DisplayRole)
+    Numeric amount = split.getValue(); // Alternatively: xaccSplitConvertAmount(split.get(), split.getAccount().get());
+    PrintAmountInfo printInfo(split.get(), false);
+
+    switch (index.column())
     {
-        Numeric amount = split.getAmount(); // Alternatively: xaccSplitConvertAmount(split.get(), split.getAccount().get());
-        PrintAmountInfo printInfo(split.get(), false);
-        switch (index.column())
+    case 0:
+        switch (role)
         {
-        case 0:
-            return trans.getDatePosted().date().toString(Qt::ISODate);
-        case 1:
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+            return trans.getDatePosted().date();
+        default:
+            return QVariant();
+        }
+    case 1:
+        switch (role)
+        {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
             return trans.getNum();
-        case 2:
+        default:
+            return QVariant();
+        }
+    case 2:
+        switch (role)
+        {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
             return trans.getDescription();
-        case 3:
+        default:
+            return QVariant();
+        }
+    case 3:
+        switch (role)
+        {
+        case Qt::DisplayRole:
             return split.getCorrAccountFullName();
-        case 4:
+        default:
+            return QVariant();
+        }
+    case 4:
+        switch (role)
+        {
+        case Qt::DisplayRole:
             return QChar(split.getReconcile());
-        case 5:
+        default:
+            return QVariant();
+        }
+    case 5:
+        switch (role)
+        {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
             if (amount.positive_p())
                 return amount.printAmount(printInfo);
             else
                 return QString();
-        case 6:
+        default:
+            return QVariant();
+        }
+    case 6:
+        switch (role)
+        {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
             if (amount.positive_p())
                 return QString();
             else
                 return amount.neg().printAmount(printInfo);
-        case 7:
-            return split.getBalance().printAmount(printInfo);
         default:
             return QVariant();
         }
-    }
-    else
+    case 7:
+        switch (role)
+        {
+        case Qt::DisplayRole:
+            return split.getBalance().printAmount(printInfo);
+        case Qt::ForegroundRole:
+            return split.getBalance().negative_p()
+                   ? QBrush(Qt::red)
+                   : QBrush();
+        default:
+            return QVariant();
+        }
+    default:
         return QVariant();
+    }
 }
 
 QVariant SplitListModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -192,7 +247,7 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
         {
         case 0:
         {
-            QDateTime date = value.toDateTime();
+            QDate date = value.toDate();
             if (date.isValid())
             {
                 cmd = cmd::setTransactionDate(trans, date);
@@ -209,26 +264,29 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
             cmd = cmd::setSplitReconcile(split, value.toChar().toLatin1());
             break;
         case 5:
+        case 6:
         {
-            bool x;
-            double v = value.toDouble(&x);
-            if (!x)
+            QString str(value.toString());
+            Numeric n;
+//             bool x;
+//             double v = value.toDouble(&x);
+            QString errmsg = n.parse(str);
+            if (errmsg.isEmpty())
             {
-                qDebug() << "Cannot convert string to gnc_numeric:" << value.toString();
+                qDebug() << "Does setting numeric work? numeric=" << n.to_string();
+                if (index.column() == 6)
+                    n = n.neg();
+//                 cmd = cmd::setSplitAmount(split, n);
+//                 m_undoStack->push(cmd);
+                cmd = cmd::setSplitValue(split, n);
             }
             else
             {
-                Numeric n(v, 100, GNC_HOW_RND_ROUND);
-                qDebug() << "Does setting numeric work? numeric=" << n.to_string();
-                cmd = cmd::setSplitAmount(split, n);
+                qDebug() << "Cannot convert string to gnc_numeric:" << str;
             }
             // Sigh. This doesn't seem to work so far.
             break;
         }
-//         case 6:
-//             cmd = cmd::setSplitAmount(split, Numeric(value.toString()).neg());
-//             break;
-
         default:
             break;
         }

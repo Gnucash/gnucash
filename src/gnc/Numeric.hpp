@@ -167,7 +167,13 @@ public:
 
     Numeric reduce() const { return gnc_numeric_reduce(*this); }
 
-    QString printAmount(const PrintAmountInfo& info);
+    QString printAmount(const PrintAmountInfo& info) const;
+
+    /** Parses the given string by the expression parser. On success,
+     * the value is written into this object and an empty string is
+     * returned. On error, this object is unchanged and a string with
+     * the error message is returned. */
+    QString parse(const QString& str);
 };
 
 inline bool operator==(const Numeric& a, const Numeric& b)

@@ -33,6 +33,7 @@ SET (gnc_HEADERS ${gnc_QOBJECT_HEADERS}
   Account.hpp
   Book.hpp
   Cmd.hpp
+  Commodity.hpp
   QofEventWrapper.hpp
   Session.hpp
   Split.hpp

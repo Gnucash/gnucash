@@ -81,28 +81,28 @@ QUndoCommand* setTransactionNum(Transaction& t, const QString& newValue)
 {
     return new Cmd<Transaction, QString>(QObject::tr("Edit Transaction Number"),
                                          t, &Transaction::setNum,
-                                         &Transaction::getNum, newValue);
+                                         t.getNum(), newValue);
 }
 
 QUndoCommand* setTransactionDescription(Transaction& t, const QString& newValue)
 {
     return new Cmd<Transaction, QString>(QObject::tr("Edit Transaction Description"),
                                          t, &Transaction::setDescription,
-                                         &Transaction::getDescription, newValue);
+                                         t.getDescription(), newValue);
 }
 
 QUndoCommand* setTransactionNotes(Transaction& t, const QString& newValue)
 {
     return new Cmd<Transaction, QString>(QObject::tr("Edit Transaction Notes"),
                                          t, &Transaction::setNotes,
-                                         &Transaction::getNotes, newValue);
+                                         t.getNotes(), newValue);
 }
 
-QUndoCommand* setTransactionDate(Transaction& t, const QDateTime& newValue)
+QUndoCommand* setTransactionDate(Transaction& t, const QDate& newValue)
 {
-    return new Cmd<Transaction, QDateTime>(QObject::tr("Edit Transaction Date"),
-                                           t, &Transaction::setDatePosted,
-                                           &Transaction::getDatePosted, newValue);
+    return new Cmd<Transaction, QDate>(QObject::tr("Edit Transaction Date"),
+                                       t, &Transaction::setDatePosted,
+                                       t.getDatePosted().date(), newValue);
 }
 
 
