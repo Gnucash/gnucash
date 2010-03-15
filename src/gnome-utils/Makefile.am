@@ -33,6 +33,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-book-close.c \
   dialog-commodity.c \
   dialog-file-access.c \
+  dialog-object-references.c \
   dialog-options.c \
   dialog-preferences.c \
   dialog-query-list.c \
@@ -111,6 +112,7 @@ gncinclude_HEADERS = \
   dialog-commodity.h \
   dialog-file-access.h \
   dialog-preferences.h \
+  dialog-object-references.h \
   dialog-options.h \
   dialog-query-list.h \
   dialog-reset-warnings.h \
