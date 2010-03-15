@@ -329,14 +329,22 @@ static void treeview_resized(GtkWidget* widget, GtkAllocation* allocation, GncCs
  * @param new_text The text the user selected
  * @param preview The display of the data being imported
  */
-static void column_type_edited(GtkCellRenderer* renderer, gchar* path,
-                               gchar* new_text, GncCsvPreview* preview)
+static void column_type_changed(GtkCellRenderer* renderer, gchar* path,
+                               GtkTreeIter* new_text_iter, GncCsvPreview* preview)
 {
     /* ncols is the number of columns in the data. */
     int i, ncols = preview->parse_data->column_types->len;
     /* store has the actual strings that appear in preview->ctreeview. */
     GtkTreeModel* store = gtk_tree_view_get_model(preview->ctreeview);
+    GtkTreeModel* model;
+    gint textColumn;
     GtkTreeIter iter;
+    gchar* new_text;
+
+    /* Get the new text */
+    g_object_get(renderer, "model", &model, "text-column", &textColumn, NULL);
+    gtk_tree_model_get(model, new_text_iter, textColumn, &new_text, -1);
+
     /* Get an iterator for the first (and only) row. */
     gtk_tree_model_get_iter_first(store, &iter);
 
@@ -344,7 +352,7 @@ static void column_type_edited(GtkCellRenderer* renderer, gchar* path,
     for (i = 0; i < ncols; i++)
     {
         /* We need all this stuff so that we can find out whether or not
-         * this was the column that was edited. */
+         * this was the column that was changed. */
         GtkCellRenderer* col_renderer; /* The renderer for this column. */
         /* The column in the treeview we are looking at */
         GtkTreeViewColumn* col = gtk_tree_view_get_column(preview->ctreeview, i);
@@ -354,7 +362,7 @@ static void column_type_edited(GtkCellRenderer* renderer, gchar* path,
         col_renderer = rend_list->data;
         g_list_free(rend_list);
 
-        /* If this is not the column that was edited ... */
+        /* If this is not the column that was changed ... */
         if (col_renderer != renderer)
         {
             /* The string that appears in the column */
@@ -373,7 +381,7 @@ static void column_type_edited(GtkCellRenderer* renderer, gchar* path,
             }
             g_free(contents);
         }
-        else /* If this is the column that was edited ... */
+        else /* If this is the column that was changed ... */
         {
             /* Set the text for this column to what the user selected. (See
              * comment above "Get the type string. ..." for why we set
@@ -963,8 +971,8 @@ static void gnc_csv_preview_update(GncCsvPreview* preview)
          * types. */
         g_object_set(G_OBJECT(crenderer), "model", cstores[i], "text-column", 0,
                      "editable", TRUE, "has-entry", FALSE, NULL);
-        g_signal_connect(G_OBJECT(crenderer), "edited",
-                         G_CALLBACK(column_type_edited), (gpointer)preview);
+        g_signal_connect(G_OBJECT(crenderer), "changed",
+                         G_CALLBACK(column_type_changed), (gpointer)preview);
 
         /* Add a single column for the treeview. */
         col = gtk_tree_view_column_new_with_attributes("", renderer, "text", i, NULL);
