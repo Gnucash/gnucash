@@ -266,6 +266,7 @@ src/gnome-utils/dialog-account.c
 src/gnome-utils/dialog-book-close.c
 src/gnome-utils/dialog-commodity.c
 src/gnome-utils/dialog-file-access.c
+src/gnome-utils/dialog-object-references.c
 src/gnome-utils/dialog-options.c
 src/gnome-utils/dialog-preferences.c
 src/gnome-utils/dialog-query-list.c
@@ -280,6 +281,7 @@ src/gnome-utils/druid-utils.c
 src/gnome-utils/glade/commodity.glade
 src/gnome-utils/glade/dialog-book-close.glade
 src/gnome-utils/glade/dialog-file-access.glade
+src/gnome-utils/glade/dialog-object-references.glade
 src/gnome-utils/glade/dialog-query-list.glade
 src/gnome-utils/glade/dialog-reset-warnings.glade
 src/gnome-utils/glade/druid-gconf-setup.glade
