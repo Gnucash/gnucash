@@ -58,6 +58,12 @@ public:
             : base_class(ptr)
     { }
 
+    void beginEdit() { xaccTransBeginEdit(get()); }
+    void commitEdit() { xaccTransCommitEdit(get()); }
+    void rollbackEdit() { xaccTransRollbackEdit(get()); }
+    bool isOpen() const { return xaccTransIsOpen(get()); }
+
+
     QString getNum() const { return QString::fromUtf8(xaccTransGetNum(get())); }
     void setNum(const QString& v) { xaccTransSetNum(get(), v.toUtf8()); }
 
@@ -68,6 +74,11 @@ public:
     void setNotes(const QString& v) { xaccTransSetNotes(get(), v.toUtf8()); }
 
     int countSplits() const { return xaccTransCountSplits(get()); }
+    Split findSplitByAccount(const Account& acc) const { return xaccTransFindSplitByAccount(get(), acc.get()); }
+    void appendSplit(Split& split) { xaccSplitSetParent(split.get(), get()); }
+    Split getSplit(int i) const { return xaccTransGetSplit(get(), i); }
+    int getSplitIndex(const Split& split) const { return xaccTransGetSplitIndex(get(), split.get()); }
+    SplitList* getSplitList() const { return xaccTransGetSplitList(get()); }
 
     Commodity getCurrency() const { return xaccTransGetCurrency(get()); }
     void setCurrency(const Commodity& c) { xaccTransSetCurrency(get(), c.get()); }

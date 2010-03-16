@@ -54,7 +54,19 @@ public:
     bool get_quote_flag() const { return gnc_commodity_get_quote_flag(get()); }
 
     bool is_currency() const { return gnc_commodity_is_currency(get()); }
+
+    bool equal(const Commodity& other) const { return gnc_commodity_equal(get(), other.get()); }
 };
+
+inline bool operator==(const Commodity& a, const Commodity& b)
+{
+    return a.equal(b);
+}
+
+inline bool operator!=(const Commodity& a, const Commodity& b)
+{
+    return !(a == b);
+}
 
 } // END namespace gnc
 

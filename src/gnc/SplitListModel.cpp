@@ -27,6 +27,9 @@
 #include <QDebug>
 #include <QUndoStack>
 #include <QBrush>
+#include <QMessageBox>
+
+#include "app-utils/gnc-ui-util.h" // for gnc_get_reconcile_str
 
 namespace gnc
 {
@@ -153,7 +156,8 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
         switch (role)
         {
         case Qt::DisplayRole:
-            return QChar(split.getReconcile());
+        case Qt::EditRole:
+            return QString::fromUtf8(gnc_get_reconcile_str(split.getReconcile()));
         default:
             return QVariant();
         }
@@ -261,30 +265,69 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
             cmd = cmd::setTransactionDescription(trans, value.toString());
             break;
         case 4:
-            cmd = cmd::setSplitReconcile(split, value.toChar().toLatin1());
+        {
+            QString str(value.toString());
+            if (str.size() > 0)
+            {
+                char recn = str[0].toLatin1();
+                switch (recn)
+                {
+                case NREC:
+                case CREC:
+                case YREC:
+                case FREC:
+                case VREC:
+                    cmd = cmd::setSplitReconcile(split, recn);
+                    break;
+                default:
+                    qDebug() << "Unknown reconcile string:" << str;
+                }
+            }
             break;
+        }
         case 5:
         case 6:
         {
-            QString str(value.toString());
+            QString str(value.toString().simplified());
             Numeric n;
-//             bool x;
-//             double v = value.toDouble(&x);
             QString errmsg = n.parse(str);
             if (errmsg.isEmpty())
             {
                 qDebug() << "Does setting numeric work? numeric=" << n.to_string();
                 if (index.column() == 6)
                     n = n.neg();
-//                 cmd = cmd::setSplitAmount(split, n);
-//                 m_undoStack->push(cmd);
-                cmd = cmd::setSplitValue(split, n);
+                // Check whether we have the simple case here
+                if (split.getParent().countSplits() != 2)
+                {
+                    QMessageBox::warning(NULL, tr("Unimplemented"),
+                                         tr("Sorry, but editing a transaction with more than two splits (here: %1) is not yet implemented.").arg(split.getParent().countSplits()));
+                }
+                else
+                {
+                    Transaction trans = split.getParent();
+                    Split other = split.getOtherSplit();
+                    Q_ASSERT(other);
+                    Commodity originCommodity =split.getAccount().getCommodity();
+                    Commodity transCommodity = trans.getCurrency();
+                    Commodity otherCommodity = other.getAccount().getCommodity();
+                    if (originCommodity != transCommodity
+                            || transCommodity != otherCommodity)
+                    {
+                        QMessageBox::warning(NULL, tr("Unimplemented"),
+                                             tr("Sorry, but editing a transaction with different accounts is not yet implemented."));
+                    }
+                    else
+                    {
+                        // This is the really simple case which we can
+                        // handle now.
+                        cmd = cmd::setSplitValueAndAmount(split, n);
+                    }
+                }
             }
             else
             {
-                qDebug() << "Cannot convert string to gnc_numeric:" << str;
+                qDebug() << "Cannot convert this string to gnc_numeric:" << str;
             }
-            // Sigh. This doesn't seem to work so far.
             break;
         }
         default:

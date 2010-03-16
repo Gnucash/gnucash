@@ -69,7 +69,7 @@ public:
     typedef SetterFunc setter_func;
 
     /// Type of the getter function to retrieve the current value from the target object
-    typedef value_type (TargetT::*getter_func)() const;
+    typedef value_type (target_type::*getter_func)() const;
 
     /** Constructor.
      * @param text The QUndoCommand's text which will be displayed in the Undo action.
@@ -80,7 +80,7 @@ public:
      * @param parent The parent QUndoCommand instance, or NULL.
      */
     Cmd(const QString& text,
-        WeakPointer<typename TargetT::element_type>& targetPtr,
+        WeakPointer<typename target_type::element_type>& targetPtr,
         setter_func setter,
         getter_func getter,
         const value_type& newValue,
@@ -91,6 +91,8 @@ public:
             , m_previousValue((m_target.*getter)())
             , m_newValue(newValue)
     {
+        Q_ASSERT(m_target);
+        Q_ASSERT(m_setter);
     }
 
     /** Overloaded constructor without a getter-function but instead
@@ -104,7 +106,7 @@ public:
      * @param parent The parent QUndoCommand instance, or NULL.
      */
     Cmd(const QString& text,
-        WeakPointer<typename TargetT::element_type>& targetPtr,
+        WeakPointer<typename target_type::element_type>& targetPtr,
         setter_func setter,
         const value_type& previousValue,
         const value_type& newValue,
@@ -115,6 +117,8 @@ public:
             , m_previousValue(previousValue)
             , m_newValue(newValue)
     {
+        Q_ASSERT(m_target);
+        Q_ASSERT(m_setter);
     }
 
     virtual void redo()
@@ -137,7 +141,7 @@ private:
     }
 
 protected:
-    TargetT m_target;
+    target_type m_target;
     setter_func m_setter;
     value_type m_previousValue;
     value_type m_newValue;
@@ -161,6 +165,7 @@ QUndoCommand* setTransactionNum(Transaction& t, const QString& newValue);
 QUndoCommand* setTransactionDescription(Transaction& t, const QString& newValue);
 QUndoCommand* setTransactionNotes(Transaction& t, const QString& newValue);
 QUndoCommand* setTransactionDate(Transaction& t, const QDate& newValue);
+QUndoCommand* setSplitValueAndAmount(Split& t, const Numeric& newValue);
 
 } // END namespace cmd
 

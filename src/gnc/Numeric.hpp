@@ -49,6 +49,8 @@ class Split;
  */
 inline QString gchar_to_QString(gchar* tmp_string)
 {
+    if (!tmp_string)
+        return QString();
     QString result = QString::fromUtf8(tmp_string);
     g_free(tmp_string);
     return result;

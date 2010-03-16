@@ -77,6 +77,79 @@ QUndoCommand* setSplitValue(Split& t, const Numeric& newValue)
 
 // ////////////////////////////////////////////////////////////
 
+class SplitValueAndAmountCmd : public QUndoCommand
+{
+public:
+    typedef QUndoCommand base_class;
+    typedef Split target_type;
+    typedef Numeric value_type;
+
+    /** Constructor without a getter-function but instead the previous
+     * value given directly.
+     */
+    SplitValueAndAmountCmd(const QString& text,
+                           WeakPointer<target_type::element_type>& targetPtr,
+                           const value_type& previousValue,
+                           const value_type& newValue,
+                           QUndoCommand *parent = 0)
+            : base_class(text, parent)
+            , m_target(targetPtr.get())
+            , m_previousValue(previousValue)
+            , m_newValue(newValue)
+    {
+        Q_ASSERT(m_target);
+    }
+
+    virtual void redo()
+    {
+        set(m_newValue);
+    }
+
+    virtual void undo()
+    {
+        set(m_previousValue);
+    }
+
+
+private:
+    void set(const value_type& value)
+    {
+        Transaction trans = m_target.getParent();
+        if (trans.countSplits() != 2)
+            return;
+        Split other = m_target.getOtherSplit();
+        Q_ASSERT(other);
+        Commodity originCommodity = m_target.getAccount().getCommodity();
+        Commodity transCommodity = trans.getCurrency();
+        Commodity otherCommodity = other.getAccount().getCommodity();
+        if (originCommodity != transCommodity
+                || transCommodity != otherCommodity)
+            return;
+
+        trans.beginEdit();
+        m_target.setValue(value);
+        m_target.setAmount(value);
+        Numeric valueNeg = value.neg();
+        other.setAmount(valueNeg);
+        other.setValue(valueNeg);
+        trans.commitEdit();
+    }
+
+protected:
+    target_type m_target;
+    value_type m_previousValue;
+    value_type m_newValue;
+
+};
+
+QUndoCommand* setSplitValueAndAmount(Split& t, const Numeric& newValue)
+{
+    return new SplitValueAndAmountCmd(QObject::tr("Edit Transaction Value"),
+                                      t, t.getValue(), newValue);
+}
+
+// ////////////////////////////////////////////////////////////
+
 QUndoCommand* setTransactionNum(Transaction& t, const QString& newValue)
 {
     return new Cmd<Transaction, QString>(QObject::tr("Edit Transaction Number"),
