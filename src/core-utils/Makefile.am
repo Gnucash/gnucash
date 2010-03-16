@@ -73,10 +73,10 @@ if ! OS_WIN32
 endif
 
 noinst_DATA = .scm-links
-EXTRA_DIST = $(gncmod_DATA) core-utils.i gncla-dir.h.in
-CLEANFILES = gnucash .scm-links
-MAINTAINERCLEANFILES = swig-core-utils.c
 BUILT_SOURCES = gncla-dir.h
+EXTRA_DIST = $(gncmod_DATA) core-utils.i gncla-dir.h.in
+CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links
+MAINTAINERCLEANFILES = swig-core-utils.c
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.core-utils\"
 
