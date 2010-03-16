@@ -1,4 +1,4 @@
-TESTS = test-load-module test-link-module
+TESTS = test-link-module
 
 GNC_TEST_DEPS = @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_builddir}/src/engine \
@@ -16,8 +16,6 @@ GNC_TEST_DEPS = @GNC_TEST_SRFI_LOAD_CMD@ \
 
 TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
-
-EXTRA_DIST = test-load-module
 
 check_PROGRAMS = test-link-module
 
