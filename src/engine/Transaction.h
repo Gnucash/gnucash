@@ -442,6 +442,15 @@ int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
 void          xaccTransSetDate (Transaction *trans,
                                 int day, int mon, int year);
 
+/** This method modifies <i>posted</i> date of the transaction,
+ * specified by a GDate. The posted date is the date when this
+ * transaction was posted at the bank.
+ *
+ * This is identical to xaccTransSetDate(), but different from
+ * xaccTransSetDatePostedSecs which artificially introduces the
+ * time-of-day part, which needs to be ignored. */
+void xaccTransSetDatePostedGDate (Transaction *trans, GDate date);
+
 /** The xaccTransSetDatePostedSecs() method will modify the <i>posted</i>
     date of the transaction, specified by a time_t (see ctime(3)). The
     posted date is the date when this transaction was posted at the
@@ -480,6 +489,9 @@ void          xaccTransGetDatePostedTS (const Transaction *trans, Timespec *ts);
     having different function names, GetDate and GetDatePosted refer
     to the same single date.)*/
 Timespec      xaccTransRetDatePostedTS (const Transaction *trans);
+/** Retrieve the posted date of the transaction. The posted date is
+    the date when this transaction was posted at the bank. */
+GDate      xaccTransGetDatePostedGDate (const Transaction *trans);
 
 /** Retrieve the date of when the transaction was entered. The entered
  * date is the date when the register entry was made.*/

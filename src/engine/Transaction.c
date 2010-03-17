@@ -1585,6 +1585,28 @@ xaccTransSetDatePostedSecs (Transaction *trans, time_t secs)
 }
 
 void
+xaccTransSetDatePostedGDate (Transaction *trans, GDate date)
+{
+    KvpValue* kvp_value;
+    KvpFrame* frame;
+    if (!trans) return;
+
+    /* We additionally save this date into a kvp frame to ensure in
+     * the future a date which was set as *date* (without time) can
+     * clearly be distinguished from the Timespec. */
+    kvp_value = kvp_value_new_gdate(date);
+    frame = kvp_frame_set_value_nc(trans->inst.kvp_data, TRANS_DATE_POSTED, kvp_value);
+    if (!frame)
+    {
+        kvp_value_delete(kvp_value);
+    }
+
+    xaccTransSetDateInternal(trans, &trans->date_posted,
+                             gdate_to_timespec(date));
+    set_gains_date_dirty (trans);
+}
+
+void
 xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
 {
     Timespec ts = {secs, 0};
@@ -1631,11 +1653,12 @@ xaccTransSetDateEnteredTS (Transaction *trans, const Timespec *ts)
 void
 xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 {
-    Timespec ts;
+    GDate *date;
     if (!trans) return;
-    ts = gnc_dmy2timespec(day, mon, year);
-    xaccTransSetDateInternal(trans, &trans->date_posted, ts);
-    set_gains_date_dirty (trans);
+    date = g_date_new_dmy(day, mon, year);
+    g_assert(g_date_valid(date));
+    xaccTransSetDatePostedGDate(trans, *date);
+    g_date_free(date);
 }
 
 void
@@ -1831,6 +1854,29 @@ xaccTransRetDatePostedTS (const Transaction *trans)
 {
     Timespec ts = {0, 0};
     return trans ? trans->date_posted : ts;
+}
+
+GDate
+xaccTransGetDatePostedGDate (const Transaction *trans)
+{
+    GDate result;
+    if (trans)
+    {
+        /* Can we look up this value in the kvp slot? If yes, use it
+         * from there because it doesn't suffer from time zone
+         * shifts. */
+        const KvpValue* kvp_value =
+            kvp_frame_get_slot(trans->inst.kvp_data, TRANS_DATE_POSTED);
+        if (kvp_value)
+            result = kvp_value_get_gdate(kvp_value);
+        else
+            result = timespec_to_gdate(xaccTransRetDatePostedTS(trans));
+    }
+    else
+    {
+        g_date_clear(&result, 1);
+    }
+    return result;
 }
 
 Timespec
