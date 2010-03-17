@@ -178,6 +178,53 @@ QUndoCommand* setTransactionDate(Transaction& t, const QDate& newValue)
                                        t.getDatePosted(), newValue);
 }
 
+// ////////////////////////////////////////////////////////////
+
+class TransactionDestroyCmd : public QUndoCommand
+{
+public:
+    typedef QUndoCommand base_class;
+    typedef Transaction target_type;
+
+    /** Constructor
+     */
+    TransactionDestroyCmd(const QString& text,
+                          WeakPointer<target_type::element_type>& targetPtr,
+                          QUndoCommand *parent = 0)
+            : base_class(text, parent)
+            , m_target(targetPtr.get())
+            , m_previousValue(m_target)
+            , m_book(m_target.getBook())
+    {
+        Q_ASSERT(m_target);
+    }
+
+    virtual void redo()
+    {
+        xaccTransDestroy(m_target.get());
+        m_target.reset();
+    }
+
+    virtual void undo()
+    {
+        m_target.reset(xaccMallocTransaction (m_book.get()));
+        m_target.beginEdit();
+        m_previousValue.copyTo(m_target);
+        m_target.commitEdit();
+    }
+
+protected:
+    target_type m_target;
+    TmpTransaction m_previousValue;
+    Book m_book;
+};
+
+QUndoCommand* destroyTransaction(Transaction& t)
+{
+    return new TransactionDestroyCmd(QObject::tr("Delete Transaction"),
+                                     t);
+}
+
 
 } // END namespace cmd
 

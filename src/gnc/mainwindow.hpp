@@ -24,6 +24,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QItemSelection>
 #include "gnc/Session.hpp"
 #include "gnc/AccountItemModel.hpp"
 
@@ -72,6 +73,7 @@ private slots:
     void on_actionAbout_triggered();
     bool on_actionSave_as_triggered();
     void on_actionCloseTab_triggered();
+    void on_actionCut_triggered();
     void on_tabWidget_tabCloseRequested(int index);
     void on_tabWidget_currentChanged(int index);
     void on_textBrowser_anchorClicked(const QUrl &);
@@ -79,6 +81,7 @@ private slots:
     void on_actionViewAccountList_triggered(bool checked);
     void on_actionViewWelcomepage_triggered(bool checked);
     void documentWasModified();
+    void selectionChanged(const QItemSelection & selected, const QItemSelection & deselected );
 
 private:
     void createActions();

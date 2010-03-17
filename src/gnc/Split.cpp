@@ -33,11 +33,33 @@ Book Split::getBook() const { return xaccSplitGetBook(get()); }
 
 Account Split::getAccount() const { return xaccSplitGetAccount(get()); }
 void Split::setAccount(Account& acc) { xaccSplitSetAccount(get(), acc.get()); }
+void Split::setAccount(::Account* acc) { xaccSplitSetAccount(get(), acc); }
 
 
 Transaction Split::getParent() const { return xaccSplitGetParent(get()); }
 void Split::setParent(Transaction& trans) { xaccSplitSetParent(get(), trans.get()); }
 
 
+TmpSplit::TmpSplit(const Split& s, const TmpTransaction* parent_trans)
+        : account(s.getAccount().get())
+        , parent(parent_trans)
+        , memo(s.getMemo())
+        , action(s.getAction())
+        , reconcile(s.getReconcile())
+        , amount(s.getAmount())
+        , value(s.getValue())
+{}
+
+void TmpSplit::copyInto(Transaction& t)
+{
+    Split s(xaccMallocSplit(t.getBook().get()));
+    s.setAccount(account);
+    s.setParent(t);
+    s.setMemo(memo);
+    s.setAction(action);
+    s.setReconcile(reconcile);
+    s.setAmount(amount);
+    s.setValue(value);
+}
 
 } // END namespace gnc

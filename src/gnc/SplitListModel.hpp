@@ -59,9 +59,15 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
 
-public slots:
-    void transactionModified( ::Transaction* trans);
+    bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex());
+    bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex());
 
+public slots:
+    void transactionEvent( ::Transaction* trans, QofEventId event_type);
+    void accountEvent( ::Account* trans, QofEventId event_type);
+
+private:
+    void recreateCache();
 protected:
     Account m_account;
     SplitQList m_list;
@@ -71,6 +77,7 @@ protected:
 
     /** The wrapper for receiving events from gnc. */
     QofEventWrapper<SplitListModel, ::Transaction*> m_eventWrapper;
+    QofEventWrapper<SplitListModel, ::Account*> m_eventWrapperAccount;
 };
 
 } // END namespace gnc

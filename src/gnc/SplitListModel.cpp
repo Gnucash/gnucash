@@ -21,6 +21,7 @@
  */
 
 #include "SplitListModel.hpp"
+#include "engine/gnc-event.h" // for GNC_EVENT_ITEM_ADDED
 #include "gnc/Transaction.hpp"
 #include "gnc/Cmd.hpp"
 #include "gnc/Session.hpp"
@@ -39,16 +40,30 @@ namespace gnc
 SplitListModel::SplitListModel(const Account& acc, QUndoStack* undoStack, QObject *parent)
         : QAbstractItemModel(parent)
         , m_account(acc)
-        , m_list(Split::fromGList(acc.getSplitList()))
+        , m_list()
         , m_undoStack(undoStack)
-        , m_eventWrapper(*this, &SplitListModel::transactionModified,
-                         GNC_ID_TRANS, QOF_EVENT_MODIFY)
+        , m_eventWrapper(*this, &SplitListModel::transactionEvent, GNC_ID_TRANS)
+        , m_eventWrapperAccount(*this, &SplitListModel::accountEvent, GNC_ID_ACCOUNT)
 {
+    recreateCache();
+}
+
+void SplitListModel::recreateCache()
+{
+    SplitQList newSplits = Split::fromGList(m_account.getSplitList());
+    bool doReset = (newSplits.size() != m_list.size());
+
+    m_list = newSplits;
+
     // Cache the mapping of transactions to split in the m_hash
+    m_hash.clear();
     for (int k = 0; k < m_list.size(); ++k)
     {
         m_hash.insert(Split(m_list[k]).getParent().get(), k);
     }
+
+    if (doReset)
+        reset();
 }
 
 SplitListModel::~SplitListModel()
@@ -70,6 +85,29 @@ QModelIndex SplitListModel::index(int row, int column,
     }
     else
         return QModelIndex();
+}
+
+bool SplitListModel::insertRows(int position, int rows, const QModelIndex &index)
+{
+    beginInsertRows(QModelIndex(), position, position + rows - 1);
+    endInsertRows();
+    return true;
+}
+
+bool SplitListModel::removeRows(int position, int rows, const QModelIndex &index)
+{
+    beginRemoveRows(QModelIndex(), position, position+rows-1);
+    for (int row = position; row < position + rows; ++row)
+    {
+        Split s(m_list.at(row));
+        Q_ASSERT(s);
+        Transaction t = s.getParent();
+        Q_ASSERT(t);
+        QUndoCommand* cmd = cmd::destroyTransaction(t);
+        m_undoStack->push(cmd);
+    }
+    endRemoveRows();
+    return true;
 }
 
 int SplitListModel::columnCount(const QModelIndex& parent) const
@@ -344,14 +382,39 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
     return false;
 }
 
-void SplitListModel::transactionModified( ::Transaction* trans)
+void SplitListModel::transactionEvent( ::Transaction* trans, QofEventId event_type)
 {
-    if (m_hash.contains(trans))
+    qDebug() << "transactionEvent, id=" << qofEventToString(event_type);
+    switch (event_type)
     {
-        int row = m_hash.value(trans);
-        emit dataChanged(index(row, 0), index(row, columnCount() - 1));
+    case QOF_EVENT_MODIFY:
+        if (m_hash.contains(trans))
+        {
+            int row = m_hash.value(trans);
+            emit dataChanged(index(row, 0), index(row, columnCount() - 1));
+        }
+        break;
+    default:
+        break;
     }
 
+}
+
+void SplitListModel::accountEvent( ::Account* acc, QofEventId event_type)
+{
+    if (acc != m_account.get())
+        return;
+    qDebug() << "accountEvent, id=" << qofEventToString(event_type);
+
+    switch (event_type)
+    {
+    case GNC_EVENT_ITEM_REMOVED:
+    case GNC_EVENT_ITEM_ADDED:
+        recreateCache();
+        break;
+    default:
+        break;
+    }
 }
 
 } // END namespace gnc

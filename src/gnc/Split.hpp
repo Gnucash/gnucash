@@ -42,6 +42,7 @@ namespace gnc
 class Book;
 class Account;
 class Transaction;
+class TmpTransaction;
 
 typedef QList< ::Split*> SplitQList;
 
@@ -64,6 +65,7 @@ public:
     Book getBook() const;
     Account getAccount() const;
     void setAccount(Account& acc);
+    void setAccount(::Account* acc);
 
     Transaction getParent() const;
     void setParent(Transaction& trans);
@@ -108,6 +110,22 @@ public:
         }
         return result;
     }
+};
+
+class TmpSplit
+{
+public:
+    TmpSplit(const Split& s, const TmpTransaction* parent_trans);
+    TmpSplit()
+    {}
+    void copyInto(Transaction& t);
+    ::Account* account;
+    const TmpTransaction* parent;
+    QString memo;
+    QString action;
+    char reconcile;
+    Numeric amount;
+    Numeric value;
 };
 
 } // END namespace gnc

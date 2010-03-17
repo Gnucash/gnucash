@@ -435,11 +435,44 @@ void MainWindow::accountItemActivated(const QModelIndex & index)
     tableView->scrollToBottom();
     if (smodel->rowCount() > 0)
         tableView->setCurrentIndex(smodel->index(smodel->rowCount() - 1, 0));
+    ui->actionCut->setEnabled(smodel->rowCount() > 0);
 
     // Insert this as a new tab
     tableView->setProperty(PROPERTY_TAB_PREVIOUSPOS, ui->tabWidget->currentIndex());
     ui->tabWidget->addTab(tableView, account.getName());
     ui->tabWidget->setCurrentWidget(tableView);
+
+    connect(tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+            this, SLOT(selectionChanged(const QItemSelection &, const QItemSelection & )));
+}
+
+void MainWindow::selectionChanged(const QItemSelection & selected, const QItemSelection & deselected )
+{
+    ui->actionCut->setEnabled(!selected.isEmpty());
+    //ui->actionCopy->setEnabled(!selected.isEmpty());
+}
+
+// Auto-connected to actionCut's signal triggered()
+void MainWindow::on_actionCut_triggered()
+{
+    QWidget *widget = ui->tabWidget->currentWidget();
+    QTableView *tableView = qobject_cast<QTableView *>(widget);
+    if (tableView)
+    {
+//         QModelIndexList selection = tableView->selectionModel()->selectedIndexes();
+//         QSet<int> rows;
+//         Q_FOREACH (QModelIndex index, selection)
+//         {
+//             rows.insert(index.row());
+//         }
+//         qDebug() << "Removing number of rows:" << rows.size();
+        QModelIndex index = tableView->currentIndex();
+        if (!index.isValid())
+            return;
+        QAbstractItemModel *model = tableView->model();
+        Q_ASSERT(model);
+        model->removeRow(index.row());
+    }
 }
 
 // ////////////////////////////////////////////////////////////

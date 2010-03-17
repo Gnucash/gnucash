@@ -166,6 +166,7 @@ QUndoCommand* setTransactionDescription(Transaction& t, const QString& newValue)
 QUndoCommand* setTransactionNotes(Transaction& t, const QString& newValue);
 QUndoCommand* setTransactionDate(Transaction& t, const QDate& newValue);
 QUndoCommand* setSplitValueAndAmount(Split& t, const Numeric& newValue);
+QUndoCommand* destroyTransaction(Transaction& t);
 
 } // END namespace cmd
 

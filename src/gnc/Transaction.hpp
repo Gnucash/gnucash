@@ -58,6 +58,8 @@ public:
             : base_class(ptr)
     { }
 
+    Book getBook() const { return xaccTransGetBook(get()); }
+
     void beginEdit() { xaccTransBeginEdit(get()); }
     void commitEdit() { xaccTransCommitEdit(get()); }
     void rollbackEdit() { xaccTransRollbackEdit(get()); }
@@ -78,7 +80,7 @@ public:
     void appendSplit(Split& split) { xaccSplitSetParent(split.get(), get()); }
     Split getSplit(int i) const { return xaccTransGetSplit(get(), i); }
     int getSplitIndex(const Split& split) const { return xaccTransGetSplitIndex(get(), split.get()); }
-    SplitList* getSplitList() const { return xaccTransGetSplitList(get()); }
+    ::SplitList* getSplitList() const { return xaccTransGetSplitList(get()); }
 
     Commodity getCurrency() const { return xaccTransGetCurrency(get()); }
     void setCurrency(const Commodity& c) { xaccTransSetCurrency(get(), c.get()); }
@@ -92,6 +94,46 @@ public:
     QDate getDatePosted() const { return toQDate(xaccTransGetDatePostedGDate(get())); }
     QDateTime getDateEntered() const { return toQDateTime(xaccTransRetDateEnteredTS(get())); }
 
+};
+
+class TmpTransaction
+{
+public:
+    TmpTransaction(const Transaction& t)
+            : num(t.getNum())
+            , description(t.getDescription())
+            , notes(t.getNotes())
+            , commodity(t.getCurrency())
+            , datePosted(t.getDatePosted())
+            , dateTimeEntered(t.getDateEntered())
+    {
+        SplitQList slist = Split::fromGList(t.getSplitList());
+        Q_FOREACH(Split s, slist)
+        {
+            splits.push_back(TmpSplit(s, this));
+        }
+    }
+    void copyTo(Transaction& t)
+    {
+        t.setNum(num);
+        t.setDescription(description);
+        if (!notes.isEmpty())
+            t.setNotes(notes);
+        t.setCurrency(commodity);
+        t.setDatePosted(datePosted);
+        t.setDateEntered(dateTimeEntered);
+        Q_FOREACH(TmpSplit s, splits)
+        {
+            s.copyInto(t);
+        }
+    }
+    QString num;
+    QString description;
+    QString notes;
+    QList<TmpSplit> splits;
+    Commodity commodity;
+    QDate datePosted;
+    QDateTime dateTimeEntered;
 };
 
 } // END namespace gnc

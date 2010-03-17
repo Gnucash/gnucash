@@ -52,18 +52,16 @@ inline const char* getQofType(QofInstance* obj)
  * The receiver's class is the first template argument; the argument
  * type of the to-be-called member function is the second template
  * (usually a pointer type). */
-template<class ReceiverT, class ValuePtrT, typename SlotFunc = void (ReceiverT::*)(ValuePtrT)>
+template<class ReceiverT, class ValuePtrT, typename SlotFunc = void (ReceiverT::*)(ValuePtrT, QofEventId)>
 class QofEventWrapper
 {
 public:
     QofEventWrapper(ReceiverT& receiver,
                     SlotFunc recvSlot,
-                    const char* qof_type,
-                    QofEventId event_type)
+                    const char* qof_type)
             : m_receiver(receiver)
             , m_receiveFunc(recvSlot)
             , m_qof_type(qof_type)
-            , m_event_type(event_type)
     {
         m_handler_id = qof_event_register_handler(QofEventWrapper::event_handler, this);
     }
@@ -91,23 +89,22 @@ private:
         // correct event type
         if (!QOF_CHECK_TYPE(entity, m_qof_type))
             return;
-        if ((event_type & m_event_type) == 0)
-            return;
+//         if ((event_type & m_event_type) == 0)
+//             return;
 
-        qDebug() << "private_event_handler, id=" << qofEventToString(event_type)
-        << "entity=" << getQofType(entity);
+//         qDebug() << "private_event_handler, id=" << qofEventToString(event_type)
+//         << "entity=" << getQofType(entity);
 
         ValuePtrT vptr = reinterpret_cast<ValuePtrT>(entity);
 
         // Call the pointer-to-member function with that weird C++
         // syntax
-        (m_receiver.*m_receiveFunc)(vptr);
+        (m_receiver.*m_receiveFunc)(vptr, event_type);
     }
 
     ReceiverT& m_receiver;
     SlotFunc m_receiveFunc;
     const char* m_qof_type;
-    QofEventId m_event_type;
     gint m_handler_id;
 };
 
