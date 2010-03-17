@@ -264,7 +264,7 @@ IconFilename_README=README.win32-bin.txt
 IconName_FAQ=FAQ (Online)
 IconName_Bugzilla=Report a Bug (Online)
 IconName_InstallFQ=Install Online Price Retrieval
-IconComment_InstallFQ=Install the necessary perl module Finance-Quote for online retrieval of prices.  Requires ActivePerl 5.10
+IconComment_InstallFQ=Install the necessary perl module Finance-Quote for online retrieval of prices.  Requires ActivePerl 5.8 or 5.10
 IconName_Uninstall=Uninstall GnuCash
 IconComment_Uninstall=Uninstall the Finance Manager GnuCash
 
@@ -301,7 +301,7 @@ de.IconFilename_README=README-de.win32-bin.txt
 de.IconName_FAQ=H�ufige Fragen (online, engl.)
 de.IconName_Bugzilla=Fehlerbericht einsenden (online, engl.)
 de.IconName_InstallFQ=Online Kursabruf installieren
-de.IconComment_InstallFQ=Das zus�tzliche Modul Finance-Quote installieren, um online Aktien- und Devisenkurse abrufen zu k�nnen.  Dazu ist das Programm ActivePerl 5.10 erforderlich.
+de.IconComment_InstallFQ=Das zus�tzliche Modul Finance-Quote installieren, um online Aktien- und Devisenkurse abrufen zu k�nnen.  Dazu ist das Programm ActivePerl 5.8 oder 5.10 erforderlich.
 de.IconName_Uninstall=Deinstallieren von GnuCash
 de.IconComment_Uninstall=Die OpenSource-Finanzverwaltung GnuCash wieder deinstallieren und vom Computer l�schen
 
@@ -328,7 +328,7 @@ el.IconFilename_README=README.win32-bin.txt
 el.IconName_FAQ=������ ��������� (Online)
 el.IconName_Bugzilla=������� ��������� (Online)
 el.IconName_InstallFQ=����������� ����� ����� (online)
-el.IconComment_InstallFQ=����������� ��� perl module Finance-Quote ��� ���� ����� online.  ������� ActivePerl 5.10
+el.IconComment_InstallFQ=����������� ��� perl module Finance-Quote ��� ���� ����� online.  ������� ActivePerl 5.8/5.10
 el.IconName_Uninstall=������������� GnuCash
 el.IconComment_Uninstall=������������� ��� ����������� ����������� GnuCash
 
@@ -355,7 +355,7 @@ fr.IconFilename_README=README-fr.win32-bin.txt
 fr.IconName_FAQ=FAQ (En ligne, en anglais)
 fr.IconName_Bugzilla=Envoyer un rapport d'erreur (En ligne, en anglais)
 fr.IconName_InstallFQ=Installer les quotations en ligne
-fr.IconComment_InstallFQ=Installation du module Finance-Quote requis pour le t�l�chargement du cours des devises et actions. Le programme ActivePerl 5.10 est aussi requis
+fr.IconComment_InstallFQ=Installation du module Finance-Quote requis pour le t�l�chargement du cours des devises et actions. Le programme ActivePerl 5.8 ou 5.10 est aussi requis
 fr.IconName_Uninstall=D�-installer GnuCash
 fr.IconComment_Uninstall=D�sinstalle le gestionnaire financier GnuCash
 
@@ -382,7 +382,7 @@ it.IconFilename_README=README-it.win32-bin.txt
 it.IconName_FAQ=FAQ (online, in Inglese)
 it.IconName_Bugzilla=Comunicare un bug (online, in Inglese)
 it.IconName_InstallFQ=Installa la funzione di ricerca delle quotazioni online
-it.IconComment_InstallFQ=Installa il modulo di perl Finance-Quote necessario per ricevere le quotazioni online. Richiede ActivePerl 5.10
+it.IconComment_InstallFQ=Installa il modulo di perl Finance-Quote necessario per ricevere le quotazioni online. Richiede ActivePerl 5.8/5.10
 it.IconName_Uninstall=Disinstalla GnuCash
 it.IconComment_Uninstall=Disinstalla il programma di gestione delle finanze GnuCash
 
@@ -409,7 +409,7 @@ nl.IconFilename_README=README-nl.win32-bin.txt
 nl.IconName_FAQ=FAQ (Online)
 nl.IconName_Bugzilla=Een Bug Melden (Online)
 nl.IconName_InstallFQ=Online Koersen Opvragen installeren
-nl.IconComment_InstallFQ=De benodigde perl module Finance Quote om online koersen op te vragen installeren.  Hiervoor is ActivePerl 5.10 nodig.
+nl.IconComment_InstallFQ=De benodigde perl module Finance Quote om online koersen op te vragen installeren.  Hiervoor is ActivePerl 5.8 of 5.10 nodig.
 nl.IconName_Uninstall=GnuCash verwijderen
 nl.IconComment_Uninstall=Het financieel beheersprogramma GnuCash verwijderen
 
@@ -436,7 +436,7 @@ pt_BR.IconFilename_README=LEIA-ME.win32-bin.txt
 pt_BR.IconName_FAQ=Perguntas Freq�entes (online, ingl�s)
 pt_BR.IconName_Bugzilla=Relatar um erro (online, ingl�s)
 pt_BR.IconName_InstallFQ=Instalar a Consulta de Pre�os Online
-pt_BR.IconComment_InstallFQ=Instala o m�dulo perl Finance-Quote, necess�rio para a busca de pre�os online. Requer ActivePerl 5.10.
+pt_BR.IconComment_InstallFQ=Instala o m�dulo perl Finance-Quote, necess�rio para a busca de pre�os online. Requer ActivePerl 5.8/5.10.
 pt_BR.IconName_Uninstall=Desinstalar o GnuCash
 pt_BR.IconComment_Uninstall=Desinstala o Gerenciador Financeiro GnuCash
 
