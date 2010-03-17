@@ -276,6 +276,12 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
         val_node = xmlNewTextChild(node, NULL, BAD_CAST tag, BAD_CAST kvp_value_get_string(val));
     else if (kvp_type == KVP_TYPE_TIMESPEC)
         val_node = NULL;
+    else if (kvp_type == KVP_TYPE_GDATE)
+    {
+        GDate d = kvp_value_get_gdate(val);
+        val_node = gdate_to_dom_tree(tag, &d);
+        xmlAddChild (node, val_node);
+    }
     else
         val_node = xmlNewTextChild(node, NULL, BAD_CAST tag, NULL);
 
@@ -311,6 +317,9 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
         xmlAddChild (node, val_node);
     }
     break;
+    case KVP_TYPE_GDATE:
+        xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "gdate");
+        break;
     case KVP_TYPE_BINARY:
     {
         guint64 size;
@@ -350,8 +359,6 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     }
     break;
 
-    default:
-        break;
     }
 }
 

@@ -261,6 +261,10 @@ void qof_backend_prepare_option(QofBackend *be, const QofBackendOption *option)
     {
         break;  /* unsupported */
     }
+    case KVP_TYPE_GDATE    :
+    {
+        break;  /* unsupported */
+    }
     }
     if (value)
     {
@@ -379,6 +383,10 @@ config_foreach_cb (const char *key, KvpValue *value, gpointer data)
     {
         break;  /* unsupported */
     }
+    case KVP_TYPE_GDATE    :
+    {
+        break;  /* unsupported */
+    }
     }
     parent = g_strdup_printf("/%s/%s", QOF_CONFIG_DESC, key);
     option.description = kvp_frame_get_string(helper->recursive, parent);
@@ -435,6 +443,10 @@ config_foreach_cb (const char *key, KvpValue *value, gpointer data)
         break;  /* unsupported */
     }
     case KVP_TYPE_FRAME    :
+    {
+        break;  /* unsupported */
+    }
+    case KVP_TYPE_GDATE    :
     {
         break;  /* unsupported */
     }

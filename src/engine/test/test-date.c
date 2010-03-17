@@ -72,8 +72,28 @@ static gboolean
 check_conversion (const char * str, Timespec expected_ts)
 {
     Timespec ts;
+    int day, month, year;
+    GDate d1, d2;
 
     ts = gnc_iso8601_to_timespec_gmt (str);
+
+    // We test the conversion to GDate against the timespec2dmy
+    // conversion, and also the conversion back to timespec and again
+    // to GDate so that it is still the original GDate
+    gnc_timespec2dmy(ts, &day, &month, &year);
+    d1 = timespec_to_gdate(ts);
+    d2 = timespec_to_gdate(gdate_to_timespec(d1));
+    if ((g_date_compare(&d1, &d2) != 0)
+        || (g_date_get_day(&d1) != day)
+        || (g_date_get_month(&d1) != month)
+        || (g_date_get_year(&d1) != year))
+    {
+        fprintf (stderr,
+                 "\nmis-converted \"%s\" to GDate\n",
+                 str);
+        failure ("misconverted timespec");
+        return FALSE;
+    }
 
     if ((expected_ts.tv_sec != ts.tv_sec) || (expected_ts.tv_nsec != ts.tv_nsec))
     {

@@ -1211,6 +1211,13 @@ string_to_kvp_value(const gchar *content, KvpValueType type)
     case KVP_TYPE_FRAME:
 //		return kvp_value_new_frame(value->value.frame);
         break;
+    case KVP_TYPE_GDATE:
+    {
+        GDate date;
+        g_date_clear(&date, 1);
+        g_date_set_parse(&date, content);
+        return kvp_value_new_gdate(date);
+    }
     }
     return NULL;
 }

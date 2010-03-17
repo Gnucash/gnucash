@@ -1441,6 +1441,22 @@ timespecToTime_t (Timespec ts)
     return ts.tv_sec;
 }
 
+GDate timespec_to_gdate (Timespec ts)
+{
+    GDate result;
+    g_date_clear(&result, 1);
+    g_date_set_time_t(&result, timespecToTime_t(ts));
+    g_assert(g_date_valid(&result));
+    return result;
+}
+
+Timespec gdate_to_timespec (GDate d)
+{
+    return gnc_dmy2timespec(g_date_get_day(&d),
+                            g_date_get_month(&d),
+                            g_date_get_year(&d));
+}
+
 void
 gnc_tm_get_day_start (struct tm *tm, time_t time_val)
 {

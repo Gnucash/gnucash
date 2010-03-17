@@ -640,7 +640,7 @@ static KvpValue *
 gnc_scm2KvpValue (SCM value_scm)
 {
     KvpValueType value_t;
-    KvpValue *value;
+    KvpValue *value = NULL;
     SCM type_scm;
     SCM val_scm;
 
@@ -689,6 +689,13 @@ gnc_scm2KvpValue (SCM value_scm)
     {
         Timespec ts = gnc_timepair2timespec (val_scm);
         value = kvp_value_new_timespec(ts);
+        break;
+    }
+
+    case KVP_TYPE_GDATE:
+    {
+        Timespec ts = gnc_timepair2timespec (val_scm);
+        value = kvp_value_new_gdate(timespec_to_gdate(ts));
         break;
     }
 
@@ -742,9 +749,6 @@ gnc_scm2KvpValue (SCM value_scm)
         break;
     }
 
-    default:
-        PWARN ("unexpected type: %d", value_t);
-        return NULL;
     }
 
     return value;

@@ -96,6 +96,7 @@ typedef enum
     KVP_TYPE_BINARY,     /**< no QOF equivalent. */
     KVP_TYPE_GLIST,      /**< no QOF equivalent. */
     KVP_TYPE_FRAME       /**< no QOF equivalent. */
+    , KVP_TYPE_GDATE       /**< no QOF equivalent. */
 } KvpValueType;
 
 /** \deprecated Deprecated backwards compat token
@@ -564,6 +565,7 @@ KvpValue   * kvp_value_new_guid(const GUID * guid);
 KvpValue   * kvp_value_new_timespec(Timespec timespec);
 KvpValue   * kvp_value_new_binary(const void * data, guint64 datasize);
 KvpValue   * kvp_value_new_frame(const KvpFrame * value);
+KvpValue   * kvp_value_new_gdate(GDate date);
 
 /** Creates a KvpValue from a <b>GList of kvp_value's</b>! (Not to be
  *  confused with GList's of something else!) */
@@ -646,6 +648,9 @@ GList       * kvp_value_get_glist(const KvpValue * value);
 /*@ dependent @*/
 KvpFrame   * kvp_value_get_frame(const KvpValue * value);
 Timespec    kvp_value_get_timespec(const KvpValue * value);
+
+/** Value accessor for GDate */
+GDate    kvp_value_get_gdate(const KvpValue * value);
 
 /**
  * Similar returns as strcmp.

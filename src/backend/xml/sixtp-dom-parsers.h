@@ -60,6 +60,7 @@ kvp_value* dom_tree_to_timespec_kvp_value(xmlNodePtr node);
 kvp_value* dom_tree_to_binary_kvp_value(xmlNodePtr node);
 kvp_value* dom_tree_to_list_kvp_value(xmlNodePtr node);
 kvp_value* dom_tree_to_frame_kvp_value(xmlNodePtr node);
+kvp_value* dom_tree_to_gdate_kvp_value (xmlNodePtr node);
 
 gboolean dom_tree_to_integer(xmlNodePtr node, gint64 *daint);
 gboolean dom_tree_to_guint16(xmlNodePtr node, guint16 *i);

@@ -211,6 +211,12 @@ void timespecFromTime_t( Timespec *ts, time_t t );
 /** Turns a Timespec into a time_t */
 time_t timespecToTime_t (Timespec ts);
 
+/** Turns a Timespec into a GDate */
+GDate timespec_to_gdate (Timespec ts);
+
+/** Turns a GDate into a Timespec  */
+Timespec gdate_to_timespec (GDate d);
+
 /** Convert a day, month, and year to a Timespec */
 Timespec gnc_dmy2timespec (gint day, gint month, gint year);
 
