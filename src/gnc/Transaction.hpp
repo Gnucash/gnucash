@@ -87,10 +87,9 @@ public:
     bool isBalanced() const { return xaccTransIsBalanced(get()); }
     Numeric getAccountConvRate(const Account& acc) const { return xaccTransGetAccountConvRate(get(), acc.get()); }
 
-    void setDatePosted(const QDate& t) { xaccTransSetDatePostedSecs(get(), QDateTime(t, QTime(12,0,0)).toTime_t()); }
-    void setDatePosted(const QDateTime& t) { xaccTransSetDatePostedSecs(get(), t.toTime_t()); }
+    void setDatePosted(const QDate& d) { xaccTransSetDate(get(), d.day(), d.month(), d.year()); }
     void setDateEntered(const QDateTime& t) { xaccTransSetDateEnteredSecs(get(), t.toTime_t()); }
-    QDateTime getDatePosted() const { return toQDateTime(xaccTransRetDatePostedTS(get())); }
+    QDate getDatePosted() const { return toQDate(xaccTransGetDatePostedGDate(get())); }
     QDateTime getDateEntered() const { return toQDateTime(xaccTransRetDateEnteredTS(get())); }
 
 };

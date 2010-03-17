@@ -10,11 +10,9 @@ INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/lib/libc) # for strptime.h
 
 
 # Workaround to create a very simple gncla-dir.h file
-FILE (WRITE ${CMAKE_CURRENT_BINARY_DIR}/qofla-dir.h.tmp "
+FILE (WRITE ${CMAKE_CURRENT_BINARY_DIR}/qofla-dir.h "
 #define QOF_LIB_DIR \"${CMAKE_INSTALL_PREFIX}/lib/gnucash\"
 ")
-# Let cmake copy the created file only on changes.
-CONFIGURE_FILE (${CMAKE_CURRENT_BINARY_DIR}/qofla-dir.h.tmp ${CMAKE_CURRENT_BINARY_DIR}/qofla-dir.h COPYONLY)
 
 INCLUDE_DIRECTORIES (${CMAKE_CURRENT_BINARY_DIR}) # for qofla-dir.h
 

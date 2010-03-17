@@ -63,6 +63,13 @@ inline QDateTime toQDateTime(const ::Timespec& timespec)
     result.setTimeSpec(Qt::UTC);
     return result;
 }
+inline QDate toQDate(const ::GDate& d)
+{
+    if (g_date_valid(&d))
+        return QDate(g_date_year(&d), g_date_month(&d), g_date_day(&d));
+    else
+        return QDate();
+}
 inline ::Timespec toTimespec(const QDateTime& qdt)
 {
     ::Timespec result;

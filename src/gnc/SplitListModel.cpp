@@ -122,7 +122,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
         {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            return trans.getDatePosted().date();
+            return trans.getDatePosted();
         default:
             return QVariant();
         }
@@ -307,7 +307,7 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
                     Transaction trans = split.getParent();
                     Split other = split.getOtherSplit();
                     Q_ASSERT(other);
-                    Commodity originCommodity =split.getAccount().getCommodity();
+                    Commodity originCommodity = split.getAccount().getCommodity();
                     Commodity transCommodity = trans.getCurrency();
                     Commodity otherCommodity = other.getAccount().getCommodity();
                     if (originCommodity != transCommodity

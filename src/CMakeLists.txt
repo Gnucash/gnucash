@@ -126,9 +126,6 @@ IF (UNIX)
 ")
 ENDIF (UNIX)
 
-# Let cmake copy the created file only on changes.
-#CONFIGURE_FILE (${CONFIG_H} ${CMAKE_CURRENT_BINARY_DIR}/config.h COPYONLY)
-
 # ############################################################
 
 # The subdirectories

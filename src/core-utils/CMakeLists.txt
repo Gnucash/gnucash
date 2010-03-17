@@ -35,15 +35,13 @@ SET (libgnc_core_utils_SOURCES
 SET_SOURCE_FILES_PROPERTIES (${libgnc_core_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
 # Workaround to create a very simple gncla-dir.h file
-FILE (WRITE ${CMAKE_CURRENT_BINARY_DIR}/gncla-dir.h.tmp "
+FILE (WRITE ${CMAKE_CURRENT_BINARY_DIR}/gncla-dir.h "
 #define PREFIX \"${CMAKE_INSTALL_PREFIX}\"
 #define DATADIR \"${CMAKE_INSTALL_PREFIX}/share\"
 #define SYSCONFDIR \"${CMAKE_INSTALL_PREFIX}/etc\"
 #define LIBDIR \"${CMAKE_INSTALL_PREFIX}/lib\"
 #define LOCALE_DATADIRNAME \"share\"
 ")
-# Let cmake copy the created file only on changes.
-CONFIGURE_FILE (${CMAKE_CURRENT_BINARY_DIR}/gncla-dir.h.tmp ${CMAKE_CURRENT_BINARY_DIR}/gncla-dir.h COPYONLY)
 
 SET (libgnc_core_utils_HEADERS
   binreloc.h

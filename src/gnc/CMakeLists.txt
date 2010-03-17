@@ -21,6 +21,7 @@ SET (gnc_SOURCES
   SplitListModel.cpp
   main.cpp
   mainwindow.cpp
+  mainwindow-file.cpp
 )
 
 SET (gnc_QOBJECT_HEADERS

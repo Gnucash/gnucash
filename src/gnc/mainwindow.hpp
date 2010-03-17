@@ -87,13 +87,27 @@ private:
     void readSettings();
     void writeSettings();
     bool maybeSave();
-    void loadFile(const QString &fileName);
-    bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
     void viewOrHideTab(bool checkedView, QWidget *widget);
     void reallyRemoveTab(int index);
     void updateWindowTitle();
+
+    void loadFile(const QString &fileName);
+    bool saveFile();
+    bool saveFileAs(const QString &fileName);
+
+    typedef enum
+    {
+        GNC_FILE_DIALOG_OPEN,
+        GNC_FILE_DIALOG_IMPORT,
+        GNC_FILE_DIALOG_SAVE,
+        GNC_FILE_DIALOG_EXPORT
+    } GNCFileDialogType;
+    static bool show_session_error (QWidget *parent,
+                                    ::QofBackendError io_error,
+                                    const QString& newfile,
+                                    GNCFileDialogType type);
 
     Ui::MainWindow *ui;
 

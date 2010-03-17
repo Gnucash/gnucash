@@ -175,7 +175,7 @@ QUndoCommand* setTransactionDate(Transaction& t, const QDate& newValue)
 {
     return new Cmd<Transaction, QDate>(QObject::tr("Edit Transaction Date"),
                                        t, &Transaction::setDatePosted,
-                                       t.getDatePosted().date(), newValue);
+                                       t.getDatePosted(), newValue);
 }
 
 
