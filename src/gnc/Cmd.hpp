@@ -30,8 +30,10 @@
 namespace gnc
 {
 
-class Split;
 class Account;
+class Split;
+class TmpSplit;
+class TmpTransaction;
 class Transaction;
 
 /** This is a templated implementation of a QUndoCommand class. This
@@ -156,16 +158,21 @@ namespace cmd
 // members. Just create one of those, add it to a QUndoStack, and
 // magically the values will change with undo/redo back and
 // forth. Spooky, IMHO.
-QUndoCommand* setSplitMemo(Split& split, const QString& newValue);
-QUndoCommand* setSplitAction(Split& t, const QString& newValue);
+// QUndoCommand* setSplitMemo(Split& split, const QString& newValue);
+// QUndoCommand* setSplitAction(Split& t, const QString& newValue);
 QUndoCommand* setSplitReconcile(Split& t, char newValue);
-QUndoCommand* setSplitAmount(Split& t, const Numeric& newValue);
-QUndoCommand* setSplitValue(Split& t, const Numeric& newValue);
+QUndoCommand* setSplitReconcile(TmpSplit& t, char newValue);
+// QUndoCommand* setSplitAmount(Split& t, const Numeric& newValue);
+// QUndoCommand* setSplitValue(Split& t, const Numeric& newValue);
 QUndoCommand* setTransactionNum(Transaction& t, const QString& newValue);
+QUndoCommand* setTransactionNum(TmpTransaction& t, const QString& newValue);
 QUndoCommand* setTransactionDescription(Transaction& t, const QString& newValue);
-QUndoCommand* setTransactionNotes(Transaction& t, const QString& newValue);
+QUndoCommand* setTransactionDescription(TmpTransaction& t, const QString& newValue);
+// QUndoCommand* setTransactionNotes(Transaction& t, const QString& newValue);
 QUndoCommand* setTransactionDate(Transaction& t, const QDate& newValue);
+QUndoCommand* setTransactionDate(TmpTransaction& t, const QDate& newValue);
 QUndoCommand* setSplitValueAndAmount(Split& t, const Numeric& newValue);
+QUndoCommand* setSplitValueAndAmount(TmpSplit& t, const Numeric& newValue);
 QUndoCommand* destroyTransaction(Transaction& t);
 
 } // END namespace cmd

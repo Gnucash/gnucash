@@ -44,8 +44,10 @@ SplitListModel::SplitListModel(const Account& acc, QUndoStack* undoStack, QObjec
         , m_undoStack(undoStack)
         , m_eventWrapper(*this, &SplitListModel::transactionEvent, GNC_ID_TRANS)
         , m_eventWrapperAccount(*this, &SplitListModel::accountEvent, GNC_ID_ACCOUNT)
+        , m_enableNewTransaction(true)
 {
     recreateCache();
+    recreateTmpTrans();
 }
 
 void SplitListModel::recreateCache()
@@ -66,6 +68,14 @@ void SplitListModel::recreateCache()
         reset();
 }
 
+void SplitListModel::recreateTmpTrans()
+{
+    m_tmpTransaction.clear();
+    m_tmpTransaction.push_back(TmpSplit(m_account.get()));
+    m_tmpTransaction.setCommodity(m_account.getCommodity());
+    m_tmpTransaction.setDatePosted(QDate::currentDate());
+}
+
 SplitListModel::~SplitListModel()
 {
 }
@@ -74,8 +84,11 @@ QModelIndex SplitListModel::index(int row, int column,
                                   const QModelIndex &parent) const
 {
     //qDebug() << "index(), " << row << column << parent;
-    if (!hasIndex(row, column, parent) || row >= m_list.size())
+    if (!hasIndex(row, column, parent) || row >= rowCount())
         return QModelIndex();
+
+    if (m_enableNewTransaction && row == m_list.size())
+        return createIndex(row, column, (void*)NULL);
 
     Split childItem = m_list.at(row);
     if (childItem.get())
@@ -87,16 +100,8 @@ QModelIndex SplitListModel::index(int row, int column,
         return QModelIndex();
 }
 
-bool SplitListModel::insertRows(int position, int rows, const QModelIndex &index)
-{
-    beginInsertRows(QModelIndex(), position, position + rows - 1);
-    endInsertRows();
-    return true;
-}
-
 bool SplitListModel::removeRows(int position, int rows, const QModelIndex &index)
 {
-    beginRemoveRows(QModelIndex(), position, position+rows-1);
     for (int row = position; row < position + rows; ++row)
     {
         Split s(m_list.at(row));
@@ -106,8 +111,14 @@ bool SplitListModel::removeRows(int position, int rows, const QModelIndex &index
         QUndoCommand* cmd = cmd::destroyTransaction(t);
         m_undoStack->push(cmd);
     }
-    endRemoveRows();
+    // No beginInsertRows/endInsertRows because reset() is called in
+    // recreateCache() anyway.
     return true;
+}
+
+int SplitListModel::rowCount(const QModelIndex& parent) const
+{
+    return m_list.size() + (m_enableNewTransaction ? 1 : 0);
 }
 
 int SplitListModel::columnCount(const QModelIndex& parent) const
@@ -148,95 +159,187 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    Split split(static_cast< ::Split*>(index.internalPointer()));
-    Transaction trans(split.getParent());
-    Numeric amount = split.getValue(); // Alternatively: xaccSplitConvertAmount(split.get(), split.getAccount().get());
-    PrintAmountInfo printInfo(split.get(), false);
-
-    switch (index.column())
+    if (m_enableNewTransaction && index.row() == m_list.size())
     {
-    case 0:
-        switch (role)
+        // Special case: We are in the last row which represents the
+        // newly entered txn.
+
+        TmpSplit split(m_tmpTransaction.getSplits().front());
+        const TmpTransaction& trans = m_tmpTransaction;
+        Numeric amount = split.getValue();
+        PrintAmountInfo printInfo(m_account, false);
+        switch (index.column())
         {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-            return trans.getDatePosted();
+        case 0:
+            switch (role)
+            {
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                return trans.getDatePosted();
+            default:
+                return QVariant();
+            }
+        case 1:
+            switch (role)
+            {
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                return trans.getNum();
+            default:
+                return QVariant();
+            }
+        case 2:
+            switch (role)
+            {
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                return trans.getDescription();
+            default:
+                return QVariant();
+            }
+        case 3:
+            switch (role)
+            {
+//         case Qt::DisplayRole:
+//             return split.getCorrAccountFullName();
+            default:
+                return QVariant();
+            }
+        case 4:
+            switch (role)
+            {
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                return QString::fromUtf8(gnc_get_reconcile_str(split.getReconcile()));
+            default:
+                return QVariant();
+            }
+        case 5:
+            switch (role)
+            {
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                if (amount.positive_p())
+                    return amount.printAmount(printInfo);
+                else
+                    return QString();
+            default:
+                return QVariant();
+            }
+        case 6:
+            switch (role)
+            {
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                if (amount.positive_p())
+                    return QString();
+                else
+                    return amount.neg().printAmount(printInfo);
+            default:
+                return QVariant();
+            }
+        case 7:
         default:
             return QVariant();
         }
-    case 1:
-        switch (role)
+
+
+    }
+    else
+    {
+        // Normal case: We are in a row that displays a normal
+        // transaction and split
+
+        Split split(static_cast< ::Split*>(index.internalPointer()));
+        Transaction trans(split.getParent());
+        Numeric amount = split.getValue(); // Alternatively: xaccSplitConvertAmount(split.get(), split.getAccount().get());
+        PrintAmountInfo printInfo(split, false);
+
+        switch (index.column())
         {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-            return trans.getNum();
+        case 0:
+            switch (role)
+            {
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                return trans.getDatePosted();
+            default:
+                return QVariant();
+            }
+        case 1:
+            switch (role)
+            {
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                return trans.getNum();
+            default:
+                return QVariant();
+            }
+        case 2:
+            switch (role)
+            {
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                return trans.getDescription();
+            default:
+                return QVariant();
+            }
+        case 3:
+            switch (role)
+            {
+            case Qt::DisplayRole:
+                return split.getCorrAccountFullName();
+            default:
+                return QVariant();
+            }
+        case 4:
+            switch (role)
+            {
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                return QString::fromUtf8(gnc_get_reconcile_str(split.getReconcile()));
+            default:
+                return QVariant();
+            }
+        case 5:
+            switch (role)
+            {
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                if (amount.positive_p())
+                    return amount.printAmount(printInfo);
+                else
+                    return QString();
+            default:
+                return QVariant();
+            }
+        case 6:
+            switch (role)
+            {
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                if (amount.positive_p())
+                    return QString();
+                else
+                    return amount.neg().printAmount(printInfo);
+            default:
+                return QVariant();
+            }
+        case 7:
+            switch (role)
+            {
+            case Qt::DisplayRole:
+                return split.getBalance().printAmount(printInfo);
+            case Qt::ForegroundRole:
+                return split.getBalance().negative_p()
+                       ? QBrush(Qt::red)
+                       : QBrush();
+            default:
+                return QVariant();
+            }
         default:
             return QVariant();
         }
-    case 2:
-        switch (role)
-        {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-            return trans.getDescription();
-        default:
-            return QVariant();
-        }
-    case 3:
-        switch (role)
-        {
-        case Qt::DisplayRole:
-            return split.getCorrAccountFullName();
-        default:
-            return QVariant();
-        }
-    case 4:
-        switch (role)
-        {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-            return QString::fromUtf8(gnc_get_reconcile_str(split.getReconcile()));
-        default:
-            return QVariant();
-        }
-    case 5:
-        switch (role)
-        {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-            if (amount.positive_p())
-                return amount.printAmount(printInfo);
-            else
-                return QString();
-        default:
-            return QVariant();
-        }
-    case 6:
-        switch (role)
-        {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-            if (amount.positive_p())
-                return QString();
-            else
-                return amount.neg().printAmount(printInfo);
-        default:
-            return QVariant();
-        }
-    case 7:
-        switch (role)
-        {
-        case Qt::DisplayRole:
-            return split.getBalance().printAmount(printInfo);
-        case Qt::ForegroundRole:
-            return split.getBalance().negative_p()
-                   ? QBrush(Qt::red)
-                   : QBrush();
-        default:
-            return QVariant();
-        }
-    default:
-        return QVariant();
     }
 }
 
@@ -275,9 +378,109 @@ QVariant SplitListModel::headerData(int section, Qt::Orientation orientation, in
 
 bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    if (!index.isValid() || role != Qt::EditRole)
+        return false;
+
     QUndoCommand* cmd = NULL;
-    if (index.isValid() && role == Qt::EditRole)
+    if (m_enableNewTransaction && index.row() == m_list.size())
     {
+        // Special case: We are in the last row which represents the
+        // newly entered txn.
+
+        TmpTransaction& trans = m_tmpTransaction;
+        TmpSplit& split = trans.getSplits().front();
+
+        // "Editing" is done by creating a Cmd-object and adding it to
+        // the undo stack. That's in fact all that was needed to
+        // create an *undoable* edit of this data cell. Seems almost
+        // spooky, doesn't it?
+        switch (index.column())
+        {
+        case 0:
+        {
+            QDate date = value.toDate();
+            if (date.isValid())
+            {
+                cmd = cmd::setTransactionDate(trans, date);
+            }
+            break;
+        }
+        case 1:
+            cmd = cmd::setTransactionNum(trans, value.toString());
+            break;
+        case 2:
+            cmd = cmd::setTransactionDescription(trans, value.toString());
+            break;
+        case 4:
+        {
+            QString str(value.toString());
+            if (str.size() > 0)
+            {
+                char recn = str[0].toLatin1();
+                switch (recn)
+                {
+                case NREC:
+                case CREC:
+                case YREC:
+                case FREC:
+                case VREC:
+                    cmd = cmd::setSplitReconcile(split, recn);
+                    break;
+                default:
+                    qDebug() << "Unknown reconcile string:" << str;
+                }
+            }
+            break;
+        }
+        case 5:
+        case 6:
+        {
+            QString str(value.toString().simplified());
+            Numeric n;
+            QString errmsg = n.parse(str);
+            if (errmsg.isEmpty())
+            {
+                qDebug() << "Does setting numeric work? numeric=" << n.to_string();
+                if (index.column() == 6)
+                    n = n.neg();
+                // Check whether we have the simple case here
+                if (trans.getSplits().size() != 1)
+                {
+                    QMessageBox::warning(NULL, tr("Unimplemented"),
+                                         tr("Sorry, but editing a transaction with more than two splits (here: %1) is not yet implemented.").arg(trans.getSplits().size()));
+                }
+                else
+                {
+                    Commodity originCommodity = m_account.getCommodity();
+                    Commodity transCommodity = trans.getCommodity();
+                    if (originCommodity != transCommodity)
+                    {
+                        QMessageBox::warning(NULL, tr("Unimplemented"),
+                                             tr("Sorry, but editing a transaction with different accounts is not yet implemented."));
+                    }
+                    else
+                    {
+                        // This is the really simple case which we can
+                        // handle now.
+                        cmd = cmd::setSplitValueAndAmount(split, n);
+                    }
+                }
+            }
+            else
+            {
+                qDebug() << "Cannot convert this string to gnc_numeric:" << str;
+            }
+            break;
+        }
+        default:
+            break;
+        }
+    }
+    else
+    {
+        // Normal case: We are in a row that displays a normal
+        // transaction and split
+
         Split split(static_cast< ::Split*>(index.internalPointer()));
         Transaction trans(split.getParent());
 

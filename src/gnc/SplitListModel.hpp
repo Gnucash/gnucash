@@ -26,6 +26,7 @@
 #include "gnc/Account.hpp"
 #include "gnc/Split.hpp"
 #include "gnc/QofEventWrapper.hpp"
+#include "gnc/Transaction.hpp"
 
 extern "C"
 {
@@ -49,7 +50,7 @@ public:
     ~SplitListModel();
 
     QModelIndex parent(const QModelIndex &index) const { return QModelIndex(); }
-    int rowCount(const QModelIndex& parent = QModelIndex()) const { return m_list.size(); }
+    int rowCount(const QModelIndex& parent = QModelIndex()) const;
     int columnCount(const QModelIndex& parent = QModelIndex()) const;
     QModelIndex index(int row, int column,
                       const QModelIndex &parent = QModelIndex()) const;
@@ -59,7 +60,6 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
 
-    bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex());
     bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex());
 
 public slots:
@@ -68,6 +68,8 @@ public slots:
 
 private:
     void recreateCache();
+    void recreateTmpTrans();
+
 protected:
     Account m_account;
     SplitQList m_list;
@@ -78,6 +80,9 @@ protected:
     /** The wrapper for receiving events from gnc. */
     QofEventWrapper<SplitListModel, ::Transaction*> m_eventWrapper;
     QofEventWrapper<SplitListModel, ::Account*> m_eventWrapperAccount;
+
+    bool m_enableNewTransaction;
+    TmpTransaction m_tmpTransaction;
 };
 
 } // END namespace gnc

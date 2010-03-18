@@ -227,6 +227,28 @@ QUndoCommand* destroyTransaction(Transaction& t)
 }
 
 
+QUndoCommand* setSplitReconcile(TmpSplit& t, char newValue)
+{
+    return 0;
+}
+QUndoCommand* setTransactionNum(TmpTransaction& t, const QString& newValue)
+{
+    return 0;
+}
+QUndoCommand* setTransactionDescription(TmpTransaction& t, const QString& newValue)
+{
+    return 0;
+}
+QUndoCommand* setTransactionDate(TmpTransaction& t, const QDate& newValue)
+{
+    return 0;
+}
+QUndoCommand* setSplitValueAndAmount(TmpSplit& t, const Numeric& newValue)
+{
+    return 0;
+}
+
+
 } // END namespace cmd
 
 
