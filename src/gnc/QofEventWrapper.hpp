@@ -40,7 +40,7 @@ namespace gnc
 QString qofEventToString(QofEventId event_type);
 
 /** Retrieval of the Qof instance class name (for debugging) */
-inline const char* getQofType(QofInstance* obj)
+inline const char* getQofType( ::QofInstance* obj)
 {
     return obj->e_type;
 }
@@ -71,7 +71,7 @@ public:
         qof_event_unregister_handler(m_handler_id);
     }
 
-    static void event_handler (QofInstance *entity,  QofEventId event_type,
+    static void event_handler (::QofInstance *entity,  QofEventId event_type,
                                gpointer user_data, gpointer event_data)
     {
         QofEventWrapper* wrapper = static_cast<QofEventWrapper *>(user_data);
@@ -79,7 +79,7 @@ public:
     }
 
 private:
-    void private_event_handler (QofInstance *entity,  QofEventId event_type,
+    void private_event_handler (::QofInstance *entity,  QofEventId event_type,
                                 gpointer event_data)
     {
 //         qDebug() << "private_event_handler, id=" << qofEventToString(event_type)

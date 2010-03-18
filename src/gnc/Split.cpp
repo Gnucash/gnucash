@@ -29,8 +29,6 @@
 namespace gnc
 {
 
-Book Split::getBook() const { return xaccSplitGetBook(get()); }
-
 Account Split::getAccount() const { return xaccSplitGetAccount(get()); }
 void Split::setAccount(Account& acc) { xaccSplitSetAccount(get(), acc.get()); }
 void Split::setAccount(::Account* acc) { xaccSplitSetAccount(get(), acc); }
@@ -49,6 +47,22 @@ TmpSplit::TmpSplit(const Split& s, const TmpTransaction* parent_trans)
         , amount(s.getAmount())
         , value(s.getValue())
 {}
+
+TmpSplit::TmpSplit(::Account* account)
+{
+    clear(account);
+}
+
+void TmpSplit::clear(::Account* account)
+{
+    account = account;
+    parent = NULL;
+    memo.clear();
+    action.clear();
+    reconcile = '\0';
+    amount = Numeric::zero();
+    value = Numeric::zero();
+}
 
 void TmpSplit::copyInto(Transaction& t)
 {

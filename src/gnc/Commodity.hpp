@@ -31,17 +31,17 @@ extern "C"
 #include "engine/gnc-commodity.h"
 }
 
-#include "gnc/WeakPointer.hpp"
+#include "gnc/GncInstance.hpp"
 #include <QString>
 
 /** Wrapper around a gnucash gnc_commodity pointer */
 namespace gnc
 {
 
-class Commodity : public WeakPointer<gnc_commodity>
+class Commodity : public GncInstance<gnc_commodity>
 {
 public:
-    typedef WeakPointer<gnc_commodity> base_class;
+    typedef GncInstance<gnc_commodity> base_class;
     Commodity(element_type *ptr = 0)
             : base_class(ptr)
     {}

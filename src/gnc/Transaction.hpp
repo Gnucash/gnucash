@@ -35,13 +35,16 @@ extern "C"
 #include "gnc/Book.hpp"
 #include "gnc/Commodity.hpp"
 #include "gnc/Numeric.hpp"
-#include "gnc/WeakPointer.hpp"
+#include "gnc/GncInstance.hpp"
 
 #include <QString>
 #include <QList>
 
 namespace gnc
 {
+
+class Split;
+class TmpSplit;
 
 /** Wrapper around a gnucash ::Transaction pointer with C++ methods for
  * easier setter and getter access.
@@ -50,15 +53,13 @@ namespace gnc
  * underlying gnucash ::Transaction object is still alive or has been
  * deleted.
  */
-class Transaction : public WeakPointer< ::Transaction >
+class Transaction : public GncInstance< ::Transaction >
 {
 public:
-    typedef WeakPointer< ::Transaction > base_class;
+    typedef GncInstance< ::Transaction > base_class;
     Transaction(element_type* ptr = 0)
             : base_class(ptr)
     { }
-
-    Book getBook() const { return xaccTransGetBook(get()); }
 
     void beginEdit() { xaccTransBeginEdit(get()); }
     void commitEdit() { xaccTransCommitEdit(get()); }
@@ -76,10 +77,10 @@ public:
     void setNotes(const QString& v) { xaccTransSetNotes(get(), v.toUtf8()); }
 
     int countSplits() const { return xaccTransCountSplits(get()); }
-    Split findSplitByAccount(const Account& acc) const { return xaccTransFindSplitByAccount(get(), acc.get()); }
-    void appendSplit(Split& split) { xaccSplitSetParent(split.get(), get()); }
-    Split getSplit(int i) const { return xaccTransGetSplit(get(), i); }
-    int getSplitIndex(const Split& split) const { return xaccTransGetSplitIndex(get(), split.get()); }
+    Split findSplitByAccount(const Account& acc) const;
+    void appendSplit(Split& split);
+    Split getSplit(int i) const;
+    int getSplitIndex(const Split& split) const;
     ::SplitList* getSplitList() const { return xaccTransGetSplitList(get()); }
 
     Commodity getCurrency() const { return xaccTransGetCurrency(get()); }
@@ -94,43 +95,45 @@ public:
     QDate getDatePosted() const { return toQDate(xaccTransGetDatePostedGDate(get())); }
     QDateTime getDateEntered() const { return toQDateTime(xaccTransRetDateEnteredTS(get())); }
 
+    static element_type* newInstance(const Book& b);
 };
 
 class TmpTransaction
 {
 public:
-    TmpTransaction(const Transaction& t)
-            : num(t.getNum())
-            , description(t.getDescription())
-            , notes(t.getNotes())
-            , commodity(t.getCurrency())
-            , datePosted(t.getDatePosted())
-            , dateTimeEntered(t.getDateEntered())
-    {
-        SplitQList slist = Split::fromGList(t.getSplitList());
-        Q_FOREACH(Split s, slist)
-        {
-            splits.push_back(TmpSplit(s, this));
-        }
-    }
-    void copyTo(Transaction& t)
-    {
-        t.setNum(num);
-        t.setDescription(description);
-        if (!notes.isEmpty())
-            t.setNotes(notes);
-        t.setCurrency(commodity);
-        t.setDatePosted(datePosted);
-        t.setDateEntered(dateTimeEntered);
-        Q_FOREACH(TmpSplit s, splits)
-        {
-            s.copyInto(t);
-        }
-    }
+    typedef QList<TmpSplit> TmpSplitQList;
+
+    TmpTransaction();
+    TmpTransaction(const Transaction& t);
+
+    void clear();
+    void copyTo(Transaction& t) const;
+    void createAsReal() const;
+
+    QString getNum() const { return num; }
+    void setNum(const QString& v) { num = v; }
+
+    QString getDescription() const { return description; }
+    void setDescription(const QString& v) { description = v; }
+
+    void push_back(const TmpSplit& s);
+    const TmpSplitQList& getSplits() const { return splits; }
+    TmpSplitQList& getSplits() { return splits; }
+
+    Commodity getCommodity() const { return commodity; }
+    void setCommodity(const Commodity& v) { commodity = v; }
+
+    QDate getDatePosted() const { return datePosted; }
+    void setDatePosted(const QDate& v) { datePosted = v; }
+
+    QDateTime getDateEntered() const { return dateTimeEntered; }
+    void setDateEntered(const QDateTime& v) { dateTimeEntered = v; }
+
+private:
     QString num;
     QString description;
     QString notes;
-    QList<TmpSplit> splits;
+    TmpSplitQList splits;
     Commodity commodity;
     QDate datePosted;
     QDateTime dateTimeEntered;

@@ -31,7 +31,7 @@ extern "C"
 #include "engine/Account.h"
 }
 
-#include "gnc/WeakPointer.hpp"
+#include "gnc/GncInstance.hpp"
 
 namespace gnc
 {
@@ -44,12 +44,15 @@ class Account;
  * underlying gnucash ::QofBook object is still alive or has been
  * deleted.
  */
-class Book : public WeakPointer< ::QofBook >
+class Book : public GncInstance< ::QofBook >
 {
 public:
-    typedef WeakPointer< ::QofBook > base_class;
+    typedef GncInstance< ::QofBook > base_class;
     Book(element_type* ptr = 0)
             : base_class(ptr)
+    { }
+    Book(const base_class& x)
+            : base_class(x)
     { }
 
     Account get_root_account();

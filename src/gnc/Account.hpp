@@ -31,7 +31,7 @@ extern "C"
 #include "engine/Account.h"
 }
 
-#include "gnc/WeakPointer.hpp"
+#include "gnc/GncInstance.hpp"
 #include "gnc/Commodity.hpp"
 
 #include <QString>
@@ -50,10 +50,10 @@ typedef QList< ::Account*> AccountQList;
  * underlying gnucash ::Account object is still alive or has been
  * deleted.
  */
-class Account : public WeakPointer< ::Account >
+class Account : public GncInstance< ::Account >
 {
 public:
-    typedef WeakPointer< ::Account > base_class;
+    typedef GncInstance< ::Account > base_class;
     Account(element_type* ptr = 0)
             : base_class(ptr)
     { }

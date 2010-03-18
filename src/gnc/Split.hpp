@@ -34,7 +34,7 @@ extern "C"
 #include <QString>
 #include <QList>
 
-#include "gnc/WeakPointer.hpp"
+#include "gnc/GncInstance.hpp"
 #include "gnc/Numeric.hpp"
 
 namespace gnc
@@ -54,15 +54,14 @@ typedef QList< ::Split*> SplitQList;
  * underlying gnucash ::Split object is still alive or has been
  * deleted.
  */
-class Split : public WeakPointer< ::Split >
+class Split : public GncInstance< ::Split >
 {
 public:
-    typedef WeakPointer< ::Split > base_class;
+    typedef GncInstance< ::Split > base_class;
     Split(element_type* ptr = 0)
             : base_class(ptr)
     { }
 
-    Book getBook() const;
     Account getAccount() const;
     void setAccount(Account& acc);
     void setAccount(::Account* acc);
@@ -116,9 +115,33 @@ class TmpSplit
 {
 public:
     TmpSplit(const Split& s, const TmpTransaction* parent_trans);
-    TmpSplit()
-    {}
+    TmpSplit(::Account* account = NULL);
+
+    void clear(::Account* account = NULL);
     void copyInto(Transaction& t);
+
+    ::Account* getAccount() const { return account; }
+    void setAccount(::Account* v) { account = v;}
+
+    const TmpTransaction* getParent() const { return parent; }
+    void setParent(const TmpTransaction* v) { parent = v; }
+
+    QString getMemo() const { return memo; }
+    void setMemo(const QString& v) { memo = v; }
+
+    QString getAction() const { return action; }
+    void setAction(const QString& v) { action = v; }
+
+    char getReconcile() const { return reconcile; }
+    void setReconcile(char v) { reconcile = v; }
+
+    Numeric getAmount() const { return amount; }
+    void setAmount(const Numeric& v) { amount = v; }
+
+    Numeric getValue() const { return value; }
+    void setValue(const Numeric& v) { value = v; }
+
+private:
     ::Account* account;
     const TmpTransaction* parent;
     QString memo;

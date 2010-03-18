@@ -19,6 +19,7 @@ SET (gnc_SOURCES
   Session.cpp
   Split.cpp
   SplitListModel.cpp
+  Transaction.cpp
   main.cpp
   mainwindow.cpp
   mainwindow-file.cpp

@@ -207,10 +207,11 @@ public:
 
     virtual void undo()
     {
-        m_target.reset(xaccMallocTransaction (m_book.get()));
+        m_target.reset(Transaction::newInstance(m_book));
         m_target.beginEdit();
         m_previousValue.copyTo(m_target);
         m_target.commitEdit();
+        // Could also use m_previousValue.createAsReal()
     }
 
 protected:
