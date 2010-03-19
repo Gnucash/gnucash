@@ -16,6 +16,7 @@ AM_CPPFLAGS = \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS} \
   ${GTK_CFLAGS} \
+  ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GOFFICE_CFLAGS}
 
@@ -59,6 +60,7 @@ libgncmod_html_la_LIBADD = \
   ${DB_LIBS} \
   ${QOF_LIBS} \
   ${GOFFICE_LIBS} \
+  ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${REGEX_LIBS}
 
