@@ -1973,9 +1973,12 @@ main_window_update_page_color (GncPluginPage *page,
     gnc_plugin_page_set_page_color(page, color_string);
 
     /* Update the notebook tab */
+    main_window_find_tab_event(window, page, &event_box);
 
     if (gdk_color_parse(color_string, &tab_color))
     {
+        gtk_widget_modify_bg(event_box, GTK_STATE_NORMAL, &tab_color);
+        gtk_widget_modify_bg(event_box, GTK_STATE_ACTIVE, &tab_color);
     }
     g_free(color_string);
     LEAVE("done");
@@ -2505,10 +2508,11 @@ gnc_main_window_open_page (GncMainWindow *window,
     GncMainWindowPrivate *priv;
     GtkWidget *tab_hbox;
     GtkWidget *label, *entry, *event_box;
-    const gchar *icon, *text;
+    const gchar *icon, *text, *color_string;
     GtkWidget *image;
     GList *tmp;
     gint width;
+    GdkColor tab_color;
 
     ENTER("window %p, page %p", window, page);
 
@@ -2592,6 +2596,14 @@ gnc_main_window_open_page (GncMainWindow *window,
     gtk_widget_show(event_box);
 
     gtk_container_add(GTK_CONTAINER(event_box), tab_hbox);
+
+    color_string = gnc_plugin_page_get_page_color(page);
+    if (color_string == NULL) color_string = "";
+    if (gdk_color_parse(color_string, &tab_color))
+    {
+        gtk_widget_modify_bg(event_box, GTK_STATE_NORMAL, &tab_color);
+        gtk_widget_modify_bg(event_box, GTK_STATE_ACTIVE, &tab_color);
+    }
 
     text = gnc_plugin_page_get_page_long_name(page);
     if (text)
