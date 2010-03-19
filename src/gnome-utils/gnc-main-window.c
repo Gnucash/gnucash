@@ -1844,14 +1844,40 @@ main_window_find_tab_items (GncMainWindow *window,
     return (*label_p && *entry_p);
 }
 
+static gboolean
+main_window_find_tab_event (GncMainWindow *window,
+                            GncPluginPage *page,
+                            GtkWidget **event_p)
+{
+    GncMainWindowPrivate *priv;
+    GtkWidget *event_box;
+
+    ENTER("window %p, page %p, event %p",
+          window, page, event_p);
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    *event_p = NULL;
+
+    event_box = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
+                                           page->notebook_page);
+    if (GTK_IS_EVENT_BOX(event_box))
+    {
+        *event_p = event_box;
+        LEAVE("event %p", *event_p);
+        return (TRUE);
+    }
+
+    LEAVE("event %p", *event_p);
+    return (FALSE);
+}
+
 void
 main_window_update_page_name (GncPluginPage *page,
                               const gchar *name_in)
 {
     GncMainWindow *window;
     GncMainWindowPrivate *priv;
-    GtkWidget *label, *entry;
-    gchar *name;
+    GtkWidget *label, *entry, *event_box;
+    gchar *name, *old_page_name, *old_page_long_name;
 
     ENTER(" ");
 
@@ -1861,6 +1887,7 @@ main_window_update_page_name (GncPluginPage *page,
         return;
     }
     name = g_strstrip(g_strdup(name_in));
+
     /* Optimization, if the name hasn't changed, don't update X. */
     if (*name == '\0' || 0 == strcmp(name, gnc_plugin_page_get_page_name(page)))
     {
@@ -1868,6 +1895,9 @@ main_window_update_page_name (GncPluginPage *page,
         LEAVE("empty string or name unchanged");
         return;
     }
+
+    old_page_name = g_strdup( gnc_plugin_page_get_page_name(page));
+    old_page_long_name = g_strdup( gnc_plugin_page_get_page_long_name(page));
 
     /* Update the plugin */
     window = GNC_MAIN_WINDOW(page->window);
@@ -1878,6 +1908,23 @@ main_window_update_page_name (GncPluginPage *page,
     main_window_find_tab_items(window, page, &label, &entry);
     gtk_label_set_text(GTK_LABEL(label), name);
 
+    /* Update Tooltip on notebook Tab */
+    main_window_find_tab_event(window, page, &event_box);
+
+    if (g_strrstr(old_page_long_name, old_page_name) != NULL)
+    {
+        gchar *new_page_long_name;
+        gint string_position;
+
+        string_position = strlen(old_page_long_name) - strlen(old_page_name);
+        new_page_long_name = g_strconcat(g_strndup(old_page_long_name, string_position), name, NULL);
+
+        gnc_plugin_page_set_page_long_name(page, new_page_long_name);
+        gtk_tooltips_set_tip(GTK_TOOLTIPS(tips), event_box, new_page_long_name, NULL);
+
+        g_free(new_page_long_name);
+    }
+
     /* Update the notebook menu */
     label = gtk_notebook_get_menu_label (GTK_NOTEBOOK(priv->notebook),
                                          page->notebook_page);
@@ -1885,6 +1932,8 @@ main_window_update_page_name (GncPluginPage *page,
 
     /* Force an update of the window title */
     gnc_main_window_update_title(window);
+    g_free(old_page_long_name);
+    g_free(old_page_name);
     g_free(name);
     LEAVE("done");
 }
