@@ -1812,22 +1812,26 @@ main_window_find_tab_items (GncMainWindow *window,
                             GtkWidget **entry_p)
 {
     GncMainWindowPrivate *priv;
-    GtkWidget *tab_hbox, *widget;
+    GtkWidget *tab_hbox, *widget, *event_box;
     GList *children, *tmp;
 
     ENTER("window %p, page %p, label_p %p, entry_p %p",
           window, page, label_p, entry_p);
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     *label_p = *entry_p = NULL;
-    tab_hbox = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
-                                          page->notebook_page);
+
+    event_box = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
+                                           page->notebook_page);
+
+    tab_hbox = gtk_bin_get_child(GTK_BIN(event_box));
+
     children = gtk_container_get_children(GTK_CONTAINER(tab_hbox));
     for (tmp = children; tmp; tmp = g_list_next(tmp))
     {
         widget = tmp->data;
-        if (GTK_IS_EVENT_BOX(widget))
+        if (GTK_IS_LABEL(widget))
         {
-            *label_p = gtk_bin_get_child(GTK_BIN(widget));
+            *label_p = widget;
         }
         else if (GTK_IS_ENTRY(widget))
         {
@@ -2519,13 +2523,26 @@ gnc_main_window_open_page (GncMainWindow *window,
         image = gtk_image_new_from_stock (icon, GTK_ICON_SIZE_MENU);
         gtk_widget_show (image);
         gtk_box_pack_start (GTK_BOX (tab_hbox), image, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (tab_hbox), label, FALSE, FALSE, 0);
     }
+    else
+        gtk_box_pack_start (GTK_BOX (tab_hbox), label, FALSE, FALSE, 0);
 
     event_box = gtk_event_box_new();
+#if defined(G_OS_UNIX) || (GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION != 18)
+    gtk_event_box_set_visible_window(GTK_EVENT_BOX(event_box), TRUE);
+#else
+    /* Bug#610675: On Windows (i.e. no G_OS_UNIX) and gtk-2.18.x,
+     * having the event_box visible makes the text disappear. Hence we
+     * leave it at non-visible, which unfortunately means there will
+     * be no coloring, but at least the text is still there. This
+     * doesn't occur with gtk-2.16.x and we hope it won't happen again
+     * with gtk-2.20.x and higher. */
     gtk_event_box_set_visible_window(GTK_EVENT_BOX(event_box), FALSE);
+#endif
     gtk_widget_show(event_box);
-    gtk_container_add(GTK_CONTAINER(event_box), label);
-    gtk_box_pack_start (GTK_BOX (tab_hbox), event_box, TRUE, TRUE, 0);
+
+    gtk_container_add(GTK_CONTAINER(event_box), tab_hbox);
 
     text = gnc_plugin_page_get_page_long_name(page);
     if (text)
@@ -2584,7 +2601,7 @@ gnc_main_window_open_page (GncMainWindow *window,
     /*
      * Now install it all in the window.
      */
-    gnc_main_window_connect(window, page, tab_hbox, label);
+    gnc_main_window_connect(window, page, event_box, label);
 
     LEAVE("");
 }
