@@ -51,8 +51,7 @@ extern "C"
 #include "gnc/Split.hpp"
 #include "gnc/SplitListModel.hpp"
 #include "gnc/RecentFileMenu.hpp"
-
-#include "gnc/Cmd.hpp"
+#include "gnc/SplitListView.hpp"
 
 namespace gnc
 {
@@ -416,7 +415,7 @@ void MainWindow::accountItemActivated(const QModelIndex & index)
     if (index.model() != m_accountTreeModel
             && index.model() != m_accountListModel)
     {
-        qDebug() << "Wrong model";
+        qDebug() << "Wrong model; row=" << (index.isValid()? index.row() : -1);
         return;
     }
     Account account(static_cast< ::Account*>(index.internalPointer()));
@@ -428,14 +427,9 @@ void MainWindow::accountItemActivated(const QModelIndex & index)
 
     // We create a new model for this account which will query it for
     // its splits, and also a view widget for this list.
-    QTableView *tableView = new QTableView(ui->tabWidget); // FIXME: Is this parent correct?
-    SplitListModel *smodel = new SplitListModel(account, m_undoStack, tableView);
-    tableView->setModel(smodel);
-    tableView->setAlternatingRowColors(true);
-    tableView->scrollToBottom();
-    if (smodel->rowCount() > 0)
-        tableView->setCurrentIndex(smodel->index(smodel->rowCount() - 1, 0));
-    ui->actionCut->setEnabled(smodel->rowCount() > 0);
+    QTableView *tableView =
+        new SplitListView(account, m_undoStack, ui->tabWidget);
+    ui->actionCut->setEnabled(tableView->model()->rowCount() > 0);
 
     // Insert this as a new tab
     tableView->setProperty(PROPERTY_TAB_PREVIOUSPOS, ui->tabWidget->currentIndex());

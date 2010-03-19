@@ -19,6 +19,7 @@ SET (gnc_SOURCES
   Session.cpp
   Split.cpp
   SplitListModel.cpp
+  SplitListView.cpp
   Transaction.cpp
   main.cpp
   mainwindow.cpp
@@ -29,6 +30,7 @@ SET (gnc_QOBJECT_HEADERS
   AccountItemModel.hpp
   RecentFileMenu.hpp
   SplitListModel.hpp
+  SplitListView.hpp
   mainwindow.hpp
 )
 SET (gnc_HEADERS ${gnc_QOBJECT_HEADERS}

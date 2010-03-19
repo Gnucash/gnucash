@@ -108,7 +108,7 @@ public:
 
     void clear();
     void copyTo(Transaction& t) const;
-    void createAsReal() const;
+    Transaction createAsReal() const;
 
     QString getNum() const { return num; }
     void setNum(const QString& v) { num = v; }
@@ -119,6 +119,7 @@ public:
     void push_back(const TmpSplit& s);
     const TmpSplitQList& getSplits() const { return splits; }
     TmpSplitQList& getSplits() { return splits; }
+    int countSplits() const { return splits.size(); }
 
     Commodity getCommodity() const { return commodity; }
     void setCommodity(const Commodity& v) { commodity = v; }

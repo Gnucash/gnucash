@@ -48,14 +48,14 @@ TmpSplit::TmpSplit(const Split& s, const TmpTransaction* parent_trans)
         , value(s.getValue())
 {}
 
-TmpSplit::TmpSplit(::Account* account)
+TmpSplit::TmpSplit(::Account* _account)
 {
-    clear(account);
+    clear(_account);
 }
 
-void TmpSplit::clear(::Account* account)
+void TmpSplit::clear(::Account* _account)
 {
-    account = account;
+    account = _account;
     parent = NULL;
     memo.clear();
     action.clear();

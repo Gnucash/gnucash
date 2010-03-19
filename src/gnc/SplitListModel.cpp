@@ -127,7 +127,7 @@ int SplitListModel::columnCount(const QModelIndex& parent) const
 //     if (!parent.isValid())
 //         return 0;
 //     else
-    return 8; // Fixed number for now
+    return COLUMN_LAST; // Fixed number for now
 }
 
 Qt::ItemFlags SplitListModel::flags(const QModelIndex &index) const
@@ -139,14 +139,16 @@ Qt::ItemFlags SplitListModel::flags(const QModelIndex &index) const
     Qt::ItemFlags result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     switch (index.column())
     {
-    case 0:
-    case 1:
-    case 2:
-    case 4:
-    case 5:
-    case 6:
+    case COLUMN_DATE:
+    case COLUMN_NUM:
+    case COLUMN_DESC:
+    case COLUMN_RECONCILE:
+    case COLUMN_INCREASE:
+    case COLUMN_DECREASE:
         // Allow write access as well
         return result | Qt::ItemIsEditable;
+    case COLUMN_ACCOUNT:
+    case COLUMN_BALANCE:
     default:
         // Ensure read-only access only
         return result;
@@ -170,7 +172,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
         PrintAmountInfo printInfo(m_account, false);
         switch (index.column())
         {
-        case 0:
+        case COLUMN_DATE:
             switch (role)
             {
             case Qt::DisplayRole:
@@ -179,7 +181,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             default:
                 return QVariant();
             }
-        case 1:
+        case COLUMN_NUM:
             switch (role)
             {
             case Qt::DisplayRole:
@@ -188,7 +190,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             default:
                 return QVariant();
             }
-        case 2:
+        case COLUMN_DESC:
             switch (role)
             {
             case Qt::DisplayRole:
@@ -197,7 +199,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             default:
                 return QVariant();
             }
-        case 3:
+        case COLUMN_ACCOUNT:
             switch (role)
             {
 //         case Qt::DisplayRole:
@@ -205,7 +207,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             default:
                 return QVariant();
             }
-        case 4:
+        case COLUMN_RECONCILE:
             switch (role)
             {
             case Qt::DisplayRole:
@@ -214,31 +216,31 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             default:
                 return QVariant();
             }
-        case 5:
+        case COLUMN_INCREASE:
             switch (role)
             {
             case Qt::DisplayRole:
             case Qt::EditRole:
-                if (amount.positive_p())
+                if (!amount.zero_p() && amount.positive_p())
                     return amount.printAmount(printInfo);
                 else
                     return QString();
             default:
                 return QVariant();
             }
-        case 6:
+        case COLUMN_DECREASE:
             switch (role)
             {
             case Qt::DisplayRole:
             case Qt::EditRole:
-                if (amount.positive_p())
+                if (amount.zero_p() || amount.positive_p())
                     return QString();
                 else
                     return amount.neg().printAmount(printInfo);
             default:
                 return QVariant();
             }
-        case 7:
+        case COLUMN_BALANCE:
         default:
             return QVariant();
         }
@@ -257,7 +259,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
 
         switch (index.column())
         {
-        case 0:
+        case COLUMN_DATE:
             switch (role)
             {
             case Qt::DisplayRole:
@@ -266,7 +268,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             default:
                 return QVariant();
             }
-        case 1:
+        case COLUMN_NUM:
             switch (role)
             {
             case Qt::DisplayRole:
@@ -275,7 +277,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             default:
                 return QVariant();
             }
-        case 2:
+        case COLUMN_DESC:
             switch (role)
             {
             case Qt::DisplayRole:
@@ -284,7 +286,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             default:
                 return QVariant();
             }
-        case 3:
+        case COLUMN_ACCOUNT:
             switch (role)
             {
             case Qt::DisplayRole:
@@ -292,7 +294,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             default:
                 return QVariant();
             }
-        case 4:
+        case COLUMN_RECONCILE:
             switch (role)
             {
             case Qt::DisplayRole:
@@ -301,7 +303,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             default:
                 return QVariant();
             }
-        case 5:
+        case COLUMN_INCREASE:
             switch (role)
             {
             case Qt::DisplayRole:
@@ -313,7 +315,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             default:
                 return QVariant();
             }
-        case 6:
+        case COLUMN_DECREASE:
             switch (role)
             {
             case Qt::DisplayRole:
@@ -325,7 +327,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             default:
                 return QVariant();
             }
-        case 7:
+        case COLUMN_BALANCE:
             switch (role)
             {
             case Qt::DisplayRole:
@@ -352,21 +354,21 @@ QVariant SplitListModel::headerData(int section, Qt::Orientation orientation, in
     {
         switch (section)
         {
-        case 0:
+        case COLUMN_DATE:
             return tr("Date");
-        case 1:
+        case COLUMN_NUM:
             return tr("Num");
-        case 2:
+        case COLUMN_DESC:
             return tr("Description");
-        case 3:
+        case COLUMN_ACCOUNT:
             return tr("Transfer");
-        case 4:
+        case COLUMN_RECONCILE:
             return tr("R?");
-        case 5:
+        case COLUMN_INCREASE:
             return tr("Increase");
-        case 6:
+        case COLUMN_DECREASE:
             return tr("Decrease");
-        case 7:
+        case COLUMN_BALANCE:
             return tr("Balance");
         default:
             return QVariant();
@@ -396,7 +398,7 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
         // spooky, doesn't it?
         switch (index.column())
         {
-        case 0:
+        case COLUMN_DATE:
         {
             QDate date = value.toDate();
             if (date.isValid())
@@ -405,13 +407,13 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
             }
             break;
         }
-        case 1:
+        case COLUMN_NUM:
             cmd = cmd::setTransactionNum(trans, value.toString());
             break;
-        case 2:
+        case COLUMN_DESC:
             cmd = cmd::setTransactionDescription(trans, value.toString());
             break;
-        case 4:
+        case COLUMN_RECONCILE:
         {
             QString str(value.toString());
             if (str.size() > 0)
@@ -432,22 +434,22 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
             }
             break;
         }
-        case 5:
-        case 6:
+        case COLUMN_INCREASE:
+        case COLUMN_DECREASE:
         {
             QString str(value.toString().simplified());
             Numeric n;
             QString errmsg = n.parse(str);
             if (errmsg.isEmpty())
             {
-                qDebug() << "Does setting numeric work? numeric=" << n.to_string();
-                if (index.column() == 6)
+                qDebug() << "Successfully parsed string to numeric=" << n.to_string();
+                if (index.column() == COLUMN_DECREASE)
                     n = n.neg();
                 // Check whether we have the simple case here
-                if (trans.getSplits().size() != 1)
+                if (trans.countSplits() != 1)
                 {
                     QMessageBox::warning(NULL, tr("Unimplemented"),
-                                         tr("Sorry, but editing a transaction with more than two splits (here: %1) is not yet implemented.").arg(trans.getSplits().size()));
+                                         tr("Sorry, but editing a transaction with more than two splits (here: %1) is not yet implemented.").arg(trans.countSplits()));
                 }
                 else
                 {
@@ -490,7 +492,7 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
         // spooky, doesn't it?
         switch (index.column())
         {
-        case 0:
+        case COLUMN_DATE:
         {
             QDate date = value.toDate();
             if (date.isValid())
@@ -499,16 +501,16 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
             }
             break;
         }
-        case 1:
+        case COLUMN_NUM:
             cmd = cmd::setTransactionNum(trans, value.toString());
             break;
-        case 2:
+        case COLUMN_DESC:
             cmd = cmd::setTransactionDescription(trans, value.toString());
             break;
-        case 4:
+        case COLUMN_RECONCILE:
         {
             QString str(value.toString());
-            if (str.size() > 0)
+            if (!str.isEmpty())
             {
                 char recn = str[0].toLatin1();
                 switch (recn)
@@ -526,16 +528,16 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
             }
             break;
         }
-        case 5:
-        case 6:
+        case COLUMN_INCREASE:
+        case COLUMN_DECREASE:
         {
             QString str(value.toString().simplified());
             Numeric n;
             QString errmsg = n.parse(str);
             if (errmsg.isEmpty())
             {
-                qDebug() << "Does setting numeric work? numeric=" << n.to_string();
-                if (index.column() == 6)
+                qDebug() << "Successfully parsed string to numeric=" << n.to_string();
+                if (index.column() == COLUMN_DECREASE)
                     n = n.neg();
                 // Check whether we have the simple case here
                 if (split.getParent().countSplits() != 2)
@@ -618,6 +620,53 @@ void SplitListModel::accountEvent( ::Account* acc, QofEventId event_type)
     default:
         break;
     }
+}
+
+void SplitListModel::editorClosed(const QModelIndex& index,
+                                  QAbstractItemDelegate::EndEditHint hint)
+{
+    if (!index.isValid())
+        return;
+
+    if (m_enableNewTransaction && index.row() == m_list.size())
+    {
+        // Special case: The line with the new transaction
+
+        switch (hint)
+        {
+        case QAbstractItemDelegate::SubmitModelCache:
+            switch (index.column())
+            {
+            case COLUMN_DATE:
+            case COLUMN_NUM:
+            case COLUMN_DESC:
+            case COLUMN_ACCOUNT:
+            case COLUMN_RECONCILE:
+                break; // we want to do nothing
+            case COLUMN_INCREASE:
+            case COLUMN_DECREASE:
+            {
+                // Commit the new transaction
+                qDebug() << "Commit the new transaction as a real one";
+                QUndoCommand* cmd = cmd::commitNewTransaction(m_tmpTransaction);
+                recreateTmpTrans();
+                m_undoStack->push(cmd);
+                break;
+            }
+            default:
+                break; // nothing to do
+            }
+        case QAbstractItemDelegate::RevertModelCache:
+            recreateTmpTrans();
+            break;
+        }
+    }
+    else
+    {
+        // We are in the line of an existing transaction - no function
+        // implemented yet.
+    }
+
 }
 
 } // END namespace gnc

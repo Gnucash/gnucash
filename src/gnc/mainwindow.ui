@@ -68,11 +68,17 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Free Finance Software. Easy to develop, easy to use.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Currently this is more or less a proof-of-concept for developers:&lt;/span&gt;&lt;/p&gt;
 &lt;ol style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; font-family:'Sans'; font-size:10pt;&quot; style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Load an existing gnucash XML file&lt;/li&gt;
-&lt;li style=&quot; font-family:'Sans'; font-size:10pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;It will show the account tree in a QTreeView&lt;/li&gt;
-&lt;li style=&quot; font-family:'Sans'; font-size:10pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Additionally the accounts will be shown in a flat list in a QTableView&lt;/li&gt;
-&lt;li style=&quot; font-family:'Sans'; font-size:10pt;&quot; style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Double-click on  any account in either view; it will open the list of splits in that account.&lt;/li&gt;&lt;/ol&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans'; font-size:10pt;&quot;&gt;The list of splits in the account is comparable to gnucash's single line view.  The amounts are already there. The dates are still missing, but that can't be hard, too.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans'; font-size:10pt;&quot;&gt;This is all read-only access so far, although &amp;quot;Save&amp;quot; probably works but hasn't been tested.&lt;/span&gt;&lt;/p&gt;
+&lt;li style=&quot; font-family:'Sans'; font-size:10pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;It will show the account tree in a tree view and also a list view &lt;/li&gt;
+&lt;li style=&quot; font-family:'Sans'; font-size:10pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Double-click on any account in either view; it will open the list of splits in that account.&lt;/li&gt;
+&lt;li style=&quot; font-family:'Sans'; font-size:10pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Save and Save-As works as normal.&lt;/li&gt;
+&lt;li style=&quot; font-family:'Sans'; font-size:10pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Edit any of the existing transaction/splits: Date, Description, or Amount. Click Undo. Click Redo. Click Undo. Etc. etc.&lt;/li&gt;
+&lt;li style=&quot; font-family:'Sans'; font-size:10pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Delete any of the existings transactions. Or entering a new one. Click Undo. Click Redo. Etc. etc.&lt;/li&gt;&lt;/ol&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans'; font-size:10pt;&quot;&gt;The list of splits in the account is comparable to gnucash's single line view.  Amounts, balance, date, all there.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans'; font-size:10pt;&quot;&gt;The following parts are still missing:&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; font-size:8pt;&quot; style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt; Currently the accout selection of a transaction cannot be edited. &lt;/li&gt;
+&lt;li style=&quot; font-size:8pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Editing or adding multi-split transactions are not yet supported (it shows only the string &amp;quot;--Split Transaction--&amp;quot;). &lt;/li&gt;
+&lt;li style=&quot; font-size:8pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Editing or adding multi-currency transactions are not yet supported. &lt;/li&gt;
+&lt;li style=&quot; font-size:8pt;&quot; style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Any of the more specialized account views are not yet implemented.&lt;/li&gt;&lt;/ul&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;The fun part is how easy it was to add this. Let's see how far we will get...&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Images&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/pixmaps/gnucash_splash.png&quot; /&gt;&lt;/p&gt;
@@ -160,11 +166,11 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionAbout_Qt"/>
    </widget>
    <widget class="QMenu" name="menuAccount">
-    <property name="title">
-     <string>&amp;Account</string>
-    </property>
     <property name="enabled">
      <bool>false</bool>
+    </property>
+    <property name="title">
+     <string>&amp;Account</string>
     </property>
     <addaction name="actionOpenAccount"/>
     <addaction name="actionNewAccount"/>
@@ -400,7 +406,7 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionCloseTab">
    <property name="icon">
-    <iconset resource="gnucash.qrc">
+    <iconset resource="gtk-icons.qrc">
      <normaloff>:/gtk-icons/gtk-close.png</normaloff>:/gtk-icons/gtk-close.png</iconset>
    </property>
    <property name="text">

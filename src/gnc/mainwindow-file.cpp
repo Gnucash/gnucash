@@ -397,7 +397,9 @@ void MainWindow::loadFile(const QString &fileName)
                   "or you may not have write permission for the directory. "
                   "If you proceed you may not be able to save any changes. "
                   "What would you like to do?"));
-        QMessageBox msgBox;
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle(fmt1);
+        msgBox.setText(fmt2);
         QPushButton *openAnyway = msgBox.addButton(tr("_Open Anyway"), QMessageBox::ActionRole);
         QPushButton *createNewFile = msgBox.addButton(tr("_Create New File"), QMessageBox::ActionRole);
         QPushButton *close = msgBox.addButton(QMessageBox::Close);

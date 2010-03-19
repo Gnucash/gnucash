@@ -91,7 +91,7 @@ void TmpTransaction::copyTo(Transaction& t) const
         s.copyInto(t);
     }
 }
-void TmpTransaction::createAsReal() const
+Transaction TmpTransaction::createAsReal() const
 {
     Q_ASSERT (!splits.isEmpty());
     Account acc(splits.front().getAccount());
@@ -102,6 +102,7 @@ void TmpTransaction::createAsReal() const
     trans.beginEdit();
     copyTo(trans);
     trans.commitEdit();
+    return trans;
 }
 void TmpTransaction::push_back(const TmpSplit& s)
 {

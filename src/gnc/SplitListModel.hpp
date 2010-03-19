@@ -34,6 +34,7 @@ extern "C"
 }
 
 #include <QAbstractItemModel>
+#include <QAbstractItemDelegate>
 #include <QHash>
 class QUndoStack;
 
@@ -46,6 +47,20 @@ class SplitListModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
+
+    enum ColumnNumbers
+    {
+        COLUMN_DATE = 0
+        , COLUMN_NUM
+        , COLUMN_DESC
+        , COLUMN_ACCOUNT
+        , COLUMN_RECONCILE
+        , COLUMN_INCREASE
+        , COLUMN_DECREASE
+        , COLUMN_BALANCE
+        , COLUMN_LAST
+    };
+
     SplitListModel(const Account& acc, QUndoStack* undoStack, QObject *parent = 0);
     ~SplitListModel();
 
@@ -65,6 +80,7 @@ public:
 public slots:
     void transactionEvent( ::Transaction* trans, QofEventId event_type);
     void accountEvent( ::Account* trans, QofEventId event_type);
+    void editorClosed(const QModelIndex& index, QAbstractItemDelegate::EndEditHint hint);
 
 private:
     void recreateCache();

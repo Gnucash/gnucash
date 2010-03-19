@@ -174,6 +174,7 @@ QUndoCommand* setTransactionDate(TmpTransaction& t, const QDate& newValue);
 QUndoCommand* setSplitValueAndAmount(Split& t, const Numeric& newValue);
 QUndoCommand* setSplitValueAndAmount(TmpSplit& t, const Numeric& newValue);
 QUndoCommand* destroyTransaction(Transaction& t);
+QUndoCommand* commitNewTransaction(const TmpTransaction& t);
 
 } // END namespace cmd
 
