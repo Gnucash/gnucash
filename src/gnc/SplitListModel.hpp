@@ -64,6 +64,8 @@ public:
     SplitListModel(const Account& acc, QUndoStack* undoStack, QObject *parent = 0);
     ~SplitListModel();
 
+    Account getAccount() const { return m_account; }
+
     QModelIndex parent(const QModelIndex &index) const { return QModelIndex(); }
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     int columnCount(const QModelIndex& parent = QModelIndex()) const;

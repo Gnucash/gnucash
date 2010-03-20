@@ -160,6 +160,8 @@ namespace cmd
 // forth. Spooky, IMHO.
 // QUndoCommand* setSplitMemo(Split& split, const QString& newValue);
 // QUndoCommand* setSplitAction(Split& t, const QString& newValue);
+QUndoCommand* setSplitAccount(Split& t, Account newValue);
+QUndoCommand* setSplitAccount(TmpSplit& t, Account newValue);
 QUndoCommand* setSplitReconcile(Split& t, char newValue);
 QUndoCommand* setSplitReconcile(TmpSplit& t, char newValue);
 // QUndoCommand* setSplitAmount(Split& t, const Numeric& newValue);

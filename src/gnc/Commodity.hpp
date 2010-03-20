@@ -32,7 +32,8 @@ extern "C"
 }
 
 #include "gnc/GncInstance.hpp"
-#include <QString>
+#include <QtCore/QMetaType>
+#include <QtCore/QString>
 
 /** Wrapper around a gnucash gnc_commodity pointer */
 namespace gnc
@@ -69,5 +70,7 @@ inline bool operator!=(const Commodity& a, const Commodity& b)
 }
 
 } // END namespace gnc
+
+Q_DECLARE_METATYPE(gnc::Commodity)
 
 #endif

@@ -31,8 +31,9 @@ extern "C"
 #include "engine/Split.h"
 }
 
-#include <QString>
-#include <QList>
+#include <QtCore/QList>
+#include <QtCore/QMetaType>
+#include <QtCore/QString>
 
 #include "gnc/GncInstance.hpp"
 #include "gnc/Numeric.hpp"
@@ -63,7 +64,7 @@ public:
     { }
 
     Account getAccount() const;
-    void setAccount(Account& acc);
+    void setAccount(Account acc);
     void setAccount(::Account* acc);
 
     Transaction getParent() const;
@@ -152,5 +153,8 @@ private:
 };
 
 } // END namespace gnc
+
+Q_DECLARE_METATYPE(gnc::Split)
+Q_DECLARE_METATYPE(gnc::TmpSplit)
 
 #endif

@@ -32,8 +32,9 @@ extern "C"
 #include "app-utils/gnc-ui-util.h"
 }
 
-#include <QString>
-#include <QDateTime>
+#include <QtCore/QDateTime>
+#include <QtCore/QMetaType>
+#include <QtCore/QString>
 
 namespace gnc
 {
@@ -196,5 +197,7 @@ inline bool operator!=(const Numeric& a, const Numeric& b)
 }
 
 } // END namespace gnc
+
+Q_DECLARE_METATYPE(gnc::Numeric)
 
 #endif

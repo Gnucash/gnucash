@@ -387,7 +387,7 @@ void MainWindow::loadFile(const QString &fileName)
     /* if file appears to be locked, ask the user ... */
     if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
     {
-        QString fmt1 = tr("GnuCash could not obtain the lock for %1.").arg(fileName);
+        QString fmt1 = tr("GnuCash could not obtain the lock for %1. ").arg(fileName);
         QString fmt2 =
             ((ERR_BACKEND_LOCKED == io_err)
              ? tr("That database may be in use by another user, "
@@ -398,10 +398,10 @@ void MainWindow::loadFile(const QString &fileName)
                   "If you proceed you may not be able to save any changes. "
                   "What would you like to do?"));
         QMessageBox msgBox(this);
-        msgBox.setWindowTitle(fmt1);
-        msgBox.setText(fmt2);
-        QPushButton *openAnyway = msgBox.addButton(tr("_Open Anyway"), QMessageBox::ActionRole);
-        QPushButton *createNewFile = msgBox.addButton(tr("_Create New File"), QMessageBox::ActionRole);
+        msgBox.setWindowTitle(tr("Could not obtain file lock"));
+        msgBox.setText(fmt1 + fmt2);
+        QPushButton *openAnyway = msgBox.addButton(tr("&Open Anyway"), QMessageBox::ActionRole);
+        QPushButton *createNewFile = msgBox.addButton(tr("&Create New File"), QMessageBox::ActionRole);
         QPushButton *close = msgBox.addButton(QMessageBox::Close);
         msgBox.exec();
         if (msgBox.clickedButton() == openAnyway)

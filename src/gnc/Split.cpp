@@ -30,7 +30,7 @@ namespace gnc
 {
 
 Account Split::getAccount() const { return xaccSplitGetAccount(get()); }
-void Split::setAccount(Account& acc) { xaccSplitSetAccount(get(), acc.get()); }
+void Split::setAccount(Account acc) { xaccSplitSetAccount(get(), acc.get()); }
 void Split::setAccount(::Account* acc) { xaccSplitSetAccount(get(), acc); }
 
 

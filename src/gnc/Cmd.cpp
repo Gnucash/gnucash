@@ -53,12 +53,24 @@ QUndoCommand* setSplitAction(Split& t, const QString& newValue)
 
 QUndoCommand* setSplitReconcile(Split& t, char newValue)
 {
+    if (newValue == t.getReconcile())
+        return NULL;
     // Special third argument: The setter function takes a value
     // directly, instead of a const-reference, so the template type
     // must be given explicitly.
     return new Cmd<Split, char, void (Split::*)(char)>(QObject::tr("Edit Split Reconcile"),
             t, &Split::setReconcile,
             t.getReconcile(), newValue);
+}
+
+QUndoCommand* setSplitAccount(Split& t, Account newValue)
+{
+    // Temporary function pointer "tmp" to resolve the ambiguous
+    // overload "setAccount()".
+    void (Split::*tmp)(Account) = &Split::setAccount;
+    return new Cmd<Split, Account, void (Split::*)(Account)>(QObject::tr("Edit Split Account"),
+            t, tmp,
+            t.getAccount(), newValue);
 }
 
 QUndoCommand* setSplitAmount(Split& t, const Numeric& newValue)
@@ -143,6 +155,8 @@ QUndoCommand* setSplitValueAndAmount(Split& t, const Numeric& newValue)
 
 QUndoCommand* setTransactionNum(Transaction& t, const QString& newValue)
 {
+    if (newValue == t.getNum())
+        return NULL;
     return new Cmd<Transaction, QString>(QObject::tr("Edit Transaction Number"),
                                          t, &Transaction::setNum,
                                          t.getNum(), newValue);
@@ -150,6 +164,8 @@ QUndoCommand* setTransactionNum(Transaction& t, const QString& newValue)
 
 QUndoCommand* setTransactionDescription(Transaction& t, const QString& newValue)
 {
+    if (newValue == t.getDescription())
+        return NULL;
     return new Cmd<Transaction, QString>(QObject::tr("Edit Transaction Description"),
                                          t, &Transaction::setDescription,
                                          t.getDescription(), newValue);
@@ -164,6 +180,8 @@ QUndoCommand* setTransactionNotes(Transaction& t, const QString& newValue)
 
 QUndoCommand* setTransactionDate(Transaction& t, const QDate& newValue)
 {
+    if (newValue == t.getDatePosted())
+        return NULL;
     return new Cmd<Transaction, QDate>(QObject::tr("Edit Transaction Date"),
                                        t, &Transaction::setDatePosted,
                                        t.getDatePosted(), newValue);
@@ -291,6 +309,12 @@ protected:
 };
 
 
+QUndoCommand* setSplitAccount(TmpSplit& t, Account newValue)
+{
+    return new CmdRef<TmpSplit, ::Account*, void(TmpSplit::*)(::Account*)>(QObject::tr("Edit Split Account"),
+            t, &TmpSplit::setAccount,
+            t.getAccount(), newValue.get());
+}
 QUndoCommand* setSplitReconcile(TmpSplit& t, char newValue)
 {
     // Special third argument: The setter function takes a value

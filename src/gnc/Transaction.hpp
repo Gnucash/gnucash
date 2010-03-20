@@ -37,8 +37,9 @@ extern "C"
 #include "gnc/Numeric.hpp"
 #include "gnc/GncInstance.hpp"
 
-#include <QString>
-#include <QList>
+#include <QtCore/QString>
+#include <QtCore/QList>
+#include <QtCore/QMetaType>
 
 namespace gnc
 {
@@ -98,6 +99,7 @@ public:
     static element_type* newInstance(const Book& b);
 };
 
+
 class TmpTransaction
 {
 public:
@@ -141,5 +143,8 @@ private:
 };
 
 } // END namespace gnc
+
+Q_DECLARE_METATYPE(gnc::Transaction)
+Q_DECLARE_METATYPE(gnc::TmpTransaction)
 
 #endif

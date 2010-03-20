@@ -24,6 +24,7 @@
 
 #include "gnc/Account.hpp"
 #include "gnc/SplitListModel.hpp"
+#include "gnc/AccountSelectionDelegate.hpp"
 
 #include <QtGui/QAbstractItemDelegate>
 #include <QUndoStack>
@@ -35,13 +36,20 @@ namespace gnc
 SplitListView::SplitListView(Account account, QUndoStack* undoStack, QWidget* parent)
         : base_class(parent)
 {
+    // Create a model that is used in this view
     SplitListModel *smodel = new SplitListModel(account, undoStack, this);
     setModel(smodel);
     connect(this, SIGNAL(editorClosed(const QModelIndex&,QAbstractItemDelegate::EndEditHint)),
             smodel, SLOT(editorClosed(const QModelIndex&,QAbstractItemDelegate::EndEditHint)));
 
+    // Create a separate delegate only for the Account colum
+    QAbstractItemDelegate *accountDelegate = new AccountSelectionDelegate(this);
+    setItemDelegateForColumn(SplitListModel::COLUMN_ACCOUNT, accountDelegate);
+
+    // Appearance of this view
     setAlternatingRowColors(true);
 
+    // Move the focus to the latest line
     scrollToBottom();
     if (model()->rowCount() > 0)
         setCurrentIndex(model()->index(model()->rowCount() - 1, 0));

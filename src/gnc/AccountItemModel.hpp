@@ -71,11 +71,11 @@ class AccountListModel : public AccountTreeModel
 {
     Q_OBJECT
 public:
+    typedef AccountTreeModel base_class;
     AccountListModel(Account rootaccount, QObject *parent = 0)
-            : AccountTreeModel(rootaccount, parent)
+            : base_class(rootaccount, parent)
             , m_list(Account::fromGList(rootaccount.get_descendants()))
-    {
-    }
+    {}
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const { return m_list.size(); }
 
@@ -84,8 +84,26 @@ public:
 
     QModelIndex parent(const QModelIndex &index) const { return QModelIndex(); }
 
+    int indexOf(AccountQList::value_type value) const { return m_list.indexOf(value); }
+    const AccountQList::value_type at(int i) const { return m_list.at(i); }
+
 private:
     AccountQList m_list;
+};
+
+/** Specialization of the account list model that only shows the
+ * "Account Full Name" in one single column.
+ */
+class AccountListNamesModel : public AccountListModel
+{
+    Q_OBJECT
+public:
+    typedef AccountListModel base_class;
+    AccountListNamesModel(Account rootaccount, QObject *parent = 0)
+            : base_class(rootaccount, parent)
+    {}
+    int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    QVariant data(const QModelIndex& index, int role) const;
 };
 
 

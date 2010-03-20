@@ -33,9 +33,11 @@ extern "C"
 
 #include "gnc/GncInstance.hpp"
 #include "gnc/Commodity.hpp"
+#include "gnc/Numeric.hpp"
 
-#include <QString>
-#include <QList>
+#include <QtCore/QString>
+#include <QtCore/QList>
+#include <QtCore/QMetaType>
 
 namespace gnc
 {
@@ -58,6 +60,7 @@ public:
             : base_class(ptr)
     { }
     QString getName() const { return QString::fromUtf8(xaccAccountGetName(get())); }
+    QString getFullName() const { return gchar_to_QString(gnc_account_get_full_name (get())); }
     QString getCode() const { return QString::fromUtf8(xaccAccountGetCode(get())); }
     QString getDescription() const { return QString::fromUtf8(xaccAccountGetDescription(get())); }
     Commodity getCommodity() const { return xaccAccountGetCommodity(get()); }
@@ -108,5 +111,7 @@ public:
 };
 
 } // END namespace gnc
+
+Q_DECLARE_METATYPE(gnc::Account)
 
 #endif

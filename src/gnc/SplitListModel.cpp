@@ -72,6 +72,7 @@ void SplitListModel::recreateTmpTrans()
 {
     m_tmpTransaction.clear();
     m_tmpTransaction.push_back(TmpSplit(m_account.get()));
+//     m_tmpTransaction.push_back(TmpSplit(NULL));
     m_tmpTransaction.setCommodity(m_account.getCommodity());
     m_tmpTransaction.setDatePosted(QDate::currentDate());
 }
@@ -145,9 +146,9 @@ Qt::ItemFlags SplitListModel::flags(const QModelIndex &index) const
     case COLUMN_RECONCILE:
     case COLUMN_INCREASE:
     case COLUMN_DECREASE:
+    case COLUMN_ACCOUNT:
         // Allow write access as well
         return result | Qt::ItemIsEditable;
-    case COLUMN_ACCOUNT:
     case COLUMN_BALANCE:
     default:
         // Ensure read-only access only
@@ -290,7 +291,11 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             switch (role)
             {
             case Qt::DisplayRole:
-                return split.getCorrAccountFullName();
+            case Qt::EditRole:
+                if (trans.countSplits() == 2)
+                    return QVariant::fromValue(split.getOtherSplit().getAccount());
+                else
+                    return split.getCorrAccountFullName();
             default:
                 return QVariant();
             }
@@ -485,6 +490,7 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
 
         Split split(static_cast< ::Split*>(index.internalPointer()));
         Transaction trans(split.getParent());
+        QVariant y(trans);
 
         // "Editing" is done by creating a Cmd-object and adding it to
         // the undo stack. That's in fact all that was needed to
@@ -506,6 +512,19 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
             break;
         case COLUMN_DESC:
             cmd = cmd::setTransactionDescription(trans, value.toString());
+            break;
+        case COLUMN_ACCOUNT:
+            if (value.canConvert<Account>())
+            {
+                if (trans.countSplits() == 2)
+                {
+                    Split other = split.getOtherSplit();
+                    cmd = cmd::setSplitAccount(other, value.value<Account>());
+                }
+                else
+                    QMessageBox::warning(NULL, tr("Unimplemented"),
+                                         tr("Sorry, but editing a transaction with more than two splits (here: %1) is not yet implemented.").arg(split.getParent().countSplits()));
+            }
             break;
         case COLUMN_RECONCILE:
         {

@@ -186,4 +186,32 @@ QModelIndex AccountListModel::index(int row, int column,
 }
 
 
+// ////////////////////////////////////////////////////////////
+
+int AccountListNamesModel::columnCount(const QModelIndex& parent) const
+{
+    return 1;
+}
+
+QVariant AccountListNamesModel::data(const QModelIndex& index, int role) const
+{
+    if (!index.isValid())
+        return QVariant();
+
+    Account account(static_cast< ::Account*>(index.internalPointer()));
+    switch (index.column())
+    {
+    case 0:
+        switch (role)
+        {
+        case Qt::DisplayRole:
+            return account.getFullName();
+        default:
+            return QVariant();
+        }
+    default:
+        return QVariant();
+    }
+}
+
 } // END namespace gnc

@@ -11,6 +11,7 @@ LINK_DIRECTORIES (${GLIB2_LIBRARY_DIRS}
 
 SET (gnc_SOURCES
   AccountItemModel.cpp
+  AccountSelectionDelegate.cpp
   Book.cpp
   Cmd.cpp
   Numeric.cpp
@@ -28,6 +29,7 @@ SET (gnc_SOURCES
 
 SET (gnc_QOBJECT_HEADERS
   AccountItemModel.hpp
+  AccountSelectionDelegate.hpp
   RecentFileMenu.hpp
   SplitListModel.hpp
   SplitListView.hpp
