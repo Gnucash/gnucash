@@ -2383,7 +2383,7 @@ gnc_main_window_connect (GncMainWindow *window,
     priv->installed_pages = g_list_append (priv->installed_pages, page);
     priv->usage_order = g_list_prepend (priv->usage_order, page);
     gtk_notebook_append_page_menu (notebook, page->notebook_page,
-                                   tab_hbox, menu_label);
+				   tab_hbox, menu_label);
     gtk_notebook_set_tab_reorderable (notebook, page->notebook_page, TRUE);
     gnc_plugin_page_inserted (page);
     gtk_notebook_set_current_page (notebook, -1);
@@ -2576,10 +2576,10 @@ gnc_main_window_open_page (GncMainWindow *window,
         image = gtk_image_new_from_stock (icon, GTK_ICON_SIZE_MENU);
         gtk_widget_show (image);
         gtk_box_pack_start (GTK_BOX (tab_hbox), image, FALSE, FALSE, 0);
-        gtk_box_pack_start (GTK_BOX (tab_hbox), label, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (tab_hbox), label, TRUE, TRUE, 0);
     }
     else
-        gtk_box_pack_start (GTK_BOX (tab_hbox), label, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (tab_hbox), label, TRUE, TRUE, 0);
 
     event_box = gtk_event_box_new();
 #if defined(G_OS_UNIX) || (GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION != 18)
@@ -2594,9 +2594,7 @@ gnc_main_window_open_page (GncMainWindow *window,
     gtk_event_box_set_visible_window(GTK_EVENT_BOX(event_box), FALSE);
 #endif
     gtk_widget_show(event_box);
-
     gtk_container_add(GTK_CONTAINER(event_box), tab_hbox);
-
     color_string = gnc_plugin_page_get_page_color(page);
     if (color_string == NULL) color_string = "";
     if (gdk_color_parse(color_string, &tab_color))
@@ -2662,8 +2660,11 @@ gnc_main_window_open_page (GncMainWindow *window,
     /*
      * Now install it all in the window.
      */
+#ifdef GTK_QUARTZ
+    gnc_main_window_connect(window, page, tab_hbox, label);
+#else
     gnc_main_window_connect(window, page, event_box, label);
-
+#endif
     LEAVE("");
 }
 
@@ -3212,7 +3213,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
     priv->notebook = gtk_notebook_new ();
     g_object_set(G_OBJECT(priv->notebook),
                  "scrollable", TRUE,
-                 "enable-popup", TRUE,
+                 "enable-popup", 
                  (char *)NULL);
     gtk_widget_show (priv->notebook);
     g_signal_connect (G_OBJECT (priv->notebook), "switch-page",
