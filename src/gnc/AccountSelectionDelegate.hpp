@@ -36,9 +36,8 @@ class AccountSelectionDelegate : public QStyledItemDelegate
     Q_OBJECT
 public:
     typedef QStyledItemDelegate base_class;
-    AccountSelectionDelegate(QObject* parent = 0)
-            : base_class(parent)
-    {}
+
+    AccountSelectionDelegate(QObject* parent = 0);
 
     virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                                   const QModelIndex &index) const;

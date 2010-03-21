@@ -53,6 +53,20 @@ TmpSplit::TmpSplit(::Account* _account)
     clear(_account);
 }
 
+TmpSplit* TmpSplit::getOtherSplit() const
+{
+    if (!parent)
+        return NULL;
+    const TmpTransaction& p = *parent;
+    if (p.countSplits() != 2)
+        return NULL;
+    TmpTransaction::TmpSplitQList& splits = const_cast<TmpTransaction&>(p).getSplits();
+    if (splits.front().getAccount() != account)
+        return &splits.front();
+    else
+        return &splits.back();
+}
+
 void TmpSplit::clear(::Account* _account)
 {
     account = _account;

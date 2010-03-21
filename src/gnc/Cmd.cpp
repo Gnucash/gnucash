@@ -372,25 +372,24 @@ public:
 private:
     void set(const value_type& value)
     {
-        const TmpTransaction* p_trans = m_target.getParent();
-//         if (trans.countSplits() != 2)
-//             return;
-//         Split other = m_target.getOtherSplit();
-//         Q_ASSERT(other);
-//         Commodity originCommodity = m_target.getAccount().getCommodity();
-//         Commodity transCommodity = trans.getCurrency();
-//         Commodity otherCommodity = other.getAccount().getCommodity();
-//         if (originCommodity != transCommodity
-//                 || transCommodity != otherCommodity)
-//             return;
+        const TmpTransaction& trans = *m_target.getParent();
+        if (trans.countSplits() != 2)
+            return;
+        TmpSplit* p_other = m_target.getOtherSplit();
+        Q_ASSERT(p_other);
+        TmpSplit& other = *p_other;
+        Commodity originCommodity = Account(m_target.getAccount()).getCommodity();
+        Commodity transCommodity = trans.getCommodity();
+        Commodity otherCommodity = Account(other.getAccount()).getCommodity();
+        if (originCommodity != transCommodity
+                || transCommodity != otherCommodity)
+            return;
 
-//         trans.beginEdit();
         m_target.setValue(value);
         m_target.setAmount(value);
-//         Numeric valueNeg = value.neg();
-//         other.setAmount(valueNeg);
-//         other.setValue(valueNeg);
-//         trans.commitEdit();
+        Numeric valueNeg = value.neg();
+        other.setAmount(valueNeg);
+        other.setValue(valueNeg);
     }
 
 protected:

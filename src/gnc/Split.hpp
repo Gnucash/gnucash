@@ -127,6 +127,8 @@ public:
     const TmpTransaction* getParent() const { return parent; }
     void setParent(const TmpTransaction* v) { parent = v; }
 
+    TmpSplit* getOtherSplit() const;
+
     QString getMemo() const { return memo; }
     void setMemo(const QString& v) { memo = v; }
 

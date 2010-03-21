@@ -29,6 +29,7 @@
 #include <QUndoStack>
 #include <QBrush>
 #include <QMessageBox>
+#include <QDateTime>
 
 #include "app-utils/gnc-ui-util.h" // for gnc_get_reconcile_str
 
@@ -71,10 +72,14 @@ void SplitListModel::recreateCache()
 void SplitListModel::recreateTmpTrans()
 {
     m_tmpTransaction.clear();
-    m_tmpTransaction.push_back(TmpSplit(m_account.get()));
-//     m_tmpTransaction.push_back(TmpSplit(NULL));
     m_tmpTransaction.setCommodity(m_account.getCommodity());
     m_tmpTransaction.setDatePosted(QDate::currentDate());
+    m_tmpTransaction.push_back(TmpSplit(m_account.get()));
+    m_tmpTransaction.push_back(TmpSplit(NULL));
+
+    Q_ASSERT(m_tmpTransaction.countSplits() == 2);
+    Q_ASSERT(m_tmpTransaction.getSplits().front().getAccount() == m_account.get());
+    Q_ASSERT(m_tmpTransaction.getSplits().back().getAccount() == NULL);
 }
 
 SplitListModel::~SplitListModel()
@@ -167,7 +172,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
         // Special case: We are in the last row which represents the
         // newly entered txn.
 
-        TmpSplit split(m_tmpTransaction.getSplits().front());
+        const TmpSplit& split(m_tmpTransaction.getSplits().front());
         const TmpTransaction& trans = m_tmpTransaction;
         Numeric amount = split.getValue();
         PrintAmountInfo printInfo(m_account, false);
@@ -203,8 +208,12 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
         case COLUMN_ACCOUNT:
             switch (role)
             {
-//         case Qt::DisplayRole:
-//             return split.getCorrAccountFullName();
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                if (trans.countSplits() == 2)
+                    return QVariant::fromValue(Account(trans.getSplits().back().getAccount()));
+                else
+                    return QVariant(); // FIXME: Multi-split txn here
             default:
                 return QVariant();
             }
@@ -396,6 +405,9 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
 
         TmpTransaction& trans = m_tmpTransaction;
         TmpSplit& split = trans.getSplits().front();
+        Q_ASSERT(split.getAccount() == m_account.get());
+        Q_ASSERT(trans.countSplits() == 2);
+        TmpSplit& other = trans.getSplits().back();
 
         // "Editing" is done by creating a Cmd-object and adding it to
         // the undo stack. That's in fact all that was needed to
@@ -417,6 +429,18 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
             break;
         case COLUMN_DESC:
             cmd = cmd::setTransactionDescription(trans, value.toString());
+            break;
+        case COLUMN_ACCOUNT:
+            if (value.canConvert<Account>())
+            {
+                if (trans.countSplits() == 2)
+                {
+                    cmd = cmd::setSplitAccount(other, value.value<Account>());
+                }
+                else
+                    QMessageBox::warning(NULL, tr("Unimplemented"),
+                                         tr("Sorry, but editing a transaction with more than two splits (here: %1) is not yet implemented.").arg(trans.countSplits()));
+            }
             break;
         case COLUMN_RECONCILE:
         {
@@ -451,7 +475,7 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
                 if (index.column() == COLUMN_DECREASE)
                     n = n.neg();
                 // Check whether we have the simple case here
-                if (trans.countSplits() != 1)
+                if (trans.countSplits() != 2)
                 {
                     QMessageBox::warning(NULL, tr("Unimplemented"),
                                          tr("Sorry, but editing a transaction with more than two splits (here: %1) is not yet implemented.").arg(trans.countSplits()));
@@ -460,7 +484,13 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
                 {
                     Commodity originCommodity = m_account.getCommodity();
                     Commodity transCommodity = trans.getCommodity();
-                    if (originCommodity != transCommodity)
+                    bool sameCommodities = (originCommodity == transCommodity);
+                    if (other.getAccount())
+                    {
+                        Commodity otherCommodity = Account(other.getAccount()).getCommodity();
+                        sameCommodities = sameCommodities && (transCommodity == otherCommodity);
+                    }
+                    if (!sameCommodities)
                     {
                         QMessageBox::warning(NULL, tr("Unimplemented"),
                                              tr("Sorry, but editing a transaction with different accounts is not yet implemented."));
@@ -523,7 +553,7 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
                 }
                 else
                     QMessageBox::warning(NULL, tr("Unimplemented"),
-                                         tr("Sorry, but editing a transaction with more than two splits (here: %1) is not yet implemented.").arg(split.getParent().countSplits()));
+                                         tr("Sorry, but editing a transaction with more than two splits (here: %1) is not yet implemented.").arg(trans.countSplits()));
             }
             break;
         case COLUMN_RECONCILE:
@@ -667,6 +697,7 @@ void SplitListModel::editorClosed(const QModelIndex& index,
             {
                 // Commit the new transaction
                 qDebug() << "Commit the new transaction as a real one";
+                m_tmpTransaction.setDateEntered(QDateTime::currentDateTime());
                 QUndoCommand* cmd = cmd::commitNewTransaction(m_tmpTransaction);
                 recreateTmpTrans();
                 m_undoStack->push(cmd);
