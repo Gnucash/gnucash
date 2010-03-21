@@ -19,6 +19,7 @@ libgnc_core_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${BINRELOC_LIBS} \
+  ${IGE_MAC_LIBS} \
   ${GCONF_LIBS} \
   ${QOF_LIBS}
 
@@ -44,6 +45,7 @@ AM_CPPFLAGS = \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \
+  ${IGE_MAC_CFLAGS} \
   ${QOF_CFLAGS} \
   -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src
