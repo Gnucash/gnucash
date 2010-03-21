@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.3.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-15 10:27-0500\n"
-"PO-Revision-Date: 2010-03-09 21:27+0900\n"
+"PO-Revision-Date: 2010-03-21 17:42+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -9151,20 +9151,20 @@ msgstr "適用をクリックすると、GnuCashは ~/.gconf.path ファイル�
 #: ../src/gnome-utils/druid-gconf-setup.c:412
 #, c-format
 msgid "When you click Apply, GnuCash will install the gconf data into your local ~/.gconf file and restart the gconf backend.  The %s script must be found in your search path for this to work correctly."
-msgstr ""
+msgstr "適用をクリックすると GnuCash はローカルの ~/.gconf ファイルにデータをインストールして gconf バックエンドを再起動します。是が正しく動作するためには %s スクリプトが検索パスに含まれていなければいけません。"
 
 #: ../src/gnome-utils/druid-gconf-setup.c:416
 msgid "You have chosen to correct the problem by yourself.  When you click Apply, GnuCash will exit.  Please correct the problem and restart the gconf backend with the command 'gconftool-2 --shutdown' before restarting GnuCash.  If you have not already done so, you can click the Back button and copy the necessary text from the dialog."
-msgstr ""
+msgstr "自分自身で問題を修正することを選択しました。適用をクリックすると GnuCash は終了します。GnuCash を再起動する前に問題を修正し、 'gconftool-2 --shutdown' コマンドを使用して gconf バックエンドを再起動してください。まだ問題を修正していない場合は戻るボタンをクリックしてダイアログから必要なテキストをコピーしてください。"
 
 #: ../src/gnome-utils/druid-gconf-setup.c:422
 #, c-format
 msgid "You have chosen to correct the problem by yourself.  When you click Apply, GnuCash will exit.  Please run the %s script which will install the configuration data and restart the gconf backend."
-msgstr ""
+msgstr "自分自身で問題を修正することを選択しました。適用をクリックすると GnuCash は終了します。 %s スクリプトを実行して設定データをインストールし、 gconf バックエンドを再起動してください。"
 
 #: ../src/gnome-utils/druid-gconf-setup.c:426
 msgid "You have already corrected the problem and restarted the gconf backend with the command 'gconftool-2 --shutdown'.  When you click Apply, GnuCash will continue loading."
-msgstr ""
+msgstr "すでに問題を修正して gconf バックエンドを 'gconftool-2 --shutdown' コマンドを使用して再起動しました。適用をクリックすると GnuCash は読み込みを継続します。"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:189
 msgid ""
@@ -9174,6 +9174,11 @@ msgid ""
 "\n"
 "Press 'Forward' now to select the correct character encoding for your data file."
 msgstr ""
+"読み込みを行おうとしているファイルは GnuCash の古いバージョンで作成されたものです。古いバージョンのファイル形式には使用している文字コードに関して詳細な指定が含まれていません。これはデータファイルに含まれるテキストが曖昧な複数の方法で読み込まれるかもしれないことを意味します。この曖昧さは自動的には修復されません。しかし GnuCash 2.2.0 の新しいファイル形式にはこの手順を再度行う必要を無くすためにすべての必要な指定が含まれます。\n"
+"\n"
+"GnuCash はデータファイルに含まれる正しい文字コードを推測しようとします。次のページではこの推測を使用した結果のテキストが表示されます。テキストが予期したとおりに表示されることを確認してください。すべて正しく表示されていれば「進む」を単に押してください。予期しない文字がテキストに含まれている場合、異なった文字コードを選択すると異なった結果が表示されます。各ボタンをクリックすることによって文字コード一覧を編集しなければならないかもしれません。\n"
+"\n"
+"では、「進む」を押してデータファイルの正しい文字コードを選択してください。"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:209
 msgid "Ambiguous character encoding"
@@ -9185,6 +9190,9 @@ msgid ""
 "\n"
 "You can also go back and verify your selections by clicking on 'Back'."
 msgstr ""
+"ファイルは正しく読み込まれました。「適用」をクリックするとファイルが保存され、メインウィンドウに再読込されます。この方法によって作業ファイルがバックアップファイルとして同じディレクトリに保持されます。\n"
+"\n"
+"「戻る」をクリックすることによって、前に戻り行った選択を確認することもできます。"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:234
 msgid "Unicode"
@@ -9271,7 +9279,7 @@ msgstr "KOI8-U (ウクライナ語)"
 #. * for assistance with spelling.
 #: ../src/gnome-utils/druid-gnc-xml-import.c:577
 msgid "ISO-8859-1 KOI8-U"
-msgstr "ISO-8859-1"
+msgstr "ISO-8859-1 WINDOWS-31J SHIFT_JIS EUC_JP CP932"
 
 #. another error, cannot handle this here
 #: ../src/gnome-utils/druid-gnc-xml-import.c:698
@@ -9319,11 +9327,11 @@ msgstr "そのGnuCash XMLファイルはすでにロードされています。�
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:1337
 msgid "This encoding has been added to the list already."
-msgstr ""
+msgstr "このエンコードはすでに一覧に加えられています。"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:1347
 msgid "This is an invalid encoding."
-msgstr "このエンコーディングは有効でありません。"
+msgstr "このエンコードは有効でありません。"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:1482
 msgid "No files to merge. Please add ones by clicking on 'Load another file'."
@@ -9484,6 +9492,9 @@ msgid ""
 "\n"
 "The configuration data used to specify default values for GnuCash cannot be found in the default system locations.  Without this data GnuCash will still operate properly but it may require some extra time to setup.  Do you wish to setup the configuration data?"
 msgstr ""
+"<b>デフォルトの値が見つかりません</b>\n"
+"\n"
+"GnuCash のデフォルトの値として指定された設定データがシステムのデフォルトの場所にありません。このデータが無くても GnuCash は正常に動作します。しかしセットアップに余分な時間が必要となります。設定データをセットアップしますか?"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:4
 msgid "Choose method"
@@ -9495,23 +9506,23 @@ msgstr "変更を終了"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:6
 msgid "GnuCash will install the data for you."
-msgstr ""
+msgstr "Gnucash でデータをインストールします。"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:7
 msgid "GnuCash will update the system path for you."
-msgstr ""
+msgstr "GnuCash でシステムパスを更新します。"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:8
 msgid "Install into home directory"
-msgstr ""
+msgstr "ホームディレクトリにインストール"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:9
 msgid "Please add the following lines at the end of your ~/.gconf.path file:"
-msgstr ""
+msgstr "次の行を ~/.gconf.path ファイルの最後に加えてください:"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:10
 msgid "Please run the following commands:"
-msgstr ""
+msgstr "次のコマンドを実行してください:"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:11
 msgid "S_kip"
@@ -9519,27 +9530,27 @@ msgstr "スキップ(_K)"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:12
 msgid "The configuration data is stored in a non-standard location.  There are two methods that can be used to make this data visible to GnuCash.  The first is to modify a system search path to include the data location.  The second is to copy the data into your home directory."
-msgstr ""
+msgstr "設定データが非標準の場所に保存されています。GnuCash でこのデータを参照できるようにするためには二種類の方法があります。一つ目はシステム検索パスにデータの位置が含まれるように変更することです。二つ目はホームディレクトリにデータをコピーすることです。"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:13
 msgid "The configuration data used by GnuCash to specify its default values cannot be found in the default system locations.  Without this data GnuCash will still operate properly, but it may require some extra time to set up."
-msgstr ""
+msgstr "デフォルト値を指定するために GnuCash で使用される設定データがシステム標準の場所にありません。このデータが無くても GnuCash は正常に動作します。しかしセットアップに余分な時間がかかります。"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:14
 msgid "The data has _already been installed in another window"
-msgstr ""
+msgstr "データは他のウィンドウによってすでにインストールされています"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:15
 msgid "The search path has _already been updated in another window"
-msgstr ""
+msgstr "検索パスは他のウィンドウによって既に更新されています。"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:16
 msgid "This method will install the GnuCash default settings and descriptions into the .gconf directory within your home directory.  The disadvantage to this method is that future updates to GnuCash will not update your local settings to add in new keys."
-msgstr ""
+msgstr "この方法では GnuCash のデフォルト設定および説明をホームディレクトリの .gconf ディレクトリ内にインストールします。この方法の欠点は GnuCash の今後のアップデートで新しくキーが追加されたとしても、ローカルの設定が更新されないことです。"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:17
 msgid "This method will modify the file .gconf.path in your home directory.  It will add the GnuCash install directory to this path so that GnuCash can find its default settings and their descriptions."
-msgstr ""
+msgstr "この方法はホームディレクトリの .gconf.path ファイルを修正します。これにより GnuCash のデフォルト設定と説明をGnuCash が見つけることができるように GnuCash のインストールディレクトリがパスに追加されます。"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:18
 msgid "Update GnuCash configuration data"
@@ -9551,33 +9562,35 @@ msgstr "gconf設定 - GnuCash を更新"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:20
 msgid "Update search path"
-msgstr "サーチパスを更新"
+msgstr "検索パスを更新"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:21
 msgid "You have chosen to install the configuration data used by GnuCash into the ~/.gconf directory.  GnuCash can do this for you, or tell you how to do it yourself."
-msgstr ""
+msgstr "GnuCash で使用される設定データを ~/.gconf ディレクトリにインストールすることを選択しました。 GnuCash がこれを実行することができます。または自分自身で行うためにはどのようにするかを通知することができます。"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:22
 msgid "You have chosen to update the system search path.  GnuCash can do this for you, or it can tell you how to do it yourself."
-msgstr ""
+msgstr "システムの検索パスを更新することを選択しました。GnuCashが是を実行することができます。または自分自身で行うためにはどのようにするかを通知することができます。"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:23
 msgid ""
 "You will then need to restart the gconf backend with the\n"
 "command 'gconftool-2 --shutdown'."
 msgstr ""
+"次に 'gconftool-2 --shutdown' コマンドを使用して gconf バックエンド\n"
+"を再起動する必要があります。"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:25
 msgid "_GnuCash installs the data"
-msgstr ""
+msgstr "GnuCash でデータをインストールする(_G)"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:26
 msgid "_GnuCash updates the search path"
-msgstr ""
+msgstr "GnuCash で検索パスを更新する(_G)"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:27
 msgid "_Install into home directory"
-msgstr ""
+msgstr "ホームディレクトリにインストールする(_I)"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:28
 msgid "_Setup"
@@ -9585,15 +9598,15 @@ msgstr "設定(_S)"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:29
 msgid "_Update search path"
-msgstr ""
+msgstr "検索パスを更新する(_U)"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:30
 msgid "_You install the data yourself"
-msgstr ""
+msgstr "自分自身でデータをインストールする(_Y)"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:31
 msgid "_You update the search path yourself"
-msgstr ""
+msgstr "自分自身で検索パスを更新する(_Y)"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:1
 msgid "<b>S_ystem input encodings</b>"
@@ -9639,11 +9652,11 @@ msgstr "エンコーディングの一覧を編集する"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:12
 msgid "Finish GnuCash Datafile Import"
-msgstr ""
+msgstr "GnuCash データファイルインポートの完了"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:13
 msgid "GnuCash Datafile Import Assistant"
-msgstr ""
+msgstr "GnuCash データファイルインポートウィザード"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:14
 msgid "GnuCash data files you have loaded"
@@ -10107,7 +10120,7 @@ msgstr "小数点以下に自動で挿入される桁数。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:84
 msgid "If active, GnuCash shows a confirmation question each time the auto-save feature is started. Otherwise no extra explanation is shown."
-msgstr ""
+msgstr "選択した場合、自動保存機能が開始した場合に毎回確認を求めるダイアログを表示します。選択しない場合、余分なダイアログは表示されません。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:85
 msgid "If checked, each register will be opened in its own top level window.  If clear, the register will be opened in the current window."
@@ -10698,7 +10711,7 @@ msgstr "(null)"
 #: ../src/gnome-utils/gnc-file.c:203
 #, c-format
 msgid "No suitable backend was found for %s."
-msgstr ""
+msgstr "%s に対する適切なバックエンドが見つかりません。"
 
 #: ../src/gnome-utils/gnc-file.c:208
 #, c-format
@@ -21996,13 +22009,13 @@ msgstr "複数スプリット取引に関してはすべてのスプリット詳
 #: ../intl-scm/guile-strings.c:7564 ../intl-scm/guile-strings.c:7748
 #: ../intl-scm/guile-strings.c:7938 ../intl-scm/guile-strings.c:8122
 msgid "Print TXF export parameters"
-msgstr "TXFエクスポートパラメータを印刷する"
+msgstr "TXFエクスポートパラメーターを印刷する"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7566 ../intl-scm/guile-strings.c:7940
 msgid "Show TXF export parameters for each TXF code/account on report"
-msgstr ""
+msgstr "帳票の各 TXFコード/勘定科目に対して TXF エクスポートパラメーターを表示します"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -22309,9 +22322,8 @@ msgstr "日付のみのオプション"
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7686 ../intl-scm/guile-strings.c:8060
-#, fuzzy
 msgid ", TXF Format "
-msgstr "書式:"
+msgstr "、TXF形式 "
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -22336,7 +22348,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7698 ../intl-scm/guile-strings.c:8072
 #, c-format
 msgid "Tax Name: %s<BR>"
-msgstr ""
+msgstr "税金名: %s<BR>"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -23762,46 +23774,3 @@ msgstr "GnuCashの開発者には簡単に連絡ができます。メーリン�
 #: ../doc/tip_of_the_day.list.in:88
 msgid "There is a theory that if ever anyone discovers what the Universe is for and why it is here, it will instantly disappear and be replaced with something even more bizarre and inexplicable. There is another theory that this has already happened. Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr "この宇宙の目的がなんであり、なぜ宇宙が存在するのか---その答えをあやまちなく見いだした者あらば、宇宙はたちまち消え去ってはるかに奇怪で不可解なものにとってかわられるだろう---そういう理論がある。それはすでに起こってしまった---という理論もある。ダグラス・アダムス著「宇宙の果てのレストラン」より。"
-
-#, fuzzy
-#~ msgid "Enter the transaction date"
-#~ msgstr "取引日時にもっとも近い"
-
-#~ msgid "The following bills are due"
-#~ msgstr "以下の請求は期限が来ています"
-
-#~ msgid "Escrow "
-#~ msgstr "エスクロー"
-
-#~ msgid "Show Hidden"
-#~ msgstr "隠し科目の表示"
-
-#~ msgid "Show hidden accounts."
-#~ msgstr "隠し勘定科目を表示する。"
-
-#~ msgid "<no file>"
-#~ msgstr "<ファイルなし>"
-
-#~ msgid "You cannot move an account into itself."
-#~ msgstr "同じ勘定科目自身に移動することはできません。"
-
-#~ msgid "The destination account is a child of the dragged account."
-#~ msgstr "移動先の勘定科目は自身の子勘定科目です。"
-
-#~ msgid "The account cannot be moved because the account types are incompatible."
-#~ msgstr "勘定科目タイプに互換性がないため移動することができません。"
-
-#~ msgid "The destination account type, %s, is not compatible with the new parent's type, %s."
-#~ msgstr "%s勘定科目タイプは親勘定科目タイプ %s と互換性がないため移動することができません。"
-
-#~ msgid "A bug was detected while reading the QIF file."
-#~ msgstr "QIFファイルの読込み中にバグが検出されました。"
-
-#~ msgid "Div"
-#~ msgstr "配当"
-
-#~ msgid "Compute unrealized gains and losses"
-#~ msgstr "未実現損益を計算"
-
-#~ msgid "Include unrealized gains and losses in the computation.  Will produce incorrect results if the current file uses commodity trading accounts"
-#~ msgstr "計算に未実現損益を含める。現在のファイルが商品取引勘定科目を用いている場合は、不正確な結果を生成することがあります。"
