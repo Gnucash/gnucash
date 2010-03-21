@@ -585,7 +585,6 @@ main(int argc, char ** argv)
 #ifdef ENABLE_BINRELOC
     {
         GError *binreloc_error = NULL;
-	g_print("Checking for Binreloc\n");
         if (!gnc_gbr_init(&binreloc_error))
         {
             g_print("main: Error on gnc_gbr_init: %s\n", binreloc_error->message);
