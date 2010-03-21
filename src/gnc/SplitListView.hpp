@@ -25,6 +25,7 @@
 
 #include "gnc/Account.hpp"
 #include "gnc/SplitListModel.hpp"
+#include "gnc/QofEventWrapper.hpp"
 
 #include <QtGui/QTableView>
 #include <QtGui/QAbstractItemDelegate>
@@ -46,6 +47,13 @@ signals:
 
 public slots:
     void closeEditor(QWidget* editor, QAbstractItemDelegate::EndEditHint hint);
+    void accountEvent( ::Account* v, QofEventId event_type);
+    void bookEvent( ::QofBook* v, QofEventId event_type);
+
+private:
+    Account m_account;
+    QofEventWrapper<SplitListView, ::Account*> m_eventWrapperAccount;
+    QofEventWrapper<SplitListView, ::QofBook*> m_eventWrapperBook;
 };
 
 }

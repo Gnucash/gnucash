@@ -43,8 +43,8 @@ SplitListModel::SplitListModel(const Account& acc, QUndoStack* undoStack, QObjec
         , m_account(acc)
         , m_list()
         , m_undoStack(undoStack)
-        , m_eventWrapper(*this, &SplitListModel::transactionEvent, GNC_ID_TRANS)
-        , m_eventWrapperAccount(*this, &SplitListModel::accountEvent, GNC_ID_ACCOUNT)
+        , m_eventWrapper(*this, &SplitListModel::transactionEvent)
+        , m_eventWrapperAccount(*this, &SplitListModel::accountEvent)
         , m_enableNewTransaction(true)
 {
     recreateCache();
@@ -646,7 +646,7 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
 
 void SplitListModel::transactionEvent( ::Transaction* trans, QofEventId event_type)
 {
-    qDebug() << "transactionEvent, id=" << qofEventToString(event_type);
+    qDebug() << "SplitListModel::transactionEvent, id=" << qofEventToString(event_type);
     switch (event_type)
     {
     case QOF_EVENT_MODIFY:
@@ -666,7 +666,7 @@ void SplitListModel::accountEvent( ::Account* acc, QofEventId event_type)
 {
     if (acc != m_account.get())
         return;
-    qDebug() << "accountEvent, id=" << qofEventToString(event_type);
+    qDebug() << "SplitListModel::accountEvent, id=" << qofEventToString(event_type);
 
     switch (event_type)
     {

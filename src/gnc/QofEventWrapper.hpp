@@ -28,10 +28,15 @@
 extern "C"
 {
 #include "qof.h"
+#include "engine/gnc-engine.h"
+#include "engine/Account.h"
+#include "engine/Transaction.h"
+#include "engine/gnc-commodity.h"
 }
 
 #include <QString>
 #include <QDebug>
+#include <stdexcept>
 
 namespace gnc
 {
@@ -43,6 +48,45 @@ QString qofEventToString(QofEventId event_type);
 inline const char* getQofType( ::QofInstance* obj)
 {
     return obj->e_type;
+}
+
+namespace detail
+{
+    template<class ValuePtrT> inline const char* getQofTypeT()
+    {
+        Q_ASSERT(false);
+        // This would need a BOOST_STATIC_ASSERT(sizeof(T)==0) to
+        // trigger a compile-time warning in case this function is
+        // erroneously instantiated.
+        // This template must not be instantiated. Instead, for each
+        // templated usage there must exist a specialization which
+        // will return the correct QOF_ID string!
+        throw std::runtime_error("Should not have been instantiated");
+    }
+    template<> inline const char* getQofTypeT< ::Transaction*>()
+    {
+        return GNC_ID_TRANS;
+    }
+    template<> inline const char* getQofTypeT< ::Account*>()
+    {
+        return GNC_ID_ACCOUNT;
+    }
+    template<> inline const char* getQofTypeT< ::QofBook*>()
+    {
+        return QOF_ID_BOOK;
+    }
+    template<> inline const char* getQofTypeT< ::QofSession*>()
+    {
+        return QOF_ID_SESSION;
+    }
+    template<> inline const char* getQofTypeT< ::gnc_commodity*>()
+    {
+        return GNC_ID_COMMODITY;
+    }
+    template<> inline const char* getQofTypeT< ::Split*>()
+    {
+        return GNC_ID_SPLIT;
+    }
 }
 
 /** Template wrapper class for objects which want to receive
@@ -57,11 +101,10 @@ class QofEventWrapper
 {
 public:
     QofEventWrapper(ReceiverT& receiver,
-                    SlotFunc recvSlot,
-                    const char* qof_type)
+                    SlotFunc recvSlot)
             : m_receiver(receiver)
             , m_receiveFunc(recvSlot)
-            , m_qof_type(qof_type)
+            , m_qof_type(gnc::detail::getQofTypeT<ValuePtrT>())
     {
         m_handler_id = qof_event_register_handler(QofEventWrapper::event_handler, this);
     }

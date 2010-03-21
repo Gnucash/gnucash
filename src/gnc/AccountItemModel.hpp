@@ -24,6 +24,7 @@
 #define GNC_ACCOUNTITEMMODEL_HPP
 
 #include "gnc/Account.hpp"
+#include "gnc/QofEventWrapper.hpp"
 
 #include <QAbstractItemModel>
 
@@ -72,10 +73,7 @@ class AccountListModel : public AccountTreeModel
     Q_OBJECT
 public:
     typedef AccountTreeModel base_class;
-    AccountListModel(Account rootaccount, QObject *parent = 0)
-            : base_class(rootaccount, parent)
-            , m_list(Account::fromGList(rootaccount.get_descendants()))
-    {}
+    AccountListModel(Account rootaccount, QObject *parent = 0);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const { return m_list.size(); }
 
@@ -87,8 +85,14 @@ public:
     int indexOf(AccountQList::value_type value) const { return m_list.indexOf(value); }
     const AccountQList::value_type at(int i) const { return m_list.at(i); }
 
+public slots:
+    void accountEvent( ::Account* v, QofEventId event_type);
+
 private:
+    void recreateCache();
+
     AccountQList m_list;
+    QofEventWrapper<AccountListModel, ::Account*> m_eventWrapperAccount;
 };
 
 /** Specialization of the account list model that only shows the

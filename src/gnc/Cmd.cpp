@@ -365,6 +365,9 @@ public:
             , m_previousValue(previousValue)
             , m_newValue(newValue)
     {
+        Q_ASSERT(m_target.getParent());
+        Q_ASSERT(m_target.getOtherSplit());
+        Q_ASSERT(m_target.getAccount());
     }
 
     virtual void redo() { set(m_newValue); }
@@ -372,6 +375,7 @@ public:
 private:
     void set(const value_type& value)
     {
+        Q_ASSERT(m_target.getParent());
         const TmpTransaction& trans = *m_target.getParent();
         if (trans.countSplits() != 2)
             return;
@@ -380,6 +384,7 @@ private:
         TmpSplit& other = *p_other;
         Commodity originCommodity = Account(m_target.getAccount()).getCommodity();
         Commodity transCommodity = trans.getCommodity();
+        Q_ASSERT(other.getAccount());
         Commodity otherCommodity = Account(other.getAccount()).getCommodity();
         if (originCommodity != transCommodity
                 || transCommodity != otherCommodity)
@@ -414,12 +419,11 @@ class TransactionCreateCmd : public QUndoCommand
 {
 public:
     typedef QUndoCommand base_class;
-    typedef TmpTransaction target_type;
 
     /** Constructor
      */
     TransactionCreateCmd(const QString& text,
-                         const target_type target,
+                         const TmpTransaction& target,
                          QUndoCommand *parent = 0)
             : base_class(text, parent)
             , m_template(target)
@@ -438,7 +442,7 @@ public:
     }
 
 protected:
-    target_type m_template;
+    TmpTransaction m_template;
     Transaction m_created;
 };
 

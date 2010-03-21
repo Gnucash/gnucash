@@ -21,6 +21,8 @@
  */
 
 #include "AccountItemModel.hpp"
+
+#include "engine/gnc-event.h" // for GNC_EVENT_ITEM_ADDED
 #include "gnc/Numeric.hpp"
 #include <QDebug>
 
@@ -167,6 +169,35 @@ QVariant AccountTreeModel::headerData(int section, Qt::Orientation orientation, 
 
 // ////////////////////////////////////////////////////////////
 
+
+AccountListModel::AccountListModel(Account rootaccount, QObject *parent)
+        : base_class(rootaccount, parent)
+        , m_list()
+        , m_eventWrapperAccount(*this, &AccountListModel::accountEvent)
+{
+    recreateCache();
+}
+
+void AccountListModel::recreateCache()
+{
+    m_list = Account::fromGList(m_root.get_descendants());
+    reset();
+}
+
+void AccountListModel::accountEvent( ::Account* acc, QofEventId event_type)
+{
+    //qDebug() << "AccountListModel::accountEvent, id=" << qofEventToString(event_type);
+
+    switch (event_type)
+    {
+    case QOF_EVENT_CREATE:
+    case QOF_EVENT_DESTROY:
+        recreateCache();
+        break;
+    default:
+        break;
+    }
+}
 
 QModelIndex AccountListModel::index(int row, int column,
                                     const QModelIndex &parent) const
