@@ -100,46 +100,71 @@ public:
 };
 
 
+/** This is a temporary transaction. Each of this tmp transactions has
+ * all data fields just like a "real" transaction, but it is not (yet)
+ * added to the respective Account and Book. In other words, it is not
+ * stored in the book yet.
+ *
+ * For this reason this class supports a full copy-by-value, which
+ * will create new independent instances of all data fields. */
 class TmpTransaction
 {
 public:
     typedef QList<TmpSplit> TmpSplitQList;
 
+    /** Creates an empty tmp transaction */
     TmpTransaction();
+
+    /** Creates a tmp transaction whose content is copied from the
+     * given real transaction */
     TmpTransaction(const Transaction& t);
 
+    /** Clears all data fields of this transaction, including deletion
+     * of all splits stored here. */
     void clear();
+
+    /** Clears all data fields, but does not delete the splits and
+     * instead only resets the data fields of all splits */
+    void resetContent();
+
+    /** Copies the content of this tmp transaction into the given real
+     * transaction. */
     void copyTo(Transaction& t) const;
+
+    /** Allocates a new real transaction in the Book and Account as
+     * stored in the tmp transaction, copies the content of this tmp
+     * transaction into the newly allocated one, and returns the
+     * pointer to the newly created real transaction. */
     Transaction createAsReal() const;
 
-    QString getNum() const { return num; }
-    void setNum(const QString& v) { num = v; }
+    QString getNum() const { return m_num; }
+    void setNum(const QString& v) { m_num = v; }
 
-    QString getDescription() const { return description; }
-    void setDescription(const QString& v) { description = v; }
+    QString getDescription() const { return m_description; }
+    void setDescription(const QString& v) { m_description = v; }
 
     void push_back(const TmpSplit& s);
-    const TmpSplitQList& getSplits() const { return splits; }
-    TmpSplitQList& getSplits() { return splits; }
-    int countSplits() const { return splits.size(); }
+    const TmpSplitQList& getSplits() const { return m_splits; }
+    TmpSplitQList& getSplits() { return m_splits; }
+    int countSplits() const { return m_splits.size(); }
 
-    Commodity getCommodity() const { return commodity; }
-    void setCommodity(const Commodity& v) { commodity = v; }
+    Commodity getCommodity() const { return m_commodity; }
+    void setCommodity(const Commodity& v) { m_commodity = v; }
 
-    QDate getDatePosted() const { return datePosted; }
-    void setDatePosted(const QDate& v) { datePosted = v; }
+    QDate getDatePosted() const { return m_datePosted; }
+    void setDatePosted(const QDate& v) { m_datePosted = v; }
 
-    QDateTime getDateEntered() const { return dateTimeEntered; }
-    void setDateEntered(const QDateTime& v) { dateTimeEntered = v; }
+    QDateTime getDateEntered() const { return m_dateTimeEntered; }
+    void setDateEntered(const QDateTime& v) { m_dateTimeEntered = v; }
 
 private:
-    QString num;
-    QString description;
-    QString notes;
-    TmpSplitQList splits;
-    Commodity commodity;
-    QDate datePosted;
-    QDateTime dateTimeEntered;
+    QString m_num;
+    QString m_description;
+    QString m_notes;
+    TmpSplitQList m_splits;
+    Commodity m_commodity;
+    QDate m_datePosted;
+    QDateTime m_dateTimeEntered;
 };
 
 } // END namespace gnc

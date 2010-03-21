@@ -112,46 +112,69 @@ public:
     }
 };
 
+
+/** This is a temporary split which belongs to a temporary transaction
+ * (class gnc::TmpTransaction). Each of this tmp splits has all data
+ * fields just like a "real" split, but it is not (yet) added to the
+ * respective Account and Book. In other words, it is not stored in
+ * the book yet.
+ *
+ * For this reason this class supports a full copy-by-value, which
+ * will create new independent instances of all data fields. */
 class TmpSplit
 {
 public:
+    /** Creates a new tmp split whose content is copied from the given
+     * real transaction and it should belong to the given
+     * TmpTransaction (but it is not added to the TmpTransaction's
+     * split list here). */
     TmpSplit(const Split& s, const TmpTransaction* parent_trans);
+
+    /** Creates a new empty tmp split, with the Account pointer
+     * initialized with the given value. */
     TmpSplit(::Account* account = NULL);
 
+    /** Clears all data fields of this split. */
     void clear(::Account* account = NULL);
-    void copyInto(Transaction& t);
 
-    ::Account* getAccount() const { return account; }
-    void setAccount(::Account* v) { account = v;}
+    /** Copies the content of this tmp split into the given real
+     * transaction by allocating a new real gnc::Split and adding it
+     * to the given real gnc::Transaction. */
+    void copyInto(Transaction& t) const;
 
-    const TmpTransaction* getParent() const { return parent; }
-    void setParent(const TmpTransaction* v) { parent = v; }
+    ::Account* getAccount() const { return m_account; }
+    void setAccount(::Account* v) { m_account = v;}
 
+    const TmpTransaction* getParent() const { return m_parent; }
+    void setParent(const TmpTransaction* v) { m_parent = v; }
+
+    /** Returns a pointer to the "Other" split if it exists, or NULL
+     * if none or multiple of them exist. */
     TmpSplit* getOtherSplit() const;
 
-    QString getMemo() const { return memo; }
-    void setMemo(const QString& v) { memo = v; }
+    QString getMemo() const { return m_memo; }
+    void setMemo(const QString& v) { m_memo = v; }
 
-    QString getAction() const { return action; }
-    void setAction(const QString& v) { action = v; }
+    QString getAction() const { return m_action; }
+    void setAction(const QString& v) { m_action = v; }
 
-    char getReconcile() const { return reconcile; }
-    void setReconcile(char v) { reconcile = v; }
+    char getReconcile() const { return m_reconcile; }
+    void setReconcile(char v) { m_reconcile = v; }
 
-    Numeric getAmount() const { return amount; }
-    void setAmount(const Numeric& v) { amount = v; }
+    Numeric getAmount() const { return m_amount; }
+    void setAmount(const Numeric& v) { m_amount = v; }
 
-    Numeric getValue() const { return value; }
-    void setValue(const Numeric& v) { value = v; }
+    Numeric getValue() const { return m_value; }
+    void setValue(const Numeric& v) { m_value = v; }
 
 private:
-    ::Account* account;
-    const TmpTransaction* parent;
-    QString memo;
-    QString action;
-    char reconcile;
-    Numeric amount;
-    Numeric value;
+    ::Account* m_account;
+    const TmpTransaction* m_parent;
+    QString m_memo;
+    QString m_action;
+    char m_reconcile;
+    Numeric m_amount;
+    Numeric m_value;
 };
 
 } // END namespace gnc

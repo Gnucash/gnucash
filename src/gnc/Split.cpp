@@ -39,55 +39,55 @@ void Split::setParent(Transaction& trans) { xaccSplitSetParent(get(), trans.get(
 
 
 TmpSplit::TmpSplit(const Split& s, const TmpTransaction* parent_trans)
-        : account(s.getAccount().get())
-        , parent(parent_trans)
-        , memo(s.getMemo())
-        , action(s.getAction())
-        , reconcile(s.getReconcile())
-        , amount(s.getAmount())
-        , value(s.getValue())
+        : m_account(s.getAccount().get())
+        , m_parent(parent_trans)
+        , m_memo(s.getMemo())
+        , m_action(s.getAction())
+        , m_reconcile(s.getReconcile())
+        , m_amount(s.getAmount())
+        , m_value(s.getValue())
 {}
 
-TmpSplit::TmpSplit(::Account* _account)
+TmpSplit::TmpSplit(::Account* account)
 {
-    clear(_account);
+    clear(account);
 }
 
 TmpSplit* TmpSplit::getOtherSplit() const
 {
-    if (!parent)
+    if (!m_parent)
         return NULL;
-    const TmpTransaction& p = *parent;
+    const TmpTransaction& p = *m_parent;
     if (p.countSplits() != 2)
         return NULL;
     TmpTransaction::TmpSplitQList& splits = const_cast<TmpTransaction&>(p).getSplits();
-    if (splits.front().getAccount() != account)
+    if (splits.front().getAccount() != m_account)
         return &splits.front();
     else
         return &splits.back();
 }
 
-void TmpSplit::clear(::Account* _account)
+void TmpSplit::clear(::Account* account)
 {
-    account = _account;
-    parent = NULL;
-    memo.clear();
-    action.clear();
-    reconcile = '\0';
-    amount = Numeric::zero();
-    value = Numeric::zero();
+    m_account = account;
+    m_parent = NULL;
+    m_memo.clear();
+    m_action.clear();
+    m_reconcile = NREC;
+    m_amount = Numeric::zero();
+    m_value = Numeric::zero();
 }
 
-void TmpSplit::copyInto(Transaction& t)
+void TmpSplit::copyInto(Transaction& t) const
 {
     Split s(xaccMallocSplit(t.getBook().get()));
-    s.setAccount(account);
+    s.setAccount(m_account);
     s.setParent(t);
-    s.setMemo(memo);
-    s.setAction(action);
-    s.setReconcile(reconcile);
-    s.setAmount(amount);
-    s.setValue(value);
+    s.setMemo(m_memo);
+    s.setAction(m_action);
+    s.setReconcile(m_reconcile);
+    s.setAmount(m_amount);
+    s.setValue(m_value);
 }
 
 } // END namespace gnc

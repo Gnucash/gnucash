@@ -769,6 +769,7 @@ bool MainWindow::saveFile()
     xaccReopenLog();
     gnc_hook_run(HOOK_BOOK_SAVED, m_session.get());
 
+    documentCleanStateChanged(true);
     statusBar()->showMessage(tr("File saved"), 5000);
     return true;
 }

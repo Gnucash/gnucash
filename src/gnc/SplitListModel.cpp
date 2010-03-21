@@ -48,6 +48,9 @@ SplitListModel::SplitListModel(const Account& acc, QUndoStack* undoStack, QObjec
         , m_enableNewTransaction(true)
 {
     recreateCache();
+
+    m_tmpTransaction.push_back(TmpSplit(NULL));
+    m_tmpTransaction.push_back(TmpSplit(NULL));
     recreateTmpTrans();
 }
 
@@ -71,15 +74,20 @@ void SplitListModel::recreateCache()
 
 void SplitListModel::recreateTmpTrans()
 {
-    m_tmpTransaction.clear();
+    m_tmpTransaction.resetContent();
+    while (m_tmpTransaction.countSplits() > 2)
+        m_tmpTransaction.getSplits().pop_back();
+    Q_ASSERT(m_tmpTransaction.countSplits() == 2);
+
     m_tmpTransaction.setCommodity(m_account.getCommodity());
     m_tmpTransaction.setDatePosted(QDate::currentDate());
-    m_tmpTransaction.push_back(TmpSplit(m_account.get()));
-    m_tmpTransaction.push_back(TmpSplit(NULL));
+    TmpSplit& oursplit = m_tmpTransaction.getSplits().front();
+    TmpSplit& othersplit = m_tmpTransaction.getSplits().back();
+    oursplit.setAccount(m_account.get());
 
     Q_ASSERT(m_tmpTransaction.countSplits() == 2);
-    Q_ASSERT(m_tmpTransaction.getSplits().front().getAccount() == m_account.get());
-    Q_ASSERT(m_tmpTransaction.getSplits().back().getAccount() == NULL);
+    Q_ASSERT(oursplit.getAccount() == m_account.get());
+    Q_ASSERT(othersplit.getAccount() == NULL);
 }
 
 SplitListModel::~SplitListModel()

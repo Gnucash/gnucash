@@ -40,6 +40,8 @@ SET (gnc_HEADERS ${gnc_QOBJECT_HEADERS}
   Book.hpp
   Cmd.hpp
   Commodity.hpp
+  GncInstance.hpp
+  Numeric.hpp
   QofEventWrapper.hpp
   Session.hpp
   Split.hpp

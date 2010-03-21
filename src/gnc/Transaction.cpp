@@ -54,47 +54,61 @@ TmpTransaction::TmpTransaction()
     clear();
 }
 TmpTransaction::TmpTransaction(const Transaction& t)
-        : num(t.getNum())
-        , description(t.getDescription())
-        , notes(t.getNotes())
-        , commodity(t.getCurrency())
-        , datePosted(t.getDatePosted())
-        , dateTimeEntered(t.getDateEntered())
+        : m_num(t.getNum())
+        , m_description(t.getDescription())
+        , m_notes(t.getNotes())
+        , m_commodity(t.getCurrency())
+        , m_datePosted(t.getDatePosted())
+        , m_dateTimeEntered(t.getDateEntered())
 {
     SplitQList slist = Split::fromGList(t.getSplitList());
     Q_FOREACH(Split s, slist)
     {
-        splits.push_back(TmpSplit(s, this));
+        m_splits.push_back(TmpSplit(s, this));
     }
 }
+
 void TmpTransaction::clear()
 {
-    num.clear();
-    description.clear();
-    notes.clear();
-    commodity.reset();
-    datePosted = QDate();
-    dateTimeEntered = QDateTime();
-    splits.clear();
+    m_splits.clear();
+    resetContent();
 }
-void TmpTransaction::copyTo(Transaction& t) const
+
+void TmpTransaction::resetContent()
 {
-    t.setNum(num);
-    t.setDescription(description);
-    if (!notes.isEmpty())
-        t.setNotes(notes);
-    t.setCurrency(commodity);
-    t.setDatePosted(datePosted);
-    t.setDateEntered(dateTimeEntered);
-    Q_FOREACH(TmpSplit s, splits)
+    m_num.clear();
+    m_description.clear();
+    m_notes.clear();
+    m_commodity.reset();
+    m_datePosted = QDate();
+    m_dateTimeEntered = QDateTime();
+    for (int i = 0; i < m_splits.size(); ++i)
     {
-        s.copyInto(t);
+        TmpSplit& split = m_splits[i];
+        split.clear();
+        split.setParent(this);
     }
 }
+
+void TmpTransaction::copyTo(Transaction& t) const
+{
+    t.setNum(m_num);
+    t.setDescription(m_description);
+    if (!m_notes.isEmpty())
+        t.setNotes(m_notes);
+    t.setCurrency(m_commodity);
+    t.setDatePosted(m_datePosted);
+    t.setDateEntered(m_dateTimeEntered);
+    for (int i = 0; i < m_splits.size(); ++i)
+    {
+        m_splits[i].copyInto(t);
+    }
+}
+
 Transaction TmpTransaction::createAsReal() const
 {
-    Q_ASSERT (!splits.isEmpty());
-    Account acc(splits.front().getAccount());
+    Q_ASSERT (!m_splits.isEmpty());
+    Account acc(m_splits.front().getAccount());
     Q_ASSERT (acc);
     Book book(acc.getBook());
     Q_ASSERT (book);
@@ -104,10 +118,11 @@ Transaction TmpTransaction::createAsReal() const
     trans.commitEdit();
     return trans;
 }
+
 void TmpTransaction::push_back(const TmpSplit& s)
 {
-    splits.push_back(s);
-    splits.back().setParent(this);
+    m_splits.push_back(s);
+    m_splits.back().setParent(this);
 }
 
 } // END namespace gnc
