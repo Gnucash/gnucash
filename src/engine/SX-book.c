@@ -176,6 +176,7 @@ static QofObject sxtg_object_def =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) GNC_ID_SXTG,
     DI(.type_label        = ) "Scheduled Transaction Templates",
+    DI(.create            = ) NULL,
     DI(.book_begin        = ) sxtg_book_begin,
     DI(.book_end          = ) sxtg_book_end,
     DI(.is_dirty          = ) sxtg_is_dirty,
