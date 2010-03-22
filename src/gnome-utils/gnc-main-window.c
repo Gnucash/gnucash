@@ -2383,7 +2383,7 @@ gnc_main_window_connect (GncMainWindow *window,
     priv->installed_pages = g_list_append (priv->installed_pages, page);
     priv->usage_order = g_list_prepend (priv->usage_order, page);
     gtk_notebook_append_page_menu (notebook, page->notebook_page,
-				   tab_hbox, menu_label);
+                                   tab_hbox, menu_label);
     gtk_notebook_set_tab_reorderable (notebook, page->notebook_page, TRUE);
     gnc_plugin_page_inserted (page);
     gtk_notebook_set_current_page (notebook, -1);
@@ -3213,7 +3213,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
     priv->notebook = gtk_notebook_new ();
     g_object_set(G_OBJECT(priv->notebook),
                  "scrollable", TRUE,
-                 "enable-popup", 
+                 "enable-popup",
                  (char *)NULL);
     gtk_widget_show (priv->notebook);
     g_signal_connect (G_OBJECT (priv->notebook), "switch-page",
