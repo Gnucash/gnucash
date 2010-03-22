@@ -2660,11 +2660,7 @@ gnc_main_window_open_page (GncMainWindow *window,
     /*
      * Now install it all in the window.
      */
-#ifdef GTK_QUARTZ
-    gnc_main_window_connect(window, page, tab_hbox, label);
-#else
     gnc_main_window_connect(window, page, event_box, label);
-#endif
     LEAVE("");
 }
 
@@ -3213,7 +3209,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
     priv->notebook = gtk_notebook_new ();
     g_object_set(G_OBJECT(priv->notebook),
                  "scrollable", TRUE,
-                 "enable-popup",
+                 "enable-popup", TRUE,
                  (char *)NULL);
     gtk_widget_show (priv->notebook);
     g_signal_connect (G_OBJECT (priv->notebook), "switch-page",
