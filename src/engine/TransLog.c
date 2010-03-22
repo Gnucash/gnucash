@@ -33,6 +33,9 @@
 #include "TransactionP.h"
 #include "TransLog.h"
 #include "qof.h"
+#ifdef _MSC_VER
+# define g_fopen fopen
+#endif
 
 /*
  * Some design philosphy that I think would be good to keep in mind:

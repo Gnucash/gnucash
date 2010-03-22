@@ -31,6 +31,7 @@
 #include <sys/types.h>
 #ifdef _MSC_VER
 typedef int ssize_t;
+# define g_fopen fopen
 #endif
 
 #include "sixtp.h"

@@ -54,6 +54,9 @@
 # define fdopen _fdopen
 # define read _read
 #endif
+#ifdef _MSC_VER
+# define g_fopen fopen
+#endif
 
 /* Do not treat -Wstrict-aliasing warnings as errors because of problems of the
  * G_LOCK* macros as declared by glib.  See

@@ -59,6 +59,9 @@ typedef int ssize_t;
 # define read _read
 # define write _write
 #endif
+#ifdef _MSC_VER
+# define g_fopen fopen
+#endif
 
 #include "qof.h"
 #include "TransLog.h"
