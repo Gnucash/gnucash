@@ -42,9 +42,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #define FILE_ACCESS_OPEN    0
 #define FILE_ACCESS_SAVE_AS 1
 
-void gnc_ui_file_access_response_cb( GtkDialog *, gint, GtkDialog * );
-static void cb_uri_type_changed_cb( GtkComboBox* cb );
-
 typedef struct FileAccessWindow
 {
     /* Parts of the dialog */
@@ -60,6 +57,11 @@ typedef struct FileAccessWindow
     GtkEntry* tf_username;
     GtkEntry* tf_password;
 } FileAccessWindow;
+
+void gnc_ui_file_access_file_activated_cb( GtkFileChooser *chooser,
+                                           FileAccessWindow *faw );
+void gnc_ui_file_access_response_cb( GtkDialog *, gint, GtkDialog * );
+static void cb_uri_type_changed_cb( GtkComboBox* cb );
 
 static gchar*
 geturl( FileAccessWindow* faw )
@@ -93,6 +95,14 @@ geturl( FileAccessWindow* faw )
     url = gnc_uri_create_uri (type, host, 0, username, password, path);
 
     return url;
+}
+
+void
+gnc_ui_file_access_file_activated_cb( GtkFileChooser *chooser, FileAccessWindow *faw )
+{
+    g_return_if_fail( chooser != NULL );
+
+    gnc_ui_file_access_response_cb( GTK_DIALOG(faw->dialog), GTK_RESPONSE_OK, NULL );
 }
 
 void
@@ -283,6 +293,8 @@ gnc_ui_file_access( int type )
     fileChooser = GTK_FILE_CHOOSER_WIDGET(gtk_file_chooser_widget_new( fileChooserAction ));
     faw->fileChooser = GTK_FILE_CHOOSER(fileChooser);
     gtk_container_add( GTK_CONTAINER(align), GTK_WIDGET(fileChooser) );
+    g_object_connect( G_OBJECT(faw->fileChooser), "signal::file-activated",
+                      gnc_ui_file_access_file_activated_cb, faw, NULL );
 
     uri_type_container = glade_xml_get_widget( xml, "vb_uri_type_container" );
     faw->cb_uri_type = GTK_COMBO_BOX(gtk_combo_box_new_text());
