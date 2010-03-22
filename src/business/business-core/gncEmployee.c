@@ -217,7 +217,7 @@ gnc_employee_class_init (GncEmployeeClass *klass)
     g_object_class_install_property
     (gobject_class,
      PROP_USERNAME,
-     g_param_spec_string ("name",
+     g_param_spec_string ("username",
                           "Employee Name",
                           "The employee name is an arbitrary string "
                           "assigned by the user which provides the employee "
