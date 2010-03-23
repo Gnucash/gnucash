@@ -31,6 +31,7 @@
 #include "test-dbi-stuff.h"
 
 #include "Account.h"
+#include "Transaction.h"
 #include "Split.h"
 #include "gnc-commodity.h"
 
@@ -43,16 +44,26 @@ create_session(void)
     QofSession* session = qof_session_new();
     QofBook* book = qof_session_get_book( session );
     Account* root = gnc_book_get_root_account( book );
-    Account* a;
+    Account* acct1;
+    Account* acct2;
     KvpFrame* frame;
+    Transaction* tx;
+    Split* spl1;
+    Split* spl2;
     Timespec ts;
     struct timeval tv;
+    gnc_commodity_table* table;
+    gnc_commodity* currency;
+    
+    table = gnc_commodity_table_get_table( book );
+    currency = gnc_commodity_table_lookup( table, GNC_COMMODITY_NS_CURRENCY, "CAD" );
 
-    a = xaccMallocAccount( book );
-    xaccAccountSetType( a, ACCT_TYPE_BANK );
-    xaccAccountSetName( a, "Bank" );
+    acct1 = xaccMallocAccount( book );
+    xaccAccountSetType( acct1, ACCT_TYPE_BANK );
+    xaccAccountSetName( acct1, "Bank 1" );
+    xaccAccountSetCommodity( acct1, currency );
 
-    frame = qof_instance_get_slots( QOF_INSTANCE(a) );
+    frame = qof_instance_get_slots( QOF_INSTANCE(acct1) );
     kvp_frame_set_gint64( frame, "int64-val", 100 );
     kvp_frame_set_double( frame, "double-val", 3.14159 );
     kvp_frame_set_numeric( frame, "numeric-val", gnc_numeric_zero() );
@@ -64,9 +75,23 @@ create_session(void)
     kvp_frame_set_timespec( frame, "timespec-val", ts );
 
     kvp_frame_set_string( frame, "string-val", "abcdefghijklmnop" );
-    kvp_frame_set_guid( frame, "guid-val", qof_instance_get_guid( QOF_INSTANCE(a) ) );
+    kvp_frame_set_guid( frame, "guid-val", qof_instance_get_guid( QOF_INSTANCE(acct1) ) );
 
-    gnc_account_append_child( root, a );
+    gnc_account_append_child( root, acct1 );
+
+    acct2 = xaccMallocAccount( book );
+    xaccAccountSetType( acct2, ACCT_TYPE_BANK );
+    xaccAccountSetName( acct2, "Bank 1" );
+
+    tx = xaccMallocTransaction( book );
+    xaccTransBeginEdit( tx );
+    xaccTransSetCurrency( tx, currency );
+    spl1 = xaccMallocSplit( book );
+    xaccTransAppendSplit( tx, spl1 );
+    spl2 = xaccMallocSplit( book );
+    xaccTransAppendSplit( tx, spl2 );
+    xaccTransCommitEdit( tx );
+
 
     return session;
 }
@@ -85,6 +110,7 @@ int main (int argc, char ** argv)
     filename = tempnam( "/tmp", "test-sqlite3-" );
     printf( "Using filename: %s\n", filename );
     test_dbi_store_and_reload( "sqlite3", session_1, filename );
+    #if 0
     printf( "TEST_MYSQL_URL='%s'\n", TEST_MYSQL_URL );
     if ( strlen( TEST_MYSQL_URL ) > 0 )
     {
@@ -97,6 +123,7 @@ int main (int argc, char ** argv)
         session_1 = create_session();
         test_dbi_store_and_reload( "pgsql", session_1, TEST_PGSQL_URL );
     }
+    #endif
     print_test_results();
     qof_close();
     exit(get_rv());

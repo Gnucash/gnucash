@@ -1,7 +1,8 @@
 /***************************************************************************
  *            test-dbi.c
  *
- *  Tests saving and loading to a dbi/sqlite3 db
+ *  Tests saving and loading to a dbi/sqlite3 db.  The contents of an XML
+ *  file are read and saved to sqlite3, then the results read back and compared.
  *
  *  Copyright (C) 2009  Phil Longstaff <plongstaff@rogers.com>
  ****************************************************************************/
