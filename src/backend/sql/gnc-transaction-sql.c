@@ -112,7 +112,23 @@ static const GncSqlColumnTableEntry split_col_table[] =
 	/*@ +full_init_block @*/
 };
 
-static const GncSqlColumnTableEntry guid_col_table[] =
+static const GncSqlColumnTableEntry post_date_col_table[] =
+{
+	/*@ -full_init_block @*/
+    { "post_date", CT_TIMESPEC, 0, 0, "post-date" },
+    { NULL }
+	/*@ +full_init_block @*/
+};
+
+static const GncSqlColumnTableEntry account_guid_col_table[] =
+{
+	/*@ -full_init_block @*/
+    { "account_guid", CT_ACCOUNTREF, 0, COL_NNUL, "account" },
+    { NULL }
+	/*@ +full_init_block @*/
+};
+
+static const GncSqlColumnTableEntry tx_guid_col_table[] =
 {
 	/*@ -full_init_block @*/
     { "tx_guid", CT_GUID, 0, 0, "guid" },
@@ -214,7 +230,7 @@ load_splits_for_tx_list( GncSqlBackend* be, GList* list )
 	if( list == NULL ) return;
 
 	sql = g_string_sized_new( 40+(GUID_ENCODING_LENGTH+3)*g_list_length( list ) );
-	g_string_append_printf( sql, "SELECT * FROM %s WHERE %s IN (", SPLIT_TABLE, guid_col_table[0].col_name );
+	g_string_append_printf( sql, "SELECT * FROM %s WHERE %s IN (", SPLIT_TABLE, tx_guid_col_table[0].col_name );
 	(void)gnc_sql_append_guid_list_to_sql( sql, list, G_MAXUINT );
 	(void)g_string_append( sql, ")" );
 
@@ -467,6 +483,10 @@ create_transaction_tables( GncSqlBackend* be )
 	version = gnc_sql_get_table_version( be, TRANSACTION_TABLE );
     if( version == 0 ) {
         (void)gnc_sql_create_table( be, TRANSACTION_TABLE, TX_TABLE_VERSION, tx_col_table );
+	    ok = gnc_sql_create_index( be, "tx_post_date_index", TRANSACTION_TABLE, post_date_col_table );
+	    if( !ok ) {
+		    PERR( "Unable to create index\n" );
+	    }
     } else if( version < TX_TABLE_VERSION ) {
 		/* Upgrade:
 		    1->2: 64 bit int handling
@@ -479,7 +499,11 @@ create_transaction_tables( GncSqlBackend* be )
 	version = gnc_sql_get_table_version( be, SPLIT_TABLE );
     if( version == 0 ) {
         (void)gnc_sql_create_table( be, SPLIT_TABLE, SPLIT_TABLE_VERSION, split_col_table );
-	    ok = gnc_sql_create_index( be, "splits_tx_guid_index", SPLIT_TABLE, guid_col_table );
+	    ok = gnc_sql_create_index( be, "splits_tx_guid_index", SPLIT_TABLE, tx_guid_col_table );
+	    if( !ok ) {
+		    PERR( "Unable to create index\n" );
+	    }
+	    ok = gnc_sql_create_index( be, "splits_account_guid_index", SPLIT_TABLE, account_guid_col_table );
 	    if( !ok ) {
 		    PERR( "Unable to create index\n" );
 	    }
@@ -489,10 +513,14 @@ create_transaction_tables( GncSqlBackend* be )
 		   1->2: 64 bit int handling
 		   3->4: Split reconcile date can be NULL */
 		gnc_sql_upgrade_table( be, SPLIT_TABLE, split_col_table );
-		ok = gnc_sql_create_index( be, "splits_tx_guid_index", SPLIT_TABLE, guid_col_table );
+		ok = gnc_sql_create_index( be, "splits_tx_guid_index", SPLIT_TABLE, tx_guid_col_table );
 		if( !ok ) {
 			PERR( "Unable to create index\n" );
 		}
+	    ok = gnc_sql_create_index( be, "splits_account_guid_index", SPLIT_TABLE, account_guid_col_table );
+	    if( !ok ) {
+		    PERR( "Unable to create index\n" );
+	    }
 		(void)gnc_sql_set_table_version( be, SPLIT_TABLE, SPLIT_TABLE_VERSION );
     }
 }
@@ -535,7 +563,7 @@ delete_splits( GncSqlBackend* be, Transaction* pTx )
 	g_return_val_if_fail( pTx != NULL, FALSE );
 
     if( !gnc_sql_do_db_operation( be, OP_DB_DELETE, SPLIT_TABLE,
-                                SPLIT_TABLE, pTx, guid_col_table ) ) {
+                                SPLIT_TABLE, pTx, tx_guid_col_table ) ) {
 		return FALSE;
 	}
     split_info.be = be;
