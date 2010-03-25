@@ -43,6 +43,7 @@
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gkeyfile-utils.h"
+#include "gnc-uri-utils.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUILE;
@@ -255,11 +256,34 @@ gnc_find_state_file (const gchar *url,
     gint i;
 
     ENTER("url %s, guid %s", url, guid);
-    tmp = strchr(url, ':');
-    if (tmp)
-        url = tmp + 1;
 
-    basename = g_path_get_basename(url);
+    if ( gnc_uri_is_file_uri ( url ) )
+    {
+        /* The url is a true file, use its basename. */
+        gchar *path = gnc_uri_get_path ( url );
+        basename = g_path_get_basename ( path );
+        g_free ( path );
+    }
+    else
+    {
+        /* The url is composed of database connection parameters. */
+        gchar* protocol = NULL;
+        gchar* host = NULL;
+        gchar* dbname = NULL;
+        gchar* username = NULL;
+        gchar* password = NULL;
+        gint portnum = 0;
+        gnc_uri_get_components ( url, &protocol, &host, &portnum,
+                                 &username, &password, &dbname );
+
+        basename = g_strjoin("_", protocol, host, username, dbname, NULL);
+        g_free( protocol );
+        g_free( host );
+        g_free( username );
+        g_free( password );
+        g_free( dbname );
+    }
+
     DEBUG("Basename %s", basename);
     original = gnc_build_book_path(basename);
     g_free(basename);
