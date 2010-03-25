@@ -1454,6 +1454,7 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
 {
     CommodityPrivate* priv_a;
     CommodityPrivate* priv_b;
+    gboolean same_book;
 
     if (a == b) return TRUE;
 
@@ -1465,8 +1466,11 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
 
     priv_a = GET_PRIVATE(a);
     priv_b = GET_PRIVATE(b);
+    same_book = qof_instance_get_book(QOF_INSTANCE(a)) == qof_instance_get_book(QOF_INSTANCE(b));
 
-    if (priv_a->namespace != priv_b->namespace)
+    if ((same_book && priv_a->namespace != priv_b->namespace)
+            || (!same_book && safe_strcmp( gnc_commodity_namespace_get_name(priv_a->namespace),
+                                           gnc_commodity_namespace_get_name(priv_b->namespace)) != 0))
     {
         DEBUG ("namespaces differ: %p(%s) vs %p(%s)",
                priv_a->namespace, gnc_commodity_namespace_get_name(priv_a->namespace),

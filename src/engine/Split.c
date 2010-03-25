@@ -540,6 +540,8 @@ xaccSplitEqual(const Split *sa, const Split *sb,
                gboolean check_balances,
                gboolean check_txn_splits)
 {
+    gboolean same_book;
+
     if (!sa && !sb) return TRUE; /* Arguable. FALSE is better, methinks */
 
     if (!sa || !sb)
@@ -550,6 +552,8 @@ xaccSplitEqual(const Split *sa, const Split *sb,
 
     if (sa == sb) return TRUE;
 
+    same_book = qof_instance_get_book(QOF_INSTANCE(sa)) == qof_instance_get_book(QOF_INSTANCE(sb));
+
     if (check_guids)
     {
         if (qof_instance_guid_compare(sa, sb) != 0)
@@ -559,15 +563,15 @@ xaccSplitEqual(const Split *sa, const Split *sb,
         }
     }
 
-    /* Since these strings are cached we can just use pointer equality */
-    if (sa->memo != sb->memo)
+    /* If the same book, since these strings are cached we can just use pointer equality */
+    if ((same_book && sa->memo != sb->memo) || (!same_book && safe_strcmp(sa->memo, sb->memo) != 0))
     {
         PWARN ("memos differ: (%p)%s vs (%p)%s",
                sa->memo, sa->memo, sb->memo, sb->memo);
         return FALSE;
     }
 
-    if (sa->action != sb->action)
+    if ((same_book && sa->action != sb->action) || (!same_book && safe_strcmp(sa->action, sb->action) != 0))
     {
         PWARN ("actions differ: %s vs %s", sa->action, sb->action);
         return FALSE;

@@ -677,6 +677,8 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
                gboolean check_balances,
                gboolean assume_ordered)
 {
+    gboolean same_book;
+
     if (!ta && !tb) return TRUE; /* Arguable.  FALSE may be better. */
 
     if (!ta || !tb)
@@ -686,6 +688,8 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
     }
 
     if (ta == tb) return TRUE;
+
+    same_book = qof_instance_get_book(QOF_INSTANCE(ta)) == qof_instance_get_book(QOF_INSTANCE(tb));
 
     if (check_guids)
     {
@@ -706,26 +710,37 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 
     if (timespec_cmp(&(ta->date_entered), &(tb->date_entered)))
     {
-        PWARN ("date entered differs");
+        char buf1[100];
+        char buf2[100];
+
+        (void)gnc_timespec_to_iso8601_buff(ta->date_entered, buf1);
+        (void)gnc_timespec_to_iso8601_buff(tb->date_entered, buf2);
+        PWARN ("date entered differs: '%s' vs '%s'", buf1, buf2);
         return FALSE;
     }
 
     if (timespec_cmp(&(ta->date_posted), &(tb->date_posted)))
     {
-        PWARN ("date posted differs");
+        char buf1[100];
+        char buf2[100];
+
+        (void)gnc_timespec_to_iso8601_buff(ta->date_posted, buf1);
+        (void)gnc_timespec_to_iso8601_buff(tb->date_posted, buf2);
+        PWARN ("date posted differs: '%s' vs '%s'", buf1, buf2);
         return FALSE;
     }
 
-    /* Since we use cached strings, we can just compare pointer
+    /* If the same book, since we use cached strings, we can just compare pointer
      * equality for num and description
      */
-    if (ta->num != tb->num)
+    if ((same_book && ta->num != tb->num) || (!same_book && safe_strcmp(ta->num, tb->num) != 0))
     {
         PWARN ("num differs: %s vs %s", ta->num, tb->num);
         return FALSE;
     }
 
-    if (ta->description != tb->description)
+    if ((same_book && ta->description != tb->description)
+        || (!same_book && safe_strcmp(ta->description, tb->description)))
     {
         PWARN ("descriptions differ: %s vs %s", ta->description, tb->description);
         return FALSE;
@@ -1338,7 +1353,7 @@ xaccTransCommitEdit (Transaction *trans)
         tv.tv_usec = 0;
 #endif
         trans->date_entered.tv_sec = tv.tv_sec;
-        trans->date_entered.tv_nsec = 1000 * tv.tv_usec;
+//        trans->date_entered.tv_nsec = 1000 * tv.tv_usec;
         qof_instance_set_dirty(QOF_INSTANCE(trans));
     }
 
