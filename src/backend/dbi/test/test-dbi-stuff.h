@@ -36,4 +36,13 @@
  */
 void test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gchar* url );
 
+typedef struct
+{
+    QofBook* book_1;
+    QofBook* book_2;
+    gboolean result;
+} CompareInfoStruct;
+
+void do_compare( QofBook* book_1, QofBook* book_2, const gchar* id, QofInstanceForeachCB cb, const gchar* msg );
+
 #endif

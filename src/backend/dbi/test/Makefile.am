@@ -1,12 +1,16 @@
 SUBDIRS = .
 
+check_LTLIBRARIES=libgncmod-test-dbi.la
+
+libgncmod_test_dbi_la_SOURCES = \
+    test-dbi-stuff.c
+libgncmod_test_dbi_la_LDFLAGS = -module
+
 test_dbi_basic_SOURCES = \
-  test-dbi-basic.c \
-  test-dbi-stuff.c
+  test-dbi-basic.c
 
 test_dbi_SOURCES = \
-  test-dbi.c \
-  test-dbi-stuff.c
+  test-dbi.c
 
 TESTS = \
   test-dbi-basic \
@@ -40,6 +44,7 @@ LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
         ${top_builddir}/src/core-utils/libgnc-core-utils.la \
         ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+        ${top_builddir}/src/backend/dbi/test/libgncmod-test-dbi.la \
         ${top_builddir}/lib/libc/libc-missing.la
 
 AM_CFLAGS = \
