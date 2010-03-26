@@ -1,4 +1,4 @@
-SUBDIRS = .
+SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-business-backend-sql.la
 
