@@ -71,7 +71,14 @@ void mark_address (GncAddress *address)
 enum
 {
     PROP_0,
-    PROP_NAME
+    PROP_NAME,
+    PROP_ADDR1,
+    PROP_ADDR2,
+    PROP_ADDR3,
+    PROP_ADDR4,
+    PROP_PHONE,
+    PROP_FAX,
+    PROP_EMAIL
 };
 
 /* GObject Initialization */
@@ -110,6 +117,27 @@ gnc_address_get_property (GObject         *object,
     case PROP_NAME:
         g_value_set_string(value, address->name);
         break;
+    case PROP_ADDR1:
+        g_value_set_string(value, address->addr1);
+        break;
+    case PROP_ADDR2:
+        g_value_set_string(value, address->addr2);
+        break;
+    case PROP_ADDR3:
+        g_value_set_string(value, address->addr3);
+        break;
+    case PROP_ADDR4:
+        g_value_set_string(value, address->addr4);
+        break;
+    case PROP_PHONE:
+        g_value_set_string(value, address->phone);
+        break;
+    case PROP_FAX:
+        g_value_set_string(value, address->fax);
+        break;
+    case PROP_EMAIL:
+        g_value_set_string(value, address->email);
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -131,6 +159,27 @@ gnc_address_set_property (GObject         *object,
     {
     case PROP_NAME:
         gncAddressSetName(address, g_value_get_string(value));
+        break;
+    case PROP_ADDR1:
+        gncAddressSetAddr1(address, g_value_get_string(value));
+        break;
+    case PROP_ADDR2:
+        gncAddressSetAddr2(address, g_value_get_string(value));
+        break;
+    case PROP_ADDR3:
+        gncAddressSetAddr3(address, g_value_get_string(value));
+        break;
+    case PROP_ADDR4:
+        gncAddressSetAddr4(address, g_value_get_string(value));
+        break;
+    case PROP_PHONE:
+        gncAddressSetPhone(address, g_value_get_string(value));
+        break;
+    case PROP_FAX:
+        gncAddressSetFax(address, g_value_get_string(value));
+        break;
+    case PROP_EMAIL:
+        gncAddressSetEmail(address, g_value_get_string(value));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -175,6 +224,77 @@ gnc_address_class_init (GncAddressClass *klass)
                           "The address name is an arbitrary string "
                           "assigned by the user.  It is intended to "
                           "a short string to identify the address.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ADDR1,
+     g_param_spec_string ("addr1",
+                          "Address Line 1",
+                          "The address line 1 is an arbitrary string "
+                          "assigned by the user.  It is the first "
+                          "line of the address.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ADDR2,
+     g_param_spec_string ("addr2",
+                          "Address Line 2",
+                          "The address line 2 is an arbitrary string "
+                          "assigned by the user.  It is the second "
+                          "line of the address.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ADDR3,
+     g_param_spec_string ("addr3",
+                          "Address Line 3",
+                          "The address line 3 is an arbitrary string "
+                          "assigned by the user.  It is the third "
+                          "line of the address.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ADDR4,
+     g_param_spec_string ("addr4",
+                          "Address Line 4",
+                          "The address line 4 is an arbitrary string "
+                          "assigned by the user.  It is the fourth "
+                          "line of the address.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_PHONE,
+     g_param_spec_string ("phone",
+                          "Phone",
+                          "The phone number is the number at this address.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_FAX,
+     g_param_spec_string ("fax",
+                          "Fax",
+                          "The fax number at this address.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_EMAIL,
+     g_param_spec_string ("email",
+                          "E-mail address",
+                          "The e-mail address at this address.",
                           NULL,
                           G_PARAM_READWRITE));
 }
@@ -472,6 +592,58 @@ int gncAddressCompare (const GncAddress *a, const GncAddress *b)
     if (a && !b) return -1;
 
     return safe_strcmp (a->name, b->name);
+}
+
+gboolean
+gncAddressEqual(const GncAddress* a, const GncAddress* b)
+{
+    if (a == NULL || b == NULL) return FALSE;
+
+    g_return_val_if_fail(GNC_IS_ADDRESS(a), FALSE);
+    g_return_val_if_fail(GNC_IS_ADDRESS(b), FALSE);
+
+    if (safe_strcmp(a->name, b->name) != 0)
+    {
+        PWARN("names differ: %s vs %s", a->name, b->name);
+        return FALSE;
+    }
+    if (safe_strcmp(a->addr1, b->addr1) != 0)
+    {
+        PWARN("address lines 1 differ: %s vs %s", a->addr1, b->addr1);
+        return FALSE;
+    }
+    if (safe_strcmp(a->addr2, b->addr2) != 0)
+    {
+        PWARN("address lines 2 differ: %s vs %s", a->addr2, b->addr1);
+        return FALSE;
+    }
+    if (safe_strcmp(a->addr3, b->addr3) != 0)
+    {
+        PWARN("address lines 3 differ: %s vs %s", a->addr3, b->addr3);
+        return FALSE;
+    }
+    if (safe_strcmp(a->addr4, b->addr4) != 0)
+    {
+        PWARN("address lines 4 differ: %s vs %s", a->addr4, b->addr4);
+        return FALSE;
+    }
+    if (safe_strcmp(a->phone, b->phone) != 0)
+    {
+        PWARN("phone numbers differ: %s vs %s", a->phone, b->phone);
+        return FALSE;
+    }
+    if (safe_strcmp(a->fax, b->fax) != 0)
+    {
+        PWARN("fax numbers differ: %s vs %s", a->fax, b->fax);
+        return FALSE;
+    }
+    if (safe_strcmp(a->email, b->email) != 0)
+    {
+        PWARN("email addresses differ: %s vs %s", a->email, b->email);
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 static QofObject GncAddressDesc =

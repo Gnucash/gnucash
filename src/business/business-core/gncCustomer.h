@@ -140,6 +140,7 @@ GList * gncCustomerGetJoblist (const GncCustomer *customer, gboolean show_all);
 
 gboolean gncCustomerIsDirty (GncCustomer *customer);
 int gncCustomerCompare (const GncCustomer *a, const GncCustomer *b);
+gboolean gncCustomerEqual(const GncCustomer *a, const GncCustomer *b);
 
 #define CUSTOMER_ID			"id"
 #define CUSTOMER_NAME		"name"

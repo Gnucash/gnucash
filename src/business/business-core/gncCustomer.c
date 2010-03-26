@@ -731,6 +731,28 @@ int gncCustomerCompare (const GncCustomer *a, const GncCustomer *b)
     return(strcmp(a->name, b->name));
 }
 
+gboolean
+gncCustomerEqual(const GncCustomer *a, const GncCustomer *b)
+{
+    if (a == NULL || b == NULL) return FALSE;
+
+    g_return_val_if_fail(GNC_IS_CUSTOMER(a), FALSE);
+    g_return_val_if_fail(GNC_IS_CUSTOMER(b), FALSE);
+
+    if (!gncAddressEqual(a->addr, b->addr))
+    {
+        PWARN("addresses differ");
+        return FALSE;
+    }
+    if (!gncAddressEqual(a->shipaddr, b->shipaddr))
+    {
+        PWARN("addresses differ");
+        return FALSE;
+    }
+    
+    return TRUE;
+}
+
 /**
  * Listens for MODIFY events from addresses.   If the address belongs to a customer,
  * mark the customer as dirty.

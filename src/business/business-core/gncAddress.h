@@ -138,6 +138,12 @@ and +1 if a is more than b or if b is empty.
 */
 int gncAddressCompare (const GncAddress *a, const GncAddress *b);
 
+/** \brief Deeply compare two addresses
+
+\return TRUE if all fields match, FALSE otherwise
+*/
+gboolean gncAddressEqual(const GncAddress *a, const GncAddress *b);
+
 #define ADDRESS_NAME    "name"
 #define ADDRESS_ONE		"number"
 #define ADDRESS_TWO		"street"
