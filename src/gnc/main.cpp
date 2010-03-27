@@ -148,18 +148,10 @@ main(int argc, char ** argv)
 #endif
     g_thread_init(NULL);
 
-#ifdef ENABLE_BINRELOC
-    {
-        GError *binreloc_error = NULL;
-        if (!gnc_gbr_init(&binreloc_error))
-        {
-            g_print("main: Error on gnc_gbr_init: %s\n", binreloc_error->message);
-            g_error_free(binreloc_error);
-        }
-    }
-#else
-    //g_message("main: binreloc relocation support was disabled at configure time.\n");
-#endif
+    QApplication app(argc, argv);
+
+    // Binreloc is initialized by the Qt exe path lookup.
+    gnc_gbr_set_exe(QCoreApplication::applicationFilePath().toUtf8());
 
 #ifdef HAVE_GETTEXT
     {
@@ -194,7 +186,6 @@ main(int argc, char ** argv)
     int r;
     {
         // From here on the new C++ code
-        QApplication app(argc, argv);
         gnc::MainWindow mainWin;
         mainWin.show();
 

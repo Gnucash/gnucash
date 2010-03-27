@@ -227,127 +227,21 @@ _br_find_exe (Gnc_GbrInitError *error)
 }
 
 
-/** @internal
- * Find the canonical filename of the executable which owns symbol.
- * Returns a filename which must be freed, or NULL on error.
- */
-static char *
-_br_find_exe_for_symbol (const void *symbol, Gnc_GbrInitError *error)
-{
-#ifndef ENABLE_BINRELOC
-    if (error)
-        *error = GNC_GBR_INIT_ERROR_DISABLED;
-    return (char *) NULL;
-#else
-#if defined G_OS_WIN32
-    g_warning ("_br_find_exe_for_symbol not implemented on win32.");
-    if (error)
-        *error = GNC_GBR_INIT_ERROR_DISABLED;
-    return (char *) NULL;
-#else
-#define SIZE PATH_MAX + 100
-    FILE *f;
-    size_t address_string_len;
-    char *address_string, line[SIZE], *found;
-
-    if (symbol == NULL)
-        return (char *) NULL;
-
-    f = fopen ("/proc/self/maps", "r");
-    if (f == NULL)
-        return (char *) NULL;
-
-    address_string_len = 4;
-    address_string = (char *) g_try_malloc (address_string_len);
-    found = (char *) NULL;
-
-    while (!feof (f))
-    {
-        char *start_addr, *end_addr, *end_addr_end, *file;
-        void *start_addr_p, *end_addr_p;
-        size_t len;
-
-        if (fgets (line, SIZE, f) == NULL)
-            break;
-
-        /* Sanity check. */
-        if (strstr (line, " r-xp ") == NULL || strchr (line, '/') == NULL)
-            continue;
-
-        /* Parse line. */
-        start_addr = line;
-        end_addr = strchr (line, '-');
-        file = strchr (line, '/');
-
-        /* More sanity check. */
-        if (!(file > end_addr && end_addr != NULL && end_addr[0] == '-'))
-            continue;
-
-        end_addr[0] = '\0';
-        end_addr++;
-        end_addr_end = strchr (end_addr, ' ');
-        if (end_addr_end == NULL)
-            continue;
-
-        end_addr_end[0] = '\0';
-        len = strlen (file);
-        if (len == 0)
-            continue;
-        if (file[len - 1] == '\n')
-            file[len - 1] = '\0';
-
-        /* Get rid of "(deleted)" from the filename. */
-        len = strlen (file);
-        if (len > 10 && strcmp (file + len - 10, " (deleted)") == 0)
-            file[len - 10] = '\0';
-
-        /* I don't know whether this can happen but better safe than sorry. */
-        len = strlen (start_addr);
-        if (len != strlen (end_addr))
-            continue;
-
-
-        /* Transform the addresses into a string in the form of 0xdeadbeef,
-         * then transform that into a pointer. */
-        if (address_string_len < len + 3)
-        {
-            address_string_len = len + 3;
-            address_string = (char *) g_try_realloc (address_string, address_string_len);
-        }
-
-        memcpy (address_string, "0x", 2);
-        memcpy (address_string + 2, start_addr, len);
-        address_string[2 + len] = '\0';
-        sscanf (address_string, "%p", &start_addr_p);
-
-        memcpy (address_string, "0x", 2);
-        memcpy (address_string + 2, end_addr, len);
-        address_string[2 + len] = '\0';
-        sscanf (address_string, "%p", &end_addr_p);
-
-
-        if (symbol >= start_addr_p && symbol < end_addr_p)
-        {
-            found = file;
-            break;
-        }
-    }
-
-    g_free (address_string);
-    fclose (f);
-
-    if (found == NULL)
-        return (char *) NULL;
-    else
-        return g_strdup (found);
-#endif /* G_OS_WIN32 */
-#endif /* ENABLE_BINRELOC */
-}
-
 
 static gchar *exe = NULL;
 
 static void set_gerror (GError **error, Gnc_GbrInitError errcode);
+
+
+void gnc_gbr_set_exe (const gchar* default_exe)
+{
+    if (exe != NULL)
+        g_free(exe);
+    exe = NULL;
+
+    if (default_exe != NULL)
+        exe = g_strdup(default_exe);
+}
 
 
 /** Initialize the BinReloc library (for applications).
@@ -380,34 +274,6 @@ gnc_gbr_init (GError **error)
         /* Failed :-( */
         set_gerror (error, errcode);
         return FALSE;
-    }
-}
-
-
-/** Initialize the BinReloc library (for libraries).
- *
- * This function must be called before using any other BinReloc functions.
- * It attempts to locate the calling library's canonical filename.
- *
- * @note The BinReloc source code MUST be included in your library, or this
- *       function won't work correctly.
- *
- * @returns TRUE on success, FALSE if a filename cannot be found.
- */
-gboolean
-gnc_gbr_init_lib (GError **error)
-{
-    Gnc_GbrInitError errcode = 0;
-
-    exe = _br_find_exe_for_symbol ((const void *) "", &errcode);
-    if (exe != NULL)
-        /* Success! */
-        return TRUE;
-    else
-    {
-        /* Failed :-( */
-        set_gerror (error, errcode);
-        return exe != NULL;
     }
 }
 

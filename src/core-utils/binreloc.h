@@ -18,7 +18,7 @@
 G_BEGIN_DECLS
 
 
-/** These error codes can be returned by br_init(), br_init_lib(), gnc_gbr_init() or gnc_gbr_init_lib(). */
+/** These error codes can be returned by gnc_gbr_init(). */
 typedef enum
 {
     /** Cannot allocate memory. */
@@ -38,22 +38,7 @@ typedef enum
 } Gnc_GbrInitError;
 
 
-#ifndef BINRELOC_RUNNING_DOXYGEN
-/* Mangle symbol names to avoid symbol collisions with other ELF objects. */
-#define gnc_gbr_find_exe         ffEt66859784967989_gnc_gbr_find_exe
-#define gnc_gbr_find_exe_dir     ffEt66859784967989_gnc_gbr_find_exe_dir
-#define gnc_gbr_find_prefix      ffEt66859784967989_gnc_gbr_find_prefix
-#define gnc_gbr_find_bin_dir     ffEt66859784967989_gnc_gbr_find_bin_dir
-#define gnc_gbr_find_sbin_dir    ffEt66859784967989_gnc_gbr_find_sbin_dir
-#define gnc_gbr_find_data_dir    ffEt66859784967989_gnc_gbr_find_data_dir
-#define gnc_gbr_find_lib_dir     ffEt66859784967989_gnc_gbr_find_lib_dir
-#define gnc_gbr_find_libexec_dir ffEt66859784967989_gnc_gbr_find_libexec_dir
-#define gnc_gbr_find_etc_dir     ffEt66859784967989_gnc_gbr_find_etc_dir
-
-
-#endif
 gboolean gnc_gbr_init             (GError **error);
-gboolean gnc_gbr_init_lib         (GError **error);
 
 gchar   *gnc_gbr_find_exe         (const gchar *default_exe);
 gchar   *gnc_gbr_find_exe_dir     (const gchar *default_dir);
@@ -64,6 +49,12 @@ gchar   *gnc_gbr_find_data_dir    (const gchar *default_data_dir);
 gchar   *gnc_gbr_find_lib_dir     (const gchar *default_lib_dir);
 gchar   *gnc_gbr_find_libexec_dir (const gchar *default_libexec_dir);
 gchar   *gnc_gbr_find_etc_dir     (const gchar *default_etc_dir);
+
+/** Sets the executable path to the given value. This is useful if the
+ * binreloc lookup code will not be used, but instead the executable
+ * location is obtained from somewhere else (e.g. qt) but the gnucash
+ * code should nevertheless use this path internally. */
+void gnc_gbr_set_exe (const gchar* default_exe);
 
 
 G_END_DECLS
