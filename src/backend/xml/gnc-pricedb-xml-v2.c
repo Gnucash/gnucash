@@ -92,7 +92,7 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, QofBook *book)
     gnc_price_begin_edit (p);
     if (safe_strcmp("price:id", (char*)sub_node->name) == 0)
     {
-        GUID *c = dom_tree_to_guid(sub_node);
+        GncGUID *c = dom_tree_to_guid(sub_node);
         if (!c) return FALSE;
         gnc_price_set_guid(p, c);
         g_free(c);

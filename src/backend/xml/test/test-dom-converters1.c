@@ -242,8 +242,8 @@ test_dom_tree_to_guid(void)
     int i;
     for (i = 0; i < 20; i++)
     {
-        GUID *test_guid1;
-        GUID *test_guid2;
+        GncGUID *test_guid1;
+        GncGUID *test_guid2;
         xmlNodePtr test_node;
 
         test_guid1 = get_random_guid();

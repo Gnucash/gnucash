@@ -43,7 +43,7 @@
  *    closed book.  The guid's of the old transactions will not
  *    be changed in the move.  Note, however, that the closed
  *    book will have a copy of every account in the open book,
- *    and that these copies will have new GUID's issued to them.
+ *    and that these copies will have new GncGUID's issued to them.
  *    Thus, every account has a 'twin' in the other book.
  *
  *    This routine will also create 'equity transactions' in
@@ -79,24 +79,24 @@
  *    Implemented in the closed book:
  *    /book/close-date       Latest date in this book. Must not change.
  *    /book/log-date         Date on which user called this routine.
- *    /book/next-book        GUID of next book (the still-open book).
+ *    /book/next-book        GncGUID of next book (the still-open book).
  *
  *    Implemented in still-open book:
  *    /book/open-date        Earliest date in this book.
- *    /book/prev-book        GUID of previous book (the closed book).
+ *    /book/prev-book        GncGUID of previous book (the closed book).
  *
  *    Implemented in the balancing transaction:
- *    /book/closed-acct      GUID of account whose balance was brought forward
- *    /book/closed-book      GUID of book whose balance was brought forward
+ *    /book/closed-acct      GncGUID of account whose balance was brought forward
+ *    /book/closed-book      GncGUID of book whose balance was brought forward
  *
  *    Implemented in the closed account:
- *    /book/balancing-trans  GUID of equity-balancing transaction.
- *    /book/next-book        GUID of equity-balancing book.
- *    /book/next-acct        GUID of twin of this account in the open book.
+ *    /book/balancing-trans  GncGUID of equity-balancing transaction.
+ *    /book/next-book        GncGUID of equity-balancing book.
+ *    /book/next-acct        GncGUID of twin of this account in the open book.
  *
  *    Implemented in the still-open account:
- *    /book/prev-acct         GUID of twin of this account in the closed book.
- *    /book/prev-book         GUID of previous book (the closed book)
+ *    /book/prev-acct         GncGUID of twin of this account in the closed book.
+ *    /book/prev-book         GncGUID of previous book (the closed book)
  *
  */
 QofBook * gnc_book_close_period (QofBook *, Timespec,
@@ -127,10 +127,10 @@ QofBook * gnc_book_close_period (QofBook *, Timespec,
  *    a 'general purpose' function.  The way to fix this would be to
  *    weed out open lots by constructing the query correctly.
  *
- *    When an account is copied, the copy is issued a new GUID.
- *    The GUID of its sibling is placed in the 'gemini' KVP value
+ *    When an account is copied, the copy is issued a new GncGUID.
+ *    The GncGUID of its sibling is placed in the 'gemini' KVP value
  *    (See kvp_doc.txt for more detail).   Transactions and splits
- *    are moved without reassigning them a new GUID.  Note they
+ *    are moved without reassigning them a new GncGUID.  Note they
  *    are removed from one book's entity table and placed into the
  *    other book:  Once moved, they won't be findable in the entity
  *    table of the old book.
@@ -155,7 +155,7 @@ void gnc_book_partition_pricedb (QofBook *dest, QofBook *src, QofQuery *);
  *    another book.  It moves all of the splits as well.  In the
  *    course of the move, the transaction is literally deleted
  *    from the first book as its placed into the second.  The
- *    transaction and split GUID's are not changed in the move.
+ *    transaction and split GncGUID's are not changed in the move.
  *    This routine assumes that twin accounts already exist in
  *    both books (and can be located with the standard twining
  *    proceedure).
@@ -168,7 +168,7 @@ void gnc_book_partition_pricedb (QofBook *dest, QofBook *src, QofQuery *);
  *
  * The gnc_book_insert_trans() routine does the same as the above,
  *    except that it doesn't actually clobber the transaction: it
- *    merely moves the transaction and split GUID's to the new
+ *    merely moves the transaction and split GncGUID's to the new
  *    books' entity tables, and not much else.
  *
  * The gnc_book_insert_lot() routine, as above, but for lots ...

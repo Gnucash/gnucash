@@ -86,7 +86,7 @@ typedef struct
     pd_type_t       type;
     pr_type_t       term_type;
     int             sense;
-    GUID            guid;
+    GncGUID            guid;
     QofIdType       id_type;
 } GUIDPredicateData;
 

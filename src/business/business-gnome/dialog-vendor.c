@@ -99,7 +99,7 @@ struct _vendor_window
     GncTaxIncluded taxincluded;
     GncBillTerm *	terms;
     VendorDialogType	dialog_type;
-    GUID		vendor_guid;
+    GncGUID		vendor_guid;
     gint		component_id;
     QofBook *	book;
     GncVendor *	created_vendor;
@@ -347,7 +347,7 @@ gnc_vendor_window_refresh_handler (GHashTable *changes, gpointer user_data)
 static gboolean
 find_handler (gpointer find_data, gpointer user_data)
 {
-    const GUID *vendor_guid = find_data;
+    const GncGUID *vendor_guid = find_data;
     VendorWindow *vw = user_data;
 
     return(vw && guid_equal(&vw->vendor_guid, vendor_guid));
@@ -367,7 +367,7 @@ gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
      */
     if (vendor)
     {
-        GUID vendor_guid;
+        GncGUID vendor_guid;
 
         vendor_guid = *gncVendorGetGUID (vendor);
         vw = gnc_find_first_gui_component (DIALOG_EDIT_VENDOR_CM_CLASS,

@@ -173,7 +173,7 @@ static gboolean
 vendor_guid_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
     struct vendor_pdata *pdata = vendor_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncVendor *vendor;
 
     guid = dom_tree_to_guid(node);
@@ -215,7 +215,7 @@ static gboolean
 vendor_terms_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
     struct vendor_pdata *pdata = vendor_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncBillTerm *term;
 
     guid = dom_tree_to_guid(node);
@@ -281,7 +281,7 @@ static gboolean
 vendor_taxtable_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
     struct vendor_pdata *pdata = vendor_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncTaxTable *taxtable;
 
     guid = dom_tree_to_guid (node);

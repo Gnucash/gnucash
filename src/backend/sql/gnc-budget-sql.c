@@ -283,7 +283,7 @@ save_budget_amounts( GncSqlBackend* be, GncBudget* budget )
 static /*@ dependent @*//*@ null @*/ GncBudget*
 load_single_budget( GncSqlBackend* be, GncSqlRow* row )
 {
-    const GUID* guid;
+    const GncGUID* guid;
 	GncBudget* pBudget = NULL;
 	Recurrence* r;
 
@@ -369,7 +369,7 @@ static gboolean
 save_budget( GncSqlBackend* be, QofInstance* inst )
 {
     GncBudget* pBudget = GNC_BUDGET(inst);
-    const GUID* guid;
+    const GncGUID* guid;
 	gint op;
 	gboolean is_infant;
 	gboolean is_ok;
@@ -445,7 +445,7 @@ load_budget_guid( const GncSqlBackend* be, GncSqlRow* row,
             const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
-    GUID guid;
+    GncGUID guid;
 	GncBudget* budget = NULL;
 
 	g_return_if_fail( be != NULL );

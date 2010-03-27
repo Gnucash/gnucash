@@ -72,7 +72,7 @@ static GncSqlColumnTableEntry col_table[] =
 static GncJob*
 load_single_job( GncSqlBackend* be, GncSqlRow* row )
 {
-    const GUID* guid;
+    const GncGUID* guid;
     GncJob* pJob;
 
     g_return_val_if_fail( be != NULL, NULL );

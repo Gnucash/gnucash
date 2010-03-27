@@ -57,7 +57,7 @@ struct _KvpValue
         double dbl;
         gnc_numeric numeric;
         gchar *str;
-        GUID *guid;
+        GncGUID *guid;
         Timespec timespec;
         KvpValueBinaryData binary;
         GList *list;
@@ -427,7 +427,7 @@ kvp_frame_set_string(KvpFrame * frame, const char * path, const char* str)
 }
 
 void
-kvp_frame_set_guid(KvpFrame * frame, const char * path, const GUID *guid)
+kvp_frame_set_guid(KvpFrame * frame, const char * path, const GncGUID *guid)
 {
     KvpValue *value;
     value = kvp_value_new_guid (guid);
@@ -605,7 +605,7 @@ kvp_frame_add_string(KvpFrame * frame, const char * path, const char* str)
 }
 
 void
-kvp_frame_add_guid(KvpFrame * frame, const char * path, const GUID *guid)
+kvp_frame_add_guid(KvpFrame * frame, const char * path, const GncGUID *guid)
 {
     KvpValue *value;
     value = kvp_value_new_guid (guid);
@@ -895,7 +895,7 @@ kvp_frame_get_string(const KvpFrame *frame, const char *path)
     return kvp_value_get_string(kvp_frame_get_slot (frame, key));
 }
 
-GUID *
+GncGUID *
 kvp_frame_get_guid(const KvpFrame *frame, const char *path)
 {
     char *key = NULL;
@@ -1164,15 +1164,15 @@ kvp_value_new_string(const char * value)
 }
 
 KvpValue *
-kvp_value_new_guid(const GUID * value)
+kvp_value_new_guid(const GncGUID * value)
 {
     KvpValue * retval;
     if (!value) return NULL;
 
     retval = g_new0(KvpValue, 1);
     retval->type       = KVP_TYPE_GUID;
-    retval->value.guid = g_new0(GUID, 1);
-    memcpy(retval->value.guid, value, sizeof(GUID));
+    retval->value.guid = g_new0(GncGUID, 1);
+    memcpy(retval->value.guid, value, sizeof(GncGUID));
     return retval;
 }
 
@@ -1365,7 +1365,7 @@ kvp_value_get_string(const KvpValue * value)
     }
 }
 
-GUID *
+GncGUID *
 kvp_value_get_guid(const KvpValue * value)
 {
     if (!value) return NULL;

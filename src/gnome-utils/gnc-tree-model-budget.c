@@ -61,7 +61,7 @@ static void add_budget_to_model(QofInstance* data, gpointer user_data )
  * consequences, I still think there must be some better way than
  * re-implementing GtkTreeModel.  One idea I'm toying with is to
  * implement a GtkTreeModel for QofCollections, which would offer only
- * the GUID as a field.  Then, TreeViews could add their own columns
+ * the GncGUID as a field.  Then, TreeViews could add their own columns
  * with custom CellDataFuncs to display the object-specific fields.
  * Or, something like that.  :)
  *
@@ -109,10 +109,10 @@ gnc_tree_model_budget_get_budget(GtkTreeModel *tm, GtkTreeIter *iter)
 {
     GncBudget *bgt;
     GValue gv = { 0 };
-    GUID *guid;
+    GncGUID *guid;
 
     gtk_tree_model_get_value(tm, iter, BUDGET_GUID_COLUMN, &gv);
-    guid = (GUID *) g_value_get_pointer(&gv);
+    guid = (GncGUID *) g_value_get_pointer(&gv);
     g_value_unset(&gv);
 
     bgt = gnc_budget_lookup(guid, gnc_get_current_book());
@@ -124,8 +124,8 @@ gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm, GtkTreeIter *iter,
         GncBudget *bgt)
 {
     GValue gv = { 0 };
-    const GUID *guid1;
-    GUID *guid2;
+    const GncGUID *guid1;
+    GncGUID *guid2;
 
     g_return_val_if_fail(GNC_BUDGET(bgt), FALSE);
 
@@ -135,7 +135,7 @@ gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm, GtkTreeIter *iter,
     while (gtk_list_store_iter_is_valid(GTK_LIST_STORE(tm), iter))
     {
         gtk_tree_model_get_value(tm, iter, BUDGET_GUID_COLUMN, &gv);
-        guid2 = (GUID *) g_value_get_pointer(&gv);
+        guid2 = (GncGUID *) g_value_get_pointer(&gv);
         g_value_unset(&gv);
 
         if (guid_equal(guid1, guid2))

@@ -30,27 +30,27 @@
 
 <b>Collision handling principles.</b>\n
 \n
-	-# Always check for a ::GUID first and compare. qofbookmerge only accepts
+	-# Always check for a ::GncGUID first and compare. qofbookmerge only accepts
     valid ::QofBook	data and therefore ALL objects in the import book will
-    include valid GUID's.
-	-# If the original import data did not contain a GUID (e.g. an external
-    non-GnuCash source)	the GUID values will have been created during the
-    import and will not match any existing GUID's in the target book so objects
-    that do not have a GUID match cannot be assumed to be ::MERGE_NEW - parameter
+    include valid GncGUID's.
+	-# If the original import data did not contain a GncGUID (e.g. an external
+    non-GnuCash source)	the GncGUID values will have been created during the
+    import and will not match any existing GncGUID's in the target book so objects
+    that do not have a GncGUID match cannot be assumed to be ::MERGE_NEW - parameter
     values must be checked.
 	-# If import contains data from closed books, store the data from the closed
 	books in the current book as active. i.e. re-open the books.
 
-- If a GUID match exists, set qof_book_merge_rule::mergeAbsolute to \a TRUE.
+- If a GncGUID match exists, set qof_book_merge_rule::mergeAbsolute to \a TRUE.
 	-# If ALL parameters in the import object match the target object with
-    the same \a GUID,
+    the same \a GncGUID,
 	set ::qof_book_merge_result to \a MERGE_ABSOLUTE.
 	-# If any parameters differ, set ::MERGE_UPDATE.
-- If the import object \a GUID does not match an existing object,
+- If the import object \a GncGUID does not match an existing object,
 mergeAbsolute is unchanged from the default \a FALSE
 The parameter values of the object are compared to other objects of the same
 type in the target book.
-	-# If the same data exists in the target book with a different GUID, the object
+	-# If the same data exists in the target book with a different GncGUID, the object
 	is tagged as DUPLICATE.
 	-# If the data has changed, the object is tagged as REPORT.
 	-# If the data does not match, the object is tagged as NEW
@@ -123,12 +123,12 @@ data is missing, amended or added, the data is labelled \a MERGE_UPDATE.
 typedef enum
 {
     MERGE_UNDEF,     /**< default value before comparison is made. */
-    MERGE_ABSOLUTE,  /**< GUID exact match, no new data - \b ignore */
+    MERGE_ABSOLUTE,  /**< GncGUID exact match, no new data - \b ignore */
     MERGE_NEW,       /**< import object does \b not exist in the target
                         book - \b add */
     MERGE_REPORT,    /**< import object needs user intervention - \b report */
-    MERGE_DUPLICATE, /**< import object with different GUID exactly matches
-                        existing GUID - \b ignore */
+    MERGE_DUPLICATE, /**< import object with different GncGUID exactly matches
+                        existing GncGUID - \b ignore */
     MERGE_UPDATE,    /**< import object matches an existing entity but includes
                         new or modified parameter data - \b update */
     MERGE_INVALID    /**< import object didn't match registered object or
@@ -139,7 +139,7 @@ typedef enum
 
 All rules are stored in the GList QofBookMergeData::mergeList.
 
-If the ::GUID matches it's the always same semantic object,
+If the ::GncGUID matches it's the always same semantic object,
 regardless of whether other data fields are changed.
 \n
 The boolean value mergeAbsolute defaults to \c FALSE
@@ -162,10 +162,10 @@ same name in mergeData.
 typedef struct
 {
     /* internal counters and reference variables */
-    gboolean mergeAbsolute;   /**< Only set if the GUID of the import matches
+    gboolean mergeAbsolute;   /**< Only set if the GncGUID of the import matches
                                 the target */
     double difference;       /**< used to find best match in a book where no
-                                GUID matches */
+                                GncGUID matches */
     gboolean updated;        /**< prevent the mergeResult from being
                                 overwritten. */
     /* rule objects set from or by external calls */
@@ -255,12 +255,12 @@ Process:
 	-# Use ::qof_object_foreach to invoke the callback ::qof_book_merge_foreach,
     one object at a time on every instance stored in mergeBook. This is the
     first point where real data from the import book is accessed.
-	-# qof_book_merge_foreach obtains the ::GUID for the object from the import
+	-# qof_book_merge_foreach obtains the ::GncGUID for the object from the import
     book and runs the first	check on the original book, checking for any exact
-    GUID match. With the full parameter list, the rules for this object can be
-    created. If there is a GUID match, the data in each parameter of the import
+    GncGUID match. With the full parameter list, the rules for this object can be
+    created. If there is a GncGUID match, the data in each parameter of the import
     object is compared with the same semantic object in the original book. If
-    there is no GUID in the import object or no GUID match with the original
+    there is no GncGUID in the import object or no GncGUID match with the original
     book, the original book is searched to find a parameter match - checking
     for a ::MERGE_DUPLICATE result.
 	-# ::qof_book_merge_compare sets the ::QofBookMergeResult of the comparison.
@@ -405,12 +405,12 @@ add an entity when mergeAbsolute is TRUE will always force a MERGE_UPDATE.
 It is not possible to update the same rule more than once.
 
 -# \b MERGE_NEW is reserved for new objects and is only pre-set if
-all parameters, including GUID, have already failed to match any
+all parameters, including GncGUID, have already failed to match any
 relevant object. ::qof_book_merge_commit will create new
 entities for all rules tagged as MERGE_NEW.
 	- if mergeAbsolute is TRUE and the user wants to import the
 		data, requests to set MERGE_NEW will be forced to MERGE_UPDATE
-		because an entity with that GUID already exists in the target book.
+		because an entity with that GncGUID already exists in the target book.
 	- if MERGE_NEW is pre-set, requests to change to MERGE_UPDATE will be
 		ignored because a new entity is needed.
 -# \b MERGE_UPDATE is reserved for existing objects - ::qof_book_merge_commit

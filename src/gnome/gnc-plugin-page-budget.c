@@ -194,7 +194,7 @@ typedef struct GncPluginPageBudgetPrivate
     gint component_id;
 
     GncBudget* budget;
-    GUID key;
+    GncGUID key;
     GncDialog* d;
 
     GList *period_col_list;
@@ -478,7 +478,7 @@ gnc_plugin_page_budget_destroy_widget (GncPluginPage *plugin_page)
     LEAVE("widget destroyed");
 }
 
-#define BUDGET_GUID "Budget GUID"
+#define BUDGET_GUID "Budget GncGUID"
 
 /** Save enough information about this plugin page that it can
  *  be recreated next time the user starts gnucash.
@@ -536,7 +536,7 @@ gnc_plugin_page_budget_recreate_page (GtkWidget *window, GKeyFile *key_file,
     GncPluginPage *page;
     GError *error = NULL;
     char *guid_str;
-    GUID guid;
+    GncGUID guid;
     GncBudget *bgt;
     QofBook *book;
 

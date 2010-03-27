@@ -51,7 +51,7 @@
 
 typedef struct {
     /*@ dependent @*/ GncSqlBackend* be;
-    /*@ dependent @*/ const GUID* guid;
+    /*@ dependent @*/ const GncGUID* guid;
 	/*@ dependent @*/ Recurrence* pRecurrence;
 } recurrence_info_t;
 
@@ -106,7 +106,7 @@ get_obj_guid( gpointer pObject )
 static void
 set_obj_guid( void )
 {
-    // Nowhere to put the GUID
+    // Nowhere to put the GncGUID
 }
 
 static gint
@@ -184,7 +184,7 @@ set_recurrence_period_start( gpointer pObject, gpointer pValue )
 /* ================================================================= */
 
 gboolean
-gnc_sql_recurrence_save( GncSqlBackend* be, const GUID* guid, const Recurrence* r )
+gnc_sql_recurrence_save( GncSqlBackend* be, const GncGUID* guid, const Recurrence* r )
 {
     recurrence_info_t recurrence_info;
 
@@ -202,7 +202,7 @@ gnc_sql_recurrence_save( GncSqlBackend* be, const GUID* guid, const Recurrence* 
 }
 
 void
-gnc_sql_recurrence_save_list( GncSqlBackend* be, const GUID* guid, GList* schedule )
+gnc_sql_recurrence_save_list( GncSqlBackend* be, const GncGUID* guid, GList* schedule )
 {
     recurrence_info_t recurrence_info;
 	GList* l;
@@ -222,7 +222,7 @@ gnc_sql_recurrence_save_list( GncSqlBackend* be, const GUID* guid, GList* schedu
 }
 
 gboolean
-gnc_sql_recurrence_delete( GncSqlBackend* be, const GUID* guid )
+gnc_sql_recurrence_delete( GncSqlBackend* be, const GncGUID* guid )
 {
     recurrence_info_t recurrence_info;
 
@@ -251,7 +251,7 @@ load_recurrence( GncSqlBackend* be, GncSqlRow* row, /*@ out @*/ Recurrence* r )
 }
 
 static /*@ null @*/ GncSqlResult*
-gnc_sql_set_recurrences_from_db( GncSqlBackend* be, const GUID* guid )
+gnc_sql_set_recurrences_from_db( GncSqlBackend* be, const GncGUID* guid )
 {
     gchar* buf;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
@@ -271,7 +271,7 @@ gnc_sql_set_recurrences_from_db( GncSqlBackend* be, const GUID* guid )
 }
 
 /*@ null @*/ Recurrence*
-gnc_sql_recurrence_load( GncSqlBackend* be, const GUID* guid )
+gnc_sql_recurrence_load( GncSqlBackend* be, const GncGUID* guid )
 {
 	GncSqlResult* result;
 	Recurrence* r = NULL;
@@ -300,7 +300,7 @@ gnc_sql_recurrence_load( GncSqlBackend* be, const GUID* guid )
 }
 
 /*@ null @*/ GList*
-gnc_sql_recurrence_load_list( GncSqlBackend* be, const GUID* guid )
+gnc_sql_recurrence_load_list( GncSqlBackend* be, const GncGUID* guid )
 {
 	GncSqlResult* result;
 	GList* list = NULL;

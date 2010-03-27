@@ -68,9 +68,9 @@
 //@}
 
 /** @brief IDENTIFIERS
- *  GUID Identifiers can be used to reference Accounts, Transactions,
+ *  GncGUID Identifiers can be used to reference Accounts, Transactions,
  *  Splits and other objects. These Gnucash types are referred to as Gnucash
- *  entities. GUID Identifiers are globally-unique and permanent, i.e., once
+ *  entities. GncGUID Identifiers are globally-unique and permanent, i.e., once
  *  an entity has been assigned an identifier, it retains that same
  *  identifier for its lifetime.
  *  -

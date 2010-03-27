@@ -65,9 +65,9 @@ typedef struct _split_record
 {
     enum _enum_action {LOG_BEGIN_EDIT, LOG_ROLLBACK, LOG_COMMIT, LOG_DELETE} log_action;
     int log_action_present;
-    GUID trans_guid;
+    GncGUID trans_guid;
     int trans_guid_present;
-    GUID split_guid;
+    GncGUID split_guid;
     int  split_guid_present;
     Timespec log_date;
     int log_date_present;
@@ -75,7 +75,7 @@ typedef struct _split_record
     int date_entered_present;
     Timespec date_posted;
     int date_posted_present;
-    GUID acc_guid;
+    GncGUID acc_guid;
     int acc_guid_present;
     char acc_name[STRING_FIELD_SIZE];
     int acc_name_present;
@@ -282,11 +282,11 @@ static void dump_split_record(split_record record)
     }
     if (record.trans_guid_present)
     {
-        DEBUG("Transaction GUID: %s", guid_to_string (&(record.trans_guid)));
+        DEBUG("Transaction GncGUID: %s", guid_to_string (&(record.trans_guid)));
     }
     if (record.split_guid_present)
     {
-        DEBUG("Split GUID: %s", guid_to_string (&(record.split_guid)));
+        DEBUG("Split GncGUID: %s", guid_to_string (&(record.split_guid)));
     }
     if (record.log_date_present)
     {
@@ -305,7 +305,7 @@ static void dump_split_record(split_record record)
     }
     if (record.acc_guid_present)
     {
-        DEBUG("Account GUID: %s", guid_to_string (&(record.acc_guid)));
+        DEBUG("Account GncGUID: %s", guid_to_string (&(record.acc_guid)));
     }
     if (record.acc_name_present)
     {

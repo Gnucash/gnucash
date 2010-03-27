@@ -34,10 +34,10 @@
 struct sr_info
 {
     /* The blank split at the bottom of the register */
-    GUID blank_split_guid;
+    GncGUID blank_split_guid;
 
     /* The currently open transaction, if any */
-    GUID pending_trans_guid;
+    GncGUID pending_trans_guid;
 
     /* A transaction used to remember where to put the cursor */
     Transaction *cursor_hint_trans;
@@ -72,7 +72,7 @@ struct sr_info
     gboolean full_refresh;
 
     /* The default account where new splits are added */
-    GUID default_account;
+    GncGUID default_account;
 
     /* The last date recorded in the blank split */
     time_t last_date_entered;
@@ -107,7 +107,7 @@ struct sr_info
     gboolean template;
 
     /* The template account which template transaction should belong to */
-    GUID template_account;
+    GncGUID template_account;
 
     /* configured strings for debit/credit headers */
     char *debit_str;

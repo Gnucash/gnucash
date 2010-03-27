@@ -57,7 +57,7 @@ void qof_book_set_backend (QofBook *book, QofBackend *be);
 gboolean qof_book_register (void);
 
 /** @deprecated use qof_instance_set_guid instead but only in
-backends (when reading the GUID from the data source). */
+backends (when reading the GncGUID from the data source). */
 #define qof_book_set_guid(book,guid)    \
          qof_instance_set_guid(QOF_INSTANCE(book), guid)
 

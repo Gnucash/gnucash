@@ -124,7 +124,7 @@ static gboolean
 job_guid_handler (xmlNodePtr node, gpointer job_pdata)
 {
     struct job_pdata *pdata = job_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncJob *job;
 
     guid = dom_tree_to_guid(node);

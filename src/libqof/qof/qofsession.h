@@ -262,13 +262,13 @@ using the GnuCash XML v2 file backend will be switched to QSF.
 
 Copied entities are identical to the source entity, all parameters
 defined with ::QofAccessFunc and ::QofSetterFunc in QOF are copied
-and the ::GUID of the original ::QofInstance is set in the new entity.
+and the ::GncGUID of the original ::QofInstance is set in the new entity.
 Sessions containing copied entities are intended for use
 as mechanisms for data export.
 
 It is acceptable to add entities to new_session in batches. Note that
 any of these calls will fail if an entity already exists in new_session
-with the same GUID as any entity to be copied.
+with the same GncGUID as any entity to be copied.
 
 To merge a whole QofBook or where there is any possibility
 of collisions or requirement for user intervention,
@@ -281,13 +281,13 @@ see \ref BookMerge
 /** \brief Copy a single QofInstance to another session
 
 Checks first that no entity in the session book contains
-the GUID of the source entity.
+the GncGUID of the source entity.
 
  @param new_session - the target session
  @param original - the QofInstance* to copy
 
 @return FALSE without copying if the session contains an entity
-with the same GUID already, otherwise TRUE.
+with the same GncGUID already, otherwise TRUE.
 */
 
 gboolean qof_instance_copy_to_session(QofSession* new_session, QofInstance* original);
@@ -295,19 +295,19 @@ gboolean qof_instance_copy_to_session(QofSession* new_session, QofInstance* orig
 /** @brief Copy a GList of entities to another session
 
 The QofBook in the new_session must \b not contain any entities
-with the same GUID as any of the source entities - there is
+with the same GncGUID as any of the source entities - there is
 no support for handling collisions, instead use \ref BookMerge
 
 Note that the GList (e.g. from ::qof_sql_query_run) can contain
 QofInstance pointers of any ::QofIdType, in any sequence. As long
-as all members of the list are ::QofInstance*, and all GUID's are
+as all members of the list are ::QofInstance*, and all GncGUID's are
 unique, the list can be copied.
 
  @param new_session - the target session
  @param entity_list - a GList of QofInstance pointers of any type(s).
 
 @return FALSE, without copying, if new_session contains any entities
-with the same GUID. Otherwise TRUE.
+with the same GncGUID. Otherwise TRUE.
 
 */
 gboolean qof_instance_copy_list(QofSession *new_session, GList *entity_list);
@@ -315,14 +315,14 @@ gboolean qof_instance_copy_list(QofSession *new_session, GList *entity_list);
 /** @brief Copy a QofCollection of entities.
 
 The QofBook in the new_session must \b not contain any entities
-with the same GUID as any entities in the collection - there is
+with the same GncGUID as any entities in the collection - there is
 no support for handling collisions - instead, use \ref BookMerge
 
 @param new_session - the target session
 @param entity_coll - a QofCollection of any QofIdType.
 
 @return FALSE, without copying, if new_session contains any entities
-with the same GUID. Otherwise TRUE.
+with the same GncGUID. Otherwise TRUE.
 */
 
 gboolean qof_instance_copy_coll(QofSession *new_session, QofCollection *entity_coll);
@@ -333,7 +333,7 @@ gboolean qof_instance_copy_coll(QofSession *new_session, QofCollection *entity_c
 ::qof_instance_copy_to_session for more information.
 
 The QofBook in the new_session must \b not contain any entities
-with the same GUID as any entities to be copied - there is
+with the same GncGUID as any entities to be copied - there is
 no support for handling collisions - instead, use \ref BookMerge
 
 Objects can be defined solely in terms of QOF data types or

@@ -86,7 +86,7 @@ static GncSqlColumnTableEntry col_table[] =
 static GncVendor*
 load_single_vendor( GncSqlBackend* be, GncSqlRow* row )
 {
-    const GUID* guid;
+    const GncGUID* guid;
     GncVendor* pVendor;
 
     g_return_val_if_fail( be != NULL, NULL );
@@ -162,7 +162,7 @@ static gboolean
 save_vendor( GncSqlBackend* be, QofInstance* inst )
 {
     GncVendor* v;
-    const GUID* guid;
+    const GncGUID* guid;
     gint op;
     gboolean is_infant;
     gboolean is_ok = TRUE;

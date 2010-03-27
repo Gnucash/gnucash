@@ -117,7 +117,7 @@ struct _TransactionClass
     QofInstanceClass parent_class;
 };
 
-/* Set the transaction's GUID. This should only be done when reading
+/* Set the transaction's GncGUID. This should only be done when reading
  * a transaction from a datafile, or some other external source. Never
  * call this on an existing transaction! */
 #define xaccTransSetGUID(t,g) qof_instance_set_guid(QOF_INSTANCE(t),g)
@@ -127,7 +127,7 @@ struct _TransactionClass
  * is wrong in many ways: it is not issued a unique guid, and thus
  * not a properly registered Entity.  The splits are copied, but
  * these are also funny: they aren't inserted into the accounts
- * they claim to be in.  The splits also have bogus GUID's.
+ * they claim to be in.  The splits also have bogus GncGUID's.
  * Another 'feature': the splits point at the old transaction
  * as the parent, not the new transaction.
  */

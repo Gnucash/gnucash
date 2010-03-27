@@ -243,7 +243,7 @@ xaccQueryAddAccountMatch(Query *q, AccountList *acct_list,
     for (; acct_list; acct_list = acct_list->next)
     {
         Account *acc = acct_list->data;
-        const GUID *guid;
+        const GncGUID *guid;
 
         if (!acc)
         {
@@ -254,7 +254,7 @@ xaccQueryAddAccountMatch(Query *q, AccountList *acct_list,
         guid = qof_entity_get_guid (QOF_INSTANCE(acc));
         if (!guid)
         {
-            PWARN ("acct returns NULL GUID");
+            PWARN ("acct returns NULL GncGUID");
             continue;
         }
 
@@ -298,7 +298,7 @@ void
 xaccQueryAddSingleAccountMatch(Query *q, Account *acc, QofQueryOp op)
 {
     GList *list;
-    const GUID *guid;
+    const GncGUID *guid;
 
     if (!q || !acc)
         return;
@@ -536,7 +536,7 @@ xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QofQueryOp op)
 }
 
 void
-xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
+xaccQueryAddGUIDMatch(Query * q, const GncGUID *guid,
                       QofIdType id_type, QofQueryOp op)
 {
     GSList *param_list = NULL;

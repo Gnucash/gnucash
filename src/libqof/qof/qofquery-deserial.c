@@ -115,7 +115,7 @@ no longer built into the QOF library. It remains in CVS until libqof2.*/
    if (0 == strcmp (TOK, node->name))                        \
    {                                                         \
       const char *str = GET_TEXT (node);                     \
-      GUID guid;                                             \
+      GncGUID guid;                                             \
       string_to_guid (str, &guid);                           \
       FN (SELF, &guid);                                      \
    }                                                         \
@@ -245,7 +245,7 @@ static void wrap_new_string(KvpValue **v, const char * value)
 {
     *v = kvp_value_new_string (value);
 }
-static void wrap_new_guid(KvpValue **v, const GUID * value)
+static void wrap_new_guid(KvpValue **v, const GncGUID * value)
 {
     *v = kvp_value_new_guid (value);
 }
@@ -301,7 +301,7 @@ qof_query_pred_guid_from_xml (xmlNodePtr root)
 {
     GList *guid_list, *n;
     const char *str;
-    GUID *guid;
+    GncGUID *guid;
     gboolean decode;
     QofQueryPredData *pred;
     QofGuidMatch sm;

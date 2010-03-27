@@ -853,7 +853,7 @@ reference_list_lookup(gpointer data, gpointer user_data)
     QofParam *ref_param;
     QofInstanceReference *reference, *starter;
     qsf_param  *params;
-    const GUID *guid;
+    const GncGUID *guid;
     xmlNodePtr node, object_node;
     xmlNsPtr ns;
     GList *copy_list;
@@ -925,7 +925,7 @@ qsf_entity_foreach(QofInstance *ent, gpointer data)
     QofCollection *qsf_coll;
     gint        param_count;
     gboolean   own_guid;
-    const GUID *cm_guid;
+    const GncGUID *cm_guid;
     gchar       cm_sa[GUID_ENCODING_LENGTH + 1];
 
     g_return_if_fail(ent != NULL);
@@ -1067,7 +1067,7 @@ qofbook_to_qsf(QofBook *book, qsf_param *params)
     xmlNodePtr top_node, node;
     xmlDocPtr doc;
     gchar buffer[GUID_ENCODING_LENGTH + 1];
-    const GUID *book_guid;
+    const GncGUID *book_guid;
 
     g_return_val_if_fail(book != NULL, NULL);
     params->book = book;
@@ -1158,7 +1158,7 @@ string_to_kvp_value(const gchar *content, KvpValueType type)
     gint64      cm_i64;
     double      cm_double;
     gnc_numeric cm_numeric;
-    GUID        *cm_guid;
+    GncGUID        *cm_guid;
     struct tm   kvp_time;
     time_t      kvp_time_t;
     Timespec    cm_date;
@@ -1189,7 +1189,7 @@ string_to_kvp_value(const gchar *content, KvpValueType type)
         return kvp_value_new_string(content);
         break;
     case KVP_TYPE_GUID:
-        cm_guid = g_new(GUID, 1);
+        cm_guid = g_new(GncGUID, 1);
         if (TRUE == string_to_guid(content, cm_guid))
         {
             return kvp_value_new_guid(cm_guid);
@@ -1247,7 +1247,7 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
     gint64         cm_i64;
     Timespec       cm_date;
     gchar          *cm_char,  *(*char_getter)  (xmlNodePtr);
-    GUID           *cm_guid;
+    GncGUID           *cm_guid;
     KvpFrame       *cm_kvp;
     KvpValue       *cm_value;
     KvpValueType   cm_type;
@@ -1316,7 +1316,7 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
     }
     if (safe_strcmp(qof_type, QOF_TYPE_GUID) == 0)
     {
-        cm_guid = g_new(GUID, 1);
+        cm_guid = g_new(GncGUID, 1);
         if (TRUE != string_to_guid((char*)xmlNodeGetContent(node), cm_guid))
         {
             qof_backend_set_error(params->be, ERR_QSF_BAD_OBJ_GUID);
@@ -1423,16 +1423,16 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
         /* retrieve the *type* of the collection, ignore any contents. */
         qsf_coll = cm_param->param_getfcn(qsf_ent, cm_param);
         type = qof_collection_get_type(qsf_coll);
-        cm_guid = g_new(GUID, 1);
+        cm_guid = g_new(GncGUID, 1);
         if (TRUE != string_to_guid((gchar*)xmlNodeGetContent(node), cm_guid))
         {
             qof_backend_set_error(params->be, ERR_QSF_BAD_OBJ_GUID);
             PINFO (" string to guid collect failed for %s", xmlNodeGetContent(node));
             return;
         }
-        /* create a QofInstanceReference with this type and GUID.
+        /* create a QofInstanceReference with this type and GncGUID.
          there is only one entity each time.
-         cm_guid contains the GUID of the reference.
+         cm_guid contains the GncGUID of the reference.
          type is the type of the reference. */
         reference = g_new0(QofInstanceReference, 1);
         reference->type = g_strdup(qsf_ent->e_type);

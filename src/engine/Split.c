@@ -818,7 +818,7 @@ xaccSplitRollbackEdit(Split *s)
 \********************************************************************/
 
 Split *
-xaccSplitLookup (const GUID *guid, QofBook *book)
+xaccSplitLookup (const GncGUID *guid, QofBook *book)
 {
     QofCollection *col;
     if (!guid || !book) return NULL;

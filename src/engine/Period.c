@@ -122,7 +122,7 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
 
 /* ================================================================ */
 /* Reparent transaction to new book.  This routine does this by
- * moving GUID's to the new book's entity tables.
+ * moving GncGUID's to the new book's entity tables.
  */
 
 void
@@ -202,7 +202,7 @@ gnc_book_insert_lot_clobber (QofBook *book, GNCLot *lot)
 
 /* ================================================================ */
 /* Reparent lot to new book.  This routine does this by
- * moving GUID's to the new book's entity tables.
+ * moving GncGUID's to the new book's entity tables.
  */
 
 void

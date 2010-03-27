@@ -32,7 +32,7 @@
 #include "gncEntry.h"
 
 gboolean gncEntryRegister (void);
-void gncEntrySetGUID (GncEntry *entry, const GUID *guid);
+void gncEntrySetGUID (GncEntry *entry, const GncGUID *guid);
 void gncEntrySetOrder (GncEntry *entry, GncOrder *order);
 void gncEntrySetInvoice (GncEntry *entry, GncInvoice *invoice);
 void gncEntrySetBill (GncEntry *entry, GncInvoice *bill);

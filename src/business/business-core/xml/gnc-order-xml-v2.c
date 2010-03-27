@@ -141,7 +141,7 @@ static gboolean
 order_guid_handler (xmlNodePtr node, gpointer order_pdata)
 {
     struct order_pdata *pdata = order_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncOrder *order;
 
     guid = dom_tree_to_guid(node);

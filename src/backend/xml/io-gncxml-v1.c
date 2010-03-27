@@ -613,7 +613,7 @@ guid_kvp_value_end_handler(gpointer data_for_children,
                            const gchar *tag)
 {
     gchar *txt = NULL;
-    GUID val;
+    GncGUID val;
     kvp_value *kvpv;
     gboolean ok;
 
@@ -1503,7 +1503,7 @@ acc_restore_name_end_handler(gpointer data_for_children,
 
    start: NA
    characters: return string copy for accumulation in end handler.
-   end: concatenate all chars and set as account GUID if not duplicate.
+   end: concatenate all chars and set as account GncGUID if not duplicate.
 
    cleanup-result: NA
    cleanup-chars: g_free the result string.
@@ -1522,7 +1522,7 @@ acc_restore_guid_end_handler(gpointer data_for_children,
     GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
     Account *acc = (Account *) parent_data;
     gchar *txt = NULL;
-    GUID gid;
+    GncGUID gid;
     gboolean ok;
 
     g_return_val_if_fail(acc, FALSE);
@@ -1735,7 +1735,7 @@ acc_restore_parent_end_handler(gpointer data_for_children,
     Account *acc = (Account *) parent_data;
     Account *parent;
     sixtp_child_result *child_result;
-    GUID gid;
+    GncGUID gid;
 
     g_return_val_if_fail(acc, FALSE);
 
@@ -1748,7 +1748,7 @@ acc_restore_parent_end_handler(gpointer data_for_children,
         return(FALSE);
 
     /* otherwise this must be a good result - use it */
-    gid = *((GUID *) child_result->data);
+    gid = *((GncGUID *) child_result->data);
 
     parent = xaccAccountLookup(&gid, pstatus->book);
 
@@ -2839,7 +2839,7 @@ txn_restore_end_handler(gpointer data_for_children,
 
     if (!xaccTransGetGUID(trans))
     {
-        /* must at least have a GUID for a restore */
+        /* must at least have a GncGUID for a restore */
         xaccTransDestroy(trans);
         xaccTransCommitEdit(trans);
         return(FALSE);
@@ -2904,7 +2904,7 @@ txn_restore_fail_handler(gpointer data_for_children,
    -----------
    start: NA
    characters: return string copy for accumulation in end handler.
-   end: concatenate all chars and set as transaction GUID if not duplicate.
+   end: concatenate all chars and set as transaction GncGUID if not duplicate.
 
    cleanup-result: NA
    cleanup-chars: g_free the result string.
@@ -2923,7 +2923,7 @@ txn_restore_guid_end_handler(gpointer data_for_children,
     GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
     Transaction *t = (Transaction *) parent_data;
     gchar *txt = NULL;
-    GUID gid;
+    GncGUID gid;
     gboolean ok;
 
     g_return_val_if_fail(t, FALSE);
@@ -3146,7 +3146,7 @@ txn_restore_split_end_handler(gpointer data_for_children,
 
     if (!xaccSplitGetGUID(s))
     {
-        /* must at least have a GUID for a restore */
+        /* must at least have a GncGUID for a restore */
         xaccSplitDestroy(s);
         return(FALSE);
     }
@@ -3221,7 +3221,7 @@ txn_restore_split_fail_handler(gpointer data_for_children,
    -----------
    start: NA
    characters: return string copy for accumulation in end handler.
-   end: concatenate all chars and set as split GUID if not duplicate.
+   end: concatenate all chars and set as split GncGUID if not duplicate.
 
    cleanup-result: NA
    cleanup-chars: g_free the result string.
@@ -3240,7 +3240,7 @@ txn_restore_split_guid_end_handler(gpointer data_for_children,
     GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
     Split *s = (Split *) parent_data;
     gchar *txt = NULL;
-    GUID gid;
+    GncGUID gid;
     gboolean ok;
 
     g_return_val_if_fail(s, FALSE);
@@ -3431,7 +3431,7 @@ txn_restore_split_reconcile_date_end_handler(gpointer data_for_children,
    -----------
    start: NA
    characters: return string copy for accumulation in end handler.
-   end: concatenate all chars and set as split account if GUID OK.
+   end: concatenate all chars and set as split account if GncGUID OK.
 
    cleanup-result: NA
    cleanup-chars: g_free the result string.
@@ -3451,7 +3451,7 @@ txn_restore_split_account_end_handler(gpointer data_for_children,
     Split *s = (Split *) parent_data;
     Account *acct;
     gchar *txt = NULL;
-    GUID gid;
+    GncGUID gid;
     gboolean ok;
 
     g_return_val_if_fail(s, FALSE);
@@ -3633,7 +3633,7 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, QofBook *book)
 
     if (safe_strcmp("price:id", (char*)sub_node->name) == 0)
     {
-        GUID *c = dom_tree_to_guid(sub_node);
+        GncGUID *c = dom_tree_to_guid(sub_node);
         if (!c) return FALSE;
         gnc_price_set_guid(p, c);
         g_free(c);

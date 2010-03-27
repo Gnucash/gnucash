@@ -140,7 +140,7 @@ destroy_mask_hash (GHashTable *hash)
 static gboolean
 destroy_event_hash_helper (gpointer key, gpointer value, gpointer user_data)
 {
-    GUID *guid = key;
+    GncGUID *guid = key;
     EventInfo *ei = value;
 
     xaccGUIDFree (guid);
@@ -149,7 +149,7 @@ destroy_event_hash_helper (gpointer key, gpointer value, gpointer user_data)
     return TRUE;
 }
 
-/* clear a hash table of the form GUID --> EventInfo, where
+/* clear a hash table of the form GncGUID --> EventInfo, where
  * both keys and values are g_malloced */
 static void
 clear_event_hash (GHashTable *hash)
@@ -178,7 +178,7 @@ clear_event_info (ComponentEventInfo *cei)
 }
 
 static void
-add_event (ComponentEventInfo *cei, const GUID *entity,
+add_event (ComponentEventInfo *cei, const GncGUID *entity,
            QofEventId event_mask, gboolean or_in)
 {
     GHashTable *hash;
@@ -210,7 +210,7 @@ add_event (ComponentEventInfo *cei, const GUID *entity,
         ei = g_hash_table_lookup (hash, entity);
         if (ei == NULL)
         {
-            GUID *key;
+            GncGUID *key;
 
             key = xaccGUIDMalloc ();
             *key = *entity;
@@ -258,7 +258,7 @@ gnc_cm_event_handler (QofInstance *entity,
                       gpointer user_data,
                       gpointer event_data)
 {
-    const GUID *guid = qof_entity_get_guid(entity);
+    const GncGUID *guid = qof_entity_get_guid(entity);
 #if CM_DEBUG
     fprintf (stderr, "event_handler: event %d, entity %p, guid %s\n", event_type,
              entity, guid_to_string(guid));
@@ -448,7 +448,7 @@ gnc_register_gui_component (const char *component_class,
 
 void
 gnc_gui_component_watch_entity (gint component_id,
-                                const GUID *entity,
+                                const GncGUID *entity,
                                 QofEventId event_mask)
 {
     ComponentInfo *ci;
@@ -468,7 +468,7 @@ gnc_gui_component_watch_entity (gint component_id,
 
 void
 gnc_gui_component_watch_entity_direct (gint component_id,
-                                       GUID entity,
+                                       GncGUID entity,
                                        QofEventId event_mask)
 {
     gnc_gui_component_watch_entity (component_id, &entity, event_mask);
@@ -492,7 +492,7 @@ gnc_gui_component_watch_entity_type (gint component_id,
 }
 
 const EventInfo *
-gnc_gui_get_entity_events (GHashTable *changes, const GUID *entity)
+gnc_gui_get_entity_events (GHashTable *changes, const GncGUID *entity)
 {
     if (!changes || !entity)
         return QOF_EVENT_NONE;
@@ -621,7 +621,7 @@ match_type_helper (gpointer key, gpointer value, gpointer user_data)
 static void
 match_helper (gpointer key, gpointer value, gpointer user_data)
 {
-    GUID *guid = key;
+    GncGUID *guid = key;
     EventInfo *ei_1 = value;
     EventInfo *ei_2;
     ComponentEventInfo *cei = user_data;

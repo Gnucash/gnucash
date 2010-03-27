@@ -83,7 +83,7 @@ test_customer (void)
 
     /* Test setting/getting routines; does the active flag get set right? */
     {
-        GUID guid;
+        GncGUID guid;
 
         test_string_fcn (book, "Id", gncCustomerSetID, gncCustomerGetID);
         test_string_fcn (book, "Name", gncCustomerSetName, gncCustomerGetName);
@@ -137,7 +137,7 @@ test_customer (void)
 
     /* Test the Entity Table */
     {
-        const GUID *guid;
+        const GncGUID *guid;
 
         guid = gncCustomerGetGUID (customer);
         do_test (gncCustomerLookup (book, guid) == customer, "Entity Table");

@@ -113,7 +113,7 @@ void qof_event_unregister_handler (gint handler_id);
    Any other events are entirely the concern of the application.
 
  \note QofEventHandler routines do \b NOT support generating
- events from a GUID and QofIdType - you must specify a genuine QofInstance.
+ events from a GncGUID and QofIdType - you must specify a genuine QofInstance.
 
  @param entity:     the entity generating the event
  @param event_type: the name of the event.

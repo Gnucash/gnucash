@@ -80,7 +80,7 @@ guint_to_dom_tree(const char *tag, guint an_int)
 
 
 xmlNodePtr
-guid_to_dom_tree(const char *tag, const GUID* gid)
+guid_to_dom_tree(const char *tag, const GncGUID* gid)
 {
     char guid_str[GUID_ENCODING_LENGTH + 1];
     xmlNodePtr ret;

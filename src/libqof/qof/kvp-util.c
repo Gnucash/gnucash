@@ -55,8 +55,8 @@ gnc_kvp_array_va (KvpFrame *kvp_root, const char * path,
     name = first_name;
     while (name)
     {
-        const GUID *guid;
-        guid = va_arg (ap, const GUID *);
+        const GncGUID *guid;
+        guid = va_arg (ap, const GncGUID *);
 
         kvp_frame_set_guid (cwd, name, guid);
 
@@ -87,14 +87,14 @@ gnc_kvp_bag_add (KvpFrame *pwd, const char * path,
 #define MATCH_GUID(elt) {                                       \
   KvpFrame *fr = kvp_value_get_frame (elt);                     \
   if (fr) {                                                     \
-     GUID *guid = kvp_frame_get_guid (fr, guid_name);           \
+     GncGUID *guid = kvp_frame_get_guid (fr, guid_name);           \
      if (guid && guid_equal (desired_guid, guid)) return fr;    \
   }                                                             \
 }
 
 KvpFrame *
 gnc_kvp_bag_find_by_guid (KvpFrame *root, const char * path,
-                          const char *guid_name, const GUID *desired_guid)
+                          const char *guid_name, const GncGUID *desired_guid)
 {
     KvpValue *arr;
     KvpValueType valtype;

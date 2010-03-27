@@ -142,7 +142,7 @@ typedef struct
 {
     QofQueryPredData pd;
     QofGuidMatch options;
-    const GUID *guid;
+    const GncGUID *guid;
     GList * guids;
 } query_choice_def, *query_choice_t;
 

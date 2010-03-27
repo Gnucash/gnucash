@@ -175,7 +175,7 @@ Transaction * xaccTransClone (const Transaction *t);
  *
  * @param assume_ordered If TRUE, assume that the splits in each
  * transaction appear in the same order.  This saves some time looking
- * up splits by GUID, and is required for checking duplicated
+ * up splits by GncGUID, and is required for checking duplicated
  * transactions because all the splits have new GUIDs.
  */
 gboolean xaccTransEqual(const Transaction *ta,
@@ -216,7 +216,7 @@ gboolean      xaccTransIsOpen (const Transaction *trans);
     transaction associated with the given id, or NULL
     if there is no such transaction. */
 /*@ dependent @*//*@ null @*/
-Transaction * xaccTransLookup (const GUID *guid, QofBook *book);
+Transaction * xaccTransLookup (const GncGUID *guid, QofBook *book);
 #define xaccTransLookupDirect(g,b) xaccTransLookup(&(g),b)
 
 Split * xaccTransFindSplitByAccount(const Transaction *trans,
@@ -417,7 +417,7 @@ gnc_numeric xaccTransGetAccountBalance (const Transaction *trans,
  *      num field (compare as an integer)
  *      date entered (compare as a date)
  *      description field (comcpare as a string using strcmp())
- *      GUID (compare as a guid)
+ *      GncGUID (compare as a guid)
  *    Finally, it returns zero if all of the above match.
  *    Note that it does *NOT* compare its member splits.
  */

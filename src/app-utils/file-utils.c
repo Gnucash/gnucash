@@ -327,7 +327,7 @@ gnc_find_state_file (const gchar *url,
         file_guid = g_key_file_get_string(key_file,
                                           STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
                                           NULL);
-        DEBUG("File GUID is %s", file_guid ? file_guid : "<not found>");
+        DEBUG("File GncGUID is %s", file_guid ? file_guid : "<not found>");
         if (safe_strcmp(guid, file_guid) == 0)
         {
             DEBUG("Matched !!!");

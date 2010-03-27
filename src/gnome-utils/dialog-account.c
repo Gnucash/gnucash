@@ -78,7 +78,7 @@ typedef struct _AccountWindow
 
     AccountDialogType dialog_type;
 
-    GUID    account;
+    GncGUID    account;
     Account *created_account;
 
     gchar **subaccount_names;

@@ -101,7 +101,7 @@ qof_book_merge_compare(QofBookMergeData *mergeData )
     QofCollection *mergeColl, *targetColl;
     gchar      *stringImport, *stringTarget;
     QofInstance  *mergeEnt, *targetEnt, *referenceEnt;
-    const GUID *guidImport, *guidTarget;
+    const GncGUID *guidImport, *guidTarget;
     QofParam   *qtparam;
     KvpFrame   *kvpImport, *kvpTarget;
     QofIdType  mergeParamName;
@@ -549,7 +549,7 @@ qof_book_merge_foreach ( QofInstance* mergeEnt, gpointer user_data)
     QofBookMergeRule *mergeRule, *currentRule;
     QofBookMergeData *mergeData;
     QofInstance *targetEnt, *best_matchEnt;
-    GUID *g;
+    GncGUID *g;
     double difference;
     GSList *c;
 
@@ -719,7 +719,7 @@ qof_book_merge_commit_rule_create_objects(QofBookMergeData *mergeData,
     g_return_if_fail(mergeData->targetBook != NULL);
     g_return_if_fail(rule->mergeResult == MERGE_NEW);
 
-    /* The new object takes the GUID from the import to retain an absolute match */
+    /* The new object takes the GncGUID from the import to retain an absolute match */
     inst = qof_object_new_instance(rule->importEnt->e_type, mergeData->targetBook);
     g_return_if_fail(inst != NULL);
     rule->targetEnt = inst;
@@ -782,7 +782,7 @@ qof_book_merge_commit_rule_loop(QofBookMergeData *mergeData,
     QofBookMergeMapCollectionIterate mapped_coll_iter;
     QofParam    *cm_param;
     gchar       *cm_string;
-    const GUID  *cm_guid;
+    const GncGUID  *cm_guid;
     KvpFrame    *cm_kvp;
     /* function pointers and variables for parameter getters that don't use pointers normally */
     gnc_numeric  cm_numeric, (*numeric_getter)  (QofInstance*, QofParam*);
@@ -796,7 +796,7 @@ qof_book_merge_commit_rule_loop(QofBookMergeData *mergeData,
     void (*string_setter)    (QofInstance*, const gchar*);
     void (*date_setter)      (QofInstance*, Timespec);
     void (*numeric_setter)   (QofInstance*, gnc_numeric);
-    void (*guid_setter)      (QofInstance*, const GUID*);
+    void (*guid_setter)      (QofInstance*, const GncGUID*);
     void (*double_setter)    (QofInstance*, double);
     void (*boolean_setter)   (QofInstance*, gboolean);
     void (*i32_setter)       (QofInstance*, gint32);
@@ -821,7 +821,7 @@ qof_book_merge_commit_rule_loop(QofBookMergeData *mergeData,
            guid_to_string(qof_instance_get_guid(rule->targetEnt)));
 
     /* currentRule->targetEnt is now set,
-    	1. by an absolute GUID match or
+    	1. by an absolute GncGUID match or
     	2. by best_matchEnt and difference or
     	3. by MERGE_NEW.
     */
@@ -871,7 +871,7 @@ qof_book_merge_commit_rule_loop(QofBookMergeData *mergeData,
         if (safe_strcmp(rule->mergeType, QOF_TYPE_GUID) == 0)
         {
             cm_guid = cm_param->param_getfcn(rule->importEnt, cm_param);
-            guid_setter = (void(*)(QofInstance*, const GUID*))cm_param->param_setfcn;
+            guid_setter = (void(*)(QofInstance*, const GncGUID*))cm_param->param_setfcn;
             if (guid_setter != NULL)
             {
                 guid_setter(rule->targetEnt, cm_guid);
@@ -1090,7 +1090,7 @@ qof_book_merge_param_as_string(QofParam *qtparam, QofInstance *qtEnt)
     gchar       *param_string, param_date[QOF_DATE_STRING_LENGTH];
     gchar       param_sa[GUID_ENCODING_LENGTH + 1];
     QofType     paramType;
-    const GUID *param_guid;
+    const GncGUID *param_guid;
     time_t      param_t;
     gnc_numeric param_numeric,  (*numeric_getter) (QofInstance*, QofParam*);
     Timespec    param_ts,       (*date_getter)    (QofInstance*, QofParam*);

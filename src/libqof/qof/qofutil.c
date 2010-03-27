@@ -334,7 +334,7 @@ qof_util_param_as_string(QofInstance *ent, QofParam *param)
     gchar       param_sa[GUID_ENCODING_LENGTH + 1];
     gboolean    known_type;
     QofType     paramType;
-    const GUID *param_guid;
+    const GncGUID *param_guid;
     time_t      param_t;
     gnc_numeric param_numeric,  (*numeric_getter) (QofInstance*, QofParam*);
     Timespec    param_ts,       (*date_getter)    (QofInstance*, QofParam*);
@@ -487,7 +487,7 @@ qof_util_param_as_string(QofInstance *ent, QofParam *param)
         }
         param_guid = qof_book_get_guid(book);
         guid_to_string_buff(param_guid, param_sa);
-        PINFO (" book GUID=%s", param_sa);
+        PINFO (" book GncGUID=%s", param_sa);
         param_string = g_strdup(param_sa);
         return param_string;
     }

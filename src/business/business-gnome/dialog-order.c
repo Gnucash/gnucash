@@ -95,7 +95,7 @@ struct _order_window
     GncEntryLedger *	ledger;
 
     OrderDialogType	dialog_type;
-    GUID		order_guid;
+    GncGUID		order_guid;
     gint		component_id;
     QofBook *	book;
     GncOrder *	created_order;
@@ -539,7 +539,7 @@ gnc_order_update_window (OrderWindow *ow)
 static gboolean
 find_handler (gpointer find_data, gpointer user_data)
 {
-    const GUID *order_guid = find_data;
+    const GncGUID *order_guid = find_data;
     OrderWindow *ow = user_data;
 
     return(ow && guid_equal(&ow->order_guid, order_guid));
@@ -572,7 +572,7 @@ gnc_order_new_window (QofBook *bookp, OrderDialogType type,
      */
     if (order)
     {
-        GUID order_guid;
+        GncGUID order_guid;
 
         order_guid = *gncOrderGetGUID(order);
         ow = gnc_find_first_gui_component (class_name, find_handler,

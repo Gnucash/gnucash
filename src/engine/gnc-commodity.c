@@ -2132,7 +2132,7 @@ gnc_commodity_table_find_namespace(const gnc_commodity_table * table,
 
 
 gnc_commodity *
-gnc_commodity_find_commodity_by_guid(const GUID *guid, QofBook *book)
+gnc_commodity_find_commodity_by_guid(const GncGUID *guid, QofBook *book)
 {
     QofCollection *col;
     if (!guid || !book) return NULL;
@@ -2141,7 +2141,7 @@ gnc_commodity_find_commodity_by_guid(const GUID *guid, QofBook *book)
 }
 
 gnc_commodity_namespace *
-gnc_commodity_find_namespace_by_guid(const GUID *guid, QofBook *book)
+gnc_commodity_find_namespace_by_guid(const GncGUID *guid, QofBook *book)
 {
     QofCollection *col;
     if (!guid || !book) return NULL;

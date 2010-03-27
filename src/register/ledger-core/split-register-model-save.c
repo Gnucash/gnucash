@@ -635,13 +635,13 @@ gnc_template_register_save_xfrm_cell (BasicCell * cell,
     SplitRegister *reg = user_data;
     SRInfo *info = gnc_split_register_get_info (reg);
     Account *template_acc;
-    const GUID *acctGUID;
+    const GncGUID *acctGUID;
     kvp_frame *kvpf;
     Account *acct;
 
     g_return_if_fail (gnc_basic_cell_has_name (cell, XFRM_CELL));
 
-    /* save the account GUID into the kvp_data. */
+    /* save the account GncGUID into the kvp_data. */
     acct = gnc_split_register_get_account (reg, XFRM_CELL);
     if (!acct)
     {

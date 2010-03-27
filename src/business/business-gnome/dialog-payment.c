@@ -120,7 +120,7 @@ static void
 gnc_payment_dialog_owner_changed(PaymentWindow *pw)
 {
     Account *last_acct = NULL;
-    GUID *guid = NULL;
+    GncGUID *guid = NULL;
     KvpValue* value;
     KvpFrame* slots;
 

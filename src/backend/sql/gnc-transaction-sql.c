@@ -65,7 +65,7 @@
 
 typedef struct {
     /*@ dependent @*/ GncSqlBackend* be;
-    /*@ dependent @*/ const GUID* guid;
+    /*@ dependent @*/ const GncGUID* guid;
 	gboolean is_ok;
 } split_info_t;
 
@@ -193,8 +193,8 @@ set_split_lot( gpointer pObject, /*@ null @*/ gpointer pLot )
 static /*@ null @*/ Split*
 load_single_split( GncSqlBackend* be, GncSqlRow* row )
 {
-    const GUID* guid;
-    GUID split_guid;
+    const GncGUID* guid;
+    GncGUID split_guid;
 	Split* pSplit;
 
 	g_return_val_if_fail( be != NULL, NULL );
@@ -263,8 +263,8 @@ load_splits_for_tx_list( GncSqlBackend* be, GList* list )
 static /*@ null @*/ Transaction*
 load_single_tx( GncSqlBackend* be, GncSqlRow* row )
 {
-    const GUID* guid;
-    GUID tx_guid;
+    const GncGUID* guid;
+    GncGUID tx_guid;
 	Transaction* pTx;
 
 	g_return_val_if_fail( be != NULL, NULL );
@@ -626,7 +626,7 @@ save_split_cb( gpointer data, gpointer user_data )
 }
 
 static gboolean
-save_splits( GncSqlBackend* be, const GUID* tx_guid, SplitList* pSplitList )
+save_splits( GncSqlBackend* be, const GncGUID* tx_guid, SplitList* pSplitList )
 {
     split_info_t split_info;
 
@@ -645,7 +645,7 @@ save_splits( GncSqlBackend* be, const GUID* tx_guid, SplitList* pSplitList )
 static gboolean
 save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
 {
-    const GUID* guid;
+    const GncGUID* guid;
 	gint op;
 	gboolean is_infant;
 	QofInstance* inst;
@@ -713,7 +713,7 @@ commit_transaction( GncSqlBackend* be, QofInstance* inst )
 }
 
 /* ================================================================= */
-static /*@ dependent @*//*@ null @*/ const GUID*
+static /*@ dependent @*//*@ null @*/ const GncGUID*
 get_guid_from_query( QofQuery* pQuery )
 {
     GList* pOrTerms;
@@ -749,7 +749,7 @@ get_guid_from_query( QofQuery* pQuery )
  */
 void gnc_sql_transaction_load_tx_for_account( GncSqlBackend* be, Account* account )
 {
-	const GUID* guid;
+	const GncGUID* guid;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	gchar* query_sql;
     GncSqlStatement* stmt;
@@ -853,7 +853,7 @@ convert_query_term_to_sql( const GncSqlBackend* be, const gchar* fieldName, QofQ
 			break;
 
 		default:
-			PERR( "Unexpected GUID match type: %d\n", guid_data->options );
+			PERR( "Unexpected GncGUID match type: %d\n", guid_data->options );
 		}
 
 		for( guid_entry = guid_data->guids; guid_entry != NULL; guid_entry = guid_entry->next ) {
@@ -976,7 +976,7 @@ typedef struct {
 static /*@ null @*/ gpointer
 compile_split_query( GncSqlBackend* be, QofQuery* query )
 {
-    const GUID* acct_guid;
+    const GncGUID* acct_guid;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	split_query_info_t* query_info = NULL;
 	gchar* query_sql;
@@ -1141,7 +1141,7 @@ static void
 set_acct_bal_account_from_guid( gpointer pObject, gpointer pValue )
 {
     single_acct_balance_t* bal = (single_acct_balance_t*)pObject;
-	const GUID* guid = (const GUID*)pValue;
+	const GncGUID* guid = (const GncGUID*)pValue;
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( pValue != NULL );
@@ -1283,7 +1283,7 @@ load_tx_guid( const GncSqlBackend* be, GncSqlRow* row,
             const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
-    GUID guid;
+    GncGUID guid;
 	Transaction* tx;
 	const gchar* guid_str;
 

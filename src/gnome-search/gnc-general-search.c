@@ -67,7 +67,7 @@ typedef struct _GNCGeneralSearchPrivate GNCGeneralSearchPrivate;
 
 struct _GNCGeneralSearchPrivate
 {
-    GUID			guid;
+    GncGUID			guid;
     GNCIdTypeConst		type;
     GNCSearchCB		search_cb;
     gpointer		user_data;
@@ -537,7 +537,7 @@ gnc_general_search_set_selected (GNCGeneralSearch *gsl, gpointer selection)
     if (selection)
     {
         const QofParam *get_guid = priv->get_guid;
-        priv->guid = * ((GUID *)(get_guid->param_getfcn
+        priv->guid = * ((GncGUID *)(get_guid->param_getfcn
                                  (gsl->selected_item, get_guid)));
         gnc_gui_component_watch_entity
         (priv->component_id, &(priv->guid),

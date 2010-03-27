@@ -38,40 +38,40 @@ SCM scm_init_sw_business_core_module (void);
 %rename(gncOwnerReturnGUID) gncOwnerRetGUID;
 
 %inline %{
-static GUID gncTaxTableReturnGUID(GncTaxTable *x)
+static GncGUID gncTaxTableReturnGUID(GncTaxTable *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
 
-static GUID gncInvoiceReturnGUID(GncInvoice *x)
+static GncGUID gncInvoiceReturnGUID(GncInvoice *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
 
-static GUID gncJobReturnGUID(GncJob *x)
+static GncGUID gncJobReturnGUID(GncJob *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
 
-static GUID gncVendorReturnGUID(GncVendor *x)
+static GncGUID gncVendorReturnGUID(GncVendor *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
 
-static GUID gncCustomerReturnGUID(GncCustomer *x)
+static GncGUID gncCustomerReturnGUID(GncCustomer *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
 
-static GUID gncEmployeeReturnGUID(GncEmployee *x)
+static GncGUID gncEmployeeReturnGUID(GncEmployee *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
 
-static GncTaxTable * gncTaxTableLookupFlip(GUID g, QofBook *b)
+static GncTaxTable * gncTaxTableLookupFlip(GncGUID g, QofBook *b)
 { return gncTaxTableLookup(b, &g); }
 
-static GncInvoice * gncInvoiceLookupFlip(GUID g, QofBook *b)
+static GncInvoice * gncInvoiceLookupFlip(GncGUID g, QofBook *b)
 { return gncInvoiceLookup(b, &g); }
 
-static GncJob * gncJobLookupFlip(GUID g, QofBook *b)
+static GncJob * gncJobLookupFlip(GncGUID g, QofBook *b)
 { return gncJobLookup(b, &g); }
 
-static GncVendor * gncVendorLookupFlip(GUID g, QofBook *b)
+static GncVendor * gncVendorLookupFlip(GncGUID g, QofBook *b)
 { return gncVendorLookup(b, &g); }
 
-static GncCustomer * gncCustomerLookupFlip(GUID g, QofBook *b)
+static GncCustomer * gncCustomerLookupFlip(GncGUID g, QofBook *b)
 { return gncCustomerLookup(b, &g); }
 
-static GncEmployee * gncEmployeeLookupFlip(GUID g, QofBook *b)
+static GncEmployee * gncEmployeeLookupFlip(GncGUID g, QofBook *b)
 { return gncEmployeeLookup(b, &g); }
 
 %}

@@ -41,7 +41,7 @@
  * @param pFrame Top-level KVP frame
  * @return TRUE if successful, FALSE if error
  */
-gboolean gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid,
+gboolean gnc_sql_slots_save( GncSqlBackend* be, const GncGUID* guid,
                              gboolean is_infant, KvpFrame* pFrame );
 
 /**
@@ -51,7 +51,7 @@ gboolean gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid,
  * @param guid Object guid
  * @return TRUE if successful, FALSE if error
  */
-gboolean gnc_sql_slots_delete( GncSqlBackend* be, const GUID* guid );
+gboolean gnc_sql_slots_delete( GncSqlBackend* be, const GncGUID* guid );
 
 /** Loads slots for an object from the db.
  *
@@ -70,7 +70,7 @@ void gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst );
 void gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list );
 
 
-typedef QofInstance* (*BookLookupFn)( const GUID* guid, const QofBook* book );
+typedef QofInstance* (*BookLookupFn)( const GncGUID* guid, const QofBook* book );
 
 /**
  * gnc_sql_slots_load_for_sql_subquery - Loads slots for all objects whose guid is

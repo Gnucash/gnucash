@@ -1040,7 +1040,7 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
 {
     KvpFrame *kvp;
     KvpValue *value;
-    GUID *guid;
+    GncGUID *guid;
     QofBook *book;
 
     if (!lot) return NULL;
@@ -1080,7 +1080,7 @@ gncInvoiceGetInvoiceFromTxn (const Transaction *txn)
 {
     KvpFrame *kvp;
     KvpValue *value;
-    GUID *guid;
+    GncGUID *guid;
     QofBook *book;
 
     if (!txn) return NULL;

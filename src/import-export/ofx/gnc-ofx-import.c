@@ -108,7 +108,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
     Account *income_account = NULL;
     kvp_frame * acc_frame;
     kvp_value * kvp_val;
-    const GUID * income_acc_guid;
+    const GncGUID * income_acc_guid;
     gchar *investment_account_text;
     gnc_commodity *currency = NULL;
     gnc_commodity *investment_commodity = NULL;

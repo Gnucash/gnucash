@@ -55,7 +55,7 @@
 
 #define HANDLE_TYPE(URL_TYPE_STR,OBJ_TYPE) {                                 \
   QofBook *book;                                                             \
-  GUID guid;                                                                 \
+  GncGUID guid;                                                                 \
   QofCollection *coll;                                                       \
                                                                              \
   g_return_val_if_fail (location != NULL, FALSE);                            \
@@ -177,7 +177,7 @@ ownerreportCB (const char *location, const char *label,
 {
     const char *ownerptr;
     const char *acctptr;
-    GUID guid;
+    GncGUID guid;
     GncOwner owner;
     GncOwnerType type;
     char *etype = NULL;

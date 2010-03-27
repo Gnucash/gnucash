@@ -90,7 +90,7 @@ reject_auth (void)
 /* XXX -- hack alert -- cheesy user authentication and tracking 
  * this should be replaced by something more professional
  *
- * This implementation uses gnucash GUID's to track sessions, 
+ * This implementation uses gnucash GncGUID's to track sessions, 
  * but the API is designed so that anything that can be converted
  * to a string & back will work.
  */
@@ -107,7 +107,7 @@ GList * logged_in_users = NULL;
 static const char *
 auth_user (const char * name, const char *passwd)
 {
-  GUID *guid;
+  GncGUID *guid;
   const char *session_auth_string;
 
   /* hack alert - XXX - we do no authentication whatsoever,
@@ -115,7 +115,7 @@ auth_user (const char * name, const char *passwd)
    */
   if (!name || !passwd) return NULL;
 
-  guid = g_new (GUID, 1);
+  guid = g_new (GncGUID, 1);
   guid_new (guid);
   logged_in_users = g_list_prepend (logged_in_users, guid);
   session_auth_string = guid_to_string (guid); /* THREAD UNSAFE */
@@ -131,7 +131,7 @@ auth_user (const char * name, const char *passwd)
 static gboolean
 have_session (const char *session_auth_string)
 {
-   GUID guid;
+   GncGUID guid;
    GList *next = logged_in_users;
 
    string_to_guid (session_auth_string, &guid);

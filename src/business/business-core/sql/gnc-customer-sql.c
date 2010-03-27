@@ -87,7 +87,7 @@ static GncSqlColumnTableEntry col_table[] =
 static GncCustomer*
 load_single_customer( GncSqlBackend* be, GncSqlRow* row )
 {
-    const GUID* guid;
+    const GncGUID* guid;
     GncCustomer* pCustomer;
 
     g_return_val_if_fail( be != NULL, NULL );

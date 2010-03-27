@@ -142,7 +142,7 @@ load_all_commodities( GncSqlBackend* be )
             pCommodity = load_single_commodity( be, row );
 
             if( pCommodity != NULL ) {
-                GUID guid;
+                GncGUID guid;
 
                 guid = *qof_instance_get_guid( QOF_INSTANCE(pCommodity) );
                 pCommodity = gnc_commodity_table_insert( pTable, pCommodity );
@@ -176,7 +176,7 @@ create_commodities_tables( GncSqlBackend* be )
 static gboolean
 do_commit_commodity( GncSqlBackend* be, QofInstance* inst, gboolean force_insert )
 {
-	const GUID* guid;
+	const GncGUID* guid;
 	gboolean is_infant;
 	gint op;
 	gboolean is_ok;
@@ -247,7 +247,7 @@ load_commodity_guid( const GncSqlBackend* be, GncSqlRow* row,
             const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
-    GUID guid;
+    GncGUID guid;
 	gnc_commodity* commodity = NULL;
 
 	g_return_if_fail( be != NULL );

@@ -265,7 +265,7 @@ static gboolean
 set_parent_child (xmlNodePtr node, struct billterm_pdata *pdata,
                   void (*func)(GncBillTerm *, GncBillTerm *))
 {
-    GUID *guid;
+    GncGUID *guid;
     GncBillTerm *term;
 
     guid = dom_tree_to_guid(node);
@@ -300,7 +300,7 @@ static gboolean
 billterm_guid_handler (xmlNodePtr node, gpointer billterm_pdata)
 {
     struct billterm_pdata *pdata = billterm_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncBillTerm *term;
 
     guid = dom_tree_to_guid(node);
@@ -769,7 +769,7 @@ gnc_billterm_xml_initialize (void)
 }
 
 GncBillTerm *
-gnc_billterm_xml_find_or_create(QofBook *book, GUID *guid)
+gnc_billterm_xml_find_or_create(QofBook *book, GncGUID *guid)
 {
     GncBillTerm *term;
 

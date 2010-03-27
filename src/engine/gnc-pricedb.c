@@ -480,7 +480,7 @@ gnc_price_set_value(GNCPrice *p, gnc_numeric value)
 /* getters */
 
 GNCPrice *
-gnc_price_lookup (const GUID *guid, QofBook *book)
+gnc_price_lookup (const GncGUID *guid, QofBook *book)
 {
     QofCollection *col;
 

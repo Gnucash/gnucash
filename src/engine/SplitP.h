@@ -133,7 +133,7 @@ struct _SplitClass
 };
 
 
-/* Set the split's GUID. This should only be done when reading
+/* Set the split's GncGUID. This should only be done when reading
  * a split from a datafile, or some other external source. Never
  * call this on an existing split! */
 #define xaccSplitSetGUID(s,g) qof_instance_set_guid(QOF_INSTANCE(s),g)

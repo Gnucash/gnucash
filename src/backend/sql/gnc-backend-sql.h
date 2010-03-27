@@ -568,10 +568,10 @@ gboolean gnc_sql_create_index( const GncSqlBackend* be, const gchar* index_name,
  *
  * @param be SQL backend struct
  * @param row Database row
- * @return GUID
+ * @return GncGUID
  */
 /*@ dependent @*//*@ null @*/
-const GUID* gnc_sql_load_guid( const GncSqlBackend* be, GncSqlRow* row );
+const GncGUID* gnc_sql_load_guid( const GncSqlBackend* be, GncSqlRow* row );
 
 /**
  * Loads the transaction guid from a database row.  The table must have a column
@@ -579,10 +579,10 @@ const GUID* gnc_sql_load_guid( const GncSqlBackend* be, GncSqlRow* row );
  *
  * @param be SQL backend struct
  * @param row Database row
- * @return GUID
+ * @return GncGUID
  */
 /*@ dependent @*//*@ null @*/
-const GUID* gnc_sql_load_tx_guid( const GncSqlBackend* be, GncSqlRow* row );
+const GncGUID* gnc_sql_load_tx_guid( const GncSqlBackend* be, GncSqlRow* row );
 
 /**
  * Creates a basic SELECT statement for a table.
@@ -604,7 +604,7 @@ GncSqlStatement* gnc_sql_create_select_statement( GncSqlBackend* be,
 void gnc_sql_register_col_type_handler( const gchar* colType, const GncSqlColumnTypeHandler* handler );
 
 /**
- * Adds a GValue for an object reference GUID to the end of a GSList.
+ * Adds a GValue for an object reference GncGUID to the end of a GSList.
  *
  * @param be SQL backend struct
  * @param obj_name QOF object type name
@@ -617,7 +617,7 @@ void gnc_sql_add_gvalue_objectref_guid_to_slist( const GncSqlBackend* be,
         const GncSqlColumnTableEntry* table_row, GSList** pList );
 
 /**
- * Adds a column info structure for an object reference GUID to the end of a
+ * Adds a column info structure for an object reference GncGUID to the end of a
  * GList.
  *
  * @param be SQL backend struct

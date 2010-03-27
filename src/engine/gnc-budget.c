@@ -379,7 +379,7 @@ gnc_budget_get_recurrence(GncBudget *budget)
     return (&GET_PRIVATE(budget)->recurrence);
 }
 
-const GUID*
+const GncGUID*
 gnc_budget_get_guid(GncBudget* budget)
 {
     g_return_val_if_fail(budget, NULL);
@@ -421,7 +421,7 @@ void
 gnc_budget_unset_account_period_value(GncBudget *budget, Account *account,
                                       guint period_num)
 {
-    const GUID *guid;
+    const GncGUID *guid;
     KvpFrame *frame;
     gchar path[BUF_SIZE];
     gchar *bufend;
@@ -446,7 +446,7 @@ void
 gnc_budget_set_account_period_value(GncBudget *budget, Account *account,
                                     guint period_num, gnc_numeric val)
 {
-    const GUID *guid;
+    const GncGUID *guid;
     KvpFrame *frame;
     gchar path[BUF_SIZE];
     gchar *bufend;
@@ -575,7 +575,7 @@ gnc_budget_get_book(GncBudget* budget)
 }
 
 GncBudget*
-gnc_budget_lookup (const GUID *guid, QofBook *book)
+gnc_budget_lookup (const GncGUID *guid, QofBook *book)
 {
     QofCollection *col;
 

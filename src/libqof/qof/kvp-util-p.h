@@ -33,20 +33,20 @@
  * @brief misc odd-job kvp utils engine-private routines
  * @author Copyright (C) 2001, 2003 Linas Vepstas <linas@linas.org>               *
 */
-/** @name KvpBag Bags of GUID Pointers
+/** @name KvpBag Bags of GncGUID Pointers
  @{
 */
 
 /** The gnc_kvp_bag_add() routine is used to maintain a collection
  *  of pointers in a kvp tree.
  *
- *  The thing being pointed at is uniquely identified by its GUID.
+ *  The thing being pointed at is uniquely identified by its GncGUID.
  *  This routine is typically used to create a linked list, and/or
  *  a collection of pointers to objects that are 'related' to each
  *  other in some way.
  *
  *  The var-args should be pairs of strings (const char *) followed by
- *  the corresponding GUID pointer (const GUID *).  Terminate the varargs
+ *  the corresponding GncGUID pointer (const GncGUID *).  Terminate the varargs
  *  with a NULL as the last string argument.
  *
  *  The actual 'pointer' is stored in a subdirectory in a bag located at
@@ -88,7 +88,7 @@ void gnc_kvp_bag_merge (KvpFrame *kvp_into, const char *intopath,
  */
 
 KvpFrame * gnc_kvp_bag_find_by_guid (KvpFrame *root,  const char * path,
-                                     const char *guid_name, const GUID *desired_guid);
+                                     const char *guid_name, const GncGUID *desired_guid);
 
 
 /** Remove the given frame from the bag.  The frame is removed,

@@ -64,7 +64,7 @@ gnc_budget_dom_tree_create(GncBudget *bgt)
     ret = xmlNewNode(NULL, BAD_CAST gnc_budget_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST budget_version_string);
 
-    /* field: GUID */
+    /* field: GncGUID */
     xmlAddChild(ret, guid_to_dom_tree(bgt_id_string,
                                       gnc_budget_get_guid(bgt)));
     /* field: char* name */
@@ -108,7 +108,7 @@ set_string(xmlNodePtr node, GncBudget* bgt,
 static gboolean
 budget_id_handler (xmlNodePtr node, gpointer bgt)
 {
-    GUID *guid;
+    GncGUID *guid;
 
     guid = dom_tree_to_guid(node);
     g_return_val_if_fail(guid, FALSE);

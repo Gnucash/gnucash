@@ -29,19 +29,19 @@
 
 /** @addtogroup Entity
     @{ */
-/** @addtogroup GUID
+/** @addtogroup GncGUID
     Globally Unique ID's provide a way to uniquely identify
-    some thing.  A GUID is a unique, cryptographically
+    some thing.  A GncGUID is a unique, cryptographically
     random 128-bit value.  The identifier is so random that
     it is safe to assume that there is no other such item
     on the planet Earth, and indeed, not even in the Galaxy
     or beyond.
 
-    QOF GUID's can be used independently of any other subsystem
+    QOF GncGUID's can be used independently of any other subsystem
     in QOF. In particular, they do not require the use of
-    other parts of the object subsystem. New GUID's are usually
+    other parts of the object subsystem. New GncGUID's are usually
     created by initialising a new entity using qof_instance_init,
-    rather than calling GUID functions directly.
+    rather than calling GncGUID functions directly.
 
     @{ */
 /** @file guid.h
@@ -57,14 +57,14 @@ typedef union GNC_INTERNAL_GUID
 
     gint __align_me; /* this just ensures that GUIDs are 32-bit
                    * aligned on systems that need them to be. */
-} GUID;
+} GncGUID;
 
 
 #define GNC_TYPE_GUID (gnc_guid_get_type())
 #define GNC_VALUE_HOLDS_GUID(value) G_VALUE_HOLDS(value, GNC_TYPE_GUID)
 
 GType gnc_guid_get_type (void);
-G_CONST_RETURN GUID* gnc_value_get_guid (const GValue *value);
+G_CONST_RETURN GncGUID* gnc_value_get_guid (const GValue *value);
 
 /** number of characters needed to encode a guid as a string
  * not including the null terminator. */
@@ -131,27 +131,27 @@ void guid_shutdown (void);
  * you'd still have less than a one-in-a-million chance of coming up
  * with a duplicate id.  2^128 == 10^38 is a really really big number.)
  */
-void guid_new(GUID *guid);
+void guid_new(GncGUID *guid);
 
 /** Generate a new id. If no initialization function has been called,
  *  guid_init() will be called before the id is created.
  *
- * @return guid A data structure containing a newly allocated GUID.
+ * @return guid A data structure containing a newly allocated GncGUID.
  *  Caller is responsible for calling guid_free().
  */
-GUID guid_new_return(void);
+GncGUID guid_new_return(void);
 
-/** Returns a GUID which is guaranteed
+/** Returns a GncGUID which is guaranteed
 to never reference any entity. */
-const GUID * guid_null (void);
+const GncGUID * guid_null (void);
 
 /** Efficiently allocate & free memory for GUIDs */
-GUID * guid_malloc (void);
+GncGUID * guid_malloc (void);
 
 /* Return a guid set to all zero's */
-void   guid_free (GUID *guid);
+void   guid_free (GncGUID *guid);
 
-GUID *guid_copy (const GUID *guid);
+GncGUID *guid_copy (const GncGUID *guid);
 
 /** The guid_to_string() routine returns a null-terminated string
  *  encoding of the id. String encodings of identifiers are hex
@@ -168,7 +168,7 @@ GUID *guid_copy (const GUID *guid);
  *  returned memory is owned by this routine and may not be freed by
  *  the caller.
  */
-const gchar * guid_to_string (const GUID * guid);
+const gchar * guid_to_string (const GncGUID * guid);
 
 /** The guid_to_string_buff() routine puts a null-terminated string
  *  encoding of the id into the memory pointed at by buff.  The
@@ -183,7 +183,7 @@ const gchar * guid_to_string (const GUID * guid);
  *
  *  @return A pointer to the terminating null character of the string.
  */
-gchar * guid_to_string_buff (const GUID * guid, /*@ out @*/ gchar *buff);
+gchar * guid_to_string_buff (const GncGUID * guid, /*@ out @*/ gchar *buff);
 
 
 /** Given a string, decode the id into the guid if guid is non-NULL.
@@ -191,15 +191,15 @@ gchar * guid_to_string_buff (const GUID * guid, /*@ out @*/ gchar *buff);
  * hexadecimal number. This function accepts both upper and lower case
  * hex digits. If the return value is FALSE, the effect on guid is
  * undefined. */
-gboolean string_to_guid(const gchar * string, /*@ out @*/ GUID * guid);
+gboolean string_to_guid(const gchar * string, /*@ out @*/ GncGUID * guid);
 
 
 /** Given two GUIDs, return TRUE if they are non-NULL and equal.
  * Return FALSE, otherwise. */
-gboolean guid_equal(const GUID *guid_1, const GUID *guid_2);
-gint     guid_compare(const GUID *g1, const GUID *g2);
+gboolean guid_equal(const GncGUID *guid_1, const GncGUID *guid_2);
+gint     guid_compare(const GncGUID *g1, const GncGUID *g2);
 
-/** Given a GUID *, hash it to a guint */
+/** Given a GncGUID *, hash it to a guint */
 guint guid_hash_to_guint(gconstpointer ptr);
 
 GHashTable *guid_hash_table_new(void);

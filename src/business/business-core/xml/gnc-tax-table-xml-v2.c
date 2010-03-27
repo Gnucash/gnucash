@@ -145,7 +145,7 @@ static gboolean
 ttentry_acct_handler (xmlNodePtr node, gpointer ttentry_pdata)
 {
     struct ttentry_pdata *pdata = ttentry_pdata;
-    GUID *guid;
+    GncGUID *guid;
     Account * acc;
 
     guid = dom_tree_to_guid (node);
@@ -232,7 +232,7 @@ static gboolean
 set_parent_child (xmlNodePtr node, struct taxtable_pdata *pdata,
                   void (*func)(GncTaxTable *, GncTaxTable *))
 {
-    GUID *guid;
+    GncGUID *guid;
     GncTaxTable *table;
 
     guid = dom_tree_to_guid(node);
@@ -264,7 +264,7 @@ static gboolean
 taxtable_guid_handler (xmlNodePtr node, gpointer taxtable_pdata)
 {
     struct taxtable_pdata *pdata = taxtable_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncTaxTable *table;
 
     guid = dom_tree_to_guid(node);

@@ -63,7 +63,7 @@ chart_collection_cb(QofInstance *ent, gpointer user_data)
     chart_data *data;
     Account *acc;
     gboolean success;
-    const GUID *guid;
+    const GncGUID *guid;
     QofCollection *copy_coll;
     QofBook *book;
 
@@ -114,7 +114,7 @@ chart_entity_cb(QofInstance *ent, gpointer user_data)
     gnc_numeric balance;
     QofBook *book;
     QofCollection *coll;
-    const GUID *guid;
+    const GncGUID *guid;
     time_t trans_time;
     GList *ref;
     QofInstanceReference *ent_ref;

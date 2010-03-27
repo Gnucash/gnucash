@@ -462,7 +462,7 @@ typedef struct GncPluginPageRegisterPrivate
 
     gint event_handler_id;
     gint component_manager_id;
-    GUID key;  /* The guid of the Account we're watching */
+    GncGUID key;  /* The guid of the Account we're watching */
 
     const char *lines_opt_section;
     const char *lines_opt_name;
@@ -3186,7 +3186,7 @@ gppr_account_destroy_cb (Account *account)
     GncPluginPageRegister *page;
     GncPluginPageRegisterPrivate *priv;
     GNCLedgerDisplayType ledger_type;
-    const GUID *acct_guid;
+    const GncGUID *acct_guid;
     const GList *citem;
     GList *item, *kill = NULL;
 

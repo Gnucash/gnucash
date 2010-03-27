@@ -57,7 +57,7 @@
 /** STRUCTS *********************************************************/
 struct _RecnWindow
 {
-    GUID account;             /* The account that we are reconciling  */
+    GncGUID account;             /* The account that we are reconciling  */
     gnc_numeric new_ending;   /* The new ending balance               */
     time_t statement_date;    /* The statement date                   */
 

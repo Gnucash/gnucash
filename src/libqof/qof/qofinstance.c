@@ -67,7 +67,7 @@ enum
 typedef struct QofInstancePrivate
 {
 //    QofIdType        e_type;    /**<	Entity type */
-    GUID guid;                  /**< GUID for the entity */
+    GncGUID guid;                  /**< GncGUID for the entity */
     QofCollection  *collection; /**< Entity collection */
 
     /* The entity_table in which this instance is stored */
@@ -143,7 +143,7 @@ static void qof_instance_class_init(QofInstanceClass *klass)
     (object_class,
      PROP_GUID,
      g_param_spec_boxed ("guid",
-                         "Object GUID",
+                         "Object GncGUID",
                          "The object Globally Unique ID.",
                          GNC_TYPE_GUID,
                          G_PARAM_READWRITE));
@@ -465,7 +465,7 @@ qof_instance_set_property (GObject         *object,
     }
 }
 
-const GUID *
+const GncGUID *
 qof_instance_get_guid (gconstpointer inst)
 {
     QofInstancePrivate *priv;
@@ -476,14 +476,14 @@ qof_instance_get_guid (gconstpointer inst)
     return &(priv->guid);
 }
 
-const GUID *
+const GncGUID *
 qof_entity_get_guid (gconstpointer ent)
 {
     return ent ? qof_instance_get_guid(ent) : guid_null();
 }
 
 void
-qof_instance_set_guid (gpointer ptr, const GUID *guid)
+qof_instance_set_guid (gpointer ptr, const GncGUID *guid)
 {
     QofInstancePrivate *priv;
     QofInstance *inst;
@@ -891,7 +891,7 @@ qof_instance_lookup_twin (const QofInstance *src, QofBook *target_book)
 {
     QofCollection *col;
     KvpFrame *fr;
-    GUID * twin_guid;
+    GncGUID * twin_guid;
     QofInstance * twin;
     QofInstancePrivate *bpriv;
 

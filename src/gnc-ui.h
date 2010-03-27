@@ -114,7 +114,7 @@ typedef enum
 
 void gnc_price_edit_dialog (gncUIWidget parent, QofSession *session,
                             GNCPrice *price, GNCPriceEditType type);
-GNCPrice* gnc_price_edit_by_guid (GtkWidget * parent, const GUID * guid);
+GNCPrice* gnc_price_edit_by_guid (GtkWidget * parent, const GncGUID * guid);
 void     gnc_prices_dialog (gncUIWidget parent);
 void     gnc_commodities_dialog (gncUIWidget parent);
 

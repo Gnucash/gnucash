@@ -78,7 +78,7 @@ static GncSqlColumnTableEntry col_table[] =
 static GncEmployee*
 load_single_employee( GncSqlBackend* be, GncSqlRow* row )
 {
-    const GUID* guid;
+    const GncGUID* guid;
     GncEmployee* pEmployee;
 
     g_return_val_if_fail( be != NULL, NULL );
@@ -162,7 +162,7 @@ static gboolean
 save_employee( GncSqlBackend* be, QofInstance* inst )
 {
     GncEmployee* emp;
-    const GUID* guid;
+    const GncGUID* guid;
     gint op;
     gboolean is_infant;
     gboolean is_ok = TRUE;

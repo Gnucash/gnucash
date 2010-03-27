@@ -190,7 +190,7 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
     for ( ; split_list; split_list = split_list->next)
     {
         gnc_commodity *split_cmdty = NULL;
-        GUID *acct_guid;
+        GncGUID *acct_guid;
         Account *acct;
 
         s = (Split*)split_list->data;
@@ -903,7 +903,7 @@ typedef struct _SxTxnCreationData
 static gboolean
 _get_template_split_account(GncSxInstance *instance, Split *template_split, Account **split_acct, GList **creation_errors)
 {
-    GUID *acct_guid;
+    GncGUID *acct_guid;
     kvp_frame *split_kvpf;
     kvp_value *kvp_val;
 
@@ -931,7 +931,7 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
     {
         char guid_str[GUID_ENCODING_LENGTH+1];
         GString *err;
-        guid_to_string_buff((const GUID*)acct_guid, guid_str);
+        guid_to_string_buff((const GncGUID*)acct_guid, guid_str);
         err = g_string_new("");
         g_string_printf(err, "Unknown account for guid [%s], cancelling SX [%s] creation.",
                         guid_str, xaccSchedXactionGetName(instance->parent->sx));

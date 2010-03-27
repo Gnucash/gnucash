@@ -274,7 +274,7 @@ static inline gboolean
 set_account(xmlNodePtr node, struct entry_pdata *pdata,
             void (*func)(GncEntry *entry, Account *acc))
 {
-    GUID *guid;
+    GncGUID *guid;
     Account * acc;
 
     guid = dom_tree_to_guid (node);
@@ -294,7 +294,7 @@ static inline gboolean
 set_taxtable (xmlNodePtr node, struct entry_pdata *pdata,
               void (*func)(GncEntry *entry, GncTaxTable *taxtable))
 {
-    GUID *guid;
+    GncGUID *guid;
     GncTaxTable *taxtable;
 
     guid = dom_tree_to_guid (node);
@@ -319,7 +319,7 @@ static gboolean
 entry_guid_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncEntry *entry;
 
     guid = dom_tree_to_guid(node);
@@ -561,7 +561,7 @@ static gboolean
 entry_order_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncOrder *order;
 
     guid = dom_tree_to_guid (node);
@@ -586,7 +586,7 @@ static gboolean
 entry_invoice_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncInvoice *invoice;
 
     guid = dom_tree_to_guid (node);
@@ -611,7 +611,7 @@ static gboolean
 entry_bill_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncInvoice *invoice;
 
     guid = dom_tree_to_guid (node);

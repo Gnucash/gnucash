@@ -95,7 +95,7 @@ static GncSqlColumnTableEntry col_table[] =
 static GncInvoice*
 load_single_invoice( GncSqlBackend* be, GncSqlRow* row )
 {
-    const GUID* guid;
+    const GncGUID* guid;
     GncInvoice* pInvoice;
 
     g_return_val_if_fail( be != NULL, NULL );
@@ -179,7 +179,7 @@ create_invoice_tables( GncSqlBackend* be )
 static gboolean
 save_invoice( GncSqlBackend* be, QofInstance* inst )
 {
-    const GUID* guid;
+    const GncGUID* guid;
     GncInvoice* invoice;
     gint op;
     gboolean is_infant;
@@ -286,7 +286,7 @@ load_invoice_guid( const GncSqlBackend* be, GncSqlRow* row,
                    const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
-    GUID guid;
+    GncGUID guid;
     GncInvoice* invoice = NULL;
 
     g_return_if_fail( be != NULL );

@@ -120,7 +120,7 @@ gnc_timepair_p(SCM x)
 }
 
 SCM
-gnc_guid2scm(GUID guid)
+gnc_guid2scm(GncGUID guid)
 {
     char string[GUID_ENCODING_LENGTH + 1];
 
@@ -130,10 +130,10 @@ gnc_guid2scm(GUID guid)
     return scm_makfrom0str(string);
 }
 
-GUID
+GncGUID
 gnc_scm2guid(SCM guid_scm)
 {
-    GUID guid;
+    GncGUID guid;
     const gchar * str;
 
     if (GUID_ENCODING_LENGTH != scm_i_string_length (guid_scm))
@@ -148,7 +148,7 @@ gnc_scm2guid(SCM guid_scm)
 int
 gnc_guid_p(SCM guid_scm)
 {
-    GUID guid;
+    GncGUID guid;
     const gchar * str;
 
     if (!scm_is_string(guid_scm))
@@ -394,7 +394,7 @@ gnc_guid_glist2scm (const GList *account_guids)
 
     for (node = account_guids; node; node = node->next)
     {
-        GUID *guid = node->data;
+        GncGUID *guid = node->data;
 
         if (guid)
             guids = scm_cons (gnc_guid2scm (*guid), guids);
@@ -414,7 +414,7 @@ gnc_scm2guid_glist (SCM guids_scm)
     while (!scm_is_null (guids_scm))
     {
         SCM guid_scm = SCM_CAR (guids_scm);
-        GUID *guid = NULL;
+        GncGUID *guid = NULL;
 
         if (guid_scm != SCM_BOOL_F)
         {
@@ -677,7 +677,7 @@ gnc_scm2KvpValue (SCM value_scm)
     {
         if (val_scm != SCM_BOOL_F)
         {
-            GUID guid = gnc_scm2guid (val_scm);
+            GncGUID guid = gnc_scm2guid (val_scm);
             value = kvp_value_new_guid (&guid);
         }
         else
@@ -1413,7 +1413,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
         }
         else if (!safe_strcmp (pd_type, "pd-guid"))
         {
-            GUID guid;
+            GncGUID guid;
             QofIdType id_type;
 
             /* guid */

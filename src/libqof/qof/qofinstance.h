@@ -108,28 +108,28 @@ void qof_instance_copy_book (gpointer ptr1, gconstpointer ptr2);
 /** See if two QofInstances share the same book.  */
 gboolean qof_instance_books_equal (gconstpointer ptr1, gconstpointer ptr2);
 
-/** Return the GUID of this instance */
+/** Return the GncGUID of this instance */
 /*@ dependent @*/
-const GUID * qof_instance_get_guid (gconstpointer);
+const GncGUID * qof_instance_get_guid (gconstpointer);
 
 /** \deprecated Use qof_instance_get_guid instead.
  *  Works like qof_instance_get_guid, but returns NULL on NULL */
 /*@ dependent @*/
-const GUID * qof_entity_get_guid (gconstpointer);
+const GncGUID * qof_entity_get_guid (gconstpointer);
 
 /** Return the collection this instance belongs to */
 /*@ dependent @*/
 QofCollection* qof_instance_get_collection (gconstpointer inst);
 
-/** Set the GUID of this instance */
-void qof_instance_set_guid (gpointer inst, const GUID *guid);
+/** Set the GncGUID of this instance */
+void qof_instance_set_guid (gpointer inst, const GncGUID *guid);
 
-/** Copy the GUID from one instance to another.  This routine should
- *  be used with extreme caution, since GUID values are everywhere
+/** Copy the GncGUID from one instance to another.  This routine should
+ *  be used with extreme caution, since GncGUID values are everywhere
  *  assumed to be unique. */
 void qof_instance_copy_guid (gpointer to, gconstpointer from);
 
-/** Compare the GUID values of two instances.  This routine returns 0
+/** Compare the GncGUID values of two instances.  This routine returns 0
  *  if the two values are equal, <0 if the first is smaller than the
  *  second, or >0 if the second is smaller tan the first. */
 gint qof_instance_guid_compare(const gconstpointer ptr1, const gconstpointer ptr2);

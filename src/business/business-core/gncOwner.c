@@ -336,7 +336,7 @@ const char * gncOwnerGetName (const GncOwner *owner)
     }
 }
 
-const GUID * gncOwnerGetGUID (const GncOwner *owner)
+const GncGUID * gncOwnerGetGUID (const GncOwner *owner)
 {
     if (!owner) return NULL;
 
@@ -357,9 +357,9 @@ const GUID * gncOwnerGetGUID (const GncOwner *owner)
     }
 }
 
-GUID gncOwnerRetGUID (GncOwner *owner)
+GncGUID gncOwnerRetGUID (GncOwner *owner)
 {
-    const GUID *guid = gncOwnerGetGUID (owner);
+    const GncGUID *guid = gncOwnerGetGUID (owner);
     if (guid)
         return *guid;
     return *guid_null ();
@@ -409,7 +409,7 @@ int gncOwnerCompare (const GncOwner *a, const GncOwner *b)
     }
 }
 
-const GUID * gncOwnerGetEndGUID (GncOwner *owner)
+const GncGUID * gncOwnerGetEndGUID (GncOwner *owner)
 {
     if (!owner) return NULL;
     owner = gncOwnerGetEndOwner (owner);
@@ -440,7 +440,7 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
 {
     KvpFrame *kvp;
     KvpValue *value;
-    GUID *guid;
+    GncGUID *guid;
     QofBook *book;
     GncOwnerType type;
 
@@ -532,7 +532,7 @@ reg_lot (void)
     qof_class_register (GNC_ID_LOT, NULL, params);
 }
 
-gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType type, GUID *guid)
+gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType type, GncGUID *guid)
 {
     if (!book || !owner || !type || !guid) return FALSE;
 

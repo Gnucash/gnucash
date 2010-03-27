@@ -935,7 +935,7 @@ xml_begin_edit (QofBackend *be, QofInstance *inst)
               "at least once before closing the books!\n");
     }
     /* XXX To be anal about it, we should really be checking to see
-     * if there already is a file with this book GUID, and disallowing
+     * if there already is a file with this book GncGUID, and disallowing
      * further progress.  This is because we are not allowed to
      * modify books that are closed (They should be treated as
      * 'read-only').

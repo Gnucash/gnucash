@@ -122,7 +122,7 @@ links: one object linked to many entities of many types.
 
                 */
                 /** @} */
-                /** Type of Paramters (String, Date, Numeric, GUID, etc.) */
+                /** Type of Paramters (String, Date, Numeric, GncGUID, etc.) */
                 typedef const char * QofType;
 
 typedef struct _QofParam QofParam;

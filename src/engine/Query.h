@@ -196,7 +196,7 @@ typedef enum
 } cleared_match_t;
 
 void xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QofQueryOp op);
-void xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
+void xaccQueryAddGUIDMatch(Query * q, const GncGUID *guid,
                            QofIdType id_type, QofQueryOp op);
 
 /** given kvp value is on right side of comparison */

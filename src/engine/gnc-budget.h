@@ -105,7 +105,7 @@ void gnc_budget_begin_edit(GncBudget *bgt);
 void gnc_budget_commit_edit(GncBudget *bgt);
 
 /*@ dependent @*/
-const GUID* gnc_budget_get_guid(GncBudget* budget);
+const GncGUID* gnc_budget_get_guid(GncBudget* budget);
 #define gnc_budget_return_guid(X) \
   (X ? *(qof_entity_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
 
@@ -153,9 +153,9 @@ QofBook* gnc_budget_get_book(GncBudget* budget);
 /* Returns some budget in the book, or NULL. */
 GncBudget* gnc_budget_get_default(QofBook *book);
 
-/* Get the budget associated with the given GUID from the given book. */
+/* Get the budget associated with the given GncGUID from the given book. */
 /*@ dependent @*/
-GncBudget* gnc_budget_lookup (const GUID *guid, QofBook *book);
+GncBudget* gnc_budget_lookup (const GncGUID *guid, QofBook *book);
 #define  gnc_budget_lookup_direct(g,b) gnc_budget_lookup(&(g),(b))
 
 #endif // __BUDGET_H__

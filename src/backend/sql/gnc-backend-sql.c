@@ -1471,8 +1471,8 @@ load_guid( const GncSqlBackend* be, GncSqlRow* row,
             const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
-    GUID guid;
-    const GUID* pGuid;
+    GncGUID guid;
+    const GncGUID* pGuid;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( row != NULL );
@@ -1517,7 +1517,7 @@ add_gvalue_guid_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 					const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
 {
     QofAccessFunc getter;
-    const GUID* guid = NULL;
+    const GncGUID* guid = NULL;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	GValue* value;
 
@@ -1557,7 +1557,7 @@ gnc_sql_add_gvalue_objectref_guid_to_slist( const GncSqlBackend* be, QofIdTypeCo
 						const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
 {
     QofAccessFunc getter;
-    const GUID* guid = NULL;
+    const GncGUID* guid = NULL;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	QofInstance* inst = NULL;
 	GValue* value;
@@ -2027,13 +2027,13 @@ register_standard_col_type_handlers( void )
 void 
 _retrieve_guid_( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
-    GUID* pGuid = (GUID*)pObject;
-    GUID* guid = (GUID*)pValue;
+    GncGUID* pGuid = (GncGUID*)pObject;
+    GncGUID* guid = (GncGUID*)pValue;
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( pValue != NULL );
 
-	memcpy( pGuid, guid, sizeof( GUID ) );
+	memcpy( pGuid, guid, sizeof( GncGUID ) );
 }
 
 
@@ -2046,10 +2046,10 @@ static GncSqlColumnTableEntry guid_table[] =
 	/*@ +full_init_block @*/
 };
 
-/*@ null @*/ const GUID*
+/*@ null @*/ const GncGUID*
 gnc_sql_load_guid( const GncSqlBackend* be, GncSqlRow* row )
 {
-	static GUID guid;
+	static GncGUID guid;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( row != NULL, NULL );
@@ -2068,10 +2068,10 @@ static GncSqlColumnTableEntry tx_guid_table[] =
 	/*@ +full_init_block @*/
 };
 
-/*@ null @*//*@ dependent @*/ const GUID*
+/*@ null @*//*@ dependent @*/ const GncGUID*
 gnc_sql_load_tx_guid( const GncSqlBackend* be, GncSqlRow* row )
 {
-    static GUID guid;
+    static GncGUID guid;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( row != NULL, NULL );
@@ -2608,7 +2608,7 @@ gboolean
 gnc_sql_commit_standard_item( GncSqlBackend* be, QofInstance* inst, const gchar* tableName,
                         	QofIdTypeConst obj_name, const GncSqlColumnTableEntry* col_table )
 {
-	const GUID* guid;
+	const GncGUID* guid;
 	gboolean is_infant;
 	gint op;
 	gboolean is_ok;

@@ -159,7 +159,7 @@ static gboolean
 employee_guid_handler (xmlNodePtr node, gpointer employee_pdata)
 {
     struct employee_pdata *pdata = employee_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncEmployee *employee;
 
     guid = dom_tree_to_guid(node);
@@ -275,7 +275,7 @@ static gboolean
 employee_ccard_handler (xmlNodePtr node, gpointer employee_pdata)
 {
     struct employee_pdata *pdata = employee_pdata;
-    GUID *guid;
+    GncGUID *guid;
     Account *ccard_acc;
 
     guid = dom_tree_to_guid(node);

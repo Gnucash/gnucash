@@ -48,7 +48,7 @@ typedef void (*GNCSearchResultCB) (QueryNew *query, gpointer user_data,
 /*
  * This callback will create a new item and return a handle to the
  * newly created item (even if it is not completely finished).  It
- * will be added to the query, but not selected.  This means the GUID
+ * will be added to the query, but not selected.  This means the GncGUID
  * must be set.
  */
 typedef gpointer (*GNCSearchNewItemCB) (gpointer user_data);

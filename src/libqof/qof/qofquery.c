@@ -1270,7 +1270,7 @@ void qof_query_add_guid_list_match (QofQuery *q, GSList *param_list,
 }
 
 void qof_query_add_guid_match (QofQuery *q, GSList *param_list,
-                               const GUID *guid, QofQueryOp op)
+                               const GncGUID *guid, QofQueryOp op)
 {
     GList *g = NULL;
 
@@ -1700,7 +1700,7 @@ qof_query_printPredData (QofQueryPredData *pd, GList *lst)
     gs = g_string_new ("Pred Data: ");
     g_string_append (gs, (gchar *) pd->type_name);
 
-    /* Char Predicate and GUID predicate don't use the 'how' field. */
+    /* Char Predicate and GncGUID predicate don't use the 'how' field. */
     if (safe_strcmp (pd->type_name, QOF_TYPE_CHAR) &&
             safe_strcmp (pd->type_name, QOF_TYPE_GUID))
     {
@@ -1756,7 +1756,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
         {
             /* THREAD-UNSAFE */
             g_string_append_printf (gs, ", guids: %s",
-                                    guid_to_string ((GUID *) node->data));
+                                    guid_to_string ((GncGUID *) node->data));
         }
         return;
     }

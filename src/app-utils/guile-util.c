@@ -805,8 +805,8 @@ gnc_copy_trans_scm_onto_trans(SCM trans_scm, Transaction *trans,
 void
 gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
         Transaction *trans,
-        const GUID *guid_1,
-        const GUID *guid_2,
+        const GncGUID *guid_1,
+        const GncGUID *guid_2,
         gboolean do_commit,
         QofBook *book)
 {

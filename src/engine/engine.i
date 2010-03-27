@@ -43,9 +43,9 @@ engine-common.i */
 %include "engine-common.i"
 
 %inline %{
-static const GUID * gncPriceGetGUID(GNCPrice *x)
+static const GncGUID * gncPriceGetGUID(GNCPrice *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
-static const GUID * gncBudgetGetGUID(GncBudget *x)
+static const GncGUID * gncBudgetGetGUID(GncBudget *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
 %}
 
@@ -92,7 +92,7 @@ const char *qof_session_get_url (QofSession *session);
 extern const char *gnc_default_strftime_date_format;
 const char *gnc_print_date (Timespec ts);
 
-GUID guid_new_return(void);
+GncGUID guid_new_return(void);
 
 %inline {
 static QofQuery * qof_query_create_for_splits(void) {
@@ -102,7 +102,7 @@ static QofQuery * qof_query_create_for_splits(void) {
 %typemap(in) GSList * "$1 = gnc_query_scm2path($input);"
 
 void qof_query_add_guid_match (QofQuery *q, GSList *param_list,
-                           const GUID *guid, QofQueryOp op);
+                           const GncGUID *guid, QofQueryOp op);
 void qof_query_set_sort_order (QofQuery *q, GSList *params1,
                            GSList *params2, GSList *params3);
 

@@ -37,22 +37,22 @@ code. The druid then uses ::qof_book_merge_init to begin the merge
 of the new book (created with QofSession) with the existing QofBook
 (loaded by the user), with user intervention and collision handling.
 
-	-# Always check for a ::GUID first and compare. qof_book_merge only accepts valid ::QofBook
-	data  and therefore ALL objects in the import book will	include valid GUID's.
-	-# If the original import data did not contain a GUID (e.g. an external non-GnuCash source)
-	the GUID values will have been created by QofSession and will not match any existing
-	GUID's in the target book so objects that do not have a GUID match cannot be assumed to
+	-# Always check for a ::GncGUID first and compare. qof_book_merge only accepts valid ::QofBook
+	data  and therefore ALL objects in the import book will	include valid GncGUID's.
+	-# If the original import data did not contain a GncGUID (e.g. an external non-GnuCash source)
+	the GncGUID values will have been created by QofSession and will not match any existing
+	GncGUID's in the target book so objects that do not have a GncGUID match cannot be assumed to
 	be ::MERGE_NEW - parameter values must be checked.
 
-- If a GUID match exists, set QofBookMergeRule::mergeAbsolute to \a TRUE.
-	-# If ALL parameters in the import object match the target object with the same \a GUID,
+- If a GncGUID match exists, set QofBookMergeRule::mergeAbsolute to \a TRUE.
+	-# If ALL parameters in the import object match the target object with the same \a GncGUID,
 	set ::QofBookMergeResult to \a MERGE_ABSOLUTE.
 	-# If any parameters differ, set ::MERGE_UPDATE.
-- If the import object \a GUID does not match an existing object,
+- If the import object \a GncGUID does not match an existing object,
 mergeAbsolute is unchanged from the default \a FALSE
 The parameter values of the object are compared to other objects of the same
 type in the target book.
-	-# If the same data exists in the target book with a different GUID, the object
+	-# If the same data exists in the target book with a different GncGUID, the object
 	is tagged as DUPLICATE.
 	-# If the data has changed, the object is tagged as REPORT.
 	-# If the data does not match, the object is tagged as NEW

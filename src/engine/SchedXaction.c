@@ -367,7 +367,7 @@ static void
 xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 {
     Account        *ra;
-    const GUID *guid;
+    const GncGUID *guid;
 
     qof_instance_init_data (&sx->inst, GNC_ID_SCHEDXACTION, book);
 
@@ -962,7 +962,7 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
     Split *split;
     KvpFrame *split_frame;
     KvpValue *tmp_value;
-    const GUID *acc_guid;
+    const GncGUID *acc_guid;
 
     split = xaccMallocSplit(book);
 

@@ -385,7 +385,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
     }
     else if (!strcmp (param_type, QOF_TYPE_GUID))
     {
-        GUID guid;
+        GncGUID guid;
         gboolean rc = string_to_guid (qvalue_name, &guid);
         if (0 == rc)
         {
@@ -416,7 +416,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
         /* If str has only digits, we know its a plain number.
          * If its numbers and a decimal point, assume a float
          * If its numbers and a slash, assume numeric
-         * If its 32 bytes of hex, assume GUID
+         * If its 32 bytes of hex, assume GncGUID
          * If it looks like an iso date ...
          * else assume its a string.
          */
@@ -424,7 +424,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
         len = strlen (str);
         if ((32 == len) && (32 == strspn (str, "0123456789abcdef")))
         {
-            GUID guid;
+            GncGUID guid;
             string_to_guid (str, &guid);
             kval = kvp_value_new_guid (&guid);
         }
@@ -596,7 +596,7 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
     gint64         cm_i64;
     Timespec       cm_date;
     char           cm_char, *tail;
-    GUID           *cm_guid;
+    GncGUID           *cm_guid;
     /*	KvpFrame       *cm_kvp;
     	KvpValue       *cm_value;
     	KvpValueType   cm_type;*/
@@ -649,7 +649,7 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
     }
     if (safe_strcmp(param->param_type, QOF_TYPE_GUID) == 0)
     {
-        cm_guid = g_new(GUID, 1);
+        cm_guid = g_new(GncGUID, 1);
         if (TRUE != string_to_guid(insert_string, cm_guid))
         {
             LEAVE (" string to guid failed for %s", insert_string);

@@ -748,16 +748,16 @@ generic_timespec_parser_new(sixtp_end_handler end_handler)
    and return it.
 
    input: NA
-   returns: GUID*
+   returns: GncGUID*
 
    start: NA
    characters: return string copy for accumulation in end handler.
-   end: concatenate all chars and create and return GUID*, if possible.
+   end: concatenate all chars and create and return GncGUID*, if possible.
 
-   cleanup-result: g_free the GUID*
+   cleanup-result: g_free the GncGUID*
    cleanup-chars: g_free the result string.
    fail: NA
-   result-fail: g_free the GUID*
+   result-fail: g_free the GncGUID*
    chars-fail: g_free the result string.
 
  */
@@ -769,13 +769,13 @@ generic_guid_end_handler(gpointer data_for_children,
                          gpointer *result, const gchar *tag)
 {
     gchar *txt = NULL;
-    GUID *gid;
+    GncGUID *gid;
     gboolean ok;
 
     txt = concatenate_child_result_chars(data_from_children);
     g_return_val_if_fail(txt, FALSE);
 
-    gid = g_new(GUID, 1);
+    gid = g_new(GncGUID, 1);
     if (!gid)
     {
         g_free(txt);
@@ -787,7 +787,7 @@ generic_guid_end_handler(gpointer data_for_children,
 
     if (!ok)
     {
-        PERR ("couldn't parse GUID");
+        PERR ("couldn't parse GncGUID");
         g_free(gid);
         return(FALSE);
     }

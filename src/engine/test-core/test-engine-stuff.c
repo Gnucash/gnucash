@@ -207,7 +207,7 @@ get_random_glist(void)
 }
 
 /* ========================================================== */
-/* Time/Date, GUID, binary data stuff */
+/* Time/Date, GncGUID, binary data stuff */
 
 Timespec*
 get_random_timespec(void)
@@ -236,12 +236,12 @@ get_random_timespec(void)
     return ret;
 }
 
-GUID*
+GncGUID*
 get_random_guid(void)
 {
-    GUID *ret;
+    GncGUID *ret;
 
-    ret = g_new(GUID, 1);
+    ret = g_new(GncGUID, 1);
     guid_new(ret);
 
     return ret;
@@ -324,7 +324,7 @@ get_random_kvp_value_depth (int type, gint depth)
 
     case KVP_TYPE_GUID:
     {
-        GUID *tmp_guid;
+        GncGUID *tmp_guid;
         tmp_guid = get_random_guid();
         ret = kvp_value_new_guid(tmp_guid);
         g_free(tmp_guid);
@@ -972,7 +972,7 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
 
 typedef struct
 {
-    GUID guid;
+    GncGUID guid;
 } TransInfo;
 
 void
@@ -1732,7 +1732,7 @@ get_random_query(void)
         GList *guids;
         GSList *path;
         char *string;
-        GUID *guid;
+        GncGUID *guid;
 
         pr_type = get_random_int_in_range (1, 20);
         if (gnc_engine_debug_random) printf("\n pr_type = %d ", pr_type);
@@ -2153,7 +2153,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
 
         /* GUID_MATCH_ANY */
         {
-            GUID * guid = get_random_guid ();
+            GncGUID * guid = get_random_guid ();
             *guid = *xaccAccountGetGUID (a);
             list = g_list_prepend (list, guid);
         }

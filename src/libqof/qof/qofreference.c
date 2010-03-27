@@ -128,7 +128,7 @@ create_reference(QofInstance *ent, const QofParam *param)
 {
     QofInstanceReference *reference;
     QofInstance          *ref_ent;
-    const GUID         *cm_guid;
+    const GncGUID         *cm_guid;
     char                cm_sa[GUID_ENCODING_LENGTH + 1];
     gchar              *cm_string;
 
@@ -140,7 +140,7 @@ create_reference(QofInstance *ent, const QofParam *param)
     }
     reference = g_new0(QofInstanceReference, 1);
     reference->type = ent->e_type;
-    reference->ref_guid = g_new(GUID, 1);
+    reference->ref_guid = g_new(GncGUID, 1);
     reference->ent_guid = qof_instance_get_guid(ent);
     if (qof_object_is_choice(ent->e_type))
     {

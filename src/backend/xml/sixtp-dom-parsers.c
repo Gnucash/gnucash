@@ -33,7 +33,7 @@
 
 static QofLogModule log_module = GNC_MOD_IO;
 
-GUID*
+GncGUID*
 dom_tree_to_guid(xmlNodePtr node)
 {
     if (!node->properties)
@@ -57,7 +57,7 @@ dom_tree_to_guid(xmlNodePtr node)
         /* handle new and guid the same for the moment */
         if ((safe_strcmp("guid", type) == 0) || (safe_strcmp("new", type) == 0))
         {
-            GUID *gid = g_new(GUID, 1);
+            GncGUID *gid = g_new(GncGUID, 1);
             char *guid_str;
 
             guid_str = (char*)xmlNodeGetContent (node->xmlChildrenNode);
@@ -218,7 +218,7 @@ dom_tree_to_string_kvp_value(xmlNodePtr node)
 kvp_value*
 dom_tree_to_guid_kvp_value(xmlNodePtr node)
 {
-    GUID *daguid;
+    GncGUID *daguid;
     kvp_value *ret = NULL;
 
     daguid = dom_tree_to_guid(node);

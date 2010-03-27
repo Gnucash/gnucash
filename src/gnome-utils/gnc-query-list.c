@@ -786,7 +786,7 @@ gnc_query_list_fill(GNCQueryList *list)
     GNCQueryListPriv *priv;
     gchar *strings[list->num_columns + 1];
     GList *entries, *item;
-    const GUID *guid;
+    const GncGUID *guid;
     gint i;
 
     /* Clear all watches */
@@ -857,7 +857,7 @@ gnc_query_list_fill(GNCQueryList *list)
 
         /* and set a watcher on this item */
         gup = priv->get_guid;
-        guid = (const GUID*)((gup->param_getfcn)(item->data, gup));
+        guid = (const GncGUID*)((gup->param_getfcn)(item->data, gup));
         gnc_gui_component_watch_entity (priv->component_id, guid,
                                         QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 

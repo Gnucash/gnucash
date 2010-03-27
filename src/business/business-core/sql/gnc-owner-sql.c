@@ -55,10 +55,10 @@ load_owner( const GncSqlBackend* be, GncSqlRow* row,
     const GValue* val;
     gchar* buf;
     GncOwnerType type;
-    GUID guid;
+    GncGUID guid;
     QofBook* book;
     GncOwner owner;
-    GUID* pGuid = NULL;
+    GncGUID* pGuid = NULL;
 
     g_return_if_fail( be != NULL );
     g_return_if_fail( row != NULL );
@@ -215,7 +215,7 @@ add_gvalue_owner_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     GValue* subfield_value;
     GncOwner* owner;
     gchar* buf;
-    const GUID* guid;
+    const GncGUID* guid;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
     GncOwnerType type;
     QofInstance* inst = NULL;

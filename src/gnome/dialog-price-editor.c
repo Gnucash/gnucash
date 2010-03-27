@@ -562,7 +562,7 @@ gnc_price_edit_dialog (GtkWidget * parent,
  * Return: nothing                                                  *
 \********************************************************************/
 GNCPrice *
-gnc_price_edit_by_guid (GtkWidget * parent, const GUID * guid)
+gnc_price_edit_by_guid (GtkWidget * parent, const GncGUID * guid)
 {
     GNCPrice *price;
     QofSession *session;

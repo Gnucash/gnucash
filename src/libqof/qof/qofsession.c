@@ -380,7 +380,7 @@ col_ref_cb (QofInstance* ref_ent, gpointer user_data)
     QofInstanceReference *ref;
     QofInstanceCopyData  *qecd;
     QofInstance *ent;
-    const GUID   *cm_guid;
+    const GncGUID   *cm_guid;
     char         cm_sa[GUID_ENCODING_LENGTH + 1];
     gchar        *cm_string;
 
@@ -390,7 +390,7 @@ col_ref_cb (QofInstance* ref_ent, gpointer user_data)
     g_return_if_fail(ent);
     ref = g_new0(QofInstanceReference, 1);
     ref->type = ent->e_type;
-    ref->ref_guid = g_new(GUID, 1);
+    ref->ref_guid = g_new(GncGUID, 1);
     ref->ent_guid = qof_instance_get_guid(ent);
     ref->param = qof_class_get_parameter(ent->e_type,
                                          qecd->param->param_name);
@@ -414,7 +414,7 @@ qof_instance_foreach_copy(gpointer data, gpointer user_data)
     /* cm_ prefix used for variables that hold the data to commit */
     QofParam 		*cm_param;
     gchar 			*cm_string, *cm_char;
-    const GUID 		*cm_guid;
+    const GncGUID 		*cm_guid;
     KvpFrame 		*cm_kvp;
     QofCollection *cm_col;
     /* function pointers and variables for parameter getters that don't use pointers normally */
@@ -428,7 +428,7 @@ qof_instance_foreach_copy(gpointer data, gpointer user_data)
     void	(*string_setter)	(QofInstance*, const char*);
     void	(*date_setter)		(QofInstance*, Timespec);
     void	(*numeric_setter)	(QofInstance*, gnc_numeric);
-    void	(*guid_setter)		(QofInstance*, const GUID*);
+    void	(*guid_setter)		(QofInstance*, const GncGUID*);
     void	(*double_setter)	(QofInstance*, double);
     void	(*boolean_setter)	(QofInstance*, gboolean);
     void	(*i32_setter)		(QofInstance*, gint32);
@@ -484,8 +484,8 @@ qof_instance_foreach_copy(gpointer data, gpointer user_data)
     }
     if (safe_strcmp(cm_param->param_type, QOF_TYPE_GUID) == 0)
     {
-        cm_guid = (const GUID*)cm_param->param_getfcn(importEnt, cm_param);
-        guid_setter = (void(*)(QofInstance*, const GUID*))cm_param->param_setfcn;
+        cm_guid = (const GncGUID*)cm_param->param_getfcn(importEnt, cm_param);
+        guid_setter = (void(*)(QofInstance*, const GncGUID*))cm_param->param_setfcn;
         if (guid_setter != NULL)
         {
             guid_setter(targetEnt, cm_guid);
@@ -591,7 +591,7 @@ static gboolean
 qof_instance_guid_match(QofSession *new_session, QofInstance *original)
 {
     QofInstance *copy;
-    const GUID *g;
+    const GncGUID *g;
     QofIdTypeConst type;
     QofBook *targetBook;
     QofCollection *coll;
@@ -618,7 +618,7 @@ qof_instance_list_foreach(gpointer data, gpointer user_data)
     QofInstance *original;
     QofInstance *inst;
     QofBook *book;
-    const GUID *g;
+    const GncGUID *g;
 
     g_return_if_fail(data != NULL);
     original = QOF_INSTANCE(data);
@@ -660,7 +660,7 @@ static void
 qof_instance_coll_foreach(QofInstance *original, gpointer user_data)
 {
     QofInstanceCopyData *qecd;
-    const GUID *g;
+    const GncGUID *g;
     QofBook *targetBook;
     QofCollection *coll;
     QofInstance *copy;
@@ -685,7 +685,7 @@ qof_instance_coll_copy(QofInstance *original, gpointer user_data)
     QofInstanceCopyData *qecd;
     QofBook *book;
     QofInstance *inst;
-    const GUID *g;
+    const GncGUID *g;
 
     g_return_if_fail(original != NULL);
     g_return_if_fail(user_data != NULL);

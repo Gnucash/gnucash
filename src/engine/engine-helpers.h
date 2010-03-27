@@ -49,8 +49,8 @@ SCM      gnc_timespec2timepair(Timespec t);
 Timespec gnc_timepair2timespec(SCM x);
 int      gnc_timepair_p(SCM x);
 
-SCM  gnc_guid2scm(GUID guid);
-GUID gnc_scm2guid(SCM guid_scm);
+SCM  gnc_guid2scm(GncGUID guid);
+GncGUID gnc_scm2guid(SCM guid_scm);
 int  gnc_guid_p(SCM guid_scm);
 
 /* for a list of strings */

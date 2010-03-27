@@ -22,7 +22,7 @@
  */
 
 /* Test file created by Linas Vepstas <linas@linas.org>
- * Try to create duplicate GUID's, which should never happen.
+ * Try to create duplicate GncGUID's, which should never happen.
  *
  */
 
@@ -38,8 +38,8 @@
 
 static void test_null_guid(void)
 {
-    GUID g;
-    GUID *gp;
+    GncGUID g;
+    GncGUID *gp;
 
     g = guid_new_return();
     gp = guid_malloc();
@@ -58,7 +58,7 @@ run_test (void)
     QofInstance *ent, *eblk[NENT];
     QofCollection *col;
     QofIdType type;
-    GUID guid;
+    GncGUID guid;
 
     sess = get_random_session ();
     book = qof_session_get_book (sess);

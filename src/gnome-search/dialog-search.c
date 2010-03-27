@@ -519,7 +519,7 @@ search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
 
     if (res)
     {
-        const GUID *guid = (const GUID *) ((sw->get_guid->param_getfcn)(res, sw->get_guid));
+        const GncGUID *guid = (const GncGUID *) ((sw->get_guid->param_getfcn)(res, sw->get_guid));
         QueryOp op = QUERY_OR;
 
         if (!sw->q)

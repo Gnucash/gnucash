@@ -110,9 +110,9 @@ int gncVendorCompare (const GncVendor *a, const GncVendor *b);
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
  *  Equivalent function prototype is
- *  GncVendor * gncVendorLookup (QofBook *book, const GUID *guid);
+ *  GncVendor * gncVendorLookup (QofBook *book, const GncGUID *guid);
  */
-static inline GncVendor * gncVendorLookup (const QofBook *book, const GUID *guid)
+static inline GncVendor * gncVendorLookup (const QofBook *book, const GncGUID *guid)
 {
     QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_VENDOR, GncVendor);
 }

@@ -36,7 +36,7 @@
 xmlNodePtr text_to_dom_tree(const char *tag, const char *str);
 xmlNodePtr int_to_dom_tree(const char *tag, gint64 val);
 xmlNodePtr boolean_to_dom_tree(const char* tag, gboolean val);
-xmlNodePtr guid_to_dom_tree(const char *tag, const GUID* gid);
+xmlNodePtr guid_to_dom_tree(const char *tag, const GncGUID* gid);
 xmlNodePtr commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c);
 xmlNodePtr timespec_to_dom_tree(const char *tag, const Timespec *spec);
 gchar * timespec_nsec_to_string(const Timespec *ts);

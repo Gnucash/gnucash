@@ -1005,7 +1005,7 @@ _show_created_transactions(GncSxSinceLastRunDialog *app_dialog, GList *created_t
     xaccQuerySetBook(book_query, gnc_get_current_book());
     for (guid_iter = created_txn_guids; guid_iter != NULL; guid_iter = guid_iter->next)
     {
-        xaccQueryAddGUIDMatch(guid_query, (GUID*)guid_iter->data, GNC_ID_TRANS, QUERY_OR);
+        xaccQueryAddGUIDMatch(guid_query, (GncGUID*)guid_iter->data, GNC_ID_TRANS, QUERY_OR);
     }
     query = xaccQueryMerge(book_query, guid_query, QUERY_AND);
 

@@ -92,7 +92,7 @@ test_job (void)
 
     /* Test setting/getting routines; does the active flag get set right? */
     {
-        GUID guid;
+        GncGUID guid;
 
         test_string_fcn (book, "Id", gncJobSetID, gncJobGetID);
         test_string_fcn (book, "Name", gncJobSetName, gncJobGetName);

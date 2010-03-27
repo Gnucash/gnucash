@@ -228,7 +228,7 @@ qof_query_pred_data_to_xml (QofQueryPredData *pd)
     if (!safe_strcmp (pd->type_name, QOF_TYPE_GUID))
     {
         topnode = xmlNewNode (NULL, "qofquery:pred-guid");
-        /* GUID Predicate doesn't do a PUT_HOW */
+        /* GncGUID Predicate doesn't do a PUT_HOW */
 
         pdata_g = (query_guid_t) pd;
         PUT_MATCH5("qofquery:guid-match", pdata_g->options,

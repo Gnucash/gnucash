@@ -58,7 +58,7 @@ static QofLogModule log_module = GNC_MOD_LEDGER;
 /* The copied split or transaction, if any */
 static CursorClass copied_class = CURSOR_CLASS_NONE;
 static SCM copied_item = SCM_UNDEFINED;
-static GUID copied_leader_guid;
+static GncGUID copied_leader_guid;
 
 
 /** static prototypes *****************************************************/
@@ -839,7 +839,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
                                 "transaction. "
                                 "Are you sure you want to do that?");
         Account * copied_leader;
-        const GUID *new_guid;
+        const GncGUID *new_guid;
         int trans_split_index;
         int split_index;
         int num_splits;

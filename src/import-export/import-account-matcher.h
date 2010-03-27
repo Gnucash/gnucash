@@ -44,7 +44,7 @@
     normal mode of operation. Can be NULL.
 
     If account_online_id_value==NULL, you basically end up with an account
-    selector that allows you to select an account whose GUID will be
+    selector that allows you to select an account whose GncGUID will be
     remembered elsewhere.  You would fill account_human_description to tell
     the user what he is looking for.  In this mode, the  online_id
     kvp_frame of the found account will not be touched.  To use this mode,

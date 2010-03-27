@@ -95,7 +95,7 @@ void
 qof_collection_remove_entity (QofInstance *ent)
 {
     QofCollection *col;
-    const GUID *guid;
+    const GncGUID *guid;
 
     if (!ent) return;
     col = qof_instance_get_collection(ent);
@@ -110,7 +110,7 @@ qof_collection_remove_entity (QofInstance *ent)
 void
 qof_collection_insert_entity (QofCollection *col, QofInstance *ent)
 {
-    const GUID *guid;
+    const GncGUID *guid;
 
     if (!col || !ent) return;
     guid = qof_instance_get_guid(ent);
@@ -127,7 +127,7 @@ gboolean
 qof_collection_add_entity (QofCollection *coll, QofInstance *ent)
 {
     QofInstance *e;
-    const GUID *guid;
+    const GncGUID *guid;
 
     e = NULL;
     if (!coll || !ent)
@@ -177,7 +177,7 @@ collection_compare_cb (QofInstance *ent, gpointer user_data)
 {
     QofCollection *target;
     QofInstance *e;
-    const GUID *guid;
+    const GncGUID *guid;
     gint value;
 
     e = NULL;
@@ -249,7 +249,7 @@ qof_collection_compare (QofCollection *target, QofCollection *merge)
 }
 
 QofInstance *
-qof_collection_lookup_entity (const QofCollection *col, const GUID * guid)
+qof_collection_lookup_entity (const QofCollection *col, const GncGUID * guid)
 {
     QofInstance *ent;
     g_return_val_if_fail (col, NULL);

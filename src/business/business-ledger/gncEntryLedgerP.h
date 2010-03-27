@@ -30,7 +30,7 @@
 
 struct GncEntryLedger_s
 {
-    GUID		blank_entry_guid;
+    GncGUID		blank_entry_guid;
     gboolean	blank_entry_edited;
     gboolean      traverse_to_new;
 

@@ -1970,7 +1970,7 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
 static gpointer
 gnc_split_register_guid_malloc (void)
 {
-    GUID *guid;
+    GncGUID *guid;
 
     guid = guid_malloc ();
 
@@ -2002,7 +2002,7 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
     if (kvpf)
     {
         Account *account;
-        GUID *guid;
+        GncGUID *guid;
 
         guid = kvp_value_get_guid(
                    kvp_frame_get_slot_path(kvpf, "sched-xaction", "account", NULL));
@@ -2149,8 +2149,8 @@ gnc_split_register_guid_free (gpointer guid)
 static void
 gnc_split_register_guid_copy (gpointer p_to, gconstpointer p_from)
 {
-    GUID *to = p_to;
-    const GUID *from = p_from;
+    GncGUID *to = p_to;
+    const GncGUID *from = p_from;
 
     g_return_if_fail (to != NULL);
     *to = from ? *from : *guid_null();

@@ -77,8 +77,8 @@ back_associate_expense_accounts(Account *stock_account,
 {
     KvpFrame *acc_frame;
     KvpValue *val, *stock_acc_guid_kvpval, *stock_acc_category_kvpval;
-    const GUID *stock_acc_guid;
-    const GUID *existing_acc_guid;
+    const GncGUID *stock_acc_guid;
+    const GncGUID *existing_acc_guid;
 
     stock_acc_guid = xaccAccountGetGUID(stock_account);
     stock_acc_guid_kvpval = kvp_value_new_guid(stock_acc_guid);
@@ -110,8 +110,8 @@ back_associate_income_accounts(Account *stock_account,
 {
     KvpFrame *acc_frame;
     KvpValue *val, *stock_acc_guid_kvpval, *stock_acc_category_kvpval;
-    const GUID *stock_acc_guid;
-    const GUID *existing_acc_guid;
+    const GncGUID *stock_acc_guid;
+    const GncGUID *existing_acc_guid;
 
     stock_acc_guid = xaccAccountGetGUID(stock_account);
     stock_acc_guid_kvpval = kvp_value_new_guid(stock_acc_guid);
@@ -142,7 +142,7 @@ make_kvpd_on_list(GList *account_list)
     KvpValue *retval;
     KvpValue *guid_kvp;
     GList  *kvp_acc_list = NULL;
-    const GUID *acc_id;
+    const GncGUID *acc_id;
 
     for (iter = account_list; iter; iter = g_list_next(iter))
     {
@@ -420,7 +420,7 @@ gnc_tracking_dissociate_account(Account *inc_or_expense_account)
     KvpFrame *stock_account_kvpframe, *assoc_acc_kvpframe;
     KvpFrame *current_account_kvpframe;
     KvpValue *stock_account_kvpval, *acc_list_kvpval, *category_kvpval;
-    const GUID *stock_account_guid, *inc_or_expense_account_guid, *current_guid;
+    const GncGUID *stock_account_guid, *inc_or_expense_account_guid, *current_guid;
     Account *stock_account;
     char *category_name;
     GList *assoc_acc_list, *assoc_acc_list_start;

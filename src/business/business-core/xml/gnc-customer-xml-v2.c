@@ -187,7 +187,7 @@ static gboolean
 customer_guid_handler (xmlNodePtr node, gpointer cust_pdata)
 {
     struct customer_pdata *pdata = cust_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncCustomer *cust;
 
     guid = dom_tree_to_guid(node);
@@ -229,7 +229,7 @@ static gboolean
 customer_terms_handler (xmlNodePtr node, gpointer cust_pdata)
 {
     struct customer_pdata *pdata = cust_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncBillTerm *term;
 
     guid = dom_tree_to_guid(node);
@@ -335,7 +335,7 @@ static gboolean
 customer_taxtable_handler (xmlNodePtr node, gpointer cust_pdata)
 {
     struct customer_pdata *pdata = cust_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncTaxTable *taxtable;
 
     guid = dom_tree_to_guid (node);

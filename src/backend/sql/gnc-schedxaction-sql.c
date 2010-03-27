@@ -80,7 +80,7 @@ static const GncSqlColumnTableEntry col_table[] =
 static /*@ null @*/ SchedXaction*
 load_single_sx( GncSqlBackend* be, GncSqlRow* row )
 {
-    const GUID* guid;
+    const GncGUID* guid;
 	SchedXaction* pSx;
 	GList* schedule;
 	GDate start_date;
@@ -161,7 +161,7 @@ gboolean
 gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst )
 {
     SchedXaction* pSx;
-    const GUID* guid;
+    const GncGUID* guid;
 	gint op;
 	gboolean is_infant;
 	gboolean is_ok;

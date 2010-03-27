@@ -186,7 +186,7 @@ Use kvp_frame_set_string instead of kvp_frame_set_str
  *    *NOT* copy the frame.
  */
 void kvp_frame_set_string(KvpFrame * frame, const gchar * path, const gchar* str);
-void kvp_frame_set_guid(KvpFrame * frame, const gchar * path, const GUID *guid);
+void kvp_frame_set_guid(KvpFrame * frame, const gchar * path, const GncGUID *guid);
 
 void kvp_frame_set_frame(KvpFrame *frame, const gchar *path, KvpFrame *chld);
 void kvp_frame_set_frame_nc(KvpFrame *frame, const gchar *path, KvpFrame *chld);
@@ -295,7 +295,7 @@ Use kvp_frame_add_string instead of kvp_frame_add_str
  *    *NOT* copy the frame.
  */
 void kvp_frame_add_string(KvpFrame * frame, const gchar * path, const gchar* str);
-void kvp_frame_add_guid(KvpFrame * frame, const gchar * path, const GUID *guid);
+void kvp_frame_add_guid(KvpFrame * frame, const gchar * path, const GncGUID *guid);
 
 void kvp_frame_add_frame(KvpFrame *frame, const gchar *path, KvpFrame *chld);
 void kvp_frame_add_frame_nc(KvpFrame *frame, const gchar *path, KvpFrame *chld);
@@ -332,7 +332,7 @@ KvpFrame * kvp_frame_add_value_nc(KvpFrame * frame, const gchar * path, KvpValue
   If any part of the path does not exist, then NULL or zero will be
   returned.
 
-  The values returned for GUID, binary, GList, KvpFrame and string
+  The values returned for GncGUID, binary, GList, KvpFrame and string
   are "non-copying" -- the returned item is the actual item stored.
   Do not delete this item unless you take the required care to avoid
   possible bad pointer derefrences (i.e. core dumps).  Also, be
@@ -351,7 +351,7 @@ gint64      kvp_frame_get_gint64(const KvpFrame *frame, const gchar *path);
 double      kvp_frame_get_double(const KvpFrame *frame, const gchar *path);
 gnc_numeric kvp_frame_get_numeric(const KvpFrame *frame, const gchar *path);
 const gchar * kvp_frame_get_string(const KvpFrame *frame, const gchar *path);
-GUID      * kvp_frame_get_guid(const KvpFrame *frame, const gchar *path);
+GncGUID      * kvp_frame_get_guid(const KvpFrame *frame, const gchar *path);
 void      * kvp_frame_get_binary(const KvpFrame *frame, const gchar *path,
                                  guint64 * size_return);
 Timespec    kvp_frame_get_timespec(const KvpFrame *frame, const gchar *path);
@@ -561,7 +561,7 @@ Use kvp_value_new_numeric instead of kvp_value_new_gnc_numeric
 #define kvp_value_new_gnc_numeric kvp_value_new_numeric
 KvpValue   * kvp_value_new_numeric(gnc_numeric value);
 KvpValue   * kvp_value_new_string(const gchar * value);
-KvpValue   * kvp_value_new_guid(const GUID * guid);
+KvpValue   * kvp_value_new_guid(const GncGUID * guid);
 KvpValue   * kvp_value_new_timespec(Timespec timespec);
 KvpValue   * kvp_value_new_binary(const void * data, guint64 datasize);
 KvpValue   * kvp_value_new_frame(const KvpFrame * value);
@@ -611,7 +611,7 @@ GList * kvp_value_replace_glist_nc(KvpValue *value, GList *newlist);
 KvpValueType kvp_value_get_type(const KvpValue * value);
 
 
-/** Value accessors. Those for GUID, binary, GList, KvpFrame and
+/** Value accessors. Those for GncGUID, binary, GList, KvpFrame and
  *   string are non-copying -- the caller can modify the value
  *   directly. Just don't free it, or you screw up everything.
  *   Note that if another value is stored at the key location
@@ -631,7 +631,7 @@ char        * kvp_value_get_string(const KvpValue * value);
 
 /** Value accessor. This one is non-copying -- the caller can modify
  * the value directly. */
-GUID        * kvp_value_get_guid(const KvpValue * value);
+GncGUID        * kvp_value_get_guid(const KvpValue * value);
 
 /** Value accessor. This one is non-copying -- the caller can modify
  * the value directly. */

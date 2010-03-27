@@ -78,7 +78,7 @@ struct _job_window
     GtkWidget *	active_check;
 
     JobDialogType	dialog_type;
-    GUID		job_guid;
+    GncGUID		job_guid;
     gint		component_id;
     QofBook *	book;
     GncJob *	created_job;
@@ -289,7 +289,7 @@ gnc_job_window_refresh_handler (GHashTable *changes, gpointer user_data)
 static gboolean
 find_handler (gpointer find_data, gpointer user_data)
 {
-    const GUID *job_guid = find_data;
+    const GncGUID *job_guid = find_data;
     JobWindow *jw = user_data;
 
     return(jw && guid_equal(&jw->job_guid, job_guid));
@@ -308,7 +308,7 @@ gnc_job_new_window (QofBook *bookp, GncOwner *owner, GncJob *job)
      */
     if (job)
     {
-        GUID job_guid;
+        GncGUID job_guid;
 
         job_guid = *gncJobGetGUID (job);
         jw = gnc_find_first_gui_component (DIALOG_EDIT_JOB_CM_CLASS,

@@ -342,7 +342,7 @@ gboolean xaccSplitEqual(const Split *sa, const Split *sb,
 /** The xaccSplitLookup() subroutine will return the
  *    split associated with the given id, or NULL
  *    if there is no such split. */
-Split      * xaccSplitLookup (const GUID *guid, QofBook *book);
+Split      * xaccSplitLookup (const GncGUID *guid, QofBook *book);
 #define      xaccSplitLookupDirect(g,b) xaccSplitLookup(&(g),b)
 
 

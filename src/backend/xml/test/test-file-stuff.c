@@ -187,9 +187,9 @@ equals_node_val_vs_boolean(xmlNodePtr node, gboolean val)
 }
 
 gboolean
-equals_node_val_vs_guid(xmlNodePtr node, const GUID *id)
+equals_node_val_vs_guid(xmlNodePtr node, const GncGUID *id)
 {
-    GUID *cmpid;
+    GncGUID *cmpid;
 
     g_return_val_if_fail(node, FALSE);
     g_return_val_if_fail(id, FALSE);

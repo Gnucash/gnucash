@@ -51,7 +51,7 @@ static void set_invisible( gpointer data, gboolean value );
 typedef struct
 {
     GncSqlBackend* be;
-    const GUID* guid;
+    const GncGUID* guid;
 } guid_info_t;
 
 static gpointer get_obj_guid( gpointer pObject, const QofParam* param );
@@ -123,7 +123,7 @@ static GncSqlColumnTableEntry guid_col_table[] =
 
 typedef struct {
 	/*@ dependent @*/ GncTaxTable* tt;
-	GUID guid;
+	GncGUID guid;
     gboolean have_guid;
 } taxtable_parent_guid_struct;
 
@@ -140,7 +140,7 @@ get_obj_guid( gpointer pObject, const QofParam* param )
 static void
 set_obj_guid( gpointer pObject, gpointer pValue )
 {
-    // Nowhere to put the GUID
+    // Nowhere to put the GncGUID
 }
 
 static void
@@ -173,7 +173,7 @@ bt_get_parent( gpointer pObject )
 {
     const GncTaxTable* tt;
     const GncTaxTable* pParent;
-    const GUID* parent_guid;
+    const GncGUID* parent_guid;
 
 	g_return_val_if_fail( pObject != NULL, NULL );
 	g_return_val_if_fail( GNC_IS_TAXTABLE(pObject), NULL );
@@ -195,7 +195,7 @@ tt_set_parent( gpointer data, gpointer value )
     GncTaxTable* tt;
     GncTaxTable* parent;
     QofBook* pBook;
-    GUID* guid = (GUID*)value;
+    GncGUID* guid = (GncGUID*)value;
 
     g_return_if_fail( data != NULL );
     g_return_if_fail( GNC_IS_TAXTABLE(data) );
@@ -216,7 +216,7 @@ static void
 tt_set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
 	taxtable_parent_guid_struct* s = (taxtable_parent_guid_struct*)pObject;
-    GUID* guid = (GUID*)pValue;
+    GncGUID* guid = (GncGUID*)pValue;
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( pValue != NULL );
@@ -278,7 +278,7 @@ static void
 load_single_taxtable( GncSqlBackend* be, GncSqlRow* row,
 					GList** l_tt_needing_parents )
 {
-    const GUID* guid;
+    const GncGUID* guid;
     GncTaxTable* tt;
 
     g_return_if_fail( be != NULL );
@@ -296,7 +296,7 @@ load_single_taxtable( GncSqlBackend* be, GncSqlRow* row,
 
     /* If the tax table doesn't have a parent, it might be because it hasn't been loaded yet.
        If so, add this tax table to the list of tax tables with no parent, along with the parent
-       GUID so that after they are all loaded, the parents can be fixed up. */
+       GncGUID so that after they are all loaded, the parents can be fixed up. */
     if( gncTaxTableGetParent( tt ) == NULL ) {
 		taxtable_parent_guid_struct* s = g_malloc( (gsize)sizeof(taxtable_parent_guid_struct) );
 		g_assert( s != NULL );
@@ -398,7 +398,7 @@ create_taxtable_tables( GncSqlBackend* be )
 
 /* ================================================================= */
 static gboolean
-delete_all_tt_entries( GncSqlBackend* be, const GUID* guid )
+delete_all_tt_entries( GncSqlBackend* be, const GncGUID* guid )
 {
     guid_info_t guid_info;
 
@@ -412,7 +412,7 @@ delete_all_tt_entries( GncSqlBackend* be, const GUID* guid )
 }
 
 static gboolean
-save_tt_entries( GncSqlBackend* be, const GUID* guid, GList* entries )
+save_tt_entries( GncSqlBackend* be, const GncGUID* guid, GList* entries )
 {
     GList* entry;
     gboolean is_ok;
@@ -440,7 +440,7 @@ static gboolean
 save_taxtable( GncSqlBackend* be, QofInstance* inst )
 {
     GncTaxTable* tt;
-    const GUID* guid;
+    const GncGUID* guid;
     gint op;
     gboolean is_infant;
     gboolean is_ok;
@@ -524,7 +524,7 @@ load_taxtable_guid( const GncSqlBackend* be, GncSqlRow* row,
                     const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
-    GUID guid;
+    GncGUID guid;
     GncTaxTable* taxtable = NULL;
 
     g_return_if_fail( be != NULL );

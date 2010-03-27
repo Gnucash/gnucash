@@ -97,7 +97,7 @@ static GncSqlColumnTableEntry billterm_parent_col_table[] =
 
 typedef struct {
 	/*@ dependent @*/ GncBillTerm* billterm;
-	GUID guid;
+	GncGUID guid;
     gboolean have_guid;
 } billterm_parent_guid_struct;
 
@@ -119,7 +119,7 @@ bt_get_parent( gpointer pObject )
 {
     const GncBillTerm* billterm;
     const GncBillTerm* pParent;
-    const GUID* parent_guid;
+    const GncGUID* parent_guid;
 
 	g_return_val_if_fail( pObject != NULL, NULL );
 	g_return_val_if_fail( GNC_IS_BILLTERM(pObject), NULL );
@@ -141,7 +141,7 @@ bt_set_parent( gpointer data, gpointer value )
     GncBillTerm* billterm;
     GncBillTerm* parent;
     QofBook* pBook;
-    GUID* guid = (GUID*)value;
+    GncGUID* guid = (GncGUID*)value;
 
     g_return_if_fail( data != NULL );
     g_return_if_fail( GNC_IS_BILLTERM(data) );
@@ -162,7 +162,7 @@ static void
 bt_set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
 	billterm_parent_guid_struct* s = (billterm_parent_guid_struct*)pObject;
-    GUID* guid = (GUID*)pValue;
+    GncGUID* guid = (GncGUID*)pValue;
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( pValue != NULL );
@@ -175,7 +175,7 @@ static GncBillTerm*
 load_single_billterm( GncSqlBackend* be, GncSqlRow* row,
 					GList** l_billterms_needing_parents )
 {
-    const GUID* guid;
+    const GncGUID* guid;
     GncBillTerm* pBillTerm;
 
     g_return_val_if_fail( be != NULL, NULL );
@@ -191,7 +191,7 @@ load_single_billterm( GncSqlBackend* be, GncSqlRow* row,
 
     /* If the billterm doesn't have a parent, it might be because it hasn't been loaded yet.
        If so, add this billterm to the list of billterms with no parent, along with the parent
-       GUID so that after they are all loaded, the parents can be fixed up. */
+       GncGUID so that after they are all loaded, the parents can be fixed up. */
     if ( gncBillTermGetParent( pBillTerm ) == NULL )
     {
 		billterm_parent_guid_struct* s = g_malloc( (gsize)sizeof(billterm_parent_guid_struct) );
@@ -346,7 +346,7 @@ load_billterm_guid( const GncSqlBackend* be, GncSqlRow* row,
                     const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
-    GUID guid;
+    GncGUID guid;
     GncBillTerm* term = NULL;
 
     g_return_if_fail( be != NULL );

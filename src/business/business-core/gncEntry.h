@@ -220,9 +220,9 @@ GncInvoice * gncEntryGetBill (const GncEntry *entry);
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
  *  Equivalent function prototype is
- *  GncEntry * gncEntryLookup (QofBook *book, const GUID *guid);
+ *  GncEntry * gncEntryLookup (QofBook *book, const GncGUID *guid);
  */
-static inline GncEntry * gncEntryLookup (const QofBook *book, const GUID *guid)
+static inline GncEntry * gncEntryLookup (const QofBook *book, const GncGUID *guid)
 {
     QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_ENTRY, GncEntry);
 }

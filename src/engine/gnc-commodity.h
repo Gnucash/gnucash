@@ -31,7 +31,7 @@
     must identify the commodity that is being traded.
 
     @warning The system used here does not follow the object
-    handling and identification system (GUID's, Entities, etc.)
+    handling and identification system (GncGUID's, Entities, etc.)
     that the other parts of GnuCash use.  The API really should be
     ported over.  This would allow us to get rid of the
     commodity table routines defined below.
@@ -723,8 +723,8 @@ gnc_commodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
         const char * fullname);
 
 /*@ dependent @*/
-gnc_commodity * gnc_commodity_find_commodity_by_guid(const GUID *guid, QofBook *book);
-gnc_commodity_namespace * gnc_commodity_find_namespace_by_guid(const GUID *guid, QofBook *book);
+gnc_commodity * gnc_commodity_find_commodity_by_guid(const GncGUID *guid, QofBook *book);
+gnc_commodity_namespace * gnc_commodity_find_namespace_by_guid(const GncGUID *guid, QofBook *book);
 
 /** @} */
 /* ---------------------------------------------------------- */

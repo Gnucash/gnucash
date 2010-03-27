@@ -1629,7 +1629,7 @@ xaccAccountBringUpToDate(Account *acc)
 \********************************************************************/
 
 void
-xaccAccountSetGUID (Account *acc, const GUID *guid)
+xaccAccountSetGUID (Account *acc, const GncGUID *guid)
 {
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
     g_return_if_fail(guid);
@@ -1646,7 +1646,7 @@ xaccAccountSetGUID (Account *acc, const GUID *guid)
 \********************************************************************/
 
 Account *
-xaccAccountLookup (const GUID *guid, QofBook *book)
+xaccAccountLookup (const GncGUID *guid, QofBook *book)
 {
     QofCollection *col;
     if (!guid || !book) return NULL;

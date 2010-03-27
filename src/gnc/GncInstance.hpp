@@ -55,7 +55,7 @@ public:
     { }
 
     GncInstance< ::QofBook > getBook() const { return qof_instance_get_book (QOF_INSTANCE(base_class::get())); }
-    ::GUID getGUID() const { return qof_entity_get_guid(QOF_INSTANCE(base_class::get())); }
+    ::GncGUID getGUID() const { return qof_entity_get_guid(QOF_INSTANCE(base_class::get())); }
 
     bool is_dirty() const { return qof_instance_get_dirty(QOF_INSTANCE(base_class::get())); }
     void set_dirty() { return qof_instance_set_dirty(QOF_INSTANCE(base_class::get())); }

@@ -100,7 +100,7 @@ struct _employee_window
     /* ACL? */
 
     EmployeeDialogType	dialog_type;
-    GUID		employee_guid;
+    GncGUID		employee_guid;
     gint		component_id;
     QofBook *	book;
     GncEmployee *	created_employee;
@@ -382,7 +382,7 @@ gnc_employee_window_refresh_handler (GHashTable *changes, gpointer user_data)
 static gboolean
 find_handler (gpointer find_data, gpointer user_data)
 {
-    const GUID *employee_guid = find_data;
+    const GncGUID *employee_guid = find_data;
     EmployeeWindow *ew = user_data;
 
     return(ew && guid_equal(&ew->employee_guid, employee_guid));
@@ -406,7 +406,7 @@ gnc_employee_new_window (QofBook *bookp,
      */
     if (employee)
     {
-        GUID employee_guid;
+        GncGUID employee_guid;
 
         employee_guid = *gncEmployeeGetGUID (employee);
         ew = gnc_find_first_gui_component (DIALOG_EDIT_EMPLOYEE_CM_CLASS,

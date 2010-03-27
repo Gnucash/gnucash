@@ -131,7 +131,7 @@ GType qof_book_get_type(void);
  * used for anchoring data.
  */
 
-/** This macro looks up an entity by GUID and returns a pointer to the
+/** This macro looks up an entity by GncGUID and returns a pointer to the
  * entity by ending with a "return" statement. Hence, this macro can
  * only be used as the last statement in the definition of a function,
  * but not somewhere inline in the code. */

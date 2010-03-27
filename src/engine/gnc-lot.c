@@ -276,7 +276,7 @@ gnc_lot_commit_edit (GNCLot *lot)
 /* ============================================================= */
 
 GNCLot *
-gnc_lot_lookup (const GUID *guid, QofBook *book)
+gnc_lot_lookup (const GncGUID *guid, QofBook *book)
 {
     QofCollection *col;
     if (!guid || !book) return NULL;

@@ -91,13 +91,13 @@ gnc_split_register_load_type_cells (SplitRegister *reg)
  *  style keeps all the transaction-level data and totals in the leading
  *  cell, and all split-level data in the cells that follow.
  *
- *  Each of these cells will remember the GUID of the ::Split to which it
- *  is associated. The leading virtual cell will be assigned the GUID of
+ *  Each of these cells will remember the GncGUID of the ::Split to which it
+ *  is associated. The leading virtual cell will be assigned the GncGUID of
  *  the "anchoring split" specified by @a split.
  *
  *  Optionally an extra, empty virtual cell will be assigned to no split.
  *  This should not be confused with the "blank split", because this cell is
- *  not tied to any split at all, not even the "blank split". A null GUID
+ *  not tied to any split at all, not even the "blank split". A null GncGUID
  *  is assigned to it.
  *
  *  The caller can find out which virtual row was used for a particular virtual

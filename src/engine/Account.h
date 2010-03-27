@@ -174,7 +174,7 @@ Account * xaccMallocAccount (QofBook *book);
 Account * gnc_account_create_root (QofBook *book);
 
 /** The xaccCloneAccount() does the same as xaccCloneAccountSimple(),
- *    except that it also also places a pair of GUID-pointers
+ *    except that it also also places a pair of GncGUID-pointers
  *    of each account to the other, in the other's kvp slot.
  *    The guid pointers are stored under the under the kvp
  *    path "gemini".
@@ -224,7 +224,7 @@ int xaccAccountOrder (const Account *account_1, const Account *account_2);
 
 /* ------------------ */
 
-/** @name Account lookup and GUID routines
+/** @name Account lookup and GncGUID routines
  @{ */
 
 /** Returns the account separation character chosen by the user.
@@ -246,7 +246,7 @@ void gnc_book_set_root_account(QofBook *book, Account *root);
 /** The xaccAccountLookup() subroutine will return the
  *    account associated with the given id, or NULL
  *    if there is no such account. */
-/*@ dependent @*/ Account * xaccAccountLookup (const GUID *guid, QofBook *book);
+/*@ dependent @*/ Account * xaccAccountLookup (const GncGUID *guid, QofBook *book);
 #define xaccAccountLookupDirect(g,b) xaccAccountLookup(&(g),b)
 
 /** @} */

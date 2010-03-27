@@ -90,7 +90,7 @@ Split *
 gnc_split_register_get_split (SplitRegister *reg,
                               VirtualCellLocation vcell_loc)
 {
-    GUID *guid;
+    GncGUID *guid;
 
     if (reg == NULL)
         return NULL;

@@ -233,7 +233,7 @@ static gboolean
 spl_id_handler(xmlNodePtr node, gpointer data)
 {
     struct split_pdata *pdata = data;
-    GUID *tmp = dom_tree_to_guid(node);
+    GncGUID *tmp = dom_tree_to_guid(node);
     g_return_val_if_fail(tmp, FALSE);
 
     xaccSplitSetGUID(pdata->split, tmp);
@@ -304,7 +304,7 @@ static gboolean
 spl_account_handler(xmlNodePtr node, gpointer data)
 {
     struct split_pdata *pdata = data;
-    GUID *id = dom_tree_to_guid(node);
+    GncGUID *id = dom_tree_to_guid(node);
     Account *account;
 
     g_return_val_if_fail(id, FALSE);
@@ -330,7 +330,7 @@ static gboolean
 spl_lot_handler(xmlNodePtr node, gpointer data)
 {
     struct split_pdata *pdata = data;
-    GUID *id = dom_tree_to_guid(node);
+    GncGUID *id = dom_tree_to_guid(node);
     GNCLot *lot;
 
     g_return_val_if_fail(id, FALSE);
@@ -449,7 +449,7 @@ trn_id_handler(xmlNodePtr node, gpointer trans_pdata)
 {
     struct trans_pdata *pdata = trans_pdata;
     Transaction *trn = pdata->trans;
-    GUID *tmp = dom_tree_to_guid(node);
+    GncGUID *tmp = dom_tree_to_guid(node);
 
     g_return_val_if_fail(tmp, FALSE);
 

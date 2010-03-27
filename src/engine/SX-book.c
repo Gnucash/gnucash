@@ -361,7 +361,7 @@ GList*
 gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct)
 {
     GList *rtn = NULL;
-    const GUID *acct_guid = qof_entity_get_guid(QOF_INSTANCE(acct));
+    const GncGUID *acct_guid = qof_entity_get_guid(QOF_INSTANCE(acct));
     GList *sx_list = gnc_book_get_schedxactions(book)->sx_list;
     for (; sx_list != NULL; sx_list = sx_list->next)
     {
@@ -371,7 +371,7 @@ gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct)
         {
             Split *s = (Split*)splits->data;
             KvpFrame *frame = kvp_frame_get_frame(xaccSplitGetSlots(s), GNC_SX_ID);
-            GUID *sx_split_acct_guid = kvp_frame_get_guid(frame, GNC_SX_ACCOUNT);
+            GncGUID *sx_split_acct_guid = kvp_frame_get_guid(frame, GNC_SX_ACCOUNT);
             if (guid_equal(acct_guid, sx_split_acct_guid))
             {
                 rtn = g_list_append(rtn, sx);

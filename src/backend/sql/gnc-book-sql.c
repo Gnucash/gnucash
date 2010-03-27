@@ -86,7 +86,7 @@ set_root_account_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
     QofBook* book = QOF_BOOK(pObject);
     const Account* root;
-    GUID* guid = (GUID*)pValue;
+    GncGUID* guid = (GncGUID*)pValue;
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( QOF_IS_BOOK(pObject) );
@@ -113,7 +113,7 @@ static void
 set_root_template_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
     QofBook* book = QOF_BOOK(pObject);
-    GUID* guid = (GUID*)pValue;
+    GncGUID* guid = (GncGUID*)pValue;
     Account* root;
 
 	g_return_if_fail( pObject != NULL );
@@ -135,7 +135,7 @@ set_root_template_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 static void
 load_single_book( GncSqlBackend* be, GncSqlRow* row )
 {
-    const GUID* guid;
+    const GncGUID* guid;
 	QofBook* pBook;
 
 	g_return_if_fail( be != NULL );

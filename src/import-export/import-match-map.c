@@ -122,7 +122,7 @@ Account * gnc_imap_find_account (GncImportMatchMap *imap, const char *category,
                                  const char *key)
 {
     kvp_value *value;
-    GUID * guid;
+    GncGUID * guid;
 
     if (!imap || !key) return NULL;
     if (!category)

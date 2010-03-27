@@ -50,7 +50,7 @@ typedef struct obj_s
     QofInstance inst;
     char     	*Name;
     gnc_numeric	Amount;
-    const GUID 	*obj_guid;
+    const GncGUID 	*obj_guid;
     Timespec 	date;
     double 		discount; /* cheap pun, I know. */
     gboolean 	active;
@@ -67,7 +67,7 @@ myobj* obj_create(QofBook*);
 
 /* obvious setter functions */
 void obj_setName(myobj*,	char*);
-void obj_setGUID(myobj*,	const GUID*);
+void obj_setGUID(myobj*,	const GncGUID*);
 void obj_setAmount(myobj*,  gnc_numeric);
 void obj_setDate(myobj*,	Timespec h);
 void obj_setDiscount(myobj*, double);
@@ -77,7 +77,7 @@ void obj_setMinor(myobj*,   gint64);
 
 /* obvious getter functions */
 char*		obj_getName(myobj*);
-const GUID*	obj_getGUID(myobj*);
+const GncGUID*	obj_getGUID(myobj*);
 gnc_numeric obj_getAmount(myobj*);
 Timespec   	obj_getDate(myobj*);
 double		obj_getDiscount(myobj*);
@@ -208,13 +208,13 @@ obj_getDate(myobj *g)
 }
 
 void
-obj_setGUID(myobj* g, const GUID* h)
+obj_setGUID(myobj* g, const GncGUID* h)
 {
     if (!g) return;
     g->obj_guid = h;
 }
 
-const GUID*
+const GncGUID*
 obj_getGUID(myobj *g)
 {
     if (!g) return NULL;

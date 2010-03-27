@@ -207,7 +207,7 @@ load_lot_guid( const GncSqlBackend* be, GncSqlRow* row,
             const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
-    GUID guid;
+    GncGUID guid;
 	GNCLot* lot;
 
 	g_return_if_fail( be != NULL );

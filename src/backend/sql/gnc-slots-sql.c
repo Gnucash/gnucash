@@ -48,7 +48,7 @@
 
 typedef struct {
     /*@ dependent @*/ GncSqlBackend* be;
-    /*@ dependent @*/ const GUID* guid;
+    /*@ dependent @*/ const GncGUID* guid;
 	gboolean is_ok;
     /*@ dependent @*/ KvpFrame* pKvpFrame;
     KvpValueType value_type;
@@ -129,7 +129,7 @@ get_obj_guid( gpointer pObject )
 static void
 set_obj_guid( void )
 {
-    // Nowhere to put the GUID
+    // Nowhere to put the GncGUID
 }
 
 static /*@ null @*/ gpointer
@@ -302,7 +302,7 @@ set_guid_val( gpointer pObject, /*@ null @*/ gpointer pValue )
 	g_return_if_fail( pObject != NULL );
 
     if( pInfo->value_type == KVP_TYPE_GUID && pValue != NULL ) {
-        kvp_frame_set_guid( pInfo->pKvpFrame, pInfo->path->str, (GUID*)pValue );
+        kvp_frame_set_guid( pInfo->pKvpFrame, pInfo->path->str, (GncGUID*)pValue );
     }
 }
 
@@ -368,7 +368,7 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
 }
 
 gboolean
-gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid, gboolean is_infant, KvpFrame* pFrame )
+gnc_sql_slots_save( GncSqlBackend* be, const GncGUID* guid, gboolean is_infant, KvpFrame* pFrame )
 {
     slot_info_t slot_info;
 
@@ -392,7 +392,7 @@ gnc_sql_slots_save( GncSqlBackend* be, const GUID* guid, gboolean is_infant, Kvp
 }
 
 gboolean
-gnc_sql_slots_delete( GncSqlBackend* be, const GUID* guid )
+gnc_sql_slots_delete( GncSqlBackend* be, const GncGUID* guid )
 {
     slot_info_t slot_info;
 
@@ -435,7 +435,7 @@ gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst )
     GncSqlResult* result;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
     GncSqlStatement* stmt;
-	const GUID* guid;
+	const GncGUID* guid;
 	KvpFrame* pFrame;
 
 	g_return_if_fail( be != NULL );
@@ -463,10 +463,10 @@ gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst )
 	}
 }
 
-static /*@ dependent @*//*@ null @*/ const GUID*
+static /*@ dependent @*//*@ null @*/ const GncGUID*
 load_obj_guid( const GncSqlBackend* be, GncSqlRow* row )
 {
-    static GUID guid;
+    static GncGUID guid;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( row != NULL, NULL );
@@ -480,7 +480,7 @@ static void
 load_slot_for_list_item( GncSqlBackend* be, GncSqlRow* row, QofCollection* coll )
 {
     slot_info_t slot_info;
-	const GUID* guid;
+	const GncGUID* guid;
 	QofInstance* inst;
 
 	g_return_if_fail( be != NULL );
@@ -558,7 +558,7 @@ static void
 load_slot_for_book_object( GncSqlBackend* be, GncSqlRow* row, BookLookupFn lookup_fn )
 {
     slot_info_t slot_info;
-	const GUID* guid;
+	const GncGUID* guid;
 	QofInstance* inst;
 
 	g_return_if_fail( be != NULL );

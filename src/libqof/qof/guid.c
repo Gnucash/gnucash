@@ -71,41 +71,41 @@ static QofLogModule log_module = QOF_MOD_ENGINE;
  *
  * @return the value stored in @a value
  */
-G_CONST_RETURN GUID*
+G_CONST_RETURN GncGUID*
 gnc_value_get_guid (const GValue *value)
 {
-    GUID *val;
+    GncGUID *val;
 
     g_return_val_if_fail (value && G_IS_VALUE (value), NULL);
     g_return_val_if_fail (GNC_VALUE_HOLDS_GUID (value), NULL);
 
-    val = (GUID*) g_value_get_boxed (value);
+    val = (GncGUID*) g_value_get_boxed (value);
 
     return val;
 }
 
 
 /* Memory management routines ***************************************/
-GUID *
+GncGUID *
 guid_malloc (void)
 {
-    return g_slice_new(GUID);
+    return g_slice_new(GncGUID);
 }
 
 void
-guid_free (GUID *guid)
+guid_free (GncGUID *guid)
 {
     if (!guid)
         return;
 
-    g_slice_free(GUID, guid);
+    g_slice_free(GncGUID, guid);
 }
 
 
-GUID *
-guid_copy (const GUID *guid)
+GncGUID *
+guid_copy (const GncGUID *guid)
 {
-    GUID *copy;
+    GncGUID *copy;
 
     g_return_val_if_fail(guid, NULL);
     copy = guid_malloc();
@@ -113,11 +113,11 @@ guid_copy (const GUID *guid)
     return copy;
 }
 
-const GUID *
+const GncGUID *
 guid_null(void)
 {
     static int null_inited = 0;
-    static GUID null_guid;
+    static GncGUID null_guid;
 
     if (!null_inited)
     {
@@ -496,7 +496,7 @@ guid_shutdown (void)
 #define GUID_PERIOD 5000
 
 void
-guid_new(GUID *guid)
+guid_new(GncGUID *guid)
 {
     static int counter = 0;
     struct md5_ctx ctx;
@@ -546,10 +546,10 @@ guid_new(GUID *guid)
     counter--;
 }
 
-GUID
+GncGUID
 guid_new_return(void)
 {
-    GUID guid;
+    GncGUID guid;
 
     guid_new (&guid);
 
@@ -615,7 +615,7 @@ badstring:
 /* Allocate the key */
 
 const char *
-guid_to_string(const GUID * guid)
+guid_to_string(const GncGUID * guid)
 {
 #ifdef G_THREADS_ENABLED
     static GStaticPrivate guid_buffer_key = G_STATIC_PRIVATE_INIT;
@@ -638,7 +638,7 @@ guid_to_string(const GUID * guid)
 }
 
 char *
-guid_to_string_buff(const GUID * guid, char *string)
+guid_to_string_buff(const GncGUID * guid, char *string)
 {
     if (!string || !guid) return NULL;
 
@@ -649,13 +649,13 @@ guid_to_string_buff(const GUID * guid, char *string)
 }
 
 gboolean
-string_to_guid(const char * string, GUID * guid)
+string_to_guid(const char * string, GncGUID * guid)
 {
     return decode_md5_string(string, (guid != NULL) ? guid->data : NULL);
 }
 
 gboolean
-guid_equal(const GUID *guid_1, const GUID *guid_2)
+guid_equal(const GncGUID *guid_1, const GncGUID *guid_2)
 {
     if (guid_1 && guid_2)
         return (memcmp(guid_1, guid_2, GUID_DATA_SIZE) == 0);
@@ -664,7 +664,7 @@ guid_equal(const GUID *guid_1, const GUID *guid_2)
 }
 
 gint
-guid_compare(const GUID *guid_1, const GUID *guid_2)
+guid_compare(const GncGUID *guid_1, const GncGUID *guid_2)
 {
     if (guid_1 == guid_2)
         return 0;
@@ -682,7 +682,7 @@ guid_compare(const GUID *guid_1, const GUID *guid_2)
 guint
 guid_hash_to_guint (gconstpointer ptr)
 {
-    const GUID *guid = ptr;
+    const GncGUID *guid = ptr;
 
     if (!guid)
     {
@@ -729,7 +729,7 @@ static void
 gnc_string_to_guid (const GValue *src, GValue *dest)
 {
     /* FIXME: add more checks*/
-    GUID *guid;
+    GncGUID *guid;
     const gchar *as_string;
 
     g_return_if_fail (G_VALUE_HOLDS_STRING (src) &&
@@ -737,7 +737,7 @@ gnc_string_to_guid (const GValue *src, GValue *dest)
 
     as_string = g_value_get_string (src);
 
-    guid = g_new0 (GUID, 1);
+    guid = g_new0 (GncGUID, 1);
     string_to_guid(as_string, guid);
 
     g_value_take_boxed (dest, guid);
@@ -763,7 +763,7 @@ gnc_guid_get_type (void)
 
     if (G_UNLIKELY (type == 0))
     {
-        type = g_boxed_type_register_static ("GUID",
+        type = g_boxed_type_register_static ("GncGUID",
                                              (GBoxedCopyFunc)guid_copy,
                                              (GBoxedFreeFunc)guid_free);
 

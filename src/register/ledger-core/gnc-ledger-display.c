@@ -50,7 +50,7 @@
 
 struct gnc_ledger_display
 {
-    GUID leader;
+    GncGUID leader;
 
     Query *query;
 
@@ -450,11 +450,11 @@ gnc_ledger_display_gl (void)
 }
 
 /**
- * @param id: The string version of the GUID of the context of template
+ * @param id: The string version of the GncGUID of the context of template
  * transaction being edited in this template GL.  As used by scheduled
- * transactions, this is the GUID of the SX itself which is magically the
+ * transactions, this is the GncGUID of the SX itself which is magically the
  * *name* of the (template) account which contains the transactions for this
- * scheduled transaction.  That's right.  The stringified GUID of the SX is
+ * scheduled transaction.  That's right.  The stringified GncGUID of the SX is
  * the name of the SX'es template account.
  **/
 GNCLedgerDisplay *

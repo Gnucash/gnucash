@@ -27,11 +27,11 @@
     @{ */
 /** @addtogroup Entities
 
-    This file defines an API that adds types to the GUID's.
-    GUID's with types can be used to identify and reference
+    This file defines an API that adds types to the GncGUID's.
+    GncGUID's with types can be used to identify and reference
     typed entities.
 
-    The idea here is that a GUID can be used to uniquely identify
+    The idea here is that a GncGUID can be used to uniquely identify
     some thing.  By adding a type, one can then talk about the
     type of thing identified.  By adding a collection, one can
     then work with a handle to a collection of things of a given
@@ -45,7 +45,7 @@
     identifier for its lifetime.
     Identifiers can be encoded as hex strings.
 
-    GUID Identifiers are 'typed' with strings.  The native ids used
+    GncGUID Identifiers are 'typed' with strings.  The native ids used
     by QOF are defined below.
 	-# An id with type QOF_ID_NONE does not
     refer to any entity.
@@ -55,7 +55,7 @@
     actual entity, but that is not guaranteed as that entity does
 	not have to exist within the current book. (See ::PARTIAL_QOFBOOK).
 	Also, creating a new entity from a data source involves creating
-	a temporary GUID and then setting the value from the data source.
+	a temporary GncGUID and then setting the value from the data source.
 	If an id does refer to an entity, the type of the entity will match
 	the type of the identifier.
 
@@ -175,7 +175,7 @@ QofIdType qof_collection_get_type (const QofCollection *);
 
 /** Find the entity going only from its guid */
 /*@ dependent @*/
-QofInstance * qof_collection_lookup_entity (const QofCollection *, const GUID *);
+QofInstance * qof_collection_lookup_entity (const QofCollection *, const GncGUID *);
 
 /** Callback type for qof_collection_foreach */
 typedef void (*QofInstanceForeachCB) (QofInstance *, gpointer user_data);
@@ -237,11 +237,11 @@ qof_collection_merge (QofCollection *target, QofCollection *merge);
 /** \brief Compare two secondary collections.
 
 Performs a deep comparision of the collections. Each QofInstance in
-each collection is looked up in the other collection, via the GUID.
+each collection is looked up in the other collection, via the GncGUID.
 
 \return 0 if the collections are identical or both are NULL
 otherwise -1 if target is NULL or either collection contains an entity with an invalid
-GUID or if the types of the two collections do not match,
+GncGUID or if the types of the two collections do not match,
 or +1 if merge is NULL or if any entity exists in one collection but
 not in the other.
 */

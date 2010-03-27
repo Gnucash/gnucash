@@ -172,7 +172,7 @@ struct _invoice_window
     invoice_sort_type_t	last_sort;
 
     InvoiceDialogType	dialog_type;
-    GUID		invoice_guid;
+    GncGUID		invoice_guid;
     gint		component_id;
     QofBook *	book;
     GncInvoice *	created_invoice;
@@ -1786,7 +1786,7 @@ gnc_invoice_id_changed_cb (GtkWidget *unused, gpointer data)
 static gboolean
 find_handler (gpointer find_data, gpointer user_data)
 {
-    const GUID *invoice_guid = find_data;
+    const GncGUID *invoice_guid = find_data;
     InvoiceWindow *iw = user_data;
 
     return(iw && guid_equal(&iw->invoice_guid, invoice_guid));
@@ -1810,7 +1810,7 @@ gnc_invoice_new_page (QofBook *bookp, InvoiceDialogType type,
      */
     if (invoice)
     {
-        GUID invoice_guid;
+        GncGUID invoice_guid;
 
         invoice_guid = *gncInvoiceGetGUID (invoice);
         iw = gnc_find_first_gui_component (DIALOG_VIEW_INVOICE_CM_CLASS,
@@ -1869,7 +1869,7 @@ gnc_invoice_recreate_page (GncMainWindow *window,
     char *tmp_string = NULL, *owner_type = NULL;
     InvoiceDialogType type;
     GncInvoice *invoice;
-    GUID guid;
+    GncGUID guid;
     QofBook *book;
     GncOwner owner = { 0 };
 
@@ -1885,7 +1885,7 @@ gnc_invoice_recreate_page (GncMainWindow *window,
     type = InvoiceDialogTypefromString(tmp_string);
     g_free(tmp_string);
 
-    /* Get Invoice GUID */
+    /* Get Invoice GncGUID */
     tmp_string = g_key_file_get_string(key_file, group_name,
                                        KEY_INVOICE_GUID, &error);
     if (error)
@@ -1918,7 +1918,7 @@ gnc_invoice_recreate_page (GncMainWindow *window,
         goto give_up;
     }
 
-    /* Get Owner GUID */
+    /* Get Owner GncGUID */
     tmp_string = g_key_file_get_string(key_file, group_name,
                                        KEY_OWNER_GUID, &error);
     if (error)
@@ -2173,7 +2173,7 @@ gnc_invoice_window_new_invoice (QofBook *bookp, GncOwner *owner,
          * Try to find an existing window for this invoice.  If found,
          * bring it to the front.
          */
-        GUID invoice_guid;
+        GncGUID invoice_guid;
 
         invoice_guid = *gncInvoiceGetGUID (invoice);
         iw = gnc_find_first_gui_component (DIALOG_NEW_INVOICE_CM_CLASS,
@@ -2537,7 +2537,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
      * owner.  If a Job is supplied, search for all invoices for that
      * job, but if a Customer is supplied, search for all invoices owned
      * by that Customer or any of that Customer's Jobs.  In other words,
-     * match on <supplied-owner's guid> == Invoice->Owner->GUID or
+     * match on <supplied-owner's guid> == Invoice->Owner->GncGUID or
      * Invoice->owner->parentGUID.
      */
     if (owner)

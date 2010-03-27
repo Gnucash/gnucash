@@ -113,9 +113,9 @@ void gncCustomerRemoveJob (GncCustomer *customer, GncJob *job);
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
  *  Equivalent function prototype is
- *  GncCustomer * gncCustomerLookup (QofBook *book, const GUID *guid);
+ *  GncCustomer * gncCustomerLookup (QofBook *book, const GncGUID *guid);
  */
-static inline GncCustomer * gncCustomerLookup (const QofBook *book, const GUID *guid)
+static inline GncCustomer * gncCustomerLookup (const QofBook *book, const GncGUID *guid)
 {
     QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_CUSTOMER, GncCustomer);
 }

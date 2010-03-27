@@ -755,7 +755,7 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
     GtkWidget *dialog;
     gdouble multip;
     gint i = 1;
-    GUID guid;
+    GncGUID guid;
     char buf[GUID_ENCODING_LENGTH+1];
     gchar *filename, *pathname;
     GtkTreeModel *model;

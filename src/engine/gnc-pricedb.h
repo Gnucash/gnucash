@@ -213,7 +213,7 @@ void gnc_price_set_value(GNCPrice *p, gnc_numeric value);
     to the GNCPrice, not copies, so don't free these values.
     @{ */
 
-GNCPrice *      gnc_price_lookup (const GUID *guid, QofBook *book);
+GNCPrice *      gnc_price_lookup (const GncGUID *guid, QofBook *book);
 /*@ dependent @*/
 gnc_commodity * gnc_price_get_commodity(const GNCPrice *p);
 /*@ dependent @*/

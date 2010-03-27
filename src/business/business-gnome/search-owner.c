@@ -306,7 +306,7 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 {
     GNCSearchOwner *fi = (GNCSearchOwner *)fe;
     GNCSearchOwnerPrivate *priv;
-    const GUID *guid;
+    const GncGUID *guid;
     GList *l = NULL;
 
     g_return_val_if_fail (fi, NULL);

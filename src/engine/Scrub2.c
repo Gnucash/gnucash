@@ -399,7 +399,7 @@ xaccScrubMergeSubSplits (Split *split)
     Transaction *txn;
     SplitList *node;
     GNCLot *lot;
-    const GUID *guid;
+    const GncGUID *guid;
 
     if (FALSE == is_subsplit (split)) return FALSE;
 

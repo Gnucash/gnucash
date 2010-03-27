@@ -81,7 +81,7 @@ find_appropriate_node(xmlNodePtr node, Split *spl)
             }
             else if (safe_strcmp((char*)mark2->name, "split:account") == 0)
             {
-                GUID *accid = dom_tree_to_guid(mark2);
+                GncGUID *accid = dom_tree_to_guid(mark2);
                 Account *account = xaccSplitGetAccount (spl);
 
                 if (guid_equal(accid, xaccAccountGetGUID(account)))
@@ -110,7 +110,7 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
     {
         if (safe_strcmp((char*)mark->name, "split:id") == 0)
         {
-            GUID *id = dom_tree_to_guid(mark);
+            GncGUID *id = dom_tree_to_guid(mark);
 
             if (!guid_equal(id, xaccSplitGetGUID(spl)))
             {
@@ -184,7 +184,7 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
         }
         else if (safe_strcmp((char*)mark->name, "split:account") == 0)
         {
-            GUID *id = dom_tree_to_guid(mark);
+            GncGUID *id = dom_tree_to_guid(mark);
             Account *account = xaccSplitGetAccount (spl);
 
             if (!guid_equal(id, xaccAccountGetGUID(account)))

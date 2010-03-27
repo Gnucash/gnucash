@@ -80,7 +80,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #define IF_TYPE(URL_TYPE_STR,ENTITY_TYPE)                                   \
   if (strncmp (URL_TYPE_STR, location, strlen (URL_TYPE_STR)) == 0)         \
   {                                                                         \
-    GUID guid;                                                              \
+    GncGUID guid;                                                              \
     QofCollection *col;                                                     \
     QofInstance *entity;                                                      \
     if (!string_to_guid (location + strlen(URL_TYPE_STR), &guid))           \
@@ -216,7 +216,7 @@ return TRUE;
 {
     GKeyFile *keyfile = NULL;
     QofBook *book;
-    const GUID *guid;
+    const GncGUID *guid;
     const gchar *url, *guid_string;
     gchar *file_guid, *filename = NULL;
     GError *error = NULL;
@@ -229,7 +229,7 @@ return TRUE;
         return;
     }
 
-    /* Get the book GUID */
+    /* Get the book GncGUID */
     book = qof_session_get_book(session);
     guid = qof_entity_get_guid(QOF_INSTANCE(book));
     guid_string = guid_to_string(guid);
@@ -307,7 +307,7 @@ gnc_save_all_state (gpointer session, gpointer unused)
     QofBook *book;
     const char *url, *guid_string;
     gchar *filename;
-    const GUID *guid;
+    const GncGUID *guid;
     GError *error = NULL;
     GKeyFile *keyfile = NULL;
 
@@ -320,7 +320,7 @@ gnc_save_all_state (gpointer session, gpointer unused)
         return;
     }
 
-    /* Get the book GUID */
+    /* Get the book GncGUID */
     book = qof_session_get_book(session);
     guid = qof_entity_get_guid(QOF_INSTANCE(book));
     guid_string = guid_to_string(guid);

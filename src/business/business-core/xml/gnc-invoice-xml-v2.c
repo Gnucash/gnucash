@@ -195,7 +195,7 @@ static gboolean
 invoice_guid_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata *pdata = invoice_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncInvoice *invoice;
 
     guid = dom_tree_to_guid(node);
@@ -289,7 +289,7 @@ static gboolean
 invoice_terms_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata *pdata = invoice_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GncBillTerm *term;
 
     guid = dom_tree_to_guid(node);
@@ -306,7 +306,7 @@ static gboolean
 invoice_posttxn_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata *pdata = invoice_pdata;
-    GUID *guid;
+    GncGUID *guid;
     Transaction *txn;
 
     guid = dom_tree_to_guid(node);
@@ -323,7 +323,7 @@ static gboolean
 invoice_postlot_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata *pdata = invoice_pdata;
-    GUID *guid;
+    GncGUID *guid;
     GNCLot *lot;
 
     guid = dom_tree_to_guid(node);
@@ -340,7 +340,7 @@ static gboolean
 invoice_postacc_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata *pdata = invoice_pdata;
-    GUID *guid;
+    GncGUID *guid;
     Account *acc;
 
     guid = dom_tree_to_guid(node);

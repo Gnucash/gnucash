@@ -296,7 +296,7 @@ xaccAccountGetDefaultGainAccount (const Account *acc, const gnc_commodity * curr
     Account *gain_acct = NULL;
     KvpFrame *cwd;
     KvpValue *vvv;
-    GUID * gain_acct_guid;
+    GncGUID * gain_acct_guid;
     const char * cur_name;
 
     if (!acc || !currency) return NULL;
@@ -326,7 +326,7 @@ GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
     Account *gain_acct = NULL;
     KvpFrame *cwd;
     KvpValue *vvv;
-    GUID * gain_acct_guid;
+    GncGUID * gain_acct_guid;
     const char * cur_name;
 
     cwd = xaccAccountGetSlots (acc);
@@ -630,7 +630,7 @@ Split *
 xaccSplitGetCapGainsSplit (const Split *split)
 {
     KvpValue *val;
-    GUID *gains_guid;
+    GncGUID *gains_guid;
     Split *gains_split;
 
     if (!split) return NULL;
@@ -653,7 +653,7 @@ Split *
 xaccSplitGetGainsSourceSplit (const Split *split)
 {
     KvpValue *val;
-    GUID *source_guid;
+    GncGUID *source_guid;
     Split *source_split;
 
     if (!split) return NULL;

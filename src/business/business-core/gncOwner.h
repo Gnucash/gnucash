@@ -118,18 +118,18 @@ int gncOwnerCompare (const GncOwner *a, const GncOwner *b);
 const char * gncOwnerGetName (const GncOwner *owner);
 gnc_commodity * gncOwnerGetCurrency (const GncOwner *owner);
 
-/** Get the GUID of the immediate owner */
-const GUID * gncOwnerGetGUID (const GncOwner *owner);
-GUID gncOwnerRetGUID (GncOwner *owner);
+/** Get the GncGUID of the immediate owner */
+const GncGUID * gncOwnerGetGUID (const GncOwner *owner);
+GncGUID gncOwnerRetGUID (GncOwner *owner);
 
 gboolean gncOwnerIsValid (const GncOwner *owner);
 
 /**
- * Get the "parent" Owner or GUID thereof.  The "parent" owner
+ * Get the "parent" Owner or GncGUID thereof.  The "parent" owner
  * is the Customer or Vendor, or the Owner of a Job
  */
 GncOwner * gncOwnerGetEndOwner (GncOwner *owner);
-const GUID * gncOwnerGetEndGUID (GncOwner *owner);
+const GncGUID * gncOwnerGetEndGUID (GncOwner *owner);
 
 /** attach an owner to a lot */
 void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot);
@@ -139,7 +139,7 @@ void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot);
  */
 gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
 
-gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType type, GUID *guid);
+gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType type, GncGUID *guid);
 
 /** Get the kvp-frame from the underlying owner object */
 KvpFrame* gncOwnerGetSlots(GncOwner* owner);

@@ -410,7 +410,7 @@ gboolean
 fs_guid_handler( xmlNodePtr node, gpointer data)
 {
     fsParseData *fspd = data;
-    GUID        *guid;
+    GncGUID        *guid;
     guid = dom_tree_to_guid( node );
     return TRUE;
 }

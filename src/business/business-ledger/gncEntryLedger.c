@@ -209,7 +209,7 @@ gboolean gnc_entry_ledger_get_numeric (GncEntryLedger *ledger,
 GncEntry * gnc_entry_ledger_get_entry (GncEntryLedger *ledger,
                                        VirtualCellLocation vcell_loc)
 {
-    GUID *guid;
+    GncGUID *guid;
 
     if (!ledger) return NULL;
 
@@ -467,7 +467,7 @@ static void create_invoice_query (GncEntryLedger *ledger)
             gncOwnerGetEndGUID (gncInvoiceGetOwner (ledger->invoice)) != NULL)
     {
 
-        const GUID *invoice_parent =
+        const GncGUID *invoice_parent =
             gncOwnerGetGUID (gncInvoiceGetOwner (ledger->invoice));
         QueryNew *q2 = gncQueryCreateFor (GNC_ENTRY_MODULE_NAME);
 

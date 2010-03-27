@@ -506,7 +506,7 @@ qsf_set_handler(xmlNodePtr parent, GHashTable *default_hash,
                               xmlNodeGetContent(cur_node));
                 content = (gchar*)xmlGetProp(lookup_node, BAD_CAST MAP_VALUE_ATTR);
                 /** \todo FIXME: do the lookup. type is defined by output object. */
-                /* Find by name, get GUID, return GUID as string. */
+                /* Find by name, get GncGUID, return GncGUID as string. */
                 g_message("Lookup %s in the receiving application\n", content );
                 LEAVE (" todo");
                 return content;

@@ -189,7 +189,7 @@ void qof_query_add_term (QofQuery *query, GSList *param_list,
 
 /** DOCUMENT ME !! */
 void qof_query_add_guid_match (QofQuery *q, GSList *param_list,
-                               const GUID *guid, QofQueryOp op);
+                               const GncGUID *guid, QofQueryOp op);
 /** DOCUMENT ME !! */
 void qof_query_add_guid_list_match (QofQuery *q, GSList *param_list,
                                     GList *guid_list, QofGuidMatch options,

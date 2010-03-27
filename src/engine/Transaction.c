@@ -836,7 +836,7 @@ gboolean xaccTransUseTradingAccounts(const Transaction *trans)
 \********************************************************************/
 
 Transaction *
-xaccTransLookup (const GUID *guid, QofBook *book)
+xaccTransLookup (const GncGUID *guid, QofBook *book)
 {
     QofCollection *col;
     if (!guid || !book) return NULL;
@@ -2149,7 +2149,7 @@ xaccTransReverse (Transaction *orig)
 Transaction *
 xaccTransGetReversedBy(const Transaction *trans)
 {
-    GUID *guid;
+    GncGUID *guid;
 
     g_return_val_if_fail(trans, NULL);
     guid = kvp_frame_get_guid(trans->inst.kvp_data, TRANS_REVERSED_BY);

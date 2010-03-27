@@ -610,7 +610,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 
             for ( ; splitList; splitList = splitList->next )
             {
-                GUID *acct_guid;
+                GncGUID *acct_guid;
                 Account *acct;
                 gnc_commodity *split_cmdty;
                 txnCreditDebitSums *tcds;

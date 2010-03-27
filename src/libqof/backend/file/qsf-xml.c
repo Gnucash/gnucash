@@ -381,7 +381,7 @@ qsf_book_node_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
     xmlNodePtr child_node;
     struct qsf_node_iterate iter;
     gchar *buffer;
-    GUID book_guid;
+    GncGUID book_guid;
 
     g_return_if_fail(child);
     g_return_if_fail(params);
@@ -399,7 +399,7 @@ qsf_book_node_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
         child_node = child->children->next;
         if (qsf_is_element(child_node, ns, QSF_BOOK_GUID))
         {
-            DEBUG (" trying to set book GUID");
+            DEBUG (" trying to set book GncGUID");
             buffer = g_strdup((gchar*)xmlNodeGetContent(child_node));
             g_return_if_fail(TRUE == string_to_guid(buffer, &book_guid));
             qof_instance_set_guid(QOF_INSTANCE(params->book), &book_guid);

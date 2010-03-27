@@ -115,7 +115,7 @@ struct _customer_window
     GncTaxIncluded taxincluded;
     GncBillTerm *	terms;
     CustomerDialogType	dialog_type;
-    GUID		customer_guid;
+    GncGUID		customer_guid;
     gint		component_id;
     QofBook *	book;
     GncCustomer *	created_customer;
@@ -428,7 +428,7 @@ gnc_customer_window_refresh_handler (GHashTable *changes, gpointer user_data)
 static gboolean
 find_handler (gpointer find_data, gpointer user_data)
 {
-    const GUID *customer_guid = find_data;
+    const GncGUID *customer_guid = find_data;
     CustomerWindow *cw = user_data;
 
     return(cw && guid_equal(&cw->customer_guid, customer_guid));
@@ -449,7 +449,7 @@ gnc_customer_new_window (QofBook *bookp, GncCustomer *cust)
      */
     if (cust)
     {
-        GUID customer_guid;
+        GncGUID customer_guid;
 
         customer_guid = *gncCustomerGetGUID(cust);
         cw = gnc_find_first_gui_component (DIALOG_EDIT_CUSTOMER_CM_CLASS,

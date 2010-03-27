@@ -27,10 +27,10 @@ typedef char gchar;
 %typemap(in) Timespec "$1 = gnc_timepair2timespec($input);"
 %typemap(out) Timespec "$result = gnc_timespec2timepair($1);"
 
-%typemap(in) GUID "$1 = gnc_scm2guid($input);"
-%typemap(out) GUID "$result = gnc_guid2scm($1);"
-%typemap(in) GUID * (GUID g) " g = gnc_scm2guid($input); $1 = &g; "
-%typemap(out) GUID * " $result = ($1) ? gnc_guid2scm(*($1)): SCM_BOOL_F; "
+%typemap(in) GncGUID "$1 = gnc_scm2guid($input);"
+%typemap(out) GncGUID "$result = gnc_guid2scm($1);"
+%typemap(in) GncGUID * (GncGUID g) " g = gnc_scm2guid($input); $1 = &g; "
+%typemap(out) GncGUID * " $result = ($1) ? gnc_guid2scm(*($1)): SCM_BOOL_F; "
 
 %typemap(in) gnc_numeric "$1 = gnc_scm_to_numeric($input);"
 %typemap(out) gnc_numeric "$result = gnc_numeric_to_scm($1);"

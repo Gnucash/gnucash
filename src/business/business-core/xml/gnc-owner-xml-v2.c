@@ -128,7 +128,7 @@ static gboolean
 owner_id_handler (xmlNodePtr node, gpointer owner_pdata)
 {
     struct owner_pdata *pdata = owner_pdata;
-    GUID *guid;
+    GncGUID *guid;
 
     guid = dom_tree_to_guid(node);
     g_return_val_if_fail (guid, FALSE);

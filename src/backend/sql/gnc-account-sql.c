@@ -88,7 +88,7 @@ static GncSqlColumnTableEntry parent_col_table[] =
 
 typedef struct {
 	/*@ dependent @*/ Account* pAccount;
-	GUID guid;
+	GncGUID guid;
 } account_parent_guid_struct;
 
 /* ================================================================= */
@@ -98,7 +98,7 @@ get_parent( gpointer pObject )
 {
     const Account* pAccount;
     const Account* pParent;
-    const GUID* parent_guid;
+    const GncGUID* parent_guid;
 
 	g_return_val_if_fail( pObject != NULL, NULL );
 	g_return_val_if_fail( GNC_IS_ACCOUNT(pObject), NULL );
@@ -119,7 +119,7 @@ set_parent( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
     Account* pAccount;
     QofBook* pBook;
-    GUID* guid = (GUID*)pValue;
+    GncGUID* guid = (GncGUID*)pValue;
     Account* pParent;
     
 	g_return_if_fail( pObject != NULL );
@@ -139,7 +139,7 @@ static void
 set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
 	account_parent_guid_struct* s = (account_parent_guid_struct*)pObject;
-    GUID* guid = (GUID*)pValue;
+    GncGUID* guid = (GncGUID*)pValue;
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( pValue != NULL );
@@ -151,7 +151,7 @@ static /*@ dependent @*//*@ null @*/ Account*
 load_single_account( GncSqlBackend* be, GncSqlRow* row,
 					GList** l_accounts_needing_parents )
 {
-    const GUID* guid;
+    const GncGUID* guid;
 	Account* pAccount = NULL;
 
 	g_return_val_if_fail( be != NULL, NULL );
@@ -297,7 +297,7 @@ gboolean
 gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst )
 {
     Account* pAcc = GNC_ACCOUNT(inst);
-    const GUID* guid;
+    const GncGUID* guid;
 	gboolean is_infant;
 	gboolean is_ok = FALSE;
 	gnc_commodity* commodity;
@@ -357,7 +357,7 @@ load_account_guid( const GncSqlBackend* be, GncSqlRow* row,
             const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
-    GUID guid;
+    GncGUID guid;
 	Account* account = NULL;
 
 	g_return_if_fail( be != NULL );

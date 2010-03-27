@@ -91,7 +91,7 @@ GNCLot * gnc_lot_new (QofBook *);
 void gnc_lot_destroy (GNCLot *);
 
 /*@ dependent @*/
-GNCLot * gnc_lot_lookup (const GUID *guid, QofBook *book);
+GNCLot * gnc_lot_lookup (const GncGUID *guid, QofBook *book);
 QofBook * gnc_lot_get_book (GNCLot *);
 
 void gnc_lot_begin_edit (GNCLot *lot);

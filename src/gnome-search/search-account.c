@@ -328,7 +328,7 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
     for (node = priv->selected_accounts; node; node = node->next)
     {
         Account *acc = node->data;
-        const GUID *guid = xaccAccountGetGUID (acc);
+        const GncGUID *guid = xaccAccountGetGUID (acc);
         l = g_list_prepend (l, (gpointer)guid);
     }
     l = g_list_reverse (l);

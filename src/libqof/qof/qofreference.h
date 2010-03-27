@@ -44,10 +44,10 @@ QofBooks must be self-contained, only a partial book uses QofInstanceReference.
 To retain the relationships between entities, including between a partial and
 a complete book, QofInstanceReference data is stored in the QofBook. This data
 should be read by backends that support partial books so that the exported
-data contains the GUID and QofIdType of the referenced entity. Even if that
+data contains the GncGUID and QofIdType of the referenced entity. Even if that
 entity does not then exist within the partial book, it can be located when
 the partial book is merged back into the original, complete, book. (Remember
-that given the GUID and QofIdType of any QofInstance it is possible to uniquely
+that given the GncGUID and QofIdType of any QofInstance it is possible to uniquely
 identify that entity in another book.)
 
 Entities in partial books may need to refer to the entities that remain within
@@ -74,7 +74,7 @@ in the create: routine for the object but QOF has no way of guaranteeing this.)
 Part of the handling for partial books requires a storage mechanism for
 references to entities that are not within reach of the partial book.
 This requires a GList in the book data to contain the reference
-QofIdType and GUID so that when the book is written out, the
+QofIdType and GncGUID so that when the book is written out, the
 reference can be included. See ::qof_book_get_data.
 
 When the file is imported back in, the list needs to be rebuilt.
@@ -82,7 +82,7 @@ The QSF backend rebuilds the references by linking to real entities.
 Other backends can process the list in similar ways.
 
 The list stores the QofInstanceReference to the referenced entity -
-a struct that contains the GUID and the QofIdType of the referenced
+a struct that contains the GncGUID and the QofIdType of the referenced
 entity as well as the parameter used to obtain the reference.
 
 Partial books need to be differentiated in the backend, the
@@ -109,10 +109,10 @@ typedef struct qof_instance_reference
     QofIdType       type;       /**< The type of the original entity -
 	use the param->param_type to obtain the type of the reference entity.
 	For a QOF_TYPE_COLLECT, obtain the collection and get the type from that. */
-    GUID            *ref_guid;  /**< The GUID of the REFERENCE entity */
+    GncGUID            *ref_guid;  /**< The GncGUID of the REFERENCE entity */
     const QofParam  *param;      /**< The parameter of the original entity to use
 	to get or set the reference. */
-    const GUID      *ent_guid;   /**< The GUID of the original entity. */
+    const GncGUID      *ent_guid;   /**< The GncGUID of the original entity. */
 } QofInstanceReference;
 
 /** \brief Adds a new reference to the partial book data hash.
@@ -129,9 +129,9 @@ qof_session_update_reference_list(QofSession *session, QofInstanceReference *ref
  *
  * Retrieved later by QSF (or any other suitable backend) to
  * rebuild the references from the QofInstanceReference struct
- * that contains the QofIdType and GUID of the referenced entity
+ * that contains the QofIdType and GncGUID of the referenced entity
  * of the original QofBook as well as the parameter data and the
- * GUID of the original entity.
+ * GncGUID of the original entity.
  * */
 #define ENTITYREFERENCE "QofInstanceReference"
 
@@ -149,7 +149,7 @@ books can be used to save this session.
 @param book The partial book containing the referenceList
 
 The referenceList is a GList of QofInstanceReference structures that contain
-the GUID of each end of a reference. e.g. where one entity refers to another.
+the GncGUID of each end of a reference. e.g. where one entity refers to another.
 
 The referenceList is used in partial books to store relationships between
 entities when the entities themselves might not exist in the partial book.
@@ -182,7 +182,7 @@ Used in the preparation of a partial QofBook when the known entity
 any other entity, usually as a parent or child.
 The routine calls the param_getfcn of the supplied parameter,
 which must return an object (QofInstance*), not a known QOF data type, to
-retrieve the referenced entity and therefore the GUID. The GUID of
+retrieve the referenced entity and therefore the GncGUID. The GncGUID of
 both entities are stored in the reference which then needs to be added
 to the reference list which is added to the partial book data hash.
 The reference itself is used to preserve the relationship

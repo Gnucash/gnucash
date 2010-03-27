@@ -1205,7 +1205,7 @@ gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data )
             kvp_val = kvp_frame_get_slot( txn_frame, "from-sched-xaction" );
             if ( kvp_val )
             {
-                GUID *fromSXId = kvp_value_get_guid( kvp_val );
+                GncGUID *fromSXId = kvp_value_get_guid( kvp_val );
                 SchedXaction *theSX = NULL;
                 GList *sxElts;
 

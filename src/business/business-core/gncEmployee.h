@@ -97,9 +97,9 @@ Account * gncEmployeeGetCCard (const GncEmployee *employee);
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
  *  Equivalent function prototype is
- *  GncEmployee * gncEmployeeLookup (QofBook *book, const GUID *guid);
+ *  GncEmployee * gncEmployeeLookup (QofBook *book, const GncGUID *guid);
  */
-static inline GncEmployee * gncEmployeeLookup (const QofBook *book, const GUID *guid)
+static inline GncEmployee * gncEmployeeLookup (const QofBook *book, const GncGUID *guid)
 {
     QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_EMPLOYEE, GncEmployee);
 }

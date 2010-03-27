@@ -40,7 +40,7 @@ typedef struct
  *
  * changes: if NULL, the component should perform a refresh.
  *
- *          if non-NULL, changes is a GUID hash that maps
+ *          if non-NULL, changes is a GncGUID hash that maps
  *          GUIDs to EventInfo structs describing which
  *          events have been received. Entities not in
  *          the hash have not generated any events.
@@ -63,10 +63,10 @@ typedef struct
  * in the changes GHashTable may no longer exist.  So how can you
  * determine if this has happened?  Well, it's a good idea to check
  * for the QOF_EVENT_DESTROY bit in the EventInfo structure.  Of
- * course, that means you need the hash key (GUID) for the destroyed
- * entity.  How are you going to get the GUID from the entity if the
+ * course, that means you need the hash key (GncGUID) for the destroyed
+ * entity.  How are you going to get the GncGUID from the entity if the
  * entity has already been destroyed?  You're not.  So, you have to
- * save a COPY of the key (GUID) away beforehand.
+ * save a COPY of the key (GncGUID) away beforehand.
  *
  * user_data: user_data supplied when component was registered.
  */
@@ -170,7 +170,7 @@ void gnc_gui_component_set_session (gint component_id, gpointer session);
  *               setting the mask to 0 turns off watching for the entity.
  */
 void gnc_gui_component_watch_entity (gint component_id,
-                                     const GUID *entity,
+                                     const GncGUID *entity,
                                      QofEventId event_mask);
 
 /* gnc_gui_component_watch_entity_direct
@@ -183,7 +183,7 @@ void gnc_gui_component_watch_entity (gint component_id,
  *               setting the mask to 0 turns off watching for the entity.
  */
 void gnc_gui_component_watch_entity_direct (gint component_id,
-        GUID entity,
+        GncGUID entity,
         QofEventId event_mask);
 
 /* gnc_gui_component_watch_entity_type
@@ -204,13 +204,13 @@ void gnc_gui_component_watch_entity_type (gint component_id,
  *   the given entity.
  *
  * changes: a hash of changes as in the refresh handler
- * entity:  the GUID of the entity to get the event mask for
+ * entity:  the GncGUID of the entity to get the event mask for
  *
  * Returns: the event info of the entity, or NULL
  *          if it is not found.
  */
 const EventInfo * gnc_gui_get_entity_events (GHashTable *changes,
-        const GUID *entity);
+        const GncGUID *entity);
 
 /* gnc_gui_component_clear_watches
  *   Clear all watches for the component.

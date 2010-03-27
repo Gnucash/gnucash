@@ -78,7 +78,7 @@ The map namespace is not included as maps are not currently written out by QOF.
 
         MAX_DATE_LENGTH itself is defined in gnc-date.h */
 #define QSF_BOOK_TAG	"book"      /**< First level child: book tag - the ::QofBook. */
-#define QSF_BOOK_GUID	"book-guid" /**< QOF GUID tag for the QofBook
+#define QSF_BOOK_GUID	"book-guid" /**< QOF GncGUID tag for the QofBook
         described by this QSF object file */
 #define QSF_BOOK_COUNT	"count"     /**< Sequential counter of each book in this file */
 #define QSF_OBJECT_TAG	"object"    /**< Second level child: object tag */
@@ -91,7 +91,7 @@ The map namespace is not included as maps are not currently written out by QOF.
 /** @name Representing KVP as XML
 
 &lt;kvp type="kvp" path="/from-sched-xaction" value="guid"&gt;c858b9a3235723b55bc1179f0e8c1322&lt;/kvp&gt;
-A kvp type KVP parameter located at $path containing a GUID $value.
+A kvp type KVP parameter located at $path containing a GncGUID $value.
 
 The relevance of type="kvp" won't be evident in GnuCash, they all use "kvp".
 
@@ -162,14 +162,14 @@ A pilot_addr_kvp type KVP parameter located at /user/name containing a guid valu
                                                         sources, the map must deal with entities that need to be referenced in
                                                         the target QofBook but which simply do not exist in the QofBook used to generate
                                                             the QSF. e.g. pilot-link knows nothing of Accounts yet when QSF creates
-                                                            a gncInvoice from qof-datebook, gncInvoice needs to know the GUID of
+                                                            a gncInvoice from qof-datebook, gncInvoice needs to know the GncGUID of
                                                             certain accounts in the target QofBook. This is handled in the map
                                                         by specifying the name of the account as a default for that map. When imported,
                                                                     the QSF QofBackend looks up the object required using the name of
                                                                     the parameter to obtain the parameter type. This is the only situation
                                                                     where QSF converts between QOF data types. A string description of the
-                                                                    required object is converted to the GUID for that specific entity. The
-                                                                        map cannot contain the GUID as it is generic and used by multiple users.
+                                                                    required object is converted to the GncGUID for that specific entity. The
+                                                                        map cannot contain the GncGUID as it is generic and used by multiple users.
 
                                                                         \attention Using enumerators
                                                                         - enum types are the only defaults that are allowed to use the same name value
@@ -632,7 +632,7 @@ gboolean is_qsf_object_with_map(const gchar *path, gchar *map_file);
 /** \brief Book and book-guid node handler.
 
 Reads the book count="" attribute (currently only 1 QofBook is supported per QSF object file)
-Sets the book-guid as the GUID of the current QofBackend QofBook in qsf_param.
+Sets the book-guid as the GncGUID of the current QofBackend QofBook in qsf_param.
 Calls the next handler, qsf_object_node_handler, with the child of the book tag.
 */
 void qsf_book_node_handler(xmlNodePtr child, xmlNsPtr qsf_ns, qsf_param *params);

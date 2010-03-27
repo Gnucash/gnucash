@@ -152,7 +152,7 @@ entry_set_bill( gpointer pObject, gpointer val )
 static GncEntry*
 load_single_entry( GncSqlBackend* be, GncSqlRow* row )
 {
-    const GUID* guid;
+    const GncGUID* guid;
     GncEntry* pEntry;
 
     g_return_val_if_fail( be != NULL, NULL );

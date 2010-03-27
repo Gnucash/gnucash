@@ -32,13 +32,13 @@
 #include "qof.h"
 #include <gmodule.h>
 
-gboolean gnc_sql_recurrence_save( GncSqlBackend* be, const GUID* guid, const Recurrence* pRecurrence );
-void gnc_sql_recurrence_save_list( GncSqlBackend* be, const GUID* guid, GList* schedule );
-gboolean gnc_sql_recurrence_delete( GncSqlBackend* be, const GUID* guid );
+gboolean gnc_sql_recurrence_save( GncSqlBackend* be, const GncGUID* guid, const Recurrence* pRecurrence );
+void gnc_sql_recurrence_save_list( GncSqlBackend* be, const GncGUID* guid, GList* schedule );
+gboolean gnc_sql_recurrence_delete( GncSqlBackend* be, const GncGUID* guid );
 /*@ null @*/
-Recurrence* gnc_sql_recurrence_load( GncSqlBackend* be, const GUID* guid );
+Recurrence* gnc_sql_recurrence_load( GncSqlBackend* be, const GncGUID* guid );
 /*@ null @*/
-GList* gnc_sql_recurrence_load_list( GncSqlBackend* be, const GUID* guid );
+GList* gnc_sql_recurrence_load_list( GncSqlBackend* be, const GncGUID* guid );
 
 void gnc_sql_init_recurrence_handler( void );
 

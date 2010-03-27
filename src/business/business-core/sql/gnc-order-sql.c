@@ -69,7 +69,7 @@ static GncSqlColumnTableEntry col_table[] =
 static GncOrder*
 load_single_order( GncSqlBackend* be, GncSqlRow* row )
 {
-    const GUID* guid;
+    const GncGUID* guid;
     GncOrder* pOrder;
 
     g_return_val_if_fail( be != NULL, NULL );
@@ -205,7 +205,7 @@ load_order_guid( const GncSqlBackend* be, GncSqlRow* row,
                  const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
-    GUID guid;
+    GncGUID guid;
     GncOrder* order = NULL;
 
     g_return_if_fail( be != NULL );

@@ -142,9 +142,9 @@ void gncTaxTableCommitEdit (GncTaxTable *table);
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
  *  Equivalent function prototype is
- *  GncTaxTable * gncTaxTableLookup (QofBook *book, const GUID *guid);
+ *  GncTaxTable * gncTaxTableLookup (QofBook *book, const GncGUID *guid);
  */
-static inline GncTaxTable *gncTaxTableLookup (const QofBook* book, const GUID *guid)
+static inline GncTaxTable *gncTaxTableLookup (const QofBook* book, const GncGUID *guid)
 {
     QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_TAXTABLE, GncTaxTable);
 }

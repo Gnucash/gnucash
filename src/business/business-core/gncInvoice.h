@@ -183,9 +183,9 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot);
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
  *  Equivalent function prototype is
- *  GncInvoice * gncInvoiceLookup (QofBook *book, const GUID *guid);
+ *  GncInvoice * gncInvoiceLookup (QofBook *book, const GncGUID *guid);
  */
-static inline GncInvoice * gncInvoiceLookup (const QofBook *book, const GUID *guid)
+static inline GncInvoice * gncInvoiceLookup (const QofBook *book, const GncGUID *guid)
 {
     QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_INVOICE, GncInvoice);
 }

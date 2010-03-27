@@ -92,7 +92,7 @@ static gboolean
 lot_id_handler (xmlNodePtr node, gpointer p)
 {
     struct lot_pdata *pdata = p;
-    GUID *guid;
+    GncGUID *guid;
 
     ENTER("(lot=%p)", pdata->lot);
     guid = dom_tree_to_guid(node);

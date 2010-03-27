@@ -55,10 +55,10 @@ struct account_s
     QofInstance inst;
 };
 
-/* Set the account's GUID. This should only be done when reading
+/* Set the account's GncGUID. This should only be done when reading
  * an account from a datafile, or some other external source. Never
  * call this on an existing account! */
-void xaccAccountSetGUID (Account *account, const GUID *guid);
+void xaccAccountSetGUID (Account *account, const GncGUID *guid);
 
 /* Register Accounts with the engine */
 gboolean xaccAccountRegister (void);
