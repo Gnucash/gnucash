@@ -32,9 +32,9 @@
 gboolean gnc_uri_is_file_protocol (const gchar *protocol)
 {
     if ( !g_ascii_strcasecmp (protocol, "file") ||
-         !g_ascii_strcasecmp (protocol, "xml") ||
-         !g_ascii_strcasecmp (protocol, "sqlite3")
-         )
+            !g_ascii_strcasecmp (protocol, "xml") ||
+            !g_ascii_strcasecmp (protocol, "sqlite3")
+       )
         return TRUE;
     else
         return FALSE;
@@ -121,7 +121,7 @@ void gnc_uri_get_components (const gchar *uri,
         {
             /* There is password in the url */
             delimiter[0] = '\0';
-            *password = g_strdup ( (const gchar*)(delimiter+1) );
+            *password = g_strdup ( (const gchar*)(delimiter + 1) );
         }
         *username = g_strdup ( (const gchar*)tmpusername );
     }
@@ -137,9 +137,9 @@ void gnc_uri_get_components (const gchar *uri,
     {
         delimiter[0] = '\0';
         if ( gnc_uri_is_file_protocol ( *protocol ) ) /* always return absolute file paths */
-             *path = gnc_resolve_file_path ( (const gchar*)(delimiter+1) );
+            *path = gnc_resolve_file_path ( (const gchar*)(delimiter + 1) );
         else /* path is no file path, so copy it as is */
-            *path = g_strdup ( (const gchar*)(delimiter+1) );
+            *path = g_strdup ( (const gchar*)(delimiter + 1) );
     }
 
     /* Check for a port specifier */
@@ -147,7 +147,7 @@ void gnc_uri_get_components (const gchar *uri,
     if ( delimiter != NULL )
     {
         delimiter[0] = '\0';
-        *port = g_ascii_strtoll ( delimiter+1, NULL, 0 );
+        *port = g_ascii_strtoll ( delimiter + 1, NULL, 0 );
     }
 
     *hostname = g_strdup ( (const gchar*)tmphostname );
@@ -206,7 +206,7 @@ gchar *gnc_uri_create_uri (const gchar *protocol,
                            const gchar *password,
                            const gchar *path)
 {
-    gchar *userpass=NULL, *portstr=NULL, *uri=NULL;
+    gchar *userpass = NULL, *portstr = NULL, *uri = NULL;
 
     g_return_val_if_fail( path != 0, NULL );
 

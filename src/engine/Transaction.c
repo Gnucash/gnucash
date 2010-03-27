@@ -740,7 +740,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
     }
 
     if ((same_book && ta->description != tb->description)
-        || (!same_book && safe_strcmp(ta->description, tb->description)))
+            || (!same_book && safe_strcmp(ta->description, tb->description)))
     {
         PWARN ("descriptions differ: %s vs %s", ta->description, tb->description);
         return FALSE;

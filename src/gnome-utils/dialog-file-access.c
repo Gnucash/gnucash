@@ -59,7 +59,7 @@ typedef struct FileAccessWindow
 } FileAccessWindow;
 
 void gnc_ui_file_access_file_activated_cb( GtkFileChooser *chooser,
-                                           FileAccessWindow *faw );
+        FileAccessWindow *faw );
 void gnc_ui_file_access_response_cb( GtkDialog *, gint, GtkDialog * );
 static void cb_uri_type_changed_cb( GtkComboBox* cb );
 

@@ -1,6 +1,6 @@
 /*
  * FILE:
- * hello.c 
+ * hello.c
  *
  * FUNCTION:
  * The first in a sequence of demos for cgi-bin programming
@@ -17,61 +17,63 @@
 #include "gnc-engine.h"
 #include "io-gncxml-v2.h"
 
- 
+
 int
-main (int argc, char *argv[]) 
+main (int argc, char *argv[])
 {
-   int fake_argc =1;
-   char * fake_argv[] = {"hello", 0};
-   QofBook *book;
-   int rc;
-   
-   /* intitialize the engine */
-   gnc_engine_init (fake_argc, fake_argv);
+    int fake_argc = 1;
+    char * fake_argv[] = {"hello", 0};
+    QofBook *book;
+    int rc;
 
-   /* dirty little hack to work around commodity borkeness */
-   {
-      gnc_commodity_table *t = gnc_engine_commodities ();
-      gnc_commodity *cm = gnc_commodity_new ("US Dollar", "ISO4217", "USD",  "840", 100);
-      gnc_commodity_table_insert (t, cm);
-   }
+    /* intitialize the engine */
+    gnc_engine_init (fake_argc, fake_argv);
 
-   /* contact the database, which is a flat file for this demo */
-   book = qof_book_new ();
+    /* dirty little hack to work around commodity borkeness */
+    {
+        gnc_commodity_table *t = gnc_engine_commodities ();
+        gnc_commodity *cm = gnc_commodity_new ("US Dollar", "ISO4217", "USD",  "840", 100);
+        gnc_commodity_table_insert (t, cm);
+    }
 
-   rc = gnc_book_begin (book, "file:/tmp/demo.gml", FALSE, FALSE);
-   if (!rc) {
-      GNCBackendError err = gnc_book_get_error (book);
-      printf ("HTTP/1.1 500 Server Error\n");
-      printf ("\n");
-      printf ("err=%d \n", err);
-      goto bookerrexit;
-   }
+    /* contact the database, which is a flat file for this demo */
+    book = qof_book_new ();
 
-   rc = gnc_book_load (book);
-   if (!rc) {
-      GNCBackendError err = gnc_book_get_error (book);
-      printf ("HTTP/1.1 500 Server Error\n");
-      printf ("\n");
-      printf ("err=%d \n", err);
-      goto bookerrexit;
-   }
+    rc = gnc_book_begin (book, "file:/tmp/demo.gml", FALSE, FALSE);
+    if (!rc)
+    {
+        GNCBackendError err = gnc_book_get_error (book);
+        printf ("HTTP/1.1 500 Server Error\n");
+        printf ("\n");
+        printf ("err=%d \n", err);
+        goto bookerrexit;
+    }
 
-   /* print the HTTP header */
-   printf ("HTTP/1.1 200 OK\n");
-   printf ("Content-Type: text/gnc-xml\r\n");
-   // the current write interfaces don't give us a length :-( 
-   // printf ("Content-Length: %d\r\n", sz);
-   printf ("\r\n");
+    rc = gnc_book_load (book);
+    if (!rc)
+    {
+        GNCBackendError err = gnc_book_get_error (book);
+        printf ("HTTP/1.1 500 Server Error\n");
+        printf ("\n");
+        printf ("err=%d \n", err);
+        goto bookerrexit;
+    }
 
-   gnc_book_write_to_xml_filehandle_v2 (book, stdout);
+    /* print the HTTP header */
+    printf ("HTTP/1.1 200 OK\n");
+    printf ("Content-Type: text/gnc-xml\r\n");
+    // the current write interfaces don't give us a length :-(
+    // printf ("Content-Length: %d\r\n", sz);
+    printf ("\r\n");
+
+    gnc_book_write_to_xml_filehandle_v2 (book, stdout);
 
 bookerrexit:
-   /* close the book */
-   qof_book_destroy (book);
+    /* close the book */
+    qof_book_destroy (book);
 
-   /* shut down the engine */
-   gnc_engine_shutdown ();
+    /* shut down the engine */
+    gnc_engine_shutdown ();
 
-   return 0;
+    return 0;
 }

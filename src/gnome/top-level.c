@@ -96,7 +96,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
                                                location);                   \
       return FALSE;                                                         \
     }                                                                       \
-
+ 
 
 static gboolean
 gnc_html_register_url_cb (const char *location, const char *label,

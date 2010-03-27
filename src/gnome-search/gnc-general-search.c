@@ -538,7 +538,7 @@ gnc_general_search_set_selected (GNCGeneralSearch *gsl, gpointer selection)
     {
         const QofParam *get_guid = priv->get_guid;
         priv->guid = * ((GncGUID *)(get_guid->param_getfcn
-                                 (gsl->selected_item, get_guid)));
+                                    (gsl->selected_item, get_guid)));
         gnc_gui_component_watch_entity
         (priv->component_id, &(priv->guid),
          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);

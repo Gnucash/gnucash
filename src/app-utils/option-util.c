@@ -1727,23 +1727,23 @@ gnc_commit_option(GNCOption *option)
         section = gnc_option_section(option);
 
 #ifdef GNOME
-		{
-			GtkWidget *dialog = gtk_message_dialog_new(NULL,
-                                        0,
-                                        GTK_MESSAGE_ERROR,
-                                        GTK_BUTTONS_OK,
-                                        format,
-                                        section ? section : "(null)",
-                                        name ? name : "(null)",
-                                        message ? message : "(null)");
-			gtk_dialog_run(GTK_DIALOG(dialog));
-			gtk_widget_destroy(dialog);
-		}
+        {
+            GtkWidget *dialog = gtk_message_dialog_new(NULL,
+                                0,
+                                GTK_MESSAGE_ERROR,
+                                GTK_BUTTONS_OK,
+                                format,
+                                section ? section : "(null)",
+                                name ? name : "(null)",
+                                message ? message : "(null)");
+            gtk_dialog_run(GTK_DIALOG(dialog));
+            gtk_widget_destroy(dialog);
+        }
 #else
-		printf(format, 
-			   section ? section : "(null)",
-			   name ? name : "(null)",
-			   message ? message : "(null)");
+        printf(format,
+               section ? section : "(null)",
+               name ? name : "(null)",
+               message ? message : "(null)");
 #endif
 
         if (name != NULL)

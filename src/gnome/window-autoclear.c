@@ -108,18 +108,18 @@ ght_gnc_numeric_hash(gconstpointer v1)
 
 typedef struct _sack_foreach_data_t
 {
-  gnc_numeric split_value;
-  GList *reachable_list;
+    gnc_numeric split_value;
+    GList *reachable_list;
 } *sack_foreach_data_t;
 
 static void sack_foreach_func(gpointer key, gpointer value, gpointer user_data)
 {
-  sack_foreach_data_t data = (sack_foreach_data_t)user_data;
-  gnc_numeric thisvalue = *(gnc_numeric *)key;
+    sack_foreach_data_t data = (sack_foreach_data_t)user_data;
+    gnc_numeric thisvalue = *(gnc_numeric *)key;
 
-  gnc_numeric reachable_value = gnc_numeric_add_fixed(thisvalue, data->split_value);
-  data->reachable_list = g_list_append(data->reachable_list, g_memdup(&reachable_value, sizeof(gnc_numeric)));
-  printf("    Sack: found %s, added %s\n", gnc_numeric_to_string(thisvalue), gnc_numeric_to_string(reachable_value));
+    gnc_numeric reachable_value = gnc_numeric_add_fixed(thisvalue, data->split_value);
+    data->reachable_list = g_list_append(data->reachable_list, g_memdup(&reachable_value, sizeof(gnc_numeric)));
+    printf("    Sack: found %s, added %s\n", gnc_numeric_to_string(thisvalue), gnc_numeric_to_string(reachable_value));
 }
 
 static void

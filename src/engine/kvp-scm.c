@@ -107,7 +107,7 @@ gnc_kvp_value_ptr_to_scm(KvpValue* val)
     case KVP_TYPE_GDATE:
         return gnc_timespec2timepair(gdate_to_timespec(kvp_value_get_gdate(val)));
 
-    /* FIXME: handle types below */
+        /* FIXME: handle types below */
     case KVP_TYPE_BINARY:
         break;
     case KVP_TYPE_GLIST:

@@ -1842,8 +1842,8 @@ integer_to_words(gint64 val)
 #ifdef _MSC_VER
 static double round(double x)
 {
-	// A simple round() implementation because MSVC doesn't seem to have that
-	return floor(x + 0.5);
+    // A simple round() implementation because MSVC doesn't seem to have that
+    return floor(x + 0.5);
 }
 #endif
 

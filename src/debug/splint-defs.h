@@ -38,12 +38,15 @@ only when running splint, so the danger is manageable. */
 void dbi_conn_close( /*@ only @*/ dbi_conn );
 int dbi_conn_error( dbi_conn, /*@ out @*/ const char** );
 dbi_result dbi_conn_get_table_list( dbi_conn, const char*, /*@ null @*/ const char* );
-/*@ dependent @*/ const char* dbi_conn_get_option( dbi_conn, const char* );
+/*@ dependent @*/
+const char* dbi_conn_get_option( dbi_conn, const char* );
 int dbi_result_free( /*@ only @*/ dbi_result );
-/*@ dependent @*/ const char* dbi_result_get_string_idx( dbi_result, unsigned int );
+/*@ dependent @*/
+const char* dbi_result_get_string_idx( dbi_result, unsigned int );
 dbi_driver dbi_driver_list( /*@ null @*/ dbi_driver );
 size_t dbi_conn_quote_string_copy( dbi_conn, const char*, /*@ out @*/ char** );
-/*@ dependent @*/ dbi_driver_get_name( dbi_driver );
+/*@ dependent @*/
+dbi_driver_get_name( dbi_driver );
 #endif
 
 /* gdate.h */
@@ -56,7 +59,8 @@ void g_date_free( /*@ only @*/ GDate* );
 
 #ifdef __G_MEM_H__
 /*@ null @*/ /*@ only @*/ /*@ out @*/ gpointer g_malloc(gsize n_bytes);
-/*@ null @*/ /*@ only @*/ /*@ out @*/ gpointer g_malloc0(gsize n_bytes);
+/*@ null @*/ /*@ only @*/ /*@ out @*/
+gpointer g_malloc0(gsize n_bytes);
 void g_free( /*@ only @*/ gpointer );
 #endif
 
@@ -64,7 +68,8 @@ void g_free( /*@ only @*/ gpointer );
 
 #ifdef __G_VALUE_H__
 GValue* g_value_init( /*@ out @*/ GValue*, GType );
-/*@ dependent @*/ const gchar* g_value_get_string(const GValue *value);
+/*@ dependent @*/
+const gchar* g_value_get_string(const GValue *value);
 void g_value_take_string( GValue*, /*@ only @*/ const gchar *);
 #endif
 
@@ -79,7 +84,8 @@ gchar* g_string_free( /*@ only @*/ GString*, gboolean );
 #ifdef __G_HASH_H__
 GHashTable* g_hash_table_new_full( GHashFunc, GEqualFunc, /*@ null @*/ GDestroyNotify, /*@ null @*/ GDestroyNotify );
 void g_hash_table_insert(GHashTable *hash_table, /*@ only @*/ gpointer key, gpointer value);
-/*@ dependent @*/ g_hash_table_lookup( GHashTable* hash_table, gpointer key );
+/*@ dependent @*/
+g_hash_table_lookup( GHashTable* hash_table, gpointer key );
 #endif
 
 /* glist.h */
@@ -107,7 +113,7 @@ gint64 g_ascii_strtoll( const gchar*, /*@ null @*/ gchar**, guint );
 
 #ifdef __G_TYPE_H__
 /*@ dependent @*/ GTypeInstance* g_type_check_instance_cast(GTypeInstance *instance,
-						 				GType iface_type);
+        GType iface_type);
 #endif
 
 /* gtestutils.h */

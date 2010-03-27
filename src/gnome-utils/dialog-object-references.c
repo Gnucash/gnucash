@@ -60,7 +60,7 @@ gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
 
     /* Set up the list store */
     store = gtk_list_store_new( 1, G_TYPE_STRING );
-    for( node = objlist; node != NULL; node = node->next )
+    for ( node = objlist; node != NULL; node = node->next )
     {
         QofInstance* inst = node->data;
         GtkTreeIter iter;

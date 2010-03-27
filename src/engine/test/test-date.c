@@ -84,9 +84,9 @@ check_conversion (const char * str, Timespec expected_ts)
     d1 = timespec_to_gdate(ts);
     d2 = timespec_to_gdate(gdate_to_timespec(d1));
     if ((g_date_compare(&d1, &d2) != 0)
-        || (g_date_get_day(&d1) != day)
-        || (g_date_get_month(&d1) != month)
-        || (g_date_get_year(&d1) != year))
+            || (g_date_get_day(&d1) != day)
+            || (g_date_get_month(&d1) != month)
+            || (g_date_get_year(&d1) != year))
     {
         fprintf (stderr,
                  "\nmis-converted \"%s\" to GDate\n",

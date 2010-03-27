@@ -923,13 +923,14 @@ gchar* qof_instance_get_display_name(const QofInstance* inst)
     else
     {
         /* Not implemented - return default string */
-        return g_strdup_printf("Object %s %p", 
-                            qof_collection_get_type(qof_instance_get_collection(inst)),
-                            inst);
+        return g_strdup_printf("Object %s %p",
+                               qof_collection_get_type(qof_instance_get_collection(inst)),
+                               inst);
     }
 }
 
-typedef struct {
+typedef struct
+{
     const QofInstance* inst;
     GList* list;
 } GetReferringObjectHelperData;
@@ -972,8 +973,8 @@ GList* qof_instance_get_referring_object_list(const QofInstance* inst)
     data.list = NULL;
 
     qof_book_foreach_collection(qof_instance_get_book(inst),
-                                    get_referring_object_helper,
-                                    &data);
+                                get_referring_object_helper,
+                                &data);
     return data.list;
 }
 

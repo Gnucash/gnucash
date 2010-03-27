@@ -960,7 +960,8 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     /* If the account has objects referring to it, show the list - the account can't be deleted until these
        references are dealt with. */
     list = qof_instance_get_referring_object_list(QOF_INSTANCE(account));
-    if (list != NULL) {
+    if (list != NULL)
+    {
 #define EXPLANATION "The list below shows objects which make use of the account which you want to delete.\nBefore you can delete it, you must either delete those objects or else modify them so they make use\nof another account"
 
         gnc_ui_object_references_show( _(EXPLANATION), list);

@@ -811,17 +811,17 @@ static void _gncBillTermDestroy (QofBook *book)
 
 static QofObject gncBillTermDesc =
 {
-    DI(.interface_version =) QOF_OBJECT_VERSION,
-    DI(.e_type            =) _GNC_MOD_NAME,
-    DI(.type_label        =) "Billing Term",
-    DI(.create            =) (gpointer)gncBillTermCreate,
-    DI(.book_begin        =) _gncBillTermCreate,
-    DI(.book_end          =) _gncBillTermDestroy,
-    DI(.is_dirty          =) qof_collection_is_dirty,
-    DI(.mark_clean        =) qof_collection_mark_clean,
-    DI(.foreach           =) qof_collection_foreach,
-    DI(.printable         =) NULL,
-    DI(.version_cmp       =) (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+    DI(.interface_version = ) QOF_OBJECT_VERSION,
+    DI(.e_type            = ) _GNC_MOD_NAME,
+    DI(.type_label        = ) "Billing Term",
+    DI(.create            = ) (gpointer)gncBillTermCreate,
+    DI(.book_begin        = ) _gncBillTermCreate,
+    DI(.book_end          = ) _gncBillTermDestroy,
+    DI(.is_dirty          = ) qof_collection_is_dirty,
+    DI(.mark_clean        = ) qof_collection_mark_clean,
+    DI(.foreach           = ) qof_collection_foreach,
+    DI(.printable         = ) NULL,
+    DI(.version_cmp       = ) (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncBillTermRegister (void)

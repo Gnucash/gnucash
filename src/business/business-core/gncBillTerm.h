@@ -121,7 +121,7 @@ void gncBillTermSetCutoff (GncBillTerm *term, gint cutoff);
  */
 static inline GncBillTerm * gncBillTermLookup (const QofBook *book, const GncGUID *guid)
 {
-    QOF_BOOK_RETURN_ENTITY(book, guid,GNC_ID_BILLTERM, GncBillTerm);
+    QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_BILLTERM, GncBillTerm);
 }
 
 GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name);

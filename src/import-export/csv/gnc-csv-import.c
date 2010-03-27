@@ -330,7 +330,7 @@ static void treeview_resized(GtkWidget* widget, GtkAllocation* allocation, GncCs
  * @param preview The display of the data being imported
  */
 static void column_type_changed(GtkCellRenderer* renderer, gchar* path,
-                               GtkTreeIter* new_text_iter, GncCsvPreview* preview)
+                                GtkTreeIter* new_text_iter, GncCsvPreview* preview)
 {
     /* ncols is the number of columns in the data. */
     int i, ncols = preview->parse_data->column_types->len;

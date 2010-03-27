@@ -49,13 +49,13 @@ void gnc_keyring_set_password (const gchar *access_method,
     guint32 *item_id = NULL;
 
     gkr_result = gnome_keyring_set_network_password_sync
-                       (NULL, user, NULL, server, service,
-                        access_method, NULL, port, password, item_id);
+                 (NULL, user, NULL, server, service,
+                  access_method, NULL, port, password, item_id);
 
     if (gkr_result != GNOME_KEYRING_RESULT_OK)
     {
         PWARN ("Gnome-keyring error: %s",
-                gnome_keyring_result_to_message(gkr_result));
+               gnome_keyring_result_to_message(gkr_result));
         PWARN ("The user will be prompted for a password again next time.");
     }
 #endif /* HAVE_GNOME_KEYRING */
@@ -74,15 +74,15 @@ void gnc_keyring_set_password (const gchar *access_method,
     //       update function instead
     g_set_application_name(PACKAGE);
     status = SecKeychainAddInternetPassword ( NULL, /* keychain */
-               strlen(server), server,              /* servername */
-               strlen(access_method), access_method,/* securitydomain */
-               strlen(*user), *user,                /* acountname */
-               strlen(service), service,            /* path */
-               port,                                /* port */
-               kSecProtocolTypeAny,                 /* protocol */
-               kSecAuthenticationTypeDefault,       /* auth type */
-               strlen(password), password,          /* passworddata */
-               SecKeychainItemRef *itemRef );
+             strlen(server), server,              /* servername */
+             strlen(access_method), access_method,/* securitydomain */
+             strlen(*user), *user,                /* acountname */
+             strlen(service), service,            /* path */
+             port,                                /* port */
+             kSecProtocolTypeAny,                 /* protocol */
+             kSecAuthenticationTypeDefault,       /* auth type */
+             strlen(password), password,          /* passworddata */
+             SecKeychainItemRef * itemRef );
 
     if ( status != noErr )
     {
@@ -129,8 +129,8 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
 #ifdef HAVE_GNOME_KEYRING
     g_set_application_name(PACKAGE);
     gkr_result = gnome_keyring_find_network_password_sync
-                       ( *user, NULL, server, service,
-                        access_method, NULL, port, &found_list );
+                 ( *user, NULL, server, service,
+                   access_method, NULL, port, &found_list );
 
     if (gkr_result == GNOME_KEYRING_RESULT_OK)
     {
@@ -141,7 +141,7 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
     }
     else
         PWARN ("Gnome-keyring access failed: %s.",
-                gnome_keyring_result_to_message(gkr_result));
+               gnome_keyring_result_to_message(gkr_result));
 
     gnome_keyring_network_password_list_free(found_list);
 #endif /* HAVE_GNOME_KEYRING */
@@ -157,15 +157,15 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
      * distinguish between these two.
      */
     status = SecKeychainFindInternetPassword( NULL,
-                strlen(server), server,
-                strlen(access_method), access_method,
-                strlen(*user), *user,
-                strlen(service), service,
-                port,
-                kSecProtocolTypeAny,
-                kSecAuthenticationTypeDefault,
-                &password_length, &password_data,
-                NULL);
+             strlen(server), server,
+             strlen(access_method), access_method,
+             strlen(*user), *user,
+             strlen(service), service,
+             port,
+             kSecProtocolTypeAny,
+             kSecAuthenticationTypeDefault,
+             &password_length, &password_data,
+             NULL);
 
     if ( status == noErr )
     {
@@ -195,17 +195,17 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
         gchar *db_path, *heading;
 
         if ( port == 0 )
-            db_path=g_strdup_printf ( "%s://%s/%s", access_method, server, service );
+            db_path = g_strdup_printf ( "%s://%s/%s", access_method, server, service );
         else
-            db_path=g_strdup_printf ( "%s://%s:%d/%s", access_method, server, port, service );
+            db_path = g_strdup_printf ( "%s://%s:%d/%s", access_method, server, port, service );
         heading = g_strdup_printf ( /* Translators: %s is a path to a database or any other url,
                  like mysql://user@server.somewhere/somedb, http://www.somequotes.com/thequotes */
-                _("Enter a user name and password to connect to: %s"),
-                             db_path );
+                      _("Enter a user name and password to connect to: %s"),
+                      db_path );
 
         password_found = gnc_get_username_password ( parent, heading,
-                                                     *user, NULL,
-                                                     user, password );
+                         *user, NULL,
+                         user, password );
         g_free ( db_path );
         g_free ( heading );
 

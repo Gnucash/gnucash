@@ -357,10 +357,10 @@ gnc_schedxaction_class_init (SchedXactionClass *klass)
     (gobject_class,
      PROP_TEMPLATE_ACCOUNT,
      g_param_spec_object("template-account",
-                        "Template account",
-                        "Account which holds the template transactions.",
-                        GNC_TYPE_ACCOUNT,
-                        G_PARAM_READWRITE));
+                         "Template account",
+                         "Account which holds the template transactions.",
+                         GNC_TYPE_ACCOUNT,
+                         G_PARAM_READWRITE));
 }
 
 static void

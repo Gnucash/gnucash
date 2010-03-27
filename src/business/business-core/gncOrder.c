@@ -520,17 +520,17 @@ _gncOrderPrintable (gpointer obj)
 
 static QofObject gncOrderDesc =
 {
-    DI(.interface_version =) QOF_OBJECT_VERSION,
-    DI(.e_type            =) _GNC_MOD_NAME,
-    DI(.type_label        =) "Order",
-    DI(.create            =) (gpointer)gncOrderCreate,
-    DI(.book_begin        =) NULL,
-    DI(.book_end          =) NULL,
-    DI(.is_dirty          =) qof_collection_is_dirty,
-    DI(.mark_clean        =) qof_collection_mark_clean,
-    DI(.foreach           =) qof_collection_foreach,
-    DI(.printable         =) _gncOrderPrintable,
-    DI(.version_cmp       =) (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+    DI(.interface_version = ) QOF_OBJECT_VERSION,
+    DI(.e_type            = ) _GNC_MOD_NAME,
+    DI(.type_label        = ) "Order",
+    DI(.create            = ) (gpointer)gncOrderCreate,
+    DI(.book_begin        = ) NULL,
+    DI(.book_end          = ) NULL,
+    DI(.is_dirty          = ) qof_collection_is_dirty,
+    DI(.mark_clean        = ) qof_collection_mark_clean,
+    DI(.foreach           = ) qof_collection_foreach,
+    DI(.printable         = ) _gncOrderPrintable,
+    DI(.version_cmp       = ) (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncOrderRegister (void)

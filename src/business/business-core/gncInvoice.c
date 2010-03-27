@@ -198,7 +198,8 @@ impl_get_display_name(const QofInstance* inst)
         s = g_strdup_printf("Invoice %s (%s)", inv->id, display_name);
         g_free(display_name);
     }
-    else {
+    else
+    {
         s = g_strdup_printf("Invoice %s", inv->id);
     }
 
@@ -1919,17 +1920,17 @@ static const char * _gncInvoicePrintable (gpointer obj)
 
 static QofObject gncInvoiceDesc =
 {
-    DI(.interface_version =) QOF_OBJECT_VERSION,
-    DI(.e_type            =) _GNC_MOD_NAME,
-    DI(.type_label        =) "Invoice",
-    DI(.create            =) (gpointer)gncInvoiceCreate,
-    DI(.book_begin        =) NULL,
-    DI(.book_end          =) NULL,
-    DI(.is_dirty          =) qof_collection_is_dirty,
-    DI(.mark_clean        =) qof_collection_mark_clean,
-    DI(.foreach           =) qof_collection_foreach,
-    DI(.printable         =) _gncInvoicePrintable,
-    DI(.version_cmp       =) (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+    DI(.interface_version = ) QOF_OBJECT_VERSION,
+    DI(.e_type            = ) _GNC_MOD_NAME,
+    DI(.type_label        = ) "Invoice",
+    DI(.create            = ) (gpointer)gncInvoiceCreate,
+    DI(.book_begin        = ) NULL,
+    DI(.book_end          = ) NULL,
+    DI(.is_dirty          = ) qof_collection_is_dirty,
+    DI(.mark_clean        = ) qof_collection_mark_clean,
+    DI(.foreach           = ) qof_collection_foreach,
+    DI(.printable         = ) _gncInvoicePrintable,
+    DI(.version_cmp       = ) (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 static void

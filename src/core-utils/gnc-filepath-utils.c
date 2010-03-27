@@ -178,7 +178,7 @@ gnc_resolve_file_path (const gchar * filefrag)
 
 /* ====================================================================== */
 
-/** @brief Check that the supplied directory path exists, is a directory, and 
+/** @brief Check that the supplied directory path exists, is a directory, and
  * that the user has adequate permissions to use it.
  *
  * @param dirname The path to check

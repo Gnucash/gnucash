@@ -749,7 +749,7 @@ gncCustomerEqual(const GncCustomer *a, const GncCustomer *b)
         PWARN("addresses differ");
         return FALSE;
     }
-    
+
     return TRUE;
 }
 
@@ -796,17 +796,17 @@ static const char * _gncCustomerPrintable (gpointer item)
 
 static QofObject gncCustomerDesc =
 {
-    DI(.interface_version =) QOF_OBJECT_VERSION,
-    DI(.e_type            =) _GNC_MOD_NAME,
-    DI(.type_label        =) "Customer",
-    DI(.create            =) (gpointer)gncCustomerCreate,
-    DI(.book_begin        =) NULL,
-    DI(.book_end          =) NULL,
-    DI(.is_dirty          =) qof_collection_is_dirty,
-    DI(.mark_clean        =) qof_collection_mark_clean,
-    DI(.foreach           =) qof_collection_foreach,
-    DI(.printable         =) (const char * (*)(gpointer))gncCustomerGetName,
-    DI(.version_cmp       =) (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+    DI(.interface_version = ) QOF_OBJECT_VERSION,
+    DI(.e_type            = ) _GNC_MOD_NAME,
+    DI(.type_label        = ) "Customer",
+    DI(.create            = ) (gpointer)gncCustomerCreate,
+    DI(.book_begin        = ) NULL,
+    DI(.book_end          = ) NULL,
+    DI(.is_dirty          = ) qof_collection_is_dirty,
+    DI(.mark_clean        = ) qof_collection_mark_clean,
+    DI(.foreach           = ) qof_collection_foreach,
+    DI(.printable         = ) (const char * (*)(gpointer))gncCustomerGetName,
+    DI(.version_cmp       = ) (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
 gboolean gncCustomerRegister (void)
