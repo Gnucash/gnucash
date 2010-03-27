@@ -54,7 +54,7 @@ create_session(void)
     struct timeval tv;
     gnc_commodity_table* table;
     gnc_commodity* currency;
-    
+
     table = gnc_commodity_table_get_table( book );
     currency = gnc_commodity_table_lookup( table, GNC_COMMODITY_NS_CURRENCY, "CAD" );
 
@@ -110,7 +110,7 @@ int main (int argc, char ** argv)
     filename = tempnam( "/tmp", "test-sqlite3-" );
     printf( "Using filename: %s\n", filename );
     test_dbi_store_and_reload( "sqlite3", session_1, filename );
-    #if 0
+#if 0
     printf( "TEST_MYSQL_URL='%s'\n", TEST_MYSQL_URL );
     if ( strlen( TEST_MYSQL_URL ) > 0 )
     {
@@ -123,7 +123,7 @@ int main (int argc, char ** argv)
         session_1 = create_session();
         test_dbi_store_and_reload( "pgsql", session_1, TEST_PGSQL_URL );
     }
-    #endif
+#endif
     print_test_results();
     qof_close();
     exit(get_rv());

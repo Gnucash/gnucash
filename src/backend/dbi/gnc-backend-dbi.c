@@ -152,10 +152,10 @@ typedef struct
     provider_functions_t* provider;
     gint last_error;        // Code of the last error that occurred. This is set in the error callback function
     gint error_repeat;      // Used in case of transient errors. After such error, another attempt at the
-                            // original call is allowed. error_repeat tracks the number of attempts and can
-                            // be used to prevent infinite loops.
+    // original call is allowed. error_repeat tracks the number of attempts and can
+    // be used to prevent infinite loops.
     gboolean retry;         // Signals the calling function that it should retry (the error handler detected
-                            // transient error and managed to resolve it, but it can't run the original query)
+    // transient error and managed to resolve it, but it can't run the original query)
 } GncDbiSqlConnection;
 
 #define DBI_MAX_CONN_ATTEMPTS 5
@@ -323,7 +323,8 @@ mysql_error_fn( dbi_conn conn, void* user_data )
         {
             PERR( "DBI error: %s - Failed to reconnect after %d attempts.\n", msg, DBI_MAX_CONN_ATTEMPTS );
             gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 0, FALSE );
-        } else
+        }
+        else
         {
             PINFO( "DBI error: %s - Reconnecting...\n", msg );
             gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CONN_LOST, 1, TRUE );
@@ -811,10 +812,12 @@ gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
             const gchar* table_name = (const gchar*)node->data;
             dbi_result result;
 
-            do {
+            do
+            {
                 gnc_dbi_init_error( ((GncDbiSqlConnection*)(be->sql_be.conn)) );
                 result = dbi_conn_queryf( be->conn, "DROP TABLE %s", table_name );
-            } while ( ((GncDbiSqlConnection*)(be->sql_be.conn))->retry );
+            }
+            while ( ((GncDbiSqlConnection*)(be->sql_be.conn))->retry );
             if ( result != NULL )
             {
                 status = dbi_result_free( result );
@@ -1445,10 +1448,12 @@ conn_execute_select_statement( GncSqlConnection* conn, GncSqlStatement* stmt )
     dbi_result result;
 
     DEBUG( "SQL: %s\n", dbi_stmt->sql->str );
-    do {
+    do
+    {
         gnc_dbi_init_error( dbi_conn );
         result = dbi_conn_query( dbi_conn->conn, dbi_stmt->sql->str );
-    } while ( dbi_conn->retry );
+    }
+    while ( dbi_conn->retry );
     if ( result == NULL )
     {
         PERR( "Error executing SQL %s\n", dbi_stmt->sql->str );
@@ -1467,10 +1472,12 @@ conn_execute_nonselect_statement( GncSqlConnection* conn, GncSqlStatement* stmt 
     gint status;
 
     DEBUG( "SQL: %s\n", dbi_stmt->sql->str );
-    do {
+    do
+    {
         gnc_dbi_init_error( dbi_conn );
         result = dbi_conn_query( dbi_conn->conn, dbi_stmt->sql->str );
-    } while( dbi_conn->retry );
+    }
+    while ( dbi_conn->retry );
     if ( result == NULL )
     {
         PERR( "Error executing SQL %s\n", dbi_stmt->sql->str );
@@ -1549,10 +1556,12 @@ conn_begin_transaction( /*@ unused @*/ GncSqlConnection* conn )
 
     DEBUG( "BEGIN\n" );
 
-    do {
+    do
+    {
         gnc_dbi_init_error( dbi_conn );
         result = dbi_conn_queryf( dbi_conn->conn, "BEGIN" );
-    } while( dbi_conn->retry );
+    }
+    while ( dbi_conn->retry );
 
     status = dbi_result_free( result );
     if ( status < 0 )

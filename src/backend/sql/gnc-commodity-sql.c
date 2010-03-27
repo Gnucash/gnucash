@@ -19,7 +19,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /** @file gnc-commodity-sql.c
- *  @brief load and save data to SQL 
+ *  @brief load and save data to SQL
  *  @author Copyright (c) 2006-2008 Phil Longstaff <plongstaff@rogers.com>
  *
  * This file implements the top-level QofBackend API for saving/
@@ -57,22 +57,27 @@ static void set_quote_source_name( gpointer pObject, /*@ null @*/ gpointer pValu
 #define COMMODITY_MAX_QUOTESOURCE_LEN 2048
 #define COMMODITY_MAX_QUOTE_TZ_LEN 2048
 
-static const GncSqlColumnTableEntry col_table[] = {
-	/*@ -full_init_block @*/
-    { "guid",         CT_GUID,    0,                             COL_NNUL|COL_PKEY, "guid" },
-    { "namespace",    CT_STRING,  COMMODITY_MAX_NAMESPACE_LEN,   COL_NNUL,          NULL, NULL,
-            (QofAccessFunc)gnc_commodity_get_namespace,
-            (QofSetterFunc)gnc_commodity_set_namespace },
+static const GncSqlColumnTableEntry col_table[] =
+{
+    /*@ -full_init_block @*/
+    { "guid",         CT_GUID,    0,                             COL_NNUL | COL_PKEY, "guid" },
+    {
+        "namespace",    CT_STRING,  COMMODITY_MAX_NAMESPACE_LEN,   COL_NNUL,          NULL, NULL,
+        (QofAccessFunc)gnc_commodity_get_namespace,
+        (QofSetterFunc)gnc_commodity_set_namespace
+    },
     { "mnemonic",     CT_STRING,  COMMODITY_MAX_MNEMONIC_LEN,    COL_NNUL,          "mnemonic" },
     { "fullname",     CT_STRING,  COMMODITY_MAX_FULLNAME_LEN,    0,                 "fullname" },
     { "cusip",        CT_STRING,  COMMODITY_MAX_CUSIP_LEN,       0,                 "cusip" },
     { "fraction",     CT_INT,     0,                             COL_NNUL,          "fraction" },
     { "quote_flag",   CT_BOOLEAN, 0,                             COL_NNUL,          "quote_flag" },
-    { "quote_source", CT_STRING,  COMMODITY_MAX_QUOTESOURCE_LEN, 0,                 NULL, NULL,
-            (QofAccessFunc)get_quote_source_name, set_quote_source_name },
+    {
+        "quote_source", CT_STRING,  COMMODITY_MAX_QUOTESOURCE_LEN, 0,                 NULL, NULL,
+        (QofAccessFunc)get_quote_source_name, set_quote_source_name
+    },
     { "quote_tz",     CT_STRING,  COMMODITY_MAX_QUOTE_TZ_LEN,    0,                 "quote-tz" },
     { NULL }
-	/*@ +full_init_block @*/
+    /*@ +full_init_block @*/
 };
 
 /* ================================================================= */
@@ -82,25 +87,25 @@ get_quote_source_name( gpointer pObject )
 {
     const gnc_commodity* pCommodity;
 
-	g_return_val_if_fail( pObject != NULL, NULL );
-	g_return_val_if_fail( GNC_IS_COMMODITY(pObject), NULL );
+    g_return_val_if_fail( pObject != NULL, NULL );
+    g_return_val_if_fail( GNC_IS_COMMODITY(pObject), NULL );
 
     pCommodity = GNC_COMMODITY(pObject);
     return (gpointer)gnc_quote_source_get_internal_name(
-                            gnc_commodity_get_quote_source(pCommodity));
+               gnc_commodity_get_quote_source(pCommodity));
 }
 
-static void 
+static void
 set_quote_source_name( gpointer pObject, gpointer pValue )
 {
     gnc_commodity* pCommodity;
     const gchar* quote_source_name = (const gchar*)pValue;
     gnc_quote_source* quote_source;
 
-	g_return_if_fail( pObject != NULL );
-	g_return_if_fail( GNC_IS_COMMODITY(pObject) );
+    g_return_if_fail( pObject != NULL );
+    g_return_if_fail( GNC_IS_COMMODITY(pObject) );
 
-	if( pValue == NULL ) return;
+    if ( pValue == NULL ) return;
 
     pCommodity = GNC_COMMODITY(pObject);
     quote_source = gnc_quote_source_lookup_by_internal( quote_source_name );
@@ -114,9 +119,9 @@ load_single_commodity( GncSqlBackend* be, GncSqlRow* row )
     gnc_commodity* pCommodity;
 
     pCommodity = gnc_commodity_new( pBook, NULL, NULL, NULL, NULL, 100 );
-	gnc_commodity_begin_edit( pCommodity );
+    gnc_commodity_begin_edit( pCommodity );
     gnc_sql_load_object( be, row, GNC_ID_COMMODITY, pCommodity, col_table );
-	gnc_commodity_commit_edit( pCommodity );
+    gnc_commodity_commit_edit( pCommodity );
 
     return pCommodity;
 }
@@ -130,44 +135,48 @@ load_all_commodities( GncSqlBackend* be )
 
     pTable = gnc_commodity_table_get_table( be->primary_book );
     stmt = gnc_sql_create_select_statement( be, COMMODITIES_TABLE );
-	if( stmt == NULL ) return;
+    if ( stmt == NULL ) return;
     result = gnc_sql_execute_select_statement( be, stmt );
-	gnc_sql_statement_dispose( stmt );
-    if( result != NULL ) {
+    gnc_sql_statement_dispose( stmt );
+    if ( result != NULL )
+    {
         gnc_commodity* pCommodity;
-		GncSqlRow* row = gnc_sql_result_get_first_row( result );
-		gchar* sql;
+        GncSqlRow* row = gnc_sql_result_get_first_row( result );
+        gchar* sql;
 
-        while( row != NULL ) {
+        while ( row != NULL )
+        {
             pCommodity = load_single_commodity( be, row );
 
-            if( pCommodity != NULL ) {
+            if ( pCommodity != NULL )
+            {
                 GncGUID guid;
 
                 guid = *qof_instance_get_guid( QOF_INSTANCE(pCommodity) );
                 pCommodity = gnc_commodity_table_insert( pTable, pCommodity );
                 qof_instance_set_guid( QOF_INSTANCE(pCommodity), &guid );
             }
-			row = gnc_sql_result_get_next_row( result );
+            row = gnc_sql_result_get_next_row( result );
         }
-		gnc_sql_result_dispose( result );
+        gnc_sql_result_dispose( result );
 
-		sql = g_strdup_printf( "SELECT DISTINCT guid FROM %s", COMMODITIES_TABLE );
-		gnc_sql_slots_load_for_sql_subquery( be, sql,
-										(BookLookupFn)gnc_commodity_find_commodity_by_guid );
-		g_free( sql );
+        sql = g_strdup_printf( "SELECT DISTINCT guid FROM %s", COMMODITIES_TABLE );
+        gnc_sql_slots_load_for_sql_subquery( be, sql,
+                                             (BookLookupFn)gnc_commodity_find_commodity_by_guid );
+        g_free( sql );
     }
 }
 /* ================================================================= */
 static void
 create_commodities_tables( GncSqlBackend* be )
 {
-	gint version;
+    gint version;
 
-	g_return_if_fail( be != NULL );
+    g_return_if_fail( be != NULL );
 
-	version = gnc_sql_get_table_version( be, COMMODITIES_TABLE );
-    if( version == 0 ) {
+    version = gnc_sql_get_table_version( be, COMMODITIES_TABLE );
+    if ( version == 0 )
+    {
         (void)gnc_sql_create_table( be, COMMODITIES_TABLE, TABLE_VERSION, col_table );
     }
 }
@@ -176,40 +185,49 @@ create_commodities_tables( GncSqlBackend* be )
 static gboolean
 do_commit_commodity( GncSqlBackend* be, QofInstance* inst, gboolean force_insert )
 {
-	const GncGUID* guid;
-	gboolean is_infant;
-	gint op;
-	gboolean is_ok;
+    const GncGUID* guid;
+    gboolean is_infant;
+    gint op;
+    gboolean is_ok;
 
-	is_infant = qof_instance_get_infant( inst );
-	if( qof_instance_get_destroying( inst ) ) {
-		op = OP_DB_DELETE;
-	} else if( be->is_pristine_db || is_infant || force_insert ) {
-		op = OP_DB_INSERT;
-	} else {
-		op = OP_DB_UPDATE;
-	}
+    is_infant = qof_instance_get_infant( inst );
+    if ( qof_instance_get_destroying( inst ) )
+    {
+        op = OP_DB_DELETE;
+    }
+    else if ( be->is_pristine_db || is_infant || force_insert )
+    {
+        op = OP_DB_INSERT;
+    }
+    else
+    {
+        op = OP_DB_UPDATE;
+    }
     is_ok = gnc_sql_do_db_operation( be, op, COMMODITIES_TABLE, GNC_ID_COMMODITY, inst, col_table );
 
-	if( is_ok ) {
-    	// Now, commit any slots
-    	guid = qof_instance_get_guid( inst );
-    	if( !qof_instance_get_destroying(inst) ) {
-        	is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-    	} else {
-        	is_ok = gnc_sql_slots_delete( be, guid );
-    	}
-	}
+    if ( is_ok )
+    {
+        // Now, commit any slots
+        guid = qof_instance_get_guid( inst );
+        if ( !qof_instance_get_destroying(inst) )
+        {
+            is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
+        }
+        else
+        {
+            is_ok = gnc_sql_slots_delete( be, guid );
+        }
+    }
 
-	return is_ok;
+    return is_ok;
 }
 
 static gboolean
 commit_commodity( GncSqlBackend* be, QofInstance* inst )
 {
-	g_return_val_if_fail( be != NULL, FALSE );
-	g_return_val_if_fail( inst != NULL, FALSE );
-	g_return_val_if_fail( GNC_IS_COMMODITY(inst), FALSE );
+    g_return_val_if_fail( be != NULL, FALSE );
+    g_return_val_if_fail( inst != NULL, FALSE );
+    g_return_val_if_fail( GNC_IS_COMMODITY(inst), FALSE );
 
     return do_commit_commodity( be, inst, FALSE );
 }
@@ -217,65 +235,74 @@ commit_commodity( GncSqlBackend* be, QofInstance* inst )
 static gboolean
 is_commodity_in_db( GncSqlBackend* be, gnc_commodity* pCommodity )
 {
-	g_return_val_if_fail( be != NULL, FALSE );
-	g_return_val_if_fail( pCommodity != NULL, FALSE );
+    g_return_val_if_fail( be != NULL, FALSE );
+    g_return_val_if_fail( pCommodity != NULL, FALSE );
 
     return gnc_sql_object_is_it_in_db( be, COMMODITIES_TABLE, GNC_ID_COMMODITY,
-                                pCommodity, col_table );
+                                       pCommodity, col_table );
 }
 
 gboolean
 gnc_sql_save_commodity( GncSqlBackend* be, gnc_commodity* pCommodity )
 {
-	gboolean is_ok = TRUE;
+    gboolean is_ok = TRUE;
 
-	g_return_val_if_fail( be != NULL, FALSE );
-	g_return_val_if_fail( pCommodity != NULL, FALSE );
+    g_return_val_if_fail( be != NULL, FALSE );
+    g_return_val_if_fail( pCommodity != NULL, FALSE );
 
-    if( !is_commodity_in_db( be, pCommodity ) ) {
+    if ( !is_commodity_in_db( be, pCommodity ) )
+    {
         is_ok = do_commit_commodity( be, QOF_INSTANCE(pCommodity), TRUE );
     }
 
-	return is_ok;
+    return is_ok;
 }
 
 /* ----------------------------------------------------------------- */
 
 static void
 load_commodity_guid( const GncSqlBackend* be, GncSqlRow* row,
-            /*@ null @*/ QofSetterFunc setter, gpointer pObject,
-            const GncSqlColumnTableEntry* table_row )
+                     /*@ null @*/ QofSetterFunc setter, gpointer pObject,
+                     const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     GncGUID guid;
-	gnc_commodity* commodity = NULL;
+    gnc_commodity* commodity = NULL;
 
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( row != NULL );
-	g_return_if_fail( pObject != NULL );
-	g_return_if_fail( table_row != NULL );
+    g_return_if_fail( be != NULL );
+    g_return_if_fail( row != NULL );
+    g_return_if_fail( pObject != NULL );
+    g_return_if_fail( table_row != NULL );
 
-	val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
-    if( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL ) {
-    	(void)string_to_guid( g_value_get_string( val ), &guid );
-		commodity = gnc_commodity_find_commodity_by_guid( &guid, be->primary_book );
-		if( commodity != NULL ) {
-    		if( table_row->gobj_param_name != NULL ) {
-				g_object_set( pObject, table_row->gobj_param_name, commodity, NULL );
-    		} else if( setter != NULL ) {
-				(*setter)( pObject, (const gpointer)commodity );
-			}
-    	} else {
-	    	PWARN( "Commodity ref '%s' not found", g_value_get_string( val ) );
-		}
-	}
+    val = gnc_sql_row_get_value_at_col_name( row, table_row->col_name );
+    if ( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL )
+    {
+        (void)string_to_guid( g_value_get_string( val ), &guid );
+        commodity = gnc_commodity_find_commodity_by_guid( &guid, be->primary_book );
+        if ( commodity != NULL )
+        {
+            if ( table_row->gobj_param_name != NULL )
+            {
+                g_object_set( pObject, table_row->gobj_param_name, commodity, NULL );
+            }
+            else if ( setter != NULL )
+            {
+                (*setter)( pObject, (const gpointer)commodity );
+            }
+        }
+        else
+        {
+            PWARN( "Commodity ref '%s' not found", g_value_get_string( val ) );
+        }
+    }
 }
 
 static GncSqlColumnTypeHandler commodity_guid_handler
-	= { load_commodity_guid,
-		gnc_sql_add_objectref_guid_col_info_to_list,
-		gnc_sql_add_colname_to_list,
-        gnc_sql_add_gvalue_objectref_guid_to_slist };
+= { load_commodity_guid,
+    gnc_sql_add_objectref_guid_col_info_to_list,
+    gnc_sql_add_colname_to_list,
+    gnc_sql_add_gvalue_objectref_guid_to_slist
+  };
 /* ================================================================= */
 void
 gnc_sql_init_commodity_handler( void )
@@ -287,14 +314,14 @@ gnc_sql_init_commodity_handler( void )
         commit_commodity,            /* commit */
         load_all_commodities,        /* initial_load */
         create_commodities_tables,   /* create_tables */
-		NULL,                        /* compile_query */
-		NULL,                        /* run_query */
-		NULL,                        /* free_query */
-		NULL                         /* write */
+        NULL,                        /* compile_query */
+        NULL,                        /* run_query */
+        NULL,                        /* free_query */
+        NULL                         /* write */
     };
 
     (void)qof_object_register_backend( GNC_ID_COMMODITY, GNC_SQL_BACKEND, &be_data );
 
-	gnc_sql_register_col_type_handler( CT_COMMODITYREF, &commodity_guid_handler );
+    gnc_sql_register_col_type_handler( CT_COMMODITYREF, &commodity_guid_handler );
 }
 /* ========================== END OF FILE ===================== */

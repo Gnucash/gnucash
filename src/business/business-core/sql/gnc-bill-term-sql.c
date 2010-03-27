@@ -95,9 +95,10 @@ static GncSqlColumnTableEntry billterm_parent_col_table[] =
     { NULL }
 };
 
-typedef struct {
-	/*@ dependent @*/ GncBillTerm* billterm;
-	GncGUID guid;
+typedef struct
+{
+    /*@ dependent @*/ GncBillTerm* billterm;
+    GncGUID guid;
     gboolean have_guid;
 } billterm_parent_guid_struct;
 
@@ -121,14 +122,17 @@ bt_get_parent( gpointer pObject )
     const GncBillTerm* pParent;
     const GncGUID* parent_guid;
 
-	g_return_val_if_fail( pObject != NULL, NULL );
-	g_return_val_if_fail( GNC_IS_BILLTERM(pObject), NULL );
+    g_return_val_if_fail( pObject != NULL, NULL );
+    g_return_val_if_fail( GNC_IS_BILLTERM(pObject), NULL );
 
     billterm = GNC_BILLTERM(pObject);
     pParent = gncBillTermGetParent( billterm );
-    if( pParent == NULL ) {
+    if ( pParent == NULL )
+    {
         parent_guid = NULL;
-    } else {
+    }
+    else
+    {
         parent_guid = qof_instance_get_guid( QOF_INSTANCE(pParent) );
     }
 
@@ -151,7 +155,8 @@ bt_set_parent( gpointer data, gpointer value )
     if ( guid != NULL )
     {
         parent = gncBillTermLookup( pBook, guid );
-        if( parent != NULL ) {
+        if ( parent != NULL )
+        {
             gncBillTermSetParent( billterm, parent );
             gncBillTermSetChild( parent, billterm );
         }
@@ -161,19 +166,19 @@ bt_set_parent( gpointer data, gpointer value )
 static void
 bt_set_parent_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 {
-	billterm_parent_guid_struct* s = (billterm_parent_guid_struct*)pObject;
+    billterm_parent_guid_struct* s = (billterm_parent_guid_struct*)pObject;
     GncGUID* guid = (GncGUID*)pValue;
 
-	g_return_if_fail( pObject != NULL );
-	g_return_if_fail( pValue != NULL );
+    g_return_if_fail( pObject != NULL );
+    g_return_if_fail( pValue != NULL );
 
-	s->guid = *guid;
+    s->guid = *guid;
     s->have_guid = TRUE;
 }
 
 static GncBillTerm*
 load_single_billterm( GncSqlBackend* be, GncSqlRow* row,
-					GList** l_billterms_needing_parents )
+                      GList** l_billterms_needing_parents )
 {
     const GncGUID* guid;
     GncBillTerm* pBillTerm;
@@ -194,15 +199,15 @@ load_single_billterm( GncSqlBackend* be, GncSqlRow* row,
        GncGUID so that after they are all loaded, the parents can be fixed up. */
     if ( gncBillTermGetParent( pBillTerm ) == NULL )
     {
-		billterm_parent_guid_struct* s = g_malloc( (gsize)sizeof(billterm_parent_guid_struct) );
-		g_assert( s != NULL );
+        billterm_parent_guid_struct* s = g_malloc( (gsize)sizeof(billterm_parent_guid_struct) );
+        g_assert( s != NULL );
 
-		s->billterm = pBillTerm;
+        s->billterm = pBillTerm;
         s->have_guid = FALSE;
-		gnc_sql_load_object( be, row, GNC_ID_TAXTABLE, s, billterm_parent_col_table );
+        gnc_sql_load_object( be, row, GNC_ID_TAXTABLE, s, billterm_parent_col_table );
         if ( s->have_guid )
         {
-		    *l_billterms_needing_parents = g_list_prepend( *l_billterms_needing_parents, s );
+            *l_billterms_needing_parents = g_list_prepend( *l_billterms_needing_parents, s );
         }
         else
         {
@@ -252,26 +257,29 @@ load_all_billterms( GncSqlBackend* be )
             gnc_sql_slots_load_for_list( be, list );
         }
 
-		/* While there are items on the list of billterms needing parents,
-		   try to see if the parent has now been loaded.  Theory says that if
-		   items are removed from the front and added to the back if the
-		   parent is still not available, then eventually, the list will
-		   shrink to size 0. */
-		if( l_billterms_needing_parents != NULL ) {
-			gboolean progress_made = TRUE;
-            GncTaxTable* root;	
-			Account* pParent;
-			GList* elem;
-				
-			while( progress_made ) {
-				progress_made = FALSE;
-				for( elem = l_billterms_needing_parents; elem != NULL; elem = g_list_next( elem ) ) {
-					billterm_parent_guid_struct* s = (billterm_parent_guid_struct*)elem->data;
+        /* While there are items on the list of billterms needing parents,
+           try to see if the parent has now been loaded.  Theory says that if
+           items are removed from the front and added to the back if the
+           parent is still not available, then eventually, the list will
+           shrink to size 0. */
+        if ( l_billterms_needing_parents != NULL )
+        {
+            gboolean progress_made = TRUE;
+            GncTaxTable* root;
+            Account* pParent;
+            GList* elem;
+
+            while ( progress_made )
+            {
+                progress_made = FALSE;
+                for ( elem = l_billterms_needing_parents; elem != NULL; elem = g_list_next( elem ) )
+                {
+                    billterm_parent_guid_struct* s = (billterm_parent_guid_struct*)elem->data;
                     bt_set_parent( s->billterm, &s->guid );
-					l_billterms_needing_parents = g_list_delete_link( l_billterms_needing_parents, elem );
-					progress_made = TRUE;
-				}
-			}
+                    l_billterms_needing_parents = g_list_delete_link( l_billterms_needing_parents, elem );
+                    progress_made = TRUE;
+                }
+            }
         }
     }
 }
