@@ -77,6 +77,7 @@ static const char* PROPERTY_TAB_PREVIOUSPOS = "tab_previouspos";
 
 MainWindow::MainWindow()
         : ui(new Ui::MainWindow)
+        , m_menuRecentFiles(new RecentFileMenu(tr("Open &Recent")))
         , m_undoStack(new QUndoStack(this))
 {
     ui->setupUi(this);
@@ -98,7 +99,6 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-    delete ui;
     if (m_session.get())
     {
         qof_session_destroy(m_session.get());
@@ -225,9 +225,8 @@ void MainWindow::createActions()
 
 void MainWindow::createToolBars()
 {
-    menuRecentFiles = new RecentFileMenu(tr("Open &Recent"));
-    ui->menuFile->insertMenu(ui->actionSave, menuRecentFiles);
-    connect(menuRecentFiles, SIGNAL(fileSelected(const QString &)),
+    ui->menuFile->insertMenu(ui->actionSave, m_menuRecentFiles.data());
+    connect(m_menuRecentFiles.data(), SIGNAL(fileSelected(const QString &)),
             this, SLOT(loadFileMaybe(const QString&)));
 
     m_fileToolBar = addToolBar(tr("File"));
@@ -256,7 +255,7 @@ void MainWindow::readSettings()
     QSize size = settings.value("size", QSize(400, 400)).toSize();
     resize(size);
     move(pos);
-    menuRecentFiles->readSettings(&settings, "RecentFiles");
+    m_menuRecentFiles->readSettings(&settings, "RecentFiles");
 }
 
 void MainWindow::writeSettings()
@@ -264,7 +263,7 @@ void MainWindow::writeSettings()
     QSettings settings("gnucash.org", "Cutecash");
     settings.setValue("pos", pos());
     settings.setValue("size", size());
-    menuRecentFiles->writeSettings(&settings, "RecentFiles");
+    m_menuRecentFiles->writeSettings(&settings, "RecentFiles");
 }
 
 bool MainWindow::maybeSave()
@@ -286,7 +285,7 @@ bool MainWindow::maybeSave()
 
 void MainWindow::setCurrentFile(const QString &fileName)
 {
-    menuRecentFiles->usingFile(fileName);
+    m_menuRecentFiles->usingFile(fileName);
     m_currentFilename = fileName;
     documentCleanStateChanged(true);
 

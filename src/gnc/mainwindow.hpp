@@ -25,6 +25,7 @@
 
 #include <QMainWindow>
 #include <QItemSelection>
+#include <QSharedPointer>
 #include "gnc/Session.hpp"
 #include "gnc/AccountItemModel.hpp"
 
@@ -112,7 +113,7 @@ private:
                                     const QString& newfile,
                                     GNCFileDialogType type);
 
-    Ui::MainWindow *ui;
+    QSharedPointer<Ui::MainWindow> ui;
 
     QString m_currentFilename;
 
@@ -120,7 +121,7 @@ private:
     QToolBar *m_editToolBar;
     QAction *m_actionUndo;
     QAction *m_actionRedo;
-    RecentFileMenu *menuRecentFiles;
+    QSharedPointer<RecentFileMenu> m_menuRecentFiles;
     QUndoStack *m_undoStack;
 
     Session m_session;
