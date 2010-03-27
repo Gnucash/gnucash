@@ -14,6 +14,10 @@ INCLUDE (GncAddSwigCommand)
 
 # ############################################################
 
+OPTION (WITH_SQL "Build this project with SQL (libdbi) support" OFF)
+
+# ############################################################
+
 # Find pkg-config
 FIND_PACKAGE (PkgConfig REQUIRED)
 
@@ -80,6 +84,20 @@ ENDIF (GUILE_INCLUDE_DIR)
 IF (NOT GUILE_EXECUTABLE)
   MESSAGe (SEND_ERROR "The guile executable was not found, but is required. Please set GUILE_EXECUTABLE.")
 ENDIF (NOT GUILE_EXECUTABLE)
+
+# ############################################################
+
+# libdbi
+FIND_PATH (LIBDBI_INCLUDE_PATH dbi/dbi.h)
+FIND_LIBRARY (LIBDBI_LIBRARY dbi)
+IF (WITH_SQL)
+  IF (NOT LIBDBI_INCLUDE_PATH)
+    MESSAGE (SEND_ERROR "Include file <dbi/dbi.h> was not found - did you install libdbi0-dev or libdbi-dev?")
+  ENDIF (NOT LIBDBI_INCLUDE_PATH)
+  IF (NOT LIBDBI_LIBRARY)
+    MESSAGE (SEND_ERROR "Library libdbi was not found")
+  ENDIF (NOT LIBDBI_LIBRARY)
+ENDIF (WITH_SQL)
 
 # ############################################################
 

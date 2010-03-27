@@ -18,6 +18,7 @@ FILE (APPEND ${CONFIG_H} "
 #define HAVE_LIBQOF /**/
 #define HAVE_TOWUPPER 1
 #define QOF_DISABLE_DEPRECATED 1
+#define GNC_NO_LOADABLE_MODULES 1
 ")
 
 IF (WIN32)
@@ -137,6 +138,11 @@ ADD_SUBDIRECTORY (backend/xml)
 ADD_SUBDIRECTORY (business/business-core)
 ADD_SUBDIRECTORY (calculation)
 ADD_SUBDIRECTORY (app-utils)
+IF (WITH_SQL)
+  ADD_SUBDIRECTORY (backend/dbi)
+  ADD_SUBDIRECTORY (backend/sql)
+  ADD_SUBDIRECTORY (business/business-core/sql)
+ENDIF (WITH_SQL)
 
 ADD_SUBDIRECTORY (gnc)
 

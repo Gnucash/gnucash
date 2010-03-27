@@ -50,6 +50,9 @@ extern "C"
 #include "backend/xml/gnc-backend-xml.h"
 #include "business/business-core/gncBusiness.h"
 #include "business/business-core/xml/gncmod-business-backend-xml.h"
+#ifdef WITH_SQL
+#  include "backend/dbi/gnc-backend-dbi.h"
+#endif
 } // END extern C
 
 #ifdef HAVE_GETTEXT
@@ -182,7 +185,7 @@ main(int argc, char ** argv)
     // Call the statically-linked versions of the backend init
     // functions
     gnc_module_init_backend_xml();
-    //gnc_module_init_backend_dbi();
+    gnc_module_init_backend_dbi();
     gnc_module_init_business_core_init();
     gnc_module_init_business_core_xml_init();
     gnc_ui_util_init();
@@ -204,7 +207,7 @@ main(int argc, char ** argv)
 
     // Shutdown of the C side after all C++ was destructed already.
     gnc_exp_parser_shutdown();
-    //gnc_module_finalize_backend_dbi();
+    gnc_module_finalize_backend_dbi();
     qof_close();
     return r;
 

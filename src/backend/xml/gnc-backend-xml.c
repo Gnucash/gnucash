@@ -1169,11 +1169,13 @@ gnc_provider_free (QofBackendProvider *prov)
     g_free (prov);
 }
 
+#ifndef GNC_NO_LOADABLE_MODULES
 G_MODULE_EXPORT void
 qof_backend_module_init(void)
 {
     gnc_module_init_backend_xml();
 }
+#endif
 
 void
 gnc_module_init_backend_xml(void)

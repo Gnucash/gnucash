@@ -57,6 +57,11 @@ SET (gnc_RESOURCES
   gnucash.qrc
   gtk-icons.qrc
 )
+
+IF (WITH_SQL)
+  ADD_DEFINITIONS (-DWITH_SQL)
+ENDIF (WITH_SQL)
+
 # Generation of resource files
 QT4_ADD_RESOURCES (gnc_RESOURCE ${gnc_RESOURCES})
 
@@ -93,6 +98,11 @@ ADD_EXECUTABLE (cutecash
 TARGET_LINK_LIBRARIES (cutecash business-core)
 TARGET_LINK_LIBRARIES (cutecash gnc-backend-xml)
 TARGET_LINK_LIBRARIES (cutecash app-utils calculation)
+IF (WITH_SQL)
+  TARGET_LINK_LIBRARIES (cutecash gnc-business-backend-sql)
+  TARGET_LINK_LIBRARIES (cutecash gnc-backend-dbi gnc-backend-sql)
+  TARGET_LINK_LIBRARIES (cutecash ${LIBDBI_LIBRARY})
+ENDIF (WITH_SQL)
 TARGET_LINK_LIBRARIES (cutecash engine gnc-module core-utils qof)
 TARGET_LINK_LIBRARIES (cutecash ${GCONF2_LIBRARIES})
 TARGET_LINK_LIBRARIES (cutecash ${GTHREAD_LIBRARIES} ${GOBJECT_LIBRARIES} ${GMODULE_LIBRARIES} ${GLIB2_LIBRARIES})

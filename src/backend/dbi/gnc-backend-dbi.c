@@ -1000,12 +1000,6 @@ gnc_dbi_check_sqlite3_file( const gchar *uri )
     return FALSE;
 }
 
-G_MODULE_EXPORT void
-qof_backend_module_init( void )
-{
-    gnc_module_init_backend_dbi();
-}
-
 void
 gnc_module_init_backend_dbi(void)
 {
@@ -1119,11 +1113,19 @@ gnc_module_init_backend_dbi(void)
     qof_log_set_level( log_module, QOF_LOG_DEBUG );
 }
 
+#ifndef GNC_NO_LOADABLE_MODULES
+G_MODULE_EXPORT void
+qof_backend_module_init( void )
+{
+    gnc_module_init_backend_dbi();
+}
+
 G_MODULE_EXPORT void
 qof_backend_module_finalize( void )
 {
     gnc_module_finalize_backend_dbi();
 }
+#endif /* GNC_NO_LOADABLE_MODULES */
 
 void
 gnc_module_finalize_backend_dbi( void )

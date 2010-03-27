@@ -38,7 +38,12 @@ void gnc_module_init_backend_dbi(void);
  * statically linked into the application. */
 void gnc_module_finalize_backend_dbi(void);
 
+#ifndef GNC_NO_LOADABLE_MODULES
+/** This is the standarized initialization function of a qof_backend
+ * GModule, but compiling this can be disabled by defining
+ * GNC_NO_LOADABLE_MODULES. */
 G_MODULE_EXPORT void qof_backend_module_init(void);
 G_MODULE_EXPORT void qof_backend_module_finalize(void);
+#endif
 
 #endif /* GNC_BACKEND_DBI_H_ */
