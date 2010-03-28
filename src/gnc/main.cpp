@@ -177,7 +177,9 @@ main(int argc, char ** argv)
     // Call the statically-linked versions of the backend init
     // functions
     gnc_module_init_backend_xml();
+#ifdef WITH_SQL
     gnc_module_init_backend_dbi();
+#endif
     gnc_module_init_business_core_init();
     gnc_module_init_business_core_xml_init();
     gnc_ui_util_init();
@@ -198,7 +200,9 @@ main(int argc, char ** argv)
 
     // Shutdown of the C side after all C++ was destructed already.
     gnc_exp_parser_shutdown();
+#ifdef WITH_SQL
     gnc_module_finalize_backend_dbi();
+#endif
     qof_close();
     return r;
 
