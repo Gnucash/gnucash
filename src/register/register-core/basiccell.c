@@ -68,7 +68,8 @@ gnc_basic_cell_clear (BasicCell *cell)
 {
     g_free (cell->cell_name);
     cell->cell_name = NULL;
-
+    g_free (cell->cell_type_name);
+    cell->cell_type_name = NULL;
     cell->changed = FALSE;
     cell->conditionally_changed = FALSE;
 
@@ -141,6 +142,27 @@ gnc_basic_cell_has_name (BasicCell *cell, const char *name)
     if (!cell->cell_name) return FALSE;
 
     return (strcmp (name, cell->cell_name) == 0);
+}
+
+
+void
+gnc_basic_cell_set_type_name (BasicCell *cell, const gchar *type_name)
+{
+    if (!cell) return;
+    if (cell->cell_type_name == type_name) return;
+
+    g_free (cell->cell_type_name);
+    cell->cell_type_name = g_strdup(type_name);
+}
+
+gboolean
+gnc_basic_cell_has_type_name (BasicCell *cell, const gchar *type_name)
+{
+    if (!cell) return FALSE;
+    if (!type_name) return FALSE;
+    if(!cell->cell_type_name) return FALSE;
+
+    return (g_strcmp0 (type_name, cell->cell_type_name));
 }
 
 void

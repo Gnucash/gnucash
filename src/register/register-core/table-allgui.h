@@ -228,7 +228,8 @@ BasicCell *    gnc_table_get_cell (Table *table, VirtualLocation virt_loc);
 
 const char *   gnc_table_get_cell_name (Table *table,
                                         VirtualLocation virt_loc);
-
+const gchar *  gnc_table_get_cell_type_name (Table *table,
+                                              VirtualLocation virt_loc);
 gboolean       gnc_table_get_cell_location (Table *table,
         const char * cell_name,
         VirtualCellLocation vcell_loc,

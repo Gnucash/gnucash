@@ -190,7 +190,7 @@ typedef enum
 struct basic_cell
 {
     char * cell_name;
-
+    gchar *cell_type_name;
     char * value;                  /* current value */
     guint value_chars;           /* number of characters in value */
 
@@ -233,6 +233,10 @@ void         gnc_basic_cell_destroy (BasicCell *bcell);
 
 void         gnc_basic_cell_set_name (BasicCell *cell, const char *name);
 gboolean     gnc_basic_cell_has_name (BasicCell *cell, const char *name);
+void         gnc_basic_cell_set_type_name (BasicCell *cell, const gchar *type_name);
+gboolean     gnc_basic_cell_has_type_name (BasicCell *cell, const gchar *type_name);
+
+
 
 void         gnc_basic_cell_set_sample_text (BasicCell *cell,
         const char *sample_text);

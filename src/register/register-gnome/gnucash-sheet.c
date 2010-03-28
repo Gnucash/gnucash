@@ -1214,28 +1214,13 @@ static gboolean
 gnucash_sheet_check_direct_update_cell(GnucashSheet *sheet,
                                        const VirtualLocation virt_loc)
 {
-    const gchar *dupdate_list[] =
-    {
-        /* From src/register/ledger-core/split-register-layout.c */
-        /* DATE_CELL_TYPE_NAME */
-        DATE_CELL,
-        DDUE_CELL,
-        /* COMBO_CELL_TYPE_NAME */
-        XFRM_CELL,
-        MXFRM_CELL,
-        ACTN_CELL,
-        NULL,
-    };
-    const gchar *cell_name;
-    int i;
+    const gchar *type_name;
 
-    cell_name = gnc_table_get_cell_name (sheet->table, virt_loc);
-    for (i = 0; dupdate_list[i]; i++)
-    {
-        if (gnc_cell_name_equal (cell_name,
-                                 dupdate_list[i]))
-            return TRUE;
-    }
+    type_name = gnc_table_get_cell_type_name (sheet->table, virt_loc);
+
+    if( (g_strcmp0 (type_name, DATE_CELL_TYPE_NAME) == 0)
+        || (g_strcmp0 (type_name, COMBO_CELL_TYPE_NAME) == 0) ) return TRUE;
+
     return FALSE;
 }
 
@@ -3120,6 +3105,6 @@ void gnucash_register_set_moved_cb (GnucashRegister *reg,
 
 /*
   Local Variables:
-  c-basic-offset: 8
+  c-basic-offset: 4
   End:
 */

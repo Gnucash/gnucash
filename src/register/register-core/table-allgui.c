@@ -506,6 +506,19 @@ gnc_table_get_cell_name (Table *table, VirtualLocation virt_loc)
     return cell->cell_name;
 }
 
+const gchar *
+gnc_table_get_cell_type_name (Table *table, VirtualLocation virt_loc)
+{
+    BasicCell *cell;
+
+    cell = gnc_table_get_cell (table, virt_loc);
+    if (cell == NULL)
+        return NULL;
+
+    return cell->cell_type_name;
+}
+
+
 gboolean
 gnc_table_get_cell_location (Table *table,
                              const char *cell_name,

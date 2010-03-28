@@ -46,6 +46,7 @@ gnc_register_add_cell (TableLayout *layout,
     cell = gnc_register_make_cell (cell_type_name);
 
     gnc_basic_cell_set_name (cell, cell_name);
+    gnc_basic_cell_set_type_name (cell, cell_type_name);
     gnc_basic_cell_set_sample_text (cell, sample_text);
     gnc_basic_cell_set_alignment (cell, alignment);
     gnc_basic_cell_set_expandable (cell, expandable);
