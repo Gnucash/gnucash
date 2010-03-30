@@ -897,7 +897,7 @@ gnc_main_window_restore_default_state(void)
      * in the window. */
     DEBUG("no saved state file");
     window = g_list_nth_data(active_windows, 0);
-    action = gnc_main_window_find_action(window, "FileNewAccountTreeAction");
+    action = gnc_main_window_find_action(window, "ViewAccountTreeAction");
     gtk_action_activate(action);
 }
 
