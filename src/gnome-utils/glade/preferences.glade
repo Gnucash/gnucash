@@ -1056,6 +1056,22 @@
 	      </child>
 
 	      <child>
+		<widget class="GtkImage" id="separator_error">
+		  <property name="visible">False</property>
+		  <property name="stock">gtk-dialog-warning</property>
+		  <property name="tooltip" translatable="no">Placeholder tooltip.</property>
+		</widget>
+		  <packing>
+		    <property name="left_attach">2</property>
+		    <property name="right_attach">3</property>
+		    <property name="top_attach">1</property>
+		    <property name="bottom_attach">2</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		  </packing>
+		</child>
+
+	      <child>
 		<widget class="GtkLabel" id="sample_account">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes"></property>

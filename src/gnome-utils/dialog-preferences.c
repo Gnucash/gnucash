@@ -69,6 +69,7 @@
 #include "gnc-gobject-utils.h"
 #include "gnc-period-select.h"
 #include "gnc-engine.h"
+#include "Account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-component-manager.h"
@@ -128,8 +129,10 @@ GSList *add_ins = NULL;
 static void
 gnc_account_separator_prefs_cb (GConfEntry *unused, GtkWidget *dialog)
 {
-    GtkWidget *label;
+    GtkWidget *label, *image;
     gchar *sample;
+    GList *invalid_account_names;
+    QofBook *book;
 
     label = gnc_glade_lookup_widget(dialog, "sample_account");
     /* Translators: Both %s will be the account separator character; the
@@ -144,6 +147,27 @@ gnc_account_separator_prefs_cb (GConfEntry *unused, GtkWidget *dialog)
     DEBUG(" Label set to '%s'", sample);
     gtk_label_set_text(GTK_LABEL(label), sample);
     g_free(sample);
+
+    /* Check if the new separator clashes with existing account names */
+    image = gnc_glade_lookup_widget(dialog, "separator_error");
+    book = gnc_get_current_book();
+    invalid_account_names = gnc_account_list_name_violations ( book,
+                                     gnc_get_account_separator_string() );
+    if ( invalid_account_names )
+    {
+        GtkTooltipsData *tipsdata = gtk_tooltips_data_get (image);
+        gchar *message = gnc_account_name_violations_errmsg ( gnc_get_account_separator_string(),
+                                                              invalid_account_names );
+        gnc_warning_dialog(dialog, message);
+
+        gtk_tooltips_set_tip ( tipsdata->tooltips, image, message, NULL);
+        gtk_widget_set_visible (image, TRUE);
+        g_free ( message );
+    }
+    else
+        gtk_widget_set_visible (image, FALSE);
+
+    g_list_free ( invalid_account_names );
 }
 
 

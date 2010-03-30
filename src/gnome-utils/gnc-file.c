@@ -32,6 +32,7 @@
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
+#include "Account.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-hooks.h"
@@ -638,6 +639,8 @@ static gboolean
 gnc_post_file_open (const char * filename)
 {
     QofSession *current_session, *new_session;
+    QofBook *new_book;
+    GList *invalid_account_names;
     gboolean uh_oh = FALSE;
     char * newfile;
     QofBackendError io_err = ERR_BACKEND_NO_ERR;
@@ -869,6 +872,19 @@ gnc_post_file_open (const char * filename)
 
     /* Call this after re-enabling events. */
     gnc_book_opened ();
+
+    /* Check for account names that may contain the current separator character
+     * and inform the user if there are any */
+    new_book = gnc_get_current_book();
+    invalid_account_names = gnc_account_list_name_violations ( new_book,
+                                     gnc_get_account_separator_string() );
+    if ( invalid_account_names )
+    {
+        gchar *message = gnc_account_name_violations_errmsg ( gnc_get_account_separator_string(),
+                                                              invalid_account_names );
+        gnc_warning_dialog(NULL, message);
+        g_free ( message );
+    }
 
     return TRUE;
 }

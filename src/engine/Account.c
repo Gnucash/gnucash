@@ -207,6 +207,69 @@ gnc_set_account_separator (const gchar *separator)
     account_separator[count] = '\0';
 }
 
+gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invalid_account_names)
+{
+    GList *node;
+    gchar *message = NULL;
+    gchar *account_list = NULL;
+
+    if ( !invalid_account_names )
+        return NULL;
+
+    for ( node = invalid_account_names;  node; node = g_list_next(node))
+    {
+        if ( !account_list )
+            account_list = node->data;
+        else
+        {
+            gchar *tmp_list = NULL;
+
+            tmp_list = g_strconcat (account_list, "\n", node->data, NULL );
+            g_free ( account_list );
+            account_list = tmp_list;
+        }
+    }
+
+    /* Translators: The first %s will be the account separator character,
+       the second %s is a list of account names.
+       The resulting string will be displayed to the user if there are
+       account names containing the separator character. */
+    message = g_strdup_printf(
+                _("The separator character \"%s\" is used in one or more account names.\n\n"
+                  "This will result in unexpected behaviour. "
+                  "Either change the account names or choose another separator character.\n\n"
+                  "Below you will find the list of invalid account names:\n"
+                  "%s"), separator, account_list );
+    g_free ( account_list );
+    return message;
+}
+
+GList *gnc_account_list_name_violations (QofBook *book, const gchar *separator)
+{
+    Account *root_account = gnc_book_get_root_account(book);
+    GList   *accounts, *node;
+    GList   *invalid_list = NULL;
+
+    g_return_val_if_fail (separator != NULL, NULL);
+
+    if (root_account == NULL)
+        return NULL;
+
+    accounts = gnc_account_get_descendants (root_account);
+    for (node = accounts; node; node = g_list_next(node))
+    {
+        Account *acct      = (Account*)node->data;
+        gchar   *acct_name = g_strdup ( xaccAccountGetName ( acct ) );
+
+        if ( g_strstr_len ( acct_name, -1, separator ) )
+            invalid_list = g_list_prepend ( invalid_list, (gpointer) acct_name );
+        else
+            g_free ( acct_name );
+    }
+
+    return invalid_list;
+}
+
 /********************************************************************\
 \********************************************************************/
 

@@ -251,6 +251,32 @@ void gnc_book_set_root_account(QofBook *book, Account *root);
 
 /** @} */
 
+/** Composes a translatable error message showing which account
+ *  names clash with the current account separator. Can be called
+ *  after gnc_account_list_name_violations to have a consistent
+ *  error message in different parts of GnuCash
+ *
+ *  @param separator The separator character that was verified against
+ *  @param invalid_account_names A GList of invalid account names.
+ *
+ *  @return An error message that can be displayed to the user or logged.
+ *          This message string should be freed with g_free when no longer
+ *          needed.
+ */
+gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invalid_account_names);
+
+/** Runs through all the accounts and returns a list of account names
+ *  that contain the provided separator character. This can be used to
+ *  check if certain account names are invalid.
+ *
+ *  @param book Pointer to the book with accounts to verify
+ *  @param separator The separator character to verify against
+ *
+ *  @return A GList of invalid account names. Should be freed with g_list_free
+ *          if no longer needed.
+ */
+GList *gnc_account_list_name_violations (QofBook *book, const gchar *separator);
+
 /* ------------------ */
 
 /** @name Account general setters/getters
