@@ -1015,6 +1015,15 @@ then
       HAVE_UNTESTED_GTK=yes
     fi
 
+    AC_MSG_CHECKING([for GTK >= 2.12.0])
+    if $PKG_CONFIG 'gtk+-2.0 >= 2.12.0'
+    then
+      AC_MSG_RESULT(yes)
+      AC_DEFINE(HAVE_GTK_2_12,1,[System has gtk 2.12.0 or better])
+      HAVE_GTK_2_12=yes
+    fi
+
+
     PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.4)
     AS_SCRUB_INCLUDE(GNOME_CFLAGS)
     AC_SUBST(GNOME_CFLAGS)
