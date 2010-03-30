@@ -86,16 +86,16 @@ validate_type(const char *url_type, const char *location,
     QofBook     * book = gnc_get_current_book();
     if (!string_to_guid (location + strlen(url_type), guid))
     {
-      result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
-      return FALSE;
+        result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
+        return FALSE;
     }
     col = qof_book_get_collection (book, entity_type);
     *entity = qof_collection_lookup_entity (col, guid);
     if (NULL == *entity)
     {
-      result->error_message = g_strdup_printf (_("Entity Not Found: %s"),
-                                               location);
-      return FALSE;
+        result->error_message = g_strdup_printf (_("Entity Not Found: %s"),
+                                location);
+        return FALSE;
     }
 
     return TRUE;
@@ -209,36 +209,36 @@ gnc_html_price_url_cb (const char *location, const char *label,
         if (!gnc_price_edit_by_guid (NULL, &guid))
         {
             result->error_message = g_strdup_printf (_("No such price: %s"),
-                                                     location);
+                                    location);
             return FALSE;
         }
     }
     else
     {
         result->error_message = g_strdup_printf (_("Badly formed URL %s"),
-                                                 location);
+                                location);
         return FALSE;
     }
 
     return TRUE;
 }
 
-       /** Restore all persistent program state.  This function finds the
-        *  "new" state file associated with a specific book guid.  It then
-        *  iterates through this state information, calling a helper function
-        *  to recreate each open window.
-        *
-        *  @note The name of the state file is based on the name of the data
-        *  file, not the path name of the data file.  If there are multiple
-        *  data files with the same name, the state files will be suffixed
-        *  with a number.  E.G. test_account, test_account_2, test_account_3,
-        *  etc.
-        *
-        *  @param session A pointer to the current session.
-        *
-        *  @param unused An unused pointer. */
-       static void
-       gnc_restore_all_state (gpointer session, gpointer unused)
+/** Restore all persistent program state.  This function finds the
+ *  "new" state file associated with a specific book guid.  It then
+ *  iterates through this state information, calling a helper function
+ *  to recreate each open window.
+ *
+ *  @note The name of the state file is based on the name of the data
+ *  file, not the path name of the data file.  If there are multiple
+ *  data files with the same name, the state files will be suffixed
+ *  with a number.  E.G. test_account, test_account_2, test_account_3,
+ *  etc.
+ *
+ *  @param session A pointer to the current session.
+ *
+ *  @param unused An unused pointer. */
+static void
+gnc_restore_all_state (gpointer session, gpointer unused)
 {
     GKeyFile *keyfile = NULL;
     QofBook *book;
