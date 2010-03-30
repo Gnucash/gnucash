@@ -2566,7 +2566,6 @@ gnc_main_window_open_page (GncMainWindow *window,
         gtk_label_set_max_width_chars(GTK_LABEL(label), width);
     }
     gtk_widget_show (label);
-    g_object_set_data(G_OBJECT (page), PLUGIN_PAGE_TAB_LABEL, label);
 
     tab_hbox = gtk_hbox_new (FALSE, 6);
     gtk_widget_show (tab_hbox);
