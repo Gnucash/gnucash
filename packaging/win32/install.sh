@@ -1203,6 +1203,10 @@ function inst_libdbi() {
             make
             make install
         qpopd
+        qpushd ${_LIBDBI_UDIR}
+            pexports bin/libdbi-0.dll > lib/libdbi.def
+            dlltool -d lib/libdbi.def -D bin/libdbi-0.dll -l lib/libdbi.lib
+        qpopd
         test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll || die "libdbi not installed correctly"
         rm -rf ${TMP_UDIR}/libdbi-0*
     fi
