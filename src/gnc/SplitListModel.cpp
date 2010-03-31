@@ -475,6 +475,8 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
         case COLUMN_DECREASE:
         {
             QString str(value.toString().simplified());
+            if (str.isEmpty())
+                break;
             Numeric n;
             QString errmsg = n.parse(str);
             if (errmsg.isEmpty())
@@ -589,6 +591,8 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
         case COLUMN_DECREASE:
         {
             QString str(value.toString().simplified());
+            if (str.isEmpty())
+                break;
             Numeric n;
             QString errmsg = n.parse(str);
             if (errmsg.isEmpty())
@@ -646,7 +650,7 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
 
 void SplitListModel::transactionEvent( ::Transaction* trans, QofEventId event_type)
 {
-    qDebug() << "SplitListModel::transactionEvent, id=" << qofEventToString(event_type);
+    //qDebug() << "SplitListModel::transactionEvent, id=" << qofEventToString(event_type);
     switch (event_type)
     {
     case QOF_EVENT_MODIFY:
@@ -656,7 +660,18 @@ void SplitListModel::transactionEvent( ::Transaction* trans, QofEventId event_ty
             emit dataChanged(index(row, 0), index(row, columnCount() - 1));
         }
         break;
+    case GNC_EVENT_ITEM_REMOVED:
+    case GNC_EVENT_ITEM_ADDED:
+        // This event is triggered by a split being added (or removed)
+        // to a transaction. Ignored because we already reacted upon
+        // the MODIFY event.
+        break;
+    case QOF_EVENT_CREATE:
+        // This event is triggered by a newly created transaction, but
+        // we reacted on this in the accountEvent handler already.
+        break;
     default:
+        qDebug() << "SplitListModel::transactionEvent, ignored event id=" << qofEventToString(event_type);
         break;
     }
 
@@ -666,7 +681,7 @@ void SplitListModel::accountEvent( ::Account* acc, QofEventId event_type)
 {
     if (acc != m_account.get())
         return;
-    qDebug() << "SplitListModel::accountEvent, id=" << qofEventToString(event_type);
+    //qDebug() << "SplitListModel::accountEvent, id=" << qofEventToString(event_type);
 
     switch (event_type)
     {
@@ -674,7 +689,15 @@ void SplitListModel::accountEvent( ::Account* acc, QofEventId event_type)
     case GNC_EVENT_ITEM_ADDED:
         recreateCache();
         break;
+    case QOF_EVENT_MODIFY:
+    case GNC_EVENT_ITEM_CHANGED:
+        // These events are also triggered e.g. by a newly added
+        // transaction/split in this account. However, we already
+        // reacted on this by the above events, so we can ignore them
+        // here.
+        break;
     default:
+        qDebug() << "SplitListModel::accountEvent, ignored event id=" << qofEventToString(event_type);
         break;
     }
 }
@@ -704,7 +727,7 @@ void SplitListModel::editorClosed(const QModelIndex& index,
             case COLUMN_DECREASE:
             {
                 // Commit the new transaction
-                qDebug() << "Commit the new transaction as a real one";
+                //qDebug() << "Commit the new transaction as a real one";
                 m_tmpTransaction.setDateEntered(QDateTime::currentDateTime());
                 QUndoCommand* cmd = cmd::commitNewTransaction(m_tmpTransaction);
                 recreateTmpTrans();
