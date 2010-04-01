@@ -158,14 +158,14 @@ gnc_account_separator_prefs_cb (GConfEntry *unused, GtkWidget *dialog)
         GtkTooltipsData *tipsdata = gtk_tooltips_data_get (image);
         gchar *message = gnc_account_name_violations_errmsg ( gnc_get_account_separator_string(),
                                                               invalid_account_names );
-        gnc_warning_dialog(dialog, message);
+        gnc_warning_dialog(dialog, "%s", message);
 
         gtk_tooltips_set_tip ( tipsdata->tooltips, image, message, NULL);
-        gtk_widget_set_visible (image, TRUE);
+        gtk_widget_show (image);
         g_free ( message );
     }
     else
-        gtk_widget_set_visible (image, FALSE);
+        gtk_widget_hide (image);
 
     g_list_free ( invalid_account_names );
 }
