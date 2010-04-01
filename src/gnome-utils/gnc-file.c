@@ -882,7 +882,7 @@ gnc_post_file_open (const char * filename)
     {
         gchar *message = gnc_account_name_violations_errmsg ( gnc_get_account_separator_string(),
                                                               invalid_account_names );
-        gnc_warning_dialog(NULL, message);
+        gnc_warning_dialog(NULL, "%s", message);
         g_free ( message );
     }
 
