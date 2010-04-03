@@ -151,7 +151,7 @@ price_to_gui (PriceEditDialog *pedit_dialog)
         namespace = gnc_commodity_get_namespace(commodity);
         fullname = gnc_commodity_get_printname(commodity);
         gnc_ui_update_namespace_picker(pedit_dialog->namespace_cbe,
-                                       namespace, DIAG_COMM_NON_CURRENCY);
+                                       namespace, DIAG_COMM_ALL);
         gnc_ui_update_commodity_picker(pedit_dialog->commodity_cbe,
                                        namespace, fullname);
 
