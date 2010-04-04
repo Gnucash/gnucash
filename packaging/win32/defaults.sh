@@ -249,8 +249,8 @@ set_default INNO_DIR $GLOBAL_DIR\\inno
 set_default HH_URL "http://download.microsoft.com/download/OfficeXPProf/Install/4.71.1015.0/W98NT42KMe/EN-US/HTMLHELP.EXE"
 set_default HH_DIR $GLOBAL_DIR\\hh
 
-set_default WEBKIT_URL "$SF_MIRROR/gnucash/webkit-1.1.5-win32.zip"
-set_default WEBKIT_DIR $GLOBAL_DIR\\webkit-1.1.5
+set_default WEBKIT_URL "$SF_MIRROR/gnucash/webkit-1.1.90-win32.zip"
+set_default WEBKIT_DIR $GLOBAL_DIR\\webkit-1.1.90
 
 set_default SVN_URL "http://subversion.tigris.org/files/documents/15/35379/svn-1.4.2-setup.exe"
 set_default SVN_DIR $GLOBAL_DIR\\svn

@@ -1272,7 +1272,7 @@ function inst_webkit() {
     add_to_env ${_WEBKIT_UDIR}/bin PATH
     add_to_env -lwebkit-1.0-2 WEBKIT_LIBS
     add_to_env -L${_WEBKIT_UDIR}/bin WEBKIT_LIBS
-    add_to_env -I${_WEBKIT_UDIR}/include WEBKIT_CFLAGS
+    add_to_env -I${_WEBKIT_UDIR}/include/webkit-1.0 WEBKIT_CFLAGS
     if quiet ${LD} ${WEBKIT_LIBS} -o $TMP_UDIR/ofile
     then
         echo "webkit already installed.  skipping."
