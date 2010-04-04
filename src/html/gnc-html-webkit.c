@@ -79,6 +79,8 @@ static char error_404_format[] = "<html><body><h3>%s</h3><p>%s</body></html>";
 static char error_404_title[] = N_("Not found");
 static char error_404_body[] = N_("The specified URL could not be loaded.");
 
+#define BASE_URI_NAME "base-uri"
+
 static WebKitNavigationResponse webkit_navigation_requested_cb(
     WebKitWebView* web_view,
     WebKitWebFrame* frame,
@@ -417,14 +419,15 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
                     g_free( priv->html_string );
                 }
                 priv->html_string = g_strdup( fdata );
-                webkit_web_view_load_html_string( priv->web_view, fdata, "base-uri" );
+                impl_webkit_show_data( GNC_HTML(self), fdata, strlen(fdata) );
+//                webkit_web_view_load_html_string( priv->web_view, fdata, BASE_URI_NAME );
             }
             else
             {
                 fdata = fdata ? fdata :
                         g_strdup_printf( error_404_format,
                                          _(error_404_title), _(error_404_body) );
-                webkit_web_view_load_html_string( priv->web_view, fdata, "base-uri" );
+                webkit_web_view_load_html_string( priv->web_view, fdata, BASE_URI_NAME );
             }
 
             g_free( fdata );
@@ -484,7 +487,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
                    label ? label : "(null)" );
             fdata = g_strdup_printf( error_404_format,
                                      _(error_404_title), _(error_404_body) );
-            webkit_web_view_load_html_string( priv->web_view, fdata, "base-uri" );
+            webkit_web_view_load_html_string( priv->web_view, fdata, BASE_URI_NAME );
             g_free( fdata );
         }
 
@@ -530,17 +533,25 @@ webkit_navigation_requested_cb( WebKitWebView* web_view, WebKitWebFrame* frame,
     GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
     const gchar* url = webkit_network_request_get_uri( request );
 
-    DEBUG( "requesting %s", url );
-    if ( strcmp( url, "base-uri" ) == 0 )
+    ENTER( "requesting %s", url );
+    if ( strcmp( url, BASE_URI_NAME ) == 0 )
     {
+        LEAVE("URI is %s", BASE_URI_NAME);
         return WEBKIT_NAVIGATION_RESPONSE_ACCEPT;
     }
 
     type = gnc_html_parse_url( GNC_HTML(self), url, &location, &label );
+    if( strcmp( type, "file" ) == 0 )
+    {
+        LEAVE("URI type is 'file'");
+        return WEBKIT_NAVIGATION_RESPONSE_ACCEPT;
+    }
     gnc_html_show_url( GNC_HTML(self), type, location, label, 0 );
 //	load_to_stream( self, type, location, label );
     g_free( location );
     g_free( label );
+
+    LEAVE("");
     return WEBKIT_NAVIGATION_RESPONSE_IGNORE;
 }
 
@@ -664,14 +675,34 @@ static void
 impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
 {
     GncHtmlWebkitPrivate* priv;
+#define TEMPLATE_REPORT_FILE_NAME "gnc-report-XXXXXX.html"
+    int fd;
+    gchar* uri;
+    gchar *filename;
 
     g_return_if_fail( self != NULL );
     g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
 
-    DEBUG( "datalen %d, data %20.20s", datalen, data );
+    ENTER( "datalen %d, data %20.20s", datalen, data );
 
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-    webkit_web_view_load_html_string( priv->web_view, data, "base-uri" );
+
+    /* Export the HTML to a file and load the file URI.   On Linux, this seems to get around some
+       security problems (otherwise, it can complain that embedded images aren't permitted to be
+       viewed because they are local resources).  On Windows, this allows the embedded images to
+       be viewed (maybe for the same reason as on Linux, but I haven't found where it puts those
+       messages. */
+    filename = g_build_filename(g_get_tmp_dir(), TEMPLATE_REPORT_FILE_NAME, (gchar *)NULL);
+    fd = g_mkstemp( filename );
+    impl_webkit_export_to_file( self, filename );
+    close( fd );
+    uri = g_strdup_printf( "file:///%s", filename );
+    g_free(filename);
+    DEBUG("Loading uri '%s'", uri);
+    webkit_web_view_load_uri( priv->web_view, uri );
+    g_free( uri );
+
+    LEAVE("");
 }
 
 /********************************************************************
@@ -947,7 +978,11 @@ impl_webkit_copy_to_clipboard( GncHtml* self )
 }
 
 /**************************************************************
- * gnc_html_export_to_file : wrapper around the builtin function in webkit
+ * gnc_html_export_to_file
+ *
+ * @param self GncHtmlWebkit object
+ * @param filepath Where to write the HTML
+ * @return TRUE if successful, FALSE if unsucessful
  **************************************************************/
 static gboolean
 impl_webkit_export_to_file( GncHtml* self, const char *filepath )
