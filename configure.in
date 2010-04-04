@@ -113,58 +113,6 @@ AC_CHECK_FUNCS(setenv,,[
   ])
 ])
 
-##################################################
-# Check for win32 platform
-##################################################
-AC_MSG_CHECKING([for native Win32])
-case $host in
-  *-*-mingw*)
-    native_win32=yes
-    ;;
-  *)
-    native_win32=no
-    ;;
-esac
-AC_MSG_RESULT([$native_win32])
-AM_CONDITIONAL(OS_WIN32, test "x$native_win32" = "xyes")
-
-AC_MSG_CHECKING([for Win32 platform in general])
-case $host in
-  *-*-mingw*|*-*-cygwin*)
-    platform_win32=yes
-    ;;
-  *)
-    platform_win32=no
-    ;;
-esac
-AC_MSG_RESULT($platform_win32)
-AM_CONDITIONAL(PLATFORM_WIN32, test "x$platform_win32" = "xyes")
-
-if test "$platform_win32" = yes; then
-  REGEX_LIBS="-lregex"
-else
-  REGEX_LIBS=""
-fi
-AC_SUBST(REGEX_LIBS)
-
-if test "x$native_win32" = "xyes" ; then
-  HTMLHELP_LIBS=
-  AC_MSG_CHECKING(for HtmlHelpW)
-  saved_LIBS="${LIBS}"
-  LIBS="${LIBS} -lhtmlhelp"
-  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <windows.h>
-  #include <htmlhelp.h>]], [HtmlHelpW(0, (wchar_t*)"", HH_HELP_CONTEXT, 0);])], [
-    AC_MSG_RESULT(yes)
-    HTMLHELP_LIBS=-lhtmlhelp
-    AC_DEFINE(HAVE_HTMLHELPW,1,[System has HtmlHelpW])
-  ], [
-    AC_MSG_RESULT(no)
-  ])
-  LIBS="${saved_LIBS}"
-  AC_SUBST(HTMLHELP_LIBS)
-fi
-##################################################
-  
 STRUCT_TM_GMTOFF_CHECK
 SCANF_LLD_CHECK
 if test x$am_cv_scanf_lld = "xno"; then
@@ -267,20 +215,19 @@ AC_CHECK_FUNCS(dlerror,,)
 LIBS="$oLIBS"
 AC_SUBST(DL_LIB)
 
-### --------------------------------------------------------------------------
-### MacOS
-# Some systems (MacOS) require -lintl
-# not true for darwin 10.3 - halts the build.
-# 10.x requires some special handling...
-#AC_SEARCH_LIBS(gettext, intl, ,[
-#	AC_MSG_ERROR([Cannot find gettext -- do you need to build -lintl?])], )
-
+##################################################
+# OS dependent checks
+##################################################
 AC_SUBST(SED)
 
-AC_MSG_CHECKING(for darwin)
+# Set some defaults, they may be overridden below
+REGEX_LIBS=""
+GNUCASH_SETUP_ENV="gnucash-setup-env"
+
+AC_MSG_CHECKING(operating system)
 case $host_os in
 	rhapsody* | darwin[1567].*)
-		AC_MSG_RESULT([yes, but too old])
+		AC_MSG_RESULT([darwin, but too old])
 		AC_MSG_ERROR([This platform is not supported, please
 update to latest  darwin])
 		;;
@@ -293,23 +240,62 @@ update to latest  darwin])
 		   AC_DEFINE(GDK_QUARTZ,,[Using GDK Quartz (not X11)])
 		   AC_MSG_CHECKING(For ige-mac-integration)   
 		   PKG_CHECK_MODULES(IGE_MAC, ige-mac-integration,
-		   		     AC_MSG_RESULT(yes),
+				     AC_MSG_RESULT(yes),
 				     AC_MSG_RESULT(no))
 		   AC_SUBST(IGE_MAC_LIBS)
 		   AC_SUBST(IGE_MAC_CFLAGS)
 		   GNUCASH_SETUP_ENV="gnucash-setup-env-osx"
 		else
-		   GNUCASH_SETUP_ENV="gnucash-setup-env"
 		   AC_MSG_RESULT(no)
 		fi
 		;;
+	mingw*|cygwin*)
+		platform_win32=yes
+		AC_MSG_RESULT(win32)
+
+		AC_MSG_CHECKING(for native win32)
+		case $host_os in
+		   mingw*)
+			    native_win32=yes
+			    AC_MSG_RESULT(yes)
+
+			    HTMLHELP_LIBS=
+			    AC_MSG_CHECKING(for HtmlHelpW)
+			    saved_LIBS="${LIBS}"
+			    LIBS="${LIBS} -lhtmlhelp"
+			    AC_LINK_IFELSE(
+			        [AC_LANG_PROGRAM(
+			          [[#include <windows.h>
+			            #include <htmlhelp.h>]],
+			          [HtmlHelpW(0, (wchar_t*)"", HH_HELP_CONTEXT, 0);])],
+			          [AC_MSG_RESULT(yes)
+			           HTMLHELP_LIBS=-lhtmlhelp
+			           AC_DEFINE(HAVE_HTMLHELPW,1,[System has HtmlHelpW])
+			        ], [AC_MSG_RESULT(no)])
+			    LIBS="${saved_LIBS}"
+			    AC_SUBST(HTMLHELP_LIBS)
+			    ;;
+		   *)
+			    AC_MSG_RESULT(no)
+			    ;;
+		esac
+		
+		REGEX_LIBS="-lregex"
+
+		# Adjust CFLAGS and LDFLAGS on Windows
+		CFLAGS="${CFLAGS} -mms-bitfields"
+		LDFLAGS="${LDFLAGS} -no-undefined -mwindows"
+		;;
 	*)
-		AC_MSG_RESULT(no)
-		   GNUCASH_SETUP_ENV="gnucash-setup-env"
+		AC_MSG_RESULT(linux/other)
+		GNUCASH_SETUP_ENV="gnucash-setup-env"
 
 		;;	
 esac
+AC_SUBST(REGEX_LIBS)
 AC_SUBST(GNUCASH_SETUP_ENV)
+AM_CONDITIONAL(PLATFORM_WIN32, test "x$platform_win32" = "xyes")
+AM_CONDITIONAL(OS_WIN32, test "x$native_win32" = "xyes")
 
 # These are unavailable on windows/mingw32 and X11 isn't desired or
 # required for MacOSX Quartz
@@ -322,6 +308,8 @@ fi
 AM_CONDITIONAL(HAVE_X11_XLIB_H, test "x$ac_cv_header_X11_Xlib_h" = "xyes")
 AC_CHECK_FUNCS(chown gethostname getppid getuid gettimeofday gmtime_r)
 AC_CHECK_FUNCS(gethostid link)
+##################################################
+  
 
 
 ### --------------------------------------------------------------------------
@@ -1322,12 +1310,6 @@ else
   warnFLAGS=none
 fi
 AC_MSG_RESULT($warnFLAGS)
-
-# Adjust CFLAGS and LDFLAGS on Windows
-if test "x${platform_win32}" = "xyes"; then
-  CFLAGS="${CFLAGS} -mms-bitfields"
-  LDFLAGS="${LDFLAGS} -no-undefined -mwindows"
-fi
 
 ### --------------------------------------------------------------------------
 ### Adjustments -- especially executables that aren't generated via
