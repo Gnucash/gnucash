@@ -220,9 +220,10 @@ AC_SUBST(DL_LIB)
 ##################################################
 AC_SUBST(SED)
 
+
 # Set some defaults, they may be overridden below
 REGEX_LIBS=""
-GNUCASH_SETUP_ENV="gnucash-setup-env"
+GNUCASH_ENVIRONMENT="environment"
 
 AC_MSG_CHECKING(operating system)
 case $host_os in
@@ -232,8 +233,10 @@ case $host_os in
 update to latest  darwin])
 		;;
 	darwin*)
-		AC_MSG_RESULT(yes)
+		platform=darwin
+		AC_MSG_RESULT($platform)
 		AC_MSG_CHECKING(For GDK-Quartz)
+		platform=osx
 		_gdk_tgt=`$PKG_CONFIG --variable=target gdk-2.0`
 		if test "x$_gdk_tgt" = xquartz; then 
 		   AC_MSG_RESULT(yes)
@@ -244,14 +247,15 @@ update to latest  darwin])
 				     AC_MSG_RESULT(no))
 		   AC_SUBST(IGE_MAC_LIBS)
 		   AC_SUBST(IGE_MAC_CFLAGS)
-		   GNUCASH_SETUP_ENV="gnucash-setup-env-osx"
 		else
 		   AC_MSG_RESULT(no)
 		fi
+		GNUCASH_ENVIRONMENT="environment-osx"
 		;;
 	mingw*|cygwin*)
-		platform_win32=yes
-		AC_MSG_RESULT(win32)
+		platform=win32
+		AC_MSG_RESULT($platform)
+		GNUCASH_ENVIRONMENT="environment-win32"
 
 		AC_MSG_CHECKING(for native win32)
 		case $host_os in
@@ -287,14 +291,17 @@ update to latest  darwin])
 		LDFLAGS="${LDFLAGS} -no-undefined -mwindows"
 		;;
 	*)
-		AC_MSG_RESULT(linux/other)
-		GNUCASH_SETUP_ENV="gnucash-setup-env"
+		platform=linux/other
+		AC_MSG_RESULT($platform)
 
 		;;	
 esac
 AC_SUBST(REGEX_LIBS)
-AC_SUBST(GNUCASH_SETUP_ENV)
-AM_CONDITIONAL(PLATFORM_WIN32, test "x$platform_win32" = "xyes")
+AC_SUBST(GNUCASH_ENVIRONMENT)
+
+AM_CONDITIONAL(PLATFORM_LINUX, test "x$platform" = "xlinux/other")
+AM_CONDITIONAL(PLATFORM_OSX, test "x$platform" = "xdarwin")
+AM_CONDITIONAL(PLATFORM_WIN32, test "x$platform" = "xwin32")
 AM_CONDITIONAL(OS_WIN32, test "x$native_win32" = "xyes")
 
 # These are unavailable on windows/mingw32 and X11 isn't desired or

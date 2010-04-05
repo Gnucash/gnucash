@@ -1,0 +1,16 @@
+# environment
+#
+# This configuration file can be used to change/add
+# environment variables during GnuCash startup.
+#
+# If you make any changes here, you should probably
+# also change the equivalent sections in:
+# - src/bin/environment.in
+# - src/bin/environment-osx.in
+# - packaging/win32/gnucash.iss.in
+# - packaging/win32/install.sh
+
+[Variables]
+# For now most of the environment is still set in
+# the install script or the installer. You can override
+# or add additional variables here.

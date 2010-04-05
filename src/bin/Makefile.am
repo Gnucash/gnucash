@@ -33,31 +33,31 @@ gnucash_bin_LDADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la
 
 GNUCASH_BIN_INSTALL_NAME=`echo gnucash-bin | sed -e '$(transform)'`
-GNUCASH_SETUP_ENV_INSTALL_NAME=`echo gnucash-setup-env | sed -e '$(transform)'`
 
-gnucash: gnucash.in gnucash-setup-env ${top_builddir}/config.status Makefile
+configdir = ${GNC_CONFIGDIR}
+config_DATA = environment
+
+if PLATFORM_OSX
+PRE_RUN = if test -z \"\$$DBUS_SESSION_BUS_ADDRESS\"; then\n\
+    eval \`dbus-launch --sh-syntax --exit-with-session --config-file=${PREFIX}/etc/dbus-1/session.conf\`\nfi\n
+else
+PRE_RUN =
+endif
+
+gnucash: gnucash.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's#@-BIN_DIR-@#${bindir}#g' \
-	    -e "s#@-GNUCASH_SETUP_ENV_INSTALL_NAME-@#${GNUCASH_SETUP_ENV_INSTALL_NAME}#g" \
+	    -e "s#@-PRE_RUN-@#${PRE_RUN}#g" \
 	    -e "s#@-GNUCASH_BIN_INSTALL_NAME-@#${GNUCASH_BIN_INSTALL_NAME}#g"
 	mv $@.tmp $@
 	chmod u+x $@
 
-gnucash-gdb: gnucash-gdb.in gnucash-setup-env ${top_builddir}/config.status Makefile
+gnucash-gdb: gnucash-gdb.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's#@-BIN_DIR-@#${bindir}#g' \
-	    -e "s#@-GNUCASH_SETUP_ENV_INSTALL_NAME-@#${GNUCASH_SETUP_ENV_INSTALL_NAME}#g" \
-	    -e "s#@-GNUCASH_BIN_INSTALL_NAME-@#${GNUCASH_BIN_INSTALL_NAME}#g"
-	mv $@.tmp $@
-	chmod u+x $@
-
-gnucash-ddd: gnucash-ddd.in gnucash-setup-env ${top_builddir}/config.status Makefile
-	rm -f $@.tmp
-	sed < $< > $@.tmp \
-	    -e 's#@-BIN_DIR-@#${bindir}#g' \
-	    -e "s#@-GNUCASH_SETUP_ENV_INSTALL_NAME-@#${GNUCASH_SETUP_ENV_INSTALL_NAME}#g" \
+	    -e "s#@-PRE_RUN-@#${PRE_RUN}#g" \
 	    -e "s#@-GNUCASH_BIN_INSTALL_NAME-@#${GNUCASH_BIN_INSTALL_NAME}#g"
 	mv $@.tmp $@
 	chmod u+x $@
@@ -67,28 +67,33 @@ gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 	sed < $< > $@.tmp \
 	    -e 's#@-BIN_DIR-@#${bindir}#g' \
 	    -e "s#@-TOP_SRC_DIR-@#${abs_top_srcdir}#g" \
-	    -e "s#@-GNUCASH_SETUP_ENV_INSTALL_NAME-@#${GNUCASH_SETUP_ENV_INSTALL_NAME}#g" \
+	    -e "s#@-PRE_RUN-@#${PRE_RUN}#g" \
 	    -e "s#@-GNUCASH_BIN_INSTALL_NAME-@#${GNUCASH_BIN_INSTALL_NAME}#g"
 	mv $@.tmp $@
 	chmod u+x $@
 
-gnucash-setup-env: ${GNUCASH_SETUP_ENV}.in ${top_builddir}/config.status Makefile
+environment: ${GNUCASH_ENVIRONMENT}.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's#@-BIN_DIR-@#${bindir}#g' \
-		-e 's#@-GNC_DBD_DIR-@#${GNC_DBD_DIR}#g' \
+	    -e 's#@-GNC_DBD_DIR-@#${GNC_DBD_DIR}#g' \
 	    -e 's#@-GNC_STANDARD_REPORTS_DIR-@#${GNC_SHAREDIR}/guile-modules/gnucash/report/standard-reports#g' \
 	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
 	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
-        -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
-        -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
+	    -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
+	    -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
 	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g" \
 	    -e 's#@-PATH_SEPARATOR-@#${PATH_SEPARATOR}#g' \
-	-e 's#@-PREFIX-@#${prefix}#g'
+	    -e 's#@-PREFIX-@#${prefix}#g'
+if PLATFORM_WIN32
+# Fix Windows paths.
+	sed < $@.tmp > $@.tmp2 -e 's,/,\\,g'
+	mv $@.tmp2 $@.tmp
+endif
 	mv $@.tmp $@
 	chmod u+x $@
 
-CLEANFILES = $(BUILT_SOURCES) gnucash gnucash-valgrind gnucash-gdb gnucash-ddd gnucash-setup-env
+CLEANFILES = $(BUILT_SOURCES) gnucash gnucash-valgrind gnucash-gdb environment
 
 # We handle gnucash scripts in a somewhat unexpected way, but we do
 # this so that a user who doesn't necessarily have the right
@@ -112,9 +117,7 @@ bin_SCRIPTS = \
 	update-gnucash-gconf \
 	gnucash \
 	gnucash-valgrind \
-	gnucash-gdb \
-	gnucash-ddd \
-	gnucash-setup-env
+	gnucash-gdb
 
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
@@ -125,9 +128,9 @@ EXTRA_DIST = \
 	gnucash.in \
 	gnucash-valgrind.in \
 	gnucash-gdb.in \
-	gnucash-ddd.in \
-	gnucash-setup-env.in\
-	gnucash-setup-env-osx.in
+	environment.in \
+	environment-win32.in \
+	environment-osx.in
 
 ## Gnucash scripts -- real code is in overrides, these just get you there.
 ${gnc_common_scripts}: generate-gnc-script ${top_builddir}/config.status

@@ -1,5 +1,4 @@
 #!/bin/sh
 
-. @-BIN_DIR-@/@-GNUCASH_SETUP_ENV_INSTALL_NAME-@
-
-exec gdb @-GNUCASH_BIN_INSTALL_NAME-@ "$@"
+@-PRE_RUN-@
+exec $(dirname $0)/gdb @-GNUCASH_BIN_INSTALL_NAME-@ "$@"

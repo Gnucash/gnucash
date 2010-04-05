@@ -1,0 +1,27 @@
+# environment
+#
+# This configuration file can be used to change/add
+# environment variables during GnuCash startup.
+#
+# If you make any changes here, you should probably
+# also change the equivalent sections in:
+# - src/bin/environment-osx.in
+# - src/bin/environment-win32.in
+# - packaging/win32/gnucash.iss.in
+# - packaging/win32/install.sh
+
+[Variables]
+GUILE_WARN_DEPRECATED=no
+
+PATH=@-BIN_DIR-@;{PATH}
+GNC_MODULE_PATH=@-GNC_PKGLIB_INSTALLDIR-@;{GNC_MODULE_PATH}
+
+EXTRA_PATH={EXTRA_PATH};@-GNC_GUILE_MODULE_DIR-@;@-GNC_SCM_INSTALL_DIR-@
+GUILE_LOAD_PATH={EXTRA_PATH};{GUILE_LOAD_PATH}
+
+EXTRA_LIBS={GNC_MODULE_PATH};@-GNC_LIB_INSTALLDIR-@;@-GNC_PKGLIB_INSTALLDIR-@
+LD_LIBRARY_PATH={EXTRA_LIBS};{LD_LIBRARY_PATH}
+DYLD_LIBRARY_PATH={EXTRA_LIBS};{DYLD_LIBRARY_PATH}
+
+GNC_DBD_DIR=@-GNC_DBD_DIR-@
+GNC_STANDARD_REPORTS_DIR=@-GNC_STANDARD_REPORTS_DIR-@
