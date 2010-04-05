@@ -43,7 +43,6 @@ CLEANFILES += gnucash-env
 gnucash-build-env: gnucash-build-env.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-            -e 's#@-GNC_TEST_SRFI_LOAD_CMD-@#@GNC_TEST_SRFI_LOAD_CMD@#g' \
             -e 's#@-GNC_BUILDDIR-@#${PWD}/${top_builddir}#g' \
             -e 's#@-GNC_SRCDIR-@#${PWD}/${top_srcdir}#g'
 	mv $@.tmp $@

@@ -1,7 +1,6 @@
 TESTS = test-load-module
 
-GNC_TEST_DEPS = @GNC_TEST_SRFI_LOAD_CMD@ \
-  --gnc-module-dir ${top_builddir}/src/engine \
+GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/report/report-system \
   --gnc-module-dir ${top_builddir}/src/report/utility-reports \
   --guile-load-dir ${top_builddir}/src/gnc-module \

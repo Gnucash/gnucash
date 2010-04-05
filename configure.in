@@ -343,11 +343,11 @@ fi
 AS_SCRUB_INCLUDE(GUILE_INCS)
 AC_SUBST(GUILE_LIBS)
 
-AM_GUILE_VERSION_CHECK(1.6.0, , , [AC_MSG_ERROR([
+AM_GUILE_VERSION_CHECK(1.6.7, , , [AC_MSG_ERROR([
 
   guile does not appear to be installed correctly, or is not in the
   correct version range.  Perhaps you have not installed the guile
-  development packages?  Gnucash requires at least version 1.6 to build.
+  development packages?  Gnucash requires at least version 1.6.7 to build.
 ])])
 
 AC_SUBST(GUILE)
@@ -429,37 +429,6 @@ AC_TRY_RUN([
 ])
 CFLAGS="$GNC_OLDCFLAGS"
 LDFLAGS="$GNC_OLDLDFLAGS"
-
-
-### --------------------------------------------------------------------------
-### Check which SRFIs we need.
-
-GNC_ADD_ON_SRFIS=""
-
-for f in ${srcdir}/lib/srfi/srfi-*.scm
-do
-  srfi=`echo $f | sed 's%.*/%%' | sed 's/.scm//'`
-  AC_MSG_CHECKING(if guile needs our copy of ${srfi})
-  if ${GUILE} -c "(debug-set! stack    200000) (use-modules (srfi ${srfi}))" > /dev/null 2>&1
-  then
-    AC_MSG_RESULT(no)
-  else
-    GNC_ADD_ON_SRFIS="${GNC_ADD_ON_SRFIS} ${srfi}.scm"
-    AC_MSG_RESULT(yes)
-  fi
-done
-
-AC_SUBST(GNC_ADD_ON_SRFIS)
-if test "x${GNC_ADD_ON_SRFIS}" != "x"
-then
- GNC_SRFI_LOAD_PATH="\${top_srcdir}/lib/"
- GNC_TEST_SRFI_LOAD_CMD="--guile-load-dir \${top_srcdir}/lib/"
-else
- GNC_SRFI_LOAD_PATH=""
- GNC_TEST_SRFI_LOAD_CMD=""
-fi
-AC_SUBST(GNC_SRFI_LOAD_PATH)
-AC_SUBST(GNC_TEST_SRFI_LOAD_CMD)
 
 ### --------------------------------------------------------------------------
 ### See if we need guile-www
@@ -1372,7 +1341,6 @@ AC_CONFIG_FILES(po/Makefile.in
           intl-scm/Makefile
           lib/Makefile
           lib/guile-www/Makefile
-          lib/srfi/Makefile
           lib/libc/Makefile
           lib/stf/Makefile
           packaging/Makefile

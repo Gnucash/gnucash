@@ -166,7 +166,7 @@ endif
 
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 	-chmod u+x ${srcdir}/iso-currencies-to-c
-	GUILE_LOAD_PATH=@GNC_SRFI_LOAD_PATH@:${GUILE_LOAD_PATH} srcdir=${srcdir} ${srcdir}/iso-currencies-to-c
+	srcdir=${srcdir} ${srcdir}/iso-currencies-to-c
 
 BUILT_SOURCES = iso-4217-currencies.c
 

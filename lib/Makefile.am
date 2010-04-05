@@ -1,5 +1,5 @@
-SUBDIRS = libc guile-www srfi stf
-DIST_SUBDIRS = libc guile-www srfi stf
+SUBDIRS = libc guile-www stf
+DIST_SUBDIRS = libc guile-www stf
 
 EXTRA_DIST = README
 
