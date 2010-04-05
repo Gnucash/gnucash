@@ -37,7 +37,7 @@ GNUCASH_BIN_INSTALL_NAME=`echo gnucash-bin | sed -e '$(transform)'`
 configdir = ${GNC_CONFIGDIR}
 config_DATA = environment
 
-if PLATFORM_OSX
+if PLATFORM_OSX_QUARTZ
 PRE_RUN = if test -z \"\$$DBUS_SESSION_BUS_ADDRESS\"; then\n\
     eval \`dbus-launch --sh-syntax --exit-with-session --config-file=${PREFIX}/etc/dbus-1/session.conf\`\nfi\n
 else

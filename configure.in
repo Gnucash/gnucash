@@ -239,6 +239,7 @@ update to latest  darwin])
 		platform=osx
 		_gdk_tgt=`$PKG_CONFIG --variable=target gdk-2.0`
 		if test "x$_gdk_tgt" = xquartz; then 
+		   platform=darwin/quartz
 		   AC_MSG_RESULT(yes)
 		   AC_DEFINE(GDK_QUARTZ,,[Using GDK Quartz (not X11)])
 		   AC_MSG_CHECKING(For ige-mac-integration)   
@@ -247,10 +248,10 @@ update to latest  darwin])
 				     AC_MSG_RESULT(no))
 		   AC_SUBST(IGE_MAC_LIBS)
 		   AC_SUBST(IGE_MAC_CFLAGS)
+		   GNUCASH_ENVIRONMENT="environment-osx"
 		else
 		   AC_MSG_RESULT(no)
 		fi
-		GNUCASH_ENVIRONMENT="environment-osx"
 		;;
 	mingw*|cygwin*)
 		platform=win32
@@ -301,6 +302,7 @@ AC_SUBST(GNUCASH_ENVIRONMENT)
 
 AM_CONDITIONAL(PLATFORM_LINUX, test "x$platform" = "xlinux/other")
 AM_CONDITIONAL(PLATFORM_OSX, test "x$platform" = "xdarwin")
+AM_CONDITIONAL(PLATFORM_OSX_QUARTZ, test "x$platform" = "xdarwin/quartz")
 AM_CONDITIONAL(PLATFORM_WIN32, test "x$platform" = "xwin32")
 AM_CONDITIONAL(OS_WIN32, test "x$native_win32" = "xyes")
 
