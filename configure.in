@@ -1104,7 +1104,7 @@ esac
     ###-----------------------------------------------------------------------
     ## Find a suitable password store
     
-    if x$host_os = xdarwin
+    if test x$host_os = xdarwin
     then
         AC_DEFINE(HAVE_OSX_KEYCHAIN,1,[System has an OS X Key chain])
     else
