@@ -415,23 +415,23 @@
   (gnc:html-table-append-row!
        table
        (append (list (gnc:make-html-table-header-cell
-                      (_ "Date")))
+                      "Date"))
                (list (gnc:make-html-table-header-cell
-                      (_ "Num")))
+                      "Num"))
                (list (gnc:make-html-table-header-cell
-                      (_ "Description")))
+                      "Description"))
                (list (gnc:make-html-table-header-cell
                       (if suppress-action-memo?
-                          (_ "Notes")
-                          (_ "Notes/Action:Memo"))))
+                          "Notes"
+                          "Notes/Action:Memo")))
                (list (gnc:make-html-table-header-cell
-                      (_ "Transfer To/From Account(s)")))
+                      "Transfer To/From Account(s)"))
                (list (if beg-bal?
                          (gnc:make-html-table-header-cell
                               (string-append "&nbsp; &nbsp; &nbsp; &nbsp;"
                      "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;"))
                          (gnc:make-html-table-header-cell/markup
-                          "number-header" (_ "Amount"))))
+                          "number-header" "Amount")))
        )
   )
 )
@@ -443,7 +443,7 @@
        (if (or tax_code? transaction-details?)
            (gnc:html-text-append! description (gnc:html-markup-b 
               (string-append "&nbsp; &nbsp; &nbsp; &nbsp;"
-                             (if end-bal-text end-bal-text (_ "Total For ")))))
+                             (if end-bal-text end-bal-text "Total For "))))
            (if (not tax_code?)
                (gnc:html-text-append! description (gnc:html-markup-b 
                   "&nbsp; &nbsp; &nbsp; &nbsp;"))
@@ -685,14 +685,14 @@
                        print-info))
      (conversion-text (if missing-pricedb-entry?
                           (string-append
-                            (_ "(Missing priceDB entry to convert ")
+                            "(Missing priceDB entry to convert "
                             (gnc-commodity-get-mnemonic account-commodity)
                             " "
                             converted-qty
-                            (_ " to USD. Go to the Tools->Price Editor dialog to enter prices. Set to zero for this report.)")
+                            " to USD. Go to the Tools->Price Editor dialog to enter prices. Set to zero for this report.)"
                           )
                           (string-append
-                            (_ "(Converted ")
+                            "(Converted "
                             (if (gnc-commodity-equiv account-commodity
                                                      USD-currency)
                                 (gnc-commodity-get-mnemonic trans-currency)
@@ -706,9 +706,9 @@
                                      (not (gnc-commodity-equiv trans-currency
                                                                USD-currency))
                                 )
-                                (string-append (_ " @ PriceDB lookup rate of "))
+                                (string-append " @ PriceDB lookup rate of ")
                                 (string-append
-                                   (_ " @ transaction split rate of ")
+                                   " @ transaction split rate of "
                                    (xaccPrintAmount
                                        (if (not (gnc-commodity-equiv
                                                            trans-currency
@@ -736,7 +736,7 @@
                                                               USD-currency))
                                )
                                (string-append
-                                 (_ " on ")
+                                 " on "
                                  (strftime "%Y-%b-%d"
                                     (localtime (car pricedb-lookup-price-time)))
                                  ")"
@@ -842,7 +842,7 @@
         (if (not (gnc-numeric-equal print-amnt trans-rpt-currency-total))
             (let* ((conversion-text (gnc:make-html-text))
                    (conversion-text-content
-                                 (_ "Multiple currency conversion differences"))
+                                 "Multiple currency conversion differences")
                    (conversion-cell (gnc:make-html-table-cell
                                         conversion-text-content)))
                   (gnc:html-table-append-row!
@@ -885,20 +885,20 @@
                       acct-full-name
                       (if (gnc-commodity-equiv account-commodity USD-currency)
                           ""
-                          (string-append (_ " (Account Commodity: ")
+                          (string-append " (Account Commodity: "
                                   (gnc-commodity-get-mnemonic account-commodity)
                                   ")"))
                       (if show-TXF-data?
                           (let* ((pns (if (or (eq? 'parent code-pns)
                                               (eq? 'current code-pns))
                                           (if (eq? 'parent payer-src)
-                                              (_ "Name Source is Parent")
-                                              (_ "Name Source is Current"))
+                                              "Name Source is Parent"
+                                              "Name Source is Current")
                                           ""))
                                  (line (if (and (= format 3)
                                                 (or (eq? code-pns 'parent)
                                                     (eq? code-pns 'current)))
-                                           (string-append (_ "Item ")
+                                           (string-append "Item "
                                                    (number->string txf-l-count))
                                            ""))
                                 )
@@ -906,12 +906,12 @@
                                     (if (eq? line "")
                                         ""
                                         (string-append
-                                          (_ " (TXF Parameter: ") line ")"))
+                                          " (TXF Parameter: " line ")"))
                                     (if (eq? line "")
                                         (string-append
-                                          (_ " (TXF Parameter: ") pns ")")
+                                          " (TXF Parameter: " pns ")")
                                         (string-append
-                                          (_ " (TXF Parameters: ") pns ", "
+                                          " (TXF Parameters: " pns ", "
                                           line ")")))
                           )
                           "")))
@@ -985,13 +985,13 @@
                         (if (and (txf-beg-bal-only? tax-code)
                                  (not transaction-details?))
                             ""
-                            (string-append (_ "Balance on ")
+                            (string-append "Balance on "
                                          (strftime "%Y-%b-%d"
                                             (localtime (car
                                                (gnc:timepair-previous-day
                                                                   from-value))))
                                          (if (string=? curr-conv-note "")
-                                             (_ ":" )
+                                             ":"
                                              (string-append  " " curr-conv-note)
                                          )
                             )
@@ -1016,7 +1016,7 @@
                                                               account-desc
                                                               " ("
                                                               amnt-acct-curr
-                                                              (_ "  In ")
+                                                              "  In "
                                                     (gnc-commodity-get-mnemonic
                                                               account-commodity)
                                                               ") ")
@@ -1120,7 +1120,7 @@
                   (other-account (xaccSplitGetAccount
                                  (xaccSplitGetOtherSplit split)))
                   (other-account-name (if (null? other-account)
-                                          (_ "Split Transaction")
+                                          "Split Transaction"
                                           (if full-names?
                                               (gnc-account-get-full-name
                                                                   other-account)
@@ -1291,14 +1291,14 @@
                                                 print-info))
                (account-total-line-text
                   (string-append (if transaction-details?
-                                     (_ "Account: ")
+                                     "Account: "
                                      "")
                                  account-name
                                  (if (not (gnc-commodity-equiv account-commodity
                                                                USD-currency))
                                      (string-append " ("
                                                     amnt-acct-curr
-                                                    (_ "  In ")
+                                                    "  In "
                                                     (gnc-commodity-get-mnemonic
                                                               account-commodity)
                                                     ") ")
@@ -1313,10 +1313,10 @@
                                     (if (or (eq? account-type ACCT-TYPE-INCOME)
                                             (eq? account-type ACCT-TYPE-EXPENSE))
                                         #f
-                                        (string-append (_ "Balance on ")
+                                        (string-append "Balance on "
                                                    (strftime "%Y-%b-%d"
                                                      (localtime (car to-value)))
-                                                   (_ " For " )
+                                                   " For "
                                         )
                                     )
                   )
@@ -1479,7 +1479,7 @@
                           (set! txf-invalid-alist (assoc-set!
                                    txf-invalid-alist
                                    tax-code
-                                   (list (_ "Set as not tax-related, but tax code assigned")
+                                   (list "Set as not tax-related, but tax code assigned"
                                          account-name form account)))
                           (set! txf-invalid-alist (assoc-set!
                                    txf-invalid-alist
@@ -1500,8 +1500,8 @@
                       (begin
                         (set! txf-invalid-alist (assoc-set!
                                txf-invalid-alist
-                               (_ "None")
-                               (list (_ "Set as tax-related, no tax code assigned")
+                               "None"
+                               (list "Set as tax-related, no tax code assigned"
                                      account-name form account)))
                          selected-accounts-sorted-by-form-line-acct) 
                       (begin ;; not tax related - skip for report
@@ -1844,11 +1844,11 @@
               (split-list (make-split-list account split-filter-pred))
               (account-USD-total (gnc-numeric-zero))
               (form-line-acct-text (string-append
-                                         (_ "Form or Schedule / Line (TXF Code")
+                                         "Form or Schedule / Line (TXF Code"
                                          (if show-TXF-data?
-                                             (_ ": Parameters")
+                                             ": Parameters"
                                              "")
-                                         (_ ") / Account Name")))
+                                         ") / Account Name"))
               (acct-beg-bal-collector (if (not
                                          (or (eq? account-type ACCT-TYPE-INCOME)
                                            (eq? account-type ACCT-TYPE-EXPENSE)))
@@ -2086,12 +2086,12 @@
                                              (string-append
                                                 (if (string=? ""
                                                           prior-form-sched-line)
-                                                    (_ "Line (Code): ")
+                                                    "Line (Code): "
                                                     "")
                                                 saved-tax-code-text
-                                                (_ ", Item ")
+                                                ", Item "
                                                 (number->string txf-l-count)
-                                                (_ ": ")
+                                                ": "
                                                 txf-last-payer
                                                 " "
                                              )
@@ -2165,7 +2165,7 @@
                                                  (string-append
                                                    (if (string=? ""
                                                           prior-form-sched-line)
-                                                       (_ "Line (Code): ")
+                                                       "Line (Code): "
                                                        "")
                                                    saved-tax-code-text
                                                  )
@@ -2273,7 +2273,7 @@
                                                  form-sched-line-total-amount
                                                  (string-append
                                                      prior-form-schedule
-                                                     (_ " Line ")
+                                                     " Line "
                                                      prior-form-sched-line
                                                  )
                                                  #t
@@ -2343,7 +2343,7 @@
                                       description " (" current-tax-code
                                       (if show-TXF-data?
                                           (string-append
-                                            (_ ": Payer Name Option ")
+                                            ": Payer Name Option "
                                             (if (or (eq? 'parent
                                                          (get-acct-txf-info
                                                               'pns
@@ -2356,24 +2356,24 @@
                                                               tax-code)))
                                                 "Y"
                                                 "N")
-                                            (_ ", TXF Format ")
+                                            ", TXF Format "
                                             (number->string 
                                                     (get-acct-txf-info
                                                          'format
                                                          type
                                                          tax-code))
-                                            (_ ", Multiple Copies ")
+                                            ", Multiple Copies "
                                             (if (get-acct-txf-info
                                                      'multiple
                                                      type
                                                      tax-code)
                                                 "Y"
                                                 "N")
-                                            (_ ", Special Dates ")
+                                            ", Special Dates "
                                             (if (txf-special-date? tax-code)
                                                 "Y"
                                                 "N")
-                                            (_ ", Special Splits ")
+                                            ", Special Splits "
                                             (if (txf-special-split? tax-code)
                                                 "Y"
                                                 "N")
@@ -2484,9 +2484,9 @@
                                     (gnc-error-dialog
                                           '()
                                           (string-append
-                                              (_ "Could not open the file: ")
+                                              "Could not open the file: "
                                               file-name
-                                              (_ ". The error is: ")
+                                              ". The error is: "
                                               (symbol->string key)
                                               " - "
                                               (car (caddr args))
@@ -2600,9 +2600,9 @@
                       (string-append (if (and (gnc-get-current-book-tax-name)
                                               (not (string=? ""
                                               (gnc-get-current-book-tax-name))))
-                                         (_ "Tax Name: %s<BR>")
+                                         "Tax Name: %s<BR>"
                                          "%s")
-                      (_ "Period from %s to %s<BR>Tax Year %s<BR>Tax Entity Type: %s<BR>All amounts in USD unless otherwise noted"))
+                      "Period from %s to %s<BR>Tax Year %s<BR>Tax Entity Type: %s<BR>All amounts in USD unless otherwise noted")
                            (gnc-get-current-book-tax-name)
                            from-date
                            to-date
@@ -2611,7 +2611,7 @@
                                        (string->symbol tax-entity-type))
                                (gnc:txf-get-tax-entity-type-description
                                        (string->symbol tax-entity-type))
-                               (_ "None specified")
+                               "None specified"
                            )
                      )))))
 
@@ -2621,20 +2621,20 @@
                     doc (gnc:make-html-text         
                           (gnc:html-markup-p
                            (gnc:html-markup/format
-                      (_ "The following Account(s) have errors with their Income Tax code assignments (use 'Edit->Tax Report Options' to correct):")))))
+                      "The following Account(s) have errors with their Income Tax code assignments (use 'Edit->Tax Report Options' to correct):"))))
                    (gnc:html-document-add-object! doc error-table)
                     (gnc:html-table-append-row!
                       error-table
                       (append (list (gnc:make-html-table-header-cell/markup
-                                     "header-just-bot" (_ "Account")))
+                                     "header-just-bot" "Account"))
                               (list (gnc:make-html-table-header-cell/markup
-                                     "header-just-bot" (_ "Error Description")))
+                                     "header-just-bot" "Error Description"))
                               (list (gnc:make-html-table-header-cell/markup
-                                     "header-just-bot" (_ "Code")))
+                                     "header-just-bot" "Code"))
                               (list (gnc:make-html-table-header-cell/markup
-                                     "header-just-bot" (_ "Form")))
+                                     "header-just-bot" "Form"))
                               (list (gnc:make-html-table-header-cell/markup
-                                     "header-just-bot" (_ "Description")))
+                                     "header-just-bot" "Description"))
                       )
                     )
                     (map (lambda (error)
@@ -2723,12 +2723,12 @@
                                            (string-append
                                               (if (string=? ""
                                                           prior-form-sched-line)
-                                                  (_ "Line (Code): ")
+                                                  "Line (Code): "
                                                   "")
                                               saved-tax-code-text
-                                              (_ ", Item ")
+                                              ", Item "
                                               (number->string txf-l-count)
-                                              (_ ": ")
+                                              ": "
                                               txf-last-payer
                                               " "
                                            )
@@ -2756,7 +2756,7 @@
                                                            print-info))
                        ) 
                        (render-total-row table tax-code-total-amount
-                                              (string-append (_ "Line (Code): ")
+                                              (string-append "Line (Code): "
                                                             saved-tax-code-text)
                                               #t
                                               transaction-details?
@@ -2782,7 +2782,7 @@
                            (render-total-row
                                 table
                                 form-sched-line-total-amount
-                                (string-append prior-form-schedule (_ " Line ")
+                                (string-append prior-form-schedule " Line "
                                                prior-form-sched-line)
                                 #t
                                 transaction-details?
@@ -2807,15 +2807,15 @@
                      (if (or (null? (gnc-get-current-book-tax-type))
                              (string=? (gnc-get-current-book-tax-type) "")
                              (string=? (gnc-get-current-book-tax-type) "Other"))
-                       (_ "The Income Tax Report is only available for valid Income Tax Entity Types. Go to the Edit->Tax Report Options dialog to change your Income Tax Entity Type selection and set up tax-related accounts.")
-                       (_ "No Tax Related accounts were found with your account selection. Change your selection or go to the Edit->Tax Report Options dialog to set up tax-related accounts.")))))
+                       "The Income Tax Report is only available for valid Income Tax Entity Types. Go to the Edit->Tax Report Options dialog to change your Income Tax Entity Type selection and set up tax-related accounts."
+                       "No Tax Related accounts were found with your account selection. Change your selection or go to the Edit->Tax Report Options dialog to set up tax-related accounts."))))
                  ;; or print selected report options
                  (gnc:html-document-add-object! 
                   doc (gnc:make-html-text         
                         (gnc:html-markup-p
                          (gnc:html-markup/format
                           (string-append
-                             (_ "Selected Report Options:<BR>")
+                             "Selected Report Options:<BR>"
                              ;; selected accounts
                              "&nbsp; &nbsp; &nbsp; %s <BR>"
                              ;; suppress 0.00 values
@@ -2837,36 +2837,36 @@
                              ;; currency conversion date
                              "&nbsp; &nbsp; &nbsp; %s <BR>")
                              (if (not (null? user-sel-accnts))
-                                 (_ "Subset of accounts")
-                                 (_ "No accounts (none = all accounts)"))
+                                 "Subset of accounts"
+                                 "No accounts (none = all accounts)")
                              (if suppress-0?
-                                 (_ "Suppress $0.00 valued Tax Codes")
-                                 (_ "Do not suppress $0.00 valued Tax Codes"))
+                                 "Suppress $0.00 valued Tax Codes"
+                                 "Do not suppress $0.00 valued Tax Codes")
                              (if full-names?
-                                 (_ "Display full account names")
-                                 (_ "Do not display full account names"))
+                                 "Display full account names"
+                                 "Do not display full account names")
                              (if split-details?
-                                 (_ "Display all Transfer To/From Accounts")
-                                 (_ "Do not display all Transfer To/From Accounts"))
+                                 "Display all Transfer To/From Accounts"
+                                 "Do not display all Transfer To/From Accounts")
                              (if show-TXF-data?
-                                 (_ "Print TXF export parameters")
-                                 (_ "Do not Print TXF export parameters"))
+                                 "Print TXF export parameters"
+                                 "Do not Print TXF export parameters")
                              (if suppress-action-memo?
-                                 (_ "Do not display Action:Memo data")
-                                 (_ "Display Action:Memo data"))
+                                 "Do not display Action:Memo data"
+                                 "Display Action:Memo data")
                              (if transaction-details?
-                                 (_ "Display transactions for selected accounts")
-                                 (_ "Do not display transactions for selected accounts"))
+                                 "Display transactions for selected accounts"
+                                 "Do not display transactions for selected accounts")
                              (if no-special-dates?
-                                 (_ "Do not include transactions outside of selected dates")
-                                 (_ "Include some transactions outside of selected dates"))
+                                 "Do not include transactions outside of selected dates"
+                                 "Include some transactions outside of selected dates")
                              (if shade-alternate-transactions?
-                                 (_ "Shade alternate transactions")
-                                 (_ "Do not shade alternate transactions"))
+                                 "Shade alternate transactions"
+                                 "Do not shade alternate transactions")
                              (if (equal? currency-conversion-date
                                          'conv-to-tran-date)
-                                 (_ "PriceDB lookups nearest to transaction date")
-                                 (_ "PriceDB lookups nearest to report end date"))
+                                 "PriceDB lookups nearest to transaction date"
+                                 "PriceDB lookups nearest to report end date")
                           )
                         ))))
 
