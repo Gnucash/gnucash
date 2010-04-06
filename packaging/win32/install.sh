@@ -1375,12 +1375,12 @@ function make_install() {
     done
 
     if [ -z $_skip_scripts ]; then
-        # Try to fix the paths in the gnucash-setup-env script
+        # Try to fix the paths in the environment config file
         qpushd $_BUILD_UDIR/src/bin
-            rm gnucash-setup-env
-            make PATH_SEPARATOR=";" \
-                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GNUTLS_UTIR}/bin:${_GMP_UDIR}/bin:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_GUILE_UDIR}/bin:${_WEBKIT_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin:${_LIBDBI_UDIR}/bin:${_SQLITE3_UDIR}/bin:${MYSQL_LIB_DIR}/lib:${PGSQL_DIR}/lib:${PGSQL_DIR}/bin" \
-                gnucash-setup-env gnucash-valgrind
+            rm environment
+            make \
+                bindir="${_INSTALL_UDIR}/bin;${_INSTALL_UDIR}/lib;${_INSTALL_UDIR}/lib/gnucash;${_GNUTLS_UDIR}/bin;${_GMP_UDIR}/bin;${_GOFFICE_UDIR}/bin;${_LIBGSF_UDIR}/bin;${_PCRE_UDIR}/bin;${_GNOME_UDIR}/bin;${_GUILE_UDIR}/bin;${_WEBKIT_UDIR}/bin;${_REGEX_UDIR}/bin;${_AUTOTOOLS_UDIR}/bin;${AQBANKING_UPATH};${_LIBOFX_UDIR}/bin;${_OPENSP_UDIR}/bin;${_LIBDBI_UDIR}/bin;${_SQLITE3_UDIR}/bin;${MYSQL_LIB_DIR}/lib;${PGSQL_DIR}/lib;${PGSQL_DIR}/bin" \
+                environment
         qpopd
     fi
     
@@ -1414,8 +1414,8 @@ function make_install() {
     if [ -z $_skip_scripts ]; then
         # Create a startup script that works without the msys shell
         # If you make any changes here, you should probably also change
-		# the equivalent sections in packaging/win32/gnucash.iss.in,
-		# src/bin/gnucash-setup-env.in and src/bin/gnucash-setup-env-osx.in
+		# the equivalent sections in packaging/win32/gnucash.iss.in, and
+		# src/bin/environment*.in
         qpushd $_INSTALL_UDIR/bin
             echo "setlocal" > gnucash.cmd
             echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GNUTLS_DIR}\\bin;${GMP_DIR}\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${WEBKIT_DIR}\\bin;${GNOME_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBDBI_DIR}\\bin;${SQLITE3_DIR}\\bin;${MYSQL_LIB_DIR}\\lib;${PGSQL_DIR}\\lib;${PGSQL_DIR}\\bin;%PATH%" >> gnucash.cmd

@@ -192,7 +192,7 @@ begin
   { Create the gnucash.cmd file; #10 is the linefeed character and #13 CR }
 
   { If you make any changes here, you should probably also change the equivalent sections }
-  { in packaging/win32/install.sh, src/bin/gnucash-setup-env.in and src/bin/gnucash-setup-env-osx.in }
+  { in packaging/win32/install.sh, src/bin/environment*.in and src/bin/gnucash-setup-env-osx.in }
   FileName := appdir + '\bin\gnucash.cmd' ;
   FileString := 'setlocal'#13#10 ;
   FileString := FileString + 'chcp ' + ExpandConstant('{cm:LanguageCodePage}') + ''#13#10 ;
