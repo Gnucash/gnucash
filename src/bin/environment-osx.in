@@ -11,21 +11,24 @@
 # - packaging/win32/install.sh
 
 [Variables]
-GUILE_WARN_DEPRECATED=no
-XDG_CONFIG_DIRS=@-PREFIX-@/etc/xdg
-XDG_DATA_DIRS=@-PREFIX-@/share
+# All settings are commented out for now. This requires more testing
+# on the interaction with the OSX bundle launcher script.
+# Until then these parameters remain set via gnucash-setup-env
+#GUILE_WARN_DEPRECATED=no
+#XDG_CONFIG_DIRS=@-PREFIX-@/etc/xdg
+#XDG_DATA_DIRS=@-PREFIX-@/share
 
-PATH=@-BIN_DIR-@;{PATH}
-GNC_MODULE_PATH=@-GNC_PKGLIB_INSTALLDIR-@;{GNC_MODULE_PATH}
+#PATH=@-BIN_DIR-@;{PATH}
+#GNC_MODULE_PATH=@-GNC_PKGLIB_INSTALLDIR-@;{GNC_MODULE_PATH}
 
-EXTRA_PATH={EXTRA_PATH};@-GNC_GUILE_MODULE_DIR-@;@-GNC_SCM_INSTALL_DIR-@
-GUILE_LOAD_PATH={EXTRA_PATH};{GUILE_LOAD_PATH}
+#EXTRA_PATH={EXTRA_PATH};@-GNC_GUILE_MODULE_DIR-@;@-GNC_SCM_INSTALL_DIR-@
+#GUILE_LOAD_PATH={EXTRA_PATH};{GUILE_LOAD_PATH}
 
-EXTRA_LIBS={GNC_MODULE_PATH};/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ImageIO.framework/Versions/A/Resources/
-EXTRA_LIBS={EXTRA_LIBS};@-GNC_LIB_INSTALLDIR-@;@-GNC_PKGLIB_INSTALLDIR-@
-LD_LIBRARY_PATH={EXTRA_LIBS};${LD_LIBRARY_PATH}
-DYLD_LIBRARY_PATH={EXTRA_LIBS};${DYLD_LIBRARY_PATH}
+#EXTRA_LIBS={GNC_MODULE_PATH};/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ImageIO.framework/Versions/A/Resources/
+#EXTRA_LIBS={EXTRA_LIBS};@-GNC_LIB_INSTALLDIR-@;@-GNC_PKGLIB_INSTALLDIR-@
+#LD_LIBRARY_PATH={EXTRA_LIBS};${LD_LIBRARY_PATH}
+#DYLD_LIBRARY_PATH={EXTRA_LIBS};${DYLD_LIBRARY_PATH}
 
-GNC_DBD_DIR=@-GNC_DBD_DIR-@
-GNC_STANDARD_REPORTS_DIR=@-GNC_STANDARD_REPORTS_DIR-@
-GNC_DOT_DIR={HOME}/Library/Application Support/Gnucash
+#GNC_DBD_DIR=@-GNC_DBD_DIR-@
+#GNC_STANDARD_REPORTS_DIR=@-GNC_STANDARD_REPORTS_DIR-@
+#GNC_DOT_DIR={HOME}/Library/Application Support/Gnucash

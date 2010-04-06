@@ -38,10 +38,11 @@ configdir = ${GNC_CONFIGDIR}
 config_DATA = environment
 
 if PLATFORM_OSX_QUARTZ
-PRE_RUN = if test -z \"\$$DBUS_SESSION_BUS_ADDRESS\"; then\n\
-    eval \`dbus-launch --sh-syntax --exit-with-session --config-file=${PREFIX}/etc/dbus-1/session.conf\`\nfi\n
+PRE_RUN = '. @-BIN_DIR-@/gnucash_setup_env'
+PLATFORM_FILES = gnucash-setup-env
 else
 PRE_RUN =
+PLATFORM_FILES =
 endif
 
 gnucash: gnucash.in ${top_builddir}/config.status Makefile
@@ -72,6 +73,24 @@ gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 	mv $@.tmp $@
 	chmod u+x $@
 
+if PLATFORM_OSX_QUARTZ
+gnucash-setup-env: gnucash-setup-env-osx.in ${top_builddir}/config.status Makefile
+	rm -f $@.tmp
+	sed < $< > $@.tmp \
+	    -e 's#@-BIN_DIR-@#${bindir}#g' \
+	    -e 's#@-GNC_DBD_DIR-@#${GNC_DBD_DIR}#g' \
+	    -e 's#@-GNC_STANDARD_REPORTS_DIR-@#${GNC_SHAREDIR}/guile-modules/gnucash/report/standard-reports#g' \
+	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
+	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
+	    -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
+	    -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
+	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g" \
+	    -e 's#@-PATH_SEPARATOR-@#${PATH_SEPARATOR}#g' \
+	    -e 's#@-PREFIX-@#${prefix}#g'
+	mv $@.tmp $@
+	chmod u+x $@
+endif
+
 environment: ${GNUCASH_ENVIRONMENT}.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
@@ -92,7 +111,7 @@ endif
 	mv $@.tmp $@
 	chmod u+x $@
 
-CLEANFILES = $(BUILT_SOURCES) gnucash gnucash-valgrind gnucash-gdb environment
+CLEANFILES = $(BUILT_SOURCES) gnucash gnucash-valgrind gnucash-gdb environment ${PLATFORM_FILES}
 
 # We handle gnucash scripts in a somewhat unexpected way, but we do
 # this so that a user who doesn't necessarily have the right
@@ -129,7 +148,8 @@ EXTRA_DIST = \
 	gnucash-gdb.in \
 	environment.in \
 	environment-win32.in \
-	environment-osx.in
+	environment-osx.in \
+	${PLATFORM_FILES}
 
 ## Gnucash scripts -- real code is in overrides, these just get you there.
 ${gnc_common_scripts}: generate-gnc-script ${top_builddir}/config.status

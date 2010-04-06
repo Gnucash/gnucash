@@ -1,0 +1,41 @@
+# If you make any changes here, you should probably also change the equivalent sections
+# in packaging/win32/gnucash.iss.in, packaging/win32/install.sh and src/bin/gnucash-setup-env.in
+
+PATH="@-BIN_DIR-@:${PATH}"
+export PATH
+XDG_CONFIG_DIRS=@-PREFIX-@/etc/xdg
+export XDG_CONFIG_DIRS
+XDG_DATA_DIRS=@-PREFIX-@/share
+export XDG_DATA_DIRS
+
+
+GUILE_WARN_DEPRECATED="no"
+export GUILE_WARN_DEPRECATED
+
+GNC_MODULE_PATH="@-GNC_PKGLIB_INSTALLDIR-@:${GNC_MODULE_PATH}"
+
+EXTRA_PATH="${EXTRA_PATH}:@-GNC_GUILE_MODULE_DIR-@"
+EXTRA_PATH="${EXTRA_PATH}:@-GNC_SCM_INSTALL_DIR-@"
+GUILE_LOAD_PATH="${EXTRA_PATH}:${GUILE_LOAD_PATH}"
+
+EXTRA_LIBS="${GNC_MODULE_PATH}"
+EXTRA_LIBS="${EXTRA_LIBS}:/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ImageIO.framework/Versions/A/Resources/"
+EXTRA_LIBS="${EXTRA_LIBS}:@-GNC_LIB_INSTALLDIR-@"
+EXTRA_LIBS="${EXTRA_LIBS}:@-GNC_PKGLIB_INSTALLDIR-@"
+
+LD_LIBRARY_PATH="${EXTRA_LIBS}:${LD_LIBRARY_PATH}"
+DYLD_LIBRARY_PATH="${EXTRA_LIBS}:${DYLD_LIBRARY_PATH}"
+GNC_DBD_DIR="@-GNC_DBD_DIR-@"
+GNC_STANDARD_REPORTS_DIR="@-GNC_STANDARD_REPORTS_DIR-@"
+
+export GNC_MODULE_PATH
+export GUILE_LOAD_PATH
+export LD_LIBRARY_PATH
+export DYLD_LIBRARY_PATH
+export GNC_DBD_DIR
+export GNC_STANDARD_REPORTS_DIR
+export GNC_DOT_DIR="$HOME/Library/Application Support/Gnucash"
+
+if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+    eval `dbus-launch --sh-syntax --exit-with-session --config-file=@-PREFIX-@/etc/dbus-1/session.conf`
+fi
