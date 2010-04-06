@@ -1081,15 +1081,16 @@ esac
 
     ###-----------------------------------------------------------------------
     ## Find a suitable password store
-    
-    if test x$host_os = xdarwin
-    then
+
+case $host_os in
+    darwin*)
         AC_DEFINE(HAVE_OSX_KEYCHAIN,1,[System has an OS X Key chain])
-    else
+        ;;
+    *)
         PKG_CHECK_MODULES(GNOME_KEYRING, gnome-keyring-1 >= "0.6",
             [AC_DEFINE(HAVE_GNOME_KEYRING,1,[System has gnome-keyring 0.6 or better])],
             [AC_DEFINE(HAVE_NO_KEYRING,1,[System has no suitable keyring service])])
-    fi
+esac
     ### ----------------------------------------------------------------------
     
     AC_ARG_ENABLE( efence,

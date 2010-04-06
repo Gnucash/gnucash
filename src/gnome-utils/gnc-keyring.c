@@ -30,7 +30,10 @@
 #include <gnome-keyring.h>
 #endif
 #ifdef HAVE_OSX_KEYCHAIN
+#  if 0
+    /* FIXME The OSX part hasn't been tested yet */
 #include <SecKeychain.h>
+#  endif /* 0 */
 #endif
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -60,7 +63,7 @@ void gnc_keyring_set_password (const gchar *access_method,
     }
 #endif /* HAVE_GNOME_KEYRING */
 #ifdef HAVE_OSX_KEYCHAIN
-#  ifdef 0
+#  if 0
     /* FIXME The OSX part hasn't been tested yet */
     OSStatus status;
     SecKeychainItemRef *itemRef = NULL;
@@ -113,7 +116,7 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
     GnomeKeyringNetworkPasswordData *found;
 #endif
 #ifdef HAVE_OSX_KEYCHAIN
-#  ifdef 0
+#  if 0
     /* FIXME The OSX part hasn't been tested yet */
     void *password_data;
     UInt32 password_length;
@@ -146,7 +149,7 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
     gnome_keyring_network_password_list_free(found_list);
 #endif /* HAVE_GNOME_KEYRING */
 #ifdef HAVE_OSX_KEYCHAIN
-#  ifdef 0
+#  if 0
     /* FIXME The OSX part hasn't been tested yet */
     void *password_data;
     UInt32 password_length;
