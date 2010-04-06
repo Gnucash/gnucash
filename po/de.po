@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-06 15:02+0200\n"
-"PO-Revision-Date: 2010-04-06 15:08+0200\n"
+"PO-Revision-Date: 2010-04-06 15:21+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2150,9 +2150,8 @@ msgid ""
 msgstr ""
 
 #: ../src/business/business-gnome/glade/payment.glade.h:12
-#, fuzzy
 msgid "The company associated with this payment."
-msgstr "Die Firma dieses Berichts"
+msgstr "Die Firma, auf die sich diese Zahlung bezieht."
 
 #: ../src/business/business-gnome/glade/payment.glade.h:13
 msgid ""
@@ -2368,14 +2367,12 @@ msgid "Open the Find Expense Voucher dialog"
 msgstr "Den Dialog für die Suche nach Auslagenerstattungen öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:256
-#, fuzzy
 msgid "Sales _Tax Table"
 msgstr "Steuertabelle"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:257
-#, fuzzy
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
-msgstr "Liste der Steuertabellen anzeigen und bearbeiten"
+msgstr "Liste der Steuertabellen (MWSt/VAT) anzeigen und bearbeiten"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:261
 msgid "_Billing Terms Editor"
@@ -3383,6 +3380,15 @@ msgid ""
 "Below you will find the list of invalid account names:\n"
 "%s"
 msgstr ""
+"Das Trennzeichen \"%s\" wird schon in einem oder mehreren Kontennamen\n"
+"verwendet.\n"
+"\n"
+"Dies ist nicht erlaubt und würde zu fehlerhaften Verhalten führen. Sie\n"
+"müssen entweder ein anderes Trennzeichen auswählen oder die\n"
+"Kontennamen ändern.\n"
+"\n"
+"Folgende Kontennamen sind betroffen:\n"
+"%s"
 
 #. src/report/report-system/report-utilities.scm
 #: ../src/engine/Account.c:3949
@@ -4431,9 +4437,8 @@ msgid "Account Type"
 msgstr "Kontoart"
 
 #: ../src/gnome/glade/account.glade.h:15
-#, fuzzy
 msgid "Account _Color:"
-msgstr "Kontonummer"
+msgstr "Konto_farbe:"
 
 #: ../src/gnome/glade/account.glade.h:16
 msgid "Account _name:"
@@ -4682,9 +4687,8 @@ msgid "Select or add a GnuCash account"
 msgstr "Auswählen oder Hinzufügen eines GnuCash Kontos"
 
 #: ../src/gnome/glade/account.glade.h:61
-#, fuzzy
 msgid "Setup selected accounts"
-msgstr "Ausgewähltes Konto löschen"
+msgstr "Ausgewähltes Konto einrichten"
 
 #: ../src/gnome/glade/account.glade.h:62
 msgid "Show _hidden accounts"
@@ -7144,9 +7148,8 @@ msgid "Find transactions with a search"
 msgstr "Finde Buchungssätze"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:152
-#, fuzzy
 msgid "Ta_x Report Options"
-msgstr "Berichts_optionen"
+msgstr "Optionen _Steuerbericht"
 
 #. Translators: currently implemented are *
 #. * US: income tax and                     *
@@ -7154,7 +7157,7 @@ msgstr "Berichts_optionen"
 #. * So adjust this string
 #: ../src/gnome/gnc-plugin-basic-commands.c:157
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
-msgstr ""
+msgstr "Konten für Steuerbericht (MWSt) einrichten"
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:163
@@ -10472,14 +10475,12 @@ msgid "Password"
 msgstr "Passwort"
 
 #: ../src/gnome-utils/glade/dialog-object-references.glade.h:1
-#, fuzzy
 msgid "Explanation"
-msgstr "Mehrteilige Buchung"
+msgstr "Erklärung"
 
 #: ../src/gnome-utils/glade/dialog-object-references.glade.h:2
-#, fuzzy
 msgid "Object references"
-msgstr "Einstellungen"
+msgstr "Objektverweise"
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:1
 msgid "No warnings to reset."
@@ -12280,7 +12281,6 @@ msgstr "_Neue Datei anlegen"
 
 #. try to load once again
 #: ../src/gnome-utils/gnc-file.c:794 ../src/gnome-utils/gnc-file.c:808
-#, fuzzy
 msgid "Loading user data..."
 msgstr "Daten laden..."
 
@@ -12344,9 +12344,9 @@ msgstr "_Konto öffnen"
 #. Translators: %s is a path to a database or any other url,
 #. like mysql://user@server.somewhere/somedb, http://www.somequotes.com/thequotes
 #: ../src/gnome-utils/gnc-keyring.c:206
-#, fuzzy, c-format
+#, c-format
 msgid "Enter a user name and password to connect to: %s"
-msgstr "Geben Sie Ihren Benutzernamen und Ihr Passwort ein"
+msgstr "Geben Sie Ihren Benutzernamen und Ihr Passwort ein für: %s"
 
 #. Toplevel
 #: ../src/gnome-utils/gnc-main-window.c:230
@@ -16771,9 +16771,8 @@ msgstr "Steuernummer"
 #. src/tax/us/txf.scm
 #. src/tax/us/txf-de_DE.scm
 #: ../intl-scm/guile-strings.c:104 ../intl-scm/guile-strings.c:106
-#, fuzzy
 msgid "No help available."
-msgstr "Keine Variable"
+msgstr "Keine Hilfe verfügbar."
 
 #. src/tax/us/txf-de_DE.scm
 #: ../intl-scm/guile-strings.c:108
@@ -24521,37 +24520,32 @@ msgstr "Einfache Rechnung"
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7668
 msgid "n/a"
-msgstr ""
+msgstr "keine"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7670
-#, fuzzy
 msgid "Headings 1"
-msgstr "Lese"
+msgstr "Überschriften 1"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7672
-#, fuzzy
 msgid "Headings 2"
-msgstr "Lese"
+msgstr "Überschriften 2"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7678
-#, fuzzy
 msgid "Report title"
 msgstr "Berichtstitel"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7680
-#, fuzzy
 msgid "Invoice number"
 msgstr "Rechnungsnummer"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7682
-#, fuzzy
 msgid "Template file"
-msgstr "_Vorlage:"
+msgstr "Vorlagendatei"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7684
@@ -24561,55 +24555,48 @@ msgstr "Stilvorlage"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7686
-#, fuzzy
 msgid "Heading font"
-msgstr "Titel"
+msgstr "Schriftart Titel"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7688
-#, fuzzy
 msgid "Text font"
-msgstr "Nur _Text"
+msgstr "Schriftart Text"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7690
 msgid "Logo filename"
-msgstr ""
+msgstr "Logo Dateiname"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7692
-#, fuzzy
 msgid "Logo width"
-msgstr "Diagrammbreite"
+msgstr "Logobreite"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7696 ../intl-scm/guile-strings.c:7736
 msgid "Qty"
-msgstr ""
+msgstr "Anzahl"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7700 ../intl-scm/guile-strings.c:7740
-#, fuzzy
 msgid "Discount Rate"
-msgstr "Skonto: "
+msgstr ""
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7702 ../intl-scm/guile-strings.c:7742
-#, fuzzy
 msgid "Discount Amount"
-msgstr "Geben Sie den Skonto-Betrag ein"
+msgstr ""
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7704 ../intl-scm/guile-strings.c:7744
-#, fuzzy
 msgid "Net Price"
-msgstr "Neuer _Preis:"
+msgstr ""
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7706 ../intl-scm/guile-strings.c:7746
-#, fuzzy
 msgid "Tax Rate"
-msgstr "_Steuerrelevant"
+msgstr ""
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7710 ../intl-scm/guile-strings.c:7750
@@ -24619,7 +24606,6 @@ msgstr "Saldo (Periodenbezogen)"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7712 ../intl-scm/guile-strings.c:7752
-#, fuzzy
 msgid "Sub-total"
 msgstr "Zwischensumme"
 
@@ -24631,7 +24617,6 @@ msgstr "Zahlungshäufigkeit"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7718
-#, fuzzy
 msgid "Extra notes"
 msgstr "Zusätzliche Bemerkungen"
 
