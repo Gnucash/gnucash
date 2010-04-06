@@ -208,7 +208,7 @@ environment_override()
         gchar **val_list;
         gsize val_count;
         gint j;
-        gchar *new_val, *tmp_val;
+        gchar *new_val = NULL, *tmp_val;
 
         /* For each variable, read its new value, optionally expand it and (un)set it */
         val_list = g_key_file_get_string_list (keyfile, "Variables",
