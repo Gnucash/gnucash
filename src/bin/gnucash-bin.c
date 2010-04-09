@@ -214,7 +214,7 @@ environment_override()
         val_list = g_key_file_get_string_list (keyfile, "Variables",
                                                env_vars[i], &val_count,
                                                &error );
-        if (!val_list)
+        if ( val_count == 0 )
             g_unsetenv (env_vars[i]);
         else
         {
