@@ -10,7 +10,13 @@ exec guile -s $0 "$@"
       (export simple-format)
       (define simple-format format)))
 
-(define *currency-file* (string-append (getenv "srcdir") "/" "iso-4217-currencies.scm"))
+(if (< (length (command-line)) 2)
+    (begin
+      (display "Missing command line argument \"source directory\"")
+      (exit 1)))
+
+(define *srcdir* (list-ref (command-line) 1))
+(define *currency-file* (string-append *srcdir* "/" "iso-4217-currencies.scm"))
 (define *c-file-name* "iso-4217-currencies.c")
 
 (define (generate-currency-c-code form output-port)

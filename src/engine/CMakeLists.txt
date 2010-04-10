@@ -62,9 +62,7 @@ ADD_CUSTOM_COMMAND (
   OUTPUT ${ISO_4217_C}
   DEPENDS iso-4217-currencies.scm iso-currencies-to-c
   COMMAND
-    GUILE_LOAD_PATH=@GNC_SRFI_LOAD_PATH@:${GUILE_LOAD_PATH}
-	srcdir=${CMAKE_CURRENT_SOURCE_DIR}
-	${GUILE_EXECUTABLE} -s ${CMAKE_CURRENT_SOURCE_DIR}/iso-currencies-to-c
+    ${GUILE_EXECUTABLE} -s "${CMAKE_CURRENT_SOURCE_DIR}/iso-currencies-to-c" "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 # Add dependency on iso-4217-currencies.c
 SET_SOURCE_FILES_PROPERTIES (gnc-commodity.c PROPERTIES OBJECT_DEPENDS ${ISO_4217_C})
