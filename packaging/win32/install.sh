@@ -1170,7 +1170,7 @@ function inst_libdbi() {
         cp -r $TMP_UDIR/mysql*/* $_MYSQL_LIB_UDIR
         mv $TMP_UDIR/mysql*/include $_MYSQL_LIB_UDIR/include/mysql
 		cd $_MYSQL_LIB_UDIR/lib
-		dlltool --input-def $LIBMYSQL_DEF --dllname libmysql.dll --output-lib libmysqlclient.a -k
+		${DLLTOOL} --input-def $LIBMYSQL_DEF --dllname libmysql.dll --output-lib libmysqlclient.a -k
         test -f ${_MYSQL_LIB_UDIR}/lib/libmysql.dll || die "mysql not installed correctly - libmysql.dll"
         test -f ${_MYSQL_LIB_UDIR}/lib/libmysqlclient.a || die "mysql not installed correctly - libmysqlclient.a"
         rm -rf ${TMP_UDIR}/mysql*
@@ -1205,7 +1205,7 @@ function inst_libdbi() {
         qpopd
         qpushd ${_LIBDBI_UDIR}
             pexports bin/libdbi-0.dll > lib/libdbi.def
-            dlltool -d lib/libdbi.def -D bin/libdbi-0.dll -l lib/libdbi.lib
+            ${DLLTOOL} -d lib/libdbi.def -D bin/libdbi-0.dll -l lib/libdbi.lib
         qpopd
         test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll || die "libdbi not installed correctly"
         rm -rf ${TMP_UDIR}/libdbi-0*
@@ -1264,6 +1264,36 @@ function inst_cmake() {
 
         [ -f ${_CMAKE_UDIR}/bin/cmake.exe ] || die "cmake not installed correctly"
     fi
+}
+
+function inst_cutecash() {
+    setup Cutecash
+    _BUILD_UDIR=`unix_path $CUTECASH_BUILD_DIR`
+    _REPOS_UDIR=`unix_path $REPOS_DIR`
+    mkdir -p $_BUILD_UDIR
+
+    qpushd $_BUILD_UDIR
+        cmake ${_REPOS_UDIR} \
+            -G"MSYS Makefiles" \
+            -DREGEX_INCLUDE_PATH=${_REGEX_UDIR}/include \
+            -DREGEX_LIBRARY=${_REGEX_UDIR}/lib/libregex.a \
+            -DGUILE_INCLUDE_DIR=${_GUILE_UDIR}/include \
+            -DGUILE_LIBRARY=${_GUILE_UDIR}/bin/libguile.dll \
+            -DLIBINTL_INCLUDE_PATH=${_GNOME_UDIR}/include \
+            -DLIBINTL_LIBRARY=${_GNOME_UDIR}/bin/intl.dll \
+            -DLIBXML2_INCLUDE_DIR=${_GNOME_UDIR}/include/libxml2 \
+            -DLIBXML2_LIBRARIES=${_GNOME_UDIR}/bin/libxml2-2.dll \
+            -DPKG_CONFIG_EXECUTABLE=${_GNOME_UDIR}/bin/pkg-config \
+            -DZLIB_INCLUDE_DIR=${_GNOME_UDIR}/include \
+            -DZLIB_LIBRARY=${_GNOME_UDIR}/bin/zlib1.dll \
+            -DSWIG_EXECUTABLE=${_SWIG_UDIR}/swig.exe \
+            -DHTMLHELP_INCLUDE_PATH=${_HH_UDIR}/include \
+            -DWITH_SQL=ON \
+            -DLIBDBI_INCLUDE_PATH=${_LIBDBI_UDIR}/include \
+            -DLIBDBI_LIBRARY=${_LIBDBI_UDIR}/lib/libdbi.dll.a \
+            -DCMAKE_BUILD_TYPE=Debug
+        make
+    qpopd
 }
 
 function inst_webkit() {

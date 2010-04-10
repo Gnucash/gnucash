@@ -71,6 +71,7 @@ else
 fi
 
 set_default WITH_CUTECASH no
+set_default CUTECASH_BUILD_DIR $GNUCASH_DIR\\build-cutecash
 
 
 ####
@@ -373,6 +374,7 @@ if [ "$UPDATE_SOURCES" = "yes" ]; then
 fi
 if [ "$WITH_CUTECASH" = "yes" ]; then
  add_step inst_cmake
+ add_step inst_cutecash
 fi
 add_step inst_gnucash
 add_step inst_docs
