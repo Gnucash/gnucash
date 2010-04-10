@@ -103,11 +103,6 @@ environment: ${GNUCASH_ENVIRONMENT}.in ${top_builddir}/config.status Makefile
 	    -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
 	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g" \
 	    -e 's#@-PREFIX-@#${prefix}#g'
-if PLATFORM_WIN32
-# Fix Windows paths.
-	sed < $@.tmp > $@.tmp2 -e 's,/,\\,g'
-	mv $@.tmp2 $@.tmp
-endif
 	mv $@.tmp $@
 	chmod u+x $@
 
