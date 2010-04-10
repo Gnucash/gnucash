@@ -43,16 +43,17 @@ fi
 # If we get here then this is NOT an svn checkout.
 
 # Maybe it's git?
-if test -d "${real_srcdir}"/.git
+real_gitdir="${real_srcdir}"/.git
+if test -d "${real_gitdir}"
 then
-  githead=`git --git-dir "${real_srcdir}"/.git log -1 --pretty=%h HEAD 2>/dev/null`  # short hash only
+  githead=`git --git-dir "${real_gitdir}" log -1 --pretty=format:"%h" HEAD 2>/dev/null`  # short hash only
   if test $? = 0 ; then
     echo -n $githead
     # Add a "+" to the hash if there deleted or modified files (not excluded by .gitignore and friends)
     # "Ignores" untracked files
-    # [ $(git --git-dir "${real_srcdir}"/.git ls-files -dkm 2>/dev/null | wc -l) -gt 0 ] && echo -n "+"  
+    # [ $(git --git-dir "${real_gitdir}" ls-files -dkm 2>/dev/null | wc -l) -gt 0 ] && echo -n "+"
     # Includes untracked files
-    [ $(git --git-dir "${real_srcdir}"/.git ls-files -dkmo --exclude-standard 2>/dev/null | wc -l) -gt 0 ] && echo -n "+"  
+    [ $(git --git-dir "${real_gitdir}" ls-files -dkmo --exclude-standard 2>/dev/null | wc -l) -gt 0 ] && echo -n "+"
     echo
     exit 0
   else
