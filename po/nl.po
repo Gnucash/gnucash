@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-15 10:27-0500\n"
-"PO-Revision-Date: 2010-04-07 23:05+0200\n"
+"PO-Revision-Date: 2010-04-10 22:21+0200\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -4780,7 +4780,7 @@ msgstr "GnuCash zal voor de geselecteerde rekeningen de budgetten afleiden uit d
 
 #: ../src/gnome/glade/budget.glade.h:12
 msgid "Match the \"day of week\" and \"week of month\"?  (for example, the \"second Tuesday\" of every month)"
-msgstr ""
+msgstr "Selecteren op \"dag van de week\" én \"week van de maand\" (bijvoorbeeld: de \"tweede dinsdag\" van elke maand)?"
 
 #: ../src/gnome/glade/budget.glade.h:14
 msgid "Number of Periods:"
@@ -5184,6 +5184,13 @@ msgid ""
 "\n"
 "REMEMBER: There is no way to undo this final operation! Make sure you have a backup before clicking 'Apply'."
 msgstr ""
+"Kies 'Toepassen' om uw QSF-data aan het bestaande GnuCash-bestand toe te voegen.\n"
+"\n"
+"Kies 'Terug' om uw selecties te beoordelen.\n"
+"\n"
+"Kies 'Annuleren' om dit venster te sluiten zonder wijzigingen aan uw huidige databestand.\n"
+"\n"
+"LET OP: Deze handeling kan niet ongedaan gemaakt worden. Het is daarom verstandig om een veiligheidskopie van uw bestand achter de hand te hebben."
 
 #: ../src/gnome/glade/merge.glade.h:14
 msgid "QSF Data Import Setup"
@@ -5191,7 +5198,7 @@ msgstr "QSF data-import instellen"
 
 #: ../src/gnome/glade/merge.glade.h:15
 msgid "Shows how your QSF data conflicts with existing data in your file."
-msgstr ""
+msgstr "Toont waar uw QSF-data conflicteert met bestaande data in uw bestand."
 
 #: ../src/gnome/glade/merge.glade.h:16
 msgid ""
@@ -5242,7 +5249,7 @@ msgstr "Als u op <i>Ja</i> drukt, verschijnt de <i>Welkom bij GnuCash</i>-dialoo
 
 #: ../src/gnome/glade/newuser.glade.h:5
 msgid "There are some predefined actions available that most new users prefer to get started with GnuCash. Select one of these actions from below and click the <i>OK</i> button or press the <i>Cancel</i> button if you don't want to perform any of them."
-msgstr ""
+msgstr "Er zijn enkele voorgedefinieerde acties beschikbaar om nieuwe gebruikers op weg te helpen met GnuCash. Selecteer een van deze acties hieronder en klik op <i>OK</i>, of klik op <i>Annuleren</i> als u geen van deze acties wilt uitvoeren."
 
 #: ../src/gnome/glade/newuser.glade.h:6
 msgid "_Import my QIF files"
@@ -5412,15 +5419,15 @@ msgstr "Aangepaste cheque-opmaak opslaan"
 
 #: ../src/gnome/glade/print.glade.h:23
 msgid "Splits Account"
-msgstr ""
+msgstr "Rekening boekregel"
 
 #: ../src/gnome/glade/print.glade.h:24
 msgid "Splits Amount"
-msgstr ""
+msgstr "Bedrag boekregel"
 
 #: ../src/gnome/glade/print.glade.h:25
 msgid "Splits Memo"
-msgstr ""
+msgstr "Notitie boekregel"
 
 #: ../src/gnome/glade/print.glade.h:26
 msgid "The origin point is the lower left-hand corner of the page."
@@ -6641,11 +6648,11 @@ msgstr "<b>Belastinggegevens van rekening</b>"
 
 #: ../src/gnome/glade/tax.glade.h:3
 msgid "<b>Copy Number</b>"
-msgstr ""
+msgstr "<b>Versienummer</b>"
 
 #: ../src/gnome/glade/tax.glade.h:4
 msgid "<b>Income Tax Identity</b>"
-msgstr ""
+msgstr "<b>Inkomstenbelasting-identiteit</b>"
 
 #: ../src/gnome/glade/tax.glade.h:5
 msgid "<b>Payer Name Source</b>"
@@ -7467,7 +7474,7 @@ msgstr "U kunt transacties met afgestemde of goedgekeurde opsplitsingen niet doo
 #: ../src/gnome/gnc-plugin-page-register.c:2180
 #: ../src/gnome/gnc-split-reg.c:871
 msgid "A reversing entry has already been created for this transaction."
-msgstr ""
+msgstr "Deze transactie is al tegengeboekt."
 
 #. Translations: The %s is the name of the plugin page
 #: ../src/gnome/gnc-plugin-page-register.c:2257
@@ -7533,7 +7540,7 @@ msgstr "Deze transactie kan niet bewerkt of verwijderd worden."
 #: ../src/gnome/gnc-split-reg.c:900
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
-msgstr ""
+msgstr "Deze transactie is als alleen-lezen aangemerkt met als opmerking: '%s'"
 
 #: ../src/gnome/gnc-split-reg.c:932
 msgid "Remove the splits from this transaction?"
@@ -7562,7 +7569,7 @@ msgstr "U kunt deze opsplitsing niet verwijderen."
 
 #: ../src/gnome/gnc-split-reg.c:1037
 msgid "This is the split anchoring this transaction to the register. You may not delete it from this register window.  You may delete the entire transaction from this window, or you may navigate to a register that shows another side of this same transaction and delete the split from that register."
-msgstr ""
+msgstr "Dit is de boekingsregel die deze transactie aan dit dagboek koppelt; deze mag niet vanuit hier worden verwijderd. U kunt hier wel de volledige transactie wissen. Ook kunt u navigeren naar het dagboek van (een van) de tegenrekening(en) en daar deze boekingsregel verwijderen."
 
 #: ../src/gnome/gnc-split-reg.c:1064
 msgid "(no memo)"
@@ -7659,7 +7666,7 @@ msgstr "Afgestemd:A"
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:1
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:1
 msgid "Order of columns in the dialog"
-msgstr ""
+msgstr "Volgorde van de kolommen in het venster"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:2
 msgid "Show currencies in this dialog"
@@ -7671,7 +7678,7 @@ msgstr "Kolom 'Volledige naam' tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:4
 msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
-msgstr ""
+msgstr "Kolom 'ISIN' (beursspecifieke gegevens) tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:5
 msgid "Show the Namespace column"
@@ -7707,7 +7714,7 @@ msgstr "Kolom 'Naam' tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:13
 msgid "Show the symbol column"
-msgstr ""
+msgstr "Kolom 'Symbool' tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:14
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:8
@@ -7732,7 +7739,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:5
 msgid "Last pathname used"
-msgstr ""
+msgstr "Laatst gebruikte padnaam"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:6
 msgid "New hierarchy window on \"New File\""
@@ -7744,7 +7751,7 @@ msgstr "Het venster 'Nieuwe gebruiker' tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:9
 msgid "Sort column ascending or descending"
-msgstr ""
+msgstr "Kolom oplopend of aflopend sorteren"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:10
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:10
@@ -7792,7 +7799,7 @@ msgstr "Vensterpositie"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:2
 msgid "Show the Price column"
-msgstr ""
+msgstr "Kolom 'Koers' tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:3
 msgid "Show the Source column"
@@ -7816,15 +7823,15 @@ msgstr "Kolom 'Datum' tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:9
 msgid "This setting enables the Price column."
-msgstr ""
+msgstr "Deze instelling activeert de koers-kolom."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:10
 msgid "This setting enables the Source column."
-msgstr ""
+msgstr "Deze instelling activeert de bron-kolom."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:11
 msgid "This setting enables the Type column."
-msgstr ""
+msgstr "Deze instelling activeert de type-kolom."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:12
 msgid "This setting enables the commodity column."
@@ -7832,11 +7839,11 @@ msgstr "Deze instelling activeert de waardepapier-kolom."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:13
 msgid "This setting enables the currency column."
-msgstr ""
+msgstr "Deze instelling activeert de valuta-kolom."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:14
 msgid "This setting enables the date column."
-msgstr ""
+msgstr "Deze instelling activeert de datum-kolom."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:1
 msgid "Custom date format"
@@ -7864,31 +7871,31 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:7
 msgid "Position of check amount in numbers"
-msgstr "Positie van de waarde in getallen"
+msgstr "Positie van de chequewaarde in getallen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:8
 msgid "Position of check amount in words"
-msgstr ""
+msgstr "Positie van de chequewaarde in woorden"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:9
 msgid "Position of check on page"
-msgstr ""
+msgstr "Positie van de cheque op de pagina"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:10
 msgid "Position of date line"
-msgstr ""
+msgstr "Positie van de datumregel"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:11
 msgid "Position of memo line"
-msgstr ""
+msgstr "Positie van de notitieregel"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:12
 msgid "Position of payee name"
-msgstr ""
+msgstr "Positie van de begunstigdenaam"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:13
 msgid "Print '***' before and after text."
-msgstr ""
+msgstr "Voor en na tekst '***' afdrukken."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:14
 msgid "Print the date format below the date."
@@ -7896,7 +7903,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:15
 msgid "The default check printing font"
-msgstr ""
+msgstr "Het standaard lettertype om cheques af te drukken"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:16
 msgid "The default font to use when printing checks. This value will be overridden by any font specified in a check description file."
@@ -8013,7 +8020,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:3
 msgid "The next tip to show."
-msgstr ""
+msgstr "De volgende te tonen tip."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:1
 msgid "\"Enter\" key moves to bottom of register"
@@ -8094,11 +8101,11 @@ msgstr "Negatieve bedragen in rood tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:20
 msgid "Enables Euro support"
-msgstr "EURO-ondersteuning inschakelen"
+msgstr "Euro-ondersteuning inschakelen"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:21
 msgid "Enables additional support for the European Union EURO currency."
-msgstr "Aanvullende ondersteuning voor de Europese Unie EURO-valuta inschakelen/"
+msgstr "Verzorgt aanvullende ondersteuning voor de Euro."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:22
 msgid "Enables file compression when writing the data file."
@@ -8359,23 +8366,23 @@ msgstr "Alleen-lezen journaal"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:12
 msgid "Remove a reconciled split from a transaction"
-msgstr "Een afgestemde opsplitsing uit een transactie verwijderen"
+msgstr "Een afgestemde boekingsregel uit een transactie verwijderen"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:13
 msgid "Remove a split from a transaction"
-msgstr "Een opsplitsing uit een transactie verwijderen"
+msgstr "Een boekingsregel uit een transactie verwijderen"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:14
 msgid "Remove all the splits from a transaction"
-msgstr "Alle opsplitsingen uit een transactie verwijderen"
+msgstr "Alle boekingsregels uit een transactie verwijderen"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:15
 msgid "This dialog is presented before allowing you to change the contents of a reconciled split. Allowing these changes can make it hard to perform future reconciliations."
-msgstr ""
+msgstr "Dit venster wordt getoond voordat u wordt toegestaan een afgestemde boekingsregel te wijzigen. Het toestaan van deze wijzigingen bemoeilijkt toekomstige afstemmingen. "
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:16
 msgid "This dialog is presented before allowing you to delete a commodity that has price quotes attached. Deleting the commodity will delete the quotes as well."
-msgstr "Dit venster wordt getoond voordat u een waardepapier verwijdert met gekoppelde koersnoteringen. Het verwijderen van het waardepapier zal tevens de bijbehorende koersnoteringen verwijderen."
+msgstr "Dit venster wordt getoond voordat u wordt toegestaan een waardepapier met gekoppelde koersnoteringen te verwijderen. Het verwijderen van het waardepapier zal tevens de bijbehorende koersnoteringen verwijderen."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:17
 msgid "This dialog is presented before allowing you to delete a commodity."
@@ -8383,11 +8390,11 @@ msgstr "Dit venster wordt getoond voordat u wordt toegestaan een waardepapier te
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:18
 msgid "This dialog is presented before allowing you to delete a transaction that contains reconciled splits. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations."
-msgstr ""
+msgstr "Dit venster wordt getoond voordat u wordt toegestaan een transactie te verwijderen met afgestemde boekingsregels. Hierdoor wordt de afgestemde waarde van het dagboek verstoord en worden toekomstige afstemmingen bemoeilijkt."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:19
 msgid "This dialog is presented before allowing you to delete a transaction."
-msgstr ""
+msgstr "Dit venster wordt getoond voordat u wordt toegestaan een transactie te verwijderen."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:20
 msgid "This dialog is presented before allowing you to delete multiple price quotes at one time."
@@ -8395,27 +8402,27 @@ msgstr "Dit venster wordt getoond voordat u wordt toegestaan meerdere koersnoter
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:21
 msgid "This dialog is presented before allowing you to mark a transaction split as unreconciled. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations."
-msgstr ""
+msgstr "Dit venster wordt getoond voordat u wordt toegestaan een boekingsregel als niet afgestemd aan te merken. Hierdoor wordt de afgestemde waarde van het dagboek verstoord en worden toekomstige afstemmingen bemoeilijkt."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:22
 msgid "This dialog is presented before allowing you to remove a reconciled split from a transaction. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations."
-msgstr ""
+msgstr "Dit venster wordt getoond voordat u wordt toegestaan een afgestemde boekingsregel uit een transactie te verwijderen. Hierdoor wordt de afgestemde waarde van het dagboek verstoord en worden toekomstige afstemmingen bemoeilijkt."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:23
 msgid "This dialog is presented before allowing you to remove a split from a transaction."
-msgstr ""
+msgstr "Dit venster wordt getoond voordat u wordt toegestaan om een boekingsregel van een transactie te verwijderen."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:24
 msgid "This dialog is presented before allowing you to remove all splits (including some reconciled splits) from a transaction. Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations."
-msgstr ""
+msgstr "Dit venster wordt getoond voordat u wordt toegestaan om alle boekingsregels (waaronder enkele afgestemde boekingsregels) van een transactie te verwijderen. Hierdoor wordt de afgestemde waarde van het dagboek verstoord en worden toekomstige afstemmingen bemoeilijkt."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:25
 msgid "This dialog is presented before allowing you to remove all splits from a transaction."
-msgstr ""
+msgstr "Dit venster wordt getoond voordat u wordt toegestaan om alle boekingsregels van een transactie te verwijderen."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:26
 msgid "This dialog is presented when a read-only register is opened."
-msgstr ""
+msgstr "Dit venster wordt getoond wanneer een alleen-lezen dagboek wordt geopend."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:27
 msgid "This dialog is presented when you attempt to duplicate a modified invoice entry. The changed data must be saved or the duplication canceled."
@@ -8435,7 +8442,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:1
 msgid "Ending date (in seconds from Jan 1, 1970)"
-msgstr ""
+msgstr "Einddatum (in secondes vanaf 1 januari 1970)"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:2
 msgid "Ending time period identifier"
@@ -8463,7 +8470,7 @@ msgstr "Goederen zonder valuta tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:8
 msgid "Starting date (in seconds from Jan 1, 1970)"
-msgstr ""
+msgstr "Startdatum (in secondes vanaf 1 januari 1970)"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:9
 msgid "Starting time period identifier"
@@ -8499,7 +8506,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_register.schemas.in.h:2
 msgid "Width of a column in the dialog"
-msgstr ""
+msgstr "Breedte van een kolom in het venster"
 
 #: ../src/gnome-search/dialog-search.c:157
 msgid "You must select an item from the list"
@@ -8867,11 +8874,11 @@ msgstr ""
 
 #: ../src/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
-msgstr ""
+msgstr "Geef een Eigen Vermogen-rekening op waar de periodeopbrengsten op geboekt moet worden."
 
 #: ../src/gnome-utils/dialog-book-close.c:301
 msgid "Please select an Equity account to hold the total Period Expense."
-msgstr ""
+msgstr "Geef een Eigen Vermogen-rekening op waar de periodekosten op geboekt moet worden."
 
 #: ../src/gnome-utils/dialog-commodity.c:166
 msgid ""
@@ -8899,7 +8906,7 @@ msgid ""
 "Exchange code (ISIN, CUSIP or similar): "
 msgstr ""
 "\n"
-"Uitwisselingscode (ISIN, CUSIP of gelijksoortig): "
+"Beurscode (ISIN of gelijksoortig): "
 
 #: ../src/gnome-utils/dialog-commodity.c:181
 msgid ""
@@ -9005,7 +9012,7 @@ msgstr "Verborgen rekeningen tonen"
 
 #: ../src/gnome-utils/dialog-options.c:958
 msgid "Show accounts that have been marked hidden."
-msgstr ""
+msgstr "Rekeningen die als verborgen zijn aangemerkt tonen."
 
 #: ../src/gnome-utils/dialog-options.c:1063
 msgid "Select all entries."
@@ -9013,7 +9020,7 @@ msgstr "Alle posten selecteren."
 
 #: ../src/gnome-utils/dialog-options.c:1070
 msgid "Clear the selection and unselect all entries."
-msgstr ""
+msgstr "Selectie legen en alle posten deselecteren."
 
 #: ../src/gnome-utils/dialog-options.c:1077
 msgid "Select the default selection."
@@ -9106,19 +9113,19 @@ msgstr "Naar bedrag:"
 
 #: ../src/gnome-utils/dialog-utils.c:958
 msgid "Remember and don't _ask me again."
-msgstr "Onthoud en _vraag mij niet opnieuw."
+msgstr "Onthouden en mij niet meer _vragen."
 
 #: ../src/gnome-utils/dialog-utils.c:959
 msgid "Don't _tell me again."
-msgstr "_Niet meer vertellen"
+msgstr "Mij niet meer _waarschuwen."
 
 #: ../src/gnome-utils/dialog-utils.c:962
 msgid "Remember and don't ask me again this _session."
-msgstr "Onthoud en vraag mij niet opnieuw tijdens deze _sessie."
+msgstr "Onthouden en mij deze _sessie niet meer vragen."
 
 #: ../src/gnome-utils/dialog-utils.c:963
 msgid "Don't tell me again this _session."
-msgstr "Tijdens deze _sessie niet meer vertellen."
+msgstr "Mij deze _sessie niet meer waarschuwen."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:409
 msgid "When you click Apply, GnuCash will modify your ~/.gconf.path file and restart the gconf backend."
@@ -9277,17 +9284,17 @@ msgstr "Bestand schrijven..."
 #: ../src/gnome-utils/druid-gnc-xml-import.c:833
 #, c-format
 msgid "There are %d unassigned and %d undecodable words. Please add encodings."
-msgstr "Er zijn %d niet-toegekende en %d niet-decodeerbare woorden. Voeg de coderingen toe."
+msgstr "Er zijn %d niet-toegekende en %d niet-decodeerbare woorden. Voeg coderingen toe."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:839
 #, c-format
 msgid "There are %d unassigned words. Please decide on them or add encodings."
-msgstr "Er zijn %d niet-toegekende woorden. Voeg de coderingen toe."
+msgstr "Er zijn %d niet-toegekende woorden. Voeg coderingen toe."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:847
 #, c-format
 msgid "There are %d undecodable words. Please add encodings."
-msgstr ""
+msgstr "Er zijn %d niet-decodeerbare woorden. Voeg coderingen toe."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:1035
 msgid "That GnuCash XML file is already loaded. Please select another file."
@@ -9295,7 +9302,7 @@ msgstr "Dat GnuCash-XML-bestand is al geladen. Kies een ander bestand."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:1337
 msgid "This encoding has been added to the list already."
-msgstr ""
+msgstr "Deze codering is reeds aan de lijst toegevoegd."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:1347
 msgid "This is an invalid encoding."
@@ -9335,7 +9342,7 @@ msgstr "Verhandeld _deel:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:8
 msgid "ISIN, CUSI_P or other code:"
-msgstr "ISIN, CUSI_P of andere code:"
+msgstr "_ISIN of andere code:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:9
 msgid "Select security/currency "
@@ -9545,7 +9552,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:25
 msgid "_GnuCash installs the data"
-msgstr ""
+msgstr "_GnuCash installeert de gegevens"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:26
 msgid "_GnuCash updates the search path"
@@ -9553,7 +9560,7 @@ msgstr "_GnuCash werkt het zoekpad bij"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:27
 msgid "_Install into home directory"
-msgstr ""
+msgstr "_Installeren in thuisdirectory"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:28
 msgid "_Setup"
@@ -9565,15 +9572,15 @@ msgstr "_Zoekpad bijwerken"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:30
 msgid "_You install the data yourself"
-msgstr ""
+msgstr "_U installeert de gegevens zelf"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:31
 msgid "_You update the search path yourself"
-msgstr ""
+msgstr "_U werkt het zoekpad zelf bij"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:1
 msgid "<b>S_ystem input encodings</b>"
-msgstr ""
+msgstr "<b>Invoercoderingen s_ysteem</b>"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:2
 msgid "<b>_Custom encoding</b>"
@@ -9581,7 +9588,7 @@ msgstr "<b>_Aangepaste codering</b>"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:3
 msgid "<b>_Selected encodings</b>"
-msgstr "<b>Geselecteerde coderingen</b>"
+msgstr "<b>Ge_selecteerde coderingen</b>"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:4
 msgid "Choose a file to import"
@@ -9744,19 +9751,19 @@ msgstr "Jaren:"
 
 #: ../src/gnome-utils/glade/gnc-gui-query.glade.h:1
 msgid "Don't tell me again this session."
-msgstr ""
+msgstr "Mij tijdens deze sessie niet meer waarschuwen."
 
 #: ../src/gnome-utils/glade/gnc-gui-query.glade.h:2
 msgid "Don't tell me again."
-msgstr ""
+msgstr "Mij niet meer waarschuwen."
 
 #: ../src/gnome-utils/glade/gnc-gui-query.glade.h:3
 msgid "Remember the answer and don't tell me again this session."
-msgstr ""
+msgstr "Het antwoord onthouden en mij deze sessie niet meer waarschuwen."
 
 #: ../src/gnome-utils/glade/gnc-gui-query.glade.h:4
 msgid "Remember the answer and don't tell me again."
-msgstr ""
+msgstr "Het antwoord onthouden en mij niet meer waarschuwen."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:1
 msgid "'_Enter' moves to blank transaction"
@@ -9945,7 +9952,7 @@ msgstr "B_odem"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:48
 msgid "Below the actual date, print the format of that date in 8 point type."
-msgstr ""
+msgstr "Druk de opmaak van de datum onder de datum zelf af in een 8-punts lettertype. "
 
 #: ../src/gnome-utils/glade/preferences.glade.h:49
 msgid "Bottom"
@@ -9977,7 +9984,7 @@ msgstr "Bestanden _comprimeren"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:56
 msgid "Compress the data file with gzip when saving it to disk."
-msgstr ""
+msgstr "De gegevens met gzip comprimeren wanneer deze worden opgeslagen."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:57
 msgid "Date/Time"
@@ -10037,23 +10044,23 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:72
 msgid "Display toolbar items as icons only."
-msgstr ""
+msgstr "Werkbalkknoppen alleen als icoon tonen."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:73
 msgid "Display toolbar items as text only."
-msgstr ""
+msgstr "Werkbalkknoppen alleen als tekst tonen."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:74
 msgid "Display toolbar items with the text label below the icon.  Labels are show for all items."
-msgstr ""
+msgstr "Werkbalkknoppen als icoon met tekstlabel tonen. Alle knoppen krijgen een label."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:75
 msgid "Display toolbar items with the text label beside the icon.  Labels are only shown for the most important items."
-msgstr ""
+msgstr "Werkbalkknoppen als icoon met tekstlabel tonen. Alleen de belangrijkste knoppen krijgen een label. "
 
 #: ../src/gnome-utils/glade/preferences.glade.h:76
 msgid "Don't sign reverse any accounts."
-msgstr ""
+msgstr "Geen enkele rekening van teken laten veranderen."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:77
 msgid "Double _mode colors alternate with transactions"
@@ -10113,7 +10120,7 @@ msgstr "Toon _eindtotaal"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:92
 msgid "Include _non-currency totals"
-msgstr ""
+msgstr "Toon _niet-valutatotalen"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:93
 msgid "Loc_ale:"
@@ -10217,7 +10224,7 @@ msgstr "Het opstartscherm tijdens het starten tonen."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:122
 msgid "Show this many transactions in a register. A value of zero means show all transactions."
-msgstr ""
+msgstr "Zoveel transacties in een dagboek tonen. Bij een waarde van nul worden alle transacties getoond."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:123
 msgid "Show two lines of information for each transaction instead of one.  Does not affect expanded transactions."
@@ -10261,11 +10268,11 @@ msgstr "Transactie_journaal"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:134
 msgid "US Dollars (USD)"
-msgstr ""
+msgstr "US Dollars (USD)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:135
 msgid "U_K:"
-msgstr ""
+msgstr "V_K:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:136
 msgid "U_se 24-hour clock"
@@ -10986,7 +10993,7 @@ msgstr "Pa_gina instellen..."
 
 #: ../src/gnome-utils/gnc-main-window.c:257
 msgid "Specify the page size and orientation for printing"
-msgstr ""
+msgstr "Paginagrootte en -oriëntatie voor afdrukken specificeren"
 
 #: ../src/gnome-utils/gnc-main-window.c:260
 msgid "Proper_ties"
@@ -11018,11 +11025,11 @@ msgstr "_Voorkeuren"
 
 #: ../src/gnome-utils/gnc-main-window.c:282
 msgid "Edit the global preferences of GnuCash"
-msgstr ""
+msgstr "De algemene voorkeuren van GnuCash bewerken"
 
 #: ../src/gnome-utils/gnc-main-window.c:288
 msgid "Select sorting criteria for this page view"
-msgstr ""
+msgstr "Sorteercriteria voor deze pagina selecteren"
 
 #: ../src/gnome-utils/gnc-main-window.c:290
 msgid "Select the account types that should be displayed."
@@ -11050,7 +11057,7 @@ msgstr "_Waarschuwingen herstellen..."
 
 #: ../src/gnome-utils/gnc-main-window.c:299
 msgid "Reset the state of all warning messages so they will be shown again."
-msgstr ""
+msgstr "De toestand van alle waarschuwingsberichten resetten zodat deze weer getoond zullen worden."
 
 #: ../src/gnome-utils/gnc-main-window.c:301
 msgid "Re_name Page"
@@ -11504,7 +11511,7 @@ msgstr "Unieke naam"
 #. National Securities Identifying Number.
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:423
 msgid "ISIN/CUSIP"
-msgstr ""
+msgstr "ISIN"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:429
 msgid "Fraction"
