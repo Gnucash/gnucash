@@ -20,7 +20,9 @@ AM_CPPFLAGS = \
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA = \
-   standard-reports.scm
+   standard-reports.scm \
+   balsheet-eg.css \
+   balsheet-eg.eguile.scm
 
 gncscmreportmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/standard-reports
 gncscmreportmod_DATA = \
@@ -46,7 +48,8 @@ gncscmreportmod_DATA = \
    trial-balance.scm \
    general-journal.scm \
    general-ledger.scm \
-   transaction.scm 
+   transaction.scm \
+   balsheet-eg.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases

@@ -166,10 +166,12 @@
   (let* ((accrec-as (process-acc-list asset-accounts #f))
          (accrec-li (process-acc-list liability-accounts #t))
          (accrec-eq (process-acc-list equity-accounts #t))
+         (accrec-tr (process-acc-list trading-accounts #t))
          (maxdepth 0)
          (rshift-as 0)
          (rshift-li 0)
          (rshift-eq 0)
+         (rshift-tr 0)
          (balancing-cc (gnc:make-commodity-collector))
          (balancing-accrec (newaccrec-clean)))
     (accrec-set-namelink! accrec-as (_ "Assets Accounts"))
@@ -187,6 +189,9 @@
     (accrec-set-namelink! accrec-eq (_ "Equity Accounts"))
     (accrec-set-placeholder?! accrec-eq #t) 
     (balancing-cc 'minusmerge (accrec-subtotal-cc accrec-eq) #f)
+    (accrec-set-namelink! accrec-tr (_ "Trading Accounts"))
+    (accrec-set-placeholder?! accrec-tr #t) 
+    (balancing-cc 'minusmerge (accrec-subtotal-cc accrec-tr) #f)
     ;; Create a balancing entry
     (if (not (gnc-commodity-collector-allzero? balancing-cc))
       (begin
@@ -207,12 +212,16 @@
     (if (and (one-depth-1 accrec-eq) 
              (> (accrec-treedepth accrec-eq) 1))
       (set! rshift-eq 1))
+    (if (and (one-depth-1 accrec-tr) 
+             (> (accrec-treedepth accrec-tr) 1))
+      (set! rshift-tr 1))
 
    (if debugging? 
      (begin
       (display "<p>Assets: ") (display accrec-as) 
       (display "<p>Liabilities: ") (display accrec-li) 
-      (display "<p>Equities: ") (display accrec-eq)))
+      (display "<p>Equities: ") (display accrec-eq)
+      (display "<p>Trading: ") (display accrec-tr)))
 
 ?>
 <table border="0" class="outer"><tr valign="top"><td valign="top"> <!-- outer table to control columns -->
@@ -221,7 +230,8 @@
 
     (set! maxdepth (max (accrec-treedepth accrec-as)
                         (accrec-treedepth accrec-li)
-                        (accrec-treedepth accrec-eq)))
+                        (accrec-treedepth accrec-eq)
+                        (accrec-treedepth accrec-tr)))
 
     ; Display assets section
     (display-accounts-table-r (list accrec-as) #f maxdepth rshift-as (one-depth-1 accrec-as))
@@ -229,14 +239,14 @@
 
     ; Split table across columns if required
     (case opt-columns
-      ('autocols 
+      ((autocols) 
         ?>
         </table>
         <!-- <table border="0" align="left"><tr><td>&nbsp;</td></tr></table> -->
         &nbsp;&nbsp;<table border="0" align="left">
         <?scm
         )
-      ('twocols
+      ((twocols)
         ?>
         </table></td><td valign="top"><table border="0">
         <?scm 
@@ -245,11 +255,13 @@
     ; Display liabilities and equity sections
     (display-accounts-table-r (list accrec-li) #t maxdepth rshift-li (one-depth-1 accrec-li))
     (hrule (* maxdepth 2))
+    (display-accounts-table-r (list accrec-tr) #t maxdepth rshift-tr (one-depth-1 accrec-tr))
+    (hrule (* maxdepth 2))
     (display-accounts-table-r (list accrec-eq) #t maxdepth rshift-eq (one-depth-1 accrec-eq))
     (hrule (* maxdepth 2))
     (display-acc-row 
       maxdepth 0 0
-      (_ "Total Equity and Liabilities") 
+      (_ "Total Equity, Trading, and Liabilities") 
       (format-comm-coll-total (accrec-subtotal-cc accrec-as)) ; yes, show the assets total
       #t #f)
 

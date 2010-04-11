@@ -31,7 +31,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;(define-module (gnucash report balsheet-eg))
+(define-module (gnucash report standard-reports balsheet-eg))
 (use-modules (gnucash main))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash business-utils))
@@ -117,7 +117,7 @@
 (define (gnc:company-info key) ; this should be in business-utils.scm soon
   ;; Access company info from key-value pairs for current book
   (kvp-frame-get-slot-path-gslist
-    (gnc-book-get-slots (gnc-get-current-book))
+    (qof-book-get-slots (gnc-get-current-book))
     (append gnc:*kvp-option-path* (list gnc:*business-label* key))))
 
 (define (add-to-cc cc com num neg?)
@@ -445,7 +445,7 @@
                    ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
                    ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
                    ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
-                   ACCT-TYPE-EQUITY )
+                   ACCT-TYPE-EQUITY ACCT-TYPE-TRADING )
              ;ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
              (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
          ;; decompose the account list
@@ -456,6 +456,8 @@
            (assoc-ref split-up-accounts ACCT-TYPE-LIABILITY))
          (equity-accounts
            (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
+         (trading-accounts
+           (assoc-ref split-up-accounts ACCT-TYPE-TRADING))
 
 
          ;; exchange rates calculation parameters
@@ -469,7 +471,7 @@
 
          (coyname (or (gnc:company-info gnc:*company-name*) ""))
 
-         (css? (and (defined? 'gnc-html-engine-supports-css) (gnc-html-engine-supports-css)))
+         (css? (gnc-html-engine-supports-css))
 
          (html #f))
 
@@ -717,7 +719,7 @@
   'report-guid "2e3751edeb7544e8a20fd19e9d08bb65"
   'menu-name (N_ "Balance Sheet using eguile-gnc")
   'menu-tip (N_ "Display a balance sheet (using eguile template)")
-  'menu-path (list gnc:menuname-business-reports)
+  'menu-path (list gnc:menuname-asset-liability)
   'options-generator balsheet-options-generator
   'renderer balsheet-renderer)
 

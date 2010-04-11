@@ -1,0 +1,59 @@
+/* Stylesheet for balsheet-eg.scm -- eguile-based Gnucash Balance Sheet report */
+
+/* Note that body and table font family and size will be overridden */
+/* by separate report options.                                      */
+
+  body { 
+    margin: 2em;
+  }
+  table.outer {
+    border-spacing: 0em;
+  }
+  table.outer tr {
+    vertical-align: top;
+  }
+  table.accounts tr {
+    vertical-align: bottom;
+  }
+  table.accounts td {
+  } 
+  td {
+    padding: 0em 0.5em;
+  }
+  td.empty {
+  }
+  td.indent {
+    width: 1em;
+  }
+  td.accname {
+    text-align: left;
+    vertical-align: top;
+  }
+  td.accnametotal {
+    text-align: left;
+    vertical-align: top;
+    font-weight: bold;
+  }
+  td.balance {
+    text-align: right;
+    vertical-align: bottom;
+  }
+  td.balancetotal {
+    text-align: right;
+    vertical-align: bottom;
+    font-weight: bold;
+  }
+  td.overruled {
+    border-top: solid thin black;
+  }
+  td.ruledtotal {
+    border-top: solid thin black;
+    border-bottom: double medium black;
+    font-weight: bold;
+    vertical-align: bottom;
+  }
+  /* Negative amounts (in addition to separate 'sign' and 'braces' options */
+  .negative { color: red; }
+  /* Foreign currency amounts */
+  .foreign { font-size: smaller; font-style: italic; }
+
