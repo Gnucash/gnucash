@@ -119,3 +119,23 @@ ENDIF (MINGW)
 
 # The subdirectories
 ADD_SUBDIRECTORY (src)
+
+
+# ############################################################
+# Package creation rules
+
+SET (CPACK_PACKAGE_NAME "Cutecash")
+SET (CPACK_PACKAGE_DESCRIPTION_SUMMARY "Cutecash Free Finance Software")
+SET (CPACK_PACKAGE_VENDOR "Christian Stimming")
+SET (CPACK_PACKAGE_VERSION_MAJOR "0")
+SET (CPACK_PACKAGE_VERSION_MINOR "1")
+SET (CPACK_PACKAGE_VERSION_PATCH "0")
+SET (CPACK_SOURCE_IGNORE_FILES "/\\\\.svn/;/\\\\.git/;.*~;build.*;html;Debug;Release")
+SET (CPACK_STRIP_FILES "bin/cutecash")
+#SET (CPACK_PACKAGE_EXECUTABLES "bin/carclient")
+
+IF(UNIX)
+  SET(CPACK_GENERATOR "TGZ")
+ENDIF(UNIX)
+
+INCLUDE (CPack)
