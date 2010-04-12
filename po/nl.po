@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-15 10:27-0500\n"
-"PO-Revision-Date: 2010-04-10 22:21+0200\n"
+"PO-Revision-Date: 2010-04-12 21:50+0200\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -1424,13 +1424,12 @@ msgid "Cutoff Day: "
 msgstr "Afsluitdag:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:10
-#, fuzzy
 msgid ""
 "Days\n"
 "Proximo"
 msgstr ""
 "Dagen\n"
-"Komende maand"
+"Dag van de volgende maand"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:12
 msgid "De_scription:"
@@ -11981,15 +11980,13 @@ msgstr "Naam voor nieuw sjabloon"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:33
 #: ../src/import-export/hbci/glade/hbci.glade.h:30
-#, fuzzy
 msgid "Online Banking Connection Window"
-msgstr "HBCI verbindingsvenster"
+msgstr "Verbindingenvenster online bankieren"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:34
 #: ../src/import-export/hbci/glade/hbci.glade.h:31
-#, fuzzy
 msgid "Online Banking Setup Finished"
-msgstr "HBCI configuratie voltooid"
+msgstr "Configuratie online bankieren voltooid"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:35
 #: ../src/import-export/hbci/glade/hbci.glade.h:33
@@ -12043,14 +12040,13 @@ msgstr "Naam ontvanger"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:45
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:4
-#, fuzzy
 msgid "Remember _PIN"
-msgstr "HBCI, bewaar PIN in geheugen"
+msgstr "_PIN onthouden"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:46
 #: ../src/import-export/hbci/glade/hbci.glade.h:42
 msgid "Sort"
-msgstr "Sorteer"
+msgstr "Sorteren"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:47
 #: ../src/import-export/hbci/glade/hbci.glade.h:43
@@ -12059,9 +12055,8 @@ msgstr ""
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:48
 #: ../src/import-export/hbci/glade/hbci.glade.h:45
-#, fuzzy
 msgid "Start Online Banking Wizard"
-msgstr "Online bankieren"
+msgstr "Online bankieren-assistent starten"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:49
 #: ../src/import-export/hbci/glade/hbci.glade.h:46
@@ -12070,7 +12065,6 @@ msgstr ""
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:50
 #: ../src/import-export/hbci/glade/hbci.glade.h:47
-#, fuzzy
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now finished.  You can now invoke Online Banking actions on those accounts.\n"
 "\n"
@@ -12086,7 +12080,6 @@ msgstr ""
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:55
 #: ../src/import-export/hbci/glade/hbci.glade.h:52
-#, fuzzy
 msgid ""
 "This assistant helps you setting up your Online Banking connection with your bank.\n"
 "\n"
@@ -12106,10 +12099,10 @@ msgstr ""
 "Deze assistent helpt u bij het configureren van uw internetbankieren-verbinding met uw bank.\n"
 "\n"
 "U moet de toegang voor internetbankieren eerst bij uw bank aanvragen. Wanneer uw bank u toegang wil geven tot internetbankieren, zal deze u een brief sturen met:\n"
-"* De bank-code van uw bank;\n"
-"* Een gebruikers-ID dat u identificeert bij uw bank;\n"
-"* Het internetadres van de internetbankieren-server van uw bank;\n"
-"* Informatie over de cryptografische publieke sleutel van uw bank (\"Ini-brief\").\n"
+"* De bankcode van uw bank.\n"
+"* Een gebruikers-ID dat u identificeert bij uw bank.\n"
+"* Het internetadres van de internetbankieren-server van uw bank.\n"
+"* Voor HCBI internetbankieren: Informatie over de publieke beveiligingssleutel van uw bank (\"Ini-brief\").\n"
 "\n"
 "Deze informatie heeft u bij deze assistent nodig. Kies 'Volgende' als u verder wilt gaan.\n"
 "\n"
@@ -12303,21 +12296,19 @@ msgstr "%s op %s (code %s)"
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:511
 #: ../src/import-export/hbci/druid-hbci-initial.c:148
-#, fuzzy, c-format
+#, c-format
 msgid "%s at bank code %s"
-msgstr "%s op %s (code %s)"
+msgstr "%s op bankcode %s"
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:779
 #: ../src/import-export/hbci/druid-hbci-initial.c:755
-#, fuzzy
 msgid "Online Banking Account Name"
-msgstr "Online bankieren"
+msgstr "Rekeningnaam binnen Online Banking"
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:784
 #: ../src/import-export/hbci/druid-hbci-initial.c:762
-#, fuzzy
 msgid "GnuCash Account Name"
-msgstr "GnuCash dagboek naam"
+msgstr "Rekeningnaam binnen GnuCash"
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:790
 #: ../src/import-export/generic-import.glade.h:35
@@ -12329,9 +12320,8 @@ msgstr "Nieuw?"
 
 #: ../src/import-export/aqbanking/gnc-ab-gettrans.c:178
 #: ../src/import-export/hbci/gnc-hbci-gettrans.c:208
-#, fuzzy
 msgid "The Online Banking import returned no transactions for the selected time period."
-msgstr "De HBCI import gaf geen transacties terug voor de geselecteerde tijdspanne."
+msgstr "Er zijn voor de geselecteerde tijdspanne geen transacties via internetbankieren beschikbaar."
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:61
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:219
@@ -12352,20 +12342,18 @@ msgstr ""
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:195
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:250
-#, fuzzy
 msgid "Online Banking Direct Debit Note"
-msgstr "Online HBCI directe afschrijvingstoestemming"
+msgstr "Online Banking-eenmalige machtiging"
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:200
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:252
 msgid "Online Banking Bank-Internal Transfer"
-msgstr ""
+msgstr "Online Banking-intrabank overboeking"
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:206
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:255
-#, fuzzy
 msgid "Online Banking Transaction"
-msgstr "Online transactie"
+msgstr "Online Banking-transactie"
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:260
 msgid ""
@@ -12389,17 +12377,21 @@ msgid ""
 "The bank has sent transaction information in its response.\n"
 "Do you want to import it?"
 msgstr ""
+"De bank heeft in zijn antwoord transactie-informatie meegestuurd.\n"
+"Wenst u deze te importeren?"
 
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:568
 #: ../src/import-export/hbci/gnc-hbci-utils.c:663
 msgid "No Online Banking account found for this gnucash account. These transactions will not be executed by Online Banking."
-msgstr ""
+msgstr "Er is geen Online Banking-rekening aangetroffen voor deze GnuCash-rekening. Deze transacties zullen niet door Online Banking worden verwerkt."
 
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:633
 msgid ""
 "The bank has sent balance information in its response.\n"
 "Do you want to import it?"
 msgstr ""
+"De bank heeft in zijn antwoord saldo-informatie meegestuurd.\n"
+"Wenst u deze te importeren?"
 
 #. Translators: Strings from this file are needed only in
 #. * countries that have one of aqbanking's Online Banking
@@ -12410,35 +12402,30 @@ msgstr ""
 #. * import-export/hbci subdirectory.
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:704
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:271
-#, fuzzy
 msgid ""
 "The downloaded Online Banking Balance was zero.\n"
 "\n"
 "Either this is the correct balance, or your bank does not support Balance download in this Online Banking version. In the latter case you should choose a different Online Banking version number in the Online Banking (AqBanking or HBCI) Setup. After that, try again to download the Online Banking Balance."
 msgstr ""
-"De opgehaalde HBCI balans was nul.\n"
-"Het lijkt erop dat dit de juiste balans is, of uw bank ondersteunt het ophalen van de balans niet \n"
-"in deze versie van HBCI. In dat laatste geval moet u een hogere versie van HBCI kiezen \n"
-"in de setup van HBCI. Probeer daarna opnieuw de HBCI balans \n"
-"op te halen.\n"
+"Het opgevraagde Online Banking-saldo was nul.\n"
+"\n"
+"Ofwel dit is het correcte saldo, ofwel uw bank ondersteunt geen saldo-informatie voor deze versie van Online Banking. In het laatste geval dient u een ander versienummer voor Online Banking op te geven bij de Online Banking-instellingen. Daarna kunt u opnieuw proberen het saldo te downloaden."
 
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:719
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:289
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Result of Online Banking job: \n"
 "Account booked balance is %s"
 msgstr ""
-"Resultaat van HBCI opdracht: \n"
-"Dagboek geboekte balans is %s%s\n"
+"Resultaat van Online Banking-opdracht: \n"
+"Het geboekte saldo op de rekening bedraagt %s"
 
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:725
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:296
-#, fuzzy, c-format
+#, c-format
 msgid "For your information: This account also has a noted balance of %s\n"
-msgstr ""
-"Ter informatie: Dit dagboek heeft ook een \n"
-"gemarkeerde balans van %s%s\n"
+msgstr "Ter informatie: de rekening heeft boekingen voor verwerking klaarstaan met een saldo van %s\n"
 
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:731
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:301
@@ -12460,37 +12447,36 @@ msgid "Import module for DTAUS import not found."
 msgstr "Importmodule voor DTAUS is niet gevonden."
 
 #: ../src/import-export/aqbanking/gnc-gwen-gui.c:867
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
 "long. Do you want to try again?"
-msgstr "Het PIN moet uit tenminste %d karakters bestaan. Wilt u het nogmaals proberen?"
+msgstr ""
+"Het PIN moet uit tenminste %d karakters bestaan.\n"
+"Wilt u het nogmaals proberen?"
 
 #: ../src/import-export/aqbanking/gnc-gwen-gui.c:1320
-#, fuzzy
 msgid "The Online Banking job is still running; are you sure you want to cancel?"
-msgstr "Deze SX is veranderd; weet u zeker dat u wilt annuleren?"
+msgstr "De Online Banking-opdracht is nog in bewerking. Weet u zeker dat u deze wilt afbreken?"
 
 #: ../src/import-export/aqbanking/gncmod-aqbanking.c:75
 #: ../src/import-export/gncmod-generic-import.c:61
 #: ../src/import-export/hbci/gncmod-hbci.c:68
 #: ../src/import-export/qif-import/gnc-plugin-qif-import.c:175
-#, fuzzy
 msgid "Online Banking"
-msgstr "<b>Online bankieren</b>"
+msgstr "Online Banking"
 
 #. Menus
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:82
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:89
-#, fuzzy
 msgid "_Online Actions"
-msgstr "Online Acties"
+msgstr "_Online acties"
 
 #. Menu Items
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:85
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:92
 msgid "_Online Banking Setup..."
-msgstr "Online bankieren instellen"
+msgstr "_Online Banking instellen..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:86
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:93
@@ -12499,63 +12485,53 @@ msgstr "Initiële toegang tot Online bankieren (HBCI of OFX DirectConnect, via A
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:88
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:95
-#, fuzzy
 msgid "Get _Balance"
-msgstr "HBCI, haal balans"
+msgstr "_Saldo opvragen"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:89
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:96
-#, fuzzy
 msgid "Get the account balance online through Online Banking"
-msgstr "Haal de dagboek balans online op via HBCI"
+msgstr "Het saldo van de rekening via Online Banking opvragen"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:91
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:98
-#, fuzzy
 msgid "Get _Transactions..."
-msgstr "HBCI Transacties halen"
+msgstr "_Transacties opvragen..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:92
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:99
-#, fuzzy
 msgid "Get the transactions online through Online Banking"
-msgstr "Haal de transacties online op via HBCI"
+msgstr "De transacties op de rekening via Online Banking opvragen"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:94
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:101
-#, fuzzy
 msgid "_Issue Transaction..."
-msgstr "Geef HBCI transactie op"
+msgstr "Transacties _doorgeven..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:95
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:102
-#, fuzzy
 msgid "Issue a new transaction online through Online Banking"
-msgstr "Geef online een nieuwe transactie op via HBCI"
+msgstr "Een nieuwe transactie-opdracht via Online Banking doorgeven"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:97
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:104
-#, fuzzy
 msgid "I_nternal Transaction..."
-msgstr "Om een transactie te boeken"
+msgstr "_Intrabank overboeken..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:98
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:105
-#, fuzzy
 msgid "Issue a new bank-internal transaction online through Online Banking"
-msgstr "Geef online een nieuwe transactie op via HBCI"
+msgstr "Een nieuwe intrabank-overboekingsopdracht via Online Banking doorgeven"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:100
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:107
-#, fuzzy
 msgid "_Direct Debit..."
-msgstr "Direct betalen"
+msgstr "_Eenmalig machtigen..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:101
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:108
-#, fuzzy
 msgid "Issue a new direct debit note online through Online Banking"
-msgstr "Geef online een nieuwe directe afschrijvingstoestemming op via HBCI"
+msgstr "Een nieuwe eenmalige machtiging via Online Banking afgeven"
 
 #. File -> Import menu item
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:105
@@ -12576,7 +12552,7 @@ msgstr "MT94_2 importeren"
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:109
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:116
 msgid "Import a MT942 file into GnuCash"
-msgstr "Een MT942-bestand imporeteren in GnuCash"
+msgstr "Een MT942-bestand importeren in GnuCash"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:111
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:118
@@ -12604,24 +12580,22 @@ msgstr "DTAUS importeren en _verzenden..."
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:123
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:130
 msgid "Import a DTAUS file into GnuCash and send the transfers online through Online Banking"
-msgstr "Een DTAUS-bestand importeren in GnuCash en de transacties online versturen met Internetbankieren"
+msgstr "Een DTAUS-bestand importeren in GnuCash en de transacties versturen met Online Banking"
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
-#, fuzzy
 msgid "CSV import data format"
-msgstr "Kies een export format"
+msgstr "Bestandsopbouw CSV-import"
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:2
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:2
-#, fuzzy
 msgid "Close window when finished"
-msgstr "Sluit dit venster na einde"
+msgstr "Dit venster na afloop sluiten"
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:3
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:3
 msgid "DTAUS import data format"
-msgstr ""
+msgstr "Bestandsopbouw DTAUS-import"
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:4
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:4
@@ -12641,51 +12615,48 @@ msgstr ""
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:7
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:7
-#, fuzzy
 msgid "Remember the PIN in memory"
-msgstr "HBCI, bewaar PIN in geheugen"
+msgstr "Het PIN in het geheugen onthouden"
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:8
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:8
 msgid "SWIFT MT940 import data format"
-msgstr ""
+msgstr "Bestandsopbouw SWIFT MT940-import"
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:9
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:9
 msgid "SWIFT MT942 import data format"
-msgstr ""
+msgstr "Bestandsopbouw SWIFT MT942-import"
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:12
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:12
 msgid "This setting specifies the data format when importing CSV files. The AqBanking library offers various import formats (called \"profiles\") of which you can choose one here."
-msgstr ""
+msgstr "Deze instelling specificeert het bestandsopbouw bij de import van CSV-bestanden. De AqBanking-bibliotheek kent verschillende import-indelingen (\"profielen\") waaruit u hier kan kiezen."
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:13
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:13
 msgid "This setting specifies the data format when importing DTAUS files. The AqBanking library offers various import formats (called \"profiles\") of which you can choose one here."
-msgstr ""
+msgstr "Deze instelling specificeert het bestandsopbouw bij de import van DTAUS-bestanden. De AqBanking-bibliotheek kent verschillende import-indelingen (\"profielen\") waaruit u hier kan kiezen."
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:14
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:14
 msgid "This setting specifies the data format when importing SWIFT MT940 files. The AqBanking library offers various import formats (called \"profiles\") of which you can choose one here."
-msgstr ""
+msgstr "Deze instelling specificeert het bestandsopbouw bij de import van SWIFT MT940-bestanden. De AqBanking-bibliotheek kent verschillende import-indelingen (\"profielen\") waaruit u hier kan kiezen."
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:15
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:15
 msgid "This setting specifies the data format when importing SWIFT MT942 files. The AqBanking library offers various import formats (called \"profiles\") of which you can choose one here."
-msgstr ""
+msgstr "Deze instelling specificeert het bestandsopbouw bij de import van SWIFT MT942-bestanden. De AqBanking-bibliotheek kent verschillende import-indelingen (\"profielen\") waaruit u hier kan kiezen."
 
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:16
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:16
-#, fuzzy
 msgid "Verbose HBCI debug messages"
-msgstr "HBCI uitgebreide debug berichten"
+msgstr "Uitgebreide HBCI foutmeldingen"
 
 #. If it fails, change back to the old encoding.
 #: ../src/import-export/csv/gnc-csv-import.c:211
-#, fuzzy
 msgid "Invalid encoding selected"
-msgstr "Geen geldige factuur geselecteerd"
+msgstr "Ongeldige codering geselecteerd"
 
 #: ../src/import-export/csv/gnc-csv-import.c:554
 msgid "Merge with column on _left"
@@ -12931,7 +12902,6 @@ msgid "Generic import transaction matcher"
 msgstr "Algemene import-transactie-koppelaar"
 
 #: ../src/import-export/generic-import.glade.h:30
-#, fuzzy
 msgid "Green"
 msgstr "Groen"
 
@@ -12971,7 +12941,6 @@ msgid "Potential splits matching the selected transaction: "
 msgstr "Potentiële opsplitsingen komen overeen met de geselecteerde transactie:"
 
 #: ../src/import-export/generic-import.glade.h:41
-#, fuzzy
 msgid "Red"
 msgstr "Rood"
 
@@ -13024,7 +12993,6 @@ msgid "Use bayesian algorithms to match new transactions with existing accounts.
 msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:54
-#, fuzzy
 msgid "Yellow"
 msgstr "Geel"
 
@@ -13053,9 +13021,8 @@ msgstr ""
 "Wilt u de opdracht opnieuw invoeren?"
 
 #: ../src/import-export/hbci/dialog-pass.c:145
-#, fuzzy
 msgid "The two passwords didn't match. Please try again."
-msgstr "De twee wachtwoorden kwamen niet overeen. Probeer het nog eens."
+msgstr "De twee wachtwoorden kwamen niet overeen. Probeer het nogmaals."
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:506
 msgid "Choose AqBanking Backend"
@@ -13071,30 +13038,22 @@ msgid "Co_nfigure"
 msgstr "Configuratie bestand"
 
 #: ../src/import-export/hbci/druid-hbci-utils.c:152
-#, fuzzy, c-format
+#, c-format
 msgid "The file %s does not exist. Would you like to create it now?"
-msgstr ""
-"Het bestand %s bestaat niet.\n"
-"Wilt u dit nu aanmaken?"
+msgstr "Het bestand %s bestaat niet. Wilt u dit nu aanmaken?"
 
 #: ../src/import-export/hbci/druid-hbci-utils.c:165
-#, fuzzy, c-format
+#, c-format
 msgid "The directory for file %s does not exist. Please choose another place for this file."
-msgstr ""
-"De map voor bestand \n"
-"%s\n"
-"bestaat niet. \n"
-"Geef een andere locatie op voor dit bestand."
+msgstr "De map voor bestand %s bestaat niet. Geef een andere locatie op voor dit bestand."
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:10
-#, fuzzy
 msgid "Choose an Online Banking Version to use with the selected bank:"
-msgstr "Kies een te gebruiken HBCI versie voor de geselecteerde bank:"
+msgstr "Kies de te gebruiken Online Banking-versie voor de geselecteerde bank:"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:32
-#, fuzzy
 msgid "Online Banking Version"
-msgstr "Online bankieren"
+msgstr "Online Banking-versie"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:44
 msgid "Start AqBanking Setup Wizard"
@@ -13145,26 +13104,16 @@ msgid "Unfortunately you entered a wrong PIN for too many times. Your chip card 
 msgstr "Helaas heeft u te vaak een verkeerde PIN ingevoerd. Uw kaart is daarom onbruikbaar gemaakt. De bewerking wordt afgebroken."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:379
-#, fuzzy
 msgid "No chip card has been found in the chip card reader. Do you want to try again?"
-msgstr ""
-"Er is geen chipkaart in de kaartlezer gevonden.\n"
-"Wilt u het nogmaals proberen?"
+msgstr "Er is geen chipkaart in de kaartlezer aangetroffen. Wilt u het nogmaals proberen?"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:385
-#, fuzzy
 msgid "Unfortunately this Online Banking job is not supported by your bank or for your account. Aborting."
-msgstr ""
-"Helaas wordt deze HBCI opdracht niet ondersteund \n"
-"door uw bank of voor dagboek. Geannuleerd."
+msgstr "Helaas wordt deze Online Banking-opdracht niet ondersteund door uw bank of voor uw rekening. De bewerking wordt afgebroken."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:393
-#, fuzzy
 msgid "The server of your bank refused the Online Banking connection. Please try again later. Aborting."
-msgstr ""
-"De server van uw bank weigert de HBCI verbinding.\n"
-"Graag later opnieuw proberen.\n"
-"Bewerking wordt gestaakt."
+msgstr "De server van uw bank weigert de Online Banking-verbinding. Graag later opnieuw proberen. De bewerking wordt afgebroken."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:544
 msgid "Executing the Online Banking outbox failed. Please check the log window."
@@ -13196,21 +13145,20 @@ msgstr ""
 "Wilt u de opdracht opnieuw invoeren ?"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:122
-#, fuzzy
 msgid "Import _CSV"
 msgstr "_CSV importeren"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:123
 msgid "Import a CSV file into GnuCash"
-msgstr ""
+msgstr "Een CSV-bestand in GnuCash importeren"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:125
 msgid "Import CSV and s_end..."
-msgstr ""
+msgstr "CSV importeren en _verzenden..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:126
 msgid "Import a CSV file into GnuCash and send the transfers online through Online Banking"
-msgstr ""
+msgstr "Een CSV-bestand in GnuCash importeren en als Online Banking-opdrachten verzenden"
 
 #: ../src/import-export/hbci/hbci-interaction.c:401
 #, c-format
@@ -13248,9 +13196,7 @@ msgstr "De rekening %s is een tussentelling en staat geen transacties toe. Kies 
 #: ../src/import-export/import-commodity-matcher.c:114
 #, fuzzy
 msgid "Please select a commodity to match the following exchange specific code. Please note that the exchange code of the commodity you select will be overwritten."
-msgstr ""
-"Selecteer een stuk dat overeenkomt met de volgende wisselkoers-code.\n"
-"Let erop dat de wisselkoers-code van het stuk dat u kiest, wordt overschreven.\n"
+msgstr "Selecteer een stuk dat overeenkomt met de volgende ISIN. Let erop dat de ISIN van het stuk dat u kiest zal worden overschreven."
 
 #: ../src/import-export/import-format-dialog.c:59
 msgid "Period: 123,456.78"
@@ -13337,7 +13283,6 @@ msgid "Confidence"
 msgstr "Vertrouwelijk"
 
 #: ../src/import-export/import-provider-format.glade.h:1
-#, fuzzy
 msgid "(no)"
 msgstr "(geen)"
 
@@ -13374,41 +13319,35 @@ msgstr ""
 "software uit de VS waarschijnlijk een \"m-d-y\" ofwel maand-dag-jaar format bevat.   \n"
 
 #: ../src/import-export/log-replay/gnc-log-replay.c:522
-#, fuzzy
 msgid "Select a .log file to replay"
-msgstr "Selecteer een te laden OFX bestand."
+msgstr "Een logbestand kiezen om te repliceren"
 
 #. Translators: %s is the file name.
 #: ../src/import-export/log-replay/gnc-log-replay.c:541
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open the current log file: %s"
-msgstr "Annuleer de huidige boeking"
+msgstr "Kan het huidige logbestand niet openen: %s"
 
 #. Translation note:
 #. * First argument is the filename,
 #. * second argument is the error.
 #.
 #: ../src/import-export/log-replay/gnc-log-replay.c:554
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open log file: %s: %s"
-msgstr "Aantal dagen dat log bestanden bewaard worden"
+msgstr "Fout bij openen van logbestand: %s: %s"
 
 #: ../src/import-export/log-replay/gnc-log-replay.c:561
-#, fuzzy
 msgid "The log file you selected was empty."
-msgstr ""
-"Het bestand \n"
-"    %s\n"
-" is leeg."
+msgstr "Het door u geselecteerde logbestand was leeg."
 
 #: ../src/import-export/log-replay/gnc-log-replay.c:567
 msgid "The log file you selected cannot be read.  The file header was not recognized."
-msgstr ""
+msgstr "Het door u geselecteerde logbestand kon niet worden gelezen. De bestandsindeling werd niet herkend."
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:45
-#, fuzzy
 msgid "_Replay GnuCash .log file..."
-msgstr "GnuCash .log bestand afspelen"
+msgstr "GnuCash logbestand _repliceren"
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:46
 #, fuzzy
@@ -13434,9 +13373,8 @@ msgid "Income account for security \"%s\""
 msgstr "Opbrengstenrekening voor waardepapier \"%s\""
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:565
-#, fuzzy
 msgid "Unknown OFX account"
-msgstr "Onbekende OFX CMA rekening"
+msgstr "Onbekende OFX rekening"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:585
 msgid "Unknown OFX checking account"
@@ -13464,20 +13402,19 @@ msgstr "Onbekende OFX creditcard rekening"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:609
 msgid "Unknown OFX investment account"
-msgstr "Onbekend OFX belegings rekening"
+msgstr "Onbekend OFX beleggingsrekening"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:679
 msgid "Select an OFX/QFX file to process"
-msgstr "Selecteer een OFX/QFX bestand om te bewerken"
+msgstr "Een OFX/QFX bestand om te verwerken selecteren"
 
 #: ../src/import-export/ofx/gnc-plugin-ofx.c:44
-#, fuzzy
 msgid "Import _OFX/QFX..."
-msgstr "Importeer QFX/OFX"
+msgstr "_OFX/QFX importeren..."
 
 #: ../src/import-export/ofx/gnc-plugin-ofx.c:45
 msgid "Process an OFX/QFX response file"
-msgstr "Verwerk een QFX/OFX antwoord bestand"
+msgstr "Een OFX/QFX antwoordbestand verwerken"
 
 #: ../src/import-export/qif-import/dialog-account-picker.c:205
 msgid "Enter a name for the account"
@@ -13485,26 +13422,19 @@ msgstr "Een naam voor de rekening invoeren"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:616
 msgid "Select QIF File"
-msgstr "Selecteer QIF Bestand"
+msgstr "QIF bestand selecteren"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:686
-#, fuzzy
 msgid "Please select a file to load."
-msgstr "Selecteer een te laden bestand.\n"
+msgstr "Een bestand om te laden selecteren."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:689
-#, fuzzy
 msgid "File not found or read permission denied. Please select another file."
-msgstr ""
-"Bestand niet gevonden of geen leesrechten.\n"
-"Kies een ander bestand."
+msgstr "Bestand niet gevonden of geen leesrechten op bestand. Kies een ander bestand."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:700
-#, fuzzy
 msgid "That QIF file is already loaded. Please select another file."
-msgstr ""
-"Dat QIF bestand is al geladen.\n"
-"Kies een ander bestand."
+msgstr "Dat QIF bestand is al geladen. Kies een ander bestand."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:730
 msgid "GnuCash will now load your QIF file. If there are no errors or warnings, you will automatically proceed to the next step. Otherwise, the details will be shown below for your review."
@@ -13519,9 +13449,8 @@ msgstr "Geannuleerd"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:840
 #: ../src/import-export/qif-import/druid-qif-import.c:844
-#, fuzzy
 msgid "An error occurred while loading the QIF file."
-msgstr "Er is een fout opgetreden tijdens het aanmaken van het rapport."
+msgstr "Er is een fout opgetreden tijdens het laden van het QIF bestand."
 
 #. Inform the user.
 #: ../src/import-export/qif-import/druid-qif-import.c:841
@@ -13544,13 +13473,11 @@ msgstr "Fout"
 #: ../src/import-export/qif-import/druid-qif-import.c:2631
 #: ../src/import-export/qif-import/druid-qif-import.c:2654
 #: ../src/import-export/qif-import/druid-qif-import.c:2701
-#, fuzzy
 msgid "Cleaning up"
-msgstr "Stijgend"
+msgstr "Opruimen"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:917
 #: ../src/import-export/qif-import/druid-qif-import.c:921
-#, fuzzy
 msgid "A bug was detected while parsing the QIF file."
 msgstr "Er is een fout opgetreden tijdens het ontleden van het QIF bestand."
 
@@ -13577,9 +13504,8 @@ msgstr "GnuCash rekeningnaam"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2071
 #: ../src/import-export/qif-import/druid-qif-import.c:2144
-#, fuzzy
 msgid "Enter a name or short description, such as \"Red Hat Stock\"."
-msgstr "Geef de volledige naam voor het stuk op, zoals \"Red Hat Aandelen\""
+msgstr "Geef een naam of korte beschrijving, zoals \"Aandelen KPN\"."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2077
 #: ../src/import-export/qif-import/druid-qif-import.c:2146
@@ -13601,19 +13527,16 @@ msgid "Enter information about \"%s\""
 msgstr "Geef informatie op over \"%s\""
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2193
-#, fuzzy
 msgid "_Name or description:"
-msgstr "O_mschrijving"
+msgstr "_Naam of omschrijving:"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2214
-#, fuzzy
 msgid "_Ticker symbol or other abbreviation:"
-msgstr "Symbool/afkorting:"
+msgstr "_Ticker-symbool/afkorting:"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2235
-#, fuzzy
 msgid "_Exchange or abbreviation type:"
-msgstr "Wisselkoers:"
+msgstr "_Beurs of afkortingstype:"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2446
 #: ../src/import-export/qif-import/druid-qif-import.c:2893
@@ -13636,11 +13559,11 @@ msgstr "Aan het afbreken"
 #: ../src/import-export/qif-import/druid-qif-import.c:2706
 #: ../src/import-export/qif-import/druid-qif-import.c:2710
 msgid "A bug was detected while detecting duplicates."
-msgstr ""
+msgstr "Er is een fout opgetreden bij het herkennen van duplicaten."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2721
 msgid "Conversion completed"
-msgstr ""
+msgstr "Conversie afgerond"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:3031
 msgid "GnuCash was unable to save your mapping preferences."
@@ -13649,12 +13572,12 @@ msgstr ""
 #. Set up the QIF account to GnuCash account matcher.
 #: ../src/import-export/qif-import/druid-qif-import.c:3549
 msgid "QIF account name"
-msgstr "QIF dagboek naam"
+msgstr "QIF rekeningnaam"
 
 #. Set up the QIF category to GnuCash account matcher.
 #: ../src/import-export/qif-import/druid-qif-import.c:3555
 msgid "QIF category name"
-msgstr "QIF categorie naam"
+msgstr "QIF categorienaam"
 
 #. Set up the QIF payee/memo to GnuCash account matcher.
 #: ../src/import-export/qif-import/druid-qif-import.c:3561
@@ -13663,20 +13586,19 @@ msgstr "QIF begunstigde/memo"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:3637
 msgid "Match?"
-msgstr ""
+msgstr "Koppeling?"
 
 #: ../src/import-export/qif-import/gnc-plugin-qif-import.c:48
 msgid "Import _QIF..."
-msgstr "Importeer _QIF..."
+msgstr "_QIF importeren..."
 
 #: ../src/import-export/qif-import/gnc-plugin-qif-import.c:49
 msgid "Import a Quicken QIF file"
-msgstr "Importeer een Quicken QIF bestand"
+msgstr "Een Quicken QIF bestand importeren"
 
 #: ../src/import-export/qif-import/qif.glade.h:1
-#, fuzzy
 msgid "<b>QIF Import</b>"
-msgstr "QIF import"
+msgstr "<b>QIF import</b>"
 
 #: ../src/import-export/qif-import/qif.glade.h:2
 msgid "Account name:"
@@ -13687,9 +13609,8 @@ msgid "Accounts and stock holdings"
 msgstr "Rekeningen en aandelenbezit"
 
 #: ../src/import-export/qif-import/qif.glade.h:4
-#, fuzzy
 msgid "Change GnuCash _Account..."
-msgstr "GnuCash dagboek naam"
+msgstr "GnuCash-_rekening wijzigen..."
 
 #: ../src/import-export/qif-import/qif.glade.h:5
 #, fuzzy
@@ -13905,44 +13826,36 @@ msgid "Update your GnuCash accounts"
 msgstr "Uw GnuCash dagboek bijwerken"
 
 #: ../src/import-export/qif-import/qif.glade.h:76
-#, fuzzy
 msgid "_Imported transactions needing review:"
-msgstr "Eerste opsplitsing van geïmporteerde transacties:"
+msgstr "_Geïmporteerde transacties die aandacht behoeven:"
 
 #: ../src/import-export/qif-import/qif.glade.h:78
-#, fuzzy
 msgid "_Possible matches for the selected transaction:"
-msgstr "Mogelijke duplicaten voor geselecteerde nieuwe transactie"
+msgstr "_Mogelijke treffers voor de geselecteerde transactie:"
 
 #: ../src/import-export/qif-import/qif.glade.h:79
-#, fuzzy
 msgid "_Select or add a GnuCash account:"
-msgstr "GnuCash dagboek selecteren of toevoegen"
+msgstr "Een GnuCash-rekening _selecteren of toevoegen:"
 
 #: ../src/import-export/qif-import/qif.glade.h:80
-#, fuzzy
 msgid "_Select the currency to use for all imported transactions:"
-msgstr "Verwijder de geselecteerde transactie"
+msgstr "De munteenheid voor alle geïmporteerde transacties _selecteren:"
 
 #: ../src/import-export/qif-import/qif.glade.h:81
-#, fuzzy
 msgid "_Select the matchings you want to change:"
-msgstr "Selecteer te vergelijken dagboeken"
+msgstr "De aan te passen treffers _selecteren:"
 
 #: ../src/import-export/qif-import/qif.glade.h:82
-#, fuzzy
 msgid "_Select..."
-msgstr "Selecteren..."
+msgstr "_Selecteren..."
 
 #: ../src/import-export/qif-import/qif.glade.h:83
-#, fuzzy
 msgid "_Show documentation"
-msgstr "Uitgebreide QIF documentatie"
+msgstr "_Documentatie tonen"
 
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:1
-#, fuzzy
 msgid "Show documentation"
-msgstr "Uitgebreide QIF documentatie"
+msgstr "Documentatie tonen"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:1
 #, fuzzy
@@ -13955,23 +13868,20 @@ msgid "Clear matching transactions above this score"
 msgstr "Geen overeenkomende transacties gevonden"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:3
-#, fuzzy
 msgid "Enable EDIT transaction action"
-msgstr "Boekingsinformatie"
+msgstr "Actie 'transactie bewerken' activeren"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:4
-#, fuzzy
 msgid "Enable SKIP transaction action"
-msgstr "De transactie omschrijving weergeven ?"
+msgstr "Actie 'transactie overslaan' activeren"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:5
 msgid "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED."
-msgstr ""
+msgstr "De actie 'bewerken' in de transactiekoppelaar activeren. NOG NIET ONDERSTEUND."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:6
-#, fuzzy
 msgid "Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default."
-msgstr "Een transactie die als beste score nog steeds in de rode zone ligt (boven de getoonde drempelwaarde, maar onder of gelijk aan de automatisch toevoegengrenswaarde) wordt automatisch toegevoegd."
+msgstr ""
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:7
 msgid "Enables bayesian matching when matching imported transaction against existing transactions. Otherwise a less sophisticated rule-based matching mechanism will be used."
@@ -13979,21 +13889,19 @@ msgstr ""
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:8
 msgid "Maximum ATM fee amount in your area"
-msgstr ""
+msgstr "Maximumtarief voor GEA-opnames in uw regio"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:9
 msgid "Minimum score to be displayed"
 msgstr ""
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:12
-#, fuzzy
 msgid "This field specifies the extra fee that is taken into account when matching imported transactions. In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won't match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
-msgstr "Op sommige plaatsen staan commerciële PIN automaten (die niet zijn van een financiële instelling), zoals in warenhuizen. Deze pinautomaten tellen hun kosten op bij het te pinnen bedrag in plaats dat ze te zien zijn als losse transactie of bij uw maandelijkse bankkosten. Wanneer u bijvoorbeeld EUR 100 opneemt, wordt u EUR 101,50 in rekening gebracht wegens de automaatkosten. Als u handmatig aan heeft gegeven dat u EUR 100 heeft opgenomen, komen de bedragen niet overeen. U moet dit dan instellen op het maximum van dergelijke kosten in uw regio (in eenheden van uw lokale munteenheid), zodat de transactie herkend wordt als overeenkomstig."
+msgstr "De aanvullende transactiekosten waarmee bij het koppelen van geïmporteerde transacties rekening wordt gehouden. Op sommige plaatsen staan 'in-store' geldautomaten, zoals in warenhuizen. Deze pinautomaten tellen soms hun kosten op bij het opgenomen bedrag in plaats dat deze als losse transactie of bij uw maandelijkse bankkosten worden verantwoord. Wanneer u bijvoorbeeld € 100 opneemt, wordt u € 101,50 in rekening gebracht wegens de transactiekosten. Als u handmatig aan heeft gegeven dat u € 100 heeft opgenomen, komen de bedragen niet overeen. U moet deze waarde instellen op het maximum van dergelijke kosten in uw regio (in eenheden van uw lokale munteenheid), zodat de transactie herkend wordt als overeenkomstig."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:13
-#, fuzzy
 msgid "This field specifies the minimum matching score a potential matching transaction must have to be displayed in the match list."
-msgstr "De minimum overeenkomst van een potentiëel overeenkomende waarde, die moet worden getoond in de overeenkomsten lijst."
+msgstr "De minimale koppelscore die een mogelijk overeenkomende transactie moet hebben om getoond te worden in de koppellijst."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:14
 #, fuzzy
@@ -14046,38 +13954,28 @@ msgid "This transaction is already being edited in another register. Please fini
 msgstr ""
 
 #: ../src/register/ledger-core/split-register.c:439
-#, fuzzy
 msgid "Save transaction before duplicating?"
-msgstr "Geïmporteerde transacties met duplicaten"
+msgstr "Transactie opslaan vóór het dupliceren?"
 
 #: ../src/register/ledger-core/split-register.c:441
 msgid "The current transaction has been changed. Would you like to record the changes before duplicating the transaction, or cancel the duplication?"
 msgstr "De huidige transactie is veranderd. Wilt u de veranderingen opslaan voordat de transactie wordt gedupliceerd of de duplicatie annuleren?"
 
 #: ../src/register/ledger-core/split-register.c:799
-#, fuzzy
 msgid "You are about to overwrite an existing split. Are you sure you want to do that?"
-msgstr ""
-"U gaat nu een bestaande opsplitsing overschrijven.\n"
-"Weet u zeker dat u dat wilt doen?"
+msgstr "U staat op het punt een bestaande boekingsregel te overschrijven. Weet u zeker dat u dat wilt doen?"
 
 #: ../src/register/ledger-core/split-register.c:831
-#, fuzzy
 msgid "You are about to overwrite an existing transaction. Are you sure you want to do that?"
-msgstr ""
-"Hiermee zult u een bestaande transactie overschrijven.\n"
-"Weet u het zeker?"
+msgstr "U staat op het punt een bestaande transactie te overschrijven. Weet u zeker dat u dat wilt doen?"
 
 #: ../src/register/ledger-core/split-register.c:1894
 msgid "Recalculate Transaction"
 msgstr "Transactie opnieuw berekenen"
 
 #: ../src/register/ledger-core/split-register.c:1895
-#, fuzzy
 msgid "The values entered for this transaction are inconsistent. Which value would you like to have recalculated?"
-msgstr ""
-"De ingevoerde waarden voor deze transactie zijn niet consistent.\n"
-"Welke waarde wilt u opnieuw laten berekenen?"
+msgstr "De ingevoerde waarden voor deze boeking zijn niet in consistent. Welke waarde wilt u opnieuw laten berekenen?"
 
 #: ../src/register/ledger-core/split-register.c:1902
 #: ../src/register/ledger-core/split-register.c:1904
