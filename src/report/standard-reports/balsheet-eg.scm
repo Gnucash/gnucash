@@ -292,10 +292,6 @@
 
 (define optname-account-links (N_ "Display accounts as hyperlinks"))
 (define opthelp-account-links (N_ "Shows each account in the table as a hyperlink to its register window"))
-(define optname-bal-label-pos (N_ "Balancing entry label (positive)"))
-(define opthelp-bal-label-pos (N_ "Label for the balancing equity entry when income exceeds expenses"))
-(define optname-bal-label-neg (N_ "Balancing entry label (negative)"))
-(define opthelp-bal-label-neg (N_ "Label for the balancing equity entry when expenses exceed income"))
 
 (define optname-neg-format (N_ "Negative amount format"))
 (define opthelp-neg-format 
@@ -342,10 +338,6 @@
                                       "c" opthelp-depth-limit 'all)
     (add-option (gnc:make-simple-boolean-option accounts-page optname-flatten?
                                                 "d" opthelp-flatten? #f))
-    (add-option (gnc:make-string-option accounts-page optname-bal-label-pos
-                                        "e" opthelp-bal-label-pos (N_ "Retained Earnings")))
-    (add-option (gnc:make-string-option accounts-page optname-bal-label-neg
-                                        "f" opthelp-bal-label-neg (N_ "Retained Losses")))
 
     ;; Commodity options
     (gnc:options-add-currency! options commodities-page optname-report-commodity "a")
@@ -416,8 +408,6 @@
          (opt-use-links?       (get-option accounts-page    optname-account-links))
          (opt-depth-limit      (get-option accounts-page    optname-depth-limit))
          (opt-flatten?         (get-option accounts-page    optname-flatten?))
-         (opt-bal-label-pos    (get-option accounts-page    optname-bal-label-pos))
-         (opt-bal-label-neg    (get-option accounts-page    optname-bal-label-neg))
          (opt-report-commodity (get-option commodities-page optname-report-commodity))
          (opt-price-source     (get-option commodities-page optname-price-source))
          (opt-show-foreign?    (get-option commodities-page optname-show-foreign))
@@ -445,8 +435,8 @@
                    ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
                    ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
                    ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
-                   ACCT-TYPE-EQUITY ACCT-TYPE-TRADING )
-             ;ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
+                   ACCT-TYPE-EQUITY ACCT-TYPE-TRADING
+                   ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
              (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
@@ -458,6 +448,9 @@
            (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
          (trading-accounts
            (assoc-ref split-up-accounts ACCT-TYPE-TRADING))
+         (income-expense-accounts 
+           (append (assoc-ref split-up-accounts ACCT-TYPE-INCOME)
+                   (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)))
 
 
          ;; exchange rates calculation parameters

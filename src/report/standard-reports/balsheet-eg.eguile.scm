@@ -167,13 +167,15 @@
          (accrec-li (process-acc-list liability-accounts #t))
          (accrec-eq (process-acc-list equity-accounts #t))
          (accrec-tr (process-acc-list trading-accounts #t))
+         (accrec-ie (process-acc-list income-expense-accounts #t))
          (maxdepth 0)
          (rshift-as 0)
          (rshift-li 0)
          (rshift-eq 0)
          (rshift-tr 0)
+         (rshift-ie 0)
          (balancing-cc (gnc:make-commodity-collector))
-         (balancing-accrec (newaccrec-clean)))
+         (etl-cc (gnc:make-commodity-collector)))
     (accrec-set-namelink! accrec-as (_ "Assets Accounts"))
     (accrec-set-placeholder?! accrec-as #t) 
     (balancing-cc 'merge (accrec-subtotal-cc accrec-as) #f)
@@ -182,46 +184,40 @@
       (set! rshift-as 1))
     (accrec-set-namelink! accrec-li (_ "Liability Accounts"))
     (accrec-set-placeholder?! accrec-li #t) 
-    (balancing-cc 'minusmerge (accrec-subtotal-cc accrec-li) #f)
+    (etl-cc 'merge (accrec-subtotal-cc accrec-li) #f)
     (if (and (one-depth-1 accrec-li) 
              (> (accrec-treedepth accrec-li) 1))
       (set! rshift-li 1))
     (accrec-set-namelink! accrec-eq (_ "Equity Accounts"))
     (accrec-set-placeholder?! accrec-eq #t) 
-    (balancing-cc 'minusmerge (accrec-subtotal-cc accrec-eq) #f)
+    (etl-cc 'merge (accrec-subtotal-cc accrec-eq) #f)
     (accrec-set-namelink! accrec-tr (_ "Trading Accounts"))
     (accrec-set-placeholder?! accrec-tr #t) 
-    (balancing-cc 'minusmerge (accrec-subtotal-cc accrec-tr) #f)
-    ;; Create a balancing entry
-    (if (not (gnc-commodity-collector-allzero? balancing-cc))
-      (begin
-        (accrec-set-subtotal-cc! balancing-accrec balancing-cc)
-        (let ((balancing-mny (gnc:sum-collector-commodity 
-                               balancing-cc 
-                               opt-report-commodity 
-                               exchange-fn)))
-          (accrec-set-balance-mny! balancing-accrec balancing-mny))
-        (accrec-set-namelink! balancing-accrec 
-                              (if (gnc-numeric-negative-p (accrec-balance-num balancing-accrec))
-                                opt-bal-label-neg 
-                                opt-bal-label-pos))
-        (accrec-set-depth! balancing-accrec 1)
-        (accrec-set-treedepth! balancing-accrec 1)
-        ((accrec-subtotal-cc accrec-eq) 'merge balancing-cc #f)
-        (accrec-set-sublist! accrec-eq (append (accrec-sublist accrec-eq) (list balancing-accrec)))))
+    (etl-cc 'merge (accrec-subtotal-cc accrec-tr) #f)
+    (balancing-cc 'minusmerge etl-cc #f)
+    (accrec-set-namelink! accrec-ie 
+                          (if (gnc-numeric-negative-p (accrec-balance-num accrec-ie))
+                            (_ "Retained earnings")
+                            (_ "Retained loss")))
+    (accrec-set-placeholder?! accrec-ie #t)
+    (balancing-cc 'minusmerge (accrec-subtotal-cc accrec-ie) #f)
     (if (and (one-depth-1 accrec-eq) 
              (> (accrec-treedepth accrec-eq) 1))
       (set! rshift-eq 1))
     (if (and (one-depth-1 accrec-tr) 
              (> (accrec-treedepth accrec-tr) 1))
       (set! rshift-tr 1))
+    (if (and (one-depth-1 accrec-ie) 
+             (> (accrec-treedepth accrec-ie) 1))
+      (set! rshift-ie 1))
 
    (if debugging? 
      (begin
       (display "<p>Assets: ") (display accrec-as) 
       (display "<p>Liabilities: ") (display accrec-li) 
       (display "<p>Equities: ") (display accrec-eq)
-      (display "<p>Trading: ") (display accrec-tr)))
+      (display "<p>Trading: ") (display accrec-tr)
+      (display "<p>Profit and loss: ") (display accrec-ie)))
 
 ?>
 <table border="0" class="outer"><tr valign="top"><td valign="top"> <!-- outer table to control columns -->
@@ -231,6 +227,7 @@
     (set! maxdepth (max (accrec-treedepth accrec-as)
                         (accrec-treedepth accrec-li)
                         (accrec-treedepth accrec-eq)
+                        (accrec-treedepth accrec-ie)
                         (accrec-treedepth accrec-tr)))
 
     ; Display assets section
@@ -262,8 +259,17 @@
     (display-acc-row 
       maxdepth 0 0
       (_ "Total Equity, Trading, and Liabilities") 
-      (format-comm-coll-total (accrec-subtotal-cc accrec-as)) ; yes, show the assets total
+      (format-comm-coll-total etl-cc)
       #t #f)
+    (hrule (* maxdepth 2))
+    (display-accounts-table-r (list accrec-ie) #t maxdepth 0 (one-depth-1 accrec-ie))
+    (hrule (* maxdepth 2))
+    (if (not (gnc-commodity-collector-allzero? balancing-cc))
+        (display-acc-row
+          maxdepth 0 0
+          (_ "Imbalance amount")
+          (format-comm-coll-total balancing-cc)
+          #t #f))
 
 ?>
 </table>
