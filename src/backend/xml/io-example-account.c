@@ -51,6 +51,10 @@
 
 #include "Scrub.h"
 #include "TransLog.h"
+#include "platform.h"
+#if COMPILER(MSVC)
+# define g_fopen fopen
+#endif
 
 static QofLogModule log_module = GNC_MOD_IO;
 

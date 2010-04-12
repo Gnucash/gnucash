@@ -54,8 +54,10 @@
 # define fdopen _fdopen
 # define read _read
 #endif
-#ifdef _MSC_VER
+#include "platform.h"
+#if COMPILER(MSVC)
 # define g_fopen fopen
+# define g_open _open
 #endif
 
 /* Do not treat -Wstrict-aliasing warnings as errors because of problems of the
@@ -1385,7 +1387,13 @@ gz_thread_func(gz_thread_params_t *params)
             gzval = gzread(file, buffer, BUFLEN);
             if (gzval > 0)
             {
-                if (write(params->fd, buffer, gzval) < 0)
+                if (
+#if COMPILER(MSVC)
+                    _write
+#else
+                    write
+#endif
+                    (params->fd, buffer, gzval) < 0)
                 {
                     g_warning("Could not write to pipe. The error is '%s' (%d)",
                               g_strerror(errno) ? g_strerror(errno) : "", errno);
@@ -2083,3 +2091,10 @@ gnc_xml2_parse_with_subst (FileBackend *fbe, QofBook *book, GHashTable *subst)
 
     return success;
 }
+
+/* For emacs we set some variables concerning indentation:
+ * Local Variables: *
+ * indent-tabs-mode:nil *
+ * c-basic-offset:4 *
+ * tab-width:8 *
+ * End: */

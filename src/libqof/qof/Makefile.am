@@ -8,6 +8,7 @@ libgnc_qof_la_LIBADD= \
 
 AM_CPPFLAGS = \
   -I$(top_srcdir)/lib/libc \
+  -I$(top_srcdir)/src \
   $(GLIB_CFLAGS)
 
 libgnc_qof_la_SOURCES =  \

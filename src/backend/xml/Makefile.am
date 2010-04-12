@@ -13,6 +13,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/lib/libc\
   -I${top_srcdir}/src/libqof/qof \
+  -I$(top_srcdir)/src \
   ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS}

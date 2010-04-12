@@ -59,8 +59,10 @@ typedef int ssize_t;
 # define read _read
 # define write _write
 #endif
-#ifdef _MSC_VER
+#include "platform.h"
+#if COMPILER(MSVC)
 # define g_fopen fopen
+# define g_open _open
 #endif
 
 #include "qof.h"
@@ -248,7 +250,9 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
         /* Again check whether the directory can be accessed */
         rc = g_stat (be->dirname, &statbuf);
         if (rc != 0
-#ifndef _MSC_VER
+#if COMPILER(MSVC)
+                || (statbuf.st_mode & _S_IFDIR) == 0
+#else
                 || !S_ISDIR(statbuf.st_mode)
 #endif
            )
@@ -278,7 +282,9 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
             return;
         }
         if (rc == 0
-#ifndef _MSC_VER
+#if COMPILER(MSVC)
+                && (statbuf.st_mode & _S_IFDIR) != 0
+#else
                 && S_ISDIR(statbuf.st_mode)
 #endif
            )
@@ -1201,3 +1207,10 @@ gnc_module_init_backend_xml(void)
 }
 
 /* ========================== END OF FILE ===================== */
+
+/* For emacs we set some variables concerning indentation:
+ * Local Variables: *
+ * indent-tabs-mode:nil *
+ * c-basic-offset:4 *
+ * tab-width:8 *
+ * End: */

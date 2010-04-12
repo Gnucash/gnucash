@@ -7,6 +7,7 @@ INCLUDE_DIRECTORIES (${LIBINTL_INCLUDE_PATH})
 INCLUDE_DIRECTORIES (${REGEX_INCLUDE_PATH})
 INCLUDE_DIRECTORIES (${CMAKE_CURRENT_BINARY_DIR}/.. ) # for config.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/lib/libc) # for strptime.h
+INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src) # for platform.h
 
 
 # Workaround to create a very simple gncla-dir.h file

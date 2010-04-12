@@ -11,6 +11,10 @@
 
 #include "config.h"
 #include "gfec.h"
+#include "platform.h"
+#if COMPILER(MSVC)
+# define strdup _strdup
+#endif
 
 
 /* We assume that data is actually a char**. The way we return results

@@ -52,6 +52,7 @@
 #ifndef HAVE_LOCALTIME_R
 #include "localtime_r.h"
 #endif
+#include "platform.h"
 
 #define NANOS_PER_SECOND 1000000000
 
@@ -1420,10 +1421,18 @@ gnc_timezone (const struct tm *tm)
      * already adjusted for daylight savings time. */
     return -(tm->tm_gmtoff);
 #else
-    /* timezone is seconds *west* of UTC and is
-     * not adjusted for daylight savings time.
-     * In Spring, we spring forward, wheee! */
-    return (long int)(timezone - (tm->tm_isdst > 0 ? 3600 : 0));
+    {
+        long tz_seconds;
+        /* timezone is seconds *west* of UTC and is
+         * not adjusted for daylight savings time.
+         * In Spring, we spring forward, wheee! */
+# if COMPILER(MSVC)
+        _get_timezone(&tz_seconds);
+# else
+        tz_seconds = timezone;
+# endif
+        return (long int)(tz_seconds - (tm->tm_isdst > 0 ? 3600 : 0));
+    }
 #endif
 }
 
@@ -1571,3 +1580,10 @@ timespec_get_type( void )
 
     return type;
 }
+
+/* For emacs we set some variables concerning indentation:
+ * Local Variables: *
+ * indent-tabs-mode:nil *
+ * c-basic-offset:4 *
+ * tab-width:8 *
+ * End: */
