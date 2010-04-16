@@ -47,6 +47,7 @@
 #include "gnc-html-webkit.h"
 #include "gnc-html-history.h"
 #include "gnc-html-graph-gog-webkit.h"
+#include "print-session.h"
 
 G_DEFINE_TYPE(GncHtmlWebkit, gnc_html_webkit, GNC_TYPE_HTML )
 
@@ -1036,13 +1037,13 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
 static void
 impl_webkit_print( GncHtml* self )
 {
-#ifndef G_OS_WIN32
+#ifndef HAVE_WEBKIT_PRINT_FULL
     extern void webkit_web_frame_print( WebKitWebFrame * frame );
 #endif
 
     GncHtmlWebkitPrivate* priv;
     WebKitWebFrame* frame;
-#ifdef G_OS_WIN32
+#ifdef HAVE_WEBKIT_PRINT_FULL
     GtkPrintOperation* op = gtk_print_operation_new();
     GError* error = NULL;
 #endif
@@ -1050,8 +1051,11 @@ impl_webkit_print( GncHtml* self )
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
     frame = webkit_web_view_get_main_frame( priv->web_view );
 
+#ifdef HAVE_WEBKIT_PRINT_FULL
+    gnc_print_operation_init( op );
 #ifdef G_OS_WIN32
     gtk_print_operation_set_unit( op, GTK_UNIT_POINTS );
+#endif
     webkit_web_frame_print_full( frame, op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, &error );
     g_object_unref( op );
 

@@ -1033,6 +1033,8 @@ then
                                [Select HTML engine [default=gtkhtml]]),
                 [],[with_html_engine="gtkhtml"])
 
+    AC_MSG_RESULT([$with_html_engine])
+
     case "$with_html_engine" in
          gtkhtml)
 
@@ -1056,11 +1058,23 @@ then
 	     webkit)
   		    PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.0")
   		    AC_DEFINE(WANT_WEBKIT,1,[Use webkit instead of gtkhtml])
+  		    AC_MSG_CHECKING(for webkit_web_frame_print_full)
+  		    saved_CFLAGS="${CFLAGS}"
+	            saved_LIBS="${LIBS}"
+	            CFLAGS="${CFLAGS} ${WEBKIT_CFLAGS}"
+	            LIBS="${LIBS} ${WEBKIT_LIBS}"
+  		    AC_LINK_IFELSE(
+  		        [AC_LANG_PROGRAM(
+  		            [[#include <webkit/webkit.h>]],
+  		            [[webkit_web_frame_print_full( 0, 0, 0, 0 );]])],
+  		            [AC_MSG_RESULT(yes)
+  		             AC_DEFINE(HAVE_WEBKIT_PRINT_FULL,1,[webkit_web_frame_print_full exists])],
+  		            [AC_MSG_RESULT(no)])
+  		    CFLAGS="${saved_CFLAGS}"
+  		    LIBS="${saved_LIBS}"
 		    ;;
 	     *) AC_MSG_ERROR([Invalid HTML engine: must be gtkhtml or webkit]) ;;
     esac
-
-    AC_MSG_RESULT([$with_html_engine])
 
     AM_CONDITIONAL(HTML_USING_WEBKIT, [test x${with_html_engine} = xwebkit])
     AC_SUBST(WEBKIT_CFLAGS)
