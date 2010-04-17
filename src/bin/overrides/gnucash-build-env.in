@@ -29,7 +29,7 @@ then
   export GNC_DOC_PATH
 fi
 
-eval `@-GNC_SRCDIR-@/src/gnc-test-env @-GNC_TEST_SRFI_LOAD_CMD-@ \
+eval `@-GNC_SRCDIR-@/src/gnc-test-env \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/backend/file \
   --gnc-module-dir ${top_builddir}/src/network-utils \
