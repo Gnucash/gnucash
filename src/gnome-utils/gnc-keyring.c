@@ -49,11 +49,11 @@ void gnc_keyring_set_password (const gchar *access_method,
 
 #ifdef HAVE_GNOME_KEYRING
     GnomeKeyringResult  gkr_result;
-    guint32 *item_id = NULL;
+    guint32 item_id = 0;
 
     gkr_result = gnome_keyring_set_network_password_sync
                  (NULL, user, NULL, server, service,
-                  access_method, NULL, port, password, item_id);
+                  access_method, NULL, port, password, &item_id);
 
     if (gkr_result != GNOME_KEYRING_RESULT_OK)
     {

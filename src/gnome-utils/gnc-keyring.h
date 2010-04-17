@@ -51,8 +51,6 @@
  *  used to create a unique key, so the password can later be
  *  retrieved again with the same parameters.
  *
- *  @param parent Used to transition from in case the user is prompted
- *                for a password.
  *  @param access_method Service type the user attempts to access. Can
  *                things like 'mysql', 'postgres' and so on.
  *  @param server Server the user wishes to connect to.
@@ -60,9 +58,7 @@
  *                be ignored in the search for a password.
  *  @param service The service the user wishes to access on the server.
  *                This can be a database name or a path.
- *  @param user   The username to access the service. Remember, although
- *                you pass it to search for the password, it can have
- *                changed when the function returns.
+ *  @param user   The username to access the service.
  *  @param password The password to access the service.
  */
 void gnc_keyring_set_password ( const gchar *access_method,

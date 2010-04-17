@@ -36,6 +36,7 @@
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-hooks.h"
+#include "gnc-keyring.h"
 #include "gnc-splash.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
@@ -510,7 +511,7 @@ gnc_add_history (QofSession * session)
     if ( gnc_uri_is_file_uri ( url ) )
         file = gnc_uri_get_path ( url );
     else
-        file = gnc_uri_normalize_uri ( url, TRUE ); /* FIXME this saves the password visibly in history ! */
+        file = gnc_uri_normalize_uri ( url, FALSE ); /* Note that the password is not saved in history ! */
 
     gnc_history_add_file (file);
 }
@@ -645,17 +646,49 @@ gnc_post_file_open (const char * filename)
     char * newfile;
     QofBackendError io_err = ERR_BACKEND_NO_ERR;
 
+    gchar *protocol=NULL;
+    gchar *hostname=NULL;
+    gchar *username=NULL;
+    gchar *password=NULL;
+    gchar *path=NULL;
+    gint32 port=0;
+
+
+    ENTER(" ");
+
     if (!filename) return FALSE;
 
-    /* FIXME Verify if it is ok that a password is stored
-     * in the uri here.
-     */
+    /* Convert user input into a normalized uri
+     * Note that the normalized uri for internal use can have a password */
     newfile = gnc_uri_normalize_uri ( filename, TRUE );
     if (!newfile)
     {
         show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename,
                             GNC_FILE_DIALOG_OPEN);
         return FALSE;
+    }
+
+    gnc_uri_get_components (newfile, &protocol, &hostname,
+                            &port, &username, &password, &path);
+
+    /* If the file to open is a database, and no password was given,
+     * attempt to look it up in a keyring. If that fails the keyring
+     * function will ask the user to enter a password. The user can
+     * cancel this dialog, in which case the open file action will be
+     * abandoned.
+     */
+    if ( !gnc_uri_is_file_protocol (protocol) && !password)
+    {
+        gboolean have_valid_pw = FALSE;
+        have_valid_pw = gnc_keyring_get_password ( NULL, protocol, hostname, port,
+                                   path, &username, &password );
+        if (!have_valid_pw)
+            return FALSE;
+
+        /* Got password. Recreate the uri to use internally. */
+        g_free ( newfile );
+        newfile = gnc_uri_create_uri ( protocol, hostname, port,
+                                       username, password, path);
     }
 
     /* disable events while moving over to the new set of accounts;
@@ -789,6 +822,13 @@ gnc_post_file_open (const char * filename)
         PINFO ("logpath=%s", logpath ? logpath : "(null)");
         xaccLogSetBaseName (logpath);
         g_free ( logpath );
+
+        /* If the new "file" is a database, attempt to store the password
+         * in a keyring. GnuCash itself will not save it.
+         */
+        if ( !gnc_uri_is_file_protocol (protocol))
+            gnc_keyring_set_password ( protocol, hostname, port,
+                                       path, username, password );
 
         xaccLogDisable();
         gnc_window_show_progress(_("Loading user data..."), 0.0);
@@ -1121,13 +1161,20 @@ gnc_file_do_save_as (const char* filename)
     const char *oldfile;
     gchar *logpath = NULL;
 
+    gchar *protocol=NULL;
+    gchar *hostname=NULL;
+    gchar *username=NULL;
+    gchar *password=NULL;
+    gchar *path=NULL;
+    gint32 port=0;
+
+
     QofBackendError io_err = ERR_BACKEND_NO_ERR;
 
     ENTER(" ");
 
-    /* Check to see if the user specified the same file as the current
-     * file. If so, then just do a simple save, instead of a full save as */
-    /* FIXME Check if it is ok to have a password in the uri here */
+    /* Convert user input into a normalized uri
+     * Note that the normalized uri for internal use can have a password */
     newfile = gnc_uri_normalize_uri ( filename, TRUE );
     if (!newfile)
     {
@@ -1136,6 +1183,11 @@ gnc_file_do_save_as (const char* filename)
         return;
     }
 
+    gnc_uri_get_components (newfile, &protocol, &hostname,
+                            &port, &username, &password, &path);
+
+    /* Check to see if the user specified the same file as the current
+     * file. If so, then just do a simple save, instead of a full save as */
     session = gnc_get_current_session ();
     oldfile = qof_session_get_url(session);
     if (oldfile && (strcmp(oldfile, newfile) == 0))
@@ -1151,6 +1203,7 @@ gnc_file_do_save_as (const char* filename)
     /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
     save_in_progress++;
+
     new_session = qof_session_new ();
     qof_session_begin (new_session, newfile, FALSE, FALSE);
 
@@ -1219,12 +1272,18 @@ gnc_file_do_save_as (const char* filename)
      * Databases don't have a file path, so no logging will be
      * done for them in the current setup.
      */
-    if ( gnc_uri_is_file_uri ( newfile ) )
+    if ( gnc_uri_is_file_protocol ( protocol ) )
         logpath = gnc_uri_get_path(newfile);
     PINFO ("logpath=%s", logpath ? logpath : "(null)");
     xaccLogSetBaseName (logpath);
     g_free ( logpath );
 
+    /* If the new "file" is a database, attempt to store the password
+     * in a keyring. GnuCash itself will not save it.
+     */
+    if ( !gnc_uri_is_file_protocol (protocol))
+        gnc_keyring_set_password ( protocol, hostname, port,
+                                   path, username, password );
 
     /* Prevent race condition between swapping the contents of the two
      * sessions, and actually installing the new session as the current
