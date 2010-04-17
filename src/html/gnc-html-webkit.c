@@ -24,6 +24,7 @@
  ********************************************************************/
 
 #include "config.h"
+#include "platform.h"
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -676,10 +677,12 @@ static void
 impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
 {
     GncHtmlWebkitPrivate* priv;
+#if HAVE(WEBKIT_WEB_VIEW_LOAD_URI)
 #define TEMPLATE_REPORT_FILE_NAME "gnc-report-XXXXXX.html"
     int fd;
     gchar* uri;
     gchar *filename;
+#endif
 
     g_return_if_fail( self != NULL );
     g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
@@ -688,6 +691,7 @@ impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
 
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
 
+#if HAVE(WEBKIT_WEB_VIEW_LOAD_URI)
     /* Export the HTML to a file and load the file URI.   On Linux, this seems to get around some
        security problems (otherwise, it can complain that embedded images aren't permitted to be
        viewed because they are local resources).  On Windows, this allows the embedded images to
@@ -702,6 +706,9 @@ impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
     DEBUG("Loading uri '%s'", uri);
     webkit_web_view_load_uri( priv->web_view, uri );
     g_free( uri );
+#else
+    webkit_web_view_load_html_string( priv->web_view, data, BASE_URI_NAME );
+#endif
 
     LEAVE("");
 }
@@ -1037,13 +1044,13 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
 static void
 impl_webkit_print( GncHtml* self )
 {
-#ifndef HAVE_WEBKIT_PRINT_FULL
+#if HAVE(WEBKIT_WEB_FRAME_PRINT_FULL)
     extern void webkit_web_frame_print( WebKitWebFrame * frame );
 #endif
 
     GncHtmlWebkitPrivate* priv;
     WebKitWebFrame* frame;
-#ifdef HAVE_WEBKIT_PRINT_FULL
+#if HAVE(WEBKIT_WEB_FRAME_PRINT_FULL)
     GtkPrintOperation* op = gtk_print_operation_new();
     GError* error = NULL;
 #endif
@@ -1051,7 +1058,7 @@ impl_webkit_print( GncHtml* self )
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
     frame = webkit_web_view_get_main_frame( priv->web_view );
 
-#ifdef HAVE_WEBKIT_PRINT_FULL
+#if HAVE(WEBKIT_WEB_FRAME_PRINT_FULL)
     gnc_print_operation_init( op );
 #ifdef G_OS_WIN32
     gtk_print_operation_set_unit( op, GTK_UNIT_POINTS );

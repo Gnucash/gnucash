@@ -1058,6 +1058,10 @@ then
 	     webkit)
   		    PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.0")
   		    AC_DEFINE(WANT_WEBKIT,1,[Use webkit instead of gtkhtml])
+            oLIBS="$LIBS"
+            LIBS="$LIBS -lwebkit-1.0"
+            AC_CHECK_FUNCS(webkit_web_view_load_uri)
+            LIBS="$oLIBS"
   		    AC_MSG_CHECKING(for webkit_web_frame_print_full)
   		    saved_CFLAGS="${CFLAGS}"
 	            saved_LIBS="${LIBS}"
@@ -1068,7 +1072,7 @@ then
   		            [[#include <webkit/webkit.h>]],
   		            [[webkit_web_frame_print_full( 0, 0, 0, 0 );]])],
   		            [AC_MSG_RESULT(yes)
-  		             AC_DEFINE(HAVE_WEBKIT_PRINT_FULL,1,[webkit_web_frame_print_full exists])],
+  		             AC_DEFINE(HAVE_WEBKIT_WEB_FRAME_PRINT_FULL,1,[webkit_web_frame_print_full exists])],
   		            [AC_MSG_RESULT(no)])
   		    CFLAGS="${saved_CFLAGS}"
   		    LIBS="${saved_LIBS}"
