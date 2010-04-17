@@ -859,6 +859,93 @@ int gncTaxTableCompare (const GncTaxTable *a, const GncTaxTable *b)
     return safe_strcmp (a->name, b->name);
 }
 
+gboolean gncTaxTableEntryEqual(const GncTaxTableEntry *a, const GncTaxTableEntry *b)
+{
+    if (a == NULL && b == NULL) return TRUE;
+    if (a == NULL || b == NULL) return FALSE;
+
+    if (!xaccAccountEqual(a->account, b->account, TRUE))
+    {
+        PWARN("accounts differ");
+        return FALSE;
+    }
+
+    if (a->type != b->type)
+    {
+        PWARN("types differ");
+        return FALSE;
+    }
+
+    if (!gnc_numeric_equal(a->amount, b->amount))
+    {
+        PWARN("amounts differ");
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+gboolean gncTaxTableEqual(const GncTaxTable *a, const GncTaxTable *b)
+{
+    if (a == NULL && b == NULL) return TRUE;
+    if (a == NULL || b == NULL) return FALSE;
+
+    g_return_val_if_fail(GNC_IS_TAXTABLE(a), FALSE);
+    g_return_val_if_fail(GNC_IS_TAXTABLE(b), FALSE);
+
+    if (safe_strcmp(a->name, b->name) != 0)
+    {
+        PWARN("Names differ: %s vs %s", a->name, b->name);
+        return FALSE;
+    }
+
+    if (a->invisible != b->invisible)
+    {
+        PWARN("invisible flags differ");
+        return FALSE;
+    }
+
+    if ((a->entries != NULL) != (b->entries != NULL))
+    {
+        PWARN("only one has entries");
+        return FALSE;
+    }
+
+    if (a->entries != NULL && b->entries != NULL)
+    {
+        GncTaxTableEntryList* a_node;
+        GncTaxTableEntryList* b_node;
+
+        for (a_node = a->entries, b_node = b->entries;
+                                a_node != NULL && b_node != NULL;
+                                a_node = a_node->next, b_node = b_node->next)
+        {
+            if (!gncTaxTableEntryEqual((GncTaxTableEntry*)a_node->data,
+                                       (GncTaxTableEntry*)b_node->data))
+            {
+                PWARN("entries differ");
+                return FALSE;
+            }
+        }
+
+        if (a_node != NULL || b_node != NULL)
+        {
+            PWARN("Unequal number of entries");
+            return FALSE;
+        }
+    }
+
+#if 0
+    /* See src/doc/business.txt for an explanation of the following */
+    /* Code that handles this is *identical* to that in gncBillTerm */
+    gint64          refcount;
+    GncTaxTable *   parent;       /* if non-null, we are an immutable child */
+    GncTaxTable *   child;        /* if non-null, we have not changed */
+    GList *         children;     /* list of children for disconnection */
+#endif
+
+    return TRUE;
+}
 
 /*
  * This will add value to the account-value for acc, creating a new

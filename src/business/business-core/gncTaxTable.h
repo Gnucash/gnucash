@@ -134,6 +134,7 @@ void gncTaxTableRemoveEntry (GncTaxTable *table, GncTaxTableEntry *entry);
 void gncTaxTableChanged (GncTaxTable *table);
 void gncTaxTableBeginEdit (GncTaxTable *table);
 void gncTaxTableCommitEdit (GncTaxTable *table);
+gboolean gncTaxTableEqual(const GncTaxTable *a, const GncTaxTable *b);
 
 /** @name Get Functions
  @{ */
@@ -169,6 +170,7 @@ gnc_numeric gncTaxTableEntryGetAmount (const GncTaxTableEntry *entry);
 
 int gncTaxTableCompare (const GncTaxTable *a, const GncTaxTable *b);
 int gncTaxTableEntryCompare (const GncTaxTableEntry *a, const GncTaxTableEntry *b);
+gboolean gncTaxTableEntryEqual(const GncTaxTableEntry *a, const GncTaxTableEntry *b);
 
 /************************************************/
 

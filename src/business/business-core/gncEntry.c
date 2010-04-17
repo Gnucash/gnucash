@@ -1420,6 +1420,116 @@ int gncEntryCompare (const GncEntry *a, const GncEntry *b)
     return qof_instance_guid_compare(a, b);
 }
 
+#define CHECK_STRING(X, Y, FIELD) \
+    if (safe_strcmp((X)->FIELD, (Y)->FIELD) != 0) \
+    { \
+        PWARN("%s differ: %s vs %s", #FIELD, (X)->FIELD, (Y)->FIELD); \
+        return FALSE; \
+    }
+
+#define CHECK_ACCOUNT(X, Y, FIELD) \
+    if (!xaccAccountEqual((X)->FIELD, (Y)->FIELD, TRUE)) \
+    { \
+        PWARN("%s differ", #FIELD); \
+        return FALSE; \
+    }
+
+#define CHECK_NUMERIC(X, Y, FIELD) \
+    if (!gnc_numeric_equal((X)->FIELD, (Y)->FIELD)) \
+    { \
+        PWARN("%s differ", #FIELD); \
+        return FALSE; \
+    }
+
+#define CHECK_VALUE(X, Y, FIELD) \
+    if ((X)->FIELD != (Y)->FIELD) \
+    { \
+        PWARN("%s differ", #FIELD); \
+        return FALSE; \
+    }
+
+gboolean gncEntryEqual(const GncEntry *a, const GncEntry *b)
+{
+    if (a == NULL && b == NULL) return TRUE;
+    if (a == NULL || b == NULL) return FALSE;
+
+    g_return_val_if_fail(GNC_IS_ENTRY(a), FALSE);
+    g_return_val_if_fail(GNC_IS_ENTRY(b), FALSE);
+
+    CHECK_STRING(a, b, desc);
+    CHECK_STRING(a, b, action);
+    CHECK_STRING(a, b, notes);
+    CHECK_NUMERIC(a, b, quantity);
+
+    if (a->invoice != NULL)
+    {
+        CHECK_ACCOUNT(a, b, i_account);
+        CHECK_NUMERIC(a, b, i_price);
+        CHECK_VALUE(a, b, i_taxable);
+        CHECK_VALUE(a, b, i_taxincluded);
+        if (!gncTaxTableEqual(a->i_tax_table, b->i_tax_table))
+        {
+            PWARN("i_tax_table differ");
+            return FALSE;
+        }
+
+        CHECK_NUMERIC(a, b, i_discount);
+        CHECK_VALUE(a, b, i_disc_type);
+        CHECK_VALUE(a, b, i_disc_how);
+        CHECK_NUMERIC(a, b, i_value);
+        CHECK_NUMERIC(a, b, i_value_rounded);
+        CHECK_NUMERIC(a, b, i_tax_value);
+        CHECK_NUMERIC(a, b, i_tax_value_rounded);
+        CHECK_NUMERIC(a, b, i_disc_value);
+        CHECK_NUMERIC(a, b, i_disc_value_rounded);
+
+#if 0
+    Timespec	date;
+    Timespec	date_entered;
+
+    /* employee bill data */
+    GncEntryPaymentType b_payment;
+
+    /* customer invoice */
+    GList *	i_tax_values;
+    Timespec	i_taxtable_modtime;
+
+#endif
+    }
+
+    if (a->bill != NULL)
+    {
+        CHECK_ACCOUNT(a, b, b_account);
+        CHECK_NUMERIC(a, b, b_price);
+
+        CHECK_NUMERIC(a, b, b_value);
+        CHECK_NUMERIC(a, b, b_value_rounded);
+        CHECK_NUMERIC(a, b, b_tax_value);
+        CHECK_NUMERIC(a, b, b_tax_value_rounded);
+#if 0
+    Timespec	date;
+    Timespec	date_entered;
+
+    /* vendor bill data */
+    gboolean	b_taxable;
+    gboolean	b_taxincluded;
+    GncTaxTable *	b_tax_table;
+    gboolean	billable;
+    GncOwner	billto;
+
+    /* employee bill data */
+    GncEntryPaymentType b_payment;
+
+    /* vendor bill */
+    GList *	b_tax_values;
+    Timespec	b_taxtable_modtime;
+#endif
+    }
+    /* FIXME: Need real tests */
+
+    return TRUE;
+}
+
 /* ============================================================= */
 /* Object declaration */
 

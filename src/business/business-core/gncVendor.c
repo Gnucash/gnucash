@@ -639,6 +639,78 @@ int gncVendorCompare (const GncVendor *a, const GncVendor *b)
     return(strcmp(a->name, b->name));
 }
 
+gboolean gncVendorEqual(const GncVendor *a, const GncVendor *b)
+{
+    if (a == NULL && b == NULL) return TRUE;
+    if (a == NULL ||  b == NULL) return FALSE;
+
+    g_return_val_if_fail(GNC_IS_VENDOR(a), FALSE);
+    g_return_val_if_fail(GNC_IS_VENDOR(b), FALSE);
+
+    if (safe_strcmp(a->id, b->id) != 0)
+    {
+        PWARN("IDs differ: %s vs %s", a->id, b->id);
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->name, b->name) != 0)
+    {
+        PWARN("Names differ: %s vs %s", a->name, b->name);
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->notes, b->notes) != 0)
+    {
+        PWARN("Notes differ");
+        return FALSE;
+    }
+
+    if (!gncBillTermEqual(a->terms, b->terms))
+    {
+        PWARN("BillTerms differ");
+        return FALSE;
+    }
+
+    if (!gncAddressEqual(a->addr, b->addr))
+    {
+        PWARN("Addresses differ");
+        return FALSE;
+    }
+
+    if (!gnc_commodity_equal(a->currency, b->currency))
+    {
+        PWARN("Currencies differ");
+        return FALSE;
+    }
+
+    if (!gncTaxTableEqual(a->taxtable, b->taxtable))
+    {
+        PWARN("Tax tables differ");
+        return FALSE;
+    }
+
+    if (a->taxtable_override != b->taxtable_override)
+    {
+        PWARN("Tax table override flags differ");
+        return FALSE;
+    }
+
+    if (a->taxincluded != b->taxincluded)
+    {
+        PWARN("Tax included flags differ");
+        return FALSE;
+    }
+
+    if (a->active != b->active)
+    {
+        PWARN("Active flags differ");
+        return FALSE;
+    }
+
+//    GList *         jobs;
+    return TRUE;
+}
+
 GList * gncVendorGetJoblist (const GncVendor *vendor, gboolean show_all)
 {
     if (!vendor) return NULL;

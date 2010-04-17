@@ -36,6 +36,7 @@
 #include "gnc-commodity.h"
 #include "gncAddress.h"
 #include "gncCustomer.h"
+#include "gncInvoice.h"
 
 #include "gnc-backend-sql.h"
 
@@ -66,7 +67,13 @@ create_session(void)
     gnc_commodity* currency;
     GncAddress* addr;
     GncCustomer* cust;
-
+    GncEmployee* emp;
+    GncVendor* v;
+    GncInvoice* inv;
+    GncJob* job;
+    GncTaxTable* tt;
+    GncTaxTableEntry* tte;
+    
     table = gnc_commodity_table_get_table( book );
     currency = gnc_commodity_table_lookup( table, GNC_COMMODITY_NS_CURRENCY, "CAD" );
 
@@ -74,12 +81,30 @@ create_session(void)
     xaccAccountSetType( acct1, ACCT_TYPE_BANK );
     xaccAccountSetName( acct1, "Bank 1" );
     xaccAccountSetCommodity( acct1, currency );
-
+    xaccAccountSetHidden( acct1, FALSE );
+    xaccAccountSetPlaceholder( acct1, FALSE );
     gnc_account_append_child( root, acct1 );
 
     acct2 = xaccMallocAccount( book );
     xaccAccountSetType( acct2, ACCT_TYPE_BANK );
-    xaccAccountSetName( acct2, "Bank 1" );
+    xaccAccountSetName( acct2, "Bank 2" );
+    xaccAccountSetCommodity( acct2, currency );
+    xaccAccountSetHidden( acct2, FALSE );
+    xaccAccountSetPlaceholder( acct2, FALSE );
+    gnc_account_append_child( root, acct2 );
+
+    tt = gncTaxTableCreate( book );
+    gncTaxTableSetName( tt, "tt" );
+    tte = gncTaxTableEntryCreate();
+    gncTaxTableEntrySetAccount( tte, acct1 );
+    gncTaxTableEntrySetType( tte, GNC_AMT_TYPE_VALUE );
+    gncTaxTableEntrySetAmount( tte, gnc_numeric_zero() );
+    gncTaxTableAddEntry( tt, tte );
+    tte = gncTaxTableEntryCreate();
+    gncTaxTableEntrySetAccount( tte, acct2 );
+    gncTaxTableEntrySetType( tte, GNC_AMT_TYPE_PERCENT );
+    gncTaxTableEntrySetAmount( tte, gnc_numeric_zero() );
+    gncTaxTableAddEntry( tt, tte );
 
     cust = gncCustomerCreate( book );
     gncCustomerSetID( cust, "0001" );
@@ -95,6 +120,12 @@ create_session(void)
     gncAddressSetPhone( addr, "(123) 555-1212" );
     gncAddressSetPhone( addr, "(123) 555-2121" );
     gncAddressSetEmail( addr, "cust@mycustomer.com" );
+
+    emp = gncEmployeeCreate( book );
+    gncEmployeeSetID( emp, "0001" );
+    gncEmployeeSetUsername( emp, "gnucash" );
+    gncEmployeeSetLanguage( emp, "english" );
+    gncEmployeeSetCurrency( emp, currency );
 
     return session;
 }

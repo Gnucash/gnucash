@@ -144,6 +144,7 @@ gint64 gncBillTermGetRefcount (const GncBillTerm *term);
 /** @} */
 
 int gncBillTermCompare (const GncBillTerm *a, const GncBillTerm *b);
+gboolean gncBillTermEqual(const GncBillTerm *a, const GncBillTerm *b);
 
 /********************************************************/
 /* functions to compute dates from Bill Terms           */

@@ -98,6 +98,7 @@ static inline GncJob * gncJobLookup (const QofBook *book, const GncGUID *guid)
 /* Other functions */
 
 int gncJobCompare (const GncJob *a, const GncJob *b);
+gboolean gncJobEqual(const GncJob *a, const GncJob *b);
 
 #define JOB_ID		"id"
 #define JOB_NAME	"name"

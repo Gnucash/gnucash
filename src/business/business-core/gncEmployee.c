@@ -558,6 +558,77 @@ int gncEmployeeCompare (const GncEmployee *a, const GncEmployee *b)
     return(strcmp(a->username, b->username));
 }
 
+gboolean gncEmployeeEqual(const GncEmployee* a, const GncEmployee* b)
+{
+    if (a == NULL && b == NULL) return TRUE;
+    if (a == NULL || b == NULL ) return FALSE;
+
+    g_return_val_if_fail(GNC_IS_EMPLOYEE(a), FALSE);
+    g_return_val_if_fail(GNC_IS_EMPLOYEE(b), FALSE);
+
+    if (safe_strcmp(a->id, b->id) != 0)
+    {
+        PWARN("IDs differ: %s vs %s", a->id, b->id);
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->username, b->username) != 0)
+    {
+        PWARN("Usernames differ: %s vs %s", a->username, b->username);
+        return FALSE;
+    }
+
+    if (!gncAddressEqual(a->addr, b->addr))
+    {
+        PWARN("Addresses differ");
+        return FALSE;
+    }
+
+    if (!gnc_commodity_equal(a->currency, b->currency))
+    {
+        PWARN("Currencies differ");
+        return FALSE;
+    }
+
+    if (a->active != b->active)
+    {
+        PWARN("Active flags differ");
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->language, b->language) != 0)
+    {
+        PWARN("Languages differ: %s vs %s", a->language, b->language);
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->acl, b->acl) != 0)
+    {
+        PWARN("ACLs differ: %s vs %s", a->acl, b->acl);
+        return FALSE;
+    }
+
+    if (!xaccAccountEqual(a->ccard_acc, b->ccard_acc, TRUE))
+    {
+        PWARN("Accounts differ");
+        return FALSE;
+    }
+
+    if (!gnc_numeric_equal(a->workday, b->workday))
+    {
+        PWARN("Workdays differ");
+        return FALSE;
+    }
+
+    if (!gnc_numeric_equal(a->rate, b->rate))
+    {
+        PWARN("Rates differ");
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
 /* Package-Private functions */
 
 static const char * _gncEmployeePrintable (gpointer item)

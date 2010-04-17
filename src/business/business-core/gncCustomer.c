@@ -734,10 +734,65 @@ int gncCustomerCompare (const GncCustomer *a, const GncCustomer *b)
 gboolean
 gncCustomerEqual(const GncCustomer *a, const GncCustomer *b)
 {
+    if (a == NULL && b == NULL) return TRUE;
     if (a == NULL || b == NULL) return FALSE;
 
     g_return_val_if_fail(GNC_IS_CUSTOMER(a), FALSE);
     g_return_val_if_fail(GNC_IS_CUSTOMER(b), FALSE);
+
+    if (safe_strcmp(a->id, b->id) != 0)
+    {
+        PWARN("IDs differ: %s vs %s", a->id, b->id);
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->name, b->name) != 0)
+    {
+        PWARN("Names differ: %s vs %s", a->name, b->name);
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->notes, b->notes) != 0)
+    {
+        PWARN("Notes differ: %s vs %s", a->notes, b->notes);
+        return FALSE;
+    }
+
+    if (!gncBillTermEqual(a->terms, b->terms))
+    {
+        PWARN("Bill terms differ");
+        return FALSE;
+    }
+
+    if (!gnc_commodity_equal(a->currency, b->currency))
+    {
+        PWARN("currencies differ");
+        return FALSE;
+    }
+
+    if (!gncTaxTableEqual(a->taxtable, b->taxtable))
+    {
+        PWARN("tax tables differ");
+        return FALSE;
+    }
+
+    if (a->taxtable_override != b->taxtable_override)
+    {
+        PWARN("Tax table override flags differ");
+        return FALSE;
+    }
+
+    if (a->taxincluded != b->taxincluded)
+    {
+        PWARN("Tax included flags differ");
+        return FALSE;
+    }
+
+    if (a->active != b->active)
+    {
+        PWARN("Active flags differ");
+        return FALSE;
+    }
 
     if (!gncAddressEqual(a->addr, b->addr))
     {
@@ -749,6 +804,22 @@ gncCustomerEqual(const GncCustomer *a, const GncCustomer *b)
         PWARN("addresses differ");
         return FALSE;
     }
+
+    if (!gnc_numeric_equal(a->credit, b->credit))
+    {
+        PWARN("Credit amounts differ");
+        return FALSE;
+    }
+
+    if (!gnc_numeric_equal(a->discount, b->discount))
+    {
+        PWARN("Discount amounts differ");
+        return FALSE;
+    }
+
+    /* FIXME: Need to check jobs list
+    GList *         jobs;
+    */
 
     return TRUE;
 }

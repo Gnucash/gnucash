@@ -105,6 +105,7 @@ static inline GncEmployee * gncEmployeeLookup (const QofBook *book, const GncGUI
 }
 
 gboolean gncEmployeeIsDirty (const GncEmployee *employee);
+gboolean gncEmployeeEqual(const GncEmployee* e1, const GncEmployee* e2);
 
 #define EMPLOYEE_ID			"id"
 #define EMPLOYEE_USERNAME	"username"

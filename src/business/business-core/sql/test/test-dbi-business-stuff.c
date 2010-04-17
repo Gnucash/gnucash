@@ -36,6 +36,9 @@
 #include "Transaction.h"
 #include "gnc-commodity.h"
 #include "gncCustomer.h"
+#include "gncInvoice.h"
+#include "gncEmployee.h"
+#include "gncVendor.h"
 
 static QofLogModule log_module = "test-dbi";
 
@@ -59,14 +62,130 @@ compare_customers( QofBook* book_1, QofBook* book_2 )
 }
 
 static void
+compare_single_employee( QofInstance* inst, gpointer user_data )
+{
+    CompareInfoStruct* info = (CompareInfoStruct*)user_data;
+    GncEmployee* emp_1 = GNC_EMPLOYEE(inst);
+    GncEmployee* emp_2 = gncEmployeeLookup( info->book_2, qof_instance_get_guid(inst) );
+
+    if (!gncEmployeeEqual( emp_1, emp_2 ))
+    {
+        info->result = FALSE;
+    }
+}
+
+static void
+compare_employees( QofBook* book_1, QofBook* book_2 )
+{
+    do_compare( book_1, book_2, GNC_ID_EMPLOYEE, compare_single_employee, "Employee lists match" );
+}
+
+static void
+compare_single_invoice( QofInstance* inst, gpointer user_data )
+{
+    CompareInfoStruct* info = (CompareInfoStruct*)user_data;
+    GncInvoice* inv_1 = GNC_INVOICE(inst);
+    GncInvoice* inv_2 = gncInvoiceLookup( info->book_2, qof_instance_get_guid(inst) );
+
+    if (!gncInvoiceEqual( inv_1, inv_2 ))
+    {
+        info->result = FALSE;
+    }
+}
+
+static void
+compare_invoices( QofBook* book_1, QofBook* book_2 )
+{
+    do_compare( book_1, book_2, GNC_ID_INVOICE, compare_single_invoice, "Invoice lists match" );
+}
+
+static void
+compare_single_job( QofInstance* inst, gpointer user_data )
+{
+    CompareInfoStruct* info = (CompareInfoStruct*)user_data;
+    GncJob* job_1 = GNC_JOB(inst);
+    GncJob* job_2 = gncJobLookup( info->book_2, qof_instance_get_guid(inst) );
+
+    if (!gncJobEqual( job_1, job_2 ))
+    {
+        info->result = FALSE;
+    }
+}
+
+static void
+compare_jobs( QofBook* book_1, QofBook* book_2 )
+{
+    do_compare( book_1, book_2, GNC_ID_JOB, compare_single_job, "Job lists match" );
+}
+
+static void
+compare_single_vendor( QofInstance* inst, gpointer user_data )
+{
+    CompareInfoStruct* info = (CompareInfoStruct*)user_data;
+    GncVendor* vendor_1 = GNC_VENDOR(inst);
+    GncVendor* vendor_2 = gncVendorLookup( info->book_2, qof_instance_get_guid(inst) );
+
+    if (!gncVendorEqual( vendor_1, vendor_2 ))
+    {
+        info->result = FALSE;
+    }
+}
+
+static void
+compare_vendors( QofBook* book_1, QofBook* book_2 )
+{
+    do_compare( book_1, book_2, GNC_ID_VENDOR, compare_single_vendor, "Vendor lists match" );
+}
+
+static void
+compare_single_billterm( QofInstance* inst, gpointer user_data )
+{
+    CompareInfoStruct* info = (CompareInfoStruct*)user_data;
+    GncBillTerm* bt_1 = GNC_BILLTERM(inst);
+    GncBillTerm* bt_2 = gncBillTermLookup( info->book_2, qof_instance_get_guid(inst) );
+
+    if (!gncBillTermEqual( bt_1, bt_2 ))
+    {
+        info->result = FALSE;
+    }
+}
+
+static void
+compare_billterms( QofBook* book_1, QofBook* book_2 )
+{
+    do_compare( book_1, book_2, GNC_ID_BILLTERM, compare_single_billterm, "Billterms lists match" );
+}
+
+static void
+compare_single_taxtable( QofInstance* inst, gpointer user_data )
+{
+    CompareInfoStruct* info = (CompareInfoStruct*)user_data;
+    GncTaxTable* tt_1 = GNC_TAXTABLE(inst);
+    GncTaxTable* tt_2 = gncTaxTableLookup( info->book_2, qof_instance_get_guid(inst) );
+
+    if (!gncTaxTableEqual( tt_1, tt_2 ))
+    {
+        info->result = FALSE;
+    }
+}
+
+static void
+compare_taxtables( QofBook* book_1, QofBook* book_2 )
+{
+    do_compare( book_1, book_2, GNC_ID_TAXTABLE, compare_single_taxtable, "TaxTable lists match" );
+}
+
+static void
 compare_books( QofBook* book_1, QofBook* book_2 )
 {
+    compare_billterms( book_1, book_2 );
+    compare_taxtables( book_1, book_2 );
+
     compare_customers( book_1, book_2 );
-//    compare_invoices( book_1, book_2 );
-//    compare_jobs( book_1, book_2 );
-//    compare_vendors( book_1, book_2 );
-//    compare_billterms( book_1, book_2 );
-//    compare_employees( book_1, book_2 );
+    compare_employees( book_1, book_2 );
+    compare_invoices( book_1, book_2 );
+    compare_jobs( book_1, book_2 );
+    compare_vendors( book_1, book_2 );
 }
 
 void

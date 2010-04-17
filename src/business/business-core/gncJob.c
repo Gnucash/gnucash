@@ -460,6 +460,46 @@ int gncJobCompare (const GncJob * a, const GncJob *b)
     return (safe_strcmp(a->id, b->id));
 }
 
+gboolean gncJobEqual(const GncJob * a, const GncJob *b)
+{
+    if (a == NULL && b == NULL) return TRUE;
+    if (a == NULL || b == NULL) return FALSE;
+
+    g_return_val_if_fail(GNC_IS_JOB(a), FALSE);
+    g_return_val_if_fail(GNC_IS_JOB(b), FALSE);
+
+    if (safe_strcmp(a->id, b->id) != 0)
+    {
+        PWARN("IDs differ: %s vs %s", a->id, b->id);
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->name, b->name) != 0)
+    {
+        PWARN("Names differ: %s vs %s", a->name, b->name);
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->desc, b->desc) != 0)
+    {
+        PWARN("Descriptions differ: %s vs %s", a->desc, b->desc);
+        return FALSE;
+    }
+
+    if (a->active != b->active)
+    {
+        PWARN("Active flags differ");
+        return FALSE;
+    }
+
+    /* FIXME: Need real tests */
+#if 0
+    GncOwner      owner;
+#endif
+
+    return TRUE;
+}
+
 /* ================================================================== */
 /* Package-Private functions */
 

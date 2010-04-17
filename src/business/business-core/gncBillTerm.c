@@ -693,6 +693,70 @@ int gncBillTermCompare (const GncBillTerm *a, const GncBillTerm *b)
     return safe_strcmp (a->desc, b->desc);
 }
 
+gboolean gncBillTermEqual(const GncBillTerm *a, const GncBillTerm *b)
+{
+    if (a == NULL && b == NULL) return TRUE;
+    if (a == NULL || b == NULL) return FALSE;
+
+    g_return_val_if_fail(GNC_IS_BILLTERM(a), FALSE);
+    g_return_val_if_fail(GNC_IS_BILLTERM(b), FALSE);
+
+    if (safe_strcmp(a->name, b->name) != 0)
+    {
+        PWARN("Names differ: %s vs %s", a->name, b->name);
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->desc, b->desc) != 0)
+    {
+        PWARN("Descriptions differ: %s vs %s", a->desc, b->desc);
+        return FALSE;
+    }
+
+    if (a->type != b->type)
+    {
+        PWARN("Types differ");
+        return FALSE;
+    }
+
+    if (a->due_days != b->due_days)
+    {
+        PWARN("Due days differ: %d vs %d", a->due_days, b->due_days);
+        return FALSE;
+    }
+
+    if (a->disc_days != b->disc_days)
+    {
+        PWARN("Discount days differ: %d vs %d", a->disc_days, b->disc_days);
+        return FALSE;
+    }
+
+    if (!gnc_numeric_equal(a->discount, b->discount))
+    {
+        PWARN("Discounts differ");
+        return FALSE;
+    }
+
+    if (a->cutoff != b->cutoff)
+    {
+        PWARN("Cutoffs differ: %d vs %d", a->cutoff, b->cutoff);
+        return FALSE;
+    }
+
+    if (a->invisible != b->invisible)
+    {
+        PWARN("Invisible flags differ");
+        return FALSE;
+    }
+
+//    gint64          refcount;
+//    GncBillTerm *   parent;      /* if non-null, we are an immutable child */
+//    GncBillTerm *   child;       /* if non-null, we have not changed */
+//    GList *         children;    /* list of children for disconnection */
+
+    return TRUE;
+}
+
 gboolean gncBillTermIsDirty (const GncBillTerm *term)
 {
     if (!term) return FALSE;

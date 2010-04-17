@@ -597,6 +597,7 @@ int gncAddressCompare (const GncAddress *a, const GncAddress *b)
 gboolean
 gncAddressEqual(const GncAddress* a, const GncAddress* b)
 {
+    if (a == NULL && b == NULL) return TRUE;
     if (a == NULL || b == NULL) return FALSE;
 
     g_return_val_if_fail(GNC_IS_ADDRESS(a), FALSE);

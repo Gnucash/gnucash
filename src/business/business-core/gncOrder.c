@@ -496,6 +496,55 @@ int gncOrderCompare (const GncOrder *a, const GncOrder *b)
     return qof_instance_guid_compare(a, b);
 }
 
+gboolean gncOrderEqual(const GncOrder * a, const GncOrder *b)
+{
+    if (a == NULL && b == NULL) return TRUE;
+    if (a == NULL || b == NULL) return FALSE;
+
+    g_return_val_if_fail(GNC_IS_ORDER(a), FALSE);
+    g_return_val_if_fail(GNC_IS_ORDER(b), FALSE);
+
+    if (safe_strcmp(a->id, b->id) != 0)
+    {
+        PWARN("IDs differ: %s vs %s", a->id, b->id);
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->notes, b->notes) != 0)
+    {
+        PWARN("Notes differ: %s vs %s", a->notes, b->notes);
+        return FALSE;
+    }
+
+    if (a->active != b->active)
+    {
+        PWARN("Active flags differ");
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->reference, b->reference) != 0)
+    {
+        PWARN("References differ: %s vs %s", a->reference, b->reference);
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->printname, b->printname) != 0)
+    {
+        PWARN("printnames differ: %s vs %s", a->printname, b->printname);
+        return FALSE;
+    }
+
+    /* FIXME: Need real tests */
+#if 0
+    GncOwner	owner;
+    GList *	entries;
+    Timespec 	opened;
+    Timespec 	closed;
+#endif
+
+    return TRUE;
+}
+
 /* =========================================================== */
 /* Package-Private functions */
 

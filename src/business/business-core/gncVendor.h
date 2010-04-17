@@ -105,6 +105,7 @@ GncTaxTable* gncVendorGetTaxTable (const GncVendor *vendor);
 GList * gncVendorGetJoblist (const GncVendor *vendor, gboolean show_all);
 gboolean gncVendorIsDirty (const GncVendor *vendor);
 int gncVendorCompare (const GncVendor *a, const GncVendor *b);
+gboolean gncVendorEqual(const GncVendor *a, const GncVendor *b);
 
 /** Return a pointer to the instance gncVendor that is identified
  *  by the guid, and is residing in the book. Returns NULL if the

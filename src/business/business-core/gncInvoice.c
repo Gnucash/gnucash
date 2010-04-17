@@ -1897,6 +1897,97 @@ int gncInvoiceCompare (const GncInvoice *a, const GncInvoice *b)
     return qof_instance_guid_compare(a, b);
 }
 
+gboolean gncInvoiceEqual(const GncInvoice *a, const GncInvoice *b)
+{
+    if (a == NULL && b == NULL) return TRUE;
+    if (a == NULL || b == NULL) return FALSE;
+
+    g_return_val_if_fail(GNC_IS_INVOICE(a), FALSE);
+    g_return_val_if_fail(GNC_IS_INVOICE(b), FALSE);
+
+    if (safe_strcmp(a->id, b->id) != 0)
+    {
+        PWARN("IDs differ: %s vs %s", a->id, b->id);
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->notes, b->notes) != 0)
+    {
+        PWARN("Notes differ: %s vs %s", a->notes, b->notes);
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->billing_id, b->billing_id) != 0)
+    {
+        PWARN("Billing IDs differ: %s vs %s", a->billing_id, b->billing_id);
+        return FALSE;
+    }
+
+    if (safe_strcmp(a->printname, b->printname) != 0)
+    {
+        PWARN("Printnames differ: %s vs %s", a->printname, b->printname);
+        return FALSE;
+    }
+
+    if (a->active != b->active)
+    {
+        PWARN("Active flags differ");
+        return FALSE;
+    }
+
+    if (!gncBillTermEqual(a->terms, b->terms))
+    {
+        PWARN("Billterms differ");
+        return FALSE;
+    }
+
+    if (!gncJobEqual(a->job, b->job))
+    {
+        PWARN("Jobs differ");
+        return FALSE;
+    }
+
+    if (!gnc_commodity_equal(a->currency, b->currency))
+    {
+        PWARN("Currencies differ");
+        return FALSE;
+    }
+
+    if (!xaccAccountEqual(a->posted_acc, b->posted_acc, TRUE))
+    {
+        PWARN("Posted accounts differ");
+        return FALSE;
+    }
+
+    if (!xaccTransEqual(a->posted_txn, b->posted_txn, TRUE, TRUE, TRUE, FALSE))
+    {
+        PWARN("Posted tx differ");
+        return FALSE;
+    }
+
+#if 0
+    if (!gncLotEqual(a->posted_lot, b->posted_lot))
+    {
+        PWARN("Posted lots differ");
+        return FALSE;
+    }
+#endif
+
+    /* FIXME: Need real checks */
+#if 0
+    GList       *entries;
+    GList       *prices;
+    GncOwner    owner;
+    GncOwner    billto;
+    Timespec    date_opened;
+    Timespec    date_posted;
+
+    gnc_numeric	to_charge_amount;
+#endif
+
+    return TRUE;
+}
+
 /* ============================================================= */
 /* Package-Private functions */
 
