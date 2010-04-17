@@ -53,4 +53,7 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${GCONF_CFLAGS}
 
+EXTRA_DIST = \
+    test-dbi-business-stuff.h
+
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.sql\"
