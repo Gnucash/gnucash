@@ -36,7 +36,8 @@ check_PROGRAMS = \
   test-dbi \
   test-load-backend
 
-#noinst_HEADERS = test-file-stuff.h
+EXTRA_DIST = \
+    test-dbi-stuff.h
 
 LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/gnc-module/libgnc-module.la \
