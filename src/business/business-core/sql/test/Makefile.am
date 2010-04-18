@@ -13,7 +13,8 @@ GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/lib/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
-  --library-dir    ${top_builddir}/src/engine
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/backend\sql
 
 TESTS_ENVIRONMENT = \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
@@ -31,6 +32,7 @@ LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/core-utils/libgnc-core-utils.la \
         ${top_builddir}/src/libqof/qof/libgnc-qof.la \
         ${top_builddir}/src/backend/dbi/test/libgncmod-test-dbi.la \
+        ${top_builddir}/src/backend/sql/libgnc-backend-sql.la \
         ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
         ${top_builddir}/src/business/business-core/sql/libgncmod-business-backend-sql.la \
         ${top_builddir}/lib/libc/libc-missing.la
