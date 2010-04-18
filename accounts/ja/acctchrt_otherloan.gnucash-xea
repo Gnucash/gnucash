@@ -4,10 +4,10 @@
       その他のローン
     </gnc-act:title>
     <gnc-act:short-description>
-      その他のローンと利息を管理するための勘定科目
+      その他のローンと利子を管理するための勘定科目
     </gnc-act:short-description>
     <gnc-act:long-description>
-    住宅以外の何か他のローンを持っている場合はこの勘定科目セットを選ぶとよいでしょう。
+    住宅以外の何か他のローンがある場合はこの勘定科目集を選ぶとよいでしょう。
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>

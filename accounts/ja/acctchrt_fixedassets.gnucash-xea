@@ -7,7 +7,7 @@
       大規模な固定資産管理用の勘定科目
     </gnc-act:short-description>
     <gnc-act:long-description>
-    大規模な固定資産（住宅、自動車、別荘、その他資産）を持っている場合はこの勘定科目セットを選ぶとよいでしょう。
+    大規模な固定資産（住宅、自動車、別荘、その他資産）を持っている場合はこの勘定科目集を選ぶとよいでしょう。
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>

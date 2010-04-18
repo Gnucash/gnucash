@@ -4,7 +4,7 @@
       単純小切手帳
     </gnc-act:title>
     <gnc-act:short-description>
-     GnuCashを使う上で最小限の勘定科目セット
+     GnuCashを使う上で最小限の勘定科目集
     </gnc-act:short-description>
     <gnc-act:long-description>
      小切手帳の収支を合わせるだけであればこれを使ってください。必要になれば、あとから詳細な収益や費用の管理を始めることができます。
@@ -52,7 +52,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>当座預金口座</act:name>
+  <act:name>当座預金</act:name>
   <act:id type="new">ab2dc28552256b8d1ef4fdea4ba45717</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
@@ -60,7 +60,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>当座預金口座</act:description>
+  <act:description>当座預金</act:description>
   <act:parent type="new">d90864ec1d660176244b05a0e43e621a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

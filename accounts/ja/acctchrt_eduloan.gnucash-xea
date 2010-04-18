@@ -4,10 +4,10 @@
       教育ローン 
     </gnc-act:title>
     <gnc-act:short-description>
-      教育ローンと関連する金利の勘定科目
+      教育ローンと関連する利子の勘定科目
     </gnc-act:short-description>
     <gnc-act:long-description>
-    教育住宅ローンを持っている場合はこの勘定科目セットを選びたくなるかもしれません。
+    教育ローンがある場合はこの勘定科目集を選ぶと良いでしょう。
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
