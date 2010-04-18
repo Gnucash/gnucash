@@ -165,7 +165,7 @@ gint gnc_quote_source_num_entries(QuoteSourceType type);
  *
  *  @param name The internal name for this new quote source.
  *
- *  @param supported TRUE is this quote source is supported by F::Q.
+ *  @param supported TRUE if this quote source is supported by F::Q.
  *  Should only be set by the F::Q startup routine.
  *
  *  @return A pointer to the newly created quote source.
@@ -287,8 +287,8 @@ const char *gnc_quote_source_get_old_internal_name (const gnc_quote_source *sour
  *  to get automatic stock quote updates.  E.G. ACME, ACME.US, etc.
  *
  *  @param cusip A string containing the CUSIP code or similar
- *  UNIQUE code for this commodity. The stock ticker is NOT
- *  appropriate as that goes in the mnemonic field.
+ *  UNIQUE code for this commodity like the ISIN. The stock ticker is
+ *  NOT appropriate as that goes in the mnemonic field.
  *
  *  @param fraction The smallest division of this commodity
  *  allowed. I.E. If this is 1, then the commodity must be traded in
@@ -585,7 +585,7 @@ void  gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src);
 /** Set the automatic price quote timezone for the specified
  *  commodity.  This should be a pointer to a null terminated string
  *  of the form "America/New_York", etc.  Legal values can be found in
- *  the known_timezones array in the file dialog-util.c.
+ *  the known_timezones array in the file src/gnome-utils/dialog-commodity.c.
  *
  *  @param cm A pointer to a commodity data structure.
  *
