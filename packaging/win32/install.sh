@@ -394,7 +394,10 @@ function inst_guile() {
 #endif
 EOF
         # Also, for MSVC compiler we need to create an import library
-        pexports $_GUILE_UDIR/bin/libguile.dll > $_GUILE_UDIR/lib/libguile.def
+        if [ x"$(which pexports.exe > /dev/null 2>&1)" != x ]
+        then
+            pexports $_GUILE_UDIR/bin/libguile.dll > $_GUILE_UDIR/lib/libguile.def
+        fi
         ${DLLTOOL} -d $_GUILE_UDIR/lib/libguile.def -D $_GUILE_UDIR/bin/libguile.dll -l $_GUILE_UDIR/lib/libguile.lib
         # Also, for MSVC compiler we need to slightly modify the gc.h header
         GC_H=$_GUILE_UDIR/include/libguile/gc.h
