@@ -394,8 +394,11 @@ function inst_guile() {
 #endif
 EOF
         # Also, for MSVC compiler we need to create an import library
-        pexports $_GUILE_UDIR/bin/libguile.dll > $_GUILE_UDIR/lib/libguile.def
-        ${DLLTOOL} -d $_GUILE_UDIR/lib/libguile.def -D $_GUILE_UDIR/bin/libguile.dll -l $_GUILE_UDIR/lib/libguile.lib
+        if [ x"$(which pexports.exe > /dev/null 2>&1)" != x ]
+        then
+            pexports $_GUILE_UDIR/bin/libguile.dll > $_GUILE_UDIR/lib/libguile.def
+            ${DLLTOOL} -d $_GUILE_UDIR/lib/libguile.def -D $_GUILE_UDIR/bin/libguile.dll -l $_GUILE_UDIR/lib/libguile.lib
+        fi
         # Also, for MSVC compiler we need to slightly modify the gc.h header
         GC_H=$_GUILE_UDIR/include/libguile/gc.h
         grep -v 'extern .*_freelist2;' ${GC_H} > ${GC_H}.tmp
