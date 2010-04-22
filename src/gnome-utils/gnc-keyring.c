@@ -30,10 +30,9 @@
 #include <gnome-keyring.h>
 #endif
 #ifdef HAVE_OSX_KEYCHAIN
-#  if 0
-    /* FIXME The OSX part hasn't been tested yet */
-#include <SecKeychain.h>
-#  endif /* 0 */
+#include <Security/Security.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <Carbon/Carbon.h>
 #endif
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -63,8 +62,6 @@ void gnc_keyring_set_password (const gchar *access_method,
     }
 #endif /* HAVE_GNOME_KEYRING */
 #ifdef HAVE_OSX_KEYCHAIN
-#  if 0
-    /* FIXME The OSX part hasn't been tested yet */
     OSStatus status;
     SecKeychainItemRef *itemRef = NULL;
 
@@ -77,26 +74,25 @@ void gnc_keyring_set_password (const gchar *access_method,
     //       update function instead
     g_set_application_name(PACKAGE);
     status = SecKeychainAddInternetPassword ( NULL, /* keychain */
-             strlen(server), server,              /* servername */
-             strlen(access_method), access_method,/* securitydomain */
-             strlen(*user), *user,                /* acountname */
-             strlen(service), service,            /* path */
-             port,                                /* port */
-             kSecProtocolTypeAny,                 /* protocol */
-             kSecAuthenticationTypeDefault,       /* auth type */
-             strlen(password), password,          /* passworddata */
-             SecKeychainItemRef * itemRef );
+             strlen(server), server,                /* servername */
+             strlen(access_method), access_method,  /* securitydomain */
+             strlen(user), user,                    /* acountname */
+             strlen(service), service,              /* path */
+             port,                                  /* port */
+             kSecProtocolTypeAny,                   /* protocol */
+             kSecAuthenticationTypeDefault,         /* auth type */
+             strlen(password), password,            /* passworddata */
+             itemRef );
 
     if ( status != noErr )
     {
-        CFStringRef resultstring = SecCopyErrorMessageString( status, NULL );
+        CFStringRef osx_resultstring = SecCopyErrorMessageString( status, NULL );
+        const gchar *resultstring = CFStringGetCStringPtr(osx_resultstring,
+                                                    GetApplicationTextEncoding());
         PWARN ( "OS X keychain error: %s", resultstring );
         PWARN ( "The user will be prompted for a password again next time." );
-        CFRelease ( resultstring );
+        CFRelease ( osx_resultstring );
     }
-
-
-#  endif /* 0 */
 #endif /* HAVE_OSX_KEYCHAIN */
 }
 
@@ -116,12 +112,9 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
     GnomeKeyringNetworkPasswordData *found;
 #endif
 #ifdef HAVE_OSX_KEYCHAIN
-#  if 0
-    /* FIXME The OSX part hasn't been tested yet */
     void *password_data;
     UInt32 password_length;
     OSStatus status;
-#  endif /* 0 */
 #endif
 
     g_return_val_if_fail (user != NULL, FALSE);
@@ -148,13 +141,8 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
 
     gnome_keyring_network_password_list_free(found_list);
 #endif /* HAVE_GNOME_KEYRING */
-#ifdef HAVE_OSX_KEYCHAIN
-#  if 0
-    /* FIXME The OSX part hasn't been tested yet */
-    void *password_data;
-    UInt32 password_length;
-    OSStatus status;
 
+#ifdef HAVE_OSX_KEYCHAIN
     /* mysql and postgres aren't valid protocols on Mac OS X.
      * So we use the security domain parameter to allow us to
      * distinguish between these two.
@@ -172,7 +160,7 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
 
     if ( status == noErr )
     {
-        *password = xmalloc((password_length + 1) * sizeof(char));
+        *password = (gchar*)xmalloc(( password_length + 1 ) * sizeof(char));
         strncpy(*password, password_data, (size_t)password_length);
         (*password)[password_length] = '\0';
         password_found = TRUE;
@@ -180,12 +168,12 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
     }
     else
     {
-        CFStringRef resultstring = SecCopyErrorMessageString( status, NULL );
+        CFStringRef osx_resultstring = SecCopyErrorMessageString( status, NULL );
+        const gchar *resultstring = CFStringGetCStringPtr(osx_resultstring,
+                                                    GetApplicationTextEncoding());
         PWARN ( "OS X keychain error: %s", resultstring );
-        CFRelease ( resultstring );
+        CFRelease ( osx_resultstring );
     }
-
-#  endif /* 0 */
 #endif /* HAVE_OSX_KEYCHAIN */
 
     if ( !password_found )
