@@ -22,9 +22,10 @@ exec guile -s $0 "$@"
 (define (generate-currency-c-code form output-port)
   ;; Check for correct number of arguments
   (if (and (list? form)
-	   (eq? 8 (length form)))
+	   (eq? 8 (length form))
+           (list? (list-ref form 0)))
       ;; Assign arguments
-      (let ((fullname (list-ref form 0))
+      (let ((fullname (list-ref (list-ref form 0) 1))
 	    (unitname (list-ref form 1))
 	    (partname (list-ref form 2))
 	    (namespace (list-ref form 3))
@@ -69,13 +70,13 @@ exec guile -s $0 "$@"
 
 	    ;; Sorry, code doubling of the error message, but whatever.
 	    (begin
-	      (display "Bad currency data at form: ")
+	      (display "Bad currency data (wrong column data) at line: ")
 	      (display form)
 	      (newline)
 	      #f)))
 
       (begin
-        (display "Bad currency data at form: ")
+        (display "Bad currency data (wrong number of columns) at line: ")
         (display form)
         (newline)
         #f)))
