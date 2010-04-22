@@ -3320,7 +3320,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="gconf/general/register/show_leaf_account_names">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If checked, only the names of the leaf accounts are displayed in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Cecking this option implies that you use unique leaf names.</property>
+		  <property name="tooltip" translatable="yes">If checked, only the names of the leaf accounts are displayed in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Checking this option implies that you use unique leaf names.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Only display leaf account names</property>
 		  <property name="use_underline">True</property>
