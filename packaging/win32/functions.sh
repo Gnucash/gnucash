@@ -50,35 +50,59 @@ function wpwd() {
 # usage:  smart_wget URL DESTDIR
 function smart_wget() {
     _FILE=`basename $1`
+    # Remove url garbage from filename that would not be removed by wget
+    _UFILE=${_FILE##*=}
     _DLD=`unix_path $2`
 
     # If the file already exists in the download directory ($2)
     # then don't do anything.  But if it does NOT exist then
     # download the file to the tmpdir and then when that completes
     # move it to the dest dir.
-    if [ ! -f $_DLD/$_FILE ] ; then
+    if [ ! -f $_DLD/$_UFILE ] ; then
     # If WGET_RATE is set (in bytes/sec), limit download bandwith
     if [ ! -z "$WGET_RATE" ] ; then
             wget --passive-ftp -c $1 -P $TMP_UDIR --limit-rate=$WGET_RATE
         else
             wget --passive-ftp -c $1 -P $TMP_UDIR
         fi
-    mv $TMP_UDIR/$_FILE $_DLD
+    mv $TMP_UDIR/$_FILE $_DLD/$_UFILE
     fi
-    LAST_FILE=$_DLD/$_FILE
+    LAST_FILE=$_DLD/$_UFILE
 }
 
 # usage:  wget_unpacked URL DOWNLOAD_DIR UNPACK_DIR
 function wget_unpacked() {
     smart_wget $1 $2
-    _UPD=`unix_path $3`
-    echo -n "Extracting ${LAST_FILE##*/} ... "
+    _EXTRACT_UDIR=`unix_path $3`
+    _EXTRACT_SUBDIR=
+    echo -n "Extracting $_UFILE ... "
     case $LAST_FILE in
-        *.zip)     unzip -q -o $LAST_FILE -d $_UPD;;
-        *.tar.gz)  tar -xzpf $LAST_FILE -C $_UPD;;
-        *.tar.bz2) tar -xjpf $LAST_FILE -C $_UPD;;
-        *)         die "Cannot unpack file $LAST_FILE!";;
+        *.zip)
+            unzip -q -o $LAST_FILE -d $_EXTRACT_UDIR
+            _PACK_DIR=$(zipinfo -1 $LAST_FILE '*/*' 2>/dev/null | head -1)
+            ;;
+        *.tar.gz)
+            tar -xzpf $LAST_FILE -C $_EXTRACT_UDIR
+            _PACK_DIR=$(tar -ztf $LAST_FILE 2>/dev/null | head -1)
+            ;;
+        *.tar.bz2)
+            tar -xjpf $LAST_FILE -C $_EXTRACT_UDIR
+            _PACK_DIR=$(tar -jtf $LAST_FILE 2>/dev/null | head -1)
+            ;;
+        *)
+            die "Cannot unpack file $LAST_FILE!"
+            ;;
     esac
+
+    # Get the path where the files were actually unpacked
+    # This can be a subdirectory of the requested directory, if the
+    # tarball or zipfile contained a relative path.
+    _PACK_DIR=$(echo "$_PACK_DIR" | sed 's,^\([^/]*\).*,\1,')
+    if (( ${#_PACK_DIR} > 3 ))    # Skip the bin and lib directories from the test
+    then
+        _EXTRACT_SUBDIR=$(echo $_UFILE | sed "s,^\($_PACK_DIR\).*,/\1,;t;d")
+    fi
+    _EXTRACT_UDIR="$_EXTRACT_UDIR$_EXTRACT_SUBDIR"
     echo "done"
 }
 
