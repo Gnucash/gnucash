@@ -521,6 +521,7 @@ src/report/stylesheets/gncmod-stylesheets.c
 src/report/stylesheets/gnc-plugin-stylesheets.c
 src/report/utility-reports/gncmod-utility-reports.c
 src/tax/us/gncmod-tax-us.c
+src/gnome/gnucash.desktop.in.in
 src/libqof/backend/file/qsf-backend.c
 src/libqof/qof/gnc-date.c
 intl-scm/guile-strings.c
