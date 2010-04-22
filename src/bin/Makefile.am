@@ -38,7 +38,7 @@ configdir = ${GNC_CONFIGDIR}
 config_DATA = environment
 
 if PLATFORM_OSX_QUARTZ
-PRE_RUN = '. @-BIN_DIR-@/gnucash_setup_env'
+PRE_RUN = . ${bindir}/gnucash-setup-env
 PLATFORM_FILES = gnucash-setup-env
 else
 PRE_RUN =
@@ -130,7 +130,8 @@ bin_SCRIPTS = \
 	update-gnucash-gconf \
 	gnucash \
 	gnucash-valgrind \
-	gnucash-gdb
+	gnucash-gdb \
+	${PLATFORM_FILES}
 
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
@@ -143,8 +144,7 @@ EXTRA_DIST = \
 	gnucash-gdb.in \
 	environment.in \
 	environment-win32.in \
-	environment-osx.in \
-	${PLATFORM_FILES}
+	environment-osx.in
 
 ## Gnucash scripts -- real code is in overrides, these just get you there.
 ${gnc_common_scripts}: generate-gnc-script ${top_builddir}/config.status
