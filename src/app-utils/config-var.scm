@@ -68,7 +68,7 @@
 (define (gnc:config-var-value-is-default? var)
   (if (not (gnc:config-var-modified? var))
       #t
-      (let (equal-values? gnc:config-var-equality-func-get var)
+      (let ((equal-values? (gnc:config-var-equality-func-get var)))
         (equal-values? 
          (gnc:config-var-default-value-get var)
          (gnc:config-var-value-get var)))))

@@ -715,15 +715,10 @@
 	  ;; however, this still doesn't seem to get around the
 	  ;; colspan bug... cf. gnc:colspans-are-working-right
 	  (if filename
-	      (let* ((port (open-output-file filename))
-		     (gnc:display-report-list-item
-		      (list doc) port " balance-sheet.scm ")
-		     (close-output-port port)
-		     )
-		)
-	      )
-	  )
-	)
+	      (let* ((port (open-output-file filename)))
+                (gnc:display-report-list-item
+                 (list doc) port " balance-sheet.scm ")
+                (close-output-port port)))))
     
     (gnc:report-finished)
     

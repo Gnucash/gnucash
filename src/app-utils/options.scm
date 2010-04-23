@@ -841,7 +841,7 @@
 
   (define (multichoice-strings p-vals)
     (if (null? p-vals)
-        ()
+        '()
         (cons (vector-ref (car p-vals) 1)
               (cons (vector-ref (car p-vals) 2)
                     (multichoice-strings (cdr p-vals))))))
@@ -927,7 +927,7 @@
 
   (define (radiobutton-strings p-vals)
     (if (null? p-vals)
-        ()
+        '()
         (cons (vector-ref (car p-vals) 1)
               (cons (vector-ref (car p-vals) 2)
                     (radiobutton-strings (cdr p-vals))))))
@@ -992,7 +992,7 @@
 
   (define (list-strings p-vals)
     (if (null? p-vals)
-        ()
+        '()
         (cons (vector-ref (car p-vals) 1)
               (cons (vector-ref (car p-vals) 2)
                     (list-strings (cdr p-vals))))))
