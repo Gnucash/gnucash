@@ -22,10 +22,9 @@ exec guile -s $0 "$@"
 (define (generate-currency-c-code form output-port)
   ;; Check for correct number of arguments
   (if (and (list? form)
-	   (eq? 8 (length form))
-           (list? (list-ref form 0)))
+	   (eq? 8 (length form)))
       ;; Assign arguments
-      (let ((fullname (list-ref (list-ref form 0) 1))
+      (let ((fullname (list-ref form 0))
 	    (unitname (list-ref form 1))
 	    (partname (list-ref form 2))
 	    (namespace (list-ref form 3))
