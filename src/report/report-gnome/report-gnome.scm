@@ -10,8 +10,7 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gnome-utils))
 
-(use-modules (ice-9 slib))
-(require 'printf)
+(use-modules (gnucash printf))
 
 (use-modules (sw_report_gnome))
 

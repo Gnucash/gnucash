@@ -48,7 +48,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
-(require 'printf)
+(use-modules (gnucash printf))
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/tax/de_DE" 0)

@@ -15,13 +15,13 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-(define-module (gnucash main))
+(define-module (gnucash main)
+  #:use-module (gnucash printf))
 
 ;; This is to silence warnings with guile-1.8:
 (if (and (>= (string->number (major-version)) 1) 
          (>= (string->number (minor-version)) 8))
     (default-duplicate-binding-handler 'last))
-(use-modules (ice-9 slib))
 
 (use-modules (gnucash core-utils))
 
@@ -31,9 +31,6 @@
 (use-modules (srfi srfi-8))
 
 (use-modules (gnucash gnc-module))
-
-(use-modules (ice-9 slib))
-(require 'printf)
 
 ;; files we can load from the top-level because they're "well behaved"
 ;; (these should probably be in modules eventually)

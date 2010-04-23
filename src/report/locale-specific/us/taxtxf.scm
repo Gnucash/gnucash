@@ -64,7 +64,7 @@
 (use-modules (gnucash gnc-module))
 (use-modules (sw_gnome_utils)) ;; to get to gnc-error-dialog
 
-(require 'printf)
+(use-modules (gnucash printf))
 
 (gnc:module-load "gnucash/tax/us" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
