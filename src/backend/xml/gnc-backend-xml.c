@@ -169,9 +169,6 @@ gnc_xml_be_get_file_lock (FileBackend *be)
 # ifdef ENOTSUP
                 || errno == ENOTSUP
 # endif
-# ifdef ENOSYS
-                || errno == ENOSYS
-# endif
            )
         {
             be->linkfile = NULL;
