@@ -48,7 +48,7 @@ exec guile -s $0 "$@"
   {
     const char *fullname = ~S;
     gnc_commodity *c = gnc_commodity_new(book,
-					 _(fullname),
+					 CUR_I18N(fullname),
                                          ~S,
                                          ~S,
                                          ~S,

@@ -2340,6 +2340,8 @@ gnc_commodity_table_copy(gnc_commodity_table *dest,
  * gnc_commodity_table_add_default_data
  ********************************************************************/
 
+#define CUR_I18N(String) dgettext ("iso_4217", String)
+
 gboolean
 gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBook *book)
 {
