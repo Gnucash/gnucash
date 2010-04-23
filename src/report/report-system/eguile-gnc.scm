@@ -85,6 +85,7 @@
 
 (use-modules (ice-9 regex))       ; for regular expressions
 (use-modules (ice-9 rdelim))      ; for read-line
+(use-modules (gnucash printf))
 (use-modules (gnucash app-utils)) ; for _
 
 ;; This is needed for displaying error messages -- note that it assumes that

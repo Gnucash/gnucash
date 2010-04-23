@@ -18,6 +18,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 (use-modules (srfi srfi-13))
+(use-modules (gnucash printf))
 
 (define (list-ref-safe list elt)
   (if (> (length list) elt)

@@ -53,6 +53,7 @@
 (define-module (gnucash report standard-reports trial-balance))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (ice-9 slib))
+(use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/report/report-system" 0)

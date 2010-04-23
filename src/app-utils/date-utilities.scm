@@ -20,7 +20,8 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-(use-modules (gnucash core-utils))
+(use-modules (gnucash core-utils)
+             (gnucash printf))
 
 (define gnc:reldate-list '())
 

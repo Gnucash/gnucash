@@ -21,6 +21,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash main))
+(use-modules (gnucash printf))
 (use-modules (sw_report_system))
 
 ;; This hash should contain all the reports available and will be used

@@ -7,6 +7,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash core-utils))
+(use-modules (gnucash printf))
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-13))
 

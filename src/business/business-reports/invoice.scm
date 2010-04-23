@@ -26,6 +26,7 @@
 
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
+(use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
 
 (require 'hash-table)
