@@ -38,11 +38,11 @@ gncpixmap_DATA = \
   stock_split_title.png \
   stock_split_watermark.png
 
-gnclarge256icondir = ${datadir}/icons/hicolor/256x256/apps
-gnclarge256icon_DATA = 256x256/gnucash-icon.png
+gnchuge256icondir = ${datadir}/icons/hicolor/256x256/apps
+gnchuge256icon_DATA = 256x256/gnucash-icon.png
 
-gnclarge128icondir = ${datadir}/icons/hicolor/128x128/apps
-gnclarge128icon_DATA = 128x128/gnucash-icon.png
+gnchuge128icondir = ${datadir}/icons/hicolor/128x128/apps
+gnchuge128icon_DATA = 128x128/gnucash-icon.png
 
 gnclarge96icondir = ${datadir}/icons/hicolor/96x96/apps
 gnclarge96icon_DATA = 96x96/gnucash-icon.png
@@ -125,17 +125,23 @@ update-icon-cache:
 	fi
 endif
 
-EXTRA_DIST = \
-  ${gncpixmap_DATA} \
+ico_files_hr = \
   ${gnchuge256icon_DATA} \
   ${gnchuge128icon_DATA} \
   ${gnclarge96icon_DATA} \
   ${gnclarge64icon_DATA} \
-  ${gnclarge48icon_DATA} \
+  ${gnclarge48icon_DATA}
+
+ico_files_lr = \
   ${gncmediumicon_DATA} \
   ${gncsmalltwfouricon_DATA} \
   ${gncsmalltwtwoicon_DATA} \
-  ${gncextrasmallicon_DATA} \
+  ${gncextrasmallicon_DATA}
+
+EXTRA_DIST = \
+  ${gncpixmap_DATA} \
+  ${ico_files_hr} \
+  ${ico_files_lr} \
   ${gncscalableicon_DATA}
 
 # Only clean up if we're building from SVN
@@ -143,3 +149,9 @@ if BUILDING_FROM_SVN
 clean-local:
 	-rm -rf 256x256 128x128 96x96 64x64 48x48 32x32 24x24 22x22 16x16 scalable
 endif
+
+# Create gnucash-icon.ico
+.PHONY: ico
+ico: ${ico_files_hr} ${ico_files_lr}
+	convert ${ico_files_lr} ${ico_files_hr} tmp.ico; \
+	mv tmp.ico gnucash-icon.ico
