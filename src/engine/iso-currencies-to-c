@@ -2,14 +2,6 @@
 exec guile -s $0 "$@"
 !#
 
-(use-modules (ice-9 slib))
-;; Test for simple-format
-(if (not (defined? 'simple-format))
-    (begin
-      (require 'format)
-      (export simple-format)
-      (define simple-format format)))
-
 (if (< (length (command-line)) 2)
     (begin
       (display "Missing command line argument \"source directory\"")
