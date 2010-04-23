@@ -116,11 +116,11 @@
 (define (template->script)
 
   ;; output text with double quotes escaped, but without the outer
-  ;; enclosing quotes that (simple-format) insists on adding.
+  ;; enclosing quotes that (format) insists on adding.
   ;; (can't use (write) either because that wraps each line of output
   ;; in double quotes)
   (define (display-text t)
-    (let ((esct (simple-format #f "~s" t)))
+    (let ((esct (format #f "~s" t)))
       (display (substring esct 1 (- (string-length esct) 1)))))
 
   ;; display either code or text

@@ -746,7 +746,7 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
   (let ((sources (gnc:fq-check-sources)))
     (if (list? sources)
 	(begin
-      (simple-format #t "Found Finance::Quote version ~A" (car sources))
+      (format #t "Found Finance::Quote version ~A" (car sources))
       (newline)
 	  (gnc:msg "Found Finance::Quote version " (car sources))
 	  (gnc-quote-source-set-fq-installed (cdr sources))))))

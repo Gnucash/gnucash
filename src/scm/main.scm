@@ -82,13 +82,6 @@
 
 ;; various utilities
 
-;; Test for simple-format
-(if (not (defined? 'simple-format))
-    (begin
-      (require 'format)
-      (export simple-format)
-      (define simple-format format)))
-
 (define (gnc:safe-strcmp a b)
   (cond
    (if (and a b)
@@ -153,7 +146,7 @@
 ;;;; Status output functions.
 
 (define (strify items)
-  (string-join (map (lambda (x) (simple-format #f "~A" x)) items) ""))
+  (string-join (map (lambda (x) (format #f "~A" x)) items) ""))
 
 (define (gnc:warn . items)
   (gnc-scm-log-warn (strify items)))

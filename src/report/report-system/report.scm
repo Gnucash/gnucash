@@ -484,12 +484,12 @@
   ;; save them 
   (string-append 
    ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
-   (simple-format #f ";; options for report ~S\n" (gnc:report-name report))
-   (simple-format
+   (format #f ";; options for report ~S\n" (gnc:report-name report))
+   (format
     #f "(let ((options (gnc:report-template-new-options/report-guid ~S ~S)))\n"
     (gnc:report-type report) (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
    (gnc:generate-restore-forms (gnc:report-options report) "options")
-   (simple-format 
+   (format 
     #f "  (gnc:restore-report-by-guid ~S ~S ~S options))\n"
     (gnc:report-id report) (gnc:report-type report) (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))))
 
@@ -514,9 +514,9 @@
 (define (gnc:report-generate-saved-forms-string name type templ-name options embedded-options guid)
   (let ((result (string-append 
    ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
-   (simple-format #f ";; Options for saved report ~S, based on template ~S\n"
+   (format #f ";; Options for saved report ~S, based on template ~S\n"
 		  name type)
-   (simple-format
+   (format
     #f "(let ()\n (define (options-gen)\n  (let ((options (gnc:report-template-new-options/report-guid ~S ~S)))\n"
     type templ-name)
    (gnc:generate-restore-forms options "options")
@@ -524,7 +524,7 @@
        embedded-options
        "")
    "  options))\n"
-   (simple-format 
+   (format 
     #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'report-guid ~S\n  'parent-type ~S\n  'options-generator options-gen\n  'menu-path (list gnc:menuname-custom)\n  'renderer (gnc:report-template-renderer/report-guid ~S ~S)))\n\n"
     name
     (if guid
