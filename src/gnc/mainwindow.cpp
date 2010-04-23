@@ -91,7 +91,7 @@ MainWindow::MainWindow()
     connect(m_undoStack, SIGNAL(cleanChanged(bool)),
             this, SLOT(documentCleanStateChanged(bool)));
 
-    setWindowIcon(QIcon(":/pixmaps/gnucash-icon-32x32.png"));
+    setWindowIcon(QIcon(":/pixmaps/gnucash-icon-64x64.png"));
 
     newFile();
     setUnifiedTitleAndToolBarOnMac(true);

@@ -14,9 +14,8 @@
 	<file>../pixmaps/gnc-split-trans.png</file>
 	<file>../pixmaps/gnc-sx-new.png</file>
 	<file>../pixmaps/gnc-transfer.png</file>
-	<file>../pixmaps/gnucash-icon-16x16.png</file>
-	<file>../pixmaps/gnucash-icon-32x32.png</file>
 	<file>../pixmaps/gnucash-icon-48x48.png</file>
+	<file>../pixmaps/gnucash-icon-64x64.png</file>
 	<file>../pixmaps/gnucash_splash.png</file>
 </qresource>
 </RCC>
