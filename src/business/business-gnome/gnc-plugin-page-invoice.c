@@ -189,12 +189,12 @@ static guint gnc_plugin_page_invoice_n_actions = G_N_ELEMENTS (gnc_plugin_page_i
 
 static GtkRadioActionEntry radio_entries [] =
 {
-    { "SortStandardAction", NULL, N_("_Standard"), NULL, "Keep normal invoice order", BY_STANDARD },
-    { "SortDateAction", NULL, N_("_Date"), NULL, "Sort by date", BY_DATE },
-    { "SortDateEntryAction", NULL, N_("Date of _Entry"), NULL, "Sort by the date of entry", BY_DATE_ENTERED },
-    { "SortQuantityAction", NULL, N_("_Quantity"), NULL, "Sort by quantity", BY_QTY },
-    { "SortPriceAction", NULL, N_("_Price"), NULL, "Sort by price", BY_PRICE },
-    { "SortDescriptionAction", NULL, N_("Descri_ption"), NULL, "Sort by description", BY_DESC },
+    { "SortStandardAction", NULL, N_("_Standard"), NULL, N_("Keep normal invoice order"), BY_STANDARD },
+    { "SortDateAction", NULL, N_("_Date"), NULL, N_("Sort by date"), BY_DATE },
+    { "SortDateEntryAction", NULL, N_("Date of _Entry"), NULL, N_("Sort by the date of entry"), BY_DATE_ENTERED },
+    { "SortQuantityAction", NULL, N_("_Quantity"), NULL, N_("Sort by quantity"), BY_QTY },
+    { "SortPriceAction", NULL, N_("_Price"), NULL, N_("Sort by price"), BY_PRICE },
+    { "SortDescriptionAction", NULL, N_("Descri_ption"), NULL, N_("Sort by description"), BY_DESC },
 };
 static guint n_radio_entries = G_N_ELEMENTS (radio_entries);
 
