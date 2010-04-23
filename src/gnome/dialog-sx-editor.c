@@ -1364,10 +1364,10 @@ schedXact_editor_create_ledger( GncSxEditorDialog *sxed )
     gnc_embedded_window_open_page (sxed->embed_window, sxed->plugin_page);
 
     /* configure... */
-    /* don't use double-line */
+    /* use double-line, so scheduled transaction Notes can be edited */
     gnc_split_register_config(splitreg,
                               splitreg->type, splitreg->style,
-                              FALSE);
+                              TRUE);
     gnc_split_register_set_auto_complete(splitreg, FALSE);
 
     /* don't show present/future divider [by definition, not necessary] */
