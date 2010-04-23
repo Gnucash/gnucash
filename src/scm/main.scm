@@ -83,16 +83,15 @@
 ;; various utilities
 
 (define (gnc:safe-strcmp a b)
-  (cond
-   (if (and a b)
-       (cond
-        ((string<? a b) -1)
-        ((string>? a b) 1)
-        (else 0))
-       (cond
-        (a 1)
-        (b -1)
-        (else 0)))))
+  (if (and a b)
+      (cond
+       ((string<? a b) -1)
+       ((string>? a b) 1)
+       (else 0))
+      (cond
+       (a 1)
+       (b -1)
+       (else 0))))
 
 (if (not (defined? 'hash-fold))
     (define (hash-fold proc init table)
