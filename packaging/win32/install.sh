@@ -1171,19 +1171,21 @@ function inst_libdbi() {
         mkdir -p $_MYSQL_LIB_UDIR
         assert_one_dir $TMP_UDIR/mysql*
         cp -r $TMP_UDIR/mysql*/* $_MYSQL_LIB_UDIR
-        mv $TMP_UDIR/mysql*/include $_MYSQL_LIB_UDIR/include/mysql
-		cd $_MYSQL_LIB_UDIR/lib
-		${DLLTOOL} --input-def $LIBMYSQL_DEF --dllname libmysql.dll --output-lib libmysqlclient.a -k
+        cp -r $TMP_UDIR/mysql*/include $_MYSQL_LIB_UDIR/include/mysql
+        rm -rf ${TMP_UDIR}/mysql*
+        qpushd $_MYSQL_LIB_UDIR/lib
+        ${DLLTOOL} --input-def $LIBMYSQL_DEF --dllname libmysql.dll --output-lib libmysqlclient.a -k
         test -f ${_MYSQL_LIB_UDIR}/lib/libmysql.dll || die "mysql not installed correctly - libmysql.dll"
         test -f ${_MYSQL_LIB_UDIR}/lib/libmysqlclient.a || die "mysql not installed correctly - libmysqlclient.a"
-        rm -rf ${TMP_UDIR}/mysql*
+        qpopd
     fi
     if test -f ${_PGSQL_UDIR}/lib/libpq.dll
     then
         echo "PGSQL library already installed.  skipping."
     else
         wget_unpacked $PGSQL_LIB_URL $DOWNLOAD_DIR $TMP_DIR
-        mv $TMP_UDIR/pgsql* $PGSQL_DIR
+        cp -r $TMP_UDIR/pgsql* $_PGSQL_UDIR
+        rm -rf ${TMP_UDIR}/pgsql*
         test -f ${_PGSQL_UDIR}/lib/libpq.dll || die "libpq not installed correctly"
     fi
     if test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll
