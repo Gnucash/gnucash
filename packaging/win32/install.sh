@@ -1363,7 +1363,7 @@ function inst_gnucash() {
             --enable-debug \
             --enable-schemas-install=no \
             --enable-dbi \
-            --with-dbi-dbd-dir=${_LIBDBI_DRIVERS_UDIR}/lib/dbd \
+            --with-dbi-dbd-dir=$( echo ${_LIBDBI_DRIVERS_UDIR} | sed 's,^/\([A-Za-z]\)/,\1:/,g' )/lib/dbd \
             ${LIBOFX_OPTIONS} \
             ${AQBANKING_OPTIONS} \
             --enable-binreloc \
@@ -1409,16 +1409,6 @@ function make_install() {
         [ "$param" = "skip_schemas" ] && _skip_schemas=1
     done
 
-    if [ -z $_skip_scripts ]; then
-        # Try to fix the paths in the environment config file
-        qpushd $_BUILD_UDIR/src/bin
-            rm environment
-            make \
-                bindir="${_INSTALL_UDIR}/bin;${_INSTALL_UDIR}/lib;${_INSTALL_UDIR}/lib/gnucash;${_GNUTLS_UDIR}/bin;${_GMP_UDIR}/bin;${_GOFFICE_UDIR}/bin;${_LIBGSF_UDIR}/bin;${_PCRE_UDIR}/bin;${_GNOME_UDIR}/bin;${_GUILE_UDIR}/bin;${_WEBKIT_UDIR}/bin;${_REGEX_UDIR}/bin;${_AUTOTOOLS_UDIR}/bin;${AQBANKING_UPATH};${_LIBOFX_UDIR}/bin;${_OPENSP_UDIR}/bin;${_LIBDBI_UDIR}/bin;${_SQLITE3_UDIR}/bin;${MYSQL_LIB_DIR}/lib;${PGSQL_DIR}/lib;${PGSQL_DIR}/bin" \
-                environment
-        qpopd
-    fi
-    
     make install
 
     qpushd $_INSTALL_UDIR/lib
@@ -1452,16 +1442,35 @@ function make_install() {
 		# the equivalent sections in packaging/win32/gnucash.iss.in, and
 		# src/bin/environment*.in
         qpushd $_INSTALL_UDIR/bin
-            echo "setlocal" > gnucash.cmd
-            echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GNUTLS_DIR}\\bin;${GMP_DIR}\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${WEBKIT_DIR}\\bin;${GNOME_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBDBI_DIR}\\bin;${SQLITE3_DIR}\\bin;${MYSQL_LIB_DIR}\\lib;${PGSQL_DIR}\\lib;${PGSQL_DIR}\\bin;%PATH%" >> gnucash.cmd
-            echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.cmd
-            echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.cmd
-            echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.cmd
-            echo "set LTDL_LIBRARY_PATH=${INSTALL_DIR}\\lib" >> gnucash.cmd
-            echo "set GNC_DBD_DIR=${LIBDBI_DRIVERS_DIR}\\lib\\dbd" >> gnucash.cmd
-			echo "set GNC_STANDARD_REPORTS_DIR=${INSTALL_DIR}\\share\\gnucash\\guile-modules\\gnucash\\report\\standard-reports" >> gnucash.cmd
-            echo "set SCHEME_LIBRARY_PATH=" >> gnucash.cmd
-            echo "start gnucash-bin %*" >> gnucash.cmd
+		cat > gnucash.cmd <<EOF
+@echo off
+setlocal
+set PATH=$INSTALL_DIR\\bin;%PATH%
+set PATH=$INSTALL_DIR\\lib;%PATH%
+set PATH=$INSTALL_DIR\\lib\\gnucash;%PATH%
+set PATH=$GNUTLS_DIR\\bin;%PATH%
+set PATH=$GMP_DIR\\bin;%PATH%
+set PATH=$GOFFICE_DIR\\bin;%PATH%
+set PATH=$LIBGSF_DIR\\bin;%PATH%
+set PATH=$PCRE_DIR\\bin;%PATH%
+set PATH=$GNOME_DIR\\bin;%PATH%
+set PATH=$GUILE_DIR\\bin;%PATH%
+set PATH=$WEBKIT_DIR\\bin;%PATH%
+set PATH=$REGEX_DIR\\bin;%PATH%
+set PATH=$AUTOTOOLS_DIR\\bin;%PATH%
+set PATH=$AQBANKING_PATH;%PATH%
+set PATH=$LIBOFX_DIR\\bin;%PATH%
+set PATH=$OPENSP_DIR\\bin;%PATH%
+set PATH=$LIBDBI_DIR\\bin;%PATH%
+set PATH=$SQLITE3_DIR\\bin;%PATH%
+set PATH=$MYSQL_LIB_DIR\\lib;%PATH%
+set PATH=$PGSQL_DIR\\bin;%PATH%
+set PATH=$PGSQL_DIR\\lib;%PATH%
+
+set LTDL_LIBRARY_PATH=${INSTALL_DIR}\\lib
+
+start gnucash-bin %*
+EOF
         qpopd
     fi
 }
