@@ -155,6 +155,7 @@
               (begin 
                 (push "<html>\n")
                 (push "<head>\n")
+                (push "<meta http-equiv=\"content-type\" content=\"text-html; charset=utf-8\">\n")
 				(if css? 
 				  (if style-text
 				    (push (list "</style>" style-text "<style type=\"text/css\">\n"))))

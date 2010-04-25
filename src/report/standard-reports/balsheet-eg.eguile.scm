@@ -129,6 +129,7 @@
 <!-- The HTML starts here... -->
 <html>
 <head>
+<meta http-equiv="content-type" content="text-html; charset=utf-8">
 <title><?scm:d coyname ?> <?scm:d reportname ?> <?scm:d (gnc-print-date opt-date-tp) ?></title>
 
 <?scm (if css? (begin ?>
