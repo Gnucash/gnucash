@@ -19,8 +19,7 @@
 
 #include <libguile/version.h> /* for SCM_MAJOR_VERSION etc */
 
-/* Backward-compatibility macros for guile-1.6 for functions which
-   were introduced in libguile-1.8.0 */
+/* Give Guile 1.6 and 1.8 a 2.0-like interface */
 #if (SCM_MAJOR_VERSION == 1) && (SCM_MINOR_VERSION <= 6)
 # define scm_is_bool SCM_BOOLP
 # define scm_is_false SCM_FALSEP
@@ -32,9 +31,10 @@
 # define scm_is_true SCM_NFALSEP
 # define scm_is_vector SCM_VECTORP
 # define scm_to_locale_string SCM_STRING_CHARS
-# define scm_i_string_length SCM_STRING_LENGTH
+# define scm_c_string_length SCM_STRING_LENGTH
+#elif (SCM_MAJOR_VERSION == 1) && (SCM_MINOR_VERSION <= 8)
+# define scm_c_string_length scm_i_string_length
 #endif
-
 /* Convenience macros */
 
 #define scm_is_equal(obj1,obj2)	scm_is_true(scm_equal_p(obj1,obj2))

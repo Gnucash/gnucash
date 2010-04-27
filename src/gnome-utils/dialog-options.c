@@ -2266,7 +2266,7 @@ gnc_option_set_ui_value_text (GNCOption *option, gboolean use_default,
     if (scm_is_string(value))
     {
         const gchar *string = scm_to_locale_string(value);
-        gtk_text_buffer_set_text (buffer, string, scm_i_string_length(value));
+        gtk_text_buffer_set_text (buffer, string, scm_c_string_length(value));
         return FALSE;
     }
     else
