@@ -1,11 +1,11 @@
  N_( "Warning!! This is a DEVELOPMENT version of GnuCash. \
 It probably has lots of bugs and unstable features! \
 If you are looking for a stable personal finance application, \
-you should use the latest release of GnuCash @-VERSION-@.")
+you should use the latest release of GnuCash @-GNUCASH_LATEST_STABLE_VERSION-@.")
 
  N_( "The GnuCash online manual has lots of helpful information. \
 If you are upgrading from earlier versions of GnuCash, the section \
-\"What's new in GnuCash @-VERSION-@\" is particularly interesting. You can \
+\"What's new in GnuCash 2.0\" is particularly interesting. You can \
 access the manual under the Help menu.")
 
  N_( "You can easily import your existing financial data from Quicken, \
