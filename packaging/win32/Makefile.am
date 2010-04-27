@@ -8,6 +8,7 @@ EXTRA_DIST = \
   gwenhywfar-3.6.0-patch.diff \
   install.sh \
   install-fq-mods.cmd \
+  libmysql.def \
   libofx-0.8.3-patch.diff \
   opensp-1.5.2-patch.diff \
   pi.sh \
