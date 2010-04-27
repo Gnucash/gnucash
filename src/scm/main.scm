@@ -93,15 +93,18 @@
        (b -1)
        (else 0))))
 
-(if (not (defined? 'hash-fold))
-    (define (hash-fold proc init table)
-      (for-each 
-       (lambda (bin)
-         (for-each 
-          (lambda (elt)
-            (set! init (proc (car elt) (cdr elt) init)))
-          bin))
-       (vector->list table))))
+(cond-expand
+ (guile-2)
+ (else
+  (if (not (defined? 'hash-fold))
+      (define (hash-fold proc init table)
+        (for-each 
+         (lambda (bin)
+           (for-each 
+            (lambda (elt)
+              (set! init (proc (car elt) (cdr elt) init)))
+            bin))
+         (vector->list table))))))
 
 (define (string-join lst joinstr)
   ;; This should avoid a bunch of unnecessary intermediate string-appends.
