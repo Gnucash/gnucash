@@ -162,7 +162,7 @@ qof_log_init_filename(const gchar* log_filename)
         if (fout != NULL && fout != stderr && fout != stdout)
             fclose(fout);
 
-        fname = g_strconcat(log_filename, ".XXXXXX", NULL);
+        fname = g_strconcat(log_filename, ".XXXXXX.log", NULL);
 
         if ((fd = g_mkstemp(fname)) != -1)
         {
@@ -171,6 +171,8 @@ qof_log_init_filename(const gchar* log_filename)
              * still isn't open. So we open normally with the file name and that's it. */
             fout = fopen(fname, "wb");
 #else
+            /* Windows prevents renaming of open files, so the next command silently fails there
+             * No problem, the filename on Winows will simply have the random characters */
             g_rename(fname, log_filename);
             fout = fdopen(fd, "w");
 #endif
