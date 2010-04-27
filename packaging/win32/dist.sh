@@ -21,6 +21,10 @@ function prepare() {
     if [ -x $DIST_DIR ]; then
         die "Please remove ${DIST_DIR} first"
     fi
+    if [ x$AQBANKING_WITH_QT != xyes ]; then
+        die "The aqbanking wizard is required to create the Windows installer.
+Please set AQBANKING_WITH_QT to yes and rerun install.sh first."
+    fi
     _UNZIP_UDIR=`unix_path $UNZIP_DIR`
     _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
     _GUILE_UDIR=`unix_path $GUILE_DIR`
