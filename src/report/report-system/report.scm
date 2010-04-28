@@ -254,7 +254,7 @@
          (gnc:make-multichoice-option 
           gnc:pagename-general gnc:optname-stylesheet "0b"
           (N_ "Select a stylesheet for the report.")
-          (string->symbol (N_ "Default"))
+          (string->symbol (N_ "Default CSS"))
           (map 
            (lambda (ss)
              (vector 
