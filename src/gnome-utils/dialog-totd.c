@@ -80,6 +80,8 @@ gnc_new_tip_number (GtkWidget *widget,
                     gint offset)
 {
     GtkWidget *textview;
+    gchar **tip_components, **tip_args;
+    gchar *tip;
 
     ENTER("widget %p, offset %d", widget, offset);
     current_tip_number += offset;
@@ -90,9 +92,14 @@ gnc_new_tip_number (GtkWidget *widget,
         current_tip_number = 0;
     gnc_gconf_set_int(GCONF_SECTION, KEY_CURRENT_TIP, current_tip_number, NULL);
 
+    tip_components = g_strsplit(tip_list[current_tip_number], "|", 0);
+    tip_args = &tip_components[1];
     textview = gnc_glade_lookup_widget(widget, "tip_textview");
+    tip = g_strdup_printf( _(tip_components[0]), tip_components[1]);
+    g_strfreev(tip_components);
     gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)),
-                             _(tip_list[current_tip_number]), -1);
+                             tip, -1);
+    g_free(tip);
     LEAVE("");
 }
 

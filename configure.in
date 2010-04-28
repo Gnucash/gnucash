@@ -32,7 +32,7 @@ GNUCASH_VERSION_STRING=AC_PACKAGE_VERSION
 GNUCASH_MAJOR_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\1/' ]`
 GNUCASH_MINOR_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\2/' ]`
 GNUCASH_MICRO_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\3/' ]`
-GNUCASH_LATEST_STABLE_VERSION="2.2.9"
+GNUCASH_LATEST_STABLE_SERIES=$GNUCASH_MAJOR_VERSION.$(($GNUCASH_MINOR_VERSION-($GNUCASH_MINOR_VERSION%2)))
 
 # save any user/environment optimization flags before we muck with them in
 # --enable-debug:
@@ -67,7 +67,7 @@ AC_SUBST(GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY)
 AC_SUBST(GNUCASH_MAJOR_VERSION)
 AC_SUBST(GNUCASH_MINOR_VERSION)
 AC_SUBST(GNUCASH_MICRO_VERSION)
-AC_SUBST(GNUCASH_LATEST_STABLE_VERSION)
+AC_SUBST(GNUCASH_LATEST_STABLE_SERIES)
 
 AC_DEFINE_UNQUOTED(GNUCASH_MAJOR_VERSION, $GNUCASH_MAJOR_VERSION,
 	[GnuCash Major version number])
@@ -75,8 +75,8 @@ AC_DEFINE_UNQUOTED(GNUCASH_MINOR_VERSION, $GNUCASH_MINOR_VERSION,
 	[GnuCash Minor version number])
 AC_DEFINE_UNQUOTED(GNUCASH_MICRO_VERSION, $GNUCASH_MICRO_VERSION,
 	[GnuCash Micro version number])
-AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_VERSION, "$GNUCASH_LATEST_STABLE_VERSION",
-	[Most recent stable version of GnuCash])
+AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES",
+	[Most recent stable GnuCash series])
 
 dnl Set of available languages.
 ALL_LINGUAS="ca cs da de el en_GB es_NI es eu fa fi fr he hu it ja ko lt lv_LV nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk vi zh_CN zh_TW"
