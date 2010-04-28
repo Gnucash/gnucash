@@ -54,7 +54,7 @@ qpushd "$(dirname "$0")"
 
 # What flavor of GCC cross-compiler are we building?
 
-TARGET=mingw32
+TARGET=${TARGET:-mingw32}
 
 # What directory will the cross-compiler be built in?
 # This is the directory into which source archives will
@@ -70,13 +70,14 @@ BUILDDIR=`unix_path $TMP_DIR`
 # that only root has write access to, you will need to run this
 # script as root.
 
-PREFIX=`unix_path $MINGW_DIR`
+_PREFIX=`unix_path $MINGW_DIR`
+PREFIX=${PREFIX:-$_PREFIX}
 
 # Purge anything and everything already in the $PREFIX
 #(also known as the destination or installation) directory?
 # Set to "Y" to purge, any other value omits the purge step.
 
-PURGE_DIR="Y"
+PURGE_DIR=${PURGE_DIR:-N}
 
 
 # Set the following to the files from the current MinGW release
@@ -89,20 +90,21 @@ MINGW_URL="http://heanet.dl.sourceforge.net/sourceforge/mingw"
 # GCC_CORE is required; the other components are optional.
 # Set any you don't want to "".  You need binutils,
 # mingw runtime and w32api; do not ever set those to "".
-
-GCC_CORE_ARCHIVE="gcc-core-3.4.5-20060117-1-src.tar.gz"
-GCC_GPP_ARCHIVE="gcc-g++-3.4.5-20060117-1-src.tar.gz"
+# gcc 3.4.5-20060117-3 is the same source of 3.4.5-20060117-2
+# see release notes
+GCC_CORE_ARCHIVE="gcc-core-3.4.5-20060117-2-src.tar.gz"
+GCC_GPP_ARCHIVE="gcc-g++-3.4.5-20060117-2-src.tar.gz"
 GCC_G77_ARCHIVE="" #gcc-g77-3.4.5-20060117-1-src.tar.gz"
 GCC_OBJC_ARCHIVE="" #gcc-objc-3.4.5-20060117-1-src.tar.gz"
 GCC_JAVA_ARCHIVE="" #gcc-java-3.4.5-20060117-1-src.tar.gz"
 GCC_ADA_ARCHIVE=""
 GCC_PATCH=""
 
-BINUTILS_ARCHIVE="binutils-2.16.91-20060119-1-src.tar.gz"
+BINUTILS_ARCHIVE="binutils-2.20.1-src.tar.gz"
 
-MINGW_ARCHIVE="mingw-runtime-3.9.tar.gz"
+MINGW_ARCHIVE="mingwrt-3.15.1-mingw32.tar.gz"
 
-W32API_ARCHIVE="w32api-3.6.tar.gz"
+W32API_ARCHIVE="w32api-3.13-mingw32-dev.tar.gz"
 
 
 # These are the files from the SDL website
