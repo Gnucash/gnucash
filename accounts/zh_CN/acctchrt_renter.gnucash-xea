@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Renter Expenses
+      租房费用
     </gnc-act:title>
     <gnc-act:short-description>
-      Expenses associated with renting a home
+      关于租房的会计科目
     </gnc-act:short-description>
     <gnc-act:long-description>
-    You would want to select this set of accounts if you rent a home or apartment (rent, renter's insurance).
+	如果您在租一个房子或公寓(租金，承租人保险)，您可能希望选择这组会计科目。
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
-  <act:name>根帐户</act:name>
+  <act:name>根会计科目</act:name>
   <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
   <act:type>ROOT</act:type>
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>费用</act:name>
+  <act:name>支出</act:name>
   <act:id type="new">9a2b4520f113372f4e576f5b6dc129c6</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>费用</act:description>
+  <act:description>支出</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -44,14 +44,14 @@
   <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>出租保险</act:name>
+  <act:name>租赁保险</act:name>
   <act:id type="new">a4c93c964b8322d534e35b7054cbda4d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>出租保险</act:description>
+  <act:description>租赁保险</act:description>
   <act:parent type="new">b79b231807a98cd562c46cf0454e9f25</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      A Simple Checkbook
-    </gnc-act:title>
+      一个简单的账本
+	</gnc-act:title>
     <gnc-act:short-description>
-     The minimal set of accounts to use GnuCash.
+     使用 GnuCash 的最小的会计科目。
     </gnc-act:short-description>
     <gnc-act:long-description>
-     Use this if you just want to balance your checkbook.  Later on, you can start tracking income and expenses in more detail if you feel the need.
+	 如果您只是想平衡您的账本那么请使用这组会计科目。以后如果需要，您可以更加详细的跟踪收入和支出。
     </gnc-act:long-description>
 <gnc:account version="2.0.0">
-  <act:name>根帐户</act:name>
+  <act:name>根会计科目</act:name>
   <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
   <act:type>ROOT</act:type>
   <act:commodity-scu>0</act:commodity-scu>
@@ -52,7 +52,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>支票帐户</act:name>
+  <act:name>活期存款</act:name>
   <act:id type="new">ab2dc28552256b8d1ef4fdea4ba45717</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
@@ -60,7 +60,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>支票帐户</act:description>
+  <act:description>活期存款</act:description>
   <act:parent type="new">d90864ec1d660176244b05a0e43e621a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -76,7 +76,7 @@
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>费用</act:name>
+  <act:name>支出</act:name>
   <act:id type="new">3b95fbbcc06ef20d61aa082b84938287</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -84,11 +84,11 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>费用</act:description>
+  <act:description>支出</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Equity</act:name>
+  <act:name>所有者权益</act:name>
   <act:id type="new">b8b72887da1adf889f171923d23efbdd</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
@@ -96,7 +96,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Equity</act:description>
+  <act:description>所有者权益</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
     <slot>
