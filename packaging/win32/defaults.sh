@@ -332,6 +332,7 @@ add_step inst_regex
 add_step inst_readline
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_active_perl
+ add_step inst_mingwutils
 fi
 add_step inst_autotools
 if [ "$AQBANKING3" = "yes" ]; then
@@ -340,7 +341,6 @@ fi
 add_step inst_guile
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_svn
- add_step inst_mingwutils
  if [ "$AQBANKING3" != "yes" ]; then
   add_step inst_openssl
  fi

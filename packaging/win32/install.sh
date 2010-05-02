@@ -1209,8 +1209,11 @@ function inst_libdbi() {
             make install
         qpopd
         qpushd ${_LIBDBI_UDIR}
+        if [ x"$(which pexports.exe > /dev/null 2>&1)" != x ]
+        then
             pexports bin/libdbi-0.dll > lib/libdbi.def
             ${DLLTOOL} -d lib/libdbi.def -D bin/libdbi-0.dll -l lib/libdbi.lib
+        fi
         qpopd
         test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll || die "libdbi not installed correctly"
         rm -rf ${TMP_UDIR}/libdbi-0*
