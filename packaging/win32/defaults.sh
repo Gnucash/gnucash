@@ -34,7 +34,7 @@
 [ "$__SOURCED_DEFAULTS" ] && return
 __SOURCED_DEFAULTS=1
 
-[ -f "custom.sh" ] && . custom.sh || true
+[ -f "./custom.sh" ] && . ./custom.sh || true
 
 set_default GLOBAL_DIR c:\\soft
 set_default TMP_DIR $GLOBAL_DIR\\tmp

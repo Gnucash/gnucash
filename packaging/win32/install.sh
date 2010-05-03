@@ -12,8 +12,8 @@ function qpopd() { popd >/dev/null; }
 function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
 
 qpushd "$(dirname $(unix_path "$0"))"
-. functions.sh
-. defaults.sh
+. ./functions.sh
+. ./defaults.sh
 
 register_env_var ACLOCAL_FLAGS " "
 register_env_var AUTOTOOLS_CPPFLAGS " "
