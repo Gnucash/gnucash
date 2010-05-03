@@ -1316,7 +1316,6 @@ function inst_webkit() {
         echo "webkit already installed.  skipping."
     else
         wget_unpacked $WEBKIT_URL $DOWNLOAD_DIR $WEBKIT_DIR
-ls $WEBKIT_DIR
         quiet ${LD} ${WEBKIT_LIBS} -o $TMP_UDIR/ofile || die "webkit not installed correctly"
     fi
 }
