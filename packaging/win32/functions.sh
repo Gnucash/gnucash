@@ -47,11 +47,11 @@ function wpwd() {
     qpopd
 }
 
-# usage:  smart_wget URL DESTDIR
+# usage:  smart_wget URL DESTDIR [DESTFILE]
 function smart_wget() {
     _FILE=`basename $1`
     # Remove url garbage from filename that would not be removed by wget
-    _UFILE=${_FILE##*=}
+    _UFILE=${3:-${_FILE##*=}}
     _DLD=`unix_path $2`
 
     # If the file already exists in the download directory ($2)
@@ -70,9 +70,9 @@ function smart_wget() {
     LAST_FILE=$_DLD/$_UFILE
 }
 
-# usage:  wget_unpacked URL DOWNLOAD_DIR UNPACK_DIR
+# usage:  wget_unpacked URL DOWNLOAD_DIR UNPACK_DIR [DESTFILE]
 function wget_unpacked() {
-    smart_wget $1 $2
+    smart_wget $1 $2 $4
     _EXTRACT_UDIR=`unix_path $3`
     _EXTRACT_SUBDIR=
     echo -n "Extracting $_UFILE ... "
