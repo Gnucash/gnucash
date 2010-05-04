@@ -75,19 +75,8 @@ set_default CUTECASH_BUILD_DIR $GNUCASH_DIR\\build-cutecash
 
 
 ####
-set_default LD ld
-set_default CC gcc
-set_default DLLTOOL dlltool
-set_default RANLIB ranlib
-
 # For cross-compiling, change this to "yes"
 set_default CROSS_COMPILE "no"
-
-if [ "$CROSS_COMPILE" = yes ]; then
-    # Insert your cross-compiler mingw32 bin-directories here
-    set_default HOST_XCOMPILE "--host=mingw32"
-fi
-####
 
 # If "yes", build without optimizations (-O0) and ease debugging
 set_default DISABLE_OPTIMIZATIONS no
@@ -108,13 +97,74 @@ set_default GNOME_WIN32_DEPS_URL "$GNOME_WIN32_URL/dependencies"
 set_default DTK_URL "$SF_MIRROR/mingw/msysDTK-1.0.1.exe"
 set_default M4_URL "$SF_MIRROR/mingw/m4-1.4.7-MSYS.tar.bz2"
 
-set_default BINUTILS_URL "$SF_MIRROR/mingw/binutils-2.19-mingw32-bin.tar.gz"
-set_default GCC_CORE_URL "$SF_MIRROR/mingw/gcc-core-3.4.5-20060117-3.tar.gz"
-set_default GCC_GPP_URL "$SF_MIRROR/mingw/gcc-g++-3.4.5-20060117-3.tar.gz"
 set_default MINGW_RT_URL "$SF_MIRROR/mingw/mingwrt-3.15.1-mingw32.tar.gz"
 set_default W32API_URL "$SF_MIRROR/mingw/w32api-3.13-mingw32-dev.tar.gz"
 set_default MINGW_MAKE_URL "$SF_MIRROR/mingw/mingw32-make-3.81-20080326-3.tar.gz"
 set_default MINGW_DIR $GLOBAL_DIR\\mingw
+
+if [ "$CROSS_COMPILE" != yes ]; then
+    # Use native toolchain
+    set_default LD ld
+    set_default CC gcc
+    set_default DLLTOOL dlltool
+    set_default RANLIB ranlib
+
+    # For native build on Windows we can use precompiled binaries
+    set_default BINUTILS_URL "$SF_MIRROR/mingw/binutils-2.19-mingw32-bin.tar.gz"
+    set_default GCC_CORE_URL "$SF_MIRROR/mingw/gcc-core-3.4.5-20060117-3.tar.gz"
+    set_default GCC_GPP_URL "$SF_MIRROR/mingw/gcc-g++-3.4.5-20060117-3.tar.gz"
+else
+    # What flavor of GCC cross-compiler are we building?
+    set_default TARGET "mingw32"
+
+    # Insert your cross-compiler mingw32 bin-directories here
+    set_default HOST_XCOMPILE "--host=$TARGET"
+
+    # Where does the cross-compiler go?
+    # This should be the directory into which your cross-compiler
+    # will be installed.  Remember that if you set this to a directory
+    # that only root has write access to, you will need to run this
+    # script as root.
+    set_default PREFIX `unix_path $MINGW_DIR`
+
+    # Use native toolchain
+    set_default LD $TARGET-ld
+    set_default CC $TARGET-gcc
+    set_default DLLTOOL $TARGET-dlltool
+    set_default RANLIB $TARGET-ranlib
+
+    # For cross compilation we need to build our own toolchain
+    set_default BINUTILS_SRC_URL "$SF_MIRROR/mingw/binutils-2.20.1-src.tar.gz"
+    set_default GCC_CORE_SRC_URL "$SF_MIRROR/mingw/gcc-core-3.4.5-20060117-2-src.tar.gz"
+    set_default GCC_GPP_SRC_URL "$SF_MIRROR/mingw/gcc-g++-3.4.5-20060117-2-src.tar.gz"
+    # Not required for GnuCash
+    set_default GCC_G77_SRC_URL "" #"$SF_MIRROR/mingw/gcc-g77-3.4.5-20060117-2-src.tar.gz"
+    set_default GCC_OBJC_SRC_URL "" #"$SF_MIRROR/mingw/gcc-objc-3.4.5-20060117-2-src.tar.gz"
+    set_default GCC_JAVA_SRC_URL "" #"$SF_MIRROR/mingw/gcc-java-3.4.5-20060117-2-src.tar.gz"
+    set_default GCC_ADA_SRC_URL "" #"$SF_MIRROR/mingw/gcc-ada-3.4.5-20060117-2-src.tar.gz"
+
+    # What directory will the cross-compiler be built in?
+    # This is the directory into which source archives will
+    # be downloaded, expanded, compiled, etc.  You need to
+    # have write-access to this directory.  If you leave it
+    # blank, it defaults to the current directory.
+    set_default XC_BUILD_DIR `unix_path $TMP_DIR`
+
+    # Purge anything and everything already in the $PREFIX
+    #(also known as the destination or installation) directory?
+    # Set to "yes" to purge, any other value omits the purge step.
+    set_default PURGE_DIR "no"
+
+    # If you wish to apply a patch to GCC, put it in the SRC_DIR
+    # and add its filename here.
+    set_default GCC_PATCH ""
+
+    # These are the files from the SDL website
+    # These are optional, set them to "" if you don't want them
+    set_default SDL_URL "" #http://www.libsdl.org/extras/win32/common"
+    set_default OPENGL_URL "" #"$SDL_URL/opengl-devel.tar.gz"
+    set_default DIRECTX_URL "" #$SDL_URL/directx-devel.tar.gz"
+fi
 
 set_default CROSS_GCC_SRC_URL "$SF_MIRROR/mingw/gcc-4.4.0-src.tar.bz2"
 set_default CROSS_GCC_SRC2_URL "$SF_MIRROR/mingw/gcc-4.4.0-mingw32-src-2.tar.gz"

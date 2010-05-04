@@ -1,8 +1,12 @@
 These scripts try to download and install a Windows/mingw32 build
-environment for GnuCash on Windows. 
+environment for GnuCash on Windows.
 
-For cross-compiling the windows executable on Linux, see the lower
-section of this file.
+These scripts support two ways to build a Windows/mingw32 version of GnuCash:
+- directly on a Windows PC
+- via cross-compilation on Linux
+
+1. Build GnuCash directly on a Windows PC
+-----------------------------------------
 
 Before you start with the automated build, you have to complete these
 steps manually. The directory variables are set in `defaults.sh' and optionally
@@ -59,7 +63,8 @@ completed:
 More information is collected on http://wiki.gnucash.org/wiki/Windows
 
 
---------------------------
+2. Cross-compile GnuCash/win32 on a linux PC
+--------------------------------------------
 
 Cross-compiling a Windows/mingw32 executable of GnuCash on a Linux
 host system. (Note: This used to work unchangedly in Sept'2006 but
@@ -67,19 +72,21 @@ probably not any longer.)
 
 These steps need to be performed:
 
-1. Edit the file create_cross_mingw.sh and set the PREFIX= variable to
-   the preferred prefix of the mingw32 gcc/binutils on your
-   Linux. (It is strongly recommended to choose a different prefix
-   than your normal compiler tool chain in order to distinguish
-   your native vs. cross compiler more easily.) Then run the
-   script create_cross_mingw.sh - it will
-   download, compile, and install a mingw32 toolchain.
+1. Look at defaults.sh and create a file named custom.sh to specify adapted
+   directory variables.  If you want verbose output of any script
+   step, add "set -x" to that file. Particularly for cross-compiling,
+   set these variables:
+   * cross_compile: should be set to yes
+   * GLOBAL_DIR: the base directory for all other directory definitions,
+     unless you explicitly override it for some directories.
+   * MINGW_DIR: set this to your preferred prefix of the mingw32 gcc/binutils
+     on your Linux installation.
+     (It is strongly recommended to choose a prefix different
+      from your normal compiler tool chain in order to distinguish
+      your native vs. cross compiler more easily.) 
 
-2. Edit the file defaults.sh: Make a global search-and-replace of
-   '\\' into '/' so that all directories are specified in unix
-   conventions. Set the variable cross_compile to "yes". Then
-   adjust the directories in defaults.sh according to your
-   preferred installation, especially $GLOBAL_DIR.
+2. Then run the script create_cross_mingw.sh - it will
+   download, compile, and install a mingw32 tool chain.
 
 3. Download a binary windows packages for "guile" e.g. from
    http://www.tu-harburg.de/~et2cs/gnc/ and unpack it into the
@@ -87,7 +94,7 @@ These steps need to be performed:
    the build system for guile doesn't support cross-compiling.)
 
 4. Call install.sh, which will read the directory settings from
-   defaults.sh. It should download, compile, and install everything
+   defaults.sh/custom.sh. It should download, compile, and install everything
    automatically. Eventually the windows gnucash is installed into
    $GNUCASH_DIR. 
 

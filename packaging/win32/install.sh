@@ -153,7 +153,6 @@ function inst_mingw() {
     setup MinGW
     _MINGW_UDIR=`unix_path $MINGW_DIR`
     _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
-    [ "$CROSS_COMPILE" = "yes" ] && add_to_env $_MINGW_UDIR/mingw32/bin PATH
     [ "$CROSS_COMPILE" = "yes" ] && add_to_env $_MINGW_UDIR/bin PATH
 
     if quiet test_for_mingw
@@ -272,7 +271,8 @@ function inst_autotools() {
         quiet autoconf --help && quiet automake --help || die "autoconf/automake not installed correctly"
         rm -rf ${TMP_UDIR}/autoconf-* ${TMP_UDIR}/automake-*
     fi
-    if quiet libtoolize --help
+    if quiet libtoolize --help && \
+       quiet ${LD} $AUTOTOOLS_LDFLAGS -lltdl -o $TMP_UDIR/ofile
     then
         echo "libtool/libtoolize already installed.  skipping."
     else
@@ -284,7 +284,8 @@ function inst_autotools() {
             make
             make install
         qpopd
-        quiet libtoolize --help || die "libtool/libtoolize not installed correctly"
+        quiet libtoolize --help && \
+        quiet ${LD} $AUTOTOOLS_LDFLAGS -lltdl -o $TMP_UDIR/ofile || die "libtool/libtoolize not installed correctly"
         rm -rf ${TMP_UDIR}/libtool-*
     fi
     [ ! -d $_AUTOTOOLS_UDIR/share/aclocal ] || add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
@@ -649,6 +650,13 @@ EOF
             mv tmp lib/pkgconfig/libgtkhtml-3.14.pc
             rm -rf $TMP_UDIR/gtk-doc-*
         qpopd
+
+        if [ "$CROSS_COMPILE" = "yes" ]; then
+            qpushd $_GNOME_UDIR/lib/pkgconfig
+                perl -pi.bak -e"s!^prefix=.*\$!prefix=$_GNOME_UDIR!" *.pc
+                #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
+            qpopd
+        fi
         wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/pixman-*
         qpushd $TMP_UDIR/pixman-*
@@ -663,12 +671,6 @@ EOF
         quiet gconftool-2 --version &&
         quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgtkhtml-3.14 &&
         quiet intltoolize --version || die "gnome not installed correctly"
-    fi
-    if [ "$CROSS_COMPILE" = "yes" ]; then
-        qpushd $_GNOME_UDIR/lib/pkgconfig
-            perl -pi.bak -e"s!^prefix=.*\$!prefix=$_GNOME_UDIR!" *.pc
-            #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
-        qpopd
     fi
     [ ! -d $_GNOME_UDIR/share/aclocal ] || add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
@@ -1345,20 +1347,21 @@ function inst_gnucash() {
     AQBANKING_UPATH="${_OPENSSL_UDIR}/bin:${_GWENHYWFAR_UDIR}/bin:${_AQBANKING_UDIR}/bin"
     LIBOFX_OPTIONS="--enable-ofx --with-ofx-prefix=${_LIBOFX_UDIR}"
 
+    if [ "$CROSS_COMPILE" = "yes" ]; then
+        # Set these variables manually because of cross-compiling
+        export GUILE_LIBS="${GUILE_LDFLAGS} -lguile -lguile-ltdl"
+        export GUILE_INCS="${GUILE_CPPFLAGS}"
+        export BUILD_GUILE=yes
+        export name_build_guile=/usr/bin/guile-config
+    fi
+
     qpushd $REPOS_DIR
-        if [ "$CROSS_COMPILE" = "yes" ]; then
-            # Set these variables manually because of cross-compiling
-            export GUILE_LIBS="${GUILE_LDFLAGS} -lguile -lguile-ltdl"
-            export GUILE_INCS="${GUILE_CPPFLAGS}"
-            export BUILD_GUILE=yes
-            export name_build_guile=/usr/bin/guile-config
-        fi
         if [ "$BUILD_FROM_TARBALL" != "yes" ]; then
             ./autogen.sh
         fi
     qpopd
 
-    qpushd $BUILD_DIR
+    qpushd $_BUILD_UDIR
         $_REL_REPOS_UDIR/configure ${HOST_XCOMPILE} \
             --prefix=$_INSTALL_WFSDIR \
             --enable-debug \
