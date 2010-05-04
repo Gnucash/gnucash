@@ -81,13 +81,17 @@ function wget_unpacked() {
             unzip -q -o $LAST_FILE -d $_EXTRACT_UDIR
             _PACK_DIR=$(zipinfo -1 $LAST_FILE '*/*' 2>/dev/null | head -1)
             ;;
-        *.tar.gz)
+        *.tar.gz|*.tgz)
             tar -xzpf $LAST_FILE -C $_EXTRACT_UDIR
             _PACK_DIR=$(tar -ztf $LAST_FILE 2>/dev/null | head -1)
             ;;
         *.tar.bz2)
             tar -xjpf $LAST_FILE -C $_EXTRACT_UDIR
             _PACK_DIR=$(tar -jtf $LAST_FILE 2>/dev/null | head -1)
+            ;;
+        *.tar.lzma)
+            lzma -dc $LAST_FILE |tar xpf - -C $_EXTRACT_UDIR
+            _PACK_DIR=$(lzma -dc $LAST_FILE |tar -tf - 2>/dev/null | head -1)
             ;;
         *)
             die "Cannot unpack file $LAST_FILE!"
@@ -178,6 +182,17 @@ function set_env() {
 
 function assert_one_dir() {
     quiet [ -d "$@" ] || die "Detected multiple directories where only one was expected; please delete all but the latest one: $@"
+}
+
+function fix_pkgconfigprefix() {
+        _PREFIX=$1
+        shift
+        perl -pi.bak -e"s!^prefix=.*\$!prefix=$_PREFIX!" $@
+   qpopd
+}
+
+function dos2unix() {
+       perl -pi.bak -e"s!\\r\\n\$!\\n!" $@
 }
 
 ### Local Variables: ***

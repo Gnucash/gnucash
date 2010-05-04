@@ -116,6 +116,11 @@ set_default W32API_URL "$SF_MIRROR/mingw/w32api-3.13-mingw32-dev.tar.gz"
 set_default MINGW_MAKE_URL "$SF_MIRROR/mingw/mingw32-make-3.81-20080326-3.tar.gz"
 set_default MINGW_DIR $GLOBAL_DIR\\mingw
 
+set_default CROSS_GCC_SRC_URL "$SF_MIRROR/mingw/gcc-4.4.0-src.tar.bz2"
+set_default CROSS_GCC_SRC2_URL "$SF_MIRROR/mingw/gcc-4.4.0-mingw32-src-2.tar.gz"
+#set_default CROSS_GCC_SRC_URL "$SF_MIRROR/mingw/gcc-4.5.0-1-mingw32-src.tar.lzma"
+set_default CROSS_BINUTILS_SRC_URL "$SF_MIRROR/mingw/binutils-2.20.1-src.tar.gz"
+
 set_default UNZIP_URL "$SF_MIRROR/gnuwin32/unzip-5.51-1.exe"
 set_default UNZIP_DIR $TOOLS_DIR
 
@@ -139,6 +144,8 @@ set_default AUTOTOOLS_DIR $GLOBAL_DIR\\autotools
 set_default GMP_URL "ftp://ftp.gnu.org/gnu/gmp/gmp-4.3.1.tar.bz2"
 set_default GMP_ABI 32
 set_default GMP_DIR $GLOBAL_DIR\\gmp
+set_default GMP5_BIN_URL "$SF_MIRROR/mingw/libgmp-5.0.1-1-mingw32-dll-10.tar.lzma"
+set_default GMP5_DEV_URL "$SF_MIRROR/mingw/gmp-5.0.1-1-mingw32-dev.tar.lzma"
 
 set_default GUILE_URL "http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
 set_default SLIB_URL "http://swiss.csail.mit.edu/ftpdir/scm/OLD/slib3a3.zip"
@@ -158,6 +165,7 @@ set_default EXETYPE_DIR $TOOLS_DIR
 
 set_default LIBXSLT_URL "http://xmlsoft.org/sources/win32/libxslt-1.1.26.win32.zip"
 set_default LIBXSLT_LIBXML2_URL "http://xmlsoft.org/sources/win32/libxml2-2.7.6.win32.zip"
+set_default LIBXSLT_SRC_URL "http://xmlsoft.org/sources/libxslt-1.1.26.tar.gz"
 set_default LIBXSLT_DIR $GLOBAL_DIR\\libxslt
 
 set_default LIBXML2_URL "$GNOME_WIN32_DEPS_URL/libxml2_2.7.4-1_win32.zip"
@@ -252,6 +260,18 @@ set_default HH_DIR $GLOBAL_DIR\\hh
 
 set_default WEBKIT_URL "$SF_MIRROR/gnucash/webkit-1.1.90-win32.zip"
 set_default WEBKIT_DIR $GLOBAL_DIR\\webkit-1.1.90
+set_default WEBKIT_SRC_URL "http://www.webkitgtk.org/webkit-1.1.90.tar.gz"
+set_default WEBKIT_PATCH `pwd`/webkit-1.2.0-time.diff
+set_default WEBKIT_PATCH2 `pwd`/webkit-1.2.0-vsaprintf.diff
+set_default ENCHANT_URL "$GNOME_WIN32_URL/dependencies/enchant_1.5.0-2_win32.zip"
+set_default ENCHANT_DEV_URL "$GNOME_WIN32_URL/dependencies/enchant-dev_1.5.0-2_win32.zip"
+#set_default LIBSOUP_URL "$GNOME_WIN32_URL/libsoup/2.4/libsoup-2.4.0.zip"
+#set_default LIBSOUP_DEV_URL "$GNOME_WIN32_URL/libsoup/2.4/libsoup-dev-2.4.0.zip"
+set_default LIBSOUP_SRC_URL "$GNOME_MIRROR/sources/libsoup/2.30/libsoup-2.30.1.tar.bz2"
+set_default ICU4C_URL "http://download.icu-project.org/files/icu4c/4.4.1/icu4c-4_4_1-Win32-msvc9.zip"
+set_default ICU4C_SRC_URL "http://download.icu-project.org/files/icu4c/4.4.1/icu4c-4_4_1-src.tgz"
+set_default ICU4C_DIR $GLOBAL_DIR\\icu-mingw32
+set_default ICU4C_PATCH `pwd`/icu-crossmingw.patch
 
 set_default SVN_URL "http://subversion.tigris.org/files/documents/15/35379/svn-1.4.2-setup.exe"
 set_default SVN_DIR $GLOBAL_DIR\\svn
@@ -289,6 +309,7 @@ set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking
 set_default AQBANKING_WITH_QT yes
 # If set to yes, download Qt from http://www.trolltech.com/developer/downloads/qt/windows,
 # install it and set QTDIR in custom.sh, like "QTDIR=/c/Qt/4.2.3".
+set_default QT_WIN_SRC_URL "ftp://ftp.qt.nokia.com/qt/source/qt-all-opensource-src-4.5.3.zip"
 
 set_default SQLITE3_URL "http://sqlite.org/sqlite-amalgamation-3.6.1.tar.gz"
 set_default SQLITE3_DIR $GLOBAL_DIR\\sqlite3
