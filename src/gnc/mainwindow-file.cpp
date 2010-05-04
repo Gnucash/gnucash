@@ -425,10 +425,6 @@ void MainWindow::loadFile(const QString &fileName)
         }
     }
 
-    if (ERR_QSF_OPEN_NOT_MERGE == io_err)
-    {
-        we_are_in_error = true;
-    }
     /* if the database doesn't exist, ask the user ... */
     else if ((ERR_BACKEND_NO_SUCH_DB == io_err) ||
              (ERR_SQL_DB_TOO_OLD == io_err))
