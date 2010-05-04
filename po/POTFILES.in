@@ -436,9 +436,6 @@ src/import-export/qif/qif-context.c
 src/import-export/qif/qif-file.c
 src/import-export/qif/qif-objects.c
 src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in
-src/libqof/backend/file/qsf-backend.c
-src/libqof/backend/file/qsf-xml.c
-src/libqof/backend/file/qsf-xml-map.c
 src/libqof/qof/gnc-date.c
 src/libqof/qof/gnc-numeric.c
 src/libqof/qof/guid.c

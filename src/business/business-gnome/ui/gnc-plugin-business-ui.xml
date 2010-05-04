@@ -38,14 +38,6 @@
 	<menuitem name="BillsDueReminderOpen" action="BillsDueReminderOpenAction"/>
 
         <placeholder name="BusinessPlaceholderMiddle"/>
-        <separator name="Sep2"/>
-
-	<menu name="ExportMenu" action="ExportMenuAction">
-	  <menuitem name="QSFInvoice" action="QSFInvoiceAction"/>
-	  <menuitem name="QSFCustomer" action="QSFCustomerAction"/>
-	  <menuitem name="QSFVendor" action="QSFVendorAction"/>
-	  <menuitem name="QSFEmployee" action="QSFEmployeeAction"/>
-	</menu>
         <placeholder name="BusinessPlaceholderBottom"/>
 
       </menu>

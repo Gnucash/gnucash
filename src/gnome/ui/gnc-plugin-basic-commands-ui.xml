@@ -17,7 +17,6 @@
       </placeholder>
       <menu name="FileExport" action="FileExportAction">
         <menuitem name="FileExportAccounts" action="FileExportAccountsAction"/>
-        <menuitem name="FileExportChart" action="FileExportChartAction"/>
       </menu>
     </menu>
   
