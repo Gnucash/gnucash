@@ -142,11 +142,10 @@ function inst_dtk() {
 }
 
 function test_for_mingw() {
-    ${CC} --version
-    ${LD} --help
-    if [ "$CROSS_COMPILE" != "yes" ]; then
-        g++ --version
-        mingw32-make --help
+    if [ "$CROSS_COMPILE" == "yes" ]; then
+        ${CC} --version && ${LD} --help
+    else
+        g++ --version && mingw32-make --help
     fi
 }
 
