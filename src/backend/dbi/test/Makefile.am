@@ -56,7 +56,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
-  -I${top_srcdir}/src/backend/qsf \
   -I${top_srcdir}/src/libqof/qof \
   -DTEST_MYSQL_URL=\"${TEST_MYSQL_URL}\" \
   -DTEST_PGSQL_URL=\"${TEST_PGSQL_URL}\" \

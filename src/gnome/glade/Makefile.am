@@ -4,11 +4,9 @@ glade_DATA = \
 	acctperiod.glade \
 	autoclear.glade \
 	budget.glade \
-	chart-export.glade \
 	commodities.glade \
 	fincalc.glade \
 	lots.glade \
-	merge.glade \
 	newuser.glade \
 	price.glade \
 	print.glade \

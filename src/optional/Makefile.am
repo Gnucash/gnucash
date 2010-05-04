@@ -1,2 +1,2 @@
-SUBDIRS = xsl ${PYTHON_DIR}
-DIST_SUBDIRS = xsl python-bindings
+SUBDIRS = ${PYTHON_DIR}
+DIST_SUBDIRS = python-bindings

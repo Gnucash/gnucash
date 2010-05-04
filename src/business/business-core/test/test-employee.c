@@ -33,6 +33,11 @@
 #include "gncInvoiceP.h"
 #include "test-stuff.h"
 
+#include "gnc-backend-xml.h"
+
+#define FILE_NAME "xml:///tmp/testbook.gnucash"
+#define GNC_LIB_NAME "gncmod-backend-xml"
+
 static int count = 0;
 
 static void
@@ -66,12 +71,13 @@ test_employee (void)
     GncEmployee *employee;
 
     session = qof_session_new();
-    qof_session_begin(session, QOF_STDOUT, FALSE, FALSE);
+    qof_session_begin(session, FILE_NAME, FALSE, FALSE);
     book = qof_session_get_book(session);
+    be = qof_book_get_backend (book);
+
     /* The book *must* have a backend to pass the test of the 'dirty' flag */
     /* See the README file for details */
-
-    be = qof_book_get_backend (book);
+    do_test (be != NULL, "xml backend could not be set");
 
     /* Test creation/destruction */
     {
@@ -220,6 +226,7 @@ int
 main (int argc, char **argv)
 {
     qof_init();
+    qof_load_backend_library ("../../../backend/xml/.libs/", GNC_LIB_NAME);
     do_test (gncInvoiceRegister(), "Cannot register GncInvoice");
     do_test (gncJobRegister (),  "Cannot register GncJob");
     do_test (gncCustomerRegister(), "Cannot register GncCustomer");

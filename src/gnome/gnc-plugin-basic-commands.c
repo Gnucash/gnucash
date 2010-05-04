@@ -40,7 +40,6 @@
 #include "gnc-ui-util.h"
 
 #include "dialog-book-close.h"
-#include "dialog-chart-export.h"
 #include "dialog-file-access.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
@@ -48,7 +47,6 @@
 #include "dialog-totd.h"
 #include "druid-acct-period.h"
 #include "druid-loan.h"
-#include "druid-merge.h"
 #include "gnc-engine.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
@@ -72,9 +70,7 @@ static void gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindowAction
 static void gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_file_qsf_import (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_file_chart_export (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, GncMainWindowActionData *data);
@@ -119,25 +115,11 @@ static GtkActionEntry gnc_plugin_actions [] =
         NULL,
         G_CALLBACK (gnc_main_window_cmd_file_save_as)
     },
-#ifdef QSF_IMPORT_WORKS
-    {
-        "FileImportQSFAction", GTK_STOCK_CONVERT,
-        N_("_QSF Import"), NULL,
-        N_("Import a QSF object file"),
-        G_CALLBACK (gnc_main_window_cmd_file_qsf_import)
-    },
-#endif // QSF_IMPORT_WORKS
     {
         "FileExportAccountsAction", GTK_STOCK_CONVERT,
         N_("Export _Accounts"), NULL,
         N_("Export the account hierarchy to a new GnuCash datafile"),
         G_CALLBACK (gnc_main_window_cmd_file_export_accounts)
-    },
-    {
-        "FileExportChartAction", GTK_STOCK_CONVERT,
-        N_("Export _Chart of Accounts to QSF"), NULL,
-        N_("Export the chart of accounts for a date with balances as QSF"),
-        G_CALLBACK (gnc_main_window_cmd_file_chart_export)
     },
 
     /* Edit menu */
@@ -440,80 +422,12 @@ gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *da
 }
 
 static void
-qsf_file_select_ok(GtkWidget *w, GtkFileSelection *fs )
-{
-    QofSession *qsf_session, *first_session;
-    const gchar *filename, *message, *error_message;
-    QofBook *original;
-    QofBackendError err;
-
-    ENTER (" ");
-    qof_event_suspend();
-    filename = gtk_file_selection_get_filename(GTK_FILE_SELECTION (fs));
-    gtk_widget_destroy((GtkWidget*) fs);
-    first_session = gnc_get_current_session();
-    original = qof_session_get_book(first_session);
-    qsf_session = qof_session_new();
-    qof_session_begin(qsf_session, filename, TRUE, FALSE);
-    qof_session_load(qsf_session, NULL);
-    err = qof_session_get_error(qsf_session);
-    if (err != ERR_BACKEND_NO_ERR)
-    {
-        error_message = qof_session_get_error_message(qsf_session);
-        if (!error_message)
-            error_message = "";
-        /* Translators: %d is the error number; %s is the error message as
-           text. */
-        message = g_strdup_printf(_("Error: Loading failed, error code %d - %s."), err, error_message);
-        PERR("%s", message);
-        qof_session_destroy(qsf_session);
-        qof_event_resume();
-        gnc_error_dialog(gnc_ui_get_toplevel(), "%s", message);
-        LEAVE (" ");
-        return;
-    }
-
-    qof_event_resume();
-    gnc_ui_qsf_import_merge_druid(first_session, qsf_session);
-    LEAVE (" ");
-}
-
-static void
-gnc_main_window_cmd_file_qsf_import (GtkAction *action, GncMainWindowActionData *data)
-{
-    GtkWidget *file_select;
-
-    g_return_if_fail (data != NULL);
-
-    gnc_window_set_progressbar_window(GNC_WINDOW(data->window));
-    file_select = gtk_file_selection_new(_("Select the QSF file to import into GnuCash"));
-    g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (file_select)->ok_button),
-                      "clicked", G_CALLBACK (qsf_file_select_ok), (gpointer) file_select);
-    g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (file_select)->cancel_button),
-                              "clicked", G_CALLBACK (gtk_widget_destroy), G_OBJECT (file_select));
-    gtk_widget_show (file_select);
-    gnc_window_set_progressbar_window(NULL);
-}
-
-static void
 gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowActionData *data)
 {
     g_return_if_fail (data != NULL);
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
     gnc_file_export_file (NULL);
-    gnc_window_set_progressbar_window (NULL);
-    /* FIXME GNOME 2 Port (update the title etc.) */
-    /* gnc_refresh_main_window_info (); */
-}
-
-static void
-gnc_main_window_cmd_file_chart_export (GtkAction *action, GncMainWindowActionData *data)
-{
-    g_return_if_fail (data != NULL);
-
-    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-    gnc_main_window_chart_export();
     gnc_window_set_progressbar_window (NULL);
     /* FIXME GNOME 2 Port (update the title etc.) */
     /* gnc_refresh_main_window_info (); */

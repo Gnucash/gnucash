@@ -413,7 +413,6 @@ qof_util_param_as_string(QofInstance *ent, QofParam *param)
     {
         boolean_getter = (gboolean (*)(QofInstance*, QofParam*)) param->param_getfcn;
         param_boolean = boolean_getter(ent, param);
-        /* Boolean values need to be lowercase for QSF validation. */
         if (param_boolean == TRUE)
         {
             param_string = g_strdup("true");

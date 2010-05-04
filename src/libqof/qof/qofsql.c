@@ -655,17 +655,6 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
             LEAVE (" string to guid failed for %s", insert_string);
             return;
         }
-        /*			reference_type = xmlGetProp(node, QSF_OBJECT_TYPE);
-        		if(0 == safe_strcmp(QOF_PARAM_GUID, reference_type))
-        		{
-        			qof_instance_set_guid(qsf_ent, cm_guid);
-        		}
-        		else {
-        			reference = qof_instance_get_reference_from(qsf_ent, cm_param);
-        			if(reference) {
-        				params->referenceList = g_list_append(params->referenceList, reference);
-        			}
-        		}*/
     }
     if (safe_strcmp(param->param_type, QOF_TYPE_INT32) == 0)
     {
@@ -686,7 +675,7 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
 
             book = qof_instance_get_book((QofInstance*)ent);
             backend = qof_book_get_backend(book);
-            qof_backend_set_error(backend, ERR_QSF_OVERFLOW);
+            qof_backend_set_error(backend, ERR_QOF_OVERFLOW);
         }
     }
     if (safe_strcmp(param->param_type, QOF_TYPE_INT64) == 0)
@@ -708,7 +697,7 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
 
             book = qof_instance_get_book((QofInstance*)ent);
             backend = qof_book_get_backend(book);
-            qof_backend_set_error(backend, ERR_QSF_OVERFLOW);
+            qof_backend_set_error(backend, ERR_QOF_OVERFLOW);
         }
     }
     if (safe_strcmp(param->param_type, QOF_TYPE_DOUBLE) == 0)

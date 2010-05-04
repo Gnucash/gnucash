@@ -1011,7 +1011,6 @@ Remember: Use the libdir from the current build environment
 and use JUST the module name without .so - .so is not portable! */
 struct backend_providers backend_list[] =
 {
-    { QOF_LIB_DIR, QSF_BACKEND_LIB },
 #ifdef HAVE_DWI
     { QOF_LIB_DIR, "libqof_backend_dwi"},
 #endif

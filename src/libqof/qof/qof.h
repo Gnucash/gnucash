@@ -97,9 +97,4 @@
 #include "qofbookmerge.h"
 #include "qofreference.h"
 
-/** allow easy logging of QSF debug messages */
-#define QOF_MOD_QSF "qof.backend.qsf"
-/** allow easy loading of the QSF backend */
-#define QSF_BACKEND_LIB "gncqof-backend-qsf"
-
 #endif /* QOF_H_ */

@@ -92,9 +92,6 @@ typedef enum
     GNC_BOOK_XML1_FILE,
     GNC_BOOK_XML2_FILE,
     GNC_BOOK_XML2_FILE_NO_ENCODING,
-    QSF_GNC_OBJECT,
-    QSF_OBJECT,
-    QSF_MAP,
 } QofBookFileType;
 
 /* ================================================================= */

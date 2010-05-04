@@ -550,11 +550,8 @@ if test x$QOF_XML_DIR = x; then
 	QOF_LIBS='${top_builddir}/src/libqof/qof/libgnc-qof.la'
 	QOF_VERSION="internal"
 	QOF_PREFIX="internal"
-	QOF_XML_DIR='${pkgdatadir}/xml/qsf'
 	LIBQOF_LIBRARY_VERSION=1:4:0
-	LIBQOF_BACKEND_QSF_LIBRARY_VERSION=0:3:0
 	AC_SUBST(LIBQOF_LIBRARY_VERSION)
-	AC_SUBST(LIBQOF_BACKEND_QSF_LIBRARY_VERSION)
   	AC_DEFINE(HAVE_LIBQOF,,[We will use the internal QOF code])
 	HAVE_LIBQOF="use_internal"
 fi
@@ -566,7 +563,6 @@ AC_SUBST(QOF_LIBS)
 AS_SCRUB_INCLUDE(QOF_PREFIX)
 AC_SUBST(QOF_PREFIX)
 AC_SUBST(QOF_LIB_DIR)
-AC_SUBST(QOF_XML_DIR)
 
 AC_DEFINE(QOF_DISABLE_DEPRECATED,1, [Don't use deprecated qof functions])
 
@@ -1449,12 +1445,9 @@ AC_CONFIG_FILES(po/Makefile.in
           src/import-export/hbci/test/Makefile
           src/libqof/Makefile
           src/libqof/qof/Makefile
-          src/libqof/backend/Makefile
-          src/libqof/backend/file/Makefile
           src/optional/Makefile
           src/optional/python-bindings/Makefile
           src/optional/python-bindings/tests/Makefile
-          src/optional/xsl/Makefile
           src/pixmaps/Makefile
           src/quotes/Makefile
           src/register/Makefile

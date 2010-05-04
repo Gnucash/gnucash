@@ -14,7 +14,7 @@ GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/src/backend\sql
+  --library-dir    ${top_builddir}/src/backend/sql
 
 TESTS_ENVIRONMENT = \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \

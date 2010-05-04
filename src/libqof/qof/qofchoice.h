@@ -54,8 +54,8 @@ really exist by itself:
 \verbatim
 QOF_TYPE_CHOICE<QOF_X, QOF_Y, QOF_Z>
 \endverbatim
-It holds a single entity of type X, Y, or Z for the purposes of QOF
-or ::QSF. For querying the object it queries as if it's an X, Y, or Z.
+It holds a single entity of type X, Y, or Z for the purposes of QOF.
+For querying the object it queries as if it's an X, Y, or Z.
 
 Each choice type has it's own definition of the allowable objects -
 each of which need to be registered as normal. Objects can declare

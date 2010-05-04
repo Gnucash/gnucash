@@ -6,6 +6,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/business/business-core \
   -I${top_srcdir}/src/libqof/qof \
+  -I${top_srcdir}/src/backend/xml \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS}
 
@@ -15,6 +16,7 @@ LDADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ../libgncmod-business-core.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${top_builddir}/src/backend/xml/libgncmod-backend-xml.la \
   ${GLIB_LIBS}
 
 TESTS = \
@@ -36,7 +38,8 @@ GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/src/business/business-core
+  --library-dir    ${top_builddir}/src/business/business-core \
+  --library-dir    ${top_builddir}/src/backend/xml
 
 TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})

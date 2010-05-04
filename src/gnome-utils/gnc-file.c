@@ -332,79 +332,6 @@ show_session_error (QofBackendError io_error,
         gnc_error_dialog (parent, fmt, newfile);
         break;
 
-        /* QSF additions */
-    case ERR_QSF_INVALID_OBJ:
-        fmt = _("Invalid QSF Object file! The QSF object file %s failed to"
-                " validate against the QSF object schema. The XML structure of"
-                " the file is either not well-formed or contains illegal data.");
-        gnc_error_dialog(parent, fmt, newfile);
-        break;
-
-    case ERR_QSF_INVALID_MAP:
-        fmt = _("Invalid QSF Map file! The QSF map file %s failed to validate"
-                " against the QSF map schema. The XML structure of the file"
-                " is either not well-formed or contains illegal data.");
-        gnc_error_dialog(parent, fmt, newfile);
-        break;
-
-    case ERR_QSF_BAD_QOF_VERSION:
-        fmt = _("The QSF Map file %s was written for a different version of"
-                " QOF.  It may need to be modified to work with your current"
-                " QOF installation.");
-        gnc_error_dialog(parent, fmt, newfile);
-        break;
-
-    case ERR_QSF_BAD_MAP:
-        fmt = _("The selected QSF map %s contains unusable data. "
-                "This is usually because not all the required parameters for "
-                "the defined objects have calculations described in the map.");
-        gnc_error_dialog(parent, fmt, newfile);
-        break;
-
-    case ERR_QSF_BAD_OBJ_GUID:
-        fmt = _("The selected QSF object file %s contains one or more invalid "
-                "GUIDs. The file cannot be processed - please check the source "
-                "of the file and try again.");
-        gnc_error_dialog(parent, fmt, newfile);
-        break;
-
-    case ERR_QSF_NO_MAP:
-        fmt = _("The selected QSF Object file %s requires a map but it was "
-                "not provided.");
-        gnc_error_dialog(parent, fmt, newfile);
-        break;
-
-    case ERR_QSF_WRONG_MAP:
-        fmt = _("Wrong QSF map selected. The selected map %s validates but was "
-                "written for different QOF objects.  The list of objects defined "
-                "in this map does not include all the objects described in "
-                "the current QSF object file.");
-        gnc_error_dialog(parent, fmt, newfile);
-        break;
-
-    case ERR_QSF_MAP_NOT_OBJ:
-        fmt = _("The selected file %s is a QSF map and cannot be "
-                "opened as a QSF object.");
-        gnc_error_dialog(parent, fmt, newfile);
-        break;
-
-    case ERR_QSF_OVERFLOW:
-        fmt = _("When converting XML strings into numbers, an overflow "
-                "has been detected. The QSF object file %s contains invalid "
-                "data in a field that is meant to hold a number.");
-        gnc_error_dialog(parent, fmt, newfile);
-        break;
-
-    case ERR_QSF_OPEN_NOT_MERGE:
-        fmt = _("The QSF object file %s is valid and contains GnuCash "
-                "objects. However, GnuCash cannot open the file directly because "
-                "the data needs to be merged into an existing GnuCash data book. "
-                "Please open a GnuCash file or create a new one, then import "
-                "this QSF object file so that the data can be merged into the "
-                "main data book.");
-        gnc_error_dialog(parent, fmt, newfile);
-        break;
-
     case ERR_FILEIO_FILE_BAD_READ:
         fmt = _("There was an error reading the file. "
                 "Do you want to continue?");
@@ -775,10 +702,6 @@ gnc_post_file_open (const char * filename)
              */
             gnc_file_new ();
         }
-    }
-    if (ERR_QSF_OPEN_NOT_MERGE == io_err)
-    {
-        uh_oh = TRUE;
     }
     /* if the database doesn't exist, ask the user ... */
     else if ((ERR_BACKEND_NO_SUCH_DB == io_err) ||

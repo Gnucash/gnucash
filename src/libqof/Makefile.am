@@ -1,2 +1,2 @@
-SUBDIRS = . qof backend
+SUBDIRS = . qof
 
