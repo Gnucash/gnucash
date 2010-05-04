@@ -121,7 +121,7 @@ function die() {
     echo
     [ "$*" ] && echo "!!! $* !!!"
     echo "!!! ABORTING !!!"
-    exit -1
+#    exit -1
 }
 
 # usage: register_env_var NAME SEPARATOR [DEFAULT]
@@ -181,7 +181,9 @@ function set_env() {
 }
 
 function assert_one_dir() {
-    quiet [ -d "$@" ] || die "Detected multiple directories where only one was expected; please delete all but the latest one: $@"
+    counted=$(ls -d "$@" 2>/dev/null | wc -l)
+    [[ $counted -eq 0 ]] && die "Exactly one directory is required, but detected $counted; please check why $@ wasn't created"
+    [[ $counted -gt 1 ]] && die "Exactly one directory is required, but detected $counted; please delete all but the latest one: $@"
 }
 
 function fix_pkgconfigprefix() {
