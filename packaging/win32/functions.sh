@@ -182,8 +182,12 @@ function set_env() {
 
 function assert_one_dir() {
     counted=$(ls -d "$@" 2>/dev/null | wc -l)
-    [[ $counted -eq 0 ]] && die "Exactly one directory is required, but detected $counted; please check why $@ wasn't created"
-    [[ $counted -gt 1 ]] && die "Exactly one directory is required, but detected $counted; please delete all but the latest one: $@"
+    if [[ $counted -eq 0 ]]; then
+        die "Exactly one directory is required, but detected $counted; please check why $@ wasn't created"
+    fi
+    if [[ $counted -gt 1 ]]; then
+        die "Exactly one directory is required, but detected $counted; please delete all but the latest one: $@"
+    fi
 }
 
 function fix_pkgconfigprefix() {
