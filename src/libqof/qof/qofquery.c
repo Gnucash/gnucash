@@ -1109,7 +1109,7 @@ qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
     search_for = (q1->search_for ? q1->search_for : q2->search_for);
 
     /* Avoid merge surprises if op==QOF_QUERY_AND but q1 is empty.
-     * The goal of this tweak is to all the user to start with
+     * The goal of this tweak is to allow the user to start with
      * an empty q1 and then append to it recursively
      * (and q1 (and q2 (and q3 (and q4 ....))))
      * without bombing out because the append started with an
@@ -1117,7 +1117,8 @@ qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
      * We do essentially the same check in qof_query_add_term()
      * so that the first term added to an empty query doesn't screw up.
      */
-    if ((QOF_QUERY_AND == op) && (0 == qof_query_has_terms (q1)))
+    if ((QOF_QUERY_AND == op) &&
+        ( (0 == qof_query_has_terms (q1)) || (0 == qof_query_has_terms (q2)) ))
     {
         op = QOF_QUERY_OR;
     }
