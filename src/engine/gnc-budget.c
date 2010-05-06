@@ -28,6 +28,7 @@
 #include <glib/gi18n.h>
 #include <time.h>
 #include "qof.h"
+#include "qofbookslots.h"
 
 #include "Account.h"
 
@@ -596,13 +597,38 @@ gnc_budget_get_default (QofBook *book)
 {
     QofCollection *col;
     GncBudget *bgt = NULL;
+    kvp_value *kvp_default_budget;
+    const GncGUID *default_budget_guid;
 
     g_return_val_if_fail(book, NULL);
-    col = qof_book_get_collection(book, GNC_ID_BUDGET);
-    if (qof_collection_count(col) > 0)
-    {
-        qof_collection_foreach(col, just_get_one, &bgt);
+
+    /* See if there is a budget selected in the KVP perferences */
+
+    kvp_default_budget = kvp_frame_get_slot_path(qof_book_get_slots (book),
+						 KVP_OPTION_PATH,
+						 OPTION_SECTION_BUDGETING,
+						 OPTION_NAME_DEFAULT_BUDGET,
+						 NULL);
+    
+    if (kvp_default_budget != NULL ) {
+      default_budget_guid = kvp_value_get_guid(kvp_default_budget);
+      if (default_budget_guid != NULL) {
+	col = qof_book_get_collection(book, GNC_ID_BUDGET);
+	bgt = (GncBudget *) qof_collection_lookup_entity(col, 
+							 default_budget_guid);
+      }
     }
+
+    /* Revert to 2.2.x behavior if there is no defined budget in KVP */
+
+    if ( bgt == NULL ) {
+      col = qof_book_get_collection(book, GNC_ID_BUDGET);
+      if (qof_collection_count(col) > 0)
+	{
+	  qof_collection_foreach(col, just_get_one, &bgt);
+	}
+    }
+
     return bgt;
 }
 

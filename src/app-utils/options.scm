@@ -304,51 +304,95 @@
       #f #f #f #f)))
 
 ;; budget option
-;; TODO: need to double-check this proc
+;; TODO: need to double-check this proc (dates back to r11545 or eariler)
+;;
+;; Always takes/returns a budget
+;; Stores the GUID in the KVP
+;;
 (define (gnc:make-budget-option
          section
          name
          sort-tag
          documentation-string)
 
-  (define (budget->guid budget)
-    (cond ((eq? budget #f) #f)
-          ((string? budget) budget)
-          (else (gncBudgetGetGUID budget))))
-
-  (define (guid->budget budget)
-    (if (string? budget)
-        (gnc-budget-lookup budget (gnc-get-current-book))
-        budget))
-
-  (let* ((default-value (gnc-budget-get-default (gnc-get-current-book)))
-         (value (budget->guid default-value))
-         (option-set #f)
-         (value->string (lambda ()
-                          (string-append "'" (gnc:value->string value))))
+  (let* ((initial-budget (gnc-budget-get-default (gnc-get-current-book)))
+	 (selection-budget initial-budget)
          )
-    (gnc:make-option
-     section name sort-tag 'budget documentation-string
-     ;; the getter should always return a budget pointer
-     (lambda () (guid->budget  ;; getter
-                 (if option-set
-                     value
-                     default-value))
-             )
 
-     (lambda (x) (set! value (budget->guid x))
-             (set! option-set #t)) ;; setter
+    (gnc:make-option
+     section 
+     name 
+     sort-tag 
+     'budget 
+     documentation-string
+
+     ;; getter -- Return a budget pointer
+     (lambda () 
+       selection-budget)
+
+     ;; setter -- takes a budget
+     (lambda (x)
+       (set! selection-budget x))
+
+     ;; default-getter
+     ;; Default now is #f so saving is independent of book-level default
      (lambda ()
-       (guid->budget
-        (gnc-budget-get-default (gnc-get-current-book)))) ;; default-getter
-     (gnc:restore-form-generator value->string) ;; ??
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
+       #f)
+
+     ;; generate-restore-form
+     ;; "return 'ascii represention of a function'
+     ;; that will set the option passed as its lone parameter
+     ;; to the value it was when the picker was first displayed"
+     ;;
+     ;; *This* is used to restore reports, not the KVP -- and is stored as text
+     ;; This does not run in closure with direct access to the option's
+     ;; internal variables, so the setter generally gets used
+     (lambda () 
+       (string-append
+	"(lambda (option) "
+	"(if option ((gnc:option-setter option) "
+	"(gnc-budget-lookup "
+	(gnc:value->string (gncBudgetGetGUID selection-budget))
+	" (gnc-get-current-book)))))"))
+
+     ;; scm->kvp -- commit the change
+     ;; f -- kvp-frame;  p -- key-path
+     (lambda (f p) 
+       (kvp-frame-set-slot-path-gslist 
+	f (gncBudgetGetGUID selection-budget) p))
+
+     ;; kvp->scm -- get the stored value
      (lambda (f p)
        (let ((v (kvp-frame-get-slot-path-gslist f p)))
          (if (and v (string? v))
-             (set! value v))))
-     (lambda (x) (list #t x)) ;; value-validator
-     #f #f #f #f)))
+	     (begin 
+	       (set! selection-budget (gnc-budget-lookup v (gnc-get-current-book)))))))
+
+     ;; value-validator -- returns (#t value) or (#f "failure message")
+     ;; As no user-generated input, this legacy hard-wire is probably ok
+     (lambda (x) 
+       (list #t x))
+
+     ;; option-data
+     #f
+     
+     ;; option-data-fns -- used for multi-pick (this isn't one), or #f
+     ;; Vector of five functions
+     ;; 1) ()      => number of choices
+     ;; 2) (n)     => key for the nth choice
+     ;; 3) (n)     => string for the nth choice
+     ;; 4) (n)     => description for the nth choice
+     ;; 5) (key)   => n (assuming this is the reverse key lookup)
+     #f
+
+     ;; strings-getter -- list of all translatable strings in the option
+     #f
+
+     ;; options-widget-changed-proc -- callback for what it sounds like
+     #f
+     
+     ))) ;; completes gnc:make-budget-option
+
 
 ;; commodity options use a specialized widget for entering commodities
 ;; in the GUI implementation.

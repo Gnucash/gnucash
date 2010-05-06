@@ -18,10 +18,15 @@
             gnc:*company-phone* gnc:*company-fax* gnc:*company-url*
             gnc:*company-email* gnc:*company-contact*)
 
-(define gnc:*book-label* ACCOUNT-OPTIONS-SECTION)
-(define gnc:*trading-accounts* TRADING-ACCOUNTS-OPTION)
+(define gnc:*option-section-accounts* OPTION-SECTION-ACCOUNTS)
+(define gnc:*option-name-trading-accounts* OPTION-NAME-TRADING-ACCOUNTS)
 
-(export gnc:*book-label* gnc:*trading-accounts*)
+(export gnc:*option-section-accounts* gnc:*option-name-trading-accounts*)
+
+(define gnc:*option-section-budgeting* OPTION-SECTION-BUDGETING)
+(define gnc:*option-name-default-budget* OPTION-NAME-DEFAULT-BUDGET)
+
+(export gnc:*option-section-budgeting* gnc:*option-name-default-budget*)
 
 (load-from-path "business-options.scm")
 (load-from-path "business-prefs.scm")

@@ -457,11 +457,11 @@ qof_book_use_trading_accounts (const QofBook *book)
     const char *opt;
     kvp_value *kvp_val;
 
-
     kvp_val = kvp_frame_get_slot_path (qof_book_get_slots (book),
-                                       BOOK_OPTIONS_NAME,
-                                       ACCOUNT_OPTIONS_SECTION,
-                                       TRADING_ACCOUNTS_OPTION, NULL);
+                                       KVP_OPTION_PATH,
+                                       OPTION_SECTION_ACCOUNTS,
+                                       OPTION_NAME_TRADING_ACCOUNTS,
+                                       NULL);
     if (kvp_val == NULL)
         return FALSE;
 

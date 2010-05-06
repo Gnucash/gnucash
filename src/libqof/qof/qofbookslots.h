@@ -19,6 +19,12 @@
  *                                                                  *
 \********************************************************************/
 
+#ifndef SWIG             /* swig doesn't see N_() as a string constant */
+#include <glib/gi18n.h>
+#else
+#define N_(string) string
+#endif
+
 /** @name Book parameter names
 
  * These define the names used for the slots used to store book level parameters.
@@ -26,8 +32,48 @@
  * Scheme code too.
  @{
 */
-#define BOOK_OPTIONS_NAME       "options"
-#define ACCOUNT_OPTIONS_SECTION "Accounts"
-#define TRADING_ACCOUNTS_OPTION "Trading Accounts"
+
+
+/*
+ * See also SET_ENUM() in src/engine/engine.i
+ *
+ * SOME_DEFINED_NAME gets mapped into SOME-DEFINED-NAME by SWIG
+ * http://www.swig.org/Doc1.3/Guile.html#Guile_nn10
+ */
+
+
+/*
+ * gnc:*kvp-option-path* is used to refer to the kvp frame
+ * in which book-level options are stored.
+ * It is tied from this C #define in
+ *   src/app-utils/app-utils.scm
+ * and is extensively used in
+ *   src/app-utils/option-util.c
+ *   src/gnome-utils/gnome-utils.scm
+ *   various reports
+ */
+
+#define KVP_OPTION_PATH  "options"
+
+/*
+ * Various option sections and options within those sections
+ * The untranslated string is used for the key in the KVP
+ * The translated string appears as the tab name and as the
+ * text associated with the option selector on the tab
+ */
+
+#define OPTION_SECTION_ACCOUNTS        N_("Accounts")
+#define OPTION_NAME_TRADING_ACCOUNTS   N_("Use Trading Accounts")
+
+#define OPTION_SECTION_BUDGETING       N_("Budgeting")
+#define OPTION_NAME_DEFAULT_BUDGET     N_("Default Budget")
 
 /** @} */
+
+/* For the grep-happy:
+ * KVP-OPTION-PATH
+ * OPTION-SECTION-ACCOUNTS
+ * OPTION-NAME-TRADING-ACCOUNTS
+ * OPTION-SECTION-BUDGETING
+ * OPTION-NAME-DEFAULT-BUDGET
+ */

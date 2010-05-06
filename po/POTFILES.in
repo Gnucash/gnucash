@@ -521,5 +521,6 @@ src/tax/us/gncmod-tax-us.c
 src/gnome/gnucash.desktop.in.in
 src/libqof/backend/file/qsf-backend.c
 src/libqof/qof/gnc-date.c
+src/libqof/qof/qofbookslots.h
 intl-scm/guile-strings.c
 doc/tip_of_the_day.list.in
