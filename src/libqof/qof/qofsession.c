@@ -51,7 +51,6 @@
 #include "qofbook-p.h"
 #include "qofsession-p.h"
 #include "qofobject-p.h"
-#include "qofla-dir.h" /* for QOF_LIB_DIR */
 
 static GHookList * session_closed_hooks = NULL;
 static QofLogModule log_module = QOF_MOD_SESSION;
@@ -1005,18 +1004,6 @@ struct backend_providers
     const char *filename;
 };
 
-/* All available QOF backends need to be described here
-and the last entry must be two NULL's.
-Remember: Use the libdir from the current build environment
-and use JUST the module name without .so - .so is not portable! */
-struct backend_providers backend_list[] =
-{
-#ifdef HAVE_DWI
-    { QOF_LIB_DIR, "libqof_backend_dwi"},
-#endif
-    { NULL, NULL }
-};
-
 static void
 qof_session_load_backend(QofSession * session, const char * access_method)
 {
@@ -1035,32 +1022,6 @@ qof_session_load_backend(QofSession * session, const char * access_method)
     prov_type = FALSE;
     if (!qof_providers_initialized)
     {
-        libdir_from_env = g_strdup(g_getenv("QOF_LIB_DIR"));
-        for (num = 0; backend_list[num].filename != NULL; num++)
-        {
-            if (libdir_from_env)
-            {
-                if (!(qof_load_backend_library(libdir_from_env,
-                                               backend_list[num].filename)
-                        || qof_load_backend_library(backend_list[num].libdir,
-                                                    backend_list[num].filename)))
-                {
-                    PWARN (" failed to load %s from %s or %s",
-                           backend_list[num].filename, libdir_from_env,
-                           backend_list[num].libdir);
-                }
-            }
-            else
-            {
-                if (!qof_load_backend_library(backend_list[num].libdir,
-                                              backend_list[num].filename))
-                {
-                    PWARN (" failed to load %s from %s",
-                           backend_list[num].filename, backend_list[num].libdir);
-                }
-            }
-        }
-        g_free(libdir_from_env);
         qof_providers_initialized = TRUE;
     }
     p = provider_list;
@@ -1392,11 +1353,6 @@ qof_session_save (QofSession *session,
         qof_session_destroy_backend(session);
         if (!qof_providers_initialized)
         {
-            for (num = 0; backend_list[num].filename != NULL; num++)
-            {
-                qof_load_backend_library(backend_list[num].libdir,
-                                         backend_list[num].filename);
-            }
             qof_providers_initialized = TRUE;
         }
         p = provider_list;
