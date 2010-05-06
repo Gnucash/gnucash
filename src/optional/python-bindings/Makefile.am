@@ -37,7 +37,7 @@ _gnucash_core_c_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la
 
 if BUILDING_FROM_SVN
-gnucash_core.c: $(SWIG_SOURCES)
+gnucash_core.c: $(SWIG_SOURCES) ${top_srcdir}/src/base-typemaps.i $(top_builddir)/config.h
 	swig -python -Wall -Werror \
         -I$(top_srcdir)/src -I$(top_srcdir)/src/engine \
 		-I$(top_srcdir)/src/business/business-core \
