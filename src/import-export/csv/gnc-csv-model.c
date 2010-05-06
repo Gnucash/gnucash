@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <math.h>
 #include <time.h>
 #ifndef HAVE_LOCALTIME_R
 #include "localtime_r.h"
@@ -683,7 +684,8 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
 
         g_free(str_dupe);
 
-        if (abs(value) > 0.00001)
+        /* Change abs to fabs, to fix bug 586805 */
+        if (fabs(value) > 0.00001)
         {
             prop->value = g_new(gnc_numeric, 1);
             *((gnc_numeric*)(prop->value)) =
