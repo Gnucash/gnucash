@@ -845,11 +845,9 @@ gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type)
     return gncInvoiceGetTotalInternal(invoice, TRUE, TRUE, TRUE, type);
 }
 
-const char * gncInvoiceGetType (GncInvoice *invoice)
+const char * gncInvoiceGetTypeFromOwnerType (GncOwnerType type)
 {
-    if (!invoice) return NULL;
-
-    switch (gncInvoiceGetOwnerType (invoice))
+    switch (type)
     {
     case GNC_OWNER_CUSTOMER:
         return _("Invoice");
@@ -860,6 +858,13 @@ const char * gncInvoiceGetType (GncInvoice *invoice)
     default:
         return NULL;
     }
+
+}
+
+const char * gncInvoiceGetType (GncInvoice *invoice)
+{
+    if (!invoice) return NULL;
+    return gncInvoiceGetTypeFromOwnerType (gncInvoiceGetOwnerType (invoice));
 }
 
 gnc_commodity * gncInvoiceGetCurrency (const GncInvoice *invoice)

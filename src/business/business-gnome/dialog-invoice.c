@@ -2552,8 +2552,9 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
             owner_type = gncOwnerGetType(tmp);
         }
 
-        /* Then if there's an actual owner (and not just a type)
-         * then add it to the query and limit the search to this owner
+        /* Then if there's an actual owner add it to the query
+         * and limit the search to this owner
+         * If there's only a type, limit the search to this type.
          */
         if (gncOwnerGetGUID (owner))
         {
@@ -2571,6 +2572,16 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
             gncQueryMergeInPlace (q, q2, QUERY_AND);
             gncQueryDestroy (q2);
             q2 = gncQueryCopy (q);
+        }
+        else
+        {
+            QofQueryPredData *inv_type_pred;
+            GSList *param_list=NULL;
+            inv_type_pred = qof_query_string_predicate(QOF_COMPARE_EQUAL,
+                                                       gncInvoiceGetTypeFromOwnerType(owner_type),
+                                                       QOF_STRING_MATCH_NORMAL, FALSE);
+            param_list = g_slist_prepend (param_list, INVOICE_TYPE);
+            gncQueryAddTerm (q, param_list, inv_type_pred, QOF_QUERY_AND);
         }
     }
 
