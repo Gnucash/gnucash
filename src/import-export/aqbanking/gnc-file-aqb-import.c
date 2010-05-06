@@ -36,12 +36,20 @@
 #include <glib/gstdio.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <gwenhywfar/io_file.h>
-#include <gwenhywfar/io_buffered.h>
-#include <gwenhywfar/iomanager.h>
+
+#include "gnc-ab-utils.h"
+
+#ifdef AQBANKING_VERSION_5_PLUS
+# include <gwenhywfar/syncio_file.h>
+# include <gwenhywfar/syncio_buffered.h>
+typedef GWEN_SYNCIO GWEN_IO_LAYER;
+#else
+# include <gwenhywfar/io_file.h>
+# include <gwenhywfar/io_buffered.h>
+# include <gwenhywfar/iomanager.h>
+#endif
 
 #include "dialog-ab-trans.h"
-#include "gnc-ab-utils.h"
 #include "gnc-file.h"
 #include "gnc-file-aqb-import.h"
 #include "gnc-gwen-gui.h"
@@ -103,7 +111,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
         goto cleanup;
     }
     if (AB_Banking_OnlineInit(api
-#ifdef AQBANKING_VERSION_4_PLUS
+#ifdef AQBANKING_VERSION_4_EXACTLY
                               , 0
 #endif
                              ) != 0)
@@ -166,23 +174,36 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     context = AB_ImExporterContext_new();
 
     /* Wrap file in buffered gwen io */
+#ifdef AQBANKING_VERSION_5_PLUS
+    close(dtaus_fd);
+    io = GWEN_SyncIo_File_new(selected_filename, GWEN_SyncIo_File_CreationMode_OpenExisting);
+#else
     io = GWEN_Io_LayerFile_new(dtaus_fd, -1);
-    dtaus_fd = -1;
     if (GWEN_Io_Manager_RegisterLayer(io))
     {
         g_warning("gnc_file_aqbanking_import: Failed to wrap file");
         goto cleanup;
     }
+#endif
+    dtaus_fd = -1;
 
     /* Run the import */
-    if (AB_ImExporter_Import(importer, context, io, db_profile, 0))
+    if (AB_ImExporter_Import(importer, context, io, db_profile
+#ifndef AQBANKING_VERSION_5_PLUS
+                             , 0
+#endif
+            ))
     {
         g_warning("gnc_file_aqbanking_import: Error on import");
         goto cleanup;
     }
 
     /* Close the file */
+#ifdef AQBANKING_VERSION_5_PLUS
+    GWEN_SyncIo_free(io);
+#else
     GWEN_Io_Layer_free(io);
+#endif
 
     /* Import the results */
     ieci = gnc_ab_import_context(context, AWAIT_TRANSACTIONS,
@@ -214,7 +235,7 @@ cleanup:
     if (gui)
         gnc_GWEN_Gui_release(gui);
     if (online)
-#ifdef AQBANKING_VERSION_4_PLUS
+#ifdef AQBANKING_VERSION_4_EXACTLY
         AB_Banking_OnlineFini(api, 0);
 #else
         AB_Banking_OnlineFini(api);

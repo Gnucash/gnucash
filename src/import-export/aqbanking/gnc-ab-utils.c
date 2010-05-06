@@ -902,7 +902,11 @@ gnc_ab_get_permanent_certs(void)
 
     g_return_val_if_fail(banking, NULL);
 #ifdef AQBANKING_VERSION_4_PLUS
-    rv = AB_Banking_LoadSharedConfig(banking, "certs", &perm_certs, 0);
+    rv = AB_Banking_LoadSharedConfig(banking, "certs", &perm_certs
+# ifndef AQBANKING_VERSION_5_PLUS
+                                     , 0
+# endif
+        );
 #else
     /* FIXME: Add code for older AqBanking versions */
     /* See QBankmanager 0.9.50 in src/kbanking/libs/kbanking.cpp lines 323ff

@@ -174,7 +174,7 @@ dai_destroy_cb(GtkObject *object, gpointer user_data)
 
     if (info->gnc_hash)
     {
-#ifdef AQBANKING_VERSION_4_PLUS
+#ifdef AQBANKING_VERSION_4_EXACTLY
         AB_Banking_OnlineFini(info->api, 0);
 #else
         AB_Banking_OnlineFini(info->api);
@@ -352,7 +352,7 @@ dai_match_page_prepare_cb(GnomeDruidPage *druid_page, GtkWidget *widget,
         info->match_page_prepared = TRUE;
 
     /* Load aqbanking accounts */
-#ifdef AQBANKING_VERSION_4_PLUS
+#ifdef AQBANKING_VERSION_4_EXACTLY
     AB_Banking_OnlineInit(info->api, 0);
 #else
     AB_Banking_OnlineInit(info->api);
@@ -395,7 +395,7 @@ banking_has_accounts(AB_BANKING *banking)
 
     g_return_val_if_fail(banking, FALSE);
 
-#ifdef AQBANKING_VERSION_4_PLUS
+#ifdef AQBANKING_VERSION_4_EXACTLY
     AB_Banking_OnlineInit(banking, 0);
 #else
     AB_Banking_OnlineInit(banking);
@@ -410,7 +410,7 @@ banking_has_accounts(AB_BANKING *banking)
     if (accl)
         AB_Account_List2_free(accl);
 
-#ifdef AQBANKING_VERSION_4_PLUS
+#ifdef AQBANKING_VERSION_4_EXACTLY
     AB_Banking_OnlineFini(banking, 0);
 #else
     AB_Banking_OnlineFini(banking);

@@ -646,7 +646,11 @@ get_available_empty_job(AB_ACCOUNT *ab_acc, GncABTransType trans_type)
         job = AB_JobSingleTransfer_new(ab_acc);
     };
 
-    if (!job || AB_Job_CheckAvailability(job, 0))
+    if (!job || AB_Job_CheckAvailability(job
+#ifndef AQBANKING_VERSION_5_PLUS
+                                         , 0
+#endif
+            ))
     {
         if (job) AB_Job_free(job);
         return NULL;

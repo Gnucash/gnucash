@@ -132,6 +132,9 @@ static gint setpasswordstatus_cb(GWEN_GUI *gwen_gui, const gchar *token,
                                  GWEN_GUI_PASSWORD_STATUS status, guint32 guiid);
 static gint loghook_cb(GWEN_GUI *gwen_gui, const gchar *log_domain,
                        GWEN_LOGGER_LEVEL priority, const gchar *text);
+#ifdef AQBANKING_VERSION_5_PLUS
+typedef GWEN_SYNCIO GWEN_IO_LAYER;
+#endif
 static gint checkcert_cb(GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
                          GWEN_IO_LAYER *io, guint32 guiid);
 

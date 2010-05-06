@@ -100,7 +100,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         return;
     }
     if (AB_Banking_OnlineInit(api
-#ifdef AQBANKING_VERSION_4_PLUS
+#ifdef AQBANKING_VERSION_4_EXACTLY
                               , 0
 #endif
                              ) != 0)
@@ -175,7 +175,11 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         /* Get a job and enqueue it */
         ab_trans = gnc_ab_trans_dialog_get_ab_trans(td);
         job = gnc_ab_trans_dialog_get_job(td);
-        if (!job || AB_Job_CheckAvailability(job, 0))
+        if (!job || AB_Job_CheckAvailability(job
+#ifndef AQBANKING_VERSION_5_PLUS
+                                             , 0
+#endif
+                ))
         {
             if (!gnc_verify_dialog(
                         parent, FALSE, "%s",
@@ -256,7 +260,11 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
             }
 
             /* Finally, execute the job */
-            AB_Banking_ExecuteJobs(api, job_list, context, 0);
+            AB_Banking_ExecuteJobs(api, job_list, context
+#ifndef AQBANKING_VERSION_5_PLUS
+                                   , 0
+#endif
+                );
 
             /* Ignore the return value of AB_Banking_ExecuteJobs(), as the job's
              * status always describes better whether the job was actually
@@ -327,7 +335,7 @@ cleanup:
     if (td)
         gnc_ab_trans_dialog_free(td);
     if (online)
-#ifdef AQBANKING_VERSION_4_PLUS
+#ifdef AQBANKING_VERSION_4_EXACTLY
         AB_Banking_OnlineFini(api, 0);
 #else
         AB_Banking_OnlineFini(api);

@@ -48,6 +48,17 @@ G_BEGIN_DECLS
 # define AQBANKING_VERSION_4_PLUS
 #endif
 
+#if (AQBANKING_VERSION_MAJOR > 4) || \
+  ((AQBANKING_VERSION_MAJOR == 4) && \
+    (AQBANKING_VERSION_MINOR >= 99))
+/** Defined if libaqbanking5 as opposed to libaqbanking4 is being used */
+# define AQBANKING_VERSION_5_PLUS
+#endif
+
+#if defined(AQBANKING_VERSION_4_PLUS) && !defined(AQBANKING_VERSION_5_PLUS)
+# define AQBANKING_VERSION_4_EXACTLY
+#endif
+
 #define GCONF_SECTION_AQBANKING "dialogs/import/hbci"
 #define KEY_FORMAT_SWIFT940 "format_swift_mt940"
 #define KEY_FORMAT_SWIFT942 "format_swift_mt942"

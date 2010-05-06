@@ -64,7 +64,7 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
         return;
     }
     if (AB_Banking_OnlineInit(api
-#ifdef AQBANKING_VERSION_4_PLUS
+#ifdef AQBANKING_VERSION_4_EXACTLY
                               , 0
 #endif
                              ) != 0)
@@ -84,7 +84,11 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
 
     /* Get a GetBalance job and enqueue it */
     job = AB_JobGetBalance_new(ab_acc);
-    if (!job || AB_Job_CheckAvailability(job, 0))
+    if (!job || AB_Job_CheckAvailability(job
+#ifndef AQBANKING_VERSION_5_PLUS
+                                         , 0
+#endif
+            ))
     {
         g_warning("gnc_ab_getbalance: JobGetBalance not available for this "
                   "account");
@@ -105,7 +109,11 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
     context = AB_ImExporterContext_new();
 
     /* Execute the job */
-    if (AB_Banking_ExecuteJobs(api, job_list, context, 0))
+    if (AB_Banking_ExecuteJobs(api, job_list, context
+#ifndef AQBANKING_VERSION_5_PLUS
+                               , 0
+#endif
+            ))
     {
         g_warning("gnc_ab_getbalance: Error on executing job");
         goto cleanup;
@@ -126,7 +134,7 @@ cleanup:
     if (job)
         AB_Job_free(job);
     if (online)
-#ifdef AQBANKING_VERSION_4_PLUS
+#ifdef AQBANKING_VERSION_4_EXACTLY
         AB_Banking_OnlineFini(api, 0);
 #else
         AB_Banking_OnlineFini(api);
