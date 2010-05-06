@@ -14,7 +14,7 @@ exec guile -s $0 "$@"
 (define (generate-currency-c-code form output-port)
   ;; Check for correct number of arguments
   (if (and (list? form)
-	   (eq? 8 (length form)))
+	   (eq? 9 (length form)))
       ;; Assign arguments
       (let ((fullname (list-ref form 0))
 	    (unitname (list-ref form 1))
@@ -23,7 +23,8 @@ exec guile -s $0 "$@"
 	    (mnemonic (list-ref form 4))
 	    (exchange-code (list-ref form 5))
 	    (parts-per-unit (list-ref form 6))
-	    (smallest-fraction (list-ref form 7)))
+	    (smallest-fraction (list-ref form 7))
+	    (local-symbol (list-ref form 8)))
 	;; Check for correct types of arguments
 	(if (and (string? fullname)
 		 (string? unitname)
@@ -32,7 +33,8 @@ exec guile -s $0 "$@"
 		 (string? mnemonic)
 		 (string? exchange-code)
 		 (number? parts-per-unit)
-		 (number? smallest-fraction))
+		 (number? smallest-fraction)
+		 (string? local-symbol))
 
 	    ;; And print the output line
 	    (format
@@ -55,7 +57,7 @@ exec guile -s $0 "$@"
   }\n"
 	     fullname
 	     namespace
-	     mnemonic 
+	     mnemonic
 	     exchange-code
 	     smallest-fraction)
 
