@@ -635,7 +635,6 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
         return;
 
     /* Check that there is at least one Entry */
-    invoice = iw_get_invoice (iw);
     if (gncInvoiceGetEntries (invoice) == NULL)
     {
         gnc_error_dialog (iw_get_window(iw), "%s",
@@ -677,7 +676,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
     acct_commodities = gnc_business_commodities(&(iw->owner));
 
     /* Get the due date and posted account */
-    timespecFromTime_t (&postdate, time(NULL));
+    postdate=gncInvoiceGetDateOpened (invoice);
     ddue = postdate;
     memo = NULL;
 
