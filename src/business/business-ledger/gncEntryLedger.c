@@ -426,7 +426,7 @@ static void create_invoice_query (GncEntryLedger *ledger)
      *          ( Entry->Billable == TRUE AND
      *            Entry->Bill->Is-Posted? == TRUE AND
      *            ( Entry->BillTo == Invoice->parent OR
-     *              Entry->Bill->BillTo == Invoice->parent ) )
+     *              ( Entry->BillTo == NULL AND Entry->Bill->BillTo == Invoice->parent ) ) )
      *           OR
      *           ( Entry->Order->real-parent == Invoice->parent ) )
      * #endif

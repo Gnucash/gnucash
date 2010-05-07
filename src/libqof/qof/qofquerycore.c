@@ -730,7 +730,9 @@ qof_query_guid_predicate (QofGuidMatch options, GList *guid_list)
     query_guid_t pdata;
     GList *node;
 
-    if (NULL == guid_list) return NULL;
+    /* An empty list of guids is only valid when testing for a null GUID value */
+    if (!guid_list)
+        g_return_val_if_fail (options == QOF_GUID_MATCH_NULL, NULL);
 
     pdata = g_new0 (query_guid_def, 1);
     pdata->pd.how = QOF_COMPARE_EQUAL;
