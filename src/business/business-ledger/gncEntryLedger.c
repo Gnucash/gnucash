@@ -523,6 +523,7 @@ void gnc_entry_ledger_set_default_invoice (GncEntryLedger *ledger,
 {
     if (!ledger) return;
     ledger->invoice = invoice;
+    ledger->last_date_entered = gncInvoiceGetDateOpened (invoice);
 
     if (!ledger->query && invoice)
         create_invoice_query (ledger);
