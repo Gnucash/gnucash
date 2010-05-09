@@ -26,7 +26,6 @@
 (define-module (gnucash report standard-reports category-barchart))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
-(use-modules (ice-9 slib))
 (use-modules (ice-9 regex))
 (use-modules (gnucash gnc-module))
 

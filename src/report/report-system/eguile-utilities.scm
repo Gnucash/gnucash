@@ -35,7 +35,7 @@
 (use-modules (gnucash report standard-reports))
 (use-modules (gnucash report business-reports))
 
-(use-modules (ice-9 slib))   ; for 'vicinity' functions
+
 ;(use-modules (srfi srfi-13)) ; for extra string functions
 
 (define-public (fmtnumber n)

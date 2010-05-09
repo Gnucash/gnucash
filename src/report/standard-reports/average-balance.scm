@@ -9,8 +9,6 @@
 
 (define-module (gnucash report standard-reports average-balance))
 (use-modules (srfi srfi-1))
-(use-modules (ice-9 slib))
-
 (use-modules (gnucash main))
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report/report-system" 0)

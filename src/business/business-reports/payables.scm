@@ -25,7 +25,6 @@
 
 (define-module (gnucash report payables))
 
-(use-modules (ice-9 slib))
 (use-modules (gnucash main))
 (use-modules (gnucash gnc-module))
 

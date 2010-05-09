@@ -32,7 +32,6 @@
 (define-module (gnucash report standard-reports general-ledger))
 (export gnc:make-general-ledger-report)
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
-(use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/report/report-system" 0)

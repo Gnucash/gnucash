@@ -6,7 +6,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash report standard-reports))
-(use-modules (ice-9 slib))
 (use-modules (srfi srfi-13))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 

@@ -47,7 +47,6 @@
 (define-module (gnucash report taxtxf-de_DE))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
-(use-modules (ice-9 slib))
 (use-modules (gnucash printf))
 
 (use-modules (gnucash gnc-module))
