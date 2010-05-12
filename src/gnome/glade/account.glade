@@ -1827,7 +1827,7 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 
 Some accounts are marked as "Placeholder". Placeholder accounts are used to create a hierarchy of accounts and normally do not have transactions or opening balances. If you would like an account to be a placeholder account, click the checkbox for that account.
 
-If you would like an account to have an opening balance, click on the row containing the account, then click on the account name and enter the starting balance.
+If you would like an account to have an opening balance, click on the row containing the account, then click on the opening balance field and enter the starting balance.
 
 Note: all accounts except Equity and placeholder accounts may have an opening balance.
 </property>
