@@ -575,7 +575,10 @@
            (lambda (key . args)
              (gnc-error-dialog
               '()
-              (string-append (_ "Could not open the file: ") conf-file-name (_ ". The error is: ") (symbol->string key) " - " (car (caddr args)) "."))
+              (sprintf
+               #f (_ "Could not open the file %s. The error is: %s")
+               conf-file-name
+               (string-append (symbol->string key) " - " (car (caddr args)))))
              #f))))
 
 (define (gnc:report-save-to-savefile report)

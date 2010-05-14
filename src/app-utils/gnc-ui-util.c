@@ -478,7 +478,17 @@ gnc_ui_account_get_tax_info_string (const Account *account)
     {
         if (!tax_related)
             return NULL;
-        else /* tax_related && !code */
+        /* tax_related && !code */
+        else
+            /* Translators: This and the following strings appear on
+             * the account tab if the Tax Info column is displayed,
+             * i.e. if the user wants to record the tax form number
+             * and location on that tax form which corresponds to this
+             * gnucash account. For the US Income Tax support in
+             * gnucash, each tax code that can be assigned to an
+             * account generally corresponds to a specific line number
+             * on a paper form and each form has a unique
+             * identification (e.g., Form 1040, Schedule A). */
             return g_strdup (_("Tax-related but has no tax code"));
     }
     else  /* with tax code */

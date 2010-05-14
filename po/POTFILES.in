@@ -186,7 +186,6 @@ src/engine/SX-ttinfo.c
 src/engine/Transaction.c
 src/engine/TransLog.c
 src/gnc-module/gnc-module.c
-src/gnome/dialog-chart-export.c
 src/gnome/dialog-commodities.c
 src/gnome/dialog-fincalc.c
 src/gnome/dialog-find-transactions.c
@@ -202,17 +201,14 @@ src/gnome/dialog-tax-info.c
 src/gnome/druid-acct-period.c
 src/gnome/druid-hierarchy.c
 src/gnome/druid-loan.c
-src/gnome/druid-merge.c
 src/gnome/druid-stock-split.c
 src/gnome/glade/account.glade
 src/gnome/glade/acctperiod.glade
 src/gnome/glade/autoclear.glade
 src/gnome/glade/budget.glade
-src/gnome/glade/chart-export.glade
 src/gnome/glade/commodities.glade
 src/gnome/glade/fincalc.glade
 src/gnome/glade/lots.glade
-src/gnome/glade/merge.glade
 src/gnome/glade/newuser.glade
 src/gnome/glade/price.glade
 src/gnome/glade/print.glade
@@ -519,7 +515,6 @@ src/report/stylesheets/gnc-plugin-stylesheets.c
 src/report/utility-reports/gncmod-utility-reports.c
 src/tax/us/gncmod-tax-us.c
 src/gnome/gnucash.desktop.in.in
-src/libqof/backend/file/qsf-backend.c
 src/libqof/qof/gnc-date.c
 src/libqof/qof/qofbookslots.h
 intl-scm/guile-strings.c

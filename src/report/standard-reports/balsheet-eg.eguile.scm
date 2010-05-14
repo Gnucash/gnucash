@@ -118,7 +118,7 @@
                   maxdepth 
                   (accrec-depth accrec) 
                   (if (> (accrec-depth accrec) 1) rshift 0) 
-                  (string-append (_ "Total ") (accrec-namelink accrec))
+                  (string-append (_ "Total") " " (accrec-namelink accrec))
                   (format-comm-coll-total (accrec-subtotal-cc accrec))
                   (<= (accrec-depth accrec) 1)        ; total? 
                   (> (accrec-depth accrec) 0)))))))   ; leftoverrule?
@@ -159,7 +159,7 @@
   <table border="0" cellpadding="16"><tr><td> <!-- hack for GTKHTML -->
 <?scm )) ?>
 <h3><?scm:d coyname ?></h3>
-<h2><?scm:d reportname ?> as at <?scm:d (gnc-print-date opt-date-tp) ?></h2>
+<h2><?scm:d reportname ?> <?scm:d (gnc-print-date opt-date-tp) ?></h2>
 
 <?scm 
   ;; This is where the work is done.
@@ -198,8 +198,8 @@
     (balancing-cc 'minusmerge etl-cc #f)
     (accrec-set-namelink! accrec-ie 
                           (if (gnc-numeric-negative-p (accrec-balance-num accrec-ie))
-                            (_ "Retained earnings")
-                            (_ "Retained loss")))
+                            (_ "Retained Earnings")
+                            (_ "Retained Losses")))
     (accrec-set-placeholder?! accrec-ie #t)
     (balancing-cc 'minusmerge (accrec-subtotal-cc accrec-ie) #f)
     (if (and (one-depth-1 accrec-eq) 
@@ -268,7 +268,7 @@
     (if (not (gnc-commodity-collector-allzero? balancing-cc))
         (display-acc-row
           maxdepth 0 0
-          (_ "Imbalance amount")
+          (_ "Imbalance Amount")
           (format-comm-coll-total balancing-cc)
           #t #f))
 

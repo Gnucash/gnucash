@@ -268,7 +268,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; All the options stuff starts here
 
-(define reportname (_ "Balance Sheet"))
+(define reportname (_ "Balance Sheet (eguile)"))
 
 ;; define all option's names and help text so that they are properly
 ;; defined in *one* place.
@@ -351,22 +351,22 @@
                   display-page optname-columns
                   "a" opthelp-columns 'onecol
                   (list (vector 'autocols
-                                (N_ "auto")
+                                (N_ "Auto")
                                 (N_ "Adjust the layout to fit the width of the screen or page"))
                         (vector 'onecol
-                                (N_ "one")
+                                (N_ "One")
                                 (N_ "Display liabilities and equity below assets"))
                         (vector 'twocols
-                                (N_ "two")
+                                (N_ "Two")
                                 (N_ "Display assets on the left, liabilities and equity on the right")))))
     (add-option (gnc:make-multichoice-option
                   display-page optname-neg-format
                   "b" opthelp-neg-format 'negsign
                   (list (vector 'negsign
-                                (N_ "sign")
+                                (N_ "Sign")
                                 (N_ "Prefix negative amounts with a minus sign, e.g. -$10.00"))
                         (vector 'negbrackets
-                                (N_ "brackets")
+                                (N_ "Brackets")
                                 (N_ "Surround negative amounts with brackets, e.g. ($100.00)")))))
     (add-option (gnc:make-string-option display-page optname-font-family "c" 
                                         opthelp-font-family "sans"))
@@ -528,9 +528,9 @@
              (and opt-omit-zb-accts?)
                   ;(> (accrec-depth accrec) 1))
              ;; Reason 1: zero Imbalance a/c
-             (string-prefix? (_ "Imbalance-") (xaccAccountGetName (accrec-account accrec)))
+             (string-prefix? (_ "Imbalance") (xaccAccountGetName (accrec-account accrec)))
              ;; Reason 2: zero Orphan a/c
-             (string-prefix? (_ "Orphan-") (xaccAccountGetName (accrec-account accrec))))))
+             (string-prefix? (_ "Orphan") (xaccAccountGetName (accrec-account accrec))))))
 
     (define (flattened-acc-depth acc)
       ;; Accounts deeper than required get moved to the requested depth
@@ -708,7 +708,7 @@
 
 (gnc:define-report 
   'version 1
-  'name "Balance Sheet (eguile)"
+  'name reportname
   'report-guid "2e3751edeb7544e8a20fd19e9d08bb65"
   'menu-name (N_ "Balance Sheet using eguile-gnc")
   'menu-tip (N_ "Display a balance sheet (using eguile template)")

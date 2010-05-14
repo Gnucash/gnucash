@@ -173,25 +173,25 @@
     <table border="0">
       <?scm (if coyphone (begin ?>
         <tr>
-          <td align="right"><?scm:d (_ "Phone:") ?>&nbsp;</td>
+          <td align="right"><?scm:d (_ "Phone") ?>:&nbsp;</td>
           <td align="right"><?scm:d coyphone ?></td>
         </tr>
       <?scm )) ?>
       <?scm (if coyfax (begin ?>
         <tr>
-          <td align="right"><?scm:d (_ "Fax:") ?>&nbsp;</td>
+          <td align="right"><?scm:d (_ "Fax") ?>:&nbsp;</td>
           <td align="right"><?scm:d coyfax ?></td>
         </tr>
       <?scm )) ?>
       <?scm (if coyemail (begin ?>
         <tr>
-          <td align="right"><?scm:d (_ "Email:") ?>&nbsp;</td>
+          <td align="right"><?scm:d (_ "Email") ?>:&nbsp;</td>
           <td align="right"><?scm:d coyemail ?></td>
         </tr>
       <?scm )) ?>
       <?scm (if coyurl (begin ?>
         <tr>
-          <td align="right"><?scm:d (_ "Website:") ?>&nbsp;</td>
+          <td align="right"><?scm:d (_ "Website") ?>:&nbsp;</td>
           <td align="right"><?scm:d coyurl ?></td>
         </tr>
       <?scm )) ?>
@@ -215,7 +215,7 @@
   <td align="right">
     <table border="0">
       <tr>
-        <td align="right" class="invnum"><big><strong><?scm:d (nbsp (_ "Invoice number:")) ?></strong></big>&nbsp;</td>
+        <td align="right" class="invnum"><big><strong><?scm:d (nbsp (_ "Invoice Number")) ?>:</strong></big>&nbsp;</td>
         <td align="right" class="invnum"><big><strong><?scm:d invoiceid ?></strong></big></td>
       </tr>
       <?scm (if (equal? postdate (cons 0 0)) (begin ?>
@@ -224,11 +224,11 @@
         </tr>
       <?scm ) (begin ?>
         <tr>
-           <td align="right"><?scm:d (nbsp (_ "Invoice date:")) ?>&nbsp;</td>
+           <td align="right"><?scm:d (nbsp (_ "Invoice Date")) ?>:&nbsp;</td>
            <td align="right"><?scm:d (gnc-print-date postdate) ?></td>
         </tr>
         <tr>
-           <td align="right"><?scm:d (nbsp (_ "Due date:")) ?>&nbsp;</td>
+           <td align="right"><?scm:d (nbsp (_ "Due Date")) ?>:&nbsp;</td>
            <td align="right"><?scm:d (gnc-print-date duedate) ?></td>
         </tr>
       <?scm )) ?>
@@ -387,16 +387,15 @@
   ; 'mainline' code: check for a valid invoice, then display the report 
   (if (null? opt-invoice)
     (begin
-      (display (_ "<h2>Tax Invoice</h2>"))
-      (display (_ "<p>No invoice has been selected -- please use the Options menu to select one.")))
+      (display (string-append "<h2>" (_ "Tax Invoice") "</h2>"))
+      (display (string-append "<p>" (_ "No invoice has been selected -- please use the Options menu to select one.") "</p>")))
     (let* ((owner     (gncInvoiceGetOwner  opt-invoice))
            (endowner  (gncOwnerGetEndOwner owner))
            (ownertype (gncOwnerGetType     endowner)))
       (if (not (eqv? ownertype GNC-OWNER-CUSTOMER))
         (begin
-          (display (_ "<h2>Tax Invoice</h2>"))
-          (display (_ "<p>This report is designed for customer (sales) invoices only.\n"))
-          (display (_ "<p>Please use the Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher.")))
+          (display (string-append "<h2>" (_ "Tax Invoice") "</h2>"))
+          (display (string-append "<p>" (_ "This report is designed for customer (sales) invoices only. Please use the Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher.") "</p>")))
         (display-report opt-invoice owner endowner ownertype))))
 
 ?>
