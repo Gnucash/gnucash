@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      配偶退休会计科目
+      配偶退休科目
     </gnc-act:title>
     <gnc-act:short-description>
 	 配偶的退休科目和相关投资科目
     </gnc-act:short-description>
     <gnc-act:long-description>
-	如果您有在配偶名下的投资(股票，债券，投资基金，指数基金，利息，股息)，您可能希望选择这组会计科目。
+	如果您有在配偶名下的投资(股票，债券，投资基金，指数基金，利息，股息)，您可能希望选择这套科目。
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
-  <act:name>根会计科目</act:name>
+  <act:name>根科目</act:name>
   <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
   <act:type>ROOT</act:type>
   <act:commodity-scu>0</act:commodity-scu>

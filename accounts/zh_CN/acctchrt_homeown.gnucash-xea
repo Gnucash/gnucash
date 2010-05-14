@@ -7,10 +7,10 @@
       关于拥有一套房屋的费用
     </gnc-act:short-description>
     <gnc-act:long-description>
-	如果您有一个房屋，您可能希望选择这组会计科目。这组会计科目提供了一组会计科目用于跟踪房屋费用(保险、税、房屋维修)。
+	如果您有一个房屋，您可能希望选择这套科目。这套科目提供了一套用于跟踪房屋费用(保险、税、房屋维修)的科目。
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
-  <act:name>根会计科目</act:name>
+  <act:name>根科目</act:name>
   <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
   <act:type>ROOT</act:type>
   <act:commodity-scu>0</act:commodity-scu>

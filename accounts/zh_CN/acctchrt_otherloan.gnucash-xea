@@ -4,13 +4,13 @@
       其它贷款       
     </gnc-act:title>
     <gnc-act:short-description>
-      跟踪其它贷款和相关利息的会计科目
+      跟踪其它贷款和相关利息的科目
     </gnc-act:short-description>
     <gnc-act:long-description>
-	如果您有一些房屋贷款以外的其它贷款(其它贷款，其它贷款利息)，您可能希望选择这组会计科目。
+	如果您有一些房屋贷款以外的其它贷款(其它贷款，其它贷款利息)，您可能希望选择这套科目。
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
-  <act:name>根会计科目</act:name>
+  <act:name>根科目</act:name>
   <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
   <act:type>ROOT</act:type>
   <act:commodity-scu>0</act:commodity-scu>

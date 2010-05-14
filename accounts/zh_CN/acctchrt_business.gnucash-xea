@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      企业会计科目
+      企业科目
     </gnc-act:title>
     <gnc-act:short-description>
-     关于企业的会计科目
+     关于企业的科目
     </gnc-act:short-description>
     <gnc-act:long-description>
-	 经营一个企业的用户会希望使用这组会计科目而不是其它的。这包含了在大多数情况下您经营一个企业所需要的所有的会计科目，包括应付账、应收账、收入和支出。
+	 经营一个企业的用户会希望使用这套科目。这包含了在大多数情况下您经营一个企业所需要的所有的科目，包括应付账、应收账、收入和支出。
     </gnc-act:long-description>
     <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
 <gnc:account version="2.0.0">
-  <act:name>根会计科目</act:name>
+  <act:name>根科目</act:name>
   <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
   <act:type>ROOT</act:type>
   <act:commodity-scu>0</act:commodity-scu>

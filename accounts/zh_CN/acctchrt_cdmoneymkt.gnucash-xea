@@ -4,13 +4,13 @@
       定期存款和金融市场
     </gnc-act:title>
     <gnc-act:short-description>
-     关于定期存款和金融市场投资的会计科目
+     关于定期存款和金融市场投资的科目
     </gnc-act:short-description>
     <gnc-act:long-description>
-    如果你有定期存款或金融市场会计科目(定期存款、定期存款利息、金融市场、金融市场利息)，您可能想选择这组会计科目。
+    如果你有定期存款或金融市场账户(定期存款、定期存款利息、金融市场、金融市场利息)，您可能想选择这套会计科目。
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
-  <act:name>根会计科目</act:name>
+  <act:name>根科目</act:name>
   <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
   <act:type>ROOT</act:type>
   <act:commodity-scu>0</act:commodity-scu>

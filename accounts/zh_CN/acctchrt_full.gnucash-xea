@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      所有的会计科目        
+      所有的科目        
     </gnc-act:title>
     <gnc-act:short-description>
-     包含所有的默认会计科目。
+     包含所有的默认科目。
     </gnc-act:short-description>
 <gnc:account version="2.0.0">
-  <act:name>根会计科目</act:name>
+  <act:name>根科目</act:name>
   <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
   <act:type>ROOT</act:type>
   <act:commodity-scu>0</act:commodity-scu>
