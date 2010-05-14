@@ -100,6 +100,7 @@ Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README.win32-bin.txt"; DestDir: "{
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-de.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-fr.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-it.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-zh_CN.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
@@ -232,6 +233,7 @@ Name: "it"; MessagesFile: "compiler:Languages\Italian.isl"; InfoAfterFile: "@pre
 Name: "ja"; MessagesFile: "@prefix@\share\@PACKAGE@\Japanese-5-5.1.11.isl"
 Name: "nl"; MessagesFile: "compiler:Languages\Dutch.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-nl.win32-bin.txt"
 Name: "pt_BR"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
+Name: "zh_CN"; MessagesFile: "@prefix@\share\@PACKAGE@\ChineseSimp-12-5.1.11.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-zh_CN.win32-bin.txt"
 
 ;; The following language files are available as well, in alphabetical
 ;; order: Basque, BrazilianPortuguese, Catalan, Czech, Danish, Dutch,
@@ -277,7 +279,7 @@ it.LanguageCodePage=1252
 ja.LanguageCodePage=932
 nl.LanguageCodePage=1252
 pt_BR.LanguageCodePage=1252
-
+zh_CN.LanguageCodePage=936
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; German translation
@@ -439,5 +441,31 @@ pt_BR.IconName_InstallFQ=Instalar a Consulta de Pre�os Online
 pt_BR.IconComment_InstallFQ=Instala o m�dulo perl Finance-Quote, necess�rio para a busca de pre�os online. Requer ActivePerl 5.8/5.10.
 pt_BR.IconName_Uninstall=Desinstalar o GnuCash
 pt_BR.IconComment_Uninstall=Desinstala o Gerenciador Financeiro GnuCash
+
+;; ;;;;;;;;;;;;;;;;;
+;; Simplified Chinese translation
+
+zh_CN.FullInstall=��ȫ��װ
+zh_CN.CustomInstall=�Զ��尲װ
+zh_CN.CreateDesktopIcon=��������ͼ��
+zh_CN.CreateMenuLink=������ʼ�˵�����
+zh_CN.RunPrg=���ڿ�ʼ���� GnuCash
+zh_CN.AdditionalIcons=������Щͼ��
+zh_CN.StatusMsgFirewall=���ڰ�װ Windows ����ǽ����...
+
+zh_CN.MainFiles=GnuCash ����
+zh_CN.TranslFiles=�����ļ�
+zh_CN.TemplFiles=��ƿ�Ŀģ���ļ�
+
+zh_CN.IconComment_GnuCash=GnuCash ��Ѳ������
+zh_CN.IconName_README=��ʾ�����ļ�
+zh_CN.IconComment_README=��ʾ�����ļ�
+zh_CN.IconFilename_README=README-zh_CN.win32-bin.txt
+zh_CN.IconName_FAQ=�������� (����)
+zh_CN.IconName_Bugzilla=������� Bug (����)
+zh_CN.IconName_InstallFQ=��װ���߼۸��������
+zh_CN.IconComment_InstallFQ=��װ���߼۸���������� Perl Finance-Quoteģ�顣��Ҫ ActivePerl 5.8 �� 5.10
+zh_CN.IconName_Uninstall=ж�� GnuCash
+zh_CN.IconComment_Uninstall=ж�ز��������� GnuCash
 
 ;; ;;;;;;;;;;;;;;;;;;;;

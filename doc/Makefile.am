@@ -8,6 +8,7 @@ doc_DATA = \
   README-fr.win32-bin.txt \
   README-it.win32-bin.txt \
   README-nl.win32-bin.txt \
+  README-zh_CN.win32-bin.txt \
   README.win32-bin.txt \
   guile-hackers.txt \
   projects.html 
