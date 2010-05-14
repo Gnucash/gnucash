@@ -12,6 +12,8 @@
 (export gnc:register-report-create)
 (export gnc:register-report-hook)
 
+(require 'hash-table)
+
 (define gnc:*register-report-hash* (make-hash-table 23))
 
 ;; Keep a hash-table of records, keyed off the account type.  Each

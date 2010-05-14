@@ -18,6 +18,8 @@
 (use-modules (ice-9 slib))
 (use-modules (ice-9 syncase))
 
+(require 'hash-table)
+
 (define (gnc:error->string tag args)
   (define (write-error port)
     (if (and (list? args) (not (null? args)))
