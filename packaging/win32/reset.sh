@@ -87,10 +87,15 @@ function eval_all() {
     eval_path $BUILD_DIR
     eval_path $INSTALL_DIR
     eval_path $GNUCASH_DIR\\dist
+    eval_path $GNUCASH_DIR\\gnucash.iss
     eval_path $TMP_DIR
     eval_path $MSYS_DIR\\etc\\profile.d\\installer.sh force
     eval_path $DOCS_DIR
     eval_path $LIBXSLT_DIR
+    eval_path $LIBBONOBOUI_DIR
+    eval_path $MYSQL_LIB_DIR
+    eval_path $PGSQL_DIR
+    eval_path $WEBKIT_DIR
 }
 
 echo
