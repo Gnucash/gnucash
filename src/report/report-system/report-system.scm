@@ -68,6 +68,11 @@
 (export gnc:options-add-sort-method!)
 (export gnc:options-add-subtotal-view!)
 
+;; html-fonts.scm
+
+(export register-font-options)
+(export add-css-information-to-doc)
+
 ;; html-utilities.scm 
 
 (export gnc:html-make-empty-cell)
@@ -693,6 +698,7 @@
 (load-from-path "html-scatter.scm")
 (load-from-path "html-linechart.scm")
 (load-from-path "html-style-info.scm")
+(load-from-path "html-fonts.scm")
 
 (load-from-path "html-style-sheet.scm")
 (load-from-path "html-table.scm")

@@ -166,6 +166,8 @@
       (N_ "Tables")
       (N_ "Table border width") "c" (N_ "Bevel depth on tables")
       1 0 20 0 1))
+    (register-font-options options)
+
     options))
 
 (define (fancy-renderer options doc)
@@ -306,6 +308,8 @@
 	(gnc:html-document-set-style!
 	 ssdoc "a" 'tag ""))
     
+    (add-css-information-to-doc options ssdoc)
+
     (let ((t (gnc:make-html-table)))
       ;; we don't want a bevel for this table, but we don't want 
       ;; that to propagate 

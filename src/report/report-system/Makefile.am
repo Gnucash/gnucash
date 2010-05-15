@@ -37,6 +37,7 @@ gncscm_DATA = \
      html-acct-table.scm \
      html-barchart.scm \
      html-document.scm \
+     html-fonts.scm \
      html-piechart.scm \
      html-scatter.scm \
      html-linechart.scm \
