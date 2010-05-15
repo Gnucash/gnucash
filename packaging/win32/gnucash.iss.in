@@ -445,27 +445,27 @@ pt_BR.IconComment_Uninstall=Desinstala o Gerenciador Financeiro GnuCash
 ;; ;;;;;;;;;;;;;;;;;
 ;; Simplified Chinese translation
 
-zh_CN.FullInstall=ï¿½ï¿½È«ï¿½ï¿½×°
-zh_CN.CustomInstall=ï¿½Ô¶ï¿½ï¿½å°²×°
-zh_CN.CreateDesktopIcon=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
-zh_CN.CreateMenuLink=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½
-zh_CN.RunPrg=ï¿½ï¿½ï¿½Ú¿ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ GnuCash
-zh_CN.AdditionalIcons=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð©Í¼ï¿½ï¿½
-zh_CN.StatusMsgFirewall=ï¿½ï¿½ï¿½Ú°ï¿½×° Windows ï¿½ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½...
+zh_CN.FullInstall=ÍêÈ«°²×°
+zh_CN.CustomInstall=×Ô¶¨Òå°²×°
+zh_CN.CreateDesktopIcon=´´½¨×ÀÃæÍ¼±ê
+zh_CN.CreateMenuLink=´´½¨¿ªÊ¼²Ëµ¥Á´½Ó
+zh_CN.RunPrg=ÏÖÔÚ¿ªÊ¼ÔËÐÐ GnuCash
+zh_CN.AdditionalIcons=´´½¨ÕâÐ©Í¼±ê
+zh_CN.StatusMsgFirewall=ÕýÔÚ°²×° Windows ·À»ðÇ½¹æÔò...
 
-zh_CN.MainFiles=GnuCash ï¿½ï¿½ï¿½ï¿½
-zh_CN.TranslFiles=ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
-zh_CN.TemplFiles=ï¿½ï¿½Æ¿ï¿½Ä¿Ä£ï¿½ï¿½ï¿½Ä¼ï¿½
+zh_CN.MainFiles=GnuCash ³ÌÐò
+zh_CN.TranslFiles=·­ÒëÎÄ¼þ
+zh_CN.TemplFiles=»á¼Æ¿ÆÄ¿Ä£°åÎÄ¼þ
 
-zh_CN.IconComment_GnuCash=GnuCash ï¿½ï¿½Ñ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-zh_CN.IconName_README=ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
-zh_CN.IconComment_README=ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+zh_CN.IconComment_GnuCash=GnuCash Ãâ·Ñ²ÆÎñ¹ÜÀí
+zh_CN.IconName_README=ÏÔÊ¾×ÔÊöÎÄ¼þ
+zh_CN.IconComment_README=ÏÔÊ¾×ÔÊöÎÄ¼þ
 zh_CN.IconFilename_README=README-zh_CN.win32-bin.txt
-zh_CN.IconName_FAQ=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½)
-zh_CN.IconName_Bugzilla=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Bug (ï¿½ï¿½ï¿½ï¿½)
-zh_CN.IconName_InstallFQ=ï¿½ï¿½×°ï¿½ï¿½ï¿½ß¼Û¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-zh_CN.IconComment_InstallFQ=ï¿½ï¿½×°ï¿½ï¿½ï¿½ß¼Û¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Perl Finance-QuoteÄ£ï¿½é¡£ï¿½ï¿½Òª ActivePerl 5.8 ï¿½ï¿½ 5.10
-zh_CN.IconName_Uninstall=Ð¶ï¿½ï¿½ GnuCash
-zh_CN.IconComment_Uninstall=Ð¶ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ GnuCash
+zh_CN.IconName_FAQ=³£¼ûÎÊÌâ (ÔÚÏß)
+zh_CN.IconName_Bugzilla=±¨¸æÈí¼þ Bug (ÔÚÏß)
+zh_CN.IconName_InstallFQ=°²×°ÔÚÏß¼Û¸ñ¼ìË÷¹¦ÄÜ
+zh_CN.IconComment_InstallFQ=°²×°ÔÚÏß¼Û¸ñ¼ìË÷Ëù±ØÐèµÄ Perl Finance-QuoteÄ£¿é¡£ÐèÒª ActivePerl 5.8 »ò 5.10
+zh_CN.IconName_Uninstall=Ð¶ÔØ GnuCash
+zh_CN.IconComment_Uninstall=Ð¶ÔØ²ÆÎñ¹ÜÀíÈí¼þ GnuCash
 
 ;; ;;;;;;;;;;;;;;;;;;;;
