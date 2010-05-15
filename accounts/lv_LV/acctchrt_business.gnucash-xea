@@ -1,0 +1,1343 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<gnc-account-example 
+     xmlns:gnc="http://www.gnucash.org/XML/gnc"
+     xmlns:act="http://www.gnucash.org/XML/act"
+     xmlns:book="http://www.gnucash.org/XML/book"
+     xmlns:cd="http://www.gnucash.org/XML/cd"
+     xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+     xmlns:price="http://www.gnucash.org/XML/price"
+     xmlns:slot="http://www.gnucash.org/XML/slot"
+     xmlns:split="http://www.gnucash.org/XML/split"
+     xmlns:sx="http://www.gnucash.org/XML/sx"
+     xmlns:trn="http://www.gnucash.org/XML/trn"
+     xmlns:ts="http://www.gnucash.org/XML/ts"
+     xmlns:fs="http://www.gnucash.org/XML/fs"
+     xmlns:bgt="http://www.gnucash.org/XML/bgt"
+     xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+     xmlns:lot="http://www.gnucash.org/XML/lot"
+     xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:addr="http://www.gnucash.org/XML/addr"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:billterm="http://www.gnucash.org/XML/billterm"
+     xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+     xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
+     xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
+     xmlns:vendor="http://www.gnucash.org/XML/vendor">
+    <gnc-act:title>
+      Uzņēmējdarbības konti
+    </gnc-act:title>
+    <gnc-act:short-description>
+     Kontu plāns uzņēmējdarbībai saskaņā ar Latvijas likumdošanu.
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+     Izmantojiet šo kontu plānu, ja vēlaties veikt finanšu uzskaiti uzņēmējdarbībā. Šis kontu plānā ir izveidots saskaņā ar Latvijas likumdošanu.
+    </gnc-act:long-description>
+    <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:id>
+  <act:type>ROOT</act:type>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1. Ilgtermiņa ieguldījumi</act:name>
+  <act:id type="guid">704eabdd648730a6b645d6405c05dcb5</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+    <slot>
+      <slot:key>reconcile-info</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>last-date</slot:key>
+          <slot:value type="integer">1230760799</slot:value>
+        </slot>
+        <slot>
+          <slot:key>include-children</slot:key>
+          <slot:value type="integer">1</slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1.2. Pamatlīdzekļi</act:name>
+  <act:id type="guid">03c7b55c5f9e7e575eb860b27361d0aa</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1.2.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">704eabdd648730a6b645d6405c05dcb5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1220 Tehnoloģiskās iekārtas un mašīnas</act:name>
+  <act:id type="guid">2365bf1c664e3f21ad7b19410b0d4c29</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1220</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>hidden</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">Piem., dators.</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">03c7b55c5f9e7e575eb860b27361d0aa</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1230 Pārējie pamatlīdzekļi un inventārs</act:name>
+  <act:id type="guid">3f28f6d2f8a9be6c49503ce02603c1c1</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1230</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">Piem., automašīna</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">03c7b55c5f9e7e575eb860b27361d0aa</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1290 Pamatlīdzekļu nolietojums (pasīvā)</act:name>
+  <act:id type="guid">364a0b133afaff78947e7310d84951a4</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1290</act:code>
+  <act:parent type="guid">03c7b55c5f9e7e575eb860b27361d0aa</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3. Pašu kapitāls</act:name>
+  <act:id type="guid">f241bfd7e177b5591d6ca17d2065ec23</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+    <slot>
+      <slot:key>reconcile-info</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>last-date</slot:key>
+          <slot:value type="integer">1230760799</slot:value>
+        </slot>
+        <slot>
+          <slot:key>include-children</slot:key>
+          <slot:value type="integer">1</slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3.1 Pamatkapitāls vai līdzdalības kapitāls agio, ilgtermiņa ieguldījumu pārvērtēšanas rezerve</act:name>
+  <act:id type="guid">202759bd32c6f91dc659e4c423d42dd6</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3.1</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">f241bfd7e177b5591d6ca17d2065ec23</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3110 Pamatkapitāls vai līdzdalības kapitāls</act:name>
+  <act:id type="guid">130465e2ff36a28d12bf755820163b50</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3110</act:code>
+  <act:parent type="guid">202759bd32c6f91dc659e4c423d42dd6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3.4. Nesadalītā peļņa vai nesegtie zaudējumi</act:name>
+  <act:id type="guid">b4836d8414f944228aa5eecdb6187e0b</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3.4.</act:code>
+  <act:parent type="guid">f241bfd7e177b5591d6ca17d2065ec23</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3410 Pārskata gada nesadalītā peļņa </act:name>
+  <act:id type="guid">897ffabc938549cd274b698eaac3e386</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3410</act:code>
+  <act:parent type="guid">b4836d8414f944228aa5eecdb6187e0b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3420 Iepriekšējo gadu nesadalītā peļņa vai nesegtie zaudējumi</act:name>
+  <act:id type="guid">c67e94087067d5755c7414eaa737167f</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3420</act:code>
+  <act:parent type="guid">b4836d8414f944228aa5eecdb6187e0b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5. Kreditori</act:name>
+  <act:id type="guid">63436c16eef1271c1b20696e8c3a0d88</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+    <slot>
+      <slot:key>reconcile-info</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>last-date</slot:key>
+          <slot:value type="integer">1230760799</slot:value>
+        </slot>
+        <slot>
+          <slot:key>last-interval</slot:key>
+          <slot:value type="frame">
+            <slot>
+              <slot:key>days</slot:key>
+              <slot:value type="integer">0</slot:value>
+            </slot>
+            <slot>
+              <slot:key>months</slot:key>
+              <slot:value type="integer">0</slot:value>
+            </slot>
+          </slot:value>
+        </slot>
+        <slot>
+          <slot:key>include-children</slot:key>
+          <slot:value type="integer">1</slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5.1. Norēķini par aizņēmumiem</act:name>
+  <act:id type="guid">ca0d662458e5e96872d8b1ceac49947a</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5.1.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">63436c16eef1271c1b20696e8c3a0d88</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5140 Citi aizņēmumi</act:name>
+  <act:id type="guid">5075144a68d29eed416773f32c2a8280</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5140</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">Piem., privāts aizdevums SIA</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">ca0d662458e5e96872d8b1ceac49947a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5.3. Norēķini ar piegādātājiem un darbuzņēmējiem</act:name>
+  <act:id type="guid">a8a5f40f126c8ad09d17d69a9f4bf20a</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5.3.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">63436c16eef1271c1b20696e8c3a0d88</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5310 Norēķini ar piegādātājiem un darbuzņēmējiem</act:name>
+  <act:id type="guid">bc343c3af452d8c502cd41ee998c48f3</act:id>
+  <act:type>PAYABLE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5310</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>tax-related</slot:key>
+      <slot:value type="integer">1</slot:value>
+    </slot>
+    <slot>
+      <slot:key>last-num</slot:key>
+      <slot:value type="string">112450</slot:value>
+    </slot>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">Piem., saņemtie rēķini</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">a8a5f40f126c8ad09d17d69a9f4bf20a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5.6. Norēķini par darba samaksu un ieturējumiem (izņemot nodokļus</act:name>
+  <act:id type="guid">d1dab714f10f758f918e6e9c42dcefd3</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5.6.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">63436c16eef1271c1b20696e8c3a0d88</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5610 Norēķini par darba algu</act:name>
+  <act:id type="guid">8288ff95c59046730814b04ff871c2f4</act:id>
+  <act:type>PAYABLE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5610</act:code>
+  <act:parent type="guid">d1dab714f10f758f918e6e9c42dcefd3</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5.7. Norēķini par nodokļiem</act:name>
+  <act:id type="guid">f95b9f7c8b6db80dd7ded93317c09387</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5.7.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">63436c16eef1271c1b20696e8c3a0d88</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5721 Norēķini par PVN</act:name>
+  <act:id type="guid">790a9d5d942fd48aeff7ffea84a19b36</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5721</act:code>
+  <act:parent type="guid">f95b9f7c8b6db80dd7ded93317c09387</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5720 Norēķini par IIN</act:name>
+  <act:id type="guid">5f679c7ac8baa02baf02700765a64e70</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5720</act:code>
+  <act:parent type="guid">f95b9f7c8b6db80dd7ded93317c09387</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5724 Norēķini par VSAOI (darba ņēmēja daļa)</act:name>
+  <act:id type="guid">aa99eaf5160726330f4d07a0c438793f</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5724</act:code>
+  <act:parent type="guid">f95b9f7c8b6db80dd7ded93317c09387</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5726 Norēķini par uzņēmējdarbības riska valsts nodevu</act:name>
+  <act:id type="guid">143de485bc2ed65d1799ba63b6d5b68a</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5726</act:code>
+  <act:parent type="guid">f95b9f7c8b6db80dd7ded93317c09387</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5725 Norēkini par VSAOI (darba devēja daļa)</act:name>
+  <act:id type="guid">79a3519e02955bdb9bc6538e8f599583</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5725</act:code>
+  <act:parent type="guid">f95b9f7c8b6db80dd7ded93317c09387</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5710 Norēķini par uzņēmuma ienākuma nodokli</act:name>
+  <act:id type="guid">28d0106efb3dd38eab0530f415e194f7</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5710</act:code>
+  <act:parent type="guid">f95b9f7c8b6db80dd7ded93317c09387</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5.5 Norēkini par parādiem ar personālu</act:name>
+  <act:id type="guid">8b4824ee28408402da7af3410e586301</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>color</slot:key>
+      <slot:value type="string">#ededececebeb</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">63436c16eef1271c1b20696e8c3a0d88</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5510 Norēķini par parādiem personālam</act:name>
+  <act:id type="guid">b24bedfbd433f378404a5f5cbc5c10e1</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5510 Norēķini par parādiem ar personālu</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>color</slot:key>
+      <slot:value type="string">#ededececebeb</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">8b4824ee28408402da7af3410e586301</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6. Ieņēmumi no uzņēmuma saimnieciskās darbības</act:name>
+  <act:id type="guid">d52bfba7a8020f9fdb13d95cdbc4a8a1</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+    <slot>
+      <slot:key>reconcile-info</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>last-date</slot:key>
+          <slot:value type="integer">1230760799</slot:value>
+        </slot>
+        <slot>
+          <slot:key>include-children</slot:key>
+          <slot:value type="integer">1</slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">6110 Ieņēmumi no pamatdarbības</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6.1. Ieņēmumi no pārdošanas, kas apliekami ar nodokļiem vispārējā kārtībā</act:name>
+  <act:id type="guid">e355fa0064ebe4f78ee7bfe3eb8eedcc</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6.1.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">d52bfba7a8020f9fdb13d95cdbc4a8a1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6110 Ieņēmumi no pamatdarbības produkcijas un pakalpojumu pārdošanas</act:name>
+  <act:id type="guid">33ca43ada815cf23bc1bc803810ed5be</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6110</act:code>
+  <act:parent type="guid">e355fa0064ebe4f78ee7bfe3eb8eedcc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7. Saimnieciskās darbības izdevumi</act:name>
+  <act:id type="guid">5bff8991d59134283c3c6d0d50add02b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+    <slot>
+      <slot:key>reconcile-info</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>last-date</slot:key>
+          <slot:value type="integer">1230760799</slot:value>
+        </slot>
+        <slot>
+          <slot:key>include-children</slot:key>
+          <slot:value type="integer">1</slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7.1. Izdevumi izejvielu, materiālu un preču iepirkšanai</act:name>
+  <act:id type="guid">2b23b70834e3a7f56018143799fe3369</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7.1.</act:code>
+  <act:parent type="guid">5bff8991d59134283c3c6d0d50add02b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7170 Samaksa par darbiem un pakalpojumiem no ārienes</act:name>
+  <act:id type="guid">c8cee36d228fe6adc6fa6f836051f221</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7170</act:code>
+  <act:parent type="guid">2b23b70834e3a7f56018143799fe3369</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7120 Preču piegādes, pakalpojumu sniegšanas  izdevumi</act:name>
+  <act:id type="guid">e084194cfdb711c85fba6f5279cec410</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7120</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">Piem., par benzīnu</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">2b23b70834e3a7f56018143799fe3369</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7190 Pirkto materiālu un preču krājumu un vērtības izmaiņas</act:name>
+  <act:id type="guid">4314a0f403d8111f788de37ccbba1fcf</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7190</act:code>
+  <act:parent type="guid">2b23b70834e3a7f56018143799fe3369</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7.2. Personāla izmaksas</act:name>
+  <act:id type="guid">42dd3b53b11e2590755e5720ccb8e944</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7.2.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">5bff8991d59134283c3c6d0d50add02b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7220 Pārvaldes personāla un administratīvā personāla algas</act:name>
+  <act:id type="guid">d78b3143ddbe8cd1df8e07cb3211c3d6</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7220</act:code>
+  <act:parent type="guid">42dd3b53b11e2590755e5720ccb8e944</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7210 Izpildpersonāla algas</act:name>
+  <act:id type="guid">733d3b31732ba36bf029b50ad8d243d8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7210</act:code>
+  <act:parent type="guid">42dd3b53b11e2590755e5720ccb8e944</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7.3. Sociālās nodevas un izmaksas</act:name>
+  <act:id type="guid">c1fde9865bbfc3d43ff0053a30db40a1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7.3.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">5bff8991d59134283c3c6d0d50add02b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7310 Sociālais nodoklis</act:name>
+  <act:id type="guid">961b0bc162623b55a336d973ec9c6a21</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7310</act:code>
+  <act:parent type="guid">c1fde9865bbfc3d43ff0053a30db40a1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7320 Pārējās sociālās izmaksa</act:name>
+  <act:id type="guid">546e2ec67d23a4910559abd540c13b4c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7320</act:code>
+  <act:parent type="guid">c1fde9865bbfc3d43ff0053a30db40a1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7.7. Administrācijas izdevumi</act:name>
+  <act:id type="guid">37a4fe57e3639910c229ec5a9dc5a43e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7.7.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">5bff8991d59134283c3c6d0d50add02b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7710 Sakaru izdevumi</act:name>
+  <act:id type="guid">3926f1b4bec084405b80b4b2c593bdc2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7710</act:code>
+  <act:parent type="guid">37a4fe57e3639910c229ec5a9dc5a43e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7760 Transporta izdevumi administrācijas vajadzībām</act:name>
+  <act:id type="guid">81dd7f75ecdc8fa74e757a07e9d0bd0f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7760</act:code>
+  <act:parent type="guid">37a4fe57e3639910c229ec5a9dc5a43e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7720 Kantora (biroja) izdevumi</act:name>
+  <act:id type="guid">38fa66ee9ca7f9defeb814326b4e5016</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7720</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">Piem., kancelejas preces, grāmatas utt.</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">37a4fe57e3639910c229ec5a9dc5a43e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7750 Naudas apgrozījuma blakus izdevumi</act:name>
+  <act:id type="guid">1b6c607cca0c9a6442c1b23f1da94b57</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7750</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">maksa par bankas pakalpojumiem</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">37a4fe57e3639910c229ec5a9dc5a43e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7770 Citi vadīšanas un administrācijas izdevumi</act:name>
+  <act:id type="guid">ee6e83ab7e527d02bc47f3005148d0ee</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7770</act:code>
+  <act:parent type="guid">37a4fe57e3639910c229ec5a9dc5a43e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7.5 Pārējie saimnieciskās darbības izdevumi</act:name>
+  <act:id type="guid">8180fe22cdc7b0d83257918cbee48522</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7.5</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">5bff8991d59134283c3c6d0d50add02b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7540 Apdrošināšanas maksājumi (izņemot darbinieku apdrošināšanu)</act:name>
+  <act:id type="guid">46e74c8480474e8f203cb407b119a7f2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7540</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">Piem., mašīnas apdrošināšana</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">8180fe22cdc7b0d83257918cbee48522</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7550 Pārējie saimnieciskās darbības izdevumi</act:name>
+  <act:id type="guid">ac9c080856d91885eaa6c68608e252a0</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7550</act:code>
+  <act:parent type="guid">8180fe22cdc7b0d83257918cbee48522</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7.4. Pamatlīdzekļu nolietojums</act:name>
+  <act:id type="guid">8dbac8e19acab0965568911995842d37</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7.4.</act:code>
+  <act:parent type="guid">5bff8991d59134283c3c6d0d50add02b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7420 Pamatlīdzekļu nolietojums</act:name>
+  <act:id type="guid">2abcc3648ab18ff0f1d673d4adaa4b4f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7420</act:code>
+  <act:parent type="guid">8dbac8e19acab0965568911995842d37</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2.  Apgrozāmie līdzekļi</act:name>
+  <act:id type="guid">fb4aa78c11eb5a3fccb5f29307eb916c</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+    <slot>
+      <slot:key>reconcile-info</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>last-date</slot:key>
+          <slot:value type="integer">1230760799</slot:value>
+        </slot>
+        <slot>
+          <slot:key>include-children</slot:key>
+          <slot:value type="integer">1</slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2.3. Norēķini par prasībām (ar debitoriem)</act:name>
+  <act:id type="guid">e1bf896bb23a38b84eb16d3e3a1f09bc</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2.3.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">fb4aa78c11eb5a3fccb5f29307eb916c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2380 Norēķini par prasībām pret personālu un īstermiņa aizdevumi personālam</act:name>
+  <act:id type="guid">697720154aa032750390fec327bdc66f</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2380</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>last-num</slot:key>
+      <slot:value type="string">6313</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">e1bf896bb23a38b84eb16d3e3a1f09bc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2310 Norēķini ar pircējiem un pasūtītājiem</act:name>
+  <act:id type="guid">79797f351d213a52aa358b692a679863</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2310</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>last-num</slot:key>
+      <slot:value type="string">15</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">e1bf896bb23a38b84eb16d3e3a1f09bc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2390 Pārmaksātie nodokļi</act:name>
+  <act:id type="guid">46c2e4ca8a2ffa2dd348be13cdaf72ba</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2390</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>color</slot:key>
+      <slot:value type="string">#ededececebeb</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">e1bf896bb23a38b84eb16d3e3a1f09bc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2.6. Naudas līdzekļi</act:name>
+  <act:id type="guid">9f327a18d3aa95242c78eb36d9ae95d0</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2.6.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">fb4aa78c11eb5a3fccb5f29307eb916c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2620 Norēķinu konti bankās</act:name>
+  <act:id type="guid">223450d4cf4bf1ccbeddeeb0ddd863d2</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2620</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>reconcile-info</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>include-children</slot:key>
+          <slot:value type="integer">0</slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">9f327a18d3aa95242c78eb36d9ae95d0</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2.1 Krājumi</act:name>
+  <act:id type="guid">68f6b8855f8df3cda8a9068b78fcc276</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2.1</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>tax-related</slot:key>
+      <slot:value type="integer">1</slot:value>
+    </slot>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">fb4aa78c11eb5a3fccb5f29307eb916c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2190 Avansa maksājumi par precēm</act:name>
+  <act:id type="guid">306c4c615ab42d3226b33ddf432cac3f</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2190 </act:code>
+  <act:parent type="guid">68f6b8855f8df3cda8a9068b78fcc276</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2150 Uzņēmuma rīcībā esošais  mazvērtīgais inventārs</act:name>
+  <act:id type="guid">01647e3c106f78c16a6b6dd281160416</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2150 </act:code>
+  <act:parent type="guid">68f6b8855f8df3cda8a9068b78fcc276</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2.4. Nākamo periodu izmaksas</act:name>
+  <act:id type="guid">43fa67934522243d2730c42f6accd623</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2.4. </act:code>
+  <act:parent type="guid">fb4aa78c11eb5a3fccb5f29307eb916c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2410 Nākamo periodu izmaksas</act:name>
+  <act:id type="guid">69265bda6fab261961acbe767ab1ca64</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2410 </act:code>
+  <act:parent type="guid">43fa67934522243d2730c42f6accd623</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8. Dažādi ieņēmumi un izdevumi, pelņa un zaudējumi</act:name>
+  <act:id type="guid">d46cf499346c8af7d669b92a49ecd710</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+    <slot>
+      <slot:key>reconcile-info</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>last-date</slot:key>
+          <slot:value type="integer">1230760799</slot:value>
+        </slot>
+        <slot>
+          <slot:key>include-children</slot:key>
+          <slot:value type="integer">1</slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8.1. Dažādi ieņēmumi</act:name>
+  <act:id type="guid">8c0cc240f0e6edf834b2bfa644e83b5b</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8.1.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">d46cf499346c8af7d669b92a49ecd710</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8120 Pārējie ieņēmumi no procentiem un tiem pielīdzināmi ieņēmumi</act:name>
+  <act:id type="guid">750db65f037999b680b01d0909cb9722</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">8c0cc240f0e6edf834b2bfa644e83b5b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8.6. Peļņa vai zaudējumi</act:name>
+  <act:id type="guid">58303077ddb1863dbd01bbc83486019d</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8.6.</act:code>
+  <act:parent type="guid">d46cf499346c8af7d669b92a49ecd710</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8610 Peļņa vai zaudējumi</act:name>
+  <act:id type="guid">d079d570200ba517c1676700b3639d75</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8610</act:code>
+  <act:parent type="guid">58303077ddb1863dbd01bbc83486019d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8.8. Nodokļi no peļņas</act:name>
+  <act:id type="guid">eb4c860bcbfd5fd03228bc14c7369fcc</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8.8.</act:code>
+  <act:parent type="guid">d46cf499346c8af7d669b92a49ecd710</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8810 Nodoklis no peļņas (ienākuma nodoklis)</act:name>
+  <act:id type="guid">c3b39c291541d1e30d925a5bead796ed</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8810</act:code>
+  <act:parent type="guid">eb4c860bcbfd5fd03228bc14c7369fcc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8.2 Dažādi izdevumi</act:name>
+  <act:id type="guid">8bb800a4801a59e337b19ebe59c2e731</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8.2</act:code>
+  <act:parent type="guid">d46cf499346c8af7d669b92a49ecd710</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8220 Samaksātie procenti un tiem pielīdzinātie izdevumi</act:name>
+  <act:id type="guid">d39d192979942ae3f4ccf2537027e90a</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8220</act:code>
+  <act:parent type="guid">8bb800a4801a59e337b19ebe59c2e731</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>4. Uzkrājumi</act:name>
+  <act:id type="guid">0cceaa8a8ffb8ebbd73506bd64437daf</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>4.3.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>reconcile-info</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>last-date</slot:key>
+          <slot:value type="integer">1230760799</slot:value>
+        </slot>
+        <slot>
+          <slot:key>include-children</slot:key>
+          <slot:value type="integer">1</slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>4.3. Citi uzkrājumi</act:name>
+  <act:id type="guid">83bc52b49a1c0a03a7ff68ecf853aaeb</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>4.3.</act:code>
+  <act:parent type="guid">0cceaa8a8ffb8ebbd73506bd64437daf</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>4310 Citi uzkrājumi</act:name>
+  <act:id type="guid">2dedecf705760d2a0f541dbf6982af29</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>Citi uzkrājumi</act:code>
+  <act:parent type="guid">83bc52b49a1c0a03a7ff68ecf853aaeb</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Imbalance-LVL</act:name>
+  <act:id type="guid">0cfec028cb836cdfbb496f493a0a845d</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Starpība-LVL</act:name>
+  <act:id type="guid">a32dc9485761b4ef034c7f92ef79d454</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>LVL</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->
