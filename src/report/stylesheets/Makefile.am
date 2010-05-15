@@ -36,7 +36,6 @@ gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA = \
   stylesheets.scm \
   stylesheet-plain.scm \
-  stylesheet-css.scm \
   stylesheet-fancy.scm \
   stylesheet-footer.scm \
   stylesheet-easy.scm
