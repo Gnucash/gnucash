@@ -30,6 +30,8 @@ gncpixmap_DATA = \
   gnc-transfer-16.png \
   gnc-transfer.png \
   gnucash-icon.ico \
+  gnucash-icon-16x16.png \
+  gnucash-icon-32x32.png \
   gnucash-icon-48x48.bmp \
   gnucash-icon-48x48.png \
   gnucash-icon-64x64.png \
@@ -110,6 +112,12 @@ if BUILDING_FROM_SVN
 scalable/gnucash-icon.svg: ${top_srcdir}/art/tango/scalable/gnucash.svg
 	-mkdir -p scalable
 	cp ${top_srcdir}/art/tango/scalable/gnucash.svg scalable/gnucash-icon.svg
+
+gnucash-icon-16x16.png:
+	cp ${top_srcdir}/art/tango/16x16/gnucash.png gnucash-icon-16x16.png
+	
+gnucash-icon-32x32.png:
+	cp ${top_srcdir}/art/tango/32x32/gnucash.png gnucash-icon-32x32.png
 endif
 
 # As suggested by <http://live.gnome.org/GnomeGoals/AppIcon>
