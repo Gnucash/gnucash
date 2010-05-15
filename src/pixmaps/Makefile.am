@@ -14,6 +14,8 @@ gncpixmap_DATA = \
   gnc-invoice-16.png \
   gnc-invoice-edit-16.png \
   gnc-invoice-edit.png \
+  gnc-invoice-pay-16.png \
+  gnc-invoice-pay.png \
   gnc-invoice-post-16.png \
   gnc-invoice-post.png \
   gnc-invoice-unpost-16.png \

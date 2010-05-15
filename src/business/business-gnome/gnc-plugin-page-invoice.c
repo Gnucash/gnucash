@@ -173,7 +173,7 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
 
     /* Business menu */
     {
-        "ToolsProcessPaymentAction", NULL, N_("_Pay Invoice"), NULL,
+        "ToolsProcessPaymentAction", GNC_STOCK_INVOICE_PAY, N_("_Pay Invoice"), NULL,
         N_("Enter a payment for the owner of this Invoice"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_pay_invoice)
     },

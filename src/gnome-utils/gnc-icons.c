@@ -43,6 +43,7 @@ static item_file item_files[] =
     { GNC_STOCK_SPLIT_TRANS,    "gnc-split-trans.png",    "gnc-split-trans-16.png"},
     { GNC_STOCK_JUMP_TO,        "gnc-jumpto.png",         "gnc-jumpto-16.png"},
     { GNC_STOCK_INVOICE,        "gnc-invoice.png",        "gnc-invoice-16.png"},
+    { GNC_STOCK_INVOICE_PAY,    "gnc-invoice-pay.png",    "gnc-invoice-pay-16.png"},
     { GNC_STOCK_INVOICE_POST,   "gnc-invoice-post.png",   "gnc-invoice-post-16.png"},
     { GNC_STOCK_INVOICE_UNPOST, "gnc-invoice-unpost.png", "gnc-invoice-unpost-16.png"},
     { GNC_STOCK_INVOICE_EDIT,   "gnc-invoice-edit.png",   "gnc-invoice-edit-16.png"},

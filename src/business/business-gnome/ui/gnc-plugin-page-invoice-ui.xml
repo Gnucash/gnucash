@@ -69,6 +69,7 @@
       <separator name="ToolbarSep68"/>
       <toolitem name="ToolbarPostInvoice"       action="EditPostInvoiceAction"/>
       <toolitem name="ToolbarUnPostInvoice"     action="EditUnpostInvoiceAction"/>
+      <toolitem name="ToolbarProcessPayment"     action="ToolsProcessPaymentAction"/>
     </placeholder>
   </toolbar>
 
