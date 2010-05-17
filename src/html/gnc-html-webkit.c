@@ -116,12 +116,31 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
     GncHtmlWebkitPrivate* priv;
     GncHtmlWebkitPrivate* new_priv;
 
+    WebKitWebSettings* webkit_settings = NULL;
+    const char* default_font_family = NULL;
+
     new_priv = g_realloc( GNC_HTML(self)->priv, sizeof(GncHtmlWebkitPrivate) );
     priv = self->priv = new_priv;
     GNC_HTML(self)->priv = (GncHtmlPrivate*)priv;
 
     priv->html_string = NULL;
     priv->web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
+
+    /* Get the default font family from GtkStyle of a GtkWidget(priv-web_view). */
+    default_font_family = pango_font_description_get_family( gtk_rc_get_style(GTK_WIDGET(priv->web_view))->font_desc );
+
+    /* Set default webkit settings */
+    webkit_settings = webkit_web_view_get_settings (priv->web_view);
+    g_object_set (G_OBJECT(webkit_settings), "default-encoding", "utf-8", NULL);
+    if (default_font_family == NULL)
+    {
+        PWARN("webkit_settings: Cannot get default font family."); 
+    }else{
+        g_object_set (G_OBJECT(webkit_settings),
+            "default-font-family", default_font_family,
+            NULL);
+        PINFO("webkit_settings: Set default font to [%s]", default_font_family);
+    }
 
     gtk_container_add( GTK_CONTAINER(priv->base.container),
                        GTK_WIDGET(priv->web_view) );
