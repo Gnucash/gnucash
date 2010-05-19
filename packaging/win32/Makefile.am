@@ -14,6 +14,7 @@ EXTRA_DIST = \
   pi.sh \
   Greek-4-5.1.11.isl \
   Japanese-5-5.1.11.isl \
+  ChineseSimp-12-5.1.11.isl \
   reset.sh
 
 if OS_WIN32
