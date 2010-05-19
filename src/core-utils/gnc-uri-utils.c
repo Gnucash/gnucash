@@ -230,9 +230,9 @@ gchar *gnc_uri_create_uri (const gchar *protocol,
      */
     g_return_val_if_fail( hostname != 0, NULL );
 
-    if ( username != NULL )
+    if ( username != NULL && *username )
     {
-        if ( password != NULL )
+        if ( password != NULL && *password )
             userpass = g_strdup_printf ( "%s:%s@", username, password );
         else
             userpass = g_strdup_printf ( "%s@", username );

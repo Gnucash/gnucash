@@ -147,32 +147,33 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
      * So we use the security domain parameter to allow us to
      * distinguish between these two.
      */
-    status = SecKeychainFindInternetPassword( NULL,
-             strlen(server), server,
-             strlen(access_method), access_method,
-             strlen(*user), *user,
-             strlen(service), service,
-             port,
-             kSecProtocolTypeAny,
-             kSecAuthenticationTypeDefault,
-             &password_length, &password_data,
-             NULL);
-
-    if ( status == noErr )
+    if (*user != NULL)
     {
-        *password = (gchar*)xmalloc(( password_length + 1 ) * sizeof(char));
-        strncpy(*password, password_data, (size_t)password_length);
-        (*password)[password_length] = '\0';
-        password_found = TRUE;
-        SecKeychainItemFreeContent(NULL, password_data);
-    }
-    else
-    {
-        CFStringRef osx_resultstring = SecCopyErrorMessageString( status, NULL );
-        const gchar *resultstring = CFStringGetCStringPtr(osx_resultstring,
-                                                    GetApplicationTextEncoding());
-        PWARN ( "OS X keychain error: %s", resultstring );
-        CFRelease ( osx_resultstring );
+        status = SecKeychainFindInternetPassword( NULL,
+                 strlen(server), server,
+                 strlen(access_method), access_method,
+                 strlen(*user), *user,
+                 strlen(service), service,
+                 port,
+                 kSecProtocolTypeAny,
+                 kSecAuthenticationTypeDefault,
+                 &password_length, &password_data,
+                 NULL);
+    
+        if ( status == noErr )
+        {
+            *password = g_strndup(password_data, password_length);
+            password_found = TRUE;
+            SecKeychainItemFreeContent(NULL, password_data);
+        }
+        else
+        {
+            CFStringRef osx_resultstring = SecCopyErrorMessageString( status, NULL );
+            const gchar *resultstring = CFStringGetCStringPtr(osx_resultstring,
+                                                        GetApplicationTextEncoding());
+            PWARN ( "OS X keychain error: %s", resultstring );
+            CFRelease ( osx_resultstring );
+        }
     }
 #endif /* HAVE_OSX_KEYCHAIN */
 
