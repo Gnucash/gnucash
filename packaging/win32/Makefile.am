@@ -23,6 +23,7 @@ if OS_WIN32
   AM_CPPFLAGS = $(GLIB_CFLAGS)
   pkgdata_DATA = Greek-4-5.1.11.isl
   pkgdata_DATA += Japanese-5-5.1.11.isl
+  pkgdata_DATA += ChineseSimp-12-5.1.11.isl
 else
   EXTRA_DIST += redirect.c
 endif
