@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-10 15:54+0300\n"
-"PO-Revision-Date: 2010-05-10 19:39+0300\n"
+"PO-Revision-Date: 2010-05-20 19:17+0300\n"
 "Last-Translator: Valdis Vītoliņš <valdis.vitolins@odo.lv>\n"
 "Language-Team: Odo <info@odo.lv>\n"
 "MIME-Version: 1.0\n"
@@ -297,7 +297,7 @@ msgstr "Iestatīt prefiksu gkonf pieprasījumiem"
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
 #: ../src/bin/gnucash-bin.c:395
 msgid "GCONFPATH"
-msgstr "GKONF CEĻŠ"
+msgstr "GCONF CEĻŠ"
 
 #: ../src/bin/gnucash-bin.c:399
 msgid "Add price quotes to given GnuCash datafile"
@@ -891,7 +891,7 @@ msgstr "Sūtīt uz kontu"
 
 #: ../src/business/business-gnome/dialog-invoice.c:670
 msgid "Accumulate Splits?"
-msgstr "Uzkrāt sadalījumus?"
+msgstr "Saskaitīt sadalījumus?"
 
 #. Fill in the conversion prices with feedback from the user
 #: ../src/business/business-gnome/dialog-invoice.c:706
@@ -1035,7 +1035,7 @@ msgstr "Nosūtīšanas datums"
 #: ../src/business/business-gnome/dialog-invoice.c:2464
 #: ../src/business/business-gnome/dialog-invoice.c:2495
 msgid "Is Posted?"
-msgstr "Ir nosītīts?"
+msgstr "Ir nosūtīts?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2436
 #: ../src/business/business-gnome/dialog-invoice.c:2467
@@ -1132,7 +1132,7 @@ msgstr "Atvērts"
 #: ../intl-scm/guile-strings.c:2144
 #: ../intl-scm/guile-strings.c:2190
 msgid "Num"
-msgstr "Nr"
+msgstr "Nr."
 
 #: ../src/business/business-gnome/dialog-invoice.c:2612
 msgid "Find Bill"
@@ -1270,7 +1270,7 @@ msgstr "Orderim jāpiešķir ID numurs."
 
 #: ../src/business/business-gnome/dialog-order.c:274
 msgid "The Order must have at least one Entry."
-msgstr "Orderī jāizdara vismaz viens ieraksts."
+msgstr "Orderī jābūt vismaz vienam ierakstam."
 
 #. Damn; yes.  Well, ask the user to make sure they REALLY want to
 #. * close this order!
@@ -1329,11 +1329,11 @@ msgstr "Ievadiet maksājuma summu. Summai jābūt lielākai par nulli."
 
 #: ../src/business/business-gnome/dialog-payment.c:272
 msgid "You must select a company for payment processing."
-msgstr "Izvēlēties uzņēmumu maksājuma apstrādei."
+msgstr "Izvēlieties uzņēmumu maksājuma apstrādei."
 
 #: ../src/business/business-gnome/dialog-payment.c:281
 msgid "You must select a transfer account from the account tree."
-msgstr "Izvēlēties pārskaitījuma kontu no kontu koka."
+msgstr "Izvēlieties pārskaitījuma kontu no kontu koka."
 
 #: ../src/business/business-gnome/dialog-payment.c:290
 msgid "You must enter an account name for posting."
@@ -1577,15 +1577,15 @@ msgstr "Nodokli_s iekļauts"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:9
 msgid "Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog."
-msgstr "Vai vairākus rēķina ierakstus, kas pārskaita uz to pašu kontu, ir nepieciešams noklusējumā uzkrāt vienā sadalījumā. Šo iestatījumu var mainīt dialoglogā Nosūtīt."
+msgstr "Vai vairākus rēķina ierakstus, kas pārskaita uz to pašu kontu, ir nepieciešams automātiski saskaitīti vienā sadalījumā. Šo iestatījumu var mainīt dialoglogā Nosūtīt."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:10
 msgid "Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors."
-msgstr "Vai noklusējumā nodoklis ir iekļauts rēķina ierakstos. Šis iestatījums ir mantots no jaunajiem klientiem un pārdevējiem."
+msgstr "Vai nodoklis ir iekļauts rēķina ierakstos automātiski. Šis iestatījums ir mantots no jaunajiem klientiem un pārdevējiem."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:11
 msgid "Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors."
-msgstr "Vai noklusējumā nodoklis ir iekļauts rēķina ierakstos. Šis iestatījums ir mantots no jaunajiem klientiem un pārdevējiem."
+msgstr "Vai nodoklis ir iekļauts rēķina ierakstos automātiski. Šis iestatījums ir mantots no jaunajiem klientiem un pārdevējiem."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:12
 msgid "Whether to display the list of Bills Due at startup."
@@ -1593,7 +1593,7 @@ msgstr "Vai uzsākot rādīt rēķinus, kuriem ir pienācis termiņš."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:13
 msgid "_Accumulate splits on post"
-msgstr "_Uzkrāt sadalījumus nosūtot"
+msgstr "_Saskaitīt sadalījumus nosūtot"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:14
 msgid "_Days in advance:"
@@ -1613,7 +1613,7 @@ msgstr "_Nodoklis iekļauts"
 
 #: ../src/business/business-gnome/glade/choose-owner.glade.h:1
 msgid "Choose Owner Dialog"
-msgstr "Izvēlēties īpašnieka dialoglogu"
+msgstr "Izvēlieties īpašnieka dialoglogu"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/account-summary.scm
@@ -1865,11 +1865,11 @@ msgstr "Kredīta konts"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:8
 msgid "Default Hours per Day: "
-msgstr "Stundas dienā noklusējumā: "
+msgstr "Noklusētās stundas dienā: "
 
 #: ../src/business/business-gnome/glade/employee.glade.h:9
 msgid "Default Rate: "
-msgstr "Likme noklusējumā: "
+msgstr "Noklusētā likme: "
 
 #. src/business/business-reports/gnucash/report/job-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
@@ -2690,7 +2690,7 @@ msgstr "Nesūtīt"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:1
 msgid "Accumulate multiple splits into one"
-msgstr "Uzkrāt vairākus sadalījumus vienā"
+msgstr "Saskaitīt vairākus sadalījumus vienā"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:2
 msgid "If active, at startup GnuCash will check to see whether any bills will become due soon. If so, it will present the user with a reminder dialog. The definition of \"soon\" is controlled by the \"Days in Advance\" setting. Otherwise GnuCash does not check for due bills."
@@ -2706,11 +2706,11 @@ msgstr "Ja aktivizēts, tiks meklēti tikai posteņi 'aktīvs' pašreizējā kat
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:5
 msgid "If set to active then tax is included by default in entries of this type. This setting is inherited by new customers and vendors."
-msgstr "Ja aktivizēts, tad noklusējumā nodoklis ir iekļauts šī tipa ierakstos. Uzstādījums ir mantots no jauniem klientiem un pārdevējiem."
+msgstr "Ja aktivizēts, tad nodoklis ir iekļauts šī tipa ierakstos automātiski. Uzstādījums ir mantots no jauniem klientiem un pārdevējiem."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:6
 msgid "If this field is active then multiple entries in an invoice that transfer to the same account will be accumulated into a single split. This field can be overridden per invoice in the Posting dialog."
-msgstr "Ja aktivizēts, daudzie rēķina  ieraksti, kas pārskaita uz to pašu kontu, tiks uzkrāti vienā sadalījumā. Šo lauku katrā rēķinā var pārrakstīt Nosūtīšanas dialoglogā."
+msgstr "Ja aktivizēts, daudzie rēķina  ieraksti, kas pārskaita uz to pašu kontu, tiks saskaitīti vienā sadalījumā. Šo lauku katrā rēķinā var pārrakstīt Nosūtīšanas dialoglogā."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:7
 msgid "Is tax included in this type of business entry?"
@@ -2829,7 +2829,7 @@ msgstr "Nodokļu tabula %s nepastāv. Vai vēlaties to izveidot?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:511
 msgid "The current entry has been changed.  However, this entry is part of an existing order. Would you like to record the change and effectively change your order?"
-msgstr "Pašreizējais ieraksts ir izmainīts. Šis ieraksts ir kāda eksistējoša ordera daļa. Vai pierakstīt izmaiņas un efektīvi veikt izmaiņas jūsu orderī?"
+msgstr "Pašreizējais ieraksts ir izmainīts. Šis ieraksts ir kāda esoša ordera daļa. Vai pierakstīt izmaiņas un efektīvi veikt izmaiņas jūsu orderī?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:528
 msgid "_Don't Record"
@@ -3120,7 +3120,7 @@ msgstr "Apmaksai?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:544
 msgid "Enter the income/expense account for the Entry, or choose one from the list"
-msgstr "Ievadīt ieņēmumu/izdevumu kontu šim ierakstam, vai izvēlēties vienu no saraksta"
+msgstr "Ievadīt ieņēmumu/izdevumu kontu šim ierakstam, vai izvēlieties vienu no saraksta"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:557
 msgid "Enter the type of Entry"
@@ -3152,7 +3152,7 @@ msgstr "Atlaides tips: procenti"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:639
 msgid "Select the Discount Type"
-msgstr "Izvēlēties atlaides tipu"
+msgstr "Izvēlieties atlaides tipu"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:656
 msgid "Tax computed after discount is applied"
@@ -3324,7 +3324,7 @@ msgid ""
 msgstr ""
 "Direktorija\n"
 " %s\n"
-"eksistē, bet nav pieejama. Programmai \n"
+"pastāv, bet nav pieejama. Programmai \n"
 "jānodrošina pilna pieeja (lasīt/rakstīt/izpildīt) šai \n"
 "direktorijai, lai tā pareizi funkcionētu.\n"
 
@@ -3339,7 +3339,7 @@ msgid ""
 msgstr ""
 "Ceļš\n"
 "  %s\n"
-"eksistē, bet tā nav direktorija. Dzēsiet\n"
+"pastāv, bet tā nav direktorija. Dzēsiet\n"
 "failu un sāciet GnuCash vēlreiz.\n"
 
 #: ../src/core-utils/gnc-filepath-utils.c:239
@@ -3353,7 +3353,7 @@ msgid ""
 msgstr ""
 "Parādījusies neatpazīta kļūda apstiprinot, ka \n"
 " %s\n"
-"direktorija eksistē un ir lietojama. Izlabojiet\n"
+"direktorija pastāv un ir lietojama. Izlabojiet\n"
 "kļūdu un pārstartējiet GnuCash. Ziņotā kļūda \n"
 "bija '%s' (errno %d)."
 
@@ -3851,7 +3851,7 @@ msgstr "Izveidojiet nosaukumu plānotajam grāmatojumam."
 #: ../src/gnome/dialog-sx-editor.c:772
 #, c-format
 msgid "A Scheduled Transaction with the name \"%s\" already exists. Are you sure you want to name this one the same?"
-msgstr "Jau eksistē plānotais grāmatojums ar šādu nosaukumu \"%s\". Vai vēlaties šo nosaukt tieši tāpat?"
+msgstr "Jau pastāv plānotais grāmatojums ar šādu nosaukumu \"%s\". Vai vēlaties šo nosaukt tieši tāpat?"
 
 #: ../src/gnome/dialog-sx-editor.c:803
 msgid "Scheduled Transactions with variables cannot be automatically created."
@@ -3982,12 +3982,12 @@ msgstr "Grāmata ir veiksmīgi aizvērta."
 #: ../src/gnome/druid-acct-period.c:247
 #, c-format
 msgid "The earliest transaction date found in this book is %s. Based on the selection made above, this book will be split into %d books.  Click on 'Forward' to start closing the earliest book."
-msgstr "Agrākais grāmatojuma datums atrasts šajā grāmatā ir %s. Pamatojoties uz atlasi augstāk, šī grāmata tiks sadalīts %d grāmatās. Klikšķināt uz 'Tālāk', lai slēgtu pirmo grāmatu."
+msgstr "Agrākais grāmatojuma datums atrasts šajā grāmatā ir %s. Pamatojoties uz atlasi augstāk, šī grāmata tiks sadalīts %d grāmatās. Klikšķiniet uz 'Tālāk', lai slēgtu pirmo grāmatu."
 
 #: ../src/gnome/druid-acct-period.c:294
 #, c-format
 msgid "You have asked for a book to be created.  This book will contain all transactions up to midnight %s (for a total of %d transactions spread over %d accounts). Click on 'Forward' to create this book. Click on 'Back' to adjust the dates."
-msgstr "Jūs vēlaties izveidot grāmatu. Šī grāmata ietvers visus grāmatojumus, kas veikti līdz pusnaktij %s (visi grāmatojumi %d kopā apskatāmi %d kontu atvērumā). Klikšķināt uz 'Tālāk', lai izveidotu šo grāmatu. Klikšķināt 'Atpakaļ', lai piemērotu datumus."
+msgstr "Jūs vēlaties izveidot grāmatu. Šī grāmata ietvers visus grāmatojumus, kas veikti līdz pusnaktij %s (visi grāmatojumi %d kopā apskatāmi %d kontu atvērumā). Klikšķiniet uz 'Tālāk', lai izveidotu šo grāmatu. Klikšķināt 'Atpakaļ', lai piemērotu datumus."
 
 #: ../src/gnome/druid-acct-period.c:312
 #, c-format
@@ -4050,7 +4050,7 @@ msgstr "nulle"
 
 #: ../src/gnome/druid-hierarchy.c:738
 msgid "existing account"
-msgstr "eksistējošs konts"
+msgstr "esošs konts"
 
 #: ../src/gnome/druid-hierarchy.c:926
 #: ../src/gnome-utils/gnc-tree-view-account.c:652
@@ -4205,7 +4205,7 @@ msgstr "Naudas klasificēšanai ir jābūt pozitīvai."
 # sadalei
 #: ../src/gnome/druid-stock-split.c:390
 msgid "You must select an income account for the cash distribution."
-msgstr "Izvēlēties ieņēmumu kontu naudas klasificēšanai."
+msgstr "Izvēlieties ieņēmumu kontu naudas klasificēšanai."
 
 # sadalei
 #: ../src/gnome/druid-stock-split.c:399
@@ -4308,11 +4308,11 @@ msgstr "_Nokārtot visu"
 
 #: ../src/gnome/glade/account.glade.h:18
 msgid "Choose Currency"
-msgstr "Izvēlēties valūtu"
+msgstr "Izvēlieties valūtu"
 
 #: ../src/gnome/glade/account.glade.h:19
 msgid "Choose accounts to create"
-msgstr "Izvēlēties kontus izveidošanai"
+msgstr "Izvēlieties kontus izveidošanai"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-plain.scm
 #. src/report/stylesheets/stylesheet-plain.scm
@@ -4538,7 +4538,7 @@ msgstr "Pārnumurēt analītiskos kontus"
 #: ../src/import-export/generic-import.glade.h:44
 #: ../src/import-export/qif-import/qif.glade.h:58
 msgid "Select Account"
-msgstr "Izvēlēties kontu"
+msgstr "Izvēlieties kontu"
 
 #: ../src/gnome/glade/account.glade.h:59
 msgid "Select categories that correspond to the ways that you will use GnuCash.  Each category you select will cause several accounts to be created.  Select the categories that are relevant to you.  You can always create additional accounts by hand later."
@@ -4574,7 +4574,7 @@ msgstr "_Attiecas uz nodokļiem"
 
 #: ../src/gnome/glade/account.glade.h:67
 msgid "This account (and any sub-accounts) will be hidden in the account tree and will not appear in the popup account list in the register.  To reset this option, you will first need to open the \"Filter By...\" dialog for the account tree and check the \"show hidden accounts\" option.  Doing so will allow you to select the account and reopen this dialog."
-msgstr "Šis konts (un jebkurš analītiskais konts) būs paslēpts kontu kokā un nebūs redzams reģistra izlecošajā kontu sarakstā. Lai restaurētu šo izvēli, vispirms jāatver \"Atlasīt pēc...\" dialoglogu kontu kokā un jāatzīmē \"rādīt paslēptos kontus\". Kad tas izdarīts, jūs varēsiet izvēlēties kontu un atvērt šo dialogu vēlreiz."
+msgstr "Šis konts (un jebkurš analītiskais konts) būs paslēpts kontu kokā un nebūs redzams reģistra izlecošajā kontu sarakstā. Lai restaurētu šo izvēli, vispirms jāatver \"Atlasīt pēc...\" dialoglogu kontu kokā un jāatzīmē \"rādīt paslēptos kontus\". Kad tas izdarīts, jūs varēsiet izvēlieties kontu un atvērt šo dialogu vēlreiz."
 
 #: ../src/gnome/glade/account.glade.h:68
 msgid "This account contains read-only transactions which may not be deleted."
@@ -4600,7 +4600,7 @@ msgid ""
 msgstr ""
 "Šis vednis palīdzēs izveidot GnuCash kontu kopumu jūsu aktīviem (kā ieguldījumi, kontu pārbaude vai uzkrājumu konti), saistībām (kā aizņēmumi) un dažāda veida ieņēmumiem un izdevumiem. \n"
 "\n"
-"Klikšķināt 'Atcelt', ja nevēlaties tagad veidot jaunus kontus."
+"Klikšķiniet 'Atcelt', ja nevēlaties tagad veidot jaunus kontus."
 
 #: ../src/gnome/glade/account.glade.h:75
 msgid ""
@@ -4705,7 +4705,7 @@ msgstr "Piezīmes:"
 
 #: ../src/gnome/glade/acctperiod.glade.h:7
 msgid "Select an accounting period and the closing date for the period.  Books will be closed on midnight of the selected date."
-msgstr "Izvēlēties atskaišu periodu un šī perioda slēgšanas datumu. Grāmatas tiks slēgtas noteiktā datuma pusnaktī."
+msgstr "Izvēlieties atskaišu periodu un šī perioda slēgšanas datumu. Grāmatas tiks slēgtas noteiktā datuma pusnaktī."
 
 #: ../src/gnome/glade/acctperiod.glade.h:8
 msgid "Setup Accounting Periods"
@@ -5578,7 +5578,7 @@ msgstr "Grafiks..."
 
 #: ../src/gnome/glade/register.glade.h:43
 msgid "Select Range:"
-msgstr "Izvēlēties intervālu:"
+msgstr "Izvēlieties intervālu:"
 
 #: ../src/gnome/glade/register.glade.h:44
 msgid "Select _All"
@@ -6272,7 +6272,7 @@ msgstr "Atlasīt visu"
 
 #: ../src/gnome/glade/sched-xact.glade.h:159
 msgid "Select occurrence date above."
-msgstr "Augstāk izvēlēties parādīšanās datumu."
+msgstr "Augstāk izvēlieties parādīšanās datumu."
 
 #: ../src/gnome/glade/sched-xact.glade.h:160
 msgid "Semi-Monthly"
@@ -6483,7 +6483,7 @@ msgstr "_Apraksts:"
 
 #: ../src/gnome/glade/stocks.glade.h:6
 msgid "Enter the date and the number of shares you gained or lost from the stock split or merger. For stock mergers (negative splits) use a negative value for the share distribution. You can also enter a description of the transaction, or accept the default one."
-msgstr "Ievadiet datumu un daļu skaitu, ko ieguvāt vai zaudējāt no akciju sadalīšanas vai apvienošanas. Akciju apvienošanai (negatīvie sadalījumi) lietojiet negatīvu vērtību akciju klasificēšanai. Jūs varat arī ievadīt grāmatojuma aprakstu, vai akceptēt noklusējumā esošo."
+msgstr "Ievadiet datumu un daļu skaitu, ko ieguvāt vai zaudējāt no akciju sadalīšanas vai sapludināšanas. Akciju apvienošanai (negatīvie sadalījumi) lietojiet negatīvu vērtību akciju klasificēšanai. Jūs varat arī ievadīt grāmatojuma aprakstu, vai akceptēt noklusēto."
 
 #: ../src/gnome/glade/stocks.glade.h:7
 msgid "If you are finished creating the stock split or merger, press `Apply'. You may also press `Back' to review your choices, or `Cancel' to quit without making any changes."
@@ -6519,7 +6519,7 @@ msgstr "Akciju sadalījuma detaļas"
 
 #: ../src/gnome/glade/stocks.glade.h:15
 msgid "This assistant will help you record a stock split or stock merger."
-msgstr "Šis vednis palīdzēs izveidot krājumu akciju sadalīšanu vai apvienošanu."
+msgstr "Šis vednis palīdzēs izveidot krājumu akciju sadalīšanu vai sapludināšanu."
 
 #: ../src/gnome/glade/stocks.glade.h:16
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:4
@@ -6576,7 +6576,7 @@ msgstr "Nodokļu informācija"
 
 #: ../src/gnome/glade/tax.glade.h:13
 msgid "Tax _Related"
-msgstr "_Ar nodokļiem saistīts"
+msgstr "_Saistīt ar nodokļiem"
 
 #: ../src/gnome/glade/tax.glade.h:15
 msgid "_Asset"
@@ -6640,7 +6640,7 @@ msgstr "_Atvērt..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:105
 msgid "Open an existing GnuCash file"
-msgstr "Atvērt eksistējošu GnuCash failu"
+msgstr "Atvērt esošu GnuCash failu"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:109
 msgid "_Save"
@@ -6783,7 +6783,7 @@ msgstr "Atvērt esošu budžetu"
 
 #: ../src/gnome/gnc-plugin-budget.c:240
 msgid "Select a Budget"
-msgstr "Izvēlēties budžetu"
+msgstr "Izvēlieties budžetu"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:156
 msgid "Create a new Account"
@@ -6885,12 +6885,12 @@ msgstr "Pārskaitīt naudu no viena konta uz citu"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:215
 #: ../src/gnome/gnc-plugin-page-register.c:296
 msgid "Stoc_k Split..."
-msgstr "_Akciju sadalījums..."
+msgstr "_Akciju sadalīšana..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:216
 #: ../src/gnome/gnc-plugin-page-register.c:297
 msgid "Record a stock split or a stock merger"
-msgstr "Pierakstīt akciju sadalījumu vai apvienošanu"
+msgstr "Pierakstīt akciju sadalīšanu vai sapludināšanu"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:220
 #: ../src/gnome/gnc-plugin-page-register.c:301
@@ -7616,15 +7616,15 @@ msgstr "Šajā laukā ir šī dialogloga pēdējais izmantotais ceļa nosaukums.
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:13
 msgid "This setting indicates how the key column is sorted. Possible values for this setting are 'ascending' and 'descending'."
-msgstr "Šis iestatījums norāda to, pēc kāda principa kārtota galvenā kolonna. Iespējamie varianti ir 'augošs' vai 'dilstošs'."
+msgstr "Šis iestatījums nosaka, kā tiek kārtota galvenā kolonna. Iespējamie varianti ir 'augošs' vai 'dilstošs'."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:14
 msgid "This setting indicates whether to search in all items in the current class, or only in 'active' items in the current class."
-msgstr "Šis iestatījums norāda, vai meklēt pašreizējās klases visos posteņos, vai tikai 'aktīvs' posteņus pašreizējā klasē."
+msgstr "Šis iestatījums nosaka, vai meklēt pašreizējās klases visos posteņos, vai tikai 'aktīvs' posteņus pašreizējā klasē."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:15
 msgid "This setting indicates which column in the tree is used for sorting. Possible values for this setting are the name of any column in this window (see the column_order key) or the keyword 'none'."
-msgstr "Šis iestatījums norāda, kura kolonna kokā izmantota kārtošanai. Iespējamie varianti ir jebkuras kolonnas nosaukums dialoglogā (skatīt kolonnu kārtību atslēgu), vai arī atslēgas vārds 'neviens'."
+msgstr "Šis iestatījums nosaka, kura kolonna kokā izmantota kārtošanai. Iespējamie varianti ir jebkuras kolonnas nosaukums dialoglogā (skatīt kolonnu kārtību atslēgu), vai arī atslēgas vārds 'neviens'."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:16
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:17
@@ -7832,19 +7832,19 @@ msgstr "Cik dienas iepriekš atgādināt lietotājam."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:3
 msgid "If active, any newly created scheduled transaction will have its 'auto create' flag set active by default. The user can change this flag during transaction creation, or at any later time by editing the scheduled transaction."
-msgstr "Ja aktivizēts, jebkuram no jauna izveidotiem plānotajiem grāmatojumiem karogs  'auto izveidot' būs aktivizēts noklusējumā. Lietotājs var mainīt karogu grāmatojuma izveides laikā vai vēlāk, rediģējot plānoto grāmatojumu."
+msgstr "Ja aktivizēts, jebkuram no jauna izveidotiem plānotajiem grāmatojumiem karogs  'auto izveidot' būs aktivizēts automātiski. Lietotājs var mainīt karogu grāmatojuma izveides laikā vai vēlāk, rediģējot plānoto grāmatojumu."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:4
 msgid "If active, any newly created scheduled transaction will have its 'notify' flag set by default. The user can change this flag during transaction creation, or at any later time by editing the scheduled transaction. This setting only has meaning if the create_auto setting is active."
-msgstr "Ja aktivizēts, jebkuram no jauna izveidotam plānotajam grāmatojumam karogs 'paziņot' būs iestatīts noklusējumā. Lietotājs var mainīt šo karogu grāmatojuma izveides laikā vai vēlāk, rediģējot šo plānoto grāmatojumu. Šim iestatījumam ir jēga tikai tad, ja izveidot_auto iestatījums ir aktīvs."
+msgstr "Ja aktivizēts, jebkuram no jauna izveidotam plānotajam grāmatojumam karogs 'paziņot' būs iestatīts automātiski. Lietotājs var mainīt šo karogu grāmatojuma izveides laikā vai vēlāk, rediģējot šo plānoto grāmatojumu. Šim iestatījumam ir jēga tikai tad, ja izveidot_auto iestatījums ir aktīvs."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:5
 msgid "Set the \"auto create\" flag by default"
-msgstr "Iestatīt \"auto izveidot\" karogu noklusējumā"
+msgstr "Iestatīt \"auto izveidot\" karogu automātiski"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:6
 msgid "Set the \"notify\" flag by default"
-msgstr "Iestatīt \"paziņot\" karogu noklusējumā"
+msgstr "Iestatīt \"paziņot\" karogu automātiski"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:7
 msgid "Show \"since last run\" dialog when a file is opened."
@@ -7957,7 +7957,7 @@ msgstr "Atļauj failu saspiešanu, rakstot datu failu."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:23
 msgid "If active all lines that make up a single transaction will use the same color for their background. Otherwise the background colors are alternated on each line."
-msgstr "Ja aktivizēts, visas rindas, kas izveido vienu grāmatojumu, izmantos to pašu krāsu savam fonam. Ja ne, fona krāsas būs izmainītas - katrai rindai cita."
+msgstr "Ja ieslēgts, visas rindas, kas izveido vienu grāmatojumu, izmantos to pašu krāsu savam fonam. Ja ne, fona krāsas būs izmainītas - katrai rindai cita."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:24
 msgid "If active then after a memorised transaction is automatically filled in the cursor will move to the Transfer field. If not active then it skips to the value field."
@@ -7965,55 +7965,55 @@ msgstr "Ja ieslēgts, pēc saglabāta grāmatojuma kursors tiek automātiski pā
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:25
 msgid "If active, GnuCash shows an explanation of the auto-save feature the first time that feature is started. Otherwise no extra explanation is shown."
-msgstr "Ja aktivizēts, GnuCash rāda paskaidrojumu automātiskās saglabāšanas iespējām pirmajā reizē, kad šī iespēja uzsākta. Ja ne, nekādi paskaidrojumi netiek rādīti."
+msgstr "Ja ieslēgts, GnuCash rāda paskaidrojumu automātiskās saglabāšanas iespējām pirmajā reizē, kad šī iespēja uzsākta. Ja ne, nekādi paskaidrojumi netiek rādīti."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:26
 msgid "If active, GnuCash will automatically insert a decimal point into values that are entered without one. Otherwise GnuCash will not modify entered numbers."
-msgstr "Ja aktivizēts, GnuCash automātiski vērtībās ievietos komatu, ja ierakstot tie nebūs ielikti. Ja ne, GnuCash neveiks izmaiņas ievadītajos skaitļos."
+msgstr "Ja ieslēgts, GnuCash automātiski vērtībās ievietos komatu, ja ierakstot tie nebūs ielikti. Ja ne, GnuCash neveiks izmaiņas ievadītajos skaitļos."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:27
 msgid "If active, a \"close\" button will be displayed on any notebook tab that may be closed. Otherwise, no such button will be shown on the tab. Regardless of this setting, pages can always be closed via the \"close\" menu item or the \"close\" button on toolbar."
-msgstr "Ja aktīvs, \"aizvērt\" poga tiks parādīta uz jebkuras piezīmju grāmatas cilnes, kuru var aizvērt. Ja ne, tāda poga nebūs uz cilnes redzama. Ja vien tas nav iestatījumos, lapas vienmēr var aizvērt caur \"aizvērt\" navigācijas izvēlnes posteni vai \"aizvērt\" pogu rīkjoslā."
+msgstr "Ja ieslēgts, \"aizvērt\" poga tiks parādīta uz jebkuras piezīmju grāmatas cilnes, kuru var aizvērt. Ja ne, tāda poga nebūs uz cilnes redzama. Ja vien tas nav iestatījumos, lapas vienmēr var aizvērt caur \"aizvērt\" navigācijas izvēlnes posteni vai \"aizvērt\" pogu rīkjoslā."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:28
 msgid "If active, a splash screen will be shown at startup. Otherwise no splash screen will be shown."
-msgstr "Ja aktivizēts, uzsākot būs redzams uzplaiksnījuma ekrāns. Ja ne, tāds nebūs redzams."
+msgstr "Ja ieslēgts, uzsākot būs redzams uzplaiksnījuma ekrāns. Ja ne, tāds nebūs redzams."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:29
 msgid "If active, closing a tab moves to the most recently visited tab. Otherwise closing a tab moves one tab to the left."
-msgstr "Ja aktivizēts, cilnes aizvēršana pāriet uz pēdējo apmeklēto cilni. Ja ne, cilnes aizvēršana pāriet uz nākošo cilni pa kreisi."
+msgstr "Ja ieslēgts, cilnes aizvēršana pāriet uz pēdējo apmeklēto cilni. Ja ne, cilnes aizvēršana pāriet uz nākošo cilni pa kreisi."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:30
 msgid "If active, each new register will be opened in a new window. Otherwise each new register will be opened as a tab in the main window."
-msgstr "Ja aktivizēts, katrs jauns reģistrs būs atvērts jaunā logā. Ja ne, katrs jauns reģistrs tiks atvērts kā cilne galvenajā logā."
+msgstr "Ja ieslēgts, katrs jauns reģistrs būs atvērts jaunā logā. Ja ne, katrs jauns reģistrs tiks atvērts kā cilne galvenajā logā."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:31
 msgid "If active, each new report will be opened in its own window. Otherwise new reports will be opened as tabs in the main window."
-msgstr "Ja aktivizēts, katrs jauns pārskats būs atvērts tajā pašā logā. Ja ne, jauns pārskats tiks atvērtas kā cilne galvenajā logā."
+msgstr "Ja ieslēgts, katrs jauns pārskats būs atvērts tajā pašā logā. Ja ne, jauns pārskats tiks atvērtas kā cilne galvenajā logā."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:32
 msgid "If active, formal accounting labels \"Credit\" and \"Debit\" will be used when designating fields on screen. Otherwise, informal labels such as Increase/Decrease, \"Funds In\"/\"Funds Out\", etc. will be used."
-msgstr "Ja aktivizēts, tiks izmantoti formālie grāmatvedības uzraksti \"Kredīts\" un \"Debets\", ja uz ekrāna norāda laukus. Ja ne, tiks izmantoti informējoši virsraksti, tādi kā Palielināt/Samazināt, \"Ienākošie līdzekļi\"/\"Izejošie līdzekļi\", u.c. "
+msgstr "Ja ieslēgts, tiks izmantoti formālie grāmatvedības uzraksti \"Kredīts\" un \"Debets\", ja uz ekrāna norāda laukus. Ja ne, tiks izmantoti informējoši virsraksti, tādi kā Palielināt/Samazināt, \"Ienākošie līdzekļi\"/\"Izejošie līdzekļi\", u.c. "
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:33
 msgid "If active, gnucash will be allowed to intentionally break file compatibility with older versions, so that a data file saved in this version cannot be read by an older version again. Otherwise gnucash will write data files only in formats that can be read by older versions as well."
-msgstr "Ja aktivizēts, gnucash būs atļauts ar nodomu salauzt failu saderību ar vecākām versijām, tādējādi datu fails, kas saglabāts šajā versijā, vecajā versijā vairs nav lasāms. Ja ne, gnucash rakstīs datu failus tikai tajos formātos, kuri ir lasāmi arī vecākajās versijās."
+msgstr "Ja ieslēgts, gnucash būs atļauts pārkāpt failu saderību ar vecākām versijām, tādējādi datu fails, kas saglabāts šajā versijā, vecajā versijā vairs nebūs lasāms. Ja ne, gnucash rakstīs datu failus tikai tajos formātos, kuri ir lasāmi arī vecākajās versijās."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:34
 msgid "If active, pressing the enter key will move to the bottom of the register. Otherwise pressing the enter key will move to the next transaction line."
-msgstr "Ja aktivizēts, nospiežot enter taustiņu pāries uz reģistra apakšu. Ja ne, nospiežot enter taustiņu, pāries uz nākošo grāmatojuma rindu. "
+msgstr "Ja ieslēgts, nospiežot enter taustiņu pāries uz reģistra apakšu. Ja ne, nospiežot enter taustiņu, pāries uz nākošo grāmatojuma rindu. "
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:35
 msgid "If active, the register will be colored as specified by the system theme. This can be overridden to provide custom colors by editing the gtkrc file in the users home directory. Otherwise the standard register colors will be used that GnuCash has always used."
-msgstr "Ja aktivizēts, reģistrs tiks iekrāsots kā norādīts sistēmas tēmā. To var ignorēt piedāvājot pielāgotas krāsas, ko veic rediģējot gtkrc failu lietotāju mājas direktorijā. Ja ne, tiks izmantotas standarta reģistra krāsas, kādas GnuCash vienmēr ir izmantojis."
+msgstr "Ja ieslēgts, reģistrs tiks iekrāsots kā norādīts sistēmas tēmā. To var ignorēt piedāvājot pielāgotas krāsas, ko veic rediģējot gtkrc failu lietotāju mājas direktorijā. Ja ne, tiks izmantotas standarta reģistra krāsas, kādas GnuCash vienmēr ir izmantojis."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:36
 msgid "If active, the size and location of each dialog window will be saved when it is closed. The sizes and locations of content windows will be remembered when you quit GnuCash. Otherwise the sizes will not be saved."
-msgstr "Ja aktivizēts, katra dialogloga lielums un novietojums aizverot tiks saglabāts. Satura logu lielumi un novietojums tiks iegaumēti izejot no GnuCash programmas. Ja ne, lielumi netiks saglabāti."
+msgstr "Ja ieslēgts, katra dialogloga lielums un novietojums aizverot tiks saglabāts. Satura logu lielumi un novietojums tiks iegaumēti izejot no GnuCash programmas. Ja ne, lielumi netiks saglabāti."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:37
 msgid "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
-msgstr "Ja aktivizēts, izmanto 24 stundu laika formātu. Ja ne - 12 stundu laika formāts."
+msgstr "Ja ieslēgts, izmanto 24 stundu laika formātu. Ja ne - 12 stundu laika formāts."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:38
 msgid "Labels on toolbar buttons"
@@ -8114,7 +8114,7 @@ msgstr "Šis iestatījums noteiktos kontos pieļauj bilances ar pretējām zīm�
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:64
 msgid "This setting chooses the way dates are displayed in GnuCash. Possible values for this setting are \"locale\" to use the system locale setting, \"ce\" for Continental Europe style dates, \"iso\" for ISO 8601 standard dates , \"uk\" for United Kingdom style dates, and \"us\" for United States style dates."
-msgstr "Šis iestatījums izvēlas, kā GnuCash ir redzams datums. Iespējamās vērtības šim iestatījumam ir \"vietējais\", lai izmantotu vietējās sistēmas iestatījumu, \"ce\" - kontinentālās Eiropas datuma stils, \"iso\" - ISO 8601 standarta datums, \"uk\" - UK datuma stils, un \"us\" - ASV satuma stils."
+msgstr "Šis iestatījums izvēlas, kā GnuCash ir redzams datums. Iespējamās vērtības šim iestatījumam ir \"vietējais\", lai izmantotu vietējās sistēmas iestatījumu, \"ce\" - kontinentālās Eiropas datuma stils, \"iso\" - ISO 8601 standarta datums, \"uk\" - UK datuma stils, un \"us\" - ASV datuma stils."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:65
 msgid "This setting controls how the labels on toolbar buttons are shown. If set to \"system\" then GnuCash will use the desktop setting for how to draw toolbar buttons. If set to \"icon\" then only icons will be show on toolbar buttons.. If set to \"text\" only the labels will be shown. If set to \"both\" then both icons and labels will be shown. If set to \"both-horiz\" then icons will be shown for all buttons with labels added on important buttons."
@@ -8130,15 +8130,15 @@ msgstr "Šis iestatījums kontrolē noklusējuma pirmsākumu valūtas jaunajiem 
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:68
 msgid "This setting determines the character that will be used between components of an account name. Possible values are any single non-alphanumeric unicode character, or any of the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and \"period\"."
-msgstr "Šis iestatījums nosaka simbolu, kas tiks izmantota starp konta nosaukuma komponentēm. Iespējamās vērtības ir jebkura viena unikoda simbols, izņemot alfabētu vai skaitļus, kā piem.:\"kols\", \"slīpstrīpa\", \"pretēja slīpstrīpa , \"domuzīme\" un\"punkts\"."
+msgstr "Šis iestatījums nosaka simbolu, kas tiks izmantota starp konta nosaukuma komponentēm. Iespējamās vērtības ir jebkura viena unikoda simbols, izņemot alfabētu vai skaitļus, kā piem.:\"kols\", \"slīpstrīpa\", \"pretēja slīpsvītra , \"domuzīme\" un\"punkts\"."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:69
 msgid "This setting determines the edge at which the summary bar for various pages is drawn. Possible values are \"top\" and \"bottom\". It defaults to \"bottom\"."
-msgstr "Šis iestatījums nosaka to robežu, kur ir uzzīmēta dažādu lapu kopsavilkuma josla. Iespējamās vērtības ir \"augša\" un \"apakša\". Noklusējumā ir \"apakša\"."
+msgstr "Šis iestatījums nosaka to robežu, kur ir uzzīmēta dažādu lapu kopsavilkuma josla. Iespējamās vērtības ir \"augša\" un \"apakša\". Noklusēti ir \"apakša\"."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:70
 msgid "This setting determines the edge at which the tabs for switching pages in notebooks are drawn. Possible values are \"top\", \"left\", \"bottom\" and \"right\". It defaults to \"top\"."
-msgstr "Šis iestatījums nosaka malu, kurā iezīmētas cilnes, pāriešanai no vienas piezīmju grāmatas lapas uz otru. Iespējamās vērtības ir \"augšā\", \"pa kreisi\", \"apakšā\" un \"pa labi\". Noklusējumā ir \"augšā\"."
+msgstr "Šis iestatījums nosaka malu, kurā iezīmētas cilnes, pāriešanai no vienas piezīmju grāmatas lapas uz otru. Iespējamās vērtības ir \"augšā\", \"pa kreisi\", \"apakšā\" un \"pa labi\". Noklusēti ir \"augšā\"."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:71
 msgid "This setting specifies the default currency used for new accounts if the currency_choice setting is set to \"other\". This field must contain the three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
@@ -8362,11 +8362,11 @@ msgstr "Izvēlēties"
 
 #: ../src/gnome-search/dialog-search.c:866
 msgid "all criteria are met"
-msgstr "visi kritēriji ir ievēroti"
+msgstr "atbilst visi kritēriji"
 
 #: ../src/gnome-search/dialog-search.c:867
 msgid "any criteria are met"
-msgstr "jebkuri kritēriji ir ievēroti"
+msgstr "atbilst jebkurš kritērijs"
 
 #. Translators: %s is either "item" or the name of some other
 #. * item, e.g. "Customer" or "Invoice".
@@ -8412,7 +8412,7 @@ msgstr "Izvēlēties saskaņotus kontus"
 
 #: ../src/gnome-search/search-account.c:257
 msgid "Select the Accounts to Compare"
-msgstr "Izvēlēties kontus, lai salīdzinātu"
+msgstr "Izvēlieties salīdzināmos kontus"
 
 #. Build and connect the toggle
 #: ../src/gnome-search/search-boolean.c:204
@@ -8453,7 +8453,7 @@ msgstr "ir mazāk par"
 #: ../src/gnome-search/search-int64.c:189
 #: ../src/gnome-search/search-numeric.c:223
 msgid "is less than or equal to"
-msgstr "ir mazāk vai vienāds ar"
+msgstr "ir mazāks vai vienāds ar"
 
 #: ../src/gnome-search/search-double.c:188
 #: ../src/gnome-search/search-int64.c:190
@@ -8477,7 +8477,7 @@ msgstr "ir lielāks par"
 #: ../src/gnome-search/search-int64.c:193
 #: ../src/gnome-search/search-numeric.c:236
 msgid "is greater than or equal to"
-msgstr "ir lielāks par vai vienāds ar"
+msgstr "ir lielāks vai vienāds ar"
 
 #: ../src/gnome-search/search.glade.h:1
 msgid " Search "
@@ -8497,7 +8497,7 @@ msgstr "Pievienot rezultātus pašreizējai meklēšanai"
 
 #: ../src/gnome-search/search.glade.h:5
 msgid "Choose whether to search all your data or only that marked as \"active\""
-msgstr "Izvēlēties meklēt visus jūsu datus, vai tikai tos, kas atzīmēti kā \"aktīvs\""
+msgstr "Izvēlieties meklēt visus jūsu datus, vai tikai tos, kas atzīmēti kā \"aktīvs\""
 
 #: ../src/gnome-search/search.glade.h:6
 msgid "Delete results from current search"
@@ -8537,7 +8537,7 @@ msgstr "mazāks par"
 
 #: ../src/gnome-search/search-numeric.c:222
 msgid "less than or equal to"
-msgstr "mazāks par, vai vienāds ar"
+msgstr "mazāks vai vienāds ar"
 
 #: ../src/gnome-search/search-numeric.c:226
 msgid "equal to"
@@ -8553,7 +8553,7 @@ msgstr "lielāks par"
 
 #: ../src/gnome-search/search-numeric.c:235
 msgid "greater than or equal to"
-msgstr "lielāks par, vai vienāds ar"
+msgstr "lielāks vai vienāds ar"
 
 #: ../src/gnome-search/search-numeric.c:252
 msgid "has credits or debits"
@@ -8614,7 +8614,7 @@ msgstr "saskan ar regex"
 
 #: ../src/gnome-search/search-string.c:266
 msgid "does not match regex"
-msgstr "nesaskaņots ar regex"
+msgstr "nesaskan ar regex"
 
 #. Build and connect the toggle button
 #: ../src/gnome-search/search-string.c:328
@@ -8762,15 +8762,15 @@ msgstr ""
 
 #: ../src/gnome-utils/dialog-commodity.c:280
 msgid "Select security/currency"
-msgstr "Izvēlēties nodrošinājumu/valūtu"
+msgstr "Izvēlieties nodrošinājumu/valūtu"
 
 #: ../src/gnome-utils/dialog-commodity.c:284
 msgid "Select security"
-msgstr "Izvēlēties nodrošinājumu"
+msgstr "Izvēlieties nodrošinājumu"
 
 #: ../src/gnome-utils/dialog-commodity.c:289
 msgid "Select currency"
-msgstr "Izvēlēties valūtu"
+msgstr "Izvēlieties valūtu"
 
 #: ../src/gnome-utils/dialog-commodity.c:529
 msgid "You must select a commodity. To create a new one, click \"New\""
@@ -8806,7 +8806,7 @@ msgstr "Nevar izveidot jaunu nacionālo valūtu."
 
 #: ../src/gnome-utils/dialog-commodity.c:1280
 msgid "That commodity already exists."
-msgstr "Prece jau eksistē."
+msgstr "Prece jau pastāv."
 
 #: ../src/gnome-utils/dialog-commodity.c:1328
 msgid "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type\" for the commodity."
@@ -8848,7 +8848,7 @@ msgstr "Izvēlēties noklusējumu"
 
 #: ../src/gnome-utils/dialog-options.c:948
 msgid "Select the default account selection."
-msgstr "Izvēlēties noklusējuma kontu izvēlni."
+msgstr "Izvēlieties noklusējuma kontu izvēlni."
 
 #: ../src/gnome-utils/dialog-options.c:962
 msgid "Show Hidden Accounts"
@@ -8920,7 +8920,7 @@ msgstr "Nevar pārskaitīt no viena konta uz to pašu kontu!"
 
 #: ../src/gnome-utils/dialog-transfer.c:1342
 msgid "You can't transfer from a non-currency account.  Try reversing the \"from\" and \"to\" accounts and making the \"amount\" negative."
-msgstr "Nevar pārskaitīt no ne-valūtas konta. Mēģiniet otrādi \"no\" un \"uz\" kontiem un izveidojot \"summa\" negatīvu."
+msgstr "Nevar pārskaitīt no ne-valūtas konta. Mēģiniet otrādi \"no\" un \"uz\" kontiem un izveidojot negatīvu \"summa\"."
 
 #: ../src/gnome-utils/dialog-transfer.c:1367
 msgid "You must enter an amount to transfer."
@@ -8961,7 +8961,7 @@ msgstr "Atcerēties un nekad vairs nejautāt."
 
 #: ../src/gnome-utils/dialog-utils.c:967
 msgid "Don't _tell me again."
-msgstr "Neteikt vairs."
+msgstr "Vairs neteikt."
 
 #: ../src/gnome-utils/dialog-utils.c:970
 msgid "Remember and don't ask me again this _session."
@@ -8973,25 +8973,25 @@ msgstr "Neteikt vairs šīs _sesijas laikā."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:428
 msgid "When you click Apply, GnuCash will modify your ~/.gconf.path file and restart the gconf backend."
-msgstr "Kad klikšķināsiet Pielietot, GnuCash pārveidos jūsu ~/.gconf.path failu un pārstartēs gconf aizmugursistēmā."
+msgstr "Kad klikšķināsiet Pielietot, GnuCash pārveidos jūsu ~/.gconf.path failu un pārstartēs gconf fona procesu."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:431
 #, c-format
 msgid "When you click Apply, GnuCash will install the gconf data into your local ~/.gconf file and restart the gconf backend.  The %s script must be found in your search path for this to work correctly."
-msgstr "Kad klikšķināsiet Pielietot, GnuCash uzstādīs gconf datus jūsu lokālajā ~/.gconf reģistrā un pārstartēs gconf aizmugursistēmā. Šis %s skripts ir jāatrod jūsu meklēšanas ceļā, lai tas pareizi darbotos."
+msgstr "Kad klikšķināsiet Pielietot, GnuCash uzstādīs gconf datus jūsu lokālajā ~/.gconf reģistrā un pārstartēs gconf fona procesu. Šis %s skripts ir jāatrod jūsu meklēšanas ceļā, lai tas pareizi darbotos."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:435
 msgid "You have chosen to correct the problem by yourself.  When you click Apply, GnuCash will exit.  Please correct the problem and restart the gconf backend with the command 'gconftool-2 --shutdown' before restarting GnuCash.  If you have not already done so, you can click the Back button and copy the necessary text from the dialog."
-msgstr "Jūs izvēlējāties labot kļudu pats. Ja spiedīsiet Pielietot, GnuCash izies. Izrediģējiet šo kļudu un pārstartējiet gconf aizmugursistēmā ar komandu 'gconftool-2 --shutdown' pirms pārstartējat GnuCash. Ja vēl neesiet to izdarījis, klikšķiniet pogu Atpakaļ un nokopējiet nepieciešamo tekstu no dialogloga."
+msgstr "Jūs izvēlējāties labot kļudu pats. Ja spiedīsiet Pielietot, GnuCash izies. Izrediģējiet šo kļudu un pārstartējiet gconf fona procesu ar komandu 'gconftool-2 --shutdown' pirms pārstartējat GnuCash. Ja vēl neesiet to izdarījis, klikšķiniet pogu Atpakaļ un nokopējiet nepieciešamo tekstu no dialogloga."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:441
 #, c-format
 msgid "You have chosen to correct the problem by yourself.  When you click Apply, GnuCash will exit.  Please run the %s script which will install the configuration data and restart the gconf backend."
-msgstr "Jūs izvēlējāties labot kļudu pats. Ja uzspiedīsiet Pielietot, GnuCash izies. Palaidiet %s skriptu, kas uzstādīs konfigurācijas datus un pārstartēs gconf aizmugursistēmā."
+msgstr "Jūs izvēlējāties labot kļūdu pats. Ja uzspiedīsiet Pielietot, GnuCash izies. Palaidiet %s skriptu, kas uzstādīs konfigurācijas datus un pārstartēs gconf fona procesu."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:445
 msgid "You have already corrected the problem and restarted the gconf backend with the command 'gconftool-2 --shutdown'.  When you click Apply, GnuCash will continue loading."
-msgstr "Jūs jau izlabojāt kļudu un pārstartējāt gconf aizmugursistēmā ar komandu 'gconftool-2 --shutdown'. Ja klikšķināsiet Pielietot, GnuCash turpinās lādēšanu."
+msgstr "Jūs jau izlabojāt kļūdu un pārstartējāt gconf fona procesu ar komandu 'gconftool-2 --shutdown'. Ja klikšķināsiet Pielietot, GnuCash turpinās lādēšanu."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:196
 msgid ""
@@ -9135,7 +9135,7 @@ msgstr "Raksta failu..."
 #: ../src/gnome-utils/druid-gnc-xml-import.c:900
 #, c-format
 msgid "There are %d unassigned and %d undecodable words. Please add encodings."
-msgstr "Ir %d nenoteikti un %d undecodable vārdi. Pievienojiet kodus."
+msgstr "Ir %d nenoteikti un %d neatšifrējami vārdi. Pievienojiet kodus."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:908
 #, c-format
@@ -9161,7 +9161,7 @@ msgstr "Šis ir nederīgs kodējums."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:1606
 msgid "No files to merge. Please add ones by clicking on 'Load another file'."
-msgstr "Nav failu savienošanai. Pievienojiet tos klikšķinot uz 'Atvērt citu failu'."
+msgstr "Nav failu ko sapludināt. Pievienojiet tos klikšķinot uz 'Atvērt citu failu'."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:1
 msgid "1 /"
@@ -9225,7 +9225,7 @@ msgstr "Laika _zona:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:16
 msgid "Type of quote source:"
-msgstr "Noteiktā pirmsākuma tips:"
+msgstr "Noteiktās kvotas tips:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:17
 msgid "Warning: Finance::Quote not installed properly."
@@ -9302,7 +9302,7 @@ msgstr "Nav brīdinājumu restaurēšanai."
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:2
 msgid "Permanent Warnings"
-msgstr "Ilgstoši brīdinājums"
+msgstr "Pastāvīgi brīdinājumi"
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:3
 msgid "Reset Warnings"
@@ -9314,7 +9314,7 @@ msgstr "Īslaicīgi brīdinājumi"
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:5
 msgid "You have requested that the following warning dialogs not be presented.  To re-enable any of these dialogs, select the check box next to the dialog, then click OK."
-msgstr "Jūs vēlējāties, lai sekojošus brīdinošos dialogus nerāda. Lai rādītu jebkurus no šiem dialogiem, izvēlieties rūtiņu atzīmēšanai, kas atrodas līdzās dialogam, tad spiediet OK. "
+msgstr "Jūs izvēlējāties, ka sekojoši brīdinājuma dialogi netiks rādīti. Lai rādītu jebkurus no šiem dialogiem, izvēlieties rūtiņu atzīmēšanai, kas atrodas līdzās dialogam, tad spiediet OK. "
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:7
 msgid "_Unselect All"
@@ -9328,7 +9328,7 @@ msgid ""
 msgstr ""
 "<b>Noklusētās vērtības nav atrastas</b>\n"
 "\n"
-"Izmantotie konfigurācijas dati noklusēto vērtību norādīšanai nav atrodami GnuCash noklusētās sistēmas novietojumā. Bez šiem datiem GnuCash darbosies pareizi, bet tam, iespējams, vajadzēs vairāk laika iestatīšanai. Vai vēlaties iestatīt konfigurētos datus?"
+"Izmantotie konfigurācijas dati noklusēto vērtību norādīšanai nav atrodami GnuCash noklusētajā sistēmas vietā. Bez šiem datiem GnuCash darbosies pareizi, bet tam, iespējams, vajadzēs vairāk laika iestatīšanai. Vai vēlaties iestatīt konfigurētos datus?"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:4
 msgid "Choose method"
@@ -9340,11 +9340,11 @@ msgstr "Beigt izmaiņas"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:6
 msgid "GnuCash will install the data for you."
-msgstr "GnuCash uzstādīs jums datus."
+msgstr "GnuCash uzstādīs datus jūsu vietā."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:7
 msgid "GnuCash will update the system path for you."
-msgstr "GnuCash atjaunos jums sistēmas ceļu."
+msgstr "GnuCash atjaunos sistēmas ceļu jūsu vietā."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:8
 msgid "Install into home directory"
@@ -9400,18 +9400,18 @@ msgstr "Atjaunot meklēšanas ceļu"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:21
 msgid "You have chosen to install the configuration data used by GnuCash into the ~/.gconf directory.  GnuCash can do this for you, or tell you how to do it yourself."
-msgstr "Jūs izvēlējāties uzstādīt konfigurācijas datus, kurus izmanto GnuCash ~/.gconf direktorijā. GnuCash to var izdarīt jūsu vietā, vai arī norādīt, kā jums to izdarīt."
+msgstr "Jūs izvēlējāties uzstādīt GnuCash konfigurācijas datus, ~/.gconf direktorijā. GnuCash to var izdarīt jūsu vietā, vai arī norādīt, kā jums to izdarīt pašam."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:22
 msgid "You have chosen to update the system search path.  GnuCash can do this for you, or it can tell you how to do it yourself."
-msgstr "Jūs izvēlējāties atjaunot sistēmas meklēšanas ceļu. GnuCash to var izdarīt jūsu vietā, vai arī norādīt, kā jums to izdarīt."
+msgstr "Jūs izvēlējāties atjaunot sistēmas meklēšanas ceļu. GnuCash to var izdarīt jūsu vietā, vai arī norādīt, kā jums to izdarīt pašam."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:23
 msgid ""
 "You will then need to restart the gconf backend with the\n"
 "command 'gconftool-2 --shutdown'."
 msgstr ""
-"Tad jums vajadzēs pārstartēt gconf aizmugursistēmā ar \n"
+"Tad jums vajadzēs pārstartēt gconf fona procesu ar \n"
 "komandu 'gconftool-2 --shutdown'."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:25
@@ -9478,7 +9478,7 @@ msgstr "Noklusētais kodējums:"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:10
 msgid "Do not merge"
-msgstr "Nesavienot"
+msgstr "Nesapludināt"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:11
 msgid "Edit the list of encodings"
@@ -9518,9 +9518,9 @@ msgid ""
 "\n"
 "Click \"Next\" to finish loading files and move to the next step. "
 msgstr ""
-"Klikšķināt \"Atvērt citu failu\", ja šoreiz ir vairāk datu atvēršanai.\n"
+"Klikšķiniet \"Atvērt citu failu\", ja šoreiz ir vairāk datu atvēršanai.\n"
 "\n"
-"Klikšķināt \"Tālāk\", lai pabeigtu failu atvēršanu un pārietu pie nākamā soļa."
+"Klikšķiniet \"Tālāk\", lai pabeigtu failu atvēršanu un pārietu pie nākamā soļa."
 
 #: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:5
 #: ../src/import-export/qif-import/qif.glade.h:77
@@ -9664,7 +9664,7 @@ msgstr "<b>Datuma formāts</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:9
 msgid "<b>Default Currency</b>"
-msgstr "<b>Valūta noklusējumā</b>"
+msgstr "<b>Noklusētā valūta</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:10
 msgid "<b>Default Report Currency</b>"
@@ -9672,7 +9672,7 @@ msgstr "<b>Noklusētā pārskata valūta</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:11
 msgid "<b>Default Style</b>"
-msgstr "<b>Stils noklusējumā</b>"
+msgstr "<b>Noklusētais stils</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:12
 msgid "<b>End Date</b>"
@@ -9928,7 +9928,7 @@ msgstr "Neparakstīt kontus ar atpakaļejošu datumu. "
 
 #: ../src/gnome-utils/glade/preferences.glade.h:77
 msgid "Double _mode colors alternate with transactions"
-msgstr "Dubults krāsu _režīms mijas grāmatojumos"
+msgstr "Divu krāsu _mija grāmatojumos"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:78
 msgid "Draw _vertical lines between columns"
@@ -9968,7 +9968,7 @@ msgstr "Ja atzīmēts, ne-valūtas preces tiks parādītas kopsummas joslā, Ja 
 
 #: ../src/gnome-utils/glade/preferences.glade.h:88
 msgid "If checked, only the names of the leaf accounts are displayed in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Checking this option implies that you use unique leaf names."
-msgstr "Ja atzīmēts, tikai lapu kontu nosaukumi būs redzami reģistrā un kontu izvēlnes izlecošajā logā. Noklusējumā redzams pilns nosaukums, ieskaitot kontu koka ceļu. Atzīmējot šo izvēlni norāda, ka jūs izmantojat unikālus lapu nosaukumus."
+msgstr "Ja atzīmēts, tikai lapu kontu nosaukumi būs redzami reģistrā un kontu izvēlnes izlecošajā logā. Pēc noklusējuma redzams pilns nosaukums, ieskaitot kontu koka ceļu. Atzīmējot šo izvēlni norāda, ka jūs izmantojat unikālus lapu nosaukumus."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:89
 msgid "If checked, pressing the 'Enter' key will move to the blank transaction at the bottom of the register.  If clear, pressing the 'Enter' key will move down one row."
@@ -10225,7 +10225,7 @@ msgstr "_Absolūts:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:157
 msgid "_Auto-raise lists"
-msgstr "_Palielināt saraktu automātiski"
+msgstr "_Palielināt sarakstu automātiski"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:158
 msgid "_Auto-split ledger"
@@ -10546,7 +10546,7 @@ msgstr "(nulle)"
 #: ../src/gnome-utils/gnc-file.c:212
 #, c-format
 msgid "No suitable backend was found for %s."
-msgstr "Nav atrasta atbilstoša %s aizmugursistēma."
+msgstr "Nav atrasta atbilstošs %s fona process."
 
 #: ../src/gnome-utils/gnc-file.c:217
 #, c-format
@@ -10726,7 +10726,7 @@ msgstr "Ielādē lietotāja datus..."
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1436
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
-msgstr "Tāds fails %s jau eksistē. Vai tiešām vēlaties to pārrakstīt?"
+msgstr "Tāds fails %s jau pastāv. Vai tiešām vēlaties to pārrakstīt?"
 
 #: ../src/gnome-utils/gnc-file.c:965
 msgid "Exporting file..."
@@ -11038,18 +11038,18 @@ msgstr "Nesaglabāta grāmata"
 
 #: ../src/gnome-utils/gnc-main-window.c:3910
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash personīgais finanšu pārvaldnieks. Tas ir GNU veids, kā pārzināt jūsu naudu!"
+msgstr "GnuCash grāmatvedības programma. Pārvaldiet savu naudu ar GNU!"
 
 #. Development version
 #: ../src/gnome-utils/gnc-main-window.c:3923
 #, c-format
 msgid "%s  This copy was built from svn r%s on %s."
-msgstr "%s Šī kopija ir izveidota no svn r%s uz %s."
+msgstr "%s Šī kopija ir izveidota no svn r%s %s."
 
 #: ../src/gnome-utils/gnc-main-window.c:3926
 #, c-format
 msgid "%s  This copy was built from r%s on %s."
-msgstr "%s Šī kopija ir izveidota no r%s uz %s."
+msgstr "%s Šī kopija ir izveidota no r%s %s."
 
 #: ../src/gnome-utils/gnc-main-window.c:3938
 msgid "translator_credits"
@@ -11710,7 +11710,7 @@ msgstr "Bankas kods"
 #: ../src/import-export/aqbanking/aqbanking.glade.h:11
 #: ../src/import-export/hbci/glade/hbci.glade.h:11
 msgid "Click on the line of an Online Banking account name if you want to match it to a GnuCash account. Click \"Forward\" when all desired accounts are matching."
-msgstr "Klikšķināt uz rindas ar tiešsaistes bankas konta nosaukumu, ja vēlaties to pieskaņot ar GnuCash kontu. Klikšķināt \"Tālāk\", kad visi vajadzīgie konti ir saskaņoti. "
+msgstr "Klikšķiniet uz rindas ar tiešsaistes bankas konta nosaukumu, ja vēlaties to pieskaņot ar GnuCash kontu. Klikšķināt \"Tālāk\", kad visi vajadzīgie konti ir saskaņoti. "
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:12
 #: ../src/import-export/hbci/glade/hbci.glade.h:12
@@ -12100,7 +12100,7 @@ msgstr "Vai tiešām vēlaties pārrakstīt jūsu veiktās veidnes izmaiņas \"%
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:912
 msgid "A template with the given name already exists.  Please enter another name."
-msgstr "Veidne ar tādu nosaukumu jau eksistē. Ievadiet citu nosaukumu."
+msgstr "Veidne ar tādu nosaukumu jau pastāv. Ievadiet citu nosaukumu."
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:1045
 #, c-format
@@ -12190,7 +12190,7 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"Aizmugursistēma darba sagatavošanas laikā atrada kļūdu. Šo darbu nav iespējams izpildīt. \n"
+"Fona process darba sagatavošanas laikā atrada kļūdu. Šo darbu nav iespējams izpildīt. \n"
 "\n"
 "Iespējams, ka visdrīzāk banka neatbalsta jūsu izvēlēto darbu, vai arī jūsu tiešsaistes bankas kontam nav atļaujas šo darbu izpildīt. Papildu kļūdu ziņojumi ir apskatāmi jūsu konsoles log.\n"
 "\n"
@@ -12509,11 +12509,11 @@ msgstr "Izvēlēts nederīgs kodējums"
 
 #: ../src/import-export/csv/gnc-csv-import.c:566
 msgid "Merge with column on _left"
-msgstr "Savienot ar kolonnu pa _kreisi"
+msgstr "Sapludināt ar kolonnu pa _kreisi"
 
 #: ../src/import-export/csv/gnc-csv-import.c:570
 msgid "Merge with column on _right"
-msgstr "Savienot ar kolonnu pa _labi"
+msgstr "Sapludināt ar kolonnu pa _labi"
 
 #: ../src/import-export/csv/gnc-csv-import.c:575
 msgid "_Split this column"
@@ -12688,11 +12688,11 @@ msgstr "<b>Vispārīgs importētājs</b>"
 
 #: ../src/import-export/generic-import.glade.h:8
 msgid "A transaction whose best match's score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default."
-msgstr "Grāmatojums, kura saskaņots rezultāts ir zaļajā zonā (virs vai vienāds ar Sākumpunkta nokārtot automātiski) noklusējumā tiks nokārtots."
+msgstr "Grāmatojums, kura saskaņots rezultāts ir zaļajā zonā (virs vai vienāds ar automātiskā grāmatojuma slieksni) tiks nokārtots automātiski."
 
 #: ../src/import-export/generic-import.glade.h:9
 msgid "A transaction whose best match's score is in the red zone (above the display threshold but below or equal to the Auto-ADD threshold) will be ADDed by default."
-msgstr "Grāmatojums, kura saskaņots rezultāts ir sarkanajā zonā (virs redzamā sākumpunkta, bet zem vai vienāds ar Sākumpunkta pievienošana automātiski) tiks pievienots noklusējumā."
+msgstr "Grāmatojums, kura saskaņots rezultāts ir sarkanajā zonā (virs redzamā sākumpunkta, bet zem vai vienāds ar automātiskā grāmatojuma slieksni) tiks pievienots automātiski."
 
 # treshold - arī minimālā noteiktā summa
 #: ../src/import-export/generic-import.glade.h:11
@@ -12725,7 +12725,7 @@ msgstr "Atļaut rediģēT darbību grāmatojuma pieskaņojumā. VĒL NAV ATBALST
 
 #: ../src/import-export/generic-import.glade.h:21
 msgid "Enable the SKIP action in the transaction matcher.  If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by default."
-msgstr "Atļaut IZLAIST darbību grāmatojuma pieskaņošanā. Ja atļauts, grāmatojums, kura labākais pieskaņošanas rezultāts ir dzeltenajā zonā (virs pievienot sākumpunkta automātiski, bet zem notīrīt sākumpunktu automātiski) noklusējumā tiks izlaists."
+msgstr "Atļaut IZLAIST darbību grāmatojuma pieskaņošanā. Ja atļauts, grāmatojums, kura labākais pieskaņošanas rezultāts ir dzeltenajā zonā (virs automātiski pievienot, bet zem automātiski notīrīt) tiks izlaists automātiski."
 
 #: ../src/import-export/generic-import.glade.h:22
 msgid ""
@@ -12737,7 +12737,7 @@ msgid ""
 "click \"OK\"."
 msgstr ""
 "Lai veidotu jaunu grāmatojumu, klikšķiniet uz ieraksta \"Cits konts\", lai izvēlētos šim grāmatojumam citu (galamērķi) kontu.\n"
-"Lai izveidotu eksistējoša grāmatojuma dublikātu , klikšķiniet uz ieraksta \"Cits konts\" vai \"Apraksts\", lai \n"
+"Lai izveidotu eksoša grāmatojuma dublikātu , klikšķiniet uz ieraksta \"Cits konts\" vai \"Apraksts\", lai \n"
 "pārbaudītu, vai GnuCash izvēlas pareizo grāmatojumu.\n"
 "Lai pārslēgtos no viena grāmatojuma uz otru, klikšķiniet uz rūtiņas \"Jauns\" kolonnā.\n"
 "Kad visiem jaunajiem grāmatojumiem ir pareizie galamērķu konti un visi dublikāti ir saskaņoti ar pareiziem eksistējošajiem grāmatojumiem, \n"
@@ -12797,7 +12797,7 @@ msgstr "Izvēlēties \"R\", lai saskaņotu pieskaņotam grāmatojumam."
 
 #: ../src/import-export/generic-import.glade.h:45
 msgid "Select matching existing transaction"
-msgstr "Izvēlēties pieskaņotu eksistējošu grāmatojumu"
+msgstr "Izvēlēties pieskaņotu esošu grāmatojumu"
 
 #: ../src/import-export/generic-import.glade.h:46
 msgid "Select neither to skip the transaction (it won't be imported at all)."
@@ -12829,7 +12829,7 @@ msgstr "Izmantot _varbūtības pieskaņošanu"
 
 #: ../src/import-export/generic-import.glade.h:53
 msgid "Use bayesian algorithms to match new transactions with existing accounts."
-msgstr "Izmantot varbūtības algoritmus jaunu grāmatojumu pieskaņošanai eksistējošiem kontiem."
+msgstr "Izmantot varbūtības algoritmus jaunu grāmatojumu pieskaņošanai esošiem kontiem."
 
 #: ../src/import-export/generic-import.glade.h:54
 msgid "Yellow"
@@ -12864,11 +12864,11 @@ msgstr "Abas paroles neder. Mēģiniet vēlreiz."
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:517
 msgid "Choose AqBanking Backend"
-msgstr "Izvēlēties Aqbankas aizmugursistēmu"
+msgstr "Izvēlēties Aqbankas fona procesu"
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:518
 msgid "Please choose an AqBanking backend to be configured"
-msgstr "Izvēlieties Aqbankas aizmugursistēmu konfigurēšanai"
+msgstr "Izvēlieties Aqbankas fona procesu konfigurēšanai"
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:519
 msgid "Co_nfigure"
@@ -13123,7 +13123,7 @@ msgstr "(nē)"
 #: ../src/import-export/import-provider-format.glade.h:2
 #: ../src/import-export/qif-import/qif.glade.h:10
 msgid "Click \"Back\" to cancel the loading of this file and choose another."
-msgstr "Klikšķināt \"Atpakaļ\", lai atceltu šī faila atvēršanu un izvēlieties citu."
+msgstr "Klikšķiniet \"Atpakaļ\", lai atceltu šī faila atvēršanu un izvēlieties citu."
 
 #: ../src/import-export/import-provider-format.glade.h:3
 msgid "Sample data:"
@@ -13141,7 +13141,7 @@ msgid ""
 "\n"
 "Please select a date format for the file.  QIF files created by European software are likely  to be in \"d-m-y\" or day-month-year format, where US QIF files are likely to be \"m-d-y\" or month-day-year.    \n"
 msgstr ""
-"QIF faila formāts nenorāda, kādā kārtībā dienas, mēneša un gada datuma komponentes tiek izdrukātas. Vairākumā gadījumu ir iespējams automātiski noteikt, kāds formāts tiek lietots konkrētajā failā. Tomēr failā, kurā jūs tikko importējāt eksistē vairāki iespējamie formāti, kas atbilst šiem datiem. \n"
+"QIF faila formāts nenorāda, kādā kārtībā dienas, mēneša un gada datuma komponentes tiek izdrukātas. Vairākumā gadījumu ir iespējams automātiski noteikt, kāds formāts tiek lietots konkrētajā failā. Tomēr failā, kurā jūs tikko importējāt ir iespējami vairāki formāti, kas atbilst šiem datiem. \n"
 "\n"
 "Izvēlieties šim failam datuma formātu. QIF failos, ko izveidojušas Eiropas programmatūras, tas parasti ir \"d-m-g\" vai diena-mēnesis-gads formātā, bet ASV QIF failos \"m-d-g\" vai mēnesis-diena-gads.  \n"
 
@@ -13345,7 +13345,7 @@ msgstr "Izvēlieties biržu, kurā simbols tiks tirgots, vai arī izvēlieties i
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2150
 msgid "You must enter an existing national currency or enter a different type."
-msgstr "Ievadiet eksistējošu nacionālo valūtu vai ievadiet atšķirīgu tipu."
+msgstr "Ievadiet esošu nacionālo valūtu vai ievadiet atšķirīgu tipu."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2219
 #, c-format
@@ -13385,7 +13385,7 @@ msgstr "Atcelšana"
 #: ../src/import-export/qif-import/druid-qif-import.c:2752
 #: ../src/import-export/qif-import/druid-qif-import.c:2756
 msgid "A bug was detected while detecting duplicates."
-msgstr "Uzejot dublikātus atklāta kļūda."
+msgstr "Meklējot dublikātus atklāta kļūda."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2767
 msgid "Conversion completed"
@@ -13446,7 +13446,7 @@ msgid ""
 "\n"
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
-"Klikšķiniet \"Pielietot\", lai importētu datus no sagatavošanas apgabala un atjaunotu jūsu GnuCash kontus. Jūsu ierakstītā kontam un kategorijai saskanīgā informācija tiks saglabāta un izmantota noklusējumā nākošreiz, kad izmantosiet QIF importa iespējas. \n"
+"Klikšķiniet \"Pielietot\", lai importētu datus no sagatavošanas apgabala un atjaunotu jūsu GnuCash kontus. Jūsu ierakstītā kontam un kategorijai saskanīgā informācija tiks saglabāta un izmantota noklusēti nākošreiz, kad izmantosiet QIF importa iespējas. \n"
 "\n"
 "Klikšķiniet \"Atpakaļ\", lai apskatītu jūsu kontu un kategoriju saskaņu, mainīt valūtu un drošības iestatījumus jaunajiem kontiem vai, lai pievienotu vēl failus sagatavošanas apgabalam.\n"
 "\n"
@@ -13458,7 +13458,7 @@ msgid ""
 "\n"
 "Click \"Forward\" to finish loading files and move to the next step of the QIF import process. "
 msgstr ""
-"Klikšķināt \"Atvērt citu failu\", ja jums tagad ir vairāki dati importēšanai. To var darīt, ja konti ir saglabāti atsevišķos QIF failos.\n"
+"Klikšķiniet \"Atvērt citu failu\", ja jums tagad ir vairāki dati importēšanai. To var darīt, ja konti ir saglabāti atsevišķos QIF failos.\n"
 "\n"
 "Klikšķiniet \"Tālāk\", lai pabeigtu failu atvēršanu un pārietu pie nākamā QIF importēšanas procesa soļa."
 
@@ -13502,9 +13502,9 @@ msgid ""
 "\n"
 "Click \"Forward\" to review the possible matches."
 msgstr ""
-"Ja importējat QIF failu no bankas vai citas finanšu institūcijas, daži grāmatojumi GnuCash kontos jau var eksistēt. Lai izvairītos no dublikātiem, GnuCash ir centies identificēt saskanīgos un nepieciešama jūsu palīdzība to pārskatīšanai.\n"
+"Ja importējat QIF failu no bankas vai citas finanšu institūcijas, daži grāmatojumi GnuCash kontos jau var pastāvēt. Lai izvairītos no dublikātiem, GnuCash ir centies identificēt saskanīgos un nepieciešama jūsu palīdzība to pārskatīšanai.\n"
 "\n"
-"Nākošajā lapā jums parādīs importēto grāmatojumu sarakstu. Tiklīdz jūs vienu izvēlaties, zemāk tiks parādīts saraksts ar iespējamiem sakanīgajiem. Ja atrodat īsto saskanīgo, klikšķiniet uz tā. Jūsu izvēle tiks apstiprināta ar ķeksīti \"Saskan?\" kolonnā.\n"
+"Nākošajā lapā jums parādīs importēto grāmatojumu sarakstu. Tiklīdz jūs vienu izvēlaties, zemāk tiks parādīts saraksts ar iespējamiem saskanīgajiem. Ja atrodat īsto saskanīgo, klikšķiniet uz tā. Jūsu izvēle tiks apstiprināta ar ķeksīti \"Saskan?\" kolonnā.\n"
 "\n"
 "Klikšķiniet \"Tālāk\", lai pārskatītu iespējamos saskanīgos."
 
@@ -13544,7 +13544,7 @@ msgstr "Pieskaņot QIF kategorijas ar GnuCash kontiem"
 
 #: ../src/import-export/qif-import/qif.glade.h:40
 msgid "Match existing transactions"
-msgstr "Pieskaņot eksistējošos grāmatojumus"
+msgstr "Pieskaņot esošos grāmatojumus"
 
 #: ../src/import-export/qif-import/qif.glade.h:41
 msgid "Match payees/memos to GnuCash accounts"
@@ -13560,9 +13560,9 @@ msgid ""
 "\n"
 "Note that GnuCash will be creating many accounts that did not exist on your other personal finance program, including a separate account for each stock you own, separate accounts for the brokerage commissions, special \"Equity\" accounts (subaccounts of Retained Earnings, by default) which are the source of your opening balances, etc. All of these accounts will appear on the next page so you can change them if you want to, but it is safe to leave them alone.\n"
 msgstr ""
-"Nākošajā lapā konti jūsu QIF failos un jebkuras akcijas vai kopfondi, kas jums pieder, tiks pieskaņoti ar GnuCash kontiem. Ja GnuCash konts jau eksistē ar tādu vai līdzīgu nosaukumu un savienojama tipu, šāds konts tiks izmantots kā pieskaņots; ja ne, GnuCash izveidos jaunu kontu ar tādu pašu nosaukumu un tipu, kā šis QIF konts. Ja jums nepatīk ierosinātais GnuCash konts, ar dubultklikšķi izmainiet to.\n"
+"Nākošajā lapā konti jūsu QIF failos un jebkuras akcijas vai kopfondi, kas jums pieder, tiks pieskaņoti ar GnuCash kontiem. Ja jau ir GnuCash konts ar tādu vai līdzīgu nosaukumu un savienojama tipu, šāds konts tiks izmantots kā pieskaņots; ja ne, GnuCash izveidos jaunu kontu ar tādu pašu nosaukumu un tipu, kā šis QIF konts. Ja jums nepatīk ierosinātais GnuCash konts, ar dubultklikšķi izmainiet to.\n"
 "\n"
-"Ņemiet vērā, ka GnuCash izveidos daudz kontu, kuri iepriekš nepastāvējā jūsu citā finanšu programmā, ieskaitot atsevišķu kontu katrai jums piederošai akcijai, atsevišķi konti brokera pakalpojumu segšanai, īpaši \"Pašu kapitāls\" konti (nesadalītās peļņas apakškonti noklusējumā), kas ir pirmsākums jūsu sākuma bilance, utt. Visi šie konti parādīsies nākošajā lapā, ja vēlaties, varēsiet tos izmainīt, bet tas ir droši atstāt tos kā ir.\n"
+"Ņemiet vērā, ka GnuCash izveidos daudz kontu, kuri iepriekš nepastāvējā jūsu citā finanšu programmā, ieskaitot atsevišķu kontu katrai jums piederošai akcijai, atsevišķi konti brokera pakalpojumu segšanai, īpaši \"Pašu kapitāls\" konti (nesadalītās peļņas apakškonti noklusēti), kas ir pirmsākums jūsu sākuma bilance, utt. Visi šie konti parādīsies nākošajā lapā, ja vēlaties, varēsiet tos izmainīt, bet tas ir droši atstāt tos kā ir.\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:47
 msgid "Payees and memos"
@@ -13590,7 +13590,7 @@ msgid ""
 msgstr ""
 "QIF failos, kas lejupielādēti no bankas un citām finanšu institūcijām, var nebūt informācija par kontiem un kategorijām, kas pareizi tos sakārtotu pa GnuCash kontiem. \n"
 "\n"
-"Sekojošā lapā jūs tekstu, kas parādīsies grāmatojuma Saņēmēja un Atgādnes laukos bez QIF konta vai kategorijas. Noklusējumā šie grāmatojumi ir piešķirti 'Nenorādīts' GnuCash kontam. Ja izvēlēsieties citu kontu, tas tiks iegaumēts turpmākajiem QIF failiem."
+"Sekojošā lapā jūs tekstu, kas parādīsies grāmatojuma Saņēmēja un Atgādnes laukos bez QIF konta vai kategorijas. Noklusēti šie grāmatojumi ir piešķirti 'Nenorādīts' GnuCash kontam. Ja izvēlēsieties citu kontu, tas tiks iegaumēts turpmākajiem QIF failiem."
 
 #: ../src/import-export/qif-import/qif.glade.h:57
 msgid "QIF files you have loaded"
@@ -13606,7 +13606,7 @@ msgstr "Izvēlēties iespējamos dublikātus"
 
 #: ../src/import-export/qif-import/qif.glade.h:62
 msgid "Set the default QIF account name"
-msgstr "Iestatīt QIF konta nosaukumu noklusējumā"
+msgstr "Iestatīt noklusēto QIF konta nosaukumu"
 
 #: ../src/import-export/qif-import/qif.glade.h:63
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:2
@@ -13689,11 +13689,11 @@ msgstr "Atļaut rediģēT darbību grāmatojuma pieskaņošanā. NAV VĒL ATBALS
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:6
 msgid "Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default."
-msgstr "Atļaut IZLAIST darbību grāmatojuma pieskaņošanā. Ja atļauts, grāmatojums, kura labākais pieskaņošanas rezultāts ir dzeltenajā zonā (virs pievienot sākumpunktam automātiski, bet zem notīrīt sākumpunktu automātiski) noklusējumā tiks izlaists."
+msgstr "Atļaut IZLAIST darbību grāmatojuma pieskaņošanā. Ja atļauts, grāmatojums, kura labākais pieskaņošanas rezultāts ir dzeltenajā zonā (virs automātiskā grāmatojuma slieksni) automātiski tiks izlaists."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:7
 msgid "Enables bayesian matching when matching imported transaction against existing transactions. Otherwise a less sophisticated rule-based matching mechanism will be used."
-msgstr "Atļauj varbūtības pieskaņošanu, kad saskaņo importētu ar eksistējošu grāmatojumu. Citādi tiks izmantots mazāk sarežģīts grāmatojumu saderības mehānisms."
+msgstr "Atļauj varbūtības pieskaņošanu, kad saskaņo importētu ar esošu grāmatojumu. Citādi tiks izmantots mazāk sarežģīts grāmatojumu saderības mehānisms."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:8
 msgid "Maximum ATM fee amount in your area"
@@ -13713,11 +13713,11 @@ msgstr "Šis lauks norāda minimālo pieskaņošanas rezultātu, kāds vajadzīg
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:14
 msgid "This field specifies the threshold above which a matching transaction will be cleared by default. A transaction whose best match's score is in the green zone (above or equal to this Clear threshold) will be cleared by default."
-msgstr "Šis lauks norāda aizturēto summu, kuru pārsniedzot tiks nokārtots derīgs grāmatojums noklusējumā. Grāmatojums, kura labākais saderības rezultāts ir zaļajā zonā (virs vai vienāds ar Nokārtot aizturēto summu), noklusējumā tiks nokārtots."
+msgstr "Šis lauks norāda aizturēto summu, kuru pārsniedzot automātiski tiks nokārtots derīgs grāmatojums. Grāmatojums, kura labākais saderības rezultāts ir zaļajā zonā (virs vai vienāds ar automātiskā grāmatojuma slieksni) tiks nokārtots automātiski."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:15
 msgid "This field specifies the threshold below which a matching transaction will be added automatically. A transaction whose best match's score is in the red zone (above the display minimum score but below or equal to the Add match score) will be added to the GnuCash file by default."
-msgstr "Šis lauks norāda summu, zem kuras automātiski tiks pievienots saskanīgs grāmatojums. Grāmatojums, kura labākais saskaņas rezultāts ir sarkanajā zonā (virs redzamā minimuma rezultāta, bet zem vai vienāds ar pievienoto saskanīgo rezultātu), noklusējumā tiks pievienots GnuCasg failam."
+msgstr "Šis lauks norāda summu, zem kuras automātiski tiks pievienots saskanīgs grāmatojums. Grāmatojums, kura labākais saskaņas rezultāts ir sarkanajā zonā (virs redzamā minimuma rezultāta, bet zem vai vienāds ar pievienot saskanīgo rezultātu), tiks pievienots GnuCasg failam automātiski."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:16
 msgid "Use bayesian matching"
@@ -13749,7 +13749,7 @@ msgstr "Jūs tagad pārrakstīsiet esošu sadalījumu. Vai tiešām vēlaties to
 
 #: ../src/register/ledger-core/split-register.c:838
 msgid "You are about to overwrite an existing transaction. Are you sure you want to do that?"
-msgstr "Jūs tagad pārrakstīsiet eksistējošu grāmatojumu. Vai tiešām vēlaties to darīt?"
+msgstr "Jūs tagad pārrakstīsiet esošu grāmatojumu. Vai tiešām vēlaties to darīt?"
 
 #: ../src/register/ledger-core/split-register.c:1927
 msgid "Recalculate Transaction"
@@ -17899,7 +17899,7 @@ msgstr "Budžeta bilance"
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:1894
 msgid "Include new/existing totals"
-msgstr "Iekļaut jaunas/eksistējošas kopsummas"
+msgstr "Iekļaut jaunas/esošas kopsummas"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:1896
@@ -18703,7 +18703,7 @@ msgstr "Šis ir izmēģinājums. Jūsu pārskatā, iespējams, nevajadzētu būt
 #: ../intl-scm/guile-strings.c:2458
 #: ../intl-scm/guile-strings.c:2616
 msgid "This is a sample GnuCash report. See the guile (scheme) source code in the scm/report directory for details on writing your own reports, or extending existing reports."
-msgstr "Šis ir GnuCash pārskata paraugs. Skatīt viltus (shēma) izcelsmes kodu scm/ pārskata direktorijā, kā izveidot savas pārskata vai paplašināt esošās."
+msgstr "Šis ir GnuCash pārskata paraugs. Lai uzzinātu, kā izveidot savu pārskatu vai paplašināt esošo, skatīt guile (scheme) pirmkodu scm/report direktorijā."
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -18711,7 +18711,7 @@ msgstr "Šis ir GnuCash pārskata paraugs. Skatīt viltus (shēma) izcelsmes kod
 #: ../intl-scm/guile-strings.c:2618
 #, c-format
 msgid "For help on writing reports, or to contribute your brand new, totally cool report, consult the mailing list %s."
-msgstr "Ja vajadzīga palīdzība par to, kā rakstīt pārskatu, vai sekmēt jūsu jauno, superīgo pārskatu, konsultēties pa e-pastu %s."
+msgstr "Lai iegūtu palīdzība par to, kā izveidot savu superīgo pārskatu, konsultēties pa e-pastu %s."
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -18725,7 +18725,7 @@ msgstr "Vairāk par to, kā reģistrētais šim sarakstam, skatīt &lt;http://ww
 #: ../intl-scm/guile-strings.c:2464
 #: ../intl-scm/guile-strings.c:2622
 msgid "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/&gt;."
-msgstr "Jūs varat uzzināt vairāk par shēmu rakstīšanu šeit &lt;http://www.scheme.com/tspl2d/&gt;."
+msgstr "Jūs varat uzzināt vairāk par sheme valodu &lt;http://www.scheme.com/tspl2d/&gt;."
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -18741,21 +18741,21 @@ msgstr "Pareizs laiks ir %s."
 #: ../intl-scm/guile-strings.c:2626
 #, c-format
 msgid "The boolean option is %s."
-msgstr "Būla izvēlne ir %s."
+msgstr "Būla izteiksme ir %s."
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:2470
 #: ../intl-scm/guile-strings.c:2628
 msgid "true"
-msgstr "pareizi"
+msgstr "patiesa"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:2472
 #: ../intl-scm/guile-strings.c:2630
 msgid "false"
-msgstr "nepareizi"
+msgstr "nepatiesa"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -18826,21 +18826,21 @@ msgstr "Skaitļu izvēlne noformēta kā valūta ir %s."
 #: ../intl-scm/guile-strings.c:2490
 #: ../intl-scm/guile-strings.c:2648
 msgid "Items you selected:"
-msgstr "Izvēlētie posteņi:"
+msgstr "Izvēlētie vienumi:"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:2492
 #: ../intl-scm/guile-strings.c:2650
 msgid "List items selected"
-msgstr "Uzskaitīt izvēlētos posteņus"
+msgstr "Uzskaitīt izvēlētos vienumi"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:2494
 #: ../intl-scm/guile-strings.c:2652
 msgid "(You selected no list items.)"
-msgstr "(Jūs neizvēlējāties posteņus no saraksta.)"
+msgstr "(Jūs neizvēlējāties vienumus no saraksta.)"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -19630,7 +19630,7 @@ msgstr "Šūnas krāsa tabulā"
 #: ../intl-scm/guile-strings.c:3626
 #: ../intl-scm/guile-strings.c:3932
 msgid "Default background for table cells."
-msgstr "Šūnu fona krāsa tabulā noklusējumā."
+msgstr "Noklusētā tabulas šūnu fona krāsa."
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -20822,7 +20822,7 @@ msgstr "Periods no %s līdz %s"
 #: ../intl-scm/guile-strings.c:4442
 #: ../intl-scm/guile-strings.c:4530
 msgid "Blue items are exportable to a German Tax XML file. Press Export to actually export them."
-msgstr "Zilie posteņi ir eksportēšanai uz Vācu nodokļu XML failu. Spiediet Eksportēt, lai tos eksportētu."
+msgstr "Zilie vienumi ir eksportēšanai uz Vācu nodokļu XML failu. Spiediet Eksportēt, lai tos eksportētu."
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
@@ -21507,7 +21507,7 @@ msgstr "Meklēt dublētus grāmatojumus"
 #: ../intl-scm/guile-strings.c:5042
 #, c-format
 msgid "Unrecognized account type '%s'. Defaulting to Bank."
-msgstr "Neatpazīts konta tips '%s'. Noklusējumā uz Banka."
+msgstr "Neatpazīts konta tips '%s'. Nomainīts uz Banka."
 
 #. src/import-export/qif-import/qif-parse.scm
 #. src/import-export/qif-import/qif-import/qif-parse.scm
@@ -21523,7 +21523,7 @@ msgstr "Neatpazīta darbība '%s'."
 #: ../intl-scm/guile-strings.c:5046
 #, c-format
 msgid "Unrecognized status '%s'. Defaulting to uncleared."
-msgstr "Neatpazīts statuss '%s'. Noklusējumā uz nenokārtots."
+msgstr "Neatpazīts statuss '%s'. Nomainīts uz nenokārtots."
 
 #. src/import-export/qif-import/qif-import/qif-to-gnc.scm
 #. src/import-export/qif-import/qif-to-gnc.scm
@@ -22705,7 +22705,7 @@ msgstr "91+ dienas"
 #: ../intl-scm/guile-strings.c:6552
 #: ../intl-scm/guile-strings.c:6942
 msgid "No valid account selected.  Click on the Options button and select the account to use."
-msgstr "Nav izvēlēts derīgs konts. Klikšķināt Izvēles iespējas un izvēlēties kontu"
+msgstr "Nav izvēlēts derīgs konts. Klikšķiniet Izvēles iespējas un izvēlēties kontu"
 
 #. src/business/business-reports/payables.scm
 #. src/business/business-reports/gnucash/report/payables.scm
@@ -22873,7 +22873,7 @@ msgstr "Pārskats:"
 #: ../intl-scm/guile-strings.c:6948
 #, c-format
 msgid "No valid %s selected.  Click on the Options button to select a company."
-msgstr "Izvēlēts nederīgs %s. Klikšķināt uz Izvēlnes, lai izvēlētos uzņēmumu"
+msgstr "Izvēlēts nederīgs %s. Klikšķiniet uz Izvēlnes, lai izvēlētos uzņēmumu"
 
 #. src/business/business-reports/gnucash/report/job-report.scm
 #. src/business/business-reports/job-report.scm
@@ -23300,12 +23300,12 @@ msgstr "<p>Šis pārskats ir paredzēta tikai klienta (pārdošanas) rēķiniem.
 #. src/business/business-reports/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:7188
 msgid "<p>Please use the Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher."
-msgstr "<p>Lūdzu izmantojiet opecijas lai iezīmētu <em>rēķinu</em>, nevis pavadzīmi vai izdevumu rēķinu."
+msgstr "<p>Lūdzu izmantojiet opcijas lai iezīmētu <em>rēķinu</em>, nevis pavadzīmi vai izdevumu rēķinu."
 
 #: ../doc/tip_of_the_day.list.in:1
 #, c-format
 msgid "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots of bugs and unstable features! If you are looking for a stable personal finance application, you should use the latest release of GnuCash %s."
-msgstr "Uzmanību!! Šī GnuCash versija ir IZSTRĀDĒ. Tajā var būt kļūdas un nedarbojošās iespējas! Ja jūs meklējat stabilu finanšu instrumentu, izvēlieties pēdējo GnuCash %s versiju."
+msgstr "Uzmanību!! Šī GnuCash versija ir IZSTRĀDĒ. Tajā var būt kļūdas un nedarbojošās iespējas! Ja jūs meklējat stabilu finanšu instrumentu, izvēlieties pēdējo stabilo GnuCash %s versiju."
 
 #: ../doc/tip_of_the_day.list.in:6
 msgid "The GnuCash online manual has lots of helpful information. If you are upgrading from earlier versions of GnuCash, the section \"What's new in GnuCash 2.0\" is particularly interesting. You can access the manual under the Help menu."
@@ -23330,7 +23330,7 @@ msgstr "Lai apskatītu pārskatu izvēlnes iespējas, klikšķiniet ar labo pele
 # paycheck - maksājuma uzdevums?
 #: ../doc/tip_of_the_day.list.in:31
 msgid "To enter multiple-split transactions such as a paycheck with multiple deductions, click the Split button in the tool bar. Alternatively, in the View menu, you can choose the register style Auto-Split Ledger or Transaction Journal."
-msgstr "Lai ievadītu vairākus sadalītus grāmatojumus, tādus, kā apmaksas čeks ar vairākiem atvilkumiem, klikšķināt pogu Sadalīt rīkjoslā. Alternatīvi izvēlnē Skatīt izvēlieties reģistrēšanas stilu sadalīt virsgrāmatu vai Grāmatojumu žurnālu automātiski."
+msgstr "Lai ievadītu vairākus sadalītus grāmatojumus, piemēram, apmaksas čeku ar vairākiem atvilkumiem, klikšķiniet pogu Sadalīt rīkjoslā. Alternatīvi izvēlnē Skatīt izvēlieties reģistrēšanas stilu sadalīt virsgrāmatu vai Grāmatojumu žurnālu automātiski."
 
 #: ../doc/tip_of_the_day.list.in:36
 msgid "As you enter amounts in the register, you can use the GnuCash calculator to add, subtract, multiply and divide .  Simply type the first value, then select '+', '-','*', or '/'.  Type the second value and press Enter to record the calculated amount."
@@ -23342,7 +23342,7 @@ msgstr "Ātrais ieraksts parastu vienkāršo grāmatojumu ievadīšanu. Rakstot 
 
 #: ../doc/tip_of_the_day.list.in:46
 msgid "Type the first letter(s) of an existing account name in the Transfer register column, and GnuCash will complete the name from your list of accounts. For subaccounts, type the first letter(s) of the parent account, followed by ':' and the first letter(s) of the subaccount (e.g. A:C for Assets:Cash.)"
-msgstr "Uzraksti eksistējoša konta nosaukuma pirmo burtu(s) reģistra kolonnā Pārskaitīt, un GnuCash pabeigs vārdu no jūsu kontu saraksta. Analītiskajiem kontiem rakstiet vecāku konta pirmo burtu(s), kam seko ':' un analītiskā konta pirmais burts(i) (t.i. A:N ir Aktīvi:Nauda)."
+msgstr "Uzrakstiet eksoša konta nosaukuma pirmo burtu(s) reģistra kolonnā Pārskaitīt, un GnuCash pabeigs vārdu no jūsu kontu saraksta. Analītiskajiem kontiem rakstiet vecāku konta pirmo burtu(s), kam seko ':' un analītiskā konta pirmais burts(i) (t.i. A:N ir Aktīvi:Nauda)."
 
 #: ../doc/tip_of_the_day.list.in:52
 msgid "Want to see all your subaccount transactions in one register? From the main menu, highlight the parent account and select Accounts -> Open Subaccounts from the menu."
@@ -23366,23 +23366,23 @@ msgstr "Lai pārskaitītu līdzekļus starp kontiem ar dažādām valūtām, kli
 
 #: ../doc/tip_of_the_day.list.in:72
 msgid "You can pack multiple reports into a single window,  providing all the financial information you want at a glance. To do so, use the Sample & Custom -> \"Custom Multicolumn Report\" report."
-msgstr "Jūs varat salikt vairākus pārskatus vienā logā, lai ir viegli apskatāma visa finanšu informācija. To var izdarīt izmantojot pārskatu Paraugs un Pielāgojums -> \"Pielāgot vairāku kolonnu pārskatu\"."
+msgstr "Jūs varat salikt vairākus pārskatus vienā logā, lai ērtāk apskatītu visu finanšu informāciju. To var izdarīt, izmantojot pārskatu Paraugs un Pielāgojums -> \"Pielāgot vairāku kolonnu pārskatu\"."
 
 #: ../doc/tip_of_the_day.list.in:77
 msgid "Style Sheets affect how reports are displayed.  Choose a style sheet for your report as a report option, and use the Edit -> Style Sheets menu to customize style sheets."
-msgstr "Stila lapas ietekmē to, kā tiks parādīts pārskats. Izvēlieties stila lapu jūsu pārskatam kā arī pārskata izvēlni, un izmantojiet rediģēt -> Stila lapas izvēlni, lai pielāgotu stila lapas."
+msgstr "Stila lapas nosaka kā tiks parādīts pārskats. Izvēlieties stila lapu jūsu pārskatam kā arī pārskata izvēlni, un izmantojiet Rediģēt -> Stila lapas izvēlni, lai pielāgotu stila lapas."
 
 #: ../doc/tip_of_the_day.list.in:81
 msgid "To raise the accounts menu in the transfer field of a register page, press the Menu key or the Ctrl-Down key combination."
-msgstr "Lai izvirzītu kontu izvēlni reģistra lapas pārskaitījuma laukā, spiediet Izvēlne taustiņu vai Ctrl-Lejā taustiņu kombināciju."
+msgstr "Lai parādītu kontu izvēlni reģistra lapas pārskaitījuma laukā, spiediet Izvēlnes taustiņu vai Ctrl-Lejup taustiņu kombināciju."
 
 #: ../doc/tip_of_the_day.list.in:84
 msgid "The GnuCash developers are easy to contact.  As well as several mailing lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome.org"
-msgstr "Ar GnuCash izstrādātājiem ir viegli kontaktēties. Varat piebiedroties  abonentu sarakstiem, vai pļāpāt ar viņiem caur IRC! Pievienojieties viņiem #gnucash irc.gnome.org"
+msgstr "Ar GnuCash izstrādātājiem ir viegli kontaktēties. Varat piebiedroties  vēstkopai, vai pļāpāt ar viņiem caur IRC! Pievienojieties viņiem #gnucash irc.gnome.org"
 
 #: ../doc/tip_of_the_day.list.in:88
 msgid "There is a theory that if ever anyone discovers what the Universe is for and why it is here, it will instantly disappear and be replaced with something even more bizarre and inexplicable. There is another theory that this has already happened. Douglas Adams, \"The Restaurant at the End of the Universe\""
-msgstr "Ir tāda teorija, ka, ja reiz kāds atklās, kam domāts Visums un, kādēļ tas te ir, tas momentā pazudīs un tiks aizvietots ar kaut ko vēl vairāk dīvainu un neizprotamu. Ir vēl cita teorija, ka tas jau reiz ir noticis. Duglass Adamss, \"Restorāns Visuma galā\""
+msgstr "Ir tāda teorija, ka, ja reiz kāds atklās, kam domāts Visums un, kādēļ tas te ir, tas momentā pazudīs un tiks aizvietots ar kaut ko vēl dīvaināku un neizprotamāku. Ir vēl cita teorija, ka tas jau reiz ir noticis. Duglass Adamss, \"Restorāns Visuma galā\""
 
 # QSF??
 #~ msgid "QSF _Invoice..."
