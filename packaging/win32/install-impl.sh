@@ -1300,7 +1300,7 @@ function inst_gnucash() {
     mkdir -p $_BUILD_UDIR
     add_to_env $_INSTALL_UDIR/bin PATH
 
-    AQBANKING_OPTIONS="--enable-hbci --with-aqbanking-dir=${_AQBANKING_UDIR}"
+    AQBANKING_OPTIONS="--enable-aqbanking"
     AQBANKING_UPATH="${_OPENSSL_UDIR}/bin:${_GWENHYWFAR_UDIR}/bin:${_AQBANKING_UDIR}/bin"
     LIBOFX_OPTIONS="--enable-ofx --with-ofx-prefix=${_LIBOFX_UDIR}"
 
