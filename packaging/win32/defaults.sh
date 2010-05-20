@@ -1,7 +1,7 @@
 #!/bin/sh # for emacs
 #
-# Instead of just editing this file, it is recommended to create a file `custom.sh'
-# in the same directory that will be read in at the beginning of this script.
+# Don't edit this file directly. Edit `custom.sh' in the same directory
+# instead. That will be read in at the beginning of this script.
 #
 # You can use the full power of bash 2.04 scripting.  In particular, you can
 # set any variable mentioned here to something non-empty and it will not be
@@ -9,27 +9,8 @@
 # yourself.  Expressions registered with late_eval are executed at the end of
 # the script.
 #
-# Steps will be executed in the order they were added.  They can only be added
-# at most once if they have not been blocked already (adding implies blocking).
-# To add a custom step <s>, just implement "function <s>()".  Keep in mind that
-# blocking or reordering may render install.sh & friends non-functional.
-#
 # Note: All directories must be without spaces!
 #
-# Here is an example custom.sh file:
-#
-# REPOS_URL="svn+ssh://<dev>@svn.gnucash.org/repo/gnucash/trunk"
-# SF_MIRROR="http://switch.dl.sourceforge.net/sourceforge"
-# DISABLE_OPTIMIZATIONS=yes
-# AQBANKING_WITH_QT=no
-# GLOBAL_DIR=Z:\\mydir  # all directories will use this
-# WGET_RATE=50k         #limit download bandwith to 50KB/s
-# NO_SAVE_PROFILE=yes   # don't save env settings to /etc/profile.d
-# late_eval 'INSTALL_DIR=$GNUCASH_DIR\\myinst'  # no need to define GNUCASH_DIR
-# block_step inst_docs
-# late_eval 'add_step greetings'
-# function greetings() { setup Greetings; }
-
 
 [ "$__SOURCED_DEFAULTS" ] && return
 __SOURCED_DEFAULTS=1
@@ -388,71 +369,8 @@ set_default DOCS_REV "HEAD"
 set_default DOCS_URL "http://svn.gnucash.org/repo/gnucash-docs/trunk"
 set_default DOCS_DIR $GLOBAL_DIR\\gnucash-docs
 set_default XSLTPROCFLAGS ""
-##
 
-# There is no reason to ever need to comment these out!
-# * commented out glade, as it is not needed to run gnucash
-add_step prepare
-if [ "$CROSS_COMPILE" != "yes" ]; then
- add_step inst_wget
- add_step inst_dtk
- add_step inst_unzip
-fi
-add_step inst_mingw
-add_step inst_regex
-add_step inst_readline
-if [ "$CROSS_COMPILE" != "yes" ]; then
- add_step inst_active_perl
- add_step inst_mingwutils
-fi
-add_step inst_autotools
-if [ "$AQBANKING3" = "yes" ]; then
- add_step inst_gmp
-fi
-add_step inst_guile
-if [ "$CROSS_COMPILE" != "yes" ]; then
- add_step inst_svn
- if [ "$AQBANKING3" != "yes" ]; then
-  add_step inst_openssl
- fi
-fi
-add_step inst_exetype
-add_step inst_libxslt
-add_step inst_gnome
-if [ "$AQBANKING3" = "yes" ]; then
- add_step inst_gnutls
-fi
-add_step inst_swig
-add_step inst_pcre
-add_step inst_libbonoboui
-add_step inst_libgsf
-if [ "$CROSS_COMPILE" != "yes" ]; then
- add_step inst_hh
-fi
-add_step inst_goffice
-#add_step inst_glade
-add_step inst_opensp
-add_step inst_libofx
-## Online banking:
-add_step inst_gwenhywfar
-add_step inst_ktoblzcheck
-add_step inst_aqbanking
-add_step inst_libdbi
-add_step inst_webkit
-##
-if [ "$UPDATE_SOURCES" = "yes" ]; then
- add_step svn_up
-fi
-if [ "$WITH_CUTECASH" = "yes" ]; then
- add_step inst_cmake
- add_step inst_cutecash
-fi
-add_step inst_gnucash
-add_step inst_docs
-if [ "$CROSS_COMPILE" != "yes" ]; then
- add_step inst_inno
-fi
-add_step finish
-
-# run commands registered with late_eval
-eval_now
+### Local Variables: ***
+### sh-basic-offset: 4 ***
+### indent-tabs-mode: nil ***
+### End: ***
