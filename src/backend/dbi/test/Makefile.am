@@ -25,10 +25,14 @@ GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine
 
+if CUSTOM_GNC_DBD_DIR
+gnc_dbd_dir_override = "GNC_DBD_DIR=@GNC_DBD_DIR@"
+endif
+
 TESTS_ENVIRONMENT = \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
   SRCDIR=${srcdir} \
-  GNC_DBD_DIR=@GNC_DBD_DIR@ \
+  ${gnc_dbd_dir_override} \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \

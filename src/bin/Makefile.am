@@ -55,6 +55,12 @@ config_DATA = environment
 if PLATFORM_OSX_QUARTZ
 PRE_RUN = . ${bindir}/gnucash-setup-env
 PLATFORM_FILES = gnucash-setup-env
+if CUSTOM_GNC_DBD_DIR
+gnc_dbd_dir_override = export GNC_DBD_DIR="@GNC_DBD_DIR@"
+else
+gnc_dbd_dir_override =
+endif
+
 else
 PRE_RUN =
 PLATFORM_FILES =
@@ -93,7 +99,7 @@ gnucash-setup-env: gnucash-setup-env-osx.in ${top_builddir}/config.status Makefi
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's#@-BIN_DIR-@#${bindir}#g' \
-	    -e 's#@-GNC_DBD_DIR-@#${GNC_DBD_DIR}#g' \
+	    -e 's#@-gnc_dbd_dir_override-@#${gnc_dbd_dir_override}#g' \
 	    -e 's#@-GNC_STANDARD_REPORTS_DIR-@#${GNC_SHAREDIR}/guile-modules/gnucash/report/standard-reports#g' \
 	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
 	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
@@ -110,7 +116,6 @@ environment: ${GNUCASH_ENVIRONMENT}.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's#@-BIN_DIR-@#${bindir}#g' \
-	    -e 's#@-GNC_DBD_DIR-@#${GNC_DBD_DIR}#g' \
 	    -e 's#@-GNC_STANDARD_REPORTS_DIR-@#${GNC_SHAREDIR}/guile-modules/gnucash/report/standard-reports#g' \
 	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
 	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
@@ -118,6 +123,9 @@ environment: ${GNUCASH_ENVIRONMENT}.in ${top_builddir}/config.status Makefile
 	    -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
 	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g" \
 	    -e 's#@-PREFIX-@#${prefix}#g'
+if CUSTOM_GNC_DBD_DIR
+	echo 'GNC_DBD_DIR="@GNC_DBD_DIR@"' >> $@.tmp
+endif
 	mv $@.tmp $@
 	chmod u+x $@
 

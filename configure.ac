@@ -583,9 +583,9 @@ then
   AC_CHECK_HEADERS(dbi/dbi.h)
   if test "x$ac_cv_header_dbi_dbi_h" != xno; then
     AC_ARG_WITH( dbi-dbd-dir,
-      [AS_HELP_STRING([--with-dbi-dbd-dir=PATH],[specify location of libdbi drivers @<:@default=/usr/lib/dbd@:>@])],
+      [AS_HELP_STRING([--with-dbi-dbd-dir=PATH],[specify location of libdbi drivers @<:@default=${libdir}/dbd@:>@])],
       GNC_DBD_DIR="$with_dbi_dbd_dir",
-      GNC_DBD_DIR="/usr/lib/dbd")
+      GNC_DBD_DIR="")
 
     LIBDBI_LIBS=-ldbi
     DBI_DIR=dbi
@@ -596,6 +596,7 @@ fi
 AC_SUBST(LIBDBI_LIBS)
 AC_SUBST(DBI_DIR)
 AC_SUBST(GNC_DBD_DIR)
+AM_CONDITIONAL(CUSTOM_GNC_DBD_DIR, [test x"$GNC_DBD_DIR" != "x"])
 
 ### --------------------------------------------------------------------------
 ### Variables

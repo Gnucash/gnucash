@@ -1007,7 +1007,6 @@ void
 gnc_module_init_backend_dbi(void)
 {
     QofBackendProvider *prov;
-#define DEFAULT_DBD_DIR "/usr/lib/dbd"
     const gchar* driver_dir;
     int num_drivers;
     gboolean have_sqlite3_driver = FALSE;
@@ -1019,8 +1018,7 @@ gnc_module_init_backend_dbi(void)
     driver_dir = g_getenv( "GNC_DBD_DIR" );
     if ( driver_dir == NULL )
     {
-        PWARN( "GNC_DBD_DIR not set: using %s\n", DEFAULT_DBD_DIR );
-        driver_dir = DEFAULT_DBD_DIR;
+        PINFO( "GNC_DBD_DIR not set: using libdbi built-in default\n");
     }
 
     num_drivers = dbi_initialize( driver_dir );
