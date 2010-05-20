@@ -17,8 +17,23 @@ AM_CPPFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS}
 
+if PLATFORM_WIN32
+GNUCASH_RESOURCE_FILE = gnucash.rc
+else
+GNUCASH_RESOURCE_FILE =
+endif
+
+SUFFIXES = .rc .res
+
+if PLATFORM_WIN32
+.rc.res:
+	$(AM_V_GEN)$(RC) -i '$<' --input-format=rc -o '$@' -O coff
+endif
+
+dist_noinst_DATA = gnucash.rc
+
 bin_PROGRAMS = gnucash-bin
-gnucash_bin_SOURCES = gnucash-bin.c
+gnucash_bin_SOURCES = gnucash-bin.c ${GNUCASH_RESOURCE_FILE}
 gnucash_bin_LDADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \

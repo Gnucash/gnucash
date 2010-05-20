@@ -261,6 +261,7 @@ update to latest  darwin])
 		platform=win32
 		AC_MSG_RESULT($platform)
 		GNUCASH_ENVIRONMENT="environment-win32"
+		LT_PROG_RC
 
 		AC_MSG_CHECKING(for native win32)
 		case $host_os in
