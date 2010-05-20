@@ -1255,6 +1255,17 @@
   <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
+  <act:name>Apkure</act:name>
+  <act:id type="new">0b343a3a6a994b3591622832492fbbe1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>Apkure</act:description>
+  <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Atkritumu savākšana</act:name>
   <act:id type="new">32e63639b9c11290ea1992ef495886d5</act:id>
   <act:type>EXPENSE</act:type>

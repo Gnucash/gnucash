@@ -36,7 +36,7 @@
      Kontu plāns uzņēmējdarbībai saskaņā ar Latvijas likumdošanu.
     </gnc-act:short-description>
     <gnc-act:long-description>
-     Izmantojiet šo kontu plānu, ja vēlaties veikt finanšu uzskaiti uzņēmējdarbībā. Šis kontu plānā ir izveidots saskaņā ar Latvijas likumdošanu.
+     Izmantojiet šo kontu plānu, ja vēlaties veikt finanšu uzskaiti uzņēmējdarbībā. Šis kontu plāns ir veidots saskaņā ar Latvijas likumdošanu.
     </gnc-act:long-description>
     <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
 <gnc:account version="2.0.0">
@@ -58,19 +58,6 @@
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
-    </slot>
-    <slot>
-      <slot:key>reconcile-info</slot:key>
-      <slot:value type="frame">
-        <slot>
-          <slot:key>last-date</slot:key>
-          <slot:value type="integer">1230760799</slot:value>
-        </slot>
-        <slot>
-          <slot:key>include-children</slot:key>
-          <slot:value type="integer">1</slot:value>
-        </slot>
-      </slot:value>
     </slot>
   </act:slots>
   <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
@@ -160,19 +147,6 @@
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
-    <slot>
-      <slot:key>reconcile-info</slot:key>
-      <slot:value type="frame">
-        <slot>
-          <slot:key>last-date</slot:key>
-          <slot:value type="integer">1230760799</slot:value>
-        </slot>
-        <slot>
-          <slot:key>include-children</slot:key>
-          <slot:value type="integer">1</slot:value>
-        </slot>
-      </slot:value>
-    </slot>
   </act:slots>
   <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
 </gnc:account>
@@ -216,6 +190,12 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>3.4.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="guid">f241bfd7e177b5591d6ca17d2065ec23</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -256,32 +236,6 @@
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
-    </slot>
-    <slot>
-      <slot:key>reconcile-info</slot:key>
-      <slot:value type="frame">
-        <slot>
-          <slot:key>last-date</slot:key>
-          <slot:value type="integer">1230760799</slot:value>
-        </slot>
-        <slot>
-          <slot:key>last-interval</slot:key>
-          <slot:value type="frame">
-            <slot>
-              <slot:key>days</slot:key>
-              <slot:value type="integer">0</slot:value>
-            </slot>
-            <slot>
-              <slot:key>months</slot:key>
-              <slot:value type="integer">0</slot:value>
-            </slot>
-          </slot:value>
-        </slot>
-        <slot>
-          <slot:key>include-children</slot:key>
-          <slot:value type="integer">1</slot:value>
-        </slot>
-      </slot:value>
     </slot>
   </act:slots>
   <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
@@ -487,7 +441,7 @@
   <act:parent type="guid">f95b9f7c8b6db80dd7ded93317c09387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>5.5 Norēkini par parādiem ar personālu</act:name>
+  <act:name>5.5. Norēkini par parādiem ar personālu</act:name>
   <act:id type="guid">8b4824ee28408402da7af3410e586301</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -497,8 +451,8 @@
   <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">#ededececebeb</slot:value>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
   <act:parent type="guid">63436c16eef1271c1b20696e8c3a0d88</act:parent>
@@ -512,7 +466,7 @@
     <cmdty:id>LVL</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:code>5510 Norēķini par parādiem ar personālu</act:code>
+  <act:code>5510</act:code>
   <act:slots>
     <slot>
       <slot:key>color</slot:key>
@@ -535,19 +489,6 @@
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
-    </slot>
-    <slot>
-      <slot:key>reconcile-info</slot:key>
-      <slot:value type="frame">
-        <slot>
-          <slot:key>last-date</slot:key>
-          <slot:value type="integer">1230760799</slot:value>
-        </slot>
-        <slot>
-          <slot:key>include-children</slot:key>
-          <slot:value type="integer">1</slot:value>
-        </slot>
-      </slot:value>
     </slot>
     <slot>
       <slot:key>notes</slot:key>
@@ -600,19 +541,6 @@
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
-    </slot>
-    <slot>
-      <slot:key>reconcile-info</slot:key>
-      <slot:value type="frame">
-        <slot>
-          <slot:key>last-date</slot:key>
-          <slot:value type="integer">1230760799</slot:value>
-        </slot>
-        <slot>
-          <slot:key>include-children</slot:key>
-          <slot:value type="integer">1</slot:value>
-        </slot>
-      </slot:value>
     </slot>
   </act:slots>
   <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
@@ -903,6 +831,12 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>7.4.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="guid">5bff8991d59134283c3c6d0d50add02b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -915,10 +849,11 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>7420</act:code>
+
   <act:parent type="guid">8dbac8e19acab0965568911995842d37</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>2.  Apgrozāmie līdzekļi</act:name>
+  <act:name>2. Apgrozāmie līdzekļi</act:name>
   <act:id type="guid">fb4aa78c11eb5a3fccb5f29307eb916c</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -931,19 +866,6 @@
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
-    </slot>
-    <slot>
-      <slot:key>reconcile-info</slot:key>
-      <slot:value type="frame">
-        <slot>
-          <slot:key>last-date</slot:key>
-          <slot:value type="integer">1230760799</slot:value>
-        </slot>
-        <slot>
-          <slot:key>include-children</slot:key>
-          <slot:value type="integer">1</slot:value>
-        </slot>
-      </slot:value>
     </slot>
   </act:slots>
   <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
@@ -1048,17 +970,6 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>2620</act:code>
-  <act:slots>
-    <slot>
-      <slot:key>reconcile-info</slot:key>
-      <slot:value type="frame">
-        <slot>
-          <slot:key>include-children</slot:key>
-          <slot:value type="integer">0</slot:value>
-        </slot>
-      </slot:value>
-    </slot>
-  </act:slots>
   <act:parent type="guid">9f327a18d3aa95242c78eb36d9ae95d0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1117,6 +1028,12 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>2.4. </act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="guid">fb4aa78c11eb5a3fccb5f29307eb916c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1145,19 +1062,6 @@
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
-    </slot>
-    <slot>
-      <slot:key>reconcile-info</slot:key>
-      <slot:value type="frame">
-        <slot>
-          <slot:key>last-date</slot:key>
-          <slot:value type="integer">1230760799</slot:value>
-        </slot>
-        <slot>
-          <slot:key>include-children</slot:key>
-          <slot:value type="integer">1</slot:value>
-        </slot>
-      </slot:value>
     </slot>
   </act:slots>
   <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
@@ -1201,6 +1105,12 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>8.6.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="guid">d46cf499346c8af7d669b92a49ecd710</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1225,6 +1135,12 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>8.8.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="guid">d46cf499346c8af7d669b92a49ecd710</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1240,7 +1156,7 @@
   <act:parent type="guid">eb4c860bcbfd5fd03228bc14c7369fcc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>8.2 Dažādi izdevumi</act:name>
+  <act:name>8.2. Dažādi izdevumi</act:name>
   <act:id type="guid">8bb800a4801a59e337b19ebe59c2e731</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -1248,7 +1164,13 @@
     <cmdty:id>LVL</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:code>8.2</act:code>
+  <act:code>8.2.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="guid">d46cf499346c8af7d669b92a49ecd710</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1272,20 +1194,11 @@
     <cmdty:id>LVL</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:code>4.3.</act:code>
+  <act:code>4.</act:code>
   <act:slots>
     <slot>
-      <slot:key>reconcile-info</slot:key>
-      <slot:value type="frame">
-        <slot>
-          <slot:key>last-date</slot:key>
-          <slot:value type="integer">1230760799</slot:value>
-        </slot>
-        <slot>
-          <slot:key>include-children</slot:key>
-          <slot:value type="integer">1</slot:value>
-        </slot>
-      </slot:value>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
   <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
@@ -1300,6 +1213,12 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4.3.</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="guid">0cceaa8a8ffb8ebbd73506bd64437daf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1311,30 +1230,8 @@
     <cmdty:id>LVL</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:code>Citi uzkrājumi</act:code>
+  <act:code>4310</act:code>
   <act:parent type="guid">83bc52b49a1c0a03a7ff68ecf853aaeb</act:parent>
-</gnc:account>
-<gnc:account version="2.0.0">
-  <act:name>Imbalance-LVL</act:name>
-  <act:id type="guid">0cfec028cb836cdfbb496f493a0a845d</act:id>
-  <act:type>BANK</act:type>
-  <act:commodity>
-    <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>LVL</cmdty:id>
-  </act:commodity>
-  <act:commodity-scu>100</act:commodity-scu>
-  <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
-</gnc:account>
-<gnc:account version="2.0.0">
-  <act:name>Starpība-LVL</act:name>
-  <act:id type="guid">a32dc9485761b4ef034c7f92ef79d454</act:id>
-  <act:type>BANK</act:type>
-  <act:commodity>
-    <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>LVL</cmdty:id>
-  </act:commodity>
-  <act:commodity-scu>100</act:commodity-scu>
-  <act:parent type="guid">f1d190ad7b90d92a692014bbf7e281a2</act:parent>
 </gnc:account>
 </gnc-account-example>
 
