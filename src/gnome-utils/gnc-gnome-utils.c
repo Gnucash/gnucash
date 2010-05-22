@@ -57,6 +57,9 @@
 #ifdef G_OS_WIN32
 #    include "gnc-help-utils.h"
 #endif
+#ifdef MAC_INTEGRATION
+#import <Cocoa/Cocoa.h>
+#endif
 
 static QofLogModule log_module = GNC_MOD_GUI;
 static GnomeProgram *gnucash_program = NULL;
@@ -271,28 +274,86 @@ gnc_gnome_init (int argc, char **argv, const char * version)
     return;
 }
 
-#ifndef G_OS_WIN32
+#ifdef MAC_INTEGRATION
+
+/* Don't be alarmed if this function looks strange to you: It's
+ * written in Objective-C, the native language of the OSX Cocoa
+ * toolkit.
+ */
 void
-gnc_gnome_help (const char *file_name, const char *anchor)
+gnc_gnome_help (const char *dir, const char *detail)
 {
-    GError *error = NULL;
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+  NSString *subdir = [NSString stringWithUTF8String: dir];
+  NSString *help_dir = [NSString stringWithUTF8String: HF_HELP];
+  NSString *tag;
+  NSURL *url = NULL;
 
-    DEBUG ("Attempting to opening help file %s", file_name);
-    if (gnome_help_display (file_name, anchor, &error))
-        return;
+  if (detail)
+      tag  = [NSString stringWithUTF8String: detail];
+  else if ([subdir compare: help_dir] == NSOrderedSame)
+      tag = @"help";
+  else
+      tag = @"index";
 
-    g_assert(error != NULL);
-    {
+  if (![[NSBundle mainBundle] bundleIdentifier]) {
+/* If bundleIdentifier is NULL, then we're running from the
+ * commandline and must construct a file path to the resource. We can
+ * still get the resource path, but it will point to the "bin"
+ * directory so we chop that off, break up what's left into pieces,
+ * add some more pieces, and put it all back together again. Then,
+ * because the gettext way of handling localizations is different from
+ * OSX's, we have to figure out which translation to use. */
+      NSArray *components = [NSArray arrayWithObjects: @"share", @"gnome", @"help", @"gnucash", nil ];
+      NSString *prefix = [[[NSBundle mainBundle] resourcePath]
+			   stringByDeletingLastPathComponent];
+      NSArray *prefix_comps = [[prefix pathComponents]
+			       arrayByAddingObjectsFromArray: components];
+      NSString *docs_dir = [NSString pathWithComponents: prefix_comps];
+      NSString * cur_locale = [[NSLocale currentLocale] localeIdentifier] ;
+      BOOL dir, exists;
+      subdir = [[[subdir lowercaseString] componentsSeparatedByString: @" "] 
+		componentsJoinedByString: @"-"];
+      if (![[NSFileManager defaultManager] fileExistsAtPath: docs_dir]) {
         const gchar *message =
             _("GnuCash could not find the files for the help documentation.  "
               "This is likely because the 'gnucash-docs' package is not installed.");
         gnc_error_dialog(NULL, "%s", message);
-    }
-    PERR ("%s", error->message);
-    g_error_free(error);
-}
+	[pool release];
+	return;
+      }
+      exists = [[NSFileManager defaultManager]
+		fileExistsAtPath: [docs_dir
+				   stringByAppendingPathComponent: cur_locale]
+		isDirectory: &dir];
+      if (exists && dir)
+	  url = [NSURL 
+		 fileURLWithPath: [[[[docs_dir
+				      stringByAppendingPathComponent: cur_locale]
+				     stringByAppendingPathComponent: subdir]
+				    stringByAppendingPathComponent: tag]
+				   stringByAppendingPathExtension: @"html"]];
+      if (!url)
+	  url = [NSURL 
+		 fileURLWithPath: [[[[docs_dir
+				      stringByAppendingPathComponent: @"C"]
+				     stringByAppendingPathComponent: subdir]
+				    stringByAppendingPathComponent: tag]
+				   stringByAppendingPathExtension: @"html"]];
 
-#else /* G_OS_WIN32 */
+  }
+/* It's a lot easier in a bundle! */
+  else   
+      url = [NSURL fileURLWithPath: [[NSBundle mainBundle] 
+				     pathForResource: tag
+				     ofType: @"html"
+				     inDirectory: subdir ]];
+
+/* Now just open the URL in the default app for opening URLs */
+  [[NSWorkspace sharedWorkspace] openURL: url];
+  [pool release];
+}
+#elif defined G_OS_WIN32 /* G_OS_WIN32 */
 void
 gnc_gnome_help (const char *file_name, const char *anchor)
 {
@@ -326,6 +387,28 @@ gnc_gnome_help (const char *file_name, const char *anchor)
     }
     g_free (found);
 }
+#else
+void
+gnc_gnome_help (const char *file_name, const char *anchor)
+{
+    GError *error = NULL;
+
+    DEBUG ("Attempting to opening help file %s", file_name);
+    if (gnome_help_display (file_name, anchor, &error))
+        return;
+
+    g_assert(error != NULL);
+    {
+        const gchar *message =
+            _("GnuCash could not find the files for the help documentation.  "
+              "This is likely because the 'gnucash-docs' package is not installed.");
+        gnc_error_dialog(NULL, "%s", message);
+    }
+    PERR ("%s", error->message);
+    g_error_free(error);
+}
+
+
 #endif
 
 /********************************************************************\
