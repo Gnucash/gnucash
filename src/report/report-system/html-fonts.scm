@@ -60,22 +60,23 @@
         (
             (opt-register 
                 (lambda (opt) (gnc:register-option options opt)))
+            (font-family "Arial")
         )
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
                 (N_ "Title") "a" (N_ "Font info for the report title")
-                "Arial Bold 15"))
+                (string-append font-family " Bold 15")))
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
                 (N_ "Account link") "b" (N_ "Font info for account name")
-                "Arial Italic 8"))
+                (string-append font-family " Italic 8")))
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
                 (N_ "Number cell") "c" (N_ "Font info for regular number cells")
-                "Arial 10"))
+                (string-append font-family " 10")))
         (opt-register
             (gnc:make-simple-boolean-option
                 (N_ "Fonts")
@@ -85,27 +86,27 @@
             (gnc:make-font-option
                 (N_ "Fonts")
                 (N_ "Number header") "e" (N_ "Font info for number headers")
-                "Arial 10"))
+                (string-append font-family " 10")))
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
                 (N_ "Text cell") "f" (N_ "Font info for regular text cells")
-                "Arial 10"))
+                (string-append font-family " 10")))
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
                 (N_ "Total number cell") "g" (N_ "Font info for number cells containing a total")
-                "Arial Bold 12"))
+                (string-append font-family " Bold 12")))
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
                 (N_ "Total label cell") "h" (N_ "Font info for cells containing total labels")
-                "Arial Bold 12"))
+                (string-append font-family " Bold 12")))
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
                 (N_ "Centered label cell") "i" (N_ "Font info for centered label cells")
-                "Arial Bold 12"))
+                (string-append font-family " Bold 12")))
     )
 )
 
