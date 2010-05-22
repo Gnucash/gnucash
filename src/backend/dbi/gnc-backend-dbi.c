@@ -516,6 +516,17 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
 
     if ( success )
     {
+        dbi_result dresult;
+
+        /* Set connection char set to utf8 */
+        dresult = dbi_conn_queryf( be->conn, "SET NAMES 'utf8'" );
+        if ( dresult == NULL )
+        {
+            PERR( "Unable to set connection char set" );
+            qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+            goto exit;
+        }
+
         if ( be->sql_be.conn != NULL )
         {
             gnc_sql_connection_dispose( be->sql_be.conn );
@@ -523,6 +534,7 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
         be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_MYSQL, qbe, be->conn );
     }
     be->sql_be.timespec_format = MYSQL_TIMESPEC_STR_FORMAT;
+
 exit:
     g_free( protocol );
     g_free( host );
