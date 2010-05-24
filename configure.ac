@@ -244,7 +244,6 @@ update to latest  darwin])
 		_gdk_tgt=`$PKG_CONFIG --variable=target gdk-2.0`
 		if test "x$_gdk_tgt" = xquartz; then 
 		   platform=darwin/quartz
-		   AC_PROG_OBJC
 		   AC_MSG_RESULT(yes)
 		   AC_DEFINE(GDK_QUARTZ,,[Using GDK Quartz (not X11)])
 		   PKG_CHECK_MODULES([IGE_MAC], ige-mac-integration,
