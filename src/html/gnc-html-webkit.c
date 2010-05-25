@@ -1063,7 +1063,7 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
 static void
 impl_webkit_print( GncHtml* self )
 {
-#if HAVE(WEBKIT_WEB_FRAME_PRINT_FULL)
+#if !HAVE(WEBKIT_WEB_FRAME_PRINT_FULL)
     extern void webkit_web_frame_print( WebKitWebFrame * frame );
 #endif
 
