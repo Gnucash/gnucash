@@ -177,6 +177,12 @@ environment_override()
     gint i;
     gboolean got_keyfile;
 
+#ifdef G_OS_WIN32
+	config_path = gnc_path_get_pkgsysconfdir();
+	share_path = gnc_path_get_pkgdatadir();
+	help_path = g_path_get_dirname(share_path);
+#endif /* G_OS_WIN32 */
+
     if ((path = g_getenv("GNC_CONFIG_PATH")))
         config_path = g_strdup(path);
     if ((path = g_getenv("GNC_SHARE_PATH")))
@@ -726,7 +732,7 @@ main(int argc, char ** argv)
      */
     environment_override();
 
-    #ifdef HAVE_GETTEXT
+#ifdef HAVE_GETTEXT
     {
         gchar *localedir = gnc_path_get_localedir();
         /* setlocale(LC_ALL, ""); is already called by gtk_set_locale()

@@ -223,8 +223,6 @@ function dist_gnucash() {
     cp -a $_INSTALL_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
     mkdir -p $DIST_UDIR/lib
     cp -a $_INSTALL_UDIR/lib/lib*.la $DIST_UDIR/lib
-    mkdir -p $DIST_UDIR/lib/gnucash
-    cp -a $_INSTALL_UDIR/lib/gnucash/lib*.dll $DIST_UDIR/lib/gnucash
     cp -a $_INSTALL_UDIR/libexec $DIST_UDIR
     mkdir -p $DIST_UDIR/share
     cp -a $_INSTALL_UDIR/share/{gnucash,locale} $DIST_UDIR/share

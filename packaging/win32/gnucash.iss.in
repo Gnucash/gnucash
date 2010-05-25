@@ -41,17 +41,17 @@ Name: desktopicon; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm
 Name: menuicon; Description: "{cm:CreateMenuLink}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Icons]
-Name: "{group}\GnuCash"; Filename: "{app}\bin\gnucash.cmd"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: menuicon; Flags: runminimized
+Name: "{group}\GnuCash"; Filename: "{app}\bin\gnucash-bin.exe"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: menuicon; Flags: runminimized
 Name: "{group}\{cm:IconName_README}"; Filename: "{app}\doc\gnucash\{cm:IconFilename_README}"; Comment: "{cm:IconComment_README}"; Tasks: menuicon
 Name: "{group}\{cm:IconName_FAQ}"; Filename: "http://wiki.gnucash.org/wiki/FAQ"; Tasks: menuicon
 Name: "{group}\{cm:IconName_Bugzilla}"; Filename: "http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash"; Tasks: menuicon
 Name: "{group}\{cm:IconName_InstallFQ}"; Filename: "{app}\bin\install-fq-mods.cmd"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_InstallFQ}"; Tasks: menuicon
 Name: "{group}\{cm:IconName_Uninstall}"; Filename: "{uninstallexe}"; Comment: "{cm:IconComment_Uninstall}"; Tasks: menuicon
 
-Name: "{commondesktop}\GnuCash"; Filename: "{app}\bin\gnucash.cmd"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: desktopicon; Flags: runminimized
+Name: "{commondesktop}\GnuCash"; Filename: "{app}\bin\gnucash-bin.exe"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: desktopicon; Flags: runminimized
 
 [Run]
-Filename: "{app}\bin\gnucash.cmd"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; OnlyBelowVersion: 0,6; Flags: postinstall skipifsilent runhidden
+Filename: "{app}\bin\gnucash-bin.exe"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; OnlyBelowVersion: 0,6; Flags: postinstall skipifsilent runhidden
 Filename: "{app}\bin\guile.cmd"; Parameters: "-c ""(use-modules (ice-9 slib)) (require 'printf)"""; Flags: runhidden
 ;; The Windows firewall exceptions, see http://www.vincenzo.net/isxkb/index.php?title=Adding_a_rule_to_the_Windows_firewall
 Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bin\gnucash-bin.exe"" ""GnuCash Free Finance Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
@@ -72,7 +72,7 @@ Source: "@prefix@\..\dist\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs ig
 ; Note: The above AfterInstall function will create the 
 ; gnucash.cmd file on-the-fly by the Pascal script below.
 
-Source: "@prefix@\..\dist\etc\*"; DestDir: "{app}\etc"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\..\dist\etc\*"; DestDir: "{app}\etc"; Flags: recursesubdirs; Components: main; AfterInstall: MyAfterInstallEtc()
 Source: "@prefix@\..\dist\lib\*"; DestDir: "{app}\lib"; Flags: recursesubdirs; Components: main
 Source: "@prefix@\..\dist\libexec\*"; DestDir: "{app}\libexec"; Flags: recursesubdirs; Components: main
 Source: "@prefix@\..\dist\share\*"; DestDir: "{app}\share"; Flags: recursesubdirs; Components: main
@@ -114,7 +114,7 @@ Root: HKCR; Subkey: ".gnucash"; ValueType: string; ValueName: ""; ValueData: "Gn
 Root: HKCR; Subkey: ".gnucash"; ValueType: string; ValueName: "Content Type"; ValueData: "application/x-gnucash"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "GnuCash.Financial.Data"; ValueType: string; ValueName: ""; ValueData: "GnuCash Financial Data"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "GnuCash.Financial.Data\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\share\gnucash\pixmaps\gnucash-icon.ico,0" 
-Root: HKCR; Subkey: "GnuCash.Financial.Data\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\gnucash.cmd"" ""%1""" 
+Root: HKCR; Subkey: "GnuCash.Financial.Data\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\gnucash-bin.exe"" ""%1""" 
 
 Root: HKLM; Subkey: "Software\GnuCash"; ValueType: none; Flags: uninsdeletekeyifempty
 Root: HKLM; Subkey: "Software\GnuCash\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
@@ -154,9 +154,11 @@ Root: HKLM; Subkey: "Software\AqBanking\Paths"; ValueType: string; ValueName: "c
 [UninstallDelete]
 Type: files; Name: "{app}\bin\gnucash.cmd"
 Type: files; Name: "{app}\bin\guile.cmd"
+Type: files; Name: "{app}\etc\gnucash\environment"
 Type: files; Name: "{app}\share\guile\1.6\slibcat"
 Type: filesandordirs; Name: "{app}\share\guile"
 Type: filesandordirs; Name: "{app}\etc\gconf"
+Type: dirifempty; Name: "{app}\etc\gnucash"
 Type: dirifempty; Name: "{app}\etc"
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -223,6 +225,62 @@ begin
 
 end;
 
+
+function BackslashPath(const S: String): String;
+begin
+	{ Convert c:\soft to c:/soft }
+	Result := S;
+	StringChange(Result, '\', '/');
+end;
+
+procedure MyAfterInstallEtc();
+var
+  FileName, FileString, appdir, libdir, pkglibdir, pkgdatadir: String;
+  Res: Boolean;
+begin
+
+  { Get the installation-specific paths }
+  appdir := BackslashPath( ExpandConstant('{app}') );
+  libdir := BackslashPath( appdir + '/lib' );
+  pkglibdir := BackslashPath( appdir + '/bin' );
+  pkgdatadir := BackslashPath( appdir + '/share/gnucash' );
+
+  { Create the etc/gnucash/environment file; #10 is the linefeed character and #13 CR }
+
+  { If you make any changes here, you should probably also change the equivalent sections }
+  { in packaging/win32/install.sh, src/bin/environment*.in and src/bin/gnucash-setup-env-osx.in }
+  FileName := appdir + '\etc\gnucash\environment' ;
+  
+
+  FileString := '# environment'#13#10 ;
+  FileString := FileString + '#'#13#10 ;
+  FileString := FileString + '# This configuration file can be used to change/add'#13#10 ;
+  FileString := FileString + '# environment variables during GnuCash startup.'#13#10 ;
+  FileString := FileString + '#'#13#10 ;
+
+  FileString := FileString + '[Variables]'#13#10 ;
+  FileString := FileString + 'PATH=' + appdir + '/bin;' + libdir + ';' + pkglibdir + ';{PATH}'#13#10 ;
+  FileString := FileString + 'SCHEME_LIBRARY_PATH='#13#10 ;
+  FileString := FileString + 'GNC_MODULE_PATH=' + pkglibdir + ''#13#10 ;
+  FileString := FileString + 'GUILE_LOAD_PATH=' + pkgdatadir + '/guile-modules;' + pkgdatadir + '/scm;' + appdir + '/share/guile/1.6;{GUILE_LOAD_PATH}'#13#10 ;
+  FileString := FileString + 'EXTRA_LIBS={GNC_MODULE_PATH}'#13#10 ;
+  FileString := FileString + 'LD_LIBRARY_PATH={EXTRA_LIBS};{LD_LIBRARY_PATH}'#13#10 ;
+  FileString := FileString + 'DYLD_LIBRARY_PATH={EXTRA_LIBS};{DYLD_LIBRARY_PATH}'#13#10 ;
+  FileString := FileString + 'LTDL_LIBRARY_PATH=' + libdir + ''#13#10 ;
+  FileString := FileString + 'QOF_LIB_DIR=' + pkglibdir + ''#13#10 ;
+  FileString := FileString + 'GNC_DBD_DIR=' + libdir + '/dbd'#13#10 ;
+  FileString := FileString + 'GNC_STANDARD_REPORTS_DIR=' + pkgdatadir + '/guile-modules/gnucash/report/standard-reports'#13#10 ;
+  FileString := FileString + 'GUILE_WARN_DEPRECATED=no'#13#10 ;
+
+  { Save the final file }
+  Res := ForceDirectories(appdir + '\etc\gnucash');
+  if Res = False then
+    MsgBox('Error on creating '+appdir+'\etc\gnucash for completing the installation', mbInformation, MB_OK);
+	
+  Res := SaveStringToFile(FileName, FileString, False);
+  if Res = False then
+    MsgBox('Error on saving '+FileName+' for completing the installation', mbInformation, MB_OK);
+end;  
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
@@ -445,27 +503,27 @@ pt_BR.IconComment_Uninstall=Desinstala o Gerenciador Financeiro GnuCash
 ;; ;;;;;;;;;;;;;;;;;
 ;; Simplified Chinese translation
 
-zh_CN.FullInstall=ÍêÈ«°²×°
-zh_CN.CustomInstall=×Ô¶¨Òå°²×°
-zh_CN.CreateDesktopIcon=´´½¨×ÀÃæÍ¼±ê
-zh_CN.CreateMenuLink=´´½¨¿ªÊ¼²Ëµ¥Á´½Ó
-zh_CN.RunPrg=ÏÖÔÚ¿ªÊ¼ÔËÐÐ GnuCash
-zh_CN.AdditionalIcons=´´½¨ÕâÐ©Í¼±ê
-zh_CN.StatusMsgFirewall=ÕýÔÚ°²×° Windows ·À»ðÇ½¹æÔò...
+zh_CN.FullInstall=ï¿½ï¿½È«ï¿½ï¿½×°
+zh_CN.CustomInstall=ï¿½Ô¶ï¿½ï¿½å°²×°
+zh_CN.CreateDesktopIcon=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
+zh_CN.CreateMenuLink=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½
+zh_CN.RunPrg=ï¿½ï¿½ï¿½Ú¿ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ GnuCash
+zh_CN.AdditionalIcons=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð©Í¼ï¿½ï¿½
+zh_CN.StatusMsgFirewall=ï¿½ï¿½ï¿½Ú°ï¿½×° Windows ï¿½ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½...
 
-zh_CN.MainFiles=GnuCash ³ÌÐò
-zh_CN.TranslFiles=·­ÒëÎÄ¼þ
-zh_CN.TemplFiles=»á¼Æ¿ÆÄ¿Ä£°åÎÄ¼þ
+zh_CN.MainFiles=GnuCash ï¿½ï¿½ï¿½ï¿½
+zh_CN.TranslFiles=ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+zh_CN.TemplFiles=ï¿½ï¿½Æ¿ï¿½Ä¿Ä£ï¿½ï¿½ï¿½Ä¼ï¿½
 
-zh_CN.IconComment_GnuCash=GnuCash Ãâ·Ñ²ÆÎñ¹ÜÀí
-zh_CN.IconName_README=ÏÔÊ¾×ÔÊöÎÄ¼þ
-zh_CN.IconComment_README=ÏÔÊ¾×ÔÊöÎÄ¼þ
+zh_CN.IconComment_GnuCash=GnuCash ï¿½ï¿½Ñ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+zh_CN.IconName_README=ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+zh_CN.IconComment_README=ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
 zh_CN.IconFilename_README=README-zh_CN.win32-bin.txt
-zh_CN.IconName_FAQ=³£¼ûÎÊÌâ (ÔÚÏß)
-zh_CN.IconName_Bugzilla=±¨¸æÈí¼þ Bug (ÔÚÏß)
-zh_CN.IconName_InstallFQ=°²×°ÔÚÏß¼Û¸ñ¼ìË÷¹¦ÄÜ
-zh_CN.IconComment_InstallFQ=°²×°ÔÚÏß¼Û¸ñ¼ìË÷Ëù±ØÐèµÄ Perl Finance-QuoteÄ£¿é¡£ÐèÒª ActivePerl 5.8 »ò 5.10
-zh_CN.IconName_Uninstall=Ð¶ÔØ GnuCash
-zh_CN.IconComment_Uninstall=Ð¶ÔØ²ÆÎñ¹ÜÀíÈí¼þ GnuCash
+zh_CN.IconName_FAQ=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½)
+zh_CN.IconName_Bugzilla=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Bug (ï¿½ï¿½ï¿½ï¿½)
+zh_CN.IconName_InstallFQ=ï¿½ï¿½×°ï¿½ï¿½ï¿½ß¼Û¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+zh_CN.IconComment_InstallFQ=ï¿½ï¿½×°ï¿½ï¿½ï¿½ß¼Û¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Perl Finance-QuoteÄ£ï¿½é¡£ï¿½ï¿½Òª ActivePerl 5.8 ï¿½ï¿½ 5.10
+zh_CN.IconName_Uninstall=Ð¶ï¿½ï¿½ GnuCash
+zh_CN.IconComment_Uninstall=Ð¶ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ GnuCash
 
 ;; ;;;;;;;;;;;;;;;;;;;;

@@ -1377,7 +1377,7 @@ function make_install() {
         # correct the 'dlname' in the libtool archives. We do not use these
         # files to dlopen the modules, so actually this is unneeded.
         # Also, in all installed .la files, remove the dependency_libs line
-        mv bin/*.dll gnucash 2>/dev/null || true
+        mv bin/*.dll gnucash/*.dll $_INSTALL_UDIR/bin 2>/dev/null || true
         for A in gnucash/*.la; do
             sed '/dependency_libs/d;s#../bin/##' $A > tmp ; mv tmp $A
         done

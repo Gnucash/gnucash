@@ -75,7 +75,12 @@ gchar *gnc_path_get_pkgsysconfdir()
 gchar *gnc_path_get_pkglibdir()
 {
     gchar *libdir = gnc_path_get_libdir ();
+#ifdef G_OS_WIN32
+	/* Workaround for Bug 618646, {pkglibdir} will be bin/ on Windows */
+	gchar *result = gnc_gbr_find_bin_dir(libdir);
+#else
     gchar *result = g_build_filename (libdir, "gnucash", (char*)NULL);
+#endif
     g_free (libdir);
     //printf("Returning pkglibdir %s\n", result);
     return result;

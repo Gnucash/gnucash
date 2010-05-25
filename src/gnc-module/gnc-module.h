@@ -11,6 +11,7 @@
 typedef void * GNCModule;
 
 #define DEFAULT_MODULE_PATH "/usr/local/gnucash/lib/modules"
+#define GNC_MODULE_PREFIX "libgncmod"
 
 /* the basics: initialize the module system, refresh its module
  * database, and get a list of all known modules */
