@@ -951,7 +951,7 @@ format_read_item_placement(const gchar * file,
         if (error)
             goto failed;
         value = doubles_to_string(dd, dd_len);
-        g_debug("Check file %s, group %s, key %s, length %d; values: %s",
+        g_debug("Check file %s, group %s, key %s, length %"G_GSIZE_FORMAT"; values: %s",
                 file, KF_GROUP_ITEMS, key, dd_len, value);
         g_free(value);
 
@@ -1367,7 +1367,7 @@ format_read_general_info(const gchar * file,
     if (!error)
     {
         value = doubles_to_string(dd, dd_len);
-        g_debug("Check file %s, group %s, key %s, length %d; values: %s",
+        g_debug("Check file %s, group %s, key %s, length %"G_GSIZE_FORMAT"; values: %s",
                 file, KF_GROUP_TOP, KF_KEY_TRANSLATION, dd_len, value);
         g_free(value);
 
