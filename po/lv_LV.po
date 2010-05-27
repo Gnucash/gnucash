@@ -226,11 +226,11 @@ msgstr "Varat arī apskatīt un reģistrēt defektus šeit http://bugzilla.gnome
 
 #: ../src/bin/gnucash-bin.c:86
 msgid "The last stable version was "
-msgstr "Pēdējā stabilā versija bija"
+msgstr "Pēdējā stabilā versija bija "
 
 #: ../src/bin/gnucash-bin.c:87
 msgid "The next stable version will be "
-msgstr "Nākamā stabilā versija būs"
+msgstr "Nākamā stabilā versija būs "
 
 #: ../src/bin/gnucash-bin.c:338
 msgid "Show GnuCash version"
@@ -389,7 +389,7 @@ msgstr "Ielādē datus..."
 #: ../intl-scm/guile-strings.c:7136
 #: ../intl-scm/guile-strings.c:7156
 msgid "Invoice"
-msgstr "Izejošais rēķins"
+msgstr "Rēķins"
 
 #. src/app-utils/prefs.scm
 #. src/business/business-reports/invoice.scm
@@ -1015,7 +1015,7 @@ msgstr "Rēķina piezīmes"
 #: ../intl-scm/guile-strings.c:6848
 #: ../intl-scm/guile-strings.c:7064
 msgid "Billing ID"
-msgstr "Rēķina ID"
+msgstr "Maksājuma ID"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2427
 #: ../src/business/business-gnome/dialog-invoice.c:2458
@@ -1066,7 +1066,7 @@ msgstr "Rēķina piezīmes"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2474
 msgid "Bill ID"
-msgstr "Rēķina ID"
+msgstr "Maksājuma ID"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2480
 msgid "Voucher Owner"
@@ -1794,7 +1794,7 @@ msgstr "Pārrakstīt vispārīgo nodokļu tabulu?"
 #: ../src/business/business-gnome/glade/employee.glade.h:20
 #: ../src/business/business-gnome/glade/vendor.glade.h:14
 msgid "Phone: "
-msgstr "Tālrunis: "
+msgstr "Telefons: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:19
 msgid "Shipping Address"
@@ -1924,7 +1924,7 @@ msgstr "Klients: "
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:10
 msgid "Default Chargeback Project"
-msgstr "Noklusējuma Reklamāciju projekts"
+msgstr "Noklusētais reklamāciju projekts"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:11
 msgid "Extra Payments"
@@ -2247,7 +2247,7 @@ msgstr "Darījumi"
 #: ../intl-scm/guile-strings.c:5842
 #: ../intl-scm/guile-strings.c:6450
 msgid "_Business"
-msgstr "Darījumi"
+msgstr "_Darījumi"
 
 #. Customer submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:137
@@ -2280,7 +2280,7 @@ msgstr "Atvērt jauna rēķina dialoglogu"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:154
 msgid "Find In_voice..."
-msgstr "Meklēt _rēķinā..."
+msgstr "Meklēt _rēķinu..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:155
 msgid "Open the Find Invoice dialog"
@@ -2790,7 +2790,7 @@ msgstr "Stundas"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:243
 msgid "Project"
-msgstr "Projekts"
+msgstr "Pakalpojums"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:244
 msgid "Material"
@@ -4949,7 +4949,7 @@ msgstr "Notīrīt ierakstu"
 
 #: ../src/gnome/glade/fincalc.glade.h:23
 msgid "Co_mpounding:"
-msgstr "_Savienojums:"
+msgstr "_Daļējs maksājums:"
 
 #: ../src/gnome/glade/fincalc.glade.h:24
 msgid "Continuous"
@@ -5041,11 +5041,11 @@ msgstr "Kad samaksāts:"
 
 #: ../src/gnome/glade/fincalc.glade.h:47
 msgid "_Effective Date:"
-msgstr "_Spēkā esošs datums:"
+msgstr "_Spēkā esošais datums:"
 
 #: ../src/gnome/glade/fincalc.glade.h:48
 msgid "_Initial Payment:"
-msgstr "_Sākotnējais maksājums:"
+msgstr "_Pirmais maksājums:"
 
 #: ../src/gnome/glade/fincalc.glade.h:49
 msgid "_Payments:"
@@ -5227,7 +5227,7 @@ msgstr "Ja aktivizēts, dzēš manuāli ievadītās akciju cenas, kas datētas p
 
 #: ../src/gnome/glade/price.glade.h:16
 msgid "Price Editor"
-msgstr "Cenas redaktors"
+msgstr "Kursa redaktors"
 
 #: ../src/gnome/glade/price.glade.h:17
 msgid "Remove _Old"
@@ -6723,7 +6723,7 @@ msgstr "Arhivēt vecos datus izmantojot uzskaites periodus"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:172
 msgid "_Price Editor"
-msgstr "_Cenas redaktors"
+msgstr "_Kursa redaktors"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:173
 msgid "View and edit the prices for stocks and mutual funds"
@@ -6921,7 +6921,7 @@ msgstr "Pārbaudīt un atjaunot nesabalansētos grāmatojumus un bāreņu sadal�
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:236
 msgid "Check & Repair A_ll"
-msgstr "Pārbaudīt un atjaunot visu"
+msgstr "_Pārbaudīt un atjaunot visu"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:237
 msgid "Check for and repair unbalanced transactions and orphan splits in all accounts"
@@ -7703,7 +7703,7 @@ msgstr "Katrreiz, kad datums ir izdrukāts, nekavējoties izdrukāt datuma form�
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:4
 msgid "If the 'date_format' is set to indicate a custom date format, this value is used as an argument to strftime to produce the date to be printed. It may be any valid strftime string; for more information about this format, read the manual page of strftime by \"man 3 strftime\"."
-msgstr "Ja 'datuma formāts' ir iestatīts tā, lai rāda pielāgoto datuma formātu, tad šis ieraksts tiek izmantots kā arguments strftime, kas izveido datumu izdrukai. Tā var būt jebkura derīga strftime virkne; vairāk informācijas par šo formātu var izlasīt rokasgrāmatā, lappusē par strftime \"man 3 strftime\"."
+msgstr "Ja 'datuma formāts' ir iestatīts tā, lai rāda pielāgoto datuma formātu, tad šis ieraksts tiek izmantots kā arguments strftime, kas izveido datumu izdrukai. Var būt jebkurš strftime teksts; vairāk informācijas par šo formātu var izlasīt rokasgrāmatā, lappusē par strftime \"man 3 strftime\"."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:5
 msgid "Index of predefined check format to use"
@@ -8122,11 +8122,11 @@ msgstr "Šis iestatījums kontrolē, kā parādīt uzrakstus uz rīkjoslas pogā
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:66
 msgid "This setting controls the default currency used for reports. If set to \"locale\" then GnuCash will retrieve the default currency from the user's locale setting. If set to \"other\", GnuCash will use the setting specified by the currency_other key."
-msgstr "Šis iestatījums kontrolē noklusējuma valūtu izmantošanai pārskatā. Ja iestatīts \"darbības vieta\", tad GnuCash atjaunos noklusējuma valūtu no lietotāja darbības vietas iestatījuma. Ja iestatīts \"cits\", GnuCash izmantos iestatījumu, ko norāda atslēga valūta_cita."
+msgstr "Šis iestatījums kontrolē noklusētās valūtas izmantošanu pārskatā. Ja iestatīts \"darbības vieta\", tad GnuCash atjaunos noklusēto valūtu no lietotāja darbības vietas iestatījuma. Ja iestatīts \"cits\", GnuCash izmantos iestatījumu, ko norāda atslēga valūta_cita."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:67
 msgid "This setting controls the source of the default currency for new accounts. If set to \"locale\" then GnuCash will retrieve the default currency from the user's locale setting. If set to \"other\", GnuCash will use the setting specified by the currency_other key."
-msgstr "Šis iestatījums kontrolē noklusējuma pirmsākumu valūtas jaunajiem kontiem. Ja iestatīts \"darbības vieta\", tad GnuCash atjaunos noklusējuma valūtu no lietotāja darbības vietas iestatījuma. Ja \"cits\", GnuCash izmantos iestatījumu, ko norāda taustiņš valūta_cita. "
+msgstr "Šis iestatījums kontrolē noklusēto valūtu jaunajiem kontiem. Ja iestatīts \"darbības vieta\", tad GnuCash atjaunos noklusēto valūtu no lietotāja darbības vietas iestatījuma. Ja \"cits\", GnuCash izmantos iestatījumu, ko norāda taustiņš valūta_cita. "
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:68
 msgid "This setting determines the character that will be used between components of an account name. Possible values are any single non-alphanumeric unicode character, or any of the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and \"period\"."
@@ -8142,11 +8142,11 @@ msgstr "Šis iestatījums nosaka malu, kurā iezīmētas cilnes, pāriešanai no
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:71
 msgid "This setting specifies the default currency used for new accounts if the currency_choice setting is set to \"other\". This field must contain the three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
-msgstr "Šis iestatījums norāda jaunos kontos izmantoto noklusējuma valūtu, ja valūta_izvēle iestatījums ir \"cits\". Šajā laukā valūtas apzīmēšanai jābūt trīs burtu kodam ISO 4217 (t.i. USD, GBP, RUB)."
+msgstr "Šis iestatījums norāda jaunos kontos izmantoto noklusēto valūtu, ja valūta_izvēle iestatījums ir \"cits\". Šajā laukā valūtas apzīmēšanai jābūt trīs burtu kodam ISO 4217 (t.i. USD, GBP, RUB)."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:72
 msgid "This setting specifies the default currency used for reports if the currency_choice setting is set to \"other\". This field must contain the three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
-msgstr "Šis iestatījums norāda pārskatā izmantoto noklusējuma valūtu, ja valūta_izvēle iestatījums ir \"cits\". Šajā laukā valūtas apzīmēšanai jābūt trīs burtu kodam ISO 4217 (t.i. USD, GBP, RUB)."
+msgstr "Šis iestatījums norāda pārskatā izmantoto noklusēto valūtu, ja valūta_izvēle iestatījums ir \"cits\". Šajā laukā valūtas apzīmēšanai jābūt trīs burtu kodam ISO 4217 (t.i. USD, GBP, RUB)."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:73
 msgid "This setting specifies the number of days after which old log/backup files will be deleted (0 = never)."
@@ -8848,7 +8848,7 @@ msgstr "Izvēlēties noklusējumu"
 
 #: ../src/gnome-utils/dialog-options.c:948
 msgid "Select the default account selection."
-msgstr "Izvēlieties noklusējuma kontu izvēlni."
+msgstr "Izvēlieties noklusēto kontu izvēlni."
 
 #: ../src/gnome-utils/dialog-options.c:962
 msgid "Show Hidden Accounts"
@@ -8961,7 +8961,7 @@ msgstr "Atcerēties un nekad vairs nejautāt."
 
 #: ../src/gnome-utils/dialog-utils.c:967
 msgid "Don't _tell me again."
-msgstr "Vairs neteikt."
+msgstr "Vairs _neteikt."
 
 #: ../src/gnome-utils/dialog-utils.c:970
 msgid "Remember and don't ask me again this _session."
@@ -9205,7 +9205,7 @@ msgstr "Izvēlēties lietotāja informāciju..."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:11
 msgid "Si_ngle:"
-msgstr "_Viens pats:"
+msgstr "_Viens:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:12
 msgid "These are F::Q quote sources that retrieve information from a single site on the internet.  If that site is unavailable, you will not be able to retrieve quotes."
@@ -9680,7 +9680,7 @@ msgstr "<b>Beigu datums</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:13
 msgid "<b>Fancy Date Format</b>"
-msgstr "<b>Izrotāts datuma formāts</b>"
+msgstr "<b>Noformēts datums</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:14
 msgid "<b>Files</b>"
@@ -9824,7 +9824,7 @@ msgstr "Apakša"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:50
 msgid "Bring the most _recent tab to the front"
-msgstr "Iznest pēdējo izmantoto cilni priekšpusē"
+msgstr "Iznest _nesenāko izmantoto cilni priekšpusē"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:51
 msgid "C_redit accounts"
@@ -9856,7 +9856,7 @@ msgstr "Datums/laiks"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:58
 msgid "Default _font:"
-msgstr "Noklusējuma _fonts:"
+msgstr "Noklusētais _fonts:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:59
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -10060,7 +10060,7 @@ msgstr "Rādīt aizvēršanas pogu uz katras piezīmju grāmatas cilnes. Tās da
 
 #: ../src/gnome-utils/glade/preferences.glade.h:115
 msgid "Show a grand total of all accounts converted to the default report currency."
-msgstr "Rādīt galīgo visu kontu kopsummu konvertētu noklusējuma pārskata valūtā."
+msgstr "Rādīt galīgo visu kontu kopsummu konvertētu noklusētajā pārskata valūtā."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:116
 msgid "Show all transactions on one line. (Two in double line mode.)"
@@ -10116,7 +10116,7 @@ msgstr "Teksts _zem ikonām"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:129
 msgid "The character that will be used between components of an account name.  A legal value is any single character except letters and numbers, or any of the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and \"period\"."
-msgstr "Simbols, kas tiks izmantots starp konta nosaukuma komponentēm. Derīga vērtība ir jebkurš viens simbols, izņemot burtus un ciparus vai jebkurus no sekojošās virknes; \"kols\" \"slīpstrīpa\", \"atpakaļ vērsta slīpstrīpa\", \"domuzīme\" un \"punkts\"."
+msgstr "Simbols, kas tiks izmantots starp konta nosaukuma komponentēm. Ir derīgs jebkurš simbols, izņemot burtus un ciparus un kāds no sekojošiem simboliem: \"kols\" \"slīpstrīpa\", \"atpakaļ vērsta slīpstrīpa\", \"domuzīme\" un \"punkts\"."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:131
 msgid "To_p"
@@ -10490,7 +10490,7 @@ msgstr "Skatīt:"
 #: ../intl-scm/guile-strings.c:3750
 #: ../intl-scm/guile-strings.c:4056
 msgid "Date: "
-msgstr "Datums:"
+msgstr "datums:"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:1178
 msgid "(unnamed)"
@@ -10509,7 +10509,7 @@ msgstr "Neizdevās atvērt failu: %s: %s"
 #: ../src/gnome-utils/gnc-file.c:103
 #: ../src/gnome-utils/gnc-main-window.c:245
 msgid "_Import"
-msgstr "_Importēt"
+msgstr "I_mportēt"
 
 #: ../src/gnome-utils/gnc-file.c:105
 #: ../src/gnome-utils/gnc-file.c:267
@@ -10898,7 +10898,7 @@ msgstr "Restaurēt visus brīdinošos vēstījumus, lai tie tiktu atkal rādīti
 
 #: ../src/gnome-utils/gnc-main-window.c:323
 msgid "Re_name Page"
-msgstr "_Pārsaukt lapu"
+msgstr "Pā_rsaukt lapu"
 
 #: ../src/gnome-utils/gnc-main-window.c:324
 msgid "Rename this page."
@@ -12365,7 +12365,7 @@ msgstr "Nogādāt grāmatojumus tiešsaistē caur tiešsaistes banku"
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:102
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:109
 msgid "_Issue Transaction..."
-msgstr "Izdot grāmatojumu..."
+msgstr "_Izdot grāmatojumu..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:103
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:110
@@ -12375,7 +12375,7 @@ msgstr "Izdot jaunu grāmatojumu tiešsaistē caur tiešsaistes banku"
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:107
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:114
 msgid "I_nternal Transaction..."
-msgstr "_Iekšējais grāmatojums..."
+msgstr "I_ekšējais grāmatojums..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:108
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:115
@@ -12825,7 +12825,7 @@ msgstr "Grāmatojumu saraksta palīdzība"
 
 #: ../src/import-export/generic-import.glade.h:52
 msgid "Use _bayesian matching"
-msgstr "Izmantot _varbūtības pieskaņošanu"
+msgstr "Izmantot _Baijesa saskaņošanu"
 
 #: ../src/import-export/generic-import.glade.h:53
 msgid "Use bayesian algorithms to match new transactions with existing accounts."
@@ -13844,7 +13844,7 @@ msgstr "POS"
 
 #: ../src/register/ledger-core/split-register.c:2245
 msgid "Phone"
-msgstr "Tālrunis"
+msgstr "Telefons"
 
 #: ../src/register/ledger-core/split-register.c:2246
 #: ../src/register/ledger-core/split-register.c:2272
@@ -14041,7 +14041,7 @@ msgstr "paraugs:999,999.000"
 
 #: ../src/register/ledger-core/split-register-layout.c:610
 msgid "sample:Memo field sample text string"
-msgstr "paraugs:Atgādnes lauka teksta parauga virkne"
+msgstr "paraugs:Atgādnes lauka teksta paraugs"
 
 #: ../src/register/ledger-core/split-register-layout.c:684
 msgid "Type:T"
@@ -14049,7 +14049,7 @@ msgstr "Tips:T"
 
 #: ../src/register/ledger-core/split-register-layout.c:692
 msgid "sample:Notes field sample text string"
-msgstr "paraugs:Piezīmju lauka teksta parauga virkne"
+msgstr "paraugs:Piezīmju lauka teksta paraugs"
 
 #: ../src/register/ledger-core/split-register-layout.c:700
 msgid "sample:No Particular Reason"
@@ -14284,7 +14284,7 @@ msgstr "Eksportēt uz failu HTML-noformētu pārskatu"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1045
 msgid "_Report Options"
-msgstr "_Pārskatu iestatījumi"
+msgstr "_Pārskata iestatījumi"
 
 #. src/report/report-system/html-utilities.scm
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1046
@@ -14414,11 +14414,11 @@ msgstr "HTML stila lapas"
 
 #: ../src/report/report-gnome/report.glade.h:10
 msgid "Move _up"
-msgstr "Iet uz augšu"
+msgstr "Iet uz _augšu"
 
 #: ../src/report/report-gnome/report.glade.h:11
 msgid "Move dow_n"
-msgstr "Iet uz leju"
+msgstr "Iet uz _leju"
 
 #: ../src/report/report-gnome/report.glade.h:12
 msgid "New Style Sheet"
@@ -14505,7 +14505,7 @@ msgstr "Budžets"
 
 #: ../src/libqof/qof/qofbookslots.h:69
 msgid "Default Budget"
-msgstr "_Noklusētais budžets"
+msgstr "Noklusētais budžets"
 
 #. * @}
 #. For the grep-happy:
@@ -16264,7 +16264,7 @@ msgstr "Šī pārskata stila CSS faila nosaukums. Šim failam ir jābūt jūsu m
 #: ../intl-scm/guile-strings.c:6816
 #: ../intl-scm/guile-strings.c:7088
 msgid "Extra Notes"
-msgstr "Papildus piezīmes"
+msgstr "Papildu piezīmes"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #. src/business/business-reports/taxinvoice.scm
@@ -18447,14 +18447,14 @@ msgstr "Ceturtās izvēlne valda!"
 #: ../intl-scm/guile-strings.c:2378
 #: ../intl-scm/guile-strings.c:2536
 msgid "String Option"
-msgstr "Virknes izvēlne"
+msgstr "Teksta izvēlne"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:2380
 #: ../intl-scm/guile-strings.c:2538
 msgid "This is a string option"
-msgstr "Šī ir virknes izvēlne"
+msgstr "Šī ir teksta izvēlne"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -18771,7 +18771,7 @@ msgstr "Daudzveidīga izvēlne ir %s."
 #: ../intl-scm/guile-strings.c:2634
 #, c-format
 msgid "The string option is %s."
-msgstr "Virknes izvēlne ir %s."
+msgstr "Teksta izvēlne ir %s."
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -19661,7 +19661,7 @@ msgstr "Mainīt tabulas šūnas krāsu"
 #: ../intl-scm/guile-strings.c:3632
 #: ../intl-scm/guile-strings.c:3938
 msgid "Default alternate background for table cells."
-msgstr "Noklusējuma izvēles fons tabulas šūnām."
+msgstr "Noklusētais mojošais fons tabulas šūnām."
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -19692,7 +19692,7 @@ msgstr "Apakšvirsraksta/starpsummas šūnas krāsa"
 #: ../intl-scm/guile-strings.c:3638
 #: ../intl-scm/guile-strings.c:3944
 msgid "Default color for subtotal rows."
-msgstr "Noklusējuma krāsa starpsummu rindām."
+msgstr "Noklusētā krāsa starpsummu rindām."
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -19947,14 +19947,14 @@ msgstr "CSS"
 #: ../intl-scm/guile-strings.c:3848
 #: ../intl-scm/guile-strings.c:4334
 msgid "Default CSS"
-msgstr "Noklusējuma CSS"
+msgstr "Noklusētais CSS"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
 #: ../intl-scm/guile-strings.c:3278
 #: ../intl-scm/guile-strings.c:4058
 msgid "Fancy"
-msgstr "Izrotāt"
+msgstr "Noformēts"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -20019,7 +20019,7 @@ msgstr "Debitori"
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:4092
 msgid "Accounts Payable"
-msgstr "Summas izmaksai"
+msgstr "Konti apmaksai"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:4094
@@ -20496,7 +20496,7 @@ msgstr "Pārvaldīt un palaist pielāgotos pārskatus"
 #: ../intl-scm/guile-strings.c:4354
 #: ../intl-scm/guile-strings.c:4368
 msgid "Welcome Sample Report"
-msgstr "Sveiciena pārskata paraugs"
+msgstr "_Sveiciena pārskata paraugs"
 
 #. src/report/report-gnome/gnucash/report/report-gnome.scm
 #. src/report/report-gnome/report-gnome.scm
@@ -21195,7 +21195,7 @@ msgstr "Atlikušo rediģē kvotu pievienošana."
 #. src/scm/command-line.scm
 #: ../intl-scm/guile-strings.c:4868
 msgid "A list of directories (strings) indicating where to look for html and parsed-html files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
-msgstr "Direktoriju (virkņu) saraksts norāda, kur meklēt html un parsējamos html failus. Katram elementam ir jābūt virknei, kas atbilst direktorijai vai simbolam, kur 'noklusējums izvēršas kā noklusējuma ceļš, un 'pašreizējs izvēršas par pašreizējo ceļa vērtību."
+msgstr "Direktoriju (virkņu) saraksts norāda, kur meklēt html un parsējamos html failus. Katram elementam ir jābūt tekstam, kas atbilst direktorijai vai simbolam, kur 'noklusētais izvēršas kā noklusētais ceļš, un 'pašreizējs izvēršas par pašreizējo ceļa vērtību."
 
 #. src/scm/main-window.scm
 #: ../intl-scm/guile-strings.c:4872
@@ -21783,32 +21783,32 @@ msgstr "Jūsu uzņēmuma ID (piem. 'Nodokļu-ID: 00-000000)"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:5318
 msgid "Default Customer TaxTable"
-msgstr "Noklusējuma klienta nodokļu tabula"
+msgstr "Noklusētā klienta nodokļu tabula"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:5320
 msgid "The default tax table to apply to customers."
-msgstr "Noklusējuma nodokļu tabula klientiem."
+msgstr "Noklusētā nodokļu tabula klientiem."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:5322
 msgid "Default Vendor TaxTable"
-msgstr "Noklusējuma pārdevēja nodokļu tabula"
+msgstr "Noklusētā pārdevēja nodokļu tabula"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:5324
 msgid "The default tax table to apply to vendors."
-msgstr "Noklusējuma nodokļu tabula pārdevējiem."
+msgstr "Noklusētā nodokļu tabula pārdevējiem."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:5326
 msgid "Fancy Date Format"
-msgstr "Izrotāts datuma formāts"
+msgstr "Noformēts datums"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:5328
 msgid "The default date format used for fancy printed dates"
-msgstr "Noklusējuma datuma formāts izmantots priekš izrotātiem drukātiem datumiem "
+msgstr "Noklusētais datuma formāts drukātiem datumiem"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:5330
@@ -21987,7 +21987,7 @@ msgstr "Pielāgots nosaukums"
 #: ../intl-scm/guile-strings.c:6686
 #: ../intl-scm/guile-strings.c:6982
 msgid "A custom string to replace Invoice, Bill or Expense Voucher"
-msgstr "Pielāgota virkne rēķina vai izdevumu dokumenta aizvietošanai"
+msgstr "Pielāgots teksts rēķina vai izdevumu dokumenta aizvietošanai"
 
 #. src/business/business-reports/invoice.scm
 #. src/business/business-reports/gnucash/report/invoice.scm
@@ -22344,7 +22344,7 @@ msgstr "Rādīt maksājumus attiecībā uz šo rēķinu?"
 #: ../intl-scm/guile-strings.c:6384
 #: ../intl-scm/guile-strings.c:7090
 msgid "Extra notes to put on the invoice"
-msgstr "Papildus piezīmes iekļaušanai rēķinā"
+msgstr "Papildu piezīmes iekļaušanai rēķinā"
 
 #. src/business/business-reports/invoice.scm
 #. src/business/business-reports/gnucash/report/invoice.scm
@@ -22397,7 +22397,7 @@ msgstr "Šodienas datuma formāts"
 #: ../intl-scm/guile-strings.c:6826
 #: ../intl-scm/guile-strings.c:6922
 msgid "The format for the date->string conversion for today's date."
-msgstr "Formāts datumam->virknes pārvēršana uz šodienas datumu."
+msgstr "Formāts šodienas datuma pārvēršanai uz tekstu."
 
 #. src/business/business-reports/invoice.scm
 #. src/business/business-reports/gnucash/report/invoice.scm
@@ -22420,7 +22420,7 @@ msgstr "Formāts datumam->virknes pārvēršana uz šodienas datumu."
 #: ../intl-scm/guile-strings.c:6886
 #: ../intl-scm/guile-strings.c:7120
 msgid "Payment, thank you"
-msgstr "Maksājums, paldies"
+msgstr "Avansa maksājums"
 
 #. src/business/business-reports/invoice.scm
 #. src/business/business-reports/gnucash/report/invoice.scm
@@ -22501,7 +22501,7 @@ msgstr "Nav izvēlēts derīgs rēķins. Klikšķiniet uz pogu Izvēlne un izvē
 #: ../intl-scm/guile-strings.c:5538
 #: ../intl-scm/guile-strings.c:5774
 msgid "Printable Invoice"
-msgstr "Izdrukājams rēķins"
+msgstr "Drukājams rēķins"
 
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/gnucash/report/aging.scm
@@ -22726,7 +22726,7 @@ msgstr "Kreditoru konts, kuru vēlaties pārbaudīt"
 #: ../intl-scm/guile-strings.c:5604
 #: ../intl-scm/guile-strings.c:5840
 msgid "Payable Aging"
-msgstr " Kreditorparāds"
+msgstr "Kreditorparāds"
 
 #. src/business/business-reports/gnucash/report/receivables.scm
 #. src/business/business-reports/receivables.scm
@@ -22952,7 +22952,7 @@ msgstr "Teksts"
 #: ../intl-scm/guile-strings.c:6112
 #: ../intl-scm/guile-strings.c:6818
 msgid "Extra notes to put on the invoice (simple HTML is accepted)"
-msgstr "Papildus piezīmes izvietošanai uz rēķina (vienkāršas HTML komandas)"
+msgstr "Papildu piezīmes izvietošanai uz rēķina (vienkāršas HTML komandas)"
 
 #. src/business/business-reports/gnucash/report/easy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -23001,35 +23001,35 @@ msgstr "Darbinieka pārskats"
 #: ../intl-scm/guile-strings.c:6376
 #: ../intl-scm/guile-strings.c:7082
 msgid "Minimum # of entries"
-msgstr "Ierakstu minimālais # "
+msgstr "Rindu minimālais skaits"
 
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:6378
 #: ../intl-scm/guile-strings.c:7084
 msgid "The minimum number of invoice entries to display. (-1)"
-msgstr "Minimālais ievadīto rēķinu skaits apskatīšanai. (-1)"
+msgstr "Minimālais parādīto rindu skaits (0 ir viena rinda)"
 
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:6388
 #: ../intl-scm/guile-strings.c:7094
 msgid "Payable to"
-msgstr "Apmaksai"
+msgstr "Apmaksāt"
 
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:6390
 #: ../intl-scm/guile-strings.c:7096
 msgid "Display the Payable to: information"
-msgstr "Rādīt Apmaksai: informācija"
+msgstr "Rādīt Apmaksāt: informāciju"
 
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:6394
 #: ../intl-scm/guile-strings.c:7100
 msgid "Payable to string"
-msgstr "UApmaksājams "
+msgstr "Apmaksāt"
 
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -23043,7 +23043,7 @@ msgstr "Frāze norādei, kas ir naudas saņēmējs"
 #: ../intl-scm/guile-strings.c:6398
 #: ../intl-scm/guile-strings.c:7104
 msgid "Make all cheques Payable to"
-msgstr "Visi čeki izmaksājami"
+msgstr "Apmaksāt rēķinu"
 
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -23064,7 +23064,7 @@ msgstr "Rādīt uzņēmuma kontaktinformāciju"
 #: ../intl-scm/guile-strings.c:6408
 #: ../intl-scm/guile-strings.c:7114
 msgid "Company contact string"
-msgstr "Uzņēmuma kontaktu virkne"
+msgstr "Uzņēmuma kontaktu apraksts"
 
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -23078,7 +23078,7 @@ msgstr "Uzņēmuma kontaktpersonas uzruna"
 #: ../intl-scm/guile-strings.c:6412
 #: ../intl-scm/guile-strings.c:7118
 msgid "Direct all inquiries to"
-msgstr "Novirzīt visus pieprasījumus uz"
+msgstr "Kontakti"
 
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -23087,7 +23087,7 @@ msgstr "Novirzīt visus pieprasījumus uz"
 #: ../intl-scm/guile-strings.c:7130
 #: ../intl-scm/guile-strings.c:7160
 msgid "Phone:"
-msgstr "Tālrunis:"
+msgstr "Telefons:"
 
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -23110,7 +23110,7 @@ msgstr "Mājas lapa:"
 #: ../intl-scm/guile-strings.c:6448
 #: ../intl-scm/guile-strings.c:7154
 msgid "Fancy Invoice"
-msgstr "Izrotāt rēķinu"
+msgstr "Detalizēts rēķins"
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:6562
@@ -23524,7 +23524,7 @@ msgstr "Ir tāda teorija, ka, ja reiz kāds atklās, kam domāts Visums un, kād
 #~ "pašreizējam failam.\n"
 #~ "\n"
 #~ "Pašreiz ne valūta, ne cena nav atbalstīta sapludināšanas operācijā, "
-#~ "jaunie dati mantos jebkuru noklusējuma valūtu, vai arī jūs varat mainīt "
+#~ "jaunie dati mantos jebkuru noklusēto valūtu, vai arī jūs varat mainīt "
 #~ "valūtu, kad sapludināšana būs pabeigta.\n"
 #~ "\n"
 #~ "Jūsu QSF dati ir gatavi importēšanai\n"
@@ -23617,7 +23617,7 @@ msgstr "Ir tāda teorija, ka, ja reiz kāds atklās, kam domāts Visums un, kād
 #~ "The QSF object file %s contains invalid data in a field that is meant to "
 #~ "hold a number."
 #~ msgstr ""
-#~ "Konvertējot XML virknes uz skaitļiem ir notikusi pārpilde. QSF objekta "
+#~ "Konvertējot XML tekstu uz skaitļiem ir notikusi pārpilde. QSF objekta "
 #~ "failā %s, laukā, kurā jābūt skaitļiem, atrodas  nederīgi dati."
 #~ msgid ""
 #~ "The QSF object file %s is valid and contains GnuCash objects. However, "
@@ -23648,13 +23648,13 @@ msgstr "Ir tāda teorija, ka, ja reiz kāds atklās, kam domāts Visums un, kād
 #~ "QOF var konvertēt objektus QSF XML failos izmantojot nepieciešamo izmaiņu "
 #~ "karti."
 #~ msgid "String encoding to use when writing the XML file."
-#~ msgstr "Virknes kodējums, ko izmanto XML faila rakstīšanai."
+#~ msgstr "Teksta kodējums, ko izmanto XML faila rakstīšanai."
 #~ msgid ""
 #~ "QSF defaults to UTF-8. Other encodings are supported by passing the "
 #~ "string encoding in this option."
 #~ msgstr ""
 #~ "QSF noklusējums uz UTF-8. Citi kodi šajā iespējā ir atbalstīti padodot "
-#~ "virknes kodējumu."
+#~ "Teksta kodējumu."
 #~ msgid "Set the logging level from 0 (least) to 6 (most)"
 #~ msgstr "Iestatīt žurnalēšanas līmeni no 0 (mazākais) līdz 6 (lielākais)"
 #~ msgid "LOGLEVEL"
