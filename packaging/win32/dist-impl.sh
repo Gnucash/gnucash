@@ -133,7 +133,7 @@ function dist_libgsf() {
     mkdir -p $DIST_UDIR/bin
     cp -a $_LIBGSF_UDIR/bin/libgsf*.dll $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/share
-    cp -a $_LIBGSF_UDIR/share/locale $DIST_UDIR/lib
+    cp -a $_LIBGSF_UDIR/share/locale $DIST_UDIR/share
 }
 
 function dist_goffice() {
@@ -193,7 +193,7 @@ function dist_aqbanking() {
     if [ "$AQBANKING3" != "yes" ]; then
         cp -a ${_AQBANKING_UDIR}/share/aqhbci ${DIST_UDIR}/share
     fi
-    cp -a ${_AQBANKING_UDIR}/share/locale ${DIST_UDIR}/lib
+    cp -a ${_AQBANKING_UDIR}/share/locale ${DIST_UDIR}/share
 }
 
 function dist_libdbi() {
