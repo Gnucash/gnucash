@@ -7,29 +7,29 @@
 #include <gmodule.h>
 
 #include "gnc-module-api.h"
-GNC_MODULE_API_DECL(libfuturemodsys)
+GNC_MODULE_API_DECL(libgncmod_futuremodsys)
 
-int libfuturemodsys_gnc_module_system_interface = 123456;
+int libgncmod_futuremodsys_gnc_module_system_interface = 123456;
 
-int libfuturemodsys_gnc_module_current = 0;
-int libfuturemodsys_gnc_module_age = 0;
-int libfuturemodsys_gnc_module_revision = 0;
+int libgncmod_futuremodsys_gnc_module_current = 0;
+int libgncmod_futuremodsys_gnc_module_age = 0;
+int libgncmod_futuremodsys_gnc_module_revision = 0;
 
 
 char *
-libfuturemodsys_gnc_module_path(void)
+libgncmod_futuremodsys_gnc_module_path(void)
 {
     return g_strdup("gnucash/futuremodsys");
 }
 
 char *
-libfuturemodsys_gnc_module_description(void)
+libgncmod_futuremodsys_gnc_module_description(void)
 {
     return g_strdup("this is a broken future module");
 }
 
 int
-libfuturemodsys_gnc_module_init(int refcount)
+libgncmod_futuremodsys_gnc_module_init(int refcount)
 {
     return TRUE;
 }
