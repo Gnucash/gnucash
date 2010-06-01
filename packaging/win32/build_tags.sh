@@ -25,11 +25,11 @@ svn update
 # If we don't have a tagfile then start from 'now'
 tagfile=tags
 if [ ! -f ${tagfile} ] ; then
-  svn ls -v ${TAG_URL} |  awk '/[^.]\/$/ { print $6$1 }' > ${tagfile}
+  svn ls -v ${TAG_URL} |  awk '/[^.]\// { print $1"/"$6 }' > ${tagfile}
 fi
 
 # Figure out the new set of tags
-svn ls -v ${TAG_URL} |  awk '/[^.]\/$/ { print $6$1 }' > ${tagfile}.new
+svn ls -v ${TAG_URL} |  awk '/[^.]\// { print $1"/"$6 }' > ${tagfile}.new
 tags="`diff --suppress-common-lines ${tagfile} ${tagfile}.new | grep '^> ' | sed -e 's/^> //g'`"
 
 # move the new file into place
@@ -39,7 +39,8 @@ mv -f ${tagfile}.new ${tagfile}
 # Now iterate over all the new tags (if any) and build a package
 
 for tag_rev in $tags ; do
-  tag=${tag_rev%/*}
+  tag=${tag_rev#*/}
+  tag=${tag%/*}
   tagbasedir=/c/soft/gnucash-${tag}
   tagdir=${tagbasedir}/gnucash
   rm -fr $tagbasedir
