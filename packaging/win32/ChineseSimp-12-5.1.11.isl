@@ -14,7 +14,7 @@
 [LangOptions]
 ; The following three entries are very important. Be sure to read and 
 ; understand the '[LangOptions] section' topic in the help file.
-LanguageName=<4E2D><6587> (<7B80><4F53>)
+LanguageName=Chinese(Simplified)
 LanguageID=$0804
 LanguageCodePage=936
 ; If the language you are translating to requires special font faces or
