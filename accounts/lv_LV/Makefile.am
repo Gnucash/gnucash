@@ -1,5 +1,5 @@
 
-accountdir = ${GNC_ACCOUNTS_DIR}/C
+accountdir = ${GNC_ACCOUNTS_DIR}/lv_LV
 
 account_DATA = \
   acctchrt_brokerage.gnucash-xea \
