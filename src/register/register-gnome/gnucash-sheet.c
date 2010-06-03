@@ -1219,7 +1219,10 @@ gnucash_sheet_check_direct_update_cell(GnucashSheet *sheet,
     type_name = gnc_table_get_cell_type_name (sheet->table, virt_loc);
 
     if( (g_strcmp0 (type_name, DATE_CELL_TYPE_NAME) == 0)
-        || (g_strcmp0 (type_name, COMBO_CELL_TYPE_NAME) == 0) ) return TRUE;
+        || (g_strcmp0 (type_name, COMBO_CELL_TYPE_NAME) == 0) 
+	|| (g_strcmp0 (type_name, NUM_CELL_TYPE_NAME) == 0)
+	|| (g_strcmp0 (type_name, PRICE_CELL_TYPE_NAME) == 0)
+	|| (g_strcmp0 (type_name, FORMULA_CELL_TYPE_NAME) == 0)) return TRUE;
 
     return FALSE;
 }
@@ -1902,14 +1905,21 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 
     sheet = GNUCASH_SHEET (widget);
 
-    /* save shift state to enable <shift minus> and <shift equal>.
-       see bug#60582 comment#27 2)
+    /* bug#60582 comment#27 2
+           save shift state to enable <shift minus> and <shift equal>
+       bug#618434
+           save keyval to handle GDK_KP_Decimal event
      */
     if (sheet->preedit_length)
-        sheet->shift_state = 0;
+	{
+	    sheet->shift_state = 0;
+	    sheet->keyval_state = 0;
+	}
     else
-        sheet->shift_state = event->state & GDK_SHIFT_MASK;
-
+	{
+	    sheet->shift_state = event->state & GDK_SHIFT_MASK;
+	    sheet->keyval_state = (event->keyval == GDK_KP_Decimal)? GDK_KP_Decimal:0;
+	}
     if (gtk_im_context_filter_keypress (sheet->im_context, event))
     {
         sheet->need_im_reset = TRUE;
@@ -1986,7 +1996,9 @@ gnucash_sheet_commit_cb (GtkIMContext *context, const gchar *str,
 
         event = gdk_event_new (GDK_KEY_PRESS);
         keyevent = (GdkEventKey *) event;
-        keyevent->keyval = gdk_unicode_to_keyval(str[0]);
+        keyevent->keyval = 
+	    sheet->keyval_state ? sheet->keyval_state 
+	    : gdk_unicode_to_keyval(str[0]);
         keyevent->state |= sheet->shift_state;
         result = gnucash_sheet_direct_event(sheet, event);
         gdk_event_free(event);
@@ -2805,6 +2817,7 @@ gnucash_sheet_init (GnucashSheet *sheet)
     sheet->retrieve_surrounding_signal = 0;
     sheet->delete_surrounding_signal = 0;
     sheet->shift_state = 0;
+    sheet->keyval_state = 0;
 }
 
 

@@ -144,6 +144,7 @@ typedef struct
     guint delete_surrounding_signal;
 
     guint shift_state;
+    guint keyval_state;
 
 } GnucashSheet;
 
@@ -258,6 +259,6 @@ GdkColor *get_gtkrc_color (GnucashSheet *sheet, RegisterColor field_type);
 
 /*
   Local Variables:
-  c-basic-offset: 8
+  c-basic-offset: 4
   End:
 */
