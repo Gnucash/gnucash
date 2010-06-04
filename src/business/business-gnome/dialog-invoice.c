@@ -2436,15 +2436,15 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
                                                _("Date Opened"), NULL, type,
                                                INVOICE_OPENED, NULL);
         inv_params = gnc_search_param_prepend (inv_params,
+                                               _("Due Date"), NULL, type,
+                                               INVOICE_DUE, NULL);
+        inv_params = gnc_search_param_prepend (inv_params,
                                                _("Company Name "), NULL, type,
                                                INVOICE_OWNER, OWNER_PARENT,
                                                OWNER_NAME, NULL);
         inv_params = gnc_search_param_prepend (inv_params,
                                                _("Invoice ID"), NULL, type,
                                                INVOICE_ID, NULL);
-        inv_params = gnc_search_param_prepend (inv_params,
-                                               _("Due Date"), NULL, type,
-                                               INVOICE_DUE, NULL);
     }
     if (bill_params == NULL)
     {
@@ -2470,15 +2470,15 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
                                                 _("Date Opened"), NULL, type,
                                                 INVOICE_OPENED, NULL);
         bill_params = gnc_search_param_prepend (bill_params,
+                                                _("Due Date"), NULL, type,
+                                                INVOICE_DUE, NULL);
+        bill_params = gnc_search_param_prepend (bill_params,
                                                 _("Company Name "), NULL, type,
                                                 INVOICE_OWNER, OWNER_PARENT,
                                                 OWNER_NAME, NULL);
         bill_params = gnc_search_param_prepend (bill_params,
                                                 _("Bill ID"), NULL, type,
                                                 INVOICE_ID, NULL);
-        bill_params = gnc_search_param_prepend (inv_params,
-                                                _("Due Date"), NULL, type,
-                                                INVOICE_DUE, NULL);
     }
     if (emp_params == NULL)
     {
@@ -2504,15 +2504,15 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
                                                _("Date Opened"), NULL, type,
                                                INVOICE_OPENED, NULL);
         emp_params = gnc_search_param_prepend (emp_params,
+                                               _("Due Date"), NULL, type,
+                                               INVOICE_DUE, NULL);
+        emp_params = gnc_search_param_prepend (emp_params,
                                                _("Employee Name"), NULL, type,
                                                INVOICE_OWNER, OWNER_PARENT,
                                                OWNER_NAME, NULL);
         emp_params = gnc_search_param_prepend (emp_params,
                                                _("Voucher ID"), NULL, type,
                                                INVOICE_ID, NULL);
-        emp_params = gnc_search_param_prepend (inv_params,
-                                               _("Due Date"), NULL, type,
-                                               INVOICE_DUE, NULL);
     }
 
     /* Build the column list in reverse order */
@@ -2525,13 +2525,13 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
         columns = gnc_search_param_prepend_with_justify (columns, _("Paid"),
                   GTK_JUSTIFY_CENTER, NULL, type,
                   INVOICE_IS_PAID, NULL);
-        columns = gnc_search_param_prepend (columns, _("Due"), NULL, type,
-                                            INVOICE_DUE, NULL);
         columns = gnc_search_param_prepend (columns, _("Posted"), NULL, type,
                                             INVOICE_POSTED, NULL);
         columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
                                             INVOICE_OWNER, OWNER_PARENT,
                                             OWNER_NAME, NULL);
+        columns = gnc_search_param_prepend (columns, _("Due"), NULL, type,
+                                            INVOICE_DUE, NULL);
         columns = gnc_search_param_prepend (columns, _("Opened"), NULL, type,
                                             INVOICE_OPENED, NULL);
         columns = gnc_search_param_prepend (columns, _("Num"), NULL, type,
