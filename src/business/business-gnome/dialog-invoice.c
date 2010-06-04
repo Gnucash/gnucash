@@ -2525,6 +2525,8 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
         columns = gnc_search_param_prepend_with_justify (columns, _("Paid"),
                   GTK_JUSTIFY_CENTER, NULL, type,
                   INVOICE_IS_PAID, NULL);
+        columns = gnc_search_param_prepend (columns, _("Due"), NULL, type,
+                                            INVOICE_DUE, NULL);
         columns = gnc_search_param_prepend (columns, _("Posted"), NULL, type,
                                             INVOICE_POSTED, NULL);
         columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
