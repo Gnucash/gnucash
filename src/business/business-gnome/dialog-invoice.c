@@ -2442,6 +2442,9 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
         inv_params = gnc_search_param_prepend (inv_params,
                                                _("Invoice ID"), NULL, type,
                                                INVOICE_ID, NULL);
+        inv_params = gnc_search_param_prepend (inv_params,
+                                               _("Due Date"), NULL, type,
+                                               INVOICE_DUE, NULL);
     }
     if (bill_params == NULL)
     {
@@ -2473,6 +2476,9 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
         bill_params = gnc_search_param_prepend (bill_params,
                                                 _("Bill ID"), NULL, type,
                                                 INVOICE_ID, NULL);
+        bill_params = gnc_search_param_prepend (inv_params,
+                                                _("Due Date"), NULL, type,
+                                                INVOICE_DUE, NULL);
     }
     if (emp_params == NULL)
     {
@@ -2504,6 +2510,9 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
         emp_params = gnc_search_param_prepend (emp_params,
                                                _("Voucher ID"), NULL, type,
                                                INVOICE_ID, NULL);
+        emp_params = gnc_search_param_prepend (inv_params,
+                                               _("Due Date"), NULL, type,
+                                               INVOICE_DUE, NULL);
     }
 
     /* Build the column list in reverse order */
