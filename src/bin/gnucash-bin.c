@@ -740,8 +740,9 @@ main(int argc, char ** argv)
      * The user may have configured a different language via
      * the environment file.
      */
+#ifndef MAC_INTEGRATION
     environment_override();
-
+#endif
 #ifdef HAVE_GETTEXT
     {
         gchar *localedir = gnc_path_get_localedir();
