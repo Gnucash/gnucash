@@ -1033,8 +1033,9 @@ gnc_module_init_backend_dbi(void)
         PINFO( "GNC_DBD_DIR not set: using libdbi built-in default\n");
     }
 
+    /* dbi_initialize returns -1 in case of errors */
     num_drivers = dbi_initialize( driver_dir );
-    if ( num_drivers == 0 )
+    if ( num_drivers <= 0 )
     {
         PWARN( "No DBD drivers found\n" );
     }
