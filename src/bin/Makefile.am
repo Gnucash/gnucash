@@ -125,7 +125,7 @@ environment: ${GNUCASH_ENVIRONMENT}.in ${top_builddir}/config.status Makefile
 	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g" \
 	    -e 's#@-PREFIX-@#${prefix}#g'
 if CUSTOM_GNC_DBD_DIR
-	echo 'GNC_DBD_DIR="@GNC_DBD_DIR@"' >> $@.tmp
+	echo 'GNC_DBD_DIR=@GNC_DBD_DIR@' >> $@.tmp
 endif
 	mv $@.tmp $@
 	chmod u+x $@
