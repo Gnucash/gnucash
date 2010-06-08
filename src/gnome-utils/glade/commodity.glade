@@ -681,7 +681,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkComboBoxEntry" id="namespace_cbe1">
+              <widget class="GtkComboBoxEntry" id="namespace_cbe">
                 <property name="visible">True</property>
                 <property name="items">Dummy namespace</property>
                 <signal name="changed" handler="gnc_ui_commodity_changed_cb"/>
