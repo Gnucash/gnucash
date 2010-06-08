@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: Gnucash 2.3.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-06 15:02+0200\n"
-"PO-Revision-Date: 2010-04-26 10:51+0100\n"
+"PO-Revision-Date: 2010-06-08 18:23+0100\n"
 "Last-Translator: Cristian Marchi <cri.penta@gmail.com>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -686,9 +686,7 @@ msgstr "Questa transazione deve essere assegnata a un venditore. Scegliere qui s
 # Tooltip
 #: ../src/business/business-gnome/dialog-customer.c:274
 msgid "You must enter a company name. If this customer is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
-msgstr ""
-"Immettere un nome per l'impresa.\n"
-"Se questo cliente è una persona e non un'impresa, immettere lo stesso nome sia per il campo «nome impresa» che per quello «nome contatto»"
+msgstr "Immettere un nome per l'impresa. Se questo cliente è una persona (e non un'impresa), immettere lo stesso nome sia per il campo «nome impresa» che per quello «nome contatto»"
 
 #: ../src/business/business-gnome/dialog-customer.c:286
 msgid "You must enter a billing address."
@@ -1392,9 +1390,7 @@ msgstr "Non è stato impostato un conto valido di emissione. Creare un conto di 
 # Tooltip
 #: ../src/business/business-gnome/dialog-vendor.c:208
 msgid "You must enter a company name. If this vendor is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
-msgstr ""
-"Immettere un nome per l'impresa.\n"
-"Se questo venditore è una persona e non un'impresa, immettere lo stesso nome sia per il campo «nome impresa» che per quello «nome contatto»"
+msgstr "Immettere un nome per l'impresa. Se questo venditore è una persona (e non un'impresa), immettere lo stesso nome sia per il campo «nome impresa» che per quello «nome contatto»"
 
 #: ../src/business/business-gnome/dialog-vendor.c:220
 msgid "You must enter a payment address."
@@ -1998,7 +1994,7 @@ msgstr "Lavoro: "
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:19
 msgid "No, keep them as they are"
-msgstr "No, mantienili come sono ora"
+msgstr "No, mantienile come sono ora"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:21
 msgid "Posted Account"
@@ -2006,7 +2002,7 @@ msgstr "Conto emissione"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:22
 msgid "Reset Tax Tables to present Values?"
-msgstr ""
+msgstr "Reimpostare le tabelle delle imposte ai valori attuali?"
 
 # Tooltip
 #: ../src/business/business-gnome/glade/invoice.glade.h:24
@@ -2021,7 +2017,7 @@ msgstr "Il ritiro di questa fattura cancellerà la transazione relativa. Si è s
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:27
 msgid "Yes, reset the Tax Tables"
-msgstr "Visualizza e permette di modificare la lista delle tabelle imposte"
+msgstr "Sì, reimposta le tabelle delle imposte"
 
 #: ../src/business/business-gnome/glade/job.glade.h:3
 msgid "Job Active"
@@ -2324,7 +2320,7 @@ msgstr "Nuova _fattura..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:164
 msgid "Open the New Invoice dialog"
-msgstr "Apre il dialogo per una nuova fattura"
+msgstr "Apre la finestra per una nuova fattura"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:168
 msgid "Find In_voice..."
@@ -2332,7 +2328,7 @@ msgstr "Trova f_attura"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:169
 msgid "Open the Find Invoice dialog"
-msgstr "Apre il dialogo di ricerca di una fattura"
+msgstr "Apre la finestra di ricerca di una fattura"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:173
 #: ../src/business/business-gnome/gnc-plugin-business.c:211
@@ -2352,7 +2348,7 @@ msgstr "Trova lav_oro..."
 #: ../src/business/business-gnome/gnc-plugin-business.c:179
 #: ../src/business/business-gnome/gnc-plugin-business.c:217
 msgid "Open the Find Job dialog"
-msgstr "Apre il dialogo per la ricerca di un lavoro"
+msgstr "Apre la finestra per la ricerca di un lavoro"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:183
 #: ../src/business/business-gnome/gnc-plugin-business.c:221
@@ -2401,7 +2397,7 @@ msgstr "Trova r_icevuta..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:207
 msgid "Open the Find Bill dialog"
-msgstr "Apre il dialogo per la ricerca di una ricevuta"
+msgstr "Apre la finestra per la ricerca di una ricevuta"
 
 #. Employee submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:227
@@ -2414,7 +2410,7 @@ msgstr "Nuovo d_ipendente..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:230
 msgid "Open the New Employee dialog"
-msgstr "Apre il dialogo del nuovo dipendente"
+msgstr "Apre la finestra del nuovo dipendente"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:234
 msgid "_Find Employee..."
@@ -2422,7 +2418,7 @@ msgstr "Trova _dipendente..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:235
 msgid "Open the Find Employee dialog"
-msgstr "Apre il dialogo per la ricerca di un dipendente"
+msgstr "Apre la finestra per la ricerca di un dipendente"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:239
 msgid "New _Expense Voucher..."
@@ -3120,7 +3116,7 @@ msgstr "Imposte incluse?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:120
 msgid "Invoiced?"
-msgstr "Fattura?"
+msgstr "Fatturata?"
 
 #. src/report/report-system/options-utilities.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -3502,13 +3498,13 @@ msgstr "Conto debitore"
 
 #: ../src/engine/Account.c:3962
 msgid "Root"
-msgstr ""
+msgstr "Radice"
 
 #: ../src/engine/Account.c:3963
 #: ../src/engine/Scrub.c:454
 #: ../src/engine/Scrub.c:519
 msgid "Trading"
-msgstr ""
+msgstr "Trading"
 
 #: ../src/engine/cap-gains.c:235
 msgid "Orphaned Gains"
@@ -3856,7 +3852,7 @@ msgstr "È necessario immettere un importo valido."
 
 #: ../src/gnome/dialog-print-check.c:817
 msgid "Cannot save check format file."
-msgstr "Non è possibile salvare su quel file."
+msgstr "Non è possibile salvare il file del formato assegno."
 
 #: ../src/gnome/dialog-print-check.c:1492
 msgid "There is a duplicate check format file."
@@ -4025,7 +4021,7 @@ msgstr "Promemoria"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:388
 msgid "Created"
-msgstr "Creato"
+msgstr "Creata"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:451
 msgid "Never"
@@ -4060,7 +4056,7 @@ msgstr "Revisione transazioni create"
 
 #: ../src/gnome/dialog-tax-info.c:280
 msgid "Last Valid Year: "
-msgstr ""
+msgstr "Ultimo anno utile:"
 
 #: ../src/gnome/dialog-tax-info.c:281
 msgid "Form Line Data: "
@@ -4953,7 +4949,7 @@ msgstr "Cancella il bilancio selezionato"
 
 #: ../src/gnome/glade/budget.glade.h:9
 msgid "Estimate Budget Values"
-msgstr "Stima il valore del bilancio"
+msgstr "Stima del valore del bilancio"
 
 #: ../src/gnome/glade/budget.glade.h:10
 #: ../src/gnome/glade/sched-xact.glade.h:89
@@ -5307,7 +5303,7 @@ msgstr "Sommario di tutte le transazioni nel lotto selezionato"
 #: ../intl-scm/guile-strings.c:7292
 #: ../intl-scm/guile-strings.c:7400
 msgid "Balance"
-msgstr "Saldo"
+msgstr "Salda"
 
 # Tooltip
 #: ../src/gnome/glade/lots.glade.h:9
@@ -5585,6 +5581,9 @@ msgid ""
 "ADDRESS item defined in order\n"
 "to print an address on the check."
 msgstr ""
+"Il formato dell'assegno deve avere\n"
+"un elemento INDIRIZZO definito per\n"
+"poter stampare un indirizzo sull'assegno."
 
 #: ../src/gnome/glade/print.glade.h:7
 msgid "Check po_sition:"
@@ -6678,7 +6677,7 @@ msgstr "Le seguenti transazioni pianificate sono collegate al conto cancellato e
 
 #: ../src/gnome/glade/sched-xact.glade.h:174
 msgid "The following scheduled transactions have expired.  Select those you wish to delete."
-msgstr "Le seguenti transazioni pianificate sono scadute. Selezionare quelle che si vogliono cancellare."
+msgstr "Le seguenti transazioni pianificate sono scadute. Selezionare quelle che si intende cancellare."
 
 #: ../src/gnome/glade/sched-xact.glade.h:175
 msgid "The listed Scheduled Transactions are to-be created soon.  Select any which you would like to create now, and click \"Forward\" to create them."
@@ -6848,16 +6847,11 @@ msgstr "Se è terminata la creazione del frazionamento o della fusione azionaria
 
 #: ../src/gnome/glade/stocks.glade.h:8
 msgid "If you received a cash disbursement as a result of the stock split, enter the details of that payment here. Otherwise, just click `Forward'."
-msgstr ""
-"Se si è ricevuto un esborso in denaro come risultato del frazionamento\n"
-"azionario, immettere qui i dettagli del pagamento. In caso contrario\n"
-"si faccia semplicemente clic su «Avanti»."
+msgstr "Se si è ricevuto un esborso in denaro come risultato del frazionamento azionario, immettere qui i dettagli del pagamento. In caso contrario si faccia semplicemente clic su «Avanti»."
 
 #: ../src/gnome/glade/stocks.glade.h:9
 msgid "If you want to record a stock price for the split, enter it below. You may safely leave it blank."
-msgstr ""
-"Se si desidera registrare un prezzo azionario per il frazionamento, immetterne uno qui sotto.\n"
-"È possibile lasciare il campo vuoto senza problemi."
+msgstr "Se si desidera registrare un prezzo azionario per il frazionamento, immetterne uno qui sotto. È possibile lasciare il campo vuoto senza problemi."
 
 #: ../src/gnome/glade/stocks.glade.h:10
 msgid "New _Price:"
@@ -6930,7 +6924,7 @@ msgstr "Con_to selezionato"
 
 #: ../src/gnome/glade/tax.glade.h:10
 msgid "Click to change Tax Name and/or Tax Type"
-msgstr ""
+msgstr "Fare clic per modificare il nome e il tipo della tassa"
 
 #: ../src/gnome/glade/tax.glade.h:11
 msgid "Income Tax Information"
@@ -7021,9 +7015,10 @@ msgstr "Sa_lva come..."
 msgid "_QSF Import"
 msgstr "Importa _QSF"
 
+# tooltip
 #: ../src/gnome/gnc-plugin-basic-commands.c:126
 msgid "Import a QSF object file"
-msgstr "Importa file oggetto QSF"
+msgstr "Importa un file oggetto QSF"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:132
 msgid "Export _Accounts"
@@ -7056,13 +7051,14 @@ msgstr "Trova le transazioni con una ricerca"
 msgid "Ta_x Report Options"
 msgstr "Opzioni del _resoconto delle imposte"
 
+# tooltip
 #. Translators: currently implemented are *
 #. * US: income tax and                     *
 #. * DE: VAT                                *
 #. * So adjust this string
 #: ../src/gnome/gnc-plugin-basic-commands.c:157
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
-msgstr ""
+msgstr "Imposta i conti ai fini dei resoconti per le imposte, ad esempio le imposte degli Stati Uniti per gli introiti"
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:163
@@ -7269,7 +7265,7 @@ msgstr "Liquida automaticamente delle singole transazioni dato un importo di liq
 #: ../src/gnome-utils/gnc-icons.c:22
 #: ../src/gnome/window-reconcile.c:2148
 msgid "_Transfer..."
-msgstr "_Trasferimenti..."
+msgstr "_Trasferisci..."
 
 # Tooltip
 #: ../src/gnome/gnc-plugin-page-account-tree.c:211
@@ -7855,9 +7851,10 @@ msgstr "Cancellare la transazione selezionata?"
 msgid "You would be deleting a transaction with reconciled splits! This is not a good idea as it will cause your reconciled balance to be off."
 msgstr "In questo modo verrà cancellata una transazione con delle suddivisioni riconciliate! non è una buona idea in quanto il saldo riconciliato verrà corrotto."
 
+# tooltip
 #: ../src/gnome/gnc-split-reg.c:1432
 msgid "Balancing entry from reconcilation"
-msgstr ""
+msgstr "Transazione di bilancio della riconcilazione"
 
 #: ../src/gnome/gnc-split-reg.c:1871
 msgid "Present:"
@@ -8243,7 +8240,7 @@ msgstr "Preseleziona le transazioni liquidate"
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
 #: ../src/gnome-utils/glade/preferences.glade.h:105
 msgid "Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment. Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts."
-msgstr "Prima della procedura di riconciliazione di un conto che frutta interessi, verrà visualizzata una finestra in cui sarà possibile inserire una transazione per il pagamento degli interessi. Attualmente questa opzione è applicabile solamente per i conti di banca, credito, fondi comuni, attività, conto creditore, conto debitore e passività"
+msgstr "Prima della procedura di riconciliazione di un conto che genera interessi, verrà visualizzata una finestra in cui sarà possibile inserire una transazione per il pagamento degli interessi. Attualmente questa opzione è applicabile solamente per i conti di banca, credito, fondi comuni, attività, conto creditore, conto debitore e passività"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:7
 msgid "Prompt for credit card payment"
@@ -9303,16 +9300,17 @@ msgstr "Seleziona figli"
 # Tooltip
 #: ../src/gnome-utils/dialog-options.c:940
 msgid "Select all descendents of selected account."
-msgstr "Seleziona tutti i conti contenuti all'interno di quello selezionato."
+msgstr "Seleziona tutti i conti contenuti all'interno di quello selezionato"
 
 #: ../src/gnome-utils/dialog-options.c:946
 #: ../src/gnome-utils/dialog-options.c:1081
 msgid "Select Default"
 msgstr "Predefiniti"
 
+# tooltip
 #: ../src/gnome-utils/dialog-options.c:948
 msgid "Select the default account selection."
-msgstr "Seleziona i conti predefiniti."
+msgstr "Seleziona i conti predefiniti"
 
 #: ../src/gnome-utils/dialog-options.c:962
 msgid "Show Hidden Accounts"
@@ -9991,7 +9989,7 @@ msgid ""
 "\n"
 "Click \"Next\" to finish loading files and move to the next step. "
 msgstr ""
-"Selezionare «carica un altro file» se si vogliono importare altri dati.\n"
+"Selezionare «carica un altro file» se si desidera importare altri dati.\n"
 "\n"
 "Selezionare «Successivo» per terminare il caricamento dei file ad avanzare al passo seguente."
 
@@ -10003,7 +10001,7 @@ msgstr "_Carica un altro file"
 #: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:6
 #: ../src/import-export/qif-import/qif.glade.h:84
 msgid "_Unload selected file"
-msgstr "_Scarica file selezionato"
+msgstr "_Scarta il file selezionato"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:1
 msgid "<b>Exchange/Price Information</b>"
@@ -10912,7 +10910,7 @@ msgstr "Trasferisci fondi"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:15
 msgid "_Fetch Rate"
-msgstr ""
+msgstr "_Recupera quote"
 
 #. create the button.
 #: ../src/gnome-utils/gnc-account-sel.c:454
@@ -11279,7 +11277,7 @@ msgstr "Salvare i cambiamenti al file?"
 #: ../src/gnome-utils/gnc-main-window.c:1129
 #, c-format
 msgid "If you don't save, changes from the past %d minutes will be discarded."
-msgstr "Se non si salva, le modifiche apportate negli ultimi %d minuti saranno perse."
+msgstr "Se non si salva, le modifiche apportate negli ultimi %d minuti andranno perse."
 
 #: ../src/gnome-utils/gnc-file.c:601
 msgid "Continue _Without Saving"
@@ -11612,12 +11610,12 @@ msgstr "Salvare i cambiamenti al file «%s» prima di chiudere?"
 #: ../src/gnome-utils/gnc-main-window.c:1131
 #, c-format
 msgid "If you don't save, changes from the past %d hours and %d minutes will be discarded."
-msgstr "Se non si salva, le modifiche apportate nelle ultime %d ore e %d minuti saranno perse."
+msgstr "Se non si salva, le modifiche apportate nelle ultime %d ore e %d minuti andranno perse."
 
 #: ../src/gnome-utils/gnc-main-window.c:1133
 #, c-format
 msgid "If you don't save, changes from the past %d days and %d hours will be discarded."
-msgstr "Se non si salva, le modifiche apportate negli ultimi %d giorni e %d ore saranno perse."
+msgstr "Se non si salva, le modifiche apportate negli ultimi %d giorni e %d ore andranno perse."
 
 #: ../src/gnome-utils/gnc-main-window.c:1141
 msgid "<unknown>"
@@ -11650,7 +11648,7 @@ msgstr "%s Questa copia è stata compilata dalla r%s in data %s"
 msgid "translator_credits"
 msgstr ""
 " \n"
-" Traduzione a opera di Cristian Marchi (2009)\n"
+" Traduzione di Cristian Marchi (2010)\n"
 "\n"
 "----------------------------------------------------------------\n"
 "\n"
@@ -11658,11 +11656,7 @@ msgstr ""
 " nella traduzione a:\n"
 " <gnucash-it@gnucash.org>\n"
 "\n"
-"-----------------------------------------------------------------\n"
-"Traduttori precedenti:\n"
-" Alessandro Seveso <aleseveso@tiscalinet.it>, 2000;\n"
-" Lorenzo Cappelletti <L.Cappelletti@mail.com>, 2002 2003;\n"
-" Lorenzo Cappelletti <lorenzo.cappelletti@email.com>, 2003-2005."
+"---------------------------------"
 
 #. CY Strings
 #. src/app-utils/date-utilities.scm
@@ -12116,7 +12110,7 @@ msgstr "Pagamento degli interessi"
 
 #: ../src/gnome/window-reconcile.c:446
 msgid "Interest Charge"
-msgstr ""
+msgstr "Tasso di interesse"
 
 #: ../src/gnome/window-reconcile.c:464
 msgid "Payment From"
@@ -12247,9 +12241,10 @@ msgstr "Aggiunge una nuova transazione al conto"
 msgid "_Balance"
 msgstr "_Saldo"
 
+# tooltip
 #: ../src/gnome/window-reconcile.c:2168
 msgid "Add a new balancing entry to the account"
-msgstr ""
+msgstr "Aggiunge una nuova transazione di bilancio al conto"
 
 # Tooltip
 #: ../src/gnome/window-reconcile.c:2173
@@ -12823,7 +12818,7 @@ msgstr "L'Online Banking non ha fornito transazioni per il periodo di tempo indi
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:61
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:229
 msgid "You have changed the list of online transfer templates, but you cancelled the transfer dialog. Do you nevertheless want to store the changes?"
-msgstr "La lista dei modelli per i trasferimenti online è stata modificata, ma poi èstato annullata la finestra del trasferimento. Si desidera salvare comunque i cambiamenti?"
+msgstr "La lista dei modelli per i trasferimenti online è stata modificata, ma poi è statz annullata la finestra del trasferimento. Salvare comunque i cambiamenti?"
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:182
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:541
@@ -13043,30 +13038,33 @@ msgstr "Emette una nuova nota di addebito diretto attraverso l'Online Banking"
 msgid "Import _MT940"
 msgstr "Importa _MT940"
 
+# tooltip
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:120
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:127
 msgid "Import a MT940 file into GnuCash"
-msgstr "Importa file MT940 in GnuCash"
+msgstr "Importa un file MT940 in GnuCash"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:124
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:131
 msgid "Import MT94_2"
 msgstr "Importa MT94_2"
 
+# tooltip
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:125
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:132
 msgid "Import a MT942 file into GnuCash"
-msgstr "Importa file MT942 in GnuCash"
+msgstr "Importa un file MT942 in GnuCash"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:129
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:136
 msgid "Import _DTAUS"
 msgstr "Importa _DTAUS"
 
+# tooltip
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:130
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:137
 msgid "Import a DTAUS file into GnuCash"
-msgstr "Importa file DTAUS in GnuCash"
+msgstr "Importa un file DTAUS in GnuCash"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:142
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:153
@@ -13274,9 +13272,10 @@ msgstr "Larghezza fissa"
 msgid "Hyphen (-)"
 msgstr "Trattino (-)"
 
+# tooltip
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:9
 msgid "Import CSV/Fixed-Width File"
-msgstr "Importa file CVS o a larghezza fissa"
+msgstr "Importa un file CVS o a larghezza fissa"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:10
 msgid "Select the type of each column below."
@@ -13562,12 +13561,12 @@ msgstr "Immettere la nuova password"
 # Tooltip
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:2
 msgid "Activate verbose debug messages for Online Banking."
-msgstr "Attiva la modalità di debug con maggiore dettaglio per l'Online Banking."
+msgstr "Attiva la modalità di debug con maggiore dettaglio per l'Online Banking"
 
 # Tooltip
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:5
 msgid "Remember the Online Banking PIN in memory during a session."
-msgstr "Ricorda in memoria il PIN dell'Online Banking durante una sessione."
+msgstr "Ricorda in memoria il PIN dell'Online Banking durante una sessione"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:386
 msgid ""
@@ -13836,9 +13835,10 @@ msgstr "Il file di log selezionato non può essere letto. L'intestazione non è 
 msgid "_Replay GnuCash .log file..."
 msgstr "_Ripeti file log di GnuCash..."
 
+# tooltip
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:48
 msgid "Replay a GnuCash log file after a crash.  This cannot be undone."
-msgstr "Ripete un file di log di GnuCash dopo un blocco del sistema. L'operazione non può essere annullata."
+msgstr "Ripete un file di log di GnuCash dopo un blocco del sistema; l'operazione non può essere annullata"
 
 #. This string is a default account
 #. name. It MUST NOT contain the
@@ -13924,7 +13924,7 @@ msgstr "Il file QIF è già caricato. Scegliere un altro file."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:762
 msgid "GnuCash will now load your QIF file. If there are no errors or warnings, you will automatically proceed to the next step. Otherwise, the details will be shown below for your review."
-msgstr "GnuCash procederà ora al caricamento del file QIF. Se non cii saranno errori o avvertimenti, procederà automaticamente al passo successivo. Diversamente, i dettagli dell'operazione verranno visualizzati sotto per la consultazione."
+msgstr "GnuCash procederà ora al caricamento del file QIF. Se non cii saranno errori o avvertimenti, procederà automaticamente al passo successivo. Diversamente, i dettagli dell'operazione verranno visualizzati qui sotto per la consultazione."
 
 #. Inform the user.
 #: ../src/import-export/qif-import/druid-qif-import.c:858
@@ -13988,20 +13988,23 @@ msgstr "E' necessario immettere il nome del conto."
 msgid "GnuCash account name"
 msgstr "Nome del conto GnuCash"
 
+# tooltip
 #: ../src/import-export/qif-import/druid-qif-import.c:2115
 #: ../src/import-export/qif-import/druid-qif-import.c:2190
 msgid "Enter a name or short description, such as \"Red Hat Stock\"."
-msgstr "Inserire un nome o una breve descrizione, quale «Fornitura di cappelli rossi»."
+msgstr "Inserire un nome o una breve descrizione, quale «Fornitura di cappelli rossi»"
 
+# tooltip
 #: ../src/import-export/qif-import/druid-qif-import.c:2122
 #: ../src/import-export/qif-import/druid-qif-import.c:2192
 msgid "Enter the ticker symbol or other well known abbreviation, such as \"RHT\". If there isn't one, or you don't know it, create your own."
-msgstr "Immettere il simbolo ticker o altra abbreviazione nota, come \"RHT\". Se non ce n'è una, o non la si conosce, crearne una propria."
+msgstr "Immettere il simbolo ticker o altra abbreviazione nota, come \"RHT\"; se non ce n'è una, o non la si conosce, crearne una propria"
 
+# tooltip
 #: ../src/import-export/qif-import/druid-qif-import.c:2130
 #: ../src/import-export/qif-import/druid-qif-import.c:2195
 msgid "Select the exchange on which the symbol is traded, or select the type of investment (such as FUND for mutual funds.) If you don't see your exchange or an appropriate investment type, you can enter a new one."
-msgstr "Selezionare la borsa in cui il simbolo è scambiato o selezionare il tipo di investimento (ad esempio FONDO per i fondi comuni). Se non si trova la borsa o un tipo di investimento adatto, se ne può creare uno nuovo."
+msgstr "Selezionare la borsa in cui il simbolo è scambiato o selezionare il tipo di investimento (ad esempio FONDO per i fondi comuni); se non si trova la borsa o un tipo di investimento adatto, se ne può creare uno nuovo"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2150
 msgid "You must enter an existing national currency or enter a different type."
@@ -14014,7 +14017,7 @@ msgstr "Inserire le informazioni riguardanti \"%s\""
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2239
 msgid "_Name or description:"
-msgstr "_Nome o descrizione:"
+msgstr "Nome o _descrizione:"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2260
 msgid "_Ticker symbol or other abbreviation:"
@@ -14217,7 +14220,7 @@ msgid ""
 "\n"
 "Note that GnuCash will be creating many accounts that did not exist on your other personal finance program, including a separate account for each stock you own, separate accounts for the brokerage commissions, special \"Equity\" accounts (subaccounts of Retained Earnings, by default) which are the source of your opening balances, etc. All of these accounts will appear on the next page so you can change them if you want to, but it is safe to leave them alone.\n"
 msgstr ""
-"Nella prossima pagina, i conti presenti nel file QIF e tutte le azioni o fondi comuni verranno uniti con i conti di GnuCash. Se uno dei conti di GnuCash esiste già con lo stesso nome, o un nome simile e di tipo compatibile, questo conto verrà mantenuto per l'unione; diversamente, GnuCash creerà un nuovo conto con lo stesso nome e dello stesso tipo di quello presente nel file QIF. Se il conto per GnuCash non fosse come voluto, basterà fare due clic su di esso per cambiarlo.\n"
+"Nella prossima pagina i conti presenti nel file QIF e tutte le azioni o fondi comuni verranno uniti con i conti di GnuCash. Se uno dei conti di GnuCash esiste già con lo stesso nome, o un nome simile e di tipo compatibile, questo conto verrà mantenuto per l'unione; diversamente, GnuCash creerà un nuovo conto con lo stesso nome e dello stesso tipo di quello presente nel file QIF. Se il conto per GnuCash non fosse come voluto, basterà fare due clic su di esso per cambiarlo.\n"
 "\n"
 "Si noti che GnuCash creerà diversi conti che non esistono nell'altro programma di finanze personali, compresi dei conti separati per ogni azione, per le parcelle di mediazione, conti speciali di \"capitale\" (sottoconti degli utili non distribuiti) che rappresentano la fonte per i bilanci di apertura, ecc... Tutti questi conti verranno elencati nella pagina successiva dove sarà possibile cambiarli se lo si desidera, ma si raccomanda comunque di lasciarli invariati.\n"
 
@@ -14233,7 +14236,7 @@ msgid ""
 msgstr ""
 "Selezionare un file da caricare. Premendo il tasto «Avanti», il file verrà caricato e analizzato. Potrebbe essere necessario rispondere ad alcune domande riguardanti il/i conti presenti nel file.\n"
 "\n"
-"E' possibile caricare quanti file si desidera, quindi non c'è da preoccuparsi se i dati sono suddivisi in più file. \n"
+"E' possibile caricare quanti file si desidera, quindi non è un problema se i dati sono suddivisi in più file.\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:53
 msgid "QIF Import"
@@ -14245,15 +14248,9 @@ msgid ""
 "\n"
 "In the following page, you will see the text that appears in the Payee and Memo fields of transactions with no QIF Account or Category. By default these transactions are assigned to the 'Unspecified' account in GnuCash. If you select a different account, it will be remembered for future QIF files. "
 msgstr ""
-"File QIF scaricati da banche e altre istituzioni finanziarie potrebbero\n"
-"non contenere informazioni su conti e categorie che permetterebbero\n"
-"una loro corretta assegnazione ai conti GnuCash.\n"
+"File QIF scaricati da banche e altre istituzioni finanziarie potrebbero non contenere informazioni su conti e categorie che permetterebbero una loro corretta assegnazione ai conti GnuCash.\n"
 "\n"
-"Nella pagina seguente verrà mostrato il testo che appare nei campi\n"
-"creditore e promemoria dei movimenti senza conto QIF o categoria. Se non\n"
-"diversamente specificato, queste operazioni sono assegnate in GnuCash\n"
-"al conto «non specificato». Se si sceglie un conto diverso, tale conto\n"
-"verrà ricordato per file QIF futuri."
+"Nella pagina seguente verrà mostrato il testo che appare nei campi \"creditore\" e \"promemoria\" dei movimenti senza conto QIF o categoria. Se non diversamente specificato, queste operazioni sono assegnate in GnuCash al conto «non specificato». Se si sceglie un conto diverso, tale conto verrà ricordato per file QIF futuri."
 
 #: ../src/import-export/qif-import/qif.glade.h:57
 msgid "QIF files you have loaded"
@@ -14317,7 +14314,7 @@ msgstr "_Selezionare la valuta da utilizzare per tutte le transazioni importate:
 
 #: ../src/import-export/qif-import/qif.glade.h:81
 msgid "_Select the matchings you want to change:"
-msgstr "_Selezionare le corrispondenze che si vogliono cambiare:"
+msgstr "_Selezionare le corrispondenze che si desidera cambiare:"
 
 #: ../src/import-export/qif-import/qif.glade.h:82
 msgid "_Select..."
@@ -14373,22 +14370,22 @@ msgstr "Punteggio minimo da visualizzare"
 # Tooltip
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:12
 msgid "This field specifies the extra fee that is taken into account when matching imported transactions. In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won't match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
-msgstr "Questo campo specifica la tassa aggiuntiva che entra in conto quando si uniscono le transazioni importate. In alcune zone gli ATM commerciali (quelli non appartenenti a istituzioni finanziarie) sono installati in posti come i centri commerciali. Questi ATM aggiungono una propria commissione direttamente sull'importo, invece di comparire come movimenti separati o come parte della propria commissione bancaria mensile. Per esempio, se si prelevano 100€, la banca addebita 101,50€ più le spese di prelievo. Si dovrebbe impostare questo campo al valore massimo di tale commissione (in unità della valuta locale), in modo che la transazione sia riconosciuta come corrispondente."
+msgstr "Questo campo specifica la tassa aggiuntiva che entra in conto quando si uniscono le transazioni importate. In alcune zone gli ATM commerciali (quelli non appartenenti a istituzioni finanziarie) sono installati in posti come i centri commerciali. Questi ATM aggiungono una propria commissione direttamente sull'importo, invece di comparire come movimenti separati o come parte della propria commissione bancaria mensile. Per esempio, se si prelevano 100€, la banca addebita 101,50€ più le spese di prelievo. Si dovrebbe impostare questo campo al valore massimo di tale commissione (in unità della valuta locale), in modo che la transazione sia riconosciuta come corrispondente"
 
 # Tooltip
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:13
 msgid "This field specifies the minimum matching score a potential matching transaction must have to be displayed in the match list."
-msgstr "Questo campo specifica il minimo punteggio di corrispondenza che una probabile transazione corrispondente deve avere per essere visualizzata nella lista delle corrispondenze."
+msgstr "Questo campo specifica il minimo punteggio di corrispondenza che una probabile transazione corrispondente deve avere per essere visualizzata nella lista delle corrispondenze"
 
 # Tooltip
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:14
 msgid "This field specifies the threshold above which a matching transaction will be cleared by default. A transaction whose best match's score is in the green zone (above or equal to this Clear threshold) will be cleared by default."
-msgstr "Questo campo specifica la soglia al di sopra della quale una transazione corrispondente verrà liquidata di default. Una transazione, il cui punteggio di corrispondenza migliore è nella zona verde (superiore o uguale a questa soglia di liquidazione) verrà liquidata di default."
+msgstr "Questo campo specifica la soglia al di sopra della quale una transazione corrispondente verrà liquidata di default. Una transazione, il cui punteggio di corrispondenza migliore è nella zona verde (superiore o uguale a questa soglia di liquidazione) verrà liquidata di default"
 
 # Tooltip
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:15
 msgid "This field specifies the threshold below which a matching transaction will be added automatically. A transaction whose best match's score is in the red zone (above the display minimum score but below or equal to the Add match score) will be added to the GnuCash file by default."
-msgstr "Questo campo specifica la soglia al di sotto della quale una transazione corrispondente verrà aggiunta automaticamente. Una transazione, il cui punteggio di corrispondenza migliore è nella zona rossa (superiore al minimo punteggio di visualizzazione ma inferiore o uguale  al punteggio di corrispondenza per l'aggiunta) verrà aggiunta al file di GnuCash di default."
+msgstr "Questo campo specifica la soglia al di sotto della quale una transazione corrispondente verrà aggiunta automaticamente. Una transazione, il cui punteggio di corrispondenza migliore è nella zona rossa (superiore al minimo punteggio di visualizzazione ma inferiore o uguale  al punteggio di corrispondenza per l'aggiunta) verrà aggiunta al file di GnuCash di default"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:16
 msgid "Use bayesian matching"
@@ -14994,7 +14991,7 @@ msgstr "Opzioni del _resoconto"
 #: ../intl-scm/guile-strings.c:1762
 #: ../intl-scm/guile-strings.c:1768
 msgid "Edit report options"
-msgstr "Modifica delle opzioni del resoconto"
+msgstr "Modifica le opzioni del resoconto"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1051
 msgid "Back"
@@ -16595,10 +16592,11 @@ msgstr "Stile delle celle numeriche regolari"
 msgid "Negative Values in Red"
 msgstr "Valori negativi in rosso"
 
+# tooltip
 #. src/report/stylesheets/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:1420
 msgid "Display negative values in red."
-msgstr "Visualizza i valori negativi in rosso."
+msgstr "Visualizza i valori negativi in rosso"
 
 #. src/report/stylesheets/stylesheet-css.scm
 #: ../intl-scm/guile-strings.c:1424
@@ -16770,7 +16768,7 @@ msgstr "Sesto livello"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1548
 msgid "Show accounts to this depth, overriding any other option."
-msgstr "Visualizza i conti a questo livello, ignorando ogni altra impostazione."
+msgstr "Visualizza i conti a questo livello, ignorando ogni altra impostazione"
 
 # Tooltip
 #. src/report/report-system/options-utilities.scm
@@ -16813,7 +16811,7 @@ msgstr "Raggruppare i conti in categorie principali?"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1558
 msgid "Select the currency to display the values of this report in."
-msgstr "Selezionare la valuta con la quale visualizzare i valori di questo resoconto."
+msgstr "Selezionare la valuta con la quale visualizzare i valori di questo resoconto"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1560
@@ -16902,19 +16900,19 @@ msgstr "Il prezzo registrato più recentemente nell'intorno della data del resoc
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1580
 msgid "Width of plot in pixels."
-msgstr "Larghezza di stampa in pixel."
+msgstr "Larghezza di stampa in pixel"
 
 # Tooltip
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1582
 msgid "Height of plot in pixels."
-msgstr "Altezza di stampa in pixel."
+msgstr "Altezza di stampa in pixel"
 
 # Tooltip
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1584
 msgid "Choose the marker for each data point."
-msgstr "Scegliere il marcatore per ogni punto dei dati."
+msgstr "Scegliere il marcatore per ogni punto dei dati"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1586
@@ -16964,7 +16962,7 @@ msgstr "Quadrato riempito con un colore"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1610
 msgid "Choose the method for sorting accounts."
-msgstr "Scegliere il criterio di ordinamento dei conti."
+msgstr "Scegliere il criterio di ordinamento dei conti"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1614
@@ -16990,7 +16988,7 @@ msgstr "Per importo, dal maggiore al minore"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1624
 msgid "How to show the balances of parent accounts"
-msgstr "Visualizza saldi per i conti padre"
+msgstr "Visualizza i saldi per i conti padre"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/gnucash/report/account-summary.scm
@@ -17376,7 +17374,7 @@ msgstr ""
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:1732
 msgid "Trading Accounts"
-msgstr ""
+msgstr "Conti per il trading"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:1734
@@ -18020,12 +18018,13 @@ msgstr "Buona giornata!"
 msgid "Sample Report with Examples"
 msgstr "Semplice resoconto con esempi"
 
+# Tooltip
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:2002
 #: ../intl-scm/guile-strings.c:2168
 msgid "A sample report with examples."
-msgstr "Un semplice resoconto con esempi."
+msgstr "Un semplice resoconto con esempi"
 
 #. src/report/utility-reports/gnucash/report/welcome-to-gnucash.scm
 #. src/report/utility-reports/welcome-to-gnucash.scm
@@ -18422,7 +18421,7 @@ msgstr "Altezza di stampa"
 #: ../intl-scm/guile-strings.c:2210
 #: ../intl-scm/guile-strings.c:3038
 msgid "Calculate the price of this commodity."
-msgstr "Calcola il prezzo di questa commodity."
+msgstr "Calcola il prezzo di questa commodity"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/gnucash/report/price-scatter.scm
@@ -18911,7 +18910,7 @@ msgstr "Non scrivere gli zeri dei saldi nulli"
 #: ../intl-scm/guile-strings.c:5086
 #: ../intl-scm/guile-strings.c:5194
 msgid "Show blank space in place of any zero balances which would be shown"
-msgstr "Lascia uno spazio bianco invece di una serie di zeri per i saldi nulli."
+msgstr "Lascia uno spazio bianco invece di una serie di zeri per i saldi nulli"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/income-statement.scm
@@ -19280,12 +19279,13 @@ msgstr "Visualizza i tassi di cambio"
 msgid "Show the exchange rates used"
 msgstr "Visualizza il tasso di cambio utilizzato"
 
+# tooltip
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:2356
 #: ../intl-scm/guile-strings.c:5050
 msgid "Budget to use."
-msgstr "Bilancio da utilizzare."
+msgstr "Bilancio da utilizzare"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2360
@@ -19447,7 +19447,7 @@ msgstr "Grafico delle entrate e delle uscite"
 #: ../intl-scm/guile-strings.c:6230
 #: ../intl-scm/guile-strings.c:6300
 msgid "Report on these accounts, if chosen account level allows."
-msgstr "Genera un resoconto per questi conti, se il livello dei conti scelto lo permette."
+msgstr "Genera un resoconto per questi conti, se il livello dei conti scelto lo permette"
 
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/gnucash/report/net-barchart.scm
@@ -19512,7 +19512,7 @@ msgstr "Visualizza tabella"
 #: ../intl-scm/guile-strings.c:4746
 #: ../intl-scm/guile-strings.c:6136
 msgid "Display a table of the selected data."
-msgstr "Visualizza una tabella dei dati selezionati."
+msgstr "Visualizza una tabella dei dati selezionati"
 
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/gnucash/report/net-barchart.scm
@@ -20902,14 +20902,14 @@ msgstr "Perdite non distribuite"
 #: ../intl-scm/guile-strings.c:3778
 #: ../intl-scm/guile-strings.c:5028
 msgid "Trading Gains"
-msgstr ""
+msgstr "Guadagni di trading"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3780
 #: ../intl-scm/guile-strings.c:5030
 msgid "Trading Losses"
-msgstr ""
+msgstr "Perdite di trading"
 
 #. src/report/standard-reports/gnucash/report/account-summary.scm
 #. src/report/standard-reports/account-summary.scm
@@ -20994,7 +20994,7 @@ msgstr "Saldo ricorrente"
 #: ../intl-scm/guile-strings.c:3870
 #: ../intl-scm/guile-strings.c:5240
 msgid "Show the total balance, including balances in subaccounts, of any account at the depth limit"
-msgstr "Visualizza il saldo totale, considerando i saldi dei sottoconti, di ogni conto al livello di profondità impostato."
+msgstr "Visualizza il saldo totale, considerando i saldi dei sottoconti, di ogni conto al livello di profondità impostato"
 
 #. src/report/standard-reports/gnucash/report/account-summary.scm
 #. src/report/standard-reports/account-summary.scm
@@ -21779,7 +21779,7 @@ msgstr "Visualizza il codice del conto"
 #: ../intl-scm/guile-strings.c:4416
 #: ../intl-scm/guile-strings.c:5786
 msgid "Display the other account name? (if this is a split transaction, this parameter is guessed)."
-msgstr "Visualizzare il nome dell'altro conto? (se si tratta di una transazione suddivisa, questo parametro sarà casuale)."
+msgstr "Visualizzare il nome dell'altro conto? (se si tratta di una transazione suddivisa, questo parametro sarà casuale)"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -22111,42 +22111,45 @@ msgstr "Selezionare colonne"
 #: ../intl-scm/guile-strings.c:4674
 #: ../intl-scm/guile-strings.c:6044
 msgid "Show Budget"
-msgstr "Mostra bilancio di previsione"
+msgstr "Mostra bilancio (Bil)"
 
+# tooltip
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4676
 #: ../intl-scm/guile-strings.c:6046
 msgid "Display a column for the budget values"
-msgstr "Visualizzare una colonna per i valori di bilancio"
+msgstr "Visualizza una colonna per i valori di bilancio"
 
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4678
 #: ../intl-scm/guile-strings.c:6048
 msgid "Show Actual"
-msgstr "Mostra attuale"
+msgstr "Mostra attuale (Att)"
 
+# tooltip
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4680
 #: ../intl-scm/guile-strings.c:6050
 msgid "Display a column for the actual values"
-msgstr "Visualizzare una colonna per i valori effettivi"
+msgstr "Visualizza una colonna per i valori effettivi"
 
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4682
 #: ../intl-scm/guile-strings.c:6052
 msgid "Show Difference"
-msgstr "Mostra differenza"
+msgstr "Mostra differenza (Diff)"
 
+# tooltip
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4684
 #: ../intl-scm/guile-strings.c:6054
 msgid "Display the difference as budget - actual"
-msgstr "Visualizzare la differenza come \"bilancio-effettivo\""
+msgstr "Visualizza la differenza \"bilancio - attuale\""
 
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
@@ -22167,31 +22170,30 @@ msgstr "Visualizza una colonna con i totali della riga"
 #: ../intl-scm/guile-strings.c:4690
 #: ../intl-scm/guile-strings.c:6060
 msgid "Roll up budget amounts to parent"
-msgstr ""
+msgstr "Raccogli gli importi del bilancio al conto padre"
 
+# tooltip
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4692
 #: ../intl-scm/guile-strings.c:6062
 msgid "If parent account does not have its own budget value, use the sum of the child account budget values"
-msgstr ""
+msgstr "Se il conto padre non ha un valore di balancio, gli verrà assegnata la somma dei valori di bilancio dei conti figli"
 
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4694
 #: ../intl-scm/guile-strings.c:6064
-#, fuzzy
 msgid "Include accounts with zero total balances and budget values"
-msgstr "Includi i conti con saldo nullo"
+msgstr "Includi i conti con saldo nullo e i valori del bilancio"
 
 # Tooltip
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4696
 #: ../intl-scm/guile-strings.c:6066
-#, fuzzy
 msgid "Include accounts with zero total (recursive) balances and budget values in this report"
-msgstr "Include i conti con saldo nullo (calcolato ricorsivamente) in questo resoconto"
+msgstr "Include i conti con saldo nullo (calcolato ricorsivamente) e i valori del bilancio in questo resoconto"
 
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
@@ -22212,21 +22214,21 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4712
 #: ../intl-scm/guile-strings.c:6082
 msgid "Bgt"
-msgstr ""
+msgstr "Bil"
 
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4714
 #: ../intl-scm/guile-strings.c:6084
 msgid "Act"
-msgstr ""
+msgstr "Att"
 
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:4716
 #: ../intl-scm/guile-strings.c:6086
 msgid "Diff"
-msgstr ""
+msgstr "Diff"
 
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
@@ -22304,7 +22306,7 @@ msgstr "Visualizza stampa"
 #: ../intl-scm/guile-strings.c:4750
 #: ../intl-scm/guile-strings.c:6140
 msgid "Display a graph of the selected data."
-msgstr "Visualizza un grafico dei dati selezionati."
+msgstr "Visualizza un grafico dei dati selezionati"
 
 #. src/report/standard-reports/gnucash/report/average-balance.scm
 #. src/report/standard-reports/average-balance.scm
@@ -22406,19 +22408,21 @@ msgstr "Entrate per giorno della settimana"
 msgid "Expenses vs. Day of Week"
 msgstr "Uscite per giorno della settimana"
 
+# Tooltip
 #. src/report/standard-reports/gnucash/report/daily-reports.scm
 #. src/report/standard-reports/daily-reports.scm
 #: ../intl-scm/guile-strings.c:4804
 #: ../intl-scm/guile-strings.c:6194
 msgid "Shows a piechart with the total income for each day of the week"
-msgstr "Visualizza un diagramma a torta con le entrate registrate in ogni giorno della settimana."
+msgstr "Visualizza un diagramma a torta con le entrate registrate in ogni giorno della settimana"
 
+# Tooltip
 #. src/report/standard-reports/gnucash/report/daily-reports.scm
 #. src/report/standard-reports/daily-reports.scm
 #: ../intl-scm/guile-strings.c:4806
 #: ../intl-scm/guile-strings.c:6196
 msgid "Shows a piechart with the total expenses for each day of the week"
-msgstr "Visualizza un diagramma a torta con le uscite registrate in ogni giorno della settimana."
+msgstr "Visualizza un diagramma a torta con le uscite registrate in ogni giorno della settimana"
 
 #. src/report/standard-reports/gnucash/report/daily-reports.scm
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
@@ -22482,33 +22486,37 @@ msgstr "Grafico a torta delle attività"
 msgid "Liability Piechart"
 msgstr "Grafico a torta delle passività"
 
+# tooltip
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4870
 #: ../intl-scm/guile-strings.c:6260
 msgid "Shows a piechart with the Income per given time interval"
-msgstr "Visualizza un diagramma a torta con le entrate registrate in un intervallo di tempo."
+msgstr "Visualizza un diagramma a torta con le entrate registrate in un intervallo di tempo"
 
+# tooltip
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4872
 #: ../intl-scm/guile-strings.c:6262
 msgid "Shows a piechart with the Expenses per given time interval"
-msgstr "Visualizza un diagramma a torta con le uscite registrate in un intervallo di tempo."
+msgstr "Visualizza un diagramma a torta con le uscite registrate in un intervallo di tempo"
 
+# tooltip
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4874
 #: ../intl-scm/guile-strings.c:6264
 msgid "Shows a piechart with the Assets balance at a given time"
-msgstr "Visualizza un diagramma a torta con il saldo delle attività in un determinato momento."
+msgstr "Visualizza un diagramma a torta con il saldo delle attività in un determinato momento"
 
+# tooltip
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4876
 #: ../intl-scm/guile-strings.c:6266
 msgid "Shows a piechart with the Liabilities balance at a given time"
-msgstr "Visualizza un diagramma a torta con il saldo delle passività in un determinato momento."
+msgstr "Visualizza un diagramma a torta con il saldo delle passività in un determinato momento"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -22543,22 +22551,24 @@ msgstr "Saldo al %s"
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:5052
 msgid "Report for range of budget periods"
-msgstr ""
+msgstr "Limita il resoconto a dei periodi del bilancio"
 
+# tooltip
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:5054
 msgid "Create report for a budget period range instead of the entire budget."
-msgstr ""
+msgstr "Crea un resoconto solo per un periodo limitato invece che per tutto il bilancio"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:5056
 msgid "Range start"
 msgstr "Inizio dell'intervallo: "
 
+# tooltip
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:5058
 msgid "Select a budget period that begins the reporting range."
-msgstr ""
+msgstr "Selezionare un periodo di bilancio da cui far partire il resoconto"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:5060
@@ -22569,24 +22579,24 @@ msgstr "Fine dell'intervallo: "
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:5062
 msgid "Select a budget period that ends the reporting range."
-msgstr ""
+msgstr "Selezionare un periodo di bilancio a cui far terminare il resoconto"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:5136
 msgid "Reporting range end period cannot be less than start period."
-msgstr ""
+msgstr "La fine del periodo di resoconto non può essere precedente all'inizio."
 
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:5138
 #, c-format
 msgid "for Budget %s Period %u"
-msgstr ""
+msgstr "per il Bilancio %s Periodo %u"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:5140
 #, c-format
 msgid "for Budget %s Periods %u - %u"
-msgstr ""
+msgstr "per il Bilancio %s Periodo %u - %u"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #: ../intl-scm/guile-strings.c:5142
@@ -23091,17 +23101,15 @@ msgstr "Imponibile / spese deducibili"
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6428
 #: ../intl-scm/guile-strings.c:6632
-#, fuzzy
 msgid "This report shows transaction detail for your accounts related to Income Taxes."
-msgstr "Questo resoconto mostra i dettagli delle transazioni relative al proprio imponibile e alle spese deducibili."
+msgstr "Questo resoconto mostra il dettaglio delle transazioni per i propri conti relativi alle tasse sulle entrate"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6432
 #: ../intl-scm/guile-strings.c:6636
-#, fuzzy
 msgid "This page shows transaction detail for relevant Income Tax accounts."
-msgstr "Questo resoconto mostra i dettagli delle transazioni relative al proprio imponibile e alle spese deducibili."
+msgstr ""
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
@@ -23515,7 +23523,7 @@ msgstr "Sto preparando la conversione dei dati QIF"
 #: ../intl-scm/guile-strings.c:6904
 #: ../intl-scm/guile-strings.c:6994
 msgid "Creating accounts"
-msgstr "Creazione conti"
+msgstr "Creazione dei conti"
 
 #. src/import-export/qif-import/qif-import/qif-to-gnc.scm
 #. src/import-export/qif-import/qif-to-gnc.scm
@@ -23633,7 +23641,7 @@ msgstr "Tabella imposte clienti predefinita"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7030
 msgid "The default tax table to apply to customers."
-msgstr "La tabella predefinita per le imposte da applicare ai clienti."
+msgstr "La tabella predefinita per le imposte da applicare ai clienti"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7032
@@ -23644,7 +23652,7 @@ msgstr "Tabella imposte venditori predefinita"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7034
 msgid "The default tax table to apply to vendors."
-msgstr "La tabella predefinita per le imposte da applicare ai venditori."
+msgstr "La tabella predefinita per le imposte da applicare ai venditori"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7036
@@ -23655,12 +23663,12 @@ msgstr "Formato data per le stampe: "
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7038
 msgid "The default date format used for fancy printed dates"
-msgstr "Il formato predefinito di data utilizzato nelle stampe."
+msgstr "Il formato predefinito di data utilizzato nelle stampe"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7040
 msgid "True if trading accounts should be used for transactions involving more than one commodity"
-msgstr ""
+msgstr "Vero se i conti per il trading dovrebbero essere usati per le transazioni che coinvolgono più di una commodity"
 
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:7046
@@ -23783,7 +23791,7 @@ msgstr "Titolo personalizzato"
 #: ../intl-scm/guile-strings.c:7498
 #: ../intl-scm/guile-strings.c:7886
 msgid "A custom string to replace Invoice, Bill or Expense Voucher"
-msgstr ""
+msgstr "Una stringa personalizzata che sostituisce \"Fattura\", \"Ricevuta\" o \"Nota spese\""
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/job-report.scm
@@ -24674,7 +24682,7 @@ msgstr ""
 #. src/business/business-reports/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:7852
 msgid "<p>No invoice has been selected -- please use the Options menu to select one."
-msgstr "<p>Non è stata selezionata alcuna fattura -- utilizzare il menu «Opzioni» per selezionarne una."
+msgstr "<p>Non è stata selezionata alcuna fattura -- utilizzare il menu «Opzioni» per selezionarne una"
 
 #. src/business/business-reports/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:7856
