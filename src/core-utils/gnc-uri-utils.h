@@ -179,6 +179,14 @@ gchar *gnc_uri_create_uri (const gchar *protocol,
 gchar *gnc_uri_normalize_uri (const gchar *uri, gboolean allow_password);
 
 
+/** Checks if there is a backend that explicitly stated to handle the given protocol.
+ *
+ *  @param protocol The protocol to check
+ *
+ *  @return TRUE if at least one backend explicitly handles this protocol, otherwise FALSE
+ */
+gboolean gnc_uri_is_known_protocol (const gchar *protocol);
+
 /** Checks if the given protocol is used to refer to a file
  *  (as opposed to a network service like a database or web url)
  *

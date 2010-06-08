@@ -25,19 +25,44 @@
 #include <glib.h>
 #include "gnc-uri-utils.h"
 #include "gnc-filepath-utils.h"
+#include "qofsession.h"
 
 /* Checks if the given protocol is used to refer to a file
  * (as opposed to a network service)
  */
+gboolean gnc_uri_is_known_protocol (const gchar *protocol)
+{
+    gboolean is_known_proto = FALSE;
+    GList *node;
+    GList *known_proto_list = qof_backend_get_registered_access_method_list();
+
+    for ( node = known_proto_list; node != NULL; node = node->next )
+    {
+        gchar *known_proto = node->data;
+        if ( !g_ascii_strcasecmp (protocol, known_proto) )
+        {
+            is_known_proto = TRUE;
+            break;
+        }
+    }
+
+    g_list_free (known_proto_list);
+    return is_known_proto;
+}
+
+/* Checks if the given protocol is used to refer to a file
+ * (as opposed to a network service)
+ * For simplicity, handle all unknown protocols as if it were
+ * file based protocols. This will avoid password lookups and such.
+ */
 gboolean gnc_uri_is_file_protocol (const gchar *protocol)
 {
-    if ( !g_ascii_strcasecmp (protocol, "file") ||
-            !g_ascii_strcasecmp (protocol, "xml") ||
-            !g_ascii_strcasecmp (protocol, "sqlite3")
+    if ( !g_ascii_strcasecmp (protocol, "mysql") ||
+            !g_ascii_strcasecmp (protocol, "postgres")
        )
-        return TRUE;
-    else
         return FALSE;
+    else
+        return TRUE;
 }
 
 /* Checks if the given uri defines a file
@@ -90,8 +115,18 @@ void gnc_uri_get_components (const gchar *uri,
 
     if ( gnc_uri_is_file_protocol ( *protocol ) )
     {
-        /* Protocol indicates file based uri */
-        *path     = gnc_resolve_file_path ( splituri[1] );
+        /* Protocol indicates file based uri.
+         * Note that unknown protocols are treated as if they are
+         * file-based protocols. This is done to prevent password
+         * lookups on unknown protocols.
+         * On the other hand, since we don't know the specifics of
+         * unknown protocols, we don't attempt to return an absolute
+         * pathname for them, just whetever was there.
+         */
+        if ( gnc_uri_is_known_protocol ( *protocol ) )
+            *path     = gnc_resolve_file_path ( splituri[1] );
+        else
+            *path     = g_strdup ( splituri[1] );
         g_strfreev ( splituri );
         return;
     }
@@ -214,9 +249,15 @@ gchar *gnc_uri_create_uri (const gchar *protocol,
     {
         /* Compose a file based uri, which means ignore everything but
          * the protocol and the path
-         * We always return absolute pathnames
+         * We return an absolute pathname if the protocol is known or
+         * no protocol was given. For an unknown protocol, we return the
+         * path info as is.
          */
-        gchar *abs_path = gnc_resolve_file_path ( path );
+        gchar *abs_path;
+        if ( protocol && (!gnc_uri_is_known_protocol (protocol)) )
+            abs_path = g_strdup ( path );
+        else
+            abs_path = gnc_resolve_file_path ( path );
         if ( protocol == NULL )
             uri = g_strdup_printf ( "file://%s", abs_path );
         else
