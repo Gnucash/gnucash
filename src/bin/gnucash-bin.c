@@ -92,7 +92,6 @@ gnc_print_unstable_message(void)
    overridden by command line options.  */
 static char *config_path = PKGSYSCONFDIR;
 static char *share_path = PKGDATADIR;
-static char *help_path = GNC_HELPDIR;
 static char *gconf_path = APP_GNUCASH;
 
 static gchar  *environment_expand(gchar *param)
@@ -180,15 +179,12 @@ environment_override()
 #ifdef G_OS_WIN32
 	config_path = gnc_path_get_pkgsysconfdir();
 	share_path = gnc_path_get_pkgdatadir();
-	help_path = g_path_get_dirname(share_path);
 #endif /* G_OS_WIN32 */
 
     if ((path = g_getenv("GNC_CONFIG_PATH")))
         config_path = g_strdup(path);
     if ((path = g_getenv("GNC_SHARE_PATH")))
         share_path = g_strdup(path);
-    if ((path = g_getenv("GNC_DOC_PATH")))
-        help_path = g_strdup(path);
     if ((path = g_getenv("GNC_GCONF_PATH")))
         gconf_path = g_strdup(path);
 #ifdef G_OS_WIN32
@@ -387,13 +383,6 @@ gnucash_command_line(int *argc, char **argv)
             _("SHAREPATH")
         },
         {
-            "doc-path", '\0', 0, G_OPTION_ARG_STRING, &help_path,
-            _("Set the search path for documentation files"),
-            /* Translators: Argument description for autohelp; see
-               http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
-            _("DOCPATH")
-        },
-        {
             "gconf-path", '\0', 0, G_OPTION_ARG_STRING, &gconf_path,
             _("Set the prefix path for gconf queries"),
             /* Translators: Argument description for autohelp; see
@@ -586,7 +575,7 @@ inner_main (void *closure, int argc, char **argv)
     SCM main_mod;
     char* fn;
     GError *error = NULL;
- 
+
     scm_c_eval_string("(debug-set! stack 200000)");
 
     main_mod = scm_c_resolve_module("gnucash main");
