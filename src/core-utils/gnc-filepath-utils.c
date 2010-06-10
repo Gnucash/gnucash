@@ -156,7 +156,7 @@ gnc_resolve_file_path (const gchar * filefrag)
     if (fullpath != NULL)
         return fullpath;
 
-    /* Look in the config dir (e.g. $PREFIX/etc/gnucash) */
+    /* Look in the config dir (e.g. $PREFIX/share/gnucash/accounts) */
     tmp_path = gnc_path_get_accountsdir();
     fullpath = g_build_filename(tmp_path, filefrag, (gchar *)NULL);
     g_free(tmp_path);
