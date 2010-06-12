@@ -1080,6 +1080,7 @@ gnc_file_do_save_as (const char* filename)
     QofSession *session;
     char *default_dir = NULL;        /* Default to last open */
     char *last;
+    char *norm_file;
     char *newfile;
     const char *oldfile;
     gchar *logpath = NULL;
@@ -1098,14 +1099,16 @@ gnc_file_do_save_as (const char* filename)
 
     /* Convert user input into a normalized uri
      * Note that the normalized uri for internal use can have a password */
-    newfile = gnc_uri_normalize_uri ( filename, TRUE );
-    if (!newfile)
+    norm_file = gnc_uri_normalize_uri ( filename, TRUE );
+    if (!norm_file)
     {
         show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename,
                             GNC_FILE_DIALOG_SAVE);
         return;
     }
 
+    newfile = gnc_uri_add_extension (norm_file, GNC_DATAFILE_EXT);
+    g_free (norm_file);
     gnc_uri_get_components (newfile, &protocol, &hostname,
                             &port, &username, &password, &path);
 

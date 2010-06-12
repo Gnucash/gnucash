@@ -374,7 +374,7 @@ xml_destroy_backend(QofBackend *be)
 
    If make_backup is true, write out a time-stamped copy of the file
    into the same directory as the indicated file, with a filename of
-   "file.YYYYMMDDHHMMSS.xac" where YYYYMMDDHHMMSS is replaced with the
+   "file.YYYYMMDDHHMMSS.gnucash" where YYYYMMDDHHMMSS is replaced with the
    current year/month/day/hour/minute/second. */
 
 /* The variable buf_size must be a compile-time constant */
@@ -593,11 +593,7 @@ gnc_xml_be_backup_file(FileBackend *be)
     }
 
     timestamp = xaccDateUtilGetStampNow ();
-    backup = g_new (char, strlen (datafile) + strlen (timestamp) + 6);
-    strcpy (backup, datafile);
-    strcat (backup, ".");
-    strcat (backup, timestamp);
-    strcat (backup, ".xac");
+    backup = g_strconcat( datafile, ".", timestamp, GNC_DATAFILE_EXT, NULL );
     g_free (timestamp);
 
     bkup_ret = gnc_int_link_or_make_backup(be, datafile, backup);
@@ -759,12 +755,17 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
 
 /* ================================================================= */
 
+/* Determine whether the path refers to a gnucash created file
+ * We can filter this based on the file's extension.
+ * Currently this can be .gnucash, .log, .LNK or .xac
+ */
 static int
 gnc_xml_be_select_files (const gchar *d)
 {
     return (g_str_has_suffix(d, ".LNK") ||
-            g_str_has_suffix(d, ".xac") ||
-            g_str_has_suffix(d, ".log"));
+            g_str_has_suffix(d, ".xac") == 0 /* old datafile extension */ ||
+            g_str_has_suffix(d, GNC_DATAFILE_EXT) ||
+            g_str_has_suffix(d, GNC_LOGFILE_EXT));
 }
 
 static void
@@ -808,6 +809,7 @@ gnc_xml_be_remove_old_files(FileBackend *be)
         char *name;
         int len;
 
+        /* Ensure we only evaluate gnucuash related files. */
         if (gnc_xml_be_select_files (dent) == 0)
             continue;
 
@@ -845,8 +847,6 @@ gnc_xml_be_remove_old_files(FileBackend *be)
 
                 if (res
                         && res != name + pathlen + 1
-                        && (strcmp(res, ".xac") == 0
-                            || strcmp(res, ".log") == 0)
                         && file_time > 0
                         && days > be->file_retention_days)
                 {

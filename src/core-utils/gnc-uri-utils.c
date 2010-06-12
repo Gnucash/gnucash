@@ -98,7 +98,7 @@ void gnc_uri_get_components (const gchar *uri,
     *password = NULL;
     *path     = NULL;
 
-    g_return_if_fail( uri != 0 );
+    g_return_if_fail( uri != NULL );
 
     splituri = g_strsplit ( uri, "://", 2 );
     if ( splituri[1] == NULL )
@@ -323,4 +323,22 @@ gchar *gnc_uri_normalize_uri (const gchar *uri, gboolean allow_password)
     g_free (path);
 
     return newuri;
+}
+
+gchar *gnc_uri_add_extension ( const gchar *uri, const gchar *extension )
+{
+    g_return_val_if_fail( uri != 0, NULL );
+
+    /* Only add extension if the user provided the extension and the uri is
+     * file based.
+     */
+    if ( !extension || !gnc_uri_is_file_uri( uri ) )
+        return g_strdup( uri );
+
+    /* Don't add extension if it's already there */
+    if ( g_str_has_suffix( uri, extension ) )
+        return g_strdup( uri );
+
+    /* Ok, all tests passed, let's add the extension */
+    return g_strconcat( uri, extension, NULL );
 }

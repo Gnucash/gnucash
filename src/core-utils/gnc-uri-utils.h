@@ -39,6 +39,9 @@
 #ifndef GNCURIUTILS_H_
 #define GNCURIUTILS_H_
 
+#define GNC_DATAFILE_EXT ".gnucash"
+#define GNC_LOGFILE_EXT  ".log"
+
 /** Converts a uri in separate components.
  *
  *  Uri's can take any of the following forms:
@@ -206,6 +209,21 @@ gboolean gnc_uri_is_file_protocol (const gchar *protocol);
  *  is normally used with network services (database, web url,...)
  */
 gboolean gnc_uri_is_file_uri (const gchar *uri);
+
+/** Adds an extension to the uri if:
+ *  * the uri is not empty and file based
+ *  * doesn't already have the extension
+ *
+ *  @param uri The uri to process
+ *  @param extension The extension to add if missing. Note that the extension
+ *                   is added verbatim, so if a dot should be added, this
+ *                   should be part of the extension.
+ *
+ *  @return The uri, but garanteed to end with extension if the uri is file
+ *          based. Otherwise the uri is returned unmodified. Note that the
+ *          returned value should be freed with g_free when no longer needed.
+ */
+gchar *gnc_uri_add_extension ( const gchar *uri, const gchar *extension );
 
 #endif /* GNCURIUTILS_H_ */
 /** @} */
