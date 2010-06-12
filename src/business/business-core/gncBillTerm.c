@@ -768,9 +768,30 @@ gboolean gncBillTermIsDirty (const GncBillTerm *term)
 
 #define SECS_PER_DAY 86400
 
-/* Based on the timespec and a proximo type, compute the month and
+/* Based on the post date and a proximo type, compute the month and
  * year this is due.  The actual day is filled in below.
- * XXX explain this, the logic is totally opaque to me.
+ *
+ * A proximo billing term has multiple parameters:
+ * * due day: day of the month the invoice/bill will be due
+ * * cutoff: day of the month used to decide if the due date will be
+ *           in the next month or in the month thereafter. This can be
+ *           a negative number in which case the cutoff date is relative
+ *           to the end of the month and counting backwards.
+ *           Eg: cutoff = -3 would mean 25 in February or 28 in June
+ *
+ * How does it work:
+ * Assume cutoff = 19 and due day = 20
+ *
+ * * Example 1 post date = 14-06-2010 (European date format)
+ *   14 is less than the cutoff of 19, so the due date will be in the next
+ *   month. Since the due day is set to 20, the due date will be
+ *   20-07-2010
+ *
+ * * Example 2 post date = 22-06-2010 (European date format)
+ *   22 is more than the cutoff of 19, so the due date will be in the month
+ *   after next month. Since the due day is set to 20, the due date will be
+ *   20-02-2010
+ *
  */
 static void
 compute_monthyear (const GncBillTerm *term, Timespec post_date,
@@ -807,7 +828,16 @@ compute_monthyear (const GncBillTerm *term, Timespec post_date,
     if (year) *year = iyear;
 }
 
-/* XXX explain this, the logic is totally opaque to me. */
+/* There are two types of billing terms:
+ *
+ * Type DAYS defines a due date to be a fixed number of days passed the post
+ * date. This is a straightforward calculation.
+ *
+ * The other type PROXIMO defines the due date as a fixed day of the month
+ * (like always the 15th of the month). The proximo algorithm determines which
+ * month based on the cutoff day and the post date. See above for a more
+ * detailed explanation of proximo.
+ */
 
 static Timespec
 compute_time (const GncBillTerm *term, Timespec post_date, int days)
