@@ -733,18 +733,6 @@ gnc_post_file_open (const char * filename)
     if (!uh_oh)
     {
         Account *new_root;
-        gchar *logpath = NULL;
-
-        /* XXX Would logging make sense for databases as well (mysql/postgres) ?
-         * Currently the logpath is relative to the data file path.
-         * Databases don't have a file path, so no logging will be
-         * done for them in the current setup.
-         */
-        if ( gnc_uri_is_file_uri ( newfile ) )
-            logpath = gnc_uri_get_path(newfile);
-        PINFO ("logpath=%s", logpath ? logpath : "(null)");
-        xaccLogSetBaseName (logpath);
-        g_free ( logpath );
 
         /* If the new "file" is a database, attempt to store the password
          * in a keyring. GnuCash itself will not save it.
@@ -1083,7 +1071,6 @@ gnc_file_do_save_as (const char* filename)
     char *norm_file;
     char *newfile;
     const char *oldfile;
-    gchar *logpath = NULL;
 
     gchar *protocol=NULL;
     gchar *hostname=NULL;
@@ -1192,17 +1179,6 @@ gnc_file_do_save_as (const char* filename)
 
         /* Whoa-ok. Blow away the previous file. */
     }
-
-    /* XXX Would logging make sense for databases as well (mysql/postgres) ?
-     * Currently the logpath is relative to the data file path.
-     * Databases don't have a file path, so no logging will be
-     * done for them in the current setup.
-     */
-    if ( gnc_uri_is_file_protocol ( protocol ) )
-        logpath = gnc_uri_get_path(newfile);
-    PINFO ("logpath=%s", logpath ? logpath : "(null)");
-    xaccLogSetBaseName (logpath);
-    g_free ( logpath );
 
     /* If the new "file" is a database, attempt to store the password
      * in a keyring. GnuCash itself will not save it.

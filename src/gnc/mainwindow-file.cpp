@@ -454,13 +454,6 @@ void MainWindow::loadFile(const QString &fileName)
 
     if (!we_are_in_error)
     {
-        gchar *logpath = NULL;
-        if ( gnc_uri_is_file_uri ( newfile ) )
-            logpath = gnc_uri_get_path(newfile);
-        PINFO ("logpath=%s", logpath ? logpath : "(null)");
-        xaccLogSetBaseName (logpath);
-        g_free ( logpath );
-
         xaccLogDisable();
 
         {
@@ -664,18 +657,6 @@ bool MainWindow::saveFileAs(const QString &fileName)
 
         /* Whoa-ok. Blow away the previous file. */
     }
-
-    /* XXX Would logging make sense for databases as well (mysql/postgres) ?
-     * Currently the logpath is relative to the data file path.
-     * Databases don't have a file path, so no logging will be
-     * done for them in the current setup.
-     */
-    gchar *logpath = NULL;
-    if ( gnc_uri_is_file_uri ( newfile ) )
-        logpath = gnc_uri_get_path(newfile);
-    PINFO ("logpath=%s", logpath ? logpath : "(null)");
-    xaccLogSetBaseName (logpath);
-    g_free ( logpath );
 
 
     /* Prevent race condition between swapping the contents of the two

@@ -751,8 +751,6 @@ gxi_parse_file (GncXmlImportData *data)
         goto cleanup_parse_file;
     }
 
-    logpath = gnc_uri_get_path (data->filename);
-    xaccLogSetBaseName (logpath);
     xaccLogDisable ();
     gxi_update_progress_bar (_("Reading file..."), 0.0);
     qof_session_load (session, gxi_update_progress_bar);

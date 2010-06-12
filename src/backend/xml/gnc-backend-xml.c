@@ -297,10 +297,14 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
         }
     }
 
+
     /* ---------------------------------------------------- */
     /* We should now have a fully resolved path name.
-     * Lets see if we can get a lock on it. */
+     * Let's start logging */
+    xaccLogSetBaseName (be->fullpath);
+    PINFO ("logpath=%s", be->fullpath ? be->fullpath : "(null)");
 
+    /* And let's see if we can get a lock on it. */
     be->lockfile = g_strconcat(be->fullpath, ".LCK", NULL);
 
     if (!ignore_lock && !gnc_xml_be_get_file_lock (be))
@@ -362,6 +366,9 @@ xml_session_end(QofBackend *be_start)
 static void
 xml_destroy_backend(QofBackend *be)
 {
+    /* Stop transactionlogging */
+    xaccLogSetBaseName (NULL);
+
     qof_backend_destroy(be);
     g_free(be);
 }
