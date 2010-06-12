@@ -49,6 +49,7 @@
 #include "gnc-owner-sql.h"
 #include "gnc-tax-table-sql.h"
 #include "gnc-vendor-sql.h"
+#include "gncmod-business-backend-sql.h"
 
 GNC_MODULE_API_DECL(libgncmod_business_backend_sql)
 
@@ -79,6 +80,25 @@ libgncmod_business_backend_sql_gnc_module_description(void)
 static const gchar* fixed_load_order[] =
 { GNC_ID_BILLTERM, GNC_ID_TAXTABLE, NULL };
 
+void
+gnc_module_init_business_core_sql_init(void)
+{
+    /* Initialize our pointers into the backend subsystem */
+    gnc_address_sql_initialize();
+    gnc_billterm_sql_initialize();
+    gnc_customer_sql_initialize();
+    gnc_employee_sql_initialize();
+    gnc_entry_sql_initialize();
+    gnc_invoice_sql_initialize();
+    gnc_job_sql_initialize();
+    gnc_order_sql_initialize();
+    gnc_owner_sql_initialize();
+    gnc_taxtable_sql_initialize();
+    gnc_vendor_sql_initialize();
+
+    gnc_sql_set_load_order( fixed_load_order );
+}
+
 int
 libgncmod_business_backend_sql_gnc_module_init(int refcount)
 {
@@ -92,20 +112,7 @@ libgncmod_business_backend_sql_gnc_module_init(int refcount)
 
     if ( refcount == 0 )
     {
-        /* Initialize our pointers into the backend subsystem */
-        gnc_address_sql_initialize();
-        gnc_billterm_sql_initialize();
-        gnc_customer_sql_initialize();
-        gnc_employee_sql_initialize();
-        gnc_entry_sql_initialize();
-        gnc_invoice_sql_initialize();
-        gnc_job_sql_initialize();
-        gnc_order_sql_initialize();
-        gnc_owner_sql_initialize();
-        gnc_taxtable_sql_initialize();
-        gnc_vendor_sql_initialize();
-
-        gnc_sql_set_load_order( fixed_load_order );
+        gnc_module_init_business_core_sql_init();
     }
 
     return TRUE;

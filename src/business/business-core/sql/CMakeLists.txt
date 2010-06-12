@@ -31,6 +31,7 @@ SET (libgnc_business_backend_sql_SOURCES
   gnc-vendor-sql.c
 )
 SET (libgnc_business_backend_sql_HEADERS
+  gncmod-business-backend-sql.h
   gnc-address-sql.h
   gnc-bill-term-sql.h
   gnc-customer-sql.h

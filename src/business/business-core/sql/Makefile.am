@@ -28,6 +28,7 @@ libgncmod_business_backend_sql_la_SOURCES = \
   gnc-vendor-sql.c
 
 noinst_HEADERS = \
+  gncmod-business-backend-sql.h \
   gnc-address-sql.h \
   gnc-bill-term-sql.h \
   gnc-customer-sql.h \
