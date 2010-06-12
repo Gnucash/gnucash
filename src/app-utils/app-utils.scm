@@ -178,6 +178,7 @@
 (export gnc:date-to-week-fraction)
 (export gnc:date-to-week)
 (export gnc:date-to-day-fraction)
+(export gnc:date-get-fraction-func)
 (export moddatek)
 (export decdate)
 (export incdate)

@@ -185,6 +185,17 @@
 (define (gnc:date-to-day-fraction caltime)
   (- (/ (/ caltime 3600.0) 24) 59))
 
+;; Returns the function that converts a date into a fraction of
+;; {year,month,week,day} according to the given symbol, or #f if the
+;; symbol was unknown
+(define (gnc:date-get-fraction-func interval)
+  (case interval
+    ('YearDelta gnc:date-to-year-fraction)
+    ('MonthDelta gnc:date-to-month-fraction)
+    ('WeekDelta gnc:date-to-week-fraction)
+    ('DayDelta gnc:date-to-day-fraction)
+    (else #f)))
+
 ;; Modify a date
 (define (moddate op adate delta)
   (let ((newtm (gnc:timepair->date adate)))
