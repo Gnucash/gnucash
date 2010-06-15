@@ -310,8 +310,9 @@ gnc_gnome_help (const char *dir, const char *detail)
       NSArray *prefix_comps = [[prefix pathComponents]
 			       arrayByAddingObjectsFromArray: components];
       NSString *docs_dir = [NSString pathWithComponents: prefix_comps];
-      NSString * cur_locale = [[NSLocale currentLocale] localeIdentifier] ;
-      BOOL dir, exists;
+      NSArray *languages = [[NSUserDefaults standardUserDefaults]
+			    objectForKey: @"AppleLanguages"]; 
+      BOOL dir;
       subdir = [[[subdir lowercaseString] componentsSeparatedByString: @" "] 
 		componentsJoinedByString: @"-"];
       if (![[NSFileManager defaultManager] fileExistsAtPath: docs_dir]) {
@@ -322,17 +323,37 @@ gnc_gnome_help (const char *dir, const char *detail)
 	[pool release];
 	return;
       }
-      exists = [[NSFileManager defaultManager]
-		fileExistsAtPath: [docs_dir
-				   stringByAppendingPathComponent: cur_locale]
-		isDirectory: &dir];
-      if (exists && dir)
-	  url = [NSURL 
-		 fileURLWithPath: [[[[docs_dir
-				      stringByAppendingPathComponent: cur_locale]
-				     stringByAppendingPathComponent: subdir]
-				    stringByAppendingPathComponent: tag]
-				   stringByAppendingPathExtension: @"html"]];
+      if ([languages count] > 0) {
+	  NSEnumerator *lang_iter = [languages objectEnumerator];
+	  NSString *path;
+	  NSString *this_lang;
+	  while(this_lang = [lang_iter nextObject]) {
+	      NSArray *elements;
+	      unsigned int paths;
+	      NSString *completed_path = [NSString alloc];
+	      this_lang = [this_lang stringByTrimmingCharactersInSet:
+			   [NSCharacterSet characterSetWithCharactersInString:
+			    @"\""]];
+	      elements = [this_lang componentsSeparatedByString: @"-"];
+	      this_lang = [elements objectAtIndex: 0];
+	      path = [docs_dir stringByAppendingPathComponent: this_lang];
+	      paths = [path completePathIntoString: &completed_path
+		       caseSensitive: FALSE
+		       matchesIntoArray: NULL filterTypes: NULL];
+	      if (paths > 1 &&
+		  [[NSFileManager defaultManager]
+			fileExistsAtPath: completed_path
+		   isDirectory: &dir])
+		  if (dir) {
+		      url = [NSURL fileURLWithPath:
+			     [[[completed_path
+				stringByAppendingPathComponent: subdir]
+			       stringByAppendingPathComponent: tag]
+			      stringByAppendingPathExtension: @"html"]];
+		      break;
+		  }
+	  }
+      }
       if (!url)
 	  url = [NSURL 
 		 fileURLWithPath: [[[[docs_dir
@@ -342,7 +363,7 @@ gnc_gnome_help (const char *dir, const char *detail)
 				   stringByAppendingPathExtension: @"html"]];
 
   }
-/* It's a lot easier in a bundle! */
+/* It's a lot easier in a bundle! OSX finds the best translation for us. */
   else   
       url = [NSURL fileURLWithPath: [[NSBundle mainBundle] 
 				     pathForResource: tag
@@ -350,7 +371,14 @@ gnc_gnome_help (const char *dir, const char *detail)
 				     inDirectory: subdir ]];
 
 /* Now just open the URL in the default app for opening URLs */
-  [[NSWorkspace sharedWorkspace] openURL: url];
+  if (url)
+      [[NSWorkspace sharedWorkspace] openURL: url];
+  else {
+        const gchar *message =
+            _("GnuCash could not find the files for the help documentation.  "
+              "This is likely because the 'gnucash-docs' package is not installed.");
+        gnc_error_dialog(NULL, "%s", message);
+  }
   [pool release];
 }
 #elif defined G_OS_WIN32 /* G_OS_WIN32 */
