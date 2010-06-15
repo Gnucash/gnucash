@@ -57,6 +57,10 @@
 #  include <locale.h>
 #endif
 
+#ifdef MAC_INTEGRATION
+#  include <Foundation/Foundation.h>
+#endif
+
 #define APP_GNUCASH "/apps/gnucash"
 
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
@@ -245,6 +249,91 @@ environment_override()
     g_strfreev(env_vars);
 
 }
+
+#ifdef MAC_INTEGRATION
+static void
+set_mac_locale() 
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
+    NSArray *languages = [defs objectForKey: @"AppleLanguages"];
+    const gchar *langs = NULL;
+    NSLocale *locale = [NSLocale currentLocale];
+    NSString *locale_str = [[[locale objectForKey: NSLocaleLanguageCode]
+			     stringByAppendingString: @"_"]
+			    stringByAppendingString:
+			    [locale objectForKey: NSLocaleCountryCode]];
+/* If we didn't get a valid current locale, the string will be just "_" */
+    if ([locale_str isEqualToString: @"_"])
+	setlocale(LC_ALL, "en_US");
+    else
+	setlocale(LC_ALL, [locale_str UTF8String]);
+/* If the currency doesn't match the base locale, we need to find a locale that does match, because setlocale won't know what to do with just a currency identifier. */
+    if (![[locale objectForKey: NSLocaleCurrencyCode] isEqualToString:
+	  [[[NSLocale alloc] initWithLocaleIdentifier: locale_str] objectForKey: NSLocaleCurrencyCode]]) {
+	NSArray *all_locales = [NSLocale availableLocaleIdentifiers];
+	NSEnumerator *locale_iter = [all_locales objectEnumerator];
+	NSString *this_locale;
+	NSString *currency = [locale objectForKey: NSLocaleCurrencyCode];
+	NSString *money_locale = nil;
+	while (this_locale = (NSString*)[locale_iter nextObject])
+	    if ([[[[NSLocale alloc] initWithLocaleIdentifier: this_locale]
+		   objectForKey: NSLocaleCurrencyCode] 
+		 isEqualToString: currency]) {
+		money_locale = this_locale;
+		break;
+	    }
+	if (money_locale)
+	    setlocale(LC_MONETARY, [money_locale UTF8String]);
+    }
+/* Now call gnc_localeconv() to force creation of the app locale
+ * before another call to setlocale messes it up. */
+    gnc_localeconv ();
+/* Process the language list. Since all of the packages we depend on
+ * are written in US english, they depend on gettext falling through
+ * to the C locale. Unfortunately, if we set a language list in that
+ * case with en or en_US as the first element, gettext will try the
+ * second language in the list (there being no en or en_US mo
+ * file). We work around that by not creating a language list if en or
+ * en_US is the first item.
+ *
+ * Language subgroups (e.g., US English) are reported in the form
+ * "ll-SS" (e.g. again, "en-US"), not what gettext wants. We convert
+ * those to old-style locales, which is easy for most cases. There are
+ * two where it isn't, though: Simplified Chinese (zh-Hans) and
+ * traditional Chinese (zh-Hant), which are normally assigned the
+ * locales zh_CN and zh_TW, respectively. Those are handled
+ * specially.*/
+    if ([languages count] > 0 && 
+	!([[languages objectAtIndex: 0] isEqualToString: @"en"] ||
+	  [[languages objectAtIndex: 0] isEqualToString: @"\"en-US\""])) {
+	NSEnumerator *lang_iter = [languages objectEnumerator];
+	NSString *this_lang;
+	NSArray *elements;
+	NSArray *new_languages = [NSArray array];
+	while (this_lang = [lang_iter nextObject]) {
+	    this_lang = [this_lang stringByTrimmingCharactersInSet:
+			 [NSCharacterSet characterSetWithCharactersInString:
+			  @"\""]];
+	    elements = [this_lang componentsSeparatedByString: @"-"];
+	    if ([elements count] > 1) {
+		if ([[elements objectAtIndex: 0] isEqualToString: @"zh"])
+		    if ([[elements objectAtIndex: 1] isEqualToString: @"Hans"])
+			this_lang = [NSString stringWithString: @"zh_CN"];
+		    else
+			this_lang = [NSString stringWithString: @"zh_TW"];
+	    }
+	    else
+		this_lang = [elements componentsJoinedByString: @"_"];
+	    new_languages = [new_languages arrayByAddingObject: this_lang];
+	}
+	langs = [[new_languages componentsJoinedByString:@":"] UTF8String];
+    }
+    if (langs && strlen(langs) > 0)
+	g_setenv("LANGUAGE", langs, TRUE);
+    [pool drain];
+}
+#endif /* MAC_INTEGRATION */
 
 static gboolean
 try_load_config_array(const gchar *fns[])
@@ -729,14 +818,16 @@ main(int argc, char ** argv)
      * The user may have configured a different language via
      * the environment file.
      */
-#ifndef MAC_INTEGRATION
+#ifdef MAC_INTEGRATION
+    set_mac_locale();
+#else
     environment_override();
 #endif
 #ifdef HAVE_GETTEXT
     {
         gchar *localedir = gnc_path_get_localedir();
         /* setlocale(LC_ALL, ""); is already called by gtk_set_locale()
-           via gtk_init(). */
+           via gtk_init() -- except that it hasn't been called yet. */
         bindtextdomain(GETTEXT_PACKAGE, localedir);
         textdomain(GETTEXT_PACKAGE);
         bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
