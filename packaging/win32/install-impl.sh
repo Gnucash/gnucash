@@ -388,7 +388,7 @@ function inst_svn() {
     setup Subversion
     _SVN_UDIR=`unix_path $SVN_DIR`
     add_to_env $_SVN_UDIR/bin PATH
-    if quiet $_SVN_UDIR/svn --version
+    if quiet $_SVN_UDIR/bin/svn --version
     then
         echo "subversion already installed.  skipping."
     else
@@ -398,7 +398,7 @@ function inst_svn() {
 		mkdir -p $SVN_DIR
 		cp -a $TMP_UDIR/svn-win32-*/* $SVN_DIR
 		rm -rf $TMP_UDIR/svn-win32-*
-        quiet $_SVN_UDIR/svn --version || die "svn not installed correctly"
+        quiet $_SVN_UDIR/bin/svn --version || die "svn not installed correctly"
     fi
 }
 
