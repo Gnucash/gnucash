@@ -121,7 +121,7 @@ function die() {
     echo
     [ "$*" ] && echo "!!! $* !!!"
     echo "!!! ABORTING !!!"
-#    exit -1
+    exit -1
 }
 
 # usage: register_env_var NAME SEPARATOR [DEFAULT]
