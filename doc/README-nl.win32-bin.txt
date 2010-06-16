@@ -1,10 +1,10 @@
-GnuCash is een vrij, open source boekhoudprogramma, uitgegeven
+﻿GnuCash is een vrij, open source boekhoudprogramma, uitgegeven
 onder de GNU General Public License (GPL) en is beschikbaar voor
 GNU/Linux, *BSD, Solaris, Mac OSX, en Microsoft Windows.
 
 Het is een eenvoudig te gebruiken, en tegelijkertijd krachtig en flexibel
 programma dat je helpt om je bankrekeningen, aandelen, inkomsten en uitgaven
-te beheren. Zo vlot en intuïtief te gebruiken als een dagboek enerzijds, en
+te beheren. Zo vlot en intuÃ¯tief te gebruiken als een dagboek enerzijds, en
 anderzijds gebaseerd op professionele boekhoudkundige principes om boeken in
 balans en nauwkeurige rapporten te verzekeren.
 
@@ -31,7 +31,7 @@ Interessante functies:
     * Klein-ondernemingsboekhouding
     * Klanten, verkopers, opdrachten, Facturen, Lopende rekening
     * Periodieke Transacties
-    * Financiële berekeningen
+    * FinanciÃ«le berekeningen
 
 Meer informatie en een handleiding om je op weg te helpen vind je
 in het "Hulp" menu onder het "Tutorial en concepten gids".

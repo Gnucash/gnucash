@@ -1,41 +1,41 @@
-GnuCash ÊÇÒ»¸öÃâ·ÑµÄ¡¢¿ª·ÅÔ´´úÂëµÄÀí²ÆÈí¼þ£¬ËüÊ¹ÓÃ GNU Í¨ÓÃ¹«¹²Ðí¿ÉÖ¤(GPL)£¬¿ÉÔËÐÐÓÚ GNU/Linux¡¢*BSD¡¢Solaris¡¢Mac OSXÒÔ¼°Î¢Èí Windows¡£
+GnuCash æ˜¯ä¸€ä¸ªå…è´¹çš„ã€å¼€æ”¾æºä»£ç çš„ç†è´¢è½¯ä»¶ï¼Œå®ƒä½¿ç”¨ GNU é€šç”¨å…¬å…±è®¸å¯è¯(GPL)ï¼Œå¯è¿è¡ŒäºŽ GNU/Linuxã€*BSDã€Solarisã€Mac OSXä»¥åŠå¾®è½¯ Windowsã€‚
 
-ÖÂÁ¦ÓÚÒ×ÓÚÊ¹ÓÃ£¬µ«¹¦ÄÜÇ¿´ó¶øÇÒÁé»î¡£GnuCash ÔÊÐíÄú¸ú×ÙÒøÐÐÕË»§¡¢¹ÉÆ±¡¢ÊÕÈëºÍÖ§³ö¡£¾ÍÏñÕË²¾Ò»Ñù¿ì½Ý¶øÇÒÖ±¹Û£¬ËüÊÇ»ùÓÚ×¨ÒµµÄ»á¼ÆÀíÄîÀ´È·±£Æ½ºâµÄÕË²¾ºÍ×¼È·µÄ±¨¸æ¡£
-
--------------------
-
-Äú¿ÉÒÔ»ñµÃÖ§³ÖµÄÍ¾¾¶
-
-ÔÚÏß³£¼ûÎÊÌâ½â´ð:    http://wiki.gnucash.org/wiki/FAQ
-ÓÊ¼þÁÐ±í:  http://wiki.gnucash.org/wiki/Mailing_Lists
-IRC (ÁÄÌì):   irc.gnome.org ·þÎñÆ÷µÄ #gnucash ÆµµÀ£¬Áí¼û http://wiki.gnucash.org/wiki/IRC
-
-Èç¹ûÄúÓöµ½ÁËÈÎºÎ bug »òÕßÎÊÌâ£¬Çë²»ÒªÓÌÔ¥£¬½«ËüÃÇ±¨¸æµ½ÎÒÃÇµÄ bug ¸ú×Ù¹¤¾ß¡°Bugzilla¡±£ºhttp://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+è‡´åŠ›äºŽæ˜“äºŽä½¿ç”¨ï¼Œä½†åŠŸèƒ½å¼ºå¤§è€Œä¸”çµæ´»ã€‚GnuCash å…è®¸æ‚¨è·Ÿè¸ªé“¶è¡Œè´¦æˆ·ã€è‚¡ç¥¨ã€æ”¶å…¥å’Œæ”¯å‡ºã€‚å°±åƒè´¦ç°¿ä¸€æ ·å¿«æ·è€Œä¸”ç›´è§‚ï¼Œå®ƒæ˜¯åŸºäºŽä¸“ä¸šçš„ä¼šè®¡ç†å¿µæ¥ç¡®ä¿å¹³è¡¡çš„è´¦ç°¿å’Œå‡†ç¡®çš„æŠ¥å‘Šã€‚
 
 -------------------
 
-¹¦ÄÜÁÁµã£º
+æ‚¨å¯ä»¥èŽ·å¾—æ”¯æŒçš„é€”å¾„
 
-    * ¸´Ê½¼ÇÕË»á¼Æ
-    * ¹ÉÆ±/Õ®È¯/»ù½ð¿ÆÄ¿
-    * QIF/OFX µ¼Èë
-    * OFX/HBCI ÍøÉÏÒøÐÐ
-    * ±¨¸æ¡¢Í¼±í
-    * Ð¡ÐÍÆóÒµ²Æ»á
-    * ¿Í»§¡¢³§ÉÌ¡¢ÈÎÎñ¡¢·¢Æ±¡¢Ó¦¸¶ÕË¿î¼°Ó¦ÊÕÕË¿î
-    * ¼Æ»®µÄ½»Ò×
-    * ½ðÈÚ¼ÆËã¹¤¾ß
+åœ¨çº¿å¸¸è§é—®é¢˜è§£ç­”:    http://wiki.gnucash.org/wiki/FAQ
+é‚®ä»¶åˆ—è¡¨:  http://wiki.gnucash.org/wiki/Mailing_Lists
+IRC (èŠå¤©):   irc.gnome.org æœåŠ¡å™¨çš„ #gnucash é¢‘é“ï¼Œå¦è§ http://wiki.gnucash.org/wiki/IRC
 
-µ±µã»÷¡°½Ì³ÌºÍÀíÄîÖ¸ÄÏ¡±Ê±£¬¿ÉÒÔÔÚ¡°°ïÖú¡±²Ëµ¥ÖÐÕÒµ½¸ü¶àµÄÐÅÏ¢ÒÔ¼°ÈçºÎ¿ªÊ¼µÄ½Ì³Ì¡£
+å¦‚æžœæ‚¨é‡åˆ°äº†ä»»ä½• bug æˆ–è€…é—®é¢˜ï¼Œè¯·ä¸è¦çŠ¹è±«ï¼Œå°†å®ƒä»¬æŠ¥å‘Šåˆ°æˆ‘ä»¬çš„ bug è·Ÿè¸ªå·¥å…·â€œBugzillaâ€ï¼šhttp://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
 
 -------------------
 
-¹ØÓÚ³ÌÐò£º
+åŠŸèƒ½äº®ç‚¹ï¼š
 
-GnuCash ÊÇÒ»¸öÃâ·ÑµÄ¡¢¿ª·ÅÔ´´úÂëµÄÀí²ÆÈí¼þ£¬ËüÊ¹ÓÃ GNU Í¨ÓÃ¹«¹²Ðí¿ÉÖ¤(GPL)¡£ËüÊÇÓÉºá¿ç6¸ö¹ú¼Ò¹²12¸ö¿ª·¢ÈËÔ±¹²Í¬ºÏ×÷¿ª·¢¶ø³É¡£
+    * å¤å¼è®°è´¦ä¼šè®¡
+    * è‚¡ç¥¨/å€ºåˆ¸/åŸºé‡‘ç§‘ç›®
+    * QIF/OFX å¯¼å…¥
+    * OFX/HBCI ç½‘ä¸Šé“¶è¡Œ
+    * æŠ¥å‘Šã€å›¾è¡¨
+    * å°åž‹ä¼ä¸šè´¢ä¼š
+    * å®¢æˆ·ã€åŽ‚å•†ã€ä»»åŠ¡ã€å‘ç¥¨ã€åº”ä»˜è´¦æ¬¾åŠåº”æ”¶è´¦æ¬¾
+    * è®¡åˆ’çš„äº¤æ˜“
+    * é‡‘èžè®¡ç®—å·¥å…·
 
-³ÌÐò×«Ð´¿ªÊ¼ÓÚ1997Äê£¬²¢ÇÒÓÚ1998ÄêµÚÒ»´Î·¢²¼¡£
+å½“ç‚¹å‡»â€œæ•™ç¨‹å’Œç†å¿µæŒ‡å—â€æ—¶ï¼Œå¯ä»¥åœ¨â€œå¸®åŠ©â€èœå•ä¸­æ‰¾åˆ°æ›´å¤šçš„ä¿¡æ¯ä»¥åŠå¦‚ä½•å¼€å§‹çš„æ•™ç¨‹ã€‚
 
 -------------------
 
-ÕâÊÇ GnuCash 2.2.x ÓÃÓÚ Windows ¶þ½øÖÆ·¢²¼°üµÄ×ÔÊöÎÄ¼þ¡£
+å…³äºŽç¨‹åºï¼š
+
+GnuCash æ˜¯ä¸€ä¸ªå…è´¹çš„ã€å¼€æ”¾æºä»£ç çš„ç†è´¢è½¯ä»¶ï¼Œå®ƒä½¿ç”¨ GNU é€šç”¨å…¬å…±è®¸å¯è¯(GPL)ã€‚å®ƒæ˜¯ç”±æ¨ªè·¨6ä¸ªå›½å®¶å…±12ä¸ªå¼€å‘äººå‘˜å…±åŒåˆä½œå¼€å‘è€Œæˆã€‚
+
+ç¨‹åºæ’°å†™å¼€å§‹äºŽ1997å¹´ï¼Œå¹¶ä¸”äºŽ1998å¹´ç¬¬ä¸€æ¬¡å‘å¸ƒã€‚
+
+-------------------
+
+è¿™æ˜¯ GnuCash 2.2.x ç”¨äºŽ Windows äºŒè¿›åˆ¶å‘å¸ƒåŒ…çš„è‡ªè¿°æ–‡ä»¶ã€‚

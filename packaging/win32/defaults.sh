@@ -283,7 +283,7 @@ set_default GOFFICE_DIR $GLOBAL_DIR\\goffice
 set_default GLADE_URL "$GNOME_MIRROR/sources/glade3/3.0/glade3-3.1.2.tar.bz2"
 set_default GLADE_DIR $GLOBAL_DIR\\glade
 
-set_default INNO_URL "http://files.jrsoftware.org/is/5/isetup-5.1.12.exe"
+set_default INNO_URL "http://files.jrsoftware.org/is/5/isetup-5.3.9-unicode.exe"
 set_default INNO_DIR $GLOBAL_DIR\\inno
 
 set_default HH_URL "http://download.microsoft.com/download/OfficeXPProf/Install/4.71.1015.0/W98NT42KMe/EN-US/HTMLHELP.EXE"

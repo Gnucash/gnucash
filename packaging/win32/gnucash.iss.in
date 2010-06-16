@@ -1,4 +1,4 @@
-; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+﻿; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Input configuration for the Inno Setup Compiler
 ; Copyright (c) 2004-2005 Christian Stimming <stimming@tuhh.de>
 ;
@@ -322,68 +322,68 @@ zh_CN.LanguageCodePage=936
 de.FullInstall=Komplett-Installation
 de.CustomInstall=Benutzerdefiniert
 de.CreateDesktopIcon=Ein Icon auf dem Desktop erstellen
-de.CreateMenuLink=Eine Verkn�pfung im Startmen� erstellen
+de.CreateMenuLink=Eine Verknüpfung im Startmenü erstellen
 de.RunPrg=GnuCash jetzt starten
 de.AdditionalIcons=Folgende Icons erstellen:
-de.StatusMsgFirewall=Ausnahmen f�r Windows-Firewall installieren...
+de.StatusMsgFirewall=Ausnahmen für Windows-Firewall installieren...
 
 de.MainFiles=GnuCash Hauptprogramm
-de.TranslFiles=Deutsche �bersetzung
+de.TranslFiles=Deutsche Übersetzung
 de.TemplFiles=Beispiel-Kontenrahmen
 
 de.IconComment_GnuCash=GnuCash OpenSource-Finanzverwaltung
 de.IconName_README=README anzeigen
 de.IconComment_README=Die Informationsdatei (README) anzeigen
 de.IconFilename_README=README-de.win32-bin.txt
-de.IconName_FAQ=H�ufige Fragen (online, engl.)
+de.IconName_FAQ=Häufige Fragen (online, engl.)
 de.IconName_Bugzilla=Fehlerbericht einsenden (online, engl.)
 de.IconName_InstallFQ=Online Kursabruf installieren
-de.IconComment_InstallFQ=Das zus�tzliche Modul Finance-Quote installieren, um online Aktien- und Devisenkurse abrufen zu k�nnen.  Dazu ist das Programm ActivePerl 5.8 oder 5.10 erforderlich.
+de.IconComment_InstallFQ=Das zusätzliche Modul Finance-Quote installieren, um online Aktien- und Devisenkurse abrufen zu können.  Dazu ist das Programm ActivePerl 5.8 oder 5.10 erforderlich.
 de.IconName_Uninstall=Deinstallieren von GnuCash
-de.IconComment_Uninstall=Die OpenSource-Finanzverwaltung GnuCash wieder deinstallieren und vom Computer l�schen
+de.IconComment_Uninstall=Die OpenSource-Finanzverwaltung GnuCash wieder deinstallieren und vom Computer löschen
 
 
 ;; ;;;;;;;;;;;;;;;;;;;
 ;; Greek translation
 
-el.FullInstall=������ �����������
-el.CustomInstall=������������� �����������
-el.CreateDesktopIcon=���������� ���������� ���� ��������� ��������
-el.CreateMenuLink=�������� ��� ����� ������
-el.RunPrg=�������� ��� GnuCash ����
-el.AdditionalIcons=���������� ����������:
-el.StatusMsgFirewall=����������� ������� ��� �� ������ ���������� ��� Windows...
+el.FullInstall=Πλήρης εγκατάσταση
+el.CustomInstall=Προσαρμοσμένη εγκατάσταση
+el.CreateDesktopIcon=Δημιουργία εικονιδίου στην επιφάνεια εργασίας
+el.CreateMenuLink=Προσθήκη στο μενού Έναρξη
+el.RunPrg=Εκτέλεση του GnuCash τώρα
+el.AdditionalIcons=Δημιουργία εικονιδίων:
+el.StatusMsgFirewall=Εγκατάσταση κανόνων για το τοίχος προστασίας των Windows...
 
-el.MainFiles=��������� GnuCash
-el.TranslFiles=������ �����������
-el.TemplFiles=������ �� ������� �����������
+el.MainFiles=Πρόγραμμα GnuCash
+el.TranslFiles=Αρχεία μετάφρασεων
+el.TemplFiles=Αρχεία με πρότυπα λογαριασμών
 
-el.IconComment_GnuCash=GnuCash ��������� ����. �����������
-el.IconName_README=�������� ��� README
-el.IconComment_README=�������� ��� ������� README
+el.IconComment_GnuCash=GnuCash πρόγραμμα διαχ. οικονομικών
+el.IconName_README=Εμφάνιση του README
+el.IconComment_README=Εμφάνιση του αρχείου README
 el.IconFilename_README=README.win32-bin.txt
-el.IconName_FAQ=������ ��������� (Online)
-el.IconName_Bugzilla=������� ��������� (Online)
-el.IconName_InstallFQ=����������� ����� ����� (online)
-el.IconComment_InstallFQ=����������� ��� perl module Finance-Quote ��� ���� ����� online.  ������� ActivePerl 5.8/5.10
-el.IconName_Uninstall=������������� GnuCash
-el.IconComment_Uninstall=������������� ��� ����������� ����������� GnuCash
+el.IconName_FAQ=Συχνές ερωτήσεις (Online)
+el.IconName_Bugzilla=Αναφορά σφάλματος (Online)
+el.IconName_InstallFQ=Εγκατάσταση λήψης τιμών (online)
+el.IconComment_InstallFQ=Εγκατάσταση του perl module Finance-Quote για λήψη τιμών online.  Απαιτεί ActivePerl 5.8/5.10
+el.IconName_Uninstall=Απεγκατάσταση GnuCash
+el.IconComment_Uninstall=Απεγκατάσταση του διαχειριστή οικονομικών GnuCash
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; French translation
 
-fr.FullInstall=Installation compl�te
-fr.CustomInstall=Installation personnalis�e
-fr.CreateDesktopIcon=Cr�er un ic�ne sur le bureau
-fr.CreateMenuLink=Cr�er un lien dans le menu de d�marrage
-fr.RunPrg=D�marrer GnuCash maintenant
-fr.AdditionalIcons=Cr�er les ic�nes suivants:
-fr.StatusMsgFirewall=Installation des r�gles de pare-feu de Windows
+fr.FullInstall=Installation complète
+fr.CustomInstall=Installation personnalisée
+fr.CreateDesktopIcon=Créer un icône sur le bureau
+fr.CreateMenuLink=Créer un lien dans le menu de démarrage
+fr.RunPrg=Démarrer GnuCash maintenant
+fr.AdditionalIcons=Créer les icônes suivants:
+fr.StatusMsgFirewall=Installation des règles de pare-feu de Windows
 
 fr.MainFiles=Programme GnuCash
-fr.TranslFiles=Traduction fran�aise
-fr.TemplFiles=Mod�le de plan comptable
+fr.TranslFiles=Traduction française
+fr.TemplFiles=Modèle de plan comptable
 
 fr.IconComment_GnuCash=GnuCash, le gestionnaire financier OpenSource
 fr.IconName_README=Afficher le LISEZMOI
@@ -392,9 +392,9 @@ fr.IconFilename_README=README-fr.win32-bin.txt
 fr.IconName_FAQ=FAQ (En ligne, en anglais)
 fr.IconName_Bugzilla=Envoyer un rapport d'erreur (En ligne, en anglais)
 fr.IconName_InstallFQ=Installer les quotations en ligne
-fr.IconComment_InstallFQ=Installation du module Finance-Quote requis pour le t�l�chargement du cours des devises et actions. Le programme ActivePerl 5.8 ou 5.10 est aussi requis
-fr.IconName_Uninstall=D�-installer GnuCash
-fr.IconComment_Uninstall=D�sinstalle le gestionnaire financier GnuCash
+fr.IconComment_InstallFQ=Installation du module Finance-Quote requis pour le téléchargement du cours des devises et actions. Le programme ActivePerl 5.8 ou 5.10 est aussi requis
+fr.IconName_Uninstall=Dé-installer GnuCash
+fr.IconComment_Uninstall=Désinstalle le gestionnaire financier GnuCash
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;;
@@ -454,53 +454,53 @@ nl.IconComment_Uninstall=Het financieel beheersprogramma GnuCash verwijderen
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Brazilian Portuguese translation
 
-pt_BR.FullInstall=Instala��o Completa
-pt_BR.CustomInstall=Instala��o Personalizada
-pt_BR.CreateDesktopIcon=Criar um �cone na �rea de Trabalho
+pt_BR.FullInstall=Instalação Completa
+pt_BR.CustomInstall=Instalação Personalizada
+pt_BR.CreateDesktopIcon=Criar um ícone na Área de Trabalho
 pt_BR.CreateMenuLink=Criar um link no menu Iniciar
 pt_BR.RunPrg=Executar o GnuCash agora
-pt_BR.AdditionalIcons=Criar estes �cones:
+pt_BR.AdditionalIcons=Criar estes ícones:
 pt_BR.StatusMsgFirewall=Instalando as regras de firewall do Windows...
 
 pt_BR.MainFiles=Programa GnuCash
-pt_BR.TranslFiles=Tradu��o
+pt_BR.TranslFiles=Tradução
 pt_BR.TemplFiles=Modelos de Conta
 
 pt_BR.IconComment_GnuCash=Gerenciador Financeiro Livre GnuCash
 pt_BR.IconName_README=Mostrar LEIA-ME (README)
 pt_BR.IconComment_README=Mostra o arquivo LEIA-ME (README)
 pt_BR.IconFilename_README=LEIA-ME.win32-bin.txt
-pt_BR.IconName_FAQ=Perguntas Freq�entes (online, ingl�s)
-pt_BR.IconName_Bugzilla=Relatar um erro (online, ingl�s)
-pt_BR.IconName_InstallFQ=Instalar a Consulta de Pre�os Online
-pt_BR.IconComment_InstallFQ=Instala o m�dulo perl Finance-Quote, necess�rio para a busca de pre�os online. Requer ActivePerl 5.8/5.10.
+pt_BR.IconName_FAQ=Perguntas Freqüentes (online, inglês)
+pt_BR.IconName_Bugzilla=Relatar um erro (online, inglês)
+pt_BR.IconName_InstallFQ=Instalar a Consulta de Preços Online
+pt_BR.IconComment_InstallFQ=Instala o módulo perl Finance-Quote, necessário para a busca de preços online. Requer ActivePerl 5.8/5.10.
 pt_BR.IconName_Uninstall=Desinstalar o GnuCash
 pt_BR.IconComment_Uninstall=Desinstala o Gerenciador Financeiro GnuCash
 
 ;; ;;;;;;;;;;;;;;;;;
 ;; Simplified Chinese translation
 
-zh_CN.FullInstall=��ȫ��װ
-zh_CN.CustomInstall=�Զ��尲װ
-zh_CN.CreateDesktopIcon=��������ͼ��
-zh_CN.CreateMenuLink=������ʼ�˵�����
-zh_CN.RunPrg=���ڿ�ʼ���� GnuCash
-zh_CN.AdditionalIcons=������Щͼ��
-zh_CN.StatusMsgFirewall=���ڰ�װ Windows ����ǽ����...
+zh_CN.FullInstall=完全安装
+zh_CN.CustomInstall=自定义安装
+zh_CN.CreateDesktopIcon=创建桌面图标
+zh_CN.CreateMenuLink=创建开始菜单链接
+zh_CN.RunPrg=现在开始运行 GnuCash
+zh_CN.AdditionalIcons=创建这些图标
+zh_CN.StatusMsgFirewall=正在安装 Windows 防火墙规则...
 
-zh_CN.MainFiles=GnuCash ����
-zh_CN.TranslFiles=�����ļ�
-zh_CN.TemplFiles=��ƿ�Ŀģ���ļ�
+zh_CN.MainFiles=GnuCash 程序
+zh_CN.TranslFiles=翻译文件
+zh_CN.TemplFiles=会计科目模板文件
 
-zh_CN.IconComment_GnuCash=GnuCash ��Ѳ������
-zh_CN.IconName_README=��ʾ�����ļ�
-zh_CN.IconComment_README=��ʾ�����ļ�
+zh_CN.IconComment_GnuCash=GnuCash 免费财务管理
+zh_CN.IconName_README=显示自述文件
+zh_CN.IconComment_README=显示自述文件
 zh_CN.IconFilename_README=README-zh_CN.win32-bin.txt
-zh_CN.IconName_FAQ=�������� (����)
-zh_CN.IconName_Bugzilla=�������� Bug (����)
-zh_CN.IconName_InstallFQ=��װ���߼۸��������
-zh_CN.IconComment_InstallFQ=��װ���߼۸����������� Perl Finance-Quoteģ�顣��Ҫ ActivePerl 5.8 �� 5.10
-zh_CN.IconName_Uninstall=ж�� GnuCash
-zh_CN.IconComment_Uninstall=ж�ز���������� GnuCash
+zh_CN.IconName_FAQ=常见问题 (在线)
+zh_CN.IconName_Bugzilla=报告软件 Bug (在线)
+zh_CN.IconName_InstallFQ=安装在线价格检索功能
+zh_CN.IconComment_InstallFQ=安装在线价格检索所必需的 Perl Finance-Quote模块。需要 ActivePerl 5.8 或 5.10
+zh_CN.IconName_Uninstall=卸载 GnuCash
+zh_CN.IconComment_Uninstall=卸载财务管理软件 GnuCash
 
 ;; ;;;;;;;;;;;;;;;;;;;;
