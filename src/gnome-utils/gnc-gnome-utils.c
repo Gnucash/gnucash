@@ -311,9 +311,9 @@ gnc_gnome_help (const char *dir, const char *detail)
 			       arrayByAddingObjectsFromArray: components];
       NSString *docs_dir = [NSString pathWithComponents: prefix_comps];
       NSArray *languages = [[NSUserDefaults standardUserDefaults]
-			    objectForKey: @"AppleLanguages"]; 
+			    objectForKey: @"AppleLanguages"];
       BOOL dir;
-      subdir = [[[subdir lowercaseString] componentsSeparatedByString: @" "] 
+      subdir = [[[subdir lowercaseString] componentsSeparatedByString: @" "]
 		componentsJoinedByString: @"-"];
       if (![[NSFileManager defaultManager] fileExistsAtPath: docs_dir]) {
         const gchar *message =
@@ -355,7 +355,7 @@ gnc_gnome_help (const char *dir, const char *detail)
 	  }
       }
       if (!url)
-	  url = [NSURL 
+	  url = [NSURL
 		 fileURLWithPath: [[[[docs_dir
 				      stringByAppendingPathComponent: @"C"]
 				     stringByAppendingPathComponent: subdir]
@@ -364,8 +364,8 @@ gnc_gnome_help (const char *dir, const char *detail)
 
   }
 /* It's a lot easier in a bundle! OSX finds the best translation for us. */
-  else   
-      url = [NSURL fileURLWithPath: [[NSBundle mainBundle] 
+  else
+      url = [NSURL fileURLWithPath: [[NSBundle mainBundle]
 				     pathForResource: tag
 				     ofType: @"html"
 				     inDirectory: subdir ]];
@@ -592,6 +592,8 @@ gnc_gui_init(void)
     {
         return main_window;
     }
+
+    g_set_application_name("GnuCash");
 
     if (gnc_gconf_get_bool(GCONF_GENERAL, "show_splash_screen", NULL))
         gnc_gui_init_splash();

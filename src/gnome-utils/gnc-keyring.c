@@ -72,7 +72,6 @@ void gnc_keyring_set_password (const gchar *access_method,
     // FIXME I'm not sure this works if a password was already in the keychain
     //       I may have to do a lookup first and if it exists, run some update
     //       update function instead
-    g_set_application_name(PACKAGE);
     status = SecKeychainAddInternetPassword ( NULL, /* keychain */
              strlen(server), server,                /* servername */
              strlen(access_method), access_method,  /* securitydomain */
@@ -123,7 +122,6 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
     *password = NULL;
 
 #ifdef HAVE_GNOME_KEYRING
-    g_set_application_name(PACKAGE);
     gkr_result = gnome_keyring_find_network_password_sync
                  ( *user, NULL, server, service,
                    access_method, NULL, port, &found_list );
@@ -159,7 +157,7 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
                  kSecAuthenticationTypeDefault,
                  &password_length, &password_data,
                  NULL);
-    
+
         if ( status == noErr )
         {
             *password = g_strndup(password_data, password_length);
