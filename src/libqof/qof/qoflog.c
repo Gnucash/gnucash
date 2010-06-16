@@ -442,7 +442,7 @@ qof_log_level_from_string(const gchar *str)
     if (g_ascii_strncasecmp("error", str, 5) == 0) return QOF_LOG_FATAL;
     if (g_ascii_strncasecmp("crit", str, 4) == 0) return QOF_LOG_ERROR;
     if (g_ascii_strncasecmp("warn", str, 4) == 0) return QOF_LOG_WARNING;
-    if (g_ascii_strncasecmp("mess", str, 4) == 0) return G_LOG_LEVEL_MESSAGE;
+    if (g_ascii_strncasecmp("mess", str, 4) == 0) return QOF_LOG_MESSAGE;
     if (g_ascii_strncasecmp("info", str, 4) == 0) return QOF_LOG_INFO;
     if (g_ascii_strncasecmp("debug", str, 5) == 0) return QOF_LOG_DEBUG;
     return QOF_LOG_DEBUG;
