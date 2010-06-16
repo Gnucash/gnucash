@@ -1,6 +1,9 @@
 #!/bin/sh
 
-@-PRE_RUN-@
+BIN_DIR=$(dirname $0)
+[ -e ${BIN_DIR}/gnucash-setup-env ] && \
+   . ${BIN_DIR}/gnucash-setup-env
+
 TOP_SRC_DIR="@-TOP_SRC_DIR-@"
 #
 # Other potentially useful options, particularly for valgrind-2.x:
@@ -18,4 +21,4 @@ exec valgrind -v \
     --error-limit=no \
     --tool=memcheck \
     --leak-check=full \
-    $(dirname $0)/@-GNUCASH_BIN_INSTALL_NAME-@ "$@"
+    ${BIN_DIR}/@-GNUCASH_BIN_INSTALL_NAME-@ "$@"

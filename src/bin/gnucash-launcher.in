@@ -4,4 +4,4 @@ BIN_DIR=$(dirname $0)
 [ -e ${BIN_DIR}/gnucash-setup-env ] && \
    . ${BIN_DIR}/gnucash-setup-env
 
-exec gdb ${BIN_DIR}/@-GNUCASH_BIN_INSTALL_NAME-@ "$@"
+exec ${BIN_DIR}/@-GNUCASH_BIN_INSTALL_NAME-@ "$@"

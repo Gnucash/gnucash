@@ -1,5 +1,9 @@
 # Order is important here.
+if !PLATFORM_WIN32
 SUBDIRS = . overrides test
+else
+SUBDIRS = . test
+endif
 
 AM_CPPFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   -DPKGSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
@@ -17,24 +21,51 @@ AM_CPPFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   ${GUILE_INCS} \
   ${IGE_MAC_CFLAGS}
 
-if PLATFORM_WIN32
-GNUCASH_RESOURCE_FILE = gnucash.rc
-else
-GNUCASH_RESOURCE_FILE =
-endif
-
 SUFFIXES = .rc .res
 
+# Some settings are platform dependent. Let's define them per platform.
 if PLATFORM_WIN32
-.rc.res:
-	$(AM_V_GEN)$(RC) -i '$<' --input-format=rc -o '$@' -O coff
-endif
-
+# Windows specific settings go here:
+BIN_NAME = GnuCash
+GnuCash_SOURCES = ${gnucash_SOURCES}
+GnuCash_LDADD = ${gnucash_LDADD}
+GNUCASH_RESOURCE_FILE = gnucash.rc
 dist_noinst_DATA = gnucash.rc
 
-bin_PROGRAMS = gnucash-bin
-gnucash_bin_SOURCES = gnucash-bin.c ${GNUCASH_RESOURCE_FILE}
-gnucash_bin_LDADD = \
+.rc.res:
+	$(AM_V_GEN)$(RC) -i '$<' --input-format=rc -o '$@' -O coff
+	
+configdir = ${GNC_CONFIGDIR}
+config_DATA = environment
+
+else !PLATFORM_WIN32
+if PLATFORM_OSX_QUARTZ
+# OSX/Quartz specific settings go here:
+BIN_NAME = gnucash-bin
+gnucash_bin_SOURCES = ${gnucash_SOURCES}
+gnucash_bin_LDADD = ${gnucash_LDADD}
+PLATFORM_FILES = gnucash-setup-env \
+	gnucash-launcher \
+	gnucash-gdb \
+	gnucash-valgrind
+
+if CUSTOM_GNC_DBD_DIR
+gnc_dbd_dir_override = export GNC_DBD_DIR="@GNC_DBD_DIR@"
+endif
+
+else !PLATFORM_OSX_QUARTZ
+# All other platforms use these settings:
+BIN_NAME = gnucash
+PLATFORM_FILES = gnucash-valgrind
+configdir = ${GNC_CONFIGDIR}
+config_DATA = environment
+
+endif !PLATFORM_OSX_QUARTZ
+endif !PLATFORM_WIN32
+
+bin_PROGRAMS = ${BIN_NAME}
+gnucash_SOURCES = gnucash-bin.c ${GNUCASH_RESOURCE_FILE}
+gnucash_LDADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
@@ -47,30 +78,11 @@ gnucash_bin_LDADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la
 
-GNUCASH_BIN_INSTALL_NAME=`echo gnucash-bin | sed -e '$(transform)'`
+GNUCASH_BIN_INSTALL_NAME=`echo ${BIN_NAME} | sed -e '$(transform)'`
 
-configdir = ${GNC_CONFIGDIR}
-config_DATA = environment
-
-if PLATFORM_OSX_QUARTZ
-PRE_RUN = . ${bindir}/gnucash-setup-env
-PLATFORM_FILES = gnucash-setup-env
-if CUSTOM_GNC_DBD_DIR
-gnc_dbd_dir_override = export GNC_DBD_DIR="@GNC_DBD_DIR@"
-else
-gnc_dbd_dir_override =
-endif
-
-else
-PRE_RUN =
-PLATFORM_FILES =
-endif
-
-gnucash: gnucash.in ${top_builddir}/config.status Makefile
+gnucash-launcher: gnucash-launcher.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's#@-BIN_DIR-@#${bindir}#g' \
-	    -e "s#@-PRE_RUN-@#${PRE_RUN}#g" \
 	    -e "s#@-GNUCASH_BIN_INSTALL_NAME-@#${GNUCASH_BIN_INSTALL_NAME}#g"
 	mv $@.tmp $@
 	chmod u+x $@
@@ -78,8 +90,6 @@ gnucash: gnucash.in ${top_builddir}/config.status Makefile
 gnucash-gdb: gnucash-gdb.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's#@-BIN_DIR-@#${bindir}#g' \
-	    -e "s#@-PRE_RUN-@#${PRE_RUN}#g" \
 	    -e "s#@-GNUCASH_BIN_INSTALL_NAME-@#${GNUCASH_BIN_INSTALL_NAME}#g"
 	mv $@.tmp $@
 	chmod u+x $@
@@ -87,14 +97,11 @@ gnucash-gdb: gnucash-gdb.in ${top_builddir}/config.status Makefile
 gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's#@-BIN_DIR-@#${bindir}#g' \
 	    -e "s#@-TOP_SRC_DIR-@#${abs_top_srcdir}#g" \
-	    -e "s#@-PRE_RUN-@#${PRE_RUN}#g" \
 	    -e "s#@-GNUCASH_BIN_INSTALL_NAME-@#${GNUCASH_BIN_INSTALL_NAME}#g"
 	mv $@.tmp $@
 	chmod u+x $@
 
-if PLATFORM_OSX_QUARTZ
 gnucash-setup-env: gnucash-setup-env-osx.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
@@ -110,7 +117,6 @@ gnucash-setup-env: gnucash-setup-env-osx.in ${top_builddir}/config.status Makefi
 	    -e 's#@-PREFIX-@#${prefix}#g'
 	mv $@.tmp $@
 	chmod u+x $@
-endif
 
 environment: ${GNUCASH_ENVIRONMENT}.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
@@ -129,8 +135,11 @@ endif
 	mv $@.tmp $@
 	chmod u+x $@
 
-CLEANFILES = $(BUILT_SOURCES) gnucash gnucash-valgrind gnucash-gdb environment ${PLATFORM_FILES}
+CLEANFILES = $(BUILT_SOURCES) ${config_DATA} ${PLATFORM_FILES}
 
+if !PLATFORM_WIN32
+# The gnucash scripts don't make sense on Windows, so will only be
+# generated and included on the other platforms.
 # We handle gnucash scripts in a somewhat unexpected way, but we do
 # this so that a user who doesn't necessarily have the right
 # directories in their path can still invoke these commands via their
@@ -151,23 +160,10 @@ gnc_common_scripts = gnucash-env gnucash-make-guids
 bin_SCRIPTS = \
     ${gnc_common_scripts} \
 	update-gnucash-gconf \
-	gnucash \
-	gnucash-valgrind \
-	gnucash-gdb \
 	${PLATFORM_FILES}
 
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
-
-EXTRA_DIST = \
-    generate-gnc-script \
-	update-gnucash-gconf.in \
-	gnucash.in \
-	gnucash-valgrind.in \
-	gnucash-gdb.in \
-	environment.in \
-	environment-win32.in \
-	environment-osx.in
 
 ## Gnucash scripts -- real code is in overrides, these just get you there.
 ${gnc_common_scripts}: generate-gnc-script ${top_builddir}/config.status
@@ -186,5 +182,16 @@ update-gnucash-gconf: update-gnucash-gconf.in \
 	    -e 's#@-GCONF_SCHEMA_FILE_DIR-@#${GCONF_SCHEMA_FILE_DIR}#g'
 	mv $@.tmp $@
 	chmod +x $@
+
+endif
+
+EXTRA_DIST = \
+    generate-gnc-script \
+	update-gnucash-gconf.in \
+	gnucash-launcher.in \
+	gnucash-valgrind.in \
+	gnucash-gdb.in \
+	environment.in \
+	environment-win32.in
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.bin\"

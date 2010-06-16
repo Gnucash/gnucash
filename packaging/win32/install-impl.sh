@@ -1403,7 +1403,7 @@ function make_install() {
 		# the equivalent sections in packaging/win32/gnucash.iss.in, and
 		# src/bin/environment*.in
         qpushd $_INSTALL_UDIR/bin
-		cat > gnucash.cmd <<EOF
+		cat > gnucash-launcher.cmd <<EOF
 @echo off
 setlocal
 set PATH=$INSTALL_DIR\\bin;%PATH%
@@ -1430,7 +1430,7 @@ set PATH=$PGSQL_DIR\\lib;%PATH%
 
 set LTDL_LIBRARY_PATH=${INSTALL_DIR}\\lib
 
-start gnucash-bin %*
+start GnuCash %*
 EOF
         qpopd
     fi
