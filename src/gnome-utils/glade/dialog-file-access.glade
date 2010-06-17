@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <glade-interface>
-  <!-- interface-requires gtk+ 2.8 -->
+  <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkDialog" id="File Access">
     <property name="border_width">5</property>
@@ -191,6 +191,7 @@
                           <widget class="GtkEntry" id="tf_password">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="visibility">False</property>
                             <property name="invisible_char">&#x25CF;</property>
                           </widget>
                           <packing>
