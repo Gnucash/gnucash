@@ -4,7 +4,7 @@ GNU/Linux, *BSD, Solaris, Mac OSX, en Microsoft Windows.
 
 Het is een eenvoudig te gebruiken, en tegelijkertijd krachtig en flexibel
 programma dat je helpt om je bankrekeningen, aandelen, inkomsten en uitgaven
-te beheren. Zo vlot en intuÃ¯tief te gebruiken als een dagboek enerzijds, en
+te beheren. Zo vlot en intuïtief te gebruiken als een dagboek enerzijds, en
 anderzijds gebaseerd op professionele boekhoudkundige principes om boeken in
 balans en nauwkeurige rapporten te verzekeren.
 
@@ -31,7 +31,7 @@ Interessante functies:
     * Klein-ondernemingsboekhouding
     * Klanten, verkopers, opdrachten, Facturen, Lopende rekening
     * Periodieke Transacties
-    * FinanciÃ«le berekeningen
+    * Financiële berekeningen
 
 Meer informatie en een handleiding om je op weg te helpen vind je
 in het "Hulp" menu onder het "Tutorial en concepten gids".
@@ -48,4 +48,4 @@ De ontwikkeling van GnuCash begon in 1997, de de eerste uitgave was in 1998.
 
 -------------------
 
-This is the Dutch GnuCash 2.2.x README file for Windows binary packages.
+Dit is het Nederlandstalige GnuCash 2.2.x LEESMIJ bestand voor het Windows installatie programma.
