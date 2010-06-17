@@ -266,6 +266,7 @@ Name: "el"; MessagesFile: "@prefix@\share\@PACKAGE@\Greek-4-5.1.11.isl"
 Name: "fr"; MessagesFile: "compiler:Languages\French.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-fr.win32-bin.txt"
 Name: "it"; MessagesFile: "compiler:Languages\Italian.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-it.win32-bin.txt"
 Name: "ja"; MessagesFile: "@prefix@\share\@PACKAGE@\Japanese-5-5.1.11.isl"
+Name: "lv"; MessagesFile: "@prefix@\share\@PACKAGE@\Latvian-1-5.1.11.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-lv.win32-bin.txt"
 Name: "nl"; MessagesFile: "compiler:Languages\Dutch.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-nl.win32-bin.txt"
 Name: "pt_BR"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
 Name: "zh_CN"; MessagesFile: "@prefix@\share\@PACKAGE@\ChineseSimp-12-5.1.11.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-zh_CN.win32-bin.txt"
@@ -424,6 +425,33 @@ it.IconName_Uninstall=Disinstalla GnuCash
 it.IconComment_Uninstall=Disinstalla il programma di gestione delle finanze GnuCash
 
 
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Latvian translation
+
+lv_LV.FullInstall=Pilna uzstādīšana
+lv_LV.CustomInstall=Izvēles uzstādīšana
+lv_LV.CreateDesktopIcon=Izveidot &darbvirsmas ikonu
+lv_LV.CreateMenuLink=Izveidot starta izvēlnes saiti
+lv_LV.RunPrg=Palaist GnuCash tagad
+lv_LV.AdditionalIcons=Izveidot sekojošas ikonas:
+lv_LV.StatusMsgFirewall=Uzstāda Windows ugunssienas likumus...
+
+lv_LV.MainFiles=GnuCash Programma
+lv_LV.TranslFiles=Tulkojumu faili
+lv_LV.TemplFiles=Kontu sagatavju faili
+
+lv_LV.IconComment_GnuCash=GnuCash grāmatvedības programma
+lv_LV.IconName_README=Parādīt README
+lv_LV.IconComment_README=Parāda README failu
+lv_LV.IconFilename_README=README-lv_LV.win32-bin.txt
+lv_LV.IconName_FAQ=BUJ (tiešsaistē)
+lv_LV.IconName_Bugzilla=Ziņot par kļūdu (tiešsaistē)
+lv_LV.IconName_InstallFQ=Uzstādīt tiešsaistes kursu iegūšanu
+lv_LV.IconComment_InstallFQ=Uzstādīt nepieciešamos Perl moduļus valūtas kursu iegūšanai. Nepieciešams ActivePerl 5.8 vai 5.10
+lv_LV.IconName_Uninstall=Noņemt GnuCash
+lv_LV.IconComment_Uninstall=Noņemt GnuCash grāmatvedības programmu
+
+
 ;; ;;;;;;;;;;;;;;;;;
 ;; Dutch translation
 
@@ -503,4 +531,3 @@ zh_CN.IconComment_InstallFQ=安装在线价格检索所必需的 Perl Finance-Qu
 zh_CN.IconName_Uninstall=卸载 GnuCash
 zh_CN.IconComment_Uninstall=卸载财务管理软件 GnuCash
 
-;; ;;;;;;;;;;;;;;;;;;;;
