@@ -428,28 +428,28 @@ it.IconComment_Uninstall=Disinstalla il programma di gestione delle finanze GnuC
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Latvian translation
 
-lv_LV.FullInstall=Pilna uzstādīšana
-lv_LV.CustomInstall=Izvēles uzstādīšana
-lv_LV.CreateDesktopIcon=Izveidot &darbvirsmas ikonu
-lv_LV.CreateMenuLink=Izveidot starta izvēlnes saiti
-lv_LV.RunPrg=Palaist GnuCash tagad
-lv_LV.AdditionalIcons=Izveidot sekojošas ikonas:
-lv_LV.StatusMsgFirewall=Uzstāda Windows ugunssienas likumus...
+lv.FullInstall=Pilna uzstādīšana
+lv.CustomInstall=Izvēles uzstādīšana
+lv.CreateDesktopIcon=Izveidot &darbvirsmas ikonu
+lv.CreateMenuLink=Izveidot starta izvēlnes saiti
+lv.RunPrg=Palaist GnuCash tagad
+lv.AdditionalIcons=Izveidot sekojošas ikonas:
+lv.StatusMsgFirewall=Uzstāda Windows ugunssienas likumus...
 
-lv_LV.MainFiles=GnuCash Programma
-lv_LV.TranslFiles=Tulkojumu faili
-lv_LV.TemplFiles=Kontu sagatavju faili
+lv.MainFiles=GnuCash Programma
+lv.TranslFiles=Tulkojumu faili
+lv.TemplFiles=Kontu sagatavju faili
 
-lv_LV.IconComment_GnuCash=GnuCash grāmatvedības programma
-lv_LV.IconName_README=Parādīt README
-lv_LV.IconComment_README=Parāda README failu
-lv_LV.IconFilename_README=README-lv_LV.win32-bin.txt
-lv_LV.IconName_FAQ=BUJ (tiešsaistē)
-lv_LV.IconName_Bugzilla=Ziņot par kļūdu (tiešsaistē)
-lv_LV.IconName_InstallFQ=Uzstādīt tiešsaistes kursu iegūšanu
-lv_LV.IconComment_InstallFQ=Uzstādīt nepieciešamos Perl moduļus valūtas kursu iegūšanai. Nepieciešams ActivePerl 5.8 vai 5.10
-lv_LV.IconName_Uninstall=Noņemt GnuCash
-lv_LV.IconComment_Uninstall=Noņemt GnuCash grāmatvedības programmu
+lv.IconComment_GnuCash=GnuCash grāmatvedības programma
+lv.IconName_README=Parādīt README
+lv.IconComment_README=Parāda README failu
+lv.IconFilename_README=README-lv.win32-bin.txt
+lv.IconName_FAQ=BUJ (tiešsaistē)
+lv.IconName_Bugzilla=Ziņot par kļūdu (tiešsaistē)
+lv.IconName_InstallFQ=Uzstādīt tiešsaistes kursu iegūšanu
+lv.IconComment_InstallFQ=Uzstādīt nepieciešamos Perl moduļus valūtas kursu iegūšanai. Nepieciešams ActivePerl 5.8 vai 5.10
+lv.IconName_Uninstall=Noņemt GnuCash
+lv.IconComment_Uninstall=Noņemt GnuCash grāmatvedības programmu
 
 
 ;; ;;;;;;;;;;;;;;;;;
