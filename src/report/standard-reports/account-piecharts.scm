@@ -108,7 +108,7 @@ balance at a given time"))
 ;; Option deactivated before 2.4.0 is out in order not to have
 ;; untranslated strings show up for the user (string freeze). Will be
 ;; activated in 2.4.1 or so by un-commenting the line below and
-;; removing the line above, and changing line 217 accordingly.
+;; removing the line above, and changing line 217 and 262 accordingly.
     ;;(if do-intervals?
         (add-option
          (gnc:make-multichoice-option
@@ -259,7 +259,7 @@ balance at a given time"))
            (tree-depth (if (equal? account-levels 'all)
                            (gnc:get-current-account-tree-depth)
                            account-levels))
-           (averaging-fraction-func (gnc:date-get-fraction-func averaging-selection))
+           (averaging-fraction-func #f) ;;(gnc:date-get-fraction-func averaging-selection))
            (averaging-multiplier
             (if averaging-fraction-func
                 ;; Calculate the divisor of the amounts so that an
