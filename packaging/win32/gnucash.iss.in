@@ -41,25 +41,25 @@ Name: desktopicon; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm
 Name: menuicon; Description: "{cm:CreateMenuLink}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Icons]
-Name: "{group}\GnuCash"; Filename: "{app}\bin\GnuCash.exe"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: menuicon
+Name: "{group}\GnuCash"; Filename: "{app}\bin\gnucash.exe"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: menuicon
 Name: "{group}\{cm:IconName_README}"; Filename: "{app}\doc\gnucash\{cm:IconFilename_README}"; Comment: "{cm:IconComment_README}"; Tasks: menuicon
 Name: "{group}\{cm:IconName_FAQ}"; Filename: "http://wiki.gnucash.org/wiki/FAQ"; Tasks: menuicon
 Name: "{group}\{cm:IconName_Bugzilla}"; Filename: "http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash"; Tasks: menuicon
 Name: "{group}\{cm:IconName_InstallFQ}"; Filename: "{app}\bin\install-fq-mods.cmd"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_InstallFQ}"; Tasks: menuicon
 Name: "{group}\{cm:IconName_Uninstall}"; Filename: "{uninstallexe}"; Comment: "{cm:IconComment_Uninstall}"; Tasks: menuicon
 
-Name: "{commondesktop}\GnuCash"; Filename: "{app}\bin\GnuCash.exe"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: desktopicon
+Name: "{commondesktop}\GnuCash"; Filename: "{app}\bin\gnucash.exe"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\bin\GnuCash.exe"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; OnlyBelowVersion: 0,6; Flags: postinstall skipifsilent
+Filename: "{app}\bin\gnucash.exe"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; OnlyBelowVersion: 0,6; Flags: postinstall skipifsilent
 Filename: "{app}\bin\guile.cmd"; Parameters: "-c ""(use-modules (ice-9 slib)) (require 'printf)"""; Flags: runhidden
 ;; The Windows firewall exceptions, see http://www.vincenzo.net/isxkb/index.php?title=Adding_a_rule_to_the_Windows_firewall
-Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bin\GnuCash.exe"" ""GnuCash Free Finance Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
+Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bin\gnucash.exe"" ""GnuCash Free Finance Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
 Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bin\gconfd-2.exe"" ""GConf Settings Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
 
 [UninstallRun]
 Filename: "{app}\bin\gconftool-2.exe"; Parameters: "--shutdown"; Flags: runhidden
-Filename: "{sys}\netsh.exe"; Parameters: "firewall delete allowedprogram program=""{app}\bin\GnuCash.exe"""; Flags: runhidden; MinVersion: 0,5.01.2600sp2
+Filename: "{sys}\netsh.exe"; Parameters: "firewall delete allowedprogram program=""{app}\bin\gnucash.exe"""; Flags: runhidden; MinVersion: 0,5.01.2600sp2
 Filename: "{sys}\netsh.exe"; Parameters: "firewall delete allowedprogram program=""{app}\bin\gconfd-2.exe"""; Flags: runhidden; MinVersion: 0,5.01.2600sp2
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -113,7 +113,7 @@ Root: HKCR; Subkey: ".gnucash"; ValueType: string; ValueName: ""; ValueData: "Gn
 Root: HKCR; Subkey: ".gnucash"; ValueType: string; ValueName: "Content Type"; ValueData: "application/x-gnucash"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "GnuCash.Financial.Data"; ValueType: string; ValueName: ""; ValueData: "GnuCash Financial Data"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "GnuCash.Financial.Data\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\share\gnucash\pixmaps\gnucash-icon.ico,0" 
-Root: HKCR; Subkey: "GnuCash.Financial.Data\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\GnuCash.exe"" ""%1""" 
+Root: HKCR; Subkey: "GnuCash.Financial.Data\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\gnucash.exe"" ""%1""" 
 
 Root: HKLM; Subkey: "Software\GnuCash"; ValueType: none; Flags: uninsdeletekeyifempty
 Root: HKLM; Subkey: "Software\GnuCash\Paths"; ValueType: none; Flags: uninsdeletekeyifempty

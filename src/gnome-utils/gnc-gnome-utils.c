@@ -593,7 +593,7 @@ gnc_gui_init(void)
         return main_window;
     }
 
-    g_set_application_name("GnuCash");
+    g_set_application_name(PACKAGE_NAME);
 
     if (gnc_gconf_get_bool(GCONF_GENERAL, "show_splash_screen", NULL))
         gnc_gui_init_splash();

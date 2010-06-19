@@ -26,9 +26,7 @@ SUFFIXES = .rc .res
 # Some settings are platform dependent. Let's define them per platform.
 if PLATFORM_WIN32
 # Windows specific settings go here:
-BIN_NAME = GnuCash
-GnuCash_SOURCES = ${gnucash_SOURCES}
-GnuCash_LDADD = ${gnucash_LDADD}
+BIN_NAME = gnucash
 GNUCASH_RESOURCE_FILE = gnucash.rc
 dist_noinst_DATA = gnucash.rc
 

@@ -1434,7 +1434,7 @@ set PATH=$PGSQL_DIR\\lib;%PATH%
 
 set LTDL_LIBRARY_PATH=${INSTALL_DIR}\\lib
 
-start GnuCash %*
+start gnucash %*
 EOF
         qpopd
     fi

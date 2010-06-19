@@ -252,7 +252,7 @@ environment_override()
 
 #ifdef MAC_INTEGRATION
 static void
-set_mac_locale() 
+set_mac_locale()
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
@@ -278,7 +278,7 @@ set_mac_locale()
 	NSString *money_locale = nil;
 	while (this_locale = (NSString*)[locale_iter nextObject])
 	    if ([[[[NSLocale alloc] initWithLocaleIdentifier: this_locale]
-		   objectForKey: NSLocaleCurrencyCode] 
+		   objectForKey: NSLocaleCurrencyCode]
 		 isEqualToString: currency]) {
 		money_locale = this_locale;
 		break;
@@ -304,7 +304,7 @@ set_mac_locale()
  * traditional Chinese (zh-Hant), which are normally assigned the
  * locales zh_CN and zh_TW, respectively. Those are handled
  * specially.*/
-    if ([languages count] > 0 && 
+    if ([languages count] > 0 &&
 	!([[languages objectAtIndex: 0] isEqualToString: @"en"] ||
 	  [[languages objectAtIndex: 0] isEqualToString: @"\"en-US\""])) {
 	NSEnumerator *lang_iter = [languages objectEnumerator];
@@ -853,7 +853,7 @@ main(int argc, char ** argv)
         /* This option needs to run without a display, so we can't
            initialize any GUI libraries.  */
         gnome_program_init(
-            "gnucash", VERSION, LIBGNOME_MODULE,
+            PACKAGE, VERSION, LIBGNOME_MODULE,
             argc, argv,
             GNOME_PARAM_APP_PREFIX, prefix,
             GNOME_PARAM_APP_SYSCONFDIR, pkgsysconfdir,
