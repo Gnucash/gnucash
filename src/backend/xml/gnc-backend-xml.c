@@ -80,8 +80,9 @@ typedef int ssize_t;
 # include "strptime.h"
 #endif
 
-#define GNC_BE_DAYS "file_retention_days"
-#define GNC_BE_ZIP  "file_compression"
+#define KEY_FILE_COMPRESSION  "file_compression"
+#define KEY_RETAIN_TYPE "retain_type"
+#define KEY_RETAIN_DAYS "retain_days"
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
@@ -1101,7 +1102,7 @@ retain_changed_cb(GConfEntry *entry, gpointer user_data)
 {
     FileBackend *be = (FileBackend*)user_data;
     g_return_if_fail(be != NULL);
-    be->file_retention_days = (int)gnc_gconf_get_float("general", "retain_days", NULL);
+    be->file_retention_days = (int)gnc_gconf_get_float(GCONF_GENERAL, KEY_RETAIN_DAYS, NULL);
 }
 
 static void
@@ -1109,7 +1110,7 @@ compression_changed_cb(GConfEntry *entry, gpointer user_data)
 {
     FileBackend *be = (FileBackend*)user_data;
     g_return_if_fail(be != NULL);
-    be->file_compression = gnc_gconf_get_bool("general", "file_compression", NULL);
+    be->file_compression = gnc_gconf_get_bool(GCONF_GENERAL, KEY_FILE_COMPRESSION, NULL);
 }
 
 static QofBackend*
@@ -1159,11 +1160,11 @@ gnc_backend_new(void)
 
     gnc_be->primary_book = NULL;
 
-    gnc_be->file_retention_days = (int)gnc_gconf_get_float("general", "retain_days", NULL);
-    gnc_be->file_compression = gnc_gconf_get_bool("general", "file_compression", NULL);
+    gnc_be->file_retention_days = (int)gnc_gconf_get_float(GCONF_GENERAL, KEY_RETAIN_DAYS, NULL);
+    gnc_be->file_compression = gnc_gconf_get_bool(GCONF_GENERAL, KEY_FILE_COMPRESSION, NULL);
 
-    gnc_gconf_general_register_cb("retain_days", retain_changed_cb, be);
-    gnc_gconf_general_register_cb("file_compression", compression_changed_cb, be);
+    gnc_gconf_general_register_cb(KEY_RETAIN_DAYS, retain_changed_cb, be);
+    gnc_gconf_general_register_cb(KEY_FILE_COMPRESSION, compression_changed_cb, be);
 
     return be;
 }
