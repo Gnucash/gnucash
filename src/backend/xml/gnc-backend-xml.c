@@ -827,17 +827,25 @@ gnc_xml_be_remove_old_files(FileBackend *be)
         /* Is this file associated with the current data file */
         if (strncmp(name, be->fullpath, pathlen) == 0)
         {
-            if ((safe_strcmp(name + len, ".LNK") == 0) &&
-                    /* Is a lock file. Skip the active lock file */
-                    (safe_strcmp(name, be->linkfile) != 0) &&
+            if (safe_strcmp(name + len, ".LNK") == 0)
+            {
+                /* Is a lock file. Skip the active lock file */
+                if ((safe_strcmp(name, be->linkfile) != 0) &&
                     /* Only delete lock files older than the active one */
                     (g_stat(name, &statbuf) == 0) &&
                     (statbuf.st_mtime < lockstatbuf.st_mtime))
+                {
+                    PINFO ("remove stale lock file: %s", name);
+                    g_unlink(name);
+                }
+            }
+            else if (be->file_retention_type == XML_RETAIN_NONE)
             {
-                PINFO ("unlink lock file: %s", name);
+                PINFO ("remove stale file: %s  - reason: preference XML_RETAIN_NONE", name);
                 g_unlink(name);
             }
-            else if (be->file_retention_days > 0)
+            else if ((be->file_retention_type == XML_RETAIN_DAYS) &&
+                     (be->file_retention_days > 0))
             {
                 time_t file_time;
                 struct tm file_tm;
@@ -856,9 +864,9 @@ gnc_xml_be_remove_old_files(FileBackend *be)
                 if (res
                         && res != name + pathlen + 1
                         && file_time > 0
-                        && days > be->file_retention_days)
+                        && days >= be->file_retention_days)
                 {
-                    PINFO ("g_unlink stale (%d days old) file: %s", days, name);
+                    PINFO ("remove stale file: %s  - reason: more than %d days old", name, days);
                     g_unlink(name);
                 }
             }
@@ -1106,6 +1114,28 @@ retain_changed_cb(GConfEntry *entry, gpointer user_data)
 }
 
 static void
+retain_type_changed_cb(GConfEntry *entry, gpointer user_data)
+{
+    FileBackend *be = (FileBackend*)user_data;
+    gchar *choice = NULL;
+    g_return_if_fail(be != NULL);
+    choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_RETAIN_TYPE, NULL);
+
+    if (safe_strcmp (choice, "never") == 0)
+        be->file_retention_type = XML_RETAIN_NONE;
+    else if (safe_strcmp (choice, "forever") == 0)
+        be->file_retention_type = XML_RETAIN_ALL;
+    else
+    {
+        if (safe_strcmp (choice, "days") != 0)
+            PERR("bad value '%s'", choice ? choice : "(null)");
+        be->file_retention_type = XML_RETAIN_DAYS;
+    }
+
+    g_free (choice);
+}
+
+static void
 compression_changed_cb(GConfEntry *entry, gpointer user_data)
 {
     FileBackend *be = (FileBackend*)user_data;
@@ -1162,8 +1192,23 @@ gnc_backend_new(void)
 
     gnc_be->file_retention_days = (int)gnc_gconf_get_float(GCONF_GENERAL, KEY_RETAIN_DAYS, NULL);
     gnc_be->file_compression = gnc_gconf_get_bool(GCONF_GENERAL, KEY_FILE_COMPRESSION, NULL);
+    retain_type_changed_cb(NULL, (gpointer)be); /* Get retain_type from gconf */
+
+    if ( (gnc_be->file_retention_type == XML_RETAIN_DAYS) &&
+         (gnc_be->file_retention_days == 0 ) )
+    {
+        /* Backwards compatibility code. Pre 2.3.15, 0 retain_days meant
+         * "keep forever". From 2.3.15 on this is controlled via a multiple
+         * choice ("retain_type"). So if we find a 0 retain_days value with
+         * a "days" retain_type, we should interpret it as if we got a
+         * "forever" retain_type.
+         */
+        gnc_be->file_retention_type = XML_RETAIN_ALL;
+        gnc_gconf_set_string (GCONF_GENERAL, KEY_RETAIN_TYPE, "forever", NULL);
+    }
 
     gnc_gconf_general_register_cb(KEY_RETAIN_DAYS, retain_changed_cb, be);
+    gnc_gconf_general_register_cb(KEY_RETAIN_TYPE, retain_type_changed_cb, be);
     gnc_gconf_general_register_cb(KEY_FILE_COMPRESSION, compression_changed_cb, be);
 
     return be;

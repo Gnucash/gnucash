@@ -35,6 +35,14 @@
 #include <gmodule.h>
 
 #include "qofbackend-p.h"
+
+typedef enum
+{
+    XML_RETAIN_NONE,
+    XML_RETAIN_DAYS,
+    XML_RETAIN_ALL
+} XMLFileRetentionType;
+
 struct FileBackend_struct
 {
     QofBackend be;
@@ -47,6 +55,7 @@ struct FileBackend_struct
 
     QofBook *primary_book;  /* The primary, main open book */
 
+    XMLFileRetentionType file_retention_type;
     int file_retention_days;
     gboolean file_compression;
 };
