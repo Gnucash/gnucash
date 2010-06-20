@@ -108,7 +108,7 @@ balance at a given time"))
 ;; Option deactivated before 2.4.0 is out in order not to have
 ;; untranslated strings show up for the user (string freeze). Will be
 ;; activated in 2.4.1 or so by un-commenting the line below and
-;; removing the line above, and changing line 217 and 262 accordingly.
+;; removing the line above, and changing line 217 and 262 and 280ff accordingly.
     ;;(if do-intervals?
         (add-option
          (gnc:make-multichoice-option
@@ -277,12 +277,12 @@ balance at a given time"))
                 1))
            ;; If there is averaging, the report-title is extended
            ;; accordingly.
-           (report-title
-            (case averaging-selection
-              ('YearDelta (string-append report-title " " (_ "Yearly Average")))
-              ('MonthDelta (string-append report-title " " (_ "Monthly Average")))
-              ('WeekDelta (string-append report-title " " (_ "Weekly Average")))
-              (else report-title)))
+;           (report-title
+;            (case averaging-selection
+;              ('YearDelta (string-append report-title " " (_ "Yearly Average")))
+;              ('MonthDelta (string-append report-title " " (_ "Monthly Average")))
+;              ('WeekDelta (string-append report-title " " (_ "Weekly Average")))
+;              (else report-title)))
            (combined '())
            (other-anchor "")
            (print-info (gnc-commodity-print-info report-currency #t)))
