@@ -190,10 +190,10 @@
 ;; symbol was unknown
 (define (gnc:date-get-fraction-func interval)
   (case interval
-    ('YearDelta gnc:date-to-year-fraction)
-    ('MonthDelta gnc:date-to-month-fraction)
-    ('WeekDelta gnc:date-to-week-fraction)
-    ('DayDelta gnc:date-to-day-fraction)
+    ((YearDelta) gnc:date-to-year-fraction)
+    ((MonthDelta) gnc:date-to-month-fraction)
+    ((WeekDelta) gnc:date-to-week-fraction)
+    ((DayDelta) gnc:date-to-day-fraction)
     (else #f)))
 
 ;; Modify a date
