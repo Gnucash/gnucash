@@ -26,7 +26,6 @@ SUFFIXES = .rc .res
 # Some settings are platform dependent. Let's define them per platform.
 if PLATFORM_WIN32
 # Windows specific settings go here:
-BIN_NAME = gnucash
 GNUCASH_RESOURCE_FILE = gnucash.rc
 dist_noinst_DATA = gnucash.rc
 
@@ -39,9 +38,6 @@ config_DATA = environment
 else !PLATFORM_WIN32
 if PLATFORM_OSX_QUARTZ
 # OSX/Quartz specific settings go here:
-BIN_NAME = gnucash-bin
-gnucash_bin_SOURCES = ${gnucash_SOURCES}
-gnucash_bin_LDADD = ${gnucash_LDADD}
 PLATFORM_FILES = gnucash-setup-env \
 	gnucash-launcher \
 	gnucash-gdb \
@@ -53,7 +49,6 @@ endif
 
 else !PLATFORM_OSX_QUARTZ
 # All other platforms use these settings:
-BIN_NAME = gnucash
 PLATFORM_FILES = gnucash-valgrind
 configdir = ${GNC_CONFIGDIR}
 config_DATA = environment
@@ -61,6 +56,7 @@ config_DATA = environment
 endif !PLATFORM_OSX_QUARTZ
 endif !PLATFORM_WIN32
 
+BIN_NAME = gnucash
 bin_PROGRAMS = ${BIN_NAME}
 gnucash_SOURCES = gnucash-bin.c ${GNUCASH_RESOURCE_FILE}
 gnucash_LDADD = \
