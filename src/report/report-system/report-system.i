@@ -11,3 +11,6 @@ SCM scm_init_sw_report_system_module (void);
 
 SCM gnc_report_find(gint id);
 gint gnc_report_add(SCM report);
+
+%newobject gnc_get_default_report_font_family;
+gchar* gnc_get_default_report_font_family();

@@ -60,7 +60,7 @@
         (
             (opt-register 
                 (lambda (opt) (gnc:register-option options opt)))
-            (font-family "Arial")
+            (font-family (gnc-get-default-report-font-family))
         )
         (opt-register
             (gnc:make-font-option

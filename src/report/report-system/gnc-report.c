@@ -195,3 +195,8 @@ gnc_report_name( SCM report )
     return g_strdup(scm_to_locale_string(value));
 }
 
+gchar*
+gnc_get_default_report_font_family(void)
+{
+    return g_strdup("Arial");
+}

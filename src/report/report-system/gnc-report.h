@@ -46,4 +46,6 @@ gint gnc_report_add(SCM report);
 void gnc_reports_flush_global(void);
 GHashTable *gnc_reports_get_global(void);
 
+gchar* gnc_get_default_report_font_family(void);
+
 #endif
