@@ -113,23 +113,23 @@ msgstr "Nav saistīts ar nodokli; %s%s %s (kods %s, nodokļa tips %s)"
 
 #: ../src/app-utils/gnc-ui-util.c:650
 msgid "not cleared:n"
-msgstr "not cleared:n"
+msgstr "nedzēsts:n"
 
 #: ../src/app-utils/gnc-ui-util.c:653
 msgid "cleared:c"
-msgstr "cleared:j"
+msgstr "dzēsts:d"
 
 #: ../src/app-utils/gnc-ui-util.c:656
 msgid "reconciled:y"
-msgstr "reconciled:j"
+msgstr "saskaņots:s"
 
 #: ../src/app-utils/gnc-ui-util.c:659
 msgid "frozen:f"
-msgstr "frozen:i"
+msgstr "iesaldēts:i"
 
 #: ../src/app-utils/gnc-ui-util.c:662
 msgid "void:v"
-msgstr "void:t"
+msgstr "tukšs:t"
 
 #: ../src/app-utils/gnc-ui-util.c:703
 msgid "Opening Balances"
@@ -1044,7 +1044,7 @@ msgstr "Ir nosūtīts?"
 #: ../src/business/business-gnome/glade/invoice.glade.h:8
 #: ../src/business/business-gnome/glade/order.glade.h:6
 msgid "Date Opened"
-msgstr "Sākuma datums"
+msgstr "Datums"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2439
 #: ../src/business/business-gnome/dialog-invoice.c:2470
@@ -2794,7 +2794,7 @@ msgstr "Pakalpojums"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:244
 msgid "Material"
-msgstr "Materiāls"
+msgstr "Prece"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:833
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:509
@@ -2884,11 +2884,11 @@ msgstr "paraugs:Izdevumi:Automašīna:Degviela"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:125
 msgid "sample:T?"
-msgstr "paraugs:T?"
+msgstr "vietrādis:T?"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:129
 msgid "sample:TI"
-msgstr "paraugs:TI"
+msgstr "vietrādis:TI"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:133
 msgid "sample:Tax Table 1"
@@ -4779,7 +4779,7 @@ msgstr "Novērtēt budžeta vērtību"
 #: ../src/gnome/glade/budget.glade.h:10
 #: ../src/gnome/glade/sched-xact.glade.h:89
 msgid "Every "
-msgstr "Katrs"
+msgstr "Katru"
 
 #: ../src/gnome/glade/budget.glade.h:11
 msgid "GnuCash will estimate budget values for the selected accounts from past transactions."
@@ -5918,7 +5918,7 @@ msgstr "Nosacījums uz sadalījumiem bez mainīgajiem"
 
 #: ../src/gnome/glade/sched-xact.glade.h:58
 msgid "Crea_te in advance, days:"
-msgstr "_Izveidot dienas iepriekš:"
+msgstr "_Izveidot uz priekšu dienas:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:59
 msgid "Create"
@@ -5934,7 +5934,7 @@ msgstr "Izveidot automātiski"
 
 #: ../src/gnome/glade/sched-xact.glade.h:62
 msgid "Create in advance:"
-msgstr "Izveidot iepriekš:"
+msgstr "Izveidot uz priekšu:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:63
 msgid "Create the transaction this many days before its effective date."
@@ -6027,7 +6027,7 @@ msgstr "Escrow konts:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:88
 msgid "Every"
-msgstr "Katrs"
+msgstr "Katru"
 
 #: ../src/gnome/glade/sched-xact.glade.h:90
 msgid "First on the:"
@@ -6049,7 +6049,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:96
 msgid "For:"
-msgstr "Priekš:"
+msgstr "Katru:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:97
 msgid "Forever"
@@ -6443,11 +6443,11 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:204
 msgid "months."
-msgstr "mēneši."
+msgstr "mēnesi"
 
 #: ../src/gnome/glade/sched-xact.glade.h:205
 msgid "occurrences"
-msgstr "Sastopamība"
+msgstr "gadījums"
 
 #: ../src/gnome/glade/sched-xact.glade.h:206
 msgid "remaining"
@@ -7807,7 +7807,7 @@ msgstr "Ja aktīvs, vienmēr atver apstiprināšanas dialogu, izmantojot šodien
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
 msgid "Pre-select cleared transactions"
-msgstr "Iepriekš atlasīt nokārtotus grāmatojumus"
+msgstr "Pirmsatlasīt nokārtotus grāmatojumus"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
 #: ../src/gnome-utils/glade/preferences.glade.h:105
@@ -11017,12 +11017,12 @@ msgstr "Saglabāt izmaiņas failā %s pirms tā aizvēršanas?"
 #: ../src/gnome-utils/gnc-main-window.c:1131
 #, c-format
 msgid "If you don't save, changes from the past %d hours and %d minutes will be discarded."
-msgstr "Ja nesaglabājat, iepriekš, pirms %d stundām un %d minūtēm izdarītās izmaiņas nesaglabāsies."
+msgstr "Ja nesaglabājat, pirms %d stundām un %d minūtēm izdarītās izmaiņas nesaglabāsies."
 
 #: ../src/gnome-utils/gnc-main-window.c:1133
 #, c-format
 msgid "If you don't save, changes from the past %d days and %d hours will be discarded."
-msgstr "Ja nesaglabājat, iepriekš, pirms %d dienām un %d stundām izdarītās izmaiņas nesaglabāsies."
+msgstr "Ja nesaglabājat, pirms %d dienām un %d stundām izdarītās izmaiņas nesaglabāsies."
 
 #: ../src/gnome-utils/gnc-main-window.c:1141
 msgid "<unknown>"
@@ -17013,7 +17013,7 @@ msgstr "Faktiskie grāmatojumi"
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1268
 msgid "The instantaneous price of actual currency transactions in the past"
-msgstr "Aktuālās valūtas iepriekšējo grāmatojumu tūlītēja cena "
+msgstr "Aktuālās valūtas iepriekšējo grāmatojumu tūlītēja cena"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1270
@@ -20669,7 +20669,7 @@ msgstr "Pagājušais gads"
 #: ../intl-scm/guile-strings.c:4582
 #: ../intl-scm/guile-strings.c:4698
 msgid "Last Yr 1st Est Tax Qtr"
-msgstr "Iepriekšējā g. 1.Nodokļu ceturksnis"
+msgstr "Iepriekšējā g. 1. nodokļu ceturksnis"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
@@ -20691,7 +20691,7 @@ msgstr "1.janv. - 31.mar., iepriekšējais g."
 #: ../intl-scm/guile-strings.c:4586
 #: ../intl-scm/guile-strings.c:4702
 msgid "Last Yr 2nd Est Tax Qtr"
-msgstr "Iepriekšējā g. 2.Nodokļu ceturksnis"
+msgstr "Iepriekšējā g. 2. nodokļu ceturksnis"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
@@ -20713,7 +20713,7 @@ msgstr "1.apr. - 31.mai., iepriekšējais g."
 #: ../intl-scm/guile-strings.c:4590
 #: ../intl-scm/guile-strings.c:4706
 msgid "Last Yr 3rd Est Tax Qtr"
-msgstr "Iepriekšējā g. 3.Nodokļu ceturksnis"
+msgstr "Iepriekšējā g. 3. nodokļu ceturksnis"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
@@ -20735,7 +20735,7 @@ msgstr "1.jūn. - 31.aug., iepriekšējais g."
 #: ../intl-scm/guile-strings.c:4594
 #: ../intl-scm/guile-strings.c:4710
 msgid "Last Yr 4th Est Tax Qtr"
-msgstr "Iepriekšējā g. 4.Nodokļu ceturksnis"
+msgstr "Iepriekšējā g. 4. nodokļu ceturksnis"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
@@ -21617,7 +21617,7 @@ msgstr "Pašreizējā kalendārā gada beigas"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:5230
 msgid "Previous Year Start"
-msgstr "Iepriekšējais gads sākās"
+msgstr "Iepriekšējā gada sākuma"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:5232
