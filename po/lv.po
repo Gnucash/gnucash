@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-10 15:54+0300\n"
-"PO-Revision-Date: 2010-05-20 19:17+0300\n"
+"PO-Revision-Date: 2010-06-24 11:52+0300\n"
 "Last-Translator: Valdis Vītoliņš <valdis.vitolins@odo.lv>\n"
 "Language-Team: Odo <info@odo.lv>\n"
 "MIME-Version: 1.0\n"
@@ -113,23 +113,23 @@ msgstr "Nav saistīts ar nodokli; %s%s %s (kods %s, nodokļa tips %s)"
 
 #: ../src/app-utils/gnc-ui-util.c:650
 msgid "not cleared:n"
-msgstr "nedzēsts:n"
+msgstr "not cleared:n"
 
 #: ../src/app-utils/gnc-ui-util.c:653
 msgid "cleared:c"
-msgstr "dzēsts:d"
+msgstr "cleared:d"
 
 #: ../src/app-utils/gnc-ui-util.c:656
 msgid "reconciled:y"
-msgstr "saskaņots:s"
+msgstr "reconciled:s"
 
 #: ../src/app-utils/gnc-ui-util.c:659
 msgid "frozen:f"
-msgstr "iesaldēts:i"
+msgstr "frozen:i"
 
 #: ../src/app-utils/gnc-ui-util.c:662
 msgid "void:v"
-msgstr "tukšs:t"
+msgstr "void:t"
 
 #: ../src/app-utils/gnc-ui-util.c:703
 msgid "Opening Balances"
@@ -2847,64 +2847,64 @@ msgstr "paraugs:X"
 #: ../src/register/ledger-core/split-register-layout.c:525
 #: ../src/register/ledger-core/split-register-layout.c:533
 msgid "sample:12/12/2000"
-msgstr "paraugs:12/12/2000"
+msgstr "sample:12/12/2000"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:85
 msgid "sample:Description of an Entry"
-msgstr "paraugs:Ieraksta apraksts"
+msgstr "sample:Ieraksta apraksts"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:89
 msgid "sample:Action"
-msgstr "paraugs:Darbība"
+msgstr "sample:Darbība"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:93
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:101
 msgid "sample:9,999.00"
-msgstr "paraugs:9,999.00"
+msgstr "sample:9,999.00"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:97
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:137
 msgid "sample:999,999.00"
-msgstr "paraugs:999,999.00"
+msgstr "sample:999,999.00"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:106
 msgid "sample(DT):+%"
-msgstr "paraugs(DT):+%"
+msgstr "sample(DT):+%"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:111
 msgid "sample(DH):+%"
-msgstr "paraugs(DH):+%"
+msgstr "sample(DH):+%"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:116
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:121
 #: ../src/register/ledger-core/split-register-layout.c:594
 #: ../src/register/ledger-core/split-register-layout.c:602
 msgid "sample:Expenses:Automobile:Gasoline"
-msgstr "paraugs:Izdevumi:Automašīna:Degviela"
+msgstr "sample:Izdevumi:Automašīna:Degviela"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:125
 msgid "sample:T?"
-msgstr "vietrādis:T?"
+msgstr "sample:T?"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:129
 msgid "sample:TI"
-msgstr "vietrādis:TI"
+msgstr "sample:TI"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:133
 msgid "sample:Tax Table 1"
-msgstr "paraugs:Nodokļu tabula 1"
+msgstr "sample:Nodokļu tabula 1"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:141
 msgid "sample:999.00"
-msgstr "paraugs:999.00"
+msgstr "sample:999.00"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:145
 msgid "sample:BI"
-msgstr "paraugs:BI"
+msgstr "sample:BI"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:149
 msgid "sample:Payment"
-msgstr "paraugs:Maksājums"
+msgstr "sample:Maksājums"
 
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:51
 msgid "$"
@@ -14020,11 +14020,11 @@ msgstr "_Nesaskaņot"
 #. leave the rest ("sample:") as is.
 #: ../src/register/ledger-core/split-register-layout.c:546
 msgid "sample:99999"
-msgstr "paraugs:99999"
+msgstr "sample:99999"
 
 #: ../src/register/ledger-core/split-register-layout.c:554
 msgid "sample:Description of a transaction"
-msgstr "paraugs:Grāmatojuma paraksts"
+msgstr "sample:Grāmatojuma paraksts"
 
 #: ../src/register/ledger-core/split-register-layout.c:578
 #: ../src/register/ledger-core/split-register-layout.c:618
@@ -14037,11 +14037,11 @@ msgstr "paraugs:Grāmatojuma paraksts"
 #: ../src/register/ledger-core/split-register-layout.c:676
 #: ../src/register/ledger-core/split-register-layout.c:724
 msgid "sample:999,999.000"
-msgstr "paraugs:999,999.000"
+msgstr "sample:999,999.000"
 
 #: ../src/register/ledger-core/split-register-layout.c:610
 msgid "sample:Memo field sample text string"
-msgstr "paraugs:Atgādnes lauka teksta paraugs"
+msgstr "sample:Atgādnes lauka teksta paraugs"
 
 #: ../src/register/ledger-core/split-register-layout.c:684
 msgid "Type:T"
@@ -14049,16 +14049,16 @@ msgstr "Tips:T"
 
 #: ../src/register/ledger-core/split-register-layout.c:692
 msgid "sample:Notes field sample text string"
-msgstr "paraugs:Piezīmju lauka teksta paraugs"
+msgstr "sample:Piezīmju lauka teksta paraugs"
 
 #: ../src/register/ledger-core/split-register-layout.c:700
 msgid "sample:No Particular Reason"
-msgstr "paraugs:Nav īpaša iemesla"
+msgstr "sample:Nav īpaša iemesla"
 
 #: ../src/register/ledger-core/split-register-layout.c:708
 #: ../src/register/ledger-core/split-register-layout.c:716
 msgid "sample:(x + 0.33 * y + (x+y) )"
-msgstr "paraugs:(x + 0.33 * y + (x+y) )"
+msgstr "sample:(x + 0.33 * y + (x+y) )"
 
 #: ../src/register/ledger-core/split-register-load.c:335
 msgid "Could not determine the account currency.  Using the default currency provided by your system."
