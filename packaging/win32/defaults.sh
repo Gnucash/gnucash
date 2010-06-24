@@ -232,8 +232,8 @@ set_default PANGO_URL "$GNOME_WIN32_URL/pango/1.26/pango_1.26.2-1_win32.zip"
 set_default PANGO_DEV_URL "$GNOME_WIN32_URL/pango/1.26/pango-dev_1.26.2-1_win32.zip"
 set_default LIBART_LGPL_URL "$GNOME_WIN32_URL/libart_lgpl/2.3/libart_lgpl-2.3.20.zip"
 set_default LIBART_LGPL_DEV_URL "$GNOME_WIN32_URL/libart_lgpl/2.3/libart_lgpl-dev-2.3.20.zip"
-set_default GTK_URL "$GNOME_WIN32_URL/gtk+/2.18/gtk+_2.18.7-1_win32.zip"
-set_default GTK_DEV_URL "$GNOME_WIN32_URL/gtk+/2.18/gtk+-dev_2.18.7-1_win32.zip"
+set_default GTK_URL "$GNOME_WIN32_URL/gtk+/2.16/gtk+_2.16.6-2_win32.zip"
+set_default GTK_DEV_URL "$GNOME_WIN32_URL/gtk+/2.16/gtk+-dev_2.16.6-2_win32.zip"
 set_default INTLTOOL_URL "$GNOME_WIN32_URL/intltool/0.40/intltool_0.40.4-1_win32.zip"
 set_default ORBIT2_URL "$GNOME_WIN32_URL/ORBit2/2.14/ORBit2-2.14.13.zip"
 set_default ORBIT2_DEV_URL "$GNOME_WIN32_URL/ORBit2/2.14/ORBit2-dev-2.14.13.zip"
@@ -276,7 +276,7 @@ set_default PCRE_DIR $GLOBAL_DIR\\pcre
 set_default LIBGSF_URL "$GNOME_MIRROR/sources/libgsf/1.14/libgsf-1.14.15.tar.bz2"
 set_default LIBGSF_DIR $GLOBAL_DIR\\libgsf
 
-set_default GOFFICE_URL "$GNOME_MIRROR/sources/goffice/0.7/goffice-0.7.17.tar.bz2"
+set_default GOFFICE_URL "$GNOME_MIRROR/sources/goffice/0.7/goffice-0.7.14.tar.bz2"
 set_default GOFFICE_DIR $GLOBAL_DIR\\goffice
 #set_default GOFFICE_PATCH `pwd`/goffice-0.7.2-patch.diff
 
