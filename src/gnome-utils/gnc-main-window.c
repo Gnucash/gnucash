@@ -2590,17 +2590,11 @@ gnc_main_window_open_page (GncMainWindow *window,
         gtk_box_pack_start (GTK_BOX (tab_hbox), label, TRUE, TRUE, 0);
 
     event_box = gtk_event_box_new();
-#if defined(G_OS_UNIX) || (GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION != 18)
+    /* Note: this doesn't work properly on Windows with gtk+2.18.x (last
+     * with 2.18.7). Setting the eventbox visible with that version results
+     * in the tab's text being invisible. See bug #610675 for more on this.
+     */
     gtk_event_box_set_visible_window(GTK_EVENT_BOX(event_box), TRUE);
-#else
-    /* Bug#610675: On Windows (i.e. no G_OS_UNIX) and gtk-2.18.x,
-     * having the event_box visible makes the text disappear. Hence we
-     * leave it at non-visible, which unfortunately means there will
-     * be no coloring, but at least the text is still there. This
-     * doesn't occur with gtk-2.16.x and we hope it won't happen again
-     * with gtk-2.20.x and higher. */
-    gtk_event_box_set_visible_window(GTK_EVENT_BOX(event_box), FALSE);
-#endif
     gtk_widget_show(event_box);
     gtk_container_add(GTK_CONTAINER(event_box), tab_hbox);
     color_string = gnc_plugin_page_get_page_color(page);
