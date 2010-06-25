@@ -32,8 +32,16 @@
 #include "qofsession.h"
 #include "qofbook.h"
 #include "qofbackend.h"
+#include "qoflog.h"
+#include "qofutil.h"
 #include "qofid.h"
 #include "guid.h"
+#include "gnc-module/gnc-module.h"
+#include "engine/gnc-engine.h"
+#include "backend/xml/gnc-backend-xml.h"
+#include "backend/dbi/gnc-backend-dbi.h"
+#include "xml/gncmod-business-backend-xml.h"
+#include "sql/gncmod-business-backend-sql.h"
 #include "Transaction.h"
 #include "Split.h"
 #include "Account.h"
@@ -45,7 +53,6 @@
 #include "gncVendor.h"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
-#include <libguile.h>
 %}
 
 %include <timespec.i>
@@ -90,9 +97,15 @@
 
 %init %{
 
-g_type_init();
-scm_init_guile();
-gnc_module_load("gnucash/engine", 0);
-gnc_module_load("gnucash/business-core", 0);
+qof_log_init();
+qof_init();
+gnc_module_system_init();
+char * no_args[1] = { NULL };
+gnc_engine_init_static(0, no_args);
 
+gnc_module_init_backend_xml();
+gnc_module_init_backend_dbi();
+gnc_module_init_business_core_init();
+gnc_module_init_business_core_xml_init();
+gnc_module_init_business_core_sql_init();
 %}

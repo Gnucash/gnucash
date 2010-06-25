@@ -17,7 +17,6 @@ _gnucash_core_c_la_SOURCES = \
 _gnucash_core_c_la_CPPFLAGS = \
   $(PYTHON_CPPFLAGS) \
   $(GLIB_CFLAGS) \
-  $(GUILE_INCS) \
   -I${top_srcdir}/src/libqof/qof \
   -I$(top_srcdir)/src  \
   -I$(top_srcdir)/src/engine \
@@ -30,12 +29,14 @@ _gnucash_core_c_la_LDFLAGS = -avoid-version -module
 
 _gnucash_core_c_la_LIBADD = \
   ${GLIB_LIBS} \
-  ${GUILE_LIBS} \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/business/business-core/libgncmod-business-core.la
-
+  ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
+  ${top_builddir}/src/backend/xml/libgncmod-backend-xml.la \
+  ${top_builddir}/src/business/business-core/xml/libgncmod-business-backend-xml.la \
+  ${top_builddir}/src/backend/dbi/libgncmod-backend-dbi.la \
+  ${top_builddir}/src/business/business-core/sql/libgncmod-business-backend-sql.la
 if BUILDING_FROM_SVN
 gnucash_core.c: $(SWIG_FILES) ${top_srcdir}/src/base-typemaps.i $(top_builddir)/config.h
 	swig -python -Wall -Werror \
