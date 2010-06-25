@@ -53,6 +53,8 @@ EXTRA_DIST = \
   example_scripts/simple_book.py \
   example_scripts/simple_session.py \
   example_scripts/simple_test.py \
+  example_scripts/simple_business_create.py \
+  example_scripts/simple_invoice_insert.py \
   glib.i
 
 MAINTAINERCLEANFILES = gnucash-core.c

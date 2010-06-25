@@ -53,6 +53,11 @@
 #include "gncVendor.h"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
+#include "gncOwner.h"
+#include "gncInvoice.h"
+#include "gncJob.h"
+#include "gncEntry.h"
+#include "gncTaxTable.h"
 %}
 
 %include <timespec.i>
@@ -86,6 +91,79 @@
 
 %include <gnc-commodity.h>
 
+%include <gncOwner.h>
+
+%typemap(out) GncOwner * {
+    GncOwnerType owner_type = gncOwnerGetType($1);
+    PyObject * owner_tuple = PyTuple_New(2);
+    PyTuple_SetItem(owner_tuple, 0, PyInt_FromLong( (long) owner_type ) );
+    PyObject * swig_wrapper_object;
+    if (owner_type == GNC_OWNER_CUSTOMER ){
+        swig_wrapper_object = SWIG_NewPointerObj(
+	    gncOwnerGetCustomer($1), $descriptor(GncCustomer *), 0);
+    }
+    else if (owner_type == GNC_OWNER_JOB){
+        swig_wrapper_object = SWIG_NewPointerObj(
+	    gncOwnerGetJob($1), $descriptor(GncJob *), 0);
+    }
+    else if (owner_type == GNC_OWNER_VENDOR){
+        swig_wrapper_object = SWIG_NewPointerObj(
+	    gncOwnerGetVendor($1), $descriptor(GncVendor *), 0);
+    }
+    else if (owner_type == GNC_OWNER_EMPLOYEE){
+        swig_wrapper_object = SWIG_NewPointerObj(
+	    gncOwnerGetEmployee($1), $descriptor(GncEmployee *), 0);
+    }
+    else {
+        swig_wrapper_object = Py_None;
+	Py_INCREF(Py_None);
+    }
+    PyTuple_SetItem(owner_tuple, 1, swig_wrapper_object);
+    $result = owner_tuple;
+}
+
+
+%typemap(in) GncOwner * {
+    GncOwner * temp_owner = gncOwnerCreate();
+    void * pointer_to_real_thing;
+    if ((SWIG_ConvertPtr($input, &pointer_to_real_thing,
+                         $descriptor(GncCustomer *),
+                         SWIG_POINTER_EXCEPTION)) == 0){
+        gncOwnerInitCustomer(temp_owner, (GncCustomer *)pointer_to_real_thing);
+        $1 = temp_owner;
+    }
+    else if ((SWIG_ConvertPtr($input, &pointer_to_real_thing,
+                         $descriptor(GncJob *),
+                         SWIG_POINTER_EXCEPTION)) == 0){
+        gncOwnerInitJob(temp_owner, (GncJob *)pointer_to_real_thing);
+        $1 = temp_owner;
+    }
+    else if ((SWIG_ConvertPtr($input, &pointer_to_real_thing,
+                         $descriptor(GncVendor *),
+                         SWIG_POINTER_EXCEPTION)) == 0){
+        gncOwnerInitVendor(temp_owner, (GncVendor *)pointer_to_real_thing);
+        $1 = temp_owner;
+    }
+    else if ((SWIG_ConvertPtr($input, &pointer_to_real_thing,
+                         $descriptor(GncEmployee *),
+                         SWIG_POINTER_EXCEPTION)) == 0){
+        gncOwnerInitEmployee(temp_owner, (GncEmployee *)pointer_to_real_thing);
+        $1 = temp_owner;
+    }
+    else {
+	PyErr_SetString(
+	    PyExc_ValueError,
+	    "Python object passed to function with GncOwner * argument "
+	    "couldn't be converted back to pointer of that type");
+        return NULL;
+    }
+}
+
+%typemap(freearg) GncOwner * {
+    gncOwnerDestroy($1);
+}
+
+
 %include <gnc-lot.h>
 
 //business-core includes
@@ -94,6 +172,10 @@
 %include <gncVendor.h>
 %include <gncAddress.h>
 %include <gncBillTerm.h>
+%include <gncInvoice.h>
+%include <gncJob.h>
+%include <gncEntry.h>
+%include <gncTaxTable.h>
 
 %init %{
 

@@ -28,8 +28,21 @@ from function_class import \
      default_arguments_decorator, method_function_returns_instance, \
      methods_return_instance
 
+from gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn, \
+    gncInvoiceGetInvoiceFromLot, gncEntryLookup, gncInvoiceLookup, \
+    gncCustomerLookup, gncVendorLookup, gncJobLookup, gncEmployeeLookup, \
+    gncTaxTableLookup, gncTaxTableLookupByName
+    
+
 class GnuCashCoreClass(ClassFromFunctions):
     _module = gnucash_core_c
+
+    def do_lookup_create_oo_instance(self, lookup_function, cls, *args):
+        thing = lookup_function(self.get_instance(), *args)
+        if thing != None:
+            thing = cls(instance=thing)
+        return thing
+
 
 class GnuCashBackendException(Exception):
     def __init__(self, msg, errors):
@@ -135,7 +148,45 @@ class Book(GnuCashCoreClass):
     get_root_account -- Returns the root level Account
     get_table -- Returns a commodity lookup table, of type GncCommodityTable
     """
-    pass
+    def InvoiceLookup(self, guid):
+        from gnucash_business import Invoice
+        return self.do_lookup_create_oo_instance(
+            gncInvoiceLookup, Invoice, guid.get_instance() )
+
+    def EntryLookup(self, guid):
+        from gnucash_business import Entr
+        return self.do_lookup_create_oo_instance(
+            gncEntryLookup, Entry, guid.get_instance() )
+
+    def CustomerLookup(self, guid):
+        from gnucash_business import Customer
+        return self.do_lookup_create_oo_instance(
+            gncCustomerLookup, Customer, guid.get_instance()) 
+
+    def JobLookup(self, guid):
+        from gnucash_business import Job
+        return self.do_lookup_create_oo_instance(
+            gncJobLookup, Job, guid.get_instance() )
+
+    def VendorLookup(self, guid):
+        from gnucash_business import Vendor
+        return self.do_lookup_create_oo_instance(
+            gncVendorLookup, Vendor, guid.get_instance() )
+
+    def EmployeeLookup(self, guid):
+        from gnucash_business import Employee
+        return self.do_lookup_create_oo_instance(
+            gncEmployeeLookup, Employee, guid.get_instance() )
+
+    def TaxTableLookup(self, guid):
+        from gnucash_business import TaxTable
+        return self.do_lookup_create_oo_instance(
+            gncTaxTableLookup, TaxTable, guid.get_instance() )
+
+    def TaxTableLookupByName(self, name):
+        from gnucash_business import TaxTable
+        return self.do_lookup_create_oo_instance(
+            gncTaxTableLookupByName, TaxTable, name)
 
 class GncNumeric(GnuCashCoreClass):
     """Object used by GnuCash to store all numbers. Always consists of a
@@ -170,7 +221,10 @@ class GncCommodityTable(GnuCashCoreClass):
     pass
 
 class GncLot(GnuCashCoreClass):
-    pass
+    def GetInvoiceFromLot(self):
+        from gnucash_business import Invoice
+        return self.do_lookup_create_oo_instance(
+            gncInvoiceGetInvoiceFromLot, Invoice )
 
 class Transaction(GnuCashCoreClass):
     """A GnuCash Transaction
@@ -181,6 +235,11 @@ class Transaction(GnuCashCoreClass):
     _new_instance = 'xaccMallocTransaction'
     def GetNthSplit(self, n):
         return self.GetSplitList().pop(n)
+
+    def GetInvoiceFromTxn(self):
+        from gnucash_business import Transaction
+        return self.do_lookup_create_oo_instance(
+            gncInvoiceGetInvoiceFromTxn, Transaction )
 
 class Split(GnuCashCoreClass):
     """A GnuCash Split
