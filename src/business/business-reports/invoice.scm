@@ -4,16 +4,16 @@
 ;; Created by:  Derek Atkins <warlord@MIT.EDU>
 ;; Copyright (c) 2002, 2003 Derek Atkins <warlord@MIT.EDU>
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -44,8 +44,8 @@
   `(set! ,alist (cons ,element ,alist)))
 
 (define (set-last-row-style! table tag . rest)
-  (let ((arg-list 
-         (cons table 
+  (let ((arg-list
+         (cons table
                (cons (- (gnc:html-table-num-rows table) 1)
                      (cons tag rest)))))
     (apply gnc:html-table-set-row-style! arg-list)))
@@ -71,16 +71,16 @@
 
 (define columns-used-size 9)
 
-(define (num-columns-required columns-used)  
-  (do ((i 0 (+ i 1)) 
-       (col-req 0 col-req)) 
+(define (num-columns-required columns-used)
+  (do ((i 0 (+ i 1))
+       (col-req 0 col-req))
       ((>= i columns-used-size) col-req)
     (if (vector-ref columns-used i)
         (set! col-req (+ col-req 1)))))
 
-(define (build-column-used options)   
+(define (build-column-used options)
   (define (opt-val section name)
-    (gnc:option-value 
+    (gnc:option-value
      (gnc:lookup-option options section name)))
   (define (make-set-col col-vector)
     (let ((col 0))
@@ -90,7 +90,7 @@
               (vector-set! col-vector index col)
               (set! col (+ col 1)))
             (vector-set! col-vector index #f)))))
-  
+
   (let* ((col-vector (make-vector columns-used-size #f))
          (set-col (make-set-col col-vector)))
     (set-col (opt-val "Display Columns" "Date") 0)
@@ -155,7 +155,7 @@
 	 table "td"
 	 'attribute (list "valign" "top"))
 	table)
-      (gnc:make-gnc-monetary currency numeric)))      
+      (gnc:make-gnc-monetary currency numeric)))
 
 (define (add-entry-row table currency entry column-vector row-style invoice?)
   (let* ((row-contents '())
@@ -225,7 +225,7 @@
 
     (gnc:html-table-append-row/markup! table row-style
                                        (reverse row-contents))
-    
+
     (cons entry-value entry-tax-value)))
 
 (define (options-generator)
@@ -240,9 +240,9 @@
  			    (lambda () '()) #f))
 
   (gnc:register-inv-option
-   (gnc:make-string-option 
-    invoice-page (N_ "Custom Title") 
-    "z" (N_ "A custom string to replace Invoice, Bill or Expense Voucher") 
+   (gnc:make-string-option
+    invoice-page (N_ "Custom Title")
+    "z" (N_ "A custom string to replace Invoice, Bill or Expense Voucher")
     ""))
 
   (gnc:register-inv-option
@@ -343,7 +343,7 @@
 
 (define (make-entry-table invoice options add-order invoice?)
   (define (opt-val section name)
-    (gnc:option-value 
+    (gnc:option-value
      (gnc:lookup-option options section name)))
 
   (let ((show-payments (opt-val "Display" "Payments"))
@@ -374,7 +374,7 @@
 			      'format gnc:make-gnc-monetary #f)))
 
 	(for-each (lambda (currency)
-		    (gnc:html-table-append-row/markup! 
+		    (gnc:html-table-append-row/markup!
 		     table
 		     subtotal-style
 		     (append (cons (gnc:make-html-table-cell/markup
@@ -404,24 +404,24 @@
 				(gncOwnerGetEndOwner owner))))
 		      (cond
 			((eqv? type GNC-OWNER-CUSTOMER)
-			 (total-collector 'add 
+			 (total-collector 'add
 			    (gnc:gnc-monetary-commodity amt)
 			    (gnc:gnc-monetary-amount amt)))
 			((eqv? type GNC-OWNER-VENDOR)
-			 (total-collector 'add 
+			 (total-collector 'add
 			    (gnc:gnc-monetary-commodity amt)
 			    (gnc:gnc-monetary-amount (gnc:monetary-neg amt))))
 	))))
-	       
-	
+
+
 	(if (date-col used-columns)
 	    (addto! row
 		    (gnc-print-date (gnc-transaction-get-date-posted t))))
 
 	(if (description-col used-columns)
 	    (addto! row (_ "Payment, thank you")))
-		    
-	(gnc:html-table-append-row/markup! 
+
+	(gnc:html-table-append-row/markup!
 	 table
 	 payment-style
 	 (append (reverse row)
@@ -733,7 +733,7 @@
 		       document
 		       (gnc:make-html-text
 			(string-append
-			 (_ "Reference") ":&nbsp;" 
+			 (_ "Reference") ":&nbsp;"
 			 (string-expand billing-id #\newline "<br>"))))
 		      (make-break! document)))))
 
@@ -745,7 +745,7 @@
 		     document
 		     (gnc:make-html-text
 		      (string-append
-		       (_ "Terms") ":&nbsp;" 
+		       (_ "Terms") ":&nbsp;"
 		       (string-expand terms #\newline "<br>")))))))
 
 	  (make-break! document)
@@ -761,7 +761,7 @@
 		 document
 		 (gnc:make-html-text
 		  (string-expand notes #\newline "<br>")))))
-	  
+
 	  (make-break! document)
 
 	  (gnc:html-document-add-object!
