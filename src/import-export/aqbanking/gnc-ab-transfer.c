@@ -179,7 +179,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
 #ifndef AQBANKING_VERSION_5_PLUS
                                              , 0
 #endif
-                ))
+                                            ))
         {
             if (!gnc_verify_dialog(
                         parent, FALSE, "%s",
@@ -264,7 +264,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
 #ifndef AQBANKING_VERSION_5_PLUS
                                    , 0
 #endif
-                );
+                                  );
 
             /* Ignore the return value of AB_Banking_ExecuteJobs(), as the job's
              * status always describes better whether the job was actually

@@ -1525,9 +1525,9 @@ gnc_main_window_update_one_menu_action (GncMainWindow *window,
                      (char *)NULL);
 #ifdef MAC_INTEGRATION
     {
-	GtkOSXApplication *theApp = 
-	    g_object_new(GTK_TYPE_OSX_APPLICATION, NULL);
-	gtk_osxapplication_sync_menubar(theApp);
+        GtkOSXApplication *theApp =
+            g_object_new(GTK_TYPE_OSX_APPLICATION, NULL);
+        gtk_osxapplication_sync_menubar(theApp);
     }
 #endif
     LEAVE(" ");
@@ -1572,17 +1572,18 @@ gnc_main_window_update_radio_button (GncMainWindow *window)
     /* Block the signal so as not to affect window ordering (top to
      * bottom) on the screen */
     action_list = gtk_radio_action_get_group(GTK_RADIO_ACTION(action));
-    if (action_list) {
-	first_action = g_slist_last(action_list)->data;
-	g_signal_handlers_block_by_func(G_OBJECT(first_action),
-                                   G_CALLBACK(gnc_main_window_cmd_window_raise),
-					window);
-	DEBUG("blocked signal on %p, set %p active, window %p", first_action,
-	      action, window);
-	gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), TRUE);
-	g_signal_handlers_unblock_by_func(G_OBJECT(first_action),
-                                   G_CALLBACK(gnc_main_window_cmd_window_raise),
-					  window);
+    if (action_list)
+    {
+        first_action = g_slist_last(action_list)->data;
+        g_signal_handlers_block_by_func(G_OBJECT(first_action),
+                                        G_CALLBACK(gnc_main_window_cmd_window_raise),
+                                        window);
+        DEBUG("blocked signal on %p, set %p active, window %p", first_action,
+              action, window);
+        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), TRUE);
+        g_signal_handlers_unblock_by_func(G_OBJECT(first_action),
+                                          G_CALLBACK(gnc_main_window_cmd_window_raise),
+                                          window);
     }
     g_free(action_name);
     LEAVE(" ");
@@ -3351,12 +3352,12 @@ gtk_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
 
     gboolean finished = gnc_main_window_all_finish_pending();
     if (!finished)
-	return TRUE;
+        return TRUE;
     session = gnc_get_current_session();
     needs_save = qof_book_not_saved(qof_session_get_book(session)) &&
                  !gnc_file_save_in_progress();
     if (needs_save && gnc_main_window_prompt_for_save(GTK_WIDGET(window)))
-	return TRUE;
+        return TRUE;
     gnc_shutdown(0);
     return FALSE;
 }
@@ -3386,8 +3387,8 @@ gtk_quartz_set_menu(GncMainWindow* window)
     item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/Help/HelpAbout");
     if (GTK_IS_MENU_ITEM (item))
-        gtk_osxapplication_add_app_menu_item (theApp, group, 
-					      GTK_MENU_ITEM (item));
+        gtk_osxapplication_add_app_menu_item (theApp, group,
+                                              GTK_MENU_ITEM (item));
 
     /*  the preferences group  */
     group = gtk_osxapplication_add_app_menu_group (theApp);
@@ -3395,8 +3396,8 @@ gtk_quartz_set_menu(GncMainWindow* window)
     item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/Edit/EditPreferences");
     if (GTK_IS_MENU_ITEM (item))
-        gtk_osxapplication_add_app_menu_item (theApp, group, 
-					      GTK_MENU_ITEM (item));
+        gtk_osxapplication_add_app_menu_item (theApp, group,
+                                              GTK_MENU_ITEM (item));
 
     item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/Help");
@@ -3405,7 +3406,7 @@ gtk_quartz_set_menu(GncMainWindow* window)
                                       "/menubar/Windows");
     gtk_osxapplication_set_window_menu(theApp, GTK_MENU_ITEM(item));
     g_signal_connect(theApp, "NSApplicationBlockTermination",
-		     G_CALLBACK(gtk_quartz_should_quit), window);
+                     G_CALLBACK(gtk_quartz_should_quit), window);
 
 }
 #endif //MAC_INTEGRATION
@@ -4009,12 +4010,12 @@ gnc_main_window_show_all_windows(void)
     {
         gtk_widget_show(GTK_WIDGET(window_iter->data));
 #ifdef MAC_INTEGRATION
-	gtk_quartz_set_menu(window_iter->data);
+        gtk_quartz_set_menu(window_iter->data);
 #endif
     }
 #ifdef MAC_INTEGRATION
     g_signal_connect(theApp, "NSApplicationWillTerminate",
-		     G_CALLBACK(gtk_quartz_shutdown), NULL);
+                     G_CALLBACK(gtk_quartz_shutdown), NULL);
     gtk_osxapplication_ready(theApp);
 #endif
 }

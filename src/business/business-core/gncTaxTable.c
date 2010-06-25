@@ -917,8 +917,8 @@ gboolean gncTaxTableEqual(const GncTaxTable *a, const GncTaxTable *b)
         GncTaxTableEntryList* b_node;
 
         for (a_node = a->entries, b_node = b->entries;
-                                a_node != NULL && b_node != NULL;
-                                a_node = a_node->next, b_node = b_node->next)
+                a_node != NULL && b_node != NULL;
+                a_node = a_node->next, b_node = b_node->next)
         {
             if (!gncTaxTableEntryEqual((GncTaxTableEntry*)a_node->data,
                                        (GncTaxTableEntry*)b_node->data))

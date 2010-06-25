@@ -160,7 +160,7 @@ gnc_basic_cell_has_type_name (BasicCell *cell, const gchar *type_name)
 {
     if (!cell) return FALSE;
     if (!type_name) return FALSE;
-    if(!cell->cell_type_name) return FALSE;
+    if (!cell->cell_type_name) return FALSE;
 
     return (g_strcmp0 (type_name, cell->cell_type_name));
 }

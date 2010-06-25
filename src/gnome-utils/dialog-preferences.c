@@ -152,12 +152,12 @@ gnc_account_separator_prefs_cb (GConfEntry *unused, GtkWidget *dialog)
     image = gnc_glade_lookup_widget(dialog, "separator_error");
     book = gnc_get_current_book();
     invalid_account_names = gnc_account_list_name_violations ( book,
-                                     gnc_get_account_separator_string() );
+                            gnc_get_account_separator_string() );
     if ( invalid_account_names )
     {
         GtkTooltipsData *tipsdata = gtk_tooltips_data_get (image);
         gchar *message = gnc_account_name_violations_errmsg ( gnc_get_account_separator_string(),
-                                                              invalid_account_names );
+                         invalid_account_names );
         gnc_warning_dialog(dialog, "%s", message);
 
         gtk_tooltips_set_tip ( tipsdata->tooltips, image, message, NULL);

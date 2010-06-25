@@ -906,7 +906,7 @@ gnc_ab_get_permanent_certs(void)
 # ifndef AQBANKING_VERSION_5_PLUS
                                      , 0
 # endif
-        );
+                                    );
 #else
     /* FIXME: Add code for older AqBanking versions */
     /* See QBankmanager 0.9.50 in src/kbanking/libs/kbanking.cpp lines 323ff

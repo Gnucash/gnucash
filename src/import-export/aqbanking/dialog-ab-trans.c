@@ -650,7 +650,7 @@ get_available_empty_job(AB_ACCOUNT *ab_acc, GncABTransType trans_type)
 #ifndef AQBANKING_VERSION_5_PLUS
                                          , 0
 #endif
-            ))
+                                        ))
     {
         if (job) AB_Job_free(job);
         return NULL;

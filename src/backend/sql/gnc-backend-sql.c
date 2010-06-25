@@ -1249,7 +1249,8 @@ const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList 
 }
 
 static GncSqlColumnTypeHandler string_handler
-= {
+=
+{
     load_string,
     add_string_col_info_to_list,
     gnc_sql_add_colname_to_list,
@@ -1261,8 +1262,8 @@ typedef void (*IntSetterFunc)( const gpointer, gint );
 
 static void
 load_int( const GncSqlBackend* be, GncSqlRow* row,
-/*@ null @*/ QofSetterFunc setter, gpointer pObject,
-const GncSqlColumnTableEntry* table_row )
+          /*@ null @*/ QofSetterFunc setter, gpointer pObject,
+          const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     gint int_value;
@@ -1297,7 +1298,7 @@ const GncSqlColumnTableEntry* table_row )
 
 static void
 add_int_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,
-GList** pList )
+                          GList** pList )
 {
     GncSqlColumnInfo* info;
 
@@ -1312,7 +1313,7 @@ GList** pList )
 
 static void
 add_gvalue_int_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
-const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
+                         const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
 {
     gint int_value = 0;
     IntAccessFunc i_getter;
@@ -1346,7 +1347,8 @@ const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList 
 }
 
 static GncSqlColumnTypeHandler int_handler
-= {
+=
+{
     load_int,
     add_int_col_info_to_list,
     gnc_sql_add_colname_to_list,
@@ -1358,8 +1360,8 @@ typedef void (*BooleanSetterFunc)( const gpointer, gboolean );
 
 static void
 load_boolean( const GncSqlBackend* be, GncSqlRow* row,
-/*@ null @*/ QofSetterFunc setter, gpointer pObject,
-const GncSqlColumnTableEntry* table_row )
+              /*@ null @*/ QofSetterFunc setter, gpointer pObject,
+              const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     gint int_value;
@@ -1394,7 +1396,7 @@ const GncSqlColumnTableEntry* table_row )
 
 static void
 add_boolean_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,
-GList** pList )
+                              GList** pList )
 {
     GncSqlColumnInfo* info;
 
@@ -1409,7 +1411,7 @@ GList** pList )
 
 static void
 add_gvalue_boolean_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
-const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
+                             const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
 {
     gint int_value = 0;
     BooleanAccessFunc b_getter;
@@ -1443,7 +1445,8 @@ const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList 
 }
 
 static GncSqlColumnTypeHandler boolean_handler
-= {
+=
+{
     load_boolean,
     add_boolean_col_info_to_list,
     gnc_sql_add_colname_to_list,
@@ -1455,8 +1458,8 @@ typedef void (*Int64SetterFunc)( const gpointer, gint64 );
 
 static void
 load_int64( const GncSqlBackend* be, GncSqlRow* row,
-/*@ null @*/ QofSetterFunc setter, gpointer pObject,
-const GncSqlColumnTableEntry* table_row )
+            /*@ null @*/ QofSetterFunc setter, gpointer pObject,
+            const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     gint64 i64_value = 0;
@@ -1485,7 +1488,7 @@ const GncSqlColumnTableEntry* table_row )
 
 static void
 add_int64_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,
-GList** pList )
+                            GList** pList )
 {
     GncSqlColumnInfo* info;
 
@@ -1500,7 +1503,7 @@ GList** pList )
 
 static void
 add_gvalue_int64_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
-const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
+                           const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
 {
     gint64 i64_value = 0;
     Int64AccessFunc getter;
@@ -1533,7 +1536,8 @@ const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList 
 }
 
 static GncSqlColumnTypeHandler int64_handler
-= {
+=
+{
     load_int64,
     add_int64_col_info_to_list,
     gnc_sql_add_colname_to_list,
@@ -1543,8 +1547,8 @@ static GncSqlColumnTypeHandler int64_handler
 
 static void
 load_double( const GncSqlBackend* be, GncSqlRow* row,
-/*@ null @*/ QofSetterFunc setter, gpointer pObject,
-const GncSqlColumnTableEntry* table_row )
+             /*@ null @*/ QofSetterFunc setter, gpointer pObject,
+             const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     gdouble d_value;
@@ -1592,7 +1596,7 @@ const GncSqlColumnTableEntry* table_row )
 
 static void
 add_double_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,
-GList** pList )
+                             GList** pList )
 {
     GncSqlColumnInfo* info;
 
@@ -1607,7 +1611,7 @@ GList** pList )
 
 static void
 add_gvalue_double_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
-const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
+                            const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
 {
     QofAccessFunc getter;
     gdouble* pDouble = NULL;
@@ -1642,7 +1646,8 @@ const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList 
 }
 
 static GncSqlColumnTypeHandler double_handler
-= {
+=
+{
     load_double,
     add_double_col_info_to_list,
     gnc_sql_add_colname_to_list,
@@ -1652,8 +1657,8 @@ static GncSqlColumnTypeHandler double_handler
 
 static void
 load_guid( const GncSqlBackend* be, GncSqlRow* row,
-/*@ null @*/ QofSetterFunc setter, gpointer pObject,
-const GncSqlColumnTableEntry* table_row )
+           /*@ null @*/ QofSetterFunc setter, gpointer pObject,
+           const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     GncGUID guid;
@@ -1691,7 +1696,7 @@ const GncSqlColumnTableEntry* table_row )
 
 static void
 add_guid_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,
-GList** pList )
+                           GList** pList )
 {
     GncSqlColumnInfo* info;
 
@@ -1706,7 +1711,7 @@ GList** pList )
 
 static void
 add_gvalue_guid_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
-const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
+                          const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
 {
     QofAccessFunc getter;
     const GncGUID* guid = NULL;
@@ -1743,7 +1748,8 @@ const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList 
 }
 
 static GncSqlColumnTypeHandler guid_handler
-= {
+=
+{
     load_guid,
     add_guid_col_info_to_list,
     gnc_sql_add_colname_to_list,
@@ -1753,7 +1759,7 @@ static GncSqlColumnTypeHandler guid_handler
 
 void
 gnc_sql_add_gvalue_objectref_guid_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
-const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
+        const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
 {
     QofAccessFunc getter;
     const GncGUID* guid = NULL;
@@ -1796,8 +1802,8 @@ const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList 
 
 void
 gnc_sql_add_objectref_guid_col_info_to_list( const GncSqlBackend* be,
-const GncSqlColumnTableEntry* table_row,
-GList** pList )
+        const GncSqlColumnTableEntry* table_row,
+        GList** pList )
 {
     add_guid_col_info_to_list( be, table_row, pList );
 }
@@ -1824,14 +1830,14 @@ gnc_sql_convert_timespec_to_string( const GncSqlBackend* be, Timespec ts )
     else year = tm->tm_year + 1900;
 
     datebuf = g_strdup_printf( be->timespec_format,
-    year, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec );
+                               year, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec );
     return datebuf;
 }
 
 static void
 load_timespec( const GncSqlBackend* be, GncSqlRow* row,
-/*@ null @*/ QofSetterFunc setter, gpointer pObject,
-const GncSqlColumnTableEntry* table_row )
+               /*@ null @*/ QofSetterFunc setter, gpointer pObject,
+               const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     Timespec ts = {0, 0};
@@ -1859,12 +1865,12 @@ const GncSqlColumnTableEntry* table_row )
             {
                 gchar* buf;
                 buf = g_strdup_printf( "%c%c%c%c-%c%c-%c%c %c%c:%c%c:%c%c",
-                s[0], s[1], s[2], s[3],
-                s[4], s[5],
-                s[6], s[7],
-                s[8], s[9],
-                s[10], s[11],
-                s[12], s[13] );
+                                       s[0], s[1], s[2], s[3],
+                                       s[4], s[5],
+                                       s[6], s[7],
+                                       s[8], s[9],
+                                       s[10], s[11],
+                                       s[12], s[13] );
                 ts = gnc_iso8601_to_timespec_gmt( buf );
                 g_free( buf );
                 isOK = TRUE;
@@ -1891,7 +1897,7 @@ const GncSqlColumnTableEntry* table_row )
 
 static void
 add_timespec_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,
-GList** pList )
+                               GList** pList )
 {
     GncSqlColumnInfo* info;
 
@@ -1906,7 +1912,7 @@ GList** pList )
 
 static void
 add_gvalue_timespec_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
-const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
+                              const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
 {
     TimespecAccessFunc ts_getter;
     Timespec ts;
@@ -1945,7 +1951,8 @@ const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList 
 }
 
 static GncSqlColumnTypeHandler timespec_handler
-= {
+=
+{
     load_timespec,
     add_timespec_col_info_to_list,
     gnc_sql_add_colname_to_list,
@@ -1956,8 +1963,8 @@ static GncSqlColumnTypeHandler timespec_handler
 
 static void
 load_date( const GncSqlBackend* be, GncSqlRow* row,
-/*@ null @*/ QofSetterFunc setter, gpointer pObject,
-const GncSqlColumnTableEntry* table_row )
+           /*@ null @*/ QofSetterFunc setter, gpointer pObject,
+           const GncSqlColumnTableEntry* table_row )
 {
     const GValue* val;
     GDate* date;
@@ -2016,7 +2023,7 @@ const GncSqlColumnTableEntry* table_row )
 
 static void
 add_date_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntry* table_row,
-GList** pList )
+                           GList** pList )
 {
     GncSqlColumnInfo* info;
 
@@ -2031,8 +2038,8 @@ GList** pList )
 
 static void
 add_gvalue_date_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
-const gpointer pObject,
-const GncSqlColumnTableEntry* table_row, GSList** pList )
+                          const gpointer pObject,
+                          const GncSqlColumnTableEntry* table_row, GSList** pList )
 {
     GDate* date = NULL;
     QofAccessFunc getter;
@@ -2062,7 +2069,7 @@ const GncSqlColumnTableEntry* table_row, GSList** pList )
     if ( g_date_valid( date ) )
     {
         buf = g_strdup_printf( "%04d%02d%02d",
-        g_date_get_year( date ), g_date_get_month( date ), g_date_get_day( date ) );
+                               g_date_get_year( date ), g_date_get_month( date ), g_date_get_day( date ) );
         g_value_take_string( value, buf );
     }
 
@@ -2070,7 +2077,8 @@ const GncSqlColumnTableEntry* table_row, GSList** pList )
 }
 
 static GncSqlColumnTypeHandler date_handler
-= {
+=
+{
     load_date,
     add_date_col_info_to_list,
     gnc_sql_add_colname_to_list,

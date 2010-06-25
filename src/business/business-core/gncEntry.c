@@ -1484,15 +1484,15 @@ gboolean gncEntryEqual(const GncEntry *a, const GncEntry *b)
         CHECK_NUMERIC(a, b, i_disc_value_rounded);
 
 #if 0
-    Timespec	date;
-    Timespec	date_entered;
+        Timespec	date;
+        Timespec	date_entered;
 
-    /* employee bill data */
-    GncEntryPaymentType b_payment;
+        /* employee bill data */
+        GncEntryPaymentType b_payment;
 
-    /* customer invoice */
-    GList *	i_tax_values;
-    Timespec	i_taxtable_modtime;
+        /* customer invoice */
+        GList *	i_tax_values;
+        Timespec	i_taxtable_modtime;
 
 #endif
     }
@@ -1507,22 +1507,22 @@ gboolean gncEntryEqual(const GncEntry *a, const GncEntry *b)
         CHECK_NUMERIC(a, b, b_tax_value);
         CHECK_NUMERIC(a, b, b_tax_value_rounded);
 #if 0
-    Timespec	date;
-    Timespec	date_entered;
+        Timespec	date;
+        Timespec	date_entered;
 
-    /* vendor bill data */
-    gboolean	b_taxable;
-    gboolean	b_taxincluded;
-    GncTaxTable *	b_tax_table;
-    gboolean	billable;
-    GncOwner	billto;
+        /* vendor bill data */
+        gboolean	b_taxable;
+        gboolean	b_taxincluded;
+        GncTaxTable *	b_tax_table;
+        gboolean	billable;
+        GncOwner	billto;
 
-    /* employee bill data */
-    GncEntryPaymentType b_payment;
+        /* employee bill data */
+        GncEntryPaymentType b_payment;
 
-    /* vendor bill */
-    GList *	b_tax_values;
-    Timespec	b_taxtable_modtime;
+        /* vendor bill */
+        GList *	b_tax_values;
+        Timespec	b_taxtable_modtime;
 #endif
     }
     /* FIXME: Need real tests */

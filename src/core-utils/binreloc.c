@@ -367,11 +367,12 @@ gnc_gbr_find_prefix (const gchar *default_prefix)
     GtkOSXApplication* theApp  = g_object_new (GTK_TYPE_OSX_APPLICATION, NULL);
     gchar *id = gtk_osxapplication_get_bundle_id (theApp);
     gchar *path = gtk_osxapplication_get_resource_path (theApp);
-    if (id == NULL) {
-	gchar *dirname = g_path_get_dirname (path);
-	g_free (path);
-	g_free (id);
-	return dirname;
+    if (id == NULL)
+    {
+        gchar *dirname = g_path_get_dirname (path);
+        g_free (path);
+        g_free (id);
+        return dirname;
     }
     g_free (id);
     return path;

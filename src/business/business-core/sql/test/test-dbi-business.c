@@ -73,7 +73,7 @@ create_session(void)
     GncJob* job;
     GncTaxTable* tt;
     GncTaxTableEntry* tte;
-    
+
     table = gnc_commodity_table_get_table( book );
     currency = gnc_commodity_table_lookup( table, GNC_COMMODITY_NS_CURRENCY, "CAD" );
 

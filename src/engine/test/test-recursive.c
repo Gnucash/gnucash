@@ -1168,8 +1168,8 @@ test_recursion (QofSession *original, guint counter)
     copy = qof_session_new();
     if (debug)
     {
-/*         FIXME XML backend can't handle STDOUT
- *         qof_session_begin(copy, QOF_STDOUT, TRUE, FALSE); */
+        /*         FIXME XML backend can't handle STDOUT
+         *         qof_session_begin(copy, QOF_STDOUT, TRUE, FALSE); */
     }
     /* TODO: implement QOF_TYPE_CHOICE testing. */
     qof_instance_copy_coll_r(copy, grand_coll);
@@ -1190,9 +1190,9 @@ test_recursion (QofSession *original, guint counter)
     do_test((f == c.collect), "Number of children in descendents does not match");
     if (counter == 4 && debug == TRUE)
     {
-/*      FIXME XML backend can't handle STDOUT
- *      qof_session_save(copy, NULL);
-        qof_session_save(original, NULL); */
+        /*      FIXME XML backend can't handle STDOUT
+         *      qof_session_save(copy, NULL);
+                qof_session_save(original, NULL); */
     }
     qof_session_end(copy);
     copy = NULL;
@@ -1213,8 +1213,8 @@ main (int argc, const char *argv[])
         original = qof_session_new();
         if (debug)
         {
-/*          FIXME XML backend can't handle STDOUT
- *          qof_session_begin(original, QOF_STDOUT, TRUE, FALSE); */
+            /*          FIXME XML backend can't handle STDOUT
+             *          qof_session_begin(original, QOF_STDOUT, TRUE, FALSE); */
         }
         create_data(original, (counter % 5));
         test_recursion(original, (counter % 5));

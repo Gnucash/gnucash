@@ -87,7 +87,7 @@ void gnc_keyring_set_password (const gchar *access_method,
     {
         CFStringRef osx_resultstring = SecCopyErrorMessageString( status, NULL );
         const gchar *resultstring = CFStringGetCStringPtr(osx_resultstring,
-                                                    GetApplicationTextEncoding());
+                                    GetApplicationTextEncoding());
         PWARN ( "OS X keychain error: %s", resultstring );
         PWARN ( "The user will be prompted for a password again next time." );
         CFRelease ( osx_resultstring );
@@ -168,7 +168,7 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
         {
             CFStringRef osx_resultstring = SecCopyErrorMessageString( status, NULL );
             const gchar *resultstring = CFStringGetCStringPtr(osx_resultstring,
-                                                        GetApplicationTextEncoding());
+                                        GetApplicationTextEncoding());
             PWARN ( "OS X keychain error: %s", resultstring );
             CFRelease ( osx_resultstring );
         }

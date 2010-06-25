@@ -134,11 +134,13 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
     g_object_set (G_OBJECT(webkit_settings), "default-encoding", "utf-8", NULL);
     if (default_font_family == NULL)
     {
-        PWARN("webkit_settings: Cannot get default font family."); 
-    }else{
+        PWARN("webkit_settings: Cannot get default font family.");
+    }
+    else
+    {
         g_object_set (G_OBJECT(webkit_settings),
-            "default-font-family", default_font_family,
-            NULL);
+                      "default-font-family", default_font_family,
+                      NULL);
         PINFO("webkit_settings: Set default font to [%s]", default_font_family);
     }
 
@@ -562,7 +564,7 @@ webkit_navigation_requested_cb( WebKitWebView* web_view, WebKitWebFrame* frame,
     }
 
     type = gnc_html_parse_url( GNC_HTML(self), url, &location, &label );
-    if( strcmp( type, "file" ) == 0 )
+    if ( strcmp( type, "file" ) == 0 )
     {
         LEAVE("URI type is 'file'");
         return WEBKIT_NAVIGATION_RESPONSE_ACCEPT;

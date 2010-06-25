@@ -211,12 +211,12 @@ gnc_module_system_refresh(void)
              * not build clean libtool modules with "-module", we get dynamic
              * libraries ending on .dylib
              * On Windows, all modules will move to bin/, so they will be mixed with
-             * other libraries, such as gtk+. Adding a prefix "libgncmod" filter will prevent 
+             * other libraries, such as gtk+. Adding a prefix "libgncmod" filter will prevent
              * module loader load other libraries. And the filter should works on other platform.
              */
             if ((g_str_has_suffix(dent, "." G_MODULE_SUFFIX)
-					|| g_str_has_suffix(dent, ".dylib"))
-					&& g_str_has_prefix(dent, GNC_MODULE_PREFIX))
+                    || g_str_has_suffix(dent, ".dylib"))
+                    && g_str_has_prefix(dent, GNC_MODULE_PREFIX))
             {
                 /* get the full path name, then dlopen the library and see
                  * if it has the appropriate symbols to be a gnc_module */

@@ -60,7 +60,11 @@ sqlEscapeString (sqlEscape *b, const char *str)
 
     ENTER("str = %s", str);
 
-    if (!b || !str) { LEAVE("(null) args"); return NULL; }
+    if (!b || !str)
+    {
+        LEAVE("(null) args");
+        return NULL;
+    }
 
     /* if a string is escaped twice, just return the first */
     if (b->escape == str)
@@ -144,7 +148,11 @@ void
 sqlEscape_destroy (sqlEscape *b)
 {
     ENTER(" ");
-    if (!b) { LEAVE("b is (null)"); return; }
+    if (!b)
+    {
+        LEAVE("b is (null)");
+        return;
+    }
     g_free (b->escape);
     b->escape = NULL;
     g_free (b);

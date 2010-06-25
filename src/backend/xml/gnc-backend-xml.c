@@ -831,9 +831,9 @@ gnc_xml_be_remove_old_files(FileBackend *be)
             {
                 /* Is a lock file. Skip the active lock file */
                 if ((safe_strcmp(name, be->linkfile) != 0) &&
-                    /* Only delete lock files older than the active one */
-                    (g_stat(name, &statbuf) == 0) &&
-                    (statbuf.st_mtime < lockstatbuf.st_mtime))
+                        /* Only delete lock files older than the active one */
+                        (g_stat(name, &statbuf) == 0) &&
+                        (statbuf.st_mtime < lockstatbuf.st_mtime))
                 {
                     PINFO ("remove stale lock file: %s", name);
                     g_unlink(name);
@@ -1195,7 +1195,7 @@ gnc_backend_new(void)
     retain_type_changed_cb(NULL, (gpointer)be); /* Get retain_type from gconf */
 
     if ( (gnc_be->file_retention_type == XML_RETAIN_DAYS) &&
-         (gnc_be->file_retention_days == 0 ) )
+            (gnc_be->file_retention_days == 0 ) )
     {
         /* Backwards compatibility code. Pre 2.3.15, 0 retain_days meant
          * "keep forever". From 2.3.15 on this is controlled via a multiple

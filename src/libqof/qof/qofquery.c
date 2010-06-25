@@ -1118,7 +1118,7 @@ qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
      * so that the first term added to an empty query doesn't screw up.
      */
     if ((QOF_QUERY_AND == op) &&
-        ( (0 == qof_query_has_terms (q1)) || (0 == qof_query_has_terms (q2)) ))
+            ( (0 == qof_query_has_terms (q1)) || (0 == qof_query_has_terms (q2)) ))
     {
         op = QOF_QUERY_OR;
     }

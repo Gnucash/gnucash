@@ -105,13 +105,13 @@ static gchar  *environment_expand(gchar *param)
     gchar *closing_brace;
     gchar *result;
     gchar *tmp;
-    gchar *expanded=NULL;
+    gchar *expanded = NULL;
 
     if (!param)
         return NULL;
 
     /* Set an initial return value, so we can always use g_strconcat below) */
-    result=g_strdup ("x");
+    result = g_strdup ("x");
 
     /* Look for matching pairs of { and }. Anything in between should be expanded */
     search_start = param;
@@ -142,7 +142,7 @@ static gchar  *environment_expand(gchar *param)
         }
 
         /* Expand the variable  we found and append it to the result */
-        to_expand = g_strndup (opening_brace + 1, closing_brace - opening_brace -1);
+        to_expand = g_strndup (opening_brace + 1, closing_brace - opening_brace - 1);
         env_val = g_getenv (to_expand);
         tmp = g_strconcat (result, env_val, NULL);
         g_free (result);
@@ -173,7 +173,7 @@ environment_override()
 {
     const gchar *path;
     gchar *env_file;
-    GKeyFile    *keyfile=g_key_file_new();
+    GKeyFile    *keyfile = g_key_file_new();
     GError      *error;
     gchar **env_vars;
     gsize param_count;
@@ -181,8 +181,8 @@ environment_override()
     gboolean got_keyfile;
 
 #ifdef G_OS_WIN32
-	config_path = gnc_path_get_pkgsysconfdir();
-	share_path = gnc_path_get_pkgdatadir();
+    config_path = gnc_path_get_pkgsysconfdir();
+    share_path = gnc_path_get_pkgdatadir();
 #endif /* G_OS_WIN32 */
 
     if ((path = g_getenv("GNC_CONFIG_PATH")))
@@ -715,11 +715,11 @@ inner_main (void *closure, int argc, char **argv)
 
 #ifdef MAC_INTEGRATION
     {
-	gchar *data_dir = gnc_path_get_pkgdatadir();
-	gchar *accelmap = g_build_filename(data_dir, "ui", "osx_accel_map", NULL);
-	gtk_accel_map_load (accelmap);
-	g_free(data_dir);
-	g_free(accelmap);
+        gchar *data_dir = gnc_path_get_pkgdatadir();
+        gchar *accelmap = g_build_filename(data_dir, "ui", "osx_accel_map", NULL);
+        gtk_accel_map_load (accelmap);
+        g_free(data_dir);
+        g_free(accelmap);
     }
 #endif /* MAC_INTEGRATION */
 

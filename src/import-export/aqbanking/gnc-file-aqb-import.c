@@ -192,7 +192,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
 #ifndef AQBANKING_VERSION_5_PLUS
                              , 0
 #endif
-            ))
+                            ))
     {
         g_warning("gnc_file_aqbanking_import: Error on import");
         goto cleanup;

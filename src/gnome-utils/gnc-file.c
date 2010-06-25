@@ -573,12 +573,12 @@ gnc_post_file_open (const char * filename)
     char * newfile;
     QofBackendError io_err = ERR_BACKEND_NO_ERR;
 
-    gchar *protocol=NULL;
-    gchar *hostname=NULL;
-    gchar *username=NULL;
-    gchar *password=NULL;
-    gchar *path=NULL;
-    gint32 port=0;
+    gchar *protocol = NULL;
+    gchar *hostname = NULL;
+    gchar *username = NULL;
+    gchar *password = NULL;
+    gchar *path = NULL;
+    gint32 port = 0;
 
 
     ENTER(" ");
@@ -608,7 +608,7 @@ gnc_post_file_open (const char * filename)
     {
         gboolean have_valid_pw = FALSE;
         have_valid_pw = gnc_keyring_get_password ( NULL, protocol, hostname, port,
-                                   path, &username, &password );
+                        path, &username, &password );
         if (!have_valid_pw)
             return FALSE;
 
@@ -828,11 +828,11 @@ gnc_post_file_open (const char * filename)
      * and inform the user if there are any */
     new_book = gnc_get_current_book();
     invalid_account_names = gnc_account_list_name_violations ( new_book,
-                                     gnc_get_account_separator_string() );
+                            gnc_get_account_separator_string() );
     if ( invalid_account_names )
     {
         gchar *message = gnc_account_name_violations_errmsg ( gnc_get_account_separator_string(),
-                                                              invalid_account_names );
+                         invalid_account_names );
         gnc_warning_dialog(NULL, "%s", message);
         g_free ( message );
     }
@@ -1072,12 +1072,12 @@ gnc_file_do_save_as (const char* filename)
     char *newfile;
     const char *oldfile;
 
-    gchar *protocol=NULL;
-    gchar *hostname=NULL;
-    gchar *username=NULL;
-    gchar *password=NULL;
-    gchar *path=NULL;
-    gint32 port=0;
+    gchar *protocol = NULL;
+    gchar *hostname = NULL;
+    gchar *username = NULL;
+    gchar *password = NULL;
+    gchar *path = NULL;
+    gint32 port = 0;
 
 
     QofBackendError io_err = ERR_BACKEND_NO_ERR;

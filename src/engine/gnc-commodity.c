@@ -220,7 +220,7 @@ static gnc_quote_source multiple_quote_sources[] =
     { FALSE, 0, 0, "Nasdaq (Yahoo, ...)", "NASDAQ", "nasdaq" },
     { FALSE, 0, 0, "New Zealand (Yahoo, ...)", "NZ", "nz" },
     { FALSE, 0, 0, "NYSE (Yahoo, ...)", "NYSE", "nyse" },
-/*    { FALSE, 0, 0, "South Africa (Sharenet, ...)", "ZA", "za" }, */
+    /*    { FALSE, 0, 0, "South Africa (Sharenet, ...)", "ZA", "za" }, */
     { FALSE, 0, 0, "T. Rowe Price", "TRPRICE", "troweprice" },
     { FALSE, 0, 0, "U.K. Unit Trusts", "UKUNITTRUSTS", "uk_unit_trusts" },
     { FALSE, 0, 0, "USA (Yahoo, Fool ...)", "USA", "usa" },

@@ -88,7 +88,7 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
 #ifndef AQBANKING_VERSION_5_PLUS
                                          , 0
 #endif
-            ))
+                                        ))
     {
         g_warning("gnc_ab_getbalance: JobGetBalance not available for this "
                   "account");
@@ -113,7 +113,7 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
 #ifndef AQBANKING_VERSION_5_PLUS
                                , 0
 #endif
-            ))
+                              ))
     {
         g_warning("gnc_ab_getbalance: Error on executing job");
         goto cleanup;

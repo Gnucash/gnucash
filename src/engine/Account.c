@@ -235,11 +235,11 @@ gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invali
        The resulting string will be displayed to the user if there are
        account names containing the separator character. */
     message = g_strdup_printf(
-                _("The separator character \"%s\" is used in one or more account names.\n\n"
-                  "This will result in unexpected behaviour. "
-                  "Either change the account names or choose another separator character.\n\n"
-                  "Below you will find the list of invalid account names:\n"
-                  "%s"), separator, account_list );
+                  _("The separator character \"%s\" is used in one or more account names.\n\n"
+                    "This will result in unexpected behaviour. "
+                    "Either change the account names or choose another separator character.\n\n"
+                    "Below you will find the list of invalid account names:\n"
+                    "%s"), separator, account_list );
     g_free ( account_list );
     return message;
 }
