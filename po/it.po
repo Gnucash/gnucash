@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: Gnucash 2.3.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-06 15:02+0200\n"
-"PO-Revision-Date: 2010-06-08 18:23+0100\n"
+"PO-Revision-Date: 2010-06-25 10:53+0100\n"
 "Last-Translator: Cristian Marchi <cri.penta@gmail.com>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -5303,7 +5303,7 @@ msgstr "Sommario di tutte le transazioni nel lotto selezionato"
 #: ../intl-scm/guile-strings.c:7292
 #: ../intl-scm/guile-strings.c:7400
 msgid "Balance"
-msgstr "Salda"
+msgstr "Saldo"
 
 # Tooltip
 #: ../src/gnome/glade/lots.glade.h:9
@@ -6843,7 +6843,7 @@ msgstr ""
 
 #: ../src/gnome/glade/stocks.glade.h:7
 msgid "If you are finished creating the stock split or merger, press `Apply'. You may also press `Back' to review your choices, or `Cancel' to quit without making any changes."
-msgstr "Se è terminata la creazione del frazionamento o della fusione azionaria, premere «Applica». Premer invece «Indietro» per rivedere le proprie scelte o «Annulla» per uscire dalla procedura e scartare i cambiamenti."
+msgstr "Se è terminata la creazione del frazionamento o della fusione azionaria, premere «Applica». Premere invece «Indietro» per rivedere le proprie scelte o «Annulla» per uscire dalla procedura e scartare i cambiamenti."
 
 #: ../src/gnome/glade/stocks.glade.h:8
 msgid "If you received a cash disbursement as a result of the stock split, enter the details of that payment here. Otherwise, just click `Forward'."
@@ -9034,12 +9034,12 @@ msgstr "Non liquidata"
 #: ../src/gnome-search/search-reconciled.c:228
 #: ../src/gnome-utils/gnc-tree-view-account.c:578
 msgid "Cleared"
-msgstr "Liquidata"
+msgstr "Liquidato"
 
 #: ../src/gnome-search/search-reconciled.c:231
 #: ../src/gnome-utils/gnc-tree-view-account.c:591
 msgid "Reconciled"
-msgstr "Riconciliata"
+msgstr "Riconciliato"
 
 #: ../src/gnome-search/search-reconciled.c:234
 msgid "Frozen"
@@ -11900,13 +11900,13 @@ msgstr "Totale (periodo)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:647
 msgid "Tax Info"
-msgstr "Informazioni sulla tassa"
+msgstr "Informazioni sulle tasse"
 
 #. Translators: This string has a context prefix; the translation
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-account.c:655
 msgid "Column letter for 'Placeholder'|P"
-msgstr "Lettera della colonna \"Segnaposto\"|S"
+msgstr "S"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1456
@@ -11974,7 +11974,7 @@ msgstr "Ricevi quotazioni"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:441
 msgid "Column letter for 'Get Quotes'|Q"
-msgstr "Lettera della colonna \"Ricevi quotazioni\"|Q"
+msgstr "Q"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:447
 #: ../src/gnome-utils/gnc-tree-view-price.c:454
@@ -14479,7 +14479,7 @@ msgstr "_Ricalcola"
 #. must only contain the part after the | character.
 #: ../src/register/ledger-core/split-register.c:2231
 msgid "Action Column|Deposit"
-msgstr ""
+msgstr "Deposito"
 
 #: ../src/register/ledger-core/split-register.c:2232
 msgid "Withdraw"
@@ -22649,6 +22649,7 @@ msgstr "Resoconto tasse / esportazione TXF"
 msgid "Alternate Period"
 msgstr "Periodo altrenativo"
 
+# tooltip
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -22658,7 +22659,7 @@ msgstr "Periodo altrenativo"
 #: ../intl-scm/guile-strings.c:6530
 #: ../intl-scm/guile-strings.c:6646
 msgid "Override or modify From: & To:"
-msgstr ""
+msgstr "Esclude o modifica \"Dal:\" - \"Al:\""
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -22669,7 +22670,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6532
 #: ../intl-scm/guile-strings.c:6648
 msgid "Use From - To"
-msgstr "Utilizza da - a"
+msgstr "Utilizza \"Dal\" - \"Al\""
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -22906,12 +22907,13 @@ msgstr "Scegliere i conti"
 msgid "Suppress $0.00 values"
 msgstr "Elimina le voci nulle"
 
+# tooltip
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6374
 #: ../intl-scm/guile-strings.c:6578
 msgid "$0.00 valued Tax codes won't be printed."
-msgstr ""
+msgstr "I codici tasse con valore $0.00 non verranno stampati"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -22920,12 +22922,13 @@ msgstr ""
 msgid "Do not print full account names"
 msgstr "Non stampare i nomi completi dei conti"
 
+# tooltip
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6378
 #: ../intl-scm/guile-strings.c:6582
 msgid "Do not print all Parent account names"
-msgstr "Non stampare tutti i nomi dei conti padre"
+msgstr "Non stampa tutti i nomi dei conti padre"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -22962,12 +22965,13 @@ msgstr "Mostra i parametri di esportazione TXF per ogni codice o conto nel resoc
 msgid "Do not print Action:Memo data"
 msgstr "Non stampare i dati del campo \"Azione:Promemoria\""
 
+# tooltip
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6390
 #: ../intl-scm/guile-strings.c:6594
 msgid "Do not print Action:Memo data for transactions"
-msgstr "Non stampare i dati del campo \"Azione:Promemoria\" per le transazioni"
+msgstr "Non stampa i dati del campo \"Azione:Promemoria\" per le transazioni"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -22976,40 +22980,43 @@ msgstr "Non stampare i dati del campo \"Azione:Promemoria\" per le transazioni"
 msgid "Do not print transaction detail"
 msgstr "Non stampare i dettagli della transazione"
 
+# tooltip
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6394
 #: ../intl-scm/guile-strings.c:6598
 msgid "Do not print transaction detail for accounts"
-msgstr "Non stampare i dettagli della transazione per i conti"
+msgstr "Non stampa i dettagli della transazione per i conti"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6396
 #: ../intl-scm/guile-strings.c:6600
 msgid "Do not use special date processing"
-msgstr ""
+msgstr "Non usare l'elaborazione speciale delle date"
 
+# tooltip
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6398
 #: ../intl-scm/guile-strings.c:6602
 msgid "Do not print transactions out of specified dates"
-msgstr "Non stampare le transazioni al di fuori delle date specificate"
+msgstr "Non stampa le transazioni al di fuori delle date specificate"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6400
 #: ../intl-scm/guile-strings.c:6604
 msgid "Shade alternate transactions"
-msgstr ""
+msgstr "Colora alternativamente le transazioni"
 
+# tooltip
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6402
 #: ../intl-scm/guile-strings.c:6606
 msgid "Shade background of alternate transactions, if more than one displayed"
-msgstr ""
+msgstr "Colora lo sfondo delle transazioni alternativamente, se ne viene visualizzata più di una"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -23018,40 +23025,42 @@ msgstr ""
 msgid "Currency conversion date"
 msgstr "Data di conversione della valuta"
 
+# tooltip
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6406
 #: ../intl-scm/guile-strings.c:6610
 msgid "Select date to use for PriceDB lookups"
-msgstr ""
+msgstr "Selezionare la data da utilizzare per l'analisi del database dei prezzi"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6408
 #: ../intl-scm/guile-strings.c:6612
 msgid "Nearest transaction date"
-msgstr "Data più vicina della transazione"
+msgstr "Data più vicina alla transazione"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6410
 #: ../intl-scm/guile-strings.c:6614
 msgid "Use nearest to transaction date"
-msgstr "usa il più vicino alla data della transazione"
+msgstr "Usa la data più vicina a quella della transazione"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6412
 #: ../intl-scm/guile-strings.c:6616
 msgid "Nearest report date"
-msgstr "Data più vicina del resoconto"
+msgstr "Data più vicina al resoconto"
 
+# tooltip
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:6414
 #: ../intl-scm/guile-strings.c:6618
 msgid "Use nearest to report date"
-msgstr "usa il più vicino alla data del resoconto"
+msgstr "Usa la data più vicina a quella del resoconto"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -24505,7 +24514,7 @@ msgstr "Note aggiuntive"
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7720
 msgid "The file name of the eguile template part of this report.  This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."
-msgstr ""
+msgstr "Il nome del file di modello eguile parte di questo resoconto. Il file dovrebbe essere o nella cartella .gnucash, o altrimenti nel giusto percorso all'interno della cartella di installazione di GnuCash."
 
 #. src/business/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:7722
