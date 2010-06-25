@@ -683,14 +683,14 @@
   <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Gas</act:name>
+  <act:name>Petrol</act:name>
   <act:id type="new">a4d661a2ba6410a74e4c70128bb275ba</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Gas</act:description>
+  <act:description>Petrol</act:description>
   <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
