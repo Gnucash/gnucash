@@ -558,6 +558,7 @@ function inst_gnome() {
         wget_unpacked $LIBART_LGPL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTK_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        echo 'gtk-theme-name = "MS-Windows"' > $GNOME_DIR/etc/gtk-2.0/gtkrc
         wget_unpacked $INTLTOOL_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $ORBIT2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -583,6 +584,17 @@ function inst_gnome() {
         wget_unpacked $LIBGLADE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTKHTML_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GTK_THEME_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/gtk2-themes-*
+        cp -a $TMP_UDIR/gtk2-themes-*/lib $_GNOME_UDIR/
+        cp -a $TMP_UDIR/gtk2-themes-*/share $_GNOME_UDIR/
+        rm -rf $TMP_UDIR/gtk2-themes-*
+
+        wget_unpacked $GTK_PREFS_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/gtk2_prefs-*
+        mv $TMP_UDIR/gtk2_prefs-*/gtk2_prefs.exe $_GNOME_UDIR/bin
+        rm -rf $TMP_UDIR/gtk2_prefs-*
+
         wget_unpacked $GTK_DOC_URL $DOWNLOAD_DIR $TMP_DIR
         qpushd $_GNOME_UDIR
             assert_one_dir $TMP_UDIR/gtk-doc-*

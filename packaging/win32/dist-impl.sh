@@ -97,7 +97,7 @@ function dist_gnome() {
     wget_unpacked $PANGO_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GTK_URL $DOWNLOAD_DIR $DIST_DIR
-    cp $DIST_DIR/share/themes/MS-Windows/gtk-2.0/gtkrc $DIST_DIR/etc/gtk-2.0
+    echo 'gtk-theme-name = "MS-Windows"' > $DIST_DIR/etc/gtk-2.0/gtkrc
     wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GAIL_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $POPT_URL $DOWNLOAD_DIR $DIST_DIR
@@ -111,6 +111,18 @@ function dist_gnome() {
     wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $DIST_DIR
 	wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $DIST_DIR
+	wget_unpacked $GTK_THEME_URL $DOWNLOAD_DIR $TMP_DIR
+
+    assert_one_dir $TMP_UDIR/gtk2-themes-*
+    cp -a $TMP_UDIR/gtk2-themes-*/lib $DIST_DIR/
+    cp -a $TMP_UDIR/gtk2-themes-*/share $DIST_DIR/
+    rm -rf $TMP_UDIR/gtk2-themes-*
+
+    wget_unpacked $GTK_PREFS_URL $DOWNLOAD_DIR $TMP_DIR
+    assert_one_dir $TMP_UDIR/gtk2_prefs-*
+    mv $TMP_UDIR/gtk2_prefs-*/gtk2_prefs.exe $DIST_DIR/bin
+    rm -rf $TMP_UDIR/gtk2_prefs-*
+
     rm -rf $DIST_UDIR/etc/gconf/gconf.xml.defaults/{desktop,schemas}
     cp -a $DIST_UDIR/lib/locale $DIST_UDIR/share
     rm -rf $DIST_UDIR/lib/locale
