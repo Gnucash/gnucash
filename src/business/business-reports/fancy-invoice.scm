@@ -163,6 +163,7 @@
        (hash-set! hash acct (if ref (gnc-numeric-add-fixed ref val) val))))
    values))
 
+
 (define (monetary-or-percent numeric currency entry-type)
   (if (gnc:entry-type-percent-p entry-type)
       ;; oli-custom - make a string instead of a table
@@ -221,6 +222,7 @@
 			     (gncEntryGetInvTaxTable entry))
 			(and (gncEntryGetBillTaxable entry)
 			     (gncEntryGetBillTaxTable entry)))
+		    ;; Translators: This "T" is displayed in the taxable column, if this entry contains tax
 		    (_ "T") "")))
 
     (if (taxvalue-col column-vector)
@@ -343,13 +345,13 @@
    (gnc:make-number-range-option
     (N_ "Display") (N_ "Minimum # of entries")
     "u" (N_ "The minimum number of invoice entries to display. (-1)") 23
-    4 23 3 1))
+    4 23 0 1))
 
   (gnc:register-inv-option
    (gnc:make-text-option
     (N_ "Display") (N_ "Extra Notes")
      "u" (N_ "Extra notes to put on the invoice")
-     ""))
+     (_ "Thank you for your patronage")))
 
   (gnc:register-inv-option
    (gnc:make-complex-boolean-option
@@ -359,7 +361,7 @@
 		  gnc:*report-options* "Display" "Payable to string" x))))
 
   (gnc:register-inv-option
-   (gnc:make-string-option
+   (gnc:make-text-option
     (N_ "Display") (N_ "Payable to string")
     "ua2" (N_ "The phrase for specifying to whom payments should be made")
     (_ "Make all cheques Payable to")))
@@ -372,7 +374,7 @@
 		  gnc:*report-options* "Display" "Company contact string" x))))
 
   (gnc:register-inv-option
-   (gnc:make-string-option
+   (gnc:make-text-option
     (N_ "Display") (N_ "Company contact string")
     "ub2" (N_ "The phrase used to introduce the company contact")
     (_ "Direct all inquiries to")))
@@ -387,6 +389,7 @@
   (gnc:options-set-default-section gnc:*report-options* "General")
 
   gnc:*report-options*)
+
 
 (define (make-entry-table invoice options add-order invoice?)
   (define (opt-val section name)
@@ -448,6 +451,7 @@
 	     (row '()))
 
 	; Update to fix bug 564380, payment on bill doubles bill. Mike Evans <mikee@saxicola.co.uk>
+	;; Reverse the value when needed
 	(if (not (null? invoice))
 	(begin
 	  (set! owner (gncInvoiceGetOwner invoice))
@@ -504,7 +508,7 @@
 					    #\space)))
 		)
 	    (add-subtotal-row table used-columns value-collector
-			      "grand-total" (_ "Subtotal"))
+			      "grand-total" (_ "Net Price"))
 
 	    (if display-all-taxes
 		(hash-for-each
@@ -521,6 +525,10 @@
 		; nope, just show the total tax.
 		(add-subtotal-row table used-columns tax-collector
 				  "grand-total" (_ "Tax")))
+
+	    (add-subtotal-row table used-columns total-collector
+			      "grand-total" (string-expand (_ "Total Price")
+							   #\space "&nbsp;"))
 
 	    (if (and show-payments (not (null? lot)))
 		(let ((splits (sort-list!

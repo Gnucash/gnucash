@@ -215,7 +215,7 @@
 			     (gncEntryGetInvTaxTable entry))
 			(and (gncEntryGetBillTaxable entry)
 			     (gncEntryGetBillTaxTable entry)))
-		    ;; This "T" is supposed to be an abbrev. for Tax?
+		    ;; Translators: This "T" is displayed in the taxable column, if this entry contains tax
 		    (_ "T") "")))
 
     (if (taxvalue-col column-vector)
@@ -370,10 +370,10 @@
     "x" (N_ "The format for the date->string conversion for today's date.")
     (gnc-default-strftime-date-format)))
 
-
   (gnc:options-set-default-section gnc:*report-options* "General")
 
   gnc:*report-options*)
+
 
 (define (make-entry-table invoice options add-order invoice?)
   (define (opt-val section name)
@@ -431,6 +431,7 @@
 	     (row '()))
 
 	; Update to fix bug 564380, payment on bill doubles bill. Mike Evans <mikee@saxicola.co.uk>
+	;; Reverse the value when needed
 	(if (not (null? invoice))
 	(begin
 	  (set! owner (gncInvoiceGetOwner invoice))
@@ -446,6 +447,7 @@
 			  (gnc:gnc-monetary-commodity amt)
 			 (gnc:gnc-monetary-amount (gnc:monetary-neg amt))))
 	      ))))
+
 
 	(if (date-col used-columns)
 	    (addto! row
@@ -477,7 +479,7 @@
             ; jamie
 	    (if (opt-val "Display" "Subtotal")
 	       (add-subtotal-row table used-columns value-collector
-			      "grand-total" (_ "Subtotal")))
+			      "grand-total" (_ "Net Price")))
 
 	    (if display-all-taxes
 		(hash-for-each
@@ -493,6 +495,9 @@
 		; nope, just show the total tax.
 		(add-subtotal-row table used-columns tax-collector
 				  "grand-total" (_ "Tax")))
+
+	    (add-subtotal-row table used-columns total-collector
+			      "grand-total" (_ "Total Price"))
 
 	    (if (and show-payments (not (null? lot)))
 		(let ((splits (sort-list!

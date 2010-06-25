@@ -209,6 +209,7 @@
 			     (gncEntryGetInvTaxTable entry))
 			(and (gncEntryGetBillTaxable entry)
 			     (gncEntryGetBillTaxTable entry)))
+		    ;; Translators: This "T" is displayed in the taxable column, if this entry contains tax
 		    (_ "T") "")))
 
     (if (taxvalue-col column-vector)
@@ -235,9 +236,9 @@
   (define (gnc:register-inv-option new-option)
     (gnc:register-option gnc:*report-options* new-option))
 
-   (gnc:register-inv-option
-    (gnc:make-invoice-option invoice-page invoice-name "x" ""
- 			    (lambda () '()) #f))
+  (gnc:register-inv-option
+   (gnc:make-invoice-option invoice-page invoice-name "x" ""
+			    (lambda () '()) #f))
 
   (gnc:register-inv-option
    (gnc:make-string-option
@@ -341,6 +342,7 @@
 
   gnc:*report-options*)
 
+
 (define (make-entry-table invoice options add-order invoice?)
   (define (opt-val section name)
     (gnc:option-value
@@ -391,6 +393,7 @@
 	     (currency (xaccTransGetCurrency t))
 	     (invoice (opt-val invoice-page invoice-name))
 	     (owner '())
+	     ;; XXX Need to know when to reverse the value
 	     (amt (gnc:make-gnc-monetary currency (xaccSplitGetValue split)))
 	     (payment-style "grand-total")
 	     (row '()))
@@ -442,7 +445,7 @@
       (if (null? entries)
 	  (begin
 	    (add-subtotal-row table used-columns value-collector
-			      "grand-total" (_ "Subtotal"))
+			      "grand-total" (_ "Net Price"))
 
 	    (if display-all-taxes
 		(hash-for-each
@@ -458,6 +461,9 @@
 		; nope, just show the total tax.
 		(add-subtotal-row table used-columns tax-collector
 				  "grand-total" (_ "Tax")))
+
+	    (add-subtotal-row table used-columns total-collector
+			      "grand-total" (_ "Total Price"))
 
 	    (if (and show-payments (not (null? lot)))
 		(let ((splits (sort-list!
