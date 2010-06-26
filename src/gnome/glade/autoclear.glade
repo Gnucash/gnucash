@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <glade-interface>
-  <!-- interface-requires gtk+ 2.6 -->
+  <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkDialog" id="Auto-clear Start Dialog">
     <property name="visible">True</property>
@@ -9,10 +9,12 @@
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox6">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <widget class="GtkVBox" id="vbox1">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
               <widget class="GtkLabel" id="label1">
@@ -62,7 +64,6 @@
                     <child>
                       <widget class="GtkLabel" id="status_label">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes"></property>
                       </widget>
                       <packing>
                         <property name="right_attach">2</property>
