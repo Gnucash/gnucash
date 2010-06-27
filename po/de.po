@@ -161,7 +161,7 @@ msgstr "Anfangsbestand"
 #: ../intl-scm/guile-strings.c:7230 ../intl-scm/guile-strings.c:7414
 #: ../intl-scm/guile-strings.c:7772
 msgid "Retained Earnings"
-msgstr "Gewinnrücklagen"
+msgstr "Erwirtschafteter Gewinn"
 
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
@@ -938,7 +938,7 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-invoice.c:1045
 #: ../src/gnome/window-reconcile.c:1074
 msgid "Total:"
-msgstr "Betrag:"
+msgstr "Summe:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1051
 msgid "Subtotal:"
@@ -3226,7 +3226,7 @@ msgstr "Rechnung erhalten?"
 #: ../intl-scm/guile-strings.c:1954 ../intl-scm/guile-strings.c:2156
 #: ../intl-scm/guile-strings.c:3298
 msgid "Subtotal"
-msgstr "Zwischensumme"
+msgstr "Nettobetrag"
 
 #. src/tax/us/de_DE.scm
 #. src/tax/us/gnucash/tax/de_DE.scm
@@ -12631,7 +12631,7 @@ msgstr "Zukünftiges Minimum (als Bericht)"
 #: ../intl-scm/guile-strings.c:7220 ../intl-scm/guile-strings.c:7404
 #: ../intl-scm/guile-strings.c:7674 ../intl-scm/guile-strings.c:9340
 msgid "Total"
-msgstr "Betrag"
+msgstr "Summe"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:629
 msgid "Total (Report)"
@@ -17742,7 +17742,7 @@ msgstr "Das Datumsformat für den Ausdruck des heutigen Datums."
 #: ../intl-scm/guile-strings.c:1744 ../intl-scm/guile-strings.c:1952
 #: ../intl-scm/guile-strings.c:2154 ../intl-scm/guile-strings.c:2408
 msgid "Payment, thank you"
-msgstr "Vielen Dank für Ihre Zahlung"
+msgstr "Betrag dankend erhalten"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/invoice.scm
@@ -17758,7 +17758,7 @@ msgstr "Vielen Dank für Ihre Zahlung"
 #: ../intl-scm/guile-strings.c:1958 ../intl-scm/guile-strings.c:2160
 #: ../intl-scm/guile-strings.c:2298 ../intl-scm/guile-strings.c:2338
 msgid "Amount Due"
-msgstr "Fälliger Betrag"
+msgstr "Noch zu zahlen"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/invoice.scm
@@ -22739,7 +22739,7 @@ msgstr "Gesamt Verbindlichkeiten"
 #: ../intl-scm/guile-strings.c:5422 ../intl-scm/guile-strings.c:7232
 #: ../intl-scm/guile-strings.c:7416 ../intl-scm/guile-strings.c:7774
 msgid "Retained Losses"
-msgstr "Verlustvortrag"
+msgstr "Erwirtschafteter Verlust"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/balance-sheet.scm
