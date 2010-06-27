@@ -76,25 +76,25 @@
 ;;   list of files in the directory
 
 (define (directory-files dir)
-    (let ((dir-stream (opendir dir)))
-        (let loop ((new (readdir dir-stream))
+  (let ((fname-regexp (make-regexp "\.scm$")) ;; Regexp that matches the desired filenames
+        (dir-stream (opendir dir)))
+    (let loop ((fname (readdir dir-stream))
 	               (acc '())
 				  )
-                  (if (eof-object? new)
+                  (if (eof-object? fname)
                       (begin
                           (closedir dir-stream)
                           acc
                       )
                       (loop (readdir dir-stream)
-                          (if (or (string=? "."  new)             ;;; ignore
-                                  (string=? ".." new))            ;;; ignore
-                              acc
-                              (cons new acc)
-                          )
+                            (if (regexp-exec fname-regexp fname)
+                                (cons fname acc)
+                                acc
+                            )
                       )
                   )
-         )
     )
+  )
 )
 
 ;; Process a list of files by removing the ".scm" suffix if it exists
