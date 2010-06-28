@@ -76,7 +76,7 @@
 ;;   list of files in the directory
 
 (define (directory-files dir)
-  (let ((fname-regexp (make-regexp "\.scm$")) ;; Regexp that matches the desired filenames
+  (let ((fname-regexp (make-regexp "\\.scm$")) ;; Regexp that matches the desired filenames
         (dir-stream (opendir dir)))
     (let loop ((fname (readdir dir-stream))
 	               (acc '())
