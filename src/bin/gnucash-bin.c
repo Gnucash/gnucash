@@ -495,9 +495,6 @@ gnucash_command_line(int *argc, char **argv)
         { NULL }
     };
 
-    /* Pretend that argv[0] is "gnucash" */
-    if ((p = strstr(argv[0], "-bin"))) * p = '\0';
-
     context = g_option_context_new (" [datafile]");
     g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
     g_option_context_add_group (context, gtk_get_option_group (FALSE));
