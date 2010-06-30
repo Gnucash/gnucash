@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <glade-interface>
-  <!-- interface-requires gtk+ 2.8 -->
+  <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkDialog" id="Print Check Dialog">
     <property name="title" translatable="yes">Print Check</property>

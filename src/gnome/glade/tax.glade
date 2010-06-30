@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <glade-interface>
-  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkDialog" id="Tax Information Dialog">
     <property name="title" translatable="yes">Income Tax Information</property>
@@ -8,10 +8,12 @@
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox14">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <widget class="GtkVBox" id="vbox101">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <child>
               <widget class="GtkAlignment" id="alignment14">
                 <property name="visible">True</property>
@@ -178,6 +180,7 @@
               <widget class="GtkVBox" id="acct_info_vbox">
                 <property name="visible">True</property>
                 <property name="border_width">6</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <widget class="GtkLabel" id="accounts_label">
                     <property name="visible">True</property>
@@ -199,6 +202,7 @@
                     <child>
                       <widget class="GtkVBox" id="vbox96">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <child>
                           <widget class="GtkTable" id="table3">
                             <property name="visible">True</property>
@@ -359,7 +363,6 @@
                                           <widget class="GtkImage" id="image1">
                                             <property name="visible">True</property>
                                             <property name="stock">gtk-add</property>
-                                            <property name="icon-size">4</property>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
@@ -413,10 +416,12 @@
               <widget class="GtkVBox" id="tax_info_vbox">
                 <property name="visible">True</property>
                 <property name="border_width">6</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <widget class="GtkVBox" id="vbox100">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <widget class="GtkLabel" id="label847734">
                         <property name="visible">True</property>
@@ -460,6 +465,7 @@
                   <widget class="GtkVBox" id="txf_categories_vbox">
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <widget class="GtkLabel" id="txf_category_label">
                         <property name="visible">True</property>
@@ -541,6 +547,7 @@
                       <widget class="GtkVBox" id="payer_name_source_vbox">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
+                        <property name="orientation">vertical</property>
                         <child>
                           <widget class="GtkLabel" id="label847736">
                             <property name="visible">True</property>
@@ -606,6 +613,7 @@
                       <widget class="GtkVBox" id="copy_number_vbox">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
+                        <property name="orientation">vertical</property>
                         <child>
                           <widget class="GtkLabel" id="label847738">
                             <property name="visible">True</property>
