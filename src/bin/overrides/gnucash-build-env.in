@@ -31,7 +31,7 @@ fi
 
 eval `@-GNC_SRCDIR-@/src/gnc-test-env \
   --gnc-module-dir ${top_builddir}/src/engine \
-  --gnc-module-dir ${top_builddir}/src/backend/file \
+  --gnc-module-dir ${top_builddir}/src/backend/xml \
   --gnc-module-dir ${top_builddir}/src/network-utils \
   --gnc-module-dir ${top_builddir}/src/calculation \
   --gnc-module-dir ${top_builddir}/src/tax/us \
