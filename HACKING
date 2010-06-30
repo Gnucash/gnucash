@@ -85,16 +85,12 @@ Starting GnuCash in GDB
 -----------------------
 To run gdb on an installed version of gnucash (installed in /opt/gnc/unstable:)
 
+    % gdb /opt/gnc/unstable/bin/gnucash
+
+OS X/Quartz developers can't run gnucash in gdb this way. They should instead use:
+
     % /opt/gnc/unstable/bin/gnucash-gdb
 
-The old method (pre 2.2) also still works, but is slightly more complicated:
-
-    % /opt/gnc/unstable/bin/gnucash &
-    [ pid number output here ]
-    % gdb /opt/gnc/unstable/bin/gnucash-bin
-    [gdb output]
-    gdb> attach <pid>
-    
 You'll also probably want to know about these:
 
     gdb> catch fork
@@ -104,7 +100,7 @@ You'll also probably want to know about these:
 It may be the case that running GDB from within emacs doesn't work for you,
 with the following error:
 
-[C-u M-x gdb /opt/gnucash-cvs/bin/gnucash-bin
+[C-u M-x gdb /opt/gnucash-cvs/bin/gnucash
  ...in buffer *gud-gdb*:]
 
     (gdb) attach <pid>
