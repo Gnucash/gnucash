@@ -224,7 +224,7 @@ main (int argc, char *argv[])
     /* this should really be an SQL server */
     book = qof_book_new ();
 
-    rc = gnc_book_begin (book, "file:/tmp/demo.xac", FALSE);
+    rc = gnc_book_begin (book, "file:/tmp/demo.gnucash", FALSE);
     if (!rc) goto bookerrexit;
 
     rc = gnc_book_load (book);

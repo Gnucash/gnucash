@@ -52,28 +52,28 @@ test_strings strs[] =
 #ifndef G_OS_WIN32
     /* basic file tests in posix like environment */
     {
-        "/test/path/file.xacc", FALSE,
-        "file", NULL, NULL, NULL, "/test/path/file.xacc", 0,
-        "file:///test/path/file.xacc",
-        "file:///test/path/file.xacc", TRUE
+        "/test/path/file.gnucash", FALSE,
+        "file", NULL, NULL, NULL, "/test/path/file.gnucash", 0,
+        "file:///test/path/file.gnucash",
+        "file:///test/path/file.gnucash", TRUE
     },
     {
-        "file:///test/path/file.xacc", FALSE,
-        "file", NULL, NULL, NULL, "/test/path/file.xacc", 0,
-        "file:///test/path/file.xacc",
-        "file:///test/path/file.xacc", TRUE
+        "file:///test/path/file.gnucash", FALSE,
+        "file", NULL, NULL, NULL, "/test/path/file.gnucash", 0,
+        "file:///test/path/file.gnucash",
+        "file:///test/path/file.gnucash", TRUE
     },
     {
-        "xml:///test/path/file.xacc", FALSE,
-        "xml", NULL, NULL, NULL, "/test/path/file.xacc", 0,
-        "xml:///test/path/file.xacc",
-        "xml:///test/path/file.xacc", TRUE
+        "xml:///test/path/file.gnucash", FALSE,
+        "xml", NULL, NULL, NULL, "/test/path/file.gnucash", 0,
+        "xml:///test/path/file.gnucash",
+        "xml:///test/path/file.gnucash", TRUE
     },
     {
-        "sqlite3:///test/path/file.xacc", FALSE,
-        "sqlite3", NULL, NULL, NULL, "/test/path/file.xacc", 0,
-        "sqlite3:///test/path/file.xacc",
-        "sqlite3:///test/path/file.xacc", TRUE
+        "sqlite3:///test/path/file.gnucash", FALSE,
+        "sqlite3", NULL, NULL, NULL, "/test/path/file.gnucash", 0,
+        "sqlite3:///test/path/file.gnucash",
+        "sqlite3:///test/path/file.gnucash", TRUE
     },
 #else
     /* basic file tests in windows environment */

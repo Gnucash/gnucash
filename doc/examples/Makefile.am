@@ -11,22 +11,22 @@ doc_DATA = \
   abc.qif \
   bogus.qif \
   cbb-export.qif \
-  currency.xac \
-  currency_tree_xml.xac \
+  currency.gnucash \
+  currency_tree_xml.gnucash \
   every.qif \
   ms-money.qif \
   quicktest.qif \
-  splitdemo.xac \
+  splitdemo.gnucash \
   swipe.qif \
-  taxreport.xac \
-  test.xac \
-  test2.xac \
-  test3.xac \
-  test4.xac \
-  trading.xac \
-  trading2.xac \
+  taxreport.gnucash \
+  test.gnucash \
+  test2.gnucash \
+  test3.gnucash \
+  test4.gnucash \
+  trading.gnucash \
+  trading2.gnucash \
   web.qif \
-  xfer.xac
+  xfer.gnucash
 
 EXTRA_DIST = \
   ${doc_DATA}

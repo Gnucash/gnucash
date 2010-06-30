@@ -199,7 +199,7 @@ You can also run gnucash --help for the command line options.
 
 You can start GnuCash at the command-line, with "gnucash" or "gnucash
 <filename>", where <filename> is a GnuCash account file.  Sample
-accounts can be found in "data" subdirectory.  *.xac files are GnuCash
+accounts can be found in "data" subdirectory.  *.gnucash files are GnuCash
 accounts that can opened with the "Open File" menu entry.  *.qif files
 are Quicken Import Format files that can be opened with the "Import
 QIF" menu entry.
