@@ -191,6 +191,16 @@ class Book(GnuCashCoreClass):
 class GncNumeric(GnuCashCoreClass):
     """Object used by GnuCash to store all numbers. Always consists of a
     numerator and denominator.
+
+    The constants GNC_DENOM_AUTO, 
+    GNC_HOW_RND_FLOOR, GNC_HOW_RND_CEIL, GNC_HOW_RND_TRUNC, 
+    GNC_HOW_RND_PROMOTE, GNC_HOW_RND_ROUND_HALF_DOWN, 
+    GNC_HOW_RND_ROUND_HALF_UP, GNC_HOW_RND_ROUND, GNC_HOW_RND_NEVER,
+    GNC_HOW_DENOM_EXACT, GNC_HOW_DENOM_REDUCE, GNC_HOW_DENOM_LCD, 
+    and GNC_HOW_DENOM_FIXED are available for arithmetic
+    functions like GncNumeric.add
+    
+    Look at gnc-numeric.h to see how ot use these
     """
 
     def __init__(self, num=0, denom=1, **kargs):
@@ -253,15 +263,17 @@ class Account(GnuCashCoreClass):
     """A GnuCash Account.
 
     A fundamental entity in accounting, an Account provides representation
-    for a financial object, such as a BANK account, an ASSET (like a building),
-    a LIABILITY (such as a bank loan), a summary of some type of EXPENSE, or
-    a summary of some source of INCOME.
+    for a financial object, such as a ACCT_TYPE_BANK account, an
+    ACCT_TYPE_ASSET (like a building),
+    a ACCT_TYPE_LIABILITY (such as a bank loan), a summary of some type of
+    ACCT_TYPE_EXPENSE, or a summary of some source of ACCT_TYPE_INCOME .
 
     The words in upper case are the constants that GnuCash and this library uses
     to describe account type. Here is the full list:
-    BANK, CASH, CREDIT, ASSET, LIABILITY, STOCK, MUTUAL
-    CURRENCY, INCOME, EXPENSE, EQUITY, RECEIVABLE, PAYABLE, 
-    CHECKING, SAVINGS, MONEYMRKT, CREDITLINE
+    ACCT_TYPE_ASSET, ACCT_TYPE_BANK, ACCT_TYPE_CASH, ACCT_TYPE_CHECKING, \
+    ACCT_TYPE_CREDIT, ACCT_TYPE_EQUITY, ACCT_TYPE_EXPENSE, ACCT_TYPE_INCOME, \
+    ACCT_TYPE_LIABILITY, ACCT_TYPE_MUTUAL, ACCT_TYPE_PAYABLE, \
+    ACCT_TYPE_RECEIVABLE, ACCT_TYPE_STOCK, ACCT_TYPE_ROOT, ACCT_TYPE_TRADING
 
     These are not strings, they are attributes you can import from this
     module
@@ -290,6 +302,30 @@ this_module_dict = globals()
 for error_name, error_value, error_name_after_prefix in \
     extract_attributes_with_prefix(gnucash_core_c, 'ERR_'):
     this_module_dict[ error_name ] = error_value
+
+# GncNumeric demoniminator computation schemes
+# Used for the denom argument in arithmetic functions like GncNumeric.add
+from gnucash.gnucash_core_c import GNC_DENOM_AUTO
+
+# GncNumeric rounding instructions
+# used for the how argument in arithmetic functions like GncNumeric.add
+from gnucash.gnucash_core_c import \
+    GNC_HOW_RND_FLOOR, GNC_HOW_RND_CEIL, GNC_HOW_RND_TRUNC, \
+    GNC_HOW_RND_PROMOTE, GNC_HOW_RND_ROUND_HALF_DOWN, \
+    GNC_HOW_RND_ROUND_HALF_UP, GNC_HOW_RND_ROUND, GNC_HOW_RND_NEVER
+
+# GncNumeric denominator types
+# used for the how argument in arithmetic functions like GncNumeric.add
+from gnucash.gnucash_core_c import \
+    GNC_HOW_DENOM_EXACT, GNC_HOW_DENOM_REDUCE, GNC_HOW_DENOM_LCD, \
+    GNC_HOW_DENOM_FIXED
+
+# import account types
+from gnucash.gnucash_core_c import \
+    ACCT_TYPE_ASSET, ACCT_TYPE_BANK, ACCT_TYPE_CASH, ACCT_TYPE_CHECKING, \
+    ACCT_TYPE_CREDIT, ACCT_TYPE_EQUITY, ACCT_TYPE_EXPENSE, ACCT_TYPE_INCOME, \
+    ACCT_TYPE_LIABILITY, ACCT_TYPE_MUTUAL, ACCT_TYPE_PAYABLE, \
+    ACCT_TYPE_RECEIVABLE, ACCT_TYPE_STOCK, ACCT_TYPE_ROOT, ACCT_TYPE_TRADING
 
 #Book
 Book.add_constructor_and_methods_with_prefix('qof_book_', 'new')
