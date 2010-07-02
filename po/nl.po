@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-05 15:40-0400\n"
-"PO-Revision-Date: 2010-06-29 22:15+0200\n"
+"PO-Revision-Date: 2010-07-02 00:03+0200\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -4369,6 +4369,13 @@ msgid ""
 "\n"
 "Note: all accounts except Equity and placeholder accounts may have an opening balance.\n"
 msgstr ""
+"Als u de naam van een rekening wilt aanpassen klikt u eerst op de rij van de betreffende rekening en daarna op de rekeningnaam, waarna u deze kunt aanpassen.\n"
+"\n"
+"Sommige rekeningen zijn aangemerkt als \"Aggregatie\". Aggregaties worden gebruikt om  hiërarchie binnen een rekeningschema aan te brengen. Meestal wordt er niet rechtstreeks op geboekt en kennen ze geen beginsaldo. Om een rekening als aggregatie aan te merken klikt u op het relevante keuzevakje.\n"
+"\n"
+"Als u aan een rekening een beginsaldo wilt toekennen klikt u op de rij van de betreffende rekening, vervolgens op het beginsaldo-veld en voert u het beginsaldo in.\n"
+"\n"
+"NB: met uitzondering van eigen vermogen-rekeningen en aggregaties kunnen alle rekeningen een beginsaldo hebben.\n"
 
 #: ../src/gnome/glade/account.glade.h:39
 msgid "Interval:"
@@ -8112,7 +8119,7 @@ msgstr "De inhoud van een afgestemde boekregel wijzigen"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:2
 msgid "Commit changes to a invoice_entry"
-msgstr ""
+msgstr "Wijzigingen op een factuur_regel toepassen"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:3
 msgid "Commit changes to a transaction"
@@ -9296,11 +9303,11 @@ msgstr "Wijzigingen doorvoeren"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:6
 msgid "GnuCash will install the data for you."
-msgstr ""
+msgstr "GnuCash zal de gegevens voor u installeren."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:7
 msgid "GnuCash will update the system path for you."
-msgstr "Gnucash zal het systeempad voor u bijwerken."
+msgstr "GnuCash zal het systeempad voor u bijwerken."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:8
 msgid "Install into home directory"
@@ -9312,7 +9319,7 @@ msgstr "Voeg de volgende regels aan het eind van uw bestand ~/.gconf.path toe:"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:10
 msgid "Please run the following commands:"
-msgstr ""
+msgstr "Voer de volgende opdrachten uit:"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:11
 msgid "S_kip"
@@ -9328,7 +9335,7 @@ msgstr "De configuratiegegevens met de standaardinstellingen voor GnuCash zijn n
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:14
 msgid "The data has _already been installed in another window"
-msgstr ""
+msgstr "De gegevens zijn _al geïnstalleerd in een ander venster"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:15
 msgid "The search path has _already been updated in another window"
@@ -10098,7 +10105,6 @@ msgid "Transaction _journal"
 msgstr "_Journaalposten"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:134
-#, fuzzy
 msgid "US Dollars (USD)"
 msgstr "US Dollars (USD)"
 
@@ -10251,7 +10257,6 @@ msgid "_Retain log files:"
 msgstr "Logbestanden _vasthouden:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:172
-#, fuzzy
 msgid "_Right"
 msgstr "_Rechts"
 
@@ -11332,7 +11337,6 @@ msgstr "Koersen ophalen"
 #. Translators: This string has a context prefix; the translation
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:441
-#, fuzzy
 msgid "Column letter for 'Get Quotes'|Q"
 msgstr "K"
 
@@ -11814,7 +11818,6 @@ msgstr "Naam afzender"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:38
 #: ../src/import-export/hbci/glade/hbcipass.glade.h:6
-#, fuzzy
 msgid "Password:"
 msgstr "Wachtwoord:"
 
@@ -11831,7 +11834,6 @@ msgstr "Doel van de betaling (vervolg)"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:41
 #: ../src/import-export/hbci/glade/hbci.glade.h:38
-#, fuzzy
 msgid "Progress"
 msgstr "Voortgang"
 
@@ -11855,7 +11857,6 @@ msgstr "Naam ontvanger"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:45
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:4
-#, fuzzy
 msgid "Remember _PIN"
 msgstr "_PIN onthouden"
 
@@ -11931,7 +11932,6 @@ msgstr "Boekingssjabloon gebruiken"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:70
 #: ../src/import-export/hbci/glade/hbci.glade.h:68
-#, fuzzy
 msgid "_Earliest possible date"
 msgstr "_Vroegst mogelijke datum"
 
@@ -11943,7 +11943,6 @@ msgstr "_Laatste ophaaldatum"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:72
 #: ../src/import-export/hbci/glade/hbci.glade.h:70
-#, fuzzy
 msgid "_Now"
 msgstr "_Nu"
 
@@ -11954,19 +11953,16 @@ msgstr "AqBanking configuratie-assistent _starten"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:74
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:6
-#, fuzzy
 msgid "_Verbose debug messages"
 msgstr "_Uitgebreide debug-berichten"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:75
 #: ../src/import-export/hbci/glade/hbci.glade.h:72
-#, fuzzy
 msgid "at Bank"
 msgstr "bij bank"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:76
 #: ../src/import-export/hbci/glade/hbci.glade.h:73
-#, fuzzy
 msgid "something"
 msgstr "iets"
 
@@ -11979,7 +11975,6 @@ msgstr "iets"
 #: ../src/import-export/hbci/dialog-hbcitrans.c:916
 #: ../src/import-export/hbci/dialog-hbcitrans.c:920
 #: ../src/import-export/hbci/dialog-hbcitrans.c:932
-#, fuzzy
 msgid "(unknown)"
 msgstr "(onbekend)"
 
@@ -12339,9 +12334,8 @@ msgstr "De boekingen op de rekening via Online bankieren opvragen"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:102
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:109
-#, fuzzy
 msgid "_Issue Transaction..."
-msgstr "Transacties _doorgeven..."
+msgstr "Boeking _doorgeven..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:103
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:110
@@ -12350,9 +12344,8 @@ msgstr "Een nieuwe transactie-opdracht via Online bankieren doorgeven"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:107
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:114
-#, fuzzy
 msgid "I_nternal Transaction..."
-msgstr "_Intrabank overboeken..."
+msgstr "_Intrabank-boeking..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:108
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:115
@@ -12694,9 +12687,8 @@ msgid "Enable edit match action"
 msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:19
-#, fuzzy
 msgid "Enable skip transaction action"
-msgstr "Algemene import-transactie-koppelaar"
+msgstr "Actie 'boeking overslaan' activeren"
 
 #: ../src/import-export/generic-import.glade.h:20
 msgid "Enable the EDIT action in the transaction matcher.  NOT YET SUPPORTED"
@@ -12907,12 +12899,11 @@ msgid "Remember the Online Banking PIN in memory during a session."
 msgstr "Het Online bankieren PIN gedurende een sessie in het geheugen onthouden."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:386
-#, fuzzy
 msgid ""
 "The PIN you entered was wrong.\n"
 "Do you want to try again?"
 msgstr ""
-"Het door u ingevoerde PIN was niet corect.\n"
+"Het door u ingevoerde PIN was niet correct.\n"
 "Wilt u het nogmaals proberen?"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:392
@@ -12934,14 +12925,12 @@ msgid "No chip card has been found in the chip card reader. Do you want to try a
 msgstr "Er is geen chipkaart in de kaartlezer aangetroffen. Wilt u het nogmaals proberen?"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:414
-#, fuzzy
 msgid "Unfortunately this Online Banking job is not supported by your bank or for your account. Aborting."
 msgstr "Helaas wordt deze Online bankieren-opdracht niet ondersteund door uw bank of voor uw rekening. De bewerking wordt afgebroken."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:422
-#, fuzzy
 msgid "The server of your bank refused the Online Banking connection. Please try again later. Aborting."
-msgstr "De server van uw bank weigert de Online bankieren-verbinding. Graag later opnieuw proberen. De bewerking wordt afgebroken."
+msgstr "De server van uw bank weigert de Online bankieren-verbinding. Probeert u het later nogmaals. De bewerking wordt afgebroken."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:591
 msgid "Executing the Online Banking outbox failed. Please check the log window."
@@ -13558,13 +13547,12 @@ msgid "Payees and memos"
 msgstr "Begunstigden en notities"
 
 #: ../src/import-export/qif-import/qif.glade.h:48
-#, fuzzy
 msgid ""
 "Please select a file to load. When you click \"Forward\", the file will be loaded and analyzed. You may need to answer some questions about the account(s) in the file.\n"
 "\n"
 "You will have the opportunity to load as many files as you wish, so don't  worry if your data is in multiple files. \n"
 msgstr ""
-"Kies een bestand om te laden. Als u \"Volgende\" klikt wordt het bestand geladen en geanalyseerd. U moet misschien nog enkele vragen over de rekeningen in het bestand beantwoorden.\n"
+"Selecteer een bestand om te laden. Als u op [Volgende] klikt, wordt het bestand geladen en geanalyseerd. U moet misschien nog enkele vragen over de rekening(en) in het bestand beantwoorden.\n"
 "\n"
 "U kunt zoveel bestanden laden als u wilt, dus het maakt niet uit als uw gegevens verspreid zijn over meerdere bestanden. \n"
 
@@ -13671,19 +13659,17 @@ msgid "Clear matching transactions above this score"
 msgstr "Overeenkomende boekingen boven deze score bevestigen"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:3
-#, fuzzy
 msgid "Enable EDIT transaction action"
-msgstr "Actie 'transactie bewerken' activeren"
+msgstr "Actie 'boeking BEWERKEN' activeren"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:4
-#, fuzzy
 msgid "Enable SKIP transaction action"
-msgstr "Actie 'transactie overslaan' activeren"
+msgstr "Actie 'boeking OVERSLAAN' activeren"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:5
 #, fuzzy
 msgid "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED."
-msgstr "De actie 'bewerken' in de transactiekoppelaar activeren. NOG NIET ONDERSTEUND."
+msgstr "De actie 'boeking bewerken' in de transactiekoppelaar activeren. NOG NIET ONDERSTEUND."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:6
 msgid "Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default."
@@ -13987,9 +13973,8 @@ msgid "The split's amount is zero, so no exchange rate is needed."
 msgstr "Het bedrag van de boekregel is nul; er is dus geen wisselkoers nodig."
 
 #: ../src/register/ledger-core/split-register-control.c:1493
-#, fuzzy
 msgid "Save the changed transaction?"
-msgstr "De aangepaste transactie opslaan?"
+msgstr "De gewijzigde boeking opslaan?"
 
 #: ../src/register/ledger-core/split-register-control.c:1495
 msgid "The current transaction has been changed.  Would you like to record the changes before moving to a new transaction, discard the changes, or return to the changed transaction?"
@@ -14072,9 +14057,9 @@ msgstr "Ref"
 
 #: ../src/register/ledger-core/split-register-model.c:352
 #: ../src/register/ledger-core/split-register-model.c:376
-#, fuzzy, c-format
+#, c-format
 msgid "Tot %s"
-msgstr "Tot %s"
+msgstr "Totaal %s"
 
 #: ../src/register/ledger-core/split-register-model.c:358
 msgid "Tot Credit"
@@ -14152,9 +14137,8 @@ msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "De tegenrekening invoeren of uit de lijst selecteren"
 
 #: ../src/register/ledger-core/split-register-model.c:1400
-#, fuzzy
 msgid "This transaction has multiple splits; press the Split button to see them all"
-msgstr "Deze transactie bevat meerdere opsplitsingen; kies de knop \"Opsplitsen\" om ze allemaal te zien"
+msgstr "Deze transactie bevat meerdere boekregels; klik op [Meer boekregels] om ze allemaal te zien"
 
 #: ../src/register/ledger-core/split-register-model.c:1403
 msgid "This transaction is a stock split; press the Split button to see details"
@@ -14348,9 +14332,9 @@ msgstr "Een exportopmaak voor dit rapport selecteren:"
 
 #. %s is the type of what is about to be saved, e.g. "HTML".
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1402
-#, fuzzy, c-format
+#, c-format
 msgid "Save %s To File"
-msgstr "Bewaar %s in bestand"
+msgstr "%s als bestand opslaan"
 
 #. %s is the strerror(3) string of the error that occurred.
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1417
@@ -14404,7 +14388,6 @@ msgid "<b>Style sheet options</b>"
 msgstr "<b>Opmaaksjabloon-opties</b>"
 
 #: ../src/report/report-gnome/report.glade.h:6
-#, fuzzy
 msgid "<b>_Selected Reports</b>"
 msgstr "<b>Ge_selecteerde rapporten</b>"
 
@@ -14495,28 +14478,24 @@ msgid "Edit report style sheets."
 msgstr "Opmaaksjablonen voor rapporten bewerken."
 
 #: ../src/gnome/gnucash.desktop.in.in.h:1
-#, fuzzy
 msgid "GnuCash Finance Management"
-msgstr "GnuCash-rekeningnaam"
+msgstr "GnuCash-financieel management"
 
 #: ../src/gnome/gnucash.desktop.in.in.h:2
 msgid "Manage your finances, accounts, and investments"
-msgstr ""
+msgstr "Om uw financiën, rekeningen en investeringen te beheren"
 
 #: ../src/libqof/qof/qofbookslots.h:66
-#, fuzzy
 msgid "Use Trading Accounts"
-msgstr "Handelsportefeuilles"
+msgstr "Handelsportefeuilles gebruiken"
 
 #: ../src/libqof/qof/qofbookslots.h:68
-#, fuzzy
 msgid "Budgeting"
-msgstr "Budget"
+msgstr "Budgetteren"
 
 #: ../src/libqof/qof/qofbookslots.h:69
-#, fuzzy
 msgid "Default Budget"
-msgstr "Budget _verwijderen"
+msgstr "Standaardbudget"
 
 #. * @}
 #. For the grep-happy:
@@ -14640,23 +14619,20 @@ msgstr "Conversie van QIF-gegevens wordt voorbereid"
 #. src/import-export/qif-import/qif-to-gnc.scm
 #. src/import-export/qif-import/qif-import/qif-to-gnc.scm
 #: ../intl-scm/guile-strings.c:76 ../intl-scm/guile-strings.c:208
-#, fuzzy
 msgid "Creating accounts"
-msgstr "Rekeningen aanmaken"
+msgstr "Rekeningen worden aangemaakt"
 
 #. src/import-export/qif-import/qif-to-gnc.scm
 #. src/import-export/qif-import/qif-import/qif-to-gnc.scm
 #: ../intl-scm/guile-strings.c:78 ../intl-scm/guile-strings.c:210
-#, fuzzy
 msgid "Matching transfers between accounts"
-msgstr "Overeenkomende transacties tussen rekeningen"
+msgstr "Overeenkomende boekingen tussen rekeningen"
 
 #. src/import-export/qif-import/qif-to-gnc.scm
 #. src/import-export/qif-import/qif-import/qif-to-gnc.scm
 #: ../intl-scm/guile-strings.c:80 ../intl-scm/guile-strings.c:212
-#, fuzzy
 msgid "Converting"
-msgstr "Omzetten"
+msgstr "Aan het omzetten"
 
 #. src/import-export/qif-import/qif-to-gnc.scm
 #. src/import-export/qif-import/qif-import/qif-to-gnc.scm
@@ -14667,16 +14643,14 @@ msgstr "Onbrekende boekdatum."
 #. src/import-export/qif-import/qif-to-gnc.scm
 #. src/import-export/qif-import/qif-import/qif-to-gnc.scm
 #: ../intl-scm/guile-strings.c:84 ../intl-scm/guile-strings.c:216
-#, fuzzy
 msgid "Dates earlier than 1970 are not supported."
 msgstr "Datums vóór 1970 worden niet ondersteund."
 
 #. src/import-export/qif-import/qif-merge-groups.scm
 #. src/import-export/qif-import/qif-import/qif-merge-groups.scm
 #: ../intl-scm/guile-strings.c:86 ../intl-scm/guile-strings.c:218
-#, fuzzy
 msgid "Finding duplicate transactions"
-msgstr "Dubbele transacties zoeken"
+msgstr "Aan het zoeken naar dubbele transacties"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
@@ -14688,16 +14662,14 @@ msgstr "Regel"
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:92 ../intl-scm/guile-strings.c:224
-#, fuzzy
 msgid "Read aborted."
-msgstr "Inlezen afgebroken."
+msgstr "Laden afgebroken."
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:94 ../intl-scm/guile-strings.c:226
-#, fuzzy
 msgid "Reading"
-msgstr "Lezen"
+msgstr "Laden"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
@@ -14709,7 +14681,6 @@ msgstr "Enkele tekens zijn verworpen."
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:98 ../intl-scm/guile-strings.c:102
 #: ../intl-scm/guile-strings.c:230 ../intl-scm/guile-strings.c:234
-#, fuzzy
 msgid "Converted to: "
 msgstr "Omgezet naar: "
 
@@ -14717,19 +14688,17 @@ msgstr "Omgezet naar: "
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:100 ../intl-scm/guile-strings.c:232
 msgid "Some characters have been converted according to your locale."
-msgstr "Enkele tekens zijn geconverteerd op basis van uw landinstelling."
+msgstr "Enkele tekens zijn omgezet op basis van uw landinstelling."
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:104 ../intl-scm/guile-strings.c:236
-#, fuzzy
 msgid "Ignoring unknown option"
 msgstr "Onbekende optie wordt genegeerd"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:106 ../intl-scm/guile-strings.c:238
-#, fuzzy
 msgid "Date required."
 msgstr "Datum is vereist."
 
@@ -14774,9 +14743,8 @@ msgstr "Boekdatum"
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:120 ../intl-scm/guile-strings.c:252
-#, fuzzy
 msgid "Transaction amount"
-msgstr "Transactiewaarde"
+msgstr "Boekwaarde"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
@@ -14806,7 +14774,6 @@ msgstr "Afstemmingsstatus"
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:130 ../intl-scm/guile-strings.c:262
-#, fuzzy
 msgid "Commission"
 msgstr "Commissie"
 
@@ -14826,16 +14793,14 @@ msgstr "BTW-tarief"
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:136 ../intl-scm/guile-strings.c:268
-#, fuzzy
 msgid "Category budget amount"
-msgstr "Waarde categoriebudget"
+msgstr "Budget voor categorie"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:138 ../intl-scm/guile-strings.c:270
-#, fuzzy
 msgid "Account budget amount"
-msgstr "Waarde rekeningbudget"
+msgstr "Budget voor rekening"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
@@ -14882,7 +14847,7 @@ msgstr ""
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:154 ../intl-scm/guile-strings.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Value '%s' could be %s or %s."
 msgstr "Waarde '%s' kan zowel %s als %s zijn."
 
@@ -14896,14 +14861,13 @@ msgstr "Geen variabele"
 #. src/tax/us/txf-de_DE.scm
 #: ../intl-scm/guile-strings.c:290
 msgid "The electronic tax number of your business"
-msgstr "Het (electronische) belastingnummer van uw bedrijf"
+msgstr "Het (electronisch) fiscaal nummer van uw bedrijf"
 
 #. src/tax/us/de_DE.scm
 #. src/tax/us/gnucash/tax/de_DE.scm
 #: ../intl-scm/guile-strings.c:294 ../intl-scm/guile-strings.c:298
-#, fuzzy
 msgid "Tax Number"
-msgstr "Belastingnummer"
+msgstr "Fiscaal nummer"
 
 #. src/business/business-utils/business-utils.scm
 #. src/business/business-utils/gnucash/business-utils.scm
@@ -14959,7 +14923,6 @@ msgstr "Het adres van uw bedrijf"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:324
-#, fuzzy
 msgid "The contact person to print on invoices"
 msgstr "De contactpersoon om op facturen af te drukken"
 
@@ -15519,9 +15482,8 @@ msgstr "Munteenheid rapport"
 #: ../intl-scm/guile-strings.c:6866 ../intl-scm/guile-strings.c:6916
 #: ../intl-scm/guile-strings.c:7024 ../intl-scm/guile-strings.c:7118
 #: ../intl-scm/guile-strings.c:7236 ../intl-scm/guile-strings.c:7304
-#, fuzzy
 msgid "Price Source"
-msgstr "Bron prijs"
+msgstr "Noteringsbron"
 
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/gnucash/report/aging.scm
@@ -15692,9 +15654,8 @@ msgstr "Belastingbedrag"
 #: ../intl-scm/guile-strings.c:552 ../intl-scm/guile-strings.c:1154
 #: ../intl-scm/guile-strings.c:1596 ../intl-scm/guile-strings.c:1766
 #: ../intl-scm/guile-strings.c:1968 ../intl-scm/guile-strings.c:2138
-#, fuzzy
 msgid "T"
-msgstr "T"
+msgstr "Bel"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -15825,9 +15786,8 @@ msgstr "De belastbaarheid voor deze post weergeven"
 #: ../intl-scm/guile-strings.c:604 ../intl-scm/guile-strings.c:1206
 #: ../intl-scm/guile-strings.c:1648 ../intl-scm/guile-strings.c:1818
 #: ../intl-scm/guile-strings.c:2020 ../intl-scm/guile-strings.c:2190
-#, fuzzy
 msgid "Display each entry's total total tax"
-msgstr "Het totale belasting en voor ieder artikel"
+msgstr "De cumulatieve belasting voor elke post weergeven"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -15838,9 +15798,8 @@ msgstr "Het totale belasting en voor ieder artikel"
 #: ../intl-scm/guile-strings.c:610 ../intl-scm/guile-strings.c:1212
 #: ../intl-scm/guile-strings.c:1654 ../intl-scm/guile-strings.c:1824
 #: ../intl-scm/guile-strings.c:2026 ../intl-scm/guile-strings.c:2196
-#, fuzzy
 msgid "Display the entry's value"
-msgstr "Toon de waarde van het gegeven"
+msgstr "De waarde van de post weergeven"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/taxinvoice.scm
@@ -16070,7 +16029,6 @@ msgstr "De toelichting op de factuur weergeven?"
 #: ../intl-scm/guile-strings.c:650 ../intl-scm/guile-strings.c:1252
 #: ../intl-scm/guile-strings.c:1694 ../intl-scm/guile-strings.c:1888
 #: ../intl-scm/guile-strings.c:2066 ../intl-scm/guile-strings.c:2260
-#, fuzzy
 msgid "Payments"
 msgstr "Betalingen"
 
@@ -16089,9 +16047,8 @@ msgstr "De betalingen op deze factuur weergeven?"
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:656 ../intl-scm/guile-strings.c:1258
-#, fuzzy
 msgid "Minimum # of entries"
-msgstr "Minimum # orderregels"
+msgstr "Minimum # regels"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -16293,16 +16250,14 @@ msgstr "n/b"
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:738 ../intl-scm/guile-strings.c:1340
-#, fuzzy
 msgid "Headings 1"
-msgstr "Lezen"
+msgstr "Koptekst 1"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:740 ../intl-scm/guile-strings.c:1342
-#, fuzzy
 msgid "Headings 2"
-msgstr "Lezen"
+msgstr "Koptekst 2"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
@@ -16365,7 +16320,6 @@ msgstr "Breedte logo"
 #: ../intl-scm/guile-strings.c:762 ../intl-scm/guile-strings.c:802
 #: ../intl-scm/guile-strings.c:1364 ../intl-scm/guile-strings.c:1404
 #: ../intl-scm/guile-strings.c:5478 ../intl-scm/guile-strings.c:6940
-#, fuzzy
 msgid "Units"
 msgstr "Eenheden"
 
@@ -16373,9 +16327,8 @@ msgstr "Eenheden"
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:764 ../intl-scm/guile-strings.c:804
 #: ../intl-scm/guile-strings.c:1366 ../intl-scm/guile-strings.c:1406
-#, fuzzy
 msgid "Qty"
-msgstr "Hoev"
+msgstr "Aant"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
@@ -16422,9 +16375,8 @@ msgstr "Subtotaal"
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:784 ../intl-scm/guile-strings.c:1386
-#, fuzzy
 msgid "Payment rec'd..."
-msgstr "Betaling ontv..."
+msgstr "Betaling ontvangen"
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
@@ -16436,7 +16388,7 @@ msgstr "Extra toelichting"
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:788 ../intl-scm/guile-strings.c:1390
 msgid "The file name of the eguile template part of this report.  This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."
-msgstr ""
+msgstr "De bestandsnaam van het eguile-sjabloon om in dit rapport te gebruiken. Het bestand dient in uw eigen .gnucash-map of in de daartoe bestemde GnuCash-systeemmap te staan."
 
 #. src/business/business-reports/taxinvoice.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
@@ -16567,7 +16519,7 @@ msgstr "Bedankt voor uw klandizie"
 #. src/business/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:1728 ../intl-scm/guile-strings.c:1928
 #: ../intl-scm/guile-strings.c:2100 ../intl-scm/guile-strings.c:2300
-#, fuzzy, c-format
+#, c-format
 msgid "%s #%d"
 msgstr "%s #%d"
 
@@ -16647,9 +16599,8 @@ msgstr "VERKOOPFACTUUR NIET GEBOEKT"
 #. src/business/business-reports/gnucash/report/easy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:1938 ../intl-scm/guile-strings.c:2310
-#, fuzzy
 msgid "Easy Invoice"
-msgstr "Snelfactuur"
+msgstr "Eenvoudige factuur"
 
 #. src/business/business-reports/gnucash/report/payables.scm
 #. src/business/business-reports/payables.scm
@@ -17133,23 +17084,20 @@ msgstr "De numerieke optie in munteenheid-opmaak is %s."
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:2490 ../intl-scm/guile-strings.c:2678
-#, fuzzy
 msgid "Items you selected:"
 msgstr "De items die u geselecteerd heeft:"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:2492 ../intl-scm/guile-strings.c:2680
-#, fuzzy
 msgid "List items selected"
 msgstr "Lijst van geselecteerde items"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #: ../intl-scm/guile-strings.c:2494 ../intl-scm/guile-strings.c:2682
-#, fuzzy
 msgid "(You selected no list items.)"
-msgstr "(U heeft geen item uit de lijst gekozen.)"
+msgstr "(U heeft geen item uit de lijst geselecteerd.)"
 
 #. src/report/utility-reports/hello-world.scm
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -21330,7 +21278,7 @@ msgstr "Bedrag niet in balans"
 #. src/report/standard-reports/balsheet-eg.eguile.scm
 #: ../intl-scm/guile-strings.c:5914 ../intl-scm/guile-strings.c:6614
 msgid "<strong>Exchange Rates</strong> used for this report"
-msgstr ""
+msgstr "<strong>Wisselkoersen</strong> gebruikt voor dit rapport"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:7368
@@ -21730,7 +21678,7 @@ msgstr ""
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:7588
 msgid "The GnuCash report system has been upgraded. Your old saved reports have been transfered into a new format. If you experience trouble with saved reports, please contact the GnuCash development team."
-msgstr ""
+msgstr "De GnuCash rapportgenerator is geüpgraded. Uw oude opgeslagen rapporten zijn naar de nieuwe opmaak omgezet. Als u problemen ondervindt met opgeslagen rapporten kunt u het beste contact opnemen met het GnuCash ontwikkelteam."
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:7590
@@ -21800,7 +21748,7 @@ msgstr "Negatieve bedragen in rood weergeven."
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:7636
 msgid "Number header"
-msgstr ""
+msgstr "Numerieke kop"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:7638
@@ -22274,7 +22222,7 @@ msgstr "Geen verwerking van bijzondere datums"
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
 #: ../intl-scm/guile-strings.c:7860 ../intl-scm/guile-strings.c:8064
 msgid "Do not print transactions out of specified dates"
-msgstr ""
+msgstr "Geen boekingen buiten de opgegeven datums afdrukken"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -23368,9 +23316,9 @@ msgid "A list of directories (strings) indicating where to look for html and par
 msgstr "Een lijst met mappen (strings) die aangeven waar (geïnterpreteerde) html-bestanden te vinden zijn. Ieder element moet een string zijn die een map of een symbool representeert met 'default als verwijzing naar het standaard pad en 'current als verwijzing naar het huidige pad."
 
 #: ../doc/tip_of_the_day.list.in:1
-#, fuzzy, c-format
+#, c-format
 msgid "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots of bugs and unstable features! If you are looking for a stable personal finance application, you should use the latest release of GnuCash %s."
-msgstr "Waarschuwing! Dit is een ONTWIKKELVERSIE van GnuCash. waarschijnlijk metveel fouten en instabiele opties! Als u op zoek bent naar een stabiele toepassing voor het beheren van uw persoonlijke financiën, kunt u beter de laatste uitgave van GnuCash 2.2 gebruiken."
+msgstr "Waarschuwing! Dit is een ONTWIKKELVERSIE van GnuCash die waarschijnlijk nog veel fouten en instabiele opties bevat! Als u op zoek bent naar een stabiele toepassing voor het beheren van uw persoonlijke financiën, kunt u beter de laatste uitgave van GnuCash %s gebruiken."
 
 #: ../doc/tip_of_the_day.list.in:6
 msgid "The GnuCash online manual has lots of helpful information. If you are upgrading from earlier versions of GnuCash, the section \"What's new in GnuCash 2.0\" is particularly interesting. You can access the manual under the Help menu."
