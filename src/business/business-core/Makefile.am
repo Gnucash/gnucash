@@ -12,47 +12,9 @@ AM_CPPFLAGS = \
   ${GLIB_CFLAGS}
 
 libgncmod_business_core_la_SOURCES = \
-  swig-business-core.c \
-  gncBusGuile.c \
-  gncmod-business-core.c \
-  gncAddress.c \
-  gncBillTerm.c \
-  gncBusiness.c \
-  gncCustomer.c \
-  gncEmployee.c \
-  gncEntry.c \
-  gncInvoice.c \
-  gncJob.c \
-  gncOrder.c \
-  gncOwner.c \
-  gncTaxTable.c \
-  gncVendor.c
+  gncmod-business-core.c
 
-noinst_HEADERS = \
-  gncAddress.h \
-  gncAddressP.h \
-  gncBillTerm.h \
-  gncBillTermP.h \
-  gncBusiness.h \
-  gncBusGuile.h \
-  gncCustomer.h \
-  gncCustomerP.h \
-  gncEmployee.h \
-  gncEmployeeP.h \
-  gncEntry.h \
-  gncEntryP.h \
-  gncInvoice.h \
-  gncInvoiceP.h \
-  gncJob.h \
-  gncJobP.h \
-  gncOrder.h \
-  gncOrderP.h \
-  gncOwner.h \
-  gncOwnerP.h \
-  gncTaxTable.h \
-  gncTaxTableP.h \
-  gncVendor.h \
-  gncVendorP.h
+noinst_HEADERS =
 
 libgncmod_business_core_la_LDFLAGS = -avoid-version
 
@@ -66,17 +28,10 @@ libgncmod_business_core_la_LIBADD = \
 
 # business-core-helpers.c
 
-if BUILDING_FROM_SVN
-swig-business-core.c: business-core.i ${noinst_HEADERS} \
-                      ${top_srcdir}/src/base-typemaps.i
-	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
-	-I${top_srcdir}/src -o $@ $<
-endif
-
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = business-core.scm
 
-EXTRA_DIST = business-core.i ${gncmod_DATA}
+EXTRA_DIST = ${gncmod_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
@@ -99,6 +54,6 @@ endif
 
 noinst_DATA = .scm-links
 CLEANFILES = gnucash .scm-links ${SCM_FILE_LINKS}
-MAINTAINERCLEANFILES = swig-business-core.c
+MAINTAINERCLEANFILES =
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.core\"

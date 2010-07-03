@@ -18,25 +18,8 @@ INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/backend/xml) # for io-gncxml-v2.h
 INCLUDE_DIRECTORIES (${CMAKE_CURRENT_SOURCE_DIR}) # when building swig-core-utils.c
 INCLUDE_DIRECTORIES (${CMAKE_CURRENT_BINARY_DIR}) # for gncla-dir.h
 
-SET (SWIG_BUSINESS_CORE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-business-core.c)
-GNC_ADD_SWIG_COMMAND (${SWIG_BUSINESS_CORE_C} ${CMAKE_CURRENT_SOURCE_DIR}/business-core.i)
-
 SET (libgnc_business_core_SOURCES
-  gncAddress.c
-  gncBillTerm.c
-  gncBusGuile.c
-  gncBusiness.c
-  gncCustomer.c
-  gncEmployee.c
-  gncEntry.c
-  gncInvoice.c
-  gncJob.c
-  gncOrder.c
-  gncOwner.c
-  gncTaxTable.c
-  gncVendor.c
   gncmod-business-core.c
-  ${SWIG_BUSINESS_CORE_C}
 )
 
 SET (libgnc_business_core_xml_SOURCES
@@ -55,30 +38,6 @@ SET (libgnc_business_core_xml_SOURCES
 )
 
 SET (libgnc_business_core_HEADERS
-  gncAddress.h
-  gncAddressP.h
-  gncBillTerm.h
-  gncBillTermP.h
-  gncBusGuile.h
-  gncBusiness.h
-  gncCustomer.h
-  gncCustomerP.h
-  gncEmployee.h
-  gncEmployeeP.h
-  gncEntry.h
-  gncEntryP.h
-  gncInvoice.h
-  gncInvoiceP.h
-  gncJob.h
-  gncJobP.h
-  gncOrder.h
-  gncOrderP.h
-  gncOwner.h
-  gncOwnerP.h
-  gncTaxTable.h
-  gncTaxTableP.h
-  gncVendor.h
-  gncVendorP.h
 )
 
 ADD_LIBRARY (business-core

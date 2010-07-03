@@ -42,7 +42,21 @@ libgncmod_engine_la_SOURCES = \
   kvp-scm.c \
   engine-helpers.c \
   glib-helpers.c  \
-  policy.c
+  policy.c \
+  swig-business-core.c \
+  gncBusGuile.c \
+  gncAddress.c \
+  gncBillTerm.c \
+  gncBusiness.c \
+  gncCustomer.c \
+  gncEmployee.c \
+  gncEntry.c \
+  gncInvoice.c \
+  gncJob.c \
+  gncOrder.c \
+  gncOwner.c \
+  gncTaxTable.c \
+  gncVendor.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
 
@@ -81,7 +95,31 @@ gncinclude_HEADERS = \
   gnc-session-scm.h \
   gncObject.h \
   kvp-scm.h \
-  policy.h
+  policy.h \
+  gncAddress.h \
+  gncAddressP.h \
+  gncBillTerm.h \
+  gncBillTermP.h \
+  gncBusiness.h \
+  gncBusGuile.h \
+  gncCustomer.h \
+  gncCustomerP.h \
+  gncEmployee.h \
+  gncEmployeeP.h \
+  gncEntry.h \
+  gncEntryP.h \
+  gncInvoice.h \
+  gncInvoiceP.h \
+  gncJob.h \
+  gncJobP.h \
+  gncOrder.h \
+  gncOrderP.h \
+  gncOwner.h \
+  gncOwnerP.h \
+  gncTaxTable.h \
+  gncTaxTableP.h \
+  gncVendor.h \
+  gncVendorP.h
 
 noinst_HEADERS = \
   AccountP.h \
@@ -129,6 +167,7 @@ EXTRA_DIST = \
   kvp_doc.txt \
   SX-book-p.h \
   engine.i \
+  business-core.i \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 
@@ -162,6 +201,10 @@ swig-engine.c: engine.i ${top_srcdir}/src/base-typemaps.i \
                ${gncinclude_HEADERS} ${noinst_HEADERS}
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src/libqof/qof -I${top_srcdir}/src -o $@ $<
+swig-business-core.c: business-core.i ${noinst_HEADERS} \
+                      ${top_srcdir}/src/base-typemaps.i
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/src -o $@ $<
 endif
 
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
@@ -172,6 +215,6 @@ BUILT_SOURCES = iso-4217-currencies.c
 
 CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links \
 	${SCM_FILE_LINKS}
-MAINTAINERCLEANFILES = swig-engine.c
+MAINTAINERCLEANFILES = swig-engine.c swig-business-core.c
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.engine\"

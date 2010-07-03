@@ -50,11 +50,38 @@ SET (libgncmod_engine_HEADERS
   gncObject.h
   kvp-scm.h
   policy.h
+  gncAddress.h
+  gncAddressP.h
+  gncBillTerm.h
+  gncBillTermP.h
+  gncBusGuile.h
+  gncBusiness.h
+  gncCustomer.h
+  gncCustomerP.h
+  gncEmployee.h
+  gncEmployeeP.h
+  gncEntry.h
+  gncEntryP.h
+  gncInvoice.h
+  gncInvoiceP.h
+  gncJob.h
+  gncJobP.h
+  gncOrder.h
+  gncOrderP.h
+  gncOwner.h
+  gncOwnerP.h
+  gncTaxTable.h
+  gncTaxTableP.h
+  gncVendor.h
+  gncVendorP.h
 )
 
 # Command to generate the swig-engine.c wrapper file
 SET (SWIG_ENGINE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-engine.c)
 GNC_ADD_SWIG_COMMAND (${SWIG_ENGINE_C} ${CMAKE_CURRENT_SOURCE_DIR}/engine.i)
+
+SET (SWIG_BUSINESS_CORE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-business-core.c)
+GNC_ADD_SWIG_COMMAND (${SWIG_BUSINESS_CORE_C} ${CMAKE_CURRENT_SOURCE_DIR}/business-core.i)
 
 # Command to generate the iso-4217-currencies.c file
 SET (ISO_4217_C ${CMAKE_CURRENT_BINARY_DIR}/iso-4217-currencies.c)
@@ -108,6 +135,20 @@ SET (libgncmod_engine_SOURCES
   glib-helpers.c
   policy.c
   ${SWIG_ENGINE_C}
+  gncAddress.c
+  gncBillTerm.c
+  gncBusGuile.c
+  gncBusiness.c
+  gncCustomer.c
+  gncEmployee.c
+  gncEntry.c
+  gncInvoice.c
+  gncJob.c
+  gncOrder.c
+  gncOwner.c
+  gncTaxTable.c
+  gncVendor.c
+  ${SWIG_BUSINESS_CORE_C}
 )
 
 # Add dependency on config.h

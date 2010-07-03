@@ -48,7 +48,7 @@ extern "C"
 #include "swig-runtime.h"
 
 #include "backend/xml/gnc-backend-xml.h"
-#include "business/business-core/gncBusiness.h"
+#include "engine/gncBusiness.h"
 #include "business/business-core/xml/gncmod-business-backend-xml.h"
 #ifdef WITH_SQL
 #  include "backend/dbi/gnc-backend-dbi.h"
