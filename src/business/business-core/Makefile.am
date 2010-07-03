@@ -34,7 +34,6 @@ noinst_HEADERS = \
   gncBillTerm.h \
   gncBillTermP.h \
   gncBusiness.h \
-  gncBusinessP.h \
   gncBusGuile.h \
   gncCustomer.h \
   gncCustomerP.h \

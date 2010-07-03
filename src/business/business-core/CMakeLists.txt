@@ -61,7 +61,6 @@ SET (libgnc_business_core_HEADERS
   gncBillTermP.h
   gncBusGuile.h
   gncBusiness.h
-  gncBusinessP.h
   gncCustomer.h
   gncCustomerP.h
   gncEmployee.h
