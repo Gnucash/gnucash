@@ -55,7 +55,7 @@
 (define optname-void-transactions (N_ "Void Transactions?"))
 (define optname-table-export (N_ "Table for Exporting"))
 (define optname-common-currency (N_ "Common Currency"))
-(define optname-currency (N_ "Report Currency"))
+(define optname-currency (N_ "Report's currency"))
 (define def:grand-total-style "grand-total")
 (define def:normal-row-style "normal-row")
 (define def:alternate-row-style "alternate-row")

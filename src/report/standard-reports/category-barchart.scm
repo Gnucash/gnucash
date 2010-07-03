@@ -261,7 +261,7 @@ developing over time"))
                (all-data '()))
           
           ;; Converts a commodity-collector into one single double
-          ;; number, depending on the report currency and the
+          ;; number, depending on the report's currency and the
           ;; exchange-fn calculated above. Returns a double.
           (define (collector->double c date)
             ;; Future improvement: Let the user choose which kind of

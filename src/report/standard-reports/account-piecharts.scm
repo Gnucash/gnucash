@@ -288,7 +288,7 @@ balance at a given time"))
            (print-info (gnc-commodity-print-info report-currency #t)))
 
       ;; Converts a commodity-collector into one single double
-      ;; number, depending on the report currency and the
+      ;; number, depending on the report's currency and the
       ;; exchange-fn calculated above. Returns the absolute value
       ;; as double, multiplied by the averaging-multiplies (smaller
       ;; than one; multiplication instead of division to avoid

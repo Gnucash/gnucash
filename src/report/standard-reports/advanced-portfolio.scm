@@ -63,7 +63,7 @@
      (N_ "Date") "a")
 
     (gnc:options-add-currency! 
-     options gnc:pagename-general (N_ "Report Currency") "c")
+     options gnc:pagename-general (N_ "Report's currency") "c")
 
     (add-option
      (gnc:make-multichoice-option
@@ -374,7 +374,7 @@
 		 ;; with US dollars. In this case, commod-currency
 		 ;; would be US dollars. If there is no price, we
 		 ;; arbitrarily set the commod-currency to the same as
-		 ;; that of the report, currency
+		 ;; that of the report's currency
 		 (commod-currency (if price (gnc-price-get-currency price) currency))
 		 ;; the value of the commodity, expressed in terms of
 		 ;; the report's currency.
@@ -752,7 +752,7 @@
   (let ((to-date     (gnc:date-option-absolute-time
                       (get-option gnc:pagename-general "Date")))
         (accounts    (get-option gnc:pagename-accounts "Accounts"))
-        (currency    (get-option gnc:pagename-general "Report Currency"))
+        (currency    (get-option gnc:pagename-general "Report's currency"))
         (price-source (get-option gnc:pagename-general
                                   optname-price-source))
         (report-title (get-option gnc:pagename-general 

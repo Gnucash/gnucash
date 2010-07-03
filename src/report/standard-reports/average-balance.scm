@@ -41,7 +41,7 @@
     (gnc:options-add-interval-choice! 
      options gnc:pagename-general optname-stepsize "b" 'MonthDelta)
 
-    ;; Report currency
+    ;; Report's currency
     (gnc:options-add-currency! 
      options gnc:pagename-general optname-report-currency "c")
     
