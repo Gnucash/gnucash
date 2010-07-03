@@ -564,7 +564,7 @@
   
   (gnc:options-add-date-interval!
    gnc:*transaction-report-options*
-   gnc:pagename-general (N_ "From") (N_ "To") "a")
+   gnc:pagename-general (N_ "Start Date") (N_ "End Date") "a")
   
   
   (gnc:register-trep-option
@@ -1312,10 +1312,10 @@ Credit Card, and Income accounts")))))
 	(filter-mode (opt-val gnc:pagename-accounts "Filter Type"))
         (begindate (gnc:timepair-start-day-time
                     (gnc:date-option-absolute-time
-                     (opt-val gnc:pagename-general "From"))))
+                     (opt-val gnc:pagename-general "Start Date"))))
         (enddate (gnc:timepair-end-day-time
                   (gnc:date-option-absolute-time
-                   (opt-val gnc:pagename-general "To"))))
+                   (opt-val gnc:pagename-general "End Date"))))
         (report-title (opt-val 
                        gnc:pagename-general
                        gnc:optname-reportname))

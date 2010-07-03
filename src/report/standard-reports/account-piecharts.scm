@@ -59,8 +59,8 @@ balance at a given time"))
 (define reportname-assets (N_ "Assets"))
 (define reportname-liabilities (N_ "Liabilities"))
 
-(define optname-from-date (N_ "From"))
-(define optname-to-date (N_ "To"))
+(define optname-from-date (N_ "Start Date"))
+(define optname-to-date (N_ "End Date"))
 (define optname-report-currency (N_ "Report's currency"))
 (define optname-price-source (N_ "Price Source"))
 

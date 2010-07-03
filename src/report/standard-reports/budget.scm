@@ -38,8 +38,8 @@
 
 ;; define all option's names so that they are properly defined
 ;; in *one* place.
-;;(define optname-from-date (N_ "From"))
-;;(define optname-to-date (N_ "To"))
+;;(define optname-from-date (N_ "Start Date"))
+;;(define optname-to-date (N_ "End Date"))
 
 (define optname-display-depth (N_ "Account Display Depth"))
 (define optname-show-subaccounts (N_ "Always show sub-accounts"))

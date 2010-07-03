@@ -32,8 +32,8 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
-(define optname-from-date (N_ "From"))
-(define optname-to-date (N_ "To"))
+(define optname-from-date (N_ "Start Date"))
+(define optname-to-date (N_ "End Date"))
 (define optname-stepsize (N_ "Step Size"))
 
 (define pagename-price (N_ "Price"))
