@@ -29,18 +29,7 @@
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
-
-#include "gncAddressP.h"
-#include "gncBillTermP.h"
-#include "gncCustomerP.h"
-#include "gncEmployeeP.h"
-#include "gncEntryP.h"
-#include "gncInvoiceP.h"
-#include "gncJobP.h"
-#include "gncOrderP.h"
-#include "gncOwnerP.h"
-#include "gncTaxTableP.h"
-#include "gncVendorP.h"
+#include "gncBusiness.h"
 
 GNC_MODULE_API_DECL(libgncmod_business_core)
 
@@ -65,23 +54,6 @@ char *
 libgncmod_business_core_gnc_module_description(void)
 {
     return g_strdup("The GnuCash business core");
-}
-
-void
-gnc_module_init_business_core_init(void)
-{
-    /* initialize known types */
-    gncInvoiceRegister ();
-    gncJobRegister ();
-    gncBillTermRegister ();
-    gncCustomerRegister ();
-    gncAddressRegister ();
-    gncEmployeeRegister ();
-    gncEntryRegister ();
-    gncOrderRegister ();
-    gncOwnerRegister ();
-    gncTaxTableRegister ();
-    gncVendorRegister ();
 }
 
 int

@@ -23,12 +23,35 @@
 
 #include "config.h"
 
+#include "gncBusiness.h"
+
 #include <glib.h>
 
-#include "gncBusiness.h"
-#include "gncBusinessP.h"
+#include "gncAddressP.h"
+#include "gncBillTermP.h"
+#include "gncCustomerP.h"
+#include "gncEmployeeP.h"
+#include "gncEntryP.h"
+#include "gncInvoiceP.h"
+#include "gncJobP.h"
+#include "gncOrderP.h"
+#include "gncOwnerP.h"
+#include "gncTaxTableP.h"
+#include "gncVendorP.h"
 
-/* This file is currently unused;
- * its contents have been moved to qofid.[ch]
- */
-// void gncBusinessInitialize (int argc, char **argv) {}
+void
+gnc_module_init_business_core_init(void)
+{
+    /* initialize known types */
+    gncInvoiceRegister ();
+    gncJobRegister ();
+    gncBillTermRegister ();
+    gncCustomerRegister ();
+    gncAddressRegister ();
+    gncEmployeeRegister ();
+    gncEntryRegister ();
+    gncOrderRegister ();
+    gncOwnerRegister ();
+    gncTaxTableRegister ();
+    gncVendorRegister ();
+}
