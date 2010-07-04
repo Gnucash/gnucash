@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-07-04 21:59+0200\n"
-"PO-Revision-Date: 2010-05-14 10:50+0200\n"
+"PO-Revision-Date: 2010-07-04 22:08+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -10995,7 +10995,7 @@ msgstr "Wieviele Dezimalstellen automatisch ausgefüllt werden."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:85
 msgid "How many days to keep old log/backup files."
-msgstr ""
+msgstr "Anzahl Tage, die die alten Backup-Dateien noch aufgehoben werden sollen."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:86
 msgid ""
@@ -22513,9 +22513,8 @@ msgstr "Aufwandskonten"
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4888 ../intl-scm/guile-strings.c:6398
-#, fuzzy
 msgid "Show Average"
-msgstr "Durchschnitt"
+msgstr "Durchschnitt anzeigen"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -22523,38 +22522,37 @@ msgstr "Durchschnitt"
 msgid ""
 "Select whether the amounts should be shown over the full time period or "
 "rather as the average e.g. per month"
-msgstr ""
+msgstr "Entweder die Beträge direkt anzeigen oder die durchschnittlichen Werte pro z.B. Monat."
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4892 ../intl-scm/guile-strings.c:6402
-#, fuzzy
 msgid "No Averaging"
-msgstr "Konvertieren"
+msgstr "Kein Durchschnitt"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4894 ../intl-scm/guile-strings.c:6404
 msgid "Just show the amounts, without any averaging"
-msgstr ""
+msgstr "Nur die Beträge anzeigen ohne weitere Durchschnittberechnung"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4898 ../intl-scm/guile-strings.c:6408
 msgid "Show the average yearly amount during the reporting period"
-msgstr ""
+msgstr "Jährlichen Durchschnitt anzeigen"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4902 ../intl-scm/guile-strings.c:6412
 msgid "Show the average monthly amount during the reporting period"
-msgstr ""
+msgstr "Monatlichen Durchschnitt anzeigen"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4906 ../intl-scm/guile-strings.c:6416
 msgid "Show the average weekly amount during the reporting period"
-msgstr ""
+msgstr "Wöchentlichen Durchschnitt anzeigen"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -22565,23 +22563,20 @@ msgstr "Maximale Anzahl Segmente (Tortenstücke) im Diagramm"
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4918 ../intl-scm/guile-strings.c:6428
-#, fuzzy
 msgid "Yearly Average"
-msgstr "Durchschnitt"
+msgstr "Durchschnitt pro Jahr"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4920 ../intl-scm/guile-strings.c:6430
-#, fuzzy
 msgid "Monthly Average"
-msgstr "Monatlich"
+msgstr "Durchschnitt pro Monat"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4922 ../intl-scm/guile-strings.c:6432
-#, fuzzy
 msgid "Weekly Average"
-msgstr "Gewichteter Durchschnitt"
+msgstr "Durchschnitt pro Woche"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -24237,7 +24232,7 @@ msgstr "WWW:"
 #: ../intl-scm/guile-strings.c:7382
 #, c-format
 msgid "%s&nbsp;#"
-msgstr ""
+msgstr "%s&nbsp;Nr."
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/taxinvoice.eguile.scm
@@ -24424,9 +24419,8 @@ msgstr "Mitarbeiterbericht"
 
 #. src/business/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:7648
-#, fuzzy
 msgid "Display the charge type?"
-msgstr "Den Anteilspreis anzeigen?"
+msgstr "Die Einheit anzeigen?"
 
 #. src/business/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:7688
@@ -25032,34 +25026,3 @@ msgstr ""
 "Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des HBCI-Zugangs. "
 "Nachdem ein HBCI-Zugang eingerichtet wurde, können die Menüpunkte im "
 "Kontofenster unter Aktionen -> Online Aktionen verwendet werden."
-
-#~ msgid "DOCPATH"
-#~ msgstr "DOCPFAD"
-
-#~ msgid "Annual"
-#~ msgstr "Jährlich"
-
-#~ msgid "Bi-monthly"
-#~ msgstr "Zweimonatlich"
-
-#~ msgid "Bi-weekly"
-#~ msgstr "Zweiwöchentlich"
-
-#~ msgid "Daily (360)"
-#~ msgstr "Täglich (360)"
-
-#~ msgid "Daily (365)"
-#~ msgstr "Täglich (365)"
-
-#~ msgid "Semi-annual"
-#~ msgstr "Halbjährlich"
-
-#~ msgid "Tri-annual"
-#~ msgstr "Dreimal pro Jahr"
-
-#~ msgid "Delete old log/backup files after this many days (0 = never)."
-#~ msgstr ""
-#~ "Alte Log/Sicherungsdateien nach so vielen Tagen löschen (0 = niemals)."
-
-#~ msgid "Report Currency"
-#~ msgstr "Währung des Berichts"
