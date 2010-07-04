@@ -10995,7 +10995,8 @@ msgstr "Wieviele Dezimalstellen automatisch ausgefüllt werden."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:85
 msgid "How many days to keep old log/backup files."
-msgstr "Anzahl Tage, die die alten Backup-Dateien noch aufgehoben werden sollen."
+msgstr ""
+"Anzahl Tage, die die alten Backup-Dateien noch aufgehoben werden sollen."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:86
 msgid ""
@@ -22522,7 +22523,9 @@ msgstr "Durchschnitt anzeigen"
 msgid ""
 "Select whether the amounts should be shown over the full time period or "
 "rather as the average e.g. per month"
-msgstr "Entweder die Beträge direkt anzeigen oder die durchschnittlichen Werte pro z.B. Monat."
+msgstr ""
+"Entweder die Beträge direkt anzeigen oder die durchschnittlichen Werte pro z."
+"B. Monat."
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
