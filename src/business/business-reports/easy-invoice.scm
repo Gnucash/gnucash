@@ -101,7 +101,7 @@
          (set-col (make-set-col col-vector)))
     (set-col (opt-val "Display Columns" "Date") 0)
     (set-col (opt-val "Display Columns" "Description") 1)
-    (set-col (opt-val "Display Columns" "Action") 2)
+    (set-col (opt-val "Display Columns" "Charge Type") 2)
     (set-col (opt-val "Display Columns" "Quantity") 3)
     (set-col (opt-val "Display Columns" "Price") 4)
     (set-col (opt-val "Display Columns" "Discount") 5)
@@ -264,8 +264,8 @@
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display Columns") (N_ "Action")
-    "g" (N_ "Display the action?") #t))
+    (N_ "Display Columns") (N_ "Charge Type")
+    "g" (N_ "Display the charge type?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -800,7 +800,7 @@
             (begin
               (add-html! document "<table border=0><tr>")
               (add-html! document "<td>")
-              (add-html! document "Date: ")
+              (add-html! document (string-append (_ "Date") ": "))
               (add-html! document "</td>")
               (add-html! document "<td>")
               (add-html! document (gnc-print-date post-date))
@@ -808,7 +808,7 @@
               (if (opt-val "Display" "Due Date")
                 (begin
                   (add-html! document "<tr><td>")
-                  (add-html! document "Due: ")
+                  (add-html! document (string-append (_ "Due") ": "))
                   (add-html! document "</td>")
                   (add-html! document "<td>")
                   (add-html! document (gnc-print-date due-date))

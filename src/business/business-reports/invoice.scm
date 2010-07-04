@@ -663,7 +663,7 @@
 	 (invoice (opt-val invoice-page invoice-name))
 	 (owner '())
 	 (references? (opt-val "Display" "References"))
-	 (default-title (N_ "Invoice"))
+	 (default-title (_ "Invoice"))
 	 (custom-title (opt-val invoice-page "Custom Title"))
 	 (title "")
 	 (invoice? #f))

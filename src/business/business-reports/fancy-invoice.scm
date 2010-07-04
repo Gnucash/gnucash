@@ -884,7 +884,7 @@
 		  (set! date-table (make-date-table))
 		  ;; oli-custom - moved invoice number here
 		  (gnc:html-table-append-row!
-		   date-table (list (sprintf #f "%s&nbsp;#" title) (gncInvoiceGetID invoice)))
+		   date-table (list (sprintf #f (_ "%s&nbsp;#") title) (gncInvoiceGetID invoice)))
 		  (make-date-row! date-table (string-append title "&nbsp;" (_ "Date")) post-date)
 		  (make-date-row! date-table (_ "Due Date") due-date)
 		  date-table)
