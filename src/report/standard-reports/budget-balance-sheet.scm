@@ -49,7 +49,7 @@
   (N_ "Print liability/equity section in the same column under the assets section as opposed to a second column right of the assets section"))
 ;; FIXME this needs an indent option
 
-(define optname-accounts (N_ "Accounts to include"))
+(define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts
   (N_ "Report on these accounts, if display depth allows."))
 (define optname-depth-limit (N_ "Levels of Subaccounts"))

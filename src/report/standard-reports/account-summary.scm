@@ -71,7 +71,7 @@
 (define optname-date (N_ "Date"))
 ;; FIXME this needs an indent option
 
-(define optname-accounts (N_ "Accounts to include"))
+(define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts
   (N_ "Report on these accounts, if display depth allows."))
 (define optname-depth-limit (N_ "Levels of Subaccounts"))

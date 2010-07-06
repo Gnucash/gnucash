@@ -73,7 +73,7 @@
 (define opthelp-report-variant (N_ "Kind of trial balance to generate"))
 ;; FIXME this needs an indent option
 
-(define optname-accounts (N_ "Accounts to include"))
+(define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts
   (N_ "Report on these accounts"))
 (define optname-depth-limit (N_ "Levels of Subaccounts"))

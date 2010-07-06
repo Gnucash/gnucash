@@ -66,7 +66,7 @@
 (define optname-start-date (N_ "Start Date"))
 (define optname-end-date (N_ "End Date"))
 
-(define optname-accounts (N_ "Accounts to include"))
+(define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts
   (N_ "Report only on these accounts"))
 

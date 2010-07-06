@@ -604,7 +604,7 @@
   ;; account to do report on
   (gnc:register-trep-option
    (gnc:make-account-list-option
-    gnc:pagename-accounts (N_ "Report Accounts")
+    gnc:pagename-accounts (N_ "Accounts")
     "a" (N_ "Report on these accounts")
     ;; select, by default, all accounts...
     (lambda ()
@@ -620,7 +620,7 @@
 
   (gnc:register-trep-option
    (gnc:make-account-list-option
-    gnc:pagename-accounts (N_ "Filter Accounts")
+    gnc:pagename-accounts (N_ "Filter By...")
     "b" (N_ "Filter on these accounts")
     (lambda ()
       ;; FIXME : gnc:get-current-accounts disappeared.
@@ -1307,8 +1307,8 @@ Credit Card, and Income accounts")))))
 
   (gnc:report-starting reportname)
   (let ((document (gnc:make-html-document))
-	(c_account_1 (opt-val gnc:pagename-accounts "Report Accounts"))
-	(c_account_2 (opt-val gnc:pagename-accounts "Filter Accounts"))
+	(c_account_1 (opt-val gnc:pagename-accounts "Accounts"))
+	(c_account_2 (opt-val gnc:pagename-accounts "Filter By..."))
 	(filter-mode (opt-val gnc:pagename-accounts "Filter Type"))
         (begindate (gnc:timepair-start-day-time
                     (gnc:date-option-absolute-time
