@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-05 15:40-0400\n"
-"PO-Revision-Date: 2010-07-02 00:03+0200\n"
+"PO-Revision-Date: 2010-07-05 23:40+0200\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -4466,9 +4466,8 @@ msgid "Select or add a GnuCash account"
 msgstr "Een GnuCash-rekening selecteren of toevoegen"
 
 #: ../src/gnome/glade/account.glade.h:61
-#, fuzzy
 msgid "Setup selected accounts"
-msgstr "De geselecteerde rekening verwijderen"
+msgstr "Geselecteerde rekeningen instellen"
 
 #: ../src/gnome/glade/account.glade.h:62
 msgid "Show _hidden accounts"
@@ -5318,7 +5317,6 @@ msgid "y"
 msgstr "y"
 
 #: ../src/gnome/glade/progress.glade.h:1
-#, fuzzy
 msgid "Working..."
 msgstr "Bezig..."
 
@@ -6514,9 +6512,8 @@ msgid "_Asset"
 msgstr "_Activa"
 
 #: ../src/gnome/glade/tax.glade.h:16
-#, fuzzy
 msgid "_Expense"
-msgstr "_Uitgaven"
+msgstr "_Kosten"
 
 #: ../src/gnome/glade/tax.glade.h:17
 msgid "_Income"
@@ -6527,9 +6524,8 @@ msgid "_Liability/Equity"
 msgstr "Eigen/vreemd _vermogen"
 
 #: ../src/gnome/glade/tax.glade.h:19
-#, fuzzy
 msgid "_Parent Account"
-msgstr "_Bovenliggende rekening"
+msgstr "_Hoofdrekening"
 
 #: ../src/gnome/glade/tax.glade.h:20
 msgid "_Select Subaccounts"
@@ -6606,9 +6602,8 @@ msgid "Find transactions with a search"
 msgstr "Boekingen met een zoekopdracht terugvinden"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:134
-#, fuzzy
 msgid "Ta_x Report Options"
-msgstr "_Rapportopties"
+msgstr "_Belastingrapport-opties"
 
 #. Translators: currently implemented are *
 #. * US: income tax and                     *
@@ -6616,7 +6611,7 @@ msgstr "_Rapportopties"
 #. * So adjust this string
 #: ../src/gnome/gnc-plugin-basic-commands.c:139
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
-msgstr ""
+msgstr "De benodigde rekeningen voor belastingrapporten instellen"
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:145
@@ -7194,9 +7189,8 @@ msgid "Save changes to %s?"
 msgstr "Wijzigingen in %s opslaan?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1244
-#, fuzzy
 msgid "This register has pending changes to a transaction.  Would you like to save the changes to this transaction, discard the transaction, or cancel the operation?"
-msgstr "Dit overzicht is in afwachting van wijzigingen in een transactie. Wilt u de gewijzigde transactie opslaan, de gewijzigde transactie verwerpen of uw bewerking annuleren?"
+msgstr "Deze grootboekkaart is in afwachting van wijzigingen in een boeking. Wilt u de gewijzigde boeking opslaan, de wijzigingen verwerpen of uw bewerking annuleren?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1247
 msgid "_Discard Transaction"
@@ -7649,9 +7643,8 @@ msgid "Each time the date is printed, print the date format immediately below in
 msgstr "Bij het afdrukken van datums direct daaronder de datumopmaak in 8-punts lettertype afdrukken, gebruik makend van de tekens Y, M en D."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:4
-#, fuzzy
 msgid "If the 'date_format' is set to indicate a custom date format, this value is used as an argument to strftime to produce the date to be printed. It may be any valid strftime string; for more information about this format, read the manual page of strftime by \"man 3 strftime\"."
-msgstr "Als voor een aangepaste datumnotatie is gekozen, wordt deze waarde gebruikt als argument voor <i>strftime</i> om de datum af te drukken. Dit mag elke geldige <i>strftime</i>-string zijn. Voor meer informatie over deze opmaak verwijzen wij u naar de handleiding van strftime. Deze kunt u vanaf de commandoregel oproepen met \"man 3 strftime\"."
+msgstr "Als voor een aangepaste datumopmaak is gekozen, wordt deze waarde gebruikt als argument voor strftime om de datum af te drukken. Dit mag elke geldige strftime-string zijn. Meer informatie over deze opmaak kunt u teruglezen in de handleiding van strftime (\"man 3 strftime\" vanaf de commandoregel)."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:5
 msgid "Index of predefined check format to use"
@@ -7969,16 +7962,15 @@ msgstr "Labels op werkbalkknoppen"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:39
 msgid "Move to Transfer field when memorised transaction auto filled"
-msgstr "Na auto-aanvullen naar veld \"tegenrekening\" springen"
+msgstr "Na auto-aanvullen naar veld Tegenrekening springen"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:40
 msgid "Number of automatic decimal places"
 msgstr "Het aantal automatische decimale posities."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:41
-#, fuzzy
 msgid "Only display leaf account names."
-msgstr "Alleen namen van vertakte rekeningen tonen."
+msgstr "Alleen laatste niveau van rekeningnamen weergeven."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:42
 msgid "Position of the notebook tabs"
@@ -8010,7 +8002,7 @@ msgstr "Horizontale randen grootboekkaart markeren"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:49
 msgid "Show only the names of the leaf accounts in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Activating this option implies that you use unique leaf names."
-msgstr ""
+msgstr "Uitsluitend het laatste onderdeel van rekeningnamen op de grootboekkaart en in het popup-scherm voor rekeningselectie weergegeven. Standaard wordt de volledige rekeningnaam inclusief alle bovenliggende rekeningen weergegeven. Deze optie heeft alleen zin als op het laagste niveau geen dubbele rekeningnamen voorkomen."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:50
 msgid "Show splash screen"
@@ -8447,7 +8439,7 @@ msgstr "Resultaten aan huidige zoekopdracht toevoegen"
 
 #: ../src/gnome-search/search.glade.h:5
 msgid "Choose whether to search all your data or only that marked as \"active\""
-msgstr ""
+msgstr "Selecteren of u alle gegevens of uitsluitend \"actieve\" gegevens wilt doorzoeken"
 
 #: ../src/gnome-search/search.glade.h:6
 msgid "Delete results from current search"
@@ -8968,6 +8960,9 @@ msgid ""
 "\n"
 "You can also go back and verify your selections by clicking on 'Back'."
 msgstr ""
+"Het bestand is succesvol geladen. Als u op [Toepassen] klikt, zal het worden opgeslagen en opnieuw in GnuCash worden geladen. Zo krijgt u een werkbestand als backup in dezelfde directory.\n"
+"\n"
+"Klik op [Terug] om uw keuzes te herzien."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:242
 msgid "Unicode"
@@ -9132,7 +9127,7 @@ msgstr "De kleinst verhandelbare coupure van het goed (effect/valuta) invoeren. 
 
 #: ../src/gnome-utils/glade/commodity.glade.h:6
 msgid "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). "
-msgstr "De beurscode ('ticker symbol') voor het goed invoeren (bijvoorbeeld RDSA of UNA). Als u de koersnoteringen online ophaalt, moet de inhoud van dit veld exact overeenkomen met de beurscode uit de noteringsbron (inclusief hoofdlettergebruik). "
+msgstr "Het tickersymbool voor het goed invoeren (bijvoorbeeld RDSA of UNA). Als u de koersnoteringen online ophaalt, moet de inhoud van dit veld exact overeenkomen met het tickersymbool uit de noteringsbron (inclusief hoofdlettergebruik). "
 
 #: ../src/gnome-utils/glade/commodity.glade.h:7
 msgid "F_raction traded:"
@@ -9152,9 +9147,8 @@ msgid "Select user information here..."
 msgstr "Selecteer hier gebruikers informatie..."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:11
-#, fuzzy
 msgid "Si_ngle:"
-msgstr "_Enkel:"
+msgstr "_Een bron:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:12
 msgid "These are F::Q quote sources that retrieve information from a single site on the internet.  If that site is unavailable, you will not be able to retrieve quotes."
@@ -9169,7 +9163,6 @@ msgid "These are quote sources that were recently added to F::Q.  GnuCash does n
 msgstr "Deze noteringsbronnen zijn recent aan Finance::Quote toegevoegd. GnuCash weet niet of deze bronnen hun informatie bij slechts één internetsite of bij meerdere internetsites ophalen."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:15
-#, fuzzy
 msgid "Time_zone:"
 msgstr "Tijd_zone:"
 
@@ -9178,12 +9171,10 @@ msgid "Type of quote source:"
 msgstr "Soort noteringsbron:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:17
-#, fuzzy
 msgid "Warning: Finance::Quote not installed properly."
 msgstr "Waarschuwing: Finance::Quote is niet correct geïnstalleerd."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:18
-#, fuzzy
 msgid "_Full name:"
 msgstr "_Volledige naam:"
 
@@ -9192,17 +9183,14 @@ msgid "_Get Online Quotes"
 msgstr "Koersen _online ophalen"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:20
-#, fuzzy
 msgid "_Multiple:"
-msgstr "_Meervoudig:"
+msgstr "_Meerdere bronnen:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:21
-#, fuzzy
 msgid "_Symbol/abbreviation:"
 msgstr "_Symbool/afkorting:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:23
-#, fuzzy
 msgid "_Unknown:"
 msgstr "_Onbekend:"
 
@@ -9220,9 +9208,8 @@ msgid "Income Total:"
 msgstr "Totaal opbrengsten:"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:1
-#, fuzzy
 msgid "<b>Data Format:</b>"
-msgstr "<b>Gegevensindeling:</b>"
+msgstr "<b>Bestandsindeling:</b>"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:2
 msgid "<b>Database Connection</b>"
@@ -9237,9 +9224,8 @@ msgid "Database"
 msgstr "Databank"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:5
-#, fuzzy
 msgid "Host"
-msgstr "Host"
+msgstr "Server"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:6
 #, fuzzy
@@ -9323,7 +9309,7 @@ msgstr "Voer de volgende opdrachten uit:"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:11
 msgid "S_kip"
-msgstr ""
+msgstr "O_verslaan"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:12
 msgid "The configuration data is stored in a non-standard location.  There are two methods that can be used to make this data visible to GnuCash.  The first is to modify a system search path to include the data location.  The second is to copy the data into your home directory."
@@ -9942,7 +9928,7 @@ msgstr "Door activering van deze optie worden ook de totale waarde van alle niet
 
 #: ../src/gnome-utils/glade/preferences.glade.h:88
 msgid "If checked, only the names of the leaf accounts are displayed in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Checking this option implies that you use unique leaf names."
-msgstr ""
+msgstr "Door activering van deze optie wordt uitsluitend het laatste onderdeel van rekeningnamen op de grootboekkaart en in het popup-scherm voor rekeningselectie weergegeven. Standaard wordt de volledige rekeningnaam inclusief alle bovenliggende rekeningen weergegeven. Deze optie heeft alleen zin als op het laagste niveau geen dubbele rekeningnamen voorkomen."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:89
 msgid "If checked, pressing the 'Enter' key will move to the blank transaction at the bottom of the register.  If clear, pressing the 'Enter' key will move down one row."
@@ -9966,7 +9952,7 @@ msgstr "_Landinstelling:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:94
 msgid "Move to Transfer field when memorised transaction auto filled."
-msgstr ""
+msgstr "Na auto-aanvullen naar veld Tegenrekening springen."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:95
 msgid "New search _limit:"
@@ -10082,7 +10068,7 @@ msgstr "Alle creditposten van teken laten wisselen (m.a.w. aanwezige (creditcard
 
 #: ../src/gnome-utils/glade/preferences.glade.h:127
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
-msgstr ""
+msgstr "Tabvolgorde om_vat veld Tegenrekening bij automatisch aangevulde boekingen"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:128
 msgid "Text _below icons"
@@ -10533,7 +10519,7 @@ msgstr "Kan de URL %s niet verwerken."
 #: ../src/gnome-utils/gnc-file.c:227
 #, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
-msgstr "Kan geen verbinding maken met %s. De host, de gebruikersnaam of het wachtwoord waren onjuist."
+msgstr "Kan geen verbinding maken met %s. De server, de gebruikersnaam of het wachtwoord waren onjuist."
 
 #: ../src/gnome-utils/gnc-file.c:233
 #, c-format
@@ -11806,13 +11792,11 @@ msgstr "Online transactie"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:36
 #: ../src/import-export/hbci/glade/hbci.glade.h:34
-#, fuzzy
 msgid "Originator Account Number"
 msgstr "Rekeningnummer afzender"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:37
 #: ../src/import-export/hbci/glade/hbci.glade.h:35
-#, fuzzy
 msgid "Originator Name"
 msgstr "Naam afzender"
 
@@ -11823,14 +11807,13 @@ msgstr "Wachtwoord:"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:39
 #: ../src/import-export/hbci/glade/hbci.glade.h:36
-#, fuzzy
 msgid "Payment Purpose (only for recipient)"
-msgstr "Doel van de betaling (alleen voor ontvanger)"
+msgstr "Doel betaling (bedoeld voor ontvanger)"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:40
 #: ../src/import-export/hbci/glade/hbci.glade.h:37
 msgid "Payment Purpose continued"
-msgstr "Doel van de betaling (vervolg)"
+msgstr "Doel betaling (vervolg)"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:41
 #: ../src/import-export/hbci/glade/hbci.glade.h:38
@@ -11839,19 +11822,16 @@ msgstr "Voortgang"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:42
 #: ../src/import-export/hbci/glade/hbci.glade.h:39
-#, fuzzy
 msgid "Recipient Account Number"
-msgstr "Nummer van de ontvangende rekening"
+msgstr "Rekeningnummer ontvanger"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:43
 #: ../src/import-export/hbci/glade/hbci.glade.h:40
-#, fuzzy
 msgid "Recipient Bank Code"
-msgstr "Bank code ontvanger"
+msgstr "Bankcode ontvanger"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:44
 #: ../src/import-export/hbci/glade/hbci.glade.h:41
-#, fuzzy
 msgid "Recipient Name"
 msgstr "Naam ontvanger"
 
@@ -12166,6 +12146,11 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
+"De AqBanking-module heeft een fout aangetroffen bij het voorbereiden van de opdracht. Het is niet mogelijk deze opdracht uit te voeren.\n"
+"\n"
+"Waarschijnlijk wordt de gekozen opdracht door uw bank niet ondersteund of heeft uw Online Bankieren-rekening niet de juiste rechten voor het uitvoeren van deze opdracht. Mogelijk zijn er meer foutmeldingen zichtbaar in het voortgangsvenster.\n"
+"\n"
+"Wilt u de opdracht opnieuw invoeren?"
 
 #: ../src/import-export/aqbanking/gnc-ab-transfer.c:208
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:262
@@ -12644,7 +12629,7 @@ msgstr "\"R\""
 
 #: ../src/import-export/generic-import.glade.h:3
 msgid "\"Select Import Action\" allows you to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required)."
-msgstr ""
+msgstr "Met \"Importactie selecteren\" kunt u de boeking met een bestaande boeking afstemmen of, indien nodig, als nieuwe boeking op een nader te specificeren tegenrekening aanmerken."
 
 #: ../src/import-export/generic-import.glade.h:4
 msgid "(none)"
@@ -12684,7 +12669,7 @@ msgstr "Drempelwaarde _transactiekosten geldautomaten"
 
 #: ../src/import-export/generic-import.glade.h:18
 msgid "Enable edit match action"
-msgstr ""
+msgstr "Actie 'boeking bewerken' activeren"
 
 #: ../src/import-export/generic-import.glade.h:19
 msgid "Enable skip transaction action"
@@ -12692,12 +12677,11 @@ msgstr "Actie 'boeking overslaan' activeren"
 
 #: ../src/import-export/generic-import.glade.h:20
 msgid "Enable the EDIT action in the transaction matcher.  NOT YET SUPPORTED"
-msgstr ""
+msgstr "De actie 'boeking BEWERKEN' bij het herkennen van bestaande boekingen activeren. NOG NIET ONDERSTEUND."
 
 #: ../src/import-export/generic-import.glade.h:21
-#, fuzzy
 msgid "Enable the SKIP action in the transaction matcher.  If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by default."
-msgstr "Een transactie die als beste score nog steeds in de rode zone ligt (boven de getoonde drempelwaarde, maar onder of gelijk aan de automatisch toevoegengrenswaarde) wordt automatisch toegevoegd."
+msgstr "De actie 'boeking OVERSLAAN' bij het herkennen van bestaande boekingen activeren. Een boeking met een mate van overeenkomst binnen de gele zone (boven de drempelwaarde voor TOEVOEGING maar kleiner dan of gelijk aan de drempelwaarde voor BEVESTIGING) wordt standaard (automatisch) OVERGESLAGEN."
 
 #: ../src/import-export/generic-import.glade.h:22
 #, fuzzy
@@ -12719,9 +12703,8 @@ msgstr ""
 "Als alle nieuwe transacties het juiste doeldagboek hebben, en alle duplicaten gekoppeld zijn met de juiste bestaande transactie, kies \"Ok\"."
 
 #: ../src/import-export/generic-import.glade.h:29
-#, fuzzy
 msgid "Generic import transaction matcher"
-msgstr "Algemene import-transactie-koppelaar"
+msgstr "Herkennen van bestaande boekingen"
 
 #: ../src/import-export/generic-import.glade.h:30
 msgid "Green"
@@ -12782,7 +12765,7 @@ msgstr "Overeenkomende bestaande boeking selecteren"
 
 #: ../src/import-export/generic-import.glade.h:46
 msgid "Select neither to skip the transaction (it won't be imported at all)."
-msgstr ""
+msgstr "Als geen van beide wordt geselecteerd zal de boeking niet worden geïmporteerd."
 
 #: ../src/import-export/generic-import.glade.h:47
 msgid "The minimum score a potential match must have to be displayed in the match list."
@@ -12945,6 +12928,11 @@ msgid ""
 "Description and remote name: \"%s\"\n"
 "Value: \"%s\"\n"
 msgstr ""
+"De bank heeft een incasso geweigerd. Het geweigerde incasso heeft de volgende gegevens:\n"
+"Bankcode wederpartij: \"%s\"\n"
+"Rekeningnummer wederpartij: \"%s\"\n"
+"Omschrijving en naam wederpartij: \"%s\"\n"
+"Bedrag: \"%s\"\n"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:639
 msgid ""
@@ -13315,12 +13303,12 @@ msgstr "Een naam of korte beschrijving invoeren, zoals \"Aandelen KPN\"."
 #: ../src/import-export/qif-import/druid-qif-import.c:2122
 #: ../src/import-export/qif-import/druid-qif-import.c:2192
 msgid "Enter the ticker symbol or other well known abbreviation, such as \"RHT\". If there isn't one, or you don't know it, create your own."
-msgstr "Het ticker-symbool of een andere bekende afkorting (bijvoorbeeld: KPN) invoeren. Als deze niet bestaat of u niet bekend is, mag u deze zelf bedenken."
+msgstr "Het tickersymbool of een andere bekende afkorting (bijvoorbeeld: KPN) invoeren. Als deze niet bestaat of u niet bekend is, mag u deze zelf bedenken."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2130
 #: ../src/import-export/qif-import/druid-qif-import.c:2195
 msgid "Select the exchange on which the symbol is traded, or select the type of investment (such as FUND for mutual funds.) If you don't see your exchange or an appropriate investment type, you can enter a new one."
-msgstr ""
+msgstr "Selecteer de beurs waarop het symbool wordt verhandeld, of selecteer het typeinvestering (zoals FONDS voor beleggingsfondsen). Indien de juiste beurs of het juiste type investering ontbreekt, kunt u zelf een nieuwe waarde toevoegen."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2150
 msgid "You must enter an existing national currency or enter a different type."
@@ -13337,7 +13325,7 @@ msgstr "_Naam of omschrijving:"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2260
 msgid "_Ticker symbol or other abbreviation:"
-msgstr "_Tickersymbool/afkorting:"
+msgstr "_Tickersymbool of andere afkorting:"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2281
 msgid "_Exchange or abbreviation type:"
@@ -13503,6 +13491,11 @@ msgid ""
 "\n"
 "If you don't see your exchange listed, or none of the available choices are appropriate, you can enter a new one."
 msgstr ""
+"Op de volgende pagina's wordt u gevraagd om informatie te verschaffen over alle aandelen, beleggingsfondsen en andere investeringen die in de geïmporteerde QIF-bestanden voorkomen. GnuCash heeft namelijk meer gegevens nodig dan in QIF-bestanden wordt opgeslagen.\n"
+"\n"
+"Elk aandeel, beleggingsfonds of andere investering moet een naam hebben en een afkorting, zoals een tickersymbool. Omdat sommige ongerelateerde investeringen dezelfde afkorting kunnen hebben, moet u ook aangeven welke soort afkorting u hebt ingevoerd. Hier kunt u bijvoorbeeld de beurs die het symbool heeft toegekend (AEX, NYSE, NASDAQ) of het type investering selecteren.\n"
+"\n"
+"Indien de juiste beurs of het juiste type investering ontbreekt, kunt u zelf een nieuwe waarde toevoegen."
 
 #: ../src/import-export/qif-import/qif.glade.h:36
 msgid "Income and Expense categories"
@@ -13650,9 +13643,8 @@ msgid "Show documentation"
 msgstr "Documentatie weergeven"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:1
-#, fuzzy
 msgid "Add matching transactions below this score"
-msgstr "Voeg een nieuwe transactie toe aan het dagboek"
+msgstr "Overeenkomende boekingen boven deze score toevoegen"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:2
 msgid "Clear matching transactions above this score"
@@ -13667,13 +13659,12 @@ msgid "Enable SKIP transaction action"
 msgstr "Actie 'boeking OVERSLAAN' activeren"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:5
-#, fuzzy
 msgid "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED."
-msgstr "De actie 'boeking bewerken' in de transactiekoppelaar activeren. NOG NIET ONDERSTEUND."
+msgstr "De actie 'boeking BEWERKEN' bij het herkennen van bestaande boekingen activeren. NOG NIET ONDERSTEUND."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:6
 msgid "Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default."
-msgstr ""
+msgstr "De actie 'boeking OVERSLAAN' bij het herkennen van bestaande boekingen activeren. Een boeking met een mate van overeenkomst binnen de gele zone (boven de drempelwaarde voor TOEVOEGING maar kleiner dan of gelijk aan de drempelwaarde voor BEVESTIGING) wordt standaard (automatisch) overgeslagen."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:7
 msgid "Enables bayesian matching when matching imported transaction against existing transactions. Otherwise a less sophisticated rule-based matching mechanism will be used."
@@ -13697,12 +13688,11 @@ msgstr "De minimale score die een potentiële match moet behalen om te worden we
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:14
 msgid "This field specifies the threshold above which a matching transaction will be cleared by default. A transaction whose best match's score is in the green zone (above or equal to this Clear threshold) will be cleared by default."
-msgstr "Dit veld bepaalt de drempel waarboven gesuggereerde overeenkomende boekingen automatisch wordt bevestigd. Een boeking met een mate van overeenkomst binnen de groene zone (boven of gelijk aan deze drempelwaarde voor bevestiging) wordt standaard (automatisch) bevestigd."
+msgstr "Dit veld bepaalt de drempel waarboven een gesuggereerde overeenkomende boeking automatisch wordt bevestigd. Een boeking met een mate van overeenkomst binnen de groene zone (boven of gelijk aan deze drempelwaarde voor bevestiging) wordt standaard (automatisch) bevestigd."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:15
-#, fuzzy
 msgid "This field specifies the threshold below which a matching transaction will be added automatically. A transaction whose best match's score is in the red zone (above the display minimum score but below or equal to the Add match score) will be added to the GnuCash file by default."
-msgstr "Een transactie die als beste score nog steeds in de rode zone ligt (boven de getoonde drempelwaarde, maar onder of gelijk aan de automatisch toevoegengrenswaarde) wordt automatisch toegevoegd."
+msgstr "Dit veld bepaalt de drempel waarboven een gesuggereerde overeenkomende boeking boeking automatisch wordt toegevoegd. Een boeking met een mate van overeenkomst binnen de rode zone (boven de weergavedrempel maar kleiner dan of gelijk aan deze drempelwaarde voor toevoeging) wordt standaard (automatisch) toegevoegd."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:16
 msgid "Use bayesian matching"
@@ -13737,14 +13727,12 @@ msgid "You are about to overwrite an existing transaction. Are you sure you want
 msgstr "U staat op het punt een bestaande boeking te overschrijven. Weet u zeker dat u dat wilt doen?"
 
 #: ../src/register/ledger-core/split-register.c:1927
-#, fuzzy
 msgid "Recalculate Transaction"
-msgstr "Transactie opnieuw berekenen"
+msgstr "Boeking herrekenen"
 
 #: ../src/register/ledger-core/split-register.c:1928
-#, fuzzy
 msgid "The values entered for this transaction are inconsistent. Which value would you like to have recalculated?"
-msgstr "De ingevoerde waarden voor deze boeking zijn niet in consistent. Welke waarde wilt u opnieuw laten berekenen?"
+msgstr "De ingevoerde waarden voor deze boeking zijn niet consistent. Welke waarde wilt u laten herrekenen?"
 
 #: ../src/register/ledger-core/split-register.c:1935
 #: ../src/register/ledger-core/split-register.c:1937
@@ -13764,7 +13752,7 @@ msgstr "_Waarde"
 
 #: ../src/register/ledger-core/split-register.c:1960
 msgid "_Recalculate"
-msgstr "_Herberekenen"
+msgstr "_Herrekenen"
 
 #. Translators: This string has a context prefix; the translation
 #. must only contain the part after the | character.
@@ -14588,21 +14576,21 @@ msgstr "Kosten"
 #: ../intl-scm/guile-strings.c:66 ../intl-scm/guile-strings.c:198
 #, c-format
 msgid "Unrecognized account type '%s'. Defaulting to Bank."
-msgstr "Niet herkende rekeningsoort '%s'. Substituut is 'Bank'."
+msgstr "Niet herkende rekeningsoort '%s'. In plaats daarvan 'Bank' gebruikt."
 
 #. src/import-export/qif-import/qif-parse.scm
 #. src/import-export/qif-import/qif-import/qif-parse.scm
 #: ../intl-scm/guile-strings.c:68 ../intl-scm/guile-strings.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized action '%s'."
-msgstr "Actie `%s` niet herkend."
+msgstr "Niet herkende actie '%s'."
 
 #. src/import-export/qif-import/qif-parse.scm
 #. src/import-export/qif-import/qif-import/qif-parse.scm
 #: ../intl-scm/guile-strings.c:70 ../intl-scm/guile-strings.c:202
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized status '%s'. Defaulting to uncleared."
-msgstr "Niet herkende status '%s'. Substituut is 'niet goedgekeurd'"
+msgstr "Niet herkende status '%s'. In plaats daarvan 'niet goedgekeurd' gebruikt."
 
 #. src/import-export/qif-import/qif-to-gnc.scm
 #. src/import-export/qif-import/qif-import/qif-to-gnc.scm
@@ -14705,28 +14693,26 @@ msgstr "Datum is vereist."
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:108 ../intl-scm/guile-strings.c:240
-#, fuzzy
 msgid "Discarding this transaction."
-msgstr "Deze transactie wordt verworpen."
+msgstr "Deze boeking wordt verworpen."
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:110 ../intl-scm/guile-strings.c:242
 msgid "Ignoring class line"
-msgstr ""
+msgstr "Kostenplaats-regel wordt genegeerd"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:112 ../intl-scm/guile-strings.c:244
-#, fuzzy
 msgid "Ignoring category line"
-msgstr "Categorieregel negeren"
+msgstr "Categorie-regel wordt genegeerd"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:114 ../intl-scm/guile-strings.c:246
 msgid "Ignoring security line"
-msgstr "Fonds-regel negeren"
+msgstr "Fonds-regel wordt genegeerd"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
@@ -14761,9 +14747,8 @@ msgstr "Aantal aandelen"
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:126 ../intl-scm/guile-strings.c:258
-#, fuzzy
 msgid "Investment action"
-msgstr "Investeringsactiviteit"
+msgstr "Investering"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
@@ -14842,7 +14827,7 @@ msgstr "Het verwerken is mislukt."
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:152 ../intl-scm/guile-strings.c:284
 msgid "Parse ambiguity between formats"
-msgstr ""
+msgstr "Niet-eenduidige opmaak verwerken"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
@@ -14854,9 +14839,8 @@ msgstr "Waarde '%s' kan zowel %s als %s zijn."
 #. src/tax/us/txf-de_DE.scm
 #. src/tax/us/txf.scm
 #: ../intl-scm/guile-strings.c:288 ../intl-scm/guile-strings.c:300
-#, fuzzy
 msgid "No help available."
-msgstr "Geen variabele"
+msgstr "Geen hulp beschikbaar."
 
 #. src/tax/us/txf-de_DE.scm
 #: ../intl-scm/guile-strings.c:290
@@ -16451,7 +16435,7 @@ msgstr "Belastingfactuur"
 #. src/business/business-reports/gnucash/report/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:832 ../intl-scm/guile-strings.c:1434
 msgid "Display a customer invoice with tax columns (using eguile template)"
-msgstr ""
+msgstr "Een verkoopfactuur met belastingkolommen weergeven (via een eguile-sjabloon)"
 
 #. src/business/business-reports/job-report.scm
 #. src/business/business-reports/gnucash/report/job-report.scm
@@ -17489,7 +17473,7 @@ msgstr "Regels in boekhoudstijl weergeven"
 #: ../intl-scm/guile-strings.c:5064 ../intl-scm/guile-strings.c:5276
 #: ../intl-scm/guile-strings.c:6506 ../intl-scm/guile-strings.c:6738
 msgid "Use rules beneath columns of added numbers like accountants do"
-msgstr ""
+msgstr "Strepen gebruiken om op te tellen bedragen en berekende totalen te scheiden (net als accountants)"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -20579,7 +20563,7 @@ msgstr "Nieuwe/bestaande totalen weergeven"
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:5308 ../intl-scm/guile-strings.c:6770
 msgid "Whether or not to include lines indicating change in totals introduced by budget"
-msgstr ""
+msgstr "Of wijzigingen in de totalen die veroorzaakt worden door het budget al dan niet als regel moeten worden weergegeven"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -20997,7 +20981,7 @@ msgstr "Bruto-correctierekeningen"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:5730 ../intl-scm/guile-strings.c:7192
 msgid "Do not net, but show gross debit/credit adjustments to these accounts. Merchandising businesses will normally select their inventory accounts here."
-msgstr ""
+msgstr "Correcties op deze rekeningen niet salderen, maar als bruto debet- of creditcorrectie weergeven. Handelsondernemingen zullen hier normaal gesproken hun voorraadrekeningen selecteren."
 
 #. src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -21673,7 +21657,7 @@ msgstr "opmaaksjabloon"
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:7586
 msgid "One of your reports has a report-guid that is a duplicate. Please check the report system, especially your saved reports, for a report with this report-guid: "
-msgstr ""
+msgstr "Er is een uniek rapport-identificatienummer (GUID) dat meerdere keren voorkomt. Controleer uw opgeslagen rapporten of daar zich ten onrechte meerdere rapporten bevinden met het volgende rapport-GUID: "
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:7588
