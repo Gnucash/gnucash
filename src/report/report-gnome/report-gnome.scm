@@ -72,6 +72,7 @@
           (set! item
                 (gnc:make-menu-item
                  name
+                 (gnc:report-template-report-guid template)
                  menu-tip
                  menu-path
                  (lambda (window)
@@ -111,6 +112,7 @@
   (gnc-add-scm-extension 
    (gnc:make-menu-item
    (N_ "Custom Reports")
+   "4d3dcdc8890b11df99dd94cddfd72085"
    (N_ "Manage and run custom reports")
    (list gnc:menuname-reports)
    (lambda (window)
@@ -132,6 +134,7 @@
   (gnc-add-scm-extension
    (gnc:make-menu-item 
     (N_ "Welcome Sample Report")
+    "ad80271c890b11dfa79f2dcedfd72085"
     (N_ "Welcome-to-GnuCash report screen")
     (list gnc:menuname-reports gnc:menuname-utility "")
     (lambda (window)

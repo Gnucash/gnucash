@@ -20,6 +20,8 @@
          type
          ;; The name of the extension in the menu
          name
+         ;; The guid of object the menu will refer to
+         guid
          ;; The tooltip
          documentation-string
          ;; A list of names indicating the menus under which this item is
@@ -30,6 +32,7 @@
          script)
   (vector type
           name
+          guid
           documentation-string
           path
           script))
@@ -38,18 +41,20 @@
   (vector-ref extension 0))
 (define (gnc:extension-name extension)
   (vector-ref extension 1))
-(define (gnc:extension-documentation extension)
+(define (gnc:extension-guid extension)
   (vector-ref extension 2))
-(define (gnc:extension-path extension)
+(define (gnc:extension-documentation extension)
   (vector-ref extension 3))
-(define (gnc:extension-script extension)
+(define (gnc:extension-path extension)
   (vector-ref extension 4))
+(define (gnc:extension-script extension)
+  (vector-ref extension 5))
 
-(define (gnc:make-menu-item name documentation-string path script)
-  (gnc:make-extension 'menu-item name documentation-string path script))
+(define (gnc:make-menu-item name guid documentation-string path script)
+  (gnc:make-extension 'menu-item name guid documentation-string path script))
 
 (define (gnc:make-menu name path)
-  (gnc:make-extension 'menu name "" path #f))
+  (gnc:make-extension 'menu name name "" path #f))
 
 (define (gnc:make-separator path)
-  (gnc:make-extension 'separator "" "" path #f))
+  (gnc:make-extension 'separator "" "" "" path #f))

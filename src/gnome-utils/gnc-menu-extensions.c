@@ -36,6 +36,7 @@ struct _Getters
 {
     SCM type;
     SCM name;
+    SCM guid;
     SCM documentation;
     SCM path;
     SCM script;
@@ -45,7 +46,7 @@ struct _Getters
 static QofLogModule log_module = GNC_MOD_GUI;
 
 static GSList *extension_list = NULL;
-static Getters getters = {0, 0, 0, 0, 0};
+static Getters getters = {0, 0, 0, 0, 0, 0};
 
 GSList *
 gnc_extensions_get_menu_list (void)
@@ -63,6 +64,7 @@ initialize_getters()
 
     getters.type = scm_c_eval_string("gnc:extension-type");
     getters.name = scm_c_eval_string("gnc:extension-name");
+    getters.guid = scm_c_eval_string("gnc:extension-guid");
     getters.documentation = scm_c_eval_string("gnc:extension-documentation");
     getters.path = scm_c_eval_string("gnc:extension-path");
     getters.script = scm_c_eval_string("gnc:extension-script");
@@ -115,6 +117,16 @@ gnc_extension_name (SCM extension)
     initialize_getters();
 
     return gnc_guile_call1_to_string(getters.name, extension);
+}
+
+
+/* returns malloc'd guid */
+static char *
+gnc_extension_guid (SCM extension)
+{
+    initialize_getters();
+
+    return gnc_guile_call1_to_string(getters.guid, extension);
 }
 
 
@@ -201,11 +213,11 @@ gnc_ext_gen_action_name (const gchar *name)
 
     actionName = g_string_sized_new( strlen( name ) + 7 );
 
-    // 'Mum & ble' => 'Mumble'
+    // 'Mum & ble12' => 'Mumble___ble12'
     for ( extChar = name; *extChar != '\0'; extChar++ )
     {
         if ( ! isalnum( *extChar ) )
-            continue;
+            g_string_append_c( actionName, '_' );
         g_string_append_c( actionName, *extChar );
     }
 
@@ -241,7 +253,7 @@ gnc_create_extension_info (SCM extension)
 {
     ExtensionInfo *ext_info;
     gchar *typeStr, *tmp;
-    const gchar *name;
+    const gchar *name, *guid;
 
     ext_info = g_new0(ExtensionInfo, 1);
     ext_info->extension = extension;
@@ -255,8 +267,9 @@ gnc_create_extension_info (SCM extension)
 
     /* Get all the pieces */
     name = gnc_extension_name(extension);
+    guid = gnc_extension_guid(extension);
     ext_info->ae.label = g_strdup(gettext(name));
-    ext_info->ae.name = gnc_ext_gen_action_name(name);
+    ext_info->ae.name = gnc_ext_gen_action_name(guid);
     ext_info->ae.tooltip = gnc_extension_documentation(extension);
     ext_info->ae.stock_id = NULL;
     ext_info->ae.accelerator = NULL;
