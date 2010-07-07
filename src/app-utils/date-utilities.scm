@@ -670,29 +670,28 @@
 (define (gnc:reldate-initialize)
   (gnc:reldate-string-db 
    'store 'start-cal-year-string 
-   (N_ "Current Year Start"))
-
+   (N_ "Start of this year"))
   (gnc:reldate-string-db 
    'store 'start-cal-year-desc 
    (N_ "Start of the current calendar year"))
 
   (gnc:reldate-string-db 
    'store 'end-cal-year-string 
-   (N_ "Current Year End"))
+   (N_ "End of this year"))
   (gnc:reldate-string-db 
    'store 'end-cal-year-desc 
    (N_ "End of the current calendar year"))
 
   (gnc:reldate-string-db 
    'store 'start-prev-year-string 
-   (N_ "Previous Year Start"))
+   (N_ "Start of previous year"))
   (gnc:reldate-string-db 
    'store 'start-prev-year-desc 
    (N_ "Beginning of the previous calendar year"))
 
   (gnc:reldate-string-db 
    'store 'end-prev-year-string 
-   (N_ "Previous Year End"))
+   (N_ "End of previous year"))
   (gnc:reldate-string-db 
    'store 'end-prev-year-desc 
    (N_ "End of the Previous Year"))
