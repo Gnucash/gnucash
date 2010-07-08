@@ -1120,6 +1120,8 @@ retain_type_changed_cb(GConfEntry *entry, gpointer user_data)
     gchar *choice = NULL;
     g_return_if_fail(be != NULL);
     choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_RETAIN_TYPE, NULL);
+    if (!choice)
+        choice = g_strdup("days");
 
     if (safe_strcmp (choice, "never") == 0)
         be->file_retention_type = XML_RETAIN_NONE;
