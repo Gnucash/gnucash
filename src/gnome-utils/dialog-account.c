@@ -372,6 +372,9 @@ gnc_ui_to_account(AccountWindow *aw)
     /* gdk_color_to_string requires gtk >= 2.12 */
     string = g_strdup_printf("#%04X%04X%04X", color.red, color.green, color.blue);
 #endif
+    if (safe_strcmp (string, DEFAULT_COLOR) == 0)
+	string = "Not Set";
+
     old_string = xaccAccountGetColor (account);
     if (safe_strcmp (string, old_string) != 0)
         xaccAccountSetColor (account, string);

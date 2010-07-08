@@ -1992,6 +1992,11 @@ main_window_update_page_color (GncPluginPage *page,
         gtk_widget_modify_bg(event_box, GTK_STATE_NORMAL, &tab_color);
         gtk_widget_modify_bg(event_box, GTK_STATE_ACTIVE, &tab_color);
     }
+    else
+    {
+        gtk_widget_modify_bg(event_box, GTK_STATE_NORMAL, NULL);
+        gtk_widget_modify_bg(event_box, GTK_STATE_ACTIVE, NULL);
+    }
     g_free(color_string);
     LEAVE("done");
 }
@@ -2603,6 +2608,11 @@ gnc_main_window_open_page (GncMainWindow *window,
     {
         gtk_widget_modify_bg(event_box, GTK_STATE_NORMAL, &tab_color);
         gtk_widget_modify_bg(event_box, GTK_STATE_ACTIVE, &tab_color);
+    }
+    else
+    {
+        gtk_widget_modify_bg(event_box, GTK_STATE_NORMAL, NULL);
+        gtk_widget_modify_bg(event_box, GTK_STATE_ACTIVE, NULL);
     }
 
     text = gnc_plugin_page_get_page_long_name(page);
