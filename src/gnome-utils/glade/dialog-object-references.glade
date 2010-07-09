@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <glade-interface>
-  <!-- interface-requires gtk+ 2.8 -->
+  <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy project-wide -->
   <widget class="GtkDialog" id="Object references">
     <property name="border_width">5</property>
