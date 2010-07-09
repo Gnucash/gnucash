@@ -72,7 +72,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_focus">True</property>
-                    <property name="adjustment">0 0 1000000000 1 10 10</property>
+                    <property name="adjustment">0 0 1000000000 1 10 0</property>
                     <property name="climb_rate">1</property>
                   </widget>
                   <packing>

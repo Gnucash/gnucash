@@ -1298,7 +1298,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip" translatable="yes">How many days to keep old log/backup files.</property>
-                        <property name="adjustment">30 1 99999 1 10 10</property>
+                        <property name="adjustment">30 1 99999 1 10 0</property>
                         <property name="climb_rate">1</property>
                       </widget>
                       <packing>
@@ -1411,7 +1411,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip" translatable="yes">How many automatic decimal places will be filled in.</property>
-                    <property name="adjustment">2 1 8 1 4 4</property>
+                    <property name="adjustment">2 1 8 1 4 0</property>
                     <property name="climb_rate">1</property>
                   </widget>
                   <packing>
@@ -1522,7 +1522,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip" translatable="yes">Default to 'new search' if fewer than this number of items is returned.</property>
-                    <property name="adjustment">1 1 100 1 10 10</property>
+                    <property name="adjustment">1 1 100 1 10 0</property>
                     <property name="climb_rate">1</property>
                   </widget>
                   <packing>
@@ -1578,7 +1578,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip" translatable="yes">The number of minutes until saving of the data file to harddisk will be started automatically. If zero, no saving will be started automatically.</property>
-                        <property name="adjustment">3 0 99999 1 10 10</property>
+                        <property name="adjustment">3 0 99999 1 10 0</property>
                         <property name="climb_rate">1</property>
                       </widget>
                       <packing>
@@ -2484,7 +2484,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip" translatable="yes">Show this many transactions in a register. A value of zero means show all transactions.</property>
-                    <property name="adjustment">0 0 999999 1 10 10</property>
+                    <property name="adjustment">0 0 999999 1 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="snap_to_ticks">True</property>
                     <property name="numeric">True</property>
@@ -2561,7 +2561,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip" translatable="yes">Display this many rows when a register is created.</property>
-                    <property name="adjustment">20 1 200 1 10 10</property>
+                    <property name="adjustment">20 1 200 1 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="snap_to_ticks">True</property>
                     <property name="numeric">True</property>
@@ -3225,7 +3225,7 @@
                       <widget class="GtkSpinButton" id="gconf/general/tab_width">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">30 1 100 1 10 10</property>
+                        <property name="adjustment">30 1 100 1 10 0</property>
                         <property name="climb_rate">1</property>
                         <property name="numeric">True</property>
                       </widget>

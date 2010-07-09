@@ -2372,7 +2372,7 @@ EUR</property>
               <widget class="GtkSpinButton" id="interval_spin">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="adjustment">10 1 10000 5 100 100</property>
+                <property name="adjustment">10 1 10000 5 100 0</property>
                 <property name="climb_rate">1</property>
                 <signal name="value_changed" handler="gnc_account_renumber_interval_changed_cb"/>
               </widget>

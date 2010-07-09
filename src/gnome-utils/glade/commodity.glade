@@ -272,7 +272,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip" translatable="yes">Enter the smallest fraction of the commodity which can be traded. For stocks which can only be traded in whole numbers, enter 1.</property>
-                    <property name="adjustment">10000 1 100000000 1 100 100</property>
+                    <property name="adjustment">10000 1 100000000 1 100 0</property>
                     <property name="climb_rate">1</property>
                   </widget>
                   <packing>

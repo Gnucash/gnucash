@@ -248,7 +248,7 @@
                   <widget class="GtkSpinButton" id="BudgetNumPeriods">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">1 1 60 1 12 12</property>
+                    <property name="adjustment">1 1 60 1 12 0</property>
                     <property name="climb_rate">1</property>
                     <property name="numeric">True</property>
                   </widget>
@@ -367,7 +367,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip" translatable="yes">Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; Quarterly = every 3 months</property>
-                <property name="adjustment">1 1 250 1 10 10</property>
+                <property name="adjustment">1 1 250 1 10 0</property>
                 <property name="climb_rate">1</property>
                 <property name="numeric">True</property>
               </widget>
@@ -465,211 +465,6 @@ year(s)</property>
       </widget>
     </child>
   </widget>
-  <widget class="GtkWindow" id="sample">
-    <property name="visible">True</property>
-    <property name="title" translatable="yes">window1</property>
-    <child>
-      <widget class="GtkVBox" id="SampleOptions">
-        <property name="visible">True</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <widget class="GtkLabel" id="SampleLabel">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes">label91</property>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkEntry" id="SampleEntry">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkComboBoxEntry" id="SampleComboBoxEntry">
-            <property name="visible">True</property>
-          </widget>
-          <packing>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkScrolledWindow" id="SampleScrolledWindow">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <child>
-              <widget class="GtkTextView" id="SampleTextView">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-              </widget>
-            </child>
-          </widget>
-          <packing>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkButton" id="SampleButton">
-            <property name="label">button1</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="use_underline">True</property>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkToggleButton" id="SampleToggleButton">
-            <property name="label">togglebutton1</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="use_underline">True</property>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">5</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkCheckButton" id="SampleCheckButton">
-            <property name="label">checkbutton1</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">6</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkRadioButton" id="SampleRadioButton">
-            <property name="label">radiobutton1</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">7</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkComboBox" id="SampleComboBox">
-            <property name="visible">True</property>
-          </widget>
-          <packing>
-            <property name="position">8</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkSpinButton" id="SampleSpinButton">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="adjustment">1 0 100 1 10 10</property>
-            <property name="climb_rate">1</property>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">9</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkScrolledWindow" id="SampleScrolledWindow2">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <child>
-              <widget class="GtkTreeView" id="SampleTreeView">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-              </widget>
-            </child>
-          </widget>
-          <packing>
-            <property name="position">10</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkHBox" id="GncRecurrencePlaceholderSampleRecurrence">
-            <property name="visible">True</property>
-            <child>
-              <placeholder/>
-            </child>
-          </widget>
-          <packing>
-            <property name="position">11</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="Custom" id="SampleCustomGncRecurrence">
-            <property name="visible">True</property>
-            <property name="creation_function">gnc_recurrence_new</property>
-          </widget>
-          <packing>
-            <property name="padding">9</property>
-            <property name="position">12</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="Custom" id="SampleCustomTreeViewAccount">
-            <property name="visible">True</property>
-            <property name="creation_function">gnc_tree_view_account_new</property>
-          </widget>
-          <packing>
-            <property name="padding">10</property>
-            <property name="position">13</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkVBox" id="PluginSampleSample2">
-            <property name="visible">True</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <placeholder/>
-            </child>
-          </widget>
-          <packing>
-            <property name="position">14</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-      </widget>
-    </child>
-  </widget>
-  <widget class="GtkWindow" id="Sample2">
-    <property name="visible">True</property>
-    <property name="title" translatable="yes">window1</property>
-    <child>
-      <widget class="GtkLabel" id="label91">
-        <property name="visible">True</property>
-        <property name="label" translatable="yes">This is Sample2.</property>
-      </widget>
-    </child>
-  </widget>
   <widget class="GtkDialog" id="BudgetEstimate">
     <property name="visible">True</property>
     <property name="title" translatable="yes">Estimate Budget Values</property>
@@ -740,7 +535,7 @@ year(s)</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip" translatable="yes">The number of leading digits to keep when rounding</property>
-                <property name="adjustment">1 1 12 1 1 1</property>
+                <property name="adjustment">1 1 12 1 1 0</property>
                 <property name="climb_rate">1</property>
                 <property name="numeric">True</property>
               </widget>
