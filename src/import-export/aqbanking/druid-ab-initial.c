@@ -53,6 +53,14 @@
 #include "gnc-session.h"
 #include "import-account-matcher.h"
 
+#if (AQBANKING_VERSION_MAJOR > 4) || \
+  ((AQBANKING_VERSION_MAJOR == 4) && \
+   ((AQBANKING_VERSION_MINOR > 99) || \
+    (AQBANKING_VERSION_MINOR == 99 && AQBANKING_VERSION_PATCHLEVEL > 8)))
+/* For aqbanking > 4.99.8. See below. */
+# include <aqbanking/dlg_setup.h>
+#endif
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -236,7 +244,7 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
     /* For aqbanking5 > 4.99.8: Use AB_Banking_GetNewUserDialog(). */
     {
         GWEN_DIALOG *dlg =
-            AB_Banking_GetNewUserDialog(banking, "aqhbci", 0);
+            AB_SetupDialog_new(banking);
 
         int rv = GWEN_Gui_ExecDialog(dlg, 0);
         if (rv <= 0)
