@@ -138,7 +138,6 @@ SET (libgncmod_engine_SOURCES
   gncAddress.c
   gncBillTerm.c
   gncBusGuile.c
-  gncBusiness.c
   gncCustomer.c
   gncEmployee.c
   gncEntry.c

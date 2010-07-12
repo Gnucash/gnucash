@@ -160,7 +160,6 @@ int main (int argc, char ** argv)
 
     qof_init();
     cashobjects_register();
-    gnc_module_init_business_core_init();
     qof_load_backend_library ("../../../../backend/dbi/.libs/", GNC_LIB_NAME);
     init_business_sql();
 

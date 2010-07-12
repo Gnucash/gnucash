@@ -47,8 +47,8 @@
 #define GNC_TAXTABLE_MODULE_NAME GNC_ID_TAXTABLE
 #define GNC_VENDOR_MODULE_NAME   GNC_ID_VENDOR
 
-void
-gnc_module_init_business_core_init(void);
+/* The initialization of the business objects is done in
+ * cashobjects_register() of <engine/cashobjects.h>. */
 
 #ifndef DI
 # ifdef _MSC_VER

@@ -47,7 +47,6 @@ libgncmod_engine_la_SOURCES = \
   gncBusGuile.c \
   gncAddress.c \
   gncBillTerm.c \
-  gncBusiness.c \
   gncCustomer.c \
   gncEmployee.c \
   gncEntry.c \

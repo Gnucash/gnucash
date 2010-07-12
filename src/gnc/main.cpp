@@ -48,7 +48,6 @@ extern "C"
 #include "swig-runtime.h"
 
 #include "backend/xml/gnc-backend-xml.h"
-#include "engine/gncBusiness.h"
 #include "business/business-core/xml/gncmod-business-backend-xml.h"
 #ifdef WITH_SQL
 #  include "backend/dbi/gnc-backend-dbi.h"
@@ -180,7 +179,6 @@ main(int argc, char ** argv)
 #ifdef WITH_SQL
     gnc_module_init_backend_dbi();
 #endif
-    gnc_module_init_business_core_init();
     gnc_module_init_business_core_xml_init();
     gnc_ui_util_init();
     gnc_exp_parser_init();

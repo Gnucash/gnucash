@@ -67,7 +67,7 @@ libgncmod_business_core_gnc_module_init(int refcount)
 
     if (refcount == 0)
     {
-        gnc_module_init_business_core_init();
+        /* Object initialization already finished in the engine. */
     }
 
     scm_init_sw_business_core_module();

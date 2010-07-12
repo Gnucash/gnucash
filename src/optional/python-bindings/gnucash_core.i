@@ -187,7 +187,6 @@ gnc_engine_init_static(0, no_args);
 
 gnc_module_init_backend_xml();
 gnc_module_init_backend_dbi();
-gnc_module_init_business_core_init();
 gnc_module_init_business_core_xml_init();
 gnc_module_init_business_core_sql_init();
 %}

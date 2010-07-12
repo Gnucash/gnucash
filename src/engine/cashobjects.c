@@ -2,8 +2,11 @@
  *            cashobjects.c
  *
  *  Mon Aug 22 09:49:52 2005
- *  Copyright  2005  Neil Williams
- *  linux@codehelp.co.uk
+ *  Copyright  2005  Neil Williams linux@codehelp.co.uk
+ *
+ * Copyright (C) 2002 Derek Atkins
+ * Copyright (C) 2010 Christian Stimming
+ *
  ****************************************************************************/
 
 /*
@@ -34,6 +37,35 @@
 #include "gnc-lot-p.h"
 #include "gnc-budget.h"
 
+#include "gncAddressP.h"
+#include "gncBillTermP.h"
+#include "gncCustomerP.h"
+#include "gncEmployeeP.h"
+#include "gncEntryP.h"
+#include "gncInvoiceP.h"
+#include "gncJobP.h"
+#include "gncOrderP.h"
+#include "gncOwnerP.h"
+#include "gncTaxTableP.h"
+#include "gncVendorP.h"
+
+static void
+business_core_init(void)
+{
+    /* initialize known types */
+    gncInvoiceRegister ();
+    gncJobRegister ();
+    gncBillTermRegister ();
+    gncCustomerRegister ();
+    gncAddressRegister ();
+    gncEmployeeRegister ();
+    gncEntryRegister ();
+    gncOrderRegister ();
+    gncOwnerRegister ();
+    gncTaxTableRegister ();
+    gncVendorRegister ();
+}
+
 gboolean
 cashobjects_register(void)
 {
@@ -46,6 +78,10 @@ cashobjects_register(void)
     g_return_val_if_fail(gnc_pricedb_register(), FALSE);
     g_return_val_if_fail (gnc_budget_register(), FALSE);
     g_return_val_if_fail ( gnc_lot_register (), FALSE);
+
+    /* And the business objects */
+    business_core_init();
+
     return TRUE;
 }
 
