@@ -229,6 +229,33 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
         return;
     }
 
+#if (AQBANKING_VERSION_MAJOR > 4) || \
+  ((AQBANKING_VERSION_MAJOR == 4) && \
+   ((AQBANKING_VERSION_MINOR > 99) || \
+    (AQBANKING_VERSION_MINOR == 99 && AQBANKING_VERSION_PATCHLEVEL > 8)))
+    /* For aqbanking5 > 4.99.8: Use AB_Banking_GetNewUserDialog(). */
+    {
+        GWEN_DIALOG *dlg =
+            AB_Banking_GetNewUserDialog(banking, "aqhbci", 0);
+
+        int rv = GWEN_Gui_ExecDialog(dlg, 0);
+        if (rv <= 0)
+        {
+            /* Dialog was aborted/rejected */
+            druid_disable_next_button(info);
+        }
+        else
+        {
+            /* Dialog accepted, all fine */
+            druid_enable_next_button(info);
+        }
+        GWEN_Dialog_free(dlg);
+    }
+#else
+    /* Previous implementation for aqbanking <= 4.99.8: Use the
+     * external application. */
+
+
     /* This is the point where we look for and start an external
      * application shipped with aqbanking that contains the setup druid
      * for AqBanking related stuff.  It requires qt (but not kde).  This
@@ -327,6 +354,7 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
     }
 
     GWEN_Buffer_free(buf);
+#endif
 
     LEAVE(" ");
 }
