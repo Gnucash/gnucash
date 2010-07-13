@@ -23,15 +23,26 @@ GNC_ADD_SWIG_COMMAND (${SWIG_GNC_MODULE_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnc-modul
 
 SET (libgnc_backend_xml_SOURCES
   gnc-account-xml-v2.c 
+  gnc-address-xml-v2.c
+  gnc-bill-term-xml-v2.c
   gnc-book-xml-v2.c 
   gnc-budget-xml-v2.c 
   gnc-commodity-xml-v2.c 
+  gnc-customer-xml-v2.c
+  gnc-employee-xml-v2.c
+  gnc-entry-xml-v2.c
   gnc-freqspec-xml-v2.c 
+  gnc-invoice-xml-v2.c
+  gnc-job-xml-v2.c
   gnc-lot-xml-v2.c 
+  gnc-order-xml-v2.c
+  gnc-owner-xml-v2.c
   gnc-pricedb-xml-v2.c 
   gnc-recurrence-xml-v2.c 
   gnc-schedxaction-xml-v2.c 
+  gnc-tax-table-xml-v2.c
   gnc-transaction-xml-v2.c 
+  gnc-vendor-xml-v2.c
   io-example-account.c 
   io-gncxml-gen.c 
   io-gncxml-v1.c 

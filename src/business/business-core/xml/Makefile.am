@@ -13,34 +13,9 @@ AM_CPPFLAGS = \
   ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS}
 
-libgncmod_business_backend_xml_la_SOURCES = \
-  gncmod-business-backend-xml.c \
-  gnc-address-xml-v2.c \
-  gnc-bill-term-xml-v2.c \
-  gnc-customer-xml-v2.c \
-  gnc-employee-xml-v2.c \
-  gnc-entry-xml-v2.c \
-  gnc-invoice-xml-v2.c \
-  gnc-job-xml-v2.c \
-  gnc-order-xml-v2.c \
-  gnc-owner-xml-v2.c \
-  gnc-tax-table-xml-v2.c \
-  gnc-vendor-xml-v2.c
+libgncmod_business_backend_xml_la_SOURCES =
 
-noinst_HEADERS = \
-  gncmod-business-backend-xml.h \
-  gnc-address-xml-v2.h \
-  gnc-bill-term-xml-v2.h \
-  gnc-customer-xml-v2.h \
-  gnc-employee-xml-v2.h \
-  gnc-entry-xml-v2.h \
-  gnc-invoice-xml-v2.h \
-  gnc-job-xml-v2.h \
-  gnc-order-xml-v2.h \
-  gnc-owner-xml-v2.h \
-  gnc-tax-table-xml-v2.h \
-  gnc-vendor-xml-v2.h \
-  xml-helpers.h
+noinst_HEADERS =
 
 libgncmod_business_backend_xml_la_LDFLAGS = -module -avoid-version
 

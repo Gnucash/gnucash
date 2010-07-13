@@ -76,6 +76,18 @@ typedef int ssize_t;
 #include "gnc-backend-xml.h"
 #include "gnc-gconf-utils.h"
 
+#include "gnc-address-xml-v2.h"
+#include "gnc-bill-term-xml-v2.h"
+#include "gnc-customer-xml-v2.h"
+#include "gnc-employee-xml-v2.h"
+#include "gnc-entry-xml-v2.h"
+#include "gnc-invoice-xml-v2.h"
+#include "gnc-job-xml-v2.h"
+#include "gnc-order-xml-v2.h"
+#include "gnc-owner-xml-v2.h"
+#include "gnc-tax-table-xml-v2.h"
+#include "gnc-vendor-xml-v2.h"
+
 #ifndef HAVE_STRPTIME
 # include "strptime.h"
 #endif
@@ -1217,6 +1229,23 @@ gnc_backend_new(void)
 }
 
 static void
+business_core_xml_init(void)
+{
+    /* Initialize our pointers into the backend subsystem */
+    gnc_address_xml_initialize ();
+    gnc_billterm_xml_initialize ();
+    gnc_customer_xml_initialize ();
+    gnc_employee_xml_initialize ();
+    gnc_entry_xml_initialize ();
+    gnc_invoice_xml_initialize ();
+    gnc_job_xml_initialize ();
+    gnc_order_xml_initialize ();
+    gnc_owner_xml_initialize ();
+    gnc_taxtable_xml_initialize ();
+    gnc_vendor_xml_initialize ();
+}
+
+static void
 gnc_provider_free (QofBackendProvider *prov)
 {
     prov->provider_name = NULL;
@@ -1253,6 +1282,9 @@ gnc_module_init_backend_xml(void)
     prov->provider_free = gnc_provider_free;
     prov->check_data_type = gnc_determine_file_type;
     qof_backend_register_provider (prov);
+
+    /* And the business objects */
+    business_core_xml_init();
 }
 
 /* ========================== END OF FILE ===================== */
