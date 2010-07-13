@@ -95,7 +95,6 @@ ADD_EXECUTABLE (cutecash
   ${gnc_SOURCES}
 )
 
-TARGET_LINK_LIBRARIES (cutecash business-core)
 TARGET_LINK_LIBRARIES (cutecash gnc-backend-xml)
 TARGET_LINK_LIBRARIES (cutecash app-utils calculation)
 IF (WITH_SQL)
