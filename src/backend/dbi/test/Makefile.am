@@ -6,6 +6,10 @@ libgncmod_test_dbi_la_SOURCES = \
     test-dbi-stuff.c
 libgncmod_test_dbi_la_LDFLAGS = -module
 
+test_dbi_business_SOURCES = \
+  test-dbi-business.c \
+  test-dbi-business-stuff.c
+
 test_dbi_basic_SOURCES = \
   test-dbi-basic.c
 
@@ -15,6 +19,7 @@ test_dbi_SOURCES = \
 TESTS = \
   test-dbi-basic \
   test-dbi \
+  test-dbi-business \
   test-load-backend
 
 GNC_TEST_DEPS = \
@@ -38,6 +43,7 @@ TESTS_ENVIRONMENT = \
 check_PROGRAMS = \
   test-dbi-basic \
   test-dbi \
+  test-dbi-business \
   test-load-backend
 
 EXTRA_DIST = \
@@ -50,6 +56,7 @@ LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/core-utils/libgnc-core-utils.la \
         ${top_builddir}/src/libqof/qof/libgnc-qof.la \
         ${top_builddir}/src/backend/dbi/test/libgncmod-test-dbi.la \
+        ${top_builddir}/src/backend/sql/libgnc-backend-sql.la \
         ${top_builddir}/lib/libc/libc-missing.la
 
 AM_CFLAGS = \
@@ -61,6 +68,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
   -I${top_srcdir}/src/libqof/qof \
+  -I${top_srcdir}/src/backend/sql \
   -DTEST_MYSQL_URL=\"${TEST_MYSQL_URL}\" \
   -DTEST_PGSQL_URL=\"${TEST_PGSQL_URL}\" \
   ${GLIB_CFLAGS} \

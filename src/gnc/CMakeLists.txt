@@ -98,7 +98,6 @@ ADD_EXECUTABLE (cutecash
 TARGET_LINK_LIBRARIES (cutecash gnc-backend-xml)
 TARGET_LINK_LIBRARIES (cutecash app-utils calculation)
 IF (WITH_SQL)
-  TARGET_LINK_LIBRARIES (cutecash gnc-business-backend-sql)
   TARGET_LINK_LIBRARIES (cutecash gnc-backend-dbi gnc-backend-sql)
   TARGET_LINK_LIBRARIES (cutecash ${LIBDBI_LIBRARY})
 ENDIF (WITH_SQL)

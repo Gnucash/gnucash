@@ -93,7 +93,6 @@ ADD_SUBDIRECTORY (app-utils)
 IF (WITH_SQL)
   ADD_SUBDIRECTORY (backend/dbi)
   ADD_SUBDIRECTORY (backend/sql)
-  ADD_SUBDIRECTORY (business/business-core/sql)
 ENDIF (WITH_SQL)
 
 ADD_SUBDIRECTORY (gnc)

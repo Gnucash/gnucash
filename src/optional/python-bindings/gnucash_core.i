@@ -40,7 +40,6 @@
 #include "engine/gnc-engine.h"
 #include "backend/xml/gnc-backend-xml.h"
 #include "backend/dbi/gnc-backend-dbi.h"
-#include "sql/gncmod-business-backend-sql.h"
 #include "Transaction.h"
 #include "Split.h"
 #include "Account.h"
@@ -186,5 +185,4 @@ gnc_engine_init_static(0, no_args);
 
 gnc_module_init_backend_xml();
 gnc_module_init_backend_dbi();
-gnc_module_init_business_core_sql_init();
 %}

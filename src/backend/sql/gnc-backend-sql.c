@@ -59,6 +59,18 @@
 #include "gnc-slots-sql.h"
 #include "gnc-transaction-sql.h"
 
+#include "gnc-address-sql.h"
+#include "gnc-bill-term-sql.h"
+#include "gnc-customer-sql.h"
+#include "gnc-employee-sql.h"
+#include "gnc-entry-sql.h"
+#include "gnc-invoice-sql.h"
+#include "gnc-job-sql.h"
+#include "gnc-order-sql.h"
+#include "gnc-owner-sql.h"
+#include "gnc-tax-table-sql.h"
+#include "gnc-vendor-sql.h"
+
 #if defined( S_SPLINT_S )
 #include "splint-defs.h"
 #endif
@@ -1024,6 +1036,29 @@ gnc_sql_run_query( QofBackend* pBEnd, gpointer pQuery )
 }
 
 /* ================================================================= */
+/* Order in which business objects need to be loaded */
+static const gchar* business_fixed_load_order[] =
+{ GNC_ID_BILLTERM, GNC_ID_TAXTABLE, NULL };
+
+static void
+business_core_sql_init(void)
+{
+    /* Initialize our pointers into the backend subsystem */
+    gnc_address_sql_initialize();
+    gnc_billterm_sql_initialize();
+    gnc_customer_sql_initialize();
+    gnc_employee_sql_initialize();
+    gnc_entry_sql_initialize();
+    gnc_invoice_sql_initialize();
+    gnc_job_sql_initialize();
+    gnc_order_sql_initialize();
+    gnc_owner_sql_initialize();
+    gnc_taxtable_sql_initialize();
+    gnc_vendor_sql_initialize();
+
+    gnc_sql_set_load_order( business_fixed_load_order );
+}
+
 static void
 gnc_sql_init_object_handlers( void )
 {
@@ -1037,6 +1072,9 @@ gnc_sql_init_object_handlers( void )
     gnc_sql_init_recurrence_handler();
     gnc_sql_init_schedxaction_handler();
     gnc_sql_init_lot_handler();
+
+    /* And the business objects */
+    business_core_sql_init();
 }
 
 /* ================================================================= */

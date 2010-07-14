@@ -1,18 +1,6 @@
 SUBDIRS = .
 
 test_column_types_SOURCES = \
-  ${top_srcdir}/src/backend/sql/gnc-backend-sql.c \
-  ${top_srcdir}/src/backend/sql/gnc-account-sql.c \
-  ${top_srcdir}/src/backend/sql/gnc-book-sql.c \
-  ${top_srcdir}/src/backend/sql/gnc-budget-sql.c \
-  ${top_srcdir}/src/backend/sql/gnc-commodity-sql.c \
-  ${top_srcdir}/src/backend/sql/gnc-lots-sql.c \
-  ${top_srcdir}/src/backend/sql/gnc-price-sql.c \
-  ${top_srcdir}/src/backend/sql/gnc-recurrence-sql.c \
-  ${top_srcdir}/src/backend/sql/gnc-schedxaction-sql.c \
-  ${top_srcdir}/src/backend/sql/gnc-slots-sql.c \
-  ${top_srcdir}/src/backend/sql/gnc-transaction-sql.c \
-  ${top_srcdir}/src/backend/sql/escape.c \
   test-column-types.c
 
 TESTS = \
@@ -39,6 +27,7 @@ check_PROGRAMS = \
 
 LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/gnc-module/libgnc-module.la \
+        ${top_builddir}/src/backend/sql/libgnc-backend-sql.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
         ${top_builddir}/src/core-utils/libgnc-core-utils.la \
