@@ -44,8 +44,8 @@
 (define optname-sort-order (N_ "Sort Order"))
 (define optname-report-currency (N_ "Report's currency"))
 (define optname-price-source (N_ "Price Source"))
-(define optname-multicurrency-totals (N_ "Show Multi-currency Totals?"))
-(define optname-show-zeros (N_ "Show zero balance items?"))
+(define optname-multicurrency-totals (N_ "Show Multi-currency Totals"))
+(define optname-show-zeros (N_ "Show zero balance items"))
 
 ;; The idea is:  have a hash with the key being the contact name
 ;; (In future this might be GUID'ed, but for now it's a string

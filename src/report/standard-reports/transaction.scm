@@ -52,7 +52,7 @@
 (define optname-sec-sortkey (N_ "Secondary Key"))
 (define optname-sec-subtotal (N_ "Secondary Subtotal"))
 (define optname-sec-date-subtotal (N_ "Secondary Subtotal for Date Key"))
-(define optname-void-transactions (N_ "Void Transactions?"))
+(define optname-void-transactions (N_ "Void Transactions"))
 (define optname-table-export (N_ "Table for Exporting"))
 (define optname-common-currency (N_ "Common Currency"))
 (define optname-currency (N_ "Report's currency"))
@@ -386,7 +386,7 @@
                  (vector-set! column-list 10 #t))))
     (if (opt-val (N_ "Display") (N_ "Running Balance"))
         (vector-set! column-list 11 #t))
-    (if (opt-val (N_ "Display")  (N_ "Use Full Account Name?"))
+    (if (opt-val (N_ "Display")  (N_ "Use Full Account Name"))
         (vector-set! column-list 12 #t))
     (if (opt-val (N_ "Display") (N_ "Memo"))
         (vector-set! column-list 13 #t))
@@ -394,11 +394,11 @@
         (vector-set! column-list 14 #t))
     (if (opt-val (N_ "Display") (N_ "Other Account Code"))
         (vector-set! column-list 15 #t))
-    (if (opt-val (N_ "Display") (N_ "Use Full Other Account Name?"))
+    (if (opt-val (N_ "Display") (N_ "Use Full Other Account Name"))
         (vector-set! column-list 16 #t))
-    (if (opt-val (N_ "Sorting") (N_ "Show Account Code?"))
+    (if (opt-val (N_ "Sorting") (N_ "Show Account Code"))
         (vector-set! column-list 17 #t))
-    (if (opt-val (N_ "Sorting") (N_ "Show Full Account Name?"))
+    (if (opt-val (N_ "Sorting") (N_ "Show Full Account Name"))
         (vector-set! column-list 18 #t))
     (if (opt-val (N_ "Display") (N_ "Notes"))
         (vector-set! column-list 19 #t))
@@ -761,14 +761,14 @@
     
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      pagename-sorting (N_ "Show Full Account Name?")
+      pagename-sorting (N_ "Show Full Account Name")
       "a1" 
       (N_ "Show the full account name for subtotals and subtitles?")
       #f))
     
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      pagename-sorting (N_ "Show Account Code?")
+      pagename-sorting (N_ "Show Account Code")
       "a2" 
       (N_ "Show the account code for subtotals and subtitles?")
       #f))
@@ -847,11 +847,11 @@
     (list (N_ "Description")                  "c"  (N_ "Display the description?") #t)
     (list (N_ "Notes")                        "d2" (N_ "Display the notes if the memo is unavailable?") #t)
     (list (N_ "Account Name")                 "e"  (N_ "Display the account name?") #f)
-    (list (N_ "Use Full Account Name?")       "f"  (N_ "Display the full account name") #t)
+    (list (N_ "Use Full Account Name")        "f"  (N_ "Display the full account name") #t)
     (list (N_ "Account Code")                 "g"  (N_ "Display the account code") #f)
     (list (N_ "Other Account Name")           "h"  (N_ "Display the other account name?\
  (if this is a split transaction, this parameter is guessed).") #f)
-    (list (N_ "Use Full Other Account Name?") "i"  (N_ "Display the full account name") #t)
+    (list (N_ "Use Full Other Account Name")  "i"  (N_ "Display the full account name") #t)
     (list (N_ "Other Account Code")           "j"  (N_ "Display the other account code") #f)
     (list (N_ "Shares")                       "k"  (N_ "Display the number of shares?") #f)
     (list (N_ "Price")                        "l"  (N_ "Display the shares price?") #f)
@@ -884,7 +884,7 @@
   
   (gnc:register-trep-option
    (gnc:make-multichoice-option
-    gnc:pagename-display (N_ "Sign Reverses?")
+    gnc:pagename-display (N_ "Sign Reverses")
     "p" (N_ "Reverse amount display for certain account types")
     'credit-accounts
     (list 
@@ -955,7 +955,7 @@ Credit Card, and Income accounts")))))
     (cdr (assq (gnc:option-value 
                 (gnc:lookup-option options
                                    (N_ "Display")
-                                   (N_ "Sign Reverses?")))
+                                   (N_ "Sign Reverses")))
                account-types-to-reverse-assoc-list)))
   
 

@@ -282,7 +282,7 @@
 
 (define optname-depth-limit (N_ "Levels of Subaccounts"))
 (define opthelp-depth-limit (N_ "Maximum number of levels in the account tree displayed"))
-(define optname-flatten?    (N_ "Flatten list to depth limit?"))
+(define optname-flatten?    (N_ "Flatten list to depth limit"))
 (define opthelp-flatten?
   (N_ "Displays accounts which exceed the depth limit at the depth limit"))
 

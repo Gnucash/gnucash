@@ -673,63 +673,63 @@
    (N_ "Start of this year"))
   (gnc:reldate-string-db 
    'store 'start-cal-year-desc 
-   (N_ "Start of the current calendar year"))
+   (N_ "First day of the current calendar year"))
 
   (gnc:reldate-string-db 
    'store 'end-cal-year-string 
    (N_ "End of this year"))
   (gnc:reldate-string-db 
    'store 'end-cal-year-desc 
-   (N_ "End of the current calendar year"))
+   (N_ "Last day of the current calendar year"))
 
   (gnc:reldate-string-db 
    'store 'start-prev-year-string 
    (N_ "Start of previous year"))
   (gnc:reldate-string-db 
    'store 'start-prev-year-desc 
-   (N_ "Beginning of the previous calendar year"))
+   (N_ "First day of the previous calendar year"))
 
   (gnc:reldate-string-db 
    'store 'end-prev-year-string 
    (N_ "End of previous year"))
   (gnc:reldate-string-db 
    'store 'end-prev-year-desc 
-   (N_ "End of the Previous Year"))
+   (N_ "Last day of the previous calendar year"))
 
   (gnc:reldate-string-db 
    'store 'start-accounting-period-string 
-   (N_ "Start of Financial Period"))
+   (N_ "Start of accounting period"))
   (gnc:reldate-string-db 
    'store 'start-accounting-period-desc 
-   (N_ "Start of the accounting period, as set in the global preferences"))
+   (N_ "First day of the accounting period, as set in the global preferences"))
 
   (gnc:reldate-string-db 
    'store 'end-accounting-period-string 
-   (N_ "End of Financial Period"))
+   (N_ "End of accounting period"))
   (gnc:reldate-string-db 
    'store 'end-accounting-period-desc 
-   (N_ "End of the accounting period, as set in the global preferences"))
+   (N_ "Last day of the accounting period, as set in the global preferences"))
 
   (gnc:reldate-string-db 
    'store 'start-this-month-string 
    (N_ "Start of this month"))
   (gnc:reldate-string-db 
    'store 'start-this-month-desc 
-   (N_ "Start of the current month"))
+   (N_ "First day of the current month"))
 
   (gnc:reldate-string-db 
    'store 'end-this-month-string 
    (N_ "End of this month"))
   (gnc:reldate-string-db 
    'store 'end-this-month-desc 
-   (N_ "End of the current month"))
+   (N_ "Last day of the current month"))
 
   (gnc:reldate-string-db 
    'store 'start-prev-month-string 
    (N_ "Start of previous month"))
   (gnc:reldate-string-db 
    'store 'start-prev-month-desc
-   (N_ "The beginning of the previous month"))
+   (N_ "First day of the previous month"))
 
   (gnc:reldate-string-db 
    'store 'end-prev-month-string 
@@ -743,28 +743,28 @@
    (N_ "Start of current quarter"))
   (gnc:reldate-string-db 
    'store 'start-current-quarter-desc
-   (N_ "The start of the latest quarterly accounting period"))
+   (N_ "First day of the current quarterly accounting period"))
 
   (gnc:reldate-string-db 
    'store 'end-current-quarter-string 
    (N_ "End of current quarter"))
   (gnc:reldate-string-db 
    'store 'end-current-quarter-desc
-   (N_ "The end of the latest quarterly accounting period"))
+   (N_ "Last day of the current quarterly accounting period"))
 
   (gnc:reldate-string-db 
    'store 'start-prev-quarter-string 
    (N_ "Start of previous quarter"))
   (gnc:reldate-string-db 
    'store 'start-prev-quarter-desc
-   (N_ "The start of the previous quarterly accounting period"))
+   (N_ "First day of the previous quarterly accounting period"))
 
   (gnc:reldate-string-db 
    'store 'end-prev-quarter-string 
    (N_ "End of previous quarter"))
   (gnc:reldate-string-db 
    'store 'end-prev-quarter-desc 
-   (N_ "End of previous quarterly accounting period"))
+   (N_ "Last day of previous quarterly accounting period"))
 
   (gnc:reldate-string-db 
    'store 'today-string 

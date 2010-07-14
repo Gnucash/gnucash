@@ -21,7 +21,7 @@
 (define optname-report-currency (N_ "Report's currency"))
 (define optname-price-source (N_ "Price Source"))
 (define optname-subacct (N_ "Include Sub-Accounts"))
-(define optname-internal (N_ "Exclude transactions between selected accounts?"))
+(define optname-internal (N_ "Exclude transactions between selected accounts"))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Options
