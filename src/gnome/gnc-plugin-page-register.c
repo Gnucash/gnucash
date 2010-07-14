@@ -173,7 +173,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     /* File menu */
 
     {
-        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Check..."), "<control>p", NULL,
+        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Checks..."), "<control>p", NULL,
         G_CALLBACK (gnc_plugin_page_register_cmd_print_check)
     },
 
@@ -2092,7 +2092,8 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
     SplitRegister * reg;
     Split         * split;
     Transaction   * trans;
-
+    GList         * splits = NULL, *item;
+    GNCLedgerDisplayType ledger_type;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
@@ -2100,12 +2101,71 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
-    split    = gnc_split_register_get_current_split(reg);
-    trans    = xaccSplitGetParent(split);
-
-    if (split && trans)
+    ledger_type = gnc_ledger_display_type(priv->ledger);
+    if (ledger_type == LD_SINGLE || ledger_type == LD_SUBACCOUNT)
     {
-        gnc_ui_print_check_dialog_create(plugin_page, split);
+        split    = gnc_split_register_get_current_split(reg);
+        trans    = xaccSplitGetParent(split);
+    
+        if (split && trans)
+        {
+            splits = g_list_append(splits, split);
+            gnc_ui_print_check_dialog_create(plugin_page, splits);
+            g_list_free(splits);
+        }
+    }
+    else if (ledger_type == LD_GL && reg->type == SEARCH_LEDGER)
+    {
+        Account *common_acct = NULL, *account;
+        splits = xaccQueryGetSplits(gnc_ledger_display_get_query(priv->ledger));
+        /* Make sure each split is from the same account */
+        for (item = splits; item; item = g_list_next(item))
+        {
+            split = (Split *) item->data;
+            if (common_acct == NULL)
+            {
+                common_acct = xaccSplitGetAccount(split);
+            }
+            else
+            {
+                if (xaccSplitGetAccount(split) != common_acct)
+                {
+                    GtkWidget *dialog, *window;
+                    gint response;
+                    const gchar *title = _("Print checks from multiple accounts?");
+                    const gchar *message =
+                        _("This search result contains splits from more than one account. "
+                          "Do you want to print the checks even though they are not all "
+                          "from the same account?");
+                    window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(plugin_page));
+                    dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+                                                    GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                    GTK_MESSAGE_WARNING,
+                                                    GTK_BUTTONS_CANCEL,
+                                                    "%s", title);
+                    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+                            "%s", message);
+                    gtk_dialog_add_button(GTK_DIALOG(dialog), _("_Print checks"),
+                                          GTK_RESPONSE_YES);
+                    response = gnc_dialog_run(GTK_DIALOG(dialog), "print_multi_acct_checks");
+                    gtk_widget_destroy(dialog);
+                    if (response != GTK_RESPONSE_YES)
+                    {
+                        LEAVE("Multiple accounts");
+                        return;
+                    }
+                    break;
+                }
+            }
+        }
+        gnc_ui_print_check_dialog_create(plugin_page, splits);
+    }
+    else
+    {
+        gnc_error_dialog(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(plugin_page)), "%s", 
+                         _("You can only print checks from a bank account register or search results."));
+        LEAVE("Unsupported ledger type");
+        return;
     }
     LEAVE(" ");
 }
