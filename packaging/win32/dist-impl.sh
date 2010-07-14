@@ -44,6 +44,7 @@ Please set AQBANKING_WITH_QT to yes and rerun install.sh first."
     _INSTALL_UDIR=`unix_path $INSTALL_DIR`
     _INNO_UDIR=`unix_path $INNO_DIR`
     _WEBKIT_UDIR=`unix_path $WEBKIT_DIR`
+	_ISOCODES_UDIR=`unix_path $ISOCODES_DIR`
     add_to_env $_UNZIP_UDIR/bin PATH # unzip
     add_to_env $_GNOME_UDIR/bin PATH # gconftool-2
     add_to_env $_EXETYPE_UDIR/bin PATH # exetype
@@ -126,6 +127,12 @@ function dist_gnome() {
     rm -rf $DIST_UDIR/etc/gconf/gconf.xml.defaults/{desktop,schemas}
     cp -a $DIST_UDIR/lib/locale $DIST_UDIR/share
     rm -rf $DIST_UDIR/lib/locale
+}
+
+function dist_isocodes() {
+    setup isocodes
+    mkdir -p $DIST_UDIR/share
+    cp -a $_ISOCODES_UDIR/share/{locale,xml} $DIST_UDIR/share
 }
 
 function dist_pcre() {

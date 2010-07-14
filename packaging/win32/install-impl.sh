@@ -648,6 +648,27 @@ EOF
     [ ! -d $_GNOME_UDIR/share/aclocal ] || add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
 
+function inst_isocodes() {
+    setup isocodes
+    _ISOCODES_UDIR=`unix_path ${ISOCODES_DIR}`
+    add_to_env $_ISOCODES_UDIR/share/pkgconfig PKG_CONFIG_PATH
+    if [ -f ${_ISOCODES_UDIR}/share/pkgconfig/iso-codes.pc ]
+    then
+        echo "isocodes already installed. skipping."
+    else
+        wget_unpacked $ISOCODES_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/iso-codes-*
+        qpushd $TMP_UDIR/iso-codes-*
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=${_ISOCODES_UDIR}
+            make
+            make install
+        qpopd
+        quiet [ -f ${_ISOCODES_UDIR}/share/pkgconfig/iso-codes.pc ] || die "isocodes not installed correctly"
+        rm -rf ${TMP_UDIR}/iso-codes-*
+    fi
+}
+
 function inst_swig() {
     setup Swig
     _SWIG_UDIR=`unix_path $SWIG_DIR`

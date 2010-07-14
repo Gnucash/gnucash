@@ -87,6 +87,7 @@ add_step inst_gnome
 if [ "$AQBANKING3" = "yes" ]; then
  add_step inst_gnutls
 fi
+add_step inst_isocodes
 add_step inst_swig
 add_step inst_pcre
 add_step inst_libbonoboui
