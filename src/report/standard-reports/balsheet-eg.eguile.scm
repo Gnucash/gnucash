@@ -198,8 +198,8 @@
     (balancing-cc 'minusmerge etl-cc #f)
     (accrec-set-namelink! accrec-ie
                           (if (gnc-numeric-negative-p (accrec-balance-num accrec-ie))
-                            (_ "Retained Earnings")
-                            (_ "Retained Losses")))
+                            (_ "Retained Losses")
+                            (_ "Retained Earnings")))
     (accrec-set-placeholder?! accrec-ie #t)
     (balancing-cc 'minusmerge (accrec-subtotal-cc accrec-ie) #f)
     (if (and (one-depth-1 accrec-eq)
