@@ -3,7 +3,7 @@
 /* Note that body and table font family and size will be overridden */
 /* by separate report options.                                      */
 
-  body { 
+  body {
     margin: 2em;
   }
   table.outer {
@@ -16,7 +16,7 @@
     vertical-align: bottom;
   }
   table.accounts td {
-  } 
+  }
   td {
     padding: 0em 0.5em;
   }

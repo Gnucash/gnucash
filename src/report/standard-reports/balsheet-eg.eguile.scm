@@ -1,24 +1,24 @@
 <?scm
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; balsheet-eg.eguile.scm 
+;; balsheet-eg.eguile.scm
 ;; by Chris Dennis  chris@starsoftanalysis.co.uk
 ;;
 ;; This eguile template is designed to be called from
 ;; balsheet-eg.scm via the eguile mechanism.
-;; 
+;;
 ;; $Author: chris $ $Date: 2009/06/19 22:40:38 $ $Revision: 1.54 $
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -32,13 +32,13 @@
 
   ;; Display a row of the accounts table, given the account name and amount,
   ;; and several parameters for adjusting layout and styling.
-  (define (display-acc-row 
+  (define (display-acc-row
             maxdepth
             depth
             rshift
             name
             amount
-            total?  
+            total?
             leftoverrule? ; put rule over cell to the left?
             )
     (let ((accname-class "accname")
@@ -74,7 +74,7 @@
             maxdepth
             rshift
             onedepth1)
-    ;; Recursively display the accounts table from the given tree 
+    ;; Recursively display the accounts table from the given tree
     ;; (as returned by process-acc-list)
     (for-each
       (lambda (accrec)
@@ -84,7 +84,7 @@
                 ;   (> (accrec-depth accrec) 0))
                 )
             ; has sub-accounts: shift left to put balance in same column as sub-accounts
-            (set! rshift2 -1))        
+            (set! rshift2 -1))
           ; Don't show zero amount for a placeholder -- the value to
           ; test for zero depends on whether or not this is a 'summary' value
           ; (i.e. a total of sub-accounts that are not shown separately)
@@ -93,11 +93,11 @@
                      (not (accrec-non-zero? accrec))
                      (gnc-numeric-zero-p (accrec-balance-num accrec))))
             (set! showamt? #f))
-          (display-acc-row 
-            maxdepth 
-            (accrec-depth accrec) 
+          (display-acc-row
+            maxdepth
+            (accrec-depth accrec)
             (+ rshift rshift2)
-            (accrec-namelink accrec) 
+            (accrec-namelink accrec)
             (if showamt?
               (if (accrec-summary? accrec)
                 (format-comm-coll (accrec-subtotal-cc accrec))
@@ -112,15 +112,15 @@
               (display-accounts-table-r (accrec-sublist accrec) neg? maxdepth rshift onedepth1)
               ; ...and then display the total
               ; unless there is only one depth-1 account
-              (if (not (and onedepth1 
+              (if (not (and onedepth1
                             (= 1 (accrec-depth accrec))))
-                (display-acc-row 
-                  maxdepth 
-                  (accrec-depth accrec) 
-                  (if (> (accrec-depth accrec) 1) rshift 0) 
+                (display-acc-row
+                  maxdepth
+                  (accrec-depth accrec)
+                  (if (> (accrec-depth accrec) 1) rshift 0)
                   (string-append (_ "Total") " " (accrec-namelink accrec))
                   (format-comm-coll-total (accrec-subtotal-cc accrec))
-                  (<= (accrec-depth accrec) 1)        ; total? 
+                  (<= (accrec-depth accrec) 1)        ; total?
                   (> (accrec-depth accrec) 0)))))))   ; leftoverrule?
       tree
       ))
@@ -137,7 +137,7 @@
 <!-- Note that the stylesheet file is overridden by some options, i.e.
      opt-font-family and opt-font-size                                 -->
 <style type="text/css">
-  body { 
+  body {
     <?scm (if opt-font-family (begin ?>
       font-family: <?scm:d opt-font-family ?>;
     <?scm )) ?>
@@ -161,7 +161,7 @@
 <h3><?scm:d coyname ?></h3>
 <h2><?scm:d reportname ?> <?scm:d (gnc-print-date opt-date-tp) ?></h2>
 
-<?scm 
+<?scm
   ;; This is where the work is done.
   ;; Create three accounts trees, make a few adjustments, then display them
   (let* ((accrec-as (process-acc-list asset-accounts #f))
@@ -178,44 +178,44 @@
          (balancing-cc (gnc:make-commodity-collector))
          (etl-cc (gnc:make-commodity-collector)))
     (accrec-set-namelink! accrec-as (_ "Assets Accounts"))
-    (accrec-set-placeholder?! accrec-as #t) 
+    (accrec-set-placeholder?! accrec-as #t)
     (balancing-cc 'merge (accrec-subtotal-cc accrec-as) #f)
-    (if (and (one-depth-1 accrec-as) 
+    (if (and (one-depth-1 accrec-as)
              (> (accrec-treedepth accrec-as) 1))
       (set! rshift-as 1))
     (accrec-set-namelink! accrec-li (_ "Liability Accounts"))
-    (accrec-set-placeholder?! accrec-li #t) 
+    (accrec-set-placeholder?! accrec-li #t)
     (etl-cc 'merge (accrec-subtotal-cc accrec-li) #f)
-    (if (and (one-depth-1 accrec-li) 
+    (if (and (one-depth-1 accrec-li)
              (> (accrec-treedepth accrec-li) 1))
       (set! rshift-li 1))
     (accrec-set-namelink! accrec-eq (_ "Equity Accounts"))
-    (accrec-set-placeholder?! accrec-eq #t) 
+    (accrec-set-placeholder?! accrec-eq #t)
     (etl-cc 'merge (accrec-subtotal-cc accrec-eq) #f)
     (accrec-set-namelink! accrec-tr (_ "Trading Accounts"))
-    (accrec-set-placeholder?! accrec-tr #t) 
+    (accrec-set-placeholder?! accrec-tr #t)
     (etl-cc 'merge (accrec-subtotal-cc accrec-tr) #f)
     (balancing-cc 'minusmerge etl-cc #f)
-    (accrec-set-namelink! accrec-ie 
+    (accrec-set-namelink! accrec-ie
                           (if (gnc-numeric-negative-p (accrec-balance-num accrec-ie))
                             (_ "Retained Earnings")
                             (_ "Retained Losses")))
     (accrec-set-placeholder?! accrec-ie #t)
     (balancing-cc 'minusmerge (accrec-subtotal-cc accrec-ie) #f)
-    (if (and (one-depth-1 accrec-eq) 
+    (if (and (one-depth-1 accrec-eq)
              (> (accrec-treedepth accrec-eq) 1))
       (set! rshift-eq 1))
-    (if (and (one-depth-1 accrec-tr) 
+    (if (and (one-depth-1 accrec-tr)
              (> (accrec-treedepth accrec-tr) 1))
       (set! rshift-tr 1))
-    (if (and (one-depth-1 accrec-ie) 
+    (if (and (one-depth-1 accrec-ie)
              (> (accrec-treedepth accrec-ie) 1))
       (set! rshift-ie 1))
 
-   (if debugging? 
+   (if debugging?
      (begin
-      (display "<p>Assets: ") (display accrec-as) 
-      (display "<p>Liabilities: ") (display accrec-li) 
+      (display "<p>Assets: ") (display accrec-as)
+      (display "<p>Liabilities: ") (display accrec-li)
       (display "<p>Equities: ") (display accrec-eq)
       (display "<p>Trading: ") (display accrec-tr)
       (display "<p>Profit and loss: ") (display accrec-ie)))
@@ -237,7 +237,7 @@
 
     ; Split table across columns if required
     (case opt-columns
-      ((autocols) 
+      ((autocols)
         ?>
         </table>
         <!-- <table border="0" align="left"><tr><td>&nbsp;</td></tr></table> -->
@@ -247,7 +247,7 @@
       ((twocols)
         ?>
         </table></td><td valign="top"><table border="0">
-        <?scm 
+        <?scm
         ))
 
     ; Display liabilities and equity sections
@@ -257,9 +257,9 @@
     (hrule (* maxdepth 2))
     (display-accounts-table-r (list accrec-eq) #t maxdepth rshift-eq (one-depth-1 accrec-eq))
     (hrule (* maxdepth 2))
-    (display-acc-row 
+    (display-acc-row
       maxdepth 0 0
-      (_ "Total Equity, Trading, and Liabilities") 
+      (_ "Total Equity, Trading, and Liabilities")
       (format-comm-coll-total etl-cc)
       #t #f)
     (hrule (* maxdepth 2))
@@ -276,7 +276,7 @@
 </table>
 </table>
 <?scm
-    ); end of let 
+    ); end of let
 ?>
 
 <?scm
@@ -288,17 +288,17 @@
 <p><?scm:d (_ "<strong>Exchange Rates</strong> used for this report") ?>
 <table border="0">
 <?scm
-      (for-each 
+      (for-each
         (lambda (xpair)
           (let* ((comm (car xpair))
                  (one-num (gnc:make-gnc-numeric 10000 1))
-                 (one-foreign-mny (gnc:make-gnc-monetary comm one-num)) 
+                 (one-foreign-mny (gnc:make-gnc-monetary comm one-num))
                  (one-local-mny (exchange-fn one-foreign-mny opt-report-commodity)))
 ?>
 <tr>
   <td align="right">1 <?scm:d (gnc-commodity-get-mnemonic comm) ?></td>
   <td>=</td>
-  <td align="left"><?scm:d (fmtnumeric 
+  <td align="left"><?scm:d (fmtnumeric
                              (gnc-numeric-div
                                (gnc:gnc-monetary-amount one-local-mny)
                                (gnc:gnc-monetary-amount one-foreign-mny)

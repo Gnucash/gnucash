@@ -1,27 +1,27 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; balsheet-eg.scm 
+;; balsheet-eg.scm
 ;; by Chris Dennis  chris@starsoftanalysis.co.uk
 ;;
 ;; - eguile version of ...
 ;; balance-sheet.scm: balance sheet
-;; 
+;;
 ;; By Robert Merkel <rgmerk@mira.net>
 ;;
-;; Heavily modified and Frankensteined by David Montenegro 
+;; Heavily modified and Frankensteined by David Montenegro
 ;;   2004.06.12-2004.06.23 <sunrise2000@comcast.net>
 ;;
 ;; $Author: chris $ $Date: 2009/07/02 10:16:02 $ $Revision: 1.44 $
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -49,7 +49,7 @@
 ;;; these could go into a separate module..........
 ;;;
 ;; Useful routines to use in the template
-(define (escape-html s1) 
+(define (escape-html s1)
   ;; convert string s1 to escape HTML special characters < > and &
   ;; i.e. convert them to &lt; &gt; and &amp; respectively.
   ;; Maybe there's a way to do this in one go... (but order is important)
@@ -121,7 +121,7 @@
     (append gnc:*kvp-option-path* (list gnc:*business-label* key))))
 
 (define (add-to-cc cc com num neg?)
-  ; add a numeric and commodity to a commodity-collector, 
+  ; add a numeric and commodity to a commodity-collector,
   ; changing sign if required
   (if neg?
     (cc 'add com (gnc-numeric-neg num))
@@ -180,7 +180,7 @@
                                (display
                                  (string-concatenate
                                    (map-in-order
-                                     (lambda (mny) 
+                                     (lambda (mny)
                                        (string-append (gnc:monetary->string mny) " "))
                                      ((accrec-subtotal-cc accrec) 'format gnc:make-gnc-monetary #f))))
                                (display "#f"))
@@ -212,10 +212,10 @@
 (define newaccrec-full (record-constructor accrectype))                ; requires all the fields
 (define newaccrec-empty (record-constructor accrectype '()))        ; all fields default to #f
 (define newaccrec (record-constructor accrectype '(account         ; most-likely-to-be-needed fields
-                                                    code 
-                                                    placeholder? 
-                                                    namelink 
-                                                    commodity 
+                                                    code
+                                                    placeholder?
+                                                    namelink
+                                                    commodity
                                                     balance-num
                                                     depth
                                                     treedepth)))
@@ -294,7 +294,7 @@
 (define opthelp-account-links (N_ "Shows each account in the table as a hyperlink to its register window"))
 
 (define optname-neg-format (N_ "Negative amount format"))
-(define opthelp-neg-format 
+(define opthelp-neg-format
   (N_ "The formatting to use for negative amounts: with a leading sign, or enclosing brackets"))
 
 (define optname-font-family    (N_ "Font family"))
@@ -302,10 +302,10 @@
 (define optname-font-size      (N_ "Font size"))
 (define opthelp-font-size      (N_ "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\""))
 (define optname-template-file  (N_ "Template file"))
-(define opthelp-template-file  
+(define opthelp-template-file
   (N_ "The file name of the eguile template part of this report.  This file must be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."))
 (define optname-css-file  (N_ "CSS stylesheet file"))
-(define opthelp-css-file  
+(define opthelp-css-file
   (N_ "The file name of the CSS stylesheet to use with this report.  If specified, this file should be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."))
 (define optname-extra-notes (N_ "Extra Notes"))
 (define opthelp-extra-notes (N_ "Notes added at end of invoice -- may contain HTML markup"))
@@ -325,7 +325,7 @@
 ;; options generator
 (define (balsheet-options-generator)
   (let* ((options (gnc:new-options))
-         (add-option 
+         (add-option
            (lambda (new-option)
              (gnc:register-option options new-option))))
 
@@ -343,7 +343,7 @@
     (gnc:options-add-currency! options commodities-page optname-report-commodity "a")
     (gnc:options-add-price-source!  options commodities-page
                                     optname-price-source "b" 'average-cost)
-    (add-option (gnc:make-simple-boolean-option commodities-page optname-show-foreign 
+    (add-option (gnc:make-simple-boolean-option commodities-page optname-show-foreign
                                                 "c" opthelp-show-foreign #t))
 
     ;; Display options
@@ -368,13 +368,13 @@
                         (vector 'negbrackets
                                 (N_ "Brackets")
                                 (N_ "Surround negative amounts with brackets, e.g. ($100.00)")))))
-    (add-option (gnc:make-string-option display-page optname-font-family "c" 
+    (add-option (gnc:make-string-option display-page optname-font-family "c"
                                         opthelp-font-family "sans"))
-    (add-option (gnc:make-string-option display-page optname-font-size "d" 
+    (add-option (gnc:make-string-option display-page optname-font-size "d"
                                         opthelp-font-size "medium"))
-    (add-option (gnc:make-string-option display-page optname-template-file "e" 
+    (add-option (gnc:make-string-option display-page optname-template-file "e"
                                         opthelp-template-file "balsheet-eg.eguile.scm"))
-    (add-option (gnc:make-string-option display-page optname-css-file "f" 
+    (add-option (gnc:make-string-option display-page optname-css-file "f"
                                         opthelp-css-file "balsheet-eg.css"))
 
     ;; General options
@@ -384,7 +384,7 @@
 
     ;; Notes options
     (add-option (gnc:make-text-option notes-page optname-extra-notes
-                                      "a" opthelp-extra-notes 
+                                      "a" opthelp-extra-notes
                                       (N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br>Change the 'Extra Notes' option to get rid of this message)")))
 
     ;; Set the accounts page as default option tab
@@ -398,7 +398,7 @@
 
   (define (get-option pagename optname)
     (gnc:option-value
-      (gnc:lookup-option 
+      (gnc:lookup-option
         (gnc:report-options report-obj) pagename optname)))
 
   (gnc:report-starting reportname)
@@ -412,25 +412,25 @@
          (opt-price-source     (get-option commodities-page optname-price-source))
          (opt-show-foreign?    (get-option commodities-page optname-show-foreign))
          (opt-report-title     (get-option general-page     optname-report-title))
-         (opt-date-tp          (gnc:timepair-end-day-time 
+         (opt-date-tp          (gnc:timepair-end-day-time
                                  (gnc:date-option-absolute-time
                                    (get-option general-page optname-date))))
          (opt-date-secs        (gnc:timepair->secs          opt-date-tp))
          (opt-columns          (get-option display-page     optname-columns))
-         (opt-font-family      (get-option display-page     optname-font-family)) 
-         (opt-font-size        (get-option display-page     optname-font-size)) 
-         (opt-template-file    (find-file 
+         (opt-font-family      (get-option display-page     optname-font-family))
+         (opt-font-size        (get-option display-page     optname-font-size))
+         (opt-template-file    (find-file
                                  (get-option display-page   optname-template-file)))
-         (opt-css-file         (find-file 
+         (opt-css-file         (find-file
                                  (get-option display-page   optname-css-file)))
          (opt-flatten-depth    999); may get adjusted below
          (opt-neg-format       (get-option display-page     optname-neg-format))
-         (opt-extra-notes      (get-option notes-page       optname-extra-notes)) 
+         (opt-extra-notes      (get-option notes-page       optname-extra-notes))
 
          ;; non-option assignments
          ;;
-         (accounts 
-           (gnc:filter-accountlist-type 
+         (accounts
+           (gnc:filter-accountlist-type
              (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
                    ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
                    ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
@@ -448,7 +448,7 @@
            (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
          (trading-accounts
            (assoc-ref split-up-accounts ACCT-TYPE-TRADING))
-         (income-expense-accounts 
+         (income-expense-accounts
            (append (assoc-ref split-up-accounts ACCT-TYPE-INCOME)
                    (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)))
 
@@ -460,7 +460,7 @@
          ; so that exchange rate table can be displayed.
          ; xlist will become an association list of (comm . #t) pairs
          ; to avoid duplicates.
-         (xlist '()) 
+         (xlist '())
 
          (coyname (or (gnc:company-info gnc:*company-name*) ""))
 
@@ -470,7 +470,7 @@
 
     ;; end of all the lets.  time for some real code
 
-    ;; The following routines are defined inside 
+    ;; The following routines are defined inside
     ;; the renderer to make options available:
 
     ;; number formatting stuff
@@ -481,13 +481,13 @@
       ;; format gnc-numeric n for printing
       (fmtnumber (gnc-numeric-to-double n)))
 
-    ;; HTML-specific formatting 
+    ;; HTML-specific formatting
 
     (define (negstyle item)
       ;; apply styling for negative amounts
       (string-append "<span class=\"negative\">" item "</span>"))
 
-    (define (foreignstyle item) 
+    (define (foreignstyle item)
       ;; apply styling for amount in foreign currency
       (if css?
         (string-append "<span class=\"foreign\">" item "</span>"))
@@ -495,7 +495,7 @@
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;; accrec-related routines
-    ;;; 
+    ;;;
     ;;; The accrec record stucture (defined above) and the following
     ;;; routines provide the basis for easy access to accounts
     ;;; from the main part of the report
@@ -507,10 +507,10 @@
            (= 1 (length (accrec-sublist accrec)))))
 
     (define (account-link account)
-      ;; Return an HTML link to the given account, 
+      ;; Return an HTML link to the given account,
       ;; e.g. <a href="gnc-register:acct-guid=abcdeaalsdfjkalsdk#">Account Name</a>
       (if opt-use-links?
-        (string-append 
+        (string-append
           "<a href=\"gnc-register:acct-guid="
           (gncAccountGetGUID account)
           "\">"
@@ -540,7 +540,7 @@
     (define (process-acc-list account-list neg?)
       ;; non-recursive wrapper around this:
       ;; Convert the account list to a tree structure for easier handling later
-      (define (process-acc-list-r  
+      (define (process-acc-list-r
                 account-list       ; list of accounts to process
                 curr-depth         ; set depth to 1 to start with
                 neg?)
@@ -550,24 +550,24 @@
               (total-cc (gnc:make-commodity-collector)))        ; gets grand total of all accounts
           ; at this level and below
           ; loop until no more accounts, or next account is at higher level
-          (while (and (not (null? account-list))   
+          (while (and (not (null? account-list))
                       (>= (gnc-account-get-current-depth (car account-list)) curr-depth))
-                 (let* ((account (car account-list)) 
+                 (let* ((account (car account-list))
                         (comm    (xaccAccountGetCommodity account))
                         (bal     (xaccAccountGetBalanceAsOfDate account opt-date-secs))
                         (depth   (flattened-acc-depth account))
-                        (treedepth 1) 
+                        (treedepth 1)
                         ; Next account only qualifies as 'deeper' if we're not flattening
                         (next-acc-deeper (> (flattened-acc-depth (safe-cadr account-list)) depth))
                         (newacc (newaccrec-clean)))
-                   (accrec-set-account!      newacc account) 
+                   (accrec-set-account!      newacc account)
                    (accrec-set-code!         newacc (xaccAccountGetCode account))
                    (accrec-set-placeholder?! newacc (xaccAccountGetPlaceholder account))
                    (accrec-set-namelink!     newacc (account-link account))
                    (accrec-set-commodity!    newacc comm) ;(xaccAccountGetCommodity account))
-                   (accrec-set-balance-num!  newacc 
+                   (accrec-set-balance-num!  newacc
                                              (if neg?
-                                               (gnc-numeric-neg bal) 
+                                               (gnc-numeric-neg bal)
                                                bal))
                    (accrec-set-depth!        newacc depth) ;(gnc-account-get-current-depth account))
                    (accrec-set-non-zero?!    newacc (not (gnc-numeric-zero-p bal)))
@@ -580,7 +580,7 @@
                    (add-to-cc total-cc comm bal neg?)
                    (add-to-cc (accrec-subtotal-cc newacc) comm bal neg?)
 
-                   (if next-acc-deeper 
+                   (if next-acc-deeper
                      ; recurse to deal with deeper level accounts,
                      ; then store the resulting list
                      (let* ((result-v (process-acc-list-r
@@ -613,11 +613,11 @@
                      (set! tree (append tree (list newacc))))
                    (if (accrec-non-zero? newacc)
                      (set! any-non-zero? #t))
-                   (accrec-set-treedepth!    newacc treedepth) 
+                   (accrec-set-treedepth!    newacc treedepth)
                    )); end of while
           ; next a/c (if any) is at higher level, so return what's
           ; left of the account list, and the accumulated total
-          ;       0    1            2        3        4  
+          ;       0    1            2        3        4
           (vector tree account-list total-cc maxdepth any-non-zero?)
           )); end of p-a-l-r
       (let* ((result-v (process-acc-list-r account-list 1 neg?))
@@ -625,7 +625,7 @@
         ; Set up top-level 'depth-0' accrec with summary information
         (accrec-set-depth!       accrec0 0)
         (accrec-set-sublist!     accrec0 (vector-ref result-v 0))
-        (accrec-set-subtotal-cc! accrec0 (vector-ref result-v 2)) 
+        (accrec-set-subtotal-cc! accrec0 (vector-ref result-v 2))
         (accrec-set-treedepth!   accrec0 (min (vector-ref result-v 3) opt-depth-limit))
         ; Return the depth-0 accrec, with all other accounts linked to it
         accrec0))
@@ -649,7 +649,7 @@
           (negstyle (nbsp mny-string)))
         (nbsp mny-string)))
 
-    (define (format-monetary mny) 
+    (define (format-monetary mny)
       ;; Format the given gnc:monetary value according to opt-neg-format
       ;; If mny's currency isn't the same as that of the report,
       ;; convert it -- show both values if specified by option
@@ -673,7 +673,7 @@
       ;; Returns one commodity per line.
       (string-concatenate
         (map-in-order
-          (lambda (mny) 
+          (lambda (mny)
             (string-append (format-monetary mny) "<br>"))
           (cc 'format gnc:make-gnc-monetary #f))))
 
@@ -684,7 +684,7 @@
     (define (fmtmoney2 mny)
       ;; format a monetary amount in the given currency/commodity
       ;; !! this takes a gnc-monetary
-      (nbsp (gnc:monetary->string mny))) 
+      (nbsp (gnc:monetary->string mny)))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -698,15 +698,15 @@
     (set! html (eguile-file-to-string opt-template-file (the-environment)))
     (gnc:debug "balsheet-eg.scm - generated html:") (gnc:debug html)
     (gnc:report-finished)
-    (if css? ; return report as document or html, depending on version 
-      html 
+    (if css? ; return report as document or html, depending on version
+      html
       (let ((document (gnc:make-html-document)))
         (gnc:html-document-add-object! document html)
         document))
 
     ))
 
-(gnc:define-report 
+(gnc:define-report
   'version 1
   'name reportname
   'report-guid "2e3751edeb7544e8a20fd19e9d08bb65"
