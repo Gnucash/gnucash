@@ -74,8 +74,8 @@ const gchar *start_strings[GNC_ACCOUNTING_PERIOD_LAST] =
     N_("Start of previous year"),
 
     /* FY Strings */
-    N_("Start of this fiscal year"),
-    N_("Start of previous fiscal year"),
+    N_("Start of this accounting period"),
+    N_("Start of previous accounting period"),
 };
 
 const gchar *end_strings[GNC_ACCOUNTING_PERIOD_LAST] =
@@ -90,8 +90,8 @@ const gchar *end_strings[GNC_ACCOUNTING_PERIOD_LAST] =
     N_("End of previous year"),
 
     /* FY Strings */
-    N_("End of this fiscal year"),
-    N_("End of previous fiscal year"),
+    N_("End of this accounting period"),
+    N_("End of previous accounting period"),
 };
 
 
