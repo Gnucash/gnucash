@@ -1247,7 +1247,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     gtk_notebook_append_page(GTK_NOTEBOOK(propertybox->notebook),
                              page_content_box, page_label);
 
-    /* Switch to selection from a list if the page count threshhold is reached */
+    /* Switch to selection from a list if the page count threshold is reached */
     page_count = gtk_notebook_page_num(GTK_NOTEBOOK(propertybox->notebook),
                                        page_content_box);
 
