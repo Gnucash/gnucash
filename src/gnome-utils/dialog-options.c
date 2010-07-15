@@ -1235,7 +1235,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     gtk_box_pack_end(GTK_BOX(page_content_box), buttonbox, FALSE, FALSE, 0);
 
     /* The reset button on each option page */
-    reset_button = gtk_button_new_with_label (_("Use defaults"));
+    reset_button = gtk_button_new_with_label (_("Reset defaults"));
     gtk_tooltips_set_tip(tooltips, reset_button,
                          _("Reset all values to their defaults."), NULL);
 
