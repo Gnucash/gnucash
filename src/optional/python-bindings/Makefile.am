@@ -33,8 +33,7 @@ _gnucash_core_c_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/backend/xml/libgncmod-backend-xml.la \
-  ${top_builddir}/src/backend/dbi/libgncmod-backend-dbi.la \
-  ${top_builddir}/src/business/business-core/sql/libgncmod-business-backend-sql.la
+  ${top_builddir}/src/backend/dbi/libgncmod-backend-dbi.la
 if BUILDING_FROM_SVN
 gnucash_core.c: $(SWIG_FILES) ${top_srcdir}/src/base-typemaps.i $(top_builddir)/config.h
 	swig -python -Wall -Werror \
