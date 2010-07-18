@@ -58,15 +58,26 @@
            (N_ "Enable Links") "c" (N_ "Enable hyperlinks in reports.")
            #t))
          (opt-register
-          (gnc:make-number-range-option
-           (N_ "Tables")
-           (N_ "Table cell spacing") "c" (N_ "Space between table cells")
-           4 0 20 0 1))
+          (gnc:make-simple-boolean-option
+           (N_ "General")
+           (N_ "Enable Alternate Line Shading") "d" (N_ "Enable different color for alternate lines in reports.")
+           #f))
+         (opt-register
+          (gnc:make-color-option
+           (N_ "General")
+           (N_ "Alternate Line Background Color") "e" (N_ "Background color for alternate lines.")
+           (list #xff #xff #xff 0)
+           255 #f))
          (opt-register
           (gnc:make-number-range-option
            (N_ "Tables")
-           (N_ "Table cell padding") "d" (N_ "Space between table cells")
+           (N_ "Table cell spacing") "c" (N_ "Space between table cells")
            0 0 20 0 1))
+         (opt-register
+          (gnc:make-number-range-option
+           (N_ "Tables")
+           (N_ "Table cell padding") "d" (N_ "Space between table cell edge and cell content")
+           4 0 20 0 1))
          (opt-register
           (gnc:make-number-range-option
            (N_ "Tables")
@@ -90,6 +101,12 @@
                   "Background Color")))
      (bgpixmap (opt-val "General" "Background Pixmap"))
      (links? (opt-val "General" "Enable Links"))
+     (alt-lines? (opt-val "General" "Enable Alternate Line Shading"))
+     (alt-line-bgcolor
+      (gnc:color-option->html
+       (gnc:lookup-option options
+                  "General"
+                  "Alternate Line Background Color")))
      (spacing (opt-val "Tables" "Table cell spacing"))
      (padding (opt-val "Tables" "Table cell padding"))
      (border (opt-val "Tables" "Table border width"))
@@ -115,6 +132,21 @@
        ssdoc "date-cell"
        'tag "td"
        'attribute (list "class" "date-cell"))
+
+    (gnc:html-document-set-style!
+       ssdoc "column-heading-left"
+       'tag "th"
+       'attribute (list "class" "column-heading-left"))
+
+    (gnc:html-document-set-style!
+       ssdoc "column-heading-center"
+       'tag "th"
+       'attribute (list "class" "column-heading-center"))
+
+    (gnc:html-document-set-style!
+       ssdoc "column-heading-right"
+       'tag "th"
+       'attribute (list "class" "column-heading-right"))
 
     (gnc:html-document-set-style!
        ssdoc "anchor-cell"
@@ -165,10 +197,15 @@
        ssdoc "normal-row"
        'tag "tr")
 
-    (gnc:html-document-set-style!
-     ssdoc "alternate-row"
-     'attribute (list "bgcolor" bgcolor)
-     'tag "tr")
+    (if alt-lines?
+        (gnc:html-document-set-style!
+         ssdoc "alternate-row"
+         'attribute (list "bgcolor" alt-line-bgcolor)
+         'tag "tr")
+        (gnc:html-document-set-style!
+         ssdoc "alternate-row"
+         'attribute (list "bgcolor" bgcolor)
+         'tag "tr"))
     (gnc:html-document-set-style!
      ssdoc "primary-subheading"
      'attribute (list "bgcolor" bgcolor)

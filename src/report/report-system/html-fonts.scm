@@ -71,7 +71,7 @@
             (gnc:make-font-option
                 (N_ "Fonts")
                 (N_ "Account link") "b" (N_ "Font info for account name")
-                (string-append font-family " Italic 8")))
+                (string-append font-family " Italic 10")))
         (opt-register
             (gnc:make-font-option
                 (N_ "Fonts")
@@ -117,6 +117,12 @@
             (lambda (section name)
                 (gnc:option-value (gnc:lookup-option options section name))))
         (negative-red? (opt-val "Fonts" "Negative Values in Red"))
+        (alt-lines? (opt-val "General" "Enable Alternate Line Shading"))
+        (alt-line-bgcolor
+         (gnc:color-option->html
+          (gnc:lookup-option options
+                     "General"
+                     "Alternate Line Background Color")))
         (title-font-info (font-name-to-style-info (opt-val "Fonts" "Title")))
         (account-link-font-info (font-name-to-style-info (opt-val "Fonts" "Account link")))
         (number-cell-font-info (font-name-to-style-info (opt-val "Fonts" "Number cell")))
@@ -132,7 +138,10 @@
                 "h3 { " title-font-info " }\n"
                 "a { " account-link-font-info " }\n"
                 "body, p, table, tr, td { text-align: left; " text-cell-font-info " }\n"
-                "th { text-align: right; " number-header-font-info " }\n"
+                "tr.alternate-row { " (if alt-lines? (string-append "background: " alt-line-bgcolor "; ") "") " }\n"
+                "th.column-heading-left { text-align: left; " number-header-font-info " }\n"
+                "th.column-heading-center { text-align: center; " number-header-font-info " }\n"
+                "th.column-heading-right { text-align: right; " number-header-font-info " }\n"
                 "td.neg { " (if negative-red? "color: red; " "") " }\n"
                 "td.number-cell, td.total-number-cell { text-align: right; white-space: nowrap; }\n"
                 "td.date-cell { white-space: nowrap; }\n"
