@@ -825,7 +825,7 @@
     <property name="title" translatable="yes">New Account Hierarchy Setup</property>
     <property name="window_position">center-on-parent</property>
     <property name="default_width">640</property>
-    <property name="default_height">500</property>
+    <property name="default_height">550</property>
     <property name="type_hint">dialog</property>
     <child>
       <widget class="GnomeDruid" id="hierarchy_druid">
@@ -1216,7 +1216,7 @@ Note: all accounts except Equity and placeholder accounts may have an opening ba
             <property name="visible">True</property>
             <property name="position">GNOME_EDGE_FINISH</property>
             <property name="title" translatable="yes">Finish Account Setup</property>
-            <property name="text" translatable="yes">Press `Apply' to create your new accounts.
+            <property name="text" translatable="yes">Press `Apply' to create your new accounts.  You will then be able to save them to a file or database.
 
 Press `Back' to review your selections.
 

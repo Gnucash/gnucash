@@ -33,6 +33,7 @@
 #include "gnc-account-merge.h"
 #include "dialog-new-user.h"
 #include "dialog-utils.h"
+#include "dialog-file-access.h"
 #include "druid-hierarchy.h"
 #include "druid-utils.h"
 #include "gnc-amount-edit.h"
@@ -1037,6 +1038,7 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
         (*when_completed)();
     }
 
+    gnc_ui_file_access_for_save_as();
     LEAVE (" ");
 }
 
