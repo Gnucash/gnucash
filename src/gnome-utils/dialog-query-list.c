@@ -25,6 +25,7 @@
 
 #include "config.h"
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "QueryNew.h"
 
@@ -263,7 +264,9 @@ void gnc_dialog_query_list_set_buttons (DialogQueryList *dql,
     /* build up the buttons */
     for (i = 0; buttons[i].label; i++)
     {
-        button = gtk_button_new_with_label (buttons[i].label);
+        /* Note: The "label" member of the GNCDisplayListButton still
+         * isn't translated. Hence, we must translate it here. */
+        button = gtk_button_new_with_label (_(buttons[i].label));
         g_object_set_data (G_OBJECT (button), "data", &(dql->buttons[i]));
         g_signal_connect (G_OBJECT (button), "clicked",
                           G_CALLBACK(gnc_dialog_query_list_button_clicked), dql);
