@@ -563,10 +563,15 @@ gnc_header_event (GnomeCanvasItem *item, GdkEvent *event)
                           &x, &y);
 
         on_line = pointer_on_resize_line (header, x, y, &ptr_col);
-        resize_col = find_resize_col (header, ptr_col);
-
-        if ((resize_col > -1) &&
-                (on_line || (resize_col == ptr_col)))
+       
+        /* If we're on a resize line and the column to the right is zero
+           width, resize that one. */
+        if (on_line)
+            resize_col = find_resize_col (header, ptr_col);
+        else
+            resize_col = ptr_col;
+       
+        if (resize_col > -1)
         {
             header->in_resize = FALSE;
             header->resize_col = -1;
