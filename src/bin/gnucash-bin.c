@@ -601,7 +601,11 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     mod = scm_c_resolve_module("gnucash price-quotes");
     scm_set_current_module(mod);
 
+    /* Don't load the modules since the stylesheet module crashes if the 
+       GUI is not initialized */
+#ifdef PRICE_QUOTES_NEED_MODULES
     load_gnucash_modules();
+#endif
 
     qof_event_suspend();
     scm_c_eval_string("(gnc:price-quotes-install-sources)");
