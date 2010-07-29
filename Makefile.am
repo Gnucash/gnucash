@@ -52,6 +52,8 @@ EXTRA_DIST = \
   po/POTFILES.skip \
   po/POTFILES.ignore \
   po/README \
+  po/glossary/bg.po \
+  po/glossary/ca.po \
   po/glossary/da.po \
   po/glossary/de.po \
   po/glossary/el.po \
@@ -59,18 +61,21 @@ EXTRA_DIST = \
   po/glossary/es_NI-policy.txt \
   po/glossary/fr.po \
   po/glossary/gnc-glossary.txt \
+  po/glossary/he.po \
   po/glossary/hu.po \
   po/glossary/it.po \
-  po/glossary/nl.po \
   po/glossary/nb.po \
+  po/glossary/nl.po \
   po/glossary/pl.po \
   po/glossary/pt.po \
   po/glossary/pt_BR.po \
+  po/glossary/ru.po \
   po/glossary/rw.po \
   po/glossary/sk.po \
   po/glossary/sv.po \
   po/glossary/txt-to-pot.sh \
   po/glossary/vi.po \
+  po/glossary/zh_CN.po \
   po/glossary/zh_TW.po \
   intltool-extract.in \
   intltool-merge.in \
