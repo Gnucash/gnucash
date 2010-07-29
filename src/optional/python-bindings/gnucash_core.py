@@ -450,6 +450,7 @@ account_dict =  {
                     'get_parent' : Account, 
                     'get_root' : Account, 
                     'nth_child' : Account, 
+                    'lookup_by_code' : Account,
                     'lookup_by_name' : Account, 
                     'lookup_by_full_name' : Account, 
                     'FindTransByDesc' : Transaction, 
