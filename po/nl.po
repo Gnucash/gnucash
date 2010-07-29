@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-05 15:40-0400\n"
-"PO-Revision-Date: 2010-07-05 23:40+0200\n"
+"PO-Revision-Date: 2010-07-29 22:17+0200\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -2371,14 +2371,12 @@ msgid "Open the Find Expense Voucher dialog"
 msgstr "Het venster ‘Onkostendeclaratie zoeken’ openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:242
-#, fuzzy
 msgid "Sales _Tax Table"
-msgstr "Belastingtarief"
+msgstr "BTW-_tarieven"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:243
-#, fuzzy
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
-msgstr "Het overzicht van belastingtarieven bekijken en bewerken"
+msgstr "Het overzicht van BTW-tarieven bekijken en bewerken"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:247
 msgid "_Billing Terms Editor"
@@ -2571,9 +2569,8 @@ msgid "_Standard"
 msgstr "_Standaard"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:192
-#, fuzzy
 msgid "Keep normal invoice order"
-msgstr "De normale rekeningvolgorde handhaven"
+msgstr "De normale factuurvolgorde handhaven"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:193
 #: ../src/gnome/glade/register.glade.h:80
@@ -2603,9 +2600,8 @@ msgid "_Quantity"
 msgstr "_Hoeveelheid"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:195
-#, fuzzy
 msgid "Sort by quantity"
-msgstr "Op bedrag sorteren"
+msgstr "Op hoeveelheid sorteren"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:196
 #: ../src/register/ledger-core/split-register.c:1942
@@ -2614,9 +2610,8 @@ msgid "_Price"
 msgstr "_Prijs"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:196
-#, fuzzy
 msgid "Sort by price"
-msgstr "Op datum sorteren"
+msgstr "Op prijs sorteren"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:197
 #: ../src/gnome/glade/register.glade.h:18
@@ -4933,7 +4928,7 @@ msgstr "De hierboven ontbrekende waarde berekenen. Vereist dat alle velden op é
 #: ../src/gnome/glade/register.glade.h:41
 #: ../src/gnome/gnc-plugin-page-register.c:427
 msgid "Schedule"
-msgstr "Rooster"
+msgstr "Inroosteren"
 
 #: ../src/gnome/glade/fincalc.glade.h:41
 msgid "Semi-annual"
@@ -4953,9 +4948,8 @@ msgid "When paid:"
 msgstr "Moment van betaling:"
 
 #: ../src/gnome/glade/fincalc.glade.h:47
-#, fuzzy
 msgid "_Effective Date:"
-msgstr "_Effectieve datum:"
+msgstr "_Feitelijke datum:"
 
 #: ../src/gnome/glade/fincalc.glade.h:48
 msgid "_Initial Payment:"
@@ -4974,7 +4968,6 @@ msgid "<b>_Lots in This Account</b>"
 msgstr "<b>_Partijen binnen deze rekening</b>"
 
 #: ../src/gnome/glade/lots.glade.h:2
-#, fuzzy
 msgid "<b>_Mini-Viewer</b>"
 msgstr "<b>_Mini-kijker</b>"
 
@@ -5482,7 +5475,7 @@ msgstr "_Afschriftdatum"
 
 #: ../src/gnome/glade/register.glade.h:42
 msgid "Schedule..."
-msgstr "Rooster..."
+msgstr "Inroosteren..."
 
 #: ../src/gnome/glade/register.glade.h:43
 msgid "Select Range:"
@@ -5822,9 +5815,8 @@ msgid "Begin notifications this many days before the transaction is created."
 msgstr "Op zoveel dagen vóór aanmaak van de boeking een melding weergeven."
 
 #: ../src/gnome/glade/sched-xact.glade.h:57
-#, fuzzy
 msgid "Conditional on splits not having variables"
-msgstr "Voorwaardelijk bij uitgesplitste posten zonder variabelen"
+msgstr "Vereist boekregels zonder variabelen"
 
 #: ../src/gnome/glade/sched-xact.glade.h:58
 msgid "Crea_te in advance, days:"
@@ -5905,9 +5897,8 @@ msgid "Days Away"
 msgstr "Over ... dagen"
 
 #: ../src/gnome/glade/sched-xact.glade.h:81
-#, fuzzy
 msgid "Disposition?"
-msgstr "Beschikking?"
+msgstr "Voorbereiding?"
 
 #: ../src/gnome/glade/sched-xact.glade.h:82
 msgid "Do you..."
@@ -5961,7 +5952,6 @@ msgid "For:"
 msgstr "Voor:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:97
-#, fuzzy
 msgid "Forever"
 msgstr "Oneindig"
 
@@ -5983,16 +5973,14 @@ msgid "Ignore"
 msgstr "Negeren"
 
 #: ../src/gnome/glade/sched-xact.glade.h:102
-#, fuzzy
 msgid "Interest Rate Change Frequency"
-msgstr "Frequentie van rente percentage verandering"
+msgstr "Wijzigingsfrequentie rentepercentage"
 
 #: ../src/gnome/glade/sched-xact.glade.h:103
 msgid "Interest Rate:"
 msgstr "Rentepercentage:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:104
-#, fuzzy
 msgid "Interest To:"
 msgstr "Rente naar:"
 
@@ -6005,9 +5993,8 @@ msgid "Length:"
 msgstr "Looptijd:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:107
-#, fuzzy
 msgid "Loan Account:"
-msgstr "Lenings dagboek:"
+msgstr "Rekening lening:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:108
 msgid "Loan Information"
@@ -6131,7 +6118,6 @@ msgid "Press apply to commit these changes."
 msgstr "Klik op [Toepassen] om deze wijzigingen door te voeren."
 
 #: ../src/gnome/glade/sched-xact.glade.h:147
-#, fuzzy
 msgid "Principal To:"
 msgstr "Hoofdsom naar:"
 
@@ -6185,9 +6171,8 @@ msgid "Select All"
 msgstr "Alles selecteren"
 
 #: ../src/gnome/glade/sched-xact.glade.h:159
-#, fuzzy
 msgid "Select occurrence date above."
-msgstr "Kiest u hierboven de gebeurtenisdatum selecteren."
+msgstr "Gebeurtenisdatum hierboven selecteren."
 
 #: ../src/gnome/glade/sched-xact.glade.h:160
 msgid "Semi-Monthly"
@@ -6214,9 +6199,8 @@ msgid "Since Last Run..."
 msgstr "Vaste journaalposten uitvoeren..."
 
 #: ../src/gnome/glade/sched-xact.glade.h:166
-#, fuzzy
 msgid "Specify Source Account"
-msgstr "Bronrekening opgeven"
+msgstr "Herkomstrekening opgeven"
 
 #: ../src/gnome/glade/sched-xact.glade.h:168
 msgid "Start Date: "
@@ -6258,15 +6242,14 @@ msgid "This assistant will walk you through any scheduled transactions that shou
 msgstr "Deze assistent helpt u met het aanmaken van de benodigde vaste journaalposten."
 
 #: ../src/gnome/glade/sched-xact.glade.h:177
-#, fuzzy
 msgid ""
 "This is a step-by-step method of creating a loan repayment setup within GnuCash.  In this assistant, you can input the parameters of your loan and its repayment and give the details of its payback. Using that information, the appropriate Scheduled Transactions will be created.\n"
 "\n"
 "If you make a mistake or want to make changes later, you can edit the created Scheduled Transactions directly."
 msgstr ""
-"Dit is een stap-voor-stap-methode om binnen GnuCash een betalingsschema van een lening in te stellen. In deze assistent kunt u de kenmerken van de lening en haar terugbetaling invoeren en details over de betalingen vastleggen. Op basis daarvan zal het betalingsschema als vaste journaalpost worden aangemaakt.\n"
+"Met deze assistent kunt u stap voor stap binnen GnuCash een betalingsschema van een lening instellen. Het hulpmiddel vraagt u om de kenmerken van de lening en details over de betalingen. Op basis daarvan zal het betalingsschema als vaste journaalpost worden aangemaakt.\n"
 "\n"
-"Wanneer u een fout maakt of later veranderingen wilt aanbrengen, kunt u de aangemaakte vaste journaalpost bewerken."
+"Wanneer u een fout maakt of later veranderingen wilt aanbrengen, kunt u de aangemaakte vaste journaalpost rechtstreeks bewerken."
 
 #. src/report/standard-reports/gnucash/report/standard-reports/daily-reports.scm
 #. src/report/standard-reports/daily-reports.scm
@@ -6276,9 +6259,8 @@ msgid "Thursday"
 msgstr "Donderdag"
 
 #: ../src/gnome/glade/sched-xact.glade.h:181
-#, fuzzy
 msgid "To-Create Transaction Preparation"
-msgstr "Aan te maken transactie voorbereiding"
+msgstr "Voorbereiding aan te maken boeking"
 
 #: ../src/gnome/glade/sched-xact.glade.h:182
 msgid "Transaction Reminders"
@@ -6400,14 +6382,12 @@ msgid "Currenc_y:"
 msgstr "_Munteenheid:"
 
 #: ../src/gnome/glade/stocks.glade.h:5
-#, fuzzy
 msgid "Desc_ription:"
 msgstr "_Omschrijving:"
 
 #: ../src/gnome/glade/stocks.glade.h:6
-#, fuzzy
 msgid "Enter the date and the number of shares you gained or lost from the stock split or merger. For stock mergers (negative splits) use a negative value for the share distribution. You can also enter a description of the transaction, or accept the default one."
-msgstr "Geef de datum en het aantal aandelen op dat u heeft gewonnen of verloren door de aandelenopsplitsing of fusie. Voor aandelenfusies (negatieve opsplitsingen) gebruikt u een negatieve waarde voor de aandelenverdeling. U kunt ook een omschrijving van de transactie opgeven of de standaardomschrijving accepteren."
+msgstr "De datum en het aantal aandelen dat u heeft ontvangen of verloren door de aandelensplitsing of -fusie. Voor aandelenfusies (negatieve splitsingen) gebruikt u een negatieve waarde bij de aandelenverdeling. U kunt ook een omschrijving bij de boeking invoeren of de standaardomschrijving accepteren."
 
 #: ../src/gnome/glade/stocks.glade.h:7
 msgid "If you are finished creating the stock split or merger, press `Apply'. You may also press `Back' to review your choices, or `Cancel' to quit without making any changes."
@@ -6426,9 +6406,8 @@ msgid "New _Price:"
 msgstr "Nieuwe _koers:"
 
 #: ../src/gnome/glade/stocks.glade.h:11
-#, fuzzy
 msgid "Select the account for which you want to record a stock split or merger."
-msgstr "Selecteer het dagboek waarvoor u een aandelen splitsing of fusie wilt archiveren."
+msgstr "De rekening waarop u een aandelensplitsing of -fusie wilt vastleggen selecteren."
 
 #: ../src/gnome/glade/stocks.glade.h:12
 msgid "Stock Account"
@@ -6452,7 +6431,6 @@ msgid "_Amount:"
 msgstr "Bedr_ag:"
 
 #: ../src/gnome/glade/stocks.glade.h:19
-#, fuzzy
 msgid "_Shares:"
 msgstr "_Aandelen:"
 
@@ -6461,12 +6439,10 @@ msgid "0"
 msgstr "0"
 
 #: ../src/gnome/glade/tax.glade.h:2
-#, fuzzy
 msgid "<b>Account Tax Information</b>"
-msgstr "<b>Belastinggegevens van rekening</b>"
+msgstr "<b>Fiscale instellingen rekening</b>"
 
 #: ../src/gnome/glade/tax.glade.h:3
-#, fuzzy
 msgid "<b>Copy Number</b>"
 msgstr "<b>Versienummer</b>"
 
@@ -6495,9 +6471,8 @@ msgid "C_urrent Account"
 msgstr "_Huidige rekening"
 
 #: ../src/gnome/glade/tax.glade.h:10
-#, fuzzy
 msgid "Click to change Tax Name and/or Tax Type"
-msgstr "Klik om de belastingnaam en/of het belastingsoort te wijzigen"
+msgstr "Klik om de belastingnaam en/of de belastingsoort te wijzigen"
 
 #: ../src/gnome/glade/tax.glade.h:11
 msgid "Income Tax Information"
@@ -7127,7 +7102,7 @@ msgstr "De wisselkoers voor de huidige boeking bewerken"
 
 #: ../src/gnome/gnc-plugin-page-register.c:321
 msgid "Sche_dule..."
-msgstr "R_ooster..."
+msgstr "Inr_oosteren..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:326
 msgid "_All transactions"
@@ -8894,7 +8869,7 @@ msgstr "Debetbedrag:"
 #: ../src/gnome-utils/dialog-transfer.c:1850
 #: ../src/gnome-utils/glade/transfer.glade.h:13
 msgid "To Amount:"
-msgstr "Bedrag:"
+msgstr "Bedrag 'naar':"
 
 #: ../src/gnome-utils/dialog-utils.c:966
 msgid "Remember and don't _ask me again."
@@ -9142,9 +9117,8 @@ msgid "Select security/currency "
 msgstr "Fonds of munteenheid selecteren "
 
 #: ../src/gnome-utils/glade/commodity.glade.h:10
-#, fuzzy
 msgid "Select user information here..."
-msgstr "Selecteer hier gebruikers informatie..."
+msgstr "Gebruikersinformatie hier selecteren..."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:11
 msgid "Si_ngle:"
@@ -9228,26 +9202,22 @@ msgid "Host"
 msgstr "Server"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:6
-#, fuzzy
 msgid "Password"
 msgstr "Wachtwoord"
 
 #: ../src/gnome-utils/glade/dialog-object-references.glade.h:1
-#, fuzzy
 msgid "Explanation"
-msgstr "Meerdere tegenrekeningen"
+msgstr "Uitleg"
 
 #: ../src/gnome-utils/glade/dialog-object-references.glade.h:2
-#, fuzzy
 msgid "Object references"
-msgstr "Voorkeuren"
+msgstr "Objectverwijzingen"
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:1
 msgid "No warnings to reset."
 msgstr "Er zijn geen waarschuwingen om opnieuw in te stellen."
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:2
-#, fuzzy
 msgid "Permanent Warnings"
 msgstr "Permanente waarschuwingen"
 
@@ -9256,7 +9226,6 @@ msgid "Reset Warnings"
 msgstr "Waarschuwingen opnieuw instellen"
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:4
-#, fuzzy
 msgid "Temporary Warnings"
 msgstr "Tijdelijke waarschuwingen"
 
@@ -9265,7 +9234,6 @@ msgid "You have requested that the following warning dialogs not be presented.  
 msgstr "U hebt verzocht om de volgende waarschuwingen te onderdrukken. Om een van deze waarschuwingen opnieuw in te schakelen, selecteert u het selectievakje naast de betreffende waarschuwing en klikt u op [OK]."
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:7
-#, fuzzy
 msgid "_Unselect All"
 msgstr "Alles _deselecteren"
 
@@ -9364,9 +9332,8 @@ msgstr ""
 "commando 'gconftool-2 --shutdown'."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:25
-#, fuzzy
 msgid "_GnuCash installs the data"
-msgstr "_GnuCash installeert de gegevens"
+msgstr "_GnuCash de gegevens laten installeren"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:26
 msgid "_GnuCash updates the search path"
@@ -9377,7 +9344,6 @@ msgid "_Install into home directory"
 msgstr "In thuismap _installeren"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:28
-#, fuzzy
 msgid "_Setup"
 msgstr "_Instellen"
 
@@ -9386,9 +9352,8 @@ msgid "_Update search path"
 msgstr "Zoek_pad bijwerken"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:30
-#, fuzzy
 msgid "_You install the data yourself"
-msgstr "_U installeert de gegevens zelf"
+msgstr "_Zelf de gegevens installeren"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:31
 msgid "_You update the search path yourself"
@@ -9441,9 +9406,8 @@ msgid "Finish GnuCash Datafile Import"
 msgstr "Importeren GnuCash-bestand afronden"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:13
-#, fuzzy
 msgid "GnuCash Datafile Import Assistant"
-msgstr "GnuCash Databestand-importeer-assistent"
+msgstr "Importeermodule GnuCash-bestanden"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:14
 msgid "GnuCash data files you have loaded"
@@ -9454,9 +9418,8 @@ msgid "Load another file"
 msgstr "Nog een bestand laden"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:16
-#, fuzzy
 msgid "Unload selected file"
-msgstr "Laad het geselecteerde bestand uit"
+msgstr "Laden geselecteerde bestand annuleren"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:17
 msgid "_Edit list of encodings"
@@ -9483,7 +9446,6 @@ msgstr "Nog een bestand _laden"
 
 #: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:6
 #: ../src/import-export/qif-import/qif.glade.h:84
-#, fuzzy
 msgid "_Unload selected file"
 msgstr "Laden geselecteerde bestand _annuleren"
 
@@ -9496,26 +9458,23 @@ msgid "<b>Split Information</b>"
 msgstr "<b>Boekingsgegevens</b>"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:3
-#, fuzzy
 msgid "To A_mount:"
-msgstr "Naar _bedrag:"
+msgstr "Bedrag '_naar':"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:6
 msgid "_Exchange Rate:"
 msgstr "_Wisselkoers:"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:7
-#, fuzzy
 msgid "_From:"
 msgstr "_Van:"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:8
-#, fuzzy
 msgid "_To:"
 msgstr "_Tot:"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:2
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
@@ -9657,14 +9616,12 @@ msgid "<b>Labels</b>"
 msgstr "<b>Taalgebruik</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:18
-#, fuzzy
 msgid "<b>Location</b>"
 msgstr "<b>Locatie</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:19
-#, fuzzy
 msgid "<b>Numbers</b>"
-msgstr "<b>Nummers</b>"
+msgstr "<b>Getallen</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:20
 msgid "<b>Other Defaults</b>"
@@ -10818,7 +10775,6 @@ msgid "Edit the global preferences of GnuCash"
 msgstr "De algemene voorkeuren van GnuCash bewerken"
 
 #: ../src/gnome-utils/gnc-main-window.c:304
-#, fuzzy
 msgid "Select sorting criteria for this page view"
 msgstr "Sorteercriteria voor deze pagina selecteren"
 
@@ -10875,9 +10831,8 @@ msgid "Move the current page to a new top-level GnuCash window."
 msgstr "De huidige pagina naar een nieuw GnuCash-venster verplaatsen."
 
 #: ../src/gnome-utils/gnc-main-window.c:346
-#, fuzzy
 msgid "Tutorial and Concepts _Guide"
-msgstr "Tutorial en concepten _gids"
+msgstr "Tutorial en concepten_gids"
 
 #: ../src/gnome-utils/gnc-main-window.c:347
 msgid "Open the GnuCash Tutorial"
@@ -11168,12 +11123,10 @@ msgid "Last Num"
 msgstr "Laatste nummer"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:545
-#, fuzzy
 msgid "Present"
 msgstr "Huidig"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:552
-#, fuzzy
 msgid "Present (Report)"
 msgstr "Huidig (rapport)"
 
@@ -11604,15 +11557,13 @@ msgstr "De gespecificeerde URL kon niet worden geladen."
 
 #: ../src/html/gnc-html-gtkhtml.c:414 ../src/html/gnc-html-gtkhtml.c:772
 #: ../src/html/gnc-html-webkit.c:481 ../src/html/gnc-html-webkit.c:881
-#, fuzzy
 msgid "Secure HTTP access is disabled. You can enable it in the Network section of the Preferences dialog."
-msgstr "Beveiligde HTTP-toegang is uitgeschakeld. Deze kunt u inschakelen ."
+msgstr "Beveiligde HTTP-toegang is uitgeschakeld. Deze kunt u inschakelen bij het onderdeel Netwerk van het Voorkeuren-venster."
 
 #: ../src/html/gnc-html-gtkhtml.c:424 ../src/html/gnc-html-gtkhtml.c:784
 #: ../src/html/gnc-html-webkit.c:491 ../src/html/gnc-html-webkit.c:893
-#, fuzzy
 msgid "Network HTTP access is disabled. You can enable it in the Network section of the Preferences dialog."
-msgstr "HTTP-toegang is uitgeschakeld. U kunt dit inschakelen in de Netwerksectie van het voorkeurenvenster."
+msgstr "HTTP-toegang is uitgeschakeld. Deze kunt u inschakelen bij het onderdeel Netwerk van het Voorkeuren-venster."
 
 #. %s is a URL (some location somewhere).
 #: ../src/html/gnc-html-gtkhtml.c:702 ../src/html/gnc-html-webkit.c:812
@@ -11917,7 +11868,6 @@ msgstr "_Vroegst mogelijke datum"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:71
 #: ../src/import-export/hbci/glade/hbci.glade.h:69
-#, fuzzy
 msgid "_Last retrieval date"
 msgstr "_Laatste ophaaldatum"
 
@@ -12618,14 +12568,12 @@ msgid " a CSV/Fixed-Width file"
 msgstr " een CSV-bestand (kommagescheiden of vaste kolombreedte)"
 
 #: ../src/import-export/generic-import.glade.h:1
-#, fuzzy
 msgid "\"A\""
-msgstr "\"A\""
+msgstr "\"T\""
 
 #: ../src/import-export/generic-import.glade.h:2
-#, fuzzy
 msgid "\"R\""
-msgstr "\"R\""
+msgstr "\"A\""
 
 #: ../src/import-export/generic-import.glade.h:3
 msgid "\"Select Import Action\" allows you to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required)."
@@ -12749,15 +12697,12 @@ msgid "Red"
 msgstr "Rood"
 
 #: ../src/import-export/generic-import.glade.h:42
-#, fuzzy
 msgid "Select \"A\" to add the transaction as new."
-msgstr "Verwijder de gehele boeking"
+msgstr "Kies \"T\" om de boeking als nieuwe boeking toe te voegen."
 
-# Onduidelijk of hier de sneltoets (uit de caption) of een hardcode-toets wordt bedoeld. Nazoeken!
 #: ../src/import-export/generic-import.glade.h:43
-#, fuzzy
 msgid "Select \"R\" to reconcile a matching transaction."
-msgstr "Kies \"A\" om een overeenkomende transactie af te stemmen."
+msgstr "Kies \"A\" om met een overeenkomende (bestaande) boeking af te stemmen."
 
 #: ../src/import-export/generic-import.glade.h:45
 msgid "Select matching existing transaction"
@@ -13026,14 +12971,12 @@ msgid "Destination account for the auto-balance split."
 msgstr "Tegenrekening voor het automatisch in balans brengen."
 
 #: ../src/import-export/import-main-matcher.c:452
-#, fuzzy
 msgid "A"
-msgstr "A"
+msgstr "T"
 
 #: ../src/import-export/import-main-matcher.c:454
-#, fuzzy
 msgid "R"
-msgstr "R"
+msgstr "A"
 
 #: ../src/import-export/import-main-matcher.c:464
 msgid "Info"
@@ -13783,7 +13726,6 @@ msgid "Teller"
 msgstr "Baliehandeling"
 
 #: ../src/register/ledger-core/split-register.c:2240
-#, fuzzy
 msgid "Receipt"
 msgstr "Ontvangst"
 
@@ -13818,13 +13760,11 @@ msgstr "Betaalautomaat"
 #. src/business/business-reports/gnucash/report/taxinvoice.eguile.scm
 #: ../src/register/ledger-core/split-register.c:2245
 #: ../intl-scm/guile-strings.c:944 ../intl-scm/guile-strings.c:1546
-#, fuzzy
 msgid "Phone"
-msgstr "Telefoon"
+msgstr "Telefonisch"
 
 #: ../src/register/ledger-core/split-register.c:2246
 #: ../src/register/ledger-core/split-register.c:2272
-#, fuzzy
 msgid "Online"
 msgstr "Online"
 
@@ -14164,9 +14104,8 @@ msgid "Enter credit formula for real transaction"
 msgstr "De formule voor de uiteindelijke boeking aan creditzijde invoeren"
 
 #: ../src/register/register-gnome/gnucash-item-list.c:487
-#, fuzzy
 msgid "List"
-msgstr "Weergeven"
+msgstr "Overzicht"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:1
 msgid "Delete the currently selected report"
@@ -14230,7 +14169,6 @@ msgstr "Naam opmaaksjabloon"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:281
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:282
-#, fuzzy
 msgid "The numeric ID of the report."
 msgstr "De identificatienummer van het rapport."
 
@@ -14515,27 +14453,24 @@ msgstr "Kapitaal winst"
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../intl-scm/guile-strings.c:8 ../intl-scm/guile-strings.c:38
 #: ../intl-scm/guile-strings.c:170
-#, fuzzy
 msgid "Cap. gain (long)"
-msgstr "Kapitaalwinst (lange termijn)"
+msgstr "Vermogensgroei (lange termijn)"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../intl-scm/guile-strings.c:10 ../intl-scm/guile-strings.c:42
 #: ../intl-scm/guile-strings.c:174
-#, fuzzy
 msgid "Cap. gain (mid)"
-msgstr "Kapitaal winst (middelange termijn)"
+msgstr "Vermogensgroei (middelange termijn)"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../intl-scm/guile-strings.c:12 ../intl-scm/guile-strings.c:46
 #: ../intl-scm/guile-strings.c:178
-#, fuzzy
 msgid "Cap. gain (short)"
-msgstr "Kapitaal winst (korte termijn)"
+msgstr "Vermogensgroei (korte termijn)"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
@@ -16153,9 +16088,8 @@ msgstr "Verschuldigd bedrag"
 #: ../intl-scm/guile-strings.c:702 ../intl-scm/guile-strings.c:1304
 #: ../intl-scm/guile-strings.c:1720 ../intl-scm/guile-strings.c:1920
 #: ../intl-scm/guile-strings.c:2092 ../intl-scm/guile-strings.c:2292
-#, fuzzy
 msgid "REF"
-msgstr "Ref"
+msgstr "Referentie"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -19357,7 +19291,7 @@ msgstr "Boekingsverslag"
 #: ../intl-scm/guile-strings.c:5918 ../intl-scm/guile-strings.c:6006
 #: ../intl-scm/guile-strings.c:6010 ../intl-scm/guile-strings.c:6950
 msgid "Sorting"
-msgstr "Aan het sorteren"
+msgstr "Sorteren"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22510,9 +22444,8 @@ msgstr "Randbreedte tabel"
 #: ../intl-scm/guile-strings.c:8414 ../intl-scm/guile-strings.c:8544
 #: ../intl-scm/guile-strings.c:8762 ../intl-scm/guile-strings.c:8978
 #: ../intl-scm/guile-strings.c:9196 ../intl-scm/guile-strings.c:9412
-#, fuzzy
 msgid "Bevel depth on tables"
-msgstr "Grensvlak diepte in tabellen"
+msgstr "Breedte van de tabelrand"
 
 #. src/report/stylesheets/stylesheet-plain.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-plain.scm
@@ -23219,7 +23152,7 @@ msgstr "Grootboek-opties"
 #: ../intl-scm/guile-strings.c:9644 ../intl-scm/guile-strings.c:9646
 #: ../intl-scm/guile-strings.c:9692 ../intl-scm/guile-strings.c:9694
 msgid "No commodities marked for quote retrieval."
-msgstr "Geen goederen geselecteerd voor het opvragen van een koersnotering."
+msgstr "Geen goederen geselecteerd voor het ophalen van een koersnotering."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
