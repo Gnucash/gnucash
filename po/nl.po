@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-05 15:40-0400\n"
-"PO-Revision-Date: 2010-07-29 22:17+0200\n"
+"PO-Revision-Date: 2010-07-30 18:47+0200\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -537,7 +537,7 @@ msgstr "Algemene instelling gebruiken"
 #: ../src/gnome/top-level.c:218
 #, c-format
 msgid "Badly formed URL %s"
-msgstr "Misvormde URL: %s"
+msgstr "Onjuiste URL: %s"
 
 #: ../src/business/business-gnome/business-urls.c:73
 #: ../src/business/business-gnome/business-urls.c:222
@@ -2858,7 +2858,7 @@ msgstr "sample(DH):+%"
 #: ../src/register/ledger-core/split-register-layout.c:594
 #: ../src/register/ledger-core/split-register-layout.c:602
 msgid "sample:Expenses:Automobile:Gasoline"
-msgstr "sample:Uitgaven:Auto:Brandstof"
+msgstr "sample:Kosten:Auto:Brandstof"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:125
 msgid "sample:T?"
@@ -3911,7 +3911,7 @@ msgstr "Fiscale identiteit"
 
 #: ../src/gnome/dialog-tax-info.c:1137
 msgid "CAUTION: If you set TXF categories, and later change 'Type', you will need to manually reset those categories one at a time"
-msgstr "LET OP: Bij een wijziging van de belastingsubjectsoort ná het instellen van TXF categorieën, moeten deze categorieën individueel opnieuw worden ingesteld"
+msgstr "LET OP: Bij een wijziging van de belastingsubjectsoort ná het instellen van TXF-categorieën, moeten deze categorieën individueel opnieuw worden ingesteld"
 
 #: ../src/gnome/dialog-tax-info.c:1283
 msgid "Form"
@@ -4510,7 +4510,7 @@ msgid ""
 "\n"
 "Click 'Cancel'  if you do not wish to create any new accounts now."
 msgstr ""
-"Deze assistent helpt u met het aanmaken van een GnuCash-rekeningschema voor uw bezittingen (zoals investeringen, betaal- of spaarrekeningen), uw schulden(zoals leningen) en verschillende soorten inkomsten en uitgaven.\n"
+"Deze assistent helpt u met het aanmaken van een GnuCash-rekeningschema voor uw bezittingen (zoals investeringen, betaal- of spaarrekeningen), uw schulden(zoals leningen) en verschillende soorten inkomsten en kosten.\n"
 "\n"
 "Klik op [Annuleren] als u nu geen nieuwe rekeningen wilt aanmaken."
 
@@ -12632,7 +12632,6 @@ msgid "Enable the SKIP action in the transaction matcher.  If enabled, a transac
 msgstr "De actie 'boeking OVERSLAAN' bij het herkennen van bestaande boekingen activeren. Een boeking met een mate van overeenkomst binnen de gele zone (boven de drempelwaarde voor TOEVOEGING maar kleiner dan of gelijk aan de drempelwaarde voor BEVESTIGING) wordt standaard (automatisch) OVERGESLAGEN."
 
 #: ../src/import-export/generic-import.glade.h:22
-#, fuzzy
 msgid ""
 "For a new transaction, click on the \"Other Account\" entry to choose the other (destination) account of this transaction.\n"
 "For a transaction that is a duplicate of an existing one, click on the \"Other Account\" or \"Description\" entry to \n"
@@ -12642,13 +12641,9 @@ msgid ""
 "click \"OK\"."
 msgstr ""
 "Klik bij nieuwe boekingen op [Andere rekening] om de juiste tegenrekening voor de boeking te selecteren.\n"
-"Bij reeds bestaande boekingen Kies voor een nieuwe transactie \"Ander dagboek\" om het andere (doel)\n"
-"dagboek voor deze transactie aan te geven.\n"
-"Voor een transactie die het duplicaat is van een bestaande transactie, kies \"Ander dagboek\" of \"Omschrijving\" om te controleren \n"
-"of GnuCash de juiste bestaande transacie kiest.\n"
-"Om transacties te wisselen tussen beide staten, kies het aanklikvak in de \n"
-"kolom \"Nieuw\".\n"
-"Als alle nieuwe transacties het juiste doeldagboek hebben, en alle duplicaten gekoppeld zijn met de juiste bestaande transactie, kies \"Ok\"."
+"Klik bij reeds bestaande boekingen op [Andere rekening] of op [Omschrijving] om te toetsen of GnuCash de juiste boeking heeft uitgekozen.\n"
+"Om tussen beide mogelijkheden om te schakelen klikt u op het keuzevak in kolom \"Nieuw\".\n"
+"Klik op [OK] wanneer alle boekingen de juiste bestemmingsrekening hebben en alle reeds bestaande boekingen op de juiste wijze zijn gekoppeld."
 
 #: ../src/import-export/generic-import.glade.h:29
 msgid "Generic import transaction matcher"
@@ -12664,21 +12659,19 @@ msgstr "Eerste boekregel van geïmporteerde boeking:"
 
 #: ../src/import-export/generic-import.glade.h:32
 msgid "In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores.  These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw $100, and you are charged $101,50 plus Interac fees.  If you manually entered that $100, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
-msgstr "Op sommige plaatsen staan commerciële 'in-store' geldautomaten die hun transactiekosten optellen op bij het opgenomen bedrag (in plaats van deze als losse transactie c.q. via de afrekening van uw bankkosten te verantwoorden). Een voorbeeld: wanneer u € 100 opneemt en de kosten zijn € 1,50, wordt een bedrag van € 101,50 van uw rekening afgeschreven. Als u vervolgens handmatig heeft ingevoerd dat u € 100 heeft opgenomen, komen de bedragen niet overeen. U moet deze waarde instellen op het maximum van dergelijke kosten in uw regio (in eenheden van uw lokale munteenheid), zodat de koppeling herkend kan worden."
+msgstr "Op sommige plaatsen staan commerciële 'in-store' geldautomaten die hun transactiekosten optellen op bij het opgenomen bedrag (in plaats van deze als losse transactie c.q. via de afrekening van uw bankkosten te verantwoorden). Een voorbeeld: wanneer u € 100 opneemt en de kosten zijn € 1,50, wordt een bedrag van € 101,50 van uw rekening afgeschreven. Als u vervolgens handmatig heeft ingevoerd dat u € 100 heeft opgenomen, komen de bedragen niet overeen. U moet deze waarde instellen op het maximum van dergelijke kosten in uw regio (in eenheden van uw lokale munteenheid), zodat de overeenkomst herkend kan worden."
 
 #: ../src/import-export/generic-import.glade.h:33
-#, fuzzy
 msgid "List of downloaded transactions (source split shown):"
-msgstr "Lijst van opgehaalde transacties (opsplitsing getoond):"
+msgstr "Overzicht van geïmporteerde boekingen (oorspronkelijke boeking weergegeven):"
 
 #: ../src/import-export/generic-import.glade.h:34
 msgid "Match _display threshold"
 msgstr "Drempelwaarde _weergave overeenkomst"
 
 #: ../src/import-export/generic-import.glade.h:36
-#, fuzzy
 msgid "Online account ID here..."
-msgstr "De online rekeningcode hier..."
+msgstr "Het online rekeningnummer..."
 
 #: ../src/import-export/generic-import.glade.h:37
 msgid "Other Account"
@@ -12729,9 +12722,8 @@ msgid "This transaction will be imported balanced (you may still want to double 
 msgstr "Deze boeking wordt in balans geïmporteerd, maar het kan geen kwaad de bestemmingsrekening te beoordelen."
 
 #: ../src/import-export/generic-import.glade.h:51
-#, fuzzy
 msgid "Transaction List Help"
-msgstr "Transacties"
+msgstr "Hulp bij boekingsoverzicht"
 
 #: ../src/import-export/generic-import.glade.h:52
 msgid "Use _bayesian matching"
@@ -13322,7 +13314,7 @@ msgstr "QIF-begunstigde/notitie"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:3694
 msgid "Match?"
-msgstr "Koppeling?"
+msgstr "Overeenkomst?"
 
 #: ../src/import-export/qif-import/gnc-plugin-qif-import.c:50
 msgid "Import _QIF..."
@@ -13377,7 +13369,6 @@ msgid "Enter the QIF file currency"
 msgstr "De munteenheid van het QIF-bestand invoeren"
 
 #: ../src/import-export/qif-import/qif.glade.h:15
-#, fuzzy
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) files written by Quicken/QuickBooks, MS Money, Moneydance, and many other programs. \n"
 "\n"
@@ -13385,14 +13376,11 @@ msgid ""
 "\n"
 "Click \"Forward\" to start loading your QIF data, or \"Cancel\" to abort the process. "
 msgstr ""
-"GnuCash kan financiële gegevens van QIF (Quicken Interchange \n"
-"Format) bestanden die geschreven zijn met Quicken/Quickbooks, \n"
-"MS Money, Moneydance en vele andere programma's importeren.\n"
+"GnuCash kan financiële gegevens uit QIF-bestanden (Quicken Interchange Format), opgeslagen door Quicken/Quickbooks, MS Money, Moneydance en vele andere programma's, importeren.\n"
 "\n"
-"Het import proces bestaat uit meerdere stappen. Uw GnuCash \n"
-"dagboeken worden niet veranderd totdat u \"Voltooien\" kiest\n"
-"aan het einde van het proces. Kies \"Volgende\" om te beginnen met het laden van uw QIF gegevens, of \n"
-"\"Annuleren\" om niet te importeren."
+"Het import-proces bestaat uit meerdere stappen. Uw GnuCash-rekeningen worden niet gewijzigd totdat u op [Voltooien] klikt aan het eind van het proces.\n"
+"\n"
+"Klik op [Volgende] om te beginnen met het importeren van uw QIF-bestanden of op [Annuleren] om het importeren af te breken."
 
 #: ../src/import-export/qif-import/qif.glade.h:20
 msgid ""
@@ -13418,7 +13406,7 @@ msgid ""
 msgstr ""
 "Als u een QIF-bestand van een bank of andere financiële instelling importeert, is het mogelijk dat bepaalde boekingen reeds voorkomen binnen GnuCash. Om duplicaten te vermijden heeft GnuCash geprobeerd om deze te herkennen, maar deze moeten nog wel gecontroleerd worden.\n"
 "\n"
-"Op de volgende pagina staat een lijst met geïmporteerde boekingen. Als u er een selecteert, zal daaronder een lijst met mogelijk overeenkomstige boekingen worden weergegeven. Een eventuele overeenkomst geeft u aan door hierop te klikken; hierdoor zal in de kolom \"Koppeling?\" een vinkje verschijnen.\n"
+"Op de volgende pagina staat een lijst met geïmporteerde boekingen. Als u er een selecteert, zal daaronder een lijst met mogelijk overeenkomstige boekingen worden weergegeven. Een eventuele overeenkomst geeft u aan door hierop te klikken; hierdoor zal in de kolom \"Overeenkomst?\" een vinkje verschijnen.\n"
 "\n"
 "Klik op [Verder] om de mogelijke overeenkomsten te beoordelen."
 
@@ -13466,7 +13454,7 @@ msgstr "Begunstigden/notities aan GnuCash-rekeningen koppelen"
 
 #: ../src/import-export/qif-import/qif.glade.h:42
 msgid "Matchings selected:"
-msgstr "Geselecteerde koppelingen:"
+msgstr "Geselecteerde overeenkomsten:"
 
 #: ../src/import-export/qif-import/qif.glade.h:43
 msgid ""
@@ -13528,17 +13516,14 @@ msgid "Show some documentation-only pages in QIF Import assistant."
 msgstr "Ook pagina's met uitsluitend achtergrondinformatie tijdens QIF-import weergeven."
 
 #: ../src/import-export/qif-import/qif.glade.h:68
-#, fuzzy
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just one account, but the file does not specify a name for that account.  \n"
 "\n"
 "Please enter a name for the account. If the file was exported from another accounting program, you should use the same account name that was used  in that program.\n"
 msgstr ""
-"Het QIF-bestand dat u nu probeert te laden heeft slechts boekingen voor één rekening, maar het bestand geeft niet aan welke rekening het betreft.\n"
+"Het QIF-bestand dat u probeert te laden lijkt slechts boekingen voor één rekening te bevatten, maar het bestand geeft niet aan welke rekening het betreft.\n"
 "\n"
-"\n"
-"Geef een naam op voor het dagboek. Wanneer het bestand ge-exporteerd is uit een ander\n"
-"boekhoud programma, kunt u het beste dezelfde naam gebruiken als in dat programma.\n"
+"Voer de naam van de rekening in. Wanneer het bestand een export uit een ander boekhoudprogramma betreft, kunt u het beste dezelfde naam gebruiken als in dat programma werd gebruikt.\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:72
 msgid "The QIF importer cannot currently handle multi-currency QIF files. All the accounts you are importing must be denominated in the same currency.\n"
@@ -13569,9 +13554,8 @@ msgid "_Select the currency to use for all imported transactions:"
 msgstr "De munteenheid voor alle geïmporteerde transacties _selecteren:"
 
 #: ../src/import-export/qif-import/qif.glade.h:81
-#, fuzzy
 msgid "_Select the matchings you want to change:"
-msgstr "De aan te passen treffers _selecteren:"
+msgstr "De te wijzigen overeenkomsten _selecteren:"
 
 #: ../src/import-export/qif-import/qif.glade.h:82
 msgid "_Select..."
@@ -14149,14 +14133,12 @@ msgid "Cols"
 msgstr "Kolommen"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:304
-#, fuzzy
 msgid "You must select a report to delete."
-msgstr "U moet een rapport selecteren voor verwijdering."
+msgstr "U moet het te verwijderen rapport eerst selecteren."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:325
-#, fuzzy
 msgid "You must select a report to run."
-msgstr "U moet rapport selecteren om aan te maken."
+msgstr "U moet het te genereren rapport eerst selecteren."
 
 #: ../src/report/report-gnome/dialog-style-sheet.c:145
 #, c-format
@@ -14264,20 +14246,19 @@ msgstr "%s als bestand opslaan"
 
 #. %s is the strerror(3) string of the error that occurred.
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1417
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You cannot save to that filename.\n"
 "\n"
 "%s"
 msgstr ""
-"U kunt niet bewaren onder die bestandsnaam.\n"
+"U kunt niet als die bestandsnaam opslaan.\n"
 "\n"
 "%s"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1427
-#, fuzzy
 msgid "You cannot save to that file."
-msgstr "U kunt niet bewaren in dat bestand"
+msgstr "U kunt niet als dat bestand opslaan."
 
 #. src/report/report-system/report.scm
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1517
@@ -14287,9 +14268,8 @@ msgid "Could not open the file %s. The error is: %s"
 msgstr "Kon het bestand '%s' niet openen. De foutmelding luidt: %s"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1549
-#, fuzzy
 msgid "There are no options for this report."
-msgstr "Er zijn geen opties voor dit rapport"
+msgstr "Er zijn geen opties voor dit rapport."
 
 #. * @}
 #. * @}
@@ -14366,9 +14346,8 @@ msgid "_Template:"
 msgstr "_Sjabloon:"
 
 #: ../src/report/report-gnome/window-report.c:103
-#, fuzzy
 msgid "Set the report options you want using this dialog."
-msgstr "Kies de rapport opties die u wilt gebruiken in dit venster."
+msgstr "In dit venster kunt u de rapportopties instellen."
 
 #. src/report/utility-reports/view-column.scm
 #. src/report/utility-reports/gnucash/report/view-column.scm
@@ -14382,18 +14361,18 @@ msgstr "Fout in rapport"
 #: ../src/report/report-gnome/window-report.c:219
 #: ../intl-scm/guile-strings.c:2338 ../intl-scm/guile-strings.c:2526
 msgid "An error occurred while running the report."
-msgstr "Er is een fout opgetreden tijdens het opstellen van het rapport."
+msgstr "Er is een fout opgetreden tijdens het genereren van het rapport."
 
 #: ../src/report/report-gnome/window-report.c:252
 #: ../src/report/report-gnome/window-report.c:274
-#, fuzzy, c-format
+#, c-format
 msgid "Badly formed options URL: %s"
-msgstr "Slecht opgestelde opties URL: %s"
+msgstr "Onjuiste opties-URL: %s"
 
 #: ../src/report/report-gnome/window-report.c:262
-#, fuzzy, c-format
+#, c-format
 msgid "Badly-formed report id: %s"
-msgstr "Misvormd rapportagenummer: %s"
+msgstr "Onjuist rapportagenummer: %s"
 
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:51
 msgid "St_yle Sheets"
@@ -14444,9 +14423,8 @@ msgstr "Dividenden"
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../intl-scm/guile-strings.c:6 ../intl-scm/guile-strings.c:34
 #: ../intl-scm/guile-strings.c:166
-#, fuzzy
 msgid "Cap Return"
-msgstr "Kapitaal winst"
+msgstr "Rentevergoeding kapitaal"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
@@ -14477,7 +14455,6 @@ msgstr "Vermogensgroei (korte termijn)"
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../intl-scm/guile-strings.c:18 ../intl-scm/guile-strings.c:58
 #: ../intl-scm/guile-strings.c:190
-#, fuzzy
 msgid "Commissions"
 msgstr "Commissies"
 
@@ -14486,9 +14463,8 @@ msgstr "Commissies"
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
 #: ../intl-scm/guile-strings.c:20 ../intl-scm/guile-strings.c:62
 #: ../intl-scm/guile-strings.c:194
-#, fuzzy
 msgid "Margin Interest"
-msgstr "Rentemarge"
+msgstr "Rentevergoeding marge"
 
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
@@ -14502,7 +14478,6 @@ msgstr "Rentemarge"
 #: ../intl-scm/guile-strings.c:3330 ../intl-scm/guile-strings.c:4220
 #: ../intl-scm/guile-strings.c:5122 ../intl-scm/guile-strings.c:6564
 #: ../intl-scm/guile-strings.c:7376
-#, fuzzy
 msgid "Expenses"
 msgstr "Kosten"
 
@@ -14706,9 +14681,8 @@ msgstr "Rekeningsoort"
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:134 ../intl-scm/guile-strings.c:266
-#, fuzzy
 msgid "Tax class"
-msgstr "BTW-tarief"
+msgstr "Belastingtarief"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-import/qif-file.scm
@@ -15243,9 +15217,8 @@ msgstr "Rapport:"
 #: ../intl-scm/guile-strings.c:456 ../intl-scm/guile-strings.c:528
 #: ../intl-scm/guile-strings.c:930 ../intl-scm/guile-strings.c:1058
 #: ../intl-scm/guile-strings.c:1130 ../intl-scm/guile-strings.c:1532
-#, fuzzy
 msgid "No valid account selected.  Click on the Options button and select the account to use."
-msgstr "Geen geldige rekening geselecteerd. Druk op de Opties-knop en kies de te gebruiken rekening."
+msgstr "Er is geen geldige rekening geselecteerd. Klik op [Opties] en selecteer de te gebruiken rekening."
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/job-report.scm
@@ -15253,9 +15226,9 @@ msgstr "Geen geldige rekening geselecteerd. Druk op de Opties-knop en kies de te
 #. src/business/business-reports/gnucash/report/job-report.scm
 #: ../intl-scm/guile-strings.c:462 ../intl-scm/guile-strings.c:936
 #: ../intl-scm/guile-strings.c:1064 ../intl-scm/guile-strings.c:1538
-#, fuzzy, c-format
+#, c-format
 msgid "No valid %s selected.  Click on the Options button to select a company."
-msgstr "Geen geldig %s geselecteerd. Druk op de Opties-knop om een bedrijf te selecteren."
+msgstr "Er is geen geldig(e) %s geselecteerd. Klik op [Opties] om een bedrijf te selecteren."
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
@@ -15450,16 +15423,14 @@ msgstr "Totaalbedrag verschuldigd aan/door bedrijf"
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/gnucash/report/aging.scm
 #: ../intl-scm/guile-strings.c:496 ../intl-scm/guile-strings.c:1098
-#, fuzzy
 msgid "Bracket Total Owed"
-msgstr "Groep totaal verschuldigd"
+msgstr "Totaal verschuldigd binnen interval"
 
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/gnucash/report/aging.scm
 #: ../intl-scm/guile-strings.c:498 ../intl-scm/guile-strings.c:1100
-#, fuzzy
 msgid "Amount owed in oldest bracket - if same go to next oldest"
-msgstr "Bedrag te betalen in oudste groep - wanneer gelijk, ga dan naar voorlaatste"
+msgstr "Bedrag verschuldigd in oudste interval; indien gelijk wordt naastoudste weergegven"
 
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/gnucash/report/aging.scm
@@ -16002,30 +15973,26 @@ msgstr "Extra toelichting om op de factuur te plaatsen"
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:668 ../intl-scm/guile-strings.c:1270
-#, fuzzy
 msgid "Payable to"
-msgstr "Te betalen aan"
+msgstr "Begunstigde"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:670 ../intl-scm/guile-strings.c:1272
-#, fuzzy
 msgid "Display the Payable to: information"
-msgstr "`Te betalen aan' tonen: informatie"
+msgstr "Begunstigderegel weergeven"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:674 ../intl-scm/guile-strings.c:1276
-#, fuzzy
 msgid "Payable to string"
-msgstr "`Te betalen aan' tekenreeks"
+msgstr "Begunstigderegel"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:676 ../intl-scm/guile-strings.c:1278
-#, fuzzy
 msgid "The phrase for specifying to whom payments should be made"
-msgstr "Het tekstfragment dat specificeert aan wie betalingen gedaan zouden moeten worden"
+msgstr "Het tekstfragment dat aangeeft aan wie betalingen moeten worden gedaan"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -16121,7 +16088,6 @@ msgstr "Web:"
 msgid "Invoice in progress..."
 msgstr "Factuur wordt verwerkt..."
 
-# Wordt hier niet het sjabloon bedoeld?
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/invoice.scm
@@ -16131,9 +16097,8 @@ msgstr "Factuur wordt verwerkt..."
 #: ../intl-scm/guile-strings.c:726 ../intl-scm/guile-strings.c:1328
 #: ../intl-scm/guile-strings.c:1740 ../intl-scm/guile-strings.c:1936
 #: ../intl-scm/guile-strings.c:2112 ../intl-scm/guile-strings.c:2308
-#, fuzzy
 msgid "No valid invoice selected.  Click on the Options button and select the invoice to use."
-msgstr "Geen geldige factuur geselecteerd. Druk op de Opties-knop en kies de te gebruiken factuur."
+msgstr "Er is geen geldige factuur geselecteerd. Klik op [Opties] en selecteer de te gebruiken factuur."
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
@@ -16407,20 +16372,17 @@ msgstr "Website"
 msgid "Invoice Date"
 msgstr "Factuurdatum"
 
-# Wordt hier niet het sjabloon bedoeld?
 #. src/business/business-reports/taxinvoice.eguile.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:966 ../intl-scm/guile-strings.c:1568
-#, fuzzy
 msgid "No invoice has been selected -- please use the Options menu to select one."
-msgstr "Geen geldige factuur geselecteerd. Druk op de Opties-knop en kies de te gebruiken factuur."
+msgstr "Er is geen factuur geselecteerd -- gebruik menukeuze Opties om er een te selecteren."
 
 #. src/business/business-reports/taxinvoice.eguile.scm
 #. src/business/business-reports/gnucash/report/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:970 ../intl-scm/guile-strings.c:1572
-#, fuzzy
 msgid "This report is designed for customer (sales) invoices only. Please use the Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher."
-msgstr "<p>Gebruik het menu Opties om een <em>Verkoopfactuur</em> te selecteren in plaats van een Inkoopfactuur of een Onkostendeclaratie."
+msgstr "Dit rapport is uitsluitend ontwikkeld voor facturen aan klanten. Gebruik menukeuze Opties om een <em>Verkoopfactuur</em> te selecteren in plaats van een Inkoopfactuur of een Onkostendeclaratie."
 
 #. src/business/business-reports/gnucash/report/invoice.scm
 #. src/business/business-reports/gnucash/report/easy-invoice.scm
@@ -18538,7 +18500,6 @@ msgstr "Totaaltelling passiva"
 #. src/report/standard-reports/budget-flow.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-flow.scm
 #: ../intl-scm/guile-strings.c:3202 ../intl-scm/guile-strings.c:4092
-#, fuzzy
 msgid "Budget Flow"
 msgstr "Budgetstroom"
 
@@ -20366,7 +20327,7 @@ msgstr "Lopend saldo"
 #. src/report/standard-reports/budget-barchart.scm
 #: ../intl-scm/guile-strings.c:5144 ../intl-scm/guile-strings.c:6586
 msgid "Calculate as running sum?"
-msgstr "Als doorlopend saldo berekenen?"
+msgstr "Als lopend saldo berekenen?"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-barchart.scm
 #. src/report/standard-reports/budget-barchart.scm
@@ -21998,9 +21959,8 @@ msgstr "De namen van alle bovenliggende rekeningen afdrukken"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:7754 ../intl-scm/guile-strings.c:7958
-#, fuzzy
 msgid "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF codes with payer sources may be repeated."
-msgstr "OPGELET: er zijn duplicaat TXF codes toegewezen aan enkele dagboeken. Alleen TXF codes met betalers-informatie mag worden herhaald"
+msgstr "WAARSCHUWING: aan sommige rekeningen zijn meerdere TXF-codes toegewezen. Dit mag uitsluitend indien deze TXF-codes informatie over de betaler bevatten."
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
@@ -22262,7 +22222,7 @@ msgstr "Aangepaste rapporten"
 #. src/report/report-gnome/gnucash/report/report-gnome.scm
 #: ../intl-scm/guile-strings.c:8108 ../intl-scm/guile-strings.c:8122
 msgid "Manage and run custom reports"
-msgstr "Aangepaste rapporten beheren en uitvoeren"
+msgstr "Aangepaste rapporten beheren en genereren"
 
 #. src/report/report-gnome/report-gnome.scm
 #. src/report/report-gnome/gnucash/report/report-gnome.scm
