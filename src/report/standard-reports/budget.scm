@@ -369,7 +369,7 @@
             ((list? col-info)
                 (gnc:html-table-add-budget-line-columns!
                    html-table rownum budget acct col-info))
-            (t
+            (else
                 (gnc:html-table-add-budget-line-columns!
                    html-table rownum budget acct (list col-info)))
             )
@@ -419,7 +419,7 @@
                (gnc:html-table-set-cell!
                 html-table 0 current-col "Multiple periods")
             )
-            (t
+            (else
              (let* ((date (gnc-budget-get-period-start-date budget col-info)))
                (gnc:html-table-set-cell!
                 html-table 0 current-col (gnc-print-date date))
