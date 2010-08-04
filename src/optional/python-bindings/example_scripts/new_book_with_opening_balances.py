@@ -130,8 +130,9 @@ def record_opening_balance(original_account, new_account, new_book,
             # balance acccount amount
             if commodity_tuple not in opening_balance_per_currency:
                 trans = Transaction(new_book)
+                trans.BeginEdit()
                 opening_balance_per_currency[commodity_tuple] = (
-                    Transaction(new_book), GncNumeric(0, 1) )
+                    trans, GncNumeric(0, 1) )
             trans, total = opening_balance_per_currency[commodity_tuple]
 
             new_total = total.sub(
@@ -256,6 +257,7 @@ def create_opening_balance_transaction(commodtable, namespace, mnemonic,
     opening_trans.SetDate( *OPENING_DATE )
     opening_trans.SetCurrency(currency)
     opening_trans.SetDescription("Opening Balance")
+    opening_trans.CommitEdit()
 
     return simple_opening_name_used
         

@@ -5,7 +5,7 @@ from gnucash import Session, Account, Transaction, Split, GncNumeric
 
 FILE_1 = "/tmp/example.gnucash"
 
-session = Session("xml:%s" % FILE_1, True)
+session = Session("xml://%s" % FILE_1, True)
 
 book = session.book
 root_acct = Account(book)
@@ -13,7 +13,10 @@ expenses_acct = Account(book)
 savings_acct = Account(book)
 opening_acct = Account(book)
 trans1 = Transaction(book)
+trans1.BeginEdit()
 trans2 = Transaction(book)
+trans2.BeginEdit()
+
 split1 = Split(book)
 split3 = Split(book)
 comm_table = book.get_table()
@@ -61,18 +64,19 @@ trans1.SetDescription("Groceries")
 trans2.SetCurrency(cad)
 trans2.SetDescription("Opening Savings Balance")
 
-split2 = split1.GetOtherSplit()
+split2 = Split(book)
 split2.SetAccount(savings_acct)
+split2.SetParent(trans1)
+split2.SetValue(num1.neg())
 
-split4 = split3.GetOtherSplit()
+split4 = Split(book)
 split4.SetAccount(opening_acct)
+split4.SetParent(trans2)
+split4.SetValue(num2.neg())
 
-book.print_dirty()
 
-book.mark_saved()
-book.mark_closed()
-
-book.print_dirty()
+trans1.CommitEdit()
+trans2.CommitEdit()
 
 session.save()
 session.end()
