@@ -909,7 +909,7 @@
 <gnc:account version="2.0.0">
   <act:name>2310 Norēķini ar pircējiem un pasūtītājiem</act:name>
   <act:id type="guid">79797f351d213a52aa358b692a679863</act:id>
-  <act:type>ASSET</act:type>
+  <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>LVL</cmdty:id>
