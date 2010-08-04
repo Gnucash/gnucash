@@ -130,7 +130,8 @@ typedef char gchar;
     }
 }
 
-%typemap(out) GList *, CommodityList *, SplitList *, AccountList *, LotList * {
+%typemap(out) GList *, CommodityList *, SplitList *, AccountList *, LotList *,
+    MonetaryList * {
     guint i;
     gpointer data;
     PyObject *list = PyList_New(0);
@@ -146,7 +147,10 @@ typedef char gchar;
         else if (GNC_IS_COMMODITY(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_gnc_commodity, 0)); 
         else if (GNC_IS_LOT(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_GNCLot, 0)); 
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_GNCLot, 0));
+        else if ($1_descriptor == $descriptor(MonetaryList *)){
+	    PyList_Append(list, SWIG_NewPointerObj(data, $descriptor(gnc_monetary *), 0));
+	}
         else
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_void, 0)); 
     }

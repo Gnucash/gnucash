@@ -241,6 +241,14 @@ class Transaction(GnuCashCoreClass):
     
     Consists of at least one (generally two) splits to represent a transaction
     between two accounts.
+
+
+    Has a GetImbalance() method that returns a list of all the imbalanced
+    currencies. Each list item is a two element tuple, the first element is
+    the imbalanced commodity, the second element is the value.
+
+    Warning, the commodity.get_instance() value can be None when there
+    is no currency set for the transaction.
     """
     _new_instance = 'xaccMallocTransaction'
     def GetNthSplit(self, n):
@@ -250,6 +258,15 @@ class Transaction(GnuCashCoreClass):
         from gnucash_business import Transaction
         return self.do_lookup_create_oo_instance(
             gncInvoiceGetInvoiceFromTxn, Transaction )
+
+def decorate_monetary_list_returning_function(orig_function):
+    def new_function(self):
+        # warning, item.commodity has been shown to be None
+        # when the transaction doesn't have a currency
+        return [(GncCommodity(instance=item.commodity),
+                 GncNumeric(instance=item.value))
+                for item in orig_function(self) ]
+    return new_function
 
 class Split(GnuCashCoreClass):
     """A GnuCash Split
@@ -402,7 +419,7 @@ trans_dict =    {
                     'Clone': Transaction, 
                     'Reverse': Transaction, 
                     'GetReversedBy': Transaction, 
-                    'GetImbalance': GncNumeric, 
+                    'GetImbalanceValue': GncNumeric, 
                     'GetAccountValue': GncNumeric, 
                     'GetAccountAmount': GncNumeric, 
                     'GetAccountConvRate': GncNumeric, 
@@ -411,6 +428,8 @@ trans_dict =    {
                     'GetGUID': GUID
                 }
 methods_return_instance(Transaction, trans_dict)
+Transaction.decorate_functions(
+    decorate_monetary_list_returning_function, 'GetImbalance')
 
 # Split
 Split.add_methods_with_prefix('xaccSplit')
