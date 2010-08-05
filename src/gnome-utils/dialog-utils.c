@@ -919,6 +919,7 @@ gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *s
         image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
         gtk_button_set_image(GTK_BUTTON(button), image);
     }
+    gtk_widget_set_can_default (button, TRUE);
     gtk_widget_show_all(button);
     gtk_dialog_add_action_widget(GTK_DIALOG(dialog), button, response);
 }
