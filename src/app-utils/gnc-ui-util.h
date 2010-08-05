@@ -45,6 +45,10 @@ typedef QofSession * (*QofSessionCB) (void);
 gboolean gnc_reverse_balance(const Account *account);
 gboolean gnc_reverse_balance_type(GNCAccountType type);
 
+/* Default directory sections ***************************************/
+#define GCONF_DIR_OPEN_SAVE "dialogs/open_save"
+#define GCONF_DIR_EXPORT "dialogs/export_accounts"
+#define GCONF_DIR_REPORT "dialogs/report"
 
 /* Default directories **********************************************/
 

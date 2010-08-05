@@ -48,7 +48,6 @@
 #include "gnc-session.h"
 #include "gnc-autosave.h"
 
-#define GCONF_SECTION "dialogs/export_accounts"
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -618,6 +617,14 @@ gnc_post_file_open (const char * filename)
                                        username, password, path);
     }
 
+    /* For file based uri's, remember the directory as the default. */
+    if (gnc_uri_is_file_protocol(protocol))
+    {
+        gchar *default_dir = g_path_get_dirname(path);
+        gnc_set_default_directory (GCONF_DIR_OPEN_SAVE, default_dir);
+        g_free(default_dir);
+    }
+
     /* disable events while moving over to the new set of accounts;
      * the mass deletion of accounts and transactions during
      * switchover would otherwise cause excessive redraws. */
@@ -849,23 +856,26 @@ gnc_post_file_open (const char * filename)
 gboolean
 gnc_file_open (void)
 {
-    const char * newfile;
-    gchar *lastpath = NULL;
-    gchar *lastfile = NULL;
-    gchar *last_file_dir = NULL;
+    const gchar * newfile;
+    gchar *last = NULL;
+    gchar *default_dir = NULL;
     gboolean result;
 
     if (!gnc_file_query_save (TRUE))
         return FALSE;
 
-    lastpath = gnc_history_get_last();
-    lastfile = gnc_uri_get_path ( lastpath );
-    if ( lastfile )
-        last_file_dir = g_path_get_dirname(lastfile);
-    newfile = gnc_file_dialog (_("Open"), NULL, last_file_dir, GNC_FILE_DIALOG_OPEN);
-    g_free ( lastpath );
-    g_free ( lastfile );
-    g_free ( last_file_dir );
+    if ( last && gnc_uri_is_file_uri ( last ) )
+    {
+        gchar *filepath = gnc_uri_get_path ( last );
+        default_dir = g_path_get_dirname( filepath );
+        g_free ( filepath );
+    }
+    else
+        default_dir = gnc_get_default_directory(GCONF_DIR_OPEN_SAVE);
+
+    newfile = gnc_file_dialog (_("Open"), NULL, default_dir, GNC_FILE_DIALOG_OPEN);
+    g_free ( last );
+    g_free ( default_dir );
 
     result = gnc_post_file_open ( newfile );
 
@@ -915,9 +925,8 @@ gnc_file_export (void)
         g_free ( filepath );
     }
     else
-    {
-        default_dir = gnc_get_default_directory(GCONF_SECTION);
-    }
+        default_dir = gnc_get_default_directory(GCONF_DIR_EXPORT);
+
     filename = gnc_file_dialog (_("Save"), NULL, default_dir,
                                 GNC_FILE_DIALOG_SAVE);
     g_free ( last );
@@ -935,7 +944,6 @@ gnc_file_do_export(const char * filename)
     QofSession *current_session, *new_session;
     gboolean ok;
     QofBackendError io_err = ERR_BACKEND_NO_ERR;
-    gchar *default_dir = NULL;
     gchar *norm_file;
     gchar *newfile;
     const gchar *oldfile;
@@ -980,8 +988,8 @@ gnc_file_do_export(const char * filename)
     /* For file based uri's, remember the directory as the default. */
     if (gnc_uri_is_file_protocol(protocol))
     {
-        default_dir = g_path_get_dirname(path);
-        gnc_set_default_directory (GCONF_SECTION, default_dir);
+        gchar *default_dir = g_path_get_dirname(path);
+        gnc_set_default_directory (GCONF_DIR_EXPORT, default_dir);
         g_free(default_dir);
     }
 
@@ -1113,14 +1121,9 @@ gnc_file_save (void)
 void
 gnc_file_save_as (void)
 {
-    QofSession *new_session;
-    QofSession *session;
-    const char *filename;
-    char *default_dir = NULL;        /* Default to last open */
-    char *last;
-    char *newfile;
-    const char *oldfile;
-    QofBackendError io_err = ERR_BACKEND_NO_ERR;
+    const gchar *filename;
+    gchar *default_dir = NULL;        /* Default to last open */
+    gchar *last;
 
     ENTER(" ");
 
@@ -1132,9 +1135,8 @@ gnc_file_save_as (void)
         g_free ( filepath );
     }
     else
-    {
-        default_dir = gnc_get_default_directory(GCONF_SECTION);
-    }
+        default_dir = gnc_get_default_directory(GCONF_DIR_OPEN_SAVE);
+
     filename = gnc_file_dialog (_("Save"), NULL, default_dir,
                                 GNC_FILE_DIALOG_SAVE);
     g_free ( last );
@@ -1151,8 +1153,6 @@ gnc_file_do_save_as (const char* filename)
 {
     QofSession *new_session;
     QofSession *session;
-    gchar *default_dir = NULL;        /* Default to last open */
-    gchar *last;
     gchar *norm_file;
     gchar *newfile;
     const gchar *oldfile;
@@ -1200,8 +1200,8 @@ gnc_file_do_save_as (const char* filename)
     /* For file based uri's, remember the directory as the default. */
     if (gnc_uri_is_file_protocol(protocol))
     {
-        default_dir = g_path_get_dirname(path);
-        gnc_set_default_directory (GCONF_SECTION, default_dir);
+        gchar *default_dir = g_path_get_dirname(path);
+        gnc_set_default_directory (GCONF_DIR_OPEN_SAVE, default_dir);
         g_free(default_dir);
     }
 

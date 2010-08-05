@@ -29,10 +29,12 @@
 #include <glade/glade.h>
 
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
 #include "gnc-uri-utils.h"
 #include "dialog-utils.h"
 #include "dialog-file-access.h"
 #include "gnc-file.h"
+#include "gnc-plugin-file-history.h"
 #include "gnc-session.h"
 
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -248,6 +250,9 @@ gnc_ui_file_access( int type )
     gint active_access_method_index = -1;
     const gchar* default_db;
     const gchar *button_label = NULL;
+    const gchar *gconf_section;
+    gchar *last;
+    gchar *starting_dir = NULL;
 
     g_return_if_fail( type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS || type == FILE_ACCESS_EXPORT );
 
@@ -278,18 +283,21 @@ gnc_ui_file_access( int type )
         gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Open..."));
         button_label = "gtk-open";
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_OPEN;
+        gconf_section = GCONF_DIR_OPEN_SAVE;
         break;
 
     case FILE_ACCESS_SAVE_AS:
         gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Save As..."));
         button_label = "gtk-save-as";
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
+        gconf_section = GCONF_DIR_OPEN_SAVE;
         break;
 
     case FILE_ACCESS_EXPORT:
         gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Export"));
         button_label = "gtk-save-as";
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
+        gconf_section = GCONF_DIR_EXPORT;
         break;
     }
 
@@ -304,6 +312,22 @@ gnc_ui_file_access( int type )
     fileChooser = GTK_FILE_CHOOSER_WIDGET(gtk_file_chooser_widget_new( fileChooserAction ));
     faw->fileChooser = GTK_FILE_CHOOSER(fileChooser);
     gtk_container_add( GTK_CONTAINER(align), GTK_WIDGET(fileChooser) );
+
+    /* Set the default directory */
+    if (type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS)
+    {
+        last = gnc_history_get_last();
+        if ( last && gnc_uri_is_file_uri ( last ) )
+        {
+            gchar *filepath = gnc_uri_get_path ( last );
+            starting_dir = g_path_get_dirname( filepath );
+            g_free ( filepath );
+        }
+    }
+    if (!starting_dir)
+        starting_dir = gnc_get_default_directory(gconf_section);
+    gtk_file_chooser_set_current_folder(faw->fileChooser, starting_dir);
+
     g_object_connect( G_OBJECT(faw->fileChooser), "signal::file-activated",
                       gnc_ui_file_access_file_activated_cb, faw, NULL );
 

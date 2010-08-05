@@ -57,6 +57,7 @@
 #include "gnc-file.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-page-report.h"
+#include "gnc-plugin-file-history.h"
 #include "gnc-report.h"
 #include "gnc-session.h"
 #include "gnc-ui-util.h"
@@ -1390,6 +1391,7 @@ gnc_get_export_filename (SCM choice)
     char * title;
     const gchar * type;
     int rc;
+    char * default_dir;
 
     if (choice == SCM_BOOL_T)
         type = _("HTML");
@@ -1400,17 +1402,23 @@ gnc_get_export_filename (SCM choice)
 
     /* %s is the type of what is about to be saved, e.g. "HTML". */
     title = g_strdup_printf (_("Save %s To File"), type);
+    default_dir = gnc_get_default_directory(GCONF_DIR_REPORT);
 
-    filepath = gnc_file_dialog (title, NULL, NULL, GNC_FILE_DIALOG_EXPORT);
+    filepath = gnc_file_dialog (title, NULL, default_dir, GNC_FILE_DIALOG_EXPORT);
 
     g_free (title);
+    g_free (default_dir);
 
     if (!filepath)
         return NULL;
 
+    default_dir = g_path_get_dirname(filepath);
+    gnc_set_default_directory (GCONF_DIR_REPORT, default_dir);
+    g_free(default_dir);
+
     rc = g_stat (filepath, &statbuf);
 
-    /* Check for an error that isn't a non-existant file. */
+    /* Check for an error that isn't a non-existent file. */
     if (rc != 0 && errno != ENOENT)
     {
         /* %s is the strerror(3) string of the error that occurred. */
