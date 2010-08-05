@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-03 12:37+0300\n"
-"PO-Revision-Date: 2010-08-03 13:11+0300\n"
+"PO-Revision-Date: 2010-08-04 11:31+0300\n"
 "Last-Translator: Valdis Vītoliņš <valdis.vitolins@odo.lv>\n"
 "Language-Team: Latvian <translation-team-lv@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -614,7 +614,7 @@ msgstr "Šim grāmatojumam jāpiesaista klients. Izvēlieties klientu zemāk."
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:81
 msgid "This transaction needs to be assigned to a Vendor.  Please choose the Vendor below."
-msgstr "Šim grāmatojumam jāpiesaista pārdevējs. Izvēlieties pārdevēju zemāk."
+msgstr "Šim grāmatojumam jāpiesaista piegādātājs. Izvēlieties piegādātāju zemāk."
 
 #: ../src/business/business-gnome/dialog-customer.c:274
 msgid "You must enter a company name. If this customer is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
@@ -1379,7 +1379,7 @@ msgstr "Jums nav derīgu \"Nosūtīt uz\" kontu. Izveidojiet \"%s\" tipa kontu p
 
 #: ../src/business/business-gnome/dialog-vendor.c:208
 msgid "You must enter a company name. If this vendor is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
-msgstr "Ievadiet uzņēmuma nosaukumu. Ja pārdevējs ir fiziska persona, tad \"uzņēmuma nosaukums\" un \"kontaktpersona\" jāiestata kā viens un tas pats."
+msgstr "Ievadiet uzņēmuma nosaukumu. Ja piegādātājs ir fiziska persona, tad \"uzņēmuma nosaukums\" un \"kontaktpersona\" jāiestata kā viens un tas pats."
 
 #: ../src/business/business-gnome/dialog-vendor.c:220
 msgid "You must enter a payment address."
@@ -1387,25 +1387,25 @@ msgstr "Ievadiet maksājuma saņēmēja adresi."
 
 #: ../src/business/business-gnome/dialog-vendor.c:301
 msgid "Edit Vendor"
-msgstr "Rediģēt pārdevēju"
+msgstr "Rediģēt piegādātāju"
 
 #: ../src/business/business-gnome/dialog-vendor.c:303
 #: ../src/business/business-gnome/glade/vendor.glade.h:9
 msgid "New Vendor"
-msgstr "Jauns pārdevējs"
+msgstr "Jauns piegādātājs"
 
 #: ../src/business/business-gnome/dialog-vendor.c:662
 msgid "View/Edit Vendor"
-msgstr "Skatīt/rediģēt pārdevēju"
+msgstr "Skatīt/rediģēt piegādātāju"
 
 #: ../src/business/business-gnome/dialog-vendor.c:663
 msgid "Vendor's Jobs"
-msgstr "Pārdevēja darbs"
+msgstr "Piegādātāja darbs"
 
 #. { N_("Vendor Orders"), order_vendor_cb},
 #: ../src/business/business-gnome/dialog-vendor.c:665
 msgid "Vendor's Bills"
-msgstr "Pārdevēja rēķini"
+msgstr "Piegādātāja rēķini"
 
 #: ../src/business/business-gnome/dialog-vendor.c:666
 msgid "Pay Bill"
@@ -1413,11 +1413,11 @@ msgstr "Apmaksāt rēķinu"
 
 #: ../src/business/business-gnome/dialog-vendor.c:678
 msgid "Vendor ID"
-msgstr "Pārdevēja ID"
+msgstr "Piegādātāja ID"
 
 #: ../src/business/business-gnome/dialog-vendor.c:713
 msgid "Find Vendor"
-msgstr "Meklēt pārdevēju"
+msgstr "Meklēt piegādātāju"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:1
 msgid "<b>New Billing Term</b>"
@@ -1604,11 +1604,11 @@ msgstr "Vai vairākus rēķina ierakstus, kas pārskaita uz to pašu kontu, ir n
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:10
 msgid "Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors."
-msgstr "Vai nodoklis ir iekļauts rēķina ierakstos automātiski. Šis iestatījums ir mantots no jaunajiem klientiem un pārdevējiem."
+msgstr "Vai nodoklis ir iekļauts rēķina ierakstos automātiski. Šis iestatījums ir mantots no jaunajiem klientiem un piegādātājiem."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:11
 msgid "Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors."
-msgstr "Vai nodoklis ir iekļauts rēķina ierakstos automātiski. Šis iestatījums ir mantots no jaunajiem klientiem un pārdevējiem."
+msgstr "Vai nodoklis ir iekļauts rēķina ierakstos automātiski. Šis iestatījums ir mantots no jaunajiem klientiem un piegādātājiem."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:12
 msgid "Whether to display the list of Bills Due at startup."
@@ -2294,7 +2294,7 @@ msgstr "Nodokļu tabula:"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:18
 msgid "The vendor ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "Pārdevēja ID numurs. Ja atstāts neaizpildīts, kāds numurs tiek piešķirts jūsu vietā"
+msgstr "Piegādātāja ID numurs. Ja atstāts neaizpildīts, kāds numurs tiek piešķirts jūsu vietā"
 
 #. src/business/business-reports/gnucash/report/job-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
@@ -2308,15 +2308,15 @@ msgstr "Pārdevēja ID numurs. Ja atstāts neaizpildīts, kāds numurs tiek pie�
 #: ../intl-scm/guile-strings.c:9182
 #: ../intl-scm/guile-strings.c:9578
 msgid "Vendor"
-msgstr "Pārdevējs"
+msgstr "Piegādātājs"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:20
 msgid "Vendor Number: "
-msgstr "Pārdevēja Nr: "
+msgstr "Piegādātāja Nr: "
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:21
 msgid "What Tax Table should be applied to this vendor?"
-msgstr "Kāda nodokļu tabula attiecināma uz šo pārdevēju?"
+msgstr "Kāda nodokļu tabula attiecināma uz šo piegādātāju?"
 
 #. src/business/business-utils/gnucash/business-utils.scm
 #. src/business/business-utils/business-utils.scm
@@ -2409,23 +2409,23 @@ msgstr "Atvērt maksājuma apstrādes dialoglogu"
 #. Vendor submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:175
 msgid "_Vendor"
-msgstr "_Pārdevējs"
+msgstr "_Piegādātājs"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:177
 msgid "_New Vendor..."
-msgstr "_Jauns pārdevējs..."
+msgstr "_Jauns piegādātājs..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:178
 msgid "Open the New Vendor dialog"
-msgstr "Atvērt jauna pārdevēja dialoglogu"
+msgstr "Atvērt jauna piegādātāja dialoglogu"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:182
 msgid "_Find Vendor..."
-msgstr "_Meklēt pārdevēju..."
+msgstr "_Meklēt piegādātāju..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:183
 msgid "Open the Find Vendor dialog"
-msgstr "Atvērt pārdevēja meklēšanas dialoglogu"
+msgstr "Atvērt piegādātāja meklēšanas dialoglogu"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:187
 msgid "New _Bill..."
@@ -2798,7 +2798,7 @@ msgstr "Ja aktivizēts, tiks meklēti tikai posteņi 'aktīvs' pašreizējā kat
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:5
 msgid "If set to active then tax is included by default in entries of this type. This setting is inherited by new customers and vendors."
-msgstr "Ja aktivizēts, tad nodoklis ir iekļauts šī tipa ierakstos automātiski. Uzstādījums ir mantots no jauniem klientiem un pārdevējiem."
+msgstr "Ja aktivizēts, tad nodoklis ir iekļauts šī tipa ierakstos automātiski. Uzstādījums ir mantots no jauniem klientiem un piegādātājiem."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:6
 msgid "If this field is active then multiple entries in an invoice that transfer to the same account will be accumulated into a single split. This field can be overridden per invoice in the Posting dialog."
@@ -3504,7 +3504,7 @@ msgstr "Kredītkarte"
 
 #: ../src/engine/Account.c:3953
 msgid "Liability"
-msgstr "Saistības"
+msgstr "Pasīvi"
 
 #: ../src/engine/Account.c:3954
 msgid "Stock"
@@ -4546,7 +4546,7 @@ msgstr "Izvēlieties kontus izveidošanai"
 #: ../intl-scm/guile-strings.c:6792
 #: ../intl-scm/guile-strings.c:6830
 msgid "Default"
-msgstr "Noklusējums"
+msgstr "Noklusētā"
 
 #: ../src/gnome/glade/account.glade.h:18
 msgid "Delete Account"
@@ -4841,7 +4841,7 @@ msgid ""
 "\n"
 "Click 'Cancel'  if you do not wish to create any new accounts now."
 msgstr ""
-"Šis vednis palīdzēs izveidot GnuCash kontu kopumu jūsu aktīviem (kā ieguldījumi, kontu pārbaude vai uzkrājumu konti), saistībām (kā aizņēmumi) un dažāda veida ieņēmumiem un izdevumiem. \n"
+"Šis vednis palīdzēs izveidot GnuCash kontu kopumu jūsu aktīviem (kā ieguldījumi, kontu pārbaude vai uzkrājumu konti), pasīviem (kā aizņēmumi) un dažāda veida ieņēmumiem un izdevumiem. \n"
 "\n"
 "Klikšķiniet 'Atcelt', ja nevēlaties tagad veidot jaunus kontus."
 
@@ -5390,10 +5390,10 @@ msgid ""
 "Net Asset Value\n"
 "Unknown"
 msgstr ""
-"Solīt\n"
-"Jautāt\n"
+"Pārdod\n"
+"Pērk\n"
 "Pēdējais\n"
-"Neto aktīvu vērtība\n"
+"Neto vērtība\n"
 "Nezināms"
 
 #: ../src/gnome/glade/price.glade.h:7
@@ -6339,7 +6339,7 @@ msgid ""
 "Semi-Monthly\n"
 "Monthly"
 msgstr ""
-"Neviens\n"
+"Nekad\n"
 "Vienreiz\n"
 "Katru dienu\n"
 "Katru nedēļu\n"
@@ -6718,7 +6718,7 @@ msgstr "_Ieņēmumi"
 
 #: ../src/gnome/glade/tax.glade.h:18
 msgid "_Liability/Equity"
-msgstr "_Saistības"
+msgstr "_Pasīvi"
 
 #: ../src/gnome/glade/tax.glade.h:19
 msgid "_Parent Account"
@@ -6967,7 +6967,7 @@ msgstr "_Pārnumurēt analītiskos kontus..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:188
 msgid "Renumber the children of the selected account"
-msgstr "Pārnumurēt izvēlētā konta bērnus"
+msgstr "Pārnumurēt izvēlētā konta apakškontus"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:194
 #: ../src/gnome/gnc-plugin-page-budget.c:159
@@ -7398,7 +7398,7 @@ msgstr "Atvērt reģistra pārskatu šim kontam"
 
 #: ../src/gnome/gnc-plugin-page-register.c:342
 msgid "Account Transaction Report"
-msgstr "Konta grāmatojuma pārskats"
+msgstr "Konta grāmatojumu pārskats"
 
 #: ../src/gnome/gnc-plugin-page-register.c:343
 msgid "Open a register report for the selected Transaction"
@@ -8029,7 +8029,7 @@ msgstr "Pirmsatlasīt nokārtotus grāmatojumus"
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
 #: ../src/gnome-utils/glade/preferences.glade.h:108
 msgid "Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment. Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts."
-msgstr "Pirms konta, kurā ietur vai izmaksā procentus, saskaņošanas, mudināt lietotāju ievadīt grāmatojumu procentu ieturēšanai vai samaksāšanai. Pašreiz atļauts tikai Banka, Kredīts, Kopīgs, Aktīvi, Saņemtie, Apmaksājamie un Saistību konti."
+msgstr "Pirms konta, kurā ietur vai izmaksā procentus, saskaņošanas, mudināt lietotāju ievadīt grāmatojumu procentu ieturēšanai vai samaksāšanai. Pašreiz atļauts tikai Banka, Kredīts, Kopīgs, Aktīvi, Saņemtie, Apmaksājamie un Pasīvu konti."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:7
 msgid "Prompt for credit card payment"
@@ -8884,18 +8884,18 @@ msgstr "Nevar izveidot sākuma bilanci."
 #. primary label
 #: ../src/gnome-utils/dialog-account.c:652
 msgid "Give the children the same type?"
-msgstr "Vai piedēvēt bērniem to pašu tipu?"
+msgstr "Vai piedēvēt apakškontiem to pašu tipu?"
 
 #. secondary label
 #: ../src/gnome-utils/dialog-account.c:670
 #, c-format
 msgid "The children of the edited account have to be changed to type \"%s\" to make them compatible."
-msgstr "Rediģētā konta bērni jānomaina uz tipu \"%s\", lai tie būtu savietojami."
+msgstr "Rediģētā konta apakškonti jānomaina uz tipu \"%s\", lai tie būtu savietojami."
 
 #. children
 #: ../src/gnome-utils/dialog-account.c:681
 msgid "_Show children accounts"
-msgstr "_Rādīt bērnu kontus"
+msgstr "_Rādīt apakškontus"
 
 #: ../src/gnome-utils/dialog-account.c:754
 msgid "The account must be given a name."
@@ -8941,7 +8941,7 @@ msgstr "(%d) Jauni konti"
 #: ../src/gnome-utils/dialog-account.c:1985
 #, c-format
 msgid "Renumber the immediate sub-accounts of %s?  This will replace the account code field of each child account with a newly generated code."
-msgstr "Pārnumurēt tiešos analītiskos kontus %s? Tas nomainīs katra bērnu konta koda lauku ar jaunizveidotu kodu."
+msgstr "Pārnumurēt tiešos analītiskos kontus %s? Tas nomainīs katra apakškonta koda lauku ar jaunizveidotu kodu."
 
 #: ../src/gnome-utils/dialog-book-close.c:295
 msgid "Please select an Equity account to hold the total Period Income."
@@ -9041,11 +9041,11 @@ msgstr "Ievadiet preces \"Pilns nosaukums\", \"Simbols/saīsinājums\", un \"Tip
 
 #: ../src/gnome-utils/dialog-file-access.c:273
 msgid "Open..."
-msgstr "_Atvērt..."
+msgstr "Atvērt..."
 
 #: ../src/gnome-utils/dialog-file-access.c:279
 msgid "Save As..."
-msgstr "_Saglabāt kā..."
+msgstr "Saglabāt kā..."
 
 #: ../src/gnome-utils/dialog-options.c:924
 #: ../src/gnome-utils/dialog-options.c:1067
@@ -9067,7 +9067,7 @@ msgstr "Notīrīt atlasi un atcelt visus izvēlētos kontus."
 
 #: ../src/gnome-utils/dialog-options.c:938
 msgid "Select Children"
-msgstr "Izvēlieties bērnus"
+msgstr "Izvēlieties visus apakškontus"
 
 #: ../src/gnome-utils/dialog-options.c:940
 msgid "Select all descendents of selected account."
@@ -10152,7 +10152,7 @@ msgstr "Rādīt rīkjoslas posteņus ar teksta uzrakstu līdzās ikonai. Uzrakst
 
 #: ../src/gnome-utils/glade/preferences.glade.h:75
 msgid "Don't sign reverse any accounts."
-msgstr "Neparakstīt kontus ar atpakaļejošu datumu. "
+msgstr "Neapgriezt nevienu negatīvu kontu."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:76
 msgid "Double _mode colors alternate with transactions"
@@ -10336,7 +10336,7 @@ msgstr "Atzīmēt reversās bilances ieņēmumu un izdevumu kontos."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:129
 msgid "Sign reverse balances on the following: Credit Card, Payable, Liability, Equity, and Income."
-msgstr "Atzīmēt reversās bilances uz sekojošo: Kredītkarte, Apmaksājams, Saistības, Pašu kapitāls un Ieņēmumi."
+msgstr "Atzīmēt reversās bilances uz sekojošo: Kredītkarte, Apmaksājams, Pasīvi, Pašu kapitāls un Ieņēmumi."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:130
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
@@ -10496,7 +10496,7 @@ msgstr "_Pa kreisi"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:171
 msgid "_None"
-msgstr "_Neviens"
+msgstr "_Nevienu"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:172
 msgid "_Only display leaf account names"
@@ -11307,35 +11307,35 @@ msgstr "Šodien"
 #: ../src/gnome-utils/gnc-period-select.c:69
 #: ../intl-scm/guile-strings.c:7740
 msgid "Start of this month"
-msgstr "Sākt no šī mēneša"
+msgstr "Pašreizējā mēneša sākums"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:70
 #: ../intl-scm/guile-strings.c:7748
 msgid "Start of previous month"
-msgstr "Sākt no iepriekšējā mēneša"
+msgstr "Iepriekšējā mēneša sākums"
 
 #: ../src/gnome-utils/gnc-period-select.c:71
 msgid "Start of this quarter"
-msgstr "Sākt no šī ceturkšņa"
+msgstr "Pašreizējā ceturkšņa sākums"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:72
 #: ../intl-scm/guile-strings.c:7764
 msgid "Start of previous quarter"
-msgstr "Sākt no iepriekšējā ceturkšņa"
+msgstr "Iepriekšējā ceturkšņa sākums"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:73
 #: ../intl-scm/guile-strings.c:7716
 msgid "Start of this year"
-msgstr "Sākt no šī gada"
+msgstr "Pašreizējā gada sākums"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:74
 #: ../intl-scm/guile-strings.c:7724
 msgid "Start of previous year"
-msgstr "Sākt no iepriekšējā gada"
+msgstr "Iepriekšējā gada sākums"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:77
@@ -11350,17 +11350,17 @@ msgstr "Iepriekšējā uzskaites perioda sākums"
 #: ../src/gnome-utils/gnc-period-select.c:85
 #: ../intl-scm/guile-strings.c:7744
 msgid "End of this month"
-msgstr "Beigt ar šo mēnesi"
+msgstr "Pašreizējā mēneša beigas"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:86
 #: ../intl-scm/guile-strings.c:7752
 msgid "End of previous month"
-msgstr "Beigt ar iepriekšējo mēnesi"
+msgstr "Iepriekšējā mēneša beigas"
 
 #: ../src/gnome-utils/gnc-period-select.c:87
 msgid "End of this quarter"
-msgstr "Beigt ar šo ceturksni"
+msgstr "Pašreizējā ceturksņa beigas"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:88
@@ -11372,7 +11372,7 @@ msgstr "Iepriekšējā ceturkšņa beigas"
 #: ../src/gnome-utils/gnc-period-select.c:89
 #: ../intl-scm/guile-strings.c:7720
 msgid "End of this year"
-msgstr "Šī gada beigas"
+msgstr "Pašreizējā gada beigas"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:90
@@ -14411,7 +14411,7 @@ msgstr "Ievadīt klienta nosaukumu"
 
 #: ../src/register/ledger-core/split-register-model.c:982
 msgid "Enter the name of the Vendor"
-msgstr "Ievadīt pārdevēja nosaukumu"
+msgstr "Ievadīt piegādātāja nosaukumu"
 
 #: ../src/register/ledger-core/split-register-model.c:985
 msgid "Enter a description of the transaction"
@@ -14569,7 +14569,7 @@ msgstr "Pievienot _pārskatu"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1033
 msgid "Add the current report to the `Custom' menu for later use. The report will be saved in the file ~/.gnucash/saved-reports-2.4. It will be accessible as menu entry in the report menu at the next startup of GnuCash."
-msgstr "Pievienot pašreizējo pārskatu 'Pielāgot' izvēlnei vēlākai izmantošanai. Pārskats tiks saglabāta failā ~/.gnucash/saved-reports-2.0. Tas būs pieejams kā izvēlnes ieraksts atsaišu izvēlnē nākošajā GnuCash uzsākšanas reizē."
+msgstr "Pievienot pašreizējo pārskatu 'Pielāgotie pārskati' izvēlnei vēlākai izmantošanai. Pārskats tiks saglabāta failā ~/.gnucash/saved-reports-2.0. Tas būs pieejams kā izvēlnes ieraksts pārskatu izvēlnē nākošajā GnuCash uzsākšanas reizē."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1040
 msgid "Export _Report"
@@ -16831,7 +16831,7 @@ msgstr "Izmantot pilnu konta nosaukumu"
 #: ../intl-scm/guile-strings.c:3996
 #: ../intl-scm/guile-strings.c:4108
 msgid "Other Account Name"
-msgstr "Cits konta nosaukums"
+msgstr "Otra konta nosaukums"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
@@ -16844,7 +16844,7 @@ msgstr "Cits konta nosaukums"
 #: ../intl-scm/guile-strings.c:3866
 #: ../intl-scm/guile-strings.c:4112
 msgid "Use Full Other Account Name"
-msgstr "Izmantot citu pilnu konta nosaukumu"
+msgstr "Izmantot otra konta pilnu nosaukumu"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
@@ -16859,7 +16859,7 @@ msgstr "Izmantot citu pilnu konta nosaukumu"
 #: ../intl-scm/guile-strings.c:4000
 #: ../intl-scm/guile-strings.c:4116
 msgid "Other Account Code"
-msgstr "Cits konta kods"
+msgstr "Otra konta kods"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
@@ -16880,7 +16880,7 @@ msgstr "Cits konta kods"
 #: ../intl-scm/guile-strings.c:4522
 #: ../intl-scm/guile-strings.c:4636
 msgid "Running Balance"
-msgstr "Bilances demonstrēšana"
+msgstr "Rādīt bilanci"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
@@ -16924,7 +16924,7 @@ msgstr "Kopā"
 #: ../intl-scm/guile-strings.c:4158
 #: ../intl-scm/guile-strings.c:4198
 msgid "Sign Reverses"
-msgstr "Parakstīt atgrieztos"
+msgstr "Apgriezt negatīvos"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
@@ -17214,7 +17214,7 @@ msgstr "Aktīvu joslas diagramma"
 #: ../intl-scm/guile-strings.c:1040
 #: ../intl-scm/guile-strings.c:2972
 msgid "Liability Barchart"
-msgstr "Saistību joslas diagramma"
+msgstr "Pasīvu joslas diagramma"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -17242,7 +17242,7 @@ msgstr "Parāda joslas diagrammu ar aktīviem, intervālam attīstoties laika ga
 #: ../intl-scm/guile-strings.c:1048
 #: ../intl-scm/guile-strings.c:2980
 msgid "Shows a barchart with the Liabilities developing over time"
-msgstr "Parāda joslas diagrammu ar saistībām, intervālam attīstoties laika gaitā"
+msgstr "Parāda joslas diagrammu ar pasīviem, intervālam attīstoties laika gaitā"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -17270,7 +17270,7 @@ msgstr "Aktīvi šajā laikā"
 #: ../intl-scm/guile-strings.c:1056
 #: ../intl-scm/guile-strings.c:2988
 msgid "Liabilities Over Time"
-msgstr "saistības šajā laikā"
+msgstr "Pasīvi laikā"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/net-barchart.scm
@@ -17580,7 +17580,7 @@ msgstr "Viena"
 #: ../intl-scm/guile-strings.c:1184
 #: ../intl-scm/guile-strings.c:3116
 msgid "Display liabilities and equity below assets"
-msgstr "Rādīt saistības un pašu kapitālu zem aktīviem"
+msgstr "Rādīt pasīvus un pašu kapitālu zem aktīviem"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/balsheet-eg.scm
 #. src/report/standard-reports/balsheet-eg.scm
@@ -17672,7 +17672,7 @@ msgstr "Rādīt neto peļņu"
 #: ../intl-scm/guile-strings.c:3158
 #: ../intl-scm/guile-strings.c:3630
 msgid "Show Asset & Liability bars"
-msgstr "Rādīt aktīvu un saistību joslas"
+msgstr "Rādīt aktīvu un pasīvu joslas"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/price-scatter.scm
@@ -17697,7 +17697,7 @@ msgstr "Rādīt ieņēmumus un izdevumus?"
 #: ../intl-scm/guile-strings.c:1238
 #: ../intl-scm/guile-strings.c:3170
 msgid "Show the Asset and the Liability bars?"
-msgstr "Rādīt aktīvu un saistību joslas?"
+msgstr "Rādīt aktīvu un pasīvu joslas?"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -17757,7 +17757,7 @@ msgstr "Aktīvi"
 #: ../intl-scm/guile-strings.c:4310
 #: ../intl-scm/guile-strings.c:6512
 msgid "Liabilities"
-msgstr "Saistības"
+msgstr "Pasīvi"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -17803,7 +17803,7 @@ msgstr "Izdevumu diagramma"
 #: ../intl-scm/guile-strings.c:1270
 #: ../intl-scm/guile-strings.c:3202
 msgid "Liability Chart"
-msgstr "Saistību diagramma"
+msgstr "Pasīvu diagramma"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -18004,7 +18004,7 @@ msgstr "Aktīvu diagramma"
 #: ../intl-scm/guile-strings.c:1370
 #: ../intl-scm/guile-strings.c:3302
 msgid "Liability Piechart"
-msgstr "Saistību diagramma"
+msgstr "Pasīvu diagramma"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -18032,7 +18032,7 @@ msgstr "Rāda diagrammu ar aktīviem dotajā laika intervālā"
 #: ../intl-scm/guile-strings.c:1378
 #: ../intl-scm/guile-strings.c:3310
 msgid "Shows a piechart with the Liabilities balance at a given time"
-msgstr "Rāda diagrammu ar saistībām dotajā laika intervālā"
+msgstr "Rāda diagrammu ar pasīviem dotajā laika intervālā"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -18426,7 +18426,7 @@ msgstr "Vienas kolonnas beigu bilance"
 #: ../intl-scm/guile-strings.c:3512
 #: ../intl-scm/guile-strings.c:4220
 msgid "Print liability/equity section in the same column under the assets section as opposed to a second column right of the assets section"
-msgstr "Drukāt saistības/pašu kapitāls nodaļu tajā pašā kolonnā zem aktīvu nodaļas, kas ir pretī otrajai kolonnai pa labi no aktīvu nodaļas."
+msgstr "Drukāt saistības/pašu kapitālu nodaļu tajā pašā kolonnā zem aktīvu nodaļas, kas ir pretī otrajai kolonnai pa labi no aktīvu nodaļas."
 
 #. src/report/standard-reports/gnucash/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-balance-sheet.scm
@@ -18481,7 +18481,7 @@ msgstr "Iekļaut vai neiekļaut rindu kopējo aktīvu norādīšanai"
 #: ../intl-scm/guile-strings.c:3554
 #: ../intl-scm/guile-strings.c:4262
 msgid "Label the liabilities section"
-msgstr "Uzlikt uzrakstu saistību nodaļa"
+msgstr "Uzlikt uzrakstu pasīvu nodaļa"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-balance-sheet.scm
@@ -18492,7 +18492,7 @@ msgstr "Uzlikt uzrakstu saistību nodaļa"
 #: ../intl-scm/guile-strings.c:3556
 #: ../intl-scm/guile-strings.c:4264
 msgid "Whether or not to include a label for the liabilities section"
-msgstr "Iekļaut vai neiekļaut uzrakstu saistību nodaļā"
+msgstr "Iekļaut vai neiekļaut uzrakstu pasīvu nodaļā"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-balance-sheet.scm
@@ -18503,7 +18503,7 @@ msgstr "Iekļaut vai neiekļaut uzrakstu saistību nodaļā"
 #: ../intl-scm/guile-strings.c:3558
 #: ../intl-scm/guile-strings.c:4266
 msgid "Include liabilities total"
-msgstr "Iekļaut saistības kopā"
+msgstr "Iekļaut pasīvu kopā"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-balance-sheet.scm
@@ -18514,7 +18514,7 @@ msgstr "Iekļaut saistības kopā"
 #: ../intl-scm/guile-strings.c:3560
 #: ../intl-scm/guile-strings.c:4268
 msgid "Whether or not to include a line indicating total liabilities"
-msgstr "Iekļaut vai neiekļaut rindu, kas norāda kopējās saistības"
+msgstr "Iekļaut vai neiekļaut rindu, kas norāda kopējos pasīvus"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-balance-sheet.scm
@@ -18580,7 +18580,7 @@ msgstr "Kopā aktīvi"
 #: ../intl-scm/guile-strings.c:3590
 #: ../intl-scm/guile-strings.c:4316
 msgid "Total Liabilities"
-msgstr "Kopā saistības"
+msgstr "Pasīvi kopā"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/balsheet-eg.eguile.scm
@@ -18627,7 +18627,7 @@ msgstr "Kopā pašu kapitāls"
 #: ../intl-scm/guile-strings.c:3608
 #: ../intl-scm/guile-strings.c:4342
 msgid "Total Liabilities & Equity"
-msgstr "Kopā saistības un pašu kapitāls"
+msgstr "Saistības un pašu kapitāls kopā"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/price-scatter.scm
@@ -18945,7 +18945,7 @@ msgstr "Zaudējums"
 #: ../intl-scm/guile-strings.c:1846
 #: ../intl-scm/guile-strings.c:3778
 msgid "Transaction Report"
-msgstr "Grāmatojuma pārskats"
+msgstr "Grāmatojumu pārskats"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19139,7 +19139,7 @@ msgstr "Pārskata stils"
 #: ../intl-scm/guile-strings.c:1986
 #: ../intl-scm/guile-strings.c:3918
 msgid "Multi-Line"
-msgstr "Daudzu rindu"
+msgstr "Daudzas"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19159,7 +19159,7 @@ msgstr "Rādīt N rindas"
 #: ../intl-scm/guile-strings.c:4150
 #: ../intl-scm/guile-strings.c:4620
 msgid "Single"
-msgstr "Vienīgais"
+msgstr "Viena"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19243,7 +19243,7 @@ msgstr "Kā rīkoties ar anulētajiem grāmatojumiem"
 #: ../intl-scm/guile-strings.c:2024
 #: ../intl-scm/guile-strings.c:3956
 msgid "Non-void only"
-msgstr "Ne tikai anulētos"
+msgstr "Tikai netukšos"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19257,7 +19257,7 @@ msgstr "Rādīt tikai neanulētos grāmatojumus"
 #: ../intl-scm/guile-strings.c:2028
 #: ../intl-scm/guile-strings.c:3960
 msgid "Void only"
-msgstr "Anulētos tikai"
+msgstr "Tikai tukšos"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19271,7 +19271,7 @@ msgstr "Rādīt tikai anulētos grāmatojumus"
 #: ../intl-scm/guile-strings.c:2032
 #: ../intl-scm/guile-strings.c:3964
 msgid "Both"
-msgstr "Abi"
+msgstr "Visus"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19362,7 +19362,7 @@ msgstr "Kārtot pēc čeka/grāmatojuma numura"
 #: ../intl-scm/guile-strings.c:2088
 #: ../intl-scm/guile-strings.c:4020
 msgid "Ascending"
-msgstr "Augošs"
+msgstr "Augoši"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19376,7 +19376,7 @@ msgstr "no mazākā uz lielāko, no agrākā uz vēlāko"
 #: ../intl-scm/guile-strings.c:2092
 #: ../intl-scm/guile-strings.c:4024
 msgid "Descending"
-msgstr "Dilstošs"
+msgstr "Dilstoši"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19672,7 +19672,7 @@ msgstr "Rādīt vienu kolonnu"
 #: ../intl-scm/guile-strings.c:4154
 #: ../intl-scm/guile-strings.c:4624
 msgid "Double"
-msgstr "Dubults"
+msgstr "Divas"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
@@ -19704,7 +19704,7 @@ msgstr "Nemainīt nevienu redzamo summu"
 #: ../intl-scm/guile-strings.c:2234
 #: ../intl-scm/guile-strings.c:4166
 msgid "Income and Expense"
-msgstr "Ieņēmumi un izdevumi"
+msgstr "Ieņēmumiem un izdevumiem"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19718,14 +19718,14 @@ msgstr "Rādīt reversu summu ieņēmumu un izdevumu kontiem"
 #: ../intl-scm/guile-strings.c:2238
 #: ../intl-scm/guile-strings.c:4170
 msgid "Credit Accounts"
-msgstr "Kredīta konti"
+msgstr "Kredīta kontiem"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2240
 #: ../intl-scm/guile-strings.c:4172
 msgid "Reverse amount display for Liability, Payable, Equity, Credit Card, and Income accounts"
-msgstr "Rādīt reversu summu Saistību, Apmaksas, Pašu kapitāla, Kredītkaršu un Ieņēmumu kontiem"
+msgstr "Rādīt reversu summu Pasīvu, Apmaksas, Pašu kapitāla, Kredītkaršu un Ieņēmumu kontiem"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -19941,14 +19941,14 @@ msgstr "Nepiešķirtie aktīvi"
 #: ../intl-scm/guile-strings.c:2380
 #: ../intl-scm/guile-strings.c:4312
 msgid "Existing Liabilities"
-msgstr "Esošās saistības"
+msgstr "Esošie pasīvi"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2382
 #: ../intl-scm/guile-strings.c:4314
 msgid "New Liabilities"
-msgstr "Jaunas saistības"
+msgstr "Jauni pasīvi"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -20275,7 +20275,7 @@ msgstr "Aktīvi kopā"
 #: ../intl-scm/guile-strings.c:2700
 #: ../intl-scm/guile-strings.c:4652
 msgid "Total Value Credits"
-msgstr "Saistības kopā"
+msgstr "Pasīvi kopā"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #. src/report/standard-reports/register.scm
@@ -20380,7 +20380,7 @@ msgstr "Apkopot budžeta summa uz vecāku"
 #: ../intl-scm/guile-strings.c:2752
 #: ../intl-scm/guile-strings.c:4704
 msgid "If parent account does not have its own budget value, use the sum of the child account budget values"
-msgstr "Ja vecāka kontam nav savas budžeta vērtības, izmantot bērnu kontu summas"
+msgstr "Ja vecāka kontam nav savas budžeta vērtības, izmantot apakškontu summas"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget.scm
 #. src/report/standard-reports/budget.scm
@@ -20408,7 +20408,7 @@ msgstr "Saspiest iepriekšējos/vēlākos periodus"
 #: ../intl-scm/guile-strings.c:2760
 #: ../intl-scm/guile-strings.c:4712
 msgid "Accumulate columns for periods before and after the current period to allow focus on the current period."
-msgstr "Apvienot periodu kolonnas pirms un pēc tekošā perioda, lai ļautu pievērsties tekošajam periodam."
+msgstr "Apvienot periodu kolonnas pirms un pēc pašreizējā perioda, lai ļautu pievērsties tekošajam periodam."
 
 #. src/report/standard-reports/gnucash/report/standard-reports/budget.scm
 #. src/report/standard-reports/budget.scm
@@ -20451,7 +20451,7 @@ msgstr "Aktīvu konti"
 #: ../intl-scm/guile-strings.c:2784
 #: ../intl-scm/guile-strings.c:4348
 msgid "Liability Accounts"
-msgstr "Saistību konti"
+msgstr "Pasīvu konti"
 
 #. src/report/standard-reports/gnucash/report/balsheet-eg.eguile.scm
 #. src/report/standard-reports/balsheet-eg.eguile.scm
@@ -20474,7 +20474,7 @@ msgstr "Pārdošanas konti"
 #: ../intl-scm/guile-strings.c:2794
 #: ../intl-scm/guile-strings.c:4358
 msgid "Total Equity, Trading, and Liabilities"
-msgstr "Kopējie aktīvi, kapitāli un saistības"
+msgstr "Kopējie aktīvi, kapitāli un pasīvi"
 
 #. src/report/standard-reports/gnucash/report/balsheet-eg.eguile.scm
 #. src/report/standard-reports/balsheet-eg.eguile.scm
@@ -22595,7 +22595,7 @@ msgstr "Nevar saglabāt stila lapu"
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:6800
 msgid "_Assets & Liabilities"
-msgstr "_Aktīvi un saistības"
+msgstr "_Aktīvi un pasīvi"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:6802
@@ -24022,12 +24022,12 @@ msgstr "Noklusētā nodokļu tabula klientiem."
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7816
 msgid "Default Vendor TaxTable"
-msgstr "Noklusētā pārdevēja nodokļu tabula"
+msgstr "Noklusētā piegādātāja nodokļu tabula"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7818
 msgid "The default tax table to apply to vendors."
-msgstr "Noklusētā nodokļu tabula pārdevējiem."
+msgstr "Noklusētā nodokļu tabula piegādātājiem."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:7820
@@ -24894,7 +24894,7 @@ msgstr "0-> LVL999,999.99, A->Z"
 #: ../intl-scm/guile-strings.c:8072
 #: ../intl-scm/guile-strings.c:8310
 msgid "Decreasing"
-msgstr "Dilstošs"
+msgstr "Dilstoši"
 
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/gnucash/report/aging.scm
@@ -24915,7 +24915,7 @@ msgstr "Rādīt visu valūtu kopējo summu. Ja nav atlasīts, konvertēt visas k
 #: ../intl-scm/guile-strings.c:8078
 #: ../intl-scm/guile-strings.c:8316
 msgid "Show all vendors/customers even if they have a zero balance."
-msgstr "Rādīt visus pārdevējus/klientus, pat, ja  ir 0 atlikums."
+msgstr "Rādīt visus piegādātājus/klientus, pat, ja  ir 0 atlikums."
 
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/gnucash/report/aging.scm
@@ -25473,7 +25473,7 @@ msgstr "Klienta pārskats"
 #: ../intl-scm/guile-strings.c:8848
 #: ../intl-scm/guile-strings.c:9598
 msgid "Vendor Report"
-msgstr "Pārdevēja pārskats"
+msgstr "Piegādātāja pārskats"
 
 #. src/business/business-reports/gnucash/report/owner-report.scm
 #. src/business/business-reports/owner-report.scm
@@ -25808,9 +25808,9 @@ msgstr "Ir tāda teorija, ka, ja reiz kāds atklās, kam domāts Visums un, kād
 #~ msgid "Defaults"
 #~ msgstr "Noklusējumi"
 #~ msgid "Start of this fiscal year"
-#~ msgstr "Sākt no šī fiskālā gada"
+#~ msgstr "Pašreizējā fiskālā gada sākums"
 #~ msgid "Start of previous fiscal year"
-#~ msgstr "Sākt no iepriekšējā fiskālā gada"
+#~ msgstr "Iepriekšējā fiskālā gada sākums"
 #~ msgid "End of this fiscal year"
 #~ msgstr "Šī finanšu gada beigas"
 #~ msgid "End of previous fiscal year"
@@ -25910,9 +25910,9 @@ msgstr "Ir tāda teorija, ka, ja reiz kāds atklās, kam domāts Visums un, kād
 #~ msgid "Export one or more customers to QSF"
 #~ msgstr "Eksportēt vienu vai vairākus klientus uz QSF"
 #~ msgid "QSF _Vendor..."
-#~ msgstr "QSF _Pārdevējs..."
+#~ msgstr "QSF _Piegādātājs..."
 #~ msgid "Export one or more vendors to QSF"
-#~ msgstr "Eksportēt vienu vai vairākus pārdevējus uz QSF"
+#~ msgstr "Eksportēt vienu vai vairākus piegādātājus uz QSF"
 #~ msgid "QSF _Employee..."
 #~ msgstr "QSF _Darbinieks..."
 #~ msgid "Export one or more employees to QSF"
@@ -25922,7 +25922,7 @@ msgstr "Ir tāda teorija, ka, ja reiz kāds atklās, kam domāts Visums un, kād
 #~ msgid "Export Customers to XML"
 #~ msgstr "Eksportēt klientus uz XML"
 #~ msgid "Export Vendors to XML"
-#~ msgstr "Eksportēt pārdevējus uz XML"
+#~ msgstr "Eksportēt piegādātājus uz XML"
 #~ msgid "Export Employees to XML"
 #~ msgstr "Eksportēt darbiniekus uz XML"
 #~ msgid "Export Chart of Accounts to QSF XML"
