@@ -96,7 +96,7 @@
  *    routine, except that the new file to open is passed as a char *
  *    argument.
  *
- * The gnc_file_export_file() routine will check for an existing edit
+ * The gnc_file_export() routine will check for an existing edit
  *    session, and if one exists, it will save just the commodities
  *    and accounts to a file.  If an error occurs, a popup dialogue
  *    will inform the user of the error.
@@ -125,8 +125,10 @@ typedef enum
 
 void gnc_file_new (void);
 gboolean gnc_file_open (void);
+void gnc_file_export(void);
 void gnc_file_save (void);
 void gnc_file_save_as (void);
+void gnc_file_do_export(const char* filename);
 void gnc_file_do_save_as(const char* filename);
 
 /** Tell the user about errors in the backends
@@ -142,7 +144,6 @@ char * gnc_file_dialog (const char * title,
                         GNCFileDialogType type);
 
 gboolean gnc_file_open_file (const char *filename);
-void gnc_file_export_file(const char * filename);
 
 gboolean gnc_file_query_save (gboolean can_cancel);
 

@@ -427,7 +427,11 @@ gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowAction
     g_return_if_fail (data != NULL);
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-    gnc_file_export_file (NULL);
+#ifdef HAVE_DBI_DBI_H
+    gnc_ui_file_access_for_export();
+#else
+    gnc_file_export ();
+#endif
     gnc_window_set_progressbar_window (NULL);
     /* FIXME GNOME 2 Port (update the title etc.) */
     /* gnc_refresh_main_window_info (); */

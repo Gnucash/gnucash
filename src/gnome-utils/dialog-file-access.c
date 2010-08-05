@@ -41,6 +41,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #define DEFAULT_DATABASE "gnucash"
 #define FILE_ACCESS_OPEN    0
 #define FILE_ACCESS_SAVE_AS 1
+#define FILE_ACCESS_EXPORT  2
 
 typedef struct FileAccessWindow
 {
@@ -135,6 +136,10 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
         else if ( faw->type == FILE_ACCESS_SAVE_AS )
         {
             gnc_file_do_save_as( url );
+        }
+        else if ( faw->type == FILE_ACCESS_EXPORT )
+        {
+            gnc_file_do_export( url );
         }
         break;
 
@@ -244,7 +249,7 @@ gnc_ui_file_access( int type )
     const gchar* default_db;
     const gchar *button_label = NULL;
 
-    g_return_if_fail( type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS );
+    g_return_if_fail( type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS || type == FILE_ACCESS_EXPORT );
 
     faw = g_new0(FileAccessWindow, 1);
     g_return_if_fail( faw != NULL );
@@ -277,6 +282,12 @@ gnc_ui_file_access( int type )
 
     case FILE_ACCESS_SAVE_AS:
         gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Save As..."));
+        button_label = "gtk-save-as";
+        fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
+        break;
+
+    case FILE_ACCESS_EXPORT:
+        gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Export"));
         button_label = "gtk-save-as";
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
         break;
@@ -409,4 +420,11 @@ void
 gnc_ui_file_access_for_save_as( void )
 {
     gnc_ui_file_access( FILE_ACCESS_SAVE_AS );
+}
+
+
+void
+gnc_ui_file_access_for_export( void )
+{
+    gnc_ui_file_access( FILE_ACCESS_EXPORT );
 }

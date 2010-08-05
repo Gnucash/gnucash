@@ -889,27 +889,113 @@ gnc_file_open_file (const char * newfile)
     return gnc_post_file_open (newfile);
 }
 
+/* Note: this dialog will only be used when dbi is not enabled
+ *       paths used in it always refer to files and are
+ *       never db uris
+ */
 void
-gnc_file_export_file(const char * newfile)
+gnc_file_export (void)
+{
+    QofSession *new_session;
+    QofSession *session;
+    const char *filename;
+    char *default_dir = NULL;        /* Default to last open */
+    char *last;
+    char *newfile;
+    const char *oldfile;
+    QofBackendError io_err = ERR_BACKEND_NO_ERR;
+
+    ENTER(" ");
+
+    last = gnc_history_get_last();
+    if ( last && gnc_uri_is_file_uri ( last ) )
+    {
+        gchar *filepath = gnc_uri_get_path ( last );
+        default_dir = g_path_get_dirname( filepath );
+        g_free ( filepath );
+    }
+    else
+    {
+        default_dir = gnc_get_default_directory(GCONF_SECTION);
+    }
+    filename = gnc_file_dialog (_("Save"), NULL, default_dir,
+                                GNC_FILE_DIALOG_SAVE);
+    g_free ( last );
+    g_free ( default_dir );
+    if (!filename) return;
+
+    gnc_file_do_export( filename );
+
+    LEAVE (" ");
+}
+
+void
+gnc_file_do_export(const char * filename)
 {
     QofSession *current_session, *new_session;
     gboolean ok;
     QofBackendError io_err = ERR_BACKEND_NO_ERR;
-    gchar *default_dir;
+    gchar *default_dir = NULL;
+    gchar *norm_file;
+    gchar *newfile;
+    const gchar *oldfile;
 
-    if (!newfile)
+    gchar *protocol = NULL;
+    gchar *hostname = NULL;
+    gchar *username = NULL;
+    gchar *password = NULL;
+    gchar *path = NULL;
+    gint32 port = 0;
+
+    ENTER(" ");
+
+    /* Convert user input into a normalized uri
+     * Note that the normalized uri for internal use can have a password */
+    norm_file = gnc_uri_normalize_uri ( filename, TRUE );
+    if (!norm_file)
     {
-        default_dir = gnc_get_default_directory (GCONF_SECTION);
-        newfile =  gnc_file_dialog (_("Export"), NULL, default_dir, GNC_FILE_DIALOG_EXPORT);
-        g_free(default_dir);
-        if (!newfile)
-            return;
+        show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename,
+                            GNC_FILE_DIALOG_EXPORT);
+        return;
     }
 
-    /* Remember the directory as the default. */
-    default_dir = g_path_get_dirname(newfile);
-    gnc_set_default_directory (GCONF_SECTION, default_dir);
-    g_free(default_dir);
+    newfile = gnc_uri_add_extension (norm_file, GNC_DATAFILE_EXT);
+    g_free (norm_file);
+    gnc_uri_get_components (newfile, &protocol, &hostname,
+                            &port, &username, &password, &path);
+
+    /* Save As can't use the generic 'file' protocol. If the user didn't set
+     * a specific protocol, assume the default 'xml'.
+     */
+    if (g_strcmp0 (protocol,"file") == 0)
+    {
+        g_free (protocol);
+        protocol = g_strdup ("xml");
+        norm_file = gnc_uri_create_uri (protocol, hostname, port,
+                                        username, password, path);
+        g_free (newfile);
+        newfile = norm_file;
+    }
+
+    /* For file based uri's, remember the directory as the default. */
+    if (gnc_uri_is_file_protocol(protocol))
+    {
+        default_dir = g_path_get_dirname(path);
+        gnc_set_default_directory (GCONF_SECTION, default_dir);
+        g_free(default_dir);
+    }
+
+    /* Check to see if the user specified the same file as the current
+     * file. If so, prevent the export from happening to avoid killing this file */
+    current_session = gnc_get_current_session ();
+    oldfile = qof_session_get_url(current_session);
+    if (oldfile && (strcmp(oldfile, newfile) == 0))
+    {
+        g_free (newfile);
+        show_session_error (ERR_FILEIO_WRITE_ERROR, filename,
+                            GNC_FILE_DIALOG_EXPORT);
+        return;
+    }
 
     qof_event_suspend();
 
@@ -949,7 +1035,6 @@ gnc_file_export_file(const char * newfile)
 
     /* use the current session to save to file */
     gnc_set_busy_cursor (NULL, TRUE);
-    current_session = gnc_get_current_session();
     gnc_window_show_progress(_("Exporting file..."), 0.0);
     ok = qof_session_export (new_session, current_session,
                              gnc_window_show_progress);
@@ -1066,11 +1151,11 @@ gnc_file_do_save_as (const char* filename)
 {
     QofSession *new_session;
     QofSession *session;
-    char *default_dir = NULL;        /* Default to last open */
-    char *last;
-    char *norm_file;
-    char *newfile;
-    const char *oldfile;
+    gchar *default_dir = NULL;        /* Default to last open */
+    gchar *last;
+    gchar *norm_file;
+    gchar *newfile;
+    const gchar *oldfile;
 
     gchar *protocol = NULL;
     gchar *hostname = NULL;
@@ -1098,6 +1183,27 @@ gnc_file_do_save_as (const char* filename)
     g_free (norm_file);
     gnc_uri_get_components (newfile, &protocol, &hostname,
                             &port, &username, &password, &path);
+
+    /* Save As can't use the generic 'file' protocol. If the user didn't set
+     * a specific protocol, assume the default 'xml'.
+     */
+    if (g_strcmp0 (protocol,"file") == 0)
+    {
+        g_free (protocol);
+        protocol = g_strdup ("xml");
+        norm_file = gnc_uri_create_uri (protocol, hostname, port,
+                                        username, password, path);
+        g_free (newfile);
+        newfile = norm_file;
+    }
+
+    /* For file based uri's, remember the directory as the default. */
+    if (gnc_uri_is_file_protocol(protocol))
+    {
+        default_dir = g_path_get_dirname(path);
+        gnc_set_default_directory (GCONF_SECTION, default_dir);
+        g_free(default_dir);
+    }
 
     /* Check to see if the user specified the same file as the current
      * file. If so, then just do a simple save, instead of a full save as */
