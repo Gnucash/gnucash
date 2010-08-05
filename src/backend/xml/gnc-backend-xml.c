@@ -836,6 +836,10 @@ gnc_xml_be_remove_old_files(FileBackend *be)
         name = g_build_filename(be->dirname, dent, (gchar*)NULL);
         len = strlen(name) - 4;
 
+        /* Never remove the current data file itself */
+        if (g_strcmp0(name, be->fullpath) == 0)
+            continue;
+
         /* Is this file associated with the current data file */
         if (strncmp(name, be->fullpath, pathlen) == 0)
         {
