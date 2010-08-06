@@ -250,7 +250,7 @@ gnc_ui_file_access( int type )
     gint active_access_method_index = -1;
     const gchar* default_db;
     const gchar *button_label = NULL;
-    const gchar *gconf_section;
+    const gchar *gconf_section = NULL;
     gchar *last;
     gchar *starting_dir = NULL;
 
