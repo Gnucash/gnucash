@@ -117,12 +117,11 @@
             (lambda (section name)
                 (gnc:option-value (gnc:lookup-option options section name))))
         (negative-red? (opt-val "Fonts" "Negative Values in Red"))
-        (alt-lines? (opt-val "General" "Enable Alternate Line Shading"))
-        (alt-line-bgcolor
+        (alternate-row-color
          (gnc:color-option->html
           (gnc:lookup-option options
-                     "General"
-                     "Alternate Line Background Color")))
+                     "Colors"
+                     "Alternate Table Cell Color")))
         (title-font-info (font-name-to-style-info (opt-val "Fonts" "Title")))
         (account-link-font-info (font-name-to-style-info (opt-val "Fonts" "Account link")))
         (number-cell-font-info (font-name-to-style-info (opt-val "Fonts" "Number cell")))
@@ -138,7 +137,7 @@
                 "h3 { " title-font-info " }\n"
                 "a { " account-link-font-info " }\n"
                 "body, p, table, tr, td { text-align: left; " text-cell-font-info " }\n"
-                "tr.alternate-row { " (if alt-lines? (string-append "background: " alt-line-bgcolor "; ") "") " }\n"
+                "tr.alternate-row { background: " alternate-row-color " }\n"
                 "th.column-heading-left { text-align: left; " number-header-font-info " }\n"
                 "th.column-heading-center { text-align: center; " number-header-font-info " }\n"
                 "th.column-heading-right { text-align: right; " number-header-font-info " }\n"

@@ -58,30 +58,25 @@
            (N_ "Enable Links") "c" (N_ "Enable hyperlinks in reports.")
            #t))
          (opt-register
-          (gnc:make-simple-boolean-option
-           (N_ "General")
-           (N_ "Enable Alternate Line Shading") "d" (N_ "Enable different color for alternate lines in reports.")
-           #f))
-         (opt-register
           (gnc:make-color-option
-           (N_ "General")
-           (N_ "Alternate Line Background Color") "e" (N_ "Background color for alternate lines.")
+           (N_ "Colors")
+           (N_ "Alternate Table Cell Color") "a" (N_ "Background color for alternate lines.")
            (list #xff #xff #xff 0)
            255 #f))
          (opt-register
           (gnc:make-number-range-option
            (N_ "Tables")
-           (N_ "Table cell spacing") "c" (N_ "Space between table cells")
+           (N_ "Table cell spacing") "a" (N_ "Space between table cells")
            0 0 20 0 1))
          (opt-register
           (gnc:make-number-range-option
            (N_ "Tables")
-           (N_ "Table cell padding") "d" (N_ "Space between table cell edge and cell content")
+           (N_ "Table cell padding") "b" (N_ "Space between table cell edge and cell content")
            4 0 20 0 1))
          (opt-register
           (gnc:make-number-range-option
            (N_ "Tables")
-           (N_ "Table border width") "e" (N_ "Bevel depth on tables")
+           (N_ "Table border width") "c" (N_ "Bevel depth on tables")
            0 0 20 0 1))
          (register-font-options options)
 
@@ -101,12 +96,11 @@
                   "Background Color")))
      (bgpixmap (opt-val "General" "Background Pixmap"))
      (links? (opt-val "General" "Enable Links"))
-     (alt-lines? (opt-val "General" "Enable Alternate Line Shading"))
-     (alt-line-bgcolor
+     (alternate-row-color
       (gnc:color-option->html
        (gnc:lookup-option options
-                  "General"
-                  "Alternate Line Background Color")))
+                  "Colors"
+                  "Alternate Table Cell Color")))
      (spacing (opt-val "Tables" "Table cell spacing"))
      (padding (opt-val "Tables" "Table cell padding"))
      (border (opt-val "Tables" "Table border width"))
@@ -197,15 +191,11 @@
        ssdoc "normal-row"
        'tag "tr")
 
-    (if alt-lines?
-        (gnc:html-document-set-style!
-         ssdoc "alternate-row"
-         'attribute (list "bgcolor" alt-line-bgcolor)
-         'tag "tr")
-        (gnc:html-document-set-style!
-         ssdoc "alternate-row"
-         'attribute (list "bgcolor" bgcolor)
-         'tag "tr"))
+    (gnc:html-document-set-style!
+       ssdoc "alternate-row"
+       'tag "tr"
+       'attribute (list "bgcolor" alternate-row-color))
+
     (gnc:html-document-set-style!
      ssdoc "primary-subheading"
      'attribute (list "bgcolor" bgcolor)

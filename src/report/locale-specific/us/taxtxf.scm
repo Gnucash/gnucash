@@ -369,59 +369,15 @@
   (string-append (substring (string-append str (make-string len #\space))
                             0 len)))
 
-(define (render-header-row table heading-line-text beg-bal beg-bal-txt
-                                                    curr-conv-data beg-bal-neg?)
+(define (render-header-row table heading-line-text)
   (let ((heading (gnc:make-html-text)))
        (gnc:html-text-append! heading (gnc:html-markup-b heading-line-text)) 
        (let ((heading-cell (gnc:make-html-table-cell/markup
                                                    "header-just-top" heading)))
-            (if beg-bal
-                (let ((beg-bal-cell (gnc:make-html-table-cell/markup
-                                                     "number-cell-bot" beg-bal-txt))
-                      (amount-table (gnc:make-html-table))) ;;to line up to details
-                     (if (caddr curr-conv-data)
-                         (begin
-                           (gnc:html-table-cell-append-objects!
-                                beg-bal-cell
-                                (gnc:html-price-anchor
-                                                     (caddr curr-conv-data) #f))
-                           (gnc:html-table-cell-append-objects!
-                                beg-bal-cell
-                                (string-append (car (cdddr curr-conv-data)) ":"))
-                         )
-                         #f)
-                     (gnc:html-table-cell-set-colspan! heading-cell 4)
-                     (gnc:html-table-set-style! amount-table "table" 
-                                          'attribute (list "border" "0")
-                                          'attribute (list "cellspacing" "0")
-                                          'attribute (list "cellpadding" "0")
-                                          'attribute (list "width" "100%"))
-                     (let ((beg-bal-amnt (if (gnc-html-engine-supports-css)
-                                             (if beg-bal-neg?
-                                                (gnc:make-html-table-cell/markup
-                                                  "number-cell-bot-neg" beg-bal)
-                                                (gnc:make-html-table-cell/markup
-                                                  "number-cell-bot" beg-bal))
-                                             (gnc:make-html-table-cell/markup
-                                               "number-cell-bot" beg-bal)))
-                          )
-                          (gnc:html-table-append-row! amount-table beg-bal-amnt)
-                     )
-                     (gnc:html-table-append-row!
-                          table
-                          (append (list heading-cell)
-                                  (list beg-bal-cell)
-                                  (list (gnc:make-html-table-cell/markup
-                                           "number-cell-bot" amount-table))))
-                )
-                (begin
-                  (gnc:html-table-cell-set-colspan! heading-cell 5)
-                  (gnc:html-table-append-row!
+            (gnc:html-table-cell-set-colspan! heading-cell 6)
+            (gnc:html-table-append-row!
                    table
-                   (append (list heading-cell)
-                           (list (gnc:make-html-table-cell "&nbsp; &nbsp;")))
-                  )
-                )
+                   (list heading-cell)
             )
        )
   )
@@ -443,11 +399,8 @@
                              "Notes/Action:Memo")))
                (list (gnc:make-html-table-header-cell/markup
                           "column-heading-center" "Transfer To/From Account(s)"))
-               (list (if beg-bal?
-                         (gnc:make-html-table-header-cell
-                              (string-append ""))
-                         (gnc:make-html-table-header-cell/markup
-                              "column-heading-center" "Amount")))
+               (list (gnc:make-html-table-header-cell/markup
+                              "column-heading-center" "Amount"))
        )
   )
 )
@@ -890,14 +843,14 @@
                                                            (gnc-numeric-neg
                                                      trans-rpt-currency-total)))
                          (plug-amnt (if (gnc-html-engine-supports-css)
-                                       (if (gnc-numeric-negative-p plug-amnt)
-                                           (gnc:make-html-table-cell/markup
+                                        (if (gnc-numeric-negative-p plug-amnt)
+                                            (gnc:make-html-table-cell/markup
                                                          "number-cell-bot-neg"
                                                          plug-amnt)
-                                           (gnc:make-html-table-cell/markup
+                                            (gnc:make-html-table-cell/markup
                                                          "number-cell-bot"
                                                          plug-amnt))
-                                       (gnc:make-html-table-cell/markup
+                                        (gnc:make-html-table-cell/markup
                                                      "number-cell-bot"
                                                      plug-amnt)))
                         )
@@ -974,6 +927,12 @@
     )
     (acct-collector 'reset #f #f)  ;initialize to zero for this account
     (acct-collector-as-dr 'reset #f #f)  ;initialize to zero for this account
+    (if (and transaction-details? tax-mode?)
+        (begin ;; print account header for all accts
+          (render-header-row table (string-append
+                                    "&nbsp; &nbsp; &nbsp; &nbsp;" account-desc))
+          (render-account-detail-header-row table suppress-action-memo? #f)
+        ))
     (if (not (or (eq? account-type ACCT-TYPE-INCOME)
                  (eq? account-type ACCT-TYPE-EXPENSE)))
         (begin ;; set beginning amount for B/S accts
@@ -993,7 +952,7 @@
                   (not (gnc-numeric-zero-p (cadr (acct-end-bal-collector
                                                'getpair account-commodity #f))))
               );; B/S acct with either beg bal, splits or end bal
-              ;; print account header for B/S accts
+              ;; print beg bal line for B/S accts
               (let* ((curr-conv-note "")
                      (curr-conv-data (list beg-bal-acct-curr
                                                           curr-conv-note #f ""))
@@ -1047,56 +1006,77 @@
                         )
                      )
                     )
-                    (if tax-mode?
-                        (begin
-                          (if (or (txf-beg-bal-only? tax-code)
-                                  transaction-details?)
-                              (render-header-row table (string-append
-                                                   "&nbsp; &nbsp; &nbsp; &nbsp;"
-                                                   (if (and (txf-beg-bal-only?
-                                                                       tax-code)
-                                                            (not
-                                                          transaction-details?))
-                                                       (if (not
-                                                            (gnc-commodity-equiv
-                                                               account-commodity
-                                                                  USD-currency))
-                                                           (string-append
-                                                              account-desc
-                                                              " ("
-                                                              amnt-acct-curr
-                                                              "  In "
-                                                    (gnc-commodity-get-mnemonic
-                                                              account-commodity)
-                                                              ") ")
-                                                           account-desc)
-                                                       account-desc))
-                                                   account-beg-amnt
-                                                   account-beg-bal-line-text
-                                                   curr-conv-data
-                                                   (if (gnc-numeric-negative-p
-                                                                     print-amnt)
-                                                       #t
-                                                       #f)))
-                          (if (and (not (txf-beg-bal-only? tax-code))
-                                   (> (length split-list) 0)
-                                   transaction-details?)
-                              (render-account-detail-header-row table
-                                                      suppress-action-memo? #t))
-                        ))
+                    (if (and transaction-details? tax-mode?)
+                        ;; print beg bal line line
+                        (let ((beg-bal-cell (gnc:make-html-table-cell/markup
+                                                     "number-cell-bot"
+                                                     account-beg-bal-line-text))
+                              (beg-bal-neg?
+                                       (if (gnc-numeric-negative-p print-amnt)
+                                           #t
+                                           #f))
+                              ;;to line up to details
+                              (amount-table (gnc:make-html-table)))
+                             (if (caddr curr-conv-data)
+                                 (begin
+                                   (gnc:html-table-cell-append-objects!
+                                        beg-bal-cell
+                                        (gnc:html-price-anchor
+                                                     (caddr curr-conv-data) #f))
+                                   (gnc:html-table-cell-append-objects!
+                                        beg-bal-cell
+                                        (string-append
+                                              (car (cdddr curr-conv-data)) ":"))
+                                 )
+                                 #f)
+                             (gnc:html-table-cell-set-colspan! beg-bal-cell 5)
+                             (gnc:html-table-set-style! amount-table "table" 
+                                          'attribute (list "border" "0")
+                                          'attribute (list "cellspacing" "0")
+                                          'attribute (list "cellpadding" "0")
+                                          'attribute (list "width" "100%"))
+                             (let ((beg-bal-amnt
+                                       (if (gnc-html-engine-supports-css)
+                                           (if beg-bal-neg?
+                                               (gnc:make-html-table-cell/markup
+                                                     "number-cell-bot-neg"
+                                                     account-beg-amnt)
+                                               (gnc:make-html-table-cell/markup
+                                                     "number-cell-bot"
+                                                     account-beg-amnt))
+                                           (gnc:make-html-table-cell/markup
+                                                 "number-cell-bot"
+                                                 account-beg-amnt)))
+                                  )
+                                  (gnc:html-table-append-row!
+                                                      amount-table beg-bal-amnt)
+                             )
+                             (gnc:html-table-append-row/markup!
+                                        table
+                                        (if shade-alternate-transactions?
+                                            (if shade-this-line?
+                                                (begin
+                                                  (set! shade-this-line? #f)
+                                                  "tran-detail-shade"
+                                                )
+                                                (begin
+                                                  (set! shade-this-line? #t)
+                                                  "tran-detail"
+                                                ))
+                                            "tran-detail")
+                                        (append (list beg-bal-cell)
+                                                (list
+                                                (gnc:make-html-table-cell/markup
+                                                      "number-cell-bot"
+                                                      amount-table))))
+                        )
+                    );; end of if
                     (set! account-USD-total (gnc-numeric-add-fixed
                                                   account-USD-total print-amnt))
               );; end of let*
           );; end of if
         );; end of begin
-        (begin ;; print account header with no beginning amount for P/L accts
-          (if (and transaction-details? tax-mode?)
-              (begin
-                (render-header-row table (string-append
-                        "&nbsp; &nbsp; &nbsp; &nbsp;" account-desc) #f #f #f #f)
-                (render-account-detail-header-row table suppress-action-memo? #f)
-              ))
-        ) ;; end of begin
+        #f
     ) ;; end of if
     (if (and (> (length split-list) 0)
              (not (txf-beg-bal-only? tax-code)))
@@ -1391,25 +1371,31 @@
                                                     ") ")
                                      "")))
               )
-              (if (not (txf-beg-bal-only? tax-code))
-                  (render-total-row table
-                                    account-total-amount
-                                    account-total-line-text
+              (render-total-row table
+                                account-total-amount
+                                account-total-line-text
+                                #f
+                                transaction-details?
+                                (if (or (eq? account-type ACCT-TYPE-INCOME)
+                                        (eq? account-type ACCT-TYPE-EXPENSE))
                                     #f
-                                    transaction-details?
-                                    (if (or (eq? account-type ACCT-TYPE-INCOME)
-                                            (eq? account-type ACCT-TYPE-EXPENSE))
-                                        #f
+                                    (if (txf-beg-bal-only? tax-code)
                                         (string-append "Balance on "
-                                                   (strftime "%Y-%b-%d"
+                                           (strftime "%Y-%b-%d" (localtime (car
+                                                (gnc:timepair-previous-day
+                                                                  from-value))))
+                                           " For "
+                                        )
+                                        (string-append "Balance on "
+                                           (strftime "%Y-%b-%d"
                                                      (localtime (car to-value)))
-                                                   " For "
+                                           " For "
                                         )
                                     )
-                                    (if (gnc-numeric-negative-p account-USD-total)
-                                        #t
-                                        #f)
-                  )
+                                )
+                                (if (gnc-numeric-negative-p account-USD-total)
+                                    #t
+                                    #f)
               )
         ) ;; end of let*
     ) ;; end of if
@@ -1747,6 +1733,7 @@
                     (gnc:date-option-absolute-time 		       
                      (get-option gnc:pagename-general "To"))))
          (alt-period (get-option gnc:pagename-general "Alternate Period"))
+         (selected-style-sheet (get-option gnc:pagename-general "Stylesheet"))
          (suppress-0? (get-option gnc:pagename-display 
                                  "Suppress $0.00 values"))
          (full-names? (not (get-option gnc:pagename-display
@@ -1974,8 +1961,7 @@
                         (begin
                            (if need-form-line-acct-header?
                                (begin
-                                 (render-header-row table
-                                                form-line-acct-text #f #f #f #f)
+                                 (render-header-row table form-line-acct-text)
                                  (set! form-line-acct-header-printed? #t)
                                )
                            )
@@ -1983,7 +1969,7 @@
                                (begin
                                  (if (not (string=? current-form-schedule ""))
                                      (render-header-row table
-                                              current-form-schedule #f #f #f #f)
+                                                          current-form-schedule)
                                  )
                                  (set! form-schedule-header-printed? #t)
                                )
@@ -1992,7 +1978,7 @@
                                (begin
                                  (render-header-row table
                                        (string-append "&nbsp; &nbsp;"
-                                             tax-code-heading-text) #f #f #f #f)
+                                                         tax-code-heading-text))
                                  (set! tax-code-header-printed? #t)
                                )
                            )
@@ -2050,15 +2036,14 @@
                         (begin
                            (if need-form-line-acct-header?
                                (begin
-                                  (render-header-row table form-line-acct-text
-                                                                    #f #f #f #f)
+                                  (render-header-row table form-line-acct-text)
                                   (set! form-line-acct-header-printed? #t)
                                )
                            )
                            (if need-form-schedule-header?
                                (begin
                                   (render-header-row table
-                                              current-form-schedule #f #f #f #f)
+                                                          current-form-schedule)
                                   (set! form-schedule-header-printed? #t)
                                )
                            )
@@ -2647,49 +2632,109 @@
           #f) ;;end of if
           (begin  ; else do tax report
              (if (gnc-html-engine-supports-css)
-                 (begin
-                  (gnc:html-document-set-style!
-                   doc "header-just-top"
-                   'tag "th"
-                   'attribute (list "class" "column-heading-left")
-                   'attribute (list "valign" "top"))
+                 (if (eq? selected-style-sheet 'Default)
+                     (begin ;; this is for webkit: default
+                      (gnc:html-document-set-style!
+                       doc "header-just-top"
+                       'tag "th"
+                       'attribute (list "class" "column-heading-left")
+                       'attribute (list "valign" "top"))
 
-                  (gnc:html-document-set-style!
-                   doc "header-just-bot"
-                   'tag "th"
-                   'attribute (list "class" "column-heading-left")
-                   'attribute (list "valign" "bottom"))
+                      (gnc:html-document-set-style!
+                       doc "header-just-bot"
+                       'tag "th"
+                       'attribute (list "class" "column-heading-left")
+                       'attribute (list "valign" "bottom"))
 
-                  (gnc:html-document-set-style!
-                   doc "tran-detail"
-                   'tag "tr"
-                   'attribute (list "class" "normal-row")
-                   'attribute (list "valign" "top"))
+                      (gnc:html-document-set-style!
+                       doc "tran-detail"
+                       'tag "tr"
+                       'attribute (list "class" "normal-row")
+                       'attribute (list "valign" "top"))
 
-                  (gnc:html-document-set-style!
-                   doc "tran-detail-shade"
-                   'tag "tr"
-                   'attribute (list "class" "alternate-row")
-                   'attribute (list "valign" "top"))
+                      (gnc:html-document-set-style!
+                       doc "tran-detail-shade"
+                       'tag "tr"
+                       'attribute (list "class" "alternate-row")
+                       'attribute (list "valign" "top"))
 
-                  (gnc:html-document-set-style!
-                   doc "number-cell-bot"
-                   'tag "td"
-                   'attribute (list "class" "number-cell")
-                   'attribute (list "valign" "bottom"))
+                      (gnc:html-document-set-style!
+                       doc "number-cell-bot"
+                       'tag "td"
+                       'attribute (list "class" "number-cell")
+                       'attribute (list "valign" "bottom"))
 
-                  (gnc:html-document-set-style!
-                   doc "number-cell-bot-neg"
-                   'tag "td"
-                   'attribute (list "class" "number-cell neg")
-                   'attribute (list "valign" "bottom"))
+                      (gnc:html-document-set-style!
+                       doc "number-cell-bot-neg"
+                       'tag "td"
+                       'attribute (list "class" "number-cell neg")
+                       'attribute (list "valign" "bottom"))
 
-                  (gnc:html-document-set-style!
-                   doc "just-bot"
-                   'tag "td"
-                   'attribute (list "valign" "bottom"))
+                      (gnc:html-document-set-style!
+                       doc "just-bot"
+                       'tag "td"
+                       'attribute (list "valign" "bottom"))
+                     )
+                     (begin ;; this is for webkit: easy, footer, technicolor
+                      (gnc:html-document-set-style!
+                       doc "header-just-top"
+                       'tag "th"
+                       'attribute (list "class" "column-heading-left")
+                       'attribute (list "valign" "top"))
+
+                      (gnc:html-document-set-style!
+                       doc "header-just-bot"
+                       'tag "th"
+                       'attribute (list "class" "column-heading-left")
+                       'attribute (list "valign" "bottom"))
+
+                      (gnc:html-document-set-style!
+                       doc "column-heading-center"
+                       'tag "th"
+                       'attribute (list "class" "column-heading-center")
+                       'attribute (list "valign" "bottom"))
+
+                      (gnc:html-document-set-style!
+                       doc "column-heading-right"
+                       'tag "th"
+                       'attribute (list "class" "column-heading-right")
+                       'attribute (list "valign" "bottom"))
+
+                      (gnc:html-document-set-style!
+                       doc "tran-detail"
+                       'tag "tr"
+                       'attribute (list "valign" "top"))
+
+                      (gnc:html-document-set-style!
+                       doc "tran-detail-shade"
+                       'tag "tr"
+                       'attribute (list "class" "alternate-row")
+                       'attribute (list "valign" "top"))
+
+                      (gnc:html-document-set-style!
+                       doc "date-cell"
+                       'tag "td"
+                       'attribute (list "class" "date-cell"))
+
+                      (gnc:html-document-set-style!
+                       doc "number-cell-bot"
+                       'tag "td"
+                       'attribute (list "class" "number-cell")
+                       'attribute (list "valign" "bottom"))
+
+                      (gnc:html-document-set-style!
+                       doc "number-cell-bot-neg"
+                       'tag "td"
+                       'attribute (list "class" "number-cell neg")
+                       'attribute (list "valign" "bottom"))
+
+                      (gnc:html-document-set-style!
+                       doc "just-bot"
+                       'tag "td"
+                       'attribute (list "valign" "bottom"))
+                     )
                  )
-                 (begin
+                 (begin ;; this is for gtkhtml
                   (gnc:html-document-set-style!
                    doc "header-just-top"
                    'tag "th"
