@@ -4,7 +4,6 @@ typedef int time_t;
 typedef unsigned int guint;
 typedef double gdouble;
 typedef float gfloat;
-typedef char * URLType;
 typedef void * gpointer;
 
 %typemap(newfree) gchar * "g_free($1);"
