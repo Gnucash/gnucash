@@ -22,3 +22,17 @@ from German where it is "Daten > XML > Importieren > GX-file auswählen"
 
 ... done: The sheets with the chart of accounts, transactions, clients, tax,
 billing terms are filled !!! :-) Other categories can be added if needed.
+
+
+gnuc2ooo.py
+-----------
+
+http://extensions.services.openoffice.org/project/gnuc2ooo
+
+This is an OOo-macro that will read GnuCash output data and import it
+into OpenOffice.org's embedded database, so that thereafter you can
+evaluate them e.g. in OOo-Calc. A German description on its use can be
+found on http://www.alice-dsl.net/gnuc2ooo/index.html .
+
+The file gnuc2ooo.py is installed by the extension manager in
+OpenOffice.org (Extras -> Extension Manager).
