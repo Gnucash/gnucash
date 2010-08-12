@@ -245,10 +245,11 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
     {
         GWEN_DIALOG *dlg =
             AB_SetupDialog_new(banking);
+        int rv;
 
         PERR ("Unfortunately starting the setup wizard of aqbanking is not yet implemented in gnucash for aqbanking5. Please see http://lists.gnucash.org/pipermail/gnucash-devel/2010-August/029188.html and http://lists.gnucash.org/pipermail/gnucash-devel/2010-August/029189.html .");
 
-        int rv = GWEN_Gui_ExecDialog(dlg, 0);
+        rv = GWEN_Gui_ExecDialog(dlg, 0);
         if (rv <= 0)
         {
             /* Dialog was aborted/rejected */
