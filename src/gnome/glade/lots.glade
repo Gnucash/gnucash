@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <glade-interface>
-  <!-- interface-requires gtk+ 2.6 -->
+  <!-- interface-requires gtk+ 2.10 -->
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkDialog" id="Lot Viewer Window">
     <property name="visible">True</property>
@@ -195,10 +195,9 @@
                         <property name="tooltip" translatable="yes">A summary of all of the transactions in the selected lot</property>
                         <property name="n_columns">7</property>
                         <property name="column_widths">80,80,80,80,80,80,80</property>
-                        <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+                        <property name="selection_mode">single</property>
                         <property name="show_titles">True</property>
-                        <property name="shadow_type">GTK_SHADOW_IN</property>
-
+                        <property name="shadow_type">in</property>
                         <child>
                           <widget class="GtkLabel" id="label22">
                             <property name="label" translatable="yes">Date</property>
@@ -217,7 +216,6 @@
                             <property name="angle">0</property>
                           </widget>
                         </child>
-
                         <child>
                           <widget class="GtkLabel" id="label23">
                             <property name="label" translatable="yes">Num</property>
@@ -236,7 +234,6 @@
                             <property name="angle">0</property>
                           </widget>
                         </child>
-
                         <child>
                           <widget class="GtkLabel" id="label24">
                             <property name="label" translatable="yes">Description</property>
@@ -255,7 +252,6 @@
                             <property name="angle">0</property>
                           </widget>
                         </child>
-
                         <child>
                           <widget class="GtkLabel" id="label25">
                             <property name="label" translatable="yes">Amount</property>
@@ -274,7 +270,6 @@
                             <property name="angle">0</property>
                           </widget>
                         </child>
-
                         <child>
                           <widget class="GtkLabel" id="label26">
                             <property name="label" translatable="yes">Value</property>
@@ -293,7 +288,6 @@
                             <property name="angle">0</property>
                           </widget>
                         </child>
-
                         <child>
                           <widget class="GtkLabel" id="label27">
                             <property name="label" translatable="yes">Gain/Loss</property>
@@ -312,7 +306,6 @@
                             <property name="angle">0</property>
                           </widget>
                         </child>
-
                         <child>
                           <widget class="GtkLabel" id="label28">
                             <property name="label" translatable="yes">Balance</property>
