@@ -130,19 +130,13 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
         }
     }
 
-    /* verify the amount */
+    /* verify the amount. Note that negative values are allowed (required for European tax rules) */
     amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (ntt->amount_entry));
-    if (gnc_numeric_negative_p (amount))
-    {
-        message = _("Negative amounts are not allowed.");
-        gnc_error_dialog (ntt->dialog, "%s", message);
-        return FALSE;
-    }
     if (ntt->type == GNC_AMT_TYPE_PERCENT &&
-            gnc_numeric_compare (amount,
+            gnc_numeric_compare (gnc_numeric_abs (amount),
                                  gnc_numeric_create (100, 1)) > 0)
     {
-        message = _("Percentage amount must be between 0 and 100.");
+        message = _("Percentage amount must be between -100 and 100.");
         gnc_error_dialog (ntt->dialog, "%s", message);
         return FALSE;
     }
