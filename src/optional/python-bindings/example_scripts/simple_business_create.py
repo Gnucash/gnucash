@@ -147,6 +147,16 @@ new_customer.ApplyPayment(None, a2, a6, GncNumeric(100,100),
 
 new_customer.ApplyPayment(invoice_customer, a2, a6, GncNumeric(7,100),
                           GncNumeric(1), datetime.date.today(), "", "")
+
+vendor_bill_returns = book.BillLoookupByID("7")
+assert( vendor_bill_returns.GetID() == "7" )
+vendor_extract = vendor_bill_returns.GetOwner()
+assert( vendor_extract.GetName() == new_vendor.GetName() )
+customer_invoice_returns = book.InvoiceLookupByID("5")
+assert( customer_invoice_returns.GetID() == "5" )
+customer_returns = book.CustomerLookupByID("1")
+assert( customer_returns.GetName() == new_customer.GetName() )
+
 s.save()
 
 s.end()

@@ -51,11 +51,14 @@
 #include "gncVendor.h"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
+
 #include "gncOwner.h"
 #include "gncInvoice.h"
 #include "gncJob.h"
 #include "gncEntry.h"
 #include "gncTaxTable.h"
+#include "utils.h"
+
 %}
 
 %include <timespec.i>
@@ -174,15 +177,18 @@
 %include <gncJob.h>
 %include <gncEntry.h>
 %include <gncTaxTable.h>
+%include "utils.h"
+
 
 %init %{
-
 qof_log_init();
 qof_init();
 gnc_module_system_init();
 char * no_args[1] = { NULL };
 gnc_engine_init_static(0, no_args);
 
+
 gnc_module_init_backend_xml();
 gnc_module_init_backend_dbi();
 %}
+

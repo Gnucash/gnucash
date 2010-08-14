@@ -82,10 +82,7 @@ root = book.get_root_account()
 commod_table = book.get_table()
 CAD = commod_table.lookup('CURRENCY', 'CAD')
 
-my_customer_guid = GUID()
-result = string_to_guid(argv[2], my_customer_guid.get_instance())
-assert( result )
-my_customer = book.CustomerLookup(my_customer_guid)
+my_customer = book.LookupByID(arg[2])
 assert( my_customer != None )
 assert( isinstance(my_customer, Customer) )
 

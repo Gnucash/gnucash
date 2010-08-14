@@ -12,15 +12,22 @@ pkgpython_PYTHON = \
 pkgpyexec_LTLIBRARIES = _gnucash_core_c.la
 
 _gnucash_core_c_la_SOURCES = \
-  gnucash_core.c
+  gnucash_core.c utils.c
 
 _gnucash_core_c_la_CPPFLAGS = \
   $(PYTHON_CPPFLAGS) \
   $(GLIB_CFLAGS) \
+  $(GNOME_CFLAGS) \
   -I${top_srcdir}/src/libqof/qof \
   -I$(top_srcdir)/src  \
   -I$(top_srcdir)/src/engine \
-  -I$(top_srcdir)/src/business/business-core
+  -I$(top_srcdir)/src/business/business-core \
+  -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/gnome \
+	-I${top_srcdir}/src/core-utils \
+  -I${top_srcdir}/src/gnc-module
 
 # Suppress all warnings for now, but we really only need to -Wno-implicit
 AM_CFLAGS = -w
@@ -29,6 +36,8 @@ _gnucash_core_c_la_LDFLAGS = -avoid-version -module
 
 _gnucash_core_c_la_LIBADD = \
   ${GLIB_LIBS} \
+  ${GNOME_LIBS} \
+  ${GLADE_LIBS} \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
@@ -60,3 +69,4 @@ EXTRA_DIST = \
   glib.i
 
 MAINTAINERCLEANFILES = gnucash-core.c
+
