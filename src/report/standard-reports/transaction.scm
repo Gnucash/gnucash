@@ -606,16 +606,13 @@
    (gnc:make-account-list-option
     gnc:pagename-accounts (N_ "Accounts")
     "a" (N_ "Report on these accounts")
-    ;; select, by default, all accounts...
+    ;; select, by default, no accounts! Selecting all accounts will
+    ;; always imply an insanely long waiting time upon opening, and it
+    ;; is almost never useful. So we instead display the normal error
+    ;; message saying "Click here", and the user knows how to
+    ;; continue.
     (lambda ()
-      (gnc:filter-accountlist-type 
-       (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
-             ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
-             ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
-             ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
-             ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE
-             ACCT-TYPE-TRADING)
-       (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
+      '())
     #f #t))
 
   (gnc:register-trep-option
