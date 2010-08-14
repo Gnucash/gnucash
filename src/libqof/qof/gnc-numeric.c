@@ -736,7 +736,7 @@ gnc_numeric_neg(gnc_numeric a)
 }
 
 /* *******************************************************************
- *  gnc_numeric_neg
+ *  gnc_numeric_abs
  *  return the absolute value of the argument
  ********************************************************************/
 
