@@ -4059,7 +4059,7 @@ msgstr "Jetzt"
 
 #: ../src/gnome/dialog-tax-info.c:1075
 msgid "Income Tax Identity"
-msgstr "Einkommensteuernummer"
+msgstr "Art der Steuererklärung"
 
 #: ../src/gnome/dialog-tax-info.c:1137
 msgid ""
@@ -6640,7 +6640,7 @@ msgstr "<b>Durchschlag-Nummer</b>"
 
 #: ../src/gnome/glade/tax.glade.h:4
 msgid "<b>Income Tax Identity</b>"
-msgstr "<b>Einkommensteuernummer</b>"
+msgstr "<b>Art der Steuererklärung</b>"
 
 #: ../src/gnome/glade/tax.glade.h:5
 msgid "<b>Payer Name Source</b>"
