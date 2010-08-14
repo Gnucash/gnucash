@@ -178,24 +178,65 @@
 ;;   env  - environment in which to do the evaluation; 
 ;;          if #f, (the-environment) will be used
 (define (script->output env)
+  ; Placeholder for the normal stack and error stack in case of an error
+  (define good-stack #f)
+  (define error-stack #f)
+  ; Actual evaluation function. This is where the work happens.
   (define (eval-input)
     (let ((s-expression (read)))
       (while (not (eof-object? s-expression))
+	     ; Capture the current stack, so we can detect from where we
+	     ; need to display the stack trace
+	     (set! good-stack (make-stack #t))
              (local-eval s-expression (or env (the-environment))) 
              (set! s-expression (read)))))
 
+  ; Error handler to display any errors while evaluating the template
   (define (error-handler key subr message args . rest)
     (display "<p>")
     (display (_ "An error occurred when processing the template:"))
-    (display "<br>")
+    (display "<br><pre>")
     (display
       (escape-html
         (with-output-to-string
           (lambda ()
             (display-error #f (current-output-port) subr message args rest)))))
-    (display "<br>"))
+	    ; Find out how many frames are interesting. From the
+	    ; good-stack, all but the bottom two frames are in
+	    ; error-stack as well, so we can remove the top #good - 2
+	    ; right away. Below that, there is still one frame in error
+	    ; stack, the call to local-eval, which we'll remove as well.
+	    ; So (#good - 2) + 1 == #good - 1 to remove from the top.
+	    ; We remove the bottom three frames as well: the pre-unwind
+	    ; handler, make-trace and one frame inside make-trace.
+	    (let* ((remove-top (- (stack-length good-stack) 1))
+		   (remove-bottom 3)
+		   (error-length (stack-length error-stack)))
+	      ; Show the backtrace. Remove one extra from the "first"
+	      ; argument, since that is an index, not a count.
+	      (display-backtrace error-stack (current-output-port) (- (- error-length remove-top) 1) (- (- error-length remove-top) remove-bottom)))
+    (display "</pre><br>"))
 
-  (catch #t eval-input error-handler))
+  ; This handler will be called by lazy-catch before unwinding the
+  ; stack, so we can capture it. The above handler will then be called
+  ; to handle the exception we rethrow. This technique was based on the
+  ; example in the guile manual, but adapted to use lazy-catch to make
+  ; it work on guile 1.6 as well. See:
+  ; http://www.gnu.org/software/guile/manual/html_node/Debug-on-Error.html
+  (define (pre-unwind-handler key . rest)
+    ; Save the current stack. Note that this will include a couple of
+    ; extra entries (this error handler, the call to make-stack and
+    ; another one to gsubr-apply) which we'll cutt off at the display
+    ; above.
+    (set! error-stack (make-stack #t))
+    ; And throw the error again
+    (apply throw key rest))
+
+  ; Use two nested catches. The inner one is lazy and does not unwind,
+  ; so it can catch th stack. The outer one does the real error
+  ; handling.
+  (catch #t (lambda () (lazy-catch #t eval-input pre-unwind-handler)) error-handler))
+
 ; end of (script->output)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
