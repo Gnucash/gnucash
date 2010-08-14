@@ -216,7 +216,7 @@ environment_override()
         gint j;
         gchar *new_val = NULL, *tmp_val;
 
-        /* For each variable, read its new value, optionally expand it and (un)set it */
+        /* For each variable, read its new value, optionally expand it and set/unset it */
         val_list = g_key_file_get_string_list (keyfile, "Variables",
                                                env_vars[i], &val_count,
                                                &error );
@@ -601,7 +601,7 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     mod = scm_c_resolve_module("gnucash price-quotes");
     scm_set_current_module(mod);
 
-    /* Don't load the modules since the stylesheet module crashes if the 
+    /* Don't load the modules since the stylesheet module crashes if the
        GUI is not initialized */
 #ifdef PRICE_QUOTES_NEED_MODULES
     load_gnucash_modules();
