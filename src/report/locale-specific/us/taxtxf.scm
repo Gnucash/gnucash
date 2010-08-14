@@ -434,14 +434,11 @@
                                           'attribute (list "cellspacing" "0")
                                           'attribute (list "cellpadding" "0")
                                           'attribute (list "width" "100%"))
-            (let ((total-amnt (if (gnc-html-engine-supports-css)
-                                  (if total-amount-neg?
-                                      (gnc:make-html-table-cell/markup
-                                             "number-cell-bot-neg" total)
-                                      (gnc:make-html-table-cell/markup
-                                             "number-cell-bot" total))
+            (let ((total-amnt (if total-amount-neg?
                                   (gnc:make-html-table-cell/markup
-                                         "number-cell-bot" total)))
+                                             "number-cell-bot-neg" total)
+                                  (gnc:make-html-table-cell/markup
+                                             "number-cell-bot" total)))
                  )
                  (gnc:html-table-append-row! amount-table total-amnt)
             )
@@ -808,13 +805,10 @@
                                                             tran-split
                                                             splt-print-amnt))
                               (splt-amnt-anchor
-                                (if (gnc-html-engine-supports-css)
-                                    (if (gnc-numeric-negative-p splt-print-amnt)
-                                        (gnc:make-html-table-cell/markup
-                                             "number-cell-bot-neg" splt-amnt-anchor)
-                                        (gnc:make-html-table-cell/markup
-                                             "number-cell-bot" splt-amnt-anchor))
-                                    (gnc:make-html-table-cell/markup
+                                 (if (gnc-numeric-negative-p splt-print-amnt)
+                                     (gnc:make-html-table-cell/markup
+                                         "number-cell-bot-neg" splt-amnt-anchor)
+                                     (gnc:make-html-table-cell/markup
                                          "number-cell-bot" splt-amnt-anchor)))
                              )
                              (gnc:html-table-append-row!
@@ -842,17 +836,11 @@
                   (let* ((plug-amnt (gnc-numeric-add-fixed print-amnt
                                                            (gnc-numeric-neg
                                                      trans-rpt-currency-total)))
-                         (plug-amnt (if (gnc-html-engine-supports-css)
-                                        (if (gnc-numeric-negative-p plug-amnt)
-                                            (gnc:make-html-table-cell/markup
-                                                         "number-cell-bot-neg"
-                                                         plug-amnt)
-                                            (gnc:make-html-table-cell/markup
-                                                         "number-cell-bot"
-                                                         plug-amnt))
+                         (plug-amnt (if (gnc-numeric-negative-p plug-amnt)
                                         (gnc:make-html-table-cell/markup
-                                                     "number-cell-bot"
-                                                     plug-amnt)))
+                                            "number-cell-bot-neg" plug-amnt)
+                                        (gnc:make-html-table-cell/markup
+                                            "number-cell-bot" plug-amnt)))
                         )
                         (gnc:html-table-append-row! transfer-table
                                                     (append
@@ -1036,17 +1024,13 @@
                                           'attribute (list "cellpadding" "0")
                                           'attribute (list "width" "100%"))
                              (let ((beg-bal-amnt
-                                       (if (gnc-html-engine-supports-css)
-                                           (if beg-bal-neg?
-                                               (gnc:make-html-table-cell/markup
+                                       (if beg-bal-neg?
+                                           (gnc:make-html-table-cell/markup
                                                      "number-cell-bot-neg"
                                                      account-beg-amnt)
-                                               (gnc:make-html-table-cell/markup
-                                                     "number-cell-bot"
-                                                     account-beg-amnt))
                                            (gnc:make-html-table-cell/markup
-                                                 "number-cell-bot"
-                                                 account-beg-amnt)))
+                                                     "number-cell-bot"
+                                                     account-beg-amnt)))
                                   )
                                   (gnc:html-table-append-row!
                                                       amount-table beg-bal-amnt)
@@ -1283,14 +1267,11 @@
                        (let* ((splt-amnt-anchor (gnc:html-split-anchor
                                                               split print-amnt))
                               (splt-amnt-anchor
-                                (if (gnc-html-engine-supports-css)
-                                    (if (gnc-numeric-negative-p print-amnt)
-                                        (gnc:make-html-table-cell/markup
-                                         "number-cell-bot-neg" splt-amnt-anchor)
-                                        (gnc:make-html-table-cell/markup
-                                         "number-cell-bot" splt-amnt-anchor))
+                                (if (gnc-numeric-negative-p print-amnt)
                                     (gnc:make-html-table-cell/markup
-                                     "number-cell-bot" splt-amnt-anchor)))
+                                         "number-cell-bot-neg" splt-amnt-anchor)
+                                    (gnc:make-html-table-cell/markup
+                                         "number-cell-bot" splt-amnt-anchor)))
                              )
                              (gnc:html-table-append-row!
                                                   amount-table splt-amnt-anchor)
@@ -2632,107 +2613,42 @@
           #f) ;;end of if
           (begin  ; else do tax report
              (if (gnc-html-engine-supports-css)
-                 (if (eq? selected-style-sheet 'Default)
-                     (begin ;; this is for webkit: default
-                      (gnc:html-document-set-style!
-                       doc "header-just-top"
-                       'tag "th"
-                       'attribute (list "class" "column-heading-left")
-                       'attribute (list "valign" "top"))
+                 (begin ;; this is for webkit
+                  (gnc:html-document-set-style!
+                   doc "header-just-top"
+                   'tag "th"
+                   'attribute (list "class" "column-heading-left")
+                   'attribute (list "valign" "top"))
 
-                      (gnc:html-document-set-style!
-                       doc "header-just-bot"
-                       'tag "th"
-                       'attribute (list "class" "column-heading-left")
-                       'attribute (list "valign" "bottom"))
+                  (gnc:html-document-set-style!
+                   doc "header-just-bot"
+                   'tag "th"
+                   'attribute (list "class" "column-heading-left")
+                   'attribute (list "valign" "bottom"))
 
-                      (gnc:html-document-set-style!
-                       doc "tran-detail"
-                       'tag "tr"
-                       'attribute (list "class" "normal-row")
-                       'attribute (list "valign" "top"))
+                  (gnc:html-document-set-style!
+                   doc "tran-detail"
+                   'tag "tr"
+                   'attribute (list "class" "normal-row")
+                   'attribute (list "valign" "top"))
 
-                      (gnc:html-document-set-style!
-                       doc "tran-detail-shade"
-                       'tag "tr"
-                       'attribute (list "class" "alternate-row")
-                       'attribute (list "valign" "top"))
+                  (gnc:html-document-set-style!
+                   doc "tran-detail-shade"
+                   'tag "tr"
+                   'attribute (list "class" "alternate-row")
+                   'attribute (list "valign" "top"))
 
-                      (gnc:html-document-set-style!
-                       doc "number-cell-bot"
-                       'tag "td"
-                       'attribute (list "class" "number-cell")
-                       'attribute (list "valign" "bottom"))
+                  (gnc:html-document-set-style!
+                   doc "number-cell-bot"
+                   'tag "td"
+                   'attribute (list "class" "number-cell")
+                   'attribute (list "valign" "bottom"))
 
-                      (gnc:html-document-set-style!
-                       doc "number-cell-bot-neg"
-                       'tag "td"
-                       'attribute (list "class" "number-cell neg")
-                       'attribute (list "valign" "bottom"))
-
-                      (gnc:html-document-set-style!
-                       doc "just-bot"
-                       'tag "td"
-                       'attribute (list "valign" "bottom"))
-                     )
-                     (begin ;; this is for webkit: easy, footer, technicolor
-                      (gnc:html-document-set-style!
-                       doc "header-just-top"
-                       'tag "th"
-                       'attribute (list "class" "column-heading-left")
-                       'attribute (list "valign" "top"))
-
-                      (gnc:html-document-set-style!
-                       doc "header-just-bot"
-                       'tag "th"
-                       'attribute (list "class" "column-heading-left")
-                       'attribute (list "valign" "bottom"))
-
-                      (gnc:html-document-set-style!
-                       doc "column-heading-center"
-                       'tag "th"
-                       'attribute (list "class" "column-heading-center")
-                       'attribute (list "valign" "bottom"))
-
-                      (gnc:html-document-set-style!
-                       doc "column-heading-right"
-                       'tag "th"
-                       'attribute (list "class" "column-heading-right")
-                       'attribute (list "valign" "bottom"))
-
-                      (gnc:html-document-set-style!
-                       doc "tran-detail"
-                       'tag "tr"
-                       'attribute (list "valign" "top"))
-
-                      (gnc:html-document-set-style!
-                       doc "tran-detail-shade"
-                       'tag "tr"
-                       'attribute (list "class" "alternate-row")
-                       'attribute (list "valign" "top"))
-
-                      (gnc:html-document-set-style!
-                       doc "date-cell"
-                       'tag "td"
-                       'attribute (list "class" "date-cell"))
-
-                      (gnc:html-document-set-style!
-                       doc "number-cell-bot"
-                       'tag "td"
-                       'attribute (list "class" "number-cell")
-                       'attribute (list "valign" "bottom"))
-
-                      (gnc:html-document-set-style!
-                       doc "number-cell-bot-neg"
-                       'tag "td"
-                       'attribute (list "class" "number-cell neg")
-                       'attribute (list "valign" "bottom"))
-
-                      (gnc:html-document-set-style!
-                       doc "just-bot"
-                       'tag "td"
-                       'attribute (list "valign" "bottom"))
-                     )
+                  (gnc:html-document-set-style!
+                   doc "number-cell-bot-neg"
+                   'tag "td"
+                   'attribute (list "class" "number-cell neg")
+                   'attribute (list "valign" "bottom"))
                  )
                  (begin ;; this is for gtkhtml
                   (gnc:html-document-set-style!
@@ -2777,15 +2693,22 @@
                    'attribute (list "valign" "bottom"))
 
                   (gnc:html-document-set-style!
+                   doc "number-cell-bot-neg"
+                   'tag "td"
+                   'attribute (list "align" "right")
+                   'attribute (list "nowrap" "nowrap")
+                   'attribute (list "valign" "bottom"))
+
+                  (gnc:html-document-set-style!
                    doc "date-cell"
                    'tag "td"
                    'attribute (list "nowrap" "nowrap"))
-
-                  (gnc:html-document-set-style!
-                   doc "just-bot"
-                   'tag "td"
-                   'attribute (list "valign" "bottom"))
                  ))
+
+             (gnc:html-document-set-style!
+              doc "just-bot"
+              'tag "td"
+              'attribute (list "valign" "bottom"))
 
              (gnc:html-document-set-title! doc report-name)
 
