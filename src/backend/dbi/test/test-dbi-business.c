@@ -31,6 +31,7 @@
 #include "test-dbi-business-stuff.h"
 
 #include "Account.h"
+#include <TransLog.h>
 #include "Transaction.h"
 #include "Split.h"
 #include "gnc-commodity.h"
@@ -160,8 +161,8 @@ int main (int argc, char ** argv)
 
     qof_init();
     cashobjects_register();
-    qof_load_backend_library ("../../../../backend/dbi/.libs/", GNC_LIB_NAME);
-    init_business_sql();
+    xaccLogDisable();
+    qof_load_backend_library ("../.libs/", GNC_LIB_NAME);
 
     // Create a session with data
     session_1 = create_session();
