@@ -41,21 +41,26 @@
 
 G_BEGIN_DECLS
 
-#if (AQBANKING_VERSION_MAJOR > 3) || \
-  ((AQBANKING_VERSION_MAJOR == 3) && \
-    (AQBANKING_VERSION_MINOR >= 99))
-/** Defined if libaqbanking4 as opposed to libaqbanking3 is being used */
+/** A define that combines the aqbanking version number into one single
+ * integer number. Assumption: Both MINOR nor PATCHLEVEL numbers are
+ * in the interval [0..99]. */
+#define AQBANKING_VERSION_INT (10000 * AQBANKING_VERSION_MAJOR + 100 * AQBANKING_VERSION_MINOR + AQBANKING_VERSION_PATCHLEVEL)
+
+#if AQBANKING_VERSION_INT >= 39900
+/** Defined if libaqbanking4 as opposed to libaqbanking3 or earlier is
+ * being used */
 # define AQBANKING_VERSION_4_PLUS
 #endif
 
-#if (AQBANKING_VERSION_MAJOR > 4) || \
-  ((AQBANKING_VERSION_MAJOR == 4) && \
-    (AQBANKING_VERSION_MINOR >= 99))
-/** Defined if libaqbanking5 as opposed to libaqbanking4 is being used */
+#if AQBANKING_VERSION_INT >= 49900
+/** Defined if libaqbanking5 as opposed to libaqbanking4 or earlier is
+ * being used */
 # define AQBANKING_VERSION_5_PLUS
 #endif
 
 #if defined(AQBANKING_VERSION_4_PLUS) && !defined(AQBANKING_VERSION_5_PLUS)
+/** Defined if libaqbanking4 is used and neither a newer nor an older
+ * version of libaqbanking. */
 # define AQBANKING_VERSION_4_EXACTLY
 #endif
 
