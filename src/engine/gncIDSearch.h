@@ -20,35 +20,25 @@
 * Mike Evans <mikee@saxicola.co.uk>
 *
 **********************************************************************/
-
-
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
-
 #include <glib/gi18n.h>
 #include <regex.h>
 #include <glib.h>
 #include <glib/gstdio.h>
-
-#include "gnc-ui.h"
-#include "gnc-ui-util.h"
-#include "gnome-utils/gnc-gui-query.h"
-#include "gncAddress.h"
+#include "qof.h"
+//#include "gncAddressP.h"
 #include "gncCustomerP.h"
-#include "gncCustomer.h"
+//#include "gncCustomer.h"
 #include "gncInvoice.h"
-#include "gnc-exp-parser.h"
-
+#include "gncBusiness.h"
 // query
 #include "QueryCore.h"
 #include "QueryNew.h"
 #include "GNCId.h"
 
-
-
 #ifndef GNC_PLUGIN_invoice_import_invoice_import_H
 #define GNC_PLUGIN_invoice_import_invoice_import_H
+
 
 GncCustomer * search_customer_on_id  (QofBook *book, const gchar *id);
 GncInvoice  * search_invoice_on_id   (QofBook *book, const gchar *id);

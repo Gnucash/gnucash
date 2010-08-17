@@ -57,7 +57,7 @@
 #include "gncJob.h"
 #include "gncEntry.h"
 #include "gncTaxTable.h"
-#include "utils.h"
+#include "gncIDSearch.h"
 
 %}
 
@@ -177,7 +177,7 @@
 %include <gncJob.h>
 %include <gncEntry.h>
 %include <gncTaxTable.h>
-%include "utils.h"
+%include <gncIDSearch.h>
 
 
 %init %{

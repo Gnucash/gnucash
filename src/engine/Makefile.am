@@ -55,6 +55,7 @@ libgncmod_engine_la_SOURCES = \
   gncOrder.c \
   gncOwner.c \
   gncTaxTable.c \
+  gncIDSearch.c \
   gncVendor.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c

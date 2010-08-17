@@ -12,7 +12,7 @@ pkgpython_PYTHON = \
 pkgpyexec_LTLIBRARIES = _gnucash_core_c.la
 
 _gnucash_core_c_la_SOURCES = \
-  gnucash_core.c utils.c
+  gnucash_core.c
 
 _gnucash_core_c_la_CPPFLAGS = \
   $(PYTHON_CPPFLAGS) \
