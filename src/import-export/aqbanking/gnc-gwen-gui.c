@@ -47,17 +47,15 @@
 
 #if GWENHYWFAR_VERSION_INT > 39913
 /* Only for the brave: You can enable the gwenhywfar gtk2 gui object
- * by un-commenting this here. Note: Also need to add "-lgwengui-gtk2"
- * to the LIBADD section in Makefile.am because that library can't be
- * looked up automatically so far! */
+ * by un-commenting this here. */
 /*# define USING_GWENHYWFAR_GTK2_GUI*/
 #endif
 
 #ifdef USING_GWENHYWFAR_GTK2_GUI
-# if GWENHYWFAR_VERSION_INT < 39920
-#  include <../gwen-gui-gtk2/gtk2_gui.h>
-# else
+# if GWENHYWFAR_VERSION_INT >= 39920
 #  include <gwen-gui-gtk2/gtk2_gui.h>
+# else
+#  error "You must be using libgwenhywfar >= 3.99.20 because otherwise the -lgwengui-gtk2 is not added into the linker flags"
 # endif
 #endif
 

@@ -45,6 +45,7 @@ libgncmod_aqbanking_la_LIBADD = \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
   ${GLIB_LIBS} \
+  ${GWENGUI_GTK2_LIBS} \
   ${AQBANKING_LIBS}
 
 AM_CFLAGS = \

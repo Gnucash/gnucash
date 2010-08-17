@@ -766,6 +766,8 @@ then
       AC_MSG_ERROR([Could not find aqbanking > 1.6.0. If you use --enable-aqbanking or --enable-hbci, you *have* to have aqbanking installed!])
     ])
   ])
+  # For libgwenhywfar > 3.99.20, look for its library gwengui-gtk2.
+  PKG_CHECK_MODULES([GWENGUI_GTK2], [gwengui-gtk2 gwenhywfar], [has_gwengui_gtk2=1], [has_gwengui_gtk2=0])
 
   # also check for ktoblzcheck
   AC_CHECK_HEADERS(ktoblzcheck.h)
