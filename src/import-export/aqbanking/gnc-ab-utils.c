@@ -134,6 +134,49 @@ gnc_AB_BANKING_new(void)
         api = AB_Banking_new("gnucash", NULL, 0);
         g_return_val_if_fail(api, NULL);
 
+#ifdef AQBANKING_VERSION_4_PLUS
+        /* Check for config migration */
+        if (AB_Banking_HasConf4(api
+# ifndef AQBANKING_VERSION_5_PLUS
+                                , 0
+# endif
+                ) != 0)
+        {
+            if (AB_Banking_HasConf3(api
+# ifndef AQBANKING_VERSION_5_PLUS
+                                    , 0
+# endif
+                    ) == 0)
+            {
+                g_message("gnc_AB_BANKING_new: importing aqbanking3 configuration\n");
+                if (AB_Banking_ImportConf3(api
+# ifndef AQBANKING_VERSION_5_PLUS
+                                           , 0
+# endif
+                        ) < 0)
+                {
+                    g_message("gnc_AB_BANKING_new: unable to import aqbanking3 configuration\n");
+                }
+            }
+            else if (AB_Banking_HasConf2(api
+# ifndef AQBANKING_VERSION_5_PLUS
+                                         , 0
+# endif
+                         ) == 0)
+            {
+                g_message("gnc_AB_BANKING_new: importing aqbanking2 configuration\n");
+                if (AB_Banking_ImportConf2(api
+# ifndef AQBANKING_VERSION_5_PLUS
+                                           , 0
+# endif
+                        ) < 0)
+                {
+                    g_message("gnc_AB_BANKING_new: unable to import aqbanking2 configuration\n");
+                }
+            }
+        } 
+#endif /* AQBANKING_VERSION_4_PLUS */        
+        
         /* Init the API */
         g_return_val_if_fail(AB_Banking_Init(api) == 0, NULL);
 
