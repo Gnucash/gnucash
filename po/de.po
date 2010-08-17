@@ -488,12 +488,12 @@ msgstr "Entität nicht gefunden: %s"
 #: ../src/business/business-gnome/business-urls.c:170
 #, c-format
 msgid "No such owner entity: %s"
-msgstr "Ungültige Entity: %s"
+msgstr "Ungültige Entität: %s"
 
 #: ../src/business/business-gnome/business-urls.c:278
 #, c-format
 msgid "Entity type does not match %s: %s"
-msgstr "Entity type passt nicht %s: %s"
+msgstr "Typ der Entität passt nicht %s: %s"
 
 #: ../src/business/business-gnome/business-urls.c:288
 #, c-format
@@ -503,7 +503,7 @@ msgstr "Fehlerhafte URL %s"
 #: ../src/business/business-gnome/business-urls.c:301
 #, c-format
 msgid "No such Account entity: %s"
-msgstr "Ungültige Konto Entity: %s"
+msgstr "Ungültige Konto Entität: %s"
 
 #: ../src/business/business-gnome/dialog-billterms.c:270
 msgid "Negative amounts are not allowed."
@@ -3157,7 +3157,7 @@ msgstr "Diesen Posten in die Rechnung einschließen?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:745
 msgid "Unknown EntryLedger Type"
-msgstr "Unbekannter EntryLedger typ"
+msgstr "Unbekannter EntryLedger-Typ"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:758
 msgid "The subtotal value of this entry "
@@ -3189,9 +3189,8 @@ msgstr ""
 "Wahl »%s« ist bereits in Benutzung."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:139
-#, fuzzy
 msgid "Percentage amount must be between -100 and 100."
-msgstr "Die Prozentzahl muss zwischen 0 und 100 liegen."
+msgstr "Die Prozentzahl muss zwischen -100 und 100 liegen."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:148
 msgid "You must choose a Tax Account."
@@ -5450,7 +5449,7 @@ msgid ""
 "Millimeters\n"
 "Points"
 msgstr ""
-"Inch\n"
+"Zoll\n"
 "Zentimeter\n"
 "Millimeter\n"
 "Punkte"
@@ -5677,7 +5676,7 @@ msgstr "Beibehalten der normalen Kontoreihenfolge"
 #: ../src/gnome/glade/register.glade.h:31
 #: ../src/gnome/gnc-plugin-page-register.c:227
 msgid "Make a copy of the current transaction"
-msgstr "Eine Kopie des aktuellen Buchungssatze erstellen"
+msgstr "Eine Kopie des aktuellen Buchungssatzes erstellen"
 
 #: ../src/gnome/glade/register.glade.h:32
 #: ../src/gnome/gnc-plugin-page-register.c:307
@@ -7471,6 +7470,8 @@ msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
 msgstr ""
+"Das Suchergebnis enthält Buchungsteile aus mehr als einem Konto. Wollen Sie "
+"die Schecks wirklich drucken, obwohl sie nicht alle zum selben Konto gehören?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:2148
 msgid "_Print checks"
@@ -8897,6 +8898,8 @@ msgid ""
 "This dialog is presented if you try to print checks from multiple accounts "
 "at the same time."
 msgstr ""
+"Dieser Dialog erscheint, wenn sie versuchen, Schecks aus mehreren Konten zur "
+"selben Zeit zu drucken."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:28
 msgid "This dialog is presented when a read-only register is opened."
@@ -17171,9 +17174,8 @@ msgstr "Zellen-Füllung"
 #: ../intl-scm/guile-strings.c:800 ../intl-scm/guile-strings.c:1016
 #: ../intl-scm/guile-strings.c:1228 ../intl-scm/guile-strings.c:1356
 #: ../intl-scm/guile-strings.c:1402
-#, fuzzy
 msgid "Space between table cell edge and content"
-msgstr "Abstand zwischen Zellen einer Tabelle"
+msgstr "Abstand zwischen Außenkante und Inhalt einer Tabellenzelle"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -18196,13 +18198,13 @@ msgstr "Hallo Welt!"
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:1818 ../intl-scm/guile-strings.c:1984
 msgid "Boolean Option"
-msgstr "Boolsche Option"
+msgstr "Boolesche Option"
 
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:1820 ../intl-scm/guile-strings.c:1986
 msgid "This is a boolean option."
-msgstr "Dies ist eine boolsche Option"
+msgstr "Dies ist eine boolesche Option"
 
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #. src/report/utility-reports/hello-world.scm
@@ -24920,13 +24922,3 @@ msgstr ""
 "Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des HBCI-Zugangs. "
 "Nachdem ein HBCI-Zugang eingerichtet wurde, können die Menüpunkte im "
 "Kontofenster unter Aktionen -> Online Aktionen verwendet werden."
-
-#~ msgid "Enable Alternate Line Shading"
-#~ msgstr "Abwechselnde Zeilenfarben aktivieren"
-
-#, fuzzy
-#~ msgid "Enable different color for alternate lines in reports."
-#~ msgstr "Hyperlinks in Berichten aktivieren."
-
-#~ msgid "Alternate Line Background Color"
-#~ msgstr "Hintergrundfarbe jeder zweiten Zeile"
