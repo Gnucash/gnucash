@@ -36,15 +36,21 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <aqbanking/banking.h>
+#include <gwenhywfar/version.h>
 
 #include "Account.h"
 
 G_BEGIN_DECLS
 
 /** A define that combines the aqbanking version number into one single
- * integer number. Assumption: Both MINOR nor PATCHLEVEL numbers are
+ * integer number. Assumption: Both MINOR and PATCHLEVEL numbers are
  * in the interval [0..99]. */
 #define AQBANKING_VERSION_INT (10000 * AQBANKING_VERSION_MAJOR + 100 * AQBANKING_VERSION_MINOR + AQBANKING_VERSION_PATCHLEVEL)
+
+/** A define that combines the gwenhywfar version number into one single
+ * integer number. Assumption: Both MINOR and PATCHLEVEL numbers are
+ * in the interval [0..99]. */
+#define GWENHYWFAR_VERSION_INT (10000 * GWENHYWFAR_VERSION_MAJOR + 100 * GWENHYWFAR_VERSION_MINOR + GWENHYWFAR_VERSION_PATCHLEVEL)
 
 #if AQBANKING_VERSION_INT >= 39900
 /** Defined if libaqbanking4 as opposed to libaqbanking3 or earlier is

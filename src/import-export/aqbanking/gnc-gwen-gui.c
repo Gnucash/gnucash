@@ -45,6 +45,22 @@
 #include "md5.h"
 #include "qof.h"
 
+#if GWENHYWFAR_VERSION_INT > 39913
+/* Only for the brave: You can enable the gwenhywfar gtk2 gui object
+ * by un-commenting this here. Note: Also need to add "-lgwengui-gtk2"
+ * to the LIBADD section in Makefile.am because that library can't be
+ * looked up automatically so far! */
+/*# define USING_GWENHYWFAR_GTK2_GUI*/
+#endif
+
+#ifdef USING_GWENHYWFAR_GTK2_GUI
+# if GWENHYWFAR_VERSION_INT < 39920
+#  include <../gwen-gui-gtk2/gtk2_gui.h>
+# else
+#  include <gwen-gui-gtk2/gtk2_gui.h>
+# endif
+#endif
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -218,7 +234,13 @@ gnc_GWEN_Gui_log_init(void)
 {
     if (!log_gwen_gui)
     {
-        log_gwen_gui = GWEN_Gui_new();
+        log_gwen_gui =
+#ifdef USING_GWENHYWFAR_GTK2_GUI
+        Gtk2_Gui_new()
+#else
+        GWEN_Gui_new()
+#endif
+            ;
 
         /* Always use our own logging */
         GWEN_Gui_SetLogHookFn(log_gwen_gui, loghook_cb);
@@ -318,7 +340,14 @@ register_callbacks(GncGWENGui *gui)
 
     ENTER("gui=%p", gui);
 
-    gui->gwen_gui = gwen_gui = GWEN_Gui_new();
+    gwen_gui =
+#ifdef USING_GWENHYWFAR_GTK2_GUI
+        Gtk2_Gui_new()
+#else
+        GWEN_Gui_new()
+#endif
+        ;
+    gui->gwen_gui = gwen_gui;
 
     GWEN_Gui_SetMessageBoxFn(gwen_gui, messagebox_cb);
     GWEN_Gui_SetInputBoxFn(gwen_gui, inputbox_cb);
