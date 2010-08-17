@@ -460,7 +460,7 @@
 <gnc:account version="2.0.0">
   <act:name>5510 Norēķini par parādiem personālam</act:name>
   <act:id type="guid">b24bedfbd433f378404a5f5cbc5c10e1</act:id>
-  <act:type>LIABILITY</act:type>
+  <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>LVL</cmdty:id>
@@ -891,7 +891,7 @@
 <gnc:account version="2.0.0">
   <act:name>2380 Norēķini par prasībām pret personālu un īstermiņa aizdevumi personālam</act:name>
   <act:id type="guid">697720154aa032750390fec327bdc66f</act:id>
-  <act:type>ASSET</act:type>
+  <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>LVL</cmdty:id>
