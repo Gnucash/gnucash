@@ -243,6 +243,11 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
 
         PERR ("Unfortunately starting the setup wizard of aqbanking is not yet implemented in gnucash for aqbanking5. Please see http://lists.gnucash.org/pipermail/gnucash-devel/2010-August/029188.html and http://lists.gnucash.org/pipermail/gnucash-devel/2010-August/029189.html .");
 
+        if (AB_Banking_OnlineInit(banking) != 0)
+        {
+            PERR("Got error on AB_Banking_OnlineInit!");
+        }
+
         rv = GWEN_Gui_ExecDialog(dlg, 0);
         if (rv <= 0)
         {
@@ -255,6 +260,11 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
             druid_enable_next_button(info);
         }
         GWEN_Dialog_free(dlg);
+
+        if (AB_Banking_OnlineFini(banking) != 0)
+        {
+            PERR("Got error on AB_Banking_OnlineFini!");
+        }
     }
 #else
     /* Previous implementation for aqbanking <= 4.99.8: Use the
