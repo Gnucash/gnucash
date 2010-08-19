@@ -306,7 +306,7 @@ set_default ICU4C_SRC_URL "http://download.icu-project.org/files/icu4c/4.4.1/icu
 set_default ICU4C_DIR $GLOBAL_DIR\\icu-mingw32
 set_default ICU4C_PATCH `pwd`/icu-crossmingw.patch
 
-set_default SVN_URL "http://subversion.tigris.org/files/documents/15/46880/svn-win32-1.6.6.zip"
+set_default SVN_URL "http://subversion.tigris.org/files/documents/15/47914/svn-win32-1.6.6.zip"
 set_default SVN_DIR $GLOBAL_DIR\\svn
 
 # OFX import in gnucash and ofx directconnect support for aqbanking
