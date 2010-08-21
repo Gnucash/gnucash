@@ -1313,7 +1313,35 @@
   (define (lookup-option section name)
     (let ((section-hash (hash-ref option-hash section)))
       (if section-hash
-          (hash-ref section-hash name)
+          (let ((option-hash (hash-ref section-hash name)))
+            (if option-hash
+                option-hash
+                ; Option name was not found. Perhaps it was renamed ?
+                ; Let's try to map it to a known new name
+                (let* ((new-names-list (list
+                        "Accounts to include" "Accounts"
+                        "Exclude transactions between selected accounts?" "Exclude transactions between selected accounts"
+                        "Filter Accounts" "Filter By..."
+                        "Flatten list to depth limit?" "Flatten list to depth limit"
+                        "From" "Start Date"
+                        "Report Accounts" "Accounts"
+                        "Report Currency" "Report's currency"
+                        "Show Account Code?" "Show Account Code"
+                        "Show Full Account Name?" "Show Full Account Name"
+                        "Show Multi-currency Totals?" "Show Multi-currency Totals"
+                        "Show zero balance items?" "Show zero balance items"
+                        "Sign Reverses?" "Sign Reverses"
+                        "To" "End Date"
+                        "Use Full Account Name?" "Use Full Account Name"
+                        "Use Full Other Account Name?" "Use Full Other Account Name"
+                        "Void Transactions?" "Void Transactions"
+                        ))
+                       (name-match (member name new-names-list)))
+
+                      (if name-match 
+                        (let ((new-name (cadr name-match)))
+                             (lookup-option section new-name))
+                        #f))))
           #f)))
 
   (define (option-changed section name)
