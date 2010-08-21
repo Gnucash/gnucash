@@ -1226,7 +1226,14 @@ fi
 ###-------------------------------------------------------------------------
 
 AC_CHECK_FUNCS(pthread_mutex_init)
-AC_REPLACE_FUNCS(strptime localtime_r gmtime_r)
+case $host_os in
+     darwin*)
+	AC_REPLACE_FUNCS(localtime_r gmtime_r)
+     	AC_LIBOBJ(strptime)
+	;;
+    *) 	AC_REPLACE_FUNCS(strptime localtime_r gmtime_r) ;;
+esac
+
 #AC_REPLACE_FUNCS(scm_strptime)
 
 if test x$am_cv_val_LC_MESSAGES = "xno"; then
