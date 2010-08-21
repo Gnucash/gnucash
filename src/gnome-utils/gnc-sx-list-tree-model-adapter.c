@@ -401,7 +401,7 @@ _freq_comparator(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer u
 }
 
 static gint
-_safe_invalidable_date_compare(GDate *a, GDate *b)
+_safe_invalidable_date_compare(const GDate *a, const GDate *b)
 {
     if (!g_date_valid(a) && !g_date_valid(b))
     {
@@ -483,7 +483,7 @@ gnc_sx_list_tree_model_adapter_init(GTypeInstance *instance, gpointer klass)
 }
 
 static void
-_format_conditional_date(GDate *date, char *date_buf, int buf_max_length)
+_format_conditional_date(const GDate *date, char *date_buf, int buf_max_length)
 {
     if (date == NULL || !g_date_valid(date))
     {

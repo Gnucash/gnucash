@@ -574,8 +574,8 @@ xaccSchedXactionSetName( SchedXaction *sx, const gchar *newName )
     gnc_sx_commit_edit(sx);
 }
 
-GDate*
-xaccSchedXactionGetStartDate( SchedXaction *sx )
+const GDate*
+xaccSchedXactionGetStartDate(const SchedXaction *sx )
 {
     return &sx->start_date;
 }
@@ -595,8 +595,8 @@ xaccSchedXactionHasEndDate( const SchedXaction *sx )
     return g_date_valid( &sx->end_date );
 }
 
-GDate*
-xaccSchedXactionGetEndDate( SchedXaction *sx )
+const GDate*
+xaccSchedXactionGetEndDate(const SchedXaction *sx )
 {
     return &sx->end_date;
 }
@@ -622,8 +622,8 @@ xaccSchedXactionSetEndDate( SchedXaction *sx, GDate *newEnd )
     gnc_sx_commit_edit(sx);
 }
 
-GDate*
-xaccSchedXactionGetLastOccurDate( SchedXaction *sx )
+const GDate*
+xaccSchedXactionGetLastOccurDate(const SchedXaction *sx )
 {
     return &sx->last_date;
 }
@@ -784,7 +784,7 @@ xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays )
 
 
 GDate
-xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData )
+xaccSchedXactionGetNextInstance(const SchedXaction *sx, SXTmpStateData *stateData )
 {
     GDate    last_occur, next_occur, tmpDate;
 
@@ -799,7 +799,7 @@ xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData )
 
     if ( stateData != NULL )
     {
-        temporalStateData *tsd = (temporalStateData*)stateData;
+        SXTmpStateData *tsd = (SXTmpStateData*)stateData;
         last_occur = tsd->last_date;
     }
 
@@ -831,7 +831,7 @@ xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData )
     /* out-of-bounds check */
     if ( xaccSchedXactionHasEndDate( sx ) )
     {
-        GDate *end_date = xaccSchedXactionGetEndDate( sx );
+        const GDate *end_date = xaccSchedXactionGetEndDate( sx );
         if ( g_date_compare( &next_occur, end_date ) > 0 )
         {
             g_debug("next_occur past end date");
@@ -842,7 +842,7 @@ xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData )
     {
         if ( stateData )
         {
-            temporalStateData *tsd = (temporalStateData*)stateData;
+            SXTmpStateData *tsd = (SXTmpStateData*)stateData;
             if ( tsd->num_occur_rem == 0 )
             {
                 g_debug("no more occurances remain");
@@ -862,9 +862,9 @@ xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData )
 }
 
 GDate
-xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
+xaccSchedXactionGetInstanceAfter( const SchedXaction *sx,
                                   GDate *date,
-                                  void *stateData )
+                                  SXTmpStateData *stateData )
 {
     GDate prev_occur, next_occur;
 
@@ -876,7 +876,7 @@ xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
 
     if ( stateData != NULL )
     {
-        temporalStateData *tsd = (temporalStateData*)stateData;
+        SXTmpStateData *tsd = (SXTmpStateData*)stateData;
         prev_occur = tsd->last_date;
     }
 
@@ -891,9 +891,7 @@ xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
 
     if ( xaccSchedXactionHasEndDate( sx ) )
     {
-        GDate *end_date;
-
-        end_date = xaccSchedXactionGetEndDate( sx );
+        const GDate *end_date = xaccSchedXactionGetEndDate( sx );
         if ( g_date_compare( &next_occur, end_date ) > 0 )
         {
             g_date_clear( &next_occur, 1 );
@@ -903,7 +901,7 @@ xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
     {
         if ( stateData )
         {
-            temporalStateData *tsd = (temporalStateData*)stateData;
+            SXTmpStateData *tsd = (SXTmpStateData*)stateData;
             if ( tsd->num_occur_rem == 0 )
             {
                 g_date_clear( &next_occur, 1 );
@@ -921,14 +919,14 @@ xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
 }
 
 gint
-gnc_sx_get_instance_count( const SchedXaction *sx, void *stateData )
+gnc_sx_get_instance_count( const SchedXaction *sx, SXTmpStateData *stateData )
 {
     gint toRet = -1;
-    temporalStateData *tsd;
+    SXTmpStateData *tsd;
 
     if ( stateData )
     {
-        tsd = (temporalStateData*)stateData;
+        tsd = (SXTmpStateData*)stateData;
         toRet = tsd->num_inst;
     }
     else
@@ -1061,22 +1059,22 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
     }
 }
 
-void*
-gnc_sx_create_temporal_state( SchedXaction *sx )
+SXTmpStateData*
+gnc_sx_create_temporal_state(const SchedXaction *sx )
 {
-    temporalStateData *toRet =
-        g_new0( temporalStateData, 1 );
+    SXTmpStateData *toRet =
+        g_new0( SXTmpStateData, 1 );
     toRet->last_date       = sx->last_date;
     toRet->num_occur_rem   = sx->num_occurances_remain;
     toRet->num_inst   = sx->instance_num;
-    return (void*)toRet;
+    return toRet;
 }
 
 void
-gnc_sx_incr_temporal_state( SchedXaction *sx, void *stateData )
+gnc_sx_incr_temporal_state(const SchedXaction *sx, SXTmpStateData *stateData )
 {
     GDate unused;
-    temporalStateData *tsd = (temporalStateData*)stateData;
+    SXTmpStateData *tsd = (SXTmpStateData*)stateData;
 
     g_date_clear( &unused, 1 );
     tsd->last_date =
@@ -1091,9 +1089,9 @@ gnc_sx_incr_temporal_state( SchedXaction *sx, void *stateData )
 }
 
 void
-gnc_sx_revert_to_temporal_state( SchedXaction *sx, void *stateData )
+gnc_sx_revert_to_temporal_state( SchedXaction *sx, SXTmpStateData *stateData )
 {
-    temporalStateData *tsd = (temporalStateData*)stateData;
+    SXTmpStateData *tsd = (SXTmpStateData*)stateData;
     gnc_sx_begin_edit(sx);
     sx->last_date        = tsd->last_date;
     sx->num_occurances_remain = tsd->num_occur_rem;
@@ -1103,27 +1101,27 @@ gnc_sx_revert_to_temporal_state( SchedXaction *sx, void *stateData )
 }
 
 void
-gnc_sx_destroy_temporal_state( void *stateData )
+gnc_sx_destroy_temporal_state( SXTmpStateData *stateData )
 {
-    g_free( (temporalStateData*)stateData );
+    g_free( (SXTmpStateData*)stateData );
 }
 
-void*
-gnc_sx_clone_temporal_state( void *stateData )
+SXTmpStateData*
+gnc_sx_clone_temporal_state( SXTmpStateData *stateData )
 {
-    temporalStateData *toRet, *tsd;
-    tsd = (temporalStateData*)stateData;
-    toRet = g_memdup( tsd, sizeof( temporalStateData ) );
-    return (void*)toRet;
+    SXTmpStateData *toRet, *tsd;
+    tsd = (SXTmpStateData*)stateData;
+    toRet = g_memdup( tsd, sizeof( SXTmpStateData ) );
+    return toRet;
 }
 
 static
 gint
 _temporal_state_data_cmp( gconstpointer a, gconstpointer b )
 {
-    temporalStateData *tsd_a, *tsd_b;
-    tsd_a = (temporalStateData*)a;
-    tsd_b = (temporalStateData*)b;
+    SXTmpStateData *tsd_a, *tsd_b;
+    tsd_a = (SXTmpStateData*)a;
+    tsd_b = (SXTmpStateData*)b;
 
     if ( !tsd_a && !tsd_b )
         return 0;

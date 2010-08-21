@@ -83,7 +83,7 @@ xmlNodePtr
 gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 {
     xmlNodePtr	ret;
-    GDate	*date;
+    const GDate	*date;
     gint        instCount;
     const GncGUID        *templ_acc_guid;
     gboolean allow_2_2_incompat = TRUE;
@@ -169,12 +169,12 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     /* Output deferred-instance list. */
     {
         xmlNodePtr instNode;
-        temporalStateData *tsd;
+        SXTmpStateData *tsd;
         GList *l;
 
         for ( l = gnc_sx_get_defer_instances( sx ); l; l = l->next )
         {
-            tsd = (temporalStateData*)l->data;
+            tsd = (SXTmpStateData*)l->data;
 
             instNode = xmlNewNode( NULL, BAD_CAST SX_DEFER_INSTANCE );
             if ( g_date_valid( &tsd->last_date ) )
@@ -371,7 +371,7 @@ sx_end_handler( xmlNodePtr node, gpointer sx_pdata )
 }
 
 static void
-_fixup_recurrence_start_dates(GDate *sx_start_date, GList *schedule)
+_fixup_recurrence_start_dates(const GDate *sx_start_date, GList *schedule)
 {
     GList *iter;
     for (iter = schedule; iter != NULL; iter = iter->next)
@@ -485,7 +485,7 @@ gboolean
 sx_defer_last_handler( xmlNodePtr node, gpointer gpTSD )
 {
     GDate *gd;
-    temporalStateData *tsd = (temporalStateData*)gpTSD;
+    SXTmpStateData *tsd = (SXTmpStateData*)gpTSD;
 
     g_return_val_if_fail( node, FALSE );
     gd = dom_tree_to_gdate( node );
@@ -500,7 +500,7 @@ gboolean
 sx_defer_rem_occur_handler( xmlNodePtr node, gpointer gpTSD )
 {
     gint64 remOccur;
-    temporalStateData *tsd = (temporalStateData*)gpTSD;
+    SXTmpStateData *tsd = (SXTmpStateData*)gpTSD;
     g_return_val_if_fail( node, FALSE );
 
     if ( ! dom_tree_to_integer( node, &remOccur ) )
@@ -516,7 +516,7 @@ gboolean
 sx_defer_inst_count_handler( xmlNodePtr node, gpointer gpTSD )
 {
     gint64 instCount;
-    temporalStateData *tsd = (temporalStateData*)gpTSD;
+    SXTmpStateData *tsd = (SXTmpStateData*)gpTSD;
     g_return_val_if_fail( node, FALSE );
 
     if ( ! dom_tree_to_integer( node, &instCount ) )
@@ -542,11 +542,11 @@ sx_defer_inst_handler( xmlNodePtr node, gpointer sx_pdata )
 {
     struct sx_pdata *pdata = sx_pdata;
     SchedXaction *sx = pdata->sx;
-    temporalStateData *tsd;
+    SXTmpStateData *tsd;
 
     g_return_val_if_fail( node, FALSE );
 
-    tsd = g_new0( temporalStateData, 1 );
+    tsd = g_new0( SXTmpStateData, 1 );
     g_assert( sx_defer_dom_handlers != NULL );
     if ( !dom_tree_generic_parse( node,
                                   sx_defer_dom_handlers,

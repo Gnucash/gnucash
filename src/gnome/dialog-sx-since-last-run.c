@@ -445,7 +445,7 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
         char last_occur_date_buf[MAX_DATE_LENGTH+1];
 
         {
-            GDate *last_occur = xaccSchedXactionGetLastOccurDate(instances->sx);
+            const GDate *last_occur = xaccSchedXactionGetLastOccurDate(instances->sx);
             if (last_occur == NULL || !g_date_valid(last_occur))
             {
                 g_stpcpy(last_occur_date_buf, _("Never"));

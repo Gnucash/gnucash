@@ -1382,7 +1382,7 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
     time_t tmpDate;
     SplitRegister *splitReg;
     struct tm *tmpTm;
-    GDate *gd;
+    const GDate *gd;
     gint daysInAdvance;
     gboolean enabledState, autoCreateState, notifyState;
 
@@ -1623,7 +1623,7 @@ gnc_sxed_update_cal(GncSxEditorDialog *sxed)
     /* Deal with the fact that this SX may have been run before [the
      * calendar should only show upcoming instances]... */
     {
-        GDate *last_sx_inst;
+        const GDate *last_sx_inst;
 
         last_sx_inst = xaccSchedXactionGetLastOccurDate(sxed->sx);
         if (g_date_valid(last_sx_inst)

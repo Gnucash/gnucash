@@ -113,9 +113,9 @@ struct _SchedXaction
 
     Account        *template_acct;
 
-    /** The list of deferred SX instances.  This list is of temporalStateData
+    /** The list of deferred SX instances.  This list is of SXTmpStateData
      * instances.  */
-    GList /* <temporalStateData*> */ *deferredList;
+    GList /* <SXTmpStateData*> */ *deferredList;
 };
 
 struct _SchedXactionClass
@@ -124,12 +124,12 @@ struct _SchedXactionClass
 };
 
 /** Just the variable temporal bits from the SX structure. */
-typedef struct _temporalStateData
+typedef struct _SXTmpStateData
 {
     GDate last_date;
     gint num_occur_rem;
     gint num_inst;
-} temporalStateData;
+} SXTmpStateData;
 
 #define xaccSchedXactionSetGUID(X,G) qof_instance_set_guid(QOF_INSTANCE(X),(G))
 
@@ -160,20 +160,20 @@ gchar *xaccSchedXactionGetName( const SchedXaction *sx );
 */
 void xaccSchedXactionSetName( SchedXaction *sx, const gchar *newName );
 
-GDate* xaccSchedXactionGetStartDate( SchedXaction *sx );
+const GDate* xaccSchedXactionGetStartDate(const SchedXaction *sx );
 void xaccSchedXactionSetStartDate( SchedXaction *sx, GDate* newStart );
 
 int xaccSchedXactionHasEndDate( const SchedXaction *sx );
 /**
  * Returns invalid date when there is no end-date specified.
 */
-GDate* xaccSchedXactionGetEndDate( SchedXaction *sx );
+const GDate* xaccSchedXactionGetEndDate(const SchedXaction *sx );
 /**
  * Set to an invalid GDate to turn off 'end-date' definition.
 */
 void xaccSchedXactionSetEndDate( SchedXaction *sx, GDate* newEnd );
 
-GDate* xaccSchedXactionGetLastOccurDate( SchedXaction *sx );
+const GDate* xaccSchedXactionGetLastOccurDate(const SchedXaction *sx );
 void xaccSchedXactionSetLastOccurDate( SchedXaction *sx, GDate* newLastOccur );
 
 /**
@@ -189,7 +189,7 @@ void xaccSchedXactionSetNumOccur( SchedXaction *sx, gint numNum );
 gint xaccSchedXactionGetRemOccur( const SchedXaction *sx );
 void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
 
-/** \brief Set the instance count.
+/** \brief Get the instance count.
  *
  *   This is incremented by one for every created
  * instance of the SX.  Returns the instance num of the SX unless stateData
@@ -198,7 +198,7 @@ void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
  * @param sx The instance whose state should be retrieved.
  * @param stateData may be NULL.
 */
-gint gnc_sx_get_instance_count( const SchedXaction *sx, /*@ null @*/ void *stateData );
+gint gnc_sx_get_instance_count( const SchedXaction *sx, /*@ null @*/ SXTmpStateData *stateData );
 /**
  * Sets the instance count to something other than the default.  As the
  * default is the incorrect value '0', callers should DTRT here.
@@ -233,16 +233,32 @@ void xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays );
  * SX without having to rollback all the individual state changes.
 @{
 */
-void *gnc_sx_create_temporal_state( SchedXaction *sx );
-void gnc_sx_incr_temporal_state( SchedXaction *sx, void *stateData );
-void gnc_sx_revert_to_temporal_state( SchedXaction *sx,
-                                      void *stateData );
-void gnc_sx_destroy_temporal_state( void *stateData );
-/** \brief Allocates and returns a copy of the given temporal state.
+/** Allocates a new SXTmpStateData object and fills it with the
+ * current state of the given sx.
+ */
+SXTmpStateData *gnc_sx_create_temporal_state(const SchedXaction *sx );
 
- *   Destroy with gnc_sx_destroy_temporal_state(), as you'd expect.
+/** Calculates the next occurrence of the given SX and stores that
+ * occurence in the remporalStateDate. The SX is unchanged. */
+void gnc_sx_incr_temporal_state(const SchedXaction *sx, SXTmpStateData *stateData );
+
+/** Sets the state of the given SX to the state of the given
+ * SXTmpStateData. In that sense, this function does not "revert"
+ * but instead it copies the state from the SXTmpStateData to the
+ * real SX.. */
+void gnc_sx_revert_to_temporal_state( SchedXaction *sx,
+                                      SXTmpStateData *stateData );
+
+/** Frees the given stateDate object. */
+void gnc_sx_destroy_temporal_state( SXTmpStateData *stateData );
+
+/** \brief Allocates and returns a one-by-one copy of the given
+ * temporal state.
+ *
+ * The caller must destroy the returned object with
+ * gnc_sx_destroy_temporal_state() after usage.
 */
-void *gnc_sx_clone_temporal_state( void *stateData );
+SXTmpStateData *gnc_sx_clone_temporal_state( SXTmpStateData *stateData );
 /** @} */
 
 /** \brief Returns the next occurrence of a scheduled transaction.
@@ -256,10 +272,10 @@ void *gnc_sx_clone_temporal_state( void *stateData );
  * for possible action without modifying the SX state until action is
  * actually taken.
 */
-GDate xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData );
-GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
-                                        GDate *date,
-                                        void *stateData );
+GDate xaccSchedXactionGetNextInstance(const SchedXaction *sx, SXTmpStateData *stateData );
+GDate xaccSchedXactionGetInstanceAfter(const SchedXaction *sx,
+                                       GDate *date,
+                                       SXTmpStateData *stateData );
 
 /** \brief Set the schedxaction's template transaction.
 

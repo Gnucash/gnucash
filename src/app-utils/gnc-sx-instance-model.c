@@ -1229,7 +1229,7 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
         if (g_list_length(instances->instance_list) == 0)
             continue;
 
-        last_occur_date = xaccSchedXactionGetLastOccurDate(instances->sx);
+        last_occur_date = (GDate*) xaccSchedXactionGetLastOccurDate(instances->sx);
         instance_count = gnc_sx_get_instance_count(instances->sx, NULL);
         remain_occur_count = xaccSchedXactionGetRemOccur(instances->sx);
 

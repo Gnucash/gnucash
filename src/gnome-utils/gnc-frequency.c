@@ -313,13 +313,13 @@ gnc_frequency_set_date_label_text(GncFrequency *gf, const gchar *txt)
 }
 
 GtkWidget*
-gnc_frequency_new_from_recurrence(GList *recurrences, GDate *start_date)
+gnc_frequency_new_from_recurrence(GList *recurrences, const GDate *start_date)
 {
     return gnc_frequency_new(recurrences, start_date);
 }
 
 GtkWidget*
-gnc_frequency_new(GList *recurrences, GDate *start_date)
+gnc_frequency_new(GList *recurrences, const GDate *start_date)
 {
     GncFrequency *toRet;
     toRet = g_object_new(gnc_frequency_get_type(), NULL);
@@ -369,13 +369,13 @@ _get_monthly_combobox_index(Recurrence *r)
 }
 
 void
-gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, GDate *start_date)
+gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, const GDate *start_date)
 {
     gnc_frequency_setup(gf, recurrences, start_date);
 }
 
 void
-gnc_frequency_setup(GncFrequency *gf, GList *recurrences, GDate *start_date)
+gnc_frequency_setup(GncFrequency *gf, GList *recurrences, const GDate *start_date)
 {
     gboolean made_changes = FALSE;
 

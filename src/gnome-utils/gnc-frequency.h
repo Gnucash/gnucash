@@ -69,8 +69,8 @@ GType gnc_frequency_get_type(void);
 /**
  * Either or both param may be NULL for reasonable defaults.
  **/
-GtkWidget* gnc_frequency_new(GList *recurrences, GDate *start_date);
-GtkWidget* gnc_frequency_new_from_recurrence(GList *recurrences, GDate *start_date);
+GtkWidget* gnc_frequency_new(GList *recurrences, const GDate *start_date);
+GtkWidget* gnc_frequency_new_from_recurrence(GList *recurrences, const GDate *start_date);
 
 void gnc_frequency_init(GncFrequency *gf);
 
@@ -79,8 +79,8 @@ void gnc_frequency_init(GncFrequency *gf);
  * If the FreqSpec is NULL, then no change is made to the widget menus.
  * If the date is NULL, then no change is made to the widget date field.
  **/
-void gnc_frequency_setup(GncFrequency *gf, GList *recurrences, GDate *start_date);
-void gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, GDate *start_date);
+void gnc_frequency_setup(GncFrequency *gf, GList *recurrences, const GDate *start_date);
+void gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, const GDate *start_date);
 
 /**
  * Saves the state of the GncFrequency widget.
