@@ -2,6 +2,7 @@ NONGUI_SUBDIRS = \
   report-system \
   standard-reports \
   utility-reports \
+  business-reports \
   locale-specific
 
 GUI_SUBDIRS = \

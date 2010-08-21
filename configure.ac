@@ -1472,6 +1472,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/report/report-system/test/Makefile
           src/report/standard-reports/Makefile
           src/report/standard-reports/test/Makefile
+          src/report/business-reports/Makefile
           src/report/locale-specific/Makefile
           src/report/locale-specific/us/Makefile
           src/report/locale-specific/us/test/Makefile
@@ -1495,7 +1496,6 @@ AC_CONFIG_FILES(po/Makefile.in
           src/business/business-gnome/schemas/Makefile
           src/business/business-gnome/ui/Makefile
           src/business/business-ledger/Makefile
-          src/business/business-reports/Makefile
 
           dnl # non-makefiles
           dnl # Please read doc/build-system before adding *anything* here
