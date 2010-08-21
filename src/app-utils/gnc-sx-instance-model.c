@@ -361,7 +361,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
 {
     GncSxInstances *instances = g_new0(GncSxInstances, 1);
     SchedXaction *sx = (SchedXaction*)data;
-    GDate *range_end = (GDate*)user_data;
+    const GDate *range_end = (const GDate*)user_data;
     GDate creation_end, remind_end;
     GDate cur_date;
     void *sequence_ctx;
@@ -424,14 +424,14 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
 GncSxInstanceModel*
 gnc_sx_get_current_instances(void)
 {
-    GDate *now = g_date_new();
-    g_date_clear(now, 1);
-    g_date_set_time_t(now, time(NULL));
-    return gnc_sx_get_instances(now, FALSE);
+    GDate now;
+    g_date_clear(&now, 1);
+    g_date_set_time_t(&now, time(NULL));
+    return gnc_sx_get_instances(&now, FALSE);
 }
 
 GncSxInstanceModel*
-gnc_sx_get_instances(GDate *range_end, gboolean include_disabled)
+gnc_sx_get_instances(const GDate *range_end, gboolean include_disabled)
 {
     GList *all_sxes = gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
     GncSxInstanceModel *instances;
@@ -445,7 +445,7 @@ gnc_sx_get_instances(GDate *range_end, gboolean include_disabled)
 
     if (include_disabled)
     {
-        instances->sx_instance_list = gnc_g_list_map(all_sxes, (GncGMapFunc)_gnc_sx_gen_instances, range_end);
+        instances->sx_instance_list = gnc_g_list_map(all_sxes, (GncGMapFunc)_gnc_sx_gen_instances, (gpointer)range_end);
     }
     else
     {
@@ -460,7 +460,7 @@ gnc_sx_get_instances(GDate *range_end, gboolean include_disabled)
                 enabled_sxes = g_list_append(enabled_sxes, sx);
             }
         }
-        instances->sx_instance_list = gnc_g_list_map(enabled_sxes, (GncGMapFunc)_gnc_sx_gen_instances, range_end);
+        instances->sx_instance_list = gnc_g_list_map(enabled_sxes, (GncGMapFunc)_gnc_sx_gen_instances, (gpointer)range_end);
         g_list_free(enabled_sxes);
     }
 
@@ -1441,7 +1441,7 @@ gnc_sx_instance_model_summarize(GncSxInstanceModel *model, GncSxSummary *summary
 }
 
 void
-gnc_sx_summary_print(GncSxSummary *summary)
+gnc_sx_summary_print(const GncSxSummary *summary)
 {
     g_message("num_instances: %d", summary->num_instances);
     g_message("num_to_create: %d", summary->num_to_create_instances);

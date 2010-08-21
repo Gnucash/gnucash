@@ -20,6 +20,9 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
+/** \file
+ */
+
 #ifndef _GNC_SX_INSTANCE_MODEL_H
 #define _GNC_SX_INSTANCE_MODEL_H
 
@@ -113,9 +116,16 @@ typedef struct _GncSxVariableNeeded
 
 GType gnc_sx_instance_model_get_type(void);
 
+/** Shorthand for get_instances(now, FALSE); */
 GncSxInstanceModel* gnc_sx_get_current_instances(void);
 
-GncSxInstanceModel* gnc_sx_get_instances(GDate *range_end, gboolean include_disabled);
+/** Allocates a new SxInstanceModel and fills it with generated
+ * instances for all scheduled transactions up to the given range_end
+ * date.
+ *
+ * The caller must unref the returned object by
+ * g_object_unref(G_OBJECT(inst_model)); when no longer in use. */
+GncSxInstanceModel* gnc_sx_get_instances(const GDate *range_end, gboolean include_disabled);
 
 /**
  * Regenerates and updates the GncSxInstances* for the given SX.  Model
@@ -179,6 +189,9 @@ void gnc_sx_instance_model_set_variable(GncSxInstanceModel *model,
  * the caller owns the list and the items.
  **/
 GList* gnc_sx_instance_model_check_variables(GncSxInstanceModel *model);
+
+/** Really ("effectively") create the transactions from the SX
+ * instances in the given model. */
 void gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
         gboolean auto_create_only,
         GList **created_transaction_guids,
@@ -200,7 +213,9 @@ typedef struct _GncSxSummary
  * that need either auto-creation or user-interaction.
  **/
 void gnc_sx_instance_model_summarize(GncSxInstanceModel *model, GncSxSummary *summary);
-void gnc_sx_summary_print(GncSxSummary *summary);
+
+/** Debug output to trace file */
+void gnc_sx_summary_print(const GncSxSummary *summary);
 
 void gnc_sx_get_variables(SchedXaction *sx, GHashTable *var_hash);
 int gnc_sx_parse_vars_from_formula(const char *formula, GHashTable *var_hash, gnc_numeric *result);
