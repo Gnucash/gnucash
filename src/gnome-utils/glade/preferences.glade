@@ -2429,7 +2429,7 @@
                 </child>
                 <child>
                   <widget class="GtkRadioButton" id="gconf/general/register/default_style/journal">
-                    <property name="label" translatable="yes">Transaction _journal</property>
+                    <property name="label" translatable="yes">Transaction _Journal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
