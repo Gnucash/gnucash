@@ -47,6 +47,10 @@
 #include "import-utilities.h"
 #include "qof.h"
 
+#ifdef AQBANKING_VERSION_5_PLUS
+# include <aqbanking/abgui.h>
+#endif /* AQBANKING_VERSION_5_PLUS */
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -114,6 +118,8 @@ gnc_GWEN_Fini(void)
     GWEN_Fini();
 }
 
+static GWEN_GUI *gnc_gwengui_extended_by_ABBanking;
+
 AB_BANKING *
 gnc_AB_BANKING_new(void)
 {
@@ -180,6 +186,11 @@ gnc_AB_BANKING_new(void)
         /* Init the API */
         g_return_val_if_fail(AB_Banking_Init(api) == 0, NULL);
 
+#ifdef AQBANKING_VERSION_5_PLUS
+        gnc_gwengui_extended_by_ABBanking = GWEN_Gui_GetGui();
+        AB_Gui_Extend(gnc_gwengui_extended_by_ABBanking, api);
+#endif /* AQBANKING_VERSION_5_PLUS */
+
         /* Cache it */
         gnc_AB_BANKING = api;
         gnc_AB_BANKING_refcount = 0;
@@ -201,8 +212,7 @@ gnc_AB_BANKING_delete(AB_BANKING *api)
         if (api == gnc_AB_BANKING)
         {
             gnc_AB_BANKING = NULL;
-            if (gnc_AB_BANKING_refcount > 0)
-                AB_Banking_Fini(api);
+            gnc_AB_BANKING_fini(api);
         }
 
         AB_Banking_free(api);
@@ -216,10 +226,22 @@ gnc_AB_BANKING_fini(AB_BANKING *api)
     if (api == gnc_AB_BANKING)
     {
         if (--gnc_AB_BANKING_refcount == 0)
+        {
+#ifdef AQBANKING_VERSION_5_PLUS
+            if (gnc_gwengui_extended_by_ABBanking)
+                AB_Gui_Unextend(gnc_gwengui_extended_by_ABBanking);
+            gnc_gwengui_extended_by_ABBanking = NULL;
+#endif /* AQBANKING_VERSION_5_PLUS */
             return AB_Banking_Fini(api);
+        }
     }
     else
     {
+#ifdef AQBANKING_VERSION_5_PLUS
+        if (gnc_gwengui_extended_by_ABBanking)
+            AB_Gui_Unextend(gnc_gwengui_extended_by_ABBanking);
+        gnc_gwengui_extended_by_ABBanking = NULL;
+#endif /* AQBANKING_VERSION_5_PLUS */
         return AB_Banking_Fini(api);
     }
     return 0;
