@@ -189,6 +189,10 @@ void xaccSchedXactionSetNumOccur( SchedXaction *sx, gint numNum );
 gint xaccSchedXactionGetRemOccur( const SchedXaction *sx );
 void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
 
+/** Calculates and returns the number of occurrences of the given SX
+ * in the given date range (inclusive). */
+gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_date, const GDate* end_date);
+
 /** \brief Get the instance count.
  *
  *   This is incremented by one for every created

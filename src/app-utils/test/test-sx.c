@@ -12,21 +12,24 @@ static void
 test_basic()
 {
     GncSxInstanceModel *model;
-    GDate *yesterday, *range_end_tomorrow;
-    SchedXaction *foo;
+    GDate yesterday, today, tomorrow, before_yesterday, after_tomorrow;
+    SchedXaction *one_sx;
 
-    yesterday = g_date_new();
-    g_date_clear(yesterday, 1);
-    g_date_set_time_t(yesterday, time(NULL));
-    g_date_subtract_days(yesterday, 1);
+    g_date_clear(&today, 1);
+    g_date_set_time_t(&today, time(NULL));
 
-    foo = add_daily_sx("foo", yesterday, NULL, NULL);
+    yesterday = today;
+    g_date_subtract_days(&yesterday, 1);
+    before_yesterday = yesterday;
+    g_date_subtract_days(&before_yesterday, 1);
+    tomorrow = today;
+    g_date_add_days(&tomorrow, 1);
+    after_tomorrow = tomorrow;
+    g_date_add_days(&after_tomorrow, 1);
 
-    range_end_tomorrow = g_date_new();
-    g_date_clear(range_end_tomorrow, 1);
-    g_date_set_time_t(range_end_tomorrow, time(NULL));
-    g_date_add_days(range_end_tomorrow, 1);
-    model = gnc_sx_get_instances(range_end_tomorrow, TRUE);
+    one_sx = add_daily_sx("foo", &yesterday, NULL, NULL);
+
+    model = gnc_sx_get_instances(&tomorrow, TRUE);
 
     {
         GncSxInstances *insts;
@@ -42,8 +45,17 @@ test_basic()
         }
     }
 
+    xaccSchedXactionSetEndDate(one_sx, &tomorrow);
+
+    do_test(gnc_sx_get_num_occur_daterange(one_sx, &before_yesterday, &before_yesterday) == 0, "0 occurrences before start");
+    do_test(gnc_sx_get_num_occur_daterange(one_sx, &today, &today) == 1, "1 occurrence today");
+    do_test(gnc_sx_get_num_occur_daterange(one_sx, &today, &tomorrow) == 2, "2 occurrence today and tomorrow");
+    do_test(gnc_sx_get_num_occur_daterange(one_sx, &yesterday, &tomorrow) == 3, "3 occurrences from yesterday to tomorrow");
+    do_test(gnc_sx_get_num_occur_daterange(one_sx, &tomorrow, &tomorrow) == 1, "1 occurrence tomorrow");
+    do_test(gnc_sx_get_num_occur_daterange(one_sx, &after_tomorrow, &after_tomorrow) == 0, "0 occurrence after the SX has ended");
+
     g_object_unref(G_OBJECT(model));
-    remove_sx(foo);
+    remove_sx(one_sx);
 }
 
 static void
@@ -58,6 +70,7 @@ test_empty()
     model = gnc_sx_get_instances(end, TRUE);
     do_test(g_list_length(model->sx_instance_list) == 0, "no instances");
     g_object_unref(G_OBJECT(model));
+    g_date_free(end);
     success("empty");
 }
 

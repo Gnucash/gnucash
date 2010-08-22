@@ -689,6 +689,69 @@ xaccSchedXactionSetRemOccur(SchedXaction *sx, gint num_remain)
     }
 }
 
+gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_date, const GDate* end_date)
+{
+    gint result = 0;
+    SXTmpStateData *tmpState;
+
+    /* SX still active? If not, return now. */
+    if ((xaccSchedXactionHasOccurDef(sx)
+         && xaccSchedXactionGetRemOccur(sx) <= 0)
+        || (xaccSchedXactionHasEndDate(sx)
+            && g_date_compare(xaccSchedXactionGetEndDate(sx), start_date) < 0))
+    {
+        return result;
+    }
+
+    tmpState = gnc_sx_create_temporal_state (sx);
+
+    /* No valid date? SX has never occurred so far. */
+    if (!g_date_valid(&tmpState->last_date))
+    {
+        /* SX has never occurred so far */
+        gnc_sx_incr_temporal_state (sx, tmpState);
+        if (xaccSchedXactionHasOccurDef(sx) && tmpState->num_occur_rem <= 0)
+        {
+            gnc_sx_destroy_temporal_state (tmpState);
+            return result;
+        }
+    }
+
+    /* Increase the tmpState until we are in our interval of
+     * interest. Only calculate anything if the sx hasn't already
+     * ended. */
+    while (g_date_compare(&tmpState->last_date, start_date) < 0)
+    {
+        gnc_sx_incr_temporal_state (sx, tmpState);
+        if (xaccSchedXactionHasOccurDef(sx) && tmpState->num_occur_rem <= 0)
+        {
+            gnc_sx_destroy_temporal_state (tmpState);
+            return result;
+        }
+    }
+
+    /* Now we are in our interval of interest. Increment the
+     * occurrence date until we are beyond the end of our interval. */
+    while ((g_date_compare(&tmpState->last_date, end_date) <= 0)
+           && (!xaccSchedXactionHasEndDate(sx)
+               || g_date_compare(&tmpState->last_date, xaccSchedXactionGetEndDate(sx)) <= 0))
+    {
+        ++result;
+        gnc_sx_incr_temporal_state (sx, tmpState);
+        /* Make sure to check for invalid dates here: It means the SX
+         * has ended. */
+        if (!g_date_valid(&tmpState->last_date)
+            || (xaccSchedXactionHasOccurDef(sx)
+                && tmpState->num_occur_rem <= 0))
+        {
+            break;
+        }
+    }
+
+    gnc_sx_destroy_temporal_state (tmpState);
+    return result;
+}
+
 
 KvpValue *
 xaccSchedXactionGetSlot( const SchedXaction *sx, const char *slot )
