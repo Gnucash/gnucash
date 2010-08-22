@@ -2189,7 +2189,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
 }
 
 static Recurrence*
-daily_freq(GDate* start, int multiplier)
+daily_freq(const GDate* start, int multiplier)
 {
     Recurrence *r = g_new0(Recurrence, 1);
     recurrenceSet(r, multiplier, PERIOD_DAY, start, WEEKEND_ADJ_NONE);
@@ -2197,7 +2197,7 @@ daily_freq(GDate* start, int multiplier)
 }
 
 static Recurrence*
-once_freq(GDate *when)
+once_freq(const GDate *when)
 {
     Recurrence *r = g_new0(Recurrence, 1);
     recurrenceSet(r, 1, PERIOD_ONCE, when, WEEKEND_ADJ_NONE);
@@ -2205,7 +2205,7 @@ once_freq(GDate *when)
 }
 
 static SchedXaction*
-add_sx(gchar *name, GDate *start, GDate *end, GDate *last_occur, Recurrence *r)
+add_sx(gchar *name, const GDate *start, const GDate *end, const GDate *last_occur, Recurrence *r)
 {
     QofBook *book = qof_session_get_book(gnc_get_current_session());
     SchedXaction *sx = xaccSchedXactionMalloc(book);
@@ -2227,13 +2227,13 @@ add_sx(gchar *name, GDate *start, GDate *end, GDate *last_occur, Recurrence *r)
 }
 
 SchedXaction*
-add_daily_sx(gchar *name, GDate *start, GDate *end, GDate *last_occur)
+add_daily_sx(gchar *name, const GDate *start, const GDate *end, const GDate *last_occur)
 {
     return add_sx(name, start, end, last_occur, daily_freq(start, 1));
 }
 
 SchedXaction*
-add_once_sx(gchar *name, GDate *when)
+add_once_sx(gchar *name, const GDate *when)
 {
     return add_sx(name, when, NULL, NULL, once_freq(when));
 }

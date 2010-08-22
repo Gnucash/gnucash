@@ -581,7 +581,7 @@ xaccSchedXactionGetStartDate(const SchedXaction *sx )
 }
 
 void
-xaccSchedXactionSetStartDate( SchedXaction *sx, GDate* newStart )
+xaccSchedXactionSetStartDate( SchedXaction *sx, const GDate* newStart )
 {
     gnc_sx_begin_edit(sx);
     sx->start_date = *newStart;
@@ -602,7 +602,7 @@ xaccSchedXactionGetEndDate(const SchedXaction *sx )
 }
 
 void
-xaccSchedXactionSetEndDate( SchedXaction *sx, GDate *newEnd )
+xaccSchedXactionSetEndDate( SchedXaction *sx, const GDate *newEnd )
 {
     if ( g_date_valid( newEnd )
             && g_date_compare( newEnd, &sx->start_date ) < 0 )
@@ -629,7 +629,7 @@ xaccSchedXactionGetLastOccurDate(const SchedXaction *sx )
 }
 
 void
-xaccSchedXactionSetLastOccurDate(SchedXaction *sx, GDate* new_last_occur)
+xaccSchedXactionSetLastOccurDate(SchedXaction *sx, const GDate* new_last_occur)
 {
     if (g_date_valid(&sx->last_date)
             && g_date_compare(&sx->last_date, new_last_occur) == 0)

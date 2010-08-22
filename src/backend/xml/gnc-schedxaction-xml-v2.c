@@ -312,7 +312,7 @@ sx_advRemind_handler( xmlNodePtr node, gpointer sx_pdata )
 static
 gboolean
 sx_set_date( xmlNodePtr node, SchedXaction *sx,
-             void (*settor)( SchedXaction *sx, GDate *d ) )
+             void (*settor)( SchedXaction *sx, const GDate *d ) )
 {
     GDate *date;
     date = dom_tree_to_gdate( node );
