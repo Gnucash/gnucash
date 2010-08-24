@@ -46,6 +46,9 @@
 #include "search-core-type.h"
 #include "search-param.h"
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = G_LOG_DOMAIN;
+
 #define DIALOG_SEARCH_CM_CLASS "dialog-search"
 #define KEY_ACTIVE_ONLY "search_for_active_only"
 
@@ -821,6 +824,33 @@ close_handler (gpointer data)
     /* DRH: should sw be freed here? */
 }
 
+static const gchar *
+type_label_to_new_button(const gchar* type_label)
+{
+    if (g_strcmp0(type_label, "Bill") == 0) {
+        return _("New Bill");
+    } else if (g_strcmp0(type_label, "Customer") == 0) {
+        return _("New Customer");
+    } else if (g_strcmp0(type_label, "Employee") == 0) {
+        return _("New Employee");
+    } else if (g_strcmp0(type_label, "Expense Voucher") == 0) {
+        return _("New Expense Voucher");
+    } else if (g_strcmp0(type_label, "Invoice") == 0) {
+        return _("New Invoice");
+    } else if (g_strcmp0(type_label, "Job") == 0) {
+        return _("New Job");
+    } else if (g_strcmp0(type_label, "Order") == 0) {
+        return _("New Order");
+    } else if (g_strcmp0(type_label, "Transaction") == 0) {
+        return _("New Transaction");
+    } else if (g_strcmp0(type_label, "Vendor") == 0) {
+        return _("New Vendor");
+    } else {
+        PWARN("No translatable new-button label found for search type \"%s\", please add one into dialog-search.c!", type_label);
+        return _("New item");
+    }
+}
+
 static void
 gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 {
@@ -899,6 +929,11 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 
     /* Deal with the new_item button */
     new_item_button = glade_xml_get_widget (xml, "new_item_button");
+    gtk_button_set_label (GTK_BUTTON(new_item_button),
+                          type_label_to_new_button(type_label));
+#if 1
+    /* This old implementation part will be de-activated and removed
+     * once the string freeze is lifted again after 2.4.0 release. */
     {
         char *desc =
             /* Translators: %s is either "item" or the name of some other
@@ -907,6 +942,8 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
         gtk_button_set_label (GTK_BUTTON(new_item_button), desc);
         g_free (desc);
     }
+#endif
+
     /* add the first criterion */
     gnc_search_dialog_add_criterion (sw);
 
@@ -1152,3 +1189,10 @@ gnc_search_dialog_test (void)
                                    NULL, NULL, buttons, NULL, NULL, NULL, NULL,
                                    NULL, NULL);
 }
+
+// Local Variables:
+// mode: c
+// indent-tabs-mode: nil
+// c-block-comment-prefix: "* "
+// eval: (c-add-style "gnc" '("k&r" (c-basic-offset . 4) (c-offsets-alist (case-label . +))) t)
+// End:
