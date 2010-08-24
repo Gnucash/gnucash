@@ -712,7 +712,7 @@ guid_hash_to_guint (gconstpointer ptr)
     }
 }
 
-static gint
+gint
 guid_g_hash_table_equal (gconstpointer guid_a, gconstpointer guid_b)
 {
     return guid_equal (guid_a, guid_b);

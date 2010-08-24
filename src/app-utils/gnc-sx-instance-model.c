@@ -256,7 +256,7 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
 }
 
 Account*
-gnc_sx_get_template_transaction_account(SchedXaction *sx)
+gnc_sx_get_template_transaction_account(const SchedXaction *sx)
 {
     Account *template_root, *sx_template_acct;
     char sx_guid_str[GUID_ENCODING_LENGTH+1];
@@ -1449,3 +1449,55 @@ gnc_sx_summary_print(const GncSxSummary *summary)
     g_message("num_auto_create_no_notify_instances: %d", summary->num_auto_create_no_notify_instances);
     g_message("need dialog? %s", summary->need_dialog ? "true" : "false");
 }
+
+static void gnc_numeric_free(gpointer data)
+{
+    gnc_numeric *p = (gnc_numeric*) data;
+    g_free(p);
+}
+
+GHashTable* gnc_g_hash_new_guid_numeric()
+{
+    return g_hash_table_new_full (guid_hash_to_guint, guid_g_hash_table_equal,
+                                  NULL, gnc_numeric_free);
+}
+
+typedef struct {
+	GHashTable *hash;
+	GList **creation_errors;
+} SxCashflowData;
+
+static gboolean
+create_cashflow_helper(Transaction *template_txn, void *user_data)
+{
+/* FIXME: Still unfinished here! */
+    return FALSE;
+}
+
+void gnc_sx_instantiate_cashflow(const SchedXaction* sx,
+                                 GHashTable* map, GList **creation_errors)
+{
+    SxCashflowData create_cashflow_data;
+    Account* sx_template_account = gnc_sx_get_template_transaction_account(sx);
+
+    create_cashflow_data.hash = map;
+    create_cashflow_data.creation_errors = creation_errors;
+
+    xaccAccountForEachTransaction(sx_template_account,
+                                  create_cashflow_helper,
+                                  &create_cashflow_data);
+}
+
+void gnc_sx_all_instantiate_cashflow(GList *all_sxes,
+                                     const GDate *range_start, const GDate *range_end,
+                                     GHashTable* map, GList **creation_errors)
+{
+    /* FIXME: Still unfinished here! */
+}
+
+// Local Variables:
+// mode: c
+// indent-tabs-mode: nil
+// c-block-comment-prefix: "* "
+// eval: (c-add-style "gnc" '("k&r" (c-basic-offset . 4) (c-offsets-alist (case-label . +))) t)
+// End:

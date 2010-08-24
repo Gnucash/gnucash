@@ -139,7 +139,7 @@ void gnc_sx_instance_model_remove_sx_instances(GncSxInstanceModel *model, SchedX
 /** @return GList<GncSxVariable*>. Caller owns the list, but not the items. **/
 GList *gnc_sx_instance_get_variables(GncSxInstance *inst);
 
-Account* gnc_sx_get_template_transaction_account(SchedXaction *sx);
+Account* gnc_sx_get_template_transaction_account(const SchedXaction *sx);
 
 /**
  * @return caller-owned data struct.
@@ -220,6 +220,39 @@ void gnc_sx_summary_print(const GncSxSummary *summary);
 void gnc_sx_get_variables(SchedXaction *sx, GHashTable *var_hash);
 int gnc_sx_parse_vars_from_formula(const char *formula, GHashTable *var_hash, gnc_numeric *result);
 void gnc_sx_randomize_variables(GHashTable *vars);
+
+/** Returns a GHashTable<GUID*, gnc_numeric*> with no destructor for
+ * the key, but a destructor for the value set.
+ *
+ * The returned value must be free'd with g_hash_table_destroy or
+ * g_hash_table_unref. */
+GHashTable* gnc_g_hash_new_guid_numeric(void);
+
+/** Calculates the cash flow of one single instance of the given SX
+ * into the GHashTable<GUID*, gnc_numeric*> such that the cash flow on
+ * each account is added to the given hash under the GUID of that
+ * account.
+ *
+ * Exactly one instance of the SX is calculated, regardless of its
+ * start date, recurrence, or end date.
+ *
+ * The creation_errors list, if non-NULL, receive any errors that
+ * occurred during creation, similar as in
+ * gnc_sx_instance_model_effect_change(). */
+void gnc_sx_instantiate_cashflow(const SchedXaction* sx,
+								 GHashTable* map, GList **creation_errors);
+
+/** Instantiates the cash flow of all given SXs (in the given
+ * GList<SchedXAction*>) into the GHashTable<GUID*, gnc_numeric*> for the
+ * given date range. Each SX is counted with multiplicity as it has
+ * occurrences in the given date range.
+ *
+ * The creation_errors list, if non-NULL, receive any errors that
+ * occurred during creation, similar as in
+ * gnc_sx_instance_model_effect_change(). */
+void gnc_sx_all_instantiate_cashflow(GList *all_sxes,
+									 const GDate *range_start, const GDate *range_end,
+									 GHashTable* map, GList **creation_errors);
 
 G_END_DECLS
 

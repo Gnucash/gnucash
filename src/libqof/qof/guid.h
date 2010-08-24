@@ -199,9 +199,14 @@ gboolean string_to_guid(const gchar * string, /*@ out @*/ GncGUID * guid);
 gboolean guid_equal(const GncGUID *guid_1, const GncGUID *guid_2);
 gint     guid_compare(const GncGUID *g1, const GncGUID *g2);
 
-/** Given a GncGUID *, hash it to a guint */
+/** Hash function for a GUID. Given a GncGUID *, hash it to a guint */
 guint guid_hash_to_guint(gconstpointer ptr);
 
+/** Equality function for two GUIDs in a GHashTable. */
+gint guid_g_hash_table_equal (gconstpointer guid_a, gconstpointer guid_b);
+
+/** Returns a GHashTable with <GUID*> as key and a <gpointer> as
+ * value and no destructor functions for key or value set. */
 GHashTable *guid_hash_table_new(void);
 
 /* @} */
