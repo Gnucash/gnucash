@@ -8,7 +8,7 @@
     </gnc-act:short-description>
     <gnc-act:long-description>
     Die meisten Anwender benötigen diese grundlegende Kontenstruktur. Sie finden hier die allgemein üblichen Konten wie Giro-, Sparkonto, Bargeld, Kreditkarte, Erträge und verschiedene Ausgaben. Wenn Sie aber einen SKR verwenden wollen, brauchen Sie sie nicht.
-  </gnc-act:long-description>    
+  </gnc-act:long-description>
   <gnc-act:start-selected>1</gnc-act:start-selected>
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -84,14 +84,14 @@
   <act:parent type="new">12862aa943c3475761754a838a21460c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Passiva</act:name>
+  <act:name>Fremdkapital</act:name>
   <act:id type="new">60d5e7e410dc5fdf91cf2ecbb5b7245c</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Passiva</act:description>
+  <act:description>alle Verbindlichkeiten</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
