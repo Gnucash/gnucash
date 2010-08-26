@@ -805,7 +805,7 @@ gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
         if (gnc_numeric_check (value) == GNC_ERROR_OK)
         {
             if (use_value)
-                total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+                total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
         }
         else
             g_warning ("bad value in our entry");
@@ -813,7 +813,7 @@ gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
         if (gnc_numeric_check (tax) == GNC_ERROR_OK)
         {
             if (use_tax)
-                total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+                total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
         }
         else
             g_warning ("bad tax-value in our entry");
@@ -1330,7 +1330,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
                 }
                 else
-                    total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+                    total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
 
             }
             else
@@ -1342,7 +1342,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
         /* ... and add the tax total */
         if (gnc_numeric_check (tax) == GNC_ERROR_OK)
-            total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+            total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
         else
             g_warning ("bad tax in our entry");
 
@@ -1416,7 +1416,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                                invoice->currency);
 
         total = gnc_numeric_sub (total, invoice->to_charge_amount,
-                                 GNC_DENOM_AUTO, GNC_DENOM_LCD);
+                                 GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
     }
 
     /* Now create the Posted split (which is negative -- it's a credit) */
@@ -1784,7 +1784,7 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
         }
 
         /* reduce the payment_value by split_amt */
-        payment_value = gnc_numeric_sub (payment_value, split_amt, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+        payment_value = gnc_numeric_sub (payment_value, split_amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
 
         /* Create the split for this lot in the post account */
         split = xaccMallocSplit (book);

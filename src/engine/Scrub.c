@@ -663,13 +663,13 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
             if (balance_split && balance_split != split)
             {
                 gnc_numeric convrate = gnc_numeric_div (amount, value,
-                                                        GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+                                                        GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
                 gnc_numeric old_value, new_value;
                 old_value = xaccSplitGetValue(balance_split);
                 new_value = gnc_numeric_div (xaccSplitGetAmount(balance_split),
                                              convrate,
                                              gnc_commodity_get_fraction(currency),
-                                             GNC_RND_ROUND);
+                                             GNC_HOW_RND_ROUND);
                 if (! gnc_numeric_equal (old_value, new_value))
                 {
                     xaccTransBeginEdit (trans);

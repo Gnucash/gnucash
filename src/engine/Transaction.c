@@ -975,7 +975,7 @@ xaccTransGetAccountAmount (const Transaction *trans, const Account *acc)
     if (!trans || !acc) return total;
 
     total = gnc_numeric_convert (total, xaccAccountGetCommoditySCU (acc),
-                                 GNC_RND_ROUND);
+                                 GNC_HOW_RND_ROUND);
     FOR_EACH_SPLIT(trans, if (acc == xaccSplitGetAccount(s))
                    total = gnc_numeric_add_fixed(
                                total, xaccSplitGetAmount(s)));
@@ -1025,7 +1025,7 @@ xaccTransGetAccountConvRate(const Transaction *txn, const Account *acc)
         if (gnc_numeric_zero_p (value))
             PWARN("How can amount be nonzero and value be zero?");
 
-        convrate = gnc_numeric_div(amount, value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+        convrate = gnc_numeric_div(amount, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
         return convrate;
     }
 

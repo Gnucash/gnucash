@@ -342,7 +342,7 @@ AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
         gnc_amount = double_to_gnc_numeric
                      (d_value,
                       xaccAccountGetCommoditySCU(gnc_acc),
-                      GNC_RND_ROUND);
+                      GNC_HOW_RND_ROUND);
         if (!h_value)
             g_warning("trans_list_cb: Oops, value was NULL. Using 0.\n");
         xaccSplitSetBaseValue(split, gnc_amount, xaccAccountGetCommodity(gnc_acc));

@@ -712,7 +712,7 @@ qif_txn_fix_amounts(QifTxn txn, gnc_numeric amount)
     for (node = txn->splits; node; node = node->next)
     {
         split = node->data;
-        sum = gnc_numeric_add(sum, split->amount, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+        sum = gnc_numeric_add(sum, split->amount, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
     }
 
     /* if the sum is not zero then reverse all the amounts in the split list */
@@ -851,7 +851,7 @@ qif_txn_setup_splits(QifTxn txn)
         {
             split = node->data;
             split->value = split->amount;
-            total = gnc_numeric_add(total, split->amount, 0, GNC_DENOM_LCD);
+            total = gnc_numeric_add(total, split->amount, 0, GNC_HOW_DENOM_LCD);
         }
 
         /* And re-set the default-split amount */
@@ -1079,7 +1079,7 @@ qif_invst_txn_setup_splits(QifContext ctx, QifTxn txn)
     itxn = txn->invst_info;
 
     /* Compute the share value, because we'll probably need it */
-    split_value = gnc_numeric_mul(itxn->shares, itxn->price, 0, GNC_DENOM_REDUCE);
+    split_value = gnc_numeric_mul(itxn->shares, itxn->price, 0, GNC_HOW_DENOM_REDUCE);
 
     /* Make sure that "amount" is a valid "transaction amount" */
     if (!itxn->amountstr && itxn->d_amountstr)

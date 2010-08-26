@@ -164,12 +164,12 @@ gnc_convert_to_euro(const gnc_commodity * currency, gnc_numeric value)
     {
         gnc_numeric rate;
 
-        rate = double_to_gnc_numeric (result->rate, 100000, GNC_RND_ROUND);
+        rate = double_to_gnc_numeric (result->rate, 100000, GNC_HOW_RND_ROUND);
 
         /* Which rounding should be used here? H. Thoma said
-           GNC_RND_FLOOR, but I (cstim) think he's wrong -- the official
-           rules say you *have* to use GNC_RND_ROUND! */
-        return gnc_numeric_div (value, rate, 100, GNC_RND_ROUND);
+           GNC_HOW_RND_FLOOR, but I (cstim) think he's wrong -- the official
+           rules say you *have* to use GNC_HOW_RND_ROUND! */
+        return gnc_numeric_div (value, rate, 100, GNC_HOW_RND_ROUND);
     }
 }
 
@@ -198,10 +198,10 @@ gnc_convert_from_euro(const gnc_commodity * currency, gnc_numeric value)
     {
         gnc_numeric rate;
 
-        rate = double_to_gnc_numeric (result->rate, 100000, GNC_RND_ROUND);
+        rate = double_to_gnc_numeric (result->rate, 100000, GNC_HOW_RND_ROUND);
 
         return gnc_numeric_mul (value, rate, gnc_commodity_get_fraction (currency),
-                                GNC_RND_ROUND);
+                                GNC_HOW_RND_ROUND);
     }
 }
 
@@ -228,7 +228,7 @@ gnc_euro_currency_get_rate (const gnc_commodity *currency)
         return gnc_numeric_zero ();
 
     return double_to_gnc_numeric (result->rate, GNC_DENOM_AUTO,
-                                  GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND);
+                                  GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND);
 }
 
 /* ------------------------------------------------------ */

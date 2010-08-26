@@ -85,7 +85,7 @@ SCM gnc_account_value_ptr_to_scm (GncAccountValue *av)
 
     com = xaccAccountGetCommodity (av->account);
     val = gnc_numeric_convert (av->value, gnc_commodity_get_fraction (com),
-                               GNC_RND_ROUND);
+                               GNC_HOW_RND_ROUND);
 
     return scm_cons (SWIG_NewPointerObj(av->account, account_type, 0),
                      gnc_numeric_to_scm (val));

@@ -2152,7 +2152,7 @@ ld_setup_repayment_sx( LoanDruidData *ldd,
     GNCPrintAmountInfo pricePAI = gnc_default_price_print_info();
 #define AMTBUF_LEN 64
     gchar amtBuf[AMTBUF_LEN];
-    gint GNCN_HOW = (GNC_DENOM_SIGFIGS(2) | GNC_RND_ROUND);
+    gint GNCN_HOW = (GNC_HOW_DENOM_SIGFIGS(2) | GNC_HOW_RND_ROUND);
 
     /* We're going to use this a lot, below, so just create it once. */
     xaccSPrintAmount( amtBuf,
@@ -2803,7 +2803,7 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
                 PERR( "pmt Parsing error at %s", eloc );
                 continue;
             }
-            val = gnc_numeric_convert( val, 100, GNC_RND_ROUND );
+            val = gnc_numeric_convert( val, 100, GNC_HOW_RND_ROUND );
             rowNumData[0] = val;
 
             if ( ! gnc_exp_parser_parse_separate_vars(
@@ -2812,7 +2812,7 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
                 PERR( "ppmt Parsing error at %s", eloc );
                 continue;
             }
-            val = gnc_numeric_convert( val, 100, GNC_RND_ROUND );
+            val = gnc_numeric_convert( val, 100, GNC_HOW_RND_ROUND );
             rowNumData[1] = val;
 
             if ( ! gnc_exp_parser_parse_separate_vars(
@@ -2821,7 +2821,7 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
                 PERR( "ipmt Parsing error at %s", eloc );
                 continue;
             }
-            val = gnc_numeric_convert( val, 100, GNC_RND_ROUND );
+            val = gnc_numeric_convert( val, 100, GNC_HOW_RND_ROUND );
             rowNumData[2] = val;
         }
 
@@ -2860,8 +2860,8 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
                         schedule, &curDate, &nextDate ) )
             {
                 gint gncn_how =
-                    GNC_DENOM_SIGFIGS(2)
-                    | GNC_RND_ROUND;
+                    GNC_HOW_DENOM_SIGFIGS(2)
+                    | GNC_HOW_RND_ROUND;
                 gnc_numeric val;
                 rowNumData = (gnc_numeric*)g_hash_table_lookup( repayment_schedule,
                              &curDate );

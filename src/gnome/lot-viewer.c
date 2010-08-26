@@ -390,7 +390,7 @@ get_realized_gains (GNCLot *lot, gnc_commodity *currency)
         trans = xaccSplitGetParent (s);
         if (FALSE == gnc_commodity_equal (xaccTransGetCurrency(trans), currency)) continue;
 
-        gains = gnc_numeric_add (gains, xaccSplitGetValue (s), GNC_DENOM_AUTO, GNC_DENOM_FIXED);
+        gains = gnc_numeric_add (gains, xaccSplitGetValue (s), GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
     }
     return gains;
 }

@@ -280,7 +280,7 @@ _set_var_to_random_value(gchar *key, GncSxVariable *var, gpointer unused_user_da
 {
     var->value = double_to_gnc_numeric(rand() + 2, 1,
                                        GNC_NUMERIC_RND_MASK
-                                       | GNC_RND_FLOOR);
+                                       | GNC_HOW_RND_FLOOR);
 }
 
 void

@@ -966,7 +966,7 @@ GList *gncAccountValueAdd (GList *list, Account *acc, gnc_numeric value)
         if (res->account == acc)
         {
             res->value = gnc_numeric_add (res->value, value, GNC_DENOM_AUTO,
-                                          GNC_DENOM_LCD);
+                                          GNC_HOW_DENOM_LCD);
             return list;
         }
     }
@@ -1000,7 +1000,7 @@ gnc_numeric gncAccountValueTotal (GList *list)
     for ( ; list ; list = list->next)
     {
         GncAccountValue *val = list->data;
-        total = gnc_numeric_add (total, val->value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+        total = gnc_numeric_add (total, val->value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
     }
     return total;
 }

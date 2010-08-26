@@ -393,7 +393,7 @@ func_op(const char *fname, int argc, void **argv)
     result = g_new0( gnc_numeric, 1 );
     *result = double_to_gnc_numeric( scm_num2dbl(scmTmp, G_STRFUNC),
                                      GNC_DENOM_AUTO,
-                                     GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND );
+                                     GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND );
     /* FIXME: cleanup scmArgs = scm_list, cons'ed cells? */
     return (void*)result;
 }
@@ -437,19 +437,19 @@ numeric_ops(char op_sym,
     {
     case ADD_OP:
         result->value = gnc_numeric_add (left->value, right->value,
-                                         GNC_DENOM_AUTO, GNC_DENOM_EXACT);
+                                         GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
         break;
     case SUB_OP:
         result->value = gnc_numeric_sub (left->value, right->value,
-                                         GNC_DENOM_AUTO, GNC_DENOM_EXACT);
+                                         GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
         break;
     case DIV_OP:
         result->value = gnc_numeric_div (left->value, right->value,
-                                         GNC_DENOM_AUTO, GNC_DENOM_EXACT);
+                                         GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
         break;
     case MUL_OP:
         result->value = gnc_numeric_mul (left->value, right->value,
-                                         GNC_DENOM_AUTO, GNC_DENOM_EXACT);
+                                         GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
         break;
     case ASN_OP:
         result->value = right->value;

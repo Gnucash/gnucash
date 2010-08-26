@@ -160,7 +160,7 @@ set_numeric (GtkWidget *widget, GncBillTerm *term,
     gdouble fl = 0.0;
 
     fl = gtk_spin_button_get_value (GTK_SPIN_BUTTON (widget));
-    val = double_to_gnc_numeric (fl, 100000, GNC_RND_ROUND);
+    val = double_to_gnc_numeric (fl, 100000, GNC_HOW_RND_ROUND);
     func (term, val);
 }
 

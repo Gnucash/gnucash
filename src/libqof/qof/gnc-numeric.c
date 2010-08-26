@@ -1080,7 +1080,7 @@ gnc_numeric_to_decimal(gnc_numeric *a, guint8 *max_decimal_places)
     converted_val = *a;
     if (converted_val.denom <= 0)
     {
-        converted_val = gnc_numeric_convert(converted_val, 1, GNC_DENOM_EXACT);
+        converted_val = gnc_numeric_convert(converted_val, 1, GNC_HOW_DENOM_EXACT);
         if (gnc_numeric_check(converted_val) != GNC_ERROR_OK)
             return FALSE;
         *a = converted_val;

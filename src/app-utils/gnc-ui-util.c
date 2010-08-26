@@ -1407,7 +1407,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     {
         rounding.num = 5; /* Limit the denom to 10^13 ~= 2^44, leaving max at ~524288 */
         rounding.denom = pow(10, max_dp + 1);
-        val = gnc_numeric_add(val, rounding, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+        val = gnc_numeric_add(val, rounding, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
         /* Yes, rounding up can cause overflow.  Check for it. */
         if (gnc_numeric_check(val))
         {

@@ -1329,7 +1329,7 @@ xaccSplitConvertAmount (const Split *split, const Account * account)
     convrate = xaccTransGetAccountConvRate(txn, account);
     return gnc_numeric_mul (value, convrate,
                             gnc_commodity_get_fraction (to_commodity),
-                            GNC_RND_ROUND);
+                            GNC_HOW_RND_ROUND);
 }
 
 /********************************************************************\

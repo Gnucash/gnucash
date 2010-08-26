@@ -303,7 +303,7 @@ gnc_split_register_check_account (SplitRegister *reg,
             gnc_numeric amt       = xaccSplitGetAmount(split);
             gnc_numeric val       = xaccSplitGetValue(split);
             gnc_numeric orig_rate = gnc_numeric_div(amt, val, GNC_DENOM_AUTO,
-                                                    GNC_DENOM_REDUCE);
+                                                    GNC_HOW_DENOM_REDUCE);
 
             if (!gnc_numeric_check(orig_rate))
             {
@@ -1426,7 +1426,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     {
         gnc_numeric amt = xaccSplitGetAmount (osplit);
         gnc_numeric val = xaccSplitGetValue (osplit);
-        exch_rate = gnc_numeric_div (amt, val, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+        exch_rate = gnc_numeric_div (amt, val, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
     }
 
     /* Ok, we need to grab the exchange rate */

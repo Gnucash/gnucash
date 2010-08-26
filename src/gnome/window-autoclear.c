@@ -134,7 +134,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
 
     /* Value we have to reach */
     toclear_value = gnc_amount_edit_get_amount(data->end_value);
-    toclear_value = gnc_numeric_convert(toclear_value, xaccAccountGetCommoditySCU(data->account), GNC_RND_NEVER);
+    toclear_value = gnc_numeric_convert(toclear_value, xaccAccountGetCommoditySCU(data->account), GNC_HOW_RND_NEVER);
 
     /* Extract which splits are not cleared and compute the amount we have to clear */
     for (node = xaccAccountGetSplitList(data->account); node; node = node->next)

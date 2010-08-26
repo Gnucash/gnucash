@@ -170,7 +170,7 @@ gnc_xfer_dialog_compute_price (XferDialog *xferData)
     from_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
     to_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit));
 
-    return(gnc_numeric_div(to_amt, from_amt, GNC_DENOM_AUTO, GNC_DENOM_REDUCE));
+    return(gnc_numeric_div(to_amt, from_amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE));
 }
 
 /* (maybe) update the price from the pricedb. */
@@ -215,7 +215,7 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
         PINFO("Found reverse price: 1 %s = %f %s", gnc_commodity_get_mnemonic(to),
               gnc_numeric_to_double(price), gnc_commodity_get_mnemonic(from));
         price = gnc_numeric_div (gnc_numeric_create (1, 1), price,
-                                 GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+                                 GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
     }
 
     /* and set the price entry */
@@ -288,7 +288,7 @@ gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
     if (gnc_numeric_zero_p (from_rate) || gnc_numeric_zero_p (to_rate))
         gnc_xfer_dialog_update_price (xferData);
 
-    price = gnc_numeric_div (to_rate, from_rate, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+    price = gnc_numeric_div (to_rate, from_rate, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
 
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(xferData->price_edit), price);
 
@@ -848,7 +848,7 @@ gnc_xfer_dialog_update_conv_info (XferDialog *xferData)
         g_free(string);
 
         rate = gnc_numeric_div(gnc_numeric_create (1, 1), rate,
-                               GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+                               GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
         string = g_strdup_printf("1 %s = %f %s", to_mnemonic,
                                  gnc_numeric_to_double(rate), from_mnemonic);
         gtk_label_set_text(GTK_LABEL(xferData->conv_reverse), string);
@@ -901,7 +901,7 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
         to_amount = gnc_numeric_zero();
     else
         to_amount = gnc_numeric_mul(gnc_amount_edit_get_amount(amount_edit),
-                                    price, scu, GNC_RND_ROUND);
+                                    price, scu, GNC_HOW_RND_ROUND);
 
     /* Update the dialog. */
     gnc_amount_edit_set_amount(to_amount_edit, to_amount);
@@ -950,7 +950,7 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
     gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit));
 
     price = gnc_xfer_dialog_compute_price(xferData);
-    price = gnc_numeric_convert (price, PRECISION, GNC_RND_ROUND);
+    price = gnc_numeric_convert (price, PRECISION, GNC_HOW_RND_ROUND);
     gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), price);
     gnc_xfer_dialog_update_conv_info(xferData);
 
@@ -1521,7 +1521,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
                     from = to;
                     to = tmp;
                     value = gnc_numeric_div (gnc_numeric_create(1, 1), value,
-                                             GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+                                             GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
                 }
                 else if ((to != gnc_default_currency()) &&
                          (strcmp (gnc_commodity_get_mnemonic(from),
@@ -1531,7 +1531,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
                     from = to;
                     to = tmp;
                     value = gnc_numeric_div (gnc_numeric_create(1, 1), value,
-                                             GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+                                             GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
                 }
 
                 price = gnc_price_create (xferData->book);
@@ -2260,7 +2260,7 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
         /* XXX: should we tell the user we've done the conversion? */
         amount = gnc_numeric_div(
                      amount, rate,
-                     gnc_commodity_get_fraction(txn_cur), GNC_DENOM_REDUCE);
+                     gnc_commodity_get_fraction(txn_cur), GNC_HOW_DENOM_REDUCE);
     }
 
     /* enter the accounts */
@@ -2270,7 +2270,7 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
         gnc_xfer_dialog_select_from_currency(xfer, xfer_com);
         if (!gnc_numeric_zero_p(*exch_rate))
             *exch_rate = gnc_numeric_div(gnc_numeric_create(1, 1), *exch_rate,
-                                         GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+                                         GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
         amount = gnc_numeric_neg(amount);
     }
     else
@@ -2300,6 +2300,6 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
      */
     if (swap_amounts)
         *exch_rate = gnc_numeric_div(gnc_numeric_create(1, 1), *exch_rate,
-                                     GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+                                     GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
     return FALSE;
 }

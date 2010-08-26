@@ -271,7 +271,7 @@ gnc_hbci_maketrans_final(HBCITransDialog *td, Account *gnc_acc,
     amount = double_to_gnc_numeric
              (AB_Value_GetValue (AB_Transaction_GetValue (h_trans)),
               xaccAccountGetCommoditySCU(gnc_acc),
-              GNC_RND_ROUND);
+              GNC_HOW_RND_ROUND);
     /*switch (trans_type) {
       case SINGLE_DEBITNOTE:
       gnc_xfer_dialog_set_amount (transdialog, gnc_numeric_neg (amount));

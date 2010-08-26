@@ -1082,7 +1082,7 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
     if (gnc_numeric_zero_p (value))
         return "0";
 
-    convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+    convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
 
     return xaccPrintAmount (convrate, gnc_default_price_print_info ());
 }
@@ -1625,13 +1625,13 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
             imbalance = gnc_numeric_mul (imbalance,
                                          xaccTransGetAccountConvRate(trans, acc),
                                          gnc_commodity_get_fraction (currency),
-                                         GNC_RND_ROUND);
+                                         GNC_HOW_RND_ROUND);
         }
         else
         {
             imbalance = gnc_numeric_convert (imbalance,
                                              gnc_commodity_get_fraction (currency),
-                                             GNC_RND_ROUND);
+                                             GNC_HOW_RND_ROUND);
         }
 
         return xaccPrintAmount (imbalance, gnc_account_print_info (acc, FALSE));

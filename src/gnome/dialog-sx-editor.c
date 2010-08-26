@@ -669,7 +669,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                     }
                     tcds->creditSum =
                         gnc_numeric_add( tcds->creditSum, tmp, 100,
-                                         (GNC_DENOM_AUTO | GNC_DENOM_LCD) );
+                                         (GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD) );
                     tmp = gnc_numeric_zero();
                 }
                 v = kvp_frame_get_slot_path( f,
@@ -696,7 +696,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                         return FALSE;
                     }
                     tcds->debitSum = gnc_numeric_add( tcds->debitSum, tmp, 100,
-                                                      (GNC_DENOM_AUTO | GNC_DENOM_LCD) );
+                                                      (GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD) );
                     tmp = gnc_numeric_zero();
                 }
             }

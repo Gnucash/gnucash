@@ -151,12 +151,12 @@ fi_to_gui(FinCalcDialog *fcd)
     gnc_amount_edit_set_damount (GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]),
                                  -fcd->financial_info.fv);
 
-    pmt = double_to_gnc_numeric (fcd->financial_info.pmt, 100000, GNC_RND_ROUND);
+    pmt = double_to_gnc_numeric (fcd->financial_info.pmt, 100000, GNC_HOW_RND_ROUND);
 
     commodity = gnc_default_currency ();
 
     total = gnc_numeric_mul (npp, pmt, gnc_commodity_get_fraction (commodity),
-                             GNC_RND_ROUND);
+                             GNC_HOW_RND_ROUND);
 
     xaccSPrintAmount (string, total, gnc_default_print_info (FALSE));
     gtk_label_set_text (GTK_LABEL(fcd->payment_total_label), string);
