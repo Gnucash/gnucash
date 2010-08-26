@@ -83,12 +83,12 @@ gnc_print_unstable_message(void)
 {
     if (!is_development_version) return;
 
-    g_print("\n\n%s%s%s%s%s\n%s%s\n\n",
+    g_print("\n\n%s%s%s%s%s%s\n%s%s%s\n\n",
             _("This is a development version. It may or may not work.\n"),
             _("Report bugs and other problems to gnucash-devel@gnucash.org.\n"),
             _("You can also lookup and file bug reports at http://bugzilla.gnome.org\n"),
-            _("The last stable version was "), "GnuCash 2.2.9",
-            _("The next stable version will be "), "GnuCash 2.4");
+            _("The last stable version was "), PACKAGE_NAME, " 2.2.9",
+            _("The next stable version will be "), PACKAGE_NAME, " 2.4");
 }
 
 /* Priority of paths: The default is set at build time.  It may be
