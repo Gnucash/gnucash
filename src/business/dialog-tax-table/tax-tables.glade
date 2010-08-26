@@ -169,7 +169,7 @@
                         <property name="layout_style">spread</property>
                         <child>
                           <widget class="GtkButton" id="edit_entry_button">
-                            <property name="label">_Edit</property>
+                            <property name="label" translatable="yes">_Edit</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
