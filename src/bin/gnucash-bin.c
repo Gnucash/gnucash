@@ -61,8 +61,6 @@
 #  include <Foundation/Foundation.h>
 #endif
 
-#define APP_GNUCASH "/apps/gnucash"
-
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
 #ifdef GNUCASH_SVN
 static int is_development_version = TRUE;
@@ -90,13 +88,6 @@ gnc_print_unstable_message(void)
             _("The last stable version was "), PACKAGE_NAME, " 2.2.9",
             _("The next stable version will be "), PACKAGE_NAME, " 2.4");
 }
-
-/* Priority of paths: The default is set at build time.  It may be
-   overridden by environment variables, which may, in turn, be
-   overridden by command line options.  */
-static char *config_path = PKGSYSCONFDIR;
-static char *share_path = PKGDATADIR;
-static char *gconf_path = APP_GNUCASH;
 
 static gchar  *environment_expand(gchar *param)
 {
@@ -172,6 +163,7 @@ static void
 environment_override()
 {
     const gchar *path;
+    gchar *config_path;
     gchar *env_file;
     GKeyFile    *keyfile = g_key_file_new();
     GError      *error;
@@ -180,17 +172,7 @@ environment_override()
     gint i;
     gboolean got_keyfile;
 
-#ifdef G_OS_WIN32
     config_path = gnc_path_get_pkgsysconfdir();
-    share_path = gnc_path_get_pkgdatadir();
-#endif /* G_OS_WIN32 */
-
-    if ((path = g_getenv("GNC_CONFIG_PATH")))
-        config_path = g_strdup(path);
-    if ((path = g_getenv("GNC_SHARE_PATH")))
-        share_path = g_strdup(path);
-    if ((path = g_getenv("GNC_GCONF_PATH")))
-        gconf_path = g_strdup(path);
 #ifdef G_OS_WIN32
     {
         /* unhide files without extension */
@@ -201,8 +183,9 @@ environment_override()
     }
 #endif
 
-    env_file = g_strjoin(G_DIR_SEPARATOR_S, config_path, "environment", NULL);
+    env_file = g_build_filename (config_path, "environment", NULL);
     got_keyfile = g_key_file_load_from_file (keyfile, env_file, G_KEY_FILE_NONE, &error);
+    g_free (config_path);
     g_free (env_file);
     if ( !got_keyfile )
         return;
@@ -365,14 +348,16 @@ static void
 load_system_config(void)
 {
     static int is_system_config_loaded = FALSE;
+    gchar *system_config_dir;
     gchar *system_config;
 
     if (is_system_config_loaded) return;
 
     update_message("loading system configuration");
-    /* FIXME: use runtime paths from gnc-path.c here */
-    system_config = g_build_filename(config_path, "config", NULL);
+    system_config_dir = gnc_path_get_pkgsysconfdir();
+    system_config = g_build_filename(system_config_dir, "config", NULL);
     is_system_config_loaded = gfec_try_load(system_config);
+    g_free(system_config_dir);
     g_free(system_config);
 }
 
@@ -417,9 +402,9 @@ load_user_config(void)
 static void
 gnucash_command_line(int *argc, char **argv)
 {
-    char *p;
     int debugging = 0, extra = 0;
     char *namespace_regexp = NULL;
+    const gchar *gconf_path = NULL;
     GError *error = NULL;
     GOptionContext *context;
     GOptionEntry options[] =
@@ -454,22 +439,6 @@ gnucash_command_line(int *argc, char **argv)
         {
             "nofile", '\0', 0, G_OPTION_ARG_NONE, &nofile,
             _("Do not load the last file opened"), NULL
-        },
-
-        {
-            "config-path", '\0', 0, G_OPTION_ARG_STRING, &config_path,
-            _("Set configuration path"),
-            /* Translators: Argument description for autohelp; see
-               http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
-            _("CONFIGPATH")
-        },
-
-        {
-            "share-path", '\0', 0, G_OPTION_ARG_STRING, &share_path,
-            _("Set shared data file search path"),
-            /* Translators: Argument description for autohelp; see
-               http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
-            _("SHAREPATH")
         },
         {
             "gconf-path", '\0', 0, G_OPTION_ARG_STRING, &gconf_path,
@@ -531,7 +500,17 @@ gnucash_command_line(int *argc, char **argv)
     }
 
     gnc_set_extra(extra);
-    gnc_set_gconf_path(gconf_path);
+
+    if (!gconf_path)
+    {
+        const char *path = g_getenv("GNC_GCONF_PATH");
+        if (path)
+            gconf_path = path;
+        else
+            gconf_path = GCONF_PATH;
+    }
+
+    gnc_set_gconf_path(g_strdup(gconf_path));
     gnc_set_debugging(debugging);
 
     if (namespace_regexp)

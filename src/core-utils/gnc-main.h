@@ -26,6 +26,8 @@
 
 #include <glib.h>
 
+#define GCONF_PATH "/apps/gnucash"
+
 void gnc_main_set_namespace_regexp(const gchar *str);
 const gchar *gnc_main_get_namespace_regexp(void);
 
