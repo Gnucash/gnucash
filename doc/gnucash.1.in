@@ -35,14 +35,6 @@ Log level overrides, of the form "log.ger.path={debug,info,warn,crit,error}"
 File to log into; defaults to "/tmp/gnucash.trace"; can be "stderr" or "stdout".
 .IP --nofile
 Do not load the last file opened
-.IP "--config-dir CONFIGDIR"
-Set configuration directory
-.IP "--share-dir SHAREDIR"
-Set shared directory
-.IP "--load-path LOADPATH"
-Set the search path for .scm files
-.IP "--doc-path DOCPATH"
-Set the search path for documentation files
 .IP "--add-price-quotes FILE"
 Add price quotes to the given data file
 .IP --namespace=REGEXP
@@ -80,7 +72,7 @@ has extensive on-line help available from the "help" menu.
 
 Additional information and the latest version is available
 at the web site:
-.B http://gnucash.org
+.B http://www.gnucash.org
 
 .SH AUTHOR
 Robert Merkel <rgmerk@mira.net> wrote this manpage.  
