@@ -901,7 +901,7 @@ typedef struct _SxTxnCreationData
 } SxTxnCreationData;
 
 static gboolean
-_get_template_split_account(GncSxInstance *instance, Split *template_split, Account **split_acct, GList **creation_errors)
+_get_template_split_account(const SchedXaction* sx, const Split *template_split, Account **split_acct, GList **creation_errors)
 {
     GncGUID *acct_guid;
     kvp_frame *split_kvpf;
@@ -917,7 +917,7 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
     {
         GString *err = g_string_new("");
         g_string_printf(err, "Null account kvp value for SX [%s], cancelling creation.",
-                        xaccSchedXactionGetName(instance->parent->sx));
+                        xaccSchedXactionGetName(sx));
         g_critical("%s", err->str);
         if (creation_errors != NULL)
             *creation_errors = g_list_append(*creation_errors, err);
@@ -934,7 +934,7 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
         guid_to_string_buff((const GncGUID*)acct_guid, guid_str);
         err = g_string_new("");
         g_string_printf(err, "Unknown account for guid [%s], cancelling SX [%s] creation.",
-                        guid_str, xaccSchedXactionGetName(instance->parent->sx));
+                        guid_str, xaccSchedXactionGetName(sx));
         g_critical("%s", err->str);
         if (creation_errors != NULL)
             *creation_errors = g_list_append(*creation_errors, err);
@@ -947,7 +947,7 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
 }
 
 static void
-_get_sx_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeric *numeric, GList **creation_errors, const char *formula_key)
+_get_sx_formula_value(const SchedXaction* sx, const Split *template_split, gnc_numeric *numeric, GList **creation_errors, const char *formula_key, GHashTable *variable_bindings)
 {
     kvp_frame *split_kvpf;
     kvp_value *kvp_val;
@@ -961,7 +961,11 @@ _get_sx_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeri
     formula_str = kvp_value_get_string(kvp_val);
     if (formula_str != NULL && strlen(formula_str) != 0)
     {
-        GHashTable *parser_vars = gnc_sx_instance_get_variables_for_parser(instance->variable_bindings);
+        GHashTable *parser_vars = NULL;
+        if (variable_bindings)
+        {
+            parser_vars = gnc_sx_instance_get_variables_for_parser(variable_bindings);
+        }
         if (!gnc_exp_parser_parse_separate_vars(formula_str,
                                                 numeric,
                                                 &parseErrorLoc,
@@ -969,7 +973,7 @@ _get_sx_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeri
         {
             GString *err = g_string_new("");
             g_string_printf(err, "Error parsing SX [%s] key [%s]=formula [%s] at [%s]: %s",
-                            xaccSchedXactionGetName(instance->parent->sx),
+                            xaccSchedXactionGetName(sx),
                             formula_key,
                             formula_str,
                             parseErrorLoc,
@@ -989,15 +993,15 @@ _get_sx_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeri
 }
 
 static void
-_get_credit_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeric *credit_num, GList **creation_errors)
+_get_credit_formula_value(GncSxInstance *instance, const Split *template_split, gnc_numeric *credit_num, GList **creation_errors)
 {
-    _get_sx_formula_value(instance, template_split, credit_num, creation_errors, GNC_SX_CREDIT_FORMULA);
+    _get_sx_formula_value(instance->parent->sx, template_split, credit_num, creation_errors, GNC_SX_CREDIT_FORMULA, instance->variable_bindings);
 }
 
 static void
-_get_debit_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeric *debit_num, GList **creation_errors)
+_get_debit_formula_value(GncSxInstance *instance, const Split *template_split, gnc_numeric *debit_num, GList **creation_errors)
 {
-    _get_sx_formula_value(instance, template_split, debit_num, creation_errors, GNC_SX_DEBIT_FORMULA);
+    _get_sx_formula_value(instance->parent->sx, template_split, debit_num, creation_errors, GNC_SX_DEBIT_FORMULA, instance->variable_bindings);
 }
 
 static gboolean
@@ -1053,7 +1057,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             txn_splits && template_splits;
             txn_splits = txn_splits->next, template_splits = template_splits->next)
     {
-        Split *template_split;
+        const Split *template_split;
         Account *split_acct;
         gnc_commodity *split_cmdty = NULL;
 
@@ -1063,7 +1067,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
         template_split = (Split*)template_splits->data;
         copying_split = (Split*)txn_splits->data;
 
-        if (!_get_template_split_account(creation_data->instance, template_split, &split_acct, creation_data->creation_errors))
+        if (!_get_template_split_account(creation_data->instance->parent->sx, template_split, &split_acct, creation_data->creation_errors))
         {
             err_flag = TRUE;
             break;
