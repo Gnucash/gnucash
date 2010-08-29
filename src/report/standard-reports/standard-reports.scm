@@ -9,6 +9,7 @@
 (use-modules (ice-9 slib))
 (use-modules (srfi srfi-13))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash core-utils))
 
 (export gnc:register-report-create)
 (export gnc:register-report-hook)
@@ -110,18 +111,18 @@
     )
 )
 
-;; Return a list of symbols representing reports in the GNC_STANDARD_REPORTS_DIR directory
+;; Return a list of symbols representing reports in the standard reports directory
 ;;
 ;; Return value:
 ;;  List of symbols for reports
 (define (get-report-list)
 	(map (lambda (s) (string->symbol s))
-         (process-file-list (directory-files (getenv "GNC_STANDARD_REPORTS_DIR")))
+         (process-file-list (directory-files (gnc-path-get-stdreportsdir)))
     )
 )
 
-(gnc:debug "dir-files=" (directory-files (getenv "GNC_STANDARD_REPORTS_DIR")))
-(gnc:debug "processed=" (process-file-list (directory-files (getenv "GNC_STANDARD_REPORTS_DIR"))))
+(gnc:debug "dir-files=" (directory-files (gnc-path-get-stdreportsdir)))
+(gnc:debug "processed=" (process-file-list (directory-files (gnc-path-get-stdreportsdir))))
 (gnc:debug "report-list=" (get-report-list))
 
 (for-each

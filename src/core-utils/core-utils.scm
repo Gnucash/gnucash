@@ -10,6 +10,7 @@
 (use-modules (sw_core_utils))
 
 (re-export gnc-is-debugging)
+(re-export gnc-path-get-stdreportsdir)
 (re-export g-find-program-in-path)
 (re-export gnc-utf8?)
 (re-export gnc-utf8-strip-invalid-strdup)

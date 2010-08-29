@@ -68,11 +68,18 @@ gchar *gnc_path_get_gladedir(void);
  * @returns A newly allocated string. */
 gchar *gnc_path_get_localedir(void);
 
-/** Returns the glade file path, usually
+/** Returns the accounts file path, usually
  * "$prefix/share/gnucash/accounts".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_accountsdir(void);
+
+/** Returns the file path to the standard
+ * reports, usually
+ * "$prefix/share/gnucash/guile-modules/gnucash/report/standard-reports".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_stdreportsdir(void);
 
 /** Returns the gconf schema config source path, usually
  * "$prefix/etc/gconf/gconf.xml.defaults".

@@ -3,6 +3,7 @@
 #include <guile-mappings.h>
 #include <gnc-glib-utils.h>
 #include <gnc-main.h>
+#include <gnc-path.h>
 #include <glib.h>
 
 SCM scm_init_sw_core_utils_module (void);
@@ -14,6 +15,8 @@ SCM scm_init_sw_core_utils_module (void);
 gchar * g_find_program_in_path(const gchar *);
 
 gboolean gnc_is_debugging(void);
+
+gchar * gnc_path_get_stdreportsdir(void);
 
 void gnc_scm_log_warn(const gchar *);
 void gnc_scm_log_error(const gchar *);

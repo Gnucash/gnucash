@@ -101,7 +101,6 @@ gnucash-setup-env: gnucash-setup-env-osx.in ${top_builddir}/config.status Makefi
 	sed < $< > $@.tmp \
 	    -e 's#@-BIN_DIR-@#${bindir}#g' \
 	    -e 's#@-GNC_DBD_DIR-@#${GNC_DBD_DIR}#g' \
-	    -e 's#@-GNC_STANDARD_REPORTS_DIR-@#${GNC_SHAREDIR}/guile-modules/gnucash/report/standard-reports#g' \
 	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
 	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
 	    -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
@@ -116,7 +115,6 @@ environment: ${GNUCASH_ENVIRONMENT}.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's#@-BIN_DIR-@#${bindir}#g' \
-	    -e 's#@-GNC_STANDARD_REPORTS_DIR-@#${GNC_SHAREDIR}/guile-modules/gnucash/report/standard-reports#g' \
 	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
 	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
 	    -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \

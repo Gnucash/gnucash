@@ -112,7 +112,7 @@ gchar *gnc_path_get_localedir()
     return result;
 }
 
-/** Returns the glade file path, usually
+/** Returns the accounts file path, usually
  * "$prefix/share/gnucash/accounts".
  *
  * @returns A newly allocated string. */
@@ -122,6 +122,21 @@ gchar *gnc_path_get_accountsdir()
     gchar *result = g_build_filename (pkgdatadir, "accounts", (char*)NULL);
     g_free (pkgdatadir);
     //printf("Returning accountsdir %s\n", result);
+    return result;
+}
+
+/** Returns the file path to the standard
+ * reports, usually
+ * "$prefix/share/gnucash/guile-modules/gnucash/report/standard-reports".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_stdreportsdir()
+{
+    gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
+    gchar *result = g_build_filename (pkgdatadir, "guile-modules",
+            "gnucash", "report", "standard-reports", (char*)NULL);
+    g_free (pkgdatadir);
+    //printf("Returning stdreportsdir %s\n", result);
     return result;
 }
 
