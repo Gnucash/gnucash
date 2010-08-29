@@ -1467,36 +1467,210 @@ GHashTable* gnc_g_hash_new_guid_numeric()
 }
 
 typedef struct {
-	GHashTable *hash;
-	GList **creation_errors;
+    GHashTable *hash;
+    GList **creation_errors;
+    const SchedXaction *sx;
+    gnc_numeric count;
 } SxCashflowData;
+
+static void add_to_hash_amount(GHashTable* hash, const GncGUID* guid, const gnc_numeric* amount)
+{
+    gnc_numeric* elem = g_hash_table_lookup(hash, guid);
+    if (!elem)
+    {
+        elem = g_new0(gnc_numeric, 1);
+        *elem = gnc_numeric_zero();
+        g_hash_table_insert(hash, (gpointer) guid, elem);
+    }
+    *elem = gnc_numeric_add_fixed(*elem, *amount);
+    g_debug("Adding to guid [%s] the value [%s]. Value now [%s].",
+            guid_to_string(guid),
+            gnc_num_dbg_to_string(*amount),
+            gnc_num_dbg_to_string(*elem));
+}
 
 static gboolean
 create_cashflow_helper(Transaction *template_txn, void *user_data)
 {
-/* FIXME: Still unfinished here! */
+    SxCashflowData *creation_data = user_data;
+    GList *template_splits;
+    gboolean err_flag = FALSE;
+    const gnc_commodity *first_cmdty = NULL;
+
+    g_debug("Evaluating txn desc [%s] for sx [%s]",
+            xaccTransGetDescription(template_txn),
+            xaccSchedXactionGetName(creation_data->sx));
+
+    /* The accounts and amounts are in the kvp_frames of the
+     * splits. Hence, we iterate over all splits of this
+     * transaction. */
+    template_splits = xaccTransGetSplitList(template_txn);
+
+    if (template_splits == NULL)
+    {
+        g_critical("transaction w/o splits for sx [%s]",
+                   xaccSchedXactionGetName(creation_data->sx));
+        return FALSE;
+    }
+
+    for (;
+         template_splits;
+         template_splits = template_splits->next)
+    {
+        Account *split_acct;
+        const gnc_commodity *split_cmdty = NULL;
+        const Split *template_split = (const Split*) template_splits->data;
+
+        /* Get the account that should be used for this split. */
+        if (!_get_template_split_account(creation_data->sx, template_split, &split_acct, creation_data->creation_errors))
+        {
+            g_debug("Could not find account for split");
+            err_flag = TRUE;
+            break;
+        }
+
+        /* The split's account also has some commodity */
+        split_cmdty = xaccAccountGetCommodity(split_acct);
+        if (first_cmdty == NULL)
+        {
+            first_cmdty = split_cmdty;
+            //xaccTransSetCurrency(new_txn, first_cmdty);
+        }
+
+        {
+            gnc_numeric credit_num = gnc_numeric_zero();
+            gnc_numeric debit_num = gnc_numeric_zero();
+            gnc_numeric final_once, final;
+            gint gncn_error;
+
+            /* Credit value */
+            _get_sx_formula_value(creation_data->sx, template_split, &credit_num, creation_data->creation_errors, GNC_SX_CREDIT_FORMULA, NULL);
+            /* Debit value */
+            _get_sx_formula_value(creation_data->sx, template_split, &debit_num, creation_data->creation_errors, GNC_SX_DEBIT_FORMULA, NULL);
+
+            /* The resulting cash flow number: debit minus credit,
+             * multiplied with the count factor. */
+            final_once = gnc_numeric_sub_fixed( debit_num, credit_num );
+            /* Multiply with the count factor. */
+            final = gnc_numeric_mul(final_once, creation_data->count,
+                                    gnc_numeric_denom(final_once),
+                                    GNC_HOW_RND_ROUND);
+
+            gncn_error = gnc_numeric_check(final);
+            if (gncn_error != GNC_ERROR_OK)
+            {
+                GString *err = g_string_new("");
+                g_string_printf(err, "error %d in SX [%s] final gnc_numeric value, using 0 instead",
+                                gncn_error, xaccSchedXactionGetName(creation_data->sx));
+                g_critical("%s", err->str);
+                if (creation_data->creation_errors != NULL)
+                    *creation_data->creation_errors = g_list_append(*creation_data->creation_errors, err);
+                else
+                    g_string_free(err, TRUE);
+                final = gnc_numeric_zero();
+            }
+
+            /* Print error message if we would have needed an exchange rate */
+            if (! gnc_commodity_equal(split_cmdty, first_cmdty))
+            {
+                GString *err = g_string_new("");
+                g_string_printf(err, "No exchange rate available in SX [%s] for %s -> %s, value is zero",
+                                xaccSchedXactionGetName(creation_data->sx),
+                                gnc_commodity_get_mnemonic(split_cmdty),
+                                gnc_commodity_get_mnemonic(first_cmdty));
+                g_critical("%s", err->str);
+                if (creation_data->creation_errors != NULL)
+                    *creation_data->creation_errors = g_list_append(*creation_data->creation_errors, err);
+                else
+                    g_string_free(err, TRUE);
+                final = gnc_numeric_zero();
+            }
+
+            /* And add the resulting value to the hash */
+            add_to_hash_amount(creation_data->hash, xaccAccountGetGUID(split_acct), &final);
+        }
+    }
+
     return FALSE;
+}
+
+static void
+instantiate_cashflow_internal(const SchedXaction* sx,
+                                     GHashTable* map,
+                                     GList **creation_errors, gint count)
+{
+    SxCashflowData create_cashflow_data;
+    Account* sx_template_account = gnc_sx_get_template_transaction_account(sx);
+
+    if (!sx_template_account)
+    {
+        g_critical("Huh? No template account for the SX %s", xaccSchedXactionGetName(sx));
+        return;
+    }
+
+    create_cashflow_data.hash = map;
+    create_cashflow_data.creation_errors = creation_errors;
+    create_cashflow_data.sx = sx;
+    create_cashflow_data.count = gnc_numeric_create(count, 1);
+
+    /* The cash flow numbers are in the transactions of the template
+     * account, so run this foreach on the transactions. */
+    xaccAccountForEachTransaction(sx_template_account,
+                                  create_cashflow_helper,
+                                  &create_cashflow_data);
 }
 
 void gnc_sx_instantiate_cashflow(const SchedXaction* sx,
                                  GHashTable* map, GList **creation_errors)
 {
-    SxCashflowData create_cashflow_data;
-    Account* sx_template_account = gnc_sx_get_template_transaction_account(sx);
+    /* Calculate ("Instantiate") the cash flow for exactly one
+     * occurrence */
+    instantiate_cashflow_internal(sx, map, creation_errors, 1);
+}
 
-    create_cashflow_data.hash = map;
-    create_cashflow_data.creation_errors = creation_errors;
+typedef struct {
+    GHashTable *hash;
+    GList **creation_errors;
+    const GDate *range_start;
+    const GDate *range_end;
+} SxAllCashflow;
 
-    xaccAccountForEachTransaction(sx_template_account,
-                                  create_cashflow_helper,
-                                  &create_cashflow_data);
+static void instantiate_cashflow_cb(gpointer data, gpointer _user_data)
+{
+    const SchedXaction* sx = (const SchedXaction*) data;
+    SxAllCashflow* userdata = (SxAllCashflow*) _user_data;
+    gint count;
+
+    g_assert(sx);
+    g_assert(userdata);
+
+    /* How often does this particular SX occur in the date range? */
+    count = gnc_sx_get_num_occur_daterange(sx, userdata->range_start,
+                                           userdata->range_end);
+    if (count > 0)
+    {
+        /* If it occurs at least once, calculate ("instantiate") its
+         * cash flow and add it to the result
+         * g_hash<GUID,gnc_numeric> */
+        instantiate_cashflow_internal(sx,
+                                      userdata->hash,
+                                      userdata->creation_errors,
+                                      count);
+    }
 }
 
 void gnc_sx_all_instantiate_cashflow(GList *all_sxes,
                                      const GDate *range_start, const GDate *range_end,
                                      GHashTable* map, GList **creation_errors)
 {
-    /* FIXME: Still unfinished here! */
+    SxAllCashflow userdata;
+    userdata.hash = map;
+    userdata.creation_errors = creation_errors;
+    userdata.range_start = range_start;
+    userdata.range_end = range_end;
+
+    /* The work is done in the callback for each SX */
+    g_list_foreach(all_sxes, instantiate_cashflow_cb, &userdata);
 }
 
 // Local Variables:
