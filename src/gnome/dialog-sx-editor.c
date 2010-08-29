@@ -3,7 +3,7 @@
  * Copyright (C) 2001,2002,2006 Joshua Sled <jsled@asynchronous.org>*
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of version 2 of the GNU General Public *
+ * modify it under the terms of version 2 and/or version 3 of the GNU General Public *
  * License as published by the Free Software Foundation.            *
  *
  * As a special exception, permission is granted to link the binary
