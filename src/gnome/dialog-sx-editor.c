@@ -214,8 +214,15 @@ sxed_confirmed_cancel(GncSxEditorDialog *sxed)
     if ( gnc_sxed_check_changed( sxed ) )
     {
         const char *sx_changed_msg =
+#if 1
             _( "This SX has changed; are you "
                "sure you want to cancel?" );
+#else
+        /* Translators: This message is currently not yet used; it
+         * will be used once the 2.4.0 string freeze is lifted. */
+            _( "This Scheduled Transaction has changed; are you "
+               "sure you want to cancel?" );
+#endif
         if (!gnc_verify_dialog(sxed->dialog, FALSE, "%s", sx_changed_msg))
         {
             return FALSE;
