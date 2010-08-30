@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 /** @internal
  * Find the canonical filename of the executable. Returns the filename
  * (which must be freed) or NULL on error. If the parameter 'error' is
- * not NULL, the error code will be stored there, if an error occurred.
+ * not NULL, the error code will be stored there, if an error occured.
  */
 static char *
 _br_find_exe (Gnc_GbrInitError *error)
@@ -49,7 +49,7 @@ _br_find_exe (Gnc_GbrInitError *error)
        relocation code for windows. Unfortunately this is not
        the case and we have to add this manually. This is only
        one possibility; other ways of looking up the full path
-       of gnucash.exe probably exist.*/
+       of gnucash-bin.exe probably exist.*/
     gchar *prefix;
     gchar *result;
 
@@ -58,7 +58,7 @@ _br_find_exe (Gnc_GbrInitError *error)
        the current process */
     prefix = g_win32_get_package_installation_directory_of_module (NULL);
     result = g_build_filename (prefix,
-                               "bin", "gnucash.exe",
+                               "bin", "gnucash-bin.exe",
                                (char*)NULL);
     g_free (prefix);
     return result;
@@ -364,9 +364,8 @@ gchar *
 gnc_gbr_find_prefix (const gchar *default_prefix)
 {
 #if defined ENABLE_BINRELOC && defined MAC_INTEGRATION
-    GtkOSXApplication* theApp  = g_object_new (GTK_TYPE_OSX_APPLICATION, NULL);
-    gchar *id = gtk_osxapplication_get_bundle_id (theApp);
-    gchar *path = gtk_osxapplication_get_resource_path (theApp);
+    gchar *id = quartz_application_get_bundle_id ();
+    gchar *path = quartz_application_get_resource_path ();
     if (id == NULL)
     {
         gchar *dirname = g_path_get_dirname (path);
