@@ -237,7 +237,7 @@ begin
   FileString := FileString + '#'#13#10 ;
 
   FileString := FileString + '[Variables]'#13#10 ;
-  FileString := FileString + 'PATH=' + pkglibdir + ';' + libdir + ';{PATH}'#13#10 ;
+  FileString := FileString + 'PATH=' + pkglibdir + ';{PATH}'#13#10 ;
   FileString := FileString + 'GNC_MODULE_PATH=' + pkglibdir + ''#13#10 ;
   FileString := FileString + 'GUILE_LOAD_PATH=' + pkgdatadir + '/guile-modules;' + pkgdatadir + '/scm;' + appdir + '/share/guile/1.6;{GUILE_LOAD_PATH}'#13#10 ;
   FileString := FileString + 'EXTRA_LIBS={GNC_MODULE_PATH}'#13#10 ;

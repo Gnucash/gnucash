@@ -218,15 +218,13 @@ function dist_aqbanking() {
 function dist_libdbi() {
     setup LibDBI
     cp -a ${_SQLITE3_UDIR}/bin/* ${DIST_UDIR}/bin
-    cp -a ${_SQLITE3_UDIR}/lib/* ${DIST_UDIR}/lib
-    cp -a ${_MYSQL_LIB_UDIR}/bin/* ${DIST_UDIR}/bin
-    cp -a ${_MYSQL_LIB_UDIR}/lib/* ${DIST_UDIR}/lib
+    cp -a ${_MYSQL_LIB_UDIR}/bin/*.{dll,manifest} ${DIST_UDIR}/bin
+    cp -a ${_MYSQL_LIB_UDIR}/lib/*.dll ${DIST_UDIR}/bin
     cp -a ${_PGSQL_UDIR}/bin/* ${DIST_UDIR}/bin
-    cp -a ${_PGSQL_UDIR}/lib/* ${DIST_UDIR}/lib
+    cp -a ${_PGSQL_UDIR}/lib/*.dll ${DIST_UDIR}/bin
     cp -a ${_LIBDBI_UDIR}/bin/* ${DIST_UDIR}/bin
-    cp -a ${_LIBDBI_UDIR}/lib/* ${DIST_UDIR}/lib
     mkdir ${DIST_UDIR}/lib/dbd
-    cp -a ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/* ${DIST_UDIR}/lib/dbd
+    cp -a ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/*.dll ${DIST_UDIR}/lib/dbd
 }
 
 function dist_webkit() {
@@ -241,7 +239,7 @@ function dist_gnucash() {
     mkdir -p $DIST_UDIR/etc/gconf/schemas
     cp -a $_INSTALL_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
     mkdir -p $DIST_UDIR/lib
-    cp -a $_INSTALL_UDIR/lib/lib*.la $DIST_UDIR/lib
+    cp -a $_INSTALL_UDIR/lib/lib*.la $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/share
     cp -a $_INSTALL_UDIR/share/{gnucash,locale} $DIST_UDIR/share
     cp -a $_REPOS_UDIR/packaging/win32/install-fq-mods.cmd $DIST_UDIR/bin
