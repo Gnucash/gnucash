@@ -238,7 +238,6 @@ function dist_gnucash() {
     cp -a $_INSTALL_UDIR/bin/* $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/etc/gconf/schemas
     cp -a $_INSTALL_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
-    mkdir -p $DIST_UDIR/lib
     cp -a $_INSTALL_UDIR/lib/lib*.la $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/share
     cp -a $_INSTALL_UDIR/share/{gnucash,locale} $DIST_UDIR/share
@@ -276,7 +275,7 @@ function dist_finish() {
     fi
 
     # Strip redirections in distributed libtool .la files
-    for file in $DIST_UDIR/lib/*.la; do
+    for file in $DIST_UDIR/bin/*.la; do
         cat $file | sed 's,^libdir=,#libdir=,' > $file.new
         mv $file.new $file
     done
