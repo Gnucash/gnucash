@@ -237,17 +237,13 @@ begin
   FileString := FileString + '#'#13#10 ;
 
   FileString := FileString + '[Variables]'#13#10 ;
-  FileString := FileString + 'PATH=' + appdir + '/bin;' + libdir + ';' + pkglibdir + ';{PATH}'#13#10 ;
-  FileString := FileString + 'SCHEME_LIBRARY_PATH='#13#10 ;
+  FileString := FileString + 'PATH=' + pkglibdir + ';' + libdir + ';{PATH}'#13#10 ;
   FileString := FileString + 'GNC_MODULE_PATH=' + pkglibdir + ''#13#10 ;
   FileString := FileString + 'GUILE_LOAD_PATH=' + pkgdatadir + '/guile-modules;' + pkgdatadir + '/scm;' + appdir + '/share/guile/1.6;{GUILE_LOAD_PATH}'#13#10 ;
   FileString := FileString + 'EXTRA_LIBS={GNC_MODULE_PATH}'#13#10 ;
   FileString := FileString + 'LD_LIBRARY_PATH={EXTRA_LIBS};{LD_LIBRARY_PATH}'#13#10 ;
   FileString := FileString + 'DYLD_LIBRARY_PATH={EXTRA_LIBS};{DYLD_LIBRARY_PATH}'#13#10 ;
-  FileString := FileString + 'LTDL_LIBRARY_PATH=' + libdir + ''#13#10 ;
-  FileString := FileString + 'QOF_LIB_DIR=' + pkglibdir + ''#13#10 ;
   FileString := FileString + 'GNC_DBD_DIR=' + libdir + '/dbd'#13#10 ;
-  FileString := FileString + 'GNC_STANDARD_REPORTS_DIR=' + pkgdatadir + '/guile-modules/gnucash/report/standard-reports'#13#10 ;
   FileString := FileString + 'GUILE_WARN_DEPRECATED=no'#13#10 ;
 
   { Save the final file }
