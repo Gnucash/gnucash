@@ -36,12 +36,14 @@
 #include "QueryNew.h"
 #include "GNCId.h"
 
-#ifndef GNC_PLUGIN_invoice_import_invoice_import_H
-#define GNC_PLUGIN_invoice_import_invoice_import_H
+
+#ifndef GNC_invoice_import_invoice_import_H
+#define GNC_invoice_import_invoice_import_H
 
 
-GncCustomer * search_customer_on_id  (QofBook *book, const gchar *id);
-GncInvoice  * search_invoice_on_id   (QofBook *book, const gchar *id);
-GncInvoice  * search_bill_on_id   (QofBook *book, const gchar *id);
+GncCustomer * gnc_search_customer_on_id  (QofBook *book, const gchar *id);
+GncInvoice  * gnc_search_invoice_on_id   (QofBook *book, const gchar *id);
+GncInvoice  * gnc_search_bill_on_id   (QofBook *book, const gchar *id);
+GncVendor  * gnc_search_vendor_on_id   (QofBook *book, const gchar *id);
 
 #endif

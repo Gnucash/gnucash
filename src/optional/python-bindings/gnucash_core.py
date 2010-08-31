@@ -31,8 +31,8 @@ from function_class import \
 from gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn, \
     gncInvoiceGetInvoiceFromLot, gncEntryLookup, gncInvoiceLookup, \
     gncCustomerLookup, gncVendorLookup, gncJobLookup, gncEmployeeLookup, \
-    gncTaxTableLookup, gncTaxTableLookupByName, search_invoice_on_id, \
-    search_customer_on_id, search_bill_on_id
+    gncTaxTableLookup, gncTaxTableLookupByName, gnc_search_invoice_on_id, \
+    gnc_search_customer_on_id, gnc_search_bill_on_id , gnc_search_vendor_on_id
     
 
 class GnuCashCoreClass(ClassFromFunctions):
@@ -192,17 +192,22 @@ class Book(GnuCashCoreClass):
     def BillLoookupByID(self, id):
         from gnucash_business import Bill
         return self.do_lookup_create_oo_instance(
-            search_bill_on_id, Bill, id)
+            gnc_search_bill_on_id, Bill, id)
 
     def InvoiceLookupByID(self, id):
         from gnucash_business import Invoice
         return self.do_lookup_create_oo_instance(
-            search_invoice_on_id, Invoice, id)
+            gnc_search_invoice_on_id, Invoice, id)
 
     def CustomerLookupByID(self, id):
         from gnucash_business import Customer
         return self.do_lookup_create_oo_instance(
-            search_customer_on_id, Customer, id)
+            gnc_search_customer_on_id, Customer, id)
+
+    def VendorLookupByID(self, id):
+        from gnucash_business import Vendor
+        return self.do_lookup_create_oo_instance(
+            gnc_search_vendor_on_id, Vendor, id)
 
 class GncNumeric(GnuCashCoreClass):
     """Object used by GnuCash to store all numbers. Always consists of a
