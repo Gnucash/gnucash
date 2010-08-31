@@ -1,24 +1,63 @@
+@-NOTE If you make any changes here, you should probably -@
+@-NOTE also change the equivalent sections in:           -@
+@-NOTE - src/bin/gnucash-launcher.in                     -@
+@-NOTE - packaging/win32/gnucash.iss.in                  -@
+@-NOTE - packaging/win32/install.sh                      -@
 # environment
 #
-# This configuration file can be used to change/add
-# environment variables during GnuCash startup.
+# This configuration file can be used to change/add environment variables
+# during GnuCash startup.
 #
-# If you make any changes here, you should probably
-# also change the equivalent sections in:
-# - src/bin/environment-osx.in
-# - src/bin/environment-win32.in
-# - packaging/win32/gnucash.iss.in
-# - packaging/win32/install.sh
+# It uses a very simple syntax for this:
+# <variable_name>=<variable_value>
+#
+# You can refer to existing environment variables in the new value by
+# enclosing it in {}, for example
+# NEW_VARIABLE={OLD_VARIABLE}_something
+#
+# When adding variables that hold a collection of directories (path variables),
+# always use ';' to separate the directories. GnuCash will replace these with
+# the proper separator for your operating system. For example:
+# PATH=/some/extra/path;{PATH}
+#
+# Finally, GnuCash exports a number of environment variables itself you can use
+# here as you see fit. They are read only. GnuCash will ignore any changes you
+# make to them. These variables are:
+# GNC_HOME the directory where GnuCash was installed. This is the base
+#          directory of all the other directories below
+# GNC_BIN  the directory where the GnuCash executable resides. This is
+#          equivalent to {GNUCASH_HOME}/bin
+# GNC_LIB  the directory where the GnuCash private libraries reside. This is
+#          equivalent to {GNUCASH_HOME}/lib/gnucash
+# GNC_DATA the directory where GnuCash specific additional data is stored,
+#          equivalent to {GNUCASH_HOME}/share/gnucash
+# GNC_CONF the directory where GnuCash configuration files are stored,
+#          equivalent to {GNUCASH_HOME}/etc/gnucash
+# SYS_LIB  the directory where the GnuCash public libraries reside. This is
+#          equivalent to {GNUCASH_HOME}/lib
 
 [Variables]
+# PATH is used to find the finance::quote utility functions
+PATH={GNC_BIN};{PATH}
+
+# Tell GnuCash where to look for GnuCash modules
+GNC_MODULE_PATH={GNC_LIB};{GNC_MODULE_PATH}
+
+# Prevent embedded guile from issuing deprecation warnings
 GUILE_WARN_DEPRECATED=no
 
-PATH=@-BIN_DIR-@;{PATH}
-GNC_MODULE_PATH=@-GNC_PKGLIB_INSTALLDIR-@;{GNC_MODULE_PATH}
+# Tell Guile where to find GnuCash specific guile modules
+# GUILE_LIBS can be used to override the path to Guile's own modules
+# GUILE_LIBS=
+GUILE_LOAD_PATH={GNC_DATA}/guile-modules;{GNC_DATA}/scm;{GUILE_LIBS};{GUILE_LOAD_PATH}
 
-EXTRA_PATH={EXTRA_PATH};@-GNC_GUILE_MODULE_DIR-@;@-GNC_SCM_INSTALL_DIR-@
-GUILE_LOAD_PATH={EXTRA_PATH};{GUILE_LOAD_PATH}
+# Tell Guile where to find GnuCash specific shared libraries
+GNC_LIBRARY_PATH={SYS_LIB};{GNC_MODULE_PATH}
+LD_LIBRARY_PATH={GNC_LIBRARY_PATH};{LD_LIBRARY_PATH}
+# The same, but for GnuCash on OS X
+DYLD_LIBRARY_PATH={GNC_LIBRARY_PATH};{DYLD_LIBRARY_PATH}
 
-EXTRA_LIBS={GNC_MODULE_PATH};@-GNC_LIB_INSTALLDIR-@;@-GNC_PKGLIB_INSTALLDIR-@
-LD_LIBRARY_PATH={EXTRA_LIBS};{LD_LIBRARY_PATH}
-DYLD_LIBRARY_PATH={EXTRA_LIBS};{DYLD_LIBRARY_PATH}
+# If you wish GnuCash to use a different language, uncomment the two parameters
+# below and set LANG to your preferred locale
+# LANG=nl_BE
+# LANGUAGE={LANG}

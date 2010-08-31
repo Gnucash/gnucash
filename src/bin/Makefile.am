@@ -111,21 +111,14 @@ gnucash-setup-env: gnucash-setup-env-osx.in ${top_builddir}/config.status Makefi
 	mv $@.tmp $@
 	chmod u+x $@
 
-environment: ${GNUCASH_ENVIRONMENT}.in ${top_builddir}/config.status Makefile
+environment: environment.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's#@-BIN_DIR-@#${bindir}#g' \
-	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
-	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
-	    -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
-	    -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
-	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g" \
-	    -e 's#@-PREFIX-@#${prefix}#g'
+	    -e '/@-NOTE.*-@/ D'
 if CUSTOM_GNC_DBD_DIR
 	echo 'GNC_DBD_DIR=@GNC_DBD_DIR@' >> $@.tmp
 endif
 	mv $@.tmp $@
-	chmod u+x $@
 
 CLEANFILES = $(BUILT_SOURCES) ${config_DATA} ${PLATFORM_FILES}
 

@@ -1,4 +1,4 @@
-﻿; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Input configuration for the Inno Setup Compiler
 ; Copyright (c) 2004-2005 Christian Stimming <stimming@tuhh.de>
 ;
@@ -60,7 +60,7 @@ Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bi
 
 [UninstallRun]
 Filename: "{app}\bin\gconftool-2.exe"; Parameters: "--shutdown"; Flags: runhidden
-Filename: "{sys}\netsh.exe"; Parameters: "firewall delete allowedprogram program=""{app}\bin\gnucash.exe"""; Flags: runhidden; MinVersion: 0,5.01.2600sp2
+Filename: "{sys}\netsh.exe"; Parameters: "firewall delete allowedprogram program=""{app}\bin\@PACKAGE@.exe"""; Flags: runhidden; MinVersion: 0,5.01.2600sp2
 Filename: "{sys}\netsh.exe"; Parameters: "firewall delete allowedprogram program=""{app}\bin\gconfd-2.exe"""; Flags: runhidden; MinVersion: 0,5.01.2600sp2
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -70,8 +70,9 @@ Filename: "{sys}\netsh.exe"; Parameters: "firewall delete allowedprogram program
 [Files]
 ; The main executables and DLLs
 Source: "@prefix@\..\dist\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs ignoreversion; Components: main
-Source: "@prefix@\..\dist\etc\*"; DestDir: "{app}\etc"; Flags: recursesubdirs; Components: main; AfterInstall: MyAfterInstallEtc()
-; Note: The above AfterInstall function will create the 
+Source: "@prefix@\..\dist\etc\*"; DestDir: "{app}\etc"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\..\dist\etc\@PACKAGE@\environment"; DestDir: "{app}\etc\@PACKAGE@"; Components: main; AfterInstall: MyAfterInstallEnvironment()
+; Note: The above AfterInstall function will adapt the 
 ; environment config file on-the-fly by the Pascal script below.
 Source: "@prefix@\..\dist\lib\*"; DestDir: "{app}\lib"; Flags: recursesubdirs; Components: main
 Source: "@prefix@\..\dist\libexec\*"; DestDir: "{app}\libexec"; Flags: recursesubdirs; Components: main
@@ -203,58 +204,54 @@ begin
 
 end;
 
-
 function BackslashPath(const S: String): String;
 begin
-	{ Convert c:\soft to c:/soft }
-	Result := S;
-	StringChange(Result, '\', '/');
+  { Convert c:\soft to c:/soft }
+  Result := S;
+  StringChange(Result, '\', '/');
 end;
 
-procedure MyAfterInstallEtc();
+procedure MyAfterInstallEnvironment();
 var
-  FileName, FileString, appdir, libdir, pkglibdir, pkgdatadir: String;
+  EnvFile, EtcDir: String;
+  iLineCounter, iSize : Integer;
+  EnvStringList: TArrayOfString;
   Res: Boolean;
 begin
+  { Make some Windows-only changes to the etc/@PACKAGE@/environment file }
+  { If you make any changes here, you should probably also change the equivalent sections }
+  { in packaging/win32/install.sh }
+  { A new line is stared with #13#10 - #10 is the linefeed character and #13 CR }
 
   { Get the installation-specific paths }
-  appdir := BackslashPath( ExpandConstant('{app}') );
-  libdir := BackslashPath( appdir + '/lib' );
-  pkglibdir := BackslashPath( appdir + '/bin' );
-  pkgdatadir := BackslashPath( appdir + '/share/gnucash' );
+  EnvFile := ExpandConstant(CurrentFileName);
+  EtcDir := ExtractFileDir(EnvFile); 
 
-  { Create the etc/gnucash/environment file; #10 is the linefeed character and #13 CR }
+  { Load the current contents of the environment file }
+  Res := LoadStringsFromFile(EnvFile, EnvStringList);
+  if Res = False then
+    MsgBox('Error on reading ' + EnvFile + ' for completing the installation', mbInformation, MB_OK);
 
-  { If you make any changes here, you should probably also change the equivalent sections }
-  { in packaging/win32/install.sh, src/bin/environment*.in and src/bin/gnucash-setup-env-osx.in }
-  FileName := appdir + '\etc\gnucash\environment' ;
-  
-
-  FileString := '# environment'#13#10 ;
-  FileString := FileString + '#'#13#10 ;
-  FileString := FileString + '# This configuration file can be used to change/add'#13#10 ;
-  FileString := FileString + '# environment variables during GnuCash startup.'#13#10 ;
-  FileString := FileString + '#'#13#10 ;
-
-  FileString := FileString + '[Variables]'#13#10 ;
-  FileString := FileString + 'PATH=' + pkglibdir + ';{PATH}'#13#10 ;
-  FileString := FileString + 'GNC_MODULE_PATH=' + pkglibdir + ''#13#10 ;
-  FileString := FileString + 'GUILE_LOAD_PATH=' + pkgdatadir + '/guile-modules;' + pkgdatadir + '/scm;' + appdir + '/share/guile/1.6;{GUILE_LOAD_PATH}'#13#10 ;
-  FileString := FileString + 'EXTRA_LIBS={GNC_MODULE_PATH}'#13#10 ;
-  FileString := FileString + 'LD_LIBRARY_PATH={EXTRA_LIBS};{LD_LIBRARY_PATH}'#13#10 ;
-  FileString := FileString + 'DYLD_LIBRARY_PATH={EXTRA_LIBS};{DYLD_LIBRARY_PATH}'#13#10 ;
-  FileString := FileString + 'GNC_DBD_DIR=' + libdir + '/dbd'#13#10 ;
-  FileString := FileString + 'GUILE_WARN_DEPRECATED=no'#13#10 ;
+  iSize := GetArrayLength(EnvStringList);
+  for iLineCounter := 0 to iSize-1 do
+    begin
+      { Adapt GUILE_LOAD_PATH parameter }
+      if (Pos('GUILE_LOAD_PATH', EnvStringList[iLineCounter]) = 1) then
+        StringChangeEx(EnvStringList[iLineCounter], '{GUILE_LOAD_PATH}', '{GNC_HOME}/share/guile/1.6;{GUILE_LOAD_PATH}', True);
+      { Adapt GNC_DBD_DIR parameter }
+      if (Pos('GNC_DBD_DIR', EnvStringList[iLineCounter]) > 0) then
+        EnvStringList[iLineCounter] := 'GNC_DBD_DIR={GNC_HOME}/lib/dbd';
+    end;
 
   { Save the final file }
-  Res := ForceDirectories(appdir + '\etc\gnucash');
+  Res := ForceDirectories(EtcDir);
   if Res = False then
-    MsgBox('Error on creating '+appdir+'\etc\gnucash for completing the installation', mbInformation, MB_OK);
-	
-  Res := SaveStringToFile(FileName, FileString, False);
+    MsgBox('Error on creating ' + EtcDir + ' for completing the installation', mbInformation, MB_OK);
+
+  Res := SaveStringsToFile(EnvFile, EnvStringList, False);
   if Res = False then
-    MsgBox('Error on saving '+FileName+' for completing the installation', mbInformation, MB_OK);
-end;  
+    MsgBox('Error on saving ' + EnvFile + ' for completing the installation', mbInformation, MB_OK);
+end;
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"

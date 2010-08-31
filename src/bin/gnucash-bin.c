@@ -171,6 +171,33 @@ environment_override()
     gsize param_count;
     gint i;
     gboolean got_keyfile;
+    gchar *env_parm, *bin_parm;
+
+    /* Export default parameters to the environment */
+    env_parm = gnc_path_get_prefix();
+    if (!g_setenv("GNC_HOME", env_parm, FALSE))
+        g_warning ("Couldn't set/override environment variable GNC_HOME.");
+    bin_parm = g_build_filename(env_parm, "bin", NULL);
+    if (!g_setenv("GNC_BIN", bin_parm, FALSE))
+        g_warning ("Couldn't set/override environment variable GNC_BIN.");
+    g_free (env_parm);
+    g_free (bin_parm);
+    env_parm = gnc_path_get_pkglibdir();
+    if (!g_setenv("GNC_LIB", env_parm, FALSE))
+        g_warning ("Couldn't set/override environment variable GNC_LIB.");
+    g_free (env_parm);
+    env_parm = gnc_path_get_pkgdatadir();
+    if (!g_setenv("GNC_DATA", env_parm, FALSE))
+        g_warning ("Couldn't set/override environment variable GNC_DATA.");
+    g_free (env_parm);
+    env_parm = gnc_path_get_pkgsysconfdir();
+    if (!g_setenv("GNC_CONF", env_parm, FALSE))
+        g_warning ("Couldn't set/override environment variable GNC_CONF.");
+    g_free (env_parm);
+    env_parm = gnc_path_get_libdir();
+    if (!g_setenv("SYS_LIB", env_parm, FALSE))
+        g_warning ("Couldn't set/override environment variable SYS_LIB.");
+    g_free (env_parm);
 
     config_path = gnc_path_get_pkgsysconfdir();
 #ifdef G_OS_WIN32

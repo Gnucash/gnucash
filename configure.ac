@@ -227,7 +227,6 @@ AC_SUBST(SED)
 
 # Set some defaults, they may be overridden below
 REGEX_LIBS=""
-GNUCASH_ENVIRONMENT="environment"
 
 AC_MSG_CHECKING(operating system)
 case $host_os in
@@ -255,7 +254,6 @@ update to latest  darwin])
 		   AC_MSG_RESULT(${_ige_mac})
 		   AC_SUBST(IGE_MAC_LIBS)
 		   AC_SUBST(IGE_MAC_CFLAGS)
-		   GNUCASH_ENVIRONMENT="environment-osx"
 		else
 		   AC_MSG_RESULT(no)
 		fi
@@ -263,7 +261,6 @@ update to latest  darwin])
 	mingw*|cygwin*)
 		platform=win32
 		AC_MSG_RESULT($platform)
-		GNUCASH_ENVIRONMENT="environment-win32"
 		LT_PROG_RC
 
 		AC_MSG_CHECKING(for native win32)
@@ -306,7 +303,6 @@ update to latest  darwin])
 		;;	
 esac
 AC_SUBST(REGEX_LIBS)
-AC_SUBST(GNUCASH_ENVIRONMENT)
 
 AM_CONDITIONAL(PLATFORM_LINUX, test "x$platform" = "xlinux/other")
 AM_CONDITIONAL(PLATFORM_OSX, test "x$platform" = "xdarwin")
