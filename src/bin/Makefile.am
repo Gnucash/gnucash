@@ -176,7 +176,6 @@ EXTRA_DIST = \
 	gnucash-launcher.in \
 	gnucash-valgrind.in \
 	gnucash-gdb.in \
-	environment.in \
-	environment-win32.in
+	environment.in
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.bin\"
