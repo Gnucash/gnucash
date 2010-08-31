@@ -49,7 +49,7 @@ _br_find_exe (Gnc_GbrInitError *error)
        relocation code for windows. Unfortunately this is not
        the case and we have to add this manually. This is only
        one possibility; other ways of looking up the full path
-       of gnucash-bin.exe probably exist.*/
+       of gnucash.exe probably exist.*/
     gchar *prefix;
     gchar *result;
 
@@ -58,7 +58,7 @@ _br_find_exe (Gnc_GbrInitError *error)
        the current process */
     prefix = g_win32_get_package_installation_directory_of_module (NULL);
     result = g_build_filename (prefix,
-                               "bin", "gnucash-bin.exe",
+                               "bin", "gnucash.exe",
                                (char*)NULL);
     g_free (prefix);
     return result;
