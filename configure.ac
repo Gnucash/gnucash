@@ -70,13 +70,13 @@ AC_SUBST(GNUCASH_MICRO_VERSION)
 AC_SUBST(GNUCASH_LATEST_STABLE_SERIES)
 
 AC_DEFINE_UNQUOTED(GNUCASH_MAJOR_VERSION, $GNUCASH_MAJOR_VERSION,
-	[GnuCash Major version number])
+    [GnuCash Major version number])
 AC_DEFINE_UNQUOTED(GNUCASH_MINOR_VERSION, $GNUCASH_MINOR_VERSION,
-	[GnuCash Minor version number])
+    [GnuCash Minor version number])
 AC_DEFINE_UNQUOTED(GNUCASH_MICRO_VERSION, $GNUCASH_MICRO_VERSION,
-	[GnuCash Micro version number])
+    [GnuCash Micro version number])
 AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES",
-	[Most recent stable GnuCash series])
+    [Most recent stable GnuCash series])
 
 dnl Set of available languages.
 ALL_LINGUAS="bg ca cs da de el en_GB es_NI es eu fa fi fr he hu it ja ko lt lv nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk vi zh_CN zh_TW"
@@ -84,8 +84,8 @@ ALL_LINGUAS="bg ca cs da de el en_GB es_NI es eu fa fi fr he hu it ja ko lt lv n
 GETTEXT_PACKAGE=gnucash
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
-	[GetText version number])
-               
+    [GetText version number])
+
 AM_GLIB_GNU_GETTEXT
 
 
@@ -142,7 +142,7 @@ else
   BUILDING_FROM_SVN=no
   # Make sure we've got swig-runtime.h and gnc-svninfo.h
   AC_CHECK_FILE(${srcdir}/src/swig-runtime.h, [],
-	[AC_MSG_ERROR([
+    [AC_MSG_ERROR([
 
 It looks like you are NOT building from Subversion
 but I cannot find swig-runtime.h.  Check your PATH
@@ -150,9 +150,9 @@ and make sure we can find svnversion in your PATH!
 Either that or contact gnucash-devel@gnucash.org because
 the tarball you downloaded is broken.
 
-	])])
+    ])])
   AC_CHECK_FILE(${srcdir}/src/gnome-utils/gnc-svninfo.h, [],
-	[AC_MSG_ERROR([
+    [AC_MSG_ERROR([
 
 It looks like you are NOT building from Subversion
 but I cannot find gnc-svninfo.h.  Check your PATH
@@ -160,7 +160,7 @@ and make sure we can find svnversion in your PATH!
 Either that or contact gnucash-devel@gnucash.org because
 the tarball you downloaded is broken.
 
-	])])
+    ])])
 fi
 AM_CONDITIONAL(BUILDING_FROM_SVN, test "x$BUILDING_FROM_SVN" = "xyes")
 
@@ -175,11 +175,11 @@ AM_BINRELOC
 
 AC_PATH_PROG(PKG_CONFIG,pkg-config)
 if test "x$PKG_CONFIG" = x; then
-    # @*%&$ Ximian programmers renamed this application
-    AC_PATH_PROG(PKG_CONFIG,pkgconfig)
-    if test "x$PKG_CONFIG" = x; then
-    	AC_MSG_ERROR([Could not find the pkg-config (or pkgconfig) program.],)
-    fi
+  # @*%&$ Ximian programmers renamed this application
+  AC_PATH_PROG(PKG_CONFIG,pkgconfig)
+  if test "x$PKG_CONFIG" = x; then
+    AC_MSG_ERROR([Could not find the pkg-config (or pkgconfig) program.],)
+  fi
 fi
 
 ### --------------------------------------------------------------------------
@@ -189,7 +189,7 @@ AM_PATH_GLIB_2_0(2.12.0,,AC_MSG_ERROR([
 *** GLIB >= 2.12 is required to build Gnucash; please make sure you have the
 *** development headers installed. The latest version of GLIB is
 *** always available at ftp://ftp.gnome.org/pub/gnome/sources/glib/.]),
-	gthread gobject gmodule)
+    gthread gobject gmodule)
 
 AC_MSG_CHECKING([for untested GLIB versions (glib >= 2.13.0)])
 if $PKG_CONFIG 'glib-2.0 >= 2.13.0'
@@ -224,83 +224,82 @@ AC_SUBST(DL_LIB)
 ##################################################
 AC_SUBST(SED)
 
-
 # Set some defaults, they may be overridden below
 REGEX_LIBS=""
 
 AC_MSG_CHECKING(operating system)
 case $host_os in
-	rhapsody* | darwin[1567].*)
-		AC_MSG_RESULT([darwin, but too old])
-		AC_MSG_ERROR([This platform is not supported, please
+  rhapsody* | darwin[1567].*)
+    AC_MSG_RESULT([darwin, but too old])
+    AC_MSG_ERROR([This platform is not supported, please
 update to latest  darwin])
-		;;
-	darwin*)
-		platform=darwin
-		AC_MSG_RESULT($platform)
-		AC_MSG_CHECKING(For GDK-Quartz)
-		platform=osx
-		_gdk_tgt=`$PKG_CONFIG --variable=target gdk-2.0`
-		if test "x$_gdk_tgt" = xquartz; then 
-		   platform=darwin/quartz
-		   AC_MSG_RESULT(yes)
-		   AC_DEFINE(GDK_QUARTZ,,[Using GDK Quartz (not X11)])
-		   PKG_CHECK_MODULES([IGE_MAC], ige-mac-integration,
-				     [_ige_mac=yes], [_ige_mac=no])
-		   if test "x$_ige_mac" = xyes;	then
-		      IGE_MAC_LIBS="${IGE_MAC_LIBS} -lobjc"
-		      IGE_MAC_CFLAGS="${IGE_MAC_CFLAGS} -xobjective-c"
-		   fi
-		   AC_MSG_RESULT(${_ige_mac})
-		   AC_SUBST(IGE_MAC_LIBS)
-		   AC_SUBST(IGE_MAC_CFLAGS)
-		else
-		   AC_MSG_RESULT(no)
-		fi
-		;;
-	mingw*|cygwin*)
-		platform=win32
-		AC_MSG_RESULT($platform)
-		LT_PROG_RC
+    ;;
+  darwin*)
+    platform=darwin
+    AC_MSG_RESULT($platform)
+    AC_MSG_CHECKING(For GDK-Quartz)
+    platform=osx
+    _gdk_tgt=`$PKG_CONFIG --variable=target gdk-2.0`
+    if test "x$_gdk_tgt" = xquartz; then 
+      platform=darwin/quartz
+      AC_MSG_RESULT(yes)
+      AC_DEFINE(GDK_QUARTZ,,[Using GDK Quartz (not X11)])
+      PKG_CHECK_MODULES([IGE_MAC], ige-mac-integration,
+                        [_ige_mac=yes], [_ige_mac=no])
+      if test "x$_ige_mac" = xyes; then
+        IGE_MAC_LIBS="${IGE_MAC_LIBS} -lobjc"
+        IGE_MAC_CFLAGS="${IGE_MAC_CFLAGS} -xobjective-c"
+      fi
+      AC_MSG_RESULT(${_ige_mac})
+      AC_SUBST(IGE_MAC_LIBS)
+      AC_SUBST(IGE_MAC_CFLAGS)
+    else
+      AC_MSG_RESULT(no)
+    fi
+    ;;
+  mingw*|cygwin*)
+    platform=win32
+    AC_MSG_RESULT($platform)
+    LT_PROG_RC
 
-		AC_MSG_CHECKING(for native win32)
-		case $host_os in
-		   mingw*)
-			    native_win32=yes
-			    AC_MSG_RESULT(yes)
+    AC_MSG_CHECKING(for native win32)
+    case $host_os in
+      mingw*)
+        native_win32=yes
+        AC_MSG_RESULT(yes)
 
-			    HTMLHELP_LIBS=
-			    AC_MSG_CHECKING(for HtmlHelpW)
-			    saved_LIBS="${LIBS}"
-			    LIBS="${LIBS} -lhtmlhelp"
-			    AC_LINK_IFELSE(
-			        [AC_LANG_PROGRAM(
-			          [[#include <windows.h>
-			            #include <htmlhelp.h>]],
-			          [HtmlHelpW(0, (wchar_t*)"", HH_HELP_CONTEXT, 0);])],
-			          [AC_MSG_RESULT(yes)
-			           HTMLHELP_LIBS=-lhtmlhelp
-			           AC_DEFINE(HAVE_HTMLHELPW,1,[System has HtmlHelpW])
-			        ], [AC_MSG_RESULT(no)])
-			    LIBS="${saved_LIBS}"
-			    AC_SUBST(HTMLHELP_LIBS)
-			    ;;
-		   *)
-			    AC_MSG_RESULT(no)
-			    ;;
-		esac
-		
-		REGEX_LIBS="-lregex"
+        HTMLHELP_LIBS=
+        AC_MSG_CHECKING(for HtmlHelpW)
+        saved_LIBS="${LIBS}"
+        LIBS="${LIBS} -lhtmlhelp"
+        AC_LINK_IFELSE(
+          [AC_LANG_PROGRAM(
+             [[#include <windows.h>
+               #include <htmlhelp.h>]],
+             [HtmlHelpW(0, (wchar_t*)"", HH_HELP_CONTEXT, 0);])],
+          [AC_MSG_RESULT(yes)
+           HTMLHELP_LIBS=-lhtmlhelp
+           AC_DEFINE(HAVE_HTMLHELPW,1,[System has HtmlHelpW])
+          ], [AC_MSG_RESULT(no)])
+        LIBS="${saved_LIBS}"
+        AC_SUBST(HTMLHELP_LIBS)
+        ;;
+      *)
+        AC_MSG_RESULT(no)
+        ;;
+    esac
 
-		# Adjust CFLAGS and LDFLAGS on Windows
-		CFLAGS="${CFLAGS} -mms-bitfields"
-		LDFLAGS="${LDFLAGS} -no-undefined -mwindows"
-		;;
-	*)
-		platform=linux/other
-		AC_MSG_RESULT($platform)
+    REGEX_LIBS="-lregex"
 
-		;;	
+    # Adjust CFLAGS and LDFLAGS on Windows
+    CFLAGS="${CFLAGS} -mms-bitfields"
+    LDFLAGS="${LDFLAGS} -no-undefined -mwindows"
+    ;;
+
+  *)
+    platform=linux/other
+    AC_MSG_RESULT($platform)
+    ;;
 esac
 AC_SUBST(REGEX_LIBS)
 
@@ -358,11 +357,11 @@ AM_GUILE_VERSION_CHECK(1.6.7, , , [AC_MSG_ERROR([
 
 AC_SUBST(GUILE)
 AC_DEFINE_UNQUOTED(GNC_GUILE_MAJOR_VERSION, ${guile_major_version},
-	[Guile Major version number])
+    [Guile Major version number])
 AC_DEFINE_UNQUOTED(GNC_GUILE_MINOR_VERSION, ${guile_minor_version},
-	[Guile Minor version number])
+    [Guile Minor version number])
 AC_DEFINE_UNQUOTED(GNC_GUILE_MICRO_VERSION, ${guile_micro_version},
-	[Guile Micro version number])
+    [Guile Micro version number])
 
 AM_GUILE_VERSION_CHECK(1.8.0, , [
   AC_DEFINE(HAVE_GUILE18,1,[System has guile 1.8 or better])
@@ -377,9 +376,9 @@ then
 else
   AC_MSG_ERROR([
 
-   Cannot find SLIB.  Are you sure you have it installed?
-   See http://bugzilla.gnome.org/show_bug.cgi?id=347922
-   and http://bugzilla.gnome.org/show_bug.cgi?id=483631
+Cannot find SLIB.  Are you sure you have it installed?
+See http://bugzilla.gnome.org/show_bug.cgi?id=347922
+and http://bugzilla.gnome.org/show_bug.cgi?id=483631
 
 ])
 fi
@@ -399,15 +398,13 @@ AC_TRY_RUN([
 ],[
   AC_MSG_RESULT(yes)
   AC_CHECK_LIB(guile, scm_long_long2num,
-               AC_DEFINE(GUILE_LONG_LONG_OK,1,is sizeof(long_long) >=
-	       sizeof(gint64)))
+    AC_DEFINE(GUILE_LONG_LONG_OK,1,is sizeof(long_long) >= sizeof(gint64)))
 ],[
   AC_MSG_RESULT(no)
 ],[
   AC_MSG_RESULT(assuming yes)
   AC_CHECK_LIB(guile, scm_long_long2num,
-               AC_DEFINE(GUILE_LONG_LONG_OK,1,is sizeof(long_long) >=
-	       sizeof(gint64)))
+    AC_DEFINE(GUILE_LONG_LONG_OK,1,is sizeof(long_long) >= sizeof(gint64)))
 ])
 CFLAGS="$GNC_OLDCFLAGS"
 LDFLAGS="$GNC_OLDLDFLAGS"
@@ -507,10 +504,10 @@ AC_ARG_ENABLE(qof,
    [gnc_enable_qof=false])
 
 AC_ARG_WITH(qof, [AS_HELP_STRING([--with-qof=path],[prefix for Query Object Framework - QOF (auto)])],
-	[gnc_with_qof=$withval], [gnc_with_qof=yes])
+    [gnc_with_qof=$withval], [gnc_with_qof=yes])
 AC_ARG_WITH(qt3_wizard_package,
                  [AS_HELP_STRING([--with-qt3-wizard-package=name],[name of package containing qt3-wizard (aqbanking)])],
-	[QT3_WIZARD_PACKAGE=$withval], [QT3_WIZARD_PACKAGE=aqbanking])
+    [QT3_WIZARD_PACKAGE=$withval], [QT3_WIZARD_PACKAGE=aqbanking])
 AC_DEFINE_UNQUOTED([QT3_WIZARD_PACKAGE],["$QT3_WIZARD_PACKAGE"],[Name of package containing qt3-wizard.])
 
 # GnuCash builds without deprecated QOF code so needs latest version.
@@ -520,40 +517,40 @@ QOF_REQUIRED=99.99.99
 if test "$gnc_enable_qof" = true ; then
   AC_MSG_CHECKING([for QOF, version >= $QOF_REQUIRED])
   if test "$gnc_with_qof" != "yes"; then
-        QOF=`$PKG_CONFIG --silence-errors --exists '$gnc_with_qof/lib/pkgconfig/qof-1.pc >= $QOF_REQUIRED'`
-        QOF_LIBS=`$PKG_CONFIG --silence-errors --libs $gnc_with_qof/lib/pkgconfig/qof-1.pc`
-        QOF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags $gnc_with_qof/lib/pkgconfig/qof-1.pc`
-        QOF_VERSION=`$PKG_CONFIG --silence-errors --modversion $gnc_with_qof/lib/pkgconfig/qof-1.pc`
-        QOF_PREFIX=`$PKG_CONFIG --silence-errors --variable=prefix $gnc_with_qof/lib/pkgconfig/qof-1.pc`
-        QOF_LIB_DIR=`$PKG_CONFIG --silence-errors --variable=libdir $gnc_with_qof/lib/pkgconfig/qof-1.pc`
-        QOF_XML_DIR=`$PKG_CONFIG --silence-errors --variable=xmldir $gnc_with_qof/lib/pkgconfig/qof-1.pc`
+    QOF=`$PKG_CONFIG --silence-errors --exists '$gnc_with_qof/lib/pkgconfig/qof-1.pc >= $QOF_REQUIRED'`
+    QOF_LIBS=`$PKG_CONFIG --silence-errors --libs $gnc_with_qof/lib/pkgconfig/qof-1.pc`
+    QOF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags $gnc_with_qof/lib/pkgconfig/qof-1.pc`
+    QOF_VERSION=`$PKG_CONFIG --silence-errors --modversion $gnc_with_qof/lib/pkgconfig/qof-1.pc`
+    QOF_PREFIX=`$PKG_CONFIG --silence-errors --variable=prefix $gnc_with_qof/lib/pkgconfig/qof-1.pc`
+    QOF_LIB_DIR=`$PKG_CONFIG --silence-errors --variable=libdir $gnc_with_qof/lib/pkgconfig/qof-1.pc`
+    QOF_XML_DIR=`$PKG_CONFIG --silence-errors --variable=xmldir $gnc_with_qof/lib/pkgconfig/qof-1.pc`
   else
-        QOF=`$PKG_CONFIG --silence-errors --exists 'qof-1 >= $QOF_REQUIRED'`
-        QOF_LIBS=`$PKG_CONFIG --silence-errors --libs qof-1`
-        QOF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags qof-1`
-        QOF_VERSION=`$PKG_CONFIG --silence-errors --modversion qof-1`
-        QOF_PREFIX=`$PKG_CONFIG --silence-errors --variable=prefix qof-1`
-        QOF_LIB_DIR=`$PKG_CONFIG --silence-errors --variable=libdir qof-1`
-        QOF_XML_DIR=`$PKG_CONFIG --silence-errors --variable=xmldir qof-1`
+    QOF=`$PKG_CONFIG --silence-errors --exists 'qof-1 >= $QOF_REQUIRED'`
+    QOF_LIBS=`$PKG_CONFIG --silence-errors --libs qof-1`
+    QOF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags qof-1`
+    QOF_VERSION=`$PKG_CONFIG --silence-errors --modversion qof-1`
+    QOF_PREFIX=`$PKG_CONFIG --silence-errors --variable=prefix qof-1`
+    QOF_LIB_DIR=`$PKG_CONFIG --silence-errors --variable=libdir qof-1`
+    QOF_XML_DIR=`$PKG_CONFIG --silence-errors --variable=xmldir qof-1`
   fi
   if test x$QOF_XML_DIR = x; then
-        AC_MSG_RESULT([no, will use internal QOF code])
+    AC_MSG_RESULT([no, will use internal QOF code])
   else
-        AC_MSG_RESULT([yes])
+    AC_MSG_RESULT([yes])
   fi
 else
   AC_MSG_NOTICE([External QOF Disabled.  Using Internal QOF Code.])
 fi
 if test x$QOF_XML_DIR = x; then
-	QOF_LIB_DIR='${pkglibdir}'
-	QOF_CFLAGS='-I${top_builddir}/src/libqof/qof -I${top_srcdir}/src/libqof/qof'
-	QOF_LIBS='${top_builddir}/src/libqof/qof/libgnc-qof.la'
-	QOF_VERSION="internal"
-	QOF_PREFIX="internal"
-	LIBQOF_LIBRARY_VERSION=1:4:0
-	AC_SUBST(LIBQOF_LIBRARY_VERSION)
-  	AC_DEFINE(HAVE_LIBQOF,,[We will use the internal QOF code])
-	HAVE_LIBQOF="use_internal"
+  QOF_LIB_DIR='${pkglibdir}'
+  QOF_CFLAGS='-I${top_builddir}/src/libqof/qof -I${top_srcdir}/src/libqof/qof'
+  QOF_LIBS='${top_builddir}/src/libqof/qof/libgnc-qof.la'
+  QOF_VERSION="internal"
+  QOF_PREFIX="internal"
+  LIBQOF_LIBRARY_VERSION=1:4:0
+  AC_SUBST(LIBQOF_LIBRARY_VERSION)
+  AC_DEFINE(HAVE_LIBQOF,,[We will use the internal QOF code])
+  HAVE_LIBQOF="use_internal"
 fi
 AM_CONDITIONAL(USE_LIBQOF, [test x$HAVE_LIBQOF != x])
 AM_CONDITIONAL(USE_LIBQOF, [test "$HAVE_LIBQOF" = "use_internal"])
@@ -628,23 +625,24 @@ AC_SUBST(GNC_LIBEXECDIR)
 AC_ARG_ENABLE( debug,
   [AS_HELP_STRING([--enable-debug],[compile with debugging flags set])],
   [
-       # remove any optimization flags...
-       CFLAGS=`echo ${CFLAGS} | sed -e 's,-O.,,g'`
-       # ...except for those the user wants.
-       CFLAGS="${CFLAGS} -g ${USER_OPTIMIZATION}"
-       LDFLAGS="${LDFLAGS} -g"
-       AC_DEFINE(DEBUG_MEMORY,1,[Enable debug memory])
-       AC_DEFINE(DEBUG_MEMORY,0,[Enable debug memory])])
+     # remove any optimization flags...
+     CFLAGS=`echo ${CFLAGS} | sed -e 's,-O.,,g'`
+     # ...except for those the user wants.
+     CFLAGS="${CFLAGS} -g ${USER_OPTIMIZATION}"
+     LDFLAGS="${LDFLAGS} -g"
+     AC_DEFINE(DEBUG_MEMORY,1,[Enable debug memory])
+     AC_DEFINE(DEBUG_MEMORY,0,[Enable debug memory])
+  ])
 
 AC_ARG_ENABLE( profile,
   [AS_HELP_STRING([--enable-profile],[compile with profiling set])],
-       CFLAGS="${CFLAGS} -pg"
-       LDFLAGS="${LDFLAGS} -pg")
+  CFLAGS="${CFLAGS} -pg"
+  LDFLAGS="${LDFLAGS} -pg")
 
 AC_ARG_ENABLE( ref-counts-dumps,
   [AS_HELP_STRING([--enable-ref-counts-dumps],[compile with ref count dumps])],
-       AC_DEFINE(DEBUG_REFERENCE_COUNTING,1,[Enable reference count dumps])
-       AC_DEFINE(DEBUG_REFERENCE_COUNTING,0,[Enable reference count dumps]) )
+  AC_DEFINE(DEBUG_REFERENCE_COUNTING,1,[Enable reference count dumps])
+  AC_DEFINE(DEBUG_REFERENCE_COUNTING,0,[Enable reference count dumps]) )
 
 
 ### --------------------------------------------------------------------------
@@ -665,66 +663,64 @@ case "${want_ofx}" in
 esac
 if test x${want_ofx} != xno ;
 then
-    AC_ARG_WITH( ofx-prefix, 
-	[AS_HELP_STRING([--with-ofx-prefix=DIR],[specify where to look for libOFX])],
-       OFXPREFIX="$with_ofx_prefix" )
+  AC_ARG_WITH( ofx-prefix, 
+    [AS_HELP_STRING([--with-ofx-prefix=DIR],[specify where to look for libOFX])],
+    OFXPREFIX="$with_ofx_prefix" )
 
-    if test x${OFXPREFIX} != x ; then
-    	LIBOFX_LIBS="-L${OFXPREFIX}/lib"
-	LIBOFX_CFLAGS="-I${OFXPREFIX}/include"
+  if test x${OFXPREFIX} != x ; then
+    LIBOFX_LIBS="-L${OFXPREFIX}/lib"
+    LIBOFX_CFLAGS="-I${OFXPREFIX}/include"
+  fi
+
+  if test "x${want_ofx}" != xno ; then
+    # Version number verified. Now check header files.
+    AC_MSG_CHECKING(for libofx/libofx.h)
+    AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
+    save_CPPFLAGS="${CPPFLAGS}"
+    CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
+    AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT(yes),
+                OFXfound=no )
+
+    if test x${OFXPREFIX} = x -a x${OFXfound} = no ; then
+      LIBOFX_LIBS="-L$/usr/local/lib"
+      LIBOFX_CFLAGS="-I$/usr/local/include"
+      AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
+      CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
+
+      AC_TRY_CPP( [#include <libofx/libofx.h>],
+        AC_MSG_RESULT([yes (in /usr/local)]),
+          [ if test "x${want_ofx}" = xyes ; then
+              AC_MSG_ERROR([cannot find libofx header, needed for OFX support.])
+            else
+              AC_MSG_RESULT([cannot find libofx header, needed for OFX support.])
+              want_ofx=no
+            fi
+          ] )
     fi
 
-    if test "x${want_ofx}" != xno ; then
-        # Version number verified. Now check header files.
-        AC_MSG_CHECKING(for libofx/libofx.h)
-        AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
-        save_CPPFLAGS="${CPPFLAGS}"
-        CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
-        AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT(yes),
-	             OFXfound=no )
+    if test "x${want_ofx}" != xno ; then 
+      LIBOFX_LIBS="${LIBOFX_LIBS} -lofx"
+      AC_MSG_CHECKING(for libofx)
+      save_LIBS="${LIBS}"
+      LIBS="${LIBS} ${LIBOFX_LIBS}"
+      AC_TRY_LINK( [#include <libofx/libofx.h>],
+        [ LibofxContextPtr libofx_context = libofx_get_new_context();
+          libofx_free_context(libofx_context);
+        ], AC_MSG_RESULT(yes),
+        [ if test "x${want_ofx}" = xyes ; then
+            AC_MSG_ERROR([*** Cannot compile test program for libofx library. Please check config.log for the exact error.])
+          else
+            AC_MSG_RESULT([*** Cannot compile test program for libofx library. Please check config.log for the exact error.])
+            want_ofx=no
+          fi
+        ] )
 
-        if test x${OFXPREFIX} = x -a x${OFXfound} = no ; then
-            LIBOFX_LIBS="-L$/usr/local/lib"
-	    LIBOFX_CFLAGS="-I$/usr/local/include"
-            AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
-            CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
-
-            AC_TRY_CPP( [#include <libofx/libofx.h>],
-                        AC_MSG_RESULT([yes (in /usr/local)]),
-	      [ if test "x${want_ofx}" = xyes ; then
-                  AC_MSG_ERROR([cannot find libofx header, needed for OFX support.])
-                else
-                  AC_MSG_RESULT([cannot find libofx header, needed for OFX support.])
-                  want_ofx=no
-                fi
-              ] )
-        fi
-
-        if test "x${want_ofx}" != xno ; then 
-            LIBOFX_LIBS="${LIBOFX_LIBS} -lofx"
-            AC_MSG_CHECKING(for libofx)
-            save_LIBS="${LIBS}"
-            LIBS="${LIBS} ${LIBOFX_LIBS}"
-            AC_TRY_LINK( [
-                #include <libofx/libofx.h>
-	        ], [
-	        LibofxContextPtr libofx_context = libofx_get_new_context();
-	        libofx_free_context(libofx_context);
-	        ], AC_MSG_RESULT(yes),
-	        [ if test "x${want_ofx}" = xyes ; then
-                    AC_MSG_ERROR([*** Cannot compile test program for libofx library. Please check config.log for the exact error.])
-                  else
-                    AC_MSG_RESULT([*** Cannot compile test program for libofx library. Please check config.log for the exact error.])
-                    want_ofx=no
-                  fi
-                 ] )
-
-            LIBS="${save_LIBS}"
-            CPPFLAGS="${save_CPPFLAGS}"
-            AC_SUBST(LIBOFX_CFLAGS)
-            AC_SUBST(LIBOFX_LIBS)
-        fi
+      LIBS="${save_LIBS}"
+      CPPFLAGS="${save_CPPFLAGS}"
+      AC_SUBST(LIBOFX_CFLAGS)
+      AC_SUBST(LIBOFX_LIBS)
     fi
+  fi
 fi
 if test "x${want_ofx}" != xno ; then
   OFX_DIR=ofx
@@ -831,9 +827,7 @@ AC_ARG_WITH( help-prefix,
   [AS_HELP_STRING([--with-help-prefix=PATH],[specify where to store the help files])],
   GNC_HELPDIR="$with_help_prefix",
   GNC_HELPDIR="\${datadir}")
-
 AC_SUBST(GNC_HELPDIR)
-
 
 ### --------------------------------------------------------------------------
 ### Check for etags
@@ -888,54 +882,53 @@ fi
 
 # Make sure it's version 5 or later
 if "$PERL" -e 'exit 1 if $] < 5.0'; then
-	:
+    :
 else
     AC_MSG_ERROR([Found ${PERL} reports version ]
                  [`${PERL} -e 'print $]'`, need version 5.*])
 fi
 AC_SUBST(PERL)
 
+### ----------------------------------------------------------------------------
+### Check for doxygen, mostly stolen from http://log4cpp.sourceforge.net/
 
-# check for doxygen, mostly stolen from http://log4cpp.sourceforge.net/
-# ----------------------------------------------------------------------------
 AC_DEFUN([BB_ENABLE_DOXYGEN],
-[
-AC_ARG_ENABLE(doxygen, [AS_HELP_STRING([--enable-doxygen],[enable documentation generation with doxygen (auto)])])
-AC_ARG_ENABLE(dot, [AS_HELP_STRING([--enable-dot],[use 'dot' to generate graphs in doxygen (auto)])])
-AC_ARG_ENABLE(html-docs, [AS_HELP_STRING([--enable-html-docs],[enable HTML generation with doxygen (yes)])], [], [ enable_html_docs=yes])              
-AC_ARG_ENABLE(latex-docs, [AS_HELP_STRING([--enable-latex-docs],[enable LaTeX documentation generation with doxygen (no)])], [], [ enable_latex_docs=no])              
-if test "x$enable_doxygen" = xno; then
+  [
+    AC_ARG_ENABLE(doxygen, [AS_HELP_STRING([--enable-doxygen],[enable documentation generation with doxygen (auto)])])
+    AC_ARG_ENABLE(dot, [AS_HELP_STRING([--enable-dot],[use 'dot' to generate graphs in doxygen (auto)])])
+    AC_ARG_ENABLE(html-docs, [AS_HELP_STRING([--enable-html-docs],[enable HTML generation with doxygen (yes)])], [], [ enable_html_docs=yes])              
+    AC_ARG_ENABLE(latex-docs, [AS_HELP_STRING([--enable-latex-docs],[enable LaTeX documentation generation with doxygen (no)])], [], [ enable_latex_docs=no])              
+    if test "x$enable_doxygen" = xno; then
+      enable_doc=no
+    else 
+      AC_PATH_PROG(DOXYGEN, doxygen, , $PATH)
+      if test x$DOXYGEN = x; then
+        if test "x$enable_doxygen" = xyes; then
+          AC_MSG_ERROR([could not find doxygen])
+        fi
         enable_doc=no
-else 
-        AC_PATH_PROG(DOXYGEN, doxygen, , $PATH)
-        if test x$DOXYGEN = x; then
-                if test "x$enable_doxygen" = xyes; then
-                        AC_MSG_ERROR([could not find doxygen])
-                fi
-                enable_doc=no
-        else
-                enable_doc=yes
-                AC_PATH_PROG(DOT, dot, , $PATH)
-        fi
-fi
-AM_CONDITIONAL(DOC, test x$enable_doc = xyes)
+      else
+        enable_doc=yes
+        AC_PATH_PROG(DOT, dot, , $PATH)
+      fi
+    fi
+    AM_CONDITIONAL(DOC, test x$enable_doc = xyes)
 
-if test x$DOT = x; then
-        if test "x$enable_dot" = xyes; then
-                AC_MSG_ERROR([could not find dot])
-        fi
-        enable_dot=no
-else
-        enable_dot=yes
-fi
-AM_CONDITIONAL(ENABLE_DOXYGEN, test x$enable_doc = xtrue)
-AC_SUBST(enable_dot)
-AC_SUBST(enable_html_docs)
-AC_SUBST(enable_latex_docs)
-])
+    if test x$DOT = x; then
+      if test "x$enable_dot" = xyes; then
+        AC_MSG_ERROR([could not find dot])
+      fi
+      enable_dot=no
+    else
+      enable_dot=yes
+    fi
+    AM_CONDITIONAL(ENABLE_DOXYGEN, test x$enable_doc = xtrue)
+    AC_SUBST(enable_dot)
+    AC_SUBST(enable_html_docs)
+    AC_SUBST(enable_latex_docs)
+  ])
 
 # check for doxygen
-# ----------------------------------------------------------------------------
 BB_ENABLE_DOXYGEN
 
 
@@ -967,190 +960,191 @@ AM_CONDITIONAL(GNUCASH_ENABLE_GUI, test x${gnc_build_gui} = xtrue)
 
 if test x${gnc_build_gui} = xtrue ;
 then
-    if test x${enable_compile_warnings} = x ;
-    then
-      enable_compile_warnings="yes"
-    fi
-    GNOME_COMPILE_WARNINGS
+  if test x${enable_compile_warnings} = x ;
+  then
+    enable_compile_warnings="yes"
+  fi
+  GNOME_COMPILE_WARNINGS
 
-    PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.10)
-    AS_SCRUB_INCLUDE(GTK_CFLAGS)
-    AC_SUBST(GTK_CFLAGS)
-    AC_SUBST(GTK_LIBS)
+  PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.10)
+  AS_SCRUB_INCLUDE(GTK_CFLAGS)
+  AC_SUBST(GTK_CFLAGS)
+  AC_SUBST(GTK_LIBS)
 
-    AC_MSG_CHECKING([for untested GTK versions (gtk > 2.11.0)])
-    if $PKG_CONFIG 'gtk+-2.0 > 2.11.0'
-    then
-      AC_MSG_RESULT(yes)
-      HAVE_UNTESTED_GTK=yes
-    fi
+  AC_MSG_CHECKING([for untested GTK versions (gtk > 2.11.0)])
+  if $PKG_CONFIG 'gtk+-2.0 > 2.11.0'
+  then
+    AC_MSG_RESULT(yes)
+    HAVE_UNTESTED_GTK=yes
+  fi
 
-    AC_MSG_CHECKING([for GTK >= 2.12.0])
-    if $PKG_CONFIG 'gtk+-2.0 >= 2.12.0'
-    then
-      AC_MSG_RESULT(yes)
-      AC_DEFINE(HAVE_GTK_2_12,1,[System has gtk 2.12.0 or better])
-      HAVE_GTK_2_12=yes
-    fi
+  AC_MSG_CHECKING([for GTK >= 2.12.0])
+  if $PKG_CONFIG 'gtk+-2.0 >= 2.12.0'
+  then
+    AC_MSG_RESULT(yes)
+    AC_DEFINE(HAVE_GTK_2_12,1,[System has gtk 2.12.0 or better])
+    HAVE_GTK_2_12=yes
+  fi
 
+  PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.4)
+  AS_SCRUB_INCLUDE(GNOME_CFLAGS)
+  AC_SUBST(GNOME_CFLAGS)
+  AC_SUBST(GNOME_LIBS)
 
-    PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.4)
-    AS_SCRUB_INCLUDE(GNOME_CFLAGS)
-    AC_SUBST(GNOME_CFLAGS)
-    AC_SUBST(GNOME_LIBS)
+  AC_MSG_CHECKING([for untested GNOME versions (libgnome >= 2.19.0)])
+  if $PKG_CONFIG 'libgnome-2.0 >= 2.19.0'
+  then
+    AC_MSG_RESULT(yes)
+    HAVE_UNTESTED_GNOME=yes
+  else
+    AC_MSG_RESULT(no)
+  fi
 
-    AC_MSG_CHECKING([for untested GNOME versions (libgnome >= 2.19.0)])
-    if $PKG_CONFIG 'libgnome-2.0 >= 2.19.0'
-    then
-      AC_MSG_RESULT(yes)
-      HAVE_UNTESTED_GNOME=yes
-    else
-      AC_MSG_RESULT(no)
-    fi
+  PKG_CHECK_MODULES(GDK_PIXBUF, gdk-pixbuf-2.0)
+  AS_SCRUB_INCLUDE(GDK_PIXBUF_CFLAGS)
+  AC_SUBST(GDK_PIXBUF_CFLAGS)
+  AC_SUBST(GDK_PIXBUF_LIBS)
 
-    PKG_CHECK_MODULES(GDK_PIXBUF, gdk-pixbuf-2.0)
-    AS_SCRUB_INCLUDE(GDK_PIXBUF_CFLAGS)
-    AC_SUBST(GDK_PIXBUF_CFLAGS)
-    AC_SUBST(GDK_PIXBUF_LIBS)
+  PKG_CHECK_MODULES(GLADE, libglade-2.0 >= 2.4)
+  AS_SCRUB_INCLUDE(GLADE_CFLAGS)
+  AC_SUBST(GLADE_CFLAGS)
+  AC_SUBST(GLADE_LIBS)
 
-    PKG_CHECK_MODULES(GLADE, libglade-2.0 >= 2.4)
-    AS_SCRUB_INCLUDE(GLADE_CFLAGS)
-    AC_SUBST(GLADE_CFLAGS)
-    AC_SUBST(GLADE_LIBS)
-
-    # checks for goffice
-    PKG_CHECK_MODULES(GOFFICE, libgoffice-0.8 >= 0.7.0, [goffice=1], [
-      PKG_CHECK_MODULES(GOFFICE, libgoffice-0.6 >= 0.6.0, [goffice=1], [
-        PKG_CHECK_MODULES(GOFFICE, libgoffice-0.5 >= 0.5.1, [goffice=1], [AC_MSG_ERROR([Cannot find libgoffice.>= 0.5.1])])
-      ])
+   # checks for goffice
+  PKG_CHECK_MODULES(GOFFICE, libgoffice-0.8 >= 0.7.0, [goffice=1], [
+    PKG_CHECK_MODULES(GOFFICE, libgoffice-0.6 >= 0.6.0, [goffice=1], [
+      PKG_CHECK_MODULES(GOFFICE, libgoffice-0.5 >= 0.5.1, [goffice=1], [AC_MSG_ERROR([Cannot find libgoffice.>= 0.5.1])])
     ])
-    AS_SCRUB_INCLUDE(GOFFICE_CFLAGS)
-    AC_SUBST(GOFFICE_CFLAGS)
-    AC_SUBST(GOFFICE_LIBS)
+  ])
+  AS_SCRUB_INCLUDE(GOFFICE_CFLAGS)
+  AC_SUBST(GOFFICE_CFLAGS)
+  AC_SUBST(GOFFICE_LIBS)
 
-    ### --------------------------------------------------------------------------
-    ### determine the HTML engine
+  ### --------------------------------------------------------------------------
+  ### determine the HTML engine
 
-    AC_MSG_CHECKING([the html engine])
-    AC_ARG_WITH(html_engine,
-                AS_HELP_STRING([--with-html-engine=@<:@webkit/gtkhtml@:>@],
-                               [Select HTML engine [default=gtkhtml]]),
-                [],[with_html_engine="gtkhtml"])
+  AC_MSG_CHECKING([the html engine])
+  AC_ARG_WITH(html_engine,
+              AS_HELP_STRING([--with-html-engine=@<:@webkit/gtkhtml@:>@],
+                             [Select HTML engine [default=gtkhtml]]),
+              [],[with_html_engine="gtkhtml"])
 
-    AC_MSG_RESULT([$with_html_engine])
+  AC_MSG_RESULT([$with_html_engine])
 
-    case "$with_html_engine" in
-         gtkhtml)
+  case "$with_html_engine" in
 
-            # check for gtkhtml >= 3.14 with gtkprint support
-            gtkhtml=0
-            PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.14, [
-              # check for gtkhtml >= 3.16 (includes gtk_html_print_operation_run())
-              AC_MSG_CHECKING(for GtkHTML - version >= 3.16.0)
-              if $PKG_CONFIG 'libgtkhtml-3.14 >= 3.16.0'; then
-                AC_MSG_RESULT(yes)
-                AC_DEFINE(HAVE_GTKHTML_3_16,1,[System has gtkhtml 3.16.0 or better])
-                HAVE_GTKHTML_3_16=1
-              else
-                AC_MSG_RESULT(no)
-              fi
-            ], [
-              AC_MSG_ERROR([cannot find GtkHTML >= 3.14])
-            ])
-            ;;
+    gtkhtml)
+      # check for gtkhtml >= 3.14 with gtkprint support
+      gtkhtml=0
+      PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.14, [
+        # check for gtkhtml >= 3.16 (includes gtk_html_print_operation_run())
+        AC_MSG_CHECKING(for GtkHTML - version >= 3.16.0)
+        if $PKG_CONFIG 'libgtkhtml-3.14 >= 3.16.0'; then
+          AC_MSG_RESULT(yes)
+          AC_DEFINE(HAVE_GTKHTML_3_16,1,[System has gtkhtml 3.16.0 or better])
+          HAVE_GTKHTML_3_16=1
+        else
+          AC_MSG_RESULT(no)
+        fi
+      ], [
+        AC_MSG_ERROR([cannot find GtkHTML >= 3.14])
+      ])
+      ;;
 
-	     webkit)
-  		    PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.0")
-  		    AC_DEFINE(WANT_WEBKIT,1,[Use webkit instead of gtkhtml])
-            case "$platform" in
-              win32)
-                # 1.1.90 has both functions
-                AC_DEFINE(HAVE_WEBKIT_WEB_VIEW_LOAD_URI,1,[webkit_web_view_load_uri exists])
-  		        AC_DEFINE(HAVE_WEBKIT_WEB_FRAME_PRINT_FULL,1,[webkit_web_frame_print_full exists])
-                ;;
-              *)
-                # Unsure - check functions exist
-                oLIBS="$LIBS"
-                LIBS="$LIBS -lwebkit-1.0"
-                AC_CHECK_FUNCS(webkit_web_view_load_uri)
-                LIBS="$oLIBS"
-  		        AC_MSG_CHECKING(for webkit_web_frame_print_full)
-  		        saved_CFLAGS="${CFLAGS}"
-	            saved_LIBS="${LIBS}"
-	            CFLAGS="${CFLAGS} ${WEBKIT_CFLAGS}"
-	            LIBS="${LIBS} ${WEBKIT_LIBS}"
-  		        AC_LINK_IFELSE(
-  		            [AC_LANG_PROGRAM(
-  		                [[#include <webkit/webkit.h>]],
-  		                [[webkit_web_frame_print_full( 0, 0, 0, 0 );]])],
-  		                [AC_MSG_RESULT(yes)
-  		                 AC_DEFINE(HAVE_WEBKIT_WEB_FRAME_PRINT_FULL,1,[webkit_web_frame_print_full exists])],
-  		                [AC_MSG_RESULT(no)])
-  		        CFLAGS="${saved_CFLAGS}"
-  		        LIBS="${saved_LIBS}"
-		        ;;
-            esac
-            ;;
-	     *) AC_MSG_ERROR([Invalid HTML engine: must be gtkhtml or webkit]) ;;
-    esac
-
-    AM_CONDITIONAL(HTML_USING_WEBKIT, [test x${with_html_engine} = xwebkit])
-    AC_SUBST(WEBKIT_CFLAGS)
-    AC_SUBST(WEBKIT_LIBS)
-    AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
-dnl if Mac OSX, also scrub /sw/include
-dnl GIVEN_CFLAGS=$(echo $GIVEN_CFLAGS | sed -e "s;-I/sw/include ;;" | sed -e "s;-I/sw/include$;;")
-
-case $host_os in
-	darwin*)
-		GTKHTML_CFLAGS=`echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include ;;" | ${SED} -e "s;-I/sw/include$;;"`
-		GTKHTML_CFLAGS=`echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include/gtkhtml ;;" | ${SED} -e "s;-I/sw/includ/gtkhtmle$;;"`
-		;;
-esac
-    AC_SUBST(GTKHTML_CFLAGS)
-    AC_SUBST(GTKHTML_LIBS)
-
-
-    ###-----------------------------------------------------------------------
-    ## Find a suitable password store
-
-case $host_os in
-    darwin*)
-        AC_DEFINE(HAVE_OSX_KEYCHAIN,1,[System has an OS X Key chain])
+    webkit)
+      PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.0")
+      AC_DEFINE(WANT_WEBKIT,1,[Use webkit instead of gtkhtml])
+      case "$platform" in
+        win32)
+          # 1.1.90 has both functions
+          AC_DEFINE(HAVE_WEBKIT_WEB_VIEW_LOAD_URI,1,[webkit_web_view_load_uri exists])
+          AC_DEFINE(HAVE_WEBKIT_WEB_FRAME_PRINT_FULL,1,[webkit_web_frame_print_full exists])
+          ;;
+        *)
+          # Unsure - check functions exist
+          oLIBS="$LIBS"
+          LIBS="$LIBS -lwebkit-1.0"
+          AC_CHECK_FUNCS(webkit_web_view_load_uri)
+          LIBS="$oLIBS"
+          AC_MSG_CHECKING(for webkit_web_frame_print_full)
+          saved_CFLAGS="${CFLAGS}"
+          saved_LIBS="${LIBS}"
+          CFLAGS="${CFLAGS} ${WEBKIT_CFLAGS}"
+          LIBS="${LIBS} ${WEBKIT_LIBS}"
+          AC_LINK_IFELSE(
+              [AC_LANG_PROGRAM(
+                  [[#include <webkit/webkit.h>]],
+                  [[webkit_web_frame_print_full( 0, 0, 0, 0 );]])],
+                  [AC_MSG_RESULT(yes)
+                   AC_DEFINE(HAVE_WEBKIT_WEB_FRAME_PRINT_FULL,1,[webkit_web_frame_print_full exists])],
+                  [AC_MSG_RESULT(no)])
+          CFLAGS="${saved_CFLAGS}"
+          LIBS="${saved_LIBS}"
+          ;;
+        esac
         ;;
+
+    *) AC_MSG_ERROR([Invalid HTML engine: must be gtkhtml or webkit]) ;;
+  esac
+
+  AM_CONDITIONAL(HTML_USING_WEBKIT, [test x${with_html_engine} = xwebkit])
+  AC_SUBST(WEBKIT_CFLAGS)
+  AC_SUBST(WEBKIT_LIBS)
+  AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
+
+  dnl if Mac OSX, also scrub /sw/include
+  dnl GIVEN_CFLAGS=$(echo $GIVEN_CFLAGS | sed -e "s;-I/sw/include ;;" | sed -e "s;-I/sw/include$;;")
+
+  case $host_os in
+    darwin*)
+      GTKHTML_CFLAGS=`echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include ;;" | ${SED} -e "s;-I/sw/include$;;"`
+      GTKHTML_CFLAGS=`echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include/gtkhtml ;;" | ${SED} -e "s;-I/sw/includ/gtkhtmle$;;"`
+      ;;
+  esac
+  AC_SUBST(GTKHTML_CFLAGS)
+  AC_SUBST(GTKHTML_LIBS)
+
+  ###-----------------------------------------------------------------------
+  ## Find a suitable password store
+
+  case $host_os in
+    darwin*)
+      AC_DEFINE(HAVE_OSX_KEYCHAIN,1,[System has an OS X Key chain])
+      ;;
     *)
-        PKG_CHECK_MODULES(GNOME_KEYRING, gnome-keyring-1 >= "0.6",
-            [AC_DEFINE(HAVE_GNOME_KEYRING,1,[System has gnome-keyring 0.6 or better])],
-            [AC_DEFINE(HAVE_NO_KEYRING,1,[System has no suitable keyring service])])
-esac
-    ### ----------------------------------------------------------------------
+      PKG_CHECK_MODULES(GNOME_KEYRING, gnome-keyring-1 >= "0.6",
+          [AC_DEFINE(HAVE_GNOME_KEYRING,1,[System has gnome-keyring 0.6 or better])],
+          [AC_DEFINE(HAVE_NO_KEYRING,1,[System has no suitable keyring service])])
+  esac
+
+  ### ----------------------------------------------------------------------
     
-    AC_ARG_ENABLE( efence,
-      [AS_HELP_STRING([--enable-efence],[link using efence])],
-      if test x$enableval = xyes; then
-         EFENCE_LIBS="-lefence"
-         USE_EFENCE=1
-	 AC_DEFINE(USE_EFENCE,,We are using EFence)
-      fi,
-      USE_EFENCE=0
-      EFENCE_LIBS="")
-    AC_SUBST(EFENCE_LIBS)
+  AC_ARG_ENABLE( efence,
+    [AS_HELP_STRING([--enable-efence],[link using efence])],
+    if test x$enableval = xyes; then
+      EFENCE_LIBS="-lefence"
+      USE_EFENCE=1
+      AC_DEFINE(USE_EFENCE,,We are using EFence)
+    fi,
+    USE_EFENCE=0
+    EFENCE_LIBS="")
+  AC_SUBST(EFENCE_LIBS)
+
+  ### ----------------------------------------------------------------------
+  ## For now, we just presume you're using the GNOME version.  The other
+  ## UI's haven't been carried over during the automake transition.  At
+  ## some point, if it's deemed worthwhile, they can be resurrected...
     
-    
-    ### ----------------------------------------------------------------------
-    ## For now, we just presume you're using the GNOME version.  The other
-    ## UI's haven't been carried over during the automake transition.  At
-    ## some point, if it's deemed worthwhile, they can be resurrected...
-    
-    GNOME=1
-    AC_DEFINE(GNOME,,using GNOME)
+  GNOME=1
+  AC_DEFINE(GNOME,,using GNOME)
+
 else
   # GNOME_COMPILE_WARNINGS will add -Wall; no need to set it again.
   # also, only add it for GCC.
   if test ${GCC}x = yesx
   then
-     # We should always see these errors...
-     CFLAGS="${CFLAGS} -Wall"
+    # We should always see these errors...
+    CFLAGS="${CFLAGS} -Wall"
   fi
 
 fi
@@ -1168,9 +1162,9 @@ fi
 AC_ARG_ENABLE(deprecated-glib,
   [AS_HELP_STRING([--disable-deprecated-glib],[don't use deprecated glib functions])],
   [case "${enableval}" in
-        no) allow_deprecated=false ;;
-        *)  allow_deprecated=true ;;
-        esac]
+     no) allow_deprecated=false ;;
+     *)  allow_deprecated=true ;;
+   esac]
   )
 if test x${allow_deprecated} != "xtrue"
 then
@@ -1187,9 +1181,9 @@ fi
 AC_ARG_ENABLE(deprecated-gtk,
   [AS_HELP_STRING([--disable-deprecated-gtk],[don't use deprecated gtk, gdk or gdk-pixbuf functions])],
   [case "${enableval}" in
-        no) allow_deprecated=false ;;
-        *)  allow_deprecated=true ;;
-        esac]
+     no) allow_deprecated=false ;;
+     *)  allow_deprecated=true ;;
+   esac]
   )
 if test x${allow_deprecated} != "xtrue"
 then
@@ -1208,9 +1202,9 @@ fi
 AC_ARG_ENABLE(deprecated-gnome,
   [AS_HELP_STRING([--disable-deprecated-gnome],[don't use deprecated gnome functions])],
   [case "${enableval}" in
-        no) allow_deprecated=false ;;
-        *)  allow_deprecated=true ;;
-        esac]
+     no) allow_deprecated=false ;;
+     *)  allow_deprecated=true ;;
+   esac]
   )
 if test x${allow_deprecated} != "xtrue"
 then
@@ -1223,11 +1217,13 @@ fi
 
 AC_CHECK_FUNCS(pthread_mutex_init)
 case $host_os in
-     darwin*)
-	AC_REPLACE_FUNCS(localtime_r gmtime_r)
-     	AC_LIBOBJ(strptime)
-	;;
-    *) 	AC_REPLACE_FUNCS(strptime localtime_r gmtime_r) ;;
+  darwin*)
+    AC_REPLACE_FUNCS(localtime_r gmtime_r)
+    AC_LIBOBJ(strptime)
+    ;;
+  *)
+    AC_REPLACE_FUNCS(strptime localtime_r gmtime_r)
+    ;;
 esac
 
 #AC_REPLACE_FUNCS(scm_strptime)
@@ -1247,10 +1243,10 @@ enable_python=false
 AC_ARG_ENABLE(python-bindings,
   [AS_HELP_STRING([--enable-python-bindings],[enable python bindings])],
   [case "${enableval}" in
-        yes) enable_python=true ;;
-        no) enable_python=false ;;
-        *) enable_python=true ;;
-        esac]
+     yes) enable_python=true ;;
+     no) enable_python=false ;;
+     *) enable_python=true ;;
+   esac]
   )
 if test x${enable_python} = "xtrue"
 then
@@ -1296,12 +1292,12 @@ then
        no)  gnc_error_on_warning=no ;;
        *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
      esac],
-    [   if test "${error_on_warning_as_default}" = "yes"; then
-	  warnFLAGS="${warnFLAGS} -Werror"; 
-	  gnc_error_on_warning=auto
-	else
-	  gnc_error_on_warning=no
-	fi
+    [ if test "${error_on_warning_as_default}" = "yes"; then
+        warnFLAGS="${warnFLAGS} -Werror"; 
+        gnc_error_on_warning=auto
+      else
+        gnc_error_on_warning=no
+      fi
     ])
 
   # For gcc >= 3.4.x, specifically enable the new warning switch
@@ -1309,21 +1305,19 @@ then
   # compatibility to gcc 2.95 and other compilers.
   GCC_VERSION=`${CC} -dumpversion`
   if test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 3; then
-     # This is gcc >= 3.x.x
-     if test "`echo ${GCC_VERSION} | cut -d. -f2`" -ge 4; then
-	# This is gcc >= 3.4.x
-	warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement"
-     else if test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 4; then
-	# This is gcc == 4.x.x
-	warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
-	# rpmbuild on FC4 forces this flag. Can't hurt to always compile with it.
-	warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
-	fi
-     fi
+    # This is gcc >= 3.x.x
+    if test "`echo ${GCC_VERSION} | cut -d. -f2`" -ge 4; then
+      # This is gcc >= 3.4.x
+      warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement"
+    else if test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 4; then
+           # This is gcc == 4.x.x
+           warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
+           # rpmbuild on FC4 forces this flag. Can't hurt to always compile with it.
+           warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
+         fi
+    fi
   fi
-
   CFLAGS="${warnFLAGS} ${CFLAGS}"
-
 else
   warnFLAGS=none
 fi
@@ -1346,179 +1340,180 @@ chmod u+x ${srcdir}/src/bin/overrides/gnucash-make-guids
 LIBOBJS_SEDSCRIPT="s,\.[[^.]]* ,$U&,g;s,\.[[^.]]*\$\$,$U&,"
 AC_SUBST(LIBOBJS_SEDSCRIPT)
 
-AC_CONFIG_FILES(po/Makefile.in
-          dnl # Makefiles
-          Makefile
-          accounts/Makefile
-          accounts/C/Makefile
-          accounts/cs/Makefile
-          accounts/da/Makefile
-          accounts/de_AT/Makefile
-          accounts/de_CH/Makefile
-          accounts/de_DE/Makefile
-          accounts/el_GR/Makefile
-          accounts/en_GB/Makefile
-          accounts/es_ES/Makefile
-          accounts/es_MX/Makefile
-          accounts/fi_FI/Makefile
-          accounts/fr_CA/Makefile
-          accounts/fr_CH/Makefile
-          accounts/fr_FR/Makefile
-          accounts/hu_HU/Makefile
-          accounts/it/Makefile
-          accounts/ja/Makefile
-          accounts/ko/Makefile
-          accounts/lv/Makefile
-          accounts/nl/Makefile
-          accounts/nb/Makefile
-          accounts/pl/Makefile
-          accounts/pt_BR/Makefile
-          accounts/pt_PT/Makefile
-          accounts/ru/Makefile
-          accounts/sk/Makefile
-          accounts/tr_TR/Makefile
-          accounts/zh_CN/Makefile
-          checks/Makefile
-          doc/Makefile
-          doc/examples/Makefile
-          intl-scm/Makefile
-          lib/Makefile
-          lib/guile-www/Makefile
-          lib/libc/Makefile
-          lib/stf/Makefile
-          packaging/Makefile
-          packaging/win32/Makefile
-          packaging/win32/gnucash.iss
-          src/Makefile
-          src/app-utils/Makefile
-          src/app-utils/test/Makefile
-          src/backend/Makefile
-		  src/backend/dbi/Makefile
-		  src/backend/dbi/test/Makefile
-          src/backend/xml/Makefile
-          src/backend/xml/test/Makefile
-          src/backend/xml/test/test-files/Makefile
-          src/backend/xml/test/test-files/xml2/Makefile
-		  src/backend/sql/Makefile
-		  src/backend/sql/test/Makefile
-          src/bin/Makefile
-          src/bin/overrides/Makefile
-          src/bin/test/Makefile
-          src/core-utils/Makefile
-          src/core-utils/test/Makefile
-          src/calculation/Makefile 
-          src/calculation/test/Makefile
-          src/debug/Makefile
-          src/debug/valgrind/Makefile 
-          src/doc/Makefile
-          src/doc/design/Makefile
-          src/doc/xml/Makefile
-          src/engine/Makefile
-          src/engine/test/Makefile
-          src/engine/test-core/Makefile
-          src/gnc-module/Makefile
-          src/gnc-module/test/Makefile
-          src/gnc-module/test/mod-foo/Makefile
-          src/gnc-module/test/mod-bar/Makefile
-          src/gnc-module/test/mod-baz/Makefile
-          src/gnc-module/test/misc-mods/Makefile
-          src/gnome/Makefile
-          src/gnome/gnucash.desktop.in
-	  src/gnome/glade/Makefile
-	  src/gnome/schemas/Makefile
-	  src/gnome/ui/Makefile
-          src/gnome-utils/Makefile
-	  src/gnome-utils/glade/Makefile
-	  src/gnome-utils/schemas/Makefile
-	  src/gnome-utils/test/Makefile
-	  src/gnome-utils/ui/Makefile
-          src/gnome-search/Makefile
-		  src/html/Makefile
-          src/import-export/Makefile
-          src/import-export/test/Makefile
-          src/import-export/qif-import/Makefile
-          src/import-export/qif/Makefile
-          src/import-export/qif/test/Makefile
-          src/import-export/qif-import/schemas/Makefile
-          src/import-export/qif-import/test/Makefile
-          src/import-export/qif-io-core/Makefile
-          src/import-export/qif-io-core/test/Makefile
-          src/import-export/schemas/Makefile
-          src/import-export/ofx/Makefile
-          src/import-export/ofx/test/Makefile
-          src/import-export/csv/Makefile
-          src/import-export/log-replay/Makefile
-          src/import-export/aqbanking/Makefile
-          src/import-export/aqbanking/schemas/Makefile
-          src/import-export/hbci/Makefile
-          src/import-export/hbci/glade/Makefile
-          src/import-export/hbci/schemas/Makefile
-          src/import-export/hbci/test/Makefile
-          src/libqof/Makefile
-          src/libqof/qof/Makefile
-          src/optional/Makefile
-          src/optional/python-bindings/Makefile
-          src/optional/python-bindings/tests/Makefile
-          src/pixmaps/Makefile
-          src/quotes/Makefile
-          src/register/Makefile
-          src/register/ledger-core/Makefile
-          src/register/ledger-core/test/Makefile
-          src/register/register-core/Makefile
-          src/register/register-core/test/Makefile
-          src/register/register-gnome/Makefile
-          src/register/register-gnome/test/Makefile
-          src/report/Makefile
-          src/report/report-gnome/Makefile
-          src/report/report-gnome/test/Makefile
-          src/report/report-system/Makefile
-          src/report/report-system/test/Makefile
-          src/report/standard-reports/Makefile
-          src/report/standard-reports/test/Makefile
-          src/report/business-reports/Makefile
-          src/report/locale-specific/Makefile
-          src/report/locale-specific/us/Makefile
-          src/report/locale-specific/us/test/Makefile
-          src/report/stylesheets/Makefile
-          src/report/stylesheets/test/Makefile
-          src/report/utility-reports/Makefile
-          src/report/utility-reports/test/Makefile
-          src/scm/Makefile
-          src/scm/gnumeric/Makefile
-          src/tax/Makefile
-          src/tax/us/Makefile
-          src/tax/us/test/Makefile
-          src/test-core/Makefile
-          src/business/Makefile
-          src/business/business-core/Makefile
-          src/business/business-core/test/Makefile
-          src/business/business-utils/Makefile
-          src/business/dialog-tax-table/Makefile
-          src/business/business-gnome/Makefile
-          src/business/business-gnome/glade/Makefile
-          src/business/business-gnome/schemas/Makefile
-          src/business/business-gnome/ui/Makefile
-          src/business/business-ledger/Makefile
+AC_CONFIG_FILES(
+  po/Makefile.in
+  dnl # Makefiles
+  Makefile
+  accounts/Makefile
+  accounts/C/Makefile
+  accounts/cs/Makefile
+  accounts/da/Makefile
+  accounts/de_AT/Makefile
+  accounts/de_CH/Makefile
+  accounts/de_DE/Makefile
+  accounts/el_GR/Makefile
+  accounts/en_GB/Makefile
+  accounts/es_ES/Makefile
+  accounts/es_MX/Makefile
+  accounts/fi_FI/Makefile
+  accounts/fr_CA/Makefile
+  accounts/fr_CH/Makefile
+  accounts/fr_FR/Makefile
+  accounts/hu_HU/Makefile
+  accounts/it/Makefile
+  accounts/ja/Makefile
+  accounts/ko/Makefile
+  accounts/lv/Makefile
+  accounts/nl/Makefile
+  accounts/nb/Makefile
+  accounts/pl/Makefile
+  accounts/pt_BR/Makefile
+  accounts/pt_PT/Makefile
+  accounts/ru/Makefile
+  accounts/sk/Makefile
+  accounts/tr_TR/Makefile
+  accounts/zh_CN/Makefile
+  checks/Makefile
+  doc/Makefile
+  doc/examples/Makefile
+  intl-scm/Makefile
+  lib/Makefile
+  lib/guile-www/Makefile
+  lib/libc/Makefile
+  lib/stf/Makefile
+  packaging/Makefile
+  packaging/win32/Makefile
+  packaging/win32/gnucash.iss
+  src/Makefile
+  src/app-utils/Makefile
+  src/app-utils/test/Makefile
+  src/backend/Makefile
+  src/backend/dbi/Makefile
+  src/backend/dbi/test/Makefile
+  src/backend/xml/Makefile
+  src/backend/xml/test/Makefile
+  src/backend/xml/test/test-files/Makefile
+  src/backend/xml/test/test-files/xml2/Makefile
+  src/backend/sql/Makefile
+  src/backend/sql/test/Makefile
+  src/bin/Makefile
+  src/bin/overrides/Makefile
+  src/bin/test/Makefile
+  src/core-utils/Makefile
+  src/core-utils/test/Makefile
+  src/calculation/Makefile 
+  src/calculation/test/Makefile
+  src/debug/Makefile
+  src/debug/valgrind/Makefile 
+  src/doc/Makefile
+  src/doc/design/Makefile
+  src/doc/xml/Makefile
+  src/engine/Makefile
+  src/engine/test/Makefile
+  src/engine/test-core/Makefile
+  src/gnc-module/Makefile
+  src/gnc-module/test/Makefile
+  src/gnc-module/test/mod-foo/Makefile
+  src/gnc-module/test/mod-bar/Makefile
+  src/gnc-module/test/mod-baz/Makefile
+  src/gnc-module/test/misc-mods/Makefile
+  src/gnome/Makefile
+  src/gnome/gnucash.desktop.in
+  src/gnome/glade/Makefile
+  src/gnome/schemas/Makefile
+  src/gnome/ui/Makefile
+  src/gnome-utils/Makefile
+  src/gnome-utils/glade/Makefile
+  src/gnome-utils/schemas/Makefile
+  src/gnome-utils/test/Makefile
+  src/gnome-utils/ui/Makefile
+  src/gnome-search/Makefile
+  src/html/Makefile
+  src/import-export/Makefile
+  src/import-export/test/Makefile
+  src/import-export/qif-import/Makefile
+  src/import-export/qif/Makefile
+  src/import-export/qif/test/Makefile
+  src/import-export/qif-import/schemas/Makefile
+  src/import-export/qif-import/test/Makefile
+  src/import-export/qif-io-core/Makefile
+  src/import-export/qif-io-core/test/Makefile
+  src/import-export/schemas/Makefile
+  src/import-export/ofx/Makefile
+  src/import-export/ofx/test/Makefile
+  src/import-export/csv/Makefile
+  src/import-export/log-replay/Makefile
+  src/import-export/aqbanking/Makefile
+  src/import-export/aqbanking/schemas/Makefile
+  src/import-export/hbci/Makefile
+  src/import-export/hbci/glade/Makefile
+  src/import-export/hbci/schemas/Makefile
+  src/import-export/hbci/test/Makefile
+  src/libqof/Makefile
+  src/libqof/qof/Makefile
+  src/optional/Makefile
+  src/optional/python-bindings/Makefile
+  src/optional/python-bindings/tests/Makefile
+  src/pixmaps/Makefile
+  src/quotes/Makefile
+  src/register/Makefile
+  src/register/ledger-core/Makefile
+  src/register/ledger-core/test/Makefile
+  src/register/register-core/Makefile
+  src/register/register-core/test/Makefile
+  src/register/register-gnome/Makefile
+  src/register/register-gnome/test/Makefile
+  src/report/Makefile
+  src/report/report-gnome/Makefile
+  src/report/report-gnome/test/Makefile
+  src/report/report-system/Makefile
+  src/report/report-system/test/Makefile
+  src/report/standard-reports/Makefile
+  src/report/standard-reports/test/Makefile
+  src/report/business-reports/Makefile
+  src/report/locale-specific/Makefile
+  src/report/locale-specific/us/Makefile
+  src/report/locale-specific/us/test/Makefile
+  src/report/stylesheets/Makefile
+  src/report/stylesheets/test/Makefile
+  src/report/utility-reports/Makefile
+  src/report/utility-reports/test/Makefile
+  src/scm/Makefile
+  src/scm/gnumeric/Makefile
+  src/tax/Makefile
+  src/tax/us/Makefile
+  src/tax/us/test/Makefile
+  src/test-core/Makefile
+  src/business/Makefile
+  src/business/business-core/Makefile
+  src/business/business-core/test/Makefile
+  src/business/business-utils/Makefile
+  src/business/dialog-tax-table/Makefile
+  src/business/business-gnome/Makefile
+  src/business/business-gnome/glade/Makefile
+  src/business/business-gnome/schemas/Makefile
+  src/business/business-gnome/ui/Makefile
+  src/business/business-ledger/Makefile
 
-          dnl # non-makefiles
-          dnl # Please read doc/build-system before adding *anything* here
+  dnl # non-makefiles
+  dnl # Please read doc/build-system before adding *anything* here
 
-          ,
-          dnl # commands go here, but we don't have any right now
+  ,
+  dnl # commands go here, but we don't have any right now
 )
 AC_OUTPUT
 
 if test x${DBI_DIR} != x; then
-components="$components dbi"
+  components="$components dbi"
 fi
 if test x${OFX_DIR} != x; then
-components="$components ofx"
+  components="$components ofx"
 fi
 if test x${AQBANKING_DIR} != x; then
-components="$components $AQBANKING_DIR"
+  components="$components $AQBANKING_DIR"
 fi
 if test x${PYTHON_DIR} != x; then
-components="$components python-bindings"
+  components="$components python-bindings"
 fi
 
 AC_MSG_RESULT([
