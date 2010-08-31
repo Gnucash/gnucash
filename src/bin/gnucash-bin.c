@@ -719,17 +719,6 @@ inner_main (void *closure, int argc, char **argv)
     }
 
     gnc_destroy_splash_screen();
-
-#ifdef MAC_INTEGRATION
-    {
-        gchar *data_dir = gnc_path_get_pkgdatadir();
-        gchar *accelmap = g_build_filename(data_dir, "ui", "osx_accel_map", NULL);
-        gtk_accel_map_load (accelmap);
-        g_free(data_dir);
-        g_free(accelmap);
-    }
-#endif /* MAC_INTEGRATION */
-
     gnc_main_window_show_all_windows();
 
     gnc_hook_run(HOOK_UI_POST_STARTUP, NULL);

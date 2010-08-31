@@ -587,6 +587,7 @@ gnc_gui_init(void)
 {
     static GncMainWindow *main_window;
     gchar *map;
+    gchar *data_dir;
 
     if (gnome_is_initialized)
     {
@@ -618,7 +619,13 @@ gnc_gui_init(void)
     // gtk_widget_show (GTK_WIDGET (main_window));
     gnc_window_set_progressbar_window (GNC_WINDOW(main_window));
 
+#ifdef MAC_INTEGRATION
+    data_dir = gnc_path_get_pkgdatadir();
+    map = g_build_filename(data_dir, "ui", "osx_accel_map", NULL);
+    g_free(data_dir);
+#else
     map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
+#endif /* MAC_INTEGRATION */
     gtk_accel_map_load(map);
     g_free(map);
 
