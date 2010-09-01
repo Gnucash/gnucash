@@ -1,4 +1,4 @@
-; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+﻿; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Input configuration for the Inno Setup Compiler
 ; Copyright (c) 2004-2005 Christian Stimming <stimming@tuhh.de>
 ;
@@ -126,6 +126,13 @@ Root: HKLM; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "pkg
 Root: HKLM; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
 Root: HKLM; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"; Flags: uninsdeletevalue
 
+; Store the version information
+Root: HKLM; Subkey: "Software\GnuCash\Version"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKLM; Subkey: "Software\GnuCash\Version"; ValueType: string; ValueName: "Version"; ValueData: "@PACKAGE_VERSION@"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\GnuCash\Version"; ValueType: dword; ValueName: "VersionMajor"; ValueData: "@GNUCASH_MAJOR_VERSION@"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\GnuCash\Version"; ValueType: dword; ValueName: "VersionMinor"; ValueData: "@GNUCASH_MINOR_VERSION@"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\GnuCash\Version"; ValueType: dword; ValueName: "VersionMicro"; ValueData: "@GNUCASH_MICRO_VERSION@"; Flags: uninsdeletevalue
+
 ; Additionally, we have to install the paths for gwenhywfar
 Root: HKLM; Subkey: "Software\Gwenhywfar"; ValueType: none; Flags: uninsdeletekeyifempty
 Root: HKLM; Subkey: "Software\Gwenhywfar\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
@@ -162,12 +169,129 @@ Type: dirifempty; Name: "{app}\etc\gnucash"
 Type: dirifempty; Name: "{app}\etc"
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; This large section is a Pascal scripting program that will modify
-; the gnucash shell script so that it then includes the
-; correct values according to our local installation. See
-; http://www.remobjects.com/?ps for a syntax reference.
+; Perform some additional actions in code that can't be done
+; by the installer by default. The code snippets below hook
+; into the installer code at specific events. See
+; http://www.jrsoftware.org/ishelp/index.php?topic=scriptintro
+; for more information on iss scription and a syntax reference.
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [Code]
+var
+  PrevInstDetectedPage : TOutputMsgWizardPage;
+  PrevAppName, PrevUninstallString : String;
+  PrevVersionMajor, PrevVersionMinor, PrevVersionMicro : Cardinal;
+  Uninstallrequired : Boolean;
+
+// -----------------------------------------------------------
+// Sometimes it's not possible to install a newer version of
+// GnuCash over an older one on Windows. This is mostly the
+// case when libraries are moved around in the newer version.
+// The code below will detect an existing GnuCash installation
+// and will remove it (if the user accepts) before installing
+// the version the user has selected.
+// -----------------------------------------------------------
+
+{ Lookup the registry information on a previous installation }
+procedure GetPrevInstallInfo();
+var
+  sUnInstPath, sAppVersionPath: String;
+  rootKey : Integer;
+begin
+  sAppVersionPath := 'Software\GnuCash\Version';
+  sUnInstPath := 'Software\Microsoft\Windows\CurrentVersion\Uninstall\GnuCash_is1';
+
+  PrevAppName := '';
+  PrevUninstallString := '';
+  PrevVersionMajor := 0;
+  PrevVersionMinor := 0;
+  PrevVersionMicro := 0;
+
+  if RegKeyExists(HKLM, sUnInstPath) then
+    rootKey := HKLM
+  else
+    rootKey := HKCU;
+
+  RegQueryStringValue(rootKey, sUnInstPath, 'UninstallString', PrevUninstallString);
+  RegQueryStringValue(rootKey, sUnInstPath, 'DisplayName', PrevAppName);
+  RegQueryDwordValue(rootKey, sAppVersionPath, 'VersionMajor', PrevVersionMajor);
+  RegQueryDwordValue(rootKey, sAppVersionPath, 'VersionMinor', PrevVersionMinor);
+  RegQueryDwordValue(rootKey, sAppVersionPath, 'VersionMicro', PrevVersionMicro);
+end;
+
+{ Check if there is another GnuCash currently installed                }
+{ and whether we can simply install over it or have to remove it first }
+{ Versions are considered 'incompatible' if the major or minor         }
+{ version components are different                                     }
+procedure CheckUninstallRequired();
+begin
+  UninstallRequired := True;
+  GetPrevInstallInfo;
+
+  if (PrevUninstallString = '') then
+    UninstallRequired := False
+  else if (PrevVersionMajor = @GNUCASH_MAJOR_VERSION@) and (PrevVersionMinor = @GNUCASH_MINOR_VERSION@) then
+    UninstallRequired := False;
+end;
+
+{ Uninstall the current installation }
+function UnInstallOldVersion(): Integer;
+var
+  sUnInstallString: String;
+  iResultCode: Integer;
+begin
+// Return Values:
+// 1 - uninstall string is empty
+// 2 - error executing the UnInstallString
+// 3 - successfully executed the UnInstallString
+
+  // default return value
+  Result := 0;
+
+  if PrevUninstallString <> '' then begin
+    sUnInstallString := RemoveQuotes(PrevUninstallString);
+    if Exec(sUnInstallString, '/SILENT /NORESTART /SUPPRESSMSGBOXES','', SW_HIDE, ewWaitUntilTerminated, iResultCode) then
+      Result := 3
+    else
+      Result := 2;
+  end else
+    Result := 1;
+end;
+
+function GetPrevAppName(Param: String): String;
+begin
+  Result := PrevAppName;
+end;
+
+{ Setup a page to display if a previous (incompatible) GnuCash installation is found }
+procedure InitializeWizard;
+begin
+  CheckUninstallRequired;
+  PrevInstDetectedPage := CreateOutputMsgPage(wpReady,
+    ExpandConstant('{cm:AIWP_Title}'),
+    ExpandConstant('{cm:AIWP_Description,{code:GetPrevAppName}}'),
+    ExpandConstant('{cm:AIWP_Message,{code:GetPrevAppName}}'));
+end;
+
+{ Determine whether the previous installation page should be displayed or not }
+function ShouldSkipPage(PageID: Integer): Boolean;
+begin
+  Result := False
+  if (PageID = PrevInstDetectedPage.ID) and (not UninstallRequired) then
+    Result := True;
+end;
+
+{ If a previous (incompatible) installation is present start the installation }
+{ process with deleting this old installation }
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if (CurStep=ssInstall) and (UninstallRequired) then
+    UnInstallOldVersion();
+end;
+
+// ------------------------------------------------------------
+// The GnuCash environment file contains paths that have to be
+// adapted at install time. The code below does that.
+// ------------------------------------------------------------
 function MingwBacksl(const S: String): String;
 begin
   { Modify the path name S so that it can be used by MinGW }
@@ -284,6 +408,11 @@ CreateMenuLink=Create a start menu link
 RunPrg=Run GnuCash now
 AdditionalIcons=Create these icons:
 StatusMsgFirewall=Installing Windows firewall rules...
+; *** "Another install" wizard page
+; %1 in the following messages will be replaced with the application name and version, like "GnuCash 2.3.15"
+AIWP_Title=Another installation has been found
+AIWP_Description=%1 is currently installed on this computer
+AIWP_Message=This earlier installation has to be removed before continuing.%n%nIf you don't want that, click Cancel now to abort the current installation.%n%nClick Next to remove %1 and continue with the installation.%n%nNote: Only the program will be removed, not your financial data.
 
 MainFiles=GnuCash Program
 TranslFiles=Translation Files
@@ -472,6 +601,10 @@ nl.IconName_InstallFQ=Online Koersen Opvragen installeren
 nl.IconComment_InstallFQ=De benodigde perl module Finance Quote om online koersen op te vragen installeren.  Hiervoor is ActivePerl 5.8 of 5.10 nodig.
 nl.IconName_Uninstall=GnuCash verwijderen
 nl.IconComment_Uninstall=Het financieel beheersprogramma GnuCash verwijderen
+
+nl.AIWP_Title=Een eerdere installatie werd gevonden
+nl.AIWP_Description=%1 is momenteel op deze computer geïnstalleerd
+nl.AIWP_Message=Deze eerdere installatie moet verwijderd worden alvorens verder te gaan.%n%nAls je dat niet wil, klik dan nu op Annuleren om de huidige installatie af te breken.%n%nKlik op Volgende om %1 te verwijderen en de installatie te vervolgen.%n%nOpmerking: enkel het programma zal verwijderd worden, niet je financiële data.
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
