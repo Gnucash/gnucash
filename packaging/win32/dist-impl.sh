@@ -12,9 +12,11 @@ function dist_prepare() {
     if [ -x $DIST_DIR ]; then
         die "Please remove ${DIST_DIR} first"
     fi
-    if [ x$AQBANKING_WITH_QT != xyes ]; then
-        die "The aqbanking wizard is required to create the Windows installer.
+    if [ "$AQBANKING5" != "yes" ] ; then
+        if [ x$AQBANKING_WITH_QT != xyes ]; then
+            die "The aqbanking wizard is required to create the Windows installer.
 Please set AQBANKING_WITH_QT to yes and rerun install.sh first."
+        fi
     fi
     _UNZIP_UDIR=`unix_path $UNZIP_DIR`
     _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
@@ -190,9 +192,6 @@ function dist_gwenhywfar() {
     setup gwenhywfar
     cp -a ${_GWENHYWFAR_UDIR}/bin/*.dll ${DIST_UDIR}/bin
     mkdir -p ${DIST_UDIR}/etc
-    if [ "$AQBANKING3" != "yes" ]; then
-        cp -a ${_GWENHYWFAR_UDIR}/etc/* ${DIST_UDIR}/etc
-    fi
     cp -a ${_GWENHYWFAR_UDIR}/lib/gwenhywfar ${DIST_UDIR}/lib
     mkdir -p ${DIST_UDIR}/share/gwenhywfar
     cp -a ${_GWENHYWFAR_UDIR}/share/gwenhywfar/ca-bundle.crt ${DIST_UDIR}/share/gwenhywfar
@@ -210,9 +209,6 @@ function dist_aqbanking() {
     cp -a ${_AQBANKING_UDIR}/bin/*.dll ${DIST_UDIR}/bin
     cp -a ${_AQBANKING_UDIR}/lib/aqbanking ${DIST_UDIR}/lib
     cp -a ${_AQBANKING_UDIR}/share/aqbanking ${DIST_UDIR}/share
-    if [ "$AQBANKING3" != "yes" ]; then
-        cp -a ${_AQBANKING_UDIR}/share/aqhbci ${DIST_UDIR}/share
-    fi
     cp -a ${_AQBANKING_UDIR}/share/locale ${DIST_UDIR}/share
 }
 

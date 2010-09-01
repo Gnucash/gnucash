@@ -320,10 +320,10 @@ set_default LIBOFX_DIR $GLOBAL_DIR\\libofx
 set_default LIBOFX_PATCH `pwd`/libofx-0.8.3-patch.diff
 
 ## online banking: gwenhywfar+aqbanking
-set_default AQBANKING3 yes
+set_default AQBANKING5 no
 
-if [ "$AQBANKING3" != "yes" ]; then
-    set_default GWENHYWFAR_URL "$SF_MIRROR/gwenhywfar/gwenhywfar-2.6.2.tar.gz"
+if [ "$AQBANKING5" = "yes" ]; then
+    set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=53&file=01&dummy=gwenhywfar-4.0.0.tar.gz"
 else
     set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=31&file=01&dummy=gwenhywfar-3.11.3.tar.gz"
     #set_default GWENHYWFAR_PATCH `pwd`/gwenhywfar-3.11.1-patch.diff
@@ -333,14 +333,15 @@ set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
 set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.24.tar.gz"
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
-if [ "$AQBANKING3" != "yes" ]; then
-    set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.3.3.tar.gz"
+if [ "$AQBANKING5" = "yes" ]; then
+    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=73&file=01&dummy=aqbanking-5.0.0.tar.gz"
+    set_default AQBANKING_WITH_QT no
 else
     set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=49&file=01&dummy=aqbanking-4.2.3.tar.gz"
     #set_default AQBANKING_PATCH `pwd`/aqbanking-4.1.6-patch.diff
+    set_default AQBANKING_WITH_QT yes
 fi
 set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking
-set_default AQBANKING_WITH_QT yes
 # If set to yes, download Qt from http://www.trolltech.com/developer/downloads/qt/windows,
 # install it and set QTDIR in custom.sh, like "QTDIR=/c/Qt/4.2.3".
 set_default QT_WIN_SRC_URL "ftp://ftp.qt.nokia.com/qt/source/qt-all-opensource-src-4.5.3.zip"

@@ -26,12 +26,8 @@ add_step dist_libbonoboui
 add_step dist_libgsf
 add_step dist_goffice
 add_step dist_libofx
-if [ "$AQBANKING3" != "yes" ]; then
-    add_step dist_openssl
-else
-    add_step dist_gnutls
-    add_step dist_gmp
-fi
+add_step dist_gnutls
+add_step dist_gmp
 add_step dist_gwenhywfar
 add_step dist_ktoblzcheck
 add_step dist_aqbanking

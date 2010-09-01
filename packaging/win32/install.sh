@@ -71,22 +71,15 @@ if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_mingwutils
 fi
 add_step inst_autotools
-if [ "$AQBANKING3" = "yes" ]; then
- add_step inst_gmp
-fi
+add_step inst_gmp
 add_step inst_guile
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_svn
- if [ "$AQBANKING3" != "yes" ]; then
-  add_step inst_openssl
- fi
 fi
 add_step inst_exetype
 add_step inst_libxslt
 add_step inst_gnome
-if [ "$AQBANKING3" = "yes" ]; then
- add_step inst_gnutls
-fi
+add_step inst_gnutls
 add_step inst_isocodes
 add_step inst_swig
 add_step inst_pcre

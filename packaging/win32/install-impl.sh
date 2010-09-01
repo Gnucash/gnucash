@@ -972,15 +972,15 @@ function inst_gwenhywfar() {
         assert_one_dir $TMP_UDIR/gwenhywfar-*
         qpushd $TMP_UDIR/gwenhywfar-*
             # circumvent binreloc bug, http://trac.autopackage.org/ticket/28
-            if [ "$AQBANKING3" != "yes" ]; then
+            if [ "$AQBANKING5" = "yes" ]; then
+                # Note: gwenhywfar-3.x and higher don't use openssl anymore.
                 ./configure ${HOST_XCOMPILE} \
-                    --with-openssl-includes=$_OPENSSL_UDIR/include \
+                    --with-libgcrypt-prefix=$_GNUTLS_UDIR \
                     --disable-binreloc \
-                    ssl_libraries="-L${_OPENSSL_UDIR}/lib" \
-                    ssl_lib="-leay32 -lssl32" \
                     --prefix=$_GWENHYWFAR_UDIR \
-                    CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS}" \
-                    LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -lintl"
+                    --with-guis=gtk2 \
+                    CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS}" \
+                    LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS} -lintl"
             else
                 if [ -n "$GWENHYWFAR_PATCH" -a -f "$GWENHYWFAR_PATCH" ] ; then
                     patch -p1 < $GWENHYWFAR_PATCH
@@ -1080,10 +1080,11 @@ function inst_aqbanking() {
             else
                 XMLMERGE="${_GWENHYWFAR_UDIR}/bin/xmlmerge"
             fi
-            if test x$AQBANKING3 = xyes; then
+            if [ "$AQBANKING5" != "yes" ] ; then
                 _AQ_BACKENDS="aqhbci aqofxconnect"
             else
-                _AQ_BACKENDS="aqdtaus aqhbci aqofxconnect"
+                # FIXME: Maybe also aqpaypal?
+                _AQ_BACKENDS="aqhbci aqofxconnect"
             fi
             if test x$AQBANKING_WITH_QT = xyes; then
                 inst_qt4
@@ -1125,9 +1126,9 @@ function inst_aqbanking() {
             make install
         qpopd
         qpushd ${_AQBANKING_UDIR}/bin
-            if [ "$AQBANKING3" != "yes" ]; then
-                exetype aqbanking-tool.exe console
-                exetype aqhbci-tool.exe console
+            if [ "$AQBANKING5" = "yes" ]; then
+                exetype aqbanking-cli.exe console
+                exetype aqhbci-tool4.exe console
             else
                 exetype aqbanking-cli.exe console
                 exetype aqhbci-tool4.exe console
