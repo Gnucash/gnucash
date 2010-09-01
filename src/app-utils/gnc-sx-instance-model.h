@@ -254,6 +254,15 @@ void gnc_sx_all_instantiate_cashflow(GList *all_sxes,
 									 const GDate *range_start, const GDate *range_end,
 									 GHashTable* map, GList **creation_errors);
 
+/** Simplified wrapper around gnc_sx_all_instantiate_cashflow(): Run
+ * that function on all SX of the current book for the given date
+ * range. Ignore any potential error messages. Returns a newly
+ * allocated GHashTable with the result, which is a GHashTable<GUID*,
+ * gnc_numeric*>, identical to what gnc_g_hash_new_guid_numeric()
+ * would return. The returned value must be free'd with
+ * g_hash_table_destroy. */
+GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_end);
+
 G_END_DECLS
 
 #endif // _GNC_SX_INSTANCE_MODEL_H

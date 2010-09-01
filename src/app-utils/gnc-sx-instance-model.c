@@ -1673,6 +1673,17 @@ void gnc_sx_all_instantiate_cashflow(GList *all_sxes,
     g_list_foreach(all_sxes, instantiate_cashflow_cb, &userdata);
 }
 
+GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_end)
+{
+    GHashTable *result_map = gnc_g_hash_new_guid_numeric();
+    GList *all_sxes = gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
+    gnc_sx_all_instantiate_cashflow(all_sxes,
+                                    &range_start, &range_end,
+                                    result_map, NULL);
+    return result_map;
+}
+
+
 // Local Variables:
 // mode: c
 // indent-tabs-mode: nil

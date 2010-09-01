@@ -13,6 +13,7 @@
 #include <gnc-session.h>
 #include <gnc-component-manager.h>
 #include <guile-util.h>
+#include <app-utils/gnc-sx-instance-model.h>
 
 #include "engine-helpers.h"
 
@@ -111,3 +112,23 @@ gint gnc_process_get_fd(const Process *proc, const guint std_fd);
 void gnc_detach_process(Process *proc, const gboolean kill_it);
 
 time_t gnc_parse_time_to_timet(const gchar *s, const gchar *format);
+
+%typemap(out) GHashTable * {
+  SCM table = scm_c_make_hash_table (g_hash_table_size($1) + 17);
+  GHashTableIter iter;
+  gpointer key, value;
+
+  g_hash_table_iter_init (&iter, $1);
+  while (g_hash_table_iter_next (&iter, &key, &value)) {
+    const GncGUID* c_guid = (const GncGUID*) key;
+    const gnc_numeric* c_numeric = (const gnc_numeric*) value;
+    SCM scm_guid = gnc_guid2scm(*c_guid);
+    SCM scm_numeric = gnc_numeric_to_scm(*c_numeric);
+
+    scm_hash_set_x(table, scm_guid, scm_numeric);
+  }
+  g_hash_table_destroy($1);
+  $result = table;
+}
+GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_end);
+%clear GHashTable *;
