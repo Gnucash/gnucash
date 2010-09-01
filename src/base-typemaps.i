@@ -26,6 +26,8 @@ typedef char gchar;
 %typemap(in) Timespec "$1 = gnc_timepair2timespec($input);"
 %typemap(out) Timespec "$result = gnc_timespec2timepair($1);"
 
+%typemap(in) GDate "$1 = gnc_timepair_to_GDate($input);"
+
 %typemap(in) GncGUID "$1 = gnc_scm2guid($input);"
 %typemap(out) GncGUID "$result = gnc_guid2scm($1);"
 %typemap(in) GncGUID * (GncGUID g) " g = gnc_scm2guid($input); $1 = &g; "

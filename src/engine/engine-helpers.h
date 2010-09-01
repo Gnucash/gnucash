@@ -47,6 +47,7 @@ void gnc_transaction_set_date(Transaction *t, Timespec ts);
 
 SCM      gnc_timespec2timepair(Timespec t);
 Timespec gnc_timepair2timespec(SCM x);
+GDate    gnc_timepair_to_GDate(SCM x);
 int      gnc_timepair_p(SCM x);
 
 SCM  gnc_guid2scm(GncGUID guid);

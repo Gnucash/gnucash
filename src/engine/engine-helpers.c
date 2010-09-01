@@ -111,6 +111,12 @@ gnc_timepair2timespec(SCM x)
     return(result);
 }
 
+GDate gnc_timepair_to_GDate(SCM x)
+{
+    Timespec tspec = gnc_timepair2timespec(x);
+    return timespec_to_gdate(tspec);
+}
+
 int
 gnc_timepair_p(SCM x)
 {
