@@ -526,13 +526,19 @@ fr.IconComment_Uninstall=Désinstalle le gestionnaire financier GnuCash
 ;; ;;;;;;;;;;;;;;;;;;;;;
 ;; Italian translation
 
+; *** Pagina di "Selezione dei componenti" 
 it.FullInstall=Installazione completa
 it.CustomInstall=Installazione personalizzata
 it.CreateDesktopIcon=Crea un'icona sul desktop
-it.CreateMenuLink=Crea un collegamento nel menu "start"
+it.CreateMenuLink=Crea un collegamento nel menu "Start"
 it.RunPrg=Avvia GnuCash
 it.AdditionalIcons=Crea queste icone:
 it.StatusMsgFirewall=Installazione delle regole per il firewall di Windows...
+; *** Pagina di "Altra installazione"
+; nel messaggio seguente la stringa %1 sarà sostituita dal nome e dalla versione dell'applicazione, ad esempio "GnuCash 2.3.15"
+it.AIWP_Title=È stata trovata un'altra installazione
+it.AIWP_Description=%1 è installato in questo computer
+it.AIWP_Message=Questa precedente installazione deve essere rimossa prima di continuare.%n%nSe non si intende rimuoverla, fare clic su «Annulla» per terminare l'installazione.%n%nFare invece clic su «Avanti» per rimuovere %1 e continuare con l'installazione.%n%nNota: verrà rimosso solo il programma, non i propri dati finanziari.
 
 it.MainFiles=File del programma GnuCash
 it.TranslFiles=Traduzione Italiana
@@ -543,12 +549,12 @@ it.IconName_README=Mostra il file LEGGIMI
 it.IconComment_README=Mostra il file LEGGIMI
 it.IconFilename_README=README-it.win32-bin.txt
 it.IconName_FAQ=FAQ (online, in Inglese)
-it.IconName_Bugzilla=Comunicare un bug (online, in Inglese)
+it.IconName_Bugzilla=Segnalare un bug (online, in Inglese)
 it.IconName_InstallFQ=Installa la funzione di ricerca delle quotazioni online
-it.IconComment_InstallFQ=Installa il modulo di perl Finance-Quote necessario per ricevere le quotazioni online. Richiede ActivePerl 5.8/5.10
+it.IconComment_InstallFQ=Installa il modulo di perl Finance-Quote necessario per ricevere le quotazioni online. Richiede ActivePerl 5.8 o 5.10
+it.IconName_Theme=Selezione del tema
 it.IconName_Uninstall=Disinstalla GnuCash
 it.IconComment_Uninstall=Disinstalla il programma di gestione delle finanze GnuCash
-
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Latvian translation
