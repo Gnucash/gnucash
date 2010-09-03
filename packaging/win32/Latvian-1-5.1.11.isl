@@ -40,9 +40,9 @@ LanguageCodePage=1257
 
 ; *** Application titles
 SetupAppTitle=Uzstâdîðana
-SetupWindowTitle=Uzstâdîðana - %1
-UninstallAppTitle=Atinstalâcija
-UninstallAppFullTitle=%1 Atinstalâcija
+SetupWindowTitle=Noòemðana - %1
+UninstallAppTitle=Noòemðana
+UninstallAppFullTitle=%1 Noòemðana
 
 ; *** Misc. common
 InformationTitle=Informâcija
@@ -56,29 +56,29 @@ LdrCannotExecTemp=Neiespçjami palaist datni no pagaidu mapes. Uzstâdîðana pârtra
 
 ; *** Startup error messages
 LastErrorMessage=%1.%n%nKïûda %2: %3
-SetupFileMissing=Datne %1 nav atrodama instalâcijas mapç. Lûdzu, izlabojiet kïûdu vai iegâdâjieties jaunu programmas kopiju.
+SetupFileMissing=Datne %1 nav atrodama uzstâdîðanas mapç. Lûdzu, izlabojiet kïûdu vai iegâdâjieties jaunu programmas kopiju.
 SetupFileCorrupt=Uzstâdâmâs datnes ir sabojâtas. Lûdzu, iegâdâjieties jaunu programmas kopiju.
-SetupFileCorruptOrWrongVer=Uzstâdâmâs datnes ir bojâtas vai nav savienojamas ar ðo Uzstâdîðanas programmu. Lûdzu, izlabojiet ðo kïûdu vai iegâdâjieties jaunu programmas kopiju.
+SetupFileCorruptOrWrongVer=Uzstâdâmâs datnes ir bojâtas vai nav savienojamas ar ðo uzstâdîðanas programmu. Lûdzu, izlabojiet ðo kïûdu vai iegâdâjieties jaunu programmas kopiju.
 NotOnThisPlatform=Ðo programmu nevar palaist uz %1.
 OnlyOnThisPlatform=Ðî programma darbojas uz %1.
 OnlyOnTheseArchitectures=Ðo programmu var uzstâdît tikai uz ðâdâm Windows versijâm:%n%n%1
-MissingWOW64APIs=Paðlaik palaistâ Windows versija neatbalsta 64-bitu instalâciju. Lai izlabotu ðo kïûdu, uzinstalçjiet Service Pack %1.
+MissingWOW64APIs=Paðlaik palaistâ Windows versija neatbalsta 64-bitu uzstâdîðanu. Lai izlabotu ðo kïûdu, uzinstalçjiet Service Pack %1.
 WinVersionTooLowError=Ðî programma pieprasa %1 versiju %2 vai jaunâku.
 WinVersionTooHighError=Ðo programmu nevar uzstâdît uz %1 versijas %2 vai jaunâkas.
-AdminPrivilegesRequired=Jums ir jâbût adminstratoram, lai varçtu uzsâkt instalâciju.
+AdminPrivilegesRequired=Jums ir jâbût adminstratoram, lai varçtu uzsâkt uzstâdîðanu.
 PowerUserPrivilegesRequired=Jums ir jâbût administratoram vai pilnvarotam lietotâjam, lai uzstâdîtu ðo programmu.
 SetupAppRunningError=Uzstâdîðana ir atklâjusi, ka %1 paðlaik darbojas.%n%nLûdzu, aizveriet visas programmas un spiediet "Ok" vai "Atcelt", lai izietu.
-UninstallAppRunningError=Atinstalâcija ir atklâjusi ka %1 paðlaik darbojas.%n%nLûdzu, aizveriet visas programmas un spiediet "Ok", lai turpinâtu, vai "Atcelt", lai izietu.
+UninstallAppRunningError=Noòeðana ir atklâjusi ka %1 paðlaik darbojas.%n%nLûdzu, aizveriet visas programmas un spiediet "Ok", lai turpinâtu, vai "Atcelt", lai izietu.
 
 ; *** Misc. errors
 ErrorCreatingDir=Uzstâdîðanâ ir neiespçjami izveidot mapi "%1"
 ErrorTooManyFilesInDir=Neiespçjami izveidot datnes mapç "%1", jo tâ satur pârâk daudz datòu
 
 ; *** Setup common messages
-ExitSetupTitle=Iziet no Uzstâdîðanas
-ExitSetupMessage=Uzstâdîðana nav pabeigta. Ja Jûs tagad iziesiet, tad programma netiks uzinstalçta.%n%nJums bûs atkal jâpalaiþ Uzstâdîðana, lai pabeigtu programmas instalâciju.%n%nIziet no Uzstâdîðanas?
-AboutSetupMenuItem=&Par Uzstâdîðanu...
-AboutSetupTitle=Par Uzstâdîðanu
+ExitSetupTitle=Iziet no uzstâdîðanas
+ExitSetupMessage=Uzstâdîðana nav pabeigta. Ja Jûs tagad iziesiet, tad programma netiks uzstâdîta.%n%nLai uzstâdîtu programmu, jums bûs atkal jâpalaiþ uzstâdîðana. %n%nIziet no uzstâdîðanas?
+AboutSetupMenuItem=&Par uzstâdîðanu...
+AboutSetupTitle=Par uzstâdîðanu
 AboutSetupMessage=%1 versija %2%n%3%n%n%1 mâjas lapa:%n%4
 AboutSetupNote=
 TranslatorNote=
@@ -99,23 +99,23 @@ ButtonWizardBrowse=Pârlû&kot...
 ButtonNewFolder=I&zveidot jaunu mapi
 
 ; *** "Select Language" dialog messages
-SelectLanguageTitle=Izvçlieties Uzstâdîðanas valodu
-SelectLanguageLabel=Izvçlieties valodu, kurâ notiks Uzstâdîðana:
+SelectLanguageTitle=Izvçlieties uzstâdîðanas valodu
+SelectLanguageLabel=Izvçlieties valodu, kurâ notiks uzstâdîðana:
 
 ; *** Common wizard text
-ClickNext=Spiediet "Tâlâk", lai turpinâtu, vai "Atcelt", lai izietu no Uzstâdîðanas.
+ClickNext=Spiediet "Tâlâk", lai turpinâtu, vai "Atcelt", lai izietu no uzstâdîðanas.
 BeveledLabel=
 BrowseDialogTitle=Pârlûkot mapi
 BrowseDialogLabel=Izvçlieties mapi no saraksta, tad spiediet "Ok".
 NewFolderName=Jauna mape
 
 ; *** "Welcome" wizard page
-WelcomeLabel1=Laipni lûdzam [name] Uzstâdîðanâ
-WelcomeLabel2=Ðis uzstâdîs [name/ver] uz Jûsu datora.%n%nVçlams aizvçrt visas programmas pirms turpinâðanas.
+WelcomeLabel1=Laipni lûdzam [name] uzstâdîðanâ
+WelcomeLabel2=Ðis uzstâdîs [name/ver] uz Jûsu datora.%n%nPirms turpinâðanas vçlams aizvçrt visas programmas.
 
 ; *** "Password" wizard page
 WizardPassword=Parole
-PasswordLabel1=Ðî instalâcija ir aizsargâta ar paroli.
+PasswordLabel1=Ðî uzstâdîðana ir aizsargâta ar paroli.
 PasswordLabel3=Lûdzu, ievadiet paroli, tad spiediet "Tâlâk", lai turpinâtu. Parole ir reìistrjutîga.
 PasswordEditLabel=&Parole:
 IncorrectPassword=Parole, ko Jûs ievadîjât, ir nepareiza. Lûdzu, mçìiniet vçlreiz.
@@ -123,24 +123,24 @@ IncorrectPassword=Parole, ko Jûs ievadîjât, ir nepareiza. Lûdzu, mçìiniet vçlrei
 ; *** "License Agreement" wizard page
 WizardLicense=Lîgums
 LicenseLabel=Lûdzu, izlasiet sekojoðo informâciju, pirms turpinât.
-LicenseLabel3=Lûdzu, izlasiet Lîgumu. Jums ir jâapstiprina Lîgums, lai turpinâtu instalâciju.
+LicenseLabel3=Lûdzu, izlasiet Lîgumu. Jums ir jâapstiprina Lîgums, lai turpinâtu uzstâdîðanu.
 LicenseAccepted=Es &piekrîtu lîgumam
 LicenseNotAccepted=Es &nepiekrîtu lîgumam
 
 ; *** "Information" wizard pages
 WizardInfoBefore=Informâcija
 InfoBeforeLabel=Lûdzu, izlasiet ðo informâciju.
-InfoBeforeClickLabel=Kad esat gatavs turpinât instalâciju, spiediet "Tâlâk".
+InfoBeforeClickLabel=Kad esat gatavs turpinât uzstâdîðanu, spiediet "Tâlâk".
 WizardInfoAfter=Informâcija
 InfoAfterLabel=Lûdzu izlasiet sekojoðo informâciju.
-InfoAfterClickLabel=Kad esat gatavs turpinât instalâciju, spiediet "Tâlâk".
+InfoAfterClickLabel=Kad esat gatavs turpinât uzstâdîðanu, spiediet "Tâlâk".
 
 ; *** "User Information" wizard page
 WizardUserInfo=Lietotâja informâcija
 UserInfoDesc=Lûdzu, ievadiet savu informâciju.
 UserInfoName=&Lietotâja vârds:
 UserInfoOrg=&Organizâcija:
-UserInfoSerial=&Seriâlais numurs:
+UserInfoSerial=&Sçrijas numurs:
 UserInfoNameRequired=Jums ir jâievada savs vârds.
 
 ; *** "Select Destination Location" wizard page
@@ -150,10 +150,10 @@ SelectDirLabel3=[name] datnes tiks instalçtas norâdîtajâ mapç.
 SelectDirBrowseLabel=Lai turpinâtu, spiediet "Tâlâk". Ja vçlaties norâdît citu mapi, spiediet "Pârlûkot".
 DiskSpaceMBLabel=Ir nepiecieðami brîvi [mb] MB uz cietâ diska.
 ToUNCPathname=Uzstâdîðana nevar uzstâdît datnes norâdîtajâ adresç. Ja Jûs mçìinât uzstâdît tîklâ, tad Jums ir nepiecieðama speciâla mape.
-InvalidPath=Jums ir jânorâda pilna instalâcijas adrese, piemçrs:%n%nC:\APP%n%nvai  UNC adrese:%n%n\\server\share
+InvalidPath=Jums ir jânorâda pilna uzstâdîðanas adrese, piemçrs:%n%nC:\APP%n%nvai  UNC adrese:%n%n\\server\share
 InvalidDrive=Ierîce UNC, kuru Jûs izvçlçjâties, nepastâv vai arî nav pieejama. Lûdzu, izvçlieties citu.
 DiskSpaceWarningTitle=Nepietiek vietas uz diska
-DiskSpaceWarning=Instalâcijai ir nepiecieðami vismaz %1 KB brîvâs vietas uz diska, bet pieejami ir tikai %2 KB.%n%nVai vçlaties turpinât?
+DiskSpaceWarning=Uzstâdîðanai ir nepiecieðami vismaz %1 KB brîvâs vietas uz diska, bet pieejami ir tikai %2 KB.%n%nVai vçlaties turpinât?
 DirNameTooLong=Mapes nosaukums vai adrese ir pârâk gara.
 InvalidDirName=Mapes nosaukums nav derîgs.
 BadDirName32=Mapes nosaukumâ nedrîkst bût ðâdi simboli:%n%n%1
@@ -166,10 +166,10 @@ DirDoesntExist=Mape:%n%n%1%n%ndoes nepastâv. Vai vçlaties izveidot mapi?
 WizardSelectComponents=Izvçlieties sastâvdaïas
 SelectComponentsDesc=Kurus komponentus vçlaties uzstâdît?
 SelectComponentsLabel2=Izvçlieties komponentus, kurus vçlaties uzstâdît. Spiediet "Tâlâk", lai turpinâtu.
-FullInstallation=Pilna Uzstâdîðana
+FullInstallation=Pilna uzstâdîðana
 ; if possible don't translate 'Compact' as 'Minimal' (I mean 'Minimal' in your language)
-CompactInstallation=Kompakta Uzstâdîðana
-CustomInstallation=Izveidot Uzstâdîðanu
+CompactInstallation=Kompakta uzstâdîðana
+CustomInstallation=Izveidot uzstâdîðanu
 NoUninstallWarningTitle=Komponenti jau pastâv
 NoUninstallWarning=Uzstâdîðana ir atklâjusi ka ðâdi faili jau ir uzstâdîti:%n%n%1%n%nAtiestatiet ðos komponentus.%n%nVai vçlaties turpinât?
 ComponentSize1=%1 KB
@@ -179,11 +179,11 @@ ComponentsDiskSpaceMBLabel=Paðlaik izvçlçtie komponenti aizòem [mb] MB uz cietâ 
 ; *** "Select Additional Tasks" wizard page
 WizardSelectTasks=Papilduzdevumu izvçlne
 SelectTasksDesc=Kurus papilduzdevumus vajadzçtu veikt?
-SelectTasksLabel2=Izvçlieties, kâdi papilduzdevumi tiks veikti [name] Uzstâdîðanas laikâ, tad spiediet "Tâlâk".
+SelectTasksLabel2=Izvçlieties, kâdi papilduzdevumi tiks veikti [name] uzstâdîðanas laikâ, tad spiediet "Tâlâk".
 
 ; *** "Select Start Menu Folder" wizard page
 WizardSelectProgramGroup=Izvçlieties Start Menu mapi
-SelectStartMenuFolderDesc=Kur Uzstâdîðanas programmai vajadzçtu likt îsinâjumikonas?
+SelectStartMenuFolderDesc=Kur uzstâdîðanas programmai vajadzçtu likt îsinâjumikonas?
 SelectStartMenuFolderLabel3=Uzstâdîðana izveidos îsinâjumikonas Start Menu mapç.
 SelectStartMenuFolderBrowseLabel=Lai turpinâtu, spiediet "Tâlâk". Ja vçlaties norâdît citu mapi, spiediet "Pârlûkot".
 MustEnterGroupName=Jums ir jânorâda mape.
@@ -193,10 +193,10 @@ BadGroupName=Mapes nosaukums satur kâdu no ðiem simboliem:%n%n%1
 NoProgramGroupCheck2=&Neizveidot Start Menu mapi
 
 ; *** "Ready to Install" wizard page
-WizardReady=Gatavs instalâcijai
+WizardReady=Gatavs uzstâdîðanai
 ReadyLabel1=Uzstâdîðana ir gatava instalçt [name] uz Jûsu datora.
-ReadyLabel2a=Spiediet "Uzstâdît", lai sâktu instalâciju, vai spiediet Atpakaï, lai izmainîtu parametrus.
-ReadyLabel2b=Spiediet "Uzstâdît", lai sâktu instalâciju.
+ReadyLabel2a=Spiediet "Uzstâdît", lai sâktu uzstâdîðanu, vai spiediet Atpakaï, lai izmainîtu parametrus.
+ReadyLabel2b=Spiediet "Uzstâdît", lai sâktu uzstâdîðanu.
 ReadyMemoUserInfo=Lietotâja informâcija:
 ReadyMemoDir=Galamçríis:
 ReadyMemoType=Uzstâdîðanas tips:
@@ -205,20 +205,20 @@ ReadyMemoGroup=Start Menu mape:
 ReadyMemoTasks=Papilduzdevumi:
 
 ; *** "Preparing to Install" wizard page
-WizardPreparing=Gatavoties instalâcijai
+WizardPreparing=Gatavoties uzstâdîðanai
 PreparingDesc=Uzstâdîðana ir gatava instalçt [name] uz Jûsu datora.
-PreviousInstallNotCompleted=Instalâcija/noòemðana iepriekðçjai programmai nav pabeigta. Jums ir jâpârstartç dators, lai pabeigtu instalâciju.%n%nPçc pârstartçðanas palaidiet uzstâdîðanu no jauna, lai pabeigtu uzstâdît [name].
+PreviousInstallNotCompleted=Uzstâdîðana/noòemðana iepriekðçjai programmai nav pabeigta. Jums ir jâpârstartç dators, lai pabeigtu uzstâdîðanu.%n%nPçc pârstartçðanas palaidiet uzstâdîðanu no jauna, lai pabeigtu uzstâdît [name].
 CannotContinue=Uzstâdîðanu nevar turpinât. Lûdzu, spiediet "Atcelt", lai izietu.
 
 ; *** "Installing" wizard page
-WizardInstalling=Instalâcija
+WizardInstalling=Uzstâdîðana
 InstallingLabel=Lûdzu, uzgaidiet, kamçr [name] tiks uzstâdîts uz Jûsu datora.
 
 ; *** "Setup Completed" wizard page
-FinishedHeadingLabel=Pabeigta [name] Uzstâdîðana
+FinishedHeadingLabel=Pabeigta [name] uzstâdîðana
 FinishedLabelNoIcons=Uzstâdîðana pabeigta.
 FinishedLabel=Uzstâdîðana pabeigta. Programmu var palaist, uzklikðíinot uz izveidotajâm ikonâm.
-ClickFinish=Spiediet "Pabeigt", lai aizvçrtu Uzstâdîðanu.
+ClickFinish=Spiediet "Pabeigt", lai aizvçrtu uzstâdîðanu.
 FinishedRestartLabel=Lai pabeigtu [name] uzstâdîðanu, nepiecieðams pârstartçt Jûsu datoru. Vai vçlaties to darît tagad?
 FinishedRestartMessage=Lai pabeigtu [name] uzstâdîðanu, nepiecieðams pârstartçt Jûsu datoru.%n%nVai vçlaties to darît tagad?
 ShowReadmeCheck=Jâ, vçlos apskatît README failu
@@ -237,8 +237,8 @@ FileNotInDir2=Datne "%1" neatrodas "%2". Lûdzu, ielieciet pareizo disku vai norâ
 SelectDirectoryLabel=Lûdzu, norâdiet nâkamâ diska atraðanâs vietu.
 
 ; *** Installation phase messages
-SetupAborted=Uzstâdîðana netika pabeigta.%n%nLûdzu, izlabojiet kïûdu un palaidiet Uzstâdîðanu no jauna.
-EntryAbortRetryIgnore=Spiediet "Atkârtot", lai mçìinâtu vçlreiz, vai "Ignorçt", lai turpinâtu, vai "Pârtraukt", lai beigtu instalâciju.
+SetupAborted=Uzstâdîðana netika pabeigta.%n%nLûdzu, izlabojiet kïûdu un palaidiet uzstâdîðanu no jauna.
+EntryAbortRetryIgnore=Spiediet "Atkârtot", lai mçìinâtu vçlreiz, vai "Ignorçt", lai turpinâtu, vai "Pârtraukt", lai beigtu uzstâdîðanu.
 
 ; *** Installation status messages
 StatusCreateDirs=Mapju izveidoðana...
@@ -247,8 +247,8 @@ StatusCreateIcons=Îsinâjumikonu izveidoðana...
 StatusCreateIniEntries=Izveido INI ierakstu...
 StatusCreateRegistryEntries=Izveido reìistra ierakstus...
 StatusRegisterFiles=Reìistrç datnes...
-StatusSavingUninstall=Saglabâ atinstalçðanas datus...
-StatusRunProgram=Pabeidz instalâciju...
+StatusSavingUninstall=Saglabâ noòemðanas datus...
+StatusRunProgram=Pabeidz uzstâdîðanu...
 StatusRollback=Izveido izmaiòas...
 
 ; *** Misc. errors
@@ -256,7 +256,7 @@ ErrorInternal2=Iekðçja kïûda: %1
 ErrorFunctionFailedNoCode=%1 cieta neveiksmi
 ErrorFunctionFailed=%1 cieta neveiksmi; kods %2
 ErrorFunctionFailedWithMessage=%1 cieta neveiksmi; kods %2.%n%3
-ErrorExecutingProgram=Neiespçjami palaist failu:%n%1
+ErrorExecutingProgram=Nespçju palaist failu:%n%1
 
 ; *** Registry errors
 ErrorRegOpenKey=Kïûda, atverot reìistra atslçgu:%n%1\%2
@@ -267,13 +267,13 @@ ErrorRegWriteKey=Kïûda, rakstot reìistra atslçgu:%n%1\%2
 ErrorIniEntry=Kïûda, izveidojot INI ieraksta datni "%1".
 
 ; *** File copying errors
-FileAbortRetryIgnore=Spiediet "Atkârtot", lai mçìinâtu vçlreiz, "Ignorçt", lai izlaistu datni (nav ieteicams), vai "Pârtraukt", lai beigtu instalâciju.
-FileAbortRetryIgnore2=Spiediet "Atkârtot", lai mçìinâtu vçlreiz, "Ignorçt", lai turpinâtu (nav ieteicams), vai "Pârtraukt", lai beigtu instalâciju.
+FileAbortRetryIgnore=Spiediet "Atkârtot", lai mçìinâtu vçlreiz, "Ignorçt", lai izlaistu datni (nav ieteicams), vai "Pârtraukt", lai beigtu uzstâdîðanu.
+FileAbortRetryIgnore2=Spiediet "Atkârtot", lai mçìinâtu vçlreiz, "Ignorçt", lai turpinâtu (nav ieteicams), vai "Pârtraukt", lai beigtu uzstâdîðanu.
 SourceIsCorrupted=Datnes avots ir bojâts
 SourceDoesntExist=Datnes avots "%1" nepastâv
-ExistingFileReadOnly=Pastâvoðâ datne ir izveidota kâ read-only.%n%nSpiediet "Atkârtot", lai noòemtu read-only îpaðîbu un mçìinâtu vçlreiz, "Ignorçt", lai izlaistu datni, vai "Pârtraukt", lai beigtu instalâciju.
+ExistingFileReadOnly=Pastâvoðâ datne ir izveidota kâ read-only.%n%nSpiediet "Atkârtot", lai noòemtu read-only îpaðîbu un mçìinâtu vçlreiz, "Ignorçt", lai izlaistu datni, vai "Pârtraukt", lai beigtu uzstâdîðanu.
 ErrorReadingExistingDest=Kïûda, nolasot pastâvoðo datni:
-FileExists=Datne jau pastâv.%n%nVai vçlaties, lai Uzstâdîðana to pârraksta?
+FileExists=Datne jau pastâv.%n%nVai vçlaties, lai uzstâdîðana to pârraksta?
 ExistingFileNewer=Pastâvoðâ datne ir jaunâka par to, kuru nepiecieðams uzstâdît. Vçlams atstât jau pastâvoðo datni.%n%nVai vçlaties to paturçt?
 ErrorChangingAttr=Radusies kïûda, mçìinot nomainît datnes îpaðîbu:
 ErrorCreatingTemp=Radusies kïûda, izveidojot datni galamçría mapç:
@@ -291,26 +291,26 @@ ErrorOpeningReadme=Radusies kïûda, atverot README datni.
 ErrorRestartingComputer=Uzstâdîðana nevar pârstartçt datoru. Lûdzu, izdariet to manuâli.
 
 ; *** Uninstaller messages
-UninstallNotFound=Datne "%1" nepastâv. Nevar atinstalçt.
-UninstallOpenError=Datni "%1" nevar atvçrt. Nevar atinstalçt
-UninstallUnsupportedVer=Atinstalçðanas datne "%1" nav atpazîstama ðai atinstalçðanas programmai. Nevar atinstalçt
-UninstallUnknownEntry=Nezinâms ieraksts (%1) izveidoja sadursmi ar atinstalâciju
+UninstallNotFound=Datne "%1" nepastâv. Nevar noòemt.
+UninstallOpenError=Datni "%1" nevar atvçrt. Nevar noòemt
+UninstallUnsupportedVer=Noòeðanas datne "%1" nav atpazîstama ðai noòemðanas programmai. Nevar noòemt
+UninstallUnknownEntry=Nezinâms ieraksts (%1) izveidoja sadursmi ar noòeðanu
 ConfirmUninstall=Vai esat pârliecinâts, ka vçlaties pilnîbâ noòemt %1 un visus tâ komponentus?
-UninstallOnlyOnWin64=Ðo instalâciju var noòemt tikai ar 64-bitu Windows.
-OnlyAdminCanUninstall=Atinstalâciju var veikt tikai lietotâjs ar Adminstratora privilçìijâm.
+UninstallOnlyOnWin64=Noòemðanu var veikt tikai ar 64-bitu Windows.
+OnlyAdminCanUninstall=Noòeðanu var veikt tikai lietotâjs ar Adminstratora privilçìijâm.
 UninstallStatusLabel=Lûdzu uzgaidiet, kamçr %1 tiek noòemts no Jûsu datora.
 UninstalledAll=%1 tika veiksmîgi noòemts no Jûsu datora.
-UninstalledMost=%1 atinstalâcija pabeigta.%n%nDaþus elementus nevarçja noòemt. Tos var noòemt manuâli.
-UninstalledAndNeedsRestart=Lai pabeigtu atinstalâciju %1, Jûsu dators jâpârstartç.%n%nVai vçlaties to darît tagad?
-UninstallDataCorrupted="%1" datne ir bojâta. Nevar atinstalçt
+UninstalledMost=%1 noòeðana pabeigta.%n%nDaþus elementus nevarçja noòemt. Tos var noòemt manuâli.
+UninstalledAndNeedsRestart=Lai pabeigtu noòeðanu %1, Jûsu dators jâpârstartç.%n%nVai vçlaties to darît tagad?
+UninstallDataCorrupted="%1" datne ir bojâta. Nevar noòemt
 
 ; *** Uninstallation phase messages
 ConfirmDeleteSharedFileTitle=Noòemt kopîgâs datnes?
 ConfirmDeleteSharedFile2=Sistçma ir secinâjusi, ka ðîs koplietoðanas datnes vairs netiks lietotas. Vai vçlaties tâs noòemt?%n%nJa kâda cita programma izmanto ðîs datnes, tad ðî programma var strâdât nekorekti. Ja neesat droðs, izvçlieties "Nç". Atstâjot ðîs datnes, Jûsu datoram netiks nodarîti nekâdi bojâjumi.
 SharedFileNameLabel=Faila nosaukums:
 SharedFileLocationLabel=Atraðanâs vieta:
-WizardUninstalling=Atinstalçðanas Statuss
-StatusUninstalling=Atinstalç %1...
+WizardUninstalling=Noòeðanas statuss
+StatusUninstalling=Noòem %1...
 
 ; The custom messages below aren't used by Setup itself, but if you make
 ; use of them in your scripts, you'll want to translate them.
@@ -322,7 +322,7 @@ AdditionalIcons=Papildu ikonas:
 CreateDesktopIcon=Izveidot &darbvisrmas ikonu
 CreateQuickLaunchIcon=Izveidot &Quick Launch ikonu
 ProgramOnTheWeb=%1 Internçtâ
-UninstallProgram=Atinstalçt %1
+UninstallProgram=Noòemt %1
 LaunchProgram=Palaist %1
 AssocFileExtension=&Apvienot %1 ar %2 faila paplaðinâjumu
-AssocingFileExtension=Apvienoðana %1 ar %2 faila paplaðinâjumu...
+AssocingFileExtension=Apvieno %1 ar %2 faila paplaðinâjumu...
