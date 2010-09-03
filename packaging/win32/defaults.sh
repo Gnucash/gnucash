@@ -320,10 +320,13 @@ set_default LIBOFX_DIR $GLOBAL_DIR\\libofx
 set_default LIBOFX_PATCH `pwd`/libofx-0.8.3-patch.diff
 
 ## online banking: gwenhywfar+aqbanking
-set_default AQBANKING5 no
+set_default AQBANKING5 yes
+# If sticking to aqbanking4, make sure to enable the QtCore4.dll et al
+# in gnucash.iss.in again because in aqbanking4 those DLLs are still
+# needed.
 
 if [ "$AQBANKING5" = "yes" ]; then
-    set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=53&file=01&dummy=gwenhywfar-4.0.0.tar.gz"
+    set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=54&file=01&dummy=gwenhywfar-4.0.1.tar.gz"
 else
     set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=31&file=01&dummy=gwenhywfar-3.11.3.tar.gz"
     #set_default GWENHYWFAR_PATCH `pwd`/gwenhywfar-3.11.1-patch.diff
@@ -334,7 +337,7 @@ set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.24.tar.gz"
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
 if [ "$AQBANKING5" = "yes" ]; then
-    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=73&file=01&dummy=aqbanking-5.0.0.tar.gz"
+    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=74&file=01&dummy=aqbanking-5.0.1.tar.gz"
     set_default AQBANKING_WITH_QT no
 else
     set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=49&file=01&dummy=aqbanking-4.2.3.tar.gz"
