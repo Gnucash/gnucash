@@ -964,7 +964,12 @@ function inst_gwenhywfar() {
     _GWENHYWFAR_UDIR=`unix_path ${GWENHYWFAR_DIR}`
     add_to_env ${_GWENHYWFAR_UDIR}/bin PATH
     add_to_env ${_GWENHYWFAR_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists gwenhywfar
+    if [ "$AQBANKING5" = "yes" ]; then
+        _GWEN_VERSION="4.0.1"
+    else
+        _GWEN_VERSION="3.11.3"
+    fi
+    if quiet ${PKG_CONFIG} --atleast-version=${_GWEN_VERSION} gwenhywfar
     then
         echo "Gwenhywfar already installed. skipping."
     else
@@ -1066,7 +1071,12 @@ function inst_aqbanking() {
     _AQBANKING_UDIR=`unix_path ${AQBANKING_DIR}`
     add_to_env ${_AQBANKING_UDIR}/bin PATH
     add_to_env ${_AQBANKING_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists aqbanking
+    if [ "$AQBANKING5" = "yes" ]; then
+        _AQBANKING_VERSION="5.0.1"
+    else
+        _AQBANKING_VERSION="4.2.4"
+    fi
+    if quiet ${PKG_CONFIG} --atleast-version=${_AQBANKING_VERSION} aqbanking
     then
         echo "AqBanking already installed. skipping."
     else

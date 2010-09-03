@@ -340,7 +340,7 @@ if [ "$AQBANKING5" = "yes" ]; then
     set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=74&file=01&dummy=aqbanking-5.0.1.tar.gz"
     set_default AQBANKING_WITH_QT no
 else
-    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=49&file=01&dummy=aqbanking-4.2.3.tar.gz"
+    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=50&file=01&dummy=aqbanking-4.2.4.tar.gz"
     #set_default AQBANKING_PATCH `pwd`/aqbanking-4.1.6-patch.diff
     set_default AQBANKING_WITH_QT yes
 fi
