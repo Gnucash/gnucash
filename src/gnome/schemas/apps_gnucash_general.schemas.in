@@ -121,6 +121,18 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/retain_type</key>
+      <applyto>/apps/gnucash/general/retain_type</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>days</default>
+      <locale name="C">
+        <short>Delete old log/backup files after this many days (0 = never)</short>
+        <long>This setting specifies the number of days after which old log/backup files will be deleted (0 = never).</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/retain_days</key>
       <applyto>/apps/gnucash/general/retain_days</applyto>
       <owner>gnucash</owner>
