@@ -556,6 +556,35 @@ it.IconName_Theme=Selezione del tema
 it.IconName_Uninstall=Disinstalla GnuCash
 it.IconComment_Uninstall=Disinstalla il programma di gestione delle finanze GnuCash
 
+
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Japanese translation
+
+ja.FullInstall=完全インストール
+ja.CustomInstall=カスタムインストール
+ja.CreateDesktopIcon=デスクトップにアイコンを作成(&D)
+ja.CreateMenuLink=スタートメニューにリンクを作成
+ja.RunPrg=GnuCashをすぐに実行
+ja.AdditionalIcons=作成されたアイコン:
+ja.StatusMsgFirewall=ファイアウォール定義をインストール中
+
+ja.MainFiles=GnuCashプログラム
+ja.TranslFiles=翻訳ファイル
+ja.TemplFiles=勘定科目テンプレートファイル
+
+ja.IconComment_GnuCash=GnuCash フリーの財務ソフトウェア
+ja.IconName_README=READMEを表示
+ja.IconComment_README=READMEファイルを表示します
+ja.IconFilename_README=README.win32-bin.txt
+ja.IconName_FAQ=FAQ (オンライン)
+ja.IconName_Bugzilla=バグを報告 (オンライン)
+ja.IconName_InstallFQ=オンライン相場表取得ツールをインストール
+ja.IconComment_InstallFQ=オンライン相場表を取得するためにFinance-Quote perl モジュールをインストールします。ActivePerl5.8または5.10が必要です
+ja.IconName_Theme=テーマの選択
+ja.IconName_Uninstall=GnuCashをアンインストール
+ja.IconComment_Uninstall=財務ソフトウェアGnuCashをアンインストールします
+
+
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Latvian translation
 
@@ -647,6 +676,7 @@ pt_BR.IconName_InstallFQ=Instalar a Consulta de Preços Online
 pt_BR.IconComment_InstallFQ=Instala o módulo perl Finance-Quote, necessário para a busca de preços online. Requer ActivePerl 5.8/5.10.
 pt_BR.IconName_Uninstall=Desinstalar o GnuCash
 pt_BR.IconComment_Uninstall=Desinstala o Gerenciador Financeiro GnuCash
+
 
 ;; ;;;;;;;;;;;;;;;;;
 ;; Simplified Chinese translation
