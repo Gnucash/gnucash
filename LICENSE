@@ -1,13 +1,12 @@
 This software is provided under a mutually-compatible set of licenses.
 
 The software, for most intents and purposes, is licensed under the GNU
-General Public License, Version 2.
+General Public License, Version 2, or (at your option) Version 3.
 
 Almost all of the source files are licensed under the GNU GPL, Version
 2, "or (at your option) any later version".  Some of the source files
-are licensed under "Version 2 and/or Version 3" of the GNU GPL, and
-very few other source files are licensed under "Version 2" of the GNU
-GPL specifically.
+are licensed under "Version 2 and/or Version 3" of the GNU GPL
+specifically.
 
 Some of the source files have an exception for linking against OpenSSL, as
 per the following language:
