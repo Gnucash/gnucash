@@ -984,7 +984,7 @@ function inst_gwenhywfar() {
                     --disable-binreloc \
                     --prefix=$_GWENHYWFAR_UDIR \
                     --with-guis=gtk2 \
-                    CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS}" \
+                    CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} -I${_GNOME_UDIR}/include/gtk-2.0 ${GNUTLS_CPPFLAGS}" \
                     LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS} -lintl"
             else
                 if [ -n "$GWENHYWFAR_PATCH" -a -f "$GWENHYWFAR_PATCH" ] ; then
