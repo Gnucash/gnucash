@@ -157,6 +157,7 @@ src/engine/gncEmployee.c
 src/engine/gnc-engine.c
 src/engine/gncEntry.c
 src/engine/gnc-hooks.c
+src/engine/gncIDSearch.c
 src/engine/gncInvoice.c
 src/engine/gncJob.c
 src/engine/gnc-lot.c
