@@ -1200,7 +1200,7 @@ do_destroy (Transaction *trans)
 /********************************************************************\
 \********************************************************************/
 
-/* Temporary hack for data consitency */
+/* Temporary hack for data consistency */
 static int scrub_data = 1;
 void xaccEnableDataScrubbing(void)
 {
@@ -1313,13 +1313,13 @@ xaccTransCommitEdit (Transaction *trans)
     if (was_trans_emptied(trans))
         qof_instance_set_destroying(trans, TRUE);
 
-    /* Before commiting the transaction, we're gonna enforce certain
+    /* Before committing the transaction, we are going to enforce certain
      * constraints.  In particular, we want to enforce the cap-gains
      * and the balanced lot constraints.  These constraints might
      * change the number of splits in this transaction, and the
      * transaction itself might be deleted.  This is also why
      * we can't really enforce these constraints elsewhere: they
-     * can cause pointers to splits and transactions to disapear out
+     * can cause pointers to splits and transactions to disappear out
      * from under the holder.
      */
     if (!qof_instance_get_destroying(trans) && scrub_data &&
@@ -1328,7 +1328,7 @@ xaccTransCommitEdit (Transaction *trans)
         /* If scrubbing gains recurses through here, don't call it again. */
         scrub_data = 0;
         /* The total value of the transaction should sum to zero.
-         * Call the trans scrub routine to fix it.   Indirectly, this
+         * Call the trans scrub routine to fix it. Indirectly, this
          * routine also performs a number of other transaction fixes too.
          */
         xaccTransScrubImbalance (trans, NULL, NULL);
