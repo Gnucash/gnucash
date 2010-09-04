@@ -315,6 +315,8 @@ GList *gnc_sx_get_defer_instances( SchedXaction *sx );
 #define GNC_SX_ACCOUNT               "account"
 #define GNC_SX_CREDIT_FORMULA        "credit-formula"
 #define GNC_SX_DEBIT_FORMULA         "debit-formula"
+#define GNC_SX_CREDIT_NUMERIC        "credit-numeric"
+#define GNC_SX_DEBIT_NUMERIC         "debit-numeric"
 #define GNC_SX_SHARES                "shares"
 #define GNC_SX_AMOUNT                "amnt"
 #define GNC_SX_FROM_SCHED_XACTION    "from-sched-xaction"

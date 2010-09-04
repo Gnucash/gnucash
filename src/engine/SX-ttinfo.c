@@ -44,6 +44,7 @@ struct TTSplitInfo_s
     /* FIXME: What about the split's KvpFrame */
     char *memo; /* owned by us */
     char *credit_formula, *debit_formula; /* owned by us */
+    gnc_numeric credit_numeric, debit_numeric;
     Account *acc;
 };
 
@@ -241,11 +242,13 @@ gnc_ttsplitinfo_set_credit_formula_numeric(TTSplitInfo *ttsi, gnc_numeric credit
         g_free(ttsi->credit_formula);
 
     ttsi->credit_formula = gnc_numeric_to_string(credit);
+    ttsi->credit_numeric = credit;
 
     if (ttsi->debit_formula)
     {
         g_free(ttsi->debit_formula);
         ttsi->debit_formula = NULL;
+        ttsi->debit_numeric = gnc_numeric_zero();
     }
 }
 
@@ -263,6 +266,7 @@ gnc_ttsplitinfo_set_credit_formula(TTSplitInfo *ttsi, const char *credit_formula
     {
         g_free(ttsi->debit_formula);
         ttsi->debit_formula = NULL;
+        ttsi->debit_numeric = gnc_numeric_zero();
     }
     return;
 }
@@ -282,6 +286,18 @@ gnc_ttsplitinfo_get_debit_formula(TTSplitInfo *ttsi)
     return ttsi->debit_formula;
 }
 
+gnc_numeric gnc_ttsplitinfo_get_credit_numeric(const TTSplitInfo *ttsi)
+{
+    g_return_val_if_fail(ttsi, gnc_numeric_zero());
+    return ttsi->credit_numeric;
+}
+
+gnc_numeric gnc_ttsplitinfo_get_debit_numeric(const TTSplitInfo *ttsi)
+{
+    g_return_val_if_fail(ttsi, gnc_numeric_zero());
+    return ttsi->debit_numeric;
+}
+
 void
 gnc_ttsplitinfo_set_debit_formula_numeric(TTSplitInfo *ttsi, gnc_numeric debit)
 {
@@ -292,11 +308,13 @@ gnc_ttsplitinfo_set_debit_formula_numeric(TTSplitInfo *ttsi, gnc_numeric debit)
         g_free(ttsi->debit_formula);
     }
     ttsi->debit_formula = gnc_numeric_to_string(debit);
+    ttsi->debit_numeric = debit;
 
     if (ttsi->credit_formula)
     {
         g_free(ttsi->credit_formula);
         ttsi->credit_formula = NULL;
+        ttsi->credit_numeric = gnc_numeric_zero();
     }
     return;
 }
@@ -315,6 +333,7 @@ gnc_ttsplitinfo_set_debit_formula(TTSplitInfo *ttsi, const char *debit_formula)
     {
         g_free(ttsi->credit_formula);
         ttsi->credit_formula = NULL;
+        ttsi->credit_numeric = gnc_numeric_zero();
     }
     return;
 }
