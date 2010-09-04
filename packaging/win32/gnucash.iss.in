@@ -567,6 +567,11 @@ ja.CreateMenuLink=スタートメニューにリンクを作成
 ja.RunPrg=GnuCashをすぐに実行
 ja.AdditionalIcons=作成されたアイコン:
 ja.StatusMsgFirewall=ファイアウォール定義をインストール中
+; *** "Another install" wizard page
+; %1 in the following messages will be replaced with the application name and version, like "GnuCash 2.3.15"
+ja.AIWP_Title=他のバージョンがインストールされています
+ja.AIWP_Description=このコンピュータには %1 が現在インストールされています
+ja.AIWP_Message=インストールを継続する前に前のバージョンはアンインストールされます。%n%nもしこの動作を望まないなら「キャンセル」をクリックしてインストールを中止してください。%n%n%1 を削除してインストールを継続する場合は「次へ」をクリックしてください。%n%n備考: 作成した財務データは削除されません。プログラムのみが削除されます。
 
 ja.MainFiles=GnuCashプログラム
 ja.TranslFiles=翻訳ファイル
