@@ -693,6 +693,7 @@ gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_d
 {
     gint result = 0;
     SXTmpStateData *tmpState;
+    gboolean countFirstDate;
 
     /* SX still active? If not, return now. */
     if ((xaccSchedXactionHasOccurDef(sx)
@@ -704,6 +705,12 @@ gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_d
     }
 
     tmpState = gnc_sx_create_temporal_state (sx);
+
+    /* Should we count the first valid date we encounter? Only if the
+     * SX has not yet occurred so far, or if its last valid date was
+     * before the start date. */
+    countFirstDate = !g_date_valid(&tmpState->last_date)
+        || (g_date_compare(&tmpState->last_date, start_date) < 0);
 
     /* No valid date? SX has never occurred so far. */
     if (!g_date_valid(&tmpState->last_date))
@@ -747,6 +754,11 @@ gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_d
             break;
         }
     }
+
+    /* If the first valid date shouldn't be counted, decrease the
+     * result number by one. */
+    if (!countFirstDate && result > 0)
+        --result;
 
     gnc_sx_destroy_temporal_state (tmpState);
     return result;
