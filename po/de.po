@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-04 22:55+0200\n"
-"PO-Revision-Date: 2010-07-29 22:36+0200\n"
+"PO-Revision-Date: 2010-09-04 23:02+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -3027,7 +3027,7 @@ msgstr "Rechnung erhalten?"
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:125
 #: ../intl-scm/guile-strings.c:1548 ../intl-scm/guile-strings.c:2680
 msgid "Subtotal"
-msgstr "Nettobetrag"
+msgstr "Zwischensumme"
 
 #. src/tax/us/de_DE.scm
 #. src/tax/us/gnucash/tax/de_DE.scm
@@ -3871,7 +3871,6 @@ msgstr ""
 #. Translators: This message is currently not yet used; it
 #. * will be used once the 2.4.0 string freeze is lifted.
 #: ../src/gnome/dialog-sx-editor.c:223
-#, fuzzy
 msgid ""
 "This Scheduled Transaction has changed; are you sure you want to cancel?"
 msgstr ""
@@ -4755,13 +4754,10 @@ msgstr ""
 "1/1000000"
 
 #: ../src/gnome/glade/account.glade.h:79
-#, fuzzy
 msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
-msgstr ""
-"Benutzen Sie den Menüpunkt »Bearbeiten -> Steuerrelevante Informationen«, um "
-"diese Häkchen zu setzen und diesem Konto einen Steuer-Code zuzuweisen."
+msgstr "Benutzen Sie den Menüpunkt »Bearbeiten -> Steuerrelevante Informationen«, um dieses Konto als »steuerrelevant« zu markieren und diesem Konto einen Steuer-Code zuzuweisen."
 
 #: ../src/gnome/glade/account.glade.h:80
 msgid "_Account code:"
@@ -5384,9 +5380,8 @@ msgid "S_ource:"
 msgstr "Que_lle:"
 
 #: ../src/gnome/glade/price.glade.h:23
-#, fuzzy
 msgid "_Namespace:"
-msgstr "Namensstandard"
+msgstr "_Namensstandard:"
 
 #: ../src/gnome/glade/price.glade.h:24
 msgid "_Price:"
@@ -9083,14 +9078,12 @@ msgid "Select"
 msgstr "Auswählen"
 
 #: ../src/gnome-search/dialog-search.c:845
-#, fuzzy
 msgid "New Transaction"
-msgstr "Buchung"
+msgstr "Neue Buchung"
 
 #: ../src/gnome-search/dialog-search.c:850
-#, fuzzy
 msgid "New item"
-msgstr "_Neuer Eintrag..."
+msgstr "Neuer Eintrag"
 
 #: ../src/gnome-search/dialog-search.c:896
 msgid "all criteria are met"
@@ -19470,9 +19463,8 @@ msgstr "Zwischensumme"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2816
-#, fuzzy
 msgid "Payment received text"
-msgstr "Vielen Dank für Ihre Zahlung."
+msgstr "Text für Danksagung"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2818
@@ -24934,22 +24926,3 @@ msgstr ""
 "Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des HBCI-Zugangs. "
 "Nachdem ein HBCI-Zugang eingerichtet wurde, können die Menüpunkte im "
 "Kontofenster unter Aktionen -> Online Aktionen verwendet werden."
-
-#~ msgid "Set configuration path"
-#~ msgstr "Konfigurations-Pfad setzen"
-
-#~ msgid "CONFIGPATH"
-#~ msgstr "CONFIGPFAD"
-
-#~ msgid "Set shared data file search path"
-#~ msgstr "Systemweiten Suchpfad für architekturunabhängige Dateien setzen"
-
-#~ msgid "SHAREPATH"
-#~ msgstr "SHAREPFAD"
-
-#~ msgid "Transaction _journal"
-#~ msgstr "Buchungsjournal"
-
-# Title for "Payment received, thank you"
-#~ msgid "Payment rec'd..."
-#~ msgstr "Erhaltene Zahlungen"
