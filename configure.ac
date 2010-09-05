@@ -132,7 +132,7 @@ fi
 
 # test whether we are building directly from SVN/SVK
 ${srcdir}/util/gnc-svnversion ${srcdir} >/dev/null 2>&1
-if test $? = 0 ; then
+if test $? = 0 -o "x${BUILDING_FROM_SVN}" = "xyes" ; then
   BUILDING_FROM_SVN=yes
 
   # We need at least version 1.3.31 of SWIG because
