@@ -57,7 +57,7 @@ gnc_split_register_save_date_cell (BasicCell * cell,
 {
     SRSaveData *sd = save_data;
     const char *value;
-    Timespec ts;
+    GDate gdate;
 
     g_return_if_fail (gnc_basic_cell_has_name (cell, DATE_CELL));
 
@@ -68,9 +68,9 @@ gnc_split_register_save_date_cell (BasicCell * cell,
 
     DEBUG ("DATE: %s", value ? value : "(null)");
 
-    gnc_date_cell_get_date ((DateCell *) cell, &ts);
+    gnc_date_cell_get_date_gdate ((DateCell *) cell, &gdate);
 
-    xaccTransSetDatePostedTS (sd->trans, &ts);
+    xaccTransSetDatePostedGDate (sd->trans, gdate);
 }
 
 static void
