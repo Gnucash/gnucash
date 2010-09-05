@@ -468,6 +468,10 @@ de.IconComment_InstallFQ=Das zusätzliche Modul Finance-Quote installieren, um o
 de.IconName_Uninstall=Deinstallieren von GnuCash
 de.IconComment_Uninstall=Die OpenSource-Finanzverwaltung GnuCash wieder deinstallieren und vom Computer löschen
 
+de.AIWP_Title=Frühere Version gefunden
+de.AIWP_Description=%1 ist momentan auf diesem Computer installiert
+de.AIWP_Message=Diese frühere Version muss vor der neuen Installation entfernt werden. %n%nFalls Sie das nicht möchten, klicken Sie jetzt auf »Abbrechen«.%n%nKlicken Sie auf »Fortsetzen«, um %1 zu entfernen und die neue Version zu installieren.%n%nHinweis: Lediglich die Programmversion wird entfernt, aber nicht Ihre finanziellen Daten.
+
 
 ;; ;;;;;;;;;;;;;;;;;;;
 ;; Greek translation
