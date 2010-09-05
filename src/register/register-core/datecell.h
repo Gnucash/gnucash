@@ -117,4 +117,6 @@ void        gnc_date_cell_commit (DateCell *cell);
 
 void        gnc_date_cell_get_date (DateCell *cell, Timespec *ts);
 
+void        gnc_date_cell_get_date_gdate (DateCell *cell, GDate *date);
+
 #endif
