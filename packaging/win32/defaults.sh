@@ -320,7 +320,7 @@ set_default LIBOFX_DIR $GLOBAL_DIR\\libofx
 set_default LIBOFX_PATCH `pwd`/libofx-0.8.3-patch.diff
 
 ## online banking: gwenhywfar+aqbanking
-set_default AQBANKING5 yes
+set_default AQBANKING5 no
 # If sticking to aqbanking4, make sure to enable the QtCore4.dll et al
 # in gnucash.iss.in again because in aqbanking4 those DLLs are still
 # needed.
