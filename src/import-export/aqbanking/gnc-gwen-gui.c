@@ -58,6 +58,42 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
+/* The following block can be enabled, but the gwen-gtk2 widgets might
+ * still need some work. */
+#if 0 /*#ifdef USING_GWENHYWFAR_GTK2_GUI*/
+
+/* A GWEN_GUI implementation using gtk2 widgets  */
+static GWEN_GUI *gwen_gui = NULL;
+
+void gnc_GWEN_Gui_log_init(void)
+{
+    if (!gwen_gui)
+    {
+        gwen_gui = Gtk2_Gui_new();
+        GWEN_Gui_SetGui(gwen_gui);
+    }
+}
+GncGWENGui *gnc_GWEN_Gui_get(GtkWidget *parent)
+{
+    if (!gwen_gui)
+        gnc_GWEN_Gui_log_init();
+    return (GncGWENGui*) gwen_gui;
+}
+void gnc_GWEN_Gui_release(GncGWENGui *gui)
+{
+}
+void gnc_GWEN_Gui_shutdown(void)
+{
+    if (gwen_gui)
+    {
+        GWEN_Gui_free(gwen_gui);
+        gwen_gui = NULL;
+        GWEN_Gui_SetGui(NULL);
+    }
+}
+
+#else
+
 /* A unique full-blown GUI, featuring  */
 static GncGWENGui *full_gui = NULL;
 
@@ -1472,3 +1508,4 @@ ggg_close_clicked_cb(GtkButton *button, gpointer user_data)
 
     LEAVE(" ");
 }
+#endif
