@@ -478,7 +478,7 @@
         <child>
           <widget class="GnomeDruidPageEdge" id="finish_page">
             <property name="visible">True</property>
-            <property name="position">Edge Finish</property>
+            <property name="position">GNOME_EDGE_FINISH</property>
             <property name="text" translatable="yes">If you are finished creating the stock split or merger, press `Apply'. You may also press `Back' to review your choices, or `Cancel' to quit without making any changes.</property>
             <signal name="finish" handler="gnc_stock_split_druid_finish"/>
           </widget>
