@@ -305,8 +305,19 @@ add_template_transaction_local( sixtp_gdv2 *data,
     {
         if ( gnc_account_get_parent( (Account*)n->data ) == NULL )
         {
-            /* replace the gnc_book_init-created root account */
-            gnc_book_set_template_root(book, (Account *)n->data);
+            if ( xaccAccountGetType( (Account*)n->data ) == ACCT_TYPE_ROOT )
+            {
+                /* replace the gnc_book_init-created root account */
+                gnc_book_set_template_root(book, (Account *)n->data);
+            }
+            else 
+            {
+                /* This is an old data file that doesn't have a template root
+                   account and this is a top level account.  Make it a child
+                   of the template root account. */
+                acctRoot = gnc_book_get_template_root(book);
+                gnc_account_append_child( acctRoot, (Account*)n->data );
+            }
         }
 
     }
