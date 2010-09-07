@@ -194,12 +194,17 @@ show_session_error (QofBackendError io_error,
     GtkWidget *dialog;
     gboolean uh_oh = TRUE;
     const char *fmt, *label;
+    gchar *displayname;
     gint response;
 
     if (NULL == newfile)
     {
-        newfile = _("(null)");
+        displayname = g_strdup(_("(null)"));
     }
+    else if (! gnc_uri_is_file_uri (newfile)) /* Hide the db password in error messages */
+        displayname = gnc_uri_normalize_uri ( newfile, FALSE);
+    else
+        displayname = g_strdup (newfile);
 
     switch (io_error)
     {
@@ -209,29 +214,29 @@ show_session_error (QofBackendError io_error,
 
     case ERR_BACKEND_NO_HANDLER:
         fmt = _("No suitable backend was found for %s.");
-        gnc_error_dialog(parent, fmt, newfile);
+        gnc_error_dialog(parent, fmt, displayname);
         break;
 
     case ERR_BACKEND_NO_BACKEND:
         fmt = _("The URL %s is not supported by this version of GnuCash.");
-        gnc_error_dialog (parent, fmt, newfile);
+        gnc_error_dialog (parent, fmt, displayname);
         break;
 
     case ERR_BACKEND_BAD_URL:
         fmt = _("Can't parse the URL %s.");
-        gnc_error_dialog (parent, fmt, newfile);
+        gnc_error_dialog (parent, fmt, displayname);
         break;
 
     case ERR_BACKEND_CANT_CONNECT:
         fmt = _("Can't connect to %s. "
                 "The host, username or password were incorrect.");
-        gnc_error_dialog (parent, fmt, newfile);
+        gnc_error_dialog (parent, fmt, displayname);
         break;
 
     case ERR_BACKEND_CONN_LOST:
         fmt = _("Can't connect to %s. "
                 "Connection was lost, unable to send data.");
-        gnc_error_dialog (parent, fmt, newfile);
+        gnc_error_dialog (parent, fmt, displayname);
         break;
 
     case ERR_BACKEND_TOO_NEW:
@@ -244,7 +249,7 @@ show_session_error (QofBackendError io_error,
     case ERR_BACKEND_NO_SUCH_DB:
         fmt = _("The database %s doesn't seem to exist. "
                 "Do you want to create it?");
-        if (gnc_verify_dialog (parent, TRUE, fmt, newfile))
+        if (gnc_verify_dialog (parent, TRUE, fmt, displayname))
         {
             uh_oh = FALSE;
         }
@@ -292,7 +297,7 @@ show_session_error (QofBackendError io_error,
                                         GTK_MESSAGE_QUESTION,
                                         GTK_BUTTONS_NONE,
                                         fmt,
-                                        newfile);
+                                        displayname);
         gtk_dialog_add_buttons(GTK_DIALOG(dialog),
                                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                label, GTK_RESPONSE_YES,
@@ -306,29 +311,29 @@ show_session_error (QofBackendError io_error,
         fmt = _("GnuCash could not write to %s. "
                 "That database may be on a read-only file system, "
                 "or you may not have write permission for the directory.");
-        gnc_error_dialog (parent, fmt, newfile);
+        gnc_error_dialog (parent, fmt, displayname);
         break;
 
     case ERR_BACKEND_DATA_CORRUPT:
         fmt = _("The file/URL %s "
                 "does not contain GnuCash data or the data is corrupt.");
-        gnc_error_dialog (parent, fmt, newfile);
+        gnc_error_dialog (parent, fmt, displayname);
         break;
 
     case ERR_BACKEND_SERVER_ERR:
         fmt = _("The server at URL %s "
                 "experienced an error or encountered bad or corrupt data.");
-        gnc_error_dialog (parent, fmt, newfile);
+        gnc_error_dialog (parent, fmt, displayname);
         break;
 
     case ERR_BACKEND_PERM:
         fmt = _("You do not have permission to access %s.");
-        gnc_error_dialog (parent, fmt, newfile);
+        gnc_error_dialog (parent, fmt, displayname);
         break;
 
     case ERR_BACKEND_MISC:
         fmt = _("An error occurred while processing %s.");
-        gnc_error_dialog (parent, fmt, newfile);
+        gnc_error_dialog (parent, fmt, displayname);
         break;
 
     case ERR_FILEIO_FILE_BAD_READ:
@@ -342,12 +347,12 @@ show_session_error (QofBackendError io_error,
 
     case ERR_FILEIO_PARSE_ERROR:
         fmt = _("There was an error parsing the file %s.");
-        gnc_error_dialog (parent, fmt, newfile);
+        gnc_error_dialog (parent, fmt, displayname);
         break;
 
     case ERR_FILEIO_FILE_EMPTY:
         fmt = _("The file %s is empty.");
-        gnc_error_dialog (parent, fmt, newfile);
+        gnc_error_dialog (parent, fmt, displayname);
         break;
 
     case ERR_FILEIO_FILE_NOT_FOUND:
@@ -358,7 +363,7 @@ show_session_error (QofBackendError io_error,
         else
         {
             fmt = _("The file %s could not be found.");
-            gnc_error_dialog (parent, fmt, newfile);
+            gnc_error_dialog (parent, fmt, displayname);
         }
         break;
 
@@ -373,24 +378,24 @@ show_session_error (QofBackendError io_error,
 
     case ERR_FILEIO_UNKNOWN_FILE_TYPE:
         fmt = _("The file type of file %s is unknown.");
-        gnc_error_dialog(parent, fmt, newfile);
+        gnc_error_dialog(parent, fmt, displayname);
         break;
 
     case ERR_FILEIO_BACKUP_ERROR:
         fmt = _("Could not make a backup of the file %s");
-        gnc_error_dialog(parent, fmt, newfile);
+        gnc_error_dialog(parent, fmt, displayname);
         break;
 
     case ERR_FILEIO_WRITE_ERROR:
         fmt = _("Could not write to file %s.  Check that you have "
                 "permission to write to this file and that "
                 "there is sufficient space to create it.");
-        gnc_error_dialog(parent, fmt, newfile);
+        gnc_error_dialog(parent, fmt, displayname);
         break;
 
     case ERR_FILEIO_FILE_EACCES:
         fmt = _("No read permission to read from file %s.");
-        gnc_error_dialog (parent, fmt, newfile);
+        gnc_error_dialog (parent, fmt, displayname);
         break;
 
     case ERR_SQL_DB_TOO_OLD:
@@ -419,6 +424,7 @@ show_session_error (QofBackendError io_error,
         break;
     }
 
+    g_free (displayname);
     return uh_oh;
 }
 
