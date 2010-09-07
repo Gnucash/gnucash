@@ -121,7 +121,7 @@ void gnc_uri_get_components (const gchar *uri,
          * lookups on unknown protocols.
          * On the other hand, since we don't know the specifics of
          * unknown protocols, we don't attempt to return an absolute
-         * pathname for them, just whetever was there.
+         * pathname for them, just whatever was there.
          */
         if ( gnc_uri_is_known_protocol ( *protocol ) )
             *path     = gnc_resolve_file_path ( splituri[1] );
