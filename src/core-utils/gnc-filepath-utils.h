@@ -29,7 +29,7 @@
 #ifndef GNC_FILEPATH_UTILS_H
 #define GNC_FILEPATH_UTILS_H
 
-/** The xaccResolveFilePath() routine is a utility that will accept
+/** The gnc_resolve_file_path() routine is a utility that will accept
  *    a fragmentary filename as input, and resolve it into a fully
  *    qualified path in the file system, i.e. a path that begins with
  *    a leading slash.  First, the current working directory is
@@ -45,5 +45,7 @@ const gchar *gnc_dotgnucash_dir (void);
 gchar *gnc_build_dotgnucash_path (const gchar *filename);
 gchar *gnc_build_book_path (const gchar *filename);
 gchar *gnc_build_data_path (const gchar *filename);
+gchar *gnc_build_report_path (const gchar *filename);
+gchar *gnc_build_stdreports_path (const gchar *filename);
 
 #endif /* GNC_FILEPATH_UTILS_H */

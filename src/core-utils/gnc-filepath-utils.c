@@ -369,4 +369,35 @@ gnc_build_data_path (const gchar *filename)
     return result;
 }
 
+/** @fn gchar * gnc_build_report_path (const gchar *filename)
+ *  @brief Make a path to filename in the report directory.
+ *
+ * @param filename The name of the file
+ *
+ *  @return An absolute path.
+ */
+
+gchar *
+gnc_build_report_path (const gchar *filename)
+{
+    gchar *result = g_build_filename(gnc_path_get_reportdir(), filename, (gchar *)NULL);
+    return result;
+}
+
+/** @fn gchar * gnc_build_stdreports_path (const gchar *filename)
+ *  @brief Make a path to filename in the standard reports directory.
+ *
+ * @param filename The name of the file
+ *
+ *  @return An absolute path.
+ */
+
+gchar *
+gnc_build_stdreports_path (const gchar *filename)
+{
+    gchar *result = g_build_filename(gnc_path_get_stdreportsdir(), filename, (gchar *)NULL);
+    return result;
+}
+
+
 /* =============================== END OF FILE ========================== */

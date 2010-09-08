@@ -27,8 +27,9 @@
 ; using all of these seems like overkill -- 
 ; not sure which are really required
 (use-modules (gnucash main))
-(use-modules (gnucash gnc-module))        
+(use-modules (gnucash gnc-module))
 (use-modules (gnucash app-utils))
+(use-modules (gnucash core-utils))
 (use-modules (gnucash business-utils))
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/business-utils" 0)
@@ -77,22 +78,14 @@
   ;; Find the file 'fname', and return its full path.
   ;; First look in the user's .gnucash directory.
   ;; Then look in Gnucash's standard report directory.
-  ;; This is complicated because of the need to cater for
-  ;; various operating systems; so it takes a fairly heuristic,
-  ;; 'best guess' approach.
   ;; If no file is found, returns just 'fname' for use in error messages.
   ;; Note: this has been tested on Linux and Windows Vista so far...
-  (let* ((userdir (sub-vicinity (user-vicinity) ".gnucash"))
-         (sysdir  (sub-vicinity (sub-vicinity (user-vicinity) "gnucash") "report"))
-         (home (or (home-vicinity)
-                   (getenv "USERPROFILE")
-                   (user-vicinity)
-                   "")))
+  (let* ((userpath (gnc-build-dotgnucash-path fname))
+         (syspath  (gnc-build-report-path fname)))
     ; make sure there's a trailing delimiter
-    (set! home (sub-vicinity (user-vicinity) home))
-    (let ((home-template (in-vicinity (in-vicinity home userdir) fname)))
-      (if (access? home-template R_OK)
-        home-template
-        (or (%search-load-path (in-vicinity sysdir fname))
-            fname)))))
+      (if (access? userpath R_OK)
+        userpath
+        (if (access? syspath R_OK)
+          syspath
+          fname))))
   

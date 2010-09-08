@@ -125,6 +125,20 @@ gchar *gnc_path_get_accountsdir()
     return result;
 }
 
+/** Returns the file path to the report directory, usually
+ * "$prefix/share/gnucash/guile-modules/gnucash/report".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_reportdir()
+{
+    gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
+    gchar *result = g_build_filename (pkgdatadir, "guile-modules",
+            "gnucash", "report", (char*)NULL);
+    g_free (pkgdatadir);
+    //printf("Returning stdreportsdir %s\n", result);
+    return result;
+}
+
 /** Returns the file path to the standard
  * reports, usually
  * "$prefix/share/gnucash/guile-modules/gnucash/report/standard-reports".
@@ -132,10 +146,9 @@ gchar *gnc_path_get_accountsdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_stdreportsdir()
 {
-    gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
-    gchar *result = g_build_filename (pkgdatadir, "guile-modules",
-            "gnucash", "report", "standard-reports", (char*)NULL);
-    g_free (pkgdatadir);
+    gchar *reportdir = gnc_path_get_reportdir ();
+    gchar *result = g_build_filename (reportdir, "standard-reports", (char*)NULL);
+    g_free (reportdir);
     //printf("Returning stdreportsdir %s\n", result);
     return result;
 }

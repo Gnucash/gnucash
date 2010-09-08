@@ -36,9 +36,9 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash business-utils))
 (use-modules (gnucash report eguile-gnc))
+(use-modules (gnucash report eguile-utilities))
 
 (use-modules (ice-9 regex))  ; for regular expressions
-(use-modules (ice-9 slib))   ; for 'vicinity' functions
 (use-modules (srfi srfi-13)) ; for extra string functions
 
 (gnc:module-load "gnucash/report/report-system" 0)
@@ -126,29 +126,6 @@
   (if neg?
     (cc 'add com (gnc-numeric-neg num))
     (cc 'add com num)))
-
-(define (find-file fname)
-  ;; Find the file 'fname', and return its full path.
-  ;; First look in the user's .gnucash directory.
-  ;; Then look in Gnucash's standard report directory.
-  ;; This is complicated because of the need to cater for
-  ;; various operating systems; so it takes a fairly heuristic,
-  ;; 'best guess' approach.
-  ;; If no file is found, returns just 'fname' for use in error messages.
-  ;; Note: this has been tested on Linux and Windows Vista so far...
-  (let* ((userdir (sub-vicinity (user-vicinity) ".gnucash"))
-         (sysdir  (sub-vicinity (sub-vicinity (user-vicinity) "gnucash") "report"))
-         (home (or (home-vicinity)
-                   (getenv "USERPROFILE")
-                   (user-vicinity)
-                   "")))
-    ; make sure there's a trailing delimiter
-    (set! home (sub-vicinity (user-vicinity) home))
-    (let ((home-template (in-vicinity (in-vicinity home userdir) fname)))
-      (if (access? home-template R_OK)
-        home-template
-        (or (%search-load-path (in-vicinity sysdir fname))
-            fname)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
