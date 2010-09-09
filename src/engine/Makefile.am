@@ -118,6 +118,7 @@ gncinclude_HEADERS = \
   gncOwnerP.h \
   gncTaxTable.h \
   gncTaxTableP.h \
+  gncIDSearch.h \
   gncVendor.h \
   gncVendorP.h
 
