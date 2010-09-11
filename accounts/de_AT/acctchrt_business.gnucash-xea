@@ -767,7 +767,7 @@
   <act:parent type="guid">5f4c8d58a67f0d5b2c909810bc45b5bf</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Passiva</act:name>
+  <act:name>Fremdkapital</act:name>
   <act:id type="new">043969ee2463beed15c59e8d85e9501c</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -775,7 +775,7 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Passiva</act:description>
+  <act:description>alle Verbindlichkeiten</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
