@@ -1805,6 +1805,7 @@ gnc_tree_view_column_properties (GncTreeView *view,
     gboolean visible;
     int width = 0;
     gchar *key;
+    GtkTreeViewColumnSizing sizing = GTK_TREE_VIEW_COLUMN_FIXED;
 
     /* Set data used by other functions */
     if (pref_name)
@@ -1818,26 +1819,33 @@ gnc_tree_view_column_properties (GncTreeView *view,
     visible = gnc_tree_view_column_visible(view, NULL, pref_name);
 
     /* Get width */
-    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-    if (priv->gconf_section)
+    if(default_width == 0)
     {
-        key = g_strdup_printf("%s_%s", pref_name, GCONF_KEY_WIDTH);
-        width = gnc_gconf_get_int(priv->gconf_section, key, NULL);
-        g_free(key);
+        sizing = GTK_TREE_VIEW_COLUMN_AUTOSIZE;
     }
+    else
+    {
+        priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+        if (priv->gconf_section)
+        {
+            key = g_strdup_printf("%s_%s", pref_name, GCONF_KEY_WIDTH);
+            width = gnc_gconf_get_int(priv->gconf_section, key, NULL);
+            g_free(key);
+        }
 
-    /* If gconf comes back with a width of zero (or there is no gconf
-     * width) the use the default width for the column.  Allow for
-     * padding L and R of the displayed data. */
-    if (width == 0)
-        width = default_width + 10;
-    if (width == 0)
-        width = 10;
+        /* If gconf comes back with a width of zero (or there is no gconf
+         * width) the use the default width for the column.  Allow for
+         * padding L and R of the displayed data. */
+        if (width == 0)
+            width = default_width + 10;
+        if (width == 0)
+            width = 10;
+    }
 
     /* Set column attributes */
     g_object_set(G_OBJECT(column),
                  "visible",     visible,
-                 "sizing",      GTK_TREE_VIEW_COLUMN_FIXED,
+                 "sizing",      sizing,
                  "fixed-width", width,
                  "resizable",   resizable && pref_name != NULL,
                  "reorderable", pref_name != NULL,
@@ -1886,8 +1894,6 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
     GncTreeViewPrivate *priv;
     GtkTreeViewColumn *column;
     GtkCellRenderer *renderer;
-    PangoLayout* layout;
-    int title_width;
 
     g_return_val_if_fail (GNC_IS_TREE_VIEW(view), NULL);
 
@@ -1910,13 +1916,9 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
         gtk_tree_view_column_add_attribute (column, renderer,
                                             "visible", model_visibility_column);
 
-    layout = gtk_widget_create_pango_layout (GTK_WIDGET(view),
-             column_short_title);
-    pango_layout_get_pixel_size(layout, &title_width, NULL);
-    g_object_unref(layout);
 
     gnc_tree_view_column_properties (view, column, pref_name, model_data_column,
-                                     title_width, FALSE, column_sort_fn);
+                                     0, FALSE, column_sort_fn);
 
     gnc_tree_view_append_column (view, column);
 
