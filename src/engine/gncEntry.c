@@ -1290,7 +1290,7 @@ gncEntryRecomputeValues (GncEntry *entry)
                           entry->i_taxincluded,
                           entry->i_discount, entry->i_disc_type,
                           entry->i_disc_how,
-                          0,
+                          denom,
                           &(entry->i_value), &(entry->i_disc_value),
                           &(entry->i_tax_values));
 
@@ -1299,7 +1299,7 @@ gncEntryRecomputeValues (GncEntry *entry)
                           (entry->b_taxable ? entry->b_tax_table : NULL),
                           entry->b_taxincluded,
                           gnc_numeric_zero(), GNC_AMT_TYPE_VALUE, GNC_DISC_PRETAX,
-                          0,
+                          denom,
                           &(entry->b_value), NULL, &(entry->b_tax_values));
 
     entry->i_value_rounded = gnc_numeric_convert (entry->i_value, denom,
