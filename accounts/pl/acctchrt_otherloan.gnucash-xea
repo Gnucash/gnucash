@@ -21,7 +21,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Pasywa</act:description>
   <act:slots>
@@ -38,7 +38,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Kredyty</act:description>
   <act:parent type="new">8ec79e80d9abf58d78ce3129d3fe3365</act:parent>
@@ -56,7 +56,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Kredyt inny</act:description>
   <act:parent type="new">b5624a9d1a1b797b87b815774faccfe4</act:parent>
@@ -67,7 +67,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Wydatki</act:description>
   <act:slots>
@@ -84,7 +84,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Odsetki</act:description>
   <act:parent type="new">565e52a122e8acc9a67a36e61357e2ae</act:parent>
@@ -95,7 +95,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Odsetki inne</act:description>
   <act:parent type="new">4a02c14e992ea79076837c164aa6fc8d</act:parent>

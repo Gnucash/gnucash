@@ -21,7 +21,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Aktywa</act:description>
   <act:slots>
@@ -38,7 +38,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Inwestycje</act:description>
   <act:parent type="new">96d9b17add59eb4c7edec7ed241af755</act:parent>
@@ -56,7 +56,7 @@
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Emerytura małżeńska</act:description>
   <act:slots>
@@ -77,7 +77,7 @@
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Obligacje</act:description>
   <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
@@ -88,7 +88,7 @@
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Giełda</act:description>
   <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
@@ -99,7 +99,7 @@
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Indeks rynkowy</act:description>
   <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>
@@ -110,7 +110,7 @@
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Fundusz wzajemny</act:description>
   <act:parent type="new">4426b41837adc284f96b291c31022844</act:parent>

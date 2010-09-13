@@ -7,8 +7,7 @@
       Koszty związane z wynajmem domu
     </gnc-act:short-description>
     <gnc-act:long-description>
-    You would want to select this set of accounts if you rent a home or apartment (rent, renter's insurance).
-    Wybierzesz ten zestaw, jeśli wynajmujesz dom lub mieszkanie (czynsz, ubezpieczenie wynajmu).
+      Wybierzesz ten zestaw, jeśli wynajmujesz dom lub mieszkanie (czynsz, ubezpieczenie wynajmu).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Konto główne</act:name>
@@ -22,7 +21,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Wydatki</act:description>
   <act:slots>
@@ -39,7 +38,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Ubezpieczenie</act:description>
   <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
@@ -50,7 +49,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Ubezpieczenie wynajmu</act:description>
   <act:parent type="new">b79b231807a98cd562c46cf0454e9f25</act:parent>
@@ -61,7 +60,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>PLN</cmdty:id>
   </act:commodity>
   <act:description>Czynsz</act:description>
   <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
