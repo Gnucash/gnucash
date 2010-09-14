@@ -521,6 +521,7 @@ function inst_gnome() {
         quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${GCONF_VERSION} gconf-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 &&
+        quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo &&
         quiet intltoolize --version
     then
         echo "gnome packages installed.  skipping."
@@ -546,6 +547,8 @@ function inst_gnome() {
         wget_unpacked $PKG_CONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $CAIRO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $PIXMAN_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $EXPAT_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $EXPAT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $FONTCONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -628,17 +631,6 @@ EOF
                 #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
             qpopd
         fi
-        wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/pixman-*
-        qpushd $TMP_UDIR/pixman-*
-            ./configure ${HOST_XCOMPILE} \
-                --prefix=$_GNOME_UDIR \
-                --disable-static
-            make
-            make install
-        qpopd
-        rm -rf $TMP_UDIR/pixman-*
-        ${PKG_CONFIG} --exists pixman-1 || die "pixman not installed correctly"
         quiet gconftool-2 --version &&
         quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 &&
         quiet intltoolize --version || die "gnome not installed correctly"
@@ -746,10 +738,12 @@ function inst_libgsf() {
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
     add_to_env $_LIBGSF_UDIR/bin PATH
     add_to_env $_LIBGSF_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1
+    if quiet ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 &&
+        quiet ${PKG_CONFIG} --atleast-version=${LIBGSF_VERSION} libgsf-1
     then
         echo "libgsf already installed.  skipping."
     else
+        rm -rf ${TMP_UDIR}/libgsf-*
         wget_unpacked $LIBGSF_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/libgsf-*
         qpushd $TMP_UDIR/libgsf-*
@@ -771,7 +765,7 @@ function inst_goffice() {
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     add_to_env $_GOFFICE_UDIR/bin PATH
     add_to_env $_GOFFICE_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists libgoffice-0.8
+    if quiet ${PKG_CONFIG} --atleast-version=${GOFFICE_VERSION} libgoffice-0.8
     then
         echo "goffice already installed.  skipping."
     else
