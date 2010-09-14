@@ -255,9 +255,6 @@ set_default LIBGNOMEUI_URL "$GNOME_WIN32_URL/libgnomeui/2.22/libgnomeui-2.22.1.z
 set_default LIBGNOMEUI_DEV_URL "$GNOME_WIN32_URL/libgnomeui/2.22/libgnomeui-dev-2.22.1.zip"
 set_default LIBGLADE_URL "$GNOME_WIN32_URL/libglade/2.6/libglade_2.6.4-1_win32.zip"
 set_default LIBGLADE_DEV_URL "$GNOME_WIN32_URL/libglade/2.6/libglade-dev_2.6.4-1_win32.zip"
-# GnuCash on Windows is built with webkit, no need to install gtkhtml
-#set_default GTKHTML_URL "$GNOME_WIN32_URL/gtkhtml/3.24/gtkhtml_3.24.2-1_win32.zip"
-#set_default GTKHTML_DEV_URL "$GNOME_WIN32_URL/gtkhtml/3.24/gtkhtml-dev_3.24.2-1_win32.zip"
 set_default GTK_DOC_URL "$GNOME_MIRROR/sources/gtk-doc/1.13/gtk-doc-1.13.tar.bz2"
 set_default GTK_THEME_URL "$SF_MIRROR/gtk-win/gtk2-themes-2009-09-07-win32_bin.zip"
 set_default GTK_PREFS_URL "$SF_MIRROR/gtk-win/gtk2_prefs-0.4.1.bin-gtk2.10-win32.zip"

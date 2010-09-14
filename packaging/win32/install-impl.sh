@@ -518,8 +518,6 @@ function inst_gnome() {
         add_to_env pkg-config PKG_CONFIG
     fi
     if quiet gconftool-2 --version &&
-# GnuCash on Windows is built with webkit, no need to install gtkhtml
-#        quiet ${PKG_CONFIG} --exists libgtkhtml-3.14 &&
         quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 &&
         quiet intltoolize --version
     then
@@ -584,9 +582,6 @@ function inst_gnome() {
         wget_unpacked $LIBGNOMEUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGLADE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-# GnuCash on Windows is built with webkit, no need to install gtkhtml
-#        wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $GNOME_DIR
-#        wget_unpacked $GTKHTML_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTK_THEME_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/gtk2-themes-*
         cp -a $TMP_UDIR/gtk2-themes-*/lib $_GNOME_UDIR/
@@ -622,9 +617,6 @@ fi
 \${PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
 EOF
             chmod +x bin/pkg-config{.exe,-msys.sh}
-# GnuCash on Windows is built with webkit, no need to install gtkhtml
-#            sed '/Requires/s,\(.*\) enchant\(.*\) iso-codes\(.*\),\1\2\3,' lib/pkgconfig/libgtkhtml-3.14.pc > tmp
-#            mv tmp lib/pkgconfig/libgtkhtml-3.14.pc
             rm -rf $TMP_UDIR/gtk-doc-*
         qpopd
 
@@ -646,8 +638,6 @@ EOF
         rm -rf $TMP_UDIR/pixman-*
         ${PKG_CONFIG} --exists pixman-1 || die "pixman not installed correctly"
         quiet gconftool-2 --version &&
-# GnuCash on Windows is built with webkit, no need to install gtkhtml
-#        quiet ${PKG_CONFIG} --exists libgtkhtml-3.14 &&
         quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 &&
         quiet intltoolize --version || die "gnome not installed correctly"
     fi
