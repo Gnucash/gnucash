@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-04 22:55+0200\n"
-"PO-Revision-Date: 2010-09-04 23:02+0200\n"
+"PO-Revision-Date: 2010-09-15 21:03+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -18850,7 +18850,7 @@ msgstr "Alle einzelnen Steueranteile anzeigen?"
 #: ../intl-scm/guile-strings.c:5608 ../intl-scm/guile-strings.c:6906
 #: ../intl-scm/guile-strings.c:7098
 msgid "Totals"
-msgstr "Beträge"
+msgstr "Gesamtsumme"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/easy-invoice.scm
@@ -18864,7 +18864,7 @@ msgstr "Beträge"
 #: ../intl-scm/guile-strings.c:5610 ../intl-scm/guile-strings.c:6908
 #: ../intl-scm/guile-strings.c:7100
 msgid "Display the totals?"
-msgstr "Anzeigen der Bilanz"
+msgstr "Anzeigen der Gesamtsumme"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/easy-invoice.scm
