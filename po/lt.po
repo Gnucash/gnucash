@@ -11624,7 +11624,7 @@ msgstr "Mokesčių informacija"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-account.c:655
 msgid "Column letter for 'Placeholder'|P"
-msgstr "Column letter for 'Placeholder'|В"
+msgstr "В"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1456
@@ -11692,7 +11692,7 @@ msgstr "Gauti citatas"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:441
 msgid "Column letter for 'Get Quotes'|Q"
-msgstr "Column letter for 'Get Quotes'|К"
+msgstr "К"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:447
 #: ../src/gnome-utils/gnc-tree-view-price.c:454

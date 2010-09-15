@@ -12123,7 +12123,7 @@ msgstr "कर सूचना"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-account.c:655
 msgid "Column letter for 'Placeholder'|P"
-msgstr "'प्लेशहोल्डर'|P को लागि स्तम्भ अक्षर"
+msgstr "P को लागि स्तम्भ अक्षर"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1456
@@ -12191,7 +12191,7 @@ msgstr "मूल्य विवरण प्राप्त गर्नुह
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:441
 msgid "Column letter for 'Get Quotes'|Q"
-msgstr "'मूल्य विवरण प्राप्त गर्नुहोस्'|Q को लागि स्तम्भ अक्षर"
+msgstr "Q को लागि स्तम्भ अक्षर"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:447
 #: ../src/gnome-utils/gnc-tree-view-price.c:454

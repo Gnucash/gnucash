@@ -4306,7 +4306,7 @@ msgstr ""
 #: ../src/gnome/druid-stock-split.c:461
 #: ../src/register/ledger-core/split-register.c:2331
 msgid "Action Column|Split"
-msgstr "Ação Coluna|Divisão"
+msgstr "Divisão"
 
 #: ../src/gnome/druid-stock-split.c:492
 msgid "Error adding price."
@@ -12419,7 +12419,7 @@ msgstr "Info. de Impostos"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-account.c:655
 msgid "Column letter for 'Placeholder'|P"
-msgstr "Letra para a coluna 'não-editável'|N"
+msgstr "N"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1456
@@ -15446,7 +15446,7 @@ msgstr "_Recalcular"
 #. must only contain the part after the | character.
 #: ../src/register/ledger-core/split-register.c:2231
 msgid "Action Column|Deposit"
-msgstr "Ação Coluna|Depósito"
+msgstr "Depósito"
 
 #: ../src/register/ledger-core/split-register.c:2232
 msgid "Withdraw"

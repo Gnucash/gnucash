@@ -12381,7 +12381,7 @@ msgstr "Informaţii despre taxe"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-account.c:655
 msgid "Column letter for 'Placeholder'|P"
-msgstr "Column letter for 'Placeholder'|G"
+msgstr "G"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1456
@@ -12449,7 +12449,7 @@ msgstr "Obţine cotaţiile"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:441
 msgid "Column letter for 'Get Quotes'|Q"
-msgstr "Column letter for 'Get Quotes'|C"
+msgstr "C"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:447
 #: ../src/gnome-utils/gnc-tree-view-price.c:454
@@ -12504,7 +12504,7 @@ msgstr "Preţ"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:176
 msgid "Single-character short column-title form of 'Enabled'|E"
-msgstr "Single-character short column-title form of 'Enabled'|A"
+msgstr "A"
 
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:187
 msgid "Last Occur"

@@ -12438,13 +12438,13 @@ msgstr "Použiť šablónu transakcií"
 #: ../src/import-export/hbci/glade/hbci.glade.h:68
 #, fuzzy
 msgid "_Earliest possible date"
-msgstr "Tu, ak je to možné|#u"
+msgstr "#u"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:71
 #: ../src/import-export/hbci/glade/hbci.glade.h:69
 #, fuzzy
 msgid "_Last retrieval date"
-msgstr "Kontrolovať posledné súbory:|#C"
+msgstr "#C"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:72
 #: ../src/import-export/hbci/glade/hbci.glade.h:70
