@@ -128,8 +128,11 @@ function dist_gnome() {
     rm -rf $TMP_UDIR/gtk2_prefs-*
 
     rm -rf $DIST_UDIR/etc/gconf/gconf.xml.defaults/{desktop,schemas}
-    cp -a $DIST_UDIR/lib/locale $DIST_UDIR/share
-    rm -rf $DIST_UDIR/lib/locale
+    if [ -d $DIST_UDIR/lib/locale ] ; then
+        # Huh, is this removed in newer gtk?
+        cp -a $DIST_UDIR/lib/locale $DIST_UDIR/share
+        rm -rf $DIST_UDIR/lib/locale
+    fi
 }
 
 function dist_isocodes() {
