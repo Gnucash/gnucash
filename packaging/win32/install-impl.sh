@@ -754,6 +754,7 @@ function inst_libgsf() {
                 CPPFLAGS="${GNOME_CPPFLAGS}" \
                 LDFLAGS="${GNOME_LDFLAGS}"
             make
+            rm -rf ${_LIBGSF_UDIR}
             make install
         qpopd
         ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 || die "libgsf not installed correctly"
@@ -785,9 +786,10 @@ function inst_goffice() {
             [ -d ../libgsf-* ] || die "We need the unpacked package $TMP_UDIR/libgsf-*; please unpack it in $TMP_UDIR"
             [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
             make
+            rm -rf ${_GOFFICE_UDIR}
             make install
         qpopd
-        ${PKG_CONFIG} --exists libgoffice-0.8 && [ -f $_GOFFICE_UDIR/bin/libgoffice-0.8-8.dll ] || die "goffice not installed correctly"
+        ${PKG_CONFIG} --exists libgoffice-0.8 && [ -f $_GOFFICE_UDIR/bin/libgoffice*.dll ] || die "goffice not installed correctly"
         rm -rf ${TMP_UDIR}/goffice-*
         rm -rf ${TMP_UDIR}/libgsf-*
     fi
@@ -950,7 +952,7 @@ function inst_gwenhywfar() {
     _GWENHYWFAR_UDIR=`unix_path ${GWENHYWFAR_DIR}`
     add_to_env ${_GWENHYWFAR_UDIR}/bin PATH
     add_to_env ${_GWENHYWFAR_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --atleast-version=${GWENHYWFAR_VERSION} gwenhywfar
+    if quiet ${PKG_CONFIG} --exact-version=${GWENHYWFAR_VERSION} gwenhywfar
     then
         echo "Gwenhywfar already installed. skipping."
     else
@@ -984,6 +986,7 @@ function inst_gwenhywfar() {
             fi
             make
 #            [ "$CROSS_COMPILE" != "yes" ] && make check
+            rm -rf ${_GWENHYWFAR_UDIR}
             make install
         qpopd
         ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
@@ -1052,7 +1055,7 @@ function inst_aqbanking() {
     _AQBANKING_UDIR=`unix_path ${AQBANKING_DIR}`
     add_to_env ${_AQBANKING_UDIR}/bin PATH
     add_to_env ${_AQBANKING_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --atleast-version=${AQBANKING_VERSION} aqbanking
+    if quiet ${PKG_CONFIG} --exact-version=${AQBANKING_VERSION} aqbanking
     then
         echo "AqBanking already installed. skipping."
     else
@@ -1109,6 +1112,7 @@ function inst_aqbanking() {
                     --prefix=${_AQBANKING_UDIR}
             fi
             make
+            rm -rf ${_AQBANKING_UDIR}
             make install
         qpopd
         qpushd ${_AQBANKING_UDIR}/bin
