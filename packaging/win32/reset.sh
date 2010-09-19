@@ -96,6 +96,7 @@ function eval_all() {
     eval_path $MYSQL_LIB_DIR
     eval_path $PGSQL_DIR
     eval_path $WEBKIT_DIR
+    eval_path $ISOCODES_DIR
 }
 
 echo
