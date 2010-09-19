@@ -15,6 +15,7 @@
   xmlns:entry="http://www.gnucash.org/XML/entry"
   xmlns:fs="http://www.gnucash.org/XML/fs"
   xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
   xmlns:invoice="http://www.gnucash.org/XML/invoice"
   xmlns:job="http://www.gnucash.org/XML/job"
   xmlns:lot="http://www.gnucash.org/XML/lot"
@@ -16892,7 +16893,7 @@
   <act:description>Umgebuchte Ausgaben bisheriger Zweckbetriebe </act:description>
   <act:parent type="guid">8268da381a30e25c7c483162066858d4</act:parent>
 </gnc:account>
-</gnc-v2>
+</gnc-account-example>
 
 <!-- Local variables: -->
 <!-- mode: xml        -->
