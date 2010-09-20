@@ -1491,6 +1491,9 @@ typedef struct {
 
 static void add_to_hash_amount(GHashTable* hash, const GncGUID* guid, const gnc_numeric* amount)
 {
+    /* Do we have a number belonging to this GUID in the hash? If yes,
+     * modify it in-place; if not, insert the new element into the
+     * hash. */
     gnc_numeric* elem = g_hash_table_lookup(hash, guid);
     if (!elem)
     {
@@ -1498,7 +1501,45 @@ static void add_to_hash_amount(GHashTable* hash, const GncGUID* guid, const gnc_
         *elem = gnc_numeric_zero();
         g_hash_table_insert(hash, (gpointer) guid, elem);
     }
-    *elem = gnc_numeric_add_fixed(*elem, *amount);
+
+    /* Check input arguments for sanity */
+    if (gnc_numeric_check(*amount) != GNC_ERROR_OK)
+    {
+        g_critical("Oops, the given amount [%s] has the error code %d, at guid [%s].",
+                   gnc_num_dbg_to_string(*amount),
+                   gnc_numeric_check(*amount),
+                   guid_to_string(guid));
+        return;
+    }
+    if (gnc_numeric_check(*elem) != GNC_ERROR_OK)
+    {
+        g_critical("Oops, the account's amount [%s] has the error code %d, at guid [%s].",
+                   gnc_num_dbg_to_string(*elem),
+                   gnc_numeric_check(*elem),
+                   guid_to_string(guid));
+        return;
+    }
+
+    /* Watch out - don't use gnc_numeric_add_fixed here because it
+     * will refuse to add 1/5+1/10; instead, we have to use the flags
+     * as given here explicitly. Eventually, add the given amount to
+     * the entry in the hash. */
+    *elem = gnc_numeric_add(*elem, *amount,
+                            GNC_DENOM_AUTO,
+                            GNC_HOW_DENOM_REDUCE | GNC_HOW_RND_NEVER);
+
+    /* Check for sanity of the output. */
+    if (gnc_numeric_check(*elem) != GNC_ERROR_OK)
+    {
+        g_critical("Oops, after addition at guid [%s] the resulting amount [%s] has the error code %d; added amount = [%s].",
+                   guid_to_string(guid),
+                   gnc_num_dbg_to_string(*elem),
+                   gnc_numeric_check(*elem),
+                   gnc_num_dbg_to_string(*amount));
+        return;
+    }
+
+    /* In case anyone wants to see this in the debug log. */
     g_debug("Adding to guid [%s] the value [%s]. Value now [%s].",
             guid_to_string(guid),
             gnc_num_dbg_to_string(*amount),
