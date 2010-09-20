@@ -531,7 +531,7 @@ function inst_gnome() {
         wget_unpacked $LIBXML2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GETTEXT_RUNTIME_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GETTEXT_RUNTIME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GETTEXT_TOOLS_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GETTEXT_DEV_TOOLS_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GLIB_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
