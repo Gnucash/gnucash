@@ -421,7 +421,7 @@
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") amount-header
-    "hb" (N_ "Display the transaction amount?") #t))
+    "hb" "Display the transaction amount?" #t)) 
 
   (gnc:register-inv-option
    (gnc:make-string-option
