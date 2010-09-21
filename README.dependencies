@@ -37,6 +37,11 @@ qof).
 strongly discouraged and actively removed whenever it's caught.
 
 
+Important notice
+----------------
+You can find the most recent version of the following part at 
+http://wiki.gnucash.org/wiki/Dependencies.
+
 GnuCash Library Dependency Policy
 ---------------------------------
 
@@ -55,7 +60,8 @@ release (or an official package-upgrade path)
 
 Libraries/Deps
 --------------
-aqbanking
+  required
+  --------
 gconf2
 glib2
 gtk+2
@@ -66,11 +72,24 @@ libgnomeprint2.2
 libgnomeui2
 [lib]goffice
 libgsf1
-[lib]gtkhtml3
-libofx
 libxml2
 pango
 swig
+
+  alternatives
+  ------------
+[lib]gtkhtml3
+webkit
+
+  optional
+  --------
+aqbanking: online banking
+libdbi + desired database layer
+libofx
+
+  at runtime, suggested
+  ---------------------
+isocodes: translation of currency names 
 
 Interesting libraries
 ---------------------
