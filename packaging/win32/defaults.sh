@@ -211,6 +211,7 @@ set_default LIBICONV_URL "$GNOME_WIN32_DEPS_URL/libiconv-1.9.1.bin.woe32.zip"
 set_default GLIB_URL "$GNOME_WIN32_URL/glib/2.24/glib_2.24.2-2_win32.zip"
 set_default GLIB_DEV_URL "$GNOME_WIN32_URL/glib/2.24/glib-dev_2.24.2-2_win32.zip"
 #set_default LIBJPEG_URL "$SF_MIRROR/gnucash/jpeg_7-1-fixed-win32.zip" # ?!?
+set_default LIBJPEG_7_URL  "$GNOME_WIN32_DEPS_URL/jpeg_7-1_win32.zip"
 set_default LIBJPEG_URL  "$GNOME_WIN32_DEPS_URL/jpeg_8-1_win32.zip"
 set_default LIBJPEG_DEV_URL "$GNOME_WIN32_DEPS_URL/jpeg-dev_8-1_win32.zip"
 set_default LIBPNG_URL "$GNOME_WIN32_DEPS_URL/libpng_1.4.3-1_win32.zip"

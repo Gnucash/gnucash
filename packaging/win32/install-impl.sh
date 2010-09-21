@@ -543,6 +543,7 @@ function inst_gnome() {
         wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GLIB_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBJPEG_7_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBJPEG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $GNOME_DIR
