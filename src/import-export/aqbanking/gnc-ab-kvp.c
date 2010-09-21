@@ -134,8 +134,10 @@ gnc_ab_set_book_template_list(QofBook *b, GList *template_list)
 {
     kvp_frame *frame = gnc_ab_get_book_kvp(b, TRUE);
     kvp_value *value = kvp_value_new_glist_nc(template_list);
+    qof_book_begin_edit(b);
     kvp_frame_set_slot_nc(frame, AB_TEMPLATES, value);
-    qof_book_kvp_changed(b);
+    qof_book_mark_dirty(b);
+    qof_book_commit_edit(b);
 }
 
 static void
