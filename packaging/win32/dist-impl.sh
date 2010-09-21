@@ -88,6 +88,7 @@ function dist_gnome() {
     smart_wget $LIBICONV_URL $DOWNLOAD_DIR
     unzip -q $LAST_FILE bin/iconv.dll -d $DIST_DIR
     wget_unpacked $GLIB_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $LIBJPEG_7_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $DIST_DIR
@@ -113,8 +114,6 @@ function dist_gnome() {
     wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $DIST_DIR
 	wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $DIST_DIR
-# GnuCash on Windows is built with webkit, no need to install gtkhtml
-#    wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $DIST_DIR
 	wget_unpacked $GTK_THEME_URL $DOWNLOAD_DIR $TMP_DIR
 
     assert_one_dir $TMP_UDIR/gtk2-themes-*
