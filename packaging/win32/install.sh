@@ -107,10 +107,10 @@ if [ "$WITH_CUTECASH" = "yes" ]; then
  add_step inst_cutecash
 fi
 add_step inst_gnucash
-add_step inst_docs
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_inno
 fi
+add_step inst_docs
 add_step inst_finish
 
 # run commands registered with late_eval

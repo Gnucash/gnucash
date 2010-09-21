@@ -496,12 +496,18 @@ function inst_libxslt() {
         wget_unpacked ${LIBXSLT_ICONV_URL} ${DOWNLOAD_DIR} ${LIBXSLT_DIR}
         wget_unpacked ${LIBXSLT_ZLIB_URL} ${DOWNLOAD_DIR} ${LIBXSLT_DIR}
         qpushd $_LIBXSLT_UDIR
-            mv libxslt-* mydir
-            cp -r mydir/* .
-            rm -rf mydir
-            mv libxml2-* mydir
-            cp -r mydir/* .
-            rm -rf mydir
+            # The unpacked zips put their content into a directory one
+            # below of where we want them, so we move the content to
+            # the parent directory here.
+            for A in libxslt-* libxml2-* iconv-* zlib-* ; do
+                if [ -d $A ] ; then
+                    mv $A tmpdir
+                    cp -r tmpdir/* .
+                    rm -rf tmpdir
+                else
+                    echo "Oops, $A is not a directory - skipping here."
+                fi
+            done
         qpopd
         quiet which xsltproc || die "libxslt not installed correctly"
     fi
@@ -1476,8 +1482,9 @@ function make_chm() {
     _CHM_TYPE=$1
     _CHM_LANG=$2
     _XSLTPROC_OPTS=$3
-    echo "Processing $_CHM_TYPE ($_CHM_LANG) ..."
+    echo "\nProcessing $_CHM_TYPE ($_CHM_LANG) ...\n"
     qpushd $_CHM_TYPE/$_CHM_LANG
+        echo "xsltproc $XSLTPROCFLAGS $_XSLTPROC_OPTS ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml"
         xsltproc $XSLTPROCFLAGS $_XSLTPROC_OPTS ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
         count=0
         echo >> htmlhelp.hhp
