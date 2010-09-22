@@ -622,6 +622,7 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
                     <property name="xpad">5</property>
                     <property name="label" translatable="yes">_Select the matchings you want to change:</property>
                     <property name="mnemonic_widget">account_page_view</property>
+                    <property name="use_underline">True</property>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -755,6 +756,7 @@ If you change your mind later, you can reorganize the account structure safely w
                     <property name="xpad">5</property>
                     <property name="label" translatable="yes">_Select the matchings you want to change:</property>
                     <property name="mnemonic_widget">category_page_view</property>
+                    <property name="use_underline">True</property>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -886,6 +888,7 @@ In the following page, you will see the text that appears in the Payee and Memo 
                     <property name="xpad">5</property>
                     <property name="label" translatable="yes">_Select the matchings you want to change:</property>
                     <property name="mnemonic_widget">memo_page_view</property>
+                    <property name="use_underline">True</property>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
