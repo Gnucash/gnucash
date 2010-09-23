@@ -26,6 +26,7 @@
                 <property name="xpad">5</property>
                 <property name="label" translatable="yes">_Select or add a GnuCash account:</property>
                 <property name="mnemonic_widget">account_tree</property>
+                <property name="use_underline">True</property>
               </widget>
               <packing>
                 <property name="expand">False</property>
