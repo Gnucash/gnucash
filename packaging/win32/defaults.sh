@@ -297,7 +297,7 @@ set_default GLADE_DIR $GLOBAL_DIR\\glade
 set_default INNO_URL "http://files.jrsoftware.org/is/5/isetup-5.3.9-unicode.exe"
 set_default INNO_DIR $GLOBAL_DIR\\inno
 
-set_default HH_URL "http://download.microsoft.com/download/OfficeXPProf/Install/4.71.1015.0/W98NT42KMe/EN-US/HTMLHELP.EXE"
+set_default HH_URL "http://download.microsoft.com/download/0/a/9/0a939ef6-e31c-430f-a3df-dfae7960d564/htmlhelp.exe"
 set_default HH_DIR $GLOBAL_DIR\\hh
 
 set_default WEBKIT_URL "$SF_MIRROR/gnucash/webkit-1.1.90-win32.zip"
