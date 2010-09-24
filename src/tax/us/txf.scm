@@ -140,7 +140,7 @@
     (cons 'N322 #(not-impl "Sched D" "ST gain/loss - other" 4 #f "" ((1991 "1d") (1989 "2d") (1986 "2c")) 1992))
     (cons 'N323 #(not-impl "Sched D" "Long Term gain/loss - security" 4 #f "" ((1997 "8") (1993 "9") (1992 "9a") (1991 "8a") (1986 "9a") (1983 "9") (1980 "8"))))
     (cons 'N324 #(not-impl "Sched D" "LT gain/loss - other" 4 #f "" ((1992 "9d") (1991 "8d") (1989 "9d") (1986 "9c")) 1992))
-    (cons 'N673 #(not-impl "Sched D" "Short/Long gain or loss" 4 #f "" ((1999 "1 or 8"))))
+    (cons 'N673 #(current "Sched D" "Short/Long gain or loss" 4 #f "" ((1999 "1 or 8"))))
     (cons 'N682 #(not-impl "Sched D" "Wash Sale - security" 4 #f "" ((2003 "1 or 8"))))
     (cons 'N488 #(parent "Sched D" "Dividend, cap gain distrib." 3 #f "_LT CapGnDst" ((1997 "13") (1992 "14") (1991 "12") (1986 "13") (1983 "15") (1980 "13"))))
     (cons 'N684 #(none "Sched D" "Div inc., PostMay5 cap gain" 3 #f "" ((2004 "NA - Expired") (2003 "13g")) 2003))

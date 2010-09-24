@@ -279,6 +279,9 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
         const gchar *str;
         const gchar *last_yr = _("Last Valid Year: ");
         const gchar *form_line = _("Form Line Data: ");
+        const gchar *code_line_word = _("Code");
+        const gchar *code_line_colon = ": ";
+        gchar *num_code = NULL;
         gchar *form_line_data = NULL;
         SCM scm;
         gint year;
@@ -304,6 +307,8 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
 
         str = scm_is_symbol(code_scm) ? SCM_SYMBOL_CHARS(code_scm) : "";
         txf_info->code = g_strdup (str);
+        num_code = g_strdup (str);
+        num_code++; /* to lose the leading N */
 
         scm = scm_call_3 (getters.form, category, code_scm, tax_entity_type);
         str = scm_is_string(scm) ? scm_to_locale_string(scm) : "";
@@ -323,8 +328,6 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
         {
             const gchar *until = _("now");
 
-            if (year != 0)
-                until = g_strdup_printf ("%d", year);
             form_line_data = g_strconcat ("\n", "\n", form_line, NULL);
             while (!scm_is_null (scm))
             {
@@ -355,17 +358,23 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
         {
             if (form_line_data != NULL)
                 txf_info->help = g_strconcat (last_yr, g_strdup_printf ("%d", year),
-                                              "\n", "\n", str, form_line_data, NULL);
+                                              "\n", "\n", str, "\n", "\n",
+                                              code_line_word, code_line_colon, num_code,
+                                              form_line_data, NULL);
             else
                 txf_info->help = g_strconcat (last_yr, g_strdup_printf ("%d", year),
-                                              "\n", "\n", str, NULL);
+                                              "\n", "\n", str, "\n", "\n",
+                                              code_line_word, code_line_colon, num_code, NULL);
         }
         else
         {
             if (form_line_data != NULL)
-                txf_info->help = g_strconcat (str, form_line_data, NULL);
+                txf_info->help = g_strconcat (str, "\n", "\n",
+                                              code_line_word, code_line_colon, num_code,
+                                              form_line_data, NULL);
             else
-                txf_info->help = g_strdup (str);
+                txf_info->help = g_strconcat (str, "\n", "\n",
+                                              code_line_word, code_line_colon, num_code, NULL);
         }
 
         if (form_line_data != NULL)
