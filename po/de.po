@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-04 22:55+0200\n"
-"PO-Revision-Date: 2010-09-15 21:03+0200\n"
+"POT-Creation-Date: 2010-09-24 21:27+0200\n"
+"PO-Revision-Date: 2010-09-24 21:29+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -19221,6 +19221,10 @@ msgstr "Anzeigen der Buchungsbeschreibung?"
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
+#: ../intl-scm/guile-strings.c:2426 ../intl-scm/guile-strings.c:2532
+msgid "Display the transaction amount?"
+msgstr "Anzeigen des Buchungsbetrags?"
+
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:2426 ../intl-scm/guile-strings.c:2458
