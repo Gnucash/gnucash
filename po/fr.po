@@ -13569,7 +13569,7 @@ msgstr "Fin du trimestre dernier"
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:89 ../intl-scm/guile-strings.c:176
 msgid "End of this year"
-msgstr "Fin de l'année actuel"
+msgstr "Fin de l'année actuelle"
 
 # po/guile_strings.txt:166
 #. src/app-utils/date-utilities.scm
