@@ -166,6 +166,12 @@ void kvp_frame_set_numeric(KvpFrame * frame, const gchar * path, gnc_numeric nva
  *     the path exist, they are created.
  */
 void kvp_frame_set_timespec(KvpFrame * frame, const gchar * path, Timespec ts);
+/**    store the value of the
+ *     GDate at the indicated path.
+ *     If not all frame components of
+ *     the path exist, they are created.
+ */
+void kvp_frame_set_gdate(KvpFrame * frame, const gchar * path, GDate date);
 
 /** \deprecated
 
