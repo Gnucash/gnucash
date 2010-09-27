@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-15 12:44-0400\n"
-"PO-Revision-Date: 2010-08-23 21:39+0200\n"
+"PO-Revision-Date: 2010-09-26 22:26+0200\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -948,7 +948,7 @@ msgstr "Toelichting op verkoopfactuur"
 #: ../intl-scm/guile-strings.c:1952 ../intl-scm/guile-strings.c:2074
 #: ../intl-scm/guile-strings.c:2270 ../intl-scm/guile-strings.c:2332
 msgid "Billing ID"
-msgstr "Inkoopfactuurnummer"
+msgstr "Kenmerk"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2427
 #: ../src/business/business-gnome/dialog-invoice.c:2461
@@ -977,7 +977,7 @@ msgstr "Geboekt?"
 #: ../src/business/business-gnome/glade/invoice.glade.h:8
 #: ../src/business/business-gnome/glade/order.glade.h:6
 msgid "Date Opened"
-msgstr "Factuurdatum"
+msgstr "Documentdatum"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2442
 #: ../src/business/business-gnome/dialog-invoice.c:2476
@@ -987,7 +987,7 @@ msgstr "Bedrijfsnaam "
 #: ../src/business/business-gnome/dialog-invoice.c:2446
 #: ../src/business/business-gnome/glade/invoice.glade.h:14
 msgid "Invoice ID"
-msgstr "Verkoopfactuurnummer"
+msgstr "Documentnummer"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2452
 msgid "Bill Owner"
@@ -1852,7 +1852,7 @@ msgstr "Klant: "
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:10
 msgid "Default Chargeback Project"
-msgstr "Standaard doorbelastingsproject"
+msgstr "Declarabele kosten"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:11
 msgid "Extra Payments"
@@ -1864,7 +1864,7 @@ msgstr "Factuurregels"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:15
 msgid "Invoice Information"
-msgstr "Factuurgegevens"
+msgstr "Documentgegevens"
 
 #. src/business/business-reports/job-report.scm
 #. src/business/business-reports/gnucash/report/job-report.scm
@@ -1893,7 +1893,7 @@ msgstr "Belastingtarieven met huidige waarden bijwerken?"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:24
 msgid "The invoice ID number.  If left blank a reasonable number will be chosen for you."
-msgstr "Het identificatienummer van de verkoopfactuur. Als dit wordt leeggelaten, zal automatisch een numerieke waarde worden toegekend."
+msgstr "Het identificatienummer van het document. Als dit wordt leeggelaten, zal automatisch een numerieke waarde worden toegekend."
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:25
 msgid ""
@@ -2996,7 +2996,7 @@ msgstr "Belasting"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:135
 msgid "Billable?"
-msgstr "Door te berekenen?"
+msgstr "Declarabel?"
 
 #. src/app-utils/prefs.scm
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:140
@@ -3106,7 +3106,7 @@ msgstr "Het totaalbedrag aan belasting van deze post"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:779
 msgid "Is this entry billable to a customer or job?"
-msgstr "Kan deze post aan een klant of een opdracht worden doorberekend?"
+msgstr "Kan deze post bij een klant of een opdracht in rekening worden gebracht?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:788
 msgid "How did you pay for this item?"
@@ -15768,7 +15768,7 @@ msgstr "De betalingsvoorwaarden weergeven?"
 #: ../intl-scm/guile-strings.c:1696 ../intl-scm/guile-strings.c:1892
 #: ../intl-scm/guile-strings.c:2076 ../intl-scm/guile-strings.c:2272
 msgid "Display the billing id?"
-msgstr "Het inkoopfactuurnummer weergeven?"
+msgstr "Het kenmerk weergeven?"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/gnucash/report/fancy-invoice.scm
