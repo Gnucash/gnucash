@@ -21842,7 +21842,6 @@ msgstr "Nazwa pliku zawierającego logo, które ma być użyte w tym raporcie."
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:4316
-#, c-format
 msgid ""
 "Width of the logo in CSS format, e.g. 10% or 32px.  Leave blank to display "
 "the logo at its natural width.  The height of the logo will be scaled "
