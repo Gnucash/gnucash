@@ -281,7 +281,8 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
         const gchar *form_line = _("Form Line Data: ");
         const gchar *code_line_word = _("Code");
         const gchar *code_line_colon = ": ";
-        gchar *num_code = NULL;
+        const gchar *num_code = NULL;
+        const gchar *prefix = "N";
         gchar *form_line_data = NULL;
         SCM scm;
         gint year;
@@ -308,7 +309,8 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
         str = scm_is_symbol(code_scm) ? SCM_SYMBOL_CHARS(code_scm) : "";
         txf_info->code = g_strdup (str);
         num_code = g_strdup (str);
-        num_code++; /* to lose the leading N */
+        if (g_str_has_prefix (num_code, prefix))
+            num_code++; /* to lose the leading N */
 
         scm = scm_call_3 (getters.form, category, code_scm, tax_entity_type);
         str = scm_is_string(scm) ? scm_to_locale_string(scm) : "";
