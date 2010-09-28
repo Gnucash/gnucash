@@ -1146,6 +1146,7 @@ identity_edit_clicked_cb (GtkButton *button,
     gtk_container_add (GTK_CONTAINER (alignment), type_combo);
     gtk_table_attach_defaults (GTK_TABLE (table), alignment, 1, 2, 1, 2);
     label = gtk_label_new (_("CAUTION: If you set TXF categories, and later change 'Type', you will need to manually reset those categories one at a time"));
+    gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
     gtk_misc_set_alignment (GTK_MISC (label), 0.50, 0.50);
     alignment = gtk_alignment_new(0.50, 0.50, 1.00, 0.00);
     gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 6, 6, 4, 4);
