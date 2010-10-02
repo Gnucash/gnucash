@@ -36,8 +36,8 @@
 #include "test-engine-stuff.h"
 #include "Transaction.h"
 
-static gint transaction_num = 720;
-static gint	max_iterate = 30;
+static gint transaction_num = 320;
+static gint	max_iterate = 10;
 
 static void
 run_test (void)

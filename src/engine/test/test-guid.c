@@ -34,7 +34,7 @@
 #include "test-engine-stuff.h"
 #include "qof.h"
 
-#define NENT 500123
+#define NENT 50123
 
 static void test_null_guid(void)
 {
