@@ -114,7 +114,6 @@ test_employee (void)
         gncEmployeeSetGUID (employee, &guid);
         do_test (guid_equal (&guid, qof_instance_get_guid(QOF_INSTANCE(employee))), "guid compare");
     }
-#if 0
     {
         GList *list;
 
@@ -128,7 +127,6 @@ test_employee (void)
         do_test (g_list_length (list) == 1, "correct length: active");
         g_list_free (list);
     }
-#endif
     {
         const char *str = get_random_string();
         const char *res;

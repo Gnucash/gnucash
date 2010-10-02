@@ -45,6 +45,7 @@ libgncmod_engine_la_SOURCES = \
   policy.c \
   swig-business-core.c \
   gncBusGuile.c \
+  gncBusiness.c \
   gncAddress.c \
   gncBillTerm.c \
   gncCustomer.c \

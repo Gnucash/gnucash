@@ -110,7 +110,6 @@ test_customer (void)
         gncCustomerSetGUID (customer, &guid);
         do_test (guid_equal (&guid, gncCustomerGetGUID (customer)), "guid compare");
     }
-#if 0
     {
         GList *list;
 
@@ -124,7 +123,6 @@ test_customer (void)
         do_test (g_list_length (list) == 1, "correct length: active");
         g_list_free (list);
     }
-#endif
     {
         const char *str = get_random_string();
         const char *res;

@@ -34,6 +34,8 @@
 #ifndef GNC_BUSINESS_H_
 #define GNC_BUSINESS_H_
 
+#include <glib.h>
+#include "qof.h"
 
 /* @deprecated backwards-compat definitions */
 #define GNC_BILLTERM_MODULE_NAME GNC_ID_BILLTERM
@@ -59,5 +61,11 @@
 #  define DI(x) x
 # endif
 #endif
+
+/** Returns a GList of all objects of the given type_name in the given
+ * book. */
+GList * gncBusinessGetList (QofBook *book, const char *type_name,
+                            gboolean all_including_inactive);
+
 
 #endif /* GNC_BUSINESS_H_ */
