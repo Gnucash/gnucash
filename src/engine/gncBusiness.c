@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include "gncBusiness.h"
+#include "engine/gncOwner.h"
 
 /* The initialization of the business objects is done in
  * cashobjects_register() of <engine/cashobjects.h>. */
@@ -40,6 +41,7 @@ static void get_list_cb (QofInstance *inst, gpointer user_data)
         data->result = g_list_prepend(data->result, inst);
 }
 
+
 GList * gncBusinessGetList (QofBook *book, const char *type_name,
                             gboolean all_including_inactive)
 {
@@ -54,6 +56,35 @@ GList * gncBusinessGetList (QofBook *book, const char *type_name,
     }
 
     qof_object_foreach(type_name, book, &get_list_cb, &data);
+
+    return data.result;
+}
+
+static void get_ownerlist_cb (QofInstance *inst, gpointer user_data)
+{
+    struct _get_list_userdata* data = user_data;
+    if (!data->is_active_accessor_func || data->is_active_accessor_func(inst, NULL))
+    {
+        GncOwner *owner = gncOwnerCreate();
+        qofOwnerSetEntity(owner, inst);
+        data->result = g_list_prepend(data->result, owner);
+    }
+}
+
+GList * gncBusinessGetOwnerList (QofBook *book, const char *type_name,
+                                 gboolean all_including_inactive)
+{
+    struct _get_list_userdata data;
+    data.result = NULL;
+    data.is_active_accessor_func = NULL;
+
+    if (!all_including_inactive)
+    {
+        data.is_active_accessor_func =
+            qof_class_get_parameter_getter(type_name, QOF_PARAM_ACTIVE);
+    }
+
+    qof_object_foreach(type_name, book, &get_ownerlist_cb, &data);
 
     return data.result;
 }

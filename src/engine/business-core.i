@@ -78,6 +78,7 @@ static GncEmployee * gncEmployeeLookupFlip(GncGUID g, QofBook *b)
 
 GLIST_HELPER_INOUT(EntryList, SWIGTYPE_p__gncEntry);
 GLIST_HELPER_INOUT(GncTaxTableEntryList, SWIGTYPE_p__gncTaxTableEntry);
+GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
 
 %typemap(in) GncAccountValue * "$1 = gnc_scm_to_account_value_ptr($input);"
 %typemap(out) GncAccountValue * "$result = gnc_account_value_ptr_to_scm($1);"
@@ -115,6 +116,7 @@ GLIST_HELPER_INOUT(GncTaxTableEntryList, SWIGTYPE_p__gncTaxTableEntry);
 /* Parse the header files to generate wrappers */
 %include <gncAddress.h>
 %include <gncBillTerm.h>
+%include <gncBusiness.h>
 %include <gncCustomer.h>
 %include <gncEmployee.h>
 %include <gncEntry.h>

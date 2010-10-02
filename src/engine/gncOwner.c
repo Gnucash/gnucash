@@ -102,13 +102,16 @@ GncOwnerType gncOwnerGetType (const GncOwner *owner)
     return owner->type;
 }
 
-QofIdType
+QofIdTypeConst
 qofOwnerGetType(const GncOwner *owner)
 {
-    QofIdType type;
+    return gncOwnerTypeToQofIdType(owner->type);
+}
 
-    type = NULL;
-    switch (owner->type)
+QofIdTypeConst gncOwnerTypeToQofIdType(GncOwnerType t)
+{
+    QofIdTypeConst type = NULL;
+    switch (t)
     {
     case GNC_OWNER_NONE :
     {

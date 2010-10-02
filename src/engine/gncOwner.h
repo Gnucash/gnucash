@@ -62,11 +62,15 @@ to QOF as they can be used by objects like GncInvoice.
 @{
 */
 /** return the type for the collection. */
-QofIdType qofOwnerGetType(const GncOwner *owner);
+QofIdTypeConst qofOwnerGetType(const GncOwner *owner);
 /** return the owner itself as an entity. */
 QofInstance* qofOwnerGetOwner (const GncOwner *owner);
 /** set the owner from the entity. */
 void qofOwnerSetEntity (GncOwner *owner, QofInstance *ent);
+
+/** Returns the QofIdType of the given GncOwnerType, or NULL if no
+ * suitable one exists. */
+QofIdTypeConst gncOwnerTypeToQofIdType(GncOwnerType t);
 
 gboolean
 gncOwnerRegister(void);
