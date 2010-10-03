@@ -2106,7 +2106,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
     {
         split    = gnc_split_register_get_current_split(reg);
         trans    = xaccSplitGetParent(split);
-    
+
         if (split && trans)
         {
             splits = g_list_append(splits, split);
@@ -2162,7 +2162,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
     }
     else
     {
-        gnc_error_dialog(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(plugin_page)), "%s", 
+        gnc_error_dialog(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(plugin_page)), "%s",
                          _("You can only print checks from a bank account register or search results."));
         LEAVE("Unsupported ledger type");
         return;

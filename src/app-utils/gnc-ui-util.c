@@ -495,7 +495,7 @@ gnc_ui_account_get_tax_info_string (const Account *account)
     {
         const gchar *num_code = NULL;
         const gchar *prefix = "N";
-        
+
         tax_type = gnc_get_current_book_tax_type ();
         if (tax_type == NULL || (safe_strcmp (tax_type, "") == 0))
             return g_strdup (_("Tax entity type not specified"));

@@ -34,38 +34,38 @@ static void * search(QofBook * book, const gchar *id, void * object, GNCIdType t
 GncCustomer *
 gnc_search_customer_on_id (QofBook * book, const gchar *id)
 {
-	GncCustomer *customer = NULL;
-	GNCIdType type = GNC_CUSTOMER_MODULE_NAME;
-	customer = (GncCustomer*)search(book, id, customer, type);
-	return customer;
+    GncCustomer *customer = NULL;
+    GNCIdType type = GNC_CUSTOMER_MODULE_NAME;
+    customer = (GncCustomer*)search(book, id, customer, type);
+    return customer;
 }
 
 GncInvoice *
 gnc_search_invoice_on_id (QofBook * book, const gchar *id)
 {
-	GncInvoice *invoice = NULL;
-	GNCIdType type = GNC_INVOICE_MODULE_NAME;
-	invoice = (GncInvoice*)search(book,id, invoice, type);
-	return invoice;
-		}
+    GncInvoice *invoice = NULL;
+    GNCIdType type = GNC_INVOICE_MODULE_NAME;
+    invoice = (GncInvoice*)search(book, id, invoice, type);
+    return invoice;
+}
 
 /* Essentially identical to above.*/
 GncInvoice *
 gnc_search_bill_on_id (QofBook * book, const gchar *id)
 {
-	GncInvoice *bill =  NULL;
-	GNCIdType type = GNC_INVOICE_MODULE_NAME;
-	bill = (GncInvoice*)search(book, id, bill, type);
-	return bill;
-	}
+    GncInvoice *bill =  NULL;
+    GNCIdType type = GNC_INVOICE_MODULE_NAME;
+    bill = (GncInvoice*)search(book, id, bill, type);
+    return bill;
+}
 
 GncVendor *
 gnc_search_vendor_on_id (QofBook * book, const gchar *id)
 {
-	GncVendor *vendor =  NULL;
-	GNCIdType type = GNC_VENDOR_MODULE_NAME;
-	vendor = (GncVendor*)search(book, id, vendor, type);
-	return vendor;
+    GncVendor *vendor =  NULL;
+    GNCIdType type = GNC_VENDOR_MODULE_NAME;
+    vendor = (GncVendor*)search(book, id, vendor, type);
+    return vendor;
 }
 
 
@@ -75,54 +75,57 @@ gnc_search_vendor_on_id (QofBook * book, const gchar *id)
  ****************************************************************/
 static void * search(QofBook * book, const gchar *id, void * object, GNCIdType type)
 {
-	void *c;
-	GList *result;
-	QueryNew *q;
-	gint len;
-	QueryPredData_t string_pred_data;
-	g_return_val_if_fail (type, NULL);
-	g_return_val_if_fail (id, NULL);
-	g_return_val_if_fail (book, NULL);
+    void *c;
+    GList *result;
+    QueryNew *q;
+    gint len;
+    QueryPredData_t string_pred_data;
+    g_return_val_if_fail (type, NULL);
+    g_return_val_if_fail (id, NULL);
+    g_return_val_if_fail (book, NULL);
 
-	// Build the query
-	q = gncQueryCreateFor (type);
-	gncQuerySetBook (q, book);
-	// Search only the id field
-	string_pred_data = gncQueryStringPredicate (COMPARE_EQUAL, id, STRING_MATCH_NORMAL, FALSE);
+    // Build the query
+    q = gncQueryCreateFor (type);
+    gncQuerySetBook (q, book);
+    // Search only the id field
+    string_pred_data = gncQueryStringPredicate (COMPARE_EQUAL, id, STRING_MATCH_NORMAL, FALSE);
 
-	if (strcmp(type,GNC_CUSTOMER_MODULE_NAME))
-	{
-		GncCustomer *c = NULL;
-		gncQueryAddTerm (q, gncQueryBuildParamList("CUSTOMER_ID"), string_pred_data, QUERY_AND);
-	}
-	else if (strcmp(type,GNC_INVOICE_MODULE_NAME))
-	{
-		GncInvoice *c = NULL;
-		gncQueryAddTerm (q, gncQueryBuildParamList("INVOICE_ID"), string_pred_data, QUERY_AND);
-	}
-	else if (strcmp(type,GNC_VENDOR_MODULE_NAME))
-	{
-		GncVendor *c = NULL;
-		gncQueryAddTerm (q, gncQueryBuildParamList("VENDOR_ID"), string_pred_data, QUERY_AND);
-	}
+    if (strcmp(type, GNC_CUSTOMER_MODULE_NAME))
+    {
+        GncCustomer *c = NULL;
+        gncQueryAddTerm (q, gncQueryBuildParamList("CUSTOMER_ID"), string_pred_data, QUERY_AND);
+    }
+    else if (strcmp(type, GNC_INVOICE_MODULE_NAME))
+    {
+        GncInvoice *c = NULL;
+        gncQueryAddTerm (q, gncQueryBuildParamList("INVOICE_ID"), string_pred_data, QUERY_AND);
+    }
+    else if (strcmp(type, GNC_VENDOR_MODULE_NAME))
+    {
+        GncVendor *c = NULL;
+        gncQueryAddTerm (q, gncQueryBuildParamList("VENDOR_ID"), string_pred_data, QUERY_AND);
+    }
 
-	// Run the query
-	result = gncQueryRun (q);
+    // Run the query
+    result = gncQueryRun (q);
 
-	// now compare _exactly_
-	len = g_list_length (result);
-	if (result && (len>0)) {
-		result = g_list_first (result);
-		while (result) {
-			c = result->data;
-			if (strcmp(id,gncCustomerGetID(c)) == 0) {
-				// correct id found
-				object = c;
-				break;
-			}
-			result = g_list_next (result);
-		}
-	}
-	gncQueryDestroy (q);
-	return object;
+    // now compare _exactly_
+    len = g_list_length (result);
+    if (result && (len > 0))
+    {
+        result = g_list_first (result);
+        while (result)
+        {
+            c = result->data;
+            if (strcmp(id, gncCustomerGetID(c)) == 0)
+            {
+                // correct id found
+                object = c;
+                break;
+            }
+            result = g_list_next (result);
+        }
+    }
+    gncQueryDestroy (q);
+    return object;
 }

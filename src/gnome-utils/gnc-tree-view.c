@@ -1819,7 +1819,7 @@ gnc_tree_view_column_properties (GncTreeView *view,
     visible = gnc_tree_view_column_visible(view, NULL, pref_name);
 
     /* Get width */
-    if(default_width == 0)
+    if (default_width == 0)
     {
         sizing = GTK_TREE_VIEW_COLUMN_AUTOSIZE;
     }

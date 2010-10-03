@@ -981,7 +981,7 @@ gnc_file_do_export(const char * filename)
     /* Save As can't use the generic 'file' protocol. If the user didn't set
      * a specific protocol, assume the default 'xml'.
      */
-    if (g_strcmp0 (protocol,"file") == 0)
+    if (g_strcmp0 (protocol, "file") == 0)
     {
         g_free (protocol);
         protocol = g_strdup ("xml");
@@ -1193,7 +1193,7 @@ gnc_file_do_save_as (const char* filename)
     /* Save As can't use the generic 'file' protocol. If the user didn't set
      * a specific protocol, assume the default 'xml'.
      */
-    if (g_strcmp0 (protocol,"file") == 0)
+    if (g_strcmp0 (protocol, "file") == 0)
     {
         g_free (protocol);
         protocol = g_strdup ("xml");

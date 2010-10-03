@@ -827,25 +827,44 @@ close_handler (gpointer data)
 static const gchar *
 type_label_to_new_button(const gchar* type_label)
 {
-    if (g_strcmp0(type_label, "Bill") == 0) {
+    if (g_strcmp0(type_label, "Bill") == 0)
+    {
         return _("New Bill");
-    } else if (g_strcmp0(type_label, "Customer") == 0) {
+    }
+    else if (g_strcmp0(type_label, "Customer") == 0)
+    {
         return _("New Customer");
-    } else if (g_strcmp0(type_label, "Employee") == 0) {
+    }
+    else if (g_strcmp0(type_label, "Employee") == 0)
+    {
         return _("New Employee");
-    } else if (g_strcmp0(type_label, "Expense Voucher") == 0) {
+    }
+    else if (g_strcmp0(type_label, "Expense Voucher") == 0)
+    {
         return _("New Expense Voucher");
-    } else if (g_strcmp0(type_label, "Invoice") == 0) {
+    }
+    else if (g_strcmp0(type_label, "Invoice") == 0)
+    {
         return _("New Invoice");
-    } else if (g_strcmp0(type_label, "Job") == 0) {
+    }
+    else if (g_strcmp0(type_label, "Job") == 0)
+    {
         return _("New Job");
-    } else if (g_strcmp0(type_label, "Order") == 0) {
+    }
+    else if (g_strcmp0(type_label, "Order") == 0)
+    {
         return _("New Order");
-    } else if (g_strcmp0(type_label, "Transaction") == 0) {
+    }
+    else if (g_strcmp0(type_label, "Transaction") == 0)
+    {
         return _("New Transaction");
-    } else if (g_strcmp0(type_label, "Vendor") == 0) {
+    }
+    else if (g_strcmp0(type_label, "Vendor") == 0)
+    {
         return _("New Vendor");
-    } else {
+    }
+    else
+    {
         PWARN("No translatable new-button label found for search type \"%s\", please add one into dialog-search.c!", type_label);
         return _("New item");
     }

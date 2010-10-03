@@ -174,18 +174,18 @@ static gint progress_log_cb(GWEN_GUI *gwen_gui, guint32 id,
                             GWEN_LOGGER_LEVEL level, const gchar *text);
 static gint progress_end_cb(GWEN_GUI *gwen_gui, guint32 id);
 static gint GNC_GWENHYWFAR_CB getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
-                           const gchar *title, const gchar *text, gchar *buffer,
-                           gint min_len, gint max_len, guint32 guiid);
+        const gchar *title, const gchar *text, gchar *buffer,
+        gint min_len, gint max_len, guint32 guiid);
 static gint GNC_GWENHYWFAR_CB setpasswordstatus_cb(GWEN_GUI *gwen_gui, const gchar *token,
-                                 const gchar *pin,
-                                 GWEN_GUI_PASSWORD_STATUS status, guint32 guiid);
+        const gchar *pin,
+        GWEN_GUI_PASSWORD_STATUS status, guint32 guiid);
 static gint GNC_GWENHYWFAR_CB loghook_cb(GWEN_GUI *gwen_gui, const gchar *log_domain,
-                       GWEN_LOGGER_LEVEL priority, const gchar *text);
+        GWEN_LOGGER_LEVEL priority, const gchar *text);
 #ifdef AQBANKING_VERSION_5_PLUS
 typedef GWEN_SYNCIO GWEN_IO_LAYER;
 #endif
 static gint GNC_GWENHYWFAR_CB checkcert_cb(GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
-                         GWEN_IO_LAYER *io, guint32 guiid);
+        GWEN_IO_LAYER *io, guint32 guiid);
 
 gboolean ggg_delete_event_cb(GtkWidget *widget, GdkEvent *event,
                              gpointer user_data);

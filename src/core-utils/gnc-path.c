@@ -133,7 +133,7 @@ gchar *gnc_path_get_reportdir()
 {
     gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
     gchar *result = g_build_filename (pkgdatadir, "guile-modules",
-            "gnucash", "report", (char*)NULL);
+                                      "gnucash", "report", (char*)NULL);
     g_free (pkgdatadir);
     //printf("Returning stdreportsdir %s\n", result);
     return result;

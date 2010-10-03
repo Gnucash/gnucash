@@ -240,7 +240,7 @@ GHashTable* gnc_g_hash_new_guid_numeric(void);
  * occurred during creation, similar as in
  * gnc_sx_instance_model_effect_change(). */
 void gnc_sx_instantiate_cashflow(const SchedXaction* sx,
-								 GHashTable* map, GList **creation_errors);
+                                 GHashTable* map, GList **creation_errors);
 
 /** Instantiates the cash flow of all given SXs (in the given
  * GList<SchedXAction*>) into the GHashTable<GUID*, gnc_numeric*> for the
@@ -251,8 +251,8 @@ void gnc_sx_instantiate_cashflow(const SchedXaction* sx,
  * occurred during creation, similar as in
  * gnc_sx_instance_model_effect_change(). */
 void gnc_sx_all_instantiate_cashflow(GList *all_sxes,
-									 const GDate *range_start, const GDate *range_end,
-									 GHashTable* map, GList **creation_errors);
+                                     const GDate *range_start, const GDate *range_end,
+                                     GHashTable* map, GList **creation_errors);
 
 /** Simplified wrapper around gnc_sx_all_instantiate_cashflow(): Run
  * that function on all SX of the current book for the given date

@@ -697,9 +697,9 @@ gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_d
 
     /* SX still active? If not, return now. */
     if ((xaccSchedXactionHasOccurDef(sx)
-         && xaccSchedXactionGetRemOccur(sx) <= 0)
-        || (xaccSchedXactionHasEndDate(sx)
-            && g_date_compare(xaccSchedXactionGetEndDate(sx), start_date) < 0))
+            && xaccSchedXactionGetRemOccur(sx) <= 0)
+            || (xaccSchedXactionHasEndDate(sx)
+                && g_date_compare(xaccSchedXactionGetEndDate(sx), start_date) < 0))
     {
         return result;
     }
@@ -710,7 +710,7 @@ gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_d
      * SX has not yet occurred so far, or if its last valid date was
      * before the start date. */
     countFirstDate = !g_date_valid(&tmpState->last_date)
-        || (g_date_compare(&tmpState->last_date, start_date) < 0);
+                     || (g_date_compare(&tmpState->last_date, start_date) < 0);
 
     /* No valid date? SX has never occurred so far. */
     if (!g_date_valid(&tmpState->last_date))
@@ -740,16 +740,16 @@ gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_d
     /* Now we are in our interval of interest. Increment the
      * occurrence date until we are beyond the end of our interval. */
     while ((g_date_compare(&tmpState->last_date, end_date) <= 0)
-           && (!xaccSchedXactionHasEndDate(sx)
-               || g_date_compare(&tmpState->last_date, xaccSchedXactionGetEndDate(sx)) <= 0))
+            && (!xaccSchedXactionHasEndDate(sx)
+                || g_date_compare(&tmpState->last_date, xaccSchedXactionGetEndDate(sx)) <= 0))
     {
         ++result;
         gnc_sx_incr_temporal_state (sx, tmpState);
         /* Make sure to check for invalid dates here: It means the SX
          * has ended. */
         if (!g_date_valid(&tmpState->last_date)
-            || (xaccSchedXactionHasOccurDef(sx)
-                && tmpState->num_occur_rem <= 0))
+                || (xaccSchedXactionHasOccurDef(sx)
+                    && tmpState->num_occur_rem <= 0))
         {
             break;
         }

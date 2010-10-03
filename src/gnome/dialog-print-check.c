@@ -520,7 +520,7 @@ check_format_has_address ( PrintCheckDialog *pcd )
     /* If we're printing more than one check no addresses are allowed */
     if (g_list_length(pcd->splits) != 1)
         return FALSE;
-        
+
     /* if format is NULL, then the custom format is being used
      * which has an ADDRESS item by definition */
     format = pcd->selected_format;
@@ -2193,7 +2193,7 @@ draw_page_boxes(GncPrintContext * context,
  *  pattern (if requested), and calls a helper function to print all check items */
 static void
 draw_check_format(GncPrintContext * context, gint position,
-                 check_format_t * format, gpointer user_data)
+                  check_format_t * format, gpointer user_data)
 {
     PrintCheckDialog *pcd = (PrintCheckDialog *) user_data;
     cairo_t *cr;
@@ -2337,8 +2337,8 @@ draw_check_custom(GncPrintContext * context, gpointer user_data)
     pango_font_description_free(desc);
 }
 
-/* Print a page of checks. This takes into account the number of checks to print, 
- * the number of checks on a page, and the starting check position on the page. 
+/* Print a page of checks. This takes into account the number of checks to print,
+ * the number of checks on a page, and the starting check position on the page.
  * This function is called once by the GtkPrint code once for each page to be printed. */
 static void
 draw_page(GtkPrintOperation * operation,
@@ -2357,7 +2357,7 @@ draw_page(GtkPrintOperation * operation,
         gint    position = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
         gint    checks_per_page;
         GList   *next_split;
-        
+
         position = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
         if (position == pcd->position_max)
         {
@@ -2370,7 +2370,7 @@ draw_page(GtkPrintOperation * operation,
             checks_per_page = pcd->position_max;
             first_page_count = gtk_spin_button_get_value_as_int(pcd->first_page_count);
         }
-            
+
         if (page_nr == 0)
         {
             first_check = 0;
@@ -2386,9 +2386,9 @@ draw_page(GtkPrintOperation * operation,
             if (position < pcd->position_max)
                 position = 0;
         }
-        
-        for (check_number = first_check; check_number <= last_check; 
-             check_number++, position++)
+
+        for (check_number = first_check; check_number <= last_check;
+                check_number++, position++)
         {
             pcd->split = (Split *) next_split->data;
             next_split = g_list_next(next_split);
@@ -2417,11 +2417,11 @@ begin_print(GtkPrintOperation * operation,
     gint first_page_count;
     gint pages;
     gint position = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
-    
+
     if (pcd->selected_format && pcd->position_max > 1 && position < pcd->position_max)
     {
         first_page_count = gtk_spin_button_get_value_as_int(pcd->first_page_count);
-        pages = ((check_count - first_page_count) + pcd->position_max - 1) / 
+        pages = ((check_count - first_page_count) + pcd->position_max - 1) /
                 pcd->position_max + 1;
     }
     else
@@ -2517,7 +2517,7 @@ gnc_print_check_format_changed (GtkComboBox *widget,
         pcd->position_max = 0;
     }
     gtk_combo_box_append_text(GTK_COMBO_BOX(pcd->position_combobox), _("Custom"));
-    
+
     /* If there's only one thing in the position combobox, make it insensitive */
     sensitive = (pcd->position_max > 0);
     gtk_widget_set_sensitive(GTK_WIDGET(pcd->position_combobox), sensitive);
@@ -2530,7 +2530,7 @@ gnc_print_check_format_changed (GtkComboBox *widget,
                           gnc_print_check_set_sensitive,
                           GINT_TO_POINTER(sensitive));
 
-    /* Set the active entry in the position combo box, this will trigger a 
+    /* Set the active entry in the position combo box, this will trigger a
        call to gnc_print_check_position_changed */
     pnum = MAX(MIN(pnum, pcd->position_max), 0);
     gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->position_combobox), pnum);
@@ -2552,23 +2552,23 @@ gnc_print_check_position_changed (GtkComboBox *widget,
     gint pnum;
     guint check_count;
     gint first_page_max, first_page_min, first_page_value;
-    gdouble fpmin,fpmax;
-    
+    gdouble fpmin, fpmax;
+
     pnum = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
-    
+
     /* Make the translation and rotation fields active if the position is "custom" */
     sensitive = pnum == pcd->position_max;
     gtk_widget_set_sensitive(GTK_WIDGET(pcd->translation_x), sensitive);
     gtk_widget_set_sensitive(GTK_WIDGET(pcd->translation_y), sensitive);
     gtk_widget_set_sensitive(GTK_WIDGET(pcd->check_rotation), sensitive);
     gtk_widget_set_sensitive(GTK_WIDGET(pcd->units_combobox), sensitive);
-    
+
     /* Set up the first page check count spin box */
     check_count = g_list_length(pcd->splits);
     first_page_max = MAX(1, MIN(pcd->position_max - pnum, check_count));
     first_page_min = 1;
     pnum = gtk_spin_button_get_value_as_int(pcd->first_page_count);
-    first_page_value = MAX(MIN(pnum, first_page_max), first_page_min);    
+    first_page_value = MAX(MIN(pnum, first_page_max), first_page_min);
     gtk_spin_button_set_range(pcd->first_page_count, (gdouble)first_page_min, (gdouble)first_page_max);
     gtk_spin_button_set_value(pcd->first_page_count, (gdouble)first_page_value);
     sensitive = first_page_max > 1;

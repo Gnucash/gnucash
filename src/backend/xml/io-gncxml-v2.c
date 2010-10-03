@@ -310,7 +310,7 @@ add_template_transaction_local( sixtp_gdv2 *data,
                 /* replace the gnc_book_init-created root account */
                 gnc_book_set_template_root(book, (Account *)n->data);
             }
-            else 
+            else
             {
                 /* This is an old data file that doesn't have a template root
                    account and this is a top level account.  Make it a child

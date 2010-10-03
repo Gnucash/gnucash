@@ -72,11 +72,11 @@
 
 const char *gnc_default_strftime_date_format =
 #ifdef G_OS_WIN32
-/* The default date format for use with strftime in Win32. */
+    /* The default date format for use with strftime in Win32. */
     N_("%B %#d, %Y")
 #else
-/* The default date format for use with strftime in other OS. */
-/* Translators: call "man strftime" for possible values. */
+    /* The default date format for use with strftime in other OS. */
+    /* Translators: call "man strftime" for possible values. */
     N_("%B %e, %Y")
 #endif
     ;

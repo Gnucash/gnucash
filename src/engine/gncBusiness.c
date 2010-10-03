@@ -31,8 +31,8 @@
 
 struct _get_list_userdata
 {
-        GList *result;
-        QofAccessFunc is_active_accessor_func;
+    GList *result;
+    QofAccessFunc is_active_accessor_func;
 };
 static void get_list_cb (QofInstance *inst, gpointer user_data)
 {

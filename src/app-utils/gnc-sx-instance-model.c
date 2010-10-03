@@ -962,7 +962,7 @@ _get_sx_formula_value(const SchedXaction* sx, const Split *template_split, gnc_n
                                       NULL);
     *numeric = kvp_value_get_numeric(kvp_val);
     if ((gnc_numeric_check(*numeric) == GNC_ERROR_OK)
-        && !gnc_numeric_zero_p(*numeric))
+            && !gnc_numeric_zero_p(*numeric))
     {
         /* Already a valid non-zero result? Then return and don't
          * parse the string. Luckily we avoid any locale problems with
@@ -1482,7 +1482,8 @@ GHashTable* gnc_g_hash_new_guid_numeric()
                                   NULL, gnc_numeric_free);
 }
 
-typedef struct {
+typedef struct
+{
     GHashTable *hash;
     GList **creation_errors;
     const SchedXaction *sx;
@@ -1571,8 +1572,8 @@ create_cashflow_helper(Transaction *template_txn, void *user_data)
     }
 
     for (;
-         template_splits;
-         template_splits = template_splits->next)
+            template_splits;
+            template_splits = template_splits->next)
     {
         Account *split_acct;
         const gnc_commodity *split_cmdty = NULL;
@@ -1653,8 +1654,8 @@ create_cashflow_helper(Transaction *template_txn, void *user_data)
 
 static void
 instantiate_cashflow_internal(const SchedXaction* sx,
-                                     GHashTable* map,
-                                     GList **creation_errors, gint count)
+                              GHashTable* map,
+                              GList **creation_errors, gint count)
 {
     SxCashflowData create_cashflow_data;
     Account* sx_template_account = gnc_sx_get_template_transaction_account(sx);
@@ -1685,7 +1686,8 @@ void gnc_sx_instantiate_cashflow(const SchedXaction* sx,
     instantiate_cashflow_internal(sx, map, creation_errors, 1);
 }
 
-typedef struct {
+typedef struct
+{
     GHashTable *hash;
     GList **creation_errors;
     const GDate *range_start;

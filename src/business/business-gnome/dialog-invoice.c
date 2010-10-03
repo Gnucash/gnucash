@@ -676,7 +676,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
     acct_commodities = gnc_business_commodities(&(iw->owner));
 
     /* Get the due date and posted account */
-    postdate=gncInvoiceGetDateOpened (invoice);
+    postdate = gncInvoiceGetDateOpened (invoice);
     ddue = postdate;
     memo = NULL;
 
@@ -2586,10 +2586,10 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
         else
         {
             QofQueryPredData *inv_type_pred;
-            GSList *param_list=NULL;
+            GSList *param_list = NULL;
             inv_type_pred = qof_query_string_predicate(QOF_COMPARE_EQUAL,
-                                                       gncInvoiceGetTypeFromOwnerType(owner_type),
-                                                       QOF_STRING_MATCH_NORMAL, FALSE);
+                            gncInvoiceGetTypeFromOwnerType(owner_type),
+                            QOF_STRING_MATCH_NORMAL, FALSE);
             param_list = g_slist_prepend (param_list, INVOICE_TYPE);
             gncQueryAddTerm (q, param_list, inv_type_pred, QOF_QUERY_AND);
         }
