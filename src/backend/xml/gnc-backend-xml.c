@@ -149,7 +149,7 @@ gnc_xml_be_get_file_lock (FileBackend *be)
 
     /* OK, now work around some NFS atomic lock race condition
      * mumbo-jumbo.  We do this by linking a unique file, and
-     * then examing the link count.  At least that's what the
+     * then examining the link count.  At least that's what the
      * NFS programmers guide suggests.
      * Note: the "unique filename" must be unique for the
      * triplet filename-host-process, otherwise accidental
@@ -379,7 +379,7 @@ xml_session_end(QofBackend *be_start)
 static void
 xml_destroy_backend(QofBackend *be)
 {
-    /* Stop transactionlogging */
+    /* Stop transaction logging */
     xaccLogSetBaseName (NULL);
 
     qof_backend_destroy(be);
@@ -599,7 +599,7 @@ gnc_xml_be_backup_file(FileBackend *be)
 
     if (gnc_xml_be_determine_file_type(datafile) == GNC_BOOK_BIN_FILE)
     {
-        /* make a more permament safer backup */
+        /* make a more permanent safer backup */
         const char *back = "-binfmt.bkup";
         char *bin_bkup = g_new(char, strlen(datafile) + strlen(back) + 1);
         strcpy(bin_bkup, datafile);
@@ -735,7 +735,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
         /* Since we successfully saved the book,
          * we should mark it clean. */
         qof_book_mark_saved (book);
-        LEAVE (" sucessful save of book=%p to file=%s", book, datafile);
+        LEAVE (" successful save of book=%p to file=%s", book, datafile);
         return TRUE;
     }
     else
@@ -829,7 +829,7 @@ gnc_xml_be_remove_old_files(FileBackend *be)
         char *name;
         int len;
 
-        /* Ensure we only evaluate gnucuash related files. */
+        /* Ensure we only evaluate gnucash related files. */
         if (gnc_xml_be_select_files (dent) == 0)
             continue;
 
