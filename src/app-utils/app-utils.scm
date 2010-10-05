@@ -243,6 +243,16 @@
 (export gnc:get-six-months-ago)
 (export gnc:get-one-year-ago)
 (export gnc:reldate-initialize)
+(export gnc:get-end-next-month)
+(export gnc:get-end-next-quarter)
+(export gnc:get-end-next-year)
+(export gnc:get-one-month-ahead)
+(export gnc:get-one-year-ahead)
+(export gnc:get-six-months-ahead)
+(export gnc:get-start-next-month)
+(export gnc:get-start-next-quarter)
+(export gnc:get-start-next-year)
+(export gnc:get-three-months-ahead)
 
 ;; hooks 
 (export gnc:hook-run-danglers)		;; from hooks.scm
